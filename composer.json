@@ -1,0 +1,36 @@
+{
+	"name": "wmde/fundraising-frontend",
+	"description": "",
+	"require": {
+		"php": ">=5.4.0"
+	},
+	"require-dev": {
+		"squizlabs/php_codesniffer": "~2.1",
+		"phpmd/phpmd": "~2.1"
+	},
+	"autoload": {
+		"psr-4": {
+			"WMDE\\Fundraising\\Frontend\\": "src/"
+		}
+	},
+	"scripts": {
+		"test": [
+			"composer validate --no-interaction",
+			"phpunit --coverage-text=/dev/null"
+		],
+		"cs": [
+			"composer phpcs",
+			"composer phpmd"
+		],
+		"ci": [
+			"composer test",
+			"composer cs"
+		],
+		"phpcs": [
+			"vendor/bin/phpcs src/* tests/* --standard=phpcs.xml --extensions=php -sp"
+		],
+		"phpmd": [
+			"vendor/bin/phpmd src/,tests/ text phpmd.xml"
+		]
+	}
+}
