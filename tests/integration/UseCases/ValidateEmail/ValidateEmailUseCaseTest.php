@@ -1,8 +1,8 @@
 <?php
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\UseCases\ValidateEmail;
 
-use WMDE\Fundraising\Frontend\UseCases\ValidateEmailUseCase;
+use WMDE\Fundraising\Frontend\UseCases\ValidateEmail\ValidateEmailUseCase;
 
 /**
  * @covers WMDE\Fundraising\Frontend\UseCases\ValidateEmailUseCase
