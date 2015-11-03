@@ -24,6 +24,6 @@ class MailAddress {
 	}
 
 	public function getString() {
-		return $this->userName . "@" . $this->domain;
+		return $this->userName . '@' . $this->domain;
 	}
 }
