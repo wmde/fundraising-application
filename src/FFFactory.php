@@ -2,6 +2,9 @@
 
 namespace WMDE\Fundraising\Frontend;
 
+use WMDE\Fundraising\Frontend\Domain\CommentRepository;
+use WMDE\Fundraising\Frontend\Domain\InMemoryCommentRepository;
+use WMDE\Fundraising\Frontend\UseCases\ListComments\ListCommentsUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ValidateEmail\ValidateEmailUseCase;
 
 /**
@@ -19,6 +22,14 @@ class FFFactory {
 
 	public function newValidateEmailUseCase(): ValidateEmailUseCase {
 		return new ValidateEmailUseCase();
+	}
+
+	public function newListCommentsUseCase(): ListCommentsUseCase {
+		return new ListCommentsUseCase( $this->newCommentRepository() );
+	}
+
+	private function newCommentRepository(): CommentRepository {
+		return new InMemoryCommentRepository( [] ); // TODO
 	}
 
 }

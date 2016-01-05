@@ -2,6 +2,10 @@
 
 namespace WMDE\Fundraising\Frontend\Domain;
 
+/**
+ * @licence GNU GPL v2+
+ * @author Jeroen De Dauw < jeroendedauw@gmail.com >
+ */
 class InMemoryCommentRepository implements CommentRepository {
 
 	private $comments;
