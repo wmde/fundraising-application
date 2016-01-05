@@ -1,0 +1,1 @@
+[![Build Status](https://travis-ci.org/wmde/FundraisingFrontend.svg)](https://travis-ci.org/wmde/FundraisingFrontend)
