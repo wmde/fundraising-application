@@ -13,18 +13,11 @@ class MailValidator {
 	const TEST_WITH_MX = true;
 	const TEST_WITHOUT_MX = false;
 
-	/**
-	 * @param bool $testWithMX
-	 */
-	public function __construct( $testWithMX ) {
+	public function __construct( bool $testWithMX ) {
 		$this->testWithMX = $testWithMX;
 	}
 
-	/**
-	 * @param string $emailAddress
-	 * @return bool
-	 */
-	public function validateMail( $emailAddress ) {
+	public function validateMail( string $emailAddress ): bool {
 		$mailAddressObject = $this->getAddressObjectFromString( $emailAddress );
 		if ( !$mailAddressObject ) {
 			return false;
@@ -44,7 +37,7 @@ class MailValidator {
 		return true;
 	}
 
-	private function getAddressObjectFromString( $emailAddress ) {
+	private function getAddressObjectFromString( string $emailAddress ) {
 		$addressParts = explode( '@', $emailAddress );
 		if ( is_array( $addressParts ) && isset( $addressParts[1] ) ) {
 			return new MailAddress( $addressParts[0], $addressParts[1] );

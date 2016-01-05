@@ -16,7 +16,7 @@ class CommentList {
 	/**
 	 * @return CommentListItem[]
 	 */
-	public function toArray() {
+	public function toArray(): array {
 		return $this->comments;
 	}
 

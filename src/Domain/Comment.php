@@ -5,51 +5,30 @@ namespace WMDE\Fundraising\Frontend\Domain;
 class Comment {
 
 	private $authorName;
-
 	private $donationAmount;
-
 	private $commentText;
-
 	private $postingTime;
 
-	/**
-	 * @param string $authorName
-	 * @param string $commentText
-	 * @param float $donationAmount
-	 * @param int $postingTime
-	 */
-	public function __construct( $authorName, $commentText, $donationAmount, $postingTime ) {
+	public function __construct( string $authorName, string $commentText, float $donationAmount, int $postingTime ) {
 		$this->authorName = $authorName;
 		$this->commentText = $commentText;
 		$this->donationAmount = $donationAmount;
 		$this->postingTime = $postingTime;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getAuthorName() {
+	public function getAuthorName(): string {
 		return $this->authorName;
 	}
 
-	/**
-	 * @return float
-	 */
-	public function getDonationAmount() {
+	public function getDonationAmount(): float {
 		return $this->donationAmount;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getCommentText() {
+	public function getCommentText(): string {
 		return $this->commentText;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getPostingTime() {
+	public function getPostingTime(): int {
 		return $this->postingTime;
 	}
 

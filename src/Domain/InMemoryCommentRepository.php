@@ -18,7 +18,7 @@ class InMemoryCommentRepository implements CommentRepository {
 	 *
 	 * @return Comment[]
 	 */
-	public function getComments( $limit ) {
+	public function getComments( int $limit ): array {
 		return array_slice( $this->comments, 0, $limit );
 	}
 

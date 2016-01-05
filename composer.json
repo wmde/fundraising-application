@@ -1,8 +1,8 @@
 {
 	"name": "wmde/fundraising-frontend",
-	"description": "",
+	"description": "WMDE fundraising application (end user facing part)",
 	"require": {
-		"php": ">=5.4.0",
+		"php": ">=7.0",
 		"ext-intl": "*"
 	},
 	"require-dev": {
@@ -20,8 +20,7 @@
 			"phpunit --coverage-text=/dev/null"
 		],
 		"cs": [
-			"composer phpcs",
-			"composer phpmd"
+			"composer phpcs"
 		],
 		"ci": [
 			"composer test",
