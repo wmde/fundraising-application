@@ -10,3 +10,6 @@ build/
 .idea/
 .floo
 .flooignore
+
+app/config/
+app/cache/
