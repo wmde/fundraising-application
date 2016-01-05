@@ -2,7 +2,8 @@
 	"name": "wmde/fundraising-frontend",
 	"description": "",
 	"require": {
-		"php": ">=5.4.0"
+		"php": ">=5.4.0",
+		"ext-intl": "*"
 	},
 	"require-dev": {
 		"squizlabs/php_codesniffer": "~2.2",
