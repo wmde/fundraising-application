@@ -6,6 +6,9 @@
 		"ext-intl": "*"
 	},
 	"require-dev": {
+		"phpunit/phpunit": "~5.0",
+		"whatthejeff/nyancat-phpunit-resultprinter": "~1.2",
+		"ockcyp/covers-validator": "~0.4",
 		"squizlabs/php_codesniffer": "~2.2",
 		"phpmd/phpmd": "~2.3"
 	},
@@ -17,7 +20,8 @@
 	"scripts": {
 		"test": [
 			"composer validate --no-interaction",
-			"phpunit --coverage-text=/dev/null"
+			"vendor/bin/phpunit",
+			"vendor/bin/covers-validator"
 		],
 		"cs": [
 			"composer phpcs"

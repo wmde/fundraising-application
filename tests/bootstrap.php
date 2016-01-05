@@ -11,7 +11,7 @@ if ( !is_readable( __DIR__ . '/../vendor/autoload.php' ) ) {
 	die( 'You need to install this package with Composer before you can run the tests' );
 }
 
-$autoLoader = require_once __DIR__ . '/../vendor/autoload.php';
+$autoLoader = require __DIR__ . '/../vendor/autoload.php';
 
 $autoLoader->addPsr4( 'WMDE\\Fundraising\\Frontend\\Tests\\Unit\\', __DIR__ . '/unit/' );
 $autoLoader->addPsr4( 'WMDE\\Fundraising\\Frontend\\Tests\\Integration\\', __DIR__ . '/integration/' );
