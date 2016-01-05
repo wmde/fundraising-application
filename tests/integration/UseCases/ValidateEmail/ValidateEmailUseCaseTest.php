@@ -1,14 +1,14 @@
 <?php
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit;
+namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\ValidateEmail;
 
-use WMDE\Fundraising\Frontend\UseCases\ValidateEmailUseCase;
+use WMDE\Fundraising\Frontend\UseCases\ValidateEmail\ValidateEmailUseCase;
 
 /**
- * @covers WMDE\Fundraising\Frontend\UseCases\ValidateEmailUseCase
+ * @covers WMDE\Fundraising\Frontend\UseCases\ValidateEmail\ValidateEmailUseCase
  *
  * @licence GNU GPL v2+
- * @author Christoph Fischer < christoph.fischer@wikimedia.de >
+ * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class ValidateEmailUseCaseTest extends \PHPUnit_Framework_TestCase {
 

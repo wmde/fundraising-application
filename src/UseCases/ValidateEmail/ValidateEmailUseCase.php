@@ -1,6 +1,6 @@
 <?php
 
-namespace WMDE\Fundraising\Frontend\UseCases;
+namespace WMDE\Fundraising\Frontend\UseCases\ValidateEmail;
 
 use WMDE\Fundraising\Frontend\MailValidator;
 
