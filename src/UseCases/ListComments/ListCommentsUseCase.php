@@ -7,17 +7,14 @@ use WMDE\Fundraising\Frontend\Domain\CommentRepository;
 
 class ListCommentsUseCase {
 
-	private $presenter;
-
 	private $commentRepository;
 
-	public function __construct( CommentListPresenter $presenter, CommentRepository $commentRepository ) {
-		$this->presenter = $presenter;
+	public function __construct( CommentRepository $commentRepository ) {
 		$this->commentRepository = $commentRepository;
 	}
 
 	public function listComments( CommentListingRequest $listingRequest ) {
-		$this->presenter->listComments( new CommentList( ...$this->getListItems( $listingRequest ) ) );
+		return new CommentList( ...$this->getListItems( $listingRequest ) );
 	}
 
 	private function getListItems( CommentListingRequest $listingRequest ): array {
