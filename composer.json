@@ -3,18 +3,26 @@
 	"description": "WMDE fundraising application (end user facing part)",
 	"require": {
 		"php": ">=7.0",
-		"ext-intl": "*"
+		"ext-intl": "*",
+
+		"silex/silex": "~1.3"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "~5.0",
 		"whatthejeff/nyancat-phpunit-resultprinter": "~1.2",
 		"ockcyp/covers-validator": "~0.4",
 		"squizlabs/php_codesniffer": "~2.2",
-		"phpmd/phpmd": "~2.3"
+		"phpmd/phpmd": "~2.3",
+		"symfony/browser-kit": "~2.7"
 	},
 	"autoload": {
 		"psr-4": {
 			"WMDE\\Fundraising\\Frontend\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"WMDE\\Fundraising\\Frontend\\Tests\\": "tests/"
 		}
 	},
 	"scripts": {
