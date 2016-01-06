@@ -20,7 +20,7 @@ class ListCommentsUseCase {
 		$this->presenter->listComments( new CommentList( ...$this->getListItems( $listingRequest ) ) );
 	}
 
-	private function getListItems( CommentListingRequest $listingRequest ) {
+	private function getListItems( CommentListingRequest $listingRequest ): array {
 		return array_map(
 			function( Comment $comment ) {
 				return new CommentListItem(

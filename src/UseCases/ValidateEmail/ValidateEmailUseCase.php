@@ -6,12 +6,7 @@ use WMDE\Fundraising\Frontend\MailValidator;
 
 class ValidateEmailUseCase {
 
-	/**
-	 * @param string $email
-	 *
-	 * @return bool
-	 */
-	public function validateEmail( $email ) {
+	public function validateEmail( string $email ): bool {
 		return ( new MailValidator( MailValidator::TEST_WITH_MX ) )->validateMail( $email );
 	}
 
