@@ -1,8 +1,9 @@
 <?php
 
-namespace WMDE\Fundraising\Frontend\Tests\System;
+namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 
 use Symfony\Component\HttpFoundation\Response;
+use WMDE\Fundraising\Frontend\Tests\System\SystemTestCase;
 
 /**
  * @licence GNU GPL v2+

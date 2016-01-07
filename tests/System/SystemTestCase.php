@@ -4,6 +4,7 @@ namespace WMDE\Fundraising\Frontend\Tests\System;
 
 use Silex\Application;
 use Silex\WebTestCase;
+use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
@@ -31,6 +32,27 @@ abstract class SystemTestCase extends WebTestCase {
 		unset( $app['exception_handler'] );
 
 		return $app;
+	}
+
+	protected function assert404( Response $response, $expectedMessage = 'Not Found' ) {
+		$this->assertJson( $response->getContent(), 'response is json' );
+
+		$this->assertJsonResponse(
+			[
+				'message' => $expectedMessage,
+				'code' => 404,
+			],
+			$response
+		);
+
+		$this->assertSame( 404, $response->getStatusCode() );
+	}
+
+	private function assertJsonResponse( $expected, Response $response ) {
+		$this->assertSame(
+			json_encode( $expected, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ),
+			$response->getContent()
+		);
 	}
 
 }
