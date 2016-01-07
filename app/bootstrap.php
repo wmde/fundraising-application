@@ -20,4 +20,14 @@ $app->after( function( Request $request, Response $response ) {
 	return $response;
 } );
 
+$app->error( function ( \Exception $e, $code ) {
+	return new JsonResponse(
+		[
+			'message' => $e->getMessage(),
+			'code' => $code
+		],
+		$code
+	);
+} );
+
 return require __DIR__ . '/routes.php';
