@@ -26,6 +26,12 @@ class DisplayPageUseCase {
 	}
 
 	private function getPageContent( string $pageName ) {
+		// Normalization
+		// White and blacklisting of page name
+		// pageRetriever->fetchPage( $wiki_page, 'render' )
+		// getProcessedContent( $content, $wiki_page, 'render' )
+		// Debug output when dev
+
 		try {
 			$content = $this->fileFetcher->fetchFile( $this->urlBase . $pageName );
 		}
