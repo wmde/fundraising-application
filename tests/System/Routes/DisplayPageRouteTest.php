@@ -1,8 +1,9 @@
 <?php
 
-namespace WMDE\Fundraising\Frontend\Tests\System;
+namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 
 use FileFetcher\InMemoryFileFetcher;
+use WMDE\Fundraising\Frontend\Tests\System\SystemTestCase;
 
 /**
  * @licence GNU GPL v2+
