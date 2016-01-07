@@ -9,6 +9,7 @@
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
+use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageDisplayRequest;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentListingRequest;
 
 $app->get(
@@ -36,7 +37,9 @@ $app->get(
 $app->get(
 	'page/{pageName}',
 	function( Application $app, $pageName ) use ( $ffFactory ) {
-		return "<html><header />missing: $pageName</html>";
+		$useCase = $ffFactory->newDisplayPageUseCase();
+
+		return $useCase->getPage( new PageDisplayRequest( $pageName ) );
 	}
 );
 
