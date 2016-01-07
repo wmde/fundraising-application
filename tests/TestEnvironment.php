@@ -2,7 +2,7 @@
 
 namespace WMDE\Fundraising\Frontend\Tests;
 
-use WMDE\Fundraising\Frontend\FFFactory;
+use WMDE\Fundraising\Frontend\FunFunFactory;
 
 /**
  * @licence GNU GPL v2+
@@ -17,15 +17,15 @@ class TestEnvironment {
 	}
 
 	/**
-	 * @var FFFactory
+	 * @var FunFunFactory
 	 */
 	private $factory;
 
 	private function __construct() {
-		$this->factory = FFFactory::newFromConfig();
+		$this->factory = FunFunFactory::newFromConfig();
 	}
 
-	public function getFactory(): FFFactory {
+	public function getFactory(): FunFunFactory {
 		return $this->factory;
 	}
 

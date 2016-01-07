@@ -5,7 +5,9 @@
 		"php": ">=7.0",
 		"ext-intl": "*",
 
-		"silex/silex": "~1.3"
+		"silex/silex": "~1.3",
+
+		"jeroen/file-fetcher": "dev-InMemoryFileFetcher"
 	},
 	"require-dev": {
 		"ext-pdo_sqlite": "*",

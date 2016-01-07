@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-$ffFactory = \WMDE\Fundraising\Frontend\FFFactory::newFromConfig();
+$ffFactory = \WMDE\Fundraising\Frontend\FunFunFactory::newFromConfig();
 
 /**
  * @var \Silex\Application $app

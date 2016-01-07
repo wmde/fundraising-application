@@ -4,7 +4,7 @@
  * These variables need to be in scope when this file is included:
  *
  * @var \Silex\Application $app
- * @var \WMDE\Fundraising\Frontend\FFFactory $ffFactory
+ * @var \WMDE\Fundraising\Frontend\FunFunFactory $ffFactory
  */
 
 use Silex\Application;
@@ -37,9 +37,7 @@ $app->get(
 $app->get(
 	'page/{pageName}',
 	function( Application $app, $pageName ) use ( $ffFactory ) {
-		$useCase = $ffFactory->newDisplayPageUseCase();
-
-		return $useCase->getPage( new PageDisplayRequest( $pageName ) );
+		return $ffFactory->newDisplayPageUseCase()->getPage( new PageDisplayRequest( $pageName ) );
 	}
 );
 
