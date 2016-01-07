@@ -1,0 +1,11 @@
+---
+- hosts: all
+  vars_files:
+      - vars.yml
+  tasks:
+      - name: Create deployment directory
+        file: path={{ deploy_dir | dirname }} state=directory
+      - name: Checkout code
+        git: repo=https://github.com/wmde/FundraisingFrontend.git dest={{deploy_dir}} version={{deploy_branch}}
+      - name: Install dependencies
+        command: "{{composer_binary}} install chdir={{deploy_dir}}"
