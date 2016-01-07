@@ -7,6 +7,7 @@
  * @var \WMDE\Fundraising\Frontend\FFFactory $ffFactory
  */
 
+use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentListingRequest;
 
@@ -29,6 +30,13 @@ $app->get(
 
 		// Presenter code:
 		return 'TODO';
+	}
+);
+
+$app->get(
+	'page/{pageName}',
+	function( Application $app, $pageName ) use ( $ffFactory ) {
+		return "<html><header />missing: $pageName</html>";
 	}
 );
 
