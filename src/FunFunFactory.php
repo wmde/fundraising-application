@@ -19,7 +19,6 @@ use WMDE\Fundraising\Frontend\UseCases\AddSubscription\AddSubscriptionUseCase;
 use WMDE\Fundraising\Frontend\PageRetriever\ActionBasedPageRetriever;
 use WMDE\Fundraising\Frontend\PageRetriever\PageRetriever;
 use WMDE\Fundraising\Frontend\Presenters\DisplayPagePresenter;
-use WMDE\Fundraising\Frontend\UseCases\DisplayPage\DisplayPageUseCase;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageContentModifier;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\ListCommentsUseCase;
 use WMDE\Fundraising\Frontend\UseCases\CheckIban\CheckIbanUseCase;

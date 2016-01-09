@@ -2,6 +2,8 @@
 
 namespace WMDE\Fundraising\Frontend\UseCases\DisplayPage;
 
+use FileFetcher\FileFetcher;
+use FileFetcher\FileFetchingException;
 use WMDE\Fundraising\Frontend\PageRetriever\PageRetriever;
 
 /**
