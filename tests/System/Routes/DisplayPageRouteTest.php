@@ -16,7 +16,7 @@ class DisplayPageRouteTest extends SystemTestCase {
 		$client->request( 'GET', '/page/kittens' );
 
 		$this->assertSame(
-			'<html><header />missing: kittens</html>',
+			'<html><header />missing: Kittens</html>',
 			$client->getResponse()->getContent()
 		);
 	}
@@ -45,7 +45,7 @@ class DisplayPageRouteTest extends SystemTestCase {
 
 	private function insertUnicornsPage() {
 		$this->testEnvironment->getFactory()->setFileFetcher( new InMemoryFileFetcher( [
-			'http://cms.wiki/unicorns' => 'Pink fluffy unicorns dancing on rainbows'
+			'http://cms.wiki/?title=Unicorns&action=render' => 'Pink fluffy unicorns dancing on rainbows'
 		] ) );
 	}
 
