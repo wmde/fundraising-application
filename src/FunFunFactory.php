@@ -6,13 +6,18 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use FileFetcher\FileFetcher;
 use FileFetcher\SimpleFileFetcher;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use WMDE\Fundraising\Frontend\Domain\CommentRepository;
 use WMDE\Fundraising\Frontend\Domain\DoctrineRequestRepository;
 use WMDE\Fundraising\Frontend\Domain\InMemoryCommentRepository;
 use WMDE\Fundraising\Frontend\Domain\RequestRepository;
 use WMDE\Fundraising\Frontend\Domain\RequestValidator;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\AddSubscriptionUseCase;
+use WMDE\Fundraising\Frontend\PageRetriever\ActionBasedPageRetriever;
+use WMDE\Fundraising\Frontend\PageRetriever\PageRetriever;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\DisplayPageUseCase;
+use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageContentModifier;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\ListCommentsUseCase;
 use WMDE\Fundraising\Frontend\UseCases\CheckIban\CheckIbanUseCase;
 use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanUseCase;
@@ -83,8 +88,26 @@ class FunFunFactory {
 
 	public function newDisplayPageUseCase(): DisplayPageUseCase {
 		return new DisplayPageUseCase(
-			$this->getFileFetcher(),
-			$this->config['cms-wiki-url']
+			$this->newPageRetriever(),
+			$this->newPageContentModifier()
+		);
+	}
+
+	private function newPageRetriever(): PageRetriever {
+		return new ActionBasedPageRetriever(
+			$this->config['cms-wiki-url'],
+			$this->newLogger(),
+			$this->getFileFetcher()
+		);
+	}
+
+	private function newLogger(): LoggerInterface {
+		return new NullLogger();
+	}
+
+	private function newPageContentModifier(): PageContentModifier {
+		return new PageContentModifier(
+			$this->newLogger()
 		);
 	}
 
