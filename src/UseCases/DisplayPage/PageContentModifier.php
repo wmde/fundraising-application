@@ -20,7 +20,7 @@ class PageContentModifier {
 	public function getProcessedContent( string $content, string $pageName ): string {
 		# full HTML document usually indicates an error (e.g. access denied)
 		if ( preg_match( '/^<!DOCTYPE html/', $content ) ) {
-			$this->logger->debug( __METHOD__ . ': fail, got error page', [ $content ] );
+			$this->logger->debug( __METHOD__ . ': fail, got error page', [ $content, $pageName ] );
 			return '';
 		}
 
@@ -41,9 +41,9 @@ class PageContentModifier {
 
 		// TODO
 		// NOTE: keep cache list in sync
-		if ( !empty( $this->page_cache_list ) ) {
-			$this->page_cache_list->add( array( 'rip', $pageName ) );
-		}
+//		if ( !empty( $this->page_cache_list ) ) {
+//			$this->page_cache_list->add( array( 'rip', $pageName ) );
+//		}
 
 		return $content;
 	}
