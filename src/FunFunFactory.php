@@ -14,6 +14,7 @@ use WMDE\Fundraising\Frontend\Domain\RequestValidator;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\AddSubscriptionUseCase;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\DisplayPageUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\ListCommentsUseCase;
+use WMDE\Fundraising\Frontend\UseCases\ValidateBankData\ValidateBankDataUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ValidateEmail\ValidateEmailUseCase;
 use WMDE\Fundraising\Store\Factory as StoreFactory;
 use WMDE\Fundraising\Store\Installer;
@@ -34,6 +35,7 @@ class FunFunFactory {
 	 * @param array $config
 	 * - db: DBAL connection parameters
 	 * - cms-wiki-url
+	 * - bank-data-file: path to file to be used by bank data validation library
 	 */
 	public function __construct( array $config ) {
 		$this->config = $config;
@@ -87,6 +89,10 @@ class FunFunFactory {
 
 	public function newAddSubscriptionUseCase(): AddSubscriptionUseCase {
 		return new AddSubscriptionUseCase( $this->newRequestRepository(), $this->newRequestValidator() );
+	}
+
+	public function newValidateBankDataUseCase(): ValidateBankDataUseCase {
+		return new ValidateBankDataUseCase( new BankDataConverter( $this->config['bank-data-file'] ) );
 	}
 
 	private function getFileFetcher(): FileFetcher {
