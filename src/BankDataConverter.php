@@ -16,7 +16,7 @@ class BankDataConverter {
 	 * @param string $lutPath
 	 * @throws BankDataLibraryInitializationException
 	 */
-	public function __construct( $lutPath ) {
+	public function __construct( string $lutPath ) {
 		$this->lutPath = $lutPath;
 		if ( lut_init( $this->lutPath ) !== 1 ) {
 			throw new BankDataLibraryInitializationException( $this->lutPath );
@@ -28,7 +28,7 @@ class BankDataConverter {
 	 * @param string $bankCode
 	 * @return bool|BankData
 	 */
-	public function getBankDataFromAccountData( $account, $bankCode ) {
+	public function getBankDataFromAccountData( string $account, string $bankCode ) {
 		$bankData = new BankData();
 		$iban = iban_gen( $bankCode, $account );
 		if ( !$iban ) {
@@ -53,7 +53,7 @@ class BankDataConverter {
 	 * @param string $iban
 	 * @return bool|BankData
 	 */
-	public function getBankDataFromIban( $iban ) {
+	public function getBankDataFromIban( string $iban ) {
 		if ( !$this->validateIban( $iban ) ) {
 			return false;
 		}
@@ -73,24 +73,20 @@ class BankDataConverter {
 		return $bankData;
 	}
 
-	private function accountNrFromDeIban( $iban ) {
+	private function accountNrFromDeIban( string $iban ): string {
 		return substr( $iban, 12 );
 	}
 
-	private function bankCodeFromDeIban( $iban ) {
+	private function bankCodeFromDeIban( string $iban ): string {
 		return substr( $iban, 4, 8 );
 	}
 
-	private function bankNameFromBankCode( $bankCode ) {
+	private function bankNameFromBankCode( string $bankCode ): string {
 		return utf8_encode( lut_name( $bankCode ) );
 	}
 
-	/**
-	 * @param string $iban
-	 * @return bool
-	 */
-	public function validateIban( $iban ) {
+	public function validateIban( string $iban ): bool {
 		$ret = iban_check( $iban );
-		return ( $ret > 0 );
+		return $ret > 0;
 	}
 }
