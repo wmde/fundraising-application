@@ -8,3 +8,12 @@ sudo: false
 install: travis_retry composer install --prefer-source
 
 script: composer ci
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+notifications:
+  email:
+    on_success: change
+    on_failure: always
