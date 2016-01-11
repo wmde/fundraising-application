@@ -24,8 +24,6 @@ class PageContentModifier {
 			return '';
 		}
 
-		# NOTE: don't strip comments, they may contain javascript, etc!
-		# $content = preg_replace('/<!--.*?-->/s', '', $content);
 		$content = trim( $content );
 
 		if ( $this->substitutions !== [] ) {
