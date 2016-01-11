@@ -8,6 +8,7 @@ original_dir=$(pwd)
 	cp blz.lut2f ${original_dir}/res
 	unzip php.zip
 	cd php
+	patch -p0 < ${original_dir}/build/kontocheck58-php7.patch
 	phpize
 	./configure
 	make
