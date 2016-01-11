@@ -29,7 +29,8 @@ class TestEnvironment {
 				'driver' => 'pdo_sqlite',
 				'memory' => true,
 			],
-			'cms-wiki-url' => 'http://cms.wiki/'
+			'cms-wiki-url' => 'http://cms.wiki/',
+			'bank-data-file' => 'res/blz.lut2f'
 		] );
 	}
 

@@ -41,4 +41,31 @@ $app->get(
 	}
 );
 
+$app->get(
+	'check-iban',
+	function( Request $request ) use ( $app, $ffFactory ) {
+		$useCase = $ffFactory->newValidateBankDataUseCase();
+		$responseModel = $useCase->checkIban( $request->get( 'iban', '' ) );
+
+		return $app->json(
+			$responseModel ?
+				[ 'status' => 'OK' ] + $responseModel->getBankData() :
+				[ 'status' => 'ERR' ]
+		);
+	}
+);
+
+$app->get(
+	'generate-iban',
+	function( Request $request ) use ( $app, $ffFactory ) {
+		$useCase = $ffFactory->newValidateBankDataUseCase();
+		$responseModel = $useCase->generateIban(
+			$request->get( 'accountNumber', '' ),
+			$request->get( 'bankCode', '' )
+		);
+
+		return $app->json( $responseModel ? [ 'status' => 'OK' ] + $responseModel->getBankData() : [ 'status' => 'ERR' ] );
+	}
+);
+
 return $app;
