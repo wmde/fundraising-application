@@ -73,7 +73,10 @@ class BankDataConverterTest extends \PHPUnit_Framework_TestCase {
 		$bankData->setBic( 'INGDDEFFXXX' );
 		$bankData->setIban( 'DE12500105170648489890' );
 
-		$this->assertEquals( $bankConverter->getBankDataFromIban( 'DE12500105170648489890' ), $bankData );
+		$this->assertEquals(
+			$bankData,
+			$bankConverter->getBankDataFromIban( 'DE12500105170648489890' )
+		);
 	}
 
 	public function testWhenGivenValidNonDEIban_converterReturnsIBAN() {
@@ -86,7 +89,10 @@ class BankDataConverterTest extends \PHPUnit_Framework_TestCase {
 		$bankData->setBic( '' );
 		$bankData->setIban( 'BE68844010370034' );
 
-		$this->assertEquals( $bankConverter->getBankDataFromIban( 'BE68844010370034' ), $bankData );
+		$this->assertEquals(
+			$bankData,
+			$bankConverter->getBankDataFromIban( 'BE68844010370034' )
+		);
 	}
 
 	public function testWhenGivenValidIban_validateIbanReturnsTrue() {
@@ -125,6 +131,9 @@ class BankDataConverterTest extends \PHPUnit_Framework_TestCase {
 		$bankData->setBic( 'INGDDEFFXXX' );
 		$bankData->setIban( 'DE12500105170648489890' );
 
-		$this->assertEquals( $bankConverter->getBankDataFromAccountData( '0648489890', '50010517' ), $bankData );
+		$this->assertEquals(
+			$bankData,
+			$bankConverter->getBankDataFromAccountData( '0648489890', '50010517' )
+		);
 	}
 }
