@@ -92,7 +92,11 @@ class FunFunFactory {
 	}
 
 	public function newValidateBankDataUseCase(): ValidateBankDataUseCase {
-		return new ValidateBankDataUseCase( new BankDataConverter( $this->config['bank-data-file'] ) );
+		return new ValidateBankDataUseCase( $this->newBankDataConverter() );
+	}
+
+	public function newBankDataConverter() {
+		return new BankDataConverter( $this->config['bank-data-file'] );
 	}
 
 	private function getFileFetcher(): FileFetcher {
