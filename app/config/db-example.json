@@ -1,8 +1,0 @@
-{
-	"driver": "pdo_mysql",
-	"user": "",
-	"password": "",
-	"dbname": "",
-	"host": "localhost",
-	"port": "3306"
-}
