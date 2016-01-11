@@ -8,6 +8,7 @@ use FileFetcher\FileFetcher;
 use FileFetcher\SimpleFileFetcher;
 use WMDE\Fundraising\Frontend\Domain\CommentRepository;
 use WMDE\Fundraising\Frontend\Domain\InMemoryCommentRepository;
+use WMDE\Fundraising\Frontend\UseCases\AddSubscription\AddSubscriptionUseCase;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\DisplayPageUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\ListCommentsUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ValidateEmail\ValidateEmailUseCase;
@@ -67,6 +68,10 @@ class FunFunFactory {
 			$this->getFileFetcher(),
 			$this->config['cms-wiki-url']
 		);
+	}
+
+	public function newAddSubscriptionUseCase(): AddSubscriptionUseCase {
+		return new AddSubscriptionUseCase(); // TODO Inject repository
 	}
 
 	private function getFileFetcher(): FileFetcher {
