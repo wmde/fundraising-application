@@ -4,11 +4,12 @@
  * These variables need to be in scope when this file is included:
  *
  * @var \Silex\Application $app
- * @var \WMDE\Fundraising\Frontend\FFFactory $ffFactory
+ * @var \WMDE\Fundraising\Frontend\FunFunFactory $ffFactory
  */
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
+use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageDisplayRequest;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentListingRequest;
 
 $app->get(
@@ -36,7 +37,7 @@ $app->get(
 $app->get(
 	'page/{pageName}',
 	function( Application $app, $pageName ) use ( $ffFactory ) {
-		return "<html><header />missing: $pageName</html>";
+		return $ffFactory->newDisplayPageUseCase()->getPage( new PageDisplayRequest( $pageName ) );
 	}
 );
 

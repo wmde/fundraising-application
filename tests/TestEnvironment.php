@@ -2,7 +2,7 @@
 
 namespace WMDE\Fundraising\Frontend\Tests;
 
-use WMDE\Fundraising\Frontend\FFFactory;
+use WMDE\Fundraising\Frontend\FunFunFactory;
 
 /**
  * @licence GNU GPL v2+
@@ -13,19 +13,27 @@ class TestEnvironment {
 	public static function newInstance() {
 		$instance = new self();
 
+		$instance->factory->newInstaller()->install();
+
 		return $instance;
 	}
 
 	/**
-	 * @var FFFactory
+	 * @var FunFunFactory
 	 */
 	private $factory;
 
 	private function __construct() {
-		$this->factory = FFFactory::newFromConfig();
+		$this->factory = new FunFunFactory( [
+			'db' => [
+				'driver' => 'pdo_sqlite',
+				'memory' => true,
+			],
+			'cms-wiki-url' => 'http://cms.wiki/'
+		] );
 	}
 
-	public function getFactory(): FFFactory {
+	public function getFactory(): FunFunFactory {
 		return $this->factory;
 	}
 
