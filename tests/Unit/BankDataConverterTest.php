@@ -26,7 +26,7 @@ class BankDataConverterTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testWhenUsingConfigLutPath_constructorCreatesConverter() {
-		$this->assertInstanceOf( 'WMDE\Fundraising\Frontend\BankDataConverter', $this->factory->newBankDataConverter() );
+		$this->assertInstanceOf( BankDataConverter::class, $this->factory->newBankDataConverter() );
 	}
 
 	/**
