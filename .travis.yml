@@ -7,4 +7,6 @@ sudo: false
 
 install: travis_retry composer install --prefer-source
 
+before_script: bash build/travis/before_script.sh
+
 script: composer ci
