@@ -1,0 +1,11 @@
+{
+	"db": {
+		"driver": "",
+		"user": "",
+		"password": "",
+		"dbname": "",
+		"host": "",
+		"port": ""
+	},
+	"cms-wiki-url": ""
+}

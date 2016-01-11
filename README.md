@@ -35,6 +35,9 @@ For a full CI run
 * `app/`: contains configuration and all framework (Silex) dependent code
 	* `bootstrap.php`: framework application bootstrap (used by System tests)
 	* `routes.php`: defines the routes and their handlers
+	* `config/config.dist.json`: default configuration
+	* `config/config.test.json`: configuration used by integration and system tests (gets merged into default config)
+	* `config/config.prod.json`: production configuration (gets merged into default config)
 * `src/`: contains framework agnostic code
 	* `FFFactory.php`: top level factory and service locator (used by Integration tests)
 	* `UseCases/`: one directory per use case

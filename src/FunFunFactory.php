@@ -25,11 +25,6 @@ class FunFunFactory {
 	private $connection;
 	private $fileFetcher;
 
-	public static function newFromConfig() {
-		// TODO: https://phabricator.wikimedia.org/T123065
-		return new self( [] );
-	}
-
 	/**
 	 * @param array $config
 	 * - db: DBAL connection parameters
