@@ -3,9 +3,11 @@ language: php
 php:
   - 7
 
-sudo: false
+sudo: required
 
 install: travis_retry composer install --prefer-source
+
+before_script: bash build/travis/before_script.sh
 
 script: composer ci
 
