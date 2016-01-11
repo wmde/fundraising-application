@@ -75,7 +75,7 @@ class StringValueGuardTest extends \PHPUnit_Framework_TestCase {
 		$guard->setWhitelist( [ 'cats', 1337, 'ponies' ] );
 	}
 
-	public function testGivenNonString_setBaclklistThrowsException() {
+	public function testGivenNonString_setBlacklistThrowsException() {
 		$guard = new StringValueGuard();
 
 		$this->setExpectedException( \InvalidArgumentException::class );
