@@ -12,6 +12,6 @@ original_dir=$(pwd)
 	phpize
 	./configure
 	make
-	sudo make install
+	make install
 	phpenv config-add konto_check.ini
 cd ${original_dir}
