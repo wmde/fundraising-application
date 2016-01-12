@@ -14,7 +14,8 @@ use WMDE\Fundraising\Frontend\Domain\RequestValidator;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\AddSubscriptionUseCase;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\DisplayPageUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\ListCommentsUseCase;
-use WMDE\Fundraising\Frontend\UseCases\ValidateBankData\ValidateBankDataUseCase;
+use WMDE\Fundraising\Frontend\UseCases\CheckIban\CheckIbanUseCase;
+use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ValidateEmail\ValidateEmailUseCase;
 use WMDE\Fundraising\Store\Factory as StoreFactory;
 use WMDE\Fundraising\Store\Installer;
@@ -91,8 +92,12 @@ class FunFunFactory {
 		return new AddSubscriptionUseCase( $this->newRequestRepository(), $this->newRequestValidator() );
 	}
 
-	public function newValidateBankDataUseCase(): ValidateBankDataUseCase {
-		return new ValidateBankDataUseCase( $this->newBankDataConverter() );
+	public function newCheckIbanUseCase(): CheckIbanUseCase {
+		return new CheckIbanUseCase( $this->newBankDataConverter() );
+	}
+
+	public function newGenerateIbanUseCase(): GenerateIbanUseCase {
+		return new GenerateIbanUseCase( $this->newBankDataConverter() );
 	}
 
 	public function newBankDataConverter() {

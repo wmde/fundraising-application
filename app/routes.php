@@ -57,7 +57,7 @@ $app->post(
 $app->get(
 	'check-iban',
 	function( Request $request ) use ( $app, $ffFactory ) {
-		$useCase = $ffFactory->newValidateBankDataUseCase();
+		$useCase = $ffFactory->newCheckIbanUseCase();
 		$responseModel = $useCase->checkIban( $request->get( 'iban', '' ) );
 
 		return $app->json(
@@ -71,7 +71,7 @@ $app->get(
 $app->get(
 	'generate-iban',
 	function( Request $request ) use ( $app, $ffFactory ) {
-		$useCase = $ffFactory->newValidateBankDataUseCase();
+		$useCase = $ffFactory->newGenerateIbanUseCase();
 		$responseModel = $useCase->generateIban(
 			$request->get( 'accountNumber', '' ),
 			$request->get( 'bankCode', '' )
