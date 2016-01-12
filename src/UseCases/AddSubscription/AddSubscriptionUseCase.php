@@ -4,8 +4,8 @@
 namespace WMDE\Fundraising\Frontend\UseCases\AddSubscription;
 
 use WMDE\Fundraising\Entities\Request;
+use WMDE\Fundraising\Frontend\Domain\RequestRepository;
 use WMDE\Fundraising\Frontend\Domain\RequestValidator;
-use WMDE\Fundraising\Frontend\MailValidator;
 
 /**
  * @license GNU GPL v2+
@@ -13,14 +13,27 @@ use WMDE\Fundraising\Frontend\MailValidator;
  */
 class AddSubscriptionUseCase
 {
+	/**
+	 * @var RequestRepository
+	 */
+	private $requestRepository;
+
+	private $requestValidator;
+
+	public function __construct( RequestRepository $requestRepository, RequestValidator $requestValidator ) {
+		$this->requestRepository = $requestRepository;
+		$this->requestValidator = $requestValidator;
+	}
+
 	public function addSubscription( SubscriptionRequest $subscriptionRequest ) {
 		$request = $this->createRequestFromSubscriptionRequest( $subscriptionRequest );
-		$validator = new RequestValidator( new MailValidator( MailValidator::TEST_WITH_MX ) );
-		if ( ! $validator->validate( $request ) ) {
-			return AddSubscriptionResponse::createInvalidResponse( $request, $validator->getValidationErrors() );
+		if ( ! $this->requestValidator->validate( $request ) ) {
+			return AddSubscriptionResponse::createInvalidResponse( $request, $this->requestValidator->getValidationErrors() );
 		}
-		// TODO store in DB
+		$this->requestRepository->storeRequest( $request );
+
 		// TODO send mails
+
 		return AddSubscriptionResponse::createValidResponse( $request );
 	}
 

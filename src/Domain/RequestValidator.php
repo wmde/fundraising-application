@@ -14,7 +14,7 @@ class RequestValidator
 {
 	private $mailValidator;
 	private $obligatoryFields = [
-		'firstName', 'lastName', 'title'
+		'vorname', 'nachname', 'titel'
 	];
 	private $validationErrors = [];
 
