@@ -14,8 +14,8 @@ class GenerateIbanUseCase {
 		$this->bankDataConverter = $bankDataConverter;
 	}
 
-	public function generateIban( string $accountNumber, string $bankCode ) {
-		return $this->bankDataConverter->getBankDataFromAccountData( $accountNumber, $bankCode );
+	public function generateIban( GenerateIbanRequest $request ) {
+		return $this->bankDataConverter->getBankDataFromAccountData( $request->getBankAccount(), $request->getBankCode() );
 	}
 
 }

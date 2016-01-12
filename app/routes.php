@@ -11,6 +11,7 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\Frontend\Domain\Iban;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageDisplayRequest;
+use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanRequest;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentListingRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\SubscriptionRequest;
 
@@ -74,8 +75,10 @@ $app->get(
 	function( Request $request ) use ( $app, $ffFactory ) {
 		$useCase = $ffFactory->newGenerateIbanUseCase();
 		$responseModel = $useCase->generateIban(
-			$request->get( 'accountNumber', '' ),
-			$request->get( 'bankCode', '' )
+			new GenerateIbanRequest(
+				$request->get( 'accountNumber', '' ),
+				$request->get( 'bankCode', '' )
+			)
 		);
 
 		return $app->json( $responseModel ? [ 'status' => 'OK' ] + $responseModel->getBankData() : [ 'status' => 'ERR' ] );
