@@ -4,6 +4,7 @@ namespace WMDE\Fundraising\Tests\Unit;
 
 use WMDE\Fundraising\Frontend\BankDataConverter;
 use WMDE\Fundraising\Frontend\Domain\BankData;
+use WMDE\Fundraising\Frontend\Domain\Iban;
 
 /**
  * @covers WMDE\Fundraising\Frontend\BankDataConverter
@@ -36,7 +37,7 @@ class BankDataConverterTest extends \PHPUnit_Framework_TestCase {
 	public function testWhenGivenInvalidIban_converterReturnsFalse( $ibanToTest ) {
 		$bankConverter = $this->newBankDataConverter();
 
-		$this->assertFalse( $bankConverter->getBankDataFromIban( $ibanToTest ) );
+		$this->assertFalse( $bankConverter->getBankDataFromIban( new Iban( $ibanToTest ) ) );
 	}
 
 	public function ibanTestProvider() {
@@ -54,7 +55,7 @@ class BankDataConverterTest extends \PHPUnit_Framework_TestCase {
 	public function testWhenGivenInvalidIban_validateIbanReturnsFalse( $ibanToTest ) {
 		$bankConverter = $this->newBankDataConverter();
 
-		$this->assertFalse( $bankConverter->validateIban( $ibanToTest ) );
+		$this->assertFalse( $bankConverter->validateIban( new Iban( $ibanToTest ) ) );
 	}
 
 	public function testWhenGivenValidIban_converterReturnsBankData() {
@@ -69,7 +70,7 @@ class BankDataConverterTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertEquals(
 			$bankData,
-			$bankConverter->getBankDataFromIban( 'DE12500105170648489890' )
+			$bankConverter->getBankDataFromIban( new Iban( 'DE12500105170648489890' ) )
 		);
 	}
 
@@ -85,15 +86,15 @@ class BankDataConverterTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertEquals(
 			$bankData,
-			$bankConverter->getBankDataFromIban( 'BE68844010370034' )
+			$bankConverter->getBankDataFromIban( new Iban( 'BE68844010370034' ) )
 		);
 	}
 
 	public function testWhenGivenValidIban_validateIbanReturnsTrue() {
 		$bankConverter = $this->newBankDataConverter();
 
-		$this->assertTrue( $bankConverter->validateIban( 'DE12500105170648489890' ) );
-		$this->assertTrue( $bankConverter->validateIban( 'BE68844010370034' ) );
+		$this->assertTrue( $bankConverter->validateIban( new Iban( 'DE12500105170648489890' ) ) );
+		$this->assertTrue( $bankConverter->validateIban( new Iban( 'BE68844010370034' ) ) );
 	}
 
 	/**

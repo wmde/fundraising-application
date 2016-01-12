@@ -3,6 +3,7 @@
 namespace WMDE\Fundraising\Frontend;
 
 use WMDE\Fundraising\Frontend\Domain\BankData;
+use WMDE\Fundraising\Frontend\Domain\Iban;
 
 /**
  * @licence GNU GPL v2+
@@ -50,22 +51,22 @@ class BankDataConverter {
 	}
 
 	/**
-	 * @param string $iban
+	 * @param Iban $iban
 	 * @return bool|BankData
 	 */
-	public function getBankDataFromIban( string $iban ) {
+	public function getBankDataFromIban( Iban $iban ) {
 		if ( !$this->validateIban( $iban ) ) {
 			return false;
 		}
 
 		$bankData = new BankData();
-		$bankData->setIban( $iban );
+		$bankData->setIban( $iban->toString() );
 
-		if ( strpos( $iban, 'DE' ) === 0 && $this->validateIban( $iban ) ) {
-			$bankData->setBic( iban2bic( $iban ) );
+		if ( $iban->getCountryCode() === 'DE' && $this->validateIban( $iban ) ) {
+			$bankData->setBic( iban2bic( $iban->toString() ) );
 
-			$bankData->setAccount( $this->accountNrFromDeIban( $iban ) );
-			$bankData->setBankCode( $this->bankCodeFromDeIban( $iban ) );
+			$bankData->setAccount( $iban->accountNrFromDeIban() );
+			$bankData->setBankCode( $iban->bankCodeFromDeIban() );
 			$bankData->setBankName( $this->bankNameFromBankCode( $bankData->getBankCode() ) );
 
 		}
@@ -73,20 +74,12 @@ class BankDataConverter {
 		return $bankData;
 	}
 
-	private function accountNrFromDeIban( string $iban ): string {
-		return substr( $iban, 12 );
-	}
-
-	private function bankCodeFromDeIban( string $iban ): string {
-		return substr( $iban, 4, 8 );
-	}
-
 	private function bankNameFromBankCode( string $bankCode ): string {
 		return utf8_encode( lut_name( $bankCode ) );
 	}
 
-	public function validateIban( string $iban ): bool {
-		$ret = iban_check( $iban );
+	public function validateIban( Iban $iban ): bool {
+		$ret = iban_check( $iban->toString() );
 		return $ret > 0;
 	}
 }

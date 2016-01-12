@@ -3,6 +3,7 @@
 namespace WMDE\Fundraising\Frontend\UseCases\CheckIban;
 
 use WMDE\Fundraising\Frontend\BankDataConverter;
+use WMDE\Fundraising\Frontend\Domain\Iban;
 
 /**
  * @licence GNU GPL v2+
@@ -14,7 +15,7 @@ class CheckIbanUseCase {
 		$this->bankDataConverter = $bankDataConverter;
 	}
 
-	public function checkIban( string $iban ) {
+	public function checkIban( Iban $iban ) {
 		return $this->bankDataConverter->getBankDataFromIban( $iban );
 	}
 

@@ -9,6 +9,7 @@
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
+use WMDE\Fundraising\Frontend\Domain\Iban;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageDisplayRequest;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentListingRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\SubscriptionRequest;
@@ -58,7 +59,7 @@ $app->get(
 	'check-iban',
 	function( Request $request ) use ( $app, $ffFactory ) {
 		$useCase = $ffFactory->newCheckIbanUseCase();
-		$responseModel = $useCase->checkIban( $request->get( 'iban', '' ) );
+		$responseModel = $useCase->checkIban( new Iban( $request->get( 'iban', '' ) ) );
 
 		return $app->json(
 			$responseModel ?
