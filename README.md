@@ -43,8 +43,8 @@ For a full CI run
 	* `UseCases/`: one directory per use case
 	* All dependencies are explicitly defined in `composer.json` (including those shared with Silex)
 * `tests/`: tests mirror the directory and namespace structure of the production code
-	* `Unit/`: small isolated tests (cannot access app, db or framework)
-	* `Integration/`: tests combining several units (cannot access framework)
+	* `Unit/`: small isolated tests (cannot access Silex, application state or top level factory)
+	* `Integration/`: tests combining several units (cannot access Silex)
 	* `System/`: edge-to-edge tests
 	* `TestEnvironment.php`: encapsulates application setup for integration and system tests
 	* `Fixtures/`: test stubs and spies
