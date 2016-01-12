@@ -3,7 +3,7 @@ language: php
 php:
   - 7
 
-sudo: required
+sudo: false
 
 install: travis_retry composer install --prefer-source
 
