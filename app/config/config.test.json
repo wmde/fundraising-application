@@ -1,0 +1,7 @@
+{
+	"db": {
+		"driver": "pdo_sqlite",
+		"memory": true
+	},
+	"cms-wiki-url": "http://cms.wiki/"
+}

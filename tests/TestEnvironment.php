@@ -2,6 +2,8 @@
 
 namespace WMDE\Fundraising\Frontend\Tests;
 
+use FileFetcher\SimpleFileFetcher;
+use WMDE\Fundraising\Frontend\ConfigReader;
 use WMDE\Fundraising\Frontend\FunFunFactory;
 
 /**
@@ -24,13 +26,13 @@ class TestEnvironment {
 	private $factory;
 
 	private function __construct() {
-		$this->factory = new FunFunFactory( [
-			'db' => [
-				'driver' => 'pdo_sqlite',
-				'memory' => true,
-			],
-			'cms-wiki-url' => 'http://cms.wiki/'
-		] );
+		$configReader = new ConfigReader(
+			new SimpleFileFetcher(),
+			__DIR__ . '/../app/config/config.dist.json',
+			__DIR__ . '/../app/config/config.test.json'
+		);
+
+		$this->factory = new FunFunFactory( $configReader->getConfig() );
 	}
 
 	public function getFactory(): FunFunFactory {
