@@ -7,7 +7,10 @@ use Doctrine\DBAL\DriverManager;
 use FileFetcher\FileFetcher;
 use FileFetcher\SimpleFileFetcher;
 use WMDE\Fundraising\Frontend\Domain\CommentRepository;
+use WMDE\Fundraising\Frontend\Domain\DoctrineRequestRepository;
 use WMDE\Fundraising\Frontend\Domain\InMemoryCommentRepository;
+use WMDE\Fundraising\Frontend\Domain\RequestRepository;
+use WMDE\Fundraising\Frontend\Domain\RequestValidator;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\AddSubscriptionUseCase;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\DisplayPageUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\ListCommentsUseCase;
@@ -25,6 +28,7 @@ class FunFunFactory {
 
 	private $connection;
 	private $fileFetcher;
+	private $requestValidator;
 
 	/**
 	 * @param array $config
@@ -63,6 +67,17 @@ class FunFunFactory {
 		return new InMemoryCommentRepository( [] ); // TODO
 	}
 
+	private function newRequestRepository(): RequestRepository {
+		return new DoctrineRequestRepository( $this->getConnection() );
+	}
+
+	private function newRequestValidator(): RequestValidator {
+		if ( $this->requestValidator === null ) {
+			$this->requestValidator = new RequestValidator( new MailValidator( MailValidator::TEST_WITH_MX ) );
+		}
+		return $this->requestValidator;
+	}
+
 	public function newDisplayPageUseCase(): DisplayPageUseCase {
 		return new DisplayPageUseCase(
 			$this->getFileFetcher(),
@@ -71,7 +86,7 @@ class FunFunFactory {
 	}
 
 	public function newAddSubscriptionUseCase(): AddSubscriptionUseCase {
-		return new AddSubscriptionUseCase(); // TODO Inject repository
+		return new AddSubscriptionUseCase( $this->newRequestRepository(), $this->newRequestValidator() );
 	}
 
 	private function getFileFetcher(): FileFetcher {
@@ -87,6 +102,10 @@ class FunFunFactory {
 	 */
 	public function setFileFetcher( FileFetcher $fileFetcher ) {
 		$this->fileFetcher = $fileFetcher;
+	}
+
+	public function setRequestValidator( RequestValidator $requestValidator ) {
+		$this->requestValidator = $requestValidator;
 	}
 
 }
