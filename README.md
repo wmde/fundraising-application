@@ -28,6 +28,11 @@ For a full CI run
 
 	composer ci
 
+## Profiling
+
+When accessing the API via `web/index.dev.php`, profiling information will be generated and in
+`app/cache/profiler`. You can access the profiler UI via `index.dev.php/_profiler`.
+
 ## Internal structure
 
 * `web/`: web accessible code
