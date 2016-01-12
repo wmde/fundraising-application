@@ -11,7 +11,7 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
  * @covers WMDE\Fundraising\Frontend\BankDataConverter
  *
  * @licence GNU GPL v2+
- * @author Christoph Fischer <christoph.fischer@wikimedia.de
+ * @author Christoph Fischer <christoph.fischer@wikimedia.de >
  */
 class BankDataConverterTest extends \PHPUnit_Framework_TestCase {
 
