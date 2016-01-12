@@ -2,8 +2,8 @@
 
 
 namespace WMDE\Fundraising\Frontend\UseCases\AddSubscription;
-use WMDE\Fundraising\Entities\Request;
 
+use WMDE\Fundraising\Entities\Request;
 
 /**
  * @license GNU GPL v2+
