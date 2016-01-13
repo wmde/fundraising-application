@@ -9,7 +9,9 @@
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
+use WMDE\Fundraising\Frontend\Domain\Iban;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageDisplayRequest;
+use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanRequest;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentListingRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\SubscriptionRequest;
 
@@ -51,6 +53,35 @@ $app->post(
 		$responseModel = $useCase->addSubscription( $subscriptionRequest );
 		// TODO forward/dispatch to matching 'page/name' route, depending on $responseModel->getType();
 		return 'TODO';
+	}
+);
+
+$app->get(
+	'check-iban',
+	function( Request $request ) use ( $app, $ffFactory ) {
+		$useCase = $ffFactory->newCheckIbanUseCase();
+		$responseModel = $useCase->checkIban( new Iban( $request->get( 'iban', '' ) ) );
+
+		return $app->json(
+			$responseModel ?
+				[ 'status' => 'OK' ] + $responseModel->getBankData() :
+				[ 'status' => 'ERR' ]
+		);
+	}
+);
+
+$app->get(
+	'generate-iban',
+	function( Request $request ) use ( $app, $ffFactory ) {
+		$useCase = $ffFactory->newGenerateIbanUseCase();
+		$responseModel = $useCase->generateIban(
+			new GenerateIbanRequest(
+				$request->get( 'accountNumber', '' ),
+				$request->get( 'bankCode', '' )
+			)
+		);
+
+		return $app->json( $responseModel ? [ 'status' => 'OK' ] + $responseModel->getBankData() : [ 'status' => 'ERR' ] );
 	}
 );
 
