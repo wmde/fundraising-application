@@ -6,13 +6,15 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use FileFetcher\FileFetcher;
 use FileFetcher\SimpleFileFetcher;
+use Mediawiki\Api\ApiUser;
+use Mediawiki\Api\MediawikiApi;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
 use WMDE\Fundraising\Frontend\Domain\CommentRepository;
 use WMDE\Fundraising\Frontend\Domain\InMemoryCommentRepository;
-use WMDE\Fundraising\Frontend\PageRetriever\ActionBasedPageRetriever;
+use WMDE\Fundraising\Frontend\PageRetriever\ApiBasedPageRetriever;
 use WMDE\Fundraising\Frontend\PageRetriever\PageRetriever;
 use WMDE\Fundraising\Frontend\Presenters\DisplayPagePresenter;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\DisplayPageUseCase;
@@ -24,7 +26,6 @@ use WMDE\Fundraising\Store\Installer;
 
 /**
  * @licence GNU GPL v2+
- * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class FunFunFactory {
 
@@ -37,6 +38,9 @@ class FunFunFactory {
 	 * @param array $config
 	 * - db: DBAL connection parameters
 	 * - cms-wiki-url
+	 * - cms-wiki-api-url
+	 * - cms-wiki-user
+	 * - cms-wiki-password
 	 * - enable-twig-cache: boolean
 	 */
 	public function __construct( array $config ) {
@@ -99,15 +103,18 @@ class FunFunFactory {
 	}
 
 	private function newPageRetriever(): PageRetriever {
-		return new ActionBasedPageRetriever(
-			$this->config['cms-wiki-url'],
-			$this->newLogger(),
-			$this->getFileFetcher()
+		return new ApiBasedPageRetriever(
+			new MediawikiApi(
+				$this->config['cms-wiki-api-url']
+				// TODO: inject guzzle Client so tests can replace it
+			),
+			new ApiUser( $this->config['cms-wiki-user'], $this->config['cms-wiki-password'] ),
+			$this->newLogger()
 		);
 	}
 
 	private function newLogger(): LoggerInterface {
-		return new NullLogger();
+		return new NullLogger(); // TODO
 	}
 
 	private function newPageContentModifier(): PageContentModifier {

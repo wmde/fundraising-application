@@ -8,5 +8,8 @@
 		"port": ""
 	},
 	"cms-wiki-url": "",
+	"cms-wiki-api-url": "",
+	"cms-wiki-user": "",
+	"cms-wiki-password": "",
 	"enable-twig-cache": true
 }

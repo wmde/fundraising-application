@@ -29,7 +29,8 @@ class TestEnvironment {
 		$configReader = new ConfigReader(
 			new SimpleFileFetcher(),
 			__DIR__ . '/../app/config/config.dist.json',
-			__DIR__ . '/../app/config/config.test.json'
+			__DIR__ . '/../app/config/config.test.json',
+			__DIR__ . '/../app/config/config.test.local.json'
 		);
 
 		$this->factory = new FunFunFactory( $configReader->getConfig() );
