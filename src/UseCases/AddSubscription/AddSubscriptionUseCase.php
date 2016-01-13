@@ -11,8 +11,8 @@ use WMDE\Fundraising\Frontend\Domain\RequestValidator;
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class AddSubscriptionUseCase
-{
+class AddSubscriptionUseCase {
+
 	/**
 	 * @var RequestRepository
 	 */

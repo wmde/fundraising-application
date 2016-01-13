@@ -9,8 +9,8 @@ use WMDE\Fundraising\Entities\Request;
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class AddSubscriptionResponse
-{
+class AddSubscriptionResponse {
+
 	const TYPE_VALID = 'valid';
 	const TYPE_INVALID = 'invalid';
 

@@ -10,8 +10,8 @@ use WMDE\Fundraising\Frontend\MailValidator;
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class RequestValidator
-{
+class RequestValidator {
+
 	private $mailValidator;
 	private $obligatoryFields = [
 		'vorname', 'nachname', 'titel'
@@ -54,4 +54,5 @@ class RequestValidator
 	public function setValidationErrors( $validationErrors ) {
 		$this->validationErrors = $validationErrors;
 	}
+
 }

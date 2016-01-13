@@ -9,8 +9,8 @@ use WMDE\Fundraising\Frontend\Domain\InMemoryRequestRepository;
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class InMemoryRequestRepositoryTest  extends \PHPUnit_Framework_TestCase
-{
+class InMemoryRequestRepositoryTest  extends \PHPUnit_Framework_TestCase {
+
 	public function testWhenRepositoryIsInitialized_ItContainsNoRequests() {
 		$repo = new InMemoryRequestRepository( [] );
 		$this->assertEquals( [], $repo->getRequests() );

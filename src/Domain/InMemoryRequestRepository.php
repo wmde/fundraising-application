@@ -12,8 +12,8 @@ use WMDE\Fundraising\Entities\Request;
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class InMemoryRequestRepository implements RequestRepository
-{
+class InMemoryRequestRepository implements RequestRepository {
+
 	private $requests;
 
 	/**
