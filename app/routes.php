@@ -11,6 +11,7 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageDisplayRequest;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentListingRequest;
+use WMDE\Fundraising\Frontend\UseCases\AddSubscription\SubscriptionRequest;
 
 $app->get(
 	'validate-email',
@@ -38,6 +39,18 @@ $app->get(
 	'page/{pageName}',
 	function( Application $app, $pageName ) use ( $ffFactory ) {
 		return $ffFactory->newDisplayPageUseCase()->getPage( new PageDisplayRequest( $pageName ) );
+	}
+);
+
+$app->post(
+	'contact/subscribe',
+	function( Request $request ) use ( $ffFactory ) {
+		$useCase = $ffFactory->newAddSubscriptionUseCase();
+		// TODO: Create SubscriptionRequest from $request params
+		$subscriptionRequest = new SubscriptionRequest();
+		$responseModel = $useCase->addSubscription( $subscriptionRequest );
+		// TODO forward/dispatch to matching 'page/name' route, depending on $responseModel->getType();
+		return 'TODO';
 	}
 );
 
