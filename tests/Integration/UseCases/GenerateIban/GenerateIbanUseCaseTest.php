@@ -33,10 +33,7 @@ class GenerateIbanUseCaseTest extends \PHPUnit_Framework_TestCase {
 	public function testWhenInvalidBankAccountDataIsGiven_falseIsReturned() {
 		$useCase = new GenerateIbanUseCase( new BankDataConverter( 'res/blz.lut2f' ) );
 
-		$this->assertEquals(
-			false,
-			$useCase->generateIban( new GenerateIbanRequest( '1015754241', '20050550' ) )
-		);
+		$this->assertFalse( $useCase->generateIban( new GenerateIbanRequest( '1015754241', '20050550' ) ) );
 	}
 
 }
