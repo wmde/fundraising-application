@@ -41,17 +41,11 @@ class RequestValidator {
 		return count( $errors ) == 0;
 	}
 
-	/**
-	 * @return array
-	 */
-	public function getValidationErrors() {
+	public function getValidationErrors(): array {
 		return $this->validationErrors;
 	}
 
-	/**
-	 * @param array $validationErrors
-	 */
-	public function setValidationErrors( $validationErrors ) {
+	public function setValidationErrors( array $validationErrors ) {
 		$this->validationErrors = $validationErrors;
 	}
 
