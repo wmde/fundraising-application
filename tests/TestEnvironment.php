@@ -21,22 +21,51 @@ class TestEnvironment {
 	}
 
 	/**
+	 * @var array
+	 */
+	private $config;
+
+	/**
 	 * @var FunFunFactory
 	 */
 	private $factory;
 
 	private function __construct() {
-		$configReader = new ConfigReader(
+		$this->config = $this->getConfigFromFiles();
+		$this->factory = new FunFunFactory( $this->config );
+	}
+
+	private function getConfigFromFiles() {
+		$readerArguments = [
 			new SimpleFileFetcher(),
 			__DIR__ . '/../app/config/config.dist.json',
-			__DIR__ . '/../app/config/config.test.json'
-		);
+			__DIR__ . '/../app/config/config.test.json',
+		];
 
-		$this->factory = new FunFunFactory( $configReader->getConfig() );
+		if ( is_readable( __DIR__ . '/../app/config/config.test.local.json' ) ) {
+			$readerArguments[] = __DIR__ . '/../app/config/config.test.local.json';
+		}
+
+		/** @noinspection PhpParamsInspection */
+		$configReader = new ConfigReader( ...$readerArguments );
+
+		return $configReader->getConfig();
 	}
 
 	public function getFactory(): FunFunFactory {
 		return $this->factory;
+	}
+
+	public function getConfig(): array {
+		return $this->config;
+	}
+
+	public function getTestData( string $fileName ): string {
+		return file_get_contents( __DIR__ . '/data/' . $fileName );
+	}
+
+	public function getJsonTestData( string $fileName ) {
+		return json_decode( $this->getTestData( $fileName ), true );
 	}
 
 }

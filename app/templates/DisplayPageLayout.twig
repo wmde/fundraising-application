@@ -60,7 +60,7 @@
     <!-- Header -->
     <header id="header">
         <div class="container clearfix">
-            {{ header }}
+            {{ header | raw }}
         </div>
     </header>
 
@@ -68,14 +68,14 @@
     <!-- Main -->
     <main id="main">
         <div class="container">
-            {{ main }}
+            {{ main | raw }}
         </div>
     </main>
 
     <!-- Footer -->
     <footer id="footer">
         <div class="container">
-            {{ footer }}
+            {{ footer | raw }}
         </div>
     </footer>
 </div>
