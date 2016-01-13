@@ -1,0 +1,39 @@
+/* Form elements ========================================================================= */
+/* Textbox / Textarea*/
+
+
+/* Radio Button */
+/*input[type=radio] { left: 0px; position: relative; }
+input[type=radio] + label { padding-left: 0; }
+input[type=radio] + label:before { background: none; }*/
+
+input[type=radio],
+input[type=checkbox] { left: -9000px; }
+
+input[type=radio].__checked + label:before,
+input[type=checkbox].__checked + label:before { background-position: left center; }
+
+input[type=radio].__disabled + label:before,
+input[type=checkbox].__disabled + label:before { background-position: left top; }
+
+input[type=radio].__checked.__disabled + label:before,
+input[type=checkbox].__checked.__disabled + label:before { background-position: left bottom; }
+
+/* Checkbox */
+/*input[type=checkbox] { left: 0px; position: relative; }
+input[type=checkbox] + label { padding-left: 0; }
+input[type=checkbox] + label:before { background: none }*/
+
+
+/* ui-slider */
+/*.ui-slider { behavior:url("_styles/PIE.php"); }
+.ui-slider div { behavior:url("_styles/PIE.php"); }
+.ui-slider .ui-slider-handle { behavior:url("_styles/PIE.php"); }*/
+/* ======================================================================================= */
+
+
+/* Layout ================================================================================ */
+/*.box.rounded { behavior:url("_styles/PIE.php"); }
+.box.rounded.partial { behavior:url("_styles/PIE.php"); }
+.box.rounded.partial .box-header { behavior:url("_styles/PIE.php"); }
+.box.rounded.partial .box-footer { behavior:url("_styles/PIE.php"); }*/
