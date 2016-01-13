@@ -44,6 +44,7 @@ class DisplayPageRouteTest extends SystemTestCase {
 	}
 
 	private function insertUnicornsPage() {
+		// FIXME: does not work with API based retriever
 		$this->testEnvironment->getFactory()->setFileFetcher( new InMemoryFileFetcher( [
 			'http://cms.wiki/?title=Unicorns&action=render' => 'Pink fluffy unicorns dancing on rainbows'
 		] ) );

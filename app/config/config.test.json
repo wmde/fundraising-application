@@ -4,5 +4,6 @@
 		"memory": true
 	},
 	"cms-wiki-url": "http://cms.wiki/",
+	"cms-wiki-api-url": "http://cms.wiki/api.php",
 	"enable-twig-cache": false
 }
