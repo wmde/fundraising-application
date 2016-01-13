@@ -3,5 +3,6 @@
 		"driver": "pdo_sqlite",
 		"memory": true
 	},
-	"cms-wiki-url": "http://cms.wiki/"
+	"cms-wiki-url": "http://cms.wiki/",
+	"enable-twig-cache": false
 }

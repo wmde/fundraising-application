@@ -7,5 +7,6 @@
 		"host": "",
 		"port": ""
 	},
-	"cms-wiki-url": ""
+	"cms-wiki-url": "",
+	"enable-twig-cache": true
 }

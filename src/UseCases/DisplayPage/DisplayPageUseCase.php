@@ -2,8 +2,6 @@
 
 namespace WMDE\Fundraising\Frontend\UseCases\DisplayPage;
 
-use FileFetcher\FileFetcher;
-use FileFetcher\FileFetchingException;
 use WMDE\Fundraising\Frontend\PageRetriever\PageRetriever;
 
 /**
@@ -20,25 +18,33 @@ class DisplayPageUseCase {
 		$this->contentModifier = $contentModifier;
 	}
 
-	public function getPage( PageDisplayRequest $listingRequest ): string {
-		$pageContent = $this->getPageContent( $this->normalizePageName( $listingRequest->getPageName() ) );
+	public function getPage( PageDisplayRequest $listingRequest ): PageDisplayResponse {
+		$response = new PageDisplayResponse();
 
-		return "<html><header />$pageContent</html>";
+		$response->setHeaderContent( $this->getPageContent( '10hoch16/Seitenkopf' ) );
+		$response->setMainContent( $this->getPageContent( $listingRequest->getPageName() ) );
+		$response->setFooterContent( $this->getPageContent( '10hoch16/Seitenfuß' ) );
+
+		$response->freeze();
+		$response->assertNoNullFields();
+		return $response;
 	}
 
-	private function getPageContent( string $pageName ) {
+	private function getPageContent( string $pageName ): string {
+		$normalizedPageName = $this->normalizePageName( $pageName );
+
 		// TODO: fetch template and embed page content into it
 		// TODO: whitelisting and blacklisting of page name?
 		// TODO: debug output when dev?
 
-		$content = $this->pageRetriever->fetchPage( $pageName );
-		$content = $this->contentModifier->getProcessedContent( $content, $pageName );
+		$content = $this->pageRetriever->fetchPage( $normalizedPageName );
+		$content = $this->contentModifier->getProcessedContent( $content, $normalizedPageName );
 
 		if ( $content !== '' ) {
 			return $content;
 		}
 
-		return 'missing: ' . htmlspecialchars( $pageName );
+		return 'missing: ' . $normalizedPageName;
 	}
 
 	private function normalizePageName( string $title ): string {

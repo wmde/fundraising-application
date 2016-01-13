@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"  xml:lang="de"  lang="de">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Spenden f&uuml;r Freies Wissen - Wikimedia F&ouml;rdergesellschaft</title>
+    <!--meta name="viewport" content="width=device-width, initial-scale=1.0"-->
+
+    <meta name="title" content="Spenden für Freies Wissen - Wikimedia Fördergesellschaft" />
+    <meta name="description" content="Wenn jeder nur einen kleinen Beitrag leisten würde, wäre unsere Spendenkampagne in einer Stunde vorüber." />
+
+    <!-- open graph -->
+    <meta property="og:title" content="Wenn jeder nur einen kleinen Beitrag leisten würde, wäre unsere Spendenkampagne in einer Stunde vorüber." />
+    <meta property="og:type" content="non_profit" />
+    <meta property="og:url" content="https://spenden.wikimedia.de/spenden/?piwik_campaign=social-networks&amp;piwik_kwd=facebook" />
+    <meta property="og:image" content="https://wikipedia.de/img/logo.png" />
+    <meta property="og:site_name" content="Gemeinnnützige Wikimedia Fördergesellschaft mbH" />
+    <meta property="og:description" content="Mir liegt Wikipedia am Herzen, deshalb habe ich gespendet. Denn was wäre das Netz ohne Wikipedia?" />
+
+    <link rel="shortcut icon" href="../skin/10h16/_assets/img/favicon.ico" />
+    <link rel="apple-touch-icon" href="../skin/10h16/_assets/img/apple-touch-icon.png" />
+
+    <link href="../res/css/fontcustom.css" rel="stylesheet" type="text/css" />
+    <link href="../res/css/lib/jquery.ui/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="../skin/10h16/_styles/styles.css" rel="stylesheet" type="text/css" />
+
+    <script type="text/javascript" src="../res/js/lib/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="../res/js/lib/jquery-ui-1.11.2.min.js"></script>
+
+    <script type="text/javascript" src="../res/js/lib/jquery.ui.touch-punch-0.2.3.min.js"></script>
+    <script type="text/javascript" src="../res/js/lib/wlightbox.jquery.js"></script>
+    <script type="text/javascript" src="../skin/10h16/_js/spenden.wikimedia.js"></script>
+
+    <script type="text/javascript" src="../res/js/lib/jquery.als-1.7.min.js"></script>
+    <script type="text/javascript" src="../res/js/donationTicker.js"></script>
+    <script type="text/javascript" src="../res/js/donationCommentsLightbox.js"></script>
+
+    <!--script type="text/javascript" src="../skin/10h16/_js/form-methods.js"></script-->
+
+    <!--[if lt IE 10]>
+    <script src="../res/js/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="../res/js/spenden.wikimedia-ie8.js"></script>
+
+    <link href="../res/css/styles-ie8.css" rel="stylesheet" type="text/css" />
+    <![endif]-->
+    <!--[if gte IE 10]>
+    <script type="text/javascript" src="../skin/10h16/_js/form-methods.js"></script>
+    <![endif]-->
+    <!--[if !IE]> -->
+    <script type="text/javascript" src="../skin/10h16/_js/form-methods.js"></script>
+    <!-- <![endif]-->
+
+    <script type="text/javascript">
+        var isMobile = {{ isMobile }};
+    </script>
+</head>
+
+<body>
+<div id="wrapper">
+
+    <!-- Header -->
+    <header id="header">
+        <div class="container clearfix">
+            {{ header }}
+        </div>
+    </header>
+
+
+    <!-- Main -->
+    <main id="main">
+        <div class="container">
+            {{ main }}
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer id="footer">
+        <div class="container">
+            {{ footer }}
+        </div>
+    </footer>
+</div>
+
+{% if subFooter is not empty %}
+<div id="subfooter">
+    {{ subFooter }}
+</div>
+{% endif %}
+
+
+<!-- notice for clients without javascript -->
+<div id="notice-wrapper">
+    <div class="notice-window">
+        {{ noJsNotice }}
+    </div>
+</div>
+<script type="text/javascript">
+    /* hide javascript notice rightaway */
+    document.getElementById( 'notice-wrapper' ).style.display = 'none';
+</script>
+</body>
+</html>
