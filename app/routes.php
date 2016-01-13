@@ -48,8 +48,11 @@ $app->post(
 	'contact/subscribe',
 	function( Request $request ) use ( $ffFactory ) {
 		$useCase = $ffFactory->newAddSubscriptionUseCase();
-		// TODO: Create SubscriptionRequest from $request params
-		$subscriptionRequest = new SubscriptionRequest();
+		$subscriptionRequest = SubscriptionRequest::createFromArray( $request->request->all() );
+		$subscriptionRequest->setWikiloginFromValues( [
+			$request->request->get( 'wikilogin' ),
+			$request->cookies->get( 'spenden_wikilogin' ),
+		] );
 		$responseModel = $useCase->addSubscription( $subscriptionRequest );
 		// TODO forward/dispatch to matching 'page/name' route, depending on $responseModel->getType();
 		return 'TODO';
