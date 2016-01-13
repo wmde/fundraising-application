@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/wmde/FundraisingFrontend.svg)](https://travis-ci.org/wmde/FundraisingFrontend)
+[![Build Status](https://travis-ci.org/wmde/FundraisingFrontend.svg?branch=master)](https://travis-ci.org/wmde/FundraisingFrontend)
 
 User facing application for the WMDE fundraising.
 
