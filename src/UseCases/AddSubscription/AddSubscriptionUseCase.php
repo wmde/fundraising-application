@@ -5,8 +5,8 @@ namespace WMDE\Fundraising\Frontend\UseCases\AddSubscription;
 
 use WMDE\Fundraising\Entities\Request;
 use WMDE\Fundraising\Frontend\Domain\RequestRepository;
-use WMDE\Fundraising\Frontend\Domain\RequestValidator;
 use WMDE\Fundraising\Frontend\ResponseModel\AddSubscriptionResponse;
+use WMDE\Fundraising\Frontend\Validation\RequestValidator;
 
 /**
  * @license GNU GPL v2+

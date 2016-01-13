@@ -1,7 +1,7 @@
 <?php
 
 
-namespace WMDE\Fundraising\Frontend\Domain;
+namespace WMDE\Fundraising\Frontend\Validation;
 
 use WMDE\Fundraising\Entities\Request;
 use WMDE\Fundraising\Frontend\MailValidator;

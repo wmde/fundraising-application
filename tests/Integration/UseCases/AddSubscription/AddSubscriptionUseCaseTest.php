@@ -6,8 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\AddSubscription;
 use PHPUnit_Framework_MockObject_MockObject;
 use WMDE\Fundraising\Entities\Request;
 use WMDE\Fundraising\Frontend\Domain\RequestRepository;
-use WMDE\Fundraising\Frontend\Domain\RequestValidator;
-use WMDE\Fundraising\Frontend\ResponseModel\AddSubscriptionResponse;
+use WMDE\Fundraising\Frontend\Validation\RequestValidator;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\AddSubscriptionUseCase;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\SubscriptionRequest;
 
