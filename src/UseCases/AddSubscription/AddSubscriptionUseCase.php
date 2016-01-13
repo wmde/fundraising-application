@@ -30,7 +30,7 @@ class AddSubscriptionUseCase {
 		$request = $this->createRequestFromSubscriptionRequest( $subscriptionRequest );
 
 		if ( ! $this->requestValidator->validate( $request ) ) {
-			return AddSubscriptionResponse::newFailureResponse( $request, $this->requestValidator->getValidationErrors() );
+			return AddSubscriptionResponse::newFailureResponse( $request, $this->requestValidator->getConstraintViolations() );
 		}
 		$this->requestRepository->storeRequest( $request );
 

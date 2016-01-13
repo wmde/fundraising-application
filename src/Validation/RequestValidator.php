@@ -10,43 +10,32 @@ use WMDE\Fundraising\Frontend\Validation\MailValidator;
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class RequestValidator {
+class RequestValidator implements InstanceValidator {
 
-	private $mailValidator;
-	private $obligatoryFields = [
-		'vorname', 'nachname', 'titel'
-	];
-	private $validationErrors = [];
+	private $constraints;
+	private $constraintViolations;
 
 	public function __construct( MailValidator $mailValidator ) {
-		$this->mailValidator = $mailValidator;
+		$this->constraints = [
+			new ValidationConstraint( 'email', $mailValidator ),
+			new ValidationConstraint( 'vorname', new RequiredFieldValidator() ),
+			new ValidationConstraint( 'nachname', new RequiredFieldValidator() ),
+			new ValidationConstraint( 'anrede', new RequiredFieldValidator() ),
+		];
 	}
 
-	public function validate( Request $request ) {
-		// TODO use a proper validator interface on the sub-validators for each field, with a config array
-		// TODO use sub-validators to generate violation messages
-		// TODO store violation messages
-		$errors = [];
-		if ( ! $this->mailValidator->validate( $request->getEmail() ) ) {
-			$errors['email'] = 'invalid';
-		}
-		foreach ( $this->obligatoryFields as $fld ) {
-			$accessor = 'get' . ucfirst( $fld );
-			if ( empty( $request->$accessor() ) ) {
-				$errors[$fld] = 'missing';
-			}
-
-		}
-		$this->validationErrors = $errors;
-		return count( $errors ) == 0;
+	public function validate( $request ): bool {
+		$this->constraintViolations = array_filter( array_map(
+				function( ValidationConstraint $constraint ) use ( $request ) {
+					return $constraint->validate( $request );
+				},
+			$this->constraints
+		) );
+		return count( $this->constraintViolations ) == 0;
 	}
 
-	public function getValidationErrors(): array {
-		return $this->validationErrors;
-	}
-
-	public function setValidationErrors( array $validationErrors ) {
-		$this->validationErrors = $validationErrors;
+	public function getConstraintViolations(): array {
+		return $this->constraintViolations;
 	}
 
 }

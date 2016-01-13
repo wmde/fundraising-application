@@ -15,8 +15,6 @@ class ConstraintViolation
 	private $constraint;
 
 	/**
-	 * ConstraintViolation constructor.
-	 *
 	 * @param mixed $value The value that caused this violation
 	 * @param string $message Error message
 	 * @param mixed $constraint The validator instance that created this
