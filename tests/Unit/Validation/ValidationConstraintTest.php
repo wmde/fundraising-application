@@ -13,8 +13,7 @@ use WMDE\Fundraising\Frontend\Validation\ValueValidator;
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class ValidationConstraintTest extends \PHPUnit_Framework_TestCase
-{
+class ValidationConstraintTest extends \PHPUnit_Framework_TestCase {
 	private $validator;
 	private $valueObject;
 

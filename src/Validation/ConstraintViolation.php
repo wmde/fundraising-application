@@ -7,8 +7,7 @@ namespace WMDE\Fundraising\Frontend\Validation;
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class ConstraintViolation
-{
+class ConstraintViolation {
 	private $value;
 	private $message;
 	private $source;
