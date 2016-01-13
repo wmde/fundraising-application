@@ -7,8 +7,8 @@ namespace WMDE\Fundraising\Frontend\UseCases\AddSubscription;
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class SubscriptionRequest
-{
+class SubscriptionRequest {
+
 	private $salutation = '';
 	private $title = '';
 	private $firstName = '';
