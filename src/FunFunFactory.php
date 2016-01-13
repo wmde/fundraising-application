@@ -8,6 +8,8 @@ use FileFetcher\FileFetcher;
 use FileFetcher\SimpleFileFetcher;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use Twig_Environment;
+use Twig_Loader_Filesystem;
 use WMDE\Fundraising\Frontend\Domain\CommentRepository;
 use WMDE\Fundraising\Frontend\Domain\DoctrineRequestRepository;
 use WMDE\Fundraising\Frontend\Domain\InMemoryCommentRepository;
@@ -16,6 +18,7 @@ use WMDE\Fundraising\Frontend\Domain\RequestValidator;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\AddSubscriptionUseCase;
 use WMDE\Fundraising\Frontend\PageRetriever\ActionBasedPageRetriever;
 use WMDE\Fundraising\Frontend\PageRetriever\PageRetriever;
+use WMDE\Fundraising\Frontend\Presenters\DisplayPagePresenter;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\DisplayPageUseCase;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageContentModifier;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\ListCommentsUseCase;
@@ -42,6 +45,7 @@ class FunFunFactory {
 	 * - db: DBAL connection parameters
 	 * - cms-wiki-url
 	 * - bank-data-file: path to file to be used by bank data validation library
+	 * - enable-twig-cache: boolean
 	 */
 	public function __construct( array $config ) {
 		$this->config = $config;
@@ -90,6 +94,26 @@ class FunFunFactory {
 		return new DisplayPageUseCase(
 			$this->newPageRetriever(),
 			$this->newPageContentModifier()
+		);
+	}
+
+	public function newDisplayPagePresenter(): DisplayPagePresenter {
+		return new DisplayPagePresenter( new TwigTemplate(
+			$this->newTwig(),
+			'DisplayPageLayout.twig'
+		) );
+	}
+
+	private function newTwig() {
+		$options = [];
+
+		if ( $this->config['enable-twig-cache'] ) {
+			$options['cache'] = __DIR__ . '/../app/cache';
+		}
+
+		return new Twig_Environment(
+			new Twig_Loader_Filesystem( __DIR__ . '/../app/templates' ),
+			$options
 		);
 	}
 

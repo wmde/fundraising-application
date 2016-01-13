@@ -15,8 +15,8 @@ class DisplayPageRouteTest extends SystemTestCase {
 		$client = $this->createClient();
 		$client->request( 'GET', '/page/kittens' );
 
-		$this->assertSame(
-			'<html><header />missing: Kittens</html>',
+		$this->assertContains(
+			'missing: Kittens',
 			$client->getResponse()->getContent()
 		);
 	}
@@ -25,8 +25,8 @@ class DisplayPageRouteTest extends SystemTestCase {
 		$client = $this->createClient();
 		$client->request( 'GET', '/page/<script>alert("kittens");' );
 
-		$this->assertSame(
-			'<html><header />missing: &lt;script&gt;alert(&quot;kittens&quot;);</html>',
+		$this->assertContains(
+			'missing: &lt;script&gt;alert(&quot;kittens&quot;);',
 			$client->getResponse()->getContent()
 		);
 	}
@@ -37,8 +37,8 @@ class DisplayPageRouteTest extends SystemTestCase {
 		$client = $this->createClient();
 		$client->request( 'GET', '/page/unicorns' );
 
-		$this->assertSame(
-			'<html><header />Pink fluffy unicorns dancing on rainbows</html>',
+		$this->assertContains(
+			'Pink fluffy unicorns dancing on rainbows',
 			$client->getResponse()->getContent()
 		);
 	}
@@ -56,6 +56,43 @@ class DisplayPageRouteTest extends SystemTestCase {
 		$client->request( 'GET', '/page/unicorns/of-doom' );
 
 		$this->assert404( $client->getResponse(), 'No route found for "GET /page/unicorns/of-doom"' );
+	}
+
+	public function testWhenNoSubFooter_subFooterDivIsNotShown() {
+		// TODO: setup
+		$client = $this->createClient();
+		$client->request( 'GET', '/page/unicorns' );
+
+		$this->assertNotContains(
+			'<div id="subfooter">',
+			$client->getResponse()->getContent()
+		);
+	}
+
+	public function testWhenIsMobile_isMobileJsVarGetsSetToTrue() {
+		// TODO: setup
+		$client = $this->createClient();
+		$client->request( 'GET', '/page/unicorns' );
+
+		$this->assertNotContains(
+			'var isMobile = true;',
+			$client->getResponse()->getContent()
+		);
+	}
+
+	public function testFooterAndHeaderGetEmbedded() {
+		$client = $this->createClient();
+		$client->request( 'GET', '/page/kittens' );
+
+		$this->assertContains(
+			'missing: 10hoch16/Seitenkopf',
+			$client->getResponse()->getContent()
+		);
+
+		$this->assertContains(
+			'missing: 10hoch16/Seitenfuß',
+			$client->getResponse()->getContent()
+		);
 	}
 
 }

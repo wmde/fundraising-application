@@ -8,5 +8,6 @@
 		"port": ""
 	},
 	"cms-wiki-url": "",
-	"bank-data-file": ""
+	"bank-data-file": "",
+	"enable-twig-cache": true
 }
