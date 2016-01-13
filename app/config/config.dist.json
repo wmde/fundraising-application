@@ -1,0 +1,13 @@
+{
+	"db": {
+		"driver": "",
+		"user": "",
+		"password": "",
+		"dbname": "",
+		"host": "",
+		"port": ""
+	},
+	"cms-wiki-url": "",
+	"bank-data-file": "",
+	"enable-twig-cache": true
+}

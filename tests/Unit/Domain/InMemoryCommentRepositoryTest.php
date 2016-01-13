@@ -17,7 +17,7 @@ class InMemoryCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$this->assertSame( [], ( new InMemoryCommentRepository( [] ) )->getComments( 10 ) );
 	}
 
-	public function testWhenAreNoComments_getCommentsReturnsThem() {
+	public function testWhenThereAreComments_getCommentsReturnsThem() {
 		$this->assertEquals(
 			[
 				new Comment( 'name0', 'comment', '42', '000000' ),

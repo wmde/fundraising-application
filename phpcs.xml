@@ -12,8 +12,8 @@
     <rule ref="Generic.Files.LineEndings" />
     <rule ref="Generic.Files.LineLength">
         <properties>
-            <property name="lineLimit" value="120" />
-            <property name="absoluteLineLimit" value="120" />
+            <property name="lineLimit" value="125" />
+            <property name="absoluteLineLimit" value="125" />
         </properties>
     </rule>
     <rule ref="Generic.Files.OneClassPerFile" />
@@ -52,7 +52,6 @@
     <rule ref="Generic.PHP.ForbiddenFunctions" />
     <rule ref="Generic.PHP.LowerCaseConstant" />
     <rule ref="Generic.PHP.LowerCaseKeyword" />
-    <rule ref="Generic.PHP.NoSilencedErrors" />
     <rule ref="Generic.PHP.SAPIUsage" />
 
     <rule ref="Generic.WhiteSpace.DisallowSpaceIndent" />

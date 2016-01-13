@@ -7,4 +7,15 @@ sudo: false
 
 install: travis_retry composer install --prefer-source
 
+before_script: bash build/travis/before_script.sh
+
 script: composer ci
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+notifications:
+  email:
+    on_success: change
+    on_failure: always
