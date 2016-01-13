@@ -4,7 +4,7 @@
 namespace WMDE\Fundraising\Frontend\Validation;
 
 use WMDE\Fundraising\Entities\Request;
-use WMDE\Fundraising\Frontend\MailValidator;
+use WMDE\Fundraising\Frontend\Validation\MailValidator;
 
 /**
  * @license GNU GPL v2+
@@ -27,7 +27,7 @@ class RequestValidator {
 		// TODO use sub-validators to generate violation messages
 		// TODO store violation messages
 		$errors = [];
-		if ( ! $this->mailValidator->validateMail( $request->getEmail() ) ) {
+		if ( ! $this->mailValidator->validate( $request->getEmail() ) ) {
 			$errors['email'] = 'invalid';
 		}
 		foreach ( $this->obligatoryFields as $fld ) {

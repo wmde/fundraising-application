@@ -27,6 +27,7 @@ use WMDE\Fundraising\Frontend\Domain\DoctrineRequestRepository;
 use WMDE\Fundraising\Frontend\Domain\InMemoryCommentRepository;
 use WMDE\Fundraising\Frontend\Domain\RequestRepository;
 use WMDE\Fundraising\Frontend\Presenters\IbanPresenter;
+use WMDE\Fundraising\Frontend\Validation\MailValidator;
 use WMDE\Fundraising\Frontend\Validation\RequestValidator;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\AddSubscriptionUseCase;
 use WMDE\Fundraising\Frontend\PageRetriever\ApiBasedPageRetriever;

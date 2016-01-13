@@ -1,12 +1,14 @@
 <?php
 
-namespace WMDE\Fundraising\Frontend;
+namespace WMDE\Fundraising\Frontend\Validation;
+
+use WMDE\Fundraising\Frontend\MailAddress;
 
 /**
  * @licence GNU GPL v2+
  * @author Christoph Fischer < christoph.fischer@wikimedia.de >
  */
-class MailValidator {
+class MailValidator implements StringValueValidator {
 
 	private $testWithMX;
 
@@ -17,7 +19,7 @@ class MailValidator {
 		$this->testWithMX = $testWithMX;
 	}
 
-	public function validateMail( string $emailAddress ): bool {
+	public function validate( string $emailAddress ): bool {
 		$mailAddressObject = $this->getAddressObjectFromString( $emailAddress );
 		if ( !$mailAddressObject ) {
 			return false;
