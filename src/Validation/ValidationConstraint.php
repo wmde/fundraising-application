@@ -4,7 +4,7 @@
 namespace WMDE\Fundraising\Frontend\Validation;
 
 /**
- * Validate an instance property and add the source information to the ConstraintViolation
+ * Validates an instance property and adds the source information to the ConstraintViolation
  *
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >

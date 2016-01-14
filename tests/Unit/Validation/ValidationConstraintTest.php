@@ -34,17 +34,17 @@ class ValidationConstraintTest extends \PHPUnit_Framework_TestCase {
 
 		$this->validator->method( 'validate' )->willReturn( false );
 		$this->validator->method( 'getLastViolation' )->willReturn(
-			new ConstraintViolation( 'nyan', 'Too many cats!', $this->validator )
+			new ConstraintViolation( 'nyan', 'Too many missing cats!', $this->validator )
 		);
 		$constraint = new ValidationConstraint( 'test', $this->validator );
 		$this->assertInstanceOf( ConstraintViolation::class, $constraint->validate( $this->valueObject ) );
 	}
 
-	public function testGivenAnInvalidValue_ConstraintViolationSourceConatinsClassAndFieldName() {
+	public function testGivenAnInvalidValue_constraintViolationSourceConatinsClassAndFieldName() {
 
 		$this->validator->method( 'validate' )->willReturn( false );
 		$this->validator->method( 'getLastViolation' )->willReturn(
-			new ConstraintViolation( 'nyan', 'Too many cats!', $this->validator )
+			new ConstraintViolation( 'nyan', 'Too many missing cats!', $this->validator )
 		);
 		$constraint = new ValidationConstraint( 'test', $this->validator );
 		$violation = $constraint->validate( $this->valueObject );

@@ -33,24 +33,15 @@ class ConstraintViolation {
 		return $this->value;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getMessage() {
+	public function getMessage(): string {
 		return $this->message;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getSource() {
+	public function getSource(): string {
 		return $this->source;
 	}
 
-	/**
-	 * @param string $source
-	 */
-	public function setSource( $source ) {
+	public function setSource( string $source ) {
 		$this->source = $source;
 	}
 
