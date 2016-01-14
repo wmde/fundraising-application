@@ -103,7 +103,8 @@ class FunFunFactory {
 	public function newDisplayPageUseCase(): DisplayPageUseCase {
 		return new DisplayPageUseCase(
 			$this->newPageRetriever(),
-			$this->newPageContentModifier()
+			$this->newPageContentModifier(),
+			$this->config['cms-wiki-title-prefix']
 		);
 	}
 
@@ -209,4 +210,7 @@ class FunFunFactory {
 		$this->requestValidator = $requestValidator;
 	}
 
+	public function setPageTitlePrefix( string $prefix ) {
+		$this->config['cms-wiki-title-prefix'] = $prefix;
+	}
 }

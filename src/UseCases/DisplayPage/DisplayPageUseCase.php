@@ -12,18 +12,22 @@ class DisplayPageUseCase {
 
 	private $pageRetriever;
 	private $contentModifier;
+	private $pageTitlePrefix;
 
-	public function __construct( PageRetriever $pageRetriever, PageContentModifier $contentModifier ) {
+	public function __construct( PageRetriever $pageRetriever,
+								 PageContentModifier $contentModifier,
+								 string $pageTitlePrefix = '' ) {
 		$this->pageRetriever = $pageRetriever;
 		$this->contentModifier = $contentModifier;
+		$this->pageTitlePrefix = $pageTitlePrefix;
 	}
 
 	public function getPage( PageDisplayRequest $listingRequest ): PageDisplayResponse {
 		$response = new PageDisplayResponse();
 
-		$response->setHeaderContent( $this->getPageContent( '10hoch16/Seitenkopf' ) );
-		$response->setMainContent( $this->getPageContent( $listingRequest->getPageName() ) );
-		$response->setFooterContent( $this->getPageContent( '10hoch16/Seitenfuß' ) );
+		$response->setHeaderContent( $this->getPageContent( $this->getPrefixedPageTitle( '10hoch16/Seitenkopf' ) ) );
+		$response->setMainContent( $this->getPageContent( $this->getPrefixedPageTitle( $listingRequest->getPageName() ) ) );
+		$response->setFooterContent( $this->getPageContent( $this->getPrefixedPageTitle( '10hoch16/Seitenfuß' ) ) );
 
 		$response->freeze();
 		$response->assertNoNullFields();
@@ -49,6 +53,10 @@ class DisplayPageUseCase {
 
 	private function normalizePageName( string $title ): string {
 		return ucfirst( str_replace( ' ', '_', trim( $title ) ) );
+	}
+
+	private function getPrefixedPageTitle( string $pageTitle ): string {
+		return $this->pageTitlePrefix . $pageTitle;
 	}
 
 }
