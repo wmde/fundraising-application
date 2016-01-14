@@ -3,7 +3,6 @@
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\Validation;
 
-
 use WMDE\Fundraising\Entities\Request;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 use WMDE\Fundraising\Frontend\Validation\MailValidator;
