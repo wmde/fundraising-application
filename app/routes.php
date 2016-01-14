@@ -40,7 +40,9 @@ $app->get(
 $app->get(
 	'page/{pageName}',
 	function( Application $app, $pageName ) use ( $ffFactory ) {
-		return $ffFactory->newDisplayPageUseCase()->getPage( new PageDisplayRequest( $pageName ) );
+		return $ffFactory->newDisplayPagePresenter()->present(
+			$ffFactory->newDisplayPageUseCase()->getPage( new PageDisplayRequest( $pageName ) )
+		);
 	}
 );
 

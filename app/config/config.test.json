@@ -4,5 +4,9 @@
 		"memory": true
 	},
 	"cms-wiki-url": "http://cms.wiki/",
-	"bank-data-file": "res/blz.lut2f"
+	"bank-data-file": "res/blz.lut2f",
+	"cms-wiki-api-url": "http://cms.wiki/api.php",
+	"cms-wiki-user": "Wiki User",
+	"cms-wiki-password": "Wiki Password",
+	"enable-twig-cache": false
 }

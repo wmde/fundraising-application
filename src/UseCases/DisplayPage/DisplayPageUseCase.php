@@ -2,8 +2,7 @@
 
 namespace WMDE\Fundraising\Frontend\UseCases\DisplayPage;
 
-use FileFetcher\FileFetcher;
-use FileFetcher\FileFetchingException;
+use WMDE\Fundraising\Frontend\PageRetriever\PageRetriever;
 
 /**
  * @licence GNU GPL v2+
@@ -11,39 +10,45 @@ use FileFetcher\FileFetchingException;
  */
 class DisplayPageUseCase {
 
-	private $fileFetcher;
-	private $urlBase;
+	private $pageRetriever;
+	private $contentModifier;
 
-	public function __construct( FileFetcher $fileFetcher, string $urlBase ) {
-		$this->fileFetcher = $fileFetcher;
-		$this->urlBase = $urlBase;
+	public function __construct( PageRetriever $pageRetriever, PageContentModifier $contentModifier ) {
+		$this->pageRetriever = $pageRetriever;
+		$this->contentModifier = $contentModifier;
 	}
 
-	public function getPage( PageDisplayRequest $listingRequest ): string {
-		$pageContent = $this->getPageContent( $listingRequest->getPageName() );
+	public function getPage( PageDisplayRequest $listingRequest ): PageDisplayResponse {
+		$response = new PageDisplayResponse();
 
-		return "<html><header />$pageContent</html>";
+		$response->setHeaderContent( $this->getPageContent( '10hoch16/Seitenkopf' ) );
+		$response->setMainContent( $this->getPageContent( $listingRequest->getPageName() ) );
+		$response->setFooterContent( $this->getPageContent( '10hoch16/Seitenfuß' ) );
+
+		$response->freeze();
+		$response->assertNoNullFields();
+		return $response;
 	}
 
-	private function getPageContent( string $pageName ) {
-		// Normalization
-		// White and blacklisting of page name
-		// pageRetriever->fetchPage( $wiki_page, 'render' )
-		// getProcessedContent( $content, $wiki_page, 'render' )
-		// Debug output when dev
+	private function getPageContent( string $pageName ): string {
+		$normalizedPageName = $this->normalizePageName( $pageName );
 
-		try {
-			$content = $this->fileFetcher->fetchFile( $this->urlBase . $pageName );
-		}
-		catch ( FileFetchingException $ex ) {
-			$content = '';
-		}
+		// TODO: fetch template and embed page content into it
+		// TODO: whitelisting and blacklisting of page name?
+		// TODO: debug output when dev?
 
-		if ( $content === '' ) {
-			return 'missing: ' . htmlspecialchars( $pageName );
-		}
+		$content = $this->pageRetriever->fetchPage( $normalizedPageName );
+		$content = $this->contentModifier->getProcessedContent( $content, $normalizedPageName );
 
-		return $content;
+		// FIXME: this should be moved to the presenter
+		if ( $content !== '' ) {
+			return $content;
+		}
+		return 'missing: ' . htmlspecialchars( $normalizedPageName );
+	}
+
+	private function normalizePageName( string $title ): string {
+		return ucfirst( str_replace( ' ', '_', trim( $title ) ) );
 	}
 
 }
