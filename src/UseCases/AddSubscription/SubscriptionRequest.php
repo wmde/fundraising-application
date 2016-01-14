@@ -104,14 +104,4 @@ class SubscriptionRequest {
 		$this->setWikilogin( $wikilogin );
 	}
 
-	public static function createFromArray( array $values ): SubscriptionRequest {
-		$instance = new self();
-		foreach ( $values as $key => $value ) {
-			$accessor = 'set' . ucfirst( $key );
-			if ( is_callable( [$instance, $accessor ] ) ) {
-				call_user_func( [$instance, $accessor ], $value );
-			}
-		}
-		return $instance;
-	}
 }
