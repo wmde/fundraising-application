@@ -27,6 +27,7 @@ class AddSubscriptionUseCase {
 
 	public function addSubscription( SubscriptionRequest $subscriptionRequest ) {
 		$request = $this->createRequestFromSubscriptionRequest( $subscriptionRequest );
+
 		if ( ! $this->requestValidator->validate( $request ) ) {
 			return AddSubscriptionResponse::createInvalidResponse( $request, $this->requestValidator->getValidationErrors() );
 		}
@@ -41,7 +42,7 @@ class AddSubscriptionUseCase {
 		$request = new Request();
 		$request->setAnrede( $subscriptionRequest->getSalutation() );
 		$request->setTitel( $subscriptionRequest->getTitle() );
-		$request->setName( $subscriptionRequest->getFirstName() );
+		$request->setVorname( $subscriptionRequest->getFirstName() );
 		$request->setNachname( $subscriptionRequest->getLastName() );
 		$request->setEmail( $subscriptionRequest->getEmail() );
 		$request->setStrasse( $subscriptionRequest->getAddress() );
