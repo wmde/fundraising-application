@@ -13,7 +13,7 @@ class ValidationConstraint {
 	private $fieldName;
 	private $validator;
 
-	public function __construct( string $fieldName, ValueValidator $validator ) {
+	public function __construct( string $fieldName, ScalarValueValidator $validator ) {
 		$this->fieldName = $fieldName;
 		$this->validator = $validator;
 	}

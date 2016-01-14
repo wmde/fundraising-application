@@ -9,7 +9,7 @@ use WMDE\Fundraising\Frontend\MailAddress;
  * @author Christoph Fischer < christoph.fischer@wikimedia.de >
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class MailValidator implements ValueValidator {
+class MailValidator implements ScalarValueValidator {
 
 	private $testWithMX;
 	private $lastViolation;

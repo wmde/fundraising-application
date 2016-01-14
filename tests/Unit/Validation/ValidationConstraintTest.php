@@ -5,7 +5,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Validation;
 
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 use WMDE\Fundraising\Frontend\Validation\ValidationConstraint;
-use WMDE\Fundraising\Frontend\Validation\ValueValidator;
+use WMDE\Fundraising\Frontend\Validation\ScalarValueValidator;
 
 /**
  * @covers WMDE\Fundraising\Frontend\Validation\ValidationConstraint
@@ -19,7 +19,7 @@ class ValidationConstraintTest extends \PHPUnit_Framework_TestCase {
 
 	public function setUp() {
 		parent::setUp();
-		$this->validator = $this->getMock( ValueValidator::class );
+		$this->validator = $this->getMock( ScalarValueValidator::class );
 		$this->valueObject = $this->getMock( \stdClass::class, [ 'getTest' ] );
 		$this->valueObject->method( 'getTest' )->willReturn( 'nyan' );
 	}
