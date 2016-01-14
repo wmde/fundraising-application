@@ -9,5 +9,8 @@
 	},
 	"cms-wiki-url": "",
 	"bank-data-file": "",
+	"cms-wiki-api-url": "",
+	"cms-wiki-user": "",
+	"cms-wiki-password": "",
 	"enable-twig-cache": true
 }

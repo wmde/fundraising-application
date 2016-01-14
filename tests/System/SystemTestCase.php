@@ -5,6 +5,7 @@ namespace WMDE\Fundraising\Frontend\Tests\System;
 use Silex\Application;
 use Silex\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
+use WMDE\Fundraising\Frontend\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
@@ -32,6 +33,14 @@ abstract class SystemTestCase extends WebTestCase {
 		unset( $app['exception_handler'] );
 
 		return $app;
+	}
+
+	protected function getFactory(): FunFunFactory {
+		return $this->testEnvironment->getFactory();
+	}
+
+	protected function getConfig(): array {
+		return $this->testEnvironment->getConfig();
 	}
 
 	protected function assert404( Response $response, $expectedMessage = 'Not Found' ) {

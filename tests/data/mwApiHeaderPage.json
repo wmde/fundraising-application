@@ -1,0 +1,9 @@
+{
+	"parse": {
+		"title": "10hoch16/Seitenkopf",
+		"pageid": 9001,
+		"text": {
+			"*": "<p>I'm a header</p>"
+		}
+	}
+}

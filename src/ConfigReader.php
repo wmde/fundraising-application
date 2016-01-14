@@ -13,13 +13,19 @@ use RuntimeException;
 class ConfigReader {
 
 	private $fileFetcher;
-	private $baseConfigFilePath;
-	private $instanceConfigFilePath;
 
-	public function __construct( FileFetcher $fileFetcher, string $baseConfigFilePath, string $instanceConfigFilePath = null ) {
+	/**
+	 * @var string[]
+	 */
+	private $configPaths;
+
+	public function __construct( FileFetcher $fileFetcher, string ...$configPaths ) {
+		if ( empty( $configPaths ) ) {
+			throw new \InvalidArgumentException( 'Need at least one config path' );
+		}
+
 		$this->fileFetcher = $fileFetcher;
-		$this->baseConfigFilePath = $baseConfigFilePath;
-		$this->instanceConfigFilePath = $instanceConfigFilePath;
+		$this->configPaths = $configPaths;
 	}
 
 	/**
@@ -27,14 +33,18 @@ class ConfigReader {
 	 * @throws RuntimeException
 	 */
 	public function getConfig(): array {
-		if ( $this->instanceConfigFilePath === null ) {
-			return $this->getFileConfig( $this->baseConfigFilePath );
+		if ( count( $this->configPaths ) === 1 ) {
+			return $this->getFileConfig( reset( $this->configPaths ) );
 		}
 
-		return array_replace_recursive(
-			$this->getFileConfig( $this->baseConfigFilePath ),
-			$this->getFileConfig( $this->instanceConfigFilePath )
+		$configs = array_map(
+			function( string $path ) {
+				return $this->getFileConfig( $path );
+			},
+			$this->configPaths
 		);
+
+		return array_replace_recursive( ...$configs );
 	}
 
 	private function getFileConfig( string $filePath ): array {

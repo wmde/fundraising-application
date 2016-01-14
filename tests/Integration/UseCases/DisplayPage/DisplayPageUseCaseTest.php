@@ -2,8 +2,8 @@
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\DisplayPage;
 
-use FileFetcher\InMemoryFileFetcher;
-use WMDE\Fundraising\Frontend\FunFunFactory;
+use Mediawiki\Api\MediawikiApi;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\ApiPostRequestHandler;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageDisplayRequest;
 
@@ -16,32 +16,35 @@ use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageDisplayRequest;
 class DisplayPageUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 	/**
-	 * @var FunFunFactory
+	 * @var TestEnvironment
 	 */
-	private $factory;
+	private $testEnvironment;
 
 	public function setUp() {
-		$this->factory = TestEnvironment::newInstance()->getFactory();
+		$this->testEnvironment = TestEnvironment::newInstance();
 		parent::setUp();
 	}
 
 	private function registerWikiPages() {
-		$this->factory->setFileFetcher( new InMemoryFileFetcher( [
-			'http://cms.wiki/?title=Unicorns&action=render' => 'Pink fluffy unicorns dancing on rainbows',
-			'http://cms.wiki/?title=10hoch16%2FSeitenkopf&action=render' => '<div>An awesome header</div>',
-			'http://cms.wiki/?title=10hoch16%2FSeitenfu%C3%9F&action=render' => '<div>An awesome footer</div>',
-		] ) );
+		$api = $this->getMockBuilder( MediawikiApi::class )->disableOriginalConstructor()->getMock();
+
+		$api->expects( $this->any() )
+			->method( 'postRequest' )
+			->willReturnCallback( new ApiPostRequestHandler( $this->testEnvironment ) );
+
+		$this->testEnvironment->getFactory()->setMediaWikiApi( $api );
 	}
 
 	public function testWhenPageExists_itGetsEmbedded() {
 		$this->registerWikiPages();
-		$useCase = $this->factory->newDisplayPageUseCase();
+
+		$useCase = $this->testEnvironment->getFactory()->newDisplayPageUseCase();
 
 		$response = $useCase->getPage( new PageDisplayRequest( 'Unicorns' ) );
 
-		$this->assertSame( 'Pink fluffy unicorns dancing on rainbows', $response->getMainContent() );
-		$this->assertSame( '<div>An awesome header</div>', $response->getHeaderContent() );
-		$this->assertSame( '<div>An awesome footer</div>', $response->getFooterContent() );
+		$this->assertSame( '<p>Pink fluffy unicorns dancing on rainbows</p>', $response->getMainContent() );
+		$this->assertSame( '<p>I\'m a header</p>', $response->getHeaderContent() );
+		$this->assertSame( '<p>I\'m a footer</p>', $response->getFooterContent() );
 	}
 
 }
