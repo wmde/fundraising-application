@@ -15,6 +15,12 @@ use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanUseCase;
  */
 class GenerateIbanUseCaseTest extends \PHPUnit_Framework_TestCase {
 
+	public function setUp() {
+		if ( !function_exists( 'lut_init' ) ) {
+			$this->markTestSkipped( 'The konto_check needs to be installed!' );
+		}
+	}
+
 	public function testWhenValidBankAccountDataIsGiven_fullBankDataIsReturned() {
 		$useCase = new GenerateIbanUseCase( new BankDataConverter( 'res/blz.lut2f' ) );
 		$bankData = new BankData();
