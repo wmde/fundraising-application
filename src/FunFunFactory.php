@@ -42,12 +42,10 @@ class FunFunFactory {
 
 	private $config;
 
-	private $connection;
-	private $fileFetcher;
-	private $requestValidator;
-	private $mwApi;
-
-	private $requestRepository;
+	/**
+	 * @var \Pimple
+	 */
+	private $pimple;
 
 	/**
 	 * @param array $config
@@ -61,18 +59,63 @@ class FunFunFactory {
 	 */
 	public function __construct( array $config ) {
 		$this->config = $config;
+		$this->pimple = $this->newPimple();
+	}
+
+	private function newPimple(): \Pimple {
+		$pimple = new \Pimple();
+
+		$pimple['dbal_connection'] = $pimple->share( function() {
+			return DriverManager::getConnection( $this->config['db'] );
+		} );
+
+		$pimple['request_repository'] = $pimple->share( function() {
+			return new DoctrineRequestRepository( $this->getConnection() );
+		} );
+
+		$pimple['request_validator'] = $pimple->share( function() {
+			return new RequestValidator( new MailValidator( MailValidator::TEST_WITH_MX ) );
+		} );
+
+		$pimple['mw_api'] = $pimple->share( function() {
+			return new MediawikiApi(
+				$this->config['cms-wiki-api-url'],
+				$this->getGuzzleClient()
+			);
+		} );
+
+		$pimple['guzzle_client'] = $pimple->share( function() {
+			$middlewareFactory = new MiddlewareFactory();
+			$middlewareFactory->setLogger( $this->newLogger() );
+
+			$handlerStack = HandlerStack::create( new CurlHandler() );
+			$handlerStack->push( $middlewareFactory->retry() );
+
+			return new Client( [
+				'cookies' => true,
+				'handler' => $handlerStack,
+				'headers' => [ 'User-Agent' => 'WMDE Fundraising Frontend' ],
+			] );
+		} );
+
+		$pimple['twig'] = $pimple->share( function() {
+			$options = [];
+
+			if ( $this->config['enable-twig-cache'] ) {
+				$options['cache'] = __DIR__ . '/../app/cache';
+			}
+
+			return new Twig_Environment(
+				new Twig_Loader_Filesystem( __DIR__ . '/../app/templates' ),
+				$options
+			);
+		} );
+
+		return $pimple;
 	}
 
 	public function getConnection(): Connection {
-		if ( $this->connection === null ) {
-			$this->connection = $this->newConnection();
-		}
-
-		return $this->connection;
-	}
-
-	private function newConnection(): Connection {
-		return DriverManager::getConnection( $this->config['db'] );
+		return $this->pimple['dbal_connection'];
 	}
 
 	public function newInstaller(): Installer {
@@ -92,22 +135,15 @@ class FunFunFactory {
 	}
 
 	private function newRequestRepository(): RequestRepository {
-		if ( $this->requestRepository === null ) {
-			$this->requestRepository = new DoctrineRequestRepository( $this->getConnection() );
-		}
-
-		return $this->requestRepository;
+		return $this->pimple['request_repository'];
 	}
 
 	public function setRequestRepository( RequestRepository $requestRepository ) {
-		$this->requestRepository = $requestRepository;
+		$this->pimple['request_repository'] = $requestRepository;
 	}
 
 	private function newRequestValidator(): RequestValidator {
-		if ( $this->requestValidator === null ) {
-			$this->requestValidator = new RequestValidator( new MailValidator( MailValidator::TEST_WITH_MX ) );
-		}
-		return $this->requestValidator;
+		return $this->pimple['request_validator'];
 	}
 
 	public function newDisplayPageUseCase(): DisplayPageUseCase {
@@ -120,22 +156,13 @@ class FunFunFactory {
 
 	public function newDisplayPagePresenter(): DisplayPagePresenter {
 		return new DisplayPagePresenter( new TwigTemplate(
-			$this->newTwig(),
+			$this->getTwig(),
 			'DisplayPageLayout.twig'
 		) );
 	}
 
-	private function newTwig() {
-		$options = [];
-
-		if ( $this->config['enable-twig-cache'] ) {
-			$options['cache'] = __DIR__ . '/../app/cache';
-		}
-
-		return new Twig_Environment(
-			new Twig_Loader_Filesystem( __DIR__ . '/../app/templates' ),
-			$options
-		);
+	private function getTwig(): Twig_Environment {
+		return $this->pimple['twig'];
 	}
 
 	private function newPageRetriever(): PageRetriever {
@@ -146,33 +173,16 @@ class FunFunFactory {
 		);
 	}
 
-	private function getMediaWikiApi() {
-		if ( $this->mwApi === null ) {
-			$this->mwApi = new MediawikiApi(
-				$this->config['cms-wiki-api-url'],
-				$this->newGuzzleClient()
-			);
-		}
-
-		return $this->mwApi;
+	private function getMediaWikiApi(): MediawikiApi {
+		return $this->pimple['mw_api'];
 	}
 
 	public function setMediaWikiApi( MediawikiApi $api ) {
-		$this->mwApi = $api;
+		$this->pimple['mw_api'] = $api;
 	}
 
-	private function newGuzzleClient(): ClientInterface {
-		$middlewareFactory = new MiddlewareFactory();
-		$middlewareFactory->setLogger( $this->newLogger() );
-
-		$handlerStack = HandlerStack::create( new CurlHandler() );
-		$handlerStack->push( $middlewareFactory->retry() );
-
-		return new Client( [
-			'cookies' => true,
-			'handler' => $handlerStack,
-			'headers' => [ 'User-Agent' => 'WMDE Fundraising Frontend' ],
-		] );
+	private function getGuzzleClient(): ClientInterface {
+		return $this->pimple['guzzle_client'];
 	}
 
 	private function newLogger(): LoggerInterface {
@@ -201,23 +211,8 @@ class FunFunFactory {
 		return new BankDataConverter( $this->config['bank-data-file'] );
 	}
 
-	private function getFileFetcher(): FileFetcher {
-		if ( $this->fileFetcher === null ) {
-			$this->fileFetcher = new SimpleFileFetcher();
-		}
-
-		return $this->fileFetcher;
-	}
-
-	/**
-	 * Should only be used by test setup code!
-	 */
-	public function setFileFetcher( FileFetcher $fileFetcher ) {
-		$this->fileFetcher = $fileFetcher;
-	}
-
 	public function setRequestValidator( RequestValidator $requestValidator ) {
-		$this->requestValidator = $requestValidator;
+		$this->pimple['request_validator'] = $requestValidator;
 	}
 
 	public function setPageTitlePrefix( string $prefix ) {
