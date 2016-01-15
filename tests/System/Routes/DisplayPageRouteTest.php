@@ -10,6 +10,8 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\ApiPostRequestHandler;
 use WMDE\Fundraising\Frontend\Tests\System\SystemTestCase;
 
 /**
+ * @covers WMDE\Fundraising\Frontend\Presenters\DisplayPagePresenter
+ *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */

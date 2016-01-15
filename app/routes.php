@@ -79,28 +79,21 @@ $app->get(
 	'check-iban',
 	function( Request $request ) use ( $app, $ffFactory ) {
 		$useCase = $ffFactory->newCheckIbanUseCase();
-		$responseModel = $useCase->checkIban( new Iban( $request->get( 'iban', '' ) ) );
-
-		return $app->json(
-			$responseModel ?
-				[ 'status' => 'OK' ] + $responseModel->getBankData() :
-				[ 'status' => 'ERR' ]
-		);
+		$checkIbanResponse = $useCase->checkIban( new Iban( $request->get( 'iban', '' ) ) );
+		return $app->json( $ffFactory->newIbanPresenter()->present( $checkIbanResponse ) );
 	}
 );
 
 $app->get(
 	'generate-iban',
 	function( Request $request ) use ( $app, $ffFactory ) {
-		$useCase = $ffFactory->newGenerateIbanUseCase();
-		$responseModel = $useCase->generateIban(
-			new GenerateIbanRequest(
-				$request->get( 'accountNumber', '' ),
-				$request->get( 'bankCode', '' )
-			)
+		$generateIbanRequest = new GenerateIbanRequest(
+			$request->get( 'accountNumber', '' ),
+			$request->get( 'bankCode', '' )
 		);
 
-		return $app->json( $responseModel ? [ 'status' => 'OK' ] + $responseModel->getBankData() : [ 'status' => 'ERR' ] );
+		$generateIbanResponse = $ffFactory->newGenerateIbanUseCase()->generateIban( $generateIbanRequest );
+		return $app->json( $ffFactory->newIbanPresenter()->present( $generateIbanResponse ) );
 	}
 );
 

@@ -2,6 +2,7 @@
 
 namespace WMDE\Fundraising\Frontend;
 
+use RuntimeException;
 use WMDE\Fundraising\Frontend\Domain\BankData;
 use WMDE\Fundraising\Frontend\Domain\Iban;
 
@@ -27,48 +28,46 @@ class BankDataConverter {
 	/**
 	 * @param string $account
 	 * @param string $bankCode
-	 * @return bool|BankData
+	 * @return BankData
+	 * @throws RuntimeException
 	 */
-	public function getBankDataFromAccountData( string $account, string $bankCode ) {
+	public function getBankDataFromAccountData( string $account, string $bankCode ): BankData {
 		$bankData = new BankData();
 		$iban = iban_gen( $bankCode, $account );
+
 		if ( !$iban ) {
-			return false;
+			throw new RuntimeException( 'Could not get IBAN' );
 		}
 
 		$bankData->setIban( $iban );
-		if ( $bankData->getIban() ) {
-			$bankData->setBic( iban2bic( $bankData->getIban() ) );
+		$bankData->setBic( iban2bic( $bankData->getIban() ) );
 
-			$bankData->setAccount( $account );
-			$bankData->setBankCode( $bankCode );
-			$bankData->setBankName( $this->bankNameFromBankCode( $bankData->getBankCode() ) );
+		$bankData->setAccount( $account );
+		$bankData->setBankCode( $bankCode );
+		$bankData->setBankName( $this->bankNameFromBankCode( $bankData->getBankCode() ) );
 
-			return $bankData;
-		}
-
-		return false;
+		return $bankData;
 	}
 
 	/**
 	 * @param Iban $iban
-	 * @return bool|BankData
+	 * @return BankData
+	 * @throws \InvalidArgumentException
 	 */
-	public function getBankDataFromIban( Iban $iban ) {
+	public function getBankDataFromIban( Iban $iban ): BankData {
 		if ( !$this->validateIban( $iban ) ) {
-			return false;
+			throw new \InvalidArgumentException( 'Provided IBAN should be valid' );
 		}
 
 		$bankData = new BankData();
 		$bankData->setIban( $iban->toString() );
 
-		if ( $iban->getCountryCode() === 'DE' && $this->validateIban( $iban ) ) {
+		if ( $iban->getCountryCode() === 'DE' ) {
 			$bankData->setBic( iban2bic( $iban->toString() ) );
 
 			$bankData->setAccount( $iban->accountNrFromDeIban() );
 			$bankData->setBankCode( $iban->bankCodeFromDeIban() );
 			$bankData->setBankName( $this->bankNameFromBankCode( $bankData->getBankCode() ) );
-
 		}
 
 		return $bankData;
@@ -79,7 +78,6 @@ class BankDataConverter {
 	}
 
 	public function validateIban( Iban $iban ): bool {
-		$ret = iban_check( $iban->toString() );
-		return $ret > 0;
+		return iban_check( $iban->toString() ) > 0;
 	}
 }

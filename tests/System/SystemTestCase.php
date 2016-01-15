@@ -64,4 +64,10 @@ abstract class SystemTestCase extends WebTestCase {
 		);
 	}
 
+	protected function assertJsonSuccessResponse( $expected, Response $response ) {
+		$this->assertTrue( $response->isSuccessful(), 'request is successful' );
+		$this->assertJson( $response->getContent(), 'response is json' );
+		$this->assertJsonResponse( $expected, $response );
+	}
+
 }
