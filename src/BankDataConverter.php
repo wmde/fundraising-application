@@ -78,7 +78,6 @@ class BankDataConverter {
 	}
 
 	public function validateIban( Iban $iban ): bool {
-		$ret = iban_check( $iban->toString() );
-		return $ret > 0;
+		return iban_check( $iban->toString() ) > 0;
 	}
 }
