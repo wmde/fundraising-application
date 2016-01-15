@@ -37,7 +37,6 @@ class DisplayPageUseCase {
 	private function getPageContent( string $pageName ): string {
 		$normalizedPageName = $this->normalizePageName( $pageName );
 
-		// TODO: fetch template and embed page content into it
 		// TODO: whitelisting and blacklisting of page name?
 		// TODO: debug output when dev?
 
