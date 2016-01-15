@@ -34,7 +34,7 @@ class DisplayPageRouteTest extends SystemTestCase {
 		$client->request( 'GET', '/page/kittens' );
 
 		$this->assertContains(
-			'missing: Kittens',
+			'Could not load main content!',
 			$client->getResponse()->getContent()
 		);
 	}
@@ -44,22 +44,22 @@ class DisplayPageRouteTest extends SystemTestCase {
 		$client->request( 'GET', '/page/kittens' );
 
 		$this->assertContains(
-			'missing: 10hoch16/Seitenkopf',
+			'Could not load header!',
 			$client->getResponse()->getContent()
 		);
 
 		$this->assertContains(
-			'missing: 10hoch16/Seitenfuß',
+			'Could not load footer!',
 			$client->getResponse()->getContent()
 		);
 	}
 
-	public function testWhenPageDoesNotExist_pageNameInResponseIsEscaped() {
+	public function testWhenPageDoesNotExist_noUnescapedPageNameIsShown() {
 		$client = $this->createClient();
 		$client->request( 'GET', '/page/<script>alert("kittens");' );
 
-		$this->assertContains(
-			'missing: &lt;script&gt;alert(&quot;kittens&quot;);',
+		$this->assertNotContains(
+			'<script>alert("kittens")',
 			$client->getResponse()->getContent()
 		);
 	}

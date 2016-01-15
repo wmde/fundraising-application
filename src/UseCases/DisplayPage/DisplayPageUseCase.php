@@ -37,18 +37,13 @@ class DisplayPageUseCase {
 	private function getPageContent( string $pageName ): string {
 		$normalizedPageName = $this->normalizePageName( $pageName );
 
-		// TODO: fetch template and embed page content into it
 		// TODO: whitelisting and blacklisting of page name?
 		// TODO: debug output when dev?
 
 		$content = $this->pageRetriever->fetchPage( $normalizedPageName );
 		$content = $this->contentModifier->getProcessedContent( $content, $normalizedPageName );
 
-		// FIXME: this should be moved to the presenter
-		if ( $content !== '' ) {
-			return $content;
-		}
-		return 'missing: ' . htmlspecialchars( $normalizedPageName );
+		return $content;
 	}
 
 	private function normalizePageName( string $title ): string {
