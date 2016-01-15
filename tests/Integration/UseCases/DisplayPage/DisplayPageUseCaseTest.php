@@ -47,4 +47,16 @@ class DisplayPageUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$this->assertSame( '<p>I\'m a footer</p>', $response->getFooterContent() );
 	}
 
+	public function testWhenPageTitlePrefixIsConfigured_pageCanBeRetrieved() {
+		$this->registerWikiPages();
+
+		$factory = $this->testEnvironment->getFactory();
+		$factory->setPageTitlePrefix( 'MyNamespace:MyPrefix/' );
+		$useCase = $factory->newDisplayPageUseCase();
+
+		$response = $useCase->getPage( new PageDisplayRequest( 'Naked mole-rat' ) );
+
+		$this->assertSame( '<p>This little guy wants to cuddle, too!</p>', $response->getMainContent() );
+	}
+
 }

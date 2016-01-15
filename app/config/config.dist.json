@@ -12,5 +12,6 @@
 	"cms-wiki-api-url": "",
 	"cms-wiki-user": "",
 	"cms-wiki-password": "",
+	"cms-wiki-title-prefix": "",
 	"enable-twig-cache": true
 }
