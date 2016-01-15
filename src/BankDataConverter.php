@@ -7,7 +7,7 @@ use WMDE\Fundraising\Frontend\Domain\Iban;
 
 /**
  * @licence GNU GPL v2+
- * @author Christoph Fischer <christoph.fischer@wikimedia.de >
+ * @author Christoph Fischer < christoph.fischer@wikimedia.de >
  */
 class BankDataConverter {
 
