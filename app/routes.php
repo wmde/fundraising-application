@@ -83,7 +83,7 @@ $app->get(
 
 		return $app->json(
 			$responseModel ?
-				[ 'status' => 'OK' ] + $responseModel->getBankData() :
+				[ 'status' => 'OK' ] + get_object_vars( $responseModel ):
 				[ 'status' => 'ERR' ]
 		);
 	}
@@ -93,14 +93,21 @@ $app->get(
 	'generate-iban',
 	function( Request $request ) use ( $app, $ffFactory ) {
 		$useCase = $ffFactory->newGenerateIbanUseCase();
-		$responseModel = $useCase->generateIban(
+		$generateIbanResponse = $useCase->generateIban(
 			new GenerateIbanRequest(
 				$request->get( 'accountNumber', '' ),
 				$request->get( 'bankCode', '' )
 			)
 		);
 
-		return $app->json( $responseModel->isSuccessful() ? [ 'status' => 'OK' ] + $responseModel->getBankData()->getBankData() : [ 'status' => 'ERR' ] );
+		if ( $generateIbanResponse->isSuccessful() ) {
+			$json = [ 'status' => 'OK' ] + get_object_vars( $generateIbanResponse->getBankData() );
+		}
+		else {
+			$json = [ 'status' => 'ERR' ];
+		}
+
+		return $app->json( $json );
 	}
 );
 

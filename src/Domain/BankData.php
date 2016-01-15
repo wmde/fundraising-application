@@ -55,8 +55,4 @@ class BankData {
 		$this->bankName = $bankName;
 	}
 
-	public function getBankData() {
-		return get_object_vars( $this );
-	}
-
 }
