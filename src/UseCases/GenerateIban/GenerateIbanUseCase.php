@@ -14,8 +14,18 @@ class GenerateIbanUseCase {
 		$this->bankDataConverter = $bankDataConverter;
 	}
 
-	public function generateIban( GenerateIbanRequest $request ) {
-		return $this->bankDataConverter->getBankDataFromAccountData( $request->getBankAccount(), $request->getBankCode() );
+	public function generateIban( GenerateIbanRequest $request ): GenerateIbanResponse {
+		try {
+			$bankData = $this->bankDataConverter->getBankDataFromAccountData(
+				$request->getBankAccount(),
+				$request->getBankCode()
+			);
+		}
+		catch ( \RuntimeException $ex ) {
+			return GenerateIbanResponse::newFailureResponse();
+		}
+
+		return GenerateIbanResponse::newSuccessResponse( $bankData );
 	}
 
 }

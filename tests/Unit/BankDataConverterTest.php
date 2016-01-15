@@ -2,6 +2,8 @@
 
 namespace WMDE\Fundraising\Tests\Unit;
 
+use InvalidArgumentException;
+use RuntimeException;
 use WMDE\Fundraising\Frontend\BankDataConverter;
 use WMDE\Fundraising\Frontend\Domain\BankData;
 use WMDE\Fundraising\Frontend\Domain\Iban;
@@ -34,10 +36,11 @@ class BankDataConverterTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * @dataProvider ibanTestProvider
 	 */
-	public function testWhenGivenInvalidIban_converterReturnsFalse( $ibanToTest ) {
+	public function testWhenGivenInvalidIban_converterThrowsException( $ibanToTest ) {
 		$bankConverter = $this->newBankDataConverter();
 
-		$this->assertFalse( $bankConverter->getBankDataFromIban( new Iban( $ibanToTest ) ) );
+		$this->setExpectedException( InvalidArgumentException::class );
+		$bankConverter->getBankDataFromIban( new Iban( $ibanToTest ) );
 	}
 
 	public function ibanTestProvider() {
@@ -100,10 +103,11 @@ class BankDataConverterTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * @dataProvider accountTestProvider
 	 */
-	public function testWhenGivenInvalidAccountData_converterReturnsFalse( $accountToTest, $bankCodeToTest ) {
+	public function testWhenGivenInvalidAccountData_converterThrowsException( $accountToTest, $bankCodeToTest ) {
 		$bankConverter = $this->newBankDataConverter();
 
-		$this->assertFalse( $bankConverter->getBankDataFromAccountData( $accountToTest, $bankCodeToTest ) );
+		$this->setExpectedException( RuntimeException::class );
+		$bankConverter->getBankDataFromAccountData( $accountToTest, $bankCodeToTest );
 	}
 
 	public function accountTestProvider() {

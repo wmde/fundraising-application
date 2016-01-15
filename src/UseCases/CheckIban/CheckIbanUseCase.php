@@ -16,6 +16,10 @@ class CheckIbanUseCase {
 	}
 
 	public function checkIban( Iban $iban ) {
+		if ( !$this->bankDataConverter->validateIban( $iban ) ) {
+			return false;
+		}
+
 		return $this->bankDataConverter->getBankDataFromIban( $iban );
 	}
 

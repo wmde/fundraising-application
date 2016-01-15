@@ -100,7 +100,7 @@ $app->get(
 			)
 		);
 
-		return $app->json( $responseModel ? [ 'status' => 'OK' ] + $responseModel->getBankData() : [ 'status' => 'ERR' ] );
+		return $app->json( $responseModel->isSuccessful() ? [ 'status' => 'OK' ] + $responseModel->getBankData()->getBankData() : [ 'status' => 'ERR' ] );
 	}
 );
 
