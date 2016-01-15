@@ -44,11 +44,7 @@ class DisplayPageUseCase {
 		$content = $this->pageRetriever->fetchPage( $normalizedPageName );
 		$content = $this->contentModifier->getProcessedContent( $content, $normalizedPageName );
 
-		// FIXME: this should be moved to the presenter
-		if ( $content !== '' ) {
-			return $content;
-		}
-		return 'missing: ' . htmlspecialchars( $normalizedPageName );
+		return $content;
 	}
 
 	private function normalizePageName( string $title ): string {

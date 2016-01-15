@@ -19,13 +19,21 @@ class DisplayPagePresenter {
 
 	public function present( PageDisplayResponse $displayResponse ): string {
 		return $this->template->render( [
-			'header' => $displayResponse->getHeaderContent(),
-			'main' => $displayResponse->getMainContent(),
-			'footer' => $displayResponse->getFooterContent(),
+			'header' => $this->getContentOrMissingMessage( $displayResponse->getHeaderContent(), 'header' ),
+			'main' => $this->getContentOrMissingMessage( $displayResponse->getMainContent(), 'main content' ),
+			'footer' => $this->getContentOrMissingMessage( $displayResponse->getFooterContent(), 'footer' ),
 			'isMobile' => true, // TODO
 			'subFooter' => '', // TODO
 			'noJsNotice' => '', // TODO
 		] );
+	}
+
+	public function getContentOrMissingMessage( string $content, string $contentName ): string {
+		if ( $content === '' ) {
+			return htmlspecialchars( "Could not load $contentName!" );
+		}
+
+		return $content;
 	}
 
 }
