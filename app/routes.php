@@ -50,8 +50,25 @@ $app->post(
 	'contact/subscribe',
 	function( Request $request ) use ( $ffFactory ) {
 		$useCase = $ffFactory->newAddSubscriptionUseCase();
-		// TODO: Create SubscriptionRequest from $request params
+
 		$subscriptionRequest = new SubscriptionRequest();
+		$subscriptionRequest->setAddress( $request->get( 'address' ) );
+		$subscriptionRequest->setCity( $request->get( 'city' ) );
+		$subscriptionRequest->setPostcode( $request->get( 'postcode' ) );
+
+		$subscriptionRequest->setFirstName( $request->get( 'firstName' ) );
+		$subscriptionRequest->setLastName( $request->get( 'lastName' ) );
+		$subscriptionRequest->setSalutation( $request->get( 'salutation' ) );
+		$subscriptionRequest->setTitle( $request->get( 'title' ) );
+
+		$subscriptionRequest->setEmail( $request->get( 'email' ) );
+		$subscriptionRequest->setWikilogin( $request->get( 'wikilogin' ) );
+
+		$subscriptionRequest->setWikiloginFromValues( [
+			$request->request->get( 'wikilogin' ),
+			$request->cookies->get( 'spenden_wikilogin' ),
+		] );
+
 		$responseModel = $useCase->addSubscription( $subscriptionRequest );
 		// TODO forward/dispatch to matching 'page/name' route, depending on $responseModel->getType();
 		return 'TODO';

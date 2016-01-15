@@ -47,6 +47,8 @@ class FunFunFactory {
 	private $requestValidator;
 	private $mwApi;
 
+	private $requestRepository;
+
 	/**
 	 * @param array $config
 	 * - db: DBAL connection parameters
@@ -90,7 +92,15 @@ class FunFunFactory {
 	}
 
 	private function newRequestRepository(): RequestRepository {
-		return new DoctrineRequestRepository( $this->getConnection() );
+		if ( $this->requestRepository === null ) {
+			$this->requestRepository = new DoctrineRequestRepository( $this->getConnection() );
+		}
+
+		return $this->requestRepository;
+	}
+
+	public function setRequestRepository( RequestRepository $requestRepository ) {
+		$this->requestRepository = $requestRepository;
 	}
 
 	private function newRequestValidator(): RequestValidator {

@@ -91,4 +91,17 @@ class SubscriptionRequest {
 		$this->wikilogin = $wikilogin;
 	}
 
+	/**
+	 * Set the wikilogin value from the first value that matches /^(1|0|yes|no)$/
+	 *
+	 * @param array $values
+	 */
+	public function setWikiloginFromValues( array $values ) {
+		$trueValues = ['yes', '1'];
+		$falseValues = ['no', '0'];
+		$matchingValues = array_intersect( $values, array_merge( $trueValues, $falseValues ) );
+		$wikilogin = in_array( array_shift( $matchingValues ), $trueValues );
+		$this->setWikilogin( $wikilogin );
+	}
+
 }
