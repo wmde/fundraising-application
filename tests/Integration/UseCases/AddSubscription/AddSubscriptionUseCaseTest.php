@@ -3,6 +3,7 @@
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\AddSubscription;
 
+use PHPUnit_Framework_MockObject_MockObject;
 use WMDE\Fundraising\Entities\Request;
 use WMDE\Fundraising\Frontend\Domain\RequestRepository;
 use WMDE\Fundraising\Frontend\Domain\RequestValidator;
@@ -17,6 +18,10 @@ use WMDE\Fundraising\Frontend\UseCases\AddSubscription\SubscriptionRequest;
 class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase
 {
 	private $repo;
+
+	/**
+	 * @var PHPUnit_Framework_MockObject_MockObject|RequestValidator
+	 */
 	private $validator;
 
 	public function setUp() {
