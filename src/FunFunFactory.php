@@ -177,7 +177,8 @@ class FunFunFactory {
 	public function newDisplayPagePresenter(): DisplayPagePresenter {
 		return new DisplayPagePresenter( new TwigTemplate(
 			$this->getTwig(),
-			'DisplayPageLayout.twig'
+			'DisplayPageLayout.twig',
+			[ 'basepath' => $this->config['web-basepath'] ]
 		) );
 	}
 
