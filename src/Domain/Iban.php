@@ -26,7 +26,7 @@ class Iban {
 		return substr( $this->iban, 4, 8 );
 	}
 
-	public function getCountryCode() {
+	public function getCountryCode(): string {
 		return substr( $this->iban, 0, 2 );
 	}
 
