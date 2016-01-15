@@ -2,6 +2,10 @@
 
 namespace WMDE\Fundraising\Frontend;
 
+/**
+ * @licence GNU GPL v2+
+ * @author Jeroen De Dauw < jeroendedauw@gmail.com >
+ */
 trait FreezableValueObject {
 
 	private $isFrozen = false;
