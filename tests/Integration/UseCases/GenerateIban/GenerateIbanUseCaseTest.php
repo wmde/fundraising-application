@@ -4,8 +4,8 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\GenerateIban;
 
 use WMDE\Fundraising\Frontend\BankDataConverter;
 use WMDE\Fundraising\Frontend\Domain\BankData;
+use WMDE\Fundraising\Frontend\ResponseModel\IbanResponse;
 use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanRequest;
-use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanResponse;
 use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanUseCase;
 
 /**
@@ -33,7 +33,7 @@ class GenerateIbanUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$bankData->setBankName( 'Hamburger Sparkasse' );
 
 		$this->assertEquals(
-			GenerateIbanResponse::newSuccessResponse( $bankData ),
+			IbanResponse::newSuccessResponse( $bankData ),
 			$useCase->generateIban( new GenerateIbanRequest( '1015754243', '20050550' ) )
 		);
 	}
@@ -42,7 +42,7 @@ class GenerateIbanUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$useCase = new GenerateIbanUseCase( new BankDataConverter( 'res/blz.lut2f' ) );
 
 		$this->assertEquals(
-			GenerateIbanResponse::newFailureResponse(),
+			IbanResponse::newFailureResponse(),
 			$useCase->generateIban( new GenerateIbanRequest( '1015754241', '20050550' ) )
 		);
 	}

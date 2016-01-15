@@ -3,6 +3,7 @@
 namespace WMDE\Fundraising\Frontend\UseCases\GenerateIban;
 
 use WMDE\Fundraising\Frontend\BankDataConverter;
+use WMDE\Fundraising\Frontend\ResponseModel\IbanResponse;
 
 /**
  * @licence GNU GPL v2+
@@ -14,7 +15,7 @@ class GenerateIbanUseCase {
 		$this->bankDataConverter = $bankDataConverter;
 	}
 
-	public function generateIban( GenerateIbanRequest $request ): GenerateIbanResponse {
+	public function generateIban( GenerateIbanRequest $request ): IbanResponse {
 		try {
 			$bankData = $this->bankDataConverter->getBankDataFromAccountData(
 				$request->getBankAccount(),
@@ -22,10 +23,10 @@ class GenerateIbanUseCase {
 			);
 		}
 		catch ( \RuntimeException $ex ) {
-			return GenerateIbanResponse::newFailureResponse();
+			return IbanResponse::newFailureResponse();
 		}
 
-		return GenerateIbanResponse::newSuccessResponse( $bankData );
+		return IbanResponse::newSuccessResponse( $bankData );
 	}
 
 }

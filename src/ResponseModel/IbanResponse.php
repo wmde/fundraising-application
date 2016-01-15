@@ -1,6 +1,6 @@
 <?php
 
-namespace WMDE\Fundraising\Frontend\UseCases\GenerateIban;
+namespace WMDE\Fundraising\Frontend\ResponseModel;
 
 use WMDE\Fundraising\Frontend\Domain\BankData;
 
@@ -8,7 +8,7 @@ use WMDE\Fundraising\Frontend\Domain\BankData;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class GenerateIbanResponse {
+class IbanResponse {
 
 	public static function newSuccessResponse( BankData $bankData ) {
 		return new self( $bankData );

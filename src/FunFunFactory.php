@@ -22,6 +22,7 @@ use WMDE\Fundraising\Frontend\Domain\DoctrineRequestRepository;
 use WMDE\Fundraising\Frontend\Domain\InMemoryCommentRepository;
 use WMDE\Fundraising\Frontend\Domain\RequestRepository;
 use WMDE\Fundraising\Frontend\Domain\RequestValidator;
+use WMDE\Fundraising\Frontend\Presenters\IbanPresenter;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\AddSubscriptionUseCase;
 use WMDE\Fundraising\Frontend\PageRetriever\ApiBasedPageRetriever;
 use WMDE\Fundraising\Frontend\PageRetriever\PageRetriever;
@@ -195,6 +196,10 @@ class FunFunFactory {
 
 	public function newGenerateIbanUseCase(): GenerateIbanUseCase {
 		return new GenerateIbanUseCase( $this->newBankDataConverter() );
+	}
+
+	public function newIbanPresenter(): IbanPresenter {
+		return new IbanPresenter();
 	}
 
 	public function newBankDataConverter() {

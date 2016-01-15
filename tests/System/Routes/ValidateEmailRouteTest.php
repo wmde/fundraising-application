@@ -26,12 +26,6 @@ class ValidateEmailRouteTest extends SystemTestCase {
 		);
 	}
 
-	private function assertJsonSuccessResponse( $expected, Response $response ) {
-		$this->assertTrue( $response->isSuccessful(), 'request is successful' );
-		$this->assertJson( $response->getContent(), 'response is json' );
-		$this->assertSame( $expected, json_decode( $response->getContent(), true ) );
-	}
-
 	public function testGivenInvalidEmail_errorResponseIsReturned() {
 		$client = $this->createClient();
 

@@ -4,6 +4,7 @@ namespace WMDE\Fundraising\Frontend\UseCases\CheckIban;
 
 use WMDE\Fundraising\Frontend\BankDataConverter;
 use WMDE\Fundraising\Frontend\Domain\Iban;
+use WMDE\Fundraising\Frontend\ResponseModel\IbanResponse;
 
 /**
  * @licence GNU GPL v2+
@@ -15,12 +16,14 @@ class CheckIbanUseCase {
 		$this->bankDataConverter = $bankDataConverter;
 	}
 
-	public function checkIban( Iban $iban ) {
+	public function checkIban( Iban $iban ): IbanResponse {
 		if ( !$this->bankDataConverter->validateIban( $iban ) ) {
-			return false;
+			return IbanResponse::newFailureResponse();
 		}
 
-		return $this->bankDataConverter->getBankDataFromIban( $iban );
+		return IbanResponse::newSuccessResponse(
+			$this->bankDataConverter->getBankDataFromIban( $iban )
+		);
 	}
 
 }

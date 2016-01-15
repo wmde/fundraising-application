@@ -79,35 +79,21 @@ $app->get(
 	'check-iban',
 	function( Request $request ) use ( $app, $ffFactory ) {
 		$useCase = $ffFactory->newCheckIbanUseCase();
-		$responseModel = $useCase->checkIban( new Iban( $request->get( 'iban', '' ) ) );
-
-		return $app->json(
-			$responseModel ?
-				[ 'status' => 'OK' ] + get_object_vars( $responseModel ):
-				[ 'status' => 'ERR' ]
-		);
+		$checkIbanResponse = $useCase->checkIban( new Iban( $request->get( 'iban', '' ) ) );
+		return $app->json( $ffFactory->newIbanPresenter()->present( $checkIbanResponse ) );
 	}
 );
 
 $app->get(
 	'generate-iban',
 	function( Request $request ) use ( $app, $ffFactory ) {
-		$useCase = $ffFactory->newGenerateIbanUseCase();
-		$generateIbanResponse = $useCase->generateIban(
-			new GenerateIbanRequest(
-				$request->get( 'accountNumber', '' ),
-				$request->get( 'bankCode', '' )
-			)
+		$generateIbanRequest = new GenerateIbanRequest(
+			$request->get( 'accountNumber', '' ),
+			$request->get( 'bankCode', '' )
 		);
 
-		if ( $generateIbanResponse->isSuccessful() ) {
-			$json = [ 'status' => 'OK' ] + get_object_vars( $generateIbanResponse->getBankData() );
-		}
-		else {
-			$json = [ 'status' => 'ERR' ];
-		}
-
-		return $app->json( $json );
+		$generateIbanResponse = $ffFactory->newGenerateIbanUseCase()->generateIban( $generateIbanRequest );
+		return $app->json( $ffFactory->newIbanPresenter()->present( $generateIbanResponse ) );
 	}
 );
 
