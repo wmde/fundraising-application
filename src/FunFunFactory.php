@@ -84,6 +84,19 @@ class FunFunFactory {
 			);
 		} );
 
+		$pimple['twig'] = $pimple->share( function() {
+			$options = [];
+
+			if ( $this->config['enable-twig-cache'] ) {
+				$options['cache'] = __DIR__ . '/../app/cache';
+			}
+
+			return new Twig_Environment(
+				new Twig_Loader_Filesystem( __DIR__ . '/../app/templates' ),
+				$options
+			);
+		} );
+
 		return $pimple;
 	}
 
@@ -129,22 +142,13 @@ class FunFunFactory {
 
 	public function newDisplayPagePresenter(): DisplayPagePresenter {
 		return new DisplayPagePresenter( new TwigTemplate(
-			$this->newTwig(),
+			$this->getTwig(),
 			'DisplayPageLayout.twig'
 		) );
 	}
 
-	private function newTwig() {
-		$options = [];
-
-		if ( $this->config['enable-twig-cache'] ) {
-			$options['cache'] = __DIR__ . '/../app/cache';
-		}
-
-		return new Twig_Environment(
-			new Twig_Loader_Filesystem( __DIR__ . '/../app/templates' ),
-			$options
-		);
+	private function getTwig(): Twig_Environment {
+		return $this->pimple['twig'];
 	}
 
 	private function newPageRetriever(): PageRetriever {
