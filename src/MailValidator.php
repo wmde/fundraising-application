@@ -46,7 +46,7 @@ class MailValidator {
 		return false;
 	}
 
-	private function normalizeMailAddress( $mailAddressObject ) {
+	private function normalizeMailAddress( MailAddress $mailAddressObject ) {
 		$convertedDomain = idn_to_ascii( $mailAddressObject->domain );
 
 		if ( $convertedDomain ) {
