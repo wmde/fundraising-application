@@ -4,22 +4,15 @@ namespace WMDE\Fundraising\Frontend\Domain;
 
 /**
  * @licence GNU GPL v2+
- * @author Christoph Fischer <christoph.fischer@wikimedia.de >
+ * @author Kai Nissen < kai.nissen@wikimedia.de >
+ * @author Christoph Fischer < christoph.fischer@wikimedia.de >
  */
 class BankData {
-	/** @var string */
+
 	private $bic;
-
-	/** @var string */
 	private $iban;
-
-	/** @var string */
 	private $account;
-
-	/** @var string */
 	private $bankCode;
-
-	/** @var string */
 	private $bankName;
 
 	public function getBic(): string {
@@ -65,4 +58,5 @@ class BankData {
 	public function getBankData() {
 		return get_object_vars( $this );
 	}
+
 }
