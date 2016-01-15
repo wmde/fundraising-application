@@ -80,8 +80,22 @@ class FunFunFactory {
 		$pimple['mw_api'] = $pimple->share( function() {
 			return new MediawikiApi(
 				$this->config['cms-wiki-api-url'],
-				$this->newGuzzleClient()
+				$this->getGuzzleClient()
 			);
+		} );
+
+		$pimple['guzzle_client'] = $pimple->share( function() {
+			$middlewareFactory = new MiddlewareFactory();
+			$middlewareFactory->setLogger( $this->newLogger() );
+
+			$handlerStack = HandlerStack::create( new CurlHandler() );
+			$handlerStack->push( $middlewareFactory->retry() );
+
+			return new Client( [
+				'cookies' => true,
+				'handler' => $handlerStack,
+				'headers' => [ 'User-Agent' => 'WMDE Fundraising Frontend' ],
+			] );
 		} );
 
 		$pimple['twig'] = $pimple->share( function() {
@@ -167,18 +181,8 @@ class FunFunFactory {
 		$this->pimple['mw_api'] = $api;
 	}
 
-	private function newGuzzleClient(): ClientInterface {
-		$middlewareFactory = new MiddlewareFactory();
-		$middlewareFactory->setLogger( $this->newLogger() );
-
-		$handlerStack = HandlerStack::create( new CurlHandler() );
-		$handlerStack->push( $middlewareFactory->retry() );
-
-		return new Client( [
-			'cookies' => true,
-			'handler' => $handlerStack,
-			'headers' => [ 'User-Agent' => 'WMDE Fundraising Frontend' ],
-		] );
+	private function getGuzzleClient(): ClientInterface {
+		return $this->pimple['guzzle_client'];
 	}
 
 	private function newLogger(): LoggerInterface {
