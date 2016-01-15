@@ -13,6 +13,11 @@ use GuzzleHttp\HandlerStack;
 use Mediawiki\Api\ApiUser;
 use Mediawiki\Api\Guzzle\MiddlewareFactory;
 use Mediawiki\Api\MediawikiApi;
+use Monolog\Formatter\JsonFormatter;
+use Monolog\Formatter\LineFormatter;
+use Monolog\Handler\BufferHandler;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Twig_Environment;
@@ -86,7 +91,7 @@ class FunFunFactory {
 
 		$pimple['guzzle_client'] = $pimple->share( function() {
 			$middlewareFactory = new MiddlewareFactory();
-			$middlewareFactory->setLogger( $this->newLogger() );
+			$middlewareFactory->setLogger( $this->getLogger() );
 
 			$handlerStack = HandlerStack::create( new CurlHandler() );
 			$handlerStack->push( $middlewareFactory->retry() );
@@ -109,6 +114,21 @@ class FunFunFactory {
 				new Twig_Loader_Filesystem( __DIR__ . '/../app/templates' ),
 				$options
 			);
+		} );
+
+		$pimple['logger'] = $pimple->share( function() {
+			$logger = new Logger( 'WMDE Fundraising Frontend logger' );
+
+			$streamHandler = new StreamHandler( $this->newLoggerPath( ( new \DateTime() )->format( 'Y-m-d\TH:i:s\Z' ) ) );
+			$bufferHandler = new BufferHandler( $streamHandler, 500, Logger::DEBUG, true, true );
+			$streamHandler->setFormatter( new LineFormatter( "%message%\n" ) );
+			$logger->pushHandler( $bufferHandler );
+
+			$errorHandler = new StreamHandler( $this->newLoggerPath( 'error' ), Logger::ERROR );
+			$errorHandler->setFormatter( new JsonFormatter() );
+			$logger->pushHandler( $errorHandler );
+
+			return $logger;
 		} );
 
 		return $pimple;
@@ -169,7 +189,7 @@ class FunFunFactory {
 		return new ApiBasedPageRetriever(
 			$this->getMediaWikiApi(),
 			new ApiUser( $this->config['cms-wiki-user'], $this->config['cms-wiki-password'] ),
-			$this->newLogger()
+			$this->getLogger()
 		);
 	}
 
@@ -185,13 +205,17 @@ class FunFunFactory {
 		return $this->pimple['guzzle_client'];
 	}
 
-	private function newLogger(): LoggerInterface {
-		return new NullLogger(); // TODO
+	private function getLogger(): LoggerInterface {
+		return $this->pimple['logger'];
+	}
+
+	private function newLoggerPath( string $fileName ): string {
+		return __DIR__ . '/../var/log/' . $fileName . '.log';
 	}
 
 	private function newPageContentModifier(): PageContentModifier {
 		return new PageContentModifier(
-			$this->newLogger()
+			$this->getLogger()
 		);
 	}
 
