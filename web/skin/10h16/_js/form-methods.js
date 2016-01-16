@@ -132,13 +132,13 @@ $( document ).ready( function() {
             accNumElm.val( cleanAccountData( accNumElm.val(), false ) );
             bankCodeElm.val( cleanAccountData( bankCodeElm.val(), false ) );
 
-			url = "../ajax.php?module=action&action=generateIban&bankCode=" + bankCodeElm.val() + "&accNum=" + accNumElm.val();
+			url = "../generate-iban?bankCode=" + bankCodeElm.val() + "&accountNumber=" + accNumElm.val();
 			$( '#iban, #bic' ).val( '' );
 			$( '#bank-name' ).text( '' );
 		} else {
             $( '#iban' ).val( cleanAccountData( $( '#iban' ).val(), true) );
 
-			url = "../ajax.php?module=action&action=checkIban&iban=" + $( "#iban" ).val();
+			url = "../check-iban?iban=" + $( "#iban" ).val();
 			$( '#account-number, #bank-code' ).val( '' );
 			$( '#bank-name' ).text( '' );
 		}
