@@ -14,7 +14,7 @@ use WMDE\Fundraising\Frontend\Domain\InMemoryCommentRepository;
 class InMemoryCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 	public function testWhenThereAreNoComments_getCommentsReturnsEmptyArray() {
-		$this->assertSame( [], ( new InMemoryCommentRepository( [] ) )->getComments( 10 ) );
+		$this->assertSame( [], ( new InMemoryCommentRepository() )->getComments( 10 ) );
 	}
 
 	public function testWhenThereAreComments_getCommentsReturnsThem() {
@@ -24,11 +24,11 @@ class InMemoryCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 				new Comment( 'name1', 'comment', '42', '000000' ),
 				new Comment( 'name2', 'comment', '42', '000000' )
 			],
-			( new InMemoryCommentRepository( [
+			( new InMemoryCommentRepository(
 				new Comment( 'name0', 'comment', '42', '000000' ),
 				new Comment( 'name1', 'comment', '42', '000000' ),
 				new Comment( 'name2', 'comment', '42', '000000' )
-			] ) )->getComments( 10 )
+			) )->getComments( 10 )
 		);
 	}
 
@@ -38,11 +38,11 @@ class InMemoryCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 				new Comment( 'name0', 'comment', '42', '000000' ),
 				new Comment( 'name1', 'comment', '42', '000000' ),
 			],
-			( new InMemoryCommentRepository( [
+			( new InMemoryCommentRepository(
 				new Comment( 'name0', 'comment', '42', '000000' ),
 				new Comment( 'name1', 'comment', '42', '000000' ),
 				new Comment( 'name2', 'comment', '42', '000000' )
-			] ) )->getComments( 2 )
+			) )->getComments( 2 )
 		);
 	}
 

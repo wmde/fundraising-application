@@ -80,7 +80,7 @@ class FunFunFactory {
 		} );
 
 		$pimple['comment_repository'] = $pimple->share( function() {
-			return new InMemoryCommentRepository( [] ); // TODO
+			return new InMemoryCommentRepository(); // TODO
 		} );
 
 		$pimple['request_validator'] = $pimple->share( function() {

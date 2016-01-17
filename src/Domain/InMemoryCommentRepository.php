@@ -10,10 +10,7 @@ class InMemoryCommentRepository implements CommentRepository {
 
 	private $comments;
 
-	/**
-	 * @param Comment[] $comments
-	 */
-	public function __construct( array $comments ) {
+	public function __construct( Comment ...$comments ) {
 		$this->comments = $comments;
 	}
 
