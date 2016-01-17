@@ -10,10 +10,7 @@ class CommentList {
 
 	private $comments;
 
-	/**
-	 * @param ...$comments CommentListItem[]
-	 */
-	public function __construct( ...$comments ) {
+	public function __construct( CommentListItem ...$comments ) {
 		$this->comments = $comments;
 	}
 
