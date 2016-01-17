@@ -19,7 +19,7 @@ use WMDE\Fundraising\Frontend\UseCases\ListComments\ListCommentsUseCase;
 class ListCommentsUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 	public function testWhenThereAreNoComments_anEmptyListIsPresented() {
-		$useCase = new ListCommentsUseCase( new InMemoryCommentRepository( [] ) );
+		$useCase = new ListCommentsUseCase( new InMemoryCommentRepository() );
 
 		$this->assertEquals(
 			new CommentList(),
@@ -28,11 +28,11 @@ class ListCommentsUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testWhenThereAreLessCommentsThanTheLimit_theyAreAllPresented() {
-		$useCase = new ListCommentsUseCase( new InMemoryCommentRepository( [
+		$useCase = new ListCommentsUseCase( new InMemoryCommentRepository(
 				new Comment( 'name0', 'comment', '42', '000000' ),
 				new Comment( 'name1', 'comment', '42', '000000' ),
 				new Comment( 'name2', 'comment', '42', '000000' )
-		] ) );
+		) );
 
 		$this->assertEquals(
 			new CommentList(
@@ -45,12 +45,12 @@ class ListCommentsUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testWhenThereAreMoreCommentsThanTheLimit_onlyTheFirstFewArePresented() {
-		$useCase = new ListCommentsUseCase( new InMemoryCommentRepository( [
+		$useCase = new ListCommentsUseCase( new InMemoryCommentRepository(
 			new Comment( 'name0', 'comment', '42', '000000' ),
 			new Comment( 'name1', 'comment', '42', '000000' ),
 			new Comment( 'name2', 'comment', '42', '000000' ),
-			new Comment( 'name3', 'comment', '42', '000000' ),
-		] ) );
+			new Comment( 'name3', 'comment', '42', '000000' )
+		) );
 
 		$this->assertEquals(
 			new CommentList(
