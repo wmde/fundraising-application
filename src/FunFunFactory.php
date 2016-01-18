@@ -4,6 +4,7 @@ namespace WMDE\Fundraising\Frontend;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\ORM\EntityManager;
 use FileFetcher\FileFetcher;
 use FileFetcher\SimpleFileFetcher;
 use GuzzleHttp\Client;
@@ -75,6 +76,10 @@ class FunFunFactory {
 			return DriverManager::getConnection( $this->config['db'] );
 		} );
 
+		$pimple['entity_manager'] = $pimple->share( function() {
+			return ( new StoreFactory( $this->getConnection() ) )->getEntityManager();
+		} );
+
 		$pimple['request_repository'] = $pimple->share( function() {
 			return new DoctrineRequestRepository( $this->getConnection() );
 		} );
@@ -141,6 +146,10 @@ class FunFunFactory {
 
 	public function getConnection(): Connection {
 		return $this->pimple['dbal_connection'];
+	}
+
+	public function getEntityManager(): EntityManager {
+		return $this->pimple['entity_manager'];
 	}
 
 	public function newInstaller(): Installer {

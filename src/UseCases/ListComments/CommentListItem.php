@@ -2,6 +2,8 @@
 
 namespace WMDE\Fundraising\Frontend\UseCases\ListComments;
 
+use DateTime;
+
 /**
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
@@ -13,7 +15,7 @@ class CommentListItem {
 	private $commentText;
 	private $postingTime;
 
-	public function __construct( string $authorName, string $commentText, float $donationAmount, int $postingTime ) {
+	public function __construct( string $authorName, string $commentText, float $donationAmount, DateTime $postingTime ) {
 		$this->authorName = $authorName;
 		$this->commentText = $commentText;
 		$this->donationAmount = $donationAmount;
@@ -32,7 +34,7 @@ class CommentListItem {
 		return $this->commentText;
 	}
 
-	public function getPostingTime(): int {
+	public function getPostingTime(): DateTime {
 		return $this->postingTime;
 	}
 

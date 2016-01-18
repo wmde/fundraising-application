@@ -29,16 +29,19 @@ class ListCommentsUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 	public function testWhenThereAreLessCommentsThanTheLimit_theyAreAllPresented() {
 		$useCase = new ListCommentsUseCase( new InMemoryCommentRepository(
-				new Comment( 'name0', 'comment', '42', '000000' ),
-				new Comment( 'name1', 'comment', '42', '000000' ),
-				new Comment( 'name2', 'comment', '42', '000000' )
+			Comment::newInstance()->setAuthorName( 'name0' )->setCommentText( 'comment' )
+				->setDonationAmount( '42' )->setPostingTime( new \DateTime( '1984-01-01' ) ),
+			Comment::newInstance()->setAuthorName( 'name1' )->setCommentText( 'comment' )
+				->setDonationAmount( '42' )->setPostingTime( new \DateTime( '1984-01-01' ) ),
+			Comment::newInstance()->setAuthorName( 'name2' )->setCommentText( 'comment' )
+				->setDonationAmount( '42' )->setPostingTime( new \DateTime( '1984-01-01' ) )
 		) );
 
 		$this->assertEquals(
 			new CommentList(
-				new CommentListItem( 'name0', 'comment', '42', '000000' ),
-				new CommentListItem( 'name1', 'comment', '42', '000000' ),
-				new CommentListItem( 'name2', 'comment', '42', '000000' )
+				new CommentListItem( 'name0', 'comment', '42', new \DateTime( '1984-01-01' ) ),
+				new CommentListItem( 'name1', 'comment', '42', new \DateTime( '1984-01-01' ) ),
+				new CommentListItem( 'name2', 'comment', '42', new \DateTime( '1984-01-01' ) )
 			),
 			$useCase->listComments( new CommentListingRequest( 10 ) )
 		);
@@ -46,16 +49,20 @@ class ListCommentsUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 	public function testWhenThereAreMoreCommentsThanTheLimit_onlyTheFirstFewArePresented() {
 		$useCase = new ListCommentsUseCase( new InMemoryCommentRepository(
-			new Comment( 'name0', 'comment', '42', '000000' ),
-			new Comment( 'name1', 'comment', '42', '000000' ),
-			new Comment( 'name2', 'comment', '42', '000000' ),
-			new Comment( 'name3', 'comment', '42', '000000' )
+			Comment::newInstance()->setAuthorName( 'name0' )->setCommentText( 'comment' )
+				->setDonationAmount( '42' )->setPostingTime( new \DateTime( '1984-01-01' ) ),
+			Comment::newInstance()->setAuthorName( 'name1' )->setCommentText( 'comment' )
+				->setDonationAmount( '42' )->setPostingTime( new \DateTime( '1984-01-01' ) ),
+			Comment::newInstance()->setAuthorName( 'name2' )->setCommentText( 'comment' )
+				->setDonationAmount( '42' )->setPostingTime( new \DateTime( '1984-01-01' ) ),
+			Comment::newInstance()->setAuthorName( 'name3' )->setCommentText( 'comment' )
+				->setDonationAmount( '42' )->setPostingTime( new \DateTime( '1984-01-01' ) )
 		) );
 
 		$this->assertEquals(
 			new CommentList(
-				new CommentListItem( 'name0', 'comment', '42', '000000' ),
-				new CommentListItem( 'name1', 'comment', '42', '000000' )
+				new CommentListItem( 'name0', 'comment', '42', new \DateTime( '1984-01-01' ) ),
+				new CommentListItem( 'name1', 'comment', '42', new \DateTime( '1984-01-01' ) )
 			),
 			$useCase->listComments( new CommentListingRequest( 2 ) )
 		);
