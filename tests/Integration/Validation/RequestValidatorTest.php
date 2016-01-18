@@ -65,7 +65,7 @@ class RequestValidatorTest extends \PHPUnit_Framework_TestCase {
 	private function assertConstraintWasViolated( array $violations, string $fieldName ) {
 		$this->assertCount( 1, $violations );
 		$this->assertInstanceOf( ConstraintViolation::class, current( $violations ) );
-		$this->assertEquals( Request::class . '.' . $fieldName, current( $violations )->getSource() );
+		$this->assertEquals( $fieldName, current( $violations )->getSource() );
 	}
 
 }
