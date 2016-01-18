@@ -8,6 +8,7 @@ use Mediawiki\Api\Request;
 use Mediawiki\Api\UsageException;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ApiPostRequestHandler;
 use WMDE\Fundraising\Frontend\Tests\System\SystemTestCase;
+use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
  * @covers WMDE\Fundraising\Frontend\Presenters\DisplayPagePresenter
@@ -19,7 +20,10 @@ class DisplayPageRouteTest extends SystemTestCase {
 
 	public function setUp() {
 		parent::setUp();
+		$this->setStubMediaWikiApi();
+	}
 
+	private function setStubMediaWikiApi() {
 		$api = $this->getMockBuilder( MediawikiApi::class )->disableOriginalConstructor()->getMock();
 
 		$api->expects( $this->any() )
@@ -62,6 +66,30 @@ class DisplayPageRouteTest extends SystemTestCase {
 
 		$this->assertNotContains(
 			'<script>alert("kittens")',
+			$client->getResponse()->getContent()
+		);
+	}
+
+	public function testWhenWebBasePathIsEmpty_templatedPathsReferToRootPath() {
+		$client = $this->createClient();
+		$client->request( 'GET', '/page/kittens' );
+
+		$this->assertContains(
+			'"/res/css/fontcustom.css"',
+			$client->getResponse()->getContent()
+		);
+	}
+
+	public function testWhenWebBasePathIsSet_itIsUsedInTemplatedPaths() {
+		$this->testEnvironment = TestEnvironment::newInstance( [ 'web-basepath' => '/some-path' ] );
+		$this->setStubMediaWikiApi();
+		$this->app = $this->createApplication();
+
+		$client = $this->createClient();
+		$client->request( 'GET', '/page/kittens' );
+
+		$this->assertContains(
+			'"/some-path/res/css/fontcustom.css"',
 			$client->getResponse()->getContent()
 		);
 	}
