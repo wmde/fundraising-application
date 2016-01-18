@@ -7,7 +7,7 @@ use PHPUnit_Framework_MockObject_MockObject;
 use WMDE\Fundraising\Entities\Request;
 use WMDE\Fundraising\Frontend\Domain\RequestRepository;
 use WMDE\Fundraising\Frontend\Domain\RequestValidator;
-use WMDE\Fundraising\Frontend\UseCases\AddSubscription\AddSubscriptionResponse;
+use WMDE\Fundraising\Frontend\ResponseModel\AddSubscriptionResponse;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\AddSubscriptionUseCase;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\SubscriptionRequest;
 
@@ -32,21 +32,21 @@ class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase
 			->getMock();
 	}
 
-	public function testGivenValidData_aValidResponseIsCreated() {
+	public function testGivenValidData_aSuccessResponseIsCreated() {
 		$this->validator->method( 'validate' )->willReturn( true );
 		$usecase = new AddSubscriptionUseCase( $this->repo, $this->validator );
 		$request = $this->getMock( SubscriptionRequest::class );
 		$result = $usecase->addSubscription( $request );
-		$this->assertEquals( AddSubscriptionResponse::TYPE_VALID, $result->getType() );
+		$this->assertTrue( $result->isSuccessful() );
 	}
 
-	public function testGivenInvalidData_invalidResponseTypeIsCreated() {
+	public function testGivenInvalidData_anErrorResponseTypeIsCreated() {
 		$this->validator->method( 'validate' )->willReturn( false );
-		$this->validator->method( 'getValidationErrors' )->willReturn( [] );
+		$this->validator->method( 'getValidationErrors' )->willReturn( [ 'dummyConstraintViolation' ] );
 		$usecase = new AddSubscriptionUseCase( $this->repo, $this->validator );
 		$request = $this->getMock( SubscriptionRequest::class );
 		$result = $usecase->addSubscription( $request );
-		$this->assertEquals( AddSubscriptionResponse::TYPE_INVALID, $result->getType() );
+		$this->assertFalse( $result->isSuccessful() );
 	}
 
 	public function testGivenValidData_requestWillBeStored() {
