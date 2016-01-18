@@ -201,7 +201,7 @@ $( document ).ready( function() {
 	}
 
 	function checkMailAddress( submit ) {
-		var url = "../ajax.php?module=action&action=checkEmail&eaddr=" + encodeURIComponent($( "#email" ).val());
+		var url = "../validate-email?email=" + encodeURIComponent($( "#email" ).val());
 		$.getJSON( url, function( response ) {
 			var $email = $( "#email" );
 			if ( response.status === "OK" ) {
