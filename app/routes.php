@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\Frontend\Domain\Iban;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageDisplayRequest;
 use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanRequest;
+use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentListingRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\SubscriptionRequest;
 
@@ -98,6 +99,22 @@ $app->get(
 
 		$generateIbanResponse = $ffFactory->newGenerateIbanUseCase()->generateIban( $generateIbanRequest );
 		return $app->json( $ffFactory->newIbanPresenter()->present( $generateIbanResponse ) );
+	}
+);
+
+$app->post(
+	'contact/get-in-touch',
+	function( Request $request ) use ( $app, $ffFactory ) {
+		$contactFormRequest = new GetInTouchRequest(
+			$request->get( 'firstname', '' ),
+			$request->get( 'lastname', '' ),
+			$request->get( 'email', '' ),
+			$request->get( 'subject', '' ),
+			$request->get( 'body', '' )
+		);
+
+		$contactFormResponse = $ffFactory->newGetInTouchUseCase()->processContact( $contactFormRequest );
+		return $contactFormResponse;
 	}
 );
 
