@@ -22,7 +22,6 @@ class DisplayPagePresenter {
 			'header' => $this->getContentOrMissingMessage( $displayResponse->getHeaderContent(), 'header' ),
 			'main' => $this->getContentOrMissingMessage( $displayResponse->getMainContent(), 'main content' ),
 			'footer' => $this->getContentOrMissingMessage( $displayResponse->getFooterContent(), 'footer' ),
-			'subFooter' => '', // TODO
 			'noJsNotice' => '', // TODO
 		] );
 	}

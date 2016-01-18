@@ -108,15 +108,4 @@ class DisplayPageRouteTest extends SystemTestCase {
 		$this->assert404( $client->getResponse(), 'No route found for "GET /page/unicorns/of-doom"' );
 	}
 
-	public function testWhenNoSubFooter_subFooterDivIsNotShown() {
-		// TODO: setup
-		$client = $this->createClient();
-		$client->request( 'GET', '/page/unicorns' );
-
-		$this->assertNotContains(
-			'<div id="subfooter">',
-			$client->getResponse()->getContent()
-		);
-	}
-
 }
