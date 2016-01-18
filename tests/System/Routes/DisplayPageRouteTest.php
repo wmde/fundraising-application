@@ -119,15 +119,4 @@ class DisplayPageRouteTest extends SystemTestCase {
 		);
 	}
 
-	public function testWhenIsMobile_isMobileJsVarGetsSetToTrue() {
-		// TODO: setup
-		$client = $this->createClient();
-		$client->request( 'GET', '/page/unicorns' );
-
-		$this->assertNotContains(
-			'var isMobile = true;',
-			$client->getResponse()->getContent()
-		);
-	}
-
 }
