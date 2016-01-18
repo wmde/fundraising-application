@@ -72,6 +72,25 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 		);
 	}
 
+	public function testOnlyPublicCommentsGetReturned() {
+		$this->persistFirstComment();
+		$this->persistSecondComment();
+		$this->persistPrivateComment();
+		$this->persistThirdComment();
+		$this->entityManager->flush();
+
+		$repository = new DbalCommentRepository( $this->getOrmRepository() );
+
+		$this->assertEquals(
+			[
+				$this->getFirstComment(),
+				$this->getSecondComment(),
+				$this->getThirdComment(),
+			],
+			$repository->getComments( 10 )
+		);
+	}
+
 	private function persistFirstComment() {
 		$firstSpenden = new Spenden();
 		$firstSpenden->setName( 'First name' );
@@ -102,6 +121,16 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$this->entityManager->persist( $thirdSpenden );
 	}
 
+	private function persistPrivateComment() {
+		$privateSpenden = new Spenden();
+		$privateSpenden->setName( 'Private name' );
+		$privateSpenden->setKommentar( 'Private comment' );
+		$privateSpenden->setBetrag( '1337' );
+		$privateSpenden->setDtNew( new DateTime( '1984-12-12' ) );
+		$privateSpenden->setIsPublic( false );
+		$this->entityManager->persist( $privateSpenden );
+	}
+
 	private function getFirstComment() {
 		return Comment::newInstance()
 			->setAuthorName( 'First name' )
@@ -109,6 +138,7 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 			->setDonationAmount( '100' )
 			->setPostingTime( new \DateTime( '1984-01-01' ) );
 	}
+
 
 	private function getSecondComment() {
 		return Comment::newInstance()
