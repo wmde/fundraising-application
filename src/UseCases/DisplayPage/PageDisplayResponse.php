@@ -14,6 +14,7 @@ class PageDisplayResponse {
 	private $mainContent;
 	private $headerContent;
 	private $footerContent;
+	private $noJsNotice;
 
 	public function getMainContent(): string {
 		return $this->mainContent;
@@ -40,6 +41,15 @@ class PageDisplayResponse {
 	public function setFooterContent( string $footerContent ) {
 		$this->assertIsWritable();
 		$this->footerContent = $footerContent;
+	}
+
+	public function getNoJsNoticedContent(): string {
+		return $this->noJsNotice;
+	}
+
+	public function setNoJsNoticedContent( string $noJsNotice ) {
+		$this->assertIsWritable();
+		$this->noJsNotice = $noJsNotice;
 	}
 
 }

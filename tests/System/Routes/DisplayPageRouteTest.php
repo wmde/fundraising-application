@@ -99,6 +99,11 @@ class DisplayPageRouteTest extends SystemTestCase {
 			'<p>I\'m a footer</p>',
 			$client->getResponse()->getContent()
 		);
+
+		$this->assertContains(
+			'<p>Y u no JavaScript!</p>',
+			$client->getResponse()->getContent()
+		);
 	}
 
 	public function testWhenPageNameContainsSlash_404isReturned() {
