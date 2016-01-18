@@ -99,6 +99,11 @@ class DisplayPageRouteTest extends SystemTestCase {
 			'<p>I\'m a footer</p>',
 			$client->getResponse()->getContent()
 		);
+
+		$this->assertContains(
+			'<p>Y u no JavaScript!</p>',
+			$client->getResponse()->getContent()
+		);
 	}
 
 	public function testWhenPageNameContainsSlash_404isReturned() {
@@ -106,28 +111,6 @@ class DisplayPageRouteTest extends SystemTestCase {
 		$client->request( 'GET', '/page/unicorns/of-doom' );
 
 		$this->assert404( $client->getResponse(), 'No route found for "GET /page/unicorns/of-doom"' );
-	}
-
-	public function testWhenNoSubFooter_subFooterDivIsNotShown() {
-		// TODO: setup
-		$client = $this->createClient();
-		$client->request( 'GET', '/page/unicorns' );
-
-		$this->assertNotContains(
-			'<div id="subfooter">',
-			$client->getResponse()->getContent()
-		);
-	}
-
-	public function testWhenIsMobile_isMobileJsVarGetsSetToTrue() {
-		// TODO: setup
-		$client = $this->createClient();
-		$client->request( 'GET', '/page/unicorns' );
-
-		$this->assertNotContains(
-			'var isMobile = true;',
-			$client->getResponse()->getContent()
-		);
 	}
 
 }
