@@ -38,6 +38,7 @@ use WMDE\Fundraising\Frontend\Domain\PageRetriever;
 use WMDE\Fundraising\Frontend\Presenters\DisplayPagePresenter;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\DisplayPageUseCase;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageContentModifier;
+use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\ListCommentsUseCase;
 use WMDE\Fundraising\Frontend\UseCases\CheckIban\CheckIbanUseCase;
 use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanUseCase;
@@ -273,6 +274,10 @@ class FunFunFactory {
 
 	public function setPageTitlePrefix( string $prefix ) {
 		$this->config['cms-wiki-title-prefix'] = $prefix;
+	}
+
+	public function newGetInTouchUseCase() {
+		return new GetInTouchUseCase();
 	}
 
 }
