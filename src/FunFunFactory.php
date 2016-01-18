@@ -79,6 +79,10 @@ class FunFunFactory {
 			return new DoctrineRequestRepository( $this->getConnection() );
 		} );
 
+		$pimple['comment_repository'] = $pimple->share( function() {
+			return new InMemoryCommentRepository( [] ); // TODO
+		} );
+
 		$pimple['request_validator'] = $pimple->share( function() {
 			return new RequestValidator( new MailValidator( MailValidator::TEST_WITH_MX ) );
 		} );
@@ -152,7 +156,7 @@ class FunFunFactory {
 	}
 
 	private function newCommentRepository(): CommentRepository {
-		return new InMemoryCommentRepository( [] ); // TODO
+		return $this->pimple['comment_repository'];
 	}
 
 	private function newRequestRepository(): RequestRepository {
