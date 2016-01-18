@@ -75,7 +75,7 @@ When accessing the API via `web/index.dev.php`, profiling information will be ge
 	<tr>
 		<th>Integration</th>
 		<td>Yes</td>
-		<td>No</td>
+		<td>If needed</td>
 		<td>No</td>
 		<td>No</td>
 	</tr>
