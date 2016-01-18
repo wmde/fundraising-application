@@ -49,8 +49,48 @@ When accessing the API via `web/index.dev.php`, profiling information will be ge
 	* `UseCases/`: one directory per use case
 	* All dependencies are explicitly defined in `composer.json` (including those shared with Silex)
 * `tests/`: tests mirror the directory and namespace structure of the production code
-	* `Unit/`: small isolated tests (cannot access Silex, application state or top level factory)
-	* `Integration/`: tests combining several units (cannot access Silex)
+	* `Unit/`: small isolated tests (one class or a small number of related classes)
+	* `Integration/`: tests combining several units
 	* `System/`: edge-to-edge tests
 	* `TestEnvironment.php`: encapsulates application setup for integration and system tests
 	* `Fixtures/`: test stubs and spies
+
+## Test type restrictions
+
+<table>
+	<tr>
+		<th></th>
+		<th>Database (in memory)</th>
+		<th>Top level factory</th>
+		<th>Framework (Silex)</th>
+		<th>Network & Disk</th>
+	</tr>
+	<tr>
+		<th>Unit</th>
+		<td>No</td>
+		<td>No</td>
+		<td>No</td>
+		<td>No</td>
+	</tr>
+	<tr>
+		<th>Integration</th>
+		<td>Yes</td>
+		<td>If needed</td>
+		<td>No</td>
+		<td>No</td>
+	</tr>
+	<tr>
+		<th>System (edge-to-edge)</th>
+		<td>Yes</td>
+		<td>Yes</td>
+		<td>Yes</td>
+		<td>No</td>
+	</tr>
+	<tr>
+		<th>System (full)</th>
+		<td>Yes</td>
+		<td>Yes</td>
+		<td>Yes</td>
+		<td>Yes</td>
+	</tr>
+</table>
