@@ -27,6 +27,7 @@ class ApiPostRequestHandler {
 			'10hoch16/Seitenkopf' => $this->testEnvironment->getJsonTestData( 'mwApiHeaderPage.json' ),
 			'10hoch16/Seitenfuß' => $this->testEnvironment->getJsonTestData( 'mwApiFooterPage.json' ),
 			'MyNamespace:MyPrefix/Naked_mole-rat' => $this->testEnvironment->getJsonTestData( 'mwApiPrefixedTitlePage.json' ),
+			'JavaScript-Notice' => $this->testEnvironment->getJsonTestData( 'mwApiJsNoticePage.json' ),
 		];
 
 		if ( array_key_exists( $request->getParams()['page'], $pageResponses ) ) {

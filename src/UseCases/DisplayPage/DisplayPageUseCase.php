@@ -28,9 +28,11 @@ class DisplayPageUseCase {
 		$response->setHeaderContent( $this->getPageContent( $this->getPrefixedPageTitle( '10hoch16/Seitenkopf' ) ) );
 		$response->setMainContent( $this->getPageContent( $this->getPrefixedPageTitle( $listingRequest->getPageName() ) ) );
 		$response->setFooterContent( $this->getPageContent( $this->getPrefixedPageTitle( '10hoch16/Seitenfuß' ) ) );
+		$response->setNoJsNoticedContent( $this->getPageContent( $this->getPrefixedPageTitle( 'JavaScript-Notice' ) ) );
 
 		$response->freeze();
 		$response->assertNoNullFields();
+
 		return $response;
 	}
 
