@@ -15,11 +15,6 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 abstract class WebRouteTestCase extends \PHPUnit_Framework_TestCase {
 
 	/**
-	 * @var TestEnvironment
-	 */
-	protected $testEnvironment;
-
-	/**
 	 * Initializes a new test environment and Silex Application and returns a HttpKernel client to
 	 * make requests to the application. The initialized test environment gets set to the
 	 * $testEnvironment field.
@@ -30,15 +25,15 @@ abstract class WebRouteTestCase extends \PHPUnit_Framework_TestCase {
 	 * @return Client
 	 */
 	public function createClient( array $config = [], callable $onEnvironmentCreated = null ): Client {
-		$this->testEnvironment = TestEnvironment::newInstance( $config );
+		$testEnvironment = TestEnvironment::newInstance( $config );
 
-		$this->onTestEnvironmentCreated( $this->getFactory(), $this->getConfig() );
+		$this->onTestEnvironmentCreated( $testEnvironment->getFactory(), $testEnvironment->getConfig() );
 
 		if ( is_callable( $onEnvironmentCreated ) ) {
-			call_user_func( $onEnvironmentCreated, $this->getFactory(), $this->getConfig() );
+			call_user_func( $onEnvironmentCreated, $testEnvironment->getFactory(), $testEnvironment->getConfig() );
 		}
 
-		return new Client( $this->createApplication() );
+		return new Client( $this->createApplication( $testEnvironment->getFactory() ) );
 	}
 
 	/**
@@ -52,23 +47,13 @@ abstract class WebRouteTestCase extends \PHPUnit_Framework_TestCase {
 		// No-op
 	}
 
-	private function createApplication() : Application {
-		/** @noinspection PhpUnusedLocalVariableInspection */
-		$ffFactory = $this->testEnvironment->getFactory();
+	private function createApplication( FunFunFactory $ffFactory ) : Application {
 		$app = require __DIR__ . ' /../../app/bootstrap.php';
 
 		$app['debug'] = true;
 		unset( $app['exception_handler'] );
 
 		return $app;
-	}
-
-	protected function getFactory(): FunFunFactory {
-		return $this->testEnvironment->getFactory();
-	}
-
-	protected function getConfig(): array {
-		return $this->testEnvironment->getConfig();
 	}
 
 	protected function assert404( Response $response, $expectedMessage = 'Not Found' ) {

@@ -60,12 +60,12 @@ class TestEnvironment {
 		return $this->config;
 	}
 
-	public function getTestData( string $fileName ): string {
+	public static function getTestData( string $fileName ): string {
 		return file_get_contents( __DIR__ . '/data/' . $fileName );
 	}
 
-	public function getJsonTestData( string $fileName ) {
-		return json_decode( $this->getTestData( $fileName ), true );
+	public static function getJsonTestData( string $fileName ) {
+		return json_decode( self::getTestData( $fileName ), true );
 	}
 
 }

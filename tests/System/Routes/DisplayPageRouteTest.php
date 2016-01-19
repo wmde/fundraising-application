@@ -19,7 +19,7 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
  */
 class DisplayPageRouteTest extends WebRouteTestCase {
 
-	protected function onTestEnvironmentCreated() {
+	protected function onTestEnvironmentCreated( FunFunFactory $factory, array $config ) {
 		$api = $this->getMockBuilder( MediawikiApi::class )->disableOriginalConstructor()->getMock();
 
 		$api->expects( $this->any() )
@@ -28,7 +28,7 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 				throw new UsageException( 'Page not found: ' . $request->getParams()['page'] );
 			} );
 
-		$this->getFactory()->setMediaWikiApi( $api );
+		$factory->setMediaWikiApi( $api );
 	}
 
 	public function testWhenPageDoesNotExist_missingResponseIsReturned() {
@@ -87,19 +87,19 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenRequestedPageExists_itGetsEmbedded() {
-		$client = $this->createClient( [], function( FunFunFactory $factory ) {
+		$client = $this->createClient( [], function( FunFunFactory $factory, array $config ) {
 			$api = $this->getMockBuilder( MediawikiApi::class )->disableOriginalConstructor()->getMock();
 
 			$api->expects( $this->atLeastOnce() )
 				->method( 'login' )
 				->with( new ApiUser(
-					$this->getConfig()['cms-wiki-user'],
-					$this->getConfig()['cms-wiki-password']
+					$config['cms-wiki-user'],
+					$config['cms-wiki-password']
 				) );
 
 			$api->expects( $this->any() )
 				->method( 'postRequest' )
-				->willReturnCallback( new ApiPostRequestHandler( $this->testEnvironment ) );
+				->willReturnCallback( new ApiPostRequestHandler() );
 
 			$factory->setMediaWikiApi( $api );
 		} );
