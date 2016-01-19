@@ -114,16 +114,7 @@ class FunFunFactory {
 		} );
 
 		$pimple['twig'] = $pimple->share( function() {
-			$options = [];
-
-			if ( $this->config['enable-twig-cache'] ) {
-				$options['cache'] = __DIR__ . '/../app/cache';
-			}
-
-			return new Twig_Environment(
-				new Twig_Loader_Filesystem( __DIR__ . '/../app/templates' ),
-				$options
-			);
+			return TwigFactory::newFromConfig( $this->config );
 		} );
 
 		$pimple['logger'] = $pimple->share( function() {
