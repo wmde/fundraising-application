@@ -3,6 +3,7 @@
 namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 
 use WMDE\Fundraising\Entities\Request;
+use WMDE\Fundraising\Frontend\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\RequestRepositorySpy;
 use WMDE\Fundraising\Frontend\Tests\System\SystemTestCase;
 
@@ -15,9 +16,10 @@ class AddSubscriptionRouteTest extends SystemTestCase {
 	public function testValidSubscriptionRequestGetsPersisted() {
 		$requestRepository = new RequestRepositorySpy();
 
-		$this->testEnvironment->getFactory()->setRequestRepository( $requestRepository );
+		$client = $this->createClient( [], function( FunFunFactory $factory ) use ( $requestRepository ) {
+			$factory->setRequestRepository( $requestRepository );
+		} );
 
-		$client = $this->createClient();
 		$client->request(
 			'POST',
 			'/contact/subscribe',

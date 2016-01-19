@@ -3,8 +3,8 @@
 namespace WMDE\Fundraising\Frontend\Tests\System;
 
 use Silex\Application;
-use Silex\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Frontend\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
@@ -12,19 +12,47 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-abstract class SystemTestCase extends WebTestCase {
+abstract class SystemTestCase extends \PHPUnit_Framework_TestCase {
 
 	/**
 	 * @var TestEnvironment
 	 */
 	protected $testEnvironment;
 
-	public function setUp() {
-		$this->testEnvironment = TestEnvironment::newInstance();
-		parent::setUp();
+	/**
+	 * Initializes a new test environment and Silex Application and returns a HttpKernel client to
+	 * make requests to the application. The initialized test environment gets set to the
+	 * $testEnvironment field.
+	 *
+	 * @param array $config
+	 * @param callable|null $onEnvironmentCreated Gets called after onTestEnvironmentCreated, same signature
+	 *
+	 * @return Client
+	 */
+	public function createClient( array $config = [], callable $onEnvironmentCreated = null ): Client {
+		$this->testEnvironment = TestEnvironment::newInstance( $config );
+
+		$this->onTestEnvironmentCreated( $this->getFactory(), $this->getConfig() );
+
+		if ( is_callable( $onEnvironmentCreated ) ) {
+			call_user_func( $onEnvironmentCreated, $this->getFactory(), $this->getConfig() );
+		}
+
+		return new Client( $this->createApplication() );
 	}
 
-	public function createApplication() : Application {
+	/**
+	 * Template method. No need to call the definition here from overriding methods as
+	 * this one will always be empty.
+	 *
+	 * @param FunFunFactory $factory
+	 * @param array $config
+	 */
+	protected function onTestEnvironmentCreated( FunFunFactory $factory, array $config ) {
+		// No-op
+	}
+
+	private function createApplication() : Application {
 		/** @noinspection PhpUnusedLocalVariableInspection */
 		$ffFactory = $this->testEnvironment->getFactory();
 		$app = require __DIR__ . ' /../../app/bootstrap.php';

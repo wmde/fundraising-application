@@ -6,6 +6,7 @@ use Mediawiki\Api\ApiUser;
 use Mediawiki\Api\MediawikiApi;
 use Mediawiki\Api\Request;
 use Mediawiki\Api\UsageException;
+use WMDE\Fundraising\Frontend\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ApiPostRequestHandler;
 use WMDE\Fundraising\Frontend\Tests\System\SystemTestCase;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
@@ -18,12 +19,7 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
  */
 class DisplayPageRouteTest extends SystemTestCase {
 
-	public function setUp() {
-		parent::setUp();
-		$this->setStubMediaWikiApi();
-	}
-
-	private function setStubMediaWikiApi() {
+	protected function onTestEnvironmentCreated() {
 		$api = $this->getMockBuilder( MediawikiApi::class )->disableOriginalConstructor()->getMock();
 
 		$api->expects( $this->any() )
@@ -81,11 +77,7 @@ class DisplayPageRouteTest extends SystemTestCase {
 	}
 
 	public function testWhenWebBasePathIsSet_itIsUsedInTemplatedPaths() {
-		$this->testEnvironment = TestEnvironment::newInstance( [ 'web-basepath' => '/some-path' ] );
-		$this->setStubMediaWikiApi();
-		$this->app = $this->createApplication();
-
-		$client = $this->createClient();
+		$client = $this->createClient( [ 'web-basepath' => '/some-path' ] );
 		$client->request( 'GET', '/page/kittens' );
 
 		$this->assertContains(
@@ -95,22 +87,23 @@ class DisplayPageRouteTest extends SystemTestCase {
 	}
 
 	public function testWhenRequestedPageExists_itGetsEmbedded() {
-		$api = $this->getMockBuilder( MediawikiApi::class )->disableOriginalConstructor()->getMock();
+		$client = $this->createClient( [], function( FunFunFactory $factory ) {
+			$api = $this->getMockBuilder( MediawikiApi::class )->disableOriginalConstructor()->getMock();
 
-		$api->expects( $this->atLeastOnce() )
-			->method( 'login' )
-			->with( new ApiUser(
-				$this->getConfig()['cms-wiki-user'],
-				$this->getConfig()['cms-wiki-password']
-			) );
+			$api->expects( $this->atLeastOnce() )
+				->method( 'login' )
+				->with( new ApiUser(
+					$this->getConfig()['cms-wiki-user'],
+					$this->getConfig()['cms-wiki-password']
+				) );
 
-		$api->expects( $this->any() )
-			->method( 'postRequest' )
-			->willReturnCallback( new ApiPostRequestHandler( $this->testEnvironment ) );
+			$api->expects( $this->any() )
+				->method( 'postRequest' )
+				->willReturnCallback( new ApiPostRequestHandler( $this->testEnvironment ) );
 
-		$this->getFactory()->setMediaWikiApi( $api );
+			$factory->setMediaWikiApi( $api );
+		} );
 
-		$client = $this->createClient();
 		$client->request( 'GET', '/page/unicorns' );
 
 		$this->assertContains(
