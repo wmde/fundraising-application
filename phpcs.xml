@@ -6,6 +6,9 @@
 <ruleset name="MediaWiki">
     <rule ref="Generic.Classes" />
     <rule ref="Generic.CodeAnalysis" />
+    <rule ref="Generic.CodeAnalysis.UnusedFunctionParameter.Found">
+        <severity>0</severity>
+    </rule>
     <rule ref="Generic.ControlStructures" />
 
     <rule ref="Generic.Files.ByteOrderMark" />

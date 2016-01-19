@@ -6,8 +6,10 @@ use Mediawiki\Api\ApiUser;
 use Mediawiki\Api\MediawikiApi;
 use Mediawiki\Api\Request;
 use Mediawiki\Api\UsageException;
+use WMDE\Fundraising\Frontend\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ApiPostRequestHandler;
-use WMDE\Fundraising\Frontend\Tests\System\SystemTestCase;
+use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
+use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
  * @covers WMDE\Fundraising\Frontend\Presenters\DisplayPagePresenter
@@ -15,11 +17,9 @@ use WMDE\Fundraising\Frontend\Tests\System\SystemTestCase;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class DisplayPageRouteTest extends SystemTestCase {
+class DisplayPageRouteTest extends WebRouteTestCase {
 
-	public function setUp() {
-		parent::setUp();
-
+	protected function onTestEnvironmentCreated( FunFunFactory $factory, array $config ) {
 		$api = $this->getMockBuilder( MediawikiApi::class )->disableOriginalConstructor()->getMock();
 
 		$api->expects( $this->any() )
@@ -28,7 +28,7 @@ class DisplayPageRouteTest extends SystemTestCase {
 				throw new UsageException( 'Page not found: ' . $request->getParams()['page'] );
 			} );
 
-		$this->getFactory()->setMediaWikiApi( $api );
+		$factory->setMediaWikiApi( $api );
 	}
 
 	public function testWhenPageDoesNotExist_missingResponseIsReturned() {
@@ -66,23 +66,44 @@ class DisplayPageRouteTest extends SystemTestCase {
 		);
 	}
 
-	public function testWhenRequestedPageExists_itGetsEmbedded() {
-		$api = $this->getMockBuilder( MediawikiApi::class )->disableOriginalConstructor()->getMock();
-
-		$api->expects( $this->atLeastOnce() )
-			->method( 'login' )
-			->with( new ApiUser(
-				$this->getConfig()['cms-wiki-user'],
-				$this->getConfig()['cms-wiki-password']
-			) );
-
-		$api->expects( $this->any() )
-			->method( 'postRequest' )
-			->willReturnCallback( new ApiPostRequestHandler( $this->testEnvironment ) );
-
-		$this->getFactory()->setMediaWikiApi( $api );
-
+	public function testWhenWebBasePathIsEmpty_templatedPathsReferToRootPath() {
 		$client = $this->createClient();
+		$client->request( 'GET', '/page/kittens' );
+
+		$this->assertContains(
+			'"/res/css/fontcustom.css"',
+			$client->getResponse()->getContent()
+		);
+	}
+
+	public function testWhenWebBasePathIsSet_itIsUsedInTemplatedPaths() {
+		$client = $this->createClient( [ 'web-basepath' => '/some-path' ] );
+		$client->request( 'GET', '/page/kittens' );
+
+		$this->assertContains(
+			'"/some-path/res/css/fontcustom.css"',
+			$client->getResponse()->getContent()
+		);
+	}
+
+	public function testWhenRequestedPageExists_itGetsEmbedded() {
+		$client = $this->createClient( [], function( FunFunFactory $factory, array $config ) {
+			$api = $this->getMockBuilder( MediawikiApi::class )->disableOriginalConstructor()->getMock();
+
+			$api->expects( $this->atLeastOnce() )
+				->method( 'login' )
+				->with( new ApiUser(
+					$config['cms-wiki-user'],
+					$config['cms-wiki-password']
+				) );
+
+			$api->expects( $this->any() )
+				->method( 'postRequest' )
+				->willReturnCallback( new ApiPostRequestHandler() );
+
+			$factory->setMediaWikiApi( $api );
+		} );
+
 		$client->request( 'GET', '/page/unicorns' );
 
 		$this->assertContains(

@@ -15,19 +15,13 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
  */
 class ApiPostRequestHandler {
 
-	private $testEnvironment;
-
-	public function __construct( TestEnvironment $testEnvironment ) {
-		$this->testEnvironment = $testEnvironment;
-	}
-
 	public function __invoke( Request $request ) {
 		$pageResponses = [
-			'Unicorns' => $this->testEnvironment->getJsonTestData( 'mwApiUnicornsPage.json' ),
-			'10hoch16/Seitenkopf' => $this->testEnvironment->getJsonTestData( 'mwApiHeaderPage.json' ),
-			'10hoch16/Seitenfuß' => $this->testEnvironment->getJsonTestData( 'mwApiFooterPage.json' ),
-			'MyNamespace:MyPrefix/Naked_mole-rat' => $this->testEnvironment->getJsonTestData( 'mwApiPrefixedTitlePage.json' ),
-			'JavaScript-Notice' => $this->testEnvironment->getJsonTestData( 'mwApiJsNoticePage.json' ),
+			'Unicorns' => TestEnvironment::getJsonTestData( 'mwApiUnicornsPage.json' ),
+			'10hoch16/Seitenkopf' => TestEnvironment::getJsonTestData( 'mwApiHeaderPage.json' ),
+			'10hoch16/Seitenfuß' => TestEnvironment::getJsonTestData( 'mwApiFooterPage.json' ),
+			'MyNamespace:MyPrefix/Naked_mole-rat' => TestEnvironment::getJsonTestData( 'mwApiPrefixedTitlePage.json' ),
+			'JavaScript-Notice' => TestEnvironment::getJsonTestData( 'mwApiJsNoticePage.json' ),
 		];
 
 		if ( array_key_exists( $request->getParams()['page'], $pageResponses ) ) {

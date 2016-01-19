@@ -12,8 +12,8 @@ use WMDE\Fundraising\Frontend\FunFunFactory;
  */
 class TestEnvironment {
 
-	public static function newInstance() {
-		$instance = new self();
+	public static function newInstance( array $config = [] ) {
+		$instance = new self( $config );
 
 		$instance->factory->newInstaller()->install();
 
@@ -30,8 +30,8 @@ class TestEnvironment {
 	 */
 	private $factory;
 
-	private function __construct() {
-		$this->config = $this->getConfigFromFiles();
+	private function __construct( array $config ) {
+		$this->config = array_replace_recursive( $this->getConfigFromFiles(), $config );
 		$this->factory = new FunFunFactory( $this->config );
 	}
 
@@ -60,12 +60,12 @@ class TestEnvironment {
 		return $this->config;
 	}
 
-	public function getTestData( string $fileName ): string {
+	public static function getTestData( string $fileName ): string {
 		return file_get_contents( __DIR__ . '/data/' . $fileName );
 	}
 
-	public function getJsonTestData( string $fileName ) {
-		return json_decode( $this->getTestData( $fileName ), true );
+	public static function getJsonTestData( string $fileName ) {
+		return json_decode( self::getTestData( $fileName ), true );
 	}
 
 }

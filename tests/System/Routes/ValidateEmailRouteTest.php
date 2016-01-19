@@ -3,13 +3,13 @@
 namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 
 use Symfony\Component\HttpFoundation\Response;
-use WMDE\Fundraising\Frontend\Tests\System\SystemTestCase;
+use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
 
 /**
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class ValidateEmailRouteTest extends SystemTestCase {
+class ValidateEmailRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidEmail_successResponseIsReturned() {
 		$client = $this->createClient();
