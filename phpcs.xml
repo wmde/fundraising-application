@@ -90,6 +90,14 @@
         </properties>
     </rule>
 
+    <!-- Disabled cause they fail with declare(strict_types=1); -->
+    <rule ref="Squiz.WhiteSpace.OperatorSpacing.NoSpaceBefore">
+        <severity>0</severity>
+    </rule>
+    <rule ref="Squiz.WhiteSpace.OperatorSpacing.NoSpaceAfter">
+        <severity>0</severity>
+    </rule>
+
     <rule ref="Squiz.WhiteSpace.ScopeClosingBrace" />
     <rule ref="Squiz.WhiteSpace.ScopeKeywordSpacing" />
     <rule ref="Squiz.WhiteSpace.SemicolonSpacing" />
