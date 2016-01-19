@@ -19,7 +19,7 @@ class CommentListJsonPresenter {
 					'spender' => $comment->getAuthorName(),
 					'kommentar' => $comment->getCommentText(),
 					'datum' => $comment->getPostingTime()->format( 'r' ),
-					'id' => '',
+					'id' => $comment->getDonationId(),
 				];
 			},
 			$commentList->toArray()

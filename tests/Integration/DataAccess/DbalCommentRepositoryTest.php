@@ -51,7 +51,7 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 			[
 				$this->getFirstComment(),
 				$this->getSecondComment(),
-				$this->getThirdComment(),
+				$this->getThirdComment( 3 ),
 			],
 			$repository->getComments( 10 )
 		);
@@ -87,7 +87,7 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 			[
 				$this->getFirstComment(),
 				$this->getSecondComment(),
-				$this->getThirdComment(),
+				$this->getThirdComment( 4 ),
 			],
 			$repository->getComments( 10 )
 		);
@@ -139,6 +139,7 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 			->setCommentText( 'First comment' )
 			->setDonationAmount( 100 )
 			->setPostingTime( new \DateTime( '1984-01-01' ) )
+			->setDonationId( 1 )
 			->freeze();
 	}
 
@@ -149,15 +150,17 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 			->setCommentText( 'Second comment' )
 			->setDonationAmount( 200 )
 			->setPostingTime( new \DateTime( '1984-02-02' ) )
+			->setDonationId( 2 )
 			->freeze();
 	}
 
-	private function getThirdComment() {
+	private function getThirdComment( int $donationId ) {
 		return Comment::newInstance()
 			->setAuthorName( 'Third name' )
 			->setCommentText( 'Third comment' )
 			->setDonationAmount( 300 )
 			->setPostingTime( new \DateTime( '1984-03-03' ) )
+			->setDonationId( $donationId )
 			->freeze();
 	}
 

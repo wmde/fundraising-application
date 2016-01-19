@@ -46,14 +46,14 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 					'spender' => 'First name',
 					'kommentar' => 'First comment',
 					'datum' => 'Sun, 01 Jan 1984 00:00:00 +0100',
-					'id' => '',
+					'id' => 1,
 				],
 				[
 					'betrag' => 200,
 					'spender' => 'Second name',
 					'kommentar' => 'Second comment',
 					'datum' => 'Thu, 02 Feb 1984 00:00:00 +0100',
-					'id' => '',
+					'id' => 2,
 				],
 			],
 			$client->getResponse()
@@ -97,7 +97,7 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 					'spender' => 'First name',
 					'kommentar' => 'First comment',
 					'datum' => 'Sun, 01 Jan 1984 00:00:00 +0100',
-					'id' => '',
+					'id' => 1,
 				]
 			],
 			$client->getResponse()

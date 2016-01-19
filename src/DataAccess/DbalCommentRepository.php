@@ -34,6 +34,7 @@ class DbalCommentRepository implements CommentRepository {
 					->setCommentText( $spenden->getKommentar() )
 					->setDonationAmount( (float)$spenden->getBetrag() )
 					->setPostingTime( $spenden->getDtNew() )
+					->setDonationId( $spenden->getId() )
 					->freeze()
 					->assertNoNullFields();
 			},
