@@ -20,14 +20,20 @@ class InMemoryCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 	public function testWhenThereAreComments_getCommentsReturnsThem() {
 		$this->assertEquals(
 			[
-				new Comment( 'name0', 'comment', '42', '000000' ),
-				new Comment( 'name1', 'comment', '42', '000000' ),
-				new Comment( 'name2', 'comment', '42', '000000' )
+				Comment::newInstance()->setAuthorName( 'name0' )->setCommentText( 'comment' )
+					->setDonationAmount( '42' )->setPostingTime( new \DateTime( '1984-01-01' ) ),
+				Comment::newInstance()->setAuthorName( 'name1' )->setCommentText( 'comment' )
+					->setDonationAmount( '42' )->setPostingTime( new \DateTime( '1984-01-01' ) ),
+				Comment::newInstance()->setAuthorName( 'name2' )->setCommentText( 'comment' )
+					->setDonationAmount( '42' )->setPostingTime( new \DateTime( '1984-01-01' ) ),
 			],
 			( new InMemoryCommentRepository(
-				new Comment( 'name0', 'comment', '42', '000000' ),
-				new Comment( 'name1', 'comment', '42', '000000' ),
-				new Comment( 'name2', 'comment', '42', '000000' )
+				Comment::newInstance()->setAuthorName( 'name0' )->setCommentText( 'comment' )
+					->setDonationAmount( '42' )->setPostingTime( new \DateTime( '1984-01-01' ) ),
+				Comment::newInstance()->setAuthorName( 'name1' )->setCommentText( 'comment' )
+					->setDonationAmount( '42' )->setPostingTime( new \DateTime( '1984-01-01' ) ),
+				Comment::newInstance()->setAuthorName( 'name2' )->setCommentText( 'comment' )
+					->setDonationAmount( '42' )->setPostingTime( new \DateTime( '1984-01-01' ) )
 			) )->getComments( 10 )
 		);
 	}
@@ -35,13 +41,18 @@ class InMemoryCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 	public function testGivenLimitSmallerThanCommentCount_getCommentsLimitsItsResult() {
 		$this->assertEquals(
 			[
-				new Comment( 'name0', 'comment', '42', '000000' ),
-				new Comment( 'name1', 'comment', '42', '000000' ),
+				Comment::newInstance()->setAuthorName( 'name0' )->setCommentText( 'comment' )
+					->setDonationAmount( '42' )->setPostingTime( new \DateTime( '1984-01-01' ) ),
+				Comment::newInstance()->setAuthorName( 'name1' )->setCommentText( 'comment' )
+					->setDonationAmount( '42' )->setPostingTime( new \DateTime( '1984-01-01' ) )
 			],
 			( new InMemoryCommentRepository(
-				new Comment( 'name0', 'comment', '42', '000000' ),
-				new Comment( 'name1', 'comment', '42', '000000' ),
-				new Comment( 'name2', 'comment', '42', '000000' )
+				Comment::newInstance()->setAuthorName( 'name0' )->setCommentText( 'comment' )
+					->setDonationAmount( '42' )->setPostingTime( new \DateTime( '1984-01-01' ) ),
+				Comment::newInstance()->setAuthorName( 'name1' )->setCommentText( 'comment' )
+					->setDonationAmount( '42' )->setPostingTime( new \DateTime( '1984-01-01' ) ),
+				Comment::newInstance()->setAuthorName( 'name2' )->setCommentText( 'comment' )
+					->setDonationAmount( '42' )->setPostingTime( new \DateTime( '1984-01-01' ) )
 			) )->getComments( 2 )
 		);
 	}

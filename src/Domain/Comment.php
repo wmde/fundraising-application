@@ -2,22 +2,26 @@
 
 namespace WMDE\Fundraising\Frontend\Domain;
 
+use DateTime;
+use WMDE\Fundraising\Frontend\FreezableValueObject;
+
 /**
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class Comment {
+	use FreezableValueObject;
 
 	private $authorName;
 	private $donationAmount;
 	private $commentText;
 	private $postingTime;
 
-	public function __construct( string $authorName, string $commentText, float $donationAmount, int $postingTime ) {
-		$this->authorName = $authorName;
-		$this->commentText = $commentText;
-		$this->donationAmount = $donationAmount;
-		$this->postingTime = $postingTime;
+	public static function newInstance() {
+		return new self();
+	}
+
+	private function __construct() {
 	}
 
 	public function getAuthorName(): string {
@@ -32,8 +36,32 @@ class Comment {
 		return $this->commentText;
 	}
 
-	public function getPostingTime(): int {
+	public function getPostingTime(): DateTime {
 		return $this->postingTime;
+	}
+
+	public function setAuthorName( string $authorName ): self {
+		$this->assertIsWritable();
+		$this->authorName = $authorName;
+		return $this;
+	}
+
+	public function setDonationAmount( float $donationAmount ): self {
+		$this->assertIsWritable();
+		$this->donationAmount = $donationAmount;
+		return $this;
+	}
+
+	public function setCommentText( string $commentText ): self {
+		$this->assertIsWritable();
+		$this->commentText = $commentText;
+		return $this;
+	}
+
+	public function setPostingTime( DateTime $postingTime ): self {
+		$this->assertIsWritable();
+		$this->postingTime = $postingTime;
+		return $this;
 	}
 
 }
