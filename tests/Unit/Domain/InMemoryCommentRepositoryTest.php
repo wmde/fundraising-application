@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Domain;
 
 use WMDE\Fundraising\Frontend\Domain\Comment;
@@ -20,14 +22,14 @@ class InMemoryCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 	public function testWhenThereAreComments_getCommentsReturnsThem() {
 		$this->assertEquals(
 			[
-				new Comment( 'name0', 'comment', '42', '000000' ),
-				new Comment( 'name1', 'comment', '42', '000000' ),
-				new Comment( 'name2', 'comment', '42', '000000' )
+				new Comment( 'name0', 'comment', 42, 0 ),
+				new Comment( 'name1', 'comment', 42, 0 ),
+				new Comment( 'name2', 'comment', 42, 0 )
 			],
 			( new InMemoryCommentRepository(
-				new Comment( 'name0', 'comment', '42', '000000' ),
-				new Comment( 'name1', 'comment', '42', '000000' ),
-				new Comment( 'name2', 'comment', '42', '000000' )
+				new Comment( 'name0', 'comment', 42, 0 ),
+				new Comment( 'name1', 'comment', 42, 0 ),
+				new Comment( 'name2', 'comment', 42, 0 )
 			) )->getComments( 10 )
 		);
 	}
@@ -35,13 +37,13 @@ class InMemoryCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 	public function testGivenLimitSmallerThanCommentCount_getCommentsLimitsItsResult() {
 		$this->assertEquals(
 			[
-				new Comment( 'name0', 'comment', '42', '000000' ),
-				new Comment( 'name1', 'comment', '42', '000000' ),
+				new Comment( 'name0', 'comment', 42, 0 ),
+				new Comment( 'name1', 'comment', 42, 0 ),
 			],
 			( new InMemoryCommentRepository(
-				new Comment( 'name0', 'comment', '42', '000000' ),
-				new Comment( 'name1', 'comment', '42', '000000' ),
-				new Comment( 'name2', 'comment', '42', '000000' )
+				new Comment( 'name0', 'comment', 42, 0 ),
+				new Comment( 'name1', 'comment', 42, 0 ),
+				new Comment( 'name2', 'comment', 42, 0 )
 			) )->getComments( 2 )
 		);
 	}

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
 use Mediawiki\Api\Request;
