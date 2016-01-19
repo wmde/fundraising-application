@@ -26,7 +26,7 @@ class DisplayPagePresenter {
 		] );
 	}
 
-	public function getContentOrMissingMessage( string $content, string $contentName ): string {
+	private function getContentOrMissingMessage( string $content, string $contentName ): string {
 		if ( $content === '' ) {
 			return htmlspecialchars( "Could not load $contentName!" );
 		}
