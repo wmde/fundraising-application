@@ -114,7 +114,7 @@ class FunFunFactory {
 		} );
 
 		$pimple['twig'] = $pimple->share( function() {
-			return TwigFactory::newFromConfig( $this->config );
+			return TwigFactory::newFromConfig( $this->config, $this->newPageRetriever() );
 		} );
 
 		$pimple['logger'] = $pimple->share( function() {

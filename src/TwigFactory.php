@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend;
 use Twig_Environment;
 use Twig_Lexer;
 use Twig_Loader_Filesystem;
+use WMDE\Fundraising\Frontend\PageRetriever\PageRetriever;
 
 /**
  * @license GNU GPL v2+
@@ -13,7 +14,7 @@ use Twig_Loader_Filesystem;
  */
 class TwigFactory {
 
-	public static function newFromConfig( array $config ): Twig_Environment {
+	public static function newFromConfig( array $config, PageRetriever $pageRetriever ): Twig_Environment {
 		$options = [];
 
 		if ( $config['enable-twig-cache'] ) {
@@ -21,8 +22,13 @@ class TwigFactory {
 		}
 
 		$templateDir = $config['template-dir']  ?: __DIR__ . '/../app/templates';
-		$twig = new Twig_Environment(
+		$loader = new \Twig_Loader_Chain( [
 			new Twig_Loader_Filesystem( $templateDir ),
+			new TwigPageLoader( $pageRetriever )
+		] );
+
+		$twig = new Twig_Environment(
+			$loader,
 			$options
 		);
 
