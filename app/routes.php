@@ -27,7 +27,7 @@ $app->get(
 );
 
 $app->get(
-	'list.rss',
+	'list-comments.json',
 	function( Request $request ) use ( $app, $ffFactory ) {
 		$useCase = $ffFactory->newListCommentsUseCase();
 		$responseModel = $useCase->listComments( new CommentListingRequest( 10 /* TODO: get real limit */ ) );
