@@ -5,13 +5,13 @@ namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 use WMDE\Fundraising\Entities\Request;
 use WMDE\Fundraising\Frontend\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\RequestRepositorySpy;
-use WMDE\Fundraising\Frontend\Tests\System\SystemTestCase;
+use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
 
 /**
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class AddSubscriptionRouteTest extends SystemTestCase {
+class AddSubscriptionRouteTest extends WebRouteTestCase {
 
 	public function testValidSubscriptionRequestGetsPersisted() {
 		$requestRepository = new RequestRepositorySpy();

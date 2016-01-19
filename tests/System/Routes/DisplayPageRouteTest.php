@@ -8,7 +8,7 @@ use Mediawiki\Api\Request;
 use Mediawiki\Api\UsageException;
 use WMDE\Fundraising\Frontend\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ApiPostRequestHandler;
-use WMDE\Fundraising\Frontend\Tests\System\SystemTestCase;
+use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
@@ -17,7 +17,7 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class DisplayPageRouteTest extends SystemTestCase {
+class DisplayPageRouteTest extends WebRouteTestCase {
 
 	protected function onTestEnvironmentCreated() {
 		$api = $this->getMockBuilder( MediawikiApi::class )->disableOriginalConstructor()->getMock();

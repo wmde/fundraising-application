@@ -2,7 +2,7 @@
 
 namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 
-use WMDE\Fundraising\Frontend\Tests\System\SystemTestCase;
+use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
 
 /**
  * @covers WMDE\Fundraising\Frontend\Presenters\IbanPresenter
@@ -10,7 +10,7 @@ use WMDE\Fundraising\Frontend\Tests\System\SystemTestCase;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class CheckIbanRouteTest extends SystemTestCase {
+class CheckIbanRouteTest extends WebRouteTestCase {
 
 	public function setUp() {
 		if ( !function_exists( 'lut_init' ) ) {

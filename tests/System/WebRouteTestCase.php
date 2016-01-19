@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-abstract class SystemTestCase extends \PHPUnit_Framework_TestCase {
+abstract class WebRouteTestCase extends \PHPUnit_Framework_TestCase {
 
 	/**
 	 * @var TestEnvironment
