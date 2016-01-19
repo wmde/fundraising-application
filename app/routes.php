@@ -74,7 +74,7 @@ $app->get(
 
 $app->post(
 	'contact/subscribe',
-	function( Request $request ) use ( $ffFactory ) {
+	function( Application $app, Request $request ) use ( $ffFactory ) {
 		$useCase = $ffFactory->newAddSubscriptionUseCase();
 
 		$subscriptionRequest = new SubscriptionRequest();
@@ -96,8 +96,8 @@ $app->post(
 		] );
 
 		$responseModel = $useCase->addSubscription( $subscriptionRequest );
-		// TODO forward/dispatch to matching 'page/name' route, depending on $responseModel->getType();
-		return 'TODO';
+		// TODO check $request for accepted content types and initialize JSON or HTML presenter accordingly
+		return $app->json( $ffFactory->newAddSubscriptionJSONPresenter()->present( $responseModel ) );
 	}
 );
 
