@@ -2,10 +2,8 @@
 
 namespace WMDE\Fundraising\Frontend\Presenters;
 
-use WMDE\Fundraising\Frontend\TwigTemplate;
-use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageDisplayResponse;
+use WMDE\Fundraising\Frontend\Domain\Comment;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentList;
-use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentListItem;
 
 /**
  * @licence GNU GPL v2+
@@ -15,12 +13,12 @@ class CommentListJsonPresenter {
 
 	public function present( CommentList $commentList ): array {
 		return array_map(
-			function( CommentListItem $commentListItem ) {
+			function( Comment $comment ) {
 				return [
-					'betrag' => $commentListItem->getDonationAmount(),
-					'spender' => $commentListItem->getAuthorName(),
-					'kommentar' => $commentListItem->getCommentText(),
-					'datum' => $commentListItem->getPostingTime()->format( 'r' ),
+					'betrag' => $comment->getDonationAmount(),
+					'spender' => $comment->getAuthorName(),
+					'kommentar' => $comment->getCommentText(),
+					'datum' => $comment->getPostingTime()->format( 'r' ),
 					'id' => '',
 				];
 			},

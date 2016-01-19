@@ -24,17 +24,7 @@ class ListCommentsUseCase {
 	}
 
 	private function getListItems( CommentListingRequest $listingRequest ): array {
-		return array_map(
-			function( Comment $comment ) {
-				return new CommentListItem(
-					$comment->getAuthorName(),
-					$comment->getCommentText(),
-					$comment->getDonationAmount(),
-					$comment->getPostingTime()
-				);
-			},
-			$this->commentRepository->getComments( $listingRequest->getLimit() )
-		);
+		return $this->commentRepository->getComments( $listingRequest->getLimit() );
 	}
 
 }
