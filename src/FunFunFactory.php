@@ -25,10 +25,13 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
+use WMDE\Fundraising\Entities\Spenden;
+use WMDE\Fundraising\Frontend\DataAccess\DbalCommentRepository;
 use WMDE\Fundraising\Frontend\Domain\CommentRepository;
 use WMDE\Fundraising\Frontend\Domain\DoctrineRequestRepository;
 use WMDE\Fundraising\Frontend\Domain\InMemoryCommentRepository;
 use WMDE\Fundraising\Frontend\Domain\RequestRepository;
+use WMDE\Fundraising\Frontend\Presenters\CommentListJsonPresenter;
 use WMDE\Fundraising\Frontend\Presenters\IbanPresenter;
 use WMDE\Fundraising\Frontend\Validation\MailValidator;
 use WMDE\Fundraising\Frontend\Validation\RequestValidator;
@@ -88,7 +91,7 @@ class FunFunFactory {
 		} );
 
 		$pimple['comment_repository'] = $pimple->share( function() {
-			return new InMemoryCommentRepository(); // TODO
+			return new DbalCommentRepository( $this->getEntityManager()->getRepository( Spenden::class ) );
 		} );
 
 		$pimple['request_validator'] = $pimple->share( function() {
@@ -156,6 +159,10 @@ class FunFunFactory {
 
 	public function newListCommentsUseCase(): ListCommentsUseCase {
 		return new ListCommentsUseCase( $this->newCommentRepository() );
+	}
+
+	public function newCommentListJsonPresenter(): CommentListJsonPresenter {
+		return new CommentListJsonPresenter();
 	}
 
 	private function newCommentRepository(): CommentRepository {

@@ -99,7 +99,7 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$firstSpenden->setKommentar( 'First comment' );
 		$firstSpenden->setBetrag( '100' );
 		$firstSpenden->setDtNew( new DateTime( '1984-01-01' ) );
-		$firstSpenden->setIsPublic( true ); // TODO
+		$firstSpenden->setIsPublic( true );
 		$this->entityManager->persist( $firstSpenden );
 	}
 
