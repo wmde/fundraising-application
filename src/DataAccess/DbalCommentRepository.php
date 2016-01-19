@@ -37,7 +37,15 @@ class DbalCommentRepository implements CommentRepository {
 					->freeze()
 					->assertNoNullFields();
 			},
-			$this->entityRepository->findBy( [ 'isPublic' => true ], null, $limit )
+			$this->getSpenden( $limit )
+		);
+	}
+
+	private function getSpenden( int $limit ): array {
+		return $this->entityRepository->findBy(
+			[ 'isPublic' => true ],
+			null,
+			$limit
 		);
 	}
 
