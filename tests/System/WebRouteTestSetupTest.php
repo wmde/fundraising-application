@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace WMDE\Fundraising\Frontend\Tests\System;
 
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;

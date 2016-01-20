@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace WMDE\Fundraising\Frontend\UseCases\CheckIban;
 
 use WMDE\Fundraising\Frontend\BankDataConverter;

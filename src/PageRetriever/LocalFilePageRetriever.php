@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace WMDE\Fundraising\Frontend\PageRetriever;
 
 use FileFetcher\FileFetcher;
