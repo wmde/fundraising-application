@@ -2,7 +2,7 @@
 
 namespace WMDE\Fundraising\Frontend\UseCases\ValidateEmail;
 
-use WMDE\Fundraising\Frontend\MailValidator;
+use WMDE\Fundraising\Frontend\Validation\MailValidator;
 
 /**
  * TODO: as is, this is a rather empty partition that can just as well be removed
@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\MailValidator;
 class ValidateEmailUseCase {
 
 	public function validateEmail( string $email ): bool {
-		return ( new MailValidator( MailValidator::TEST_WITH_MX ) )->validateMail( $email );
+		return ( new MailValidator( MailValidator::TEST_WITH_MX ) )->validate( $email );
 	}
 
 }

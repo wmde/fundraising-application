@@ -2,10 +2,10 @@
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit;
 
-use WMDE\Fundraising\Frontend\MailValidator;
+use WMDE\Fundraising\Frontend\Validation\MailValidator;
 
 /**
- * @covers WMDE\Fundraising\Frontend\MailValidator
+ * @covers WMDE\Fundraising\Frontend\Validation\MailValidator
  *
  * @licence GNU GPL v2+
  * @author Christoph Fischer < christoph.fischer@wikimedia.de >
@@ -18,7 +18,7 @@ class MailValidatorTest extends \PHPUnit_Framework_TestCase {
 	public function testWhenGivenMail_validatorMXValidatesCorrectly( $mailToTest, $resultExpected ) {
 		$mailValidator = new MailValidator( true );
 
-		$this->assertSame( $mailValidator->validateMail( $mailToTest ), $resultExpected );
+		$this->assertSame( $mailValidator->validate( $mailToTest ), $resultExpected );
 	}
 
 	public function emailTestProviderMX() {
@@ -45,7 +45,7 @@ class MailValidatorTest extends \PHPUnit_Framework_TestCase {
 	public function testWhenGivenMail_validatorNoMXValidatesCorrectly( $mailToTest, $resultExpected ) {
 		$mailValidator = new MailValidator( false );
 
-		$this->assertSame( $mailValidator->validateMail( $mailToTest ), $resultExpected );
+		$this->assertSame( $mailValidator->validate( $mailToTest ), $resultExpected );
 	}
 
 	public function emailTestProviderNoMX() {
