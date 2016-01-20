@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace WMDE\Fundraising\Frontend\PageRetriever;
 
 use Mediawiki\Api\ApiUser;
@@ -36,7 +38,7 @@ class ApiBasedPageRetriever implements PageRetriever {
 
 		if ( $content === false || $content === null ) {
 			$this->logger->debug( __METHOD__ . ': fail, got non-value', [ $content ] );
-			return false;
+			return '';
 		}
 
 		return $content;

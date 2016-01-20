@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace WMDE\Fundraising\Frontend\UseCases\DisplayPage;
 
 use WMDE\Fundraising\Frontend\PageRetriever\PageRetriever;

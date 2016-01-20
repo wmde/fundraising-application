@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
 
 use DateTime;
@@ -135,7 +137,7 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 		return Comment::newInstance()
 			->setAuthorName( 'First name' )
 			->setCommentText( 'First comment' )
-			->setDonationAmount( '100' )
+			->setDonationAmount( 100 )
 			->setPostingTime( new \DateTime( '1984-01-01' ) );
 	}
 
@@ -144,7 +146,7 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 		return Comment::newInstance()
 			->setAuthorName( 'Second name' )
 			->setCommentText( 'Second comment' )
-			->setDonationAmount( '200' )
+			->setDonationAmount( 200 )
 			->setPostingTime( new \DateTime( '1984-02-02' ) );
 	}
 
@@ -152,7 +154,7 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 		return Comment::newInstance()
 			->setAuthorName( 'Third name' )
 			->setCommentText( 'Third comment' )
-			->setDonationAmount( '300' )
+			->setDonationAmount( 300 )
 			->setPostingTime( new \DateTime( '1984-03-03' ) );
 	}
 

@@ -6,6 +6,8 @@
  * @var \WMDE\Fundraising\Frontend\FunFunFactory $ffFactory
  */
 
+declare(strict_types = 1);
+
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

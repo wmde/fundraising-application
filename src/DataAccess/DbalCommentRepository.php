@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace WMDE\Fundraising\Frontend\DataAccess;
 
 use Doctrine\ORM\EntityRepository;
@@ -30,7 +32,7 @@ class DbalCommentRepository implements CommentRepository {
 				return Comment::newInstance()
 					->setAuthorName( $spenden->getName() )
 					->setCommentText( $spenden->getKommentar() )
-					->setDonationAmount( $spenden->getBetrag() )
+					->setDonationAmount( (float)$spenden->getBetrag() )
 					->setPostingTime( $spenden->getDtNew() );
 			},
 			$this->entityRepository->findBy( [ 'isPublic' => true ], null, $limit )
