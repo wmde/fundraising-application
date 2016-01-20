@@ -14,5 +14,6 @@
 	"cms-wiki-password": "",
 	"cms-wiki-title-prefix": "",
 	"web-basepath": "",
-	"enable-twig-cache": true
+	"enable-twig-cache": true,
+	"template-dir": ""
 }
