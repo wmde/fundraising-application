@@ -16,25 +16,21 @@ class TwigPageLoader implements \Twig_LoaderInterface {
 	private $pageCache = [];
 	private $errorCache = [];
 
-	/**
-	 * TwigPageLoader constructor.
-	 * @param $pageRetriever
-	 */
 	public function __construct( PageRetriever $pageRetriever ) {
 		$this->pageRetriever = $pageRetriever;
 	}
 
-	public function getSource( $name ) {
+	public function getSource( $name ): string {
 		return $this->retrievePage( $name );
 	}
 
-	public function getCacheKey( $name ) {
+	public function getCacheKey( $name ): string {
 		// retrieve page to generate loader exception if page does not exist
 		$this->retrievePage( $name );
 		return $name;
 	}
 
-	public function isFresh( $name, $time ) {
+	public function isFresh( $name, $time ): bool {
 		// TODO: Check wiki page revisions if page is fresh,
 		//   otherwise the Twig page cache has to be cleared manually when the wimkimpages changes!!!
 
@@ -43,7 +39,7 @@ class TwigPageLoader implements \Twig_LoaderInterface {
 		return true;
 	}
 
-	private function retrievePage( string $name ) {
+	private function retrievePage( string $name ): string {
 		if ( isset( $this->pageCache[$name] ) ) {
 			return $this->pageCache[$name];
 		}
