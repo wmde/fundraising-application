@@ -16,15 +16,20 @@ class Messenger {
 
 	private $mailTransport;
 	private $failedRecipients = [];
+	private $operatorAddress;
 
-	public function __construct( Swift_Transport $mailTransport ) {
+	public function __construct( Swift_Transport $mailTransport, MailAddress $operatorAddress ) {
 		$this->mailTransport = $mailTransport;
+		$this->operatorAddress = $operatorAddress;
 	}
 
 	public function constructMessage( MailAddress $sender, MailAddress $receiver, string $subject, string $body ) {
 		$message = Swift_Message::newInstance( $subject, $body );
-		$message->setFrom( $sender->getFullAddress(), $sender->getDisplayName() );
+		$message->setFrom( $this->operatorAddress->getFullAddress(), $this->operatorAddress->getDisplayName() );
 		$message->setTo( $receiver->getFullAddress(), $receiver->getDisplayName() );
+		if ( $sender !== $this->operatorAddress ) {
+			$message->setReplyTo( $sender->getFullAddress(), $sender->getDisplayName() );
+		}
 
 		return $message;
 	}

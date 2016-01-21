@@ -68,6 +68,8 @@ class FunFunFactory {
 	 * - cms-wiki-user
 	 * - cms-wiki-password
 	 * - enable-twig-cache: boolean
+	 * - operator-email: used as sender when sending emails
+	 * - operator-displayname: used as sender when sending emails
 	 */
 	public function __construct( array $config ) {
 		$this->config = $config;
@@ -142,7 +144,7 @@ class FunFunFactory {
 		} );
 
 		$pimple['messenger'] = $pimple->share( function() {
-			return new Messenger( new Swift_MailTransport() );
+			return new Messenger( new Swift_MailTransport(), $this->getOperatorAddress() );
 		} );
 
 		return $pimple;
@@ -284,6 +286,13 @@ class FunFunFactory {
 
 	public function setMessenger( Messenger $messenger ) {
 		$this->pimple['messenger'] = $messenger;
+	}
+
+	public function getOperatorAddress() {
+		return new MailAddress(
+			$this->config['operator-email'],
+			$this->config['operator-displayname']
+		);
 	}
 
 }

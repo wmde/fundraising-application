@@ -15,5 +15,7 @@
 	"cms-wiki-title-prefix": "",
 	"web-basepath": "",
 	"enable-twig-cache": true,
-	"template-dir": ""
+	"template-dir": "",
+	"operator-email": "",
+	"operator-displayname": ""
 }
