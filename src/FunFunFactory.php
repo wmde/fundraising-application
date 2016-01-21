@@ -224,7 +224,12 @@ class FunFunFactory {
 
 	private function newPageContentModifier(): PageContentModifier {
 		return new PageContentModifier(
-			$this->getLogger()
+			$this->getLogger(),	[
+				// strip section edit links
+				'!<span class="editsection">.*?</span>!' => '',
+				'!<span class="mw-editsection"><span class="mw-editsection-bracket">\[</span>.*?' .
+					'<span class="mw-editsection-bracket">\]</span></span>!' => ''
+			]
 		);
 	}
 
