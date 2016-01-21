@@ -20,7 +20,7 @@ class DisplayPagePresenter {
 	}
 
 	public function present( PageDisplayResponse $displayResponse ): string {
-		return $this->template->render( [
+		return $this->template->renderArgumentsAsTemplates( [
 			'header' => $this->getContentOrMissingMessage( $displayResponse->getHeaderContent(), 'header' ),
 			'main' => $this->getContentOrMissingMessage( $displayResponse->getMainContent(), 'main content' ),
 			'footer' => $this->getContentOrMissingMessage( $displayResponse->getFooterContent(), 'footer' ),
