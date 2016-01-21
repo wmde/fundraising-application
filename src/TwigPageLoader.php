@@ -34,7 +34,7 @@ class TwigPageLoader implements \Twig_LoaderInterface {
 	public function isFresh( $name, $time ): bool {
 		// @codingStandardsIgnoreEnd
 		// TODO: Check wiki page revisions if page is fresh,
-		//   otherwise the Twig page cache has to be cleared manually when the wimkimpages changes!!!
+		//   otherwise the Twig page cache has to be cleared manually when the wikipages changes!!!
 
 		// retrieve page to generate loader exception if page does not exist
 		$this->retrievePage( $name );
@@ -42,6 +42,7 @@ class TwigPageLoader implements \Twig_LoaderInterface {
 	}
 
 	private function retrievePage( string $name ): string {
+		$name = preg_replace( '/\\.twig$/', '', $name );
 		if ( isset( $this->pageCache[$name] ) ) {
 			return $this->pageCache[$name];
 		}
