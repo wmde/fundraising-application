@@ -4,10 +4,8 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\ListComments;
 
 use WMDE\Fundraising\Frontend\Domain\Comment;
 use WMDE\Fundraising\Frontend\Domain\InMemoryCommentRepository;
-use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentListItem;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentList;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentListingRequest;
-use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentListPresenter;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\ListCommentsUseCase;
 
 /**
@@ -39,9 +37,12 @@ class ListCommentsUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertEquals(
 			new CommentList(
-				new CommentListItem( 'name0', 'comment', '42', new \DateTime( '1984-01-01' ) ),
-				new CommentListItem( 'name1', 'comment', '42', new \DateTime( '1984-01-01' ) ),
-				new CommentListItem( 'name2', 'comment', '42', new \DateTime( '1984-01-01' ) )
+				Comment::newInstance()->setAuthorName( 'name0' )->setCommentText( 'comment' )
+					->setDonationAmount( '42' )->setPostingTime( new \DateTime( '1984-01-01' ) ),
+				Comment::newInstance()->setAuthorName( 'name1' )->setCommentText( 'comment' )
+					->setDonationAmount( '42' )->setPostingTime( new \DateTime( '1984-01-01' ) ),
+				Comment::newInstance()->setAuthorName( 'name2' )->setCommentText( 'comment' )
+					->setDonationAmount( '42' )->setPostingTime( new \DateTime( '1984-01-01' ) )
 			),
 			$useCase->listComments( new CommentListingRequest( 10 ) )
 		);
@@ -61,8 +62,10 @@ class ListCommentsUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertEquals(
 			new CommentList(
-				new CommentListItem( 'name0', 'comment', '42', new \DateTime( '1984-01-01' ) ),
-				new CommentListItem( 'name1', 'comment', '42', new \DateTime( '1984-01-01' ) )
+				Comment::newInstance()->setAuthorName( 'name0' )->setCommentText( 'comment' )
+					->setDonationAmount( '42' )->setPostingTime( new \DateTime( '1984-01-01' ) ),
+				Comment::newInstance()->setAuthorName( 'name1' )->setCommentText( 'comment' )
+					->setDonationAmount( '42' )->setPostingTime( new \DateTime( '1984-01-01' ) )
 			),
 			$useCase->listComments( new CommentListingRequest( 2 ) )
 		);

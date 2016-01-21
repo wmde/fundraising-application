@@ -33,9 +33,20 @@ class DbalCommentRepository implements CommentRepository {
 					->setAuthorName( $spenden->getName() )
 					->setCommentText( $spenden->getKommentar() )
 					->setDonationAmount( (float)$spenden->getBetrag() )
-					->setPostingTime( $spenden->getDtNew() );
+					->setPostingTime( $spenden->getDtNew() )
+					->setDonationId( $spenden->getId() )
+					->freeze()
+					->assertNoNullFields();
 			},
-			$this->entityRepository->findBy( [ 'isPublic' => true ], null, $limit )
+			$this->getSpenden( $limit )
+		);
+	}
+
+	private function getSpenden( int $limit ): array {
+		return $this->entityRepository->findBy(
+			[ 'isPublic' => true ],
+			null,
+			$limit
 		);
 	}
 

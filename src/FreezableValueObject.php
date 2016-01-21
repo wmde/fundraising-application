@@ -12,17 +12,19 @@ trait FreezableValueObject {
 
 	private $isFrozen = false;
 
-	public function freeze() {
+	public function freeze(): self {
 		$this->isFrozen = true;
+		return $this;
 	}
 
 	/**
 	 * @throws \RuntimeException
 	 */
-	protected function assertIsWritable() {
+	protected function assertIsWritable(): self {
 		if ( $this->isFrozen ) {
 			throw new \RuntimeException( 'Cannot write to a frozen object!' );
 		}
+		return $this;
 	}
 
 	/**
@@ -30,12 +32,13 @@ trait FreezableValueObject {
 	 *
 	 * @throws \RuntimeException
 	 */
-	public function assertNoNullFields() {
+	public function assertNoNullFields(): self {
 		foreach ( get_object_vars( $this ) as $fieldName => $fieldValue ) {
 			if ( $fieldValue === null ) {
 				throw new \RuntimeException( "Field '$fieldName' cannot be null" );
 			}
 		}
+		return $this;
 	}
 
 }

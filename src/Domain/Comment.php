@@ -18,6 +18,7 @@ class Comment {
 	private $donationAmount;
 	private $commentText;
 	private $postingTime;
+	private $donationId;
 
 	public static function newInstance() {
 		return new self();
@@ -42,6 +43,10 @@ class Comment {
 		return $this->postingTime;
 	}
 
+	public function getDonationId(): int {
+		return $this->donationId;
+	}
+
 	public function setAuthorName( string $authorName ): self {
 		$this->assertIsWritable();
 		$this->authorName = $authorName;
@@ -63,6 +68,12 @@ class Comment {
 	public function setPostingTime( DateTime $postingTime ): self {
 		$this->assertIsWritable();
 		$this->postingTime = $postingTime;
+		return $this;
+	}
+
+	public function setDonationId( int $donationId ) {
+		$this->assertIsWritable();
+		$this->donationId = $donationId;
 		return $this;
 	}
 

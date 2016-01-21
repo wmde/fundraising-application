@@ -31,11 +31,13 @@ $app->get(
 $app->get(
 	'list-comments.json',
 	function( Request $request ) use ( $app, $ffFactory ) {
-		$useCase = $ffFactory->newListCommentsUseCase();
-		$responseModel = $useCase->listComments( new CommentListingRequest( 10 /* TODO: get real limit */ ) );
-
-		// Presenter code:
-		return 'TODO';
+		return $app->json(
+			$ffFactory->newCommentListJsonPresenter()->present(
+				$ffFactory->newListCommentsUseCase()->listComments(
+					new CommentListingRequest( (int)$request->get( 'n' ) )
+				)
+			)
+		);
 	}
 );
 
