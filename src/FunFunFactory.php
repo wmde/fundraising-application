@@ -20,6 +20,8 @@ use Monolog\Handler\BufferHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
+use Swift_MailTransport;
 use Twig_Environment;
 use WMDE\Fundraising\Entities\Spenden;
 use WMDE\Fundraising\Frontend\DataAccess\DbalCommentRepository;
@@ -137,6 +139,10 @@ class FunFunFactory {
 			$logger->pushHandler( $errorHandler );
 
 			return $logger;
+		} );
+
+		$pimple['messenger'] = $pimple->share( function() {
+			return new Messenger( new Swift_MailTransport() );
 		} );
 
 		return $pimple;
@@ -269,7 +275,15 @@ class FunFunFactory {
 	}
 
 	public function newGetInTouchUseCase() {
-		return new GetInTouchUseCase();
+		return new GetInTouchUseCase( $this->getMessenger() );
+	}
+
+	public function getMessenger(): Messenger {
+		return $this->pimple['messenger'];
+	}
+
+	public function setMessenger( Messenger $messenger ) {
+		$this->pimple['messenger'] = $messenger;
 	}
 
 }
