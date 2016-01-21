@@ -19,10 +19,6 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
  */
 class ListCommentsRssRouteTest extends WebRouteTestCase {
 
-	public function setUp() {
-		date_default_timezone_set( 'Europe/Berlin' );
-	}
-
 	public function testWhenThereAreNoComments_rssFeedIsEmpty() {
 		$client = $this->createClient();
 		$client->request( 'GET', '/list-comments.rss' );
