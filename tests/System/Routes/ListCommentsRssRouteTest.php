@@ -35,6 +35,7 @@ class ListCommentsRssRouteTest extends WebRouteTestCase {
 		$client = $this->createClient( [], function( FunFunFactory $factory ) {
 			$this->persistFirstComment( $factory->getEntityManager() );
 			$this->persistSecondComment( $factory->getEntityManager() );
+			$this->persistEvilComment( $factory->getEntityManager() );
 			$factory->getEntityManager()->flush();
 		} );
 
@@ -61,6 +62,16 @@ class ListCommentsRssRouteTest extends WebRouteTestCase {
 			'Second comment',
 			$client->getResponse()->getContent()
 		);
+
+		$this->assertContains(
+			'name &amp; company',
+			$client->getResponse()->getContent()
+		);
+
+		$this->assertContains(
+			'Third &lt;script&gt; comment',
+			$client->getResponse()->getContent()
+		);
 	}
 
 	private function persistFirstComment( EntityManager $entityManager ) {
@@ -83,4 +94,13 @@ class ListCommentsRssRouteTest extends WebRouteTestCase {
 		$entityManager->persist( $secondSpenden );
 	}
 
+	private function persistEvilComment( EntityManager $entityManager ) {
+		$secondSpenden = new Spenden();
+		$secondSpenden->setName( 'Third name & company' );
+		$secondSpenden->setKommentar( 'Third <script> comment' );
+		$secondSpenden->setBetrag( '9001' );
+		$secondSpenden->setDtNew( new DateTime( '1984-02-02' ) );
+		$secondSpenden->setIsPublic( true );
+		$entityManager->persist( $secondSpenden );
+	}
 }
