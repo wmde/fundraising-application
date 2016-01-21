@@ -3,7 +3,7 @@
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit;
 
-use WMDE\Fundraising\Frontend\PageRetriever\PageRetriever;
+use WMDE\Fundraising\Frontend\Domain\PageRetriever;
 use WMDE\Fundraising\Frontend\TwigPageLoader;
 
 class TwigPageLoaderTest extends \PHPUnit_Framework_TestCase {

@@ -4,7 +4,7 @@
 namespace WMDE\Fundraising\Frontend;
 
 use Twig_Error_Loader;
-use WMDE\Fundraising\Frontend\PageRetriever\PageRetriever;
+use WMDE\Fundraising\Frontend\Domain\PageRetriever;
 
 /**
  * @license GNU GPL v2+
