@@ -21,7 +21,9 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
  */
 class DisplayPageRouteTest extends WebRouteTestCase {
 
+	// @codingStandardsIgnoreStart
 	protected function onTestEnvironmentCreated( FunFunFactory $factory, array $config ) {
+		// @codingStandardsIgnoreEnd
 		$api = $this->getMockBuilder( MediawikiApi::class )->disableOriginalConstructor()->getMock();
 
 		$api->expects( $this->any() )

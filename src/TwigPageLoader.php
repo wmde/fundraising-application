@@ -30,7 +30,9 @@ class TwigPageLoader implements \Twig_LoaderInterface {
 		return $name;
 	}
 
+	// @codingStandardsIgnoreStart
 	public function isFresh( $name, $time ): bool {
+		// @codingStandardsIgnoreEnd
 		// TODO: Check wiki page revisions if page is fresh,
 		//   otherwise the Twig page cache has to be cleared manually when the wimkimpages changes!!!
 

@@ -49,7 +49,9 @@ abstract class WebRouteTestCase extends \PHPUnit_Framework_TestCase {
 		// No-op
 	}
 
+	// @codingStandardsIgnoreStart
 	private function createApplication( FunFunFactory $ffFactory ) : Application {
+		// @codingStandardsIgnoreEnd
 		$app = require __DIR__ . ' /../../app/bootstrap.php';
 
 		$app['debug'] = true;
