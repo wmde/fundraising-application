@@ -2,11 +2,12 @@
 
 declare(strict_types = 1);
 
-namespace WMDE\Fundraising\Frontend\PageRetriever;
+namespace WMDE\Fundraising\Frontend\DataAccess;
 
 use FileFetcher\FileFetcher;
 use FileFetcher\FileFetchingException;
 use Psr\Log\LoggerInterface;
+use WMDE\Fundraising\Frontend\Domain\PageRetriever;
 
 /**
  * @licence GNU GPL v2+

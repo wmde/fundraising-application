@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace WMDE\Fundraising\Frontend\PageRetriever;
+namespace WMDE\Fundraising\Frontend\Domain;
 
 /**
  * @licence GNU GPL v2+

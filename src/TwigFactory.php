@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend;
 use Twig_Environment;
 use Twig_Lexer;
 use Twig_Loader_Filesystem;
-use WMDE\Fundraising\Frontend\PageRetriever\PageRetriever;
+use WMDE\Fundraising\Frontend\Domain\PageRetriever;
 
 /**
  * @license GNU GPL v2+
