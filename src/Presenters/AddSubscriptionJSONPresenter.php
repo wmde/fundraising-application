@@ -10,7 +10,7 @@ use WMDE\Fundraising\Frontend\ResponseModel\AddSubscriptionResponse;
  */
 class AddSubscriptionJSONPresenter {
 
-	public function present( AddSubscriptionResponse $subscriptionResponse ) {
+	public function present( AddSubscriptionResponse $subscriptionResponse ): array {
 		if ( $subscriptionResponse->isSuccessful() ) {
 			return $this->newSuccessResponse();
 		}
@@ -18,11 +18,11 @@ class AddSubscriptionJSONPresenter {
 		return $this->newErrorResponse( $subscriptionResponse );
 	}
 
-	private function newSuccessResponse() {
+	private function newSuccessResponse(): array {
 		return [ 'status' => 'OK' ];
 	}
 
-	private function newErrorResponse( AddSubscriptionResponse $response ) {
+	private function newErrorResponse( AddSubscriptionResponse $response ): array {
 		$errors = [];
 		// TODO: When https://github.com/wmde/FundraisingFrontend/pull/41 is merged, fill $errors with
 		// translated strings generated from $response->getValidationErrors().

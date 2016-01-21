@@ -70,8 +70,10 @@ $app->get(
 			$ffFactory->newDisplayPageUseCase()->getPage( new PageDisplayRequest( $pageName ) )
 		);
 	}
-);
+)
+->bind( 'page' );
 
+// Form for this is provided by route page/SubscriptionForm
 $app->post(
 	'contact/subscribe',
 	function( Application $app, Request $request ) use ( $ffFactory ) {
@@ -96,10 +98,17 @@ $app->post(
 		] );
 
 		$responseModel = $useCase->addSubscription( $subscriptionRequest );
-		// TODO check $request for accepted content types and initialize JSON or HTML presenter accordingly
-		return $app->json( $ffFactory->newAddSubscriptionJSONPresenter()->present( $responseModel ) );
+		if ( in_array( 'application/json', $request->getAcceptableContentTypes() ) ) {
+			return $app->json( $ffFactory->newAddSubscriptionJSONPresenter()->present( $responseModel ) );
+		}
+		if ( $responseModel->isSuccessful() ) {
+			$app->redirect( $app['url_generator']->generate('page', [ 'pageName' => 'SubscriptionSuccess' ] ) );
+		}
+		return $ffFactory->newAddSubscriptionHTMLPresenter()->present( $responseModel, $request->request->all() );
+
 	}
-);
+)
+->bind( 'subscribe' );
 
 $app->get(
 	'check-iban',
