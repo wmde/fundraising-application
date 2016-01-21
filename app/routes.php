@@ -11,6 +11,7 @@ declare(strict_types = 1);
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\Domain\Iban;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageDisplayRequest;
 use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanRequest;
@@ -37,6 +38,26 @@ $app->get(
 					new CommentListingRequest( (int)$request->get( 'n' ) )
 				)
 			)
+		);
+	}
+);
+
+$app->get(
+	'list-comments.rss',
+	function() use ( $app, $ffFactory ) {
+		$rss = $ffFactory->newCommentListRssPresenter()->present(
+			$ffFactory->newListCommentsUseCase()->listComments(
+				new CommentListingRequest( 100 )
+			)
+		);
+
+		return new Response(
+			$rss,
+			200,
+			[
+				'Content-Type' => 'text/xml; charset=utf-8',
+				'X-Moz-Is-Feed' => '1'
+			]
 		);
 	}
 );
