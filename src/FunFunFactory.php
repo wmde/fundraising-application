@@ -197,7 +197,7 @@ class FunFunFactory {
 		) );
 	}
 
-	private function getTwig(): Twig_Environment {
+	public function getTwig(): Twig_Environment {
 		return $this->pimple['twig'];
 	}
 
