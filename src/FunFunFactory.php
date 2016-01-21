@@ -28,6 +28,7 @@ use WMDE\Fundraising\Frontend\Domain\CommentRepository;
 use WMDE\Fundraising\Frontend\Domain\DoctrineRequestRepository;
 use WMDE\Fundraising\Frontend\Domain\RequestRepository;
 use WMDE\Fundraising\Frontend\Presenters\CommentListJsonPresenter;
+use WMDE\Fundraising\Frontend\Presenters\CommentListRssPresenter;
 use WMDE\Fundraising\Frontend\Presenters\IbanPresenter;
 use WMDE\Fundraising\Frontend\Validation\MailValidator;
 use WMDE\Fundraising\Frontend\Validation\RequestValidator;
@@ -165,6 +166,13 @@ class FunFunFactory {
 		return new CommentListJsonPresenter();
 	}
 
+	public function newCommentListRssPresenter(): CommentListRssPresenter {
+		return new CommentListRssPresenter( new TwigTemplate(
+			$this->getTwig(),
+			'CommentList.rss.twig'
+		) );
+	}
+
 	private function newCommentRepository(): CommentRepository {
 		return $this->pimple['comment_repository'];
 	}
@@ -266,4 +274,5 @@ class FunFunFactory {
 	public function setPageTitlePrefix( string $prefix ) {
 		$this->config['cms-wiki-title-prefix'] = $prefix;
 	}
+
 }

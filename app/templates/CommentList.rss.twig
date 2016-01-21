@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+    <channel>
+        <title>Spenden an Wikimedia</title>
+        <link>{$ rssLink |e $}</link>
+        <description>Öffentliche Liste der über das Online-Formular der Wikimedia Fördergesellschaft getätigter Spenden</description>
+        <language>de-de</language>
+        <pubDate>{$ rssPublicationData|e $}</pubDate>
+
+{% for comment in comments %}        <item>
+            <title>{$ comment.amount |number_format(2, ',', '.') |e $} Euro von {$ comment.author |e $}</title>
+            <description>{$ comment.text |e $}</description>
+            <pubDate>{$ comment.publicationDate |e $}</pubDate>
+            <link>{$ comment.link |e $}</link>
+        </item>{% endfor %}
+    </channel>
+</rss>
