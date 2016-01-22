@@ -31,6 +31,7 @@ use WMDE\Fundraising\Frontend\Domain\DoctrineRequestRepository;
 use WMDE\Fundraising\Frontend\Domain\RequestRepository;
 use WMDE\Fundraising\Frontend\Presenters\CommentListJsonPresenter;
 use WMDE\Fundraising\Frontend\Presenters\CommentListRssPresenter;
+use WMDE\Fundraising\Frontend\Presenters\Content\WikiContentProvider;
 use WMDE\Fundraising\Frontend\Presenters\IbanPresenter;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\Fundraising\Frontend\Validation\MailValidator;
@@ -40,8 +41,8 @@ use WMDE\Fundraising\Frontend\DataAccess\ApiBasedPageRetriever;
 use WMDE\Fundraising\Frontend\Domain\PageRetriever;
 use WMDE\Fundraising\Frontend\Presenters\DisplayPagePresenter;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\DisplayPageUseCase;
-use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageContentModifier;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
+use WMDE\Fundraising\Frontend\Presenters\Content\PageContentModifier;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\ListCommentsUseCase;
 use WMDE\Fundraising\Frontend\UseCases\CheckIban\CheckIbanUseCase;
 use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanUseCase;
@@ -131,7 +132,7 @@ class FunFunFactory {
 		} );
 
 		$pimple['twig'] = $pimple->share( function() {
-			return TwigFactory::newFromConfig( $this->config, $this->newPageRetriever() );
+			return TwigFactory::newFromConfig( $this->config, $this->newWikiContentProvider() );
 		} );
 
 		$pimple['logger'] = $pimple->share( function() {
@@ -249,6 +250,14 @@ class FunFunFactory {
 
 	private function getGuzzleClient(): ClientInterface {
 		return $this->pimple['guzzle_client'];
+	}
+
+	private function newWikiContentProvider() {
+		return new WikiContentProvider(
+			$this->newPageRetriever(),
+			$this->newPageContentModifier(),
+			$this->config['cms-wiki-title-prefix']
+		);
 	}
 
 	private function getLogger(): LoggerInterface {

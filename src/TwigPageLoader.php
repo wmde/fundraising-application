@@ -4,7 +4,7 @@
 namespace WMDE\Fundraising\Frontend;
 
 use Twig_Error_Loader;
-use WMDE\Fundraising\Frontend\Domain\PageRetriever;
+use WMDE\Fundraising\Frontend\Presenters\Content\WikiContentProvider;
 
 /**
  * @license GNU GPL v2+
@@ -12,12 +12,12 @@ use WMDE\Fundraising\Frontend\Domain\PageRetriever;
  */
 class TwigPageLoader implements \Twig_LoaderInterface {
 
-	private $pageRetriever;
+	private $contentProvider;
 	private $pageCache = [];
 	private $errorCache = [];
 
-	public function __construct( PageRetriever $pageRetriever ) {
-		$this->pageRetriever = $pageRetriever;
+	public function __construct( WikiContentProvider $contentProvider ) {
+		$this->contentProvider = $contentProvider;
 	}
 
 	public function getSource( $name ): string {
@@ -41,20 +41,22 @@ class TwigPageLoader implements \Twig_LoaderInterface {
 		return true;
 	}
 
-	private function retrievePage( string $name ): string {
-		$name = preg_replace( '/\\.twig$/', '', $name );
-		if ( isset( $this->pageCache[$name] ) ) {
-			return $this->pageCache[$name];
+	private function retrievePage( string $pageName ): string {
+		$title = preg_replace( '/\\.twig$/', '', $pageName );
+		if ( isset( $this->pageCache[$title] ) ) {
+			return $this->pageCache[$title];
 		}
-		if ( isset( $this->errorCache[$name] ) ) {
-			throw new \Twig_Error_Loader( "Wiki page $name not found." );
+		if ( isset( $this->errorCache[$title] ) ) {
+			throw new Twig_Error_Loader( "Wiki page $title not found." );
 		}
-		$content = $this->pageRetriever->fetchPage( $name );
+		$content = $this->contentProvider->getContent( $title );
 		if ( $content !== '' ) {
-			$this->pageCache[$name] = $content;
+			$this->pageCache[$title] = $content;
 			return $content;
 		}
-		$this->errorCache[$name] = true;
-		throw new \Twig_Error_Loader( "Wiki page $name not found." );
+		$this->errorCache[$title] = true;
+		throw new Twig_Error_Loader( "Wiki page $title not found." );
 	}
+
+
 }

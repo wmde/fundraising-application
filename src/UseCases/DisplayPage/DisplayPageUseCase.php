@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace WMDE\Fundraising\Frontend\UseCases\DisplayPage;
 
 use WMDE\Fundraising\Frontend\Domain\PageRetriever;
+use WMDE\Fundraising\Frontend\Presenters\Content\PageContentModifier;
 
 /**
  * @licence GNU GPL v2+
