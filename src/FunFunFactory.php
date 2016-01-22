@@ -27,6 +27,7 @@ use Twig_Environment;
 use Twig_Loader_Filesystem;
 use WMDE\Fundraising\Entities\Spenden;
 use WMDE\Fundraising\Frontend\DataAccess\DbalCommentRepository;
+use WMDE\Fundraising\Frontend\DataAccess\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\Domain\CommentRepository;
 use WMDE\Fundraising\Frontend\Domain\DoctrineRequestRepository;
 use WMDE\Fundraising\Frontend\Domain\InMemoryCommentRepository;
@@ -95,7 +96,7 @@ class FunFunFactory {
 		} );
 
 		$pimple['request_validator'] = $pimple->share( function() {
-			return new RequestValidator( new MailValidator( MailValidator::TEST_WITH_MX ) );
+			return new RequestValidator( new MailValidator( new InternetDomainNameValidator() ) );
 		} );
 
 		$pimple['mw_api'] = $pimple->share( function() {

@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit;
 
+use WMDE\Fundraising\Frontend\DataAccess\InternetDomainNameValidator;
+use WMDE\Fundraising\Frontend\Domain\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Validation\MailValidator;
 
 /**
@@ -18,7 +20,7 @@ class MailValidatorTest extends \PHPUnit_Framework_TestCase {
 	 * @dataProvider emailTestProviderMX
 	 */
 	public function testWhenGivenMail_validatorMXValidatesCorrectly( $mailToTest, $resultExpected ) {
-		$mailValidator = new MailValidator( true );
+		$mailValidator = new MailValidator( new InternetDomainNameValidator() );
 
 		$this->assertSame( $mailValidator->validate( $mailToTest ), $resultExpected );
 	}
@@ -45,7 +47,7 @@ class MailValidatorTest extends \PHPUnit_Framework_TestCase {
 	 * @dataProvider emailTestProviderNoMX
 	 */
 	public function testWhenGivenMail_validatorNoMXValidatesCorrectly( $mailToTest, $resultExpected ) {
-		$mailValidator = new MailValidator( false );
+		$mailValidator = new MailValidator( new NullDomainNameValidator() );
 
 		$this->assertSame( $mailValidator->validate( $mailToTest ), $resultExpected );
 	}
