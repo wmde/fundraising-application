@@ -95,8 +95,12 @@ class FunFunFactory {
 			return new DbalCommentRepository( $this->getEntityManager()->getRepository( Spenden::class ) );
 		} );
 
+		$pimple['mail_validator'] = $pimple->share( function() {
+			return new MailValidator( new InternetDomainNameValidator() );
+		} );
+
 		$pimple['request_validator'] = $pimple->share( function() {
-			return new RequestValidator( new MailValidator( new InternetDomainNameValidator() ) );
+			return new RequestValidator( $this->getMailValidator() );
 		} );
 
 		$pimple['mw_api'] = $pimple->share( function() {
@@ -155,7 +159,7 @@ class FunFunFactory {
 	}
 
 	public function newValidateEmailUseCase(): ValidateEmailUseCase {
-		return new ValidateEmailUseCase();
+		return new ValidateEmailUseCase( $this->getMailValidator() );
 	}
 
 	public function newListCommentsUseCase(): ListCommentsUseCase {
@@ -178,8 +182,12 @@ class FunFunFactory {
 		$this->pimple['request_repository'] = $requestRepository;
 	}
 
-	private function newRequestValidator(): RequestValidator {
+	private function getRequestValidator(): RequestValidator {
 		return $this->pimple['request_validator'];
+	}
+
+	private function getMailValidator(): MailValidator {
+		return $this->pimple['mail_validator'];
 	}
 
 	public function newDisplayPageUseCase(): DisplayPageUseCase {
@@ -237,7 +245,7 @@ class FunFunFactory {
 	}
 
 	public function newAddSubscriptionUseCase(): AddSubscriptionUseCase {
-		return new AddSubscriptionUseCase( $this->newRequestRepository(), $this->newRequestValidator() );
+		return new AddSubscriptionUseCase( $this->newRequestRepository(), $this->getRequestValidator() );
 	}
 
 	public function newCheckIbanUseCase(): CheckIbanUseCase {

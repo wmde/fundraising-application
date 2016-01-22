@@ -4,7 +4,9 @@ declare(strict_types = 1);
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\ValidateEmail;
 
+use WMDE\Fundraising\Frontend\Domain\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\UseCases\ValidateEmail\ValidateEmailUseCase;
+use WMDE\Fundraising\Frontend\Validation\MailValidator;
 
 /**
  * @covers WMDE\Fundraising\Frontend\UseCases\ValidateEmail\ValidateEmailUseCase
@@ -15,11 +17,14 @@ use WMDE\Fundraising\Frontend\UseCases\ValidateEmail\ValidateEmailUseCase;
 class ValidateEmailUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 	public function testGivenValidEmail_trueIsReturned() {
-		$this->assertTrue( ( new ValidateEmailUseCase() )->validateEmail( 'christoph.fischer@wikimedia.de' ) );
+		$useCase = new ValidateEmailUseCase( new MailValidator( new NullDomainNameValidator() ) );
+		$this->assertTrue( $useCase->validateEmail( 'christoph.fischer@wikimedia.de' ) );
 	}
 
 	public function testGivenInvalidEmail_falseIsReturned() {
-		$this->assertFalse( ( new ValidateEmailUseCase() )->validateEmail( '~=[,,_,,]:3' ) );
+		$useCase = new ValidateEmailUseCase( new MailValidator( new NullDomainNameValidator() ) );
+
+		$this->assertFalse( $useCase->validateEmail( '~=[,,_,,]:3' ) );
 	}
 
 }

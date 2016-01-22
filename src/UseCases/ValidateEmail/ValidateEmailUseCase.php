@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace WMDE\Fundraising\Frontend\UseCases\ValidateEmail;
 
-use WMDE\Fundraising\Frontend\DataAccess\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\Validation\MailValidator;
 
 /**
@@ -14,8 +13,14 @@ use WMDE\Fundraising\Frontend\Validation\MailValidator;
  */
 class ValidateEmailUseCase {
 
+	private $mailValidator;
+
+	public function __construct( MailValidator $mailValidator ) {
+		$this->mailValidator = $mailValidator;
+	}
+
 	public function validateEmail( string $email ): bool {
-		return ( new MailValidator( new InternetDomainNameValidator() ) )->validate( $email );
+		return $this->mailValidator->validate( $email );
 	}
 
 }
