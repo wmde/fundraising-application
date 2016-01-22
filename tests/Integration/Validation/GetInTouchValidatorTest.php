@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace WMDE\Fundraising\Frontend\Tests\Integration\Validation;
 
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
-use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 use WMDE\Fundraising\Frontend\Validation\MailValidator;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 
@@ -11,7 +12,7 @@ use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class GetInTouchValidatorTest extends \PHPUnit_Framework_TestCase {
+class GetInTouchValidatorTest extends ValidatorTestCase {
 
 	public function testNameFieldsAreOptional() {
 		$mailValidator = new MailValidator( MailValidator::TEST_WITHOUT_MX );
@@ -66,16 +67,6 @@ class GetInTouchValidatorTest extends \PHPUnit_Framework_TestCase {
 		);
 		$this->assertFalse( $validator->validate( $request ) );
 		$this->assertConstraintWasViolated( $validator->getConstraintViolations(), 'kommentar' );
-	}
-
-	/**
-	 * @param ConstraintViolation[] $violations
-	 * @param string $fieldName
-	 */
-	private function assertConstraintWasViolated( array $violations, string $fieldName ) {
-		$this->assertCount( 1, $violations );
-		$this->assertInstanceOf( ConstraintViolation::class, current( $violations ) );
-		$this->assertEquals( $fieldName, current( $violations )->getSource() );
 	}
 
 }
