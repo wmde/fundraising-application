@@ -5,11 +5,10 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\Validation;
 
 use WMDE\Fundraising\Entities\Request;
 use WMDE\Fundraising\Frontend\Domain\NullDomainNameValidator;
-use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 use WMDE\Fundraising\Frontend\Validation\MailValidator;
 use WMDE\Fundraising\Frontend\Validation\RequestValidator;
 
-class RequestValidatorTest extends \PHPUnit_Framework_TestCase {
+class RequestValidatorTest extends ValidatorTestCase {
 
 	public function testEmailIsValidated() {
 		$mailValidator = new MailValidator( new NullDomainNameValidator() );
@@ -57,16 +56,6 @@ class RequestValidatorTest extends \PHPUnit_Framework_TestCase {
 		$request->setEmail( 'nyan@meow.com' );
 		$this->assertFalse( $requestValidator->validate( $request ) );
 		$this->assertConstraintWasViolated( $requestValidator->getConstraintViolations(), 'anrede' );
-	}
-
-	/**
-	 * @param ConstraintViolation[] $violations
-	 * @param string $fieldName
-	 */
-	private function assertConstraintWasViolated( array $violations, string $fieldName ) {
-		$this->assertCount( 1, $violations );
-		$this->assertInstanceOf( ConstraintViolation::class, current( $violations ) );
-		$this->assertEquals( $fieldName, current( $violations )->getSource() );
 	}
 
 }
