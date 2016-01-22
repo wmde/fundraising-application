@@ -3,6 +3,7 @@
 namespace WMDE\Fundraising\Frontend\Presenters;
 
 use WMDE\Fundraising\Frontend\ResponseModel\AddSubscriptionResponse;
+use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 
 /**
  * @licence GNU GPL v2+
@@ -24,9 +25,11 @@ class AddSubscriptionJSONPresenter {
 
 	private function newErrorResponse( AddSubscriptionResponse $response ): array {
 		$errors = [];
-		// TODO: When https://github.com/wmde/FundraisingFrontend/pull/41 is merged, fill $errors with
-		// translated strings generated from $response->getValidationErrors().
-		// The field names from $response->getValidationErrors() should be the field names in $errors
-		return [ 'status' => 'ERR' ];
+		/** @var ConstraintViolation $constraintViolation */
+		foreach( $response->getValidationErrors() as $constraintViolation ) {
+			// TODO add translation library and translate message.
+			$errors[$constraintViolation->getSource()] = $constraintViolation->getMessage();
+		}
+		return [ 'status' => 'ERR', 'errors' => $errors ];
 	}
 }

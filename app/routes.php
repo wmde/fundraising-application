@@ -102,10 +102,9 @@ $app->post(
 			return $app->json( $ffFactory->newAddSubscriptionJSONPresenter()->present( $responseModel ) );
 		}
 		if ( $responseModel->isSuccessful() ) {
-			$app->redirect( $app['url_generator']->generate('page', [ 'pageName' => 'SubscriptionSuccess' ] ) );
+			return $app->redirect( $app['url_generator']->generate('page', [ 'pageName' => 'SubscriptionSuccess' ] ) );
 		}
 		return $ffFactory->newAddSubscriptionHTMLPresenter()->present( $responseModel, $request->request->all() );
-
 	}
 )
 ->bind( 'subscribe' );

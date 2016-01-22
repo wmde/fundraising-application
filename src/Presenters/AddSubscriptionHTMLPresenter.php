@@ -20,10 +20,13 @@ class AddSubscriptionHTMLPresenter {
 	}
 
 	public function present( AddSubscriptionResponse $subscriptionResponse, array $formData ): string {
-		// TODO: When https://github.com/wmde/FundraisingFrontend/pull/41 is merged,
-		// render form with values from HTTP request and $response->getValidationErrors()
-		$validationMessages = []; // TODO: use $response->getValidationErrors() to create these (translated)
-		return $this->template->render( array_merge( $formData, [ 'errors' => $validationMessages ] ) );
+		$errors = [];
+		/** @var ConstraintViolation $constraintViolation */
+		foreach( $subscriptionResponse->getValidationErrors() as $constraintViolation ) {
+			// TODO add translation library and translate message.
+			$errors[] = $constraintViolation->getMessage();
+		}
+		return $this->template->render( array_merge( $formData, [ 'errors' => $errors ] ) );
 	}
 
 

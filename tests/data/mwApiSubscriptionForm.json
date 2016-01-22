@@ -1,0 +1,9 @@
+{
+  "parse": {
+    "title": "SubscriptionForm",
+    "pageid": 9002,
+    "text": {
+      "*": "<-- just for testing if data is assigned and processed -->\nErrors: {$ errors|length $}\nFirstName: {$ firstName $}"
+    }
+  }
+}
