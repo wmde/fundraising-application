@@ -16,7 +16,7 @@ use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchResponse;
  */
 class GetInTouchRouteTest extends WebRouteTestCase {
 
-	protected function onTestEnvironmentCreated( FunFunFactory $factory, array $config ) {
+	protected function onTestEnvironmentCreated( FunFunFactory $factory ) {
 		$factory->setMessenger( new Messenger( Swift_NullTransport::newInstance(), $factory->getOperatorAddress() ) );
 	}
 
