@@ -32,4 +32,6 @@ $app->error( function ( \Exception $e, $code ) {
 	);
 } );
 
+$ffFactory->getTwig()->addGlobal( 'app', $app );
+
 return require __DIR__ . '/routes.php';
