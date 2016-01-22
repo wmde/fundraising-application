@@ -8,6 +8,7 @@ use Swift_NullTransport;
 use WMDE\Fundraising\Frontend\FunFunFactory;
 use WMDE\Fundraising\Frontend\Messenger;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
+use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchResponse;
 
 /**
  * @licence GNU GPL v2+
@@ -26,16 +27,37 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 			'POST',
 			'/contact/get-in-touch',
 			[
-				'firstName' => 'Curious',
-				'lastName' => 'Guy',
-				'email' => 'curious.guy@curiousguysownmailserver.com',
-				'subject' => 'What is it you are doing?!',
-				'body' => 'Just tell me'
+				'Vorname' => 'Curious',
+				'Nachname' => 'Guy',
+				'email' => 'curious.guy@gmail.com',
+				'Betreff' => 'What is it you are doing?!',
+				'kommentar' => 'Just tell me'
 			]
 		);
 
 		$this->assertContains(
 			'request successful',
+			$client->getResponse()->getContent()
+		);
+	}
+
+	public function testGivenInValidRequest_validationFails() {
+		$client = $this->createClient();
+
+		$client->request(
+			'POST',
+			'/contact/get-in-touch',
+			[
+				'Vorname' => 'Curious',
+				'Nachname' => 'Guy',
+				'email' => 'curious.guy@gmail',
+				'Betreff' => 'What is it you are doing?!',
+				'kommentar' => 'Just tell me'
+			]
+		);
+
+		$this->assertContains(
+			'validation failed',
 			$client->getResponse()->getContent()
 		);
 	}
