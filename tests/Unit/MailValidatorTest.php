@@ -37,7 +37,7 @@ class MailValidatorTest extends \PHPUnit_Framework_TestCase {
 			array( 'A-Za-z0-9.!#$%&\'*+-/=?^_`{|}~info@nick.berlin', true ),
 			array( 'info@triebwerk-grün.de', true ),
 			array( 'info@triebwerk-grün.de', true ),
-			array( 'info@موقع.وزارة-الاتصالات.مصر', true ),
+			array( 'info@عربي.امارات', true ),
 		);
 	}
 
@@ -63,7 +63,7 @@ class MailValidatorTest extends \PHPUnit_Framework_TestCase {
 			array( 'test@test.email', true ),
 			array( 'A-Za-z0-9.!#$%&\'*+-/=?^_`{|}~info@test.email', true ),
 			array( 'info@triebwerk-grün.de', true ),
-			array( 'info@موقع.وزارة-الاتصالات.مصر', true ),
+			array( 'info@عربي.امارات', true ),
 		);
 	}
 }
