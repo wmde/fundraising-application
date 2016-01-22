@@ -13,8 +13,14 @@ use WMDE\Fundraising\Frontend\Validation\MailValidator;
  */
 class ValidateEmailUseCase {
 
+	private $mailValidator;
+
+	public function __construct( MailValidator $mailValidator ) {
+		$this->mailValidator = $mailValidator;
+	}
+
 	public function validateEmail( string $email ): bool {
-		return ( new MailValidator( MailValidator::TEST_WITH_MX ) )->validate( $email );
+		return $this->mailValidator->validate( $email );
 	}
 
 }

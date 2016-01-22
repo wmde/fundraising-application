@@ -7,8 +7,6 @@ namespace WMDE\Fundraising\Frontend;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
-use FileFetcher\FileFetcher;
-use FileFetcher\SimpleFileFetcher;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Handler\CurlHandler;
@@ -22,14 +20,12 @@ use Monolog\Handler\BufferHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
 use Twig_Environment;
-use Twig_Loader_Filesystem;
 use WMDE\Fundraising\Entities\Spenden;
 use WMDE\Fundraising\Frontend\DataAccess\DbalCommentRepository;
+use WMDE\Fundraising\Frontend\DataAccess\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\Domain\CommentRepository;
 use WMDE\Fundraising\Frontend\Domain\DoctrineRequestRepository;
-use WMDE\Fundraising\Frontend\Domain\InMemoryCommentRepository;
 use WMDE\Fundraising\Frontend\Domain\RequestRepository;
 use WMDE\Fundraising\Frontend\Presenters\CommentListJsonPresenter;
 use WMDE\Fundraising\Frontend\Presenters\IbanPresenter;
@@ -94,8 +90,12 @@ class FunFunFactory {
 			return new DbalCommentRepository( $this->getEntityManager()->getRepository( Spenden::class ) );
 		} );
 
+		$pimple['mail_validator'] = $pimple->share( function() {
+			return new MailValidator( new InternetDomainNameValidator() );
+		} );
+
 		$pimple['request_validator'] = $pimple->share( function() {
-			return new RequestValidator( new MailValidator( MailValidator::TEST_WITH_MX ) );
+			return new RequestValidator( $this->getMailValidator() );
 		} );
 
 		$pimple['mw_api'] = $pimple->share( function() {
@@ -154,7 +154,7 @@ class FunFunFactory {
 	}
 
 	public function newValidateEmailUseCase(): ValidateEmailUseCase {
-		return new ValidateEmailUseCase();
+		return new ValidateEmailUseCase( $this->getMailValidator() );
 	}
 
 	public function newListCommentsUseCase(): ListCommentsUseCase {
@@ -177,8 +177,12 @@ class FunFunFactory {
 		$this->pimple['request_repository'] = $requestRepository;
 	}
 
-	private function newRequestValidator(): RequestValidator {
+	private function getRequestValidator(): RequestValidator {
 		return $this->pimple['request_validator'];
+	}
+
+	private function getMailValidator(): MailValidator {
+		return $this->pimple['mail_validator'];
 	}
 
 	public function newDisplayPageUseCase(): DisplayPageUseCase {
@@ -236,7 +240,7 @@ class FunFunFactory {
 	}
 
 	public function newAddSubscriptionUseCase(): AddSubscriptionUseCase {
-		return new AddSubscriptionUseCase( $this->newRequestRepository(), $this->newRequestValidator() );
+		return new AddSubscriptionUseCase( $this->newRequestRepository(), $this->getRequestValidator() );
 	}
 
 	public function newCheckIbanUseCase(): CheckIbanUseCase {

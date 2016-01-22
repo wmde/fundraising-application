@@ -4,6 +4,7 @@
 namespace WMDE\Fundraising\Frontend\Tests\Integration\Validation;
 
 use WMDE\Fundraising\Entities\Request;
+use WMDE\Fundraising\Frontend\Domain\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 use WMDE\Fundraising\Frontend\Validation\MailValidator;
 use WMDE\Fundraising\Frontend\Validation\RequestValidator;
@@ -11,7 +12,7 @@ use WMDE\Fundraising\Frontend\Validation\RequestValidator;
 class RequestValidatorTest extends \PHPUnit_Framework_TestCase {
 
 	public function testEmailIsValidated() {
-		$mailValidator = new MailValidator( MailValidator::TEST_WITHOUT_MX );
+		$mailValidator = new MailValidator( new NullDomainNameValidator() );
 		$requestValidator = new RequestValidator( $mailValidator );
 		$request = new Request();
 		$request->setAnrede( 'Herr' );
@@ -23,7 +24,7 @@ class RequestValidatorTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testFirstNameIsValidated() {
-		$mailValidator = new MailValidator( MailValidator::TEST_WITHOUT_MX );
+		$mailValidator = new MailValidator( new NullDomainNameValidator() );
 		$requestValidator = new RequestValidator( $mailValidator );
 		$request = new Request();
 		$request->setAnrede( 'Herr' );
@@ -35,7 +36,7 @@ class RequestValidatorTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testLastNameIsValidated() {
-		$mailValidator = new MailValidator( MailValidator::TEST_WITHOUT_MX );
+		$mailValidator = new MailValidator( new NullDomainNameValidator() );
 		$requestValidator = new RequestValidator( $mailValidator );
 		$request = new Request();
 		$request->setAnrede( 'Herr' );
@@ -47,7 +48,7 @@ class RequestValidatorTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testSalutationNameIsValidated() {
-		$mailValidator = new MailValidator( MailValidator::TEST_WITHOUT_MX );
+		$mailValidator = new MailValidator( new NullDomainNameValidator() );
 		$requestValidator = new RequestValidator( $mailValidator );
 		$request = new Request();
 		$request->setAnrede( '' );

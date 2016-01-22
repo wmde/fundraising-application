@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace WMDE\Fundraising\Frontend\Validation;
 
+use WMDE\Fundraising\Frontend\Domain\DomainNameValidator;
 use WMDE\Fundraising\Frontend\MailAddress;
 
 /**
@@ -13,14 +14,11 @@ use WMDE\Fundraising\Frontend\MailAddress;
  */
 class MailValidator implements ScalarValueValidator {
 
-	private $testWithMX;
+	private $domainValidator;
 	private $lastViolation;
 
-	const TEST_WITH_MX = true;
-	const TEST_WITHOUT_MX = false;
-
-	public function __construct( bool $testWithMX ) {
-		$this->testWithMX = $testWithMX;
+	public function __construct( DomainNameValidator $tldValidator ) {
+		$this->domainValidator = $tldValidator;
 	}
 
 	public function validate( $emailAddress ): bool {
@@ -36,11 +34,9 @@ class MailValidator implements ScalarValueValidator {
 			return false;
 		}
 
-		if ( $this->testWithMX ) {
-			if ( !checkdnsrr( $mailAddressObject->domain, 'MX' ) && !checkdnsrr( $mailAddressObject->domain, 'A' ) ) {
-				$this->lastViolation = new ConstraintViolation( $emailAddress, 'MX record not found', $this );
-				return false;
-			}
+		if ( !$this->domainValidator->isValid( $mailAddressObject->domain ) ) {
+			$this->lastViolation = new ConstraintViolation( $emailAddress, 'MX record not found', $this );
+			return false;
 		}
 
 		return true;
