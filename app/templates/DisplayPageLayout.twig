@@ -56,7 +56,7 @@
     <!-- Header -->
     <header id="header">
         <div class="container clearfix">
-            {$ header | raw $}
+            {% include 'header' %}
         </div>
     </header>
 
@@ -64,14 +64,14 @@
     <!-- Main -->
     <main id="main">
         <div class="container">
-            {$ main | raw $}
+            {% include 'main' %}
         </div>
     </main>
 
     <!-- Footer -->
     <footer id="footer">
         <div class="container">
-            {$ footer | raw $}
+            {%  include 'footer' %}
         </div>
     </footer>
 </div>
@@ -80,7 +80,7 @@
 <!-- notice for clients without javascript -->
 <div id="notice-wrapper">
     <div class="notice-window">
-        {$ noJsNotice | raw $}
+        {% include 'noJsNotice' %}
     </div>
 </div>
 <script type="text/javascript">
