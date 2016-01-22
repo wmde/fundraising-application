@@ -106,11 +106,11 @@ $app->post(
 	'contact/get-in-touch',
 	function( Request $request ) use ( $app, $ffFactory ) {
 		$contactFormRequest = new GetInTouchRequest(
-			$request->get( 'firstname', '' ),
-			$request->get( 'lastname', '' ),
+			$request->get( 'Vorname', '' ),
+			$request->get( 'Nachname', '' ),
 			$request->get( 'email', '' ),
-			$request->get( 'subject', '' ),
-			$request->get( 'body', '' )
+			$request->get( 'Betreff', '' ),
+			$request->get( 'kommentar', '' )
 		);
 
 		$contactFormResponse = $ffFactory->newGetInTouchUseCase()->processContact( $contactFormRequest );

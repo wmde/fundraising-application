@@ -31,6 +31,7 @@ use WMDE\Fundraising\Frontend\Domain\DoctrineRequestRepository;
 use WMDE\Fundraising\Frontend\Domain\RequestRepository;
 use WMDE\Fundraising\Frontend\Presenters\CommentListJsonPresenter;
 use WMDE\Fundraising\Frontend\Presenters\IbanPresenter;
+use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\Fundraising\Frontend\Validation\MailValidator;
 use WMDE\Fundraising\Frontend\Validation\RequestValidator;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\AddSubscriptionUseCase;
@@ -101,6 +102,10 @@ class FunFunFactory {
 
 		$pimple['request_validator'] = $pimple->share( function() {
 			return new RequestValidator( $this->getMailValidator() );
+		} );
+
+		$pimple['contact_validator'] = $pimple->share( function() {
+			return new GetInTouchValidator( new MailValidator( MailValidator::TEST_WITH_MX ) );
 		} );
 
 		$pimple['mw_api'] = $pimple->share( function() {
@@ -277,7 +282,15 @@ class FunFunFactory {
 	}
 
 	public function newGetInTouchUseCase() {
-		return new GetInTouchUseCase( $this->getMessenger() );
+		return new GetInTouchUseCase( $this->getContactValidator(), $this->getMessenger() );
+	}
+
+	public function setContactValidator( GetInTouchValidator $validator ) {
+		$this->pimple['contact_validator'] = $validator;
+	}
+
+	private function getContactValidator(): GetInTouchValidator {
+		return $this->pimple['contact_validator'];
 	}
 
 	public function getMessenger(): Messenger {
