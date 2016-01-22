@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit;
 
-use WMDE\Fundraising\Frontend\DataAccess\InternetDomainNameValidator;
+use WMDE\Fundraising\Frontend\Domain\DomainNameValidator;
 use WMDE\Fundraising\Frontend\Domain\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Validation\MailValidator;
 
@@ -16,56 +16,76 @@ use WMDE\Fundraising\Frontend\Validation\MailValidator;
  */
 class MailValidatorTest extends \PHPUnit_Framework_TestCase {
 
-	/**
-	 * @dataProvider emailTestProviderMX
-	 */
-	public function testWhenGivenMail_validatorMXValidatesCorrectly( $mailToTest, $resultExpected ) {
-		$mailValidator = new MailValidator( new InternetDomainNameValidator() );
-
-		$this->assertSame( $mailValidator->validate( $mailToTest ), $resultExpected );
+	private function newStubDomainValidator(): DomainNameValidator {
+		return new class() implements DomainNameValidator {
+			public function isValid( string $domain ): bool {
+				return in_array( $domain, [
+					'wikimedia.de',
+					'nick.berlin',
+					'xn--triebwerk-grn-7ob.de',
+					'xn--4gbrim.xn----ymcbaaajlc6dj7bxne2c.xn--wgbh1c'
+				] );
+			}
+		};
 	}
 
-	public function emailTestProviderMX() {
-		return array(
-			array( 'chrifi.asfsfas.de  ', false ),
-			array( ' ', false ),
-			array( 'fibor@fgagaadadfafasfasfasfasffasfsfe.com', false ),
-			array( 'hllo909a()_9a=f9@dsafadsff', false ),
-			array( 'christoph.fischer@wikimedia.de ', false ),
-			array( 'christoph.füscher@wikimedia.de ', false ),
+	/**
+	 * @dataProvider fullyValidEmailProvider
+	 */
+	public function testGivenValidMail_validationWithDomainNameCheckSucceeds( $validEmail ) {
+		$mailValidator = new MailValidator( $this->newStubDomainValidator() );
 
-			array( 'christoph.fischer@wikimedia.de', true ),
-			array( 'test@nick.berlin', true ),
-			array( 'A-Za-z0-9.!#$%&\'*+-/=?^_`{|}~info@nick.berlin', true ),
-			array( 'info@triebwerk-grün.de', true ),
-			array( 'info@triebwerk-grün.de', true ),
-			array( 'info@موقع.وزارة-الاتصالات.مصر', true ),
+		$this->assertTrue( $mailValidator->validate( $validEmail ) );
+	}
+
+	public function fullyValidEmailProvider() {
+		return array(
+			array( 'christoph.fischer@wikimedia.de' ),
+			array( 'test@nick.berlin' ),
+			array( 'A-Za-z0-9.!#$%&\'*+-/=?^_`{|}~info@nick.berlin' ),
+			array( 'info@triebwerk-grün.de' ),
+			array( 'info@triebwerk-grün.de' ),
+			array( 'info@موقع.وزارة-الاتصالات.مصر' ),
 		);
 	}
 
 	/**
-	 * @dataProvider emailTestProviderNoMX
+	 * @dataProvider emailWithInvalidDomainProvider
 	 */
-	public function testWhenGivenMail_validatorNoMXValidatesCorrectly( $mailToTest, $resultExpected ) {
+	public function testGivenMailWithInvalidDomain_validationWithDomainNameCheckFails( $invalidEmail ) {
+		$mailValidator = new MailValidator( $this->newStubDomainValidator() );
+
+		$this->assertFalse( $mailValidator->validate( $invalidEmail ) );
+	}
+
+	public function emailWithInvalidDomainProvider() {
+		return [
+			array( 'chrifi.asfsfas.de  ' ),
+			array( ' ' ),
+			array( 'fibor@fgagaadadfafasfasfasfasffasfsfe.com' ),
+			array( 'hllo909a()_9a=f9@dsafadsff' ),
+			array( 'christoph.fischer@wikimedia.de ' ),
+			array( 'christoph.füscher@wikimedia.de ' ),
+		];
+	}
+
+	/**
+	 * @dataProvider emailWithInvalidFormatProvider
+	 */
+	public function testGivenMailWithInvalidFormat_validationWithoutDomainCheckFails( $invalidEmail ) {
 		$mailValidator = new MailValidator( new NullDomainNameValidator() );
 
-		$this->assertSame( $mailValidator->validate( $mailToTest ), $resultExpected );
+		$this->assertFalse( $mailValidator->validate( $invalidEmail ) );
 	}
 
-	public function emailTestProviderNoMX() {
-		return array(
-			array( 'chrifi.asfsfas.de  ', false ),
-			array( ' ', false ),
-			array( 'hllo909a()_9a=f9@dsafadsff', false ),
-			array( 'christoph.fischer@wikimedia.de ', false ),
-			array( 'christoph.füscher@wikimedia.de ', false ),
-
-			array( 'fibor@fgagaadadfafasfasfasfasffasfsfe.com', true ),
-			array( 'christoph.fischer@wikimedia.de', true ),
-			array( 'test@test.email', true ),
-			array( 'A-Za-z0-9.!#$%&\'*+-/=?^_`{|}~info@test.email', true ),
-			array( 'info@triebwerk-grün.de', true ),
-			array( 'info@موقع.وزارة-الاتصالات.مصر', true ),
-		);
+	public function emailWithInvalidFormatProvider() {
+		return [
+			array( 'chrifi.asfsfas.de  ' ),
+			array( ' ' ),
+			array( 'hllo909a()_9a=f9@dsafadsff' ),
+			array( 'christoph.fischer@wikimedia.de ' ),
+			array( 'christoph.füscher@wikimedia.de ' ),
+		];
 	}
+
 }
