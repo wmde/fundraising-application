@@ -106,7 +106,7 @@ class FunFunFactory {
 		} );
 
 		$pimple['contact_validator'] = $pimple->share( function() {
-			return new GetInTouchValidator( new MailValidator( MailValidator::TEST_WITH_MX ) );
+			return new GetInTouchValidator( $this->getMailValidator() );
 		} );
 
 		$pimple['mw_api'] = $pimple->share( function() {
