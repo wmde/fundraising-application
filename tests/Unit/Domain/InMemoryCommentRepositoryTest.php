@@ -14,7 +14,7 @@ use WMDE\Fundraising\Frontend\Domain\InMemoryCommentRepository;
 class InMemoryCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 	public function testWhenThereAreNoComments_getCommentsReturnsEmptyArray() {
-		$this->assertSame( [], ( new InMemoryCommentRepository() )->getComments( 10 ) );
+		$this->assertSame( [], ( new InMemoryCommentRepository() )->getPublicComments( 10 ) );
 	}
 
 	public function testWhenThereAreComments_getCommentsReturnsThem() {
@@ -34,7 +34,7 @@ class InMemoryCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 					->setDonationAmount( '42' )->setPostingTime( new \DateTime( '1984-01-01' ) ),
 				Comment::newInstance()->setAuthorName( 'name2' )->setCommentText( 'comment' )
 					->setDonationAmount( '42' )->setPostingTime( new \DateTime( '1984-01-01' ) )
-			) )->getComments( 10 )
+			) )->getPublicComments( 10 )
 		);
 	}
 
@@ -53,7 +53,7 @@ class InMemoryCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 					->setDonationAmount( '42' )->setPostingTime( new \DateTime( '1984-01-01' ) ),
 				Comment::newInstance()->setAuthorName( 'name2' )->setCommentText( 'comment' )
 					->setDonationAmount( '42' )->setPostingTime( new \DateTime( '1984-01-01' ) )
-			) )->getComments( 2 )
+			) )->getPublicComments( 2 )
 		);
 	}
 

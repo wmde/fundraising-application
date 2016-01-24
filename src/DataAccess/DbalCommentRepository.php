@@ -22,11 +22,13 @@ class DbalCommentRepository implements CommentRepository {
 	}
 
 	/**
+	 * Returns the comments that can be shown to non-privileged users.
+	 *
 	 * @param int $limit
 	 *
 	 * @return Comment[]
 	 */
-	public function getComments( int $limit ): array {
+	public function getPublicComments( int $limit ): array {
 		return array_map(
 			function( Spenden $spenden ) {
 				return Comment::newInstance()

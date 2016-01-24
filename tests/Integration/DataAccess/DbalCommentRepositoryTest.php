@@ -36,7 +36,7 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 	public function testWhenThereAreNoComments_anEmptyListIsReturned() {
 		$repository = new DbalCommentRepository( $this->getOrmRepository() );
 
-		$this->assertEmpty( $repository->getComments( 10 ) );
+		$this->assertEmpty( $repository->getPublicComments( 10 ) );
 	}
 
 	public function testWhenThereAreLessCommentsThanTheLimit_theyAreAllReturned() {
@@ -53,7 +53,7 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 				$this->getSecondComment(),
 				$this->getThirdComment( 3 ),
 			],
-			$repository->getComments( 10 )
+			$repository->getPublicComments( 10 )
 		);
 	}
 
@@ -70,7 +70,7 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 				$this->getFirstComment(),
 				$this->getSecondComment(),
 			],
-			$repository->getComments( 2 )
+			$repository->getPublicComments( 2 )
 		);
 	}
 
@@ -89,7 +89,7 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 				$this->getSecondComment(),
 				$this->getThirdComment( 4 ),
 			],
-			$repository->getComments( 10 )
+			$repository->getPublicComments( 10 )
 		);
 	}
 
@@ -108,7 +108,7 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 				$this->getSecondComment(),
 				$this->getThirdComment( 4 ),
 			],
-			$repository->getComments( 10 )
+			$repository->getPublicComments( 10 )
 		);
 	}
 

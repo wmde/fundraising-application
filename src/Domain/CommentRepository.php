@@ -18,6 +18,6 @@ interface CommentRepository {
 	 *
 	 * @return Comment[]
 	 */
-	public function getComments( int $limit ): array;
+	public function getPublicComments( int $limit ): array;
 
 }
