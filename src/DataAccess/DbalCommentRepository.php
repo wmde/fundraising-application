@@ -44,7 +44,10 @@ class DbalCommentRepository implements CommentRepository {
 
 	private function getSpenden( int $limit ): array {
 		return $this->entityRepository->findBy(
-			[ 'isPublic' => true ],
+			[
+				'isPublic' => true,
+				'dtDel' => null
+			],
 			null,
 			$limit
 		);

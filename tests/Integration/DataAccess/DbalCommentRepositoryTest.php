@@ -93,6 +93,25 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 		);
 	}
 
+	public function testOnlyNonDeletedCommentsGetReturned() {
+		$this->persistFirstComment();
+		$this->persistSecondComment();
+		$this->persistDeletedComment();
+		$this->persistThirdComment();
+		$this->entityManager->flush();
+
+		$repository = new DbalCommentRepository( $this->getOrmRepository() );
+
+		$this->assertEquals(
+			[
+				$this->getFirstComment(),
+				$this->getSecondComment(),
+				$this->getThirdComment( 4 ),
+			],
+			$repository->getComments( 10 )
+		);
+	}
+
 	private function persistFirstComment() {
 		$firstSpenden = new Spenden();
 		$firstSpenden->setName( 'First name' );
@@ -131,6 +150,17 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$privateSpenden->setDtNew( new DateTime( '1984-12-12' ) );
 		$privateSpenden->setIsPublic( false );
 		$this->entityManager->persist( $privateSpenden );
+	}
+
+	private function persistDeletedComment() {
+		$deletedSpenden = new Spenden();
+		$deletedSpenden->setName( 'Deleted name' );
+		$deletedSpenden->setKommentar( 'Deleted comment' );
+		$deletedSpenden->setBetrag( '31337' );
+		$deletedSpenden->setDtNew( new DateTime( '1984-11-11' ) );
+		$deletedSpenden->setIsPublic( true );
+		$deletedSpenden->setDtDel( new DateTime( '2000-01-01' ) );
+		$this->entityManager->persist( $deletedSpenden );
 	}
 
 	private function getFirstComment() {
