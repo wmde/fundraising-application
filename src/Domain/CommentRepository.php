@@ -14,6 +14,8 @@ namespace WMDE\Fundraising\Frontend\Domain;
 interface CommentRepository {
 
 	/**
+	 * Returns the comments that can be shown to non-privileged users, newest first.
+	 *
 	 * @param int $limit
 	 *
 	 * @return Comment[]

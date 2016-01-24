@@ -22,7 +22,7 @@ class DbalCommentRepository implements CommentRepository {
 	}
 
 	/**
-	 * Returns the comments that can be shown to non-privileged users.
+	 * @see CommentRepository::getPublicComments
 	 *
 	 * @param int $limit
 	 *
@@ -50,7 +50,9 @@ class DbalCommentRepository implements CommentRepository {
 				'isPublic' => true,
 				'dtDel' => null
 			],
-			null,
+			[
+				'dtNew' => 'DESC'
+			],
 			$limit
 		);
 	}

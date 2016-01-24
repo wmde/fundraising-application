@@ -49,9 +49,9 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertEquals(
 			[
-				$this->getFirstComment(),
-				$this->getSecondComment(),
 				$this->getThirdComment( 3 ),
+				$this->getSecondComment(),
+				$this->getFirstComment(),
 			],
 			$repository->getPublicComments( 10 )
 		);
@@ -67,7 +67,7 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertEquals(
 			[
-				$this->getFirstComment(),
+				$this->getThirdComment( 3 ),
 				$this->getSecondComment(),
 			],
 			$repository->getPublicComments( 2 )
@@ -85,9 +85,9 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertEquals(
 			[
-				$this->getFirstComment(),
-				$this->getSecondComment(),
 				$this->getThirdComment( 4 ),
+				$this->getSecondComment(),
+				$this->getFirstComment(),
 			],
 			$repository->getPublicComments( 10 )
 		);
@@ -104,9 +104,9 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertEquals(
 			[
-				$this->getFirstComment(),
-				$this->getSecondComment(),
 				$this->getThirdComment( 4 ),
+				$this->getSecondComment(),
+				$this->getFirstComment(),
 			],
 			$repository->getPublicComments( 10 )
 		);

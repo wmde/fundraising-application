@@ -42,18 +42,18 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 		$this->assertJsonSuccessResponse(
 			[
 				[
-					'betrag' => 100,
-					'spender' => 'First name',
-					'kommentar' => 'First comment',
-					'datum' => 'Sun, 01 Jan 1984 00:00:00 +0100',
-					'id' => 1,
-				],
-				[
 					'betrag' => 200,
 					'spender' => 'Second name',
 					'kommentar' => 'Second comment',
 					'datum' => 'Thu, 02 Feb 1984 00:00:00 +0100',
 					'id' => 2,
+				],
+				[
+					'betrag' => 100,
+					'spender' => 'First name',
+					'kommentar' => 'First comment',
+					'datum' => 'Sun, 01 Jan 1984 00:00:00 +0100',
+					'id' => 1,
 				],
 			],
 			$client->getResponse()
@@ -93,11 +93,11 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 		$this->assertJsonSuccessResponse(
 			[
 				[
-					'betrag' => 100,
-					'spender' => 'First name',
-					'kommentar' => 'First comment',
-					'datum' => 'Sun, 01 Jan 1984 00:00:00 +0100',
-					'id' => 1,
+					'betrag' => 200,
+					'spender' => 'Second name',
+					'kommentar' => 'Second comment',
+					'datum' => 'Thu, 02 Feb 1984 00:00:00 +0100',
+					'id' => 2,
 				]
 			],
 			$client->getResponse()
