@@ -115,6 +115,7 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 			$client->getResponse()->getContent()
 		);
 
+		// Test header, footer and noJS feature of the base template
 		$this->assertContains(
 			'<p>I\'m a header</p>',
 			$client->getResponse()->getContent()

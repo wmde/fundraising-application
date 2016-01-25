@@ -13,8 +13,6 @@ class WikiContentProvider {
 	private $pageRetriever;
 	private $contentModifier;
 	private $pageTitlePrefix;
-	private $pageCache = [];
-	private $errorCache = [];
 
 	public function __construct( PageRetriever $pageRetriever, PageContentModifier $contentModifier, string $pageTitlePrefix) {
 		$this->pageRetriever = $pageRetriever;

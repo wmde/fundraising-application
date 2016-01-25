@@ -214,22 +214,37 @@ class FunFunFactory {
 
 	public function newDisplayPageUseCase(): DisplayPageUseCase {
 		return new DisplayPageUseCase(
-			$this->newPageRetriever(),
+			$this->newWikiContentProvider(),
 			$this->newPageContentModifier(),
 			$this->config['cms-wiki-title-prefix']
 		);
 	}
 
 	public function newDisplayPagePresenter(): DisplayPagePresenter {
-		return new DisplayPagePresenter( new TwigTemplate(
-			$this->getTwig(),
-			'DisplayPageLayout.twig',
-			[ 'basepath' => $this->config['web-basepath'] ]
-		) );
+		return new DisplayPagePresenter( $this->getLayoutTemplate( 'DisplayPageLayout.twig' ) );
 	}
 
 	public function getTwig(): Twig_Environment {
 		return $this->pimple['twig'];
+	}
+
+	/**
+	 * Get a template, with the content for the layout areas filled in.
+	 *
+	 * @param string $templateName
+	 * @return TwigTemplate
+	 */
+	private function getLayoutTemplate( string $templateName ): TwigTemplate {
+		 return new TwigTemplate(
+			$this->getTwig(),
+			$templateName,
+			[
+				'basepath' => $this->config['web-basepath'],
+				'header_template' => $this->config['default-layout-templates']['header'],
+				'footer_template' => $this->config['default-layout-templates']['footer'],
+				'no_js_notice_template' => $this->config['default-layout-templates']['no-js-notice'],
+			]
+		);
 	}
 
 	private function newPageRetriever(): PageRetriever {
