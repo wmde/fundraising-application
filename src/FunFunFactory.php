@@ -214,14 +214,12 @@ class FunFunFactory {
 
 	public function newDisplayPageUseCase(): DisplayPageUseCase {
 		return new DisplayPageUseCase(
-			$this->newWikiContentProvider(),
-			$this->newPageContentModifier(),
-			$this->config['cms-wiki-title-prefix']
+			$this->newWikiContentProvider()
 		);
 	}
 
 	public function newDisplayPagePresenter(): DisplayPagePresenter {
-		return new DisplayPagePresenter( $this->getLayoutTemplate( 'DisplayPageLayout.twig' ) );
+		return new DisplayPagePresenter( $this->getLayoutTemplate( 'BaseLayout.twig' ) );
 	}
 
 	public function getTwig(): Twig_Environment {

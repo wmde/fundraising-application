@@ -8,7 +8,7 @@ use Psr\Log\NullLogger;
 use WMDE\Fundraising\Frontend\Presenters\Content\PageContentModifier;
 
 /**
- * @covers WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageContentModifier
+ * @covers WMDE\Fundraising\Frontend\Presenters\Content\PageContentModifier
  *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
