@@ -36,7 +36,7 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 	public function testWhenThereAreNoComments_anEmptyListIsReturned() {
 		$repository = new DbalCommentRepository( $this->getOrmRepository() );
 
-		$this->assertEmpty( $repository->getComments( 10 ) );
+		$this->assertEmpty( $repository->getPublicComments( 10 ) );
 	}
 
 	public function testWhenThereAreLessCommentsThanTheLimit_theyAreAllReturned() {
@@ -49,11 +49,11 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertEquals(
 			[
-				$this->getFirstComment(),
-				$this->getSecondComment(),
 				$this->getThirdComment( 3 ),
+				$this->getSecondComment(),
+				$this->getFirstComment(),
 			],
-			$repository->getComments( 10 )
+			$repository->getPublicComments( 10 )
 		);
 	}
 
@@ -67,10 +67,10 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertEquals(
 			[
-				$this->getFirstComment(),
+				$this->getThirdComment( 3 ),
 				$this->getSecondComment(),
 			],
-			$repository->getComments( 2 )
+			$repository->getPublicComments( 2 )
 		);
 	}
 
@@ -85,11 +85,30 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertEquals(
 			[
-				$this->getFirstComment(),
-				$this->getSecondComment(),
 				$this->getThirdComment( 4 ),
+				$this->getSecondComment(),
+				$this->getFirstComment(),
 			],
-			$repository->getComments( 10 )
+			$repository->getPublicComments( 10 )
+		);
+	}
+
+	public function testOnlyNonDeletedCommentsGetReturned() {
+		$this->persistFirstComment();
+		$this->persistSecondComment();
+		$this->persistDeletedComment();
+		$this->persistThirdComment();
+		$this->entityManager->flush();
+
+		$repository = new DbalCommentRepository( $this->getOrmRepository() );
+
+		$this->assertEquals(
+			[
+				$this->getThirdComment( 4 ),
+				$this->getSecondComment(),
+				$this->getFirstComment(),
+			],
+			$repository->getPublicComments( 10 )
 		);
 	}
 
@@ -131,6 +150,17 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$privateSpenden->setDtNew( new DateTime( '1984-12-12' ) );
 		$privateSpenden->setIsPublic( false );
 		$this->entityManager->persist( $privateSpenden );
+	}
+
+	private function persistDeletedComment() {
+		$deletedSpenden = new Spenden();
+		$deletedSpenden->setName( 'Deleted name' );
+		$deletedSpenden->setKommentar( 'Deleted comment' );
+		$deletedSpenden->setBetrag( '31337' );
+		$deletedSpenden->setDtNew( new DateTime( '1984-11-11' ) );
+		$deletedSpenden->setIsPublic( true );
+		$deletedSpenden->setDtDel( new DateTime( '2000-01-01' ) );
+		$this->entityManager->persist( $deletedSpenden );
 	}
 
 	private function getFirstComment() {

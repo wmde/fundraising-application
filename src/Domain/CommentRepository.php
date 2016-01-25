@@ -14,10 +14,12 @@ namespace WMDE\Fundraising\Frontend\Domain;
 interface CommentRepository {
 
 	/**
+	 * Returns the comments that can be shown to non-privileged users, newest first.
+	 *
 	 * @param int $limit
 	 *
 	 * @return Comment[]
 	 */
-	public function getComments( int $limit ): array;
+	public function getPublicComments( int $limit ): array;
 
 }

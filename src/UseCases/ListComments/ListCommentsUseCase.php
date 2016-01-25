@@ -24,7 +24,7 @@ class ListCommentsUseCase {
 	}
 
 	private function getListItems( CommentListingRequest $listingRequest ): array {
-		return $this->commentRepository->getComments( $listingRequest->getLimit() );
+		return $this->commentRepository->getPublicComments( $listingRequest->getLimit() );
 	}
 
 }

@@ -22,11 +22,13 @@ class DbalCommentRepository implements CommentRepository {
 	}
 
 	/**
+	 * @see CommentRepository::getPublicComments
+	 *
 	 * @param int $limit
 	 *
 	 * @return Comment[]
 	 */
-	public function getComments( int $limit ): array {
+	public function getPublicComments( int $limit ): array {
 		return array_map(
 			function( Spenden $spenden ) {
 				return Comment::newInstance()
@@ -44,8 +46,13 @@ class DbalCommentRepository implements CommentRepository {
 
 	private function getSpenden( int $limit ): array {
 		return $this->entityRepository->findBy(
-			[ 'isPublic' => true ],
-			null,
+			[
+				'isPublic' => true,
+				'dtDel' => null
+			],
+			[
+				'dtNew' => 'DESC'
+			],
 			$limit
 		);
 	}
