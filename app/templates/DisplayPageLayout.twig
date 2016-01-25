@@ -1,0 +1,6 @@
+{% extends 'BaseLayout.twig' %}
+
+{% block main %}
+    {# the variable 'main' contains unprocessed template text from DisplayPagePresenter #}
+    {% include(template_from_string(main)) %}
+{% endblock %}

@@ -219,7 +219,7 @@ class FunFunFactory {
 	}
 
 	public function newDisplayPagePresenter(): DisplayPagePresenter {
-		return new DisplayPagePresenter( $this->getLayoutTemplate( 'BaseLayout.twig' ) );
+		return new DisplayPagePresenter( $this->getLayoutTemplate( 'DisplayPageLayout.twig' ) );
 	}
 
 	public function getTwig(): Twig_Environment {

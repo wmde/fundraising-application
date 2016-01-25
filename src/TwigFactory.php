@@ -4,6 +4,7 @@
 namespace WMDE\Fundraising\Frontend;
 
 use Twig_Environment;
+use Twig_Extension_StringLoader;
 use Twig_Lexer;
 use Twig_Loader_Filesystem;
 use WMDE\Fundraising\Frontend\Presenters\Content\WikiContentProvider;
@@ -31,6 +32,8 @@ class TwigFactory {
 			$loader,
 			$options
 		);
+
+		$twig->addExtension(new Twig_Extension_StringLoader());
 
 		$lexer = new Twig_Lexer( $twig, [
 			'tag_comment'   => [ '{#', '#}' ],
