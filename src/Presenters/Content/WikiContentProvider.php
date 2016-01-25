@@ -14,7 +14,7 @@ class WikiContentProvider {
 	private $contentModifier;
 	private $pageTitlePrefix;
 
-	public function __construct( PageRetriever $pageRetriever, PageContentModifier $contentModifier, string $pageTitlePrefix) {
+	public function __construct( PageRetriever $pageRetriever, PageContentModifier $contentModifier, string $pageTitlePrefix ) {
 		$this->pageRetriever = $pageRetriever;
 		$this->contentModifier = $contentModifier;
 		$this->pageTitlePrefix = $pageTitlePrefix;
