@@ -21,10 +21,7 @@ class DisplayPagePresenter {
 
 	public function present( PageDisplayResponse $displayResponse ): string {
 		return $this->template->render( [
-			'header' => $this->getContentOrMissingMessage( $displayResponse->getHeaderContent(), 'header' ),
 			'main' => $this->getContentOrMissingMessage( $displayResponse->getMainContent(), 'main content' ),
-			'footer' => $this->getContentOrMissingMessage( $displayResponse->getFooterContent(), 'footer' ),
-			'noJsNotice' => $this->getContentOrMissingMessage( $displayResponse->getNoJsNoticedContent(), 'no JS notice' ),
 		] );
 	}
 

@@ -45,8 +45,6 @@ class DisplayPageUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$response = $useCase->getPage( new PageDisplayRequest( 'Unicorns' ) );
 
 		$this->assertSame( '<p>Pink fluffy unicorns dancing on rainbows</p>', $response->getMainContent() );
-		$this->assertSame( '<p>I\'m a header</p>', $response->getHeaderContent() );
-		$this->assertSame( '<p>I\'m a footer</p>', $response->getFooterContent() );
 	}
 
 	public function testWhenPageTitlePrefixIsConfigured_pageCanBeRetrieved() {
