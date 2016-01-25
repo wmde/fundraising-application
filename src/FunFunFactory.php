@@ -225,10 +225,7 @@ class FunFunFactory {
 	}
 
 	public function newAddSubscriptionHTMLPresenter(): AddSubscriptionHTMLPresenter {
-		return new AddSubscriptionHTMLPresenter( new TwigTemplate(
-			$this->getTwig(),
-			'SubscriptionForm'
-		) );
+		return new AddSubscriptionHTMLPresenter( $this->getLayoutTemplate( 'AddSubscription.twig' ) );
 	}
 
 	public function newAddSubscriptionJSONPresenter(): AddSubscriptionJSONPresenter {
