@@ -31,40 +31,33 @@ class GetInTouchUseCase {
 			return 'validation failed';
 		}
 
-		if ( $this->forwardContactRequest() && $this->confirmToUser() ) {
+		try {
+			$this->forwardContactRequest();
+			$this->confirmToUser();
 			return 'request successful';
+		} catch ( \RuntimeException $e ) {
+			return 'mail transmission failed';
 		}
-
-		return 'mail transmission failed';
 	}
 
-	private function forwardContactRequest(): bool {
+	private function forwardContactRequest() {
 		$this->messenger->sendMessage(
-			$this->messenger->constructMessage(
-				new MailAddress(
-					$this->request->getEmailAddress(),
-					implode( ' ', [ $this->request->getFirstName(), $this->request->getLastName() ] )
-				),
-				new MailAddress( 'kai.nissen@wikimedia.de' ),
-				$this->request->getSubject(),
-				$this->request->getMessageBody()
+			$this->request->getSubject(),
+			$this->request->getMessageBody(),
+			new MailAddress( 'kai.nissen@wikimedia.de' ),
+			new MailAddress(
+				$this->request->getEmailAddress(),
+				implode( ' ', [ $this->request->getFirstName(), $this->request->getLastName() ] )
 			)
 		);
-
-		return $this->messenger->getFailedRecipients() === [];
 	}
 
-	private function confirmToUser(): bool {
+	private function confirmToUser() {
 		$this->messenger->sendMessage(
-			$this->messenger->constructMessage(
-				new MailAddress( 'kai.nissen@wikimedia.de', 'Kai Nissen' ),
-				new MailAddress( $this->request->getEmailAddress() ),
-				'TODO',
-				'fetch from CMW'
-			)
+			'TODO',
+			'fetch from CMW',
+			new MailAddress( $this->request->getEmailAddress() )
 		);
-
-		return $this->messenger->getFailedRecipients() === [];
 	}
 
 }

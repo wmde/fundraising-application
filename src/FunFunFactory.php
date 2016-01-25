@@ -150,7 +150,11 @@ class FunFunFactory {
 		} );
 
 		$pimple['messenger'] = $pimple->share( function() {
-			return new Messenger( new Swift_MailTransport(), $this->getOperatorAddress() );
+			return new Messenger(
+				new Swift_MailTransport(),
+				$this->getOperatorAddress(),
+				$this->config['operator-displayname']
+			);
 		} );
 
 		return $pimple;
@@ -293,15 +297,11 @@ class FunFunFactory {
 		return new GetInTouchUseCase( $this->getContactValidator(), $this->getMessenger() );
 	}
 
-	public function setContactValidator( GetInTouchValidator $validator ) {
-		$this->pimple['contact_validator'] = $validator;
-	}
-
 	private function getContactValidator(): GetInTouchValidator {
 		return $this->pimple['contact_validator'];
 	}
 
-	public function getMessenger(): Messenger {
+	private function getMessenger(): Messenger {
 		return $this->pimple['messenger'];
 	}
 
@@ -310,10 +310,7 @@ class FunFunFactory {
 	}
 
 	public function getOperatorAddress() {
-		return new MailAddress(
-			$this->config['operator-email'],
-			$this->config['operator-displayname']
-		);
+		return new MailAddress( $this->config['operator-email'] );
 	}
 
 }

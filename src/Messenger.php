@@ -15,31 +15,29 @@ use Swift_Transport;
 class Messenger {
 
 	private $mailTransport;
-	private $failedRecipients = [];
 	private $operatorAddress;
+	private $operatorName;
 
-	public function __construct( Swift_Transport $mailTransport, MailAddress $operatorAddress ) {
+	public function __construct( Swift_Transport $mailTransport,
+								 MailAddress $operatorAddress,
+								 string $operatorName = '' ) {
 		$this->mailTransport = $mailTransport;
 		$this->operatorAddress = $operatorAddress;
+		$this->operatorName = $operatorName;
 	}
 
-	public function constructMessage( MailAddress $sender, MailAddress $receiver, string $subject, string $body ) {
+	public function sendMessage( string $subject, string $body, MailAddress $recipient, MailAddress $replyTo = null ) {
 		$message = Swift_Message::newInstance( $subject, $body );
-		$message->setFrom( $this->operatorAddress->getFullAddress(), $this->operatorAddress->getDisplayName() );
-		$message->setTo( $receiver->getFullAddress(), $receiver->getDisplayName() );
-		if ( $sender !== $this->operatorAddress ) {
-			$message->setReplyTo( $sender->getFullAddress(), $sender->getDisplayName() );
+		$message->setFrom( $this->operatorAddress->getFullAddress(), $this->operatorName );
+		$message->setTo( $recipient->getFullAddress() );
+		if ( $replyTo ) {
+			$message->setReplyTo( $replyTo->getFullAddress() );
 		}
 
-		return $message;
-	}
-
-	public function sendMessage( Swift_Mime_Message $message ) {
-		$this->mailTransport->send( $message, $this->failedRecipients );
-	}
-
-	public function getFailedRecipients() {
-		return $this->failedRecipients;
+		$deliveryCount = $this->mailTransport->send( $message );
+		if ( $deliveryCount === 0 ) {
+			throw new \RuntimeException( 'Message delivery failed' );
+		}
 	}
 
 }

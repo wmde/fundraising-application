@@ -12,14 +12,12 @@ namespace WMDE\Fundraising\Frontend;
 class MailAddress {
 	private $userName;
 	private $domain;
-	private $displayName;
 
-	public function __construct( string $emailAddress, string $displayName = '' ) {
+	public function __construct( string $emailAddress ) {
 		$addressParts = explode( '@', $emailAddress );
 		if ( is_array( $addressParts ) && count( $addressParts ) === 2 ) {
 			$this->userName = $addressParts[0];
 			$this->domain = $addressParts[1];
-			$this->displayName = $displayName;
 		} else {
 			throw new \InvalidArgumentException( 'Given email address could not be parsed' );
 		}
@@ -31,10 +29,6 @@ class MailAddress {
 
 	public function getDomain(): string {
 		return $this->domain;
-	}
-
-	public function getDisplayName(): string {
-		return $this->displayName;
 	}
 
 	public function getNormalizedDomain() {

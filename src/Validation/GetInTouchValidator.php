@@ -11,7 +11,6 @@ use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class GetInTouchValidator implements InstanceValidator {
-
 	use CanValidateField;
 
 	private $mailValidator;

@@ -16,11 +16,13 @@ use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchResponse;
  */
 class GetInTouchRouteTest extends WebRouteTestCase {
 
+	// @codingStandardsIgnoreStart
 	protected function onTestEnvironmentCreated( FunFunFactory $factory, array $config ) {
+		// @codingStandardsIgnoreEnd
 		$factory->setMessenger( new Messenger(
 			Swift_NullTransport::newInstance(),
-			$factory->getOperatorAddress()
-		) );
+			$factory->getOperatorAddress() )
+		);
 	}
 
 	public function testGivenValidRequest_contactRequestIsProperlyProcessed() {

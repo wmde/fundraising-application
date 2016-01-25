@@ -18,7 +18,8 @@ class ValidatorTestCase extends \PHPUnit_Framework_TestCase {
 	 */
 	protected function assertConstraintWasViolated( array $violations, string $fieldName ) {
 		$this->assertCount( 1, $violations );
-		$this->assertInstanceOf( ConstraintViolation::class, current( $violations ) );
+		#$this->assertInstanceOf( ConstraintViolation::class, current( $violations ) );
+		$this->assertContainsOnlyInstancesOf( ConstraintViolation::class, $violations );
 		$this->assertEquals( $fieldName, current( $violations )->getSource() );
 	}
 
