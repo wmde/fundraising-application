@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+    <channel>
+        <title>Spenden an Wikimedia</title>
+        <link>https://spenden.wikimedia.de/spenden/list.php</link>
+        <description>Öffentliche Liste der über das Online-Formular der Wikimedia Fördergesellschaft getätigter Spenden</description>
+        <language>de-de</language>
+        <pubDate></pubDate>
+
+    </channel>
+</rss>
