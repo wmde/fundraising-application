@@ -20,6 +20,8 @@ use Monolog\Handler\BufferHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
+use Swift_MailTransport;
 use Twig_Environment;
 use WMDE\Fundraising\Entities\Spenden;
 use WMDE\Fundraising\Frontend\DataAccess\DbalCommentRepository;
@@ -30,6 +32,7 @@ use WMDE\Fundraising\Frontend\Domain\RequestRepository;
 use WMDE\Fundraising\Frontend\Presenters\CommentListJsonPresenter;
 use WMDE\Fundraising\Frontend\Presenters\CommentListRssPresenter;
 use WMDE\Fundraising\Frontend\Presenters\IbanPresenter;
+use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\Fundraising\Frontend\Validation\MailValidator;
 use WMDE\Fundraising\Frontend\Validation\RequestValidator;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\AddSubscriptionUseCase;
@@ -38,6 +41,7 @@ use WMDE\Fundraising\Frontend\Domain\PageRetriever;
 use WMDE\Fundraising\Frontend\Presenters\DisplayPagePresenter;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\DisplayPageUseCase;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageContentModifier;
+use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\ListCommentsUseCase;
 use WMDE\Fundraising\Frontend\UseCases\CheckIban\CheckIbanUseCase;
 use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanUseCase;
@@ -66,6 +70,8 @@ class FunFunFactory {
 	 * - cms-wiki-user
 	 * - cms-wiki-password
 	 * - enable-twig-cache: boolean
+	 * - operator-email: used as sender when sending emails
+	 * - operator-displayname: used as sender when sending emails
 	 */
 	public function __construct( array $config ) {
 		$this->config = $config;
@@ -97,6 +103,10 @@ class FunFunFactory {
 
 		$pimple['request_validator'] = $pimple->share( function() {
 			return new RequestValidator( $this->getMailValidator() );
+		} );
+
+		$pimple['contact_validator'] = $pimple->share( function() {
+			return new GetInTouchValidator( $this->getMailValidator() );
 		} );
 
 		$pimple['mw_api'] = $pimple->share( function() {
@@ -137,6 +147,14 @@ class FunFunFactory {
 			$logger->pushHandler( $errorHandler );
 
 			return $logger;
+		} );
+
+		$pimple['messenger'] = $pimple->share( function() {
+			return new Messenger(
+				new Swift_MailTransport(),
+				$this->getOperatorAddress(),
+				$this->config['operator-displayname']
+			);
 		} );
 
 		return $pimple;
@@ -273,6 +291,26 @@ class FunFunFactory {
 
 	public function setPageTitlePrefix( string $prefix ) {
 		$this->config['cms-wiki-title-prefix'] = $prefix;
+	}
+
+	public function newGetInTouchUseCase() {
+		return new GetInTouchUseCase( $this->getContactValidator(), $this->getMessenger() );
+	}
+
+	private function getContactValidator(): GetInTouchValidator {
+		return $this->pimple['contact_validator'];
+	}
+
+	private function getMessenger(): Messenger {
+		return $this->pimple['messenger'];
+	}
+
+	public function setMessenger( Messenger $messenger ) {
+		$this->pimple['messenger'] = $messenger;
+	}
+
+	public function getOperatorAddress() {
+		return new MailAddress( $this->config['operator-email'] );
 	}
 
 }

@@ -8,5 +8,7 @@
 	"cms-wiki-api-url": "http://cms.wiki/api.php",
 	"cms-wiki-user": "Wiki User",
 	"cms-wiki-password": "Wiki Password",
-	"enable-twig-cache": false
+	"enable-twig-cache": false,
+	"operator-email": "email@operatorsownmailserver.com",
+	"operator-displayname": "Friendly Operator"
 }
