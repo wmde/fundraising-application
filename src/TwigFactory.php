@@ -33,14 +33,14 @@ class TwigFactory {
 			$options
 		);
 
-		$twig->addExtension(new Twig_Extension_StringLoader());
+		$twig->addExtension( new Twig_Extension_StringLoader() );
 
 		$lexer = new Twig_Lexer( $twig, [
 			'tag_comment'   => [ '{#', '#}' ],
 			'tag_block'     => [ '{%', '%}' ],
 			'tag_variable'  => [ '{$', '$}' ]
 		] );
-		$twig->setLexer($lexer);
+		$twig->setLexer( $lexer );
 
 		return $twig;
 	}
