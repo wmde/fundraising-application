@@ -32,6 +32,8 @@ use WMDE\Fundraising\Frontend\Domain\RequestRepository;
 use WMDE\Fundraising\Frontend\Presenters\CommentListJsonPresenter;
 use WMDE\Fundraising\Frontend\Presenters\CommentListRssPresenter;
 use WMDE\Fundraising\Frontend\Presenters\Content\WikiContentProvider;
+use WMDE\Fundraising\Frontend\Presenters\AddSubscriptionHTMLPresenter;
+use WMDE\Fundraising\Frontend\Presenters\AddSubscriptionJSONPresenter;
 use WMDE\Fundraising\Frontend\Presenters\IbanPresenter;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\Fundraising\Frontend\Validation\MailValidator;
@@ -220,6 +222,14 @@ class FunFunFactory {
 
 	public function newDisplayPagePresenter(): DisplayPagePresenter {
 		return new DisplayPagePresenter( $this->getLayoutTemplate( 'DisplayPageLayout.twig' ) );
+	}
+
+	public function newAddSubscriptionHTMLPresenter(): AddSubscriptionHTMLPresenter {
+		return new AddSubscriptionHTMLPresenter( $this->getLayoutTemplate( 'AddSubscription.twig' ) );
+	}
+
+	public function newAddSubscriptionJSONPresenter(): AddSubscriptionJSONPresenter {
+		return new AddSubscriptionJSONPresenter();
 	}
 
 	public function getTwig(): Twig_Environment {

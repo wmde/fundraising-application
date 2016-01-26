@@ -30,13 +30,13 @@ class AddSubscriptionUseCase {
 		$request = $this->createRequestFromSubscriptionRequest( $subscriptionRequest );
 
 		if ( ! $this->requestValidator->validate( $request ) ) {
-			return AddSubscriptionResponse::newFailureResponse( $request, $this->requestValidator->getConstraintViolations() );
+			return AddSubscriptionResponse::newFailureResponse( $this->requestValidator->getConstraintViolations() );
 		}
 		$this->requestRepository->storeRequest( $request );
 
 		// TODO send mails
 
-		return AddSubscriptionResponse::newSuccessResponse( $request );
+		return AddSubscriptionResponse::newSuccessResponse();
 	}
 
 	private function createRequestFromSubscriptionRequest( SubscriptionRequest $subscriptionRequest ): Request {

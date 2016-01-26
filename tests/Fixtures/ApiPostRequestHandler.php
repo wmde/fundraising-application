@@ -24,6 +24,7 @@ class ApiPostRequestHandler {
 			'10hoch16/Seitenfuß' => TestEnvironment::getJsonTestData( 'mwApiFooterPage.json' ),
 			'MyNamespace:MyPrefix/Naked_mole-rat' => TestEnvironment::getJsonTestData( 'mwApiPrefixedTitlePage.json' ),
 			'JavaScript-Notice' => TestEnvironment::getJsonTestData( 'mwApiJsNoticePage.json' ),
+			'SubscriptionForm' => TestEnvironment::getJsonTestData( 'mwApiSubscriptionForm.json' ),
 		];
 
 		if ( array_key_exists( $request->getParams()['page'], $pageResponses ) ) {

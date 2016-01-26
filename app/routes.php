@@ -70,11 +70,13 @@ $app->get(
 			$ffFactory->newDisplayPageUseCase()->getPage( new PageDisplayRequest( $pageName ) )
 		);
 	}
-);
+)
+->bind( 'page' );
 
+// Form for this is provided by route page/SubscriptionForm
 $app->post(
 	'contact/subscribe',
-	function( Request $request ) use ( $ffFactory ) {
+	function( Application $app, Request $request ) use ( $ffFactory ) {
 		$useCase = $ffFactory->newAddSubscriptionUseCase();
 
 		$subscriptionRequest = new SubscriptionRequest();
@@ -96,10 +98,16 @@ $app->post(
 		] );
 
 		$responseModel = $useCase->addSubscription( $subscriptionRequest );
-		// TODO forward/dispatch to matching 'page/name' route, depending on $responseModel->getType();
-		return 'TODO';
+		if ( in_array( 'application/json', $request->getAcceptableContentTypes() ) ) {
+			return $app->json( $ffFactory->newAddSubscriptionJSONPresenter()->present( $responseModel ) );
+		}
+		if ( $responseModel->isSuccessful() ) {
+			return $app->redirect( $app['url_generator']->generate('page', [ 'pageName' => 'SubscriptionSuccess' ] ) );
+		}
+		return $ffFactory->newAddSubscriptionHTMLPresenter()->present( $responseModel, $request->request->all() );
 	}
-);
+)
+->bind( 'subscribe' );
 
 $app->get(
 	'check-iban',

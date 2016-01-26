@@ -11,24 +11,18 @@ use WMDE\Fundraising\Entities\Request;
  */
 class AddSubscriptionResponse {
 
-	private $request;
 	private $validationErrors;
 
-	public function __construct( Request $request, array $requestValidationErrors = [] ) {
-		$this->request = $request;
+	public function __construct( array $requestValidationErrors = [] ) {
 		$this->validationErrors = $requestValidationErrors;
 	}
 
-	public static function newSuccessResponse( Request $request ): self {
-		return new self( $request );
+	public static function newSuccessResponse(): self {
+		return new self();
 	}
 
-	public static function newFailureResponse( Request $request, array $errors ): self {
-		return new self( $request, $errors );
-	}
-
-	public function getRequest(): Request {
-		return $this->request;
+	public static function newFailureResponse( array $errors ): self {
+		return new self( $errors );
 	}
 
 	public function getValidationErrors(): array {
