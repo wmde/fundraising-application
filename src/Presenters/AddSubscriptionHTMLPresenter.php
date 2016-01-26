@@ -2,8 +2,9 @@
 
 namespace WMDE\Fundraising\Frontend\Presenters;
 
-use WMDE\Fundraising\Frontend\ResponseModel\AddSubscriptionResponse;
+use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
 use WMDE\Fundraising\Frontend\TwigTemplate;
+use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 
 /**
  * Render the subscription HTML form with errors
@@ -19,7 +20,7 @@ class AddSubscriptionHTMLPresenter {
 		$this->template = $template;
 	}
 
-	public function present( AddSubscriptionResponse $subscriptionResponse, array $formData ): string {
+	public function present( ValidationResponse $subscriptionResponse, array $formData ): string {
 		$errors = [];
 		/** @var ConstraintViolation $constraintViolation */
 		foreach( $subscriptionResponse->getValidationErrors() as $constraintViolation ) {

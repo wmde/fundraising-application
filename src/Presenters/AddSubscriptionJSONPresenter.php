@@ -2,7 +2,7 @@
 
 namespace WMDE\Fundraising\Frontend\Presenters;
 
-use WMDE\Fundraising\Frontend\ResponseModel\AddSubscriptionResponse;
+use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 
 /**
@@ -11,7 +11,7 @@ use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
  */
 class AddSubscriptionJSONPresenter {
 
-	public function present( AddSubscriptionResponse $subscriptionResponse ): array {
+	public function present( ValidationResponse $subscriptionResponse ): array {
 		if ( $subscriptionResponse->isSuccessful() ) {
 			return $this->newSuccessResponse();
 		}
@@ -23,7 +23,7 @@ class AddSubscriptionJSONPresenter {
 		return [ 'status' => 'OK' ];
 	}
 
-	private function newErrorResponse( AddSubscriptionResponse $response ): array {
+	private function newErrorResponse( ValidationResponse $response ): array {
 		$errors = [];
 		/** @var ConstraintViolation $constraintViolation */
 		foreach( $response->getValidationErrors() as $constraintViolation ) {
