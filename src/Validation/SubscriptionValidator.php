@@ -3,13 +3,13 @@
 
 namespace WMDE\Fundraising\Frontend\Validation;
 
-use WMDE\Fundraising\Entities\Request;
+use WMDE\Fundraising\Entities\Subscription;
 
 /**
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class RequestValidator implements InstanceValidator {
+class SubscriptionValidator implements InstanceValidator {
 
 	use CanValidateField;
 
@@ -22,15 +22,16 @@ class RequestValidator implements InstanceValidator {
 	}
 
 	/**
-	 * @param Request $instance
+	 * @param Subscription $instance
 	 * @return bool
 	 */
 	public function validate( $instance ): bool {
 		$violations = [];
 		$requiredFieldValidator = new RequiredFieldValidator();
-		$violations[] = $this->validateField( $requiredFieldValidator, $instance->getAnrede(), 'anrede');
-		$violations[] = $this->validateField( $requiredFieldValidator, $instance->getVorname(), 'vorname');
-		$violations[] = $this->validateField( $requiredFieldValidator, $instance->getNachname(), 'nachname');
+		$address = $instance->getAddress();
+		$violations[] = $this->validateField( $requiredFieldValidator, $address->getSalutation(), 'anrede');
+		$violations[] = $this->validateField( $requiredFieldValidator, $address->getFirstName(), 'vorname');
+		$violations[] = $this->validateField( $requiredFieldValidator, $address->getLastName(), 'nachname');
 		$violations[] = $this->validateField( $requiredFieldValidator, $instance->getEmail(), 'email');
 		$violations[] = $this->validateField( $this->mailValidator, $instance->getEmail(), 'email');
 		$this->constraintViolations = array_filter( $violations );

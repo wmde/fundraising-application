@@ -5,10 +5,9 @@ declare(strict_types = 1);
 namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 
 use Mediawiki\Api\MediawikiApi;
-use WMDE\Fundraising\Entities\Request;
 use WMDE\Fundraising\Frontend\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ApiPostRequestHandler;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\RequestRepositorySpy;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\SubscriptionRepositorySpy;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
 
 /**
@@ -42,10 +41,10 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 	];
 
 	public function testValidSubscriptionRequestGetsPersisted() {
-		$requestRepository = new RequestRepositorySpy();
+		$subscriptionRepository = new SubscriptionRepositorySpy();
 
-		$client = $this->createClient( [], function( FunFunFactory $factory ) use ( $requestRepository ) {
-			$factory->setRequestRepository( $requestRepository );
+		$client = $this->createClient( [], function( FunFunFactory $factory ) use ( $subscriptionRepository ) {
+			$factory->setRequestRepository( $subscriptionRepository );
 		} );
 		$client->followRedirects( false );
 
@@ -55,20 +54,19 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 			$this->validFormInput
 		);
 
-		$this->assertCount( 1, $requestRepository->getRequests() );
+		$this->assertCount( 1, $subscriptionRepository->getSubscriptions() );
 
-		$request = $requestRepository->getRequests()[0];
+		$subscription = $subscriptionRepository->getSubscriptions()[0];
+		$address = $subscription->getAddress();
 
-		$this->assertSame( 'Nyan', $request->getVorname() );
-		$this->assertSame( 'Cat', $request->getNachname() );
-		$this->assertSame( 'Herr', $request->getAnrede() );
-		$this->assertSame( 'Prof. Dr. Dr.', $request->getTitel() );
-		$this->assertSame( 'Awesome Way 1', $request->getStrasse() );
-		$this->assertSame( 'Berlin', $request->getOrt() );
-		$this->assertSame( '12345', $request->getPlz() );
-		$this->assertSame( 'jeroendedauw@gmail.com', $request->getEmail() );
-		$this->assertTrue( $request->getWikilogin() );
-		$this->assertSame( Request::TYPE_SUBSCRIPTION, $request->getType() );
+		$this->assertSame( 'Nyan', $address->getFirstName() );
+		$this->assertSame( 'Cat', $address->getLastName() );
+		$this->assertSame( 'Herr', $address->getSalutation() );
+		$this->assertSame( 'Prof. Dr. Dr.', $address->getTitle() );
+		$this->assertSame( 'Awesome Way 1', $address->getAddress() );
+		$this->assertSame( 'Berlin', $address->getCity() );
+		$this->assertSame( '12345', $address->getPostcode() );
+		$this->assertSame( 'jeroendedauw@gmail.com', $subscription->getEmail() );
 	}
 
 	public function testGivenValidDataAndNoContentType_routeReturnsRedirectToSucccessPage() {
