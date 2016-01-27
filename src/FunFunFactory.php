@@ -283,7 +283,7 @@ class FunFunFactory {
 		);
 	}
 
-	private function getLogger(): LoggerInterface {
+	public function getLogger(): LoggerInterface {
 		return $this->pimple['logger'];
 	}
 

@@ -24,7 +24,13 @@ $app->after( function( Request $request, Response $response ) {
 	return $response;
 } );
 
-$app->error( function ( \Exception $e, $code ) {
+$app->error( function ( \Exception $e, $code ) use ( $ffFactory ) {
+	$ffFactory->getLogger()->error( $e->getMessage(), [
+		'code' => $e->getCode(),
+		'file' => $e->getFile(),
+		'line' => $e->getLine(),
+		'stack_trace' => $e->getTraceAsString()
+	] );
 	return new JsonResponse(
 		[
 			'message' => $e->getMessage(),
