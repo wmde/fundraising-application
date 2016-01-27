@@ -4,11 +4,11 @@ declare(strict_types = 1);
 
 namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 
-use Mediawiki\Api\MediawikiApi;
 use WMDE\Fundraising\Frontend\FunFunFactory;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\ApiPostRequestHandler;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SubscriptionRepositorySpy;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
+use WMDE\Fundraising\Frontend\Messenger;
+use Swift_NullTransport;
 
 /**
  * @licence GNU GPL v2+
@@ -39,6 +39,15 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 		'email' => '',
 		'wikilogin' => true
 	];
+
+	// @codingStandardsIgnoreStart
+	protected function onTestEnvironmentCreated( FunFunFactory $factory, array $config ) {
+		// @codingStandardsIgnoreEnd
+		$factory->setMessenger( new Messenger(
+				Swift_NullTransport::newInstance(),
+				$factory->getOperatorAddress() )
+		);
+	}
 
 	public function testValidSubscriptionRequestGetsPersisted() {
 		$subscriptionRepository = new SubscriptionRepositorySpy();
