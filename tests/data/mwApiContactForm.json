@@ -1,0 +1,9 @@
+{
+	"parse": {
+		"title": "Kontaktformular",
+		"pageid": 8192,
+		"text": {
+			"*": "<-- just for testing if data is assigned and processed -->\nErrors: {$ errors|length $}\nFirst Name: {$ firstname $}"
+		}
+	}
+}

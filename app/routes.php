@@ -143,7 +143,11 @@ $app->post(
 		);
 
 		$contactFormResponse = $ffFactory->newGetInTouchUseCase()->processContact( $contactFormRequest );
-		return $contactFormResponse;
+		if ( $contactFormResponse->isSuccessful() ) {
+			return $app->redirect( $app['url_generator']->generate( 'page', [ 'pageName' => 'KontaktBestaetigung' ] ) );
+		}
+		return $ffFactory->newGetInTouchHTMLPresenter()->present( $contactFormResponse, $request->request->all() );
+
 	}
 );
 
