@@ -5,7 +5,7 @@ namespace WMDE\Fundraising\Frontend\UseCases\AddSubscription;
 
 use WMDE\Fundraising\Entities\Request;
 use WMDE\Fundraising\Frontend\Domain\RequestRepository;
-use WMDE\Fundraising\Frontend\ResponseModel\AddSubscriptionResponse;
+use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
 use WMDE\Fundraising\Frontend\Validation\RequestValidator;
 
 /**
@@ -30,13 +30,13 @@ class AddSubscriptionUseCase {
 		$request = $this->createRequestFromSubscriptionRequest( $subscriptionRequest );
 
 		if ( ! $this->requestValidator->validate( $request ) ) {
-			return AddSubscriptionResponse::newFailureResponse( $this->requestValidator->getConstraintViolations() );
+			return ValidationResponse::newFailureResponse( $this->requestValidator->getConstraintViolations() );
 		}
 		$this->requestRepository->storeRequest( $request );
 
 		// TODO send mails
 
-		return AddSubscriptionResponse::newSuccessResponse();
+		return ValidationResponse::newSuccessResponse();
 	}
 
 	private function createRequestFromSubscriptionRequest( SubscriptionRequest $subscriptionRequest ): Request {
