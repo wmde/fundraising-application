@@ -570,6 +570,19 @@ main { padding-top: 40px; padding-bottom: 100px; background: #f6f6f6; display: b
 #comment-header .box-header { background: #84c5f1; }
 #comment-list .box-header { background: #84c5f1; }
 
+#contact-form .box-header { background: #84c5f1; }
+#contact-form .box-header span[class^="icon-"] { padding-left: 30px; display: inline-block; }
+#contact-form .box-header span[class^="icon-"]:before { font-size: 1.2em; position: absolute; margin-left: -30px; }
+#contact-form label { width: 175px; }
+#contact-form label[for="messageBody"] { vertical-align: top; margin-top: 8px; }
+#contact-form input[type="text"] { width: 350px; }
+#contact-form textarea { width: 350px; height: 200px; }
+#contact-form #first-name { width: 169px; }
+#contact-form #last-name { width: 169px; }
+
+/* inline form input errors */
+form div.input-container span.form-error { margin-left: 180px; font-size: 0.8em; color: red; position: relative; top: 5px; }
+
 /* footer */
 footer { background: #FFF; font-size: 0.8em; color: #BBB; padding-top: 15px; position: absolute; bottom: 0; width: 100%; display: block; }
 footer * { color: #BBB; }
