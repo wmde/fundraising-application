@@ -8,7 +8,6 @@ use Swift_NullTransport;
 use WMDE\Fundraising\Frontend\FunFunFactory;
 use WMDE\Fundraising\Frontend\Messenger;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
-use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchResponse;
 
 /**
  * @licence GNU GPL v2+
@@ -32,11 +31,11 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 			'POST',
 			'/contact/get-in-touch',
 			[
-				'Vorname' => 'Curious',
-				'Nachname' => 'Guy',
+				'firstname' => 'Curious',
+				'lastname' => 'Guy',
 				'email' => 'curious.guy@gmail.com',
-				'Betreff' => 'What is it you are doing?!',
-				'kommentar' => 'Just tell me'
+				'subject' => 'What is it you are doing?!',
+				'messageBody' => 'Just tell me'
 			]
 		);
 
@@ -53,11 +52,11 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 			'POST',
 			'/contact/get-in-touch',
 			[
-				'Vorname' => 'Curious',
-				'Nachname' => 'Guy',
+				'firstname' => 'Curious',
+				'lastname' => 'Guy',
 				'email' => 'curious.guy@gmail',
-				'Betreff' => 'What is it you are doing?!',
-				'kommentar' => 'Just tell me'
+				'subject' => 'What is it you are doing?!',
+				'messageBody' => 'Just tell me'
 			]
 		);
 

@@ -28,8 +28,8 @@ class GetInTouchValidator implements InstanceValidator {
 	public function validate( $instance ): bool {
 		$violations = [];
 		$requiredFieldValidator = new RequiredFieldValidator();
-		$violations[] = $this->validateField( $requiredFieldValidator, $instance->getSubject(), 'Betreff');
-		$violations[] = $this->validateField( $requiredFieldValidator, $instance->getMessageBody(), 'kommentar');
+		$violations[] = $this->validateField( $requiredFieldValidator, $instance->getSubject(), 'subject');
+		$violations[] = $this->validateField( $requiredFieldValidator, $instance->getMessageBody(), 'messageBody');
 		$violations[] = $this->validateField( $requiredFieldValidator, $instance->getEmailAddress(), 'email');
 		$violations[] = $this->validateField( $this->mailValidator, $instance->getEmailAddress(), 'email');
 		$this->constraintViolations = array_filter( $violations );
