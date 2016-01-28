@@ -91,7 +91,19 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenRequestedPageExists_itGetsEmbedded() {
-		$client = $this->createClient( [], function( FunFunFactory $factory, array $config ) {
+		$client = $this->createClient(
+			[
+				'twig' => [
+					'loaders' => [
+						'array' => [
+							'10hoch16/Seitenkopf' => '<p>I\'m a header</p>',
+							'10hoch16/Seitenfuß' => '<p>I\'m a footer</p>',
+							'JavaScript-Notice' => '<p>Y u no JavaScript!</p>',
+							]
+						]
+					]
+			],
+		function( FunFunFactory $factory, array $config ) {
 			$api = $this->getMockBuilder( MediawikiApi::class )->disableOriginalConstructor()->getMock();
 
 			$api->expects( $this->atLeastOnce() )

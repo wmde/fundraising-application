@@ -20,13 +20,7 @@ class ApiPostRequestHandler {
 	public function __invoke( Request $request ) {
 		$pageResponses = [
 			'Unicorns' => TestEnvironment::getJsonTestData( 'mwApiUnicornsPage.json' ),
-			'10hoch16/Seitenkopf' => TestEnvironment::getJsonTestData( 'mwApiHeaderPage.json' ),
-			'10hoch16/Seitenfuß' => TestEnvironment::getJsonTestData( 'mwApiFooterPage.json' ),
 			'MyNamespace:MyPrefix/Naked_mole-rat' => TestEnvironment::getJsonTestData( 'mwApiPrefixedTitlePage.json' ),
-			'JavaScript-Notice' => TestEnvironment::getJsonTestData( 'mwApiJsNoticePage.json' ),
-			'SubscriptionForm' => TestEnvironment::getJsonTestData( 'mwApiSubscriptionForm.json' ),
-			'Kontaktformular' => TestEnvironment::getJsonTestData( 'mwApiContactForm.json' ),
-			'ErrorPage' => TestEnvironment::getJsonTestData( 'mwApiErrorPage.json' ),
 		];
 
 		if ( array_key_exists( $request->getParams()['page'], $pageResponses ) ) {

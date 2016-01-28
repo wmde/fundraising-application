@@ -23,7 +23,14 @@ class DisplayPageUseCaseTest extends \PHPUnit_Framework_TestCase {
 	private $testEnvironment;
 
 	public function setUp() {
-		$this->testEnvironment = TestEnvironment::newInstance();
+		$twigConfig = [
+			'twig' => [
+				'loaders' => [
+					'wiki' => true
+				]
+			]
+		];
+		$this->testEnvironment = TestEnvironment::newInstance( $twigConfig );
 		parent::setUp();
 	}
 

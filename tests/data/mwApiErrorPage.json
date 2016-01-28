@@ -1,9 +1,0 @@
-{
-	"parse": {
-		"title": "ErrorPage",
-		"pageid": 8118,
-		"text": {
-			"*": "Internal Error: {$ message $}"
-		}
-	}
-}

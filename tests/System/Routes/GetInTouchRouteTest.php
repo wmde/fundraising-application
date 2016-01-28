@@ -47,15 +47,7 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenInvalidRequest_validationFails() {
-		$client = $this->createClient( [], function ( FunFunFactory $factory, array $config ) {
-			$api = $this->getMockBuilder( MediawikiApi::class )->disableOriginalConstructor()->getMock();
-
-			$api->expects( $this->any() )
-				->method( 'postRequest' )
-				->willReturnCallback( new ApiPostRequestHandler() );
-
-			$factory->setMediaWikiApi( $api );
-		} );
+		$client = $this->createClient();
 
 		$client->request(
 			'POST',
@@ -83,12 +75,6 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 
 	public function testOnException_errorPageIsRendered() {
 		$client = $this->createClient( [], function ( FunFunFactory $factory, array $config ) {
-			$api = $this->getMockBuilder( MediawikiApi::class )->disableOriginalConstructor()->getMock();
-
-			$api->expects( $this->any() )
-				->method( 'postRequest' )
-				->willReturnCallback( new ApiPostRequestHandler() );
-
 			$messenger = $this->getMockBuilder( Messenger::class )
 				->disableOriginalConstructor()
 				->getMock();
@@ -97,7 +83,6 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 				->method( 'sendMessage' )
 				->willThrowException( new \RuntimeException( 'Something unexpected happened' ) );
 
-			$factory->setMediaWikiApi( $api );
 			$factory->setMessenger( $messenger );
 		} );
 
