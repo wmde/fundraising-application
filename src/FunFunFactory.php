@@ -23,12 +23,12 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Swift_MailTransport;
 use Twig_Environment;
-use WMDE\Fundraising\Entities\Spenden;
+use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\DataAccess\DbalCommentRepository;
 use WMDE\Fundraising\Frontend\DataAccess\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\Domain\CommentRepository;
-use WMDE\Fundraising\Frontend\Domain\DoctrineRequestRepository;
-use WMDE\Fundraising\Frontend\Domain\RequestRepository;
+use WMDE\Fundraising\Frontend\Domain\DoctrineSubscriptionRepository;
+use WMDE\Fundraising\Frontend\Domain\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\Presenters\CommentListJsonPresenter;
 use WMDE\Fundraising\Frontend\Presenters\CommentListRssPresenter;
 use WMDE\Fundraising\Frontend\Presenters\Content\WikiContentProvider;
@@ -39,7 +39,7 @@ use WMDE\Fundraising\Frontend\Presenters\IbanPresenter;
 use WMDE\Fundraising\Frontend\Presenters\InternalErrorHTMLPresenter;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\Fundraising\Frontend\Validation\MailValidator;
-use WMDE\Fundraising\Frontend\Validation\RequestValidator;
+use WMDE\Fundraising\Frontend\Validation\SubscriptionValidator;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\AddSubscriptionUseCase;
 use WMDE\Fundraising\Frontend\DataAccess\ApiBasedPageRetriever;
 use WMDE\Fundraising\Frontend\Domain\PageRetriever;
@@ -95,11 +95,11 @@ class FunFunFactory {
 		} );
 
 		$pimple['request_repository'] = $pimple->share( function() {
-			return new DoctrineRequestRepository( $this->getConnection() );
+			return new DoctrineSubscriptionRepository( $this->getConnection() );
 		} );
 
 		$pimple['comment_repository'] = $pimple->share( function() {
-			return new DbalCommentRepository( $this->getEntityManager()->getRepository( Spenden::class ) );
+			return new DbalCommentRepository( $this->getEntityManager()->getRepository( Donation::class ) );
 		} );
 
 		$pimple['mail_validator'] = $pimple->share( function() {
@@ -107,7 +107,7 @@ class FunFunFactory {
 		} );
 
 		$pimple['request_validator'] = $pimple->share( function() {
-			return new RequestValidator( $this->getMailValidator() );
+			return new SubscriptionValidator( $this->getMailValidator() );
 		} );
 
 		$pimple['contact_validator'] = $pimple->share( function() {
@@ -200,15 +200,15 @@ class FunFunFactory {
 		return $this->pimple['comment_repository'];
 	}
 
-	private function newRequestRepository(): RequestRepository {
+	private function newRequestRepository(): SubscriptionRepository {
 		return $this->pimple['request_repository'];
 	}
 
-	public function setRequestRepository( RequestRepository $requestRepository ) {
+	public function setRequestRepository( SubscriptionRepository $requestRepository ) {
 		$this->pimple['request_repository'] = $requestRepository;
 	}
 
-	private function getRequestValidator(): RequestValidator {
+	private function getRequestValidator(): SubscriptionValidator {
 		return $this->pimple['request_validator'];
 	}
 
@@ -323,7 +323,7 @@ class FunFunFactory {
 		return new BankDataConverter( $this->config['bank-data-file'] );
 	}
 
-	public function setRequestValidator( RequestValidator $requestValidator ) {
+	public function setRequestValidator( SubscriptionValidator $requestValidator ) {
 		$this->pimple['request_validator'] = $requestValidator;
 	}
 

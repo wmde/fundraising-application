@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 
 use DateTime;
 use Doctrine\ORM\EntityManager;
-use WMDE\Fundraising\Entities\Spenden;
+use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
 
@@ -61,23 +61,23 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 	}
 
 	private function persistFirstComment( EntityManager $entityManager ) {
-		$firstSpenden = new Spenden();
-		$firstSpenden->setName( 'First name' );
-		$firstSpenden->setKommentar( 'First comment' );
-		$firstSpenden->setBetrag( '100' );
-		$firstSpenden->setDtNew( new DateTime( '1984-01-01' ) );
-		$firstSpenden->setIsPublic( true );
-		$entityManager->persist( $firstSpenden );
+		$firstDonation = new Donation();
+		$firstDonation->setName( 'First name' );
+		$firstDonation->setComment( 'First comment' );
+		$firstDonation->setAmount( '100' );
+		$firstDonation->setDtNew( new DateTime( '1984-01-01' ) );
+		$firstDonation->setIsPublic( true );
+		$entityManager->persist( $firstDonation );
 	}
 
 	private function persistSecondComment( EntityManager $entityManager ) {
-		$secondSpenden = new Spenden();
-		$secondSpenden->setName( 'Second name' );
-		$secondSpenden->setKommentar( 'Second comment' );
-		$secondSpenden->setBetrag( '200' );
-		$secondSpenden->setDtNew( new DateTime( '1984-02-02' ) );
-		$secondSpenden->setIsPublic( true );
-		$entityManager->persist( $secondSpenden );
+		$secondDonation = new Donation();
+		$secondDonation->setName( 'Second name' );
+		$secondDonation->setComment( 'Second comment' );
+		$secondDonation->setAmount( '200' );
+		$secondDonation->setDtNew( new DateTime( '1984-02-02' ) );
+		$secondDonation->setIsPublic( true );
+		$entityManager->persist( $secondDonation );
 	}
 
 	public function testGivenLimitSmallerThanCommentCount_onlySoManyCommentsAreShown() {

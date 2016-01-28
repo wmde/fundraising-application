@@ -8,7 +8,7 @@ use DateTime;
 use Doctrine\ORM\EntityManager;
 use DOMDocument;
 use DOMElement;
-use WMDE\Fundraising\Entities\Spenden;
+use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
@@ -75,32 +75,32 @@ class ListCommentsRssRouteTest extends WebRouteTestCase {
 	}
 
 	private function persistFirstComment( EntityManager $entityManager ) {
-		$firstSpenden = new Spenden();
-		$firstSpenden->setName( 'First name' );
-		$firstSpenden->setKommentar( 'First comment' );
-		$firstSpenden->setBetrag( '100.42' );
-		$firstSpenden->setDtNew( new DateTime( '1984-01-01' ) );
-		$firstSpenden->setIsPublic( true );
-		$entityManager->persist( $firstSpenden );
+		$firstDonation = new Donation();
+		$firstDonation->setName( 'First name' );
+		$firstDonation->setComment( 'First comment' );
+		$firstDonation->setAmount( '100.42' );
+		$firstDonation->setDtNew( new DateTime( '1984-01-01' ) );
+		$firstDonation->setIsPublic( true );
+		$entityManager->persist( $firstDonation );
 	}
 
 	private function persistSecondComment( EntityManager $entityManager ) {
-		$secondSpenden = new Spenden();
-		$secondSpenden->setName( 'Second name' );
-		$secondSpenden->setKommentar( 'Second comment' );
-		$secondSpenden->setBetrag( '9001' );
-		$secondSpenden->setDtNew( new DateTime( '1984-02-02' ) );
-		$secondSpenden->setIsPublic( true );
-		$entityManager->persist( $secondSpenden );
+		$secondDonation = new Donation();
+		$secondDonation->setName( 'Second name' );
+		$secondDonation->setComment( 'Second comment' );
+		$secondDonation->setAmount( '9001' );
+		$secondDonation->setDtNew( new DateTime( '1984-02-02' ) );
+		$secondDonation->setIsPublic( true );
+		$entityManager->persist( $secondDonation );
 	}
 
 	private function persistEvilComment( EntityManager $entityManager ) {
-		$secondSpenden = new Spenden();
-		$secondSpenden->setName( 'Third name & company' );
-		$secondSpenden->setKommentar( 'Third <script> comment' );
-		$secondSpenden->setBetrag( '9001' );
-		$secondSpenden->setDtNew( new DateTime( '1984-02-02' ) );
-		$secondSpenden->setIsPublic( true );
-		$entityManager->persist( $secondSpenden );
+		$secondDonation = new Donation();
+		$secondDonation->setName( 'Third name & company' );
+		$secondDonation->setComment( 'Third <script> comment' );
+		$secondDonation->setAmount( '9001' );
+		$secondDonation->setDtNew( new DateTime( '1984-02-02' ) );
+		$secondDonation->setIsPublic( true );
+		$entityManager->persist( $secondDonation );
 	}
 }

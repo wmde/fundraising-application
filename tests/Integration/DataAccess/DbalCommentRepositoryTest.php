@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
 
 use DateTime;
 use Doctrine\ORM\EntityManager;
-use WMDE\Fundraising\Entities\Spenden;
+use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\DataAccess\DbalCommentRepository;
 use WMDE\Fundraising\Frontend\Domain\Comment;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
@@ -30,7 +30,7 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	private function getOrmRepository() {
-		return $this->entityManager->getRepository( Spenden::class );
+		return $this->entityManager->getRepository( Donation::class );
 	}
 
 	public function testWhenThereAreNoComments_anEmptyListIsReturned() {
@@ -113,54 +113,54 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	private function persistFirstComment() {
-		$firstSpenden = new Spenden();
-		$firstSpenden->setName( 'First name' );
-		$firstSpenden->setKommentar( 'First comment' );
-		$firstSpenden->setBetrag( '100' );
-		$firstSpenden->setDtNew( new DateTime( '1984-01-01' ) );
-		$firstSpenden->setIsPublic( true );
-		$this->entityManager->persist( $firstSpenden );
+		$firstDonation = new Donation();
+		$firstDonation->setName( 'First name' );
+		$firstDonation->setComment( 'First comment' );
+		$firstDonation->setAmount( '100' );
+		$firstDonation->setDtNew( new DateTime( '1984-01-01' ) );
+		$firstDonation->setIsPublic( true );
+		$this->entityManager->persist( $firstDonation );
 	}
 
 	private function persistSecondComment() {
-		$secondSpenden = new Spenden();
-		$secondSpenden->setName( 'Second name' );
-		$secondSpenden->setKommentar( 'Second comment' );
-		$secondSpenden->setBetrag( '200' );
-		$secondSpenden->setDtNew( new DateTime( '1984-02-02' ) );
-		$secondSpenden->setIsPublic( true );
-		$this->entityManager->persist( $secondSpenden );
+		$secondDonation = new Donation();
+		$secondDonation->setName( 'Second name' );
+		$secondDonation->setComment( 'Second comment' );
+		$secondDonation->setAmount( '200' );
+		$secondDonation->setDtNew( new DateTime( '1984-02-02' ) );
+		$secondDonation->setIsPublic( true );
+		$this->entityManager->persist( $secondDonation );
 	}
 
 	private function persistThirdComment() {
-		$thirdSpenden = new Spenden();
-		$thirdSpenden->setName( 'Third name' );
-		$thirdSpenden->setKommentar( 'Third comment' );
-		$thirdSpenden->setBetrag( '300' );
-		$thirdSpenden->setDtNew( new DateTime( '1984-03-03' ) );
-		$thirdSpenden->setIsPublic( true );
-		$this->entityManager->persist( $thirdSpenden );
+		$thirdDonation = new Donation();
+		$thirdDonation->setName( 'Third name' );
+		$thirdDonation->setComment( 'Third comment' );
+		$thirdDonation->setAmount( '300' );
+		$thirdDonation->setDtNew( new DateTime( '1984-03-03' ) );
+		$thirdDonation->setIsPublic( true );
+		$this->entityManager->persist( $thirdDonation );
 	}
 
 	private function persistPrivateComment() {
-		$privateSpenden = new Spenden();
-		$privateSpenden->setName( 'Private name' );
-		$privateSpenden->setKommentar( 'Private comment' );
-		$privateSpenden->setBetrag( '1337' );
-		$privateSpenden->setDtNew( new DateTime( '1984-12-12' ) );
-		$privateSpenden->setIsPublic( false );
-		$this->entityManager->persist( $privateSpenden );
+		$privateDonation = new Donation();
+		$privateDonation->setName( 'Private name' );
+		$privateDonation->setComment( 'Private comment' );
+		$privateDonation->setAmount( '1337' );
+		$privateDonation->setDtNew( new DateTime( '1984-12-12' ) );
+		$privateDonation->setIsPublic( false );
+		$this->entityManager->persist( $privateDonation );
 	}
 
 	private function persistDeletedComment() {
-		$deletedSpenden = new Spenden();
-		$deletedSpenden->setName( 'Deleted name' );
-		$deletedSpenden->setKommentar( 'Deleted comment' );
-		$deletedSpenden->setBetrag( '31337' );
-		$deletedSpenden->setDtNew( new DateTime( '1984-11-11' ) );
-		$deletedSpenden->setIsPublic( true );
-		$deletedSpenden->setDtDel( new DateTime( '2000-01-01' ) );
-		$this->entityManager->persist( $deletedSpenden );
+		$deletedDonation = new Donation();
+		$deletedDonation->setName( 'Deleted name' );
+		$deletedDonation->setComment( 'Deleted comment' );
+		$deletedDonation->setAmount( '31337' );
+		$deletedDonation->setDtNew( new DateTime( '1984-11-11' ) );
+		$deletedDonation->setIsPublic( true );
+		$deletedDonation->setDtDel( new DateTime( '2000-01-01' ) );
+		$this->entityManager->persist( $deletedDonation );
 	}
 
 	private function getFirstComment() {

@@ -3,10 +3,11 @@
 
 namespace WMDE\Fundraising\Frontend\UseCases\AddSubscription;
 
-use WMDE\Fundraising\Entities\Request;
-use WMDE\Fundraising\Frontend\Domain\RequestRepository;
+use WMDE\Fundraising\Entities\Address;
+use WMDE\Fundraising\Entities\Subscription;
+use WMDE\Fundraising\Frontend\Domain\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
-use WMDE\Fundraising\Frontend\Validation\RequestValidator;
+use WMDE\Fundraising\Frontend\Validation\SubscriptionValidator;
 
 /**
  * @license GNU GPL v2+
@@ -15,43 +16,44 @@ use WMDE\Fundraising\Frontend\Validation\RequestValidator;
 class AddSubscriptionUseCase {
 
 	/**
-	 * @var RequestRepository
+	 * @var SubscriptionRepository
 	 */
 	private $requestRepository;
 
 	private $requestValidator;
 
-	public function __construct( RequestRepository $requestRepository, RequestValidator $requestValidator ) {
+	public function __construct( SubscriptionRepository $requestRepository, SubscriptionValidator $requestValidator ) {
 		$this->requestRepository = $requestRepository;
 		$this->requestValidator = $requestValidator;
 	}
 
 	public function addSubscription( SubscriptionRequest $subscriptionRequest ) {
-		$request = $this->createRequestFromSubscriptionRequest( $subscriptionRequest );
+		$request = $this->createSubscriptionFromRequest( $subscriptionRequest );
 
 		if ( ! $this->requestValidator->validate( $request ) ) {
 			return ValidationResponse::newFailureResponse( $this->requestValidator->getConstraintViolations() );
 		}
-		$this->requestRepository->storeRequest( $request );
+		$this->requestRepository->storeSubscription( $request );
 
 		// TODO send mails
 
 		return ValidationResponse::newSuccessResponse();
 	}
 
-	private function createRequestFromSubscriptionRequest( SubscriptionRequest $subscriptionRequest ): Request {
-		$request = new Request();
-		$request->setAnrede( $subscriptionRequest->getSalutation() );
-		$request->setTitel( $subscriptionRequest->getTitle() );
-		$request->setVorname( $subscriptionRequest->getFirstName() );
-		$request->setNachname( $subscriptionRequest->getLastName() );
+	private function createSubscriptionFromRequest( SubscriptionRequest $subscriptionRequest ): Subscription {
+		$request = new Subscription();
+		$address = new Address();
+		$address->setSalutation( $subscriptionRequest->getSalutation() );
+		$address->setTitle( $subscriptionRequest->getTitle() );
+		$address->setFirstName( $subscriptionRequest->getFirstName() );
+		$address->setLastName( $subscriptionRequest->getLastName() );
+		$address->setAddress( $subscriptionRequest->getAddress() );
+		$address->setPostcode( $subscriptionRequest->getPostcode() );
+		$address->setCity( $subscriptionRequest->getCity() );
+
+		$request->setAddress( $address );
 		$request->setEmail( $subscriptionRequest->getEmail() );
-		$request->setStrasse( $subscriptionRequest->getAddress() );
-		$request->setPlz( $subscriptionRequest->getPostcode() );
-		$request->setOrt( $subscriptionRequest->getCity() );
-		$request->setWikilogin( $subscriptionRequest->getWikilogin() );
-		$request->setGuid( random_bytes( 16 ) ); // No need to use uuid library here
-		$request->setType( Request::TYPE_SUBSCRIPTION );
+		$request->setConfirmationCode( random_bytes( 16 ) ); // No need to use uuid library here
 		return $request;
 	}
 }

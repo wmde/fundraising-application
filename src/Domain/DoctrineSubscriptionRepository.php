@@ -4,14 +4,14 @@
 namespace WMDE\Fundraising\Frontend\Domain;
 
 use Doctrine\DBAL\Connection;
-use WMDE\Fundraising\Entities\Request;
+use WMDE\Fundraising\Entities\Subscription;
 use WMDE\Fundraising\Store\Factory as FundraisingStoreFactory;
 
 /**
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class DoctrineRequestRepository implements RequestRepository {
+class DoctrineSubscriptionRepository implements SubscriptionRepository {
 
 	private $entityManager;
 
@@ -20,8 +20,8 @@ class DoctrineRequestRepository implements RequestRepository {
 		$this->entityManager = $factory->getEntityManager();
 	}
 
-	public function storeRequest( Request $request ) {
-		$this->entityManager->persist( $request );
+	public function storeSubscription( Subscription $subscription ) {
+		$this->entityManager->persist( $subscription );
 	}
 
 }

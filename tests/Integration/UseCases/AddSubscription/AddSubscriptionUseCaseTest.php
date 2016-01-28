@@ -4,9 +4,9 @@
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\AddSubscription;
 
 use PHPUnit_Framework_MockObject_MockObject;
-use WMDE\Fundraising\Entities\Request;
-use WMDE\Fundraising\Frontend\Domain\RequestRepository;
-use WMDE\Fundraising\Frontend\Validation\RequestValidator;
+use WMDE\Fundraising\Entities\Subscription;
+use WMDE\Fundraising\Frontend\Domain\SubscriptionRepository;
+use WMDE\Fundraising\Frontend\Validation\SubscriptionValidator;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\AddSubscriptionUseCase;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\SubscriptionRequest;
 
@@ -21,14 +21,14 @@ class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase
 	private $repo;
 
 	/**
-	 * @var PHPUnit_Framework_MockObject_MockObject|RequestValidator
+	 * @var PHPUnit_Framework_MockObject_MockObject|SubscriptionValidator
 	 */
 	private $validator;
 
 	public function setUp() {
 		parent::setUp();
-		$this->repo = $this->getMock( RequestRepository::class );
-		$this->validator = $this->getMockBuilder( RequestValidator::class )
+		$this->repo = $this->getMock( SubscriptionRepository::class );
+		$this->validator = $this->getMockBuilder( SubscriptionValidator::class )
 			->disableOriginalConstructor()
 			->getMock();
 	}
@@ -53,8 +53,8 @@ class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase
 	public function testGivenValidData_requestWillBeStored() {
 		$this->validator->method( 'validate' )->willReturn( true );
 		$this->repo->expects( $this->once() )
-			->method( 'storeRequest' )
-			->with( $this->isInstanceOf( Request::class ) );
+			->method( 'storeSubscription' )
+			->with( $this->isInstanceOf( Subscription::class ) );
 		$usecase = new AddSubscriptionUseCase( $this->repo, $this->validator );
 		$request = $this->getMock( SubscriptionRequest::class );
 		$usecase->addSubscription( $request );
