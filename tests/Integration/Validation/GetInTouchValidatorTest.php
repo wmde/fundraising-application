@@ -53,7 +53,7 @@ class GetInTouchValidatorTest extends ValidatorTestCase {
 			'I just wanted to say "Hi".'
 		);
 		$this->assertFalse( $validator->validate( $request ) );
-		$this->assertConstraintWasViolated( $validator->getConstraintViolations(), 'Betreff' );
+		$this->assertConstraintWasViolated( $validator->getConstraintViolations(), 'subject' );
 	}
 
 	public function testMessageBodyIsValidated() {
@@ -67,7 +67,7 @@ class GetInTouchValidatorTest extends ValidatorTestCase {
 			''
 		);
 		$this->assertFalse( $validator->validate( $request ) );
-		$this->assertConstraintWasViolated( $validator->getConstraintViolations(), 'kommentar' );
+		$this->assertConstraintWasViolated( $validator->getConstraintViolations(), 'messageBody' );
 	}
 
 }

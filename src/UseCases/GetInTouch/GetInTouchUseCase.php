@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\UseCases\GetInTouch;
 
 use WMDE\Fundraising\Frontend\MailAddress;
 use WMDE\Fundraising\Frontend\Messenger;
+use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 
 /**
@@ -24,20 +25,16 @@ class GetInTouchUseCase {
 		$this->messenger = $messenger;
 	}
 
-	public function processContact( GetInTouchRequest $request ): string {
+	public function processContact( GetInTouchRequest $request ): ValidationResponse {
 		$this->request = $request;
 
 		if ( !$this->validator->validate( $request ) ) {
-			return 'validation failed';
+			return ValidationResponse::newFailureResponse( $this->validator->getConstraintViolations() );
 		}
 
-		try {
-			$this->forwardContactRequest();
-			$this->confirmToUser();
-			return 'request successful';
-		} catch ( \RuntimeException $e ) {
-			return 'mail transmission failed';
-		}
+		$this->forwardContactRequest();
+		$this->confirmToUser();
+		return ValidationResponse::newSuccessResponse();
 	}
 
 	private function forwardContactRequest() {

@@ -135,15 +135,32 @@ $app->post(
 	'contact/get-in-touch',
 	function( Request $request ) use ( $app, $ffFactory ) {
 		$contactFormRequest = new GetInTouchRequest(
-			$request->get( 'Vorname', '' ),
-			$request->get( 'Nachname', '' ),
+			$request->get( 'firstname', '' ),
+			$request->get( 'lastname', '' ),
 			$request->get( 'email', '' ),
-			$request->get( 'Betreff', '' ),
-			$request->get( 'kommentar', '' )
+			$request->get( 'subject', '' ),
+			$request->get( 'messageBody', '' )
 		);
 
-		$contactFormResponse = $ffFactory->newGetInTouchUseCase()->processContact( $contactFormRequest );
-		return $contactFormResponse;
+		try {
+			$contactFormResponse = $ffFactory->newGetInTouchUseCase()->processContact( $contactFormRequest );
+			if ( $contactFormResponse->isSuccessful() ) {
+				return $app->redirect( $app['url_generator']->generate( 'page', [ 'pageName' => 'KontaktBestaetigung' ] ) );
+			}
+			return $ffFactory->newGetInTouchHTMLPresenter()->present( $contactFormResponse, $request->request->all() );
+		} catch ( \RuntimeException $e ) {
+			$ffFactory->getLogger()->error(
+				$e->getMessage(),
+				[
+					'code' => $e->getCode(),
+					'file' => $e->getFile(),
+					'line' => $e->getLine(),
+					'stack_trace' => $e->getTraceAsString()
+				]
+			);
+
+			return $ffFactory->newInternalErrorHTMLPresenter()->present( $e );
+		}
 	}
 );
 
