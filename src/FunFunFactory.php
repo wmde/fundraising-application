@@ -36,6 +36,7 @@ use WMDE\Fundraising\Frontend\Presenters\AddSubscriptionHTMLPresenter;
 use WMDE\Fundraising\Frontend\Presenters\AddSubscriptionJSONPresenter;
 use WMDE\Fundraising\Frontend\Presenters\GetInTouchHTMLPresenter;
 use WMDE\Fundraising\Frontend\Presenters\IbanPresenter;
+use WMDE\Fundraising\Frontend\Presenters\InternalErrorHTMLPresenter;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\Fundraising\Frontend\Validation\MailValidator;
 use WMDE\Fundraising\Frontend\Validation\RequestValidator;
@@ -348,6 +349,10 @@ class FunFunFactory {
 
 	public function getOperatorAddress() {
 		return new MailAddress( $this->config['operator-email'] );
+	}
+
+	public function newInternalErrorHTMLPresenter(): InternalErrorHTMLPresenter {
+		return new InternalErrorHTMLPresenter( $this->getLayoutTemplate( 'Error.twig' ) );
 	}
 
 }

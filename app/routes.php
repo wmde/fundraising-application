@@ -142,12 +142,25 @@ $app->post(
 			$request->get( 'messageBody', '' )
 		);
 
-		$contactFormResponse = $ffFactory->newGetInTouchUseCase()->processContact( $contactFormRequest );
-		if ( $contactFormResponse->isSuccessful() ) {
-			return $app->redirect( $app['url_generator']->generate( 'page', [ 'pageName' => 'KontaktBestaetigung' ] ) );
-		}
-		return $ffFactory->newGetInTouchHTMLPresenter()->present( $contactFormResponse, $request->request->all() );
+		try {
+			$contactFormResponse = $ffFactory->newGetInTouchUseCase()->processContact( $contactFormRequest );
+			if ( $contactFormResponse->isSuccessful() ) {
+				return $app->redirect( $app['url_generator']->generate( 'page', [ 'pageName' => 'KontaktBestaetigung' ] ) );
+			}
+			return $ffFactory->newGetInTouchHTMLPresenter()->present( $contactFormResponse, $request->request->all() );
+		} catch ( \RuntimeException $e ) {
+			$ffFactory->getLogger()->error(
+				$e->getMessage(),
+				[
+					'code' => $e->getCode(),
+					'file' => $e->getFile(),
+					'line' => $e->getLine(),
+					'stack_trace' => $e->getTraceAsString()
+				]
+			);
 
+			return $ffFactory->newInternalErrorHTMLPresenter()->present( $e );
+		}
 	}
 );
 

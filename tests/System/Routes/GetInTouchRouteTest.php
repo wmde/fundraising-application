@@ -81,4 +81,41 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'First Name: Curious', $content );
 	}
 
+	public function testOnException_errorPageIsRendered() {
+		$client = $this->createClient( [], function ( FunFunFactory $factory, array $config ) {
+			$api = $this->getMockBuilder( MediawikiApi::class )->disableOriginalConstructor()->getMock();
+
+			$api->expects( $this->any() )
+				->method( 'postRequest' )
+				->willReturnCallback( new ApiPostRequestHandler() );
+
+			$messenger = $this->getMockBuilder( Messenger::class )
+				->disableOriginalConstructor()
+				->getMock();
+
+			$messenger->expects( $this->any() )
+				->method( 'sendMessage' )
+				->willThrowException( new \RuntimeException( 'Something unexpected happened' ) );
+
+			$factory->setMediaWikiApi( $api );
+			$factory->setMessenger( $messenger );
+		} );
+
+		$client->request(
+			'POST',
+			'/contact/get-in-touch',
+			[
+				'firstname' => 'Some Other',
+				'lastname' => 'Guy',
+				'email' => 'someother@alltheguys.com',
+				'subject' => 'Give me an error page',
+				'messageBody' => 'Let me see if I can raise an exception'
+			]
+		);
+
+		$response = $client->getResponse();
+		$content = $response->getContent();
+
+		$this->assertContains( 'Internal Error: Something unexpected happened', $content );
+	}
 }

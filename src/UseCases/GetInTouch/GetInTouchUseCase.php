@@ -32,13 +32,9 @@ class GetInTouchUseCase {
 			return ValidationResponse::newFailureResponse( $this->validator->getConstraintViolations() );
 		}
 
-		try {
-			$this->forwardContactRequest();
-			$this->confirmToUser();
-			return ValidationResponse::newSuccessResponse();
-		} catch ( \RuntimeException $e ) {
-			return 'mail transmission failed';
-		}
+		$this->forwardContactRequest();
+		$this->confirmToUser();
+		return ValidationResponse::newSuccessResponse();
 	}
 
 	private function forwardContactRequest() {
