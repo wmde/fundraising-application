@@ -16,6 +16,8 @@ use WMDE\Fundraising\Frontend\Presenters\Content\WikiContentProvider;
  */
 class TwigFactory {
 
+	const DEFAULT_TEMPLATE_DIR = 'app/templates';
+
 	private $config;
 
 	public function __construct( array $config ) {
@@ -59,26 +61,43 @@ class TwigFactory {
 		if ( empty( $this->config['loaders']['filesystem'] ) ) {
 			return null;
 		}
-		if ( empty( $this->config['loaders']['filesystem']['template-dir'] ) ) {
-			$templateDir = [ 'app/templates' ];
+		$templateDir = $this->getTemplateDir( $this->config['loaders']['filesystem'] );
+		return new Twig_Loader_Filesystem( $templateDir );
+	}
+
+	/**
+	 * Create an array of absolute template directories from the loader
+	 *
+	 * @param array $config Configuration for the filesystem loader. The key 'template-dir' can be a string or an array.
+	 * @return array
+	 */
+	private function getTemplateDir( $config ): array {
+		if ( empty( $config['template-dir'] ) ) {
+			$templateDir = [ self::DEFAULT_TEMPLATE_DIR ];
 		}
-		elseif( is_string( $this->config['loaders']['filesystem']['template-dir'] ) ) {
-			$templateDir = [ $this->config['loaders']['filesystem']['template-dir'] ];
+		elseif( is_string( $config['template-dir'] ) ) {
+			$templateDir = [ $config['template-dir'] ];
 		}
-		elseif( is_array( $this->config['loaders']['filesystem']['template-dir'] ) ) {
-			$templateDir = $this->config['loaders']['filesystem']['template-dir'];
+		elseif( is_array( $config['template-dir'] ) ) {
+			$templateDir = $config['template-dir'];
 		}
 		else {
-			throw new \RuntimeException( 'wrong template dir type' );
+			throw new \RuntimeException( 'wrong template directory type' );
 		}
 		$appRoot = realpath( __DIR__ . '/..' ) . '/';
-		$templateDir = array_map( function( $dir ) use ( $appRoot ) {
-			if ( strlen( $dir ) == 0 || $dir{0} != '/' ) {
-				return $appRoot . $dir;
-			}
-			return $dir;
-		}, $templateDir );
-		return new Twig_Loader_Filesystem( $templateDir );
+		return $this->convertToAbsolute( $appRoot, $templateDir );
+	}
+
+	private function convertToAbsolute( $root, array $dirs ): array {
+		return array_map(
+			function( $dir ) use ( $root ) {
+				if ( strlen( $dir ) == 0 || $dir{0} != '/' ) {
+					return $root . $dir;
+				}
+				return $dir;
+			},
+			$dirs
+		);
 	}
 
 	public function newArrayLoader() {
