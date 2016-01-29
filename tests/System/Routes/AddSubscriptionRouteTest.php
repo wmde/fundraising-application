@@ -83,15 +83,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenInvalidDataAndNoContentType_routeDisplaysFormPage() {
-		$client = $this->createClient( [], function ( FunFunFactory $factory, array $config ) {
-			$api = $this->getMockBuilder( MediawikiApi::class )->disableOriginalConstructor()->getMock();
-
-			$api->expects( $this->any() )
-				->method( 'postRequest' )
-				->willReturnCallback( new ApiPostRequestHandler() );
-
-			$factory->setMediaWikiApi( $api );
-		} );
+		$client = $this->createClient();
 
 		$client->request(
 			'POST',
@@ -107,7 +99,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'text/html', $contentType, 'Wrong content type: ' . $contentType );
 		$this->assertSame( 1, $errorsFound, 'No error count found in test template' );
 		$this->assertGreaterThan( 0, (int) $errorMatches[1], 'Error list was empty' );
-		$this->assertContains( 'FirstName: Nyan', $content );
+		$this->assertContains( 'First Name: Nyan', $content );
 	}
 
 	public function testGivenInvalidDataAndJSONContentType_routeReturnsSuccessResult() {

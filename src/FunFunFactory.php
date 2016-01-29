@@ -135,8 +135,17 @@ class FunFunFactory {
 			] );
 		} );
 
-		$pimple['twig'] = $pimple->share( function() {
-			return TwigFactory::newFromConfig( $this->config, $this->newWikiContentProvider() );
+		$pimple['twig_factory'] = $pimple->share( function () {
+			return new TwigFactory( $this->config['twig'] );
+		} );
+
+		$pimple['twig'] = $pimple->share( function( $pimple ) {
+			$loaders = array_filter( [
+				$pimple['twig_factory']->newFileSystemLoader(),
+				$pimple['twig_factory']->newArrayLoader(), // This is just a fallback for testing
+				$pimple['twig_factory']->newWikiPageLoader( $this->newWikiContentProvider() ),
+			] );
+			return $pimple['twig_factory']->create( $loaders );
 		} );
 
 		$pimple['logger'] = $pimple->share( function() {

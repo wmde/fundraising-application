@@ -8,7 +8,18 @@
 	"cms-wiki-api-url": "http://cms.wiki/api.php",
 	"cms-wiki-user": "Wiki User",
 	"cms-wiki-password": "Wiki Password",
-	"enable-twig-cache": false,
+	"twig": {
+		"enable-cache": false,
+		"loaders": {
+			"wiki": false,
+			"filesystem": {
+				"template-dir": [
+					"app/templates",
+					"tests/templates"
+				]
+			}
+		}
+	},
 	"operator-email": "email@operatorsownmailserver.com",
 	"operator-displayname": "Friendly Operator"
 }
