@@ -313,7 +313,20 @@ class FunFunFactory {
 	}
 
 	public function newAddSubscriptionUseCase(): AddSubscriptionUseCase {
-		return new AddSubscriptionUseCase( $this->newRequestRepository(), $this->getRequestValidator() );
+		return new AddSubscriptionUseCase(
+			$this->newRequestRepository(),
+			$this->getRequestValidator(),
+			$this->newAddSubscriptionMessenger()
+		);
+	}
+
+	private function newAddSubscriptionMessenger(): TemplatedMessenger {
+		return new TemplatedMessenger(
+			$this->getMessenger(),
+			'Ihre Mitgliedschaft bei Wikimedia Deutschland', // TODO make this translatable
+			new TwigTemplate( $this->getTwig(), 'AddSubscriptionMailExternal.twig' ),
+			new MailAddress( $this->config['mail-recipients']['add-subscription'] )
+		);
 	}
 
 	public function newCheckIbanUseCase(): CheckIbanUseCase {

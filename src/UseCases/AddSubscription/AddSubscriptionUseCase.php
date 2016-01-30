@@ -6,7 +6,9 @@ namespace WMDE\Fundraising\Frontend\UseCases\AddSubscription;
 use WMDE\Fundraising\Entities\Address;
 use WMDE\Fundraising\Entities\Subscription;
 use WMDE\Fundraising\Frontend\Domain\SubscriptionRepository;
+use WMDE\Fundraising\Frontend\MailAddress;
 use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
+use WMDE\Fundraising\Frontend\TemplatedMessenger;
 use WMDE\Fundraising\Frontend\Validation\SubscriptionValidator;
 
 /**
@@ -18,24 +20,35 @@ class AddSubscriptionUseCase {
 	/**
 	 * @var SubscriptionRepository
 	 */
-	private $requestRepository;
+	private $subscriptionRepository;
 
-	private $requestValidator;
+	private $subscriptionValidator;
 
-	public function __construct( SubscriptionRepository $requestRepository, SubscriptionValidator $requestValidator ) {
-		$this->requestRepository = $requestRepository;
-		$this->requestValidator = $requestValidator;
+	private $messenger;
+
+	public function __construct( SubscriptionRepository $subscriptionRepository, SubscriptionValidator $subscriptionValidator,
+								 TemplatedMessenger $messenger  ) {
+
+		$this->subscriptionRepository = $subscriptionRepository;
+		$this->subscriptionValidator = $subscriptionValidator;
+		$this->messenger = $messenger;
 	}
 
 	public function addSubscription( SubscriptionRequest $subscriptionRequest ) {
-		$request = $this->createSubscriptionFromRequest( $subscriptionRequest );
+		$subscription = $this->createSubscriptionFromRequest( $subscriptionRequest );
 
-		if ( ! $this->requestValidator->validate( $request ) ) {
-			return ValidationResponse::newFailureResponse( $this->requestValidator->getConstraintViolations() );
+		if ( ! $this->subscriptionValidator->validate( $subscription ) ) {
+			return ValidationResponse::newFailureResponse( $this->subscriptionValidator->getConstraintViolations() );
 		}
-		$this->requestRepository->storeSubscription( $request );
+		$this->subscriptionRepository->storeSubscription( $subscription );
 
-		// TODO send mails
+		$postalAddress = $subscription->getAddress();
+		$this->messenger->sendMessage( [ 'subscription' => $subscription ],
+			new MailAddress(
+				$subscription->getEmail(),
+				implode( ' ', [ $postalAddress->getFirstName(), $postalAddress->getLastName() ] )
+			)
+		);
 
 		return ValidationResponse::newSuccessResponse();
 	}

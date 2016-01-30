@@ -21,5 +21,9 @@
 		}
 	},
 	"operator-email": "email@operatorsownmailserver.com",
-	"operator-displayname": "Friendly Operator"
+	"operator-displayname": "Friendly Operator",
+	"mail-recipients": {
+		"add-subscription": "email@operatorsownmailserver.com",
+		"get-in-touch": "email@operatorsownmailserver.com"
+	}
 }
