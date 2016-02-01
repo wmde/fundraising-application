@@ -26,8 +26,8 @@ class Messenger {
 		$this->operatorName = $operatorName;
 	}
 
-	public function sendMessage( string $subject, string $body, MailAddress $recipient, MailAddress $replyTo = null ) {
-		$message = Swift_Message::newInstance( $subject, $body );
+	public function sendMessage( Message $messageContent, MailAddress $recipient, MailAddress $replyTo = null ) {
+		$message = Swift_Message::newInstance( $messageContent->getSubject(), $messageContent->getMessageBody() );
 		$message->setFrom( $this->operatorAddress->getFullAddress(), $this->operatorName );
 		$message->setTo( $recipient->getFullAddress() );
 		if ( $replyTo ) {
@@ -40,4 +40,7 @@ class Messenger {
 		}
 	}
 
+	public function getOperatorAddress() {
+		return $this->operatorAddress;
+	}
 }

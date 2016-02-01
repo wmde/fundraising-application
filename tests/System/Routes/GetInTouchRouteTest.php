@@ -7,7 +7,9 @@ namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 use Mediawiki\Api\MediawikiApi;
 use Swift_NullTransport;
 use WMDE\Fundraising\Frontend\FunFunFactory;
+use WMDE\Fundraising\Frontend\MailAddress;
 use WMDE\Fundraising\Frontend\Messenger;
+use WMDE\Fundraising\Frontend\SimpleMessage;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ApiPostRequestHandler;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
 
@@ -78,6 +80,9 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 			$messenger = $this->getMockBuilder( Messenger::class )
 				->disableOriginalConstructor()
 				->getMock();
+
+			$messenger->method( 'getOperatorAddress' )
+				->willReturn( new MailAddress( 'just.some@email.address' ) );
 
 			$messenger->expects( $this->any() )
 				->method( 'sendMessage' )

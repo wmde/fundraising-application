@@ -3,6 +3,7 @@
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit;
 
+use WMDE\Fundraising\Frontend\TemplatedMessage;
 use WMDE\Fundraising\Frontend\TemplatedMessenger;
 use WMDE\Fundraising\Frontend\Messenger;
 use WMDE\Fundraising\Frontend\TwigTemplate;
@@ -19,7 +20,7 @@ class TemplatedMessengerTest extends \PHPUnit_Framework_TestCase {
 		$template->method( 'render' )->willReturn( 'Pink fluffy unicorns dancing on rainbows' );
 		$messenger->expects( $this->once() )
 			->method( 'sendMessage' )
-			->with( 'Important unicorn update', 'Pink fluffy unicorns dancing on rainbows', $recipient, $replyTo );
+			->with( new TemplatedMessage( 'Important unicorn update', $template, $recipient, $replyTo ) );
 		$templatedMessenger->sendMessage( [], $recipient, $replyTo );
 	}
 }

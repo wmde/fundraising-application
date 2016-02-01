@@ -17,6 +17,9 @@
 					"app/templates",
 					"tests/templates"
 				]
+			},
+			"array": {
+				"KontaktMailExtern.twig": "this is just a test template"
 			}
 		}
 	},

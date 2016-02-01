@@ -20,9 +20,10 @@ class TemplatedMessenger {
 	}
 
 	public function sendMessage( array $templateData, MailAddress $recipient, MailAddress $replyTo = null ) {
+		$message = new TemplatedMessage( $this->subject, $this->bodyTemplate );
+		$message->setTemplateParams( $templateData );
 		$this->messenger->sendMessage(
-			$this->subject,
-			$this->bodyTemplate->render( $templateData ),
+			$message,
 			$recipient,
 			$replyTo
 		);

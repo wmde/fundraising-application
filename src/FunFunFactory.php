@@ -353,7 +353,7 @@ class FunFunFactory {
 	}
 
 	public function newGetInTouchUseCase() {
-		return new GetInTouchUseCase( $this->getContactValidator(), $this->getMessenger() );
+		return new GetInTouchUseCase( $this->getContactValidator(), $this->getMessenger(), $this->getContactConfirmationMessage() );
 	}
 
 	private function getContactValidator(): GetInTouchValidator {
@@ -374,6 +374,13 @@ class FunFunFactory {
 
 	public function newInternalErrorHTMLPresenter(): InternalErrorHTMLPresenter {
 		return new InternalErrorHTMLPresenter( $this->getLayoutTemplate( 'Error.twig' ) );
+	}
+
+	private function getContactConfirmationMessage() {
+		return new TemplatedMessage(
+			'Ihre Anfrage an Wikimedia', // TODO make this translatable
+			new TwigTemplate( $this->getTwig(), 'GetInTouchConfirmation.twig' )
+		);
 	}
 
 }
