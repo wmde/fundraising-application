@@ -324,8 +324,7 @@ class FunFunFactory {
 		return new TemplatedMessenger(
 			$this->getMessenger(),
 			'Ihre Mitgliedschaft bei Wikimedia Deutschland', // TODO make this translatable
-			new TwigTemplate( $this->getTwig(), 'AddSubscriptionMailExternal.twig' ),
-			new MailAddress( $this->config['mail-recipients']['add-subscription'] )
+			new TwigTemplate( $this->getTwig(), 'AddSubscriptionMailExternal.twig' )
 		);
 	}
 

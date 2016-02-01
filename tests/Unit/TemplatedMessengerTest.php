@@ -20,6 +20,6 @@ class TemplatedMessengerTest extends \PHPUnit_Framework_TestCase {
 		$messenger->expects( $this->once() )
 			->method( 'sendMessage' )
 			->with( 'Important unicorn update', 'Pink fluffy unicorns dancing on rainbows', $recipient, $replyTo );
-		$templatedMessenger->sendMessage( [], $replyTo );
+		$templatedMessenger->sendMessage( [], $recipient, $replyTo );
 	}
 }
