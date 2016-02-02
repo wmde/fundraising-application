@@ -7,6 +7,8 @@ namespace WMDE\Fundraising\Frontend\UseCases\GetInTouch;
 use WMDE\Fundraising\Frontend\MailAddress;
 use WMDE\Fundraising\Frontend\Messenger;
 use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
+use WMDE\Fundraising\Frontend\SimpleMessage;
+use WMDE\Fundraising\Frontend\TemplatedMessage;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 
 /**
@@ -17,12 +19,14 @@ class GetInTouchUseCase {
 
 	private $validator;
 	private $messenger;
+	private $confirmationMessage;
 	/** @var GetInTouchRequest */
 	private $request;
 
-	public function __construct( GetInTouchValidator $validator, Messenger $messenger ) {
+	public function __construct( GetInTouchValidator $validator, Messenger $messenger, TemplatedMessage $confirmationMessage ) {
 		$this->validator = $validator;
 		$this->messenger = $messenger;
+		$this->confirmationMessage = $confirmationMessage;
 	}
 
 	public function processContact( GetInTouchRequest $request ): ValidationResponse {
@@ -38,10 +42,11 @@ class GetInTouchUseCase {
 	}
 
 	private function forwardContactRequest() {
-		$this->messenger->sendMessage(
-			$this->request->getSubject(),
-			$this->request->getMessageBody(),
-			new MailAddress( 'kai.nissen@wikimedia.de' ),
+		$this->messenger->sendMessageToOperator(
+			new SimpleMessage(
+				$this->request->getSubject(),
+				$this->request->getMessageBody()
+			),
 			new MailAddress(
 				$this->request->getEmailAddress(),
 				implode( ' ', [ $this->request->getFirstName(), $this->request->getLastName() ] )
@@ -50,9 +55,8 @@ class GetInTouchUseCase {
 	}
 
 	private function confirmToUser() {
-		$this->messenger->sendMessage(
-			'TODO',
-			'fetch from CMW',
+		$this->messenger->sendMessageToUser(
+			$this->confirmationMessage,
 			new MailAddress( $this->request->getEmailAddress() )
 		);
 	}

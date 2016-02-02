@@ -316,16 +316,15 @@ class FunFunFactory {
 		return new AddSubscriptionUseCase(
 			$this->newRequestRepository(),
 			$this->getRequestValidator(),
-			$this->newAddSubscriptionMessenger()
+			$this->getMessenger(),
+			$this->newAddSubscriptionMessage()
 		);
 	}
 
-	private function newAddSubscriptionMessenger(): TemplatedMessenger {
-		return new TemplatedMessenger(
-			$this->getMessenger(),
+	private function newAddSubscriptionMessage(): TemplatedMessage {
+		return new TemplatedMessage(
 			'Ihre Mitgliedschaft bei Wikimedia Deutschland', // TODO make this translatable
-			new TwigTemplate( $this->getTwig(), 'AddSubscriptionMailExternal.twig' ),
-			new MailAddress( $this->config['mail-recipients']['add-subscription'] )
+			new TwigTemplate( $this->getTwig(), 'AddSubscriptionMailExternal.twig' )
 		);
 	}
 
@@ -354,7 +353,11 @@ class FunFunFactory {
 	}
 
 	public function newGetInTouchUseCase() {
-		return new GetInTouchUseCase( $this->getContactValidator(), $this->getMessenger() );
+		return new GetInTouchUseCase(
+			$this->getContactValidator(),
+			$this->getMessenger(),
+			$this->getContactConfirmationMessage()
+		);
 	}
 
 	private function getContactValidator(): GetInTouchValidator {
@@ -375,6 +378,13 @@ class FunFunFactory {
 
 	public function newInternalErrorHTMLPresenter(): InternalErrorHTMLPresenter {
 		return new InternalErrorHTMLPresenter( $this->getLayoutTemplate( 'Error.twig' ) );
+	}
+
+	private function getContactConfirmationMessage() {
+		return new TemplatedMessage(
+			'Ihre Anfrage an Wikimedia', // TODO make this translatable
+			new TwigTemplate( $this->getTwig(), 'GetInTouchConfirmation.twig' )
+		);
 	}
 
 }

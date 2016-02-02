@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace WMDE\Fundraising\Frontend;
 
 use Swift_Message;
-use Swift_Mime_Message;
 use Swift_Transport;
 
 /**
@@ -26,14 +25,27 @@ class Messenger {
 		$this->operatorName = $operatorName;
 	}
 
-	public function sendMessage( string $subject, string $body, MailAddress $recipient, MailAddress $replyTo = null ) {
-		$message = Swift_Message::newInstance( $subject, $body );
+	public function sendMessageToUser( Message $messageContent, MailAddress $recipient ) {
+		$this->sendMessage( $this->createMessage( $messageContent, $recipient ) );
+	}
+
+	public function sendMessageToOperator( Message $messageContent, MailAddress $replyTo = null ) {
+		$this->sendMessage( $this->createMessage( $messageContent, $this->operatorAddress, $replyTo ) );
+	}
+
+	private function createMessage( Message $messageContent, MailAddress $recipient,
+									MailAddress $replyTo = null ): Swift_Message {
+		$message = Swift_Message::newInstance( $messageContent->getSubject(), $messageContent->getMessageBody() );
 		$message->setFrom( $this->operatorAddress->getFullAddress(), $this->operatorName );
 		$message->setTo( $recipient->getFullAddress() );
 		if ( $replyTo ) {
 			$message->setReplyTo( $replyTo->getFullAddress() );
 		}
 
+		return $message;
+	}
+
+	private function sendMessage( Swift_Message $message ) {
 		$deliveryCount = $this->mailTransport->send( $message );
 		if ( $deliveryCount === 0 ) {
 			throw new \RuntimeException( 'Message delivery failed' );

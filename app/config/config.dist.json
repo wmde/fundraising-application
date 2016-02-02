@@ -30,9 +30,5 @@
 		"no-js-notice": "JavaScript-Notice"
 	},
 	"operator-email": "",
-	"operator-displayname": "",
-	"mail-recipients": {
-		"add-subscription": "",
-		"get-in-touch": ""
-	}
+	"operator-displayname": ""
 }
