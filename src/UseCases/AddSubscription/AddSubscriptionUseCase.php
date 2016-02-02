@@ -46,7 +46,7 @@ class AddSubscriptionUseCase {
 
 		$postalAddress = $subscription->getAddress();
 		$this->message->setTemplateParams( [ 'subscription' => $subscription ] );
-		$this->messenger->sendMessage( $this->message,
+		$this->messenger->sendMessageToUser( $this->message,
 			new MailAddress(
 				$subscription->getEmail(),
 				implode( ' ', [ $postalAddress->getFirstName(), $postalAddress->getLastName() ] )

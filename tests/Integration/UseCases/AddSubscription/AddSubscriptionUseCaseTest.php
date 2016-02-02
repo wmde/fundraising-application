@@ -89,7 +89,7 @@ class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase
 	public function testGivenValidData_requestWillBeMailed() {
 		$this->validator->method( 'validate' )->willReturn( true );
 		$this->messenger->expects( $this->once() )
-			->method( 'sendMessage' )
+			->method( 'sendMessageToUser' )
 			->with( $this->isInstanceOf( TemplatedMessage::class ),
 				$this->isInstanceOf( MailAddress::class )
 			);
@@ -100,7 +100,7 @@ class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase
 	public function testGivenInvalidData_requestWillNotBeMailed() {
 		$this->validator->method( 'validate' )->willReturn( false );
 		$this->validator->method( 'getConstraintViolations' )->willReturn( [] );
-		$this->messenger->expects( $this->never() )->method( 'sendMessage' );
+		$this->messenger->expects( $this->never() )->method( 'sendMessageToUser' );
 		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->messenger, $this->message );
 		$request = $this->getMock( SubscriptionRequest::class );
 		$useCase->addSubscription( $request );

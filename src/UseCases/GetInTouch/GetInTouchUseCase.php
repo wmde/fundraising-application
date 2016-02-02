@@ -55,7 +55,7 @@ class GetInTouchUseCase {
 	}
 
 	private function confirmToUser() {
-		$this->messenger->sendMessage(
+		$this->messenger->sendMessageToUser(
 			$this->confirmationMessage,
 			new MailAddress( $this->request->getEmailAddress() )
 		);

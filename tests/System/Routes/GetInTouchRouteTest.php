@@ -85,7 +85,7 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 				->willReturn( new MailAddress( 'just.some@email.address' ) );
 
 			$messenger->expects( $this->any() )
-				->method( 'sendMessage' )
+				->method( 'sendMessageToUser' )
 				->willThrowException( new \RuntimeException( 'Something unexpected happened' ) );
 
 			$factory->setMessenger( $messenger );
