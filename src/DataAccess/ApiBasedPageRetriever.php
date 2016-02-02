@@ -28,14 +28,24 @@ class ApiBasedPageRetriever implements PageRetriever {
 		$this->logger = $logger;
 	}
 
-	public function fetchPage( string $pageTitle ): string {
+	public function fetchPage( string $pageTitle, string $action = 'render' ): string {
 		$this->logger->debug( __METHOD__ . ': pageTitle', [ $pageTitle ] );
 
 		if ( !$this->api->isLoggedin() ) {
 			$this->doLogin();
 		}
 
-		$content = $this->retrieveRenderedPage( $pageTitle );
+		$content = false;
+		switch ( $action ) {
+			case 'raw':
+				$content = $this->retrieveWikiText( $pageTitle );
+				break;
+			case 'render':
+				$content = $this->retrieveRenderedPage( $pageTitle );
+				break;
+			default:
+				break;
+		}
 
 		if ( $content === false || $content === null ) {
 			$this->logger->debug( __METHOD__ . ': fail, got non-value', [ $content ] );
@@ -62,6 +72,25 @@ class ApiBasedPageRetriever implements PageRetriever {
 		}
 
 		return $response['parse']['text']['*'];
+	}
+
+	private function retrieveWikiText( $pageTitle ) {
+		$params = [
+			'titles' => $pageTitle,
+			'prop' => 'revisions',
+			'rvprop' => 'content'
+		];
+
+		try {
+			$response = $this->api->postRequest( new SimpleRequest( 'query', $params ) );
+			if ( !is_array( $response['query']['pages'] ) ) {
+				return false;
+			}
+			$page = reset( $response['query']['pages'] );
+			return $page['revisions'][0]['*'];
+		} catch ( UsageException $e ) {
+			return false;
+		}
 	}
 
 }

@@ -23,7 +23,7 @@ class LocalFilePageRetriever implements PageRetriever {
 		$this->fetcher = $fetcher;
 	}
 
-	public function fetchPage( string $filename ): string {
+	public function fetchPage( string $filename, string $fetchMode = '' ): string {
 		$this->logger->debug( __METHOD__ . ': wiki_page', [ $filename ] );
 
 		try {

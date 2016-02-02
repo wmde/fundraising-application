@@ -58,4 +58,27 @@ class TwigPageLoaderTest extends \PHPUnit_Framework_TestCase {
 		$loader = new TwigPageLoader( $pageRetriever );
 		$loader->isFresh( 'Felis silvestris', 0 );
 	}
+
+	public function testPageTitleConfiguredAsRawContent_pageRetrieverFetchesInRawMode() {
+		$pageRetriever = $this->getMockBuilder( WikiContentProvider::class )->disableOriginalConstructor()->getMock();
+		$pageRetriever->method( 'getContent' )->willReturn( 'template text' );
+		$pageRetriever->expects( $this->once() )
+			->method( 'getContent' )
+			->with( 'FetchMeInRawMode', 'raw' );
+
+		$loader = new TwigPageLoader( $pageRetriever, [ 'FetchMeInRawMode' ] );
+		$loader->getSource( 'FetchMeInRawMode' );
+	}
+
+	public function testPageTitleNotConfiguredAsRawContent_pageRetrieverFetchesInRenderMode() {
+		$pageRetriever = $this->getMockBuilder( WikiContentProvider::class )->disableOriginalConstructor()->getMock();
+		$pageRetriever->method( 'getContent' )->willReturn( 'template text' );
+		$pageRetriever->expects( $this->once() )
+			->method( 'getContent' )
+			->with( 'FetchMeInRenderMode', 'render' );
+
+		$loader = new TwigPageLoader( $pageRetriever, [ 'FetchMeInRawMode' ] );
+		$loader->getSource( 'FetchMeInRenderMode' );
+	}
+
 }

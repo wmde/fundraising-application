@@ -51,10 +51,10 @@ class TwigFactory {
 	}
 
 	public function newWikiPageLoader( WikiContentProvider $provider ) {
-		if ( empty( $this->config['loaders']['wiki'] ) ) {
+		if ( !$this->config['loaders']['wiki']['enabled'] ) {
 			return null;
 		}
-		return new TwigPageLoader( $provider );
+		return new TwigPageLoader( $provider, $this->config['loaders']['wiki']['rawpages'] ?? [] );
 	}
 
 	public function newFileSystemLoader() {

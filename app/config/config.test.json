@@ -11,7 +11,9 @@
 	"twig": {
 		"enable-cache": false,
 		"loaders": {
-			"wiki": false,
+			"wiki": {
+				"enabled": false
+			},
 			"filesystem": {
 				"template-dir": [
 					"app/templates",
