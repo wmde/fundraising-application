@@ -41,18 +41,7 @@ class ApiBasedPageRetriever implements PageRetriever {
 			$this->doLogin();
 		}
 
-		$content = false;
-		switch ( $action ) {
-			case 'raw':
-				$content = $this->retrieveWikiText( $pageTitle );
-				break;
-			case 'render':
-				$content = $this->retrieveRenderedPage( $pageTitle );
-				break;
-			default:
-				throw new \RuntimeException( 'Action "' . $action . '" not supported' );
-				break;
-		}
+		$content = $this->retrieveContent( $pageTitle, $action );
 
 		if ( $content === false || $content === null ) {
 			$this->logger->debug( __METHOD__ . ': fail, got non-value', [ $content ] );
@@ -64,6 +53,25 @@ class ApiBasedPageRetriever implements PageRetriever {
 
 	private function doLogin() {
 		$this->api->login( $this->apiUser );
+	}
+
+	/**
+	 * @param string $pageTitle
+	 * @param string $action
+	 * @return string|bool retrieved content or false on error
+	 */
+	private function retrieveContent( string $pageTitle, string $action ) {
+		switch ( $action ) {
+			case 'raw':
+				return $this->retrieveWikiText( $pageTitle );
+				break;
+			case 'render':
+				return $this->retrieveRenderedPage( $pageTitle );
+				break;
+			default:
+				throw new \RuntimeException( 'Action "' . $action . '" not supported' );
+				break;
+		}
 	}
 
 	private function retrieveRenderedPage( $pageTitle ) {
@@ -90,14 +98,16 @@ class ApiBasedPageRetriever implements PageRetriever {
 
 		try {
 			$response = $this->api->postRequest( new SimpleRequest( 'query', $params ) );
-			if ( !is_array( $response['query']['pages'] ) ) {
-				return false;
-			}
-			$page = reset( $response['query']['pages'] );
-			return $page['revisions'][0]['*'];
 		} catch ( UsageException $e ) {
 			return false;
 		}
+
+		if ( !is_array( $response['query']['pages'] ) ) {
+			return false;
+		}
+		$page = reset( $response['query']['pages'] );
+
+		return $page['revisions'][0]['*'];
 	}
 
 }
