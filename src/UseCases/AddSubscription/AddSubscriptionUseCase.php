@@ -5,6 +5,7 @@ namespace WMDE\Fundraising\Frontend\UseCases\AddSubscription;
 
 use WMDE\Fundraising\Entities\Address;
 use WMDE\Fundraising\Entities\Subscription;
+use WMDE\Fundraising\Frontend\ConfirmationCodeConverter;
 use WMDE\Fundraising\Frontend\Domain\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\MailAddress;
 use WMDE\Fundraising\Frontend\Messenger;
@@ -45,7 +46,12 @@ class AddSubscriptionUseCase {
 		$this->subscriptionRepository->storeSubscription( $subscription );
 
 		$postalAddress = $subscription->getAddress();
-		$this->message->setTemplateParams( [ 'subscription' => $subscription ] );
+		$confirmationCodeConverter = new ConfirmationCodeConverter();
+		$confirmationCode = $confirmationCodeConverter->fromBinaryToReadable( $subscription->getConfirmationCode() );
+		$this->message->setTemplateParams( [
+			'subscription' => $subscription,
+			'confirmation_code' => $confirmationCode
+		] );
 		$this->messenger->sendMessageToUser( $this->message,
 			new MailAddress(
 				$subscription->getEmail(),
