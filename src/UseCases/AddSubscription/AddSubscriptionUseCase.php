@@ -7,8 +7,9 @@ use WMDE\Fundraising\Entities\Address;
 use WMDE\Fundraising\Entities\Subscription;
 use WMDE\Fundraising\Frontend\Domain\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\MailAddress;
+use WMDE\Fundraising\Frontend\Messenger;
 use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
-use WMDE\Fundraising\Frontend\TemplatedMessenger;
+use WMDE\Fundraising\Frontend\TemplatedMessage;
 use WMDE\Fundraising\Frontend\Validation\SubscriptionValidator;
 
 /**
@@ -27,11 +28,12 @@ class AddSubscriptionUseCase {
 	private $messenger;
 
 	public function __construct( SubscriptionRepository $subscriptionRepository, SubscriptionValidator $subscriptionValidator,
-								 TemplatedMessenger $messenger  ) {
+								 Messenger $messenger, TemplatedMessage $message ) {
 
 		$this->subscriptionRepository = $subscriptionRepository;
 		$this->subscriptionValidator = $subscriptionValidator;
 		$this->messenger = $messenger;
+		$this->message = $message;
 	}
 
 	public function addSubscription( SubscriptionRequest $subscriptionRequest ) {
@@ -43,7 +45,8 @@ class AddSubscriptionUseCase {
 		$this->subscriptionRepository->storeSubscription( $subscription );
 
 		$postalAddress = $subscription->getAddress();
-		$this->messenger->sendMessage( [ 'subscription' => $subscription ],
+		$this->message->setTemplateParams( [ 'subscription' => $subscription ] );
+		$this->messenger->sendMessage( $this->message,
 			new MailAddress(
 				$subscription->getEmail(),
 				implode( ' ', [ $postalAddress->getFirstName(), $postalAddress->getLastName() ] )

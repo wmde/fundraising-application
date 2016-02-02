@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace WMDE\Fundraising\Frontend;
 
 use Swift_Message;
-use Swift_Mime_Message;
 use Swift_Transport;
 
 /**
@@ -26,10 +25,21 @@ class Messenger {
 		$this->operatorName = $operatorName;
 	}
 
-	public function sendMessage( Message $messageContent, MailAddress $recipient, MailAddress $replyTo = null ) {
+	public function sendMessage( Message $messageContent, MailAddress $recipient ) {
 		$message = Swift_Message::newInstance( $messageContent->getSubject(), $messageContent->getMessageBody() );
 		$message->setFrom( $this->operatorAddress->getFullAddress(), $this->operatorName );
 		$message->setTo( $recipient->getFullAddress() );
+
+		$deliveryCount = $this->mailTransport->send( $message );
+		if ( $deliveryCount === 0 ) {
+			throw new \RuntimeException( 'Message delivery failed' );
+		}
+	}
+
+	public function sendMessageToOperator( Message $messageContent, MailAddress $replyTo = null ) {
+		$message = Swift_Message::newInstance( $messageContent->getSubject(), $messageContent->getMessageBody() );
+		$message->setFrom( $this->operatorAddress->getFullAddress(), $this->operatorName );
+		$message->setTo( $this->operatorAddress->getFullAddress() );
 		if ( $replyTo ) {
 			$message->setReplyTo( $replyTo->getFullAddress() );
 		}
@@ -40,7 +50,4 @@ class Messenger {
 		}
 	}
 
-	public function getOperatorAddress() {
-		return $this->operatorAddress;
-	}
 }

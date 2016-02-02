@@ -42,12 +42,11 @@ class GetInTouchUseCase {
 	}
 
 	private function forwardContactRequest() {
-		$this->messenger->sendMessage(
+		$this->messenger->sendMessageToOperator(
 			new SimpleMessage(
 				$this->request->getSubject(),
 				$this->request->getMessageBody()
 			),
-			$this->messenger->getOperatorAddress(),
 			new MailAddress(
 				$this->request->getEmailAddress(),
 				implode( ' ', [ $this->request->getFirstName(), $this->request->getLastName() ] )

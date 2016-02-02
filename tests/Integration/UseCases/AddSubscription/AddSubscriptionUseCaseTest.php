@@ -6,10 +6,11 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\AddSubscription;
 use PHPUnit_Framework_MockObject_MockObject;
 use WMDE\Fundraising\Entities\Subscription;
 use WMDE\Fundraising\Frontend\Domain\SubscriptionRepository;
+use WMDE\Fundraising\Frontend\Messenger;
+use WMDE\Fundraising\Frontend\TemplatedMessage;
 use WMDE\Fundraising\Frontend\Validation\SubscriptionValidator;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\AddSubscriptionUseCase;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\SubscriptionRequest;
-use WMDE\Fundraising\Frontend\TemplatedMessenger;
 use WMDE\Fundraising\Frontend\MailAddress;
 
 /**
@@ -29,13 +30,18 @@ class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase
 
 	private $messenger;
 
+	private $message;
+
 	public function setUp() {
 		parent::setUp();
 		$this->repo = $this->getMock( SubscriptionRepository::class );
 		$this->validator = $this->getMockBuilder( SubscriptionValidator::class )
 			->disableOriginalConstructor()
 			->getMock();
-		$this->messenger = $this->getMockBuilder( TemplatedMessenger::class )
+		$this->messenger = $this->getMockBuilder( Messenger::class )
+			->disableOriginalConstructor()
+			->getMock();
+		$this->message = $this->getMockBuilder( TemplatedMessage::class )
 			->disableOriginalConstructor()
 			->getMock();
 	}
@@ -48,7 +54,7 @@ class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase
 
 	public function testGivenValidData_aSuccessResponseIsCreated() {
 		$this->validator->method( 'validate' )->willReturn( true );
-		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->messenger );
+		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->messenger, $this->message );
 		$result = $useCase->addSubscription( $this->createValidSubscriptionRequest() );
 		$this->assertTrue( $result->isSuccessful() );
 	}
@@ -56,7 +62,7 @@ class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase
 	public function testGivenInvalidData_anErrorResponseTypeIsCreated() {
 		$this->validator->method( 'validate' )->willReturn( false );
 		$this->validator->method( 'getConstraintViolations' )->willReturn( [ 'dummyConstraintViolation' ] );
-		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->messenger );
+		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->messenger, $this->message );
 		$request = $this->getMock( SubscriptionRequest::class );
 		$result = $useCase->addSubscription( $request );
 		$this->assertFalse( $result->isSuccessful() );
@@ -67,7 +73,7 @@ class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase
 		$this->repo->expects( $this->once() )
 			->method( 'storeSubscription' )
 			->with( $this->isInstanceOf( Subscription::class ) );
-		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->messenger );
+		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->messenger, $this->message );
 		$useCase->addSubscription( $this->createValidSubscriptionRequest() );
 	}
 
@@ -75,7 +81,7 @@ class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase
 		$this->validator->method( 'validate' )->willReturn( false );
 		$this->validator->method( 'getConstraintViolations' )->willReturn( [] );
 		$this->repo->expects( $this->never() )->method( 'storeSubscription' );
-		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->messenger );
+		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->messenger, $this->message );
 		$request = $this->getMock( SubscriptionRequest::class );
 		$useCase->addSubscription( $request );
 	}
@@ -84,13 +90,10 @@ class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase
 		$this->validator->method( 'validate' )->willReturn( true );
 		$this->messenger->expects( $this->once() )
 			->method( 'sendMessage' )
-			->with(
-				$this->callback( function( $templateData ) {
-					return ($templateData['subscription'] instanceof Subscription );
-				} ),
+			->with( $this->isInstanceOf( TemplatedMessage::class ),
 				$this->isInstanceOf( MailAddress::class )
 			);
-		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->messenger );
+		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->messenger, $this->message );
 		$useCase->addSubscription( $this->createValidSubscriptionRequest() );
 	}
 
@@ -98,7 +101,7 @@ class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase
 		$this->validator->method( 'validate' )->willReturn( false );
 		$this->validator->method( 'getConstraintViolations' )->willReturn( [] );
 		$this->messenger->expects( $this->never() )->method( 'sendMessage' );
-		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->messenger );
+		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->messenger, $this->message );
 		$request = $this->getMock( SubscriptionRequest::class );
 		$useCase->addSubscription( $request );
 	}
