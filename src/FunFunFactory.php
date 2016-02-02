@@ -27,7 +27,7 @@ use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\DataAccess\DbalCommentRepository;
 use WMDE\Fundraising\Frontend\DataAccess\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\Domain\CommentRepository;
-use WMDE\Fundraising\Frontend\DataAccess\DoctrineSubscriptionRepository;
+use WMDE\Fundraising\Frontend\DataAccess\DbalSubscriptionRepository;
 use WMDE\Fundraising\Frontend\Domain\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListJsonPresenter;
@@ -43,6 +43,7 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\InternalErrorHTMLPresenter
 use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationUseCase;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\Fundraising\Frontend\Validation\MailValidator;
+use WMDE\Fundraising\Frontend\Validation\SubscriptionDuplicateValidator;
 use WMDE\Fundraising\Frontend\Validation\SubscriptionValidator;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\AddSubscriptionUseCase;
 use WMDE\Fundraising\Frontend\DataAccess\ApiBasedPageRetriever;
@@ -100,7 +101,7 @@ class FunFunFactory {
 		} );
 
 		$pimple['subscription_repository'] = $pimple->share( function() {
-			return new DoctrineSubscriptionRepository( $this->getConnection() );
+			return new DbalSubscriptionRepository( $this->getEntityManager() );
 		} );
 
 		$pimple['comment_repository'] = $pimple->share( function() {
@@ -112,7 +113,11 @@ class FunFunFactory {
 		} );
 
 		$pimple['subscription_validator'] = $pimple->share( function() {
-			return new SubscriptionValidator( $this->getMailValidator(), $this->getTextPolicyValidator( 'fields' ) );
+			return new SubscriptionValidator(
+					$this->getMailValidator(),
+					$this->getTextPolicyValidator( 'fields' ),
+					$this->newSubscriptionDuplicateValidator()
+			);
 		} );
 
 		$pimple['contact_validator'] = $pimple->share( function() {
@@ -239,7 +244,7 @@ class FunFunFactory {
 		return $this->pimple['comment_repository'];
 	}
 
-	private function newSubscriptionRepository(): SubscriptionRepository {
+	private function getSubscriptionRepository(): SubscriptionRepository {
 		return $this->pimple['subscription_repository'];
 	}
 
@@ -348,7 +353,7 @@ class FunFunFactory {
 
 	public function newAddSubscriptionUseCase(): AddSubscriptionUseCase {
 		return new AddSubscriptionUseCase(
-			$this->newSubscriptionRepository(),
+			$this->getSubscriptionRepository(),
 			$this->getSubscriptionValidator(),
 			$this->newAddSubscriptionMailer()
 		);
@@ -412,6 +417,19 @@ class FunFunFactory {
 
 	private function getContactValidator(): GetInTouchValidator {
 		return $this->pimple['contact_validator'];
+	}
+
+	private function newSubscriptionDuplicateValidator(): SubscriptionDuplicateValidator {
+		return new SubscriptionDuplicateValidator(
+				$this->getSubscriptionRepository(),
+				$this->newSubscriptionDuplicateCutoffDate()
+		);
+	}
+
+	private function newSubscriptionDuplicateCutoffDate(): \DateTime {
+		$cutoffDateTime = new \DateTime();
+		$cutoffDateTime->sub( new \DateInterval( $this->config['subscription-interval'] ) );
+		return $cutoffDateTime;
 	}
 
 	private function getMessenger(): Messenger {

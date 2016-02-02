@@ -26,4 +26,14 @@ class SubscriptionRepositorySpy implements SubscriptionRepository {
 		return $this->subscriptions;
 	}
 
+	public function countSimilar( Subscription $subscription, \DateTime $cutoffDateTime ): int {
+		$count = 0;
+		foreach ( $this->subscriptions as $sub ) {
+			if ( $sub->getEmail() == $subscription->getEmail() && $subscription->getCreatedAt() > $cutoffDateTime ) {
+				$count++;
+			}
+		}
+		return $count;
+	}
+
 }

@@ -39,5 +39,6 @@
 			"whitewords": "",
 			"badwords": ""
 		}
-	}
+	},
+	"subscription-interval": "PT30M"
 }
