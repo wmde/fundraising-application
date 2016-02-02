@@ -28,6 +28,12 @@ class ApiBasedPageRetriever implements PageRetriever {
 		$this->logger = $logger;
 	}
 
+	/**
+	 * @param string $pageTitle
+	 * @param string $action
+	 * @throws \RuntimeException if the value of $action is not supported
+	 * @return string
+	 */
 	public function fetchPage( string $pageTitle, string $action = 'render' ): string {
 		$this->logger->debug( __METHOD__ . ': pageTitle', [ $pageTitle ] );
 
@@ -44,6 +50,7 @@ class ApiBasedPageRetriever implements PageRetriever {
 				$content = $this->retrieveRenderedPage( $pageTitle );
 				break;
 			default:
+				throw new \RuntimeException( 'Action "' . $action . '" not supported' );
 				break;
 		}
 
