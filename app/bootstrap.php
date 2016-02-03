@@ -31,11 +31,9 @@ $app->error( function ( \Exception $e, $code ) use ( $ffFactory ) {
 		'line' => $e->getLine(),
 		'stack_trace' => $e->getTraceAsString()
 	] );
-	return new JsonResponse(
-		[
-			'message' => $e->getMessage(),
-			'code' => $code
-		],
+
+	return new Response(
+		$ffFactory->newInternalErrorHTMLPresenter()->present( $e ),
 		$code
 	);
 } );

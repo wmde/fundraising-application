@@ -148,7 +148,7 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 		$client = $this->createClient();
 		$client->request( 'GET', '/page/unicorns/of-doom' );
 
-		$this->assert404( $client->getResponse(), 'No route found for "GET /page/unicorns/of-doom"' );
+		$this->assert404( $client->getResponse() );
 	}
 
 }

@@ -14,7 +14,7 @@ class RouteNotFoundTest extends WebRouteTestCase {
 		$client = $this->createClient();
 		$client->request( 'GET', '/kittens' );
 
-		$this->assert404( $client->getResponse(), 'No route found for "GET /kittens"' );
+		$this->assert404( $client->getResponse() );
 	}
 
 }
