@@ -331,7 +331,7 @@ class FunFunFactory {
 			'Ihre Mitgliedschaft bei Wikimedia Deutschland', // TODO make this translatable
 			new TwigTemplate(
 				$this->getTwig(),
-				'AddSubscriptionMailExternal.twig',
+				'Mail_Subscription_Request.twig',
 				[ 'greeting_generator' => $this->getGreetingGenerator() ]
 			)
 		);
