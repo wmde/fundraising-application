@@ -12,11 +12,11 @@ namespace WMDE\Fundraising\Frontend\Presenters;
 class GreetingGenerator {
 
 	public function createGreeting( string $lastName, string $salutation, string $title ): string {
-		if ( empty( $lastName ) ) {
+		if ( $lastName === '' ) {
 			return 'Sehr geehrte Damen und Herren,';
 		}
 
-		$spacedTitle = $title ? $title . ' ' : '';
+		$spacedTitle = $title ==== '' ? '' : $title . ' ';
 		switch ( $salutation ) {
 			case 'Herr':
 				return sprintf( 'Sehr geehrter Herr %s%s,', $spacedTitle, $lastName );
