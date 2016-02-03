@@ -29,6 +29,7 @@ use WMDE\Fundraising\Frontend\DataAccess\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\Domain\CommentRepository;
 use WMDE\Fundraising\Frontend\Domain\DoctrineSubscriptionRepository;
 use WMDE\Fundraising\Frontend\Domain\SubscriptionRepository;
+use WMDE\Fundraising\Frontend\Presenters\CommentListHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presenters\CommentListJsonPresenter;
 use WMDE\Fundraising\Frontend\Presenters\CommentListRssPresenter;
 use WMDE\Fundraising\Frontend\Presenters\Content\WikiContentProvider;
@@ -203,6 +204,10 @@ class FunFunFactory {
 			$this->getTwig(),
 			'CommentList.rss.twig'
 		) );
+	}
+
+	public function newCommentListHtmlPresenter(): CommentListHtmlPresenter {
+		return new CommentListHtmlPresenter( $this->getLayoutTemplate( 'CommentList.html.twig' ) );
 	}
 
 	private function newCommentRepository(): CommentRepository {

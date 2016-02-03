@@ -9,27 +9,26 @@ use Doctrine\ORM\EntityManager;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
-use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class ListCommentsRssRouteTest extends WebRouteTestCase {
+class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 
 	public function testWhenThereAreNoComments_rssFeedIsEmpty() {
 		$client = $this->createClient();
-		$client->request( 'GET', '/list-comments.rss' );
+		$client->request( 'GET', '/list-comments.html' );
 
 		$this->assertTrue( $client->getResponse()->isSuccessful(), 'request is successful' );
 
-		$this->assertEquals(
-			TestEnvironment::getTestData( 'emptyCommentList.rss' ),
+		$this->assertContains(
+			'Die 0 neuesten Spenderkommentare',
 			$client->getResponse()->getContent()
 		);
 	}
 
-	public function testWhenAreComments_theyAreInTheRss() {
+	public function testWhenAreComments_theyAreInTheHtml() {
 		$client = $this->createClient( [], function( FunFunFactory $factory ) {
 			$this->persistFirstComment( $factory->getEntityManager() );
 			$this->persistSecondComment( $factory->getEntityManager() );
@@ -37,12 +36,17 @@ class ListCommentsRssRouteTest extends WebRouteTestCase {
 			$factory->getEntityManager()->flush();
 		} );
 
-		$client->request( 'GET', '/list-comments.rss' );
+		$client->request( 'GET', '/list-comments.html' );
 
 		$this->assertTrue( $client->getResponse()->isSuccessful(), 'request is successful' );
 
 		$this->assertContains(
-			'100,42 Euro von First name',
+			'Die 3 neuesten Spenderkommentare',
+			$client->getResponse()->getContent()
+		);
+
+		$this->assertContains(
+			'100,42&euro; von First name am',
 			$client->getResponse()->getContent()
 		);
 
@@ -52,7 +56,7 @@ class ListCommentsRssRouteTest extends WebRouteTestCase {
 		);
 
 		$this->assertContains(
-			'9.001,00 Euro von Second name',
+			'9.001,00&euro; von Second name am',
 			$client->getResponse()->getContent()
 		);
 
@@ -101,4 +105,5 @@ class ListCommentsRssRouteTest extends WebRouteTestCase {
 		$secondDonation->setIsPublic( true );
 		$entityManager->persist( $secondDonation );
 	}
+
 }

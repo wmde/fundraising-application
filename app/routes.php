@@ -70,6 +70,19 @@ $app->get(
 );
 
 $app->get(
+	'list-comments.html',
+	function() use ( $app, $ffFactory ) {
+		return new Response(
+			$ffFactory->newCommentListHtmlPresenter()->present(
+				$ffFactory->newListCommentsUseCase()->listComments(
+					new CommentListingRequest( 10 )
+				)
+			)
+		);
+	}
+);
+
+$app->get(
 	'page/{pageName}',
 	function( Application $app, $pageName ) use ( $ffFactory ) {
 		return $ffFactory->newDisplayPagePresenter()->present(
