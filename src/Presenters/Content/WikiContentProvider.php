@@ -20,10 +20,10 @@ class WikiContentProvider {
 		$this->pageTitlePrefix = $pageTitlePrefix;
 	}
 
-	public function getContent( string $pageName ): string {
+	public function getContent( string $pageName, string $fetchMode = 'render' ): string {
 		$prefixedPageName = $this->getPrefixedPageTitle( $pageName );
 		$normalizedPageName = $this->normalizePageName( $prefixedPageName );
-		$content = $this->pageRetriever->fetchPage( $normalizedPageName );
+		$content = $this->pageRetriever->fetchPage( $normalizedPageName, $fetchMode );
 		$content = $this->contentModifier->getProcessedContent( $content, $normalizedPageName );
 
 		return $content;

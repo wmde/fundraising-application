@@ -15,9 +15,11 @@ class TwigPageLoader implements \Twig_LoaderInterface {
 	private $contentProvider;
 	private $pageCache = [];
 	private $errorCache = [];
+	private $rawPagesList = [];
 
-	public function __construct( WikiContentProvider $contentProvider ) {
+	public function __construct( WikiContentProvider $contentProvider, array $rawPagesList = [] ) {
 		$this->contentProvider = $contentProvider;
+		$this->rawPagesList = $rawPagesList;
 	}
 
 	public function getSource( $name ): string {
@@ -42,6 +44,7 @@ class TwigPageLoader implements \Twig_LoaderInterface {
 	}
 
 	private function retrievePage( string $pageName ): string {
+		$fetchMode = in_array( $pageName, $this->rawPagesList ) ? 'raw' : 'render';
 		$title = preg_replace( '/\\.twig$/', '', $pageName );
 		if ( isset( $this->pageCache[$title] ) ) {
 			return $this->pageCache[$title];
@@ -49,7 +52,7 @@ class TwigPageLoader implements \Twig_LoaderInterface {
 		if ( isset( $this->errorCache[$title] ) ) {
 			throw new Twig_Error_Loader( "Wiki page $title not found." );
 		}
-		$content = $this->contentProvider->getContent( $title );
+		$content = $this->contentProvider->getContent( $title, $fetchMode );
 		if ( $content !== '' ) {
 			$this->pageCache[$title] = $content;
 			return $content;

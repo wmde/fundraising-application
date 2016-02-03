@@ -14,8 +14,9 @@ interface PageRetriever {
 
 	/**
 	 * @param string $pageName
+	 * @param string $fetchMode
 	 * @return string
 	 */
-	public function fetchPage( string $pageName ): string;
+	public function fetchPage( string $pageName, string $fetchMode ): string;
 
 }
