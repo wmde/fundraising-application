@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types = 1);
 
 namespace WMDE\Fundraising\Frontend\Presentation;
 
@@ -12,11 +13,12 @@ namespace WMDE\Fundraising\Frontend\Presentation;
 class GreetingGenerator {
 
 	public function createGreeting( string $lastName, string $salutation, string $title ): string {
-		if ( empty( $lastName ) ) {
+		if ( $lastName === '' ) {
 			return 'Sehr geehrte Damen und Herren,';
 		}
 
-		$spacedTitle = $title ? $title . ' ' : '';
+		$spacedTitle = $title === '' ? '' : $title . ' ';
+
 		switch ( $salutation ) {
 			case 'Herr':
 				return sprintf( 'Sehr geehrter Herr %s%s,', $spacedTitle, $lastName );
@@ -28,4 +30,5 @@ class GreetingGenerator {
 				return 'Sehr geehrte Damen und Herren,';
 		}
 	}
+
 }
