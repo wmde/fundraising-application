@@ -33,6 +33,7 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListJsonPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListRssPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Content\WikiContentProvider;
+use WMDE\Fundraising\Frontend\Presentation\GreetingGenerator;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionHTMLPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionJSONPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\GetInTouchHTMLPresenter;
@@ -113,6 +114,10 @@ class FunFunFactory {
 
 		$pimple['contact_validator'] = $pimple->share( function() {
 			return new GetInTouchValidator( $this->getMailValidator() );
+		} );
+
+		$pimple['greeting_generator'] = $pimple->share( function() {
+			return new GreetingGenerator();
 		} );
 
 		$pimple['mw_api'] = $pimple->share( function() {
@@ -345,9 +350,17 @@ class FunFunFactory {
 	private function newAddSubscriptionMailer(): TemplateBasedMailer {
 		return new TemplateBasedMailer(
 			$this->getMessenger(),
-			new TwigTemplate( $this->getTwig(), 'AddSubscriptionMailExternal.twig' ),
+			new TwigTemplate(
+				$this->getTwig(),
+				'AddSubscriptionMailExternal.twig',
+				[ 'greeting_generator' => $this->getGreetingGenerator() ]
+			),
 			$this->getTranslator()->trans( 'Your membership with Wikimedia Germany' )
 		);
+	}
+
+	public function getGreetingGenerator() {
+		return $this->pimple['greeting_generator'];
 	}
 
 	public function newCheckIbanUseCase(): CheckIbanUseCase {
