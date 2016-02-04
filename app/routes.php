@@ -33,13 +33,19 @@ $app->get(
 $app->get(
 	'list-comments.json',
 	function( Request $request ) use ( $app, $ffFactory ) {
-		return $app->json(
+		$response = $app->json(
 			$ffFactory->newCommentListJsonPresenter()->present(
 				$ffFactory->newListCommentsUseCase()->listComments(
 					new CommentListingRequest( (int)$request->get( 'n' ) )
 				)
 			)
 		);
+
+		if ( $request->get( 'f' ) ) {
+			$response->setCallback( $request->get( 'f' ) );
+		}
+
+		return $response;
 	}
 );
 
