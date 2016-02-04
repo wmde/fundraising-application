@@ -316,15 +316,15 @@ class FunFunFactory {
 		return new AddSubscriptionUseCase(
 			$this->newRequestRepository(),
 			$this->getRequestValidator(),
-			$this->getMessenger(),
-			$this->newAddSubscriptionMessage()
+			$this->newAddSubscriptionMailer()
 		);
 	}
 
-	private function newAddSubscriptionMessage(): TemplatedMessage {
-		return new TemplatedMessage(
-			'Ihre Mitgliedschaft bei Wikimedia Deutschland', // TODO make this translatable
-			new TwigTemplate( $this->getTwig(), 'AddSubscriptionMailExternal.twig' )
+	private function newAddSubscriptionMailer(): TemplateBasedMailer {
+		return new TemplateBasedMailer(
+			$this->getMessenger(),
+			new TwigTemplate( $this->getTwig(), 'AddSubscriptionMailExternal.twig' ),
+			'Ihre Mitgliedschaft bei Wikimedia Deutschland' // TODO make this translatable
 		);
 	}
 
