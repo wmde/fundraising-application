@@ -16,6 +16,7 @@ use WMDE\Fundraising\Frontend\Domain\Iban;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageDisplayRequest;
 use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanRequest;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
+use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationRequest;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentListingRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\SubscriptionRequest;
 
@@ -168,6 +169,22 @@ $app->post(
 			return $app->redirect( $app['url_generator']->generate( 'page', [ 'pageName' => 'KontaktBestaetigung' ] ) );
 		}
 		return $ffFactory->newGetInTouchHTMLPresenter()->present( $contactFormResponse, $request->request->all() );
+	}
+);
+
+$app->post(
+	'donation/cancel',
+	function( Request $request ) use ( $app, $ffFactory ) {
+		$cancellationRequest = new CancelDonationRequest(
+			$request->get( 'firstname', 'sid' ),
+			$request->get( 'firstname', 'token' ),
+			$request->get( 'firstname', 'utoken' )
+		);
+
+		$ffFactory->newCancelDonationUseCase()->cancelDonation( $cancellationRequest );
+
+		// TODO: response
+		return '';
 	}
 );
 
