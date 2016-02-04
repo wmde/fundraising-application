@@ -8,9 +8,8 @@ use WMDE\Fundraising\Entities\Address;
 use WMDE\Fundraising\Entities\Subscription;
 use WMDE\Fundraising\Frontend\Domain\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\MailAddress;
-use WMDE\Fundraising\Frontend\Messenger;
 use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
-use WMDE\Fundraising\Frontend\TemplatedMessage;
+use WMDE\Fundraising\Frontend\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Validation\SubscriptionValidator;
 
 /**
@@ -19,22 +18,16 @@ use WMDE\Fundraising\Frontend\Validation\SubscriptionValidator;
  */
 class AddSubscriptionUseCase {
 
-	/**
-	 * @var SubscriptionRepository
-	 */
 	private $subscriptionRepository;
-
 	private $subscriptionValidator;
-
-	private $messenger;
+	private $mailer;
 
 	public function __construct( SubscriptionRepository $subscriptionRepository, SubscriptionValidator $subscriptionValidator,
-								 Messenger $messenger, TemplatedMessage $message ) {
+		TemplateBasedMailer $mailer ) {
 
 		$this->subscriptionRepository = $subscriptionRepository;
 		$this->subscriptionValidator = $subscriptionValidator;
-		$this->messenger = $messenger;
-		$this->message = $message;
+		$this->mailer = $mailer;
 	}
 
 	public function addSubscription( SubscriptionRequest $subscriptionRequest ) {
@@ -51,19 +44,22 @@ class AddSubscriptionUseCase {
 	}
 
 	private function sendSubscriptionNotification( Subscription $subscription ) {
-		$this->message->setTemplateParams( [ 'subscription' => $subscription ] );
+		$this->mailer->sendMail(
+			$this->newMailAddressFromSubscription( $subscription ),
+			// FIXME: this is an output similar to the main response model and should similarly not be an entity
+			[ 'subscription' => $subscription ]
+		);
+	}
 
-		$this->messenger->sendMessageToUser(
-			$this->message,
-			new MailAddress(
-				$subscription->getEmail(),
-				implode(
-					' ',
-					[
-						$subscription->getAddress()->getFirstName(),
-						$subscription->getAddress()->getLastName()
-					]
-				)
+	private function newMailAddressFromSubscription( Subscription $subscription ): MailAddress {
+		return new MailAddress(
+			$subscription->getEmail(),
+			implode(
+				' ',
+				[
+					$subscription->getAddress()->getFirstName(),
+					$subscription->getAddress()->getLastName()
+				]
 			)
 		);
 	}
