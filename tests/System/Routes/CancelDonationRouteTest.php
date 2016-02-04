@@ -28,5 +28,20 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 		$this->assertSame( 200, $client->getResponse()->getStatusCode() );
 	}
 
+	public function testGivenGetRequest_resultIs405() {
+		$client = $this->createClient();
+
+		$client->request(
+			'GET',
+			'/donation/cancel',
+			[
+				'sid' => '',
+				'token' => '',
+				'utoken' => '',
+			]
+		);
+
+		$this->assertSame( 405, $client->getResponse()->getStatusCode() );
+	}
 
 }
