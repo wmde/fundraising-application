@@ -19,7 +19,7 @@ class ListCommentsUseCase {
 		$this->commentRepository = $commentRepository;
 	}
 
-	public function listComments( CommentListingRequest $listingRequest ) {
+	public function listComments( CommentListingRequest $listingRequest ): CommentList {
 		return new CommentList( ...$this->getListItems( $listingRequest ) );
 	}
 
