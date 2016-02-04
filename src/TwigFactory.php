@@ -3,6 +3,8 @@
 
 namespace WMDE\Fundraising\Frontend;
 
+use Symfony\Bridge\Twig\Extension\TranslationExtension;
+use Symfony\Component\Translation\TranslatorInterface;
 use Twig_Environment;
 use Twig_Extension_StringLoader;
 use Twig_Lexer;
@@ -24,7 +26,7 @@ class TwigFactory {
 		$this->config = $config;
 	}
 
-	public function create( array $loaders ): Twig_Environment {
+	public function create( array $loaders, array $extensions ): Twig_Environment {
 		$options = [];
 
 		if ( $this->config['enable-cache'] ) {
@@ -38,7 +40,9 @@ class TwigFactory {
 			$options
 		);
 
-		$twig->addExtension( new Twig_Extension_StringLoader() );
+		foreach ( $extensions as $ext ) {
+			$twig->addExtension( $ext );
+		}
 
 		$lexer = new Twig_Lexer( $twig, [
 			'tag_comment'   => [ '{#', '#}' ],
@@ -103,5 +107,13 @@ class TwigFactory {
 	public function newArrayLoader() {
 		$templates = $this->config['loaders']['array'] ?? [];
 		return new Twig_Loader_Array( $templates );
+	}
+
+	public function newStringLoaderExtension() {
+		return new Twig_Extension_StringLoader();
+	}
+
+	public function newTranslationExtension( TranslatorInterface $translator ) {
+		return new TranslationExtension( $translator );
 	}
 }

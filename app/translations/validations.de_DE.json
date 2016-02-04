@@ -1,0 +1,6 @@
+{
+  "This field is required": "Dieses Feld ist ein Pflichtfeld",
+  "Address has wrong format": "Kein gültiges Email-Adressformat",
+  "Address is no valid email": "Keine gültige E-Mail-Adresse",
+  "MX record not found": "Domain der Mailadresse nicht gefunden"
+}

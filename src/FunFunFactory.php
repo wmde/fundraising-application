@@ -22,6 +22,7 @@ use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Swift_MailTransport;
+use Symfony\Component\Translation\TranslatorInterface;
 use Twig_Environment;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\DataAccess\DbalCommentRepository;
@@ -136,17 +137,34 @@ class FunFunFactory {
 			] );
 		} );
 
+		$pimple['translator'] = $pimple->share( function() {
+			$translationFactory = new TranslationFactory();
+			$loaders = [
+				'json' => $translationFactory->newJsonLoader()
+			];
+			$locale = 'de_DE'; // In the future, this could be configured somehow
+			$translator = $translationFactory->create( $loaders, $locale );
+			$translator->addResource( 'json', __DIR__ . '/../app/translations/messages.de_DE.json', $locale );
+			$translator->addResource( 'json', __DIR__ . '/../app/translations/validations.de_DE.json', $locale, 'validations' );
+			return $translator;
+		} );
+
 		$pimple['twig_factory'] = $pimple->share( function () {
 			return new TwigFactory( $this->config['twig'] );
 		} );
 
 		$pimple['twig'] = $pimple->share( function( $pimple ) {
+			$twigFactory = $this->getTwigFactory();
 			$loaders = array_filter( [
-				$pimple['twig_factory']->newFileSystemLoader(),
-				$pimple['twig_factory']->newArrayLoader(), // This is just a fallback for testing
-				$pimple['twig_factory']->newWikiPageLoader( $this->newWikiContentProvider() ),
+				$twigFactory->newFileSystemLoader(),
+				$twigFactory->newArrayLoader(), // This is just a fallback for testing
+				$twigFactory->newWikiPageLoader( $this->newWikiContentProvider() ),
 			] );
-			return $pimple['twig_factory']->create( $loaders );
+			$extensions = [
+				$twigFactory->newStringLoaderExtension(),
+				$twigFactory->newTranslationExtension( $this->getTranslator() )
+			];
+			return $twigFactory->create( $loaders, $extensions );
 		} );
 
 		$pimple['logger'] = $pimple->share( function() {
@@ -245,7 +263,7 @@ class FunFunFactory {
 	}
 
 	public function newAddSubscriptionJSONPresenter(): AddSubscriptionJSONPresenter {
-		return new AddSubscriptionJSONPresenter();
+		return new AddSubscriptionJSONPresenter( $this->getTranslator() );
 	}
 
 	public function newGetInTouchHTMLPresenter(): GetInTouchHTMLPresenter {
@@ -329,7 +347,7 @@ class FunFunFactory {
 		return new TemplateBasedMailer(
 			$this->getMessenger(),
 			new TwigTemplate( $this->getTwig(), 'AddSubscriptionMailExternal.twig' ),
-			'Ihre Mitgliedschaft bei Wikimedia Deutschland' // TODO make this translatable
+			$this->getTranslator()->trans( 'Your membership with Wikimedia Germany' )
 		);
 	}
 
@@ -387,9 +405,17 @@ class FunFunFactory {
 
 	private function getContactConfirmationMessage() {
 		return new TemplatedMessage(
-			'Ihre Anfrage an Wikimedia', // TODO make this translatable
+			$this->getTranslator()->trans( 'Your inquiry at Wikimedia' ),
 			new TwigTemplate( $this->getTwig(), 'GetInTouchConfirmation.twig' )
 		);
+	}
+
+	private function getTranslator(): TranslatorInterface {
+		return $this->pimple['translator'];
+	}
+
+	private function getTwigFactory(): TwigFactory {
+		return $this->pimple['twig_factory'];
 	}
 
 }
