@@ -104,7 +104,7 @@ $app->post(
 		] );
 
 		$responseModel = $useCase->addSubscription( $subscriptionRequest );
-		if ( in_array( 'application/json', $request->getAcceptableContentTypes() ) ) {
+		if ( $app['request.is_json'] ) {
 			return $app->json( $ffFactory->newAddSubscriptionJSONPresenter()->present( $responseModel ) );
 		}
 		if ( $responseModel->isSuccessful() ) {
