@@ -29,9 +29,9 @@ class SubscriptionValidator implements InstanceValidator {
 		$violations = [];
 		$requiredFieldValidator = new RequiredFieldValidator();
 		$address = $instance->getAddress();
-		$violations[] = $this->validateField( $requiredFieldValidator, $address->getSalutation(), 'anrede');
-		$violations[] = $this->validateField( $requiredFieldValidator, $address->getFirstName(), 'vorname');
-		$violations[] = $this->validateField( $requiredFieldValidator, $address->getLastName(), 'nachname');
+		$violations[] = $this->validateField( $requiredFieldValidator, $address->getSalutation(), 'salutation');
+		$violations[] = $this->validateField( $requiredFieldValidator, $address->getFirstName(), 'firstName');
+		$violations[] = $this->validateField( $requiredFieldValidator, $address->getLastName(), 'lastName');
 		$violations[] = $this->validateField( $requiredFieldValidator, $instance->getEmail(), 'email');
 		$violations[] = $this->validateField( $this->mailValidator, $instance->getEmail(), 'email');
 		$this->constraintViolations = array_filter( $violations );
