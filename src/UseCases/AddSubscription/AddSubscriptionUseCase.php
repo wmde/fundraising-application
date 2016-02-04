@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types = 1);
 
 namespace WMDE\Fundraising\Frontend\UseCases\AddSubscription;
 
@@ -42,23 +43,44 @@ class AddSubscriptionUseCase {
 		if ( ! $this->subscriptionValidator->validate( $subscription ) ) {
 			return ValidationResponse::newFailureResponse( $this->subscriptionValidator->getConstraintViolations() );
 		}
-		$this->subscriptionRepository->storeSubscription( $subscription );
 
-		$postalAddress = $subscription->getAddress();
-		$this->message->setTemplateParams( [ 'subscription' => $subscription ] );
-		$this->messenger->sendMessageToUser( $this->message,
-			new MailAddress(
-				$subscription->getEmail(),
-				implode( ' ', [ $postalAddress->getFirstName(), $postalAddress->getLastName() ] )
-			)
-		);
+		$this->subscriptionRepository->storeSubscription( $subscription );
+		$this->sendSubscriptionNotification( $subscription );
 
 		return ValidationResponse::newSuccessResponse();
 	}
 
+	private function sendSubscriptionNotification( Subscription $subscription ) {
+		$this->message->setTemplateParams( [ 'subscription' => $subscription ] );
+
+		$this->messenger->sendMessageToUser(
+			$this->message,
+			new MailAddress(
+				$subscription->getEmail(),
+				implode(
+					' ',
+					[
+						$subscription->getAddress()->getFirstName(),
+						$subscription->getAddress()->getLastName()
+					]
+				)
+			)
+		);
+	}
+
 	private function createSubscriptionFromRequest( SubscriptionRequest $subscriptionRequest ): Subscription {
 		$request = new Subscription();
+
+		$request->setAddress( $this->addressFromSubscriptionRequest( $subscriptionRequest ) );
+		$request->setEmail( $subscriptionRequest->getEmail() );
+		$request->setConfirmationCode( random_bytes( 16 ) ); // No need to use uuid library here
+
+		return $request;
+	}
+
+	private function addressFromSubscriptionRequest( SubscriptionRequest $subscriptionRequest ): Address {
 		$address = new Address();
+
 		$address->setSalutation( $subscriptionRequest->getSalutation() );
 		$address->setTitle( $subscriptionRequest->getTitle() );
 		$address->setFirstName( $subscriptionRequest->getFirstName() );
@@ -67,9 +89,7 @@ class AddSubscriptionUseCase {
 		$address->setPostcode( $subscriptionRequest->getPostcode() );
 		$address->setCity( $subscriptionRequest->getCity() );
 
-		$request->setAddress( $address );
-		$request->setEmail( $subscriptionRequest->getEmail() );
-		$request->setConfirmationCode( random_bytes( 16 ) ); // No need to use uuid library here
-		return $request;
+		return $address;
 	}
+
 }
