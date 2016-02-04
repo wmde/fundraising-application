@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 
 use DateTime;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
@@ -81,7 +82,6 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenLimitSmallerThanCommentCount_onlySoManyCommentsAreShown() {
-		// TODO: sorting
 		$client = $this->createClient( [], function( FunFunFactory $factory ) {
 			$this->persistFirstComment( $factory->getEntityManager() );
 			$this->persistSecondComment( $factory->getEntityManager() );
@@ -104,6 +104,35 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 		);
 	}
 
+	public function testGivenJsonpCallback_jsonIsWrappedInCallback() {
+		$client = $this->createClient( [], function( FunFunFactory $factory ) {
+			$this->persistFirstComment( $factory->getEntityManager() );
+			$this->persistSecondComment( $factory->getEntityManager() );
+			$factory->getEntityManager()->flush();
+		} );
 
+		$client->request( 'GET', '/list-comments.json?n=1&f=kittens' );
+
+		$this->assertJsonpSuccessResponse(
+			[
+				[
+					'betrag' => 200,
+					'spender' => 'Second name',
+					'kommentar' => 'Second comment',
+					'datum' => 'Thu, 02 Feb 1984 00:00:00 +0100',
+					'id' => 2,
+				]
+			],
+			'kittens',
+			$client->getResponse()
+		);
+	}
+
+	private function assertJsonpSuccessResponse( $expectedJson, string $expectedCallback, Response $response ) {
+		$this->assertSame(
+			'/**/' . $expectedCallback . '(' . json_encode( $expectedJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ) . ');',
+			$response->getContent()
+		);
+	}
 
 }
