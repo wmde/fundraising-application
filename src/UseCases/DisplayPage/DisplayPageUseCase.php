@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace WMDE\Fundraising\Frontend\UseCases\DisplayPage;
 
-use WMDE\Fundraising\Frontend\Presenters\Content\WikiContentProvider;
+use WMDE\Fundraising\Frontend\Presentation\Content\WikiContentProvider;
 
 /**
  * @licence GNU GPL v2+

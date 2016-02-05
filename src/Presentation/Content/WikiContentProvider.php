@@ -1,6 +1,6 @@
 <?php
 
-namespace WMDE\Fundraising\Frontend\Presenters\Content;
+namespace WMDE\Fundraising\Frontend\Presentation\Content;
 
 use WMDE\Fundraising\Frontend\Domain\PageRetriever;
 

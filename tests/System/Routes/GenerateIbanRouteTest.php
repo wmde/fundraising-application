@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Presenters\IbanPresenter
+ * @covers WMDE\Fundraising\Frontend\Presentation\Presenters\IbanPresenter
  *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >

@@ -14,7 +14,7 @@ use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Presenters\DisplayPagePresenter
+ * @covers WMDE\Fundraising\Frontend\Presentation\Presenters\DisplayPagePresenter
  *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
