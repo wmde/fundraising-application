@@ -1,10 +1,11 @@
 <?php
 
 
-namespace WMDE\Fundraising\Frontend\Domain;
+namespace WMDE\Fundraising\Frontend\DataAccess;
 
 use Doctrine\DBAL\Connection;
 use WMDE\Fundraising\Entities\Subscription;
+use WMDE\Fundraising\Frontend\Domain\SubscriptionRepository;
 use WMDE\Fundraising\Store\Factory as FundraisingStoreFactory;
 
 /**
