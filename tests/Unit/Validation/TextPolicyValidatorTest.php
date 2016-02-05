@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Tests\Unit;
 use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
 
 /**
- * @covers WMDE\Fundraising\TextPolicyValidator
+ * @covers WMDE\Fundraising\Frontend\Validation\TextPolicyValidator
  *
  * @licence GNU GPL v2+
  * @author Christoph Fischer <christoph.fischer@wikimedia.de
