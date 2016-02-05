@@ -18,6 +18,17 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 class ApiPostRequestHandler {
 
 	public function __invoke( Request $request ) {
+		switch ( $request->getParams()['action'] ) {
+			case 'parse':
+				return $this->getPageResponse( $request );
+			case 'query':
+				return $this->getRawResponse( $request );
+			default:
+				throw new UsageException( 'Unsupported API action: ' . $request->getParams()['action'] );
+		}
+	}
+
+	private function getPageResponse( Request $request ) {
 		$pageResponses = [
 			'Unicorns' => TestEnvironment::getJsonTestData( 'mwApiUnicornsPage.json' ),
 			'MyNamespace:MyPrefix/Naked_mole-rat' => TestEnvironment::getJsonTestData( 'mwApiPrefixedTitlePage.json' ),
@@ -30,4 +41,15 @@ class ApiPostRequestHandler {
 		throw new UsageException( 'Page not found: ' . $request->getParams()['page'] );
 	}
 
+	private function getRawResponse( Request $request ) {
+		$rawResponses = [
+			'No_Cats' => TestEnvironment::getJsonTestData( 'mwApiNo_CatsQuery.json' )
+		];
+
+		if ( array_key_exists( $request->getParams()['titles'], $rawResponses ) ) {
+			return $rawResponses[$request->getParams()['titles']];
+		}
+
+		throw new \RuntimeException( 'Page not found: ' . $request->getParams()['titles'] );
+	}
 }
