@@ -27,7 +27,7 @@ use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\DataAccess\DbalCommentRepository;
 use WMDE\Fundraising\Frontend\DataAccess\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\Domain\CommentRepository;
-use WMDE\Fundraising\Frontend\Domain\DoctrineSubscriptionRepository;
+use WMDE\Fundraising\Frontend\DataAccess\DoctrineSubscriptionRepository;
 use WMDE\Fundraising\Frontend\Domain\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\Presenters\CommentListJsonPresenter;
 use WMDE\Fundraising\Frontend\Presenters\CommentListRssPresenter;
