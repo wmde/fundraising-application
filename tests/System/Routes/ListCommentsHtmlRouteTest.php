@@ -6,70 +6,47 @@ namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 
 use DateTime;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
-use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class ListCommentsRssRouteTest extends WebRouteTestCase {
+class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 
 	public function testWhenThereAreNoComments_rssFeedIsEmpty() {
 		$client = $this->createClient();
-		$client->request( 'GET', '/list-comments.rss' );
+		$client->request( 'GET', '/list-comments.html' );
 
 		$this->assertTrue( $client->getResponse()->isSuccessful(), 'request is successful' );
 
-		$this->assertEquals(
-			TestEnvironment::getTestData( 'emptyCommentList.rss' ),
+		$this->assertContains(
+			'Die 0 neuesten Spenderkommentare',
 			$client->getResponse()->getContent()
 		);
 	}
 
-	public function testWhenAreComments_theyAreInTheRss() {
-		$client = $this->createClient( [], function( FunFunFactory $factory ) {
+	public function testWhenAreThreeComments_listSizeIsShownAsThree() {
+		$client = $this->newClientWithThreeComments();
+
+		$client->request( 'GET', '/list-comments.html' );
+
+		$this->assertContains(
+			'Die 3 neuesten Spenderkommentare',
+			$client->getResponse()->getContent()
+		);
+	}
+
+	private function newClientWithThreeComments(): Client {
+		return $this->createClient( [], function( FunFunFactory $factory ) {
 			$this->persistFirstComment( $factory->getEntityManager() );
 			$this->persistSecondComment( $factory->getEntityManager() );
 			$this->persistEvilComment( $factory->getEntityManager() );
 			$factory->getEntityManager()->flush();
 		} );
-
-		$client->request( 'GET', '/list-comments.rss' );
-
-		$this->assertTrue( $client->getResponse()->isSuccessful(), 'request is successful' );
-
-		$this->assertContains(
-			'100,42 Euro von First name',
-			$client->getResponse()->getContent()
-		);
-
-		$this->assertContains(
-			'First comment',
-			$client->getResponse()->getContent()
-		);
-
-		$this->assertContains(
-			'9.001,00 Euro von Second name',
-			$client->getResponse()->getContent()
-		);
-
-		$this->assertContains(
-			'Second comment',
-			$client->getResponse()->getContent()
-		);
-
-		$this->assertContains(
-			'name &amp; company',
-			$client->getResponse()->getContent()
-		);
-
-		$this->assertContains(
-			'Third &lt;script&gt; comment',
-			$client->getResponse()->getContent()
-		);
 	}
 
 	private function persistFirstComment( EntityManager $entityManager ) {
@@ -101,4 +78,47 @@ class ListCommentsRssRouteTest extends WebRouteTestCase {
 		$secondDonation->setIsPublic( true );
 		$entityManager->persist( $secondDonation );
 	}
+
+	public function testWhenAreComments_theyAreInTheHtml() {
+		$client = $this->newClientWithThreeComments();
+
+		$client->request( 'GET', '/list-comments.html' );
+
+		$this->assertContains(
+			'100,42&euro; von First name am',
+			$client->getResponse()->getContent()
+		);
+
+		$this->assertContains(
+			'First comment',
+			$client->getResponse()->getContent()
+		);
+
+		$this->assertContains(
+			'9.001,00&euro; von Second name am',
+			$client->getResponse()->getContent()
+		);
+
+		$this->assertContains(
+			'Second comment',
+			$client->getResponse()->getContent()
+		);
+
+		$this->assertContains(
+			'name &amp; company',
+			$client->getResponse()->getContent()
+		);
+	}
+
+	public function testCommentsGetEscaped() {
+		$client = $this->newClientWithThreeComments();
+
+		$client->request( 'GET', '/list-comments.html' );
+
+		$this->assertContains(
+			'Third &lt;script&gt; comment',
+			$client->getResponse()->getContent()
+		);
+	}
+
 }
