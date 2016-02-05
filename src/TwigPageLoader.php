@@ -4,7 +4,7 @@
 namespace WMDE\Fundraising\Frontend;
 
 use Twig_Error_Loader;
-use WMDE\Fundraising\Frontend\Presenters\Content\WikiContentProvider;
+use WMDE\Fundraising\Frontend\Presentation\Content\WikiContentProvider;
 
 /**
  * @license GNU GPL v2+

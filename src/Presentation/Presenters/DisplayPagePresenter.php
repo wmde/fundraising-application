@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace WMDE\Fundraising\Frontend\Presenters;
+namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
 use WMDE\Fundraising\Frontend\TwigTemplate;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageDisplayResponse;

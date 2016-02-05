@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace WMDE\Fundraising\Frontend\Presenters\Content;
+namespace WMDE\Fundraising\Frontend\Presentation\Content;
 
 use Psr\Log\LoggerInterface;
 

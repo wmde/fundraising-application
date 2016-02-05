@@ -8,7 +8,7 @@ use Twig_Extension_StringLoader;
 use Twig_Lexer;
 use Twig_Loader_Array;
 use Twig_Loader_Filesystem;
-use WMDE\Fundraising\Frontend\Presenters\Content\WikiContentProvider;
+use WMDE\Fundraising\Frontend\Presentation\Content\WikiContentProvider;
 
 /**
  * @license GNU GPL v2+

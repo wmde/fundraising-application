@@ -1,6 +1,6 @@
 <?php
 
-namespace WMDE\Fundraising\Frontend\Presenters;
+namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
 use WMDE\Fundraising\Frontend\Domain\Comment;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentList;
