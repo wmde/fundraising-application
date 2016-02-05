@@ -2,7 +2,7 @@
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation;
 
-use WMDE\Fundraising\Frontend\Presenters\GreetingGenerator;
+use WMDE\Fundraising\Frontend\Presentation\GreetingGenerator;
 
 class GreetingGeneratorTest extends \PHPUnit_Framework_TestCase {
 
