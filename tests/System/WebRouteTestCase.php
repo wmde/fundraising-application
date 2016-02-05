@@ -64,7 +64,7 @@ abstract class WebRouteTestCase extends \PHPUnit_Framework_TestCase {
 		$this->assertSame( 404, $response->getStatusCode() );
 	}
 
-	private function assertJsonResponse( $expected, Response $response ) {
+	protected function assertJsonResponse( $expected, Response $response ) {
 		$this->assertSame(
 			json_encode( $expected, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ),
 			$response->getContent()
