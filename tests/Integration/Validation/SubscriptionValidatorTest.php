@@ -36,7 +36,7 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 		$subscription->setAddress( $address );
 		$subscription->setEmail( 'nyan@meow.com' );
 		$this->assertFalse( $subscriptionValidator->validate( $subscription ) );
-		$this->assertConstraintWasViolated( $subscriptionValidator->getConstraintViolations(), 'vorname' );
+		$this->assertConstraintWasViolated( $subscriptionValidator->getConstraintViolations(), 'firstName' );
 	}
 
 	public function testLastNameIsValidated() {
@@ -50,7 +50,7 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 		$subscription->setAddress( $address );
 		$subscription->setEmail( 'nyan@meow.com' );
 		$this->assertFalse( $subscriptionValidator->validate( $subscription ) );
-		$this->assertConstraintWasViolated( $subscriptionValidator->getConstraintViolations(), 'nachname' );
+		$this->assertConstraintWasViolated( $subscriptionValidator->getConstraintViolations(), 'lastName' );
 	}
 
 	public function testSalutationIsValidated() {
@@ -64,7 +64,7 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 		$subscription->setAddress( $address );
 		$subscription->setEmail( 'nyan@meow.com' );
 		$this->assertFalse( $subscriptionValidator->validate( $subscription ) );
-		$this->assertConstraintWasViolated( $subscriptionValidator->getConstraintViolations(), 'anrede' );
+		$this->assertConstraintWasViolated( $subscriptionValidator->getConstraintViolations(), 'salutation' );
 	}
 
 }

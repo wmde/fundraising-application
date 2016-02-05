@@ -31,8 +31,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 	private $invalidFormInput = [
 		'firstName' => 'Nyan',
 		'lastName' => '',
-		'salutation' => 'Herr',
-		'title' => '',
+		// skip salutation and title since they won't be in the POST data if nothing is selected
 		'address' => '',
 		'city' => '',
 		'postcode' => '',

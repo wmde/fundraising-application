@@ -92,11 +92,10 @@ $app->post(
 
 		$subscriptionRequest->setFirstName( $request->get( 'firstName' ) );
 		$subscriptionRequest->setLastName( $request->get( 'lastName' ) );
-		$subscriptionRequest->setSalutation( $request->get( 'salutation' ) );
-		$subscriptionRequest->setTitle( $request->get( 'title' ) );
+		$subscriptionRequest->setSalutation( $request->get( 'salutation', '' ) );
+		$subscriptionRequest->setTitle( $request->get( 'title', '' ) );
 
 		$subscriptionRequest->setEmail( $request->get( 'email' ) );
-		$subscriptionRequest->setWikilogin( $request->get( 'wikilogin' ) );
 
 		$subscriptionRequest->setWikiloginFromValues( [
 			$request->request->get( 'wikilogin' ),
