@@ -27,7 +27,10 @@ class GetInTouchUseCase {
 		$this->templateBasedMailer = $templateMailer;
 	}
 
-	public function processContact( GetInTouchRequest $request ): ValidationResponse {
+	/**
+	 * @throws \RuntimeException
+	 */
+	public function processContactRequest( GetInTouchRequest $request ): ValidationResponse {
 		if ( !$this->validator->validate( $request ) ) {
 			return ValidationResponse::newFailureResponse( $this->validator->getConstraintViolations() );
 		}

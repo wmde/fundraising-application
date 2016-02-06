@@ -23,6 +23,9 @@ class TemplateBasedMailer {
 		$this->subject = $mailSubject;
 	}
 
+	/**
+	 * @throws \RuntimeException
+	 */
 	public function sendMail( MailAddress $recipient, array $templateArguments = [] ) {
 		$this->messenger->sendMessageToUser(
 			new SimpleMessage(

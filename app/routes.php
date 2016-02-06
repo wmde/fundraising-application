@@ -160,7 +160,7 @@ $app->post(
 			$request->get( 'messageBody', '' )
 		);
 
-		$contactFormResponse = $ffFactory->newGetInTouchUseCase()->processContact( $contactFormRequest );
+		$contactFormResponse = $ffFactory->newGetInTouchUseCase()->processContactRequest( $contactFormRequest );
 		if ( $contactFormResponse->isSuccessful() ) {
 			return $app->redirect( $app['url_generator']->generate( 'page', [ 'pageName' => 'KontaktBestaetigung' ] ) );
 		}
