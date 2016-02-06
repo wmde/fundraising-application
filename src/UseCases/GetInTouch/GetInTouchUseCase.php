@@ -8,7 +8,7 @@ use WMDE\Fundraising\Frontend\MailAddress;
 use WMDE\Fundraising\Frontend\Messenger;
 use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
 use WMDE\Fundraising\Frontend\SimpleMessage;
-use WMDE\Fundraising\Frontend\TemplatedMessage;
+use WMDE\Fundraising\Frontend\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 
 /**
@@ -19,46 +19,40 @@ class GetInTouchUseCase {
 
 	private $validator;
 	private $messenger;
-	private $confirmationMessage;
-	/** @var GetInTouchRequest */
-	private $request;
+	private $templateBasedMailer;
 
-	public function __construct( GetInTouchValidator $validator, Messenger $messenger, TemplatedMessage $confirmationMessage ) {
+	public function __construct( GetInTouchValidator $validator, Messenger $messenger, TemplateBasedMailer $templateMailer ) {
 		$this->validator = $validator;
 		$this->messenger = $messenger;
-		$this->confirmationMessage = $confirmationMessage;
+		$this->templateBasedMailer = $templateMailer;
 	}
 
 	public function processContact( GetInTouchRequest $request ): ValidationResponse {
-		$this->request = $request;
-
 		if ( !$this->validator->validate( $request ) ) {
 			return ValidationResponse::newFailureResponse( $this->validator->getConstraintViolations() );
 		}
 
-		$this->forwardContactRequest();
-		$this->confirmToUser();
+		$this->forwardContactRequest( $request );
+		$this->confirmToUser( $request );
+
 		return ValidationResponse::newSuccessResponse();
 	}
 
-	private function forwardContactRequest() {
+	private function forwardContactRequest( GetInTouchRequest $request ) {
 		$this->messenger->sendMessageToOperator(
 			new SimpleMessage(
-				$this->request->getSubject(),
-				$this->request->getMessageBody()
+				$request->getSubject(),
+				$request->getMessageBody()
 			),
 			new MailAddress(
-				$this->request->getEmailAddress(),
-				implode( ' ', [ $this->request->getFirstName(), $this->request->getLastName() ] )
+				$request->getEmailAddress(),
+				implode( ' ', [ $request->getFirstName(), $request->getLastName() ] )
 			)
 		);
 	}
 
-	private function confirmToUser() {
-		$this->messenger->sendMessageToUser(
-			$this->confirmationMessage,
-			new MailAddress( $this->request->getEmailAddress() )
-		);
+	private function confirmToUser( GetInTouchRequest $request ) {
+		$this->templateBasedMailer->sendMail( new MailAddress( $request->getEmailAddress() ) );
 	}
 
 }

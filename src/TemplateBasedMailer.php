@@ -23,7 +23,7 @@ class TemplateBasedMailer {
 		$this->subject = $mailSubject;
 	}
 
-	public function sendMail( MailAddress $recipient, array $templateArguments ) {
+	public function sendMail( MailAddress $recipient, array $templateArguments = [] ) {
 		$this->messenger->sendMessageToUser(
 			new SimpleMessage(
 				$this->subject,
