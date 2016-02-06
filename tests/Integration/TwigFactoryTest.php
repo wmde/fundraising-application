@@ -22,7 +22,7 @@ class TwigFactoryTest extends \PHPUnit_Framework_TestCase {
 				'array' => [ 'variableReplacement.twig' => '{$ testvar $}' ]
 			]
 		] );
-		$twig = $factory->create( [ $factory->newArrayLoader() ] );
+		$twig = $factory->create( [ $factory->newArrayLoader() ], [] );
 		$result = $twig->render( 'variableReplacement.twig', [ 'testvar' => 'Meeow!' ] );
 		$this->assertSame( 'Meeow!', $result);
 	}
@@ -43,7 +43,7 @@ class TwigFactoryTest extends \PHPUnit_Framework_TestCase {
 		$thirdLoader->expects( $this->never() )->method( $this->anything() );
 
 		$factory = new TwigFactory( [ 'enable-cache' => false ] );
-		$twig = $factory->create( [ $firstLoader, $secondLoader, $thirdLoader ] );
+		$twig = $factory->create( [ $firstLoader, $secondLoader, $thirdLoader ], [] );
 		$result = $twig->render( 'Canis_silvestris' );
 		$this->assertSame( 'Meeow!', $result);
 	}

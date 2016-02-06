@@ -14,7 +14,9 @@
 		"addwiki/mediawiki-api-base": "~2.1",
 		"psr/log": "~1.0",
 		"monolog/monolog": "~1.17",
-		"swiftmailer/swiftmailer": "~5.4"
+		"swiftmailer/swiftmailer": "~5.4",
+		"symfony/translation": "^3.0",
+		"symfony/twig-bridge": "^3.0"
 	},
 	"require-dev": {
 		"ext-pdo_sqlite": "*",

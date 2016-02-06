@@ -2,6 +2,7 @@
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
+use Symfony\Component\Translation\TranslatorInterface;
 use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 
@@ -10,6 +11,13 @@ use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
 class AddSubscriptionJSONPresenter {
+
+	private $translator;
+
+	public function __construct( TranslatorInterface $translator ) {
+		$this->translator = $translator;
+	}
+
 
 	public function present( ValidationResponse $subscriptionResponse ): array {
 		if ( $subscriptionResponse->isSuccessful() ) {
@@ -27,8 +35,8 @@ class AddSubscriptionJSONPresenter {
 		$errors = [];
 		/** @var ConstraintViolation $constraintViolation */
 		foreach( $response->getValidationErrors() as $constraintViolation ) {
-			// TODO add translation library and translate message.
-			$errors[$constraintViolation->getSource()] = $constraintViolation->getMessage();
+			$message = $this->translator->trans( $constraintViolation->getMessage(), (array) $constraintViolation, 'validations' );
+			$errors[$constraintViolation->getSource()] = $message;
 		}
 		return [ 'status' => 'ERR', 'errors' => $errors ];
 	}
