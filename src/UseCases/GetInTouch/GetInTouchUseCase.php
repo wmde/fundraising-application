@@ -44,10 +44,7 @@ class GetInTouchUseCase {
 				$request->getSubject(),
 				$request->getMessageBody()
 			),
-			new MailAddress(
-				$request->getEmailAddress(),
-				implode( ' ', [ $request->getFirstName(), $request->getLastName() ] )
-			)
+			new MailAddress( $request->getEmailAddress() )
 		);
 	}
 
