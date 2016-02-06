@@ -20,7 +20,6 @@ use Monolog\Handler\BufferHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
 use Swift_MailTransport;
 use Twig_Environment;
 use WMDE\Fundraising\Entities\Donation;
