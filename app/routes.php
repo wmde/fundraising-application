@@ -100,16 +100,16 @@ $app->post(
 		$useCase = $ffFactory->newAddSubscriptionUseCase();
 
 		$subscriptionRequest = new SubscriptionRequest();
-		$subscriptionRequest->setAddress( $request->get( 'address' ) );
-		$subscriptionRequest->setCity( $request->get( 'city' ) );
-		$subscriptionRequest->setPostcode( $request->get( 'postcode' ) );
+		$subscriptionRequest->setAddress( $request->get( 'address', '' ) );
+		$subscriptionRequest->setCity( $request->get( 'city', '' ) );
+		$subscriptionRequest->setPostcode( $request->get( 'postcode', '' ) );
 
-		$subscriptionRequest->setFirstName( $request->get( 'firstName' ) );
-		$subscriptionRequest->setLastName( $request->get( 'lastName' ) );
+		$subscriptionRequest->setFirstName( $request->get( 'firstName', '' ) );
+		$subscriptionRequest->setLastName( $request->get( 'lastName', '' ) );
 		$subscriptionRequest->setSalutation( $request->get( 'salutation', '' ) );
 		$subscriptionRequest->setTitle( $request->get( 'title', '' ) );
 
-		$subscriptionRequest->setEmail( $request->get( 'email' ) );
+		$subscriptionRequest->setEmail( $request->get( 'email', '' ) );
 
 		$subscriptionRequest->setWikiloginFromValues( [
 			$request->request->get( 'wikilogin' ),
