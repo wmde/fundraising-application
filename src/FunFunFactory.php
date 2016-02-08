@@ -39,6 +39,7 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionJSONPresent
 use WMDE\Fundraising\Frontend\Presentation\Presenters\GetInTouchHTMLPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\IbanPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\InternalErrorHTMLPresenter;
+use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationUseCase;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\Fundraising\Frontend\Validation\MailValidator;
 use WMDE\Fundraising\Frontend\Validation\SubscriptionValidator;
@@ -445,11 +446,16 @@ class FunFunFactory {
 
 	private function loadWordsFromWiki( WikiContentProvider $contentProvider, string $pageName ): array {
 		if ( $pageName === '' ) {
-			return [];
+			return [ ];
 		}
 		$content = $contentProvider->getContent( $pageName, 'raw' );
 		$words = array_map( 'trim', explode( "\n", $content ) );
+
 		return array_filter( $words );
+	}
+
+	public function newCancelDonationUseCase(): CancelDonationUseCase {
+		return new CancelDonationUseCase();
 	}
 
 }
