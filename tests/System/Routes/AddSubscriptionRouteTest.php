@@ -14,6 +14,7 @@ use Swift_NullTransport;
 
 /**
  * @licence GNU GPL v2+
+ * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class AddSubscriptionRouteTest extends WebRouteTestCase {
