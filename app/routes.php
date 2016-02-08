@@ -93,7 +93,7 @@ $app->get(
 )
 ->bind( 'page' );
 
-// Form for this is provided by route page/SubscriptionForm
+// Form for this is provided by route page/Subscription_Form
 $app->post(
 	'contact/subscribe',
 	function( Application $app, Request $request ) use ( $ffFactory ) {
