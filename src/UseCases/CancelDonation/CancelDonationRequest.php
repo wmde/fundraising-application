@@ -10,9 +10,9 @@ namespace WMDE\Fundraising\Frontend\UseCases\CancelDonation;
  */
 class CancelDonationRequest {
 
-	public $limit;
-	public $donationToken;
-	public $donationUpdateToken;
+	private $donationId;
+	private $donationToken;
+	private $donationUpdateToken;
 
 	public function __construct( string $donationId, string $donationToken, string $donationUpdateToken ) {
 		$this->donationId = $donationId;
@@ -20,8 +20,8 @@ class CancelDonationRequest {
 		$this->donationUpdateToken = $donationUpdateToken;
 	}
 
-	public function getLimit(): string {
-		return $this->limit;
+	public function getDonationId(): string {
+		return $this->donationId;
 	}
 
 	public function getDonationToken(): string {
