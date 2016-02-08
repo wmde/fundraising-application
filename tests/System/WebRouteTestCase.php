@@ -77,4 +77,12 @@ abstract class WebRouteTestCase extends \PHPUnit_Framework_TestCase {
 		$this->assertJsonResponse( $expected, $response );
 	}
 
+	protected function assertGetRequestCausesMethodNotAllowedResponse( string $route, array $params ) {
+		$client = $this->createClient();
+
+		$client->request( 'GET', $route, $params );
+
+		$this->assertSame( 405, $client->getResponse()->getStatusCode() );
+	}
+
 }
