@@ -28,7 +28,7 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 		$this->assertSame( 200, $client->getResponse()->getStatusCode() );
 	}
 
-	public function testGivenGetRequest_resultIs405() {
+	public function testGivenGetRequest_resultHas405methodNotAllowedStatus() {
 		$client = $this->createClient();
 
 		$client->request(
