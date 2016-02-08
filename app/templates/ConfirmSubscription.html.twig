@@ -1,0 +1,11 @@
+{% extends 'BaseLayout.twig' %}
+
+{% block main %}
+    {% if error_message %}
+        {# TODO ask Kai if we can make the " Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut." string on
+            the error page optional #}
+        {% include 'ErrorPage.twig' with { 'message': error_message|trans } %}
+    {% else %}
+        {% include 'Subscription_Confirmed.twig' %}
+    {% endif %}
+{% endblock %}
