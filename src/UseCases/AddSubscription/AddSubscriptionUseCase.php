@@ -38,6 +38,11 @@ class AddSubscriptionUseCase {
 		}
 
 		$this->subscriptionRepository->storeSubscription( $subscription );
+
+		if ( $this->subscriptionValidator->needsModeration( $subscription ) ) {
+			return ValidationResponse::newModerationNeededResponse();
+		}
+
 		$this->sendSubscriptionNotification( $subscription );
 
 		return ValidationResponse::newSuccessResponse();

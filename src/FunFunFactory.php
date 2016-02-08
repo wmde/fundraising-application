@@ -53,6 +53,7 @@ use WMDE\Fundraising\Frontend\UseCases\ListComments\ListCommentsUseCase;
 use WMDE\Fundraising\Frontend\UseCases\CheckIban\CheckIbanUseCase;
 use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ValidateEmail\ValidateEmailUseCase;
+use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
 use WMDE\Fundraising\Store\Factory as StoreFactory;
 use WMDE\Fundraising\Store\Installer;
 
@@ -109,7 +110,7 @@ class FunFunFactory {
 		} );
 
 		$pimple['request_validator'] = $pimple->share( function() {
-			return new SubscriptionValidator( $this->getMailValidator() );
+			return new SubscriptionValidator( $this->getMailValidator(), $this->getTextPolicyValidator( 'fields' ) );
 		} );
 
 		$pimple['contact_validator'] = $pimple->share( function() {
@@ -429,6 +430,26 @@ class FunFunFactory {
 
 	private function getTwigFactory(): TwigFactory {
 		return $this->pimple['twig_factory'];
+	}
+
+	private function getTextPolicyValidator( $policyName ) {
+		$policyValidator = new TextPolicyValidator();
+		$contentProvider = $this->newWikiContentProvider();
+		$textPolicyConfig = $this->config['text-policies'][$policyName];
+		$badWords = $this->loadWordsFromWiki( $contentProvider, $textPolicyConfig['badwords'] ?? '' );
+		$whiteWords = $this->loadWordsFromWiki( $contentProvider, $textPolicyConfig['whitewords'] ?? '' );
+		$policyValidator->addBadWordsFromArray( $badWords );
+		$policyValidator->addWhiteWordsFromArray( $whiteWords );
+		return $policyValidator;
+	}
+
+	private function loadWordsFromWiki( WikiContentProvider $contentProvider, string $pageName ): array {
+		if ( $pageName === '' ) {
+			return [];
+		}
+		$content = $contentProvider->getContent( $pageName, 'raw' );
+		$words = array_map( 'trim', explode( "\n", $content ) );
+		return array_filter( $words );
 	}
 
 }

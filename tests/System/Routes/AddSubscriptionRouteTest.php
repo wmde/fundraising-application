@@ -4,10 +4,12 @@ declare(strict_types = 1);
 
 namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 
+use Mediawiki\Api\MediawikiApi;
 use WMDE\Fundraising\Frontend\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SubscriptionRepositorySpy;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Messenger;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\ApiPostRequestHandler;
 use Swift_NullTransport;
 
 /**
@@ -142,6 +144,27 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 		$this->assertSame( 'ERR', $responseData['status'] );
 		$this->assertGreaterThan( 0, count( $responseData['errors'] ) );
 		$this->assertSame( 'Dieses Feld ist ein Pflichtfeld', $responseData['errors']['lastName'] );
+	}
+
+	public function testGivenDataNeedingModerationAndNoContentType_routeReturnsRedirectToModerationPage() {
+		$config = [ 'text-policies' => [ 'fields' => [ 'badwords' => 'No_Cats' ] ] ];
+		$client = $this->createClient( $config, function( FunFunFactory $factory ) {
+			$api = $this->getMockBuilder( MediawikiApi::class )->disableOriginalConstructor()->getMock();
+			$api->expects( $this->any() )
+				->method( 'postRequest' )
+				->willReturnCallback( new ApiPostRequestHandler() );
+
+			$factory->setMediaWikiApi( $api );
+		} );
+		$client->followRedirects( false );
+		$client->request(
+			'POST',
+			'/contact/subscribe',
+			$this->validFormInput
+		);
+		$response = $client->getResponse();
+		$this->assertTrue($response->isRedirect(), 'Is redirect response' );
+		$this->assertSame( '/page/SubscriptionModeration', $response->headers->get( 'Location' ) );
 	}
 
 }

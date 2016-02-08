@@ -9,9 +9,11 @@ namespace WMDE\Fundraising\Frontend\ResponseModel;
 class ValidationResponse {
 
 	private $validationErrors;
+	private $needsModerationValue;
 
-	public function __construct( array $requestValidationErrors = [] ) {
+	public function __construct( array $requestValidationErrors = [], $needsModeration = false ) {
 		$this->validationErrors = $requestValidationErrors;
+		$this->needsModerationValue = $needsModeration;
 	}
 
 	public static function newSuccessResponse(): self {
@@ -22,12 +24,20 @@ class ValidationResponse {
 		return new self( $errors );
 	}
 
+	public static function newModerationNeededResponse(): self {
+		return new self( [], true );
+	}
+
 	public function getValidationErrors(): array {
 		return $this->validationErrors;
 	}
 
 	public function isSuccessful(): bool {
 		return count( $this->validationErrors ) == 0;
+	}
+
+	public function needsModeration(): bool {
+		return $this->needsModerationValue;
 	}
 
 }

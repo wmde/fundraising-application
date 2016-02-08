@@ -33,5 +33,11 @@
 		"no-js-notice": "JavaScript-Notice"
 	},
 	"operator-email": "",
-	"operator-displayname": ""
+	"operator-displayname": "",
+	"text-policies": {
+		"fields": {
+			"whitewords": "",
+			"badwords": ""
+		}
+	}
 }
