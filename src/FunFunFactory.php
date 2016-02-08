@@ -26,8 +26,10 @@ use Twig_Environment;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\DataAccess\DbalCommentRepository;
 use WMDE\Fundraising\Frontend\DataAccess\InternetDomainNameValidator;
+use WMDE\Fundraising\Frontend\Domain\Address\AddressType;
 use WMDE\Fundraising\Frontend\Domain\CommentRepository;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineSubscriptionRepository;
+use WMDE\Fundraising\Frontend\Domain\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListJsonPresenter;
@@ -39,9 +41,13 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionJSONPresent
 use WMDE\Fundraising\Frontend\Presentation\Presenters\GetInTouchHTMLPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\IbanPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\InternalErrorHTMLPresenter;
+use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationUseCase;
 use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationUseCase;
+use WMDE\Fundraising\Frontend\Validation\AnonymousAddressValidator;
+use WMDE\Fundraising\Frontend\Validation\CompanyAddressValidator;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\Fundraising\Frontend\Validation\MailValidator;
+use WMDE\Fundraising\Frontend\Validation\PersonAddressValidator;
 use WMDE\Fundraising\Frontend\Validation\SubscriptionValidator;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\AddSubscriptionUseCase;
 use WMDE\Fundraising\Frontend\DataAccess\ApiBasedPageRetriever;
@@ -250,6 +256,25 @@ class FunFunFactory {
 		return $this->pimple['request_validator'];
 	}
 
+	private function newDonationRepository(): DonationRepository {
+		return $this->pimple['donation_repository'];
+	}
+
+	public function setDonationRepository( DonationRepository $donationRepository ) {
+		$this->pimple['donation_repository'] = $donationRepository;
+	}
+
+	public function newAddressValidatorFromAddressType( string $addressType ) {
+		switch ( $addressType ) {
+			case AddressType::ADDRESS_TYPE_PERSON:
+				return new PersonAddressValidator( $this->getMailValidator() );
+			case AddressType::ADDRESS_TYPE_COMPANY:
+				return new CompanyAddressValidator( $this->getMailValidator() );
+			default:
+				return new AnonymousAddressValidator( $this->getMailValidator() );
+		}
+	}
+
 	private function getMailValidator(): MailValidator {
 		return $this->pimple['mail_validator'];
 	}
@@ -363,6 +388,12 @@ class FunFunFactory {
 
 	public function getGreetingGenerator() {
 		return $this->pimple['greeting_generator'];
+	}
+
+	public function newAddDonationUseCase(): AddDonationUseCase {
+		return new AddDonationUseCase(
+			$this->newDonationRepository()
+		);
 	}
 
 	public function newCheckIbanUseCase(): CheckIbanUseCase {
