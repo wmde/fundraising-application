@@ -114,7 +114,7 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 	private function persistFirstComment() {
 		$firstDonation = new Donation();
-		$firstDonation->setName( 'First name' );
+		$firstDonation->setPublicRecord( 'First name' );
 		$firstDonation->setComment( 'First comment' );
 		$firstDonation->setAmount( '100' );
 		$firstDonation->setDtNew( new DateTime( '1984-01-01' ) );
@@ -124,7 +124,7 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 	private function persistSecondComment() {
 		$secondDonation = new Donation();
-		$secondDonation->setName( 'Second name' );
+		$secondDonation->setPublicRecord( 'Second name' );
 		$secondDonation->setComment( 'Second comment' );
 		$secondDonation->setAmount( '200' );
 		$secondDonation->setDtNew( new DateTime( '1984-02-02' ) );
@@ -134,7 +134,7 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 	private function persistThirdComment() {
 		$thirdDonation = new Donation();
-		$thirdDonation->setName( 'Third name' );
+		$thirdDonation->setPublicRecord( 'Third name' );
 		$thirdDonation->setComment( 'Third comment' );
 		$thirdDonation->setAmount( '300' );
 		$thirdDonation->setDtNew( new DateTime( '1984-03-03' ) );
@@ -144,7 +144,7 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 	private function persistPrivateComment() {
 		$privateDonation = new Donation();
-		$privateDonation->setName( 'Private name' );
+		$privateDonation->setPublicRecord( 'Private name' );
 		$privateDonation->setComment( 'Private comment' );
 		$privateDonation->setAmount( '1337' );
 		$privateDonation->setDtNew( new DateTime( '1984-12-12' ) );
@@ -154,7 +154,7 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 	private function persistDeletedComment() {
 		$deletedDonation = new Donation();
-		$deletedDonation->setName( 'Deleted name' );
+		$deletedDonation->setPublicRecord( 'Deleted name' );
 		$deletedDonation->setComment( 'Deleted comment' );
 		$deletedDonation->setAmount( '31337' );
 		$deletedDonation->setDtNew( new DateTime( '1984-11-11' ) );
