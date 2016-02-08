@@ -378,7 +378,15 @@ class FunFunFactory {
 		return new GetInTouchUseCase(
 			$this->getContactValidator(),
 			$this->getMessenger(),
-			$this->getContactConfirmationMessage()
+			$this->newContactConfirmationMailer()
+		);
+	}
+
+	private function newContactConfirmationMailer(): TemplateBasedMailer {
+		return new TemplateBasedMailer(
+			$this->getMessenger(),
+			new TwigTemplate( $this->getTwig(), 'GetInTouchConfirmation.twig' ),
+			'Ihre Anfrage an Wikimedia'
 		);
 	}
 
@@ -400,13 +408,6 @@ class FunFunFactory {
 
 	public function newInternalErrorHTMLPresenter(): InternalErrorHTMLPresenter {
 		return new InternalErrorHTMLPresenter( $this->getLayoutTemplate( 'Error.twig' ) );
-	}
-
-	private function getContactConfirmationMessage() {
-		return new TemplatedMessage(
-			$this->getTranslator()->trans( 'Your inquiry at Wikimedia' ),
-			new TwigTemplate( $this->getTwig(), 'GetInTouchConfirmation.twig' )
-		);
 	}
 
 	private function getTranslator(): TranslatorInterface {

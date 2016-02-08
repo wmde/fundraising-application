@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace WMDE\Fundraising\Frontend;
 
+use RuntimeException;
 use Swift_Message;
 use Swift_Transport;
 
@@ -25,10 +26,16 @@ class Messenger {
 		$this->operatorName = $operatorName;
 	}
 
+	/**
+	 * @throws RuntimeException
+	 */
 	public function sendMessageToUser( Message $messageContent, MailAddress $recipient ) {
 		$this->sendMessage( $this->createMessage( $messageContent, $recipient ) );
 	}
 
+	/**
+	 * @throws RuntimeException
+	 */
 	public function sendMessageToOperator( Message $messageContent, MailAddress $replyTo = null ) {
 		$this->sendMessage( $this->createMessage( $messageContent, $this->operatorAddress, $replyTo ) );
 	}
@@ -48,7 +55,7 @@ class Messenger {
 	private function sendMessage( Swift_Message $message ) {
 		$deliveryCount = $this->mailTransport->send( $message );
 		if ( $deliveryCount === 0 ) {
-			throw new \RuntimeException( 'Message delivery failed' );
+			throw new RuntimeException( 'Message delivery failed' );
 		}
 	}
 
