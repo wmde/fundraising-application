@@ -63,7 +63,7 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 
 	private function persistFirstComment( EntityManager $entityManager ) {
 		$firstDonation = new Donation();
-		$firstDonation->setName( 'First name' );
+		$firstDonation->setPublicRecord( 'First name' );
 		$firstDonation->setComment( 'First comment' );
 		$firstDonation->setAmount( '100' );
 		$firstDonation->setDtNew( new DateTime( '1984-01-01' ) );
@@ -73,7 +73,7 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 
 	private function persistSecondComment( EntityManager $entityManager ) {
 		$secondDonation = new Donation();
-		$secondDonation->setName( 'Second name' );
+		$secondDonation->setPublicRecord( 'Second name' );
 		$secondDonation->setComment( 'Second comment' );
 		$secondDonation->setAmount( '200' );
 		$secondDonation->setDtNew( new DateTime( '1984-02-02' ) );

@@ -32,7 +32,7 @@ class DbalCommentRepository implements CommentRepository {
 		return array_map(
 			function( Donation $donation ) {
 				return Comment::newInstance()
-					->setAuthorName( $donation->getName() )
+					->setAuthorName( $donation->getPublicRecord() )
 					->setCommentText( $donation->getComment() )
 					->setDonationAmount( (float)$donation->getAmount() )
 					->setPostingTime( $donation->getDtNew() )
