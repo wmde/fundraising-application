@@ -25,15 +25,19 @@ class PhysicalAddressValidatorTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEmpty( $validator->getConstraintViolations() );
 	}
 
-	public function testGivenEmptyAddress_validatorReturnsFalse_andViolationsContainsRequiredFieldNames() {
+	public function testGivenEmptyAddress_validatorReturnsFalse() {
 		$validator = new PhysicalAddressValidator();
-		$physicalAddress = new PhysicalAddress();
+		$this->assertFalse( $validator->validate( new PhysicalAddress() ) );
+	}
 
-		$this->assertFalse( $validator->validate( $physicalAddress ) );
-		$this->assertAttributeContains( 'strasse', 'source', $validator->getConstraintViolations()[0] );
-		$this->assertAttributeContains( 'plz', 'source', $validator->getConstraintViolations()[1] );
-		$this->assertAttributeContains( 'ort', 'source', $validator->getConstraintViolations()[2] );
-		$this->assertAttributeContains( 'country', 'source', $validator->getConstraintViolations()[3] );
+	public function testGivenEmptyAddress_violationsContainsRequiredFieldNames() {
+		$validator = new PhysicalAddressValidator();
+		$validator->validate( new PhysicalAddress() );
+
+		$this->assertSame( 'strasse', $validator->getConstraintViolations()[0]->getSource() );
+		$this->assertSame( 'plz', $validator->getConstraintViolations()[1]->getSource() );
+		$this->assertSame( 'ort', $validator->getConstraintViolations()[2]->getSource() );
+		$this->assertSame( 'country', $validator->getConstraintViolations()[3]->getSource() );
 	}
 
 }
