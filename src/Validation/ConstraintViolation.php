@@ -11,19 +11,16 @@ class ConstraintViolation {
 	private $value;
 	private $message;
 	private $source;
-	private $constraint;
 
 	/**
 	 * @param mixed $value The value that caused this violation
 	 * @param string $message Error message
-	 * @param mixed $constraint The validator instance that created this
 	 * @param string $source Class name or Class.Field name
 	 */
-	public function __construct( $value, string $message, $constraint = null, string $source = '' ) {
+	public function __construct( $value, string $message, string $source = '' ) {
 		$this->value = $value;
 		$this->message = $message;
 		$this->source = $source;
-		$this->constraint = $constraint;
 	}
 
 	/**
@@ -45,7 +42,4 @@ class ConstraintViolation {
 		$this->source = $source;
 	}
 
-	public function getConstraint(): string {
-		return $this->constraint;
-	}
 }
