@@ -45,10 +45,7 @@ class ConstraintViolation {
 		$this->source = $source;
 	}
 
-	/**
-	 * @return mixed|null
-	 */
-	public function getConstraint() {
+	public function getConstraint(): string {
 		return $this->constraint;
 	}
 }
