@@ -99,7 +99,7 @@ class FunFunFactory {
 			return ( new StoreFactory( $this->getConnection() ) )->getEntityManager();
 		} );
 
-		$pimple['request_repository'] = $pimple->share( function() {
+		$pimple['subscription_repository'] = $pimple->share( function() {
 			return new DoctrineSubscriptionRepository( $this->getConnection() );
 		} );
 
@@ -111,7 +111,7 @@ class FunFunFactory {
 			return new MailValidator( new InternetDomainNameValidator() );
 		} );
 
-		$pimple['request_validator'] = $pimple->share( function() {
+		$pimple['subscription_validator'] = $pimple->share( function() {
 			return new SubscriptionValidator( $this->getMailValidator(), $this->getTextPolicyValidator( 'fields' ) );
 		} );
 
@@ -239,16 +239,16 @@ class FunFunFactory {
 		return $this->pimple['comment_repository'];
 	}
 
-	private function newRequestRepository(): SubscriptionRepository {
-		return $this->pimple['request_repository'];
+	private function newSubscriptionRepository(): SubscriptionRepository {
+		return $this->pimple['subscription_repository'];
 	}
 
-	public function setRequestRepository( SubscriptionRepository $requestRepository ) {
-		$this->pimple['request_repository'] = $requestRepository;
+	public function setSubscriptionRepository( SubscriptionRepository $subscriptionRepository ) {
+		$this->pimple['subscription_repository'] = $subscriptionRepository;
 	}
 
-	private function getRequestValidator(): SubscriptionValidator {
-		return $this->pimple['request_validator'];
+	private function getSubscriptionValidator(): SubscriptionValidator {
+		return $this->pimple['subscription_validator'];
 	}
 
 	private function getMailValidator(): MailValidator {
@@ -348,8 +348,8 @@ class FunFunFactory {
 
 	public function newAddSubscriptionUseCase(): AddSubscriptionUseCase {
 		return new AddSubscriptionUseCase(
-			$this->newRequestRepository(),
-			$this->getRequestValidator(),
+			$this->newSubscriptionRepository(),
+			$this->getSubscriptionValidator(),
 			$this->newAddSubscriptionMailer()
 		);
 	}
@@ -386,8 +386,8 @@ class FunFunFactory {
 		return new BankDataConverter( $this->config['bank-data-file'] );
 	}
 
-	public function setRequestValidator( SubscriptionValidator $requestValidator ) {
-		$this->pimple['request_validator'] = $requestValidator;
+	public function setSubscriptionValidator(SubscriptionValidator $subscriptionValidator ) {
+		$this->pimple['subscription_validator'] = $subscriptionValidator;
 	}
 
 	public function setPageTitlePrefix( string $prefix ) {
