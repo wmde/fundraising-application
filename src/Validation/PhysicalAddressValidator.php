@@ -26,6 +26,9 @@ class PhysicalAddressValidator implements InstanceValidator {
 		return empty( $this->constraintViolations );
 	}
 
+	/**
+	 * @return ConstraintViolation[]
+	 */
 	public function getConstraintViolations(): array {
 		return $this->constraintViolations;
 	}
