@@ -13,7 +13,7 @@ class RequiredFieldValidator implements ScalarValueValidator {
 
 	public function validate( $value ): bool {
 		if ( empty( $value ) ) {
-			$this->lastViolation = new ConstraintViolation( $value, 'This field is required', $this );
+			$this->lastViolation = new ConstraintViolation( $value, 'This field is required' );
 			return false;
 		}
 

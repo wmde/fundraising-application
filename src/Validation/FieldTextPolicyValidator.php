@@ -26,7 +26,7 @@ class FieldTextPolicyValidator implements ScalarValueValidator {
 		if ( $this->textPolicyValidator->hasHarmlessContent( (string) $value, $this->validationFlags ) ) {
 			return true;
 		}
-		$this->lastViolation = new ConstraintViolation( $value, self::VIOLATION_MESSAGE, $this );
+		$this->lastViolation = new ConstraintViolation( $value, self::VIOLATION_MESSAGE );
 		return false;
 	}
 

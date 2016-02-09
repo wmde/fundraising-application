@@ -28,17 +28,17 @@ class MailValidator implements ScalarValueValidator {
 		try {
 			$mailAddress = new MailAddress( $emailAddress );
 		} catch ( \InvalidArgumentException $e ) {
-			$this->lastViolation = new ConstraintViolation( $emailAddress, 'Address has wrong format', $this );
+			$this->lastViolation = new ConstraintViolation( $emailAddress, 'Address has wrong format' );
 			return false;
 		}
 
 		if ( !$mailAddress || !filter_var( $mailAddress->getNormalizedAddress(), FILTER_VALIDATE_EMAIL ) ) {
-			$this->lastViolation = new ConstraintViolation( $emailAddress, 'Address is no valid email', $this );
+			$this->lastViolation = new ConstraintViolation( $emailAddress, 'Address is no valid email' );
 			return false;
 		}
 
 		if ( !$this->domainValidator->isValid( $mailAddress->getNormalizedDomain() ) ) {
-			$this->lastViolation = new ConstraintViolation( $emailAddress, 'MX record not found', $this );
+			$this->lastViolation = new ConstraintViolation( $emailAddress, 'MX record not found' );
 			return false;
 		}
 
