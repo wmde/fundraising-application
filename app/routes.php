@@ -163,7 +163,10 @@ $app->get(
 $app->post(
 	'add-comment',
 	function( Request $request ) use ( $app, $ffFactory ) {
-		
+		return $app->json( [
+			'status' => 'ERR',
+			'message' => '',
+		] );
 	}
 );
 

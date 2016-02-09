@@ -25,4 +25,19 @@ class AddCommentRouteTest extends WebRouteTestCase {
 		);
 	}
 
+	public function testGivenRequestWithoutParameters_resultIsError() {
+		$client = $this->createClient();
+
+		$client->request(
+			'POST',
+			'add-comment',
+			[]
+		);
+
+		$response = $client->getResponse();
+
+		$this->assertTrue( $response->isSuccessful(), 'request is successful' );
+		$this->assertErrorJsonResponse( $response );
+	}
+
 }
