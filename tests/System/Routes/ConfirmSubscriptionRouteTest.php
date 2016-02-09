@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 
+use WMDE\Fundraising\Entities\Address;
 use WMDE\Fundraising\Entities\Subscription;
 use WMDE\Fundraising\Frontend\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SubscriptionRepositorySpy;
@@ -26,16 +27,24 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 		) );
 	}
 
-	public function testGivenAnUnconfirmedSubscriptionRequest_successPageIsDisplayed() {
-		$subscription = new Subscription();
-		$subscription->setHexConfirmationCode( 'deadbeef' );
-		$subscription->setEmail( 'tester@example.com' );
-		$subscription->setStatus( Subscription::STATUS_NEUTRAL );
-		$subscriptionRepository = new SubscriptionRepositorySpy();
-		$subscriptionRepository->storeSubscription( $subscription );
+	private function newSubscriptionAddress() {
+		$address = new Address();
+		$address->setSalutation( 'Herr' );
+		$address->setFirstName( 'Nyan' );
+		$address->setLastName( 'Cat' );
+		$address->setTitle( 'Dr.' );
+		return $address;
+	}
 
-		$client = $this->createClient( [], function( FunFunFactory $factory ) use ( $subscriptionRepository ) {
-			$factory->setSubscriptionRepository( $subscriptionRepository );
+	public function testGivenAnUnconfirmedSubscriptionRequest_successPageIsDisplayed() {
+		$client = $this->createClient( [], function( FunFunFactory $factory ) {
+			$subscription = new Subscription();
+			$subscription->setHexConfirmationCode( 'deadbeef' );
+			$subscription->setEmail( 'tester@example.com' );
+			$subscription->setAddress( $this->newSubscriptionAddress() );
+			$subscription->setStatus( Subscription::STATUS_NEUTRAL );
+
+			$factory->getSubscriptionRepository()->storeSubscription( $subscription );
 		} );
 
 		$client->request(
@@ -49,9 +58,7 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenANonHexadecimalConfirmationCode_confirmationPageIsNotFound() {
-		$client = $this->createClient( [], function( FunFunFactory $factory ) {
-			$factory->setSubscriptionRepository( new SubscriptionRepositorySpy() );
-		} );
+		$client = $this->createClient();
 
 		$client->request(
 			'GET',
@@ -59,5 +66,39 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 		);
 
 		$this->assert404( $client->getResponse() );
+	}
+
+	public function testGivenNoSubscription_AnErrorIsDisplayed() {
+		$client = $this->createClient();
+
+		$client->request(
+			'GET',
+			'/contact/confirm-subscription/deadbeef'
+		);
+		$response = $client->getResponse();
+
+		$this->assertSame( 200, $response->getStatusCode() );
+		$this->assertContains( 'Es konnte kein Eintrag mit diesem Bestätigungs-Code gefunden werden', $response->getContent() );
+	}
+
+	public function testGivenAConfirmedSubscriptionRequest_successPageIsDisplayed() {
+		$client = $this->createClient( [], function( FunFunFactory $factory ) {
+			$subscription = new Subscription();
+			$subscription->setHexConfirmationCode( 'deadbeef' );
+			$subscription->setEmail( 'tester@example.com' );
+			$subscription->setAddress( $this->newSubscriptionAddress() );
+			$subscription->setStatus( Subscription::STATUS_CONFIRMED );
+
+			$factory->getSubscriptionRepository()->storeSubscription( $subscription );
+		} );
+
+		$client->request(
+			'GET',
+			'/contact/confirm-subscription/deadbeef'
+		);
+		$response = $client->getResponse();
+
+		$this->assertSame( 200, $response->getStatusCode() );
+		$this->assertContains( 'Diese E-Mail-Adresse wurde bereits bestätigt.', $response->getContent() );
 	}
 }

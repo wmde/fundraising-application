@@ -37,5 +37,10 @@ class DbalSubscriptionRepository implements SubscriptionRepository {
 		return (int) $query->getSingleScalarResult();
 	}
 
+	public function findByConfirmationCode( string $confirmationCode ) {
+		return $this->entityManager->getRepository( Subscription::class )->findOneBy( [
+			'confirmationCode' => $confirmationCode
+		] );
+	}
 
 }

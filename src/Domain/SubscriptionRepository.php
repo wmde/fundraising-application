@@ -10,6 +10,7 @@ use WMDE\Fundraising\Entities\Subscription;
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
 interface SubscriptionRepository {
+
 	public function storeSubscription( Subscription $subscription );
 
 	/**
@@ -20,4 +21,11 @@ interface SubscriptionRepository {
 	 * @return int
 	 */
 	public function countSimilar( Subscription $subscription, \DateTime $cutoffDateTime ): int;
+
+	/**
+	 * @param string $confirmationCode
+	 * @return Subscription|null
+	 */
+	public function findByConfirmationCode( string $confirmationCode );
+
 }

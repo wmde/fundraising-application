@@ -41,6 +41,7 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\GetInTouchHTMLPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\IbanPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\InternalErrorHTMLPresenter;
 use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationUseCase;
+use WMDE\Fundraising\Frontend\UseCases\ConfirmSubscription\ConfirmSubscriptionUseCase;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\Fundraising\Frontend\Validation\MailValidator;
 use WMDE\Fundraising\Frontend\Validation\SubscriptionDuplicateValidator;
@@ -244,7 +245,7 @@ class FunFunFactory {
 		return $this->pimple['comment_repository'];
 	}
 
-	private function getSubscriptionRepository(): SubscriptionRepository {
+	public function getSubscriptionRepository(): SubscriptionRepository {
 		return $this->pimple['subscription_repository'];
 	}
 
@@ -359,6 +360,13 @@ class FunFunFactory {
 		);
 	}
 
+	public function newConfirmSubscriptionUseCase(): ConfirmSubscriptionUseCase {
+		return new ConfirmSubscriptionUseCase(
+			$this->getSubscriptionRepository(),
+			$this->newConfirmSubscriptionMailer()
+		);
+	}
+
 	private function newAddSubscriptionMailer(): TemplateBasedMailer {
 		return new TemplateBasedMailer(
 			$this->getMessenger(),
@@ -368,6 +376,18 @@ class FunFunFactory {
 				[ 'greeting_generator' => $this->getGreetingGenerator() ]
 			),
 			$this->getTranslator()->trans( 'Your membership with Wikimedia Germany' )
+		);
+	}
+
+	private function newConfirmSubscriptionMailer(): TemplateBasedMailer {
+		return new TemplateBasedMailer(
+				$this->getMessenger(),
+				new TwigTemplate(
+						$this->getTwig(),
+						'Mail_Subscription_Confirmation.twig',
+						[ 'greeting_generator' => $this->getGreetingGenerator() ]
+				),
+				$this->getTranslator()->trans( 'Your membership with Wikimedia Germany' )
 		);
 	}
 
@@ -382,6 +402,7 @@ class FunFunFactory {
 	public function newGenerateIbanUseCase(): GenerateIbanUseCase {
 		return new GenerateIbanUseCase( $this->newBankDataConverter() );
 	}
+
 
 	public function newIbanPresenter(): IbanPresenter {
 		return new IbanPresenter();
