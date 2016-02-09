@@ -26,4 +26,14 @@ class SubscriptionRepositorySpy implements SubscriptionRepository {
 		return $this->subscriptions;
 	}
 
+	public function findByConfirmationCode( string $confirmationCode )
+	{
+		foreach( $this->subscriptions as $subscription ) {
+			if ( $subscription->getConfirmationCode() === $confirmationCode ) {
+				return $subscription;
+			}
+		}
+	}
+
+
 }

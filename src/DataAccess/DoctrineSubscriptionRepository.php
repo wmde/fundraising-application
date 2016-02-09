@@ -25,4 +25,10 @@ class DoctrineSubscriptionRepository implements SubscriptionRepository {
 		$this->entityManager->persist( $subscription );
 	}
 
+	public function findByConfirmationCode( string $confirmationCode ) {
+		return $this->entityManager->getRepository( Subscription::class )->findOneBy( [
+			'confirmationCode' => $confirmationCode
+		] );
+	}
+
 }

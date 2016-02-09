@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 
+use WMDE\Fundraising\Entities\Address;
 use WMDE\Fundraising\Entities\Subscription;
 use WMDE\Fundraising\Frontend\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SubscriptionRepositorySpy;
@@ -26,10 +27,20 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 		) );
 	}
 
+	private function newSubscriptionAddress() {
+		$address = new Address();
+		$address->setSalutation( 'Herr' );
+		$address->setFirstName( 'Nyan' );
+		$address->setLastName( 'Cat' );
+		$address->setTitle( 'Dr.' );
+		return $address;
+	}
+
 	public function testGivenAnUnconfirmedSubscriptionRequest_successPageIsDisplayed() {
 		$subscription = new Subscription();
 		$subscription->setHexConfirmationCode( 'deadbeef' );
 		$subscription->setEmail( 'tester@example.com' );
+		$subscription->setAddress( $this->newSubscriptionAddress() );
 		$subscription->setStatus( Subscription::STATUS_NEUTRAL );
 		$subscriptionRepository = new SubscriptionRepositorySpy();
 		$subscriptionRepository->storeSubscription( $subscription );

@@ -11,4 +11,10 @@ use WMDE\Fundraising\Entities\Subscription;
  */
 interface SubscriptionRepository {
 	public function storeSubscription( Subscription $subscription );
+
+	/**
+	 * @param string $confirmationCode
+	 * @return Subscription|null
+	 */
+	public function findByConfirmationCode( string $confirmationCode );
 }
