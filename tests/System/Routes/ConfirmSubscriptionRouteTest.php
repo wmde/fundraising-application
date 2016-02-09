@@ -35,7 +35,7 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 		$subscriptionRepository->storeSubscription( $subscription );
 
 		$client = $this->createClient( [], function( FunFunFactory $factory ) use ( $subscriptionRepository ) {
-			$factory->setRequestRepository( $subscriptionRepository );
+			$factory->setSubscriptionRepository( $subscriptionRepository );
 		} );
 
 		$client->request(
@@ -50,7 +50,7 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 
 	public function testGivenANonHexadecimalConfirmationCode_confirmationPageIsNotFound() {
 		$client = $this->createClient( [], function( FunFunFactory $factory ) {
-			$factory->setRequestRepository( new SubscriptionRepositorySpy() );
+			$factory->setSubscriptionRepository( new SubscriptionRepositorySpy() );
 		} );
 
 		$client->request(
