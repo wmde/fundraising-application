@@ -36,6 +36,7 @@ use WMDE\Fundraising\Frontend\Presentation\Content\WikiContentProvider;
 use WMDE\Fundraising\Frontend\Presentation\GreetingGenerator;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionHTMLPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionJSONPresenter;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\ConfirmSubscriptionHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\GetInTouchHTMLPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\IbanPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\InternalErrorHTMLPresenter;
@@ -266,6 +267,10 @@ class FunFunFactory {
 
 	public function newAddSubscriptionHTMLPresenter(): AddSubscriptionHTMLPresenter {
 		return new AddSubscriptionHTMLPresenter( $this->getLayoutTemplate( 'AddSubscription.twig' ) );
+	}
+
+	public function newConfirmSubscriptionHtmlPresenter(): ConfirmSubscriptionHtmlPresenter {
+		return new ConfirmSubscriptionHtmlPresenter( $this->getLayoutTemplate( 'ConfirmSubscription.html.twig' ) );
 	}
 
 	public function newAddSubscriptionJSONPresenter(): AddSubscriptionJSONPresenter {

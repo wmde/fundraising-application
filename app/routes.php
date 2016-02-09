@@ -131,6 +131,13 @@ $app->post(
 )
 ->bind( 'subscribe' );
 
+$app->get( 'contact/confirm-subscription/{confirmationCode}', function ( $confirmationCode ) use ( $ffFactory ) {
+	// TODO create actual use case
+	$dummyResponse = \WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse::newSuccessResponse();
+	return $ffFactory->newConfirmSubscriptionHtmlPresenter()->present( $dummyResponse );
+} )
+->assert( 'confirmationCode', '^[0-9a-f]+$' );
+
 $app->get(
 	'check-iban',
 	function( Request $request ) use ( $app, $ffFactory ) {

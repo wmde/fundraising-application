@@ -2,6 +2,8 @@
 
 namespace WMDE\Fundraising\Frontend\ResponseModel;
 
+use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
+
 /**
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
@@ -11,6 +13,10 @@ class ValidationResponse {
 	private $validationErrors;
 	private $needsModerationValue;
 
+	/**
+	 * @param ConstraintViolation[] $requestValidationErrors
+	 * @param bool $needsModeration
+	 */
 	public function __construct( array $requestValidationErrors = [], $needsModeration = false ) {
 		$this->validationErrors = $requestValidationErrors;
 		$this->needsModerationValue = $needsModeration;
@@ -28,6 +34,9 @@ class ValidationResponse {
 		return new self( [], true );
 	}
 
+	/**
+	 * @return ConstraintViolation[]
+	 */
 	public function getValidationErrors(): array {
 		return $this->validationErrors;
 	}
