@@ -13,6 +13,7 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\Domain\Iban;
+use WMDE\Fundraising\Frontend\UseCases\AddDonation\DonationRequest;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageDisplayRequest;
 use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanRequest;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
@@ -192,6 +193,60 @@ $app->post(
 
 		// TODO: response
 		return '';
+	}
+);
+
+$app->post(
+	'donation/add',
+	function( Application $app, Request $request ) use ( $ffFactory ) {
+		$useCase = $ffFactory->newAddDonationUseCase();
+
+		$donationRequest = new DonationRequest();
+		$donationRequest->setAmount( floatval( $request->get( 'betrag', 0 ) ) );
+		$donationRequest->setPaymentType( $request->get( 'zahlweise', '' ) );
+		$donationRequest->setInterval( intval( $request->get( 'periode', 0 ) ) );
+
+		$addressType = $request->get( 'adresstyp', '' );
+		$donationRequest->setAddressType( $addressType );
+		$donationRequest->setSalutation( $request->get( 'anrede', '' ) );
+		$donationRequest->setTitle( $request->get( 'titel', '' ) );
+		$donationRequest->setCompanyName( $request->get( 'firma', '' ) );
+		$donationRequest->setFirstName( $request->get( 'vorname', '' ) );
+		$donationRequest->setLastName( $request->get( 'nachname', '' ) );
+		$donationRequest->setPostalAddress( $request->get( 'strasse', '' ) );
+		$donationRequest->setPostalCode( $request->get( 'plz', '' ) );
+		$donationRequest->setCity( $request->get( 'ort', '' ) );
+		$donationRequest->setCountry( $request->get( 'country', '' ) );
+		$donationRequest->setEmailAddress( $request->get( 'email', '' ) );
+
+		$donationRequest->setIban( $request->get( 'iban', '' ) );
+		$donationRequest->setBic( $request->get( 'bic', '' ) );
+		$donationRequest->setBankAccount( $request->get( 'konto', '' ) );
+		$donationRequest->setBankCode( $request->get( 'blz', '' ) );
+		$donationRequest->setBankName( $request->get( 'bankname', '' ) );
+
+		# TODO: determine tracking data
+		$donationRequest->setTracking( '' );
+		$donationRequest->setSource( '' );
+		$donationRequest->setTotalImpressionCount( $request->get( 'impCount', 0 ) );
+		$donationRequest->setSingleBannerImpressionCount( $request->get( 'bImpCount', 0 ) );
+		$donationRequest->setColor( $request->get( 'color', '' ) );
+		$donationRequest->setSkin( $request->get( 'skin', '' ) );
+		$donationRequest->setLayout( $request->get( 'layout', '' ) );
+
+		$donationRequest->setNextForm( $request->get( 'form', '' ) );
+		$donationRequest->setCurrentForm( $request->get( 'from_form', '' ) );
+		$donationRequest->setLastForm( $request->get( 'back_form', '' ) );
+
+		$responseModel = $useCase->addDonation( $donationRequest, $ffFactory->newAddressValidatorFromAddressType( $addressType ) );
+		#if ( in_array( 'application/json', $request->getAcceptableContentTypes() ) ) {
+			#return $app->json( $ffFactory->newAddDonationJSONPresenter()->present( $responseModel ) );
+		#}
+		if ( $responseModel->isSuccessful() ) {
+			return $app->redirect( $app['url_generator']->generate('page', [ 'pageName' => 'DonationSuccess' ] ) );
+		}
+		#return $ffFactory->newAddDonationHTMLPresenter()->present( $responseModel, $request->request->all() );
+		return 'TODO';
 	}
 );
 
