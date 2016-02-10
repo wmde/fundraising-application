@@ -19,7 +19,10 @@
 		"loaders": {
 			"wiki": {
 				"enabled": true,
-				"rawpages": []
+				"rawpages": [
+					"Mail_Subscription_Confirmation.twig",
+					"Mail_Subscription_Request.twig"
+				]
 			},
 			"filesystem": {
 				"template-dir": [ "app/templates" ]
