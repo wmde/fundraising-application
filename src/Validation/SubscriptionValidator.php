@@ -28,6 +28,11 @@ class SubscriptionValidator implements InstanceValidator {
 		$this->textPolicyViolations = [];
 	}
 
+	/**
+	 * @param Subscription $instance
+	 *
+	 * @return bool
+	 */
 	public function validate( $instance ): bool {
 		$violations = $this->getRequiredFieldViolations( $instance );
 		$violations[] = $this->validateField( $this->mailValidator, $instance->getEmail(), 'email');

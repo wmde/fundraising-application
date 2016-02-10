@@ -16,6 +16,8 @@ class Donation {
 	private $personalInfo;
 
 	/**
+	 * Returns the PersonalInfo or null for anonymous donations.
+	 *
 	 * @return PersonalInfo|null
 	 */
 	public function getPersonalInfo() {
@@ -23,6 +25,7 @@ class Donation {
 	}
 
 	public function setPersonalInfo( PersonalInfo $personalInfo ) {
+		$this->assertIsWritable();
 		$this->personalInfo = $personalInfo;
 	}
 

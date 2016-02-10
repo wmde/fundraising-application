@@ -18,36 +18,30 @@ class PersonalInfo {
 	private $physicalAddress;
 	private $emailAddress;
 
-	/**
-	 * @return PersonName
-	 */
-	public function getPersonName() {
+	public function getPersonName(): PersonName {
 		return $this->personName;
 	}
 
 	public function setPersonName( PersonName $personName ) {
+		$this->assertIsWritable();
 		$this->personName = $personName;
 	}
 
-	/**
-	 * @return PhysicalAddress
-	 */
-	public function getPhysicalAddress() {
+	public function getPhysicalAddress(): PhysicalAddress {
 		return $this->physicalAddress;
 	}
 
 	public function setPhysicalAddress( PhysicalAddress $physicalAddress ) {
+		$this->assertIsWritable();
 		$this->physicalAddress = $physicalAddress;
 	}
 
-	/**
-	 * @return MailAddress
-	 */
-	public function getEmailAddress() {
+	public function getEmailAddress(): MailAddress {
 		return $this->emailAddress;
 	}
 
 	public function setEmailAddress( MailAddress $emailAddress ) {
+		$this->assertIsWritable();
 		$this->emailAddress = $emailAddress;
 	}
 
