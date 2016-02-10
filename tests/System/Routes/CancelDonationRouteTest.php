@@ -28,11 +28,8 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 		$this->assertSame( 200, $client->getResponse()->getStatusCode() );
 	}
 
-	public function testGivenGetRequest_resultHas405methodNotAllowedStatus() {
-		$client = $this->createClient();
-
-		$client->request(
-			'GET',
+	public function testGivenGetRequest_resultHasMethodNotAllowedStatus() {
+		$this->assertGetRequestCausesMethodNotAllowedResponse(
 			'/donation/cancel',
 			[
 				'sid' => '',
@@ -40,8 +37,6 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 				'utoken' => '',
 			]
 		);
-
-		$this->assertSame( 405, $client->getResponse()->getStatusCode() );
 	}
 
 }
