@@ -39,7 +39,7 @@ class DbalSubscriptionRepository implements SubscriptionRepository {
 
 	public function findByConfirmationCode( string $confirmationCode ) {
 		return $this->entityManager->getRepository( Subscription::class )->findOneBy( [
-			'confirmationCode' => $confirmationCode
+			'confirmationCode' => hex2bin( $confirmationCode )
 		] );
 	}
 

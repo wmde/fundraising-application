@@ -30,8 +30,7 @@ class ConfirmSubscriptionUseCase {
 	}
 
 	public function confirmSubscription( string $confirmationCode ): ValidationResponse {
-		$binaryConfirmationCode = hex2bin( $confirmationCode );
-		$subscription = $this->subscriptionRepository->findByConfirmationCode( $binaryConfirmationCode );
+		$subscription = $this->subscriptionRepository->findByConfirmationCode( $confirmationCode );
 		if ( ! $subscription ) {
 			$errorMsg = 'No subscription was found with this confirmation code.';
 			return ValidationResponse::newFailureResponse( [ new ConstraintViolation( $confirmationCode, $errorMsg ) ] );
