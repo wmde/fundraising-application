@@ -132,9 +132,9 @@ $app->post(
 ->bind( 'subscribe' );
 
 $app->get( 'contact/confirm-subscription/{confirmationCode}', function ( $confirmationCode ) use ( $ffFactory ) {
-	// TODO create actual use case
-	$dummyResponse = \WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse::newSuccessResponse();
-	return $ffFactory->newConfirmSubscriptionHtmlPresenter()->present( $dummyResponse );
+	$useCase = $ffFactory->newConfirmSubscriptionUseCase();
+	$response = $useCase->confirmSubscription( $confirmationCode );
+	return $ffFactory->newConfirmSubscriptionHtmlPresenter()->present( $response );
 } )
 ->assert( 'confirmationCode', '^[0-9a-f]+$' );
 

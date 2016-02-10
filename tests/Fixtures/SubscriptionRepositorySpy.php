@@ -33,4 +33,8 @@ class SubscriptionRepositorySpy implements SubscriptionRepository {
 		return 0;
 	}
 
+	public function findByConfirmationCode( string $confirmationCode ) {
+		return null;
+	}
+
 }
