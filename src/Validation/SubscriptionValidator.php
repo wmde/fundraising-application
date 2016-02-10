@@ -14,24 +14,26 @@ class SubscriptionValidator implements InstanceValidator {
 	use CanValidateField;
 
 	private $mailValidator;
+	private $duplicateValidator;
 	private $textPolicyValidator;
 	private $constraintViolations;
 	private $textPolicyViolations;
 
-	public function __construct( MailValidator $mailValidator, TextPolicyValidator $textPolicyValidator ) {
+	public function __construct( MailValidator $mailValidator, TextPolicyValidator $textPolicyValidator,
+	                             SubscriptionDuplicateValidator $duplicateValidator ) {
 		$this->mailValidator = $mailValidator;
 		$this->textPolicyValidator = $textPolicyValidator;
+		$this->duplicateValidator = $duplicateValidator;
 		$this->constraintViolations = [];
 		$this->textPolicyViolations = [];
 	}
 
-	/**
-	 * @param Subscription $instance
-	 * @return bool
-	 */
 	public function validate( $instance ): bool {
 		$violations = $this->getRequiredFieldViolations( $instance );
 		$violations[] = $this->validateField( $this->mailValidator, $instance->getEmail(), 'email');
+		if ( ! $this->duplicateValidator->validate( $instance ) ) {
+			$violations = array_merge( $violations, $this->duplicateValidator->getConstraintViolations() );
+		}
 		$this->constraintViolations = array_filter( $violations );
 		return count( $this->constraintViolations ) == 0;
 	}

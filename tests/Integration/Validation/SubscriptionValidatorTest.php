@@ -6,16 +6,31 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\Validation;
 use WMDE\Fundraising\Entities\Address;
 use WMDE\Fundraising\Entities\Subscription;
 use WMDE\Fundraising\Frontend\Domain\NullDomainNameValidator;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\InMemorySubscriptionRepository;
 use WMDE\Fundraising\Frontend\Validation\MailValidator;
 use WMDE\Fundraising\Frontend\Validation\SubscriptionValidator;
+use WMDE\Fundraising\Frontend\Validation\SubscriptionDuplicateValidator;
 use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\SubscriptionRepositorySpy;
 
+/**
+ * @covers WMDE\Fundraising\Frontend\Validation\SubscriptionValidator
+ *
+ * @license GNU GPL v2+
+ * @author Gabriel Birke < gabriel.birke@wikimedia.de >
+ */
 class SubscriptionValidatorTest extends ValidatorTestCase {
 
 	private function getMockTextPolicyValidator() {
 		$mock = $this->getMock( TextPolicyValidator::class );
 		$mock->method( 'hasHarmlessContent' )
 			->willReturn( true );
+		return $mock;
+	}
+
+	private function getMockDuplicateValidator() {
+		$mock = $this->getMockBuilder( SubscriptionDuplicateValidator::class )->disableOriginalConstructor()->getMock();
+		$mock->method( 'validate' )->willReturn( true );
 		return $mock;
 	}
 
@@ -33,7 +48,11 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 
 	public function testEmailIsValidated() {
 		$mailValidator = new MailValidator( new NullDomainNameValidator() );
-		$subscriptionValidator = new SubscriptionValidator( $mailValidator, $this->getMockTextPolicyValidator() );
+		$subscriptionValidator = new SubscriptionValidator(
+			$mailValidator,
+			$this->getMockTextPolicyValidator(),
+			$this->getMockDuplicateValidator()
+		);
 		$subscription = new Subscription();
 		$subscription->setAddress( $this->createAddress( 'Herr', 'Nyan', 'Cat' ) );
 		$subscription->setEmail( 'this is not a mail addess' );
@@ -43,7 +62,11 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 
 	public function testFirstNameIsValidated() {
 		$mailValidator = new MailValidator( new NullDomainNameValidator() );
-		$subscriptionValidator = new SubscriptionValidator( $mailValidator, $this->getMockTextPolicyValidator() );
+		$subscriptionValidator = new SubscriptionValidator(
+			$mailValidator,
+			$this->getMockTextPolicyValidator(),
+			$this->getMockDuplicateValidator()
+		);
 		$subscription = new Subscription();
 		$subscription->setAddress( $this->createAddress( 'Herr', '', 'Cat' ) );
 		$subscription->setEmail( 'nyan@meow.com' );
@@ -53,7 +76,11 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 
 	public function testLastNameIsValidated() {
 		$mailValidator = new MailValidator( new NullDomainNameValidator() );
-		$subscriptionValidator = new SubscriptionValidator( $mailValidator, $this->getMockTextPolicyValidator() );
+		$subscriptionValidator = new SubscriptionValidator(
+			$mailValidator,
+			$this->getMockTextPolicyValidator(),
+			$this->getMockDuplicateValidator()
+		);
 		$subscription = new Subscription();
 		$subscription->setAddress( $this->createAddress( 'Herr', 'Nyan', '' ) );
 		$subscription->setEmail( 'nyan@meow.com' );
@@ -63,7 +90,11 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 
 	public function testSalutationIsValidated() {
 		$mailValidator = new MailValidator( new NullDomainNameValidator() );
-		$subscriptionValidator = new SubscriptionValidator( $mailValidator, $this->getMockTextPolicyValidator() );
+		$subscriptionValidator = new SubscriptionValidator(
+			$mailValidator,
+			$this->getMockTextPolicyValidator(),
+			$this->getMockDuplicateValidator()
+		);
 		$subscription = new Subscription();
 		$subscription->setAddress( $this->createAddress( '', 'Nyan', 'Cat' ) );
 		$subscription->setEmail( 'nyan@meow.com' );
@@ -76,7 +107,11 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 		$policyValidator = $this->getMock( TextPolicyValidator::class );
 		$policyValidator->method( 'hasHarmlessContent' )
 			->willReturn( false );
-		$subscriptionValidator = new SubscriptionValidator( $mailValidator, $policyValidator );
+		$subscriptionValidator = new SubscriptionValidator(
+			$mailValidator,
+			$policyValidator,
+			$this->getMockDuplicateValidator()
+		);
 		$subscription = new Subscription();
 		$subscription->setAddress( $this->createAddress( 'Herr', 'Nyan', 'Cat' ) );
 		$subscription->setEmail( 'nyan@meow.com' );
@@ -89,10 +124,33 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 		$policyValidator = $this->getMock( TextPolicyValidator::class );
 		$policyValidator->method( 'hasHarmlessContent' )
 			->willReturn( false );
-		$subscriptionValidator = new SubscriptionValidator( $mailValidator, $policyValidator );
+		$subscriptionValidator = new SubscriptionValidator(
+			$mailValidator,
+			$policyValidator,
+			$this->getMockDuplicateValidator()
+		);
 		$subscription = new Subscription();
 		$subscription->setAddress( $this->createAddress( 'Herr', 'Nyan', 'Cat' ) );
 		$subscription->setEmail( 'nyan@meow.com' );
 		$this->assertTrue( $subscriptionValidator->needsModeration( $subscription ) );
+	}
+
+	public function testDuplicateSubscriptionIsValidated() {
+		$subscription = new Subscription();
+		$subscription->setAddress( $this->createAddress( 'Herr', 'Nyan', 'Cat' ) );
+		$subscription->setEmail( 'nyan@meow.com' );
+		$subscription->setCreatedAt( new \DateTime( '5 minutes ago' ) );
+
+		$mailValidator = new MailValidator( new NullDomainNameValidator() );
+		$repository = new InMemorySubscriptionRepository();
+		$repository->storeSubscription( $subscription );
+		$duplicateValidator = new SubscriptionDuplicateValidator( $repository, new \DateTime( '30 minutes ago' ) );
+		$subscriptionValidator = new SubscriptionValidator(
+			$mailValidator,
+			$this->getMockTextPolicyValidator(),
+			$duplicateValidator
+		);
+		$this->assertFalse( $subscriptionValidator->validate( $subscription ) );
+		$this->assertConstraintWasViolated( $subscriptionValidator->getConstraintViolations(), '' );
 	}
 }
