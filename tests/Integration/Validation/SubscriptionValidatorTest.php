@@ -151,7 +151,6 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 			$duplicateValidator
 		);
 		$this->assertFalse( $subscriptionValidator->validate( $subscription ) );
-		$expectedSource = 'WMDE\Fundraising\Entities\Subscription::duplicate';
-		$this->assertConstraintWasViolated( $subscriptionValidator->getConstraintViolations(), $expectedSource );
+		$this->assertConstraintWasViolated( $subscriptionValidator->getConstraintViolations(), '' );
 	}
 }

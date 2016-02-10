@@ -20,13 +20,17 @@ class SubscriptionDuplicateValidator implements InstanceValidator {
 		$this->cutoffDateTime = $cutoffDateTime;
 	}
 
-	public function validate( $instance ): bool {
+	/**
+	 * @param Subscription $subscription
+	 *
+	 * @return bool
+	 */
+	public function validate( $subscription ): bool {
 		$this->constraintViolations = [];
-		if ( $this->repository->countSimilar( $instance, $this->cutoffDateTime ) > 0 ) {
+		if ( $this->repository->countSimilar( $subscription, $this->cutoffDateTime ) > 0 ) {
 			$this->constraintViolations[] = new ConstraintViolation(
-				$instance->getEmail(),
-				'The data was already inserted',
-				Subscription::class . '::duplicate'
+				$subscription->getEmail(),
+				'The data was already inserted'
 			);
 		}
 		return empty( $this->constraintViolations );
