@@ -11,7 +11,7 @@ use WMDE\Fundraising\Frontend\Domain\SubscriptionRepository;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class SubscriptionRepositorySpy implements SubscriptionRepository {
+class InMemorySubscriptionRepository implements SubscriptionRepository {
 
 	/**
 	 * @var Subscription[]
@@ -30,7 +30,13 @@ class SubscriptionRepositorySpy implements SubscriptionRepository {
 	}
 
 	public function countSimilar( Subscription $subscription, \DateTime $cutoffDateTime ): int {
-		return 0;
+		$count = 0;
+		foreach ( $this->subscriptions as $sub ) {
+			if ( $sub->getEmail() == $subscription->getEmail() && $subscription->getCreatedAt() > $cutoffDateTime ) {
+				$count++;
+			}
+		}
+		return $count;
 	}
 
 }
