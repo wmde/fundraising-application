@@ -20,73 +20,79 @@ use WMDE\Fundraising\Frontend\UseCases\ConfirmSubscription\ConfirmSubscriptionUs
  */
 class ConfirmSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase {
 
-	/**
-	 * @var PHPUnit_Framework_MockObject_MockObject|SubscriptionRepository
-	 */
-	private $repo;
+	const CONFIRMATION_CODE = 'deadbeef';
 
-	/**
-	 * @var PHPUnit_Framework_MockObject_MockObject|TemplateBasedMailer
-	 */
-	private $mailer;
-
-	public function setUp() {
-		$this->repo = new SubscriptionRepositorySpy();
-
-		$this->mailer = $this->getMockBuilder( TemplateBasedMailer::class )
-				->disableOriginalConstructor()
-				->getMock();
-	}
-
-	private function newSubscriptionAddress() {
+	private function newSubscriptionAddress(): Address {
 		$address = new Address();
+
 		$address->setSalutation( 'Herr' );
 		$address->setFirstName( 'Nyan' );
 		$address->setLastName( 'Cat' );
 		$address->setTitle( 'Dr.' );
+
 		return $address;
 	}
 
+	private function newSubscription(): Subscription {
+		$subscription = new Subscription();
+
+		$subscription->setHexConfirmationCode( self::CONFIRMATION_CODE );
+		$subscription->setEmail( 'nyan@awesomecats.com' );
+		$subscription->setAddress( $this->newSubscriptionAddress() );
+
+		return $subscription;
+	}
+
+	/**
+	 * @return PHPUnit_Framework_MockObject_MockObject|TemplateBasedMailer
+	 */
+	private function newMailer() {
+		return $this->getMockBuilder( TemplateBasedMailer::class )
+			->disableOriginalConstructor()
+			->getMock();
+	}
+
 	public function testGivenNoSubscriptions_anErrorResponseIsCreated() {
-		$this->mailer->expects( $this->never() )->method( 'sendMail' );
-		$useCase = new ConfirmSubscriptionUseCase( $this->repo, $this->mailer );
-		$result = $useCase->confirmSubscription( 'deadbeef' );
+		$mailer = $this->newMailer();
+		$mailer->expects( $this->never() )->method( 'sendMail' );
+		$useCase = new ConfirmSubscriptionUseCase( new SubscriptionRepositorySpy(), $mailer );
+		$result = $useCase->confirmSubscription( self::CONFIRMATION_CODE );
 		$this->assertFalse( $result->isSuccessful() );
 	}
 
 	public function testGivenASubscriptionWithWrongStatus_anErrorResponseIsCreated() {
-		$subscription = new Subscription();
-		$subscription->setHexConfirmationCode( 'deadbeef' );
-		$subscription->setEmail( 'nyan@awesomecats.com' );
-		$subscription->setAddress( $this->newSubscriptionAddress() );
+		$subscription = $this->newSubscription();
 		$subscription->setStatus( Subscription::STATUS_CONFIRMED );
-		$this->repo->storeSubscription( $subscription );
-		$this->mailer->expects( $this->never() )->method( 'sendMail' );
-		$useCase = new ConfirmSubscriptionUseCase( $this->repo, $this->mailer );
-		$result = $useCase->confirmSubscription( 'deadbeef' );
-		$this->assertFalse( $result->isSuccessful() );
+
+		$repo = new SubscriptionRepositorySpy();
+		$repo->storeSubscription( $subscription );
+
+		$mailer = $this->newMailer();
+		$mailer->expects( $this->never() )->method( 'sendMail' );
+
+		$useCase = new ConfirmSubscriptionUseCase( $repo, $mailer );
+
+		$this->assertFalse( $useCase->confirmSubscription( self::CONFIRMATION_CODE )->isSuccessful() );
 	}
 
 	public function testGivenASubscription_aSuccessIsCreated() {
-		$subscription = new Subscription();
-		$subscription->setHexConfirmationCode( 'deadbeef' );
-		$subscription->setEmail( 'nyan@awesomecats.com' );
-		$subscription->setAddress( $this->newSubscriptionAddress() );
-		$this->repo->storeSubscription( $subscription );
-		$useCase = new ConfirmSubscriptionUseCase( $this->repo, $this->mailer  );
-		$result = $useCase->confirmSubscription( 'deadbeef' );
-		$this->assertTrue( $result->isSuccessful() );
+		$repo = new SubscriptionRepositorySpy();
+		$repo->storeSubscription( $this->newSubscription() );
+
+		$useCase = new ConfirmSubscriptionUseCase( $repo, $this->newMailer() );
+
+		$this->assertTrue( $useCase->confirmSubscription( self::CONFIRMATION_CODE )->isSuccessful() );
 	}
 
 	public function testGivenASubscription_aConfirmationMailIsSent() {
-		$subscription = new Subscription();
-		$subscription->setHexConfirmationCode( 'deadbeef' );
-		$subscription->setEmail( 'nyan@awesomecats.com' );
-		$subscription->setAddress( $this->newSubscriptionAddress() );
-		$this->repo->storeSubscription( $subscription );
-		$this->mailer->expects( $this->once() )->method( 'sendMail' );
-		$useCase = new ConfirmSubscriptionUseCase( $this->repo, $this->mailer  );
-		$result = $useCase->confirmSubscription( 'deadbeef' );
-		$this->assertTrue( $result->isSuccessful() );
+		$repo = new SubscriptionRepositorySpy();
+		$repo->storeSubscription( $this->newSubscription() );
+
+		$mailer = $this->newMailer();
+		$mailer->expects( $this->once() )->method( 'sendMail' );
+
+		$useCase = new ConfirmSubscriptionUseCase( $repo, $mailer );
+
+		$this->assertTrue( $useCase->confirmSubscription( self::CONFIRMATION_CODE )->isSuccessful() );
 	}
 }

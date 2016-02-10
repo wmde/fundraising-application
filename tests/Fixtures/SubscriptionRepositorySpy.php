@@ -13,6 +13,9 @@ use WMDE\Fundraising\Frontend\Domain\SubscriptionRepository;
  */
 class SubscriptionRepositorySpy implements SubscriptionRepository {
 
+	/**
+	 * @var Subscription[]
+	 */
 	private $subscriptions = [];
 
 	public function storeSubscription( Subscription $subscription ) {
