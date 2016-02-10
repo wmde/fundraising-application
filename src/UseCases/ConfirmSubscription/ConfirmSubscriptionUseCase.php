@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace WMDE\Fundraising\Frontend\UseCases\ConfirmSubscription;
 
+use WMDE\Fundraising\Entities\Subscription;
 use WMDE\Fundraising\Frontend\Domain\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\MailAddress;
 use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
@@ -36,7 +37,10 @@ class ConfirmSubscriptionUseCase {
 			return ValidationResponse::newFailureResponse( [ new ConstraintViolation( $confirmationCode, $errorMsg ) ] );
 		}
 
-		// TODO if $subscription->getState != unconfirmed -> fail
+		if ( $subscription->getStatus() !== Subscription::STATUS_NEUTRAL ) {
+			$errorMsg = 'The subscription was already confirmed.';
+			return ValidationResponse::newFailureResponse( [ new ConstraintViolation( $confirmationCode, $errorMsg ) ] );
+		}
 
 		$this->mailer->sendMail( new MailAddress( $subscription->getEmail() ), [ 'subscription' => $subscription ] );
 		return ValidationResponse::newSuccessResponse();

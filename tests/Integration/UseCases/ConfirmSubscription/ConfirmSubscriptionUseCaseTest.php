@@ -11,7 +11,6 @@ use WMDE\Fundraising\Frontend\Domain\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SubscriptionRepositorySpy;
 use WMDE\Fundraising\Frontend\UseCases\ConfirmSubscription\ConfirmSubscriptionUseCase;
-use WMDE\Fundraising\Frontend\MailAddress;
 
 /**
  * @covers WMDE\Fundraising\Frontend\UseCases\ConfirmSubscription\ConfirmSubscriptionUseCase
@@ -49,6 +48,19 @@ class ConfirmSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testGivenNoSubscriptions_anErrorResponseIsCreated() {
+		$this->mailer->expects( $this->never() )->method( 'sendMail' );
+		$useCase = new ConfirmSubscriptionUseCase( $this->repo, $this->mailer );
+		$result = $useCase->confirmSubscription( 'deadbeef' );
+		$this->assertFalse( $result->isSuccessful() );
+	}
+
+	public function testGivenASubscriptionWithWrongStatus_anErrorResponseIsCreated() {
+		$subscription = new Subscription();
+		$subscription->setHexConfirmationCode( 'deadbeef' );
+		$subscription->setEmail( 'nyan@awesomecats.com' );
+		$subscription->setAddress( $this->newSubscriptionAddress() );
+		$subscription->setStatus( Subscription::STATUS_CONFIRMED );
+		$this->repo->storeSubscription( $subscription );
 		$this->mailer->expects( $this->never() )->method( 'sendMail' );
 		$useCase = new ConfirmSubscriptionUseCase( $this->repo, $this->mailer );
 		$result = $useCase->confirmSubscription( 'deadbeef' );

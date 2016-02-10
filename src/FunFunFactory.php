@@ -379,7 +379,7 @@ class FunFunFactory {
 				$this->getMessenger(),
 				new TwigTemplate(
 						$this->getTwig(),
-						'Mail_Subscription_Confirm.twig',
+						'Mail_Subscription_Confirmation.twig',
 						[ 'greeting_generator' => $this->getGreetingGenerator() ]
 				),
 				$this->getTranslator()->trans( 'Your membership with Wikimedia Germany' )

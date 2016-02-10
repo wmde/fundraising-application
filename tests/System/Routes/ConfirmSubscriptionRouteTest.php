@@ -71,4 +71,40 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 
 		$this->assert404( $client->getResponse() );
 	}
+
+	public function testGivenNoSubscription_AnErrorIsDisplayed() {
+		$client = $this->createClient();
+
+		$client->request(
+			'GET',
+			'/contact/confirm-subscription/deadbeef'
+		);
+		$response = $client->getResponse();
+
+		$this->assertSame( 200, $response->getStatusCode() );
+		$this->assertContains( 'Es konnte kein Eintrag mit diesem Bestätigungs-Code gefunden werden', $response->getContent() );
+	}
+
+	public function testGivenAConfirmedSubscriptionRequest_successPageIsDisplayed() {
+		$subscription = new Subscription();
+		$subscription->setHexConfirmationCode( 'deadbeef' );
+		$subscription->setEmail( 'tester@example.com' );
+		$subscription->setAddress( $this->newSubscriptionAddress() );
+		$subscription->setStatus( Subscription::STATUS_CONFIRMED );
+		$subscriptionRepository = new SubscriptionRepositorySpy();
+		$subscriptionRepository->storeSubscription( $subscription );
+
+		$client = $this->createClient( [], function( FunFunFactory $factory ) use ( $subscriptionRepository ) {
+			$factory->setSubscriptionRepository( $subscriptionRepository );
+		} );
+
+		$client->request(
+			'GET',
+			'/contact/confirm-subscription/deadbeef'
+		);
+		$response = $client->getResponse();
+
+		$this->assertSame( 200, $response->getStatusCode() );
+		$this->assertContains( 'Diese E-Mail-Adresse wurde bereits bestätigt.', $response->getContent() );
+	}
 }
