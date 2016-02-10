@@ -3,7 +3,6 @@
 namespace WMDE\Fundraising\Frontend\Validation;
 
 use WMDE\Fundraising\Frontend\Domain\Donation;
-use WMDE\Fundraising\Frontend\Domain\PersonalInfo;
 
 /**
  * @license GNU GPL v2+
@@ -11,7 +10,7 @@ use WMDE\Fundraising\Frontend\Domain\PersonalInfo;
  */
 class DonationValidator implements InstanceValidator {
 
-	use CanValidateField, CanValidateValueObject;
+	use CanValidateField;
 
 	private $nameValidator;
 	private $addressValidator;
@@ -55,6 +54,16 @@ class DonationValidator implements InstanceValidator {
 	 */
 	public function getConstraintViolations(): array {
 		return $this->constraintViolations;
+	}
+
+	/**
+	 * @param InstanceValidator $validator
+	 * @param $valueObject
+	 * @return ConstraintViolation[]
+	 */
+	private function validateValueObject( InstanceValidator $validator, $valueObject ) {
+		$validator->validate( $valueObject );
+		return $validator->getConstraintViolations();
 	}
 
 }
