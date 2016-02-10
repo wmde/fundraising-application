@@ -23,11 +23,6 @@ class DbalSubscriptionRepositoryTest extends \PHPUnit_Framework_TestCase {
 	 */
 	private $entityManager;
 
-	/**
-	 * @var Connection
-	 */
-	private $connection;
-
 	public function setUp() {
 		$this->entityManager = TestEnvironment::newInstance()->getFactory()->getEntityManager();
 		parent::setUp();
@@ -73,7 +68,7 @@ class DbalSubscriptionRepositoryTest extends \PHPUnit_Framework_TestCase {
 		return $subscription;
 	}
 
-	private function persistSecondSubscription() {
+	private function persistSecondSubscription(): Subscription {
 		$subscription = new Subscription();
 		$subscription->setEmail( 'unicorn@dancingonrainbows.com' );
 		$subscription->setCreatedAt( new \DateTime( '10 days ago' ) );
@@ -81,7 +76,7 @@ class DbalSubscriptionRepositoryTest extends \PHPUnit_Framework_TestCase {
 		return $subscription;
 	}
 
-	private function persistThirdSubscription() {
+	private function persistThirdSubscription(): Subscription {
 		$subscription = new Subscription();
 		$subscription->setEmail( 'unicorn@dancingonrainbows.com' );
 		$subscription->setCreatedAt( new \DateTime( '10 minutes ago' ) );
