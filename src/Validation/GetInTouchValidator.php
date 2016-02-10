@@ -23,6 +23,7 @@ class GetInTouchValidator implements InstanceValidator {
 
 	/**
 	 * @param GetInTouchRequest $instance
+	 *
 	 * @return bool
 	 */
 	public function validate( $instance ): bool {

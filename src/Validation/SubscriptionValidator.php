@@ -27,6 +27,7 @@ class SubscriptionValidator implements InstanceValidator {
 
 	/**
 	 * @param Subscription $instance
+	 *
 	 * @return bool
 	 */
 	public function validate( $instance ): bool {

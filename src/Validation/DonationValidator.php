@@ -9,7 +9,6 @@ use WMDE\Fundraising\Frontend\Domain\Donation;
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class DonationValidator implements InstanceValidator {
-
 	use CanValidateField;
 
 	private $nameValidator;
@@ -29,24 +28,25 @@ class DonationValidator implements InstanceValidator {
 	}
 
 	/**
-	 * @param Donation $instance
+	 * @param Donation $donation
+	 *
 	 * @return bool
 	 */
-	public function validate( $instance ): bool {
+	public function validate( $donation ): bool {
 		$violations = [];
 
-		if ( $instance->getPersonalInfo() ) {
-			$violations += $this->validateValueObject( $this->nameValidator, $instance->getPersonalInfo()->getPersonName() );
-			$violations += $this->validateValueObject( $this->addressValidator, $instance->getPersonalInfo()->getPhysicalAddress() );
+		if ( $donation->getPersonalInfo() ) {
+			$violations += $this->validateValueObject( $this->nameValidator, $donation->getPersonalInfo()->getPersonName() );
+			$violations += $this->validateValueObject( $this->addressValidator, $donation->getPersonalInfo()->getPhysicalAddress() );
 			$violations[] = $this->validateField(
 				$this->mailValidator,
-				$instance->getPersonalInfo()->getEmailAddress()->getFullAddress(),
+				$donation->getPersonalInfo()->getEmailAddress()->getFullAddress(),
 				'email'
 			);
 		}
 
 		$this->constraintViolations = array_filter( $violations );
-		return count( $this->constraintViolations ) == 0;
+		return empty( $this->constraintViolations );
 	}
 
 	/**

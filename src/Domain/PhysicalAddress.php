@@ -24,6 +24,7 @@ class PhysicalAddress {
 	}
 
 	public function setStreetAddress( string $streetAddress ) {
+		$this->assertIsWritable();
 		$this->streetAddress = $streetAddress;
 	}
 
@@ -32,6 +33,7 @@ class PhysicalAddress {
 	}
 
 	public function setPostalCode( string $postalCode ) {
+		$this->assertIsWritable();
 		$this->postalCode = $postalCode;
 	}
 
@@ -40,6 +42,7 @@ class PhysicalAddress {
 	}
 
 	public function setCity( string $city ) {
+		$this->assertIsWritable();
 		$this->city = $city;
 	}
 
@@ -48,6 +51,7 @@ class PhysicalAddress {
 	}
 
 	public function setCountryCode( string $countryCode ) {
+		$this->assertIsWritable();
 		$this->countryCode = $countryCode;
 	}
 

@@ -20,6 +20,7 @@ class PhysicalAddressValidatorTest extends \PHPUnit_Framework_TestCase {
 		$physicalAddress->setPostalCode( '20099' );
 		$physicalAddress->setCity( 'Hamburg' );
 		$physicalAddress->setCountryCode( 'DE' );
+		$physicalAddress->freeze()->assertNoNullFields();
 
 		$this->assertTrue( $validator->validate( $physicalAddress ) );
 		$this->assertEmpty( $validator->getConstraintViolations() );

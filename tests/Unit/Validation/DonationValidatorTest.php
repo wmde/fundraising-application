@@ -34,7 +34,9 @@ class DonationValidatorTest extends \PHPUnit_Framework_TestCase {
 		$personalInfo->setPersonName( $this->newCompanyName() );
 		$personalInfo->setPhysicalAddress( $this->newPhysicalAddress() );
 		$personalInfo->setEmailAddress( new MailAddress( 'hank.scorpio@globex.com' ) );
+		$personalInfo->freeze()->assertNoNullFields();
 		$donation->setPersonalInfo( $personalInfo );
+		$donation->freeze()->assertNoNullFields();
 
 		$this->assertTrue( $this->donationValidator->validate( $donation ) );
 	}
@@ -45,7 +47,9 @@ class DonationValidatorTest extends \PHPUnit_Framework_TestCase {
 		$personalInfo->setPersonName( PersonName::newCompanyName() );
 		$personalInfo->setPhysicalAddress( $this->newPhysicalAddress() );
 		$personalInfo->setEmailAddress( new MailAddress( 'hank.scorpio@globex.com' ) );
+		$personalInfo->freeze()->assertNoNullFields();
 		$donation->setPersonalInfo( $personalInfo );
+		$donation->freeze()->assertNoNullFields();
 
 		$this->donationValidator->validate( $donation );
 		$this->assertSame( 'firma', $this->donationValidator->getConstraintViolations()[0]->getSource() );
@@ -62,7 +66,9 @@ class DonationValidatorTest extends \PHPUnit_Framework_TestCase {
 		$personalInfo->setPersonName( PersonName::newCompanyName() );
 		$personalInfo->setPhysicalAddress( new PhysicalAddress() );
 		$personalInfo->setEmailAddress( new MailAddress( 'hank.scorpio@globex.com' ) );
+		$personalInfo->freeze()->assertNoNullFields();
 		$donation->setPersonalInfo( $personalInfo );
+		$donation->freeze()->assertNoNullFields();
 
 		$this->assertFalse( $this->donationValidator->validate( $donation ) );
 	}
@@ -79,6 +85,7 @@ class DonationValidatorTest extends \PHPUnit_Framework_TestCase {
 		$address->setPostalCode( '90701' );
 		$address->setCity( 'Cypress Creek' );
 		$address->setCountryCode( 'US' );
+		$address->freeze()->assertNoNullFields();
 		return $address;
 	}
 
