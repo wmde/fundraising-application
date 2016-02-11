@@ -16,7 +16,8 @@ class MailAddressTest extends \PHPUnit_Framework_TestCase {
 	 * @dataProvider unparsableAddressProvider
 	 */
 	public function testWhenGivenMail_validatorMXValidatesCorrectly( $mailToTest ) {
-		$this->setExpectedException( \InvalidArgumentException::class );
+		$this->expectException( \InvalidArgumentException::class );
+		$this->expectExceptionMessage( 'Given email address could not be parsed' );
 		new MailAddress( $mailToTest );
 	}
 
