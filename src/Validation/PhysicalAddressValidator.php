@@ -2,7 +2,7 @@
 
 namespace WMDE\Fundraising\Frontend\Validation;
 
-use WMDE\Fundraising\Frontend\Domain\Address;
+use WMDE\Fundraising\Frontend\Domain\PhysicalAddress;
 
 /**
  * @license GNU GPL v2+
@@ -13,13 +13,19 @@ class PhysicalAddressValidator implements InstanceValidator {
 
 	private $constraintViolations = [];
 
-	public function validate( $instance ): bool {
+	/**
+	 * @param PhysicalAddress $address
+	 *
+	 * @return bool
+	 */
+	public function validate( $address ): bool {
 		$violations = [];
 		$requiredFieldValidator = new RequiredFieldValidator();
-		$violations[] = $this->validateField( $requiredFieldValidator, $instance->getStreetAddress(), 'strasse' );
-		$violations[] = $this->validateField( $requiredFieldValidator, $instance->getPostalCode(), 'plz' );
-		$violations[] = $this->validateField( $requiredFieldValidator, $instance->getCity(), 'ort' );
-		$violations[] = $this->validateField( $requiredFieldValidator, $instance->getCountryCode(), 'country' );
+
+		$violations[] = $this->validateField( $requiredFieldValidator, $address->getStreetAddress(), 'strasse' );
+		$violations[] = $this->validateField( $requiredFieldValidator, $address->getPostalCode(), 'plz' );
+		$violations[] = $this->validateField( $requiredFieldValidator, $address->getCity(), 'ort' );
+		$violations[] = $this->validateField( $requiredFieldValidator, $address->getCountryCode(), 'country' );
 
 		$this->constraintViolations = array_merge( $this->constraintViolations, array_filter( $violations ) );
 
