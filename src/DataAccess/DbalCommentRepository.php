@@ -6,14 +6,14 @@ namespace WMDE\Fundraising\Frontend\DataAccess;
 
 use Doctrine\ORM\EntityRepository;
 use WMDE\Fundraising\Entities\Donation;
-use WMDE\Fundraising\Frontend\Domain\Comment;
-use WMDE\Fundraising\Frontend\Domain\CommentRepository;
+use WMDE\Fundraising\Frontend\Domain\ReadModel\CommentWithAmount;
+use WMDE\Fundraising\Frontend\Domain\Repositories\CommentFinder;
 
 /**
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class DbalCommentRepository implements CommentRepository {
+class DbalCommentRepository implements CommentFinder {
 
 	private $entityRepository;
 
@@ -26,16 +26,16 @@ class DbalCommentRepository implements CommentRepository {
 	 *
 	 * @param int $limit
 	 *
-	 * @return Comment[]
+	 * @return CommentWithAmount[]
 	 */
 	public function getPublicComments( int $limit ): array {
 		return array_map(
 			function( Donation $donation ) {
-				return Comment::newInstance()
+				return CommentWithAmount::newInstance()
 					->setAuthorName( $donation->getPublicRecord() )
 					->setCommentText( $donation->getComment() )
 					->setDonationAmount( (float)$donation->getAmount() )
-					->setPostingTime( $donation->getDtNew() )
+					->setDonationTime( $donation->getDtNew() )
 					->setDonationId( $donation->getId() )
 					->freeze()
 					->assertNoNullFields();

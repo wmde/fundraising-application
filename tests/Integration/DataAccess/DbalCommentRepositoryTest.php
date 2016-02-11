@@ -8,7 +8,7 @@ use DateTime;
 use Doctrine\ORM\EntityManager;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\DataAccess\DbalCommentRepository;
-use WMDE\Fundraising\Frontend\Domain\Comment;
+use WMDE\Fundraising\Frontend\Domain\ReadModel\CommentWithAmount;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
@@ -164,32 +164,32 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	private function getFirstComment() {
-		return Comment::newInstance()
+		return CommentWithAmount::newInstance()
 			->setAuthorName( 'First name' )
 			->setCommentText( 'First comment' )
 			->setDonationAmount( 100 )
-			->setPostingTime( new \DateTime( '1984-01-01' ) )
+			->setDonationTime( new \DateTime( '1984-01-01' ) )
 			->setDonationId( 1 )
 			->freeze();
 	}
 
 
 	private function getSecondComment() {
-		return Comment::newInstance()
+		return CommentWithAmount::newInstance()
 			->setAuthorName( 'Second name' )
 			->setCommentText( 'Second comment' )
 			->setDonationAmount( 200 )
-			->setPostingTime( new \DateTime( '1984-02-02' ) )
+			->setDonationTime( new \DateTime( '1984-02-02' ) )
 			->setDonationId( 2 )
 			->freeze();
 	}
 
 	private function getThirdComment( int $donationId ) {
-		return Comment::newInstance()
+		return CommentWithAmount::newInstance()
 			->setAuthorName( 'Third name' )
 			->setCommentText( 'Third comment' )
 			->setDonationAmount( 300 )
-			->setPostingTime( new \DateTime( '1984-03-03' ) )
+			->setDonationTime( new \DateTime( '1984-03-03' ) )
 			->setDonationId( $donationId )
 			->freeze();
 	}

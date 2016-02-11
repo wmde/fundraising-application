@@ -40,7 +40,30 @@ class AddCommentRouteTest extends WebRouteTestCase {
 		$this->assertErrorJsonResponse( $response );
 	}
 
+	public function testGivenRequestWithoutTokens_resultIsError() {
+		// TODO: insert donation
+
+		$client = $this->createClient();
+
+		$client->request(
+			'POST',
+			'add-comment',
+			[
+				'kommentar' => 'Your programmers deserve a raise',
+				'public' => '1',
+				'eintrag' => 'Uncle Bob',
+				'sid' => '9001',
+			]
+		);
+
+		$response = $client->getResponse();
+
+		$this->assertTrue( $response->isSuccessful(), 'request is successful' );
+		$this->assertErrorJsonResponse( $response );
+	}
+
 	public function testGivenRequestWithParameters_resultIsSuccess() {
+		// TODO: insert donation
 		self::markTestSkipped( 'Not implemented yet!' );
 
 		$client = $this->createClient();

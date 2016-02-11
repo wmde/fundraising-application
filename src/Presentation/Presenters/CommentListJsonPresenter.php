@@ -2,7 +2,7 @@
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
-use WMDE\Fundraising\Frontend\Domain\Comment;
+use WMDE\Fundraising\Frontend\Domain\ReadModel\CommentWithAmount;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentList;
 
 /**
@@ -13,12 +13,12 @@ class CommentListJsonPresenter {
 
 	public function present( CommentList $commentList ): array {
 		return array_map(
-			function( Comment $comment ) {
+			function( CommentWithAmount $comment ) {
 				return [
 					'betrag' => $comment->getDonationAmount(),
 					'spender' => $comment->getAuthorName(),
 					'kommentar' => $comment->getCommentText(),
-					'datum' => $comment->getPostingTime()->format( 'r' ),
+					'datum' => $comment->getDonationTime()->format( 'r' ),
 					'id' => $comment->getDonationId(),
 				];
 			},

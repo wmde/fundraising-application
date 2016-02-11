@@ -4,8 +4,8 @@ declare(strict_types = 1);
 
 namespace WMDE\Fundraising\Frontend\UseCases\ListComments;
 
-use WMDE\Fundraising\Frontend\Domain\Comment;
-use WMDE\Fundraising\Frontend\Domain\CommentRepository;
+use WMDE\Fundraising\Frontend\Domain\ReadModel\CommentWithAmount;
+use WMDE\Fundraising\Frontend\Domain\Repositories\CommentFinder;
 
 /**
  * @licence GNU GPL v2+
@@ -15,7 +15,7 @@ class ListCommentsUseCase {
 
 	private $commentRepository;
 
-	public function __construct( CommentRepository $commentRepository ) {
+	public function __construct( CommentFinder $commentRepository ) {
 		$this->commentRepository = $commentRepository;
 	}
 

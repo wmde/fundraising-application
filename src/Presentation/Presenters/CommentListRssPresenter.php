@@ -2,7 +2,7 @@
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
-use WMDE\Fundraising\Frontend\Domain\Comment;
+use WMDE\Fundraising\Frontend\Domain\ReadModel\CommentWithAmount;
 use WMDE\Fundraising\Frontend\TwigTemplate;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentList;
 
@@ -28,12 +28,12 @@ class CommentListRssPresenter {
 
 	private function getCommentsViewModel( CommentList $commentList ) {
 		return array_map(
-			function( Comment $comment ) {
+			function( CommentWithAmount $comment ) {
 				return [
 					'amount' => $comment->getDonationAmount(),
 					'author' => $comment->getAuthorName(),
 					'text' => $comment->getCommentText(),
-					'publicationDate' => $comment->getPostingTime()->format( 'r' ),
+					'publicationDate' => $comment->getDonationTime()->format( 'r' ),
 					'link' => 'https://spenden.wikimedia.de/spenden/list.php', // TODO
 				];
 			},
@@ -46,7 +46,7 @@ class CommentListRssPresenter {
 			return '';
 		}
 
-		return $commentList->toArray()[0]->getPostingTime()->format( 'r' );
+		return $commentList->toArray()[0]->getDonationTime()->format( 'r' );
 	}
 
 
