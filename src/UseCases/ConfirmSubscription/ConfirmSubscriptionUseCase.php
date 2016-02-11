@@ -19,9 +19,6 @@ class ConfirmSubscriptionUseCase {
 
 	private $subscriptionRepository;
 
-	/**
-	 * @var TemplateBasedMailer
-	 */
 	private $mailer;
 
 	public function __construct( SubscriptionRepository $subscriptionRepository, TemplateBasedMailer $mailer ) {
@@ -31,17 +28,18 @@ class ConfirmSubscriptionUseCase {
 
 	public function confirmSubscription( string $confirmationCode ): ValidationResponse {
 		$subscription = $this->subscriptionRepository->findByConfirmationCode( $confirmationCode );
-		if ( ! $subscription ) {
+
+		if ( $subscription === null ) {
 			$errorMsg = 'No subscription was found with this confirmation code.';
 			return ValidationResponse::newFailureResponse( [ new ConstraintViolation( $confirmationCode, $errorMsg ) ] );
 		}
 
-		if ( $subscription->getStatus() !== Subscription::STATUS_NEUTRAL ) {
-			$errorMsg = 'The subscription was already confirmed.';
-			return ValidationResponse::newFailureResponse( [ new ConstraintViolation( $confirmationCode, $errorMsg ) ] );
+		if ( $subscription->getStatus() === Subscription::STATUS_NEUTRAL ) {
+			$this->mailer->sendMail( new MailAddress( $subscription->getEmail() ), [ 'subscription' => $subscription ] );
+			return ValidationResponse::newSuccessResponse();
 		}
 
-		$this->mailer->sendMail( new MailAddress( $subscription->getEmail() ), [ 'subscription' => $subscription ] );
-		return ValidationResponse::newSuccessResponse();
+		$errorMsg = 'The subscription was already confirmed.';
+		return ValidationResponse::newFailureResponse( [ new ConstraintViolation( $confirmationCode, $errorMsg ) ] );
 	}
 }
