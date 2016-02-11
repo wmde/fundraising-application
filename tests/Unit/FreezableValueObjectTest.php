@@ -51,7 +51,8 @@ class FreezableValueObjectTest extends \PHPUnit_Framework_TestCase {
 
 		$object->freeze();
 
-		$this->setExpectedException( RuntimeException::class );
+		$this->expectException( RuntimeException::class );
+		$this->expectExceptionMessage( 'Cannot write to a frozen object!' );
 		$object->setHeaderContent( 'header' );
 	}
 
@@ -60,14 +61,16 @@ class FreezableValueObjectTest extends \PHPUnit_Framework_TestCase {
 
 		$object->freeze();
 
-		$this->setExpectedException( RuntimeException::class );
+		$this->expectException( RuntimeException::class );
+		$this->expectExceptionMessage( 'Cannot write to a frozen object!' );
 		$object->setHeaderContent( 'header' );
 	}
 
 	public function testWhenNoValuesAreSet_assertNoNullFieldsThrowsException() {
 		$object = new FrozenValueObject();
 
-		$this->setExpectedException( RuntimeException::class );
+		$this->expectException( RuntimeException::class );
+		$this->expectExceptionMessageRegExp( '/Field \'[a-zA-Z]+\' cannot be null/' );
 		$object->assertNoNullFields();
 	}
 

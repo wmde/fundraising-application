@@ -41,7 +41,8 @@ class BankDataConverterTest extends \PHPUnit_Framework_TestCase {
 	public function testWhenGivenInvalidIban_converterThrowsException( $ibanToTest ) {
 		$bankConverter = $this->newBankDataConverter();
 
-		$this->setExpectedException( InvalidArgumentException::class );
+		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage( 'Provided IBAN should be valid' );
 		$bankConverter->getBankDataFromIban( new Iban( $ibanToTest ) );
 	}
 
@@ -108,7 +109,8 @@ class BankDataConverterTest extends \PHPUnit_Framework_TestCase {
 	public function testWhenGivenInvalidAccountData_converterThrowsException( $accountToTest, $bankCodeToTest ) {
 		$bankConverter = $this->newBankDataConverter();
 
-		$this->setExpectedException( RuntimeException::class );
+		$this->expectException( RuntimeException::class );
+		$this->expectExceptionMessage( 'Could not get IBAN' );
 		$bankConverter->getBankDataFromAccountData( $accountToTest, $bankCodeToTest );
 	}
 

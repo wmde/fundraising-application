@@ -19,7 +19,7 @@ class AmountPolicyValidator {
 	public function __construct( int $maxAmount, int $maxAmountRecurring, $maxAmountRecurringAnnually ) {
 		$this->maxAmount = $maxAmount;
 		$this->maxAmountRecurring = $maxAmountRecurring;
-		$this->maxAmountRecurringAnually = $maxAmountRecurringAnnually;
+		$this->maxAmountRecurringAnnually = $maxAmountRecurringAnnually;
 	}
 
 	public function validate( float $amount, int $interval ): bool {

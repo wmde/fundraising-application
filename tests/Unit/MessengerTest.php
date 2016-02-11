@@ -26,7 +26,8 @@ class MessengerTest extends \PHPUnit_Framework_TestCase {
 			->method( 'send' )
 			->willReturn( 0 );
 
-		$this->setExpectedException( \RuntimeException::class );
+		$this->expectException( \RuntimeException::class );
+		$this->expectExceptionMessage( 'Message delivery failed' );
 		( new Messenger( $mailTransport, new MailAddress( 'hostmaster@thatoperator.com' ) ) )
 			->sendMessageToUser(
 				new SimpleMessage( 'Test message', 'This is just a test' ),
