@@ -14,7 +14,7 @@ class AmountPolicyValidatorTest extends \PHPUnit_Framework_TestCase {
 
 	public function testGivenAmountWithinLimits_validationSucceeds() {
 		$validator = $this->newAmountValidator();
-		$this->assertTrue( $validator->validate( 50 ) );
+		$this->assertTrue( $validator->validate( 50, 0 ) );
 	}
 
 	public function offLimitAmountProvider() {
