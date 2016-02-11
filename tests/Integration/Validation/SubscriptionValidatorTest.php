@@ -152,6 +152,9 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 			$duplicateValidator
 		);
 		$this->assertFalse( $subscriptionValidator->validate( $subscription ) );
-		$this->assertConstraintWasViolated( $subscriptionValidator->getConstraintViolations(), '' );
+		$this->assertConstraintWasViolated(
+			$subscriptionValidator->getConstraintViolations(),
+			SubscriptionDuplicateValidator::SOURCE_NAME
+		);
 	}
 }
