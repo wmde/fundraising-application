@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace WMDE\Fundraising\Frontend\Tests\Integration\Validation;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\Validation;
 
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 
@@ -17,10 +17,16 @@ class ValidatorTestCase extends \PHPUnit_Framework_TestCase {
 	 * @param string $fieldName
 	 */
 	protected function assertConstraintWasViolated( array $violations, string $fieldName ) {
-		$this->assertCount( 1, $violations );
-		#$this->assertInstanceOf( ConstraintViolation::class, current( $violations ) );
 		$this->assertContainsOnlyInstancesOf( ConstraintViolation::class, $violations );
-		$this->assertEquals( $fieldName, current( $violations )->getSource() );
+
+		$violated = false;
+		foreach( $violations as $violation ) {
+			if ( $violation->getSource() === $fieldName ) {
+				$violated = true;
+			}
+		}
+
+		$this->assertTrue( $violated );
 	}
 
 }

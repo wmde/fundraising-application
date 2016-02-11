@@ -3,6 +3,7 @@
 namespace WMDE\Fundraising\Tests\Unit;
 
 use WMDE\Fundraising\Frontend\Domain\PersonName;
+use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
 use WMDE\Fundraising\Frontend\Validation\PersonNameValidator;
 
 /**
@@ -11,7 +12,7 @@ use WMDE\Fundraising\Frontend\Validation\PersonNameValidator;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class PersonNameValidatorTest extends \PHPUnit_Framework_TestCase {
+class PersonNameValidatorTest extends ValidatorTestCase {
 
 	public function testGivenValidPersonName_validationSucceeds() {
 		$validator = new PersonNameValidator();
@@ -30,9 +31,9 @@ class PersonNameValidatorTest extends \PHPUnit_Framework_TestCase {
 		$personName = PersonName::newPrivatePersonName();
 
 		$this->assertFalse( $validator->validate( $personName ) );
-		$this->assertSame( 'anrede', $validator->getConstraintViolations()[0]->getSource() );
-		$this->assertSame( 'vorname', $validator->getConstraintViolations()[1]->getSource() );
-		$this->assertSame( 'nachname', $validator->getConstraintViolations()[2]->getSource() );
+		$this->assertConstraintWasViolated( $validator->getConstraintViolations(), 'anrede' );
+		$this->assertConstraintWasViolated( $validator->getConstraintViolations(), 'vorname' );
+		$this->assertConstraintWasViolated( $validator->getConstraintViolations(), 'nachname' );
 	}
 
 	public function testGivenValidCompanyName_validationSucceeds() {
@@ -49,7 +50,7 @@ class PersonNameValidatorTest extends \PHPUnit_Framework_TestCase {
 		$personName = PersonName::newCompanyName();
 
 		$this->assertFalse( $validator->validate( $personName ) );
-		$this->assertSame( 'firma', $validator->getConstraintViolations()[0]->getSource() );
+		$this->assertConstraintWasViolated( $validator->getConstraintViolations(), 'firma' );
 	}
 
 }

@@ -60,7 +60,7 @@ class DonationValidator implements InstanceValidator {
 			);
 		}
 
-		$this->constraintViolations = array_values( array_filter( $violations ) );
+		$this->constraintViolations = array_filter( $violations );
 		return empty( $this->constraintViolations );
 	}
 
