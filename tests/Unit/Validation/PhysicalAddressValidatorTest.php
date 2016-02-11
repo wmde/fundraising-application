@@ -3,6 +3,7 @@
 namespace WMDE\Fundraising\Tests\Unit;
 
 use WMDE\Fundraising\Frontend\Domain\PhysicalAddress;
+use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
 use WMDE\Fundraising\Frontend\Validation\PhysicalAddressValidator;
 
 /**
@@ -11,7 +12,7 @@ use WMDE\Fundraising\Frontend\Validation\PhysicalAddressValidator;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class PhysicalAddressValidatorTest extends \PHPUnit_Framework_TestCase {
+class PhysicalAddressValidatorTest extends ValidatorTestCase {
 
 	public function testGivenValidAddress_validatorReturnsTrue_andConstraintViolationsAreEmpty() {
 		$validator = new PhysicalAddressValidator();
@@ -35,10 +36,10 @@ class PhysicalAddressValidatorTest extends \PHPUnit_Framework_TestCase {
 		$validator = new PhysicalAddressValidator();
 		$validator->validate( new PhysicalAddress() );
 
-		$this->assertSame( 'strasse', $validator->getConstraintViolations()[0]->getSource() );
-		$this->assertSame( 'plz', $validator->getConstraintViolations()[1]->getSource() );
-		$this->assertSame( 'ort', $validator->getConstraintViolations()[2]->getSource() );
-		$this->assertSame( 'country', $validator->getConstraintViolations()[3]->getSource() );
+		$this->assertConstraintWasViolated( $validator->getConstraintViolations(), 'strasse' );
+		$this->assertConstraintWasViolated( $validator->getConstraintViolations(), 'plz' );
+		$this->assertConstraintWasViolated( $validator->getConstraintViolations(), 'ort' );
+		$this->assertConstraintWasViolated( $validator->getConstraintViolations(), 'country' );
 	}
 
 }

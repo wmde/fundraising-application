@@ -8,6 +8,9 @@ use WMDE\Fundraising\Frontend\Domain\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Domain\PersonName;
 use WMDE\Fundraising\Frontend\Domain\PhysicalAddress;
 use WMDE\Fundraising\Frontend\MailAddress;
+use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
+use WMDE\Fundraising\Frontend\Validation\AmountPolicyValidator;
+use WMDE\Fundraising\Frontend\Validation\AmountValidator;
 use WMDE\Fundraising\Frontend\Validation\DonationValidator;
 use WMDE\Fundraising\Frontend\Validation\MailValidator;
 use WMDE\Fundraising\Frontend\Validation\PersonNameValidator;
@@ -19,7 +22,7 @@ use WMDE\Fundraising\Frontend\Validation\PhysicalAddressValidator;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class DonationValidatorTest extends \PHPUnit_Framework_TestCase {
+class DonationValidatorTest extends ValidatorTestCase {
 
 	/** @var DonationValidator */
 	private $donationValidator;
@@ -29,48 +32,40 @@ class DonationValidatorTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testGivenValidDonation_validatorReturnsTrue() {
-		$donation = new Donation();
 		$personalInfo = new PersonalInfo();
 		$personalInfo->setPersonName( $this->newCompanyName() );
 		$personalInfo->setPhysicalAddress( $this->newPhysicalAddress() );
 		$personalInfo->setEmailAddress( new MailAddress( 'hank.scorpio@globex.com' ) );
 		$personalInfo->freeze()->assertNoNullFields();
+
+		$donation = new Donation();
+		$donation->setAmount( 1 );
 		$donation->setPersonalInfo( $personalInfo );
 		$donation->freeze()->assertNoNullFields();
 
 		$this->assertTrue( $this->donationValidator->validate( $donation ) );
-	}
-
-	public function testCompanyNameNotGiven_validatorHasViolations() {
-		$donation = new Donation();
-		$personalInfo = new PersonalInfo();
-		$personalInfo->setPersonName( PersonName::newCompanyName() );
-		$personalInfo->setPhysicalAddress( $this->newPhysicalAddress() );
-		$personalInfo->setEmailAddress( new MailAddress( 'hank.scorpio@globex.com' ) );
-		$personalInfo->freeze()->assertNoNullFields();
-		$donation->setPersonalInfo( $personalInfo );
-		$donation->freeze()->assertNoNullFields();
-
-		$this->donationValidator->validate( $donation );
-		$this->assertSame( 'firma', $this->donationValidator->getConstraintViolations()[0]->getSource() );
 	}
 
 	public function testNoPersonalInfoGiven_validatorReturnsTrue() {
 		$donation = new Donation();
+		$donation->setAmount( 1 );
 		$this->assertTrue( $this->donationValidator->validate( $donation ) );
 	}
 
 	public function testPartlyPersonalInfoGiven_validatorReturnsFalse() {
-		$donation = new Donation();
 		$personalInfo = new PersonalInfo();
 		$personalInfo->setPersonName( PersonName::newCompanyName() );
 		$personalInfo->setPhysicalAddress( new PhysicalAddress() );
 		$personalInfo->setEmailAddress( new MailAddress( 'hank.scorpio@globex.com' ) );
 		$personalInfo->freeze()->assertNoNullFields();
+
+		$donation = new Donation();
+		$donation->setAmount( 1 );
 		$donation->setPersonalInfo( $personalInfo );
 		$donation->freeze()->assertNoNullFields();
 
 		$this->assertFalse( $this->donationValidator->validate( $donation ) );
+		$this->assertConstraintWasViolated( $this->donationValidator->getConstraintViolations(), 'firma' );
 	}
 
 	private function newCompanyName(): PersonName {
@@ -91,6 +86,8 @@ class DonationValidatorTest extends \PHPUnit_Framework_TestCase {
 
 	private function newDonationValidator(): DonationValidator {
 		return new DonationValidator(
+			new AmountValidator( 1 ),
+			new AmountPolicyValidator( 1000, 200, 300 ),
 			new PersonNameValidator(),
 			new PhysicalAddressValidator(),
 			new MailValidator( new NullDomainNameValidator() )

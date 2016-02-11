@@ -13,7 +13,17 @@ use WMDE\Fundraising\Frontend\FreezableValueObject;
 class Donation {
 	use FreezableValueObject;
 
+	private $amount;
 	private $personalInfo;
+
+	public function getAmount(): float {
+		return $this->amount;
+	}
+
+	public function setAmount( float $amount ) {
+		$this->assertIsWritable();
+		$this->amount = $amount;
+	}
 
 	/**
 	 * Returns the PersonalInfo or null for anonymous donations.
