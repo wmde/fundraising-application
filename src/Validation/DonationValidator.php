@@ -66,8 +66,12 @@ class DonationValidator implements InstanceValidator {
 
 	public function needsModeration( Donation $donation ): bool {
 		// TODO: add TextPolicyValidator
-		$this->policyViolations[] = $this->amountPolicyValidator->validate( $donation->getAmount() );
-		return empty( $this->policyViolations );
+		$violations = [];
+
+		$violations[] = $this->amountPolicyValidator->validate( $donation->getAmount(), $donation->getInterval() );
+
+		$this->policyViolations = array_filter( $violations );
+		return !empty( $this->policyViolations );
 	}
 
 	/**

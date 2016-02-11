@@ -14,6 +14,7 @@ class Donation {
 	use FreezableValueObject;
 
 	private $amount;
+	private $interval = 0;
 	private $personalInfo;
 
 	public function getAmount(): float {
@@ -23,6 +24,15 @@ class Donation {
 	public function setAmount( float $amount ) {
 		$this->assertIsWritable();
 		$this->amount = $amount;
+	}
+
+	public function getInterval(): int {
+		return $this->interval;
+	}
+
+	public function setInterval( int $interval ) {
+		$this->assertIsWritable();
+		$this->interval = $interval;
 	}
 
 	/**

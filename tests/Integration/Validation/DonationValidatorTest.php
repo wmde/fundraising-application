@@ -52,6 +52,13 @@ class DonationValidatorTest extends ValidatorTestCase {
 		$this->assertTrue( $this->donationValidator->validate( $donation ) );
 	}
 
+	public function testTooHighAmountGiven_needsModerationReturnsTrue() {
+		$donation = new Donation();
+		$donation->setAmount( 350 );
+		$donation->setInterval( 12 );
+		$this->assertFalse( $this->donationValidator->needsModeration( $donation ) );
+	}
+
 	public function testPartlyPersonalInfoGiven_validatorReturnsFalse() {
 		$personalInfo = new PersonalInfo();
 		$personalInfo->setPersonName( PersonName::newCompanyName() );
