@@ -412,13 +412,11 @@ $(function() {
     }
   } );
 
-    /* iOS fix - label onclick */
-    if (isMobile) {
-      $('label').each(function(){
-        $(this).click(function(evt){
+    /* iOS fix - label onclick, see http://stackoverflow.com/questions/7358781/tapping-on-label-in-mobile-safari */
+    if ( navigator.userAgent.match( /Safari/ ) ) {
+      $( 'label' ).click( function( evt ) {
           evt.stopPropagation();
-        })
-      });
+      } );
     }
 
 
