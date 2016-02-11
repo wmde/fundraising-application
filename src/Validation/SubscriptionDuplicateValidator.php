@@ -13,6 +13,8 @@ use WMDE\Fundraising\Frontend\Domain\SubscriptionRepository;
  */
 class SubscriptionDuplicateValidator {
 
+	const SOURCE_NAME = 'subscription_duplicate_subscription';
+
 	private $repository;
 	private $cutoffDateTime;
 
@@ -27,7 +29,8 @@ class SubscriptionDuplicateValidator {
 		if ( $this->repository->countSimilar( $subscription, $this->cutoffDateTime ) > 0 ) {
 			$constraintViolations[] = new ConstraintViolation(
 				$subscription->getEmail(),
-				'The data was already inserted'
+				'The data was already inserted',
+				self::SOURCE_NAME
 			);
 		}
 
