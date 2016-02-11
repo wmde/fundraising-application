@@ -166,7 +166,7 @@ class FunFunFactory {
 			return new TwigFactory( $this->config['twig'] );
 		} );
 
-		$pimple['twig'] = $pimple->share( function( $pimple ) {
+		$pimple['twig'] = $pimple->share( function() {
 			$twigFactory = $this->getTwigFactory();
 			$loaders = array_filter( [
 				$twigFactory->newFileSystemLoader(),
