@@ -13,12 +13,17 @@ class PersonNameValidator implements InstanceValidator {
 
 	private $constraintViolations = [];
 
-	public function validate( $instance ): bool {
-		if ( $instance->getPersonType() === PersonName::PERSON_PRIVATE ) {
-			return $this->validatePrivatePerson( $instance );
-		} else {
-			return $this->validateCompanyPerson( $instance );
+	/**
+	 * @param PersonName $name
+	 *
+	 * @return bool
+	 */
+	public function validate( $name ): bool {
+		if ( $name->getPersonType() === PersonName::PERSON_PRIVATE ) {
+			return $this->validatePrivatePerson( $name );
 		}
+
+		return $this->validateCompanyPerson( $name );
 	}
 
 	/**
