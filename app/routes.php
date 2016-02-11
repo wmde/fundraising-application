@@ -13,6 +13,11 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\Domain\Iban;
+use WMDE\Fundraising\Frontend\Domain\PersonalInfo;
+use WMDE\Fundraising\Frontend\Domain\PersonName;
+use WMDE\Fundraising\Frontend\Domain\PhysicalAddress;
+use WMDE\Fundraising\Frontend\FunFunFactory;
+use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageDisplayRequest;
 use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanRequest;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
@@ -202,6 +207,91 @@ $app->post(
 
 		// TODO: response
 		return '';
+	}
+);
+
+
+$app->post(
+	'donation/add',
+	function( Application $app, Request $request ) use ( $ffFactory ) {
+		$routeHandler = new class() {
+
+			public function handle( FunFunFactory $ffFactory, Application $app, Request $request ) {
+				$responseModel = $ffFactory->newAddDonationUseCase()->addDonation(
+					$this->createDonationRequest( $request )
+				);
+
+				if ( $responseModel->isSuccessful() ) {
+					return $app->redirect( $app['url_generator']->generate('page', [ 'pageName' => 'DonationSuccess' ] ) );
+				}
+
+				return 'TODO';
+			}
+
+			private function createDonationRequest( Request $request ): AddDonationRequest {
+				$donationRequest = new AddDonationRequest();
+				$donationRequest->setAmount( floatval( $request->get( 'betrag', 0 ) ) );
+				$donationRequest->setPaymentType( $request->get( 'zahlweise', '' ) );
+				$donationRequest->setInterval( intval( $request->get( 'periode', 0 ) ) );
+
+				$donationRequest->setPersonalInfo(
+					$request->get( 'adresstyp', '' ) === 'anonym' ? null :  $this->getPersonalInfoFromRequest( $request )
+				);
+
+				$donationRequest->setIban( $request->get( 'iban', '' ) );
+				$donationRequest->setBic( $request->get( 'bic', '' ) );
+				$donationRequest->setBankAccount( $request->get( 'konto', '' ) );
+				$donationRequest->setBankCode( $request->get( 'blz', '' ) );
+				$donationRequest->setBankName( $request->get( 'bankname', '' ) );
+
+				# TODO: determine tracking data
+				$donationRequest->setTracking( '' );
+				$donationRequest->setSource( '' );
+				$donationRequest->setTotalImpressionCount( $request->get( 'impCount', 0 ) );
+				$donationRequest->setSingleBannerImpressionCount( $request->get( 'bImpCount', 0 ) );
+				$donationRequest->setColor( $request->get( 'color', '' ) );
+				$donationRequest->setSkin( $request->get( 'skin', '' ) );
+				$donationRequest->setLayout( $request->get( 'layout', '' ) );
+
+				return $donationRequest;
+			}
+
+			private function getPersonalInfoFromRequest( Request $request ): PersonalInfo {
+				$personalInfo = new PersonalInfo();
+
+				$personalInfo->setEmailAddress( $request->get( 'email', '' ) );
+				$personalInfo->setPhysicalAddress( $this->getPhysicalAddressFromRequest( $request ) );
+				$personalInfo->setPersonName( $this->getNameFromRequest( $request ) );
+
+				return $personalInfo->freeze()->assertNoNullFields();
+			}
+
+			private function getPhysicalAddressFromRequest( Request $request ): PhysicalAddress {
+				$address = new PhysicalAddress();
+
+				$address->setPostalCode( $request->get( 'strasse', '' ) );
+				$address->setPostalCode( $request->get( 'plz', '' ) );
+				$address->setCity( $request->get( 'ort', '' ) );
+				$address->setCountryCode( $request->get( 'country', '' ) );
+
+				return $address->freeze()->assertNoNullFields();
+			}
+
+			private function getNameFromRequest( Request $request ): PersonName {
+				$name = $request->get( 'adresstyp', '' ) === 'firma'
+					? PersonName::newCompanyName() : PersonName::newPrivatePersonName();
+
+				$name->setSalutation( $request->get( 'anrede', '' ) );
+				$name->setTitle( $request->get( 'titel', '' ) );
+				$name->setCompanyName( $request->get( 'firma', '' ) );
+				$name->setFirstName( $request->get( 'vorname', '' ) );
+				$name->setLastName( $request->get( 'nachname', '' ) );
+
+				return $name->freeze()->assertNoNullFields();
+			}
+		};
+
+		return $routeHandler->handle( $ffFactory, $app, $request );
 	}
 );
 

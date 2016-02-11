@@ -28,6 +28,7 @@ use WMDE\Fundraising\Frontend\DataAccess\DbalCommentRepository;
 use WMDE\Fundraising\Frontend\DataAccess\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\Domain\CommentRepository;
 use WMDE\Fundraising\Frontend\DataAccess\DbalSubscriptionRepository;
+use WMDE\Fundraising\Frontend\Domain\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListJsonPresenter;
@@ -40,10 +41,16 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\ConfirmSubscriptionHtmlPre
 use WMDE\Fundraising\Frontend\Presentation\Presenters\GetInTouchHTMLPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\IbanPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\InternalErrorHTMLPresenter;
+use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationUseCase;
 use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ConfirmSubscription\ConfirmSubscriptionUseCase;
+use WMDE\Fundraising\Frontend\Validation\AmountPolicyValidator;
+use WMDE\Fundraising\Frontend\Validation\AmountValidator;
+use WMDE\Fundraising\Frontend\Validation\DonationValidator;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\Fundraising\Frontend\Validation\MailValidator;
+use WMDE\Fundraising\Frontend\Validation\PersonNameValidator;
+use WMDE\Fundraising\Frontend\Validation\PhysicalAddressValidator;
 use WMDE\Fundraising\Frontend\Validation\SubscriptionDuplicateValidator;
 use WMDE\Fundraising\Frontend\Validation\SubscriptionValidator;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\AddSubscriptionUseCase;
@@ -500,6 +507,27 @@ class FunFunFactory {
 
 	public function newCancelDonationUseCase(): CancelDonationUseCase {
 		return new CancelDonationUseCase();
+	}
+
+	public function newAddDonationUseCase(): AddDonationUseCase {
+		return new AddDonationUseCase(
+			$this->newDonationRepository(),
+			new DonationValidator(
+				new AmountValidator( 1 ), // TODO: get from settings
+				new AmountPolicyValidator( 1000, 200, 300 ), // TODO: get from settings
+				new PersonNameValidator(),
+				new PhysicalAddressValidator(),
+				$this->getMailValidator()
+			)
+		);
+	}
+
+	private function newDonationRepository(): DonationRepository {
+		return $this->pimple['donation_repository'];
+	}
+
+	public function setDonationRepository( DonationRepository $donationRepository ) {
+		$this->pimple['donation_repository'] = $donationRepository;
 	}
 
 }

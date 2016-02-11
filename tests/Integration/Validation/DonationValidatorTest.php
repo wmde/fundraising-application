@@ -31,19 +31,21 @@ class DonationValidatorTest extends ValidatorTestCase {
 		$this->donationValidator = $this->newDonationValidator();
 	}
 
-	public function testGivenValidDonation_validatorReturnsTrue() {
+	public function testGivenValidDonation_validationIsSuccessful() {
+		$donation = new Donation();
+		$donation->setAmount( 1 );
+
 		$personalInfo = new PersonalInfo();
 		$personalInfo->setPersonName( $this->newCompanyName() );
 		$personalInfo->setPhysicalAddress( $this->newPhysicalAddress() );
-		$personalInfo->setEmailAddress( new MailAddress( 'hank.scorpio@globex.com' ) );
+		$personalInfo->setEmailAddress( 'hank.scorpio@globex.com' );
 		$personalInfo->freeze()->assertNoNullFields();
-
-		$donation = new Donation();
-		$donation->setAmount( 1 );
 		$donation->setPersonalInfo( $personalInfo );
+
 		$donation->freeze()->assertNoNullFields();
 
-		$this->assertTrue( $this->donationValidator->validate( $donation ) );
+		$this->donationValidator->validate( $donation );
+		$this->assertEmpty( $this->donationValidator->getConstraintViolations() );
 	}
 
 	public function testNoPersonalInfoGiven_validatorReturnsTrue() {
@@ -56,7 +58,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 		$personalInfo = new PersonalInfo();
 		$personalInfo->setPersonName( PersonName::newCompanyName() );
 		$personalInfo->setPhysicalAddress( new PhysicalAddress() );
-		$personalInfo->setEmailAddress( new MailAddress( 'hank.scorpio@globex.com' ) );
+		$personalInfo->setEmailAddress( 'hank.scorpio@globex.com' );
 		$personalInfo->freeze()->assertNoNullFields();
 
 		$donation = new Donation();

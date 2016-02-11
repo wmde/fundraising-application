@@ -44,7 +44,7 @@ class DonationValidator implements InstanceValidator {
 		$violations = [];
 		$violations[] = $this->validateField( $this->amountValidator, $donation->getAmount(), 'betrag' );
 
-		if ( $donation->getPersonalInfo() ) {
+		if ( $donation->getPersonalInfo() !== null ) {
 			$violations = array_merge(
 				$violations,
 				$this->validateValueObject( $this->nameValidator, $donation->getPersonalInfo()->getPersonName() )
@@ -55,7 +55,7 @@ class DonationValidator implements InstanceValidator {
 			);
 			$violations[] = $this->validateField(
 				$this->mailValidator,
-				$donation->getPersonalInfo()->getEmailAddress()->getFullAddress(),
+				$donation->getPersonalInfo()->getEmailAddress(),
 				'email'
 			);
 		}
