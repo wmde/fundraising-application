@@ -22,7 +22,7 @@ class AmountPolicyValidator {
 		$this->maxAmountRecurringAnually = $maxAmountRecurringAnually;
 	}
 
-	public function validate( $amount, $interval = 0 ): bool {
+	public function validate( $amount, $interval ): bool {
 		$violations = [];
 
 		if ( $this->isOneTimeAmountTooHigh( $amount, $interval ) ||
