@@ -14,15 +14,23 @@ class DonationValidator implements InstanceValidator {
 	private $nameValidator;
 	private $addressValidator;
 	private $mailValidator;
+	private $amountValidator;
+	private $amountPolicyValidator;
 
 	protected $constraintViolations;
 
-	public function __construct( PersonNameValidator $nameValidator,
+	private $policyViolations;
+
+	public function __construct( AmountValidator $amountValidator,
+								 AmountPolicyValidator $amountPolicyValidator,
+								 PersonNameValidator $nameValidator,
 								 PhysicalAddressValidator $addressValidator,
 								 MailValidator $mailValidator ) {
 		$this->nameValidator = $nameValidator;
 		$this->addressValidator = $addressValidator;
 		$this->mailValidator = $mailValidator;
+		$this->amountValidator = $amountValidator;
+		$this->amountPolicyValidator = $amountPolicyValidator;
 
 		$this->constraintViolations = [];
 	}
@@ -34,10 +42,17 @@ class DonationValidator implements InstanceValidator {
 	 */
 	public function validate( $donation ): bool {
 		$violations = [];
+		$violations[] = $this->validateField( $this->amountValidator, $donation->getAmount(), 'betrag' );
 
 		if ( $donation->getPersonalInfo() ) {
-			$violations += $this->validateValueObject( $this->nameValidator, $donation->getPersonalInfo()->getPersonName() );
-			$violations += $this->validateValueObject( $this->addressValidator, $donation->getPersonalInfo()->getPhysicalAddress() );
+			$violations = array_merge(
+				$violations,
+				$this->validateValueObject( $this->nameValidator, $donation->getPersonalInfo()->getPersonName() )
+			);
+			$violations = array_merge(
+				$violations,
+				$this->validateValueObject( $this->addressValidator, $donation->getPersonalInfo()->getPhysicalAddress() )
+			);
 			$violations[] = $this->validateField(
 				$this->mailValidator,
 				$donation->getPersonalInfo()->getEmailAddress()->getFullAddress(),
@@ -45,8 +60,14 @@ class DonationValidator implements InstanceValidator {
 			);
 		}
 
-		$this->constraintViolations = array_filter( $violations );
+		$this->constraintViolations = array_values( array_filter( $violations ) );
 		return empty( $this->constraintViolations );
+	}
+
+	public function needsModeration( Donation $donation ): bool {
+		// TODO: add TextPolicyValidator
+		$this->policyViolations[] = $this->amountPolicyValidator->validate( $donation->getAmount() );
+		return empty( $this->policyViolations );
 	}
 
 	/**
