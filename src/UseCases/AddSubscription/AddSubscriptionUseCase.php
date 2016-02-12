@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\UseCases\AddSubscription;
 
 use WMDE\Fundraising\Entities\Address;
 use WMDE\Fundraising\Entities\Subscription;
+use WMDE\Fundraising\Frontend\Domain\SubscriptionRepositoryException;
 use WMDE\Fundraising\Frontend\Domain\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\MailAddress;
 use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
@@ -30,6 +31,11 @@ class AddSubscriptionUseCase {
 		$this->mailer = $mailer;
 	}
 
+	/**
+	 * @param SubscriptionRequest $subscriptionRequest
+	 * @return ValidationResponse
+	 * @throws SubscriptionRepositoryException
+	 */
 	public function addSubscription( SubscriptionRequest $subscriptionRequest ) {
 		$subscription = $this->createSubscriptionFromRequest( $subscriptionRequest );
 

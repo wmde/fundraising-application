@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Validation;
 
 use WMDE\Fundraising\Entities\Subscription;
 use WMDE\Fundraising\Frontend\Domain\SubscriptionRepository;
+use WMDE\Fundraising\Frontend\Domain\SubscriptionRepositoryException;
 
 /**
  * @license GNU GPL v2+
@@ -23,6 +24,11 @@ class SubscriptionDuplicateValidator {
 		$this->cutoffDateTime = $cutoffDateTime;
 	}
 
+	/**
+	 * @param Subscription $subscription
+	 * @return ValidationResult
+	 * @throws SubscriptionRepositoryException
+	 */
 	public function validate( Subscription $subscription ): ValidationResult {
 		$constraintViolations = [];
 

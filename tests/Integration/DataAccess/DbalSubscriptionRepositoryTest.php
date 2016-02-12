@@ -3,8 +3,9 @@
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
 
-use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\ORMException;
+use WMDE\Fundraising\Frontend\Domain\SubscriptionRepositoryException;
 use WMDE\Fundraising\Entities\Address;
 use WMDE\Fundraising\Entities\Subscription;
 use WMDE\Fundraising\Frontend\DataAccess\DbalSubscriptionRepository;
@@ -58,6 +59,19 @@ class DbalSubscriptionRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$repository = new DbalSubscriptionRepository(  $this->entityManager );
 		$this->assertSame( 1, $repository->countSimilar( $thirdSubscription, new \DateTime( '1 hour ago' ) ) );
 		$this->assertSame( 2, $repository->countSimilar( $thirdSubscription, new \DateTime( '100 years ago' ) ) );
+	}
+
+	public function testDatabaseLayerExceptionsAreConvertedToDomainExceptions() {
+		$this->expectException( SubscriptionRepositoryException::class );
+		$entityManager = $this->getMock(
+			EntityManager::class, array('getRepository', 'getClassMetadata', 'persist', 'flush'), array(), '', false
+		);
+		$entityManager->expects( $this->once() )->method( 'persist' )->willThrowException( new ORMException() );
+		$repository = new DbalSubscriptionRepository(  $entityManager );
+		$subscription = new Subscription();
+		$subscription->setEmail( 'nyan@awesomecats.com' );
+		$subscription->setAddress( new Address() );
+		$repository->storeSubscription( $subscription );
 	}
 
 	private function persistFirstSubscription(): Subscription {
