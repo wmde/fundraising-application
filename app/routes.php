@@ -127,9 +127,9 @@ $app->post(
 		}
 		if ( $responseModel->isSuccessful() ) {
 			if ( $responseModel->needsModeration() ) {
-				return $app->redirect( $app['url_generator']->generate('page', [ 'pageName' => 'SubscriptionModeration' ] ) );
+				return $app->redirect( $app['url_generator']->generate('page', [ 'pageName' => 'Subscription_Moderation' ] ) );
 			}
-			return $app->redirect( $app['url_generator']->generate('page', [ 'pageName' => 'SubscriptionSuccess' ] ) );
+			return $app->redirect( $app['url_generator']->generate('page', [ 'pageName' => 'Subscription_Success' ] ) );
 		}
 		return $ffFactory->newAddSubscriptionHTMLPresenter()->present( $responseModel, $request->request->all() );
 	}
