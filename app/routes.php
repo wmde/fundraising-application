@@ -245,8 +245,17 @@ $app->post(
 				$donationRequest->setBankCode( $request->get( 'blz', '' ) );
 				$donationRequest->setBankName( $request->get( 'bankname', '' ) );
 
-				# TODO: determine tracking data
-				$donationRequest->setTracking( '' );
+				$donationRequest->setTracking(
+					$donationRequest->getPreferredValue( [
+						$request->cookies->get( 'spenden_tracking' ),
+						$request->request->get( 'tracking' ),
+						$donationRequest->concatTrackingFromVarCouple(
+							$request->get( 'piwik_campaign', '' ),
+							$request->get( 'piwik_kwd', '' )
+						)
+					] )
+				);
+
 				$donationRequest->setSource( '' );
 				$donationRequest->setTotalImpressionCount( $request->get( 'impCount', 0 ) );
 				$donationRequest->setSingleBannerImpressionCount( $request->get( 'bImpCount', 0 ) );

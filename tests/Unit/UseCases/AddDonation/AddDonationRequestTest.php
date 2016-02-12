@@ -46,4 +46,52 @@ class AddDonationRequestTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals( $expectedValue, $request->getAmount() );
 	}
 
+	public function preferredValueProvider() {
+		return [
+			[ 'chocolate', [ 'chocolate', 'hazelnuts', 'campaign/keyword' ] ],
+			[ 'hazelnuts', [ '', 'hazelnuts', 'campaign/keyword' ] ],
+			[ 'campaign/keyword', [ '', '', 'campaign/keyword' ] ],
+			[ '', [ '', '', '' ] ],
+		];
+	}
+
+	/**
+	 * @dataProvider preferredValueProvider
+	 *
+	 * @param string $expectedResult
+	 * @param string[] $values
+	 */
+	public function testGetPreferredValueReturnsFirstSetElementOrEmptyString( $expectedResult, $values ) {
+		$request = new AddDonationRequest();
+		$value = $request->getPreferredValue( $values );
+		$this->assertEquals( $expectedResult, $value );
+	}
+
+	public function trackingVarProvider() {
+		return [
+			[ 'campaign/keyword', 'campaign', 'keyword' ],
+			[ 'campaign/keyword', 'Campaign', 'Keyword' ],
+			[ 'campaign', 'campaign', '' ],
+			[ '', '', 'keyword' ],
+		];
+	}
+
+	/**
+	 * @dataProvider trackingVarProvider
+	 *
+	 * @param $expectedResult
+	 * @param $campaign
+	 * @param $keyword
+	 */
+	public function testConcatTrackingFromVarCouple( $expectedResult, $campaign, $keyword ) {
+		$request = new AddDonationRequest();
+		$value = $request->getPreferredValue( [
+			'',
+			'',
+			$request->concatTrackingFromVarCouple( $campaign, $keyword )
+		] );
+
+		$this->assertEquals( $expectedResult, $value );
+	}
+
 }
