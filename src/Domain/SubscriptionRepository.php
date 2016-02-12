@@ -17,7 +17,6 @@ interface SubscriptionRepository {
 	 * If the subscription exists in the repository, update it.
 	 *
 	 * @param Subscription $subscription
-	 * @return mixed
 	 */
 	public function storeSubscription( Subscription $subscription );
 
