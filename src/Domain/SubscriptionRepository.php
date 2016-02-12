@@ -11,6 +11,11 @@ use WMDE\Fundraising\Entities\Subscription;
  */
 interface SubscriptionRepository {
 
+	/**
+	 * @param Subscription $subscription
+	 * @return mixed
+	 * @throws SubscriptionRepositoryException
+	 */
 	public function storeSubscription( Subscription $subscription );
 
 	/**
