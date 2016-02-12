@@ -230,7 +230,8 @@ $app->post(
 
 			private function createDonationRequest( Request $request ): AddDonationRequest {
 				$donationRequest = new AddDonationRequest();
-				$donationRequest->setAmount( floatval( $request->get( 'betrag', 0 ) ) );
+				$locale = 'de_DE'; // TODO: make this configurable for multilanguage support
+				$donationRequest->setAmountFromString( $request->get( 'betrag', '' ), $locale );
 				$donationRequest->setPaymentType( $request->get( 'zahlweise', '' ) );
 				$donationRequest->setInterval( intval( $request->get( 'periode', 0 ) ) );
 
