@@ -11,6 +11,14 @@ use WMDE\Fundraising\Entities\Subscription;
  */
 interface SubscriptionRepository {
 
+	/**
+	 * Add or update a subscription.
+	 *
+	 * If the subscription exists in the repository, update it.
+	 *
+	 * @param Subscription $subscription
+	 * @return mixed
+	 */
 	public function storeSubscription( Subscription $subscription );
 
 	/**

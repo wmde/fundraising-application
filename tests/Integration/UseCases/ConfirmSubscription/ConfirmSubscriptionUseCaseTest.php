@@ -83,6 +83,20 @@ class ConfirmSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$this->assertTrue( $useCase->confirmSubscription( self::CONFIRMATION_CODE )->isSuccessful() );
 	}
 
+	public function testGivenASubscription_statusIsSetToConfirmed() {
+		$repo = new InMemorySubscriptionRepository();
+		$repo->storeSubscription( $this->newSubscription() );
+
+		$useCase = new ConfirmSubscriptionUseCase( $repo, $this->newMailer() );
+		$useCase->confirmSubscription( self::CONFIRMATION_CODE );
+
+		$this->assertSame(
+			Subscription::STATUS_CONFIRMED,
+			$repo->getSubscriptions()[0]->getStatus(),
+			'Confirmed status was not set.'
+		);
+	}
+
 	public function testGivenASubscription_aConfirmationMailIsSent() {
 		$repo = new InMemorySubscriptionRepository();
 		$repo->storeSubscription( $this->newSubscription() );

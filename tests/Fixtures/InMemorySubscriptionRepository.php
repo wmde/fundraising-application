@@ -19,7 +19,11 @@ class InMemorySubscriptionRepository implements SubscriptionRepository {
 	private $subscriptions = [];
 
 	public function storeSubscription( Subscription $subscription ) {
-		$this->subscriptions[] = $subscription;
+		$subscriptionKey = array_search( $subscription, $this->subscriptions, true );
+		if ( $subscriptionKey === false ) {
+			$subscriptionKey = count( $this->subscriptions );
+		}
+		$this->subscriptions[$subscriptionKey] = $subscription;
 	}
 
 	/**
