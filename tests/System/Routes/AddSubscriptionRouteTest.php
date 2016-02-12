@@ -23,7 +23,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 		'firstName' => 'Nyan',
 		'lastName' => 'Cat',
 		'salutation' => 'Herr',
-		'title' => 'Prof. Dr. Dr.',
+		'title' => 'Prof. Dr.',
 		'address' => 'Awesome Way 1',
 		'city' => 'Berlin',
 		'postcode' => '12345',
@@ -73,7 +73,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 		$this->assertSame( 'Nyan', $address->getFirstName() );
 		$this->assertSame( 'Cat', $address->getLastName() );
 		$this->assertSame( 'Herr', $address->getSalutation() );
-		$this->assertSame( 'Prof. Dr. Dr.', $address->getTitle() );
+		$this->assertSame( 'Prof. Dr.', $address->getTitle() );
 		$this->assertSame( 'Awesome Way 1', $address->getAddress() );
 		$this->assertSame( 'Berlin', $address->getCity() );
 		$this->assertSame( '12345', $address->getPostcode() );
