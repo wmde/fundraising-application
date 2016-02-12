@@ -168,4 +168,10 @@ class AddDonationRequest {
 		$this->layout = $layout;
 	}
 
+	public function setAmountFromString( string $value, string $locale = 'de_DE' ) {
+		$this->setAmount(
+			( new \NumberFormatter( $locale, \NumberFormatter::DECIMAL ) )->parse( $value )
+		);
+	}
+
 }
