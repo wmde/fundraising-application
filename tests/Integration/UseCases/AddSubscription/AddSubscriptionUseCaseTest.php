@@ -83,7 +83,9 @@ class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$this->validator->method( 'needsModeration' )->willReturn( true );
 		$this->repo->expects( $this->once() )
 			->method( 'storeSubscription' )
-			->with( $this->isInstanceOf( Subscription::class ) );
+			->with( $this->callback( function( Subscription $subscription ) {
+					return $subscription->getStatus() === Subscription::STATUS_MODERATION;
+			} ) );
 		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->mailer );
 		$useCase->addSubscription( $this->createValidSubscriptionRequest() );
 	}
