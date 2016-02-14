@@ -44,7 +44,7 @@ class Donation {
 		return $this->personalInfo;
 	}
 
-	public function setPersonalInfo( PersonalInfo $personalInfo ) {
+	public function setPersonalInfo( PersonalInfo $personalInfo = null ) {
 		$this->assertIsWritable();
 		$this->personalInfo = $personalInfo;
 	}

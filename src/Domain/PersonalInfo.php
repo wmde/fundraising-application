@@ -36,11 +36,11 @@ class PersonalInfo {
 		$this->physicalAddress = $physicalAddress;
 	}
 
-	public function getEmailAddress(): MailAddress {
+	public function getEmailAddress(): string {
 		return $this->emailAddress;
 	}
 
-	public function setEmailAddress( MailAddress $emailAddress ) {
+	public function setEmailAddress( string $emailAddress ) {
 		$this->assertIsWritable();
 		$this->emailAddress = $emailAddress;
 	}
