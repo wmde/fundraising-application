@@ -13,6 +13,6 @@ $configReader = new ConfigReader(
 	is_readable( $prodConfigPath ) ? $prodConfigPath : ''
 );
 
-$factory = new Factory( DriverManager::getConnection( $configReader->getConfig()['db']) );
+$factory = new Factory( DriverManager::getConnection( $configReader->getConfig()['db'] ) );
 
 return ConsoleRunner::createHelperSet( $factory->getEntityManager() );
