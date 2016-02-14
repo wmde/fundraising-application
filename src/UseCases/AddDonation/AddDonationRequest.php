@@ -29,7 +29,7 @@ class AddDonationRequest {
 	private $bankName = '';
 
 	# tracking
-	private $tracking = ''; # TODO: generated from piwik parameters
+	private $tracking = '';
 	private $source = ''; # TODO: generated from referer
 	private $totalImpressionCount = 0;
 	private $singleBannerImpressionCount = 0;
@@ -172,6 +172,24 @@ class AddDonationRequest {
 		$this->setAmount(
 			( new \NumberFormatter( $locale, \NumberFormatter::DECIMAL ) )->parse( $value )
 		);
+	}
+
+	public function getPreferredValue( array $values ) {
+		foreach ( $values as $value ) {
+			if ( $value ) {
+				return $value;
+			}
+		}
+
+		return '';
+	}
+
+	public function concatTrackingFromVarCouple( string $campaign, string $keyword ): string {
+		if ( $campaign ) {
+			return strtolower( implode( '/', array_filter( [ $campaign, $keyword ] ) ) );
+		}
+
+		return '';
 	}
 
 }
