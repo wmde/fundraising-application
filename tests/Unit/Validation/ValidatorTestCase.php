@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Validation;
 
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
+use WMDE\Fundraising\Frontend\Validation\ValidationResult;
 
 /**
  * @licence GNU GPL v2+
@@ -12,15 +13,12 @@ use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
  */
 class ValidatorTestCase extends \PHPUnit_Framework_TestCase {
 
-	/**
-	 * @param ConstraintViolation[] $violations
-	 * @param string $fieldName
-	 */
-	protected function assertConstraintWasViolated( array $violations, string $fieldName ) {
-		$this->assertContainsOnlyInstancesOf( ConstraintViolation::class, $violations );
+	protected function assertConstraintWasViolated( ValidationResult $result, string $fieldName ) {
+		$this->assertContainsOnlyInstancesOf( ConstraintViolation::class, $result->getViolations() );
+		$this->assertTrue( $result->hasViolations() );
 
 		$violated = false;
-		foreach( $violations as $violation ) {
+		foreach( $result->getViolations() as $violation ) {
 			if ( $violation->getSource() === $fieldName ) {
 				$violated = true;
 			}

@@ -31,8 +31,10 @@ class GetInTouchUseCase {
 	 * @throws \RuntimeException
 	 */
 	public function processContactRequest( GetInTouchRequest $request ): ValidationResponse {
-		if ( !$this->validator->validate( $request ) ) {
-			return ValidationResponse::newFailureResponse( $this->validator->getConstraintViolations() );
+		$validationResult = $this->validator->validate( $request );
+
+		if ( $validationResult->hasViolations() ) {
+			return ValidationResponse::newFailureResponse( $validationResult->getViolations() );
 		}
 
 		$this->forwardContactRequest( $request );

@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types = 1);
 
 namespace WMDE\Fundraising\Frontend\Validation;
 
@@ -9,13 +10,12 @@ use WMDE\Fundraising\Entities\Subscription;
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class SubscriptionValidator implements InstanceValidator {
+class SubscriptionValidator {
 	use CanValidateField;
 
 	private $mailValidator;
 	private $duplicateValidator;
 	private $textPolicyValidator;
-	private $constraintViolations;
 	private $textPolicyViolations;
 
 	public function __construct( MailValidator $mailValidator, TextPolicyValidator $textPolicyValidator,
@@ -23,28 +23,23 @@ class SubscriptionValidator implements InstanceValidator {
 		$this->mailValidator = $mailValidator;
 		$this->textPolicyValidator = $textPolicyValidator;
 		$this->duplicateValidator = $duplicateValidator;
-		$this->constraintViolations = [];
 		$this->textPolicyViolations = [];
 	}
 
-	/**
-	 * @param Subscription $subscription
-	 *
-	 * @return bool
-	 */
-	public function validate( $subscription ): bool {
-		$violations = $this->getRequiredFieldViolations( $subscription );
-		$violations[] = $this->validateField( $this->mailValidator, $subscription->getEmail(), 'email' );
-		if ( ! $this->duplicateValidator->validate( $subscription ) ) {
-			$violations = array_merge( $violations, $this->duplicateValidator->getConstraintViolations() );
-		}
-		$this->constraintViolations = array_filter( $violations );
-		return count( $this->constraintViolations ) == 0;
+	public function validate( Subscription $subscription ): ValidationResult {
+		return new ValidationResult( ...array_filter( array_merge(
+			$this->getRequiredFieldViolations( $subscription ),
+			[ $this->validateField( $this->mailValidator, $subscription->getEmail(), 'email' ) ],
+			$this->duplicateValidator->validate( $subscription )->getViolations() )
+		) );
 	}
 
 	public function needsModeration( $subscription ): bool {
-		$this->textPolicyViolations = array_filter( $this->getBadWordViolations( $subscription ) );
-		return count( $this->textPolicyViolations ) > 0;
+		$this->textPolicyViolations = array_filter(
+			$this->getBadWordViolations( $subscription )
+		);
+
+		return !empty( $this->textPolicyViolations );
 	}
 
 	private function getRequiredFieldViolations( Subscription $subscription ): array {
@@ -76,10 +71,9 @@ class SubscriptionValidator implements InstanceValidator {
 		return $violations;
 	}
 
-	public function getConstraintViolations(): array {
-		return $this->constraintViolations;
-	}
-
+	/**
+	 * @return ConstraintViolation[]
+	 */
 	public function getTextPolicyViolations(): array {
 		return $this->textPolicyViolations;
 	}

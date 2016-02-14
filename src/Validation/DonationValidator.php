@@ -8,7 +8,7 @@ use WMDE\Fundraising\Frontend\Domain\Donation;
  * @license GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class DonationValidator implements InstanceValidator {
+class DonationValidator {
 	use CanValidateField;
 
 	private $nameValidator;
@@ -16,8 +16,6 @@ class DonationValidator implements InstanceValidator {
 	private $mailValidator;
 	private $amountValidator;
 	private $amountPolicyValidator;
-
-	protected $constraintViolations;
 
 	private $policyViolations;
 
@@ -31,27 +29,20 @@ class DonationValidator implements InstanceValidator {
 		$this->mailValidator = $mailValidator;
 		$this->amountValidator = $amountValidator;
 		$this->amountPolicyValidator = $amountPolicyValidator;
-
-		$this->constraintViolations = [];
 	}
 
-	/**
-	 * @param Donation $donation
-	 *
-	 * @return bool
-	 */
-	public function validate( $donation ): bool {
+	public function validate( Donation $donation ): ValidationResult {
 		$violations = [];
 		$violations[] = $this->validateField( $this->amountValidator, $donation->getAmount(), 'betrag' );
 
 		if ( $donation->getPersonalInfo() !== null ) {
 			$violations = array_merge(
 				$violations,
-				$this->validateValueObject( $this->nameValidator, $donation->getPersonalInfo()->getPersonName() )
+				$this->nameValidator->validate( $donation->getPersonalInfo()->getPersonName() )->getViolations()
 			);
 			$violations = array_merge(
 				$violations,
-				$this->validateValueObject( $this->addressValidator, $donation->getPersonalInfo()->getPhysicalAddress() )
+				$this->addressValidator->validate( $donation->getPersonalInfo()->getPhysicalAddress() )->getViolations()
 			);
 			$violations[] = $this->validateField(
 				$this->mailValidator,
@@ -60,8 +51,7 @@ class DonationValidator implements InstanceValidator {
 			);
 		}
 
-		$this->constraintViolations = array_filter( $violations );
-		return empty( $this->constraintViolations );
+		return new ValidationResult( ...array_filter( $violations ) );
 	}
 
 	public function needsModeration( Donation $donation ): bool {
@@ -72,23 +62,6 @@ class DonationValidator implements InstanceValidator {
 
 		$this->policyViolations = array_filter( $violations );
 		return !empty( $this->policyViolations );
-	}
-
-	/**
-	 * @return ConstraintViolation[]
-	 */
-	public function getConstraintViolations(): array {
-		return $this->constraintViolations;
-	}
-
-	/**
-	 * @param InstanceValidator $validator
-	 * @param $valueObject
-	 * @return ConstraintViolation[]
-	 */
-	private function validateValueObject( InstanceValidator $validator, $valueObject ) {
-		$validator->validate( $valueObject );
-		return $validator->getConstraintViolations();
 	}
 
 }

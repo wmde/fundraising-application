@@ -15,7 +15,7 @@ class SubscriptionDuplicateValidatorTest extends \PHPUnit_Framework_TestCase {
 		$subscription = $this->getMock( Subscription::class );
 		$cutoffDateTime = new \DateTime( '3 hours ago' );
 		$validator = new SubscriptionDuplicateValidator( $repository, $cutoffDateTime );
-		$this->assertTrue( $validator->validate( $subscription ) );
+		$this->assertTrue( $validator->validate( $subscription )->isSuccessful() );
 	}
 
 	public function testGivenSubscriptionCountGreaterThanZero_validationFails() {
@@ -24,7 +24,7 @@ class SubscriptionDuplicateValidatorTest extends \PHPUnit_Framework_TestCase {
 		$subscription = $this->getMock( Subscription::class );
 		$cutoffDateTime = new \DateTime( '3 hours ago' );
 		$validator = new SubscriptionDuplicateValidator( $repository, $cutoffDateTime );
-		$this->assertFalse( $validator->validate( $subscription ) );
+		$this->assertFalse( $validator->validate( $subscription )->isSuccessful() );
 	}
 
 }

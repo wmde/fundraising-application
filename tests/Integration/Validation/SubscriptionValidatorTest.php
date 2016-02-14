@@ -13,6 +13,7 @@ use WMDE\Fundraising\Frontend\Validation\SubscriptionValidator;
 use WMDE\Fundraising\Frontend\Validation\SubscriptionDuplicateValidator;
 use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SubscriptionRepositorySpy;
+use WMDE\Fundraising\Frontend\Validation\ValidationResult;
 
 /**
  * @covers WMDE\Fundraising\Frontend\Validation\SubscriptionValidator
@@ -30,8 +31,10 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 	}
 
 	private function getMockDuplicateValidator() {
-		$mock = $this->getMockBuilder( SubscriptionDuplicateValidator::class )->disableOriginalConstructor()->getMock();
-		$mock->method( 'validate' )->willReturn( true );
+		$mock = $this->getMockBuilder( SubscriptionDuplicateValidator::class )
+			->disableOriginalConstructor()->getMock();
+
+		$mock->method( 'validate' )->willReturn( new ValidationResult() );
 		return $mock;
 	}
 
@@ -57,8 +60,7 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 		$subscription = new Subscription();
 		$subscription->setAddress( $this->createAddress( 'Herr', 'Nyan', 'Cat' ) );
 		$subscription->setEmail( 'this is not a mail addess' );
-		$this->assertFalse( $subscriptionValidator->validate( $subscription ) );
-		$this->assertConstraintWasViolated( $subscriptionValidator->getConstraintViolations(), 'email' );
+		$this->assertConstraintWasViolated( $subscriptionValidator->validate( $subscription ), 'email' );
 	}
 
 	public function testFirstNameIsValidated() {
@@ -71,8 +73,7 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 		$subscription = new Subscription();
 		$subscription->setAddress( $this->createAddress( 'Herr', '', 'Cat' ) );
 		$subscription->setEmail( 'nyan@meow.com' );
-		$this->assertFalse( $subscriptionValidator->validate( $subscription ) );
-		$this->assertConstraintWasViolated( $subscriptionValidator->getConstraintViolations(), 'firstName' );
+		$this->assertConstraintWasViolated( $subscriptionValidator->validate( $subscription ), 'firstName' );
 	}
 
 	public function testLastNameIsValidated() {
@@ -85,8 +86,7 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 		$subscription = new Subscription();
 		$subscription->setAddress( $this->createAddress( 'Herr', 'Nyan', '' ) );
 		$subscription->setEmail( 'nyan@meow.com' );
-		$this->assertFalse( $subscriptionValidator->validate( $subscription ) );
-		$this->assertConstraintWasViolated( $subscriptionValidator->getConstraintViolations(), 'lastName' );
+		$this->assertConstraintWasViolated( $subscriptionValidator->validate( $subscription ), 'lastName' );
 	}
 
 	public function testSalutationIsValidated() {
@@ -99,8 +99,7 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 		$subscription = new Subscription();
 		$subscription->setAddress( $this->createAddress( '', 'Nyan', 'Cat' ) );
 		$subscription->setEmail( 'nyan@meow.com' );
-		$this->assertFalse( $subscriptionValidator->validate( $subscription ) );
-		$this->assertConstraintWasViolated( $subscriptionValidator->getConstraintViolations(), 'salutation' );
+		$this->assertConstraintWasViolated( $subscriptionValidator->validate( $subscription ), 'salutation' );
 	}
 
 	public function testGivenBadWords_subscriptionIsStillValid() {
@@ -116,8 +115,7 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 		$subscription = new Subscription();
 		$subscription->setAddress( $this->createAddress( 'Herr', 'Nyan', 'Cat' ) );
 		$subscription->setEmail( 'nyan@meow.com' );
-		$this->assertTrue( $subscriptionValidator->validate( $subscription ) );
-		$this->assertSame( [], $subscriptionValidator->getConstraintViolations() );
+		$this->assertTrue( $subscriptionValidator->validate( $subscription )->isSuccessful() );
 	}
 
 	public function testGivenBadWords_needsModerationIsTrue() {
@@ -151,7 +149,6 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 			$this->getMockTextPolicyValidator(),
 			$duplicateValidator
 		);
-		$this->assertFalse( $subscriptionValidator->validate( $subscription ) );
-		$this->assertConstraintWasViolated( $subscriptionValidator->getConstraintViolations(), '' );
+		$this->assertConstraintWasViolated( $subscriptionValidator->validate( $subscription ), '' );
 	}
 }

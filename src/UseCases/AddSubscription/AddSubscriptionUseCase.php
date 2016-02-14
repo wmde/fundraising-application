@@ -33,8 +33,10 @@ class AddSubscriptionUseCase {
 	public function addSubscription( SubscriptionRequest $subscriptionRequest ) {
 		$subscription = $this->createSubscriptionFromRequest( $subscriptionRequest );
 
-		if ( ! $this->subscriptionValidator->validate( $subscription ) ) {
-			return ValidationResponse::newFailureResponse( $this->subscriptionValidator->getConstraintViolations() );
+		$validationResult = $this->subscriptionValidator->validate( $subscription );
+
+		if ( $validationResult->hasViolations() ) {
+			return ValidationResponse::newFailureResponse( $validationResult->getViolations() );
 		}
 
 		$this->subscriptionRepository->storeSubscription( $subscription );

@@ -9,6 +9,7 @@ use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationUseCase;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 use WMDE\Fundraising\Frontend\Validation\DonationValidator;
+use WMDE\Fundraising\Frontend\Validation\ValidationResult;
 
 /**
  * @covers WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationUseCase
@@ -36,8 +37,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$donationValidator = $this->getMockBuilder( DonationValidator::class )
 			->disableOriginalConstructor()
 			->getMock();
-		$donationValidator->method( 'validate' )->willReturn( true );
-		$donationValidator->method( 'getConstraintViolations' )->willReturn( [] );
+		$donationValidator->method( 'validate' )->willReturn( new ValidationResult() );
 
 		$useCase = new AddDonationUseCase(
 			$this->getMock( DonationRepository::class ),
@@ -62,8 +62,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
-		$validator->method( 'validate' )->willReturn( false );
-		$validator->method( 'getConstraintViolations' )->willReturn( [ $violation ] );
+		$validator->method( 'validate' )->willReturn( new ValidationResult( $violation ) );
 
 		return $validator;
 	}

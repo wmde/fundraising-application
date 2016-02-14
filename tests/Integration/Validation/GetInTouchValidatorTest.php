@@ -26,7 +26,7 @@ class GetInTouchValidatorTest extends ValidatorTestCase {
 			'Hello there!',
 			'I just wanted to say "Hi".'
 		);
-		$this->assertTrue( $validator->validate( $request ) );
+		$this->assertTrue( $validator->validate( $request )->isSuccessful() );
 	}
 
 	public function testEmailAddressIsValidated() {
@@ -39,8 +39,8 @@ class GetInTouchValidatorTest extends ValidatorTestCase {
 			'Hello there!',
 			'I just wanted to say "Hi".'
 		);
-		$this->assertFalse( $validator->validate( $request ) );
-		$this->assertConstraintWasViolated( $validator->getConstraintViolations(), 'email' );
+		$this->assertFalse( $validator->validate( $request )->isSuccessful() );
+		$this->assertConstraintWasViolated( $validator->validate( $request ), 'email' );
 	}
 
 	public function testSubjectIsValidated() {
@@ -53,8 +53,8 @@ class GetInTouchValidatorTest extends ValidatorTestCase {
 			'',
 			'I just wanted to say "Hi".'
 		);
-		$this->assertFalse( $validator->validate( $request ) );
-		$this->assertConstraintWasViolated( $validator->getConstraintViolations(), 'subject' );
+		$this->assertFalse( $validator->validate( $request )->isSuccessful() );
+		$this->assertConstraintWasViolated( $validator->validate( $request ), 'subject' );
 	}
 
 	public function testMessageBodyIsValidated() {
@@ -67,8 +67,8 @@ class GetInTouchValidatorTest extends ValidatorTestCase {
 			'Hello there!',
 			''
 		);
-		$this->assertFalse( $validator->validate( $request ) );
-		$this->assertConstraintWasViolated( $validator->getConstraintViolations(), 'messageBody' );
+		$this->assertFalse( $validator->validate( $request )->isSuccessful() );
+		$this->assertConstraintWasViolated( $validator->validate( $request ), 'messageBody' );
 	}
 
 }
