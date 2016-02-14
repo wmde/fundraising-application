@@ -32,7 +32,7 @@ $app->before(
 	Application::EARLY_EVENT
 );
 
-$app->error( function ( \Exception $e, $code ) use ( $ffFactory, $app ) {
+$app->error( function ( \Exception $e ) use ( $ffFactory, $app ) {
 	$ffFactory->getLogger()->error( $e->getMessage(), [
 		'code' => $e->getCode(),
 		'file' => $e->getFile(),
@@ -45,9 +45,10 @@ $app->error( function ( \Exception $e, $code ) use ( $ffFactory, $app ) {
 			'ERR' => $e->getMessage()
 		] );
 	}
+
 	return new Response(
 		$ffFactory->newInternalErrorHTMLPresenter()->present( $e ),
-		$code
+		500
 	);
 } );
 
