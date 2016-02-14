@@ -174,9 +174,9 @@ class AddDonationRequest {
 		);
 	}
 
-	public function getPreferredValue( array $values ) {
+	public static function getPreferredValue( array $values ) {
 		foreach ( $values as $value ) {
-			if ( $value ) {
+			if ( $value !== null && $value !== '' ) {
 				return $value;
 			}
 		}
@@ -184,8 +184,8 @@ class AddDonationRequest {
 		return '';
 	}
 
-	public function concatTrackingFromVarCouple( string $campaign, string $keyword ): string {
-		if ( $campaign ) {
+	public static function concatTrackingFromVarCouple( string $campaign, string $keyword ): string {
+		if ( $campaign !== '' ) {
 			return strtolower( implode( '/', array_filter( [ $campaign, $keyword ] ) ) );
 		}
 

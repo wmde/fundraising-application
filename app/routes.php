@@ -246,10 +246,10 @@ $app->post(
 				$donationRequest->setBankName( $request->get( 'bankname', '' ) );
 
 				$donationRequest->setTracking(
-					$donationRequest->getPreferredValue( [
+					AddDonationRequest::getPreferredValue( [
 						$request->cookies->get( 'spenden_tracking' ),
 						$request->request->get( 'tracking' ),
-						$donationRequest->concatTrackingFromVarCouple(
+						AddDonationRequest::concatTrackingFromVarCouple(
 							$request->get( 'piwik_campaign', '' ),
 							$request->get( 'piwik_kwd', '' )
 						)
