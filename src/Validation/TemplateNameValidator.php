@@ -9,8 +9,6 @@ namespace WMDE\Fundraising\Frontend\Validation;
 class TemplateNameValidator {
 
 	private $twig;
-	private $lastViolation;
-
 
 	public function __construct( \Twig_Environment $twig ) {
 		$this->twig = $twig;
@@ -24,11 +22,11 @@ class TemplateNameValidator {
 	public function validate( $value ): ValidationResult {
 		try {
 			$this->twig->loadTemplate( $value );
-			return new ValidationResult();
 		}
-		catch (\Twig_Error_Loader $e ) {
+		catch ( \Twig_Error_Loader $e ) {
 			return new ValidationResult( new ConstraintViolation( $value, 'Could not find template' ) );
 		}
 
+		return new ValidationResult();
 	}
 }
