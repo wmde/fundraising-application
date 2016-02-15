@@ -29,6 +29,7 @@ use WMDE\Fundraising\Frontend\DataAccess\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\Domain\CommentRepository;
 use WMDE\Fundraising\Frontend\DataAccess\DbalSubscriptionRepository;
 use WMDE\Fundraising\Frontend\Domain\DonationRepository;
+use WMDE\Fundraising\Frontend\Domain\Honorifics;
 use WMDE\Fundraising\Frontend\Domain\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListJsonPresenter;
@@ -47,6 +48,7 @@ use WMDE\Fundraising\Frontend\UseCases\ConfirmSubscription\ConfirmSubscriptionUs
 use WMDE\Fundraising\Frontend\Validation\AmountPolicyValidator;
 use WMDE\Fundraising\Frontend\Validation\AmountValidator;
 use WMDE\Fundraising\Frontend\Validation\DonationValidator;
+use WMDE\Fundraising\Frontend\Validation\AllowedValuesValidator;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\Fundraising\Frontend\Validation\MailValidator;
 use WMDE\Fundraising\Frontend\Validation\PersonNameValidator;
@@ -122,9 +124,10 @@ class FunFunFactory {
 
 		$pimple['subscription_validator'] = $pimple->share( function() {
 			return new SubscriptionValidator(
-					$this->getMailValidator(),
-					$this->getTextPolicyValidator( 'fields' ),
-					$this->newSubscriptionDuplicateValidator()
+				$this->getMailValidator(),
+				$this->getTextPolicyValidator( 'fields' ),
+				$this->newSubscriptionDuplicateValidator(),
+				$this->newHonorificValidator()
 			);
 		} );
 
@@ -162,11 +165,22 @@ class FunFunFactory {
 			$loaders = [
 				'json' => $translationFactory->newJsonLoader()
 			];
-			$locale = 'de_DE'; // In the future, this could be configured somehow
+			$locale = $this->config['locale'];
 			$translator = $translationFactory->create( $loaders, $locale );
-			$translator->addResource( 'json', __DIR__ . '/../app/translations/messages.de_DE.json', $locale );
-			$translator->addResource( 'json', __DIR__ . '/../app/translations/validations.de_DE.json', $locale, 'validations' );
+			$translator->addResource( 'json', __DIR__ . '/../app/translations/messages.' . $locale . '.json', $locale );
+			$translator->addResource( 'json', __DIR__ . '/../app/translations/validations.' . $locale . '.json', $locale,
+				'validations' );
 			return $translator;
+		} );
+
+		// In the future, this could be locale-specific or filled from a DB table
+		$pimple['honorifics'] = $pimple->share( function() {
+			return new Honorifics( [
+				'' => 'Kein Titel',
+				'Dr.' => 'Dr.',
+				'Prof.' => 'Prof.',
+				'Prof. Dr.' => 'Prof. Dr.'
+			] );
 		} );
 
 		$pimple['twig_factory'] = $pimple->share( function () {
@@ -310,6 +324,7 @@ class FunFunFactory {
 			$templateName,
 			[
 				'basepath' => $this->config['web-basepath'],
+				'honorifics' => $this->getHonorifics()->getList(),
 				'header_template' => $this->config['default-layout-templates']['header'],
 				'footer_template' => $this->config['default-layout-templates']['footer'],
 				'no_js_notice_template' => $this->config['default-layout-templates']['no-js-notice'],
@@ -461,6 +476,14 @@ class FunFunFactory {
 		$cutoffDateTime = new \DateTime();
 		$cutoffDateTime->sub( new \DateInterval( $this->config['subscription-interval'] ) );
 		return $cutoffDateTime;
+	}
+
+	private function newHonorificValidator(): AllowedValuesValidator {
+		return new AllowedValuesValidator( $this->getHonorifics()->getKeys() );
+	}
+
+	private function getHonorifics(): Honorifics {
+		return $this->pimple['honorifics'];
 	}
 
 	private function getMessenger(): Messenger {

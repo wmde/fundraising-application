@@ -43,5 +43,6 @@
 			"badwords": ""
 		}
 	},
-	"subscription-interval": "PT30M"
+	"subscription-interval": "PT30M",
+	"locale": "de_DE"
 }

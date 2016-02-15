@@ -18,12 +18,15 @@ class SubscriptionValidator {
 	private $duplicateValidator;
 	private $textPolicyValidator;
 	private $textPolicyViolations;
+	private $titleValidator;
 
 	public function __construct( MailValidator $mailValidator, TextPolicyValidator $textPolicyValidator,
-	                             SubscriptionDuplicateValidator $duplicateValidator ) {
+								 SubscriptionDuplicateValidator $duplicateValidator,
+								 AllowedValuesValidator $titleValidator ) {
 		$this->mailValidator = $mailValidator;
 		$this->textPolicyValidator = $textPolicyValidator;
 		$this->duplicateValidator = $duplicateValidator;
+		$this->titleValidator = $titleValidator;
 		$this->textPolicyViolations = [];
 	}
 
@@ -36,6 +39,10 @@ class SubscriptionValidator {
 		return new ValidationResult( ...array_filter( array_merge(
 			$this->getRequiredFieldViolations( $subscription ),
 			[ $this->getFieldViolation( $this->mailValidator->validate( $subscription->getEmail() ), 'email' ) ],
+			[ $this->getFieldViolation(
+				$this->titleValidator->validate( $subscription->getAddress()->getTitle() ),
+				'title'
+			) ],
 			$this->duplicateValidator->validate( $subscription )->getViolations() )
 		) );
 	}
