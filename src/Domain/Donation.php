@@ -15,6 +15,7 @@ class Donation {
 
 	private $amount;
 	private $interval = 0;
+	private $paymentType;
 	private $personalInfo;
 
 	public function getAmount(): float {
@@ -33,6 +34,15 @@ class Donation {
 	public function setInterval( int $interval ) {
 		$this->assertIsWritable();
 		$this->interval = $interval;
+	}
+
+	public function getPaymentType(): string {
+		return $this->paymentType;
+	}
+
+	public function setPaymentType( string $paymentType ) {
+		$this->assertIsWritable();
+		$this->paymentType = $paymentType;
 	}
 
 	/**

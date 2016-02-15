@@ -7,8 +7,8 @@ use WMDE\Fundraising\Frontend\Domain\PersonalInfo;
 use WMDE\Fundraising\Frontend\Domain\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Domain\PersonName;
 use WMDE\Fundraising\Frontend\Domain\PhysicalAddress;
-use WMDE\Fundraising\Frontend\MailAddress;
 use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
+use WMDE\Fundraising\Frontend\Validation\AllowedValuesValidator;
 use WMDE\Fundraising\Frontend\Validation\AmountPolicyValidator;
 use WMDE\Fundraising\Frontend\Validation\AmountValidator;
 use WMDE\Fundraising\Frontend\Validation\DonationValidator;
@@ -16,6 +16,7 @@ use WMDE\Fundraising\Frontend\Validation\MailValidator;
 use WMDE\Fundraising\Frontend\Validation\PersonNameValidator;
 use WMDE\Fundraising\Frontend\Validation\PhysicalAddressValidator;
 use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
+use WMDE\Fundraising\Frontend\Validation\ValidationResult;
 
 /**
  * @covers WMDE\Fundraising\Frontend\Validation\DonationValidator
@@ -46,6 +47,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 	public function testNoPersonalInfoGiven_validatorReturnsTrue() {
 		$donation = new Donation();
 		$donation->setAmount( 1 );
+		$donation->setPaymentType( 'CASH' );
 		$this->assertTrue( $this->donationValidator->validate( $donation )->isSuccessful() );
 	}
 
@@ -53,6 +55,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 		$donation = new Donation();
 		$donation->setAmount( 350 );
 		$donation->setInterval( 12 );
+		$donation->setPaymentType( 'CASH' );
 		$this->assertTrue( $this->donationValidator->needsModeration( $donation ) );
 	}
 
@@ -62,7 +65,12 @@ class DonationValidatorTest extends ValidatorTestCase {
 		$personalInfo->setPhysicalAddress( new PhysicalAddress() );
 		$personalInfo->setEmailAddress( 'hank.scorpio@globex.com' );
 		$personalInfo->freeze()->assertNoNullFields();
-		$donation = $this->newDonation( $personalInfo );
+
+		$donation = new Donation();
+		$donation->setAmount( 1 );
+		$donation->setPaymentType( 'CASH' );
+		$donation->setPersonalInfo( $personalInfo );
+		$donation->freeze()->assertNoNullFields();
 
 		$this->assertFalse( $this->donationValidator->validate( $donation )->isSuccessful() );
 
@@ -83,6 +91,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 			$textPolicyValidator,
 			new PersonNameValidator(),
 			new PhysicalAddressValidator(),
+			new AllowedValuesValidator( [ 'CASH' ] ),
 			new MailValidator( new NullDomainNameValidator() )
 		);
 
@@ -94,6 +103,34 @@ class DonationValidatorTest extends ValidatorTestCase {
 
 		$donation = $this->newDonation( $personalInfo );
 		$this->assertTrue( $donationValidator->needsModeration( $donation ) );
+	}
+
+	public function testNoPaymentTypeGiven_validatorReturnsFalse() {
+		$donation = new Donation();
+		$donation->setAmount( 1 );
+		$donation->setPaymentType( '' );
+		$donation->freeze();
+
+		$this->assertFalse( $this->donationValidator->validate( $donation )->isSuccessful() );
+
+		$this->assertConstraintWasViolated(
+			$this->donationValidator->validate( $donation ),
+			'zahlweise'
+		);
+	}
+
+	public function testUnsupportedPaymentTypeGiven_validatorReturnsFalse() {
+		$donation = new Donation();
+		$donation->setAmount( 1 );
+		$donation->setPaymentType( 'BTC' );
+		$donation->freeze();
+
+		$this->assertFalse( $this->donationValidator->validate( $donation )->isSuccessful() );
+
+		$this->assertConstraintWasViolated(
+			$this->donationValidator->validate( $donation ),
+			'zahlweise'
+		);
 	}
 
 	private function newCompanyName(): PersonName {
@@ -119,6 +156,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 			new TextPolicyValidator(),
 			new PersonNameValidator(),
 			new PhysicalAddressValidator(),
+			new AllowedValuesValidator( [ 'CASH' ] ),
 			new MailValidator( new NullDomainNameValidator() )
 		);
 	}
@@ -127,6 +165,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 		$donation = new Donation();
 		$donation->setAmount( 1 );
 		$donation->setPersonalInfo( $personalInfo );
+		$donation->setPaymentType( 'CASH' );
 		$donation->freeze()->assertNoNullFields();
 
 		return $donation;

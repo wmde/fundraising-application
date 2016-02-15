@@ -15,6 +15,7 @@ class DonationValidator {
 	private $addressValidator;
 	private $mailValidator;
 	private $amountValidator;
+	private $paymentTypeValidator;
 	private $amountPolicyValidator;
 	private $textPolicyValidator;
 
@@ -25,11 +26,13 @@ class DonationValidator {
 								 TextPolicyValidator $textPolicyValidator,
 								 PersonNameValidator $nameValidator,
 								 PhysicalAddressValidator $addressValidator,
+								 AllowedValuesValidator $paymentTypeValidator,
 								 MailValidator $mailValidator ) {
 		$this->nameValidator = $nameValidator;
 		$this->addressValidator = $addressValidator;
 		$this->mailValidator = $mailValidator;
 		$this->amountValidator = $amountValidator;
+		$this->paymentTypeValidator = $paymentTypeValidator;
 		$this->amountPolicyValidator = $amountPolicyValidator;
 		$this->textPolicyValidator = $textPolicyValidator;
 	}
@@ -37,6 +40,9 @@ class DonationValidator {
 	public function validate( Donation $donation ): ValidationResult {
 		$violations = [];
 		$violations[] = $this->getFieldViolation( $this->amountValidator->validate( $donation->getAmount() ), 'betrag' );
+		$violations[] = $this->getFieldViolation(
+			$this->paymentTypeValidator->validate( $donation->getPaymentType() ), 'zahlweise'
+		);
 
 		if ( $donation->getPersonalInfo() !== null ) {
 			$violations = array_merge(

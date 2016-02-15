@@ -38,7 +38,9 @@ class AddDonationUseCase {
 		$donation = new Donation();
 
 		$donation->setAmount( $donationRequest->getAmount() );
+		$donation->setInterval( $donationRequest->getInterval() );
 		$donation->setPersonalInfo( $donationRequest->getPersonalInfo() );
+		$donation->setPaymentType( $donationRequest->getPaymentType() );
 
 		if ( $donationRequest->getPaymentType() !== 'BEZ' ) {
 			// TODO: this should not be done via an exception
