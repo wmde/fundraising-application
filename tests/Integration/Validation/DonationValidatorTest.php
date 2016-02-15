@@ -15,6 +15,7 @@ use WMDE\Fundraising\Frontend\Validation\DonationValidator;
 use WMDE\Fundraising\Frontend\Validation\MailValidator;
 use WMDE\Fundraising\Frontend\Validation\PersonNameValidator;
 use WMDE\Fundraising\Frontend\Validation\PhysicalAddressValidator;
+use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
 
 /**
  * @covers WMDE\Fundraising\Frontend\Validation\DonationValidator
@@ -32,19 +33,13 @@ class DonationValidatorTest extends ValidatorTestCase {
 	}
 
 	public function testGivenValidDonation_validationIsSuccessful() {
-		$donation = new Donation();
-		$donation->setAmount( 1 );
-
 		$personalInfo = new PersonalInfo();
 		$personalInfo->setPersonName( $this->newCompanyName() );
 		$personalInfo->setPhysicalAddress( $this->newPhysicalAddress() );
 		$personalInfo->setEmailAddress( 'hank.scorpio@globex.com' );
 		$personalInfo->freeze()->assertNoNullFields();
-		$donation->setPersonalInfo( $personalInfo );
+		$donation = $this->newDonation( $personalInfo );
 
-		$donation->freeze()->assertNoNullFields();
-
-		;
 		$this->assertEmpty( $this->donationValidator->validate( $donation )->getViolations() );
 	}
 
@@ -67,11 +62,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 		$personalInfo->setPhysicalAddress( new PhysicalAddress() );
 		$personalInfo->setEmailAddress( 'hank.scorpio@globex.com' );
 		$personalInfo->freeze()->assertNoNullFields();
-
-		$donation = new Donation();
-		$donation->setAmount( 1 );
-		$donation->setPersonalInfo( $personalInfo );
-		$donation->freeze()->assertNoNullFields();
+		$donation = $this->newDonation( $personalInfo );
 
 		$this->assertFalse( $this->donationValidator->validate( $donation )->isSuccessful() );
 
@@ -79,6 +70,30 @@ class DonationValidatorTest extends ValidatorTestCase {
 			$this->donationValidator->validate( $donation ),
 			'firma'
 		);
+	}
+
+	public function testGivenBadWords_needsModerationReturnsTrue() {
+		$textPolicyValidator = $this->getMock( TextPolicyValidator::class );
+		$textPolicyValidator->method( 'hasHarmlessContent' )
+			->willReturn( false );
+
+		$donationValidator = new DonationValidator(
+			new AmountValidator( 1 ),
+			new AmountPolicyValidator( 1000, 200, 300 ),
+			$textPolicyValidator,
+			new PersonNameValidator(),
+			new PhysicalAddressValidator(),
+			new MailValidator( new NullDomainNameValidator() )
+		);
+
+		$personalInfo = new PersonalInfo();
+		$personalInfo->setPersonName( $this->newCompanyName() );
+		$personalInfo->setPhysicalAddress( $this->newPhysicalAddress() );
+		$personalInfo->setEmailAddress( 'hank.scorpio@globex.com' );
+		$personalInfo->freeze();
+
+		$donation = $this->newDonation( $personalInfo );
+		$this->assertTrue( $donationValidator->needsModeration( $donation ) );
 	}
 
 	private function newCompanyName(): PersonName {
@@ -101,10 +116,20 @@ class DonationValidatorTest extends ValidatorTestCase {
 		return new DonationValidator(
 			new AmountValidator( 1 ),
 			new AmountPolicyValidator( 1000, 200, 300 ),
+			new TextPolicyValidator(),
 			new PersonNameValidator(),
 			new PhysicalAddressValidator(),
 			new MailValidator( new NullDomainNameValidator() )
 		);
+	}
+
+	private function newDonation( PersonalInfo $personalInfo ): Donation {
+		$donation = new Donation();
+		$donation->setAmount( 1 );
+		$donation->setPersonalInfo( $personalInfo );
+		$donation->freeze()->assertNoNullFields();
+
+		return $donation;
 	}
 
 }
