@@ -23,10 +23,10 @@ class GetInTouchValidator {
 		$requiredFieldValidator = new RequiredFieldValidator();
 
 		return new ValidationResult( ...array_filter( [
-			$this->validateField( $requiredFieldValidator, $instance->getSubject(), 'subject' ),
-			$this->validateField( $requiredFieldValidator, $instance->getMessageBody(), 'messageBody' ),
-			$this->validateField( $requiredFieldValidator, $instance->getEmailAddress(), 'email' ),
-			$this->validateField( $this->mailValidator, $instance->getEmailAddress(), 'email' )
+			$this->getFieldViolation( $requiredFieldValidator->validate( $instance->getSubject() ), 'subject' ),
+			$this->getFieldViolation( $requiredFieldValidator->validate( $instance->getMessageBody() ), 'messageBody' ),
+			$this->getFieldViolation( $requiredFieldValidator->validate( $instance->getEmailAddress() ), 'email' ),
+			$this->getFieldViolation( $this->mailValidator->validate( $instance->getEmailAddress() ), 'email' )
 		] ) );
 	}
 

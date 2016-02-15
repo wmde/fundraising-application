@@ -7,21 +7,14 @@ namespace WMDE\Fundraising\Frontend\Validation;
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class RequiredFieldValidator implements ScalarValueValidator {
+class RequiredFieldValidator {
 
-	private $lastViolation = null;
-
-	public function validate( $value ): bool {
+	public function validate( $value ): ValidationResult {
 		if ( empty( $value ) ) {
-			$this->lastViolation = new ConstraintViolation( $value, 'This field is required' );
-			return false;
+			return new ValidationResult( new ConstraintViolation( $value, 'This field is required' ) );
 		}
 
-		return true;
-	}
-
-	public function getLastViolation(): ConstraintViolation {
-		return $this->lastViolation;
+		return new ValidationResult();
 	}
 
 }

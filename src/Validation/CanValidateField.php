@@ -6,18 +6,17 @@ namespace WMDE\Fundraising\Frontend\Validation;
 trait CanValidateField {
 
 	/**
-	 * @param ScalarValueValidator $validator
-	 * @param mixed $fieldValue
+	 * @param ValidationResult $validationResult
 	 * @param string $fieldName
 	 *
 	 * @return ConstraintViolation|null
 	 */
-	private function validateField( ScalarValueValidator $validator, $fieldValue, string $fieldName ) {
-		if ( $validator->validate( $fieldValue) ) {
+	private function getFieldViolation( ValidationResult $validationResult, string $fieldName ) {
+		if ( $validationResult->isSuccessful() ) {
 			return null;
 		}
 
-		$violation = $validator->getLastViolation();
+		$violation = $validationResult->getViolations()[0];
 		$violation->setSource( $fieldName );
 
 		return $violation;

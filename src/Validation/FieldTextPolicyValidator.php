@@ -6,11 +6,10 @@ namespace WMDE\Fundraising\Frontend\Validation;
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class FieldTextPolicyValidator implements ScalarValueValidator {
+class FieldTextPolicyValidator {
 
 	const VIOLATION_MESSAGE = 'This field has unacceptable language or URLs in it';
 
-	private $lastViolation = null;
 	private $validationFlags;
 	private $textPolicyValidator;
 
@@ -19,19 +18,16 @@ class FieldTextPolicyValidator implements ScalarValueValidator {
 		$this->validationFlags = $validationFlags;
 	}
 
-	public function validate( $value ): bool {
+	public function validate( $value ): ValidationResult {
 		if ( $value === '' ) {
-			return true;
+			return new ValidationResult();
 		}
-		if ( $this->textPolicyValidator->hasHarmlessContent( (string) $value, $this->validationFlags ) ) {
-			return true;
-		}
-		$this->lastViolation = new ConstraintViolation( $value, self::VIOLATION_MESSAGE );
-		return false;
-	}
 
-	public function getLastViolation(): ConstraintViolation {
-		return $this->lastViolation;
+		if ( $this->textPolicyValidator->hasHarmlessContent( (string) $value, $this->validationFlags ) ) {
+			return new ValidationResult();
+		}
+
+		return new ValidationResult( new ConstraintViolation( $value, self::VIOLATION_MESSAGE ) );
 	}
 
 }

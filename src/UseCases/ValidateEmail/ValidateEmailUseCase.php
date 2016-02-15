@@ -20,7 +20,7 @@ class ValidateEmailUseCase {
 	}
 
 	public function validateEmail( string $email ): bool {
-		return $this->mailValidator->validate( $email );
+		return $this->mailValidator->validate( $email )->isSuccessful();
 	}
 
 }
