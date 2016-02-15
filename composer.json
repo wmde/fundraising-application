@@ -21,7 +21,7 @@
 	"require-dev": {
 		"ext-pdo_sqlite": "*",
 
-		"phpunit/phpunit": "~5.0",
+		"phpunit/phpunit": "~5.2",
 		"whatthejeff/nyancat-phpunit-resultprinter": "~1.2",
 		"ockcyp/covers-validator": "~0.4",
 		"squizlabs/php_codesniffer": "~2.2",
