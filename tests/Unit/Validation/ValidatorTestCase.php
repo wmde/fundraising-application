@@ -24,7 +24,7 @@ class ValidatorTestCase extends \PHPUnit_Framework_TestCase {
 			}
 		}
 
-		$this->assertTrue( $violated );
+		$this->assertTrue( $violated, 'Failed asserting that constraint for field "' . $fieldName . '"" was violated.' );
 	}
 
 }

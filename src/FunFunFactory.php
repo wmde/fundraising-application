@@ -30,6 +30,7 @@ use WMDE\Fundraising\Frontend\Domain\CommentRepository;
 use WMDE\Fundraising\Frontend\DataAccess\DbalSubscriptionRepository;
 use WMDE\Fundraising\Frontend\Domain\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Honorifics;
+use WMDE\Fundraising\Frontend\Domain\PaymentTypes;
 use WMDE\Fundraising\Frontend\Domain\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListJsonPresenter;
@@ -185,6 +186,16 @@ class FunFunFactory {
 				'Dr.' => 'Dr.',
 				'Prof.' => 'Prof.',
 				'Prof. Dr.' => 'Prof. Dr.'
+			] );
+		} );
+
+		// In the future, this could be locale-specific or filled from a DB table
+		$pimple['payment_types'] = $pimple->share( function() {
+			return new PaymentTypes( [
+				'BEZ' => 'Lastschrift',
+				'UEB' => 'Überweisung',
+				'MCP' => 'Kreditkarte',
+				'PPL' => 'PayPal'
 			] );
 		} );
 
@@ -494,6 +505,14 @@ class FunFunFactory {
 		return $this->pimple['honorifics'];
 	}
 
+	private function newPaymentTypeValidator(): AllowedValuesValidator {
+		return new AllowedValuesValidator( $this->getPaymentTypes()->getKeys() );
+	}
+
+	private function getPaymentTypes(): PaymentTypes {
+		return $this->pimple['payment_types'];
+	}
+
 	private function getMessenger(): Messenger {
 		return $this->pimple['messenger'];
 	}
@@ -552,6 +571,7 @@ class FunFunFactory {
 				$this->getTextPolicyValidator( 'fields' ),
 				new PersonNameValidator(),
 				new PhysicalAddressValidator(),
+				$this->newPaymentTypeValidator(),
 				$this->getMailValidator()
 			)
 		);
