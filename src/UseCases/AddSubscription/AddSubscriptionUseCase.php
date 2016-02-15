@@ -39,6 +39,10 @@ class AddSubscriptionUseCase {
 			return ValidationResponse::newFailureResponse( $validationResult->getViolations() );
 		}
 
+		if ( $this->subscriptionValidator->needsModeration( $subscription ) ) {
+			$subscription->setStatus( Subscription::STATUS_MODERATION );
+		}
+
 		$this->subscriptionRepository->storeSubscription( $subscription );
 
 		if ( $this->subscriptionValidator->needsModeration( $subscription ) ) {

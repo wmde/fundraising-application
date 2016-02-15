@@ -27,6 +27,7 @@ class ConfirmSubscriptionUseCase {
 	}
 
 	public function confirmSubscription( string $confirmationCode ): ValidationResponse {
+
 		$subscription = $this->subscriptionRepository->findByConfirmationCode( $confirmationCode );
 
 		if ( $subscription === null ) {
@@ -35,6 +36,8 @@ class ConfirmSubscriptionUseCase {
 		}
 
 		if ( $subscription->getStatus() === Subscription::STATUS_NEUTRAL ) {
+			$subscription->setStatus( Subscription::STATUS_CONFIRMED );
+			$this->subscriptionRepository->storeSubscription( $subscription );
 			$this->mailer->sendMail( new MailAddress( $subscription->getEmail() ), [ 'subscription' => $subscription ] );
 			return ValidationResponse::newSuccessResponse();
 		}

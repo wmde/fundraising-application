@@ -380,7 +380,10 @@ class FunFunFactory {
 			new TwigTemplate(
 				$this->getTwig(),
 				'Mail_Subscription_Request.twig',
-				[ 'greeting_generator' => $this->getGreetingGenerator() ]
+				[
+					'basepath' => $this->config['web-basepath'],
+					'greeting_generator' => $this->getGreetingGenerator()
+				]
 			),
 			$this->getTranslator()->trans( 'Your membership with Wikimedia Germany' )
 		);

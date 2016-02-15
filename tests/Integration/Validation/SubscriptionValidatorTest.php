@@ -149,6 +149,9 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 			$this->getMockTextPolicyValidator(),
 			$duplicateValidator
 		);
-		$this->assertConstraintWasViolated( $subscriptionValidator->validate( $subscription ), '' );
+		$this->assertConstraintWasViolated(
+			$subscriptionValidator->validate( $subscription ),
+			SubscriptionDuplicateValidator::SOURCE_NAME
+		);
 	}
 }

@@ -90,7 +90,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 		);
 		$response = $client->getResponse();
 		$this->assertTrue($response->isRedirect(), 'Is redirect response' );
-		$this->assertSame( '/page/SubscriptionSuccess', $response->headers->get( 'Location' ) );
+		$this->assertSame( '/page/Subscription_Success', $response->headers->get( 'Location' ) );
 	}
 
 	public function testGivenInvalidDataAndNoContentType_routeDisplaysFormPage() {
@@ -165,7 +165,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 		);
 		$response = $client->getResponse();
 		$this->assertTrue($response->isRedirect(), 'Is redirect response' );
-		$this->assertSame( '/page/SubscriptionModeration', $response->headers->get( 'Location' ) );
+		$this->assertSame( '/page/Subscription_Moderation', $response->headers->get( 'Location' ) );
 	}
 
 }
