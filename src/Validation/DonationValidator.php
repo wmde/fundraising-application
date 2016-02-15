@@ -33,7 +33,7 @@ class DonationValidator {
 
 	public function validate( Donation $donation ): ValidationResult {
 		$violations = [];
-		$violations[] = $this->validateField( $this->amountValidator, $donation->getAmount(), 'betrag' );
+		$violations[] = $this->getFieldViolation( $this->amountValidator->validate( $donation->getAmount() ), 'betrag' );
 
 		if ( $donation->getPersonalInfo() !== null ) {
 			$violations = array_merge(
@@ -44,9 +44,8 @@ class DonationValidator {
 				$violations,
 				$this->addressValidator->validate( $donation->getPersonalInfo()->getPhysicalAddress() )->getViolations()
 			);
-			$violations[] = $this->validateField(
-				$this->mailValidator,
-				$donation->getPersonalInfo()->getEmailAddress(),
+			$violations[] = $this->getFieldViolation(
+				$this->mailValidator->validate( $donation->getPersonalInfo()->getEmailAddress() ),
 				'email'
 			);
 		}

@@ -14,13 +14,13 @@ class PhysicalAddressValidator {
 	use CanValidateField;
 
 	public function validate( PhysicalAddress $address ): ValidationResult {
-		$requiredFieldValidator = new RequiredFieldValidator();
+		$validator = new RequiredFieldValidator();
 
 		return new ValidationResult( ...array_filter( [
-			$this->validateField( $requiredFieldValidator, $address->getStreetAddress(), 'strasse' ),
-			$this->validateField( $requiredFieldValidator, $address->getPostalCode(), 'plz' ),
-			$this->validateField( $requiredFieldValidator, $address->getCity(), 'ort' ),
-			$this->validateField( $requiredFieldValidator, $address->getCountryCode(), 'country' )
+			$this->getFieldViolation( $validator->validate( $address->getStreetAddress() ), 'strasse' ),
+			$this->getFieldViolation( $validator->validate( $address->getPostalCode() ), 'plz' ),
+			$this->getFieldViolation( $validator->validate( $address->getCity() ), 'ort' ),
+			$this->getFieldViolation( $validator->validate( $address->getCountryCode() ), 'country' )
 		] ) );
 	}
 

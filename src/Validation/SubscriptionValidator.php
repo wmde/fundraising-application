@@ -35,7 +35,7 @@ class SubscriptionValidator {
 	public function validate( Subscription $subscription ): ValidationResult {
 		return new ValidationResult( ...array_filter( array_merge(
 			$this->getRequiredFieldViolations( $subscription ),
-			[ $this->validateField( $this->mailValidator, $subscription->getEmail(), 'email' ) ],
+			[ $this->getFieldViolation( $this->mailValidator->validate( $subscription->getEmail() ), 'email' ) ],
 			$this->duplicateValidator->validate( $subscription )->getViolations() )
 		) );
 	}
@@ -50,31 +50,32 @@ class SubscriptionValidator {
 
 	private function getRequiredFieldViolations( Subscription $subscription ): array {
 		$address = $subscription->getAddress();
-		$requiredFieldValidator = new RequiredFieldValidator();
-		$violations = [];
-		$violations[] = $this->validateField( $requiredFieldValidator, $address->getSalutation(), 'salutation' );
-		$violations[] = $this->validateField( $requiredFieldValidator, $address->getFirstName(), 'firstName' );
-		$violations[] = $this->validateField( $requiredFieldValidator, $address->getLastName(), 'lastName' );
-		$violations[] = $this->validateField( $requiredFieldValidator, $subscription->getEmail(), 'email' );
-		return $violations;
+		$validator = new RequiredFieldValidator();
+
+		return [
+			$this->getFieldViolation( $validator->validate( $address->getSalutation() ), 'salutation' ),
+			$this->getFieldViolation( $validator->validate( $address->getFirstName() ), 'firstName' ),
+			$this->getFieldViolation( $validator->validate( $address->getLastName() ), 'lastName' ),
+			$this->getFieldViolation( $validator->validate( $subscription->getEmail() ), 'email' )
+		];
 	}
 
 	private function getBadWordViolations( Subscription $subscription ) {
-		$violations = [];
-
 		$flags = TextPolicyValidator::CHECK_BADWORDS |
 			TextPolicyValidator::IGNORE_WHITEWORDS |
 			TextPolicyValidator::CHECK_URLS;
+
 		$fieldTextValidator = new FieldTextPolicyValidator( $this->textPolicyValidator, $flags );
 		$address = $subscription->getAddress();
 
-		$violations[] = $this->validateField( $fieldTextValidator, $address->getFirstName(), 'firstName' );
-		$violations[] = $this->validateField( $fieldTextValidator, $address->getLastName(), 'lastName' );
-		$violations[] = $this->validateField( $fieldTextValidator, $address->getCompany(), 'company' );
-		$violations[] = $this->validateField( $fieldTextValidator, $address->getAddress(), 'address' );
-		$violations[] = $this->validateField( $fieldTextValidator, $address->getPostcode(), 'postcode' );
-		$violations[] = $this->validateField( $fieldTextValidator, $address->getCity(), 'city' );
-		return $violations;
+		return [
+			$this->getFieldViolation( $fieldTextValidator->validate( $address->getFirstName() ), 'firstName' ),
+			$this->getFieldViolation( $fieldTextValidator->validate( $address->getLastName() ), 'lastName' ),
+			$this->getFieldViolation( $fieldTextValidator->validate( $address->getCompany() ), 'company' ),
+			$this->getFieldViolation( $fieldTextValidator->validate( $address->getAddress() ), 'address' ),
+			$this->getFieldViolation( $fieldTextValidator->validate( $address->getPostcode() ), 'postcode' ),
+			$this->getFieldViolation( $fieldTextValidator->validate( $address->getCity() ), 'city' )
+		];
 	}
 
 	/**

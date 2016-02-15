@@ -14,17 +14,17 @@ class AmountValidatorTest extends \PHPUnit_Framework_TestCase {
 
 	public function testGivenAmountWithinLimits_validationSucceeds() {
 		$validator = $this->newAmountValidator();
-		$this->assertTrue( $validator->validate( 50 ) );
+		$this->assertTrue( $validator->validate( 50 )->isSuccessful() );
 	}
 
 	public function testGivenAmountTooLow_validationFails() {
 		$validator = $this->newAmountValidator();
-		$this->assertFalse( $validator->validate( 0.2 ) );
+		$this->assertFalse( $validator->validate( 0.2 )->isSuccessful() );
 	}
 
 	public function testGivenAmountIsNotANumber_validationFails() {
 		$validator = $this->newAmountValidator();
-		$this->assertFalse( $validator->validate( 'much money' ) );
+		$this->assertFalse( $validator->validate( 'much money' )->isSuccessful() );
 	}
 
 	private function newAmountValidator() {

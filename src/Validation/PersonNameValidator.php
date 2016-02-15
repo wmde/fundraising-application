@@ -23,18 +23,18 @@ class PersonNameValidator {
 	}
 
 	private function validatePrivatePerson( PersonName $instance ): ValidationResult {
-		$requiredFieldValidator = new RequiredFieldValidator();
+		$validator = new RequiredFieldValidator();
 
 		return new ValidationResult( ...array_filter( [
-			$this->validateField( $requiredFieldValidator, $instance->getSalutation(), 'anrede' ),
-			$this->validateField( $requiredFieldValidator, $instance->getFirstName(), 'vorname' ),
-			$this->validateField( $requiredFieldValidator, $instance->getLastName(), 'nachname' )
+			$this->getFieldViolation( $validator->validate( $instance->getSalutation() ), 'anrede' ),
+			$this->getFieldViolation( $validator->validate( $instance->getFirstName() ), 'vorname' ),
+			$this->getFieldViolation( $validator->validate( $instance->getLastName() ), 'nachname' )
 		] ) );
 	}
 
 	private function validateCompanyPerson( PersonName $instance ): ValidationResult {
 		return new ValidationResult( ...array_filter( [
-			$this->validateField( new RequiredFieldValidator(), $instance->getCompanyName(), 'firma' )
+			$this->getFieldViolation( ( new RequiredFieldValidator() )->validate( $instance->getCompanyName() ), 'firma' )
 		] ) );
 	}
 
