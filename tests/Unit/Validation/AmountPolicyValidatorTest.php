@@ -3,6 +3,7 @@
 namespace WMDE\Fundraising\Tests\Unit;
 
 use WMDE\Fundraising\Frontend\Validation\AmountPolicyValidator;
+use WMDE\Fundraising\Frontend\Validation\ValidationResult;
 
 /**
  * @covers WMDE\Fundraising\Frontend\Validation\AmountPolicyValidator
@@ -13,7 +14,7 @@ use WMDE\Fundraising\Frontend\Validation\AmountPolicyValidator;
 class AmountPolicyValidatorTest extends \PHPUnit_Framework_TestCase {
 
 	public function testGivenAmountWithinLimits_validationSucceeds() {
-		$this->assertTrue( $this->newAmountValidator()->validate( 50, 0 ) );
+		$this->assertTrue( $this->newAmountValidator()->validate( 50, 0 )->isSuccessful() );
 	}
 
 	/**
@@ -22,7 +23,7 @@ class AmountPolicyValidatorTest extends \PHPUnit_Framework_TestCase {
 	 * @param int $interval
 	 */
 	public function testGivenAmountTooHigh_validationFails( $amount, $interval ) {
-		$this->assertFalse( $this->newAmountValidator()->validate( $amount, $interval ) );
+		$this->assertFalse( $this->newAmountValidator()->validate( $amount, $interval )->isSuccessful() );
 	}
 
 	public function offLimitAmountProvider() {

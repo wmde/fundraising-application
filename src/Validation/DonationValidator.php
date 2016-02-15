@@ -57,7 +57,13 @@ class DonationValidator {
 		// TODO: add TextPolicyValidator
 		$violations = [];
 
-		$violations[] = $this->amountPolicyValidator->validate( $donation->getAmount(), $donation->getInterval() );
+		$violations[] = $this->getFieldViolation(
+			$this->amountPolicyValidator->validate(
+				$donation->getAmount(),
+				$donation->getInterval()
+			),
+			'betrag'
+		);
 
 		$this->policyViolations = array_filter( $violations );
 		return !empty( $this->policyViolations );
