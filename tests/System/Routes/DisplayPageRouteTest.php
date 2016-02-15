@@ -99,6 +99,9 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 							'10hoch16/Seitenkopf' => '<p>I\'m a header</p>',
 							'10hoch16/Seitenfuß' => '<p>I\'m a footer</p>',
 							'JavaScript-Notice' => '<p>Y u no JavaScript!</p>',
+							],
+						'wiki' => [
+							'enabled' => true
 							]
 						]
 					]
