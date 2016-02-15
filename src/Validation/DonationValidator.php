@@ -16,11 +16,13 @@ class DonationValidator {
 	private $mailValidator;
 	private $amountValidator;
 	private $amountPolicyValidator;
+	private $textPolicyValidator;
 
 	private $policyViolations;
 
 	public function __construct( AmountValidator $amountValidator,
 								 AmountPolicyValidator $amountPolicyValidator,
+								 TextPolicyValidator $textPolicyValidator,
 								 PersonNameValidator $nameValidator,
 								 PhysicalAddressValidator $addressValidator,
 								 MailValidator $mailValidator ) {
@@ -29,6 +31,7 @@ class DonationValidator {
 		$this->mailValidator = $mailValidator;
 		$this->amountValidator = $amountValidator;
 		$this->amountPolicyValidator = $amountPolicyValidator;
+		$this->textPolicyValidator = $textPolicyValidator;
 	}
 
 	public function validate( Donation $donation ): ValidationResult {
@@ -54,13 +57,61 @@ class DonationValidator {
 	}
 
 	public function needsModeration( Donation $donation ): bool {
-		// TODO: add TextPolicyValidator
 		$violations = [];
 
 		$violations[] = $this->amountPolicyValidator->validate( $donation->getAmount(), $donation->getInterval() );
 
+		$violations = array_merge(
+			$violations,
+			$this->getBadWordViolations( $donation )
+		);
+
 		$this->policyViolations = array_filter( $violations );
+
 		return !empty( $this->policyViolations );
+	}
+
+	public function getPolicyViolations() {
+		return $this->policyViolations;
+	}
+
+	private function getBadWordViolations( Donation $donation ) {
+		$violations = [];
+
+		$flags = TextPolicyValidator::CHECK_BADWORDS |
+			TextPolicyValidator::IGNORE_WHITEWORDS |
+			TextPolicyValidator::CHECK_URLS;
+		$fieldTextValidator = new FieldTextPolicyValidator( $this->textPolicyValidator, $flags );
+		$personalInfo = $donation->getPersonalInfo();
+
+		if ( $personalInfo ) {
+			$violations[] = $this->getFieldViolation(
+				$fieldTextValidator->validate( $personalInfo->getPersonName()->getFirstName() ),
+				'vorname'
+			);
+			$violations[] = $this->getFieldViolation(
+				$fieldTextValidator->validate( $personalInfo->getPersonName()->getLastName() ),
+				'nachname'
+			);
+			$violations[] = $this->getFieldViolation(
+				$fieldTextValidator->validate( $personalInfo->getPersonName()->getCompanyName() ),
+				'firma'
+			);
+			$violations[] = $this->getFieldViolation(
+				$fieldTextValidator->validate( $personalInfo->getPhysicalAddress()->getStreetAddress() ),
+				'strasse'
+			);
+			$violations[] = $this->getFieldViolation(
+				$fieldTextValidator->validate( $personalInfo->getPhysicalAddress()->getPostalCode() ),
+				'plz'
+			);
+			$violations[] = $this->getFieldViolation(
+				$fieldTextValidator->validate( $personalInfo->getPhysicalAddress()->getCity() ),
+				'ort'
+			);
+		}
+
+		return $violations;
 	}
 
 }

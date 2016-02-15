@@ -518,6 +518,7 @@ class FunFunFactory {
 			new DonationValidator(
 				new AmountValidator( 1 ), // TODO: get from settings
 				new AmountPolicyValidator( 1000, 200, 300 ), // TODO: get from settings
+				$this->getTextPolicyValidator( 'fields' ),
 				new PersonNameValidator(),
 				new PhysicalAddressValidator(),
 				$this->getMailValidator()
