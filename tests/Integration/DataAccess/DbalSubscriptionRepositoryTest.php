@@ -74,7 +74,7 @@ class DbalSubscriptionRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$subscription = new Subscription();
 		$subscription->setEmail( 'nyan@awesomecats.com' );
 		$subscription->setAddress( new Address() );
-		
+
 		$this->expectException( SubscriptionRepositoryException::class );
 		$repository->storeSubscription( $subscription );
 	}
