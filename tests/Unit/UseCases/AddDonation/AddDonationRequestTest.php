@@ -46,15 +46,6 @@ class AddDonationRequestTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals( $expectedValue, $request->getAmount() );
 	}
 
-	public function preferredValueProvider() {
-		return [
-			[ 'chocolate', [ 'chocolate', 'hazelnuts', 'campaign/keyword' ] ],
-			[ 'hazelnuts', [ '', 'hazelnuts', 'campaign/keyword' ] ],
-			[ 'campaign/keyword', [ '', '', 'campaign/keyword' ] ],
-			[ '', [ '', '', '' ] ],
-		];
-	}
-
 	/**
 	 * @dataProvider preferredValueProvider
 	 *
@@ -62,17 +53,16 @@ class AddDonationRequestTest extends \PHPUnit_Framework_TestCase {
 	 * @param string[] $values
 	 */
 	public function testGetPreferredValueReturnsFirstSetElementOrEmptyString( $expectedResult, $values ) {
-		$request = new AddDonationRequest();
-		$value = $request->getPreferredValue( $values );
-		$this->assertEquals( $expectedResult, $value );
+		$value = AddDonationRequest::getPreferredValue( $values );
+		$this->assertSame( $expectedResult, $value );
 	}
 
-	public function trackingVarProvider() {
+	public function preferredValueProvider() {
 		return [
-			[ 'campaign/keyword', 'campaign', 'keyword' ],
-			[ 'campaign/keyword', 'Campaign', 'Keyword' ],
-			[ 'campaign', 'campaign', '' ],
-			[ '', '', 'keyword' ],
+			[ 'chocolate', [ 'chocolate', 'hazelnuts', 'campaign/keyword' ] ],
+			[ 'hazelnuts', [ '', 'hazelnuts', 'campaign/keyword' ] ],
+			[ 'campaign/keyword', [ '', '', 'campaign/keyword' ] ],
+			[ '', [ '', '', '' ] ],
 		];
 	}
 
@@ -84,14 +74,22 @@ class AddDonationRequestTest extends \PHPUnit_Framework_TestCase {
 	 * @param $keyword
 	 */
 	public function testConcatTrackingFromVarCouple( $expectedResult, $campaign, $keyword ) {
-		$request = new AddDonationRequest();
-		$value = $request->getPreferredValue( [
+		$value = AddDonationRequest::getPreferredValue( [
 			'',
 			'',
-			$request->concatTrackingFromVarCouple( $campaign, $keyword )
+			AddDonationRequest::concatTrackingFromVarCouple( $campaign, $keyword )
 		] );
 
-		$this->assertEquals( $expectedResult, $value );
+		$this->assertSame( $expectedResult, $value );
+	}
+
+	public function trackingVarProvider() {
+		return [
+			[ 'campaign/keyword', 'campaign', 'keyword' ],
+			[ 'campaign/keyword', 'Campaign', 'Keyword' ],
+			[ 'campaign', 'campaign', '' ],
+			[ '', '', 'keyword' ],
+		];
 	}
 
 }
