@@ -62,15 +62,20 @@ class DbalSubscriptionRepositoryTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testDatabaseLayerExceptionsAreConvertedToDomainExceptions() {
-		$this->expectException( SubscriptionRepositoryException::class );
 		$entityManager = $this->getMock(
-			EntityManager::class, array('getRepository', 'getClassMetadata', 'persist', 'flush'), array(), '', false
+			EntityManager::class,
+			[ 'getRepository', 'getClassMetadata', 'persist', 'flush' ],
+			[],
+			'',
+			false
 		);
 		$entityManager->expects( $this->once() )->method( 'persist' )->willThrowException( new ORMException() );
 		$repository = new DbalSubscriptionRepository(  $entityManager );
 		$subscription = new Subscription();
 		$subscription->setEmail( 'nyan@awesomecats.com' );
 		$subscription->setAddress( new Address() );
+		
+		$this->expectException( SubscriptionRepositoryException::class );
 		$repository->storeSubscription( $subscription );
 	}
 
