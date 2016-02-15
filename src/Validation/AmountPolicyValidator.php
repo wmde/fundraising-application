@@ -12,9 +12,7 @@ class AmountPolicyValidator {
 
 	private $maxAmount;
 	private $maxAmountRecurring;
-	private $maxAmountRecurringAnually;
-
-	private $lastViolation;
+	private $maxAmountRecurringAnnually;
 
 	public function __construct( int $maxAmount, int $maxAmountRecurring, $maxAmountRecurringAnnually ) {
 		$this->maxAmount = $maxAmount;
@@ -22,21 +20,15 @@ class AmountPolicyValidator {
 		$this->maxAmountRecurringAnnually = $maxAmountRecurringAnnually;
 	}
 
-	public function validate( float $amount, int $interval ): bool {
-		$violations = [];
-
+	public function validate( float $amount, int $interval ): ValidationResult {
 		if ( $this->isOneTimeAmountTooHigh( $amount, $interval ) ||
 			$this->isRecurringAmountTooHigh( $amount, $interval ) ||
 			$this->isAnuallyRecurringAmountTooHigh( $amount, $interval ) ) {
 
-			$violations[] = new ConstraintViolation( $amount, 'Amount too high' );
+			return new ValidationResult( new ConstraintViolation( $amount, 'This field is required' ) );
 		}
 
-		return empty( $violations );
-	}
-
-	public function getLastViolation(): ConstraintViolation {
-		return $this->lastViolation;
+		return new ValidationResult();
 	}
 
 	private function isOneTimeAmountTooHigh( float $amount, int $interval ): bool {
@@ -55,7 +47,7 @@ class AmountPolicyValidator {
 
 	private function isAnuallyRecurringAmountTooHigh( float $amount, int $interval ): bool {
 		if ( $interval === 12 ) {
-			return $amount >= $this->maxAmountRecurringAnually;
+			return $amount >= $this->maxAmountRecurringAnnually;
 		}
 		return false;
 	}
