@@ -13,15 +13,29 @@ use WMDE\Fundraising\Frontend\FreezableValueObject;
 class PageDisplayResponse {
 	use FreezableValueObject;
 
-	private $mainContent;
+	private $mainContentTemplate;
+	private $templateExists;
 
-	public function getMainContent(): string {
-		return $this->mainContent;
+	public function getMainContentTemplate(): string {
+		return $this->mainContentTemplate;
 	}
 
-	public function setMainContent( string $mainContent ) {
+	public function setMainContentTemplate( string $mainContentTemplate ): PageDisplayResponse {
 		$this->assertIsWritable();
-		$this->mainContent = $mainContent;
+		$this->mainContentTemplate = $mainContentTemplate;
+		return $this;
 	}
+
+	public function getTemplateExists(): bool {
+		return $this->templateExists;
+	}
+
+	public function setTemplateExists( bool $templateExists ): PageDisplayResponse {
+		$this->assertIsWritable();
+		$this->templateExists = $templateExists;
+		return $this;
+	}
+
+
 }
 

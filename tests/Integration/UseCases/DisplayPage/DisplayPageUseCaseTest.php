@@ -26,7 +26,9 @@ class DisplayPageUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$twigConfig = [
 			'twig' => [
 				'loaders' => [
-					'wiki' => true
+					'wiki' => [
+						'enabled' => true
+					]
 				]
 			]
 		];
@@ -44,14 +46,15 @@ class DisplayPageUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$this->testEnvironment->getFactory()->setMediaWikiApi( $api );
 	}
 
-	public function testWhenPageExists_itGetsEmbedded() {
+	public function testWhenPageExists_responseReflectsExistence() {
 		$this->registerWikiPages();
 
 		$useCase = $this->testEnvironment->getFactory()->newDisplayPageUseCase();
 
 		$response = $useCase->getPage( new PageDisplayRequest( 'Unicorns' ) );
 
-		$this->assertSame( '<p>Pink fluffy unicorns dancing on rainbows</p>', $response->getMainContent() );
+		$this->assertTrue( $response->getTemplateExists() );
+		$this->assertSame( 'Unicorns', $response->getMainContentTemplate() );
 	}
 
 	public function testWhenPageTitlePrefixIsConfigured_pageCanBeRetrieved() {
@@ -63,7 +66,8 @@ class DisplayPageUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 		$response = $useCase->getPage( new PageDisplayRequest( 'Naked mole-rat' ) );
 
-		$this->assertSame( '<p>This little guy wants to cuddle, too!</p>', $response->getMainContent() );
+		$this->assertTrue( $response->getTemplateExists() );
+		$this->assertSame( 'Naked mole-rat', $response->getMainContentTemplate() );
 	}
 
 }

@@ -20,17 +20,12 @@ class DisplayPagePresenter {
 	}
 
 	public function present( PageDisplayResponse $displayResponse ): string {
+		$mainTemplate = '404message.html.twig';
+		if ( $displayResponse->getTemplateExists() ) {
+			$mainTemplate = $displayResponse->getMainContentTemplate();
+		}
 		return $this->template->render( [
-			'main' => $this->getContentOrMissingMessage( $displayResponse->getMainContent(), 'main content' ),
+			'main_template' => $mainTemplate,
 		] );
 	}
-
-	private function getContentOrMissingMessage( string $content, string $contentName ): string {
-		if ( $content === '' ) {
-			return htmlspecialchars( "Could not load $contentName!" );
-		}
-
-		return $content;
-	}
-
 }

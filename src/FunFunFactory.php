@@ -66,6 +66,7 @@ use WMDE\Fundraising\Frontend\UseCases\ListComments\ListCommentsUseCase;
 use WMDE\Fundraising\Frontend\UseCases\CheckIban\CheckIbanUseCase;
 use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ValidateEmail\ValidateEmailUseCase;
+use WMDE\Fundraising\Frontend\Validation\TemplateNameValidator;
 use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
 use WMDE\Fundraising\Store\Factory as StoreFactory;
 use WMDE\Fundraising\Store\Installer;
@@ -129,6 +130,10 @@ class FunFunFactory {
 				$this->newSubscriptionDuplicateValidator(),
 				$this->newHonorificValidator()
 			);
+		} );
+
+		$pimple['template_name_validator'] = $pimple->share( function() {
+			return new TemplateNameValidator( $this->getTwig() );
 		} );
 
 		$pimple['contact_validator'] = $pimple->share( function() {
@@ -195,7 +200,6 @@ class FunFunFactory {
 				$twigFactory->newWikiPageLoader( $this->newWikiContentProvider() ),
 			] );
 			$extensions = [
-				$twigFactory->newStringLoaderExtension(),
 				$twigFactory->newTranslationExtension( $this->getTranslator() )
 			];
 			return $twigFactory->create( $loaders, $extensions );
@@ -282,9 +286,13 @@ class FunFunFactory {
 		return $this->pimple['mail_validator'];
 	}
 
+	private function getTemplateNameValidator(): TemplateNameValidator {
+		return $this->pimple['template_name_validator'];
+	}
+
 	public function newDisplayPageUseCase(): DisplayPageUseCase {
 		return new DisplayPageUseCase(
-			$this->newWikiContentProvider()
+			$this->getTemplateNameValidator()
 		);
 	}
 

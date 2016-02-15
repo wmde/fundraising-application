@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace WMDE\Fundraising\Frontend\UseCases\DisplayPage;
 
-use WMDE\Fundraising\Frontend\Presentation\Content\WikiContentProvider;
+use WMDE\Fundraising\Frontend\Validation\TemplateNameValidator;
 
 /**
  * @licence GNU GPL v2+
@@ -12,17 +12,17 @@ use WMDE\Fundraising\Frontend\Presentation\Content\WikiContentProvider;
  */
 class DisplayPageUseCase {
 
-	private $contentProvider;
+	private $templateNameValidator;
 
-	public function __construct( WikiContentProvider $contentProvider ) {
-		$this->contentProvider = $contentProvider;
+	public function __construct( TemplateNameValidator $templateNameValidator ) {
+		$this->templateNameValidator = $templateNameValidator;
 	}
 
 	public function getPage( PageDisplayRequest $listingRequest ): PageDisplayResponse {
 		$response = new PageDisplayResponse();
-
-		$response->setMainContent( $this->contentProvider->getContent( $listingRequest->getPageName() ) );
-
+		$response->setMainContentTemplate( $listingRequest->getPageName() );
+		$templateExists = $this->templateNameValidator->validate( $listingRequest->getPageName() )->isSuccessful();
+		$response->setTemplateExists( $templateExists );
 		$response->freeze();
 		$response->assertNoNullFields();
 
