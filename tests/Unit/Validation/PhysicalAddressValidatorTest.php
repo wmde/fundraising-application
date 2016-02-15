@@ -23,23 +23,22 @@ class PhysicalAddressValidatorTest extends ValidatorTestCase {
 		$physicalAddress->setCountryCode( 'DE' );
 		$physicalAddress->freeze()->assertNoNullFields();
 
-		$this->assertTrue( $validator->validate( $physicalAddress ) );
-		$this->assertEmpty( $validator->getConstraintViolations() );
+		$this->assertTrue( $validator->validate( $physicalAddress )->isSuccessful() );
 	}
 
 	public function testGivenEmptyAddress_validatorReturnsFalse() {
 		$validator = new PhysicalAddressValidator();
-		$this->assertFalse( $validator->validate( new PhysicalAddress() ) );
+		$this->assertFalse( $validator->validate( new PhysicalAddress() )->isSuccessful() );
 	}
 
 	public function testGivenEmptyAddress_violationsContainsRequiredFieldNames() {
 		$validator = new PhysicalAddressValidator();
-		$validator->validate( new PhysicalAddress() );
+		$result = $validator->validate( new PhysicalAddress() );
 
-		$this->assertConstraintWasViolated( $validator->getConstraintViolations(), 'strasse' );
-		$this->assertConstraintWasViolated( $validator->getConstraintViolations(), 'plz' );
-		$this->assertConstraintWasViolated( $validator->getConstraintViolations(), 'ort' );
-		$this->assertConstraintWasViolated( $validator->getConstraintViolations(), 'country' );
+		$this->assertConstraintWasViolated( $result, 'strasse' );
+		$this->assertConstraintWasViolated( $result, 'plz' );
+		$this->assertConstraintWasViolated( $result, 'ort' );
+		$this->assertConstraintWasViolated( $result, 'country' );
 	}
 
 }

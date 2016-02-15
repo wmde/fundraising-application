@@ -7,10 +7,12 @@ use PHPUnit_Framework_MockObject_MockObject;
 use WMDE\Fundraising\Entities\Subscription;
 use WMDE\Fundraising\Frontend\Domain\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FailedValidationResult;
 use WMDE\Fundraising\Frontend\Validation\SubscriptionValidator;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\AddSubscriptionUseCase;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\SubscriptionRequest;
 use WMDE\Fundraising\Frontend\MailAddress;
+use WMDE\Fundraising\Frontend\Validation\ValidationResult;
 
 /**
  * @covers WMDE\Fundraising\Frontend\UseCases\AddSubscription\AddSubscriptionUseCase
@@ -54,15 +56,14 @@ class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testGivenValidData_aSuccessResponseIsCreated() {
-		$this->validator->method( 'validate' )->willReturn( true );
+		$this->validator->method( 'validate' )->willReturn( new ValidationResult() );
 		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->mailer );
 		$result = $useCase->addSubscription( $this->createValidSubscriptionRequest() );
 		$this->assertTrue( $result->isSuccessful() );
 	}
 
 	public function testGivenInvalidData_anErrorResponseTypeIsCreated() {
-		$this->validator->method( 'validate' )->willReturn( false );
-		$this->validator->method( 'getConstraintViolations' )->willReturn( [ 'dummyConstraintViolation' ] );
+		$this->validator->method( 'validate' )->willReturn( new FailedValidationResult() );
 		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->mailer );
 		$request = $this->getMock( SubscriptionRequest::class );
 		$result = $useCase->addSubscription( $request );
@@ -70,7 +71,7 @@ class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testGivenValidData_requestWillBeStored() {
-		$this->validator->method( 'validate' )->willReturn( true );
+		$this->validator->method( 'validate' )->willReturn( new ValidationResult() );
 		$this->repo->expects( $this->once() )
 			->method( 'storeSubscription' )
 			->with( $this->isInstanceOf( Subscription::class ) );
@@ -79,7 +80,7 @@ class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testGivenDataThatNeedsToBeModerated_requestWillBeStored() {
-		$this->validator->method( 'validate' )->willReturn( true );
+		$this->validator->method( 'validate' )->willReturn( new ValidationResult() );
 		$this->validator->method( 'needsModeration' )->willReturn( true );
 		$this->repo->expects( $this->once() )
 			->method( 'storeSubscription' )
@@ -89,8 +90,7 @@ class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testGivenInvalidData_requestWillNotBeStored() {
-		$this->validator->method( 'validate' )->willReturn( false );
-		$this->validator->method( 'getConstraintViolations' )->willReturn( [] );
+		$this->validator->method( 'validate' )->willReturn( new FailedValidationResult() );
 		$this->repo->expects( $this->never() )->method( 'storeSubscription' );
 		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->mailer );
 		$request = $this->getMock( SubscriptionRequest::class );
@@ -98,7 +98,7 @@ class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testGivenValidData_requestWillBeMailed() {
-		$this->validator->method( 'validate' )->willReturn( true );
+		$this->validator->method( 'validate' )->willReturn( new ValidationResult() );
 		$this->mailer->expects( $this->once() )
 			->method( 'sendMail' )
 			->with(
@@ -119,8 +119,7 @@ class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testGivenInvalidData_requestWillNotBeMailed() {
-		$this->validator->method( 'validate' )->willReturn( false );
-		$this->validator->method( 'getConstraintViolations' )->willReturn( [] );
+		$this->validator->method( 'validate' )->willReturn( new FailedValidationResult() );
 		$this->mailer->expects( $this->never() )->method( 'sendMail' );
 		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->mailer );
 		$request = $this->getMock( SubscriptionRequest::class );
@@ -128,7 +127,7 @@ class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testGivenDataThatNeedsToBeModerated_requestNotBeMailed() {
-		$this->validator->method( 'validate' )->willReturn( true );
+		$this->validator->method( 'validate' )->willReturn( new ValidationResult() );
 		$this->validator->method( 'needsModeration' )->willReturn( true );
 		$this->mailer->expects( $this->never() )->method( 'sendMail' );
 		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->mailer );

@@ -22,18 +22,17 @@ class PersonNameValidatorTest extends ValidatorTestCase {
 		$personName->setFirstName( 'Hank' );
 		$personName->setLastName( 'Scorpio' );
 
-		$this->assertTrue( $validator->validate( $personName ) );
-		$this->assertEmpty( $validator->getConstraintViolations() );
+		$this->assertTrue( $validator->validate( $personName )->isSuccessful() );
 	}
 
 	public function testGivenEmptyPersonName_validationFails() {
 		$validator = new PersonNameValidator();
 		$personName = PersonName::newPrivatePersonName();
 
-		$this->assertFalse( $validator->validate( $personName ) );
-		$this->assertConstraintWasViolated( $validator->getConstraintViolations(), 'anrede' );
-		$this->assertConstraintWasViolated( $validator->getConstraintViolations(), 'vorname' );
-		$this->assertConstraintWasViolated( $validator->getConstraintViolations(), 'nachname' );
+		$result = $validator->validate( $personName );
+		$this->assertConstraintWasViolated( $result, 'anrede' );
+		$this->assertConstraintWasViolated( $result, 'vorname' );
+		$this->assertConstraintWasViolated( $result, 'nachname' );
 	}
 
 	public function testGivenValidCompanyName_validationSucceeds() {
@@ -41,16 +40,16 @@ class PersonNameValidatorTest extends ValidatorTestCase {
 		$personName = PersonName::newCompanyName();
 		$personName->setCompanyName( 'Globex Corp.' );
 
-		$this->assertTrue( $validator->validate( $personName ) );
-		$this->assertEmpty( $validator->getConstraintViolations() );
+		$this->assertTrue( $validator->validate( $personName )->isSuccessful() );
 	}
 
 	public function testGivenEmptyCompanyName_validationFails() {
 		$validator = new PersonNameValidator();
-		$personName = PersonName::newCompanyName();
 
-		$this->assertFalse( $validator->validate( $personName ) );
-		$this->assertConstraintWasViolated( $validator->getConstraintViolations(), 'firma' );
+		$this->assertConstraintWasViolated(
+			$validator->validate( PersonName::newCompanyName() ),
+			'firma'
+		);
 	}
 
 }

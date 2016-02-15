@@ -44,14 +44,14 @@ class DonationValidatorTest extends ValidatorTestCase {
 
 		$donation->freeze()->assertNoNullFields();
 
-		$this->donationValidator->validate( $donation );
-		$this->assertEmpty( $this->donationValidator->getConstraintViolations() );
+		;
+		$this->assertEmpty( $this->donationValidator->validate( $donation )->getViolations() );
 	}
 
 	public function testNoPersonalInfoGiven_validatorReturnsTrue() {
 		$donation = new Donation();
 		$donation->setAmount( 1 );
-		$this->assertTrue( $this->donationValidator->validate( $donation ) );
+		$this->assertTrue( $this->donationValidator->validate( $donation )->isSuccessful() );
 	}
 
 	public function testTooHighAmountGiven_needsModerationReturnsTrue() {
@@ -73,8 +73,12 @@ class DonationValidatorTest extends ValidatorTestCase {
 		$donation->setPersonalInfo( $personalInfo );
 		$donation->freeze()->assertNoNullFields();
 
-		$this->assertFalse( $this->donationValidator->validate( $donation ) );
-		$this->assertConstraintWasViolated( $this->donationValidator->getConstraintViolations(), 'firma' );
+		$this->assertFalse( $this->donationValidator->validate( $donation )->isSuccessful() );
+
+		$this->assertConstraintWasViolated(
+			$this->donationValidator->validate( $donation ),
+			'firma'
+		);
 	}
 
 	private function newCompanyName(): PersonName {

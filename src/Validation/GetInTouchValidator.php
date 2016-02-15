@@ -10,35 +10,24 @@ use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
  * @license GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class GetInTouchValidator implements InstanceValidator {
+class GetInTouchValidator {
 	use CanValidateField;
 
 	private $mailValidator;
-	private $constraintViolations;
 
 	public function __construct( MailValidator $mailValidator ) {
 		$this->mailValidator = $mailValidator;
-		$this->constraintViolations = [];
 	}
 
-	/**
-	 * @param GetInTouchRequest $instance
-	 *
-	 * @return bool
-	 */
-	public function validate( $instance ): bool {
-		$violations = [];
+	public function validate( GetInTouchRequest $instance ): ValidationResult {
 		$requiredFieldValidator = new RequiredFieldValidator();
-		$violations[] = $this->validateField( $requiredFieldValidator, $instance->getSubject(), 'subject');
-		$violations[] = $this->validateField( $requiredFieldValidator, $instance->getMessageBody(), 'messageBody');
-		$violations[] = $this->validateField( $requiredFieldValidator, $instance->getEmailAddress(), 'email');
-		$violations[] = $this->validateField( $this->mailValidator, $instance->getEmailAddress(), 'email');
-		$this->constraintViolations = array_filter( $violations );
-		return count( $this->constraintViolations ) == 0;
-	}
 
-	public function getConstraintViolations(): array {
-		return $this->constraintViolations;
+		return new ValidationResult( ...array_filter( [
+			$this->validateField( $requiredFieldValidator, $instance->getSubject(), 'subject' ),
+			$this->validateField( $requiredFieldValidator, $instance->getMessageBody(), 'messageBody' ),
+			$this->validateField( $requiredFieldValidator, $instance->getEmailAddress(), 'email' ),
+			$this->validateField( $this->mailValidator, $instance->getEmailAddress(), 'email' )
+		] ) );
 	}
 
 }

@@ -1,24 +1,20 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace WMDE\Fundraising\Frontend\Validation;
 
 use WMDE\Fundraising\Frontend\Domain\PersonName;
+use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
 
 /**
  * @license GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class PersonNameValidator implements InstanceValidator {
+class PersonNameValidator {
 	use CanValidateField;
 
-	private $constraintViolations = [];
-
-	/**
-	 * @param PersonName $name
-	 *
-	 * @return bool
-	 */
-	public function validate( $name ): bool {
+	public function validate( PersonName $name ): ValidationResult {
 		if ( $name->getPersonType() === PersonName::PERSON_PRIVATE ) {
 			return $this->validatePrivatePerson( $name );
 		}
@@ -26,33 +22,20 @@ class PersonNameValidator implements InstanceValidator {
 		return $this->validateCompanyPerson( $name );
 	}
 
-	/**
-	 * @return ConstraintViolation[]
-	 */
-	public function getConstraintViolations(): array {
-		return $this->constraintViolations;
+	private function validatePrivatePerson( PersonName $instance ): ValidationResult {
+		$requiredFieldValidator = new RequiredFieldValidator();
+
+		return new ValidationResult( ...array_filter( [
+			$this->validateField( $requiredFieldValidator, $instance->getSalutation(), 'anrede' ),
+			$this->validateField( $requiredFieldValidator, $instance->getFirstName(), 'vorname' ),
+			$this->validateField( $requiredFieldValidator, $instance->getLastName(), 'nachname' )
+		] ) );
 	}
 
-	private function validatePrivatePerson( PersonName $instance ): bool {
-		$violations = [];
-
-		$requiredFieldValidator = new RequiredFieldValidator();
-		$violations[] = $this->validateField( $requiredFieldValidator, $instance->getSalutation(), 'anrede' );
-		$violations[] = $this->validateField( $requiredFieldValidator, $instance->getFirstName(), 'vorname' );
-		$violations[] = $this->validateField( $requiredFieldValidator, $instance->getLastName(), 'nachname' );
-
-		$this->constraintViolations = array_merge( $this->constraintViolations, array_filter( $violations ) );
-		return empty( $this->constraintViolations );
-	}
-
-	private function validateCompanyPerson( PersonName $instance ): bool {
-		$violations = [];
-
-		$requiredFieldValidator = new RequiredFieldValidator();
-		$violations[] = $this->validateField( $requiredFieldValidator, $instance->getCompanyName(), 'firma' );
-
-		$this->constraintViolations = array_merge( $this->constraintViolations, array_filter( $violations ) );
-		return empty( $this->constraintViolations );
+	private function validateCompanyPerson( PersonName $instance ): ValidationResult {
+		return new ValidationResult( ...array_filter( [
+			$this->validateField( new RequiredFieldValidator(), $instance->getCompanyName(), 'firma' )
+		] ) );
 	}
 
 }

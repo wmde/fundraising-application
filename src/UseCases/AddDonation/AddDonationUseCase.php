@@ -45,8 +45,10 @@ class AddDonationUseCase {
 			throw new \RuntimeException( 'Payment type CASH not supported' );
 		}
 
-		if ( !$this->donationValidator->validate( $donation ) ) {
-			return ValidationResponse::newFailureResponse( $this->donationValidator->getConstraintViolations() );
+		$validationResult = $this->donationValidator->validate( $donation );
+
+		if ( $validationResult->hasViolations() ) {
+			return ValidationResponse::newFailureResponse( $validationResult->getViolations() );
 		}
 
 		// TODO: persist donation
