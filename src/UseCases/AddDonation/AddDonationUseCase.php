@@ -2,22 +2,12 @@
 
 namespace WMDE\Fundraising\Frontend\UseCases\AddDonation;
 
-use WMDE\Fundraising\Frontend\DataAccess\InternetDomainNameValidator;
-use WMDE\Fundraising\Frontend\Domain\Address;
-use WMDE\Fundraising\Frontend\Domain\Address\AnonymousAddress;
-use WMDE\Fundraising\Frontend\Domain\Address\CompanyAddress;
-use WMDE\Fundraising\Frontend\Domain\Address\PersonAddress;
+use WMDE\Fundraising\Frontend\Domain\BankData;
 use WMDE\Fundraising\Frontend\Domain\Donation;
-use WMDE\Fundraising\Frontend\Domain\PaymentData\BankTransferPaymentData;
-use WMDE\Fundraising\Frontend\Domain\DonationData;
 use WMDE\Fundraising\Frontend\Domain\DonationRepository;
-use WMDE\Fundraising\Frontend\Domain\PaymentData\DirectDebitPaymentData;
-use WMDE\Fundraising\Frontend\Domain\PaymentData\PaymentType;
+use WMDE\Fundraising\Frontend\Domain\Iban;
 use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
-use WMDE\Fundraising\Frontend\Validation\AddressValidator;
 use WMDE\Fundraising\Frontend\Validation\DonationValidator;
-use WMDE\Fundraising\Frontend\Validation\MailValidator;
-use WMDE\Fundraising\Frontend\Validation\PersonAddressValidator;
 
 /**
  * @license GNU GPL v2+
@@ -42,9 +32,9 @@ class AddDonationUseCase {
 		$donation->setPersonalInfo( $donationRequest->getPersonalInfo() );
 		$donation->setPaymentType( $donationRequest->getPaymentType() );
 
-		if ( $donationRequest->getPaymentType() !== 'BEZ' ) {
-			// TODO: this should not be done via an exception
-			throw new \RuntimeException( 'Payment type CASH not supported' );
+		// TODO: try to complement bank data if some fields are missing
+		if ( $donationRequest->getPaymentType() === 'BEZ' ) {
+			$donation->setBankData( $this->newBankDataFromRequest( $donationRequest ) );
 		}
 
 		$validationResult = $this->donationValidator->validate( $donation );
@@ -59,6 +49,14 @@ class AddDonationUseCase {
 		return ValidationResponse::newSuccessResponse();
 	}
 
-
+	private function newBankDataFromRequest( AddDonationRequest $request ): BankData {
+		$bankData = new BankData();
+		$bankData->setIban( new Iban( $request->getIban() ) )
+			->setBic( $request->getBic() )
+			->setAccount( $request->getBankAccount() )
+			->setBankCode( $request->getBankCode() )
+			->setBankName( $request->getBankName() );
+		return $bankData->freeze()->assertNoNullFields();
+	}
 
 }

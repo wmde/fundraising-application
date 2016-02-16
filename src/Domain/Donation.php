@@ -17,6 +17,7 @@ class Donation {
 	private $interval = 0;
 	private $paymentType;
 	private $personalInfo;
+	private $bankData;
 
 	public function getAmount(): float {
 		return $this->amount;
@@ -57,6 +58,15 @@ class Donation {
 	public function setPersonalInfo( PersonalInfo $personalInfo = null ) {
 		$this->assertIsWritable();
 		$this->personalInfo = $personalInfo;
+	}
+
+	public function getBankData(): BankData {
+		return $this->bankData;
+	}
+
+	public function setBankData( BankData $bankData ) {
+		$this->assertIsWritable();
+		$this->bankData = $bankData;
 	}
 
 }

@@ -48,9 +48,11 @@ use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ConfirmSubscription\ConfirmSubscriptionUseCase;
 use WMDE\Fundraising\Frontend\Validation\AmountPolicyValidator;
 use WMDE\Fundraising\Frontend\Validation\AmountValidator;
+use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
 use WMDE\Fundraising\Frontend\Validation\DonationValidator;
 use WMDE\Fundraising\Frontend\Validation\AllowedValuesValidator;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
+use WMDE\Fundraising\Frontend\Validation\IbanValidator;
 use WMDE\Fundraising\Frontend\Validation\MailValidator;
 use WMDE\Fundraising\Frontend\Validation\PersonNameValidator;
 use WMDE\Fundraising\Frontend\Validation\PhysicalAddressValidator;
@@ -513,6 +515,10 @@ class FunFunFactory {
 		return $this->pimple['payment_types'];
 	}
 
+	private function newBankDataValidator(): BankDataValidator {
+		return new BankDataValidator( new IbanValidator( $this->newBankDataConverter() ) );
+	}
+
 	private function getMessenger(): Messenger {
 		return $this->pimple['messenger'];
 	}
@@ -572,6 +578,7 @@ class FunFunFactory {
 				new PersonNameValidator(),
 				new PhysicalAddressValidator(),
 				$this->newPaymentTypeValidator(),
+				$this->newBankDataValidator(),
 				$this->getMailValidator()
 			)
 		);
