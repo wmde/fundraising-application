@@ -44,5 +44,41 @@
 		}
 	},
 	"subscription-interval": "PT30M",
-	"locale": "de_DE"
+	"locale": "de_DE",
+	"referrer-generalization": {
+		"default": "web",
+		"domain-map": {
+			"localhost": "LOCALHOST",
+			"wikimedia.de": "wikimedia.de",
+			"www.wikimedia.de": "wikimedia.de",
+			"secure.wikimedia.de": "wikimedia.de",
+			"spenden.wikimedia.de": "wikimedia.de",
+			"blog.wikimedia.de": "wikimedia.de",
+			"wikipedia.de": "wikipedia.de",
+			"www.wikipedia.de": "wikipedia.de",
+			"de.wikipedia.org": "de.wikipedia.org",
+			"wikipedia.org": "wikipedia.org",
+			"wikimediafoundation.org": "wikimediafoundation.org",
+			"www.wikimediafoundation.org": "wikimediafoundation.org",
+			"wikidata.org": "wikidata.org",
+			"www.wikidata.org": "wikidata.org",
+			"commons.wikimedia.org": "commons.wikimedia.org",
+			"meta.wikimedia.org": "meta.wikimedia.org",
+			"de.wiktionary.org": "de.wiktionary.org",
+			"wiktionary.org": "wiktionary.org",
+			"de.wikiquotes.org": "de.wikiquotes.org",
+			"wikiquotes.org": "wikiquotes.org",
+			"de.wikinews.org": "de.wikinews.org",
+			"wikinews.org": "wikinews.org",
+			"de.wikisources.org": "de.wikisources.org",
+			"wikisources.org": "wikisources.org",
+			"de.wikijunior.org": "de.wikijunior.org",
+			"wikijunior.org": "wikijunior.org",
+			"de.wikiversity.org": "de.wikiversity.org",
+			"wikiversity.org": "wikiversity.org",
+			"de.wikivoyage.org": "de.wikivoyage.org",
+			"wikivoyage.org": "wikivoyage.org",
+			"wikispecies.org": "wikispecies.org"
+		}
+	}
 }

@@ -351,6 +351,13 @@ class FunFunFactory {
 		);
 	}
 
+	private function newGeneralizedReferrer() {
+		return new GeneralizedReferrer(
+			$this->config['referrer-generalization']['default'],
+			$this->config['referrer-generalization']['domain-map']
+		);
+	}
+
 	private function newPageRetriever(): PageRetriever {
 		return new ApiBasedPageRetriever(
 			$this->getMediaWikiApi(),
