@@ -4,21 +4,25 @@ declare(strict_types = 1);
 
 namespace WMDE\Fundraising\Frontend\DataAccess;
 
-use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\ORMException;
 use WMDE\Fundraising\Entities\Donation;
+use WMDE\Fundraising\Frontend\Domain\Model\Comment;
 use WMDE\Fundraising\Frontend\Domain\ReadModel\CommentWithAmount;
 use WMDE\Fundraising\Frontend\Domain\Repositories\CommentFinder;
+use WMDE\Fundraising\Frontend\Domain\Repositories\CommentRepository;
+use WMDE\Fundraising\Frontend\Domain\Repositories\StoreCommentException;
 
 /**
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class DbalCommentRepository implements CommentFinder {
+class DbalCommentRepository implements CommentRepository, CommentFinder {
 
-	private $entityRepository;
+	private $entityManager;
 
-	public function __construct( EntityRepository $entityRepository ) {
-		$this->entityRepository = $entityRepository;
+	public function __construct( EntityManager $entityManager ) {
+		$this->entityManager = $entityManager;
 	}
 
 	/**
@@ -45,7 +49,7 @@ class DbalCommentRepository implements CommentFinder {
 	}
 
 	private function getDonation( int $limit ): array {
-		return $this->entityRepository->findBy(
+		return $this->entityManager->getRepository( Donation::class )->findBy(
 			[
 				'isPublic' => true,
 				'dtDel' => null
@@ -55,6 +59,34 @@ class DbalCommentRepository implements CommentFinder {
 			],
 			$limit
 		);
+	}
+
+	/**
+	 * @param Comment $comment
+	 *
+	 * @throws StoreCommentException
+	 */
+	public function storeComment( Comment $comment ) {
+		try {
+			/**
+			 * @var Donation $donation
+			 */
+			$donation = $this->entityManager->find( Donation::class, $comment->getDonationId() );
+
+			if ( !is_object( $donation ) ) {
+				throw new StoreCommentException();
+			}
+
+			$donation->setIsPublic( $comment->isPublic() );
+			$donation->setComment( $comment->getCommentText() );
+			$donation->setPublicRecord( $comment->getAuthorDisplayName() );
+
+			$this->entityManager->persist( $donation );
+			$this->entityManager->flush();
+		}
+		catch ( ORMException $ex ) {
+			throw new StoreCommentException();
+		}
 	}
 
 }

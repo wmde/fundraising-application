@@ -5,10 +5,13 @@ declare(strict_types = 1);
 namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
 
 use DateTime;
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManager;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\DataAccess\DbalCommentRepository;
+use WMDE\Fundraising\Frontend\Domain\Model\Comment;
 use WMDE\Fundraising\Frontend\Domain\ReadModel\CommentWithAmount;
+use WMDE\Fundraising\Frontend\Domain\Repositories\StoreCommentException;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
@@ -29,23 +32,23 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 		parent::setUp();
 	}
 
-	private function getOrmRepository() {
-		return $this->entityManager->getRepository( Donation::class );
+	private function newDbalCommentRepository(): DbalCommentRepository {
+		return new DbalCommentRepository( $this->entityManager );
 	}
 
 	public function testWhenThereAreNoComments_anEmptyListIsReturned() {
-		$repository = new DbalCommentRepository( $this->getOrmRepository() );
+		$repository = $this->newDbalCommentRepository();
 
 		$this->assertEmpty( $repository->getPublicComments( 10 ) );
 	}
 
 	public function testWhenThereAreLessCommentsThanTheLimit_theyAreAllReturned() {
-		$this->persistFirstComment();
-		$this->persistSecondComment();
-		$this->persistThirdComment();
+		$this->persistFirstDonationWithComment();
+		$this->persistSecondDonationWithComment();
+		$this->persistThirdDonationWithComment();
 		$this->entityManager->flush();
 
-		$repository = new DbalCommentRepository( $this->getOrmRepository() );
+		$repository = $this->newDbalCommentRepository();
 
 		$this->assertEquals(
 			[
@@ -58,12 +61,12 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testWhenThereAreMoreCommentsThanTheLimit_aLimitedNumberAreReturned() {
-		$this->persistFirstComment();
-		$this->persistSecondComment();
-		$this->persistThirdComment();
+		$this->persistFirstDonationWithComment();
+		$this->persistSecondDonationWithComment();
+		$this->persistThirdDonationWithComment();
 		$this->entityManager->flush();
 
-		$repository = new DbalCommentRepository( $this->getOrmRepository() );
+		$repository = $this->newDbalCommentRepository();
 
 		$this->assertEquals(
 			[
@@ -75,13 +78,13 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testOnlyPublicCommentsGetReturned() {
-		$this->persistFirstComment();
-		$this->persistSecondComment();
-		$this->persistPrivateComment();
-		$this->persistThirdComment();
+		$this->persistFirstDonationWithComment();
+		$this->persistSecondDonationWithComment();
+		$this->persistDonationWithPrivateComment();
+		$this->persistThirdDonationWithComment();
 		$this->entityManager->flush();
 
-		$repository = new DbalCommentRepository( $this->getOrmRepository() );
+		$repository = $this->newDbalCommentRepository();
 
 		$this->assertEquals(
 			[
@@ -94,13 +97,13 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testOnlyNonDeletedCommentsGetReturned() {
-		$this->persistFirstComment();
-		$this->persistSecondComment();
-		$this->persistDeletedComment();
-		$this->persistThirdComment();
+		$this->persistFirstDonationWithComment();
+		$this->persistSecondDonationWithComment();
+		$this->persistDeletedDonationWithComment();
+		$this->persistThirdDonationWithComment();
 		$this->entityManager->flush();
 
-		$repository = new DbalCommentRepository( $this->getOrmRepository() );
+		$repository = $this->newDbalCommentRepository();
 
 		$this->assertEquals(
 			[
@@ -112,7 +115,7 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 		);
 	}
 
-	private function persistFirstComment() {
+	private function persistFirstDonationWithComment() {
 		$firstDonation = new Donation();
 		$firstDonation->setPublicRecord( 'First name' );
 		$firstDonation->setComment( 'First comment' );
@@ -122,7 +125,7 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$this->entityManager->persist( $firstDonation );
 	}
 
-	private function persistSecondComment() {
+	private function persistSecondDonationWithComment() {
 		$secondDonation = new Donation();
 		$secondDonation->setPublicRecord( 'Second name' );
 		$secondDonation->setComment( 'Second comment' );
@@ -132,7 +135,7 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$this->entityManager->persist( $secondDonation );
 	}
 
-	private function persistThirdComment() {
+	private function persistThirdDonationWithComment() {
 		$thirdDonation = new Donation();
 		$thirdDonation->setPublicRecord( 'Third name' );
 		$thirdDonation->setComment( 'Third comment' );
@@ -142,7 +145,7 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$this->entityManager->persist( $thirdDonation );
 	}
 
-	private function persistPrivateComment() {
+	private function persistDonationWithPrivateComment() {
 		$privateDonation = new Donation();
 		$privateDonation->setPublicRecord( 'Private name' );
 		$privateDonation->setComment( 'Private comment' );
@@ -152,7 +155,7 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$this->entityManager->persist( $privateDonation );
 	}
 
-	private function persistDeletedComment() {
+	private function persistDeletedDonationWithComment() {
 		$deletedDonation = new Donation();
 		$deletedDonation->setPublicRecord( 'Deleted name' );
 		$deletedDonation->setComment( 'Deleted comment' );
@@ -163,36 +166,81 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$this->entityManager->persist( $deletedDonation );
 	}
 
-	private function getFirstComment() {
+	private function getFirstComment(): CommentWithAmount {
 		return CommentWithAmount::newInstance()
 			->setAuthorName( 'First name' )
 			->setCommentText( 'First comment' )
 			->setDonationAmount( 100 )
 			->setDonationTime( new \DateTime( '1984-01-01' ) )
 			->setDonationId( 1 )
-			->freeze();
+			->freeze()->assertNoNullFields();
 	}
 
 
-	private function getSecondComment() {
+	private function getSecondComment(): CommentWithAmount {
 		return CommentWithAmount::newInstance()
 			->setAuthorName( 'Second name' )
 			->setCommentText( 'Second comment' )
 			->setDonationAmount( 200 )
 			->setDonationTime( new \DateTime( '1984-02-02' ) )
 			->setDonationId( 2 )
-			->freeze();
+			->freeze()->assertNoNullFields();
 	}
 
-	private function getThirdComment( int $donationId ) {
+	private function getThirdComment( int $donationId ): CommentWithAmount {
 		return CommentWithAmount::newInstance()
 			->setAuthorName( 'Third name' )
 			->setCommentText( 'Third comment' )
 			->setDonationAmount( 300 )
 			->setDonationTime( new \DateTime( '1984-03-03' ) )
 			->setDonationId( $donationId )
-			->freeze();
+			->freeze()->assertNoNullFields();
 	}
 
+	public function testWhenNoDonation_storeCommentThrowsException() {
+		$repository = $this->newDbalCommentRepository();
+
+		$comment = $this->newValidCommentForStorage( 1337 );
+
+		$this->expectException( StoreCommentException::class );
+		$repository->storeComment( $comment );
+	}
+
+	private function newValidCommentForStorage( int $donationId ): Comment {
+		$expectedComment = new Comment();
+
+		$expectedComment->setCommentText( 'Your programmers deserve a raise' );
+		$expectedComment->setAuthorDisplayName( 'Uncle Bob' );
+		$expectedComment->setDonationId( $donationId );
+		$expectedComment->setIsPublic( true );
+
+		return $expectedComment->freeze()->assertNoNullFields();
+	}
+
+	public function testWhenDonationExists_storeCommentAddsItToDonation() {
+		$donation = new Donation();
+		$donation->setAmount( '100' );
+		$donation->setDtNew( new DateTime( '1984-01-01' ) );
+		$this->entityManager->persist( $donation );
+		$this->entityManager->flush();
+
+		$repository = $this->newDbalCommentRepository();
+
+		$repository->storeComment( $this->newValidCommentForStorage( $donation->getId() ) );
+
+		$expectedComment = CommentWithAmount::newInstance()
+			->setCommentText( 'Your programmers deserve a raise' )
+			->setAuthorName( 'Uncle Bob' )
+			->setDonationAmount( 100 )
+			->setCommentText( 'Your programmers deserve a raise' )
+			->setDonationId( $donation->getId() )
+			->setDonationTime( new DateTime( '1984-01-01' ) )
+			->freeze()->assertNoNullFields();
+
+		$this->assertEquals(
+			[ $expectedComment ],
+			$repository->getPublicComments( 10 )
+		);
+	}
 
 }

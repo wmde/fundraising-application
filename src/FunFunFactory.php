@@ -23,7 +23,6 @@ use Psr\Log\LoggerInterface;
 use Swift_MailTransport;
 use Symfony\Component\Translation\TranslatorInterface;
 use Twig_Environment;
-use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\DataAccess\DbalCommentRepository;
 use WMDE\Fundraising\Frontend\DataAccess\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\Domain\Repositories\CommentFinder;
@@ -119,7 +118,9 @@ class FunFunFactory {
 		} );
 
 		$pimple['comment_finder'] = $pimple->share( function() {
-			return new DbalCommentRepository( $this->getEntityManager()->getRepository( Donation::class ) );
+			return new DbalCommentRepository(
+				$this->getEntityManager()
+			);
 		} );
 
 		$pimple['mail_validator'] = $pimple->share( function() {
