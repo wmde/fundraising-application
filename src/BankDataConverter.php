@@ -41,8 +41,8 @@ class BankDataConverter {
 			throw new RuntimeException( 'Could not get IBAN' );
 		}
 
-		$bankData->setIban( $iban );
-		$bankData->setBic( iban2bic( $bankData->getIban() ) );
+		$bankData->setIban( new Iban( $iban ) );
+		$bankData->setBic( iban2bic( $bankData->getIban()->toString() ) );
 
 		$bankData->setAccount( $account );
 		$bankData->setBankCode( $bankCode );
@@ -62,7 +62,7 @@ class BankDataConverter {
 		}
 
 		$bankData = new BankData();
-		$bankData->setIban( $iban->toString() );
+		$bankData->setIban( $iban );
 
 		if ( $iban->getCountryCode() === 'DE' ) {
 			$bankData->setBic( iban2bic( $iban->toString() ) );

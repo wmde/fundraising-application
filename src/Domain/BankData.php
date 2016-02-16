@@ -4,12 +4,15 @@ declare(strict_types = 1);
 
 namespace WMDE\Fundraising\Frontend\Domain;
 
+use WMDE\Fundraising\Frontend\FreezableValueObject;
+
 /**
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  * @author Christoph Fischer < christoph.fischer@wikimedia.de >
  */
 class BankData {
+	use FreezableValueObject;
 
 	private $bic;
 	private $iban;
@@ -22,15 +25,19 @@ class BankData {
 	}
 
 	public function setBic( string $bic ) {
+		$this->assertIsWritable();
 		$this->bic = $bic;
+		return $this;
 	}
 
-	public function getIban(): string {
+	public function getIban(): Iban {
 		return $this->iban;
 	}
 
-	public function setIban( string $iban ) {
+	public function setIban( Iban $iban ) {
+		$this->assertIsWritable();
 		$this->iban = $iban;
+		return $this;
 	}
 
 	public function getAccount(): string {
@@ -38,7 +45,9 @@ class BankData {
 	}
 
 	public function setAccount( string $account ) {
+		$this->assertIsWritable();
 		$this->account = $account;
+		return $this;
 	}
 
 	public function getBankCode(): string {
@@ -46,7 +55,9 @@ class BankData {
 	}
 
 	public function setBankCode( string $bankCode ) {
+		$this->assertIsWritable();
 		$this->bankCode = $bankCode;
+		return $this;
 	}
 
 	public function getBankName(): string {
@@ -54,7 +65,9 @@ class BankData {
 	}
 
 	public function setBankName( string $bankName ) {
+		$this->assertIsWritable();
 		$this->bankName = $bankName;
+		return $this;
 	}
 
 }

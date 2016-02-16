@@ -25,7 +25,7 @@ class IbanPresenter {
 		return [
 			'status' => 'OK',
 			'bic' => $bankData->getBic(),
-			'iban' => $bankData->getIban(),
+			'iban' => $bankData->getIban()->toString(),
 			'account' => $bankData->getAccount(),
 			'bankCode' => $bankData->getBankCode(),
 			'bankName' => $bankData->getBankName(),
