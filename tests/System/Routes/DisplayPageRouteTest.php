@@ -148,7 +148,7 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenPageNameContainsSlash_404isReturned() {
-		$client = $this->createClient();
+		$client = $this->createClient( [], null, self::DISABLE_DEBUG );
 		$client->request( 'GET', '/page/unicorns/of-doom' );
 
 		$this->assert404( $client->getResponse() );
