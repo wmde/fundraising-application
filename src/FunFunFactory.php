@@ -576,7 +576,8 @@ class FunFunFactory {
 				$this->newPaymentTypeValidator(),
 				$this->newBankDataValidator(),
 				$this->getMailValidator()
-			)
+			),
+			$this->newGeneralizedReferrer()
 		);
 	}
 

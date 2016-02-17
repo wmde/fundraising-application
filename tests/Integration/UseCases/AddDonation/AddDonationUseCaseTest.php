@@ -5,6 +5,8 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\AddDonation;
 
 use RuntimeException;
 use WMDE\Fundraising\Frontend\Domain\DonationRepository;
+use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
+use WMDE\Fundraising\Frontend\GeneralizedReferrer;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationUseCase;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
@@ -27,7 +29,8 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 		$useCase = new AddDonationUseCase(
 			$this->getMock( DonationRepository::class ),
-			$donationValidator
+			$donationValidator,
+			$this->getMockBuilder( GeneralizedReferrer::class )->disableOriginalConstructor()->getMock()
 		);
 
 		$this->assertTrue( $useCase->addDonation( $this->newMinimumDonationRequest() )->isSuccessful() );
@@ -36,7 +39,8 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 	public function testValidationFails_responseObjectContainsViolations() {
 		$useCase = new AddDonationUseCase(
 			$this->getMock( DonationRepository::class ),
-			$this->getFailingValidatorMock( new ConstraintViolation( 'foo', 'bar' ) )
+			$this->getFailingValidatorMock( new ConstraintViolation( 'foo', 'bar' ) ),
+			$this->getMockBuilder( GeneralizedReferrer::class )->disableOriginalConstructor()->getMock()
 		);
 
 		$result = $useCase->addDonation( $this->newMinimumDonationRequest() );
@@ -55,7 +59,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 	private function newMinimumDonationRequest(): AddDonationRequest {
 		$donationRequest = new AddDonationRequest();
-		$donationRequest->setPaymentType( 'BEZ' );
+		$donationRequest->setPaymentType( PaymentType::DIRECT_DEBIT );
 		return $donationRequest;
 	}
 

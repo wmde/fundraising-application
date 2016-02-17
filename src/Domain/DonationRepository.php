@@ -2,7 +2,7 @@
 
 namespace WMDE\Fundraising\Frontend\Domain;
 
-use WMDE\Fundraising\Entities\Donation;
+use WMDE\Fundraising\Entities\Donation as DonationEntity;
 
 /**
  * @license GNU GPL v2+
@@ -13,8 +13,8 @@ interface DonationRepository {
 	/**
 	 * TODO: add exception
 	 *
-	 * @param Donation $donation
+	 * @param DonationEntity $donation
 	 */
-	public function storeDonation( Donation $donation );
+	public function storeDonation( DonationEntity $donation );
 
 }
