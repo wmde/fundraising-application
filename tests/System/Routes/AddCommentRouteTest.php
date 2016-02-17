@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 
 use DateTime;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
@@ -39,30 +40,25 @@ class AddCommentRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenRequestWithoutTokens_resultIsError() {
-		/**
-		 * @var Donation $donation
-		 */
-		$donation = null;
-
-		$client = $this->createClient( [], function( FunFunFactory $factory ) use ( &$donation ) {
+		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
 			$donation = $this->storeDonation( $factory->getEntityManager() );
+
+			$client->request(
+				'POST',
+				'add-comment',
+				[
+					'kommentar' => 'Your programmers deserve a raise',
+					'public' => '1',
+					'eintrag' => 'Uncle Bob',
+					'sid' => (string)$donation->getId(),
+				]
+			);
+
+			$response = $client->getResponse();
+
+			$this->assertTrue( $response->isSuccessful(), 'request is successful' );
+			$this->assertErrorJsonResponse( $response );
 		} );
-
-		$client->request(
-			'POST',
-			'add-comment',
-			[
-				'kommentar' => 'Your programmers deserve a raise',
-				'public' => '1',
-				'eintrag' => 'Uncle Bob',
-				'sid' => (string)$donation->getId(),
-			]
-		);
-
-		$response = $client->getResponse();
-
-		$this->assertTrue( $response->isSuccessful(), 'request is successful' );
-		$this->assertErrorJsonResponse( $response );
 	}
 
 	private function storeDonation( EntityManager $entityManager ): Donation {
@@ -75,31 +71,26 @@ class AddCommentRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenRequestWithParameters_resultIsSuccess() {
-		/**
-		 * @var Donation $donation
-		 */
-		$donation = null;
-
-		$client = $this->createClient( [], function( FunFunFactory $factory ) use ( &$donation ) {
+		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
 			$donation = $this->storeDonation( $factory->getEntityManager() );
+
+			$client->request(
+				'POST',
+				'add-comment',
+				[
+					'kommentar' => 'Your programmers deserve a raise',
+					'public' => '1',
+					'eintrag' => 'Uncle Bob',
+					'sid' => (string)$donation->getId(),
+					'token' => '1276888%2459b42194b31d0265df452735f6438a234bae2af7',
+					'utoken' => 'b5b249c8beefb986faf8d186a3f16e86ef509ab2',
+				]
+			);
+
+			$response = $client->getResponse();
+
+			$this->assertSuccessJsonResponse( $response );
 		} );
-
-		$client->request(
-			'POST',
-			'add-comment',
-			[
-				'kommentar' => 'Your programmers deserve a raise',
-				'public' => '1',
-				'eintrag' => 'Uncle Bob',
-				'sid' => (string)$donation->getId(),
-				'token' => '1276888%2459b42194b31d0265df452735f6438a234bae2af7',
-				'utoken' => 'b5b249c8beefb986faf8d186a3f16e86ef509ab2',
-			]
-		);
-
-		$response = $client->getResponse();
-
-		$this->assertSuccessJsonResponse( $response );
 	}
 
 }
