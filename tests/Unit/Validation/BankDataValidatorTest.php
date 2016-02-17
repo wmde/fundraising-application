@@ -18,11 +18,10 @@ class BankDataValidatorTest extends ValidatorTestCase {
 
 	/**
 	 * @dataProvider invalidBankDataProvider
-	 * @param string $iban
-	 * @param string $bic
-	 * @param string $bankName
 	 */
-	public function testFieldsMissing_validationFails( $iban, $bic, $bankName, $bankCode, $account ) {
+	public function testFieldsMissing_validationFails( string $iban, string $bic, string $bankName,
+		string $bankCode, string $account ) {
+
 		$bankDataValidator = $this->newBankDataValidator();
 		$bankData = $this->newBankData( $iban, $bic, $bankName, $bankCode, $account );
 		$this->assertFalse( $bankDataValidator->validate( $bankData )->isSuccessful() );
@@ -62,13 +61,7 @@ class BankDataValidatorTest extends ValidatorTestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider invalidBankDataProvider
-	 * @param string $iban
-	 * @param string $bic
-	 * @param string $bankName
-	 */
-	public function testAllRequiredFieldsGiven_validationSucceeds( $iban, $bic, $bankName, $bankCode, $account ) {
+	public function testAllRequiredFieldsGiven_validationSucceeds() {
 		$bankDataValidator = $this->newBankDataValidator();
 		$bankData = $this->newBankData( 'DE00123456789012345678', 'SCROUSDBXXX', 'Scrooge Bank', '12345678', '1234567890' );
 		$this->assertTrue( $bankDataValidator->validate( $bankData )->isSuccessful() );
