@@ -18,11 +18,11 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 abstract class WebRouteTestCase extends \PHPUnit_Framework_TestCase {
 
 	const DISABLE_DEBUG = false;
+	const ENABLE_DEBUG = true;
 
 	/**
 	 * Initializes a new test environment and Silex Application and returns a HttpKernel client to
-	 * make requests to the application. The initialized test environment gets set to the
-	 * $testEnvironment field.
+	 * make requests to the application.
 	 *
 	 * @param array $config
 	 * @param callable|null $onEnvironmentCreated Gets called after onTestEnvironmentCreated, same signature
@@ -40,6 +40,34 @@ abstract class WebRouteTestCase extends \PHPUnit_Framework_TestCase {
 		}
 
 		return new Client( $this->createApplication( $testEnvironment->getFactory(), $debug ) );
+	}
+
+	/**
+	 * Initializes a new test environment and Silex Application.
+	 * Invokes the provided callable with a HttpKernel client to make requests to the application
+	 * as first argument. The second argument is the top level factory which can be used for
+	 * both setup before requests to the client and validation tasks afterwards.
+	 *
+	 * Use instead of createClient when the client and factory are needed in the same scope.
+	 *
+	 * @param array $config
+	 * @param callable $onEnvironmentCreated
+	 */
+	public function createEnvironment( array $config, callable $onEnvironmentCreated ) {
+		$testEnvironment = TestEnvironment::newInstance( $config );
+
+		$this->onTestEnvironmentCreated( $testEnvironment->getFactory(), $testEnvironment->getConfig() );
+
+		$client = new Client( $this->createApplication(
+			$testEnvironment->getFactory(),
+			self::ENABLE_DEBUG
+		) );
+
+		call_user_func(
+			$onEnvironmentCreated,
+			$client,
+			$testEnvironment->getFactory()
+		);
 	}
 
 	/**
