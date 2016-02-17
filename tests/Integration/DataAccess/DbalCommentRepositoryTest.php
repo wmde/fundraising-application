@@ -232,7 +232,6 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 			->setCommentText( 'Your programmers deserve a raise' )
 			->setAuthorName( 'Uncle Bob' )
 			->setDonationAmount( 100 )
-			->setCommentText( 'Your programmers deserve a raise' )
 			->setDonationId( $donation->getId() )
 			->setDonationTime( new DateTime( '1984-01-01' ) )
 			->freeze()->assertNoNullFields();
