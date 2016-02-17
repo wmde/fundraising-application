@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\GenerateIban;
 
 use WMDE\Fundraising\Frontend\BankDataConverter;
 use WMDE\Fundraising\Frontend\Domain\BankData;
+use WMDE\Fundraising\Frontend\Domain\Iban;
 use WMDE\Fundraising\Frontend\ResponseModel\IbanResponse;
 use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanRequest;
 use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanUseCase;
@@ -29,7 +30,7 @@ class GenerateIbanUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 		$bankData = new BankData();
 		$bankData->setBic( 'HASPDEHHXXX' );
-		$bankData->setIban( 'DE76200505501015754243' );
+		$bankData->setIban( new Iban( 'DE76200505501015754243' ) );
 		$bankData->setAccount( '1015754243' );
 		$bankData->setBankCode( '20050550' );
 		$bankData->setBankName( 'Hamburger Sparkasse' );

@@ -17,6 +17,7 @@ class DonationValidator {
 	private $amountValidator;
 	private $paymentTypeValidator;
 	private $amountPolicyValidator;
+	private $bankDataValidator;
 	private $textPolicyValidator;
 
 	private $policyViolations;
@@ -27,13 +28,16 @@ class DonationValidator {
 								 PersonNameValidator $nameValidator,
 								 PhysicalAddressValidator $addressValidator,
 								 AllowedValuesValidator $paymentTypeValidator,
+								 BankDataValidator $bankDataValidator,
 								 MailValidator $mailValidator ) {
+		// TODO: inject a ValidatorObject to reduce number of parameters
 		$this->nameValidator = $nameValidator;
 		$this->addressValidator = $addressValidator;
 		$this->mailValidator = $mailValidator;
 		$this->amountValidator = $amountValidator;
 		$this->paymentTypeValidator = $paymentTypeValidator;
 		$this->amountPolicyValidator = $amountPolicyValidator;
+		$this->bankDataValidator = $bankDataValidator;
 		$this->textPolicyValidator = $textPolicyValidator;
 	}
 
@@ -56,6 +60,13 @@ class DonationValidator {
 			$violations[] = $this->getFieldViolation(
 				$this->mailValidator->validate( $donation->getPersonalInfo()->getEmailAddress() ),
 				'email'
+			);
+		}
+
+		if ( $donation->getPaymentType() === 'BEZ' ) {
+			$violations = array_merge(
+				$violations,
+				$this->bankDataValidator->validate( $donation->getBankData() )->getViolations()
 			);
 		}
 

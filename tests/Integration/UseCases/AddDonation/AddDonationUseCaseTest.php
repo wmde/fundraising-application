@@ -19,20 +19,6 @@ use WMDE\Fundraising\Frontend\Validation\ValidationResult;
  */
 class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
-	public function testGivenInvalidPaymentType_exceptionIsThrown() {
-		$useCase = new AddDonationUseCase(
-			$this->getMock( DonationRepository::class ),
-			$this->getMockBuilder( DonationValidator::class )
-				->disableOriginalConstructor()
-				->getMock()
-		);
-
-		$this->expectException( RuntimeException::class );
-		$this->expectExceptionMessage( 'Payment type CASH not supported' );
-
-		$useCase->addDonation( $this->newInvalidPaymentTypeRequest() );
-	}
-
 	public function testValidationSucceeds_successResponseIsCreated() {
 		$donationValidator = $this->getMockBuilder( DonationValidator::class )
 			->disableOriginalConstructor()
@@ -70,12 +56,6 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 	private function newMinimumDonationRequest(): AddDonationRequest {
 		$donationRequest = new AddDonationRequest();
 		$donationRequest->setPaymentType( 'BEZ' );
-		return $donationRequest;
-	}
-
-	private function newInvalidPaymentTypeRequest(): AddDonationRequest {
-		$donationRequest = new AddDonationRequest();
-		$donationRequest->setPaymentType( 'CASH' );
 		return $donationRequest;
 	}
 

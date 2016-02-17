@@ -72,7 +72,7 @@ class BankDataConverterTest extends \PHPUnit_Framework_TestCase {
 		$bankData->setAccount( '0648489890' );
 		$bankData->setBankCode( '50010517' );
 		$bankData->setBic( 'INGDDEFFXXX' );
-		$bankData->setIban( 'DE12500105170648489890' );
+		$bankData->setIban( new Iban( 'DE12500105170648489890' ) );
 
 		$this->assertEquals(
 			$bankData,
@@ -88,7 +88,7 @@ class BankDataConverterTest extends \PHPUnit_Framework_TestCase {
 		$bankData->setAccount( '' );
 		$bankData->setBankCode( '' );
 		$bankData->setBic( '' );
-		$bankData->setIban( 'BE68844010370034' );
+		$bankData->setIban( new Iban( 'BE68844010370034' ) );
 
 		$this->assertEquals(
 			$bankData,
@@ -132,7 +132,7 @@ class BankDataConverterTest extends \PHPUnit_Framework_TestCase {
 		$bankData->setAccount( '0648489890' );
 		$bankData->setBankCode( '50010517' );
 		$bankData->setBic( 'INGDDEFFXXX' );
-		$bankData->setIban( 'DE12500105170648489890' );
+		$bankData->setIban( new Iban( 'DE12500105170648489890' ) );
 
 		$this->assertEquals(
 			$bankData,

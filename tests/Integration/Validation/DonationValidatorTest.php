@@ -2,7 +2,9 @@
 
 namespace WMDE\Fundraising\Tests\Unit;
 
+use WMDE\Fundraising\Frontend\Domain\BankData;
 use WMDE\Fundraising\Frontend\Domain\Donation;
+use WMDE\Fundraising\Frontend\Domain\Iban;
 use WMDE\Fundraising\Frontend\Domain\PersonalInfo;
 use WMDE\Fundraising\Frontend\Domain\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Domain\PersonName;
@@ -11,7 +13,9 @@ use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
 use WMDE\Fundraising\Frontend\Validation\AllowedValuesValidator;
 use WMDE\Fundraising\Frontend\Validation\AmountPolicyValidator;
 use WMDE\Fundraising\Frontend\Validation\AmountValidator;
+use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
 use WMDE\Fundraising\Frontend\Validation\DonationValidator;
+use WMDE\Fundraising\Frontend\Validation\IbanValidator;
 use WMDE\Fundraising\Frontend\Validation\MailValidator;
 use WMDE\Fundraising\Frontend\Validation\PersonNameValidator;
 use WMDE\Fundraising\Frontend\Validation\PhysicalAddressValidator;
@@ -70,7 +74,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 		$donation->setAmount( 1 );
 		$donation->setPaymentType( 'CASH' );
 		$donation->setPersonalInfo( $personalInfo );
-		$donation->freeze()->assertNoNullFields();
+		$donation->freeze();
 
 		$this->assertFalse( $this->donationValidator->validate( $donation )->isSuccessful() );
 
@@ -92,6 +96,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 			new PersonNameValidator(),
 			new PhysicalAddressValidator(),
 			new AllowedValuesValidator( [ 'CASH' ] ),
+			$this->newBankDataValidator(),
 			new MailValidator( new NullDomainNameValidator() )
 		);
 
@@ -133,6 +138,20 @@ class DonationValidatorTest extends ValidatorTestCase {
 		);
 	}
 
+	public function testDirectDebitMissingBankData_validatorReturnsFalse() {
+		$donation = new Donation();
+		$donation->setAmount( 1 );
+		$donation->setPaymentType( 'BEZ' );
+		$donation->setBankData( $this->newValidBankData() );
+		$donation->freeze();
+
+		$validationResult = $this->donationValidator->validate( $donation );
+		$this->assertFalse( $validationResult->isSuccessful() );
+		$this->assertConstraintWasViolated( $validationResult, 'iban' );
+		$this->assertConstraintWasViolated( $validationResult, 'bic' );
+		$this->assertConstraintWasViolated( $validationResult, 'bankname' );
+	}
+
 	private function newCompanyName(): PersonName {
 		$name = PersonName::newCompanyName();
 		$name->setCompanyName( 'Globex Corp.' );
@@ -157,6 +176,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 			new PersonNameValidator(),
 			new PhysicalAddressValidator(),
 			new AllowedValuesValidator( [ 'CASH' ] ),
+			$this->newBankDataValidator(),
 			new MailValidator( new NullDomainNameValidator() )
 		);
 	}
@@ -166,9 +186,27 @@ class DonationValidatorTest extends ValidatorTestCase {
 		$donation->setAmount( 1 );
 		$donation->setPersonalInfo( $personalInfo );
 		$donation->setPaymentType( 'CASH' );
-		$donation->freeze()->assertNoNullFields();
+		$donation->freeze();
 
 		return $donation;
+	}
+
+	private function newValidBankData() {
+		$bankData = new BankData();
+		$bankData->setIban( new Iban( '' ) );
+		$bankData->setBic( '' );
+		$bankData->setAccount( '' );
+		$bankData->setBankCode( '' );
+		$bankData->setBankName( '' );
+		return $bankData;
+	}
+
+	private function newBankDataValidator() {
+		$ibanValidatorMock = $this->getMockBuilder( IbanValidator::class )->disableOriginalConstructor()->getMock();
+		$ibanValidatorMock->method( 'validate' )
+			->willReturn( new ValidationResult() );
+
+		return new BankDataValidator( $ibanValidatorMock );
 	}
 
 }
