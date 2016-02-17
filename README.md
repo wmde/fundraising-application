@@ -6,7 +6,7 @@ User facing application for the WMDE fundraising.
 
 * PHP >= 7
 * php-intl
-* php5-sqlite (only needed for running the tests)
+* php7.0-sqlite3 (only needed for running the tests)
 
 ## Running the application
 
