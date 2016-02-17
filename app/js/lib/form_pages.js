@@ -22,18 +22,17 @@ var FormPage = {
 	},
 
 	PageCollection = {
-		pages: {},
-		displayPage: function ( name ) {
-			var pageName;
-			for ( pageName in this.pages ) {
-				if ( this.pages.hasOwnProperty( pageName ) ) {
-					if ( pageName === name ) {
-						this.pages[ pageName ].show();
-					} else {
-						this.pages[ pageName ].hide();
-					}
+		pages: [],
+		currentPage: 0,
+		displayPage: function ( pageIndex ) {
+			this.pages.forEach( function ( page, index )  {
+				if ( index === pageIndex ) {
+					this.currentPage = index;
+					page.show();
+				} else {
+					page.hide();
 				}
-			}
+			} );
 		}
 	},
 
@@ -46,6 +45,7 @@ var FormPage = {
 	createFormWithPages = function ( pages ) {
 		var f = Object.create( PageCollection );
 		f.pages = pages;
+		f.displayPage( 0 );
 		return f;
 	};
 
