@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\System;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use WMDE\Fundraising\Frontend\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
@@ -16,6 +17,8 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
  */
 abstract class WebRouteTestCase extends \PHPUnit_Framework_TestCase {
 
+	const DISABLE_DEBUG = false;
+
 	/**
 	 * Initializes a new test environment and Silex Application and returns a HttpKernel client to
 	 * make requests to the application. The initialized test environment gets set to the
@@ -23,10 +26,11 @@ abstract class WebRouteTestCase extends \PHPUnit_Framework_TestCase {
 	 *
 	 * @param array $config
 	 * @param callable|null $onEnvironmentCreated Gets called after onTestEnvironmentCreated, same signature
+	 * @param bool $debug
 	 *
 	 * @return Client
 	 */
-	public function createClient( array $config = [], callable $onEnvironmentCreated = null ): Client {
+	public function createClient( array $config = [], callable $onEnvironmentCreated = null, bool $debug = true ): Client {
 		$testEnvironment = TestEnvironment::newInstance( $config );
 
 		$this->onTestEnvironmentCreated( $testEnvironment->getFactory(), $testEnvironment->getConfig() );
@@ -35,7 +39,7 @@ abstract class WebRouteTestCase extends \PHPUnit_Framework_TestCase {
 			call_user_func( $onEnvironmentCreated, $testEnvironment->getFactory(), $testEnvironment->getConfig() );
 		}
 
-		return new Client( $this->createApplication( $testEnvironment->getFactory() ) );
+		return new Client( $this->createApplication( $testEnvironment->getFactory(), $debug ) );
 	}
 
 	/**
@@ -50,12 +54,14 @@ abstract class WebRouteTestCase extends \PHPUnit_Framework_TestCase {
 	}
 
 	// @codingStandardsIgnoreStart
-	private function createApplication( FunFunFactory $ffFactory ) : Application {
+	private function createApplication( FunFunFactory $ffFactory, bool $debug ) : Application {
 		// @codingStandardsIgnoreEnd
 		$app = require __DIR__ . ' /../../app/bootstrap.php';
 
-		$app['debug'] = true;
-		unset( $app['exception_handler'] );
+		if ( $debug ) {
+			$app['debug'] = true;
+			unset( $app['exception_handler'] );
+		}
 
 		return $app;
 	}
@@ -80,9 +86,8 @@ abstract class WebRouteTestCase extends \PHPUnit_Framework_TestCase {
 	protected function assertGetRequestCausesMethodNotAllowedResponse( string $route, array $params ) {
 		$client = $this->createClient();
 
+		$this->expectException( MethodNotAllowedHttpException::class );
 		$client->request( 'GET', $route, $params );
-
-		$this->assertSame( 405, $client->getResponse()->getStatusCode() );
 	}
 
 	protected function assertErrorJsonResponse( Response $response ) {
