@@ -25,6 +25,7 @@ use Symfony\Component\Translation\TranslatorInterface;
 use Twig_Environment;
 use WMDE\Fundraising\Frontend\DataAccess\DbalCommentRepository;
 use WMDE\Fundraising\Frontend\DataAccess\InternetDomainNameValidator;
+use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\Repositories\CommentFinder;
 use WMDE\Fundraising\Frontend\DataAccess\DbalSubscriptionRepository;
 use WMDE\Fundraising\Frontend\Domain\DonationRepository;
@@ -575,7 +576,7 @@ class FunFunFactory {
 		return new AddDonationUseCase(
 			$this->newDonationRepository(),
 			new DonationValidator(
-				new AmountValidator( 1 ),
+				$this->newAmountValidator(),
 				new AmountPolicyValidator( 1000, 200, 300 ), // TODO: get from settings
 				$this->getTextPolicyValidator( 'fields' ),
 				new PersonNameValidator(),
@@ -584,6 +585,16 @@ class FunFunFactory {
 				$this->newBankDataValidator(),
 				$this->getMailValidator()
 			)
+		);
+	}
+
+	private function newAmountValidator(): AmountValidator {
+		return new AmountValidator(
+			0.01,
+			[
+				PaymentType::CREDIT_CARD => 1,
+				PaymentType::PAYPAL => 1,
+			]
 		);
 	}
 
