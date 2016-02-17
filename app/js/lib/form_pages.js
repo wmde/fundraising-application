@@ -1,4 +1,6 @@
-var FormPage = {
+var Promise = require( 'promise' ),
+
+	FormPage = {
 		show: function () {
 			jQuery( this.sections ).show();
 		},
@@ -6,18 +8,36 @@ var FormPage = {
 		hide: function () {
 			jQuery( this.sections ).hide();
 		},
-		sections: ''
+		validate: function () {
+			'use strict';
+			var self = this;
+			return new Promise( function ( resolve, reject ) {
+				if ( self.validation === null ) {
+					resolve( null );
+					return;
+				}
+				try {
+					resolve( self.validation() );
+				} catch ( e ) {
+					reject( e );
+				}
+			} );
+		},
+		sections: '',
+		validation: null
 	},
 
 	/**
 	 * Create a form page encompassing different sections
 	 *
 	 * @param {string} sections A CSS selector
+	 * @param {Function|null} validation Validation function (optional)
 	 * @return {FormPage}
 	 */
-	createFormPage = function ( sections ) {
+	createFormPage = function ( sections, validation ) {
 		var p = Object.create( FormPage );
 		p.sections = sections;
+		p.validation = validation || null;
 		return p;
 	},
 
