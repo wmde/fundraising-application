@@ -86,7 +86,7 @@ class TextPolicyValidator {
 	}
 
 	private function getMatches( string $text, array $wordArray ): array {
-		$matches = array();
+		$matches = [];
 		preg_match_all( $this->composeRegex( $wordArray ), $text, $matches );
 		return $matches[0];
 	}
@@ -94,7 +94,7 @@ class TextPolicyValidator {
 	private function hasBadWordNotMatchingWhiteWords( array $badMatches, array $whiteMatches ):bool {
 		return count(
 			array_udiff( $badMatches, $whiteMatches, function( $badMatch, $whiteMatch ) {
-				return !preg_match( $this->composeRegex( array( $badMatch ) ), $whiteMatch );
+				return !preg_match( $this->composeRegex( [ $badMatch ] ), $whiteMatch );
 			} )
 		) > 0;
 	}

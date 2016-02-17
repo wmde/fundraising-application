@@ -35,20 +35,20 @@ class PageContentModifierTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function stringSubstitutionProvider() {
-		return array(
-			array(
+		return [
+			[
 				'<span class="editsection">foobar</span>',
 				''
-			),
-			array(
+			],
+			[
 				'foobar',
 				'foobar'
-			),
-			array(
+			],
+			[
 				'<span class="editsection">foobar</span>~=[,,_,,]:3<span class="editsection">foobar</span>',
 				'~=[,,_,,]:3'
-			)
-		);
+			]
+		];
 	}
 
 }

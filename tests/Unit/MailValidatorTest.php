@@ -39,14 +39,14 @@ class MailValidatorTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function fullyValidEmailProvider() {
-		return array(
-			array( 'christoph.fischer@wikimedia.de' ),
-			array( 'test@nick.berlin' ),
-			array( 'A-Za-z0-9.!#$%&\'*+-/=?^_`{|}~info@nick.berlin' ),
-			array( 'info@triebwerk-grün.de' ),
-			array( 'info@triebwerk-grün.de' ),
-			array( 'info@موقع.وزارة-الاتصالات.مصر' ),
-		);
+		return [
+			[ 'christoph.fischer@wikimedia.de' ],
+			[ 'test@nick.berlin' ],
+			[ 'A-Za-z0-9.!#$%&\'*+-/=?^_`{|}~info@nick.berlin' ],
+			[ 'info@triebwerk-grün.de' ],
+			[ 'info@triebwerk-grün.de' ],
+			[ 'info@موقع.وزارة-الاتصالات.مصر' ],
+		];
 	}
 
 	/**
@@ -60,12 +60,12 @@ class MailValidatorTest extends \PHPUnit_Framework_TestCase {
 
 	public function emailWithInvalidDomainProvider() {
 		return [
-			array( 'chrifi.asfsfas.de  ' ),
-			array( ' ' ),
-			array( 'fibor@fgagaadadfafasfasfasfasffasfsfe.com' ),
-			array( 'hllo909a()_9a=f9@dsafadsff' ),
-			array( 'christoph.fischer@wikimedia.de ' ),
-			array( 'christoph.füscher@wikimedia.de ' ),
+			[ 'chrifi.asfsfas.de  ' ],
+			[ ' ' ],
+			[ 'fibor@fgagaadadfafasfasfasfasffasfsfe.com' ],
+			[ 'hllo909a()_9a=f9@dsafadsff' ],
+			[ 'christoph.fischer@wikimedia.de ' ],
+			[ 'christoph.füscher@wikimedia.de ' ],
 		];
 	}
 
@@ -80,11 +80,11 @@ class MailValidatorTest extends \PHPUnit_Framework_TestCase {
 
 	public function emailWithInvalidFormatProvider() {
 		return [
-			array( 'chrifi.asfsfas.de  ' ),
-			array( ' ' ),
-			array( 'hllo909a()_9a=f9@dsafadsff' ),
-			array( 'christoph.fischer@wikimedia.de ' ),
-			array( 'christoph.füscher@wikimedia.de ' ),
+			[ 'chrifi.asfsfas.de  ' ],
+			[ ' ' ],
+			[ 'hllo909a()_9a=f9@dsafadsff' ],
+			[ 'christoph.fischer@wikimedia.de ' ],
+			[ 'christoph.füscher@wikimedia.de ' ],
 		];
 	}
 

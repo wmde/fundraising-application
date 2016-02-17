@@ -47,12 +47,12 @@ class BankDataConverterTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function ibanTestProvider() {
-		return array(
-			array( '' ),
-			array( 'DE120105170648489892' ),
-			array( 'DE1048489892' ),
-			array( 'BE125005170648489890' ),
-		);
+		return [
+			[ '' ],
+			[ 'DE120105170648489892' ],
+			[ 'DE1048489892' ],
+			[ 'BE125005170648489890' ],
+		];
 	}
 
 	/**
@@ -115,13 +115,13 @@ class BankDataConverterTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function accountTestProvider() {
-		return array(
-			array( '', '' ),
-			array( '0648489890', '' ),
-			array( '0648489890', '12310517' ),
-			array( '1234567890', '50010517' ),
-			array( '', '50010517' ),
-		);
+		return [
+			[ '', '' ],
+			[ '0648489890', '' ],
+			[ '0648489890', '12310517' ],
+			[ '1234567890', '50010517' ],
+			[ '', '50010517' ],
+		];
 	}
 
 	public function testWhenGivenValidAccountData_converterReturnsBankData() {
