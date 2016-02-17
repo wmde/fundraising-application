@@ -5,6 +5,7 @@ User facing application for the WMDE fundraising.
 ## System dependencies
 
 * PHP >= 7
+* php-intl
 * php5-sqlite (only needed for running the tests)
 
 ## Running the application
