@@ -46,4 +46,19 @@ class AmountValidatorTest extends \PHPUnit_Framework_TestCase {
 		$this->assertTrue( $validator->validate( 1, PaymentType::BITCOIN )->isSuccessful() );
 	}
 
+	public function testStringNotationBelowLowerBoundIsNotAllowed() {
+		$validator = new AmountValidator( 1 );
+		$this->assertFalse( $validator->validate( '0.1', PaymentType::BITCOIN )->isSuccessful() );
+	}
+
+	public function testStringNotationAboveLowerBoundIsAllowed() {
+		$validator = new AmountValidator( 1 );
+		$this->assertTrue( $validator->validate( '1.1', PaymentType::BITCOIN )->isSuccessful() );
+	}
+
+	public function testBinaryNotationIsNotAllowed() {
+		$validator = new AmountValidator( 1 );
+		$this->assertFalse( $validator->validate( '0b10100111001', PaymentType::BITCOIN )->isSuccessful() );
+	}
+
 }
