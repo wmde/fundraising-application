@@ -48,6 +48,12 @@
 			"vendor/bin/phpunit",
 			"vendor/bin/covers-validator"
 		],
+		"ftest": [
+			"vendor/bin/phpunit tests/Unit",
+			"vendor/bin/phpunit tests/Integration",
+			"vendor/bin/phpunit tests/System",
+			"vendor/bin/covers-validator"
+		],
 		"cs": [
 			"composer phpcs"
 		],

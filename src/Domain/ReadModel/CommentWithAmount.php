@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace WMDE\Fundraising\Frontend\Domain;
+namespace WMDE\Fundraising\Frontend\Domain\ReadModel;
 
 use DateTime;
 use WMDE\Fundraising\Frontend\FreezableValueObject;
@@ -11,13 +11,13 @@ use WMDE\Fundraising\Frontend\FreezableValueObject;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class Comment {
+class CommentWithAmount {
 	use FreezableValueObject;
 
 	private $authorName;
 	private $donationAmount;
 	private $commentText;
-	private $postingTime;
+	private $donationTime;
 	private $donationId;
 
 	public static function newInstance() {
@@ -39,8 +39,8 @@ class Comment {
 		return $this->commentText;
 	}
 
-	public function getPostingTime(): DateTime {
-		return $this->postingTime;
+	public function getDonationTime(): DateTime {
+		return $this->donationTime;
 	}
 
 	public function getDonationId(): int {
@@ -65,13 +65,13 @@ class Comment {
 		return $this;
 	}
 
-	public function setPostingTime( DateTime $postingTime ): self {
+	public function setDonationTime( DateTime $donationTime ): self {
 		$this->assertIsWritable();
-		$this->postingTime = $postingTime;
+		$this->donationTime = $donationTime;
 		return $this;
 	}
 
-	public function setDonationId( int $donationId ) {
+	public function setDonationId( int $donationId ): self {
 		$this->assertIsWritable();
 		$this->donationId = $donationId;
 		return $this;

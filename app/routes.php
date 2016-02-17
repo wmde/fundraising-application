@@ -17,6 +17,7 @@ use WMDE\Fundraising\Frontend\Domain\PersonalInfo;
 use WMDE\Fundraising\Frontend\Domain\PersonName;
 use WMDE\Fundraising\Frontend\Domain\PhysicalAddress;
 use WMDE\Fundraising\Frontend\FunFunFactory;
+use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageDisplayRequest;
 use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanRequest;
@@ -168,9 +169,35 @@ $app->get(
 $app->post(
 	'add-comment',
 	function( Request $request ) use ( $app, $ffFactory ) {
+		$addCommentRequest = new AddCommentRequest();
+		$addCommentRequest->setCommentText( $request->get( 'kommentar', '' ) );
+		$addCommentRequest->setIsPublic( $request->get( 'public', '0' ) === '1' );
+		$addCommentRequest->setAuthorDisplayName( $request->get( 'eintrag', '' ) );
+		$addCommentRequest->setDonationId( (int)$request->get( 'sid', '' ) );
+		$addCommentRequest->freeze()->assertNoNullFields();
+
+		$token = $request->get( 'token', '' );
+		$updateToken = $request->get( 'utoken', '' );
+
+		if ( $token === '' || $updateToken === '' ) {
+			return $app->json( [
+				'status' => 'ERR',
+				'message' => 'Required token is missing',
+			] );
+		}
+
+		$response = $ffFactory->newAddCommentUseCase()->addComment( $addCommentRequest );
+
+		if ( $response->isSuccessful() ) {
+			return $app->json( [
+				'status' => 'OK',
+				'message' => '',
+			] );
+		}
+
 		return $app->json( [
 			'status' => 'ERR',
-			'message' => '',
+			'message' => $response->getErrorMessage(),
 		] );
 	}
 );

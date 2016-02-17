@@ -2,7 +2,7 @@
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\UseCases\ListComments;
 
-use WMDE\Fundraising\Frontend\Domain\Comment;
+use WMDE\Fundraising\Frontend\Domain\ReadModel\CommentWithAmount;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentList;
 
 /**
@@ -18,33 +18,33 @@ class CommentListTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testGivenOneComment_constructorCreatesListWithComment() {
-		$comment = Comment::newInstance()
+		$comment = CommentWithAmount::newInstance()
 			->setAuthorName( 'name0' )
 			->setCommentText( 'comment' )
 			->setDonationAmount( '42' )
-			->setPostingTime( new \DateTime( '1984-01-01' ) );
+			->setDonationTime( new \DateTime( '1984-01-01' ) );
 
 		$this->assertSame( [ $comment ], ( new CommentList( $comment ) )->toArray() );
 	}
 
 	public function testGivenMultipleComments_constructorCreatesListWithAllComments() {
-		$comment0 = Comment::newInstance()
+		$comment0 = CommentWithAmount::newInstance()
 			->setAuthorName( 'name0' )
 			->setCommentText( 'comment' )
 			->setDonationAmount( '42' )
-			->setPostingTime( new \DateTime( '1984-01-01' ) );
+			->setDonationTime( new \DateTime( '1984-01-01' ) );
 
-		$comment1 = Comment::newInstance()
+		$comment1 = CommentWithAmount::newInstance()
 			->setAuthorName( 'name1' )
 			->setCommentText( 'comment' )
 			->setDonationAmount( '42' )
-			->setPostingTime( new \DateTime( '1984-01-01' ) );
+			->setDonationTime( new \DateTime( '1984-01-01' ) );
 
-		$comment2 = Comment::newInstance()
+		$comment2 = CommentWithAmount::newInstance()
 			->setAuthorName( 'name2' )
 			->setCommentText( 'comment' )
 			->setDonationAmount( '42' )
-			->setPostingTime( new \DateTime( '1984-01-01' ) );
+			->setDonationTime( new \DateTime( '1984-01-01' ) );
 
 		$this->assertSame(
 			[ $comment0, $comment1, $comment2 ],

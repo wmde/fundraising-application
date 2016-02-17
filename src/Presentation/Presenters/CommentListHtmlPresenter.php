@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
-use WMDE\Fundraising\Frontend\Domain\Comment;
+use WMDE\Fundraising\Frontend\Domain\ReadModel\CommentWithAmount;
 use WMDE\Fundraising\Frontend\TwigTemplate;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentList;
 
@@ -23,12 +23,12 @@ class CommentListHtmlPresenter {
 	public function present( CommentList $commentList ): string {
 		return $this->template->render( [
 			'comments' => array_map(
-				function( Comment $comment ) {
+				function( CommentWithAmount $comment ) {
 					return [
 						'amount' => $comment->getDonationAmount(),
 						'author' => $comment->getAuthorName(),
 						'text' => $comment->getCommentText(),
-						'publicationDate' => $comment->getPostingTime()->format( 'r' ),
+						'publicationDate' => $comment->getDonationTime()->format( 'r' ),
 					];
 				},
 				$commentList->toArray()

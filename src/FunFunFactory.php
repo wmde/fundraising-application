@@ -23,14 +23,14 @@ use Psr\Log\LoggerInterface;
 use Swift_MailTransport;
 use Symfony\Component\Translation\TranslatorInterface;
 use Twig_Environment;
-use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\DataAccess\DbalCommentRepository;
 use WMDE\Fundraising\Frontend\DataAccess\InternetDomainNameValidator;
-use WMDE\Fundraising\Frontend\Domain\CommentRepository;
+use WMDE\Fundraising\Frontend\Domain\Repositories\CommentFinder;
 use WMDE\Fundraising\Frontend\DataAccess\DbalSubscriptionRepository;
 use WMDE\Fundraising\Frontend\Domain\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Honorifics;
 use WMDE\Fundraising\Frontend\Domain\PaymentTypes;
+use WMDE\Fundraising\Frontend\Domain\Repositories\CommentRepository;
 use WMDE\Fundraising\Frontend\Domain\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListJsonPresenter;
@@ -43,6 +43,7 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\ConfirmSubscriptionHtmlPre
 use WMDE\Fundraising\Frontend\Presentation\Presenters\GetInTouchHTMLPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\IbanPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\InternalErrorHTMLPresenter;
+use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentUseCase;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationUseCase;
 use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ConfirmSubscription\ConfirmSubscriptionUseCase;
@@ -118,8 +119,10 @@ class FunFunFactory {
 			return new DbalSubscriptionRepository( $this->getEntityManager() );
 		} );
 
-		$pimple['comment_repository'] = $pimple->share( function() {
-			return new DbalCommentRepository( $this->getEntityManager()->getRepository( Donation::class ) );
+		$pimple['comment_finder'] = $pimple->share( function() {
+			return new DbalCommentRepository(
+				$this->getEntityManager()
+			);
 		} );
 
 		$pimple['mail_validator'] = $pimple->share( function() {
@@ -261,7 +264,7 @@ class FunFunFactory {
 	}
 
 	public function newListCommentsUseCase(): ListCommentsUseCase {
-		return new ListCommentsUseCase( $this->newCommentRepository() );
+		return new ListCommentsUseCase( $this->getCommentFinder() );
 	}
 
 	public function newCommentListJsonPresenter(): CommentListJsonPresenter {
@@ -279,8 +282,8 @@ class FunFunFactory {
 		return new CommentListHtmlPresenter( $this->getLayoutTemplate( 'CommentList.html.twig' ) );
 	}
 
-	private function newCommentRepository(): CommentRepository {
-		return $this->pimple['comment_repository'];
+	private function getCommentFinder(): CommentFinder {
+		return $this->pimple['comment_finder'];
 	}
 
 	public function getSubscriptionRepository(): SubscriptionRepository {
@@ -590,6 +593,20 @@ class FunFunFactory {
 
 	public function setDonationRepository( DonationRepository $donationRepository ) {
 		$this->pimple['donation_repository'] = $donationRepository;
+	}
+
+	public function newAddCommentUseCase(): AddCommentUseCase {
+		return new AddCommentUseCase(
+			$this->getCommentRepository()
+		);
+	}
+
+	private function getCommentRepository(): CommentRepository {
+		return $this->pimple['comment_repository'];
+	}
+
+	public function setCommentRepository( CommentRepository $commentRepository ) {
+		$this->pimple['comment_repository'] = $commentRepository;
 	}
 
 }

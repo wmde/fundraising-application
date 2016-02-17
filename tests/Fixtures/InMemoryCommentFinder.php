@@ -2,15 +2,16 @@
 
 declare(strict_types = 1);
 
-namespace WMDE\Fundraising\Frontend\UseCases\ListComments;
+namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
+use WMDE\Fundraising\Frontend\Domain\Repositories\CommentFinder;
 use WMDE\Fundraising\Frontend\Domain\ReadModel\CommentWithAmount;
 
 /**
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class CommentList {
+class InMemoryCommentFinder implements CommentFinder {
 
 	private $comments;
 
@@ -19,10 +20,12 @@ class CommentList {
 	}
 
 	/**
+	 * @param int $limit
+	 *
 	 * @return CommentWithAmount[]
 	 */
-	public function toArray(): array {
-		return $this->comments;
+	public function getPublicComments( int $limit ): array {
+		return array_slice( $this->comments, 0, $limit );
 	}
 
 }
