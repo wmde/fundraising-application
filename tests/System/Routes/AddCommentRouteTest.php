@@ -54,10 +54,7 @@ class AddCommentRouteTest extends WebRouteTestCase {
 				]
 			);
 
-			$response = $client->getResponse();
-
-			$this->assertTrue( $response->isSuccessful(), 'request is successful' );
-			$this->assertErrorJsonResponse( $response );
+			$this->assertErrorJsonResponse( $client->getResponse() );
 		} );
 	}
 
@@ -70,7 +67,7 @@ class AddCommentRouteTest extends WebRouteTestCase {
 		return $donation;
 	}
 
-	public function testGivenRequestWithParameters_resultIsSuccess() {
+	public function testGivenRequestWithValidParameters_resultIsSuccess() {
 		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
 			$donation = $this->storeDonation( $factory->getEntityManager() );
 
@@ -87,9 +84,28 @@ class AddCommentRouteTest extends WebRouteTestCase {
 				]
 			);
 
-			$response = $client->getResponse();
+			$this->assertSuccessJsonResponse( $client->getResponse() );
+		} );
+	}
 
-			$this->assertSuccessJsonResponse( $response );
+	public function testGivenRequestWithUnknownDonationId_resultIsError() {
+		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
+			$this->storeDonation( $factory->getEntityManager() );
+
+			$client->request(
+				'POST',
+				'add-comment',
+				[
+					'kommentar' => 'Your programmers deserve a raise',
+					'public' => '1',
+					'eintrag' => 'Uncle Bob',
+					'sid' => 25502, // No donation with this id
+					'token' => '1276888%2459b42194b31d0265df452735f6438a234bae2af7',
+					'utoken' => 'b5b249c8beefb986faf8d186a3f16e86ef509ab2',
+				]
+			);
+
+			$this->assertErrorJsonResponse( $client->getResponse() );
 		} );
 	}
 
