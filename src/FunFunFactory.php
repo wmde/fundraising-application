@@ -575,7 +575,7 @@ class FunFunFactory {
 		return new AddDonationUseCase(
 			$this->newDonationRepository(),
 			new DonationValidator(
-				new AmountValidator( 1 ), // TODO: get from settings
+				new AmountValidator( 1 ),
 				new AmountPolicyValidator( 1000, 200, 300 ), // TODO: get from settings
 				$this->getTextPolicyValidator( 'fields' ),
 				new PersonNameValidator(),
