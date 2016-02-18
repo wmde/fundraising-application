@@ -59,7 +59,8 @@
 		],
 		"ci": [
 			"composer test",
-			"composer cs"
+			"composer cs",
+			"npm run ci"
 		],
 		"phpcs": [
 			"vendor/bin/phpcs src/* tests/* --standard=phpcs.xml --extensions=php -sp"

@@ -7,7 +7,7 @@ User facing application for the WMDE fundraising.
 * PHP >= 7
 * php7.0-intl
 * php7.0-sqlite3 (only needed for running the tests)
-* Node.js >= 5.0 (only needed in development for compiling the JavaScript and running the JavaScript tests)
+* Node.js and npm (only needed in development for compiling the JavaScript and running the JavaScript tests)
 
 ## Running the application
 
@@ -26,7 +26,7 @@ For style checks only
 
 	composer cs
 
-For a full CI run
+For a full CI run (including JavaScript CI)
 
 	composer ci
 

@@ -5,7 +5,9 @@ php:
 
 sudo: false
 
-install: travis_retry composer install --prefer-source
+install:
+  - travis_retry composer install --prefer-source
+  - npm install
 
 before_script: bash build/travis/before_script.sh
 
@@ -14,6 +16,7 @@ script: composer ci
 cache:
   directories:
     - $HOME/.composer/cache
+    - node_modules
 
 notifications:
   email:

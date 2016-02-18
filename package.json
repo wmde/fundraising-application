@@ -8,7 +8,7 @@
     "test": "app/js/tests"
   },
   "scripts": {
-    "test": "tape 'app/js/tests/**/*.js'",
+    "test": "tape 'app/js/tests/**/*.js' | tap-min",
     "cs": "jshint app/js && jscs app/js",
     "ci": "npm run cs && npm run test"
   },
@@ -29,6 +29,7 @@
     "browserify": "^13.0.0",
     "jscs": "^2.10.1",
     "jshint": "^2.9.1",
+    "tap-min": "^1.1.0",
     "tape": "^4.4.0"
   },
   "dependencies": {
