@@ -12,8 +12,14 @@
          stopOnSkipped="false"
          verbose="true">
     <testsuites>
-        <testsuite name="FundraisingFrontend">
-            <directory>tests</directory>
+        <testsuite name="FundraisingFrontend-unit">
+            <directory>tests/Unit</directory>
+        </testsuite>
+        <testsuite name="FundraisingFrontend-integration">
+            <directory>tests/Integration</directory>
+        </testsuite>
+        <testsuite name="FundraisingFrontend-system">
+            <directory>tests/System</directory>
         </testsuite>
     </testsuites>
     <filter>
