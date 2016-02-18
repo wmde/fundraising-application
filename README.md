@@ -29,6 +29,9 @@ For a full CI run
 
 	composer ci
 
+To run the tests with your globally installed PHPUnit, you will need a recent version of
+PHPUnit. Consult the `require-dev` section of `composer.json` for up to date information.
+
 ## Profiling
 
 When accessing the API via `web/index.dev.php`, profiling information will be generated and in
