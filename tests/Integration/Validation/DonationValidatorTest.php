@@ -52,7 +52,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 	public function testNoPersonalInfoGiven_validatorReturnsTrue() {
 		$donation = new Donation();
 		$donation->setAmount( 1 );
-		$donation->setPaymentType( PaymentType::CASH );
+		$donation->setPaymentType( PaymentType::BANK_TRANSFER );
 		$this->assertTrue( $this->donationValidator->validate( $donation )->isSuccessful() );
 	}
 
@@ -60,7 +60,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 		$donation = new Donation();
 		$donation->setAmount( 350 );
 		$donation->setInterval( 12 );
-		$donation->setPaymentType( PaymentType::CASH );
+		$donation->setPaymentType( PaymentType::DIRECT_DEBIT );
 		$this->assertTrue( $this->donationValidator->needsModeration( $donation ) );
 	}
 
@@ -73,7 +73,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 
 		$donation = new Donation();
 		$donation->setAmount( 1 );
-		$donation->setPaymentType( PaymentType::CASH );
+		$donation->setPaymentType( PaymentType::BANK_TRANSFER );
 		$donation->setPersonalInfo( $personalInfo );
 		$donation->freeze();
 
@@ -96,7 +96,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 			$textPolicyValidator,
 			new PersonNameValidator(),
 			new PhysicalAddressValidator(),
-			new AllowedValuesValidator( [ PaymentType::CASH ] ),
+			new AllowedValuesValidator( [ PaymentType::DIRECT_DEBIT ] ),
 			$this->newBankDataValidator(),
 			new MailValidator( new NullDomainNameValidator() )
 		);
@@ -128,7 +128,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 	public function testUnsupportedPaymentTypeGiven_validatorReturnsFalse() {
 		$donation = new Donation();
 		$donation->setAmount( 1 );
-		$donation->setPaymentType( PaymentType::BITCOIN );
+		$donation->setPaymentType( PaymentType::PAYPAL );
 		$donation->freeze();
 
 		$this->assertFalse( $this->donationValidator->validate( $donation )->isSuccessful() );
@@ -176,7 +176,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 			new TextPolicyValidator(),
 			new PersonNameValidator(),
 			new PhysicalAddressValidator(),
-			new AllowedValuesValidator( [ PaymentType::CASH ] ),
+			new AllowedValuesValidator( [ PaymentType::DIRECT_DEBIT, PaymentType::BANK_TRANSFER ] ),
 			$this->newBankDataValidator(),
 			new MailValidator( new NullDomainNameValidator() )
 		);
@@ -186,7 +186,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 		$donation = new Donation();
 		$donation->setAmount( 1 );
 		$donation->setPersonalInfo( $personalInfo );
-		$donation->setPaymentType( PaymentType::CASH );
+		$donation->setPaymentType( PaymentType::BANK_TRANSFER );
 		$donation->freeze();
 
 		return $donation;
