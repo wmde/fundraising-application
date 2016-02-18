@@ -125,6 +125,10 @@ class FunFunFactory {
 			);
 		} );
 
+		$pimple['donation_repository'] = $pimple->share( function() {
+			// TODO
+		} );
+
 		$pimple['mail_validator'] = $pimple->share( function() {
 			return new MailValidator( new InternetDomainNameValidator() );
 		} );
