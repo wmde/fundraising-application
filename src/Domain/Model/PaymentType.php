@@ -14,7 +14,5 @@ interface PaymentType {
 	const CREDIT_CARD = 'MCP';
 	const DIRECT_DEBIT = 'BEZ';
 	const PAYPAL = 'PPL';
-	const CASH = 'CASH';
-	const BITCOIN = 'BTC';
 
 }
