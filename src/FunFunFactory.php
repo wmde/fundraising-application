@@ -119,10 +119,14 @@ class FunFunFactory {
 			return new DbalSubscriptionRepository( $this->getEntityManager() );
 		} );
 
-		$pimple['comment_finder'] = $pimple->share( function() {
+		$pimple['comment_repository'] = $pimple->share( function() {
 			return new DbalCommentRepository(
 				$this->getEntityManager()
 			);
+		} );
+
+		$pimple['donation_repository'] = $pimple->share( function() {
+			// TODO
 		} );
 
 		$pimple['mail_validator'] = $pimple->share( function() {
@@ -273,7 +277,7 @@ class FunFunFactory {
 	}
 
 	private function getCommentFinder(): CommentFinder {
-		return $this->pimple['comment_finder'];
+		return $this->pimple['comment_repository'];
 	}
 
 	public function getSubscriptionRepository(): SubscriptionRepository {

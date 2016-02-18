@@ -58,7 +58,7 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenANonHexadecimalConfirmationCode_confirmationPageIsNotFound() {
-		$client = $this->createClient();
+		$client = $this->createClient( [], null, self::DISABLE_DEBUG );
 
 		$client->request(
 			'GET',
