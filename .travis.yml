@@ -7,7 +7,9 @@ sudo: false
 
 install: travis_retry composer install --prefer-source
 
-before_script: bash build/travis/before_script.sh
+before_script:
+  - phpenv config-rm xdebug.ini
+  - bash build/travis/before_script.sh
 
 script: composer ci
 
