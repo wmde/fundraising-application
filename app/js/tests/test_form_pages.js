@@ -3,8 +3,15 @@ var test = require( 'tape' ),
 	Promise = require( 'promise' ),
 	pageSpy = {
 		display: false,
+		validationResult: null,
 		show: function () { this.display = true; },
-		hide: function () { this.display = false; }
+		hide: function () { this.display = false; },
+		validate: function () {
+			var self = this;
+			return new Promise( function ( resolve ) {
+				return resolve( self.validationResult );
+			} );
+		}
 	};
 
 test( 'When form is created, first page is shown', function ( t ) {
@@ -51,3 +58,48 @@ test( 'Form page with validation function returns promise with validation result
 	} );
 } );
 
+test( 'nextPage switches to next page when validation status is ok', function ( t ) {
+	'use strict';
+
+	var firstPage = Object.create( pageSpy ),
+		secondPage = Object.create( pageSpy ),
+		form = formPages.createFormwithPages( [ firstPage, secondPage ] );
+	firstPage.validationResult = { status: 'OK' };
+	t.plan( 2 );
+	Promise.resolve( form.nextPage() ) .then( function () {
+		t.notOk( firstPage.display, 'First page is hidden' );
+		t.ok( secondPage.display, 'Second page is displayed' );
+	} );
+} );
+
+test( 'nextPage stays on page when validation status is not ok', function ( t ) {
+	'use strict';
+
+	var firstPage = Object.create( pageSpy ),
+		secondPage = Object.create( pageSpy ),
+		form = formPages.createFormwithPages( [ firstPage, secondPage ] );
+	firstPage.validationResult = { status: 'ERR' };
+	t.plan( 2 );
+	Promise.resolve( form.nextPage() ) .then( function () {
+		t.ok( firstPage.display, 'First page is displayed' );
+		t.notOk( secondPage.display, 'Second page is hidden' );
+	} );
+} );
+
+test( 'nextPage generates error when there are no more pages', function ( t ) {
+	'use strict';
+
+	var firstPage = Object.create( pageSpy ),
+		secondPage = Object.create( pageSpy ),
+		form = formPages.createFormwithPages( [ firstPage, secondPage ] );
+	secondPage.validationResult = { status: 'OK' };
+	form.displayPage( 1 );
+	Promise.resolve( form.nextPage() ) .then( function () {
+		t.fail( 'nextPage should throw an error' );
+		t.end();
+	} ).catch( function () {
+		t.notOk( firstPage.display, 'First page is displayed' );
+		t.ok( secondPage.display, 'Second page is hidden' );
+		t.end();
+	} );
+} );

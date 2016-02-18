@@ -52,7 +52,20 @@ var Promise = require( 'promise' ),
 				} else {
 					page.hide();
 				}
+			}, this );
+		},
+		nextPage: function () {
+			var self = this;
+			return Promise.resolve( this.pages[ this.currentPage ].validate() ).then( function ( validationResult ) {
+				'use strict';
+				if ( validationResult && validationResult.status === 'OK' ) {
+					if ( self.currentPage + 1 === self.pages.length ) {
+						throw new Error( 'You are on the last page' );
+					}
+					self.displayPage( self.currentPage + 1 );
+				}
 			} );
+
 		}
 	},
 
