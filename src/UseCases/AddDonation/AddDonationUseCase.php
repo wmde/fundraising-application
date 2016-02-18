@@ -81,8 +81,7 @@ class AddDonationUseCase {
 
 		$dbalDonation->setPaymentType( $donation->getPaymentType() );
 		if ( $donation->getPaymentType() === PaymentType::BANK_TRANSFER ) {
-			// TODO: generate transfer code
-			$dbalDonation->setTransferCode( '' );
+			$dbalDonation->setTransferCode( $donation->generateTransferCode() );
 		}
 
 		$data = [
@@ -93,7 +92,6 @@ class AddDonationUseCase {
 			'tracking' => $donation->getTracking(),
 			'skin' => $donation->getSkin(),
 			'color' => $donation->getColor(),
-			// TODO: use the GeneralizedReferrer to determine
 			'source' => $this->generalizedReferrer->generalize( $donation->getSource() ),
 		];
 
@@ -105,6 +103,10 @@ class AddDonationUseCase {
 				'blz' => $donation->getBankData()->getBankCode(),
 				'bankname' => $donation->getBankData()->getBankName(),
 			] );
+		}
+
+		if ( $donation->getPaymentType() === PaymentType::BANK_TRANSFER ) {
+			$dbalDonation->setTransferCode( $donation->generateTransferCode() );
 		}
 
 		if ( $donation->getPersonalInfo() !== null ) {
@@ -123,8 +125,7 @@ class AddDonationUseCase {
 			] );
 			$dbalDonation->setCity( $donation->getPersonalInfo()->getPhysicalAddress()->getCity() );
 			$dbalDonation->setEmail( $donation->getPersonalInfo()->getEmailAddress() );
-			// TODO: generate full name string from name parts (title, first name, last name, company)
-			$dbalDonation->setName( '' );
+			$dbalDonation->setName( $donation->determineFullName() );
 			$dbalDonation->setInfo( $donation->getOptIn() );
 		} else {
 			$dbalDonation->setName( 'anonym' );
