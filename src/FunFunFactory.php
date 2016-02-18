@@ -30,7 +30,6 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\CommentFinder;
 use WMDE\Fundraising\Frontend\DataAccess\DbalSubscriptionRepository;
 use WMDE\Fundraising\Frontend\Domain\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Honorifics;
-use WMDE\Fundraising\Frontend\Domain\PaymentTypes;
 use WMDE\Fundraising\Frontend\Domain\Repositories\CommentRepository;
 use WMDE\Fundraising\Frontend\Domain\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListHtmlPresenter;
@@ -192,16 +191,6 @@ class FunFunFactory {
 				'Dr.' => 'Dr.',
 				'Prof.' => 'Prof.',
 				'Prof. Dr.' => 'Prof. Dr.'
-			] );
-		} );
-
-		// In the future, this could be locale-specific or filled from a DB table
-		$pimple['payment_types'] = $pimple->share( function() {
-			return new PaymentTypes( [
-				'BEZ' => 'Lastschrift',
-				'UEB' => 'Überweisung',
-				'MCP' => 'Kreditkarte',
-				'PPL' => 'PayPal'
 			] );
 		} );
 
@@ -519,11 +508,7 @@ class FunFunFactory {
 	}
 
 	private function newPaymentTypeValidator(): AllowedValuesValidator {
-		return new AllowedValuesValidator( $this->getPaymentTypes()->getKeys() );
-	}
-
-	private function getPaymentTypes(): PaymentTypes {
-		return $this->pimple['payment_types'];
+		return new AllowedValuesValidator( PaymentType::getPaymentTypes() );
 	}
 
 	private function newBankDataValidator(): BankDataValidator {
