@@ -1,4 +1,5 @@
 var Promise = require( 'promise' ),
+	jQuery = require( 'jquery' ),
 
 	FormPage = {
 		show: function () {

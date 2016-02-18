@@ -39,6 +39,24 @@ The JavaScript tests are run as npm scripts that mirror composer scripts:
     npm run cs
     npm run ci
 
+Note that these scripts need some node.js packages installed (see below).
+
+## Compiling the JavaScript
+
+As a first step you must install the required node.js packages with npm:
+
+    npm install
+
+To compile the Javascript to be uased by the web application, run
+
+    npm run build-js
+    
+If you are working on the JavaScript files and need automatic recompilation when a files changes, use
+
+    npm run watch-js
+
+instead. 
+
 ## Profiling
 
 When accessing the API via `web/index.dev.php`, profiling information will be generated and in

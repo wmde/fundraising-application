@@ -267,6 +267,40 @@
         </div>
     </section>
 
+    <section id="donation-submit2" class="container clearfix" style="display:none">
+        <div class="ltcol">
+            &nbsp;
+        </div>
+
+        <div class="ctcol">
+            <div class="box rounded partial">
+
+                <div class="box-footer border-top clearfix">
+                    <span class="label f-left">Schließen Sie die Spende ab</span>
+
+                    <button id="continueFormSubmit" type="button" class="f-right">Spende abschließen <span class="icon-arrow-right"></span></button>
+                </div>
+
+            </div>
+        </div>
+
+        <script>
+            $(function(){
+                var FP = WMDEFR.FormPages,
+                        // TODO do proper validation or use premade validation class
+                    validateFirstPage = function() { return { status: 'OK' }; },
+                    frm = FP.createFormwithPages( [
+                  FP.createFormPage( "#donation-periode,#donation-amount,#donation-payment,#donation-submit1", validateFirstPage ),
+                  FP.createFormPage( "#donation-submit2" )
+                ] );
+                $('#donation-submit1 button' ).click( function() { frm.nextPage(); } );
+            } );
+        </script>
+
+        <div class="rtcol">
+        </div>
+    </section>
+
     <input type="hidden" id="interval-hidden" name="periode">
     <input type="hidden" name="form" value="10h16_Form2_Ticker_Intrvar">
 </form>
