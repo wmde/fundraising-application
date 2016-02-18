@@ -5,6 +5,7 @@ namespace WMDE\Fundraising\Tests\Unit;
 use WMDE\Fundraising\Frontend\Domain\BankData;
 use WMDE\Fundraising\Frontend\Domain\Donation;
 use WMDE\Fundraising\Frontend\Domain\Iban;
+use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\PersonalInfo;
 use WMDE\Fundraising\Frontend\Domain\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Domain\PersonName;
@@ -51,7 +52,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 	public function testNoPersonalInfoGiven_validatorReturnsTrue() {
 		$donation = new Donation();
 		$donation->setAmount( 1 );
-		$donation->setPaymentType( 'CASH' );
+		$donation->setPaymentType( PaymentType::CASH );
 		$this->assertTrue( $this->donationValidator->validate( $donation )->isSuccessful() );
 	}
 
@@ -59,7 +60,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 		$donation = new Donation();
 		$donation->setAmount( 350 );
 		$donation->setInterval( 12 );
-		$donation->setPaymentType( 'CASH' );
+		$donation->setPaymentType( PaymentType::CASH );
 		$this->assertTrue( $this->donationValidator->needsModeration( $donation ) );
 	}
 
@@ -72,7 +73,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 
 		$donation = new Donation();
 		$donation->setAmount( 1 );
-		$donation->setPaymentType( 'CASH' );
+		$donation->setPaymentType( PaymentType::CASH );
 		$donation->setPersonalInfo( $personalInfo );
 		$donation->freeze();
 
@@ -95,7 +96,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 			$textPolicyValidator,
 			new PersonNameValidator(),
 			new PhysicalAddressValidator(),
-			new AllowedValuesValidator( [ 'CASH' ] ),
+			new AllowedValuesValidator( [ PaymentType::CASH ] ),
 			$this->newBankDataValidator(),
 			new MailValidator( new NullDomainNameValidator() )
 		);
@@ -127,7 +128,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 	public function testUnsupportedPaymentTypeGiven_validatorReturnsFalse() {
 		$donation = new Donation();
 		$donation->setAmount( 1 );
-		$donation->setPaymentType( 'BTC' );
+		$donation->setPaymentType( PaymentType::BITCOIN );
 		$donation->freeze();
 
 		$this->assertFalse( $this->donationValidator->validate( $donation )->isSuccessful() );
@@ -141,7 +142,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 	public function testDirectDebitMissingBankData_validatorReturnsFalse() {
 		$donation = new Donation();
 		$donation->setAmount( 1 );
-		$donation->setPaymentType( 'BEZ' );
+		$donation->setPaymentType( PaymentType::DIRECT_DEBIT );
 		$donation->setBankData( $this->newValidBankData() );
 		$donation->freeze();
 
@@ -175,7 +176,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 			new TextPolicyValidator(),
 			new PersonNameValidator(),
 			new PhysicalAddressValidator(),
-			new AllowedValuesValidator( [ 'CASH' ] ),
+			new AllowedValuesValidator( [ PaymentType::CASH ] ),
 			$this->newBankDataValidator(),
 			new MailValidator( new NullDomainNameValidator() )
 		);
@@ -185,7 +186,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 		$donation = new Donation();
 		$donation->setAmount( 1 );
 		$donation->setPersonalInfo( $personalInfo );
-		$donation->setPaymentType( 'CASH' );
+		$donation->setPaymentType( PaymentType::CASH );
 		$donation->freeze();
 
 		return $donation;

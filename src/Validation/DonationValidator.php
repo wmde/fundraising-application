@@ -42,11 +42,12 @@ class DonationValidator {
 	}
 
 	public function validate( Donation $donation ): ValidationResult {
-		$violations = [];
-		$violations[] = $this->getFieldViolation( $this->amountValidator->validate( $donation->getAmount() ), 'betrag' );
-		$violations[] = $this->getFieldViolation(
-			$this->paymentTypeValidator->validate( $donation->getPaymentType() ), 'zahlweise'
-		);
+		$violations = [
+			$this->getAmountViolation( $donation ),
+			$this->getFieldViolation(
+				$this->paymentTypeValidator->validate( $donation->getPaymentType() ), 'zahlweise'
+			)
+		];
 
 		if ( $donation->getPersonalInfo() !== null ) {
 			$violations = array_merge(
@@ -71,6 +72,16 @@ class DonationValidator {
 		}
 
 		return new ValidationResult( ...array_filter( $violations ) );
+	}
+
+	private function getAmountViolation( Donation $donation ) {
+		return $this->getFieldViolation(
+			$this->amountValidator->validate(
+				$donation->getAmount(),
+				$donation->getPaymentType()
+			),
+			'betrag'
+		);
 	}
 
 	public function needsModeration( Donation $donation ): bool {
