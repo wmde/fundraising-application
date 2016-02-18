@@ -4,6 +4,7 @@
 	- https://github.com/squizlabs/PHP_CodeSniffer/tree/master/CodeSniffer/Standards
 -->
 <ruleset name="MediaWiki">
+    <rule ref="Generic.Arrays.DisallowLongArraySyntax" />
     <rule ref="Generic.Classes" />
     <rule ref="Generic.CodeAnalysis" />
     <rule ref="Generic.CodeAnalysis.UnusedFunctionParameter.Found">

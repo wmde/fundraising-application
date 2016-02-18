@@ -27,18 +27,18 @@ class TextPolicyValidatorTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function urlTestProvider() {
-		return array(
-			array( 'www.example.com' ),
-			array( 'http://www.example.com' ),
-			array( 'https://www.example.com' ),
-			array( 'example.com' ),
-			array( 'example.com/test' ),
-			array( 'example.com/teKAst/index.php' ),
-			array( 'Ich mag Wikipedia. Aber meine Seite ist auch toll:example.com/teKAst/index.php' ),
-			array( 'inwx.berlin' ),
-			array( 'wwwwwww.website.com' ),
-			array( 'TriebWerk-Grün.de' ),
-		);
+		return [
+			[ 'www.example.com' ],
+			[ 'http://www.example.com' ],
+			[ 'https://www.example.com' ],
+			[ 'example.com' ],
+			[ 'example.com/test' ],
+			[ 'example.com/teKAst/index.php' ],
+			[ 'Ich mag Wikipedia. Aber meine Seite ist auch toll:example.com/teKAst/index.php' ],
+			[ 'inwx.berlin' ],
+			[ 'wwwwwww.website.com' ],
+			[ 'TriebWerk-Grün.de' ],
+		];
 	}
 
 
@@ -55,12 +55,12 @@ class TextPolicyValidatorTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function harmlessTestProvider() {
-		return array(
-			array( 'Ich mag Wikipedia.Wieso ? Weil ich es so toll finde!' ),
-			array( 'Wikipedia ist so super, meine Eltern sagen es ist eine toll Seite. Berlin ist auch Super.' ),
-			array( 'Ich mag Wikipedia. Aber meine Seite ist auch toll. Googelt mal nach Bunsenbrenner!!!1' ),
-			array( 'Bei Wikipedia kann man eine Menge zum Thema Hamster finden. Hamster fressen voll viel Zeug alter!' ),
-		);
+		return [
+			[ 'Ich mag Wikipedia.Wieso ? Weil ich es so toll finde!' ],
+			[ 'Wikipedia ist so super, meine Eltern sagen es ist eine toll Seite. Berlin ist auch Super.' ],
+			[ 'Ich mag Wikipedia. Aber meine Seite ist auch toll. Googelt mal nach Bunsenbrenner!!!1' ],
+			[ 'Bei Wikipedia kann man eine Menge zum Thema Hamster finden. Hamster fressen voll viel Zeug alter!' ],
+		];
 	}
 
 
@@ -77,12 +77,12 @@ class TextPolicyValidatorTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function insultingTestProvider() {
-		return array(
-			array( 'Alles Deppen!' ),
-			array( 'Heil Hitler!' ),
-			array( 'Duhamsterfresse!!!' ),
-			array( 'Alles nur HAMSTERFRESSEN!!!!!!!!1111111111' ),
-		);
+		return [
+			[ 'Alles Deppen!' ],
+			[ 'Heil Hitler!' ],
+			[ 'Duhamsterfresse!!!' ],
+			[ 'Alles nur HAMSTERFRESSEN!!!!!!!!1111111111' ],
+		];
 	}
 
 
@@ -104,11 +104,11 @@ class TextPolicyValidatorTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function whiteWordsInsultingTestProvider() {
-		return array(
-			array( 'Ich heisse Deppendorf ihr Deppen und das ist auch gut so!' ),
-			array( 'Ihr Arschgeigen, ich wohne in Marsch und das ist auch gut so!' ),
-			array( 'Bei Wikipedia gibts echt tolle Arschkrampen!' ),
-		);
+		return [
+			[ 'Ich heisse Deppendorf ihr Deppen und das ist auch gut so!' ],
+			[ 'Ihr Arschgeigen, ich wohne in Marsch und das ist auch gut so!' ],
+			[ 'Bei Wikipedia gibts echt tolle Arschkrampen!' ],
+		];
 	}
 
 
@@ -130,12 +130,12 @@ class TextPolicyValidatorTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function whiteWordsHarmlessTestProvider() {
-		return array(
-			array( 'Wikipedia ist so super, meine Eltern sagen es ist eine toll Seite. Berlin ist auch Super.' ),
-			array( 'Ich heisse Deppendorf ihr und das ist auch gut so!' ),
-			array( 'Bei Wikipedia gibts echt tolle Dinge!' ),
-			array( 'Ick spend richtig Kohle, denn ick hab ne GmbH & Co.KG' ),
-		);
+		return [
+			[ 'Wikipedia ist so super, meine Eltern sagen es ist eine toll Seite. Berlin ist auch Super.' ],
+			[ 'Ich heisse Deppendorf ihr und das ist auch gut so!' ],
+			[ 'Bei Wikipedia gibts echt tolle Dinge!' ],
+			[ 'Ick spend richtig Kohle, denn ick hab ne GmbH & Co.KG' ],
+		];
 	}
 
 	private function getPreFilledTextPolicyValidator() {
