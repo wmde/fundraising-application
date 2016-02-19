@@ -33,12 +33,32 @@ class DoctrineDonationRepository implements DonationRepository {
 		$doctrineDonation->setPeriod( $donation->getInterval() );
 
 		$doctrineDonation->setPaymentType( $donation->getPaymentType() );
+
 		if ( $donation->getPaymentType() === PaymentType::BANK_TRANSFER ) {
 			$doctrineDonation->setTransferCode( $donation->generateTransferCode() );
 		}
 
+		if ( $donation->getPaymentType() === PaymentType::BANK_TRANSFER ) {
+			$doctrineDonation->setTransferCode( $donation->generateTransferCode() );
+		}
+
+		if ( $donation->getPersonalInfo() === null ) {
+			$doctrineDonation->setName( 'anonym' );
+		} else {
+			$doctrineDonation->setCity( $donation->getPersonalInfo()->getPhysicalAddress()->getCity() );
+			$doctrineDonation->setEmail( $donation->getPersonalInfo()->getEmailAddress() );
+			$doctrineDonation->setName( $donation->determineFullName() );
+			$doctrineDonation->setInfo( $donation->getOptIn() );
+		}
+
+		// TODO: move the enconding to the entity class in FundraisingStore
+		$doctrineDonation->setData( base64_encode( serialize( $this->getDataMap( $donation ) ) ) );
+
+		return $doctrineDonation;
+	}
+
+	private function getDataMap( Donation $donation ): array {
 		$data = [
-			'addresstyp' => 'anonym',
 			'layout' => $donation->getLayout(),
 			'impCount' => $donation->getTotalImpressionCount(),
 			'bImpCount' => $donation->getSingleBannerImpressionCount(),
@@ -58,11 +78,10 @@ class DoctrineDonationRepository implements DonationRepository {
 			] );
 		}
 
-		if ( $donation->getPaymentType() === PaymentType::BANK_TRANSFER ) {
-			$doctrineDonation->setTransferCode( $donation->generateTransferCode() );
+		if ( $donation->getPersonalInfo() === null ) {
+			$data['addresstyp'] = 'anonym';
 		}
-
-		if ( $donation->getPersonalInfo() !== null ) {
+		else {
 			$data = array_merge( $data, [
 				'adresstyp' => $donation->getPersonalInfo()->getPersonName()->getPersonType(),
 				'anrede' => $donation->getPersonalInfo()->getPersonName()->getSalutation(),
@@ -76,18 +95,9 @@ class DoctrineDonationRepository implements DonationRepository {
 				'country' => $donation->getPersonalInfo()->getPhysicalAddress()->getCountryCode(),
 				'email' => $donation->getPersonalInfo()->getEmailAddress(),
 			] );
-			$doctrineDonation->setCity( $donation->getPersonalInfo()->getPhysicalAddress()->getCity() );
-			$doctrineDonation->setEmail( $donation->getPersonalInfo()->getEmailAddress() );
-			$doctrineDonation->setName( $donation->determineFullName() );
-			$doctrineDonation->setInfo( $donation->getOptIn() );
-		} else {
-			$doctrineDonation->setName( 'anonym' );
 		}
 
-		// TODO: move the enconding to the entity class in FundraisingStore
-		$doctrineDonation->setData( base64_encode( serialize( $data ) ) );
-
-		return $doctrineDonation;
+		return $data;
 	}
 
 }
