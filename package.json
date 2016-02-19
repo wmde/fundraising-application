@@ -1,0 +1,52 @@
+{
+  "name": "wmde_fundraising",
+  "version": "2.0.0-dev",
+  "description": "WMDE fundraising application (end user facing part)",
+  "main": "index.js",
+  "directories": {
+    "lib": "app/js/lib",
+    "test": "app/js/tests"
+  },
+  "scripts": {
+    "build-js": "browserify app/js/main.js -s WMDEFR -o web/res/js/wmde_fr.js",
+    "watch-js": "watchify app/js/main.js -v -s WMDEFR -o web/res/js/wmde_fr.js",
+    "test": "tape 'app/js/tests/**/*.js' | tap-min",
+    "cs": "jshint app/js && jscs app/js",
+    "ci": "npm run cs && npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wmde/FundraisingFrontend.git"
+  },
+  "keywords": [
+    "fundraising"
+  ],
+  "author": "",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/wmde/FundraisingFrontend/issues"
+  },
+  "homepage": "https://github.com/wmde/FundraisingFrontend#readme",
+  "devDependencies": {
+    "browserify": "^13.0.0",
+    "browserify-shim": "^3.8.12",
+    "jquery": "^2.2.0",
+    "jscs": "^2.10.1",
+    "jshint": "^2.9.1",
+    "tap-min": "^1.1.0",
+    "tape": "^4.4.0",
+    "watchify": "^3.7.0"
+  },
+  "dependencies": {
+    "object-assign": "^4.0.1",
+    "promise": "^7.1.1"
+  },
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
+  },
+  "browserify-shim": {
+    "jquery": "global:jQuery"
+  }
+}
