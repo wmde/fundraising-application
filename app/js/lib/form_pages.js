@@ -1,3 +1,5 @@
+'use strict';
+
 var Promise = require( 'promise' ),
 	jQuery = require( 'jquery' ),
 
@@ -10,7 +12,6 @@ var Promise = require( 'promise' ),
 			jQuery( this.sections ).hide();
 		},
 		validate: function () {
-			'use strict';
 			var self = this;
 			return new Promise( function ( resolve, reject ) {
 				if ( self.validation === null ) {
@@ -58,7 +59,6 @@ var Promise = require( 'promise' ),
 		nextPage: function () {
 			var self = this;
 			return Promise.resolve( this.pages[ this.currentPage ].validate() ).then( function ( validationResult ) {
-				'use strict';
 				if ( validationResult && validationResult.status === 'OK' ) {
 					if ( self.currentPage + 1 === self.pages.length ) {
 						throw new Error( 'You are on the last page' );

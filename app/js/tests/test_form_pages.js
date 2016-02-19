@@ -1,3 +1,5 @@
+'use strict';
+
 var test = require( 'tape' ),
 	formPages = require( '../lib/form_pages' ),
 	Promise = require( 'promise' ),
@@ -15,10 +17,9 @@ var test = require( 'tape' ),
 	};
 
 test( 'When form is created, first page is shown', function ( t ) {
-	'use strict';
-
 	var firstPage = Object.create( pageSpy ),
 		secondPage = Object.create( pageSpy );
+
 	formPages.createFormwithPages( [ firstPage, secondPage ] );
 	t.ok( firstPage.display, 'First page is  displayed' );
 	t.notOk( secondPage.display, 'Second page is hidden' );
@@ -26,11 +27,10 @@ test( 'When form is created, first page is shown', function ( t ) {
 } );
 
 test( 'Form shows and hides pages correctly', function ( t ) {
-	'use strict';
-
 	var firstPage = Object.create( pageSpy ),
 		secondPage = Object.create( pageSpy ),
 		form = formPages.createFormwithPages( [ firstPage, secondPage ] );
+
 	form.displayPage( 1 );
 	t.notOk( firstPage.display, 'First page is hidden' );
 	t.ok( secondPage.display, 'Second page is displayed' );
@@ -38,8 +38,8 @@ test( 'Form shows and hides pages correctly', function ( t ) {
 } );
 
 test( 'Form page without validation returns null promise.', function ( t ) {
-	'use strict';
 	var page = formPages.createFormPage( '#dummy' );
+
 	t.plan( 1 );
 	Promise.resolve( page.validate() ).then( function ( validationResult ) {
 		t.equals( validationResult, null, 'empty validation must return null' );
@@ -48,10 +48,10 @@ test( 'Form page without validation returns null promise.', function ( t ) {
 } );
 
 test( 'Form page with validation function returns promise with validation result.', function ( t ) {
-	'use strict';
 	var page = formPages.createFormPage( '#dummy', function () {
-		return 'validation ok';
-	} );
+			return 'validation ok';
+		} );
+
 	t.plan( 1 );
 	Promise.resolve( page.validate() ).then( function ( validationResult ) {
 		t.equals( validationResult, 'validation ok', 'validation result must me returned' );
@@ -59,11 +59,11 @@ test( 'Form page with validation function returns promise with validation result
 } );
 
 test( 'nextPage switches to next page when validation status is ok', function ( t ) {
-	'use strict';
 
 	var firstPage = Object.create( pageSpy ),
 		secondPage = Object.create( pageSpy ),
 		form = formPages.createFormwithPages( [ firstPage, secondPage ] );
+
 	firstPage.validationResult = { status: 'OK' };
 	t.plan( 2 );
 	Promise.resolve( form.nextPage() ) .then( function () {
@@ -73,11 +73,10 @@ test( 'nextPage switches to next page when validation status is ok', function ( 
 } );
 
 test( 'nextPage stays on page when validation status is not ok', function ( t ) {
-	'use strict';
-
 	var firstPage = Object.create( pageSpy ),
 		secondPage = Object.create( pageSpy ),
 		form = formPages.createFormwithPages( [ firstPage, secondPage ] );
+
 	firstPage.validationResult = { status: 'ERR' };
 	t.plan( 2 );
 	Promise.resolve( form.nextPage() ) .then( function () {
@@ -87,11 +86,10 @@ test( 'nextPage stays on page when validation status is not ok', function ( t ) 
 } );
 
 test( 'nextPage generates error when there are no more pages', function ( t ) {
-	'use strict';
-
 	var firstPage = Object.create( pageSpy ),
 		secondPage = Object.create( pageSpy ),
 		form = formPages.createFormwithPages( [ firstPage, secondPage ] );
+
 	secondPage.validationResult = { status: 'OK' };
 	form.displayPage( 1 );
 	Promise.resolve( form.nextPage() ) .then( function () {
