@@ -38,10 +38,6 @@ class DoctrineDonationRepository implements DonationRepository {
 			$doctrineDonation->setTransferCode( $donation->generateTransferCode() );
 		}
 
-		if ( $donation->getPaymentType() === PaymentType::BANK_TRANSFER ) {
-			$doctrineDonation->setTransferCode( $donation->generateTransferCode() );
-		}
-
 		if ( $donation->getPersonalInfo() === null ) {
 			$doctrineDonation->setName( 'anonym' );
 		} else {
