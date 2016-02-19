@@ -1,15 +1,14 @@
 'use strict';
 
 var Promise = require( 'promise' ),
-	jQuery = require( 'jquery' ),
 
 	FormPage = {
 		show: function () {
-			jQuery( this.sections ).show();
+			this.sections.show();
 		},
 
 		hide: function () {
-			jQuery( this.sections ).hide();
+			this.sections.hide();
 		},
 		validate: function () {
 			var self = this;
@@ -19,26 +18,28 @@ var Promise = require( 'promise' ),
 					return;
 				}
 				try {
-					resolve( self.validation() );
+					resolve( self.validation( self.sections ) );
 				} catch ( e ) {
 					reject( e );
 				}
 			} );
 		},
-		sections: '',
+		sections: null,
 		validation: null
 	},
 
 	/**
-	 * Create a form page encompassing different sections
+	 * Create a form page from a jQuery object
 	 *
-	 * @param {string} sections A CSS selector
-	 * @param {Function|null} validation Validation function (optional)
+	 * @param {jQuery} $sections jQuery object containing all elements of the form page
+	 * @param {Function|null} validation Validation function (optional).
+	 *        The function will get the section as parameter and is expected to return an object containing a
+	 *        `status` key with 'OK' for a valid result.
 	 * @return {FormPage}
 	 */
-	createFormPage = function ( sections, validation ) {
+	createFormPage = function ( $sections, validation ) {
 		var p = Object.create( FormPage );
-		p.sections = sections;
+		p.sections = $sections;
 		p.validation = validation || null;
 		return p;
 	},

@@ -11,11 +11,11 @@ var objectAsssign = require( 'object-assign' ),
 	hasValFunction = function ( obj ) {
 		return typeof obj.val === 'function';
 	},
-	createAmountCollector = function ( amountSelection, customAmountField ) {
-		if ( hasValFunction( amountSelection )  && hasValFunction( customAmountField ) ) {
+	createAmountCollector = function ( $amountSelection, $customAmountField ) {
+		if ( hasValFunction( $amountSelection )  && hasValFunction( $customAmountField ) ) {
 			return objectAsssign( Object.create( AmountCollector ), {
-				amountSelection: amountSelection,
-				customAmountField: customAmountField
+				amountSelection: $amountSelection,
+				customAmountField: $customAmountField
 			} ) ;
 		} else {
 			throw new Error( 'Amount parameters must have functions to get values!' );

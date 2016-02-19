@@ -290,8 +290,8 @@
                         // TODO do proper validation or use premade validation class
                     validateFirstPage = function() { return { status: 'OK' }; },
                     frm = FP.createFormwithPages( [
-                  FP.createFormPage( "#donation-periode,#donation-amount,#donation-payment,#donation-submit1", validateFirstPage ),
-                  FP.createFormPage( "#donation-submit2" )
+                  FP.createFormPage( $( "#donation-periode,#donation-amount,#donation-payment,#donation-submit1" ), validateFirstPage ),
+                  FP.createFormPage( $( "#donation-submit2" ) )
                 ] );
                 $('#donation-submit1 button' ).click( function() { frm.nextPage(); } );
             } );

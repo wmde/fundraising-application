@@ -4,10 +4,10 @@ var test = require( 'tape' ),
 	formPages = require( '../lib/form_pages' ),
 	Promise = require( 'promise' ),
 	pageSpy = {
-		display: false,
+		isVisible: false,
 		validationResult: null,
-		show: function () { this.display = true; },
-		hide: function () { this.display = false; },
+		show: function () { this.isVisible = true; },
+		hide: function () { this.isVisible = false; },
 		validate: function () {
 			var self = this;
 			return new Promise( function ( resolve ) {
@@ -21,8 +21,8 @@ test( 'When form is created, first page is shown', function ( t ) {
 		secondPage = Object.create( pageSpy );
 
 	formPages.createFormwithPages( [ firstPage, secondPage ] );
-	t.ok( firstPage.display, 'First page is  displayed' );
-	t.notOk( secondPage.display, 'Second page is hidden' );
+	t.ok( firstPage.isVisible, 'First page is displayed' );
+	t.notOk( secondPage.isVisible, 'Second page is hidden' );
 	t.end();
 } );
 
@@ -32,8 +32,8 @@ test( 'Form shows and hides pages correctly', function ( t ) {
 		form = formPages.createFormwithPages( [ firstPage, secondPage ] );
 
 	form.displayPage( 1 );
-	t.notOk( firstPage.display, 'First page is hidden' );
-	t.ok( secondPage.display, 'Second page is displayed' );
+	t.notOk( firstPage.isVisible, 'First page is hidden' );
+	t.ok( secondPage.isVisible, 'Second page is displayed' );
 	t.end();
 } );
 
@@ -67,8 +67,8 @@ test( 'nextPage switches to next page when validation status is ok', function ( 
 	firstPage.validationResult = { status: 'OK' };
 	t.plan( 2 );
 	Promise.resolve( form.nextPage() ) .then( function () {
-		t.notOk( firstPage.display, 'First page is hidden' );
-		t.ok( secondPage.display, 'Second page is displayed' );
+		t.notOk( firstPage.isVisible, 'First page is hidden' );
+		t.ok( secondPage.isVisible, 'Second page is displayed' );
 	} );
 } );
 
@@ -80,8 +80,8 @@ test( 'nextPage stays on page when validation status is not ok', function ( t ) 
 	firstPage.validationResult = { status: 'ERR' };
 	t.plan( 2 );
 	Promise.resolve( form.nextPage() ) .then( function () {
-		t.ok( firstPage.display, 'First page is displayed' );
-		t.notOk( secondPage.display, 'Second page is hidden' );
+		t.ok( firstPage.isVisible, 'First page is displayed' );
+		t.notOk( secondPage.isVisible, 'Second page is hidden' );
 	} );
 } );
 
@@ -96,8 +96,8 @@ test( 'nextPage generates error when there are no more pages', function ( t ) {
 		t.fail( 'nextPage should throw an error' );
 		t.end();
 	} ).catch( function () {
-		t.notOk( firstPage.display, 'First page is displayed' );
-		t.ok( secondPage.display, 'Second page is hidden' );
+		t.notOk( firstPage.isVisible, 'First page is displayed' );
+		t.ok( secondPage.isVisible, 'Second page is hidden' );
 		t.end();
 	} );
 } );
