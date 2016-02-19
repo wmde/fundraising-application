@@ -24,11 +24,12 @@ use Swift_MailTransport;
 use Symfony\Component\Translation\TranslatorInterface;
 use Twig_Environment;
 use WMDE\Fundraising\Frontend\DataAccess\DbalCommentRepository;
+use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
 use WMDE\Fundraising\Frontend\DataAccess\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\Repositories\CommentFinder;
 use WMDE\Fundraising\Frontend\DataAccess\DbalSubscriptionRepository;
-use WMDE\Fundraising\Frontend\Domain\DonationRepository;
+use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Honorifics;
 use WMDE\Fundraising\Frontend\Domain\Repositories\CommentRepository;
 use WMDE\Fundraising\Frontend\Domain\SubscriptionRepository;
@@ -117,6 +118,10 @@ class FunFunFactory {
 
 		$pimple['subscription_repository'] = $pimple->share( function() {
 			return new DbalSubscriptionRepository( $this->getEntityManager() );
+		} );
+
+		$pimple['donation_repository'] = $pimple->share( function() {
+			return new DoctrineDonationRepository( $this->getEntityManager() );
 		} );
 
 		$pimple['comment_finder'] = $pimple->share( function() {
@@ -566,7 +571,7 @@ class FunFunFactory {
 
 	public function newAddDonationUseCase(): AddDonationUseCase {
 		return new AddDonationUseCase(
-			$this->newDonationRepository(),
+			$this->getDonationRepository(),
 			new DonationValidator(
 				$this->newAmountValidator(),
 				new AmountPolicyValidator( 1000, 200, 300 ), // TODO: get from settings
@@ -581,6 +586,10 @@ class FunFunFactory {
 		);
 	}
 
+	public function getDonationRepository(): DonationRepository {
+		return $this->pimple['donation_repository'];
+	}
+
 	private function newAmountValidator(): AmountValidator {
 		return new AmountValidator(
 			0.01,
@@ -589,14 +598,6 @@ class FunFunFactory {
 				PaymentType::PAYPAL => 1,
 			]
 		);
-	}
-
-	private function newDonationRepository(): DonationRepository {
-		return $this->pimple['donation_repository'];
-	}
-
-	public function setDonationRepository( DonationRepository $donationRepository ) {
-		$this->pimple['donation_repository'] = $donationRepository;
 	}
 
 	public function newAddCommentUseCase(): AddCommentUseCase {

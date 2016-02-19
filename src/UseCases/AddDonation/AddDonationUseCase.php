@@ -4,7 +4,7 @@ namespace WMDE\Fundraising\Frontend\UseCases\AddDonation;
 
 use WMDE\Fundraising\Frontend\Domain\BankData;
 use WMDE\Fundraising\Frontend\Domain\Donation;
-use WMDE\Fundraising\Frontend\Domain\DonationRepository;
+use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\GeneralizedReferrer;
@@ -38,7 +38,7 @@ class AddDonationUseCase {
 		$donation->setOptIn( $donationRequest->getOptIn() );
 		$donation->setPaymentType( $donationRequest->getPaymentType() );
 		$donation->setTracking( $donationRequest->getTracking() );
-		$donation->setSource( $donationRequest->getSource() );
+		$donation->setSource( $this->generalizedReferrer->generalize( $donationRequest->getSource() ) );
 		$donation->setTotalImpressionCount( $donationRequest->getTotalImpressionCount() );
 		$donation->setSingleBannerImpressionCount( $donationRequest->getSingleBannerImpressionCount() );
 		$donation->setColor( $donationRequest->getColor() );
@@ -56,7 +56,7 @@ class AddDonationUseCase {
 			return ValidationResponse::newFailureResponse( $validationResult->getViolations() );
 		}
 
-		$this->donationRepository->storeDonation( $this->newDonationEntityFromDonationDomain( $donation ) );
+		$this->donationRepository->storeDonation( $donation );
 
 		// TODO: send mails
 
@@ -71,70 +71,6 @@ class AddDonationUseCase {
 			->setBankCode( $request->getBankCode() )
 			->setBankName( $request->getBankName() );
 		return $bankData->freeze()->assertNoNullFields();
-	}
-
-	private function newDonationEntityFromDonationDomain( Donation $donation ) {
-		$dbalDonation = new \WMDE\Fundraising\Entities\Donation();
-		$dbalDonation->setStatus( $donation->getInitialStatus() );
-		$dbalDonation->setAmount( $donation->getAmount() );
-		$dbalDonation->setPeriod( $donation->getInterval() );
-
-		$dbalDonation->setPaymentType( $donation->getPaymentType() );
-		if ( $donation->getPaymentType() === PaymentType::BANK_TRANSFER ) {
-			$dbalDonation->setTransferCode( $donation->generateTransferCode() );
-		}
-
-		$data = [
-			'addresstyp' => 'anonym',
-			'layout' => $donation->getLayout(),
-			'impCount' => $donation->getTotalImpressionCount(),
-			'bImpCount' => $donation->getSingleBannerImpressionCount(),
-			'tracking' => $donation->getTracking(),
-			'skin' => $donation->getSkin(),
-			'color' => $donation->getColor(),
-			'source' => $this->generalizedReferrer->generalize( $donation->getSource() ),
-		];
-
-		if ( $donation->getPaymentType() === PaymentType::DIRECT_DEBIT ) {
-			$data = array_merge( $data, [
-				'iban' => $donation->getBankData()->getIban()->toString(),
-				'bic' => $donation->getBankData()->getBic(),
-				'konto' => $donation->getBankData()->getAccount(),
-				'blz' => $donation->getBankData()->getBankCode(),
-				'bankname' => $donation->getBankData()->getBankName(),
-			] );
-		}
-
-		if ( $donation->getPaymentType() === PaymentType::BANK_TRANSFER ) {
-			$dbalDonation->setTransferCode( $donation->generateTransferCode() );
-		}
-
-		if ( $donation->getPersonalInfo() !== null ) {
-			$data = array_merge( $data, [
-				'adresstyp' => $donation->getPersonalInfo()->getPersonName()->getPersonType(),
-				'anrede' => $donation->getPersonalInfo()->getPersonName()->getSalutation(),
-				'titel' => $donation->getPersonalInfo()->getPersonName()->getTitle(),
-				'vorname' => $donation->getPersonalInfo()->getPersonName()->getFirstName(),
-				'nachname' => $donation->getPersonalInfo()->getPersonName()->getLastName(),
-				'firma' => $donation->getPersonalInfo()->getPersonName()->getCompanyName(),
-				'strasse' => $donation->getPersonalInfo()->getPhysicalAddress()->getStreetAddress(),
-				'plz' => $donation->getPersonalInfo()->getPhysicalAddress()->getPostalCode(),
-				'ort' => $donation->getPersonalInfo()->getPhysicalAddress()->getCity(),
-				'country' => $donation->getPersonalInfo()->getPhysicalAddress()->getCountryCode(),
-				'email' => $donation->getPersonalInfo()->getEmailAddress(),
-			] );
-			$dbalDonation->setCity( $donation->getPersonalInfo()->getPhysicalAddress()->getCity() );
-			$dbalDonation->setEmail( $donation->getPersonalInfo()->getEmailAddress() );
-			$dbalDonation->setName( $donation->determineFullName() );
-			$dbalDonation->setInfo( $donation->getOptIn() );
-		} else {
-			$dbalDonation->setName( 'anonym' );
-		}
-
-		// TODO: move the enconding to the entity class in FundraisingStore
-		$dbalDonation->setData( base64_encode( serialize( $data ) ) );
-
-		return $dbalDonation;
 	}
 
 }

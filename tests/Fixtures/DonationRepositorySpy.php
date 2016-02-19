@@ -4,8 +4,8 @@ declare(strict_types = 1);
 
 namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
-use WMDE\Fundraising\Entities\Donation;
-use WMDE\Fundraising\Frontend\Domain\DonationRepository;
+use WMDE\Fundraising\Frontend\Domain\Donation;
+use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 
 /**
  * @licence GNU GPL v2+

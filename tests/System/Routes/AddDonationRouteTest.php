@@ -4,8 +4,8 @@ declare(strict_types = 1);
 
 namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 
+use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\FunFunFactory;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\DonationRepositorySpy;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
 
 /**
@@ -45,11 +45,16 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	];
 
 	public function testGivenValidRequest_donationGetsPersisted() {
-		$donationRepository = new DonationRepositorySpy();
+		/**
+		 * @var FunFunFactory
+		 */
+		$factory = null;
 
-		$client = $this->createClient( [], function( FunFunFactory $factory ) use ( $donationRepository ) {
-			$factory->setDonationRepository( $donationRepository );
+		// TODO: refactor once https://github.com/wmde/FundraisingFrontend/commit/7df7c763fb1c6 is merged
+		$client = $this->createClient( [], function( FunFunFactory $f ) use ( &$factory ) {
+			$factory = $f;
 		} );
+
 		$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
 		$client->followRedirects( false );
 
@@ -59,9 +64,8 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$this->validFormInput
 		);
 
-		$this->assertCount( 1, $donationRepository->getDonations() );
+		$donation = $this->getDonationFromDatabase( $factory );
 
-		$donation = $donationRepository->getDonations()[0];
 		$data = unserialize( base64_decode( $donation->getData() ) );
 		$this->assertSame( 5.51, $donation->getAmount() );
 		$this->assertSame( 'BEZ', $donation->getPaymentType() );
@@ -96,6 +100,13 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertSame( '1', $donation->getInfo() );
 		// TODO: another test for bank transfer
 		#$this->assertSame( '', $donation->getTransferCode() );
+	}
+
+	private function getDonationFromDatabase( FunFunFactory $factory ): Donation {
+		$donationRepo = $factory->getEntityManager()->getRepository( Donation::class );
+		$donation = $donationRepo->find( 1 );
+		$this->assertInstanceOf( Donation::class, $donation );
+		return $donation;
 	}
 
 }
