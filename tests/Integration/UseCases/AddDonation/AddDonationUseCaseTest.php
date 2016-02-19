@@ -5,7 +5,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\AddDonation;
 
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
-use WMDE\Fundraising\Frontend\GeneralizedReferrer;
+use WMDE\Fundraising\Frontend\ReferrerGeneralizer;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationUseCase;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
@@ -29,7 +29,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$useCase = new AddDonationUseCase(
 			$this->getMock( DonationRepository::class ),
 			$donationValidator,
-			new GeneralizedReferrer( 'http://foo.bar', [] )
+			new ReferrerGeneralizer( 'http://foo.bar', [] )
 		);
 
 		$this->assertTrue( $useCase->addDonation( $this->newMinimumDonationRequest() )->isSuccessful() );
@@ -39,7 +39,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$useCase = new AddDonationUseCase(
 			$this->getMock( DonationRepository::class ),
 			$this->getFailingValidatorMock( new ConstraintViolation( 'foo', 'bar' ) ),
-			new GeneralizedReferrer( 'http://foo.bar', [] )
+			new ReferrerGeneralizer( 'http://foo.bar', [] )
 		);
 
 		$result = $useCase->addDonation( $this->newMinimumDonationRequest() );

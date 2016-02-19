@@ -7,7 +7,7 @@ use WMDE\Fundraising\Frontend\Domain\Donation;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
-use WMDE\Fundraising\Frontend\GeneralizedReferrer;
+use WMDE\Fundraising\Frontend\ReferrerGeneralizer;
 use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
 use WMDE\Fundraising\Frontend\Validation\DonationValidator;
 
@@ -20,13 +20,13 @@ class AddDonationUseCase {
 
 	private $donationRepository;
 	private $donationValidator;
-	private $generalizedReferrer;
+	private $referrerGeneralizer;
 
 	public function __construct( DonationRepository $donationRepository, DonationValidator $donationValidator,
-								 GeneralizedReferrer $generalizedReferrer ) {
+								 ReferrerGeneralizer $referrerGeneralizer ) {
 		$this->donationRepository = $donationRepository;
 		$this->donationValidator = $donationValidator;
-		$this->generalizedReferrer = $generalizedReferrer;
+		$this->referrerGeneralizer = $referrerGeneralizer;
 	}
 
 	public function addDonation( AddDonationRequest $donationRequest ) {
@@ -38,7 +38,7 @@ class AddDonationUseCase {
 		$donation->setOptIn( $donationRequest->getOptIn() );
 		$donation->setPaymentType( $donationRequest->getPaymentType() );
 		$donation->setTracking( $donationRequest->getTracking() );
-		$donation->setSource( $this->generalizedReferrer->generalize( $donationRequest->getSource() ) );
+		$donation->setSource( $this->referrerGeneralizer->generalize( $donationRequest->getSource() ) );
 		$donation->setTotalImpressionCount( $donationRequest->getTotalImpressionCount() );
 		$donation->setSingleBannerImpressionCount( $donationRequest->getSingleBannerImpressionCount() );
 		$donation->setColor( $donationRequest->getColor() );

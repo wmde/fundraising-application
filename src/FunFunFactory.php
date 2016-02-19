@@ -351,8 +351,8 @@ class FunFunFactory {
 		);
 	}
 
-	private function newGeneralizedReferrer() {
-		return new GeneralizedReferrer(
+	private function newReferrerGeneralizer() {
+		return new ReferrerGeneralizer(
 			$this->config['referrer-generalization']['default'],
 			$this->config['referrer-generalization']['domain-map']
 		);
@@ -582,7 +582,7 @@ class FunFunFactory {
 				$this->newBankDataValidator(),
 				$this->getMailValidator()
 			),
-			$this->newGeneralizedReferrer()
+			$this->newReferrerGeneralizer()
 		);
 	}
 
