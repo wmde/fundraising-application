@@ -4,13 +4,12 @@ declare(strict_types = 1);
 
 namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 
-use Mediawiki\Api\MediawikiApi;
+use DateTime;
+use Doctrine\ORM\EntityManager;
+use Symfony\Component\HttpKernel\Client;
+use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\FunFunFactory;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\SubscriptionRepositorySpy;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
-use WMDE\Fundraising\Frontend\Messenger;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\ApiPostRequestHandler;
-use Swift_NullTransport;
 
 /**
  * @licence GNU GPL v2+
@@ -41,50 +40,73 @@ class AddCommentRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenRequestWithoutTokens_resultIsError() {
-		// TODO: insert donation
+		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
+			$donation = $this->storeDonation( $factory->getEntityManager() );
 
-		$client = $this->createClient();
+			$client->request(
+				'POST',
+				'add-comment',
+				[
+					'kommentar' => 'Your programmers deserve a raise',
+					'public' => '1',
+					'eintrag' => 'Uncle Bob',
+					'sid' => (string)$donation->getId(),
+				]
+			);
 
-		$client->request(
-			'POST',
-			'add-comment',
-			[
-				'kommentar' => 'Your programmers deserve a raise',
-				'public' => '1',
-				'eintrag' => 'Uncle Bob',
-				'sid' => '9001',
-			]
-		);
-
-		$response = $client->getResponse();
-
-		$this->assertTrue( $response->isSuccessful(), 'request is successful' );
-		$this->assertErrorJsonResponse( $response );
+			$this->assertErrorJsonResponse( $client->getResponse() );
+		} );
 	}
 
-	public function testGivenRequestWithParameters_resultIsSuccess() {
-		// TODO: insert donation
-		self::markTestSkipped( 'Not implemented yet!' );
+	private function storeDonation( EntityManager $entityManager ): Donation {
+		$donation = new Donation();
+		$donation->setAmount( '100' );
+		$donation->setDtNew( new DateTime( '1984-01-01' ) );
+		$entityManager->persist( $donation );
+		$entityManager->flush();
+		return $donation;
+	}
 
-		$client = $this->createClient();
+	public function testGivenRequestWithValidParameters_resultIsSuccess() {
+		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
+			$donation = $this->storeDonation( $factory->getEntityManager() );
 
-		$client->request(
-			'POST',
-			'add-comment',
-			[
-				'kommentar' => 'Your programmers deserve a raise',
-				'public' => '1',
-				'eintrag' => 'Uncle Bob',
-				'token' => '1276888%2459b42194b31d0265df452735f6438a234bae2af7',
-				'utoken' => 'b5b249c8beefb986faf8d186a3f16e86ef509ab2',
-				'sid' => '9001',
-			]
-		);
+			$client->request(
+				'POST',
+				'add-comment',
+				[
+					'kommentar' => 'Your programmers deserve a raise',
+					'public' => '1',
+					'eintrag' => 'Uncle Bob',
+					'sid' => (string)$donation->getId(),
+					'token' => '1276888%2459b42194b31d0265df452735f6438a234bae2af7',
+					'utoken' => 'b5b249c8beefb986faf8d186a3f16e86ef509ab2',
+				]
+			);
 
-		$response = $client->getResponse();
+			$this->assertSuccessJsonResponse( $client->getResponse() );
+		} );
+	}
 
-		$this->assertTrue( $response->isSuccessful(), 'request is successful' );
-		$this->assertSuccessJsonResponse( $response );
+	public function testGivenRequestWithUnknownDonationId_resultIsError() {
+		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
+			$this->storeDonation( $factory->getEntityManager() );
+
+			$client->request(
+				'POST',
+				'add-comment',
+				[
+					'kommentar' => 'Your programmers deserve a raise',
+					'public' => '1',
+					'eintrag' => 'Uncle Bob',
+					'sid' => 25502, // No donation with this id
+					'token' => '1276888%2459b42194b31d0265df452735f6438a234bae2af7',
+					'utoken' => 'b5b249c8beefb986faf8d186a3f16e86ef509ab2',
+				]
+			);
+
+			$this->assertErrorJsonResponse( $client->getResponse() );
+		} );
 	}
 
 }

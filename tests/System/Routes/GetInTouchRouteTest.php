@@ -76,20 +76,24 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 	}
 
 	public function testOnException_errorPageIsRendered() {
-		$client = $this->createClient( [], function ( FunFunFactory $factory, array $config ) {
-			$messenger = $this->getMockBuilder( Messenger::class )
-				->disableOriginalConstructor()
-				->getMock();
+		$client = $this->createClient(
+			[],
+			function ( FunFunFactory $factory, array $config ) {
+				$messenger = $this->getMockBuilder( Messenger::class )
+					->disableOriginalConstructor()
+					->getMock();
 
-			$messenger->method( 'getOperatorAddress' )
-				->willReturn( new MailAddress( 'just.some@email.address' ) );
+				$messenger->method( 'getOperatorAddress' )
+					->willReturn( new MailAddress( 'just.some@email.address' ) );
 
-			$messenger->expects( $this->any() )
-				->method( 'sendMessageToUser' )
-				->willThrowException( new \RuntimeException( 'Something unexpected happened' ) );
+				$messenger->expects( $this->any() )
+					->method( 'sendMessageToUser' )
+					->willThrowException( new \RuntimeException( 'Something unexpected happened' ) );
 
-			$factory->setMessenger( $messenger );
-		} );
+				$factory->setMessenger( $messenger );
+			},
+			self::DISABLE_DEBUG
+		);
 
 		$client->request(
 			'POST',
