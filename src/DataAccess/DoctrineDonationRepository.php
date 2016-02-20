@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace WMDE\Fundraising\Frontend\DataAccess;
 
 use Doctrine\ORM\EntityManager;
@@ -47,7 +49,7 @@ class DoctrineDonationRepository implements DonationRepository {
 			$doctrineDonation->setCity( $donation->getPersonalInfo()->getPhysicalAddress()->getCity() );
 			$doctrineDonation->setEmail( $donation->getPersonalInfo()->getEmailAddress() );
 			$doctrineDonation->setName( $donation->determineFullName() );
-			$doctrineDonation->setInfo( $donation->getOptIn() );
+			$doctrineDonation->setInfo( $donation->getOptsIntoNewsletter() );
 		}
 
 		// TODO: move the enconding to the entity class in FundraisingStore

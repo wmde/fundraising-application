@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace WMDE\Fundraising\Frontend\UseCases\AddDonation;
 
 use WMDE\Fundraising\Frontend\Domain\BankData;
@@ -35,7 +37,7 @@ class AddDonationUseCase {
 		$donation->setAmount( $donationRequest->getAmount() );
 		$donation->setInterval( $donationRequest->getInterval() );
 		$donation->setPersonalInfo( $donationRequest->getPersonalInfo() );
-		$donation->setOptIn( $donationRequest->getOptIn() );
+		$donation->setOptsIntoNewsletter( $donationRequest->getOptIn() === '1' );
 		$donation->setPaymentType( $donationRequest->getPaymentType() );
 		$donation->setTracking( $donationRequest->getTracking() );
 		$donation->setSource( $this->referrerGeneralizer->generalize( $donationRequest->getSource() ) );

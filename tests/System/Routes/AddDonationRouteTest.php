@@ -97,7 +97,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertSame( 'default', $data['skin'] );
 		$this->assertSame( 'en.wikipedia.org', $data['source'] );
 		$this->assertSame( 'N', $donation->getStatus() );
-		$this->assertSame( '1', $donation->getInfo() );
+		$this->assertSame( true, $donation->getInfo() );
 		// TODO: another test for bank transfer
 		#$this->assertSame( '', $donation->getTransferCode() );
 	}

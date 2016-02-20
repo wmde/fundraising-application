@@ -28,12 +28,23 @@ class Donation {
 	const STATUS_DELETED = 'D';
 
 	private $status;
+
 	private $amount;
 	private $interval = 0;
 	private $paymentType;
+
+	/**
+	 * @var PersonalInfo
+	 */
 	private $personalInfo;
-	private $optIn;
+
+	/**
+	 * @var BankData
+	 */
 	private $bankData;
+
+	private $optsIntoNewsletter;
+
 	private $tracking;
 	private $source;
 	private $totalImpressionCount;
@@ -91,13 +102,13 @@ class Donation {
 		$this->personalInfo = $personalInfo;
 	}
 
-	public function getOptIn(): string {
-		return $this->optIn;
+	public function getOptsIntoNewsletter(): bool {
+		return $this->optsIntoNewsletter;
 	}
 
-	public function setOptIn( string $optIn ) {
+	public function setOptsIntoNewsletter( bool $optIn ) {
 		$this->assertIsWritable();
-		$this->optIn = $optIn;
+		$this->optsIntoNewsletter = $optIn;
 	}
 
 	public function getBankData(): BankData {
