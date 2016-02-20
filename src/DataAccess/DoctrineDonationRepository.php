@@ -9,6 +9,8 @@ use Doctrine\ORM\ORMException;
 use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
+use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
+use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Domain\Model\TrackingInfo;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
@@ -110,18 +112,30 @@ class DoctrineDonationRepository implements DonationRepository {
 			return [ 'addresstyp' => 'anonym' ];
 		}
 
+		return array_merge(
+			$this->getDataFieldsFromPersonName( $personalInfo->getPersonName() ),
+			$this->getDataFieldsFromAddress( $personalInfo->getPhysicalAddress() ),
+			[ 'email' => $personalInfo->getEmailAddress() ]
+		);
+	}
+
+	private function getDataFieldsFromPersonName( PersonName $name ) {
 		return [
-			'adresstyp' => $personalInfo->getPersonName()->getPersonType(),
-			'anrede' => $personalInfo->getPersonName()->getSalutation(),
-			'titel' => $personalInfo->getPersonName()->getTitle(),
-			'vorname' => $personalInfo->getPersonName()->getFirstName(),
-			'nachname' => $personalInfo->getPersonName()->getLastName(),
-			'firma' => $personalInfo->getPersonName()->getCompanyName(),
-			'strasse' => $personalInfo->getPhysicalAddress()->getStreetAddress(),
-			'plz' => $personalInfo->getPhysicalAddress()->getPostalCode(),
-			'ort' => $personalInfo->getPhysicalAddress()->getCity(),
-			'country' => $personalInfo->getPhysicalAddress()->getCountryCode(),
-			'email' => $personalInfo->getEmailAddress(),
+			'adresstyp' => $name->getPersonType(),
+			'anrede' => $name->getSalutation(),
+			'titel' => $name->getTitle(),
+			'vorname' => $name->getFirstName(),
+			'nachname' => $name->getLastName(),
+			'firma' => $name->getCompanyName(),
+		];
+	}
+
+	private function getDataFieldsFromAddress( PhysicalAddress $address ) {
+		return [
+			'strasse' => $address->getStreetAddress(),
+			'plz' => $address->getPostalCode(),
+			'ort' => $address->getCity(),
+			'country' => $address->getCountryCode(),
 		];
 	}
 
