@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace WMDE\Fundraising\Frontend\UseCases\AddDonation;
 
-use WMDE\Fundraising\Frontend\Domain\BankData;
+use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Iban;

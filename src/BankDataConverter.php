@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace WMDE\Fundraising\Frontend;
 
 use RuntimeException;
-use WMDE\Fundraising\Frontend\Domain\BankData;
+use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Iban;
 
 /**

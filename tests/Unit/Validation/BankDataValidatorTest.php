@@ -2,7 +2,7 @@
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Validation;
 
-use WMDE\Fundraising\Frontend\Domain\BankData;
+use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Iban;
 use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
 use WMDE\Fundraising\Frontend\Validation\IbanValidator;
