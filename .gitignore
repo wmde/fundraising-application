@@ -14,7 +14,6 @@ var/
 .flooignore
 
 app/config/
-app/cache/
 
 res/blz.lut2f
 web/res/js/wmde_fr.js

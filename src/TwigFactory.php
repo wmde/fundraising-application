@@ -30,7 +30,7 @@ class TwigFactory {
 		$options = [];
 
 		if ( $this->config['enable-cache'] ) {
-			$options['cache'] = __DIR__ . '/../app/cache';
+			$options['cache'] = __DIR__ . '/../var/cache';
 		}
 
 		$loader = new \Twig_Loader_Chain( $loaders );

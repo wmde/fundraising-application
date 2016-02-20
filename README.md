@@ -85,6 +85,9 @@ When accessing the API via `web/index.dev.php`, profiling information will be ge
 	* `System/`: edge-to-edge tests
 	* `TestEnvironment.php`: encapsulates application setup for integration and system tests
 	* `Fixtures/`: test stubs and spies
+* `var/`: Ephemeral application data
+    * `logs`: Log files (in debug mode, every request creates a log file)
+    * `cache`: Cache directory for Twig templates
 
 ## Test type restrictions
 
