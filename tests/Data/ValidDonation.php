@@ -22,14 +22,14 @@ class ValidDonation {
 	private function __construct() {
 	}
 
-	public static function newDonation(): Donation {
-		return ( new self() )->createDonation();
+	public static function newDonation( float $amount = 42 ): Donation {
+		return ( new self() )->createDonation( $amount );
 	}
 
-	private function createDonation(): Donation {
+	private function createDonation( float $amount ): Donation {
 		$donation = new Donation();
 
-		$donation->setAmount( 100 );
+		$donation->setAmount( $amount );
 		$donation->setPaymentType( PaymentType::DIRECT_DEBIT );
 		$donation->setStatus( Donation::STATUS_NEW );
 

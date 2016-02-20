@@ -35,8 +35,8 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 		$doctrineDonation = $this->getDonationFromDatabase();
 
-		// FIXME: test fails when using 100.01 as amount
 		$this->assertSame( $donation->getAmount(), $doctrineDonation->getAmount() );
+		$this->assertSame( $donation->getPersonalInfo()->getEmailAddress(), $doctrineDonation->getEmail() );
 	}
 
 	private function getDonationFromDatabase(): DoctineDonation {
@@ -44,6 +44,16 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$donation = $donationRepo->find( 1 );
 		$this->assertInstanceOf( DoctineDonation::class, $donation );
 		return $donation;
+	}
+
+	public function testFractionalAmountsRoundtripWithoutChange() {
+		$donation = ValidDonation::newDonation( 100.01 );
+
+		( new DoctrineDonationRepository( $this->entityManager ) )->storeDonation( $donation );
+
+		$doctrineDonation = $this->getDonationFromDatabase();
+
+		$this->assertSame( $donation->getAmount(), $doctrineDonation->getAmount() );
 	}
 
 }
