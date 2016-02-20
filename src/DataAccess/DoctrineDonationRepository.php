@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace WMDE\Fundraising\Frontend\DataAccess;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\ORMException;
 use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
@@ -12,6 +13,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\TrackingInfo;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\Domain\Repositories\StoreDonationException;
 
 /**
  * @license GNU GPL v2+
@@ -27,9 +29,13 @@ class DoctrineDonationRepository implements DonationRepository {
 	}
 
 	public function storeDonation( Donation $donation ) {
-		// TODO: handle exceptions
-		$this->entityManager->persist( $this->newDonationEntity( $donation ) );
-		$this->entityManager->flush();
+		try {
+			$this->entityManager->persist( $this->newDonationEntity( $donation ) );
+			$this->entityManager->flush();
+		}
+		catch ( ORMException $ex ) {
+			throw new StoreDonationException( $ex );
+		}
 
 		// TODO: return donation id
 	}

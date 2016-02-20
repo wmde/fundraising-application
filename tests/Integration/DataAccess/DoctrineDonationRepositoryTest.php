@@ -5,10 +5,12 @@ declare(strict_types = 1);
 namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\ORMException;
+use WMDE\Fundraising\Entities\Donation as DoctineDonation;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
+use WMDE\Fundraising\Frontend\Domain\Repositories\StoreDonationException;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
-use \WMDE\Fundraising\Entities\Donation as DoctineDonation;
 
 /**
  * @covers WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository
@@ -54,6 +56,22 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$doctrineDonation = $this->getDonationFromDatabase();
 
 		$this->assertSame( $donation->getAmount(), $doctrineDonation->getAmount() );
+	}
+
+	public function testWhenPersistenceFails_domainExceptionIsThrown() {
+		$donation = ValidDonation::newDonation();
+
+		$entityManager = $this->getMockBuilder( EntityManager::class )
+			->disableOriginalConstructor()->getMock();
+
+		$entityManager->expects( $this->any() )
+			->method( 'persist' )
+			->willThrowException( new ORMException() );
+
+		$repository = new DoctrineDonationRepository( $entityManager );
+
+		$this->expectException( StoreDonationException::class );
+		$repository->storeDonation( $donation );
 	}
 
 }
