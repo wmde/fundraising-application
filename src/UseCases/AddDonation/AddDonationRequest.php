@@ -15,6 +15,7 @@ class AddDonationRequest {
 	 * @var PersonalInfo|null
 	 */
 	private $personalInfo;
+	private $optIn = '';
 
 	# donation
 	private $amount = 0.0;
@@ -46,6 +47,14 @@ class AddDonationRequest {
 
 	public function setPersonalInfo( PersonalInfo $personalInfo = null ) {
 		$this->personalInfo = $personalInfo;
+	}
+
+	public function getOptIn(): string {
+		return $this->optIn;
+	}
+
+	public function setOptIn( string $optIn ) {
+		$this->optIn = $optIn;
 	}
 
 	public function getAmount(): float {

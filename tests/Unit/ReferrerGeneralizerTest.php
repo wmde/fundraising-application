@@ -2,16 +2,16 @@
 
 namespace WMDE\Fundraising\Tests\Unit;
 
-use WMDE\Fundraising\Frontend\GeneralizedReferrer;
+use WMDE\Fundraising\Frontend\ReferrerGeneralizer;
 use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
 
 /**
- * @covers WMDE\Fundraising\Frontend\GeneralizedReferrer
+ * @covers WMDE\Fundraising\Frontend\ReferrerGeneralizer
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class GeneralizedReferrerTest extends ValidatorTestCase {
+class ReferrerGeneralizerTest extends ValidatorTestCase {
 
 	private $domainMap = [
 		'wikimedia.de' => 'wikimedia.de',
@@ -29,7 +29,7 @@ class GeneralizedReferrerTest extends ValidatorTestCase {
 	 * @param string $url
 	 */
 	public function testGeneralization( string $url, string $expected ) {
-		$generalizer = new GeneralizedReferrer( 'web', $this->domainMap );
+		$generalizer = new ReferrerGeneralizer( 'web', $this->domainMap );
 		$this->assertSame( $expected, $generalizer->generalize( $url ) );
 	}
 

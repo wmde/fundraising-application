@@ -4,8 +4,10 @@ namespace WMDE\Fundraising\Frontend\UseCases\AddDonation;
 
 use WMDE\Fundraising\Frontend\Domain\BankData;
 use WMDE\Fundraising\Frontend\Domain\Donation;
-use WMDE\Fundraising\Frontend\Domain\DonationRepository;
+use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Iban;
+use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
+use WMDE\Fundraising\Frontend\ReferrerGeneralizer;
 use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
 use WMDE\Fundraising\Frontend\Validation\DonationValidator;
 
@@ -18,10 +20,13 @@ class AddDonationUseCase {
 
 	private $donationRepository;
 	private $donationValidator;
+	private $referrerGeneralizer;
 
-	public function __construct( DonationRepository $donationRepository, DonationValidator $donationValidator ) {
+	public function __construct( DonationRepository $donationRepository, DonationValidator $donationValidator,
+								 ReferrerGeneralizer $referrerGeneralizer ) {
 		$this->donationRepository = $donationRepository;
 		$this->donationValidator = $donationValidator;
+		$this->referrerGeneralizer = $referrerGeneralizer;
 	}
 
 	public function addDonation( AddDonationRequest $donationRequest ) {
@@ -30,10 +35,18 @@ class AddDonationUseCase {
 		$donation->setAmount( $donationRequest->getAmount() );
 		$donation->setInterval( $donationRequest->getInterval() );
 		$donation->setPersonalInfo( $donationRequest->getPersonalInfo() );
+		$donation->setOptIn( $donationRequest->getOptIn() );
 		$donation->setPaymentType( $donationRequest->getPaymentType() );
+		$donation->setTracking( $donationRequest->getTracking() );
+		$donation->setSource( $this->referrerGeneralizer->generalize( $donationRequest->getSource() ) );
+		$donation->setTotalImpressionCount( $donationRequest->getTotalImpressionCount() );
+		$donation->setSingleBannerImpressionCount( $donationRequest->getSingleBannerImpressionCount() );
+		$donation->setColor( $donationRequest->getColor() );
+		$donation->setSkin( $donationRequest->getSkin() );
+		$donation->setLayout( $donationRequest->getLayout() );
 
 		// TODO: try to complement bank data if some fields are missing
-		if ( $donationRequest->getPaymentType() === 'BEZ' ) {
+		if ( $donationRequest->getPaymentType() === PaymentType::DIRECT_DEBIT ) {
 			$donation->setBankData( $this->newBankDataFromRequest( $donationRequest ) );
 		}
 
@@ -43,7 +56,8 @@ class AddDonationUseCase {
 			return ValidationResponse::newFailureResponse( $validationResult->getViolations() );
 		}
 
-		// TODO: persist donation
+		$this->donationRepository->storeDonation( $donation );
+
 		// TODO: send mails
 
 		return ValidationResponse::newSuccessResponse();

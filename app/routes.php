@@ -283,9 +283,16 @@ $app->post(
 					] )
 				);
 
-				$donationRequest->setSource( '' );
-				$donationRequest->setTotalImpressionCount( $request->get( 'impCount', 0 ) );
-				$donationRequest->setSingleBannerImpressionCount( $request->get( 'bImpCount', 0 ) );
+				$donationRequest->setOptIn( $request->get( 'info', '' ) );
+				$donationRequest->setSource(
+					AddDonationRequest::getPreferredValue( [
+						$request->cookies->get( 'spenden_source' ),
+						$request->request->get( 'source' ),
+						$request->server->get( 'HTTP_REFERER' )
+					] )
+				);
+				$donationRequest->setTotalImpressionCount( intval( $request->get( 'impCount', 0 ) ) );
+				$donationRequest->setSingleBannerImpressionCount( intval( $request->get( 'bImpCount', 0 ) ) );
 				$donationRequest->setColor( $request->get( 'color', '' ) );
 				$donationRequest->setSkin( $request->get( 'skin', '' ) );
 				$donationRequest->setLayout( $request->get( 'layout', '' ) );
@@ -306,7 +313,7 @@ $app->post(
 			private function getPhysicalAddressFromRequest( Request $request ): PhysicalAddress {
 				$address = new PhysicalAddress();
 
-				$address->setPostalCode( $request->get( 'strasse', '' ) );
+				$address->setStreetAddress( $request->get( 'strasse', '' ) );
 				$address->setPostalCode( $request->get( 'plz', '' ) );
 				$address->setCity( $request->get( 'ort', '' ) );
 				$address->setCountryCode( $request->get( 'country', '' ) );

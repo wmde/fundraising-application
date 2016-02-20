@@ -85,4 +85,19 @@ class PersonName {
 		$this->lastName = $lastName;
 	}
 
+	public function getFullName(): string {
+		return join( ', ', array_filter( [
+			$this->getFullPrivatePersonName(),
+			$this->getCompanyName()
+		] ) );
+	}
+
+	private function getFullPrivatePersonName(): string {
+		return join( ' ', array_filter( [
+			$this->getTitle(),
+			$this->getFirstName(),
+			$this->getLastName()
+		] ) );
+	}
+
 }

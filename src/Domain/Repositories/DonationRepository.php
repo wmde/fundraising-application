@@ -1,8 +1,8 @@
 <?php
 
-namespace WMDE\Fundraising\Frontend\Domain;
+namespace WMDE\Fundraising\Frontend\Domain\Repositories;
 
-use WMDE\Fundraising\Entities\Donation;
+use WMDE\Fundraising\Frontend\Domain\Donation;
 
 /**
  * @license GNU GPL v2+

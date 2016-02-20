@@ -3,6 +3,7 @@
 namespace WMDE\Fundraising\Frontend\Validation;
 
 use WMDE\Fundraising\Frontend\Domain\Donation;
+use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 
 /**
  * @license GNU GPL v2+
@@ -64,7 +65,7 @@ class DonationValidator {
 			);
 		}
 
-		if ( $donation->getPaymentType() === 'BEZ' ) {
+		if ( $donation->getPaymentType() === PaymentType::DIRECT_DEBIT ) {
 			$violations = array_merge(
 				$violations,
 				$this->bankDataValidator->validate( $donation->getBankData() )->getViolations()
