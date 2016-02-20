@@ -63,7 +63,7 @@ class TestEnvironment {
 	}
 
 	public static function getTestData( string $fileName ): string {
-		return file_get_contents( __DIR__ . '/data/' . $fileName );
+		return file_get_contents( __DIR__ . '/Data/files/' . $fileName );
 	}
 
 	public static function getJsonTestData( string $fileName ) {
