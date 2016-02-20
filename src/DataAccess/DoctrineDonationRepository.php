@@ -6,11 +6,12 @@ use Doctrine\ORM\EntityManager;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
-use WMDE\Fundraising\Frontend\Domain\Donation;
+use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 
 /**
  * @license GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
+ * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class DoctrineDonationRepository implements DonationRepository {
 
@@ -24,6 +25,8 @@ class DoctrineDonationRepository implements DonationRepository {
 		// TODO: handle exceptions
 		$this->entityManager->persist( $this->newDonationEntity( $donation ) );
 		$this->entityManager->flush();
+
+		// TODO: return donation id
 	}
 
 	private function newDonationEntity( Donation $donation ): DoctrineDonation {

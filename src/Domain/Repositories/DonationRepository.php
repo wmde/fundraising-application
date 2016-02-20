@@ -2,7 +2,7 @@
 
 namespace WMDE\Fundraising\Frontend\Domain\Repositories;
 
-use WMDE\Fundraising\Frontend\Domain\Donation;
+use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 
 /**
  * @license GNU GPL v2+

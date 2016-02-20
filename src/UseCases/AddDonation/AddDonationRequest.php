@@ -2,7 +2,7 @@
 
 namespace WMDE\Fundraising\Frontend\UseCases\AddDonation;
 
-use WMDE\Fundraising\Frontend\Domain\PersonalInfo;
+use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
 
 /**
  * @license GNU GPL v2+

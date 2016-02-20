@@ -2,9 +2,9 @@
 
 declare(strict_types = 1);
 
-namespace WMDE\Fundraising\Frontend\Domain;
+namespace WMDE\Fundraising\Frontend\Domain\Model;
 
-use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
+use WMDE\Fundraising\Frontend\Domain\BankData;
 use WMDE\Fundraising\Frontend\FreezableValueObject;
 
 /**
