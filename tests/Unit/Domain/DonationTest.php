@@ -2,12 +2,12 @@
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Domain;
 
-use WMDE\Fundraising\Frontend\Domain\Donation;
-use WMDE\Fundraising\Frontend\Domain\PersonalInfo;
-use WMDE\Fundraising\Frontend\Domain\PersonName;
+use WMDE\Fundraising\Frontend\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
+use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Domain\Donation
+ * @covers WMDE\Fundraising\Frontend\Domain\Model\Donation
  *
  * @license GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >

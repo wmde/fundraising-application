@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace WMDE\Fundraising\Frontend\UseCases\AddDonation;
 
-use WMDE\Fundraising\Frontend\Domain\PersonalInfo;
+use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
 
 /**
  * @license GNU GPL v2+
@@ -179,7 +181,7 @@ class AddDonationRequest {
 
 	public function setAmountFromString( string $value, string $locale = 'de_DE' ) {
 		$this->setAmount(
-			( new \NumberFormatter( $locale, \NumberFormatter::DECIMAL ) )->parse( $value )
+			(float)( new \NumberFormatter( $locale, \NumberFormatter::DECIMAL ) )->parse( $value )
 		);
 	}
 

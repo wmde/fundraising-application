@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Tests\Unit;
 use InvalidArgumentException;
 use RuntimeException;
 use WMDE\Fundraising\Frontend\BankDataConverter;
-use WMDE\Fundraising\Frontend\Domain\BankData;
+use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Iban;
 
 /**

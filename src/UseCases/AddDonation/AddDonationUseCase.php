@@ -1,14 +1,19 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace WMDE\Fundraising\Frontend\UseCases\AddDonation;
 
-use WMDE\Fundraising\Frontend\Domain\BankData;
-use WMDE\Fundraising\Frontend\Domain\Donation;
+use WMDE\Fundraising\Frontend\Domain\Model\BankData;
+use WMDE\Fundraising\Frontend\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\Domain\Model\TrackingInfo;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
+use WMDE\Fundraising\Frontend\MailAddress;
 use WMDE\Fundraising\Frontend\ReferrerGeneralizer;
 use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
+use WMDE\Fundraising\Frontend\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Validation\DonationValidator;
 
 /**
@@ -21,12 +26,14 @@ class AddDonationUseCase {
 	private $donationRepository;
 	private $donationValidator;
 	private $referrerGeneralizer;
+	private $mailer;
 
 	public function __construct( DonationRepository $donationRepository, DonationValidator $donationValidator,
-								 ReferrerGeneralizer $referrerGeneralizer ) {
+								 ReferrerGeneralizer $referrerGeneralizer, TemplateBasedMailer $mailer ) {
 		$this->donationRepository = $donationRepository;
 		$this->donationValidator = $donationValidator;
 		$this->referrerGeneralizer = $referrerGeneralizer;
+		$this->mailer = $mailer;
 	}
 
 	public function addDonation( AddDonationRequest $donationRequest ) {
@@ -35,15 +42,10 @@ class AddDonationUseCase {
 		$donation->setAmount( $donationRequest->getAmount() );
 		$donation->setInterval( $donationRequest->getInterval() );
 		$donation->setPersonalInfo( $donationRequest->getPersonalInfo() );
-		$donation->setOptIn( $donationRequest->getOptIn() );
+		$donation->setOptsIntoNewsletter( $donationRequest->getOptIn() === '1' );
 		$donation->setPaymentType( $donationRequest->getPaymentType() );
-		$donation->setTracking( $donationRequest->getTracking() );
-		$donation->setSource( $this->referrerGeneralizer->generalize( $donationRequest->getSource() ) );
-		$donation->setTotalImpressionCount( $donationRequest->getTotalImpressionCount() );
-		$donation->setSingleBannerImpressionCount( $donationRequest->getSingleBannerImpressionCount() );
-		$donation->setColor( $donationRequest->getColor() );
-		$donation->setSkin( $donationRequest->getSkin() );
-		$donation->setLayout( $donationRequest->getLayout() );
+
+		$donation->setTrackingInfo( $this->newTrackingInfoFromRequest( $donationRequest ) );
 
 		// TODO: try to complement bank data if some fields are missing
 		if ( $donationRequest->getPaymentType() === PaymentType::DIRECT_DEBIT ) {
@@ -58,19 +60,44 @@ class AddDonationUseCase {
 
 		$this->donationRepository->storeDonation( $donation );
 
-		// TODO: send mails
+		$this->sendDonationConfirmationEmail( $donation );
 
 		return ValidationResponse::newSuccessResponse();
 	}
 
 	private function newBankDataFromRequest( AddDonationRequest $request ): BankData {
 		$bankData = new BankData();
+
 		$bankData->setIban( new Iban( $request->getIban() ) )
 			->setBic( $request->getBic() )
 			->setAccount( $request->getBankAccount() )
 			->setBankCode( $request->getBankCode() )
 			->setBankName( $request->getBankName() );
+
 		return $bankData->freeze()->assertNoNullFields();
+	}
+
+	private function newTrackingInfoFromRequest( AddDonationRequest $request ): TrackingInfo {
+		$trackingInfo = new TrackingInfo();
+
+		$trackingInfo->setTracking( $request->getTracking() );
+		$trackingInfo->setSource( $this->referrerGeneralizer->generalize( $request->getSource() ) );
+		$trackingInfo->setTotalImpressionCount( $request->getTotalImpressionCount() );
+		$trackingInfo->setSingleBannerImpressionCount( $request->getSingleBannerImpressionCount() );
+		$trackingInfo->setColor( $request->getColor() );
+		$trackingInfo->setSkin( $request->getSkin() );
+		$trackingInfo->setLayout( $request->getLayout() );
+
+		return $trackingInfo->freeze()->assertNoNullFields();
+	}
+
+	private function sendDonationConfirmationEmail( Donation $donation ) {
+		if ( $donation->getPersonalInfo() !== null ) {
+			$this->mailer->sendMail(
+				new MailAddress( $donation->getPersonalInfo()->getEmailAddress() ),
+				[] // TODO
+			);
+		}
 	}
 
 }

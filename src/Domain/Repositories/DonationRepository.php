@@ -2,18 +2,19 @@
 
 namespace WMDE\Fundraising\Frontend\Domain\Repositories;
 
-use WMDE\Fundraising\Frontend\Domain\Donation;
+use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 
 /**
  * @license GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
+ * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 interface DonationRepository {
 
 	/**
-	 * TODO: add exception
-	 *
 	 * @param Donation $donation
+	 *
+	 * @throws StoreDonationException
 	 */
 	public function storeDonation( Donation $donation );
 

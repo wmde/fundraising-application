@@ -572,17 +572,37 @@ class FunFunFactory {
 	public function newAddDonationUseCase(): AddDonationUseCase {
 		return new AddDonationUseCase(
 			$this->getDonationRepository(),
-			new DonationValidator(
-				$this->newAmountValidator(),
-				new AmountPolicyValidator( 1000, 200, 300 ), // TODO: get from settings
-				$this->getTextPolicyValidator( 'fields' ),
-				new PersonNameValidator(),
-				new PhysicalAddressValidator(),
-				$this->newPaymentTypeValidator(),
-				$this->newBankDataValidator(),
-				$this->getMailValidator()
+			$this->newDonationValidator(),
+			$this->newReferrerGeneralizer(),
+			$this->newAddDonationMailer()
+		);
+	}
+
+	private function newDonationValidator(): DonationValidator {
+		return new DonationValidator(
+			$this->newAmountValidator(),
+			new AmountPolicyValidator( 1000, 200, 300 ), // TODO: get from settings
+			$this->getTextPolicyValidator( 'fields' ),
+			new PersonNameValidator(),
+			new PhysicalAddressValidator(),
+			$this->newPaymentTypeValidator(),
+			$this->newBankDataValidator(),
+			$this->getMailValidator()
+		);
+	}
+
+	private function newAddDonationMailer(): TemplateBasedMailer {
+		return new TemplateBasedMailer(
+			$this->getMessenger(),
+			new TwigTemplate(
+				$this->getTwig(),
+				'Mail_Donation_Confirmation.twig', // TODO
+				[
+					'basepath' => $this->config['web-basepath'],
+					'greeting_generator' => $this->getGreetingGenerator()
+				]
 			),
-			$this->newReferrerGeneralizer()
+			$this->getTranslator()->trans( 'Foo bar' ) // TODO
 		);
 	}
 

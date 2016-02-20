@@ -1,16 +1,26 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace WMDE\Fundraising\Frontend\DataAccess;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\ORMException;
+use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
+use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
+use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
+use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
+use WMDE\Fundraising\Frontend\Domain\Model\TrackingInfo;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
-use WMDE\Fundraising\Frontend\Domain\Donation;
+use WMDE\Fundraising\Frontend\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\Domain\Repositories\StoreDonationException;
 
 /**
  * @license GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
+ * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class DoctrineDonationRepository implements DonationRepository {
 
@@ -21,9 +31,15 @@ class DoctrineDonationRepository implements DonationRepository {
 	}
 
 	public function storeDonation( Donation $donation ) {
-		// TODO: handle exceptions
-		$this->entityManager->persist( $this->newDonationEntity( $donation ) );
-		$this->entityManager->flush();
+		try {
+			$this->entityManager->persist( $this->newDonationEntity( $donation ) );
+			$this->entityManager->flush();
+		}
+		catch ( ORMException $ex ) {
+			throw new StoreDonationException( $ex );
+		}
+
+		// TODO: return donation id
 	}
 
 	private function newDonationEntity( Donation $donation ): DoctrineDonation {
@@ -44,7 +60,7 @@ class DoctrineDonationRepository implements DonationRepository {
 			$doctrineDonation->setCity( $donation->getPersonalInfo()->getPhysicalAddress()->getCity() );
 			$doctrineDonation->setEmail( $donation->getPersonalInfo()->getEmailAddress() );
 			$doctrineDonation->setName( $donation->determineFullName() );
-			$doctrineDonation->setInfo( $donation->getOptIn() );
+			$doctrineDonation->setInfo( $donation->getOptsIntoNewsletter() );
 		}
 
 		// TODO: move the enconding to the entity class in FundraisingStore
@@ -54,46 +70,73 @@ class DoctrineDonationRepository implements DonationRepository {
 	}
 
 	private function getDataMap( Donation $donation ): array {
-		$data = [
-			'layout' => $donation->getLayout(),
-			'impCount' => $donation->getTotalImpressionCount(),
-			'bImpCount' => $donation->getSingleBannerImpressionCount(),
-			'tracking' => $donation->getTracking(),
-			'skin' => $donation->getSkin(),
-			'color' => $donation->getColor(),
-			'source' => $donation->getSource(),
+		return array_merge(
+			$this->getDataFieldsFromTrackingInfo( $donation->getTrackingInfo() ),
+			$this->getDataFieldsForBankData( $donation ),
+			$this->getDataFieldsFromPersonalInfo( $donation->getPersonalInfo() )
+		);
+	}
+
+	private function getDataFieldsFromTrackingInfo( TrackingInfo $trackingInfo ): array {
+		return [
+			'layout' => $trackingInfo->getLayout(),
+			'impCount' => $trackingInfo->getTotalImpressionCount(),
+			'bImpCount' => $trackingInfo->getSingleBannerImpressionCount(),
+			'tracking' => $trackingInfo->getTracking(),
+			'skin' => $trackingInfo->getSkin(),
+			'color' => $trackingInfo->getColor(),
+			'source' => $trackingInfo->getSource(),
 		];
+	}
 
+	private function getDataFieldsFromBankData( BankData $bankData ): array {
+		return [
+			'iban' => $bankData->getIban()->toString(),
+			'bic' => $bankData->getBic(),
+			'konto' => $bankData->getAccount(),
+			'blz' => $bankData->getBankCode(),
+			'bankname' => $bankData->getBankName(),
+		];
+	}
+
+	private function getDataFieldsForBankData( Donation $donation ): array {
 		if ( $donation->getPaymentType() === PaymentType::DIRECT_DEBIT ) {
-			$data = array_merge( $data, [
-				'iban' => $donation->getBankData()->getIban()->toString(),
-				'bic' => $donation->getBankData()->getBic(),
-				'konto' => $donation->getBankData()->getAccount(),
-				'blz' => $donation->getBankData()->getBankCode(),
-				'bankname' => $donation->getBankData()->getBankName(),
-			] );
+			return $this->getDataFieldsFromBankData( $donation->getBankData() );
 		}
 
-		if ( $donation->getPersonalInfo() === null ) {
-			$data['addresstyp'] = 'anonym';
-		}
-		else {
-			$data = array_merge( $data, [
-				'adresstyp' => $donation->getPersonalInfo()->getPersonName()->getPersonType(),
-				'anrede' => $donation->getPersonalInfo()->getPersonName()->getSalutation(),
-				'titel' => $donation->getPersonalInfo()->getPersonName()->getTitle(),
-				'vorname' => $donation->getPersonalInfo()->getPersonName()->getFirstName(),
-				'nachname' => $donation->getPersonalInfo()->getPersonName()->getLastName(),
-				'firma' => $donation->getPersonalInfo()->getPersonName()->getCompanyName(),
-				'strasse' => $donation->getPersonalInfo()->getPhysicalAddress()->getStreetAddress(),
-				'plz' => $donation->getPersonalInfo()->getPhysicalAddress()->getPostalCode(),
-				'ort' => $donation->getPersonalInfo()->getPhysicalAddress()->getCity(),
-				'country' => $donation->getPersonalInfo()->getPhysicalAddress()->getCountryCode(),
-				'email' => $donation->getPersonalInfo()->getEmailAddress(),
-			] );
+		return [];
+	}
+
+	private function getDataFieldsFromPersonalInfo( PersonalInfo $personalInfo = null ): array {
+		if ( $personalInfo === null ) {
+			return [ 'addresstyp' => 'anonym' ];
 		}
 
-		return $data;
+		return array_merge(
+			$this->getDataFieldsFromPersonName( $personalInfo->getPersonName() ),
+			$this->getDataFieldsFromAddress( $personalInfo->getPhysicalAddress() ),
+			[ 'email' => $personalInfo->getEmailAddress() ]
+		);
+	}
+
+	private function getDataFieldsFromPersonName( PersonName $name ) {
+		return [
+			'adresstyp' => $name->getPersonType(),
+			'anrede' => $name->getSalutation(),
+			'titel' => $name->getTitle(),
+			'vorname' => $name->getFirstName(),
+			'nachname' => $name->getLastName(),
+			'firma' => $name->getCompanyName(),
+		];
+	}
+
+	private function getDataFieldsFromAddress( PhysicalAddress $address ) {
+		return [
+			'strasse' => $address->getStreetAddress(),
+			'plz' => $address->getPostalCode(),
+			'ort' => $address->getCity(),
+			'country' => $address->getCountryCode(),
+		];
 	}
 
 }

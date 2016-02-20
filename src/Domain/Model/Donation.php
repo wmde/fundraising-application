@@ -2,9 +2,8 @@
 
 declare(strict_types = 1);
 
-namespace WMDE\Fundraising\Frontend\Domain;
+namespace WMDE\Fundraising\Frontend\Domain\Model;
 
-use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\FreezableValueObject;
 
 /**
@@ -28,19 +27,29 @@ class Donation {
 	const STATUS_DELETED = 'D';
 
 	private $status;
+
 	private $amount;
 	private $interval = 0;
 	private $paymentType;
+
+	private $optsIntoNewsletter;
+
+	/**
+	 * @var PersonalInfo|null
+	 */
 	private $personalInfo;
-	private $optIn;
+
+	/**
+	 * TODO: can this not be null as well, for some payment types?
+	 *
+	 * @var BankData
+	 */
 	private $bankData;
-	private $tracking;
-	private $source;
-	private $totalImpressionCount;
-	private $singleBannerImpressionCount;
-	private $color;
-	private $skin;
-	private $layout;
+
+	/**
+	 * @var TrackingInfo
+	 */
+	private $trackingInfo;
 
 	public function getStatus(): string {
 		return $this->status;
@@ -91,13 +100,13 @@ class Donation {
 		$this->personalInfo = $personalInfo;
 	}
 
-	public function getOptIn(): string {
-		return $this->optIn;
+	public function getOptsIntoNewsletter(): bool {
+		return $this->optsIntoNewsletter;
 	}
 
-	public function setOptIn( string $optIn ) {
+	public function setOptsIntoNewsletter( bool $optIn ) {
 		$this->assertIsWritable();
-		$this->optIn = $optIn;
+		$this->optsIntoNewsletter = $optIn;
 	}
 
 	public function getBankData(): BankData {
@@ -109,61 +118,13 @@ class Donation {
 		$this->bankData = $bankData;
 	}
 
-	public function getTracking(): string {
-		return $this->tracking;
+	public function getTrackingInfo(): TrackingInfo {
+		return $this->trackingInfo;
 	}
 
-	public function setTracking( string $tracking ) {
+	public function setTrackingInfo( TrackingInfo $trackingInfo ) {
 		$this->assertIsWritable();
-		$this->tracking = $tracking;
-	}
-
-	public function getSource(): string {
-		return $this->source;
-	}
-
-	public function setSource( string $source ) {
-		$this->source = $source;
-	}
-
-	public function getTotalImpressionCount(): int {
-		return $this->totalImpressionCount;
-	}
-
-	public function setTotalImpressionCount( int $totalImpressionCount ) {
-		$this->totalImpressionCount = $totalImpressionCount;
-	}
-
-	public function getSingleBannerImpressionCount(): int {
-		return $this->singleBannerImpressionCount;
-	}
-
-	public function setSingleBannerImpressionCount( int $singleBannerImpressionCount ) {
-		$this->singleBannerImpressionCount = $singleBannerImpressionCount;
-	}
-
-	public function getColor(): string {
-		return $this->color;
-	}
-
-	public function setColor( string $color ) {
-		$this->color = $color;
-	}
-
-	public function getSkin(): string {
-		return $this->skin;
-	}
-
-	public function setSkin( string $skin ) {
-		$this->skin = $skin;
-	}
-
-	public function getLayout(): string {
-		return $this->layout;
-	}
-
-	public function setLayout( string $layout ) {
-		$this->layout = $layout;
+		$this->trackingInfo = $trackingInfo;
 	}
 
 	public function getInitialStatus(): string {
