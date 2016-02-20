@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\UseCases\AddDonation;
 
 use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\Domain\Model\TrackingInfo;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
@@ -39,13 +40,8 @@ class AddDonationUseCase {
 		$donation->setPersonalInfo( $donationRequest->getPersonalInfo() );
 		$donation->setOptsIntoNewsletter( $donationRequest->getOptIn() === '1' );
 		$donation->setPaymentType( $donationRequest->getPaymentType() );
-		$donation->setTracking( $donationRequest->getTracking() );
-		$donation->setSource( $this->referrerGeneralizer->generalize( $donationRequest->getSource() ) );
-		$donation->setTotalImpressionCount( $donationRequest->getTotalImpressionCount() );
-		$donation->setSingleBannerImpressionCount( $donationRequest->getSingleBannerImpressionCount() );
-		$donation->setColor( $donationRequest->getColor() );
-		$donation->setSkin( $donationRequest->getSkin() );
-		$donation->setLayout( $donationRequest->getLayout() );
+
+		$donation->setTrackingInfo( $this->newTrackingInfoFromRequest( $donationRequest ) );
 
 		// TODO: try to complement bank data if some fields are missing
 		if ( $donationRequest->getPaymentType() === PaymentType::DIRECT_DEBIT ) {
@@ -67,12 +63,28 @@ class AddDonationUseCase {
 
 	private function newBankDataFromRequest( AddDonationRequest $request ): BankData {
 		$bankData = new BankData();
+
 		$bankData->setIban( new Iban( $request->getIban() ) )
 			->setBic( $request->getBic() )
 			->setAccount( $request->getBankAccount() )
 			->setBankCode( $request->getBankCode() )
 			->setBankName( $request->getBankName() );
+
 		return $bankData->freeze()->assertNoNullFields();
+	}
+
+	private function newTrackingInfoFromRequest( AddDonationRequest $request ): TrackingInfo {
+		$trackingInfo = new TrackingInfo();
+
+		$trackingInfo->setTracking( $request->getTracking() );
+		$trackingInfo->setSource( $this->referrerGeneralizer->generalize( $request->getSource() ) );
+		$trackingInfo->setTotalImpressionCount( $request->getTotalImpressionCount() );
+		$trackingInfo->setSingleBannerImpressionCount( $request->getSingleBannerImpressionCount() );
+		$trackingInfo->setColor( $request->getColor() );
+		$trackingInfo->setSkin( $request->getSkin() );
+		$trackingInfo->setLayout( $request->getLayout() );
+
+		return $trackingInfo->freeze()->assertNoNullFields();
 	}
 
 }

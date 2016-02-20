@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\DataAccess;
 
 use Doctrine\ORM\EntityManager;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
+use WMDE\Fundraising\Frontend\Domain\Model\TrackingInfo;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
@@ -59,15 +60,7 @@ class DoctrineDonationRepository implements DonationRepository {
 	}
 
 	private function getDataMap( Donation $donation ): array {
-		$data = [
-			'layout' => $donation->getLayout(),
-			'impCount' => $donation->getTotalImpressionCount(),
-			'bImpCount' => $donation->getSingleBannerImpressionCount(),
-			'tracking' => $donation->getTracking(),
-			'skin' => $donation->getSkin(),
-			'color' => $donation->getColor(),
-			'source' => $donation->getSource(),
-		];
+		$data = $this->getTrackingData( $donation->getTrackingInfo() );
 
 		if ( $donation->getPaymentType() === PaymentType::DIRECT_DEBIT ) {
 			$data = array_merge( $data, [
@@ -99,6 +92,18 @@ class DoctrineDonationRepository implements DonationRepository {
 		}
 
 		return $data;
+	}
+
+	private function getTrackingData( TrackingInfo $trackingInfo ) {
+		return [
+			'layout' => $trackingInfo->getLayout(),
+			'impCount' => $trackingInfo->getTotalImpressionCount(),
+			'bImpCount' => $trackingInfo->getSingleBannerImpressionCount(),
+			'tracking' => $trackingInfo->getTracking(),
+			'skin' => $trackingInfo->getSkin(),
+			'color' => $trackingInfo->getColor(),
+			'source' => $trackingInfo->getSource(),
+		];
 	}
 
 }
