@@ -5,7 +5,9 @@ declare(strict_types = 1);
 namespace WMDE\Fundraising\Frontend\DataAccess;
 
 use Doctrine\ORM\EntityManager;
+use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
+use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
 use WMDE\Fundraising\Frontend\Domain\Model\TrackingInfo;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
@@ -60,41 +62,14 @@ class DoctrineDonationRepository implements DonationRepository {
 	}
 
 	private function getDataMap( Donation $donation ): array {
-		$data = $this->getTrackingData( $donation->getTrackingInfo() );
-
-		if ( $donation->getPaymentType() === PaymentType::DIRECT_DEBIT ) {
-			$data = array_merge( $data, [
-				'iban' => $donation->getBankData()->getIban()->toString(),
-				'bic' => $donation->getBankData()->getBic(),
-				'konto' => $donation->getBankData()->getAccount(),
-				'blz' => $donation->getBankData()->getBankCode(),
-				'bankname' => $donation->getBankData()->getBankName(),
-			] );
-		}
-
-		if ( $donation->getPersonalInfo() === null ) {
-			$data['addresstyp'] = 'anonym';
-		}
-		else {
-			$data = array_merge( $data, [
-				'adresstyp' => $donation->getPersonalInfo()->getPersonName()->getPersonType(),
-				'anrede' => $donation->getPersonalInfo()->getPersonName()->getSalutation(),
-				'titel' => $donation->getPersonalInfo()->getPersonName()->getTitle(),
-				'vorname' => $donation->getPersonalInfo()->getPersonName()->getFirstName(),
-				'nachname' => $donation->getPersonalInfo()->getPersonName()->getLastName(),
-				'firma' => $donation->getPersonalInfo()->getPersonName()->getCompanyName(),
-				'strasse' => $donation->getPersonalInfo()->getPhysicalAddress()->getStreetAddress(),
-				'plz' => $donation->getPersonalInfo()->getPhysicalAddress()->getPostalCode(),
-				'ort' => $donation->getPersonalInfo()->getPhysicalAddress()->getCity(),
-				'country' => $donation->getPersonalInfo()->getPhysicalAddress()->getCountryCode(),
-				'email' => $donation->getPersonalInfo()->getEmailAddress(),
-			] );
-		}
-
-		return $data;
+		return array_merge(
+			$this->getDataFieldsFromTrackingInfo( $donation->getTrackingInfo() ),
+			$this->getDataFieldsForBankData( $donation ),
+			$this->getDataFieldsFromPersonalInfo( $donation->getPersonalInfo() )
+		);
 	}
 
-	private function getTrackingData( TrackingInfo $trackingInfo ) {
+	private function getDataFieldsFromTrackingInfo( TrackingInfo $trackingInfo ): array {
 		return [
 			'layout' => $trackingInfo->getLayout(),
 			'impCount' => $trackingInfo->getTotalImpressionCount(),
@@ -103,6 +78,44 @@ class DoctrineDonationRepository implements DonationRepository {
 			'skin' => $trackingInfo->getSkin(),
 			'color' => $trackingInfo->getColor(),
 			'source' => $trackingInfo->getSource(),
+		];
+	}
+
+	private function getDataFieldsFromBankData( BankData $bankData ): array {
+		return [
+			'iban' => $bankData->getIban()->toString(),
+			'bic' => $bankData->getBic(),
+			'konto' => $bankData->getAccount(),
+			'blz' => $bankData->getBankCode(),
+			'bankname' => $bankData->getBankName(),
+		];
+	}
+
+	private function getDataFieldsForBankData( Donation $donation ): array {
+		if ( $donation->getPaymentType() === PaymentType::DIRECT_DEBIT ) {
+			return $this->getDataFieldsFromBankData( $donation->getBankData() );
+		}
+
+		return [];
+	}
+
+	private function getDataFieldsFromPersonalInfo( PersonalInfo $personalInfo = null ): array {
+		if ( $personalInfo === null ) {
+			return [ 'addresstyp' => 'anonym' ];
+		}
+
+		return [
+			'adresstyp' => $personalInfo->getPersonName()->getPersonType(),
+			'anrede' => $personalInfo->getPersonName()->getSalutation(),
+			'titel' => $personalInfo->getPersonName()->getTitle(),
+			'vorname' => $personalInfo->getPersonName()->getFirstName(),
+			'nachname' => $personalInfo->getPersonName()->getLastName(),
+			'firma' => $personalInfo->getPersonName()->getCompanyName(),
+			'strasse' => $personalInfo->getPhysicalAddress()->getStreetAddress(),
+			'plz' => $personalInfo->getPhysicalAddress()->getPostalCode(),
+			'ort' => $personalInfo->getPhysicalAddress()->getCity(),
+			'country' => $personalInfo->getPhysicalAddress()->getCountryCode(),
+			'email' => $personalInfo->getEmailAddress(),
 		];
 	}
 
