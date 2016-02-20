@@ -10,8 +10,10 @@ use WMDE\Fundraising\Frontend\Domain\Model\TrackingInfo;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
+use WMDE\Fundraising\Frontend\MailAddress;
 use WMDE\Fundraising\Frontend\ReferrerGeneralizer;
 use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
+use WMDE\Fundraising\Frontend\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Validation\DonationValidator;
 
 /**
@@ -24,12 +26,14 @@ class AddDonationUseCase {
 	private $donationRepository;
 	private $donationValidator;
 	private $referrerGeneralizer;
+	private $mailer;
 
 	public function __construct( DonationRepository $donationRepository, DonationValidator $donationValidator,
-								 ReferrerGeneralizer $referrerGeneralizer ) {
+								 ReferrerGeneralizer $referrerGeneralizer, TemplateBasedMailer $mailer ) {
 		$this->donationRepository = $donationRepository;
 		$this->donationValidator = $donationValidator;
 		$this->referrerGeneralizer = $referrerGeneralizer;
+		$this->mailer = $mailer;
 	}
 
 	public function addDonation( AddDonationRequest $donationRequest ) {
@@ -56,7 +60,7 @@ class AddDonationUseCase {
 
 		$this->donationRepository->storeDonation( $donation );
 
-		// TODO: send mails
+		$this->sendDonationConfirmationEmail( $donation );
 
 		return ValidationResponse::newSuccessResponse();
 	}
@@ -85,6 +89,15 @@ class AddDonationUseCase {
 		$trackingInfo->setLayout( $request->getLayout() );
 
 		return $trackingInfo->freeze()->assertNoNullFields();
+	}
+
+	private function sendDonationConfirmationEmail( Donation $donation ) {
+		if ( $donation->getPersonalInfo() !== null ) {
+			$this->mailer->sendMail(
+				new MailAddress( $donation->getPersonalInfo()->getEmailAddress() ),
+				[] // TODO
+			);
+		}
 	}
 
 }
