@@ -8,6 +8,7 @@ use WMDE\Fundraising\Frontend\FreezableValueObject;
 
 /**
  * @licence GNU GPL v2+
+ * @author Kai Nissen < kai.nissen@wikimedia.de >
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class TrackingInfo {
@@ -35,6 +36,7 @@ class TrackingInfo {
 	}
 
 	public function setSource( string $source ) {
+		$this->assertIsWritable();
 		$this->source = $source;
 	}
 
@@ -43,6 +45,7 @@ class TrackingInfo {
 	}
 
 	public function setTotalImpressionCount( int $totalImpressionCount ) {
+		$this->assertIsWritable();
 		$this->totalImpressionCount = $totalImpressionCount;
 	}
 
@@ -51,6 +54,7 @@ class TrackingInfo {
 	}
 
 	public function setSingleBannerImpressionCount( int $singleBannerImpressionCount ) {
+		$this->assertIsWritable();
 		$this->singleBannerImpressionCount = $singleBannerImpressionCount;
 	}
 
@@ -59,6 +63,7 @@ class TrackingInfo {
 	}
 
 	public function setColor( string $color ) {
+		$this->assertIsWritable();
 		$this->color = $color;
 	}
 
@@ -67,6 +72,7 @@ class TrackingInfo {
 	}
 
 	public function setSkin( string $skin ) {
+		$this->assertIsWritable();
 		$this->skin = $skin;
 	}
 
@@ -75,6 +81,7 @@ class TrackingInfo {
 	}
 
 	public function setLayout( string $layout ) {
+		$this->assertIsWritable();
 		$this->layout = $layout;
 	}
 
