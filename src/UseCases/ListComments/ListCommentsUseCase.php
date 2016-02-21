@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace WMDE\Fundraising\Frontend\UseCases\ListComments;
 
-use WMDE\Fundraising\Frontend\Domain\ReadModel\CommentWithAmount;
 use WMDE\Fundraising\Frontend\Domain\Repositories\CommentFinder;
 
 /**
