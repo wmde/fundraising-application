@@ -22,7 +22,7 @@ class DonationRepositorySpy implements DonationRepository {
 	/**
 	 * @return Donation[]
 	 */
-	public function getDonations(): array {
+	public function getStoreDonationCalls(): array {
 		return $this->donations;
 	}
 
