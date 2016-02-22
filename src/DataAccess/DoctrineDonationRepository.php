@@ -16,6 +16,7 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Repositories\StoreDonationException;
+use WMDE\Fundraising\Store\TransferCodeGenerator;
 
 /**
  * @license GNU GPL v2+
@@ -51,7 +52,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		$doctrineDonation->setPaymentType( $donation->getPaymentType() );
 
 		if ( $donation->getPaymentType() === PaymentType::BANK_TRANSFER ) {
-			$doctrineDonation->setTransferCode( $donation->generateTransferCode() );
+			$doctrineDonation->setTransferCode( ( new TransferCodeGenerator() )->generateTransferCode() );
 		}
 
 		if ( $donation->getPersonalInfo() === null ) {
