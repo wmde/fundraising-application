@@ -55,12 +55,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_donationGetsPersisted() {
-		/**
-		 * @var FunFunFactory
-		 */
-		$factory = null;
-
-		$this->createEnvironment([], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setMessenger( new Messenger(
 				Swift_NullTransport::newInstance(),
 				$factory->getOperatorAddress()
@@ -112,9 +107,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			// TODO: another test for bank transfer
 			#$this->assertSame( '', $donation->getTransferCode() );
 		} );
-
-
-
 	}
 
 	private function getDonationFromDatabase( FunFunFactory $factory ): Donation {
