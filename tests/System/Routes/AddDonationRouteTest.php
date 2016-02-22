@@ -7,6 +7,8 @@ namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
+use WMDE\Fundraising\Frontend\Messenger;
+use Swift_NullTransport;
 
 /**
  * @licence GNU GPL v2+
@@ -44,6 +46,13 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		'skin' => 'default',
 	];
 
+	public function setUp() {
+		if ( !function_exists( 'lut_init' ) ) {
+			$this->markTestSkipped( 'The konto_check needs to be installed!' );
+		}
+		parent::setUp();
+	}
+
 	public function testGivenValidRequest_donationGetsPersisted() {
 		/**
 		 * @var FunFunFactory
@@ -53,6 +62,10 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		// TODO: refactor once https://github.com/wmde/FundraisingFrontend/commit/7df7c763fb1c6 is merged
 		$client = $this->createClient( [], function( FunFunFactory $f ) use ( &$factory ) {
 			$factory = $f;
+			$factory->setMessenger( new Messenger(
+				Swift_NullTransport::newInstance(),
+				$factory->getOperatorAddress()
+			) );
 		} );
 
 		$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
