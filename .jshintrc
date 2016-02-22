@@ -27,8 +27,7 @@
         "OO": true,
         "mwPerformance": true,
         "jQuery": true,
-        "QUnit": false,
-        "sinon": false
+        "QUnit": false
     }
 }
 

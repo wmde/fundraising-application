@@ -4,14 +4,14 @@ var jQuery = require( 'jquery' ),
 	objectAsssign = require( 'object-assign' ),
 
 	AmountValidator = {
-		amountCollector: null,
-		paymentType: null,
+		amountAccessor: null,
+		paymentTypeAccessor: null,
 		validationUrl: '',
 		postFunction: null,
 		validate: function () {
 			var data = {
-				amount: this.amountCollector.getAmount(),
-				paymentType: this.paymentType.val()
+				amount: this.amountAccessor.getValue(),
+				paymentType: this.paymentTypeAccessor.getValue()
 			};
 			return this.postFunction( this.validationUrl, data, null, 'json' );
 		}
@@ -19,16 +19,16 @@ var jQuery = require( 'jquery' ),
 
 	/**
 	 *
-	 * @param {AmountCollector} amountCollector
-	 * @param {jQuery} $paymentType
+	 * @param {*} amountAccessor object that supports the getValue interface
+	 * @param {*} paymentTypeAccessor object that supports the getValue interface
 	 * @param {string} validationUrl
 	 * @param {Function} postFunction jQuery.post function or equivalent
-	 * @returns {AmountValidator}
+	 * @return {AmountValidator}
 	 */
-	createAmountValidator = function ( amountCollector, $paymentType, validationUrl, postFunction ) {
+	createAmountValidator = function ( amountAccessor, paymentTypeAccessor, validationUrl, postFunction ) {
 		return objectAsssign( Object.create( AmountValidator ), {
-			amountCollector: amountCollector,
-			paymentType: $paymentType,
+			amountAccessor: amountAccessor,
+			paymentTypeAccessor: paymentTypeAccessor,
 			validationUrl: validationUrl,
 			postFunction: postFunction || jQuery.post
 		} );
