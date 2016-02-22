@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
-use WMDE\Fundraising\Entities\Donation as DoctineDonation;
+use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\StoreDonationException;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
@@ -41,10 +41,10 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$this->assertSame( $donation->getPersonalInfo()->getEmailAddress(), $doctrineDonation->getEmail() );
 	}
 
-	private function getDonationFromDatabase(): DoctineDonation {
-		$donationRepo = $this->entityManager->getRepository( DoctineDonation::class );
+	private function getDonationFromDatabase(): DoctrineDonation {
+		$donationRepo = $this->entityManager->getRepository( DoctrineDonation::class );
 		$donation = $donationRepo->find( 1 );
-		$this->assertInstanceOf( DoctineDonation::class, $donation );
+		$this->assertInstanceOf( DoctrineDonation::class, $donation );
 		return $donation;
 	}
 
@@ -72,6 +72,35 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 		$this->expectException( StoreDonationException::class );
 		$repository->storeDonation( $donation );
+	}
+
+	public function testGivenUniqueBankTransferCode_itGetsPersisted() {
+		$donation = ValidDonation::newBankTransferDonation( 'testcode' );
+		( new DoctrineDonationRepository( $this->entityManager ) )->storeDonation( $donation );
+		$doctrineDonation = $this->getDonationFromDatabase();
+
+		$this->assertSame( 'testcode', $doctrineDonation->getTransferCode() );
+	}
+
+	public function testGivenAmbiguousBankTransferCode_newCodeGetsGenerated() {
+		$donation = ValidDonation::newBankTransferDonation( 'testcode' );
+		( new DoctrineDonationRepository( $this->entityManager ) )->storeDonation( $donation );
+		( new DoctrineDonationRepository( $this->entityManager ) )->storeDonation( $donation );
+
+		$donations = $this->getDonationsFromDatabase();
+
+		$this->assertSame( 'testcode', $donations[0]->getTransferCode() );
+		$this->assertNotSame( 'testcode', $donations[1]->getTransferCode() );
+	}
+
+	/**
+	 * @return DoctrineDonation[]
+	 */
+	private function getDonationsFromDatabase(): array {
+		$donationRepo = $this->entityManager->getRepository( DoctrineDonation::class );
+		$donations = $donationRepo->findAll();
+		$this->assertContainsOnlyInstancesOf( DoctrineDonation::class, $donations );
+		return $donations;
 	}
 
 }

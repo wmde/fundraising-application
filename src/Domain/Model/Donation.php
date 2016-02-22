@@ -31,6 +31,7 @@ class Donation {
 	private $amount;
 	private $interval = 0;
 	private $paymentType;
+	private $bankTransferCode = '';
 
 	private $optsIntoNewsletter;
 
@@ -84,6 +85,15 @@ class Donation {
 	public function setPaymentType( string $paymentType ) {
 		$this->assertIsWritable();
 		$this->paymentType = $paymentType;
+	}
+
+	public function getBankTransferCode(): string {
+		return $this->bankTransferCode;
+	}
+
+	public function setBankTransferCode( string $bankTransferCode ) {
+		$this->assertIsWritable();
+		$this->bankTransferCode = $bankTransferCode;
 	}
 
 	/**
@@ -145,23 +155,6 @@ class Donation {
 		}
 
 		return 'Anonym';
-	}
-
-	public function generateTransferCode() {
-		$transferCode = 'W-Q-';
-
-		for ( $i = 0; $i < 6; ++$i ) {
-			$transferCode .= $this->getRandomCharacter();
-		}
-		$transferCode .= '-' . $this->getRandomCharacter();
-
-		return $transferCode;
-	}
-
-	private function getRandomCharacter() {
-		$charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
-		return $charSet[random_int( 0, strlen( $charSet ) - 1 )];
 	}
 
 }

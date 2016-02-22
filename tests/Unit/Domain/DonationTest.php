@@ -14,11 +14,6 @@ use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
  */
 class DonationTest extends \PHPUnit_Framework_TestCase {
 
-	public function testGenerateBankTransferCode_matchesRegex() {
-		$donation = new Donation();
-		$this->assertRegExp( '/W-Q-[A-Z]{6}-[A-Z]/', $donation->generateTransferCode() );
-	}
-
 	public function testPersonalInfoNotSet_determineFullNameReturnsAnonymous() {
 		$donation = new Donation();
 		$this->assertSame( 'Anonym', $donation->determineFullName() );
