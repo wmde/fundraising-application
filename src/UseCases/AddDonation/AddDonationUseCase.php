@@ -14,6 +14,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
 use WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer;
+use WMDE\Fundraising\Frontend\Presentation\GreetingGenerator;
 use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
 use WMDE\Fundraising\Frontend\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Validation\DonationValidator;
@@ -69,9 +70,14 @@ class AddDonationUseCase {
 			$donation->setBankTransferCode( $this->transferCodeGenerator->generateTransferCode() );
 		}
 
-		$this->donationRepository->storeDonation( $donation );
+		$needsModeration = $this->donationValidator->needsModeration( $donation );
+		if ( $needsModeration ) {
+			$donation->setStatus( Donation::STATUS_MODERATION );
+		}
 
-		$this->sendDonationConfirmationEmail( $donation );
+		$donationId = $this->donationRepository->storeDonation( $donation );
+
+		$this->sendDonationConfirmationEmail( $donationId, $donation, $needsModeration );
 
 		return ValidationResponse::newSuccessResponse();
 	}
@@ -120,11 +126,32 @@ class AddDonationUseCase {
 		return $trackingInfo->freeze()->assertNoNullFields();
 	}
 
-	private function sendDonationConfirmationEmail( Donation $donation ) {
+	private function sendDonationConfirmationEmail( int $donationId, Donation $donation, bool $needsModeration ) {
 		if ( $donation->getPersonalInfo() !== null ) {
 			$this->mailer->sendMail(
 				new MailAddress( $donation->getPersonalInfo()->getEmailAddress() ),
-				[] // TODO
+				[
+					'recipient' => [
+						'salutation' => ( new GreetingGenerator() )->createGreeting(
+							$donation->getPersonalInfo()->getPersonName()->getLastName(),
+							$donation->getPersonalInfo()->getPersonName()->getSalutation(),
+							$donation->getPersonalInfo()->getPersonName()->getTitle()
+						)
+					],
+					'donation' => [
+						'id' => $donationId,
+						'formattedAmount' => ( new \NumberFormatter( 'de_DE', \NumberFormatter::CURRENCY ) )->format(
+							$donation->getAmount()
+						),
+						'needsModeration' => $needsModeration,
+						'paymentType' => [
+							'code' => $donation->getPaymentType(),
+							'text' => 'Überweisung' // TODO: use twig translator extension
+						],
+						'bankTransferCode' => 'W-Q-ABCDEF-G', // $donation->getBankTransferCode(), should this be fetched from entity?
+						'recurringText' => 'Immer und immer wieder. Bis ans Ende Ihrer Tage.' // TODO: generate text
+					]
+				]
 			);
 		}
 	}

@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\AddDonation;
 use PHPUnit_Framework_MockObject_MockObject;
 use WMDE\Fundraising\Frontend\BankDataConverter;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
+use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
@@ -50,7 +51,10 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	private function newRepository(): DonationRepository {
-		return $this->getMock( DonationRepository::class );
+		$donationRepositoryMock = $this->getMock( DonationRepository::class );
+		$donationRepositoryMock->method( 'storeDonation' )
+			->willReturn( 1234 );
+		return $donationRepositoryMock;
 	}
 
 	public function testValidationFails_responseObjectContainsViolations() {
@@ -143,6 +147,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 		$request = $this->newMinimumDonationRequest();
 		$personalInfo = new PersonalInfo();
+		$personalInfo->setPersonName( PersonName::newPrivatePersonName() );
 		$personalInfo->setEmailAddress( 'foo@bar.baz' );
 		$request->setPersonalInfo( $personalInfo );
 
