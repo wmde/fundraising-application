@@ -11,7 +11,10 @@ namespace WMDE\Fundraising\Frontend\UseCases\CancelDonation;
 class CancelDonationUseCase {
 
 	public function cancelDonation( CancelDonationRequest $cancellationRequest ) {
-
+		// TODO: update donation status
+		// TODO: add log message to spenden.data['log']
+		// TODO: reset spenden_stamp in cookie
+		// TODO: send cancellation confirmation email
 	}
 
 }
