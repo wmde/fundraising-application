@@ -286,11 +286,18 @@
 
         <script>
             $(function(){
+
                 var FP = WMDEFR.FormPages,
-                        // TODO do proper validation or use premade validation class
-                    validateFirstPage = function() { return { status: 'OK' }; },
+                    amountValidator = WMDEFR.FormValidation.createAmountValidator(
+                            WMDEFR.FormData.createMultipleValueAccessor(
+                                    WMDEFR.FormData.createTextValueAccessor( $( '#betrag' ) ),
+                                    WMDEFR.FormData.createRadioValueAccessor( $( 'input[name=betrag_auswahl]' ) )
+                            ),
+                            WMDEFR.FormData.createRadioValueAccessor( $( 'input[name=zahlweise]' ) ),
+                            '{$ basepath $}/validate-amount'
+                    ),
                     frm = FP.createFormwithPages( [
-                  FP.createFormPage( $( "#donation-periode,#donation-amount,#donation-payment,#donation-submit1" ), validateFirstPage ),
+                  FP.createFormPage( $( "#donation-periode,#donation-amount,#donation-payment,#donation-submit1" ), amountValidator.validate ),
                   FP.createFormPage( $( "#donation-submit2" ) )
                 ] );
                 $('#donation-submit1 button' ).click( function() { frm.nextPage(); } );

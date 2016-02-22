@@ -58,6 +58,19 @@ test( 'Form page with validation function returns promise with validation result
 	} );
 } );
 
+test( 'Form page validator accepts Promise as validation result.', function ( t ) {
+	var page = formPages.createFormPage( '#dummy', function () {
+		return new Promise( function ( resolve ) {
+			resolve( 'validation ok' );
+		} );
+	} );
+
+	t.plan( 1 );
+	Promise.resolve( page.validate() ).then( function ( validationResult ) {
+		t.equals( validationResult, 'validation ok', 'validation result must me returned' );
+	} );
+} );
+
 test( 'nextPage switches to next page when validation status is ok', function ( t ) {
 
 	var firstPage = Object.create( pageSpy ),

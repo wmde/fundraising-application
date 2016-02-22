@@ -40,7 +40,6 @@ test( 'TextValueAccessor returns value', function ( t ) {
 	} );
 } );
 
-
 test( 'MultipleValueAccessor returns first truthy value', function ( t ) {
 	var getValStub = function ( returnValue ) {
 		return { getValue: function () { return returnValue; } };
