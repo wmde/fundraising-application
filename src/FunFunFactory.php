@@ -19,6 +19,7 @@ use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\BufferHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use NumberFormatter;
 use Psr\Log\LoggerInterface;
 use Swift_MailTransport;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -610,7 +611,7 @@ class FunFunFactory {
 		return $this->pimple['donation_repository'];
 	}
 
-	private function newAmountValidator(): AmountValidator {
+	public function newAmountValidator(): AmountValidator {
 		return new AmountValidator(
 			0.01,
 			[
@@ -618,6 +619,10 @@ class FunFunFactory {
 				PaymentType::PAYPAL => 1,
 			]
 		);
+	}
+
+	public function newDecimalNumberFormatter(): NumberFormatter {
+		return new NumberFormatter( $this->config['locale'], NumberFormatter::DECIMAL );
 	}
 
 	public function newAddCommentUseCase(): AddCommentUseCase {
