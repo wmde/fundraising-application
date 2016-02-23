@@ -157,8 +157,9 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$this->assertSame( 'blue', $data['color'] );
 			$this->assertSame( 'default', $data['skin'] );
 			$this->assertSame( 'en.wikipedia.org', $data['source'] );
-			$this->assertSame( 'Z', $donation->getStatus() );
 			$this->assertSame( true, $donation->getInfo() );
+
+			$this->assertSame( 'Z', $donation->getStatus() );
 			$this->assertRegExp( '/W-Q-[A-Z]{6}-[A-Z]/', $donation->getTransferCode() );
 		} );
 	}
