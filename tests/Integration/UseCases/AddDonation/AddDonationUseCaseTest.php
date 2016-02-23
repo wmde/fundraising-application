@@ -7,6 +7,7 @@ use PHPUnit_Framework_MockObject_MockObject;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
+use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\MailAddress;
 use WMDE\Fundraising\Frontend\ReferrerGeneralizer;
 use WMDE\Fundraising\Frontend\TemplateBasedMailer;
@@ -30,7 +31,8 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 			$this->newRepository(),
 			$this->getSucceedingValidatorMock(),
 			new ReferrerGeneralizer( 'http://foo.bar', [] ),
-			$this->newMailer()
+			$this->newMailer(),
+			$this->newTransferCodeGenerator()
 		);
 
 		$this->assertTrue( $useCase->addDonation( $this->newMinimumDonationRequest() )->isSuccessful() );
@@ -54,7 +56,8 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 			$this->newRepository(),
 			$this->getFailingValidatorMock( new ConstraintViolation( 'foo', 'bar' ) ),
 			new ReferrerGeneralizer( 'http://foo.bar', [] ),
-			$this->newMailer()
+			$this->newMailer(),
+			$this->newTransferCodeGenerator()
 		);
 
 		$result = $useCase->addDonation( $this->newMinimumDonationRequest() );
@@ -96,10 +99,15 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 			$this->newRepository(),
 			$this->getFailingValidatorMock( new ConstraintViolation( 'foo', 'bar' ) ),
 			new ReferrerGeneralizer( 'http://foo.bar', [] ),
-			$mailer
+			$mailer,
+			$this->newTransferCodeGenerator()
 		);
 
 		$useCase->addDonation( $this->newMinimumDonationRequest() );
+	}
+
+	private function newTransferCodeGenerator(): TransferCodeGenerator {
+		return $this->getMock( TransferCodeGenerator::class );
 	}
 
 
@@ -121,7 +129,8 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 			$this->newRepository(),
 			$this->getSucceedingValidatorMock(),
 			new ReferrerGeneralizer( 'http://foo.bar', [] ),
-			$mailer
+			$mailer,
+			$this->newTransferCodeGenerator()
 		);
 
 		$request = $this->newMinimumDonationRequest();

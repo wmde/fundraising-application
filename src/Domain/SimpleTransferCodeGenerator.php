@@ -1,14 +1,16 @@
 <?php
 
-namespace WMDE\Fundraising\Frontend;
+declare(strict_types = 1);
+
+namespace WMDE\Fundraising\Frontend\Domain;
 
 /**
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class TransferCodeGenerator {
+class SimpleTransferCodeGenerator implements TransferCodeGenerator {
 
-	public function generateTransferCode() {
+	public function generateTransferCode(): string {
 		$transferCode = 'W-Q-';
 
 		for ( $i = 0; $i < 6; ++$i ) {
@@ -19,7 +21,7 @@ class TransferCodeGenerator {
 		return $transferCode;
 	}
 
-	private function getRandomCharacter() {
+	private function getRandomCharacter(): string {
 		$charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 		return $charSet[random_int( 0, strlen( $charSet ) - 1 )];
