@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace WMDE\Fundraising\Store\Tests;
 
 use WMDE\Fundraising\Frontend\Domain\SimpleTransferCodeGenerator;
