@@ -24,6 +24,7 @@ use Psr\Log\LoggerInterface;
 use Swift_MailTransport;
 use Symfony\Component\Translation\TranslatorInterface;
 use Twig_Environment;
+use Twig_Extensions_Extension_Intl;
 use WMDE\Fundraising\Frontend\DataAccess\DbalCommentRepository;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
 use WMDE\Fundraising\Frontend\DataAccess\InternetDomainNameValidator;
@@ -217,7 +218,8 @@ class FunFunFactory {
 				$twigFactory->newWikiPageLoader( $this->newWikiContentProvider() ),
 			] );
 			$extensions = [
-				$twigFactory->newTranslationExtension( $this->getTranslator() )
+				$twigFactory->newTranslationExtension( $this->getTranslator() ),
+				new Twig_Extensions_Extension_Intl()
 			];
 			return $twigFactory->create( $loaders, $extensions );
 		} );

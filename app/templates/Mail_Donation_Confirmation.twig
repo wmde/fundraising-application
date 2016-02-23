@@ -1,3 +1,4 @@
+{% set formattedAmount = donation.amount|localizedcurrency('EUR', 'de_DE') %}
 {$ recipient.salutation $}
 
 wie uns liegt Ihnen Wikipedia am Herzen. Sie engagieren sich mit einer
@@ -5,24 +6,24 @@ Spende, damit Wikipedia weiterhin besteht und Millionen Menschen auch in Zukunft
 freien Zugang zu Wissen haben. Dafür danke ich Ihnen herzlich.
 
 {% if donation.needsModeration %}
-Ihre Spende in Höhe von {$ donation.formattedAmount $} wurde zur Überprüfung vorgemerkt.
+Ihre Spende in Höhe von {$ formattedAmount $} wurde zur Überprüfung vorgemerkt.
 Bevor wir Ihre Spende abbuchen, werden wir Sie noch einmal kontaktieren.
 
 {% else %}
 {% if donation.paymentType.code == 'BEZ' %}
 In Kürze erhalten Sie eine Vorankündigung Ihres SEPA-Lastschriftmandats. Dort ist auch Ihre Mandatsreferenznummer enthalten.
-Ihre Spende in Höhe von {$ donation.formattedAmount $} werden wir im Anschluss von dem von Ihnen angegebenen Konto abbuchen.
+Ihre Spende in Höhe von {$ formattedAmount $} werden wir im Anschluss von dem von Ihnen angegebenen Konto abbuchen.
 {$ donation.recurringText $}
 
 {% elseif donation.paymentType.code == 'PPL' or donation.paymentType.code == 'MCP' %}
-Ihre Spende in Höhe von {$ donation.formattedAmount $} wurde durch unseren Partner
+Ihre Spende in Höhe von {$ formattedAmount $} wurde durch unseren Partner
 {$ donation.paymentType.text $} gebucht. {$ donation.recurringText $}
 
 {% elseif donation.paymentType.code == 'UEB' %}
-Bitte überweisen Sie Ihre Spende über {$ donation.formattedAmount $} EUR wie folgt:
+Bitte überweisen Sie Ihre Spende über {$ formattedAmount $} EUR wie folgt:
 
 * Kontoinhaber: Wikimedia Foerdergesellschaft
-* Betrag: {$ donation.formattedAmount $}
+* Betrag: {$ formattedAmount $}
 * IBAN: DE33100205000001194700
 * BIC: BFSWDE33BER
 * Konto: 1194700

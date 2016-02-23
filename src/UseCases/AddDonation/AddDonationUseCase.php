@@ -140,15 +140,13 @@ class AddDonationUseCase {
 					],
 					'donation' => [
 						'id' => $donationId,
-						'formattedAmount' => ( new \NumberFormatter( 'de_DE', \NumberFormatter::CURRENCY ) )->format(
-							$donation->getAmount()
-						),
+						'amount' => $donation->getAmount(),
 						'needsModeration' => $needsModeration,
 						'paymentType' => [
 							'code' => $donation->getPaymentType(),
 							'text' => 'Überweisung' // TODO: use twig translator extension
 						],
-						'bankTransferCode' => 'W-Q-ABCDEF-G', // $donation->getBankTransferCode(), should this be fetched from entity?
+						'bankTransferCode' => $donation->getBankTransferCode(),
 						'recurringText' => 'Immer und immer wieder. Bis ans Ende Ihrer Tage.' // TODO: generate text
 					]
 				]
