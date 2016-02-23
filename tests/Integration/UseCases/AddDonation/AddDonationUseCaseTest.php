@@ -4,6 +4,7 @@
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\AddDonation;
 
 use PHPUnit_Framework_MockObject_MockObject;
+use WMDE\Fundraising\Frontend\BankDataConverter;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
@@ -32,7 +33,8 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 			$this->getSucceedingValidatorMock(),
 			new ReferrerGeneralizer( 'http://foo.bar', [] ),
 			$this->newMailer(),
-			$this->newTransferCodeGenerator()
+			$this->newTransferCodeGenerator(),
+			$this->newBankDataConverter()
 		);
 
 		$this->assertTrue( $useCase->addDonation( $this->newMinimumDonationRequest() )->isSuccessful() );
@@ -57,7 +59,8 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 			$this->getFailingValidatorMock( new ConstraintViolation( 'foo', 'bar' ) ),
 			new ReferrerGeneralizer( 'http://foo.bar', [] ),
 			$this->newMailer(),
-			$this->newTransferCodeGenerator()
+			$this->newTransferCodeGenerator(),
+			$this->newBankDataConverter()
 		);
 
 		$result = $useCase->addDonation( $this->newMinimumDonationRequest() );
@@ -100,7 +103,8 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 			$this->getFailingValidatorMock( new ConstraintViolation( 'foo', 'bar' ) ),
 			new ReferrerGeneralizer( 'http://foo.bar', [] ),
 			$mailer,
-			$this->newTransferCodeGenerator()
+			$this->newTransferCodeGenerator(),
+			$this->newBankDataConverter()
 		);
 
 		$useCase->addDonation( $this->newMinimumDonationRequest() );
@@ -110,6 +114,9 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		return $this->getMock( TransferCodeGenerator::class );
 	}
 
+	private function newBankDataConverter(): BankDataConverter {
+		return $this->getMockBuilder( BankDataConverter::class )->disableOriginalConstructor()->getMock();
+	}
 
 	public function testGivenValidRequest_confirmationEmailIsSend() {
 		$mailer = $this->newMailer();
@@ -130,7 +137,8 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 			$this->getSucceedingValidatorMock(),
 			new ReferrerGeneralizer( 'http://foo.bar', [] ),
 			$mailer,
-			$this->newTransferCodeGenerator()
+			$this->newTransferCodeGenerator(),
+			$this->newBankDataConverter()
 		);
 
 		$request = $this->newMinimumDonationRequest();

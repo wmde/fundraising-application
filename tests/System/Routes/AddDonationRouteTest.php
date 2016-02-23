@@ -191,6 +191,52 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		];
 	}
 
+	public function testGivenComplementableBankData_donationStillGetsPersisted() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setMessenger( new Messenger(
+				Swift_NullTransport::newInstance(),
+				$factory->getOperatorAddress()
+			) );
+
+			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
+			$client->followRedirects( false );
+
+			$client->request(
+				'POST',
+				'/donation/add',
+				$this->newComplementableFormInput()
+			);
+
+			$donation = $this->getDonationFromDatabase( $factory );
+
+			$data = unserialize( base64_decode( $donation->getData() ) );
+			$this->assertSame( 'DE12500105170648489890', $data['iban'] );
+			$this->assertSame( 'INGDDEFFXXX', $data['bic'] );
+			$this->assertSame( '0648489890', $data['konto'] );
+			$this->assertSame( '50010517', $data['blz'] );
+			$this->assertSame( 'ING-DiBa', $data['bankname'] );
+		} );
+	}
+
+	private function newComplementableFormInput() {
+		return [
+			'betrag' => '5,51',
+			'zahlweise' => 'BEZ',
+			'periode' => 0,
+			'iban' => 'DE12500105170648489890',
+			'adresstyp' => 'person',
+			'anrede' => 'Frau',
+			'titel' => 'Prof. Dr.',
+			'vorname' => 'Karla',
+			'nachname' => 'Kennichnich',
+			'strasse' => 'Lehmgasse 12',
+			'plz' => '12345',
+			'ort' => 'Einort',
+			'country' => 'DE',
+			'email' => 'karla@kennichnich.de',
+		];
+	}
+
 	private function getDonationFromDatabase( FunFunFactory $factory ): Donation {
 		$donationRepo = $factory->getEntityManager()->getRepository( Donation::class );
 		$donation = $donationRepo->find( 1 );
