@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace WMDE\Fundraising\Frontend\UseCases\AddDonation;
 
+use WMDE\Fundraising\Frontend\BankDataConverter;
 use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Model\TrackingInfo;
@@ -29,16 +30,18 @@ class AddDonationUseCase {
 	private $referrerGeneralizer;
 	private $mailer;
 	private $transferCodeGenerator;
+	private $bankDataConverter;
 
 	public function __construct( DonationRepository $donationRepository, DonationValidator $donationValidator,
 								 ReferrerGeneralizer $referrerGeneralizer, TemplateBasedMailer $mailer,
-								 TransferCodeGenerator $transferCodeGenerator ) {
+								 TransferCodeGenerator $transferCodeGenerator, BankDataConverter $bankDataConverter ) {
 
 		$this->donationRepository = $donationRepository;
 		$this->donationValidator = $donationValidator;
 		$this->referrerGeneralizer = $referrerGeneralizer;
 		$this->mailer = $mailer;
 		$this->transferCodeGenerator = $transferCodeGenerator;
+		$this->bankDataConverter = $bankDataConverter;
 	}
 
 	public function addDonation( AddDonationRequest $donationRequest ) {
@@ -52,7 +55,6 @@ class AddDonationUseCase {
 
 		$donation->setTrackingInfo( $this->newTrackingInfoFromRequest( $donationRequest ) );
 
-		// TODO: try to complement bank data if some fields are missing
 		if ( $donationRequest->getPaymentType() === PaymentType::DIRECT_DEBIT ) {
 			$donation->setBankData( $this->newBankDataFromRequest( $donationRequest ) );
 		}
@@ -83,6 +85,24 @@ class AddDonationUseCase {
 			->setBankCode( $request->getBankCode() )
 			->setBankName( $request->getBankName() );
 
+		if ( $bankData->hasIban() && !$bankData->hasCompleteLegacyBankData() ) {
+			$bankData = $this->newBankDataFromIban( $bankData->getIban() );
+		}
+
+		if ( $bankData->hasCompleteLegacyBankData() && !$bankData->hasIban() ) {
+			$bankData = $this->newBankDataFromAccountAndBankCode( $bankData->getAccount(), $bankData->getBankCode() );
+		}
+
+		return $bankData->freeze()->assertNoNullFields();
+	}
+
+	private function newBankDataFromIban( Iban $iban ): BankData {
+		$bankData = $this->bankDataConverter->getBankDataFromIban( $iban );
+		return $bankData->freeze()->assertNoNullFields();
+	}
+
+	private function newBankDataFromAccountAndBankCode( string $account, string $bankCode ): BankData {
+		$bankData = $this->bankDataConverter->getBankDataFromAccountData( $account, $bankCode );
 		return $bankData->freeze()->assertNoNullFields();
 	}
 

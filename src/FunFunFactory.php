@@ -578,7 +578,8 @@ class FunFunFactory {
 			$this->newDonationValidator(),
 			$this->newReferrerGeneralizer(),
 			$this->newAddDonationMailer(),
-			$this->newBankTransferCodeGenerator()
+			$this->newBankTransferCodeGenerator(),
+			$this->newBankDataConverter()
 		);
 	}
 
