@@ -141,13 +141,10 @@ class AddDonationUseCase {
 					'donation' => [
 						'id' => $donationId,
 						'amount' => $donation->getAmount(),
+						'interval' => $donation->getInterval(),
 						'needsModeration' => $needsModeration,
-						'paymentType' => [
-							'code' => $donation->getPaymentType(),
-							'text' => 'Überweisung' // TODO: use twig translator extension
-						],
+						'paymentType' => $donation->getPaymentType(),
 						'bankTransferCode' => $donation->getBankTransferCode(),
-						'recurringText' => 'Immer und immer wieder. Bis ans Ende Ihrer Tage.' // TODO: generate text
 					]
 				]
 			);

@@ -191,6 +191,12 @@ class FunFunFactory {
 			$locale = $this->config['locale'];
 			$translator = $translationFactory->create( $loaders, $locale );
 			$translator->addResource( 'json', __DIR__ . '/../app/translations/messages.' . $locale . '.json', $locale );
+			$translator->addResource(
+				'json',
+				__DIR__ . '/../app/translations/paymentTypes.' . $locale . '.json',
+				$locale,
+				'paymentTypes'
+			);
 			$translator->addResource( 'json', __DIR__ . '/../app/translations/validations.' . $locale . '.json', $locale,
 				'validations' );
 			return $translator;
@@ -612,13 +618,13 @@ class FunFunFactory {
 			$this->getMessenger(),
 			new TwigTemplate(
 				$this->getTwig(),
-				'Mail_Donation_Confirmation.twig', // TODO
+				'Mail_Donation_Confirmation.twig', // TODO: ongoing unification of different templates
 				[
 					'basepath' => $this->config['web-basepath'],
 					'greeting_generator' => $this->getGreetingGenerator()
 				]
 			),
-			$this->getTranslator()->trans( 'Foo bar' ) // TODO
+			$this->getTranslator()->trans( 'mail_subject_confirm_donation' )
 		);
 	}
 

@@ -10,16 +10,20 @@ Ihre Spende in Höhe von {$ formattedAmount $} wurde zur Überprüfung vorgemerk
 Bevor wir Ihre Spende abbuchen, werden wir Sie noch einmal kontaktieren.
 
 {% else %}
-{% if donation.paymentType.code == 'BEZ' %}
+{% if donation.paymentType == 'BEZ' %}
 In Kürze erhalten Sie eine Vorankündigung Ihres SEPA-Lastschriftmandats. Dort ist auch Ihre Mandatsreferenznummer enthalten.
 Ihre Spende in Höhe von {$ formattedAmount $} werden wir im Anschluss von dem von Ihnen angegebenen Konto abbuchen.
-{$ donation.recurringText $}
+{% if donation.interval > 0 %}
+{$ 'recurringDonation'|transchoice( donation.interval, { '%interval%': donation.interval } ) $}
+{% endif %}
 
-{% elseif donation.paymentType.code == 'PPL' or donation.paymentType.code == 'MCP' %}
-Ihre Spende in Höhe von {$ formattedAmount $} wurde durch unseren Partner
-{$ donation.paymentType.text $} gebucht. {$ donation.recurringText $}
+{% elseif donation.paymentType == 'PPL' or donation.paymentType == 'MCP' %}
+Ihre Spende in Höhe von {$ formattedAmount $} wurde durch unseren Partner {$ donation.paymentType|trans({}, 'paymentTypes') $} gebucht.
+{% if donation.interval > 0 %}
+{$ 'recurringDonation'|transchoice( donation.interval, { '%interval%': donation.interval } ) $}
+{% endif %}
 
-{% elseif donation.paymentType.code == 'UEB' %}
+{% elseif donation.paymentType == 'UEB' %}
 Bitte überweisen Sie Ihre Spende über {$ formattedAmount $} EUR wie folgt:
 
 * Kontoinhaber: Wikimedia Foerdergesellschaft
@@ -35,7 +39,7 @@ Bitte überweisen Sie Ihre Spende über {$ formattedAmount $} EUR wie folgt:
 {% endif %}
 Bitte geben Sie bei Rückfragen Ihre Spendennummer an: {$ donation.id $}.
 
-{% if donation.paymentType.code == 'UEB' %}
+{% if donation.paymentType == 'UEB' %}
 Wenn Sie Wikipedia und Freies Wissen regelmäßig unterstützen möchten, richten Sie bitte einen Dauerauftrag ein.
 
 {% endif %}
