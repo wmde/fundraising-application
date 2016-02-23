@@ -49,10 +49,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		$doctrineDonation->setPeriod( $donation->getInterval() );
 
 		$doctrineDonation->setPaymentType( $donation->getPaymentType() );
-
-		if ( $donation->getPaymentType() === PaymentType::BANK_TRANSFER ) {
-			$doctrineDonation->setTransferCode( $donation->generateTransferCode() );
-		}
+		$doctrineDonation->setTransferCode( $donation->getBankTransferCode() );
 
 		if ( $donation->getPersonalInfo() === null ) {
 			$doctrineDonation->setName( 'anonym' );

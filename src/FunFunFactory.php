@@ -26,13 +26,16 @@ use Twig_Environment;
 use WMDE\Fundraising\Frontend\DataAccess\DbalCommentRepository;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
 use WMDE\Fundraising\Frontend\DataAccess\InternetDomainNameValidator;
+use WMDE\Fundraising\Frontend\DataAccess\UniqueTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\Repositories\CommentFinder;
 use WMDE\Fundraising\Frontend\DataAccess\DbalSubscriptionRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Honorifics;
 use WMDE\Fundraising\Frontend\Domain\Repositories\CommentRepository;
+use WMDE\Fundraising\Frontend\Domain\SimpleTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\SubscriptionRepository;
+use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListJsonPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListRssPresenter;
@@ -574,7 +577,15 @@ class FunFunFactory {
 			$this->getDonationRepository(),
 			$this->newDonationValidator(),
 			$this->newReferrerGeneralizer(),
-			$this->newAddDonationMailer()
+			$this->newAddDonationMailer(),
+			$this->newBankTransferCodeGenerator()
+		);
+	}
+
+	private function newBankTransferCodeGenerator(): TransferCodeGenerator {
+		return new UniqueTransferCodeGenerator(
+			new SimpleTransferCodeGenerator(),
+			$this->getEntityManager()
 		);
 	}
 

@@ -26,11 +26,18 @@ class ValidDonation {
 		return ( new self() )->createDonation( $amount );
 	}
 
-	private function createDonation( float $amount ): Donation {
+	public static function newBankTransferDonation( string $transferCode ): Donation {
+		return ( new self() )->createDonation( 42, PaymentType::BANK_TRANSFER, $transferCode );
+	}
+
+	private function createDonation( float $amount,
+									 string $paymentType = PaymentType::DIRECT_DEBIT,
+									 string $transferCode = '' ): Donation {
 		$donation = new Donation();
 
 		$donation->setAmount( $amount );
-		$donation->setPaymentType( PaymentType::DIRECT_DEBIT );
+		$donation->setPaymentType( $paymentType );
+		$donation->setBankTransferCode( $transferCode );
 		$donation->setStatus( Donation::STATUS_NEW );
 
 		$donation->setOptsIntoNewsletter( true );
