@@ -18,9 +18,9 @@
 
                 <div class="box-header">
                     <ul class="step-list horizontal clearfix">
-                        <li class="first active">Mein Betrag</li>
-                        <li>Meine Daten</li>
-                        <li class="last">Fertig!</li>
+                        <li id="highlight-payment" class="first">Mein Betrag</li>
+                        <li id="highlight-personalData">Meine Daten</li>
+                        <li id="highlight-finished" class="last">Fertig!</li>
                     </ul>
                 </div>
 
@@ -433,31 +433,6 @@
             </div>
         </div>
 
-        <script>
-            $(function(){
-
-                var FP = WMDEFR.FormPages,
-                    amountValidator = WMDEFR.FormValidation.createAmountValidator(
-                            WMDEFR.FormData.createMultipleValueAccessor(
-                                    WMDEFR.FormData.createTextValueAccessor( $( '#betrag' ) ),
-                                    WMDEFR.FormData.createRadioValueAccessor( $( 'input[name=betrag_auswahl]' ) )
-                            ),
-                            WMDEFR.FormData.createRadioValueAccessor( $( 'input[name=zahlweise]' ) ),
-                            '{$ basepath $}/validate-amount'
-                    ),
-                    // remove this when amount validation on the server side is merged
-                    fakeAmountValidator = function() {
-                        return { status: 'OK' };
-                    },
-                    frm = FP.createFormwithPages( [
-                  //FP.createFormPage( $( "#donation-periode,#donation-amount,#donation-payment,#donation-submit1" ), amountValidator.validate )
-                  FP.createFormPage( $( "#donation-periode,#donation-amount,#donation-payment,#donation-submit1" ), fakeAmountValidator ),
-                  FP.createFormPage( $( "#personal-data,#donation-submit2" ) )
-                ] );
-                $('#donation-submit1 button' ).click( function() { frm.nextPage(); } );
-            } );
-        </script>
-
         <div class="rtcol">
         </div>
     </section>
@@ -465,6 +440,60 @@
     <input type="hidden" id="interval-hidden" name="periode">
     <input type="hidden" name="form" value="10h16_Form2_Ticker_Intrvar">
 </form>
+
+<script>
+    // Initialize the form
+    $(function(){
+
+        var formVisibility = WMDEFR.View.createFormPageVisibilityHandler( {
+                    payment: $( "#donation-periode,#donation-amount,#donation-payment,#donation-submit1" ),
+                    personalData: $( "#personal-data,#donation-submit2" )
+            } ),
+            formHighlight = WMDEFR.View.createFormPageHighlightHandler( $( 'ul.step-list li' ) ),
+            buttonsEnable = WMDEFR.View.createEnabledWhenValidHandler( $('#donation-submit1 button,#donation-submit2 button') ),
+            amountValidator = WMDEFR.FormValidation.createAmountValidator(
+                    WMDEFR.FormData.createMultipleValueAccessor(
+                            WMDEFR.FormData.createTextValueAccessor( $( '#betrag' ) ),
+                            WMDEFR.FormData.createRadioValueAccessor( $( 'input[name=betrag_auswahl]' ) )
+                    ),
+                    WMDEFR.FormData.createRadioValueAccessor( $( 'input[name=zahlweise]' ) ),
+                    '{$ basepath $}/validate-amount'
+            ),
+            // TODO remove this when amount validation on the server side is merged
+            fakeValidator = {
+                validate: function() {
+                    return new Promise( function ( resolve ) {
+                        resolve( { status: 'OK' } );
+                    } );
+                }
+            };
+
+        // Glue function for event handling
+        // TODO maybe make this an independent bindings layer?
+        WMDEFR.FormState.subscribe( function() {
+            var state = WMDEFR.FormState.getState();
+            // console.log( state );
+            formVisibility.update( state.formPagination );
+            formHighlight.update( state.formPagination );
+            buttonsEnable.update( state.validity );
+        } );
+
+        // Initialize pages
+        WMDEFR.FormState.dispatch( WMDEFR.Actions.addPage( 'payment' ) );
+        WMDEFR.FormState.dispatch( WMDEFR.Actions.addPage( 'personalData' ) );
+
+        // Add view events
+        $( '.amount-list input, .payment-type-list input' ).change( function( evt ) {
+            fakeValidator.validate().then( function( validationResult ) {
+                WMDEFR.FormState.dispatch( WMDEFR.Actions.storeValidationResult( validationResult.status === 'OK' ) );
+            } );
+        } );
+
+        $('#donation-submit1 button' ).click( function() {
+            WMDEFR.FormState.dispatch( WMDEFR.Actions.nextPage() );
+        } );
+    } );
+</script>
 
 <!-- TODO
 <div class="wlightbox-contents">

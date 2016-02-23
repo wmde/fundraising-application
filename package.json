@@ -30,6 +30,7 @@
   "devDependencies": {
     "browserify": "^13.0.0",
     "browserify-shim": "^3.8.12",
+    "deep-freeze": "0.0.1",
     "jquery": "^2.2.0",
     "jscs": "^2.10.1",
     "jsdom": "^8.0.4",
@@ -41,7 +42,8 @@
   },
   "dependencies": {
     "object-assign": "^4.0.1",
-    "promise": "^7.1.1"
+    "promise": "^7.1.1",
+    "redux": "^3.3.1"
   },
   "browserify": {
     "transform": [

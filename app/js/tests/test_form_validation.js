@@ -18,7 +18,7 @@ test( 'Validation sends values to server', function ( t ) {
 
 	validationResult = amountValidator.validate();
 
-	t.ok( postFunctionSpy.calledOnce );
+	t.ok( postFunctionSpy.calledOnce, 'data is sent once' );
 	callParameters = postFunctionSpy.getCall( 0 ).args;
 	t.equals( callParameters[ 0 ], 'http://spenden.wikimedia.org/validate-amount' );
 	t.deepEquals( callParameters[ 1 ], { amount: 23, paymentType: 'BEZ' } );
