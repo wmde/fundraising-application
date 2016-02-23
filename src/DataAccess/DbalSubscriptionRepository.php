@@ -7,8 +7,8 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use WMDE\Fundraising\Entities\Subscription;
-use WMDE\Fundraising\Frontend\Domain\SubscriptionRepositoryException;
-use WMDE\Fundraising\Frontend\Domain\SubscriptionRepository;
+use WMDE\Fundraising\Frontend\Domain\Repositories\SubscriptionRepositoryException;
+use WMDE\Fundraising\Frontend\Domain\Repositories\SubscriptionRepository;
 
 /**
  * @license GNU GPL v2+

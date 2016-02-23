@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
 use WMDE\Fundraising\Entities\Subscription;
-use WMDE\Fundraising\Frontend\Domain\SubscriptionRepository;
+use WMDE\Fundraising\Frontend\Domain\Repositories\SubscriptionRepository;
 
 /**
  * @licence GNU GPL v2+

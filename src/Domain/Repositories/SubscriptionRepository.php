@@ -1,7 +1,7 @@
 <?php
 
 
-namespace WMDE\Fundraising\Frontend\Domain;
+namespace WMDE\Fundraising\Frontend\Domain\Repositories;
 
 use WMDE\Fundraising\Entities\Subscription;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace WMDE\Fundraising\Frontend\Domain;
+namespace WMDE\Fundraising\Frontend\Domain\Repositories;
 
 /**
  * @license GNU GPL v2+
