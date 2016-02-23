@@ -5,8 +5,8 @@ declare(strict_types = 1);
 namespace WMDE\Fundraising\Frontend\Validation;
 
 use WMDE\Fundraising\Entities\Subscription;
-use WMDE\Fundraising\Frontend\Domain\SubscriptionRepository;
-use WMDE\Fundraising\Frontend\Domain\SubscriptionRepositoryException;
+use WMDE\Fundraising\Frontend\Domain\Repositories\SubscriptionRepository;
+use WMDE\Fundraising\Frontend\Domain\Repositories\SubscriptionRepositoryException;
 
 /**
  * @license GNU GPL v2+

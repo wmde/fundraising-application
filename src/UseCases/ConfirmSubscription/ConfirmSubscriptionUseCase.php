@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace WMDE\Fundraising\Frontend\UseCases\ConfirmSubscription;
 
 use WMDE\Fundraising\Entities\Subscription;
-use WMDE\Fundraising\Frontend\Domain\SubscriptionRepository;
+use WMDE\Fundraising\Frontend\Domain\Repositories\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\MailAddress;
 use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
 use WMDE\Fundraising\Frontend\TemplateBasedMailer;
