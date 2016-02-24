@@ -268,7 +268,6 @@ $(function() {
 
       });
 
-      $( ':radio' ).change();
     }
 
 
@@ -527,11 +526,6 @@ $(function() {
     });
   });
 
-  $('.amount-list').each(function(){
-    if ( $( ".amount-custom :text" ).val() !== "" ) {
-      $( ".amount-custom :text" ).trigger( "change" );
-    }
-
     /* periode-1 */
     $('#periode-1').change(function(e){
       if ( e.target.checked ) {
@@ -561,13 +555,7 @@ $(function() {
         }
       });
     });
-  });
 
-  /* remove dots from custom amount */
-  var customAmount = $( "#amount-8" ).val();
-  if ( customAmount && customAmount.indexOf(".") >= 0 ) {
-    $( "#amount-8" ).val( customAmount.replace( ".", "" ) );
-  }
 
   $( "#address-type-1" ).click( function() {
     clearFields( $( '#company-name' ) );
