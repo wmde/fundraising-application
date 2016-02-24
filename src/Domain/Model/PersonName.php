@@ -42,6 +42,7 @@ class PersonName {
 	}
 
 	public function setPersonType( string $personType ) {
+		$this->assertIsWritable();
 		$this->personType = $personType;
 	}
 
@@ -50,6 +51,7 @@ class PersonName {
 	}
 
 	public function setCompanyName( string $companyName ) {
+		$this->assertIsWritable();
 		$this->companyName = $companyName;
 	}
 
@@ -58,6 +60,7 @@ class PersonName {
 	}
 
 	public function setSalutation( string $salutation ) {
+		$this->assertIsWritable();
 		$this->salutation = $salutation;
 	}
 
@@ -66,6 +69,7 @@ class PersonName {
 	}
 
 	public function setTitle( string $title ) {
+		$this->assertIsWritable();
 		$this->title = $title;
 	}
 
@@ -74,6 +78,7 @@ class PersonName {
 	}
 
 	public function setFirstName( string $firstName ) {
+		$this->assertIsWritable();
 		$this->firstName = $firstName;
 	}
 
@@ -82,6 +87,7 @@ class PersonName {
 	}
 
 	public function setLastName( string $lastName ) {
+		$this->assertIsWritable();
 		$this->lastName = $lastName;
 	}
 
