@@ -98,6 +98,12 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals( $donation, $repository->getDonationById( $donation->getId() ) );
 	}
 
+	public function testWhenEntityDoesNotExist_getEntityReturnsNull() {
+		$repository = new DoctrineDonationRepository( $this->entityManager );
+
+		$this->assertNull( $repository->getDonationById( 42 ) );
+	}
+
 	// TODO: test not found
 	// TODO: test Docrtine exception
 

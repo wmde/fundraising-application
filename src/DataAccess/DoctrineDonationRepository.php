@@ -152,6 +152,10 @@ class DoctrineDonationRepository implements DonationRepository {
 		 */
 		$donation = $this->entityManager->find( DoctrineDonation::class, $id );
 
+		if ( $donation === null ) {
+			return null;
+		}
+
 		return $this->newDonationDomainObject( $donation );
 	}
 
