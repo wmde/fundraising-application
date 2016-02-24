@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\DataAccess;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
+use WMDE\Fundraising\Frontend\Domain\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
@@ -15,6 +16,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\TrackingInfo;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
 use WMDE\Fundraising\Frontend\Domain\Repositories\StoreDonationException;
 
 /**
@@ -31,15 +33,17 @@ class DoctrineDonationRepository implements DonationRepository {
 	}
 
 	public function storeDonation( Donation $donation ) {
+		$doctrineDonation = $this->newDonationEntity( $donation );
+
 		try {
-			$this->entityManager->persist( $this->newDonationEntity( $donation ) );
+			$this->entityManager->persist($doctrineDonation  );
 			$this->entityManager->flush();
 		}
 		catch ( ORMException $ex ) {
 			throw new StoreDonationException( $ex );
 		}
 
-		// TODO: return donation id
+		$donation->setId( $doctrineDonation->getId() );
 	}
 
 	private function newDonationEntity( Donation $donation ): DoctrineDonation {
@@ -135,5 +139,109 @@ class DoctrineDonationRepository implements DonationRepository {
 			'country' => $address->getCountryCode(),
 		];
 	}
+
+	/**
+	 * @param int $id
+	 *
+	 * @return Donation|null
+	 * @throws GetDonationException
+	 */
+	public function getDonationById( int $id ) {
+		/**
+		 * @var DoctrineDonation $donation
+		 */
+		$donation = $this->entityManager->find( DoctrineDonation::class, $id );
+
+		return $this->newDonationDomainObject( $donation );
+	}
+
+	private function newDonationDomainObject( DoctrineDonation $dd ): Donation {
+		$donation = new Donation();
+
+		$donation->setId( $dd->getId() );
+		$donation->setStatus( $dd->getStatus() );
+		$donation->setAmount( $dd->getAmount() );
+		$donation->setInterval( $dd->getPeriod() );
+		$donation->setPaymentType( $dd->getPaymentType() );
+		$donation->setBankTransferCode( $dd->getTransferCode() );
+		$donation->setOptsIntoNewsletter( $dd->getInfo() );
+
+		$donation->setPersonalInfo( $this->getPersonalInfoFromEntity( $dd ) );
+		$donation->setBankData( $this->getBankDataFromEntity( $dd ) );
+		$donation->setTrackingInfo( $this->getTrackingInfoFromEntity( $dd ) );
+
+		return $donation;
+	}
+
+	private function getPersonalInfoFromEntity( DoctrineDonation $dd ): PersonalInfo {
+		$personalInfo = new PersonalInfo();
+
+		$personalInfo->setEmailAddress( $dd->getEmail() );
+		$personalInfo->setPersonName( $this->getPersonNameFromEntity( $dd ) );
+		$personalInfo->setPhysicalAddress( $this->getPhysicalAddressFromEntity( $dd ) );
+		$personalInfo->setPhysicalAddress( $this->getPhysicalAddressFromEntity( $dd ) );
+		$personalInfo->setPhysicalAddress( $this->getPhysicalAddressFromEntity( $dd ) );
+
+		return $personalInfo->freeze()->assertNoNullFields();
+	}
+
+	private function getPersonNameFromEntity( DoctrineDonation $dd ): PersonName {
+		$data = $dd->getDecodedData();
+
+		$name = $data['adresstyp'] === PersonName::PERSON_COMPANY
+			? PersonName::newCompanyName() : PersonName::newPrivatePersonName();
+
+		$name->setSalutation( $data['anrede'] );
+		$name->setTitle( $data['titel'] );
+		$name->setFirstName( $data['vorname'] );
+		$name->setLastName( $data['nachname'] );
+		$name->setCompanyName( $data['firma'] );
+
+		return $name->freeze()->assertNoNullFields();
+	}
+
+	private function getPhysicalAddressFromEntity( DoctrineDonation $dd ): PhysicalAddress {
+		$data = $dd->getDecodedData();
+
+		$address = new PhysicalAddress();
+
+		$address->setStreetAddress( $data['strasse'] );
+		$address->setCity( $data['ort'] );
+		$address->setPostalCode( $data['plz'] );
+		$address->setCountryCode( $data['country'] );
+
+		return $address->freeze()->assertNoNullFields();
+	}
+
+	private function getBankDataFromEntity( DoctrineDonation $dd ): BankData {
+		$data = $dd->getDecodedData();
+
+		$bankData = new BankData();
+
+		$bankData->setIban( new Iban( $data['iban'] ) );
+		$bankData->setBic( $data['bic'] );
+		$bankData->setAccount( $data['konto'] );
+		$bankData->setBankCode( $data['blz'] );
+		$bankData->setBankName( $data['bankname'] );
+
+		return $bankData->freeze()->assertNoNullFields();
+	}
+
+	private function getTrackingInfoFromEntity( DoctrineDonation $dd ): TrackingInfo {
+		$data = $dd->getDecodedData();
+
+		$trackingInfo = new TrackingInfo();
+
+		$trackingInfo->setLayout( $data['layout'] );
+		$trackingInfo->setTotalImpressionCount( $data['impCount'] );
+		$trackingInfo->setSingleBannerImpressionCount( $data['bImpCount'] );
+		$trackingInfo->setTracking( $data['tracking'] );
+		$trackingInfo->setSkin( $data['skin'] );
+		$trackingInfo->setColor( $data['color'] );
+		$trackingInfo->setSource( $data['source'] );
+
+		return $trackingInfo->freeze()->assertNoNullFields();
+	}
+
 
 }

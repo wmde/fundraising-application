@@ -74,4 +74,31 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$repository->storeDonation( $donation );
 	}
 
+	public function testNewDonationPersistenceRoundTrip() {
+		$donation = ValidDonation::newDonation();
+		$donation->setId( 1 );
+
+		$repository = new DoctrineDonationRepository( $this->entityManager );
+
+		$repository->storeDonation( $donation );
+
+		$this->assertEquals( $donation, $repository->getDonationById( 1 ) );
+	}
+
+	public function testExistingDonationPersistenceRoundTrip() {
+		$repository = new DoctrineDonationRepository( $this->entityManager );
+
+		$donation = ValidDonation::newDonation();
+		$donation->setAmount( 42 );
+		$repository->storeDonation( $donation );
+
+		$donation->setAmount( 1337 );
+		$repository->storeDonation( $donation );
+
+		$this->assertEquals( $donation, $repository->getDonationById( $donation->getId() ) );
+	}
+
+	// TODO: test not found
+	// TODO: test Docrtine exception
+
 }
