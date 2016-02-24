@@ -1,12 +1,6 @@
 'use strict';
 
 function validity( state, action ) {
-	if ( typeof state === 'undefined' ) {
-		return {
-			isValid: true,
-			isValidated: false
-		};
-	}
 	switch ( action.type ) {
 		case 'VALIDATION_RESULT':
 			return {
@@ -14,6 +8,12 @@ function validity( state, action ) {
 				isValidated: true
 			};
 		default:
+			if ( typeof state === 'undefined' ) {
+				return {
+					isValid: true,
+					isValidated: false
+				};
+			}
 			return state;
 	}
 }

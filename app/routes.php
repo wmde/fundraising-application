@@ -42,7 +42,7 @@ $app->post(
 	'validate-amount',
 	function( Request $request ) use ( $app, $ffFactory ) {
 
-		$amount = (float) $ffFactory->newDecimalNumberFormatter()->parse( $request->get( 'amount', 0 ) );
+		$amount = (float) $ffFactory->newDecimalNumberFormatter()->parse( $request->get( 'amount', '0' ) );
 		$amountValidator = $ffFactory->newAmountValidator();
 		$validationResult = $amountValidator->validate( $amount, (string) $request->get( 'paymentType', '' ) );
 

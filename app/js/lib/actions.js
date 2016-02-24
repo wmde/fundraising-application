@@ -1,27 +1,27 @@
 'use strict';
 
-function addPage( pageName ) {
+function newAddPageAction( pageName ) {
 	return {
 		type: 'ADD_PAGE',
 		payload: { name: pageName }
 	};
 }
 
-function storeValidationResult( isValid ) {
+function newNextPageAction() {
+	return {
+		type: 'NEXT_PAGE'
+	};
+}
+
+function newStoreValidationResultAction( isValid ) {
 	return {
 		type: 'VALIDATION_RESULT',
 		payload: { isValid: isValid }
 	};
 }
 
-function nextPage() {
-	return {
-		type: 'NEXT_PAGE'
-	};
-}
-
 module.exports = {
-	addPage: addPage,
-	nextPage: nextPage,
-	storeValidationResult: storeValidationResult
+	newAddPageAction: newAddPageAction,
+	newNextPageAction: newNextPageAction,
+	newStoreValidationResultAction: newStoreValidationResultAction
 };

@@ -8,8 +8,8 @@
     "test": "app/js/tests"
   },
   "scripts": {
-    "build-js": "browserify app/js/main.js -s WMDEFR -o web/res/js/wmde_fr.js",
-    "watch-js": "watchify app/js/main.js -v -s WMDEFR -o web/res/js/wmde_fr.js",
+    "build-js": "browserify app/js/main.js -s WMDE -o web/res/js/wmde.js",
+    "watch-js": "watchify app/js/main.js -v -s WMDE -o web/res/js/wmde.js",
     "test": "tape 'app/js/tests/**/*.js' | tap-min",
     "cs": "jshint app/js && jscs app/js",
     "ci": "npm run cs && npm run test"

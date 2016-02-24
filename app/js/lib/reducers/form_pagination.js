@@ -1,31 +1,38 @@
 'use strict';
 
-var formPage = require( './form_pages' );
-
-function currentPage( page, pageLength, action ) {
-	var defaultPage = page || ( pageLength > 0 ? 0 : -1 );
-	switch ( action.type ) {
-		case 'ADD_PAGE':
-			if ( defaultPage === -1 ) {
-				return 0;
-			} else {
-				return defaultPage;
-			}
-			break;
-		case 'NEXT_PAGE':
-			return pageLength > defaultPage + 1 ? defaultPage + 1 : defaultPage ;
-		default:
-			return defaultPage;
-	}
+function currentPageIsLastPage( paginationState ) {
+	return paginationState.currentPage + 1 < paginationState.pages.length;
 }
 
-function formPagination( pageState, action ) {
-	var defaultPageState = pageState || {},
-		pages = defaultPageState.pages || [];
-	return {
-		pages: formPage( defaultPageState.pages, action ),
-		currentPage: currentPage( defaultPageState.currentPage, pages.length, action )
-	};
+function formPagination( paginationState, action ) {
+	var newPaginationState;
+	if ( typeof paginationState !== 'object' ) {
+		newPaginationState = {
+			pages: [],
+			currentPage: -1
+		};
+	} else {
+		// TODO use Immutable.js instead?
+		newPaginationState = {
+			pages: paginationState.pages,
+			currentPage: paginationState.currentPage
+		};
+	}
+	switch ( action.type ) {
+		case 'ADD_PAGE':
+			newPaginationState.pages = newPaginationState.pages.concat( action.payload.name );
+			if ( newPaginationState.currentPage === -1 ) {
+				newPaginationState.currentPage = 0;
+			}
+			return newPaginationState;
+		case 'NEXT_PAGE':
+			if ( currentPageIsLastPage( newPaginationState )  ) {
+				newPaginationState.currentPage += 1;
+			}
+			return newPaginationState;
+		default:
+			return newPaginationState;
+	}
 }
 
 module.exports = formPagination;

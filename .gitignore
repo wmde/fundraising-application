@@ -16,4 +16,4 @@ var/
 app/config/
 
 res/blz.lut2f
-web/res/js/wmde_fr.js
+web/res/js/wmde.js

@@ -1,8 +1,11 @@
 // main module to expose all submodules
+/**
+ * Uppercase keys designate namespaces, lowercase keys designate global objects
+ */
 module.exports = {
-	FormData: require( './lib/form_data' ),
+	FormFieldAccessors: require( './lib/form_field_accessors' ),
 	FormValidation: require( './lib/form_validation' ),
-	FormState: require( './lib/store' ),
+	Store: require( './lib/store' ),
 	View: {
 		createEnabledWhenValidHandler: require( './lib/view_handler/enabled_when_valid' ).createHandler,
 		createFormPageVisibilityHandler: require( './lib/view_handler/form_page_visibility' ).createHandler,

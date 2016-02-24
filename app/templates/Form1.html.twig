@@ -445,53 +445,68 @@
     // Initialize the form
     $(function(){
 
-        var formVisibility = WMDEFR.View.createFormPageVisibilityHandler( {
-                    payment: $( "#donation-periode,#donation-amount,#donation-payment,#donation-submit1" ),
-                    personalData: $( "#personal-data,#donation-submit2" )
-            } ),
-            formHighlight = WMDEFR.View.createFormPageHighlightHandler( $( 'ul.step-list li' ) ),
-            buttonsEnable = WMDEFR.View.createEnabledWhenValidHandler( $('#donation-submit1 button,#donation-submit2 button') ),
-            amountValidator = WMDEFR.FormValidation.createAmountValidator(
-                    WMDEFR.FormData.createMultipleValueAccessor(
-                            WMDEFR.FormData.createTextValueAccessor( $( '#betrag' ) ),
-                            WMDEFR.FormData.createRadioValueAccessor( $( 'input[name=betrag_auswahl]' ) )
-                    ),
-                    WMDEFR.FormData.createRadioValueAccessor( $( 'input[name=zahlweise]' ) ),
-                    '{$ basepath $}/validate-amount'
-            ),
-            // TODO remove this when amount validation on the server side is merged
-            fakeValidator = {
-                validate: function() {
-                    return new Promise( function ( resolve ) {
-                        resolve( { status: 'OK' } );
+        var dispatchValidationResult = function ( validationResult ) {
+                // TODO investigate how Reflux stores can react to Promises, so we don't need this function with the
+                // global store object and replace the buttonsEnabled handler with a handler that validates on button
+               // click if needed
+                var isValid = ( validationResult.status === 'OK' );
+                    WMDE.Store.dispatch( actions.newStoreValidationResultAction( isValid ) );
+            },
+            FormFactory = {
+                newViewHandlers: function() {
+                    return {
+                        formPageVisibility: WMDE.View.createFormPageVisibilityHandler( {
+                            payment: $( "#donation-periode,#donation-amount,#donation-payment,#donation-submit1" ),
+                            personalData: $( "#personal-data,#donation-submit2" )
+                        } ),
+                        formPageHighlight: WMDE.View.createFormPageHighlightHandler( $( 'ul.step-list li' ) ),
+                        buttonsEnabled: WMDE.View.createEnabledWhenValidHandler( $('#donation-submit1 button,#donation-submit2 button') )
+                    };
+                },
+                newValidators: function() {
+                    return {
+                        amountValidator: WMDE.FormValidation.createAmountValidator(
+                                WMDE.FormFieldAccessors.createMultipleValueAccessor(
+                                        WMDE.FormFieldAccessors.createTextValueAccessor( $( '#betrag' ) ),
+                                        WMDE.FormFieldAccessors.createRadioValueAccessor( $( 'input[name=betrag_auswahl]' ) )
+                                ),
+                                WMDE.FormFieldAccessors.createRadioValueAccessor( $( 'input[name=zahlweise]' ) ),
+                                '{$ basepath $}/validate-amount'
+                        )
+                    };
+                },
+                connectElementEventsToActions: function( store, actions, validators ) {
+                    $( '.amount-list input, .payment-type-list input' ).change( function( evt ) {
+                        validators.amountValidator.validate().then( dispatchValidationResult );
+                    } );
+
+                    $( '#donation-submit1 button' ).click( function() {
+                        store.dispatch( actions.newNextPageAction() );
                     } );
                 }
-            };
+            },
 
-        // Glue function for event handling
-        // TODO maybe make this an independent bindings layer?
-        WMDEFR.FormState.subscribe( function() {
-            var state = WMDEFR.FormState.getState();
+            validators = FormFactory.newValidators(),
+            viewHandlers = FormFactory.newViewHandlers();
+
+        // Connect view Handlers to state update
+        // TODO Move this to an a class that gets a map of the handlers and their assorted state property
+        WMDE.Store.subscribe( function() {
+            var state = WMDE.Store.getState();
             // console.log( state );
-            formVisibility.update( state.formPagination );
-            formHighlight.update( state.formPagination );
-            buttonsEnable.update( state.validity );
+            // TODO check if state has changed before executing update action
+            viewHandlers.formPageVisibility.update( state.formPagination );
+            viewHandlers.formPageHighlight.update( state.formPagination );
+            viewHandlers.buttonsEnabled.update( state.validity );
         } );
 
-        // Initialize pages
-        WMDEFR.FormState.dispatch( WMDEFR.Actions.addPage( 'payment' ) );
-        WMDEFR.FormState.dispatch( WMDEFR.Actions.addPage( 'personalData' ) );
+        // Initialize form pages
+        WMDE.Store.dispatch( WMDE.Actions.newAddPageAction( 'payment' ) );
+        WMDE.Store.dispatch( WMDE.Actions.newAddPageAction( 'personalData' ) );
 
-        // Add view events
-        $( '.amount-list input, .payment-type-list input' ).change( function( evt ) {
-            fakeValidator.validate().then( function( validationResult ) {
-                WMDEFR.FormState.dispatch( WMDEFR.Actions.storeValidationResult( validationResult.status === 'OK' ) );
-            } );
-        } );
+        FormFactory.connectElementEventsToActions( WMDE.Store, WMDE.Actions, validators );
 
-        $('#donation-submit1 button' ).click( function() {
-            WMDEFR.FormState.dispatch( WMDEFR.Actions.nextPage() );
-        } );
+
     } );
 </script>
 

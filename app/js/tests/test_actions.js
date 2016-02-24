@@ -3,28 +3,28 @@
 var test = require( 'tape' ),
 	actions = require( '../lib/actions' );
 
-test( 'addPage returns action object', function ( t ) {
+test( 'newAddPageAction returns action object', function ( t ) {
 	var expectedAction = {
 		type: 'ADD_PAGE',
 		payload: { name: 'firstPage' }
 	};
-	t.deepEqual( actions.addPage( 'firstPage' ), expectedAction );
+	t.deepEqual( actions.newAddPageAction( 'firstPage' ), expectedAction );
 	t.end();
 } );
 
-test( 'nextPage returns action object', function ( t ) {
+test( 'newNextPageAction returns action object', function ( t ) {
 	var expectedAction = {
 		type: 'NEXT_PAGE'
 	};
-	t.deepEqual( actions.nextPage(), expectedAction );
+	t.deepEqual( actions.newNextPageAction(), expectedAction );
 	t.end();
 } );
 
-test( 'storeValidationResult returns action object', function ( t ) {
+test( 'newStoreValidationResultAction returns action object', function ( t ) {
 	var expectedAction = {
 		type: 'VALIDATION_RESULT',
 		payload: { isValid: true }
 	};
-	t.deepEqual( actions.storeValidationResult( true ), expectedAction );
+	t.deepEqual( actions.newStoreValidationResultAction( true ), expectedAction );
 	t.end();
 } );

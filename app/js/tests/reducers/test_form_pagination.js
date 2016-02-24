@@ -30,13 +30,23 @@ test( 'When there are no pages, current page is initialized with negativeValue',
 } );
 
 test( 'When first page is added, current page is set to first page and does not change afterwards', function ( t ) {
-	var stateBefore = { pages: [], currentPage: -1 },
-		expectedState = { pages: [ 'foo', 'bar' ], currentPage: 0 },
-		currentState;
+	var firstPageState, secondPageState;
 
-	deepFreeze( stateBefore );
-	currentState = formPagination( stateBefore, { type: 'ADD_PAGE', payload: { name: 'foo' } } );
-	currentState = formPagination( currentState, { type: 'ADD_PAGE', payload: { name: 'bar' } } );
-	t.deepEqual( currentState, expectedState );
+	firstPageState = formPagination( undefined, { type: 'ADD_PAGE', payload: { name: 'foo' } } );
+	deepFreeze( firstPageState );
+	secondPageState = formPagination( firstPageState, { type: 'ADD_PAGE', payload: { name: 'bar' } } );
+	t.equal( secondPageState.currentPage, 0 );
 	t.end();
 } );
+
+test( 'ADD_PAGE adds page names', function ( t ) {
+	var firstPageState, secondPageState;
+
+	firstPageState = formPagination( undefined, { type: 'ADD_PAGE', payload: { name: 'foo' } } );
+	deepFreeze( firstPageState );
+	secondPageState = formPagination( firstPageState, { type: 'ADD_PAGE', payload: { name: 'bar' } } );
+	t.deepEqual( firstPageState.pages, [ 'foo' ] );
+	t.deepEqual( secondPageState.pages, [ 'foo', 'bar' ] );
+	t.end();
+} );
+
