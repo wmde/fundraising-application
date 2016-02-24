@@ -71,11 +71,11 @@ class BankData {
 		return $this;
 	}
 
-	public function hasIban() {
+	public function hasIban(): bool {
 		return !empty( $this->getIban()->toString() );
 	}
 
-	public function hasCompleteLegacyBankData() {
+	public function hasCompleteLegacyBankData(): bool {
 		return !empty( $this->getAccount() ) || !empty( $this->getBankCode() );
 	}
 
