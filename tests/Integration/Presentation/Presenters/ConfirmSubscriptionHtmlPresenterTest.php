@@ -3,6 +3,7 @@
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\Presentation\Presenters;
 
+use Symfony\Component\Translation\Translator;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\ConfirmSubscriptionHtmlPresenter;
 use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
 use WMDE\Fundraising\Frontend\TwigTemplate;
@@ -21,7 +22,7 @@ class ConfirmSubscriptionHtmlPresenterTest extends \PHPUnit_Framework_TestCase {
 		$twig->expects( $this->once() )
 			->method( 'render' )
 			->with( [] );
-		$presenter = new ConfirmSubscriptionHtmlPresenter( $twig );
+		$presenter = new ConfirmSubscriptionHtmlPresenter( $twig, new Translator( 'en' ) );
 		$presenter->present( ValidationResponse::newSuccessResponse() );
 	}
 
@@ -30,7 +31,7 @@ class ConfirmSubscriptionHtmlPresenterTest extends \PHPUnit_Framework_TestCase {
 		$twig->expects( $this->once() )
 			->method( 'render' )
 			->with( [ 'error_message' => 'The confirmation code has expired.' ] );
-		$presenter = new ConfirmSubscriptionHtmlPresenter( $twig );
+		$presenter = new ConfirmSubscriptionHtmlPresenter( $twig, new Translator( 'en' ) );
 		$constraintViolation = new ConstraintViolation( 'deadbeef', 'The confirmation code has expired.' );
 		$presenter->present( ValidationResponse::newFailureResponse( [ $constraintViolation ] ) );
 	}

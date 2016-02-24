@@ -1,8 +1,8 @@
 {
-  "This field is required": "Dieses Feld ist ein Pflichtfeld",
-  "Address has wrong format": "Kein gültiges Email-Adressformat",
-  "Address is no valid email": "Keine gültige E-Mail-Adresse",
-  "MX record not found": "Domain der Mailadresse nicht gefunden",
-  "No subscription was found with this confirmation code.": "Es konnte kein Eintrag mit diesem Bestätigungs-Code gefunden werden.",
-  "The subscription was already confirmed.": "Diese E-Mail-Adresse wurde bereits bestätigt."
+  "field_required": "Dieses Feld ist ein Pflichtfeld",
+  "email_address_wrong_format": "Kein gültiges Email-Adressformat",
+  "email_address_invalid": "Keine gültige E-Mail-Adresse",
+  "email_address_domain_record_not_found": "Domain der Mailadresse nicht gefunden",
+  "subscription_confirmation_code_not_found": "Es konnte kein Eintrag mit diesem Bestätigungs-Code gefunden werden.",
+  "subscription_already_confirmed": "Diese E-Mail-Adresse wurde bereits bestätigt."
 }

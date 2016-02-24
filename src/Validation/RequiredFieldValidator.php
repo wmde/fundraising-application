@@ -11,7 +11,7 @@ class RequiredFieldValidator {
 
 	public function validate( $value ): ValidationResult {
 		if ( empty( $value ) ) {
-			return new ValidationResult( new ConstraintViolation( $value, 'This field is required' ) );
+			return new ValidationResult( new ConstraintViolation( $value, 'field_required' ) );
 		}
 
 		return new ValidationResult();
