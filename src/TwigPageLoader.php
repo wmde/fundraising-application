@@ -61,5 +61,4 @@ class TwigPageLoader implements \Twig_LoaderInterface {
 		throw new Twig_Error_Loader( "Wiki page $title not found." );
 	}
 
-
 }

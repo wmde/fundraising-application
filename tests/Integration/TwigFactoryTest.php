@@ -24,7 +24,7 @@ class TwigFactoryTest extends \PHPUnit_Framework_TestCase {
 		] );
 		$twig = $factory->create( [ $factory->newArrayLoader() ], [] );
 		$result = $twig->render( 'variableReplacement.twig', [ 'testvar' => 'Meeow!' ] );
-		$this->assertSame( 'Meeow!', $result);
+		$this->assertSame( 'Meeow!', $result );
 	}
 
 	public function testTwigInstancesTryAllLoadersUntilTemplateIsFound() {
@@ -45,7 +45,7 @@ class TwigFactoryTest extends \PHPUnit_Framework_TestCase {
 		$factory = new TwigFactory( [ 'enable-cache' => false ] );
 		$twig = $factory->create( [ $firstLoader, $secondLoader, $thirdLoader ], [] );
 		$result = $twig->render( 'Canis_silvestris' );
-		$this->assertSame( 'Meeow!', $result);
+		$this->assertSame( 'Meeow!', $result );
 	}
 
 	public function testFilesystemLoaderConvertsStringPathToArray() {

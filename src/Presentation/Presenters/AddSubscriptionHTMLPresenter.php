@@ -23,12 +23,11 @@ class AddSubscriptionHTMLPresenter {
 	public function present( ValidationResponse $subscriptionResponse, array $formData ): string {
 		$errors = [];
 		/** @var ConstraintViolation $constraintViolation */
-		foreach( $subscriptionResponse->getValidationErrors() as $constraintViolation ) {
+		foreach ( $subscriptionResponse->getValidationErrors() as $constraintViolation ) {
 			// TODO add translation library and translate message.
 			$errors[$constraintViolation->getSource()] = $constraintViolation->getMessage();
 		}
 		return $this->template->render( array_merge( $formData, [ 'errors' => $errors ] ) );
 	}
-
 
 }

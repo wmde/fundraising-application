@@ -49,5 +49,4 @@ class CommentListRssPresenter {
 		return $commentList->toArray()[0]->getDonationTime()->format( 'r' );
 	}
 
-
 }

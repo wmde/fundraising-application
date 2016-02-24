@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend;
 
@@ -458,7 +458,6 @@ class FunFunFactory {
 		return new GenerateIbanUseCase( $this->newBankDataConverter() );
 	}
 
-
 	public function newIbanPresenter(): IbanPresenter {
 		return new IbanPresenter();
 	}
@@ -467,7 +466,7 @@ class FunFunFactory {
 		return new BankDataConverter( $this->config['bank-data-file'] );
 	}
 
-	public function setSubscriptionValidator(SubscriptionValidator $subscriptionValidator ) {
+	public function setSubscriptionValidator( SubscriptionValidator $subscriptionValidator ) {
 		$this->pimple['subscription_validator'] = $subscriptionValidator;
 	}
 

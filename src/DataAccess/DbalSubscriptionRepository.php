@@ -32,7 +32,7 @@ class DbalSubscriptionRepository implements SubscriptionRepository {
 			$this->entityManager->persist( $subscription->getAddress() );
 			$this->entityManager->flush();
 		}
-		catch( ORMException $e ) {
+		catch ( ORMException $e ) {
 			throw new SubscriptionRepositoryException( 'Could not store subscription.', $e );
 		}
 	}
@@ -49,7 +49,7 @@ class DbalSubscriptionRepository implements SubscriptionRepository {
 		try {
 			return (int) $query->getSingleScalarResult();
 		}
-		catch( ORMException $e ) {
+		catch ( ORMException $e ) {
 			throw new SubscriptionRepositoryException( 'Could not count subscriptions, check your query and its parameters.', $e );
 		}
 

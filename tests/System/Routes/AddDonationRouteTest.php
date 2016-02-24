@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 
@@ -115,7 +115,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		 */
 		$factory = null;
 
-		$this->createEnvironment([], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setMessenger( new Messenger(
 				Swift_NullTransport::newInstance(),
 				$factory->getOperatorAddress()

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 
@@ -89,7 +89,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 			$this->validFormInput
 		);
 		$response = $client->getResponse();
-		$this->assertTrue($response->isRedirect(), 'Is redirect response' );
+		$this->assertTrue( $response->isRedirect(), 'Is redirect response' );
 		$this->assertSame( '/page/Subscription_Success', $response->headers->get( 'Location' ) );
 	}
 
@@ -164,7 +164,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 			$this->validFormInput
 		);
 		$response = $client->getResponse();
-		$this->assertTrue($response->isRedirect(), 'Is redirect response' );
+		$this->assertTrue( $response->isRedirect(), 'Is redirect response' );
 		$this->assertSame( '/page/Subscription_Moderation', $response->headers->get( 'Location' ) );
 	}
 

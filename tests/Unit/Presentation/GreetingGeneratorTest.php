@@ -19,7 +19,7 @@ class GreetingGeneratorTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * @dataProvider greetingProvider
 	 */
-	public function testGivenASalutation_specificGreetingIsGenerated( $salutation, $expected) {
+	public function testGivenASalutation_specificGreetingIsGenerated( $salutation, $expected ) {
 		$generator = new GreetingGenerator();
 		$this->assertSame( $expected, $generator->createGreeting( 'Nyan', $salutation, '' ) );
 	}
@@ -35,7 +35,7 @@ class GreetingGeneratorTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * @dataProvider greetingTitleProvider
 	 */
-	public function testGivenATitle_itIsMentionInGreeting( $salutation, $title, $expected) {
+	public function testGivenATitle_itIsMentionInGreeting( $salutation, $title, $expected ) {
 		$generator = new GreetingGenerator();
 		$this->assertSame( $expected, $generator->createGreeting( 'Nyan', $salutation, $title ) );
 	}

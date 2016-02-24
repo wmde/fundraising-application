@@ -18,7 +18,6 @@ class AddSubscriptionJSONPresenter {
 		$this->translator = $translator;
 	}
 
-
 	public function present( ValidationResponse $subscriptionResponse ): array {
 		if ( $subscriptionResponse->isSuccessful() ) {
 			return $this->newSuccessResponse();
@@ -34,7 +33,7 @@ class AddSubscriptionJSONPresenter {
 	private function newErrorResponse( ValidationResponse $response ): array {
 		$errors = [];
 		/** @var ConstraintViolation $constraintViolation */
-		foreach( $response->getValidationErrors() as $constraintViolation ) {
+		foreach ( $response->getValidationErrors() as $constraintViolation ) {
 			$message = $this->translator->trans( $constraintViolation->getMessage(), (array) $constraintViolation, 'validations' );
 			$errors[$constraintViolation->getSource()] = $message;
 		}

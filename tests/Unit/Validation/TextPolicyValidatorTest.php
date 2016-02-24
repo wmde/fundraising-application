@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Tests\Unit;
 
@@ -41,7 +41,6 @@ class TextPolicyValidatorTest extends \PHPUnit_Framework_TestCase {
 		];
 	}
 
-
 	/**
 	 * @dataProvider harmlessTestProvider
 	 */
@@ -63,7 +62,6 @@ class TextPolicyValidatorTest extends \PHPUnit_Framework_TestCase {
 		];
 	}
 
-
 	/**
 	 * @dataProvider insultingTestProvider
 	 */
@@ -84,7 +82,6 @@ class TextPolicyValidatorTest extends \PHPUnit_Framework_TestCase {
 			[ 'Alles nur HAMSTERFRESSEN!!!!!!!!1111111111' ],
 		];
 	}
-
 
 	/**
 	 * @dataProvider whiteWordsInsultingTestProvider
@@ -110,7 +107,6 @@ class TextPolicyValidatorTest extends \PHPUnit_Framework_TestCase {
 			[ 'Bei Wikipedia gibts echt tolle Arschkrampen!' ],
 		];
 	}
-
 
 	/**
 	 * @dataProvider whiteWordsHarmlessTestProvider
