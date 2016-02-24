@@ -9,17 +9,17 @@ namespace WMDE\Fundraising\Frontend\Validation;
  */
 class ConstraintViolation {
 	private $value;
-	private $message;
+	private $messageIdentifier;
 	private $source;
 
 	/**
 	 * @param mixed $value The value that caused this violation
-	 * @param string $message Error message
+	 * @param string $messageIdentifier identifier of the error message as defined in translation files
 	 * @param string $source Class name or Class.Field name
 	 */
-	public function __construct( $value, string $message, string $source = '' ) {
+	public function __construct( $value, string $messageIdentifier, string $source = '' ) {
 		$this->value = $value;
-		$this->message = $message;
+		$this->messageIdentifier = $messageIdentifier;
 		$this->source = $source;
 	}
 
@@ -30,8 +30,8 @@ class ConstraintViolation {
 		return $this->value;
 	}
 
-	public function getMessage(): string {
-		return $this->message;
+	public function getMessageIdentifier(): string {
+		return $this->messageIdentifier;
 	}
 
 	public function getSource(): string {

@@ -25,7 +25,7 @@ class AmountPolicyValidator {
 			$this->isRecurringAmountTooHigh( $amount, $interval ) ||
 			$this->isAnuallyRecurringAmountTooHigh( $amount, $interval ) ) {
 
-			return new ValidationResult( new ConstraintViolation( $amount, 'This field is required' ) );
+			return new ValidationResult( new ConstraintViolation( $amount, 'field_required' ) );
 		}
 
 		return new ValidationResult();
