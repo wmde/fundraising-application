@@ -36,7 +36,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		$doctrineDonation = $this->newDonationEntity( $donation );
 
 		try {
-			$this->entityManager->persist($doctrineDonation  );
+			$this->entityManager->persist( $doctrineDonation );
 			$this->entityManager->flush();
 		}
 		catch ( ORMException $ex ) {
