@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Validation;
 
@@ -18,7 +18,7 @@ class ValidatorTestCase extends \PHPUnit_Framework_TestCase {
 		$this->assertTrue( $result->hasViolations() );
 
 		$violated = false;
-		foreach( $result->getViolations() as $violation ) {
+		foreach ( $result->getViolations() as $violation ) {
 			if ( $violation->getSource() === $fieldName ) {
 				$violated = true;
 			}

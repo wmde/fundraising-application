@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\UseCases\DisplayPage;
 
@@ -35,7 +35,6 @@ class PageDisplayResponse {
 		$this->templateExists = $templateExists;
 		return $this;
 	}
-
 
 }
 

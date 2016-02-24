@@ -23,7 +23,7 @@ class GetInTouchHTMLPresenter {
 	public function present( ValidationResponse $response, array $formData ): string {
 		$errors = [];
 		/** @var ConstraintViolation $constraintViolation */
-		foreach( $response->getValidationErrors() as $constraintViolation ) {
+		foreach ( $response->getValidationErrors() as $constraintViolation ) {
 			// TODO add translation library and translate message.
 			$errors[$constraintViolation->getSource()] = $constraintViolation->getMessage();
 		}

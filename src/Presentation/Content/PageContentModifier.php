@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Presentation\Content;
 
@@ -37,15 +37,19 @@ class PageContentModifier {
 		}
 
 		// TODO
-//		if ( $this->image_cache ) {
-//			$content = self::apply_image_cache_rewrite( $content, array( $this, 'image_cache_rewrite' ) );
-//		}
+		/*
+		if ( $this->image_cache ) {
+			$content = self::apply_image_cache_rewrite( $content, array( $this, 'image_cache_rewrite' ) );
+		}
+		*/
 
 		// TODO
 		// NOTE: keep cache list in sync
-//		if ( !empty( $this->page_cache_list ) ) {
-//			$this->page_cache_list->add( array( 'rip', $pageName ) );
-//		}
+		/*
+		if ( !empty( $this->page_cache_list ) ) {
+			$this->page_cache_list->add( array( 'rip', $pageName ) );
+		}
+		*/
 
 		return $content;
 	}

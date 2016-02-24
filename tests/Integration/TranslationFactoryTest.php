@@ -11,6 +11,6 @@ class TranslationFactoryTest extends \PHPUnit_Framework_TestCase {
 		$loader = new ArrayLoader();
 		$translator = $factory->create( ['array' => $loader] );
 		$translator->addResource( 'array', ['foo' => 'bar'], 'de_DE' );
-		$this->assertSame( 'bar', $translator->trans( 'foo') );
+		$this->assertSame( 'bar', $translator->trans( 'foo' ) );
 	}
 }

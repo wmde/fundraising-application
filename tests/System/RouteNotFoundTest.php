@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\System;
 
@@ -21,7 +21,7 @@ class RouteNotFoundTest extends WebRouteTestCase {
 		$client = $this->createClient( [], null, self::DISABLE_DEBUG );
 		$client->request( 'GET', '/kittens' );
 
-		$this->assertContains( 'text/html', $client->getResponse()->headers->get( 'Content-Type') );
+		$this->assertContains( 'text/html', $client->getResponse()->headers->get( 'Content-Type' ) );
 		$this->assertContains( '<html', $client->getResponse()->getContent() );
 	}
 

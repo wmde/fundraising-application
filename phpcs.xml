@@ -3,7 +3,9 @@
 	- https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml
 	- https://github.com/squizlabs/PHP_CodeSniffer/tree/master/CodeSniffer/Standards
 -->
-<ruleset name="MediaWiki">
+<ruleset name="FunFunFundraisingFrontend">
+    <rule ref="vendor/mediawiki/mediawiki-codesniffer/MediaWiki/Sniffs/WhiteSpace" />
+
     <rule ref="Generic.Arrays.DisallowLongArraySyntax" />
     <rule ref="Generic.Classes" />
     <rule ref="Generic.CodeAnalysis" />

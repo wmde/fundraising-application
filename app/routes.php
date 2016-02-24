@@ -7,7 +7,7 @@
  * @var \WMDE\Fundraising\Frontend\FunFunFactory $ffFactory
  */
 
-declare(strict_types = 1);
+declare( strict_types = 1 );
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;

@@ -46,7 +46,7 @@ class DbalSubscriptionRepositoryTest extends \PHPUnit_Framework_TestCase {
 	public function testGivenARecentSubscription_itIsCounted() {
 		$firstSubscription = $this->persistFirstSubscription();
 		$this->entityManager->flush();
-		$repository = new DbalSubscriptionRepository(  $this->entityManager );
+		$repository = new DbalSubscriptionRepository( $this->entityManager );
 		$this->assertSame( 1, $repository->countSimilar( $firstSubscription, new \DateTime( '100 years ago' ) ) );
 	}
 
@@ -56,7 +56,7 @@ class DbalSubscriptionRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$thirdSubscription = $this->persistThirdSubscription();
 
 		$this->entityManager->flush();
-		$repository = new DbalSubscriptionRepository(  $this->entityManager );
+		$repository = new DbalSubscriptionRepository( $this->entityManager );
 		$this->assertSame( 1, $repository->countSimilar( $thirdSubscription, new \DateTime( '1 hour ago' ) ) );
 		$this->assertSame( 2, $repository->countSimilar( $thirdSubscription, new \DateTime( '100 years ago' ) ) );
 	}
@@ -70,7 +70,7 @@ class DbalSubscriptionRepositoryTest extends \PHPUnit_Framework_TestCase {
 			false
 		);
 		$entityManager->expects( $this->once() )->method( 'persist' )->willThrowException( new ORMException() );
-		$repository = new DbalSubscriptionRepository(  $entityManager );
+		$repository = new DbalSubscriptionRepository( $entityManager );
 		$subscription = new Subscription();
 		$subscription->setEmail( 'nyan@awesomecats.com' );
 		$subscription->setAddress( new Address() );

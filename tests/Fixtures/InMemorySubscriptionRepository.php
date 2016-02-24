@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
@@ -44,7 +44,7 @@ class InMemorySubscriptionRepository implements SubscriptionRepository {
 	}
 
 	public function findByConfirmationCode( string $confirmationCode ) {
-		foreach( $this->subscriptions as $subscription ) {
+		foreach ( $this->subscriptions as $subscription ) {
 			if ( $subscription->getHexConfirmationCode() === $confirmationCode ) {
 				return $subscription;
 			}

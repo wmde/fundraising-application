@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
 
@@ -175,7 +175,6 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 			->setDonationId( 1 )
 			->freeze()->assertNoNullFields();
 	}
-
 
 	private function getSecondComment(): CommentWithAmount {
 		return CommentWithAmount::newInstance()
