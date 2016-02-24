@@ -147,10 +147,15 @@ class DoctrineDonationRepository implements DonationRepository {
 	 * @throws GetDonationException
 	 */
 	public function getDonationById( int $id ) {
-		/**
-		 * @var DoctrineDonation $donation
-		 */
-		$donation = $this->entityManager->find( DoctrineDonation::class, $id );
+		try {
+			/**
+			 * @var DoctrineDonation $donation
+			 */
+			$donation = $this->entityManager->find( DoctrineDonation::class, $id );
+		}
+		catch ( ORMException $ex ) {
+			throw new GetDonationException( $ex );
+		}
 
 		if ( $donation === null ) {
 			return null;

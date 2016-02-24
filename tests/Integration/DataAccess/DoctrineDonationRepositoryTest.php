@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
+use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
 use WMDE\Fundraising\Frontend\Domain\Repositories\StoreDonationException;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
@@ -104,7 +105,22 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$this->assertNull( $repository->getDonationById( 42 ) );
 	}
 
-	// TODO: test not found
-	// TODO: test Docrtine exception
+	public function testWhenDoctrineThrowsException_domainExceptionIsThrown() {
+		$repository = new DoctrineDonationRepository( $this->newEntityManagerThatThrowsOnFind() );
+
+		$this->expectException( GetDonationException::class );
+		$repository->getDonationById( 42 );
+	}
+
+	private function newEntityManagerThatThrowsOnFind(): EntityManager {
+		$entityManager = $this->getMockBuilder( EntityManager::class )
+			->disableOriginalConstructor()->getMock();
+
+		$entityManager->expects( $this->any() )
+			->method( 'find' )
+			->willThrowException( new ORMException() );
+
+		return $entityManager;
+	}
 
 }
