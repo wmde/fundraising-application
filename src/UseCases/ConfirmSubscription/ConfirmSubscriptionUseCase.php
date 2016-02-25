@@ -31,7 +31,7 @@ class ConfirmSubscriptionUseCase {
 		$subscription = $this->subscriptionRepository->findByConfirmationCode( $confirmationCode );
 
 		if ( $subscription === null ) {
-			$errorMsg = 'No subscription was found with this confirmation code.';
+			$errorMsg = 'subscription_confirmation_code_not_found';
 			return ValidationResponse::newFailureResponse( [ new ConstraintViolation( $confirmationCode, $errorMsg ) ] );
 		}
 
@@ -42,7 +42,7 @@ class ConfirmSubscriptionUseCase {
 			return ValidationResponse::newSuccessResponse();
 		}
 
-		$errorMsg = 'The subscription was already confirmed.';
+		$errorMsg = 'subscription_already_confirmed';
 		return ValidationResponse::newFailureResponse( [ new ConstraintViolation( $confirmationCode, $errorMsg ) ] );
 	}
 }
