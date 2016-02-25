@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Domain\Model;
 
+use RuntimeException;
+
 /**
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
@@ -131,6 +133,15 @@ class Donation {
 
 	public function setBankData( BankData $bankData ) {
 		$this->bankData = $bankData;
+	}
+
+	public function cancel() {
+		// payment type needs to be direct debit
+		// status should be STATUS_NEW or STATUS_MODERATION
+
+		// https://github.com/wmde/FundraisingStore/pull/53/files
+
+		throw new RuntimeException( 'Can only cancel direct debit' );
 	}
 
 	public function getTrackingInfo(): TrackingInfo {
