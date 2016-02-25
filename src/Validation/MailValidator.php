@@ -27,15 +27,15 @@ class MailValidator {
 		try {
 			$mailAddress = new MailAddress( $emailAddress );
 		} catch ( \InvalidArgumentException $e ) {
-			return new ValidationResult( new ConstraintViolation( $emailAddress, 'Address has wrong format' ) );
+			return new ValidationResult( new ConstraintViolation( $emailAddress, 'email_address_wrong_format' ) );
 		}
 
 		if ( !$mailAddress || !filter_var( $mailAddress->getNormalizedAddress(), FILTER_VALIDATE_EMAIL ) ) {
-			return new ValidationResult( new ConstraintViolation( $emailAddress, 'Address is no valid email' ) );
+			return new ValidationResult( new ConstraintViolation( $emailAddress, 'email_address_invalid' ) );
 		}
 
 		if ( !$this->domainValidator->isValid( $mailAddress->getNormalizedDomain() ) ) {
-			return new ValidationResult( new ConstraintViolation( $emailAddress, 'MX record not found' ) );
+			return new ValidationResult( new ConstraintViolation( $emailAddress, 'email_address_domain_record_not_found' ) );
 		}
 
 		return new ValidationResult();

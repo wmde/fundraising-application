@@ -327,11 +327,14 @@ class FunFunFactory {
 	}
 
 	public function newAddSubscriptionHTMLPresenter(): AddSubscriptionHTMLPresenter {
-		return new AddSubscriptionHTMLPresenter( $this->getLayoutTemplate( 'AddSubscription.twig' ) );
+		return new AddSubscriptionHTMLPresenter( $this->getLayoutTemplate( 'AddSubscription.twig' ), $this->getTranslator() );
 	}
 
 	public function newConfirmSubscriptionHtmlPresenter(): ConfirmSubscriptionHtmlPresenter {
-		return new ConfirmSubscriptionHtmlPresenter( $this->getLayoutTemplate( 'ConfirmSubscription.html.twig' ) );
+		return new ConfirmSubscriptionHtmlPresenter(
+			$this->getLayoutTemplate( 'ConfirmSubscription.html.twig' ),
+			$this->getTranslator()
+		);
 	}
 
 	public function newAddSubscriptionJSONPresenter(): AddSubscriptionJSONPresenter {
@@ -339,7 +342,7 @@ class FunFunFactory {
 	}
 
 	public function newGetInTouchHTMLPresenter(): GetInTouchHTMLPresenter {
-		return new GetInTouchHTMLPresenter( $this->getLayoutTemplate( 'GetInTouch.twig' ) );
+		return new GetInTouchHTMLPresenter( $this->getLayoutTemplate( 'GetInTouch.twig' ), $this->getTranslator() );
 	}
 
 	public function getTwig(): Twig_Environment {
@@ -441,7 +444,7 @@ class FunFunFactory {
 					'greeting_generator' => $this->getGreetingGenerator()
 				]
 			),
-			$this->getTranslator()->trans( 'Your membership with Wikimedia Germany' )
+			$this->getTranslator()->trans( 'mail_subject_membership' )
 		);
 	}
 
@@ -453,7 +456,7 @@ class FunFunFactory {
 						'Mail_Subscription_Confirmation.twig',
 						[ 'greeting_generator' => $this->getGreetingGenerator() ]
 				),
-				$this->getTranslator()->trans( 'Your membership with Wikimedia Germany' )
+				$this->getTranslator()->trans( 'mail_subject_membership' )
 		);
 	}
 
@@ -497,7 +500,7 @@ class FunFunFactory {
 		return new TemplateBasedMailer(
 			$this->getMessenger(),
 			new TwigTemplate( $this->getTwig(), 'GetInTouchConfirmation.twig' ),
-			'Ihre Anfrage an Wikimedia'
+			$this->getTranslator()->trans( 'mail_subject_getintouch' )
 		);
 	}
 
@@ -550,8 +553,12 @@ class FunFunFactory {
 		return new InternalErrorHTMLPresenter( $this->getLayoutTemplate( 'Error.twig' ) );
 	}
 
-	private function getTranslator(): TranslatorInterface {
+	public function getTranslator(): TranslatorInterface {
 		return $this->pimple['translator'];
+	}
+
+	public function setTranslator( TranslatorInterface $translator ) {
+		$this->pimple['translator'] = $translator;
 	}
 
 	private function getTwigFactory(): TwigFactory {

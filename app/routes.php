@@ -48,11 +48,11 @@ $app->post(
 
 		if ( $validationResult->isSuccessful() ) {
 			return $app->json( [ 'status' => 'OK' ] );
-		}
-		else {
-			$errors = array_map( function ( ConstraintViolation $constraintViolation ) {
-				return $constraintViolation->getMessage();
-			}, $validationResult->getViolations() );
+		} else {
+			$errors = [];
+			foreach( $validationResult->getViolations() as $violation ) {
+				$errors[] = $ffFactory->getTranslator()->trans( $violation->getMessageIdentifier() );
+			}
 			return $app->json( [ 'status' => 'ERR', 'message' => implode( "\n", $errors ) ] );
 		}
 	}

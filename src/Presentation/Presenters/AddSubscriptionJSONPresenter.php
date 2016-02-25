@@ -11,6 +11,7 @@ use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 /**
  * @licence GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
+ * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class AddSubscriptionJSONPresenter {
 
@@ -36,7 +37,11 @@ class AddSubscriptionJSONPresenter {
 		$errors = [];
 		/** @var ConstraintViolation $constraintViolation */
 		foreach ( $response->getValidationErrors() as $constraintViolation ) {
-			$message = $this->translator->trans( $constraintViolation->getMessage(), (array) $constraintViolation, 'validations' );
+			$message = $this->translator->trans(
+				$constraintViolation->getMessageIdentifier(),
+				(array) $constraintViolation,
+				'validations'
+			);
 			$errors[$constraintViolation->getSource()] = $message;
 		}
 		return [ 'status' => 'ERR', 'errors' => $errors ];
