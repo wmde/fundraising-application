@@ -4,15 +4,11 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Domain\Model;
 
-use WMDE\Fundraising\Frontend\FreezableValueObject;
-
 /**
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class Donation {
-	use FreezableValueObject;
-
 	// status for direct debit
 	const STATUS_NEW = 'N';
 
@@ -25,6 +21,11 @@ class Donation {
 
 	const STATUS_MODERATION = 'P';
 	const STATUS_DELETED = 'D';
+
+	/**
+	 * @var int|null
+	 */
+	private $id;
 
 	private $status;
 
@@ -52,6 +53,17 @@ class Donation {
 	 */
 	private $trackingInfo;
 
+	/**
+	 * @return int|null
+	 */
+	public function getId() {
+		return $this->id;
+	}
+
+	public function setId( int $id = null ) {
+		$this->id = $id;
+	}
+
 	public function getStatus(): string {
 		return $this->status;
 	}
@@ -65,7 +77,6 @@ class Donation {
 	}
 
 	public function setAmount( float $amount ) {
-		$this->assertIsWritable();
 		$this->amount = $amount;
 	}
 
@@ -74,7 +85,6 @@ class Donation {
 	}
 
 	public function setInterval( int $interval ) {
-		$this->assertIsWritable();
 		$this->interval = $interval;
 	}
 
@@ -83,7 +93,6 @@ class Donation {
 	}
 
 	public function setPaymentType( string $paymentType ) {
-		$this->assertIsWritable();
 		$this->paymentType = $paymentType;
 	}
 
@@ -92,7 +101,6 @@ class Donation {
 	}
 
 	public function setBankTransferCode( string $bankTransferCode ) {
-		$this->assertIsWritable();
 		$this->bankTransferCode = $bankTransferCode;
 	}
 
@@ -106,7 +114,6 @@ class Donation {
 	}
 
 	public function setPersonalInfo( PersonalInfo $personalInfo = null ) {
-		$this->assertIsWritable();
 		$this->personalInfo = $personalInfo;
 	}
 
@@ -115,7 +122,6 @@ class Donation {
 	}
 
 	public function setOptsIntoNewsletter( bool $optIn ) {
-		$this->assertIsWritable();
 		$this->optsIntoNewsletter = $optIn;
 	}
 
@@ -124,7 +130,6 @@ class Donation {
 	}
 
 	public function setBankData( BankData $bankData ) {
-		$this->assertIsWritable();
 		$this->bankData = $bankData;
 	}
 
@@ -133,7 +138,6 @@ class Donation {
 	}
 
 	public function setTrackingInfo( TrackingInfo $trackingInfo ) {
-		$this->assertIsWritable();
 		$this->trackingInfo = $trackingInfo;
 	}
 

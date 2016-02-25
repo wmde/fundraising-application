@@ -46,7 +46,7 @@ class ValidDonation {
 		$donation->setTrackingInfo( $this->newTrackingInfo() );
 		$donation->setBankData( $this->newBankData() );
 
-		return $donation->freeze();
+		return $donation;
 	}
 
 	private function newPersonalInfo(): PersonalInfo {

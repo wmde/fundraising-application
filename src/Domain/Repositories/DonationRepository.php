@@ -18,4 +18,12 @@ interface DonationRepository {
 	 */
 	public function storeDonation( Donation $donation );
 
+	/**
+	 * @param int $id
+	 *
+	 * @return Donation|null
+	 * @throws GetDonationException
+	 */
+	public function getDonationById( int $id );
+
 }

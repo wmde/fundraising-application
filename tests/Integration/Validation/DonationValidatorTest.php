@@ -75,7 +75,6 @@ class DonationValidatorTest extends ValidatorTestCase {
 		$donation->setAmount( 1 );
 		$donation->setPaymentType( PaymentType::BANK_TRANSFER );
 		$donation->setPersonalInfo( $personalInfo );
-		$donation->freeze();
 
 		$this->assertFalse( $this->donationValidator->validate( $donation )->isSuccessful() );
 
@@ -115,7 +114,6 @@ class DonationValidatorTest extends ValidatorTestCase {
 		$donation = new Donation();
 		$donation->setAmount( 1 );
 		$donation->setPaymentType( '' );
-		$donation->freeze();
 
 		$this->assertFalse( $this->donationValidator->validate( $donation )->isSuccessful() );
 
@@ -129,7 +127,6 @@ class DonationValidatorTest extends ValidatorTestCase {
 		$donation = new Donation();
 		$donation->setAmount( 1 );
 		$donation->setPaymentType( PaymentType::PAYPAL );
-		$donation->freeze();
 
 		$this->assertFalse( $this->donationValidator->validate( $donation )->isSuccessful() );
 
@@ -144,7 +141,6 @@ class DonationValidatorTest extends ValidatorTestCase {
 		$donation->setAmount( 1 );
 		$donation->setPaymentType( PaymentType::DIRECT_DEBIT );
 		$donation->setBankData( $this->newValidBankData() );
-		$donation->freeze();
 
 		$validationResult = $this->donationValidator->validate( $donation );
 		$this->assertFalse( $validationResult->isSuccessful() );
@@ -187,7 +183,6 @@ class DonationValidatorTest extends ValidatorTestCase {
 		$donation->setAmount( 1 );
 		$donation->setPersonalInfo( $personalInfo );
 		$donation->setPaymentType( PaymentType::BANK_TRANSFER );
-		$donation->freeze();
 
 		return $donation;
 	}
