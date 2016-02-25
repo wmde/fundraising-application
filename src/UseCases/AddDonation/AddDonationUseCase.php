@@ -45,20 +45,8 @@ class AddDonationUseCase {
 		$this->bankDataConverter = $bankDataConverter;
 	}
 
-	public function addDonation( AddDonationRequest $donationRequest ) {
-		$donation = new Donation();
-
-		$donation->setAmount( $donationRequest->getAmount() );
-		$donation->setInterval( $donationRequest->getInterval() );
-		$donation->setPersonalInfo( $donationRequest->getPersonalInfo() );
-		$donation->setOptsIntoNewsletter( $donationRequest->getOptIn() === '1' );
-		$donation->setPaymentType( $donationRequest->getPaymentType() );
-
-		$donation->setTrackingInfo( $this->newTrackingInfoFromRequest( $donationRequest ) );
-
-		if ( $donationRequest->getPaymentType() === PaymentType::DIRECT_DEBIT ) {
-			$donation->setBankData( $this->newBankDataFromRequest( $donationRequest ) );
-		}
+	public function addDonation( AddDonationRequest $donationRequest ): ValidationResponse {
+		$donation = $this->newDonationFromRequest( $donationRequest );
 
 		$validationResult = $this->donationValidator->validate( $donation );
 
@@ -80,6 +68,24 @@ class AddDonationUseCase {
 		$this->sendDonationConfirmationEmail( $donation, $needsModeration );
 
 		return ValidationResponse::newSuccessResponse();
+	}
+
+	private function newDonationFromRequest( AddDonationRequest $donationRequest ): Donation {
+		$donation = new Donation();
+
+		$donation->setAmount( $donationRequest->getAmount() );
+		$donation->setInterval( $donationRequest->getInterval() );
+		$donation->setPersonalInfo( $donationRequest->getPersonalInfo() );
+		$donation->setOptsIntoNewsletter( $donationRequest->getOptIn() === '1' );
+		$donation->setPaymentType( $donationRequest->getPaymentType() );
+
+		$donation->setTrackingInfo( $this->newTrackingInfoFromRequest( $donationRequest ) );
+
+		if ( $donationRequest->getPaymentType() === PaymentType::DIRECT_DEBIT ) {
+			$donation->setBankData( $this->newBankDataFromRequest( $donationRequest ) );
+		}
+
+		return $donation;
 	}
 
 	private function newBankDataFromRequest( AddDonationRequest $request ): BankData {
@@ -130,25 +136,29 @@ class AddDonationUseCase {
 		if ( $donation->getPersonalInfo() !== null ) {
 			$this->mailer->sendMail(
 				new MailAddress( $donation->getPersonalInfo()->getEmailAddress() ),
-				[
-					'recipient' => [
-						'salutation' => ( new GreetingGenerator() )->createGreeting(
-							$donation->getPersonalInfo()->getPersonName()->getLastName(),
-							$donation->getPersonalInfo()->getPersonName()->getSalutation(),
-							$donation->getPersonalInfo()->getPersonName()->getTitle()
-						)
-					],
-					'donation' => [
-						'id' => $donation->getId(),
-						'amount' => $donation->getAmount(),
-						'interval' => $donation->getInterval(),
-						'needsModeration' => $needsModeration,
-						'paymentType' => $donation->getPaymentType(),
-						'bankTransferCode' => $donation->getBankTransferCode(),
-					]
-				]
+				$this->getConfirmationMailTemplateArguments( $donation, $needsModeration )
 			);
 		}
+	}
+
+	private function getConfirmationMailTemplateArguments( Donation $donation, bool $needsModeration ): array {
+		return [
+			'recipient' => [
+				'salutation' => ( new GreetingGenerator() )->createGreeting(
+					$donation->getPersonalInfo()->getPersonName()->getLastName(),
+					$donation->getPersonalInfo()->getPersonName()->getSalutation(),
+					$donation->getPersonalInfo()->getPersonName()->getTitle()
+				)
+			],
+			'donation' => [
+				'id' => $donation->getId(),
+				'amount' => $donation->getAmount(),
+				'interval' => $donation->getInterval(),
+				'needsModeration' => $needsModeration,
+				'paymentType' => $donation->getPaymentType(),
+				'bankTransferCode' => $donation->getBankTransferCode(),
+			]
+		];
 	}
 
 }
