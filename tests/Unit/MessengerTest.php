@@ -7,7 +7,7 @@ use Swift_Mime_SimpleMessage;
 use Swift_NullTransport;
 use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
 use WMDE\Fundraising\Frontend\Messenger;
-use WMDE\Fundraising\Frontend\SimpleMessage;
+use WMDE\Fundraising\Frontend\Message;
 
 /**
  * @covers WMDE\Fundraising\Frontend\Messenger
@@ -30,7 +30,7 @@ class MessengerTest extends \PHPUnit_Framework_TestCase {
 		$this->expectExceptionMessage( 'Message delivery failed' );
 		( new Messenger( $mailTransport, new MailAddress( 'hostmaster@thatoperator.com' ) ) )
 			->sendMessageToUser(
-				new SimpleMessage( 'Test message', 'This is just a test' ),
+				new Message( 'Test message', 'This is just a test' ),
 				new MailAddress( 'i.want@to.receive.com' )
 			);
 	}

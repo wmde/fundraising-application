@@ -27,7 +27,7 @@ class TemplateBasedMailer {
 	 */
 	public function sendMail( MailAddress $recipient, array $templateArguments = [] ) {
 		$this->messenger->sendMessageToUser(
-			new SimpleMessage(
+			new Message(
 				$this->subject,
 				$this->template->render( $templateArguments )
 			),

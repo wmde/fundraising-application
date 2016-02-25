@@ -8,9 +8,22 @@ namespace WMDE\Fundraising\Frontend;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-interface Message {
+class Message {
 
-	public function getSubject(): string;
-	public function getMessageBody(): string;
+	private $subject;
+	private $messageBody;
+
+	public function __construct( string $subject, string $messageBody ) {
+		$this->subject = $subject;
+		$this->messageBody = $messageBody;
+	}
+
+	public function getSubject(): string {
+		return $this->subject;
+	}
+
+	public function getMessageBody(): string {
+		return $this->messageBody;
+	}
 
 }

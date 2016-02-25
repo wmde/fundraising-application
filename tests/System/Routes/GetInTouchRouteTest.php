@@ -9,7 +9,7 @@ use Swift_NullTransport;
 use WMDE\Fundraising\Frontend\FunFunFactory;
 use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
 use WMDE\Fundraising\Frontend\Messenger;
-use WMDE\Fundraising\Frontend\SimpleMessage;
+use WMDE\Fundraising\Frontend\Message;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ApiPostRequestHandler;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
 
