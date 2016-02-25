@@ -75,9 +75,9 @@ class AddDonationUseCase {
 			$donation->setStatus( Donation::STATUS_MODERATION );
 		}
 
-		$donationId = $this->donationRepository->storeDonation( $donation );
+		$this->donationRepository->storeDonation( $donation );
 
-		$this->sendDonationConfirmationEmail( $donationId, $donation, $needsModeration );
+		$this->sendDonationConfirmationEmail( $donation, $needsModeration );
 
 		return ValidationResponse::newSuccessResponse();
 	}
@@ -126,7 +126,7 @@ class AddDonationUseCase {
 		return $trackingInfo->freeze()->assertNoNullFields();
 	}
 
-	private function sendDonationConfirmationEmail( int $donationId, Donation $donation, bool $needsModeration ) {
+	private function sendDonationConfirmationEmail( Donation $donation, bool $needsModeration ) {
 		if ( $donation->getPersonalInfo() !== null ) {
 			$this->mailer->sendMail(
 				new MailAddress( $donation->getPersonalInfo()->getEmailAddress() ),
@@ -139,7 +139,7 @@ class AddDonationUseCase {
 						)
 					],
 					'donation' => [
-						'id' => $donationId,
+						'id' => $donation->getId(),
 						'amount' => $donation->getAmount(),
 						'interval' => $donation->getInterval(),
 						'needsModeration' => $needsModeration,
