@@ -22,15 +22,16 @@ class Honorifics {
 	}
 
 	/**
-	 * Get list of honorifics.
-	 *
-	 * @return array
+	 * @return string[]
 	 */
-	public function getList() {
+	public function getList(): array {
 		return $this->honorifics;
 	}
 
-	public function getKeys() {
+	/**
+	 * @return string[]
+	 */
+	public function getKeys(): array {
 		return array_keys( $this->honorifics );
 	}
 
