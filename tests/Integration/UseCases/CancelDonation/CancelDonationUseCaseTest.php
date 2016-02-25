@@ -1,0 +1,26 @@
+<?php
+
+declare( strict_types = 1 );
+
+namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\ConfirmSubscription;
+
+use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
+use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationRequest;
+
+/**
+ * @covers WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationUseCase
+ *
+ * @license GNU GPL v2+
+ * @author Jeroen De Dauw < jeroendedauw@gmail.com >
+ */
+class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
+
+	public function testGivenIdOfUnknownDonation_error() {
+		$useCase = TestEnvironment::newInstance()->getFactory()->newCancelDonationUseCase();
+
+		$useCase->cancelDonation( new CancelDonationRequest( 1337, 'token', 'updateToken' ) );
+
+		// TODO: assert fail
+	}
+
+}
