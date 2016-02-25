@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Validation;
 
 use WMDE\Fundraising\Frontend\Domain\DomainNameValidator;
-use WMDE\Fundraising\Frontend\MailAddress;
+use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
 
 /**
  * @licence GNU GPL v2+

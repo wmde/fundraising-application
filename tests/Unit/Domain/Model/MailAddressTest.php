@@ -2,10 +2,10 @@
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit;
 
-use WMDE\Fundraising\Frontend\MailAddress;
+use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
 
 /**
- * @covers WMDE\Fundraising\Frontend\MailAddress
+ * @covers WMDE\Fundraising\Frontend\Domain\Model\MailAddress
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >

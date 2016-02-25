@@ -11,7 +11,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FailedValidationResult;
 use WMDE\Fundraising\Frontend\Validation\SubscriptionValidator;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\AddSubscriptionUseCase;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\SubscriptionRequest;
-use WMDE\Fundraising\Frontend\MailAddress;
+use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
 use WMDE\Fundraising\Frontend\Validation\ValidationResult;
 
 /**

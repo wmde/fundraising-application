@@ -2,11 +2,11 @@
 
 namespace WMDE\Fundraising\Tests\Unit;
 
-use WMDE\Fundraising\Frontend\ReferrerGeneralizer;
+use WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer;
 use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
 
 /**
- * @covers WMDE\Fundraising\Frontend\ReferrerGeneralizer
+ * @covers WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
