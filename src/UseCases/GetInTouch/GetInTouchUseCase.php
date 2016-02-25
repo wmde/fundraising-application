@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\UseCases\GetInTouch;
 use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
 use WMDE\Fundraising\Frontend\Messenger;
 use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
-use WMDE\Fundraising\Frontend\SimpleMessage;
+use WMDE\Fundraising\Frontend\Message;
 use WMDE\Fundraising\Frontend\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 
@@ -45,7 +45,7 @@ class GetInTouchUseCase {
 
 	private function forwardContactRequest( GetInTouchRequest $request ) {
 		$this->messenger->sendMessageToOperator(
-			new SimpleMessage(
+			new Message(
 				$request->getSubject(),
 				$request->getMessageBody()
 			),
