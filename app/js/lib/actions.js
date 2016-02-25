@@ -19,5 +19,27 @@ module.exports = {
 			type: 'VALIDATION_RESULT',
 			payload: { isValid: isValid }
 		};
+	},
+
+	newSelectAmountAction: function ( amount ) {
+		return {
+			type: 'SELECT_AMOUNT',
+			payload: { amount: amount }
+		};
+	},
+
+	newInputAmountAction: function ( amount ) {
+		return {
+			type: 'INPUT_AMOUNT',
+			payload: { amount: amount }
+		};
+	},
+
+	newSelectPaymentTypeAction: function ( paymentType ) {
+		return {
+			type: 'SELECT_PAYMENT_TYPE',
+			payload: { paymentType: paymentType }
+		};
 	}
+
 };

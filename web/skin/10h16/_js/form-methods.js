@@ -33,6 +33,7 @@ $( document ).ready( function() {
 			$( '#donFormSubmit' ).trigger( 'click' );
 			return false;
 		}
+		// TODO Remove this when validation is incorporated in module
 		if ( !amountSpecified() ) {
 			$customAmount.get( 0 ).setCustomValidity( "Der Mindestbetrag beträgt 1 Euro" );
 			return false;
@@ -66,17 +67,6 @@ $( document ).ready( function() {
 			return false;
 		}
 	});
-
-	if ( inDonationForm()) {
-		$( 'input[name=betrag_auswahl], #amount-8' ).on( 'change', function() {
-			$customAmount.get( 0 ).setCustomValidity( '' );
-		} );
-		$customAmount.on( 'blur', function() {
-			if ( !amountSpecified() ) {
-				$customAmount.get( 0 ).setCustomValidity( 'Der Mindestbetrag beträgt 1 Euro' );
-			}
-		} );
-	}
 
 	$( '#payment-type-1, #payment-type-2, #payment-type-4' ).on( 'click', function() {
 		$( 'section#donation-payment' ).find( 'input[type=text]' ).each( function() {

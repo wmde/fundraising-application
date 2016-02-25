@@ -48,43 +48,43 @@
 
                     <ul class="horizontal clearfix amount-list">
                         <li class="first">
-                            <input type="radio" id="amount-1" name="betrag_auswahl" value="5,00" title="5&euro;" checked>
+                            <input type="radio" class="amount-select" id="amount-1" name="betrag_auswahl" value="5,00" title="5&euro;">
                             <label for="amount-1">5&euro;</label>
                         </li>
 
                         <li>
-                            <input type="radio" id="amount-2" name="betrag_auswahl" value="15,00" title="15&euro;">
+                            <input type="radio" class="amount-select" id="amount-2" name="betrag_auswahl" value="15,00" title="15&euro;">
                             <label for="amount-2">15&euro;</label>
                         </li>
 
                         <li>
-                            <input type="radio" id="amount-3" name="betrag_auswahl" value="25,00" title="25&euro;">
+                            <input type="radio" class="amount-select" id="amount-3" name="betrag_auswahl" value="25,00" title="25&euro;">
                             <label for="amount-3">25&euro;</label>
                         </li>
 
                         <li>
-                            <input type="radio" id="amount-4" name="betrag_auswahl" value="50,00" title="50&euro;">
+                            <input type="radio" class="amount-select" id="amount-4" name="betrag_auswahl" value="50,00" title="50&euro;">
                             <label for="amount-4">50&euro;</label>
                         </li>
 
                         <li>
-                            <input type="radio" id="amount-5" name="betrag_auswahl" value="75,00" title="75&euro;">
+                            <input type="radio" class="amount-select" id="amount-5" name="betrag_auswahl" value="75,00" title="75&euro;">
                             <label for="amount-5">75&euro;</label>
                         </li>
 
                         <li>
-                            <input type="radio" id="amount-6" name="betrag_auswahl" value="100,00" title="100&euro;">
+                            <input type="radio" class="amount-select" id="amount-6" name="betrag_auswahl" value="100,00" title="100&euro;">
                             <label for="amount-6">100&euro;</label>
                         </li>
 
                         <li>
-                            <input type="radio" id="amount-7" name="betrag_auswahl" value="250,00" title="250&euro;">
+                            <input type="radio" class="amount-select" id="amount-7" name="betrag_auswahl" value="250,00" title="250&euro;">
                             <label for="amount-7">250&euro;</label>
                         </li>
 
                         <li class="amount-custom last no-margin">
                             <div class="container" style="width: 100px;">
-                                <input id="amount-8" name="betrag" type="text" value="" title="Betrag zwischen 1 und 99999,99 Euro; Komma als Dezimaltrenner" autocomplete="off" pattern="^[1-9]{1}\d{0,4}(?:,\d\d)?$">
+                                <input id="amount-8" name="betrag" type="text" value="" title="Betrag zwischen 1 und 99999,99 Euro; Komma als Dezimaltrenner" pattern="^[1-9]{1}\d{0,4}(?:,\d\d)?$">
                                 <label class="right top" for="amount-8">&euro;</label>
                             </div>
                         </li>
@@ -450,7 +450,7 @@
                 // global store object and replace the buttonsEnabled handler with a handler that validates on button
                // click if needed
                 var isValid = ( validationResult.status === 'OK' );
-                    WMDE.Store.dispatch( actions.newStoreValidationResultAction( isValid ) );
+                    WMDE.Store.dispatch( WMDE.Actions.newStoreValidationResultAction( isValid ) );
             },
             FormFactory = {
                 newViewHandlers: function() {
@@ -460,15 +460,18 @@
                             personalData: $( "#personal-data,#donation-submit2" )
                         } ),
                         formPageHighlight: WMDE.View.createFormPageHighlightHandler( $( 'ul.step-list li' ) ),
+                        clearAmount: WMDE.View.createClearAmountHandler( $( 'input[name=betrag_auswahl]' ), $( '#betrag' ) ),
                         buttonsEnabled: WMDE.View.createEnabledWhenValidHandler( $('#donation-submit1 button,#donation-submit2 button') )
                     };
                 },
                 newValidators: function() {
                     return {
+                        // TODO validate store values instead of input values, get rid of accessors,
+                        // connect validators to store update
                         amountValidator: WMDE.FormValidation.createAmountValidator(
                                 WMDE.FormFieldAccessors.createMultipleValueAccessor(
-                                        WMDE.FormFieldAccessors.createTextValueAccessor( $( '#betrag' ) ),
-                                        WMDE.FormFieldAccessors.createRadioValueAccessor( $( 'input[name=betrag_auswahl]' ) )
+                                        WMDE.FormFieldAccessors.createTextValueAccessor( $( '#amount-8' ) ),
+                                        WMDE.FormFieldAccessors.createRadioValueAccessor( $( '.amount-select' ) )
                                 ),
                                 WMDE.FormFieldAccessors.createRadioValueAccessor( $( 'input[name=zahlweise]' ) ),
                                 '{$ basepath $}/validate-amount'
@@ -476,14 +479,44 @@
                     };
                 },
                 connectElementEventsToActions: function( store, actions, validators ) {
-                    $( '.amount-list input, .payment-type-list input' ).change( function( evt ) {
+                    // TODO get rid of validation calls in event handlers, remove validator parameter
+                    $( '.amount-select' ).change( function( evt ) {
+
+                        store.dispatch( actions.newSelectAmountAction( evt.target.value ) );
+                        validators.amountValidator.validate().then( dispatchValidationResult );
+                    } );
+
+                    $( '#amount-8' ).change( function( evt ) {
+                        store.dispatch( actions.newInputAmountAction( evt.target.value ) );
+                        validators.amountValidator.validate().then( dispatchValidationResult );
+                    } ).focus( function( evt ) {
+                        // This method will clear the selection (important for usability),
+                        // but keep the form data valid when the custom amount field is empty
+                        var newAmount;
+                        if ( evt.target.value ) {
+                            newAmount = evt.target.value;
+                        }
+                        else {
+                            newAmount = $( '.amount-select:checked' ).val();
+                        }
+                        store.dispatch( actions.newInputAmountAction( newAmount) );
+                    } ).blur( function( evt ) {
+                        // When the custom amount field is empty, simulate a selection to restore previous selection
+                        if ( !evt.target.value ) {
+                            store.dispatch( actions.newSelectAmountAction( null ) );
+                        }
+                    } );
+
+                    $( '.payment-type-list input' ).change( function( evt ) {
+                        store.dispatch( actions.newSelectPaymentTypeAction( evt.target.value ) );
                         validators.amountValidator.validate().then( dispatchValidationResult );
                     } );
 
                     $( '#donation-submit1 button' ).click( function() {
                         store.dispatch( actions.newNextPageAction() );
                     } );
-                }
+                },
+
             },
 
             validators = FormFactory.newValidators(),
@@ -497,6 +530,7 @@
             // TODO check if state has changed before executing update action
             viewHandlers.formPageVisibility.update( state.formPagination );
             viewHandlers.formPageHighlight.update( state.formPagination );
+            viewHandlers.clearAmount.update( state.formContent );
             viewHandlers.buttonsEnabled.update( state.validity );
         } );
 
@@ -505,7 +539,6 @@
         WMDE.Store.dispatch( WMDE.Actions.newAddPageAction( 'personalData' ) );
 
         FormFactory.connectElementEventsToActions( WMDE.Store, WMDE.Actions, validators );
-
 
     } );
 </script>
