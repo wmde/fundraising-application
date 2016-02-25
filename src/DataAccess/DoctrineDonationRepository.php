@@ -56,7 +56,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		$doctrineDonation->setTransferCode( $donation->getBankTransferCode() );
 
 		if ( $donation->getPersonalInfo() === null ) {
-			$doctrineDonation->setName( 'anonym' );
+			$doctrineDonation->setName( 'Anonym' );
 		} else {
 			$doctrineDonation->setCity( $donation->getPersonalInfo()->getPhysicalAddress()->getCity() );
 			$doctrineDonation->setEmail( $donation->getPersonalInfo()->getEmailAddress() );
