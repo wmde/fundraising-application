@@ -1,6 +1,6 @@
 <?php
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\Domain\Model;
 
 use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
 

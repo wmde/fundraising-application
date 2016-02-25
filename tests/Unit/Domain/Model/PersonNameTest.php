@@ -1,39 +1,29 @@
 <?php
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\Domain;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\Domain\Model;
 
-use WMDE\Fundraising\Frontend\Domain\Model\Donation;
-use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Domain\Model\Donation
+ * @covers WMDE\Fundraising\Frontend\Domain\Model\PersonName
  *
  * @license GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class DonationTest extends \PHPUnit_Framework_TestCase {
+class PersonNameTest extends \PHPUnit_Framework_TestCase {
 
-	public function testPersonalInfoNotSet_determineFullNameReturnsAnonymous() {
-		$donation = new Donation();
-		$this->assertSame( 'Anonym', $donation->determineFullName() );
-	}
-
-	/** @dataProvider privatePersonProvider */
+	/**
+	 * @dataProvider privatePersonProvider
+	 */
 	public function testGivenPersonName_determineFullNameReturnsFullName( $expectedValue, $data ) {
 		$personName = PersonName::newPrivatePersonName();
+
 		$personName->setCompanyName( $data['company'] );
 		$personName->setFirstName( $data['firstName'] );
 		$personName->setLastName( $data['lastName'] );
 		$personName->setTitle( $data['title'] );
 
-		$personalInfo = new PersonalInfo();
-		$personalInfo->setPersonName( $personName );
-
-		$donation = new Donation();
-		$donation->setPersonalInfo( $personalInfo );
-
-		$this->assertSame( $expectedValue, $donation->determineFullName() );
+		$this->assertSame( $expectedValue, $personName->getFullName() );
 	}
 
 	public function privatePersonProvider() {

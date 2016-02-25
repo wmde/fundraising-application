@@ -153,12 +153,4 @@ class Donation {
 		return self::STATUS_EXTERNAL_INCOMPLETE;
 	}
 
-	public function determineFullName() {
-		if ( $this->getPersonalInfo() !== null ) {
-			return $this->getPersonalInfo()->getPersonName()->getFullName();
-		}
-
-		return 'Anonym';
-	}
-
 }

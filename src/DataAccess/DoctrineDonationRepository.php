@@ -60,7 +60,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		} else {
 			$doctrineDonation->setCity( $donation->getPersonalInfo()->getPhysicalAddress()->getCity() );
 			$doctrineDonation->setEmail( $donation->getPersonalInfo()->getEmailAddress() );
-			$doctrineDonation->setName( $donation->determineFullName() );
+			$doctrineDonation->setName( $donation->getPersonalInfo()->getPersonName()->getFullName() );
 			$doctrineDonation->setInfo( $donation->getOptsIntoNewsletter() );
 		}
 
