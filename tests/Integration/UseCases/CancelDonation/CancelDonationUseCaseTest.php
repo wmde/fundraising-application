@@ -15,12 +15,12 @@ use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationRequest;
  */
 class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
-	public function testGivenIdOfUnknownDonation_error() {
+	public function testGivenIdOfUnknownDonation_cancellationIsNotSuccessful() {
 		$useCase = TestEnvironment::newInstance()->getFactory()->newCancelDonationUseCase();
 
-		$useCase->cancelDonation( new CancelDonationRequest( 1337, 'token', 'updateToken' ) );
+		$response = $useCase->cancelDonation( new CancelDonationRequest( 1337, 'token', 'updateToken' ) );
 
-		// TODO: assert fail
+		$this->assertFalse( $response->cancellationWasSuccessful() );
 	}
 
 }

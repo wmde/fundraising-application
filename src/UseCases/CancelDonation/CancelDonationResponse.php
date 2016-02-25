@@ -20,4 +20,8 @@ class CancelDonationResponse {
 		return $this->donationId;
 	}
 
+	public function cancellationWasSuccessful(): bool {
+		return false;
+	}
+
 }
