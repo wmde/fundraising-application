@@ -14,6 +14,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
 use WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer;
+use WMDE\Fundraising\Frontend\Presentation\GreetingGenerator;
 use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
 use WMDE\Fundraising\Frontend\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Validation\DonationValidator;
@@ -69,9 +70,14 @@ class AddDonationUseCase {
 			$donation->setBankTransferCode( $this->transferCodeGenerator->generateTransferCode() );
 		}
 
+		$needsModeration = $this->donationValidator->needsModeration( $donation );
+		if ( $needsModeration ) {
+			$donation->setStatus( Donation::STATUS_MODERATION );
+		}
+
 		$this->donationRepository->storeDonation( $donation );
 
-		$this->sendDonationConfirmationEmail( $donation );
+		$this->sendDonationConfirmationEmail( $donation, $needsModeration );
 
 		return ValidationResponse::newSuccessResponse();
 	}
@@ -120,11 +126,27 @@ class AddDonationUseCase {
 		return $trackingInfo->freeze()->assertNoNullFields();
 	}
 
-	private function sendDonationConfirmationEmail( Donation $donation ) {
+	private function sendDonationConfirmationEmail( Donation $donation, bool $needsModeration ) {
 		if ( $donation->getPersonalInfo() !== null ) {
 			$this->mailer->sendMail(
 				new MailAddress( $donation->getPersonalInfo()->getEmailAddress() ),
-				[] // TODO
+				[
+					'recipient' => [
+						'salutation' => ( new GreetingGenerator() )->createGreeting(
+							$donation->getPersonalInfo()->getPersonName()->getLastName(),
+							$donation->getPersonalInfo()->getPersonName()->getSalutation(),
+							$donation->getPersonalInfo()->getPersonName()->getTitle()
+						)
+					],
+					'donation' => [
+						'id' => $donation->getId(),
+						'amount' => $donation->getAmount(),
+						'interval' => $donation->getInterval(),
+						'needsModeration' => $needsModeration,
+						'paymentType' => $donation->getPaymentType(),
+						'bankTransferCode' => $donation->getBankTransferCode(),
+					]
+				]
 			);
 		}
 	}

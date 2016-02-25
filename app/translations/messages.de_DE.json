@@ -1,4 +1,6 @@
 {
   "Your inquiry at Wikimedia": "Ihre Anfrage an Wikimedia",
-  "Your membership with Wikimedia Germany": "Ihre Mitgliedschaft bei Wikimedia Deutschland"
+  "Your membership with Wikimedia Germany": "Ihre Mitgliedschaft bei Wikimedia Deutschland",
+  "mail_subject_confirm_donation": "Ihre Spende für Freies Wissen",
+  "recurringDonation": "Wie gewünscht werden wir die Buchung jeden Monat wiederholen.|Wie gewünscht werden wir die Buchung alle %interval% Monate wiederholen."
 }
