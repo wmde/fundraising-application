@@ -21,11 +21,13 @@ class CancelDonationUseCase {
 		$this->mailer = $mailer;
 	}
 
-	public function cancelDonation( CancelDonationRequest $cancellationRequest ) {
+	public function cancelDonation( CancelDonationRequest $cancellationRequest ): CancelDonationResponse {
 		// TODO: update donation status
 		// TODO: add log message to spenden.data['log']
 		// TODO: reset spenden_stamp in cookie
 		// TODO: send cancellation confirmation email
+
+		return new CancelDonationResponse( $cancellationRequest->getDonationId() );
 	}
 
 }
