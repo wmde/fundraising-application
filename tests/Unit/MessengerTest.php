@@ -5,7 +5,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit;
 use Swift_Message;
 use Swift_Mime_SimpleMessage;
 use Swift_NullTransport;
-use WMDE\Fundraising\Frontend\MailAddress;
+use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
 use WMDE\Fundraising\Frontend\Messenger;
 use WMDE\Fundraising\Frontend\SimpleMessage;
 
