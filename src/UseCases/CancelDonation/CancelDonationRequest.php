@@ -14,13 +14,13 @@ class CancelDonationRequest {
 	private $donationToken;
 	private $donationUpdateToken;
 
-	public function __construct( string $donationId, string $donationToken, string $donationUpdateToken ) {
+	public function __construct( int $donationId, string $donationToken, string $donationUpdateToken ) {
 		$this->donationId = $donationId;
 		$this->donationToken = $donationToken;
 		$this->donationUpdateToken = $donationUpdateToken;
 	}
 
-	public function getDonationId(): string {
+	public function getDonationId(): int {
 		return $this->donationId;
 	}
 

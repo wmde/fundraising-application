@@ -580,7 +580,21 @@ class FunFunFactory {
 	}
 
 	public function newCancelDonationUseCase(): CancelDonationUseCase {
-		return new CancelDonationUseCase();
+		return new CancelDonationUseCase(
+			$this->getDonationRepository(),
+			$this->newCancelDonationMailer()
+		);
+	}
+
+	private function newCancelDonationMailer(): TemplateBasedMailer {
+		return new TemplateBasedMailer(
+			$this->getMessenger(),
+			new TwigTemplate(
+				$this->getTwig(),
+				 'TODO.twig' // 'Donation_Cancellation_Confirmation.twig'
+			),
+			$this->getTranslator()->trans( 'TODO' )
+		);
 	}
 
 	public function newAddDonationUseCase(): AddDonationUseCase {
