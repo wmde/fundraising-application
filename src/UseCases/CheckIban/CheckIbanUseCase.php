@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\UseCases\CheckIban;
 
-use WMDE\Fundraising\Frontend\BankDataConverter;
+use WMDE\Fundraising\Frontend\Domain\BankDataConverter;
 use WMDE\Fundraising\Frontend\Domain\Iban;
 use WMDE\Fundraising\Frontend\ResponseModel\IbanResponse;
 

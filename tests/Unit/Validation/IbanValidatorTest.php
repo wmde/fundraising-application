@@ -4,7 +4,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Validation;
 
 use WMDE\Fundraising\Frontend\Domain\Iban;
 use WMDE\Fundraising\Frontend\Validation\IbanValidator;
-use WMDE\Fundraising\Frontend\BankDataConverter;
+use WMDE\Fundraising\Frontend\Domain\BankDataConverter;
 
 /**
  * @covers WMDE\Fundraising\Frontend\Validation\IbanValidator
