@@ -4,7 +4,7 @@
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\AddDonation;
 
 use PHPUnit_Framework_MockObject_MockObject;
-use WMDE\Fundraising\Frontend\BankDataConverter;
+use WMDE\Fundraising\Frontend\Domain\BankDataConverter;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;

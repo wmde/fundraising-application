@@ -2,11 +2,11 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend;
+namespace WMDE\Fundraising\Frontend\Domain;
 
 use RuntimeException;
+use WMDE\Fundraising\Frontend\BankDataLibraryInitializationException;
 use WMDE\Fundraising\Frontend\Domain\Model\BankData;
-use WMDE\Fundraising\Frontend\Domain\Iban;
 
 /**
  * @licence GNU GPL v2+

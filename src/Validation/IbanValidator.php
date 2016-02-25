@@ -2,7 +2,7 @@
 
 namespace WMDE\Fundraising\Frontend\Validation;
 
-use WMDE\Fundraising\Frontend\BankDataConverter;
+use WMDE\Fundraising\Frontend\Domain\BankDataConverter;
 use WMDE\Fundraising\Frontend\Domain\Iban;
 
 /**

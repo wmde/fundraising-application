@@ -6,12 +6,12 @@ namespace WMDE\Fundraising\Tests\Unit;
 
 use InvalidArgumentException;
 use RuntimeException;
-use WMDE\Fundraising\Frontend\BankDataConverter;
+use WMDE\Fundraising\Frontend\Domain\BankDataConverter;
 use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Iban;
 
 /**
- * @covers WMDE\Fundraising\Frontend\BankDataConverter
+ * @covers WMDE\Fundraising\Frontend\Domain\BankDataConverter
  *
  * @licence GNU GPL v2+
  * @author Christoph Fischer <christoph.fischer@wikimedia.de >
