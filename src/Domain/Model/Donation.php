@@ -141,6 +141,7 @@ class Donation {
 		$this->trackingInfo = $trackingInfo;
 	}
 
+	// TODO: this might be misplaced
 	public function getInitialStatus(): string {
 		if ( $this->paymentType === PaymentType::DIRECT_DEBIT ) {
 			return self::STATUS_NEW;
