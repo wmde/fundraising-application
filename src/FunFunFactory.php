@@ -546,6 +546,10 @@ class FunFunFactory {
 		return $this->pimple['translator'];
 	}
 
+	public function setTranslator( TranslatorInterface $translator ) {
+		$this->pimple['translator'] = $translator;
+	}
+
 	private function getTwigFactory(): TwigFactory {
 		return $this->pimple['twig_factory'];
 	}
