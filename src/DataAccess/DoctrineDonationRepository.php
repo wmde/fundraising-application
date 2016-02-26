@@ -198,18 +198,9 @@ class DoctrineDonationRepository implements DonationRepository {
 
 		$personalInfo->setEmailAddress( $dd->getEmail() );
 		$personalInfo->setPersonName( $this->getPersonNameFromEntity( $dd ) );
-		$this->hitThePersonalInfoWithLeadPipeUntilItFinallySetsTheAddress( $personalInfo, $dd );
+		$personalInfo->setPhysicalAddress( $this->getPhysicalAddressFromEntity( $dd ) );
 
 		return $personalInfo->freeze()->assertNoNullFields();
-	}
-
-	private function hitThePersonalInfoWithLeadPipeUntilItFinallySetsTheAddress(
-		PersonalInfo $personalInfo, DoctrineDonation $dd ) {
-
-		// TODO: we might want to use a loop here
-		$personalInfo->setPhysicalAddress( $this->getPhysicalAddressFromEntity( $dd ) );
-		$personalInfo->setPhysicalAddress( $this->getPhysicalAddressFromEntity( $dd ) );
-		$personalInfo->setPhysicalAddress( $this->getPhysicalAddressFromEntity( $dd ) );
 	}
 
 	private function getPersonNameFromEntity( DoctrineDonation $dd ): PersonName {
