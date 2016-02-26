@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Domain\Model;
 
+use RuntimeException;
+
 /**
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
@@ -131,6 +133,22 @@ class Donation {
 
 	public function setBankData( BankData $bankData ) {
 		$this->bankData = $bankData;
+	}
+
+	public function cancel() {
+		if ( $this->paymentType !== PaymentType::DIRECT_DEBIT ) {
+			throw new RuntimeException( 'Can only cancel direct debit' );
+		}
+
+		if ( !$this->statusIsCancellable() ) {
+			throw new RuntimeException( 'Can only cancel new donations' );
+		}
+
+		$this->status = self::STATUS_DELETED;
+	}
+
+	private function statusIsCancellable() {
+		return $this->status === self::STATUS_NEW || $this->status === self::STATUS_MODERATION;
 	}
 
 	public function getTrackingInfo(): TrackingInfo {
