@@ -74,7 +74,8 @@ class DoctrineDonationRepository implements DonationRepository {
 		return array_merge(
 			$this->getDataFieldsFromTrackingInfo( $donation->getTrackingInfo() ),
 			$this->getDataFieldsForBankData( $donation ),
-			$this->getDataFieldsFromPersonalInfo( $donation->getPersonalInfo() )
+			$this->getDataFieldsFromPersonalInfo( $donation->getPersonalInfo() ),
+			$this->getDataFieldsFromTokens( $donation )
 		);
 	}
 
@@ -140,6 +141,14 @@ class DoctrineDonationRepository implements DonationRepository {
 		];
 	}
 
+	private function getDataFieldsFromTokens( Donation $donation ) {
+		return [
+			'token' => $donation->getAccessToken(),
+			'utoken' => $donation->getUpdateToken(),
+			'utoken_expiry' => $donation->getUpdateTokenExpiry()
+		];
+	}
+
 	/**
 	 * @param int $id
 	 *
@@ -189,18 +198,9 @@ class DoctrineDonationRepository implements DonationRepository {
 
 		$personalInfo->setEmailAddress( $dd->getEmail() );
 		$personalInfo->setPersonName( $this->getPersonNameFromEntity( $dd ) );
-		$this->hitThePersonalInfoWithLeadPipeUntilItFinallySetsTheAddress( $personalInfo, $dd );
+		$personalInfo->setPhysicalAddress( $this->getPhysicalAddressFromEntity( $dd ) );
 
 		return $personalInfo->freeze()->assertNoNullFields();
-	}
-
-	private function hitThePersonalInfoWithLeadPipeUntilItFinallySetsTheAddress(
-		PersonalInfo $personalInfo, DoctrineDonation $dd ) {
-
-		// TODO: we might want to use a loop here
-		$personalInfo->setPhysicalAddress( $this->getPhysicalAddressFromEntity( $dd ) );
-		$personalInfo->setPhysicalAddress( $this->getPhysicalAddressFromEntity( $dd ) );
-		$personalInfo->setPhysicalAddress( $this->getPhysicalAddressFromEntity( $dd ) );
 	}
 
 	private function getPersonNameFromEntity( DoctrineDonation $dd ): PersonName {

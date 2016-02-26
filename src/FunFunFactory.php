@@ -40,6 +40,7 @@ use WMDE\Fundraising\Frontend\Domain\Honorifics;
 use WMDE\Fundraising\Frontend\Domain\Repositories\CommentRepository;
 use WMDE\Fundraising\Frontend\Domain\SimpleTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\Repositories\SubscriptionRepository;
+use WMDE\Fundraising\Frontend\Domain\TokenGenerator;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListJsonPresenter;
@@ -611,7 +612,8 @@ class FunFunFactory {
 			$this->newReferrerGeneralizer(),
 			$this->newAddDonationMailer(),
 			$this->newBankTransferCodeGenerator(),
-			$this->newBankDataConverter()
+			$this->newBankDataConverter(),
+			$this->newTokenGenerator()
 		);
 	}
 
@@ -680,6 +682,10 @@ class FunFunFactory {
 
 	public function setCommentRepository( CommentRepository $commentRepository ) {
 		$this->pimple['comment_repository'] = $commentRepository;
+	}
+
+	public function newTokenGenerator() {
+		return new TokenGenerator( $this->config['token-length'], $this->config['token-validity-timestamp'] );
 	}
 
 }
