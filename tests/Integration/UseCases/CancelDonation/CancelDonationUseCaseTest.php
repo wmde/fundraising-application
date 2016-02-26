@@ -23,4 +23,12 @@ class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$this->assertFalse( $response->cancellationWasSuccessful() );
 	}
 
+	public function testResponseContainsDonationId() {
+		$useCase = TestEnvironment::newInstance()->getFactory()->newCancelDonationUseCase();
+
+		$response = $useCase->cancelDonation( new CancelDonationRequest( 1337, 'token', 'updateToken' ) );
+
+		$this->assertEquals( 1337, $response->getDonationId() );
+	}
+
 }
