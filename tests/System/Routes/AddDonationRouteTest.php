@@ -74,6 +74,11 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$this->assertSame( 'en.wikipedia.org', $data['source'] );
 			$this->assertSame( 'N', $donation->getStatus() );
 			$this->assertSame( true, $donation->getInfo() );
+
+			// TODO: assert tokens are set
+			// $this->assertRegExp( '/[0-9a-f]{32}/', $data['token'] );
+			// $this->assertRegExp( '/[0-9a-f]{32}/', $data['utoken'] );
+			// $this->assertGreaterThan( ( new \DateTime() )->format( 'Y-m-d H:i:s' ), $data['utoken_expiry'] );
 		} );
 	}
 
