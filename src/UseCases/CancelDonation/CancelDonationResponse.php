@@ -11,9 +11,11 @@ namespace WMDE\Fundraising\Frontend\UseCases\CancelDonation;
 class CancelDonationResponse {
 
 	private $donationId;
+	private $isSuccess;
 
-	public function __construct( int $donationId /* TODO: the smag should go here? */ ) {
+	public function __construct( int $donationId, bool $isSuccess /* TODO: the smag should go here? */ ) {
 		$this->donationId = $donationId;
+		$this->isSuccess = $isSuccess;
 	}
 
 	public function getDonationId(): int {
@@ -21,7 +23,7 @@ class CancelDonationResponse {
 	}
 
 	public function cancellationWasSuccessful(): bool {
-		return false;
+		return $this->isSuccess;
 	}
 
 }
