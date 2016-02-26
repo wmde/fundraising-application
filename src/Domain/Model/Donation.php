@@ -135,6 +135,9 @@ class Donation {
 		$this->bankData = $bankData;
 	}
 
+	/**
+	 * @throws RuntimeException
+	 */
 	public function cancel() {
 		if ( $this->paymentType !== PaymentType::DIRECT_DEBIT ) {
 			throw new RuntimeException( 'Can only cancel direct debit' );
@@ -147,7 +150,7 @@ class Donation {
 		$this->status = self::STATUS_DELETED;
 	}
 
-	private function statusIsCancellable() {
+	private function statusIsCancellable(): bool {
 		return $this->status === self::STATUS_NEW || $this->status === self::STATUS_MODERATION;
 	}
 
