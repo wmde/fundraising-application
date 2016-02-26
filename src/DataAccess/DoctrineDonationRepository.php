@@ -74,7 +74,8 @@ class DoctrineDonationRepository implements DonationRepository {
 		return array_merge(
 			$this->getDataFieldsFromTrackingInfo( $donation->getTrackingInfo() ),
 			$this->getDataFieldsForBankData( $donation ),
-			$this->getDataFieldsFromPersonalInfo( $donation->getPersonalInfo() )
+			$this->getDataFieldsFromPersonalInfo( $donation->getPersonalInfo() ),
+			$this->getDataFieldsFromTokens( $donation )
 		);
 	}
 
@@ -137,6 +138,14 @@ class DoctrineDonationRepository implements DonationRepository {
 			'plz' => $address->getPostalCode(),
 			'ort' => $address->getCity(),
 			'country' => $address->getCountryCode(),
+		];
+	}
+
+	private function getDataFieldsFromTokens( Donation $donation ) {
+		return [
+			'token' => $donation->getAccessToken(),
+			'utoken' => $donation->getUpdateToken(),
+			'utoken_expiry' => $donation->getUpdateTokenExpiry()
 		];
 	}
 

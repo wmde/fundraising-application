@@ -81,5 +81,7 @@
 			"wikivoyage.org": "wikivoyage.org",
 			"wikispecies.org": "wikispecies.org"
 		}
-	}
+	},
+	"token-length": 16,
+	"token-validity-timestamp": "PT4H"
 }

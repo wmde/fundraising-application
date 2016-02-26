@@ -36,6 +36,10 @@ class Donation {
 	private $paymentType;
 	private $bankTransferCode = '';
 
+	private $accessToken = '';
+	private $updateToken = '';
+	private $updateTokenExpiry = '';
+
 	private $optsIntoNewsletter;
 
 	/**
@@ -157,6 +161,30 @@ class Donation {
 
 	public function setTrackingInfo( TrackingInfo $trackingInfo ) {
 		$this->trackingInfo = $trackingInfo;
+	}
+
+	public function setAccessToken( string $accessToken ) {
+		$this->accessToken = $accessToken;
+	}
+
+	public function getAccessToken(): string {
+		return $this->accessToken;
+	}
+
+	public function setUpdateToken( string $updateToken ) {
+		$this->updateToken = $updateToken;
+	}
+
+	public function getUpdateToken(): string {
+		return $this->updateToken;
+	}
+
+	public function setUpdateTokenExpiry( string $updateTokenExpiry ) {
+		$this->updateTokenExpiry = $updateTokenExpiry;
+	}
+
+	public function getUpdateTokenExpiry(): string {
+		return $this->updateTokenExpiry;
 	}
 
 	public function getInitialStatus(): string {

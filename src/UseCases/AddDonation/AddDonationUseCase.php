@@ -11,6 +11,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\TrackingInfo;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
+use WMDE\Fundraising\Frontend\Domain\TokenGenerator;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
 use WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer;
@@ -31,17 +32,20 @@ class AddDonationUseCase {
 	private $referrerGeneralizer;
 	private $mailer;
 	private $transferCodeGenerator;
+	private $tokenGenerator;
 	private $bankDataConverter;
 
 	public function __construct( DonationRepository $donationRepository, DonationValidator $donationValidator,
 								 ReferrerGeneralizer $referrerGeneralizer, TemplateBasedMailer $mailer,
-								 TransferCodeGenerator $transferCodeGenerator, BankDataConverter $bankDataConverter ) {
+								 TransferCodeGenerator $transferCodeGenerator, BankDataConverter $bankDataConverter,
+								 TokenGenerator $tokenGenerator ) {
 
 		$this->donationRepository = $donationRepository;
 		$this->donationValidator = $donationValidator;
 		$this->referrerGeneralizer = $referrerGeneralizer;
 		$this->mailer = $mailer;
 		$this->transferCodeGenerator = $transferCodeGenerator;
+		$this->tokenGenerator = $tokenGenerator;
 		$this->bankDataConverter = $bankDataConverter;
 	}
 
@@ -53,6 +57,10 @@ class AddDonationUseCase {
 		if ( $validationResult->hasViolations() ) {
 			return ValidationResponse::newFailureResponse( $validationResult->getViolations() );
 		}
+
+		$donation->setAccessToken( $this->tokenGenerator->generateToken() );
+		$donation->setUpdateToken( $this->tokenGenerator->generateToken() );
+		$donation->setUpdateTokenExpiry( $this->tokenGenerator->generateTokenExpiry() );
 
 		if ( $donation->getPaymentType() === PaymentType::BANK_TRANSFER ) {
 			$donation->setBankTransferCode( $this->transferCodeGenerator->generateTransferCode() );
