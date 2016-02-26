@@ -18,9 +18,9 @@
 
                 <div class="box-header">
                     <ul class="step-list horizontal clearfix">
-                        <li class="first active">Mein Betrag</li>
-                        <li>Meine Daten</li>
-                        <li class="last">Fertig!</li>
+                        <li id="highlight-payment" class="first">Mein Betrag</li>
+                        <li id="highlight-personalData">Meine Daten</li>
+                        <li id="highlight-finished" class="last">Fertig!</li>
                     </ul>
                 </div>
 
@@ -267,6 +267,155 @@
         </div>
     </section>
 
+    <!-- personal data -->
+    <section id="personal-data" class="container clearfix">
+        <div class="ltcol">
+            &nbsp;
+        </div>
+
+        <div class="ctcol">
+            <div class="box partial">
+
+                <div class="box-section">
+                    <div class="section-title clearfix">
+                        <h2>Pers&ouml;nliche Daten</h2>
+                    </div>
+
+                    <div class="container">
+                        <ul class="horizontal clearfix">
+                            <li class="first">
+                                <input type="radio" id="address-type-1" name="adresstyp" value="person" title="privat" class="slide-toggle" data-slide-rel="#personal-data .slide-1" {% if adresstyp == 'person' or not adresstyp %}checked{% endif %}>
+                                <label for="address-type-1">Privatperson</label>
+                            </li>
+
+                            <li>
+                                <input type="radio" id="address-type-2" name="adresstyp" value="firma" title="gesch&auml;ftlich" class="slide-toggle" data-slide-rel="#personal-data .slide-2" {% if adresstyp == 'firma' %}checked{% endif %}>
+                                <label for="address-type-2">Firma</label>
+                            </li>
+
+                            <li class="last">
+                                <input type="radio" id="address-type-3" name="adresstyp" value="anonym" title="anonym" class="slide-toggle slide-toggle-invert" data-slide-rel="#personal-data .slide-3" {% if adresstyp == 'anonym' %}checked{% endif %}>
+                                <label for="address-type-3">anonym</label>
+                            </li>
+                        </ul>
+
+                        <a href="#" id="tooltip-icon-addresstype" class="right top help tooltip icon-only tooltip-track" data-title="Adresstyp" title="Bitte beachten Sie, dass wir für eine spätere Zuordnung der Spende Ihren Namen und die Zahlungsinformationen vom Dienstleister erhalten."><span class="icon-question-sign"></span></a>
+                    </div>
+
+                    <div class="slide-3">
+
+                        <hr/>
+
+                        <div class="slide-1">
+
+                            <div class="input-container">
+                                <ul class="horizontal clearfix salutation">
+                                    <li class="first">
+                                        <input type="radio" id="salutation-1" name="anrede" value="Frau" title="Frau" class="required" {% if anrede == 'Frau' or not anrede %}checked="checked"{% endif %}>
+                                        <label for="salutation-1">Frau</label>
+                                    </li>
+
+                                    <li class="last">
+                                        <input type="radio" id="salutation-2" name="anrede" value="Herr" title="Herr" {% if anrede == 'Herr' %}checked="checked"{% endif %}>
+                                        <label for="salutation-2">Herr</label>
+                                    </li>
+                                </ul>
+
+                                <select id="personal-title" name="titel">
+                                    <option value="" data-behavior="placeholder">Kein Titel</option>
+                                    <option value="Dr." {% if titel == 'Dr.' %}selected{% endif %}>Dr.</option>
+                                    <option value="Prof." {% if titel == 'Prof.' %}selected{% endif %}>Prof.</option>
+                                    <option value="Prof. Dr." {% if titel == 'Prof. Dr.' %}selected{% endif %}>Prof. Dr.</option>
+                                </select>
+                            </div>
+
+                            <div class="input-container">
+                                <label for="first-name">Name</label>
+                                <input id="first-name" name="vorname" type="text" value="{$ vorname $}" pattern="^((?![M|m]ustermann).)*$" title="Groß- und Kleinbuchstaben, Bindestriche und Leerzeichen" placeholder="Vorname" required="required" class="required">
+                                <span class="validation icon-placeholder"></span>
+                                <input id="last-name" name="nachname" type="text" value="{$ nachname $}" pattern="^((?![M|m]ustermann).)*$" title="Groß- und Kleinbuchstaben, Bindestriche, Leerzeichen und Punkte" placeholder="Nachname" required="required" class="required">
+                                <span class="validation icon-placeholder"></span>
+                            </div>
+                        </div>
+
+                        <div class="slide-2">
+
+                            <div class="input-container">
+                                <label for="company-name">Firma</label>
+                                <input id="company-name" name="firma" type="text" value="{$ firma $}" placeholder="Firma" required="required" class="required">
+                                <span class="validation icon-placeholder"></span>
+                            </div>
+                        </div>
+
+
+                        <div class="input-container">
+                            <label for="street">Stra&szlig;e</label>
+                            <input id="street" name="strasse" type="text" value="{$ strasse $}" pattern="^((?![M|m]uster).)*$" placeholder="z.B. Musterstra&szlig;e 123" required="required" class="required">
+                            <span class="validation icon-placeholder"></span>
+                        </div>
+
+                        <div class="input-container">
+                            <label for="post-code">PLZ &amp; Ort</label>
+                            <input id="post-code" name="plz" type="text" value="{$ plz $}"  placeholder="z.B. 10117" title="Fünfstellige Postleitzahl" required="required" class="required" pattern="[0-9]{5}">
+                            <span class="validation icon-placeholder"></span>
+                            <input id="city" name="ort" type="text" value="{$ ort $}" pattern="^((?![M|m]uster).)*$" placeholder="z.B. Berlin" required="required" class="required">
+                            <span class="validation icon-placeholder"></span>
+                        </div>
+
+                        <div class="input-container">
+                            <label for="country">Land</label>
+                            <select id="country" name="country" title="Land">
+                                <option value="DE" {% if country == 'DE' %}selected{% endif %}>Deutschland</option>
+                                <option value="AT" {% if country == 'AT' %}selected{% endif %}>Österreich</option>
+                                <option value="CH" {% if country == 'CH' %}selected{% endif %}>Schweiz</option>
+                                <option value="BE" {% if country == 'BE' %}selected{% endif %}>Belgien</option>
+                                <option value="IT" {% if country == 'IT' %}selected{% endif %}>Italien</option>
+                                <option value="LI" {% if country == 'LI' %}selected{% endif %}>Liechtenstein</option>
+                                <option value="LU" {% if country == 'LU' %}selected{% endif %}>Luxemburg</option>
+                            </select>
+                        </div>
+
+                        <div class="input-container">
+                            <label for="email">E-Mail</label>
+                            <input id="email" name="email" type="text" value="{$ email $}" placeholder="z.B. name@domain.de" required="required" class="required">
+                            <span class="validation icon-placeholder"></span>
+                        </div>
+
+                        <!-- Informationsmaterial -->
+                        <div class="container" style="margin-top: 40px; font-size:90%">
+                            <input type="checkbox" id="send-information" name="info" value="1" title="Bitte senden Sie mir Informationsmaterial.">
+                            <label for="send-information" style="margin-right: 30px; width: auto;">Ja, ich bin damit einverstanden, dass Wikimedia mich per E-Mail kontaktiert, wenn Wikipedia meine Unterstützung benötigt.</label>
+                            <a href="#" class="right top help tooltip icon-only tooltip-track" data-title="Infomaterial_F2_Intrvar" title="Einmal im Jahr bitten wir die Leserinnen und Leser Wikipedias um Unterstützung. Wir würden uns freuen, wenn wir in Zukunft auf Sie zählen können, wenn es um die Verbreitung Freien Wissens geht."><span class="icon-question-sign"></span></a>
+                        </div>
+                        <!-- Informationsmaterial -->
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="rtcol">
+            <div class="icon-shield _icon-list-item first last">
+                <p>
+                    <strong>Ihre Daten sind sicher</strong>
+                </p>
+                <p>
+                    Wir f&uuml;hlen uns dem  Datenschutz verpflichtet. Unsere Bestimmungen dazu k&ouml;nnen Sie <a href="Datenschutz">hier</a> einsehen.
+                </p>
+            </div>
+            <div class="icon-envelope-alt _icon-list-item first last slide-3 opened" style="position: absolute; bottom: -9px; width: 180px;/* IE8 fix */">
+                <p>
+                    <strong>Einfache Abmeldung</strong>
+                </p>
+                <p>
+                    Die Einwilligung können Sie jederzeit per E-Mail an <a href="mailto:spenden@wikimedia.de">spenden@wikimedia.de</a><br>mit Wirkung für die Zukunft widerrufen.
+                </p>
+            </div>
+        </div>
+    </section>
+
+
     <section id="donation-submit2" class="container clearfix" style="display:none">
         <div class="ltcol">
             &nbsp;
@@ -284,19 +433,6 @@
             </div>
         </div>
 
-        <script>
-            $(function(){
-                var FP = WMDEFR.FormPages,
-                        // TODO do proper validation or use premade validation class
-                    validateFirstPage = function() { return { status: 'OK' }; },
-                    frm = FP.createFormwithPages( [
-                  FP.createFormPage( "#donation-periode,#donation-amount,#donation-payment,#donation-submit1", validateFirstPage ),
-                  FP.createFormPage( "#donation-submit2" )
-                ] );
-                $('#donation-submit1 button' ).click( function() { frm.nextPage(); } );
-            } );
-        </script>
-
         <div class="rtcol">
         </div>
     </section>
@@ -304,6 +440,75 @@
     <input type="hidden" id="interval-hidden" name="periode">
     <input type="hidden" name="form" value="10h16_Form2_Ticker_Intrvar">
 </form>
+
+<script>
+    // Initialize the form
+    $(function(){
+
+        var dispatchValidationResult = function ( validationResult ) {
+                // TODO investigate how Reflux stores can react to Promises, so we don't need this function with the
+                // global store object and replace the buttonsEnabled handler with a handler that validates on button
+               // click if needed
+                var isValid = ( validationResult.status === 'OK' );
+                    WMDE.Store.dispatch( actions.newStoreValidationResultAction( isValid ) );
+            },
+            FormFactory = {
+                newViewHandlers: function() {
+                    return {
+                        formPageVisibility: WMDE.View.createFormPageVisibilityHandler( {
+                            payment: $( "#donation-periode,#donation-amount,#donation-payment,#donation-submit1" ),
+                            personalData: $( "#personal-data,#donation-submit2" )
+                        } ),
+                        formPageHighlight: WMDE.View.createFormPageHighlightHandler( $( 'ul.step-list li' ) ),
+                        buttonsEnabled: WMDE.View.createEnabledWhenValidHandler( $('#donation-submit1 button,#donation-submit2 button') )
+                    };
+                },
+                newValidators: function() {
+                    return {
+                        amountValidator: WMDE.FormValidation.createAmountValidator(
+                                WMDE.FormFieldAccessors.createMultipleValueAccessor(
+                                        WMDE.FormFieldAccessors.createTextValueAccessor( $( '#betrag' ) ),
+                                        WMDE.FormFieldAccessors.createRadioValueAccessor( $( 'input[name=betrag_auswahl]' ) )
+                                ),
+                                WMDE.FormFieldAccessors.createRadioValueAccessor( $( 'input[name=zahlweise]' ) ),
+                                '{$ basepath $}/validate-amount'
+                        )
+                    };
+                },
+                connectElementEventsToActions: function( store, actions, validators ) {
+                    $( '.amount-list input, .payment-type-list input' ).change( function( evt ) {
+                        validators.amountValidator.validate().then( dispatchValidationResult );
+                    } );
+
+                    $( '#donation-submit1 button' ).click( function() {
+                        store.dispatch( actions.newNextPageAction() );
+                    } );
+                }
+            },
+
+            validators = FormFactory.newValidators(),
+            viewHandlers = FormFactory.newViewHandlers();
+
+        // Connect view Handlers to state update
+        // TODO Move this to an a class that gets a map of the handlers and their assorted state property
+        WMDE.Store.subscribe( function() {
+            var state = WMDE.Store.getState();
+            // console.log( state );
+            // TODO check if state has changed before executing update action
+            viewHandlers.formPageVisibility.update( state.formPagination );
+            viewHandlers.formPageHighlight.update( state.formPagination );
+            viewHandlers.buttonsEnabled.update( state.validity );
+        } );
+
+        // Initialize form pages
+        WMDE.Store.dispatch( WMDE.Actions.newAddPageAction( 'payment' ) );
+        WMDE.Store.dispatch( WMDE.Actions.newAddPageAction( 'personalData' ) );
+
+        FormFactory.connectElementEventsToActions( WMDE.Store, WMDE.Actions, validators );
+
+
+    } );
+</script>
 
 <!-- TODO
 <div class="wlightbox-contents">

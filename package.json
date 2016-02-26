@@ -8,8 +8,8 @@
     "test": "app/js/tests"
   },
   "scripts": {
-    "build-js": "browserify app/js/main.js -s WMDEFR -o web/res/js/wmde_fr.js",
-    "watch-js": "watchify app/js/main.js -v -s WMDEFR -o web/res/js/wmde_fr.js",
+    "build-js": "browserify app/js/main.js -s WMDE -o web/res/js/wmde.js",
+    "watch-js": "watchify app/js/main.js -v -s WMDE -o web/res/js/wmde.js",
     "test": "tape 'app/js/tests/**/*.js' | tap-min",
     "cs": "jshint app/js && jscs app/js",
     "ci": "npm run cs && npm run test"
@@ -30,16 +30,20 @@
   "devDependencies": {
     "browserify": "^13.0.0",
     "browserify-shim": "^3.8.12",
+    "deep-freeze": "0.0.1",
     "jquery": "^2.2.0",
     "jscs": "^2.10.1",
+    "jsdom": "^8.0.4",
     "jshint": "^2.9.1",
+    "sinon": "^1.17.3",
     "tap-min": "^1.1.0",
     "tape": "^4.4.0",
     "watchify": "^3.7.0"
   },
   "dependencies": {
     "object-assign": "^4.0.1",
-    "promise": "^7.1.1"
+    "promise": "^7.1.1",
+    "redux": "^3.3.1"
   },
   "browserify": {
     "transform": [
