@@ -136,12 +136,19 @@ class Donation {
 	}
 
 	public function cancel() {
-		// payment type needs to be direct debit
-		// status should be STATUS_NEW or STATUS_MODERATION
+		if ( $this->paymentType !== PaymentType::DIRECT_DEBIT ) {
+			throw new RuntimeException( 'Can only cancel direct debit' );
+		}
 
-		// https://github.com/wmde/FundraisingStore/pull/53/files
+		if ( !$this->statusIsCancellable() ) {
+			throw new RuntimeException( 'Can only cancel new donations' );
+		}
 
-		throw new RuntimeException( 'Can only cancel direct debit' );
+		$this->status = self::STATUS_DELETED;
+	}
+
+	private function statusIsCancellable() {
+		return $this->status === self::STATUS_NEW || $this->status === self::STATUS_MODERATION;
 	}
 
 	public function getTrackingInfo(): TrackingInfo {
