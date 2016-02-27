@@ -38,7 +38,7 @@ class CancelDonationUseCase {
 			$donation->cancel();
 		}
 		catch ( \RuntimeException $ex ) {
-			return new CancelDonationResponse( $cancellationRequest->getDonationId(), true );
+			return new CancelDonationResponse( $cancellationRequest->getDonationId(), false );
 		}
 
 		// TODO: update donation status

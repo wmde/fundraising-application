@@ -48,7 +48,7 @@ class DoctrineDonationRepository implements DonationRepository {
 
 	private function newDonationEntity( Donation $donation ): DoctrineDonation {
 		$doctrineDonation = new DoctrineDonation();
-		$doctrineDonation->setStatus( $donation->getInitialStatus() );
+		$doctrineDonation->setStatus( $donation->getStatus() );
 		$doctrineDonation->setAmount( $donation->getAmount() );
 		$doctrineDonation->setPeriod( $donation->getInterval() );
 

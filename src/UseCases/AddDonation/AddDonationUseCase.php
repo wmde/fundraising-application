@@ -59,15 +59,30 @@ class AddDonationUseCase {
 		}
 
 		$needsModeration = $this->donationValidator->needsModeration( $donation );
-		if ( $needsModeration ) {
-			$donation->setStatus( Donation::STATUS_MODERATION );
-		}
+
+		$donation->setStatus( $this->getInitialDonationStatus( $donation, $needsModeration ) );
 
 		$this->donationRepository->storeDonation( $donation );
 
 		$this->sendDonationConfirmationEmail( $donation, $needsModeration );
 
 		return ValidationResponse::newSuccessResponse();
+	}
+
+	private function getInitialDonationStatus( Donation $donation, bool $needsModeration ): string {
+		if ( $needsModeration ) {
+			 return Donation::STATUS_MODERATION;
+		}
+
+		if ( $donation->getPaymentType() === PaymentType::DIRECT_DEBIT ) {
+			return Donation::STATUS_NEW;
+		}
+
+		if ( $donation->getPaymentType() === PaymentType::BANK_TRANSFER ) {
+			return Donation::STATUS_PROMISE;
+		}
+
+		return Donation::STATUS_EXTERNAL_INCOMPLETE;
 	}
 
 	private function newDonationFromRequest( AddDonationRequest $donationRequest ): Donation {
