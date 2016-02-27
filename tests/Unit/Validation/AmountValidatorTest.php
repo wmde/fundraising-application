@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace WMDE\Fundraising\Tests\Unit;
 
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;

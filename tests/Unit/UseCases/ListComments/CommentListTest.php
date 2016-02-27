@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace WMDE\Fundraising\Frontend\Tests\Unit\UseCases\ListComments;
 
 use WMDE\Fundraising\Frontend\Domain\ReadModel\CommentWithAmount;
@@ -21,7 +23,7 @@ class CommentListTest extends \PHPUnit_Framework_TestCase {
 		$comment = CommentWithAmount::newInstance()
 			->setAuthorName( 'name0' )
 			->setCommentText( 'comment' )
-			->setDonationAmount( '42' )
+			->setDonationAmount( 42 )
 			->setDonationTime( new \DateTime( '1984-01-01' ) );
 
 		$this->assertSame( [ $comment ], ( new CommentList( $comment ) )->toArray() );
@@ -31,19 +33,19 @@ class CommentListTest extends \PHPUnit_Framework_TestCase {
 		$comment0 = CommentWithAmount::newInstance()
 			->setAuthorName( 'name0' )
 			->setCommentText( 'comment' )
-			->setDonationAmount( '42' )
+			->setDonationAmount( 42 )
 			->setDonationTime( new \DateTime( '1984-01-01' ) );
 
 		$comment1 = CommentWithAmount::newInstance()
 			->setAuthorName( 'name1' )
 			->setCommentText( 'comment' )
-			->setDonationAmount( '42' )
+			->setDonationAmount( 42 )
 			->setDonationTime( new \DateTime( '1984-01-01' ) );
 
 		$comment2 = CommentWithAmount::newInstance()
 			->setAuthorName( 'name2' )
 			->setCommentText( 'comment' )
-			->setDonationAmount( '42' )
+			->setDonationAmount( 42 )
 			->setDonationTime( new \DateTime( '1984-01-01' ) );
 
 		$this->assertSame(

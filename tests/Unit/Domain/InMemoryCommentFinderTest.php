@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Domain;
 
 use WMDE\Fundraising\Frontend\Domain\ReadModel\CommentWithAmount;
@@ -21,19 +23,19 @@ class InMemoryCommentFinderTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(
 			[
 				CommentWithAmount::newInstance()->setAuthorName( 'name0' )->setCommentText( 'comment' )
-					->setDonationAmount( '42' )->setDonationTime( new \DateTime( '1984-01-01' ) ),
+					->setDonationAmount( 42 )->setDonationTime( new \DateTime( '1984-01-01' ) ),
 				CommentWithAmount::newInstance()->setAuthorName( 'name1' )->setCommentText( 'comment' )
-					->setDonationAmount( '42' )->setDonationTime( new \DateTime( '1984-01-01' ) ),
+					->setDonationAmount( 42 )->setDonationTime( new \DateTime( '1984-01-01' ) ),
 				CommentWithAmount::newInstance()->setAuthorName( 'name2' )->setCommentText( 'comment' )
-					->setDonationAmount( '42' )->setDonationTime( new \DateTime( '1984-01-01' ) ),
+					->setDonationAmount( 42 )->setDonationTime( new \DateTime( '1984-01-01' ) ),
 			],
 			( new InMemoryCommentFinder(
 				CommentWithAmount::newInstance()->setAuthorName( 'name0' )->setCommentText( 'comment' )
-					->setDonationAmount( '42' )->setDonationTime( new \DateTime( '1984-01-01' ) ),
+					->setDonationAmount( 42 )->setDonationTime( new \DateTime( '1984-01-01' ) ),
 				CommentWithAmount::newInstance()->setAuthorName( 'name1' )->setCommentText( 'comment' )
-					->setDonationAmount( '42' )->setDonationTime( new \DateTime( '1984-01-01' ) ),
+					->setDonationAmount( 42 )->setDonationTime( new \DateTime( '1984-01-01' ) ),
 				CommentWithAmount::newInstance()->setAuthorName( 'name2' )->setCommentText( 'comment' )
-					->setDonationAmount( '42' )->setDonationTime( new \DateTime( '1984-01-01' ) )
+					->setDonationAmount( 42 )->setDonationTime( new \DateTime( '1984-01-01' ) )
 			) )->getPublicComments( 10 )
 		);
 	}
@@ -42,17 +44,17 @@ class InMemoryCommentFinderTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(
 			[
 				CommentWithAmount::newInstance()->setAuthorName( 'name0' )->setCommentText( 'comment' )
-					->setDonationAmount( '42' )->setDonationTime( new \DateTime( '1984-01-01' ) ),
+					->setDonationAmount( 42 )->setDonationTime( new \DateTime( '1984-01-01' ) ),
 				CommentWithAmount::newInstance()->setAuthorName( 'name1' )->setCommentText( 'comment' )
-					->setDonationAmount( '42' )->setDonationTime( new \DateTime( '1984-01-01' ) )
+					->setDonationAmount( 42 )->setDonationTime( new \DateTime( '1984-01-01' ) )
 			],
 			( new InMemoryCommentFinder(
 				CommentWithAmount::newInstance()->setAuthorName( 'name0' )->setCommentText( 'comment' )
-					->setDonationAmount( '42' )->setDonationTime( new \DateTime( '1984-01-01' ) ),
+					->setDonationAmount( 42 )->setDonationTime( new \DateTime( '1984-01-01' ) ),
 				CommentWithAmount::newInstance()->setAuthorName( 'name1' )->setCommentText( 'comment' )
-					->setDonationAmount( '42' )->setDonationTime( new \DateTime( '1984-01-01' ) ),
+					->setDonationAmount( 42 )->setDonationTime( new \DateTime( '1984-01-01' ) ),
 				CommentWithAmount::newInstance()->setAuthorName( 'name2' )->setCommentText( 'comment' )
-					->setDonationAmount( '42' )->setDonationTime( new \DateTime( '1984-01-01' ) )
+					->setDonationAmount( 42 )->setDonationTime( new \DateTime( '1984-01-01' ) )
 			) )->getPublicComments( 2 )
 		);
 	}

@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation;
 
 use WMDE\Fundraising\Frontend\Presentation\GreetingGenerator;
