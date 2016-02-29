@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\UseCases\CancelDonation;
 
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
-use WMDE\Fundraising\Frontend\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 
 /**
  * @licence GNU GPL v2+

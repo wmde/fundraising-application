@@ -2,17 +2,15 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
-use Swift_Message;
-use Swift_Mime_SimpleMessage;
 use Swift_NullTransport;
 use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
-use WMDE\Fundraising\Frontend\Messenger;
-use WMDE\Fundraising\Frontend\Message;
+use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
+use WMDE\Fundraising\Frontend\Infrastructure\Message;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Messenger
+ * @covers WMDE\Fundraising\Frontend\Infrastructure\Messenger
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >

@@ -8,7 +8,7 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
-use WMDE\Fundraising\Frontend\FunFunFactory;
+use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**

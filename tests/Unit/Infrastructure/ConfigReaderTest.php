@@ -2,16 +2,16 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
 use FileFetcher\SimpleFileFetcher;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use RuntimeException;
-use WMDE\Fundraising\Frontend\ConfigReader;
+use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
 
 /**
- * @covers WMDE\Fundraising\Frontend\ConfigReader
+ * @covers WMDE\Fundraising\Frontend\Infrastructure\ConfigReader
  *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >

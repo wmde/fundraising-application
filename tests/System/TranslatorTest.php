@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\System;
 use Mediawiki\Api\MediawikiApi;
 use Symfony\Component\Translation\Loader\ArrayLoader;
 use Symfony\Component\Translation\Translator;
-use WMDE\Fundraising\Frontend\FunFunFactory;
+use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
 /**
  * @licence GNU GPL v2+

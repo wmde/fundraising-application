@@ -2,9 +2,10 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend;
+namespace WMDE\Fundraising\Frontend\Infrastructure;
 
 use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
+use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
 /**
  * @licence GNU GPL v2+

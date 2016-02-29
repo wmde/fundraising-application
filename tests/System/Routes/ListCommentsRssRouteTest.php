@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 use DateTime;
 use Doctrine\ORM\EntityManager;
 use WMDE\Fundraising\Entities\Donation;
-use WMDE\Fundraising\Frontend\FunFunFactory;
+use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 

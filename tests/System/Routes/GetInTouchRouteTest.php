@@ -6,10 +6,10 @@ namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 
 use Mediawiki\Api\MediawikiApi;
 use Swift_NullTransport;
-use WMDE\Fundraising\Frontend\FunFunFactory;
+use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
-use WMDE\Fundraising\Frontend\Messenger;
-use WMDE\Fundraising\Frontend\Message;
+use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
+use WMDE\Fundraising\Frontend\Infrastructure\Message;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ApiPostRequestHandler;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
 

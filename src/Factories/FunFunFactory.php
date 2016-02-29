@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend;
+namespace WMDE\Fundraising\Frontend\Factories;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
@@ -41,6 +41,8 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\CommentRepository;
 use WMDE\Fundraising\Frontend\Domain\SimpleTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\Repositories\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
+use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
+use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListJsonPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListRssPresenter;
@@ -52,6 +54,7 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\ConfirmSubscriptionHtmlPre
 use WMDE\Fundraising\Frontend\Presentation\Presenters\GetInTouchHTMLPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\IbanPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\InternalErrorHTMLPresenter;
+use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentUseCase;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationUseCase;
 use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationUseCase;
@@ -191,14 +194,14 @@ class FunFunFactory {
 			];
 			$locale = $this->config['locale'];
 			$translator = $translationFactory->create( $loaders, $locale );
-			$translator->addResource( 'json', __DIR__ . '/../app/translations/messages.' . $locale . '.json', $locale );
+			$translator->addResource( 'json', __DIR__ . '/../../app/translations/messages.' . $locale . '.json', $locale );
 			$translator->addResource(
 				'json',
-				__DIR__ . '/../app/translations/paymentTypes.' . $locale . '.json',
+				__DIR__ . '/../../app/translations/paymentTypes.' . $locale . '.json',
 				$locale,
 				'paymentTypes'
 			);
-			$translator->addResource( 'json', __DIR__ . '/../app/translations/validations.' . $locale . '.json', $locale,
+			$translator->addResource( 'json', __DIR__ . '/../../app/translations/validations.' . $locale . '.json', $locale,
 				'validations' );
 			return $translator;
 		} );
@@ -409,7 +412,7 @@ class FunFunFactory {
 	}
 
 	private function newLoggerPath( string $fileName ): string {
-		return __DIR__ . '/../var/log/' . $fileName . '.log';
+		return __DIR__ . '/../../var/log/' . $fileName . '.log';
 	}
 
 	private function newPageContentModifier(): PageContentModifier {

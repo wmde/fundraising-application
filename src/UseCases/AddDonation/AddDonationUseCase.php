@@ -16,7 +16,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
 use WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer;
 use WMDE\Fundraising\Frontend\Presentation\GreetingGenerator;
 use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
-use WMDE\Fundraising\Frontend\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Validation\DonationValidator;
 
 /**

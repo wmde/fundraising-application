@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\AddSubscription;
 use PHPUnit_Framework_MockObject_MockObject;
 use WMDE\Fundraising\Entities\Subscription;
 use WMDE\Fundraising\Frontend\Domain\Repositories\SubscriptionRepository;
-use WMDE\Fundraising\Frontend\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FailedValidationResult;
 use WMDE\Fundraising\Frontend\Validation\SubscriptionValidator;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\AddSubscriptionUseCase;

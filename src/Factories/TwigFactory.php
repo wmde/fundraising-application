@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend;
+namespace WMDE\Fundraising\Frontend\Factories;
 
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -11,6 +11,7 @@ use Twig_Extension_StringLoader;
 use Twig_Lexer;
 use Twig_Loader_Array;
 use Twig_Loader_Filesystem;
+use WMDE\Fundraising\Frontend\Presentation\Content\TwigPageLoader;
 use WMDE\Fundraising\Frontend\Presentation\Content\WikiContentProvider;
 
 /**
@@ -31,7 +32,7 @@ class TwigFactory {
 		$options = [];
 
 		if ( $this->config['enable-cache'] ) {
-			$options['cache'] = __DIR__ . '/../var/cache';
+			$options['cache'] = __DIR__ . '/../../var/cache';
 		}
 
 		$loader = new \Twig_Loader_Chain( $loaders );
@@ -89,7 +90,7 @@ class TwigFactory {
 		else {
 			throw new \RuntimeException( 'wrong template directory type' );
 		}
-		$appRoot = realpath( __DIR__ . '/..' ) . '/';
+		$appRoot = realpath( __DIR__ . '/../..' ) . '/';
 		return $this->convertToAbsolute( $appRoot, $templateDir );
 	}
 
