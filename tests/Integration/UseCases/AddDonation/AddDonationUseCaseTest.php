@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
 use WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer;
-use WMDE\Fundraising\Frontend\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationUseCase;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;

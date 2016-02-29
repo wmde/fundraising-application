@@ -4,7 +4,7 @@
  * These variables need to be in scope when this file is included:
  *
  * @var \Silex\Application $app
- * @var \WMDE\Fundraising\Frontend\FunFunFactory $ffFactory
+ * @var \WMDE\Fundraising\Frontend\Factories\FunFunFactory $ffFactory
  */
 
 declare( strict_types = 1 );
@@ -16,7 +16,7 @@ use WMDE\Fundraising\Frontend\Domain\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
-use WMDE\Fundraising\Frontend\FunFunFactory;
+use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageDisplayRequest;

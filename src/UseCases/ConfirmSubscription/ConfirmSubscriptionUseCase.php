@@ -8,7 +8,7 @@ use WMDE\Fundraising\Entities\Subscription;
 use WMDE\Fundraising\Frontend\Domain\Repositories\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
 use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
-use WMDE\Fundraising\Frontend\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 
 /**

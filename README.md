@@ -76,15 +76,21 @@ When accessing the API via `web/index.dev.php`, profiling information will be ge
 	* `js/lib`: Javascript modules, will be compiled into one file for the frontend.
 	* `js/test`: Unit tests for the JavaScript modules
 * `src/`: contains framework agnostic code
-	* `FFFactory.php`: top level factory and service locator (used by Integration tests)
+	* `DataAccess/`: persistence other data access (ie network) service implementations
+	* `Domain/`: application independent code belonging to the fundraising frontend bounded context
+	* `Factories/`: application factories used by the framework, including top level factory `FFFactory`
+	* `Infrastructure/`: services belonging to supporting domains
+	* `Presentation/`: presentation code, including the `Presenters/`
+	* `ResponseModel/`: common code for the response models of the use cases
 	* `UseCases/`: one directory per use case
+	* `Validation/`: validation code
 	* All dependencies are explicitly defined in `composer.json` (including those shared with Silex)
 * `tests/`: tests mirror the directory and namespace structure of the production code
 	* `Unit/`: small isolated tests (one class or a small number of related classes)
 	* `Integration/`: tests combining several units
 	* `System/`: edge-to-edge tests
-	* `TestEnvironment.php`: encapsulates application setup for integration and system tests
 	* `Fixtures/`: test stubs and spies
+	* `TestEnvironment.php`: encapsulates application setup for integration and system tests
 * `var/`: Ephemeral application data
     * `logs`: Log files (in debug mode, every request creates a log file)
     * `cache`: Cache directory for Twig templates

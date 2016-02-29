@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
 use WMDE\Fundraising\Frontend\Domain\ReadModel\CommentWithAmount;
-use WMDE\Fundraising\Frontend\TwigTemplate;
+use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentList;
 
 /**

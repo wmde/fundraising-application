@@ -2,14 +2,14 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Integration;
+namespace WMDE\Fundraising\Frontend\Tests\Integration\Factories;
 
-use WMDE\Fundraising\Frontend\TwigFactory;
+use WMDE\Fundraising\Frontend\Factories\TwigFactory;
 use Twig_LoaderInterface;
 use Twig_Error_Loader;
 
 /**
- * @covers WMDE\Fundraising\Frontend\TwigFactory
+ * @covers WMDE\Fundraising\Frontend\Factories\TwigFactory
  *
  * @licence GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
@@ -53,12 +53,12 @@ class TwigFactoryTest extends \PHPUnit_Framework_TestCase {
 		$factory = new TwigFactory( [
 			'loaders' => [
 				'filesystem' => [
-					'template-dir' => __DIR__ . '/../templates'
+					'template-dir' => __DIR__ . '/../../templates'
 				]
 			]
 		] );
 		$loader = $factory->newFileSystemLoader();
-		$this->assertSame( [ __DIR__ . '/../templates' ], $loader->getPaths() );
+		$this->assertSame( [ __DIR__ . '/../../templates' ], $loader->getPaths() );
 	}
 
 	public function testFilesystemLoaderPrependsRelativePathsToArray() {
@@ -72,7 +72,7 @@ class TwigFactoryTest extends \PHPUnit_Framework_TestCase {
 		$loader = $factory->newFileSystemLoader();
 		$realPath = realpath( $loader->getPaths()[0] );
 		$this->assertFalse( $realPath === false, 'path does not exist' );
-		$this->assertSame( $realPath, realPath( __DIR__ . '/../templates' ) );
+		$this->assertSame( $realPath, realPath( __DIR__ . '/../../templates' ) );
 	}
 
 }

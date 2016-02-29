@@ -7,9 +7,9 @@ namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 use Swift_NullTransport;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\Donation;
-use WMDE\Fundraising\Frontend\FunFunFactory;
+use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
-use WMDE\Fundraising\Frontend\Messenger;
+use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 
 /**
  * @licence GNU GPL v2+

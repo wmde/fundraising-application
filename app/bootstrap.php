@@ -3,7 +3,7 @@
 /**
  * These variables need to be in scope when this file is included:
  *
- * @var \WMDE\Fundraising\Frontend\FunFunFactory $ffFactory
+ * @var \WMDE\Fundraising\Frontend\Factories\FunFunFactory $ffFactory
  */
 
 declare( strict_types = 1 );

@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\ConfirmSubscripti
 use PHPUnit_Framework_MockObject_MockObject;
 use WMDE\Fundraising\Entities\Address;
 use WMDE\Fundraising\Entities\Subscription;
-use WMDE\Fundraising\Frontend\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\InMemorySubscriptionRepository;
 use WMDE\Fundraising\Frontend\UseCases\ConfirmSubscription\ConfirmSubscriptionUseCase;
 

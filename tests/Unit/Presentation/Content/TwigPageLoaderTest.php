@@ -2,10 +2,10 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation\Content;
 
 use WMDE\Fundraising\Frontend\Presentation\Content\WikiContentProvider;
-use WMDE\Fundraising\Frontend\TwigPageLoader;
+use WMDE\Fundraising\Frontend\Presentation\Content\TwigPageLoader;
 
 class TwigPageLoaderTest extends \PHPUnit_Framework_TestCase {
 

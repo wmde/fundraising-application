@@ -2,10 +2,9 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend;
+namespace WMDE\Fundraising\Frontend\Presentation\Content;
 
 use Twig_Error_Loader;
-use WMDE\Fundraising\Frontend\Presentation\Content\WikiContentProvider;
 
 /**
  * @license GNU GPL v2+

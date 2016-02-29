@@ -2,10 +2,10 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Integration;
+namespace WMDE\Fundraising\Frontend\Tests\Integration\Factories;
 
 use Symfony\Component\Translation\Loader\ArrayLoader;
-use WMDE\Fundraising\Frontend\TranslationFactory;
+use WMDE\Fundraising\Frontend\Factories\TranslationFactory;
 
 class TranslationFactoryTest extends \PHPUnit_Framework_TestCase {
 	public function testLoadersAreSet(){

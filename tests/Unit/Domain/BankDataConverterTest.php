@@ -29,7 +29,7 @@ class BankDataConverterTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * @expectedException \WMDE\Fundraising\Frontend\BankDataLibraryInitializationException
+	 * @expectedException \WMDE\Fundraising\Frontend\Domain\BankDataLibraryInitializationException
 	 */
 	public function testGivenNotExistingBankDataFile_constructorThrowsException() {
 		$this->newBankDataConverter( '/foo/bar/awesome.data' );
