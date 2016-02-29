@@ -64,8 +64,7 @@ class DoctrineDonationRepository implements DonationRepository {
 			$doctrineDonation->setInfo( $donation->getOptsIntoNewsletter() );
 		}
 
-		// TODO: move the enconding to the entity class in FundraisingStore
-		$doctrineDonation->setData( base64_encode( serialize( $this->getDataMap( $donation ) ) ) );
+		$doctrineDonation->encodeAndSetData( $this->getDataMap( $donation ) );
 
 		return $doctrineDonation;
 	}
