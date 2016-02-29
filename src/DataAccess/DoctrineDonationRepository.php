@@ -146,8 +146,6 @@ class DoctrineDonationRepository implements DonationRepository {
 	 * @throws GetDonationException
 	 */
 	public function getDonationById( int $id ) {
-		// TODO: dt_gruen should be null
-
 		try {
 			/**
 			 * @var DoctrineDonation $donation
