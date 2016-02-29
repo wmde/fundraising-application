@@ -162,16 +162,4 @@ class Donation {
 		$this->trackingInfo = $trackingInfo;
 	}
 
-	public function getInitialStatus(): string {
-		if ( $this->paymentType === PaymentType::DIRECT_DEBIT ) {
-			return self::STATUS_NEW;
-		}
-
-		if ( $this->paymentType === PaymentType::BANK_TRANSFER ) {
-			return self::STATUS_PROMISE;
-		}
-
-		return self::STATUS_EXTERNAL_INCOMPLETE;
-	}
-
 }
