@@ -445,14 +445,7 @@
     // Initialize the form
     $(function(){
 
-        var dispatchValidationResult = function ( validationResult ) {
-                // TODO investigate how Reflux stores can react to Promises, so we don't need this function with the
-                // global store object and replace the buttonsEnabled handler with a handler that validates on button
-               // click if needed
-                var isValid = ( validationResult.status === 'OK' );
-                    WMDE.Store.dispatch( WMDE.Actions.newStoreValidationResultAction( isValid ) );
-            },
-            FormFactory = {
+        var FormFactory = {
                 newViewHandlers: function() {
                     return {
                         formPageVisibility: WMDE.View.createFormPageVisibilityHandler( {
@@ -464,8 +457,12 @@
                     };
                 },
                 newValidators: function() {
+                    // TODO investigate how Reflux stores can react to Promises
                     return {
-                        amountValidator: WMDE.FormValidation.createAmountValidator( '{$ basepath $}/validate-amount' )
+                        amountValidator: WMDE.ReduxValidation.createValidationWrapper(
+                                WMDE.FormValidation.createAmountValidator( '{$ basepath $}/validate-amount' ),
+                                WMDE.Actions.newValidateAmountAction
+                        )
                     };
                 },
                 connectElementEventsToActions: function( store, actions ) {
@@ -499,8 +496,8 @@
                 },
                 connectValidatorsToStore: function( store ) {
                     var validators = this.newValidators();
-                    WMDE.FormValidation.createValidationMapper( store, [
-                        validators.amountValidator
+                    WMDE.ReduxValidation.createValidationMapper( store, [
+                            validators.amountValidator
                     ] );
                 }
             },
