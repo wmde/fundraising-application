@@ -28,3 +28,30 @@ test( 'newStoreValidationResultAction returns action object', function ( t ) {
 	t.deepEqual( actions.newStoreValidationResultAction( true ), expectedAction );
 	t.end();
 } );
+
+test( 'newSelectAmountAction returns action object', function ( t ) {
+	var expectedAction = {
+		type: 'SELECT_AMOUNT',
+		payload: { amount: '1,99' }
+	};
+	t.deepEqual( actions.newSelectAmountAction( '1,99' ), expectedAction );
+	t.end();
+} );
+
+test( 'newInputAmountAction returns action object', function ( t ) {
+	var expectedAction = {
+		type: 'INPUT_AMOUNT',
+		payload: { amount: '1,99' }
+	};
+	t.deepEqual( actions.newInputAmountAction( '1,99' ), expectedAction );
+	t.end();
+} );
+
+test( 'newSelectPaymentTypeAction returns action object', function ( t ) {
+	var expectedAction = {
+		type: 'SELECT_PAYMENT_TYPE',
+		payload: { paymentType: 'BTC' }
+	};
+	t.deepEqual( actions.newSelectPaymentTypeAction( 'BTC' ), expectedAction );
+	t.end();
+} );

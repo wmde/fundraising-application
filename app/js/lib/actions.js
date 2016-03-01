@@ -1,27 +1,45 @@
 'use strict';
 
-function newAddPageAction( pageName ) {
-	return {
-		type: 'ADD_PAGE',
-		payload: { name: pageName }
-	};
-}
-
-function newNextPageAction() {
-	return {
-		type: 'NEXT_PAGE'
-	};
-}
-
-function newStoreValidationResultAction( isValid ) {
-	return {
-		type: 'VALIDATION_RESULT',
-		payload: { isValid: isValid }
-	};
-}
-
 module.exports = {
-	newAddPageAction: newAddPageAction,
-	newNextPageAction: newNextPageAction,
-	newStoreValidationResultAction: newStoreValidationResultAction
+	newAddPageAction: function ( pageName ) {
+		return {
+			type: 'ADD_PAGE',
+			payload: { name: pageName }
+		};
+	},
+
+	newNextPageAction: function () {
+		return {
+			type: 'NEXT_PAGE'
+		};
+	},
+
+	newStoreValidationResultAction: function ( isValid ) {
+		return {
+			type: 'VALIDATION_RESULT',
+			payload: { isValid: isValid }
+		};
+	},
+
+	newSelectAmountAction: function ( amount ) {
+		return {
+			type: 'SELECT_AMOUNT',
+			payload: { amount: amount }
+		};
+	},
+
+	newInputAmountAction: function ( amount ) {
+		return {
+			type: 'INPUT_AMOUNT',
+			payload: { amount: amount }
+		};
+	},
+
+	newSelectPaymentTypeAction: function ( paymentType ) {
+		return {
+			type: 'SELECT_PAYMENT_TYPE',
+			payload: { paymentType: paymentType }
+		};
+	}
+
 };

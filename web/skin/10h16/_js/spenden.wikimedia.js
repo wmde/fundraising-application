@@ -343,9 +343,6 @@ $(function() {
 
       $container.find(':radio').change(function(e){
         $('.display-amount').text($container.find(':radio:checked').val());
-        if( $container.find( ':radio:checked' ).val() ) {
-            $( ".amount-custom :text" ).val( "" );
-        }
       });
 
       $container.find('.amount-custom :text').on('load change keyup paste focus', function() {
@@ -353,11 +350,6 @@ $(function() {
         if (val == '') val = 0;
         //val = isNaN(parseInt(val)) ? 0 : parseInt(val);
         $('.display-amount').text(val);
-      });
-
-      /* uncheck all list items when user changes custom amount text field */
-      $container.find('.amount-custom :text').bind('focus', function(){
-        $container.find(':radio').prop('checked', false);
       });
     });
 
