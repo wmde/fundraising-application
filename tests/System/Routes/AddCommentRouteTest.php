@@ -17,6 +17,8 @@ use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
  */
 class AddCommentRouteTest extends WebRouteTestCase {
 
+	const CORRECT_UPDATE_TOKEN = 'b5b249c8beefb986faf8d186a3f16e86ef509ab2';
+
 	public function testGivenGetRequest_resultHasMethodNotAllowedStatus() {
 		$this->assertGetRequestCausesMethodNotAllowedResponse(
 			'add-comment',
@@ -62,6 +64,7 @@ class AddCommentRouteTest extends WebRouteTestCase {
 		$donation = new Donation();
 		$donation->setAmount( '100' );
 		$donation->setDtNew( new DateTime( '1984-01-01' ) );
+		$donation->encodeAndSetData( [ 'utoken' => self::CORRECT_UPDATE_TOKEN ] );
 		$entityManager->persist( $donation );
 		$entityManager->flush();
 		return $donation;
@@ -80,7 +83,7 @@ class AddCommentRouteTest extends WebRouteTestCase {
 					'eintrag' => 'Uncle Bob',
 					'sid' => (string)$donation->getId(),
 					'token' => '1276888%2459b42194b31d0265df452735f6438a234bae2af7',
-					'utoken' => 'b5b249c8beefb986faf8d186a3f16e86ef509ab2',
+					'utoken' => self::CORRECT_UPDATE_TOKEN,
 				]
 			);
 
@@ -101,7 +104,28 @@ class AddCommentRouteTest extends WebRouteTestCase {
 					'eintrag' => 'Uncle Bob',
 					'sid' => 25502, // No donation with this id
 					'token' => '1276888%2459b42194b31d0265df452735f6438a234bae2af7',
-					'utoken' => 'b5b249c8beefb986faf8d186a3f16e86ef509ab2',
+					'utoken' => self::CORRECT_UPDATE_TOKEN,
+				]
+			);
+
+			$this->assertErrorJsonResponse( $client->getResponse() );
+		} );
+	}
+
+	public function testGivenRequestWithInvalidUpdateToken_resultIsError() {
+		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
+			$donation = $this->storeDonation( $factory->getEntityManager() );
+
+			$client->request(
+				'POST',
+				'add-comment',
+				[
+					'kommentar' => 'Your programmers deserve a raise',
+					'public' => '1',
+					'eintrag' => 'Uncle Bob',
+					'sid' => (string)$donation->getId(),
+					'token' => '1276888%2459b42194b31d0265df452735f6438a234bae2af7',
+					'utoken' => 'Not the correct token',
 				]
 			);
 

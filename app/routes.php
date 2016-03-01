@@ -207,7 +207,7 @@ $app->post(
 			] );
 		}
 
-		$response = $ffFactory->newAddCommentUseCase()->addComment( $addCommentRequest );
+		$response = $ffFactory->newAddCommentUseCase( $updateToken )->addComment( $addCommentRequest );
 
 		if ( $response->isSuccessful() ) {
 			return $app->json( [

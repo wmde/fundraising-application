@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\UseCases\AddComment;
 use WMDE\Fundraising\Frontend\Domain\Model\Comment;
 use WMDE\Fundraising\Frontend\Domain\Repositories\CommentRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\StoreCommentException;
+use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationService;
 
 /**
  * @license GNU GPL v2+
@@ -15,12 +16,18 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\StoreCommentException;
 class AddCommentUseCase {
 
 	private $commentRepository;
+	private $authorizationService;
 
-	public function __construct( CommentRepository $repository ) {
+	public function __construct( CommentRepository $repository, AuthorizationService $authorizationService ) {
 		$this->commentRepository = $repository;
+		$this->authorizationService = $authorizationService;
 	}
 
 	public function addComment( AddCommentRequest $addCommentRequest ): AddCommentResponse {
+		if ( !$this->requestIsAllowed( $addCommentRequest ) ) {
+			return AddCommentResponse::newFailureResponse( 'Authorization failed' );
+		}
+
 		$comment = $this->newCommentFromRequest( $addCommentRequest );
 
 		try {
@@ -31,6 +38,10 @@ class AddCommentUseCase {
 		}
 
 		return AddCommentResponse::newSuccessResponse();
+	}
+
+	private function requestIsAllowed( AddCommentRequest $addCommentRequest ): bool {
+		return $this->authorizationService->canModifyDonation( $addCommentRequest->getDonationId() );
 	}
 
 	private function newCommentFromRequest( AddCommentRequest $request ): Comment {
