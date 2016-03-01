@@ -14,13 +14,6 @@ module.exports = {
 		};
 	},
 
-	newStoreValidationResultAction: function ( isValid ) {
-		return {
-			type: 'VALIDATION_RESULT',
-			payload: { isValid: isValid }
-		};
-	},
-
 	newSelectAmountAction: function ( amount ) {
 		return {
 			type: 'SELECT_AMOUNT',
@@ -39,6 +32,13 @@ module.exports = {
 		return {
 			type: 'SELECT_PAYMENT_TYPE',
 			payload: { paymentType: paymentType }
+		};
+	},
+
+	newValidateAmountAction: function ( validationResult ) {
+		return {
+			type: 'VALIDATE_AMOUNT',
+			payload: validationResult
 		};
 	}
 

@@ -4,20 +4,24 @@ var test = require( 'tape' ),
 	deepFreeze = require( 'deep-freeze' ),
 	validity = require( '../../lib/reducers/validity' );
 
-test( 'initial state is valid and unvalidated', function ( t ) {
-	var expectedState = { isValid: true, isValidated: false };
+function createValidPayload() {
+	return {
+		status: 'OK'
+	};
+}
 
-	t.deepEqual( validity( undefined, { type: 'UNSUPPORTED_ACTION' } ), expectedState );
-	t.end();
-} );
+function createInvalidPayload() {
+	return {
+		status: 'ERR',
+		messages: [ 'there was an error' ]
+	};
+}
 
-test( 'VALIDATION_RESULT returns new valid and validated state', function ( t ) {
-	var beforeState = { isValid: true, isValidated: false },
-		expectedValidState = { isValid: true, isValidated: true },
-		expectedInvalidState = { isValid: false, isValidated: true };
+test( 'VALIDATE_AMOUNT returns validated amount', function ( t ) {
+	var beforeState = { amount: null };
 
 	deepFreeze( beforeState );
-	t.deepEqual( validity( beforeState, { type: 'VALIDATION_RESULT', payload: { isValid: true } } ), expectedValidState );
-	t.deepEqual( validity( beforeState, { type: 'VALIDATION_RESULT', payload: { isValid: false } } ), expectedInvalidState );
+	t.ok( validity( beforeState, { type: 'VALIDATE_AMOUNT', payload: createValidPayload() } ).amount );
+	t.notOk( validity( beforeState, { type: 'VALIDATION_RESULT', payload: createInvalidPayload } ).amount );
 	t.end();
 } );

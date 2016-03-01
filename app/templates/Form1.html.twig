@@ -461,34 +461,20 @@
                         } ),
                         formPageHighlight: WMDE.View.createFormPageHighlightHandler( $( 'ul.step-list li' ) ),
                         clearAmount: WMDE.View.createClearAmountHandler( $( 'input[name=betrag_auswahl]' ), $( '#betrag' ) ),
-                        buttonsEnabled: WMDE.View.createEnabledWhenValidHandler( $('#donation-submit1 button,#donation-submit2 button') )
                     };
                 },
                 newValidators: function() {
                     return {
-                        // TODO validate store values instead of input values, get rid of accessors,
-                        // connect validators to store update
-                        amountValidator: WMDE.FormValidation.createAmountValidator(
-                                WMDE.FormFieldAccessors.createMultipleValueAccessor(
-                                        WMDE.FormFieldAccessors.createTextValueAccessor( $( '#amount-8' ) ),
-                                        WMDE.FormFieldAccessors.createRadioValueAccessor( $( '.amount-select' ) )
-                                ),
-                                WMDE.FormFieldAccessors.createRadioValueAccessor( $( 'input[name=zahlweise]' ) ),
-                                '{$ basepath $}/validate-amount'
-                        )
+                        amountValidator: WMDE.FormValidation.createAmountValidator( '{$ basepath $}/validate-amount' )
                     };
                 },
-                connectElementEventsToActions: function( store, actions, validators ) {
-                    // TODO get rid of validation calls in event handlers, remove validator parameter
+                connectElementEventsToActions: function( store, actions ) {
                     $( '.amount-select' ).change( function( evt ) {
-
                         store.dispatch( actions.newSelectAmountAction( evt.target.value ) );
-                        validators.amountValidator.validate().then( dispatchValidationResult );
                     } );
 
                     $( '#amount-8' ).change( function( evt ) {
                         store.dispatch( actions.newInputAmountAction( evt.target.value ) );
-                        validators.amountValidator.validate().then( dispatchValidationResult );
                     } ).focus( function( evt ) {
                         // This method will clear the selection (important for usability),
                         // but keep the form data valid when the custom amount field is empty
@@ -509,17 +495,16 @@
 
                     $( '.payment-type-list input' ).change( function( evt ) {
                         store.dispatch( actions.newSelectPaymentTypeAction( evt.target.value ) );
-                        validators.amountValidator.validate().then( dispatchValidationResult );
-                    } );
-
-                    $( '#donation-submit1 button' ).click( function() {
-                        store.dispatch( actions.newNextPageAction() );
                     } );
                 },
-
+                connectValidatorsToStore: function( store ) {
+                    var validators = this.newValidators();
+                    WMDE.FormValidation.createValidationMapper( store, [
+                        validators.amountValidator
+                    ] );
+                }
             },
 
-            validators = FormFactory.newValidators(),
             viewHandlers = FormFactory.newViewHandlers();
 
         // Connect view Handlers to state update
@@ -531,14 +516,14 @@
             viewHandlers.formPageVisibility.update( state.formPagination );
             viewHandlers.formPageHighlight.update( state.formPagination );
             viewHandlers.clearAmount.update( state.formContent );
-            viewHandlers.buttonsEnabled.update( state.validity );
         } );
 
         // Initialize form pages
         WMDE.Store.dispatch( WMDE.Actions.newAddPageAction( 'payment' ) );
         WMDE.Store.dispatch( WMDE.Actions.newAddPageAction( 'personalData' ) );
 
-        FormFactory.connectElementEventsToActions( WMDE.Store, WMDE.Actions, validators );
+        FormFactory.connectElementEventsToActions( WMDE.Store, WMDE.Actions );
+        FormFactory.connectValidatorsToStore( WMDE.Store )
 
     } );
 </script>

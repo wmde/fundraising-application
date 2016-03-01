@@ -20,12 +20,12 @@ test( 'newNextPageAction returns action object', function ( t ) {
 	t.end();
 } );
 
-test( 'newStoreValidationResultAction returns action object', function ( t ) {
+test( 'newValidateAmountAction returns action object', function ( t ) {
 	var expectedAction = {
-		type: 'VALIDATION_RESULT',
-		payload: { isValid: true }
+		type: 'VALIDATE_AMOUNT',
+		payload: { status: 'OK' }
 	};
-	t.deepEqual( actions.newStoreValidationResultAction( true ), expectedAction );
+	t.deepEqual( actions.newValidateAmountAction( { status: 'OK' } ), expectedAction );
 	t.end();
 } );
 

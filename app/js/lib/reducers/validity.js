@@ -1,19 +1,22 @@
 'use strict';
 
+var objectAssign = require( 'object-assign' ),
+	defaultState = {
+		amount: null
+	};
+
+function isValid( validationResult ) {
+	return validationResult.status === 'OK';
+}
+
 function validity( state, action ) {
+	if ( typeof state !== 'object' ) {
+		state = defaultState;
+	}
 	switch ( action.type ) {
-		case 'VALIDATION_RESULT':
-			return {
-				isValid: !!action.payload.isValid,
-				isValidated: true
-			};
+		case 'VALIDATE_AMOUNT':
+			return objectAssign( {}, state, { amount: isValid( action.payload ) } );
 		default:
-			if ( typeof state === 'undefined' ) {
-				return {
-					isValid: true,
-					isValidated: false
-				};
-			}
 			return state;
 	}
 }

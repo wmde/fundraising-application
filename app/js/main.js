@@ -8,7 +8,6 @@ module.exports = {
 	Store: require( './lib/store' ),
 	View: {
 		createClearAmountHandler: require( './lib/view_handler/clear_amount' ).createHandler,
-		createEnabledWhenValidHandler: require( './lib/view_handler/enabled_when_valid' ).createHandler,
 		createFormPageVisibilityHandler: require( './lib/view_handler/form_page_visibility' ).createHandler,
 		createFormPageHighlightHandler: require( './lib/view_handler/form_page_highlight' ).createHandler
 	},
