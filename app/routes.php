@@ -279,7 +279,11 @@ $app->post(
 				);
 
 				if ( $responseModel->isSuccessful() ) {
-					return $app->redirect( $app['url_generator']->generate('page', [ 'pageName' => 'DonationSuccess' ] ) );
+					// show confirmation page (UEB, BEZ)
+					return $ffFactory->newAddDonationHtmlPresenter()->present( $responseModel->getDonation() );
+					// TODO: redirect to PayPal (PPL)
+					// TODO: show page embedding iframe (MCP)
+					// TODO: take over confirmation page selection functionality from old application
 				}
 
 				return 'TODO';

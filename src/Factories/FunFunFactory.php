@@ -46,6 +46,7 @@ use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationService;
 use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\AddDonationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListJsonPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListRssPresenter;
@@ -203,6 +204,12 @@ class FunFunFactory {
 				__DIR__ . '/../../app/translations/paymentTypes.' . $locale . '.json',
 				$locale,
 				'paymentTypes'
+			);
+			$translator->addResource(
+				'json',
+				__DIR__ . '/../../app/translations/paymentIntervals.' . $locale . '.json',
+				$locale,
+				'paymentIntervals'
 			);
 			$translator->addResource( 'json', __DIR__ . '/../../app/translations/validations.' . $locale . '.json', $locale,
 				'validations' );
@@ -702,6 +709,10 @@ class FunFunFactory {
 			$this->config['token-length'],
 			$this->config['token-validity-timestamp']
 		);
+	}
+
+	public function newAddDonationHtmlPresenter() {
+		return new AddDonationHtmlPresenter( $this->getLayoutTemplate( 'DonationConfirmation.twig' ) );
 	}
 
 }

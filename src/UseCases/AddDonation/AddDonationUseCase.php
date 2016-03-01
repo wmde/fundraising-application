@@ -16,6 +16,7 @@ use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
 use WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer;
 use WMDE\Fundraising\Frontend\Presentation\GreetingGenerator;
+use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationResponse;
 use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Validation\DonationValidator;
@@ -46,13 +47,13 @@ class AddDonationUseCase {
 		$this->bankDataConverter = $bankDataConverter;
 	}
 
-	public function addDonation( AddDonationRequest $donationRequest ): ValidationResponse {
+	public function addDonation( AddDonationRequest $donationRequest ): AddDonationResponse {
 		$donation = $this->newDonationFromRequest( $donationRequest );
 
 		$validationResult = $this->donationValidator->validate( $donation );
 
 		if ( $validationResult->hasViolations() ) {
-			return ValidationResponse::newFailureResponse( $validationResult->getViolations() );
+			return AddDonationResponse::newFailureResponse( $validationResult->getViolations() );
 		}
 
 		if ( $donation->getPaymentType() === PaymentType::BANK_TRANSFER ) {
@@ -63,11 +64,12 @@ class AddDonationUseCase {
 
 		$donation->setStatus( $this->getInitialDonationStatus( $donation, $needsModeration ) );
 
-		$this->donationRepository->storeDonation( $donation );
+		/** @var Donation $donation */
+		$donation = $this->donationRepository->storeDonation( $donation );
 
 		$this->sendDonationConfirmationEmail( $donation, $needsModeration );
 
-		return ValidationResponse::newSuccessResponse();
+		return AddDonationResponse::newSuccessResponse( $donation );
 	}
 
 	private function getInitialDonationStatus( Donation $donation, bool $needsModeration ): string {

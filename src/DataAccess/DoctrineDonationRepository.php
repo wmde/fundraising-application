@@ -32,7 +32,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		$this->entityManager = $entityManager;
 	}
 
-	public function storeDonation( Donation $donation ) {
+	public function storeDonation( Donation $donation ): Donation {
 		$doctrineDonation = $this->newDonationEntity( $donation );
 
 		try {
@@ -49,6 +49,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		// 'token' => $donation->getAccessToken(),
 		// 'utoken' => $donation->getUpdateToken(),
 		// 'uexpiry' => $donation->getUpdateTokenExpiry()
+		return $donation;
 	}
 
 	private function newDonationEntity( Donation $donation ): DoctrineDonation {

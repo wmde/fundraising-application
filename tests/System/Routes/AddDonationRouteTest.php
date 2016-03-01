@@ -40,6 +40,8 @@ class AddDonationRouteTest extends WebRouteTestCase {
 				$this->newValidFormInput()
 			);
 
+			$response = $client->getResponse();
+
 			$donation = $this->getDonationFromDatabase( $factory );
 
 			$data = unserialize( base64_decode( $donation->getData() ) );
@@ -79,6 +81,9 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			// $this->assertRegExp( '/[0-9a-f]{32}/', $data['token'] );
 			// $this->assertRegExp( '/[0-9a-f]{32}/', $data['utoken'] );
 			// $this->assertGreaterThan( ( new \DateTime() )->format( 'Y-m-d H:i:s' ), $data['utoken_expiry'] );
+
+			$this->assertContains( '5,51', $response->getContent() );
+			$this->assertContains( 'einmalig', $response->getContent() );
 		} );
 	}
 
