@@ -16,8 +16,8 @@ var objectAssign = require( 'object-assign' ),
 	ValidationMapper = {
 		store: null,
 		validationFunctions: [],
-		onUpdate: function ( state ) {
-			var formContent = state.formContent,
+		onUpdate: function () {
+			var formContent = this.store.getState().formContent,
 				i, validationAction;
 			for ( i = 0; i < this.validationFunctions.length; i++ ) {
 				validationAction = this.validationFunctions[ i ]( formContent );

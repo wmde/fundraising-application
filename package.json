@@ -43,7 +43,8 @@
   "dependencies": {
     "object-assign": "^4.0.1",
     "promise": "^7.1.1",
-    "redux": "^3.3.1"
+    "redux": "^3.3.1",
+    "redux-promise": "^0.5.1"
   },
   "browserify": {
     "transform": [

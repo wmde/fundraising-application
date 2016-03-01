@@ -5,8 +5,14 @@ var objectAssign = require( 'object-assign' ),
 		amount: null
 	};
 
-function isValid( validationResult ) {
-	return validationResult.status === 'OK';
+/**
+ * Check if action has error flag set (happens when the AJAX request fails) and if payload.status is 'OK'
+ *
+ * @param {Object} action Redux standard action
+ * @return {boolean}
+ */
+function isValid( action ) {
+	return !action.error && action.payload.status === 'OK';
 }
 
 function validity( state, action ) {
@@ -15,7 +21,7 @@ function validity( state, action ) {
 	}
 	switch ( action.type ) {
 		case 'VALIDATE_AMOUNT':
-			return objectAssign( {}, state, { amount: isValid( action.payload ) } );
+			return objectAssign( {}, state, { amount: isValid( action ) } );
 		default:
 			return state;
 	}

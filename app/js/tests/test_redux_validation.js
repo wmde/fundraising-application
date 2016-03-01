@@ -52,19 +52,21 @@ test( 'ValidationWrapper does not create action if validation function returns u
 } );
 
 test( 'ValidationMapper connects validator functions to form content', function ( t ) {
-	var storeSpy = {
+	var formContent = { amount: 42 },
+		storeSpy = {
 			subscribe: sinon.spy(),
-			dispatch: sinon.spy()
+			dispatch: sinon.spy(),
+			getState: sinon.stub().returns( { formContent: formContent, foo: '123' } )
 		},
 		validator = {
 			validate: sinon.spy()
 		},
-		formContent = { amount: 42 },
+
 		mapper = reduxValidation.createValidationMapper( storeSpy, [ validator ] );
 
 	t.ok( storeSpy.subscribe.calledOnce, 'mapper subscribes to store updates' );
 
-	mapper.onUpdate( { foo: '123', formContent: formContent } );
+	mapper.onUpdate();
 
 	t.ok( validator.validate.calledOnce, 'mapper calls validation on update' );
 	t.ok( validator.validate.calledWith( formContent ), 'mapper selects form content for validation on update' );
@@ -72,9 +74,11 @@ test( 'ValidationMapper connects validator functions to form content', function 
 } );
 
 test( 'ValidationMapper dispatches validation action if it is an action object', function ( t ) {
-	var storeSpy = {
+	var formContent = { amount: 42 },
+		storeSpy = {
 			subscribe: sinon.spy(),
-			dispatch: sinon.spy()
+			dispatch: sinon.spy(),
+			getState: sinon.stub().returns( { formContent: formContent } )
 		},
 		validators = [
 			{ validate: function () { return null; } },
@@ -82,10 +86,9 @@ test( 'ValidationMapper dispatches validation action if it is an action object',
 			{ validate: function () { return { type: 'VALIDATE_AMOUNT' }; } },
 			{ validate: function () { return { type: 'VALIDATE_INPUT' }; } }
 		],
-		formContent = { amount: 42 },
 		mapper = reduxValidation.createValidationMapper( storeSpy, validators );
 
-	mapper.onUpdate( { formContent: formContent } );
+	mapper.onUpdate();
 
 	t.ok( storeSpy.dispatch.calledTwice, 'mapper dispatches actions' );
 	t.ok( storeSpy.dispatch.calledWith( { type: 'VALIDATE_AMOUNT' } ), 'dispatches validation actions returned by validator' );
