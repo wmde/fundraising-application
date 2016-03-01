@@ -27,6 +27,7 @@ use Twig_Environment;
 use Twig_Extensions_Extension_Intl;
 use WMDE\Fundraising\Frontend\DataAccess\DbalCommentRepository;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
+use WMDE\Fundraising\Frontend\DataAccess\DoctrineTokenAuthorizationService;
 use WMDE\Fundraising\Frontend\DataAccess\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\DataAccess\UniqueTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\BankDataConverter;
@@ -41,6 +42,7 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\CommentRepository;
 use WMDE\Fundraising\Frontend\Domain\SimpleTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\Repositories\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
+use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationService;
 use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListHtmlPresenter;
@@ -671,9 +673,17 @@ class FunFunFactory {
 		return new NumberFormatter( $this->config['locale'], NumberFormatter::DECIMAL );
 	}
 
-	public function newAddCommentUseCase(): AddCommentUseCase {
+	public function newAddCommentUseCase( string $updateToken ): AddCommentUseCase {
 		return new AddCommentUseCase(
-			$this->getCommentRepository()
+			$this->getCommentRepository(),
+			$this->newAuthorizationService( $updateToken )
+		);
+	}
+
+	private function newAuthorizationService( string $updateToken ): AuthorizationService {
+		return new DoctrineTokenAuthorizationService(
+			$this->getEntityManager(),
+			$updateToken
 		);
 	}
 

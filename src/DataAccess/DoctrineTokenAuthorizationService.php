@@ -41,7 +41,7 @@ class DoctrineTokenAuthorizationService implements AuthorizationService {
 
 		$data = $donation->getDecodedData();
 
-		if ( array_key_exists( 'utoken', $data ) ) {
+		if ( is_array( $data ) && array_key_exists( 'utoken', $data ) ) {
 			return $data['utoken'] === $this->updateToken;
 		}
 

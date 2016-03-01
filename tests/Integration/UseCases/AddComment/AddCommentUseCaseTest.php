@@ -8,6 +8,8 @@ use WMDE\Fundraising\Frontend\Domain\Model\Comment;
 use WMDE\Fundraising\Frontend\Domain\Repositories\CommentRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\StoreCommentException;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\CommentRepositorySpy;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingAuthorizer;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingAuthorizer;
 use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentUseCase;
 
@@ -28,7 +30,7 @@ class AddCommentUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$addCommentRequest->freeze()->assertNoNullFields();
 
 		$commentRepository = new CommentRepositorySpy();
-		$useCase = new AddCommentUseCase( $commentRepository );
+		$useCase = new AddCommentUseCase( $commentRepository, new SucceedingAuthorizer() );
 		$response = $useCase->addComment( $addCommentRequest );
 
 		$expectedComment = new Comment();
@@ -53,11 +55,36 @@ class AddCommentUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$addCommentRequest->setDonationId( 9001 );
 		$addCommentRequest->freeze()->assertNoNullFields();
 
-		$useCase = new AddCommentUseCase( new class () implements CommentRepository {
+		$useCase = new AddCommentUseCase(
+			$this->newThrowingCommentRepository(),
+			new SucceedingAuthorizer()
+		);
+
+		$response = $useCase->addComment( $addCommentRequest );
+
+		$this->assertFalse( $response->isSuccessful() );
+	}
+
+	private function newThrowingCommentRepository(): CommentRepository {
+		return new class () implements CommentRepository {
 			public function storeComment( Comment $comment ) {
 				throw new StoreCommentException();
 			}
-		} );
+		};
+	}
+
+	public function testAuthorizationFails_failureResponseIsReturned() {
+		$addCommentRequest = new AddCommentRequest();
+		$addCommentRequest->setCommentText( 'Your programmers deserve a raise' );
+		$addCommentRequest->setIsPublic( true );
+		$addCommentRequest->setAuthorDisplayName( 'Uncle Bob' );
+		$addCommentRequest->setDonationId( 9001 );
+		$addCommentRequest->freeze()->assertNoNullFields();
+
+		$useCase = new AddCommentUseCase(
+			new CommentRepositorySpy(),
+			new FailingAuthorizer()
+		);
 
 		$response = $useCase->addComment( $addCommentRequest );
 
