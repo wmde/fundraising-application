@@ -246,9 +246,7 @@ $app->post(
 	'donation/cancel',
 	function( Request $request ) use ( $app, $ffFactory ) {
 		$cancellationRequest = new CancelDonationRequest(
-			(int)$request->get( 'sid', '' ),
-			$request->get( 'token', '' ),
-			$request->get( 'utoken', '' )
+			(int)$request->get( 'sid', '' )
 		);
 
 		$ffFactory->newCancelDonationUseCase( $request->get( 'utoken', '' ) )->cancelDonation( $cancellationRequest );
