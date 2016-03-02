@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\UseCases\CancelDonation;
 
+use WMDE\Fundraising\Frontend\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
@@ -44,9 +46,25 @@ class CancelDonationUseCase {
 		// TODO: update donation status
 		// TODO: add log message to spenden.data['log']
 		// TODO: reset spenden_stamp in cookie
-		// TODO: send cancellation confirmation email
+
+		$this->sendConfirmationEmail( $donation );
 
 		return new CancelDonationResponse( $cancellationRequest->getDonationId(), true );
+	}
+
+	private function sendConfirmationEmail( Donation $donation ) {
+		if ( $donation->getPersonalInfo() !== null ) {
+			$this->mailer->sendMail(
+				new MailAddress( $donation->getPersonalInfo()->getEmailAddress() ),
+				$this->getConfirmationMailTemplateArguments( $donation )
+			);
+		}
+	}
+
+	private function getConfirmationMailTemplateArguments( Donation $donation ): array {
+		return [
+			// TODO
+		];
 	}
 
 }

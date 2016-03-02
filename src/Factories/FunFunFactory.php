@@ -604,9 +604,9 @@ class FunFunFactory {
 			$this->getMessenger(),
 			new TwigTemplate(
 				$this->getTwig(),
-				 'TODO.twig' // 'Donation_Cancellation_Confirmation.twig'
+				 'Donation_Cancellation_Confirmation.twig'
 			),
-			$this->getTranslator()->trans( 'TODO' )
+			$this->getTranslator()->trans( 'mail_subject_confirm_cancellation' )
 		);
 	}
 
