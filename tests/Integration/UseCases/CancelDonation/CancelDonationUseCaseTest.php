@@ -14,6 +14,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationRequest;
 use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationUseCase;
@@ -26,6 +27,8 @@ use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationUseCase;
  */
 class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
+	const CORRECT_UPDATE_TOKEN = 'b5b249c8beefb986faf8d186a3f16e86ef509ab2';
+
 	public function testGivenIdOfUnknownDonation_cancellationIsNotSuccessful() {
 		$useCase = $this->newUseCase();
 
@@ -35,7 +38,7 @@ class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	private function newUseCase(): CancelDonationUseCase {
-		return $this->newFactoryWithNullMailer()->newCancelDonationUseCase();
+		return $this->newFactoryWithNullMailer()->newCancelDonationUseCase( self::CORRECT_UPDATE_TOKEN );
 	}
 
 	private function newFactoryWithNullMailer(): FunFunFactory {
@@ -66,7 +69,7 @@ class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 		$factory->getDonationRepository()->storeDonation( $donation );
 
-		$useCase = $factory->newCancelDonationUseCase();
+		$useCase = $factory->newCancelDonationUseCase( self::CORRECT_UPDATE_TOKEN );
 		$response = $useCase->cancelDonation( new CancelDonationRequest(
 			$donation->getId(),
 			'token',
@@ -85,7 +88,7 @@ class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 		$factory->getDonationRepository()->storeDonation( $donation );
 
-		$useCase = $factory->newCancelDonationUseCase();
+		$useCase = $factory->newCancelDonationUseCase( self::CORRECT_UPDATE_TOKEN );
 		$response = $useCase->cancelDonation( new CancelDonationRequest(
 			$donation->getId(),
 			'token',
@@ -134,7 +137,8 @@ class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 		return new CancelDonationUseCase(
 			$this->getDonationRepositoryWithDonation( $donation ),
-			$mailer
+			$mailer,
+			new SucceedingAuthorizer()
 		);
 	}
 

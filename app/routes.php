@@ -251,7 +251,7 @@ $app->post(
 			$request->get( 'utoken', '' )
 		);
 
-		$ffFactory->newCancelDonationUseCase()->cancelDonation( $cancellationRequest );
+		$ffFactory->newCancelDonationUseCase( $request->get( 'utoken', '' ) )->cancelDonation( $cancellationRequest );
 
 		// TODO: response
 		return '';
