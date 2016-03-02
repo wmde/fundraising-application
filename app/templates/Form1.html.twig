@@ -493,6 +493,10 @@
                     $( '.payment-type-list input' ).change( function( evt ) {
                         store.dispatch( actions.newSelectPaymentTypeAction( evt.target.value ) );
                     } );
+
+                    $( '#donation-submit1 button' ).click( function() {
+                        store.dispatch( actions.newNextPageAction() );
+                    } );
                 },
                 connectValidatorsToStore: function( store ) {
                     var validators = this.newValidators();
