@@ -249,10 +249,21 @@ $app->post(
 			(int)$request->get( 'sid', '' )
 		);
 
-		$ffFactory->newCancelDonationUseCase( $request->get( 'utoken', '' ) )->cancelDonation( $cancellationRequest );
+		$response = $ffFactory->newCancelDonationUseCase( $request->get( 'utoken', '' ) )->cancelDonation( $cancellationRequest );
 
-		// TODO: response
-		return '';
+		// TODO: response should be HTML/redirect?
+
+		if ( $response->cancellationWasSuccessful() ) {
+			return $app->json( [
+				'status' => 'OK',
+				'message' => '',
+			] );
+		}
+
+		return $app->json( [
+			'status' => 'ERR',
+			'message' => 'TODO',
+		] );
 	}
 );
 

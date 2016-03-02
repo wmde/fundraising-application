@@ -30,22 +30,26 @@ class CancelDonationUseCase {
 	}
 
 	public function cancelDonation( CancelDonationRequest $cancellationRequest ): CancelDonationResponse {
+		if ( !$this->authorizationService->canModifyDonation( $cancellationRequest->getDonationId() ) ) {
+			return new CancelDonationResponse( $cancellationRequest->getDonationId(), false ); // TODO
+		}
+
 		try {
 			$donation = $this->donationRepository->getDonationById( $cancellationRequest->getDonationId() );
 		}
 		catch ( GetDonationException $ex ) {
-			return new CancelDonationResponse( $cancellationRequest->getDonationId(), false );
+			return new CancelDonationResponse( $cancellationRequest->getDonationId(), false ); // TODO
 		}
 
 		if ( $donation === null ) {
-			return new CancelDonationResponse( $cancellationRequest->getDonationId(), false );
+			return new CancelDonationResponse( $cancellationRequest->getDonationId(), false ); // TODO
 		}
 
 		try {
 			$donation->cancel();
 		}
 		catch ( \RuntimeException $ex ) {
-			return new CancelDonationResponse( $cancellationRequest->getDonationId(), false );
+			return new CancelDonationResponse( $cancellationRequest->getDonationId(), false ); // TODO
 		}
 
 		// TODO: update donation status
@@ -54,7 +58,7 @@ class CancelDonationUseCase {
 
 		$this->sendConfirmationEmail( $donation );
 
-		return new CancelDonationResponse( $cancellationRequest->getDonationId(), true );
+		return new CancelDonationResponse( $cancellationRequest->getDonationId(), true ); // TODO
 	}
 
 	private function sendConfirmationEmail( Donation $donation ) {
