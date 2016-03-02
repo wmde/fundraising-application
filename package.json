@@ -31,6 +31,7 @@
     "browserify": "^13.0.0",
     "browserify-shim": "^3.8.12",
     "deep-freeze": "0.0.1",
+    "envify": "^3.4.0",
     "jquery": "^2.2.0",
     "jscs": "^2.10.1",
     "jsdom": "^8.0.4",
@@ -49,7 +50,8 @@
   },
   "browserify": {
     "transform": [
-      "browserify-shim"
+      "browserify-shim",
+      "envify"
     ]
   },
   "browserify-shim": {

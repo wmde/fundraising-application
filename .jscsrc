@@ -1,3 +1,8 @@
 {
-        "preset": "wikimedia"
+    "preset": "wikimedia",
+    "jsDoc": {
+        "checkAnnotations": {
+            "preset": "jsdoc3"
+        }
+    }
 }
