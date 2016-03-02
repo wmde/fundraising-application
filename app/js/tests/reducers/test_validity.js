@@ -13,7 +13,7 @@ function createValidPayload() {
 function createInvalidPayload() {
 	return {
 		status: 'ERR',
-		messages: [ 'there was an error' ]
+		message: 'there was an error'
 	};
 }
 

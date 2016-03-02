@@ -617,7 +617,7 @@ div.errorbox {
 	-moz-border-radius: 2px;
 	border-radius: 2px;
 	background: #f3a5a5;
-	margin: 0 250px 0 128px;
+	margin: 0 250px 10px 128px;
 }
 div.successbox {
 	color: #333;
