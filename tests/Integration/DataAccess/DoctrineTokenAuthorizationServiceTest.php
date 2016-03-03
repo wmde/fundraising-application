@@ -46,7 +46,10 @@ class DoctrineTokenAuthorizationServiceTest extends \PHPUnit_Framework_TestCase 
 
 	public function testWhenDonationWithTokenExists() {
 		$donation = new Donation();
-		$donation->encodeAndSetData( [ 'utoken' => self::THE_CORRECT_TOKEN ] );
+		$donation->encodeAndSetData( [
+			'utoken' => self::THE_CORRECT_TOKEN,
+			'uexpiry' => $this->getExpiryTimeInTheFuture()
+		] );
 
 		$this->specify(
 			'given correct donation id and correct token, authorization succeeds',
@@ -73,6 +76,10 @@ class DoctrineTokenAuthorizationServiceTest extends \PHPUnit_Framework_TestCase 
 		);
 	}
 
+	private function getExpiryTimeInTheFuture(): string {
+		return date( 'Y-m-d H:i:s', time() + 60 * 60 );
+	}
+
 	public function testWhenDonationWithoutTokenExists() {
 		$donation = new Donation();
 		$donation->encodeAndSetData( [] );
@@ -84,6 +91,26 @@ class DoctrineTokenAuthorizationServiceTest extends \PHPUnit_Framework_TestCase 
 				$this->assertFalse( $authorizer->canModifyDonation( $donation->getId() ) );
 			}
 		);
+	}
+
+	public function testWhenUpdateTokenIsExpired() {
+		$donation = new Donation();
+		$donation->encodeAndSetData( [
+			'utoken' => self::THE_CORRECT_TOKEN,
+			'uexpiry' => $this->getExpiryTimeInThePast()
+		] );
+
+		$this->specify(
+			'given correct donation id and a token, authorization fails',
+			function() use ( $donation ) {
+				$authorizer = $this->newAuthorizationServiceWithDonations( self::THE_CORRECT_TOKEN, $donation );
+				$this->assertFalse( $authorizer->canModifyDonation( $donation->getId() ) );
+			}
+		);
+	}
+
+	private function getExpiryTimeInThePast(): string {
+		return date( 'Y-m-d H:i:s', time() - 1 );
 	}
 
 }
