@@ -44,9 +44,7 @@ class Donation {
 	private $personalInfo;
 
 	/**
-	 * TODO: can this not be null as well, for some payment types?
-	 *
-	 * @var BankData
+	 * @var BankData|null
 	 */
 	private $bankData;
 
@@ -127,11 +125,16 @@ class Donation {
 		$this->optsIntoNewsletter = $optIn;
 	}
 
-	public function getBankData(): BankData {
+	/**
+	 * Returns the BankData for direct debit donations, or null for others.
+	 *
+	 * @return BankData|null
+	 */
+	public function getBankData() {
 		return $this->bankData;
 	}
 
-	public function setBankData( BankData $bankData ) {
+	public function setBankData( BankData $bankData = null ) {
 		$this->bankData = $bankData;
 	}
 

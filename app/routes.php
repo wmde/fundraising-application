@@ -246,15 +246,24 @@ $app->post(
 	'donation/cancel',
 	function( Request $request ) use ( $app, $ffFactory ) {
 		$cancellationRequest = new CancelDonationRequest(
-			(int)$request->get( 'sid', '' ),
-			$request->get( 'token', '' ),
-			$request->get( 'utoken', '' )
+			(int)$request->get( 'sid', '' )
 		);
 
-		$ffFactory->newCancelDonationUseCase()->cancelDonation( $cancellationRequest );
+		$response = $ffFactory->newCancelDonationUseCase( $request->get( 'utoken', '' ) )->cancelDonation( $cancellationRequest );
 
-		// TODO: response
-		return '';
+		// TODO: response should be HTML/redirect?
+
+		if ( $response->cancellationWasSuccessful() ) {
+			return $app->json( [
+				'status' => 'OK',
+				'message' => '',
+			] );
+		}
+
+		return $app->json( [
+			'status' => 'ERR',
+			'message' => 'TODO',
+		] );
 	}
 );
 

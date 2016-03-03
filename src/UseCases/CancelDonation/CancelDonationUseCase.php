@@ -8,6 +8,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
+use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationService;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 
 /**
@@ -18,29 +19,37 @@ class CancelDonationUseCase {
 
 	private $donationRepository;
 	private $mailer;
+	private $authorizationService;
 
-	public function __construct( DonationRepository $donationRepository, TemplateBasedMailer $mailer ) {
+	public function __construct( DonationRepository $donationRepository, TemplateBasedMailer $mailer,
+		AuthorizationService $authorizationService ) {
+
 		$this->donationRepository = $donationRepository;
 		$this->mailer = $mailer;
+		$this->authorizationService = $authorizationService;
 	}
 
 	public function cancelDonation( CancelDonationRequest $cancellationRequest ): CancelDonationResponse {
+		if ( !$this->authorizationService->canModifyDonation( $cancellationRequest->getDonationId() ) ) {
+			return new CancelDonationResponse( $cancellationRequest->getDonationId(), false ); // TODO
+		}
+
 		try {
 			$donation = $this->donationRepository->getDonationById( $cancellationRequest->getDonationId() );
 		}
 		catch ( GetDonationException $ex ) {
-			return new CancelDonationResponse( $cancellationRequest->getDonationId(), false );
+			return new CancelDonationResponse( $cancellationRequest->getDonationId(), false ); // TODO
 		}
 
 		if ( $donation === null ) {
-			return new CancelDonationResponse( $cancellationRequest->getDonationId(), false );
+			return new CancelDonationResponse( $cancellationRequest->getDonationId(), false ); // TODO
 		}
 
 		try {
 			$donation->cancel();
 		}
 		catch ( \RuntimeException $ex ) {
-			return new CancelDonationResponse( $cancellationRequest->getDonationId(), false );
+			return new CancelDonationResponse( $cancellationRequest->getDonationId(), false ); // TODO
 		}
 
 		// TODO: update donation status
@@ -49,7 +58,7 @@ class CancelDonationUseCase {
 
 		$this->sendConfirmationEmail( $donation );
 
-		return new CancelDonationResponse( $cancellationRequest->getDonationId(), true );
+		return new CancelDonationResponse( $cancellationRequest->getDonationId(), true ); // TODO
 	}
 
 	private function sendConfirmationEmail( Donation $donation ) {

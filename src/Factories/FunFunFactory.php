@@ -592,10 +592,11 @@ class FunFunFactory {
 		return array_filter( $words );
 	}
 
-	public function newCancelDonationUseCase(): CancelDonationUseCase {
+	public function newCancelDonationUseCase( string $updateToken ): CancelDonationUseCase {
 		return new CancelDonationUseCase(
 			$this->getDonationRepository(),
-			$this->newCancelDonationMailer()
+			$this->newCancelDonationMailer(),
+			$this->newAuthorizationService( $updateToken )
 		);
 	}
 

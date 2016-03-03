@@ -173,11 +173,11 @@ class DoctrineDonationRepository implements DonationRepository {
 
 		$donation->setId( $dd->getId() );
 		$donation->setStatus( $dd->getStatus() );
-		$donation->setAmount( $dd->getAmount() );
+		$donation->setAmount( (float)$dd->getAmount() ); // FIXME: type error
 		$donation->setInterval( $dd->getPeriod() );
 		$donation->setPaymentType( $dd->getPaymentType() );
 		$donation->setBankTransferCode( $dd->getTransferCode() );
-		$donation->setOptsIntoNewsletter( $dd->getInfo() );
+		$donation->setOptsIntoNewsletter( (bool)$dd->getInfo() ); // FIXME: type error
 
 		$donation->setPersonalInfo( $this->getPersonalInfoFromEntity( $dd ) );
 		$donation->setBankData( $this->getBankDataFromEntity( $dd ) );
@@ -186,10 +186,18 @@ class DoctrineDonationRepository implements DonationRepository {
 		return $donation;
 	}
 
-	private function getPersonalInfoFromEntity( DoctrineDonation $dd ): PersonalInfo {
+	/**
+	 * @param DoctrineDonation $dd
+	 * @return PersonalInfo|null
+	 */
+	private function getPersonalInfoFromEntity( DoctrineDonation $dd ) {
+		if ( $dd->getEmail() === null ) {
+			return null;
+		}
+
 		$personalInfo = new PersonalInfo();
 
-		$personalInfo->setEmailAddress( $dd->getEmail() );
+		$personalInfo->setEmailAddress( $dd->getEmail() ); // FIXME: type error
 		$personalInfo->setPersonName( $this->getPersonNameFromEntity( $dd ) );
 		$this->hitThePersonalInfoWithLeadPipeUntilItFinallySetsTheAddress( $personalInfo, $dd );
 
@@ -233,18 +241,26 @@ class DoctrineDonationRepository implements DonationRepository {
 		return $address->freeze()->assertNoNullFields();
 	}
 
-	private function getBankDataFromEntity( DoctrineDonation $dd ): BankData {
+	/**
+	 * @param DoctrineDonation $dd
+	 * @return BankData|null
+	 */
+	private function getBankDataFromEntity( DoctrineDonation $dd ) {
 		$data = $dd->getDecodedData();
 
-		$bankData = new BankData();
+		if ( array_key_exists( 'iban', $data ) ) {
+			$bankData = new BankData();
 
-		$bankData->setIban( new Iban( $data['iban'] ) );
-		$bankData->setBic( $data['bic'] );
-		$bankData->setAccount( $data['konto'] );
-		$bankData->setBankCode( $data['blz'] );
-		$bankData->setBankName( $data['bankname'] );
+			$bankData->setIban( new Iban( $data['iban'] ) );
+			$bankData->setBic( $data['bic'] );
+			$bankData->setAccount( $data['konto'] );
+			$bankData->setBankCode( $data['blz'] );
+			$bankData->setBankName( $data['bankname'] );
 
-		return $bankData->freeze()->assertNoNullFields();
+			return $bankData->freeze()->assertNoNullFields();
+		}
+
+		return null;
 	}
 
 	private function getTrackingInfoFromEntity( DoctrineDonation $dd ): TrackingInfo {
