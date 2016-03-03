@@ -1,29 +1,37 @@
 'use strict';
 
 var objectAssign = require( 'object-assign' ),
-	ValidationWrapper = {
+	_ = require( 'lodash' ),
+
+	ValidationDispatcher = {
 		validationFunction: null,
 		actionCreationFunction: null,
-		validate: function ( formValues ) {
-			var validationResult = this.validationFunction( formValues );
-			if ( typeof validationResult === 'undefined' ) {
+		fields: null,
+
+		// internal properties
+		previousFieldValues: {},
+		dispatchIfChanged: function ( formValues, store ) {
+			var selectedValues = _.pick( formValues, this.fields ),
+				validationResult;
+
+			if ( _.isEqual( this.previousFieldValues, selectedValues ) ) {
 				return;
 			}
-			return this.actionCreationFunction( validationResult );
+
+			this.previousFieldValues = selectedValues;
+			validationResult = this.validationFunction( selectedValues );
+			return store.dispatch( this.actionCreationFunction( validationResult ) );
 		}
 	},
 
-	ValidationMapper = {
+	ValidationDispatcherCollection = {
+		dispatchers: [],
 		store: null,
-		validationFunctions: [],
 		onUpdate: function () {
 			var formContent = this.store.getState().formContent,
-				i, validationAction;
-			for ( i = 0; i < this.validationFunctions.length; i++ ) {
-				validationAction = this.validationFunctions[ i ]( formContent );
-				if ( validationAction && validationAction.type ) {
-					this.store.dispatch( validationAction );
-				}
+				i;
+			for ( i = 0; i < this.dispatchers.length; i++ ) {
+				this.dispatchers[ i ].dispatchIfChanged( formContent, this.store );
 			}
 		}
 	},
@@ -31,41 +39,37 @@ var objectAssign = require( 'object-assign' ),
 	/**
 	 *
 	 * @param {Function|Object} validator Function or object that has a 'validate' method.
-	 * 			The method will be bound to the object. If the function returns undefined,
-	 * 			that means 'no need for validating' and no validation action will be generated.
+	 * 			The method will be bound to the object.
 	 * @param {Function} actionCreationFunction
-	 * @return {ValidationWrapper}
+	 * @param {Array} fieldNames Names of the state values from formContent that will be validated
+	 * @return {ValidationDispatcher}
 	 */
-	createValidationWrapper = function ( validator, actionCreationFunction ) {
+	createValidationDispatcher = function ( validator, actionCreationFunction, fieldNames ) {
 		if ( typeof validator === 'object' ) {
 			validator = validator.validate.bind( validator );
 		}
-		return objectAssign( Object.create( ValidationWrapper ), {
+		return objectAssign( Object.create( ValidationDispatcher ), {
 			validationFunction: validator,
-			actionCreationFunction: actionCreationFunction
+			actionCreationFunction: actionCreationFunction,
+			fields: fieldNames
 		} );
 	},
 
 	/**
 	 *
-	 * @param {*} store Redux store
-	 * @param {Array} validators (objects that have a `validate` method that returns an action object)
+	 * @param {Object} store Redux store
+	 * @param {ValidationDispatcher[]} dispatchers
 	 */
-	createValidationMapper = function ( store, validators ) {
-		var validationFunctions = validators.map( function ( validator ) {
-				return function ( state ) {
-					return validator.validate.call( validator, state );
-				};
-			} ),
-			mapper = objectAssign( Object.create( ValidationMapper ), {
+	createValidationDispatcherCollection = function ( store, dispatchers ) {
+		var collection = objectAssign( Object.create( ValidationDispatcherCollection ), {
 				store: store,
-				validationFunctions: validationFunctions
+				dispatchers: dispatchers
 			} );
-		store.subscribe( mapper.onUpdate.bind( mapper ) );
-		return mapper;
+		store.subscribe( collection.onUpdate.bind( collection ) );
+		return collection;
 	};
 
 module.exports = {
-	createValidationWrapper: createValidationWrapper,
-	createValidationMapper: createValidationMapper
+	createValidationDispatcher: createValidationDispatcher,
+	createValidationDispatcherCollection: createValidationDispatcherCollection
 };

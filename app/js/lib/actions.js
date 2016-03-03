@@ -35,9 +35,14 @@ module.exports = {
 		};
 	},
 
-	newValidateAmountAction: function ( validationResult ) {
+	/**
+	 *
+	 * @param {Object|Promise} validationResult
+	 * @return {{type: string, payload: *}}
+	 */
+	newFinishAmountValidationAction: function ( validationResult ) {
 		return {
-			type: 'VALIDATE_AMOUNT',
+			type: 'FINISH_AMOUNT_VALIDATION',
 			payload: validationResult
 		};
 	}

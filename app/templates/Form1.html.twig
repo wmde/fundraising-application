@@ -453,17 +453,17 @@
                             personalData: $( "#personal-data,#donation-submit2" )
                         } ),
                         formPageHighlight: WMDE.View.createFormPageHighlightHandler( $( 'ul.step-list li' ) ),
-                        clearAmount: WMDE.View.createClearAmountHandler( $( 'input[name=betrag_auswahl]' ), $( '#amount-8' ) ),
+                        clearAmount: WMDE.View.createClearAmountHandler( $( 'input[name=betrag_auswahl]' ), $( '#amount-8' ) )
                     };
                 },
                 newValidators: function() {
-                    // TODO investigate how Reflux stores can react to Promises
-                    return {
-                        amountValidator: WMDE.ReduxValidation.createValidationWrapper(
+                    return [
+                        WMDE.ReduxValidation.createValidationDispatcher(
                                 WMDE.FormValidation.createAmountValidator( '{$ basepath $}/validate-amount' ),
-                                WMDE.Actions.newValidateAmountAction
+                                WMDE.Actions.newFinishAmountValidationAction,
+                                [ 'amount', 'paymentType' ]
                         )
-                    };
+                    ];
                 },
                 connectElementEventsToActions: function( store, actions ) {
                     $( '.amount-select' ).change( function( evt ) {
@@ -490,41 +490,41 @@
                         }
                     } );
 
-                    $( '.payment-type-list input' ).change( function( evt ) {
+                    $( '.payment-type-list input' ).change( function ( evt ) {
                         store.dispatch( actions.newSelectPaymentTypeAction( evt.target.value ) );
                     } );
 
-                    $( '#donation-submit1 button' ).click( function() {
+                    $( '#donation-submit1 button' ).click( function () {
                         store.dispatch( actions.newNextPageAction() );
                     } );
                 },
-                connectValidatorsToStore: function( store ) {
-                    var validators = this.newValidators();
-                    WMDE.ReduxValidation.createValidationMapper( store, [
-                            validators.amountValidator
-                    ] );
+                connectValidatorsToStore: function ( store ) {
+                    WMDE.ReduxValidation.createValidationDispatcherCollection( store, this.newValidators() );
+                },
+                connectViewHandlersToStore: function ( store ) {
+                    var viewHandlers = this.newViewHandlers();
+                    store.subscribe( function() {
+                        var state = store.getState();
+                        // console.log( state );
+                        // TODO check if state has changed before executing update action
+                        viewHandlers.formPageVisibility.update( state.formPagination );
+                        viewHandlers.formPageHighlight.update( state.formPagination );
+                        viewHandlers.clearAmount.update( state.formContent );
+                    } );
+                },
+                init: function( store, actions ) {
+                    this.connectElementEventsToActions(store, actions );
+                    this.connectValidatorsToStore( store );
+                    this.connectViewHandlersToStore( store )
                 }
-            },
+            };
 
-            viewHandlers = FormFactory.newViewHandlers();
-
-        // Connect view Handlers to state update
-        // TODO Move this to an a class that gets a map of the handlers and their assorted state property
-        WMDE.Store.subscribe( function() {
-            var state = WMDE.Store.getState();
-            // console.log( state );
-            // TODO check if state has changed before executing update action
-            viewHandlers.formPageVisibility.update( state.formPagination );
-            viewHandlers.formPageHighlight.update( state.formPagination );
-            viewHandlers.clearAmount.update( state.formContent );
-        } );
+        FormFactory.init( WMDE.Store, WMDE.Actions );
 
         // Initialize form pages
         WMDE.Store.dispatch( WMDE.Actions.newAddPageAction( 'payment' ) );
         WMDE.Store.dispatch( WMDE.Actions.newAddPageAction( 'personalData' ) );
 
-        FormFactory.connectElementEventsToActions( WMDE.Store, WMDE.Actions );
-        FormFactory.connectValidatorsToStore( WMDE.Store )
 
     } );
 </script>

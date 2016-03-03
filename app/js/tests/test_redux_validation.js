@@ -4,93 +4,100 @@ var test = require( 'tape' ),
 	sinon = require( 'sinon' ),
 	reduxValidation = require( '../lib/redux_validation' );
 
-test( 'ValidationWrapper calls validationFunction and returns validation action', function ( t ) {
+test( 'ValidationDispatcher calls validationFunction and dispatches action', function ( t ) {
 	var successResult = { status: 'OK' },
 		dummyAction = { type: 'TEST_VALIDATION' },
-		testData = { testData: 'just some data which will be ignored' },
+		testData = { importantField: 'just some data', ignoredData: 'this won\'t be validated' },
 		validationFunction = sinon.stub().returns( successResult ),
 		actionCreationFunction = sinon.stub().returns( dummyAction ),
-		wrapper = reduxValidation.createValidationWrapper( validationFunction, actionCreationFunction ),
+		dispatcher = reduxValidation.createValidationDispatcher( validationFunction, actionCreationFunction, [ 'importantField' ] ),
+		testStore = { dispatch: sinon.spy() };
 
-		validationResult = wrapper.validate( testData );
+	dispatcher.dispatchIfChanged( testData, testStore );
 
 	t.ok( validationFunction.calledOnce, 'validation function is called once' );
-	t.ok( validationFunction.calledWith( testData ), 'validation function is called with test data' );
+	t.ok( validationFunction.calledWith( { importantField: 'just some data' }  ), 'validation function is called with selected fields' );
 	t.ok( actionCreationFunction.calledOnce, 'action is created' );
 	t.ok( actionCreationFunction.calledWith( successResult ), 'action is created with validation result' );
-	t.deepEqual( validationResult, dummyAction, 'validation wrapper should return action object' );
+	t.ok( testStore.dispatch.calledWith( dummyAction ), 'validation dispatcher should dispatch action object' );
 	t.end();
 } );
 
-test( 'ValidationWrapper accepts validator object as validation function', function ( t ) {
+test( 'ValidationDispatcher calls validationFunction and dispatches action only if data changes', function ( t ) {
+	var successResult = { status: 'OK' },
+		dummyAction = { type: 'TEST_VALIDATION' },
+		testData = { importantField: 'just some data', ignoredData: 'this won\'t be validated' },
+		validationFunction = sinon.stub().returns( successResult ),
+		actionCreationFunction = sinon.stub().returns( dummyAction ),
+		dispatcher = reduxValidation.createValidationDispatcher( validationFunction, actionCreationFunction, [ 'importantField' ] ),
+		testStore = { dispatch: sinon.spy() };
+
+	dispatcher.dispatchIfChanged( testData, testStore );
+	dispatcher.dispatchIfChanged( testData, testStore );
+
+	t.ok( validationFunction.calledOnce, 'validation function is called once' );
+	t.ok( testStore.dispatch.calledOnce, 'action is dispatched once' );
+
+	testData.ignoredData = 'data changed, but in ignored field';
+	dispatcher.dispatchIfChanged( testData, testStore );
+
+	t.ok( validationFunction.calledOnce, 'validation function is not called when ignored field change' );
+	t.ok( testStore.dispatch.calledOnce, 'action is is not dispatched when ignored field change' );
+
+	testData.importantField = 'data changed';
+	dispatcher.dispatchIfChanged( testData, testStore );
+
+	t.ok( validationFunction.calledTwice, 'validation function is called once' );
+	t.ok( actionCreationFunction.calledTwice, 'new action is created' );
+	t.ok( testStore.dispatch.calledTwice, 'action is dispatched again' );
+
+	t.end();
+} );
+
+test( 'createValidationDispatcher accepts validator object as validation function', function ( t ) {
 	var validatorSpy = {
-			validatorDeletegate: sinon.spy(),
+			// use internal delegation to check if 'this' is bound correctly
+			validatorDelegate: sinon.spy(),
 			validate: function ( formValues ) {
-				return this.validatorDeletegate( formValues );
+				return this.validatorDelegate( formValues );
 			}
 		},
-		testData = { testData: 'just some data which will be ignored' },
+		testData = { importantField: 'just some data which will be ignored' },
 		actionCreationFunction = sinon.stub(),
-		wrapper = reduxValidation.createValidationWrapper( validatorSpy, actionCreationFunction );
+		dispatcher = reduxValidation.createValidationDispatcher( validatorSpy, actionCreationFunction, [ 'importantField' ] ),
+		testStore = { dispatch: sinon.spy() };
 
-	wrapper.validate( testData );
+	dispatcher.dispatchIfChanged( testData, testStore );
 
-	t.ok( validatorSpy.validatorDeletegate.calledOnce, 'validate function is called once' );
-	t.ok( validatorSpy.validatorDeletegate.calledWith( testData ), 'validation function is called with test data' );
+	t.ok( validatorSpy.validatorDelegate.calledOnce, 'validate function is called once' );
+	t.ok( validatorSpy.validatorDelegate.calledWith( testData ), 'validation function is called with test data' );
 	t.end();
 } );
 
-test( 'ValidationWrapper does not create action if validation function returns undefined', function ( t ) {
-	var testData = { testData: 'just some data which will be ignored' },
-		validationFunction = sinon.stub().returns( undefined ),
-		actionCreationFunction = sinon.stub(),
-		wrapper = reduxValidation.createValidationWrapper( validationFunction, actionCreationFunction );
+test( 'ValidationDispatcherCollection listens to store updates', function ( t ) {
+	var storeSpy = {
+			subscribe: sinon.spy()
+		};
 
-	t.equals( wrapper.validate( testData ), undefined, 'returns undefined instead of action object' );
-	t.ok( actionCreationFunction.notCalled, 'action creation is avoided' );
-	t.end();
-} );
-
-test( 'ValidationMapper connects validator functions to form content', function ( t ) {
-	var formContent = { amount: 42 },
-		storeSpy = {
-			subscribe: sinon.spy(),
-			dispatch: sinon.spy(),
-			getState: sinon.stub().returns( { formContent: formContent, foo: '123' } )
-		},
-		validator = {
-			validate: sinon.spy()
-		},
-
-		mapper = reduxValidation.createValidationMapper( storeSpy, [ validator ] );
+	reduxValidation.createValidationDispatcherCollection( storeSpy, [] );
 
 	t.ok( storeSpy.subscribe.calledOnce, 'mapper subscribes to store updates' );
-
-	mapper.onUpdate();
-
-	t.ok( validator.validate.calledOnce, 'mapper calls validation on update' );
-	t.ok( validator.validate.calledWith( formContent ), 'mapper selects form content for validation on update' );
 	t.end();
 } );
 
-test( 'ValidationMapper dispatches validation action if it is an action object', function ( t ) {
+test( 'ValidationDispatcherCollection update method calls dispatchers', function ( t ) {
 	var formContent = { amount: 42 },
 		storeSpy = {
 			subscribe: sinon.spy(),
-			dispatch: sinon.spy(),
-			getState: sinon.stub().returns( { formContent: formContent } )
+			getState: sinon.stub().returns( formContent )
 		},
-		validators = [
-			{ validate: function () { return null; } },
-			{ validate: function () { return { thisIsNotAnAction: true }; } },
-			{ validate: function () { return { type: 'VALIDATE_AMOUNT' }; } },
-			{ validate: function () { return { type: 'VALIDATE_INPUT' }; } }
-		],
-		mapper = reduxValidation.createValidationMapper( storeSpy, validators );
+		validatorSpy = { dispatchIfChanged: sinon.spy() },
+		collection = reduxValidation.createValidationDispatcherCollection( storeSpy, [ validatorSpy ] );
 
-	mapper.onUpdate();
+	collection.onUpdate();
 
-	t.ok( storeSpy.dispatch.calledTwice, 'mapper dispatches actions' );
-	t.ok( storeSpy.dispatch.calledWith( { type: 'VALIDATE_AMOUNT' } ), 'dispatches validation actions returned by validator' );
+	t.ok( storeSpy.getState.calledOnce, 'onUpdate gets state from the store' );
+	t.ok( validatorSpy.dispatchIfChanged.calledOnce, 'dispatchers are called' );
 	t.end();
 } );
+

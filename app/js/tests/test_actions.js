@@ -22,10 +22,10 @@ test( 'newNextPageAction returns action object', function ( t ) {
 
 test( 'newValidateAmountAction returns action object', function ( t ) {
 	var expectedAction = {
-		type: 'VALIDATE_AMOUNT',
+		type: 'FINISH_AMOUNT_VALIDATION',
 		payload: { status: 'OK' }
 	};
-	t.deepEqual( actions.newValidateAmountAction( { status: 'OK' } ), expectedAction );
+	t.deepEqual( actions.newFinishAmountValidationAction( { status: 'OK' } ), expectedAction );
 	t.end();
 } );
 
