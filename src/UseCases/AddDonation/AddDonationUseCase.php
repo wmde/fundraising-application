@@ -64,8 +64,7 @@ class AddDonationUseCase {
 
 		$donation->setStatus( $this->getInitialDonationStatus( $donation, $needsModeration ) );
 
-		/** @var Donation $donation */
-		$donation = $this->donationRepository->storeDonation( $donation );
+		$this->donationRepository->storeDonation( $donation );
 
 		$this->sendDonationConfirmationEmail( $donation, $needsModeration );
 
