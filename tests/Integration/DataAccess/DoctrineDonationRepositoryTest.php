@@ -62,6 +62,13 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 	public function testWhenPersistenceFails_domainExceptionIsThrown() {
 		$donation = ValidDonation::newDonation();
 
+		$repository = new DoctrineDonationRepository( $this->getThrowingEntityManager() );
+
+		$this->expectException( StoreDonationException::class );
+		$repository->storeDonation( $donation );
+	}
+
+	private function getThrowingEntityManager(): EntityManager {
 		$entityManager = $this->getMockBuilder( EntityManager::class )
 			->disableOriginalConstructor()->getMock();
 
@@ -69,21 +76,20 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 			->method( 'persist' )
 			->willThrowException( new ORMException() );
 
-		$repository = new DoctrineDonationRepository( $entityManager );
-
-		$this->expectException( StoreDonationException::class );
-		$repository->storeDonation( $donation );
+		return $entityManager;
 	}
 
 	public function testNewDonationPersistenceRoundTrip() {
 		$donation = ValidDonation::newDonation();
-		$donation->setId( 1 );
 
 		$repository = new DoctrineDonationRepository( $this->entityManager );
 
 		$repository->storeDonation( $donation );
 
-		$this->assertEquals( $donation, $repository->getDonationById( 1 ) );
+		$this->assertEquals(
+			$donation,
+			$repository->getDonationById( $donation->getId() )
+		);
 	}
 
 	public function testExistingDonationPersistenceRoundTrip() {
