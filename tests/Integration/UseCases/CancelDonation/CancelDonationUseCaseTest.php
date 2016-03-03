@@ -87,7 +87,10 @@ class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 		$doctrineDonation->encodeAndSetData( array_merge(
 			$doctrineDonation->getDecodedData(),
-			[ 'utoken' => self::CORRECT_UPDATE_TOKEN ]
+			[
+				'utoken' => self::CORRECT_UPDATE_TOKEN,
+				'uexpiry' => date( 'Y-m-d H:i:s', time() + 60 * 60 )
+			]
 		) );
 
 		$factory->getEntityManager()->persist( $doctrineDonation );

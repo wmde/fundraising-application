@@ -64,7 +64,10 @@ class AddCommentRouteTest extends WebRouteTestCase {
 		$donation = new Donation();
 		$donation->setAmount( '100' );
 		$donation->setDtNew( new DateTime( '1984-01-01' ) );
-		$donation->encodeAndSetData( [ 'utoken' => self::CORRECT_UPDATE_TOKEN ] );
+		$donation->encodeAndSetData( [
+			'utoken' => self::CORRECT_UPDATE_TOKEN,
+			'uexpiry' => date( 'Y-m-d H:i:s', time() + 60 * 60 )
+		] );
 		$entityManager->persist( $donation );
 		$entityManager->flush();
 		return $donation;
