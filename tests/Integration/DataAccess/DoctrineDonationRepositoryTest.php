@@ -62,14 +62,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 	public function testWhenPersistenceFails_domainExceptionIsThrown() {
 		$donation = ValidDonation::newDonation();
 
-		$entityManager = $this->getMockBuilder( EntityManager::class )
-			->disableOriginalConstructor()->getMock();
-
-		$entityManager->expects( $this->any() )
-			->method( 'persist' )
-			->willThrowException( new ORMException() );
-
-		$repository = new DoctrineDonationRepository( $entityManager );
+		$repository = new DoctrineDonationRepository( $this->newEntityManagerThatThrows() );
 
 		$this->expectException( StoreDonationException::class );
 		$repository->storeDonation( $donation );
@@ -77,13 +70,15 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 	public function testNewDonationPersistenceRoundTrip() {
 		$donation = ValidDonation::newDonation();
-		$donation->setId( 1 );
 
 		$repository = new DoctrineDonationRepository( $this->entityManager );
 
 		$repository->storeDonation( $donation );
 
-		$this->assertEquals( $donation, $repository->getDonationById( 1 ) );
+		$this->assertEquals(
+			$donation,
+			$repository->getDonationById( $donation->getId() )
+		);
 	}
 
 	public function testExistingDonationPersistenceRoundTrip() {
@@ -106,18 +101,18 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testWhenDoctrineThrowsException_domainExceptionIsThrown() {
-		$repository = new DoctrineDonationRepository( $this->newEntityManagerThatThrowsOnFind() );
+		$repository = new DoctrineDonationRepository( $this->newEntityManagerThatThrows() );
 
 		$this->expectException( GetDonationException::class );
 		$repository->getDonationById( 42 );
 	}
 
-	private function newEntityManagerThatThrowsOnFind(): EntityManager {
+	private function newEntityManagerThatThrows(): EntityManager {
 		$entityManager = $this->getMockBuilder( EntityManager::class )
 			->disableOriginalConstructor()->getMock();
 
 		$entityManager->expects( $this->any() )
-			->method( 'find' )
+			->method( $this->anything() )
 			->willThrowException( new ORMException() );
 
 		return $entityManager;

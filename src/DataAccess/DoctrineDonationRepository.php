@@ -54,7 +54,7 @@ class DoctrineDonationRepository implements DonationRepository {
 	private function newDonationEntity( Donation $donation ): DoctrineDonation {
 		$doctrineDonation = new DoctrineDonation();
 		$doctrineDonation->setStatus( $donation->getStatus() );
-		$doctrineDonation->setAmount( $donation->getAmount() );
+		$doctrineDonation->setAmount( $donation->getAmount() ); // FIXME: should be string
 		$doctrineDonation->setPeriod( $donation->getInterval() );
 
 		$doctrineDonation->setPaymentType( $donation->getPaymentType() );
@@ -66,8 +66,9 @@ class DoctrineDonationRepository implements DonationRepository {
 			$doctrineDonation->setCity( $donation->getPersonalInfo()->getPhysicalAddress()->getCity() );
 			$doctrineDonation->setEmail( $donation->getPersonalInfo()->getEmailAddress() );
 			$doctrineDonation->setName( $donation->getPersonalInfo()->getPersonName()->getFullName() );
-			$doctrineDonation->setInfo( $donation->getOptsIntoNewsletter() );
 		}
+
+		$doctrineDonation->setInfo( $donation->getOptsIntoNewsletter() );
 
 		$doctrineDonation->encodeAndSetData( $this->getDataMap( $donation ) );
 
@@ -173,11 +174,11 @@ class DoctrineDonationRepository implements DonationRepository {
 
 		$donation->setId( $dd->getId() );
 		$donation->setStatus( $dd->getStatus() );
-		$donation->setAmount( (float)$dd->getAmount() ); // FIXME: type error
+		$donation->setAmount( (float)$dd->getAmount() );
 		$donation->setInterval( $dd->getPeriod() );
 		$donation->setPaymentType( $dd->getPaymentType() );
 		$donation->setBankTransferCode( $dd->getTransferCode() );
-		$donation->setOptsIntoNewsletter( (bool)$dd->getInfo() ); // FIXME: type error
+		$donation->setOptsIntoNewsletter( (bool)$dd->getInfo() );
 
 		$donation->setPersonalInfo( $this->getPersonalInfoFromEntity( $dd ) );
 		$donation->setBankData( $this->getBankDataFromEntity( $dd ) );
