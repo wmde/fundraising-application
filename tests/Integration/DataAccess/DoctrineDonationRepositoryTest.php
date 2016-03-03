@@ -62,21 +62,10 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 	public function testWhenPersistenceFails_domainExceptionIsThrown() {
 		$donation = ValidDonation::newDonation();
 
-		$repository = new DoctrineDonationRepository( $this->getThrowingEntityManager() );
+		$repository = new DoctrineDonationRepository( $this->newEntityManagerThatThrows() );
 
 		$this->expectException( StoreDonationException::class );
 		$repository->storeDonation( $donation );
-	}
-
-	private function getThrowingEntityManager(): EntityManager {
-		$entityManager = $this->getMockBuilder( EntityManager::class )
-			->disableOriginalConstructor()->getMock();
-
-		$entityManager->expects( $this->any() )
-			->method( 'persist' )
-			->willThrowException( new ORMException() );
-
-		return $entityManager;
 	}
 
 	public function testNewDonationPersistenceRoundTrip() {
@@ -112,18 +101,18 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testWhenDoctrineThrowsException_domainExceptionIsThrown() {
-		$repository = new DoctrineDonationRepository( $this->newEntityManagerThatThrowsOnFind() );
+		$repository = new DoctrineDonationRepository( $this->newEntityManagerThatThrows() );
 
 		$this->expectException( GetDonationException::class );
 		$repository->getDonationById( 42 );
 	}
 
-	private function newEntityManagerThatThrowsOnFind(): EntityManager {
+	private function newEntityManagerThatThrows(): EntityManager {
 		$entityManager = $this->getMockBuilder( EntityManager::class )
 			->disableOriginalConstructor()->getMock();
 
 		$entityManager->expects( $this->any() )
-			->method( 'find' )
+			->method( $this->anything() )
 			->willThrowException( new ORMException() );
 
 		return $entityManager;
