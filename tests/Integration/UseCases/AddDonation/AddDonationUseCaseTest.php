@@ -8,12 +8,14 @@ use PHPUnit_Framework_MockObject_MockObject;
 use WMDE\Fundraising\Frontend\Domain\BankDataConverter;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
+use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
 use WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\DonationRepositorySpy;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationUseCase;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
@@ -52,10 +54,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	private function newRepository(): DonationRepository {
-		$donationRepositoryMock = $this->getMock( DonationRepository::class );
-		$donationRepositoryMock->method( 'storeDonation' )
-			->willReturn( 1234 );
-		return $donationRepositoryMock;
+		return new DonationRepositorySpy();
 	}
 
 	public function testValidationFails_responseObjectContainsViolations() {
@@ -149,6 +148,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$request = $this->newMinimumDonationRequest();
 		$personalInfo = new PersonalInfo();
 		$personalInfo->setPersonName( PersonName::newPrivatePersonName() );
+		$personalInfo->setPhysicalAddress( new PhysicalAddress() );
 		$personalInfo->setEmailAddress( 'foo@bar.baz' );
 		$request->setPersonalInfo( $personalInfo );
 

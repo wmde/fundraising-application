@@ -7,7 +7,6 @@ namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
-use WMDE\Fundraising\Frontend\Domain\Repositories\int;
 
 /**
  * @licence GNU GPL v2+
@@ -18,8 +17,9 @@ class DonationRepositorySpy implements DonationRepository {
 	private $storeDonationCalls = [];
 	private $getDonationCalls = [];
 
-	public function storeDonation( Donation $donation ) {
+	public function storeDonation( Donation $donation ): Donation {
 		$this->storeDonationCalls[] = $donation;
+		return $donation;
 	}
 
 	/**
