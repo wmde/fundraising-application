@@ -254,4 +254,33 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		return $donation;
 	}
 
+	public function testGivenValidPayPalData_redirectsToPayPal() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setMessenger( new Messenger(
+				Swift_NullTransport::newInstance(),
+				$factory->getOperatorAddress()
+			) );
+			$client->followRedirects( false );
+
+			$client->request(
+				'POST',
+				'/donation/add',
+				$this->newValidPayPalInput()
+			);
+
+			$response = $client->getResponse();
+			$this->assertSame( 302, $response->getStatusCode() );
+			$this->assertContains( 'that.paymentprovider.com', $response->getContent() );
+		} );
+	}
+
+	private function newValidPayPalInput() {
+		return [
+			'betrag' => '12,34',
+			'zahlweise' => 'PPL',
+			'periode' => 3,
+			'adresstyp' => 'anonym',
+		];
+	}
+
 }

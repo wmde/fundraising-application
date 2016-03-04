@@ -33,6 +33,8 @@ use WMDE\Fundraising\Frontend\DataAccess\UniqueTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\BankDataConverter;
 use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
+use WMDE\Fundraising\Frontend\Domain\PayPalConfig;
+use WMDE\Fundraising\Frontend\Domain\PayPalUrlGenerator;
 use WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer;
 use WMDE\Fundraising\Frontend\Domain\Repositories\CommentFinder;
 use WMDE\Fundraising\Frontend\DataAccess\DbalSubscriptionRepository;
@@ -662,6 +664,14 @@ class FunFunFactory {
 			),
 			$this->getTranslator()->trans( 'mail_subject_confirm_donation' )
 		);
+	}
+
+	public function newPayPalUrlGenerator() {
+		return new PayPalUrlGenerator( $this->getPayPalConfig() );
+	}
+
+	private function getPayPalConfig() {
+		return ( PayPalConfig::newFromConfig( $this->config['paypal'] ) );
 	}
 
 	public function getDonationRepository(): DonationRepository {

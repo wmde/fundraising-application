@@ -13,9 +13,11 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\Domain\Iban;
+use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
+use WMDE\Fundraising\Frontend\Domain\PayPalUrlGenerator;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationRequest;
@@ -279,9 +281,23 @@ $app->post(
 				);
 
 				if ( $responseModel->isSuccessful() ) {
-					// show confirmation page (UEB, BEZ)
-					return $ffFactory->newAddDonationHtmlPresenter()->present( $responseModel->getDonation() );
-					// TODO: redirect to PayPal (PPL)
+					$donation = $responseModel->getDonation();
+
+					switch( $donation->getPaymentType() ) {
+						case PaymentType::DIRECT_DEBIT:
+						case PaymentType::BANK_TRANSFER:
+							return $ffFactory->newAddDonationHtmlPresenter()->present( $responseModel->getDonation() );
+						case PaymentType::PAYPAL:
+							return $app->redirect(
+								$ffFactory->newPayPalUrlGenerator()->generateUrl(
+									$donation->getId(),
+									$donation->getAmount(),
+									$donation->getInterval(),
+									'token',
+									'utoken'
+								)
+							);
+					}
 					// TODO: show page embedding iframe (MCP)
 					// TODO: take over confirmation page selection functionality from old application
 				}
