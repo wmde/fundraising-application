@@ -1,17 +1,22 @@
 language: php
 
-php:
-  - 7
+matrix:
+  include:
+    - php: 7
+      env: DB=sqlite
+    - php: 7
+      env: DB=mysql
 
 sudo: false
 
 install:
-  - travis_retry composer install --prefer-source
+  - travis_retry composer install
   - npm install
 
 before_script:
   - phpenv config-rm xdebug.ini
-  - bash build/travis/before_script.sh
+  - bash build/travis/installKontoCheck.sh
+  - if [ "$DB" == "mysql" ]; then bash build/travis/configureForMysql.sh; fi
 
 script: composer ci
 

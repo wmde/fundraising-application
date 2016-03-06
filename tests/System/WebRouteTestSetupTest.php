@@ -15,10 +15,22 @@ class WebRouteTestSetupTest extends WebRouteTestCase {
 	public function testPersistenceGetsInitialized() {
 		$factory = TestEnvironment::newInstance()->getFactory();
 
-		$tableNames = $factory->getConnection()->getSchemaManager()->createSchema()->getTableNames();
+		$tableNames = $this->removeDatabaseNames(
+			...$factory->getConnection()->getSchemaManager()->createSchema()->getTableNames()
+		);
 
-		$this->assertContains( 'public.spenden', $tableNames );
-		$this->assertContains( 'public.users', $tableNames );
+		$this->assertContains( 'spenden', $tableNames );
+		$this->assertContains( 'users', $tableNames );
+	}
+
+	private function removeDatabaseNames( string ...$tableNames ): array {
+		return array_map(
+			function( string $tableName ) {
+				$parts = explode( '.', $tableName );
+				return end( $parts );
+			},
+			$tableNames
+		);
 	}
 
 }
