@@ -21,14 +21,19 @@ class PayPalUrlGenerator {
 		$this->config = $config;
 	}
 
-	public function generateUrl( int $donationId, float $amount, int $interval, string $accessToken, string $updateToken ) {
-		if ( $interval > 0 ) {
-			$params = $this->getSubscriptionParams( $amount, $interval );
-		} else {
-			$params = $this->getSinglePaymentParams( $amount );
-		}
+	public function generateUrl( int $donationId, float $amount, int $interval,
+		string $accessToken, string $updateToken ): string {
 
-		$params = array_merge( $params, [
+		$params = array_merge(
+			$this->getIntervalDependentParameters( $amount, $interval ),
+			$this->getIntervalAgnosticParameters( $donationId, $accessToken, $updateToken )
+		);
+
+		return $this->config->getPayPalBaseUrl() . http_build_query( $params );
+	}
+
+	private function getIntervalAgnosticParameters( int $donationId, string $accessToken, string $updateToken ): array {
+		return [
 			'business' => $this->config->getPayPalAccountAddress(),
 			'currency_code' => 'EUR',
 			'lc' => 'de',
@@ -42,9 +47,15 @@ class PayPalUrlGenerator {
 				'token' => $accessToken,
 				'utoken' => $updateToken
 			] )
-		] );
+		];
+	}
 
-		return $this->config->getPayPalBaseUrl() . http_build_query( $params );
+	private function getIntervalDependentParameters( float $amount, int $interval ): array {
+		if ( $interval > 0 ) {
+			return $this->getSubscriptionParams( $amount, $interval );
+		}
+
+		return $this->getSinglePaymentParams( $amount );
 	}
 
 	private function getSubscriptionParams( float $amount, int $interval ): array {
