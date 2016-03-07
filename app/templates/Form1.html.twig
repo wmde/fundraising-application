@@ -468,7 +468,8 @@
                         WMDE.ReduxValidation.createValidationDispatcher(
                                 WMDE.FormValidation.createAmountValidator( '{$ basepath $}/validate-amount' ),
                                 WMDE.Actions.newFinishAmountValidationAction,
-                                [ 'amount', 'paymentType' ]
+                                [ 'amount', 'paymentType' ],
+                                { amount: 0, paymentType: 'BEZ' }
                         )
                     ];
                 },
