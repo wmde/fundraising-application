@@ -4,25 +4,14 @@ var jQuery = require( 'jquery' ),
 	objectAsssign = require( 'object-assign' ),
 
 	AmountValidator = {
-		previousAmount: null,
-		previousPaymentType: null,
 		validationUrl: '',
 		postFunction: null,
 		validate: function ( formValues ) {
-			var postData;
-			if ( formValues.amount === this.previousAmount && formValues.paymentType === this.previousPaymentType ) {
-				return;
-			}
-			this.storePreviousValues( formValues );
-			postData = {
+			var postData = {
 				amount: formValues.amount,
 				paymentType: formValues.paymentType
 			};
 			return this.postFunction( this.validationUrl, postData, null, 'json' );
-		},
-		storePreviousValues: function ( formValues ) {
-			this.previousAmount = formValues.amount;
-			this.previousPaymentType = formValues.paymentType;
 		}
 	},
 

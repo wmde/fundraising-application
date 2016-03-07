@@ -24,24 +24,3 @@ test( 'Amount validation sends values to server', function ( t ) {
 	t.end();
 } );
 
-test( 'Validation sends values to server only when they changed', function ( t ) {
-	var postFunctionSpy = sinon.spy(),
-		amountValidator = validation.createAmountValidator(
-			'http://spenden.wikimedia.org/validate-amount',
-			postFunctionSpy
-		),
-		formValues = { amount: 23, paymentType: 'BEZ', otherStuff: 'foo' };
-
-	amountValidator.validate( formValues );
-	amountValidator.validate( formValues );
-
-	t.ok( postFunctionSpy.calledOnce, 'data is sent only once when input data is the same' );
-
-	formValues.amount = 42;
-	amountValidator.validate( formValues );
-
-	t.ok( postFunctionSpy.calledTwice, 'data is sent when input data changes' );
-
-	t.end();
-} );
-
