@@ -17,7 +17,15 @@ class TestEnvironment {
 	public static function newInstance( array $config = [] ) {
 		$instance = new self( $config );
 
-		$instance->factory->newInstaller()->install();
+		$installer = $instance->factory->newInstaller();
+
+		try {
+			$installer->uninstall();
+		}
+		catch ( \Exception $ex ) {
+		}
+
+		$installer->install();
 
 		return $instance;
 	}

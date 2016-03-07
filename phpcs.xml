@@ -10,9 +10,9 @@
 
     <rule ref="Generic.Arrays.DisallowLongArraySyntax" />
     <rule ref="Generic.Classes" />
-    <rule ref="Generic.CodeAnalysis" />
-    <rule ref="Generic.CodeAnalysis.UnusedFunctionParameter.Found">
-        <severity>0</severity>
+    <rule ref="Generic.CodeAnalysis">
+        <exclude name="Generic.CodeAnalysis.EmptyStatement" />
+        <exclude name="Generic.CodeAnalysis.UnusedFunctionParameter" />
     </rule>
     <rule ref="Generic.ControlStructures" />
 
