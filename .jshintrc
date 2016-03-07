@@ -18,6 +18,7 @@
     // Environment
     "browser": true,
     "node": true,
+    "devel": false,
 
     "globals": {
         "require": true,
@@ -28,6 +29,9 @@
         "mwPerformance": true,
         "jQuery": true,
         "QUnit": false
-    }
+    },
+
+    "predef": ["-console"]
+
 }
 

@@ -445,14 +445,7 @@
     // Initialize the form
     $(function(){
 
-        var dispatchValidationResult = function ( validationResult ) {
-                // TODO investigate how Reflux stores can react to Promises, so we don't need this function with the
-                // global store object and replace the buttonsEnabled handler with a handler that validates on button
-               // click if needed
-                var isValid = ( validationResult.status === 'OK' );
-                    WMDE.Store.dispatch( WMDE.Actions.newStoreValidationResultAction( isValid ) );
-            },
-            FormFactory = {
+        var FormFactory = {
                 newViewHandlers: function() {
                     return {
                         formPageVisibility: WMDE.View.createFormPageVisibilityHandler( {
@@ -460,35 +453,25 @@
                             personalData: $( "#personal-data,#donation-submit2" )
                         } ),
                         formPageHighlight: WMDE.View.createFormPageHighlightHandler( $( 'ul.step-list li' ) ),
-                        clearAmount: WMDE.View.createClearAmountHandler( $( 'input[name=betrag_auswahl]' ), $( '#betrag' ) ),
-                        buttonsEnabled: WMDE.View.createEnabledWhenValidHandler( $('#donation-submit1 button,#donation-submit2 button') )
+                        clearAmount: WMDE.View.createClearAmountHandler( $( 'input[name=betrag_auswahl]' ), $( '#amount-8' ) )
                     };
                 },
                 newValidators: function() {
-                    return {
-                        // TODO validate store values instead of input values, get rid of accessors,
-                        // connect validators to store update
-                        amountValidator: WMDE.FormValidation.createAmountValidator(
-                                WMDE.FormFieldAccessors.createMultipleValueAccessor(
-                                        WMDE.FormFieldAccessors.createTextValueAccessor( $( '#amount-8' ) ),
-                                        WMDE.FormFieldAccessors.createRadioValueAccessor( $( '.amount-select' ) )
-                                ),
-                                WMDE.FormFieldAccessors.createRadioValueAccessor( $( 'input[name=zahlweise]' ) ),
-                                '{$ basepath $}/validate-amount'
+                    return [
+                        WMDE.ReduxValidation.createValidationDispatcher(
+                                WMDE.FormValidation.createAmountValidator( '{$ basepath $}/validate-amount' ),
+                                WMDE.Actions.newFinishAmountValidationAction,
+                                [ 'amount', 'paymentType' ]
                         )
-                    };
+                    ];
                 },
-                connectElementEventsToActions: function( store, actions, validators ) {
-                    // TODO get rid of validation calls in event handlers, remove validator parameter
+                connectElementEventsToActions: function( store, actions ) {
                     $( '.amount-select' ).change( function( evt ) {
-
                         store.dispatch( actions.newSelectAmountAction( evt.target.value ) );
-                        validators.amountValidator.validate().then( dispatchValidationResult );
                     } );
 
                     $( '#amount-8' ).change( function( evt ) {
                         store.dispatch( actions.newInputAmountAction( evt.target.value ) );
-                        validators.amountValidator.validate().then( dispatchValidationResult );
                     } ).focus( function( evt ) {
                         // This method will clear the selection (important for usability),
                         // but keep the form data valid when the custom amount field is empty
@@ -507,38 +490,41 @@
                         }
                     } );
 
-                    $( '.payment-type-list input' ).change( function( evt ) {
+                    $( '.payment-type-list input' ).change( function ( evt ) {
                         store.dispatch( actions.newSelectPaymentTypeAction( evt.target.value ) );
-                        validators.amountValidator.validate().then( dispatchValidationResult );
                     } );
 
-                    $( '#donation-submit1 button' ).click( function() {
+                    $( '#donation-submit1 button' ).click( function () {
                         store.dispatch( actions.newNextPageAction() );
                     } );
                 },
+                connectValidatorsToStore: function ( store ) {
+                    WMDE.ReduxValidation.createValidationDispatcherCollection( store, this.newValidators() );
+                },
+                connectViewHandlersToStore: function ( store ) {
+                    var viewHandlers = this.newViewHandlers();
+                    store.subscribe( function() {
+                        var state = store.getState();
+                        // console.log( state );
+                        // TODO check if state has changed before executing update action
+                        viewHandlers.formPageVisibility.update( state.formPagination );
+                        viewHandlers.formPageHighlight.update( state.formPagination );
+                        viewHandlers.clearAmount.update( state.formContent );
+                    } );
+                },
+                init: function( store, actions ) {
+                    this.connectElementEventsToActions(store, actions );
+                    this.connectValidatorsToStore( store );
+                    this.connectViewHandlersToStore( store )
+                }
+            };
 
-            },
-
-            validators = FormFactory.newValidators(),
-            viewHandlers = FormFactory.newViewHandlers();
-
-        // Connect view Handlers to state update
-        // TODO Move this to an a class that gets a map of the handlers and their assorted state property
-        WMDE.Store.subscribe( function() {
-            var state = WMDE.Store.getState();
-            // console.log( state );
-            // TODO check if state has changed before executing update action
-            viewHandlers.formPageVisibility.update( state.formPagination );
-            viewHandlers.formPageHighlight.update( state.formPagination );
-            viewHandlers.clearAmount.update( state.formContent );
-            viewHandlers.buttonsEnabled.update( state.validity );
-        } );
+        FormFactory.init( WMDE.Store, WMDE.Actions );
 
         // Initialize form pages
         WMDE.Store.dispatch( WMDE.Actions.newAddPageAction( 'payment' ) );
         WMDE.Store.dispatch( WMDE.Actions.newAddPageAction( 'personalData' ) );
 
-        FormFactory.connectElementEventsToActions( WMDE.Store, WMDE.Actions, validators );
 
     } );
 </script>
