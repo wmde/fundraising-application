@@ -671,7 +671,7 @@ class FunFunFactory {
 	}
 
 	private function getPayPalConfig() {
-		return ( PayPalConfig::newFromConfig( $this->config['paypal'] ) );
+		return PayPalConfig::newFromConfig( $this->config['paypal'] );
 	}
 
 	public function getDonationRepository(): DonationRepository {

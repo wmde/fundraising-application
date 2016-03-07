@@ -21,7 +21,7 @@ class PayPalUrlGenerator {
 		$this->config = $config;
 	}
 
-	public function generateUrl( int $id, float $amount, int $interval, string $accessToken, string $updateToken ) {
+	public function generateUrl( int $donationId, float $amount, int $interval, string $accessToken, string $updateToken ) {
 		if ( $interval > 0 ) {
 			$params = $this->getSubscriptionParams( $amount, $interval );
 		} else {
@@ -33,12 +33,12 @@ class PayPalUrlGenerator {
 			'currency_code' => 'EUR',
 			'lc' => 'de',
 			'item_name' => $this->config->getItemName(),
-			'item_number' => $id,
+			'item_number' => $donationId,
 			'notify_url' => $this->config->getNotifyUrl(),
 			'cancel_return' => $this->config->getCancelUrl(),
-			'return' => $this->config->getReturnUrl() . '?sid=' . $id,
+			'return' => $this->config->getReturnUrl() . '?sid=' . $donationId,
 			'custom' => json_encode( [
-				'sid' => $id,
+				'sid' => $donationId,
 				'token' => $accessToken,
 				'utoken' => $updateToken
 			] )
@@ -47,7 +47,7 @@ class PayPalUrlGenerator {
 		return $this->config->getPayPalBaseUrl() . http_build_query( $params );
 	}
 
-	private function getSubscriptionParams( $amount, $interval ): array {
+	private function getSubscriptionParams( float $amount, int $interval ): array {
 		return [
 			'cmd' => '_xclick-subscriptions',
 			'no_shipping' => '1',
@@ -60,7 +60,7 @@ class PayPalUrlGenerator {
 		];
 	}
 
-	private function getSinglePaymentParams( $amount ): array {
+	private function getSinglePaymentParams( float $amount ): array {
 		return [
 			'cmd' => '_donations',
 			'amount' => $amount
