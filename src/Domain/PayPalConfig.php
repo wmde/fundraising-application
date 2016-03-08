@@ -28,10 +28,11 @@ class PayPalConfig {
 	}
 
 	/**
-	 * @param String[] $config
-	 * @return PayPalConfig
+	 * @param string[] $config
+	 * @return self
+	 * @throws \RuntimeException
 	 */
-	public static function newFromConfig( array $config ) {
+	public static function newFromConfig( array $config ): self {
 		return ( new PayPalConfig(
 			$config['account-address'],
 			$config['base-url'],
@@ -42,11 +43,6 @@ class PayPalConfig {
 		) )->assertNoEmptyFields();
 	}
 
-	/**
-	 * Throws an exception if any of the fields have null as value.
-	 *
-	 * @throws \RuntimeException
-	 */
 	private function assertNoEmptyFields(): self {
 		foreach ( get_object_vars( $this ) as $fieldName => $fieldValue ) {
 			if ( empty( $fieldValue ) ) {
