@@ -66,7 +66,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		);
 	}
 
-	private function newOneHourInterval() {
+	private function newOneHourInterval(): \DateInterval {
 		return new \DateInterval( 'PT1H' );
 	}
 
@@ -155,7 +155,13 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 				} )
 			);
 
-		$useCase = new AddDonationUseCase(
+		$useCase = $this->newUseCaseWithMailer( $mailer );
+
+		$useCase->addDonation( $this->newValidAddDonationRequestWithEmail( 'foo@bar.baz' ) );
+	}
+
+	private function newUseCaseWithMailer( TemplateBasedMailer $mailer ) {
+		return new AddDonationUseCase(
 			$this->newRepository(),
 			$this->getSucceedingValidatorMock(),
 			new ReferrerGeneralizer( 'http://foo.bar', [] ),
@@ -164,7 +170,9 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 			$this->newBankDataConverter(),
 			$this->newTokenGenerator()
 		);
+	}
 
+	private function newValidAddDonationRequestWithEmail( string $email ): AddDonationRequest {
 		$request = $this->newMinimumDonationRequest();
 		$personalInfo = new PersonalInfo();
 		$personalInfo->setPersonName( PersonName::newPrivatePersonName() );
@@ -172,7 +180,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$personalInfo->setEmailAddress( 'foo@bar.baz' );
 		$request->setPersonalInfo( $personalInfo );
 
-		$useCase->addDonation( $request );
+		return $request;
 	}
 
 }
