@@ -648,7 +648,7 @@ class FunFunFactory {
 		);
 	}
 
-	private function newPersonalInfoValidator(): PersonalInfoValidator {
+	public function newPersonalInfoValidator(): PersonalInfoValidator {
 		return new PersonalInfoValidator(
 			new PersonNameValidator(),
 			new PhysicalAddressValidator(),
