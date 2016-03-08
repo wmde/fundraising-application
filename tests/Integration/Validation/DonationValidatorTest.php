@@ -194,7 +194,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 		return $donation;
 	}
 
-	private function newValidBankData() {
+	private function newValidBankData(): BankData {
 		$bankData = new BankData();
 		$bankData->setIban( new Iban( '' ) );
 		$bankData->setBic( '' );
@@ -204,7 +204,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 		return $bankData;
 	}
 
-	private function newBankDataValidator() {
+	private function newBankDataValidator(): BankDataValidator {
 		$ibanValidatorMock = $this->getMockBuilder( IbanValidator::class )->disableOriginalConstructor()->getMock();
 		$ibanValidatorMock->method( 'validate' )
 			->willReturn( new ValidationResult() );
@@ -212,7 +212,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 		return new BankDataValidator( $ibanValidatorMock );
 	}
 
-	private function newMockPersonalInfoValidator() {
+	private function newMockPersonalInfoValidator(): PersonalInfoValidator {
 		$validator = $this->getMockBuilder( PersonalInfoValidator::class )->disableOriginalConstructor()->getMock();
 		$validator->method( 'validate' )->willReturn( new ValidationResult() );
 		return $validator;
