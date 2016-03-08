@@ -57,6 +57,12 @@ If you are working on the JavaScript files and need automatic recompilation when
 
 instead. 
 
+If you want to debug problems in the Redux data flow, set the following variable in the shell environment:
+  
+    export REDUX_LOG=on
+
+Actions and their resulting state will be logged. 
+
 ## Profiling
 
 When accessing the API via `web/index.dev.php`, profiling information will be generated and in
