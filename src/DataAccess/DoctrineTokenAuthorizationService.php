@@ -39,21 +39,17 @@ class DoctrineTokenAuthorizationService implements AuthorizationService {
 			return false;
 		}
 
-		$data = $donation->getDecodedData();
-
-		return is_array( $data )
-			&& $this->tokenMatches( $data )
-			&& $this->tokenHasNotExpired( $data );
+		return $this->tokenMatches( $donation )
+			&& $this->tokenHasNotExpired( $donation );
 	}
 
-	private function tokenMatches( array $data ): bool {
-		return array_key_exists( 'utoken', $data )
-			&& $data['utoken'] === $this->updateToken;
+	private function tokenMatches( Donation $donation ): bool {
+		return $donation->getDataObject()->getUpdateToken() === $this->updateToken;
 	}
 
-	private function tokenHasNotExpired( array $data ): bool {
-		return array_key_exists( 'uexpiry', $data )
-			&& strtotime( $data['uexpiry'] ) >= time();
+	private function tokenHasNotExpired( Donation $donation ): bool {
+		$expiryTime = $donation->getDataObject()->getUpdateTokenExpiry();
+		return $expiryTime !== null && strtotime( $expiryTime ) >= time();
 	}
 
 }
