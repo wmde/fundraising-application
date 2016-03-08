@@ -3,6 +3,7 @@ var Redux = require( 'redux' ),
 	formPagination = require( './reducers/form_pagination' ),
 	formContent = require( './reducers/form_content' ),
 	validity = require( './reducers/validity' ),
+	validationMessages = require( './reducers/validation_messages' ),
 	middlewares = [ reduxPromise ];
 
 /* jshint ignore:start */ // Ignore console.log calls
@@ -36,6 +37,6 @@ if ( process.env.REDUX_LOG === 'on' ) {
 module.exports = Redux.createStore( Redux.combineReducers( {
 	formPagination: formPagination,
 	formContent: formContent,
-	validity: validity
+	validity: validity,
+	validationMessages: validationMessages
 } ), undefined, Redux.applyMiddleware.apply( this, middlewares ) );
-

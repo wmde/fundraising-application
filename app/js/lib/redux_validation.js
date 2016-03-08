@@ -7,9 +7,8 @@ var objectAssign = require( 'object-assign' ),
 		validationFunction: null,
 		actionCreationFunction: null,
 		fields: null,
-
-		// internal properties
 		previousFieldValues: {},
+
 		dispatchIfChanged: function ( formValues, store ) {
 			var selectedValues = _.pick( formValues, this.fields ),
 				validationResult;
@@ -44,14 +43,15 @@ var objectAssign = require( 'object-assign' ),
 	 * @param {Array} fieldNames Names of the state values from formContent that will be validated
 	 * @return {ValidationDispatcher}
 	 */
-	createValidationDispatcher = function ( validator, actionCreationFunction, fieldNames ) {
+	createValidationDispatcher = function ( validator, actionCreationFunction, fieldNames, initalValues ) {
 		if ( typeof validator === 'object' ) {
 			validator = validator.validate.bind( validator );
 		}
 		return objectAssign( Object.create( ValidationDispatcher ), {
 			validationFunction: validator,
 			actionCreationFunction: actionCreationFunction,
-			fields: fieldNames
+			fields: fieldNames,
+			previousFieldValues: initalValues || {}
 		} );
 	},
 

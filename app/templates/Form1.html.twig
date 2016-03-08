@@ -5,6 +5,12 @@
  TODO Remove this when JavaScript works.
 #}
 <!-- <html> -->
+
+<div id="validation-errors" class="errorbox" style="display: none">
+    <strong>Bei der Prüfung Ihrer Eingaben wurden Probleme bemerkt</strong>.
+    Bitte überprüfen Sie Ihre Angaben in folgenden Feldern: <strong class="fields">keine</strong>
+</div>
+
 <form name="donForm" id="donForm" method="POST" action="#">
 
     <!-- steps-overview -->
@@ -453,7 +459,8 @@
                             personalData: $( "#personal-data,#donation-submit2" )
                         } ),
                         formPageHighlight: WMDE.View.createFormPageHighlightHandler( $( 'ul.step-list li' ) ),
-                        clearAmount: WMDE.View.createClearAmountHandler( $( 'input[name=betrag_auswahl]' ), $( '#amount-8' ) )
+                        clearAmount: WMDE.View.createClearAmountHandler( $( 'input[name=betrag_auswahl]' ), $( '#amount-8' ) ),
+                        errorBox: WMDE.View.createErrorBoxHandler( $( '#validation-errors' ), { amount: 'Betrag' } )
                     };
                 },
                 newValidators: function() {
@@ -461,7 +468,8 @@
                         WMDE.ReduxValidation.createValidationDispatcher(
                                 WMDE.FormValidation.createAmountValidator( '{$ basepath $}/validate-amount' ),
                                 WMDE.Actions.newFinishAmountValidationAction,
-                                [ 'amount', 'paymentType' ]
+                                [ 'amount', 'paymentType' ],
+                                { amount: 0, paymentType: 'BEZ' }
                         )
                     ];
                 },
@@ -510,6 +518,7 @@
                         viewHandlers.formPageVisibility.update( state.formPagination );
                         viewHandlers.formPageHighlight.update( state.formPagination );
                         viewHandlers.clearAmount.update( state.formContent );
+                        viewHandlers.errorBox.update( state.validationMessages );
                     } );
                 },
                 init: function( store, actions ) {
