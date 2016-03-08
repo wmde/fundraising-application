@@ -319,6 +319,8 @@ $app->post(
 		// TODO: response should be HTML/redirect?
 
 		if ( $response->cancellationWasSuccessful() ) {
+			// TODO: reset spenden_stamp in cookie
+
 			return $app->json( [
 				'status' => 'OK',
 				'message' => '',

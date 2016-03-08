@@ -54,7 +54,6 @@ class CancelDonationUseCase {
 
 		// TODO: update donation status
 		// TODO: add log message to spenden.data['log']
-		// TODO: reset spenden_stamp in cookie
 
 		$this->sendConfirmationEmail( $donation );
 
