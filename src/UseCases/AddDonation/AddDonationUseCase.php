@@ -74,7 +74,7 @@ class AddDonationUseCase {
 		// 'utoken' => $donation->getUpdateToken(),
 		// 'uexpiry' => $donation->getUpdateTokenExpiry()
 
-		return AddDonationResponse::newSuccessResponse( $donation );
+		return AddDonationResponse::newSuccessResponse( $donation, 'TODO token' );
 	}
 
 	private function getInitialDonationStatus( Donation $donation, bool $needsModeration ): string {
