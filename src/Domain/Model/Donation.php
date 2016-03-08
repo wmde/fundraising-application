@@ -44,8 +44,6 @@ class Donation {
 	private $personalInfo;
 
 	/**
-	 * TODO: can this not be null as well, for some payment types?
-	 *
 	 * @var BankData|null
 	 */
 	private $bankData;
