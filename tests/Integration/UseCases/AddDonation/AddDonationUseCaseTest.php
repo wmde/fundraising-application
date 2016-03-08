@@ -15,7 +15,9 @@ use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
 use WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\DonationRepositorySpy;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationUseCase;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
@@ -38,7 +40,8 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 			new ReferrerGeneralizer( 'http://foo.bar', [] ),
 			$this->newMailer(),
 			$this->newTransferCodeGenerator(),
-			$this->newBankDataConverter()
+			$this->newBankDataConverter(),
+			$this->newTokenGenerator()
 		);
 
 		$this->assertTrue( $useCase->addDonation( $this->newMinimumDonationRequest() )->isSuccessful() );
@@ -53,6 +56,20 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 			->getMock();
 	}
 
+	/**
+	 * @return TokenGenerator
+	 */
+	private function newTokenGenerator(): TokenGenerator {
+		return new FixedTokenGenerator(
+			'a very nice token',
+			( new \DateTime() )->add( $this->newOneHourInterval() )
+		);
+	}
+
+	private function newOneHourInterval() {
+		return new \DateInterval( 'PT1H' );
+	}
+
 	private function newRepository(): DonationRepository {
 		return new DonationRepositorySpy();
 	}
@@ -64,7 +81,8 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 			new ReferrerGeneralizer( 'http://foo.bar', [] ),
 			$this->newMailer(),
 			$this->newTransferCodeGenerator(),
-			$this->newBankDataConverter()
+			$this->newBankDataConverter(),
+			$this->newTokenGenerator()
 		);
 
 		$result = $useCase->addDonation( $this->newMinimumDonationRequest() );
@@ -108,7 +126,8 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 			new ReferrerGeneralizer( 'http://foo.bar', [] ),
 			$mailer,
 			$this->newTransferCodeGenerator(),
-			$this->newBankDataConverter()
+			$this->newBankDataConverter(),
+			$this->newTokenGenerator()
 		);
 
 		$useCase->addDonation( $this->newMinimumDonationRequest() );
@@ -142,7 +161,8 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 			new ReferrerGeneralizer( 'http://foo.bar', [] ),
 			$mailer,
 			$this->newTransferCodeGenerator(),
-			$this->newBankDataConverter()
+			$this->newBankDataConverter(),
+			$this->newTokenGenerator()
 		);
 
 		$request = $this->newMinimumDonationRequest();

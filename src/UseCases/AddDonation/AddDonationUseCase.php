@@ -11,6 +11,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\TrackingInfo;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
+use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
 use WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer;
@@ -31,10 +32,12 @@ class AddDonationUseCase {
 	private $mailer;
 	private $transferCodeGenerator;
 	private $bankDataConverter;
+	private $tokenGenerator;
 
 	public function __construct( DonationRepository $donationRepository, DonationValidator $donationValidator,
 								 ReferrerGeneralizer $referrerGeneralizer, TemplateBasedMailer $mailer,
-								 TransferCodeGenerator $transferCodeGenerator, BankDataConverter $bankDataConverter ) {
+								 TransferCodeGenerator $transferCodeGenerator, BankDataConverter $bankDataConverter,
+								 TokenGenerator $tokenGenerator ) {
 
 		$this->donationRepository = $donationRepository;
 		$this->donationValidator = $donationValidator;
@@ -42,6 +45,7 @@ class AddDonationUseCase {
 		$this->mailer = $mailer;
 		$this->transferCodeGenerator = $transferCodeGenerator;
 		$this->bankDataConverter = $bankDataConverter;
+		$this->tokenGenerator = $tokenGenerator;
 	}
 
 	public function addDonation( AddDonationRequest $donationRequest ): AddDonationResponse {

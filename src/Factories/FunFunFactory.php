@@ -43,11 +43,12 @@ use WMDE\Fundraising\Frontend\Domain\Honorifics;
 use WMDE\Fundraising\Frontend\Domain\Repositories\CommentRepository;
 use WMDE\Fundraising\Frontend\Domain\SimpleTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\Repositories\SubscriptionRepository;
-use WMDE\Fundraising\Frontend\Domain\TokenGenerator;
+use WMDE\Fundraising\Frontend\Infrastructure\RandomTokenGenerator;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationService;
 use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\AddDonationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListJsonPresenter;
@@ -628,7 +629,8 @@ class FunFunFactory {
 			$this->newReferrerGeneralizer(),
 			$this->newAddDonationMailer(),
 			$this->newBankTransferCodeGenerator(),
-			$this->newBankDataConverter()
+			$this->newBankDataConverter(),
+			$this->newTokenGenerator()
 		);
 	}
 
@@ -722,7 +724,7 @@ class FunFunFactory {
 	}
 
 	public function newTokenGenerator(): TokenGenerator {
-		return new TokenGenerator(
+		return new RandomTokenGenerator(
 			$this->config['token-length'],
 			$this->config['token-validity-timestamp']
 		);
