@@ -1,0 +1,246 @@
+<div style="height: 42em;">
+	<section class="container clearfix" id="donation-amount">
+		<div class="ltcol">
+			&nbsp;
+		</div>
+
+		<div class="ctcol">
+			<div class="box rounded">
+				<div class="box-footer clearfix">
+					<span class="icon-ok-sign">
+						{$ 'paytext_cc'|trans({}, 'paymentIntervals') $} {$ donation.interval|trans({}, 'paymentIntervals') $} {$ donation.amount|localizedcurrency('EUR', 'de_DE') $}</strong>
+						per Kreditkarte.</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="rtcol">
+			<div class="icon-bar-chart _icon-list-item">
+				<p>
+					<a class="wlightbox inline" href="#" data-href="#wlightbox-wohin-geht-das-geld">
+						<strong>Wohin geht das Geld?</strong>
+					</a>
+				</p>
+			</div>
+
+			<div class="icon-hand-right _icon-list-item" style="margin-top: -9px;">
+				<p>
+					<a class="wlightbox inline" href="#" data-href="#wlightbox-steuerlich-absetzbar">
+						<strong>Steuerlich absetzbar</strong>
+					</a>
+				</p>
+			</div>
+		</div>
+	</section>
+	<div class="steps-overview container clearfix">
+		<div class="ltcol">
+			&nbsp;
+		</div>
+		<div class="ctcol">
+			<div class="box rounded partial no-margin">
+				<div class="box-header">
+					<ul class="step-list horizontal clearfix">
+						<li class="first">Mein Betrag</li>
+						<li class="active">Meine Daten</li>
+						<li class="last">Fertig!</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="rtcol">
+			&nbsp;
+		</div>
+	</div>
+	<div>
+		<div class="ltcol">
+			&nbsp;
+		</div>
+
+		<div class="ctcol">
+			<iframe id="micropayment-portal" class="payment-portal" scrolling="auto"
+					style="width:39em; height: 39em; border: 0px;"
+					allowtransparency="true" src="{$ iframeUrl|raw $}">
+			</iframe>
+		</div>
+		<div class="rtcol">
+			<div class="_icon-list-item first">
+				<span class="logo-creditcards"></span>
+			</div>
+			<div class="icon-lock _icon-list-item">
+				<p>
+					<strong>SSL-Verschlüsselte Daten</strong>
+				</p>
+
+				<p>
+					Ihre Spende wird über eine sichere SSL-Verschlüsselung aufgenommen und liegt später auf deutschen
+					Servern.
+				</p>
+			</div>
+			<div class="icon-shield _icon-list-item last">
+				<p>
+					<strong>Ihre Daten sind sicher</strong>
+				</p>
+				<p>
+					Wir fühlen uns dem Datenschutz verpflichtet. Unsere Bestimmungen dazu können Sie
+					<a class="wlightbox inline" href="Datenschutz" data-href="#wlightbox-datenschutz">hier</a> einsehen
+				</p>
+			</div>
+		</div>
+	</div>
+
+	<!-- TODO: transclude lightbox content -->
+	<div class="wlightbox-contents">
+		<div id="wlightbox-wohin-geht-das-geld">
+
+			<div class="wlightbox-title clearfix">
+				<span class="icon-bar-chart wlightbox-icon"></span>Wohin geht meine Spende?
+
+				<a target="_blank" href="http://wikimedia.de/wiki/Transparenz"><span
+							class="logo-itz-white f-right no-margin"></span></a>
+			</div>
+
+			<p>
+				<img src="//spenden.wikimedia.de/wiki/images/7/7f/WMDE-Mittelverwendung-2016.png" />
+			</p>
+
+			<div class="container clearfix">
+				<div style="width: 235px; margin-right: 25px;" class="f-left">
+					<p>
+						<strong>Die Organisation</strong><br/>
+						Wikimedia besteht in Deutschland aus zwei Organisationen: Wikimedia Deutschland e.V. (WMDE) und
+						dessen 100%iger Tochtergesellschaft “Gemeinnützige Wikimedia Fördergesellschaft mbH” (WMFG). Die
+						Fördergesellschaft ist Empfängerin der Spenden.
+					</p>
+					<p>
+						Sie hat den Zweck, Gelder an die US-amerikanische Wikimedia Foundation (WMF) zum Betrieb und
+						Ausbau der Wikimedia-Projekte und für internationale Programme weiterzuleiten. Ebenso leitet die
+						Fördergesellschaft Gelder an den Wikimedia Deutschland e.V. weiter, der die Projekte des Vereins
+						ausführt.
+					</p>
+				</div>
+
+				<div style="padding-left: 25px; border-left: 1px solid #cfd2d9; width: 400px;" class="f-left no-margin">
+					<p>
+						<strong style="color:#2fa037;">Mittel für die Wikimedia Foundation</strong><br/>
+						Die Betreiberin der Wikimedia-Projekte nutzt die Spenden für Produktentwicklung, Technik,
+						internationale Unterstützung der Wikimedia-Gemeinschaft und Aktivitäten rund um die Wikipedia.
+					</p>
+
+					<p>
+						<strong style="color:#01b4dd;">Softwareentwicklung</strong><br/>
+						hat das Ziel, die Qualität der Wikimedia-Projekte zu erhöhen und ihre Bedienung zu erleichtern.
+						Deshalb sorgt das Team für stetige Verbesserung der Software rund um die Wikimedia-Projekte
+						und entwickelt neuartige Lösungen, um auf die Bedürfnisse der vielen Communitys zu reagieren.
+					</p>
+
+					<p>
+						<strong style="color:#01b4dd;">Ideenförderung</strong><br/>
+						unterstützt die Freiwilligen in Form von Stipendien oder Reisekostenerstattungen, verleiht
+						technische Ausrüstung, um das Aufnehmen von Fotos, Videos und Tönen zu ermöglichen und leistet
+						logistische, administrative und organisatorische Hilfe bei der Durchführung von
+						Community-Veranstaltungen.
+					</p>
+
+					<p>
+						<strong style="color:#01b4dd;">Bildung, Wissen und Kultur</strong><br/>
+						hat die Aufgabe, im Bildungs-, Wissenschafts- und Kulturbereich durch Austausch und
+						Veranstaltungen für freie Inhalte zu werben. Außerdem werden Forschungs- und Entwicklungsvorhaben
+						initiiert und innovative Projekte unterstützt.
+					</p>
+
+					<p>
+						<strong style="color:#01b4dd;">Politik und Recht</strong><br/>
+						setzt sich für optimale politische und rechtliche Rahmenbedingungen für Freies Wissen ein und
+						wirkt an Debatten auf nationaler und europäischer Ebene mit.
+					</p>
+
+					<p>
+						<strong style="color:#01b4dd;">Internationales</strong><br/>
+						gestaltet die Vernetzung mit der internationalen Wikimedia-Gemeinschaft. Durch Wissensaustausch
+						wird der globale Zugang zu Freiem Wissen gefördert.
+					</p>
+
+					<p>
+						<strong style="color:#01b4dd;">Kommunikation</strong><br/>
+						hat die Aufgabe, Wikimedia Deutschland bei der Kommunikation seiner Ziele und Aufgaben zu
+						unterstützen. Dazu gehören Einzelbotschaften wie auch das Gesamtbild des Vereins – nach außen
+						wie innen.
+					</p>
+
+					<p>
+						<strong style="color:#01b4dd;">Zusammenarbeit und Entwicklung</strong><br/>
+						kümmert sich um Partnerschaften zur Umsetzung gezielter Projektvorhaben und sorgt für die
+						Steuerung und Verknüpfung der einzelnen Projekte des Vereins. Durch Monitoring und Evaluation wird
+						zudem Wirkung und Zielerreichung der Projekte verbessert. Dafür wird eine wirkungsorientiertes
+						Monitoringsystem aufgebaut.
+					</p>
+
+					<p>
+						<strong style="color:#0196b5;">Unterstützende Bereiche und Verwaltung</strong><br/>
+						Veranstaltungsmanagement, IT, Präsidium, Vorstand, Verwaltung und Finanzen und Rücklagen
+					</p>
+				</div>
+			</div>
+			<div style="font-size: 0.9em; color: #666666; margin-top: 10px;">* bis zur Genehmigung auf der Mitgliederversammlung von Wikimedia Deutschland am 28.11.2015</div>
+			<div style="font-size: 0.9em; color: #666666; margin-top: 10px;">** inklusive Einnahmen durch Mitgliedsbeiträge, Drittmittel und sonstige Einnahmen</div>
+			<hr/>
+
+			<a title="Erfahren Sie mehr" href="https://meta.wikimedia.org/wiki/Wikimedia_Deutschland/PP16/ZWP16"
+			   class="a-center">Erfahren Sie mehr</a>
+
+		</div>
+		<div id="wlightbox-steuerlich-absetzbar">
+
+			<div class="wlightbox-title clearfix">
+				<span class="icon-hand-right wlightbox-icon"></span>Steuerlich absetzbar
+
+				<a target="_blank" href="http://wikimedia.de/wiki/Transparenz"><span
+							class="logo-itz-white f-right no-margin"></span></a>
+			</div>
+
+			<div class="container">
+				<p>
+					<strong>Ist meine Spende steuerlich absetzbar?</strong><br/>
+					<br/>
+					Ja, Ihre Spende ist steuerlich absetzbar. Die Wikimedia Fördergesellschaft ist als gemeinnützig
+					anerkannt und kann somit Zuwendungsbescheinigungen ausstellen. Bis zu einem Betrag von
+					200 € genügt dem Finanzamt der sogenannten Vereinfachte Zuwendungsbescheid in Verbindung mit Ihrem
+					Kontoauszug als Nachweis der Spende.
+				</p>
+
+				<p>
+					<a target="_blank"
+					   href="https://spenden.wikimedia.de/wiki/images/3/33/Vereinfachter_Zuwendungsbescheid_Foerdergesellschaft_2015.pdf">Den
+						vereinfachten Zuwendungsbescheid für die Wikimedia Fördergesellschaft können Sie hier
+						herunterladen.</a>
+				</p>
+
+				<p>
+					Als Dankeschön und Zeichen unserer Wertschätzung stellen wir jedoch für jede Spende ab genau 5 Euro
+					automatisch eine Zuwendungsbescheinigung aus. Diese verschicken wir zum Ende des ersten Quartals des
+					folgenden Jahres. Wenn Sie Ihre Zuwendungsbestätigung eher benötigen, sagen Sie uns einfach
+					Bescheid. Auf Nachfrage versenden wir die Bestätigung auch gern eher.
+				</p>
+
+				<p>
+					Für Spenden unter 5 € bieten wir in der Regel keine Zuwendungsbestätigung an, da dem Finanzamt der
+					Kontoauszug in Verbindung mit dem vereinfachten Zuwendungsbescheid als Nachweis der Spende
+					ausreicht. Ebenso möchten wir die Kosten für Verwaltung und Versand möglichst gering halten. Wenn
+					Sie dennoch eine Zuwendungsbestätigung erhalten möchten, ist dies natürlich kein Problem. Gern
+					stellen wir Ihnen eine Bestätigung aus. Schreiben Sie uns dazu einfach eine E-Mail an
+					<a href="mailto:spenden@wikimedia.de">spenden@wikimedia.de</a>.
+				</p>
+
+				<p>
+					Bitte beachten Sie: Bei selbstständigen Überweisungen müssen Sie die Adresse in den Verwendungszweck
+					eintragen, wenn Sie eine Zuwendungsbestätigung erhalten möchten. Komfortabler ist es jedoch, wenn
+					Sie mittels unseres Spendenformulars per Überweisung spenden. Dort können Sie Ihre Adresse direkt
+					eingeben. Die Kontoverbindung wird Ihnen dann im Anschluss mitsamt dem Code Ihrer Spende mitgeteilt.
+					Diesen Code tragen Sie bitte bei Ihrer Überweisung in den Verwendungszweck ein.
+				</p>
+			</div>
+
+		</div>
+	</div>
+</div>
+

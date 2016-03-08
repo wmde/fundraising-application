@@ -34,5 +34,12 @@
 		"return-url": "http://my.donation.app/fr-rewrite/donation/confirm",
 		"cancel-url": "http://my.donation.app/fr-rewrite/donation/cancel",
 		"item-name": "This appears on the invoice"
+	},
+	"creditcard": {
+		"base-url": "http://thatother.paymentprovider.com?",
+		"project-id": "myprojectid",
+		"background-color": "000000",
+		"skin": "default",
+		"theme": "default"
 	}
 }
