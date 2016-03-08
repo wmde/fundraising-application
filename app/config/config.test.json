@@ -26,5 +26,13 @@
 		}
 	},
 	"operator-email": "email@operatorsownmailserver.com",
-	"operator-displayname": "Friendly Operator"
+	"operator-displayname": "Friendly Operator",
+	"paypal": {
+		"base-url": "http://that.paymentprovider.com/?",
+		"account-address": "foerderpp@wikimedia.de",
+		"notify-url": "http://my.donation.app/handler/paypal",
+		"return-url": "http://my.donation.app/fr-rewrite/donation/confirm",
+		"cancel-url": "http://my.donation.app/fr-rewrite/donation/cancel",
+		"item-name": "This appears on the invoice"
+	}
 }
