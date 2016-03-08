@@ -21,12 +21,12 @@ class PayPalConfigTest extends \PHPUnit_Framework_TestCase {
 
 	private function newIncompletePayPalConfig() {
 		return PayPalConfig::newFromConfig( [
-			'base-url' => 'http://that.paymentprovider.com/?',
-			'account-address' => 'some@email-adress.com',
-			'notify-url' => 'http://my.donation.app/handler/paypal/',
-			'return-url' => 'http://my.donation.app/donation/confirm/',
-			'cancel-url' => 'http://my.donation.app/donation/cancel/',
-			'item-name' => ''
+			PayPalConfig::CONFIG_KEY_BASE_URL => 'http://that.paymentprovider.com/?',
+			PayPalConfig::CONFIG_KEY_ACCOUNT_ADDRESS => 'some@email-adress.com',
+			PayPalCOnfig::CONFIG_KEY_NOTIFY_URL => 'http://my.donation.app/handler/paypal/',
+			PayPalCOnfig::CONFIG_KEY_RETURN_URL => 'http://my.donation.app/donation/confirm/',
+			PayPalCOnfig::CONFIG_KEY_CANCEL_URL => 'http://my.donation.app/donation/cancel/',
+			PayPalCOnfig::CONFIG_KEY_ITEM_NAME => ''
 		] );
 	}
 
@@ -36,12 +36,12 @@ class PayPalConfigTest extends \PHPUnit_Framework_TestCase {
 
 	private function newPayPalConfig() {
 		return PayPalConfig::newFromConfig( [
-			'base-url' => 'http://that.paymentprovider.com/?',
-			'account-address' => 'some@email-adress.com',
-			'notify-url' => 'http://my.donation.app/handler/paypal/',
-			'return-url' => 'http://my.donation.app/donation/confirm/',
-			'cancel-url' => 'http://my.donation.app/donation/cancel/',
-			'item-name' => 'This appears on the invoice'
+			PayPalConfig::CONFIG_KEY_BASE_URL => 'http://that.paymentprovider.com/?',
+			PayPalConfig::CONFIG_KEY_ACCOUNT_ADDRESS => 'some@email-adress.com',
+			PayPalCOnfig::CONFIG_KEY_NOTIFY_URL => 'http://my.donation.app/handler/paypal/',
+			PayPalCOnfig::CONFIG_KEY_RETURN_URL => 'http://my.donation.app/donation/confirm/',
+			PayPalCOnfig::CONFIG_KEY_CANCEL_URL => 'http://my.donation.app/donation/cancel/',
+			PayPalCOnfig::CONFIG_KEY_ITEM_NAME => 'This appears on the invoice'
 		] );
 	}
 

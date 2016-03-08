@@ -10,6 +10,13 @@ namespace WMDE\Fundraising\Frontend\Domain;
  */
 class PayPalConfig {
 
+	const CONFIG_KEY_ACCOUNT_ADDRESS = 'account-address';
+	const CONFIG_KEY_BASE_URL = 'base-url';
+	const CONFIG_KEY_NOTIFY_URL = 'notify-url';
+	const CONFIG_KEY_RETURN_URL = 'return-url';
+	const CONFIG_KEY_CANCEL_URL = 'cancel-url';
+	const CONFIG_KEY_ITEM_NAME = 'item-name';
+
 	private $payPalAccountAddress;
 	private $payPalBaseUrl;
 	private $notifyUrl;
@@ -34,12 +41,12 @@ class PayPalConfig {
 	 */
 	public static function newFromConfig( array $config ): self {
 		return ( new PayPalConfig(
-			$config['account-address'],
-			$config['base-url'],
-			$config['notify-url'],
-			$config['return-url'],
-			$config['cancel-url'],
-			$config['item-name']
+			$config[self::CONFIG_KEY_ACCOUNT_ADDRESS],
+			$config[self::CONFIG_KEY_BASE_URL],
+			$config[self::CONFIG_KEY_NOTIFY_URL],
+			$config[self::CONFIG_KEY_RETURN_URL],
+			$config[self::CONFIG_KEY_CANCEL_URL],
+			$config[self::CONFIG_KEY_ITEM_NAME]
 		) )->assertNoEmptyFields();
 	}
 
