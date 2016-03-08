@@ -58,7 +58,11 @@ class PayPalUrlGenerator {
 		return $this->getSinglePaymentParams( $amount );
 	}
 
-	private function getSubscriptionParams( float $amount, int $interval ): array {
+	/**
+	 * This method returns a set of parameters needed for recurring donations.
+	 * @link https://developer.paypal.com/docs/classic/paypal-payments-standard/integration-guide/wp_standard_overview/
+	 */
+	private function getSubscriptionParams( $amount, $interval ): array {
 		return [
 			'cmd' => '_xclick-subscriptions',
 			'no_shipping' => '1',
@@ -71,7 +75,11 @@ class PayPalUrlGenerator {
 		];
 	}
 
-	private function getSinglePaymentParams( float $amount ): array {
+	/**
+	 * This method returns a set of parameters needed for one time donations.
+	 * @link https://developer.paypal.com/docs/classic/paypal-payments-standard/integration-guide/wp_standard_overview/
+	 */
+	private function getSinglePaymentParams( $amount ): array {
 		return [
 			'cmd' => '_donations',
 			'amount' => $amount
