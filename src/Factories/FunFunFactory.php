@@ -73,6 +73,7 @@ use WMDE\Fundraising\Frontend\Validation\AllowedValuesValidator;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\Fundraising\Frontend\Validation\IbanValidator;
 use WMDE\Fundraising\Frontend\Validation\MailValidator;
+use WMDE\Fundraising\Frontend\Validation\PersonalInfoValidator;
 use WMDE\Fundraising\Frontend\Validation\PersonNameValidator;
 use WMDE\Fundraising\Frontend\Validation\PhysicalAddressValidator;
 use WMDE\Fundraising\Frontend\Validation\SubscriptionDuplicateValidator;
@@ -642,11 +643,17 @@ class FunFunFactory {
 		return new DonationValidator(
 			$this->newAmountValidator(),
 			new AmountPolicyValidator( 1000, 200, 300 ), // TODO: get from settings
+			$this->newPersonalInfoValidator(),
 			$this->getTextPolicyValidator( 'fields' ),
+			$this->newPaymentTypeValidator(),
+			$this->newBankDataValidator()
+		);
+	}
+
+	public function newPersonalInfoValidator(): PersonalInfoValidator {
+		return new PersonalInfoValidator(
 			new PersonNameValidator(),
 			new PhysicalAddressValidator(),
-			$this->newPaymentTypeValidator(),
-			$this->newBankDataValidator(),
 			$this->getMailValidator()
 		);
 	}

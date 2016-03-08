@@ -27,7 +27,6 @@ use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationRequest;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentListingRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\SubscriptionRequest;
-use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 
 $app->get(
 	'validate-email',
@@ -57,6 +56,70 @@ $app->post(
 			}
 			return $app->json( [ 'status' => 'ERR', 'message' => implode( "\n", $errors ) ] );
 		}
+	}
+);
+
+$app->post(
+	'validate-address',
+	function( Request $request ) use ( $app, $ffFactory ) {
+		$routeHandler = new class() {
+
+			public function handle( FunFunFactory $ffFactory, Application $app, Request $request ) {
+				if ( $request->get( 'adresstyp', '' ) === 'anonym' ) {
+					return $app->json( [ 'status' => 'OK' ] );
+				}
+
+				$personalInfo = $this->getPersonalInfoFromRequest( $request );
+				$personalInfoValidator = $ffFactory->newPersonalInfoValidator();
+				$validationResult = $personalInfoValidator->validate( $personalInfo );
+
+				if ( $validationResult->isSuccessful() ) {
+					return $app->json( [ 'status' => 'OK' ] );
+				} else {
+					$errors = [];
+					foreach( $validationResult->getViolations() as $violation ) {
+						$errors[$violation->getSource()] = $ffFactory->getTranslator()->trans( $violation->getMessageIdentifier() );
+					}
+					return $app->json( [ 'status' => 'ERR', 'messages' => $errors ] );
+				}
+			}
+
+			private function getPersonalInfoFromRequest( Request $request ): PersonalInfo {
+				$personalInfo = new PersonalInfo();
+
+				$personalInfo->setEmailAddress( $request->get( 'email', '' ) );
+				$personalInfo->setPhysicalAddress( $this->getPhysicalAddressFromRequest( $request ) );
+				$personalInfo->setPersonName( $this->getNameFromRequest( $request ) );
+
+				return $personalInfo->freeze()->assertNoNullFields();
+			}
+
+			private function getPhysicalAddressFromRequest( Request $request ): PhysicalAddress {
+				$address = new PhysicalAddress();
+
+				$address->setStreetAddress( $request->get( 'strasse', '' ) );
+				$address->setPostalCode( $request->get( 'plz', '' ) );
+				$address->setCity( $request->get( 'ort', '' ) );
+				$address->setCountryCode( $request->get( 'country', '' ) );
+
+				return $address->freeze()->assertNoNullFields();
+			}
+
+			private function getNameFromRequest( Request $request ): PersonName {
+				$name = $request->get( 'adresstyp', '' ) === 'firma'
+					? PersonName::newCompanyName() : PersonName::newPrivatePersonName();
+
+				$name->setSalutation( $request->get( 'anrede', '' ) );
+				$name->setTitle( $request->get( 'titel', '' ) );
+				$name->setCompanyName( $request->get( 'firma', '' ) );
+				$name->setFirstName( $request->get( 'vorname', '' ) );
+				$name->setLastName( $request->get( 'nachname', '' ) );
+
+				return $name->freeze()->assertNoNullFields();
+			}
+		};
+
+		return $routeHandler->handle( $ffFactory, $app, $request );
 	}
 );
 
