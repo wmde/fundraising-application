@@ -13,7 +13,7 @@ class RandomTokenGenerator implements TokenGenerator {
 	private $tokenLength;
 	private $validityTimeSpan;
 
-	public function __construct( int $tokenLength, string $validityTimeSpan ) {
+	public function __construct( int $tokenLength, \DateInterval $validityTimeSpan ) {
 		$this->tokenLength = $tokenLength;
 		$this->validityTimeSpan = $validityTimeSpan;
 	}
@@ -22,9 +22,8 @@ class RandomTokenGenerator implements TokenGenerator {
 		return bin2hex( random_bytes( $this->tokenLength ) );
 	}
 
-	public function generateTokenExpiry(): string {
-		// TODO: change to return DateTime (the formatting here is a detail of how the stuff is persisted)
-		return ( new \DateTime() )->add( new \DateInterval( $this->validityTimeSpan ) )->format( 'Y-m-d H:i:s' );
+	public function generateTokenExpiry(): \DateTime {
+		return ( new \DateTime() )->add( $this->validityTimeSpan );
 	}
 
 }

@@ -12,6 +12,6 @@ interface TokenGenerator {
 
 	public function generateToken(): string;
 
-	public function generateTokenExpiry(): string;
+	public function generateTokenExpiry(): \DateTime;
 
 }

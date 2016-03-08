@@ -726,7 +726,7 @@ class FunFunFactory {
 	public function newTokenGenerator(): TokenGenerator {
 		return new RandomTokenGenerator(
 			$this->config['token-length'],
-			$this->config['token-validity-timestamp']
+			new \DateInterval( $this->config['token-validity-timestamp'] )
 		);
 	}
 

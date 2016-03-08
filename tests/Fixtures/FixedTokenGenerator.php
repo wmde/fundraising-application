@@ -24,7 +24,7 @@ class FixedTokenGenerator implements TokenGenerator {
 		return $this->token;
 	}
 
-	public function generateTokenExpiry(): string {
+	public function generateTokenExpiry(): \DateTime {
 		return $this->expiry;
 	}
 
