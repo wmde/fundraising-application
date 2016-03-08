@@ -2,14 +2,13 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Tests\Unit;
+namespace WMDE\Fundraising\Tests\Integration\Validation;
 
 use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
-use WMDE\Fundraising\Frontend\Domain\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
@@ -17,11 +16,10 @@ use WMDE\Fundraising\Frontend\Validation\AllowedValuesValidator;
 use WMDE\Fundraising\Frontend\Validation\AmountPolicyValidator;
 use WMDE\Fundraising\Frontend\Validation\AmountValidator;
 use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
+use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 use WMDE\Fundraising\Frontend\Validation\DonationValidator;
 use WMDE\Fundraising\Frontend\Validation\IbanValidator;
-use WMDE\Fundraising\Frontend\Validation\MailValidator;
-use WMDE\Fundraising\Frontend\Validation\PersonNameValidator;
-use WMDE\Fundraising\Frontend\Validation\PhysicalAddressValidator;
+use WMDE\Fundraising\Frontend\Validation\PersonalInfoValidator;
 use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
 use WMDE\Fundraising\Frontend\Validation\ValidationResult;
 
@@ -66,7 +64,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 		$this->assertTrue( $this->donationValidator->needsModeration( $donation ) );
 	}
 
-	public function testPartlyPersonalInfoGiven_validatorReturnsFalse() {
+	public function testPersonalInfoValidationFails_validatorReturnsFalse() {
 		$personalInfo = new PersonalInfo();
 		$personalInfo->setPersonName( PersonName::newCompanyName() );
 		$personalInfo->setPhysicalAddress( new PhysicalAddress() );
@@ -78,12 +76,23 @@ class DonationValidatorTest extends ValidatorTestCase {
 		$donation->setPaymentType( PaymentType::BANK_TRANSFER );
 		$donation->setPersonalInfo( $personalInfo );
 
-		$this->assertFalse( $this->donationValidator->validate( $donation )->isSuccessful() );
+		$personalInfoValidator = $this->getMockBuilder( PersonalInfoValidator::class )->disableOriginalConstructor()->getMock();
+		$personalInfoValidator->method( 'validate' )
+			->willReturn( new ValidationResult( new ConstraintViolation( '', 'Name missing', 'firma' ) ) );
 
-		$this->assertConstraintWasViolated(
-			$this->donationValidator->validate( $donation ),
-			'firma'
+		$donationValidator = new DonationValidator(
+			new AmountValidator( 1 ),
+			new AmountPolicyValidator( 1000, 200, 300 ),
+			$personalInfoValidator,
+			new TextPolicyValidator(),
+			new AllowedValuesValidator( [ PaymentType::DIRECT_DEBIT ] ),
+			$this->newBankDataValidator()
 		);
+
+		$this->assertFalse( $donationValidator->validate( $donation )->isSuccessful() );
+
+		$this->assertConstraintWasViolated( $donationValidator->validate( $donation ), 'firma' );
+
 	}
 
 	public function testGivenBadWords_needsModerationReturnsTrue() {
@@ -94,12 +103,10 @@ class DonationValidatorTest extends ValidatorTestCase {
 		$donationValidator = new DonationValidator(
 			new AmountValidator( 1 ),
 			new AmountPolicyValidator( 1000, 200, 300 ),
+			$this->newMockPersonalInfoValidator(),
 			$textPolicyValidator,
-			new PersonNameValidator(),
-			new PhysicalAddressValidator(),
 			new AllowedValuesValidator( [ PaymentType::DIRECT_DEBIT ] ),
-			$this->newBankDataValidator(),
-			new MailValidator( new NullDomainNameValidator() )
+			$this->newBankDataValidator()
 		);
 
 		$personalInfo = new PersonalInfo();
@@ -171,12 +178,10 @@ class DonationValidatorTest extends ValidatorTestCase {
 		return new DonationValidator(
 			new AmountValidator( 1 ),
 			new AmountPolicyValidator( 1000, 200, 300 ),
+			$this->newMockPersonalInfoValidator(),
 			new TextPolicyValidator(),
-			new PersonNameValidator(),
-			new PhysicalAddressValidator(),
 			new AllowedValuesValidator( [ PaymentType::DIRECT_DEBIT, PaymentType::BANK_TRANSFER ] ),
-			$this->newBankDataValidator(),
-			new MailValidator( new NullDomainNameValidator() )
+			$this->newBankDataValidator()
 		);
 	}
 
@@ -205,6 +210,12 @@ class DonationValidatorTest extends ValidatorTestCase {
 			->willReturn( new ValidationResult() );
 
 		return new BankDataValidator( $ibanValidatorMock );
+	}
+
+	private function newMockPersonalInfoValidator() {
+		$validator = $this->getMockBuilder( PersonalInfoValidator::class )->disableOriginalConstructor()->getMock();
+		$validator->method( 'validate' )->willReturn( new ValidationResult() );
+		return $validator;
 	}
 
 }

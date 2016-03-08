@@ -14,9 +14,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 class DonationValidator {
 	use CanValidateField;
 
-	private $nameValidator;
-	private $addressValidator;
-	private $mailValidator;
+	private $personalInfoValidator;
 	private $amountValidator;
 	private $paymentTypeValidator;
 	private $amountPolicyValidator;
@@ -27,16 +25,12 @@ class DonationValidator {
 
 	public function __construct( AmountValidator $amountValidator,
 								 AmountPolicyValidator $amountPolicyValidator,
+								 PersonalInfoValidator $personalInfoValidator,
 								 TextPolicyValidator $textPolicyValidator,
-								 PersonNameValidator $nameValidator,
-								 PhysicalAddressValidator $addressValidator,
 								 AllowedValuesValidator $paymentTypeValidator,
-								 BankDataValidator $bankDataValidator,
-								 MailValidator $mailValidator ) {
+								 BankDataValidator $bankDataValidator ) {
 		// TODO: inject a ValidatorObject to reduce number of parameters
-		$this->nameValidator = $nameValidator;
-		$this->addressValidator = $addressValidator;
-		$this->mailValidator = $mailValidator;
+		$this->personalInfoValidator = $personalInfoValidator;
 		$this->amountValidator = $amountValidator;
 		$this->paymentTypeValidator = $paymentTypeValidator;
 		$this->amountPolicyValidator = $amountPolicyValidator;
@@ -55,15 +49,7 @@ class DonationValidator {
 		if ( $donation->getPersonalInfo() !== null ) {
 			$violations = array_merge(
 				$violations,
-				$this->nameValidator->validate( $donation->getPersonalInfo()->getPersonName() )->getViolations()
-			);
-			$violations = array_merge(
-				$violations,
-				$this->addressValidator->validate( $donation->getPersonalInfo()->getPhysicalAddress() )->getViolations()
-			);
-			$violations[] = $this->getFieldViolation(
-				$this->mailValidator->validate( $donation->getPersonalInfo()->getEmailAddress() ),
-				'email'
+				$this->personalInfoValidator->validate( $donation->getPersonalInfo() )->getViolations()
 			);
 		}
 
