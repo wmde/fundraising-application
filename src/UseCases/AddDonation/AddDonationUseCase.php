@@ -65,6 +65,11 @@ class AddDonationUseCase {
 
 		$this->sendDonationConfirmationEmail( $donation, $needsModeration );
 
+		// TODO: on new donation, generate and set token fields
+		// 'token' => $donation->getAccessToken(),
+		// 'utoken' => $donation->getUpdateToken(),
+		// 'uexpiry' => $donation->getUpdateTokenExpiry()
+
 		return AddDonationResponse::newSuccessResponse( $donation );
 	}
 
