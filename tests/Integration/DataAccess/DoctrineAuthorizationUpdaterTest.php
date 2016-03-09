@@ -19,6 +19,7 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 class DoctrineAuthorizationUpdaterTest extends \PHPUnit_Framework_TestCase {
 
 	const UPDATE_TOKEN = 'kindly allow me access';
+	const EXPIRY_TIME = '2150-12-07 00:00:00'; // v=ADV9XzgpQZc :)
 
 	/**
 	 * @var EntityManager
@@ -34,18 +35,16 @@ class DoctrineAuthorizationUpdaterTest extends \PHPUnit_Framework_TestCase {
 
 		$this->persistDonation( $donation );
 
-		$expiryTime = new \DateTime( '2150-12-07' );
-
 		$this->newAuthorizationUpdater()->allowDonationModificationViaToken(
 			$donation->getId(),
 			self::UPDATE_TOKEN,
-			$expiryTime
+			new \DateTime( self::EXPIRY_TIME )
 		);
 
 		$this->assertDonationHasTokenAndExpiry(
 			$donation->getId(),
 			self::UPDATE_TOKEN,
-			'2150-12-07 00:00:00'
+			self::EXPIRY_TIME
 		);
 	}
 
