@@ -33,8 +33,16 @@ use WMDE\Fundraising\Frontend\Validation\ValidationResult;
  */
 class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
-	public function testValidationSucceeds_successResponseIsCreated() {
-		$useCase = new AddDonationUseCase(
+	const UPDATE_TOKEN = 'a very nice token';
+
+	public function testWhenValidationSucceeds_successResponseIsCreated() {
+		$useCase = $this->newValidationSucceedingUseCase();
+
+		$this->assertTrue( $useCase->addDonation( $this->newMinimumDonationRequest() )->isSuccessful() );
+	}
+
+	private function newValidationSucceedingUseCase(): AddDonationUseCase {
+		return new AddDonationUseCase(
 			$this->newRepository(),
 			$this->getSucceedingValidatorMock(),
 			new ReferrerGeneralizer( 'http://foo.bar', [] ),
@@ -43,8 +51,6 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 			$this->newBankDataConverter(),
 			$this->newTokenGenerator()
 		);
-
-		$this->assertTrue( $useCase->addDonation( $this->newMinimumDonationRequest() )->isSuccessful() );
 	}
 
 	/**
@@ -61,7 +67,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 	 */
 	private function newTokenGenerator(): TokenGenerator {
 		return new FixedTokenGenerator(
-			'a very nice token',
+			self::UPDATE_TOKEN,
 			( new \DateTime() )->add( $this->newOneHourInterval() )
 		);
 	}
@@ -177,10 +183,18 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$personalInfo = new PersonalInfo();
 		$personalInfo->setPersonName( PersonName::newPrivatePersonName() );
 		$personalInfo->setPhysicalAddress( new PhysicalAddress() );
-		$personalInfo->setEmailAddress( 'foo@bar.baz' );
+		$personalInfo->setEmailAddress( $email );
 		$request->setPersonalInfo( $personalInfo );
 
 		return $request;
+	}
+
+	public function testWhenAdditionWorks_successResponseContainsUpdateToken() {
+		$useCase = $this->newValidationSucceedingUseCase();
+
+		$response = $useCase->addDonation( $this->newMinimumDonationRequest() );
+
+		$this->assertSame( self::UPDATE_TOKEN, $response->getUpdateToken() );
 	}
 
 }
