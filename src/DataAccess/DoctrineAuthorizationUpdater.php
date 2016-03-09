@@ -44,7 +44,7 @@ class DoctrineAuthorizationUpdater implements AuthorizationUpdater {
 			$this->entityManager->flush();
 		}
 		catch ( ORMException $ex ) {
-			// TODO: throw
+			throw new AuthorizationUpdateException( 'Failed to persist the token' );
 		}
 	}
 
