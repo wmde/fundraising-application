@@ -11,7 +11,7 @@ namespace WMDE\Fundraising\Frontend\Infrastructure;
 interface AuthorizationUpdater {
 
 	/**
-	 * TODO: exception
+	 * @throws AuthorizationUpdateException
 	 */
 	public function allowDonationModificationViaToken( int $donationId, string $token, \DateTime $expiry );
 

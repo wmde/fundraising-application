@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\DataAccess;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use WMDE\Fundraising\Entities\Donation;
+use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationUpdateException;
 use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationUpdater;
 
 /**
@@ -23,11 +24,14 @@ class DoctrineAuthorizationUpdater implements AuthorizationUpdater {
 		$this->entityManager = $entityManager;
 	}
 
+	/**
+	 * @throws AuthorizationUpdateException
+	 */
 	public function allowDonationModificationViaToken( int $donationId, string $token, \DateTime $expiry ) {
 		$donation = $this->getDonationById( $donationId );
 
 		if ( $donation === null ) {
-			// TODO: throw
+			throw new AuthorizationUpdateException( 'Donation does not exist' );
 		}
 
 		$donationData = $donation->getDataObject();

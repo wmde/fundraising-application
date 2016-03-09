@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
 use Doctrine\ORM\EntityManager;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineAuthorizationUpdater;
+use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationUpdateException;
 use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationUpdater;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
@@ -66,6 +67,40 @@ class DoctrineAuthorizationUpdaterTest extends \PHPUnit_Framework_TestCase {
 
 	private function getDonationById( int $donationId ): Donation {
 		return $this->entityManager->find( Donation::class, $donationId );
+	}
+
+	public function testWhenDonationDoesNotExist_exceptionIsThrown() {
+		$this->expectException( AuthorizationUpdateException::class );
+
+		$this->newAuthorizationUpdater()->allowDonationModificationViaToken(
+			1337,
+			self::UPDATE_TOKEN,
+			new \DateTime( self::EXPIRY_TIME )
+		);
+	}
+
+	public function testWhenDatabaseReadFails_exceptionIsThrown() {
+		// TODO
+
+		$this->expectException( AuthorizationUpdateException::class );
+
+		$this->newAuthorizationUpdater()->allowDonationModificationViaToken(
+			1337,
+			self::UPDATE_TOKEN,
+			new \DateTime( self::EXPIRY_TIME )
+		);
+	}
+
+	public function testWhenDatabaseWriteFails_exceptionIsThrown() {
+		// TODO
+
+		$this->expectException( AuthorizationUpdateException::class );
+
+		$this->newAuthorizationUpdater()->allowDonationModificationViaToken(
+			1337,
+			self::UPDATE_TOKEN,
+			new \DateTime( self::EXPIRY_TIME )
+		);
 	}
 
 }
