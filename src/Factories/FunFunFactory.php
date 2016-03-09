@@ -54,12 +54,12 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListJsonPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListRssPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Content\WikiContentProvider;
 use WMDE\Fundraising\Frontend\Presentation\GreetingGenerator;
-use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionHTMLPresenter;
-use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionJSONPresenter;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionHtmlPresenter;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionJsonPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\ConfirmSubscriptionHtmlPresenter;
-use WMDE\Fundraising\Frontend\Presentation\Presenters\GetInTouchHTMLPresenter;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\GetInTouchHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\IbanPresenter;
-use WMDE\Fundraising\Frontend\Presentation\Presenters\InternalErrorHTMLPresenter;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\InternalErrorHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentUseCase;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationUseCase;
@@ -342,8 +342,8 @@ class FunFunFactory {
 		return new DisplayPagePresenter( $this->getLayoutTemplate( 'DisplayPageLayout.twig' ) );
 	}
 
-	public function newAddSubscriptionHTMLPresenter(): AddSubscriptionHTMLPresenter {
-		return new AddSubscriptionHTMLPresenter( $this->getLayoutTemplate( 'AddSubscription.twig' ), $this->getTranslator() );
+	public function newAddSubscriptionHTMLPresenter(): AddSubscriptionHtmlPresenter {
+		return new AddSubscriptionHtmlPresenter( $this->getLayoutTemplate( 'AddSubscription.twig' ), $this->getTranslator() );
 	}
 
 	public function newConfirmSubscriptionHtmlPresenter(): ConfirmSubscriptionHtmlPresenter {
@@ -353,12 +353,12 @@ class FunFunFactory {
 		);
 	}
 
-	public function newAddSubscriptionJSONPresenter(): AddSubscriptionJSONPresenter {
-		return new AddSubscriptionJSONPresenter( $this->getTranslator() );
+	public function newAddSubscriptionJSONPresenter(): AddSubscriptionJsonPresenter {
+		return new AddSubscriptionJsonPresenter( $this->getTranslator() );
 	}
 
-	public function newGetInTouchHTMLPresenter(): GetInTouchHTMLPresenter {
-		return new GetInTouchHTMLPresenter( $this->getLayoutTemplate( 'GetInTouch.twig' ), $this->getTranslator() );
+	public function newGetInTouchHTMLPresenter(): GetInTouchHtmlPresenter {
+		return new GetInTouchHtmlPresenter( $this->getLayoutTemplate( 'GetInTouch.twig' ), $this->getTranslator() );
 	}
 
 	public function getTwig(): Twig_Environment {
@@ -565,8 +565,8 @@ class FunFunFactory {
 		return new MailAddress( $this->config['operator-email'] );
 	}
 
-	public function newInternalErrorHTMLPresenter(): InternalErrorHTMLPresenter {
-		return new InternalErrorHTMLPresenter( $this->getLayoutTemplate( 'Error.twig' ) );
+	public function newInternalErrorHTMLPresenter(): InternalErrorHtmlPresenter {
+		return new InternalErrorHtmlPresenter( $this->getLayoutTemplate( 'Error.twig' ) );
 	}
 
 	public function getTranslator(): TranslatorInterface {

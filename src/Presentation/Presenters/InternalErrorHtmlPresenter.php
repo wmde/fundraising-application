@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class InternalErrorHTMLPresenter {
+class InternalErrorHtmlPresenter {
 
 	private $template;
 

@@ -10,12 +10,13 @@ use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 
 /**
- * Render the contact form with errors
+ * Render the subscription HTML form with errors
  *
  * @licence GNU GPL v2+
+ * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class GetInTouchHTMLPresenter {
+class AddSubscriptionHtmlPresenter {
 
 	private $template;
 	private $translator;
@@ -25,13 +26,12 @@ class GetInTouchHTMLPresenter {
 		$this->translator = $translator;
 	}
 
-	public function present( ValidationResponse $response, array $formData ): string {
+	public function present( ValidationResponse $subscriptionResponse, array $formData ): string {
 		$errors = [];
 		/** @var ConstraintViolation $constraintViolation */
-		foreach ( $response->getValidationErrors() as $constraintViolation ) {
+		foreach ( $subscriptionResponse->getValidationErrors() as $constraintViolation ) {
 			$errors[$constraintViolation->getSource()] = $this->translator->trans( $constraintViolation->getMessageIdentifier() );
 		}
-
 		return $this->template->render( array_merge( $formData, [ 'errors' => $errors ] ) );
 	}
 

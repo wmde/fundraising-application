@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class AddSubscriptionJSONPresenter {
+class AddSubscriptionJsonPresenter {
 
 	private $translator;
 
