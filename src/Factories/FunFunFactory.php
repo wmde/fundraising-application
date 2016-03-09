@@ -27,7 +27,7 @@ use Twig_Environment;
 use Twig_Extensions_Extension_Intl;
 use WMDE\Fundraising\Frontend\DataAccess\DbalCommentRepository;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
-use WMDE\Fundraising\Frontend\DataAccess\DoctrineTokenAuthorizationService;
+use WMDE\Fundraising\Frontend\DataAccess\DoctrineTokenAuthorizationChecker;
 use WMDE\Fundraising\Frontend\DataAccess\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\DataAccess\UniqueTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\BankDataConverter;
@@ -45,7 +45,7 @@ use WMDE\Fundraising\Frontend\Domain\SimpleTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\Repositories\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\Infrastructure\RandomTokenGenerator;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
-use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationService;
+use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationChecker;
 use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
@@ -607,7 +607,7 @@ class FunFunFactory {
 		return new CancelDonationUseCase(
 			$this->getDonationRepository(),
 			$this->newCancelDonationMailer(),
-			$this->newAuthorizationService( $updateToken )
+			$this->newAuthorizationChecker( $updateToken )
 		);
 	}
 
@@ -704,12 +704,12 @@ class FunFunFactory {
 	public function newAddCommentUseCase( string $updateToken ): AddCommentUseCase {
 		return new AddCommentUseCase(
 			$this->getCommentRepository(),
-			$this->newAuthorizationService( $updateToken )
+			$this->newAuthorizationChecker( $updateToken )
 		);
 	}
 
-	private function newAuthorizationService( string $updateToken ): AuthorizationService {
-		return new DoctrineTokenAuthorizationService(
+	private function newAuthorizationChecker( string $updateToken ): AuthorizationChecker {
+		return new DoctrineTokenAuthorizationChecker(
 			$this->getEntityManager(),
 			$updateToken
 		);

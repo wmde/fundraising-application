@@ -8,7 +8,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
-use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationService;
+use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationChecker;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 
 /**
@@ -22,7 +22,7 @@ class CancelDonationUseCase {
 	private $authorizationService;
 
 	public function __construct( DonationRepository $donationRepository, TemplateBasedMailer $mailer,
-		AuthorizationService $authorizationService ) {
+		AuthorizationChecker $authorizationService ) {
 
 		$this->donationRepository = $donationRepository;
 		$this->mailer = $mailer;

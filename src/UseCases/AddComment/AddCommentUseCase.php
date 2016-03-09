@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\UseCases\AddComment;
 use WMDE\Fundraising\Frontend\Domain\Model\Comment;
 use WMDE\Fundraising\Frontend\Domain\Repositories\CommentRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\StoreCommentException;
-use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationService;
+use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationChecker;
 
 /**
  * @license GNU GPL v2+
@@ -18,7 +18,7 @@ class AddCommentUseCase {
 	private $commentRepository;
 	private $authorizationService;
 
-	public function __construct( CommentRepository $repository, AuthorizationService $authorizationService ) {
+	public function __construct( CommentRepository $repository, AuthorizationChecker $authorizationService ) {
 		$this->commentRepository = $repository;
 		$this->authorizationService = $authorizationService;
 	}

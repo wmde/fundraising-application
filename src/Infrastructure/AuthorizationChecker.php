@@ -8,7 +8,7 @@ namespace WMDE\Fundraising\Frontend\Infrastructure;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-interface AuthorizationService {
+interface AuthorizationChecker {
 
 	public function canModifyDonation( int $donationId ): bool;
 
