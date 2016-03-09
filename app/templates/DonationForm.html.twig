@@ -1,0 +1,139 @@
+{#
+ This is a template "page" for developing the form page.
+ Try with the url path `/page/DonationForm.html.twig` (yes, with that suffix)
+
+ TODO Remove this when JavaScript works.
+#}
+<!-- <html> -->
+
+<div id="validation-errors" class="errorbox" style="display: none">
+    <strong>Bei der Prüfung Ihrer Eingaben wurden Probleme bemerkt</strong>.
+    Bitte überprüfen Sie Ihre Angaben in folgenden Feldern: <strong class="fields">keine</strong>
+</div>
+
+<div id="paymentPage">
+    {% include 'Form1.html.twig' %}
+</div>
+
+<div id="personalDataPage">
+    {% include 'Form2.html.twig' %}
+</div>
+
+<div id="bankConfirmationPage">
+    TODO
+</div>
+
+
+<script>
+    // Initialize the form
+    $(function(){
+
+        var FormFactory = {
+                newViewHandlers: function() {
+                    return {
+                        formPageVisibility: WMDE.View.createFormPageVisibilityHandler( {
+                            payment: $( "#paymentPage" ),
+                            personalData: $( "#personalDataPage" ),
+                            bankConfirmation: $( '#bankConfirmationPage' )
+                        } ),
+                        clearAmount: WMDE.View.createClearAmountHandler( $( 'input[name=betrag_auswahl]' ), $( '#amount-8' ) ),
+                        errorBox: WMDE.View.createErrorBoxHandler( $( '#validation-errors' ), { amount: 'Betrag' } )
+                    };
+                },
+                newValidators: function() {
+                    return [
+                        WMDE.ReduxValidation.createValidationDispatcher(
+                                WMDE.FormValidation.createAmountValidator( '{$ basepath $}/validate-amount' ),
+                                WMDE.Actions.newFinishAmountValidationAction,
+                                [ 'amount', 'paymentType' ],
+                                { amount: 0, paymentType: 'BEZ' }
+                        )
+                    ];
+                },
+                connectElementEventsToActions: function( store, actions ) {
+                    // TODO: connect element events only to elements on the active page to avoid infinite loops.
+                    /*
+                    $( '.amount-select' ).change( function( evt ) {
+                        store.dispatch( actions.newSelectAmountAction( evt.target.value ) );
+                    } );
+
+                    $( '#amount-8' ).change( function( evt ) {
+                        store.dispatch( actions.newInputAmountAction( evt.target.value ) );
+                    } ).focus( function( evt ) {
+                        // This method will clear the selection (important for usability),
+                        // but keep the form data valid when the custom amount field is empty
+                        var newAmount;
+                        if ( evt.target.value ) {
+                            newAmount = evt.target.value;
+                        }
+                        else {
+                            newAmount = $( '.amount-select:checked' ).val();
+                        }
+                        store.dispatch( actions.newInputAmountAction( newAmount) );
+                    } ).blur( function( evt ) {
+                        // When the custom amount field is empty, simulate a selection to restore previous selection
+                        if ( !evt.target.value ) {
+                            store.dispatch( actions.newSelectAmountAction( null ) );
+                        }
+                    } );
+
+                    $( '.payment-type-list input' ).change( function ( evt ) {
+                        store.dispatch( actions.newSelectPaymentTypeAction( evt.target.value ) );
+                    } );
+                    */
+
+                    $( '#donation-submit1 button' ).click( function () {
+                        store.dispatch( actions.newNextPageAction() );
+                    } );
+                },
+                connectValidatorsToStore: function ( store ) {
+                    WMDE.ReduxValidation.createValidationDispatcherCollection( store, this.newValidators() );
+                },
+                connectViewHandlersToStore: function ( store ) {
+                    var viewHandlers = this.newViewHandlers();
+                    store.subscribe( function() {
+                        var state = store.getState();
+                        // TODO check if state has changed before executing update actions
+
+                        viewHandlers.formPageVisibility.update( state.formPagination );
+
+                        // TODO re-enable when view handler is bound to form page
+                        // viewHandlers.clearAmount.update( state.formContent );
+
+                        viewHandlers.errorBox.update( state.validationMessages );
+                    } );
+                },
+                init: function( store, actions ) {
+                    this.connectElementEventsToActions(store, actions );
+                    this.connectValidatorsToStore( store );
+                    this.connectViewHandlersToStore( store )
+                }
+            };
+
+        FormFactory.init( WMDE.Store, WMDE.Actions );
+
+        // Initialize form pages
+        WMDE.Store.dispatch( WMDE.Actions.newAddPageAction( 'payment' ) );
+        WMDE.Store.dispatch( WMDE.Actions.newAddPageAction( 'personalData' ) );
+        WMDE.Store.dispatch( WMDE.Actions.newAddPageAction( 'bankConfirmation' ) );
+
+    } );
+</script>
+
+<!-- TODO
+<div class="wlightbox-contents">
+    <div id="wlightbox-wohin-geht-das-geld">
+</html>{{Web:Spendenseite-HK2013/rewrite/10h16_Lightbox_Wohin_geht_das_Geld}}<html>
+</div>
+<div id="wlightbox-steuerlich-absetzbar">
+</html>{{Web:Spendenseite-HK2013/rewrite/10h16_Lightbox_Steuer}}<html>
+</div>
+<div id="wlightbox-bitcoin">
+</html>{{Web:Spendenseite-HK2013/rewrite/10h16_Lightbox_BitCoin}}<html>
+</div>
+<div id="wlightbox-spendenkommentare"></html>{{Web:Spendenseite-HK2013/rewrite/10h16_Lightbox_Spendenkommentare}}<html></div>
+
+</div>
+</html>{{Web:Spendenseite-HK2013/rewrite/Bank Detail Banner}}<html>
+</html>
+-->
