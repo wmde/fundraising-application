@@ -8,11 +8,11 @@ namespace WMDE\Fundraising\Frontend\Infrastructure;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-interface AuthorizationChecker {
+interface AuthorizationUpdater {
 
 	/**
-	 * Should return false on infrastructure failure.
+	 * TODO: exception
 	 */
-	public function canModifyDonation( int $donationId ): bool;
+	public function allowDonationModificationViaToken( int $donationId, string $token, \DateTime $expiry );
 
 }
