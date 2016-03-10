@@ -316,21 +316,12 @@ $app->post(
 
 		$response = $ffFactory->newCancelDonationUseCase( $request->get( 'utoken', '' ) )->cancelDonation( $cancellationRequest );
 
-		// TODO: response should be HTML/redirect?
+		// TODO: reset spenden_stamp in cookie
 
-		if ( $response->cancellationWasSuccessful() ) {
-			// TODO: reset spenden_stamp in cookie
-
-			return $app->json( [
-				'status' => 'OK',
-				'message' => '',
-			] );
-		}
-
-		return $app->json( [
-			'status' => 'ERR',
-			'message' => 'TODO',
-		] );
+		return $ffFactory->newCancelDonationHtmlPresenter()->present(
+			$response->getDonationId(),
+			$response->cancellationWasSuccessful()
+		);
 	}
 );
 

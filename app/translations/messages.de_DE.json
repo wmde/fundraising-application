@@ -5,5 +5,7 @@
   "mail_subject_confirm_cancellation": "TODODODODODODODODODODO",
   "recurringDonation": "Wie gewünscht werden wir die Buchung jeden Monat wiederholen.|Wie gewünscht werden wir die Buchung alle %interval% Monate wiederholen.",
   "donation-cancellation-header": "Ihre Spende wurde storniert",
-  "donation-cancellation-text": "Der Spendenvorgang mit der Nummer %donation.id% wurde storniert. Wenn Sie noch Fragen haben oder uns auf Probleme hinweisen möchten, wenden Sie sich bitte an <a href=\"mailto:spenden@wikimedia.de?subject=Online-Spende%20%donation.id%\">spenden@wikimedia.de</a>."
+  "donation-cancellation-text": "Der Spendenvorgang mit der Nummer %donation.id% wurde storniert. Wenn Sie noch Fragen haben oder uns auf Probleme hinweisen möchten, wenden Sie sich bitte an <a href=\"mailto:spenden@wikimedia.de?subject=Online-Spende%20%donation.id%\">spenden@wikimedia.de</a>.",
+  "donation-cancellation-failed-header": "Spende konnte nicht storniert werden",
+  "donation-cancellation-failed-text": "Ihre Spende mit der Nummer %donation.id% konnte nicht storniert werden. Bitte wenden Sie sich an <a href=\"mailto:spenden@wikimedia.de?subject=Online-Spende%20%donation.id%\">spenden@wikimedia.de</a>, um gegebenenfalls eine Rückbuchung zu veranlassen."
 }

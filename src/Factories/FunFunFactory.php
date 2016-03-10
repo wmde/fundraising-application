@@ -52,6 +52,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\AddDonationHtmlPresenter;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\CancelDonationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListJsonPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListRssPresenter;
@@ -619,7 +620,7 @@ class FunFunFactory {
 			$this->getMessenger(),
 			new TwigTemplate(
 				$this->getTwig(),
-				 'Donation_Cancellation_Confirmation.twig'
+				'Donation_Cancellation_Confirmation.twig'
 			),
 			$this->getTranslator()->trans( 'mail_subject_confirm_cancellation' )
 		);
@@ -750,6 +751,12 @@ class FunFunFactory {
 			$this->getLayoutTemplate( 'CreditCardPayment.html.twig' ),
 			$this->getTranslator(),
 			$this->newCreditCardUrlGenerator()
+		);
+	}
+
+	public function newCancelDonationHtmlPresenter() {
+		return new CancelDonationHtmlPresenter(
+			$this->getLayoutTemplate( 'Donation_Cancellation_Confirmation.twig' )
 		);
 	}
 
