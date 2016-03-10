@@ -91,5 +91,12 @@
 		"return-url": "",
 		"cancel-url": "",
 		"item-name": ""
+	},
+	"creditcard": {
+		"base-url": "",
+		"project-id": "",
+		"background-color": "",
+		"skin": "",
+		"theme": ""
 	}
 }

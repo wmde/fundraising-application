@@ -31,6 +31,8 @@ use WMDE\Fundraising\Frontend\DataAccess\DoctrineTokenAuthorizationChecker;
 use WMDE\Fundraising\Frontend\DataAccess\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\DataAccess\UniqueTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\BankDataConverter;
+use WMDE\Fundraising\Frontend\Domain\CreditCardConfig;
+use WMDE\Fundraising\Frontend\Domain\CreditCardUrlGenerator;
 use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\PayPalConfig;
@@ -58,6 +60,7 @@ use WMDE\Fundraising\Frontend\Presentation\GreetingGenerator;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionJsonPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\ConfirmSubscriptionHtmlPresenter;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\CreditCardPaymentHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\GetInTouchHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\IbanPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\InternalErrorHtmlPresenter;
@@ -683,6 +686,14 @@ class FunFunFactory {
 		return PayPalConfig::newFromConfig( $this->config['paypal'] );
 	}
 
+	public function newCreditCardUrlGenerator() {
+		return new CreditCardUrlGenerator( $this->newCreditCardConfig() );
+	}
+
+	private function newCreditCardConfig() {
+		return CreditCardConfig::newFromConfig( $this->config['creditcard'] );
+	}
+
 	public function getDonationRepository(): DonationRepository {
 		return $this->pimple['donation_repository'];
 	}
@@ -732,6 +743,14 @@ class FunFunFactory {
 
 	public function newAddDonationHtmlPresenter() {
 		return new AddDonationHtmlPresenter( $this->getLayoutTemplate( 'DonationConfirmation.twig' ) );
+	}
+
+	public function newCreditCardPaymentHtmlPresenter() {
+		return new CreditCardPaymentHtmlPresenter(
+			$this->getLayoutTemplate( 'CreditCardPayment.html.twig' ),
+			$this->getTranslator(),
+			$this->newCreditCardUrlGenerator()
+		);
 	}
 
 }

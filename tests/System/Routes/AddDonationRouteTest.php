@@ -283,4 +283,33 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		];
 	}
 
+	public function testGivenValidCreditCardData_showsIframeEmbeddingPage() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setMessenger( new Messenger(
+				Swift_NullTransport::newInstance(),
+				$factory->getOperatorAddress()
+			) );
+
+			$client->request(
+				'POST',
+				'/donation/add',
+				$this->newValidCreditCardInput()
+			);
+
+			$response = $client->getResponse();
+			$this->assertSame( 200, $response->getStatusCode() );
+
+			$this->assertContains( 'thatother.paymentprovider.com', $response->getContent() );
+		} );
+	}
+
+	private function newValidCreditCardInput() {
+		return [
+			'betrag' => '12,34',
+			'zahlweise' => 'MCP',
+			'periode' => 3,
+			'adresstyp' => 'anonym',
+		];
+	}
+
 }
