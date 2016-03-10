@@ -1,11 +1,9 @@
 'use strict';
 var objectAssign = require( 'object-assign' ),
+	actions = require( './actions' ),
 	createDefaultChangeHandler = function ( store, contentName ) {
 		return function ( evt ) {
-			store.dispatch( { type: 'CHANGE_CONTENT', payload: {
-				value: evt.target.value,
-				contentName: contentName
-			} } );
+			store.dispatch( actions.newChangeContentAction( contentName, evt.target.value ) );
 		};
 	},
 	RadioComponent = {

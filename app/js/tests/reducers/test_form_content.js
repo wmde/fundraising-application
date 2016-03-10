@@ -34,12 +34,13 @@ test( 'INPUT_AMOUNT sets amount and isCustomAount', function ( t ) {
 
 } );
 
-test( 'SELECT_PAYMENT_TYPE sets payment type', function ( t ) {
-	var stateBefore = { paymentType: 'PPL' },
-		expectedState = { paymentType: 'BEZ' };
+test( 'CHANGE_CONTENT changes the field', function ( t ) {
+	var stateBefore = { paymentType: 'PPL', amount: 0 },
+		expectedState = { paymentType: 'BEZ', amount: 0 },
+		action = { type: 'CHANGE_CONTENT', payload: { value: 'BEZ', contentName: 'paymentType' } };
 
 	deepFreeze( stateBefore );
-	t.deepEqual( formContent( stateBefore, { type: 'SELECT_PAYMENT_TYPE', payload: { paymentType: 'BEZ' } } ), expectedState );
+	t.deepEqual( formContent( stateBefore, action ), expectedState );
 	t.end();
 
 } );
