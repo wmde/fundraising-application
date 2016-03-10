@@ -255,23 +255,6 @@ $(function() {
       });
     });
 
-
-    /* donation-payment */
-    $('#donation-payment').each(function () {
-      var $container = $(this);
-
-      /* change title and show related content */
-      $container.find('.payment-type-list :radio').change(function (e) {
-
-        $container.find('.section-title .h2').addClass('no-display');
-        $container.find('.section-title .display-' + $(this).attr('id')).removeClass('no-display');
-
-        $container.find('.tab-group .payment-type .tab').addClass('no-display');
-        $container.find('.section-title .display-' + $(this).attr('id')).removeClass('no-display');
-      });
-    });
-
-
     /* iOS fix - label onclick, see http://stackoverflow.com/questions/7358781/tapping-on-label-in-mobile-safari */
     if (navigator.userAgent.match(/Safari/)) {
       $('label').click(function (evt) {
