@@ -50,7 +50,7 @@
                         )
                     ];
                 },
-                newComponents: function ( store, actions ) {
+                newComponents: function ( store ) {
                     return [
                         WMDE.Components.createRadioComponent( store, $( '.payment-type-select' ), 'paymentType' )
                     ];
@@ -102,8 +102,8 @@
                         viewHandlers.errorBox.update( state.validationMessages );
                     } );
                 },
-                connectComponentsToStore: function( store, actions ) {
-                    var components = this.newComponents( store, actions );
+                connectComponentsToStore: function( store ) {
+                    var components = this.newComponents( store );
                     store.subscribe( function() {
                         var state = store.getState(),
                             formContent = state.formContent;
@@ -119,7 +119,7 @@
                     this.connectElementEventsToActions(store, actions );
                     this.connectValidatorsToStore( store );
                     this.connectViewHandlersToStore( store );
-                    this.connectComponentsToStore( store, actions );
+                    this.connectComponentsToStore( store );
                 }
             };
 

@@ -9,7 +9,12 @@ the validity of those values, validation messages, which parts are displayed and
 the **Store**. To change the state, an **Action** is dispatched to the store, where it is handled by **Reducers** -
 [pure functions][pure_function] that have an initial state and the action as input and a changed state as output.
 
-The **view handler** classes are listening to changes in the state and update the HTML of the form accordingly.
+**Form components** are wrappers for form fields that send the form field value to the store with a `CHANGE_CONTENT` action 
+and set the form field value when they receive form content updates from the store. This ensures that the store always 
+has the current form field values and that form fields that are duplicated across form pages are in sync.  
+
+The **view handler** classes are listening to changes in the state and update the HTML. They are more diverse than 
+form components and do not dispatch actions.  
 
 **Validators** are also listening to changes in the state. If a value changes, they call a validation function and
 dispatch a "validation finished" action to the store, which then stores the validation result and validation error
@@ -19,8 +24,8 @@ messages with its reducers. The changed validation state may trigger other view 
 
 ### Reasons for this architecture
 - Redux allows for a clear data flow and a central storage of form state instead of state storage that's tied directly to the DOM.
-- We use view handlers instead of component libraries like [React][react] or [Vue][vue] because the view handlers can
-  decouple HTML manipulation from the actual markup. When the markup changes, view handlers can be reused.
+- We use view handlers and components instead of component libraries like [React][react] or [Vue][vue] because the view handlers can
+  decouple HTML manipulation from the actual markup. When the markup changes, view handlers and components can be reused.
 
 ## Initializing the form
 
@@ -30,10 +35,10 @@ In the form code, insert the following skeleton object. Its empty functions will
 
 ```JavaScript
 var FormFactory = {
-        connectElementEventsToActions: function( store, actions ) {
+        connectElementEventsToActions: function ( store, actions ) {
             // TODO insert code here
         },
-        newValidators: function() {
+        newValidators: function () {
             return [
                 // TODO insert validators here
             ];
@@ -41,7 +46,7 @@ var FormFactory = {
         connectValidatorsToStore: function ( store ) {
             WMDE.ReduxValidation.createValidationDispatcherCollection( store, this.newValidators() );
         },
-        newViewHandlers: function() {
+        newViewHandlers: function () {
             return {
                 // TODO insert view handlers here
             };
@@ -53,10 +58,29 @@ var FormFactory = {
                     // TODO call update methods of view handlers here
             } );
         },
-        init: function( store, actions ) {
-            this.connectElementEventsToActions(store, actions );
+        newComponents: function ( store ) {
+            return [
+                // TODO insert form components here
+            ];
+        },
+        connectComponentsToStore: function ( store ) {
+             var components = this.newComponents( store );
+             store.subscribe( function() {
+                var state = store.getState(),
+                    formContent = state.formContent;
+
+                // TODO check if formContent has changed before executing update actions
+                components.map( function ( component ) {
+                    component.render( formContent );
+                } );
+
+            } );
+        },
+        init: function ( store, actions ) {
+            this.connectElementEventsToActions( store, actions );
             this.connectValidatorsToStore( store );
-            this.connectViewHandlersToStore( store )
+            this.connectComponentsToStore( store, actions );
+            this.connectViewHandlersToStore( store );
         }
     };
 
@@ -65,21 +89,41 @@ FormFactory.init( WMDE.Store, WMDE.Actions );
 
 The `init` method should only be called when the document has fully loaded.
 
+### Setting up form components
+
+For every form input element (or group for elements in case of checkboxes and radio buttons), set up a form component 
+in the method body of `newComponents`:
+ 
+```JavaScript
+newComponents: function ( store ) {
+    return [
+        WMDE.Components.createRadioComponent( store, $( '.payment-type-select' ), 'paymentType' ),
+        WMDE.Components.createTextComponent( store, $( '.first-name' ), 'firstName' )
+    ];
+},
+```
+
+The second argument to the factory function is a jQuery object for the form field. The third argument to the factory 
+function is the key for storing the value in the global state (as part of the `formContent` object).
+
+You can find all the available components in [`app/js/lib/form_components.js`](../app/js/lib/form_components.js).
+
 ### Connecting user events and form values to actions
-Fill the `connectElementEventsToActions` method body with code that binds DOM events to Redux actions.
-You'll be mostly reacting to user input - click and change events. You can find all the available actions in
+Fill the `connectElementEventsToActions` method body with code that binds DOM events to Redux actions. 
+Only connect DOM events that aren't handled by the form components. You can find all the available actions in
 [`app/js/lib/actions.js`](../app/js/lib/actions.js).
 
 ```JavaScript
 connectElementEventsToActions: function( store, actions ) {
-    $( '#paymentType' ).change( function ( evt ) {
-        store.dispatch( actions.newSelectPaymentTypeAction( evt.target.value ) );
+     $( '#donation-submit1 button' ).click( function () {
+        store.dispatch( actions.newNextPageAction() );
     } );
 },
 ```
 
-The `newSelectPaymentTypeAction` function is an **Action Creator** - a function that makes sure the correct action
-object with the correct payload is generated. Many actions have **payloads** - data that will be processed by the reducer functions. The payload given through the parameters of the action creator.
+The `newNextPageAction` function is an **Action Creator** - a function that makes sure the correct action object is created
+correctly. Many actions have **payloads** - data that will be processed by the reducer functions. 
+The payload given through the parameters of the action creator.
 
 ### Setting up validation
 
