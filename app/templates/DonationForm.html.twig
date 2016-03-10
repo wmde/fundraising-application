@@ -36,7 +36,7 @@
                             personalData: $( "#personalDataPage" ),
                             bankConfirmation: $( '#bankConfirmationPage' )
                         } ),
-                        clearAmount: WMDE.View.createClearAmountHandler( $( 'input[name=betrag_auswahl]' ), $( '#amount-8' ) ),
+                        clearAmount: WMDE.View.createClearAmountHandler( $( '.amount-select' ), $( '.amount-input' ) ),
                         errorBox: WMDE.View.createErrorBoxHandler( $( '#validation-errors' ), { amount: 'Betrag' } )
                     };
                 },
@@ -56,13 +56,14 @@
                     ];
                 },
                 connectElementEventsToActions: function( store, actions ) {
-                    // TODO: Clean up code here, move change handling to components
-                    /*
+
+                    // we can't put amount selection into a component because we need to distinguish between
+                    // selected and custom amount in the state
                     $( '.amount-select' ).change( function( evt ) {
                         store.dispatch( actions.newSelectAmountAction( evt.target.value ) );
                     } );
 
-                    $( '#amount-8' ).change( function( evt ) {
+                    $( '.amount-input' ).change( function( evt ) {
                         store.dispatch( actions.newInputAmountAction( evt.target.value ) );
                     } ).focus( function( evt ) {
                         // This method will clear the selection (important for usability),
@@ -81,8 +82,6 @@
                             store.dispatch( actions.newSelectAmountAction( null ) );
                         }
                     } );
-
-                    */
 
                     $( '#donation-submit1 button' ).click( function () {
                         store.dispatch( actions.newNextPageAction() );
