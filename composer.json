@@ -37,7 +37,8 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"WMDE\\Fundraising\\Frontend\\": "src/"
+			"WMDE\\Fundraising\\Frontend\\": "src/",
+			"WMDE\\Fundraising\\Frontend\\App\\": "app/"
 		}
 	},
 	"autoload-dev": {
