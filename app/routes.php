@@ -318,10 +318,7 @@ $app->post(
 
 		// TODO: reset spenden_stamp in cookie
 
-		return $ffFactory->newCancelDonationHtmlPresenter()->present(
-			$response->getDonationId(),
-			$response->cancellationWasSuccessful()
-		);
+		return $ffFactory->newCancelDonationHtmlPresenter()->present( $response );
 	}
 );
 
