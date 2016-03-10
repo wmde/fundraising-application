@@ -3,6 +3,7 @@
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
+use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationResponse;
 
 /**
  * Render the credit card payment page embedding an iframe
@@ -18,8 +19,11 @@ class CancelDonationHtmlPresenter {
 		$this->template = $template;
 	}
 
-	public function present( int $donationId, bool $success ): string {
-		return $this->template->render( [ 'donationId' => $donationId, 'cancellationSuccessful' => $success ] );
+	public function present( CancelDonationResponse $response ): string {
+		return $this->template->render( [
+			'donationId' => $response->getDonationId(),
+			'cancellationSuccessful' => $response->cancellationWasSuccessful()
+		] );
 	}
 
 }
