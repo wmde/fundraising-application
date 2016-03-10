@@ -96,24 +96,25 @@
                     <div class="change-payment-type">
                         <hr/>
 
+                        <!-- TODO Remove IDs and adjust JS in web/skin/10h16/_js/form-methods.js -->
                         <ul class="horizontal clearfix payment-type-list">
                             <li class="first">
-                                <input type="radio" id="payment-type-1" name="zahlweise" value="UEB" title="&Uuml;berweisung" required="required">
+                                <input type="radio" class="payment-type-select" id="payment-type-1" name="zahlweise" value="UEB" title="&Uuml;berweisung" required="required">
                                 <label for="payment-type-1">&Uuml;berweisung</label>
                             </li>
 
                             <li>
-                                <input type="radio" id="payment-type-2" name="zahlweise" value="MCP" title="Kreditkarte" required="required">
+                                <input type="radio" class="payment-type-select" id="payment-type-2" name="zahlweise" value="MCP" title="Kreditkarte" required="required">
                                 <label for="payment-type-2">Kreditkarte</label>
                             </li>
 
                             <li>
-                                <input type="radio" id="payment-type-3" name="zahlweise" value="BEZ" title="Lastschrift" required="required">
+                                <input type="radio" class="payment-type-select" id="payment-type-3" name="zahlweise" value="BEZ" title="Lastschrift" required="required">
                                 <label for="payment-type-3">Lastschrift</label>
                             </li>
 
                             <li class="last">
-                                <input type="radio" id="payment-type-4" name="zahlweise" value="PPL" title="PayPal" required="required">
+                                <input type="radio" class="payment-type-select" id="payment-type-4" name="zahlweise" value="PPL" title="PayPal" required="required">
                                 <label for="payment-type-4">Paypal</label>
                             </li>
                         </ul>
