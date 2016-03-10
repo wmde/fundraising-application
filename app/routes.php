@@ -365,6 +365,7 @@ $app->post(
 					}
 					// TODO: show page embedding iframe (MCP)
 					// TODO: take over confirmation page selection functionality from old application
+					// TODO: return update token
 				}
 
 				return 'TODO';

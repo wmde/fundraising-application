@@ -15,22 +15,25 @@ class AddDonationResponse {
 
 	private $validationErrors;
 	private $donation;
+	private $updateToken;
 
 	/**
-	 * @param Donation $donation
+	 * @param Donation|null $donation
+	 * @param string|null $updateToken
 	 * @param ConstraintViolation[] $requestValidationErrors
 	 */
-	public function __construct( Donation $donation = null, array $requestValidationErrors = [] ) {
+	private function __construct( Donation $donation = null, string $updateToken = null, array $requestValidationErrors = [] ) {
 		$this->donation = $donation;
 		$this->validationErrors = $requestValidationErrors;
+		$this->updateToken = $updateToken;
 	}
 
-	public static function newSuccessResponse( Donation $donation ): self {
-		return new self( $donation );
+	public static function newSuccessResponse( Donation $donation, string $updateToken ): self {
+		return new self( $donation, $updateToken );
 	}
 
 	public static function newFailureResponse( array $errors ): self {
-		return new self( null, $errors );
+		return new self( null, null, $errors );
 	}
 
 	/**
@@ -44,8 +47,18 @@ class AddDonationResponse {
 		return count( $this->validationErrors ) == 0;
 	}
 
+	/**
+	 * @return Donation|null
+	 */
 	public function getDonation() {
 		return $this->donation;
+	}
+
+	/**
+	 * @return string|null
+	 */
+	public function getUpdateToken() {
+		return $this->updateToken;
 	}
 
 }

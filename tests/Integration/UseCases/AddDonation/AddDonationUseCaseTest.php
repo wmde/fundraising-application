@@ -15,7 +15,9 @@ use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
 use WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\DonationRepositorySpy;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationUseCase;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
@@ -31,17 +33,24 @@ use WMDE\Fundraising\Frontend\Validation\ValidationResult;
  */
 class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
-	public function testValidationSucceeds_successResponseIsCreated() {
-		$useCase = new AddDonationUseCase(
+	const UPDATE_TOKEN = 'a very nice token';
+
+	public function testWhenValidationSucceeds_successResponseIsCreated() {
+		$useCase = $this->newValidationSucceedingUseCase();
+
+		$this->assertTrue( $useCase->addDonation( $this->newMinimumDonationRequest() )->isSuccessful() );
+	}
+
+	private function newValidationSucceedingUseCase(): AddDonationUseCase {
+		return new AddDonationUseCase(
 			$this->newRepository(),
 			$this->getSucceedingValidatorMock(),
 			new ReferrerGeneralizer( 'http://foo.bar', [] ),
 			$this->newMailer(),
 			$this->newTransferCodeGenerator(),
-			$this->newBankDataConverter()
+			$this->newBankDataConverter(),
+			$this->newTokenGenerator()
 		);
-
-		$this->assertTrue( $useCase->addDonation( $this->newMinimumDonationRequest() )->isSuccessful() );
 	}
 
 	/**
@@ -51,6 +60,20 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		return $this->getMockBuilder( TemplateBasedMailer::class )
 			->disableOriginalConstructor()
 			->getMock();
+	}
+
+	/**
+	 * @return TokenGenerator
+	 */
+	private function newTokenGenerator(): TokenGenerator {
+		return new FixedTokenGenerator(
+			self::UPDATE_TOKEN,
+			( new \DateTime() )->add( $this->newOneHourInterval() )
+		);
+	}
+
+	private function newOneHourInterval(): \DateInterval {
+		return new \DateInterval( 'PT1H' );
 	}
 
 	private function newRepository(): DonationRepository {
@@ -64,7 +87,8 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 			new ReferrerGeneralizer( 'http://foo.bar', [] ),
 			$this->newMailer(),
 			$this->newTransferCodeGenerator(),
-			$this->newBankDataConverter()
+			$this->newBankDataConverter(),
+			$this->newTokenGenerator()
 		);
 
 		$result = $useCase->addDonation( $this->newMinimumDonationRequest() );
@@ -108,7 +132,8 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 			new ReferrerGeneralizer( 'http://foo.bar', [] ),
 			$mailer,
 			$this->newTransferCodeGenerator(),
-			$this->newBankDataConverter()
+			$this->newBankDataConverter(),
+			$this->newTokenGenerator()
 		);
 
 		$useCase->addDonation( $this->newMinimumDonationRequest() );
@@ -136,23 +161,40 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 				} )
 			);
 
-		$useCase = new AddDonationUseCase(
+		$useCase = $this->newUseCaseWithMailer( $mailer );
+
+		$useCase->addDonation( $this->newValidAddDonationRequestWithEmail( 'foo@bar.baz' ) );
+	}
+
+	private function newUseCaseWithMailer( TemplateBasedMailer $mailer ) {
+		return new AddDonationUseCase(
 			$this->newRepository(),
 			$this->getSucceedingValidatorMock(),
 			new ReferrerGeneralizer( 'http://foo.bar', [] ),
 			$mailer,
 			$this->newTransferCodeGenerator(),
-			$this->newBankDataConverter()
+			$this->newBankDataConverter(),
+			$this->newTokenGenerator()
 		);
+	}
 
+	private function newValidAddDonationRequestWithEmail( string $email ): AddDonationRequest {
 		$request = $this->newMinimumDonationRequest();
 		$personalInfo = new PersonalInfo();
 		$personalInfo->setPersonName( PersonName::newPrivatePersonName() );
 		$personalInfo->setPhysicalAddress( new PhysicalAddress() );
-		$personalInfo->setEmailAddress( 'foo@bar.baz' );
+		$personalInfo->setEmailAddress( $email );
 		$request->setPersonalInfo( $personalInfo );
 
-		$useCase->addDonation( $request );
+		return $request;
+	}
+
+	public function testWhenAdditionWorks_successResponseContainsUpdateToken() {
+		$useCase = $this->newValidationSucceedingUseCase();
+
+		$response = $useCase->addDonation( $this->newMinimumDonationRequest() );
+
+		$this->assertSame( self::UPDATE_TOKEN, $response->getUpdateToken() );
 	}
 
 }

@@ -44,11 +44,6 @@ class DoctrineDonationRepository implements DonationRepository {
 		}
 
 		$donation->setId( $doctrineDonation->getId() );
-
-		// TODO: on new donation, generate and set token fields
-		// 'token' => $donation->getAccessToken(),
-		// 'utoken' => $donation->getUpdateToken(),
-		// 'uexpiry' => $donation->getUpdateTokenExpiry()
 	}
 
 	private function newDonationEntity( Donation $donation ): DoctrineDonation {
