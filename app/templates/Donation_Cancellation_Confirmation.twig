@@ -1,9 +1,19 @@
 <div id="greenBox" class="inhalt boxShadow">
 
 	<div class="text">
-		<h2>{$ 'donation-cancellation-header'|trans({}) $}</h2>
+		<h2>
+			{% if cancellationSuccessful %}
+			{$ 'donation-cancellation-header'|trans({}) $}</h2>
+			{% else %}
+			{$ 'donation-cancellation-failed-header'|trans({}) $}
+			{% endif %}
+		</h2>
 		<p>
-			{$ 'donation-cancellation-text'|trans( { '%donation.id%': donation.id } )|raw $}
+			{% if cancellationSuccessful %}
+			{$ 'donation-cancellation-text'|trans( { '%donation.id%': donationId } )|raw $}
+			{% else %}
+			{$ 'donation-cancellation-failed-text'|trans( { '%donation.id%': donationId } )|raw $}
+			{% endif %}
 		</p>
 		<ul>
 			<li>

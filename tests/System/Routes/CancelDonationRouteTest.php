@@ -5,9 +5,11 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 
 use Doctrine\ORM\EntityManager;
+use Swift_NullTransport;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
 use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
@@ -36,6 +38,29 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 		$this->assertSame( 200, $client->getResponse()->getStatusCode() );
 	}
 
+	public function testGivenValidUpdateToken_confirmationPageIsShown() {
+		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
+			$factory->setMessenger( new Messenger(
+				Swift_NullTransport::newInstance(),
+				$factory->getOperatorAddress()
+			) );
+
+			$donationId = $this->storeDonation( $factory->getDonationRepository(), $factory->getEntityManager() );
+
+			$client->request(
+				'POST',
+				'/donation/cancel',
+				[
+					'sid' => (string)$donationId,
+					'token' => '',
+					'utoken' => self::CORRECT_UPDATE_TOKEN,
+				]
+			);
+
+			$this->assertContains( 'wurde storniert', $client->getResponse()->getContent() );
+		} );
+	}
+
 	public function testGivenGetRequest_resultHasMethodNotAllowedStatus() {
 		$this->assertGetRequestCausesMethodNotAllowedResponse(
 			'/donation/cancel',
@@ -61,7 +86,7 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 				]
 			);
 
-			$this->assertErrorJsonResponse( $client->getResponse() );
+			$this->assertContains( 'konnte nicht', $client->getResponse()->getContent() );
 		} );
 	}
 
@@ -77,7 +102,10 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 
 		$doctrineDonation->encodeAndSetData( array_merge(
 			$doctrineDonation->getDecodedData(),
-			[ 'utoken' => self::CORRECT_UPDATE_TOKEN ]
+			[
+				'utoken' => self::CORRECT_UPDATE_TOKEN,
+				'uexpiry' => date( 'Y-m-d H:i:s', time() + 60 * 60 )
+			]
 		) );
 
 		$entityManager->persist( $doctrineDonation );
