@@ -1,8 +1,17 @@
 'use strict';
 
+/**
+ *
+ * @module redux_validation
+ */
+
 var objectAssign = require( 'object-assign' ),
 	_ = require( 'lodash' ),
 
+	/**
+	 *
+	 * @class ValidationDispatcher
+	 */
 	ValidationDispatcher = {
 		validationFunction: null,
 		actionCreationFunction: null,

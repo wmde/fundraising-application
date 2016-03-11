@@ -69,7 +69,7 @@ test( 'INITIALIZE_CONTENT throws an error if a field name is not allowed', funct
 
 	t.throws( function () {
 		formContent( {}, action );
-	} );
+	}, /unknownField/ );
 	t.end();
 } );
 

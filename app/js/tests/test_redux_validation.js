@@ -27,9 +27,15 @@ test( 'ValidationDispatcher calls validationFunction and dispatches action only 
 	var successResult = { status: 'OK' },
 		dummyAction = { type: 'TEST_VALIDATION' },
 		testData = { importantField: 'just some data', ignoredData: 'this won\'t be validated' },
+		initialData = {},
 		validationFunction = sinon.stub().returns( successResult ),
 		actionCreationFunction = sinon.stub().returns( dummyAction ),
-		dispatcher = reduxValidation.createValidationDispatcher( validationFunction, actionCreationFunction, [ 'importantField' ] ),
+		dispatcher = reduxValidation.createValidationDispatcher(
+			validationFunction,
+			actionCreationFunction,
+			[ 'importantField' ],
+			initialData
+		),
 		testStore = { dispatch: sinon.spy() };
 
 	dispatcher.dispatchIfChanged( testData, testStore );
@@ -64,25 +70,18 @@ test( 'createValidationDispatcher accepts validator object as validation functio
 		},
 		testData = { importantField: 'just some data which will be ignored' },
 		actionCreationFunction = sinon.stub(),
-		dispatcher = reduxValidation.createValidationDispatcher( validatorSpy, actionCreationFunction, [ 'importantField' ] ),
+		dispatcher = reduxValidation.createValidationDispatcher(
+			validatorSpy,
+			actionCreationFunction,
+			[ 'importantField' ],
+			{}
+		),
 		testStore = { dispatch: sinon.spy() };
 
 	dispatcher.dispatchIfChanged( testData, testStore );
 
 	t.ok( validatorSpy.validatorDelegate.calledOnce, 'validate function is called once' );
 	t.ok( validatorSpy.validatorDelegate.calledWith( testData ), 'validation function is called with test data' );
-	t.end();
-} );
-
-test( 'createValidationDispatcher can set initial values from object', function ( t ) {
-	var initialDataBag = { importantField: 'initial data', ignoredData: 'this won\'t be added to initial data' },
-		validationFunction = sinon.stub(),
-		actionCreationFunction = sinon.stub(),
-		dispatcher = reduxValidation.createValidationDispatcher( validationFunction, actionCreationFunction, [ 'importantField' ], initialDataBag ),
-		expectedPreviousFieldValues = { importantField: 'initial data' };
-
-	t.deepEqual( dispatcher.previousFieldValues, expectedPreviousFieldValues, 'Previous field values should only contain selected values' );
-
 	t.end();
 } );
 

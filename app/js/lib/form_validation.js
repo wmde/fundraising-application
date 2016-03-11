@@ -1,7 +1,7 @@
 'use strict';
 
 var jQuery = require( 'jquery' ),
-	objectAsssign = require( 'object-assign' ),
+	objectAssign = require( 'object-assign' ),
 
 	AmountValidator = {
 		validationUrl: '',
@@ -22,7 +22,7 @@ var jQuery = require( 'jquery' ),
 	 * @return {AmountValidator}
 	 */
 	createAmountValidator = function ( validationUrl, postFunction ) {
-		return objectAsssign( Object.create( AmountValidator ), {
+		return objectAssign( Object.create( AmountValidator ), {
 			validationUrl: validationUrl,
 			postFunction: postFunction || jQuery.post
 		} );
