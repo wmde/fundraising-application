@@ -26,6 +26,7 @@ use Symfony\Component\Translation\TranslatorInterface;
 use Twig_Environment;
 use Twig_Extensions_Extension_Intl;
 use WMDE\Fundraising\Frontend\DataAccess\DbalCommentRepository;
+use WMDE\Fundraising\Frontend\DataAccess\DoctrineAuthorizationUpdater;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineTokenAuthorizationChecker;
 use WMDE\Fundraising\Frontend\DataAccess\InternetDomainNameValidator;
@@ -45,6 +46,7 @@ use WMDE\Fundraising\Frontend\Domain\Honorifics;
 use WMDE\Fundraising\Frontend\Domain\Repositories\CommentRepository;
 use WMDE\Fundraising\Frontend\Domain\SimpleTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\Repositories\SubscriptionRepository;
+use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationUpdater;
 use WMDE\Fundraising\Frontend\Infrastructure\RandomTokenGenerator;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationChecker;
@@ -633,7 +635,8 @@ class FunFunFactory {
 			$this->newAddDonationMailer(),
 			$this->newBankTransferCodeGenerator(),
 			$this->newBankDataConverter(),
-			$this->newTokenGenerator()
+			$this->newTokenGenerator(),
+			$this->newAuthorizationUpdater()
 		);
 	}
 
@@ -724,6 +727,10 @@ class FunFunFactory {
 			$this->getEntityManager(),
 			$updateToken
 		);
+	}
+
+	private function newAuthorizationUpdater(): AuthorizationUpdater {
+		return new DoctrineAuthorizationUpdater( $this->getEntityManager() );
 	}
 
 	private function getCommentRepository(): CommentRepository {

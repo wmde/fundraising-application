@@ -17,9 +17,8 @@ class DonationRepositorySpy implements DonationRepository {
 	private $storeDonationCalls = [];
 	private $getDonationCalls = [];
 
-	public function storeDonation( Donation $donation ): Donation {
+	public function storeDonation( Donation $donation ) {
 		$this->storeDonationCalls[] = $donation;
-		return $donation;
 	}
 
 	/**

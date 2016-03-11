@@ -11,6 +11,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\TrackingInfo;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
+use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationUpdater;
 use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
@@ -33,11 +34,12 @@ class AddDonationUseCase {
 	private $transferCodeGenerator;
 	private $bankDataConverter;
 	private $tokenGenerator;
+	private $authorizationUpdater;
 
 	public function __construct( DonationRepository $donationRepository, DonationValidator $donationValidator,
 								 ReferrerGeneralizer $referrerGeneralizer, TemplateBasedMailer $mailer,
 								 TransferCodeGenerator $transferCodeGenerator, BankDataConverter $bankDataConverter,
-								 TokenGenerator $tokenGenerator ) {
+								 TokenGenerator $tokenGenerator, AuthorizationUpdater $authorizationUpdater ) {
 
 		$this->donationRepository = $donationRepository;
 		$this->donationValidator = $donationValidator;
@@ -46,6 +48,7 @@ class AddDonationUseCase {
 		$this->transferCodeGenerator = $transferCodeGenerator;
 		$this->bankDataConverter = $bankDataConverter;
 		$this->tokenGenerator = $tokenGenerator;
+		$this->authorizationUpdater = $authorizationUpdater;
 	}
 
 	public function addDonation( AddDonationRequest $donationRequest ): AddDonationResponse {
@@ -67,18 +70,24 @@ class AddDonationUseCase {
 
 		$this->donationRepository->storeDonation( $donation );
 
+		$updateToken = $this->assignAndReturnNewUpdateToken( $donation->getId() );
+
 		$this->sendDonationConfirmationEmail( $donation, $needsModeration );
 
-		// TODO: on new donation, generate and set token fields
-		// 'token' => $donation->getAccessToken(),
-		// 'utoken' => $donation->getUpdateToken(),
-		// 'uexpiry' => $donation->getUpdateTokenExpiry()
+		return AddDonationResponse::newSuccessResponse( $donation, $updateToken );
+	}
 
+	// TODO: handle token update exception
+	private function assignAndReturnNewUpdateToken( int $donationId ) {
 		$updateToken = $this->tokenGenerator->generateToken();
 
-		// TODO: persist update token
+		$this->authorizationUpdater->allowDonationModificationViaToken(
+			$donationId,
+			$updateToken,
+			$this->tokenGenerator->generateTokenExpiry()
+		);
 
-		return AddDonationResponse::newSuccessResponse( $donation, $updateToken );
+		return $updateToken;
 	}
 
 	private function getInitialDonationStatus( Donation $donation, bool $needsModeration ): string {
