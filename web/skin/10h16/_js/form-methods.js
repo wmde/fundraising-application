@@ -68,7 +68,12 @@ $( document ).ready( function() {
 		}
 	});
 
-	$( '#payment-type-1, #payment-type-2, #payment-type-4' ).on( 'click', function() {
+	// Clear bank data when payment type is not bank transfer
+	// TODO: Move to view handler or similar class when bank data fields have been componentized
+	$( '.payment-type-select' ).on( 'change', function ( evt ) {
+		if ( evt.target.value === 'BEZ' ) {
+			return;
+		}
 		$( 'section#donation-payment' ).find( 'input[type=text]' ).each( function() {
 			$( this )[0].setCustomValidity( "" );
 			$( this ).val( "" );

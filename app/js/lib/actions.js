@@ -28,10 +28,13 @@ module.exports = {
 		};
 	},
 
-	newSelectPaymentTypeAction: function ( paymentType ) {
+	newChangeContentAction: function ( contentName, newValue ) {
 		return {
-			type: 'SELECT_PAYMENT_TYPE',
-			payload: { paymentType: paymentType }
+			type: 'CHANGE_CONTENT',
+			payload: {
+				contentName: contentName,
+				value: newValue
+			}
 		};
 	},
 

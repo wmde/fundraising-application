@@ -1,6 +1,7 @@
 'use strict';
 
 var objectAssign = require( 'object-assign' ),
+	_ = require( 'underscore' ),
 	initialState = {
 		amount: 0,
 		isCustomAmount: false,
@@ -8,7 +9,7 @@ var objectAssign = require( 'object-assign' ),
 	};
 
 module.exports = function formContent( state, action ) {
-	var newAmount;
+	var newAmount, newState;
 	if ( typeof state === 'undefined' ) {
 		state = initialState;
 	}
@@ -24,10 +25,13 @@ module.exports = function formContent( state, action ) {
 				amount: action.payload.amount,
 				isCustomAmount: true
 			} );
-		case 'SELECT_PAYMENT_TYPE':
-			return objectAssign( {}, state, {
-				paymentType: action.payload.paymentType
-			} );
+		case 'CHANGE_CONTENT':
+			if ( !_.has( state, action.payload.contentName ) ) {
+				throw new Error( 'Unsupported from content name: ' + action.payload.contentName );
+			}
+			newState = _.clone( state );
+			newState[ action.payload.contentName ] = action.payload.value;
+			return newState;
 		default:
 			return state;
 	}

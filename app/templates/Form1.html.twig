@@ -41,44 +41,44 @@
 
                     <ul class="horizontal clearfix amount-list">
                         <li class="first">
-                            <input type="radio" class="amount-select" id="amount-1" name="betrag_auswahl" value="5,00" title="5&euro;">
-                            <label for="amount-1">5&euro;</label>
+                            <input type="radio" class="amount-select" id="form1-amount-1" name="betrag_auswahl" value="5,00" title="5&euro;">
+                            <label for="form1-amount-1">5&euro;</label>
                         </li>
 
                         <li>
-                            <input type="radio" class="amount-select" id="amount-2" name="betrag_auswahl" value="15,00" title="15&euro;">
-                            <label for="amount-2">15&euro;</label>
+                            <input type="radio" class="amount-select" id="form1-amount-2" name="betrag_auswahl" value="15,00" title="15&euro;">
+                            <label for="form1-amount-2">15&euro;</label>
                         </li>
 
                         <li>
-                            <input type="radio" class="amount-select" id="amount-3" name="betrag_auswahl" value="25,00" title="25&euro;">
-                            <label for="amount-3">25&euro;</label>
+                            <input type="radio" class="amount-select" id="form1-amount-3" name="betrag_auswahl" value="25,00" title="25&euro;">
+                            <label for="form1-amount-3">25&euro;</label>
                         </li>
 
                         <li>
-                            <input type="radio" class="amount-select" id="amount-4" name="betrag_auswahl" value="50,00" title="50&euro;">
-                            <label for="amount-4">50&euro;</label>
+                            <input type="radio" class="amount-select" id="form1-amount-4" name="betrag_auswahl" value="50,00" title="50&euro;">
+                            <label for="form1-amount-4">50&euro;</label>
                         </li>
 
                         <li>
-                            <input type="radio" class="amount-select" id="amount-5" name="betrag_auswahl" value="75,00" title="75&euro;">
-                            <label for="amount-5">75&euro;</label>
+                            <input type="radio" class="amount-select" id="form1-amount-5" name="betrag_auswahl" value="75,00" title="75&euro;">
+                            <label for="form1-amount-5">75&euro;</label>
                         </li>
 
                         <li>
-                            <input type="radio" class="amount-select" id="amount-6" name="betrag_auswahl" value="100,00" title="100&euro;">
-                            <label for="amount-6">100&euro;</label>
+                            <input type="radio" class="amount-select" id="form1-amount-6" name="betrag_auswahl" value="100,00" title="100&euro;">
+                            <label for="form1-amount-6">100&euro;</label>
                         </li>
 
                         <li>
-                            <input type="radio" class="amount-select" id="amount-7" name="betrag_auswahl" value="250,00" title="250&euro;">
-                            <label for="amount-7">250&euro;</label>
+                            <input type="radio" class="amount-select" id="form1-amount-7" name="betrag_auswahl" value="250,00" title="250&euro;">
+                            <label for="form1-amount-7">250&euro;</label>
                         </li>
 
                         <li class="amount-custom last no-margin">
                             <div class="container" style="width: 100px;">
-                                <input id="amount-8" name="betrag" type="text" value="" title="Betrag zwischen 1 und 99999,99 Euro; Komma als Dezimaltrenner" pattern="^[1-9]{1}\d{0,4}(?:,\d\d)?$">
-                                <label class="right top" for="amount-8">&euro;</label>
+                                <input id="form1-amount-8" class="amount-input" name="betrag" type="text" value="" title="Betrag zwischen 1 und 99999,99 Euro; Komma als Dezimaltrenner" pattern="^[1-9]{1}\d{0,4}(?:,\d\d)?$">
+                                <label class="right top" for="form1-amount-8">&euro;</label>
                             </div>
                         </li>
                     </ul>
@@ -208,25 +208,26 @@
                         <h2>Meine Zahlungsweise</h2>
                     </div>
 
+                    <!-- TODO Remove IDs and adjust JS in web/skin/10h16/_js/form-methods.js -->
                     <ul class="horizontal clearfix payment-type-list">
                         <li class="first">
-                            <input type="radio" id="payment-type-1" name="zahlweise" value="UEB" title="&Uuml;berweisung" required="required">
-                            <label for="payment-type-1">&Uuml;berweisung</label>
+                            <input type="radio" class="payment-type-select" id="form1-payment-type-1" name="zahlweise" value="UEB" title="&Uuml;berweisung" required="required">
+                            <label for="form1-payment-type-1">&Uuml;berweisung</label>
                         </li>
 
                         <li>
-                            <input type="radio" id="payment-type-2" name="zahlweise" value="MCP" title="Kreditkarte" required="required">
-                            <label for="payment-type-2">Kreditkarte</label>
+                            <input type="radio" class="payment-type-select" id="form1-payment-type-2" name="zahlweise" value="MCP" title="Kreditkarte" required="required">
+                            <label for="form1-payment-type-2">Kreditkarte</label>
                         </li>
 
                         <li>
-                            <input type="radio" id="payment-type-3" name="zahlweise" value="BEZ" title="Lastschrift" required="required" checked="checked">
-                            <label for="payment-type-3">Lastschrift</label>
+                            <input type="radio" class="payment-type-select" id="form1-payment-type-3" name="zahlweise" value="BEZ" title="Lastschrift" required="required" checked="checked">
+                            <label for="form1-payment-type-3">Lastschrift</label>
                         </li>
 
                         <li class="last">
-                            <input type="radio" id="payment-type-4" name="zahlweise" value="PPL" title="PayPal" required="required">
-                            <label for="payment-type-4">Paypal</label>
+                            <input type="radio" class="payment-type-select" id="form1-payment-type-4" name="zahlweise" value="PPL" title="PayPal" required="required">
+                            <label for="form1-payment-type-4">Paypal</label>
                         </li>
                     </ul>
                 </div>

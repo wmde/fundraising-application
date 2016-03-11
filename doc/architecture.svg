@@ -24,7 +24,8 @@
       <rect x="527" width="120" height="50" y="11" clip-path="url(#clipPath2)" stroke="none"/>
     </g>
     <g text-rendering="geometricPrecision" stroke-miterlimit="1.45" shape-rendering="geometricPrecision" font-family="sans-serif" transform="matrix(1,0,0,1,-60,4)" stroke-linecap="butt">
-      <text x="548.7236" xml:space="preserve" y="40.5352" clip-path="url(#clipPath2)" stroke="none">View Handler</text>
+      <text x="546.8252" xml:space="preserve" y="33.4688" clip-path="url(#clipPath2)" stroke="none">View Handler,</text>
+      <text x="553.0654" xml:space="preserve" y="47.6016" clip-path="url(#clipPath2)" stroke="none">Component</text>
       <rect fill="none" x="527" width="120" height="50" y="11" clip-path="url(#clipPath2)"/>
     </g>
     <g fill="rgb(255,204,0)" text-rendering="geometricPrecision" shape-rendering="geometricPrecision" transform="matrix(1,0,0,1,-60,4)" stroke="rgb(255,204,0)">

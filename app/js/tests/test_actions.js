@@ -47,11 +47,11 @@ test( 'newInputAmountAction returns action object', function ( t ) {
 	t.end();
 } );
 
-test( 'newSelectPaymentTypeAction returns action object', function ( t ) {
+test( 'newChangeContentAction returns action object', function ( t ) {
 	var expectedAction = {
-		type: 'SELECT_PAYMENT_TYPE',
-		payload: { paymentType: 'BTC' }
+		type: 'CHANGE_CONTENT',
+		payload: { contentName: 'email', value: 'nyan@awesomecats.com' }
 	};
-	t.deepEqual( actions.newSelectPaymentTypeAction( 'BTC' ), expectedAction );
+	t.deepEqual( actions.newChangeContentAction( 'email', 'nyan@awesomecats.com' ), expectedAction );
 	t.end();
 } );
