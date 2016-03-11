@@ -272,17 +272,18 @@ $(function() {
 
     formInitialized = true;
 
-  //additional methods for form controlling
+  // Update display of selected period, amount and payment type
+  // TODO Move this to a view handler
 
   $(".interval-radio").click(function () {
     $("#interval-hidden").val($("input[name='recurring']:checked").val());
   });
 
     /* periode-1 */
-    $('#periode-1').change(function(e){
+    $('.interval-type-select.one-off').change(function(e){
       if ( e.target.checked ) {
         $('.interval-radio').prop('checked', false);
-        $('#interval-display').text($( "label[for='periode-1']" ).text());
+        $('#interval-display').text($( "label[for$='periode-1']" ).first().text());
       }
     });
 

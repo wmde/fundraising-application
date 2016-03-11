@@ -5,7 +5,8 @@ var objectAssign = require( 'object-assign' ),
 	initialState = {
 		amount: 0,
 		isCustomAmount: false,
-		paymentType: 'BEZ'
+		paymentType: 'BEZ',
+		paymentPeriodInMonths: 0 // 0, 1, 3, 6 or 12, 0 = non-recurring payment
 	};
 
 module.exports = function formContent( state, action ) {

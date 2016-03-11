@@ -52,7 +52,9 @@
                 },
                 newComponents: function ( store ) {
                     return [
-                        WMDE.Components.createRadioComponent( store, $( '.payment-type-select' ), 'paymentType' )
+                        WMDE.Components.createRadioComponent( store, $( '.payment-type-select' ), 'paymentType' ),
+                        WMDE.Components.createRadioComponent( store, $( '.interval-type-select' ), 'paymentPeriodInMonths' ),
+                        WMDE.Components.createRadioComponent( store, $( '.payment-period-select' ), 'paymentPeriodInMonths' )
                     ];
                 },
                 connectElementEventsToActions: function( store, actions ) {
