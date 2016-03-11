@@ -75,10 +75,12 @@ When accessing the API via `web/index.dev.php`, profiling information will be ge
 * `app/`: contains configuration and all framework (Silex) dependent code
 	* `bootstrap.php`: framework application bootstrap (used by System tests)
 	* `routes.php`: defines the routes and their handlers
-	* `config/config.dist.json`: default configuration
-	* `config/config.test.json`: configuration used by integration and system tests (gets merged into default config)
-	* `config/config.test.local.json`:  instance specific (gitignored) test config (gets merged into config.test.json)
-	* `config/config.prod.json`: instance specific (gitignored) production configuration (gets merged into default config)
+	* `RouteHandlers/`: route handlers that get benefit from having their own class are placed here
+	* `config/`: configuration files
+		* `config.dist.json`: default configuration
+		* `config.test.json`: configuration used by integration and system tests (gets merged into default config)
+		* `config.test.local.json`:  instance specific (gitignored) test config (gets merged into config.test.json)
+		* `config.prod.json`: instance specific (gitignored) production configuration (gets merged into default config)
 	* `js/lib`: Javascript modules, will be compiled into one file for the frontend.
 	* `js/test`: Unit tests for the JavaScript modules
 * `src/`: contains framework agnostic code
