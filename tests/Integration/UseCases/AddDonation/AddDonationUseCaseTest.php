@@ -14,9 +14,10 @@ use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
 use WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer;
+use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationUpdater;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\DonationRepositorySpy;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\DonationRepositoryFake;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationUseCase;
@@ -35,6 +36,15 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 	const UPDATE_TOKEN = 'a very nice token';
 
+	/**
+	 * @var \DateTime
+	 */
+	private $oneHourInTheFuture;
+
+	public function setUp() {
+		$this->oneHourInTheFuture = ( new \DateTime() )->add( $this->newOneHourInterval() );
+	}
+
 	public function testWhenValidationSucceeds_successResponseIsCreated() {
 		$useCase = $this->newValidationSucceedingUseCase();
 
@@ -49,7 +59,8 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 			$this->newMailer(),
 			$this->newTransferCodeGenerator(),
 			$this->newBankDataConverter(),
-			$this->newTokenGenerator()
+			$this->newTokenGenerator(),
+			$this->newAuthorizationUpdater()
 		);
 	}
 
@@ -62,14 +73,18 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 			->getMock();
 	}
 
-	/**
-	 * @return TokenGenerator
-	 */
 	private function newTokenGenerator(): TokenGenerator {
 		return new FixedTokenGenerator(
 			self::UPDATE_TOKEN,
-			( new \DateTime() )->add( $this->newOneHourInterval() )
+			$this->oneHourInTheFuture
 		);
+	}
+
+	/**
+	 * @return AuthorizationUpdater|PHPUnit_Framework_MockObject_MockObject
+	 */
+	private function newAuthorizationUpdater(): AuthorizationUpdater {
+		return $this->getMock( AuthorizationUpdater::class );
 	}
 
 	private function newOneHourInterval(): \DateInterval {
@@ -77,7 +92,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	private function newRepository(): DonationRepository {
-		return new DonationRepositorySpy();
+		return new DonationRepositoryFake();
 	}
 
 	public function testValidationFails_responseObjectContainsViolations() {
@@ -88,7 +103,8 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 			$this->newMailer(),
 			$this->newTransferCodeGenerator(),
 			$this->newBankDataConverter(),
-			$this->newTokenGenerator()
+			$this->newTokenGenerator(),
+			$this->newAuthorizationUpdater()
 		);
 
 		$result = $useCase->addDonation( $this->newMinimumDonationRequest() );
@@ -133,7 +149,8 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 			$mailer,
 			$this->newTransferCodeGenerator(),
 			$this->newBankDataConverter(),
-			$this->newTokenGenerator()
+			$this->newTokenGenerator(),
+			$this->newAuthorizationUpdater()
 		);
 
 		$useCase->addDonation( $this->newMinimumDonationRequest() );
@@ -174,7 +191,8 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 			$mailer,
 			$this->newTransferCodeGenerator(),
 			$this->newBankDataConverter(),
-			$this->newTokenGenerator()
+			$this->newTokenGenerator(),
+			$this->newAuthorizationUpdater()
 		);
 	}
 
@@ -195,6 +213,35 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$response = $useCase->addDonation( $this->newMinimumDonationRequest() );
 
 		$this->assertSame( self::UPDATE_TOKEN, $response->getUpdateToken() );
+	}
+
+	public function testWhenAdditionWorks_updateTokenIsPersisted() {
+		$authorizationUpdater = $this->newAuthorizationUpdater();
+
+		$authorizationUpdater->expects( $this->once() )
+			->method( 'allowDonationModificationViaToken' )
+			->with(
+				$this->equalTo( 1 ),
+				$this->equalTo( self::UPDATE_TOKEN ),
+				$this->equalTo( $this->oneHourInTheFuture )
+			);
+
+		$useCase = $this->newUseCaseWithAuthorizationUpdater( $authorizationUpdater );
+
+		$useCase->addDonation( $this->newMinimumDonationRequest() );
+	}
+
+	private function newUseCaseWithAuthorizationUpdater( AuthorizationUpdater $authUpdater ): AddDonationUseCase {
+		return new AddDonationUseCase(
+			$this->newRepository(),
+			$this->getSucceedingValidatorMock(),
+			new ReferrerGeneralizer( 'http://foo.bar', [] ),
+			$this->newMailer(),
+			$this->newTransferCodeGenerator(),
+			$this->newBankDataConverter(),
+			$this->newTokenGenerator(),
+			$authUpdater
+		);
 	}
 
 }
