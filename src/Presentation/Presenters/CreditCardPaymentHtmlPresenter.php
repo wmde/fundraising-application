@@ -5,8 +5,8 @@ namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Translation\TranslatorInterface;
 use WMDE\Fundraising\Frontend\Domain\CreditCardUrlGenerator;
-use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
+use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationResponse;
 
 /**
  * Render the credit card payment page embedding an iframe
@@ -28,21 +28,21 @@ class CreditCardPaymentHtmlPresenter {
 		$this->urlGenerator = $urlGenerator;
 	}
 
-	public function present( Donation $donation ): string {
-		return $this->template->render( $this->getArguments( $donation ) );
+	public function present( AddDonationResponse $response ): string {
+		return $this->template->render( $this->getArguments( $response ) );
 	}
 
-	private function getArguments( Donation $donation ) {
+	private function getArguments( AddDonationResponse $response ) {
+		$personalInfo = $response->getDonation()->getPersonalInfo();
 		return [
 			'iframeUrl' => $this->urlGenerator->generateUrl(
-				$donation->getPersonalInfo() ? $donation->getPersonalInfo()->getPersonName()->getFirstName() : '',
-				$donation->getPersonalInfo() ? $donation->getPersonalInfo()->getPersonName()->getLastName() : '',
+				$personalInfo ? $personalInfo->getPersonName()->getFirstName() : '',
+				$personalInfo ? $personalInfo->getPersonName()->getLastName() : '',
 				$this->translator->trans( 'paytext_cc', [], 'paymentIntervals' ) . ' ' .
-				$this->translator->trans( $donation->getInterval(), [], 'paymentIntervals' ),
-				$donation->getId(),
-				// TODO: get update token
-				'update_token',
-				$donation->getAmount()
+					$this->translator->trans( $response->getDonation()->getInterval(), [], 'paymentIntervals' ),
+				$response->getDonation()->getId(),
+				$response->getUpdateToken(),
+				$response->getDonation()->getAmount()
 			),
 		];
 	}

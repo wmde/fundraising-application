@@ -39,7 +39,7 @@ class AddDonationHandler {
 			switch( $donation->getPaymentType() ) {
 				case PaymentType::DIRECT_DEBIT:
 				case PaymentType::BANK_TRANSFER:
-					return $this->ffFactory->newAddDonationHtmlPresenter()->present( $responseModel->getDonation() );
+					return $this->ffFactory->newAddDonationHtmlPresenter()->present( $donation );
 				case PaymentType::PAYPAL:
 					return $this->app->redirect(
 						$this->ffFactory->newPayPalUrlGenerator()->generateUrl(
@@ -51,7 +51,7 @@ class AddDonationHandler {
 						)
 					);
 				case PaymentType::CREDIT_CARD:
-					return $this->ffFactory->newCreditCardPaymentHtmlPresenter()->present( $responseModel->getDonation() );
+					return $this->ffFactory->newCreditCardPaymentHtmlPresenter()->present( $responseModel );
 			}
 			// TODO: take over confirmation page selection functionality from old application
 			// TODO: return update token
