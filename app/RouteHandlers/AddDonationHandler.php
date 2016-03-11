@@ -5,13 +5,16 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\App\RouteHandlers;
 
 use Silex\Application;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationRequest;
+use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationResponse;
 
 /**
  * @license GNU GPL v2+
@@ -19,6 +22,9 @@ use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationRequest;
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class AddDonationHandler {
+
+	const UPDATE_TOKEN_COOKIE_NAME = 'wmde-fundraising-utoken';
+	const DONATION_ID_COOKIE_NAME = 'wmde-fundraising-donation-id';
 
 	private $ffFactory;
 	private $app;
@@ -28,34 +34,61 @@ class AddDonationHandler {
 		$this->app = $app;
 	}
 
-	public function handle( Request $request ) {
+	public function handle( Request $request ): Response {
 		$responseModel = $this->ffFactory->newAddDonationUseCase()->addDonation(
 			$this->createDonationRequest( $request )
 		);
 
-		if ( $responseModel->isSuccessful() ) {
-			$donation = $responseModel->getDonation();
-
-			switch( $donation->getPaymentType() ) {
-				case PaymentType::DIRECT_DEBIT:
-				case PaymentType::BANK_TRANSFER:
-					return $this->ffFactory->newAddDonationHtmlPresenter()->present( $donation );
-				case PaymentType::PAYPAL:
-					return $this->app->redirect(
-						$this->ffFactory->newPayPalUrlGenerator()->generateUrl(
-							$donation->getId(),
-							$donation->getAmount(),
-							$donation->getInterval(),
-							$responseModel->getUpdateToken()
-						)
-					);
-				case PaymentType::CREDIT_CARD:
-					return $this->ffFactory->newCreditCardPaymentHtmlPresenter()->present( $responseModel );
-			}
-			// TODO: take over confirmation page selection functionality from old application
+		if ( !$responseModel->isSuccessful() ) {
+			return new Response( 'TODO: error occurred' ); // TODO
 		}
 
-		return 'TODO';
+		// TODO: take over confirmation page selection functionality from old application
+
+		$response = $this->newHttpResponseFromResponseModel( $responseModel );
+
+		$this->addCookies( $response, $responseModel );
+
+		return $response;
+	}
+
+	private function newHttpResponseFromResponseModel( AddDonationResponse $responseModel ): Response {
+		$donation = $responseModel->getDonation();
+
+		switch( $donation->getPaymentType() ) {
+			case PaymentType::DIRECT_DEBIT:
+			case PaymentType::BANK_TRANSFER:
+				return new Response(
+					$this->ffFactory->newAddDonationHtmlPresenter()->present( $donation )
+				);
+			case PaymentType::PAYPAL:
+				return $this->app->redirect(
+					$this->ffFactory->newPayPalUrlGenerator()->generateUrl(
+						$donation->getId(),
+						$donation->getAmount(),
+						$donation->getInterval(),
+						$responseModel->getUpdateToken()
+					)
+				);
+			case PaymentType::CREDIT_CARD:
+				return new Response(
+					$this->ffFactory->newCreditCardPaymentHtmlPresenter()->present( $responseModel )
+				);
+			default:
+				throw new \LogicException( 'This code should not be reached' );
+		}
+	}
+
+	private function addCookies( Response $response, AddDonationResponse $responseModel ) {
+		$response->headers->setCookie( new Cookie(
+			self::UPDATE_TOKEN_COOKIE_NAME,
+			$responseModel->getUpdateToken()
+		) );
+
+		$response->headers->setCookie( new Cookie(
+			self::DONATION_ID_COOKIE_NAME,
+			$responseModel->getDonation()->getId()
+		) );
 	}
 
 	private function createDonationRequest( Request $request ): AddDonationRequest {
