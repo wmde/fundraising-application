@@ -4,12 +4,10 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 
-use Swift_NullTransport;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
-use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 
 /**
  * @licence GNU GPL v2+
@@ -26,10 +24,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequest_donationGetsPersisted() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setMessenger( new Messenger(
-				Swift_NullTransport::newInstance(),
-				$factory->getOperatorAddress()
-			) );
+			$factory->setNullMessenger();
 
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
 			$client->followRedirects( false );
@@ -121,10 +116,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$factory = null;
 
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setMessenger( new Messenger(
-				Swift_NullTransport::newInstance(),
-				$factory->getOperatorAddress()
-			) );
+			$factory->setNullMessenger();
 
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
 			$client->followRedirects( false );
@@ -198,10 +190,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenComplementableBankData_donationStillGetsPersisted() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setMessenger( new Messenger(
-				Swift_NullTransport::newInstance(),
-				$factory->getOperatorAddress()
-			) );
+			$factory->setNullMessenger();
 
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
 			$client->followRedirects( false );
@@ -251,10 +240,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidPayPalData_redirectsToPayPal() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setMessenger( new Messenger(
-				Swift_NullTransport::newInstance(),
-				$factory->getOperatorAddress()
-			) );
+			$factory->setNullMessenger();
 			$client->followRedirects( false );
 
 			$client->request(
@@ -280,10 +266,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidCreditCardData_showsIframeEmbeddingPage() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setMessenger( new Messenger(
-				Swift_NullTransport::newInstance(),
-				$factory->getOperatorAddress()
-			) );
+			$factory->setNullMessenger();
 
 			$client->request(
 				'POST',

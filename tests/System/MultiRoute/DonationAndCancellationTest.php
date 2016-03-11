@@ -4,10 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\System\MultiRoute;
 
-use Swift_NullTransport;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 use WMDE\Fundraising\Frontend\Tests\System\Routes\AddDonationRouteTest;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
 
@@ -22,10 +20,7 @@ class DonationAndCancellationTest extends WebRouteTestCase {
 
 	public function testWhenCreatingDonation_itCanBeCancelled() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setMessenger( new Messenger(
-				Swift_NullTransport::newInstance(),
-				$factory->getOperatorAddress()
-			) );
+			$factory->setNullMessenger();
 
 			$client->request(
 				'POST',

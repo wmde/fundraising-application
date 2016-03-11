@@ -5,14 +5,12 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 
 use Doctrine\ORM\EntityManager;
-use Swift_NullTransport;
 use Symfony\Component\HttpKernel\Client;
+use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
-use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
 
 /**
  * @licence GNU GPL v2+
@@ -40,10 +38,7 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidUpdateToken_confirmationPageIsShown() {
 		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
-			$factory->setMessenger( new Messenger(
-				Swift_NullTransport::newInstance(),
-				$factory->getOperatorAddress()
-			) );
+			$factory->setNullMessenger();
 
 			$donationId = $this->storeDonation( $factory->getDonationRepository(), $factory->getEntityManager() );
 

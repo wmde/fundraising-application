@@ -5,20 +5,18 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\ConfirmSubscription;
 
 use PHPUnit_Framework_MockObject_MockObject;
-use Swift_NullTransport;
+use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationRequest;
 use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationUseCase;
-use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
 
 /**
  * @covers WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationUseCase
@@ -45,10 +43,7 @@ class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 	private function newFactoryWithNullMailer(): FunFunFactory {
 		$factory = TestEnvironment::newInstance()->getFactory();
 
-		$factory->setMessenger( new Messenger(
-			Swift_NullTransport::newInstance(),
-			$factory->getOperatorAddress()
-		) );
+		$factory->setNullMessenger();
 
 		return $factory;
 	}

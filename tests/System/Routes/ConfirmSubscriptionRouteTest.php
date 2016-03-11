@@ -7,10 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 use WMDE\Fundraising\Entities\Address;
 use WMDE\Fundraising\Entities\Subscription;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\SubscriptionRepositorySpy;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
-use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
-use Swift_NullTransport;
 
 /**
  * @licence GNU GPL v2+
@@ -21,10 +18,7 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 	// @codingStandardsIgnoreStart
 	protected function onTestEnvironmentCreated( FunFunFactory $factory, array $config ) {
 		// @codingStandardsIgnoreEnd
-		$factory->setMessenger( new Messenger(
-			Swift_NullTransport::newInstance(),
-			$factory->getOperatorAddress()
-		) );
+		$factory->setNullMessenger();
 	}
 
 	private function newSubscriptionAddress() {

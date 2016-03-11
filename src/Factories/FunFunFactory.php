@@ -22,6 +22,7 @@ use Monolog\Logger;
 use NumberFormatter;
 use Psr\Log\LoggerInterface;
 use Swift_MailTransport;
+use Swift_NullTransport;
 use Symfony\Component\Translation\TranslatorInterface;
 use Twig_Environment;
 use Twig_Extensions_Extension_Intl;
@@ -562,6 +563,13 @@ class FunFunFactory {
 
 	public function setMessenger( Messenger $messenger ) {
 		$this->pimple['messenger'] = $messenger;
+	}
+
+	public function setNullMessenger() {
+		$this->setMessenger( new Messenger(
+			Swift_NullTransport::newInstance(),
+			$this->getOperatorAddress()
+		) );
 	}
 
 	public function getOperatorAddress() {
