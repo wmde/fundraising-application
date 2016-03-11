@@ -74,6 +74,18 @@ test( 'createValidationDispatcher accepts validator object as validation functio
 	t.end();
 } );
 
+test( 'createValidationDispatcher can set initial values from object', function ( t ) {
+	var initialDataBag = { importantField: 'initial data', ignoredData: 'this won\'t be added to initial data' },
+		validationFunction = sinon.stub(),
+		actionCreationFunction = sinon.stub(),
+		dispatcher = reduxValidation.createValidationDispatcher( validationFunction, actionCreationFunction, [ 'importantField' ], initialDataBag ),
+		expectedPreviousFieldValues = { importantField: 'initial data' };
+
+	t.deepEqual( dispatcher.previousFieldValues, expectedPreviousFieldValues, 'Previous field values should only contain selected values' );
+
+	t.end();
+} );
+
 test( 'ValidationDispatcherCollection listens to store updates', function ( t ) {
 	var storeSpy = {
 			subscribe: sinon.spy()

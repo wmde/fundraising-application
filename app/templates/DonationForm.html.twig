@@ -23,13 +23,16 @@
     TODO
 </div>
 
-
 <script>
+
+    // The following line is a Twig template placeholder to generate initial values
+    var initialFormValues = {$ initialFormValues|default( 'undefined' )|json_encode|raw $} || {};
+
     // Initialize the form
     $(function(){
 
         var FormFactory = {
-                newViewHandlers: function() {
+                newViewHandlers: function () {
                     return {
                         formPageVisibility: WMDE.View.createFormPageVisibilityHandler( {
                             payment: $( "#paymentPage" ),
@@ -40,13 +43,13 @@
                         errorBox: WMDE.View.createErrorBoxHandler( $( '#validation-errors' ), { amount: 'Betrag' } )
                     };
                 },
-                newValidators: function() {
+                newValidators: function ( initialValues ) {
                     return [
                         WMDE.ReduxValidation.createValidationDispatcher(
                                 WMDE.FormValidation.createAmountValidator( '{$ basepath $}/validate-amount' ),
                                 WMDE.Actions.newFinishAmountValidationAction,
                                 [ 'amount', 'paymentType' ],
-                                { amount: 0, paymentType: 'BEZ' }
+                                initialValues
                         )
                     ];
                 },
@@ -89,8 +92,10 @@
                         store.dispatch( actions.newNextPageAction() );
                     } );
                 },
-                connectValidatorsToStore: function ( store ) {
-                    WMDE.ReduxValidation.createValidationDispatcherCollection( store, this.newValidators() );
+                connectValidatorsToStore: function ( store, initialValues ) {
+                    var completeInitialValues = $.extend( {}, store.getState().formContent, initialValues ),
+                        validators = this.newValidators( completeInitialValues );
+                    WMDE.ReduxValidation.createValidationDispatcherCollection( store, validators );
                 },
                 connectViewHandlersToStore: function ( store ) {
                     var viewHandlers = this.newViewHandlers();
@@ -116,15 +121,15 @@
 
                     } );
                 },
-                init: function( store, actions ) {
+                init: function( store, actions, initialFormValues ) {
                     this.connectElementEventsToActions(store, actions );
-                    this.connectValidatorsToStore( store );
+                    this.connectValidatorsToStore( store, initialFormValues );
                     this.connectViewHandlersToStore( store );
                     this.connectComponentsToStore( store );
                 }
             };
 
-        FormFactory.init( WMDE.Store, WMDE.Actions );
+        FormFactory.init( WMDE.Store, WMDE.Actions, initialFormValues );
 
         // Initialize form pages
         WMDE.Store.dispatch( WMDE.Actions.newAddPageAction( 'payment' ) );

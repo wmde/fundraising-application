@@ -9,6 +9,11 @@ var objectAssign = require( 'object-assign' ),
 		paymentPeriodInMonths: 0 // 0, 1, 3, 6 or 12, 0 = non-recurring payment
 	};
 
+function stateContainsInvalidKeys( state ) {
+	var invalidKeys = _.omit( state, _.keys( initialState ) );
+	return !_.isEmpty( invalidKeys );
+}
+
 module.exports = function formContent( state, action ) {
 	var newAmount, newState;
 	if ( typeof state === 'undefined' ) {
@@ -33,6 +38,14 @@ module.exports = function formContent( state, action ) {
 			newState = _.clone( state );
 			newState[ action.payload.contentName ] = action.payload.value;
 			return newState;
+		case 'INITIALIZE_CONTENT':
+			if ( stateContainsInvalidKeys( action.payload ) ) {
+				throw new Error(
+					'Initial state contains invalid keys: ' +
+					_.omit( state, _.keys( initialState ) ).join( ', ' )
+				);
+			}
+			return objectAssign( {}, state, action.payload );
 		default:
 			return state;
 	}
