@@ -29,7 +29,6 @@ class DonationValidator {
 								 TextPolicyValidator $textPolicyValidator,
 								 AllowedValuesValidator $paymentTypeValidator,
 								 BankDataValidator $bankDataValidator ) {
-		// TODO: inject a ValidatorObject to reduce number of parameters
 		$this->personalInfoValidator = $personalInfoValidator;
 		$this->amountValidator = $amountValidator;
 		$this->paymentTypeValidator = $paymentTypeValidator;
