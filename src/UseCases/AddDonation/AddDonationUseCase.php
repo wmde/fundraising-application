@@ -90,7 +90,7 @@ class AddDonationUseCase {
 		return AddDonationResponse::newSuccessResponse( $donation, $updateToken );
 	}
 
-	private function assignAndReturnNewUpdateToken( int $donationId ) {
+	private function assignAndReturnNewUpdateToken( int $donationId ): string {
 		$updateToken = $this->tokenGenerator->generateToken();
 
 		$this->authorizationUpdater->allowDonationModificationViaToken(
@@ -180,6 +180,13 @@ class AddDonationUseCase {
 		return $trackingInfo->freeze()->assertNoNullFields();
 	}
 
+	/**
+	 * @param Donation $donation
+	 * @param bool $needsModeration
+	 *
+	 * @throws \RuntimeException
+	 * TODO: handle exception
+	 */
 	private function sendDonationConfirmationEmail( Donation $donation, bool $needsModeration ) {
 		if ( $donation->getPersonalInfo() !== null ) {
 			$this->mailer->sendMail(
