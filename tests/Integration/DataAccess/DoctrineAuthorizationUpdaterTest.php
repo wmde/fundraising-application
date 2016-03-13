@@ -80,24 +80,30 @@ class DoctrineAuthorizationUpdaterTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testWhenDatabaseReadFails_exceptionIsThrown() {
-		// TODO
+		$this->markTestIncomplete( 'TODO: make read method throw' ); // TODO
+
+		$donation = new Donation();
+		$this->persistDonation( $donation );
 
 		$this->expectException( AuthorizationUpdateException::class );
 
 		$this->newAuthorizationUpdater()->allowDonationModificationViaToken(
-			1337,
+			$donation->getId(),
 			self::UPDATE_TOKEN,
 			new \DateTime( self::EXPIRY_TIME )
 		);
 	}
 
 	public function testWhenDatabaseWriteFails_exceptionIsThrown() {
-		// TODO
+		$this->markTestIncomplete( 'TODO: make write method throw' ); // TODO
+
+		$donation = new Donation();
+		$this->persistDonation( $donation );
 
 		$this->expectException( AuthorizationUpdateException::class );
 
 		$this->newAuthorizationUpdater()->allowDonationModificationViaToken(
-			1337,
+			$donation->getId(),
 			self::UPDATE_TOKEN,
 			new \DateTime( self::EXPIRY_TIME )
 		);
