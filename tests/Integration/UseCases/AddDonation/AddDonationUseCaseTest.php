@@ -14,6 +14,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
 use WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer;
+use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationUpdateException;
 use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationUpdater;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
@@ -242,6 +243,20 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 			$this->newTokenGenerator(),
 			$authUpdater
 		);
+	}
+
+	public function testWhenAuthorizationUpdateFails_failureResponseIsReturned() {
+		$authorizationUpdater = $this->newAuthorizationUpdater();
+
+		$authorizationUpdater->expects( $this->any() )
+			->method( 'allowDonationModificationViaToken' )
+			->willThrowException( new AuthorizationUpdateException( 'Auth update failed' ) );
+
+		$useCase = $this->newUseCaseWithAuthorizationUpdater( $authorizationUpdater );
+
+		$response = $useCase->addDonation( $this->newMinimumDonationRequest() );
+
+		$this->assertFalse( $response->isSuccessful() );
 	}
 
 }
