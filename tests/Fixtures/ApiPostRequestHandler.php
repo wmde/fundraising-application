@@ -9,9 +9,6 @@ use Mediawiki\Api\UsageException;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
- * TODO: once https://github.com/addwiki/mediawiki-api-base/pull/20 is merged, we can create
- * a simple fake similar to InMemoryFileFetcher.
- *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
