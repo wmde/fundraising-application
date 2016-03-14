@@ -72,6 +72,7 @@ use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentUseCase;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationUseCase;
 use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ConfirmSubscription\ConfirmSubscriptionUseCase;
+use WMDE\Fundraising\Frontend\UseCases\RequestMembership\RequestMembershipUseCase;
 use WMDE\Fundraising\Frontend\Validation\AmountPolicyValidator;
 use WMDE\Fundraising\Frontend\Validation\AmountValidator;
 use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
@@ -761,6 +762,10 @@ class FunFunFactory {
 		return new CancelDonationHtmlPresenter(
 			$this->getLayoutTemplate( 'Donation_Cancellation_Confirmation.twig' )
 		);
+	}
+
+	public function newRequestMembershipUseCase(): RequestMembershipUseCase {
+		return new RequestMembershipUseCase();
 	}
 
 }

@@ -25,6 +25,7 @@ use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageDisplayRequest;
 use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanRequest;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentListingRequest;
+use WMDE\Fundraising\Frontend\UseCases\RequestMembership\RequestMembershipRequest;
 
 $app->get(
 	'validate-email',
@@ -328,14 +329,18 @@ $app->post(
 $app->post(
 	'request-membership',
 	function( Application $app, Request $request ) use ( $ffFactory ) {
-		return 'TODO';
+		$useCase = $ffFactory->newRequestMembershipUseCase();
+
+		$useCase->requestMembership( new RequestMembershipRequest( /* TODO */ ) );
+
+		return 'TODO'; // TODO
 	}
 );
 
 $app->post(
 	'cancel-membership-request',
 	function( Application $app, Request $request ) use ( $ffFactory ) {
-		return 'TODO';
+		return 'TODO'; // TODO
 	}
 );
 
