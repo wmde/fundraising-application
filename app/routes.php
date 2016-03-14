@@ -325,4 +325,18 @@ $app->post(
 	}
 );
 
+$app->post(
+	'request-membership',
+	function( Application $app, Request $request ) use ( $ffFactory ) {
+		return 'TODO';
+	}
+);
+
+$app->post(
+	'cancel-membership-request',
+	function( Application $app, Request $request ) use ( $ffFactory ) {
+		return 'TODO';
+	}
+);
+
 return $app;
