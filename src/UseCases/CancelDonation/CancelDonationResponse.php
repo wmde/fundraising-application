@@ -13,7 +13,7 @@ class CancelDonationResponse {
 	private $donationId;
 	private $isSuccess;
 
-	public function __construct( int $donationId, bool $isSuccess /* TODO: the smag should go here? */ ) {
+	public function __construct( int $donationId, bool $isSuccess ) {
 		$this->donationId = $donationId;
 		$this->isSuccess = $isSuccess;
 	}

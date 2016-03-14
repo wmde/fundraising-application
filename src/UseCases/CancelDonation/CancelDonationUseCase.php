@@ -31,25 +31,25 @@ class CancelDonationUseCase {
 
 	public function cancelDonation( CancelDonationRequest $cancellationRequest ): CancelDonationResponse {
 		if ( !$this->authorizationService->canModifyDonation( $cancellationRequest->getDonationId() ) ) {
-			return new CancelDonationResponse( $cancellationRequest->getDonationId(), false ); // TODO
+			return $this->newFailureResponse( $cancellationRequest );
 		}
 
 		try {
 			$donation = $this->donationRepository->getDonationById( $cancellationRequest->getDonationId() );
 		}
 		catch ( GetDonationException $ex ) {
-			return new CancelDonationResponse( $cancellationRequest->getDonationId(), false ); // TODO
+			return $this->newFailureResponse( $cancellationRequest );
 		}
 
 		if ( $donation === null ) {
-			return new CancelDonationResponse( $cancellationRequest->getDonationId(), false ); // TODO
+			return $this->newFailureResponse( $cancellationRequest );
 		}
 
 		try {
 			$donation->cancel();
 		}
 		catch ( \RuntimeException $ex ) {
-			return new CancelDonationResponse( $cancellationRequest->getDonationId(), false ); // TODO
+			return $this->newFailureResponse( $cancellationRequest );
 		}
 
 		// TODO: update donation status
@@ -57,7 +57,15 @@ class CancelDonationUseCase {
 
 		$this->sendConfirmationEmail( $donation );
 
-		return new CancelDonationResponse( $cancellationRequest->getDonationId(), true ); // TODO
+		return $this->newSuccessResponse( $cancellationRequest );
+	}
+
+	private function newSuccessResponse( CancelDonationRequest $cancellationRequest ): CancelDonationResponse {
+		return new CancelDonationResponse( $cancellationRequest->getDonationId(), true );
+	}
+
+	private function newFailureResponse( CancelDonationRequest $cancellationRequest ): CancelDonationResponse {
+		return new CancelDonationResponse( $cancellationRequest->getDonationId(), false );
 	}
 
 	private function sendConfirmationEmail( Donation $donation ) {
