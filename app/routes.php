@@ -21,6 +21,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\SubscriptionRequest;
 use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationRequest;
+use WMDE\Fundraising\Frontend\UseCases\CancelMembershipRequest\CancelMembershipRequestRequest;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageDisplayRequest;
 use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanRequest;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
@@ -340,6 +341,10 @@ $app->post(
 $app->post(
 	'cancel-membership-request',
 	function( Application $app, Request $request ) use ( $ffFactory ) {
+		$useCase = $ffFactory->newCancelMembershipRequestUseCase();
+
+		$useCase->cancelMembershipRequest( new CancelMembershipRequestRequest( /* TODO */ ) );
+
 		return 'TODO'; // TODO
 	}
 );

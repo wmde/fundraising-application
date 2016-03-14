@@ -71,6 +71,7 @@ use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentUseCase;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationUseCase;
 use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationUseCase;
+use WMDE\Fundraising\Frontend\UseCases\CancelMembershipRequest\CancelMembershipRequestUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ConfirmSubscription\ConfirmSubscriptionUseCase;
 use WMDE\Fundraising\Frontend\UseCases\RequestMembership\RequestMembershipUseCase;
 use WMDE\Fundraising\Frontend\Validation\AmountPolicyValidator;
@@ -766,6 +767,10 @@ class FunFunFactory {
 
 	public function newRequestMembershipUseCase(): RequestMembershipUseCase {
 		return new RequestMembershipUseCase();
+	}
+
+	public function newCancelMembershipRequestUseCase(): CancelMembershipRequestUseCase {
+		return new CancelMembershipRequestUseCase();
 	}
 
 }
