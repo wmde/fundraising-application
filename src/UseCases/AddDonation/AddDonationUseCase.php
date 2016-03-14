@@ -11,6 +11,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\TrackingInfo;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
+use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationUpdateException;
 use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationUpdater;
 use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
@@ -18,6 +19,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
 use WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer;
 use WMDE\Fundraising\Frontend\Presentation\GreetingGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 use WMDE\Fundraising\Frontend\Validation\DonationValidator;
 
 /**
@@ -70,15 +72,25 @@ class AddDonationUseCase {
 
 		$this->donationRepository->storeDonation( $donation );
 
-		$updateToken = $this->assignAndReturnNewUpdateToken( $donation->getId() );
+		try {
+			$updateToken = $this->assignAndReturnNewUpdateToken( $donation->getId() );
+		}
+		catch ( AuthorizationUpdateException $ex ) {
+			// TODO: rollback side effects on failure
+
+			// TODO: the result format format is really weird for this failure case
+			return AddDonationResponse::newFailureResponse( [ new ConstraintViolation(
+				null,
+				'TODO'
+			) ] );
+		}
 
 		$this->sendDonationConfirmationEmail( $donation, $needsModeration );
 
 		return AddDonationResponse::newSuccessResponse( $donation, $updateToken );
 	}
 
-	// TODO: handle token update exception
-	private function assignAndReturnNewUpdateToken( int $donationId ) {
+	private function assignAndReturnNewUpdateToken( int $donationId ): string {
 		$updateToken = $this->tokenGenerator->generateToken();
 
 		$this->authorizationUpdater->allowDonationModificationViaToken(
@@ -168,6 +180,13 @@ class AddDonationUseCase {
 		return $trackingInfo->freeze()->assertNoNullFields();
 	}
 
+	/**
+	 * @param Donation $donation
+	 * @param bool $needsModeration
+	 *
+	 * @throws \RuntimeException
+	 * TODO: handle exception
+	 */
 	private function sendDonationConfirmationEmail( Donation $donation, bool $needsModeration ) {
 		if ( $donation->getPersonalInfo() !== null ) {
 			$this->mailer->sendMail(
