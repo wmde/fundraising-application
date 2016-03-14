@@ -292,10 +292,6 @@ class FunFunFactory {
 		return ( new StoreFactory( $this->getConnection() ) )->newInstaller();
 	}
 
-	public function newValidateEmailUseCase(): ValidateEmailUseCase {
-		return new ValidateEmailUseCase( $this->getMailValidator() );
-	}
-
 	public function newListCommentsUseCase(): ListCommentsUseCase {
 		return new ListCommentsUseCase( $this->getCommentFinder() );
 	}
@@ -331,7 +327,7 @@ class FunFunFactory {
 		return $this->pimple['subscription_validator'];
 	}
 
-	private function getMailValidator(): MailValidator {
+	public function getMailValidator(): MailValidator {
 		return $this->pimple['mail_validator'];
 	}
 

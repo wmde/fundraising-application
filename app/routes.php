@@ -29,11 +29,8 @@ use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentListingRequest;
 $app->get(
 	'validate-email',
 	function( Request $request ) use ( $app, $ffFactory ) {
-		$useCase = $ffFactory->newValidateEmailUseCase();
-		$responseModel = $useCase->validateEmail( $request->get( 'email', '' ) );
-
-		// Presenter code:
-		return $app->json( [ 'status' => $responseModel ? 'OK' : 'ERR' ] );
+		$validationResult = $ffFactory->getMailValidator()->validate( $request->get( 'email', '' ) );
+		return $app->json( [ 'status' => $validationResult->isSuccessful() ? 'OK' : 'ERR' ] );
 	}
 );
 
