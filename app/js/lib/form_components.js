@@ -1,11 +1,13 @@
 'use strict';
 var objectAssign = require( 'object-assign' ),
 	actions = require( './actions' ),
+
 	createDefaultChangeHandler = function ( store, contentName ) {
 		return function ( evt ) {
 			store.dispatch( actions.newChangeContentAction( contentName, evt.target.value ) );
 		};
 	},
+
 	RadioComponent = {
 		element: null,
 		contentName: '',
@@ -14,6 +16,7 @@ var objectAssign = require( 'object-assign' ),
 			this.element.val( [ formContent[ this.contentName ] ] ); // Needs to be an array
 		}
 	},
+
 	TextComponent = {
 		element: null,
 		contentName: '',
