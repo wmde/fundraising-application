@@ -140,7 +140,8 @@ class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 				$this->equalTo( new MailAddress( $donation->getPersonalInfo()->getEmailAddress() ) ),
 				$this->callback( function( $value ) {
 					$this->assertInternalType( 'array', $value );
-					// TODO: assert parameters
+					$this->assertSame( 'Sehr geehrte Damen und Herren,', $value['salutation'] );
+					$this->assertSame( 1, $value['donationId'] );
 					return true;
 				} )
 			);
