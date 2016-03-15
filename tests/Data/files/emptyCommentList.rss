@@ -2,7 +2,7 @@
 <rss version="2.0">
     <channel>
         <title>Spenden an Wikimedia</title>
-        <link>https://spenden.wikimedia.de/spenden/list.php</link>
+        <link>/list-comments.html</link>
         <description>Öffentliche Liste der über das Online-Formular der Wikimedia Fördergesellschaft getätigter Spenden</description>
         <language>de-de</language>
         <pubDate></pubDate>

@@ -22,7 +22,6 @@ class CommentListRssPresenter {
 
 	public function present( CommentList $commentList ): string {
 		return $this->template->render( [
-			'rssLink' => 'https://spenden.wikimedia.de/spenden/list.php', // TODO
 			'rssPublicationDate' => $this->getPublicationTime( $commentList ),
 			'comments' => $this->getCommentsViewModel( $commentList ),
 		] );
@@ -36,7 +35,6 @@ class CommentListRssPresenter {
 					'author' => $comment->getAuthorName(),
 					'text' => $comment->getCommentText(),
 					'publicationDate' => $comment->getDonationTime()->format( 'r' ),
-					'link' => 'https://spenden.wikimedia.de/spenden/list.php', // TODO
 				];
 			},
 			$commentList->toArray()
