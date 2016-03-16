@@ -70,7 +70,9 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\InternalErrorHtmlPresenter
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentUseCase;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationUseCase;
+use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipUseCase;
 use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationUseCase;
+use WMDE\Fundraising\Frontend\UseCases\CancelMembershipApplication\CancelMembershipApplicationUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ConfirmSubscription\ConfirmSubscriptionUseCase;
 use WMDE\Fundraising\Frontend\Validation\AmountPolicyValidator;
 use WMDE\Fundraising\Frontend\Validation\AmountValidator;
@@ -95,7 +97,6 @@ use WMDE\Fundraising\Frontend\Presentation\Content\PageContentModifier;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\ListCommentsUseCase;
 use WMDE\Fundraising\Frontend\UseCases\CheckIban\CheckIbanUseCase;
 use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanUseCase;
-use WMDE\Fundraising\Frontend\UseCases\ValidateEmail\ValidateEmailUseCase;
 use WMDE\Fundraising\Frontend\Validation\TemplateNameValidator;
 use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
 use WMDE\Fundraising\Store\Factory as StoreFactory;
@@ -761,6 +762,14 @@ class FunFunFactory {
 		return new CancelDonationHtmlPresenter(
 			$this->getLayoutTemplate( 'Donation_Cancellation_Confirmation.twig' )
 		);
+	}
+
+	public function newApplyForMembershipUseCase(): ApplyForMembershipUseCase {
+		return new ApplyForMembershipUseCase();
+	}
+
+	public function newCancelMembershipApplicationUseCase(): CancelMembershipApplicationUseCase {
+		return new CancelMembershipApplicationUseCase();
 	}
 
 }
