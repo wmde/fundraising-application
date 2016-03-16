@@ -10,11 +10,11 @@ use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class RequestMembershipRouteTest extends WebRouteTestCase {
+class CancelMembershipApplicationRouteTest extends WebRouteTestCase {
 
 	public function testGivenGetRequest_resultHasMethodNotAllowedStatus() {
 		$this->assertGetRequestCausesMethodNotAllowedResponse(
-			'request-membership',
+			'cancel-membership-application',
 			[]
 		);
 	}

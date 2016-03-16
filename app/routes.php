@@ -21,12 +21,12 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\SubscriptionRequest;
 use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationRequest;
-use WMDE\Fundraising\Frontend\UseCases\CancelMembershipRequest\CancelMembershipRequestRequest;
+use WMDE\Fundraising\Frontend\UseCases\CancelMembershipRequest\CancelMembershipApplicationRequest;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageDisplayRequest;
 use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanRequest;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentListingRequest;
-use WMDE\Fundraising\Frontend\UseCases\RequestMembership\RequestMembershipRequest;
+use WMDE\Fundraising\Frontend\UseCases\RequestMembership\ApplyForMembershipRequest;
 
 $app->get(
 	'validate-email',
@@ -328,22 +328,22 @@ $app->post(
 );
 
 $app->post(
-	'request-membership',
+	'apply-for-membership',
 	function( Application $app, Request $request ) use ( $ffFactory ) {
-		$useCase = $ffFactory->newRequestMembershipUseCase();
+		$useCase = $ffFactory->newApplyForMembershipUseCase();
 
-		$useCase->requestMembership( new RequestMembershipRequest( /* TODO */ ) );
+		$useCase->applyForMembership( new ApplyForMembershipRequest( /* TODO */ ) );
 
 		return 'TODO'; // TODO
 	}
 );
 
 $app->post(
-	'cancel-membership-request',
+	'cancel-membership-application',
 	function( Application $app, Request $request ) use ( $ffFactory ) {
-		$useCase = $ffFactory->newCancelMembershipRequestUseCase();
+		$useCase = $ffFactory->newCancelMembershipApplicationUseCase();
 
-		$useCase->cancelMembershipRequest( new CancelMembershipRequestRequest( /* TODO */ ) );
+		$useCase->cancelMembershipApplication( new CancelMembershipApplicationRequest( /* TODO */ ) );
 
 		return 'TODO'; // TODO
 	}
