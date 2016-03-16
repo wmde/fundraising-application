@@ -36,9 +36,9 @@ class PayPalUrlGeneratorTest extends \PHPUnit_Framework_TestCase {
 			'&notify_url=http%3A%2F%2Fmy.donation.app%2Fhandler%2Fpaypal%2F' .
 			'&cancel_return=http%3A%2F%2Fmy.donation.app%2Fdonation%2Fcancel%2F' .
 			'&return=http%3A%2F%2Fmy.donation.app%2Fdonation%2Fconfirm%2F%3Fsid%3D1234' .
-			'&custom=%7B%22sid%22%3A1234%2C%22token%22%3A%22token%22%2C%22utoken%22%3A%22utoken%22%7D',
+			'&custom=%7B%22sid%22%3A1234%2C%22utoken%22%3A%22utoken%22%7D',
 
-			$generator->generateUrl( 1234, 12.34, 3, 'token', 'utoken' )
+			$generator->generateUrl( 1234, 12.34, 3, 'utoken' )
 		);
 	}
 
@@ -57,9 +57,9 @@ class PayPalUrlGeneratorTest extends \PHPUnit_Framework_TestCase {
 			'&notify_url=http%3A%2F%2Fmy.donation.app%2Fhandler%2Fpaypal%2F' .
 			'&cancel_return=http%3A%2F%2Fmy.donation.app%2Fdonation%2Fcancel%2F' .
 			'&return=http%3A%2F%2Fmy.donation.app%2Fdonation%2Fconfirm%2F%3Fsid%3D1234' .
-			'&custom=%7B%22sid%22%3A1234%2C%22token%22%3A%22token%22%2C%22utoken%22%3A%22utoken%22%7D',
+			'&custom=%7B%22sid%22%3A1234%2C%22utoken%22%3A%22utoken%22%7D',
 
-			$generator->generateUrl( 1234, 12.34, 0, 'token', 'utoken' )
+			$generator->generateUrl( 1234, 12.34, 0, 'utoken' )
 		);
 	}
 

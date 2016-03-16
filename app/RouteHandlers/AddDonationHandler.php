@@ -46,15 +46,13 @@ class AddDonationHandler {
 							$donation->getId(),
 							$donation->getAmount(),
 							$donation->getInterval(),
-							'token',
-							'utoken'
+							$responseModel->getUpdateToken()
 						)
 					);
 				case PaymentType::CREDIT_CARD:
 					return $this->ffFactory->newCreditCardPaymentHtmlPresenter()->present( $responseModel );
 			}
 			// TODO: take over confirmation page selection functionality from old application
-			// TODO: return update token
 		}
 
 		return 'TODO';
