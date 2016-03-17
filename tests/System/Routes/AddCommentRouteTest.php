@@ -18,6 +18,7 @@ use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
 class AddCommentRouteTest extends WebRouteTestCase {
 
 	const CORRECT_UPDATE_TOKEN = 'b5b249c8beefb986faf8d186a3f16e86ef509ab2';
+	const NON_EXISTING_DONATION_ID = 25502;
 
 	public function testGivenGetRequest_resultHasMethodNotAllowedStatus() {
 		$this->assertGetRequestCausesMethodNotAllowedResponse(
@@ -107,7 +108,7 @@ class AddCommentRouteTest extends WebRouteTestCase {
 					'kommentar' => 'Your programmers deserve a raise',
 					'public' => '1',
 					'eintrag' => 'Uncle Bob',
-					'sid' => 25502, // No donation with this id
+					'sid' => self::NON_EXISTING_DONATION_ID,
 					'token' => '1276888%2459b42194b31d0265df452735f6438a234bae2af7',
 					'utoken' => self::CORRECT_UPDATE_TOKEN,
 				]
