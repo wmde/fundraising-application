@@ -20,13 +20,13 @@ use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\SubscriptionRequest;
+use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipRequest;
 use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationRequest;
-use WMDE\Fundraising\Frontend\UseCases\CancelMembershipRequest\CancelMembershipApplicationRequest;
+use WMDE\Fundraising\Frontend\UseCases\CancelMembershipApplication\CancelMembershipApplicationRequest;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageDisplayRequest;
 use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanRequest;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentListingRequest;
-use WMDE\Fundraising\Frontend\UseCases\RequestMembership\ApplyForMembershipRequest;
 
 $app->get(
 	'validate-email',
