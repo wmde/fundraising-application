@@ -47,20 +47,18 @@ class AddDonationHandler {
 	}
 
 	private function newHttpResponseFromResponseModel( AddDonationResponse $responseModel ): Response {
-		$donation = $responseModel->getDonation();
-
-		switch( $donation->getPaymentType() ) {
+		switch( $responseModel->getDonation()->getPaymentType() ) {
 			case PaymentType::DIRECT_DEBIT:
 			case PaymentType::BANK_TRANSFER:
 				return new Response(
-					$this->ffFactory->newAddDonationHtmlPresenter()->present( $donation )
+					$this->ffFactory->newAddDonationHtmlPresenter()->present( $responseModel )
 				);
 			case PaymentType::PAYPAL:
 				return $this->app->redirect(
 					$this->ffFactory->newPayPalUrlGenerator()->generateUrl(
-						$donation->getId(),
-						$donation->getAmount(),
-						$donation->getInterval(),
+						$responseModel->getDonation()->getId(),
+						$responseModel->getDonation()->getAmount(),
+						$responseModel->getDonation()->getInterval(),
 						$responseModel->getUpdateToken()
 					)
 				);
