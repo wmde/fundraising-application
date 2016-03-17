@@ -11,6 +11,7 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
+use WMDE\Fundraising\Store\DonationData;
 
 /**
  * @licence GNU GPL v2+
@@ -85,7 +86,6 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	// TODO: refactor once token generation is done by the repo
 	private function storeDonation( DonationRepository $repo, EntityManager $entityManager ): int {
 		$donation = ValidDonation::newDonation();
 		$repo->storeDonation( $donation );
@@ -95,10 +95,10 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 		 */
 		$doctrineDonation = $entityManager->getRepository( DoctrineDonation::class )->find( $donation->getId() );
 
-		$donationData = $doctrineDonation->getDataObject();
-		$donationData->setUpdateToken( self::CORRECT_UPDATE_TOKEN );
-		$donationData->setUpdateTokenExpiry( date( 'Y-m-d H:i:s', time() + 60 * 60 ) );
-		$doctrineDonation->setDataObject( $donationData );
+		$doctrineDonation->modifyDataObject( function( DonationData $data ) {
+			$data->setUpdateToken( self::CORRECT_UPDATE_TOKEN );
+			$data->setUpdateTokenExpiry( date( 'Y-m-d H:i:s', time() + 60 * 60 ) );
+		} );
 
 		$entityManager->persist( $doctrineDonation );
 		$entityManager->flush();
