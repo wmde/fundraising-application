@@ -308,12 +308,10 @@ $app->post(
 	'donation/cancel',
 	function( Request $request ) use ( $app, $ffFactory ) {
 		$cancellationRequest = new CancelDonationRequest(
-			(int)$request->get( 'sid', '' )
+			(int)$request->request->get( 'sid', '' )
 		);
 
-		$response = $ffFactory->newCancelDonationUseCase( $request->get( 'utoken', '' ) )->cancelDonation( $cancellationRequest );
-
-		// TODO: reset spenden_stamp in cookie
+		$response = $ffFactory->newCancelDonationUseCase( $request->request->get( 'utoken', '' ) )->cancelDonation( $cancellationRequest );
 
 		return $ffFactory->newCancelDonationHtmlPresenter()->present( $response );
 	}

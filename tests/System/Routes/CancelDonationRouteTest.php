@@ -29,7 +29,6 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 			'/donation/cancel',
 			[
 				'sid' => '',
-				'token' => '',
 				'utoken' => self::CORRECT_UPDATE_TOKEN,
 			]
 		);
@@ -48,7 +47,6 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 				'/donation/cancel',
 				[
 					'sid' => (string)$donationId,
-					'token' => '',
 					'utoken' => self::CORRECT_UPDATE_TOKEN,
 				]
 			);
@@ -62,7 +60,6 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 			'/donation/cancel',
 			[
 				'sid' => '',
-				'token' => '',
 				'utoken' => self::CORRECT_UPDATE_TOKEN,
 			]
 		);
@@ -77,7 +74,6 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 				'/donation/cancel',
 				[
 					'sid' => (string)$donationId,
-					'token' => '',
 					'utoken' => 'Not the correct update token',
 				]
 			);
