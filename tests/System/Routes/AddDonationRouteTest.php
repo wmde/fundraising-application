@@ -4,9 +4,11 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 
+use Swift_NullTransport;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
 
 /**
@@ -77,7 +79,36 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public static function newValidFormInput() {
+	public function testGivenValidRequest_confirmationPageContainsEnteredData() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setMessenger( new Messenger(
+				Swift_NullTransport::newInstance(),
+				$factory->getOperatorAddress()
+			) );
+
+			$client->request(
+				'POST',
+				'/donation/add',
+				$this->newValidFormInput()
+			);
+
+			$response = $client->getResponse()->getContent();
+
+			$this->assertContains( '<strong>5,51 €</strong>', $response );
+			$this->assertContains( 'per Lastschrift', $response );
+			$this->assertContains( 'einmalig', $response );
+			$this->assertContains( 'DE12500105170648489890', $response );
+			$this->assertContains( 'INGDDEFFXXX', $response );
+			$this->assertContains( 'ING-DiBa', $response );
+			$this->assertContains( 'Prof. Dr. Karla Kennichnich', $response );
+			$this->assertContains( 'Lehmgasse 12', $response );
+			$this->assertContains( '<span id="confirm-postcode">12345</span> <span id="confirm-city">Einort</span>', $response );
+			$this->assertContains( 'karla@kennichnich.de', $response );
+			$this->assertContains( '<div id="send-info"', $response );
+		} );
+	}
+
+	private function newValidFormInput() {
 		return [
 			'betrag' => '5,51',
 			'zahlweise' => 'BEZ',
