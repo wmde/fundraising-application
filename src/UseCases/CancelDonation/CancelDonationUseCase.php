@@ -10,6 +10,7 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
 use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationChecker;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Presentation\GreetingGenerator;
 
 /**
  * @licence GNU GPL v2+
@@ -79,7 +80,12 @@ class CancelDonationUseCase {
 
 	private function getConfirmationMailTemplateArguments( Donation $donation ): array {
 		return [
-			// TODO
+			'donationId' => $donation->getId(),
+			'salutation' => ( new GreetingGenerator() )->createGreeting(
+				$donation->getPersonalInfo()->getPersonName()->getLastName(),
+				$donation->getPersonalInfo()->getPersonName()->getSalutation(),
+				$donation->getPersonalInfo()->getPersonName()->getTitle()
+			)
 		];
 	}
 
