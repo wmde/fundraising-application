@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\App\RouteHandlers;
 
 use Silex\Application;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
@@ -22,9 +21,6 @@ use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationResponse;
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class AddDonationHandler {
-
-	const UPDATE_TOKEN_COOKIE_NAME = 'wmde-fundraising-utoken';
-	const DONATION_ID_COOKIE_NAME = 'wmde-fundraising-donation-id';
 
 	private $ffFactory;
 	private $app;
@@ -46,8 +42,6 @@ class AddDonationHandler {
 		// TODO: take over confirmation page selection functionality from old application
 
 		$response = $this->newHttpResponseFromResponseModel( $responseModel );
-
-		$this->addCookies( $response, $responseModel );
 
 		return $response;
 	}
@@ -77,18 +71,6 @@ class AddDonationHandler {
 			default:
 				throw new \LogicException( 'This code should not be reached' );
 		}
-	}
-
-	private function addCookies( Response $response, AddDonationResponse $responseModel ) {
-		$response->headers->setCookie( new Cookie(
-			self::UPDATE_TOKEN_COOKIE_NAME,
-			$responseModel->getUpdateToken()
-		) );
-
-		$response->headers->setCookie( new Cookie(
-			self::DONATION_ID_COOKIE_NAME,
-			$responseModel->getDonation()->getId()
-		) );
 	}
 
 	private function createDonationRequest( Request $request ): AddDonationRequest {
