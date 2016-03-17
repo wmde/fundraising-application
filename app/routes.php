@@ -31,7 +31,7 @@ use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentListingRequest;
 $app->get(
 	'validate-email',
 	function( Request $request ) use ( $app, $ffFactory ) {
-		$validationResult = $ffFactory->getMailValidator()->validate( $request->get( 'email', '' ) );
+		$validationResult = $ffFactory->getMailValidator()->validate( $request->query->get( 'email', '' ) );
 		return $app->json( [ 'status' => $validationResult->isSuccessful() ? 'OK' : 'ERR' ] );
 	}
 );
@@ -126,13 +126,13 @@ $app->get(
 		$response = $app->json(
 			$ffFactory->newCommentListJsonPresenter()->present(
 				$ffFactory->newListCommentsUseCase()->listComments(
-					new CommentListingRequest( (int)$request->get( 'n' ) )
+					new CommentListingRequest( (int)$request->query->get( 'n' ) )
 				)
 			)
 		);
 
-		if ( $request->get( 'f' ) ) {
-			$response->setCallback( $request->get( 'f' ) );
+		if ( $request->query->get( 'f' ) ) {
+			$response->setCallback( $request->query->get( 'f' ) );
 		}
 
 		return $response;
@@ -231,7 +231,7 @@ $app->get(
 	'check-iban',
 	function( Request $request ) use ( $app, $ffFactory ) {
 		$useCase = $ffFactory->newCheckIbanUseCase();
-		$checkIbanResponse = $useCase->checkIban( new Iban( $request->get( 'iban', '' ) ) );
+		$checkIbanResponse = $useCase->checkIban( new Iban( $request->query->get( 'iban', '' ) ) );
 		return $app->json( $ffFactory->newIbanPresenter()->present( $checkIbanResponse ) );
 	}
 );
@@ -240,8 +240,8 @@ $app->get(
 	'generate-iban',
 	function( Request $request ) use ( $app, $ffFactory ) {
 		$generateIbanRequest = new GenerateIbanRequest(
-			$request->get( 'accountNumber', '' ),
-			$request->get( 'bankCode', '' )
+			$request->query->get( 'accountNumber', '' ),
+			$request->query->get( 'bankCode', '' )
 		);
 
 		$generateIbanResponse = $ffFactory->newGenerateIbanUseCase()->generateIban( $generateIbanRequest );
