@@ -4,6 +4,7 @@ namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
+use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationResponse;
 
 /**
  * Render the confirmation pages for donations
@@ -19,27 +20,28 @@ class AddDonationHtmlPresenter {
 		$this->template = $template;
 	}
 
-	public function present( Donation $donation ): string {
-		return $this->template->render( $this->getConfirmationPageArguments( $donation ) );
+	public function present( AddDonationResponse $responseModel ): string {
+		return $this->template->render( $this->getConfirmationPageArguments( $responseModel ) );
 	}
 
-	private function getConfirmationPageArguments( Donation $donation ) {
+	private function getConfirmationPageArguments( AddDonationResponse $responseModel ) {
 		return array_merge( [
 			'donation' => [
-				'id' => $donation->getId(),
-				'status' => $donation->getStatus(),
-				'amount' => $donation->getAmount(),
-				'interval' => $donation->getInterval(),
-				'paymentType' => $donation->getPaymentType(),
-				'optsIntoNewsletter' => $donation->getOptsIntoNewsletter(),
-				'bankTransferCode' => $donation->getBankTransferCode(),
+				'id' => $responseModel->getDonation()->getId(),
+				'status' => $responseModel->getDonation()->getStatus(),
+				'amount' => $responseModel->getDonation()->getAmount(),
+				'interval' => $responseModel->getDonation()->getInterval(),
+				'paymentType' => $responseModel->getDonation()->getPaymentType(),
+				'optsIntoNewsletter' => $responseModel->getDonation()->getOptsIntoNewsletter(),
+				'bankTransferCode' => $responseModel->getDonation()->getBankTransferCode(),
 				// TODO: use locale to determine the date format
 				'creationDate' => ( new \DateTime() )->format( 'd.M.Y' ),
 				// TODO: set cookie duration for "hide banner cookie"
-				'cookieDuration' => ''
+				'cookieDuration' => '',
+				'updateToken' => $responseModel->getUpdateToken()
 			],
-			$this->getPersonArguments( $donation ),
-			$this->getBankDataArguments( $donation )
+			$this->getPersonArguments( $responseModel->getDonation() ),
+			$this->getBankDataArguments( $responseModel->getDonation() )
 		] );
 	}
 
