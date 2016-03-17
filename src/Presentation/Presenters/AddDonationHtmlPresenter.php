@@ -35,26 +35,24 @@ class AddDonationHtmlPresenter {
 				'optsIntoNewsletter' => $responseModel->getDonation()->getOptsIntoNewsletter(),
 				'bankTransferCode' => $responseModel->getDonation()->getBankTransferCode(),
 				// TODO: use locale to determine the date format
-				'creationDate' => ( new \DateTime() )->format( 'd.M.Y' ),
+				'creationDate' => ( new \DateTime() )->format( 'd.m.Y' ),
 				// TODO: set cookie duration for "hide banner cookie"
 				'cookieDuration' => '',
 				'updateToken' => $responseModel->getUpdateToken()
 			],
-			$this->getPersonArguments( $responseModel->getDonation() ),
-			$this->getBankDataArguments( $responseModel->getDonation() )
+			'person' => $this->getPersonArguments( $responseModel->getDonation() ),
+			'bankData' => $this->getBankDataArguments( $responseModel->getDonation() )
 		] );
 	}
 
 	private function getPersonArguments( Donation $donation ): array {
 		if ( $donation->getPersonalInfo() !== null ) {
 			return [
-				'person' => [
-					'fullName' => $donation->getPersonalInfo()->getPersonName()->getFullName(),
-					'streetAddress' => $donation->getPersonalInfo()->getPhysicalAddress()->getStreetAddress(),
-					'postalCode' => $donation->getPersonalInfo()->getPhysicalAddress()->getPostalCode(),
-					'city' => $donation->getPersonalInfo()->getPhysicalAddress()->getCity(),
-					'email' => $donation->getPersonalInfo()->getEmailAddress(),
-				]
+				'fullName' => $donation->getPersonalInfo()->getPersonName()->getFullName(),
+				'streetAddress' => $donation->getPersonalInfo()->getPhysicalAddress()->getStreetAddress(),
+				'postalCode' => $donation->getPersonalInfo()->getPhysicalAddress()->getPostalCode(),
+				'city' => $donation->getPersonalInfo()->getPhysicalAddress()->getCity(),
+				'email' => $donation->getPersonalInfo()->getEmailAddress(),
 			];
 		}
 
@@ -64,11 +62,9 @@ class AddDonationHtmlPresenter {
 	private function getBankDataArguments( Donation $donation ): array {
 		if ( $donation->getBankData() !== null ) {
 			return [
-				'bankData' => [
-					'iban' => $donation->getBankData()->getIban()->toString(),
-					'bic' => $donation->getBankData()->getBankCode(),
-					'bankname' => $donation->getBankData()->getBankName(),
-				]
+				'iban' => $donation->getBankData()->getIban()->toString(),
+				'bic' => $donation->getBankData()->getBic(),
+				'bankname' => $donation->getBankData()->getBankName(),
 			];
 		}
 
