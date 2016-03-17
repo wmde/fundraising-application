@@ -253,14 +253,14 @@ $app->post(
 	'add-comment',
 	function( Request $request ) use ( $app, $ffFactory ) {
 		$addCommentRequest = new AddCommentRequest();
-		$addCommentRequest->setCommentText( $request->get( 'kommentar', '' ) );
-		$addCommentRequest->setIsPublic( $request->get( 'public', '0' ) === '1' );
-		$addCommentRequest->setAuthorDisplayName( $request->get( 'eintrag', '' ) );
-		$addCommentRequest->setDonationId( (int)$request->get( 'sid', '' ) );
+		$addCommentRequest->setCommentText( $request->request->get( 'kommentar', '' ) );
+		$addCommentRequest->setIsPublic( $request->request->get( 'public', '0' ) === '1' );
+		$addCommentRequest->setAuthorDisplayName( $request->request->get( 'eintrag', '' ) );
+		$addCommentRequest->setDonationId( (int)$request->request->get( 'sid', '' ) );
 		$addCommentRequest->freeze()->assertNoNullFields();
 
-		$token = $request->get( 'token', '' );
-		$updateToken = $request->get( 'utoken', '' );
+		$token = $request->request->get( 'token', '' );
+		$updateToken = $request->request->get( 'utoken', '' );
 
 		if ( $token === '' || $updateToken === '' ) {
 			return $app->json( [
