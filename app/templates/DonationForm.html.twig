@@ -75,6 +75,10 @@
                     {
                         viewHandler: WMDE.View.createErrorBoxHandler( $( '#validation-errors' ), { amount: 'Betrag' } ),
                         stateKey: 'validationMessages'
+                    },
+                    {
+                        viewHandler: WMDE.View.createElementSliderHandler( $( '.periode-2-list' ), /^(1|3|6|12)$/ ),
+                        stateKey: 'formContent.paymentPeriodInMonths'
                     }
                 ],
                 store

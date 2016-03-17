@@ -48,7 +48,7 @@ module.exports = {
 			viewHandlers.forEach( function ( viewHandlerConfig ) {
 				viewHandlerConfig.viewHandler.update.call(
 					viewHandlerConfig.viewHandler,
-					state[ viewHandlerConfig.stateKey ]
+					_.get( state, viewHandlerConfig.stateKey )
 				);
 			} );
 		} );
