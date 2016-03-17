@@ -45,10 +45,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 	// @codingStandardsIgnoreStart
 	protected function onTestEnvironmentCreated( FunFunFactory $factory, array $config ) {
 		// @codingStandardsIgnoreEnd
-		$factory->setMessenger( new Messenger(
-			Swift_NullTransport::newInstance(),
-			$factory->getOperatorAddress()
-		) );
+		$factory->setNullMessenger();
 	}
 
 	public function testValidSubscriptionRequestGetsPersisted() {

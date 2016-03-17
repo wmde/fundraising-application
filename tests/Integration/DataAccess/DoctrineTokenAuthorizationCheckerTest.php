@@ -46,10 +46,10 @@ class DoctrineTokenAuthorizationCheckerTest extends \PHPUnit_Framework_TestCase 
 
 	public function testWhenDonationWithTokenExists() {
 		$donation = new Donation();
-		$donation->encodeAndSetData( [
-			'utoken' => self::THE_CORRECT_TOKEN,
-			'uexpiry' => $this->getExpiryTimeInTheFuture()
-		] );
+		$donationData = $donation->getDataObject();
+		$donationData->setUpdateToken( self::THE_CORRECT_TOKEN );
+		$donationData->setUpdateTokenExpiry( $this->getExpiryTimeInTheFuture() );
+		$donation->setDataObject( $donationData );
 
 		$this->specify(
 			'given correct donation id and correct token, authorization succeeds',
@@ -95,10 +95,10 @@ class DoctrineTokenAuthorizationCheckerTest extends \PHPUnit_Framework_TestCase 
 
 	public function testWhenUpdateTokenIsExpired() {
 		$donation = new Donation();
-		$donation->encodeAndSetData( [
-			'utoken' => self::THE_CORRECT_TOKEN,
-			'uexpiry' => $this->getExpiryTimeInThePast()
-		] );
+		$donationData = $donation->getDataObject();
+		$donationData->setUpdateToken( self::THE_CORRECT_TOKEN );
+		$donationData->setUpdateTokenExpiry( $this->getExpiryTimeInThePast() );
+		$donation->setDataObject( $donationData );
 
 		$this->specify(
 			'given correct donation id and a token, authorization fails',

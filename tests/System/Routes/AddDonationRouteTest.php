@@ -4,12 +4,10 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 
-use Swift_NullTransport;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
-use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 
 /**
  * @licence GNU GPL v2+
@@ -26,10 +24,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequest_donationGetsPersisted() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setMessenger( new Messenger(
-				Swift_NullTransport::newInstance(),
-				$factory->getOperatorAddress()
-			) );
+			$factory->setNullMessenger();
 
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
 			$client->followRedirects( false );
@@ -44,7 +39,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 			$donation = $this->getDonationFromDatabase( $factory );
 
-			$data = unserialize( base64_decode( $donation->getData() ) );
+			$data = $donation->getDecodedData();
 			$this->assertSame( 5.51, $donation->getAmount() );
 			$this->assertSame( 'BEZ', $donation->getPaymentType() );
 			$this->assertSame( 0, $donation->getPeriod() );
@@ -77,17 +72,12 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$this->assertSame( 'N', $donation->getStatus() );
 			$this->assertSame( true, $donation->getInfo() );
 
-			// TODO: assert tokens are set
-			// $this->assertRegExp( '/[0-9a-f]{32}/', $data['token'] );
-			// $this->assertRegExp( '/[0-9a-f]{32}/', $data['utoken'] );
-			// $this->assertGreaterThan( ( new \DateTime() )->format( 'Y-m-d H:i:s' ), $data['utoken_expiry'] );
-
 			$this->assertContains( '5,51', $response->getContent() );
 			$this->assertContains( 'einmalig', $response->getContent() );
 		} );
 	}
 
-	private function newValidFormInput() {
+	public static function newValidFormInput() {
 		return [
 			'betrag' => '5,51',
 			'zahlweise' => 'BEZ',
@@ -126,10 +116,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$factory = null;
 
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setMessenger( new Messenger(
-				Swift_NullTransport::newInstance(),
-				$factory->getOperatorAddress()
-			) );
+			$factory->setNullMessenger();
 
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
 			$client->followRedirects( false );
@@ -142,7 +129,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 			$donation = $this->getDonationFromDatabase( $factory );
 
-			$data = unserialize( base64_decode( $donation->getData() ) );
+			$data = $donation->getDecodedData();
 			$this->assertSame( 12.34, $donation->getAmount() );
 			$this->assertSame( 'UEB', $donation->getPaymentType() );
 			$this->assertSame( 0, $donation->getPeriod() );
@@ -203,10 +190,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenComplementableBankData_donationStillGetsPersisted() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setMessenger( new Messenger(
-				Swift_NullTransport::newInstance(),
-				$factory->getOperatorAddress()
-			) );
+			$factory->setNullMessenger();
 
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
 			$client->followRedirects( false );
@@ -219,7 +203,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 			$donation = $this->getDonationFromDatabase( $factory );
 
-			$data = unserialize( base64_decode( $donation->getData() ) );
+			$data = $donation->getDecodedData();
 			$this->assertSame( 'DE12500105170648489890', $data['iban'] );
 			$this->assertSame( 'INGDDEFFXXX', $data['bic'] );
 			$this->assertSame( '0648489890', $data['konto'] );
@@ -256,10 +240,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidPayPalData_redirectsToPayPal() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setMessenger( new Messenger(
-				Swift_NullTransport::newInstance(),
-				$factory->getOperatorAddress()
-			) );
+			$factory->setNullMessenger();
 			$client->followRedirects( false );
 
 			$client->request(
@@ -285,10 +266,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidCreditCardData_showsIframeEmbeddingPage() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setMessenger( new Messenger(
-				Swift_NullTransport::newInstance(),
-				$factory->getOperatorAddress()
-			) );
+			$factory->setNullMessenger();
 
 			$client->request(
 				'POST',

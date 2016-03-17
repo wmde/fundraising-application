@@ -4,13 +4,9 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 
-use Mediawiki\Api\MediawikiApi;
-use Swift_NullTransport;
-use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
+use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
-use WMDE\Fundraising\Frontend\Infrastructure\Message;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\ApiPostRequestHandler;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
 
 /**
@@ -22,10 +18,7 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 	// @codingStandardsIgnoreStart
 	protected function onTestEnvironmentCreated( FunFunFactory $factory, array $config ) {
 		// @codingStandardsIgnoreEnd
-		$factory->setMessenger( new Messenger(
-			Swift_NullTransport::newInstance(),
-			$factory->getOperatorAddress() )
-		);
+		$factory->setNullMessenger();
 	}
 
 	public function testGivenValidRequest_contactRequestIsProperlyProcessed() {
@@ -78,7 +71,7 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 	public function testOnException_errorPageIsRendered() {
 		$client = $this->createClient(
 			[],
-			function ( FunFunFactory $factory, array $config ) {
+			function ( FunFunFactory $factory ) {
 				$messenger = $this->getMockBuilder( Messenger::class )
 					->disableOriginalConstructor()
 					->getMock();
