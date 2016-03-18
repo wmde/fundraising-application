@@ -259,10 +259,9 @@ $app->post(
 		$addCommentRequest->setDonationId( (int)$request->request->get( 'sid', '' ) );
 		$addCommentRequest->freeze()->assertNoNullFields();
 
-		$token = $request->request->get( 'token', '' );
 		$updateToken = $request->request->get( 'utoken', '' );
 
-		if ( $token === '' || $updateToken === '' ) {
+		if ( $updateToken === '' ) {
 			return $app->json( [
 				'status' => 'ERR',
 				'message' => 'Required token is missing',
