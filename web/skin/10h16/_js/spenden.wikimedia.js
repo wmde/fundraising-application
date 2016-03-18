@@ -266,7 +266,6 @@ $(function() {
     initSlideToggle();
     initTabToggle();
     initToolTip();
-    initWLightbox();
     initRadioBtnToggle();
     initStyledSelect();
 
@@ -309,11 +308,33 @@ $(function() {
       });
     });
 
+	$( document.commentForm ).bind( 'submit', function ( event ) {
+		event.preventDefault();
+		$.ajax( '../add-comment', {
+			data: $( this ).serialize(),
+			dataType: 'json',
+			type: 'POST',
+			error: function ( e ){
+				var $feedback = $( '#feedback' );
+				$feedback.find( '.message' ).remove();
+				$feedback.append(
+					$( '<div />' )
+						.addClass( 'message' )
+						.addClass( 'error' )
+						.text( 'Die Nachricht konnte auf Grund eines Fehlers nicht verschickt werden.' )
+				);
+			},
+			success: function( response ) {
+				var $feedback = $( '#feedback' );
+				$feedback.find( '.message' ).remove();
+				$feedback.append(
+					$( '<div />' )
+						.addClass( 'message' )
+						.addClass( response.status === 'ERR' ? 'error' : 'success' )
+						.text( response.message || 'Vielen Dank! Die Nachricht wurde verschickt!' )
+				);
+			}
+		});
+	});
 
 });
-
-
-
-
-
-

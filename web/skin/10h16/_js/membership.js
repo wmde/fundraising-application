@@ -11,24 +11,6 @@ $(function() {
         });
     });
 
-    $( "#commentForm" ).on( "submit", function( event ) {
-        event.preventDefault();
-        var url = "../ajax.php?module=action&action=addComment";
-        $.ajax( url, {
-            data: $( this ).serialize(),
-            dataType: "json",
-            type: "POST",
-            error: function(e){
-                $( "#feedback" ).find('.message').remove();
-                $( "#feedback" ).append('<div id="negative-feedback" class="message error">Die Nachricht konnte auf Grund eines Fehlers nicht verschickt werden!</div>');
-            },
-            success: function( response ) {
-                $( "#feedback" ).find('.message').remove();
-                $( "#feedback" ).append('<div id="positive-feedback" class="message success">' + response.message + '</div>');
-            }
-        });
-    });
-
     /* trigger hidden membership fee on custom field */
     $('#amount-8').change(function() {
         $('#amount-custom').trigger( 'click' );
