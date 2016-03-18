@@ -27,6 +27,7 @@ use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageDisplayRequest;
 use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanRequest;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentListingRequest;
+use WMDE\Fundraising\Frontend\UseCases\ShowDonationConfirmation\ShowDonationConfirmationRequest;
 
 $app->get(
 	'validate-email',
@@ -341,6 +342,17 @@ $app->post(
 		$useCase = $ffFactory->newCancelMembershipApplicationUseCase();
 
 		$useCase->cancelMembershipApplication( new CancelMembershipApplicationRequest( /* TODO */ ) );
+
+		return 'TODO'; // TODO
+	}
+);
+
+$app->post(
+	'show-donation-confirmation',
+	function( Application $app, Request $request ) use ( $ffFactory ) {
+		$useCase = $ffFactory->newShowDonationConfirmationUseCase();
+
+		$useCase->showConfirmation( new ShowDonationConfirmationRequest( /* TODO */ ) );
 
 		return 'TODO'; // TODO
 	}

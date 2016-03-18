@@ -75,6 +75,7 @@ use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipUseC
 use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationUseCase;
 use WMDE\Fundraising\Frontend\UseCases\CancelMembershipApplication\CancelMembershipApplicationUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ConfirmSubscription\ConfirmSubscriptionUseCase;
+use WMDE\Fundraising\Frontend\UseCases\ShowDonationConfirmation\ShowDonationConfirmationUseCase;
 use WMDE\Fundraising\Frontend\Validation\AmountPolicyValidator;
 use WMDE\Fundraising\Frontend\Validation\AmountValidator;
 use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
@@ -778,6 +779,10 @@ class FunFunFactory {
 
 	public function newCancelMembershipApplicationUseCase(): CancelMembershipApplicationUseCase {
 		return new CancelMembershipApplicationUseCase();
+	}
+
+	public function newShowDonationConfirmationUseCase(): ShowDonationConfirmationUseCase {
+		return new ShowDonationConfirmationUseCase();
 	}
 
 }
