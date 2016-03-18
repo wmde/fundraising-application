@@ -44,7 +44,7 @@ class AddDonationResponse {
 	}
 
 	public function isSuccessful(): bool {
-		return count( $this->validationErrors ) == 0;
+		return empty( $this->validationErrors );
 	}
 
 	/**
