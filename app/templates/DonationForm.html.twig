@@ -37,7 +37,8 @@
             [
                 WMDE.Components.createRadioComponent( store, $( '.payment-type-select' ), 'paymentType' ),
                 WMDE.Components.createRadioComponent( store, $( '.interval-type-select' ), 'paymentPeriodInMonths' ),
-                WMDE.Components.createRadioComponent( store, $( '.payment-period-select' ), 'paymentPeriodInMonths' )
+                WMDE.Components.createRadioComponent( store, $( '.payment-period-select' ), 'paymentPeriodInMonths' ),
+                WMDE.Components.createRadioComponent( store, $( '.debit-type-select' ), 'debitType' )
             ],
             store
         );
@@ -83,6 +84,14 @@
                     {
                         viewHandler: WMDE.View.createElementSliderHandler( $( '#bank-data' ), 'BEZ' ),
                         stateKey: 'formContent.paymentType'
+                    },
+                    {
+                        viewHandler: WMDE.View.createElementSliderHandler( $( '.slide-sepa' ), 'sepa' ),
+                        stateKey: 'formContent.debitType'
+                    },
+                    {
+                        viewHandler: WMDE.View.createElementSliderHandler( $( '.slide-non-sepa' ), 'non-sepa' ),
+                        stateKey: 'formContent.debitType'
                     }
                 ],
                 store

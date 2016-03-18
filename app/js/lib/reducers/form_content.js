@@ -6,7 +6,8 @@ var objectAssign = require( 'object-assign' ),
 		amount: 0,
 		isCustomAmount: false,
 		paymentType: 'BEZ',
-		paymentPeriodInMonths: 0 // 0, 1, 3, 6 or 12, 0 = non-recurring payment
+		paymentPeriodInMonths: 0, // 0, 1, 3, 6 or 12, 0 = non-recurring payment
+		debitType: 'sepa' // sepa and "non-sepa"
 	};
 
 /**
@@ -42,7 +43,7 @@ module.exports = function formContent( state, action ) {
 			} );
 		case 'CHANGE_CONTENT':
 			if ( !_.has( state, action.payload.contentName ) ) {
-				throw new Error( 'Unsupported from content name: ' + action.payload.contentName );
+				throw new Error( 'Unsupported form content name: ' + action.payload.contentName );
 			}
 			newState = _.clone( state );
 			newState[ action.payload.contentName ] = action.payload.value;
