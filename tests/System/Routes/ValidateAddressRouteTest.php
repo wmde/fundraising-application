@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 
 use Symfony\Component\HttpKernel\Client;
-use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
 
 /**
@@ -15,7 +14,7 @@ use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
 class ValidateAddressRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidAddress_validationReturnsSuccess() {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client ) {
 
 			$client->followRedirects( false );
 
@@ -27,13 +26,12 @@ class ValidateAddressRouteTest extends WebRouteTestCase {
 
 			$response = $client->getResponse();
 
-			$this->assertJsonSuccessResponse( ['status' => 'OK'], $response );
-
+			$this->assertJsonSuccessResponse( [ 'status' => 'OK' ], $response );
 		} );
 	}
 
 	public function testGivenInvalidCompanyAddress_validationReturnsErrorMessage() {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client ) {
 
 			$client->followRedirects( false );
 
