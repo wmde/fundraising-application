@@ -306,17 +306,17 @@
                     <div class="container">
                         <ul class="horizontal clearfix">
                             <li class="first">
-                                <input type="radio" id="address-type-1" name="adresstyp" value="person" title="privat" class="slide-toggle" data-slide-rel="#personal-data .slide-1" {% if adresstyp == 'person' or not adresstyp %}checked{% endif %}>
+                                <input type="radio" id="address-type-1" name="adresstyp" value="person" title="privat" class="address-type-select" >
                                 <label for="address-type-1">Privatperson</label>
                             </li>
 
                             <li>
-                                <input type="radio" id="address-type-2" name="adresstyp" value="firma" title="gesch&auml;ftlich" class="slide-toggle" data-slide-rel="#personal-data .slide-2" {% if adresstyp == 'firma' %}checked{% endif %}>
+                                <input type="radio" id="address-type-2" name="adresstyp" value="firma" title="gesch&auml;ftlich" class="address-type-select" >
                                 <label for="address-type-2">Firma</label>
                             </li>
 
                             <li class="last">
-                                <input type="radio" id="address-type-3" name="adresstyp" value="anonym" title="anonym" class="slide-toggle slide-toggle-invert" data-slide-rel="#personal-data .slide-3" {% if adresstyp == 'anonym' %}checked{% endif %}>
+                                <input type="radio" id="address-type-3" name="adresstyp" value="anonym" title="anonym" class="address-type-select" >
                                 <label for="address-type-3">anonym</label>
                             </li>
                         </ul>
@@ -324,11 +324,11 @@
                         <a href="#" id="tooltip-icon-addresstype" class="right top help tooltip icon-only tooltip-track" data-title="Adresstyp" title="Bitte beachten Sie, dass wir für eine spätere Zuordnung der Spende Ihren Namen und die Zahlungsinformationen vom Dienstleister erhalten."><span class="icon-question-sign"></span></a>
                     </div>
 
-                    <div class="slide-3">
+                    <div class="personal-data-full">
 
                         <hr/>
 
-                        <div class="slide-1">
+                        <div class="personal-data-person">
 
                             <div class="input-container">
                                 <ul class="horizontal clearfix salutation">
@@ -360,7 +360,7 @@
                             </div>
                         </div>
 
-                        <div class="slide-2">
+                        <div class="personal-data-company">
 
                             <div class="input-container">
                                 <label for="company-name">Firma</label>
