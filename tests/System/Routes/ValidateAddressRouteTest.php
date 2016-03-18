@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
  * @licence GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class ValidateAddessRouteTest extends WebRouteTestCase {
+class ValidateAddressRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidAddress_validationReturnsSuccess() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
