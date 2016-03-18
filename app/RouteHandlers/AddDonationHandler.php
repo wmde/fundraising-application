@@ -41,9 +41,7 @@ class AddDonationHandler {
 
 		// TODO: take over confirmation page selection functionality from old application
 
-		$response = $this->newHttpResponseFromResponseModel( $responseModel );
-
-		return $response;
+		return $this->newHttpResponseFromResponseModel( $responseModel );
 	}
 
 	private function newHttpResponseFromResponseModel( AddDonationResponse $responseModel ): Response {
