@@ -6,8 +6,8 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
 use Swift_NullTransport;
 use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
-use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 use WMDE\Fundraising\Frontend\Infrastructure\Message;
+use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 
 /**
  * @covers WMDE\Fundraising\Frontend\Infrastructure\Messenger

@@ -4,8 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 
-use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
+use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
 
 /**
  * @licence GNU GPL v2+

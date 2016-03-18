@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Tests\Unit;
 
 use WMDE\Fundraising\Frontend\Validation\AmountPolicyValidator;
-use WMDE\Fundraising\Frontend\Validation\ValidationResult;
 
 /**
  * @covers WMDE\Fundraising\Frontend\Validation\AmountPolicyValidator

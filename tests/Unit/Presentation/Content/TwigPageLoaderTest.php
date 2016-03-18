@@ -4,8 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation\Content;
 
-use WMDE\Fundraising\Frontend\Presentation\Content\WikiContentProvider;
 use WMDE\Fundraising\Frontend\Presentation\Content\TwigPageLoader;
+use WMDE\Fundraising\Frontend\Presentation\Content\WikiContentProvider;
 
 class TwigPageLoaderTest extends \PHPUnit_Framework_TestCase {
 

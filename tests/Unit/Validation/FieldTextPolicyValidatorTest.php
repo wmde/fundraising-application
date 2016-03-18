@@ -4,9 +4,9 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Tests\Unit;
 
+use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 use WMDE\Fundraising\Frontend\Validation\FieldTextPolicyValidator;
 use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
-use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 
 /**
  * @covers WMDE\Fundraising\Frontend\Validation\FieldTextPolicyValidator

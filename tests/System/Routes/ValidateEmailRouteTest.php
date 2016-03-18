@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 
-use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
 
 /**

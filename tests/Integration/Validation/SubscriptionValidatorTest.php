@@ -11,10 +11,9 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\InMemorySubscriptionRepository;
 use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
 use WMDE\Fundraising\Frontend\Validation\AllowedValuesValidator;
 use WMDE\Fundraising\Frontend\Validation\MailValidator;
-use WMDE\Fundraising\Frontend\Validation\SubscriptionValidator;
 use WMDE\Fundraising\Frontend\Validation\SubscriptionDuplicateValidator;
+use WMDE\Fundraising\Frontend\Validation\SubscriptionValidator;
 use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\SubscriptionRepositorySpy;
 use WMDE\Fundraising\Frontend\Validation\ValidationResult;
 
 /**
