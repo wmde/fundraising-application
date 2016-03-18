@@ -55,3 +55,13 @@ test( 'newChangeContentAction returns action object', function ( t ) {
 	t.deepEqual( actions.newChangeContentAction( 'email', 'nyan@awesomecats.com' ), expectedAction );
 	t.end();
 } );
+
+test( 'newInitializeContentAction returns action object', function ( t ) {
+	var expectedAction = {
+		type: 'INITIALIZE_CONTENT',
+		payload: { paymentType: 'BEZ', amount: '50,00' }
+	};
+	t.deepEqual( actions.newInitializeContentAction( { paymentType: 'BEZ', amount: '50,00' } ), expectedAction );
+	t.end();
+} );
+

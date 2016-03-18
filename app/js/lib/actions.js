@@ -28,6 +28,19 @@ module.exports = {
 		};
 	},
 
+	/**
+	 * Set initial form content
+	 *
+	 * @param {{Object}} initialContent
+	 * @returns {{type: string, payload: *}}
+	 */
+	newInitializeContentAction: function ( initialContent ) {
+		return {
+			type: 'INITIALIZE_CONTENT',
+			payload: initialContent
+		};
+	},
+
 	newChangeContentAction: function ( contentName, newValue ) {
 		return {
 			type: 'CHANGE_CONTENT',

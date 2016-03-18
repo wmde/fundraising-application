@@ -9,6 +9,20 @@ var objectAssign = require( 'object-assign' ),
 		paymentPeriodInMonths: 0 // 0, 1, 3, 6 or 12, 0 = non-recurring payment
 	};
 
+/**
+ * Return object keys that are not defined in initial state
+ *
+ * @param {Object} state
+ * @returns {Array}
+ */
+function getInvalidKeys( state ) {
+	return _.keys( _.omit( state, _.keys( initialState ) ) );
+}
+
+function stateContainsUnknownKeys( state ) {
+	return !_.isEmpty( getInvalidKeys( state ) );
+}
+
 module.exports = function formContent( state, action ) {
 	var newAmount, newState;
 	if ( typeof state === 'undefined' ) {
@@ -33,6 +47,13 @@ module.exports = function formContent( state, action ) {
 			newState = _.clone( state );
 			newState[ action.payload.contentName ] = action.payload.value;
 			return newState;
+		case 'INITIALIZE_CONTENT':
+			if ( stateContainsUnknownKeys( action.payload ) ) {
+				throw new Error(
+					'Initial state contains unknown keys: ' + getInvalidKeys( action.payload ).join( ', ' )
+				);
+			}
+			return objectAssign( {}, state, action.payload );
 		default:
 			return state;
 	}

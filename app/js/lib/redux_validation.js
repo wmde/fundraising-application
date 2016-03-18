@@ -1,8 +1,17 @@
 'use strict';
 
+/**
+ *
+ * @module redux_validation
+ */
+
 var objectAssign = require( 'object-assign' ),
 	_ = require( 'lodash' ),
 
+	/**
+	 *
+	 * @class ValidationDispatcher
+	 */
 	ValidationDispatcher = {
 		validationFunction: null,
 		actionCreationFunction: null,
@@ -41,9 +50,10 @@ var objectAssign = require( 'object-assign' ),
 	 * 			The method will be bound to the object.
 	 * @param {Function} actionCreationFunction
 	 * @param {Array} fieldNames Names of the state values from formContent that will be validated
+	 * @param {Object} initialValues Initial form state. Only the keys and values from fieldNames will be used
 	 * @return {ValidationDispatcher}
 	 */
-	createValidationDispatcher = function ( validator, actionCreationFunction, fieldNames, initalValues ) {
+	createValidationDispatcher = function ( validator, actionCreationFunction, fieldNames, initialValues ) {
 		if ( typeof validator === 'object' ) {
 			validator = validator.validate.bind( validator );
 		}
@@ -51,7 +61,7 @@ var objectAssign = require( 'object-assign' ),
 			validationFunction: validator,
 			actionCreationFunction: actionCreationFunction,
 			fields: fieldNames,
-			previousFieldValues: initalValues || {}
+			previousFieldValues: _.pick( initialValues || {}, fieldNames )
 		} );
 	},
 

@@ -23,113 +23,103 @@
     TODO
 </div>
 
-
 <script>
-    // Initialize the form
-    $(function(){
 
-        var FormFactory = {
-                newViewHandlers: function() {
-                    return {
-                        formPageVisibility: WMDE.View.createFormPageVisibilityHandler( {
+    // The following line is a Twig template placeholder to generate initial values (defaults to empty object)
+    var initialFormValues = {% if initialFormValues %}{$ initialFormValues|json_encode|raw $}{% else %}{}{% endif %};
+
+    // Initialize the form
+    $( function () {
+        var store = WMDE.Store,
+            actions = WMDE.Actions;
+
+        WMDE.StoreUpdates.connectComponentsToStore(
+            [
+                WMDE.Components.createRadioComponent( store, $( '.payment-type-select' ), 'paymentType' ),
+                WMDE.Components.createRadioComponent( store, $( '.interval-type-select' ), 'paymentPeriodInMonths' ),
+                WMDE.Components.createRadioComponent( store, $( '.payment-period-select' ), 'paymentPeriodInMonths' )
+            ],
+            store
+        );
+
+        WMDE.StoreUpdates.connectValidatorsToStore(
+            function ( initialValues ) {
+                return [
+                    WMDE.ReduxValidation.createValidationDispatcher(
+                            WMDE.FormValidation.createAmountValidator( '{$ basepath $}/validate-amount' ),
+                            actions.newFinishAmountValidationAction,
+                            [ 'amount', 'paymentType' ],
+                            initialValues
+                    )
+                ];
+            },
+            store,
+            initialFormValues
+        );
+
+        // Connect view handlers to changes in specific parts in the global state, designated by 'stateKey'
+        WMDE.StoreUpdates.connectViewHandlersToStore(
+                [
+                    {
+                        viewHandler: WMDE.View.createFormPageVisibilityHandler( {
                             payment: $( "#paymentPage" ),
                             personalData: $( "#personalDataPage" ),
                             bankConfirmation: $( '#bankConfirmationPage' )
                         } ),
-                        clearAmount: WMDE.View.createClearAmountHandler( $( '.amount-select' ), $( '.amount-input' ) ),
-                        errorBox: WMDE.View.createErrorBoxHandler( $( '#validation-errors' ), { amount: 'Betrag' } )
-                    };
-                },
-                newValidators: function() {
-                    return [
-                        WMDE.ReduxValidation.createValidationDispatcher(
-                                WMDE.FormValidation.createAmountValidator( '{$ basepath $}/validate-amount' ),
-                                WMDE.Actions.newFinishAmountValidationAction,
-                                [ 'amount', 'paymentType' ],
-                                { amount: 0, paymentType: 'BEZ' }
-                        )
-                    ];
-                },
-                newComponents: function ( store ) {
-                    return [
-                        WMDE.Components.createRadioComponent( store, $( '.payment-type-select' ), 'paymentType' ),
-                        WMDE.Components.createRadioComponent( store, $( '.interval-type-select' ), 'paymentPeriodInMonths' ),
-                        WMDE.Components.createRadioComponent( store, $( '.payment-period-select' ), 'paymentPeriodInMonths' )
-                    ];
-                },
-                connectElementEventsToActions: function( store, actions ) {
+                        stateKey: 'formPagination'
+                    },
+                    {
+                        viewHandler: WMDE.View.createClearAmountHandler( $( '.amount-select' ), $( '.amount-input' ) ),
+                        stateKey: 'formContent'
+                    },
+                    {
+                        viewHandler: WMDE.View.createErrorBoxHandler( $( '#validation-errors' ), { amount: 'Betrag' } ),
+                        stateKey: 'validationMessages'
+                    }
+                ],
+                store
+        );
 
-                    // we can't put amount selection into a component because we need to distinguish between
-                    // selected and custom amount in the state
-                    $( '.amount-select' ).change( function( evt ) {
-                        store.dispatch( actions.newSelectAmountAction( evt.target.value ) );
-                    } );
+        // connect DOM elements to actions
 
-                    $( '.amount-input' ).change( function( evt ) {
-                        store.dispatch( actions.newInputAmountAction( evt.target.value ) );
-                    } ).focus( function( evt ) {
-                        // This method will clear the selection (important for usability),
-                        // but keep the form data valid when the custom amount field is empty
-                        var newAmount;
-                        if ( evt.target.value ) {
-                            newAmount = evt.target.value;
-                        }
-                        else {
-                            newAmount = $( '.amount-select:checked' ).val();
-                        }
-                        store.dispatch( actions.newInputAmountAction( newAmount) );
-                    } ).blur( function( evt ) {
-                        // When the custom amount field is empty, simulate a selection to restore previous selection
-                        if ( !evt.target.value ) {
-                            store.dispatch( actions.newSelectAmountAction( null ) );
-                        }
-                    } );
+        // we can't put amount selection into a component because we need to distinguish between
+        // selected and custom amount in the state
+        $( '.amount-select' ).change( function( evt ) {
+            store.dispatch( actions.newSelectAmountAction( evt.target.value ) );
+        } );
 
-                    $( '#donation-submit1 button' ).click( function () {
-                        store.dispatch( actions.newNextPageAction() );
-                    } );
-                },
-                connectValidatorsToStore: function ( store ) {
-                    WMDE.ReduxValidation.createValidationDispatcherCollection( store, this.newValidators() );
-                },
-                connectViewHandlersToStore: function ( store ) {
-                    var viewHandlers = this.newViewHandlers();
-                    store.subscribe( function() {
-                        var state = store.getState();
-                        // TODO check if state has changed before executing update actions
+        $( '.amount-input' ).change( function( evt ) {
+            store.dispatch( actions.newInputAmountAction( evt.target.value ) );
+        } ).focus( function( evt ) {
+            // This method will clear the selection (important for usability),
+            // but keep the form data valid when the custom amount field is empty
+            var newAmount;
+            if ( evt.target.value ) {
+                newAmount = evt.target.value;
+            }
+            else {
+                newAmount = $( '.amount-select:checked' ).val();
+            }
+            store.dispatch( actions.newInputAmountAction( newAmount) );
+        } ).blur( function( evt ) {
+            // When the custom amount field is empty, simulate a selection to restore previous selection
+            if ( !evt.target.value ) {
+                store.dispatch( actions.newSelectAmountAction( null ) );
+            }
+        } );
 
-                        viewHandlers.formPageVisibility.update( state.formPagination );
-                        viewHandlers.clearAmount.update( state.formContent );
-                        viewHandlers.errorBox.update( state.validationMessages );
-                    } );
-                },
-                connectComponentsToStore: function( store ) {
-                    var components = this.newComponents( store );
-                    store.subscribe( function() {
-                        var state = store.getState(),
-                            formContent = state.formContent;
+        $( '#donation-submit1 button' ).click( function () {
+            store.dispatch( actions.newNextPageAction() );
+        } );
 
-                        // TODO check if formContent has changed before executing update actions
-                        components.map( function ( component ) {
-                            component.render( formContent );
-                        } );
-
-                    } );
-                },
-                init: function( store, actions ) {
-                    this.connectElementEventsToActions(store, actions );
-                    this.connectValidatorsToStore( store );
-                    this.connectViewHandlersToStore( store );
-                    this.connectComponentsToStore( store );
-                }
-            };
-
-        FormFactory.init( WMDE.Store, WMDE.Actions );
 
         // Initialize form pages
-        WMDE.Store.dispatch( WMDE.Actions.newAddPageAction( 'payment' ) );
-        WMDE.Store.dispatch( WMDE.Actions.newAddPageAction( 'personalData' ) );
-        WMDE.Store.dispatch( WMDE.Actions.newAddPageAction( 'bankConfirmation' ) );
+        store.dispatch( actions.newAddPageAction( 'payment' ) );
+        store.dispatch( actions.newAddPageAction( 'personalData' ) );
+        store.dispatch( actions.newAddPageAction( 'bankConfirmation' ) );
+
+        // Set initial form values
+        store.dispatch( actions.newInitializeContentAction( initialFormValues ) );
 
     } );
 </script>

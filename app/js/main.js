@@ -1,6 +1,6 @@
 // main module to expose all submodules
 /**
- * Uppercase keys designate namespaces, lowercase keys designate global objects
+ * Uppercase keys designate namespaces, lowercase keys designate global objects/functions
  */
 module.exports = {
 	FormFieldAccessors: require( './lib/form_field_accessors' ),
@@ -8,6 +8,7 @@ module.exports = {
 	ReduxValidation: require( './lib/redux_validation' ),
 	Components: require( './lib/form_components' ),
 	Store: require( './lib/store' ),
+	StoreUpdates: require( './lib/store_update_handling' ),
 	View: {
 		createClearAmountHandler: require( './lib/view_handler/clear_amount' ).createHandler,
 		createErrorBoxHandler:  require( './lib/view_handler/error_box' ).createHandler,
