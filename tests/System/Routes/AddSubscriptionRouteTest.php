@@ -6,11 +6,9 @@ namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 
 use Mediawiki\Api\MediawikiApi;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\ApiPostRequestHandler;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SubscriptionRepositorySpy;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
-use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\ApiPostRequestHandler;
-use Swift_NullTransport;
 
 /**
  * @licence GNU GPL v2+

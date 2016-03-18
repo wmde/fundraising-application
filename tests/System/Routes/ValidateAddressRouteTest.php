@@ -4,21 +4,17 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 
-use Swift_NullTransport;
 use Symfony\Component\HttpKernel\Client;
-use WMDE\Fundraising\Entities\Donation;
-use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
-use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 
 /**
  * @licence GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class ValidateAddessRouteTest extends WebRouteTestCase {
+class ValidateAddressRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidAddress_validationReturnsSuccess() {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client ) {
 
 			$client->followRedirects( false );
 
@@ -30,13 +26,12 @@ class ValidateAddessRouteTest extends WebRouteTestCase {
 
 			$response = $client->getResponse();
 
-			$this->assertJsonSuccessResponse( ['status' => 'OK'], $response );
-
+			$this->assertJsonSuccessResponse( [ 'status' => 'OK' ], $response );
 		} );
 	}
 
 	public function testGivenInvalidCompanyAddress_validationReturnsErrorMessage() {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client ) {
 
 			$client->followRedirects( false );
 

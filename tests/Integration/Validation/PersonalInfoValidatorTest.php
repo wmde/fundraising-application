@@ -3,14 +3,14 @@
 namespace WMDE\Fundraising\Tests\Integration\Validation;
 
 use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
-use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
+use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
+use WMDE\Fundraising\Frontend\Domain\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
+use WMDE\Fundraising\Frontend\Validation\MailValidator;
+use WMDE\Fundraising\Frontend\Validation\PersonalInfoValidator;
 use WMDE\Fundraising\Frontend\Validation\PersonNameValidator;
 use WMDE\Fundraising\Frontend\Validation\PhysicalAddressValidator;
-use WMDE\Fundraising\Frontend\Validation\MailValidator;
-use WMDE\Fundraising\Frontend\Domain\NullDomainNameValidator;
-use WMDE\Fundraising\Frontend\Validation\PersonalInfoValidator;
 
 /**
  * @license GNU GPL v2+

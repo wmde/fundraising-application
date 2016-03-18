@@ -11,7 +11,6 @@ use Mediawiki\Api\UsageException;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ApiPostRequestHandler;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
-use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
  * @covers WMDE\Fundraising\Frontend\Presentation\Presenters\DisplayPagePresenter

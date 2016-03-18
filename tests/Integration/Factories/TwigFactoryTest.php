@@ -4,9 +4,9 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\Factories;
 
-use WMDE\Fundraising\Frontend\Factories\TwigFactory;
-use Twig_LoaderInterface;
 use Twig_Error_Loader;
+use Twig_LoaderInterface;
+use WMDE\Fundraising\Frontend\Factories\TwigFactory;
 
 /**
  * @covers WMDE\Fundraising\Frontend\Factories\TwigFactory

@@ -6,10 +6,10 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
-use WMDE\Fundraising\Frontend\Domain\Repositories\SubscriptionRepositoryException;
 use WMDE\Fundraising\Entities\Address;
 use WMDE\Fundraising\Entities\Subscription;
 use WMDE\Fundraising\Frontend\DataAccess\DbalSubscriptionRepository;
+use WMDE\Fundraising\Frontend\Domain\Repositories\SubscriptionRepositoryException;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
