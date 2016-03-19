@@ -57,8 +57,6 @@ class ShowDonationConfirmationUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testWhenDonationDoesNotExist_accessIsNotPermitted() {
-		self::markTestIncomplete( 'TODO' );
-
 		$useCase = new ShowDonationConfirmationUseCase(
 			new SucceedingDonationAuthorizer(),
 			new FakeDonationRepository()
@@ -71,6 +69,23 @@ class ShowDonationConfirmationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertFalse( $response->accessIsPermitted() );
 		$this->assertNull( $response->getDonation() );
+	}
+
+	public function testWhenDonationExistsAndAccessIsAllowed_donationIsReturned() {
+		$donation = new Donation();
+		$donation->setAmount( 42 );
+
+		$useCase = new ShowDonationConfirmationUseCase(
+			new SucceedingDonationAuthorizer(),
+			new FakeDonationRepository( $donation )
+		);
+
+		$response = $useCase->showConfirmation( new ShowDonationConfirmationRequest(
+			self::CORRECT_DONATION_ID,
+			self::WRONG_ACCESS_TOKEN
+		) );
+
+		$this->assertEquals( $donation, $response->getDonation() );
 	}
 
 }

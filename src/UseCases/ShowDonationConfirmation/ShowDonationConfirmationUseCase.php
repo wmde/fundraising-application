@@ -4,8 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\UseCases\ShowDonationConfirmation;
 
-use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
+use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizer;
 
 /**
@@ -23,13 +23,24 @@ class ShowDonationConfirmationUseCase {
 	}
 
 	public function showConfirmation( ShowDonationConfirmationRequest $request ): ShowDonationConfirmationResponse {
-
 		if ( $this->authorizer->canAccessDonation( $request->getDonationId() ) ) {
-			// TODO: retrieve donation
-			return ShowDonationConfirmationResponse::newValidResponse( new Donation() );
+			$donation = $this->getDonationById( $request->getDonationId() );
+
+			if ( $donation !== null ) {
+				return ShowDonationConfirmationResponse::newValidResponse( $donation );
+			}
 		}
 
 		return ShowDonationConfirmationResponse::newNotAllowedResponse();
+	}
+
+	private function getDonationById( int $donationId ) {
+		try {
+			return $this->donationRepository->getDonationById( $donationId );
+		}
+		catch ( GetDonationException $ex ) {
+			return null;
+		}
 	}
 
 }

@@ -14,6 +14,7 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 class FakeDonationRepository implements DonationRepository {
 
 	private $calls = 0;
+	private $donations = [];
 
 	public function __construct( Donation ...$donations ) {
 		foreach ( $donations as $donation ) {
@@ -23,10 +24,11 @@ class FakeDonationRepository implements DonationRepository {
 
 	public function storeDonation( Donation $donation ) {
 		$donation->setId( ++$this->calls );
+		$this->donations[$donation->getId()] = $donation;
 	}
 
 	public function getDonationById( int $id ) {
-		return null;
+		return array_key_exists( $id, $this->donations ) ? $this->donations[$id] : null;
 	}
 
 }
