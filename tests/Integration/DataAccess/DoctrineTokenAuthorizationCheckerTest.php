@@ -5,6 +5,8 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
 
 use Codeception\Specify;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\ORMException;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationAuthorizer;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizer;
@@ -153,6 +155,32 @@ class DoctrineDonationAuthorizerTest extends \PHPUnit_Framework_TestCase {
 
 	private function getExpiryTimeInThePast(): string {
 		return date( 'Y-m-d H:i:s', time() - 1 );
+	}
+
+	public function testWhenDoctrineThrowsException() {
+		$authorizer = new DoctrineDonationAuthorizer(
+			$this->getThrowingEntityManager(),
+			self::CORRECT_UPDATE_TOKEN,
+			self::CORRECT_ACCESS_TOKEN
+		);
+
+		$this->specify( 'update authorization fails', function() use ( $authorizer ) {
+			$this->assertFalse( $authorizer->canModifyDonation( self::MEANINGLESS_DONATION_ID ) );
+		} );
+
+		$this->specify( 'access authorization fails', function() use ( $authorizer ) {
+			$this->assertFalse( $authorizer->canAccessDonation( self::MEANINGLESS_DONATION_ID ) );
+		} );
+	}
+
+	private function getThrowingEntityManager(): EntityManager {
+		$entityManager = $this->getMockBuilder( EntityManager::class )
+			->disableOriginalConstructor()->getMock();
+
+		$entityManager->method( $this->anything() )
+			->willThrowException( new ORMException() );
+
+		return $entityManager;
 	}
 
 }
