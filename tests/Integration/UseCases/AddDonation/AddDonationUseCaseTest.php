@@ -18,7 +18,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationUpdateException;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizationUpdater;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\DonationRepositoryFake;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeDonationRepository;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationUseCase;
@@ -93,7 +93,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	private function newRepository(): DonationRepository {
-		return new DonationRepositoryFake();
+		return new FakeDonationRepository();
 	}
 
 	public function testValidationFails_responseObjectContainsViolations() {

@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\ShowDonationConfirmation;
 
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\DonationRepositoryFake;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeDonationRepository;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\UseCases\ShowDonationConfirmation\ShowDonationConfirmationRequest;
@@ -28,7 +28,7 @@ class ShowDonationConfirmationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 		$useCase = new ShowDonationConfirmationUseCase(
 			new FailingDonationAuthorizer(),
-			new DonationRepositoryFake( $donation )
+			new FakeDonationRepository( $donation )
 		);
 
 		$response = $useCase->showConfirmation( new ShowDonationConfirmationRequest(
@@ -45,7 +45,7 @@ class ShowDonationConfirmationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 		$useCase = new ShowDonationConfirmationUseCase(
 			new SucceedingDonationAuthorizer(),
-			new DonationRepositoryFake( $donation )
+			new FakeDonationRepository( $donation )
 		);
 
 		$response = $useCase->showConfirmation( new ShowDonationConfirmationRequest(
@@ -61,7 +61,7 @@ class ShowDonationConfirmationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 		$useCase = new ShowDonationConfirmationUseCase(
 			new SucceedingDonationAuthorizer(),
-			new DonationRepositoryFake()
+			new FakeDonationRepository()
 		);
 
 		$response = $useCase->showConfirmation( new ShowDonationConfirmationRequest(

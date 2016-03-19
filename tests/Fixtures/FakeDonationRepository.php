@@ -11,7 +11,7 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class DonationRepositoryFake implements DonationRepository {
+class FakeDonationRepository implements DonationRepository {
 
 	private $calls = 0;
 
