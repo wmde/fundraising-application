@@ -261,11 +261,25 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		);
 	}
 
-	public function testWhenAuthorizationUpdateFails_failureResponseIsReturned() {
+	public function testWhenUpdateAuthorizationUpdateFails_failureResponseIsReturned() {
 		$authorizationUpdater = $this->newAuthorizationUpdater();
 
 		$authorizationUpdater->expects( $this->any() )
 			->method( 'allowModificationViaToken' )
+			->willThrowException( new AuthorizationUpdateException( 'Auth update failed' ) );
+
+		$useCase = $this->newUseCaseWithAuthorizationUpdater( $authorizationUpdater );
+
+		$response = $useCase->addDonation( $this->newMinimumDonationRequest() );
+
+		$this->assertFalse( $response->isSuccessful() );
+	}
+
+	public function testWhenAccessAuthorizationUpdateFails_failureResponseIsReturned() {
+		$authorizationUpdater = $this->newAuthorizationUpdater();
+
+		$authorizationUpdater->expects( $this->any() )
+			->method( 'allowAccessViaToken' )
 			->willThrowException( new AuthorizationUpdateException( 'Auth update failed' ) );
 
 		$useCase = $this->newUseCaseWithAuthorizationUpdater( $authorizationUpdater );
