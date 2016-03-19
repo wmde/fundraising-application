@@ -9,6 +9,7 @@ use Doctrine\ORM\ORMException;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationUpdateException;
 use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationUpdater;
+use WMDE\Fundraising\Store\DonationData;
 
 /**
  * @licence GNU GPL v2+
@@ -30,49 +31,51 @@ class DoctrineAuthorizationUpdater implements AuthorizationUpdater {
 	public function allowDonationModificationViaToken( int $donationId, string $token, \DateTime $expiry ) {
 		$donation = $this->getDonationById( $donationId );
 
-		if ( $donation === null ) {
-			throw new AuthorizationUpdateException( 'Donation does not exist' );
-		}
+		$donation->modifyDataObject( function( DonationData $data ) use ( $token, $expiry ) {
+			$data->setUpdateToken( $token );
+			$data->setUpdateTokenExpiry( $expiry->format( self::DATE_TIME_FORMAT ) );
+		} );
 
-		$donationData = $donation->getDataObject();
-		$donationData->setUpdateToken( $token );
-		$donationData->setUpdateTokenExpiry( $expiry->format( self::DATE_TIME_FORMAT ) );
-		$donation->setDataObject( $donationData );
-
-		try {
-			$this->entityManager->persist( $donation );
-			$this->entityManager->flush();
-		}
-		catch ( ORMException $ex ) {
-			throw new AuthorizationUpdateException( 'Failed to persist the token' );
-		}
+		$this->persistDonation( $donation );
 	}
 
-	/**
-	 * @param int $donationId
-	 * @return Donation|null
-	 */
-	private function getDonationById( int $donationId ) {
+	private function getDonationById( int $donationId ): Donation {
 		try {
 			$donation = $this->entityManager->find( Donation::class, $donationId );
 		}
 		catch ( ORMException $ex ) {
 			// TODO: might want to log failure here
-			return null;
+			throw new AuthorizationUpdateException( 'Donation could not be accessed' );
 		}
 
 		if ( $donation === null ) {
-			return null;
+			throw new AuthorizationUpdateException( 'Donation does not exist' );
 		}
 
 		return $donation;
+	}
+
+	private function persistDonation( Donation $donation ) {
+		try {
+			$this->entityManager->persist( $donation );
+			$this->entityManager->flush();
+		}
+		catch ( ORMException $ex ) {
+			throw new AuthorizationUpdateException( 'Failed to persist the donation' );
+		}
 	}
 
 	/**
 	 * @throws AuthorizationUpdateException
 	 */
 	public function allowDonationAccessViaToken( int $donationId, string $accessToken ) {
-		// TODO
+		$donation = $this->getDonationById( $donationId );
+
+		$donation->modifyDataObject( function( DonationData $data ) use ( $accessToken ) {
+			$data->setAccessToken( $accessToken );
+		} );
+
+		$this->persistDonation( $donation );
 	}
 
 }
