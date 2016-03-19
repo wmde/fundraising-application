@@ -10,6 +10,20 @@ namespace WMDE\Fundraising\Frontend\UseCases\ShowDonationConfirmation;
  */
 class ShowDonationConfirmationRequest {
 
-	// TODO
+	private $donationId;
+	private $accessToken;
+
+	public function __construct( int $donationId, string $accessToken ) {
+		$this->donationId = $donationId;
+		$this->accessToken = $accessToken;
+	}
+
+	public function getDonationId(): int {
+		return $this->donationId;
+	}
+
+	public function getAccessToken(): string {
+		return $this->accessToken;
+	}
 
 }

@@ -13,6 +13,8 @@ class ShowDonationConfirmationUseCase {
 	public function showConfirmation( ShowDonationConfirmationRequest $request ): ShowDonationConfirmationResponse {
 		// TODO: verify access token
 		// TODO: retrieve donation
+
+		return ShowDonationConfirmationResponse::newNotAllowedResponse();
 	}
 
 }
