@@ -17,39 +17,61 @@ class DoctrineDonationAuthorizer implements DonationAuthorizer {
 
 	private $entityManager;
 	private $updateToken;
+	private $accessToken;
 
-	public function __construct( EntityManager $entityManager, string $updateToken ) {
+	public function __construct( EntityManager $entityManager, string $updateToken = null, string $accessToken = null ) {
 		$this->entityManager = $entityManager;
 		$this->updateToken = $updateToken;
+		$this->accessToken = $accessToken;
 	}
 
 	public function canModifyDonation( int $donationId ): bool {
 		try {
-			/**
-			 * @var Donation $donation
-			 */
-			$donation = $this->entityManager->find( Donation::class, $donationId );
+			$donation = $this->getDonationById( $donationId );
 		}
 		catch ( ORMException $ex ) {
 			// TODO: might want to log failure here
 			return false;
 		}
 
-		if ( $donation === null ) {
-			return false;
-		}
-
-		return $this->tokenMatches( $donation )
+		return $donation !== null
+			&& $this->updateTokenMatches( $donation )
 			&& $this->tokenHasNotExpired( $donation );
 	}
 
-	private function tokenMatches( Donation $donation ): bool {
+	/**
+	 * @param int $donationId
+	 *
+	 * @return Donation|null
+	 */
+	private function getDonationById( int $donationId ) {
+		return $this->entityManager->find( Donation::class, $donationId );
+	}
+
+	private function updateTokenMatches( Donation $donation ): bool {
 		return $donation->getDataObject()->getUpdateToken() === $this->updateToken;
 	}
 
 	private function tokenHasNotExpired( Donation $donation ): bool {
 		$expiryTime = $donation->getDataObject()->getUpdateTokenExpiry();
 		return $expiryTime !== null && strtotime( $expiryTime ) >= time();
+	}
+
+	public function canAccessDonation( int $donationId ): bool {
+		try {
+			$donation = $this->getDonationById( $donationId );
+		}
+		catch ( ORMException $ex ) {
+			// TODO: might want to log failure here
+			return false;
+		}
+
+		return $donation !== null
+			&& $this->accessTokenMatches( $donation );
+	}
+
+	private function accessTokenMatches( Donation $donation ): bool {
+		return $donation->getDataObject()->getAccessToken() === $this->accessToken;
 	}
 
 }

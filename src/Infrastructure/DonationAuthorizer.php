@@ -15,4 +15,9 @@ interface DonationAuthorizer {
 	 */
 	public function canModifyDonation( int $donationId ): bool;
 
+	/**
+	 * Should return false on infrastructure failure.
+	 */
+	public function canAccessDonation( int $donationId ): bool;
+
 }

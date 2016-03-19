@@ -16,4 +16,8 @@ class SucceedingDonationAuthorizer implements DonationAuthorizer {
 		return true;
 	}
 
+	public function canAccessDonation( int $donationId ): bool {
+		return true;
+	}
+
 }

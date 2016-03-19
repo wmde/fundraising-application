@@ -16,4 +16,8 @@ class FailingDonationAuthorizer implements DonationAuthorizer {
 		return false;
 	}
 
+	public function canAccessDonation( int $donationId ): bool {
+		return false;
+	}
+
 }
