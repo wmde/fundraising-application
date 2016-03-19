@@ -28,10 +28,16 @@ class AddDonationResponse {
 	 */
 	private $updateToken = null;
 
-	public static function newSuccessResponse( Donation $donation, string $updateToken ): self {
+	/**
+	 * @var string|null
+	 */
+	private $accessToken;
+
+	public static function newSuccessResponse( Donation $donation, string $updateToken, string $accessToken ): self {
 		$response = new self();
 		$response->donation = $donation;
 		$response->updateToken = $updateToken;
+		$response->accessToken = $accessToken;
 		return $response;
 	}
 
@@ -66,6 +72,13 @@ class AddDonationResponse {
 	 * @return string|null
 	 */
 	public function getUpdateToken() {
+		return $this->updateToken;
+	}
+
+	/**
+	 * @return string|null
+	 */
+	public function getAccessToken() {
 		return $this->updateToken;
 	}
 

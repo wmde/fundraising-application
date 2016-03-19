@@ -74,6 +74,7 @@ class AddDonationUseCase {
 
 		try {
 			$updateToken = $this->assignAndReturnNewUpdateToken( $donation->getId() );
+			$accessToken = $this->assignAndReturnNewAccessToken( $donation->getId() );
 		}
 		catch ( AuthorizationUpdateException $ex ) {
 			// TODO: rollback side effects on failure
@@ -87,9 +88,12 @@ class AddDonationUseCase {
 
 		$this->sendDonationConfirmationEmail( $donation, $needsModeration );
 
-		return AddDonationResponse::newSuccessResponse( $donation, $updateToken );
+		return AddDonationResponse::newSuccessResponse( $donation, $updateToken, $accessToken );
 	}
 
+	/**
+	 * @throws AuthorizationUpdateException
+	 */
 	private function assignAndReturnNewUpdateToken( int $donationId ): string {
 		$updateToken = $this->tokenGenerator->generateToken();
 
@@ -100,6 +104,20 @@ class AddDonationUseCase {
 		);
 
 		return $updateToken;
+	}
+
+	/**
+	 * @throws AuthorizationUpdateException
+	 */
+	private function assignAndReturnNewAccessToken( int $donationId ): string {
+		$accessToken = $this->tokenGenerator->generateToken();
+
+		$this->authorizationUpdater->allowDonationAccessViaToken(
+			$donationId,
+			$accessToken
+		);
+
+		return $accessToken;
 	}
 
 	private function getInitialDonationStatus( Donation $donation, bool $needsModeration ): string {

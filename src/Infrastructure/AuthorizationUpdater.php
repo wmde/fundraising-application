@@ -15,4 +15,9 @@ interface AuthorizationUpdater {
 	 */
 	public function allowDonationModificationViaToken( int $donationId, string $token, \DateTime $expiry );
 
+	/**
+	 * @throws AuthorizationUpdateException
+	 */
+	public function allowDonationAccessViaToken( int $donationId, string $accessToken );
+
 }

@@ -208,12 +208,13 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		return $request;
 	}
 
-	public function testWhenAdditionWorks_successResponseContainsUpdateToken() {
+	public function testWhenAdditionWorks_successResponseContainsTokens() {
 		$useCase = $this->newValidationSucceedingUseCase();
 
 		$response = $useCase->addDonation( $this->newMinimumDonationRequest() );
 
 		$this->assertSame( self::UPDATE_TOKEN, $response->getUpdateToken() );
+		$this->assertSame( self::UPDATE_TOKEN, $response->getAccessToken() );
 	}
 
 	public function testWhenAdditionWorks_updateTokenIsPersisted() {
@@ -225,6 +226,21 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 				$this->equalTo( 1 ),
 				$this->equalTo( self::UPDATE_TOKEN ),
 				$this->equalTo( $this->oneHourInTheFuture )
+			);
+
+		$useCase = $this->newUseCaseWithAuthorizationUpdater( $authorizationUpdater );
+
+		$useCase->addDonation( $this->newMinimumDonationRequest() );
+	}
+
+	public function testWhenAdditionWorks_accessTokenIsPersisted() {
+		$authorizationUpdater = $this->newAuthorizationUpdater();
+
+		$authorizationUpdater->expects( $this->once() )
+			->method( 'allowDonationAccessViaToken' )
+			->with(
+				$this->equalTo( 1 ),
+				$this->equalTo( self::UPDATE_TOKEN )
 			);
 
 		$useCase = $this->newUseCaseWithAuthorizationUpdater( $authorizationUpdater );

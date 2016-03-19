@@ -67,4 +67,12 @@ class DoctrineAuthorizationUpdater implements AuthorizationUpdater {
 
 		return $donation;
 	}
+
+	/**
+	 * @throws AuthorizationUpdateException
+	 */
+	public function allowDonationAccessViaToken( int $donationId, string $accessToken ) {
+		// TODO
+	}
+
 }
