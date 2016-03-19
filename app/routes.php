@@ -350,11 +350,10 @@ $app->post(
 $app->get(
 	'show-donation-confirmation',
 	function( Application $app, Request $request ) use ( $ffFactory ) {
-		$useCase = $ffFactory->newShowDonationConfirmationUseCase();
+		$useCase = $ffFactory->newShowDonationConfirmationUseCase( $request->query->get( 'token', '' ) );
 
 		$useCase->showConfirmation( new ShowDonationConfirmationRequest(
-			(int)$request->query->get( 'donationId', '' ),
-			$request->query->get( 'token', '' )
+			(int)$request->query->get( 'donationId', '' )
 		) );
 
 		return 'TODO'; // TODO

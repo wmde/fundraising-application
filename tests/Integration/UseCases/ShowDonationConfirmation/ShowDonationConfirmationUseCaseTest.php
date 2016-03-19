@@ -20,8 +20,6 @@ use WMDE\Fundraising\Frontend\UseCases\ShowDonationConfirmation\ShowDonationConf
 class ShowDonationConfirmationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 	const CORRECT_DONATION_ID = 1;
-	const WRONG_ACCESS_TOKEN = 'I am a potato';
-	const CORRECT_ACCESS_TOKEN = 'Kindly allow me access';
 
 	public function testWhenAuthorizerSaysNoCanHaz_accessIsNotPermitted() {
 		$donation = new Donation();
@@ -32,8 +30,7 @@ class ShowDonationConfirmationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		);
 
 		$response = $useCase->showConfirmation( new ShowDonationConfirmationRequest(
-			self::CORRECT_DONATION_ID,
-			self::WRONG_ACCESS_TOKEN
+			self::CORRECT_DONATION_ID
 		) );
 
 		$this->assertFalse( $response->accessIsPermitted() );
@@ -49,8 +46,7 @@ class ShowDonationConfirmationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		);
 
 		$response = $useCase->showConfirmation( new ShowDonationConfirmationRequest(
-			self::CORRECT_DONATION_ID,
-			self::CORRECT_ACCESS_TOKEN
+			self::CORRECT_DONATION_ID
 		) );
 
 		$this->assertTrue( $response->accessIsPermitted() );
@@ -63,8 +59,7 @@ class ShowDonationConfirmationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		);
 
 		$response = $useCase->showConfirmation( new ShowDonationConfirmationRequest(
-			self::CORRECT_DONATION_ID,
-			self::WRONG_ACCESS_TOKEN
+			self::CORRECT_DONATION_ID
 		) );
 
 		$this->assertFalse( $response->accessIsPermitted() );
@@ -81,8 +76,7 @@ class ShowDonationConfirmationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		);
 
 		$response = $useCase->showConfirmation( new ShowDonationConfirmationRequest(
-			self::CORRECT_DONATION_ID,
-			self::WRONG_ACCESS_TOKEN
+			self::CORRECT_DONATION_ID
 		) );
 
 		$this->assertEquals( $donation, $response->getDonation() );

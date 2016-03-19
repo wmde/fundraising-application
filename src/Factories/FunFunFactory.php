@@ -782,9 +782,9 @@ class FunFunFactory {
 		return new CancelMembershipApplicationUseCase();
 	}
 
-	public function newShowDonationConfirmationUseCase(): ShowDonationConfirmationUseCase {
+	public function newShowDonationConfirmationUseCase( string $accessToken ): ShowDonationConfirmationUseCase {
 		return new ShowDonationConfirmationUseCase(
-			$this->newDonationAuthorizer(),
+			$this->newDonationAuthorizer( null, $accessToken ),
 			$this->getDonationRepository()
 		);
 	}
