@@ -29,7 +29,7 @@ use Twig_Extensions_Extension_Intl;
 use WMDE\Fundraising\Frontend\DataAccess\DbalCommentRepository;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationAuthorizationUpdater;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
-use WMDE\Fundraising\Frontend\DataAccess\DoctrineTokenAuthorizationChecker;
+use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationAuthorizer;
 use WMDE\Fundraising\Frontend\DataAccess\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\DataAccess\UniqueTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\BankDataConverter;
@@ -50,7 +50,7 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizationUpdater;
 use WMDE\Fundraising\Frontend\Infrastructure\RandomTokenGenerator;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
-use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationChecker;
+use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizer;
 use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
@@ -729,8 +729,8 @@ class FunFunFactory {
 		);
 	}
 
-	private function newAuthorizationChecker( string $updateToken ): AuthorizationChecker {
-		return new DoctrineTokenAuthorizationChecker(
+	private function newAuthorizationChecker( string $updateToken ): DonationAuthorizer {
+		return new DoctrineDonationAuthorizer(
 			$this->getEntityManager(),
 			$updateToken
 		);

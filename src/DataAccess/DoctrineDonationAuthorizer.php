@@ -7,13 +7,13 @@ namespace WMDE\Fundraising\Frontend\DataAccess;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use WMDE\Fundraising\Entities\Donation;
-use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationChecker;
+use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizer;
 
 /**
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class DoctrineTokenAuthorizationChecker implements AuthorizationChecker {
+class DoctrineDonationAuthorizer implements DonationAuthorizer {
 
 	private $entityManager;
 	private $updateToken;

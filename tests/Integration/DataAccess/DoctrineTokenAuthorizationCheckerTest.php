@@ -6,17 +6,17 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
 
 use Codeception\Specify;
 use WMDE\Fundraising\Entities\Donation;
-use WMDE\Fundraising\Frontend\DataAccess\DoctrineTokenAuthorizationChecker;
-use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationChecker;
+use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationAuthorizer;
+use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
- * @covers WMDE\Fundraising\Frontend\DataAccess\DoctrineTokenAuthorizationChecker
+ * @covers WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationAuthorizer
  *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class DoctrineTokenAuthorizationCheckerTest extends \PHPUnit_Framework_TestCase {
+class DoctrineDonationAuthorizerTest extends \PHPUnit_Framework_TestCase {
 	use Specify;
 
 	const THE_CORRECT_TOKEN = 'TheCorrectToken';
@@ -25,7 +25,7 @@ class DoctrineTokenAuthorizationCheckerTest extends \PHPUnit_Framework_TestCase 
 	const MEANINGLESS_DONATION_ID = 1337;
 	const ID_OF_WRONG_DONATION = 42;
 
-	private function newAuthorizationServiceWithDonations( string $token, Donation ...$donations ): AuthorizationChecker {
+	private function newAuthorizationServiceWithDonations( string $token, Donation ...$donations ): DonationAuthorizer {
 		$entityManager = TestEnvironment::newInstance()->getFactory()->getEntityManager();
 
 		foreach ( $donations as $donation ) {
@@ -34,7 +34,7 @@ class DoctrineTokenAuthorizationCheckerTest extends \PHPUnit_Framework_TestCase 
 
 		$entityManager->flush();
 
-		return new DoctrineTokenAuthorizationChecker( $entityManager, $token );
+		return new DoctrineDonationAuthorizer( $entityManager, $token );
 	}
 
 	public function testWhenNoDonations() {
