@@ -6,18 +6,18 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
 
 use Doctrine\ORM\EntityManager;
 use WMDE\Fundraising\Entities\Donation;
-use WMDE\Fundraising\Frontend\DataAccess\DoctrineAuthorizationUpdater;
+use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationAuthorizationUpdater;
 use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationUpdateException;
-use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationUpdater;
+use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizationUpdater;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
- * @covers WMDE\Fundraising\Frontend\DataAccess\DoctrineAuthorizationUpdater
+ * @covers WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationAuthorizationUpdater
  *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class DoctrineAuthorizationUpdaterTest extends \PHPUnit_Framework_TestCase {
+class DoctrineDonationAuthorizationUpdaterTest extends \PHPUnit_Framework_TestCase {
 
 	const ACCESS_TOKEN = 'kindly allow me access';
 	const UPDATE_TOKEN = 'kindly accept my datas';
@@ -37,7 +37,7 @@ class DoctrineAuthorizationUpdaterTest extends \PHPUnit_Framework_TestCase {
 
 		$this->persistDonation( $donation );
 
-		$this->newAuthorizationUpdater()->allowDonationModificationViaToken(
+		$this->newAuthorizationUpdater()->allowModificationViaToken(
 			$donation->getId(),
 			self::UPDATE_TOKEN,
 			new \DateTime( self::EXPIRY_TIME )
@@ -50,8 +50,8 @@ class DoctrineAuthorizationUpdaterTest extends \PHPUnit_Framework_TestCase {
 		);
 	}
 
-	private function newAuthorizationUpdater(): AuthorizationUpdater {
-		return new DoctrineAuthorizationUpdater( $this->entityManager );
+	private function newAuthorizationUpdater(): DonationAuthorizationUpdater {
+		return new DoctrineDonationAuthorizationUpdater( $this->entityManager );
 	}
 
 	private function persistDonation( Donation $donation ) {
@@ -73,7 +73,7 @@ class DoctrineAuthorizationUpdaterTest extends \PHPUnit_Framework_TestCase {
 	public function testWhenDonationDoesNotExist_assigningUpdateTokenCausesException() {
 		$this->expectException( AuthorizationUpdateException::class );
 
-		$this->newAuthorizationUpdater()->allowDonationModificationViaToken(
+		$this->newAuthorizationUpdater()->allowModificationViaToken(
 			1337,
 			self::UPDATE_TOKEN,
 			new \DateTime( self::EXPIRY_TIME )
@@ -83,7 +83,7 @@ class DoctrineAuthorizationUpdaterTest extends \PHPUnit_Framework_TestCase {
 	public function testWhenDonationDoesNotExist_assigningAccessTokenCausesException() {
 		$this->expectException( AuthorizationUpdateException::class );
 
-		$this->newAuthorizationUpdater()->allowDonationAccessViaToken(
+		$this->newAuthorizationUpdater()->allowAccessViaToken(
 			1337,
 			self::ACCESS_TOKEN
 		);
@@ -97,7 +97,7 @@ class DoctrineAuthorizationUpdaterTest extends \PHPUnit_Framework_TestCase {
 
 		$this->expectException( AuthorizationUpdateException::class );
 
-		$this->newAuthorizationUpdater()->allowDonationModificationViaToken(
+		$this->newAuthorizationUpdater()->allowModificationViaToken(
 			$donation->getId(),
 			self::UPDATE_TOKEN,
 			new \DateTime( self::EXPIRY_TIME )
@@ -112,7 +112,7 @@ class DoctrineAuthorizationUpdaterTest extends \PHPUnit_Framework_TestCase {
 
 		$this->expectException( AuthorizationUpdateException::class );
 
-		$this->newAuthorizationUpdater()->allowDonationModificationViaToken(
+		$this->newAuthorizationUpdater()->allowModificationViaToken(
 			$donation->getId(),
 			self::UPDATE_TOKEN,
 			new \DateTime( self::EXPIRY_TIME )
@@ -124,7 +124,7 @@ class DoctrineAuthorizationUpdaterTest extends \PHPUnit_Framework_TestCase {
 
 		$this->persistDonation( $donation );
 
-		$this->newAuthorizationUpdater()->allowDonationAccessViaToken(
+		$this->newAuthorizationUpdater()->allowAccessViaToken(
 			$donation->getId(),
 			self::ACCESS_TOKEN
 		);

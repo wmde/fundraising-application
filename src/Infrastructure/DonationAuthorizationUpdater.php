@@ -8,16 +8,16 @@ namespace WMDE\Fundraising\Frontend\Infrastructure;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-interface AuthorizationUpdater {
+interface DonationAuthorizationUpdater {
 
 	/**
 	 * @throws AuthorizationUpdateException
 	 */
-	public function allowDonationModificationViaToken( int $donationId, string $token, \DateTime $expiry );
+	public function allowModificationViaToken( int $donationId, string $token, \DateTime $expiry );
 
 	/**
 	 * @throws AuthorizationUpdateException
 	 */
-	public function allowDonationAccessViaToken( int $donationId, string $accessToken );
+	public function allowAccessViaToken( int $donationId, string $accessToken );
 
 }

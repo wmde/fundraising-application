@@ -15,7 +15,7 @@ use WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationUpdateException;
-use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationUpdater;
+use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizationUpdater;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\DonationRepositoryFake;
@@ -82,10 +82,10 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * @return AuthorizationUpdater|PHPUnit_Framework_MockObject_MockObject
+	 * @return DonationAuthorizationUpdater|PHPUnit_Framework_MockObject_MockObject
 	 */
-	private function newAuthorizationUpdater(): AuthorizationUpdater {
-		return $this->getMock( AuthorizationUpdater::class );
+	private function newAuthorizationUpdater(): DonationAuthorizationUpdater {
+		return $this->getMock( DonationAuthorizationUpdater::class );
 	}
 
 	private function newOneHourInterval(): \DateInterval {
@@ -221,7 +221,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$authorizationUpdater = $this->newAuthorizationUpdater();
 
 		$authorizationUpdater->expects( $this->once() )
-			->method( 'allowDonationModificationViaToken' )
+			->method( 'allowModificationViaToken' )
 			->with(
 				$this->equalTo( 1 ),
 				$this->equalTo( self::UPDATE_TOKEN ),
@@ -237,7 +237,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$authorizationUpdater = $this->newAuthorizationUpdater();
 
 		$authorizationUpdater->expects( $this->once() )
-			->method( 'allowDonationAccessViaToken' )
+			->method( 'allowAccessViaToken' )
 			->with(
 				$this->equalTo( 1 ),
 				$this->equalTo( self::UPDATE_TOKEN )
@@ -248,7 +248,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$useCase->addDonation( $this->newMinimumDonationRequest() );
 	}
 
-	private function newUseCaseWithAuthorizationUpdater( AuthorizationUpdater $authUpdater ): AddDonationUseCase {
+	private function newUseCaseWithAuthorizationUpdater( DonationAuthorizationUpdater $authUpdater ): AddDonationUseCase {
 		return new AddDonationUseCase(
 			$this->newRepository(),
 			$this->getSucceedingValidatorMock(),
@@ -265,7 +265,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$authorizationUpdater = $this->newAuthorizationUpdater();
 
 		$authorizationUpdater->expects( $this->any() )
-			->method( 'allowDonationModificationViaToken' )
+			->method( 'allowModificationViaToken' )
 			->willThrowException( new AuthorizationUpdateException( 'Auth update failed' ) );
 
 		$useCase = $this->newUseCaseWithAuthorizationUpdater( $authorizationUpdater );

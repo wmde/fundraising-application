@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationUpdateException;
-use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationUpdater;
+use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizationUpdater;
 use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
@@ -41,7 +41,7 @@ class AddDonationUseCase {
 	public function __construct( DonationRepository $donationRepository, DonationValidator $donationValidator,
 								 ReferrerGeneralizer $referrerGeneralizer, TemplateBasedMailer $mailer,
 								 TransferCodeGenerator $transferCodeGenerator, BankDataConverter $bankDataConverter,
-								 TokenGenerator $tokenGenerator, AuthorizationUpdater $authorizationUpdater ) {
+								 TokenGenerator $tokenGenerator, DonationAuthorizationUpdater $authorizationUpdater ) {
 
 		$this->donationRepository = $donationRepository;
 		$this->donationValidator = $donationValidator;
@@ -97,7 +97,7 @@ class AddDonationUseCase {
 	private function assignAndReturnNewUpdateToken( int $donationId ): string {
 		$updateToken = $this->tokenGenerator->generateToken();
 
-		$this->authorizationUpdater->allowDonationModificationViaToken(
+		$this->authorizationUpdater->allowModificationViaToken(
 			$donationId,
 			$updateToken,
 			$this->tokenGenerator->generateTokenExpiry()
@@ -112,7 +112,7 @@ class AddDonationUseCase {
 	private function assignAndReturnNewAccessToken( int $donationId ): string {
 		$accessToken = $this->tokenGenerator->generateToken();
 
-		$this->authorizationUpdater->allowDonationAccessViaToken(
+		$this->authorizationUpdater->allowAccessViaToken(
 			$donationId,
 			$accessToken
 		);

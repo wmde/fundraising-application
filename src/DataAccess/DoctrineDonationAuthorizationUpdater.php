@@ -8,14 +8,14 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationUpdateException;
-use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationUpdater;
+use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizationUpdater;
 use WMDE\Fundraising\Store\DonationData;
 
 /**
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class DoctrineAuthorizationUpdater implements AuthorizationUpdater {
+class DoctrineDonationAuthorizationUpdater implements DonationAuthorizationUpdater {
 
 	const DATE_TIME_FORMAT = 'Y-m-d H:i:s';
 
@@ -28,7 +28,7 @@ class DoctrineAuthorizationUpdater implements AuthorizationUpdater {
 	/**
 	 * @throws AuthorizationUpdateException
 	 */
-	public function allowDonationModificationViaToken( int $donationId, string $token, \DateTime $expiry ) {
+	public function allowModificationViaToken( int $donationId, string $token, \DateTime $expiry ) {
 		$donation = $this->getDonationById( $donationId );
 
 		$donation->modifyDataObject( function( DonationData $data ) use ( $token, $expiry ) {
@@ -68,7 +68,7 @@ class DoctrineAuthorizationUpdater implements AuthorizationUpdater {
 	/**
 	 * @throws AuthorizationUpdateException
 	 */
-	public function allowDonationAccessViaToken( int $donationId, string $accessToken ) {
+	public function allowAccessViaToken( int $donationId, string $accessToken ) {
 		$donation = $this->getDonationById( $donationId );
 
 		$donation->modifyDataObject( function( DonationData $data ) use ( $accessToken ) {
