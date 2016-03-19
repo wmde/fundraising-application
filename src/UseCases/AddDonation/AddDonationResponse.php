@@ -13,27 +13,35 @@ use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
  */
 class AddDonationResponse {
 
-	private $validationErrors;
-	private $donation;
-	private $updateToken;
+	/**
+	 * @var ConstraintViolation[]
+	 */
+	private $validationErrors = [];
 
 	/**
-	 * @param Donation|null $donation
-	 * @param string|null $updateToken
-	 * @param ConstraintViolation[] $requestValidationErrors
+	 * @var Donation|null
 	 */
-	private function __construct( Donation $donation = null, string $updateToken = null, array $requestValidationErrors = [] ) {
-		$this->donation = $donation;
-		$this->validationErrors = $requestValidationErrors;
-		$this->updateToken = $updateToken;
-	}
+	private $donation = null;
+
+	/**
+	 * @var string|null
+	 */
+	private $updateToken = null;
 
 	public static function newSuccessResponse( Donation $donation, string $updateToken ): self {
-		return new self( $donation, $updateToken );
+		$response = new self();
+		$response->donation = $donation;
+		$response->updateToken = $updateToken;
+		return $response;
 	}
 
 	public static function newFailureResponse( array $errors ): self {
-		return new self( null, null, $errors );
+		$response = new self();
+		$response->validationErrors = $errors;
+		return $response;
+	}
+
+	private function __construct() {
 	}
 
 	/**
