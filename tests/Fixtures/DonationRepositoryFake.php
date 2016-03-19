@@ -15,6 +15,12 @@ class DonationRepositoryFake implements DonationRepository {
 
 	private $calls = 0;
 
+	public function __construct( Donation ...$donations ) {
+		foreach ( $donations as $donation ) {
+			$this->storeDonation( $donation );
+		}
+	}
+
 	public function storeDonation( Donation $donation ) {
 		$donation->setId( ++$this->calls );
 	}

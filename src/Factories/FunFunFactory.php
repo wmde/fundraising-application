@@ -619,7 +619,7 @@ class FunFunFactory {
 		return new CancelDonationUseCase(
 			$this->getDonationRepository(),
 			$this->newCancelDonationMailer(),
-			$this->newAuthorizationChecker( $updateToken )
+			$this->newDonationAuthorizer( $updateToken )
 		);
 	}
 
@@ -725,14 +725,15 @@ class FunFunFactory {
 	public function newAddCommentUseCase( string $updateToken ): AddCommentUseCase {
 		return new AddCommentUseCase(
 			$this->getCommentRepository(),
-			$this->newAuthorizationChecker( $updateToken )
+			$this->newDonationAuthorizer( $updateToken )
 		);
 	}
 
-	private function newAuthorizationChecker( string $updateToken ): DonationAuthorizer {
+	private function newDonationAuthorizer( string $updateToken = null, string $accessToken = null ): DonationAuthorizer {
 		return new DoctrineDonationAuthorizer(
 			$this->getEntityManager(),
-			$updateToken
+			$updateToken,
+			$accessToken
 		);
 	}
 
@@ -782,7 +783,10 @@ class FunFunFactory {
 	}
 
 	public function newShowDonationConfirmationUseCase(): ShowDonationConfirmationUseCase {
-		return new ShowDonationConfirmationUseCase();
+		return new ShowDonationConfirmationUseCase(
+			$this->newDonationAuthorizer(),
+			$this->getDonationRepository()
+		);
 	}
 
 }
