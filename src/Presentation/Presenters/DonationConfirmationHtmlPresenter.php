@@ -4,7 +4,6 @@ namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
-use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationResponse;
 
 /**
  * Render the confirmation pages for donations
@@ -12,7 +11,7 @@ use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationResponse;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class AddDonationHtmlPresenter {
+class DonationConfirmationHtmlPresenter {
 
 	private $template;
 
@@ -20,28 +19,29 @@ class AddDonationHtmlPresenter {
 		$this->template = $template;
 	}
 
-	public function present( AddDonationResponse $responseModel ): string {
-		return $this->template->render( $this->getConfirmationPageArguments( $responseModel ) );
+	public function present( Donation $donation, string $updateToken ): string {
+		return $this->template->render( $this->getConfirmationPageArguments( $donation, $updateToken ) );
 	}
 
-	private function getConfirmationPageArguments( AddDonationResponse $responseModel ) {
+	private function getConfirmationPageArguments( Donation $donation, string $updateToken ) {
+
 		return array_merge( [
 			'donation' => [
-				'id' => $responseModel->getDonation()->getId(),
-				'status' => $responseModel->getDonation()->getStatus(),
-				'amount' => $responseModel->getDonation()->getAmount(),
-				'interval' => $responseModel->getDonation()->getInterval(),
-				'paymentType' => $responseModel->getDonation()->getPaymentType(),
-				'optsIntoNewsletter' => $responseModel->getDonation()->getOptsIntoNewsletter(),
-				'bankTransferCode' => $responseModel->getDonation()->getBankTransferCode(),
+				'id' => $donation->getId(),
+				'status' => $donation->getStatus(),
+				'amount' => $donation->getAmount(),
+				'interval' => $donation->getInterval(),
+				'paymentType' => $donation->getPaymentType(),
+				'optsIntoNewsletter' => $donation->getOptsIntoNewsletter(),
+				'bankTransferCode' => $donation->getBankTransferCode(),
 				// TODO: use locale to determine the date format
 				'creationDate' => ( new \DateTime() )->format( 'd.m.Y' ),
 				// TODO: set cookie duration for "hide banner cookie"
 				'cookieDuration' => '',
-				'updateToken' => $responseModel->getUpdateToken()
+				'updateToken' => $updateToken
 			],
-			'person' => $this->getPersonArguments( $responseModel->getDonation() ),
-			'bankData' => $this->getBankDataArguments( $responseModel->getDonation() )
+			'person' => $this->getPersonArguments( $donation ),
+			'bankData' => $this->getBankDataArguments( $donation )
 		] );
 	}
 

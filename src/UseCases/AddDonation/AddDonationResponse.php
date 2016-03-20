@@ -31,7 +31,7 @@ class AddDonationResponse {
 	/**
 	 * @var string|null
 	 */
-	private $accessToken;
+	private $accessToken = null;
 
 	public static function newSuccessResponse( Donation $donation, string $updateToken, string $accessToken ): self {
 		$response = new self();

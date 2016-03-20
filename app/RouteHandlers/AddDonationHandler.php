@@ -41,16 +41,17 @@ class AddDonationHandler {
 
 		// TODO: take over confirmation page selection functionality from old application
 
-		return $this->newHttpResponseFromResponseModel( $responseModel );
+		return $this->newHttpResponse( $responseModel );
 	}
 
-	private function newHttpResponseFromResponseModel( AddDonationResponse $responseModel ): Response {
+	private function newHttpResponse( AddDonationResponse $responseModel ): Response {
 		switch( $responseModel->getDonation()->getPaymentType() ) {
 			case PaymentType::DIRECT_DEBIT:
 			case PaymentType::BANK_TRANSFER:
-				return new Response(
-					$this->ffFactory->newAddDonationHtmlPresenter()->present( $responseModel )
-				);
+				return new Response( $this->ffFactory->newDonationConfirmationPresenter()->present(
+					$responseModel->getDonation(),
+					$responseModel->getUpdateToken()
+				) );
 			case PaymentType::PAYPAL:
 				return $this->app->redirect(
 					$this->ffFactory->newPayPalUrlGenerator()->generateUrl(
@@ -58,6 +59,7 @@ class AddDonationHandler {
 						$responseModel->getDonation()->getAmount(),
 						$responseModel->getDonation()->getInterval(),
 						$responseModel->getUpdateToken()
+						// TODO: include access token
 					)
 				);
 			case PaymentType::CREDIT_CARD:

@@ -54,7 +54,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizer;
 use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
-use WMDE\Fundraising\Frontend\Presentation\Presenters\AddDonationHtmlPresenter;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CancelDonationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListJsonPresenter;
@@ -643,7 +643,7 @@ class FunFunFactory {
 			$this->newBankTransferCodeGenerator(),
 			$this->newBankDataConverter(),
 			$this->newTokenGenerator(),
-			$this->newAuthorizationUpdater()
+			$this->newDonationAuthorizationUpdater()
 		);
 	}
 
@@ -737,7 +737,7 @@ class FunFunFactory {
 		);
 	}
 
-	private function newAuthorizationUpdater(): DonationAuthorizationUpdater {
+	public function newDonationAuthorizationUpdater(): DonationAuthorizationUpdater {
 		return new DoctrineDonationAuthorizationUpdater( $this->getEntityManager() );
 	}
 
@@ -756,8 +756,10 @@ class FunFunFactory {
 		);
 	}
 
-	public function newAddDonationHtmlPresenter() {
-		return new AddDonationHtmlPresenter( $this->getLayoutTemplate( 'DonationConfirmation.twig' ) );
+	public function newDonationConfirmationPresenter() {
+		return new DonationConfirmationHtmlPresenter(
+			$this->getLayoutTemplate( 'DonationConfirmation.twig' )
+		);
 	}
 
 	public function newCreditCardPaymentHtmlPresenter() {

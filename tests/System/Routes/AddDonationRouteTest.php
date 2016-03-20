@@ -4,11 +4,9 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 
-use Swift_NullTransport;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
 
 /**
@@ -36,8 +34,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 				'/donation/add',
 				$this->newValidFormInput()
 			);
-
-			$response = $client->getResponse();
 
 			$donation = $this->getDonationFromDatabase( $factory );
 
@@ -72,19 +68,13 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$this->assertSame( 'default', $data['skin'] );
 			$this->assertSame( 'en.wikipedia.org', $data['source'] );
 			$this->assertSame( 'N', $donation->getStatus() );
-			$this->assertSame( true, $donation->getInfo() );
-
-			$this->assertContains( '5,51', $response->getContent() );
-			$this->assertContains( 'einmalig', $response->getContent() );
+			$this->assertTrue( $donation->getInfo() );
 		} );
 	}
 
 	public function testGivenValidRequest_confirmationPageContainsEnteredData() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setMessenger( new Messenger(
-				Swift_NullTransport::newInstance(),
-				$factory->getOperatorAddress()
-			) );
+			$factory->setNullMessenger();
 
 			$client->request(
 				'POST',
