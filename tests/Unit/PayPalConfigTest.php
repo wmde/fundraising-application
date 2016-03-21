@@ -4,10 +4,10 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests;
 
-use WMDE\Fundraising\Frontend\Domain\PayPalConfig;
+use WMDE\Fundraising\Frontend\Presentation\PayPalConfig;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Domain\PayPalConfig
+ * @covers WMDE\Fundraising\Frontend\Presentation\PayPalConfig
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
@@ -23,10 +23,10 @@ class PayPalConfigTest extends \PHPUnit_Framework_TestCase {
 		return PayPalConfig::newFromConfig( [
 			PayPalConfig::CONFIG_KEY_BASE_URL => 'http://that.paymentprovider.com/?',
 			PayPalConfig::CONFIG_KEY_ACCOUNT_ADDRESS => 'some@email-adress.com',
-			PayPalCOnfig::CONFIG_KEY_NOTIFY_URL => 'http://my.donation.app/handler/paypal/',
-			PayPalCOnfig::CONFIG_KEY_RETURN_URL => 'http://my.donation.app/donation/confirm/',
-			PayPalCOnfig::CONFIG_KEY_CANCEL_URL => 'http://my.donation.app/donation/cancel/',
-			PayPalCOnfig::CONFIG_KEY_ITEM_NAME => ''
+			PayPalConfig::CONFIG_KEY_NOTIFY_URL => 'http://my.donation.app/handler/paypal/',
+			PayPalConfig::CONFIG_KEY_RETURN_URL => 'http://my.donation.app/donation/confirm/',
+			PayPalConfig::CONFIG_KEY_CANCEL_URL => 'http://my.donation.app/donation/cancel/',
+			PayPalConfig::CONFIG_KEY_ITEM_NAME => ''
 		] );
 	}
 
@@ -38,10 +38,10 @@ class PayPalConfigTest extends \PHPUnit_Framework_TestCase {
 		return PayPalConfig::newFromConfig( [
 			PayPalConfig::CONFIG_KEY_BASE_URL => 'http://that.paymentprovider.com/?',
 			PayPalConfig::CONFIG_KEY_ACCOUNT_ADDRESS => 'some@email-adress.com',
-			PayPalCOnfig::CONFIG_KEY_NOTIFY_URL => 'http://my.donation.app/handler/paypal/',
-			PayPalCOnfig::CONFIG_KEY_RETURN_URL => 'http://my.donation.app/donation/confirm/',
-			PayPalCOnfig::CONFIG_KEY_CANCEL_URL => 'http://my.donation.app/donation/cancel/',
-			PayPalCOnfig::CONFIG_KEY_ITEM_NAME => 'This appears on the invoice'
+			PayPalConfig::CONFIG_KEY_NOTIFY_URL => 'http://my.donation.app/handler/paypal/',
+			PayPalConfig::CONFIG_KEY_RETURN_URL => 'http://my.donation.app/donation/confirm/',
+			PayPalConfig::CONFIG_KEY_CANCEL_URL => 'http://my.donation.app/donation/cancel/',
+			PayPalConfig::CONFIG_KEY_ITEM_NAME => 'This appears on the invoice'
 		] );
 	}
 

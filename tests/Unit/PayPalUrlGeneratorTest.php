@@ -4,11 +4,11 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests;
 
-use WMDE\Fundraising\Frontend\Domain\PayPalConfig;
-use WMDE\Fundraising\Frontend\Domain\PayPalUrlGenerator;
+use WMDE\Fundraising\Frontend\Presentation\PayPalConfig;
+use WMDE\Fundraising\Frontend\Presentation\PayPalUrlGenerator;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Domain\PayPalUrlGenerator
+ * @covers WMDE\Fundraising\Frontend\Presentation\PayPalUrlGenerator
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
@@ -63,7 +63,7 @@ class PayPalUrlGeneratorTest extends \PHPUnit_Framework_TestCase {
 		);
 	}
 
-	private function newPayPalConfig() {
+	private function newPayPalConfig(): PayPalConfig {
 		return PayPalConfig::newFromConfig( [
 			'base-url' => 'http://that.paymentprovider.com/?',
 			'account-address' => 'foerderpp@wikimedia.de',
@@ -76,7 +76,7 @@ class PayPalUrlGeneratorTest extends \PHPUnit_Framework_TestCase {
 
 	public function testGivenIncompletePayPalConfig_exceptionIsThrown() {
 		$this->expectException( \RuntimeException::class );
-		$config = $this->newIncompletePayPalConfig();
+		$this->newIncompletePayPalConfig();
 	}
 
 	private function newIncompletePayPalConfig() {
