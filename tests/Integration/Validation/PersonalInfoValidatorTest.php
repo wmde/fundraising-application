@@ -19,31 +19,31 @@ use WMDE\Fundraising\Frontend\Validation\PhysicalAddressValidator;
 class PersonalInfoValidatorTest extends ValidatorTestCase {
 
 	public function testGivenValidPersonalInfo_validationIsSuccessful() {
-		$personalInfo = new PersonalInfo();
-		$personalInfo->setPersonName( $this->newCompanyName() );
-		$personalInfo->setPhysicalAddress( $this->newPhysicalAddress() );
-		$personalInfo->setEmailAddress( 'hank.scorpio@globex.com' );
-		$personalInfo->freeze()->assertNoNullFields();
+		$personalInfo = new PersonalInfo(
+			$this->newCompanyName(),
+			$this->newPhysicalAddress(),
+			'hank.scorpio@globex.com'
+		);
 
 		$this->assertTrue( $this->newPersonalInfoValidator()->validate( $personalInfo )->isSuccessful() );
 	}
 
 	public function testGivenMissingEmail_validationFails() {
-		$personalInfo = new PersonalInfo();
-		$personalInfo->setPersonName( $this->newCompanyName() );
-		$personalInfo->setPhysicalAddress( $this->newPhysicalAddress() );
-		$personalInfo->setEmailAddress( '' );
-		$personalInfo->freeze()->assertNoNullFields();
+		$personalInfo = new PersonalInfo(
+			$this->newCompanyName(),
+			$this->newPhysicalAddress(),
+			''
+		);
 
 		$this->assertFalse( $this->newPersonalInfoValidator()->validate( $personalInfo )->isSuccessful() );
 	}
 
 	public function testGivenMissingName_validationFails() {
-		$personalInfo = new PersonalInfo();
-		$personalInfo->setPersonName( PersonName::newCompanyName() );
-		$personalInfo->setPhysicalAddress( $this->newPhysicalAddress() );
-		$personalInfo->setEmailAddress( 'hank.scorpio@globex.com' );
-		$personalInfo->freeze()->assertNoNullFields();
+		$personalInfo = new PersonalInfo(
+			PersonName::newCompanyName(),
+			$this->newPhysicalAddress(),
+			'hank.scorpio@globex.com'
+		);
 
 		$validator = $this->newPersonalInfoValidator();
 
@@ -55,11 +55,11 @@ class PersonalInfoValidatorTest extends ValidatorTestCase {
 	}
 
 	public function testGivenMissingAddressFields_validationFails() {
-		$personalInfo = new PersonalInfo();
-		$personalInfo->setPersonName( $this->newCompanyName() );
-		$personalInfo->setPhysicalAddress( $this->newPhysicalAddressWithMissingData() );
-		$personalInfo->setEmailAddress( 'hank.scorpio@globex.com' );
-		$personalInfo->freeze()->assertNoNullFields();
+		$personalInfo = new PersonalInfo(
+			$this->newCompanyName(),
+			$this->newPhysicalAddressWithMissingData(),
+			'hank.scorpio@globex.com'
+		);
 
 		$validator = $this->newPersonalInfoValidator();
 

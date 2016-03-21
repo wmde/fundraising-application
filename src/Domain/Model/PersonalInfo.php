@@ -11,37 +11,27 @@ use WMDE\Fundraising\Frontend\FreezableValueObject;
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class PersonalInfo {
-	use FreezableValueObject;
 
 	private $personName;
 	private $physicalAddress;
 	private $emailAddress;
 
-	public function getPersonName(): PersonName {
-		return $this->personName;
+	public function __construct( PersonName $name, PhysicalAddress $address, string $emailAddress ) {
+		$this->personName = $name;
+		$this->physicalAddress = $address;
+		$this->emailAddress = $emailAddress;
 	}
 
-	public function setPersonName( PersonName $personName ) {
-		$this->assertIsWritable();
-		$this->personName = $personName;
+	public function getPersonName(): PersonName {
+		return $this->personName;
 	}
 
 	public function getPhysicalAddress(): PhysicalAddress {
 		return $this->physicalAddress;
 	}
 
-	public function setPhysicalAddress( PhysicalAddress $physicalAddress ) {
-		$this->assertIsWritable();
-		$this->physicalAddress = $physicalAddress;
-	}
-
 	public function getEmailAddress(): string {
 		return $this->emailAddress;
-	}
-
-	public function setEmailAddress( string $emailAddress ) {
-		$this->assertIsWritable();
-		$this->emailAddress = $emailAddress;
 	}
 
 }

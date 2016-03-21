@@ -50,13 +50,11 @@ class ValidDonation {
 	}
 
 	private function newPersonalInfo(): PersonalInfo {
-		$personalInfo = new PersonalInfo();
-
-		$personalInfo->setEmailAddress( 'foo@bar.baz' );
-		$personalInfo->setPersonName( $this->newPersonName() );
-		$personalInfo->setPhysicalAddress( $this->newAddress() );
-
-		return $personalInfo->freeze()->assertNoNullFields();
+		return new PersonalInfo(
+			$this->newPersonName(),
+			$this->newAddress(),
+			'foo@bar.baz'
+		);
 	}
 
 	private function newPersonName(): PersonName {

@@ -191,22 +191,11 @@ class DoctrineDonationRepository implements DonationRepository {
 			return null;
 		}
 
-		$personalInfo = new PersonalInfo();
-
-		$personalInfo->setEmailAddress( $dd->getEmail() ); // FIXME: type error
-		$personalInfo->setPersonName( $this->getPersonNameFromEntity( $dd ) );
-		$this->hitThePersonalInfoWithLeadPipeUntilItFinallySetsTheAddress( $personalInfo, $dd );
-
-		return $personalInfo->freeze()->assertNoNullFields();
-	}
-
-	private function hitThePersonalInfoWithLeadPipeUntilItFinallySetsTheAddress(
-		PersonalInfo $personalInfo, DoctrineDonation $dd ) {
-
-		// TODO: we might want to use a loop here
-		$personalInfo->setPhysicalAddress( $this->getPhysicalAddressFromEntity( $dd ) );
-		$personalInfo->setPhysicalAddress( $this->getPhysicalAddressFromEntity( $dd ) );
-		$personalInfo->setPhysicalAddress( $this->getPhysicalAddressFromEntity( $dd ) );
+		return new PersonalInfo(
+			$this->getPersonNameFromEntity( $dd ),
+			$this->getPhysicalAddressFromEntity( $dd ),
+			$dd->getEmail() // FIXME: type error
+		);
 	}
 
 	private function getPersonNameFromEntity( DoctrineDonation $dd ): PersonName {
