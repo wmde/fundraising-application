@@ -27,9 +27,9 @@ use Symfony\Component\Translation\TranslatorInterface;
 use Twig_Environment;
 use Twig_Extensions_Extension_Intl;
 use WMDE\Fundraising\Frontend\DataAccess\DbalCommentRepository;
-use WMDE\Fundraising\Frontend\DataAccess\DoctrineAuthorizationUpdater;
+use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationAuthorizationUpdater;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
-use WMDE\Fundraising\Frontend\DataAccess\DoctrineTokenAuthorizationChecker;
+use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationAuthorizer;
 use WMDE\Fundraising\Frontend\DataAccess\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\DataAccess\UniqueTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\BankDataConverter;
@@ -47,14 +47,14 @@ use WMDE\Fundraising\Frontend\Domain\Honorifics;
 use WMDE\Fundraising\Frontend\Domain\Repositories\CommentRepository;
 use WMDE\Fundraising\Frontend\Domain\SimpleTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\Repositories\SubscriptionRepository;
-use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationUpdater;
+use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizationUpdater;
 use WMDE\Fundraising\Frontend\Infrastructure\RandomTokenGenerator;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
-use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationChecker;
+use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizer;
 use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
-use WMDE\Fundraising\Frontend\Presentation\Presenters\AddDonationHtmlPresenter;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CancelDonationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListJsonPresenter;
@@ -619,7 +619,7 @@ class FunFunFactory {
 		return new CancelDonationUseCase(
 			$this->getDonationRepository(),
 			$this->newCancelDonationMailer(),
-			$this->newAuthorizationChecker( $updateToken )
+			$this->newDonationAuthorizer( $updateToken )
 		);
 	}
 
@@ -643,7 +643,7 @@ class FunFunFactory {
 			$this->newBankTransferCodeGenerator(),
 			$this->newBankDataConverter(),
 			$this->newTokenGenerator(),
-			$this->newAuthorizationUpdater()
+			$this->newDonationAuthorizationUpdater()
 		);
 	}
 
@@ -725,19 +725,20 @@ class FunFunFactory {
 	public function newAddCommentUseCase( string $updateToken ): AddCommentUseCase {
 		return new AddCommentUseCase(
 			$this->getCommentRepository(),
-			$this->newAuthorizationChecker( $updateToken )
+			$this->newDonationAuthorizer( $updateToken )
 		);
 	}
 
-	private function newAuthorizationChecker( string $updateToken ): AuthorizationChecker {
-		return new DoctrineTokenAuthorizationChecker(
+	private function newDonationAuthorizer( string $updateToken = null, string $accessToken = null ): DonationAuthorizer {
+		return new DoctrineDonationAuthorizer(
 			$this->getEntityManager(),
-			$updateToken
+			$updateToken,
+			$accessToken
 		);
 	}
 
-	private function newAuthorizationUpdater(): AuthorizationUpdater {
-		return new DoctrineAuthorizationUpdater( $this->getEntityManager() );
+	public function newDonationAuthorizationUpdater(): DonationAuthorizationUpdater {
+		return new DoctrineDonationAuthorizationUpdater( $this->getEntityManager() );
 	}
 
 	private function getCommentRepository(): CommentRepository {
@@ -755,8 +756,10 @@ class FunFunFactory {
 		);
 	}
 
-	public function newAddDonationHtmlPresenter() {
-		return new AddDonationHtmlPresenter( $this->getLayoutTemplate( 'DonationConfirmation.twig' ) );
+	public function newDonationConfirmationPresenter() {
+		return new DonationConfirmationHtmlPresenter(
+			$this->getLayoutTemplate( 'DonationConfirmation.twig' )
+		);
 	}
 
 	public function newCreditCardPaymentHtmlPresenter() {
@@ -781,8 +784,11 @@ class FunFunFactory {
 		return new CancelMembershipApplicationUseCase();
 	}
 
-	public function newShowDonationConfirmationUseCase(): ShowDonationConfirmationUseCase {
-		return new ShowDonationConfirmationUseCase();
+	public function newShowDonationConfirmationUseCase( string $accessToken ): ShowDonationConfirmationUseCase {
+		return new ShowDonationConfirmationUseCase(
+			$this->newDonationAuthorizer( null, $accessToken ),
+			$this->getDonationRepository()
+		);
 	}
 
 }

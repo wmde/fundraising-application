@@ -11,16 +11,24 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class DonationRepositoryFake implements DonationRepository {
+class FakeDonationRepository implements DonationRepository {
 
 	private $calls = 0;
+	private $donations = [];
+
+	public function __construct( Donation ...$donations ) {
+		foreach ( $donations as $donation ) {
+			$this->storeDonation( $donation );
+		}
+	}
 
 	public function storeDonation( Donation $donation ) {
 		$donation->setId( ++$this->calls );
+		$this->donations[$donation->getId()] = $donation;
 	}
 
 	public function getDonationById( int $id ) {
-		return null;
+		return array_key_exists( $id, $this->donations ) ? $this->donations[$id] : null;
 	}
 
 }

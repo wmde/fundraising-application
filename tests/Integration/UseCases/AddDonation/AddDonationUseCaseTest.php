@@ -15,10 +15,10 @@ use WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationUpdateException;
-use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationUpdater;
+use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizationUpdater;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\DonationRepositoryFake;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeDonationRepository;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationUseCase;
@@ -82,10 +82,10 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * @return AuthorizationUpdater|PHPUnit_Framework_MockObject_MockObject
+	 * @return DonationAuthorizationUpdater|PHPUnit_Framework_MockObject_MockObject
 	 */
-	private function newAuthorizationUpdater(): AuthorizationUpdater {
-		return $this->getMock( AuthorizationUpdater::class );
+	private function newAuthorizationUpdater(): DonationAuthorizationUpdater {
+		return $this->getMock( DonationAuthorizationUpdater::class );
 	}
 
 	private function newOneHourInterval(): \DateInterval {
@@ -93,7 +93,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	private function newRepository(): DonationRepository {
-		return new DonationRepositoryFake();
+		return new FakeDonationRepository();
 	}
 
 	public function testValidationFails_responseObjectContainsViolations() {
@@ -208,19 +208,20 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		return $request;
 	}
 
-	public function testWhenAdditionWorks_successResponseContainsUpdateToken() {
+	public function testWhenAdditionWorks_successResponseContainsTokens() {
 		$useCase = $this->newValidationSucceedingUseCase();
 
 		$response = $useCase->addDonation( $this->newMinimumDonationRequest() );
 
 		$this->assertSame( self::UPDATE_TOKEN, $response->getUpdateToken() );
+		$this->assertSame( self::UPDATE_TOKEN, $response->getAccessToken() );
 	}
 
 	public function testWhenAdditionWorks_updateTokenIsPersisted() {
 		$authorizationUpdater = $this->newAuthorizationUpdater();
 
 		$authorizationUpdater->expects( $this->once() )
-			->method( 'allowDonationModificationViaToken' )
+			->method( 'allowModificationViaToken' )
 			->with(
 				$this->equalTo( 1 ),
 				$this->equalTo( self::UPDATE_TOKEN ),
@@ -232,7 +233,22 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$useCase->addDonation( $this->newMinimumDonationRequest() );
 	}
 
-	private function newUseCaseWithAuthorizationUpdater( AuthorizationUpdater $authUpdater ): AddDonationUseCase {
+	public function testWhenAdditionWorks_accessTokenIsPersisted() {
+		$authorizationUpdater = $this->newAuthorizationUpdater();
+
+		$authorizationUpdater->expects( $this->once() )
+			->method( 'allowAccessViaToken' )
+			->with(
+				$this->equalTo( 1 ),
+				$this->equalTo( self::UPDATE_TOKEN )
+			);
+
+		$useCase = $this->newUseCaseWithAuthorizationUpdater( $authorizationUpdater );
+
+		$useCase->addDonation( $this->newMinimumDonationRequest() );
+	}
+
+	private function newUseCaseWithAuthorizationUpdater( DonationAuthorizationUpdater $authUpdater ): AddDonationUseCase {
 		return new AddDonationUseCase(
 			$this->newRepository(),
 			$this->getSucceedingValidatorMock(),
@@ -245,11 +261,25 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		);
 	}
 
-	public function testWhenAuthorizationUpdateFails_failureResponseIsReturned() {
+	public function testWhenUpdateAuthorizationUpdateFails_failureResponseIsReturned() {
 		$authorizationUpdater = $this->newAuthorizationUpdater();
 
 		$authorizationUpdater->expects( $this->any() )
-			->method( 'allowDonationModificationViaToken' )
+			->method( 'allowModificationViaToken' )
+			->willThrowException( new AuthorizationUpdateException( 'Auth update failed' ) );
+
+		$useCase = $this->newUseCaseWithAuthorizationUpdater( $authorizationUpdater );
+
+		$response = $useCase->addDonation( $this->newMinimumDonationRequest() );
+
+		$this->assertFalse( $response->isSuccessful() );
+	}
+
+	public function testWhenAccessAuthorizationUpdateFails_failureResponseIsReturned() {
+		$authorizationUpdater = $this->newAuthorizationUpdater();
+
+		$authorizationUpdater->expects( $this->any() )
+			->method( 'allowAccessViaToken' )
 			->willThrowException( new AuthorizationUpdateException( 'Auth update failed' ) );
 
 		$useCase = $this->newUseCaseWithAuthorizationUpdater( $authorizationUpdater );

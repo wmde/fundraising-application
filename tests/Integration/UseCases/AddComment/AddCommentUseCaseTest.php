@@ -8,8 +8,8 @@ use WMDE\Fundraising\Frontend\Domain\Model\Comment;
 use WMDE\Fundraising\Frontend\Domain\Repositories\CommentRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\StoreCommentException;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\CommentRepositorySpy;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingAuthorizer;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingAuthorizer;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingDonationAuthorizer;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentUseCase;
 
@@ -30,7 +30,7 @@ class AddCommentUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$addCommentRequest->freeze()->assertNoNullFields();
 
 		$commentRepository = new CommentRepositorySpy();
-		$useCase = new AddCommentUseCase( $commentRepository, new SucceedingAuthorizer() );
+		$useCase = new AddCommentUseCase( $commentRepository, new SucceedingDonationAuthorizer() );
 		$response = $useCase->addComment( $addCommentRequest );
 
 		$expectedComment = new Comment();
@@ -57,7 +57,7 @@ class AddCommentUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 		$useCase = new AddCommentUseCase(
 			$this->newThrowingCommentRepository(),
-			new SucceedingAuthorizer()
+			new SucceedingDonationAuthorizer()
 		);
 
 		$response = $useCase->addComment( $addCommentRequest );
@@ -83,7 +83,7 @@ class AddCommentUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 		$useCase = new AddCommentUseCase(
 			new CommentRepositorySpy(),
-			new FailingAuthorizer()
+			new FailingDonationAuthorizer()
 		);
 
 		$response = $useCase->addComment( $addCommentRequest );

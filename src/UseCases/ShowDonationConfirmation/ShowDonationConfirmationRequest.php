@@ -10,6 +10,14 @@ namespace WMDE\Fundraising\Frontend\UseCases\ShowDonationConfirmation;
  */
 class ShowDonationConfirmationRequest {
 
-	// TODO
+	private $donationId;
+
+	public function __construct( int $donationId ) {
+		$this->donationId = $donationId;
+	}
+
+	public function getDonationId(): int {
+		return $this->donationId;
+	}
 
 }

@@ -347,14 +347,25 @@ $app->post(
 	}
 );
 
-$app->post(
+$app->get(
 	'show-donation-confirmation',
 	function( Application $app, Request $request ) use ( $ffFactory ) {
-		$useCase = $ffFactory->newShowDonationConfirmationUseCase();
+		$useCase = $ffFactory->newShowDonationConfirmationUseCase( $request->query->get( 'accessToken', '' ) );
 
-		$useCase->showConfirmation( new ShowDonationConfirmationRequest( /* TODO */ ) );
+		$responseModel = $useCase->showConfirmation( new ShowDonationConfirmationRequest(
+			(int)$request->query->get( 'donationId', '' )
+		) );
 
-		return 'TODO'; // TODO
+		if ( $responseModel->accessIsPermitted() ) {
+			return new Response(
+				$ffFactory->newDonationConfirmationPresenter()->present(
+					$responseModel->getDonation(),
+					$request->query->get( 'updateToken', '' )
+				)
+			);
+		}
+
+		return new Response( 'TODO: access not permitted' ); // TODO
 	}
 );
 

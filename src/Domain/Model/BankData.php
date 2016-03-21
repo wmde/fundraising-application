@@ -35,7 +35,7 @@ class BankData {
 		return $this->iban;
 	}
 
-	public function setIban( Iban $iban ) {
+	public function setIban( $iban ) {
 		$this->assertIsWritable();
 		$this->iban = $iban;
 		return $this;

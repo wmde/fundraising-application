@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingAuthorizer;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationRequest;
 use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationUseCase;
@@ -141,7 +141,7 @@ class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		return new CancelDonationUseCase(
 			$this->getDonationRepositoryWithDonation( $donation ),
 			$mailer,
-			new SucceedingAuthorizer()
+			new SucceedingDonationAuthorizer()
 		);
 	}
 
