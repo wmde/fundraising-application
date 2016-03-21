@@ -9,6 +9,12 @@ User facing application for the WMDE fundraising.
 * php7.0-sqlite3 (only needed for running the tests)
 * Node.js and npm (only needed in development for compiling the JavaScript and running the JavaScript tests)
 
+## Installing the application
+
+	composer install
+	npm install
+	npm run build-js
+
 ## Running the application
 
 For development
@@ -16,46 +22,39 @@ For development
 	cd web
 	php -S 0:8000
 
+The "add donation" form can then be found at http://localhost:8000/index.php/page/DonationForm.html.twig
+
 ## Running the tests
 
 For tests only
 
     composer test
+    npm run test
 
 For style checks only
 
 	composer cs
+	npm run cs
 
 For a full CI run (including JavaScript CI)
 
 	composer ci
 
+For a full JS CI run
+
+	npm run ci
+
+By default the PHP tests are run with a version of PHPUnit installed locally with Composer.
 To run the tests with your globally installed PHPUnit, you will need a recent version of
 PHPUnit. Consult the `require-dev` section of `composer.json` for up to date information.
 
-The JavaScript tests are run as npm scripts that mirror composer scripts:
-
-    npm run test
-    npm run cs
-    npm run ci
-
-Note that these scripts need some node.js packages installed (see below).
-
-## Compiling the JavaScript
-
-As a first step you must install the required node.js packages with npm:
-
-    npm install
-
-To compile the Javascript to be uased by the web application, run
+If JavaScript files where changed, you will first need to run
 
     npm run build-js
     
-If you are working on the JavaScript files and need automatic recompilation when a files changes, use
+If you are working on the JavaScript files and need automatic recompilation when a files changes, then run
 
     npm run watch-js
-
-instead. 
 
 If you want to debug problems in the Redux data flow, set the following variable in the shell environment:
   
