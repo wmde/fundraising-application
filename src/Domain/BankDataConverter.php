@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Domain;
 
 use RuntimeException;
 use WMDE\Fundraising\Frontend\Domain\Model\BankData;
+use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 
 /**
  * @licence GNU GPL v2+
