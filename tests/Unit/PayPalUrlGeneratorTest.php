@@ -4,11 +4,11 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests;
 
-use WMDE\Fundraising\Frontend\Domain\PayPalConfig;
-use WMDE\Fundraising\Frontend\Domain\PayPalUrlGenerator;
+use WMDE\Fundraising\Frontend\Presentation\PayPalConfig;
+use WMDE\Fundraising\Frontend\Presentation\PayPalUrlGenerator;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Domain\PayPalUrlGenerator
+ * @covers WMDE\Fundraising\Frontend\Presentation\PayPalUrlGenerator
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >

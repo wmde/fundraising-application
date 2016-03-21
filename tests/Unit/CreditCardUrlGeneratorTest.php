@@ -4,11 +4,11 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests;
 
-use WMDE\Fundraising\Frontend\Domain\CreditCardConfig;
-use WMDE\Fundraising\Frontend\Domain\CreditCardUrlGenerator;
+use WMDE\Fundraising\Frontend\Presentation\CreditCardConfig;
+use WMDE\Fundraising\Frontend\Presentation\CreditCardUrlGenerator;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Domain\CreditCardUrlGenerator
+ * @covers WMDE\Fundraising\Frontend\Presentation\CreditCardUrlGenerator
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
