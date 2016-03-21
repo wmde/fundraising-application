@@ -696,7 +696,7 @@ class FunFunFactory {
 		return PayPalConfig::newFromConfig( $this->config['paypal'] );
 	}
 
-	public function newCreditCardUrlGenerator() {
+	private function newCreditCardUrlGenerator() {
 		return new CreditCardUrlGenerator( $this->newCreditCardConfig() );
 	}
 
