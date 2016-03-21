@@ -18,11 +18,13 @@ use WMDE\Fundraising\Frontend\Validation\PhysicalAddressValidator;
  */
 class PersonalInfoValidatorTest extends ValidatorTestCase {
 
+	const VALID_EMAIL_ADDRESS = 'hank.scorpio@globex.com';
+
 	public function testGivenValidPersonalInfo_validationIsSuccessful() {
 		$personalInfo = new PersonalInfo(
 			$this->newCompanyName(),
 			$this->newPhysicalAddress(),
-			'hank.scorpio@globex.com'
+			self::VALID_EMAIL_ADDRESS
 		);
 
 		$this->assertTrue( $this->newPersonalInfoValidator()->validate( $personalInfo )->isSuccessful() );
@@ -42,7 +44,7 @@ class PersonalInfoValidatorTest extends ValidatorTestCase {
 		$personalInfo = new PersonalInfo(
 			PersonName::newCompanyName(),
 			$this->newPhysicalAddress(),
-			'hank.scorpio@globex.com'
+			self::VALID_EMAIL_ADDRESS
 		);
 
 		$validator = $this->newPersonalInfoValidator();
@@ -58,7 +60,7 @@ class PersonalInfoValidatorTest extends ValidatorTestCase {
 		$personalInfo = new PersonalInfo(
 			$this->newCompanyName(),
 			$this->newPhysicalAddressWithMissingData(),
-			'hank.scorpio@globex.com'
+			self::VALID_EMAIL_ADDRESS
 		);
 
 		$validator = $this->newPersonalInfoValidator();
