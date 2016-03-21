@@ -9,6 +9,7 @@ use RuntimeException;
 /**
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
+ * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class Donation {
 	// status for direct debit
@@ -49,6 +50,7 @@ class Donation {
 	private $bankData;
 
 	/**
+	 * TODO: move out of Donation
 	 * @var TrackingInfo
 	 */
 	private $trackingInfo;
