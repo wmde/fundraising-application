@@ -117,13 +117,11 @@ class AddDonationHandler {
 	}
 
 	private function getPersonalInfoFromRequest( Request $request ): PersonalInfo {
-		$personalInfo = new PersonalInfo();
-
-		$personalInfo->setEmailAddress( $request->get( 'email', '' ) );
-		$personalInfo->setPhysicalAddress( $this->getPhysicalAddressFromRequest( $request ) );
-		$personalInfo->setPersonName( $this->getNameFromRequest( $request ) );
-
-		return $personalInfo->freeze()->assertNoNullFields();
+		return new PersonalInfo(
+			$this->getNameFromRequest( $request ),
+			$this->getPhysicalAddressFromRequest( $request ),
+			$request->get( 'email', '' )
+		);
 	}
 
 	private function getPhysicalAddressFromRequest( Request $request ): PhysicalAddress {

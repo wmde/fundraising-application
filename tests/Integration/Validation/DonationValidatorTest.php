@@ -39,12 +39,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 	}
 
 	public function testGivenValidDonation_validationIsSuccessful() {
-		$personalInfo = new PersonalInfo();
-		$personalInfo->setPersonName( $this->newCompanyName() );
-		$personalInfo->setPhysicalAddress( $this->newPhysicalAddress() );
-		$personalInfo->setEmailAddress( 'hank.scorpio@globex.com' );
-		$personalInfo->freeze()->assertNoNullFields();
-		$donation = $this->newDonation( $personalInfo );
+		$donation = $this->newDonation();
 
 		$this->assertEmpty( $this->donationValidator->validate( $donation )->getViolations() );
 	}
@@ -65,16 +60,14 @@ class DonationValidatorTest extends ValidatorTestCase {
 	}
 
 	public function testPersonalInfoValidationFails_validatorReturnsFalse() {
-		$personalInfo = new PersonalInfo();
-		$personalInfo->setPersonName( PersonName::newCompanyName() );
-		$personalInfo->setPhysicalAddress( new PhysicalAddress() );
-		$personalInfo->setEmailAddress( 'hank.scorpio@globex.com' );
-		$personalInfo->freeze()->assertNoNullFields();
-
 		$donation = new Donation();
 		$donation->setAmount( 1 );
 		$donation->setPaymentType( PaymentType::BANK_TRANSFER );
-		$donation->setPersonalInfo( $personalInfo );
+		$donation->setPersonalInfo( new PersonalInfo(
+			$this->newCompanyName(),
+			$this->newPhysicalAddress(),
+			'hank.scorpio@globex.com'
+		) );
 
 		$personalInfoValidator = $this->getMockBuilder( PersonalInfoValidator::class )->disableOriginalConstructor()->getMock();
 		$personalInfoValidator->method( 'validate' )
@@ -109,14 +102,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 			$this->newBankDataValidator()
 		);
 
-		$personalInfo = new PersonalInfo();
-		$personalInfo->setPersonName( $this->newCompanyName() );
-		$personalInfo->setPhysicalAddress( $this->newPhysicalAddress() );
-		$personalInfo->setEmailAddress( 'hank.scorpio@globex.com' );
-		$personalInfo->freeze();
-
-		$donation = $this->newDonation( $personalInfo );
-		$this->assertTrue( $donationValidator->needsModeration( $donation ) );
+		$this->assertTrue( $donationValidator->needsModeration( $this->newDonation() ) );
 	}
 
 	public function testNoPaymentTypeGiven_validatorReturnsFalse() {
@@ -185,10 +171,14 @@ class DonationValidatorTest extends ValidatorTestCase {
 		);
 	}
 
-	private function newDonation( PersonalInfo $personalInfo ): Donation {
+	private function newDonation(): Donation {
 		$donation = new Donation();
 		$donation->setAmount( 1 );
-		$donation->setPersonalInfo( $personalInfo );
+		$donation->setPersonalInfo( new PersonalInfo(
+			$this->newCompanyName(),
+			$this->newPhysicalAddress(),
+			'hank.scorpio@globex.com'
+		) );
 		$donation->setPaymentType( PaymentType::BANK_TRANSFER );
 
 		return $donation;

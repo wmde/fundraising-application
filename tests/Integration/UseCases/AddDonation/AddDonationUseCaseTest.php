@@ -199,11 +199,12 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 	private function newValidAddDonationRequestWithEmail( string $email ): AddDonationRequest {
 		$request = $this->newMinimumDonationRequest();
-		$personalInfo = new PersonalInfo();
-		$personalInfo->setPersonName( PersonName::newPrivatePersonName() );
-		$personalInfo->setPhysicalAddress( new PhysicalAddress() );
-		$personalInfo->setEmailAddress( $email );
-		$request->setPersonalInfo( $personalInfo );
+;
+		$request->setPersonalInfo( new PersonalInfo(
+			PersonName::newPrivatePersonName(),
+			new PhysicalAddress(),
+			$email
+		) );
 
 		return $request;
 	}
