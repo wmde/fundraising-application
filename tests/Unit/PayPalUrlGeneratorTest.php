@@ -63,7 +63,7 @@ class PayPalUrlGeneratorTest extends \PHPUnit_Framework_TestCase {
 		);
 	}
 
-	private function newPayPalConfig() {
+	private function newPayPalConfig(): PayPalConfig {
 		return PayPalConfig::newFromConfig( [
 			'base-url' => 'http://that.paymentprovider.com/?',
 			'account-address' => 'foerderpp@wikimedia.de',
@@ -76,7 +76,7 @@ class PayPalUrlGeneratorTest extends \PHPUnit_Framework_TestCase {
 
 	public function testGivenIncompletePayPalConfig_exceptionIsThrown() {
 		$this->expectException( \RuntimeException::class );
-		$config = $this->newIncompletePayPalConfig();
+		$this->newIncompletePayPalConfig();
 	}
 
 	private function newIncompletePayPalConfig() {
