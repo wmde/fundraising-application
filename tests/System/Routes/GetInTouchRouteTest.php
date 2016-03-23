@@ -76,9 +76,6 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 					->disableOriginalConstructor()
 					->getMock();
 
-				$messenger->method( 'getOperatorAddress' )
-					->willReturn( new MailAddress( 'just.some@email.address' ) );
-
 				$messenger->expects( $this->any() )
 					->method( 'sendMessageToUser' )
 					->willThrowException( new \RuntimeException( 'Something unexpected happened' ) );
