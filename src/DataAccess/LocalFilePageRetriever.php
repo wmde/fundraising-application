@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\DataAccess;
 use FileFetcher\FileFetcher;
 use FileFetcher\FileFetchingException;
 use Psr\Log\LoggerInterface;
-use WMDE\Fundraising\Frontend\Domain\PageRetriever;
+use WMDE\Fundraising\Frontend\Infrastructure\PageRetriever;
 
 /**
  * @licence GNU GPL v2+

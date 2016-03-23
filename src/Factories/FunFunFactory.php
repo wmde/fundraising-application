@@ -91,7 +91,7 @@ use WMDE\Fundraising\Frontend\Validation\SubscriptionDuplicateValidator;
 use WMDE\Fundraising\Frontend\Validation\SubscriptionValidator;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\AddSubscriptionUseCase;
 use WMDE\Fundraising\Frontend\DataAccess\ApiBasedPageRetriever;
-use WMDE\Fundraising\Frontend\Domain\PageRetriever;
+use WMDE\Fundraising\Frontend\Infrastructure\PageRetriever;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DisplayPagePresenter;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\DisplayPageUseCase;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;

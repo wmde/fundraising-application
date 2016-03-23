@@ -9,7 +9,7 @@ use Mediawiki\Api\MediawikiApi;
 use Mediawiki\Api\SimpleRequest;
 use Mediawiki\Api\UsageException;
 use Psr\Log\LoggerInterface;
-use WMDE\Fundraising\Frontend\Domain\PageRetriever;
+use WMDE\Fundraising\Frontend\Infrastructure\PageRetriever;
 
 /**
  * @licence GNU GPL v2+
