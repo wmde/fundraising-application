@@ -98,5 +98,8 @@
 		"background-color": "",
 		"skin": "",
 		"theme": ""
-	}
+	},
+	"confirmation-pages": [
+		"10h16_Bestätigung.twig"
+	]
 }

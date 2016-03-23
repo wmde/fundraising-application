@@ -19,13 +19,14 @@ class DonationConfirmationHtmlPresenter {
 		$this->template = $template;
 	}
 
-	public function present( Donation $donation, string $updateToken ): string {
-		return $this->template->render( $this->getConfirmationPageArguments( $donation, $updateToken ) );
+	public function present( Donation $donation, string $updateToken, string $templateName = '' ): string {
+		return $this->template->render( $this->getConfirmationPageArguments( $donation, $updateToken, $templateName ) );
 	}
 
-	private function getConfirmationPageArguments( Donation $donation, string $updateToken ) {
+	private function getConfirmationPageArguments( Donation $donation, string $updateToken, string $templateName ) {
 
 		return array_merge( [
+			'templateName' => $templateName,
 			'donation' => [
 				'id' => $donation->getId(),
 				'status' => $donation->getStatus(),

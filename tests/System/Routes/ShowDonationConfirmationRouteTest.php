@@ -9,6 +9,7 @@ use Symfony\Component\HttpKernel\Client;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Presentation\DonationConfirmationPageSelector;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
 
@@ -43,6 +44,27 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 			);
 
 			$this->assertDonationDataInResponse( $donation, $client->getResponse() );
+		} );
+	}
+
+	public function testGivenAlternativeConfirmationPageConfig_alternativeContentIsDisplayed() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setDonationConfirmationPageSelector(
+				new DonationConfirmationPageSelector( [ 'DonationConfirmationAlternative.twig' ] )
+			);
+			$donation = $this->newStoredDonation( $factory );
+
+			$client->request(
+				'GET',
+				'show-donation-confirmation',
+				[
+					'donationId' => $donation->getId(),
+					'accessToken' => self::CORRECT_ACCESS_TOKEN,
+					'updateToken' => self::SOME_UPDATE_TOKEN
+				]
+			);
+
+			$this->assertContains( 'Alternative content', $client->getResponse()->getContent() );
 		} );
 	}
 
