@@ -3,6 +3,7 @@
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\Domain\SelectedConfirmationPage;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
 /**
@@ -19,14 +20,16 @@ class DonationConfirmationHtmlPresenter {
 		$this->template = $template;
 	}
 
-	public function present( Donation $donation, string $updateToken, string $templateName = '' ): string {
-		return $this->template->render( $this->getConfirmationPageArguments( $donation, $updateToken, $templateName ) );
+	public function present( Donation $donation, string $updateToken, SelectedConfirmationPage $selectedPage ): string {
+		return $this->template->render( $this->getConfirmationPageArguments( $donation, $updateToken, $selectedPage ) );
 	}
 
-	private function getConfirmationPageArguments( Donation $donation, string $updateToken, string $templateName ) {
+	private function getConfirmationPageArguments( Donation $donation, string $updateToken,
+												   SelectedConfirmationPage $selectedPage ) {
 
 		return array_merge( [
-			'templateName' => $templateName,
+			'templateCampaign' => $selectedPage->getCampaignCode(),
+			'templateName' => $selectedPage->getPageTitle(),
 			'donation' => [
 				'id' => $donation->getId(),
 				'status' => $donation->getStatus(),

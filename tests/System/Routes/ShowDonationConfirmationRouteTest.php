@@ -9,7 +9,6 @@ use Symfony\Component\HttpKernel\Client;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\TemplateTestCampaign;
 use WMDE\Fundraising\Frontend\Presentation\DonationConfirmationPageSelector;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
@@ -49,6 +48,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 			);
 
 			$this->assertDonationDataInResponse( $donation, $client->getResponse() );
+			$this->assertContains( 'Template Name: 10h16_Bestätigung.twig', $client->getResponse()->getContent() );
 		} );
 	}
 
@@ -69,7 +69,9 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 				]
 			);
 
-			$this->assertContains( 'Alternative content', $client->getResponse()->getContent() );
+			$content = $client->getResponse()->getContent();
+			$this->assertContains( 'Template Name: DonationConfirmationAlternative.twig', $content );
+			$this->assertContains( 'Template Campaign: example', $content );
 		} );
 	}
 
@@ -169,26 +171,30 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	private function newConfirmationPageConfig() {
 		return [
 			'default' => '10h16_Bestätigung.twig',
-			'campaigns' => [ new TemplateTestCampaign( [
-				'code' => 'example',
-				'active' => true,
-				'startDate' => '1970-01-01 00:00:00',
-				'endDate' => '2038-12-31 23:59:59',
-				'templates' => [ 'DonationConfirmationAlternative.twig' ]
-			] ) ]
+			'campaigns' => [
+				[
+					'code' => 'example',
+					'active' => true,
+					'startDate' => '1970-01-01 00:00:00',
+					'endDate' => '2038-12-31 23:59:59',
+					'templates' => [ 'DonationConfirmationAlternative.twig' ]
+				]
+			]
 		];
 	}
 
 	private function newEmptyConfirmationPageConfig() {
 		return [
 			'default' => '10h16_Bestätigung.twig',
-			'campaigns' => [ new TemplateTestCampaign( [
-				'code' => 'example',
-				'active' => false,
-				'startDate' => '1970-01-01 00:00:00',
-				'endDate' => '1970-12-31 23:59:59',
-				'templates' => []
-			] ) ]
+			'campaigns' => [
+				[
+					'code' => 'example',
+					'active' => false,
+					'startDate' => '1970-01-01 00:00:00',
+					'endDate' => '1970-12-31 23:59:59',
+					'templates' => []
+				]
+			]
 		];
 	}
 

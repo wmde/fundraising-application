@@ -12,6 +12,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Domain\SelectedConfirmationPage;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationResponse;
 
@@ -39,18 +40,17 @@ class AddDonationHandler {
 			return new Response( 'TODO: error occurred' ); // TODO
 		}
 
-		// TODO: take over confirmation page selection functionality from old application
-
-		return $this->newHttpResponse( $responseModel );
+		return $this->newHttpResponse( $responseModel, $this->ffFactory->getDonationConfirmationPageSelector()->selectPage() );
 	}
 
-	private function newHttpResponse( AddDonationResponse $responseModel ): Response {
+	private function newHttpResponse( AddDonationResponse $responseModel, SelectedConfirmationPage $selectedPage ): Response {
 		switch( $responseModel->getDonation()->getPaymentType() ) {
 			case PaymentType::DIRECT_DEBIT:
 			case PaymentType::BANK_TRANSFER:
 				return new Response( $this->ffFactory->newDonationConfirmationPresenter()->present(
 					$responseModel->getDonation(),
-					$responseModel->getUpdateToken()
+					$responseModel->getUpdateToken(),
+					$selectedPage
 				) );
 			case PaymentType::PAYPAL:
 				return $this->app->redirect(

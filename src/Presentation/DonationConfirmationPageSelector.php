@@ -2,7 +2,8 @@
 
 namespace WMDE\Fundraising\Frontend\Presentation;
 
-use WMDE\Fundraising\Frontend\Infrastructure\TemplateTestCampaign;
+use WMDE\Fundraising\Frontend\Domain\SelectedConfirmationPage;
+use WMDE\Fundraising\Frontend\Domain\TemplateTestCampaign;
 
 /**
  * Selects a random confirmation page from given options
@@ -18,17 +19,17 @@ class DonationConfirmationPageSelector {
 
 	public function __construct( array $config ) {
 		$this->defaultPageTitle = $config['default'];
-		$this->campaigns = $config['campaigns'];
+		$this->parseCampaigns( $config['campaigns'] );
 	}
 
-	public function selectPage(): string {
+	public function selectPage(): SelectedConfirmationPage {
 		foreach ( $this->getRunningCampaigns() as $campaign ) {
 			if ( !empty( $campaign->getTemplates() ) ) {
-				return $campaign->getRandomTemplate();
+				return new SelectedConfirmationPage( $campaign->getCode(), $campaign->getRandomTemplate() );
 			}
 		}
 
-		return $this->defaultPageTitle;
+		return new SelectedConfirmationPage( '', $this->defaultPageTitle );
 	}
 
 	/**
@@ -41,6 +42,12 @@ class DonationConfirmationPageSelector {
 				return $campaign->isRunning();
 			}
 		);
+	}
+
+	private function parseCampaigns( $campaigns ) {
+		foreach ( $campaigns as $campaign ) {
+			$this->campaigns[] = new TemplateTestCampaign( $campaign );
+		}
 	}
 
 }

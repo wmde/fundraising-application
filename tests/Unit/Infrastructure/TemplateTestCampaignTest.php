@@ -2,10 +2,10 @@
 
 namespace WMDE\Fundraising\Tests\Unit;
 
-use WMDE\Fundraising\Frontend\Infrastructure\TemplateTestCampaign;
+use WMDE\Fundraising\Frontend\Domain\TemplateTestCampaign;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Infrastructure\TemplateTestCampaign
+ * @covers WMDE\Fundraising\Frontend\Domain\TemplateTestCampaign
  *
  * @licence GNU GPL v2+
  * @author Leszek Manicki <leszek.manicki@wikimedia.de>
