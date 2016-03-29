@@ -9,6 +9,7 @@ use Symfony\Component\HttpKernel\Client;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\TemplateTestCampaign;
 use WMDE\Fundraising\Frontend\Presentation\DonationConfirmationPageSelector;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
@@ -31,6 +32,10 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequest_confirmationPageContainsDonationData() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setDonationConfirmationPageSelector(
+				new DonationConfirmationPageSelector( $this->newEmptyConfirmationPageConfig() )
+			);
+
 			$donation = $this->newStoredDonation( $factory );
 
 			$client->request(
@@ -50,7 +55,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	public function testGivenAlternativeConfirmationPageConfig_alternativeContentIsDisplayed() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setDonationConfirmationPageSelector(
-				new DonationConfirmationPageSelector( [ 'DonationConfirmationAlternative.twig' ] )
+				new DonationConfirmationPageSelector( $this->newConfirmationPageConfig() )
 			);
 			$donation = $this->newStoredDonation( $factory );
 
@@ -90,6 +95,9 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 	public function testGivenWrongToken_accessIsDenied() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setDonationConfirmationPageSelector(
+				new DonationConfirmationPageSelector( $this->newEmptyConfirmationPageConfig() )
+			);
 			$donation = $this->newStoredDonation( $factory );
 
 			$client->request(
@@ -118,6 +126,10 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 	public function testGivenWrongId_accessIsDenied() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setDonationConfirmationPageSelector(
+				new DonationConfirmationPageSelector( $this->newEmptyConfirmationPageConfig() )
+			);
+
 			$donation = $this->newStoredDonation( $factory );
 
 			$client->request(
@@ -136,6 +148,10 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 	public function testWhenNoDonation_accessIsDenied() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setDonationConfirmationPageSelector(
+				new DonationConfirmationPageSelector( $this->newEmptyConfirmationPageConfig() )
+			);
+
 			$client->request(
 				'GET',
 				'show-donation-confirmation',
@@ -148,6 +164,32 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 			$this->assertContains( 'TODO: access not permitted', $client->getResponse()->getContent() );
 		} );
+	}
+
+	private function newConfirmationPageConfig() {
+		return [
+			'default' => '10h16_Bestätigung.twig',
+			'campaigns' => [ new TemplateTestCampaign( [
+				'code' => 'example',
+				'active' => true,
+				'startDate' => '1970-01-01 00:00:00',
+				'endDate' => '2038-12-31 23:59:59',
+				'templates' => [ 'DonationConfirmationAlternative.twig' ]
+			] ) ]
+		];
+	}
+
+	private function newEmptyConfirmationPageConfig() {
+		return [
+			'default' => '10h16_Bestätigung.twig',
+			'campaigns' => [ new TemplateTestCampaign( [
+				'code' => 'example',
+				'active' => false,
+				'startDate' => '1970-01-01 00:00:00',
+				'endDate' => '1970-12-31 23:59:59',
+				'templates' => []
+			] ) ]
+		];
 	}
 
 }
