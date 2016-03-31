@@ -16,8 +16,8 @@
 			},
 			"filesystem": {
 				"template-dir": [
-					"app/templates",
-					"tests/templates"
+					"tests/templates",
+					"app/templates"
 				]
 			},
 			"array": {

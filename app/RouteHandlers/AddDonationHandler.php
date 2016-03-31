@@ -34,12 +34,11 @@ class AddDonationHandler {
 	}
 
 	public function handle( Request $request ): Response {
-		$responseModel = $this->ffFactory->newAddDonationUseCase()->addDonation(
-			$this->createDonationRequest( $request )
-		);
+		$addDonationRequest = $this->createDonationRequest( $request );
+		$responseModel = $this->ffFactory->newAddDonationUseCase()->addDonation( $addDonationRequest );
 
 		if ( !$responseModel->isSuccessful() ) {
-			return new Response( 'TODO: error occurred' ); // TODO
+			return new Response( $this->ffFactory->newDonationFormViolationPresenter()->present( $responseModel->getValidationErrors(), $addDonationRequest ) );
 		}
 
 		return $this->newHttpResponse( $responseModel, $this->ffFactory->getDonationConfirmationPageSelector()->selectPage() );

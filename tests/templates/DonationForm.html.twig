@@ -1,0 +1,23 @@
+Amount: {$ betrag $}
+Payment type: {$ zahlweise $}
+Address type: {$ adresstyp $}
+Interval: {$ periode $}
+IBAN: {$ iban $}
+BIC: {$ bic $}
+Bank name: {$ bankName $}
+Address type: {$ adressType $}
+Salutation: {$ anrede $}
+Title: {$ titel $}
+Company: {$ firma $}
+First name: {$ vorname $}
+Last name: {$ nachname $}
+Street: {$ strasse $}
+Postal code: {$ plz $}
+City: {$ ort $}
+Country code: {$ country $}
+Email address: {$ email $}
+
+Violations:
+{% for fieldName, message in violatedFields %}
+	Value of field "{$ fieldName $}" violates rule: {$ message $}
+{% endfor %}

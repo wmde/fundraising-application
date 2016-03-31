@@ -113,6 +113,23 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals( [ new ConstraintViolation( 'foo', 'bar' ) ], $result->getValidationErrors() );
 	}
 
+	public function testValidationFails_responseObjectContainsRequestObject() {
+		$useCase = new AddDonationUseCase(
+			$this->newRepository(),
+			$this->getFailingValidatorMock( new ConstraintViolation( 'foo', 'bar' ) ),
+			new ReferrerGeneralizer( 'http://foo.bar', [] ),
+			$this->newMailer(),
+			$this->newTransferCodeGenerator(),
+			$this->newBankDataConverter(),
+			$this->newTokenGenerator(),
+			$this->newAuthorizationUpdater()
+		);
+
+		$request = $this->newInvalidDonationRequest();
+		$useCase->addDonation( $request );
+		$this->assertEquals( $this->newInvalidDonationRequest(), $request );
+	}
+
 	private function getSucceedingValidatorMock(): DonationValidator {
 		$validator = $this->getMockBuilder( DonationValidator::class )
 			->disableOriginalConstructor()
@@ -137,6 +154,13 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$donationRequest = new AddDonationRequest();
 		$donationRequest->setAmount( Euro::newFromString( '1.00' ) );
 		$donationRequest->setPaymentType( PaymentType::DIRECT_DEBIT );
+		return $donationRequest;
+	}
+
+	private function newInvalidDonationRequest(): AddDonationRequest {
+		$donationRequest = new AddDonationRequest();
+		$donationRequest->setPaymentType( PaymentType::DIRECT_DEBIT );
+		$donationRequest->setAmount( new Euro( 0 ) );
 		return $donationRequest;
 	}
 
