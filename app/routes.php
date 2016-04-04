@@ -355,10 +355,12 @@ $app->get(
 		) );
 
 		if ( $responseModel->accessIsPermitted() ) {
+			$selectedConfirmationPage = $ffFactory->getDonationConfirmationPageSelector()->selectPage();
 			return new Response(
 				$ffFactory->newDonationConfirmationPresenter()->present(
 					$responseModel->getDonation(),
-					$request->query->get( 'updateToken', '' )
+					$request->query->get( 'updateToken', '' ),
+					$selectedConfirmationPage
 				)
 			);
 		}

@@ -65,6 +65,7 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionHtmlPresent
 use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionJsonPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\ConfirmSubscriptionHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CreditCardPaymentHtmlPresenter;
+use WMDE\Fundraising\Frontend\Presentation\DonationConfirmationPageSelector;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\GetInTouchHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\IbanPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\InternalErrorHtmlPresenter;
@@ -278,6 +279,10 @@ class FunFunFactory {
 				$this->getOperatorAddress(),
 				$this->config['operator-displayname']
 			);
+		} );
+
+		$pimple['confirmation-page-selector'] = $pimple->share( function() {
+			return new DonationConfirmationPageSelector( $this->config['confirmation-pages'] );
 		} );
 
 		return $pimple;
@@ -789,6 +794,14 @@ class FunFunFactory {
 			$this->newDonationAuthorizer( null, $accessToken ),
 			$this->getDonationRepository()
 		);
+	}
+
+	public function setDonationConfirmationPageSelector( DonationConfirmationPageSelector $selector ) {
+		$this->pimple['confirmation-page-selector'] = $selector;
+	}
+
+	public function getDonationConfirmationPageSelector() {
+		return $this->pimple['confirmation-page-selector'];
 	}
 
 }
