@@ -25,11 +25,11 @@ class TemplateTestCampaignTest extends \PHPUnit_Framework_TestCase {
 			]
 		] );
 
-		$this->assertEquals( 'FOO', $campaign->getCode() );
+		$this->assertSame( 'FOO', $campaign->getCode() );
 		$this->assertTrue( $campaign->isActive() );
-		$this->assertEquals( '2015-11-01 08:00:00', $campaign->getStartTimestamp()->format( 'Y-m-d H:i:s' ) );
-		$this->assertEquals( '2015-11-08 08:00:00', $campaign->getEndTimestamp()->format( 'Y-m-d H:i:s' ) );
-		$this->assertEquals( [ 'bar', 'baz' ], $campaign->getTemplates() );
+		$this->assertSame( '2015-11-01 08:00:00', $campaign->getStartTimestamp()->format( 'Y-m-d H:i:s' ) );
+		$this->assertSame( '2015-11-08 08:00:00', $campaign->getEndTimestamp()->format( 'Y-m-d H:i:s' ) );
+		$this->assertSame( [ 'bar', 'baz' ], $campaign->getTemplates() );
 	}
 
 	private function newCampaign( array $campaignData ) {
@@ -113,9 +113,9 @@ class TemplateTestCampaignTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * @dataProvider testIsRunningDataProvider
 	 */
-	public function testIsRunning( $expected, array $data ) {
+	public function testIsRunning( bool $expected, array $data ) {
 		$campaign = $this->newCampaign( $data );
-		$this->assertEquals( $expected, $campaign->isRunning() );
+		$this->assertSame( $expected, $campaign->isRunning() );
 	}
 
 }
