@@ -3,7 +3,7 @@
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
-use WMDE\Fundraising\Frontend\Domain\SelectedConfirmationPage;
+use WMDE\Fundraising\Frontend\Presentation\SelectedConfirmationPage;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
 /**

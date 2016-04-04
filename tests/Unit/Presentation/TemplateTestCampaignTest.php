@@ -1,11 +1,11 @@
 <?php
 
-namespace WMDE\Fundraising\Tests\Unit;
+namespace WMDE\Fundraising\Tests\Unit\Presentation;
 
-use WMDE\Fundraising\Frontend\Domain\TemplateTestCampaign;
+use WMDE\Fundraising\Frontend\Presentation\TemplateTestCampaign;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Domain\TemplateTestCampaign
+ * @covers WMDE\Fundraising\Frontend\Presentation\TemplateTestCampaign
  *
  * @licence GNU GPL v2+
  * @author Leszek Manicki <leszek.manicki@wikimedia.de>
