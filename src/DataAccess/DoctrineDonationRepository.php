@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\DataAccess;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
+use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
@@ -49,7 +50,7 @@ class DoctrineDonationRepository implements DonationRepository {
 	private function newDonationEntity( Donation $donation ): DoctrineDonation {
 		$doctrineDonation = new DoctrineDonation();
 		$doctrineDonation->setStatus( $donation->getStatus() );
-		$doctrineDonation->setAmount( $donation->getAmount() ); // FIXME: should be string
+		$doctrineDonation->setAmount( $donation->getAmount()->getEuroString() );
 		$doctrineDonation->setPeriod( $donation->getInterval() );
 
 		$doctrineDonation->setPaymentType( $donation->getPaymentType() );
@@ -169,7 +170,7 @@ class DoctrineDonationRepository implements DonationRepository {
 
 		$donation->setId( $dd->getId() );
 		$donation->setStatus( $dd->getStatus() );
-		$donation->setAmount( (float)$dd->getAmount() );
+		$donation->setAmount( Euro::newFromString( $dd->getAmount() ) );
 		$donation->setInterval( $dd->getPeriod() );
 		$donation->setPaymentType( $dd->getPaymentType() );
 		$donation->setBankTransferCode( $dd->getTransferCode() );

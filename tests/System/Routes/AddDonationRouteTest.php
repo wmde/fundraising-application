@@ -38,7 +38,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$donation = $this->getDonationFromDatabase( $factory );
 
 			$data = $donation->getDecodedData();
-			$this->assertSame( 5.51, $donation->getAmount() );
+			$this->assertSame( '5.51', $donation->getAmount() );
 			$this->assertSame( 'BEZ', $donation->getPaymentType() );
 			$this->assertSame( 0, $donation->getPeriod() );
 			$this->assertSame( 'DE12500105170648489890', $data['iban'] );
@@ -151,7 +151,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$donation = $this->getDonationFromDatabase( $factory );
 
 			$data = $donation->getDecodedData();
-			$this->assertSame( 12.34, $donation->getAmount() );
+			$this->assertSame( '12.34', $donation->getAmount() );
 			$this->assertSame( 'UEB', $donation->getPaymentType() );
 			$this->assertSame( 0, $donation->getPeriod() );
 			$this->assertSame( 'person', $data['adresstyp'] );

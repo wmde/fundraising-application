@@ -65,7 +65,7 @@ class DonationValidator {
 	private function getAmountViolation( Donation $donation ) {
 		return $this->getFieldViolation(
 			$this->amountValidator->validate(
-				$donation->getAmount(),
+				$donation->getAmount()->getEuroFloat(),
 				$donation->getPaymentType()
 			),
 			'betrag'
@@ -77,7 +77,7 @@ class DonationValidator {
 
 		$violations[] = $this->getFieldViolation(
 			$this->amountPolicyValidator->validate(
-				$donation->getAmount(),
+				$donation->getAmount()->getEuroFloat(),
 				$donation->getInterval()
 			),
 			'betrag'

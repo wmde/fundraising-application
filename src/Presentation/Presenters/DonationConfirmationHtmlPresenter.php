@@ -33,7 +33,7 @@ class DonationConfirmationHtmlPresenter {
 			'donation' => [
 				'id' => $donation->getId(),
 				'status' => $donation->getStatus(),
-				'amount' => $donation->getAmount(),
+				'amount' => $donation->getAmount()->getEuroFloat(),
 				'interval' => $donation->getInterval(),
 				'paymentType' => $donation->getPaymentType(),
 				'optsIntoNewsletter' => $donation->getOptsIntoNewsletter(),
