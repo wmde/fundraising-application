@@ -13,7 +13,7 @@ class AmountParser {
 
 	private $locale;
 
-	public function __construct( string $locale = 'de_DE' ) {
+	public function __construct( string $locale ) {
 		$this->locale = $locale;
 	}
 

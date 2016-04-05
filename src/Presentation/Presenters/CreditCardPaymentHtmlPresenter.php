@@ -42,7 +42,7 @@ class CreditCardPaymentHtmlPresenter {
 					$this->translator->trans( $response->getDonation()->getInterval(), [], 'paymentIntervals' ),
 				$response->getDonation()->getId(),
 				$response->getUpdateToken(),
-				$response->getDonation()->getAmount()->getEuroFloat()
+				$response->getDonation()->getAmount()
 			),
 		];
 	}

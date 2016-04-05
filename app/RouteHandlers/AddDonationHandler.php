@@ -58,7 +58,7 @@ class AddDonationHandler {
 				return $this->app->redirect(
 					$this->ffFactory->newPayPalUrlGenerator()->generateUrl(
 						$responseModel->getDonation()->getId(),
-						$responseModel->getDonation()->getAmount()->getEuroFloat(),
+						$responseModel->getDonation()->getAmount(),
 						$responseModel->getDonation()->getInterval(),
 						$responseModel->getUpdateToken()
 						// TODO: include access token

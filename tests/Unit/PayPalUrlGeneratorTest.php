@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests;
 
+use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Presentation\PayPalConfig;
 use WMDE\Fundraising\Frontend\Presentation\PayPalUrlGenerator;
 
@@ -38,7 +39,7 @@ class PayPalUrlGeneratorTest extends \PHPUnit_Framework_TestCase {
 			'&return=http%3A%2F%2Fmy.donation.app%2Fdonation%2Fconfirm%2F%3Fsid%3D1234' .
 			'&custom=%7B%22sid%22%3A1234%2C%22utoken%22%3A%22utoken%22%7D',
 
-			$generator->generateUrl( 1234, 12.34, 3, 'utoken' )
+			$generator->generateUrl( 1234, Euro::newFromString( '12.34' ), 3, 'utoken' )
 		);
 	}
 
@@ -59,7 +60,7 @@ class PayPalUrlGeneratorTest extends \PHPUnit_Framework_TestCase {
 			'&return=http%3A%2F%2Fmy.donation.app%2Fdonation%2Fconfirm%2F%3Fsid%3D1234' .
 			'&custom=%7B%22sid%22%3A1234%2C%22utoken%22%3A%22utoken%22%7D',
 
-			$generator->generateUrl( 1234, 12.34, 0, 'utoken' )
+			$generator->generateUrl( 1234, Euro::newFromString( '12.34' ), 0, 'utoken' )
 		);
 	}
 
