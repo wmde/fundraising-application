@@ -7,7 +7,6 @@ namespace WMDE\Fundraising\Frontend\UseCases\AddDonation;
 use WMDE\Fundraising\Frontend\Domain\BankDataConverter;
 use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
-use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Domain\Model\TrackingInfo;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Model\Iban;
@@ -140,7 +139,7 @@ class AddDonationUseCase {
 	private function newDonationFromRequest( AddDonationRequest $donationRequest ): Donation {
 		$donation = new Donation();
 
-		$donation->setAmount( Euro::newFromFloat( $donationRequest->getAmount() ) );
+		$donation->setAmount( $donationRequest->getAmount() );
 		$donation->setInterval( $donationRequest->getInterval() );
 		$donation->setPersonalInfo( $donationRequest->getPersonalInfo() );
 		$donation->setOptsIntoNewsletter( $donationRequest->getOptIn() === '1' );

@@ -7,12 +7,14 @@ namespace WMDE\Fundraising\Frontend\App\RouteHandlers;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Presentation\SelectedConfirmationPage;
+use WMDE\Fundraising\Frontend\Infrastructure\AmountParser;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationResponse;
 
@@ -73,8 +75,9 @@ class AddDonationHandler {
 
 	private function createDonationRequest( Request $request ): AddDonationRequest {
 		$donationRequest = new AddDonationRequest();
-		$locale = 'de_DE'; // TODO: make this configurable for multilanguage support
-		$donationRequest->setAmountFromString( $request->get( 'betrag', '' ), $locale );
+
+		$donationRequest->setAmount( $this->getEuroAmountFromString( $request->get( 'betrag', '' ) ) );
+
 		$donationRequest->setPaymentType( $request->get( 'zahlweise', '' ) );
 		$donationRequest->setInterval( intval( $request->get( 'periode', 0 ) ) );
 
@@ -114,6 +117,12 @@ class AddDonationHandler {
 		$donationRequest->setLayout( $request->get( 'layout', '' ) );
 
 		return $donationRequest;
+	}
+
+	private function getEuroAmountFromString( string $amount ) {
+		$locale = 'de_DE'; // TODO: make this configurable for multilanguage support
+
+		return Euro::newFromFloat( ( new AmountParser( $locale ) )->parseAsFloat( $amount ) );
 	}
 
 	private function getPersonalInfoFromRequest( Request $request ): PersonalInfo {
