@@ -50,13 +50,13 @@ class DonationConfirmationHtmlPresenter {
 	}
 
 	private function getPersonArguments( Donation $donation ): array {
-		if ( $donation->getPersonalInfo() !== null ) {
+		if ( $donation->getDonor() !== null ) {
 			return [
-				'fullName' => $donation->getPersonalInfo()->getPersonName()->getFullName(),
-				'streetAddress' => $donation->getPersonalInfo()->getPhysicalAddress()->getStreetAddress(),
-				'postalCode' => $donation->getPersonalInfo()->getPhysicalAddress()->getPostalCode(),
-				'city' => $donation->getPersonalInfo()->getPhysicalAddress()->getCity(),
-				'email' => $donation->getPersonalInfo()->getEmailAddress(),
+				'fullName' => $donation->getDonor()->getPersonName()->getFullName(),
+				'streetAddress' => $donation->getDonor()->getPhysicalAddress()->getStreetAddress(),
+				'postalCode' => $donation->getDonor()->getPhysicalAddress()->getPostalCode(),
+				'city' => $donation->getDonor()->getPhysicalAddress()->getCity(),
+				'email' => $donation->getDonor()->getEmailAddress(),
 			];
 		}
 

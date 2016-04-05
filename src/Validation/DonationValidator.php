@@ -45,10 +45,10 @@ class DonationValidator {
 			)
 		];
 
-		if ( $donation->getPersonalInfo() !== null ) {
+		if ( $donation->getDonor() !== null ) {
 			$violations = array_merge(
 				$violations,
-				$this->personalInfoValidator->validate( $donation->getPersonalInfo() )->getViolations()
+				$this->personalInfoValidator->validate( $donation->getDonor() )->getViolations()
 			);
 		}
 
@@ -104,7 +104,7 @@ class DonationValidator {
 			TextPolicyValidator::IGNORE_WHITEWORDS |
 			TextPolicyValidator::CHECK_URLS;
 		$fieldTextValidator = new FieldTextPolicyValidator( $this->textPolicyValidator, $flags );
-		$personalInfo = $donation->getPersonalInfo();
+		$personalInfo = $donation->getDonor();
 
 		if ( $personalInfo ) {
 			$violations[] = $this->getFieldViolation(

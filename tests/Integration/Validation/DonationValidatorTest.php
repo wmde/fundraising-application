@@ -9,7 +9,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
-use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
+use WMDE\Fundraising\Frontend\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
@@ -64,7 +64,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 		$donation = new Donation();
 		$donation->setAmount( new Euro( 100 ) );
 		$donation->setPaymentType( PaymentType::BANK_TRANSFER );
-		$donation->setPersonalInfo( new PersonalInfo(
+		$donation->setDonor( new Donor(
 			$this->newCompanyName(),
 			$this->newPhysicalAddress(),
 			'hank.scorpio@globex.com'
@@ -175,7 +175,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 	private function newDonation(): Donation {
 		$donation = new Donation();
 		$donation->setAmount( new Euro( 100 ) );
-		$donation->setPersonalInfo( new PersonalInfo(
+		$donation->setDonor( new Donor(
 			$this->newCompanyName(),
 			$this->newPhysicalAddress(),
 			'hank.scorpio@globex.com'

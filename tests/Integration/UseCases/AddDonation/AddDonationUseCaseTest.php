@@ -9,7 +9,7 @@ use WMDE\Fundraising\Frontend\Domain\BankDataConverter;
 use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
-use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
+use WMDE\Fundraising\Frontend\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer;
@@ -202,7 +202,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 	private function newValidAddDonationRequestWithEmail( string $email ): AddDonationRequest {
 		$request = $this->newMinimumDonationRequest();
 ;
-		$request->setPersonalInfo( new PersonalInfo(
+		$request->setPersonalInfo( new Donor(
 			PersonName::newPrivatePersonName(),
 			new PhysicalAddress(),
 			$email

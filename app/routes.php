@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\AddDonationHandler;
 use WMDE\Fundraising\Frontend\Domain\Model\Iban;
-use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
+use WMDE\Fundraising\Frontend\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
@@ -82,8 +82,8 @@ $app->post(
 				}
 			}
 
-			private function getPersonalInfoFromRequest( Request $request ): PersonalInfo {
-				return new PersonalInfo(
+			private function getPersonalInfoFromRequest( Request $request ): Donor {
+				return new Donor(
 					$this->getNameFromRequest( $request ),
 					$this->getPhysicalAddressFromRequest( $request ),
 					$request->get( 'email', '' )

@@ -8,7 +8,7 @@ namespace WMDE\Fundraising\Frontend\Domain\Model;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class PersonalInfo {
+class Donor {
 
 	private $personName;
 	private $physicalAddress;

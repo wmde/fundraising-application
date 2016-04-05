@@ -16,45 +16,35 @@ class MembershipApplication {
 	private $id;
 
 	/**
-	 * @var PersonalInfo
+	 * @var MembershipApplicant
 	 */
-	private $personalInfo;
+	private $applicant;
 
 	/**
 	 * @var BankData
 	 */
 	private $bankData;
 
-	public function __construct( int $id, PersonalInfo $personalInfo, BankData $bankData ) {
+	public function __construct( int $id, MembershipApplicant $applicant, BankData $bankData ) {
 		$this->id = $id;
-		$this->personalInfo = $personalInfo;
+		$this->applicant = $applicant;
 		$this->bankData = $bankData;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getId() {
+	public function getId(): int {
 		return $this->id;
 	}
 
-	/**
-	 * @return PersonalInfo
-	 */
-	public function getPersonalInfo() {
-		return $this->personalInfo;
+	public function getApplicant(): MembershipApplicant {
+		return $this->applicant;
 	}
 
-	/**
-	 * @return BankData
-	 */
-	public function getBankData() {
+	public function getBankData(): BankData {
 		return $this->bankData;
 	}
 
 	/**
 	 * TODO:
-	 * - date of birth & phone
 	 * - type, fee interval & fee amount
 	 * - account holder
 	 */

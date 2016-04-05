@@ -2,7 +2,7 @@
 
 namespace WMDE\Fundraising\Frontend\Validation;
 
-use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
+use WMDE\Fundraising\Frontend\Domain\Model\Donor;
 
 /**
  * @license GNU GPL v2+
@@ -23,7 +23,7 @@ class PersonalInfoValidator {
 		$this->mailValidator = $mailValidator;
 	}
 
-	public function validate( PersonalInfo $personalInfo ): ValidationResult {
+	public function validate( Donor $personalInfo ): ValidationResult {
 		$violations = $this->nameValidator->validate( $personalInfo->getPersonName() )->getViolations();
 		$violations = array_merge(
 			$violations,

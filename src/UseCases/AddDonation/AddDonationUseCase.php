@@ -141,7 +141,7 @@ class AddDonationUseCase {
 
 		$donation->setAmount( $donationRequest->getAmount() );
 		$donation->setInterval( $donationRequest->getInterval() );
-		$donation->setPersonalInfo( $donationRequest->getPersonalInfo() );
+		$donation->setDonor( $donationRequest->getPersonalInfo() );
 		$donation->setOptsIntoNewsletter( $donationRequest->getOptIn() === '1' );
 		$donation->setPaymentType( $donationRequest->getPaymentType() );
 
@@ -206,9 +206,9 @@ class AddDonationUseCase {
 	 * TODO: handle exception
 	 */
 	private function sendDonationConfirmationEmail( Donation $donation, bool $needsModeration ) {
-		if ( $donation->getPersonalInfo() !== null ) {
+		if ( $donation->getDonor() !== null ) {
 			$this->mailer->sendMail(
-				new MailAddress( $donation->getPersonalInfo()->getEmailAddress() ),
+				new MailAddress( $donation->getDonor()->getEmailAddress() ),
 				$this->getConfirmationMailTemplateArguments( $donation, $needsModeration )
 			);
 		}
@@ -218,9 +218,9 @@ class AddDonationUseCase {
 		return [
 			'recipient' => [
 				'salutation' => ( new GreetingGenerator() )->createGreeting(
-					$donation->getPersonalInfo()->getPersonName()->getLastName(),
-					$donation->getPersonalInfo()->getPersonName()->getSalutation(),
-					$donation->getPersonalInfo()->getPersonName()->getTitle()
+					$donation->getDonor()->getPersonName()->getLastName(),
+					$donation->getDonor()->getPersonName()->getSalutation(),
+					$donation->getDonor()->getPersonName()->getTitle()
 				)
 			],
 			'donation' => [

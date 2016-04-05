@@ -2,7 +2,7 @@
 
 namespace WMDE\Fundraising\Tests\Integration\Validation;
 
-use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
+use WMDE\Fundraising\Frontend\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Domain\NullDomainNameValidator;
@@ -21,7 +21,7 @@ class PersonalInfoValidatorTest extends ValidatorTestCase {
 	const VALID_EMAIL_ADDRESS = 'hank.scorpio@globex.com';
 
 	public function testGivenValidPersonalInfo_validationIsSuccessful() {
-		$personalInfo = new PersonalInfo(
+		$personalInfo = new Donor(
 			$this->newCompanyName(),
 			$this->newPhysicalAddress(),
 			self::VALID_EMAIL_ADDRESS
@@ -31,7 +31,7 @@ class PersonalInfoValidatorTest extends ValidatorTestCase {
 	}
 
 	public function testGivenMissingEmail_validationFails() {
-		$personalInfo = new PersonalInfo(
+		$personalInfo = new Donor(
 			$this->newCompanyName(),
 			$this->newPhysicalAddress(),
 			''
@@ -41,7 +41,7 @@ class PersonalInfoValidatorTest extends ValidatorTestCase {
 	}
 
 	public function testGivenMissingName_validationFails() {
-		$personalInfo = new PersonalInfo(
+		$personalInfo = new Donor(
 			PersonName::newCompanyName(),
 			$this->newPhysicalAddress(),
 			self::VALID_EMAIL_ADDRESS
@@ -57,7 +57,7 @@ class PersonalInfoValidatorTest extends ValidatorTestCase {
 	}
 
 	public function testGivenMissingAddressFields_validationFails() {
-		$personalInfo = new PersonalInfo(
+		$personalInfo = new Donor(
 			$this->newCompanyName(),
 			$this->newPhysicalAddressWithMissingData(),
 			self::VALID_EMAIL_ADDRESS
