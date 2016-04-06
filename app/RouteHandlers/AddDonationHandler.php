@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Domain\SelectedConfirmationPage;
+use WMDE\Fundraising\Frontend\Presentation\SelectedConfirmationPage;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationResponse;
 

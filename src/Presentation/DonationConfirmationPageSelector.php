@@ -2,8 +2,8 @@
 
 namespace WMDE\Fundraising\Frontend\Presentation;
 
-use WMDE\Fundraising\Frontend\Domain\SelectedConfirmationPage;
-use WMDE\Fundraising\Frontend\Domain\TemplateTestCampaign;
+use WMDE\Fundraising\Frontend\Presentation\SelectedConfirmationPage;
+use WMDE\Fundraising\Frontend\Presentation\TemplateTestCampaign;
 
 /**
  * Selects a random confirmation page from given options
