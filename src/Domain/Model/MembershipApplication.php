@@ -11,27 +11,23 @@ namespace WMDE\Fundraising\Frontend\Domain\Model;
 class MembershipApplication {
 
 	/**
-	 * @var int
+	 * @var int|null
 	 */
 	private $id;
 
-	/**
-	 * @var MembershipApplicant
-	 */
 	private $applicant;
+	private $payment;
 
-	/**
-	 * @var BankData
-	 */
-	private $bankData;
-
-	public function __construct( int $id, MembershipApplicant $applicant, BankData $bankData ) {
+	public function __construct( int $id = null, MembershipApplicant $applicant, MembershipPayment $payment ) {
 		$this->id = $id;
 		$this->applicant = $applicant;
-		$this->bankData = $bankData;
+		$this->payment = $payment;
 	}
 
-	public function getId(): int {
+	/**
+	 * @return int|null
+	 */
+	public function getId() {
 		return $this->id;
 	}
 
@@ -39,14 +35,8 @@ class MembershipApplication {
 		return $this->applicant;
 	}
 
-	public function getBankData(): BankData {
-		return $this->bankData;
+	public function getPayment(): MembershipPayment {
+		return $this->payment;
 	}
-
-	/**
-	 * TODO:
-	 * - type, fee interval & fee amount
-	 * - account holder
-	 */
 
 }
