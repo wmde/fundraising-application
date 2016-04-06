@@ -1,8 +1,9 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
-use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
@@ -35,59 +36,40 @@ class DonationFormViolationPresenter {
 				'bic' => $request->getBic(),
 				'bankName' => $request->getBankName()
 			],
-			$this->getPersonalInfo( $request->getPersonalInfo() ) );
+			$this->getPersonalInfo( $request->getPersonalInfo() )
+		);
 	}
 
-	/**
-	 * @param PersonalInfo|null $personalInfo
-	 * @return array
-	 */
-	private function getPersonalInfo( $personalInfo ) {
-		if ( $personalInfo !== null ) {
-			return array_merge(
-				$this->getPersonName( $personalInfo->getPersonName() ),
-				$this->getPhysicalAddress( $personalInfo->getPhysicalAddress() ),
-				[ 'email' => $personalInfo->getEmailAddress() ]
-			);
+	private function getPersonalInfo( PersonalInfo $personalInfo = null ) {
+		if ( $personalInfo === null ) {
+			return [];
 		}
 
-		return [];
+		return array_merge(
+			$this->getPersonName( $personalInfo->getPersonName() ),
+			$this->getPhysicalAddress( $personalInfo->getPhysicalAddress() ),
+			[ 'email' => $personalInfo->getEmailAddress() ]
+		);
 	}
 
-	/**
-	 * @param PersonName|null $personName
-	 * @return array
-	 */
-	private function getPersonName( $personName ) {
-		if ( $personName !== null ) {
-			return [
-				'adresstyp' => $personName->getPersonType(),
-				'anrede' => $personName->getSalutation(),
-				'titel' => $personName->getTitle(),
-				'firma' => $personName->getCompanyName(),
-				'vorname' => $personName->getFirstName(),
-				'nachname' => $personName->getLastName(),
-			];
-		}
-
-		return [];
+	private function getPersonName( PersonName $personName ) {
+		return [
+			'adresstyp' => $personName->getPersonType(),
+			'anrede' => $personName->getSalutation(),
+			'titel' => $personName->getTitle(),
+			'firma' => $personName->getCompanyName(),
+			'vorname' => $personName->getFirstName(),
+			'nachname' => $personName->getLastName(),
+		];
 	}
 
-	/**
-	 * @param PhysicalAddress|null $address
-	 * @return array
-	 */
-	private function getPhysicalAddress( $address ) {
-		if ( $address !== null ) {
-			return [
-				'strasse' => $address->getStreetAddress(),
-				'plz' => $address->getPostalCode(),
-				'ort' => $address->getCity(),
-				'country' => $address->getCountryCode(),
-			];
-		}
-
-		return [];
+	private function getPhysicalAddress( PhysicalAddress $address ) {
+		return [
+			'strasse' => $address->getStreetAddress(),
+			'plz' => $address->getPostalCode(),
+			'ort' => $address->getCity(),
+			'country' => $address->getCountryCode(),
+		];
 	}
 
 }
