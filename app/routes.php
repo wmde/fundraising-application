@@ -309,9 +309,11 @@ $app->post(
 			(int)$request->request->get( 'sid', '' )
 		);
 
-		$response = $ffFactory->newCancelDonationUseCase( $request->request->get( 'utoken', '' ) )->cancelDonation( $cancellationRequest );
+		$useCase = $ffFactory->newCancelDonationUseCase( $request->request->get( 'utoken', '' ) );
 
-		return $ffFactory->newCancelDonationHtmlPresenter()->present( $response );
+		return $ffFactory->newCancelDonationHtmlPresenter()->present(
+			$useCase->cancelDonation( $cancellationRequest )
+		);
 	}
 );
 
@@ -337,9 +339,13 @@ $app->post(
 $app->post(
 	'cancel-membership-application',
 	function( Application $app, Request $request ) use ( $ffFactory ) {
-		$useCase = $ffFactory->newCancelMembershipApplicationUseCase();
+		$cancellationRequest = new CancelMembershipApplicationRequest(
+			(int)$request->request->get( 'sid', '' )
+		);
 
-		$useCase->cancelMembershipApplication( new CancelMembershipApplicationRequest( /* TODO */ ) );
+		$useCase = $ffFactory->newCancelMembershipApplicationUseCase( $request->request->get( 'utoken', '' ) );
+
+		$useCase->cancelApplication( $cancellationRequest );
 
 		return 'TODO'; // TODO
 	}

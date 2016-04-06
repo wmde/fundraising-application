@@ -785,7 +785,7 @@ class FunFunFactory {
 		return new ApplyForMembershipUseCase();
 	}
 
-	public function newCancelMembershipApplicationUseCase(): CancelMembershipApplicationUseCase {
+	public function newCancelMembershipApplicationUseCase( string $updateToken ): CancelMembershipApplicationUseCase {
 		return new CancelMembershipApplicationUseCase();
 	}
 
