@@ -39,6 +39,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Presentation\PayPalConfig;
 use WMDE\Fundraising\Frontend\Presentation\PayPalUrlGenerator;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormViolationPresenter;
 use WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer;
 use WMDE\Fundraising\Frontend\Domain\Repositories\CommentFinder;
 use WMDE\Fundraising\Frontend\DataAccess\DbalSubscriptionRepository;
@@ -802,6 +803,10 @@ class FunFunFactory {
 
 	public function getDonationConfirmationPageSelector() {
 		return $this->pimple['confirmation-page-selector'];
+	}
+
+	public function newDonationFormViolationPresenter() {
+		return new DonationFormViolationPresenter( $this->getLayoutTemplate( 'DonationForm.html.twig' ) );
 	}
 
 }

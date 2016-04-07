@@ -311,4 +311,96 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		];
 	}
 
+	public function testGivenInvalidRequest_formIsReloadedAndPrefilled() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setNullMessenger();
+
+			$client->request(
+				'POST',
+				'/donation/add',
+				$this->newInvalidFormInput()
+			);
+
+			$response = $client->getResponse()->getContent();
+
+			$this->assertContains( 'Amount: 0', $response );
+			$this->assertContains( 'Payment type: BEZ', $response );
+			$this->assertContains( 'Interval: 3', $response );
+			$this->assertContains( 'IBAN: DE12500105170648489890', $response );
+			$this->assertContains( 'BIC: INGDDEFFXXX', $response );
+			$this->assertContains( 'Bank name: ING-DiBa', $response );
+			$this->assertContains( 'Address type: person', $response );
+			$this->assertContains( 'Salutation: Frau', $response );
+			$this->assertContains( 'Title: Prof. Dr.', $response );
+			$this->assertContains( 'Company: ', $response );
+			$this->assertContains( 'First name: Karla', $response );
+			$this->assertContains( 'Last name: Kennichnich', $response );
+			$this->assertContains( 'Street: Lehmgasse 12', $response );
+			$this->assertContains( 'Postal code: 12345', $response );
+			$this->assertContains( 'City: Einort', $response );
+			$this->assertContains( 'Country code: DE', $response );
+			$this->assertContains( 'Email address: karla@kennichnich.de', $response );
+		} );
+	}
+
+	private function newInvalidFormInput() {
+		return [
+			'betrag' => '0',
+			'zahlweise' => 'BEZ',
+			'periode' => 3,
+			'iban' => 'DE12500105170648489890',
+			'bic' => 'INGDDEFFXXX',
+			'konto' => '0648489890',
+			'blz' => '50010517',
+			'bankname' => 'ING-DiBa',
+			'adresstyp' => 'person',
+			'anrede' => 'Frau',
+			'titel' => 'Prof. Dr.',
+			'firma' => '',
+			'vorname' => 'Karla',
+			'nachname' => 'Kennichnich',
+			'strasse' => 'Lehmgasse 12',
+			'plz' => '12345',
+			'ort' => 'Einort',
+			'country' => 'DE',
+			'email' => 'karla@kennichnich.de',
+			'info' => '1',
+			'piwik_campaign' => 'test',
+			'piwik_kwd' => 'gelb',
+			'impCount' => '3',
+			'bImpCount' => '1',
+			'layout' => 'Default',
+			'color' => 'blue',
+			'skin' => 'default',
+		];
+	}
+
+	public function testGivenInvalidAnonymousRequest_formIsReloadedAndPrefilled() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setNullMessenger();
+
+			$client->request(
+				'POST',
+				'/donation/add',
+				$this->newAnonymousFormInput()
+			);
+
+			$response = $client->getResponse()->getContent();
+
+			$this->assertContains( 'Amount: 0', $response );
+			$this->assertContains( 'Payment type: UEB', $response );
+			$this->assertContains( 'Interval: 1', $response );
+			$this->assertContains( 'Value of field "betrag" violates rule: Amount too low', $response );
+		} );
+	}
+
+	private function newAnonymousFormInput() {
+		return [
+			'betrag' => '0',
+			'zahlweise' => 'UEB',
+			'periode' => 1,
+			'adresstyp' => 'anonym'
+		];
+	}
+
 }
