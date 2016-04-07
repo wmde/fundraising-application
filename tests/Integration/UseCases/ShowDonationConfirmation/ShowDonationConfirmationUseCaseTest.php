@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\ShowDonationConfirmation;
 
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeDonationRepository;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingDonationAuthorizer;
@@ -68,7 +69,7 @@ class ShowDonationConfirmationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 	public function testWhenDonationExistsAndAccessIsAllowed_donationIsReturned() {
 		$donation = new Donation();
-		$donation->setAmount( 42 );
+		$donation->setAmount( new Euro( 4200 ) );
 
 		$useCase = new ShowDonationConfirmationUseCase(
 			new SucceedingDonationAuthorizer(),

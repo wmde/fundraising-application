@@ -72,11 +72,11 @@ class Donation {
 		$this->status = $status;
 	}
 
-	public function getAmount(): float {
+	public function getAmount(): Euro {
 		return $this->amount;
 	}
 
-	public function setAmount( float $amount ) {
+	public function setAmount( Euro $amount ) {
 		$this->amount = $amount;
 	}
 

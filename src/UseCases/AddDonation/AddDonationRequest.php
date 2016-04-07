@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\UseCases\AddDonation;
 
+use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
 
 /**
@@ -20,7 +21,7 @@ class AddDonationRequest {
 	private $optIn = '';
 
 	# donation
-	private $amount = 0.0;
+	private $amount;
 	private $paymentType = '';
 	private $interval = 0;
 
@@ -59,11 +60,11 @@ class AddDonationRequest {
 		$this->optIn = $optIn;
 	}
 
-	public function getAmount(): float {
+	public function getAmount(): Euro {
 		return $this->amount;
 	}
 
-	public function setAmount( float $amount ) {
+	public function setAmount( Euro $amount ) {
 		$this->amount = $amount;
 	}
 
@@ -177,12 +178,6 @@ class AddDonationRequest {
 
 	public function setLayout( string $layout ) {
 		$this->layout = $layout;
-	}
-
-	public function setAmountFromString( string $value, string $locale = 'de_DE' ) {
-		$this->setAmount(
-			(float)( new \NumberFormatter( $locale, \NumberFormatter::DECIMAL ) )->parse( $value )
-		);
 	}
 
 	public static function getPreferredValue( array $values ) {

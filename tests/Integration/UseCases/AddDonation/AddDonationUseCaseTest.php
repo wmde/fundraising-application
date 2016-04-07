@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\AddDonation;
 
 use PHPUnit_Framework_MockObject_MockObject;
 use WMDE\Fundraising\Frontend\Domain\BankDataConverter;
+use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
@@ -134,6 +135,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 	private function newMinimumDonationRequest(): AddDonationRequest {
 		$donationRequest = new AddDonationRequest();
+		$donationRequest->setAmount( Euro::newFromString( '1.00' ) );
 		$donationRequest->setPaymentType( PaymentType::DIRECT_DEBIT );
 		return $donationRequest;
 	}

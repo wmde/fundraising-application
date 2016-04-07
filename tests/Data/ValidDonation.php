@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Data;
 
+use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
@@ -35,7 +36,7 @@ class ValidDonation {
 									 string $transferCode = '' ): Donation {
 		$donation = new Donation();
 
-		$donation->setAmount( $amount );
+		$donation->setAmount( Euro::newFromFloat( $amount ) );
 		$donation->setPaymentType( $paymentType );
 		$donation->setBankTransferCode( $transferCode );
 		$donation->setStatus( Donation::STATUS_NEW );

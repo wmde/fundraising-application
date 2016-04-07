@@ -14,38 +14,6 @@ use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationRequest;
  */
 class AddDonationRequestTest extends \PHPUnit_Framework_TestCase {
 
-	public function valueProvider() {
-		return [
-			[ 'de_DE', 29.5, '29,50' ],
-			[ 'de_DE', 0.1, '0,10' ],
-			[ 'de_DE', 1234.56, '1234,56' ],
-			[ 'de_DE', 1234567.89, '1.234.567,89' ],
-			[ 'de_DE', 0, '0' ],
-			[ 'de_DE', 0, '' ],
-			[ 'de_DE', 0, 'abc' ],
-
-			[ 'en_US', 29.5, '29.50' ],
-			[ 'en_US', 0.1, '0.10' ],
-			[ 'en_US', 1234.56, '1234.56' ],
-			[ 'en_US', 1234567.89, '1,234,567.89' ],
-			[ 'en_US', 0, '0' ],
-			[ 'en_US', 0, '' ],
-			[ 'en_US', 0, 'abc' ],
-		];
-	}
-
-	/**
-	 * @dataProvider valueProvider
-	 * @param string $locale
-	 * @param float $expectedValue
-	 * @param string $inputValue
-	 */
-	public function testGivenFormattedString_setAmountFromStringParsesIntoFloat( $locale, $expectedValue, $inputValue ) {
-		$request = new AddDonationRequest();
-		$request->setAmountFromString( $inputValue, $locale );
-		$this->assertEquals( $expectedValue, $request->getAmount() );
-	}
-
 	/**
 	 * @dataProvider preferredValueProvider
 	 *

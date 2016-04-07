@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Presentation;
 
+use WMDE\Fundraising\Frontend\Domain\Model\Euro;
+
 /**
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
@@ -17,7 +19,7 @@ class CreditCardUrlGenerator {
 	}
 
 	public function generateUrl( string $firstName, string $lastName, string $payText,
-								  int $donationId, string $updateToken, float $amount ) {
+								  int $donationId, string $updateToken, Euro $amount ) {
 		// TODO: implement sealed parameters (https://techdoc.micropayment.de/payment/payments/payments_en.html#id302721)
 		$baseUrl = $this->config->getBaseUrl();
 		$params = [
@@ -29,7 +31,7 @@ class CreditCardUrlGenerator {
 			'sid' => $donationId,
 			'skin' => $this->config->getSkin(),
 			'utoken' => $updateToken,
-			'amount' => intval( $amount * 100 ),
+			'amount' => $amount->getEuroCents(),
 			'theme' => $this->config->getTheme()
 		];
 

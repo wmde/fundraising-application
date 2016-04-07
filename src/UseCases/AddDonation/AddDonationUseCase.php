@@ -225,7 +225,7 @@ class AddDonationUseCase {
 			],
 			'donation' => [
 				'id' => $donation->getId(),
-				'amount' => $donation->getAmount(),
+				'amount' => $donation->getAmount()->getEuroFloat(), // TODO: getEuroString might be better
 				'interval' => $donation->getInterval(),
 				'needsModeration' => $needsModeration,
 				'paymentType' => $donation->getPaymentType(),

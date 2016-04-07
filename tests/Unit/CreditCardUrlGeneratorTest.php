@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests;
 
+use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Presentation\CreditCardConfig;
 use WMDE\Fundraising\Frontend\Presentation\CreditCardUrlGenerator;
 
@@ -17,7 +18,7 @@ class CreditCardUrlGeneratorTest extends \PHPUnit_Framework_TestCase {
 
 	/** @dataProvider donationProvider */
 	public function testUrlGeneration( string $expected, string $firstName, string $lastName, string $payText,
-									   int $donationId, string $updateToken, float $amount ) {
+									   int $donationId, string $updateToken, Euro $amount ) {
 		$urlGenerator = new CreditCardUrlGenerator(
 			CreditCardConfig::newFromConfig( [
 				'base-url' => 'https://credit-card.micropayment.de/creditcard/event/index.php?',
@@ -44,7 +45,7 @@ class CreditCardUrlGeneratorTest extends \PHPUnit_Framework_TestCase {
 				'Ich spende einmalig',
 				1234567,
 				'my_update_token',
-				5.00
+				Euro::newFromFloat( 5.00 )
 			],
 			[
 				'https://credit-card.micropayment.de/creditcard/event/index.php?project=wikimedia&bgcolor=CCE7CD&' .
@@ -55,7 +56,7 @@ class CreditCardUrlGeneratorTest extends \PHPUnit_Framework_TestCase {
 				'Ich spende monatlich',
 				1234567,
 				'my_update_token',
-				1.23
+				Euro::newFromFloat( 1.23 )
 			],
 			[
 				'https://credit-card.micropayment.de/creditcard/event/index.php?project=wikimedia&bgcolor=CCE7CD&' .
@@ -66,7 +67,7 @@ class CreditCardUrlGeneratorTest extends \PHPUnit_Framework_TestCase {
 				'Ich spende halbjährlich',
 				1234567,
 				'my_update_token',
-				12.5
+				Euro::newFromFloat( 12.5 )
 			],
 		];
 	}

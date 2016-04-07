@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
+use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
 use WMDE\Fundraising\Frontend\Domain\Repositories\StoreDonationException;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
@@ -38,7 +39,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 		$doctrineDonation = $this->getDonationFromDatabase();
 
-		$this->assertSame( $donation->getAmount(), $doctrineDonation->getAmount() );
+		$this->assertSame( $donation->getAmount()->getEuroString(), $doctrineDonation->getAmount() );
 		$this->assertSame( $donation->getPersonalInfo()->getEmailAddress(), $doctrineDonation->getEmail() );
 	}
 
@@ -56,7 +57,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 		$doctrineDonation = $this->getDonationFromDatabase();
 
-		$this->assertSame( $donation->getAmount(), $doctrineDonation->getAmount() );
+		$this->assertSame( $donation->getAmount()->getEuroString(), $doctrineDonation->getAmount() );
 	}
 
 	public function testWhenPersistenceFails_domainExceptionIsThrown() {
@@ -85,10 +86,10 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$repository = new DoctrineDonationRepository( $this->entityManager );
 
 		$donation = ValidDonation::newDonation();
-		$donation->setAmount( 42 );
+		$donation->setAmount( new Euro( 4200 ) );
 		$repository->storeDonation( $donation );
 
-		$donation->setAmount( 1337 );
+		$donation->setAmount( new Euro( 133700 ) );
 		$repository->storeDonation( $donation );
 
 		$this->assertEquals( $donation, $repository->getDonationById( $donation->getId() ) );
