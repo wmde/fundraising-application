@@ -90,8 +90,8 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	private function assertDonationDataInResponse( Donation $donation, Response $response ) {
 		$content = $response->getContent();
 
-		$this->assertContains( $donation->getPersonalInfo()->getPersonName()->getFirstName(), $content );
-		$this->assertContains( $donation->getPersonalInfo()->getPersonName()->getLastName(), $content );
+		$this->assertContains( $donation->getDonor()->getPersonName()->getFirstName(), $content );
+		$this->assertContains( $donation->getDonor()->getPersonName()->getLastName(), $content );
 		$this->assertContains( $donation->getBankData()->getIban()->toString(), $content );
 	}
 
@@ -119,8 +119,8 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	private function assertDonationIsNotShown( Donation $donation, Response $response ) {
 		$content = $response->getContent();
 
-		$this->assertNotContains( $donation->getPersonalInfo()->getPersonName()->getFirstName(), $content );
-		$this->assertNotContains( $donation->getPersonalInfo()->getPersonName()->getLastName(), $content );
+		$this->assertNotContains( $donation->getDonor()->getPersonName()->getFirstName(), $content );
+		$this->assertNotContains( $donation->getDonor()->getPersonName()->getLastName(), $content );
 		$this->assertNotContains( $donation->getBankData()->getIban()->toString(), $content );
 
 		$this->assertContains( 'TODO: access not permitted', $content );

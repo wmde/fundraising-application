@@ -70,9 +70,9 @@ class CancelDonationUseCase {
 	}
 
 	private function sendConfirmationEmail( Donation $donation ) {
-		if ( $donation->getPersonalInfo() !== null ) {
+		if ( $donation->getDonor() !== null ) {
 			$this->mailer->sendMail(
-				new MailAddress( $donation->getPersonalInfo()->getEmailAddress() ),
+				new MailAddress( $donation->getDonor()->getEmailAddress() ),
 				$this->getConfirmationMailTemplateArguments( $donation )
 			);
 		}
@@ -82,9 +82,9 @@ class CancelDonationUseCase {
 		return [
 			'donationId' => $donation->getId(),
 			'salutation' => ( new GreetingGenerator() )->createGreeting(
-				$donation->getPersonalInfo()->getPersonName()->getLastName(),
-				$donation->getPersonalInfo()->getPersonName()->getSalutation(),
-				$donation->getPersonalInfo()->getPersonName()->getTitle()
+				$donation->getDonor()->getPersonName()->getLastName(),
+				$donation->getDonor()->getPersonName()->getSalutation(),
+				$donation->getDonor()->getPersonName()->getTitle()
 			)
 		];
 	}

@@ -9,6 +9,7 @@ use RuntimeException;
 /**
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
+ * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class Donation {
 	// status for direct debit
@@ -39,9 +40,9 @@ class Donation {
 	private $optsIntoNewsletter;
 
 	/**
-	 * @var PersonalInfo|null
+	 * @var Donor|null
 	 */
-	private $personalInfo;
+	private $donor;
 
 	/**
 	 * @var BankData|null
@@ -49,6 +50,7 @@ class Donation {
 	private $bankData;
 
 	/**
+	 * TODO: move out of Donation
 	 * @var TrackingInfo
 	 */
 	private $trackingInfo;
@@ -105,16 +107,16 @@ class Donation {
 	}
 
 	/**
-	 * Returns the PersonalInfo or null for anonymous donations.
+	 * Returns the Donor or null for anonymous donations.
 	 *
-	 * @return PersonalInfo|null
+	 * @return Donor|null
 	 */
-	public function getPersonalInfo() {
-		return $this->personalInfo;
+	public function getDonor() {
+		return $this->donor;
 	}
 
-	public function setPersonalInfo( PersonalInfo $personalInfo = null ) {
-		$this->personalInfo = $personalInfo;
+	public function setDonor( Donor $donor = null ) {
+		$this->donor = $donor;
 	}
 
 	public function getOptsIntoNewsletter(): bool {

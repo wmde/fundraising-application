@@ -10,7 +10,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
-use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
+use WMDE\Fundraising\Frontend\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Domain\Model\TrackingInfo;
@@ -56,12 +56,12 @@ class DoctrineDonationRepository implements DonationRepository {
 		$doctrineDonation->setPaymentType( $donation->getPaymentType() );
 		$doctrineDonation->setTransferCode( $donation->getBankTransferCode() );
 
-		if ( $donation->getPersonalInfo() === null ) {
+		if ( $donation->getDonor() === null ) {
 			$doctrineDonation->setName( 'Anonym' );
 		} else {
-			$doctrineDonation->setCity( $donation->getPersonalInfo()->getPhysicalAddress()->getCity() );
-			$doctrineDonation->setEmail( $donation->getPersonalInfo()->getEmailAddress() );
-			$doctrineDonation->setName( $donation->getPersonalInfo()->getPersonName()->getFullName() );
+			$doctrineDonation->setCity( $donation->getDonor()->getPhysicalAddress()->getCity() );
+			$doctrineDonation->setEmail( $donation->getDonor()->getEmailAddress() );
+			$doctrineDonation->setName( $donation->getDonor()->getPersonName()->getFullName() );
 		}
 
 		$doctrineDonation->setInfo( $donation->getOptsIntoNewsletter() );
@@ -75,7 +75,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		return array_merge(
 			$this->getDataFieldsFromTrackingInfo( $donation->getTrackingInfo() ),
 			$this->getDataFieldsForBankData( $donation ),
-			$this->getDataFieldsFromPersonalInfo( $donation->getPersonalInfo() )
+			$this->getDataFieldsFromPersonalInfo( $donation->getDonor() )
 		);
 	}
 
@@ -109,7 +109,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		return [];
 	}
 
-	private function getDataFieldsFromPersonalInfo( PersonalInfo $personalInfo = null ): array {
+	private function getDataFieldsFromPersonalInfo( Donor $personalInfo = null ): array {
 		if ( $personalInfo === null ) {
 			return [ 'addresstyp' => 'anonym' ];
 		}
@@ -176,7 +176,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		$donation->setBankTransferCode( $dd->getTransferCode() );
 		$donation->setOptsIntoNewsletter( (bool)$dd->getInfo() );
 
-		$donation->setPersonalInfo( $this->getPersonalInfoFromEntity( $dd ) );
+		$donation->setDonor( $this->getPersonalInfoFromEntity( $dd ) );
 		$donation->setBankData( $this->getBankDataFromEntity( $dd ) );
 		$donation->setTrackingInfo( $this->getTrackingInfoFromEntity( $dd ) );
 
@@ -185,14 +185,15 @@ class DoctrineDonationRepository implements DonationRepository {
 
 	/**
 	 * @param DoctrineDonation $dd
-	 * @return PersonalInfo|null
+	 *
+	 * @return Donor|null
 	 */
 	private function getPersonalInfoFromEntity( DoctrineDonation $dd ) {
 		if ( $dd->getEmail() === null ) {
 			return null;
 		}
 
-		return new PersonalInfo(
+		return new Donor(
 			$this->getPersonNameFromEntity( $dd ),
 			$this->getPhysicalAddressFromEntity( $dd ),
 			$dd->getEmail() // FIXME: type error

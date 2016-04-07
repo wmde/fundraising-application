@@ -33,7 +33,7 @@ class CreditCardPaymentHtmlPresenter {
 	}
 
 	private function getArguments( AddDonationResponse $response ) {
-		$personalInfo = $response->getDonation()->getPersonalInfo();
+		$personalInfo = $response->getDonation()->getDonor();
 		return [
 			'iframeUrl' => $this->urlGenerator->generateUrl(
 				$personalInfo ? $personalInfo->getPersonName()->getFirstName() : '',

@@ -40,7 +40,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$doctrineDonation = $this->getDonationFromDatabase();
 
 		$this->assertSame( $donation->getAmount()->getEuroString(), $doctrineDonation->getAmount() );
-		$this->assertSame( $donation->getPersonalInfo()->getEmailAddress(), $doctrineDonation->getEmail() );
+		$this->assertSame( $donation->getDonor()->getEmailAddress(), $doctrineDonation->getEmail() );
 	}
 
 	private function getDonationFromDatabase(): DoctrineDonation {

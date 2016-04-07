@@ -9,7 +9,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
-use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
+use WMDE\Fundraising\Frontend\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Domain\Model\TrackingInfo;
@@ -43,15 +43,15 @@ class ValidDonation {
 
 		$donation->setOptsIntoNewsletter( true );
 
-		$donation->setPersonalInfo( $this->newPersonalInfo() );
+		$donation->setDonor( $this->newPersonalInfo() );
 		$donation->setTrackingInfo( $this->newTrackingInfo() );
 		$donation->setBankData( $this->newBankData() );
 
 		return $donation;
 	}
 
-	private function newPersonalInfo(): PersonalInfo {
-		return new PersonalInfo(
+	private function newPersonalInfo(): Donor {
+		return new Donor(
 			$this->newPersonName(),
 			$this->newAddress(),
 			'foo@bar.baz'

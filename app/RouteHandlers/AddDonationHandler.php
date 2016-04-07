@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
-use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
+use WMDE\Fundraising\Frontend\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
@@ -125,8 +125,8 @@ class AddDonationHandler {
 		return Euro::newFromFloat( ( new AmountParser( $locale ) )->parseAsFloat( $amount ) );
 	}
 
-	private function getPersonalInfoFromRequest( Request $request ): PersonalInfo {
-		return new PersonalInfo(
+	private function getPersonalInfoFromRequest( Request $request ): Donor {
+		return new Donor(
 			$this->getNameFromRequest( $request ),
 			$this->getPhysicalAddressFromRequest( $request ),
 			$request->get( 'email', '' )

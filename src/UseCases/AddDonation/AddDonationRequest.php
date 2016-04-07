@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\UseCases\AddDonation;
 
 use WMDE\Fundraising\Frontend\Domain\Model\Euro;
-use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
+use WMDE\Fundraising\Frontend\Domain\Model\Donor;
 
 /**
  * @license GNU GPL v2+
@@ -15,7 +15,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\PersonalInfo;
 class AddDonationRequest {
 
 	/**
-	 * @var PersonalInfo|null
+	 * @var Donor|null
 	 */
 	private $personalInfo;
 	private $optIn = '';
@@ -42,13 +42,13 @@ class AddDonationRequest {
 	private $layout = ''; # TODO: drop this?
 
 	/**
-	 * @return PersonalInfo|null
+	 * @return Donor|null
 	 */
 	public function getPersonalInfo() {
 		return $this->personalInfo;
 	}
 
-	public function setPersonalInfo( PersonalInfo $personalInfo = null ) {
+	public function setPersonalInfo( Donor $personalInfo = null ) {
 		$this->personalInfo = $personalInfo;
 	}
 
