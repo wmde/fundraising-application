@@ -10,7 +10,7 @@
          stopOnFailure="false"
          stopOnIncomplete="false"
          stopOnSkipped="false"
-         verbose="true">
+         verbose="false">
     <testsuites>
         <testsuite name="FundraisingFrontend-unit">
             <directory>tests/Unit</directory>
