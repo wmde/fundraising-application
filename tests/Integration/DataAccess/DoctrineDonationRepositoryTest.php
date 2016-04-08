@@ -12,6 +12,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
 use WMDE\Fundraising\Frontend\Domain\Repositories\StoreDonationException;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
@@ -63,7 +64,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 	public function testWhenPersistenceFails_domainExceptionIsThrown() {
 		$donation = ValidDonation::newDonation();
 
-		$repository = new DoctrineDonationRepository( $this->newEntityManagerThatThrows() );
+		$repository = new DoctrineDonationRepository( ThrowingEntityManager::newInstance( $this ) );
 
 		$this->expectException( StoreDonationException::class );
 		$repository->storeDonation( $donation );
@@ -102,21 +103,10 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testWhenDoctrineThrowsException_domainExceptionIsThrown() {
-		$repository = new DoctrineDonationRepository( $this->newEntityManagerThatThrows() );
+		$repository = new DoctrineDonationRepository( ThrowingEntityManager::newInstance( $this ) );
 
 		$this->expectException( GetDonationException::class );
 		$repository->getDonationById( 42 );
-	}
-
-	private function newEntityManagerThatThrows(): EntityManager {
-		$entityManager = $this->getMockBuilder( EntityManager::class )
-			->disableOriginalConstructor()->getMock();
-
-		$entityManager->expects( $this->any() )
-			->method( $this->anything() )
-			->willThrowException( new ORMException() );
-
-		return $entityManager;
 	}
 
 }

@@ -39,4 +39,16 @@ class MembershipApplication {
 		return $this->payment;
 	}
 
+	/**
+	 * @param int $id
+	 * @throws \RuntimeException
+	 */
+	public function setId( int $id ) {
+		if ( $this->id !== null ) {
+			throw new \RuntimeException( 'Can only set an id when it is not yet assigned' );
+		}
+
+		$this->id = $id;
+	}
+
 }

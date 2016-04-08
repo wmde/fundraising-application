@@ -22,6 +22,7 @@ class MembershipApplicant {
 		$this->dateOfBirth = $dateOfBirth;
 	}
 
+	// TODO: $applicant->getPersonName->getFirstName() is odd compared to // TODO: $applicant->getFirstName()
 	public function getPersonName(): PersonName {
 		return $this->personName;
 	}

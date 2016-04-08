@@ -18,9 +18,9 @@ class MembershipPayment {
 	private $amount;
 	private $bankData;
 
-	public function __construct( string $type, int $interval, Euro $amount, BankData $bankData ) {
+	public function __construct( string $type, int $intervalInMonths, Euro $amount, BankData $bankData ) {
 		$this->type = $type;
-		$this->interval = $interval;
+		$this->interval = $intervalInMonths;
 		$this->amount = $amount;
 		$this->bankData = $bankData;
 	}
@@ -29,7 +29,7 @@ class MembershipPayment {
 		return $this->type;
 	}
 
-	public function getInterval(): int {
+	public function getIntervalInMonths(): int {
 		return $this->interval;
 	}
 
