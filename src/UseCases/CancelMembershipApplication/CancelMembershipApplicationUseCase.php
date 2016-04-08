@@ -10,8 +10,11 @@ namespace WMDE\Fundraising\Frontend\UseCases\CancelMembershipApplication;
  */
 class CancelMembershipApplicationUseCase {
 
-	public function cancelMembershipApplication( CancelMembershipApplicationRequest $request ):
-		CancelMembershipApplicationResponse {
+	public function __construct( /* TODO: authorizer, repository, mailer */ ) {
+
+	}
+
+	public function cancelApplication( CancelMembershipApplicationRequest $request ): CancelMembershipApplicationResponse {
 		// TODO
 	}
 
