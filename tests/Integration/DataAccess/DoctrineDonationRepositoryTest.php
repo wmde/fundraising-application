@@ -90,6 +90,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$donation->setAmount( new Euro( 4200 ) );
 		$repository->storeDonation( $donation );
 
+		// FIXME: change to no longer use the same Donation instance
 		$donation->setAmount( new Euro( 133700 ) );
 		$repository->storeDonation( $donation );
 

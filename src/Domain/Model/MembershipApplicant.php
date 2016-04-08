@@ -39,6 +39,10 @@ class MembershipApplicant {
 		return $this->dateOfBirth;
 	}
 
+	public function setEmailAddress( string $emailAddress ) {
+		$this->emailAddress = $emailAddress;
+	}
+
 	// TODO: phone number
 	// Create a PhoneNumber class?
 	// Use something like https://github.com/giggsey/libphonenumber-for-php?

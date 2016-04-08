@@ -36,7 +36,7 @@ class ValidMembershipApplication {
 
 	const APPLICANT_EMAIL_ADDRESS = 'jeroendedauw@gmail.com';
 
-	const PAYMENT_TYPE = MembershipPayment::TYPE_ACTIVE;
+	const MEMBERSHIP_TYPE = MembershipApplication::ACTIVE_MEMBERSHIP;
 	const PAYMENT_PERIOD_IN_MONTHS = 3;
 	const PAYMENT_AMOUNT_IN_EURO = 5;
 
@@ -53,6 +53,7 @@ class ValidMembershipApplication {
 	private function createApplication(): MembershipApplication {
 		return new MembershipApplication(
 			null,
+			self::MEMBERSHIP_TYPE,
 			new MembershipApplicant(
 				$this->newPersonName(),
 				$this->newAddress(),
@@ -60,7 +61,6 @@ class ValidMembershipApplication {
 				new \DateTime( self::APPLICANT_DATE_OF_BIRTH )
 			),
 			new MembershipPayment(
-				self::PAYMENT_TYPE,
 				self::PAYMENT_PERIOD_IN_MONTHS,
 				Euro::newFromFloat( self::PAYMENT_AMOUNT_IN_EURO ),
 				$this->newBankData()
@@ -109,29 +109,29 @@ class ValidMembershipApplication {
 	private function createDoctrineApplication(): DoctrineMembershipApplication {
 		$application = new DoctrineMembershipApplication();
 
-		$application->setFirstName( self::APPLICANT_FIRST_NAME );
-		$application->setLastName( self::APPLICANT_LAST_NAME );
-		$application->setSalutation( self::APPLICANT_SALUTATION );
-		$application->setTitle( self::APPLICANT_TITLE );
+		$application->setApplicantFirstName( self::APPLICANT_FIRST_NAME );
+		$application->setApplicantLastName( self::APPLICANT_LAST_NAME );
+		$application->setApplicantSalutation( self::APPLICANT_SALUTATION );
+		$application->setApplicantTitle( self::APPLICANT_TITLE );
 
-		$application->setDob( new \DateTime( self::APPLICANT_DATE_OF_BIRTH ) );
+		$application->setApplicantDateOfBirth( new \DateTime( self::APPLICANT_DATE_OF_BIRTH ) );
 
 		$application->setCity( self::APPLICANT_CITY );
 		$application->setCountry( self::APPLICANT_COUNTRY_CODE );
 		$application->setPostcode( self::APPLICANT_POSTAL_CODE );
 		$application->setAddress( self::APPLICANT_STREET_ADDRESS );
 
-		$application->setEmail( self::APPLICANT_EMAIL_ADDRESS );
+		$application->setApplicantEmailAddress( self::APPLICANT_EMAIL_ADDRESS );
 
-		$application->setMembershipType( self::PAYMENT_TYPE );
-		$application->setMembershipFeeInterval( self::PAYMENT_PERIOD_IN_MONTHS );
-		$application->setMembershipFee( self::PAYMENT_AMOUNT_IN_EURO );
+		$application->setMembershipType( self::MEMBERSHIP_TYPE );
+		$application->setPaymentIntervalInMonths( self::PAYMENT_PERIOD_IN_MONTHS );
+		$application->setPaymentAmount( self::PAYMENT_AMOUNT_IN_EURO );
 
-		$application->setAccountNumber( self::PAYMENT_BANK_ACCOUNT );
-		$application->setBankCode( self::PAYMENT_BANK_CODE );
-		$application->setBankName( self::PAYMENT_BANK_NAME );
-		$application->setBic( self::PAYMENT_BIC );
-		$application->setIban( self::PAYMENT_IBAN );
+		$application->setPaymentBankAccount( self::PAYMENT_BANK_ACCOUNT );
+		$application->setPaymentBankCode( self::PAYMENT_BANK_CODE );
+		$application->setPaymentBankName( self::PAYMENT_BANK_NAME );
+		$application->setPaymentBic( self::PAYMENT_BIC );
+		$application->setPaymentIban( self::PAYMENT_IBAN );
 
 		// TODO: data fields?
 		$application->encodeAndSetData( [] );

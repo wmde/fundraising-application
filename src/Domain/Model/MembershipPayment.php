@@ -10,23 +10,14 @@ namespace WMDE\Fundraising\Frontend\Domain\Model;
  */
 class MembershipPayment {
 
-	const TYPE_ACTIVE = 'active';
-	const TYPE_SUSTAINING = 'sustaining';
-
-	private $type;
 	private $interval;
 	private $amount;
 	private $bankData;
 
-	public function __construct( string $type, int $intervalInMonths, Euro $amount, BankData $bankData ) {
-		$this->type = $type;
+	public function __construct( int $intervalInMonths, Euro $amount, BankData $bankData ) {
 		$this->interval = $intervalInMonths;
 		$this->amount = $amount;
 		$this->bankData = $bankData;
-	}
-
-	public function getType(): string {
-		return $this->type;
 	}
 
 	public function getIntervalInMonths(): int {
