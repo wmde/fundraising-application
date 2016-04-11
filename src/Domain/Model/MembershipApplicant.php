@@ -22,6 +22,7 @@ class MembershipApplicant {
 		$this->dateOfBirth = $dateOfBirth;
 	}
 
+	// TODO: $applicant->getPersonName->getFirstName() is odd compared to // TODO: $applicant->getFirstName()
 	public function getPersonName(): PersonName {
 		return $this->personName;
 	}
@@ -36,6 +37,10 @@ class MembershipApplicant {
 
 	public function getDateOfBirth(): \DateTime {
 		return $this->dateOfBirth;
+	}
+
+	public function setEmailAddress( string $emailAddress ) {
+		$this->emailAddress = $emailAddress;
 	}
 
 	// TODO: phone number
