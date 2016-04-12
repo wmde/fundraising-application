@@ -44,7 +44,7 @@ use WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer;
 use WMDE\Fundraising\Frontend\Domain\Repositories\CommentFinder;
 use WMDE\Fundraising\Frontend\DataAccess\DbalSubscriptionRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
-use WMDE\Fundraising\Frontend\Domain\Honorifics;
+use WMDE\Fundraising\Frontend\Infrastructure\Honorifics;
 use WMDE\Fundraising\Frontend\Domain\Repositories\CommentRepository;
 use WMDE\Fundraising\Frontend\Domain\SimpleTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\Repositories\SubscriptionRepository;

@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Domain;
+namespace WMDE\Fundraising\Frontend\Infrastructure;
 
 /**
  * Encapsulates a list of honorifics for the current locale.
