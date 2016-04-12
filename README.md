@@ -124,14 +124,14 @@ When accessing the API via `web/index.dev.php`, profiling information will be ge
 		<td>Yes</td>
 		<td>If needed</td>
 		<td>No</td>
-		<td>No</td>
+		<td>Read only</td>
 	</tr>
 	<tr>
 		<th>System (edge-to-edge)</th>
 		<td>Yes</td>
 		<td>Yes</td>
 		<td>Yes</td>
-		<td>No</td>
+		<td>Read only</td>
 	</tr>
 	<tr>
 		<th>System (full)</th>
