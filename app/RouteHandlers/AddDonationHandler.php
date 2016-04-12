@@ -58,7 +58,7 @@ class AddDonationHandler {
 					$this->ffFactory->newPayPalUrlGenerator()->generateUrl(
 						$responseModel->getDonation()->getId(),
 						$responseModel->getDonation()->getAmount(),
-						$responseModel->getDonation()->getInterval(),
+						$responseModel->getDonation()->getPaymentIntervalInMonths(),
 						$responseModel->getUpdateToken()
 						// TODO: include access token
 					)

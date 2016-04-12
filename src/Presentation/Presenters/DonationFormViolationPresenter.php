@@ -47,7 +47,7 @@ class DonationFormViolationPresenter {
 				'bic' => $request->getBic(),
 				'bankName' => $request->getBankName()
 			],
-			$this->getPersonalInfo( $request->getPersonalInfo() )
+			$this->getPersonalInfo( $request->getDonor() )
 		);
 	}
 

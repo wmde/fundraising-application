@@ -59,9 +59,7 @@ class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 	public function testGivenIdOfCancellableDonation_cancellationIsSuccessful() {
 		$factory = $this->newFactoryWithNullMailer();
 
-		$donation = ValidDonation::newDonation();
-		$donation->setStatus( Donation::STATUS_NEW );
-		$donation->setPaymentType( PaymentType::DIRECT_DEBIT );
+		$donation = $this->newCancelableDonation();
 
 		$this->storeDonation( $donation, $factory );
 
@@ -92,9 +90,8 @@ class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 	public function testGivenIdOfNonCancellableDonation_cancellationIsNotSuccessful() {
 		$factory = $this->newFactoryWithNullMailer();
 
-		$donation = ValidDonation::newDonation();
-		$donation->setStatus( Donation::STATUS_DELETED );
-		$donation->setPaymentType( PaymentType::DIRECT_DEBIT );
+		$donation = ValidDonation::newDirectDebitDonation();
+		$donation->cancel();
 
 		$this->storeDonation( $donation, $factory );
 
@@ -115,12 +112,7 @@ class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	private function newCancelableDonation(): Donation {
-		$donation = ValidDonation::newDonation();
-
-		$donation->setStatus( Donation::STATUS_NEW );
-		$donation->setPaymentType( PaymentType::DIRECT_DEBIT );
-
-		return $donation;
+		return ValidDonation::newDirectDebitDonation();
 	}
 
 	private function newUseCaseWithMailerMock( Donation $donation ): CancelDonationUseCase {

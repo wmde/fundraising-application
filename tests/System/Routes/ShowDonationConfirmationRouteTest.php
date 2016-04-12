@@ -76,7 +76,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	}
 
 	private function newStoredDonation( FunFunFactory $factory ): Donation {
-		$donation = ValidDonation::newDonation();
+		$donation = ValidDonation::newDirectDebitDonation();
 
 		$factory->getDonationRepository()->storeDonation( $donation );
 		$factory->newDonationAuthorizationUpdater()->allowAccessViaToken(
@@ -92,7 +92,6 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 		$this->assertContains( $donation->getDonor()->getPersonName()->getFirstName(), $content );
 		$this->assertContains( $donation->getDonor()->getPersonName()->getLastName(), $content );
-		$this->assertContains( $donation->getBankData()->getIban()->toString(), $content );
 	}
 
 	public function testGivenWrongToken_accessIsDenied() {
@@ -121,7 +120,6 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 		$this->assertNotContains( $donation->getDonor()->getPersonName()->getFirstName(), $content );
 		$this->assertNotContains( $donation->getDonor()->getPersonName()->getLastName(), $content );
-		$this->assertNotContains( $donation->getBankData()->getIban()->toString(), $content );
 
 		$this->assertContains( 'TODO: access not permitted', $content );
 	}

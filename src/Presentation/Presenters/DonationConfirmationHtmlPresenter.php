@@ -2,7 +2,10 @@
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
+use WMDE\Fundraising\Frontend\Domain\Model\BankTransferPayment;
+use WMDE\Fundraising\Frontend\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\Domain\Model\PaymentMethod;
 use WMDE\Fundraising\Frontend\Presentation\SelectedConfirmationPage;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
@@ -34,10 +37,10 @@ class DonationConfirmationHtmlPresenter {
 				'id' => $donation->getId(),
 				'status' => $donation->getStatus(),
 				'amount' => $donation->getAmount()->getEuroFloat(), // TODO: getEuroString might be better
-				'interval' => $donation->getInterval(),
+				'interval' => $donation->getPaymentIntervalInMonths(),
 				'paymentType' => $donation->getPaymentType(),
 				'optsIntoNewsletter' => $donation->getOptsIntoNewsletter(),
-				'bankTransferCode' => $donation->getBankTransferCode(),
+				'bankTransferCode' => $this->getBankTransferCode( $donation->getPaymentMethod() ),
 				// TODO: use locale to determine the date format
 				'creationDate' => ( new \DateTime() )->format( 'd.m.Y' ),
 				// TODO: set cookie duration for "hide banner cookie"
@@ -45,7 +48,7 @@ class DonationConfirmationHtmlPresenter {
 				'updateToken' => $updateToken
 			],
 			'person' => $this->getPersonArguments( $donation ),
-			'bankData' => $this->getBankDataArguments( $donation )
+			'bankData' => $this->getBankDataArguments( $donation->getPaymentMethod() )
 		] );
 	}
 
@@ -63,12 +66,20 @@ class DonationConfirmationHtmlPresenter {
 		return [];
 	}
 
-	private function getBankDataArguments( Donation $donation ): array {
-		if ( $donation->getBankData() !== null ) {
+	private function getBankTransferCode( PaymentMethod $paymentMethod ): string {
+		if ( $paymentMethod instanceof BankTransferPayment ) {
+			return $paymentMethod->getBankTransferCode();
+		}
+
+		return '';
+	}
+
+	private function getBankDataArguments( PaymentMethod $paymentMethod ): array {
+		if ( $paymentMethod instanceof DirectDebitPayment ) {
 			return [
-				'iban' => $donation->getBankData()->getIban()->toString(),
-				'bic' => $donation->getBankData()->getBic(),
-				'bankname' => $donation->getBankData()->getBankName(),
+				'iban' => $paymentMethod->getBankData()->getIban()->toString(),
+				'bic' => $paymentMethod->getBankData()->getBic(),
+				'bankname' => $paymentMethod->getBankData()->getBankName(),
 			];
 		}
 

@@ -12,18 +12,18 @@ use RuntimeException;
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class Donation {
-	// status for direct debit
-	const STATUS_NEW = 'N';
 
-	// status for bank transfer
-	const STATUS_PROMISE = 'Z';
-
-	// statuses for external payments
-	const STATUS_EXTERNAL_INCOMPLETE = 'X';
-	const STATUS_EXTERNAL_BOOKED = 'B';
-
+	const STATUS_NEW = 'N'; // status for direct debit
+	const STATUS_PROMISE = 'Z'; // status for bank transfer
+	const STATUS_EXTERNAL_INCOMPLETE = 'X'; // status for external payments
+	const STATUS_EXTERNAL_BOOKED = 'B'; // status for external payments
 	const STATUS_MODERATION = 'P';
 	const STATUS_DELETED = 'D';
+
+	const OPTS_INTO_NEWSLETTER = true;
+	const DOES_NOT_OPT_INTO_NEWSLETTER = false;
+
+	const NO_APPLICANT = null;
 
 	/**
 	 * @var int|null
@@ -31,11 +31,6 @@ class Donation {
 	private $id;
 
 	private $status;
-
-	private $amount;
-	private $interval = 0;
-	private $paymentType;
-	private $bankTransferCode = '';
 
 	private $optsIntoNewsletter;
 
@@ -45,15 +40,26 @@ class Donation {
 	private $donor;
 
 	/**
-	 * @var BankData|null
+	 * @var DonationPayment
 	 */
-	private $bankData;
+	private $payment;
 
 	/**
 	 * TODO: move out of Donation
 	 * @var TrackingInfo
 	 */
 	private $trackingInfo;
+
+	public function __construct( int $id = null, string $status, Donor $donor = null, DonationPayment $payment,
+		bool $optsIntoNewsletter, TrackingInfo $trackingInfo ) {
+
+		$this->id = $id;
+		$this->status = $status;
+		$this->donor = $donor;
+		$this->payment = $payment;
+		$this->optsIntoNewsletter = $optsIntoNewsletter;
+		$this->trackingInfo = $trackingInfo;
+	}
 
 	/**
 	 * @return int|null
@@ -62,6 +68,11 @@ class Donation {
 		return $this->id;
 	}
 
+	/**
+	 * TODO: prevent changing assigned identity
+	 *
+	 * @param int|null $id
+	 */
 	public function setId( int $id = null ) {
 		$this->id = $id;
 	}
@@ -70,40 +81,16 @@ class Donation {
 		return $this->status;
 	}
 
-	public function setStatus( string $status ) {
-		$this->status = $status;
-	}
-
 	public function getAmount(): Euro {
-		return $this->amount;
+		return $this->payment->getAmount();
 	}
 
-	public function setAmount( Euro $amount ) {
-		$this->amount = $amount;
-	}
-
-	public function getInterval(): int {
-		return $this->interval;
-	}
-
-	public function setInterval( int $interval ) {
-		$this->interval = $interval;
+	public function getPaymentIntervalInMonths(): int {
+		return $this->payment->getIntervalInMonths();
 	}
 
 	public function getPaymentType(): string {
-		return $this->paymentType;
-	}
-
-	public function setPaymentType( string $paymentType ) {
-		$this->paymentType = $paymentType;
-	}
-
-	public function getBankTransferCode(): string {
-		return $this->bankTransferCode;
-	}
-
-	public function setBankTransferCode( string $bankTransferCode ) {
-		$this->bankTransferCode = $bankTransferCode;
+		return $this->payment->getPaymentMethod()->getType();
 	}
 
 	/**
@@ -115,36 +102,23 @@ class Donation {
 		return $this->donor;
 	}
 
-	public function setDonor( Donor $donor = null ) {
-		$this->donor = $donor;
+	public function getPayment(): DonationPayment {
+		return $this->payment;
+	}
+
+	public function getPaymentMethod(): PaymentMethod {
+		return $this->payment->getPaymentMethod();
 	}
 
 	public function getOptsIntoNewsletter(): bool {
 		return $this->optsIntoNewsletter;
 	}
 
-	public function setOptsIntoNewsletter( bool $optIn ) {
-		$this->optsIntoNewsletter = $optIn;
-	}
-
-	/**
-	 * Returns the BankData for direct debit donations, or null for others.
-	 *
-	 * @return BankData|null
-	 */
-	public function getBankData() {
-		return $this->bankData;
-	}
-
-	public function setBankData( BankData $bankData = null ) {
-		$this->bankData = $bankData;
-	}
-
 	/**
 	 * @throws RuntimeException
 	 */
 	public function cancel() {
-		if ( $this->paymentType !== PaymentType::DIRECT_DEBIT ) {
+		if ( $this->getPaymentType() !== PaymentType::DIRECT_DEBIT ) {
 			throw new RuntimeException( 'Can only cancel direct debit' );
 		}
 
@@ -155,6 +129,10 @@ class Donation {
 		$this->status = self::STATUS_DELETED;
 	}
 
+	public function markForModeration() {
+		$this->status = self::STATUS_MODERATION;
+	}
+
 	private function statusIsCancellable(): bool {
 		return $this->status === self::STATUS_NEW || $this->status === self::STATUS_MODERATION;
 	}
@@ -163,8 +141,12 @@ class Donation {
 		return $this->trackingInfo;
 	}
 
-	public function setTrackingInfo( TrackingInfo $trackingInfo ) {
-		$this->trackingInfo = $trackingInfo;
+	/**
+	 * Should not be called by production code.
+	 * @param string $status
+	 */
+	public function setStatusForTest( string $status ) {
+		$this->status = $status;
 	}
 
 }

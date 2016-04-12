@@ -7,6 +7,10 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
 use Doctrine\ORM\EntityManager;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
 use WMDE\Fundraising\Frontend\DataAccess\UniqueTransferCodeGenerator;
+use WMDE\Fundraising\Frontend\Domain\Model\BankTransferPayment;
+use WMDE\Fundraising\Frontend\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\Domain\Model\DonationPayment;
+use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
@@ -55,7 +59,19 @@ class UniqueTransferCodeGeneratorTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	private function storeDonationWithTransferCode( string $code ) {
-		$donation = ValidDonation::newBankTransferDonation( $code );
+		$donation = new Donation(
+			null,
+			Donation::STATUS_NEW,
+			ValidDonation::newDonor(),
+			new DonationPayment(
+				Euro::newFromFloat( 13.37 ),
+				3,
+				new BankTransferPayment( $code )
+			),
+			Donation::OPTS_INTO_NEWSLETTER,
+			ValidDonation::newTrackingInfo()
+		);
+
 		( new DoctrineDonationRepository( $this->entityManager ) )->storeDonation( $donation );
 	}
 

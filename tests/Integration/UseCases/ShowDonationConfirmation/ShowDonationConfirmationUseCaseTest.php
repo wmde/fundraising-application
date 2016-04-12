@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\ShowDonationConfi
 
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Model\Euro;
+use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeDonationRepository;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingDonationAuthorizer;
@@ -23,11 +24,9 @@ class ShowDonationConfirmationUseCaseTest extends \PHPUnit_Framework_TestCase {
 	const CORRECT_DONATION_ID = 1;
 
 	public function testWhenAuthorizerSaysNoCanHaz_accessIsNotPermitted() {
-		$donation = new Donation();
-
 		$useCase = new ShowDonationConfirmationUseCase(
 			new FailingDonationAuthorizer(),
-			new FakeDonationRepository( $donation )
+			new FakeDonationRepository( ValidDonation::newDirectDebitDonation() )
 		);
 
 		$response = $useCase->showConfirmation( new ShowDonationConfirmationRequest(
@@ -39,11 +38,9 @@ class ShowDonationConfirmationUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testWhenAuthorizerSaysSureThingBro_accessIsPermitted() {
-		$donation = new Donation();
-
 		$useCase = new ShowDonationConfirmationUseCase(
 			new SucceedingDonationAuthorizer(),
-			new FakeDonationRepository( $donation )
+			new FakeDonationRepository( ValidDonation::newDirectDebitDonation() )
 		);
 
 		$response = $useCase->showConfirmation( new ShowDonationConfirmationRequest(
@@ -68,8 +65,7 @@ class ShowDonationConfirmationUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testWhenDonationExistsAndAccessIsAllowed_donationIsReturned() {
-		$donation = new Donation();
-		$donation->setAmount( Euro::newFromInt( 42 ) );
+		$donation = ValidDonation::newDirectDebitDonation();
 
 		$useCase = new ShowDonationConfirmationUseCase(
 			new SucceedingDonationAuthorizer(),
