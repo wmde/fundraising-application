@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Infrastructure;
 
-use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
+use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
 /**
@@ -26,7 +26,7 @@ class TemplateBasedMailer {
 	/**
 	 * @throws \RuntimeException
 	 */
-	public function sendMail( MailAddress $recipient, array $templateArguments = [] ) {
+	public function sendMail( EmailAddress $recipient, array $templateArguments = [] ) {
 		$this->messenger->sendMessageToUser(
 			new Message(
 				$this->subject,

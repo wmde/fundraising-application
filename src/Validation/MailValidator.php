@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Validation;
 
 use WMDE\Fundraising\Frontend\Domain\DomainNameValidator;
-use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
+use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
 
 /**
  * @licence GNU GPL v2+
@@ -25,7 +25,7 @@ class MailValidator {
 		$mailAddress = null;
 
 		try {
-			$mailAddress = new MailAddress( $emailAddress );
+			$mailAddress = new EmailAddress( $emailAddress );
 		} catch ( \InvalidArgumentException $e ) {
 			return new ValidationResult( new ConstraintViolation( $emailAddress, 'email_address_wrong_format' ) );
 		}

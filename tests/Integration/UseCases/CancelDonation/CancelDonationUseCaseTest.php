@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\ConfirmSubscripti
 use PHPUnit_Framework_MockObject_MockObject;
 use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
-use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
+use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
@@ -129,7 +129,7 @@ class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$mailer->expects( $this->once() )
 			->method( 'sendMail' )
 			->with(
-				$this->equalTo( new MailAddress( $donation->getDonor()->getEmailAddress() ) ),
+				$this->equalTo( new EmailAddress( $donation->getDonor()->getEmailAddress() ) ),
 				$this->callback( function( $value ) {
 					$this->assertInternalType( 'array', $value );
 					$this->assertSame( 'Sehr geehrte Damen und Herren,', $value['salutation'] );

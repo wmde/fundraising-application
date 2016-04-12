@@ -15,7 +15,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationUpdateException;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizationUpdater;
 use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
-use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
+use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer;
 use WMDE\Fundraising\Frontend\Presentation\GreetingGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
@@ -208,7 +208,7 @@ class AddDonationUseCase {
 	private function sendDonationConfirmationEmail( Donation $donation, bool $needsModeration ) {
 		if ( $donation->getDonor() !== null ) {
 			$this->mailer->sendMail(
-				new MailAddress( $donation->getDonor()->getEmailAddress() ),
+				new EmailAddress( $donation->getDonor()->getEmailAddress() ),
 				$this->getConfirmationMailTemplateArguments( $donation, $needsModeration )
 			);
 		}
