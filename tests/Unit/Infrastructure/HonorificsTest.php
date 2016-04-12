@@ -2,12 +2,12 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\Domain;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
-use WMDE\Fundraising\Frontend\Domain\Honorifics;
+use WMDE\Fundraising\Frontend\Infrastructure\Honorifics;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Domain\Honorifics
+ * @covers WMDE\Fundraising\Frontend\Infrastructure\Honorifics
  *
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
