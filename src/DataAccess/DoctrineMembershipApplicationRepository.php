@@ -15,6 +15,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\MembershipApplicant;
 use WMDE\Fundraising\Frontend\Domain\Model\MembershipApplication;
 use WMDE\Fundraising\Frontend\Domain\Model\MembershipPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
+use WMDE\Fundraising\Frontend\Domain\Model\PhoneNumber;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Domain\Repositories\GetMembershipApplicationException;
 use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepository;
@@ -78,6 +79,7 @@ class DoctrineMembershipApplicationRepository implements MembershipApplicationRe
 		$application->setApplicantDateOfBirth( $applicant->getDateOfBirth() );
 
 		$application->setApplicantEmailAddress( $applicant->getEmailAddress()->getFullAddress() );
+		$application->setApplicantPhoneNumber( $applicant->getPhoneNumber()->__toString() );
 
 		$address = $applicant->getPhysicalAddress();
 
@@ -132,6 +134,7 @@ class DoctrineMembershipApplicationRepository implements MembershipApplicationRe
 				$this->newPersonName( $application ),
 				$this->newAddress( $application ),
 				new EmailAddress( $application->getApplicantEmailAddress() ),
+				new PhoneNumber( $application->getApplicantPhoneNumber() ),
 				$application->getApplicantDateOfBirth()
 			),
 			new MembershipPayment(
