@@ -160,7 +160,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 	private function newInvalidDonationRequest(): AddDonationRequest {
 		$donationRequest = new AddDonationRequest();
 		$donationRequest->setPaymentType( PaymentType::DIRECT_DEBIT );
-		$donationRequest->setAmount( new Euro( 0 ) );
+		$donationRequest->setAmount( Euro::newFromInt( 0 ) );
 		return $donationRequest;
 	}
 

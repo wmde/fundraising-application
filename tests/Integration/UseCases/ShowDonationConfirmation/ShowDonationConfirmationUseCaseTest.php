@@ -69,7 +69,7 @@ class ShowDonationConfirmationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 	public function testWhenDonationExistsAndAccessIsAllowed_donationIsReturned() {
 		$donation = new Donation();
-		$donation->setAmount( new Euro( 4200 ) );
+		$donation->setAmount( Euro::newFromInt( 42 ) );
 
 		$useCase = new ShowDonationConfirmationUseCase(
 			new SucceedingDonationAuthorizer(),

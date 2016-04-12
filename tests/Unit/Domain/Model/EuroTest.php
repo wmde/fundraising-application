@@ -18,7 +18,7 @@ class EuroTest extends \PHPUnit_Framework_TestCase {
 	 * @dataProvider unsignedIntegerProvider
 	 */
 	public function testGetCentsReturnsConstructorArgument( int $unsignedInteger ) {
-		$amount = new Euro( $unsignedInteger );
+		$amount = Euro::newFromCents( $unsignedInteger );
 		$this->assertSame( $unsignedInteger, $amount->getEuroCents() );
 	}
 
@@ -30,7 +30,7 @@ class EuroTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testGivenZero_getEuroFloatReturnsZeroFloat() {
-		$amount = new Euro( 0 );
+		$amount = Euro::newFromCents( 0 );
 		$this->assertExactFloat( 0.0, $amount->getEuroFloat() );
 		$this->assertNotSame( 0, $amount->getEuroFloat() );
 	}
@@ -41,52 +41,52 @@ class EuroTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testGivenOneEuro_getEuroFloatReturnsOne() {
-		$amount = new Euro( 100 );
+		$amount = Euro::newFromCents( 100 );
 		$this->assertExactFloat( 1.0, $amount->getEuroFloat() );
 	}
 
 	public function testGivenOneCent_getEuroFloatReturnsPointZeroOne() {
-		$amount = new Euro( 1 );
+		$amount = Euro::newFromCents( 1 );
 		$this->assertExactFloat( 0.01, $amount->getEuroFloat() );
 	}
 
 	public function testGiven33cents_getEuroFloatReturnsPointThreeThree() {
-		$amount = new Euro( 33 );
+		$amount = Euro::newFromCents( 33 );
 		$this->assertExactFloat( 0.33, $amount->getEuroFloat() );
 	}
 
 	public function testGivenNegativeAmount_constructorThrowsException() {
 		$this->expectException( \InvalidArgumentException::class );
-		new Euro( -1 );
+		Euro::newFromCents( -1 );
 	}
 
 	public function testGivenZero_getEuroStringReturnsZeroString() {
-		$amount = new Euro( 0 );
+		$amount = Euro::newFromCents( 0 );
 		$this->assertSame( '0.00', $amount->getEuroString() );
 	}
 
 	public function testGivenOneEuro_getEuroStringReturnsOnePointZeroZero() {
-		$amount = new Euro( 100 );
+		$amount = Euro::newFromCents( 100 );
 		$this->assertSame( '1.00', $amount->getEuroString() );
 	}
 
 	public function testGivenTwoEuros_getEuroStringReturnsTwoPointZeroZero() {
-		$amount = new Euro( 200 );
+		$amount = Euro::newFromCents( 200 );
 		$this->assertSame( '2.00', $amount->getEuroString() );
 	}
 
 	public function testGivenOneCent_getEuroStringReturnsZeroPointZeroOne() {
-		$amount = new Euro( 1 );
+		$amount = Euro::newFromCents( 1 );
 		$this->assertSame( '0.01', $amount->getEuroString() );
 	}
 
 	public function testGivenTenCents_getEuroStringReturnsZeroPointOneZero() {
-		$amount = new Euro( 10 );
+		$amount = Euro::newFromCents( 10 );
 		$this->assertSame( '0.10', $amount->getEuroString() );
 	}
 
 	public function testGiven1234Cents_getEuroStringReturns12euro34() {
-		$amount = new Euro( 1234 );
+		$amount = Euro::newFromCents( 1234 );
 		$this->assertSame( '12.34', $amount->getEuroString() );
 	}
 
@@ -183,6 +183,23 @@ class EuroTest extends \PHPUnit_Framework_TestCase {
 		$this->assertSame( 102, Euro::newFromFloat( 1.015 )->getEuroCents() );
 		$this->assertSame( 102, Euro::newFromFloat( 1.019 )->getEuroCents() );
 		$this->assertSame( 102, Euro::newFromFloat( 1.0199999 )->getEuroCents() );
+	}
+
+	public function testZeroEuroIntegers_isZeroCents() {
+		$this->assertSame( 0, Euro::newFromInt( 0 )->getEuroCents() );
+	}
+
+	public function testOneEuroIntegers_is100cents() {
+		$this->assertSame( 100, Euro::newFromInt( 1 )->getEuroCents() );
+	}
+
+	public function test1337EuroIntegers_is133700cents() {
+		$this->assertSame( 133700, Euro::newFromInt( 1337 )->getEuroCents() );
+	}
+
+	public function testGivenNegativeIntegerAmount_exceptionIsThrown() {
+		$this->expectException( \InvalidArgumentException::class );
+		Euro::newFromInt( -1 );
 	}
 
 }

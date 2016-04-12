@@ -47,14 +47,14 @@ class DonationValidatorTest extends ValidatorTestCase {
 
 	public function testNoPersonalInfoGiven_validatorReturnsTrue() {
 		$donation = new Donation();
-		$donation->setAmount( new Euro( 100 ) );
+		$donation->setAmount( Euro::newFromInt( 100 ) );
 		$donation->setPaymentType( PaymentType::BANK_TRANSFER );
 		$this->assertTrue( $this->donationValidator->validate( $donation )->isSuccessful() );
 	}
 
 	public function testTooHighAmountGiven_needsModerationReturnsTrue() {
 		$donation = new Donation();
-		$donation->setAmount( new Euro( 35000 ) );
+		$donation->setAmount( Euro::newFromInt( 35000 ) );
 		$donation->setInterval( 12 );
 		$donation->setPaymentType( PaymentType::DIRECT_DEBIT );
 		$this->assertTrue( $this->donationValidator->needsModeration( $donation ) );
@@ -62,7 +62,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 
 	public function testPersonalInfoValidationFails_validatorReturnsFalse() {
 		$donation = new Donation();
-		$donation->setAmount( new Euro( 100 ) );
+		$donation->setAmount( Euro::newFromInt( 100 ) );
 		$donation->setPaymentType( PaymentType::BANK_TRANSFER );
 		$donation->setDonor( new Donor(
 			$this->newCompanyName(),
@@ -108,7 +108,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 
 	public function testNoPaymentTypeGiven_validatorReturnsFalse() {
 		$donation = new Donation();
-		$donation->setAmount( new Euro( 100 ) );
+		$donation->setAmount( Euro::newFromInt( 100 ) );
 		$donation->setPaymentType( '' );
 
 		$this->assertFalse( $this->donationValidator->validate( $donation )->isSuccessful() );
@@ -121,7 +121,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 
 	public function testUnsupportedPaymentTypeGiven_validatorReturnsFalse() {
 		$donation = new Donation();
-		$donation->setAmount( new Euro( 100 ) );
+		$donation->setAmount( Euro::newFromInt( 100 ) );
 		$donation->setPaymentType( PaymentType::PAYPAL );
 
 		$this->assertFalse( $this->donationValidator->validate( $donation )->isSuccessful() );
@@ -134,7 +134,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 
 	public function testDirectDebitMissingBankData_validatorReturnsFalse() {
 		$donation = new Donation();
-		$donation->setAmount( new Euro( 100 ) );
+		$donation->setAmount( Euro::newFromInt( 100 ) );
 		$donation->setPaymentType( PaymentType::DIRECT_DEBIT );
 		$donation->setBankData( $this->newValidBankData() );
 
@@ -174,7 +174,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 
 	private function newDonation(): Donation {
 		$donation = new Donation();
-		$donation->setAmount( new Euro( 100 ) );
+		$donation->setAmount( Euro::newFromInt( 100 ) );
 		$donation->setDonor( new Donor(
 			$this->newCompanyName(),
 			$this->newPhysicalAddress(),
