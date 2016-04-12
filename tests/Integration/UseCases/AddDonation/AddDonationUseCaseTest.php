@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\AddDonation;
 use PHPUnit_Framework_MockObject_MockObject;
 use WMDE\Fundraising\Frontend\Domain\BankDataConverter;
 use WMDE\Fundraising\Frontend\Domain\Model\Euro;
-use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
+use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
@@ -197,7 +197,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$mailer->expects( $this->once() )
 			->method( 'sendMail' )
 			->with(
-				$this->equalTo( new MailAddress( 'foo@bar.baz' ) ),
+				$this->equalTo( new EmailAddress( 'foo@bar.baz' ) ),
 				$this->callback( function( $value ) {
 					$this->assertInternalType( 'array', $value );
 					// TODO: assert parameters

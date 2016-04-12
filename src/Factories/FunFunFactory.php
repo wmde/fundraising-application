@@ -35,7 +35,7 @@ use WMDE\Fundraising\Frontend\DataAccess\UniqueTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\BankDataConverter;
 use WMDE\Fundraising\Frontend\Presentation\CreditCardConfig;
 use WMDE\Fundraising\Frontend\Presentation\CreditCardUrlGenerator;
-use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
+use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Presentation\PayPalConfig;
 use WMDE\Fundraising\Frontend\Presentation\PayPalUrlGenerator;
@@ -581,7 +581,7 @@ class FunFunFactory {
 	}
 
 	public function getOperatorAddress() {
-		return new MailAddress( $this->config['operator-email'] );
+		return new EmailAddress( $this->config['operator-email'] );
 	}
 
 	public function newInternalErrorHTMLPresenter(): InternalErrorHtmlPresenter {

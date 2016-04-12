@@ -4,15 +4,15 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Domain\Model;
 
-use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
+use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Domain\Model\MailAddress
+ * @covers WMDE\Fundraising\Frontend\Domain\Model\EmailAddress
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class MailAddressTest extends \PHPUnit_Framework_TestCase {
+class EmailAddressTest extends \PHPUnit_Framework_TestCase {
 
 	/**
 	 * @dataProvider unparsableAddressProvider
@@ -20,7 +20,7 @@ class MailAddressTest extends \PHPUnit_Framework_TestCase {
 	public function testWhenGivenMail_validatorMXValidatesCorrectly( $mailToTest ) {
 		$this->expectException( \InvalidArgumentException::class );
 		$this->expectExceptionMessage( 'Given email address could not be parsed' );
-		new MailAddress( $mailToTest );
+		new EmailAddress( $mailToTest );
 	}
 
 	public function unparsableAddressProvider() {

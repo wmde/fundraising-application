@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\UseCases\CancelDonation;
 
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
-use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
+use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizer;
@@ -72,7 +72,7 @@ class CancelDonationUseCase {
 	private function sendConfirmationEmail( Donation $donation ) {
 		if ( $donation->getDonor() !== null ) {
 			$this->mailer->sendMail(
-				new MailAddress( $donation->getDonor()->getEmailAddress() ),
+				new EmailAddress( $donation->getDonor()->getEmailAddress() ),
 				$this->getConfirmationMailTemplateArguments( $donation )
 			);
 		}

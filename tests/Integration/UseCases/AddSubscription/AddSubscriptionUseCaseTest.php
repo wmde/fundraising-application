@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\AddSubscription;
 
 use PHPUnit_Framework_MockObject_MockObject;
 use WMDE\Fundraising\Entities\Subscription;
-use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
+use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\Domain\Repositories\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FailedValidationResult;
@@ -105,7 +105,7 @@ class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$this->mailer->expects( $this->once() )
 			->method( 'sendMail' )
 			->with(
-				$this->equalTo( new MailAddress( 'curious@nyancat.com' ) ),
+				$this->equalTo( new EmailAddress( 'curious@nyancat.com' ) ),
 				$this->callback( function( $value ) {
 					$this->assertInternalType( 'array', $value );
 					$this->assertArrayHasKey( 'subscription', $value );

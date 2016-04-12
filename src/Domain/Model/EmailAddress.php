@@ -9,7 +9,8 @@ namespace WMDE\Fundraising\Frontend\Domain\Model;
  * @author Christoph Fischer < christoph.fischer@wikimedia.de >
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class MailAddress {
+class EmailAddress {
+
 	private $userName;
 	private $domain;
 

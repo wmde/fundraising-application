@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\UseCases\GetInTouch;
 
-use WMDE\Fundraising\Frontend\Domain\Model\MailAddress;
+use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
 use WMDE\Fundraising\Frontend\Infrastructure\Message;
@@ -49,12 +49,12 @@ class GetInTouchUseCase {
 				$request->getSubject(),
 				$request->getMessageBody()
 			),
-			new MailAddress( $request->getEmailAddress() )
+			new EmailAddress( $request->getEmailAddress() )
 		);
 	}
 
 	private function confirmToUser( GetInTouchRequest $request ) {
-		$this->templateBasedMailer->sendMail( new MailAddress( $request->getEmailAddress() ) );
+		$this->templateBasedMailer->sendMail( new EmailAddress( $request->getEmailAddress() ) );
 	}
 
 }
