@@ -12,13 +12,17 @@ class MembershipApplicant {
 
 	private $personName;
 	private $physicalAddress;
-	private $emailAddress;
+	private $email;
+	private $phone;
 	private $dateOfBirth;
 
-	public function __construct( PersonName $name, PhysicalAddress $address, string $emailAddress, \DateTime $dateOfBirth ) {
+	public function __construct( PersonName $name, PhysicalAddress $address, EmailAddress $email,
+		PhoneNumber $phone, \DateTime $dateOfBirth ) {
+
 		$this->personName = $name;
 		$this->physicalAddress = $address;
-		$this->emailAddress = $emailAddress;
+		$this->email = $email;
+		$this->phone = $phone;
 		$this->dateOfBirth = $dateOfBirth;
 	}
 
@@ -31,20 +35,20 @@ class MembershipApplicant {
 		return $this->physicalAddress;
 	}
 
-	public function getEmailAddress(): string {
-		return $this->emailAddress;
+	public function getEmailAddress(): EmailAddress {
+		return $this->email;
 	}
 
 	public function getDateOfBirth(): \DateTime {
 		return $this->dateOfBirth;
 	}
 
-	public function setEmailAddress( string $emailAddress ) {
-		$this->emailAddress = $emailAddress;
+	public function changeEmailAddress( EmailAddress $email ) {
+		$this->email = $email;
 	}
 
-	// TODO: phone number
-	// Create a PhoneNumber class?
-	// Use something like https://github.com/giggsey/libphonenumber-for-php?
+	public function getPhoneNumber(): PhoneNumber {
+		return $this->phone;
+	}
 
 }

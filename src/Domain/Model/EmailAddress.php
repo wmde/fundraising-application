@@ -16,12 +16,13 @@ class EmailAddress {
 
 	public function __construct( string $emailAddress ) {
 		$addressParts = explode( '@', $emailAddress );
-		if ( is_array( $addressParts ) && count( $addressParts ) === 2 ) {
-			$this->userName = $addressParts[0];
-			$this->domain = $addressParts[1];
-		} else {
+
+		if ( !is_array( $addressParts ) || count( $addressParts ) !== 2 ) {
 			throw new \InvalidArgumentException( 'Given email address could not be parsed' );
 		}
+
+		$this->userName = $addressParts[0];
+		$this->domain = $addressParts[1];
 	}
 
 	public function getUserName(): string {
@@ -32,7 +33,7 @@ class EmailAddress {
 		return $this->domain;
 	}
 
-	public function getNormalizedDomain() {
+	public function getNormalizedDomain(): string {
 		return idn_to_ascii( $this->domain );
 	}
 
@@ -42,6 +43,10 @@ class EmailAddress {
 
 	public function getNormalizedAddress(): string {
 		return $this->userName . '@' . $this->getNormalizedDomain();
+	}
+
+	public function __toString(): string {
+		return $this->getFullAddress();
 	}
 
 }

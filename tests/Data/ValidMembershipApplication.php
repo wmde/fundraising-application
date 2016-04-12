@@ -6,12 +6,14 @@ namespace WMDE\Fundraising\Frontend\Tests\Data;
 
 use WMDE\Fundraising\Entities\MembershipApplication as DoctrineMembershipApplication;
 use WMDE\Fundraising\Frontend\Domain\Model\BankData;
+use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\MembershipApplicant;
 use WMDE\Fundraising\Frontend\Domain\Model\MembershipApplication;
 use WMDE\Fundraising\Frontend\Domain\Model\MembershipPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
+use WMDE\Fundraising\Frontend\Domain\Model\PhoneNumber;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 
 /**
@@ -35,6 +37,7 @@ class ValidMembershipApplication {
 	const APPLICANT_STREET_ADDRESS = 'Nyan street';
 
 	const APPLICANT_EMAIL_ADDRESS = 'jeroendedauw@gmail.com';
+	const APPLICANT_PHONE_NUMBER = '1337-1337-1337';
 
 	const MEMBERSHIP_TYPE = MembershipApplication::ACTIVE_MEMBERSHIP;
 	const PAYMENT_PERIOD_IN_MONTHS = 3;
@@ -57,7 +60,8 @@ class ValidMembershipApplication {
 			new MembershipApplicant(
 				$this->newPersonName(),
 				$this->newAddress(),
-				self::APPLICANT_EMAIL_ADDRESS,
+				new EmailAddress( self::APPLICANT_EMAIL_ADDRESS ),
+				new PhoneNumber( self::APPLICANT_PHONE_NUMBER ),
 				new \DateTime( self::APPLICANT_DATE_OF_BIRTH )
 			),
 			new MembershipPayment(
@@ -122,6 +126,7 @@ class ValidMembershipApplication {
 		$application->setAddress( self::APPLICANT_STREET_ADDRESS );
 
 		$application->setApplicantEmailAddress( self::APPLICANT_EMAIL_ADDRESS );
+		$application->setApplicantPhoneNumber( self::APPLICANT_PHONE_NUMBER );
 
 		$application->setMembershipType( self::MEMBERSHIP_TYPE );
 		$application->setPaymentIntervalInMonths( self::PAYMENT_PERIOD_IN_MONTHS );
