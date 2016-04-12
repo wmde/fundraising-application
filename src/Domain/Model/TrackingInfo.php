@@ -7,6 +7,8 @@ namespace WMDE\Fundraising\Frontend\Domain\Model;
 use WMDE\Fundraising\Frontend\FreezableValueObject;
 
 /**
+ * TODO: move to Infrastructure
+ *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
