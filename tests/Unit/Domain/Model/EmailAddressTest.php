@@ -20,6 +20,7 @@ class EmailAddressTest extends \PHPUnit_Framework_TestCase {
 	public function testWhenGivenMail_validatorMXValidatesCorrectly( $mailToTest ) {
 		$this->expectException( \InvalidArgumentException::class );
 		$this->expectExceptionMessage( 'Given email address could not be parsed' );
+
 		new EmailAddress( $mailToTest );
 	}
 
@@ -30,6 +31,26 @@ class EmailAddressTest extends \PHPUnit_Framework_TestCase {
 			[ '' ],
 			[ ' ' ]
 		];
+	}
+
+	public function testGetFullAddressReturnsOriginalInput() {
+		$email = new EmailAddress( 'jeroendedauw@gmail.com' );
+
+		$this->assertSame( 'jeroendedauw@gmail.com', $email->getFullAddress() );
+	}
+
+	public function testCanGetEmailParts() {
+		$email = new EmailAddress( 'jeroendedauw@gmail.com' );
+
+		$this->assertSame( 'jeroendedauw', $email->getUserName() );
+		$this->assertSame( 'gmail.com', $email->getDomain() );
+	}
+
+	public function testCanNormalizedDomainName() {
+		$email = new EmailAddress( 'info@triebwerk-grün.de' );
+
+		$this->assertSame( 'xn--triebwerk-grn-7ob.de', $email->getNormalizedDomain() );
+		$this->assertSame( 'info@xn--triebwerk-grn-7ob.de', $email->getNormalizedAddress() );
 	}
 
 }
