@@ -87,11 +87,11 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$repository = new DoctrineDonationRepository( $this->entityManager );
 
 		$donation = ValidDonation::newDonation();
-		$donation->setAmount( new Euro( 4200 ) );
+		$donation->setAmount( Euro::newFromInt( 42 ) );
 		$repository->storeDonation( $donation );
 
 		// FIXME: change to no longer use the same Donation instance
-		$donation->setAmount( new Euro( 133700 ) );
+		$donation->setAmount( Euro::newFromInt( 1337 ) );
 		$repository->storeDonation( $donation );
 
 		$this->assertEquals( $donation, $repository->getDonationById( $donation->getId() ) );

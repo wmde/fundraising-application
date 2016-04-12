@@ -21,12 +21,21 @@ final class Euro {
 	 * @param int $cents
 	 * @throws InvalidArgumentException
 	 */
-	public function __construct( int $cents ) {
+	private function __construct( int $cents ) {
 		if ( $cents < 0 ) {
 			throw new InvalidArgumentException( 'Amount needs to be positive' );
 		}
 
 		$this->cents = $cents;
+	}
+
+	/**
+	 * @param int $cents
+	 * @return self
+	 * @throws InvalidArgumentException
+	 */
+	public static function newFromCents( int $cents ): self {
+		return new self( $cents );
 	}
 
 	/**
@@ -63,6 +72,15 @@ final class Euro {
 		return new self( intval(
 			round( $euroAmount, self::$DECIMAL_COUNT ) * self::$CENTS_PER_EURO
 		) );
+	}
+
+	/**
+	 * @param int $euroAmount
+	 * @return self
+	 * @throws InvalidArgumentException
+	 */
+	public static function newFromInt( int $euroAmount ) {
+		return new self( $euroAmount * self::$CENTS_PER_EURO );
 	}
 
 	public function getEuroCents(): int {
