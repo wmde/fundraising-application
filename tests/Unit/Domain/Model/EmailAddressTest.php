@@ -53,4 +53,10 @@ class EmailAddressTest extends \PHPUnit_Framework_TestCase {
 		$this->assertSame( 'info@xn--triebwerk-grn-7ob.de', $email->getNormalizedAddress() );
 	}
 
+	public function testToStringOriginalInput() {
+		$email = new EmailAddress( 'jeroendedauw@gmail.com' );
+
+		$this->assertSame( 'jeroendedauw@gmail.com', (string)$email->getFullAddress() );
+	}
+
 }

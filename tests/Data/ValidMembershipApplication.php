@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Data;
 
 use WMDE\Fundraising\Entities\MembershipApplication as DoctrineMembershipApplication;
 use WMDE\Fundraising\Frontend\Domain\Model\BankData;
+use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\MembershipApplicant;
@@ -57,7 +58,7 @@ class ValidMembershipApplication {
 			new MembershipApplicant(
 				$this->newPersonName(),
 				$this->newAddress(),
-				self::APPLICANT_EMAIL_ADDRESS,
+				new EmailAddress( self::APPLICANT_EMAIL_ADDRESS ),
 				new \DateTime( self::APPLICANT_DATE_OF_BIRTH )
 			),
 			new MembershipPayment(

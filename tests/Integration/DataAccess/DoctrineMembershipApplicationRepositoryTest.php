@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
 use Doctrine\ORM\EntityManager;
 use WMDE\Fundraising\Entities\MembershipApplication as DoctrineMembershipApplication;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipApplicationRepository;
+use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\Domain\Repositories\GetMembershipApplicationException;
 use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\StoreMembershipApplicationException;
@@ -115,7 +116,7 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit_Framework_Tes
 		// It is important a new instance is created here to test "detached entity" handling
 		$newApplication = ValidMembershipApplication::newDomainEntity();
 		$newApplication->setId( $originalApplication->getId() );
-		$newApplication->getApplicant()->setEmailAddress( 'chuck.norris@always.win' );
+		$newApplication->getApplicant()->changeEmailAddress( new EmailAddress( 'chuck.norris@always.win' ) );
 
 		$repository->storeApplication( $newApplication );
 
