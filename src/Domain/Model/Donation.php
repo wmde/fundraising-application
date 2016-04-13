@@ -141,12 +141,4 @@ class Donation {
 		return $this->trackingInfo;
 	}
 
-	/**
-	 * Should not be called by production code.
-	 * @param string $status
-	 */
-	public function setStatusForTest( string $status ) {
-		$this->status = $status;
-	}
-
 }
