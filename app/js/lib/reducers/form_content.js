@@ -35,6 +35,32 @@ function stateContainsUnknownKeys( state ) {
 	return !_.isEmpty( getInvalidKeys( state ) );
 }
 
+function clearFieldsIfAddressTypeChanges( newState, payload ) {
+	if ( payload.contentName !== 'addressType'  ) {
+		return;
+	}
+	switch ( payload.value ) {
+		case 'privat':
+			newState.companyName = '';
+			break;
+		case 'firma':
+			newState.personalTitle = '';
+			newState.firstName = '';
+			newState.lastName = '';
+			break;
+		case 'anonym':
+			newState.personalTitle = '';
+			newState.companyName = '';
+			newState.firstName = '';
+			newState.lastName = '';
+			newState.street = '';
+			newState.postCode = '';
+			newState.city = '';
+			newState.email = '';
+			break;
+	}
+}
+
 module.exports = function formContent( state, action ) {
 	var newAmount, newState;
 	if ( typeof state === 'undefined' ) {
@@ -57,6 +83,7 @@ module.exports = function formContent( state, action ) {
 				throw new Error( 'Unsupported form content name: ' + action.payload.contentName );
 			}
 			newState = _.clone( state );
+			clearFieldsIfAddressTypeChanges( newState, action.payload );
 			newState[ action.payload.contentName ] = action.payload.value;
 			return newState;
 		case 'INITIALIZE_CONTENT':

@@ -50,6 +50,56 @@ test( 'CHANGE_CONTENT throws an error if the field name is not allowed', functio
 	t.end();
 } );
 
+test( 'When CHANGE_CONTENT sets address type to private, company name is cleared', function ( t ) {
+	var stateBefore = { companyName: 'Globex Corp', addressType: 'firma' },
+		expectedState = { companyName: '', addressType: 'privat' },
+		action = { type: 'CHANGE_CONTENT', payload: { value: 'privat', contentName: 'addressType' } };
+
+	deepFreeze( stateBefore );
+	t.deepEqual( formContent( stateBefore, action ), expectedState );
+	t.end();
+} );
+
+test( 'When CHANGE_CONTENT sets address type to company, names are cleared', function ( t ) {
+	var stateBefore = { personalTitle: 'Dr.', firstName: 'Hank', lastName: 'Scorpio', addressType: 'privat' },
+		expectedState = { personalTitle: '', firstName: '', lastName: '', addressType: 'firma' },
+		action = { type: 'CHANGE_CONTENT', payload: { value: 'firma', contentName: 'addressType' } };
+
+	deepFreeze( stateBefore );
+	t.deepEqual( formContent( stateBefore, action ), expectedState );
+	t.end();
+} );
+
+test( 'When CHANGE_CONTENT sets address type to anonymous, all personal data fields are cleared', function ( t ) {
+	var stateBefore = {
+			companyName: '',
+			personalTitle: 'Dr.',
+			firstName: 'Hank',
+			lastName: 'Scorpio',
+			street: 'Hammock District',
+			postCode: '12345',
+			city: 'Cypress Creek',
+			addressType: 'privat',
+			email: 'hank@globex.com'
+		},
+		expectedState = {
+			companyName: '',
+			personalTitle: '',
+			firstName: '',
+			lastName: '',
+			street: '',
+			postCode: '',
+			city: '',
+			addressType: 'anonym',
+			email: ''
+		},
+		action = { type: 'CHANGE_CONTENT', payload: { value: 'anonym', contentName: 'addressType' } };
+
+	deepFreeze( stateBefore );
+	t.deepEqual( formContent( stateBefore, action ), expectedState );
+	t.end();
+} );
+
 test( 'INITIALIZE_CONTENT changes multiple fields', function ( t ) {
 	var stateBefore = { paymentType: 'PPL', amount: 0, recurringPayment: 0 },
 		expectedState = { paymentType: 'BEZ', amount: '25,00', recurringPayment: 0 },
