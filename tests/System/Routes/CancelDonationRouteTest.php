@@ -83,7 +83,7 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 	}
 
 	private function storeDonation( DonationRepository $repo, EntityManager $entityManager ): int {
-		$donation = ValidDonation::newDonation();
+		$donation = ValidDonation::newDirectDebitDonation();
 		$repo->storeDonation( $donation );
 
 		/**

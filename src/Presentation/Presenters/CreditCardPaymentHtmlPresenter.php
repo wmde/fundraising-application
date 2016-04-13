@@ -39,7 +39,7 @@ class CreditCardPaymentHtmlPresenter {
 				$personalInfo ? $personalInfo->getPersonName()->getFirstName() : '',
 				$personalInfo ? $personalInfo->getPersonName()->getLastName() : '',
 				$this->translator->trans( 'paytext_cc', [], 'paymentIntervals' ) . ' ' .
-					$this->translator->trans( $response->getDonation()->getInterval(), [], 'paymentIntervals' ),
+					$this->translator->trans( $response->getDonation()->getPaymentIntervalInMonths(), [], 'paymentIntervals' ),
 				$response->getDonation()->getId(),
 				$response->getUpdateToken(),
 				$response->getDonation()->getAmount()

@@ -44,7 +44,7 @@ class AddDonationRequest {
 	/**
 	 * @return Donor|null
 	 */
-	public function getPersonalInfo() {
+	public function getDonor() {
 		return $this->personalInfo;
 	}
 

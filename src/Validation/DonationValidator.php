@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Validation;
 
+use WMDE\Fundraising\Frontend\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 
@@ -41,7 +42,8 @@ class DonationValidator {
 		$violations = [
 			$this->getAmountViolation( $donation ),
 			$this->getFieldViolation(
-				$this->paymentTypeValidator->validate( $donation->getPaymentType() ), 'zahlweise'
+				$this->paymentTypeValidator->validate( $donation->getPaymentType() ),
+				'zahlweise'
 			)
 		];
 
@@ -52,10 +54,12 @@ class DonationValidator {
 			);
 		}
 
-		if ( $donation->getPaymentType() === PaymentType::DIRECT_DEBIT ) {
+		$paymentMethod = $donation->getPaymentMethod();
+
+		if ( $paymentMethod instanceof DirectDebitPayment ) {
 			$violations = array_merge(
 				$violations,
-				$this->bankDataValidator->validate( $donation->getBankData() )->getViolations()
+				$this->bankDataValidator->validate( $paymentMethod->getBankData() )->getViolations()
 			);
 		}
 
@@ -78,7 +82,7 @@ class DonationValidator {
 		$violations[] = $this->getFieldViolation(
 			$this->amountPolicyValidator->validate(
 				$donation->getAmount()->getEuroFloat(),
-				$donation->getInterval()
+				$donation->getPaymentIntervalInMonths()
 			),
 			'betrag'
 		);

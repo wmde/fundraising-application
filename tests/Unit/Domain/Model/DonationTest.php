@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Domain\Model;
 use RuntimeException;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
+use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 
 /**
  * @covers WMDE\Fundraising\Frontend\Domain\Model\Donation
@@ -17,18 +18,14 @@ use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 class DonationTest extends \PHPUnit_Framework_TestCase {
 
 	public function testGivenNonDirectDebitDonation_cancellationFails() {
-		$donation = new Donation();
-		$donation->setPaymentType( PaymentType::CREDIT_CARD );
-		$donation->setStatus( Donation::STATUS_NEW );
+		$donation = ValidDonation::newBankTransferDonation();
 
 		$this->expectException( RuntimeException::class );
 		$donation->cancel();
 	}
 
 	public function testGivenDirectDebitDonation_cancellationSucceeds() {
-		$donation = new Donation();
-		$donation->setPaymentType( PaymentType::DIRECT_DEBIT );
-		$donation->setStatus( Donation::STATUS_NEW );
+		$donation = ValidDonation::newDirectDebitDonation();
 
 		$donation->cancel();
 		$this->assertSame( Donation::STATUS_DELETED, $donation->getStatus() );
@@ -38,9 +35,8 @@ class DonationTest extends \PHPUnit_Framework_TestCase {
 	 * @dataProvider nonCancellableStatusProvider
 	 */
 	public function testGivenNonNewStatus_cancellationFails( $nonCancellableStatus ) {
-		$donation = new Donation();
-		$donation->setPaymentType( PaymentType::DIRECT_DEBIT );
-		$donation->setStatus( $nonCancellableStatus );
+		$donation = ValidDonation::newDirectDebitDonation();
+		$donation->setStatusForTest( $nonCancellableStatus );
 
 		$this->expectException( RuntimeException::class );
 		$donation->cancel();
@@ -55,23 +51,19 @@ class DonationTest extends \PHPUnit_Framework_TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider cancellableStatusProvider
-	 */
-	public function testGivenNewStatus_cancellationSucceeds( $cancellableStatus ) {
-		$donation = new Donation();
-		$donation->setPaymentType( PaymentType::DIRECT_DEBIT );
-		$donation->setStatus( $cancellableStatus );
+	public function testGivenNewStatus_cancellationSucceeds() {
+		$donation = ValidDonation::newDirectDebitDonation();
 
 		$donation->cancel();
 		$this->assertSame( Donation::STATUS_DELETED, $donation->getStatus() );
 	}
 
-	public function cancellableStatusProvider() {
-		return [
-			[ Donation::STATUS_NEW ],
-			[ Donation::STATUS_MODERATION ],
-		];
+	public function testGivenModerationStatus_cancellationSucceeds() {
+		$donation = ValidDonation::newDirectDebitDonation();
+
+		$donation->markForModeration();
+		$donation->cancel();
+		$this->assertSame( Donation::STATUS_DELETED, $donation->getStatus() );
 	}
 
 }

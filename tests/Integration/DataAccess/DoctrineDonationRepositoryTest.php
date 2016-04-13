@@ -34,7 +34,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testValidDonationGetPersisted() {
-		$donation = ValidDonation::newDonation();
+		$donation = ValidDonation::newDirectDebitDonation();
 
 		( new DoctrineDonationRepository( $this->entityManager ) )->storeDonation( $donation );
 
@@ -52,7 +52,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testFractionalAmountsRoundtripWithoutChange() {
-		$donation = ValidDonation::newDonation( 100.01 );
+		$donation = ValidDonation::newDirectDebitDonation();
 
 		( new DoctrineDonationRepository( $this->entityManager ) )->storeDonation( $donation );
 
@@ -62,7 +62,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testWhenPersistenceFails_domainExceptionIsThrown() {
-		$donation = ValidDonation::newDonation();
+		$donation = ValidDonation::newDirectDebitDonation();
 
 		$repository = new DoctrineDonationRepository( ThrowingEntityManager::newInstance( $this ) );
 
@@ -71,7 +71,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testNewDonationPersistenceRoundTrip() {
-		$donation = ValidDonation::newDonation();
+		$donation = ValidDonation::newDirectDebitDonation();
 
 		$repository = new DoctrineDonationRepository( $this->entityManager );
 
@@ -86,12 +86,11 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 	public function testExistingDonationPersistenceRoundTrip() {
 		$repository = new DoctrineDonationRepository( $this->entityManager );
 
-		$donation = ValidDonation::newDonation();
-		$donation->setAmount( Euro::newFromInt( 42 ) );
+		$donation = ValidDonation::newDirectDebitDonation();
 		$repository->storeDonation( $donation );
 
 		// FIXME: change to no longer use the same Donation instance
-		$donation->setAmount( Euro::newFromInt( 1337 ) );
+		$donation->cancel();
 		$repository->storeDonation( $donation );
 
 		$this->assertEquals( $donation, $repository->getDonationById( $donation->getId() ) );

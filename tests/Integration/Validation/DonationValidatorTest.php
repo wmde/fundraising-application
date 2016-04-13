@@ -4,14 +4,17 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Tests\Integration\Validation;
 
+use WMDE\Fundraising\Frontend\Domain\Model\BankTransferPayment;
+use WMDE\Fundraising\Frontend\Domain\Model\DirectDebitPayment;
+use WMDE\Fundraising\Frontend\Domain\Model\DonationPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\Domain\Model\PaymentMethod;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
-use WMDE\Fundraising\Frontend\Domain\Model\Donor;
-use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
-use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
+use WMDE\Fundraising\Frontend\Domain\Model\PaymentWithoutAssociatedData;
+use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
 use WMDE\Fundraising\Frontend\Validation\AllowedValuesValidator;
 use WMDE\Fundraising\Frontend\Validation\AmountPolicyValidator;
@@ -46,29 +49,41 @@ class DonationValidatorTest extends ValidatorTestCase {
 	}
 
 	public function testNoPersonalInfoGiven_validatorReturnsTrue() {
-		$donation = new Donation();
-		$donation->setAmount( Euro::newFromInt( 100 ) );
-		$donation->setPaymentType( PaymentType::BANK_TRANSFER );
+		$donation = new Donation(
+			null,
+			Donation::STATUS_NEW,
+			Donation::NO_APPLICANT,
+			$this->newDonationPayment(),
+			Donation::OPTS_INTO_NEWSLETTER,
+			ValidDonation::newTrackingInfo()
+		);
+
 		$this->assertTrue( $this->donationValidator->validate( $donation )->isSuccessful() );
 	}
 
+	private function newDonationPayment( float $amount = 13.37 ): DonationPayment {
+		return new DonationPayment(
+			Euro::newFromFloat( $amount ),
+			3,
+			new BankTransferPayment( 'transfer code' )
+		);
+	}
+
 	public function testTooHighAmountGiven_needsModerationReturnsTrue() {
-		$donation = new Donation();
-		$donation->setAmount( Euro::newFromInt( 35000 ) );
-		$donation->setInterval( 12 );
-		$donation->setPaymentType( PaymentType::DIRECT_DEBIT );
+		$donation = new Donation(
+			null,
+			Donation::STATUS_NEW,
+			Donation::NO_APPLICANT,
+			$this->newDonationPayment( 35000 ),
+			Donation::OPTS_INTO_NEWSLETTER,
+			ValidDonation::newTrackingInfo()
+		);
+
 		$this->assertTrue( $this->donationValidator->needsModeration( $donation ) );
 	}
 
 	public function testPersonalInfoValidationFails_validatorReturnsFalse() {
-		$donation = new Donation();
-		$donation->setAmount( Euro::newFromInt( 100 ) );
-		$donation->setPaymentType( PaymentType::BANK_TRANSFER );
-		$donation->setDonor( new Donor(
-			$this->newCompanyName(),
-			$this->newPhysicalAddress(),
-			'hank.scorpio@globex.com'
-		) );
+		$donation = ValidDonation::newDirectDebitDonation();
 
 		$personalInfoValidator = $this->getMockBuilder( PersonalInfoValidator::class )->disableOriginalConstructor()->getMock();
 		$personalInfoValidator->method( 'validate' )
@@ -86,7 +101,6 @@ class DonationValidatorTest extends ValidatorTestCase {
 		$this->assertFalse( $donationValidator->validate( $donation )->isSuccessful() );
 
 		$this->assertConstraintWasViolated( $donationValidator->validate( $donation ), 'firma' );
-
 	}
 
 	public function testGivenBadWords_needsModerationReturnsTrue() {
@@ -107,9 +121,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 	}
 
 	public function testNoPaymentTypeGiven_validatorReturnsFalse() {
-		$donation = new Donation();
-		$donation->setAmount( Euro::newFromInt( 100 ) );
-		$donation->setPaymentType( '' );
+		$donation = $this->newDonationWithPaymentMethod( new PaymentWithoutAssociatedData( '' ) );
 
 		$this->assertFalse( $this->donationValidator->validate( $donation )->isSuccessful() );
 
@@ -119,10 +131,23 @@ class DonationValidatorTest extends ValidatorTestCase {
 		);
 	}
 
+	private function newDonationWithPaymentMethod( PaymentMethod $paymentMethod ): Donation {
+		return new Donation(
+			null,
+			Donation::STATUS_NEW,
+			ValidDonation::newDonor(),
+			new DonationPayment(
+				Euro::newFromFloat( 13.37 ),
+				3,
+				$paymentMethod
+			),
+			Donation::OPTS_INTO_NEWSLETTER,
+			ValidDonation::newTrackingInfo()
+		);
+	}
+
 	public function testUnsupportedPaymentTypeGiven_validatorReturnsFalse() {
-		$donation = new Donation();
-		$donation->setAmount( Euro::newFromInt( 100 ) );
-		$donation->setPaymentType( PaymentType::PAYPAL );
+		$donation = $this->newDonationWithPaymentMethod( new PaymentWithoutAssociatedData( 'KaiCoin' ) );
 
 		$this->assertFalse( $this->donationValidator->validate( $donation )->isSuccessful() );
 
@@ -133,10 +158,9 @@ class DonationValidatorTest extends ValidatorTestCase {
 	}
 
 	public function testDirectDebitMissingBankData_validatorReturnsFalse() {
-		$donation = new Donation();
-		$donation->setAmount( Euro::newFromInt( 100 ) );
-		$donation->setPaymentType( PaymentType::DIRECT_DEBIT );
-		$donation->setBankData( $this->newValidBankData() );
+		$donation = $this->newDonationWithPaymentMethod(
+			new DirectDebitPayment( $this->newEmptyBankData() )
+		);
 
 		$validationResult = $this->donationValidator->validate( $donation );
 		$this->assertFalse( $validationResult->isSuccessful() );
@@ -145,20 +169,14 @@ class DonationValidatorTest extends ValidatorTestCase {
 		$this->assertConstraintWasViolated( $validationResult, 'bankname' );
 	}
 
-	private function newCompanyName(): PersonName {
-		$name = PersonName::newCompanyName();
-		$name->setCompanyName( 'Globex Corp.' );
-		return $name;
-	}
-
-	private function newPhysicalAddress(): PhysicalAddress {
-		$address = new PhysicalAddress();
-		$address->setStreetAddress( 'PO box 1234' );
-		$address->setPostalCode( '90701' );
-		$address->setCity( 'Cypress Creek' );
-		$address->setCountryCode( 'US' );
-		$address->freeze()->assertNoNullFields();
-		return $address;
+	private function newEmptyBankData(): BankData {
+		$bankData = new BankData();
+		$bankData->setIban( new Iban( '' ) );
+		$bankData->setBic( '' );
+		$bankData->setAccount( '' );
+		$bankData->setBankCode( '' );
+		$bankData->setBankName( '' );
+		return $bankData;
 	}
 
 	private function newDonationValidator(): DonationValidator {
@@ -173,26 +191,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 	}
 
 	private function newDonation(): Donation {
-		$donation = new Donation();
-		$donation->setAmount( Euro::newFromInt( 100 ) );
-		$donation->setDonor( new Donor(
-			$this->newCompanyName(),
-			$this->newPhysicalAddress(),
-			'hank.scorpio@globex.com'
-		) );
-		$donation->setPaymentType( PaymentType::BANK_TRANSFER );
-
-		return $donation;
-	}
-
-	private function newValidBankData(): BankData {
-		$bankData = new BankData();
-		$bankData->setIban( new Iban( '' ) );
-		$bankData->setBic( '' );
-		$bankData->setAccount( '' );
-		$bankData->setBankCode( '' );
-		$bankData->setBankName( '' );
-		return $bankData;
+		return ValidDonation::newDirectDebitDonation();
 	}
 
 	private function newBankDataValidator(): BankDataValidator {

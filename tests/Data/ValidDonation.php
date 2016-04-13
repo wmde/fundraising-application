@@ -4,11 +4,14 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Data;
 
+use WMDE\Fundraising\Frontend\Domain\Model\BankTransferPayment;
+use WMDE\Fundraising\Frontend\Domain\Model\DirectDebitPayment;
+use WMDE\Fundraising\Frontend\Domain\Model\DonationPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
-use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
+use WMDE\Fundraising\Frontend\Domain\Model\PaymentMethod;
 use WMDE\Fundraising\Frontend\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
@@ -20,40 +23,65 @@ use WMDE\Fundraising\Frontend\Domain\Model\TrackingInfo;
  */
 class ValidDonation {
 
-	private function __construct() {
+	const DONATION_STATUS = Donation::STATUS_NEW;
+
+	const DONOR_FIRST_NAME = 'Jeroen';
+	const DONOR_LAST_NAME = 'De Dauw';
+	const DONOR_SALUTATION = 'nyan';
+	const DONOR_TITLE = 'nyan';
+
+	const DONOR_CITY = 'Berlin';
+	const DONOR_POSTAL_CODE = '1234';
+	const DONOR_COUNTRY_CODE = 'DE';
+	const DONOR_STREET_ADDRESS = 'Nyan Street';
+
+	const DONOR_EMAIL_ADDRESS = 'foo@bar.baz';
+
+	const DONATION_AMOUNT = 13.37; // Keep fractional to detect floating point issues
+	const PAYMENT_INTERVAL_IN_MONTHS = 3;
+
+	const PAYMENT_BANK_ACCOUNT = '0648489890';
+	const PAYMENT_BANK_CODE = '50010517';
+	const PAYMENT_BANK_NAME = 'ING-DiBa';
+	const PAYMENT_BIC = 'INGDDEFFXXX';
+	const PAYMENT_IBAN = 'DE12500105170648489890';
+
+	const PAYMENT_BANK_TRANSFER_CODE = 'pink fluffy unicorns';
+
+	const OPTS_INTO_NEWSLETTER = Donation::OPTS_INTO_NEWSLETTER;
+
+	public static function newBankTransferDonation(): Donation {
+		return ( new self() )->createDonation(
+			new BankTransferPayment( self::PAYMENT_BANK_TRANSFER_CODE )
+		);
 	}
 
-	public static function newDonation( float $amount = 42 ): Donation {
-		return ( new self() )->createDonation( $amount );
+	public static function newDirectDebitDonation(): Donation {
+		$self = new self();
+		return $self->createDonation( new DirectDebitPayment( $self->newBankData() ) );
 	}
 
-	public static function newBankTransferDonation( string $transferCode ): Donation {
-		return ( new self() )->createDonation( 42, PaymentType::BANK_TRANSFER, $transferCode );
+	private function createDonation( PaymentMethod $paymentMethod ): Donation {
+		return new Donation(
+			null,
+			self::DONATION_STATUS,
+			$this->newDonor(),
+			new DonationPayment(
+				Euro::newFromFloat( self::DONATION_AMOUNT ),
+				self::PAYMENT_INTERVAL_IN_MONTHS,
+				$paymentMethod
+			),
+			self::OPTS_INTO_NEWSLETTER,
+			$this->newTrackingInfo()
+		);
 	}
 
-	private function createDonation( float $amount,
-									 string $paymentType = PaymentType::DIRECT_DEBIT,
-									 string $transferCode = '' ): Donation {
-		$donation = new Donation();
+	public static function newDonor(): Donor {
+		$self = new self();
 
-		$donation->setAmount( Euro::newFromFloat( $amount ) );
-		$donation->setPaymentType( $paymentType );
-		$donation->setBankTransferCode( $transferCode );
-		$donation->setStatus( Donation::STATUS_NEW );
-
-		$donation->setOptsIntoNewsletter( true );
-
-		$donation->setDonor( $this->newPersonalInfo() );
-		$donation->setTrackingInfo( $this->newTrackingInfo() );
-		$donation->setBankData( $this->newBankData() );
-
-		return $donation;
-	}
-
-	private function newPersonalInfo(): Donor {
 		return new Donor(
-			$this->newPersonName(),
-			$this->newAddress(),
+			$self->newPersonName(),
+			$self->newAddress(),
 			'foo@bar.baz'
 		);
 	}
@@ -61,10 +89,10 @@ class ValidDonation {
 	private function newPersonName(): PersonName {
 		$personName = PersonName::newPrivatePersonName();
 
-		$personName->setFirstName( 'Jeroen' );
-		$personName->setLastName( 'De Dauw' );
-		$personName->setSalutation( 'nyan' );
-		$personName->setTitle( 'nyan' );
+		$personName->setFirstName( self::DONOR_FIRST_NAME );
+		$personName->setLastName( self::DONOR_LAST_NAME );
+		$personName->setSalutation( self::DONOR_SALUTATION );
+		$personName->setTitle( self::DONOR_TITLE );
 
 		return $personName->freeze()->assertNoNullFields();
 	}
@@ -72,15 +100,15 @@ class ValidDonation {
 	private function newAddress(): PhysicalAddress {
 		$address = new PhysicalAddress();
 
-		$address->setCity( 'Berlin' );
-		$address->setCountryCode( 'DE' );
-		$address->setPostalCode( '1234' );
-		$address->setStreetAddress( 'Nyan Street' );
+		$address->setCity( self::DONOR_CITY );
+		$address->setCountryCode( self::DONOR_COUNTRY_CODE );
+		$address->setPostalCode( self::DONOR_POSTAL_CODE );
+		$address->setStreetAddress( self::DONOR_STREET_ADDRESS );
 
 		return $address->freeze()->assertNoNullFields();
 	}
 
-	private function newTrackingInfo(): TrackingInfo {
+	public static function newTrackingInfo(): TrackingInfo {
 		$trackingInfo = new TrackingInfo();
 
 		$trackingInfo->setColor( 'blue' );
@@ -97,11 +125,11 @@ class ValidDonation {
 	private function newBankData(): BankData {
 		$bankData = new BankData();
 
-		$bankData->setAccount( '0648489890' );
-		$bankData->setBankCode( '50010517' );
-		$bankData->setBankName( 'ING-DiBa' );
-		$bankData->setBic( 'INGDDEFFXXX' );
-		$bankData->setIban( new Iban( 'DE12500105170648489890' ) );
+		$bankData->setAccount( self::PAYMENT_BANK_ACCOUNT );
+		$bankData->setBankCode( self::PAYMENT_BANK_CODE );
+		$bankData->setBankName( self::PAYMENT_BANK_NAME );
+		$bankData->setBic( self::PAYMENT_BIC );
+		$bankData->setIban( new Iban( self::PAYMENT_IBAN ) );
 
 		return $bankData->freeze()->assertNoNullFields();
 	}

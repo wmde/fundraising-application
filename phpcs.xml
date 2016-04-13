@@ -24,6 +24,8 @@
             <property name="absoluteLineLimit" value="125" />
         </properties>
     </rule>
+
+    <!-- https://github.com/squizlabs/PHP_CodeSniffer/issues/955 -->
     <rule ref="Generic.Files.OneClassPerFile" />
 
     <rule ref="Generic.Formatting.DisallowMultipleStatements" />

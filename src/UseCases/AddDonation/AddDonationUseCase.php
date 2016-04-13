@@ -6,7 +6,12 @@ namespace WMDE\Fundraising\Frontend\UseCases\AddDonation;
 
 use WMDE\Fundraising\Frontend\Domain\BankDataConverter;
 use WMDE\Fundraising\Frontend\Domain\Model\BankData;
+use WMDE\Fundraising\Frontend\Domain\Model\BankTransferPayment;
+use WMDE\Fundraising\Frontend\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\Domain\Model\DonationPayment;
+use WMDE\Fundraising\Frontend\Domain\Model\PaymentMethod;
+use WMDE\Fundraising\Frontend\Domain\Model\PaymentWithoutAssociatedData;
 use WMDE\Fundraising\Frontend\Domain\Model\TrackingInfo;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Model\Iban;
@@ -62,13 +67,11 @@ class AddDonationUseCase {
 			return AddDonationResponse::newFailureResponse( $validationResult->getViolations() );
 		}
 
-		if ( $donation->getPaymentType() === PaymentType::BANK_TRANSFER ) {
-			$donation->setBankTransferCode( $this->transferCodeGenerator->generateTransferCode() );
-		}
-
 		$needsModeration = $this->donationValidator->needsModeration( $donation );
 
-		$donation->setStatus( $this->getInitialDonationStatus( $donation, $needsModeration ) );
+		if ( $needsModeration ) {
+			$donation->markForModeration();
+		}
 
 		$this->donationRepository->storeDonation( $donation );
 
@@ -120,38 +123,47 @@ class AddDonationUseCase {
 		return $accessToken;
 	}
 
-	private function getInitialDonationStatus( Donation $donation, bool $needsModeration ): string {
-		if ( $needsModeration ) {
-			 return Donation::STATUS_MODERATION;
-		}
+	private function newDonationFromRequest( AddDonationRequest $donationRequest ): Donation {
+		return new Donation(
+			null,
+			$this->getInitialDonationStatus( $donationRequest->getPaymentType() ),
+			$donationRequest->getDonor(),
+			$this->getPaymentFromRequest( $donationRequest ),
+			$donationRequest->getOptIn() === '1',
+			$this->newTrackingInfoFromRequest( $donationRequest )
+		);
+	}
 
-		if ( $donation->getPaymentType() === PaymentType::DIRECT_DEBIT ) {
+	private function getInitialDonationStatus( string $paymentType ): string {
+		if ( $paymentType === PaymentType::DIRECT_DEBIT ) {
 			return Donation::STATUS_NEW;
 		}
 
-		if ( $donation->getPaymentType() === PaymentType::BANK_TRANSFER ) {
+		if ( $paymentType === PaymentType::BANK_TRANSFER ) {
 			return Donation::STATUS_PROMISE;
 		}
 
 		return Donation::STATUS_EXTERNAL_INCOMPLETE;
 	}
 
-	private function newDonationFromRequest( AddDonationRequest $donationRequest ): Donation {
-		$donation = new Donation();
+	private function getPaymentFromRequest( AddDonationRequest $donationRequest ): DonationPayment {
+		return new DonationPayment(
+			$donationRequest->getAmount(),
+			$donationRequest->getInterval(),
+			$this->getPaymentMethodFromRequest( $donationRequest )
+		);
+	}
 
-		$donation->setAmount( $donationRequest->getAmount() );
-		$donation->setInterval( $donationRequest->getInterval() );
-		$donation->setDonor( $donationRequest->getPersonalInfo() );
-		$donation->setOptsIntoNewsletter( $donationRequest->getOptIn() === '1' );
-		$donation->setPaymentType( $donationRequest->getPaymentType() );
-
-		$donation->setTrackingInfo( $this->newTrackingInfoFromRequest( $donationRequest ) );
-
-		if ( $donationRequest->getPaymentType() === PaymentType::DIRECT_DEBIT ) {
-			$donation->setBankData( $this->newBankDataFromRequest( $donationRequest ) );
+	private function getPaymentMethodFromRequest( AddDonationRequest $donationRequest ): PaymentMethod {
+		if ( $donationRequest->getPaymentType() === PaymentType::BANK_TRANSFER ) {
+			return new BankTransferPayment( $this->transferCodeGenerator->generateTransferCode() );
 		}
 
-		return $donation;
+		if ( $donationRequest->getPaymentType() === PaymentType::DIRECT_DEBIT ) {
+			return new DirectDebitPayment( $this->newBankDataFromRequest( $donationRequest ) );
+		}
+
+		return new PaymentWithoutAssociatedData( $donationRequest->getPaymentType() );
 	}
 
 	private function newBankDataFromRequest( AddDonationRequest $request ): BankData {
@@ -226,12 +238,20 @@ class AddDonationUseCase {
 			'donation' => [
 				'id' => $donation->getId(),
 				'amount' => $donation->getAmount()->getEuroFloat(), // TODO: getEuroString might be better
-				'interval' => $donation->getInterval(),
+				'interval' => $donation->getPaymentIntervalInMonths(),
 				'needsModeration' => $needsModeration,
 				'paymentType' => $donation->getPaymentType(),
-				'bankTransferCode' => $donation->getBankTransferCode(),
+				'bankTransferCode' => $this->getBankTransferCode( $donation->getPaymentMethod() ),
 			]
 		];
+	}
+
+	private function getBankTransferCode( PaymentMethod $paymentMethod ): string {
+		if ( $paymentMethod instanceof BankTransferPayment ) {
+			return $paymentMethod->getBankTransferCode();
+		}
+
+		return '';
 	}
 
 }
