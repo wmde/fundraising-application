@@ -5,7 +5,10 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Domain\Model;
 
 use RuntimeException;
+use WMDE\Fundraising\Frontend\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\Domain\Model\DonationPayment;
+use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 
@@ -35,11 +38,25 @@ class DonationTest extends \PHPUnit_Framework_TestCase {
 	 * @dataProvider nonCancellableStatusProvider
 	 */
 	public function testGivenNonNewStatus_cancellationFails( $nonCancellableStatus ) {
-		$donation = ValidDonation::newDirectDebitDonation();
-		$donation->setStatusForTest( $nonCancellableStatus );
+		$donation = $this->newDirectDebitDonationWithStatus( $nonCancellableStatus );
 
 		$this->expectException( RuntimeException::class );
 		$donation->cancel();
+	}
+
+	private function newDirectDebitDonationWithStatus( string $status ) {
+		return new Donation(
+			null,
+			$status,
+			ValidDonation::newDonor(),
+			new DonationPayment(
+				Euro::newFromFloat( 13.37 ),
+				3,
+				new DirectDebitPayment( ValidDonation::newBankData() )
+			),
+			Donation::OPTS_INTO_NEWSLETTER,
+			ValidDonation::newTrackingInfo()
+		);
 	}
 
 	public function nonCancellableStatusProvider() {

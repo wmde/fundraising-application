@@ -57,8 +57,7 @@ class ValidDonation {
 	}
 
 	public static function newDirectDebitDonation(): Donation {
-		$self = new self();
-		return $self->createDonation( new DirectDebitPayment( $self->newBankData() ) );
+		return ( new self() )->createDonation( new DirectDebitPayment( self::newBankData() ) );
 	}
 
 	private function createDonation( PaymentMethod $paymentMethod ): Donation {
@@ -122,7 +121,7 @@ class ValidDonation {
 		return $trackingInfo->freeze()->assertNoNullFields();
 	}
 
-	private function newBankData(): BankData {
+	public static function newBankData(): BankData {
 		$bankData = new BankData();
 
 		$bankData->setAccount( self::PAYMENT_BANK_ACCOUNT );
