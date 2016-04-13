@@ -132,21 +132,33 @@ $(function() {
 
     /* styled select boxes */
     function initStyledSelect() {
-      $('select').selectmenu({
+
+		function getStyledSelectElement( selectElement ) {
+			var styledElementName = '#' + $( selectElement ).attr( 'id' ) + '-button';
+			return $( styledElementName );
+		}
+
+		function setPlaceholderClass( selectElement, optionElement ) {
+			if ( optionElement.data( 'behavior' ) === 'placeholder' ) {
+				getStyledSelectElement( selectElement ).addClass( 'placeholder' );
+			} else {
+				getStyledSelectElement( selectElement ).removeClass( 'placeholder' );
+			}
+
+		}
+
+      $( 'select' ).selectmenu( {
             positionOptions: {
               collision: 'none'
-            }
-          })
-          .on('change', function (evt, params) {
-            var $option = $(this).find('[value="' + $(this).find('option:selected').val() + '"]');
-
-            if ($option.attr('data-behavior') == 'placeholder') {
-              $('#' + $(this).attr('id') + '-button').addClass('placeholder');
-            } else {
-              $('#' + $(this).attr('id') + '-button').removeClass('placeholder');
-            }
-          })
-          .change();
+            },
+		    change: function ( evt, ui ) {
+				setPlaceholderClass( this, ui.item.element );
+			},
+		    create: function ( evt ) {
+				setPlaceholderClass( this, $( 'option:selected', this ) );
+			}
+          }
+	  );
 
       // adjust position, margins & dimension
       $('.ui-selectmenu').each(function () {
