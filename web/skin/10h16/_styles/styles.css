@@ -523,6 +523,8 @@ main { padding-top: 40px; padding-bottom: 100px; background: #f6f6f6; display: b
 #donation-payment .hosted-by { font-size: 0.6em; color: #b2b2b2; margin-bottom: 15px; }
 #donation-payment .hosted-by a { text-decoration: underline; color: #b2b2b2; }
 
+.slide-sepa label, .slide-non-sepa label { width: 175px; }
+
 #donation-submit button[type="reset"] { vertical-align: bottom; }
 #donation-submit button[type="submit"] { vertical-align: bottom; }
 #donation-submit .label { font-size: 0.8em; line-height: 1.5em; margin-top: 2px; }

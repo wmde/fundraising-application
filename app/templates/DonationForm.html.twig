@@ -37,7 +37,9 @@
             [
                 WMDE.Components.createRadioComponent( store, $( '.payment-type-select' ), 'paymentType' ),
                 WMDE.Components.createRadioComponent( store, $( '.interval-type-select' ), 'paymentPeriodInMonths' ),
-                WMDE.Components.createRadioComponent( store, $( '.payment-period-select' ), 'paymentPeriodInMonths' )
+                WMDE.Components.createRadioComponent( store, $( '.payment-period-select' ), 'paymentPeriodInMonths' ),
+                WMDE.Components.createRadioComponent( store, $( '.debit-type-select' ), 'debitType' ),
+                WMDE.Components.createRadioComponent( store, $( '.address-type-select' ), 'addressType' )
             ],
             store
         );
@@ -75,6 +77,35 @@
                     {
                         viewHandler: WMDE.View.createErrorBoxHandler( $( '#validation-errors' ), { amount: 'Betrag' } ),
                         stateKey: 'validationMessages'
+                    },
+                    {
+                        viewHandler: WMDE.View.createElementSlideAnimationHandler( $( '.periode-2-list' ), /^(1|3|6|12)$/ ),
+                        stateKey: 'formContent.paymentPeriodInMonths'
+                    },
+                    {
+                        viewHandler: WMDE.View.createElementSlideAnimationHandler( $( '#bank-data' ), 'BEZ' ),
+                        stateKey: 'formContent.paymentType'
+                    },
+                    {
+                        viewHandler: WMDE.View.createElementSlideAnimationHandler( $( '.slide-sepa' ), 'sepa' ),
+                        stateKey: 'formContent.debitType'
+                    },
+                    {
+                        viewHandler: WMDE.View.createElementSlideAnimationHandler( $( '.slide-non-sepa' ), 'non-sepa' ),
+                        stateKey: 'formContent.debitType'
+                    },
+                    // Show only the right data fields for personal data
+                    {
+                        viewHandler: WMDE.View.createElementSlideAnimationHandler( $( '.personal-data-person' ), 'person' ),
+                        stateKey: 'formContent.addressType'
+                    },
+                    {
+                        viewHandler: WMDE.View.createElementSlideAnimationHandler( $( '.personal-data-company' ), 'firma' ),
+                        stateKey: 'formContent.addressType'
+                    },
+                    {
+                        viewHandler: WMDE.View.createElementSlideAnimationHandler( $( '.personal-data-full' ), /firma|person/ ),
+                        stateKey: 'formContent.addressType'
                     }
                 ],
                 store

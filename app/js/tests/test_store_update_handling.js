@@ -95,3 +95,22 @@ test( 'connect view handlers to store updates', function ( t ) {
 	t.ok( viewHandler.update.calledWith( 42 ), 'view handler get passed only selected state parts' );
 	t.end();
 } );
+
+test( 'connect view handlers to deeply nested store values', function ( t ) {
+	var viewHandler = {
+			update: sinon.spy()
+		},
+		viewHandlerConfig = {
+			viewHandler: viewHandler,
+			stateKey: 'facts.cats.number'
+		},
+		storeData = { facts: { cats: { number: 42, owners: 3 } } },
+		store = createFakeStore( storeData );
+
+	storeUpdateHandling.connectViewHandlersToStore( [ viewHandlerConfig ], store );
+	store.fakeUpdate();
+
+	t.ok( viewHandler.update.calledOnce, 'view handler update method is only called once' );
+	t.ok( viewHandler.update.calledWith( 42 ), 'view handler get passed only selected state parts' );
+	t.end();
+} );

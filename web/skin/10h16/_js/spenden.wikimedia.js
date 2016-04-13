@@ -130,70 +130,6 @@ $(function() {
       });
     }
 
-    /* radio button toggle */
-    function initRadioBtnToggle() {
-      $(':radio').change(function (e) {
-        var slides = [];
-        $(':radio.slide-toggle').each(function () {
-          slides.push($(this).attr('data-slide-rel'));
-        });
-
-        $(':radio.slide-toggle').each(function () {
-          var $slide = $($(this).attr('data-slide-rel'));
-
-          if ($(this).is(':checked') == !$(this).hasClass('slide-toggle-invert')) {
-
-            // show child if child is slide in another slide, prevent flickering / blopping slide children
-            $.each(slides, function (index, item) {
-              if ($slide.has($(item)).length > 0 && $(':radio[data-slide-rel="' + item + '"]').is(':checked') && !$slide.hasClass('opened')) {
-                $(item).stop().clearQueue().show().removeAttr('style');
-              }
-            });
-
-            // open
-            $slide
-                .addClass('opened')
-                .slideDown(600, checkInvisibleInput)
-                .animate(
-                    {opacity: 1},
-                    {queue: false, duration: 600}
-                );
-          } else {
-
-            //close
-            $slide
-                .removeClass('opened')
-                .slideUp(600, checkInvisibleInput)
-                .animate(
-                    {opacity: 0},
-                    {queue: false, duration: 600}
-                );
-          }
-
-        });
-
-        $(':radio.tab-toggle').each(function () {
-          if ($(this).is(':checked')) {
-            $($(this).attr('data-tab-rel')).removeClass('no-display');
-          } else {
-            $($(this).attr('data-tab-rel'))
-                .addClass('no-display');
-          }
-
-          checkInvisibleInput();
-        });
-        $(':radio.tab-toggle:checked').each(function () {
-          $($(this).attr('data-tab-rel'))
-              .removeClass('no-display');
-
-          checkInvisibleInput();
-        });
-
-      });
-
-    }
-
-
     /* styled select boxes */
     function initStyledSelect() {
       $('select').selectmenu({
@@ -266,7 +202,6 @@ $(function() {
     initSlideToggle();
     initTabToggle();
     initToolTip();
-    initRadioBtnToggle();
     initStyledSelect();
 
     formInitialized = true;
