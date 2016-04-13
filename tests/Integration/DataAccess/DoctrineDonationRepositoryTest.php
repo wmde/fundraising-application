@@ -92,7 +92,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 		// It is important a new instance is created here to test "detached entity" handling
 		$newDonation = ValidDonation::newDirectDebitDonation();
-		$newDonation->setId( $donation->getId() );
+		$newDonation->assignId( $donation->getId() );
 		$newDonation->cancel();
 		$repository->storeDonation( $newDonation );
 

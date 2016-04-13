@@ -59,7 +59,7 @@ class DoctrineDonationRepository implements DonationRepository {
 			throw new StoreDonationException( $ex );
 		}
 
-		$donation->setId( $doctrineDonation->getId() );
+		$donation->assignId( $doctrineDonation->getId() );
 	}
 
 	private function newDonationEntity( Donation $donation ): DoctrineDonation {

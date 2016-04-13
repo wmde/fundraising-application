@@ -22,16 +22,16 @@ class MembershipApplicationTest extends \PHPUnit_Framework_TestCase {
 	public function testCanAssignIdToNewDonation() {
 		$donation = ValidMembershipApplication::newDomainEntity();
 
-		$donation->setId( 42 );
+		$donation->assignId( 42 );
 		$this->assertSame( 42, $donation->getId() );
 	}
 
 	public function testCannotAssignIdToDonationWithIdentity() {
 		$donation = ValidMembershipApplication::newDomainEntity();
-		$donation->setId( 42 );
+		$donation->assignId( 42 );
 
 		$this->expectException( RuntimeException::class );
-		$donation->setId( 43 );
+		$donation->assignId( 43 );
 	}
 
 }

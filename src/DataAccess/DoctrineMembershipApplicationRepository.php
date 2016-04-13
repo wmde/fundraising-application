@@ -54,7 +54,7 @@ class DoctrineMembershipApplicationRepository implements MembershipApplicationRe
 			throw new StoreMembershipApplicationException( $ex );
 		}
 
-		$application->setId( $doctrineApplication->getId() );
+		$application->assignId( $doctrineApplication->getId() );
 	}
 
 	private function newDoctrineApplication( MembershipApplication $application ): DoctrineApplication {
