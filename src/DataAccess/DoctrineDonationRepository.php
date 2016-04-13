@@ -42,7 +42,17 @@ class DoctrineDonationRepository implements DonationRepository {
 		$doctrineDonation = $this->newDonationEntity( $donation );
 
 		try {
-			$this->entityManager->persist( $doctrineDonation );
+			if ( $doctrineDonation->getId() === null ) {
+				$this->entityManager->persist( $doctrineDonation );
+			}
+			else {
+				// merge would override the timestamp with null value, so we need to get it from the entity
+				$oldDonation = $this->entityManager->find( DoctrineDonation::class, $doctrineDonation->getId() );
+				// FIXME: this blows up if the entity is not found
+				$doctrineDonation->setDtNew( $oldDonation->getDtNew() );
+				$this->entityManager->merge( $doctrineDonation );
+			}
+
 			$this->entityManager->flush();
 		}
 		catch ( ORMException $ex ) {
@@ -54,6 +64,8 @@ class DoctrineDonationRepository implements DonationRepository {
 
 	private function newDonationEntity( Donation $donation ): DoctrineDonation {
 		$doctrineDonation = new DoctrineDonation();
+		$doctrineDonation->setId( $donation->getId() );
+
 		$doctrineDonation->setStatus( $donation->getStatus() );
 		$doctrineDonation->setAmount( $donation->getAmount()->getEuroString() );
 		$doctrineDonation->setPeriod( $donation->getPaymentIntervalInMonths() );

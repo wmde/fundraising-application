@@ -66,4 +66,23 @@ class DonationTest extends \PHPUnit_Framework_TestCase {
 		$this->assertSame( Donation::STATUS_DELETED, $donation->getStatus() );
 	}
 
+	public function testIdIsNullWhenNotAssigned() {
+		$this->assertNull( ValidDonation::newDirectDebitDonation()->getId() );
+	}
+
+	public function testCanAssignIdToNewDonation() {
+		$donation = ValidDonation::newDirectDebitDonation();
+
+		$donation->setId( 42 );
+		$this->assertSame( 42, $donation->getId() );
+	}
+
+	public function testCannotAssignIdToDonationWithIdentity() {
+		$donation = ValidDonation::newDirectDebitDonation();
+		$donation->setId( 42 );
+
+		$this->expectException( RuntimeException::class );
+		$donation->setId( 43 );
+	}
+
 }

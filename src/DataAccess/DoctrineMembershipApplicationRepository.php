@@ -43,6 +43,7 @@ class DoctrineMembershipApplicationRepository implements MembershipApplicationRe
 			else {
 				// merge would override the timestamp with null value, so we need to get it from the entity
 				$oldApplication = $this->entityManager->find( DoctrineApplication::class, $doctrineApplication->getId() );
+				// FIXME: this blows up if the entity is not found
 				$doctrineApplication->setCreationTime( $oldApplication->getCreationTime() );
 				$this->entityManager->merge( $doctrineApplication );
 			}
