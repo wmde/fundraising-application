@@ -33,6 +33,7 @@ use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationAuthorizer;
 use WMDE\Fundraising\Frontend\DataAccess\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\DataAccess\UniqueTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\BankDataConverter;
+use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Presentation\CreditCardConfig;
 use WMDE\Fundraising\Frontend\Presentation\CreditCardUrlGenerator;
 use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
@@ -77,6 +78,7 @@ use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipUseC
 use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationUseCase;
 use WMDE\Fundraising\Frontend\UseCases\CancelMembershipApplication\CancelMembershipApplicationUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ConfirmSubscription\ConfirmSubscriptionUseCase;
+use WMDE\Fundraising\Frontend\UseCases\HandlePayPalPaymentNotification\HandlePayPalPaymentNotificationUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ShowDonationConfirmation\ShowDonationConfirmationUseCase;
 use WMDE\Fundraising\Frontend\Validation\AmountPolicyValidator;
 use WMDE\Fundraising\Frontend\Validation\AmountValidator;
@@ -284,6 +286,13 @@ class FunFunFactory {
 
 		$pimple['confirmation-page-selector'] = $pimple->share( function() {
 			return new DonationConfirmationPageSelector( $this->config['confirmation-pages'] );
+		} );
+
+		$pimple['paypal-payment-notification-verifier'] = $pimple->share( function() {
+			return new PayPalPaymentNotificationVerifier(
+				new Client(),
+				$this->config['paypal']
+			);
 		} );
 
 		return $pimple;
@@ -807,6 +816,18 @@ class FunFunFactory {
 
 	public function newDonationFormViolationPresenter() {
 		return new DonationFormViolationPresenter( $this->getLayoutTemplate( 'DonationForm.html.twig' ) );
+	}
+
+	public function newHandlePayPalPaymentNotificationUseCase() {
+		return new HandlePayPalPaymentNotificationUseCase();
+	}
+
+	public function getPayPalPaymentNotificationVerifier(): PayPalPaymentNotificationVerifier {
+		return $this->pimple['paypal-payment-notification-verifier'];
+	}
+
+	public function setPayPalPaymentNotificationVerifier( PayPalPaymentNotificationVerifier $verifier ) {
+		$this->pimple['paypal-payment-notification-verifier'] = $verifier;
 	}
 
 }

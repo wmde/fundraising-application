@@ -375,4 +375,21 @@ $app->get(
 	}
 );
 
+$app->post(
+	'handle-paypal-payment-notification',
+	function ( Application $app, Request $request ) use ( $ffFactory ) {
+		if ( $ffFactory->getPayPalPaymentNotificationVerifier()->verify( $request->request->all() ) ) {
+			$useCase = $ffFactory->newHandlePayPalPaymentNotificationUseCase();
+
+			// TODO: check receiver_email, item_name, payment_status, txn_type
+			// TODO: create request object
+			// TODO: update donation's status and payment provider related fields
+
+			return new Response( $useCase->handleNotification() );
+		}
+
+		return new Response( 'TODO' ); # PayPal expects an empty response
+	}
+);
+
 return $app;
