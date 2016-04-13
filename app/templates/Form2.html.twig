@@ -333,17 +333,17 @@
                             <div class="input-container">
                                 <ul class="horizontal clearfix salutation">
                                     <li class="first">
-                                        <input type="radio" id="salutation-1" name="anrede" value="Frau" title="Frau" class="required" {% if anrede == 'Frau' or not anrede %}checked="checked"{% endif %}>
+                                        <input type="radio" id="salutation-1" name="anrede" value="Frau" title="Frau" class="salutation" {% if anrede == 'Frau' or not anrede %}checked="checked"{% endif %}>
                                         <label for="salutation-1">Frau</label>
                                     </li>
 
                                     <li class="last">
-                                        <input type="radio" id="salutation-2" name="anrede" value="Herr" title="Herr" {% if anrede == 'Herr' %}checked="checked"{% endif %}>
+                                        <input type="radio" id="salutation-2" name="anrede" value="Herr" title="Herr" class="salutation" {% if anrede == 'Herr' %}checked="checked"{% endif %}>
                                         <label for="salutation-2">Herr</label>
                                     </li>
                                 </ul>
 
-                                <select id="personal-title" name="titel">
+                                <select id="personal-title" name="titel" class="personal-title">
                                     <option value="" data-behavior="placeholder">Kein Titel</option>
                                     <option value="Dr." {% if titel == 'Dr.' %}selected{% endif %}>Dr.</option>
                                     <option value="Prof." {% if titel == 'Prof.' %}selected{% endif %}>Prof.</option>

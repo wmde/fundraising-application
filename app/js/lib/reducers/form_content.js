@@ -8,7 +8,17 @@ var objectAssign = require( 'object-assign' ),
 		paymentType: 'BEZ',
 		paymentPeriodInMonths: 0, // 0, 1, 3, 6 or 12, 0 = non-recurring payment
 		debitType: 'sepa', // sepa and "non-sepa"
-		addressType: 'person' // person, firma and anonym
+		addressType: 'person', // person, firma and anonym
+		salutation: 'Frau',
+		personalTitle: '',
+		firstName: '',
+		lastName: '',
+		companyName: '',
+		street: '',
+		postCode: '',
+		city: '',
+		country: 'DE',
+		email: ''
 	};
 
 /**
