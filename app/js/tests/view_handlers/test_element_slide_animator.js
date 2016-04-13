@@ -2,7 +2,7 @@
 
 var test = require( 'tape' ),
 	sinon = require( 'sinon' ),
-	createElementSlideHandler = require( '../../lib/view_handler/element_slide' ).createHandler
+	createElementSlideHandler = require( '../../lib/view_handler/element_slide_animator' ).createHandler
 	;
 
 test( 'When state matches value for showing, element slides in', function ( t ) {
