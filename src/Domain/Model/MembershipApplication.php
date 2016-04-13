@@ -52,7 +52,7 @@ class MembershipApplication {
 	 * @param int $id
 	 * @throws \RuntimeException
 	 */
-	public function setId( int $id ) {
+	public function assignId( int $id ) {
 		if ( $this->id !== null && $this->id !== $id ) {
 			throw new \RuntimeException( 'Id cannot be changed after initial assignment' );
 		}

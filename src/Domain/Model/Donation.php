@@ -69,11 +69,14 @@ class Donation {
 	}
 
 	/**
-	 * TODO: prevent changing assigned identity
-	 *
-	 * @param int|null $id
+	 * @param int $id
+	 * @throws \RuntimeException
 	 */
-	public function setId( int $id = null ) {
+	public function assignId( int $id ) {
+		if ( $this->id !== null && $this->id !== $id ) {
+			throw new \RuntimeException( 'Id cannot be changed after initial assignment' );
+		}
+
 		$this->id = $id;
 	}
 

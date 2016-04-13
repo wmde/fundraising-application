@@ -40,6 +40,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 		$doctrineDonation = $this->getDonationFromDatabase();
 
+		// TODO: compare whole donation, now easy via ValidDonation
 		$this->assertSame( $donation->getAmount()->getEuroString(), $doctrineDonation->getAmount() );
 		$this->assertSame( $donation->getDonor()->getEmailAddress(), $doctrineDonation->getEmail() );
 	}
@@ -83,17 +84,19 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		);
 	}
 
-	public function testExistingDonationPersistenceRoundTrip() {
+	public function testWhenDonationAlreadyExists_persistingCausesUpdate() {
 		$repository = new DoctrineDonationRepository( $this->entityManager );
 
 		$donation = ValidDonation::newDirectDebitDonation();
 		$repository->storeDonation( $donation );
 
-		// FIXME: change to no longer use the same Donation instance
-		$donation->cancel();
-		$repository->storeDonation( $donation );
+		// It is important a new instance is created here to test "detached entity" handling
+		$newDonation = ValidDonation::newDirectDebitDonation();
+		$newDonation->assignId( $donation->getId() );
+		$newDonation->cancel();
+		$repository->storeDonation( $newDonation );
 
-		$this->assertEquals( $donation, $repository->getDonationById( $donation->getId() ) );
+		$this->assertEquals( $newDonation, $repository->getDonationById( $newDonation->getId() ) );
 	}
 
 	public function testWhenEntityDoesNotExist_getEntityReturnsNull() {

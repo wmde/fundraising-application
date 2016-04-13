@@ -83,7 +83,7 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit_Framework_Tes
 		$this->storeDoctrineApplication( ValidMembershipApplication::newDoctrineEntity() );
 
 		$expected = ValidMembershipApplication::newDomainEntity();
-		$expected->setId( self::MEMBERSHIP_APPLICATION_ID );
+		$expected->assignId( self::MEMBERSHIP_APPLICATION_ID );
 
 		$this->assertEquals(
 			$expected,
@@ -115,7 +115,7 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit_Framework_Tes
 
 		// It is important a new instance is created here to test "detached entity" handling
 		$newApplication = ValidMembershipApplication::newDomainEntity();
-		$newApplication->setId( $originalApplication->getId() );
+		$newApplication->assignId( $originalApplication->getId() );
 		$newApplication->getApplicant()->changeEmailAddress( new EmailAddress( 'chuck.norris@always.win' ) );
 
 		$repository->storeApplication( $newApplication );
