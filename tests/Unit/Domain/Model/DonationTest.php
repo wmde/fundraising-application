@@ -31,7 +31,7 @@ class DonationTest extends \PHPUnit_Framework_TestCase {
 		$donation = ValidDonation::newDirectDebitDonation();
 
 		$donation->cancel();
-		$this->assertSame( Donation::STATUS_DELETED, $donation->getStatus() );
+		$this->assertSame( Donation::STATUS_CANCELLED, $donation->getStatus() );
 	}
 
 	/**
@@ -61,7 +61,7 @@ class DonationTest extends \PHPUnit_Framework_TestCase {
 
 	public function nonCancellableStatusProvider() {
 		return [
-			[ Donation::STATUS_DELETED ],
+			[ Donation::STATUS_CANCELLED ],
 			[ Donation::STATUS_EXTERNAL_BOOKED ],
 			[ Donation::STATUS_EXTERNAL_INCOMPLETE ],
 			[ Donation::STATUS_PROMISE ],
@@ -72,7 +72,7 @@ class DonationTest extends \PHPUnit_Framework_TestCase {
 		$donation = ValidDonation::newDirectDebitDonation();
 
 		$donation->cancel();
-		$this->assertSame( Donation::STATUS_DELETED, $donation->getStatus() );
+		$this->assertSame( Donation::STATUS_CANCELLED, $donation->getStatus() );
 	}
 
 	public function testGivenModerationStatus_cancellationSucceeds() {
@@ -80,7 +80,7 @@ class DonationTest extends \PHPUnit_Framework_TestCase {
 
 		$donation->markForModeration();
 		$donation->cancel();
-		$this->assertSame( Donation::STATUS_DELETED, $donation->getStatus() );
+		$this->assertSame( Donation::STATUS_CANCELLED, $donation->getStatus() );
 	}
 
 	public function testIdIsNullWhenNotAssigned() {

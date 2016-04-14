@@ -18,7 +18,7 @@ class Donation {
 	const STATUS_EXTERNAL_INCOMPLETE = 'X'; // status for external payments
 	const STATUS_EXTERNAL_BOOKED = 'B'; // status for external payments
 	const STATUS_MODERATION = 'P';
-	const STATUS_DELETED = 'D';
+	const STATUS_CANCELLED = 'D';
 
 	const OPTS_INTO_NEWSLETTER = true;
 	const DOES_NOT_OPT_INTO_NEWSLETTER = false;
@@ -129,7 +129,7 @@ class Donation {
 			throw new RuntimeException( 'Can only cancel new donations' );
 		}
 
-		$this->status = self::STATUS_DELETED;
+		$this->status = self::STATUS_CANCELLED;
 	}
 
 	public function markForModeration() {
