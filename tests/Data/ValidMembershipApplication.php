@@ -54,8 +54,7 @@ class ValidMembershipApplication {
 	}
 
 	private function createApplication(): MembershipApplication {
-		return new MembershipApplication(
-			null,
+		return MembershipApplication::newApplication(
 			self::MEMBERSHIP_TYPE,
 			new MembershipApplicant(
 				$this->newPersonName(),

@@ -13,6 +13,12 @@ class MembershipApplication {
 	const ACTIVE_MEMBERSHIP = 'active';
 	const SUSTAINING_MEMBERSHIP = 'sustaining';
 
+	const NO_MODERATION_NEEDED = false;
+	const NEEDS_MODERATION = true;
+
+	const IS_CURRENT = 0;
+	const IS_CANCELLED = 1;
+
 	/**
 	 * @var int|null
 	 */
@@ -21,12 +27,29 @@ class MembershipApplication {
 	private $type;
 	private $applicant;
 	private $payment;
+	private $needsModeration;
+	private $isCancelled;
 
-	public function __construct( int $id = null, string $type, MembershipApplicant $applicant, MembershipPayment $payment ) {
+	public static function newApplication( string $type, MembershipApplicant $applicant, MembershipPayment $payment ): self {
+		return new self(
+			null,
+			$type,
+			$applicant,
+			$payment,
+			self::NO_MODERATION_NEEDED,
+			self::IS_CURRENT
+		);
+	}
+
+	public function __construct( int $id = null, string $type, MembershipApplicant $applicant, MembershipPayment $payment,
+		bool $needsModeration, int $isCancelled ) {
+
 		$this->id = $id;
 		$this->type = $type;
 		$this->applicant = $applicant;
 		$this->payment = $payment;
+		$this->needsModeration = $needsModeration;
+		$this->isCancelled = $isCancelled;
 	}
 
 	/**
@@ -58,6 +81,22 @@ class MembershipApplication {
 		}
 
 		$this->id = $id;
+	}
+
+	public function cancel() {
+		$this->isCancelled = self::IS_CANCELLED;
+	}
+
+	public function markForModeration() {
+		$this->needsModeration = self::NEEDS_MODERATION;
+	}
+
+	public function isCancelled(): bool {
+		return $this->isCancelled === self::IS_CANCELLED;
+	}
+
+	public function needsModeration(): bool {
+		return $this->needsModeration === self::NEEDS_MODERATION;
 	}
 
 }

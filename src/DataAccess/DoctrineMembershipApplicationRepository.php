@@ -142,7 +142,9 @@ class DoctrineMembershipApplicationRepository implements MembershipApplicationRe
 				$application->getPaymentIntervalInMonths(),
 				Euro::newFromFloat( $application->getPaymentAmount() ),
 				$this->newBankData( $application )
-			)
+			),
+			MembershipApplication::NO_MODERATION_NEEDED, // TODO
+			MembershipApplication::IS_CURRENT // TODO
 		);
 	}
 
