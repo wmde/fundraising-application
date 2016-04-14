@@ -137,4 +137,14 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit_Framework_Tes
 		);
 	}
 
+	public function testWhenPersistingDeletedApplication_exceptionIsThrown() {
+		$application = ValidMembershipApplication::newDomainEntity();
+		$application->assignId( 42 );
+
+		$repository = $this->newRepository();
+
+		$this->expectException( StoreMembershipApplicationException::class );
+		$repository->storeApplication( $application );
+	}
+
 }

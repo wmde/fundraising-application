@@ -39,31 +39,48 @@ class DoctrineDonationRepository implements DonationRepository {
 	}
 
 	public function storeDonation( Donation $donation ) {
-		$doctrineDonation = $this->newDonationEntity( $donation );
+		if ( $donation->getId() === null ) {
+			$this->insertDonation( $donation );
+		}
+		else {
+			$this->updateDonation( $donation );
+		}
+	}
+
+	private function insertDonation( Donation $donation ) {
+		$doctrineApplication = new DoctrineDonation();
+		$this->updateDonationEntity( $doctrineApplication, $donation );
 
 		try {
-			if ( $doctrineDonation->getId() === null ) {
-				$this->entityManager->persist( $doctrineDonation );
-			}
-			else {
-				// merge would override the timestamp with null value, so we need to get it from the entity
-				$oldDonation = $this->entityManager->find( DoctrineDonation::class, $doctrineDonation->getId() );
-				// FIXME: this blows up if the entity is not found
-				$doctrineDonation->setDtNew( $oldDonation->getDtNew() );
-				$this->entityManager->merge( $doctrineDonation );
-			}
-
+			$this->entityManager->persist( $doctrineApplication );
 			$this->entityManager->flush();
 		}
 		catch ( ORMException $ex ) {
 			throw new StoreDonationException( $ex );
 		}
 
-		$donation->assignId( $doctrineDonation->getId() );
+		$donation->assignId( $doctrineApplication->getId() );
 	}
 
-	private function newDonationEntity( Donation $donation ): DoctrineDonation {
-		$doctrineDonation = new DoctrineDonation();
+	private function updateDonation( Donation $donation ) {
+		$doctrineApplication = $this->getDoctrineDonationById( $donation->getId() );
+
+		if ( $doctrineApplication === null ) {
+			throw new StoreDonationException();
+		}
+
+		$this->updateDonationEntity( $doctrineApplication, $donation );
+
+		try {
+			$this->entityManager->persist( $doctrineApplication );
+			$this->entityManager->flush();
+		}
+		catch ( ORMException $ex ) {
+			throw new StoreDonationException( $ex );
+		}
+	}
+
+	private function updateDonationEntity( DoctrineDonation $doctrineDonation, Donation $donation ) {
 		$doctrineDonation->setId( $donation->getId() );
 
 		$doctrineDonation->setStatus( $donation->getStatus() );
@@ -84,8 +101,6 @@ class DoctrineDonationRepository implements DonationRepository {
 		$doctrineDonation->setInfo( $donation->getOptsIntoNewsletter() );
 
 		$doctrineDonation->encodeAndSetData( $this->getDataMap( $donation ) );
-
-		return $doctrineDonation;
 	}
 
 	private function getBankTransferCode( PaymentMethod $paymentMethod ): string {
@@ -174,15 +189,7 @@ class DoctrineDonationRepository implements DonationRepository {
 	 */
 	public function getDonationById( int $id ) {
 		try {
-			/**
-			 * @var DoctrineDonation $donation
-			 *
-			 * FIXME: only select donations that have
-			 * 'isPublic' => true,
-			 * 'dtDel' => null
-			 * correct status
-			 */
-			$donation = $this->entityManager->find( DoctrineDonation::class, $id );
+			$donation = $this->getDoctrineDonationById( $id );
 		}
 		catch ( ORMException $ex ) {
 			throw new GetDonationException( $ex );
@@ -193,6 +200,22 @@ class DoctrineDonationRepository implements DonationRepository {
 		}
 
 		return $this->newDonationDomainObject( $donation );
+	}
+
+	/**
+	 * @param int $id
+	 * @return DoctrineDonation|null
+	 * @throws ORMException
+	 */
+	private function getDoctrineDonationById( int $id ) {
+		/*
+		 * FIXME: only select donations that have
+			 * 'isPublic' => true,
+			 * 'dtDel' => null
+			 * correct status
+		 */
+
+		return $this->entityManager->find( DoctrineDonation::class, $id );
 	}
 
 	private function newDonationDomainObject( DoctrineDonation $dd ): Donation {

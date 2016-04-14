@@ -112,4 +112,14 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$repository->getDonationById( 42 );
 	}
 
+	public function testWhenPersistingDeletedApplication_exceptionIsThrown() {
+		$donation = ValidDonation::newDirectDebitDonation();
+		$donation->assignId( 42 );
+
+		$repository = new DoctrineDonationRepository( $this->entityManager );
+
+		$this->expectException( StoreDonationException::class );
+		$repository->storeDonation( $donation );
+	}
+
 }
