@@ -5,10 +5,9 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
 
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\ORMException;
 use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
-use WMDE\Fundraising\Frontend\Domain\Model\Euro;
+use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
 use WMDE\Fundraising\Frontend\Domain\Repositories\StoreDonationException;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
@@ -118,6 +117,31 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$donation = ValidDonation::newDirectDebitDonation();
 		$donation->assignId( self::ID_OF_DONATION_NOT_IN_DB );
 
+		$repository = new DoctrineDonationRepository( $this->entityManager );
+
+		$this->expectException( StoreDonationException::class );
+		$repository->storeDonation( $donation );
+	}
+
+	public function testWhenDeletionDateGetsSet_repositoryNoLongerReturnsEntity() {
+		$donation = $this->createDeletedDonation();
+		$repository = new DoctrineDonationRepository( $this->entityManager );
+
+		$this->assertNull( $repository->getDonationById( $donation->getId() ) );
+	}
+
+	private function createDeletedDonation(): Donation {
+		$donation = ValidDonation::newDirectDebitDonation();
+		$repository = new DoctrineDonationRepository( $this->entityManager );
+		$repository->storeDonation( $donation );
+		$doctrineDonation = $repository->getDoctrineDonationById( $donation->getId() );
+		$doctrineDonation->setDtDel( new \DateTime() );
+		$this->entityManager->flush();
+		return $donation;
+	}
+
+	public function testWhenDeletionDateGetsSet_repositoryNoLongerPersistsEntity() {
+		$donation = $this->createDeletedDonation();
 		$repository = new DoctrineDonationRepository( $this->entityManager );
 
 		$this->expectException( StoreDonationException::class );

@@ -207,15 +207,11 @@ class DoctrineDonationRepository implements DonationRepository {
 	 * @return DoctrineDonation|null
 	 * @throws ORMException
 	 */
-	private function getDoctrineDonationById( int $id ) {
-		/*
-		 * FIXME: only select donations that have
-			 * 'isPublic' => true,
-			 * 'dtDel' => null
-			 * correct status
-		 */
-
-		return $this->entityManager->find( DoctrineDonation::class, $id );
+	public function getDoctrineDonationById( int $id ) {
+		return $this->entityManager->getRepository( DoctrineDonation::class )->findOneBy( [
+			'id' => $id,
+			'dtDel' => null
+		] );
 	}
 
 	private function newDonationDomainObject( DoctrineDonation $dd ): Donation {
