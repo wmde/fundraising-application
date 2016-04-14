@@ -24,6 +24,7 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 	const MEMBERSHIP_APPLICATION_ID = 1;
+	const ID_OF_APPLICATION_NOT_IN_DB = 35505;
 
 	/**
 	 * @var EntityManager
@@ -97,14 +98,14 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit_Framework_Tes
 	}
 
 	public function testWhenEntityDoesNotExist_getEntityReturnsNull() {
-		$this->assertNull( $this->newRepository()->getApplicationById( 42 ) );
+		$this->assertNull( $this->newRepository()->getApplicationById( self::ID_OF_APPLICATION_NOT_IN_DB ) );
 	}
 
 	public function testWhenReadFails_domainExceptionIsThrown() {
 		$repository = new DoctrineMembershipApplicationRepository( ThrowingEntityManager::newInstance( $this ) );
 
 		$this->expectException( GetMembershipApplicationException::class );
-		$repository->getApplicationById( 42 );
+		$repository->getApplicationById( self::ID_OF_APPLICATION_NOT_IN_DB );
 	}
 
 	public function testWhenApplicationAlreadyExists_persistingCausesUpdate() {
@@ -125,7 +126,7 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit_Framework_Tes
 		$this->assertSame( 'chuck.norris@always.win', $doctrineApplication->getApplicantEmailAddress() );
 	}
 
-	public function testWriteAndReadRoundrtip() {
+	public function testWriteAndReadRoundtrip() {
 		$repository = $this->newRepository();
 		$application = ValidMembershipApplication::newDomainEntity();
 
@@ -139,7 +140,7 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit_Framework_Tes
 
 	public function testWhenPersistingDeletedApplication_exceptionIsThrown() {
 		$application = ValidMembershipApplication::newDomainEntity();
-		$application->assignId( 42 );
+		$application->assignId( self::ID_OF_APPLICATION_NOT_IN_DB );
 
 		$repository = $this->newRepository();
 
