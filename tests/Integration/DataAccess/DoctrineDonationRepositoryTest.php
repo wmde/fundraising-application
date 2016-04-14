@@ -22,6 +22,8 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
+	
+	const ID_OF_DONATION_NOT_IN_DB = 35505;
 
 	/**
 	 * @var EntityManager
@@ -99,7 +101,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals( $newDonation, $repository->getDonationById( $newDonation->getId() ) );
 	}
 
-	public function testWhenEntityDoesNotExist_getEntityReturnsNull() {
+	public function testWhenDonationDoesNotExist_getDonationReturnsNull() {
 		$repository = new DoctrineDonationRepository( $this->entityManager );
 
 		$this->assertNull( $repository->getDonationById( 42 ) );
@@ -112,9 +114,9 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$repository->getDonationById( 42 );
 	}
 
-	public function testWhenPersistingDeletedApplication_exceptionIsThrown() {
+	public function testWhenDonationDoesNotExist_persistingCausesException() {
 		$donation = ValidDonation::newDirectDebitDonation();
-		$donation->assignId( 42 );
+		$donation->assignId( self::ID_OF_DONATION_NOT_IN_DB );
 
 		$repository = new DoctrineDonationRepository( $this->entityManager );
 
