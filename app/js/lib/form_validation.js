@@ -3,6 +3,17 @@
 var jQuery = require( 'jquery' ),
 	objectAssign = require( 'object-assign' ),
 
+	AddressValidator = {
+		validationUrl: '',
+		postFunction: null,
+		validate: function ( formValues ) {
+			if ( formValues.addressType === 'anonym' ) {
+				return { status: 'OK' };
+			}
+			return this.postFunction( this.validationUrl, formValues, null, 'json' );
+		}
+	},
+
 	AmountValidator = {
 		validationUrl: '',
 		postFunction: null,
@@ -13,6 +24,13 @@ var jQuery = require( 'jquery' ),
 			};
 			return this.postFunction( this.validationUrl, postData, null, 'json' );
 		}
+	},
+
+	createAddressValidator = function ( validationUrl, postFunction ) {
+		return objectAssign( Object.create( AddressValidator ), {
+			validationUrl: validationUrl,
+			postFunction: postFunction || jQuery.post
+		} );
 	},
 
 	/**
@@ -29,5 +47,6 @@ var jQuery = require( 'jquery' ),
 	};
 
 module.exports = {
-	createAmountValidator: createAmountValidator
+	createAmountValidator: createAmountValidator,
+	createAddressValidator: createAddressValidator
 };
