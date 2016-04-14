@@ -176,6 +176,11 @@ class DoctrineDonationRepository implements DonationRepository {
 		try {
 			/**
 			 * @var DoctrineDonation $donation
+			 *
+			 * FIXME: only select donations that have
+			 * 'isPublic' => true,
+			 * 'dtDel' => null
+			 * correct status
 			 */
 			$donation = $this->entityManager->find( DoctrineDonation::class, $id );
 		}
@@ -214,7 +219,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		return new Donor(
 			$this->getPersonNameFromEntity( $dd ),
 			$this->getPhysicalAddressFromEntity( $dd ),
-			$dd->getEmail() // FIXME: type error
+			$dd->getEmail()
 		);
 	}
 

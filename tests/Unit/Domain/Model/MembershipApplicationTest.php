@@ -34,4 +34,26 @@ class MembershipApplicationTest extends \PHPUnit_Framework_TestCase {
 		$donation->assignId( 43 );
 	}
 
+	public function testNewApplicationHasExpectedDefaults() {
+		$application = ValidMembershipApplication::newDomainEntity();
+
+		$this->assertNull( $application->getId() );
+		$this->assertFalse( $application->isCancelled() );
+		$this->assertFalse( $application->needsModeration() );
+	}
+
+	public function testCancellationResultsInCancelledApplication() {
+		$application = ValidMembershipApplication::newDomainEntity();
+		$application->cancel();
+
+		$this->assertTrue( $application->isCancelled() );
+	}
+
+	public function testMarkForModerationResultsInApplicationThatNeedsModeration() {
+		$application = ValidMembershipApplication::newDomainEntity();
+		$application->markForModeration();
+
+		$this->assertTrue( $application->needsModeration() );
+	}
+
 }
