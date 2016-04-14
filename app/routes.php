@@ -13,6 +13,7 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\AddDonationHandler;
+use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
@@ -27,6 +28,7 @@ use WMDE\Fundraising\Frontend\UseCases\CancelMembershipApplication\CancelMembers
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageDisplayRequest;
 use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanRequest;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
+use WMDE\Fundraising\Frontend\UseCases\HandlePayPalPaymentNotification\HandlePayPalPaymentNotificationRequest;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentListingRequest;
 use WMDE\Fundraising\Frontend\UseCases\ShowDonationConfirmation\ShowDonationConfirmationRequest;
 
@@ -379,20 +381,59 @@ $app->get(
 $app->post(
 	'handle-paypal-payment-notification',
 	function ( Application $app, Request $request ) use ( $ffFactory ) {
-		try {
-			$ffFactory->getPayPalPaymentNotificationVerifier()->verify( $request->request->all() );
-			$useCase = $ffFactory->newHandlePayPalPaymentNotificationUseCase();
+		$routeHandler = new class() {
 
-			// TODO: check receiver_email, item_name, payment_status, txn_type
-			// TODO: create request object
-			// TODO: update donation's status and payment provider related fields
+			public function handle( FunFunFactory $ffFactory, Application $app, Request $request ) {
+				try {
+					$post = $request->request;
+					$ffFactory->getPayPalPaymentNotificationVerifier()->verify( $post->all() );
 
-			return new Response( $useCase->handleNotification() );
-		} catch ( PayPalPaymentNotificationVerifierException $e ) {
-			// TODO: log error
-		}
+					// TODO: check receiver_email, item_name, payment_status, txn_type
+					// TODO: update donation's status and payment provider related fields
 
-		return new Response( 'TODO' ); # PayPal expects an empty response
+					$useCase = $ffFactory->newHandlePayPalPaymentNotificationUseCase();
+					return new Response( $useCase->handleNotification(
+						( new HandlePayPalPaymentNotificationRequest() )
+							->setTransactionType( $post->get( 'trx_type', '' ) )
+							->setTransactionId( $post->get( 'trx_id', '' ) )
+							->setPayerId( $post->get( 'payer_id', '' ) )
+							->setPayerEmail( $post->get( 'payer_email', '' ) )
+							->setPayerStatus( $post->get( 'payer_status', '' ) )
+							->setPayerFirstName( $post->get( 'first_name', '' ) )
+							->setPayerLastName( $post->get( 'last_name', '' ) )
+							->setPayerAddressName( $post->get( 'address_name', '' ) )
+							->setPayerAddressStreet( $post->get( 'address_street', '' ) )
+							->setPayerAddressPostalCode( $post->get( 'address_zip', '' ) )
+							->setPayerAddressCity( $post->get( 'address_city', '' ) )
+							->setPayerAddressCountryCode( $post->get( 'address_country_code', '' ) )
+							->setPayerAddressStatus( $post->get( 'address_status', '' ) )
+							->setDonationId( $post->get( 'item_number', 0 ) )
+							->setToken( $this->getTokenFromCustomVars( $post->get( 'custom', '' ) ) )
+							->setCurrencyCode( $post->get( 'mc_currency', '' ) )
+							->setTransactionFee( Euro::newFromString( $post->get( 'mc_fee', '0' ) ) )
+							->setAmountGross( Euro::newFromString( $post->get( 'mc_gross', '0' ) ) )
+							->setPaymentTimestamp( $post->get( 'payment_date', '' ) )
+							->setPaymentStatus( $post->get( 'payment_status', '' ) )
+							->setPaymentType( $post->get( 'payment_type', '' ) )
+					) );
+				} catch ( PayPalPaymentNotificationVerifierException $e ) {
+					// TODO: log error
+				}
+
+				return new Response( 'TODO' ); # PayPal expects an empty response
+			}
+
+			private function getTokenFromCustomVars( string $customVars ): string {
+				$vars = json_decode( $customVars, true );
+				if ( !empty( $customVars['token'] ) ) {
+					return $vars['token'];
+				}
+
+				return '';
+			}
+		};
+
+		return $routeHandler->handle( $ffFactory, $app, $request );
 	}
 );
 
