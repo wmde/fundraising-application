@@ -27,33 +27,45 @@ class PayPalPaymentNotificationVerifier {
 		$this->config = $config;
 	}
 
-	public function verify( array $data ): bool {
-		if ( !$this->matchReceiverAddress( $data ) ) {
-			// TODO: might want to log this
-			return false;
+	/**
+	 * Verifies the request's integrity and reassures with PayPal
+	 * servers that the request wasn't tampered with during transfer
+	 *
+	 * @param array $request
+	 *
+	 * @return bool
+	 * @throws PayPalPaymentNotificationVerifierException
+	 */
+	public function verify( array $request ): bool {
+		if ( !$this->matchReceiverAddress( $request ) ) {
+			throw new PayPalPaymentNotificationVerifierException( 'Payment receiver address does not match' );
 		}
 
-		if ( !$this->isPaymentStatusAllowed( $data ) ) {
-			// TODO: might want to log this
-			return false;
+		if ( !$this->isPaymentStatusAllowed( $request ) ) {
+			throw new PayPalPaymentNotificationVerifierException( 'Payment status is not configured as confirmable' );
 		}
 
 		$result = $this->httpClient->post(
 			$this->config['base-url'],
-			array_merge( [ 'cmd' => '_notify_validate' ], $data )
+			array_merge( [ 'cmd' => '_notify_validate' ], $request )
 		);
 
 		if ( $result->getStatusCode() !== 200 ) {
-			// TODO: might want to log this
-			return false;
+			throw new PayPalPaymentNotificationVerifierException(
+				'Payment provider returned an error (HTTP status: ' . $result->getStatusCode() . ')'
+			);
 		}
 
-		return ( trim( $result->getBody()->getContents() ) === 'VERIFIED' );
+		if ( trim( $result->getBody()->getContents() ) !== 'VERIFIED' ) {
+			throw new PayPalPaymentNotificationVerifierException( 'Payment provider did not confirm the sent data' );
+		}
+
+		return true;
 	}
 
-	private function matchReceiverAddress( $data ): bool {
-		return array_key_exists( 'receiver_email', $data ) &&
-			$data['receiver_email'] === $this->config['account-address'];
+	private function matchReceiverAddress( $request ): bool {
+		return array_key_exists( 'receiver_email', $request ) &&
+			$request['receiver_email'] === $this->config['account-address'];
 	}
 
 	private function isPaymentStatusAllowed( $request ): bool {

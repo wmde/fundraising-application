@@ -18,6 +18,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifierException;
 use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\SubscriptionRequest;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipRequest;
@@ -378,7 +379,8 @@ $app->get(
 $app->post(
 	'handle-paypal-payment-notification',
 	function ( Application $app, Request $request ) use ( $ffFactory ) {
-		if ( $ffFactory->getPayPalPaymentNotificationVerifier()->verify( $request->request->all() ) ) {
+		try {
+			$ffFactory->getPayPalPaymentNotificationVerifier()->verify( $request->request->all() );
 			$useCase = $ffFactory->newHandlePayPalPaymentNotificationUseCase();
 
 			// TODO: check receiver_email, item_name, payment_status, txn_type
@@ -386,6 +388,8 @@ $app->post(
 			// TODO: update donation's status and payment provider related fields
 
 			return new Response( $useCase->handleNotification() );
+		} catch ( PayPalPaymentNotificationVerifierException $e ) {
+			// TODO: log error
 		}
 
 		return new Response( 'TODO' ); # PayPal expects an empty response

@@ -43,13 +43,39 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
+	public function testGivenInvalidRequest_applicationReturnsError() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setPayPalPaymentNotificationVerifier(
+				new PayPalPaymentNotificationVerifier(
+					$this->getClientMock(),
+					[
+						'base-url' => 'https://that.paymentprovider.com/',
+						'account-address' => 'foerderpp@wikimedia.de'
+					]
+				)
+			);
+
+			$client->request(
+				'POST',
+				'/handle-paypal-payment-notification',
+				[
+					'receiver_email' => 'foerderpp@wikimedia.de',
+					'payment_status' => 'Unknown'
+				]
+			);
+
+			$this->assertSame( 'TODO', $client->getResponse()->getContent() );
+			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
+		} );
+	}
+
 	private function getClientMock() {
 		$body = $this->getMockBuilder( Stream::class )
 			->disableOriginalConstructor()
 			->setMethods( [ 'getContents' ] )
 			->getMock();
 
-		$body->expects( $this->once() )
+		$body->expects( $this->any() )
 			->method( 'getContents' )
 			->willReturn( 'VERIFIED' );
 
@@ -58,7 +84,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			->setMethods( [ 'getBody' ] )
 			->getMock();
 
-		$response->expects( $this->once() )
+		$response->expects( $this->any() )
 			->method( 'getBody' )
 			->willReturn( $body );
 
@@ -67,7 +93,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			->setMethods( [ 'post' ] )
 			->getMock();
 
-		$client->expects( $this->once() )
+		$client->expects( $this->any() )
 			->method( 'post' )
 			->with(
 				'https://that.paymentprovider.com/',
