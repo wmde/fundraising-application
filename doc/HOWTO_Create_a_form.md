@@ -23,7 +23,8 @@ For easier HTML updates both view handlers and components get a jQuery object pa
 
 **Validators** are also listening to changes in the state. If a value changes, they call a validation function and
 dispatch a "validation finished" action to the store, which then stores the validation result and validation error
-messages with its reducers. The changed validation state may trigger other view handlers.
+messages with its reducers. The changed validation state and error messages may trigger view handlers that set CSS 
+classes on validated fields and display the error messages. 
 
 ![Data flow in the architecture](architecture.svg)
 
@@ -101,7 +102,7 @@ You can find all the available components in [`app/js/lib/form_components.js`](.
 
 ### Setting up validation
 
-Fill the validators function body with instances of `ValidationDispatcher` classes. A `ValidationDispatcher` calls a validation function with values from the store and dispatches an action to store the validation result. It only does this when the values from the store change.
+Fill the validators function body with instances of `ValidationDispatcher` classes. A `ValidationDispatcher` calls a validation function with values from the `formContent` part of the store and dispatches an action to store the validation result. It only does this when the values from the store change.
 
 The `createValidationDispatcher` factory function has four arguments:
 

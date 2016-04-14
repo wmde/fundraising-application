@@ -7,20 +7,15 @@
  * @requires redux_validation
  */
 
-/**
- * Create validation dispatchers
- *
- * @callback validatorFactoryFunction
- * @param {Object} initialValues - initial values for the validation dispatchers so they don't fire on initialization
- * @return {redux_validation.ValidationDispatcher[]}
- */
-
 var reduxValidation = require( './redux_validation' ),
 	_ = require( 'lodash' );
 
 module.exports = {
 	/**
-	 * @param {validatorFactoryFunction} validatorFactoryFunction
+	 *
+	 * validatorFactoryFunction must return an array of validation dispatchers
+	 *
+	 * @param {Function} validatorFactoryFunction
 	 * @param {store.Store} store
 	 * @param {Object} initialValues - initial values for the validation dispatchers so they don't fire on initialization
 	 */
