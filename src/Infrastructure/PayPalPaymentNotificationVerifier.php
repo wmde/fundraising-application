@@ -17,12 +17,7 @@ class PayPalPaymentNotificationVerifier {
 	private $config;
 	private $allowedStatuses = [ 'Completed' ];
 
-	/**
-	 * PayPalPaymentNotificationVerifier constructor.
-	 * @param Client $httpClient
-	 * @param array $config
-	 */
-	public function __construct( $httpClient, array $config ) {
+	public function __construct( Client $httpClient, array $config ) {
 		$this->httpClient = $httpClient;
 		$this->config = $config;
 	}
@@ -36,8 +31,8 @@ class PayPalPaymentNotificationVerifier {
 	 * @return bool
 	 * @throws PayPalPaymentNotificationVerifierException
 	 */
-	public function verify( array $request ): bool {
-		if ( !$this->matchReceiverAddress( $request ) ) {
+	public function verify( array $request ) {
+		if ( !$this->matchesReceiverAddress( $request ) ) {
 			throw new PayPalPaymentNotificationVerifierException( 'Payment receiver address does not match' );
 		}
 
@@ -59,11 +54,9 @@ class PayPalPaymentNotificationVerifier {
 		if ( trim( $result->getBody()->getContents() ) !== 'VERIFIED' ) {
 			throw new PayPalPaymentNotificationVerifierException( 'Payment provider did not confirm the sent data' );
 		}
-
-		return true;
 	}
 
-	private function matchReceiverAddress( $request ): bool {
+	private function matchesReceiverAddress( $request ): bool {
 		return array_key_exists( 'receiver_email', $request ) &&
 			$request['receiver_email'] === $this->config['account-address'];
 	}

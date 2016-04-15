@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
 
+use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Stream;
 use Symfony\Component\HttpKernel\Client;
@@ -69,7 +70,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function getClientMock() {
+	private function getClientMock(): GuzzleClient {
 		$body = $this->getMockBuilder( Stream::class )
 			->disableOriginalConstructor()
 			->setMethods( [ 'getContents' ] )
@@ -88,7 +89,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			->method( 'getBody' )
 			->willReturn( $body );
 
-		$client = $this->getMockBuilder( Client::class )
+		$client = $this->getMockBuilder( GuzzleClient::class )
 			->disableOriginalConstructor()
 			->setMethods( [ 'post' ] )
 			->getMock();

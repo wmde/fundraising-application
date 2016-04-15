@@ -425,11 +425,7 @@ $app->post(
 
 			private function getTokenFromCustomVars( string $customVars ): string {
 				$vars = json_decode( $customVars, true );
-				if ( !empty( $customVars['token'] ) ) {
-					return $vars['token'];
-				}
-
-				return '';
+				return !empty( $vars['token'] ) ? $vars['token'] : '';
 			}
 		};
 

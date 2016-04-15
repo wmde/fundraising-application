@@ -15,41 +15,47 @@ use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifierEx
  */
 class PayPalPaymentNotificationVerifierTest extends \PHPUnit_Framework_TestCase {
 
+	const VALID_ACCOUNT_EMAIL = 'foerderpp@wikimedia.de';
+	const INVALID_ACCOUNT_EMAIL = 'this.is.not@my.email.address';
+	const DUMMY_API_URL = 'https://dummy-url.com';
+	const VALID_PAYMENT_STATUS = 'Completed';
+	const INVALID_PAYMENT_STATUS = 'Unknown';
+
 	public function testReceiverAddressMismatches_verifierThrowsException() {
 		$this->expectException( PayPalPaymentNotificationVerifierException::class );
 
-		$this->newVerifier( null )->verify( [
-			'receiver_email' => 'this.is.not@my.email.address',
-			'payment_status' => 'Completed'
+		$this->newVerifier( new Client() )->verify( [
+			'receiver_email' => self::INVALID_ACCOUNT_EMAIL,
+			'payment_status' => self::VALID_PAYMENT_STATUS
 		] );
 	}
 
 	public function testReceiverAddressNotGiven_verifierReturnsFalse() {
 		$this->expectException( PayPalPaymentNotificationVerifierException::class );
 
-		$this->newVerifier( null )->verify( [] );
+		$this->newVerifier( new Client() )->verify( [] );
 	}
 
 	public function testPaymentStatusNotGiven_verifierReturnsFalse() {
 		$this->expectException( PayPalPaymentNotificationVerifierException::class );
-		$this->newVerifier( null )->verify( [
-			'receiver_email' => 'foerderpp@wikimedia.de'
+		$this->newVerifier( new Client() )->verify( [
+			'receiver_email' => self::VALID_ACCOUNT_EMAIL
 		] );
 	}
 
 	public function testPaymentStatusNotConfirmable_verifierReturnsFalse() {
 		$this->expectException( PayPalPaymentNotificationVerifierException::class );
-		$this->newVerifier( null )->verify( [
-			'receiver_email' => 'foerderpp@wikimedia.de',
-			'payment_status' => 'Unknown',
+		$this->newVerifier( new Client() )->verify( [
+			'receiver_email' => self::VALID_ACCOUNT_EMAIL,
+			'payment_status' => self::INVALID_PAYMENT_STATUS,
 		] );
 	}
 
 	public function testReassuringReceivedDataSucceeds_verifierReturnsTrue() {
 		$verifier = $this->newVerifier( $this->newSucceedingClient() );
 		$this->assertTrue( $verifier->verify( [
-			'receiver_email' => 'foerderpp@wikimedia.de',
-			'payment_status' => 'Completed'
+			'receiver_email' => self::VALID_ACCOUNT_EMAIL,
+			'payment_status' => self::VALID_PAYMENT_STATUS
 		] ) );
 	}
 
@@ -57,22 +63,22 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit_Framework_TestCase 
 		$this->expectException( PayPalPaymentNotificationVerifierException::class );
 		$verifier = $this->newVerifier( $this->newFailingClient() );
 		$verifier->verify( [
-			'receiver_email' => 'foerderpp@wikimedia.de',
-			'payment_status' => 'Completed'
+			'receiver_email' => self::VALID_ACCOUNT_EMAIL,
+			'payment_status' => self::VALID_PAYMENT_STATUS
 		] );
 	}
 
-	private function newVerifier( $client ) {
+	private function newVerifier( Client $httpClient ): PayPalPaymentNotificationVerifier {
 		return new PayPalPaymentNotificationVerifier(
-			$client,
+			$httpClient,
 			[
-				'base-url' => 'https://dummy-url.com',
-				'account-address' => 'foerderpp@wikimedia.de'
+				'base-url' => self::DUMMY_API_URL,
+				'account-address' => self::VALID_ACCOUNT_EMAIL
 			]
 		);
 	}
 
-	private function newSucceedingClient() {
+	private function newSucceedingClient(): Client {
 		$body = $this->getMockBuilder( Stream::class )
 			->disableOriginalConstructor()
 			->setMethods( [ 'getContents' ] )
@@ -85,7 +91,7 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit_Framework_TestCase 
 		return $this->newClient( $body );
 	}
 
-	private function newFailingClient() {
+	private function newFailingClient(): Client {
 		$body = $this->getMockBuilder( Stream::class )
 			->disableOriginalConstructor()
 			->setMethods( [ 'getContents' ] )
@@ -98,7 +104,7 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit_Framework_TestCase 
 		return $this->newClient( $body );
 	}
 
-	private function newClient( $body ) {
+	private function newClient( Stream $body ): Client {
 		$response = $this->getMockBuilder( Response::class )
 			->disableOriginalConstructor()
 			->setMethods( [ 'getBody' ] )
@@ -115,10 +121,10 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit_Framework_TestCase 
 
 		$client->expects( $this->once() )
 			->method( 'post' )
-			->with( 'https://dummy-url.com', [
+			->with( self::DUMMY_API_URL, [
 				'cmd' => '_notify_validate',
-				'receiver_email' => 'foerderpp@wikimedia.de',
-				'payment_status' => 'Completed'
+				'receiver_email' => self::VALID_ACCOUNT_EMAIL,
+				'payment_status' => self::VALID_PAYMENT_STATUS
 			] )
 			->willReturn( $response );
 
