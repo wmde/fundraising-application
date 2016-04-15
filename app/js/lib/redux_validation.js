@@ -9,6 +9,10 @@ var objectAssign = require( 'object-assign' ),
 	_ = require( 'lodash' ),
 
 	/**
+	 * The dispatcher checks the form content for fields given in the `fields` property.
+	 * If they have changed (compared to their equavalent in the `previousFieldValues` property),
+	 * the `validationFunction` is called with an object with the selected fields.
+	 * The validation result is then sent to the store via the `actionCreationFunction`.
 	 *
 	 * @class ValidationDispatcher
 	 */
@@ -47,8 +51,8 @@ var objectAssign = require( 'object-assign' ),
 	/**
 	 *
 	 * @param {Function|Object} validator Function or object that has a 'validate' method.
-	 * 			The method will be bound to the object.
-	 * @param {Function} actionCreationFunction
+	 * 			The method will be bound to the object. The validator will get an object with store values as parameter.
+	 * @param {Function} actionCreationFunction Action to dispatch with the validation result.
 	 * @param {Array} fieldNames Names of the state values from formContent that will be validated
 	 * @param {Object} initialValues Initial form state. Only the keys and values from fieldNames will be used
 	 * @return {ValidationDispatcher}
