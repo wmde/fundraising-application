@@ -30,20 +30,20 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit_Framework_TestCase 
 		] );
 	}
 
-	public function testReceiverAddressNotGiven_verifierReturnsFalse() {
+	public function testReceiverAddressNotGiven_verifierThrowsException() {
 		$this->expectException( PayPalPaymentNotificationVerifierException::class );
 
 		$this->newVerifier( new Client() )->verify( [] );
 	}
 
-	public function testPaymentStatusNotGiven_verifierReturnsFalse() {
+	public function testPaymentStatusNotGiven_verifierThrowsException() {
 		$this->expectException( PayPalPaymentNotificationVerifierException::class );
 		$this->newVerifier( new Client() )->verify( [
 			'receiver_email' => self::VALID_ACCOUNT_EMAIL
 		] );
 	}
 
-	public function testPaymentStatusNotConfirmable_verifierReturnsFalse() {
+	public function testPaymentStatusNotConfirmable_verifierThrowsException() {
 		$this->expectException( PayPalPaymentNotificationVerifierException::class );
 		$this->newVerifier( new Client() )->verify( [
 			'receiver_email' => self::VALID_ACCOUNT_EMAIL,
@@ -51,15 +51,18 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit_Framework_TestCase 
 		] );
 	}
 
-	public function testReassuringReceivedDataSucceeds_verifierReturnsTrue() {
-		$verifier = $this->newVerifier( $this->newSucceedingClient() );
-		$this->assertTrue( $verifier->verify( [
-			'receiver_email' => self::VALID_ACCOUNT_EMAIL,
-			'payment_status' => self::VALID_PAYMENT_STATUS
-		] ) );
+	public function testReassuringReceivedDataSucceeds_verifierThrowsException() {
+		try {
+			$this->newVerifier( $this->newSucceedingClient() )->verify( [
+				'receiver_email' => self::VALID_ACCOUNT_EMAIL,
+				'payment_status' => self::VALID_PAYMENT_STATUS
+			] );
+		} catch ( PayPalPaymentNotificationVerifierException $e ) {
+			$this->fail();
+		}
 	}
 
-	public function testReassuringReceivedDataFails_verifierReturnsFalse() {
+	public function testReassuringReceivedDataFails_verifierThrowsException() {
 		$this->expectException( PayPalPaymentNotificationVerifierException::class );
 		$verifier = $this->newVerifier( $this->newFailingClient() );
 		$verifier->verify( [
