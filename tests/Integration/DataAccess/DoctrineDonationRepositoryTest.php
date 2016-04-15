@@ -23,6 +23,8 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
  */
 class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 
+	const ID_OF_DONATION_NOT_IN_DB = 35505;
+
 	/**
 	 * @var EntityManager
 	 */
@@ -99,17 +101,27 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals( $newDonation, $repository->getDonationById( $newDonation->getId() ) );
 	}
 
-	public function testWhenEntityDoesNotExist_getEntityReturnsNull() {
+	public function testWhenDonationDoesNotExist_getDonationReturnsNull() {
 		$repository = new DoctrineDonationRepository( $this->entityManager );
 
-		$this->assertNull( $repository->getDonationById( 42 ) );
+		$this->assertNull( $repository->getDonationById( self::ID_OF_DONATION_NOT_IN_DB ) );
 	}
 
 	public function testWhenDoctrineThrowsException_domainExceptionIsThrown() {
 		$repository = new DoctrineDonationRepository( ThrowingEntityManager::newInstance( $this ) );
 
 		$this->expectException( GetDonationException::class );
-		$repository->getDonationById( 42 );
+		$repository->getDonationById( self::ID_OF_DONATION_NOT_IN_DB );
+	}
+
+	public function testWhenDonationDoesNotExist_persistingCausesException() {
+		$donation = ValidDonation::newDirectDebitDonation();
+		$donation->assignId( self::ID_OF_DONATION_NOT_IN_DB );
+
+		$repository = new DoctrineDonationRepository( $this->entityManager );
+
+		$this->expectException( StoreDonationException::class );
+		$repository->storeDonation( $donation );
 	}
 
 }

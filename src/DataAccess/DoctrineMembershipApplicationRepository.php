@@ -34,20 +34,20 @@ class DoctrineMembershipApplicationRepository implements MembershipApplicationRe
 	}
 
 	public function storeApplication( MembershipApplication $application ) {
-		$doctrineApplication = $this->newDoctrineApplication( $application );
+		if ( $application->getId() === null ) {
+			$this->insertApplication( $application );
+		}
+		else {
+			$this->updateApplication( $application );
+		}
+	}
+
+	private function insertApplication( MembershipApplication $application ) {
+		$doctrineApplication = new DoctrineApplication();
+		$this->updateDoctrineApplication( $doctrineApplication, $application );
 
 		try {
-			if ( $doctrineApplication->getId() === null ) {
-				$this->entityManager->persist( $doctrineApplication );
-			}
-			else {
-				// merge would override the timestamp with null value, so we need to get it from the entity
-				$oldApplication = $this->entityManager->find( DoctrineApplication::class, $doctrineApplication->getId() );
-				// FIXME: this blows up if the entity is not found
-				$doctrineApplication->setCreationTime( $oldApplication->getCreationTime() );
-				$this->entityManager->merge( $doctrineApplication );
-			}
-
+			$this->entityManager->persist( $doctrineApplication );
 			$this->entityManager->flush();
 		}
 		catch ( ORMException $ex ) {
@@ -57,9 +57,25 @@ class DoctrineMembershipApplicationRepository implements MembershipApplicationRe
 		$application->assignId( $doctrineApplication->getId() );
 	}
 
-	private function newDoctrineApplication( MembershipApplication $application ): DoctrineApplication {
-		$doctrineApplication = new DoctrineApplication();
+	private function updateApplication( MembershipApplication $application ) {
+		$doctrineApplication = $this->getDoctrineApplicationById( $application->getId() );
 
+		if ( $doctrineApplication === null ) {
+			throw new StoreMembershipApplicationException();
+		}
+
+		$this->updateDoctrineApplication( $doctrineApplication, $application );
+
+		try {
+			$this->entityManager->persist( $doctrineApplication );
+			$this->entityManager->flush();
+		}
+		catch ( ORMException $ex ) {
+			throw new StoreMembershipApplicationException( $ex );
+		}
+	}
+
+	private function updateDoctrineApplication( DoctrineApplication $doctrineApplication, MembershipApplication $application ) {
 		$doctrineApplication->setId( $application->getId() );
 		$doctrineApplication->setMembershipType( $application->getType() );
 
@@ -67,8 +83,6 @@ class DoctrineMembershipApplicationRepository implements MembershipApplicationRe
 		$this->setPaymentFields( $doctrineApplication, $application->getPayment() );
 
 		$doctrineApplication->encodeAndSetData( [] ); // TODO
-
-		return $doctrineApplication;
 	}
 
 	private function setApplicantFields( DoctrineApplication $application, MembershipApplicant $applicant ) {
@@ -111,10 +125,7 @@ class DoctrineMembershipApplicationRepository implements MembershipApplicationRe
 	 */
 	public function getApplicationById( int $id ) {
 		try {
-			/**
-			 * @var DoctrineApplication $application
-			 */
-			$application = $this->entityManager->find( DoctrineApplication::class, $id );
+			$application = $this->getDoctrineApplicationById( $id );
 		}
 		catch ( ORMException $ex ) {
 			throw new GetMembershipApplicationException( $ex );
@@ -125,6 +136,15 @@ class DoctrineMembershipApplicationRepository implements MembershipApplicationRe
 		}
 
 		return $this->newApplicationDomainEntity( $application );
+	}
+
+	/**
+	 * @param int $id
+	 * @return DoctrineApplication|null
+	 * @throws ORMException
+	 */
+	public function getDoctrineApplicationById( int $id ) {
+		return $this->entityManager->find( DoctrineApplication::class, $id );
 	}
 
 	private function newApplicationDomainEntity( DoctrineApplication $application ): MembershipApplication {
