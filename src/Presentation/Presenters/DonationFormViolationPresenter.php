@@ -42,7 +42,7 @@ class DonationFormViolationPresenter {
 			[
 				'betrag' => $request->getAmount()->getEuroString(),
 				'zahlweise' => $request->getPaymentType(),
-				'periode' => $request->getInterval(),
+				'paymentIntervalInMonths' => $request->getInterval(),
 				'iban' => $request->getIban(),
 				'bic' => $request->getBic(),
 				'bankName' => $request->getBankName()

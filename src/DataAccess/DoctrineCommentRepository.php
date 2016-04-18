@@ -39,7 +39,7 @@ class DoctrineCommentRepository implements CommentRepository, CommentFinder {
 					->setAuthorName( $donation->getPublicRecord() )
 					->setCommentText( $donation->getComment() )
 					->setDonationAmount( (float)$donation->getAmount() )
-					->setDonationTime( $donation->getDtNew() )
+					->setDonationTime( $donation->getCreationTime() )
 					->setDonationId( $donation->getId() )
 					->freeze()
 					->assertNoNullFields();
@@ -52,10 +52,10 @@ class DoctrineCommentRepository implements CommentRepository, CommentFinder {
 		return $this->entityManager->getRepository( Donation::class )->findBy(
 			[
 				'isPublic' => true,
-				'dtDel' => null
+				'deletionTime' => null
 			],
 			[
-				'dtNew' => 'DESC'
+				'creationTime' => 'DESC'
 			],
 			$limit
 		);

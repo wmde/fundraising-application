@@ -64,7 +64,7 @@ class AddCommentRouteTest extends WebRouteTestCase {
 	private function storeDonation( EntityManager $entityManager ): Donation {
 		$donation = new Donation();
 		$donation->setAmount( '100' );
-		$donation->setDtNew( new DateTime( '1984-01-01' ) );
+		$donation->setCreationTime( new DateTime( '1984-01-01' ) );
 
 		$donationData = $donation->getDataObject();
 		$donationData->setUpdateToken( self::CORRECT_UPDATE_TOKEN );

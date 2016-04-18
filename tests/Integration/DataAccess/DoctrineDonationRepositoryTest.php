@@ -43,7 +43,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 		// TODO: compare whole donation, now easy via ValidDonation
 		$this->assertSame( $donation->getAmount()->getEuroString(), $doctrineDonation->getAmount() );
-		$this->assertSame( $donation->getDonor()->getEmailAddress(), $doctrineDonation->getEmail() );
+		$this->assertSame( $donation->getDonor()->getEmailAddress(), $doctrineDonation->getDonorEmail() );
 	}
 
 	private function getDonationFromDatabase(): DoctrineDonation {
@@ -135,7 +135,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$repository = new DoctrineDonationRepository( $this->entityManager );
 		$repository->storeDonation( $donation );
 		$doctrineDonation = $repository->getDoctrineDonationById( $donation->getId() );
-		$doctrineDonation->setDtDel( new \DateTime() );
+		$doctrineDonation->setDeletionTime( new \DateTime() );
 		$this->entityManager->flush();
 		return $donation;
 	}

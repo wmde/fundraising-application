@@ -119,7 +119,7 @@ class DoctrineCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$firstDonation->setPublicRecord( 'First name' );
 		$firstDonation->setComment( 'First comment' );
 		$firstDonation->setAmount( '100' );
-		$firstDonation->setDtNew( new DateTime( '1984-01-01' ) );
+		$firstDonation->setCreationTime( new DateTime( '1984-01-01' ) );
 		$firstDonation->setIsPublic( true );
 		$this->entityManager->persist( $firstDonation );
 	}
@@ -129,7 +129,7 @@ class DoctrineCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$secondDonation->setPublicRecord( 'Second name' );
 		$secondDonation->setComment( 'Second comment' );
 		$secondDonation->setAmount( '200' );
-		$secondDonation->setDtNew( new DateTime( '1984-02-02' ) );
+		$secondDonation->setCreationTime( new DateTime( '1984-02-02' ) );
 		$secondDonation->setIsPublic( true );
 		$this->entityManager->persist( $secondDonation );
 	}
@@ -139,7 +139,7 @@ class DoctrineCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$thirdDonation->setPublicRecord( 'Third name' );
 		$thirdDonation->setComment( 'Third comment' );
 		$thirdDonation->setAmount( '300' );
-		$thirdDonation->setDtNew( new DateTime( '1984-03-03' ) );
+		$thirdDonation->setCreationTime( new DateTime( '1984-03-03' ) );
 		$thirdDonation->setIsPublic( true );
 		$this->entityManager->persist( $thirdDonation );
 	}
@@ -149,7 +149,7 @@ class DoctrineCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$privateDonation->setPublicRecord( 'Private name' );
 		$privateDonation->setComment( 'Private comment' );
 		$privateDonation->setAmount( '1337' );
-		$privateDonation->setDtNew( new DateTime( '1984-12-12' ) );
+		$privateDonation->setCreationTime( new DateTime( '1984-12-12' ) );
 		$privateDonation->setIsPublic( false );
 		$this->entityManager->persist( $privateDonation );
 	}
@@ -159,9 +159,9 @@ class DoctrineCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$deletedDonation->setPublicRecord( 'Deleted name' );
 		$deletedDonation->setComment( 'Deleted comment' );
 		$deletedDonation->setAmount( '31337' );
-		$deletedDonation->setDtNew( new DateTime( '1984-11-11' ) );
+		$deletedDonation->setCreationTime( new DateTime( '1984-11-11' ) );
 		$deletedDonation->setIsPublic( true );
-		$deletedDonation->setDtDel( new DateTime( '2000-01-01' ) );
+		$deletedDonation->setDeletionTime( new DateTime( '2000-01-01' ) );
 		$this->entityManager->persist( $deletedDonation );
 	}
 
@@ -218,7 +218,7 @@ class DoctrineCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 	public function testWhenDonationExists_storeCommentAddsItToDonation() {
 		$donation = new Donation();
 		$donation->setAmount( '100' );
-		$donation->setDtNew( new DateTime( '1984-01-01' ) );
+		$donation->setCreationTime( new DateTime( '1984-01-01' ) );
 		$this->entityManager->persist( $donation );
 		$this->entityManager->flush();
 
