@@ -82,25 +82,29 @@ class DoctrineDonationRepository implements DonationRepository {
 
 	private function updateDonationEntity( DoctrineDonation $doctrineDonation, Donation $donation ) {
 		$doctrineDonation->setId( $donation->getId() );
+		$this->updatePaymentInformation( $doctrineDonation, $donation );
+		$this->updateDonorInformation( $doctrineDonation, $donation->getDonor() );
+		$doctrineDonation->setInfo( $donation->getOptsIntoNewsletter() );
+		$doctrineDonation->encodeAndSetData( $this->getDataMap( $donation ) );
+	}
 
+	private function updatePaymentInformation( DoctrineDonation $doctrineDonation, Donation $donation ) {
 		$doctrineDonation->setStatus( $donation->getStatus() );
 		$doctrineDonation->setAmount( $donation->getAmount()->getEuroString() );
 		$doctrineDonation->setPeriod( $donation->getPaymentIntervalInMonths() );
 
 		$doctrineDonation->setPaymentType( $donation->getPaymentType() );
 		$doctrineDonation->setTransferCode( $this->getBankTransferCode( $donation->getPaymentMethod() ) );
+	}
 
-		if ( $donation->getDonor() === null ) {
+	private function updateDonorInformation( DoctrineDonation $doctrineDonation, Donor $donor = null ) {
+		if ( $donor === null ) {
 			$doctrineDonation->setName( 'Anonym' );
 		} else {
-			$doctrineDonation->setCity( $donation->getDonor()->getPhysicalAddress()->getCity() );
-			$doctrineDonation->setEmail( $donation->getDonor()->getEmailAddress() );
-			$doctrineDonation->setName( $donation->getDonor()->getPersonName()->getFullName() );
+			$doctrineDonation->setCity( $donor->getPhysicalAddress()->getCity() );
+			$doctrineDonation->setEmail( $donor->getEmailAddress() );
+			$doctrineDonation->setName( $donor->getPersonName()->getFullName() );
 		}
-
-		$doctrineDonation->setInfo( $donation->getOptsIntoNewsletter() );
-
-		$doctrineDonation->encodeAndSetData( $this->getDataMap( $donation ) );
 	}
 
 	private function getBankTransferCode( PaymentMethod $paymentMethod ): string {
