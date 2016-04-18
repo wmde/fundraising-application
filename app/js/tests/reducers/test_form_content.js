@@ -77,7 +77,7 @@ test( 'When CHANGE_CONTENT sets address type to anonymous, all personal data fie
 			firstName: 'Hank',
 			lastName: 'Scorpio',
 			street: 'Hammock District',
-			postCode: '12345',
+			postcode: '12345',
 			city: 'Cypress Creek',
 			addressType: 'person',
 			email: 'hank@globex.com'
@@ -88,7 +88,7 @@ test( 'When CHANGE_CONTENT sets address type to anonymous, all personal data fie
 			firstName: '',
 			lastName: '',
 			street: '',
-			postCode: '',
+			postcode: '',
 			city: '',
 			addressType: 'anonym',
 			email: ''

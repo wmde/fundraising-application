@@ -15,7 +15,7 @@ var objectAssign = require( 'object-assign' ),
 		lastName: '',
 		company: '',
 		street: '',
-		postCode: '',
+		postcode: '',
 		city: '',
 		country: 'DE',
 		email: ''
@@ -54,7 +54,7 @@ function clearFieldsIfAddressTypeChanges( newState, payload ) {
 			newState.firstName = '';
 			newState.lastName = '';
 			newState.street = '';
-			newState.postCode = '';
+			newState.postcode = '';
 			newState.city = '';
 			newState.email = '';
 			break;

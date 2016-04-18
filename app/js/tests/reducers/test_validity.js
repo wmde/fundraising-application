@@ -17,7 +17,7 @@ function createInvalidPayload() {
 	};
 }
 
-test( 'VALIDATE_AMOUNT returns validated amount', function ( t ) {
+test( 'FINISH_AMOUNT_VALIDATION sets amount validation state', function ( t ) {
 	var beforeState = { amount: null };
 
 	deepFreeze( beforeState );
@@ -25,3 +25,13 @@ test( 'VALIDATE_AMOUNT returns validated amount', function ( t ) {
 	t.notOk( validity( beforeState, { type: 'FINISH_AMOUNT_VALIDATION', payload: createInvalidPayload } ).amount );
 	t.end();
 } );
+
+test( 'FINISH_ADDRESS_VALIDATION sets amount validation state', function ( t ) {
+	var beforeState = { amount: null };
+
+	deepFreeze( beforeState );
+	t.ok( validity( beforeState, { type: 'FINISH_ADDRESS_VALIDATION', payload: createValidPayload() } ).address );
+	t.notOk( validity( beforeState, { type: 'FINISH_ADDRESS_VALIDATION', payload: createInvalidPayload } ).address );
+	t.end();
+} );
+

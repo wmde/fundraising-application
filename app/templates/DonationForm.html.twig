@@ -91,7 +91,19 @@
                         stateKey: 'formContent'
                     },
                     {
-                        viewHandler: WMDE.View.createErrorBoxHandler( $( '#validation-errors' ), { amount: 'Betrag' } ),
+                        viewHandler: WMDE.View.createErrorBoxHandler( $( '#validation-errors' ), {
+                            amount: 'Betrag',
+                            salutation: 'Anrede',
+                            title: 'Titel',
+                            firstName: 'Vorname',
+                            lastName: 'Nachname',
+                            company: 'Firma',
+                            street: 'Straße',
+                            postcode: 'PLZ',
+                            city: 'Ort',
+                            country: 'DE',
+                            email: 'E-Mail'
+                        } ),
                         stateKey: 'validationMessages'
                     },
                     {
