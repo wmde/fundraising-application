@@ -8,7 +8,7 @@ namespace WMDE\Fundraising\Frontend\UseCases\CancelMembershipApplication;
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class CancelMembershipApplicationRequest {
+class CancellationRequest {
 
 	private $applicationId;
 

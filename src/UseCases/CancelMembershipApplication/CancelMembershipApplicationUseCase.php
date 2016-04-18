@@ -14,7 +14,7 @@ class CancelMembershipApplicationUseCase {
 
 	}
 
-	public function cancelApplication( CancelMembershipApplicationRequest $request ): CancelMembershipApplicationResponse {
+	public function cancelApplication( CancellationRequest $request ): CancellationResponse {
 		// TODO
 	}
 
