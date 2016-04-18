@@ -8,17 +8,17 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use WMDE\Fundraising\Entities\Address;
 use WMDE\Fundraising\Entities\Subscription;
-use WMDE\Fundraising\Frontend\DataAccess\DbalSubscriptionRepository;
+use WMDE\Fundraising\Frontend\DataAccess\DoctrineSubscriptionRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\SubscriptionRepositoryException;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
- * @covers WMDE\Fundraising\Frontend\DataAccess\DbalSubscriptionRepository
+ * @covers WMDE\Fundraising\Frontend\DataAccess\DoctrineSubscriptionRepository
  *
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class DbalSubscriptionRepositoryTest extends \PHPUnit_Framework_TestCase {
+class DoctrineSubscriptionRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 	/**
 	 * @var EntityManager
@@ -38,7 +38,7 @@ class DbalSubscriptionRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$subscription = new Subscription();
 		$subscription->setEmail( 'nyan@awesomecats.com' );
 		$subscription->setAddress( new Address() );
-		$repository = new DbalSubscriptionRepository( $this->entityManager );
+		$repository = new DoctrineSubscriptionRepository( $this->entityManager );
 		$repository->storeSubscription( $subscription );
 		$expected = $this->getOrmRepository()->findAll();
 		$this->assertEquals( [$subscription], $expected );
@@ -47,7 +47,7 @@ class DbalSubscriptionRepositoryTest extends \PHPUnit_Framework_TestCase {
 	public function testGivenARecentSubscription_itIsCounted() {
 		$firstSubscription = $this->persistFirstSubscription();
 		$this->entityManager->flush();
-		$repository = new DbalSubscriptionRepository( $this->entityManager );
+		$repository = new DoctrineSubscriptionRepository( $this->entityManager );
 		$this->assertSame( 1, $repository->countSimilar( $firstSubscription, new \DateTime( '100 years ago' ) ) );
 	}
 
@@ -57,7 +57,7 @@ class DbalSubscriptionRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$thirdSubscription = $this->persistThirdSubscription();
 
 		$this->entityManager->flush();
-		$repository = new DbalSubscriptionRepository( $this->entityManager );
+		$repository = new DoctrineSubscriptionRepository( $this->entityManager );
 		$this->assertSame( 1, $repository->countSimilar( $thirdSubscription, new \DateTime( '1 hour ago' ) ) );
 		$this->assertSame( 2, $repository->countSimilar( $thirdSubscription, new \DateTime( '100 years ago' ) ) );
 	}
@@ -71,7 +71,7 @@ class DbalSubscriptionRepositoryTest extends \PHPUnit_Framework_TestCase {
 			false
 		);
 		$entityManager->expects( $this->once() )->method( 'persist' )->willThrowException( new ORMException() );
-		$repository = new DbalSubscriptionRepository( $entityManager );
+		$repository = new DoctrineSubscriptionRepository( $entityManager );
 		$subscription = new Subscription();
 		$subscription->setEmail( 'nyan@awesomecats.com' );
 		$subscription->setAddress( new Address() );

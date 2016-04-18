@@ -15,7 +15,7 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\SubscriptionRepository;
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class DbalSubscriptionRepository implements SubscriptionRepository {
+class DoctrineSubscriptionRepository implements SubscriptionRepository {
 
 	private $entityManager;
 
