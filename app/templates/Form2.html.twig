@@ -306,17 +306,17 @@
                     <div class="container">
                         <ul class="horizontal clearfix">
                             <li class="first">
-                                <input type="radio" id="address-type-1" name="adresstyp" value="person" title="privat" class="address-type-select" >
+                                <input type="radio" id="address-type-1" name="addressType" value="person" title="privat" class="address-type-select" >
                                 <label for="address-type-1">Privatperson</label>
                             </li>
 
                             <li>
-                                <input type="radio" id="address-type-2" name="adresstyp" value="firma" title="gesch&auml;ftlich" class="address-type-select" >
+                                <input type="radio" id="address-type-2" name="addressType" value="firma" title="gesch&auml;ftlich" class="address-type-select" >
                                 <label for="address-type-2">Firma</label>
                             </li>
 
                             <li class="last">
-                                <input type="radio" id="address-type-3" name="adresstyp" value="anonym" title="anonym" class="address-type-select" >
+                                <input type="radio" id="address-type-3" name="addressType" value="anonym" title="anonym" class="address-type-select" >
                                 <label for="address-type-3">anonym</label>
                             </li>
                         </ul>
@@ -333,29 +333,29 @@
                             <div class="input-container">
                                 <ul class="horizontal clearfix salutation">
                                     <li class="first">
-                                        <input type="radio" id="salutation-1" name="anrede" value="Frau" title="Frau" class="salutation" {% if anrede == 'Frau' or not anrede %}checked="checked"{% endif %}>
+                                        <input type="radio" id="salutation-1" name="salutation" value="Frau" title="Frau" class="salutation" {% if salutation == 'Frau' or not salutation %}checked="checked"{% endif %}>
                                         <label for="salutation-1">Frau</label>
                                     </li>
 
                                     <li class="last">
-                                        <input type="radio" id="salutation-2" name="anrede" value="Herr" title="Herr" class="salutation" {% if anrede == 'Herr' %}checked="checked"{% endif %}>
+                                        <input type="radio" id="salutation-2" name="salutation" value="Herr" title="Herr" class="salutation" {% if salutation == 'Herr' %}checked="checked"{% endif %}>
                                         <label for="salutation-2">Herr</label>
                                     </li>
                                 </ul>
 
-                                <select id="personal-title" name="titel" class="personal-title">
+                                <select id="personal-title" name="title" class="personal-title">
                                     <option value="" data-behavior="placeholder">Kein Titel</option>
-                                    <option value="Dr." {% if titel == 'Dr.' %}selected{% endif %}>Dr.</option>
-                                    <option value="Prof." {% if titel == 'Prof.' %}selected{% endif %}>Prof.</option>
-                                    <option value="Prof. Dr." {% if titel == 'Prof. Dr.' %}selected{% endif %}>Prof. Dr.</option>
+                                    <option value="Dr." {% if title == 'Dr.' %}selected{% endif %}>Dr.</option>
+                                    <option value="Prof." {% if title == 'Prof.' %}selected{% endif %}>Prof.</option>
+                                    <option value="Prof. Dr." {% if title == 'Prof. Dr.' %}selected{% endif %}>Prof. Dr.</option>
                                 </select>
                             </div>
 
                             <div class="input-container">
                                 <label for="first-name">Name</label>
-                                <input id="first-name" name="vorname" type="text" value="{$ vorname $}" pattern="^((?![M|m]ustermann).)*$" title="Groß- und Kleinbuchstaben, Bindestriche und Leerzeichen" placeholder="Vorname" required="required" class="required">
+                                <input id="first-name" name="firstName" type="text" value="{$ firstName $}" pattern="^((?![M|m]ustermann).)*$" title="Groß- und Kleinbuchstaben, Bindestriche und Leerzeichen" placeholder="Vorname" required="required" class="required">
                                 <span class="validation icon-placeholder"></span>
-                                <input id="last-name" name="nachname" type="text" value="{$ nachname $}" pattern="^((?![M|m]ustermann).)*$" title="Groß- und Kleinbuchstaben, Bindestriche, Leerzeichen und Punkte" placeholder="Nachname" required="required" class="required">
+                                <input id="last-name" name="lastName" type="text" value="{$ lastName $}" pattern="^((?![M|m]ustermann).)*$" title="Groß- und Kleinbuchstaben, Bindestriche, Leerzeichen und Punkte" placeholder="Nachname" required="required" class="required">
                                 <span class="validation icon-placeholder"></span>
                             </div>
                         </div>
@@ -364,7 +364,7 @@
 
                             <div class="input-container">
                                 <label for="company-name">Firma</label>
-                                <input id="company-name" name="firma" type="text" value="{$ firma $}" placeholder="Firma" required="required" class="required">
+                                <input id="company-name" name="company" type="text" value="{$ company $}" placeholder="Firma" required="required" class="required">
                                 <span class="validation icon-placeholder"></span>
                             </div>
                         </div>
@@ -372,15 +372,15 @@
 
                         <div class="input-container">
                             <label for="street">Stra&szlig;e</label>
-                            <input id="street" name="strasse" type="text" value="{$ strasse $}" pattern="^((?![M|m]uster).)*$" placeholder="z.B. Musterstra&szlig;e 123" required="required" class="required">
+                            <input id="street" name="street" type="text" value="{$ street $}" pattern="^((?![M|m]uster).)*$" placeholder="z.B. Musterstra&szlig;e 123" required="required" class="required">
                             <span class="validation icon-placeholder"></span>
                         </div>
 
                         <div class="input-container">
                             <label for="post-code">PLZ &amp; Ort</label>
-                            <input id="post-code" name="plz" type="text" value="{$ plz $}"  placeholder="z.B. 10117" title="Fünfstellige Postleitzahl" required="required" class="required" pattern="[0-9]{5}">
+                            <input id="post-code" name="postcode" type="text" value="{$ postcode $}"  placeholder="z.B. 10117" title="Fünfstellige Postleitzahl" required="required" class="required" pattern="[0-9]{5}">
                             <span class="validation icon-placeholder"></span>
-                            <input id="city" name="ort" type="text" value="{$ ort $}" pattern="^((?![M|m]uster).)*$" placeholder="z.B. Berlin" required="required" class="required">
+                            <input id="city" name="city" type="text" value="{$ city $}" pattern="^((?![M|m]uster).)*$" placeholder="z.B. Berlin" required="required" class="required">
                             <span class="validation icon-placeholder"></span>
                         </div>
 

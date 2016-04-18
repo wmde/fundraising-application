@@ -145,7 +145,7 @@ function getMembershipMinFee() {
     var feeInterval = 12 / parseInt( $( "input:radio[name=membership_fee_interval]:checked" ).val() );
     var minFee = 24;
 
-    if ( $( "input:radio[name=adresstyp]:checked" ).val() === 'firma' ) {
+    if ( $( "input:radio[name=addressType]:checked" ).val() === 'firma' ) {
         minFee = 100;
     }
     return minFee / feeInterval;

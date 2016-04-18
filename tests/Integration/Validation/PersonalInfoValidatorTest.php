@@ -52,7 +52,7 @@ class PersonalInfoValidatorTest extends ValidatorTestCase {
 		$this->assertFalse( $validator->validate( $personalInfo )->isSuccessful() );
 		$this->assertConstraintWasViolated(
 			$validator->validate( $personalInfo ),
-			'firma'
+			'company'
 		);
 	}
 
@@ -68,11 +68,11 @@ class PersonalInfoValidatorTest extends ValidatorTestCase {
 		$this->assertFalse( $validator->validate( $personalInfo )->isSuccessful() );
 		$this->assertConstraintWasViolated(
 			$validator->validate( $personalInfo ),
-			'strasse'
+			'street'
 		);
 		$this->assertConstraintWasViolated(
 			$validator->validate( $personalInfo ),
-			'plz'
+			'postcode'
 		);
 	}
 

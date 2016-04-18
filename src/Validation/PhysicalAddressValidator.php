@@ -17,9 +17,9 @@ class PhysicalAddressValidator {
 		$validator = new RequiredFieldValidator();
 
 		return new ValidationResult( ...array_filter( [
-			$this->getFieldViolation( $validator->validate( $address->getStreetAddress() ), 'strasse' ),
-			$this->getFieldViolation( $validator->validate( $address->getPostalCode() ), 'plz' ),
-			$this->getFieldViolation( $validator->validate( $address->getCity() ), 'ort' ),
+			$this->getFieldViolation( $validator->validate( $address->getStreetAddress() ), 'street' ),
+			$this->getFieldViolation( $validator->validate( $address->getPostalCode() ), 'postcode' ),
+			$this->getFieldViolation( $validator->validate( $address->getCity() ), 'city' ),
 			$this->getFieldViolation( $validator->validate( $address->getCountryCode() ), 'country' )
 		] ) );
 	}

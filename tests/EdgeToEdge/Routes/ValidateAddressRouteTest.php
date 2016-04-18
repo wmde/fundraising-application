@@ -46,7 +46,7 @@ class ValidateAddressRouteTest extends WebRouteTestCase {
 			$expectedResponse = [
 				'status' => 'ERR',
 				'messages' => [
-					'firma' => 'field_required'
+					'company' => 'field_required'
 				]
 			];
 			$this->assertJsonSuccessResponse( $expectedResponse, $response );
@@ -56,15 +56,15 @@ class ValidateAddressRouteTest extends WebRouteTestCase {
 
 	private function newPersonFormInput() {
 		return [
-			'adresstyp' => 'person',
-			'anrede' => 'Frau',
-			'titel' => 'Prof. Dr.',
-			'firma' => '',
-			'vorname' => 'Karla',
-			'nachname' => 'Kennichnich',
-			'strasse' => 'Lehmgasse 12',
-			'plz' => '12345',
-			'ort' => 'Einort',
+			'addressType' => 'person',
+			'salutation' => 'Frau',
+			'title' => 'Prof. Dr.',
+			'company' => '',
+			'firstName' => 'Karla',
+			'lastName' => 'Kennichnich',
+			'street' => 'Lehmgasse 12',
+			'postcode' => '12345',
+			'city' => 'Einort',
 			'country' => 'DE',
 			'email' => 'karla@kennichnich.de',
 		];
@@ -72,15 +72,15 @@ class ValidateAddressRouteTest extends WebRouteTestCase {
 
 	private function newCompanyWithMissingNameFormInput() {
 		return [
-			'adresstyp' => 'firma',
-			'anrede' => 'Frau',
-			'titel' => 'Prof. Dr.',
-			'firma' => '',
-			'vorname' => 'Karla',
-			'nachname' => 'Kennichnich',
-			'strasse' => 'Lehmgasse 12',
-			'plz' => '12345',
-			'ort' => 'Einort',
+			'addressType' => 'firma',
+			'salutation' => 'Frau',
+			'title' => 'Prof. Dr.',
+			'company' => '',
+			'firstName' => 'Karla',
+			'lastName' => 'Kennichnich',
+			'street' => 'Lehmgasse 12',
+			'postcode' => '12345',
+			'city' => 'Einort',
 			'country' => 'DE',
 			'email' => 'karla@kennichnich.de',
 		];

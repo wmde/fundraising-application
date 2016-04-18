@@ -25,15 +25,15 @@ class PersonNameValidator {
 		$validator = new RequiredFieldValidator();
 
 		return new ValidationResult( ...array_filter( [
-			$this->getFieldViolation( $validator->validate( $instance->getSalutation() ), 'anrede' ),
-			$this->getFieldViolation( $validator->validate( $instance->getFirstName() ), 'vorname' ),
-			$this->getFieldViolation( $validator->validate( $instance->getLastName() ), 'nachname' )
+			$this->getFieldViolation( $validator->validate( $instance->getSalutation() ), 'salutation' ),
+			$this->getFieldViolation( $validator->validate( $instance->getFirstName() ), 'firstName' ),
+			$this->getFieldViolation( $validator->validate( $instance->getLastName() ), 'lastName' )
 		] ) );
 	}
 
 	private function validateCompanyPerson( PersonName $instance ): ValidationResult {
 		return new ValidationResult( ...array_filter( [
-			$this->getFieldViolation( ( new RequiredFieldValidator() )->validate( $instance->getCompanyName() ), 'firma' )
+			$this->getFieldViolation( ( new RequiredFieldValidator() )->validate( $instance->getCompanyName() ), 'company' )
 		] ) );
 	}
 

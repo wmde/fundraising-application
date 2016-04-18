@@ -113,27 +113,27 @@ class DonationValidator {
 		if ( $personalInfo ) {
 			$violations[] = $this->getFieldViolation(
 				$fieldTextValidator->validate( $personalInfo->getPersonName()->getFirstName() ),
-				'vorname'
+				'firstName'
 			);
 			$violations[] = $this->getFieldViolation(
 				$fieldTextValidator->validate( $personalInfo->getPersonName()->getLastName() ),
-				'nachname'
+				'lastName'
 			);
 			$violations[] = $this->getFieldViolation(
 				$fieldTextValidator->validate( $personalInfo->getPersonName()->getCompanyName() ),
-				'firma'
+				'company'
 			);
 			$violations[] = $this->getFieldViolation(
 				$fieldTextValidator->validate( $personalInfo->getPhysicalAddress()->getStreetAddress() ),
-				'strasse'
+				'street'
 			);
 			$violations[] = $this->getFieldViolation(
 				$fieldTextValidator->validate( $personalInfo->getPhysicalAddress()->getPostalCode() ),
-				'plz'
+				'postcode'
 			);
 			$violations[] = $this->getFieldViolation(
 				$fieldTextValidator->validate( $personalInfo->getPhysicalAddress()->getCity() ),
-				'ort'
+				'postcode'
 			);
 		}
 

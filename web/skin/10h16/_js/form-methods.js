@@ -100,7 +100,7 @@ $( document ).ready( function() {
 	}
 
 	if ( inMembershipForm() ) {
-		$( "input:radio[name=membership_fee], input:radio[name=membership_fee_interval], input:radio[name=adresstyp], #amount-8" ).on( 'change', function ( evt ) {
+		$( "input:radio[name=membership_fee], input:radio[name=membership_fee_interval], input:radio[name=addressType], #amount-8" ).on( 'change', function ( evt ) {
 			memCheckPending = true;
 			checkMembershipFee( false );
 		} );
