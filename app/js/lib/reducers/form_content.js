@@ -40,7 +40,7 @@ function clearFieldsIfAddressTypeChanges( newState, payload ) {
 		return;
 	}
 	switch ( payload.value ) {
-		case 'privat':
+		case 'person':
 			newState.companyName = '';
 			break;
 		case 'firma':

@@ -48,7 +48,7 @@ test( 'Given a private adddress, address validation sends values to server', fun
 			postFunctionSpy
 		),
 		formData = {
-			addressType: 'privat',
+			addressType: 'person',
 			personalTitle: 'Dr.',
 			firstName: 'Hank',
 			lastName: 'Scorpio',
