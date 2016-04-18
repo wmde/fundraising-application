@@ -10,7 +10,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\Euro;
  * @license GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class HandlePayPalPaymentNotificationRequest {
+class PayPalNotificationRequest {
 
 	private $transactionType;
 	private $transactionId;
@@ -174,7 +174,7 @@ class HandlePayPalPaymentNotificationRequest {
 	}
 
 	public function getCurrencyCode(): string {
-		return $this->currency;
+		return $this->currencyCode;
 	}
 
 	public function setCurrencyCode( string $currencyCode ): self {

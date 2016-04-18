@@ -29,7 +29,7 @@ use WMDE\Fundraising\Frontend\UseCases\CancelMembershipApplication\CancellationR
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageDisplayRequest;
 use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanRequest;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
-use WMDE\Fundraising\Frontend\UseCases\HandlePayPalPaymentNotification\HandlePayPalPaymentNotificationRequest;
+use WMDE\Fundraising\Frontend\UseCases\HandlePayPalPaymentNotification\PayPalNotificationRequest;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentListingRequest;
 use WMDE\Fundraising\Frontend\UseCases\ShowDonationConfirmation\ShowDonationConfirmationRequest;
 
@@ -394,7 +394,7 @@ $app->post(
 
 					$useCase = $ffFactory->newHandlePayPalPaymentNotificationUseCase();
 					return new Response( $useCase->handleNotification(
-						( new HandlePayPalPaymentNotificationRequest() )
+						( new PayPalNotificationRequest() )
 							->setTransactionType( $post->get( 'trx_type', '' ) )
 							->setTransactionId( $post->get( 'trx_id', '' ) )
 							->setPayerId( $post->get( 'payer_id', '' ) )

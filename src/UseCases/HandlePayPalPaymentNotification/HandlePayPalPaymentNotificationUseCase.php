@@ -13,7 +13,7 @@ class HandlePayPalPaymentNotificationUseCase {
 	public function __construct() {
 	}
 
-	public function handleNotification( HandlePayPalPaymentNotificationRequest $request ) {
+	public function handleNotification( PayPalNotificationRequest $request ) {
 		return 'TODO';
 	}
 
