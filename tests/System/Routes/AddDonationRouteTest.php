@@ -40,7 +40,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$data = $donation->getDecodedData();
 			$this->assertSame( '5.51', $donation->getAmount() );
 			$this->assertSame( 'BEZ', $donation->getPaymentType() );
-			$this->assertSame( 0, $donation->getPeriod() );
+			$this->assertSame( 0, $donation->getPaymentIntervalInMonths() );
 			$this->assertSame( 'DE12500105170648489890', $data['iban'] );
 			$this->assertSame( 'INGDDEFFXXX', $data['bic'] );
 			$this->assertSame( '0648489890', $data['konto'] );
@@ -52,14 +52,14 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$this->assertSame( '', $data['firma'] );
 			$this->assertSame( 'Karla', $data['vorname'] );
 			$this->assertSame( 'Kennichnich', $data['nachname'] );
-			$this->assertSame( 'Prof. Dr. Karla Kennichnich', $donation->getName() );
+			$this->assertSame( 'Prof. Dr. Karla Kennichnich', $donation->getDonorFullName() );
 			$this->assertSame( 'Lehmgasse 12', $data['strasse'] );
 			$this->assertSame( '12345', $data['plz'] );
 			$this->assertSame( 'Einort', $data['ort'] );
-			$this->assertSame( 'Einort', $donation->getCity() );
+			$this->assertSame( 'Einort', $donation->getDonorCity() );
 			$this->assertSame( 'DE', $data['country'] );
 			$this->assertSame( 'karla@kennichnich.de', $data['email'] );
-			$this->assertSame( 'karla@kennichnich.de', $donation->getEmail() );
+			$this->assertSame( 'karla@kennichnich.de', $donation->getDonorEmail() );
 			$this->assertSame( 'test/gelb', $data['tracking'] );
 			$this->assertSame( 3, $data['impCount'] );
 			$this->assertSame( 1, $data['bImpCount'] );
@@ -68,7 +68,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$this->assertSame( 'default', $data['skin'] );
 			$this->assertSame( 'en.wikipedia.org', $data['source'] );
 			$this->assertSame( 'N', $donation->getStatus() );
-			$this->assertTrue( $donation->getInfo() );
+			$this->assertTrue( $donation->getDonorOptsIntoNewsletter() );
 		} );
 	}
 
@@ -153,21 +153,21 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$data = $donation->getDecodedData();
 			$this->assertSame( '12.34', $donation->getAmount() );
 			$this->assertSame( 'UEB', $donation->getPaymentType() );
-			$this->assertSame( 0, $donation->getPeriod() );
+			$this->assertSame( 0, $donation->getPaymentIntervalInMonths() );
 			$this->assertSame( 'person', $data['adresstyp'] );
 			$this->assertSame( 'Frau', $data['anrede'] );
 			$this->assertSame( 'Prof. Dr.', $data['titel'] );
 			$this->assertSame( '', $data['firma'] );
 			$this->assertSame( 'Karla', $data['vorname'] );
 			$this->assertSame( 'Kennichnich', $data['nachname'] );
-			$this->assertSame( 'Prof. Dr. Karla Kennichnich', $donation->getName() );
+			$this->assertSame( 'Prof. Dr. Karla Kennichnich', $donation->getDonorFullName() );
 			$this->assertSame( 'Lehmgasse 12', $data['strasse'] );
 			$this->assertSame( '12345', $data['plz'] );
 			$this->assertSame( 'Einort', $data['ort'] );
-			$this->assertSame( 'Einort', $donation->getCity() );
+			$this->assertSame( 'Einort', $donation->getDonorCity() );
 			$this->assertSame( 'DE', $data['country'] );
 			$this->assertSame( 'karla@kennichnich.de', $data['email'] );
-			$this->assertSame( 'karla@kennichnich.de', $donation->getEmail() );
+			$this->assertSame( 'karla@kennichnich.de', $donation->getDonorEmail() );
 			$this->assertSame( 'test/gelb', $data['tracking'] );
 			$this->assertSame( 3, $data['impCount'] );
 			$this->assertSame( 1, $data['bImpCount'] );
@@ -175,10 +175,10 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$this->assertSame( 'blue', $data['color'] );
 			$this->assertSame( 'default', $data['skin'] );
 			$this->assertSame( 'en.wikipedia.org', $data['source'] );
-			$this->assertSame( true, $donation->getInfo() );
+			$this->assertSame( true, $donation->getDonorOptsIntoNewsletter() );
 
 			$this->assertSame( 'Z', $donation->getStatus() );
-			$this->assertRegExp( '/W-Q-[A-Z]{6}-[A-Z]/', $donation->getTransferCode() );
+			$this->assertRegExp( '/W-Q-[A-Z]{6}-[A-Z]/', $donation->getBankTransferCode() );
 		} );
 	}
 

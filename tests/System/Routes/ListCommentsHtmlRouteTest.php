@@ -54,7 +54,7 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 		$firstDonation->setPublicRecord( 'First name' );
 		$firstDonation->setComment( 'First comment' );
 		$firstDonation->setAmount( '100.42' );
-		$firstDonation->setDtNew( new DateTime( '1984-01-01' ) );
+		$firstDonation->setCreationTime( new DateTime( '1984-01-01' ) );
 		$firstDonation->setIsPublic( true );
 		$entityManager->persist( $firstDonation );
 	}
@@ -64,7 +64,7 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 		$secondDonation->setPublicRecord( 'Second name' );
 		$secondDonation->setComment( 'Second comment' );
 		$secondDonation->setAmount( '9001' );
-		$secondDonation->setDtNew( new DateTime( '1984-02-02' ) );
+		$secondDonation->setCreationTime( new DateTime( '1984-02-02' ) );
 		$secondDonation->setIsPublic( true );
 		$entityManager->persist( $secondDonation );
 	}
@@ -74,7 +74,7 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 		$secondDonation->setPublicRecord( 'Third name & company' );
 		$secondDonation->setComment( 'Third <script> comment' );
 		$secondDonation->setAmount( '9001' );
-		$secondDonation->setDtNew( new DateTime( '1984-02-02' ) );
+		$secondDonation->setCreationTime( new DateTime( '1984-02-02' ) );
 		$secondDonation->setIsPublic( true );
 		$entityManager->persist( $secondDonation );
 	}

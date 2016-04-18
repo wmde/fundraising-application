@@ -32,7 +32,7 @@ class UniqueTransferCodeGenerator implements TransferCodeGenerator {
 	}
 
 	private function codeIsNotUnique( string $transferCode ): bool {
-		return !empty( $this->entityRepository->findBy( [ 'transferCode' => $transferCode ] ) );
+		return !empty( $this->entityRepository->findBy( [ 'bankTransferCode' => $transferCode ] ) );
 	}
 
 }
