@@ -18,6 +18,8 @@ function validationMessages( state, action ) {
 	switch ( action.type ) {
 		case 'FINISH_AMOUNT_VALIDATION':
 			return addStateIfStatusIsNotOk( state, action.payload.status, { amount: action.payload.message } );
+		case 'FINISH_ADDRESS_VALIDATION':
+			return addStateIfStatusIsNotOk( state, action.payload.status, { address: action.payload.message } );
 		default:
 			return state;
 	}

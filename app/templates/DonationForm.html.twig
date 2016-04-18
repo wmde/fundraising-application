@@ -41,7 +41,7 @@
                 WMDE.Components.createRadioComponent( store, $( '.debit-type-select' ), 'debitType' ),
                 WMDE.Components.createRadioComponent( store, $( '.address-type-select' ), 'addressType' ),
                 WMDE.Components.createRadioComponent( store, $( '.salutation' ), 'salutation' ),
-                WMDE.Components.createRadioComponent( store, $( '.personal-title' ), 'personalTitle' ),
+                WMDE.Components.createRadioComponent( store, $( '.personal-title' ), 'title' ),
                 WMDE.Components.createTextComponent( store, $( '#first-name' ), 'firstName' ),
                 WMDE.Components.createTextComponent( store, $( '#last-name' ), 'lastName' ),
                 WMDE.Components.createTextComponent( store, $( '#company-name' ), 'companyName' ),
@@ -62,7 +62,13 @@
                             actions.newFinishAmountValidationAction,
                             [ 'amount', 'paymentType' ],
                             initialValues
-                    )
+                    ),
+                    WMDE.ReduxValidation.createValidationDispatcher(
+                            WMDE.FormValidation.createAddressValidator( '{$ basepath $}/validate-address' ),
+                            actions.newFinishAddressValidationAction,
+                            [ 'salutation', 'title', 'firstName', 'lastName', 'companyName', 'street', 'postcode', 'city', 'country', 'email' ],
+                            initialValues
+                    ),
                 ];
             },
             store,

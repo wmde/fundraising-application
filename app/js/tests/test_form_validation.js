@@ -49,7 +49,7 @@ test( 'Given a private adddress, address validation sends values to server', fun
 		),
 		formData = {
 			addressType: 'person',
-			personalTitle: 'Dr.',
+			title: 'Dr.',
 			firstName: 'Hank',
 			lastName: 'Scorpio',
 			street: 'Hammock District',

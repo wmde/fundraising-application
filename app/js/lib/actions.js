@@ -56,6 +56,18 @@ module.exports = {
 	 * @param {Object|Promise} validationResult
 	 * @return {{type: string, payload: *}}
 	 */
+	newFinishAddressValidationAction: function ( validationResult ) {
+		return {
+			type: 'FINISH_ADDRESS_VALIDATION',
+			payload: validationResult
+		};
+	},
+
+	/**
+	 *
+	 * @param {Object|Promise} validationResult
+	 * @return {{type: string, payload: *}}
+	 */
 	newFinishAmountValidationAction: function ( validationResult ) {
 		return {
 			type: 'FINISH_AMOUNT_VALIDATION',

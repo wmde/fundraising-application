@@ -10,10 +10,10 @@ var objectAssign = require( 'object-assign' ),
 		debitType: 'sepa', // sepa and "non-sepa"
 		addressType: 'person', // person, firma and anonym
 		salutation: 'Frau',
-		personalTitle: '',
+		title: '',
 		firstName: '',
 		lastName: '',
-		companyName: '',
+		company: '',
 		street: '',
 		postCode: '',
 		city: '',
@@ -41,16 +41,16 @@ function clearFieldsIfAddressTypeChanges( newState, payload ) {
 	}
 	switch ( payload.value ) {
 		case 'person':
-			newState.companyName = '';
+			newState.company = '';
 			break;
 		case 'firma':
-			newState.personalTitle = '';
+			newState.title = '';
 			newState.firstName = '';
 			newState.lastName = '';
 			break;
 		case 'anonym':
-			newState.personalTitle = '';
-			newState.companyName = '';
+			newState.title = '';
+			newState.company = '';
 			newState.firstName = '';
 			newState.lastName = '';
 			newState.street = '';
