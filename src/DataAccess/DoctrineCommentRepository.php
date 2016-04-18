@@ -17,7 +17,7 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\StoreCommentException;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class DbalCommentRepository implements CommentRepository, CommentFinder {
+class DoctrineCommentRepository implements CommentRepository, CommentFinder {
 
 	private $entityManager;
 

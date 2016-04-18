@@ -26,7 +26,7 @@ use Swift_NullTransport;
 use Symfony\Component\Translation\TranslatorInterface;
 use Twig_Environment;
 use Twig_Extensions_Extension_Intl;
-use WMDE\Fundraising\Frontend\DataAccess\DbalCommentRepository;
+use WMDE\Fundraising\Frontend\DataAccess\DoctrineCommentRepository;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationAuthorizationUpdater;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationAuthorizer;
@@ -43,7 +43,7 @@ use WMDE\Fundraising\Frontend\Presentation\PayPalUrlGenerator;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormViolationPresenter;
 use WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer;
 use WMDE\Fundraising\Frontend\Domain\Repositories\CommentFinder;
-use WMDE\Fundraising\Frontend\DataAccess\DbalSubscriptionRepository;
+use WMDE\Fundraising\Frontend\DataAccess\DoctrineSubscriptionRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Infrastructure\Honorifics;
 use WMDE\Fundraising\Frontend\Domain\Repositories\CommentRepository;
@@ -149,7 +149,7 @@ class FunFunFactory {
 		} );
 
 		$pimple['subscription_repository'] = $pimple->share( function() {
-			return new DbalSubscriptionRepository( $this->getEntityManager() );
+			return new DoctrineSubscriptionRepository( $this->getEntityManager() );
 		} );
 
 		$pimple['donation_repository'] = $pimple->share( function() {
@@ -157,7 +157,7 @@ class FunFunFactory {
 		} );
 
 		$pimple['comment_repository'] = $pimple->share( function() {
-			return new DbalCommentRepository(
+			return new DoctrineCommentRepository(
 				$this->getEntityManager()
 			);
 		} );

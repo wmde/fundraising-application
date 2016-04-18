@@ -7,19 +7,19 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
 use DateTime;
 use Doctrine\ORM\EntityManager;
 use WMDE\Fundraising\Entities\Donation;
-use WMDE\Fundraising\Frontend\DataAccess\DbalCommentRepository;
+use WMDE\Fundraising\Frontend\DataAccess\DoctrineCommentRepository;
 use WMDE\Fundraising\Frontend\Domain\Model\Comment;
 use WMDE\Fundraising\Frontend\Domain\ReadModel\CommentWithAmount;
 use WMDE\Fundraising\Frontend\Domain\Repositories\StoreCommentException;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
- * @covers WMDE\Fundraising\Frontend\DataAccess\DbalCommentRepository
+ * @covers WMDE\Fundraising\Frontend\DataAccess\DoctrineCommentRepository
  *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
+class DoctrineCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 	/**
 	 * @var EntityManager
@@ -31,8 +31,8 @@ class DbalCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 		parent::setUp();
 	}
 
-	private function newDbalCommentRepository(): DbalCommentRepository {
-		return new DbalCommentRepository( $this->entityManager );
+	private function newDbalCommentRepository(): DoctrineCommentRepository {
+		return new DoctrineCommentRepository( $this->entityManager );
 	}
 
 	public function testWhenThereAreNoComments_anEmptyListIsReturned() {
