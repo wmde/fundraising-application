@@ -18,23 +18,18 @@ use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
  */
 class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 
+	const BASE_URL = 'https://that.paymentprovider.com/';
+	const EMAIL_ADDRESS = 'foerderpp@wikimedia.de';
+
 	public function testGivenValidRequest_applicationIndicatesSuccess() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setPayPalPaymentNotificationVerifier(
-				new PayPalPaymentNotificationVerifier(
-					$this->getClientMock(),
-					[
-						'base-url' => 'https://that.paymentprovider.com/',
-						'account-address' => 'foerderpp@wikimedia.de'
-					]
-				)
-			);
+			$factory->setPayPalPaymentNotificationVerifier( $this->newNotifierMock() );
 
 			$client->request(
 				'POST',
 				'/handle-paypal-payment-notification',
 				[
-					'receiver_email' => 'foerderpp@wikimedia.de',
+					'receiver_email' => self::EMAIL_ADDRESS,
 					'payment_status' => 'Completed'
 				]
 			);
@@ -44,33 +39,17 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testGivenInvalidRequest_applicationReturnsError() {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setPayPalPaymentNotificationVerifier(
-				new PayPalPaymentNotificationVerifier(
-					$this->getClientMock(),
-					[
-						'base-url' => 'https://that.paymentprovider.com/',
-						'account-address' => 'foerderpp@wikimedia.de'
-					]
-				)
-			);
-
-			$client->request(
-				'POST',
-				'/handle-paypal-payment-notification',
-				[
-					'receiver_email' => 'foerderpp@wikimedia.de',
-					'payment_status' => 'Unknown'
-				]
-			);
-
-			$this->assertSame( 'TODO', $client->getResponse()->getContent() );
-			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
-		} );
+	private function newNotifierMock() {
+		return new PayPalPaymentNotificationVerifier(
+			$this->newGuzzleClientMock(),
+			[
+				'base-url' => self::BASE_URL,
+				'account-address' => self::EMAIL_ADDRESS
+			]
+		);
 	}
 
-	private function getClientMock(): GuzzleClient {
+	private function newGuzzleClientMock(): GuzzleClient {
 		$body = $this->getMockBuilder( Stream::class )
 			->disableOriginalConstructor()
 			->setMethods( [ 'getContents' ] )
@@ -97,16 +76,34 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		$client->expects( $this->any() )
 			->method( 'post' )
 			->with(
-				'https://that.paymentprovider.com/',
+				self::BASE_URL,
 				[
 					'cmd' => '_notify_validate',
-					'receiver_email' => 'foerderpp@wikimedia.de',
+					'receiver_email' => self::EMAIL_ADDRESS,
 					'payment_status' => 'Completed'
 				]
 			)
 			->willReturn( $response );
 
 		return $client;
+	}
+
+	public function testGivenInvalidRequest_applicationReturnsError() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setPayPalPaymentNotificationVerifier( $this->newNotifierMock() );
+
+			$client->request(
+				'POST',
+				'/handle-paypal-payment-notification',
+				[
+					'receiver_email' => self::EMAIL_ADDRESS,
+					'payment_status' => 'Unknown'
+				]
+			);
+
+			$this->assertSame( 'TODO', $client->getResponse()->getContent() );
+			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
+		} );
 	}
 
 }
