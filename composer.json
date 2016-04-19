@@ -35,6 +35,9 @@
 					"classmap": [
 						"lib",
 						"services"
+					],
+					"files": [
+						"lib/init.php"
 					]
 				}
 			}
