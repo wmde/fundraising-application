@@ -10,6 +10,23 @@ namespace WMDE\Fundraising\Frontend\UseCases\CancelMembershipApplication;
  */
 class CancellationResponse {
 
-	// TODO
+	private $applicationId;
+	private $isSuccess;
+
+	const IS_SUCCESS = true;
+	const IS_FAILURE = false;
+
+	public function __construct( int $applicationId, bool $isSuccess ) {
+		$this->applicationId = $applicationId;
+		$this->isSuccess = $isSuccess;
+	}
+
+	public function getMembershipApplicationId(): int {
+		return $this->applicationId;
+	}
+
+	public function cancellationWasSuccessful(): bool {
+		return $this->isSuccess;
+	}
 
 }

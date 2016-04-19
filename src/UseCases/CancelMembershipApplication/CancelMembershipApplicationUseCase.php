@@ -27,7 +27,25 @@ class CancelMembershipApplicationUseCase {
 	}
 
 	public function cancelApplication( CancellationRequest $request ): CancellationResponse {
-		// TODO
+		$application = $this->repository->getApplicationById( $request->getApplicationId() );
+
+		if ( $application === null ) {
+			return $this->newFailureResponse( $request );
+		}
+
+		$application->cancel();
+
+		$this->repository->storeApplication( $application );
+
+		return $this->newSuccessResponse( $request );
+	}
+
+	private function newFailureResponse( CancellationRequest $request ) {
+		return new CancellationResponse( $request->getApplicationId(), CancellationResponse::IS_FAILURE );
+	}
+
+	private function newSuccessResponse( CancellationRequest $request ) {
+		return new CancellationResponse( $request->getApplicationId(), CancellationResponse::IS_SUCCESS );
 	}
 
 }
