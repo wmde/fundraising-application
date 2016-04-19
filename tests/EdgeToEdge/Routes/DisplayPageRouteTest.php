@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
+namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Mediawiki\Api\ApiUser;
 use Mediawiki\Api\MediawikiApi;
@@ -10,7 +10,7 @@ use Mediawiki\Api\Request;
 use Mediawiki\Api\UsageException;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ApiPostRequestHandler;
-use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
+use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
 /**
  * @covers WMDE\Fundraising\Frontend\Presentation\Presenters\DisplayPagePresenter

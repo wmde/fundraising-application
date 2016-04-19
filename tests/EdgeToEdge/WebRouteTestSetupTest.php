@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\System;
+namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 

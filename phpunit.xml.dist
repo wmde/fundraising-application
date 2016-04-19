@@ -18,6 +18,9 @@
         <testsuite name="FundraisingFrontend-integration">
             <directory>tests/Integration</directory>
         </testsuite>
+        <testsuite name="FundraisingFrontend-edgetoedge">
+            <directory>tests/EdgeToEdge</directory>
+        </testsuite>
         <testsuite name="FundraisingFrontend-system">
             <directory>tests/System</directory>
         </testsuite>
