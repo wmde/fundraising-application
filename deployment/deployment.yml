@@ -19,7 +19,7 @@
       - name: Compile JavaScript
         local_action: command npm run build-js
 
-      - name: Copy compiles JavaScript
+      - name: Copy compiled JavaScript
         copy: src=../web/res/js/wmde.js dest={{ deploy_dir }}/web/res/js/wmde.js
 
       - name: Check if configuration file exists

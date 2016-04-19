@@ -2,7 +2,7 @@
 spenden.wikimedia.de ansible_user=deploy
 
 [production:vars]
-deploy_dir = "/usr/share/nginx/www/spenden.wikimedia.de"
+deploy_dir = "/usr/share/nginx/www/spenden.wikimedia.de/html"
 deploy_branch = master
 composer_optimize_autoloader = yes
 composer_no_dev = yes
