@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
+namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpKernel\Client;
@@ -10,7 +10,7 @@ use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
-use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
+use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Store\DonationData;
 
 /**

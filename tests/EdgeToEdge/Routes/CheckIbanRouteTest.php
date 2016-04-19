@@ -2,9 +2,9 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\System\Routes;
+namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
-use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
+use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
 /**
  * @covers WMDE\Fundraising\Frontend\Presentation\Presenters\IbanPresenter
@@ -12,10 +12,7 @@ use WMDE\Fundraising\Frontend\Tests\System\WebRouteTestCase;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class GenerateIbanRouteTest extends WebRouteTestCase {
-
-	const INVALID_ACCOUNT_NUMBER = '1015754241';
-	const VALID_ACCOUNT_NUMBER = '1015754243';
+class CheckIbanRouteTest extends WebRouteTestCase {
 
 	public function setUp() {
 		if ( !function_exists( 'lut_init' ) ) {
@@ -29,10 +26,9 @@ class GenerateIbanRouteTest extends WebRouteTestCase {
 
 		$client->request(
 			'GET',
-			'/generate-iban',
+			'/check-iban',
 			[
-				'accountNumber' => self::INVALID_ACCOUNT_NUMBER,
-				'bankCode' => '20050550',
+				'iban' => 'not a valid IBAN!',
 			]
 		);
 
@@ -47,10 +43,9 @@ class GenerateIbanRouteTest extends WebRouteTestCase {
 
 		$client->request(
 			'GET',
-			'/generate-iban',
+			'/check-iban',
 			[
-				'accountNumber' => self::VALID_ACCOUNT_NUMBER,
-				'bankCode' => '20050550',
+				'iban' => 'DE76200505501015754243',
 			]
 		);
 
