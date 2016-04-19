@@ -30,9 +30,13 @@ use WMDE\Fundraising\Frontend\DataAccess\DoctrineCommentRepository;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationAuthorizationUpdater;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationAuthorizer;
+use WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipApplicationAuthorizer;
+use WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipApplicationRepository;
 use WMDE\Fundraising\Frontend\DataAccess\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\DataAccess\UniqueTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\BankDataConverter;
+use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepository;
+use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationAuthorizer;
 use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Presentation\CreditCardConfig;
 use WMDE\Fundraising\Frontend\Presentation\CreditCardUrlGenerator;
@@ -154,6 +158,10 @@ class FunFunFactory {
 
 		$pimple['donation_repository'] = $pimple->share( function() {
 			return new DoctrineDonationRepository( $this->getEntityManager() );
+		} );
+
+		$pimple['membership_application_repository'] = $pimple->share( function() {
+			return new DoctrineMembershipApplicationRepository( $this->getEntityManager() );
 		} );
 
 		$pimple['comment_repository'] = $pimple->share( function() {
@@ -796,7 +804,36 @@ class FunFunFactory {
 	}
 
 	public function newCancelMembershipApplicationUseCase( string $updateToken ): CancelMembershipApplicationUseCase {
-		return new CancelMembershipApplicationUseCase();
+		return new CancelMembershipApplicationUseCase(
+			$this->newMembershipApplicationAuthorizer( $updateToken ),
+			$this->getMembershipApplicationRepository(),
+			$this->newCancelMembershipApplicationMailer()
+		);
+	}
+
+	private function newMembershipApplicationAuthorizer(
+		string $updateToken = null, string $accessToken = null ): MembershipApplicationAuthorizer {
+
+		return new DoctrineMembershipApplicationAuthorizer(
+			$this->getEntityManager(),
+			$updateToken,
+			$accessToken
+		);
+	}
+
+	public function getMembershipApplicationRepository(): MembershipApplicationRepository {
+		return $this->pimple['membership_application_repository'];
+	}
+
+	private function newCancelMembershipApplicationMailer(): TemplateBasedMailer {
+		return new TemplateBasedMailer(
+			$this->getMessenger(),
+			new TwigTemplate(
+				$this->getTwig(),
+				'Mail_Membership_Application_Cancellation_Confirmation.twig' // TODO: create
+			),
+			$this->getTranslator()->trans( 'mail_subject_confirm_membership_application_cancellation' ) // TODO: create
+		);
 	}
 
 	public function newShowDonationConfirmationUseCase( string $accessToken ): ShowDonationConfirmationUseCase {
