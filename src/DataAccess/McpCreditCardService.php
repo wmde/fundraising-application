@@ -18,14 +18,17 @@ class McpCreditCardService implements CreditCardService {
 
 	private $microPaymentDispatcher;
 	private $accessKey;
+	private $useTestMode;
 
 	/**
 	 * @param IMcpCreditcardService_v1_5|TNvpServiceDispatcher $microPaymentDispatcher
 	 * @param string $accessKey
+	 * @param bool $useTestMode
 	 */
-	public function __construct( $microPaymentDispatcher, string $accessKey ) {
+	public function __construct( $microPaymentDispatcher, string $accessKey, bool $useTestMode ) {
 		$this->microPaymentDispatcher = $microPaymentDispatcher;
 		$this->accessKey = $accessKey;
+		$this->useTestMode = $useTestMode;
 	}
 
 	/**
@@ -35,7 +38,7 @@ class McpCreditCardService implements CreditCardService {
 	 */
 	public function getExpirationDate( string $customerId ): CreditCardExpiry {
 		try {
-			$customerData = $this->microPaymentDispatcher->creditcardDataGet( $this->accessKey, null, $customerId );
+			$customerData = $this->microPaymentDispatcher->creditcardDataGet( $this->accessKey, $this->useTestMode, $customerId );
 		}
 		catch ( \Exception $ex ) {
 			throw new CreditCardExpiryFetchingException( 'MCP-API: Request failed', $ex );

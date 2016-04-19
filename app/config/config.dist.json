@@ -93,6 +93,7 @@
 		"item-name": ""
 	},
 	"creditcard": {
+		"access-key": "",
 		"base-url": "",
 		"project-id": "",
 		"background-color": "",

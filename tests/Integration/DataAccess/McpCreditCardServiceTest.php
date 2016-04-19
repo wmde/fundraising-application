@@ -34,12 +34,12 @@ class McpCreditCardServiceTest extends \PHPUnit_Framework_TestCase {
 			->method( 'creditcardDataGet' )
 			->with(
 				$this->equalTo( self::ACCESS_KEY ),
-				$this->equalTo( null ),
+				$this->equalTo( true ),
 				$this->equalTo( self::CUSTOMER_ID )
 			)
 			->willReturn( self::VALID_RETURN_DATA );
 
-		$creditCardService = new McpCreditCardService( $microPaymentServiceMock, self::ACCESS_KEY );
+		$creditCardService = new McpCreditCardService( $microPaymentServiceMock, self::ACCESS_KEY, true );
 		$creditCardService->getExpirationDate( self::CUSTOMER_ID );
 	}
 
@@ -57,7 +57,7 @@ class McpCreditCardServiceTest extends \PHPUnit_Framework_TestCase {
 			->method( 'creditcardDataGet' )
 			->willReturn( self::VALID_RETURN_DATA );
 
-		$creditCardService = new McpCreditCardService( $microPaymentServiceStub, self::ACCESS_KEY );
+		$creditCardService = new McpCreditCardService( $microPaymentServiceStub, self::ACCESS_KEY, true );
 
 		$this->assertEquals(
 			new CreditCardExpiry( self::EXPIRY_MONTH, self::EXPIRY_YEAR ),
@@ -75,7 +75,7 @@ class McpCreditCardServiceTest extends \PHPUnit_Framework_TestCase {
 			->method( 'creditcardDataGet' )
 			->willReturn( $invalidReturnData );
 
-		$creditCardService = new McpCreditCardService( $microPaymentServiceStub, self::ACCESS_KEY );
+		$creditCardService = new McpCreditCardService( $microPaymentServiceStub, self::ACCESS_KEY, true );
 
 		$this->expectException( CreditCardExpiryFetchingException::class );
 		$creditCardService->getExpirationDate( self::CUSTOMER_ID );
