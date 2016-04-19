@@ -3,7 +3,6 @@
  * Uppercase keys designate namespaces, lowercase keys designate global objects/functions
  */
 module.exports = {
-	FormFieldAccessors: require( './lib/form_field_accessors' ),
 	FormValidation: require( './lib/form_validation' ),
 	ReduxValidation: require( './lib/redux_validation' ),
 	Components: require( './lib/form_components' ),
