@@ -7,10 +7,16 @@ var test = require( 'tape' ),
 test( 'ValidationDispatcher calls validationFunction and dispatches action', function ( t ) {
 	var successResult = { status: 'OK' },
 		dummyAction = { type: 'TEST_VALIDATION' },
+		initialData = {},
 		testData = { importantField: 'just some data', ignoredData: 'this won\'t be validated' },
 		validationFunction = sinon.stub().returns( successResult ),
 		actionCreationFunction = sinon.stub().returns( dummyAction ),
-		dispatcher = reduxValidation.createValidationDispatcher( validationFunction, actionCreationFunction, [ 'importantField' ] ),
+		dispatcher = reduxValidation.createValidationDispatcher(
+			validationFunction,
+			actionCreationFunction,
+			[ 'importantField' ],
+			initialData
+		),
 		testStore = { dispatch: sinon.spy() };
 
 	dispatcher.dispatchIfChanged( testData, testStore );
@@ -57,6 +63,27 @@ test( 'ValidationDispatcher calls validationFunction and dispatches action only 
 	t.ok( actionCreationFunction.calledTwice, 'new action is created' );
 	t.ok( testStore.dispatch.calledTwice, 'action is dispatched again' );
 
+	t.end();
+} );
+
+test( 'When validationFunction returns null, ValidationDispatcher does nothing', function ( t ) {
+	var initialData = {},
+		testData = { importantField: 'just some data', ignoredData: 'this won\'t be validated' },
+		validationFunction = sinon.stub().returns( null ),
+		actionCreationFunction = sinon.stub(),
+		dispatcher = reduxValidation.createValidationDispatcher(
+			validationFunction,
+			actionCreationFunction,
+			[ 'importantField' ],
+			initialData
+		),
+		testStore = { dispatch: sinon.spy() };
+
+	dispatcher.dispatchIfChanged( testData, testStore );
+
+	t.ok( validationFunction.calledOnce, 'validation function is called once' );
+	t.notOk( actionCreationFunction.called, 'action is not created' );
+	t.notOk( testStore.dispatch.called, 'no action is dispatched' );
 	t.end();
 } );
 

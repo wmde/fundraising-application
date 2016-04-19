@@ -102,11 +102,11 @@ You can find all the available components in [`app/js/lib/form_components.js`](.
 
 ### Setting up validation
 
-Fill the validators function body with instances of `ValidationDispatcher` classes. A `ValidationDispatcher` calls a validation function with values from the `formContent` part of the store and dispatches an action to store the validation result. It only does this when the values from the store change.
+Fill the validators function body with instances of `ValidationDispatcher` classes. A `ValidationDispatcher` calls a validation function with values from the `formContent` part of the store and dispatches an action to store the validation result. It only does this when the values from the store change and the validation function returns a value that is not `null`. If the validation function returns `null` that means that the validation was skipped - for example when preconditions for validating are not met.
 
 The `createValidationDispatcher` factory function has four arguments:
 
-1. The **validation function** to call. The function has to have one parameter - an object of the values to validate. The "validation function" argument can also be an object that has a `validate` method.
+1. The **validation function** to call. The function has to have one parameter - an object of the values to validate. The "validation function" can also be an object that has a `validate` method.
 2. The action creator to call with the validation result.
 3. An array of field names from the `formContent` part of the global store. The field names will be used to construct the value object for the validation function.
 4. The `initialValues` parameter, which is passed on from the factory function
