@@ -31,6 +31,10 @@ class CancelMembershipApplicationUseCase {
 	}
 
 	public function cancelApplication( CancellationRequest $request ): CancellationResponse {
+		if ( !$this->authorizer->canModifyApplication( $request->getApplicationId() ) ) {
+			return $this->newFailureResponse( $request );
+		}
+
 		$application = $this->getApplicationById( $request->getApplicationId() );
 
 		if ( $application === null ) {

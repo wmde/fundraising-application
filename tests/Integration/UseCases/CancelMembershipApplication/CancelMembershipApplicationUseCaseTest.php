@@ -7,8 +7,10 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\CancelMembershipA
 use WMDE\Fundraising\Frontend\Domain\Model\MembershipApplication;
 use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepository;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationAuthorizer;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingMembershipAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingMembershipAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
@@ -124,6 +126,26 @@ class CancelMembershipApplicationUseCaseTest extends \PHPUnit_Framework_TestCase
 		return $repository;
 	}
 
-	// TODO: test auth
+	public function testNotAuthorized_cancellationFails() {
+		$response = $this->getResponseForCancellationWithAuthorizer( new FailingMembershipAuthorizer() );
+		$this->assertFalse( $response->cancellationWasSuccessful() );
+	}
+
+	private function getResponseForCancellationWithAuthorizer( MembershipApplicationAuthorizer $authorizer ) {
+		$application = $this->newCancelableApplication();
+
+		$useCase = new CancelMembershipApplicationUseCase(
+			$authorizer,
+			$this->getRepositoryWithApplication( $application ),
+			new TemplateBasedMailerSpy( $this )
+		);
+
+		return $useCase->cancelApplication( new CancellationRequest( $application->getId() ) );
+	}
+
+	public function testNotAuthorized_cancellationSucceeds() {
+		$response = $this->getResponseForCancellationWithAuthorizer( new SucceedingMembershipAuthorizer() );
+		$this->assertTrue( $response->cancellationWasSuccessful() );
+	}
 
 }
