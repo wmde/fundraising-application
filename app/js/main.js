@@ -11,6 +11,7 @@ module.exports = {
 	View: {
 		createClearAmountHandler: require( './lib/view_handler/clear_amount' ).createHandler,
 		createElementSlideAnimationHandler: require( './lib/view_handler/element_visibility_switcher' ).createElementSlideAnimationHandler,
+		createElementVisibilityHandler: require( './lib/view_handler/element_visibility_switcher' ).createElementVisibilityHandler,
 		createErrorBoxHandler:  require( './lib/view_handler/error_box' ).createHandler,
 		createFormPageVisibilityHandler: require( './lib/view_handler/form_page_visibility' ).createHandler
 	},

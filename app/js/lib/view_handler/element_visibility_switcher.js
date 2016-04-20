@@ -71,7 +71,7 @@ function createRegexIfNeeded( showOnValue  ) {
 	return showOnValue;
 }
 
-function createElementCustomVisibilityHandler( element, showOnValue, animator ) {
+function createElementCustomVisibilityHandler( showOnValue, animator ) {
 	return objectAssign(
 		Object.create( VisibilitySwitcher ),
 		{
@@ -89,13 +89,13 @@ module.exports = {
 	 * @return {ElementSlideAnimator}
 	 */
 	createElementSlideAnimationHandler: function ( element, showOnValue ) {
-		return createElementCustomVisibilityHandler( element, showOnValue, objectAssign(
+		return createElementCustomVisibilityHandler( showOnValue, objectAssign(
 			Object.create( ElementSlideAnimator ),
 			{ el: element }
 		) );
 	},
 	createElementVisibilityHandler: function ( element, showOnValue ) {
-		return createElementCustomVisibilityHandler( element, showOnValue, objectAssign(
+		return createElementCustomVisibilityHandler( showOnValue, objectAssign(
 			Object.create( ElementHideAnimator ),
 			{ el: element }
 		) );

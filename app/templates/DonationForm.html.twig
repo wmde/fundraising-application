@@ -115,6 +115,14 @@
                         stateKey: 'formContent.paymentType'
                     },
                     {
+                        viewHandler: WMDE.View.createElementVisibilityHandler( $( '#finishFormSubmit2' ), /^MCP|PPL|UEB/ ),
+                        stateKey: 'formContent.paymentType'
+                    },
+                    {
+                        viewHandler: WMDE.View.createElementVisibilityHandler( $( '#continueFormSubmit2' ), 'BEZ' ),
+                        stateKey: 'formContent.paymentType'
+                    },
+                    {
                         viewHandler: WMDE.View.createElementSlideAnimationHandler( $( '.slide-sepa' ), 'sepa' ),
                         stateKey: 'formContent.debitType'
                     },

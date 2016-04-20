@@ -18,7 +18,7 @@ function createTestAnimator() {
 test( 'When state matches value for showing, element is shown', function ( t ) {
 	var animator = createTestAnimator(),
 		showValue = '4711',
-		handler = createElementCustomVisibilityHandler( sinon.stub(), showValue, animator );
+		handler = createElementCustomVisibilityHandler( showValue, animator );
 
 	handler.update( '4711' );
 
@@ -29,7 +29,7 @@ test( 'When state matches value for showing, element is shown', function ( t ) {
 test( 'Given a matching regular expression as value for showing, element is shown', function ( t ) {
 	var animator = createTestAnimator(),
 		showValue = /^.711$/,
-		handler = createElementCustomVisibilityHandler( sinon.stub(), showValue, animator );
+		handler = createElementCustomVisibilityHandler( showValue, animator );
 
 	handler.update( '4711' );
 
@@ -40,7 +40,7 @@ test( 'Given a matching regular expression as value for showing, element is show
 test( 'When state matches value for showing and element is already showing, element does not change', function ( t ) {
 	var animator = createTestAnimator(),
 		showValue = '4711',
-		handler = createElementCustomVisibilityHandler( sinon.stub(), showValue, animator );
+		handler = createElementCustomVisibilityHandler( showValue, animator );
 
 	handler.update( '4711' );
 	handler.update( '4711' );
@@ -52,7 +52,7 @@ test( 'When state matches value for showing and element is already showing, elem
 test( 'When state does not match value for showing, element is hidden', function ( t ) {
 	var animator = createTestAnimator(),
 		showValue = '4711',
-		handler = createElementCustomVisibilityHandler( sinon.stub(), showValue, animator );
+		handler = createElementCustomVisibilityHandler( showValue, animator );
 
 	handler.update( '47' );
 
@@ -63,7 +63,7 @@ test( 'When state does not match value for showing, element is hidden', function
 test( 'When state matches value for hiding and element is already hidden, element does not change', function ( t ) {
 	var animator = createTestAnimator(),
 		showValue = '4711',
-		handler = createElementCustomVisibilityHandler( sinon.stub(), showValue, animator );
+		handler = createElementCustomVisibilityHandler( showValue, animator );
 
 	handler.update( '47' );
 	handler.update( '47' );
