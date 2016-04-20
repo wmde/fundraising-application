@@ -4,7 +4,8 @@ var test = require( 'tape' ),
 	sinon = require( 'sinon' ),
 	visibilitySwitching = require( '../../lib/view_handler/element_visibility_switcher' ),
 	createElementCustomVisibilityHandler = visibilitySwitching.createElementCustomVisibilityHandler,
-	createElementSlideAnimationHandler = visibilitySwitching.createElementSlideAnimationHandler
+	createElementSlideAnimationHandler = visibilitySwitching.createElementSlideAnimationHandler,
+	createElementVisibilityHandler = visibilitySwitching.createElementVisibilityHandler
 	;
 
 function createTestAnimator() {
@@ -96,5 +97,31 @@ test( 'When state does not match value for showing, element slides up', function
 	handler.update( '23' );
 
 	t.ok( element.slideUp.calledOnce, 'slideUp was called once' );
+	t.end();
+} );
+
+test( 'Given a slide animation, When element is shown, element is shown', function ( t ) {
+	var element = {
+			show: sinon.stub().returnsThis()
+		},
+		showValue = '4711',
+		handler = createElementVisibilityHandler( element, showValue );
+
+	handler.update( showValue );
+
+	t.ok( element.show.calledOnce, 'show was called once' );
+	t.end();
+} );
+
+test( 'When state does not match value for showing, element is hidden', function ( t ) {
+	var element = {
+			hide: sinon.stub().returnsThis()
+		},
+		showValue = '4711',
+		handler = createElementVisibilityHandler( element, showValue );
+
+	handler.update( '23' );
+
+	t.ok( element.hide.calledOnce, 'hide was called once' );
 	t.end();
 } );

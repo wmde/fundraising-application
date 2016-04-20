@@ -2,6 +2,10 @@
 
 var objectAssign = require( 'object-assign' ),
 
+	/**
+	 * View Handler for showing and hiding elements if the update value matches a regular expression
+	 * @class
+	 */
 	VisibilitySwitcher = {
 		showOnValueMatchRegex: null,
 		animator: null,
@@ -25,10 +29,6 @@ var objectAssign = require( 'object-assign' ),
 		}
 	},
 
-	/**
-	 * View Handler for showing and hiding elements if the update value matches a regular expression
-	 * @class
-	 */
 	ElementSlideAnimator = {
 		el: null,
 
@@ -51,6 +51,17 @@ var objectAssign = require( 'object-assign' ),
 					{ queue: false, duration: this.slideSpeed }
 				);
 		}
+	},
+
+	ElementHideAnimator = {
+		el: null,
+
+		showElement: function () {
+			this.el.show();
+		},
+		hideElement: function () {
+			this.el.hide();
+		}
 	};
 
 function createRegexIfNeeded( showOnValue  ) {
@@ -58,6 +69,16 @@ function createRegexIfNeeded( showOnValue  ) {
 		showOnValue = new RegExp( '^' + showOnValue + '$' );
 	}
 	return showOnValue;
+}
+
+function createElementCustomVisibilityHandler( element, showOnValue, animator ) {
+	return objectAssign(
+		Object.create( VisibilitySwitcher ),
+		{
+			showOnValueMatchRegex: createRegexIfNeeded( showOnValue ),
+			animator: animator
+		}
+	);
 }
 
 module.exports = {
@@ -68,24 +89,16 @@ module.exports = {
 	 * @return {ElementSlideAnimator}
 	 */
 	createElementSlideAnimationHandler: function ( element, showOnValue ) {
-		return objectAssign(
-			Object.create( VisibilitySwitcher ),
-			{
-				showOnValueMatchRegex: createRegexIfNeeded( showOnValue ),
-				animator:  objectAssign(
-					Object.create( ElementSlideAnimator ),
-					{ el: element }
-				)
-			}
-		);
+		return createElementCustomVisibilityHandler( element, showOnValue, objectAssign(
+			Object.create( ElementSlideAnimator ),
+			{ el: element }
+		) );
 	},
-	createElementCustomVisibilityHandler: function ( element, showOnValue, animator ) {
-		return objectAssign(
-			Object.create( VisibilitySwitcher ),
-			{
-				showOnValueMatchRegex: createRegexIfNeeded( showOnValue ),
-				animator:  animator
-			}
-		);
-	}
+	createElementVisibilityHandler: function ( element, showOnValue ) {
+		return createElementCustomVisibilityHandler( element, showOnValue, objectAssign(
+			Object.create( ElementHideAnimator ),
+			{ el: element }
+		) );
+	},
+	createElementCustomVisibilityHandler: createElementCustomVisibilityHandler
 };
