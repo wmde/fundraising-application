@@ -19,7 +19,6 @@ class McpCreditCardServiceTest extends \PHPUnit_Framework_TestCase {
 	const TEST_MODE = 1;
 	const CARD_NUMBER = '4111111111111111';
 	const CARD_CVC2 = '666';
-	const CUSTOMER_ID = '3df81b041b2afb7b0eceb08b04e926b5';
 	const CARD_EXPIRY_MONTH = '11';
 	const CARD_EXPIRY_YEAR = '2020';
 
@@ -29,24 +28,27 @@ class McpCreditCardServiceTest extends \PHPUnit_Framework_TestCase {
 	private $accessKey;
 	private $projectId;
 
+	private $customerId;
+
 	public function setUp() {
 		$config = TestEnvironment::newInstance( [] )->getConfig();
 		$this->accessKey = $config['creditcard']['access-key'];
 		$this->projectId = $config['creditcard']['project-id'];
 
 		$emailAddress = 'test.this@email.address';
-		$this->customerId = md5( $emailAddress );
+		$random = bin2hex( random_bytes( 16 ) );
+		$this->customerId = md5( $emailAddress . $random );
 		$firstName = 'Karl-Walter';
 		$lastName = 'Musterhans';
 
 		$this->dispatcher = $this->newDispatcher();
 
 		$this->dispatcher->customerCreate(
-			$this->accessKey, self::TEST_MODE, self::CUSTOMER_ID, null, $firstName, $lastName
+			$this->accessKey, self::TEST_MODE, $this->customerId, null, $firstName, $lastName
 		);
 
 		$this->dispatcher->creditcardDataSet(
-			$this->accessKey, self::TEST_MODE, self::CUSTOMER_ID, self::CARD_NUMBER, self::CARD_EXPIRY_YEAR, self::CARD_EXPIRY_MONTH
+			$this->accessKey, self::TEST_MODE, $this->customerId, self::CARD_NUMBER, self::CARD_EXPIRY_YEAR, self::CARD_EXPIRY_MONTH
 		);
 
 		$sessionId = $this->createSession( 250, 'EUR', 'My Title', 'My Pay Text', '127.0.0.1' );
@@ -55,19 +57,15 @@ class McpCreditCardServiceTest extends \PHPUnit_Framework_TestCase {
 
 	private function createSession( $amountInCents, $currencyCode, $title, $payText, $localIpAddress ): string {
 		$result = $this->dispatcher->sessionCreate(
-			$this->accessKey, self::TEST_MODE, self::CUSTOMER_ID, null, $this->projectId, null, null, null, $amountInCents,
+			$this->accessKey, self::TEST_MODE, $this->customerId, null, $this->projectId, null, null, null, $amountInCents,
 			$currencyCode, $title, $payText, $localIpAddress, false
 		);
 		return $result['sessionId'];
 	}
 
-	public function tearDown() {
-		$this->dispatcher->resetTest( $this->accessKey, self::TEST_MODE );
-	}
-
 	public function testGivenValidCustomerId_expirationDateIsRetrieved() {
 		$service = new McpCreditCardService( $this->dispatcher, $this->accessKey, true );
-		$creditCardInfo = $service->getExpirationDate( self::CUSTOMER_ID );
+		$creditCardInfo = $service->getExpirationDate( $this->customerId );
 		$this->assertSame( (int)self::CARD_EXPIRY_MONTH, $creditCardInfo->getMonth() );
 		$this->assertSame( (int)self::CARD_EXPIRY_YEAR, $creditCardInfo->getYear() );
 	}
