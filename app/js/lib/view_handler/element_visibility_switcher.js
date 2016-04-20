@@ -29,7 +29,7 @@ var objectAssign = require( 'object-assign' ),
 		}
 	},
 
-	ElementSlideAnimator = {
+	SlidingElementAnimator = {
 		el: null,
 
 		// internal fields
@@ -53,7 +53,7 @@ var objectAssign = require( 'object-assign' ),
 		}
 	},
 
-	ElementHideAnimator = {
+	SimpleElementAnimator = {
 		el: null,
 
 		showElement: function () {
@@ -77,7 +77,7 @@ function createRegexIfNeeded( showOnValue  ) {
  * @param {Object} animator Object with showElement and hideElement methods
  * @return {VisibilitySwitcher}
  */
-function createElementCustomVisibilityHandler( showOnValue, animator ) {
+function createCustomVisibilityHandler( showOnValue, animator ) {
 	return objectAssign(
 		Object.create( VisibilitySwitcher ),
 		{
@@ -94,9 +94,9 @@ module.exports = {
 	 * @param {string|RegExp} showOnValue - Show element if the value is equal to the string or matches the regex
 	 * @return {VisibilitySwitcher}
 	 */
-	createElementSlideAnimationHandler: function ( element, showOnValue ) {
-		return createElementCustomVisibilityHandler( showOnValue, objectAssign(
-			Object.create( ElementSlideAnimator ),
+	createSlidingVisibilityHandler: function ( element, showOnValue ) {
+		return createCustomVisibilityHandler( showOnValue, objectAssign(
+			Object.create( SlidingElementAnimator ),
 			{ el: element }
 		) );
 	},
@@ -107,12 +107,12 @@ module.exports = {
 	 * @param {string|RegExp} showOnValue - Show element if the value is equal to the string or matches the regex
 	 * @return {VisibilitySwitcher}
 	 */
-	createElementVisibilityHandler: function ( element, showOnValue ) {
-		return createElementCustomVisibilityHandler( showOnValue, objectAssign(
-			Object.create( ElementHideAnimator ),
+	createSimpleVisibilityHandler: function ( element, showOnValue ) {
+		return createCustomVisibilityHandler( showOnValue, objectAssign(
+			Object.create( SimpleElementAnimator ),
 			{ el: element }
 		) );
 	},
 
-	createElementCustomVisibilityHandler: createElementCustomVisibilityHandler
+	createCustomVisibilityHandler: createCustomVisibilityHandler
 };

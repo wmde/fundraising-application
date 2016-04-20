@@ -10,8 +10,8 @@ module.exports = {
 	StoreUpdates: require( './lib/store_update_handling' ),
 	View: {
 		createClearAmountHandler: require( './lib/view_handler/clear_amount' ).createHandler,
-		createElementSlideAnimationHandler: require( './lib/view_handler/element_visibility_switcher' ).createElementSlideAnimationHandler,
-		createElementVisibilityHandler: require( './lib/view_handler/element_visibility_switcher' ).createElementVisibilityHandler,
+		createSlidingVisibilityHandler: require( './lib/view_handler/element_visibility_switcher' ).createSlidingVisibilityHandler,
+		createSimpleVisibilityHandler: require( './lib/view_handler/element_visibility_switcher' ).createSimpleVisibilityHandler,
 		createErrorBoxHandler:  require( './lib/view_handler/error_box' ).createHandler,
 		createFormPageVisibilityHandler: require( './lib/view_handler/form_page_visibility' ).createHandler
 	},
