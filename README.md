@@ -51,16 +51,16 @@ PHPUnit. Consult the `require-dev` section of `composer.json` for up to date inf
 If JavaScript files where changed, you will first need to run
 
     npm run build-js
-    
+
 If you are working on the JavaScript files and need automatic recompilation when a files changes, then run
 
     npm run watch-js
 
 If you want to debug problems in the Redux data flow, set the following variable in the shell environment:
-  
+
     export REDUX_LOG=on
 
-Actions and their resulting state will be logged. 
+Actions and their resulting state will be logged.
 
 ## Profiling
 
@@ -95,8 +95,9 @@ When accessing the API via `web/index.dev.php`, profiling information will be ge
 * `tests/`: tests mirror the directory and namespace structure of the production code
 	* `Unit/`: small isolated tests (one class or a small number of related classes)
 	* `Integration/`: tests combining several units
-	* `System/`: edge-to-edge tests
-	* `Fixtures/`: test stubs and spies
+	* `EdgeToEdge/`: edge-to-edge tests (fake HTTP requests to the framework)
+	* `System/`: tests involving outside systems (ie, beyond our PHP app and database)
+	* `Fixtures/`: test doubles (stubs, spies and mocks)
 	* `TestEnvironment.php`: encapsulates application setup for integration and system tests
 * `var/`: Ephemeral application data
     * `logs`: Log files (in debug mode, every request creates a log file)
