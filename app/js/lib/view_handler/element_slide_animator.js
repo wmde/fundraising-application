@@ -2,50 +2,55 @@
 
 var objectAssign = require( 'object-assign' ),
 
+	VisibilitySwitcher = {
+		showOnValueMatchRegex: null,
+		animator: null,
+
+		isHidden: null, // Null to always trigger show/hide on first call to update
+
+		update: function ( value ) {
+			if ( this.showOnValueMatchRegex.test( value ) ) {
+				if ( this.isHidden === false ) {
+					return;
+				}
+				this.animator.showElement();
+				this.isHidden = false;
+			} else {
+				if ( this.isHidden === true ) {
+					return;
+				}
+				this.animator.hideElement();
+				this.isHidden = true;
+			}
+		}
+	},
+	
 	/**
 	 * View Handler for showing and hiding elements if the update value matches a regular expression
 	 * @class
 	 */
 	ElementSlideAnimator = {
 		el: null,
-		showOnValueMatchRegex: null,
 
 		// internal fields
 		slideSpeed: 600,
-		isHidden: null, // Null to always trigger show/hide on first call to update
 
-		update: function ( value ) {
-			if ( this.showOnValueMatchRegex.test( value ) ) {
-				this.showElement();
-			} else {
-				this.hideElement();
-			}
-		},
 		showElement: function () {
-			if ( this.isHidden === false ) {
-				return;
-			}
 			this.el
 				.slideDown( this.slideSpeed )
 				.animate(
 					{ opacity: 1 },
 					{ queue: false, duration: this.slideSpeed }
 				);
-			this.isHidden = false;
 		},
 		hideElement: function () {
-			if ( this.isHidden === true ) {
-				return;
-			}
 			this.el
 				.slideUp( this.slideSpeed )
 				.animate(
 					{ opacity: 0 },
 					{ queue: false, duration: this.slideSpeed }
 				);
-			this.isHidden = true;
 		}
-
 	};
 
 module.exports = {
@@ -59,9 +64,15 @@ module.exports = {
 		if ( !( showOnValue instanceof RegExp ) ) {
 			showOnValue = new RegExp( '^' + showOnValue + '$' );
 		}
-		return objectAssign( Object.create( ElementSlideAnimator ), {
-			el: element,
-			showOnValueMatchRegex: showOnValue
-		} );
+		return objectAssign(
+			Object.create( VisibilitySwitcher ),
+			{
+				showOnValueMatchRegex: showOnValue,
+				animator:  objectAssign(
+					Object.create( ElementSlideAnimator ),
+					{ el: element }
+				)
+			}
+		);
 	}
 };
