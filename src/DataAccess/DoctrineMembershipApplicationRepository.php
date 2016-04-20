@@ -34,11 +34,11 @@ class DoctrineMembershipApplicationRepository implements MembershipApplicationRe
 	}
 
 	public function storeApplication( MembershipApplication $application ) {
-		if ( $application->getId() === null ) {
-			$this->insertApplication( $application );
+		if ( $application->hasId() ) {
+			$this->updateApplication( $application );
 		}
 		else {
-			$this->updateApplication( $application );
+			$this->insertApplication( $application );
 		}
 	}
 
