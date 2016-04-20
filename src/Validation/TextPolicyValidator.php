@@ -130,6 +130,7 @@ class TextPolicyValidator {
 	}
 
 	private function isExistingDomain( string $host ): bool {
+		// FIXME: this should be factored out as it depends on internets
 		return checkdnsrr( $host, 'A' );
 	}
 
