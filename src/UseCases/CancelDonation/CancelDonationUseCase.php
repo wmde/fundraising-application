@@ -81,6 +81,8 @@ class CancelDonationUseCase {
 	private function getConfirmationMailTemplateArguments( Donation $donation ): array {
 		return [
 			'donationId' => $donation->getId(),
+
+			// FIXME: this should be in the presenter or template
 			'salutation' => ( new GreetingGenerator() )->createGreeting(
 				$donation->getDonor()->getPersonName()->getLastName(),
 				$donation->getDonor()->getPersonName()->getSalutation(),

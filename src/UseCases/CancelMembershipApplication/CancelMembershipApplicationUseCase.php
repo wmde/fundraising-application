@@ -80,6 +80,8 @@ class CancelMembershipApplicationUseCase {
 	private function getConfirmationMailTemplateArguments( MembershipApplication $application ): array {
 		return [
 			'applicationId' => $application->getId(),
+
+			// FIXME: this should be in the presenter or template
 			'salutation' => ( new GreetingGenerator() )->createGreeting(
 				$application->getApplicant()->getPersonName()->getLastName(),
 				$application->getApplicant()->getPersonName()->getSalutation(),
