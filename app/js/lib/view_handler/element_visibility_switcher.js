@@ -71,6 +71,12 @@ function createRegexIfNeeded( showOnValue  ) {
 	return showOnValue;
 }
 
+/**
+ *
+ * @param {string|RegExp} showOnValue - Show element if the value is equal to the string or matches the regex
+ * @param {Object} animator Object with showElement and hideElement methods
+ * @return {VisibilitySwitcher}
+ */
 function createElementCustomVisibilityHandler( showOnValue, animator ) {
 	return objectAssign(
 		Object.create( VisibilitySwitcher ),
@@ -86,7 +92,7 @@ module.exports = {
 	 *
 	 * @param {jQuery} element
 	 * @param {string|RegExp} showOnValue - Show element if the value is equal to the string or matches the regex
-	 * @return {ElementSlideAnimator}
+	 * @return {VisibilitySwitcher}
 	 */
 	createElementSlideAnimationHandler: function ( element, showOnValue ) {
 		return createElementCustomVisibilityHandler( showOnValue, objectAssign(
@@ -94,11 +100,19 @@ module.exports = {
 			{ el: element }
 		) );
 	},
+
+	/**
+	 *
+	 * @param {jQuery} element
+	 * @param {string|RegExp} showOnValue - Show element if the value is equal to the string or matches the regex
+	 * @return {VisibilitySwitcher}
+	 */
 	createElementVisibilityHandler: function ( element, showOnValue ) {
 		return createElementCustomVisibilityHandler( showOnValue, objectAssign(
 			Object.create( ElementHideAnimator ),
 			{ el: element }
 		) );
 	},
+
 	createElementCustomVisibilityHandler: createElementCustomVisibilityHandler
 };
