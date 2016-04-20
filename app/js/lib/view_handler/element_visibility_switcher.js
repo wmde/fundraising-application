@@ -29,9 +29,17 @@ var objectAssign = require( 'object-assign' ),
 		}
 	},
 
-	SlidingElementAnimator = {
+	ElementAnimator = {
 		el: null,
+		showElement: function () {
+			throw new Error( 'This is an abstract class!' );
+		},
+		hideElement: function () {
+			throw new Error( 'This is an abstract class!' );
+		}
+	},
 
+	SlidingElementAnimator = objectAssign( Object.create( ElementAnimator ), {
 		// internal fields
 		slideSpeed: 600,
 
@@ -51,18 +59,16 @@ var objectAssign = require( 'object-assign' ),
 					{ queue: false, duration: this.slideSpeed }
 				);
 		}
-	},
+	} ),
 
-	SimpleElementAnimator = {
-		el: null,
-
+	SimpleElementAnimator = objectAssign( Object.create( ElementAnimator ), {
 		showElement: function () {
 			this.el.show();
 		},
 		hideElement: function () {
 			this.el.hide();
 		}
-	};
+	} );
 
 function createRegexIfNeeded( showOnValue  ) {
 	if ( !( showOnValue instanceof RegExp ) ) {
@@ -74,7 +80,7 @@ function createRegexIfNeeded( showOnValue  ) {
 /**
  *
  * @param {string|RegExp} showOnValue - Show element if the value is equal to the string or matches the regex
- * @param {Object} animator Object with showElement and hideElement methods
+ * @param {ElementAnimator} animator
  * @return {VisibilitySwitcher}
  */
 function createCustomVisibilitySwitcher( showOnValue, animator ) {
@@ -114,5 +120,7 @@ module.exports = {
 		) );
 	},
 
-	createCustomVisibilitySwitcher: createCustomVisibilitySwitcher
+	createCustomVisibilitySwitcher: createCustomVisibilitySwitcher,
+
+	ElementAnimator: ElementAnimator
 };
