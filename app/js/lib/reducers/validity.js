@@ -3,8 +3,8 @@
 var objectAssign = require( 'object-assign' ),
 
 	defaultState = {
-		amount: null
-		// TODO: Add different fields like address and email
+		amount: null,
+		address: null
 	};
 
 /**
@@ -33,6 +33,8 @@ function validity( state, action ) {
 	switch ( action.type ) {
 		case 'FINISH_AMOUNT_VALIDATION':
 			return objectAssign( {}, state, { amount: convertExternalResult( action ) } );
+		case 'FINISH_ADDRESS_VALIDATION':
+			return objectAssign( {}, state, { address: convertExternalResult( action ) } );
 		default:
 			return state;
 	}

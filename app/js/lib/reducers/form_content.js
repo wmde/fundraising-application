@@ -8,7 +8,17 @@ var objectAssign = require( 'object-assign' ),
 		paymentType: 'BEZ',
 		paymentPeriodInMonths: 0, // 0, 1, 3, 6 or 12, 0 = non-recurring payment
 		debitType: 'sepa', // sepa and "non-sepa"
-		addressType: 'person' // person, firma and anonym
+		addressType: 'person', // person, firma and anonym
+		salutation: 'Frau',
+		title: '',
+		firstName: '',
+		lastName: '',
+		company: '',
+		street: '',
+		postcode: '',
+		city: '',
+		country: 'DE',
+		email: ''
 	};
 
 /**
@@ -23,6 +33,32 @@ function getInvalidKeys( state ) {
 
 function stateContainsUnknownKeys( state ) {
 	return !_.isEmpty( getInvalidKeys( state ) );
+}
+
+function clearFieldsIfAddressTypeChanges( newState, payload ) {
+	if ( payload.contentName !== 'addressType'  ) {
+		return;
+	}
+	switch ( payload.value ) {
+		case 'person':
+			newState.company = '';
+			break;
+		case 'firma':
+			newState.title = '';
+			newState.firstName = '';
+			newState.lastName = '';
+			break;
+		case 'anonym':
+			newState.title = '';
+			newState.company = '';
+			newState.firstName = '';
+			newState.lastName = '';
+			newState.street = '';
+			newState.postcode = '';
+			newState.city = '';
+			newState.email = '';
+			break;
+	}
 }
 
 module.exports = function formContent( state, action ) {
@@ -47,6 +83,7 @@ module.exports = function formContent( state, action ) {
 				throw new Error( 'Unsupported form content name: ' + action.payload.contentName );
 			}
 			newState = _.clone( state );
+			clearFieldsIfAddressTypeChanges( newState, action.payload );
 			newState[ action.payload.contentName ] = action.payload.value;
 			return newState;
 		case 'INITIALIZE_CONTENT':

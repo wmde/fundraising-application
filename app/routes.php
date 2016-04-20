@@ -66,7 +66,7 @@ $app->post(
 		$routeHandler = new class() {
 
 			public function handle( FunFunFactory $ffFactory, Application $app, Request $request ) {
-				if ( $request->get( 'adresstyp', '' ) === 'anonym' ) {
+				if ( $request->get( 'adressType', '' ) === 'anonym' ) {
 					return $app->json( [ 'status' => 'OK' ] );
 				}
 
@@ -96,23 +96,23 @@ $app->post(
 			private function getPhysicalAddressFromRequest( Request $request ): PhysicalAddress {
 				$address = new PhysicalAddress();
 
-				$address->setStreetAddress( $request->get( 'strasse', '' ) );
-				$address->setPostalCode( $request->get( 'plz', '' ) );
-				$address->setCity( $request->get( 'ort', '' ) );
+				$address->setStreetAddress( $request->get( 'street', '' ) );
+				$address->setPostalCode( $request->get( 'postcode', '' ) );
+				$address->setCity( $request->get( 'city', '' ) );
 				$address->setCountryCode( $request->get( 'country', '' ) );
 
 				return $address->freeze()->assertNoNullFields();
 			}
 
 			private function getNameFromRequest( Request $request ): PersonName {
-				$name = $request->get( 'adresstyp', '' ) === 'firma'
+				$name = $request->get( 'addressType', '' ) === 'firma'
 					? PersonName::newCompanyName() : PersonName::newPrivatePersonName();
 
-				$name->setSalutation( $request->get( 'anrede', '' ) );
-				$name->setTitle( $request->get( 'titel', '' ) );
-				$name->setCompanyName( $request->get( 'firma', '' ) );
-				$name->setFirstName( $request->get( 'vorname', '' ) );
-				$name->setLastName( $request->get( 'nachname', '' ) );
+				$name->setSalutation( $request->get( 'salutation', '' ) );
+				$name->setTitle( $request->get( 'title', '' ) );
+				$name->setCompanyName( $request->get( 'company', '' ) );
+				$name->setFirstName( $request->get( 'firstName', '' ) );
+				$name->setLastName( $request->get( 'lastName', '' ) );
 
 				return $name->freeze()->assertNoNullFields();
 			}

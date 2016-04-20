@@ -32,9 +32,9 @@ class PersonNameValidatorTest extends ValidatorTestCase {
 		$personName = PersonName::newPrivatePersonName();
 
 		$result = $validator->validate( $personName );
-		$this->assertConstraintWasViolated( $result, 'anrede' );
-		$this->assertConstraintWasViolated( $result, 'vorname' );
-		$this->assertConstraintWasViolated( $result, 'nachname' );
+		$this->assertConstraintWasViolated( $result, 'salutation' );
+		$this->assertConstraintWasViolated( $result, 'firstName' );
+		$this->assertConstraintWasViolated( $result, 'lastName' );
 	}
 
 	public function testGivenValidCompanyName_validationSucceeds() {
@@ -50,7 +50,7 @@ class PersonNameValidatorTest extends ValidatorTestCase {
 
 		$this->assertConstraintWasViolated(
 			$validator->validate( PersonName::newCompanyName() ),
-			'firma'
+			'company'
 		);
 	}
 

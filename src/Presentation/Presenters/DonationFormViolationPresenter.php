@@ -65,20 +65,20 @@ class DonationFormViolationPresenter {
 
 	private function getPersonName( PersonName $personName ) {
 		return [
-			'adresstyp' => $personName->getPersonType(),
-			'anrede' => $personName->getSalutation(),
-			'titel' => $personName->getTitle(),
-			'firma' => $personName->getCompanyName(),
-			'vorname' => $personName->getFirstName(),
-			'nachname' => $personName->getLastName(),
+			'addressType' => $personName->getPersonType(),
+			'salutation' => $personName->getSalutation(),
+			'title' => $personName->getTitle(),
+			'company' => $personName->getCompanyName(),
+			'firstName' => $personName->getFirstName(),
+			'lastName' => $personName->getLastName(),
 		];
 	}
 
 	private function getPhysicalAddress( PhysicalAddress $address ) {
 		return [
-			'strasse' => $address->getStreetAddress(),
-			'plz' => $address->getPostalCode(),
-			'ort' => $address->getCity(),
+			'street' => $address->getStreetAddress(),
+			'postcode' => $address->getPostalCode(),
+			'city' => $address->getCity(),
 			'country' => $address->getCountryCode(),
 		];
 	}

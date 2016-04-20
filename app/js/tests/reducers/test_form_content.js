@@ -50,6 +50,56 @@ test( 'CHANGE_CONTENT throws an error if the field name is not allowed', functio
 	t.end();
 } );
 
+test( 'When CHANGE_CONTENT sets address type to private, company name is cleared', function ( t ) {
+	var stateBefore = { company: 'Globex Corp', addressType: 'firma' },
+		expectedState = { company: '', addressType: 'person' },
+		action = { type: 'CHANGE_CONTENT', payload: { value: 'person', contentName: 'addressType' } };
+
+	deepFreeze( stateBefore );
+	t.deepEqual( formContent( stateBefore, action ), expectedState );
+	t.end();
+} );
+
+test( 'When CHANGE_CONTENT sets address type to company, names are cleared', function ( t ) {
+	var stateBefore = { title: 'Dr.', firstName: 'Hank', lastName: 'Scorpio', addressType: 'privat' },
+		expectedState = { title: '', firstName: '', lastName: '', addressType: 'firma' },
+		action = { type: 'CHANGE_CONTENT', payload: { value: 'firma', contentName: 'addressType' } };
+
+	deepFreeze( stateBefore );
+	t.deepEqual( formContent( stateBefore, action ), expectedState );
+	t.end();
+} );
+
+test( 'When CHANGE_CONTENT sets address type to anonymous, all personal data fields are cleared', function ( t ) {
+	var stateBefore = {
+			company: '',
+			title: 'Dr.',
+			firstName: 'Hank',
+			lastName: 'Scorpio',
+			street: 'Hammock District',
+			postcode: '12345',
+			city: 'Cypress Creek',
+			addressType: 'person',
+			email: 'hank@globex.com'
+		},
+		expectedState = {
+			company: '',
+			title: '',
+			firstName: '',
+			lastName: '',
+			street: '',
+			postcode: '',
+			city: '',
+			addressType: 'anonym',
+			email: ''
+		},
+		action = { type: 'CHANGE_CONTENT', payload: { value: 'anonym', contentName: 'addressType' } };
+
+	deepFreeze( stateBefore );
+	t.deepEqual( formContent( stateBefore, action ), expectedState );
+	t.end();
+} );
+
 test( 'INITIALIZE_CONTENT changes multiple fields', function ( t ) {
 	var stateBefore = { paymentType: 'PPL', amount: 0, recurringPayment: 0 },
 		expectedState = { paymentType: 'BEZ', amount: '25,00', recurringPayment: 0 },

@@ -87,7 +87,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 
 		$personalInfoValidator = $this->getMockBuilder( PersonalInfoValidator::class )->disableOriginalConstructor()->getMock();
 		$personalInfoValidator->method( 'validate' )
-			->willReturn( new ValidationResult( new ConstraintViolation( '', 'Name missing', 'firma' ) ) );
+			->willReturn( new ValidationResult( new ConstraintViolation( '', 'Name missing', 'company' ) ) );
 
 		$donationValidator = new DonationValidator(
 			new AmountValidator( 1 ),
@@ -100,7 +100,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 
 		$this->assertFalse( $donationValidator->validate( $donation )->isSuccessful() );
 
-		$this->assertConstraintWasViolated( $donationValidator->validate( $donation ), 'firma' );
+		$this->assertConstraintWasViolated( $donationValidator->validate( $donation ), 'company' );
 	}
 
 	public function testGivenBadWords_needsModerationReturnsTrue() {

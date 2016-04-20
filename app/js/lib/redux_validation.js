@@ -10,9 +10,9 @@ var objectAssign = require( 'object-assign' ),
 
 	/**
 	 * The dispatcher checks the form content for fields given in the `fields` property.
-	 * If they have changed (compared to their equavalent in the `previousFieldValues` property),
+	 * If they have changed (compared to their equivalent in the `previousFieldValues` property),
 	 * the `validationFunction` is called with an object with the selected fields.
-	 * The validation result is then sent to the store via the `actionCreationFunction`.
+	 * If the validation result is not null, it is sent to the store via the `actionCreationFunction`.
 	 *
 	 * @class ValidationDispatcher
 	 */
@@ -22,6 +22,12 @@ var objectAssign = require( 'object-assign' ),
 		fields: null,
 		previousFieldValues: {},
 
+		/**
+		 *
+		 * @param {Object} formValues
+		 * @param {Store} store
+		 * @returns {*} Action object or null
+		 */
 		dispatchIfChanged: function ( formValues, store ) {
 			var selectedValues = _.pick( formValues, this.fields ),
 				validationResult;
@@ -32,6 +38,9 @@ var objectAssign = require( 'object-assign' ),
 
 			this.previousFieldValues = selectedValues;
 			validationResult = this.validationFunction( selectedValues );
+			if ( validationResult === null ) {
+				return;
+			}
 			return store.dispatch( this.actionCreationFunction( validationResult ) );
 		}
 	},

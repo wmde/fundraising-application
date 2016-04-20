@@ -39,7 +39,17 @@
                 WMDE.Components.createRadioComponent( store, $( '.interval-type-select' ), 'paymentPeriodInMonths' ),
                 WMDE.Components.createRadioComponent( store, $( '.payment-period-select' ), 'paymentPeriodInMonths' ),
                 WMDE.Components.createRadioComponent( store, $( '.debit-type-select' ), 'debitType' ),
-                WMDE.Components.createRadioComponent( store, $( '.address-type-select' ), 'addressType' )
+                WMDE.Components.createRadioComponent( store, $( '.address-type-select' ), 'addressType' ),
+                WMDE.Components.createRadioComponent( store, $( '.salutation' ), 'salutation' ),
+                WMDE.Components.createRadioComponent( store, $( '.personal-title' ), 'title' ),
+                WMDE.Components.createTextComponent( store, $( '#first-name' ), 'firstName' ),
+                WMDE.Components.createTextComponent( store, $( '#last-name' ), 'lastName' ),
+                WMDE.Components.createTextComponent( store, $( '#company-name' ), 'companyName' ),
+                WMDE.Components.createTextComponent( store, $( '#street' ), 'street' ),
+                WMDE.Components.createTextComponent( store, $( '#post-code' ), 'postcode' ),
+                WMDE.Components.createTextComponent( store, $( '#city' ), 'city' ),
+                WMDE.Components.createRadioComponent( store, $( '#country' ), 'country' ),
+                WMDE.Components.createTextComponent( store, $( '#email' ), 'email' )
             ],
             store
         );
@@ -52,7 +62,13 @@
                             actions.newFinishAmountValidationAction,
                             [ 'amount', 'paymentType' ],
                             initialValues
-                    )
+                    ),
+                    WMDE.ReduxValidation.createValidationDispatcher(
+                            WMDE.FormValidation.createAddressValidator( '{$ basepath $}/validate-address' ),
+                            actions.newFinishAddressValidationAction,
+                            [ 'salutation', 'title', 'firstName', 'lastName', 'companyName', 'street', 'postcode', 'city', 'country', 'email' ],
+                            initialValues
+                    ),
                 ];
             },
             store,
@@ -75,7 +91,19 @@
                         stateKey: 'formContent'
                     },
                     {
-                        viewHandler: WMDE.View.createErrorBoxHandler( $( '#validation-errors' ), { amount: 'Betrag' } ),
+                        viewHandler: WMDE.View.createErrorBoxHandler( $( '#validation-errors' ), {
+                            amount: 'Betrag',
+                            salutation: 'Anrede',
+                            title: 'Titel',
+                            firstName: 'Vorname',
+                            lastName: 'Nachname',
+                            company: 'Firma',
+                            street: 'Straße',
+                            postcode: 'PLZ',
+                            city: 'Ort',
+                            country: 'DE',
+                            email: 'E-Mail'
+                        } ),
                         stateKey: 'validationMessages'
                     },
                     {
@@ -140,6 +168,7 @@
         } );
 
         $( '#donation-submit1 button' ).click( function () {
+            // TODO check if page is valid
             store.dispatch( actions.newNextPageAction() );
         } );
 

@@ -37,9 +37,9 @@ class PhysicalAddressValidatorTest extends ValidatorTestCase {
 		$validator = new PhysicalAddressValidator();
 		$result = $validator->validate( new PhysicalAddress() );
 
-		$this->assertConstraintWasViolated( $result, 'strasse' );
-		$this->assertConstraintWasViolated( $result, 'plz' );
-		$this->assertConstraintWasViolated( $result, 'ort' );
+		$this->assertConstraintWasViolated( $result, 'street' );
+		$this->assertConstraintWasViolated( $result, 'postcode' );
+		$this->assertConstraintWasViolated( $result, 'city' );
 		$this->assertConstraintWasViolated( $result, 'country' );
 	}
 
