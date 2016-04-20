@@ -24,7 +24,7 @@ var objectAssign = require( 'object-assign' ),
 			}
 		}
 	},
-	
+
 	/**
 	 * View Handler for showing and hiding elements if the update value matches a regular expression
 	 * @class
@@ -53,6 +53,13 @@ var objectAssign = require( 'object-assign' ),
 		}
 	};
 
+function createRegexIfNeeded( showOnValue  ) {
+	if ( !( showOnValue instanceof RegExp ) ) {
+		showOnValue = new RegExp( '^' + showOnValue + '$' );
+	}
+	return showOnValue;
+}
+
 module.exports = {
 	/**
 	 *
@@ -60,18 +67,24 @@ module.exports = {
 	 * @param {string|RegExp} showOnValue - Show element if the value is equal to the string or matches the regex
 	 * @return {ElementSlideAnimator}
 	 */
-	createHandler: function ( element, showOnValue ) {
-		if ( !( showOnValue instanceof RegExp ) ) {
-			showOnValue = new RegExp( '^' + showOnValue + '$' );
-		}
+	createElementSlideAnimationHandler: function ( element, showOnValue ) {
 		return objectAssign(
 			Object.create( VisibilitySwitcher ),
 			{
-				showOnValueMatchRegex: showOnValue,
+				showOnValueMatchRegex: createRegexIfNeeded( showOnValue ),
 				animator:  objectAssign(
 					Object.create( ElementSlideAnimator ),
 					{ el: element }
 				)
+			}
+		);
+	},
+	createElementCustomVisibilityHandler: function ( element, showOnValue, animator ) {
+		return objectAssign(
+			Object.create( VisibilitySwitcher ),
+			{
+				showOnValueMatchRegex: createRegexIfNeeded( showOnValue ),
+				animator:  animator
 			}
 		);
 	}
