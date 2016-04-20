@@ -107,32 +107,40 @@
                         stateKey: 'validationMessages'
                     },
                     {
-                        viewHandler: WMDE.View.createElementSlideAnimationHandler( $( '.periode-2-list' ), /^(1|3|6|12)$/ ),
+                        viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.periode-2-list' ), /^(1|3|6|12)$/ ),
                         stateKey: 'formContent.paymentPeriodInMonths'
                     },
                     {
-                        viewHandler: WMDE.View.createElementSlideAnimationHandler( $( '#bank-data' ), 'BEZ' ),
+                        viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '#bank-data' ), 'BEZ' ),
                         stateKey: 'formContent.paymentType'
                     },
                     {
-                        viewHandler: WMDE.View.createElementSlideAnimationHandler( $( '.slide-sepa' ), 'sepa' ),
+                        viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '#finishFormSubmit2' ), /^MCP|PPL|UEB/ ),
+                        stateKey: 'formContent.paymentType'
+                    },
+                    {
+                        viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '#continueFormSubmit2' ), 'BEZ' ),
+                        stateKey: 'formContent.paymentType'
+                    },
+                    {
+                        viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.slide-sepa' ), 'sepa' ),
                         stateKey: 'formContent.debitType'
                     },
                     {
-                        viewHandler: WMDE.View.createElementSlideAnimationHandler( $( '.slide-non-sepa' ), 'non-sepa' ),
+                        viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.slide-non-sepa' ), 'non-sepa' ),
                         stateKey: 'formContent.debitType'
                     },
                     // Show only the right data fields for personal data
                     {
-                        viewHandler: WMDE.View.createElementSlideAnimationHandler( $( '.personal-data-person' ), 'person' ),
+                        viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.personal-data-person' ), 'person' ),
                         stateKey: 'formContent.addressType'
                     },
                     {
-                        viewHandler: WMDE.View.createElementSlideAnimationHandler( $( '.personal-data-company' ), 'firma' ),
+                        viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.personal-data-company' ), 'firma' ),
                         stateKey: 'formContent.addressType'
                     },
                     {
-                        viewHandler: WMDE.View.createElementSlideAnimationHandler( $( '.personal-data-full' ), /firma|person/ ),
+                        viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.personal-data-full' ), /firma|person/ ),
                         stateKey: 'formContent.addressType'
                     }
                 ],
