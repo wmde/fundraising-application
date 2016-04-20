@@ -4,9 +4,12 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\CancelMembershipApplication;
 
+use PHPUnit_Framework_MockObject_MockObject;
 use WMDE\Fundraising\Frontend\Domain\Model\MembershipApplication;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingMembershipAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 use WMDE\Fundraising\Frontend\UseCases\CancelMembershipApplication\CancellationRequest;
 use WMDE\Fundraising\Frontend\UseCases\CancelMembershipApplication\CancelMembershipApplicationUseCase;
@@ -85,5 +88,50 @@ class CancelMembershipApplicationUseCaseTest extends \PHPUnit_Framework_TestCase
 	private function getDoctrineApplicationById( FunFunFactory $factory, int $id ): DoctrineApplication {
 		return $factory->getEntityManager()->getRepository( DoctrineApplication::class )->find( $id );
 	}
+
+	public function testWhenApplicationGetsCancelled_cancellationConfirmationEmailIsSend() {
+		$application = $this->newCancelableApplication();
+		$repository = $this->newFactory()->getMembershipApplicationRepository();
+		$repository->storeApplication( $application );
+
+		$useCase = new CancelMembershipApplicationUseCase(
+			new SucceedingMembershipAuthorizer(),
+			$repository,
+			$this->newMailerMock( $application )
+		);
+
+		$response = $useCase->cancelApplication( new CancellationRequest( $application->getId() ) );
+
+		$this->assertTrue( $response->cancellationWasSuccessful() );
+	}
+
+	private function newMailerMock( MembershipApplication $application ): TemplateBasedMailer {
+		$mailer = $this->newMailer();
+
+		$mailer->expects( $this->once() )
+			->method( 'sendMail' )
+			->with(
+				$this->equalTo( $application->getApplicant()->getEmailAddress() ),
+				$this->callback( function( $value ) {
+					$this->assertInternalType( 'array', $value );
+					$this->assertSame( 'Sehr geehrte Damen und Herren,', $value['salutation'] );
+					$this->assertSame( 1, $value['applicationId'] );
+					return true;
+				} )
+			);
+
+		return $mailer;
+	}
+
+	/**
+	 * @return TemplateBasedMailer|PHPUnit_Framework_MockObject_MockObject
+	 */
+	private function newMailer(): TemplateBasedMailer {
+		return $this->getMockBuilder( TemplateBasedMailer::class )
+			->disableOriginalConstructor()
+			->getMock();
+	}
+
+	// TODO: test auth
 
 }
