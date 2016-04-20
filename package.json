@@ -12,7 +12,7 @@
     "watch-js": "watchify app/js/main.js -v -s WMDE -o web/res/js/wmde.js",
     "test": "tape 'app/js/tests/**/*.js' | tap-min",
     "cs": "jshint app/js && jscs app/js",
-    "ci": "npm run cs && npm run test"
+    "ci": "npm run cs && npm run test && browserify app/js/main.js -s WMDE -o /dev/null"
   },
   "repository": {
     "type": "git",
