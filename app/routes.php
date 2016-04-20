@@ -12,6 +12,7 @@ declare( strict_types = 1 );
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\AddDonationHandler;
 use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Domain\Model\Iban;
@@ -432,5 +433,13 @@ $app->post(
 		return $routeHandler->handle( $ffFactory, $app, $request );
 	}
 );
+
+$app->get( '/', function ( Application $app ) {
+
+	// TODO Move code from template to content wiki to have a page name without suffixes (/page/DonationForm)
+	$subRequest = Request::create('/page/DonationForm.html.twig', 'GET');
+
+	return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+} );
 
 return $app;
