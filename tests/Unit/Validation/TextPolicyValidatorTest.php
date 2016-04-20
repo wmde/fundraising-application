@@ -18,12 +18,26 @@ class TextPolicyValidatorTest extends \PHPUnit_Framework_TestCase {
 	 * @dataProvider urlTestProvider
 	 */
 	public function testWhenGivenCommentHasURL_validatorReturnsFalse( $commentToTest ) {
+		$this->skipIfNoInternet();
+
 		$textPolicyValidator = new TextPolicyValidator();
 
 		$this->assertFalse( $textPolicyValidator->hasHarmlessContent(
 			$commentToTest,
 			TextPolicyValidator::CHECK_URLS | TextPolicyValidator::CHECK_URLS_DNS
 		) );
+	}
+
+	private function skipIfNoInternet() {
+		static $isConnected = null;
+
+		if ( $isConnected === null ) {
+			$isConnected = (bool)@fsockopen( 'www.google.com', 80, $num, $error, 1 );
+		}
+
+		if ( !$isConnected ) {
+			$this->markTestSkipped( 'No internet connection' );
+		}
 	}
 
 	public function urlTestProvider() {
