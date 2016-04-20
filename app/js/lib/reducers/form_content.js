@@ -1,7 +1,7 @@
 'use strict';
 
 var objectAssign = require( 'object-assign' ),
-	_ = require( 'underscore' ),
+	_ = require( 'lodash' ),
 	initialState = {
 		amount: 0,
 		isCustomAmount: false,
