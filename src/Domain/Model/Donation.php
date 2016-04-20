@@ -132,16 +132,36 @@ class Donation {
 		$this->status = self::STATUS_CANCELLED;
 	}
 
+	public function confirmBooked() {
+		if ( !$this->isPaymentTypeExternal() ) {
+			throw new RuntimeException( 'Only external payments can be confirmed as booked' );
+		}
+
+		if ( !$this->isStatusIncomplete() ) {
+			throw new RuntimeException( 'Only incomplete donations can be confirmed as booked' );
+		}
+
+		$this->status = self::STATUS_EXTERNAL_BOOKED;
+	}
+
 	public function markForModeration() {
 		$this->status = self::STATUS_MODERATION;
+	}
+
+	public function getTrackingInfo(): TrackingInfo {
+		return $this->trackingInfo;
 	}
 
 	private function statusIsCancellable(): bool {
 		return $this->status === self::STATUS_NEW || $this->status === self::STATUS_MODERATION;
 	}
 
-	public function getTrackingInfo(): TrackingInfo {
-		return $this->trackingInfo;
+	private function isPaymentTypeExternal() {
+		return in_array( $this->getPaymentType(), [ PaymentType::PAYPAL, PaymentType::CREDIT_CARD ] );
+	}
+
+	private function isStatusIncomplete() {
+		return $this->status === self::STATUS_EXTERNAL_INCOMPLETE;
 	}
 
 }

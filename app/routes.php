@@ -389,14 +389,14 @@ $app->post(
 					$post = $request->request;
 					$ffFactory->getPayPalPaymentNotificationVerifier()->verify( $post->all() );
 
-					// TODO: check receiver_email, item_name, payment_status, txn_type
+					// TODO: check txn_type
 					// TODO: update donation's status and payment provider related fields
 
 					$useCase = $ffFactory->newHandlePayPalPaymentNotificationUseCase();
 					return new Response( $useCase->handleNotification(
 						( new PayPalNotificationRequest() )
-							->setTransactionType( $post->get( 'trx_type', '' ) )
-							->setTransactionId( $post->get( 'trx_id', '' ) )
+							->setTransactionType( $post->get( 'txn_type', '' ) )
+							->setTransactionId( $post->get( 'txn_id', '' ) )
 							->setPayerId( $post->get( 'payer_id', '' ) )
 							->setPayerEmail( $post->get( 'payer_email', '' ) )
 							->setPayerStatus( $post->get( 'payer_status', '' ) )
@@ -419,6 +419,7 @@ $app->post(
 					) );
 				} catch ( PayPalPaymentNotificationVerifierException $e ) {
 					// TODO: log error
+					// TODO: let PayPal resend IPN?
 				}
 
 				return new Response( 'TODO' ); # PayPal expects an empty response

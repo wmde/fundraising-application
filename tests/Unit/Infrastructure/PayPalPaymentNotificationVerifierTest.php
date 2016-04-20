@@ -20,6 +20,8 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit_Framework_TestCase 
 	const DUMMY_API_URL = 'https://dummy-url.com';
 	const VALID_PAYMENT_STATUS = 'Completed';
 	const INVALID_PAYMENT_STATUS = 'Unknown';
+	const ITEM_NAME = 'My donation';
+	const CURRENCY_EUR = 'EUR';
 
 	public function testReceiverAddressMismatches_verifierThrowsException() {
 		$this->expectException( PayPalPaymentNotificationVerifierException::class );
@@ -51,12 +53,9 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit_Framework_TestCase 
 		] );
 	}
 
-	public function testReassuringReceivedDataSucceeds_verifierThrowsException() {
+	public function testReassuringReceivedDataSucceeds_verifierDoesNotThrowException() {
 		try {
-			$this->newVerifier( $this->newSucceedingClient() )->verify( [
-				'receiver_email' => self::VALID_ACCOUNT_EMAIL,
-				'payment_status' => self::VALID_PAYMENT_STATUS
-			] );
+			$this->newVerifier( $this->newSucceedingClient() )->verify( $this->newRequest() );
 		} catch ( PayPalPaymentNotificationVerifierException $e ) {
 			$this->fail();
 		}
@@ -65,10 +64,16 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit_Framework_TestCase 
 	public function testReassuringReceivedDataFails_verifierThrowsException() {
 		$this->expectException( PayPalPaymentNotificationVerifierException::class );
 		$verifier = $this->newVerifier( $this->newFailingClient() );
-		$verifier->verify( [
+		$verifier->verify( $this->newRequest() );
+	}
+
+	private function newRequest() {
+		return [
 			'receiver_email' => self::VALID_ACCOUNT_EMAIL,
-			'payment_status' => self::VALID_PAYMENT_STATUS
-		] );
+			'payment_status' => self::VALID_PAYMENT_STATUS,
+			'item_name' => self::ITEM_NAME,
+			'mc_currency' => self::CURRENCY_EUR
+		];
 	}
 
 	private function newVerifier( Client $httpClient ): PayPalPaymentNotificationVerifier {
@@ -76,7 +81,8 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit_Framework_TestCase 
 			$httpClient,
 			[
 				'base-url' => self::DUMMY_API_URL,
-				'account-address' => self::VALID_ACCOUNT_EMAIL
+				'account-address' => self::VALID_ACCOUNT_EMAIL,
+				'item-name' => self::ITEM_NAME
 			]
 		);
 	}
@@ -127,7 +133,9 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit_Framework_TestCase 
 			->with( self::DUMMY_API_URL, [
 				'cmd' => '_notify_validate',
 				'receiver_email' => self::VALID_ACCOUNT_EMAIL,
-				'payment_status' => self::VALID_PAYMENT_STATUS
+				'payment_status' => self::VALID_PAYMENT_STATUS,
+				'item_name' => self::ITEM_NAME,
+				'mc_currency' => self::CURRENCY_EUR
 			] )
 			->willReturn( $response );
 
