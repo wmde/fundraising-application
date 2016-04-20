@@ -3,9 +3,9 @@
 var test = require( 'tape' ),
 	sinon = require( 'sinon' ),
 	visibilitySwitching = require( '../../lib/view_handler/element_visibility_switcher' ),
-	createElementCustomVisibilityHandler = visibilitySwitching.createCustomVisibilityHandler,
-	createElementSlideAnimationHandler = visibilitySwitching.createSlidingVisibilityHandler,
-	createElementVisibilityHandler = visibilitySwitching.createSimpleVisibilityHandler
+	createElementCustomVisibilityHandler = visibilitySwitching.createCustomVisibilitySwitcher,
+	createElementSlideAnimationHandler = visibilitySwitching.createSlidingVisibilitySwitcher,
+	createElementVisibilityHandler = visibilitySwitching.createSimpleVisibilitySwitcher
 	;
 
 function createTestAnimator() {
