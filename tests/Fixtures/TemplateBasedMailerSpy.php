@@ -14,8 +14,8 @@ use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
  */
 class TemplateBasedMailerSpy extends TemplateBasedMailer {
 
-	private $sendMailCalls = [];
 	private $testCase;
+	private $sendMailCalls = [];
 
 	public function __construct( PHPUnit_Framework_TestCase $testCase ) {
 		$this->testCase = $testCase;

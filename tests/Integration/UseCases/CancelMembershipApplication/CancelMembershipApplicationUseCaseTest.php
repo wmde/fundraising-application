@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\CancelMembershipApplication;
 
 use WMDE\Fundraising\Frontend\Domain\Model\MembershipApplication;
+use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepository;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
@@ -105,17 +106,22 @@ class CancelMembershipApplicationUseCaseTest extends \PHPUnit_Framework_TestCase
 	}
 
 	private function saveAndCancelUsingMailer( MembershipApplication $application, TemplateBasedMailer $mailer ) {
-		$repository = $this->newFactory()->getMembershipApplicationRepository();
-		$repository->storeApplication( $application );
-
 		$useCase = new CancelMembershipApplicationUseCase(
 			new SucceedingMembershipAuthorizer(),
-			$repository,
+			$this->getRepositoryWithApplication( $application ),
 			$mailer
 		);
 
 		$response = $useCase->cancelApplication( new CancellationRequest( $application->getId() ) );
 		$this->assertTrue( $response->cancellationWasSuccessful() );
+	}
+
+	private function getRepositoryWithApplication( MembershipApplication $application ): MembershipApplicationRepository {
+		$repository = $this->newFactory()->getMembershipApplicationRepository();
+
+		$repository->storeApplication( $application );
+
+		return $repository;
 	}
 
 	// TODO: test auth

@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\CancelDonation;
 
-use PHPUnit_Framework_MockObject_MockObject;
 use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
@@ -13,6 +12,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingDonationAuthorizer;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationRequest;
 use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationUseCase;
@@ -100,49 +100,34 @@ class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$this->assertFalse( $response->cancellationWasSuccessful() );
 	}
 
-	public function testGivenValidRequest_cancellationConfirmationEmailIsSend() {
-		$donation = $this->newCancelableDonation();
-
-		$useCase = $this->newUseCaseWithMailerMock( $donation );
-
-		$response = $useCase->cancelDonation( new CancelDonationRequest( $donation->getId() ) );
-
-		$this->assertTrue( $response->cancellationWasSuccessful() );
-	}
-
 	private function newCancelableDonation(): Donation {
 		return ValidDonation::newDirectDebitDonation();
 	}
 
-	private function newUseCaseWithMailerMock( Donation $donation ): CancelDonationUseCase {
-		$mailer = $this->newMailer();
+	public function testWhenDonationGetsCancelled_cancellationConfirmationEmailIsSend() {
+		$donation = $this->newCancelableDonation();
+		$mailerSpy = new TemplateBasedMailerSpy( $this );
 
-		$mailer->expects( $this->once() )
-			->method( 'sendMail' )
-			->with(
-				$this->equalTo( new EmailAddress( $donation->getDonor()->getEmailAddress() ) ),
-				$this->callback( function( $value ) {
-					$this->assertInternalType( 'array', $value );
-					$this->assertSame( 'Sehr geehrte Damen und Herren,', $value['salutation'] );
-					$this->assertSame( 1, $value['donationId'] );
-					return true;
-				} )
-			);
+		$this->saveAndCancelUsingMailer( $donation, $mailerSpy );
 
-		return new CancelDonationUseCase(
+		$mailerSpy->assertMailerCalledOnceWith(
+			new EmailAddress( $donation->getDonor()->getEmailAddress() ),
+			[
+				'salutation' => 'Sehr geehrte Damen und Herren,',
+				'donationId' => 1
+			]
+		);
+	}
+
+	private function saveAndCancelUsingMailer( Donation $donation, TemplateBasedMailer $mailer ) {
+		$useCase = new CancelDonationUseCase(
 			$this->getDonationRepositoryWithDonation( $donation ),
 			$mailer,
 			new SucceedingDonationAuthorizer()
 		);
-	}
 
-	/**
-	 * @return TemplateBasedMailer|PHPUnit_Framework_MockObject_MockObject
-	 */
-	private function newMailer(): TemplateBasedMailer {
-		return $this->getMockBuilder( TemplateBasedMailer::class )
-			->disableOriginalConstructor()
-			->getMock();
+		$response = $useCase->cancelDonation( new CancelDonationRequest( $donation->getId() ) );
+		$this->assertTrue( $response->cancellationWasSuccessful() );
 	}
 
 	private function getDonationRepositoryWithDonation( Donation $donation ): DonationRepository {
