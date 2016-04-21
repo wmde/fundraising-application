@@ -13,6 +13,8 @@ use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentMethod;
 use WMDE\Fundraising\Frontend\Domain\Model\Donor;
+use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
+use WMDE\Fundraising\Frontend\Domain\Model\PaymentWithoutAssociatedData;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Domain\Model\TrackingInfo;
@@ -22,8 +24,6 @@ use WMDE\Fundraising\Frontend\Domain\Model\TrackingInfo;
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class ValidDonation {
-
-	const DONATION_STATUS = Donation::STATUS_NEW;
 
 	const DONOR_FIRST_NAME = 'Jeroen';
 	const DONOR_LAST_NAME = 'De Dauw';
@@ -52,18 +52,36 @@ class ValidDonation {
 
 	public static function newBankTransferDonation(): Donation {
 		return ( new self() )->createDonation(
-			new BankTransferPayment( self::PAYMENT_BANK_TRANSFER_CODE )
+			new BankTransferPayment( self::PAYMENT_BANK_TRANSFER_CODE ),
+			Donation::STATUS_NEW
 		);
 	}
 
 	public static function newDirectDebitDonation(): Donation {
-		return ( new self() )->createDonation( new DirectDebitPayment( self::newBankData() ) );
+		return ( new self() )->createDonation(
+			new DirectDebitPayment( self::newBankData() ),
+			Donation::STATUS_NEW
+		);
 	}
 
-	private function createDonation( PaymentMethod $paymentMethod ): Donation {
+	public static function newBookedPayPalDonation(): Donation {
+		return ( new self() )->createDonation(
+			new PaymentWithoutAssociatedData( PaymentType::PAYPAL ),
+			Donation::STATUS_EXTERNAL_BOOKED
+		);
+	}
+
+	public static function newIncompletePayPalDonation(): Donation {
+		return ( new self() )->createDonation(
+			new PaymentWithoutAssociatedData( PaymentType::PAYPAL ),
+			Donation::STATUS_EXTERNAL_INCOMPLETE
+		);
+	}
+
+	private function createDonation( PaymentMethod $paymentMethod, string $status ): Donation {
 		return new Donation(
 			null,
-			self::DONATION_STATUS,
+			$status,
 			$this->newDonor(),
 			new DonationPayment(
 				Euro::newFromFloat( self::DONATION_AMOUNT ),

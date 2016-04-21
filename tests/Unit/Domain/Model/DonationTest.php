@@ -9,7 +9,10 @@ use WMDE\Fundraising\Frontend\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Model\DonationPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\Euro;
+use WMDE\Fundraising\Frontend\Domain\Model\PaymentMethod;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
+use WMDE\Fundraising\Frontend\Domain\Model\PaymentWithoutAssociatedData;
+use WMDE\Fundraising\Frontend\Domain\Model\TrackingInfo;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 
 /**
@@ -100,6 +103,27 @@ class DonationTest extends \PHPUnit_Framework_TestCase {
 
 		$this->expectException( RuntimeException::class );
 		$donation->assignId( 43 );
+	}
+
+	public function testGivenNonExternalPaymentType_confirmBookedThrowsException() {
+		$donation = ValidDonation::newDirectDebitDonation();
+
+		$this->setExpectedExceptionRegExp( RuntimeException::class, '/Only external payments/' );
+		$donation->confirmBooked();
+	}
+
+	public function testGivenNonIncompleteStatus_confirmBookedThrowsException() {
+		$donation = ValidDonation::newBookedPayPalDonation();
+
+		$this->setExpectedExceptionRegExp( RuntimeException::class, '/Only incomplete/' );
+		$donation->confirmBooked();
+	}
+
+	public function testGivenIncompleteStatus_confirmBookedSetsBookedStatus() {
+		$donation = ValidDonation::newIncompletePayPalDonation();
+		$donation->confirmBooked();
+
+		$this->assertSame( Donation::STATUS_EXTERNAL_BOOKED, $donation->getStatus() );
 	}
 
 }
