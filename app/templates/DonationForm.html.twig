@@ -2,14 +2,21 @@
  This is a template "page" for developing the form page.
  Try with the url path `/page/DonationForm.html.twig` (yes, with that suffix)
 
- TODO Remove this when JavaScript works.
+ TODO when the Javascript works, move this form to the wiki and remove the comments around the html tags
 #}
 <!-- <html> -->
 
-<div id="validation-errors" class="errorbox" style="display: none">
+<div id="validation-errors" class="errorbox" style="display:none">
     <strong>Bei der Prüfung Ihrer Eingaben wurden Probleme bemerkt</strong>.
     Bitte überprüfen Sie Ihre Angaben in folgenden Feldern: <strong class="fields">keine</strong>
 </div>
+
+{# TODO Remove this debugging code! #}
+{% if violatedFields %}
+    <script>
+        console.log("Server-side validation errors:", "{$ violatedFields|join(',\n') $}" );
+    </script>
+{% endif %}
 
 <div id="paymentPage">
     {% include 'Form1.html.twig' %}
@@ -27,6 +34,8 @@
 
     // The following line is a Twig template placeholder to generate initial values (defaults to empty object)
     var initialFormValues = {% if initialFormValues %}{$ initialFormValues|json_encode|raw $}{% else %}{}{% endif %};
+
+    // TODO add initial validation status to show validation errors when coming from the server
 
     // Initialize the form
     $( function () {
@@ -66,9 +75,21 @@
                     WMDE.ReduxValidation.createValidationDispatcher(
                             WMDE.FormValidation.createAddressValidator( '{$ basepath $}/validate-address' ),
                             actions.newFinishAddressValidationAction,
-                            [ 'salutation', 'title', 'firstName', 'lastName', 'companyName', 'street', 'postcode', 'city', 'country', 'email' ],
+                            [
+                                'addressType',
+                                'salutation',
+                                'title',
+                                'firstName',
+                                'lastName',
+                                'company',
+                                'street',
+                                'postcode',
+                                'city',
+                                'country',
+                                'email'
+                            ],
                             initialValues
-                    ),
+                    )
                 ];
             },
             store,
@@ -142,6 +163,27 @@
                     {
                         viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.personal-data-full' ), /firma|person/ ),
                         stateKey: 'formContent.addressType'
+                    },
+                    {
+                        viewHandler: WMDE.View.createValueDependentEventHandler( $( '#continueFormSubmit1' ), 'click', [
+                            [ /true/, function () { store.dispatch( actions.newNextPageAction() ); } ],
+                            [ /false|null/, function () { alert( 'Bitte wählen Sie einen gültigen Betrag aus.' ); } ]
+                        ] ),
+                        stateKey: 'validity.amount'
+                    },
+                    {
+                        viewHandler: WMDE.View.createValueDependentEventHandler( $( '#continueFormSubmit2' ), 'click', [
+                            [ /true/, function () { store.dispatch( actions.newNextPageAction() ); } ],
+                            [ /false|null/, function () { alert( 'Bitte geben Sie einen gültige Adresse ein.' ); } ]
+                        ] ),
+                        stateKey: 'validity.address'
+                    },
+                    {
+                        viewHandler: WMDE.View.createValueDependentEventHandler( $( '#finishFormSubmit2, #finishFormSubmit3' ), 'click', [
+                            [ /true/, function () { $( '#donForm2' ).submit(); } ],
+                            [ /false|null/, function () { alert( 'Bitte geben Sie einen gültige Adresse ein.' ); } ]
+                        ] ),
+                        stateKey: 'validity.address'
                     }
                 ],
                 store
@@ -175,12 +217,6 @@
             }
         } );
 
-        $( '#donation-submit1 button' ).click( function () {
-            // TODO check if page is valid
-            store.dispatch( actions.newNextPageAction() );
-        } );
-
-
         // Initialize form pages
         store.dispatch( actions.newAddPageAction( 'payment' ) );
         store.dispatch( actions.newAddPageAction( 'personalData' ) );
@@ -188,6 +224,8 @@
 
         // Set initial form values
         store.dispatch( actions.newInitializeContentAction( initialFormValues ) );
+
+        // TODO switch to correct page, depending on validation status coming from the server
 
     } );
 </script>
