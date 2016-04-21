@@ -349,9 +349,10 @@ $app->post(
 
 		$useCase = $ffFactory->newCancelMembershipApplicationUseCase( $request->request->get( 'utoken', '' ) );
 
-		$useCase->cancelApplication( $cancellationRequest );
+		$cancellationResponse = $useCase->cancelApplication( $cancellationRequest );
 
-		return 'TODO'; // TODO
+		// TODO: add presenter
+		return $cancellationResponse->cancellationWasSuccessful() ? 'cancelled' : 'error';
 	}
 );
 

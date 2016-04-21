@@ -14,7 +14,7 @@ interface MembershipApplicationRepository {
 
 	/**
 	 * When storing a not yet persisted MembershipApplication, a new id will be generated and assigned to it.
-	 * Any previously set ID will be overridden. The id can be accessed by calling getId on
+	 * This means the id of new applications needs to be null. The id can be accessed by calling getId on
 	 * the passed in MembershipApplication.
 	 *
 	 * @param MembershipApplication $application

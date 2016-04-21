@@ -229,6 +229,7 @@ class AddDonationUseCase {
 	private function getConfirmationMailTemplateArguments( Donation $donation, bool $needsModeration ): array {
 		return [
 			'recipient' => [
+				// FIXME: this should be in the presenter or template
 				'salutation' => ( new GreetingGenerator() )->createGreeting(
 					$donation->getDonor()->getPersonName()->getLastName(),
 					$donation->getDonor()->getPersonName()->getSalutation(),

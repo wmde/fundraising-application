@@ -59,6 +59,10 @@ class MembershipApplication {
 		return $this->id;
 	}
 
+	public function hasId(): bool {
+		return $this->id !== null;
+	}
+
 	public function getApplicant(): MembershipApplicant {
 		return $this->applicant;
 	}
