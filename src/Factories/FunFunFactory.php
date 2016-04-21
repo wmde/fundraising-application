@@ -852,7 +852,11 @@ class FunFunFactory {
 	}
 
 	public function newDonationFormViolationPresenter() {
-		return new DonationFormViolationPresenter( $this->getLayoutTemplate( 'DonationForm.html.twig' ) );
+		$template = $this->getLayoutTemplate( 'DisplayPageLayout.twig' );
+		// TODO make this dependent on the 'form' value from the HTTP POST request
+		// (we need different form pages for A/B testing)
+		$template->context['main_template'] = 'DonationForm.html.twig';
+		return new DonationFormViolationPresenter( $template );
 	}
 
 	public function newHandlePayPalPaymentNotificationUseCase() {
