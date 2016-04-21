@@ -66,9 +66,21 @@
                     WMDE.ReduxValidation.createValidationDispatcher(
                             WMDE.FormValidation.createAddressValidator( '{$ basepath $}/validate-address' ),
                             actions.newFinishAddressValidationAction,
-                            [ 'salutation', 'title', 'firstName', 'lastName', 'companyName', 'street', 'postcode', 'city', 'country', 'email' ],
+                            [
+                                'addressType',
+                                'salutation',
+                                'title',
+                                'firstName',
+                                'lastName',
+                                'company',
+                                'street',
+                                'postcode',
+                                'city',
+                                'country',
+                                'email'
+                            ],
                             initialValues
-                    ),
+                    )
                 ];
             },
             store,
@@ -142,6 +154,27 @@
                     {
                         viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.personal-data-full' ), /firma|person/ ),
                         stateKey: 'formContent.addressType'
+                    },
+                    {
+                        viewHandler: WMDE.View.createValueDependentEventHandler( $( '#continueFormSubmit1' ), 'click', [
+                            [ /true/, function () { store.dispatch( actions.newNextPageAction() ); } ],
+                            [ /false|null/, function () { alert( 'Bitte wählen Sie einen gültigen Betrag aus.' ); } ]
+                        ] ),
+                        stateKey: 'validity.amount'
+                    },
+                    {
+                        viewHandler: WMDE.View.createValueDependentEventHandler( $( '#continueFormSubmit2' ), 'click', [
+                            [ /true/, function () { store.dispatch( actions.newNextPageAction() ); } ],
+                            [ /false|null/, function () { alert( 'Bitte geben Sie einen gültige Adresse ein.' ); } ]
+                        ] ),
+                        stateKey: 'validity.address'
+                    },
+                    {
+                        viewHandler: WMDE.View.createValueDependentEventHandler( $( '#finishFormSubmit2, #finishFormSubmit3' ), 'click', [
+                            [ /true/, function () { $( '#donForm2' ).submit(); } ],
+                            [ /false|null/, function () { alert( 'Bitte geben Sie einen gültige Adresse ein.' ); } ]
+                        ] ),
+                        stateKey: 'validity.address'
                     }
                 ],
                 store
@@ -174,12 +207,6 @@
                 store.dispatch( actions.newSelectAmountAction( null ) );
             }
         } );
-
-        $( '#donation-submit1 button' ).click( function () {
-            // TODO check if page is valid
-            store.dispatch( actions.newNextPageAction() );
-        } );
-
 
         // Initialize form pages
         store.dispatch( actions.newAddPageAction( 'payment' ) );
