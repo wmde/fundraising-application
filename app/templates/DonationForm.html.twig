@@ -14,7 +14,7 @@
 {# TODO Remove this debugging code! #}
 {% if violatedFields %}
     <script>
-        console.log("Server-side validation errors:", "{$ violatedFields|join(',\n') $}" );
+        console.log("Server-side validation errors:", {$ violatedFields|json_encode|raw $} );
     </script>
 {% endif %}
 
