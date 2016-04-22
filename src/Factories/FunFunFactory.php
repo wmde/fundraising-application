@@ -404,14 +404,35 @@ class FunFunFactory {
 		 return new TwigTemplate(
 			$this->getTwig(),
 			$templateName,
-			[
-				'basepath' => $this->config['web-basepath'],
-				'honorifics' => $this->getHonorifics()->getList(),
-				'header_template' => $this->config['default-layout-templates']['header'],
-				'footer_template' => $this->config['default-layout-templates']['footer'],
-				'no_js_notice_template' => $this->config['default-layout-templates']['no-js-notice'],
-			]
+			$this->getDefaultTwigVariables()
 		);
+	}
+
+	/**
+	 * Get a layouted template that includes another template
+	 *
+	 * @param string $templateName Template to include
+	 * @return TwigTemplate
+	 */
+	private function getIncludeTemplate( string $templateName ): TwigTemplate {
+		return new TwigTemplate(
+			$this->getTwig(),
+			'IncludeInLayout.twig',
+			array_merge(
+				$this->getDefaultTwigVariables(),
+				[ 'main_template' => $templateName]
+			)
+		);
+	}
+
+	private function getDefaultTwigVariables() {
+		return [
+			'basepath' => $this->config['web-basepath'],
+			'honorifics' => $this->getHonorifics()->getList(),
+			'header_template' => $this->config['default-layout-templates']['header'],
+			'footer_template' => $this->config['default-layout-templates']['footer'],
+			'no_js_notice_template' => $this->config['default-layout-templates']['no-js-notice'],
+		];
 	}
 
 	private function newReferrerGeneralizer() {
@@ -795,8 +816,7 @@ class FunFunFactory {
 
 	public function newCancelDonationHtmlPresenter() {
 		return new CancelDonationHtmlPresenter(
-			$this->getLayoutTemplate( 'DisplayPageLayout.twig' ),
-			'Donation_Cancellation_Confirmation.twig'
+			$this->getIncludeTemplate( 'Donation_Cancellation_Confirmation.twig' )
 		);
 	}
 
