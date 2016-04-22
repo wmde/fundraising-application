@@ -44,6 +44,7 @@
 
         WMDE.StoreUpdates.connectComponentsToStore(
             [
+                WMDE.Components.createAmountComponent( store, $( '.amount-input' ), $( '.amount-select' ) ),
                 WMDE.Components.createRadioComponent( store, $( '.payment-type-select' ), 'paymentType' ),
                 WMDE.Components.createRadioComponent( store, $( '.interval-type-select' ), 'paymentPeriodInMonths' ),
                 WMDE.Components.createRadioComponent( store, $( '.payment-period-select' ), 'paymentPeriodInMonths' ),
@@ -94,10 +95,6 @@
                             bankConfirmation: $( '#bankConfirmationPage' )
                         } ),
                         stateKey: 'formPagination'
-                    },
-                    {
-                        viewHandler: WMDE.View.createClearAmountHandler( $( '.amount-select' ), $( '.amount-input' ) ),
-                        stateKey: 'formContent'
                     },
                     {
                         viewHandler: WMDE.View.createErrorBoxHandler( $( '#validation-errors' ), {
@@ -158,32 +155,6 @@
 
         // connect DOM elements to actions
 
-        // we can't put amount selection into a component because we need to distinguish between
-        // selected and custom amount in the state
-        $( '.amount-select' ).change( function( evt ) {
-            store.dispatch( actions.newSelectAmountAction( evt.target.value ) );
-        } );
-
-        $( '.amount-input' ).change( function( evt ) {
-            store.dispatch( actions.newInputAmountAction( evt.target.value ) );
-        } ).focus( function( evt ) {
-            // This method will clear the selection (important for usability),
-            // but keep the form data valid when the custom amount field is empty
-            var newAmount;
-            if ( evt.target.value ) {
-                newAmount = evt.target.value;
-            }
-            else {
-                newAmount = $( '.amount-select:checked' ).val();
-            }
-            store.dispatch( actions.newInputAmountAction( newAmount) );
-        } ).blur( function( evt ) {
-            // When the custom amount field is empty, simulate a selection to restore previous selection
-            if ( !evt.target.value ) {
-                store.dispatch( actions.newSelectAmountAction( null ) );
-            }
-        } );
-
         $( '#continueFormSubmit1,#continueFormSubmit2' ).click( function () {
             // TODO check if page is valid
             store.dispatch( actions.newNextPageAction() );
@@ -193,8 +164,7 @@
             // TODO check if page is valid
             $( '#donForm2' ).submit();
         } );
-
-
+        
         // Initialize form pages
         store.dispatch( actions.newAddPageAction( 'payment' ) );
         store.dispatch( actions.newAddPageAction( 'personalData' ) );
