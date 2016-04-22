@@ -30,12 +30,14 @@ use WMDE\Fundraising\Frontend\DataAccess\DoctrineCommentRepository;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationAuthorizationUpdater;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationAuthorizer;
+use WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipAppAuthUpdater;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipApplicationAuthorizer;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipApplicationRepository;
 use WMDE\Fundraising\Frontend\DataAccess\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\DataAccess\UniqueTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\BankDataConverter;
 use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepository;
+use WMDE\Fundraising\Frontend\Infrastructure\MembershipAppAuthUpdater;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationAuthorizer;
 use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Presentation\CreditCardConfig;
@@ -800,7 +802,28 @@ class FunFunFactory {
 	}
 
 	public function newApplyForMembershipUseCase(): ApplyForMembershipUseCase {
-		return new ApplyForMembershipUseCase();
+		return new ApplyForMembershipUseCase(
+			$this->getMembershipApplicationRepository(),
+			$this->newMembershipAuthUpdater(),
+			$this->newApplyForMembershipMailer()
+		);
+	}
+
+	private function newApplyForMembershipMailer(): TemplateBasedMailer {
+		return new TemplateBasedMailer(
+			$this->getMessenger(),
+			new TwigTemplate(
+				$this->getTwig(),
+				'Mail_Membership_Application_Confirmation.twig'
+			),
+			$this->getTranslator()->trans( 'mail_subject_confirm_membership_application' ) // TODO: create
+		);
+	}
+
+	private function newMembershipAuthUpdater(): MembershipAppAuthUpdater {
+		return new DoctrineMembershipAppAuthUpdater(
+			$this->getEntityManager()
+		);
 	}
 
 	public function newCancelMembershipApplicationUseCase( string $updateToken ): CancelMembershipApplicationUseCase {
@@ -830,7 +853,7 @@ class FunFunFactory {
 			$this->getMessenger(),
 			new TwigTemplate(
 				$this->getTwig(),
-				'Mail_Membership_Application_Cancellation_Confirmation.twig' // TODO: create
+				'Mail_Membership_Application_Cancellation_Confirmation.twig'
 			),
 			$this->getTranslator()->trans( 'mail_subject_confirm_membership_application_cancellation' ) // TODO: create
 		);
