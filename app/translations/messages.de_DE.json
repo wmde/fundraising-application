@@ -2,7 +2,7 @@
   "mail_subject_getintouch": "Ihre Anfrage an Wikimedia",
   "mail_subject_membership": "Ihre Mitgliedschaft bei Wikimedia Deutschland",
   "mail_subject_confirm_donation": "Ihre Spende für Freies Wissen",
-  "mail_subject_confirm_cancellation": "TODODODODODODODODODODO",
+  "mail_subject_confirm_cancellation": "Stornierung Ihrer Spende",
   "recurringDonation": "Wie gewünscht werden wir die Buchung jeden Monat wiederholen.|Wie gewünscht werden wir die Buchung alle %interval% Monate wiederholen.",
   "donation-cancellation-header": "Ihre Spende wurde storniert",
   "donation-cancellation-text": "Der Spendenvorgang mit der Nummer %donation.id% wurde storniert. Wenn Sie noch Fragen haben oder uns auf Probleme hinweisen möchten, wenden Sie sich bitte an <a href=\"mailto:spenden@wikimedia.de?subject=Online-Spende%20%donation.id%\">spenden@wikimedia.de</a>.",

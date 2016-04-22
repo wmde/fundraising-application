@@ -14,13 +14,16 @@ use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationResponse;
 class CancelDonationHtmlPresenter {
 
 	private $template;
+	private $mainTemplate;
 
-	public function __construct( TwigTemplate $template ) {
+	public function __construct( TwigTemplate $template, string $mainTemplate ) {
 		$this->template = $template;
+		$this->mainTemplate = $mainTemplate;
 	}
 
 	public function present( CancelDonationResponse $response ): string {
 		return $this->template->render( [
+			'main_template' => $this->mainTemplate,
 			'donationId' => $response->getDonationId(),
 			'cancellationSuccessful' => $response->cancellationWasSuccessful()
 		] );
