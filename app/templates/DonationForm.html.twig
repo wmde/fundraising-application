@@ -20,7 +20,7 @@
 </div>
 
 <div id="bankConfirmationPage">
-    TODO
+    {% include 'Form3.html.twig' %}
 </div>
 
 <script>
@@ -175,9 +175,14 @@
             }
         } );
 
-        $( '#donation-submit1 button' ).click( function () {
+        $( '#continueFormSubmit1,#continueFormSubmit2' ).click( function () {
             // TODO check if page is valid
             store.dispatch( actions.newNextPageAction() );
+        } );
+
+        $( '#finishFormSubmit2,#finishFormSubmit3' ).click( function () {
+            // TODO check if page is valid
+            $( '#donForm2' ).submit();
         } );
 
 

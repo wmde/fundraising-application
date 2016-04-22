@@ -30,7 +30,7 @@ class DonationConfirmationHtmlPresenter {
 	private function getConfirmationPageArguments( Donation $donation, string $updateToken,
 												   SelectedConfirmationPage $selectedPage ) {
 
-		return array_merge( [
+		return [
 			'templateCampaign' => $selectedPage->getCampaignCode(),
 			'templateName' => $selectedPage->getPageTitle(),
 			'donation' => [
@@ -49,12 +49,13 @@ class DonationConfirmationHtmlPresenter {
 			],
 			'person' => $this->getPersonArguments( $donation ),
 			'bankData' => $this->getBankDataArguments( $donation->getPaymentMethod() )
-		] );
+		];
 	}
 
 	private function getPersonArguments( Donation $donation ): array {
 		if ( $donation->getDonor() !== null ) {
 			return [
+				'salutation' => $donation->getDonor()->getPersonName()->getSalutation(),
 				'fullName' => $donation->getDonor()->getPersonName()->getFullName(),
 				'streetAddress' => $donation->getDonor()->getPhysicalAddress()->getStreetAddress(),
 				'postalCode' => $donation->getDonor()->getPhysicalAddress()->getPostalCode(),
