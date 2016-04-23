@@ -855,8 +855,11 @@ class FunFunFactory {
 		return new DonationFormViolationPresenter( $this->getLayoutTemplate( 'DonationForm.html.twig' ) );
 	}
 
-	public function newHandlePayPalPaymentNotificationUseCase() {
-		return new HandlePayPalPaymentNotificationUseCase();
+	public function newHandlePayPalPaymentNotificationUseCase( string $updateToken ) {
+		return new HandlePayPalPaymentNotificationUseCase(
+			$this->getDonationRepository(),
+			$this->newDonationAuthorizer( $updateToken )
+		);
 	}
 
 	public function getPayPalPaymentNotificationVerifier(): PayPalPaymentNotificationVerifier {

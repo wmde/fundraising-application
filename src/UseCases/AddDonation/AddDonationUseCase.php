@@ -12,6 +12,8 @@ use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Model\DonationPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentMethod;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentWithoutAssociatedData;
+use WMDE\Fundraising\Frontend\Domain\Model\PayPalData;
+use WMDE\Fundraising\Frontend\Domain\Model\PayPalPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\TrackingInfo;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Model\Iban;
@@ -161,6 +163,10 @@ class AddDonationUseCase {
 
 		if ( $donationRequest->getPaymentType() === PaymentType::DIRECT_DEBIT ) {
 			return new DirectDebitPayment( $this->newBankDataFromRequest( $donationRequest ) );
+		}
+
+		if ( $donationRequest->getPaymentType() === PaymentType::PAYPAL ) {
+			return new PayPalPayment( new PayPalData() );
 		}
 
 		return new PaymentWithoutAssociatedData( $donationRequest->getPaymentType() );

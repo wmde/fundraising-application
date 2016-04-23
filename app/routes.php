@@ -392,12 +392,13 @@ $app->post(
 					// TODO: check txn_type
 					// TODO: update donation's status and payment provider related fields
 
-					$useCase = $ffFactory->newHandlePayPalPaymentNotificationUseCase();
-					return new Response( $useCase->handleNotification(
+					$useCase = $ffFactory->newHandlePayPalPaymentNotificationUseCase( $this->getValueFromCustomVars( $post->get( 'custom', '' ), 'utoken' ) );
+					$success = $useCase->handleNotification(
 						( new PayPalNotificationRequest() )
 							->setTransactionType( $post->get( 'txn_type', '' ) )
 							->setTransactionId( $post->get( 'txn_id', '' ) )
 							->setPayerId( $post->get( 'payer_id', '' ) )
+							->setSubscriberId( $post->get( 'subscr_id', '' ) )
 							->setPayerEmail( $post->get( 'payer_email', '' ) )
 							->setPayerStatus( $post->get( 'payer_status', '' ) )
 							->setPayerFirstName( $post->get( 'first_name', '' ) )
@@ -409,14 +410,16 @@ $app->post(
 							->setPayerAddressCountryCode( $post->get( 'address_country_code', '' ) )
 							->setPayerAddressStatus( $post->get( 'address_status', '' ) )
 							->setDonationId( $post->get( 'item_number', 0 ) )
-							->setToken( $this->getTokenFromCustomVars( $post->get( 'custom', '' ) ) )
 							->setCurrencyCode( $post->get( 'mc_currency', '' ) )
 							->setTransactionFee( Euro::newFromString( $post->get( 'mc_fee', '0' ) ) )
 							->setAmountGross( Euro::newFromString( $post->get( 'mc_gross', '0' ) ) )
+							->setSettleAmount( Euro::newFromString( $post->get( 'settle_amount', '0' ) ) )
 							->setPaymentTimestamp( $post->get( 'payment_date', '' ) )
 							->setPaymentStatus( $post->get( 'payment_status', '' ) )
 							->setPaymentType( $post->get( 'payment_type', '' ) )
-					) );
+					);
+
+					return new Response( '', 200 );
 				} catch ( PayPalPaymentNotificationVerifierException $e ) {
 					// TODO: log error
 					// TODO: let PayPal resend IPN?
@@ -425,9 +428,9 @@ $app->post(
 				return new Response( 'TODO' ); # PayPal expects an empty response
 			}
 
-			private function getTokenFromCustomVars( string $customVars ): string {
+			private function getValueFromCustomVars( string $customVars, string $key ): string {
 				$vars = json_decode( $customVars, true );
-				return !empty( $vars['token'] ) ? $vars['token'] : '';
+				return !empty( $vars[$key] ) ? $vars[$key] : '';
 			}
 		};
 

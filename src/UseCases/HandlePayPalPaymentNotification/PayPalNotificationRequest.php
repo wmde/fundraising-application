@@ -18,6 +18,7 @@ class PayPalNotificationRequest {
 	private $payerId;
 	private $payerEmail;
 	private $payerStatus;
+	private $subscriberId;
 
 	private $payerFirstName;
 	private $payerLastName;
@@ -34,6 +35,7 @@ class PayPalNotificationRequest {
 	private $currencyCode;
 	private $transactionFee;
 	private $amountGross;
+	private $settleAmount;
 	private $paymentTimestamp;
 	private $paymentStatus;
 	private $paymentType;
@@ -62,6 +64,15 @@ class PayPalNotificationRequest {
 
 	public function setPayerId( string $payerId ): self {
 		$this->payerId = $payerId;
+		return $this;
+	}
+
+	public function getSubscriberId(): string {
+		return $this->subscriberId;
+	}
+
+	public function setSubscriberId( string $subscriberId ) {
+		$this->subscriberId = $subscriberId;
 		return $this;
 	}
 
@@ -224,6 +235,15 @@ class PayPalNotificationRequest {
 
 	public function setPaymentType( string $paymentType ): self {
 		$this->paymentType = $paymentType;
+		return $this;
+	}
+
+	public function getSettleAmount() {
+		return $this->settleAmount;
+	}
+
+	public function setSettleAmount( Euro $settleAmount ) {
+		$this->settleAmount = $settleAmount;
 		return $this;
 	}
 

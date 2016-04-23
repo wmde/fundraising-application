@@ -16,6 +16,8 @@ use WMDE\Fundraising\Frontend\Domain\Model\PaymentMethod;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentWithoutAssociatedData;
+use WMDE\Fundraising\Frontend\Domain\Model\PayPalData;
+use WMDE\Fundraising\Frontend\Domain\Model\PayPalPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Domain\Model\TrackingInfo;
@@ -118,7 +120,7 @@ class DoctrineDonationRepository implements DonationRepository {
 	private function getDataMap( Donation $donation ): array {
 		return array_merge(
 			$this->getDataFieldsFromTrackingInfo( $donation->getTrackingInfo() ),
-			$this->getDataFieldsForBankData( $donation->getPaymentMethod() ),
+			$this->getDataFieldsForPaymentData( $donation->getPaymentMethod() ),
 			$this->getDataFieldsFromPersonalInfo( $donation->getDonor() )
 		);
 	}
@@ -145,9 +147,13 @@ class DoctrineDonationRepository implements DonationRepository {
 		];
 	}
 
-	private function getDataFieldsForBankData( PaymentMethod $paymentMethod ): array {
+	private function getDataFieldsForPaymentData( PaymentMethod $paymentMethod ): array {
 		if ( $paymentMethod instanceof DirectDebitPayment ) {
 			return $this->getDataFieldsFromBankData( $paymentMethod->getBankData() );
+		}
+
+		if ( $paymentMethod instanceof PayPalPayment ) {
+			return $this->getDataFieldsFromPayPalData( $paymentMethod->getPayPalData() );
 		}
 
 		return [];
@@ -182,6 +188,22 @@ class DoctrineDonationRepository implements DonationRepository {
 			'plz' => $address->getPostalCode(),
 			'ort' => $address->getCity(),
 			'country' => $address->getCountryCode(),
+		];
+	}
+
+	private function getDataFieldsFromPayPalData( PayPalData $payPalData ) {
+		return [
+			'paypal_payer_id' => $payPalData->getPayerId(),
+			'paypal_subscr_id' => $payPalData->getSubscriberId(),
+			'paypal_payer_status' => $payPalData->getPayerStatus(),
+			'paypal_address_status' => $payPalData->getAddressStatus(),
+			'paypal_mc_gross' => $payPalData->getAmount(),
+			'paypal_mc_currency' => $payPalData->getCurrencyCode(),
+			'paypal_mc_fee' => $payPalData->getFee(),
+			'paypal_settle_amount' => $payPalData->getSettleAmount(),
+			'paypal_first_name' => $payPalData->getFirstName(),
+			'paypal_last_name' => $payPalData->getLastName(),
+			'paypal_address_name' => $payPalData->getAddressName()
 		];
 	}
 
@@ -263,6 +285,10 @@ class DoctrineDonationRepository implements DonationRepository {
 			return new DirectDebitPayment( $this->getBankDataFromEntity( $dd ) );
 		}
 
+		if ( $dd->getPaymentType() === PaymentType::PAYPAL ) {
+			return new PayPalPayment( $this->getPayPalDataFromEntity( $dd ) );
+		}
+
 		return new PaymentWithoutAssociatedData( $dd->getPaymentType() );
 	}
 
@@ -330,6 +356,32 @@ class DoctrineDonationRepository implements DonationRepository {
 		$trackingInfo->setSource( $data['source'] );
 
 		return $trackingInfo->freeze()->assertNoNullFields();
+	}
+
+	/**
+	 * @param DoctrineDonation $dd
+	 * @return PayPalData|null
+	 */
+	private function getPayPalDataFromEntity( DoctrineDonation $dd ) {
+		$data = $dd->getDecodedData();
+
+		if ( array_key_exists( 'paypal_payer_id', $data ) ) {
+			return ( new PayPalData() )
+				->setPayerId( $data['paypal_payer_id'] )
+				->setSubscriberId( $data['paypal_subscr_id'] )
+				->setPayerStatus( $data['paypal_payer_status'] )
+				->setAddressStatus( $data['paypal_address_status'] )
+				->setAmount( $data['paypal_mc_gross'] )
+				->setCurrencyCode( $data['paypal_mc_currency'] )
+				->setFee( $data['paypal_mc_fee'] )
+				->setSettleAmount( $data['paypal_settle_amount'] )
+				->setFirstName( $data['paypal_first_name'] )
+				->setLastName( $data['paypal_last_name'] )
+				->setAddressName( $data['paypal_address_name'] )
+				->freeze()->assertNoNullFields();
+		}
+
+		return null;
 	}
 
 }
