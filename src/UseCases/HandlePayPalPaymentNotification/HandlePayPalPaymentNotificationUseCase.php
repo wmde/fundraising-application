@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\UseCases\HandlePayPalPaymentNotification;
 use WMDE\Fundraising\Frontend\Domain\Model\PayPalData;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
+use WMDE\Fundraising\Frontend\Domain\Repositories\StoreDonationException;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizer;
 
 /**
@@ -32,34 +33,48 @@ class HandlePayPalPaymentNotificationUseCase {
 
 		if ( $donation === null ) {
 			// TODO: create new donation
+
+			// TODO: the id in PayPalNotificationRequest needs to be made nullable?
+
+			// TODO: when id is null, dont try getting donation.
+			// If it is not null, not finding donation should probably be error
 			return true;
-		} else {
-			if ( !$this->authorizationService->canModifyDonation( $request->getDonationId() ) ) {
-				return false;
-			}
+		}
+
+		if ( !$this->authorizationService->canModifyDonation( $request->getDonationId() ) ) {
+			return false;
 		}
 
 		try {
-			$donation->addPayPalData(
-				( new PayPalData() )
-					->setPayerId( $request->getPayerId() )
-					->setSubscriberId( $request->getSubscriberId() )
-					->setPayerStatus( $request->getPayerStatus() )
-					->setAddressStatus( $request->getPayerAddressStatus() )
-					->setAmount( $request->getAmountGross() )
-					->setCurrencyCode( $request->getCurrencyCode() )
-					->setFee( $request->getTransactionFee() )
-					->setSettleAmount( $request->getSettleAmount() )
-					->setFirstName( $request->getPayerFirstName() )
-					->setLastName( $request->getPayerLastName() )
-					->setAddressName( $request->getPayerAddressName() )
-			);
+			$donation->addPayPalData( $this->newPayPalDataFromRequest( $request ) );
 			$donation->confirmBooked();
-			$this->repository->storeDonation( $donation );
 		} catch ( \RuntimeException $ex ) {
 			return false;
 		}
+
+		try {
+			$this->repository->storeDonation( $donation );
+		}
+		catch ( StoreDonationException $ex ) {
+			return false;
+		}
+
 		return true;
+	}
+
+	private function newPayPalDataFromRequest( PayPalNotificationRequest $request ): PayPalData {
+		return ( new PayPalData() )
+			->setPayerId( $request->getPayerId() )
+			->setSubscriberId( $request->getSubscriberId() )
+			->setPayerStatus( $request->getPayerStatus() )
+			->setAddressStatus( $request->getPayerAddressStatus() )
+			->setAmount( $request->getAmountGross() )
+			->setCurrencyCode( $request->getCurrencyCode() )
+			->setFee( $request->getTransactionFee() )
+			->setSettleAmount( $request->getSettleAmount() )
+			->setFirstName( $request->getPayerFirstName() )
+			->setLastName( $request->getPayerLastName() )
+			->setAddressName( $request->getPayerAddressName() );
 	}
 
 }
