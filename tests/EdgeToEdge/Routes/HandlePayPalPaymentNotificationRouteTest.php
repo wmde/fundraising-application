@@ -10,12 +10,8 @@ use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Stream;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationAuthorizationUpdater;
-use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationAuthorizer;
-use WMDE\Fundraising\Frontend\Domain\Model\Donation;
-use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
-use WMDE\Fundraising\Frontend\Domain\Model\Euro;
-use WMDE\Fundraising\Frontend\Domain\Model\PayPalData;
 use WMDE\Fundraising\Frontend\Domain\Model\PayPalPayment;
+use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
@@ -31,13 +27,14 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	const EMAIL_ADDRESS = 'foerderpp@wikimedia.de';
 	const ITEM_NAME = 'My preciousss';
 	const UPDATE_TOKEN = 'my_secret_token';
+	const DONATION_ID = 1;
 
 	public function testGivenValidRequest_applicationIndicatesSuccess() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->getDonationRepository()->storeDonation( ValidDonation::newIncompletePayPalDonation() );
 			$authorizer = new DoctrineDonationAuthorizationUpdater( $factory->getEntityManager() );
 			$authorizer->allowModificationViaToken(
-				1,
+				self::DONATION_ID,
 				self::UPDATE_TOKEN,
 				DateTime::createFromFormat( 'Y-m-d H:i:s', '2039-12-31 23:59:59' )
 			);
@@ -50,8 +47,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			);
 
 			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
-			$donation = $factory->getDonationRepository()->getDonationById( 1 );
-			$this->assertDataComplemented( $donation, $this->newRequest() );
+			$this->assertPayPalDataGotPersisted( $factory->getDonationRepository(), $this->newRequest() );
 		} );
 	}
 
@@ -119,25 +115,9 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		return $client;
 	}
 
-	public function testGivenInvalidRequest_applicationReturnsError() {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setPayPalPaymentNotificationVerifier( $this->newNotifierMock() );
+	private function assertPayPalDataGotPersisted( DonationRepository $donationRepo, array $request ) {
+		$donation = $donationRepo->getDonationById( self::DONATION_ID );
 
-			$client->request(
-				'POST',
-				'/handle-paypal-payment-notification',
-				[
-					'receiver_email' => self::EMAIL_ADDRESS,
-					'payment_status' => 'Unknown'
-				]
-			);
-
-			$this->assertSame( 'TODO', $client->getResponse()->getContent() );
-			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
-		} );
-	}
-
-	private function assertDataComplemented( Donation $donation, array $request ) {
 		/** @var PayPalPayment $paymentMethod */
 		$paymentMethod = $donation->getPayment()->getPaymentMethod();
 		$pplData = $paymentMethod->getPayPalData();
@@ -174,6 +154,24 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			'item_number' => 1,
 			'custom' => '{"id": "1", "utoken": "my_secret_token"}'
 		];
+	}
+
+	public function testGivenInvalidRequest_applicationReturnsError() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setPayPalPaymentNotificationVerifier( $this->newNotifierMock() );
+
+			$client->request(
+				'POST',
+				'/handle-paypal-payment-notification',
+				[
+					'receiver_email' => self::EMAIL_ADDRESS,
+					'payment_status' => 'Unknown'
+				]
+			);
+
+			$this->assertSame( 'TODO', $client->getResponse()->getContent() );
+			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
+		} );
 	}
 
 }
