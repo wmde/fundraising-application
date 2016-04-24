@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\UseCases\HandlePayPalPaymentNotification;
 
-use WMDE\Fundraising\Frontend\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\Domain\Model\PayPalData;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizer;
@@ -40,11 +40,25 @@ class HandlePayPalPaymentNotificationUseCase {
 		}
 
 		try {
+			$donation->addPayPalData(
+				( new PayPalData() )
+					->setPayerId( $request->getPayerId() )
+					->setSubscriberId( $request->getSubscriberId() )
+					->setPayerStatus( $request->getPayerStatus() )
+					->setAddressStatus( $request->getPayerAddressStatus() )
+					->setAmount( $request->getAmountGross() )
+					->setCurrencyCode( $request->getCurrencyCode() )
+					->setFee( $request->getTransactionFee() )
+					->setSettleAmount( $request->getSettleAmount() )
+					->setFirstName( $request->getPayerFirstName() )
+					->setLastName( $request->getPayerLastName() )
+					->setAddressName( $request->getPayerAddressName() )
+			);
 			$donation->confirmBooked();
+			$this->repository->storeDonation( $donation );
 		} catch ( \RuntimeException $ex ) {
 			return false;
 		}
-
 		return true;
 	}
 

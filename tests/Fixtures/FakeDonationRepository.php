@@ -23,7 +23,9 @@ class FakeDonationRepository implements DonationRepository {
 	}
 
 	public function storeDonation( Donation $donation ) {
-		$donation->assignId( ++$this->calls );
+		if ( $donation->getId() === null ) {
+			$donation->assignId( ++$this->calls );
+		}
 		$this->donations[$donation->getId()] = $donation;
 	}
 

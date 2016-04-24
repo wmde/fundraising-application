@@ -61,11 +61,22 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$this->assertTrue( $useCase->handleNotification( $request ) );
 	}
 
+	public function testWhenPaymentTypeIsNonPayPal_handlerReturnsFalse() {
+		$donation = ValidDonation::newDirectDebitDonation();
+		$fakeRepository = new FakeDonationRepository();
+		$fakeRepository->storeDonation( $donation );
+
+		$request = $this->newRequest( 1 );
+		$useCase = new HandlePayPalPaymentNotificationUseCase( $fakeRepository, new SucceedingDonationAuthorizer() );
+		$this->assertFalse( $useCase->handleNotification( $request ) );
+	}
+
 	private function newRequest( int $donationId ) {
 		return ( new PayPalNotificationRequest() )
 			->setTransactionType( 'transaction_type' )
 			->setTransactionId( 'transaction_id' )
 			->setPayerId( 'payer_id' )
+			->setSubscriberId( 'subscriber_id' )
 			->setPayerEmail( 'payer.email@address.com' )
 			->setPayerStatus( 'payer_status' )
 			->setPayerFirstName( 'first_name' )
@@ -81,6 +92,7 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			->setCurrencyCode( 'mc_currency' )
 			->setTransactionFee( Euro::newFromCents( 27 ) )
 			->setAmountGross( Euro::newFromCents( 500 ) )
+			->setSettleAmount( Euro::newFromCents( 123 ) )
 			->setPaymentTimestamp( 'payment_date' )
 			->setPaymentStatus( 'payment_status' )
 			->setPaymentType( 'payment_type' );

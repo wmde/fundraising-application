@@ -13,8 +13,8 @@ use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentMethod;
 use WMDE\Fundraising\Frontend\Domain\Model\Donor;
-use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
-use WMDE\Fundraising\Frontend\Domain\Model\PaymentWithoutAssociatedData;
+use WMDE\Fundraising\Frontend\Domain\Model\PayPalData;
+use WMDE\Fundraising\Frontend\Domain\Model\PayPalPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Domain\Model\TrackingInfo;
@@ -66,14 +66,14 @@ class ValidDonation {
 
 	public static function newBookedPayPalDonation(): Donation {
 		return ( new self() )->createDonation(
-			new PaymentWithoutAssociatedData( PaymentType::PAYPAL ),
+			new PayPalPayment( new PayPalData() ),
 			Donation::STATUS_EXTERNAL_BOOKED
 		);
 	}
 
 	public static function newIncompletePayPalDonation(): Donation {
 		return ( new self() )->createDonation(
-			new PaymentWithoutAssociatedData( PaymentType::PAYPAL ),
+			new PayPalPayment( new PayPalData() ),
 			Donation::STATUS_EXTERNAL_INCOMPLETE
 		);
 	}

@@ -152,6 +152,20 @@ class Donation {
 		return $this->trackingInfo;
 	}
 
+	/**
+	 * @param PayPalData $payPalData
+	 * @throws RuntimeException
+	 */
+	public function addPayPalData( PayPalData $payPalData ) {
+		if ( !$this->getPaymentMethod() instanceof PayPalPayment ) {
+			throw new RuntimeException( 'Cannot set PayPal data on a non PayPal payment' );
+		}
+
+		/** @var PayPalPayment $payment */
+		$payment = $this->payment->getPaymentMethod();
+		$payment->addPayPalData( $payPalData );
+	}
+
 	private function statusIsCancellable(): bool {
 		return $this->status === self::STATUS_NEW || $this->status === self::STATUS_MODERATION;
 	}
