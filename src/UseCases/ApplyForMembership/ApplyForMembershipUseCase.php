@@ -34,13 +34,16 @@ class ApplyForMembershipUseCase {
 	}
 
 	public function applyForMembership( ApplyForMembershipRequest $request ): ApplyForMembershipResponse {
+		$application = $this->newApplicationFromRequest( $request );
+
 		// TODO: validation
 
 		// TODO: handle error
-		$this->repository->storeApplication( $this->newApplicationFromRequest( $request ) );
+		$this->repository->storeApplication( $application );
 
 		// TODO: update auth
-		// TODO: confirmation email
+
+		$this->sendConfirmationEmail( $application );
 
 		return ApplyForMembershipResponse::newSuccessResponse();
 	}
@@ -83,6 +86,13 @@ class ApplyForMembershipUseCase {
 		$address->setStreetAddress( $request->getApplicantStreetAddress() );
 
 		return $address->freeze()->assertNoNullFields();
+	}
+
+	private function sendConfirmationEmail( MembershipApplication $application ) {
+		$this->mailer->sendMail(
+			$application->getApplicant()->getEmailAddress(),
+			[] // TODO
+		);
 	}
 
 }

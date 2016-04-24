@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\CancelMembershipApplication;
 
 use WMDE\Fundraising\Frontend\Domain\Model\BankData;
+use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepository;
@@ -24,6 +25,7 @@ use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipUseC
 class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 	const ID_OF_NON_EXISTING_APPLICATION = 1337;
+	const FIRST_APPLICATION_ID = 1;
 
 	/**
 	 * @var MembershipApplicationRepository
@@ -99,12 +101,21 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$this->newUseCase()->applyForMembership( $this->newValidRequest() );
 
 		$expectedApplication = ValidMembershipApplication::newDomainEntity();
-		$expectedApplication->assignId( 1 );
+		$expectedApplication->assignId( self::FIRST_APPLICATION_ID );
 
 		$application = $this->repository->getApplicationById( $expectedApplication->getId() );
 		$this->assertNotNull( $application );
 
 		$this->assertEquals( $expectedApplication, $application );
+	}
+
+	public function testGivenValidRequest_confirmationEmailIsSend() {
+		$this->newUseCase()->applyForMembership( $this->newValidRequest() );
+
+		$this->mailer->assertMailerCalledOnceWith(
+			new EmailAddress( ValidMembershipApplication::APPLICANT_EMAIL_ADDRESS ),
+			[]
+		);
 	}
 
 }

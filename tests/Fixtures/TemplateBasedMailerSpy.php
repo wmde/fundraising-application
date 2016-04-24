@@ -30,7 +30,7 @@ class TemplateBasedMailerSpy extends TemplateBasedMailer {
 	}
 
 	public function assertMailerCalledOnceWith( EmailAddress $expectedEmail, array $expectedArguments ) {
-		$this->testCase->assertCount( 1, $this->sendMailCalls );
+		$this->testCase->assertCount( 1, $this->sendMailCalls, 'Mailer should be called exactly once' );
 
 		$this->testCase->assertEquals(
 			[
