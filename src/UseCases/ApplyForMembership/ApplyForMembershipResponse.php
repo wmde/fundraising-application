@@ -10,10 +10,22 @@ namespace WMDE\Fundraising\Frontend\UseCases\ApplyForMembership;
  */
 class ApplyForMembershipResponse {
 
-	// TODO
+	public static function newSuccessResponse(): self {
+		return new self( true );
+	}
+
+	public static function newFailureResponse(): self {
+		return new self( false );
+	}
+
+	private $isSuccess;
+
+	private function __construct( bool $isSuccess ) {
+		$this->isSuccess = $isSuccess;
+	}
 
 	public function isSuccessful(): bool {
-		return true;
+		return $this->isSuccess;
 	}
 
 }

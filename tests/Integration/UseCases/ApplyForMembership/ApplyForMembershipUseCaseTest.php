@@ -43,11 +43,13 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testGivenValidRequest_applicationSucceeds() {
-		$request = new ApplyForMembershipRequest();
-
-		$response = $this->newUseCase()->applyForMembership( $request );
+		$response = $this->newUseCase()->applyForMembership( $this->newValidRequest() );
 
 		$this->assertTrue( $response->isSuccessful() );
+	}
+
+	private function newValidRequest() {
+		return new ApplyForMembershipRequest();
 	}
 
 	private function newUseCase(): ApplyForMembershipUseCase {

@@ -27,8 +27,13 @@ class ApplyForMembershipUseCase {
 	}
 
 	public function applyForMembership( ApplyForMembershipRequest $request ): ApplyForMembershipResponse {
-		// TODO
-		return new ApplyForMembershipResponse();
+		// TODO: validation
+		// TODO: build domain object
+		// TODO: persistence
+		// TODO: update auth
+		// TODO: confirmation email
+
+		return ApplyForMembershipResponse::newSuccessResponse();
 	}
 
 }
