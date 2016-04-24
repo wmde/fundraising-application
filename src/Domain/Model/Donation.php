@@ -157,13 +157,13 @@ class Donation {
 	 * @throws RuntimeException
 	 */
 	public function addPayPalData( PayPalData $payPalData ) {
-		if ( !$this->getPaymentMethod() instanceof PayPalPayment ) {
+		$paymentMethod = $this->payment->getPaymentMethod();
+
+		if ( !( $paymentMethod instanceof PayPalPayment ) ) {
 			throw new RuntimeException( 'Cannot set PayPal data on a non PayPal payment' );
 		}
 
-		/** @var PayPalPayment $payment */
-		$payment = $this->payment->getPaymentMethod();
-		$payment->addPayPalData( $payPalData );
+		$paymentMethod->addPayPalData( $payPalData );
 	}
 
 	private function statusIsCancellable(): bool {
