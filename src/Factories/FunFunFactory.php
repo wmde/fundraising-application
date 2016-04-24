@@ -805,7 +805,8 @@ class FunFunFactory {
 		return new ApplyForMembershipUseCase(
 			$this->getMembershipApplicationRepository(),
 			$this->newMembershipAuthUpdater(),
-			$this->newApplyForMembershipMailer()
+			$this->newApplyForMembershipMailer(),
+			$this->newTokenGenerator()
 		);
 	}
 

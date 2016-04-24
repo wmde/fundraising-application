@@ -14,6 +14,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepository;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipAppAuthUpdater;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
 
 /**
  * @license GNU GPL v2+
@@ -24,13 +25,15 @@ class ApplyForMembershipUseCase {
 	private $repository;
 	private $authUpdater;
 	private $mailer;
+	private $tokenGenerator;
 
 	public function __construct( MembershipApplicationRepository $repository,
-		MembershipAppAuthUpdater $authUpdater, TemplateBasedMailer $mailer ) {
+		MembershipAppAuthUpdater $authUpdater, TemplateBasedMailer $mailer, TokenGenerator $tokenGenerator ) {
 
 		$this->repository = $repository;
 		$this->authUpdater = $authUpdater;
 		$this->mailer = $mailer;
+		$this->tokenGenerator = $tokenGenerator;
 	}
 
 	public function applyForMembership( ApplyForMembershipRequest $request ): ApplyForMembershipResponse {
@@ -41,11 +44,15 @@ class ApplyForMembershipUseCase {
 		// TODO: handle error
 		$this->repository->storeApplication( $application );
 
-		// TODO: update auth
+		$accessToken = $this->tokenGenerator->generateToken();
+		$updateToken = $this->tokenGenerator->generateToken();
+
+		$this->authUpdater->allowAccessViaToken( $application->getId(), $accessToken );
+		$this->authUpdater->allowModificationViaToken( $application->getId(), $updateToken );
 
 		$this->sendConfirmationEmail( $application );
 
-		return ApplyForMembershipResponse::newSuccessResponse();
+		return ApplyForMembershipResponse::newSuccessResponse( $accessToken, $updateToken );
 	}
 
 	private function newApplicationFromRequest( ApplyForMembershipRequest $request ) {

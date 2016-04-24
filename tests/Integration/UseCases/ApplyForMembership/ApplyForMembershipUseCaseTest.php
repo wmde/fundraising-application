@@ -10,7 +10,9 @@ use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepository;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipAppAuthUpdater;
+use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\InMemoryMembershipApplicationRepository;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipRequest;
@@ -26,6 +28,7 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 	const ID_OF_NON_EXISTING_APPLICATION = 1337;
 	const FIRST_APPLICATION_ID = 1;
+	const GENERATED_TOKEN = 'Gimmeh all the access';
 
 	/**
 	 * @var MembershipApplicationRepository
@@ -33,7 +36,7 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 	private $repository;
 
 	/**
-	 * @var MembershipAppAuthUpdater
+	 * @var MembershipAppAuthUpdater|\PHPUnit_Framework_MockObject_MockObject
 	 */
 	private $authUpdater;
 
@@ -42,16 +45,31 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 	 */
 	private $mailer;
 
+	/**
+	 * @var TokenGenerator
+	 */
+	private $tokenGenerator;
+
 	public function setUp() {
 		$this->repository = new InMemoryMembershipApplicationRepository();
 		$this->authUpdater = $this->getMock( MembershipAppAuthUpdater::class );
 		$this->mailer = new TemplateBasedMailerSpy( $this );
+		$this->tokenGenerator = new FixedTokenGenerator( self::GENERATED_TOKEN );
 	}
 
 	public function testGivenValidRequest_applicationSucceeds() {
 		$response = $this->newUseCase()->applyForMembership( $this->newValidRequest() );
 
 		$this->assertTrue( $response->isSuccessful() );
+	}
+
+	private function newUseCase(): ApplyForMembershipUseCase {
+		return new ApplyForMembershipUseCase(
+			$this->repository,
+			$this->authUpdater,
+			$this->mailer,
+			$this->tokenGenerator
+		);
 	}
 
 	private function newValidRequest() {
@@ -89,14 +107,6 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 		return $bankData->assertNoNullFields()->freeze();
 	}
 
-	private function newUseCase(): ApplyForMembershipUseCase {
-		return new ApplyForMembershipUseCase(
-			$this->repository,
-			$this->authUpdater,
-			$this->mailer
-		);
-	}
-
 	public function testGivenValidRequest_applicationGetsPersisted() {
 		$this->newUseCase()->applyForMembership( $this->newValidRequest() );
 
@@ -116,6 +126,31 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 			new EmailAddress( ValidMembershipApplication::APPLICANT_EMAIL_ADDRESS ),
 			[]
 		);
+	}
+
+	public function testGivenValidRequest_tokenIsGeneratedAndAssigned() {
+		$this->authUpdater->expects( $this->once() )
+			->method( 'allowModificationViaToken' )
+			->with(
+				$this->equalTo( self::FIRST_APPLICATION_ID ),
+				$this->equalTo( self::GENERATED_TOKEN )
+			);
+
+		$this->authUpdater->expects( $this->once() )
+			->method( 'allowAccessViaToken' )
+			->with(
+				$this->equalTo( self::FIRST_APPLICATION_ID ),
+				$this->equalTo( self::GENERATED_TOKEN )
+			);
+
+		$this->newUseCase()->applyForMembership( $this->newValidRequest() );
+	}
+
+	public function testGivenValidRequest_tokenIsGeneratedAndReturned() {
+		$response = $this->newUseCase()->applyForMembership( $this->newValidRequest() );
+
+		$this->assertSame( self::GENERATED_TOKEN, $response->getAccessToken() );
+		$this->assertSame( self::GENERATED_TOKEN, $response->getUpdateToken() );
 	}
 
 }
