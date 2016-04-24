@@ -94,6 +94,7 @@ use WMDE\Fundraising\Frontend\Validation\AllowedValuesValidator;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\Fundraising\Frontend\Validation\IbanValidator;
 use WMDE\Fundraising\Frontend\Validation\MailValidator;
+use WMDE\Fundraising\Frontend\Validation\MembershipApplicationValidator;
 use WMDE\Fundraising\Frontend\Validation\PersonalInfoValidator;
 use WMDE\Fundraising\Frontend\Validation\PersonNameValidator;
 use WMDE\Fundraising\Frontend\Validation\PhysicalAddressValidator;
@@ -806,7 +807,8 @@ class FunFunFactory {
 			$this->getMembershipApplicationRepository(),
 			$this->newMembershipAuthUpdater(),
 			$this->newApplyForMembershipMailer(),
-			$this->newTokenGenerator()
+			$this->newTokenGenerator(),
+			$this->newMembershipApplicationValidator()
 		);
 	}
 
@@ -819,6 +821,10 @@ class FunFunFactory {
 			),
 			$this->getTranslator()->trans( 'mail_subject_confirm_membership_application' ) // TODO: create
 		);
+	}
+
+	private function newMembershipApplicationValidator(): MembershipApplicationValidator {
+		return new MembershipApplicationValidator();
 	}
 
 	private function newMembershipAuthUpdater(): MembershipAppAuthUpdater {

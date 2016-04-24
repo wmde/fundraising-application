@@ -4,6 +4,10 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Validation;
 
+/**
+ * @license GNU GPL v2+
+ * @author Gabriel Birke < gabriel.birke@wikimedia.de >
+ */
 trait CanValidateField {
 
 	/**

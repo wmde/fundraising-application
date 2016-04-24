@@ -15,6 +15,7 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepositor
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipAppAuthUpdater;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
+use WMDE\Fundraising\Frontend\Validation\MembershipApplicationValidator;
 
 /**
  * @license GNU GPL v2+
@@ -26,30 +27,38 @@ class ApplyForMembershipUseCase {
 	private $authUpdater;
 	private $mailer;
 	private $tokenGenerator;
+	private $validator;
 
 	public function __construct( MembershipApplicationRepository $repository,
-		MembershipAppAuthUpdater $authUpdater, TemplateBasedMailer $mailer, TokenGenerator $tokenGenerator ) {
+		MembershipAppAuthUpdater $authUpdater, TemplateBasedMailer $mailer,
+		TokenGenerator $tokenGenerator, MembershipApplicationValidator $validator ) {
 
 		$this->repository = $repository;
 		$this->authUpdater = $authUpdater;
 		$this->mailer = $mailer;
 		$this->tokenGenerator = $tokenGenerator;
+		$this->validator = $validator;
 	}
 
 	public function applyForMembership( ApplyForMembershipRequest $request ): ApplyForMembershipResponse {
 		$application = $this->newApplicationFromRequest( $request );
 
-		// TODO: validation
+		if ( !$this->validator->validate( $application )->isSuccessful() ) {
+			// TODO: return failures (note that we have infrastructure failures that are not ConstraintViolations)
+			return ApplyForMembershipResponse::newFailureResponse();
+		}
 
-		// TODO: handle error
+		// TODO: handle exceptions
 		$this->repository->storeApplication( $application );
 
 		$accessToken = $this->tokenGenerator->generateToken();
 		$updateToken = $this->tokenGenerator->generateToken();
 
+		// TODO: handle exceptions
 		$this->authUpdater->allowAccessViaToken( $application->getId(), $accessToken );
 		$this->authUpdater->allowModificationViaToken( $application->getId(), $updateToken );
 
+		// TODO: handle exceptions
 		$this->sendConfirmationEmail( $application );
 
 		return ApplyForMembershipResponse::newSuccessResponse( $accessToken, $updateToken );

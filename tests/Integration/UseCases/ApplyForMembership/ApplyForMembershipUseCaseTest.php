@@ -17,6 +17,9 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\InMemoryMembershipApplicationReposi
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipRequest;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipUseCase;
+use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
+use WMDE\Fundraising\Frontend\Validation\MembershipApplicationValidator;
+use WMDE\Fundraising\Frontend\Validation\ValidationResult;
 
 /**
  * @covers WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipUseCase
@@ -50,11 +53,27 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 	 */
 	private $tokenGenerator;
 
+	/**
+	 * @var MembershipApplicationValidator
+	 */
+	private $validator;
+
 	public function setUp() {
 		$this->repository = new InMemoryMembershipApplicationRepository();
 		$this->authUpdater = $this->getMock( MembershipAppAuthUpdater::class );
 		$this->mailer = new TemplateBasedMailerSpy( $this );
 		$this->tokenGenerator = new FixedTokenGenerator( self::GENERATED_TOKEN );
+		$this->validator = $this->newSucceedingValidator();
+	}
+
+	private function newSucceedingValidator(): MembershipApplicationValidator {
+		$validator = $this->getMock( MembershipApplicationValidator::class );
+
+		$validator->expects( $this->any() )
+			->method( 'validate' )
+			->willReturn( new ValidationResult() );
+
+		return $validator;
 	}
 
 	public function testGivenValidRequest_applicationSucceeds() {
@@ -68,7 +87,8 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 			$this->repository,
 			$this->authUpdater,
 			$this->mailer,
-			$this->tokenGenerator
+			$this->tokenGenerator,
+			$this->validator
 		);
 	}
 
@@ -151,6 +171,24 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertSame( self::GENERATED_TOKEN, $response->getAccessToken() );
 		$this->assertSame( self::GENERATED_TOKEN, $response->getUpdateToken() );
+	}
+
+	public function testWhenValidationFails_failureResultIsReturned() {
+		$this->validator = $this->newFailingValidator();
+
+		$response = $this->newUseCase()->applyForMembership( $this->newValidRequest() );
+
+		$this->assertFalse( $response->isSuccessful() );
+	}
+
+	private function newFailingValidator(): MembershipApplicationValidator {
+		$validator = $this->getMock( MembershipApplicationValidator::class );
+
+		$validator->expects( $this->any() )
+			->method( 'validate' )
+			->willReturn( new ValidationResult( new ConstraintViolation( null, 'fail' ) ) );
+
+		return $validator;
 	}
 
 }
