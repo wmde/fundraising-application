@@ -12,6 +12,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentMethod;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentWithoutAssociatedData;
+use WMDE\Fundraising\Frontend\Domain\Model\PayPalData;
 use WMDE\Fundraising\Frontend\Domain\Model\TrackingInfo;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 
@@ -124,6 +125,13 @@ class DonationTest extends \PHPUnit_Framework_TestCase {
 		$donation->confirmBooked();
 
 		$this->assertSame( Donation::STATUS_EXTERNAL_BOOKED, $donation->getStatus() );
+	}
+
+	public function testAddingPayPalDataToNoPayPalDonationCausesException() {
+		$donation = ValidDonation::newDirectDebitDonation();
+
+		$this->expectException( RuntimeException::class );
+		$donation->addPayPalData( new PayPalData() );
 	}
 
 }

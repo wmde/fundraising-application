@@ -14,13 +14,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\AddDonationHandler;
-use WMDE\Fundraising\Frontend\Domain\Model\Euro;
-use WMDE\Fundraising\Frontend\Domain\Model\Iban;
+use WMDE\Fundraising\Frontend\App\RouteHandlers\PayPalNotificationHandler;
 use WMDE\Fundraising\Frontend\Domain\Model\Donor;
+use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifierException;
 use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\SubscriptionRequest;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipRequest;
@@ -29,7 +28,6 @@ use WMDE\Fundraising\Frontend\UseCases\CancelMembershipApplication\CancellationR
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageDisplayRequest;
 use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanRequest;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
-use WMDE\Fundraising\Frontend\UseCases\HandlePayPalPaymentNotification\PayPalNotificationRequest;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentListingRequest;
 use WMDE\Fundraising\Frontend\UseCases\ShowDonationConfirmation\ShowDonationConfirmationRequest;
 
@@ -383,59 +381,7 @@ $app->get(
 $app->post(
 	'handle-paypal-payment-notification',
 	function ( Application $app, Request $request ) use ( $ffFactory ) {
-		$routeHandler = new class() {
-
-			public function handle( FunFunFactory $ffFactory, Application $app, Request $request ) {
-				try {
-					$post = $request->request;
-					$ffFactory->getPayPalPaymentNotificationVerifier()->verify( $post->all() );
-
-					// TODO: check txn_type
-					// TODO: update donation's status and payment provider related fields
-
-					$useCase = $ffFactory->newHandlePayPalPaymentNotificationUseCase( $this->getValueFromCustomVars( $post->get( 'custom', '' ), 'utoken' ) );
-					$success = $useCase->handleNotification(
-						( new PayPalNotificationRequest() )
-							->setTransactionType( $post->get( 'txn_type', '' ) )
-							->setTransactionId( $post->get( 'txn_id', '' ) )
-							->setPayerId( $post->get( 'payer_id', '' ) )
-							->setSubscriberId( $post->get( 'subscr_id', '' ) )
-							->setPayerEmail( $post->get( 'payer_email', '' ) )
-							->setPayerStatus( $post->get( 'payer_status', '' ) )
-							->setPayerFirstName( $post->get( 'first_name', '' ) )
-							->setPayerLastName( $post->get( 'last_name', '' ) )
-							->setPayerAddressName( $post->get( 'address_name', '' ) )
-							->setPayerAddressStreet( $post->get( 'address_street', '' ) )
-							->setPayerAddressPostalCode( $post->get( 'address_zip', '' ) )
-							->setPayerAddressCity( $post->get( 'address_city', '' ) )
-							->setPayerAddressCountryCode( $post->get( 'address_country_code', '' ) )
-							->setPayerAddressStatus( $post->get( 'address_status', '' ) )
-							->setDonationId( $post->get( 'item_number', 0 ) )
-							->setCurrencyCode( $post->get( 'mc_currency', '' ) )
-							->setTransactionFee( Euro::newFromString( $post->get( 'mc_fee', '0' ) ) )
-							->setAmountGross( Euro::newFromString( $post->get( 'mc_gross', '0' ) ) )
-							->setSettleAmount( Euro::newFromString( $post->get( 'settle_amount', '0' ) ) )
-							->setPaymentTimestamp( $post->get( 'payment_date', '' ) )
-							->setPaymentStatus( $post->get( 'payment_status', '' ) )
-							->setPaymentType( $post->get( 'payment_type', '' ) )
-					);
-
-					return new Response( '', 200 );
-				} catch ( PayPalPaymentNotificationVerifierException $e ) {
-					// TODO: log error
-					// TODO: let PayPal resend IPN?
-				}
-
-				return new Response( 'TODO' ); # PayPal expects an empty response
-			}
-
-			private function getValueFromCustomVars( string $customVars, string $key ): string {
-				$vars = json_decode( $customVars, true );
-				return !empty( $vars[$key] ) ? $vars[$key] : '';
-			}
-		};
-
-		return $routeHandler->handle( $ffFactory, $app, $request );
+		return ( new PayPalNotificationHandler( $ffFactory ) )->handle( $request );
 	}
 );
 
