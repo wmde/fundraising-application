@@ -61,13 +61,13 @@ class PayPalNotificationHandler {
 					->setPaymentType( $post->get( 'payment_type', '' ) )
 			);
 
-			return new Response( '', 200 );
+			return new Response( '', Response::HTTP_OK ); # PayPal expects an empty response
 		} catch ( PayPalPaymentNotificationVerifierException $e ) {
 			// TODO: log error
 			// TODO: let PayPal resend IPN?
+			// TODO: is this the right Response?
+			return new Response( '', Response::HTTP_INTERNAL_SERVER_ERROR );
 		}
-
-		return new Response( 'TODO' ); # PayPal expects an empty response
 	}
 
 	private function getUpdateToken( ParameterBag $postRequest ): string {
