@@ -107,7 +107,11 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 					'address_name' => 'address_name',
 					'item_name' => 'My preciousss',
 					'item_number' => 1,
-					'custom' => '{"id": "1", "utoken": "my_secret_token"}'
+					'custom' => '{"id": "1", "utoken": "my_secret_token"}',
+					'txn_id' => 'transaction_id',
+					'payment_type' => 'transaction_id',
+					'txn_type' => 'transaction_id',
+					'payment_date' => 'payment_date',
 				]
 			)
 			->willReturn( $response );
@@ -133,6 +137,13 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		$this->assertSame( $request['mc_fee'], $pplData->getFee()->getEuroString() );
 		$this->assertSame( $request['mc_gross'], $pplData->getAmount()->getEuroString() );
 		$this->assertSame( $request['settle_amount'], $pplData->getSettleAmount()->getEuroString() );
+
+		$this->assertSame( $request['txn_id'], $pplData->getPaymentId() );
+		$this->assertSame( $request['payment_type'], $pplData->getPaymentType() );
+		$this->assertSame( $request['payment_status'] . '/' . $request['txn_type'], $pplData->getPaymentStatus() );
+		$this->assertSame( $request['payer_id'], $pplData->getPayerId() );
+		$this->assertSame( $request['payment_date'], $pplData->getPaymentTimestamp() );
+		$this->assertSame( $request['subscr_id'], $pplData->getSubscriberId() );
 	}
 
 	private function newRequest() {
@@ -152,7 +163,11 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			'address_name' => 'address_name',
 			'item_name' => self::ITEM_NAME,
 			'item_number' => 1,
-			'custom' => '{"id": "1", "utoken": "my_secret_token"}'
+			'custom' => '{"id": "1", "utoken": "my_secret_token"}',
+			'txn_id' => 'transaction_id',
+			'payment_type' => 'transaction_id',
+			'txn_type' => 'transaction_id',
+			'payment_date' => 'payment_date',
 		];
 	}
 

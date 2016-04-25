@@ -203,7 +203,13 @@ class DoctrineDonationRepository implements DonationRepository {
 			'paypal_settle_amount' => $payPalData->getSettleAmount(),
 			'paypal_first_name' => $payPalData->getFirstName(),
 			'paypal_last_name' => $payPalData->getLastName(),
-			'paypal_address_name' => $payPalData->getAddressName()
+			'paypal_address_name' => $payPalData->getAddressName(),
+			'ext_payment_id' => $payPalData->getPaymentId(),
+			'ext_subscr_id' => $payPalData->getSubscriberId(),
+			'ext_payment_type' => $payPalData->getPaymentType(),
+			'ext_payment_status' => $payPalData->getPaymentStatus(),
+			'ext_payment_account' => $payPalData->getPayerId(),
+			'ext_payment_timestamp' => $payPalData->getPaymentTimestamp()
 		];
 	}
 
@@ -378,6 +384,10 @@ class DoctrineDonationRepository implements DonationRepository {
 				->setFirstName( $data['paypal_first_name'] )
 				->setLastName( $data['paypal_last_name'] )
 				->setAddressName( $data['paypal_address_name'] )
+				->setPaymentId( $data['ext_payment_id'] )
+				->setPaymentType( $data['ext_payment_type'] )
+				->setPaymentStatus( $data['ext_payment_status'] )
+				->setPaymentTimestamp( $data['ext_payment_timestamp'] )
 				->freeze()->assertNoNullFields();
 		}
 
