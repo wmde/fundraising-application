@@ -4,13 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\UseCases\ApplyForMembership;
 
-use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
-use WMDE\Fundraising\Frontend\Domain\Model\MembershipApplicant;
 use WMDE\Fundraising\Frontend\Domain\Model\MembershipApplication;
-use WMDE\Fundraising\Frontend\Domain\Model\MembershipPayment;
-use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
-use WMDE\Fundraising\Frontend\Domain\Model\PhoneNumber;
-use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepository;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipAppAuthUpdater;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
@@ -64,44 +58,8 @@ class ApplyForMembershipUseCase {
 		return ApplyForMembershipResponse::newSuccessResponse( $accessToken, $updateToken );
 	}
 
-	private function newApplicationFromRequest( ApplyForMembershipRequest $request ) {
-		return MembershipApplication::newApplication(
-			$request->getMembershipType(),
-			new MembershipApplicant(
-				$this->newPersonName( $request ),
-				$this->newAddress( $request ),
-				new EmailAddress( $request->getApplicantEmailAddress() ),
-				new PhoneNumber( $request->getApplicantPhoneNumber() ),
-				new \DateTime( $request->getApplicantDateOfBirth() )
-			),
-			new MembershipPayment(
-				$request->getPaymentIntervalInMonths(),
-				$request->getPaymentAmount(),
-				$request->getPaymentBankData()
-			)
-		);
-	}
-
-	private function newPersonName( ApplyForMembershipRequest $request ): PersonName {
-		$personName = PersonName::newPrivatePersonName();
-
-		$personName->setFirstName( $request->getApplicantFirstName() );
-		$personName->setLastName( $request->getApplicantLastName() );
-		$personName->setSalutation( $request->getApplicantSalutation() );
-		$personName->setTitle( $request->getApplicantTitle() );
-
-		return $personName->freeze()->assertNoNullFields();
-	}
-
-	private function newAddress( ApplyForMembershipRequest $request ): PhysicalAddress {
-		$address = new PhysicalAddress();
-
-		$address->setCity( $request->getApplicantCity() );
-		$address->setCountryCode( $request->getApplicantCountryCode() );
-		$address->setPostalCode( $request->getApplicantPostalCode() );
-		$address->setStreetAddress( $request->getApplicantStreetAddress() );
-
-		return $address->freeze()->assertNoNullFields();
+	private function newApplicationFromRequest( ApplyForMembershipRequest $request ): MembershipApplication {
+		return ( new MembershipApplicationBuilder() )->newApplicationFromRequest( $request );
 	}
 
 	private function sendConfirmationEmail( MembershipApplication $application ) {
