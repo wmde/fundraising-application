@@ -169,8 +169,8 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 				]
 			);
 
-			$this->assertSame( 'TODO', $client->getResponse()->getContent() );
-			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
+			$this->assertSame( '', $client->getResponse()->getContent() );
+			$this->assertSame( 500, $client->getResponse()->getStatusCode() );
 		} );
 	}
 
