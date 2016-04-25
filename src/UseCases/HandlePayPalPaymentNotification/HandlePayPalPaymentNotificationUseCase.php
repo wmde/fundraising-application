@@ -74,7 +74,11 @@ class HandlePayPalPaymentNotificationUseCase {
 			->setSettleAmount( $request->getSettleAmount() )
 			->setFirstName( $request->getPayerFirstName() )
 			->setLastName( $request->getPayerLastName() )
-			->setAddressName( $request->getPayerAddressName() );
+			->setAddressName( $request->getPayerAddressName() )
+			->setPaymentId( $request->getTransactionId() )
+			->setPaymentType( $request->getPaymentType() )
+			->setPaymentStatus( implode( '/', [ $request->getPaymentStatus(), $request->getTransactionType() ] ) )
+			->setPaymentTimestamp( $request->getPaymentTimestamp() );
 	}
 
 }

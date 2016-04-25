@@ -24,6 +24,10 @@ class PayPalData {
 	private $firstName = '';
 	private $lastName = '';
 	private $addressName = '';
+	private $paymentId = '';
+	private $paymentType = '';
+	private $paymentStatus = '';
+	private $paymentTimestamp = '';
 
 	public function __construct() {
 		$this->amount = Euro::newFromInt( 0 );
@@ -138,6 +142,46 @@ class PayPalData {
 	public function setAddressName( string $addressName ) {
 		$this->assertIsWritable();
 		$this->addressName = $addressName;
+		return $this;
+	}
+
+	public function getPaymentId(): string {
+		return $this->paymentId;
+	}
+
+	public function setPaymentId( string $paymentId ) {
+		$this->assertIsWritable();
+		$this->paymentId = $paymentId;
+		return $this;
+	}
+
+	public function getPaymentType(): string {
+		return $this->paymentType;
+	}
+
+	public function setPaymentType( string $paymentType ) {
+		$this->assertIsWritable();
+		$this->paymentType = $paymentType;
+		return $this;
+	}
+
+	public function getPaymentStatus(): string {
+		return $this->paymentStatus;
+	}
+
+	public function setPaymentStatus( string $paymentStatus ) {
+		$this->assertIsWritable();
+		$this->paymentStatus = $paymentStatus;
+		return $this;
+	}
+
+	public function getPaymentTimestamp(): string {
+		return $this->paymentTimestamp;
+	}
+
+	public function setPaymentTimestamp( string $paymentTimestamp ) {
+		$this->assertIsWritable();
+		$this->paymentTimestamp = $paymentTimestamp;
 		return $this;
 	}
 
