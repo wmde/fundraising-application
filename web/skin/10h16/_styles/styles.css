@@ -541,6 +541,10 @@ main { padding-top: 40px; padding-bottom: 100px; background: #f6f6f6; display: b
 #donation-sepa-confirmation .step-list li.first { background: #85d576 url(../_assets/img/sheet_step_list_item_1.png) right center no-repeat; }
 #donation-sepa-confirmation .step-list li.last { background: #7bc46d; }
 
+.box-common .box-header { background: #84c5f1; }
+.box-common .box-header span[class^="icon-"] { padding-left: 30px; display: inline-block; }
+.box-common .box-header span[class^="icon-"]:before { font-size: 1.2em; position: absolute; margin-left: -30px; }
+
 #donation-sheet .box-header { background: #85d576; }
 #donation-sheet .box-section { font-size: 0.8em; color: #000; }
 #donation-sheet .title { font-size: 1.2em; }
