@@ -15,9 +15,9 @@ class FixedTokenGenerator implements TokenGenerator {
 	private $token;
 	private $expiry;
 
-	public function __construct( string $token, \DateTime $expiry ) {
+	public function __construct( string $token, \DateTime $expiry = null ) {
 		$this->token = $token;
-		$this->expiry = $expiry;
+		$this->expiry = $expiry === null ? new \DateTime() : $expiry;
 	}
 
 	public function generateToken(): string {

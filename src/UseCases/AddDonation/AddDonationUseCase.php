@@ -75,6 +75,7 @@ class AddDonationUseCase {
 			$donation->markForModeration();
 		}
 
+		// TODO: handle exceptions
 		$this->donationRepository->storeDonation( $donation );
 
 		try {
