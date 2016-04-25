@@ -24,6 +24,19 @@ var objectAssign = require( 'object-assign' ),
 		render: function ( formContent ) {
 			this.element.val( formContent[ this.contentName ] );
 		}
+	},
+
+	AmountComponent = {
+		inputElement: null,
+		selectElement: null,
+		render: function ( formContent ) {
+			this.inputElement.val( formContent.amount || '' );
+			if ( formContent.isCustomAmount ) {
+				this.selectElement.prop( 'checked', false );
+			} else {
+				this.selectElement.val( [ formContent.amount ] );
+			}
+		}
 	};
 
 module.exports = {
@@ -36,6 +49,7 @@ module.exports = {
 		element.on( 'change', component.onChange );
 		return component;
 	},
+
 	createTextComponent: function ( store, element, contentName ) {
 		var component = objectAssign( Object.create( TextComponent ), {
 			element: element,
@@ -43,6 +57,20 @@ module.exports = {
 			onChange: createDefaultChangeHandler( store, contentName )
 		} );
 		element.on( 'change', component.onChange );
+		return component;
+	},
+
+	createAmountComponent: function ( store, inputElement, selectElement ) {
+		var component = objectAssign( Object.create( AmountComponent ), {
+			inputElement: inputElement,
+			selectElement: selectElement
+		} );
+		inputElement.on( 'change', function ( evt ) {
+			store.dispatch( actions.newInputAmountAction( evt.target.value ) );
+		} );
+		selectElement.on( 'change', function ( evt ) {
+			store.dispatch( actions.newSelectAmountAction( evt.target.value ) );
+		} );
 		return component;
 	}
 };
