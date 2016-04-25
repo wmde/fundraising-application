@@ -8,6 +8,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
+use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipRequest;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\MembershipApplicationBuilder;
@@ -27,9 +28,12 @@ class MembershipApplicationBuilderTest extends \PHPUnit_Framework_TestCase {
 
 		$application = ( new MembershipApplicationBuilder() )->newApplicationFromRequest( $request );
 
+		$this->assertIsExpectedCompanyPersonName( $application->getApplicant()->getPersonName() );
+		$this->assertIsExpectedAddress( $application->getApplicant()->getPhysicalAddress() );
+
 		$this->assertEquals(
-			$this->getCompanyPersonName(),
-			$application->getApplicant()->getPersonName()
+			Euro::newFromInt( ValidMembershipApplication::PAYMENT_AMOUNT_IN_EURO ),
+			$application->getPayment()->getAmount()
 		);
 	}
 
@@ -70,6 +74,13 @@ class MembershipApplicationBuilderTest extends \PHPUnit_Framework_TestCase {
 		return $bankData->assertNoNullFields()->freeze();
 	}
 
+	private function assertIsExpectedCompanyPersonName( PersonName $name ) {
+		$this->assertEquals(
+			$this->getCompanyPersonName(),
+			$name
+		);
+	}
+
 	private function getCompanyPersonName(): PersonName {
 		$name = PersonName::newCompanyName();
 
@@ -80,6 +91,24 @@ class MembershipApplicationBuilderTest extends \PHPUnit_Framework_TestCase {
 		$name->setLastName( ValidMembershipApplication::APPLICANT_LAST_NAME );
 
 		return $name->assertNoNullFields()->freeze();
+	}
+
+	private function assertIsExpectedAddress( PhysicalAddress $address ) {
+		$this->assertEquals(
+			$this->getPhysicalAddress(),
+			$address
+		);
+	}
+
+	private function getPhysicalAddress(): PhysicalAddress {
+		$address = new PhysicalAddress();
+
+		$address->setStreetAddress( ValidMembershipApplication::APPLICANT_STREET_ADDRESS );
+		$address->setPostalCode( ValidMembershipApplication::APPLICANT_POSTAL_CODE );
+		$address->setCity( ValidMembershipApplication::APPLICANT_CITY );
+		$address->setCountryCode( ValidMembershipApplication::APPLICANT_COUNTRY_CODE );
+
+		return $address->assertNoNullFields()->freeze();
 	}
 
 }
