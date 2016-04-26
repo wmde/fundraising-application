@@ -60,8 +60,9 @@
 
                         <div class="container clearfix">
                             <div class="address f-left">
+                                {%  if person %}
                                 <p>
-                                    <span class="confirm-salutation">{$ person.salutation $}</span> <span class="confirm-name">{$ person.fullName $}</span>
+                                    <span class="confirm-name">{$ person.fullName $}</span>
                                 </p>
 
                                 <p class="no-margin">
@@ -69,6 +70,7 @@
                                     <span class="confirm-postcode">{$ person.postcode $}</span> <span class="confirm-city">{$ person.city $}</span><br/>
                                     <span class="confirm-mail">{$ person.email $}</span>
                                 </p>
+                                {% endif %}
                             </div>
 
                             <div class="payment f-left">
