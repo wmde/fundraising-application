@@ -17,6 +17,8 @@ class ApplyForMembershipRequest {
 
 	private $membershipType;
 
+	private $applicantType;
+	private $applicantCompanyName;
 	private $applicantSalutation;
 	private $applicantTitle;
 	private $applicantFirstName;
@@ -42,6 +44,22 @@ class ApplyForMembershipRequest {
 	public function setMembershipType( string $membershipType ) {
 		$this->assertIsWritable();
 		$this->membershipType = $membershipType;
+	}
+
+	public function getApplicantType(): string {
+		return $this->applicantType;
+	}
+
+	public function setApplicantType( string $applicantType ) {
+		$this->applicantType = $applicantType;
+	}
+
+	public function getApplicantCompanyName(): string {
+		return $this->applicantCompanyName;
+	}
+
+	public function setApplicantCompanyName( string $applicantCompanyName ) {
+		$this->applicantCompanyName = $applicantCompanyName;
 	}
 
 	public function getApplicantSalutation(): string {

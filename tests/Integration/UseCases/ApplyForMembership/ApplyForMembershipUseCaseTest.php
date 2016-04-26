@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\CancelMembershipApplication;
+namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\ApplyForMembership;
 
 use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
@@ -95,6 +95,9 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 	private function newValidRequest() {
 		$request = new ApplyForMembershipRequest();
 
+		$request->setMembershipType( ValidMembershipApplication::MEMBERSHIP_TYPE );
+		$request->setApplicantType( 'person' );
+		$request->setApplicantCompanyName( '' );
 		$request->setMembershipType( ValidMembershipApplication::MEMBERSHIP_TYPE );
 		$request->setApplicantSalutation( ValidMembershipApplication::APPLICANT_SALUTATION );
 		$request->setApplicantTitle( ValidMembershipApplication::APPLICANT_TITLE );
