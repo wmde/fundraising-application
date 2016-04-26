@@ -41,11 +41,6 @@ class PersonName {
 		return $this->personType;
 	}
 
-	public function setPersonType( string $personType ) {
-		$this->assertIsWritable();
-		$this->personType = $personType;
-	}
-
 	public function getCompanyName(): string {
 		return $this->companyName;
 	}
