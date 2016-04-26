@@ -148,6 +148,17 @@
                     {
                         viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.personal-data-full' ), /firma|person/ ),
                         stateKey: 'formContent.addressType'
+                    },
+                    {
+                        viewHandler: WMDE.View.createAddressDisplayHandler( {
+                            fullName: $( '.confirm-name' ),
+                            street: $( '.confirm-street' ),
+                            postcode: $( '.confirm-postcode' ),
+                            city: $( '.confirm-city' ),
+                            country: $( '.confirm-country' ),
+                            email: $( '.confirm-email' )
+                        } ),
+                        stateKey: 'formContent'
                     }
                 ],
                 store
