@@ -882,9 +882,10 @@ class FunFunFactory {
 			$this->getMessenger(),
 			new TwigTemplate(
 				$this->getTwig(),
-				'Mail_Membership_Application_Cancellation_Confirmation.twig'
+				'Mail_Membership_Application_Cancellation_Confirmation.twig',
+				[ 'greeting_generator' => $this->getGreetingGenerator() ]
 			),
-			$this->getTranslator()->trans( 'mail_subject_confirm_membership_application_cancellation' ) // TODO: create
+			$this->getTranslator()->trans( 'mail_subject_confirm_membership_application_cancellation' )
 		);
 	}
 
