@@ -58,6 +58,7 @@ test( 'Given non-sepa bank data, IBAN and BIC are displayed', function ( t ) {
 } );
 
 test( 'Bank data display handler checks if all elements are configured', function ( t ) {
+	// TODO Do more than a spot check. How do i check all fields without using a loop in the test?
 	var bankDataWithMissingAccountNumber = {
 		bankCode: createElement(),
 		bankName: createElement()

@@ -8,9 +8,27 @@ var test = require( 'tape' ),
 		return {
 			on: sinon.spy(),
 			val: sinon.spy(),
-			prop: sinon.spy()
+			prop: sinon.spy(),
+			text: sinon.spy()
+		};
+	},
+	assertChangeHandlerWasSet = function ( t, spyingElement ) {
+		t.ok( spyingElement.on.calledOnce, 'event handler was set once' );
+		t.equals( spyingElement.on.firstCall.args[ 0 ], 'change', 'event handler was set for change events' );
+		t.equals( typeof spyingElement.on.firstCall.args[ 1 ], 'function', 'event handler is a function' );
+	},
+	createBankDataConfig = function () {
+		return {
+			ibanElement: createSpyingElement(),
+			bicElement: createSpyingElement(),
+			accountNumberElement: createSpyingElement(),
+			bankCodeElement: createSpyingElement(),
+			debitTypeElement: createSpyingElement(),
+			bankNameFieldElement: createSpyingElement(),
+			bankNameDisplayElement: createSpyingElement()
 		};
 	}
+
 	;
 
 test( 'Components add change handling function to their elements', function ( t ) {
@@ -134,5 +152,61 @@ test( 'Changing the amount input dispatches select action', function ( t ) {
 
 	t.ok( store.dispatch.calledOnce, 'event handler triggers store update' );
 	t.deepEqual( store.dispatch.args[ 0 ][ 0 ], expectedAction, 'event handler generates the correct action' );
+	t.end();
+} );
+
+test( 'Bank data component adds change handling function to its elements', function ( t ) {
+	var bankDataComponentConfig = createBankDataConfig(),
+		store = {};
+
+	formComponents.createBankDataComponent( store, bankDataComponentConfig );
+
+	assertChangeHandlerWasSet( t, bankDataComponentConfig.ibanElement );
+	assertChangeHandlerWasSet( t, bankDataComponentConfig.bicElement );
+	assertChangeHandlerWasSet( t, bankDataComponentConfig.accountNumberElement );
+	assertChangeHandlerWasSet( t, bankDataComponentConfig.bankCodeElement );
+	assertChangeHandlerWasSet( t, bankDataComponentConfig.debitTypeElement );
+	// Bank data is a pure display field with no change handler
+	t.end();
+} );
+
+test( 'Bank data component renders the store values in its elements', function ( t ) {
+	var bankDataComponentConfig = createBankDataConfig(),
+		store = {},
+		handler = formComponents.createBankDataComponent( store, bankDataComponentConfig );
+
+	handler.render( {
+		iban: 'DE12500105170648489890',
+		bic: 'INGDDEFFXXX',
+		accountNumber: '0648489890',
+		bankCode: '50010517',
+		bankName: 'ING-DiBa',
+		debitType: 'non-sepa'
+	} );
+
+	t.equals( bankDataComponentConfig.ibanElement.val.args[ 0 ][ 0 ], 'DE12500105170648489890', 'IBAN value is set' );
+	t.equals( bankDataComponentConfig.bicElement.val.args[ 0 ][ 0 ], 'INGDDEFFXXX', 'BIC value is set' );
+	t.equals( bankDataComponentConfig.accountNumberElement.val.args[ 0 ][ 0 ], '0648489890', 'Account number is set' );
+	t.equals( bankDataComponentConfig.bankCodeElement.val.args[ 0 ][ 0 ], '50010517', 'BIC value is set' );
+	t.equals( bankDataComponentConfig.bankNameDisplayElement.text.args[ 0 ][ 0 ], 'ING-DiBa', 'Bank name is displayed' );
+	t.equals( bankDataComponentConfig.bankNameFieldElement.val.args[ 0 ][ 0 ], 'ING-DiBa', 'Bank name is set in field' );
+	t.deepEqual( bankDataComponentConfig.debitTypeElement.val.args[ 0 ][ 0 ], [ 'non-sepa' ], 'Debit type is set' );
+
+	t.end();
+} );
+
+test( 'Bank data component checks if all elements in the configuration are set', function ( t ) {
+	// TODO Do more than a spot check. How do i check all fields without using a loop in the test?
+	// The test succeeds without checking code in the factory function because of the calls to the event binding
+	// However, if bankName instead of iban was missing, the test would fail.
+	var bankDataComponentConfigWithMissingIban = createBankDataConfig(),
+		store = {};
+
+	delete bankDataComponentConfigWithMissingIban.ibanElement;
+
+	t.throws( function () {
+		formComponents.createBankDataComponent( store, bankDataComponentConfigWithMissingIban );
+	} );
+
 	t.end();
 } );

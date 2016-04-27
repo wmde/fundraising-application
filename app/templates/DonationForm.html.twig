@@ -48,7 +48,15 @@
                 WMDE.Components.createRadioComponent( store, $( '.payment-type-select' ), 'paymentType' ),
                 WMDE.Components.createRadioComponent( store, $( '.interval-type-select' ), 'paymentPeriodInMonths' ),
                 WMDE.Components.createRadioComponent( store, $( '.payment-period-select' ), 'paymentPeriodInMonths' ),
-                WMDE.Components.createRadioComponent( store, $( '.debit-type-select' ), 'debitType' ),
+                WMDE.Components.createBankDataComponent( store, {
+                    ibanElement: $( '#iban' ),
+                    bicElement: $( '#bic' ),
+                    accountNumberElement: $( '#account-number' ),
+                    bankCodeElement: $( '#bank-code' ),
+                    bankNameFieldElement: $( '#bank-name' ),
+                    bankNameDisplayElement: $( '#field-bank-name' ),
+                    debitTypeElement: $( '.debit-type-select' )
+                } ),
                 WMDE.Components.createRadioComponent( store, $( '.address-type-select' ), 'addressType' ),
                 WMDE.Components.createRadioComponent( store, $( '.salutation' ), 'salutation' ),
                 WMDE.Components.createRadioComponent( store, $( '.personal-title' ), 'title' ),
