@@ -29,23 +29,15 @@ $( document ).ready( function() {
 		$customAmount = $( '#amount-8' );
 
 	$donationForm.on( 'submit', function( e ) {
-		if ( bankCheckPending || mailCheckPending ) {
+		if ( mailCheckPending ) {
 			$( '#donFormSubmit' ).trigger( 'click' );
 			return false;
 		}
-		// TODO Remove this when validation is incorporated in module
-		if ( !amountSpecified() ) {
-			$customAmount.get( 0 ).setCustomValidity( "Der Mindestbetrag beträgt 1 Euro" );
-			return false;
-		}
 	} );
+	
 	$membershipForm.on( 'submit', function( e ) {
-		if ( bankCheckPending || mailCheckPending || memCheckPending ) {
+		if ( mailCheckPending || memCheckPending ) {
 			$( '#memFormSubmit' ).trigger( 'click' );
-			return false;
-		}
-		if ( !amountSpecified() ) {
-			checkMembershipFee( false );
 			return false;
 		}
 	} );
@@ -53,10 +45,6 @@ $( document ).ready( function() {
 	$( '#donFormSubmit, #memFormSubmit' ).on( 'click', function( e ) {
 		if ( mailCheckPending ) {
 			checkMailAddress( true );
-			return false;
-		}
-		if ( bankCheckPending ) {
-			checkBankData( true );
 			return false;
 		}
 	});
@@ -68,36 +56,10 @@ $( document ).ready( function() {
 		}
 	});
 
-	// Clear bank data when payment type is not bank transfer
-	// TODO: Move to view handler or similar class when bank data fields have been componentized
-	$( '.payment-type-select' ).on( 'change', function ( evt ) {
-		if ( evt.target.value === 'BEZ' ) {
-			return;
-		}
-		$( 'section#donation-payment' ).find( 'input[type=text]' ).each( function() {
-			$( this )[0].setCustomValidity( "" );
-			$( this ).val( "" );
-		} );
-	} );
-
-	$( ".iban-check, .bank-check" ).on( 'change', function( evt ) {
-		checkBankData( false );
-	});
-
-    $( "#bic" ).on( 'change', function( evt ) {
-        evt.target.value = cleanAccountData(evt.target.value, true);
-    });
-
 	$( "#email" ).on( 'change', function( evt ) {
 		mailCheckPending = true;
 		checkMailAddress( false );
 	});
-
-	var $iban = $( "#iban" );
-	if ( $iban.val() && $iban.val().length > 0 ) {
-		$iban.trigger( 'change' );
-		$( "#debit-type-1" ).trigger( 'click' );
-	}
 
 	if ( inMembershipForm() ) {
 		$( "input:radio[name=membership_fee], input:radio[name=membership_fee_interval], input:radio[name=addressType], #amount-8" ).on( 'change', function ( evt ) {
@@ -109,89 +71,6 @@ $( document ).ready( function() {
 				memCheckPending = true;
 				checkMembershipFee( false );
 			}
-		} );
-	}
-
-	function checkBankData( submit ) {
-		bankCheckPending = true;
-		var url = '';
-
-		if ( $( '#debit-type-2' ).is( ':checked' ) ) {
-            var accNumElm = $( '#account-number' );
-            var bankCodeElm = $( '#bank-code' );
-
-			if( accNumElm.val() === '' || bankCodeElm.val() === '' ) {
-				return;
-			}
-
-            accNumElm.val( cleanAccountData( accNumElm.val(), false ) );
-            bankCodeElm.val( cleanAccountData( bankCodeElm.val(), false ) );
-
-			url = "../generate-iban?bankCode=" + bankCodeElm.val() + "&accountNumber=" + accNumElm.val();
-			$( '#iban, #bic' ).val( '' );
-			$( '#bank-name' ).text( '' );
-		} else {
-            $( '#iban' ).val( cleanAccountData( $( '#iban' ).val(), true) );
-
-			url = "../check-iban?iban=" + $( "#iban" ).val();
-			$( '#account-number, #bank-code' ).val( '' );
-			$( '#bank-name' ).text( '' );
-		}
-
-		$.getJSON( url, function( data ) {
-			if ( data.status === "OK" ) {
-				$( '#iban' ).val( data.iban ? data.iban : '' );
-				$( '#bank-name' ).text( data.bankName ? data.bankName : '' );
-				$( '#field-bank-name' ).val( data.bankName ? data.bankName : '' );
-				$( '#account-number' ).val( data.account ? data.account : '' );
-				$( '#bank-code' ).val( data.bankCode ? data.bankCode : '' );
-
-				setFieldsValid( $( '#bank-code, #account-number, #iban' ) );
-
-				var $bic = $( '#bic' );
-				if( $bic.hasClass( 'invalid' ) || data.bic ) {
-					$bic.val( data.bic );
-					setFieldsValid( $bic );
-				} else if( !$bic.hasClass( 'valid' ) ) {
-					$( "#bic" ).next().removeClass( "icon-bug icon-ok" );
-				}
-			} else {
-				var $bankFields = $( "#bank-code, #account-number" );
-				$bankFields.removeClass( "valid" ).addClass( "invalid" );
-				$bankFields.next().removeClass( "icon-ok icon-placeholder" ).addClass( "icon-bug" );
-				if( $( "#non-sepa" ).css( 'display' ) === 'block' ) {
-					$bankFields.each( function( index, elmId ) {
-						$( elmId )[0].setCustomValidity( "Die angegebene Bankverbindung ist nicht korrekt." );
-					} );
-				} else {
-					$( "#bic, #iban" ).each( function( index, elmId ) {
-						$( elmId )[0].setCustomValidity( "Die angegebene Bankverbindung ist nicht korrekt." );
-					} );
-				}
-			}
-			bankCheckPending = false;
-
-			if( submit ) {
-				$( '#donFormSubmit, #memFormSubmit' ).trigger( 'click' );
-			}
-		});
-	}
-
-    function cleanAccountData( data, isIBAN ) {
-        data = data.toString();
-        if ( isIBAN ) {
-            data = data.toUpperCase();
-            return data.replace( /[^0-9A-Z]/g, "" );
-        } else {
-            return data.replace( /[^0-9]/g, "" );
-        }
-    }
-
-	function setFieldsValid( $fields ) {
-		$fields.removeClass( "invalid" ).addClass( "valid" );
-		$fields.next().removeClass( "icon-bug icon-placeholder" ).addClass( "icon-ok" );
-		$fields.each( function( index, elmId ) {
-			$( elmId )[0].setCustomValidity( "" );
 		} );
 	}
 

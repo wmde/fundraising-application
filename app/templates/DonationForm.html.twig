@@ -53,8 +53,8 @@
                     bicElement: $( '#bic' ),
                     accountNumberElement: $( '#account-number' ),
                     bankCodeElement: $( '#bank-code' ),
-                    bankNameFieldElement: $( '#bank-name' ),
-                    bankNameDisplayElement: $( '#field-bank-name' ),
+                    bankNameFieldElement: $( '#field-bank-name' ),
+                    bankNameDisplayElement: $( '#bank-name' ),
                     debitTypeElement: $( '.debit-type-select' )
                 } ),
                 WMDE.Components.createRadioComponent( store, $( '.address-type-select' ), 'addressType' ),
@@ -87,6 +87,12 @@
                             [ 'salutation', 'title', 'firstName', 'lastName', 'companyName', 'street', 'postcode', 'city', 'country', 'email' ],
                             initialValues
                     ),
+                    WMDE.ReduxValidation.createValidationDispatcher(
+                            WMDE.FormValidation.createBankDataValidator( '{$ basepath $}/check-iban', '{$ basepath $}/generate-iban' ),
+                            actions.newFinishBankDataValidationAction,
+                            [ 'iban', 'accountNumber', 'bankCode', 'debitType', 'paymentType' ],
+                            initialValues
+                    )
                 ];
             },
             store,

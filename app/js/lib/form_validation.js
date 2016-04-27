@@ -6,7 +6,7 @@ var jQuery = require( 'jquery' ),
 
 	AddressValidator = {
 		validationUrl: '',
-		postFunction: null,
+		sendFunction: null,
 
 		requiredFieldsForAll: [ 'street', 'postcode', 'city', 'email' ],
 		requiredFieldsForPerson: [ 'firstName', 'lastName', 'salutation' ],
@@ -29,7 +29,7 @@ var jQuery = require( 'jquery' ),
 				return null;
 			}
 
-			return this.postFunction( this.validationUrl, formValues, null, 'json' );
+			return this.sendFunction( this.validationUrl, formValues, null, 'json' );
 		},
 		formValuesHaveEmptyRequiredFields: function ( formValues, requiredFields ) {
 			var objectWithOnlyTheRequiredFields = _.pick( formValues, requiredFields ),
@@ -40,37 +40,74 @@ var jQuery = require( 'jquery' ),
 
 	AmountValidator = {
 		validationUrl: '',
-		postFunction: null,
+		sendFunction: null,
 		validate: function ( formValues ) {
 			var postData = {
 				amount: formValues.amount,
 				paymentType: formValues.paymentType
 			};
-			return this.postFunction( this.validationUrl, postData, null, 'json' );
+			return this.sendFunction( this.validationUrl, postData, null, 'json' );
 		}
 	},
 
-	createAddressValidator = function ( validationUrl, postFunction ) {
+	BankDataValidator = {
+		validationUrlForSepa: '',
+		validationUrlForNonSepa: '',
+		sendFunction: null,
+		validate: function ( formValues ) {
+			var data, validationUrl;
+			if ( formValues.paymentType !== 'BEZ' ) {
+				return {
+					status: 'OK'
+				};
+			}
+			if ( formValues.debitType === 'sepa' ) {
+				data = {
+					iban: formValues.iban
+				};
+				validationUrl = this.validationUrlForSepa;
+			} else {
+				data = {
+					accountNumber: formValues.accountNumber,
+					bankCode: formValues.bankCode
+				};
+				validationUrl = this.validationUrlForNonSepa;
+			}
+			return this.sendFunction( validationUrl, data, null, 'json' );
+		}
+	},
+
+	createAddressValidator = function ( validationUrl, sendFunction ) {
 		return objectAssign( Object.create( AddressValidator ), {
 			validationUrl: validationUrl,
-			postFunction: postFunction || jQuery.post
+			sendFunction: sendFunction || jQuery.post
 		} );
 	},
 
 	/**
 	 *
 	 * @param {string} validationUrl
-	 * @param {Function} postFunction jQuery.post function or equivalent
+	 * @param {Function} sendFunction jQuery.post function or equivalent
 	 * @return {AmountValidator}
 	 */
-	createAmountValidator = function ( validationUrl, postFunction ) {
+	createAmountValidator = function ( validationUrl, sendFunction ) {
 		return objectAssign( Object.create( AmountValidator ), {
 			validationUrl: validationUrl,
-			postFunction: postFunction || jQuery.post
+			sendFunction: sendFunction || jQuery.post
 		} );
-	};
+	},
+
+	createBankDataValidator = function ( validationUrlForSepa, validationUrlForNonSepa, sendFunction ) {
+		return objectAssign( Object.create( BankDataValidator ), {
+			validationUrlForSepa: validationUrlForSepa,
+			validationUrlForNonSepa: validationUrlForNonSepa,
+			sendFunction: sendFunction || jQuery.get
+		} );
+	}
+	;
 
 module.exports = {
 	createAmountValidator: createAmountValidator,
-	createAddressValidator: createAddressValidator
+	createAddressValidator: createAddressValidator,
+	createBankDataValidator: createBankDataValidator
 };

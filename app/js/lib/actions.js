@@ -73,6 +73,18 @@ module.exports = {
 			type: 'FINISH_AMOUNT_VALIDATION',
 			payload: validationResult
 		};
+	},
+
+	/**
+	 *
+	 * @param {Object|Promise} validationResult
+	 * @return {{type: string, payload: *}}
+	 */
+	newFinishBankDataValidationAction: function ( validationResult ) {
+		return {
+			type: 'FINISH_BANK_DATA_VALIDATION',
+			payload: validationResult
+		};
 	}
 
 };

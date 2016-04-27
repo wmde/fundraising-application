@@ -100,6 +100,41 @@ test( 'When CHANGE_CONTENT sets address type to anonymous, all personal data fie
 	t.end();
 } );
 
+test( 'FINISH_BANK_DATA_VALIDATION sets bank data when status is OK', function ( t ) {
+	var stateBefore = { iban: '', bic: '', accountNumber: '', bankCode: '', bankName: '' },
+		expectedState = {
+			iban: 'DE12500105170648489890',
+			bic: 'INGDDEFFXXX',
+			accountNumber: '0648489890',
+			bankCode: '50010517',
+			bankName: 'ING-DiBa'
+		},
+		action = { type: 'FINISH_BANK_DATA_VALIDATION', payload: {
+			status: 'OK',
+			iban: 'DE12500105170648489890',
+			bic: 'INGDDEFFXXX',
+			account: '0648489890',
+			bankCode: '50010517',
+			bankName: 'ING-DiBa'
+		} };
+
+	deepFreeze( stateBefore );
+	t.deepEqual( formContent( stateBefore, action ), expectedState );
+	t.end();
+} );
+
+test( 'FINISH_BANK_DATA_VALIDATION does not modify state data when status is not OK', function ( t ) {
+	var stateBefore = { iban: '', bic: '', accountNumber: '', bankCode: '', bankName: '' },
+		action = { type: 'FINISH_BANK_DATA_VALIDATION', payload: {
+			status: 'ERR',
+			message: 'Invalid BIC'
+		} };
+
+	deepFreeze( stateBefore );
+	t.equals( formContent( stateBefore, action ), stateBefore );
+	t.end();
+} );
+
 test( 'INITIALIZE_CONTENT changes multiple fields', function ( t ) {
 	var stateBefore = { paymentType: 'PPL', amount: 0, recurringPayment: 0 },
 		expectedState = { paymentType: 'BEZ', amount: '25,00', recurringPayment: 0 },

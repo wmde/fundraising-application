@@ -95,3 +95,86 @@ test( 'Given an incomplete private adddress, address validation sends no values 
 	t.end();
 } );
 
+test( 'Given sepa debit type, bank data validation sends IBAN to server', function ( t ) {
+	var positiveResult = { status: 'OK' }, // all other fields are not relevenat to the test
+		postFunctionSpy = sinon.stub().returns( positiveResult ),
+		bankDataValidator = validation.createBankDataValidator(
+			'http://spenden.wikimedia.org/check-iban',
+			'http://spenden.wikimedia.org/generate-iban',
+			postFunctionSpy
+		),
+		callParameters, validationResult;
+
+	validationResult = bankDataValidator.validate( {
+		iban: 'DE12500105170648489890',
+		bic: 'INGDDEFFXXX',
+		accountNumber: '0648489890',
+		bankCode: '50010517',
+		bankName: 'ING-DiBa',
+		debitType: 'sepa',
+		paymentType: 'BEZ'
+	} );
+
+	t.ok( postFunctionSpy.calledOnce, 'data is sent once' );
+	callParameters = postFunctionSpy.getCall( 0 ).args;
+	t.equals( callParameters[ 0 ], 'http://spenden.wikimedia.org/check-iban', 'validation calls URL for SEPA' );
+	t.deepEquals( callParameters[ 1 ], { iban: 'DE12500105170648489890' }, 'validation sends only necessary data' );
+	t.equals( callParameters[ 3 ], 'json', 'validation expects JSON data' );
+	t.deepEqual( validationResult, positiveResult, 'validation function returns result' );
+	t.end();
+} );
+
+test( 'Given non-sepa debit type, bank data validation sends account number and bank code to server', function ( t ) {
+	var positiveResult = { status: 'OK' }, // all other fields are not relevenat to the test
+		postFunctionSpy = sinon.stub().returns( positiveResult ),
+		bankDataValidator = validation.createBankDataValidator(
+			'http://spenden.wikimedia.org/check-iban',
+			'http://spenden.wikimedia.org/generate-iban',
+			postFunctionSpy
+		),
+		callParameters, validationResult;
+
+	validationResult = bankDataValidator.validate( {
+		iban: 'DE12500105170648489890',
+		bic: 'INGDDEFFXXX',
+		accountNumber: '0648489890',
+		bankCode: '50010517',
+		bankName: 'ING-DiBa',
+		debitType: 'non-sepa',
+		paymentType: 'BEZ'
+	} );
+
+	t.ok( postFunctionSpy.calledOnce, 'data is sent once' );
+	callParameters = postFunctionSpy.getCall( 0 ).args;
+	t.equals( callParameters[ 0 ], 'http://spenden.wikimedia.org/generate-iban', 'validation calls URL for SEPA' );
+	t.deepEquals( callParameters[ 1 ], { accountNumber: '0648489890', bankCode: '50010517' }, 'validation sends only necessary data' );
+	t.equals( callParameters[ 3 ], 'json', 'validation expects JSON data' );
+	t.deepEqual( validationResult, positiveResult, 'validation function returns result' );
+	t.end();
+} );
+
+test( 'Given a non-debit payment type, bank data validation succeeds', function ( t ) {
+	var postFunctionSpy = sinon.spy(),
+		bankDataValidator = validation.createBankDataValidator(
+			'http://spenden.wikimedia.org/check-iban',
+			'http://spenden.wikimedia.org/generate-iban',
+			postFunctionSpy
+		),
+		expectedValidationResult = { status: 'OK' },
+		validationResult;
+
+	validationResult = bankDataValidator.validate( {
+		iban: 'DE12500105170648489890',
+		bic: 'INGDDEFFXXX',
+		accountNumber: '0648489890',
+		bankCode: '50010517',
+		bankName: 'ING-DiBa',
+		debitType: 'non-sepa',
+		paymentType: 'PPL'
+	} );
+
+	t.equals( postFunctionSpy.callCount, 0, 'data is not sent' );
+	t.deepEquals( validationResult, expectedValidationResult, 'validation is successful' );
+	t.end();
+} );
+
