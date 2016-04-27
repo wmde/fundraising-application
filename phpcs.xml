@@ -25,9 +25,6 @@
         </properties>
     </rule>
 
-    <!-- https://github.com/squizlabs/PHP_CodeSniffer/issues/955 -->
-    <rule ref="Generic.Files.OneClassPerFile" />
-
     <rule ref="Generic.Formatting.DisallowMultipleStatements" />
 
     <rule ref="Generic.Functions.CallTimePassByReference" />
