@@ -1,0 +1,7 @@
+{% if cancellationSuccessful %}
+	{$ 'membership-cancellation-header'|trans({}) $}
+	{$ 'membership-cancellation-text'|trans( { '%membership.id%': membershipId } )|raw $}
+{% else %}
+	{$ 'membership-cancellation-failed-header'|trans({}) $}
+	{$ 'membership-cancellation-failed-text'|trans( { '%membership.id%': membershipId } )|raw $}
+{% endif %}

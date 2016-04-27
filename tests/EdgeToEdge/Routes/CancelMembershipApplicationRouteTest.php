@@ -41,8 +41,7 @@ class CancelMembershipApplicationRouteTest extends WebRouteTestCase {
 				]
 			);
 
-			// TODO: replace when presenter is added
-			$this->assertContains( 'cancelled', $client->getResponse()->getContent() );
+			$this->assertContains( 'wurde storniert', $client->getResponse()->getContent() );
 		} );
 	}
 
@@ -59,8 +58,7 @@ class CancelMembershipApplicationRouteTest extends WebRouteTestCase {
 				]
 			);
 
-			// TODO: replace when presenter is added
-			$this->assertContains( 'error', $client->getResponse()->getContent() );
+			$this->assertContains( 'konnte nicht storniert werden', $client->getResponse()->getContent() );
 		} );
 	}
 

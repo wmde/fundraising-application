@@ -345,12 +345,10 @@ $app->post(
 			(int)$request->request->get( 'sid', '' )
 		);
 
-		$useCase = $ffFactory->newCancelMembershipApplicationUseCase( $request->request->get( 'utoken', '' ) );
-
-		$cancellationResponse = $useCase->cancelApplication( $cancellationRequest );
-
-		// TODO: add presenter
-		return $cancellationResponse->cancellationWasSuccessful() ? 'cancelled' : 'error';
+		return $ffFactory->newCancelMembershipApplicationHtmlPresenter()->present(
+			$ffFactory->newCancelMembershipApplicationUseCase( $request->request->get( 'utoken', '' ) )
+				->cancelApplication( $cancellationRequest )
+		);
 	}
 );
 
