@@ -33,7 +33,7 @@ var objectAssign = require( 'object-assign' ),
 	};
 
 module.exports = {
-	createAddressDisplayHandler: function ( elementConfig ) {
+	createDisplayAddressHandler: function ( elementConfig ) {
 		var expectedConfigProperties = [
 				'fullName',
 				'street',

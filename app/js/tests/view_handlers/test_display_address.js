@@ -2,8 +2,8 @@
 
 var test = require( 'tape' ),
 	sinon = require( 'sinon' ),
-	dataDisplayHandlers = require( '../../lib/view_handler/data_display' ),
-	createAddressDisplayHandler = dataDisplayHandlers.createAddressDisplayHandler,
+	dataDisplayHandlers = require( '../../lib/view_handler/display_address' ),
+	createAddressDisplayHandler = dataDisplayHandlers.createDisplayAddressHandler,
 	createElement = function () {
 		return {
 			text: sinon.spy()

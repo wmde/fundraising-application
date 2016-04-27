@@ -9,7 +9,7 @@ module.exports = {
 	Store: require( './lib/store' ),
 	StoreUpdates: require( './lib/store_update_handling' ),
 	View: {
-		createAddressDisplayHandler: require( './lib/view_handler/data_display' ).createAddressDisplayHandler,
+		createDisplayAddressHandler: require( './lib/view_handler/display_address' ).createDisplayAddressHandler,
 		createSlidingVisibilitySwitcher: require( './lib/view_handler/element_visibility_switcher' ).createSlidingVisibilitySwitcher,
 		createSimpleVisibilitySwitcher: require( './lib/view_handler/element_visibility_switcher' ).createSimpleVisibilitySwitcher,
 		createErrorBoxHandler:  require( './lib/view_handler/error_box' ).createHandler,
