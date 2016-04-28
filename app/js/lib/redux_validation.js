@@ -48,8 +48,9 @@ var objectAssign = require( 'object-assign' ),
 	ValidationDispatcherCollection = {
 		dispatchers: [],
 		store: null,
+		formContentName: '',
 		onUpdate: function () {
-			var formContent = this.store.getState().formContent,
+			var formContent = this.store.getState()[ this.formContentName ],
 				i;
 			for ( i = 0; i < this.dispatchers.length; i++ ) {
 				this.dispatchers[ i ].dispatchIfChanged( formContent, this.store );
@@ -82,11 +83,13 @@ var objectAssign = require( 'object-assign' ),
 	 *
 	 * @param {Object} store Redux store
 	 * @param {ValidationDispatcher[]} dispatchers
+	 * @param {string} formContentName Field name for the store to access form contents, e.g. 'donationFormContent' or 'membershipFormContent'
 	 */
-	createValidationDispatcherCollection = function ( store, dispatchers ) {
+	createValidationDispatcherCollection = function ( store, dispatchers, formContentName ) {
 		var collection = objectAssign( Object.create( ValidationDispatcherCollection ), {
 				store: store,
-				dispatchers: dispatchers
+				dispatchers: dispatchers,
+				formContentName: formContentName
 			} );
 		store.subscribe( collection.onUpdate.bind( collection ) );
 		return collection;

@@ -2,7 +2,7 @@
 
 var test = require( 'tape' ),
 	deepFreeze = require( 'deep-freeze' ),
-	formContent = require( '../../lib/reducers/form_content' );
+	formContent = require( '../../lib/reducers/form_content' ).formContent;
 
 test( 'SELECT_AMOUNT sets amount and isCustomAmount', function ( t ) {
 	var stateBefore = { amount: 99, isCustomAmount: true },
@@ -132,29 +132,6 @@ test( 'FINISH_BANK_DATA_VALIDATION does not modify state data when status is not
 
 	deepFreeze( stateBefore );
 	t.equal( formContent( stateBefore, action ), stateBefore );
-	t.end();
-} );
-
-test( 'INITIALIZE_CONTENT changes multiple fields', function ( t ) {
-	var stateBefore = { paymentType: 'PPL', amount: 0, recurringPayment: 0 },
-		expectedState = { paymentType: 'BEZ', amount: '25,00', recurringPayment: 0 },
-		action = { type: 'INITIALIZE_CONTENT', payload: { amount: '25,00', paymentType: 'BEZ' } };
-
-	deepFreeze( stateBefore );
-	t.deepEqual( formContent( stateBefore, action ), expectedState );
-	t.end();
-} );
-
-test( 'INITIALIZE_CONTENT throws an error if a field name is not allowed', function ( t ) {
-	var action = { type: 'INITIALIZE_CONTENT', payload: {
-		amount: '25,00',
-		paymentType: 'BEZ',
-		unknownField: 'supercalifragilistic'
-	} };
-
-	t.throws( function () {
-		formContent( {}, action );
-	}, /unknownField/ );
 	t.end();
 } );
 
