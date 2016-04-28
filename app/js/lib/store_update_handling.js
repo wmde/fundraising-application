@@ -18,16 +18,17 @@ module.exports = {
 	 * @param {Function} validatorFactoryFunction
 	 * @param {store.Store} store
 	 * @param {Object} initialValues - initial values for the validation dispatchers so they don't fire on initialization
+	 * @param {string} formContentName Field name for the store to access form contents, e.g. 'donationFormContent' or 'membershipFormContent'
 	 */
-	connectValidatorsToStore: function ( validatorFactoryFunction, store, initialValues ) {
-		var completeInitialValues = _.extend( {}, store.getState().formContent, initialValues ),
+	connectValidatorsToStore: function ( validatorFactoryFunction, store, initialValues, formContentName ) {
+		var completeInitialValues = _.extend( {}, store.getState()[ formContentName ], initialValues ),
 			validators = validatorFactoryFunction( completeInitialValues );
-		reduxValidation.createValidationDispatcherCollection( store, validators );
+		reduxValidation.createValidationDispatcherCollection( store, validators, formContentName );
 	},
-	connectComponentsToStore: function ( components, store ) {
+	connectComponentsToStore: function ( components, store, formContentName ) {
 		store.subscribe( function () {
 			var state = store.getState(),
-				formContent = state.formContent;
+				formContent = state[ formContentName ];
 
 			// TODO check if formContent has changed before executing update actions
 			components.forEach( function ( component ) {

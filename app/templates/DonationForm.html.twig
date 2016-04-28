@@ -69,7 +69,8 @@
                 WMDE.Components.createRadioComponent( store, $( '#country' ), 'country' ),
                 WMDE.Components.createTextComponent( store, $( '#email' ), 'email' )
             ],
-            store
+            store,
+            'donationFormContent'    
         );
 
         WMDE.StoreUpdates.connectValidatorsToStore(
@@ -96,7 +97,8 @@
                 ];
             },
             store,
-            initialFormValues
+            initialFormValues,
+            'donationFormContent'
         );
 
         // Connect view handlers to changes in specific parts in the global state, designated by 'stateKey'
@@ -128,40 +130,40 @@
                     },
                     {
                         viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.periode-2-list' ), /^(1|3|6|12)$/ ),
-                        stateKey: 'formContent.paymentPeriodInMonths'
+                        stateKey: 'donationFormContent.paymentPeriodInMonths'
                     },
                     {
                         viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '#bank-data' ), 'BEZ' ),
-                        stateKey: 'formContent.paymentType'
+                        stateKey: 'donationFormContent.paymentType'
                     },
                     {
                         viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '#finishFormSubmit2' ), /^MCP|PPL|UEB/ ),
-                        stateKey: 'formContent.paymentType'
+                        stateKey: 'donationFormContent.paymentType'
                     },
                     {
                         viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '#continueFormSubmit2' ), 'BEZ' ),
-                        stateKey: 'formContent.paymentType'
+                        stateKey: 'donationFormContent.paymentType'
                     },
                     {
                         viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.slide-sepa' ), 'sepa' ),
-                        stateKey: 'formContent.debitType'
+                        stateKey: 'donationFormContent.debitType'
                     },
                     {
                         viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.slide-non-sepa' ), 'non-sepa' ),
-                        stateKey: 'formContent.debitType'
+                        stateKey: 'donationFormContent.debitType'
                     },
                     // Show only the right data fields for personal data
                     {
                         viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.personal-data-person' ), 'person' ),
-                        stateKey: 'formContent.addressType'
+                        stateKey: 'donationFormContent.addressType'
                     },
                     {
                         viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.personal-data-company' ), 'firma' ),
-                        stateKey: 'formContent.addressType'
+                        stateKey: 'donationFormContent.addressType'
                     },
                     {
                         viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.personal-data-full' ), /firma|person/ ),
-                        stateKey: 'formContent.addressType'
+                        stateKey: 'donationFormContent.addressType'
                     },
                     {
                         viewHandler: WMDE.View.createDisplayAddressHandler( {
@@ -172,7 +174,7 @@
                             country: $( '.confirm-country' ),
                             email: $( '.confirm-email' )
                         } ),
-                        stateKey: 'formContent'
+                        stateKey: 'donationFormContent'
                     }
                 ],
                 store

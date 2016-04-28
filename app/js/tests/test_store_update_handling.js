@@ -30,7 +30,7 @@ test( 'connect validators to store updates', function ( t ) {
 		storeData = { formContent: { test: 'dummy store contents' } },
 		store = createFakeStore( storeData );
 
-	storeUpdateHandling.connectValidatorsToStore( validatorFactory, store, {} );
+	storeUpdateHandling.connectValidatorsToStore( validatorFactory, store, {}, 'formContent' );
 	store.fakeUpdate();
 
 	t.ok( validator.dispatchIfChanged.calledOnce, 'validator dispatch method is only called once' );
@@ -48,8 +48,8 @@ test( 'initial values are passed to validator factory and merged with initial st
 		store = createFakeStore( storeData ),
 		initialValues = { paymentType: 'BTC' };
 
-	storeUpdateHandling.connectValidatorsToStore( validatorFactory, store, {} );
-	storeUpdateHandling.connectValidatorsToStore( validatorFactory, store, initialValues );
+	storeUpdateHandling.connectValidatorsToStore( validatorFactory, store, {}, 'formContent' );
+	storeUpdateHandling.connectValidatorsToStore( validatorFactory, store, initialValues, 'formContent' );
 
 	t.ok(
 		validatorFactory.firstCall.calledWith( initialStoreFormContent ),
@@ -69,7 +69,7 @@ test( 'connect components to store updates', function ( t ) {
 		storeData = { formContent: { test: 'dummy store contents' } },
 		store = createFakeStore( storeData );
 
-	storeUpdateHandling.connectComponentsToStore( [ component ], store );
+	storeUpdateHandling.connectComponentsToStore( [ component ], store, 'formContent' );
 	store.fakeUpdate();
 
 	t.ok( component.render.calledOnce, 'render method of component is called once' );
