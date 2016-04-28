@@ -26,8 +26,8 @@ class ValidMembershipApplication {
 
 	const APPLICANT_FIRST_NAME = 'Jeroen';
 	const APPLICANT_LAST_NAME = 'De Dauw';
-	const APPLICANT_SALUTATION = 'salutation';
-	const APPLICANT_TITLE = 'title';
+	const APPLICANT_SALUTATION = 'Herr';
+	const APPLICANT_TITLE = '';
 
 	const APPLICANT_DATE_OF_BIRTH = '1990-01-01';
 

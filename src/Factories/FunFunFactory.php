@@ -46,6 +46,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Presentation\PayPalConfig;
 use WMDE\Fundraising\Frontend\Presentation\PayPalUrlGenerator;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\CancelMembershipApplicationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormViolationPresenter;
 use WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer;
 use WMDE\Fundraising\Frontend\Domain\Repositories\CommentFinder;
@@ -881,9 +882,10 @@ class FunFunFactory {
 			$this->getMessenger(),
 			new TwigTemplate(
 				$this->getTwig(),
-				'Mail_Membership_Application_Cancellation_Confirmation.twig'
+				'Mail_Membership_Application_Cancellation_Confirmation.twig',
+				[ 'greeting_generator' => $this->getGreetingGenerator() ]
 			),
-			$this->getTranslator()->trans( 'mail_subject_confirm_membership_application_cancellation' ) // TODO: create
+			$this->getTranslator()->trans( 'mail_subject_confirm_membership_application_cancellation' )
 		);
 	}
 
@@ -923,6 +925,12 @@ class FunFunFactory {
 
 	public function setPayPalPaymentNotificationVerifier( PayPalPaymentNotificationVerifier $verifier ) {
 		$this->pimple['paypal-payment-notification-verifier'] = $verifier;
+	}
+
+	public function newCancelMembershipApplicationHtmlPresenter() {
+		return new CancelMembershipApplicationHtmlPresenter(
+			$this->getIncludeTemplate( 'Membership_Application_Cancellation_Confirmation.twig' )
+		);
 	}
 
 }

@@ -97,8 +97,12 @@ class CancelMembershipApplicationUseCaseTest extends \PHPUnit_Framework_TestCase
 		$this->mailer->assertMailerCalledOnceWith(
 			$application->getApplicant()->getEmailAddress(),
 			[
-				'salutation' => 'Sehr geehrte Damen und Herren,',
-				'applicationId' => 1
+				'membershipApplicant' => [
+					'salutation' => 'Herr',
+					'title' => '',
+					'lastName' => 'De Dauw'
+				],
+			'applicationId' => 1
 			]
 		);
 	}
