@@ -25,9 +25,9 @@ module.exports = {
 				'bankCode',
 				'bankName'
 			],
-			uncofiguredElements = _.difference( expectedConfigProperties, _.keys( elementConfig ) );
-		if ( uncofiguredElements.length > 0 ) {
-			throw new Error( 'The following elements were not configured: ' + uncofiguredElements.join( ', ' ) );
+			unconfiguredElements = _.difference( expectedConfigProperties, _.keys( elementConfig ) );
+		if ( unconfiguredElements.length > 0 ) {
+			throw new Error( 'The following elements were not configured: ' + unconfiguredElements.join( ', ' ) );
 		}
 		return objectAssign( Object.create( BankDataDisplayHandler ), elementConfig );
 	}
