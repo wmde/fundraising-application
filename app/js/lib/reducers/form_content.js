@@ -8,6 +8,11 @@ var objectAssign = require( 'object-assign' ),
 		paymentType: 'BEZ',
 		paymentPeriodInMonths: 0, // 0, 1, 3, 6 or 12, 0 = non-recurring payment
 		debitType: 'sepa', // sepa and "non-sepa"
+		iban: '',
+		bic: '',
+		accountNumber: '',
+		bankCode: '',
+		bankName: '',
 		addressType: 'person', // person, firma and anonym
 		salutation: 'Frau',
 		title: '',
@@ -86,6 +91,17 @@ module.exports = function formContent( state, action ) {
 			clearFieldsIfAddressTypeChanges( newState, action.payload );
 			newState[ action.payload.contentName ] = action.payload.value;
 			return newState;
+		case 'FINISH_BANK_DATA_VALIDATION':
+			if ( action.payload.status !== 'OK' ) {
+				return state;
+			}
+			return objectAssign( {}, state, {
+				iban: action.payload.iban || '',
+				bic: action.payload.bic || '',
+				accountNumber: action.payload.account || '',
+				bankCode: action.payload.bankCode || '',
+				bankName: action.payload.bankName || ''
+			} );
 		case 'INITIALIZE_CONTENT':
 			if ( stateContainsUnknownKeys( action.payload ) ) {
 				throw new Error(

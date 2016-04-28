@@ -70,6 +70,7 @@ test( 'Given a company address, Company name is displayed in address instead of 
 } );
 
 test( 'Address display handler checks if all elements are configured', function ( t ) {
+	// TODO Do more than a spot check. How do i check all fields without using a loop in the test?
 	var addressWithMissingFullName = {
 			street: createElement(),
 			postcode: createElement(),

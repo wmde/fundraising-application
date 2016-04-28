@@ -4,7 +4,8 @@ var objectAssign = require( 'object-assign' ),
 
 	defaultState = {
 		amount: null,
-		address: null
+		address: null,
+		bankData: null
 	};
 
 /**
@@ -35,6 +36,8 @@ function validity( state, action ) {
 			return objectAssign( {}, state, { amount: convertExternalResult( action ) } );
 		case 'FINISH_ADDRESS_VALIDATION':
 			return objectAssign( {}, state, { address: convertExternalResult( action ) } );
+		case 'FINISH_BANK_DATA_VALIDATION':
+			return objectAssign( {}, state, { bankData: convertExternalResult( action ) } );
 		default:
 			return state;
 	}
