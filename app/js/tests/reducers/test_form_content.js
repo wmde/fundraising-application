@@ -131,7 +131,7 @@ test( 'FINISH_BANK_DATA_VALIDATION does not modify state data when status is not
 		} };
 
 	deepFreeze( stateBefore );
-	t.equals( formContent( stateBefore, action ), stateBefore );
+	t.equal( formContent( stateBefore, action ), stateBefore );
 	t.end();
 } );
 

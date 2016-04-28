@@ -14,8 +14,8 @@ var test = require( 'tape' ),
 	},
 	assertChangeHandlerWasSet = function ( t, spyingElement ) {
 		t.ok( spyingElement.on.calledOnce, 'event handler was set once' );
-		t.equals( spyingElement.on.firstCall.args[ 0 ], 'change', 'event handler was set for change events' );
-		t.equals( typeof spyingElement.on.firstCall.args[ 1 ], 'function', 'event handler is a function' );
+		t.equal( spyingElement.on.firstCall.args[ 0 ], 'change', 'event handler was set for change events' );
+		t.equal( typeof spyingElement.on.firstCall.args[ 1 ], 'function', 'event handler is a function' );
 	},
 	createBankDataConfig = function () {
 		return {
@@ -184,12 +184,12 @@ test( 'Bank data component renders the store values in its elements', function (
 		debitType: 'non-sepa'
 	} );
 
-	t.equals( bankDataComponentConfig.ibanElement.val.args[ 0 ][ 0 ], 'DE12500105170648489890', 'IBAN value is set' );
-	t.equals( bankDataComponentConfig.bicElement.val.args[ 0 ][ 0 ], 'INGDDEFFXXX', 'BIC value is set' );
-	t.equals( bankDataComponentConfig.accountNumberElement.val.args[ 0 ][ 0 ], '0648489890', 'Account number is set' );
-	t.equals( bankDataComponentConfig.bankCodeElement.val.args[ 0 ][ 0 ], '50010517', 'BIC value is set' );
-	t.equals( bankDataComponentConfig.bankNameDisplayElement.text.args[ 0 ][ 0 ], 'ING-DiBa', 'Bank name is displayed' );
-	t.equals( bankDataComponentConfig.bankNameFieldElement.val.args[ 0 ][ 0 ], 'ING-DiBa', 'Bank name is set in field' );
+	t.equal( bankDataComponentConfig.ibanElement.val.args[ 0 ][ 0 ], 'DE12500105170648489890', 'IBAN value is set' );
+	t.equal( bankDataComponentConfig.bicElement.val.args[ 0 ][ 0 ], 'INGDDEFFXXX', 'BIC value is set' );
+	t.equal( bankDataComponentConfig.accountNumberElement.val.args[ 0 ][ 0 ], '0648489890', 'Account number is set' );
+	t.equal( bankDataComponentConfig.bankCodeElement.val.args[ 0 ][ 0 ], '50010517', 'BIC value is set' );
+	t.equal( bankDataComponentConfig.bankNameDisplayElement.text.args[ 0 ][ 0 ], 'ING-DiBa', 'Bank name is displayed' );
+	t.equal( bankDataComponentConfig.bankNameFieldElement.val.args[ 0 ][ 0 ], 'ING-DiBa', 'Bank name is set in field' );
 	t.deepEqual( bankDataComponentConfig.debitTypeElement.val.args[ 0 ][ 0 ], [ 'non-sepa' ], 'Debit type is set' );
 
 	t.end();

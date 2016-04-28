@@ -17,9 +17,9 @@ test( 'Amount validation sends values to server', function ( t ) {
 
 	t.ok( postFunctionSpy.calledOnce, 'data is sent once' );
 	callParameters = postFunctionSpy.getCall( 0 ).args;
-	t.equals( callParameters[ 0 ], 'http://spenden.wikimedia.org/validate-amount', 'validation calls configured URL' );
-	t.deepEquals( callParameters[ 1 ], { amount: 23, paymentType: 'BEZ' }, 'validation sends only necessary data' );
-	t.equals( callParameters[ 3 ], 'json', 'validation expects JSON data' );
+	t.equal( callParameters[ 0 ], 'http://spenden.wikimedia.org/validate-amount', 'validation calls configured URL' );
+	t.deepEqual( callParameters[ 1 ], { amount: 23, paymentType: 'BEZ' }, 'validation sends only necessary data' );
+	t.equal( callParameters[ 3 ], 'json', 'validation expects JSON data' );
 	t.deepEqual( validationResult, positiveResult, 'validation function returns result' );
 	t.end();
 } );
@@ -63,9 +63,9 @@ test( 'Given a private adddress, address validation sends values to server', fun
 
 	t.ok( postFunctionSpy.calledOnce, 'data is sent once' );
 	callParameters = postFunctionSpy.getCall( 0 ).args;
-	t.equals( callParameters[ 0 ], 'http://spenden.wikimedia.org/validate-address', 'validation calls configured URL' );
-	t.deepEquals( callParameters[ 1 ], formData, 'validation sends all data' );
-	t.equals( callParameters[ 3 ], 'json', 'validation expects JSON data' );
+	t.equal( callParameters[ 0 ], 'http://spenden.wikimedia.org/validate-address', 'validation calls configured URL' );
+	t.deepEqual( callParameters[ 1 ], formData, 'validation sends all data' );
+	t.equal( callParameters[ 3 ], 'json', 'validation expects JSON data' );
 	t.deepEqual( validationResult, positiveResult, 'validation function returns result' );
 	t.end();
 } );
@@ -91,7 +91,7 @@ test( 'Given an incomplete private adddress, address validation sends no values 
 	validationResult = addressValidator.validate( formData );
 
 	t.ok( !postFunctionSpy.called, 'post function is not called' );
-	t.equals( validationResult, null, 'validation function returns null to signal validation was skipped' );
+	t.equal( validationResult, null, 'validation function returns null to signal validation was skipped' );
 	t.end();
 } );
 
@@ -117,9 +117,9 @@ test( 'Given sepa debit type, bank data validation sends IBAN to server', functi
 
 	t.ok( postFunctionSpy.calledOnce, 'data is sent once' );
 	callParameters = postFunctionSpy.getCall( 0 ).args;
-	t.equals( callParameters[ 0 ], 'http://spenden.wikimedia.org/check-iban', 'validation calls URL for SEPA' );
-	t.deepEquals( callParameters[ 1 ], { iban: 'DE12500105170648489890' }, 'validation sends only necessary data' );
-	t.equals( callParameters[ 3 ], 'json', 'validation expects JSON data' );
+	t.equal( callParameters[ 0 ], 'http://spenden.wikimedia.org/check-iban', 'validation calls URL for SEPA' );
+	t.deepEqual( callParameters[ 1 ], { iban: 'DE12500105170648489890' }, 'validation sends only necessary data' );
+	t.equal( callParameters[ 3 ], 'json', 'validation expects JSON data' );
 	t.deepEqual( validationResult, positiveResult, 'validation function returns result' );
 	t.end();
 } );
@@ -146,9 +146,9 @@ test( 'Given non-sepa debit type, bank data validation sends account number and 
 
 	t.ok( postFunctionSpy.calledOnce, 'data is sent once' );
 	callParameters = postFunctionSpy.getCall( 0 ).args;
-	t.equals( callParameters[ 0 ], 'http://spenden.wikimedia.org/generate-iban', 'validation calls URL for SEPA' );
-	t.deepEquals( callParameters[ 1 ], { accountNumber: '0648489890', bankCode: '50010517' }, 'validation sends only necessary data' );
-	t.equals( callParameters[ 3 ], 'json', 'validation expects JSON data' );
+	t.equal( callParameters[ 0 ], 'http://spenden.wikimedia.org/generate-iban', 'validation calls URL for SEPA' );
+	t.deepEqual( callParameters[ 1 ], { accountNumber: '0648489890', bankCode: '50010517' }, 'validation sends only necessary data' );
+	t.equal( callParameters[ 3 ], 'json', 'validation expects JSON data' );
 	t.deepEqual( validationResult, positiveResult, 'validation function returns result' );
 	t.end();
 } );
@@ -173,8 +173,8 @@ test( 'Given a non-debit payment type, bank data validation succeeds', function 
 		paymentType: 'PPL'
 	} );
 
-	t.equals( postFunctionSpy.callCount, 0, 'data is not sent' );
-	t.deepEquals( validationResult, expectedValidationResult, 'validation is successful' );
+	t.equal( postFunctionSpy.callCount, 0, 'data is not sent' );
+	t.deepEqual( validationResult, expectedValidationResult, 'validation is successful' );
 	t.end();
 } );
 
