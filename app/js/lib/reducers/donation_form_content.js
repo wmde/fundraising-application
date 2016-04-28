@@ -23,7 +23,9 @@ var formContentLib = require( './form_content' ),
 		postcode: '',
 		city: '',
 		country: 'DE',
-		email: ''
+		email: '',
+		confirmSepa: false,
+		confirmShortTerm: false
 	};
 
 module.exports = function donationFormContent( state, action ) {

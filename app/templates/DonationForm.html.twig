@@ -67,7 +67,9 @@
                 WMDE.Components.createTextComponent( store, $( '#post-code' ), 'postcode' ),
                 WMDE.Components.createTextComponent( store, $( '#city' ), 'city' ),
                 WMDE.Components.createRadioComponent( store, $( '#country' ), 'country' ),
-                WMDE.Components.createTextComponent( store, $( '#email' ), 'email' )
+                WMDE.Components.createTextComponent( store, $( '#email' ), 'email' ),
+                WMDE.Components.createCheckboxComponent( store, $( '#confirm_sepa' ), 'confirmSepa' ),
+                WMDE.Components.createCheckboxComponent( store, $( '#confirm_shortterm' ), 'confirmShortTerm' ),
             ],
             store,
             'donationFormContent'    
@@ -92,6 +94,12 @@
                             WMDE.FormValidation.createBankDataValidator( '{$ basepath $}/check-iban', '{$ basepath $}/generate-iban' ),
                             actions.newFinishBankDataValidationAction,
                             [ 'iban', 'accountNumber', 'bankCode', 'debitType', 'paymentType' ],
+                            initialValues
+                    ),
+                    WMDE.ReduxValidation.createValidationDispatcher(
+                            WMDE.FormValidation.createSepaConfirmationValidator(),
+                            actions.newFinishSepaConfirmationValidationAction,
+                            [ 'confirmSepa', 'confirmShortTerm' ],
                             initialValues
                     )
                 ];
@@ -207,14 +215,22 @@
             }
         } );
 
-        $( '#finishFormSubmit2,#finishFormSubmit3' ).click( function () {
-            // TODO Create validation for the SEPA checkboxes and split this handler for the different submit buttons
+        $( '#finishFormSubmit2' ).click( function () {
+            var validity = store.getState().validity;
             if ( validity.amount && validity.address ) {
                 $( '#donForm2' ).submit();
             } else {
-                alert( 'Bitte füllen Sie das Formular komplett aus' );
+                alert( 'Bitte füllen Sie das Formular komplett aus.' );
             }
+        } );
 
+        $( '#finishFormSubmit3' ).click( function () {
+            var validity = store.getState().validity;
+            if ( validity.amount && validity.address && validity.bankData && validity.sepaConfirmation ) {
+                $( '#donForm2' ).submit();
+            } else {
+                alert( 'Bitte füllen Sie das Formular komplett aus.' );
+            }
         } );
 
         // Initialize form pages

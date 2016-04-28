@@ -77,6 +77,12 @@ var jQuery = require( 'jquery' ),
 		}
 	},
 
+	SepaConfirmationValidator = {
+		validate: function ( formValues ) {
+			return formValues.confirmSepa && formValues.confirmShortTerm;
+		}
+	},
+
 	createAddressValidator = function ( validationUrl, sendFunction ) {
 		return objectAssign( Object.create( AddressValidator ), {
 			validationUrl: validationUrl,
@@ -109,5 +115,8 @@ var jQuery = require( 'jquery' ),
 module.exports = {
 	createAmountValidator: createAmountValidator,
 	createAddressValidator: createAddressValidator,
-	createBankDataValidator: createBankDataValidator
+	createBankDataValidator: createBankDataValidator,
+	createSepaConfirmationValidator: function () {
+		return Object.create( SepaConfirmationValidator );
+	}
 };
