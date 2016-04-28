@@ -190,14 +190,31 @@
 
         // connect DOM elements to actions
 
-        $( '#continueFormSubmit1,#continueFormSubmit2' ).click( function () {
-            // TODO check if page is valid
-            store.dispatch( actions.newNextPageAction() );
+        $( '#continueFormSubmit1' ).click( function () {
+            if ( store.getState().validity.amount ) {
+                store.dispatch( actions.newNextPageAction() );
+            } else {
+                alert( 'Bitte füllen Sie das Formular komplett aus.' );
+            }
+        } );
+
+        $( '#continueFormSubmit2' ).click( function () {
+            var validity = store.getState().validity;
+            if ( validity.amount && validity.address && validity.bankData ) {
+                store.dispatch( actions.newNextPageAction() );
+            } else {
+                alert( 'Bitte füllen Sie das Formular komplett aus.' );
+            }
         } );
 
         $( '#finishFormSubmit2,#finishFormSubmit3' ).click( function () {
-            // TODO check if page is valid
-            $( '#donForm2' ).submit();
+            // TODO Create validation for the SEPA checkboxes and split this handler for the different submit buttons
+            if ( validity.amount && validity.address ) {
+                $( '#donForm2' ).submit();
+            } else {
+                alert( 'Bitte füllen Sie das Formular komplett aus' );
+            }
+
         } );
 
         // Initialize form pages
