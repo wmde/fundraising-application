@@ -8,7 +8,7 @@ var test = require( 'tape' ),
 		return {
 			on: sinon.spy(),
 			val: sinon.spy(),
-			prop: sinon.spy(),
+			prop: sinon.stub(),
 			text: sinon.spy()
 		};
 	},
@@ -78,6 +78,46 @@ test( 'Rendering the radio component sets the value as array', function ( t ) {
 
 	t.ok( element.val.calledOnce, 'value is set once' );
 	t.ok( element.val.calledWith( [ 'the new awesome value' ] ) );
+	t.end();
+} );
+
+test( 'Given true, rendering the checkbox component applies the checked property', function ( t ) {
+	var element = createSpyingElement(),
+		store = {},
+		component = formComponents.createCheckboxComponent( store, element, 'value' );
+
+	component.render( { value: true } );
+
+	t.ok( element.prop.calledOnce, 'value is set once' );
+	t.ok( element.prop.calledWith( 'checked', true ) );
+	t.end();
+} );
+
+test( 'Given false, rendering the checkbox component applies the checked property', function ( t ) {
+	var element = createSpyingElement(),
+		store = {},
+		component = formComponents.createCheckboxComponent( store, element, 'value' );
+
+	component.render( { value: false } );
+
+	t.ok( element.prop.calledOnce, 'value is set once' );
+	t.ok( element.prop.calledWith( 'checked', false ) );
+	t.end();
+} );
+
+test( 'Event handler for checkbox component stores checked state', function ( t ) {
+	var element = createSpyingElement(),
+		store = { dispatch: sinon.spy() },
+		fakeEvent = { target: { value: 'current value' } },
+		expectedAction = { type: 'CHANGE_CONTENT', payload: { value: true, contentName: 'value' } },
+		component = formComponents.createCheckboxComponent( store, element, 'value' );
+
+	element.prop.returns( true );
+
+	component.onChange( fakeEvent );
+
+	t.ok( store.dispatch.calledOnce, 'action is dispatched' );
+	t.ok( store.dispatch.calledWith( expectedAction ), 'action contains expected value ' );
 	t.end();
 } );
 

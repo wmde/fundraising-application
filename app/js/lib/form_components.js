@@ -17,6 +17,15 @@ var objectAssign = require( 'object-assign' ),
 		}
 	},
 
+	CheckboxComponent = {
+		element: null,
+		contentName: '',
+		onChange: null,
+		render: function ( formContent ) {
+			this.element.prop( 'checked', !!formContent[ this.contentName ] ); // !! converts to boolean
+		}
+	},
+
 	TextComponent = {
 		element: null,
 		contentName: '',
@@ -64,6 +73,18 @@ module.exports = {
 			element: element,
 			contentName: contentName,
 			onChange: createDefaultChangeHandler( store, contentName )
+		} );
+		element.on( 'change', component.onChange );
+		return component;
+	},
+
+	createCheckboxComponent: function ( store, element, contentName ) {
+		var component = objectAssign( Object.create( CheckboxComponent ), {
+			element: element,
+			contentName: contentName,
+			onChange: function () {
+				store.dispatch( actions.newChangeContentAction( contentName, !!element.prop( 'checked' ) ) );
+			}
 		} );
 		element.on( 'change', component.onChange );
 		return component;
