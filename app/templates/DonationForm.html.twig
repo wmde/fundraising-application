@@ -175,6 +175,14 @@
                             email: $( '.confirm-email' )
                         } ),
                         stateKey: 'donationFormContent'
+                    },
+                    {
+                        viewHandler: WMDE.View.createBankDataDisplayHandler(
+                            $( '.confirm-iban' ),
+                            $( '.confirm-bic' ),
+                            $( '.confirm-bank-name' )
+                        ),
+                        stateKey: 'donationFormContent'
                     }
                 ],
                 store
