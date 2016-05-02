@@ -10,8 +10,8 @@ namespace WMDE\Fundraising\Frontend\Domain\Repositories;
  */
 class GetDonationException extends \RuntimeException {
 
-	public function __construct( \Exception $previous = null ) {
-		parent::__construct( 'Could not get donation', 0, $previous );
+	public function __construct( \Exception $previous = null, $message = 'Could not get donation' ) {
+		parent::__construct( $message, 0, $previous );
 	}
 
 }
