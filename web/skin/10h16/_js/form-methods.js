@@ -49,30 +49,10 @@ $( document ).ready( function() {
 		}
 	});
 
-	$( '#memFormSubmit' ).on( 'click', function( e ) {
-		if ( memCheckPending ) {
-			checkMembershipFee( true );
-			return false;
-		}
-	});
-
 	$( "#email" ).on( 'change', function( evt ) {
 		mailCheckPending = true;
 		checkMailAddress( false );
 	});
-
-	if ( inMembershipForm() ) {
-		$( "input:radio[name=membership_fee], input:radio[name=membership_fee_interval], input:radio[name=addressType], #amount-8" ).on( 'change', function ( evt ) {
-			memCheckPending = true;
-			checkMembershipFee( false );
-		} );
-		$customAmount.on( 'blur', function () {
-			if ( !amountSpecified() ) {
-				memCheckPending = true;
-				checkMembershipFee( false );
-			}
-		} );
-	}
 
 	function checkMailAddress( submit ) {
 		var url = "../validate-email?email=" + encodeURIComponent($( "#email" ).val());
@@ -92,32 +72,6 @@ $( document ).ready( function() {
 				$( '#donFormSubmit, #memFormSubmit' ).trigger( "click" );
 			}
 		});
-	}
-
-	function checkMembershipFee( submit ) {
-		var $activeFeeField, fee, minFee;
-		resetMembershipFeeFields();
-
-		$activeFeeField = $( "input:radio[name=membership_fee]:checked" );
-		fee = $activeFeeField.val();
-		if ( !fee || fee === 'custom' ) {
-			fee = $( ".amount-custom :text" ).val() ? $( ".amount-custom :text" ).val() : 0;
-		}
-
-		minFee = getMembershipMinFee();
-
-		if ( parseInt( fee ) < minFee && formInitialized ) {
-			if ( $activeFeeField.length > 0 && $activeFeeField.val() != 'custom' ) {
-				$activeFeeField.get( 0 ).setCustomValidity( "Der Mindestbetrag beträgt " + minFee + " Euro" );
-			} else {
-				$customAmount.get( 0 ).setCustomValidity( "Der Mindestbetrag beträgt " + minFee + " Euro" );
-			}
-		}
-
-		memCheckPending = false;
-		if ( submit ) {
-			$( '#memFormSubmit' ).trigger( 'click' );
-		}
 	}
 
 	function resetMembershipFeeFields() {
