@@ -17,6 +17,8 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\StoreMembershipApplicationExce
  */
 class LoggingMembershipApplicationRepository implements MembershipApplicationRepository {
 
+	const CONTEXT_EXCEPTION_KEY = 'exception';
+	
 	private $repository;
 	private $logger;
 	private $logLevel;
@@ -39,7 +41,7 @@ class LoggingMembershipApplicationRepository implements MembershipApplicationRep
 			$this->repository->storeApplication( $application );
 		}
 		catch ( StoreMembershipApplicationException $ex ) {
-			$this->logger->log( $this->logLevel, $ex->getMessage(), [ 'exception' => $ex ] );
+			$this->logger->log( $this->logLevel, $ex->getMessage(), [ self::CONTEXT_EXCEPTION_KEY => $ex ] );
 			throw $ex;
 		}
 	}
@@ -57,7 +59,7 @@ class LoggingMembershipApplicationRepository implements MembershipApplicationRep
 			return $this->repository->getApplicationById( $id );
 		}
 		catch ( GetMembershipApplicationException $ex ) {
-			$this->logger->log( $this->logLevel, $ex->getMessage(), [ 'exception' => $ex ] );
+			$this->logger->log( $this->logLevel, $ex->getMessage(), [ self::CONTEXT_EXCEPTION_KEY => $ex ] );
 			throw $ex;
 		}
 	}

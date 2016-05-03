@@ -16,6 +16,8 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\StoreCommentException;
  */
 class LoggingCommentRepository implements CommentRepository {
 
+	const CONTEXT_EXCEPTION_KEY = 'exception';
+	
 	private $repository;
 	private $logger;
 	private $logLevel;
@@ -35,7 +37,7 @@ class LoggingCommentRepository implements CommentRepository {
 			$this->repository->storeComment( $comment );
 		}
 		catch ( StoreCommentException $ex ) {
-			$this->logger->log( $this->logLevel, $ex->getMessage(), [ 'exception' => $ex ] );
+			$this->logger->log( $this->logLevel, $ex->getMessage(), [ self::CONTEXT_EXCEPTION_KEY => $ex ] );
 			throw $ex;
 		}
 	}

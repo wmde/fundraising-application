@@ -17,6 +17,8 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\StoreDonationException;
  */
 class LoggingDonationRepository implements DonationRepository {
 
+	const CONTEXT_EXCEPTION_KEY = 'exception';
+
 	private $repository;
 	private $logger;
 	private $logLevel;
@@ -39,7 +41,7 @@ class LoggingDonationRepository implements DonationRepository {
 			$this->repository->storeDonation( $donation );
 		}
 		catch ( StoreDonationException $ex ) {
-			$this->logger->log( $this->logLevel, $ex->getMessage(), [ 'exception' => $ex ] );
+			$this->logger->log( $this->logLevel, $ex->getMessage(), [ self::CONTEXT_EXCEPTION_KEY => $ex ] );
 			throw $ex;
 		}
 	}
@@ -57,7 +59,7 @@ class LoggingDonationRepository implements DonationRepository {
 			return $this->repository->getDonationById( $id );
 		}
 		catch ( GetDonationException $ex ) {
-			$this->logger->log( $this->logLevel, $ex->getMessage(), [ 'exception' => $ex ] );
+			$this->logger->log( $this->logLevel, $ex->getMessage(), [ self::CONTEXT_EXCEPTION_KEY => $ex ] );
 			throw $ex;
 		}
 	}
