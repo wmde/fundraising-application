@@ -2,7 +2,6 @@
 
 var test = require( 'tape' ),
 	sinon = require( 'sinon' ),
-	areIntlLocalesSupported = require('intl-locales-supported'),
 	createPaymentPeriodAndAmountDisplayHandler = require( '../../lib/view_handler/display_period_and_amount' ).createPaymentPeriodAndAmountDisplayHandler,
 	createElement = function () {
 		return {
@@ -16,46 +15,34 @@ var test = require( 'tape' ),
 		'6': 'halbjährlich',
 		'12': 'jährlich'
 	},
-	locale = 'de',
-	expectedFormattedAmount = '23,00' + String.fromCharCode( 160 ) + '€'
+	formattedAmount = '23,00 EUR',
+	currencyFormatter = {
+		format: sinon.stub().returns( formattedAmount )
+	}
 	;
 
-if (global.Intl) {
-	// Determine if the built-in `Intl` has the locale data we need. 
-	if ( !areIntlLocalesSupported( [ locale ] ) ) {
-		// `Intl` exists, but it doesn't have the data we need, so load the 
-		// polyfill and patch the constructors we need with the polyfill's. 
-		var IntlPolyfill    = require( 'intl' );
-		Intl.NumberFormat   = IntlPolyfill.NumberFormat;
-		Intl.DateTimeFormat = IntlPolyfill.DateTimeFormat;
-	}
-} else {
-	// No `Intl`, so use and load the polyfill. 
-	global.Intl = require( 'intl' );
-}
-
-test( 'Given amount with decimal comma, it is rendered as-is', function ( t ) {
+test( 'The amount is passed to the curreny formatter', function ( t ) {
 	var amountElement = createElement(),
 		periodElement = createElement(),
-		handler = createPaymentPeriodAndAmountDisplayHandler( periodElement, amountElement, paymentPeriodTranslations, locale );
+		handler = createPaymentPeriodAndAmountDisplayHandler( periodElement, amountElement, paymentPeriodTranslations, currencyFormatter );
 	handler.update( {
 		amount: '23,00',
 		period: '0'
 	} );
-	t.ok( amountElement.text.calledOnce, 'Amount is set' );
-	t.equals( amountElement.text.firstCall.args[ 0 ], expectedFormattedAmount, 'Amount is preserved' );
+	t.ok( currencyFormatter.format.calledOnce, 'format is called' );
+	t.equals( currencyFormatter.format.firstCall.args[ 0 ], '23,00', 'Amount is passed to formatter' );
 	t.end();
 } );
 
-test( 'Given amount with missing decimal places, they are added', function ( t ) {
+test( 'Formatted amount is set in amount element', function ( t ) {
 	var amountElement = createElement(),
 		periodElement = createElement(),
-		handler = createPaymentPeriodAndAmountDisplayHandler( periodElement, amountElement, paymentPeriodTranslations );
+		handler = createPaymentPeriodAndAmountDisplayHandler( periodElement, amountElement, paymentPeriodTranslations, currencyFormatter );
 	handler.update( {
 		amount: '23,0',
 		period: '0'
 	} );
 	t.ok( amountElement.text.calledOnce, 'Amount is set' );
-	t.equals( amountElement.text.firstCall.args[ 0 ], expectedFormattedAmount, 'decimal places are added' );
+	t.equals( amountElement.text.firstCall.args[ 0 ], formattedAmount, 'amount is set' );
 	t.end();
 } );
