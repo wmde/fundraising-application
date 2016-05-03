@@ -10,7 +10,7 @@ var objectAssign = require( 'object-assign' ),
 			this.periodElement.text( this.formatPaymentPeriod( formContent.paymentPeriodInMonths ) );
 			this.amountElement.text( this.numberFormatter.format( formContent.amount ) );
 		},
-		formatPaymentPeriod: function( paymentPeriodInMonths ) {
+		formatPaymentPeriod: function ( paymentPeriodInMonths ) {
 			return this.periodTranslations[ paymentPeriodInMonths ];
 		}
 	};

@@ -9,11 +9,11 @@ var test = require( 'tape' ),
 		};
 	},
 	paymentPeriodTranslations = {
-		'0': 'einmalig',
-		'1': 'monatlich',
-		'3': 'quartalsweise',
-		'6': 'halbjährlich',
-		'12': 'jährlich'
+		0: 'einmalig',
+		1: 'monatlich',
+		3: 'quartalsweise',
+		6: 'halbjährlich',
+		12: 'jährlich'
 	},
 	formattedAmount = '23,00 EUR',
 	currencyFormatter = {

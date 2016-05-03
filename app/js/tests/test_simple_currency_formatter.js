@@ -7,9 +7,9 @@ var test = require( 'tape' ),
 	;
 
 test( 'German locale', function ( t ) {
-	
+
 	var locale = 'de';
-	
+
 	t.test( 'Given amount with decimal comma, it is rendered as-is', function ( t ) {
 		var formatter = createCurrencyFormatter( locale );
 		t.equals( formatter.format( '23,00' ), expectedFormattedAmountInGermanLocale, 'Amount is preserved' );
