@@ -31,4 +31,12 @@ class LoggerSpy extends AbstractLogger {
 		return $this->logCalls;
 	}
 
+	public function assertNoCalls() {
+		if ( !empty( $this->logCalls ) ) {
+			throw new \RuntimeException(
+				'Logger calls where made while non where expected: ' . var_export( $this->logCalls, true )
+			);
+		}
+	}
+
 }

@@ -17,7 +17,7 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\StoreCommentException;
 class LoggingCommentRepository implements CommentRepository {
 
 	const CONTEXT_EXCEPTION_KEY = 'exception';
-	
+
 	private $repository;
 	private $logger;
 	private $logLevel;

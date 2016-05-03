@@ -10,6 +10,7 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
 use WMDE\Fundraising\Frontend\Domain\Repositories\StoreDonationException;
 use WMDE\Fundraising\Frontend\Infrastructure\Repositories\LoggingDonationRepository;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeDonationRepository;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\LoggerSpy;
 
 /**
@@ -71,6 +72,20 @@ class LoggingDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$this->assertInternalType( 'array', $logCall[2], 'the third log argument should be an array' );
 		$this->assertArrayHasKey( 'exception', $logCall[2], 'the log context should contain an exception element' );
 		$this->assertInstanceOf( $expectedExceptionType, $logCall[2]['exception'] );
+	}
+
+	public function testWhenGetDonationByIdDoesNotThrow_returnValueIsReturnedWithoutLogging() {
+		$logger = new LoggerSpy();
+		$donation = ValidDonation::newDirectDebitDonation();
+		$donation->assignId( 1337 );
+
+		$loggingRepo = new LoggingDonationRepository(
+			new FakeDonationRepository( $donation ),
+			$logger
+		);
+
+		$this->assertSame( $donation, $loggingRepo->getDonationById( 1337 ) );
+		$logger->assertNoCalls();
 	}
 
 	public function testWhenStoreDonationThrowException_itIsLogged() {

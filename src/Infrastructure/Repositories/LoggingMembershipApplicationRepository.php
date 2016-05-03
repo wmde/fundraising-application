@@ -18,7 +18,7 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\StoreMembershipApplicationExce
 class LoggingMembershipApplicationRepository implements MembershipApplicationRepository {
 
 	const CONTEXT_EXCEPTION_KEY = 'exception';
-	
+
 	private $repository;
 	private $logger;
 	private $logLevel;
