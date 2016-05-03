@@ -56,7 +56,7 @@ var jQuery = require( 'jquery' ),
 		sendFunction: null,
 		validate: function ( formValues ) {
 			var data, validationUrl;
-			if ( formValues.paymentType !== 'BEZ' ) {
+			if ( formValues.paymentType && formValues.paymentType !== 'BEZ' ) {
 				return {
 					status: 'OK'
 				};
