@@ -28,12 +28,14 @@ interface SubscriptionRepository {
 	 * @param Subscription $subscription
 	 * @param \DateTime $cutoffDateTime
 	 * @return int
+	 * @throws SubscriptionRepositoryException
 	 */
 	public function countSimilar( Subscription $subscription, \DateTime $cutoffDateTime ): int;
 
 	/**
 	 * @param string $confirmationCode
 	 * @return Subscription|null
+	 * @throws SubscriptionRepositoryException
 	 */
 	public function findByConfirmationCode( string $confirmationCode );
 
