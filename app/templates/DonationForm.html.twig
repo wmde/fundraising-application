@@ -136,14 +136,17 @@
                         } ),
                         stateKey: 'validationMessages'
                     },
+                    // show payment periods if interval payment is selected
                     {
                         viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.periode-2-list' ), /^(1|3|6|12)$/ ),
                         stateKey: 'donationFormContent.paymentPeriodInMonths'
                     },
+                    // Show bank data input when doing direct debit
                     {
                         viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '#bank-data' ), 'BEZ' ),
                         stateKey: 'donationFormContent.paymentType'
                     },
+                    // Show the right submit buttons on page 2, depending on payment type
                     {
                         viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '#finishFormSubmit2' ), /^MCP|PPL|UEB/ ),
                         stateKey: 'donationFormContent.paymentType'
@@ -152,6 +155,12 @@
                         viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '#continueFormSubmit2' ), 'BEZ' ),
                         stateKey: 'donationFormContent.paymentType'
                     },
+                    // Hide anonymous payment when doing direct debit
+                    {
+                        viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '.anonymous-payment-select' ), /^MCP|PPL|UEB/ ),
+                        stateKey: 'donationFormContent.paymentType'
+                    },
+                    // Switch bank data input between IBAN/BIC and Account Number/Bank code
                     {
                         viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.slide-sepa' ), 'sepa' ),
                         stateKey: 'donationFormContent.debitType'

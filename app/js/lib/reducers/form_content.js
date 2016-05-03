@@ -40,6 +40,14 @@ function clearFieldsIfAddressTypeChanges( newState, payload ) {
 	}
 }
 
+function forcePersonalDataForDirectDebit( state ) {
+	if ( state.paymentType === 'BEZ' && state.addressType === 'anonym' ) {
+		return objectAssign( {}, state, { addressType: 'person' } );
+	} else {
+		return state;
+	}
+}
+
 module.exports = {
 	stateContainsUnknownKeys: function ( state, initialState ) {
 		return !_.isEmpty( getInvalidKeys( state, initialState ) );
@@ -66,6 +74,7 @@ module.exports = {
 				newState = _.clone( state );
 				clearFieldsIfAddressTypeChanges( newState, action.payload );
 				newState[ action.payload.contentName ] = action.payload.value;
+				newState = forcePersonalDataForDirectDebit( newState );
 				return newState;
 			case 'FINISH_BANK_DATA_VALIDATION':
 				if ( action.payload.status !== 'OK' ) {

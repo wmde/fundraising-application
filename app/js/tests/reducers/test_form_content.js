@@ -100,6 +100,22 @@ test( 'When CHANGE_CONTENT sets address type to anonymous, all personal data fie
 	t.end();
 } );
 
+test( 'When CHANGE_CONTENT sets payment type to direct debit and address type is anonymous, address type is switched to person', function ( t ) {
+	var stateBefore = {
+			paymentType: 'PPL',
+			addressType: 'anonym'
+		},
+		expectedState = {
+			paymentType: 'BEZ',
+			addressType: 'person'
+		},
+		action = { type: 'CHANGE_CONTENT', payload: { value: 'BEZ', contentName: 'paymentType' } };
+
+	deepFreeze( stateBefore );
+	t.deepEqual( formContent( stateBefore, action ), expectedState );
+	t.end();
+} );
+
 test( 'FINISH_BANK_DATA_VALIDATION sets bank data when status is OK', function ( t ) {
 	var stateBefore = { iban: '', bic: '', accountNumber: '', bankCode: '', bankName: '' },
 		expectedState = {
