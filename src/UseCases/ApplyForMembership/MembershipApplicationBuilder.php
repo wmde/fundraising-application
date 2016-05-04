@@ -18,6 +18,8 @@ use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
  */
 class MembershipApplicationBuilder {
 
+	const COMPANY_APPLICANT_TYPE = 'firma';
+
 	public function newApplicationFromRequest( ApplyForMembershipRequest $request ): MembershipApplication {
 		return MembershipApplication::newApplication(
 			$request->getMembershipType(),
@@ -48,7 +50,7 @@ class MembershipApplicationBuilder {
 	}
 
 	private function newBasePersonName( ApplyForMembershipRequest $request ): PersonName {
-		if ( $request->getApplicantType() === 'firma' ) { // TODO: use constant
+		if ( $request->getApplicantType() === self::COMPANY_APPLICANT_TYPE ) {
 			$personName = PersonName::newCompanyName();
 			$personName->setCompanyName( $request->getApplicantCompanyName() );
 			return $personName;
