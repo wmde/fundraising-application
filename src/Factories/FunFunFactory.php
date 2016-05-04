@@ -705,7 +705,7 @@ class FunFunFactory {
 	private function newDonationValidator(): DonationValidator {
 		return new DonationValidator(
 			$this->newAmountValidator(),
-			new AmountPolicyValidator( 1000, 200, 300 ), // TODO: get from settings
+			new AmountPolicyValidator( 1000, 200, 300 ),
 			$this->newPersonalInfoValidator(),
 			$this->getTextPolicyValidator( 'fields' ),
 			$this->newPaymentTypeValidator(),
