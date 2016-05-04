@@ -197,10 +197,10 @@ class DoctrineDonationRepository implements DonationRepository {
 			'paypal_subscr_id' => $payPalData->getSubscriberId(),
 			'paypal_payer_status' => $payPalData->getPayerStatus(),
 			'paypal_address_status' => $payPalData->getAddressStatus(),
-			'paypal_mc_gross' => $payPalData->getAmount(),
+			'paypal_mc_gross' => $payPalData->getAmount()->getEuroString(),
 			'paypal_mc_currency' => $payPalData->getCurrencyCode(),
-			'paypal_mc_fee' => $payPalData->getFee(),
-			'paypal_settle_amount' => $payPalData->getSettleAmount(),
+			'paypal_mc_fee' => $payPalData->getFee()->getEuroString(),
+			'paypal_settle_amount' => $payPalData->getSettleAmount()->getEuroString(),
 			'paypal_first_name' => $payPalData->getFirstName(),
 			'paypal_last_name' => $payPalData->getLastName(),
 			'paypal_address_name' => $payPalData->getAddressName(),
@@ -377,10 +377,10 @@ class DoctrineDonationRepository implements DonationRepository {
 				->setSubscriberId( $data['paypal_subscr_id'] )
 				->setPayerStatus( $data['paypal_payer_status'] )
 				->setAddressStatus( $data['paypal_address_status'] )
-				->setAmount( $data['paypal_mc_gross'] )
+				->setAmount( Euro::newFromString( $data['paypal_mc_gross'] ) )
 				->setCurrencyCode( $data['paypal_mc_currency'] )
-				->setFee( $data['paypal_mc_fee'] )
-				->setSettleAmount( $data['paypal_settle_amount'] )
+				->setFee( Euro::newFromString( $data['paypal_mc_fee'] ) )
+				->setSettleAmount( Euro::newFromString( $data['paypal_settle_amount'] ) )
 				->setFirstName( $data['paypal_first_name'] )
 				->setLastName( $data['paypal_last_name'] )
 				->setAddressName( $data['paypal_address_name'] )
