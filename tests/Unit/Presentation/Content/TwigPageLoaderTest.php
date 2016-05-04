@@ -50,14 +50,11 @@ class TwigPageLoaderTest extends \PHPUnit_Framework_TestCase {
 		$loader->getCacheKey( 'Felis silvestris' );
 	}
 
-	/**
-	 * @expectedException \Twig_Error_Loader
-	 */
-	public function testGivenMissingPage_isFreshKeyThrowsException() {
+	public function testGivenMissingPage_isFreshKeyStaysTrue() {
 		$pageRetriever = $this->getMockBuilder( WikiContentProvider::class )->disableOriginalConstructor()->getMock();
 		$pageRetriever->method( 'getContent' )->willReturn( '' );
 		$loader = new TwigPageLoader( $pageRetriever );
-		$loader->isFresh( 'Felis silvestris', 0 );
+		$this->assertTrue( $loader->isFresh( 'Felis silvestris', 0 ) );
 	}
 
 	public function testPageTitleConfiguredAsRawContent_pageRetrieverFetchesInRawMode() {
