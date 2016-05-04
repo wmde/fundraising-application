@@ -812,7 +812,7 @@ class FunFunFactory {
 
 	public function newCreditCardPaymentHtmlPresenter() {
 		return new CreditCardPaymentHtmlPresenter(
-			$this->getLayoutTemplate( 'CreditCardPayment.html.twig' ),
+			$this->getIncludeTemplate( 'CreditCardPayment.html.twig' ),
 			$this->getTranslator(),
 			$this->newCreditCardUrlGenerator()
 		);
