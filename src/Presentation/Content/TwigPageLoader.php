@@ -35,9 +35,8 @@ class TwigPageLoader implements \Twig_LoaderInterface {
 	// @codingStandardsIgnoreStart
 	public function isFresh( $name, $time ): bool {
 		// @codingStandardsIgnoreEnd
-
-		// retrieve page to generate loader exception if page does not exist
-		$this->retrievePage( $name );
+		// page is always "fresh" since we have no communication between Wiki and our application
+		// Instead, cache is invalidated manually
 		return true;
 	}
 
