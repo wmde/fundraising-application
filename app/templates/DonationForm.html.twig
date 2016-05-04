@@ -222,7 +222,7 @@
 
         // connect DOM elements to actions
 
-        function donationAndPersonalDataIsValid() {
+        function formPage2IsValid() {
             var validity = store.getState().validity,
                 formContent = store.getState().donationFormContent,
                 addressIsValid = formContent.addressType === 'anonym' || validity.address,
@@ -239,7 +239,7 @@
         } );
 
         $( '#continueFormSubmit2' ).click( function () {
-            if ( donationAndPersonalDataIsValid() ) {
+            if ( formPage2IsValid() ) {
                 store.dispatch( actions.newNextPageAction() );
             } else {
                 alert( 'Bitte füllen Sie das Formular komplett aus.' );
@@ -247,7 +247,7 @@
         } );
 
         $( '#finishFormSubmit2' ).click( function () {
-            if ( donationAndPersonalDataIsValid() ) {
+            if ( formPage2IsValid() ) {
                 $( '#donForm2' ).submit();
             } else {
                 alert( 'Bitte füllen Sie das Formular komplett aus.' );
