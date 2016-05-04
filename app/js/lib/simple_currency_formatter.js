@@ -8,6 +8,7 @@
 var parseGermanFloat = function ( amountStr ) {
 		return parseFloat( String( amountStr ).replace( ',', '.' ) );
 	},
+
 	GermanCurrencyFormatter = {
 		format: function ( amountStr ) {
 			var amount = this.parse( amountStr );
@@ -15,10 +16,11 @@ var parseGermanFloat = function ( amountStr ) {
 		},
 		parse: parseGermanFloat
 	},
+
 	EnglishCurrencyFormatter = {
 		format: function ( amountStr ) {
 			var amount = this.parse( amountStr );
-			return String( amount.toFixed( 2 ) ) + String.fromCharCode( 160 ) + '€';
+			return '€' + String( amount.toFixed( 2 ) );
 		},
 		parse: parseGermanFloat // just to be sure.
 	};

@@ -3,7 +3,7 @@
 var test = require( 'tape' ),
 	createCurrencyFormatter = require( '../lib/simple_currency_formatter' ).createCurrencyFormatter,
 	expectedFormattedAmountInGermanLocale = '23,00' + String.fromCharCode( 160 ) + '€',
-	expectedFormattedAmountInEnglishLocale = '23.00' + String.fromCharCode( 160 ) + '€'
+	expectedFormattedAmountInEnglishLocale = '€23.00'
 	;
 
 test( 'German locale', function ( t ) {
@@ -62,7 +62,7 @@ test( 'English locale', function ( t ) {
 	t.test( 'Large amounts have no separators', function ( t ) {
 		var formatter = createCurrencyFormatter( locale ),
 			formattedAmount = formatter.format( '230000' );
-		t.equals( formattedAmount, '230000.00' + String.fromCharCode( 160 ) + '€', 'Amount is formatted' );
+		t.equals( formattedAmount, '€230000.00', 'Amount is formatted' );
 		t.end();
 	} );
 
