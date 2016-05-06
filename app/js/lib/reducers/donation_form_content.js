@@ -6,7 +6,7 @@ var formContentLib = require( './form_content' ),
 		amount: 0,
 		isCustomAmount: false,
 		paymentType: 'BEZ',
-		paymentPeriodInMonths: 0, // 0, 1, 3, 6 or 12, 0 = non-recurring payment
+		paymentIntervalInMonths: 0, // 0, 1, 3, 6 or 12, 0 = non-recurring payment
 		debitType: 'sepa', // sepa and "non-sepa"
 		iban: '',
 		bic: '',
