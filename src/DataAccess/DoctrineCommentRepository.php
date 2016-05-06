@@ -49,6 +49,7 @@ class DoctrineCommentRepository implements CommentRepository, CommentFinder {
 	}
 
 	private function getDonation( int $limit ): array {
+		// FIXME: catch exception
 		return $this->entityManager->getRepository( Donation::class )->findBy(
 			[
 				'isPublic' => true,
