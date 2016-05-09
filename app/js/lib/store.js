@@ -35,10 +35,18 @@ if ( process.env.REDUX_LOG === 'on' ) {
 }
 /* jshint ignore:end */
 
-module.exports = Redux.createStore( Redux.combineReducers( {
-	formPagination: formPagination,
-	donationFormContent: donationFormContent,
-	membershipFormContent: membershipFormContent,
-	validity: validity,
-	validationMessages: validationMessages
-} ), undefined, Redux.applyMiddleware.apply( this, middlewares ) );
+// Different stores for different pages, does not violate Reflux pattern
+module.exports = {
+	DonationStore: Redux.createStore( Redux.combineReducers( {
+		formPagination: formPagination,
+		donationFormContent: donationFormContent,
+		validity: validity,
+		validationMessages: validationMessages
+	} ), undefined, Redux.applyMiddleware.apply( this, middlewares ) ),
+	MembershipStore: Redux.createStore( Redux.combineReducers( {
+		formPagination: formPagination,
+		membershipFormContent: membershipFormContent,
+		validity: validity,
+		validationMessages: validationMessages
+	} ), undefined, Redux.applyMiddleware.apply( this, middlewares ) )
+};
