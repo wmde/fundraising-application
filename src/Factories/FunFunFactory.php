@@ -37,8 +37,10 @@ use WMDE\Fundraising\Frontend\DataAccess\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\DataAccess\UniqueTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\BankDataConverter;
 use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepository;
+use WMDE\Fundraising\Frontend\Infrastructure\LoggingPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipAppAuthUpdater;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationAuthorizer;
+use WMDE\Fundraising\Frontend\Infrastructure\PaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Presentation\CreditCardConfig;
 use WMDE\Fundraising\Frontend\Presentation\CreditCardUrlGenerator;
@@ -301,9 +303,12 @@ class FunFunFactory {
 		} );
 
 		$pimple['paypal-payment-notification-verifier'] = $pimple->share( function() {
-			return new PayPalPaymentNotificationVerifier(
-				new Client(),
-				$this->config['paypal']
+			return new LoggingPaymentNotificationVerifier(
+				new PayPalPaymentNotificationVerifier(
+					new Client(),
+					$this->config['paypal']
+				),
+				$this->getLogger()
 			);
 		} );
 
@@ -919,11 +924,11 @@ class FunFunFactory {
 		);
 	}
 
-	public function getPayPalPaymentNotificationVerifier(): PayPalPaymentNotificationVerifier {
+	public function getPayPalPaymentNotificationVerifier(): PaymentNotificationVerifier {
 		return $this->pimple['paypal-payment-notification-verifier'];
 	}
 
-	public function setPayPalPaymentNotificationVerifier( PayPalPaymentNotificationVerifier $verifier ) {
+	public function setPayPalPaymentNotificationVerifier( PaymentNotificationVerifier $verifier ) {
 		$this->pimple['paypal-payment-notification-verifier'] = $verifier;
 	}
 

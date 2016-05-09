@@ -10,7 +10,7 @@ use GuzzleHttp\Client;
  * @license GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class PayPalPaymentNotificationVerifier {
+class PayPalPaymentNotificationVerifier implements PaymentNotificationVerifier {
 
 	/** @var Client */
 	private $httpClient;

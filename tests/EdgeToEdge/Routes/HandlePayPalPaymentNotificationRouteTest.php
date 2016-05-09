@@ -13,6 +13,7 @@ use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationAuthorizationUpdater;
 use WMDE\Fundraising\Frontend\Domain\Model\PayPalPayment;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\LoggingPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
@@ -38,7 +39,9 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 				self::UPDATE_TOKEN,
 				DateTime::createFromFormat( 'Y-m-d H:i:s', '2039-12-31 23:59:59' )
 			);
-			$factory->setPayPalPaymentNotificationVerifier( $this->newNotifierMock() );
+			$factory->setPayPalPaymentNotificationVerifier(
+				new LoggingPaymentNotificationVerifier( $this->newNotifierMock(), $factory->getLogger() )
+			);
 
 			$client->request(
 				'POST',
@@ -173,7 +176,9 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 
 	public function testGivenInvalidRequest_applicationReturnsError() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setPayPalPaymentNotificationVerifier( $this->newNotifierMock() );
+			$factory->setPayPalPaymentNotificationVerifier(
+				new LoggingPaymentNotificationVerifier( $this->newNotifierMock(), $factory->getLogger() )
+			);
 
 			$client->request(
 				'POST',
