@@ -1,0 +1,178 @@
+<!-- <html> -->
+
+<div id="validation-errors" class="errorbox" style="display:none">
+	<strong>Bei der Prüfung Ihrer Eingaben wurden Probleme bemerkt</strong>.
+	Bitte überprüfen Sie Ihre Angaben in folgenden Feldern: <strong class="fields">keine</strong>
+</div>
+
+{# TODO Remove this debugging code! #}
+{% if violatedFields %}
+	<script>
+		console.log("Server-side validation errors:", {$ violatedFields|json_encode|raw $} );
+	</script>
+{% endif %}
+
+<div id="personalDataPage">
+	{% include 'Membership_Application_Form1.html.twig' %}
+</div>
+
+<div id="bankConfirmationPage">
+	{% include 'Membership_Application_Form2.html.twig' %}
+</div>
+
+<script>
+
+	// The following line is a Twig template placeholder to generate initial values (defaults to empty object)
+	var initialFormValues = {% if initialFormValues %}{$ initialFormValues|json_encode|raw $}{% else %}{}{% endif %};
+
+	// TODO add initial validation status to show validation errors when coming from the server
+
+	// Initialize the form
+	$( function () {
+		var store = WMDE.Store,
+				actions = WMDE.Actions;
+
+		WMDE.StoreUpdates.connectComponentsToStore(
+			[
+				WMDE.Components.createRadioComponent( store, $( '.membership-type-select' ), 'membershipType' ),
+				WMDE.Components.createRadioComponent( store, $( '.address-type-select' ), 'addressType' ),
+				WMDE.Components.createRadioComponent( store, $( '.salutation-select' ), 'salutation' ),
+				WMDE.Components.createRadioComponent( store, $( '#personal-title' ), 'title' ),
+				WMDE.Components.createTextComponent( store, $( '#first-name' ), 'firstName' ),
+				WMDE.Components.createTextComponent( store, $( '#last-name' ), 'lastName' ),
+				WMDE.Components.createTextComponent( store, $( '#company-name' ), 'companyName' ),
+				WMDE.Components.createTextComponent( store, $( '#street' ), 'street' ),
+				WMDE.Components.createTextComponent( store, $( '#post-code' ), 'postCode' ),
+				WMDE.Components.createTextComponent( store, $( '#city' ), 'city' ),
+				WMDE.Components.createRadioComponent( store, $( '#country' ), 'countryCode' ),
+				WMDE.Components.createTextComponent( store, $( '#email' ), 'email' ),
+				WMDE.Components.createTextComponent( store, $( '#date-of-birth' ), 'dateOfBirth' ),
+				WMDE.Components.createTextComponent( store, $( '#phone' ), 'phoneNumber' ),
+				WMDE.Components.createRadioComponent( store, $( '.payment-period-select' ), 'paymentPeriodInMonths' ),
+				WMDE.Components.createAmountComponent( store, $( '.amount-input' ), $( '.amount-select' ) ),
+				WMDE.Components.createRadioComponent( store, $( '.debit-type-select' ), 'debitType' ),
+				WMDE.Components.createTextComponent( store, $( '#iban' ), 'iban' ),
+				WMDE.Components.createTextComponent( store, $( '#bic' ), 'bic' ),
+				WMDE.Components.createTextComponent( store, $( '#account-number' ), 'accountNumber' ),
+				WMDE.Components.createTextComponent( store, $( '#bank-code' ), 'bankCode' )
+			],
+			store,
+			'membershipFormContent'
+		);
+
+		WMDE.StoreUpdates.connectValidatorsToStore(
+				function ( initialValues ) {
+					console.log(initialValues);
+					return [
+						WMDE.ReduxValidation.createValidationDispatcher(
+							WMDE.FormValidation.createAddressValidator( '{$ basepath $}/validate-address' ),
+							actions.newFinishAddressValidationAction,
+							[ 'salutation', 'title', 'firstName', 'lastName', 'companyName', 'street', 'postCode', 'city', 'countryCode', 'email' ],
+							initialValues
+						),
+						WMDE.ReduxValidation.createValidationDispatcher(
+							WMDE.FormValidation.createBankDataValidator( '{$ basepath $}/check-iban', '{$ basepath $}/generate-iban' ),
+							actions.newFinishBankDataValidationAction,
+							[ 'iban', 'accountNumber', 'bankCode', 'debitType' ],
+							initialValues
+						)
+					];
+				},
+				store,
+				initialFormValues,
+				'membershipFormContent'
+		);
+
+		// Connect view handlers to changes in specific parts in the global state, designated by 'stateKey'
+		WMDE.StoreUpdates.connectViewHandlersToStore(
+				[
+					{
+						viewHandler: WMDE.View.createFormPageVisibilityHandler( {
+							personalData: $( "#personalDataPage" ),
+							bankConfirmation: $( '#bankConfirmationPage' )
+						} ),
+						stateKey: 'formPagination'
+					},
+					{
+						viewHandler: WMDE.View.createErrorBoxHandler( $( '#validation-errors' ), {
+							amount: 'Betrag',
+							salutation: 'Anrede',
+							title: 'Titel',
+							firstName: 'Vorname',
+							lastName: 'Nachname',
+							company: 'Firma',
+							street: 'Straße',
+							postcode: 'PLZ',
+							city: 'Ort',
+							country: 'DE',
+							email: 'E-Mail'
+						} ),
+						stateKey: 'validationMessages'
+					},
+					{
+						viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.slide-sepa' ), 'sepa' ),
+						stateKey: 'membershipFormContent.debitType'
+					},
+					{
+						viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.slide-non-sepa' ), 'non-sepa' ),
+						stateKey: 'membershipFormContent.debitType'
+					},
+					{
+						viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.person-name' ), 'person' ),
+						stateKey: 'membershipFormContent.addressType'
+					},
+					{
+						viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.company-name' ), 'firma' ),
+						stateKey: 'membershipFormContent.addressType'
+					},
+					{
+						viewHandler: WMDE.View.createFeeOptionSwitcher( $( '#amount-1' ), 1 ),
+						stateKey: 'membershipFormContent.paymentPeriodInMonths'
+					},
+					{
+						viewHandler: WMDE.View.createFeeOptionSwitcher( $( '#amount-2' ), 6 ),
+						stateKey: 'membershipFormContent.paymentPeriodInMonths'
+					}
+				],
+				store
+		);
+
+		// connect DOM elements to actions
+
+		$( '#continueFormSubmit' ).click( function () {
+			// TODO check if page is valid
+			store.dispatch( actions.newNextPageAction() );
+		} );
+
+		$( '#finishFormSubmit' ).click( function () {
+			// TODO check if page is valid
+			$( '#memForm' ).submit();
+		} );
+
+		// Initialize form pages
+		store.dispatch( actions.newAddPageAction( 'personalData' ) );
+		store.dispatch( actions.newAddPageAction( 'bankConfirmation' ) );
+
+		// Set initial form values
+		store.dispatch( actions.newInitializeContentAction( initialFormValues ) );
+
+	} );
+</script>
+
+<!-- TODO
+<div class="wlightbox-contents">
+    <div id="wlightbox-wohin-geht-das-geld">
+</html>{{Web:Spendenseite-HK2013/rewrite/10h16_Lightbox_Wohin_geht_das_Geld}}<html>
+</div>
+<div id="wlightbox-steuerlich-absetzbar">
+</html>{{Web:Spendenseite-HK2013/rewrite/10h16_Lightbox_Steuer}}<html>
+</div>
+<div id="wlightbox-bitcoin">
+</html>{{Web:Spendenseite-HK2013/rewrite/10h16_Lightbox_BitCoin}}<html>
+</div>
+<div id="wlightbox-spendenkommentare"></html>{{Web:Spendenseite-HK2013/rewrite/10h16_Lightbox_Spendenkommentare}}<html></div>
+
+</div>
+</html>{{Web:Spendenseite-HK2013/rewrite/Bank Detail Banner}}<html>
+</html>
+-->

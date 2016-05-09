@@ -1,0 +1,444 @@
+<html>
+<!-- become member -->
+<!-- TODO: action attribute on second form -->
+<form name="memForm" id="memForm" method="POST" action="{$ basepath $}/apply-for-membership">
+
+	<!-- header box -->
+	<section id="become-member">
+		<div class="container clearfix">
+			<div class="ltcol">
+				&nbsp;
+			</div>
+
+			<div class="ctcol">
+				<div class="box partial rounded no-margin">
+					<div class="box-header container clearfix">
+						<span class="icon-lock">Werden Sie Mitglied für Freies Wissen!</span>
+					</div>
+
+					<div class="box-section">
+						<div class="container clearfix">
+							<p class="h2">
+								Seien Sie dabei!
+							</p>
+
+							<ul class="advantage-list">
+								<li class="first icon-ok _icon-list-item">
+									Langfristig die Wikipedia unterst&uuml;tzen
+								</li>
+
+								<li class="icon-ok _icon-list-item">
+									Der Mitgliedsbeitrag ist absetzbar
+								</li>
+
+								<li class="icon-ok _icon-list-item">
+									Regelm&auml;&szlig;ig Infos &uuml;ber die Arbeit des Vereins erhalten
+								</li>
+
+								<li class="icon-ok _icon-list-item">
+									Kostenfrei an Veranstaltungen rund um Wikipedia teilnehmen
+								</li>
+
+								<li class="icon-ok _icon-list-item">
+									Die Mitgliedschaft ist jederzeit k&uuml;ndbar
+								</li>
+
+								<li class="last icon-ok _icon-list-item">
+									Aktiv Freies Wissen verbreiten
+								</li>
+							</ul>
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+
+			<div class="rtcol">
+				<div class="icon-file-alt _icon-list-item last">
+					<p>
+						<strong>Mehr Informationen</strong>
+					</p>
+					<p>
+						Erfahren Sie <a href="http://wikimedia.de/wiki/Mitgliedschaft" target="_blank">mehr</a> &uuml;ber Wikimedia Deutschland e. V. und seine Aktivit&auml;ten.
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- personal data -->
+	<section id="personal-data" class="container clearfix">
+		<div class="ltcol">
+			&nbsp;
+		</div>
+
+		<div class="ctcol">
+			<div class="box partial">
+
+				<div class="box-section approval">
+					<div class="icon-ok _icon-list-item clearfix">
+						Ich werde Mitglied des Wikimedia e. V.
+					</div>
+
+					<div class="container">
+						<ul class="horizontal clearfix">
+							<li class="first">
+								<input type="radio" id="membership-type-1" class="membership-type-select" name="membership_type" value="sustaining" title="F&ouml;rdermitglied" {% if membershipAppl.type == 'sustaining' or not membershipAppl.type %}checked="checked"{% endif %}>
+								<label for="membership-type-1">F&ouml;rdermitglied</label>
+							</li>
+
+							<li class="last">
+								<input type="radio" id="membership-type-2" class="membership-type-select" name="membership_type" value="active" title="Aktives Mitglied" {% if membershipAppl.type == 'active' or not membershipAppl.type %}checked="checked"{% endif %}>
+								<label for="membership-type-2">Aktives Mitglied</label>
+							</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="box-section">
+					<div class="section-title clearfix">
+						<h2>Pers&ouml;nliche Daten</h2>
+					</div>
+
+					<div class="container">
+						<ul class="horizontal clearfix">
+							<li class="first">
+								<input type="radio" id="address-type-1" class="address-type-select slide-toggle" name="adresstyp" value="person" title="privat" data-slide-rel="#personal-data .slide-1" {% if membershipAppl.person.addressType == 'person' or not membershipAppl.person.addressType %}checked="checked"{% endif %}>
+								<label for="address-type-1">Privatperson</label>
+							</li>
+
+							<li class="last">
+								<input type="radio" id="address-type-2" class="address-type-select slide-toggle" name="adresstyp" value="firma" title="gesch&auml;ftlich" data-slide-rel="#personal-data .slide-2" {% if membershipAppl.person.addressType == 'firma' %}checked="checked"{% endif %}>
+								<label for="address-type-2">Firma</label>
+							</li>
+						</ul>
+					</div>
+
+					<div class="slide-3">
+
+						<hr/>
+
+						<div class="person-name">
+
+							<div class="input-container">
+								<ul class="horizontal clearfix salutation">
+									<li class="first">
+										<input type="radio" id="salutation-1" class="salutation-select" name="anrede" value="Frau" title="Frau" {% if membershipAppl.person.salutation == 'Frau' or not membershipAppl.person.salutation %}checked="checked"{% endif %}>
+										<label for="salutation-1">Frau</label>
+									</li>
+
+									<li class="last">
+										<input type="radio" id="salutation-2" class="salutation-select" name="anrede" value="Herr" title="Herr" {% if membershipAppl.person.salutation == 'Herr' %}checked="checked"{% endif %}>
+										<label for="salutation-2">Herr</label>
+									</li>
+								</ul>
+								<input type="radio" id="salutation-3" class="salutation-select" name="anrede" value="Firma" style="visibility: hidden">
+
+								<select id="personal-title" name="titel">
+									<option value="" data-behavior="placeholder" {% if membershipAppl.person.title == '' or not membershipAppl.person.title %}selected="selected"{% endif %}>Kein Titel</option>
+									<option value="Dr." {% if membershipAppl.person.title == 'Dr.' %}selected="selected"{% endif %}>Dr.</option>
+									<option value="Prof." {% if membershipAppl.person.title == 'Prof.' %}selected="selected"{% endif %}>Prof.</option>
+									<option value="Prof. Dr." {% if membershipAppl.person.title == 'Prof. Dr.' %}selected="selected"{% endif %}>Prof. Dr.</option>
+								</select>
+							</div>
+
+							<div class="input-container">
+								<label for="first-name">Name</label>
+								<input id="first-name" name="vorname" type="text" value="{$ membershipAppl.person.firstName $}" autocomplete="off" pattern="^((?![M|m]ustermann).)*$" title="Groß- und Kleinbuchstaben, Bindestriche und Leerzeichen" placeholder="Vorname" required="required" class="required">
+								<span class="validation icon-placeholder"></span>
+								<input id="last-name" name="nachname" type="text" value="{$ membershipAppl.person.lastName $}" autocomplete="off" pattern="^((?![M|m]ustermann).)*$" title="Groß- und Kleinbuchstaben, Bindestriche, Leerzeichen und Punkte" placeholder="Nachname" required="required" class="required">
+								<span class="validation icon-placeholder"></span>
+							</div>
+						</div>
+
+						<div class="company-name">
+							<div class="input-container">
+								<label for="company-name">Firma</label>
+								<input id="company-name" name="firma" type="text" value="{$ membershipAppl.person.company $}" autocomplete="off" placeholder="Firma" required="required" class="required">
+								<span class="validation icon-placeholder"></span>
+							</div>
+						</div>
+
+
+						<div class="input-container">
+							<label for="street">Stra&szlig;e</label>
+							<input id="street" name="strasse" type="text" value="{$ membershipAppl.address.street $}" autocomplete="off" pattern="^((?![M|m]uster).)*$" placeholder="z.B. Musterstra&szlig;e 123" required="required" class="required">
+							<span class="validation icon-placeholder"></span>
+						</div>
+
+						<div class="input-container">
+							<label for="post-code">PLZ &amp; Ort</label>
+							<input id="post-code" name="plz" type="text" value="{$ membershipAppl.address.postCode $}" autocomplete="off" pattern="[0-9]{5}" title="Fünfstellige Postleitzahl" placeholder="z.B. 10117" required="required" class="required">
+							<span class="validation icon-placeholder"></span>
+							<input id="city" name="ort" type="text" value="{$ membershipAppl.address.city $}" autocomplete="off" pattern="^((?![M|m]uster).)*$" placeholder="z.B. Berlin" required="required" class="required">
+							<span class="validation icon-placeholder"></span>
+						</div>
+
+						<div class="input-container">
+							<label for="country">Land</label>
+							<select id="country" name="country" title="Land">
+								<option value="DE" {% if membershipAppl.address.countryCode == 'DE' or not membershipAppl.address.countryCode %}selected="selected"{% endif %}>Deutschland</option>
+								<option value="AT" {% if membershipAppl.address.countryCode == 'AT' %}selected="selected"{% endif %}>Österreich</option>
+								<option value="CH" {% if membershipAppl.address.countryCode == 'CH' %}selected="selected"{% endif %}>Schweiz</option>
+								<option value="BE" {% if membershipAppl.address.countryCode == 'BE' %}selected="selected"{% endif %}>Belgien</option>
+								<option value="IT" {% if membershipAppl.address.countryCode == 'IT' %}selected="selected"{% endif %}>Italien</option>
+								<option value="LI" {% if membershipAppl.address.countryCode == 'LI' %}selected="selected"{% endif %}>Liechtenstein</option>
+								<option value="LU" {% if membershipAppl.address.countryCode == 'LU' %}selected="selected"{% endif %}>Luxemburg</option>
+							</select>
+						</div>
+
+						<div class="input-container">
+							<label for="email">E-Mail</label>
+							<input id="email" name="email" type="text" value="{$ membershipAppl.emailAddress $}" autocomplete="off" placeholder="z.B. name@domain.de" required="required" class="required">
+							<span class="validation icon-placeholder"></span>
+						</div>
+
+						<div class="input-container">
+							<label for="date-of-birth">Geburtsdatum</label>
+							<input id="date-of-birth" class="optional" name="dob" type="text" value="{$ membershipAppl.dateOfBirth $}" autocomplete="off" title="DD.MM.YYYY" optional="optional" placeholder="optional" pattern="[0-9]{2}\.[0-9]{2}\.[0-9]{4}">
+							<span class="validation icon-placeholder"></span>
+						</div>
+
+						<div class="input-container">
+							<label for="phone">Telefon</label>
+							<input id="phone" class="optional" name="phone" type="text" value="{$ membershipAppl.phoneNumber $}" autocomplete="off" title="Ziffern, runde Klammern, Plus und Minus" optional="optional" placeholder="optional" pattern="[0-9\-\+\(\)].*">
+							<span class="validation icon-placeholder"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="rtcol">
+			<div class="icon-hand-right _icon-list-item first last">
+				<p>
+					<strong>Steuerlich absetzbar</strong>
+				</p>
+				<p>
+					Mitgliedsbeitr&auml;ge sind wie Spenden steuerlich absetzbar.
+				</p>
+			</div>
+		</div>
+	</section>
+
+
+	<!-- membership payment -->
+	<section class="container clearfix" id="membership-payment">
+		<div class="ltcol">
+			&nbsp;
+		</div>
+
+		<div class="ctcol">
+			<div class="box rounded partial no-margin">
+				<div class="box-section">
+					<div class="section-title clearfix">
+						<h2 class="f-left no-margin">Ihr Mitgliedsbeitrag</h2>
+					</div>
+
+					<div class="container clearfix">
+						<ul class="horizontal clearfix interval-list">
+							<li class="first">
+								<input type="radio" id="interval-1" name="membership_fee_interval" class="payment-period-select" value="1" title="monatlich">
+								<label for="interval-1">monatlich</label>
+							</li>
+
+							<li>
+								<input type="radio" id="interval-2" name="membership_fee_interval" class="payment-period-select" value="3" title="quartalsweise">
+								<label for="interval-2">quartalsweise</label>
+							</li>
+
+							<li>
+								<input type="radio" id="interval-3" name="membership_fee_interval" class="payment-period-select" value="6" title="halbjährlich">
+								<label for="interval-3">halbjährlich</label>
+							</li>
+
+							<li class="last">
+								<input type="radio" id="interval-4" name="membership_fee_interval" class="payment-period-select" value="12" title="jährlich" checked="checked" required="required">
+								<label for="interval-4">jährlich</label>
+							</li>
+						</ul>
+
+						<hr>
+
+						<ul class="horizontal clearfix amount-list">
+							<li class="first">
+								<input type="radio" id="amount-1" class="amount-select" name="membership_fee" value="5,00" title="5€">
+								<label for="amount-1">5€</label>
+							</li>
+
+							<li>
+								<input type="radio" id="amount-2" class="amount-select" name="membership_fee" value="15,00" title="15€">
+								<label for="amount-2">15€</label>
+							</li>
+
+							<li>
+								<input type="radio" id="amount-3" class="amount-select" name="membership_fee" value="25,00" title="25€">
+								<label for="amount-3">25€</label>
+							</li>
+
+							<li>
+								<input type="radio" id="amount-4" class="amount-select" name="membership_fee" value="50,00" title="50€">
+								<label for="amount-4">50€</label>
+							</li>
+
+							<li>
+								<input type="radio" id="amount-5" class="amount-select" name="membership_fee" value="75,00" title="75€">
+								<label for="amount-5">75€</label>
+							</li>
+
+							<li>
+								<input type="radio" id="amount-6" class="amount-select" name="membership_fee" value="100,00" title="100€">
+								<label for="amount-6">100€</label>
+							</li>
+
+							<li>
+								<input type="radio" id="amount-7" class="amount-select" name="membership_fee" value="250,00" title="250€">
+								<label for="amount-7">250€</label>
+							</li>
+
+							<li class="amount-custom last no-margin">
+								<div class="container" style="width: 100px;">
+									<input type="text" id="amount-8" class="amount-input" name="membership_fee_custom"
+										   title="Betrag zwischen 2 und 99999,99 Euro; Komma als Dezimaltrenner"
+										   autocomplete="off" pattern="^[1-9]{1}\d{0,4}(?:,\d\d)?$">
+									<label class="right top" for="amount-8">€</label>
+								</div>
+							</li>
+						</ul>
+					</div>
+
+					<hr>
+
+					<div class="container">
+						<ul class="horizontal clearfix">
+							<li class="first">
+								<input type="radio" data-slide-rel=".slide-sepa" class="debit-type-select slide-toggle" checked="checked"
+									   title="SEPA" name="debit-type" value="sepa" id="debit-type-1">
+								<label for="debit-type-1">IBAN</label>
+							</li>
+
+							<li class="last">
+								<input type="radio" data-slide-rel=".slide-non-sepa" class="debit-type-select slide-toggle" title="Konto/BLZ"
+									   name="debit-type" value="non-sepa" id="debit-type-2">
+								<label for="debit-type-2">Konto/Bankleitzahl</label>
+							</li>
+						</ul>
+					</div>
+
+					<div class="slide-6">
+						<hr>
+						<div class="slide-sepa opened" id="sepa">
+							<div class="input-container">
+								<label for="iban">IBAN</label>
+								<input type="text" required="required" title="Internationale Kontonummer"
+									   pattern="^DE[0-9]{20}$|^AT[0-9]{18}$|^CH[0-9]{7}[A-Za-z0-9]{12}$|^BE[0-8]{14}$|^IT[0-9]{2}[A-Z][0-9]{10}[A-Za-z0-9]{12}$|^LI[0-9]{7}[A-Za-z0-9]{12}$|^LU[0-9]{5}[A-Za-z0-9]{13}$"
+									   placeholder="IBAN" name="iban" id="iban" class="required iban-check"
+									   value="{$ membershipAppl.bankData.iban $}">
+								<span class="validation"></span>
+							</div>
+
+							<div class="input-container">
+								<label for="bic">BIC</label>
+								<input type="text" required="" title="BIC"
+									   pattern="^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$" placeholder="BIC"
+									   autocomplete="off" name="bic" id="bic" class="required" value="{$ membershipAppl.bankData.bic $}">
+								<span class="validation"></span>
+							</div>
+						</div>
+
+						<div class="slide-non-sepa" id="non-sepa" style="opacity: 0; display: none;">
+							<div class="input-container">
+								<label for="account-number">Kontonummer</label>
+								<input type="text" title="Bis zu zehnstellige Kontonummer" pattern="[0-9]{4,10}"
+									   placeholder="Kontonummer" autocomplete="off" name="account_number"
+									   id="account-number" class="required bank-check">
+								<span class="validation"></span>
+							</div>
+
+							<div class="input-container">
+								<label for="bank-code">Bankleitzahl</label>
+								<input type="text" pattern="[0-9]{8}" title="Achtstellige Bankleitzahl"
+									   placeholder="Bankleitzahl" autocomplete="off" name="bank_code" id="bank-code"
+									   class="required bank-check">
+								<span class="validation"></span>
+							</div>
+						</div>
+					</div>
+
+					<div style="margin-left: 180px" class="input-container">
+						<span id="bank-name"></span><br><span id="bic"></span>
+					</div>
+
+					<hr>
+
+					<div class="last direct-debit label">
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<div class="rtcol">
+			<div class="icon-hand-right _icon-list-item firt last">
+				<p>
+					<strong>Mitgliedsbeitrag</strong>
+				</p>
+
+				<p>
+					Der Mindestbetrag für natürliche Personen beträgt 24 Euro, für juristische Personen 100 Euro im Jahr.
+				</p>
+
+				<p>
+					Für Personen mit eingeschränkter finanzieller Leistungskraft kann der Beitrag auf Antrag auf 12 Euro
+					ermäßigt werden.
+				</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- become member submit -->
+	<section id="become-member-submit">
+		<div class="container clearfix">
+			<div class="ltcol">
+				&nbsp;
+			</div>
+
+			<div class="ctcol">
+				<div class="box partial rounded">
+
+					<div class="box-footer clearfix">
+						<div class="tab-1 tab container clearfix ">
+							<span class="label f-right">Weiter Zur<br/>Best&auml;tigung</span>
+							<button id="continueFormSubmit" type="submit" name="go_contact" class="f-right">Mitgliedschaft abschlie&szlig;en<span class="icon-ok"></span></button>
+							<!--span class="logo-ssl-white f-right no-margin"></span-->
+						</div>
+					</div>
+
+				</div>
+
+				<div class="meta-nav container clearfix">
+					<a href="http://de.wikipedia.org" class="f-left">
+						<span class="icon-angle-left"></span>Zur&uuml;ck zur Wikipedia
+					</a>
+
+					<a href="http://wikimedia.de" class="f-right">
+						Mehr Infos zu Wikimedia<span class="icon-angle-right _icon-right"></span>
+					</a>
+				</div>
+			</div>
+
+			<div class="rtcol">
+
+			</div>
+		</div>
+	</section>
+	<input type="hidden" name="purpose" value="membership-full" />
+	<input type="hidden" name="back_form" value="Mitgliedschaft" />
+	<input type="hidden" name="member_agree" value="1" />
+	<input type="hidden" name="account_holder" value="blank" />
+	<input type="hidden" name="bank_name" id="field-bank-name" value="{$ membershipAppl.bankData.bankName $}" />
+	<input type="hidden" name="wikilogin" />
+</form>
+</html>
