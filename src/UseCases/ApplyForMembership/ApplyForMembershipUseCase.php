@@ -9,7 +9,7 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepositor
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipAppAuthUpdater;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
-use WMDE\Fundraising\Frontend\Validation\MembershipApplicationValidator;
+use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\MembershipApplicationValidator;
 
 /**
  * @license GNU GPL v2+
@@ -35,12 +35,12 @@ class ApplyForMembershipUseCase {
 	}
 
 	public function applyForMembership( ApplyForMembershipRequest $request ): ApplyForMembershipResponse {
-		$application = $this->newApplicationFromRequest( $request );
-
-		if ( !$this->validator->validate( $application )->isSuccessful() ) {
+		if ( !$this->validator->validate( $request )->isSuccessful() ) {
 			// TODO: return failures (note that we have infrastructure failures that are not ConstraintViolations)
 			return ApplyForMembershipResponse::newFailureResponse();
 		}
+
+		$application = $this->newApplicationFromRequest( $request );
 
 		// TODO: handle exceptions
 		$this->repository->storeApplication( $application );
