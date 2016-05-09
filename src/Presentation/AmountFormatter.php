@@ -23,14 +23,14 @@ class AmountFormatter {
 	}
 
 	public function format( Euro $amount ) {
-		if ( empty( $this->localeData[ $this->locale ] ) ) {
+		if ( empty( $this->localeData[$this->locale] ) ) {
 			throw new \RuntimeException( 'Unknown locale' );
 		}
 		return number_format(
 			$amount->getEuroFloat(),
-			$this->localeData[ $this->locale ][0],
-			$this->localeData[ $this->locale ][1],
-			$this->localeData[ $this->locale ][2]
+			$this->localeData[$this->locale][0],
+			$this->localeData[$this->locale][1],
+			$this->localeData[$this->locale][2]
 		);
 	}
 

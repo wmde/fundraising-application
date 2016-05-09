@@ -38,7 +38,25 @@ test( 'connect validators to store updates', function ( t ) {
 	t.end();
 } );
 
-test( 'initial values are passed to validator factory and merged with initial store formContent values', function ( t ) {
+test( 'initial values passed to validator factory default to formValues from the store', function ( t ) {
+	var validator = {
+			dispatchIfChanged: sinon.spy()
+		},
+		validatorFactory = sinon.stub().returns( [ validator ] ),
+		initialStoreFormContent = { paymentType: 'PPL' },
+		storeData = { formContent: initialStoreFormContent },
+		store = createFakeStore( storeData );
+
+	storeUpdateHandling.connectValidatorsToStore( validatorFactory, store, {}, 'formContent' );
+
+	t.ok(
+		validatorFactory.firstCall.calledWith( initialStoreFormContent ),
+		'validator factory is called with initial values from store'
+	);
+	t.end();
+} );
+
+test( 'initial values are passed to validator factory can be changed on initialization', function ( t ) {
 	var validator = {
 			dispatchIfChanged: sinon.spy()
 		},
@@ -48,15 +66,10 @@ test( 'initial values are passed to validator factory and merged with initial st
 		store = createFakeStore( storeData ),
 		initialValues = { paymentType: 'BTC' };
 
-	storeUpdateHandling.connectValidatorsToStore( validatorFactory, store, {}, 'formContent' );
 	storeUpdateHandling.connectValidatorsToStore( validatorFactory, store, initialValues, 'formContent' );
 
 	t.ok(
-		validatorFactory.firstCall.calledWith( initialStoreFormContent ),
-		'validator factory is called with initial values from store'
-	);
-	t.ok(
-		validatorFactory.secondCall.calledWith( initialValues ),
+		validatorFactory.firstCall.calledWith( initialValues ),
 		'validator factory is called with initial values from store'
 	);
 	t.end();

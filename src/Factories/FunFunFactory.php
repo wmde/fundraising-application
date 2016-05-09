@@ -42,6 +42,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\MembershipAppAuthUpdater;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationAuthorizer;
 use WMDE\Fundraising\Frontend\Infrastructure\PaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifier;
+use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
 use WMDE\Fundraising\Frontend\Presentation\CreditCardConfig;
 use WMDE\Fundraising\Frontend\Presentation\CreditCardUrlGenerator;
 use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
@@ -771,6 +772,10 @@ class FunFunFactory {
 		);
 	}
 
+	private function newAmountFormatter(): AmountFormatter {
+		return new AmountFormatter( $this->config['locale'] );
+	}
+
 	public function newDecimalNumberFormatter(): NumberFormatter {
 		return new NumberFormatter( $this->config['locale'], NumberFormatter::DECIMAL );
 	}
@@ -914,7 +919,7 @@ class FunFunFactory {
 		// TODO make this dependent on the 'form' value from the HTTP POST request
 		// (we need different form pages for A/B testing)
 		$template->context['main_template'] = 'DonationForm.html.twig';
-		return new DonationFormViolationPresenter( $template );
+		return new DonationFormViolationPresenter( $template, $this->newAmountFormatter() );
 	}
 
 	public function newHandlePayPalPaymentNotificationUseCase( string $updateToken ) {

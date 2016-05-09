@@ -1,20 +1,20 @@
-Amount: {$ betrag $}
-Payment type: {$ zahlweise $}
-Interval: {$ paymentIntervalInMonths $}
-IBAN: {$ iban $}
-BIC: {$ bic $}
-Bank name: {$ bankName $}
-Address type: {$ addressType $}
-Salutation: {$ salutation $}
-Title: {$ title $}
-Company: {$ company $}
-First name: {$ firstName $}
-Last name: {$ lastName $}
-Street: {$ street $}
-Postal code: {$ postcode $}
-City: {$ city $}
-Country code: {$ country $}
-Email address: {$ email $}
+Amount: {$ initialFormValues.amount $}
+Payment type: {$ initialFormValues.paymentType $}
+Interval: {$ initialFormValues.paymentIntervalInMonths $}
+IBAN: {$ initialFormValues.iban $}
+BIC: {$ initialFormValues.bic $}
+Bank name: {$ initialFormValues.bankName $}
+Address type: {$ initialFormValues.addressType $}
+Salutation: {$ initialFormValues.salutation $}
+Title: {$ initialFormValues.title $}
+Company: {$ initialFormValues.company $}
+First name: {$ initialFormValues.firstName $}
+Last name: {$ initialFormValues.lastName $}
+Street: {$ initialFormValues.street $}
+Postal code: {$ initialFormValues.postcode $}
+City: {$ initialFormValues.city $}
+Country code: {$ initialFormValues.country $}
+Email address: {$ initialFormValues.email $}
 
 Violations:
 {% for fieldName, message in violatedFields %}

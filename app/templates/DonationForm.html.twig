@@ -263,13 +263,14 @@
             }
         } );
 
+        // Set initial form values
+        store.dispatch( actions.newInitializeContentAction( initialFormValues ) );
+
         // Initialize form pages
         store.dispatch( actions.newAddPageAction( 'payment' ) );
         store.dispatch( actions.newAddPageAction( 'personalData' ) );
         store.dispatch( actions.newAddPageAction( 'bankConfirmation' ) );
 
-        // Set initial form values
-        store.dispatch( actions.newInitializeContentAction( initialFormValues ) );
 
         // TODO switch to correct page, depending on validation status coming from the server
 

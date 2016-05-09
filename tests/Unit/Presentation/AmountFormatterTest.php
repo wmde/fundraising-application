@@ -3,7 +3,6 @@
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation;
 
-
 use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
 
