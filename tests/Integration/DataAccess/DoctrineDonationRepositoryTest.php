@@ -148,4 +148,36 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$repository->storeDonation( $donation );
 	}
 
+	public function testDataFieldsAreRetainedOrUpdatedOnUpdate() {
+		$doctrineDonation = $this->getNewlyCreatedDoctrineDonation();
+
+		$doctrineDonation->encodeAndSetData( array_merge(
+			$doctrineDonation->getDecodedData(),
+			[
+				'untouched' => 'value',
+				'vorname' => 'potato',
+				'another' => 'untouched',
+			]
+		) );
+
+		$this->entityManager->flush();
+
+		$donation = ValidDonation::newDirectDebitDonation();
+		$donation->assignId( $doctrineDonation->getId() );
+
+		( new DoctrineDonationRepository( $this->entityManager ) )->storeDonation( $donation );
+
+		$data = $this->getDonationFromDatabase()->getDecodedData();
+
+		$this->assertSame( 'value', $data['untouched'] );
+		$this->assertSame( 'untouched', $data['another'] );
+		$this->assertSame( $donation->getDonor()->getPersonName()->getFirstName(), $data['vorname'] );
+	}
+
+	private function getNewlyCreatedDoctrineDonation(): DoctrineDonation {
+		$donation = ValidDonation::newDirectDebitDonation();
+		( new DoctrineDonationRepository( $this->entityManager ) )->storeDonation( $donation );
+		return $this->getDonationFromDatabase();
+	}
+
 }
