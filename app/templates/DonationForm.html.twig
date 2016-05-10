@@ -30,17 +30,18 @@
     {% include 'Form3.html.twig' %}
 </div>
 
-<script>
-
-    // The following line is a Twig template placeholder to generate initial values (defaults to empty object)
-    var initialFormValues = {% if initialFormValues %}{$ initialFormValues|json_encode|raw $}{% else %}{}{% endif %};
-
-    // TODO add initial validation status to show validation errors when coming from the server
-
+<script id="init-form"
+        data-initial-form-values='{% if initialFormValues %}{$ initialFormValues|json_encode|e("html_attr") $}{% else %}{}{% endif %}'
+        data-validate-amount-url='{$ basepath|e("html_attr") $}/validate-amount'
+        data-validate-address-url='{$ basepath|e("html_attr") $}/validate-address'
+        data-validate-iban-url='{$ basepath $}/check-iban'
+        data-generate-iban-url='{$ basepath $}/generate-iban'
+        >
     // Initialize the form
     $( function () {
         var store = WMDE.Store.DonationStore,
-            actions = WMDE.Actions;
+            actions = WMDE.Actions,
+            initData = $( '#init-form' );
 
         WMDE.StoreUpdates.connectComponentsToStore(
             [
@@ -79,19 +80,19 @@
             function ( initialValues ) {
                 return [
                     WMDE.ReduxValidation.createValidationDispatcher(
-                            WMDE.FormValidation.createAmountValidator( '{$ basepath $}/validate-amount' ),
+                            WMDE.FormValidation.createAmountValidator( initData.data( 'validate-amount-url' ) ),
                             actions.newFinishAmountValidationAction,
                             [ 'amount', 'paymentType' ],
                             initialValues
                     ),
                     WMDE.ReduxValidation.createValidationDispatcher(
-                            WMDE.FormValidation.createAddressValidator( '{$ basepath $}/validate-address' ),
+                            WMDE.FormValidation.createAddressValidator( initData.data( 'validate-address-url' ) ),
                             actions.newFinishAddressValidationAction,
                             [ 'salutation', 'title', 'firstName', 'lastName', 'companyName', 'street', 'postcode', 'city', 'country', 'email' ],
                             initialValues
                     ),
                     WMDE.ReduxValidation.createValidationDispatcher(
-                            WMDE.FormValidation.createBankDataValidator( '{$ basepath $}/check-iban', '{$ basepath $}/generate-iban' ),
+                            WMDE.FormValidation.createBankDataValidator( initData.data( 'validate-iban-url' ), initData.data( 'generate-iban-url' ) ),
                             actions.newFinishBankDataValidationAction,
                             [ 'iban', 'accountNumber', 'bankCode', 'debitType', 'paymentType' ],
                             initialValues
@@ -105,7 +106,7 @@
                 ];
             },
             store,
-            initialFormValues,
+            initData.data( 'initial-form-values' ),
             'donationFormContent'
         );
 
@@ -264,7 +265,7 @@
         } );
 
         // Set initial form values
-        store.dispatch( actions.newInitializeContentAction( initialFormValues ) );
+        store.dispatch( actions.newInitializeContentAction( initData.data( 'initial-form-values' ) ) );
 
         // Initialize form pages
         store.dispatch( actions.newAddPageAction( 'payment' ) );
