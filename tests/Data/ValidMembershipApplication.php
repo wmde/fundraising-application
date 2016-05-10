@@ -41,7 +41,7 @@ class ValidMembershipApplication {
 
 	const MEMBERSHIP_TYPE = MembershipApplication::ACTIVE_MEMBERSHIP;
 	const PAYMENT_PERIOD_IN_MONTHS = 3;
-	const PAYMENT_AMOUNT_IN_EURO = 5;
+	const PAYMENT_AMOUNT_IN_EURO = 10;
 
 	const PAYMENT_BANK_ACCOUNT = '0648489890';
 	const PAYMENT_BANK_CODE = '50010517';

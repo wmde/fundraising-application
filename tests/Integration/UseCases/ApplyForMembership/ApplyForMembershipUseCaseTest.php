@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\ApplyForMembership;
 
+use PDepend\Application;
 use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\Domain\Model\Euro;
@@ -15,10 +16,11 @@ use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\InMemoryMembershipApplicationRepository;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
+use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplicationValidationResult;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipRequest;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipUseCase;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
-use WMDE\Fundraising\Frontend\Validation\MembershipApplicationValidator;
+use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\MembershipApplicationValidator;
 use WMDE\Fundraising\Frontend\Validation\ValidationResult;
 
 /**
@@ -71,7 +73,7 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 		$validator->expects( $this->any() )
 			->method( 'validate' )
-			->willReturn( new ValidationResult() );
+			->willReturn( new ApplicationValidationResult() );
 
 		return $validator;
 	}
@@ -111,7 +113,7 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$request->setApplicantPhoneNumber( ValidMembershipApplication::APPLICANT_PHONE_NUMBER );
 		$request->setApplicantDateOfBirth( ValidMembershipApplication::APPLICANT_DATE_OF_BIRTH );
 		$request->setPaymentIntervalInMonths( ValidMembershipApplication::PAYMENT_PERIOD_IN_MONTHS );
-		$request->setPaymentAmount( Euro::newFromInt( ValidMembershipApplication::PAYMENT_AMOUNT_IN_EURO ) );
+		$request->setPaymentAmountInEuros( (string)ValidMembershipApplication::PAYMENT_AMOUNT_IN_EURO );
 
 		$request->setPaymentBankData( $this->newValidBankData() );
 
@@ -189,9 +191,19 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 		$validator->expects( $this->any() )
 			->method( 'validate' )
-			->willReturn( new ValidationResult( new ConstraintViolation( null, 'fail' ) ) );
+			->willReturn( $this->newInvalidValidationResult() );
 
 		return $validator;
+	}
+
+	private function newInvalidValidationResult(): ApplicationValidationResult {
+		$invalidResult = $this->getMock( ApplicationValidationResult::class );
+
+		$invalidResult->expects( $this->any() )
+			->method( 'isValid' )
+			->willReturn( false );
+
+		return $invalidResult;
 	}
 
 }

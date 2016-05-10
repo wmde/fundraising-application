@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\UseCases\ApplyForMembership;
 
 use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
+use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Domain\Model\MembershipApplicant;
 use WMDE\Fundraising\Frontend\Domain\Model\MembershipApplication;
 use WMDE\Fundraising\Frontend\Domain\Model\MembershipPayment;
@@ -73,7 +74,7 @@ class MembershipApplicationBuilder {
 	private function newPayment( ApplyForMembershipRequest $request ): MembershipPayment {
 		return new MembershipPayment(
 			$request->getPaymentIntervalInMonths(),
-			$request->getPaymentAmount(),
+			Euro::newFromString( $request->getPaymentAmountInEuros() ),
 			$request->getPaymentBankData()
 		);
 	}
