@@ -1,0 +1,34 @@
+---
+- hosts: all
+  tasks:
+      - name: Create deployment directory parent
+        file: path={{ deploy_dir | dirname }} state=directory
+
+      - name: Checkout code
+        git: repo=https://github.com/wmde/FundraisingFrontend.git dest={{ deploy_dir }} version={{ deploy_branch }}
+
+      - name: Install dependencies
+        composer: command=install working_dir={{ deploy_dir }} no_dev={{ composer_no_dev }} optimize_autoloader={{ composer_optimize_autoloader}}
+
+      - name: Create var folders
+        file: path={{ deploy_dir }}/var/{{ item }} state=directory mode=775 group=www-data
+        items:
+          - cache
+          - log
+
+      - name: Compile JavaScript
+        local_action: command npm run build-js
+
+      - name: Copy compiled JavaScript
+        copy: src=../web/res/js/wmde.js dest={{ deploy_dir }}/web/res/js/wmde.js
+
+      - name: Check if configuration file exists
+        stat: path={{ deploy_dir }}/app/config/config.prod.json # it's always "prod", even on the test server, maybe rename "prod" to "server"?
+        register: server_config_file
+        failed_when: not server_config_file.stat.exists
+
+      - name: Check if configuration file is valid JSON
+        command: php -r 'json_decode( file_get_contents( "{{ deploy_dir }}/app/config/config.prod.json" ) ); echo json_last_error();'
+        register: decode_json_config
+        failed_when: decode_json_config.stdout != "0"
+

@@ -82,6 +82,7 @@ When accessing the API via `web/index.dev.php`, profiling information will be ge
 		* `config.prod.json`: instance specific (gitignored) production configuration (gets merged into default config)
 	* `js/lib`: Javascript modules, will be compiled into one file for the frontend.
 	* `js/test`: Unit tests for the JavaScript modules
+* `deployment/`: Ansible scripts and configuration for deploying the application
 * `src/`: contains framework agnostic code
 	* `DataAccess/`: persistence other data access (ie network) service implementations
 	* `Domain/`: application independent code belonging to the fundraising frontend bounded context
