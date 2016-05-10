@@ -22,13 +22,6 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	const CORRECT_ACCESS_TOKEN = 'KindlyAllowMeAccess';
 	const SOME_UPDATE_TOKEN = 'SomeUpdateToken';
 
-	public function testGivenPostRequest_resultHasMethodNotAllowedStatus() {
-		$client = $this->createClient();
-
-		$this->expectException( MethodNotAllowedHttpException::class );
-		$client->request( 'POST', 'show-donation-confirmation' );
-	}
-
 	public function testGivenValidRequest_confirmationPageContainsDonationData() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setDonationConfirmationPageSelector(
@@ -39,6 +32,29 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 			$client->request(
 				'GET',
+				'show-donation-confirmation',
+				[
+					'donationId' => $donation->getId(),
+					'accessToken' => self::CORRECT_ACCESS_TOKEN,
+					'updateToken' => self::SOME_UPDATE_TOKEN
+				]
+			);
+
+			$this->assertDonationDataInResponse( $donation, $client->getResponse() );
+			$this->assertContains( 'Template Name: 10h16_Bestätigung.twig', $client->getResponse()->getContent() );
+		} );
+	}
+
+	public function testGivenValidPostRequest_confirmationPageContainsDonationData() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setDonationConfirmationPageSelector(
+				new DonationConfirmationPageSelector( $this->newEmptyConfirmationPageConfig() )
+			);
+
+			$donation = $this->newStoredDonation( $factory );
+
+			$client->request(
+				'POST',
 				'show-donation-confirmation',
 				[
 					'donationId' => $donation->getId(),

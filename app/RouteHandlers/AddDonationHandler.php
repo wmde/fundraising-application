@@ -59,8 +59,8 @@ class AddDonationHandler {
 						$responseModel->getDonation()->getId(),
 						$responseModel->getDonation()->getAmount(),
 						$responseModel->getDonation()->getPaymentIntervalInMonths(),
-						$responseModel->getUpdateToken()
-						// TODO: include access token
+						$responseModel->getUpdateToken(),
+						$responseModel->getAccessToken()
 					)
 				);
 			case PaymentType::CREDIT_CARD:

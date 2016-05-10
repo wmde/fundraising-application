@@ -23,17 +23,18 @@ class PayPalUrlGenerator {
 		$this->config = $config;
 	}
 
-	public function generateUrl( int $donationId, Euro $amount, int $interval, string $updateToken ): string {
+	public function generateUrl( int $donationId, Euro $amount, int $interval,
+								 string $updateToken, string $accessToken ): string {
 
 		$params = array_merge(
 			$this->getIntervalDependentParameters( $amount, $interval ),
-			$this->getIntervalAgnosticParameters( $donationId, $updateToken )
+			$this->getIntervalAgnosticParameters( $donationId, $updateToken, $accessToken )
 		);
 
 		return $this->config->getPayPalBaseUrl() . http_build_query( $params );
 	}
 
-	private function getIntervalAgnosticParameters( int $donationId, string $updateToken ): array {
+	private function getIntervalAgnosticParameters( int $donationId, string $updateToken, string $accessToken ): array {
 		return [
 			'business' => $this->config->getPayPalAccountAddress(),
 			'currency_code' => 'EUR',
@@ -42,7 +43,7 @@ class PayPalUrlGenerator {
 			'item_number' => $donationId,
 			'notify_url' => $this->config->getNotifyUrl(),
 			'cancel_return' => $this->config->getCancelUrl(),
-			'return' => $this->config->getReturnUrl() . '?sid=' . $donationId,
+			'return' => $this->config->getReturnUrl() . '?donationId=' . $donationId . '&accessToken=' . $accessToken,
 			'custom' => json_encode( [
 				'sid' => $donationId,
 				'utoken' => $updateToken
