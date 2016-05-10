@@ -11,13 +11,6 @@
     Bitte überprüfen Sie Ihre Angaben in folgenden Feldern: <strong class="fields">keine</strong>
 </div>
 
-{# TODO Remove this debugging code! #}
-{% if violatedFields %}
-    <script>
-        console.log("Server-side validation errors:", {$ violatedFields|json_encode|raw $} );
-    </script>
-{% endif %}
-
 <div id="paymentPage">
     {% include 'Form1.html.twig' %}
 </div>
@@ -32,16 +25,19 @@
 
 <script id="init-form"
         data-initial-form-values='{% if initialFormValues %}{$ initialFormValues|json_encode|e("html_attr") $}{% else %}{}{% endif %}'
+        data-violated-fields='{% if violatedFields %}{$ violatedFields|json_encode|e("html_attr") $}{% else %}{}{% endif %}'
         data-validate-amount-url='{$ basepath|e("html_attr") $}/validate-amount'
         data-validate-address-url='{$ basepath|e("html_attr") $}/validate-address'
         data-validate-iban-url='{$ basepath $}/check-iban'
         data-generate-iban-url='{$ basepath $}/generate-iban'
         >
     // Initialize the form
+
     $( function () {
-        var store = WMDE.Store.DonationStore,
-            actions = WMDE.Actions,
-            initData = $( '#init-form' );
+        var initData = $( '#init-form' ),
+            store = WMDE.Store.createDonationStore( WMDE.createInitialStateFromViolatedFields( initData.data( 'violatedFields' ) ) ),
+            actions = WMDE.Actions
+            ;
 
         WMDE.StoreUpdates.connectComponentsToStore(
             [
