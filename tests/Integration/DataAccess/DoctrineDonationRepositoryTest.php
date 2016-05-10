@@ -37,18 +37,22 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 	public function testValidDonationGetPersisted() {
 		$donation = ValidDonation::newDirectDebitDonation();
 
-		( new DoctrineDonationRepository( $this->entityManager ) )->storeDonation( $donation );
+		$this->newRepository()->storeDonation( $donation );
 
-		$doctrineDonation = $this->getDonationFromDatabase();
+		$doctrineDonation = $this->getDoctrineDonationById( $donation->getId() );
 
 		// TODO: compare whole donation, now easy via ValidDonation
 		$this->assertSame( $donation->getAmount()->getEuroString(), $doctrineDonation->getAmount() );
 		$this->assertSame( $donation->getDonor()->getEmailAddress(), $doctrineDonation->getDonorEmail() );
 	}
 
-	private function getDonationFromDatabase(): DoctrineDonation {
+	private function newRepository(): DoctrineDonationRepository {
+		return new DoctrineDonationRepository( $this->entityManager );
+	}
+
+	private function getDoctrineDonationById( int $id ): DoctrineDonation {
 		$donationRepo = $this->entityManager->getRepository( DoctrineDonation::class );
-		$donation = $donationRepo->find( 1 );
+		$donation = $donationRepo->find( $id );
 		$this->assertInstanceOf( DoctrineDonation::class, $donation );
 		return $donation;
 	}
@@ -56,9 +60,9 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 	public function testFractionalAmountsRoundtripWithoutChange() {
 		$donation = ValidDonation::newDirectDebitDonation();
 
-		( new DoctrineDonationRepository( $this->entityManager ) )->storeDonation( $donation );
+		$this->newRepository()->storeDonation( $donation );
 
-		$doctrineDonation = $this->getDonationFromDatabase();
+		$doctrineDonation = $this->getDoctrineDonationById( $donation->getId() );
 
 		$this->assertSame( $donation->getAmount()->getEuroString(), $doctrineDonation->getAmount() );
 	}
@@ -75,7 +79,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 	public function testNewDonationPersistenceRoundTrip() {
 		$donation = ValidDonation::newDirectDebitDonation();
 
-		$repository = new DoctrineDonationRepository( $this->entityManager );
+		$repository = $this->newRepository();
 
 		$repository->storeDonation( $donation );
 
@@ -86,7 +90,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testWhenDonationAlreadyExists_persistingCausesUpdate() {
-		$repository = new DoctrineDonationRepository( $this->entityManager );
+		$repository = $this->newRepository();
 
 		$donation = ValidDonation::newDirectDebitDonation();
 		$repository->storeDonation( $donation );
@@ -101,7 +105,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testWhenDonationDoesNotExist_getDonationReturnsNull() {
-		$repository = new DoctrineDonationRepository( $this->entityManager );
+		$repository = $this->newRepository();
 
 		$this->assertNull( $repository->getDonationById( self::ID_OF_DONATION_NOT_IN_DB ) );
 	}
@@ -117,7 +121,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$donation = ValidDonation::newDirectDebitDonation();
 		$donation->assignId( self::ID_OF_DONATION_NOT_IN_DB );
 
-		$repository = new DoctrineDonationRepository( $this->entityManager );
+		$repository = $this->newRepository();
 
 		$this->expectException( StoreDonationException::class );
 		$repository->storeDonation( $donation );
@@ -125,14 +129,14 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 	public function testWhenDeletionDateGetsSet_repositoryNoLongerReturnsEntity() {
 		$donation = $this->createDeletedDonation();
-		$repository = new DoctrineDonationRepository( $this->entityManager );
+		$repository = $this->newRepository();
 
 		$this->assertNull( $repository->getDonationById( $donation->getId() ) );
 	}
 
 	private function createDeletedDonation(): Donation {
 		$donation = ValidDonation::newDirectDebitDonation();
-		$repository = new DoctrineDonationRepository( $this->entityManager );
+		$repository = $this->newRepository();
 		$repository->storeDonation( $donation );
 		$doctrineDonation = $repository->getDoctrineDonationById( $donation->getId() );
 		$doctrineDonation->setDeletionTime( new \DateTime() );
@@ -142,7 +146,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 	public function testWhenDeletionDateGetsSet_repositoryNoLongerPersistsEntity() {
 		$donation = $this->createDeletedDonation();
-		$repository = new DoctrineDonationRepository( $this->entityManager );
+		$repository = $this->newRepository();
 
 		$this->expectException( StoreDonationException::class );
 		$repository->storeDonation( $donation );
@@ -165,19 +169,19 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$donation = ValidDonation::newDirectDebitDonation();
 		$donation->assignId( $doctrineDonation->getId() );
 
-		( new DoctrineDonationRepository( $this->entityManager ) )->storeDonation( $donation );
+		$this->newRepository()->storeDonation( $donation );
 
-		$data = $this->getDonationFromDatabase()->getDecodedData();
+		$data = $this->getDoctrineDonationById( $donation->getId() )->getDecodedData();
 
 		$this->assertSame( 'value', $data['untouched'] );
+		$this->assertNotSame( 'potato', $data['vorname'] );
 		$this->assertSame( 'untouched', $data['another'] );
-		$this->assertSame( $donation->getDonor()->getPersonName()->getFirstName(), $data['vorname'] );
 	}
 
 	private function getNewlyCreatedDoctrineDonation(): DoctrineDonation {
 		$donation = ValidDonation::newDirectDebitDonation();
-		( new DoctrineDonationRepository( $this->entityManager ) )->storeDonation( $donation );
-		return $this->getDonationFromDatabase();
+		$this->newRepository()->storeDonation( $donation );
+		return $this->getDoctrineDonationById( $donation->getId() );
 	}
 
 }
