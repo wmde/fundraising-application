@@ -21,7 +21,8 @@ module.exports = {
 	 * @param {string} formContentName Field name for the store to access form contents, e.g. 'donationFormContent' or 'membershipFormContent'
 	 */
 	connectValidatorsToStore: function ( validatorFactoryFunction, store, initialValues, formContentName ) {
-		var completeInitialValues = _.extend( {}, store.getState()[ formContentName ], initialValues ),
+		var pickNonfalsy = _.partial( _.pickBy, _, _.identity ),
+			completeInitialValues = _.extend( {}, store.getState()[ formContentName ], pickNonfalsy( initialValues ) ),
 			validators = validatorFactoryFunction( completeInitialValues );
 		reduxValidation.createValidationDispatcherCollection( store, validators, formContentName );
 	},

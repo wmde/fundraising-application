@@ -323,7 +323,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 			$response = $client->getResponse()->getContent();
 
-			$this->assertContains( 'Amount: 0', $response );
+			$this->assertContains( 'Amount: 0,00', $response );
 			$this->assertContains( 'Payment type: BEZ', $response );
 			$this->assertContains( 'Interval: 3', $response );
 			$this->assertContains( 'IBAN: DE12500105170648489890', $response );
