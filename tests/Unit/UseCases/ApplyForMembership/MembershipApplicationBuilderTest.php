@@ -41,7 +41,7 @@ class MembershipApplicationBuilderTest extends \PHPUnit_Framework_TestCase {
 		$request = new ApplyForMembershipRequest();
 
 		$request->setMembershipType( ValidMembershipApplication::MEMBERSHIP_TYPE );
-		$request->setApplicantType( 'firma' );
+		$request->markApplicantAsCompany();
 		$request->setApplicantCompanyName( self::COMPANY_NAME );
 		$request->setMembershipType( ValidMembershipApplication::MEMBERSHIP_TYPE );
 		$request->setApplicantSalutation( ValidMembershipApplication::APPLICANT_SALUTATION );

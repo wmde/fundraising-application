@@ -51,7 +51,7 @@ class MembershipApplicationBuilder {
 	}
 
 	private function newBasePersonName( ApplyForMembershipRequest $request ): PersonName {
-		if ( $request->getApplicantType() === self::COMPANY_APPLICANT_TYPE ) {
+		if ( $request->isCompanyApplication() ) {
 			$personName = PersonName::newCompanyName();
 			$personName->setCompanyName( $request->getApplicantCompanyName() );
 			return $personName;

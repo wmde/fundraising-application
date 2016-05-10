@@ -16,7 +16,7 @@ class ApplyForMembershipRequest {
 
 	private $membershipType;
 
-	private $applicantType;
+	private $applicantIsCompany = false;
 	private $applicantCompanyName;
 	private $applicantSalutation;
 	private $applicantTitle;
@@ -45,12 +45,16 @@ class ApplyForMembershipRequest {
 		$this->membershipType = $membershipType;
 	}
 
-	public function getApplicantType(): string {
-		return $this->applicantType;
+	/**
+	 * @return bool True when the applicant is a company, false when the applicant is a private person
+	 */
+	public function isCompanyApplication(): bool {
+		return $this->applicantIsCompany;
 	}
 
-	public function setApplicantType( string $applicantType ) {
-		$this->applicantType = $applicantType;
+	public function markApplicantAsCompany() {
+		$this->assertIsWritable();
+		$this->applicantIsCompany = true;
 	}
 
 	public function getApplicantCompanyName(): string {

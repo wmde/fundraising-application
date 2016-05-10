@@ -14,8 +14,6 @@ use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipRequ
  */
 class ValidMembershipApplicationRequest {
 
-	const APPLICANT_TYPE = 'person';
-
 	/**
 	 * Returns a request with the same data as the constants in @see ValidMembershipApplication
 	 */
@@ -28,7 +26,6 @@ class ValidMembershipApplicationRequest {
 
 		$request->setMembershipType( ValidMembershipApplication::MEMBERSHIP_TYPE );
 
-		$request->setApplicantType( self::APPLICANT_TYPE );
 		$request->setApplicantFirstName( ValidMembershipApplication::APPLICANT_FIRST_NAME );
 		$request->setApplicantLastName( ValidMembershipApplication::APPLICANT_LAST_NAME );
 		$request->setApplicantSalutation( ValidMembershipApplication::APPLICANT_SALUTATION );
