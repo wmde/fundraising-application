@@ -16,11 +16,13 @@ use WMDE\Fundraising\Frontend\Presentation\PayPalUrlGenerator;
  */
 class PayPalUrlGeneratorTest extends \PHPUnit_Framework_TestCase {
 
+	const BASE_URL = 'https://www.sandbox.paypal.com/cgi-bin/webscr?';
+
 	public function testSubscriptions() {
 		$generator = new PayPalUrlGenerator( $this->newPayPalConfig() );
 
 		$this->assertSame(
-			'http://that.paymentprovider.com/' .
+			'https://www.sandbox.paypal.com/cgi-bin/webscr' .
 			'?cmd=_xclick-subscriptions' .
 			'&no_shipping=1' .
 			'&src=1' .
@@ -47,7 +49,7 @@ class PayPalUrlGeneratorTest extends \PHPUnit_Framework_TestCase {
 		$generator = new PayPalUrlGenerator( $this->newPayPalConfig() );
 
 		$this->assertSame(
-			'http://that.paymentprovider.com/' .
+			'https://www.sandbox.paypal.com/cgi-bin/webscr' .
 			'?cmd=_donations' .
 			'&amount=12.34' .
 			'&business=foerderpp%40wikimedia.de' .
@@ -66,7 +68,7 @@ class PayPalUrlGeneratorTest extends \PHPUnit_Framework_TestCase {
 
 	private function newPayPalConfig(): PayPalConfig {
 		return PayPalConfig::newFromConfig( [
-			'base-url' => 'http://that.paymentprovider.com/?',
+			'base-url' => self::BASE_URL,
 			'account-address' => 'foerderpp@wikimedia.de',
 			'notify-url' => 'http://my.donation.app/handler/paypal/',
 			'return-url' => 'http://my.donation.app/donation/confirm/',
@@ -82,7 +84,7 @@ class PayPalUrlGeneratorTest extends \PHPUnit_Framework_TestCase {
 
 	private function newIncompletePayPalConfig() {
 		return PayPalConfig::newFromConfig( [
-			'base-url' => 'http://that.paymentprovider.com/?',
+			'base-url' => self::BASE_URL,
 			'account-address' => 'some@email-adress.com',
 			'notify-url' => 'http://my.donation.app/handler/paypal/',
 			'return-url' => 'http://my.donation.app/donation/confirm/',

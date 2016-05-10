@@ -272,7 +272,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 			$response = $client->getResponse();
 			$this->assertSame( 302, $response->getStatusCode() );
-			$this->assertContains( 'that.paymentprovider.com', $response->getContent() );
+			$this->assertContains( 'sandbox.paypal.com', $response->getContent() );
 		} );
 	}
 

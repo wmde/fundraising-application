@@ -51,7 +51,7 @@ class PayPalPaymentNotificationVerifier implements PaymentNotificationVerifier {
 
 		$result = $this->httpClient->post(
 			$this->config['base-url'],
-			array_merge( [ 'cmd' => '_notify_validate' ], $request )
+			[ 'form_params' => array_merge( [ 'cmd' => '_notify-validate' ], $request ) ]
 		);
 
 		if ( $result->getStatusCode() !== 200 ) {
@@ -60,8 +60,13 @@ class PayPalPaymentNotificationVerifier implements PaymentNotificationVerifier {
 			);
 		}
 
-		if ( trim( $result->getBody()->getContents() ) !== 'VERIFIED' ) {
+		$responseBody = trim( $result->getBody()->getContents() );
+		if ( $responseBody === 'INVALID' ) {
 			throw new PayPalPaymentNotificationVerifierException( 'Payment provider did not confirm the sent data' );
+		}
+
+		if ( $responseBody !== 'VERIFIED' ) {
+			throw new PayPalPaymentNotificationVerifierException( 'An error occurred while trying to confirm the sent data' );
 		}
 	}
 
