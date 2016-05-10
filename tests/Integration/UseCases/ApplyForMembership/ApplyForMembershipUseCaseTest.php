@@ -200,7 +200,7 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$invalidResult = $this->getMock( ApplicationValidationResult::class );
 
 		$invalidResult->expects( $this->any() )
-			->method( 'isValid' )
+			->method( 'isSuccessful' )
 			->willReturn( false );
 
 		return $invalidResult;
