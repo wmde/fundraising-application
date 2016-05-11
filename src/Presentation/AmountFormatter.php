@@ -1,5 +1,5 @@
 <?php
-
+declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Presentation;
 
@@ -14,8 +14,8 @@ class AmountFormatter {
 	private $locale;
 
 	private $localeData = [
-		'de_DE' => [2, ',', '' ],
-		'en_US' => [2, '.', '' ]
+		'de_DE' => [ 2, ',', '' ],
+		'en_US' => [ 2, '.', '' ]
 	];
 
 	public function __construct( string $locale ) {
