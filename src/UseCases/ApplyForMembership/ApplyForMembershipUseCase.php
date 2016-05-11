@@ -17,6 +17,8 @@ use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\MembershipApplicationV
  */
 class ApplyForMembershipUseCase {
 
+	/* private */ const YEARLY_PAYMENT_MODERATION_THRESHOLD_IN_EURO = 1000;
+
 	private $repository;
 	private $authUpdater;
 	private $mailer;
@@ -42,6 +44,10 @@ class ApplyForMembershipUseCase {
 
 		$application = $this->newApplicationFromRequest( $request );
 
+		if ( $this->applicationNeedsModeration( $application ) ) {
+			$application->markForModeration();
+		}
+
 		// TODO: handle exceptions
 		$this->repository->storeApplication( $application );
 
@@ -55,7 +61,7 @@ class ApplyForMembershipUseCase {
 		// TODO: handle exceptions
 		$this->sendConfirmationEmail( $application );
 
-		return ApplyForMembershipResponse::newSuccessResponse( $accessToken, $updateToken );
+		return ApplyForMembershipResponse::newSuccessResponse( $accessToken, $updateToken, $application );
 	}
 
 	private function newApplicationFromRequest( ApplyForMembershipRequest $request ): MembershipApplication {
@@ -67,6 +73,12 @@ class ApplyForMembershipUseCase {
 			$application->getApplicant()->getEmailAddress(),
 			[] // TODO
 		);
+	}
+
+	private function applicationNeedsModeration( MembershipApplication $application ): bool {
+		return
+			$application->getPayment()->getYearlyAmount()->getEuroFloat()
+			> self::YEARLY_PAYMENT_MODERATION_THRESHOLD_IN_EURO;
 	}
 
 }
