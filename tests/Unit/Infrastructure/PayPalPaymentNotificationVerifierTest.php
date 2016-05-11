@@ -131,11 +131,13 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit_Framework_TestCase 
 		$client->expects( $this->once() )
 			->method( 'post' )
 			->with( self::DUMMY_API_URL, [
-				'cmd' => '_notify_validate',
-				'receiver_email' => self::VALID_ACCOUNT_EMAIL,
-				'payment_status' => self::VALID_PAYMENT_STATUS,
-				'item_name' => self::ITEM_NAME,
-				'mc_currency' => self::CURRENCY_EUR
+				'form_params' => [
+					'cmd' => '_notify-validate',
+					'receiver_email' => self::VALID_ACCOUNT_EMAIL,
+					'payment_status' => self::VALID_PAYMENT_STATUS,
+					'item_name' => self::ITEM_NAME,
+					'mc_currency' => self::CURRENCY_EUR
+				]
 			] )
 			->willReturn( $response );
 

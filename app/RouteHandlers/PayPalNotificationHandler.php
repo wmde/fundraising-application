@@ -51,7 +51,7 @@ class PayPalNotificationHandler {
 					->setPayerAddressCity( $post->get( 'address_city', '' ) )
 					->setPayerAddressCountryCode( $post->get( 'address_country_code', '' ) )
 					->setPayerAddressStatus( $post->get( 'address_status', '' ) )
-					->setDonationId( $post->get( 'item_number', 0 ) )
+					->setDonationId( (int)$post->get( 'item_number', 0 ) )
 					->setCurrencyCode( $post->get( 'mc_currency', '' ) )
 					->setTransactionFee( Euro::newFromString( $post->get( 'mc_fee', '0' ) ) )
 					->setAmountGross( Euro::newFromString( $post->get( 'mc_gross', '0' ) ) )

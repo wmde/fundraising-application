@@ -16,11 +16,13 @@ use WMDE\Fundraising\Frontend\Presentation\PayPalUrlGenerator;
  */
 class PayPalUrlGeneratorTest extends \PHPUnit_Framework_TestCase {
 
+	const BASE_URL = 'https://www.sandbox.paypal.com/cgi-bin/webscr?';
+
 	public function testSubscriptions() {
 		$generator = new PayPalUrlGenerator( $this->newPayPalConfig() );
 
 		$this->assertSame(
-			'http://that.paymentprovider.com/' .
+			'https://www.sandbox.paypal.com/cgi-bin/webscr' .
 			'?cmd=_xclick-subscriptions' .
 			'&no_shipping=1' .
 			'&src=1' .
@@ -36,10 +38,10 @@ class PayPalUrlGeneratorTest extends \PHPUnit_Framework_TestCase {
 			'&item_number=1234' .
 			'&notify_url=http%3A%2F%2Fmy.donation.app%2Fhandler%2Fpaypal%2F' .
 			'&cancel_return=http%3A%2F%2Fmy.donation.app%2Fdonation%2Fcancel%2F' .
-			'&return=http%3A%2F%2Fmy.donation.app%2Fdonation%2Fconfirm%2F%3Fsid%3D1234' .
+			'&return=http%3A%2F%2Fmy.donation.app%2Fdonation%2Fconfirm%2F%3FdonationId%3D1234%26accessToken%3Datoken' .
 			'&custom=%7B%22sid%22%3A1234%2C%22utoken%22%3A%22utoken%22%7D',
 
-			$generator->generateUrl( 1234, Euro::newFromString( '12.34' ), 3, 'utoken' )
+			$generator->generateUrl( 1234, Euro::newFromString( '12.34' ), 3, 'utoken', 'atoken' )
 		);
 	}
 
@@ -47,7 +49,7 @@ class PayPalUrlGeneratorTest extends \PHPUnit_Framework_TestCase {
 		$generator = new PayPalUrlGenerator( $this->newPayPalConfig() );
 
 		$this->assertSame(
-			'http://that.paymentprovider.com/' .
+			'https://www.sandbox.paypal.com/cgi-bin/webscr' .
 			'?cmd=_donations' .
 			'&amount=12.34' .
 			'&business=foerderpp%40wikimedia.de' .
@@ -57,16 +59,16 @@ class PayPalUrlGeneratorTest extends \PHPUnit_Framework_TestCase {
 			'&item_number=1234' .
 			'&notify_url=http%3A%2F%2Fmy.donation.app%2Fhandler%2Fpaypal%2F' .
 			'&cancel_return=http%3A%2F%2Fmy.donation.app%2Fdonation%2Fcancel%2F' .
-			'&return=http%3A%2F%2Fmy.donation.app%2Fdonation%2Fconfirm%2F%3Fsid%3D1234' .
+			'&return=http%3A%2F%2Fmy.donation.app%2Fdonation%2Fconfirm%2F%3FdonationId%3D1234%26accessToken%3Datoken' .
 			'&custom=%7B%22sid%22%3A1234%2C%22utoken%22%3A%22utoken%22%7D',
 
-			$generator->generateUrl( 1234, Euro::newFromString( '12.34' ), 0, 'utoken' )
+			$generator->generateUrl( 1234, Euro::newFromString( '12.34' ), 0, 'utoken', 'atoken' )
 		);
 	}
 
 	private function newPayPalConfig(): PayPalConfig {
 		return PayPalConfig::newFromConfig( [
-			'base-url' => 'http://that.paymentprovider.com/?',
+			'base-url' => self::BASE_URL,
 			'account-address' => 'foerderpp@wikimedia.de',
 			'notify-url' => 'http://my.donation.app/handler/paypal/',
 			'return-url' => 'http://my.donation.app/donation/confirm/',
@@ -82,7 +84,7 @@ class PayPalUrlGeneratorTest extends \PHPUnit_Framework_TestCase {
 
 	private function newIncompletePayPalConfig() {
 		return PayPalConfig::newFromConfig( [
-			'base-url' => 'http://that.paymentprovider.com/?',
+			'base-url' => self::BASE_URL,
 			'account-address' => 'some@email-adress.com',
 			'notify-url' => 'http://my.donation.app/handler/paypal/',
 			'return-url' => 'http://my.donation.app/donation/confirm/',

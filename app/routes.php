@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\AddDonationHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\PayPalNotificationHandler;
+use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowDonationConfirmationHandler;
 use WMDE\Fundraising\Frontend\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
@@ -352,29 +353,14 @@ $app->post(
 	}
 );
 
-$app->get(
+$app->match(
 	'show-donation-confirmation',
 	function( Application $app, Request $request ) use ( $ffFactory ) {
-		$useCase = $ffFactory->newShowDonationConfirmationUseCase( $request->query->get( 'accessToken', '' ) );
-
-		$responseModel = $useCase->showConfirmation( new ShowDonationConfirmationRequest(
-			(int)$request->query->get( 'donationId', '' )
-		) );
-
-		if ( $responseModel->accessIsPermitted() ) {
-			$selectedConfirmationPage = $ffFactory->getDonationConfirmationPageSelector()->selectPage();
-			return new Response(
-				$ffFactory->newDonationConfirmationPresenter()->present(
-					$responseModel->getDonation(),
-					$request->query->get( 'updateToken', '' ),
-					$selectedConfirmationPage
-				)
-			);
-		}
-
-		return new Response( 'TODO: access not permitted' ); // TODO
+		return ( new ShowDonationConfirmationHandler( $ffFactory ) )->handle(
+			$request->getMethod() === Request::METHOD_GET ? $request->query : $request->request
+		);
 	}
-);
+)->method( 'GET|POST' );
 
 $app->post(
 	'handle-paypal-payment-notification',
