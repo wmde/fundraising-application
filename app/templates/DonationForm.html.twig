@@ -219,7 +219,7 @@
 
         // connect DOM elements to actions
 
-        function formPage2IsValid() {
+        function personalDataPageIsValid() {
             var validity = store.getState().validity,
                 formContent = store.getState().donationFormContent,
                 addressIsValid = formContent.addressType === 'anonym' || validity.address,
@@ -227,8 +227,14 @@
             return validity.amount && addressIsValid && bankDataIsValid;
         }
 
+        function paymentDataPageIsValid() {
+            var currentState = store.getState();
+            return currentState.validity.amount ||
+                    ( currentState.donationFormContent.amount && currentState.donationFormContent.paymentType ) ;
+        }
+
         $( '#continueFormSubmit1' ).click( function () {
-            if ( store.getState().validity.amount ) {
+            if ( paymentDataPageIsValid() ) {
                 store.dispatch( actions.newNextPageAction() );
             } else {
                 alert( 'Bitte füllen Sie das Formular komplett aus.' );
@@ -236,7 +242,7 @@
         } );
 
         $( '#continueFormSubmit2' ).click( function () {
-            if ( formPage2IsValid() ) {
+            if ( personalDataPageIsValid() ) {
                 store.dispatch( actions.newNextPageAction() );
             } else {
                 alert( 'Bitte füllen Sie das Formular komplett aus.' );
@@ -244,7 +250,7 @@
         } );
 
         $( '#finishFormSubmit2' ).click( function () {
-            if ( formPage2IsValid() ) {
+            if ( personalDataPageIsValid() ) {
                 $( '#donForm2' ).submit();
             } else {
                 alert( 'Bitte füllen Sie das Formular komplett aus.' );
@@ -268,8 +274,10 @@
         store.dispatch( actions.newAddPageAction( 'personalData' ) );
         store.dispatch( actions.newAddPageAction( 'bankConfirmation' ) );
 
-
-        // TODO switch to correct page, depending on validation status coming from the server
+        // switch to personal page if payment data is filled in
+        if ( paymentDataPageIsValid() ) {
+            store.dispatch( actions.newNextPageAction() );
+        }
 
     } );
 </script>
