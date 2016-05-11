@@ -20,16 +20,21 @@
 	{% include 'Membership_Application_Form2.html.twig' %}
 </div>
 
-<script>
-
-	// The following line is a Twig template placeholder to generate initial values (defaults to empty object)
-	var initialFormValues = {% if initialFormValues %}{$ initialFormValues|json_encode|raw $}{% else %}{}{% endif %};
-
-	// TODO add initial validation status to show validation errors when coming from the server
+<script id="init-form"
+		data-initial-form-values="{% if initialFormValues %}{$ initialFormValues|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
+		data-violated-fields="{% if violatedFields %}{$ violatedFields|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
+		data-validate-amount-url="{$ basepath|e('html_attr') $}/validate-amount"
+		data-validate-address-url="{$ basepath|e('html_attr') $}/validate-address"
+		data-validate-iban-url="{$ basepath $}/check-iban"
+		data-generate-iban-url="{$ basepath $}/generate-iban"
+	>
 
 	// Initialize the form
 	$( function () {
-		var store = WMDE.Store.MembershipStore,
+		var initData = $( '#init-form' ),
+			store = WMDE.Store.createMembershipStore(
+				WMDE.createInitialStateFromViolatedFields( initData.data( 'violatedFields' ) )
+			),
 				actions = WMDE.Actions;
 
 		WMDE.StoreUpdates.connectComponentsToStore(
@@ -42,7 +47,7 @@
 				WMDE.Components.createTextComponent( store, $( '#last-name' ), 'lastName' ),
 				WMDE.Components.createTextComponent( store, $( '#company-name' ), 'companyName' ),
 				WMDE.Components.createTextComponent( store, $( '#street' ), 'street' ),
-				WMDE.Components.createTextComponent( store, $( '#post-code' ), 'postCode' ),
+				WMDE.Components.createTextComponent( store, $( '#post-code' ), 'postcode' ),
 				WMDE.Components.createTextComponent( store, $( '#city' ), 'city' ),
 				WMDE.Components.createRadioComponent( store, $( '#country' ), 'countryCode' ),
 				WMDE.Components.createTextComponent( store, $( '#email' ), 'email' ),
@@ -50,37 +55,60 @@
 				WMDE.Components.createTextComponent( store, $( '#phone' ), 'phoneNumber' ),
 				WMDE.Components.createRadioComponent( store, $( '.payment-period-select' ), 'paymentPeriodInMonths' ),
 				WMDE.Components.createAmountComponent( store, $( '.amount-input' ), $( '.amount-select' ) ),
-				WMDE.Components.createRadioComponent( store, $( '.debit-type-select' ), 'debitType' ),
-				WMDE.Components.createTextComponent( store, $( '#iban' ), 'iban' ),
-				WMDE.Components.createTextComponent( store, $( '#bic' ), 'bic' ),
-				WMDE.Components.createTextComponent( store, $( '#account-number' ), 'accountNumber' ),
-				WMDE.Components.createTextComponent( store, $( '#bank-code' ), 'bankCode' )
+				WMDE.Components.createBankDataComponent( store, {
+					ibanElement: $( '#iban' ),
+					bicElement: $( '#bic' ),
+					accountNumberElement: $( '#account-number' ),
+					bankCodeElement: $( '#bank-code' ),
+					bankNameFieldElement: $( '#field-bank-name' ),
+					bankNameDisplayElement: $( '#bank-name' ),
+					debitTypeElement: $( '.debit-type-select' )
+				} )
 			],
 			store,
 			'membershipFormContent'
 		);
 
 		WMDE.StoreUpdates.connectValidatorsToStore(
-				function ( initialValues ) {
-					console.log(initialValues);
-					return [
-						WMDE.ReduxValidation.createValidationDispatcher(
-							WMDE.FormValidation.createAddressValidator( '{$ basepath $}/validate-address' ),
-							actions.newFinishAddressValidationAction,
-							[ 'salutation', 'title', 'firstName', 'lastName', 'companyName', 'street', 'postCode', 'city', 'countryCode', 'email' ],
-							initialValues
+			function ( initialValues ) {
+				return [
+					WMDE.ReduxValidation.createValidationDispatcher(
+						WMDE.FormValidation.createAddressValidator( initData.data( 'validate-address-url' ) ),
+						actions.newFinishAddressValidationAction,
+								[
+									'salutation',
+									'title',
+									'firstName',
+									'lastName',
+									'companyName',
+									'street',
+									'postcode',
+									'city',
+									'countryCode',
+									'email'
+								],
+						initialValues
+					),
+					WMDE.ReduxValidation.createValidationDispatcher(
+						WMDE.FormValidation.createBankDataValidator(
+							initData.data( 'validate-iban-url' ),
+							initData.data( 'generate-iban-url' )
 						),
-						WMDE.ReduxValidation.createValidationDispatcher(
-							WMDE.FormValidation.createBankDataValidator( '{$ basepath $}/check-iban', '{$ basepath $}/generate-iban' ),
-							actions.newFinishBankDataValidationAction,
-							[ 'iban', 'accountNumber', 'bankCode', 'debitType' ],
+						actions.newFinishBankDataValidationAction,
+						[ 'iban', 'accountNumber', 'bankCode', 'debitType' ],
+						initialValues
+					),
+					WMDE.ReduxValidation.createValidationDispatcher(
+							WMDE.FormValidation.createSepaConfirmationValidator(),
+							actions.newFinishSepaConfirmationValidationAction,
+							[ 'confirmSepa', 'confirmShortTerm' ],
 							initialValues
-						)
-					];
-				},
-				store,
-				initialFormValues,
-				'membershipFormContent'
+					)
+				];
+			},
+			store,
+			initData.data( 'initial-form-values' ),
+			'membershipFormContent'
 		);
 
 		// Connect view handlers to changes in specific parts in the global state, designated by 'stateKey'
@@ -132,6 +160,25 @@
 					{
 						viewHandler: WMDE.View.createFeeOptionSwitcher( $( '#amount-2' ), 6 ),
 						stateKey: 'membershipFormContent.paymentPeriodInMonths'
+					},
+					{
+						viewHandler: WMDE.View.createDisplayAddressHandler( {
+							fullName: $( '#confirm-name' ),
+							street: $( '#confirm-street' ),
+							postcode: $( '#confirm-postcode' ),
+							city: $( '#confirm-city' ),
+							country: $( '#confirm-country' ),
+							email: $( '#confirm-mail' )
+						} ),
+						stateKey: 'membershipFormContent'
+					},
+					{
+						viewHandler: WMDE.View.createBankDataDisplayHandler(
+								$( '#confirm-iban' ),
+								$( '#confirm-bic' ),
+								$( '#confirm-bankname' )
+						),
+						stateKey: 'membershipFormContent'
 					}
 				],
 				store
@@ -144,6 +191,11 @@
 			store.dispatch( actions.newNextPageAction() );
 		} );
 
+		$( '.back-button' ).click( function () {
+			// TODO check if page is valid
+			store.dispatch( actions.newPreviousPageAction() );
+		} );
+
 		$( '#finishFormSubmit' ).click( function () {
 			// TODO check if page is valid
 			$( '#memForm' ).submit();
@@ -154,7 +206,7 @@
 		store.dispatch( actions.newAddPageAction( 'bankConfirmation' ) );
 
 		// Set initial form values
-		store.dispatch( actions.newInitializeContentAction( initialFormValues ) );
+		store.dispatch( actions.newInitializeContentAction( initData.data( 'initial-form-values' ) ) );
 
 	} );
 </script>

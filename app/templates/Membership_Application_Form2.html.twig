@@ -1,5 +1,5 @@
 <html>
-<form name="donForm" id="donForm" method="POST" action="contact.php">
+<form>
 
 	<!-- steps-overview -->
 	<div class="steps-overview container clearfix">
@@ -64,8 +64,6 @@
 						<div class="container clearfix">
 							<div class="address f-left">
 								<p>
-									<span id="confirm-salutation">{$ membershipAppl.person.salutation $}</span>
-									<span id="confirm-title">{$ membershipAppl.person.title $}</span>
 									<span id="confirm-name">{$ membershipAppl.person.name $}</span>
 								</p>
 
@@ -92,8 +90,8 @@
 						<hr/>
 
 						<div class="container clearfix" style="margin-bottom: 35px;">
-							<input type="checkbox" id="confirm_sepa" name="confirm_sepa" value="1" {% if membershipAppl.bankData.confirmSepa %}checked="checked"{% endif %} title="SEPA-Bestätigung">
-							<label for="confirm_sepa">
+							<input type="checkbox" id="confirmSepa" name="confirmSepa" value="1" {% if membershipAppl.bankData.confirmSepa %}checked="checked"{% endif %} title="SEPA-Bestätigung">
+							<label for="confirmSepa">
 								Ich ermächtige Wikimedia Deutschland e.V. (Gläubiger-ID: DE39ZZZ00000029337) Zahlungen
 								von meinem Konto mittels Lastschrift einzuziehen. Zugleich weise ich mein Kreditinstitut an, die von Wikimedia Deutschland e.V.
 								auf mein Konto gezogenen Lastschriften einzulösen.<br /><br />
@@ -105,7 +103,7 @@
 						<hr/>
 
 						<div class="container clearfix">
-							Berlin, {$ membershipAppl.date $}
+							Berlin, {$ "now"|date("d.m.Y") $}
 						</div>
 
 					</div>
@@ -150,9 +148,8 @@
 
 				<div class="box-footer border-top clearfix">
 					<div class="container f-right">
-						<!-- TODO: back action -->
-						<button type="submit" class="back-button">Abbrechen</button>
-						<button id="donFormSubmit" name="go_contact" type="submit">Jetzt Mitglied werden <span class="icon-ok"></span></button>
+						<button type="button" class="back-button">Zurück</button>
+						<button id="finishFormSubmit" type="button">Jetzt Mitglied werden <span class="icon-ok"></span></button>
 					</div>
 				</div>
 			</div>
