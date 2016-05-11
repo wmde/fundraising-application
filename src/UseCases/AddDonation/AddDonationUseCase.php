@@ -24,7 +24,6 @@ use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer;
-use WMDE\Fundraising\Frontend\Presentation\GreetingGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 use WMDE\Fundraising\Frontend\Validation\DonationValidator;
@@ -236,16 +235,13 @@ class AddDonationUseCase {
 	private function getConfirmationMailTemplateArguments( Donation $donation, bool $needsModeration ): array {
 		return [
 			'recipient' => [
-				// FIXME: this should be in the presenter or template
-				'salutation' => ( new GreetingGenerator() )->createGreeting(
-					$donation->getDonor()->getPersonName()->getLastName(),
-					$donation->getDonor()->getPersonName()->getSalutation(),
-					$donation->getDonor()->getPersonName()->getTitle()
-				)
+				'lastName' => $donation->getDonor()->getPersonName()->getLastName(),
+				'salutation' =>	$donation->getDonor()->getPersonName()->getSalutation(),
+				'title' => $donation->getDonor()->getPersonName()->getTitle()
 			],
 			'donation' => [
 				'id' => $donation->getId(),
-				'amount' => $donation->getAmount()->getEuroFloat(), // TODO: getEuroString might be better
+				'amount' => $donation->getAmount()->getEuroFloat(), // number is formatted in template
 				'interval' => $donation->getPaymentIntervalInMonths(),
 				'needsModeration' => $needsModeration,
 				'paymentType' => $donation->getPaymentType(),

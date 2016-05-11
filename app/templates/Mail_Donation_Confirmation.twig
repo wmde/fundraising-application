@@ -1,5 +1,5 @@
 {% set formattedAmount = donation.amount|localizedcurrency('EUR', 'de_DE') %}
-{$ recipient.salutation $}
+{$ greeting_generator.createGreeting( recipient.lastName, recipient.salutation, recipient.title ) $}
 
 wie uns liegt Ihnen Wikipedia am Herzen. Sie engagieren sich mit einer
 Spende, damit Wikipedia weiterhin besteht und Millionen Menschen auch in Zukunft
