@@ -10,6 +10,7 @@ use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
 use WMDE\Fundraising\Frontend\Domain\Repositories\StoreDonationException;
+use WMDE\Fundraising\Frontend\Tests\Data\ValidDoctrineDonation;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
@@ -40,10 +41,13 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$this->newRepository()->storeDonation( $donation );
 
 		$doctrineDonation = $this->getDoctrineDonationById( $donation->getId() );
+		$doctrineDonation->setCreationTime( null );
 
-		// TODO: compare whole donation, now easy via ValidDonation
-		$this->assertSame( $donation->getAmount()->getEuroString(), $doctrineDonation->getAmount() );
-		$this->assertSame( $donation->getDonor()->getEmailAddress(), $doctrineDonation->getDonorEmail() );
+		$expectedDonation = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
+		$expectedDonation->setId( 1 );
+
+		$this->assertEquals( $expectedDonation->getDecodedData(), $doctrineDonation->getDecodedData() );
+		$this->assertEquals( $expectedDonation, $doctrineDonation );
 	}
 
 	private function newRepository(): DoctrineDonationRepository {
@@ -55,16 +59,6 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$donation = $donationRepo->find( $id );
 		$this->assertInstanceOf( DoctrineDonation::class, $donation );
 		return $donation;
-	}
-
-	public function testFractionalAmountsRoundtripWithoutChange() {
-		$donation = ValidDonation::newDirectDebitDonation();
-
-		$this->newRepository()->storeDonation( $donation );
-
-		$doctrineDonation = $this->getDoctrineDonationById( $donation->getId() );
-
-		$this->assertSame( $donation->getAmount()->getEuroString(), $doctrineDonation->getAmount() );
 	}
 
 	public function testWhenPersistenceFails_domainExceptionIsThrown() {

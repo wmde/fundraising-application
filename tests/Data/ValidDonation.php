@@ -29,6 +29,7 @@ class ValidDonation {
 	const DONOR_LAST_NAME = 'De Dauw';
 	const DONOR_SALUTATION = 'nyan';
 	const DONOR_TITLE = 'nyan';
+	const DONOR_FULL_NAME = 'nyan Jeroen De Dauw';
 
 	const DONOR_CITY = 'Berlin';
 	const DONOR_POSTAL_CODE = '1234';
@@ -49,6 +50,14 @@ class ValidDonation {
 	const PAYMENT_BANK_TRANSFER_CODE = 'pink fluffy unicorns';
 
 	const OPTS_INTO_NEWSLETTER = Donation::OPTS_INTO_NEWSLETTER;
+
+	const TRACKING_COLOR = 'blue';
+	const TRACKING_LAYOUT = 'Default';
+	const TRACKING_BANNER_IMPRESSION_COUNT = 1;
+	const TRACKING_SKIN = 'default';
+	const TRACKING_SOURCE = 'web';
+	const TRACKING_TOTAL_IMPRESSION_COUNT = 3;
+	const TRACKING_TRACKING = 'test/gelb'; // WTF name?
 
 	public static function newBankTransferDonation(): Donation {
 		return ( new self() )->createDonation(
@@ -99,7 +108,7 @@ class ValidDonation {
 		return new Donor(
 			$self->newPersonName(),
 			$self->newAddress(),
-			'foo@bar.baz'
+			self::DONOR_EMAIL_ADDRESS
 		);
 	}
 
@@ -128,13 +137,13 @@ class ValidDonation {
 	public static function newTrackingInfo(): TrackingInfo {
 		$trackingInfo = new TrackingInfo();
 
-		$trackingInfo->setColor( 'blue' );
-		$trackingInfo->setLayout( 'Default' );
-		$trackingInfo->setSingleBannerImpressionCount( 1 );
-		$trackingInfo->setSkin( 'default' );
-		$trackingInfo->setSource( 'web' );
-		$trackingInfo->setTotalImpressionCount( 3 );
-		$trackingInfo->setTracking( 'test/gelb' );
+		$trackingInfo->setColor( self::TRACKING_COLOR );
+		$trackingInfo->setLayout( self::TRACKING_LAYOUT );
+		$trackingInfo->setSingleBannerImpressionCount( self::TRACKING_BANNER_IMPRESSION_COUNT );
+		$trackingInfo->setSkin( self::TRACKING_SKIN );
+		$trackingInfo->setSource( self::TRACKING_SOURCE );
+		$trackingInfo->setTotalImpressionCount( self::TRACKING_TOTAL_IMPRESSION_COUNT );
+		$trackingInfo->setTracking( self::TRACKING_TRACKING );
 
 		return $trackingInfo->freeze()->assertNoNullFields();
 	}
