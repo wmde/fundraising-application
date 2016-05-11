@@ -25,7 +25,8 @@ var formContentLib = require( './form_content' ),
 		bic: '',
 		accountNumber: '',
 		bankCode: '',
-		bankname: ''
+		bankname: '',
+		confirmSepa: false
 	};
 
 module.exports = function membershipFormContent( state, action ) {

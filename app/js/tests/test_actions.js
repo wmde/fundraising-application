@@ -20,6 +20,14 @@ test( 'newNextPageAction returns action object', function ( t ) {
 	t.end();
 } );
 
+test( 'newPreviousPageAction returns action object', function ( t ) {
+	var expectedAction = {
+		type: 'PREVIOUS_PAGE'
+	};
+	t.deepEqual( actions.newPreviousPageAction(), expectedAction );
+	t.end();
+} );
+
 test( 'newValidateAmountAction returns action object', function ( t ) {
 	var expectedAction = {
 		type: 'FINISH_AMOUNT_VALIDATION',

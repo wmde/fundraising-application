@@ -22,6 +22,24 @@ test( 'When current page is the last, NEXT_PAGE does not change current page', f
 	t.end();
 } );
 
+test( 'PREVIOUS_PAGE decreases current page', function ( t ) {
+	var stateBefore = { pages: [ 'foo', 'bar' ], currentPage: 1 },
+		expectedState = { pages: [ 'foo', 'bar' ], currentPage: 0 };
+
+	deepFreeze( stateBefore );
+	t.deepEqual( formPagination( stateBefore, { type: 'PREVIOUS_PAGE' } ), expectedState );
+	t.end();
+} );
+
+test( 'When current page is the first, PREVIOUS_PAGE does not change current page', function ( t ) {
+	var stateBefore = { pages: [ 'foo', 'bar' ], currentPage: 0 },
+		expectedState = { pages: [ 'foo', 'bar' ], currentPage: 0 };
+
+	deepFreeze( stateBefore );
+	t.deepEqual( formPagination( stateBefore, { type: 'PREVIOUS_PAGE' } ), expectedState );
+	t.end();
+} );
+
 test( 'When there are no pages, current page is initialized with negativeValue', function ( t ) {
 	var expectedState = { pages: [], currentPage: -1 };
 
