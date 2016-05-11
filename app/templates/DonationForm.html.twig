@@ -11,13 +11,6 @@
     Bitte überprüfen Sie Ihre Angaben in folgenden Feldern: <strong class="fields">keine</strong>
 </div>
 
-{# TODO Remove this debugging code! #}
-{% if violatedFields %}
-    <script>
-        console.log("Server-side validation errors:", {$ violatedFields|json_encode|raw $} );
-    </script>
-{% endif %}
-
 <div id="paymentPage">
     {% include 'Form1.html.twig' %}
 </div>
@@ -30,17 +23,21 @@
     {% include 'Form3.html.twig' %}
 </div>
 
-<script>
-
-    // The following line is a Twig template placeholder to generate initial values (defaults to empty object)
-    var initialFormValues = {% if initialFormValues %}{$ initialFormValues|json_encode|raw $}{% else %}{}{% endif %};
-
-    // TODO add initial validation status to show validation errors when coming from the server
-
+<script id="init-form"
+        data-initial-form-values="{% if initialFormValues %}{$ initialFormValues|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
+        data-violated-fields="{% if violatedFields %}{$ violatedFields|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
+        data-validate-amount-url="{$ basepath|e('html_attr') $}/validate-amount"
+        data-validate-address-url="{$ basepath|e('html_attr') $}/validate-address"
+        data-validate-iban-url="{$ basepath|e('html_attr') $}/check-iban"
+        data-generate-iban-url="{$ basepath|e('html_attr') $}/generate-iban"
+        >
     // Initialize the form
+
     $( function () {
-        var store = WMDE.Store.DonationStore,
-            actions = WMDE.Actions;
+        var initData = $( '#init-form' ),
+            store = WMDE.Store.createDonationStore( WMDE.createInitialStateFromViolatedFields( initData.data( 'violatedFields' ) ) ),
+            actions = WMDE.Actions
+            ;
 
         WMDE.StoreUpdates.connectComponentsToStore(
             [
@@ -79,19 +76,19 @@
             function ( initialValues ) {
                 return [
                     WMDE.ReduxValidation.createValidationDispatcher(
-                            WMDE.FormValidation.createAmountValidator( '{$ basepath $}/validate-amount' ),
+                            WMDE.FormValidation.createAmountValidator( initData.data( 'validate-amount-url' ) ),
                             actions.newFinishAmountValidationAction,
                             [ 'amount', 'paymentType' ],
                             initialValues
                     ),
                     WMDE.ReduxValidation.createValidationDispatcher(
-                            WMDE.FormValidation.createAddressValidator( '{$ basepath $}/validate-address' ),
+                            WMDE.FormValidation.createAddressValidator( initData.data( 'validate-address-url' ) ),
                             actions.newFinishAddressValidationAction,
                             [ 'salutation', 'title', 'firstName', 'lastName', 'companyName', 'street', 'postcode', 'city', 'country', 'email' ],
                             initialValues
                     ),
                     WMDE.ReduxValidation.createValidationDispatcher(
-                            WMDE.FormValidation.createBankDataValidator( '{$ basepath $}/check-iban', '{$ basepath $}/generate-iban' ),
+                            WMDE.FormValidation.createBankDataValidator( initData.data( 'validate-iban-url' ), initData.data( 'generate-iban-url' ) ),
                             actions.newFinishBankDataValidationAction,
                             [ 'iban', 'accountNumber', 'bankCode', 'debitType', 'paymentType' ],
                             initialValues
@@ -105,7 +102,7 @@
                 ];
             },
             store,
-            initialFormValues,
+            initData.data( 'initial-form-values' ),
             'donationFormContent'
         );
 
@@ -222,7 +219,7 @@
 
         // connect DOM elements to actions
 
-        function formPage2IsValid() {
+        function personalDataPageIsValid() {
             var validity = store.getState().validity,
                 formContent = store.getState().donationFormContent,
                 addressIsValid = formContent.addressType === 'anonym' || validity.address,
@@ -230,8 +227,14 @@
             return validity.amount && addressIsValid && bankDataIsValid;
         }
 
+        function paymentDataPageIsValid() {
+            var currentState = store.getState();
+            return currentState.validity.amount ||
+                    ( currentState.donationFormContent.amount && currentState.donationFormContent.paymentType ) ;
+        }
+
         $( '#continueFormSubmit1' ).click( function () {
-            if ( store.getState().validity.amount ) {
+            if ( paymentDataPageIsValid() ) {
                 store.dispatch( actions.newNextPageAction() );
             } else {
                 alert( 'Bitte füllen Sie das Formular komplett aus.' );
@@ -239,7 +242,7 @@
         } );
 
         $( '#continueFormSubmit2' ).click( function () {
-            if ( formPage2IsValid() ) {
+            if ( personalDataPageIsValid() ) {
                 store.dispatch( actions.newNextPageAction() );
             } else {
                 alert( 'Bitte füllen Sie das Formular komplett aus.' );
@@ -247,7 +250,7 @@
         } );
 
         $( '#finishFormSubmit2' ).click( function () {
-            if ( formPage2IsValid() ) {
+            if ( personalDataPageIsValid() ) {
                 $( '#donForm2' ).submit();
             } else {
                 alert( 'Bitte füllen Sie das Formular komplett aus.' );
@@ -264,15 +267,17 @@
         } );
 
         // Set initial form values
-        store.dispatch( actions.newInitializeContentAction( initialFormValues ) );
+        store.dispatch( actions.newInitializeContentAction( initData.data( 'initial-form-values' ) ) );
 
         // Initialize form pages
         store.dispatch( actions.newAddPageAction( 'payment' ) );
         store.dispatch( actions.newAddPageAction( 'personalData' ) );
         store.dispatch( actions.newAddPageAction( 'bankConfirmation' ) );
 
-
-        // TODO switch to correct page, depending on validation status coming from the server
+        // switch to personal page if payment data is filled in
+        if ( paymentDataPageIsValid() ) {
+            store.dispatch( actions.newNextPageAction() );
+        }
 
     } );
 </script>

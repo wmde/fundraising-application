@@ -19,5 +19,6 @@ module.exports = {
 		createFeeOptionSwitcher: require( './lib/view_handler/fee_option_switcher' ).createFeeOptionSwitcher
 	},
 	Actions: require( './lib/actions' ),
-	CurrencyFormatter: require( './lib/simple_currency_formatter' )
+	CurrencyFormatter: require( './lib/simple_currency_formatter' ),
+	createInitialStateFromViolatedFields: require( './lib/validation_conversion' ).createInitialStateFromViolatedFields
 };
