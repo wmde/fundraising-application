@@ -30,8 +30,8 @@ class MembershipPayment {
 	}
 
 	private function assertIsValidInterval( int $intervalInMonths ) {
-		if ( !in_array( $intervalInMonths, [ 1, 2, 3, 4, 6, 12 ] ) ) {
-			throw new \InvalidArgumentException( 'Interval needs to be 1, 2, 3, 4, 6 or 12' );
+		if ( !in_array( $intervalInMonths, [ 1, 3, 6, 12 ] ) ) {
+			throw new \InvalidArgumentException( 'Interval needs to be 1, 3, 6 or 12' );
 		}
 	}
 
