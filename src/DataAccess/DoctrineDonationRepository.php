@@ -65,16 +65,16 @@ class DoctrineDonationRepository implements DonationRepository {
 	}
 
 	private function updateDonation( Donation $donation ) {
-		$doctrineApplication = $this->getDoctrineDonationById( $donation->getId() );
+		$doctrineDonation = $this->getDoctrineDonationById( $donation->getId() );
 
-		if ( $doctrineApplication === null ) {
+		if ( $doctrineDonation === null ) {
 			throw new StoreDonationException();
 		}
 
-		$this->updateDonationEntity( $doctrineApplication, $donation );
+		$this->updateDonationEntity( $doctrineDonation, $donation );
 
 		try {
-			$this->entityManager->persist( $doctrineApplication );
+			$this->entityManager->persist( $doctrineDonation );
 			$this->entityManager->flush();
 		}
 		catch ( ORMException $ex ) {
@@ -87,7 +87,11 @@ class DoctrineDonationRepository implements DonationRepository {
 		$this->updatePaymentInformation( $doctrineDonation, $donation );
 		$this->updateDonorInformation( $doctrineDonation, $donation->getDonor() );
 		$doctrineDonation->setDonorOptsIntoNewsletter( $donation->getOptsIntoNewsletter() );
-		$doctrineDonation->encodeAndSetData( $this->getDataMap( $donation ) );
+
+		$doctrineDonation->encodeAndSetData( array_merge(
+			$doctrineDonation->getDecodedData(),
+			$this->getDataMap( $donation )
+		) );
 	}
 
 	private function updatePaymentInformation( DoctrineDonation $doctrineDonation, Donation $donation ) {
