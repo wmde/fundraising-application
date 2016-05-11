@@ -116,7 +116,7 @@ class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 				'recipient' => [
 					'lastName' => ValidDonation::DONOR_LAST_NAME,
 					'salutation' => ValidDonation::DONOR_SALUTATION,
-					'title'=> ValidDonation::DONOR_TITLE
+					'title' => ValidDonation::DONOR_TITLE
 				],
 				'donationId' => 1
 			]

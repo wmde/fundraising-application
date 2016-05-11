@@ -180,7 +180,7 @@ class Donation {
 	private function isStatusIncomplete() {
 		return $this->status === self::STATUS_EXTERNAL_INCOMPLETE;
 	}
-	
+
 	public function needsModeration(): bool {
 		return $this->status === self::STATUS_MODERATION;
 	}

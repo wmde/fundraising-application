@@ -22,9 +22,8 @@ use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationUpdateException;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizationUpdater;
 use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
-use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer;
-use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 use WMDE\Fundraising\Frontend\Validation\DonationValidator;
 
@@ -45,7 +44,7 @@ class AddDonationUseCase {
 	private $authorizationUpdater;
 
 	public function __construct( DonationRepository $donationRepository, DonationValidator $donationValidator,
-								 ReferrerGeneralizer $referrerGeneralizer, TemplateBasedMailer $mailer,
+								 ReferrerGeneralizer $referrerGeneralizer, DonationConfirmationMailer $mailer,
 								 TransferCodeGenerator $transferCodeGenerator, BankDataConverter $bankDataConverter,
 								 TokenGenerator $tokenGenerator, DonationAuthorizationUpdater $authorizationUpdater ) {
 
@@ -91,7 +90,7 @@ class AddDonationUseCase {
 			) ] );
 		}
 
-		$this->sendDonationConfirmationEmail( $donation, $needsModeration );
+		$this->sendDonationConfirmationEmail( $donation );
 
 		return AddDonationResponse::newSuccessResponse( $donation, $updateToken, $accessToken );
 	}
@@ -218,44 +217,13 @@ class AddDonationUseCase {
 
 	/**
 	 * @param Donation $donation
-	 * @param bool $needsModeration
 	 *
 	 * @throws \RuntimeException
 	 * TODO: handle exception
 	 */
-	private function sendDonationConfirmationEmail( Donation $donation, bool $needsModeration ) {
+	private function sendDonationConfirmationEmail( Donation $donation ) {
 		if ( $donation->getDonor() !== null ) {
-			$this->mailer->sendMail(
-				new EmailAddress( $donation->getDonor()->getEmailAddress() ),
-				$this->getConfirmationMailTemplateArguments( $donation, $needsModeration )
-			);
+			$this->mailer->sendMailFromDonation( $donation );
 		}
 	}
-
-	private function getConfirmationMailTemplateArguments( Donation $donation, bool $needsModeration ): array {
-		return [
-			'recipient' => [
-				'lastName' => $donation->getDonor()->getPersonName()->getLastName(),
-				'salutation' =>	$donation->getDonor()->getPersonName()->getSalutation(),
-				'title' => $donation->getDonor()->getPersonName()->getTitle()
-			],
-			'donation' => [
-				'id' => $donation->getId(),
-				'amount' => $donation->getAmount()->getEuroFloat(), // number is formatted in template
-				'interval' => $donation->getPaymentIntervalInMonths(),
-				'needsModeration' => $needsModeration,
-				'paymentType' => $donation->getPaymentType(),
-				'bankTransferCode' => $this->getBankTransferCode( $donation->getPaymentMethod() ),
-			]
-		];
-	}
-
-	private function getBankTransferCode( PaymentMethod $paymentMethod ): string {
-		if ( $paymentMethod instanceof BankTransferPayment ) {
-			return $paymentMethod->getBankTransferCode();
-		}
-
-		return '';
-	}
-
 }

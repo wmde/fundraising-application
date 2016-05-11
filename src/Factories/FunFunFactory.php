@@ -37,6 +37,7 @@ use WMDE\Fundraising\Frontend\DataAccess\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\DataAccess\UniqueTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\BankDataConverter;
 use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepository;
+use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\LoggingPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipAppAuthUpdater;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationAuthorizer;
@@ -728,15 +729,14 @@ class FunFunFactory {
 		);
 	}
 
-	private function newAddDonationMailer(): TemplateBasedMailer {
-		return new TemplateBasedMailer(
+	private function newAddDonationMailer(): DonationConfirmationMailer {
+		return new DonationConfirmationMailer(
 			$this->getMessenger(),
 			new TwigTemplate(
 				$this->getTwig(),
 				'Mail_Donation_Confirmation.twig', // TODO: ongoing unification of different templates
 				[
-					'basepath' => $this->config['web-basepath'],
-					'greeting_generator' => $this->getGreetingGenerator()
+					'basepath' => $this->config['web-basepath']
 				]
 			),
 			$this->getTranslator()->trans( 'mail_subject_confirm_donation' )

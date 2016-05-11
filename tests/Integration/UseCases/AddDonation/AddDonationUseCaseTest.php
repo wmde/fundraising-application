@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\AddDonation;
 
 use PHPUnit_Framework_MockObject_MockObject;
 use WMDE\Fundraising\Frontend\Domain\BankDataConverter;
+use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
@@ -17,7 +18,7 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationUpdateException;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizationUpdater;
-use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeDonationRepository;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
@@ -67,10 +68,10 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * @return TemplateBasedMailer|PHPUnit_Framework_MockObject_MockObject
+	 * @return DonationConfirmationMailer|PHPUnit_Framework_MockObject_MockObject
 	 */
-	private function newMailer(): TemplateBasedMailer {
-		return $this->getMockBuilder( TemplateBasedMailer::class )
+	private function newMailer(): DonationConfirmationMailer {
+		return $this->getMockBuilder( DonationConfirmationMailer::class )
 			->disableOriginalConstructor()
 			->getMock();
 	}
@@ -191,26 +192,20 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		return $this->getMockBuilder( BankDataConverter::class )->disableOriginalConstructor()->getMock();
 	}
 
-	public function testGivenValidRequest_confirmationEmailIsSend() {
+	public function testGivenValidRequest_confirmationEmailIsSent() {
 		$mailer = $this->newMailer();
+		$donation = $this->newValidAddDonationRequestWithEmail( 'foo@bar.baz' );
 
 		$mailer->expects( $this->once() )
-			->method( 'sendMail' )
-			->with(
-				$this->equalTo( new EmailAddress( 'foo@bar.baz' ) ),
-				$this->callback( function( $value ) {
-					$this->assertInternalType( 'array', $value );
-					// TODO: assert parameters
-					return true;
-				} )
-			);
+			->method( 'sendMailFromDonation' )
+			->with( $this->isInstanceOf( Donation::class ) );
 
 		$useCase = $this->newUseCaseWithMailer( $mailer );
 
-		$useCase->addDonation( $this->newValidAddDonationRequestWithEmail( 'foo@bar.baz' ) );
+		$useCase->addDonation( $donation );
 	}
 
-	private function newUseCaseWithMailer( TemplateBasedMailer $mailer ) {
+	private function newUseCaseWithMailer( DonationConfirmationMailer $mailer ) {
 		return new AddDonationUseCase(
 			$this->newRepository(),
 			$this->getSucceedingValidatorMock(),
@@ -225,7 +220,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 	private function newValidAddDonationRequestWithEmail( string $email ): AddDonationRequest {
 		$request = $this->newMinimumDonationRequest();
-;
+
 		$request->setPersonalInfo( new Donor(
 			PersonName::newPrivatePersonName(),
 			new PhysicalAddress(),
