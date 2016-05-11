@@ -173,7 +173,7 @@ class Donation {
 		return $this->status === self::STATUS_NEW || $this->status === self::STATUS_MODERATION;
 	}
 
-	private function isPaymentTypeExternal() {
+	public function isPaymentTypeExternal() {
 		return in_array( $this->getPaymentType(), [ PaymentType::PAYPAL, PaymentType::CREDIT_CARD ] );
 	}
 
