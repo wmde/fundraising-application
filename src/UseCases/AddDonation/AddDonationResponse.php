@@ -62,6 +62,10 @@ class AddDonationResponse {
 	}
 
 	/**
+	 * WARNING: we're returning the domain object to not have to create a  more verbose response model.
+	 * Keep in mind that you should not use domain logic in the presenter, or put presentation helpers
+	 * in the domain object!
+	 *
 	 * @return Donation|null
 	 */
 	public function getDonation() {

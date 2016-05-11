@@ -94,7 +94,7 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 		);
 	}
 
-	private function newValidRequest() {
+	private function newValidRequest(): ApplyForMembershipRequest {
 		$request = new ApplyForMembershipRequest();
 
 		$request->setMembershipType( ValidMembershipApplication::MEMBERSHIP_TYPE );
@@ -117,7 +117,7 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 		$request->setPaymentBankData( $this->newValidBankData() );
 
-		return $request->assertNoNullFields()->freeze();
+		return $request->assertNoNullFields();
 	}
 
 	private function newValidBankData(): BankData {
@@ -204,6 +204,33 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 			->willReturn( false );
 
 		return $invalidResult;
+	}
+
+	public function testGivenValidRequest_moderationIsNotNeeded() {
+		$response = $this->newUseCase()->applyForMembership( $this->newValidRequest() );
+
+		$this->assertFalse( $response->getMembershipApplication()->needsModeration() );
+	}
+
+	public function testGivenRequestWithHighYearlyAmount_moderationIsNeeded() {
+		$request = $this->newValidRequest();
+		$request->setPaymentAmountInEuros( '1000.01' );
+		$request->setPaymentIntervalInMonths( 12 );
+
+		$this->assertRequestResultsInModeration( $request );
+	}
+
+	public function testGivenRequestWithHighQuarterlyAmount_moderationIsNeeded() {
+		$request = $this->newValidRequest();
+		$request->setPaymentAmountInEuros( '250.01' );
+		$request->setPaymentIntervalInMonths( 3 );
+
+		$this->assertRequestResultsInModeration( $request );
+	}
+
+	private function assertRequestResultsInModeration( ApplyForMembershipRequest $request ) {
+		$response = $this->newUseCase()->applyForMembership( $request );
+		$this->assertTrue( $response->getMembershipApplication()->needsModeration() );
 	}
 
 }
