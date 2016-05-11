@@ -82,7 +82,10 @@ class DoctrineMembershipApplicationRepository implements MembershipApplicationRe
 		$this->setApplicantFields( $doctrineApplication, $application->getApplicant() );
 		$this->setPaymentFields( $doctrineApplication, $application->getPayment() );
 
-		$doctrineApplication->encodeAndSetData( [] ); // TODO
+		$doctrineApplication->encodeAndSetData( array_merge(
+			$doctrineApplication->getDecodedData(),
+			$this->getDataMap( $application )
+		) );
 	}
 
 	private function setApplicantFields( DoctrineApplication $application, MembershipApplicant $applicant ) {
@@ -115,6 +118,10 @@ class DoctrineMembershipApplicationRepository implements MembershipApplicationRe
 		$application->setPaymentBankName( $bankData->getBankName() );
 		$application->setPaymentBic( $bankData->getBic() );
 		$application->setPaymentIban( $bankData->getIban()->toString() );
+	}
+
+	private function getDataMap( MembershipApplication $application ): array {
+		return []; // TODO
 	}
 
 	/**
