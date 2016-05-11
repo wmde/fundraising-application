@@ -53,7 +53,7 @@
 				WMDE.Components.createTextComponent( store, $( '#email' ), 'email' ),
 				WMDE.Components.createTextComponent( store, $( '#date-of-birth' ), 'dateOfBirth' ),
 				WMDE.Components.createTextComponent( store, $( '#phone' ), 'phoneNumber' ),
-				WMDE.Components.createRadioComponent( store, $( '.payment-period-select' ), 'paymentPeriodInMonths' ),
+				WMDE.Components.createRadioComponent( store, $( '.payment-period-select' ), 'paymentIntervalInMonths' ),
 				WMDE.Components.createAmountComponent( store, $( '.amount-input' ), $( '.amount-select' ) ),
 				WMDE.Components.createBankDataComponent( store, {
 					ibanElement: $( '#iban' ),
@@ -155,11 +155,26 @@
 					},
 					{
 						viewHandler: WMDE.View.createFeeOptionSwitcher( $( '#amount-1' ), 1 ),
-						stateKey: 'membershipFormContent.paymentPeriodInMonths'
+						stateKey: 'membershipFormContent.paymentIntervalInMonths'
 					},
 					{
 						viewHandler: WMDE.View.createFeeOptionSwitcher( $( '#amount-2' ), 6 ),
-						stateKey: 'membershipFormContent.paymentPeriodInMonths'
+						stateKey: 'membershipFormContent.paymentIntervalInMonths'
+					},
+					{
+						viewHandler: WMDE.View.createPaymentIntervalAndAmountDisplayHandler(
+								$( '#confirm-interval' ),
+								$( '#confirm-fee'),
+								{
+									'0': 'einmalig',
+									'1': 'monatlich',
+									'3': 'quartalsweise',
+									'6': 'halbjährlich',
+									'12': 'jährlich'
+								},
+								WMDE.CurrencyFormatter.createCurrencyFormatter( 'de' )
+						),
+						stateKey: 'membershipFormContent'
 					},
 					{
 						viewHandler: WMDE.View.createDisplayAddressHandler( {
