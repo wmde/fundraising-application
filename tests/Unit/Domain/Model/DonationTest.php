@@ -75,6 +75,13 @@ class DonationTest extends \PHPUnit_Framework_TestCase {
 		$this->assertSame( Donation::STATUS_CANCELLED, $donation->getStatus() );
 	}
 
+	public function testModerationStatusCanBeQueried() {
+		$donation = ValidDonation::newDirectDebitDonation();
+
+		$donation->markForModeration();
+		$this->assertTrue( $donation->needsModeration() );
+	}
+
 	public function testGivenModerationStatus_cancellationSucceeds() {
 		$donation = ValidDonation::newDirectDebitDonation();
 
