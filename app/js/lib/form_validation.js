@@ -50,6 +50,19 @@ var jQuery = require( 'jquery' ),
 		}
 	},
 
+	FeeValidator = {
+		validationUrl: '',
+		sendFunction: null,
+		validate: function ( formValues ) {
+			var postData = {
+				amount: formValues.amount,
+				paymentIntervalInMonths: formValues.paymentIntervalInMonths,
+				addressType: formValues.addressType
+			};
+			return this.sendFunction( this.validationUrl, postData, null, 'json' );
+		}
+	},
+
 	BankDataValidator = {
 		validationUrlForSepa: '',
 		validationUrlForNonSepa: '',
@@ -103,6 +116,13 @@ var jQuery = require( 'jquery' ),
 		} );
 	},
 
+	createFeeValidator = function ( validationUrl, sendFunction ) {
+		return objectAssign( Object.create( FeeValidator ), {
+			validationUrl: validationUrl,
+			sendFunction: sendFunction || jQuery.post
+		} );
+	},
+
 	createBankDataValidator = function ( validationUrlForSepa, validationUrlForNonSepa, sendFunction ) {
 		return objectAssign( Object.create( BankDataValidator ), {
 			validationUrlForSepa: validationUrlForSepa,
@@ -114,6 +134,7 @@ var jQuery = require( 'jquery' ),
 
 module.exports = {
 	createAmountValidator: createAmountValidator,
+	createFeeValidator: createFeeValidator,
 	createAddressValidator: createAddressValidator,
 	createBankDataValidator: createBankDataValidator,
 	createSepaConfirmationValidator: function () {
