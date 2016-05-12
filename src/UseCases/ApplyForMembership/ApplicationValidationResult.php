@@ -24,6 +24,10 @@ class ApplicationValidationResult {
 		$this->violations = $violations;
 	}
 
+	public function getViolations(): array {
+		return $this->violations;
+	}
+
 	public function isSuccessful(): bool {
 		return empty( $this->violations );
 	}
