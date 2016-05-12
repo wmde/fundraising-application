@@ -14,6 +14,12 @@ module.exports = {
 		};
 	},
 
+	newPreviousPageAction: function () {
+		return {
+			type: 'PREVIOUS_PAGE'
+		};
+	},
+
 	newSelectAmountAction: function ( amount ) {
 		return {
 			type: 'SELECT_AMOUNT',

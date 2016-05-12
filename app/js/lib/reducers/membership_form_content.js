@@ -6,7 +6,7 @@ var formContentLib = require( './form_content' ),
 		membershipType: 'sustaining', // sustaining, active
 		amount: 0,
 		isCustomAmount: false,
-		paymentPeriodInMonths: 12, // 1, 3, 6, 12
+		paymentIntervalInMonths: 12, // 1, 3, 6, 12
 		debitType: 'sepa', // sepa and "non-sepa"
 		addressType: 'person', // person, firma
 		salutation: 'Frau',
@@ -15,7 +15,7 @@ var formContentLib = require( './form_content' ),
 		lastName: '',
 		company: '',
 		street: '',
-		postCode: '',
+		postcode: '',
 		city: '',
 		countryCode: 'DE',
 		email: '',
@@ -25,7 +25,8 @@ var formContentLib = require( './form_content' ),
 		bic: '',
 		accountNumber: '',
 		bankCode: '',
-		bankname: ''
+		bankname: '',
+		confirmSepa: false
 	};
 
 module.exports = function membershipFormContent( state, action ) {

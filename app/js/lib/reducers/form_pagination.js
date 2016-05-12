@@ -4,6 +4,10 @@ function currentPageIsLastPage( paginationState ) {
 	return paginationState.currentPage + 1 < paginationState.pages.length;
 }
 
+function currentPageIsFirstPage( paginationState ) {
+	return paginationState.currentPage - 1 < 0;
+}
+
 function formPagination( paginationState, action ) {
 	var newPaginationState;
 	if ( typeof paginationState !== 'object' ) {
@@ -28,6 +32,11 @@ function formPagination( paginationState, action ) {
 		case 'NEXT_PAGE':
 			if ( currentPageIsLastPage( newPaginationState )  ) {
 				newPaginationState.currentPage += 1;
+			}
+			return newPaginationState;
+		case 'PREVIOUS_PAGE':
+			if ( !currentPageIsFirstPage( newPaginationState ) ) {
+				newPaginationState.currentPage -= 1;
 			}
 			return newPaginationState;
 		default:
