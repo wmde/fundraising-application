@@ -335,7 +335,9 @@ $app->post(
 
 		$request->setMembershipType( $httpRequest->request->get( 'membership_type', '' ) );
 
-		$request->setApplicantType( $httpRequest->request->get( 'adresstyp', '' ) );
+		if ( $httpRequest->request->get( 'adresstyp', '' )  === 'firma' ) {
+			$request->markApplicantAsCompany();
+		}
 
 		$request->setApplicantSalutation( $httpRequest->request->get( 'anrede', '' ) );
 		$request->setApplicantTitle( $httpRequest->request->get( 'titel', '' ) );
