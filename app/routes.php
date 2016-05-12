@@ -330,12 +330,47 @@ $app->post(
 
 $app->post(
 	'apply-for-membership',
-	function( Application $app, Request $request ) use ( $ffFactory ) {
-		$useCase = $ffFactory->newApplyForMembershipUseCase();
+	function( Application $app, Request $httpRequest ) use ( $ffFactory ) {
+		$request = new ApplyForMembershipRequest();
 
-		$useCase->applyForMembership( new ApplyForMembershipRequest( /* TODO */ ) );
+		$request->setMembershipType( $httpRequest->request->get( 'membership_type', '' ) );
 
-		return 'TODO'; // TODO
+		$request->setApplicantType( $httpRequest->request->get( 'adresstyp', '' ) );
+
+		$request->setApplicantSalutation( $httpRequest->request->get( 'anrede', '' ) );
+		$request->setApplicantTitle( $httpRequest->request->get( 'titel', '' ) );
+		$request->setApplicantFirstName( $httpRequest->request->get( 'vorname', '' ) );
+		$request->setApplicantLastName( $httpRequest->request->get( 'nachname', '' ) );
+		$request->setApplicantCompanyName( $httpRequest->request->get( 'firma', '' ) );
+
+		$request->setApplicantStreetAddress( $httpRequest->request->get( 'strasse', '' ) );
+		$request->setApplicantPostalCode( $httpRequest->request->get( 'plz', '' ) );
+		$request->setApplicantCity( $httpRequest->request->get( 'ort', '' ) );
+		$request->setApplicantCountryCode( $httpRequest->request->get( 'country', '' ) );
+
+		$request->setApplicantEmailAddress( $httpRequest->request->get( 'email', '' ) );
+		$request->setApplicantPhoneNumber( $httpRequest->request->get( 'phone', '' ) );
+		$request->setApplicantDateOfBirth( $httpRequest->request->get( 'dob', '' ) );
+
+
+		$request->setPaymentIntervalInMonths( (int)$httpRequest->request->get( 'membership_fee_interval', 0 ) );
+		$request->setPaymentAmountInEuros( $httpRequest->request->get( 'membership_fee', '' ) );
+
+		$bankData = new \WMDE\Fundraising\Frontend\Domain\Model\BankData();
+
+		$bankData->setBankName( $httpRequest->request->get( 'bank_name', '' ) );
+		$bankData->setIban( new Iban( $httpRequest->request->get( 'iban', '' ) ) );
+		$bankData->setBic( $httpRequest->request->get( 'bic', '' ) );
+		$bankData->setAccount( $httpRequest->request->get( 'account_number', '' ) );
+		$bankData->setBankCode( $httpRequest->request->get( 'bank_code', '' ) );
+
+		$bankData->assertNoNullFields()->freeze();
+		$request->setPaymentBankData( $bankData );
+		$request->assertNoNullFields()->freeze();
+
+		$response = $ffFactory->newApplyForMembershipUseCase()->applyForMembership( $request );
+
+		return $response->isSuccessful() ? 'TODO success' : 'TODO fail'; // TODO
 	}
 );
 
