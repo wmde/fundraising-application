@@ -1,4 +1,5 @@
 <?php
+
 declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Presentation;
@@ -22,8 +23,8 @@ class AmountFormatter {
 		$this->locale = $locale;
 	}
 
-	public function format( Euro $amount ) {
-		if ( empty( $this->localeData[$this->locale] ) ) {
+	public function format( Euro $amount ): string {
+		if ( !array_key_exists( $this->locale, $this->localeData ) ) {
 			throw new \RuntimeException( 'Unknown locale' );
 		}
 		return number_format(
