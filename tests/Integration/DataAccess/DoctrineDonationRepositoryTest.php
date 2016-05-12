@@ -40,18 +40,27 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 		$this->newRepository()->storeDonation( $donation );
 
-		$doctrineDonation = $this->getDoctrineDonationById( $donation->getId() );
-		$doctrineDonation->setCreationTime( null );
+		$expectedDoctrineEntity = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
+		$expectedDoctrineEntity->setId( $donation->getId() );
 
-		$expectedDonation = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
-		$expectedDonation->setId( 1 );
-
-		$this->assertEquals( $expectedDonation->getDecodedData(), $doctrineDonation->getDecodedData() );
-		$this->assertEquals( $expectedDonation, $doctrineDonation );
+		$this->assertDoctrineEntityIsInDatabase( $expectedDoctrineEntity );
 	}
 
 	private function newRepository(): DoctrineDonationRepository {
 		return new DoctrineDonationRepository( $this->entityManager );
+	}
+
+	private function assertDoctrineEntityIsInDatabase( DoctrineDonation $expected ) {
+		$actual = $this->getDoctrineDonationById( $expected->getId() );
+
+		$this->assertNotNull( $actual->getCreationTime() );
+		$actual->setCreationTime( null );
+
+		$this->assertEquals( $expected->getDecodedData(), $actual->getDecodedData() );
+		$expected->encodeAndSetData( [] );
+		$actual->encodeAndSetData( [] );
+
+		$this->assertEquals( $expected, $actual );
 	}
 
 	private function getDoctrineDonationById( int $id ): DoctrineDonation {
