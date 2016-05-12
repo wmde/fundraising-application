@@ -24,8 +24,8 @@ use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
  */
 class ValidMembershipApplication {
 
-	const APPLICANT_FIRST_NAME = 'Jeroen';
-	const APPLICANT_LAST_NAME = 'De Dauw';
+	const APPLICANT_FIRST_NAME = 'Potato';
+	const APPLICANT_LAST_NAME = 'The Great';
 	const APPLICANT_SALUTATION = 'Herr';
 	const APPLICANT_TITLE = '';
 
@@ -117,8 +117,6 @@ class ValidMembershipApplication {
 		$application->setApplicantSalutation( self::APPLICANT_SALUTATION );
 		$application->setApplicantTitle( self::APPLICANT_TITLE );
 
-		$application->setApplicantDateOfBirth( new \DateTime( self::APPLICANT_DATE_OF_BIRTH ) );
-
 		$application->setCity( self::APPLICANT_CITY );
 		$application->setCountry( self::APPLICANT_COUNTRY_CODE );
 		$application->setPostcode( self::APPLICANT_POSTAL_CODE );
@@ -126,6 +124,7 @@ class ValidMembershipApplication {
 
 		$application->setApplicantEmailAddress( self::APPLICANT_EMAIL_ADDRESS );
 		$application->setApplicantPhoneNumber( self::APPLICANT_PHONE_NUMBER );
+		$application->setApplicantDateOfBirth( new \DateTime( self::APPLICANT_DATE_OF_BIRTH ) );
 
 		$application->setMembershipType( self::MEMBERSHIP_TYPE );
 		$application->setPaymentIntervalInMonths( self::PAYMENT_PERIOD_IN_MONTHS );
@@ -137,8 +136,29 @@ class ValidMembershipApplication {
 		$application->setPaymentBic( self::PAYMENT_BIC );
 		$application->setPaymentIban( self::PAYMENT_IBAN );
 
-		// TODO: data fields?
-		$application->encodeAndSetData( [] );
+		$application->encodeAndSetData( [
+			'anrede' => self::APPLICANT_SALUTATION,
+			'titel' => self::APPLICANT_TITLE,
+			'vorname' => self::APPLICANT_FIRST_NAME,
+			'nachname' => self::APPLICANT_LAST_NAME,
+			'firma' => '',
+
+			'strasse' => self::APPLICANT_STREET_ADDRESS,
+			'plz' => self::APPLICANT_POSTAL_CODE,
+			'ort' => self::APPLICANT_CITY,
+			'country' => self::APPLICANT_COUNTRY_CODE,
+
+			'email' => self::APPLICANT_EMAIL_ADDRESS,
+			'phone' => self::APPLICANT_PHONE_NUMBER,
+			'dob' => self::APPLICANT_DATE_OF_BIRTH,
+
+			'account_holder' => 'Potato The Great',
+			'bank_name' => self::PAYMENT_BANK_NAME,
+			'iban' => self::PAYMENT_IBAN,
+			'bic' => self::PAYMENT_BIC,
+			'account_number' => self::PAYMENT_BANK_ACCOUNT,
+			'bank_code' => self::PAYMENT_BANK_CODE,
+		] );
 
 		return $application;
 	}

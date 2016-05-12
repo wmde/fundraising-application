@@ -42,16 +42,22 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit_Framework_Tes
 		$expectedDoctrineEntity = ValidMembershipApplication::newDoctrineEntity();
 		$expectedDoctrineEntity->setId( self::MEMBERSHIP_APPLICATION_ID );
 
-		$this->assertDoctrineEntityInDatabase( $expectedDoctrineEntity );
+		$this->assertDoctrineEntityIsInDatabase( $expectedDoctrineEntity );
 	}
 
 	private function newRepository(): MembershipApplicationRepository {
 		return new DoctrineMembershipApplicationRepository( $this->entityManager );
 	}
 
-	private function assertDoctrineEntityInDatabase( DoctrineMembershipApplication $expected ) {
+	private function assertDoctrineEntityIsInDatabase( DoctrineMembershipApplication $expected ) {
 		$actual = $this->getApplicationFromDatabase( $expected->getId() );
-		$actual->setCreationTime( null ); // TODO: gabriel, suggestion of how to test this?
+
+		$this->assertNotNull( $actual->getCreationTime() );
+		$actual->setCreationTime( null );
+
+		$this->assertEquals( $expected->getDecodedData(), $actual->getDecodedData() );
+		$expected->encodeAndSetData( [] );
+		$actual->encodeAndSetData( [] );
 
 		$this->assertEquals( $expected, $actual );
 	}
