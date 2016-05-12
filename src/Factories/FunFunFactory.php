@@ -695,7 +695,7 @@ class FunFunFactory {
 			$this->getDonationRepository(),
 			$this->newDonationValidator(),
 			$this->newReferrerGeneralizer(),
-			$this->newAddDonationMailer(),
+			$this->newDonationConfirmationMailer(),
 			$this->newBankTransferCodeGenerator(),
 			$this->newBankDataConverter(),
 			$this->newTokenGenerator(),
@@ -729,7 +729,7 @@ class FunFunFactory {
 		);
 	}
 
-	private function newAddDonationMailer(): DonationConfirmationMailer {
+	private function newDonationConfirmationMailer(): DonationConfirmationMailer {
 		return new DonationConfirmationMailer(
 			new TemplateBasedMailer(
 				$this->getMessenger(),
@@ -929,7 +929,8 @@ class FunFunFactory {
 	public function newHandlePayPalPaymentNotificationUseCase( string $updateToken ) {
 		return new HandlePayPalPaymentNotificationUseCase(
 			$this->getDonationRepository(),
-			$this->newDonationAuthorizer( $updateToken )
+			$this->newDonationAuthorizer( $updateToken ),
+			$this->newDonationConfirmationMailer()
 		);
 	}
 
