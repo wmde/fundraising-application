@@ -23,7 +23,7 @@
 <script id="init-form"
 		data-initial-form-values="{% if initialFormValues %}{$ initialFormValues|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
 		data-violated-fields="{% if violatedFields %}{$ violatedFields|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
-		data-validate-amount-url="{$ basepath|e('html_attr') $}/validate-amount"
+		data-validate-fee-url="{$ basepath|e('html_attr') $}/validate-fee"
 		data-validate-address-url="{$ basepath|e('html_attr') $}/validate-address"
 		data-validate-iban-url="{$ basepath $}/check-iban"
 		data-generate-iban-url="{$ basepath $}/generate-iban"
@@ -72,6 +72,12 @@
 		WMDE.StoreUpdates.connectValidatorsToStore(
 			function ( initialValues ) {
 				return [
+					WMDE.ReduxValidation.createValidationDispatcher(
+						WMDE.FormValidation.createFeeValidator( initData.data( 'validate-fee-url' ) ),
+						actions.newFinishAmountValidationAction,
+						[ 'amount', 'paymentIntervalInMonths', 'addressType' ],
+						initialValues
+					),
 					WMDE.ReduxValidation.createValidationDispatcher(
 						WMDE.FormValidation.createAddressValidator( initData.data( 'validate-address-url' ) ),
 						actions.newFinishAddressValidationAction,
@@ -201,9 +207,19 @@
 
 		// connect DOM elements to actions
 
+		function formDataIsValid() {
+			var validity = store.getState().validity,
+				addressIsValid = validity.address,
+				bankDataIsValid = validity.bankData;
+			return validity.amount && addressIsValid && bankDataIsValid;
+		}
+
 		$( '#continueFormSubmit' ).click( function () {
-			// TODO check if page is valid
-			store.dispatch( actions.newNextPageAction() );
+			if ( formDataIsValid() ) {
+				store.dispatch( actions.newNextPageAction() );
+			} else {
+				console.log('form data is invalid');
+			}
 		} );
 
 		$( '.back-button' ).click( function () {
