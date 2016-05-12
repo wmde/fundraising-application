@@ -14,8 +14,9 @@ use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplicationValidationR
  */
 class MembershipApplicationValidator {
 
-	const MIN_YEARLY_PAYMENT_IN_EURO = 25;
-	const MONTHS_PER_YEAR = 12;
+	/* private */ const MIN_PERSON_YEARLY_PAYMENT_IN_EURO = 24;
+	/* private */ const MIN_COMPANY_YEARLY_PAYMENT_IN_EURO = 100;
+	/* private */ const MONTHS_PER_YEAR = 12;
 
 	/**
 	 * @var ApplyForMembershipRequest
@@ -53,12 +54,19 @@ class MembershipApplicationValidator {
 	}
 
 	private function validateAmountMeetsYearlyMinimum( Euro $amount ) {
-		$yearlyAmount = $amount->getEuroFloat() * self::MONTHS_PER_YEAR / $this->request->getPaymentIntervalInMonths();
-
-		if ( $yearlyAmount < self::MIN_YEARLY_PAYMENT_IN_EURO ) {
-			// TODO: also add the violation to SOURCE_PAYMENT_INTERVAL?
+		if ( $this->getYearlyPaymentAmount( $amount ) < $this->getYearlyPaymentRequirement() ) {
 			$this->addViolation( Result::SOURCE_PAYMENT_AMOUNT, Result::VIOLATION_TOO_LOW );
 		}
+	}
+
+	private function getYearlyPaymentAmount( Euro $amount ): float {
+		return $amount->getEuroFloat() * self::MONTHS_PER_YEAR / $this->request->getPaymentIntervalInMonths();
+	}
+
+	private function getYearlyPaymentRequirement(): float {
+		return $this->request->isCompanyApplication() ?
+			self::MIN_COMPANY_YEARLY_PAYMENT_IN_EURO :
+			self::MIN_PERSON_YEARLY_PAYMENT_IN_EURO;
 	}
 
 }

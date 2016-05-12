@@ -36,10 +36,8 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * @dataProvider invalidAmountProvider
 	 */
-	public function testGivenInvalidAmount_validationFails( string $amount, string $expectedViolation ) {
-		$request = $this->newValidRequest();
-		$request->setPaymentAmountInEuros( $amount );
-		$request->setPaymentIntervalInMonths( 12 ); // TODO: test different intervals
+	public function testGivenInvalidAmount_validationFails( string $amount, int $intervalInMonths, string $expectedViolation ) {
+		$request = $this->newValidRequestWithPaymentAmount( $amount, $intervalInMonths );
 
 		$response = $this->newValidator()->validate( $request );
 
@@ -50,12 +48,57 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 
 	public function invalidAmountProvider() {
 		return [
-			'too low' => [ '1.00', Result::VIOLATION_TOO_LOW ],
-			'just too low' => [ '24.99', Result::VIOLATION_TOO_LOW ],
-			'max too low' => [ '0', Result::VIOLATION_TOO_LOW ],
-			'invalid: negative' => [ '-1.00', Result::VIOLATION_NOT_MONEY ],
-			'invalid' => [ 'y u no btc', Result::VIOLATION_NOT_MONEY ],
+			'invalid: negative' => [ '-1.00', 3, Result::VIOLATION_NOT_MONEY ],
+			'invalid' => [ 'y u no btc', 3, Result::VIOLATION_NOT_MONEY ],
+
+			'too low single payment' => [ '1.00', 12, Result::VIOLATION_TOO_LOW ],
+			'just too low single payment' => [ '23.99', 12, Result::VIOLATION_TOO_LOW ],
+			'max too low single payment' => [ '0', 12, Result::VIOLATION_TOO_LOW ],
+
+			'too low 12 times' => [ '1.99', 1, Result::VIOLATION_TOO_LOW ],
+			'too low 4 times' => [ '5.99', 3, Result::VIOLATION_TOO_LOW ],
 		];
+	}
+
+	private function newValidRequestWithPaymentAmount( string $amount, int $intervalInMonths ) {
+		$request = $this->newValidRequest();
+		$request->setPaymentAmountInEuros( $amount );
+		$request->setPaymentIntervalInMonths( $intervalInMonths );
+		return $request;
+	}
+
+	/**
+	 * @dataProvider validAmountProvider
+	 */
+	public function testGivenValidAmount_validationSucceeds( string $amount, int $intervalInMonths ) {
+		$request = $this->newValidRequestWithPaymentAmount( $amount, $intervalInMonths );
+
+		$this->assertTrue( $this->newValidator()->validate( $request )->isSuccessful() );
+	}
+
+	public function validAmountProvider() {
+		return [
+			'single payment' => [ '50.00', 12 ],
+			'just enough single payment' => [ '24.00', 12 ],
+			'high single payment' => [ '31333.37', 12 ],
+
+			'just enough 12 times' => [ '2.00', 1 ],
+			'just enough 4 times' => [ '6.00', 3 ],
+		];
+	}
+
+	public function testGivenValidCompanyAmount_validationSucceeds() {
+		$request = $this->newValidRequestWithPaymentAmount( '100.00', 12 );
+		$request->markApplicantAsCompany();
+
+		$this->assertTrue( $this->newValidator()->validate( $request )->isSuccessful() );
+	}
+
+	public function testGivenInvalidCompanyAmount_validationFails() {
+		$request = $this->newValidRequestWithPaymentAmount( '99.99', 12 );
+		$request->markApplicantAsCompany();
+
+		$this->assertFalse( $this->newValidator()->validate( $request )->isSuccessful() );
 	}
 
 }

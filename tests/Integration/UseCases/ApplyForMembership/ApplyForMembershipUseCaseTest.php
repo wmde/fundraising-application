@@ -98,7 +98,6 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$request = new ApplyForMembershipRequest();
 
 		$request->setMembershipType( ValidMembershipApplication::MEMBERSHIP_TYPE );
-		$request->setApplicantType( 'person' );
 		$request->setApplicantCompanyName( '' );
 		$request->setMembershipType( ValidMembershipApplication::MEMBERSHIP_TYPE );
 		$request->setApplicantSalutation( ValidMembershipApplication::APPLICANT_SALUTATION );
