@@ -731,15 +731,17 @@ class FunFunFactory {
 
 	private function newAddDonationMailer(): DonationConfirmationMailer {
 		return new DonationConfirmationMailer(
-			$this->getMessenger(),
-			new TwigTemplate(
-				$this->getTwig(),
-				'Mail_Donation_Confirmation.twig', // TODO: ongoing unification of different templates
-				[
-					'basepath' => $this->config['web-basepath']
-				]
-			),
-			$this->getTranslator()->trans( 'mail_subject_confirm_donation' )
+			new TemplateBasedMailer(
+				$this->getMessenger(),
+				new TwigTemplate(
+					$this->getTwig(),
+					'Mail_Donation_Confirmation.twig', // TODO: ongoing unification of different templates
+					[
+						'basepath' => $this->config['web-basepath']
+					]
+				),
+				$this->getTranslator()->trans( 'mail_subject_confirm_donation' )
+			)
 		);
 	}
 

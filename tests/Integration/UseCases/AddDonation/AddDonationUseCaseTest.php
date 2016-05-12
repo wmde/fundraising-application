@@ -168,7 +168,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 	public function testGivenInvalidRequest_noConfirmationEmailIsSend() {
 		$mailer = $this->newMailer();
 
-		$mailer->expects( $this->never() )->method( 'sendMail' );
+		$mailer->expects( $this->never() )->method( 'sendMailFromDonation' );
 
 		$useCase = new AddDonationUseCase(
 			$this->newRepository(),

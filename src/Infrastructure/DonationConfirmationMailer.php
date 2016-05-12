@@ -13,10 +13,16 @@ use WMDE\Fundraising\Frontend\Domain\Model\BankTransferPayment;
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class DonationConfirmationMailer extends TemplateBasedMailer {
+class DonationConfirmationMailer {
+
+	private $mailer;
+
+	public function __construct( TemplateBasedMailer $mailer ) {
+		$this->mailer = $mailer;
+	}
 
 	public function sendMailFromDonation( Donation $donation ) {
-		$this->sendMail(
+		$this->mailer->sendMail(
 			new EmailAddress( $donation->getDonor()->getEmailAddress() ),
 			$this->getConfirmationMailTemplateArguments( $donation )
 		);
