@@ -10,6 +10,7 @@ use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
 use WMDE\Fundraising\Frontend\Domain\Repositories\StoreDonationException;
+use WMDE\Fundraising\Frontend\Tests\Data\ValidDoctrineDonation;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
@@ -39,15 +40,27 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 		$this->newRepository()->storeDonation( $donation );
 
-		$doctrineDonation = $this->getDoctrineDonationById( $donation->getId() );
+		$expectedDoctrineEntity = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
+		$expectedDoctrineEntity->setId( $donation->getId() );
 
-		// TODO: compare whole donation, now easy via ValidDonation
-		$this->assertSame( $donation->getAmount()->getEuroString(), $doctrineDonation->getAmount() );
-		$this->assertSame( $donation->getDonor()->getEmailAddress(), $doctrineDonation->getDonorEmail() );
+		$this->assertDoctrineEntityIsInDatabase( $expectedDoctrineEntity );
 	}
 
 	private function newRepository(): DoctrineDonationRepository {
 		return new DoctrineDonationRepository( $this->entityManager );
+	}
+
+	private function assertDoctrineEntityIsInDatabase( DoctrineDonation $expected ) {
+		$actual = $this->getDoctrineDonationById( $expected->getId() );
+
+		$this->assertNotNull( $actual->getCreationTime() );
+		$actual->setCreationTime( null );
+
+		$this->assertEquals( $expected->getDecodedData(), $actual->getDecodedData() );
+		$expected->encodeAndSetData( [] );
+		$actual->encodeAndSetData( [] );
+
+		$this->assertEquals( $expected, $actual );
 	}
 
 	private function getDoctrineDonationById( int $id ): DoctrineDonation {
@@ -55,16 +68,6 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$donation = $donationRepo->find( $id );
 		$this->assertInstanceOf( DoctrineDonation::class, $donation );
 		return $donation;
-	}
-
-	public function testFractionalAmountsRoundtripWithoutChange() {
-		$donation = ValidDonation::newDirectDebitDonation();
-
-		$this->newRepository()->storeDonation( $donation );
-
-		$doctrineDonation = $this->getDoctrineDonationById( $donation->getId() );
-
-		$this->assertSame( $donation->getAmount()->getEuroString(), $doctrineDonation->getAmount() );
 	}
 
 	public function testWhenPersistenceFails_domainExceptionIsThrown() {

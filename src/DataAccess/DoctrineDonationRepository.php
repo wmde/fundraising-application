@@ -125,7 +125,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		return array_merge(
 			$this->getDataFieldsFromTrackingInfo( $donation->getTrackingInfo() ),
 			$this->getDataFieldsForPaymentData( $donation->getPaymentMethod() ),
-			$this->getDataFieldsFromPersonalInfo( $donation->getDonor() )
+			$this->getDataFieldsFromDonor( $donation->getDonor() )
 		);
 	}
 
@@ -141,16 +141,6 @@ class DoctrineDonationRepository implements DonationRepository {
 		];
 	}
 
-	private function getDataFieldsFromBankData( BankData $bankData ): array {
-		return [
-			'iban' => $bankData->getIban()->toString(),
-			'bic' => $bankData->getBic(),
-			'konto' => $bankData->getAccount(),
-			'blz' => $bankData->getBankCode(),
-			'bankname' => $bankData->getBankName(),
-		];
-	}
-
 	private function getDataFieldsForPaymentData( PaymentMethod $paymentMethod ): array {
 		if ( $paymentMethod instanceof DirectDebitPayment ) {
 			return $this->getDataFieldsFromBankData( $paymentMethod->getBankData() );
@@ -163,7 +153,17 @@ class DoctrineDonationRepository implements DonationRepository {
 		return [];
 	}
 
-	private function getDataFieldsFromPersonalInfo( Donor $personalInfo = null ): array {
+	private function getDataFieldsFromBankData( BankData $bankData ): array {
+		return [
+			'iban' => $bankData->getIban()->toString(),
+			'bic' => $bankData->getBic(),
+			'konto' => $bankData->getAccount(),
+			'blz' => $bankData->getBankCode(),
+			'bankname' => $bankData->getBankName(),
+		];
+	}
+
+	private function getDataFieldsFromDonor( Donor $personalInfo = null ): array {
 		if ( $personalInfo === null ) {
 			return [ 'addresstyp' => 'anonym' ];
 		}
