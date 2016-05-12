@@ -121,7 +121,52 @@ class DoctrineMembershipApplicationRepository implements MembershipApplicationRe
 	}
 
 	private function getDataMap( MembershipApplication $application ): array {
-		return []; // TODO
+		return array_merge(
+			$this->getDataFieldsFromApplicant( $application->getApplicant() ),
+			$this->getDataFieldsFromBankData( $application->getPayment()->getBankData() )
+		);
+	}
+
+	private function getDataFieldsFromBankData( BankData $bankData ): array {
+		return [
+			'iban' => $bankData->getIban()->toString(),
+			'bic' => $bankData->getBic(),
+			'account_number' => $bankData->getAccount(),
+			'bank_code' => $bankData->getBankCode(),
+			'bank_name' => $bankData->getBankName(),
+		];
+	}
+
+	private function getDataFieldsFromApplicant( MembershipApplicant $applicant ): array {
+		return array_merge(
+			$this->getDataFieldsFromPersonName( $applicant->getPersonName() ),
+			$this->getDataFieldsFromAddress( $applicant->getPhysicalAddress() ),
+			[
+				'email' => (string)$applicant->getEmailAddress(),
+				'phone' => (string)$applicant->getPhoneNumber(),
+				'dob' => $applicant->getDateOfBirth()->format( 'Y-m-d' )
+			]
+		);
+	}
+
+	private function getDataFieldsFromPersonName( PersonName $name ) {
+		return [
+			'anrede' => $name->getSalutation(),
+			'titel' => $name->getTitle(),
+			'vorname' => $name->getFirstName(),
+			'nachname' => $name->getLastName(),
+			'firma' => $name->getCompanyName(),
+			'account_holder' => $name->getFirstName() . ' ' . $name->getLastName()
+		];
+	}
+
+	private function getDataFieldsFromAddress( PhysicalAddress $address ) {
+		return [
+			'strasse' => $address->getStreetAddress(),
+			'plz' => $address->getPostalCode(),
+			'ort' => $address->getCity(),
+			'country' => $address->getCountryCode(),
+		];
 	}
 
 	/**
