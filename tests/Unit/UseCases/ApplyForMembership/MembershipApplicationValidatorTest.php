@@ -8,6 +8,7 @@ use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplicationRequest;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplicationValidationResult as Result;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipRequest;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\MembershipApplicationValidator;
+use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
 
 /**
  * @covers WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\MembershipApplicationValidator
@@ -26,7 +27,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	private function newValidator() {
-		return new MembershipApplicationValidator();
+		return new MembershipApplicationValidator( new MembershipFeeValidator() );
 	}
 
 	private function newValidRequest(): ApplyForMembershipRequest {

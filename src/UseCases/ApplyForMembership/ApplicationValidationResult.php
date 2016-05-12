@@ -24,6 +24,14 @@ class ApplicationValidationResult {
 		$this->violations = $violations;
 	}
 
+	public function addViolations( array $violations ) {
+		$this->violations = array_merge( $this->violations, $violations );
+	}
+
+	public function getViolations(): array {
+		return $this->violations;
+	}
+
 	public function isSuccessful(): bool {
 		return empty( $this->violations );
 	}
