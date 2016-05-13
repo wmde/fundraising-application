@@ -113,7 +113,11 @@ class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$mailerSpy->assertMailerCalledOnceWith(
 			new EmailAddress( $donation->getDonor()->getEmailAddress() ),
 			[
-				'salutation' => 'Sehr geehrte Damen und Herren,',
+				'recipient' => [
+					'lastName' => ValidDonation::DONOR_LAST_NAME,
+					'salutation' => ValidDonation::DONOR_SALUTATION,
+					'title' => ValidDonation::DONOR_TITLE
+				],
 				'donationId' => 1
 			]
 		);

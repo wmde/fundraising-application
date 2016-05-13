@@ -10,7 +10,6 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepositor
 use WMDE\Fundraising\Frontend\Domain\Repositories\StoreMembershipApplicationException;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationAuthorizer;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
-use WMDE\Fundraising\Frontend\Presentation\GreetingGenerator;
 
 /**
  * @license GNU GPL v2+

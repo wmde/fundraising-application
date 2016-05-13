@@ -10,7 +10,6 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizer;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
-use WMDE\Fundraising\Frontend\Presentation\GreetingGenerator;
 
 /**
  * @licence GNU GPL v2+
@@ -82,12 +81,11 @@ class CancelDonationUseCase {
 		return [
 			'donationId' => $donation->getId(),
 
-			// FIXME: this should be in the presenter or template
-			'salutation' => ( new GreetingGenerator() )->createGreeting(
-				$donation->getDonor()->getPersonName()->getLastName(),
-				$donation->getDonor()->getPersonName()->getSalutation(),
-				$donation->getDonor()->getPersonName()->getTitle()
-			)
+			'recipient' => [
+				'lastName' => $donation->getDonor()->getPersonName()->getLastName(),
+				'salutation' =>	$donation->getDonor()->getPersonName()->getSalutation(),
+				'title' => $donation->getDonor()->getPersonName()->getTitle()
+			],
 		];
 	}
 
