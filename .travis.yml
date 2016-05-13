@@ -16,7 +16,7 @@ before_script:
 - if [ "$MCP_ACCESS_KEY" != "" ] && [ "$MCP_PROJECT_ID" != "" ]; then bash build/travis/createLocalTestConfig.sh > app/config/config.test.local.json; fi
 script:
 - composer ci
-- phpunit tests/System/
+- travis_retry phpunit tests/System/
 cache:
   directories:
   - "$HOME/.composer/cache"
