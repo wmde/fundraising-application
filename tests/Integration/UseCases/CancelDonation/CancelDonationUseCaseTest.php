@@ -110,7 +110,7 @@ class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 		$this->saveAndCancelUsingMailer( $donation, $mailerSpy );
 
-		$mailerSpy->assertMailerCalledOnceWith(
+		$mailerSpy->assertCalledOnceWith(
 			new EmailAddress( $donation->getDonor()->getEmailAddress() ),
 			[
 				'recipient' => [
