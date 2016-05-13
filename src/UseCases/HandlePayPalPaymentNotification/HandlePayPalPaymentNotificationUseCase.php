@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\UseCases\HandlePayPalPaymentNotification;
 
+use Psr\Log\LoggerInterface;
 use WMDE\Fundraising\Frontend\Domain\Model\PayPalData;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
@@ -20,15 +21,37 @@ class HandlePayPalPaymentNotificationUseCase {
 	private $repository;
 	private $authorizationService;
 	private $mailer;
+	private $logger;
 
 	public function __construct( DonationRepository $repository, DonationAuthorizer $authorizationService,
-								 DonationConfirmationMailer $mailer ) {
+								 DonationConfirmationMailer $mailer, LoggerInterface $logger ) {
 		$this->repository = $repository;
 		$this->authorizationService = $authorizationService;
 		$this->mailer = $mailer;
+		$this->logger = $logger;
 	}
 
 	public function handleNotification( PayPalNotificationRequest $request ): bool {
+		// Avoid handling notifications that are not successes
+		if ( !$request->isSuccessfulPaymentNotification() ) {
+			$logContext = [
+				'payment_status' => $request->getPaymentStatus(),
+				'txn_id' => $request->getTransactionId()
+			];
+			$this->logger->info( 'Unhandled PayPal notification: ' . $request->getPaymentStatus(), $logContext );
+			return false;
+		}
+
+		// Avoid handling successful notifications that are subscription-related but not payments
+		if ( $this->transactionIsSubscriptionRelatedButNotAPayment( $request ) ) {
+			$logContext = [
+				'transaction_type' => $request->getTransactionType(),
+				'txn_id' => $request->getTransactionId()
+			];
+			$this->logger->info( 'Unhandled PayPal subscription notification: ' . $request->getTransactionType(), $logContext );
+			return false;
+		}
+
 		try {
 			$donation = $this->repository->getDonationById( $request->getDonationId() );
 		} catch ( GetDonationException $ex ) {
@@ -72,6 +95,11 @@ class HandlePayPalPaymentNotificationUseCase {
 		}
 
 		return true;
+	}
+
+	private function transactionIsSubscriptionRelatedButNotAPayment( PayPalNotificationRequest $request ) {
+		$transactionType = $request->getTransactionType();
+		return strpos( $transactionType, 'subscr_' ) === 0 && $transactionType !== 'subscr_payment';
 	}
 
 	private function newPayPalDataFromRequest( PayPalNotificationRequest $request ): PayPalData {

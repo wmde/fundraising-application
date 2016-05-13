@@ -930,7 +930,8 @@ class FunFunFactory {
 		return new HandlePayPalPaymentNotificationUseCase(
 			$this->getDonationRepository(),
 			$this->newDonationAuthorizer( $updateToken ),
-			$this->newDonationConfirmationMailer()
+			$this->newDonationConfirmationMailer(),
+			$this->getLogger()
 		);
 	}
 
