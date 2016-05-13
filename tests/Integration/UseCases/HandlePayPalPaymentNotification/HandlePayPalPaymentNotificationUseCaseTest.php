@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\HandlePayPalPayme
 
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Model\Euro;
+use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeDonationRepository;
@@ -26,7 +27,8 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$request = $this->newRequest( 1 );
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
 			new DoctrineDonationRepository( ThrowingEntityManager::newInstance( $this ) ),
-			new FailingDonationAuthorizer()
+			new FailingDonationAuthorizer(),
+			$this->getMailer()
 		);
 		$this->assertFalse( $useCase->handleNotification( $request ) );
 	}
@@ -37,7 +39,11 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$fakeRepository->storeDonation( $donation );
 
 		$request = $this->newRequest( 1 );
-		$useCase = new HandlePayPalPaymentNotificationUseCase( $fakeRepository, new FailingDonationAuthorizer() );
+		$useCase = new HandlePayPalPaymentNotificationUseCase(
+			$fakeRepository,
+			new FailingDonationAuthorizer(),
+			$this->getMailer()
+		);
 		$this->assertFalse( $useCase->handleNotification( $request ) );
 	}
 
@@ -47,7 +53,11 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$fakeRepository->storeDonation( $donation );
 
 		$request = $this->newRequest( 1 );
-		$useCase = new HandlePayPalPaymentNotificationUseCase( $fakeRepository, new SucceedingDonationAuthorizer() );
+		$useCase = new HandlePayPalPaymentNotificationUseCase(
+			$fakeRepository,
+			new SucceedingDonationAuthorizer(),
+			$this->getMailer()
+		);
 		$this->assertTrue( $useCase->handleNotification( $request ) );
 	}
 
@@ -57,7 +67,11 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$fakeRepository->storeDonation( $donation );
 
 		$request = $this->newRequest( 123456 );
-		$useCase = new HandlePayPalPaymentNotificationUseCase( $fakeRepository, new SucceedingDonationAuthorizer() );
+		$useCase = new HandlePayPalPaymentNotificationUseCase(
+			$fakeRepository,
+			new SucceedingDonationAuthorizer(),
+			$this->getMailer()
+		);
 		$this->assertTrue( $useCase->handleNotification( $request ) );
 	}
 
@@ -67,8 +81,44 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$fakeRepository->storeDonation( $donation );
 
 		$request = $this->newRequest( 1 );
-		$useCase = new HandlePayPalPaymentNotificationUseCase( $fakeRepository, new SucceedingDonationAuthorizer() );
+		$useCase = new HandlePayPalPaymentNotificationUseCase(
+			$fakeRepository,
+			new SucceedingDonationAuthorizer(),
+			$this->getMailer()
+		);
 		$this->assertFalse( $useCase->handleNotification( $request ) );
+	}
+
+	public function testWhenAuthorizationSucceeds_confirmationMailIsSent() {
+		$donation = ValidDonation::newIncompletePayPalDonation();
+		$fakeRepository = new FakeDonationRepository();
+		$fakeRepository->storeDonation( $donation );
+		$mailer = $this->getMailer();
+
+		$mailer->expects( $this->once() )
+			->method( 'sendMailFromDonation' )
+			->with( $this->equalTo( $donation ) );
+		$request = $this->newRequest( 1 );
+		$useCase = new HandlePayPalPaymentNotificationUseCase( $fakeRepository, new SucceedingDonationAuthorizer(), $mailer );
+		$this->assertTrue( $useCase->handleNotification( $request ) );
+	}
+
+	public function testWhenSendingConfirmationMailFails_handlerReturnsTrue() {
+		$donation = ValidDonation::newIncompletePayPalDonation();
+		$fakeRepository = new FakeDonationRepository();
+		$fakeRepository->storeDonation( $donation );
+		$mailer = $this->getMailer();
+
+		$mailer->expects( $this->once() )
+			->method( 'sendMailFromDonation' )
+			->willThrowException( new \RuntimeException( 'Oh noes!' ) );
+		$request = $this->newRequest( 1 );
+		$useCase = new HandlePayPalPaymentNotificationUseCase( $fakeRepository, new SucceedingDonationAuthorizer(), $mailer );
+		$this->assertTrue( $useCase->handleNotification( $request ) );
+	}
+
+	private function getMailer() {
+		return $this->getMockBuilder( DonationConfirmationMailer::class )->disableOriginalConstructor()->getMock();
 	}
 
 	private function newRequest( int $donationId ) {

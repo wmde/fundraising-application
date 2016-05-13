@@ -9,6 +9,7 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
 use WMDE\Fundraising\Frontend\Domain\Repositories\StoreDonationException;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizer;
+use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
 
 /**
  * @license GNU GPL v2+
@@ -18,10 +19,13 @@ class HandlePayPalPaymentNotificationUseCase {
 
 	private $repository;
 	private $authorizationService;
+	private $mailer;
 
-	public function __construct( DonationRepository $repository, DonationAuthorizer $authorizationService ) {
+	public function __construct( DonationRepository $repository, DonationAuthorizer $authorizationService,
+								 DonationConfirmationMailer $mailer ) {
 		$this->repository = $repository;
 		$this->authorizationService = $authorizationService;
+		$this->mailer = $mailer;
 	}
 
 	public function handleNotification( PayPalNotificationRequest $request ): bool {
@@ -57,6 +61,14 @@ class HandlePayPalPaymentNotificationUseCase {
 		}
 		catch ( StoreDonationException $ex ) {
 			return false;
+		}
+
+		try {
+			$this->mailer->sendMailFromDonation( $donation );
+		} catch ( \RuntimeException $ex ) {
+			// TODO log mail error like we do in the add donation use case, see https://phabricator.wikimedia.org/T133549
+
+			// no need to re-throw or return false, this is not a fatal error, only a minor inconvenience
 		}
 
 		return true;

@@ -205,6 +205,18 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$useCase->addDonation( $donation );
 	}
 
+	public function testGivenValidRequestWithExternalPaymentType_confirmationEmailIsNotSent() {
+		$mailer = $this->newMailer();
+
+		$mailer->expects( $this->never() )->method( 'sendMailFromDonation' );
+
+		$useCase = $this->newUseCaseWithMailer( $mailer );
+
+		$request = $this->newValidAddDonationRequestWithEmail( 'foo@bar.baz' );
+		$request->setPaymentType( 'PPL' );
+		$useCase->addDonation( $request );
+	}
+
 	private function newUseCaseWithMailer( DonationConfirmationMailer $mailer ) {
 		return new AddDonationUseCase(
 			$this->newRepository(),
