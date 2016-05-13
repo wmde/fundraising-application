@@ -136,11 +136,11 @@ class Donation {
 	 * @throws RuntimeException
 	 */
 	public function confirmBooked() {
-		if ( !$this->isPaymentTypeExternal() ) {
+		if ( !$this->hasExternalPayment() ) {
 			throw new RuntimeException( 'Only external payments can be confirmed as booked' );
 		}
 
-		if ( !$this->isStatusIncomplete() ) {
+		if ( !$this->isIncomplete() ) {
 			throw new RuntimeException( 'Only incomplete donations can be confirmed as booked' );
 		}
 
@@ -173,11 +173,11 @@ class Donation {
 		return $this->status === self::STATUS_NEW || $this->status === self::STATUS_MODERATION;
 	}
 
-	public function isPaymentTypeExternal() {
+	public function hasExternalPayment(): bool {
 		return in_array( $this->getPaymentType(), [ PaymentType::PAYPAL, PaymentType::CREDIT_CARD ] );
 	}
 
-	private function isStatusIncomplete() {
+	private function isIncomplete(): bool {
 		return $this->status === self::STATUS_EXTERNAL_INCOMPLETE;
 	}
 

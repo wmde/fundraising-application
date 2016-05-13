@@ -222,7 +222,7 @@ class AddDonationUseCase {
 	 * TODO: handle exception
 	 */
 	private function sendDonationConfirmationEmail( Donation $donation ) {
-		if ( $donation->getDonor() !== null && !$donation->isPaymentTypeExternal() ) {
+		if ( $donation->getDonor() !== null && !$donation->hasExternalPayment() ) {
 			$this->mailer->sendConfirmationMailFor( $donation );
 		}
 	}
