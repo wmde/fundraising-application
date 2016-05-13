@@ -21,7 +21,7 @@ class DonationConfirmationMailer {
 		$this->mailer = $mailer;
 	}
 
-	public function sendMailFromDonation( Donation $donation ) {
+	public function sendConfirmationMailFor( Donation $donation ) {
 		$this->mailer->sendMail(
 			new EmailAddress( $donation->getDonor()->getEmailAddress() ),
 			$this->getConfirmationMailTemplateArguments( $donation )

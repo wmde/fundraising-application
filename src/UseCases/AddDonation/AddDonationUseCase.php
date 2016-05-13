@@ -223,7 +223,7 @@ class AddDonationUseCase {
 	 */
 	private function sendDonationConfirmationEmail( Donation $donation ) {
 		if ( $donation->getDonor() !== null && !$donation->isPaymentTypeExternal() ) {
-			$this->mailer->sendMailFromDonation( $donation );
+			$this->mailer->sendConfirmationMailFor( $donation );
 		}
 	}
 }

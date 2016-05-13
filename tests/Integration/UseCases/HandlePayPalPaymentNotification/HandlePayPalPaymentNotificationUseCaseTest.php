@@ -96,7 +96,7 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$mailer = $this->getMailer();
 
 		$mailer->expects( $this->once() )
-			->method( 'sendMailFromDonation' )
+			->method( 'sendConfirmationMailFor' )
 			->with( $this->equalTo( $donation ) );
 		$request = $this->newRequest( 1 );
 		$useCase = new HandlePayPalPaymentNotificationUseCase( $fakeRepository, new SucceedingDonationAuthorizer(), $mailer );
@@ -110,7 +110,7 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$mailer = $this->getMailer();
 
 		$mailer->expects( $this->once() )
-			->method( 'sendMailFromDonation' )
+			->method( 'sendConfirmationMailFor' )
 			->willThrowException( new \RuntimeException( 'Oh noes!' ) );
 		$request = $this->newRequest( 1 );
 		$useCase = new HandlePayPalPaymentNotificationUseCase( $fakeRepository, new SucceedingDonationAuthorizer(), $mailer );
