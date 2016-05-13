@@ -94,7 +94,7 @@ class CancelMembershipApplicationUseCaseTest extends \PHPUnit_Framework_TestCase
 
 		$this->newUseCase()->cancelApplication( new CancellationRequest( $application->getId() ) );
 
-		$this->mailer->assertMailerCalledOnceWith(
+		$this->mailer->assertCalledOnceWith(
 			$application->getApplicant()->getEmailAddress(),
 			[
 				'membershipApplicant' => [

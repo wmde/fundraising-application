@@ -146,7 +146,7 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 	public function testGivenValidRequest_confirmationEmailIsSend() {
 		$this->newUseCase()->applyForMembership( $this->newValidRequest() );
 
-		$this->mailer->assertMailerCalledOnceWith(
+		$this->mailer->assertCalledOnceWith(
 			new EmailAddress( ValidMembershipApplication::APPLICANT_EMAIL_ADDRESS ),
 			[]
 		);
