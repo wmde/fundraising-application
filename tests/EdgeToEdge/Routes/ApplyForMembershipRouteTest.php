@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
 /**
@@ -37,32 +38,32 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	private function newValidHttpParameters(): array {
 		return [
-			'membership_type' => 'active',
+			'membership_type' => ValidMembershipApplication::MEMBERSHIP_TYPE,
 
-			'adresstyp' => 'person',
-			'anrede' => 'Herr',
-			'titel' => '',
-			'vorname' => 'blah',
-			'nachname' => 'blub',
+			'adresstyp' => ValidMembershipApplication::APPLICANT_TYPE,
+			'anrede' => ValidMembershipApplication::APPLICANT_SALUTATION,
+			'titel' => ValidMembershipApplication::APPLICANT_TITLE,
+			'vorname' => ValidMembershipApplication::APPLICANT_FIRST_NAME,
+			'nachname' => ValidMembershipApplication::APPLICANT_LAST_NAME,
 			'firma' => '',
 
-			'strasse' => 'cnkevhwnw',
-			'plz' => '11207',
-			'ort' => 'Berlin',
-			'country' => 'DE',
+			'strasse' => ValidMembershipApplication::APPLICANT_STREET_ADDRESS,
+			'plz' => ValidMembershipApplication::APPLICANT_POSTAL_CODE,
+			'ort' => ValidMembershipApplication::APPLICANT_CITY,
+			'country' => ValidMembershipApplication::APPLICANT_COUNTRY_CODE,
 
-			'email' => 'gb@blah.com',
-			'phone' => '1234555',
-			'dob' => '30.02.9999',
+			'email' => ValidMembershipApplication::APPLICANT_EMAIL_ADDRESS,
+			'phone' => ValidMembershipApplication::APPLICANT_PHONE_NUMBER,
+			'dob' => ValidMembershipApplication::APPLICANT_DATE_OF_BIRTH,
 
-			'membership_fee_interval' => '12',
-			'membership_fee' => '25.00', // TODO: change to localized
+			'membership_fee_interval' => (string)ValidMembershipApplication::PAYMENT_PERIOD_IN_MONTHS,
+			'membership_fee' => (string)ValidMembershipApplication::PAYMENT_AMOUNT_IN_EURO, // TODO: change to localized
 
-			'bank_name' => 'ING-DiBa',
-			'iban' => 'DE12500105170648489890',
-			'bic' => 'INGDDEFFXXX',
-			'account_number' => '0648489890',
-			'bank_code' => '50010517',
+			'bank_name' => ValidMembershipApplication::PAYMENT_BANK_NAME,
+			'iban' => ValidMembershipApplication::PAYMENT_IBAN,
+			'bic' => ValidMembershipApplication::PAYMENT_BIC,
+			'account_number' => ValidMembershipApplication::PAYMENT_BANK_ACCOUNT,
+			'bank_code' => ValidMembershipApplication::PAYMENT_BANK_CODE,
 		];
 	}
 
@@ -80,6 +81,27 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			);
 
 			$this->assertSame( 'TODO fail', $client->getResponse()->getContent() );
+		} );
+	}
+
+	public function testGivenValidRequest_applicationIsPersisted() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setNullMessenger();
+
+			$client->request(
+				'POST',
+				'apply-for-membership',
+				$this->newValidHttpParameters()
+			);
+
+			$application = $factory->getMembershipApplicationRepository()->getApplicationById( 1 );
+
+			$this->assertNotNull( $application );
+
+			$expectedApplication = ValidMembershipApplication::newDomainEntity();
+			$expectedApplication->assignId( 1 );
+
+			$this->assertEquals( $expectedApplication, $application );
 		} );
 	}
 
