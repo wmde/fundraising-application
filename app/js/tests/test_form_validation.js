@@ -71,7 +71,8 @@ test( 'Given a private adddress, address validation sends values to server', fun
 } );
 
 test( 'Given an incomplete private adddress, address validation sends no values to server', function ( t ) {
-	var postFunctionSpy = sinon.spy(),
+	var negativeResult = { status: 'ERR' },
+		postFunctionSpy = sinon.spy(),
 		addressValidator = validation.createAddressValidator(
 			'http://spenden.wikimedia.org/validate-address',
 			postFunctionSpy
@@ -91,7 +92,7 @@ test( 'Given an incomplete private adddress, address validation sends no values 
 	validationResult = addressValidator.validate( formData );
 
 	t.ok( !postFunctionSpy.called, 'post function is not called' );
-	t.equal( validationResult, null, 'validation function returns null to signal validation was skipped' );
+	t.deepEqual( validationResult, negativeResult, 'validation function returns error' );
 	t.end();
 } );
 
