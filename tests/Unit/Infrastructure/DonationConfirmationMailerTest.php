@@ -9,6 +9,12 @@ use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 
+/**
+ * @covers WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer
+ *
+ * @licence GNU GPL v2+
+ * @author Gabriel Birke < gabriel.birke@wikimedia.de >
+ */
 class DonationConfirmationMailerTest extends \PHPUnit_Framework_TestCase {
 
 	public function testMailerExtractsEmailFromDonation() {
