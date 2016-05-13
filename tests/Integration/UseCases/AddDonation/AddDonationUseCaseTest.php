@@ -168,7 +168,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 	public function testGivenInvalidRequest_noConfirmationEmailIsSend() {
 		$mailer = $this->newMailer();
 
-		$mailer->expects( $this->never() )->method( 'sendMailFromDonation' );
+		$mailer->expects( $this->never() )->method( $this->anything() );
 
 		$useCase = new AddDonationUseCase(
 			$this->newRepository(),
@@ -197,7 +197,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$donation = $this->newValidAddDonationRequestWithEmail( 'foo@bar.baz' );
 
 		$mailer->expects( $this->once() )
-			->method( 'sendMailFromDonation' )
+			->method( 'sendConfirmationMailFor' )
 			->with( $this->isInstanceOf( Donation::class ) );
 
 		$useCase = $this->newUseCaseWithMailer( $mailer );
@@ -208,7 +208,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 	public function testGivenValidRequestWithExternalPaymentType_confirmationEmailIsNotSent() {
 		$mailer = $this->newMailer();
 
-		$mailer->expects( $this->never() )->method( 'sendMailFromDonation' );
+		$mailer->expects( $this->never() )->method( $this->anything() );
 
 		$useCase = $this->newUseCaseWithMailer( $mailer );
 

@@ -21,7 +21,7 @@ class DonationConfirmationMailerTest extends \PHPUnit_Framework_TestCase {
 				$this->anything()
 			);
 		$mailer = new DonationConfirmationMailer( $templateMailer );
-		$mailer->sendMailFromDonation( $donation );
+		$mailer->sendConfirmationMailFor( $donation );
 	}
 
 	public function testMailerAssemblesTemplateData() {
@@ -49,7 +49,7 @@ class DonationConfirmationMailerTest extends \PHPUnit_Framework_TestCase {
 				$this->equalTo( $expectedTemplateData )
 			);
 		$mailer = new DonationConfirmationMailer( $templateMailer );
-		$mailer->sendMailFromDonation( $donation );
+		$mailer->sendConfirmationMailFor( $donation );
 	}
 
 }

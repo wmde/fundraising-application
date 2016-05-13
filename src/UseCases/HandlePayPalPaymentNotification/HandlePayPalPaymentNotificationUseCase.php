@@ -64,7 +64,7 @@ class HandlePayPalPaymentNotificationUseCase {
 		}
 
 		try {
-			$this->mailer->sendMailFromDonation( $donation );
+			$this->mailer->sendConfirmationMailFor( $donation );
 		} catch ( \RuntimeException $ex ) {
 			// TODO log mail error like we do in the add donation use case, see https://phabricator.wikimedia.org/T133549
 
