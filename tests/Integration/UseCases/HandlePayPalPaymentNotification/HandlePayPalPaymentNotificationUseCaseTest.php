@@ -26,50 +26,46 @@ use WMDE\Fundraising\Frontend\UseCases\HandlePayPalPaymentNotification\PayPalNot
 class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 	public function testWhenRepositoryThrowsException_handlerReturnsFalse() {
-		$request = $this->newRequest( 1 );
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
 			new DoctrineDonationRepository( ThrowingEntityManager::newInstance( $this ) ),
 			new FailingDonationAuthorizer(),
 			$this->getMailer(),
 			new NullLogger()
 		);
-		$this->assertFalse( $useCase->handleNotification( $request ) );
+		$this->assertFalse( $useCase->handleNotification( $this->newRequest( 1 ) ) );
 	}
 
 	public function testWhenAuthorizationFails_handlerReturnsFalse() {
-		$donation = ValidDonation::newIncompletePayPalDonation();
 		$fakeRepository = new FakeDonationRepository();
-		$fakeRepository->storeDonation( $donation );
+		$fakeRepository->storeDonation( ValidDonation::newIncompletePayPalDonation() );
 
-		$request = $this->newRequest( 1 );
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
 			$fakeRepository,
 			new FailingDonationAuthorizer(),
 			$this->getMailer(),
 			new NullLogger()
 		);
-		$this->assertFalse( $useCase->handleNotification( $request ) );
+
+		$this->assertFalse( $useCase->handleNotification( $this->newRequest( 1 ) ) );
 	}
 
 	public function testWhenAuthorizationSucceeds_handlerReturnsTrue() {
-		$donation = ValidDonation::newIncompletePayPalDonation();
 		$fakeRepository = new FakeDonationRepository();
-		$fakeRepository->storeDonation( $donation );
+		$fakeRepository->storeDonation( ValidDonation::newIncompletePayPalDonation() );
 
-		$request = $this->newRequest( 1 );
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
 			$fakeRepository,
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
 			new NullLogger()
 		);
-		$this->assertTrue( $useCase->handleNotification( $request ) );
+
+		$this->assertTrue( $useCase->handleNotification( $this->newRequest( 1 ) ) );
 	}
 
 	public function testWhenDonationIsNotFound_handlerCreatesOneAndReturnsTrue() {
-		$donation = ValidDonation::newIncompletePayPalDonation();
 		$fakeRepository = new FakeDonationRepository();
-		$fakeRepository->storeDonation( $donation );
+		$fakeRepository->storeDonation( ValidDonation::newIncompletePayPalDonation() );
 
 		$request = $this->newRequest( 123456 );
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
@@ -78,13 +74,13 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$this->getMailer(),
 			new NullLogger()
 		);
+
 		$this->assertTrue( $useCase->handleNotification( $request ) );
 	}
 
 	public function testWhenPaymentTypeIsNonPayPal_handlerReturnsFalse() {
-		$donation = ValidDonation::newDirectDebitDonation();
 		$fakeRepository = new FakeDonationRepository();
-		$fakeRepository->storeDonation( $donation );
+		$fakeRepository->storeDonation( ValidDonation::newDirectDebitDonation() );
 
 		$request = $this->newRequest( 1 );
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
@@ -93,48 +89,47 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$this->getMailer(),
 			new NullLogger()
 		);
+
 		$this->assertFalse( $useCase->handleNotification( $request ) );
 	}
 
 	public function testWhenPaymentStatusIsPending_handlerReturnsFalse() {
-		$fakeRepository = new FakeDonationRepository();
-
 		$request = $this->newRequest( 1 );
 		$request->setPaymentStatus( 'Pending' );
+
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
-			$fakeRepository,
+			new FakeDonationRepository(),
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
 			new NullLogger()
 		);
+
 		$this->assertFalse( $useCase->handleNotification( $request ) );
 	}
 
 	public function testWhenPaymentStatusIsPending_handlerLogsStatus() {
-		$fakeRepository = new FakeDonationRepository();
 		$logger = new LoggerSpy();
 
 		$request = $this->newRequest( 1 );
 		$request->setPaymentStatus( 'Pending' );
+
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
-			$fakeRepository,
+			new FakeDonationRepository(),
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
 			$logger
 		);
+
 		$useCase->handleNotification( $request );
-		$logCalls = $logger->getLogCalls();
-		$this->assertEquals( 1, count( $logCalls ), 'Logger must only be called once' );
-		$this->assertEquals( 'Unhandled PayPal notification: Pending', $logCalls[0][1] );
+
+		$logger->assertCalledOnceWithMessage( 'Unhandled PayPal notification: Pending', $this );
 	}
 
 	public function testWhenTransactionTypeIsForSubscriptionChanges_handlerReturnsFalse() {
-		$fakeRepository = new FakeDonationRepository();
-
 		$request = $this->newRequest( 1 );
 		$request->setTransactionType( 'subscr_modify' );
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
-			$fakeRepository,
+			new FakeDonationRepository(),
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
 			new NullLogger()
@@ -143,32 +138,33 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 	}
 
 	public function testWhenTransactionTypeIsForSubscriptionChanges_handlerLogsStatus() {
-		$fakeRepository = new FakeDonationRepository();
 		$logger = new LoggerSpy();
 
-		$request = $this->newRequest( 1 );
-		$request->setTransactionType( 'subscr_modify' );
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
-			$fakeRepository,
+			new FakeDonationRepository(),
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
 			$logger
 		);
+
+		$request = $this->newRequest( 1 );
+		$request->setTransactionType( 'subscr_modify' );
+
 		$useCase->handleNotification( $request );
-		$logCalls = $logger->getLogCalls();
-		$this->assertEquals( 1, count( $logCalls ), 'Logger must only be called once' );
-		$this->assertEquals( 'Unhandled PayPal subscription notification: subscr_modify', $logCalls[0][1] );
+
+		$logger->assertCalledOnceWithMessage( 'Unhandled PayPal subscription notification: subscr_modify', $this );
 	}
 
 	public function testWhenAuthorizationSucceeds_confirmationMailIsSent() {
 		$donation = ValidDonation::newIncompletePayPalDonation();
 		$fakeRepository = new FakeDonationRepository();
 		$fakeRepository->storeDonation( $donation );
-		$mailer = $this->getMailer();
 
+		$mailer = $this->getMailer();
 		$mailer->expects( $this->once() )
 			->method( 'sendConfirmationMailFor' )
 			->with( $this->equalTo( $donation ) );
+
 		$request = $this->newRequest( 1 );
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
 			$fakeRepository,
@@ -176,18 +172,19 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$mailer,
 			new NullLogger()
 		);
+
 		$this->assertTrue( $useCase->handleNotification( $request ) );
 	}
 
 	public function testWhenSendingConfirmationMailFails_handlerReturnsTrue() {
-		$donation = ValidDonation::newIncompletePayPalDonation();
 		$fakeRepository = new FakeDonationRepository();
-		$fakeRepository->storeDonation( $donation );
-		$mailer = $this->getMailer();
+		$fakeRepository->storeDonation( ValidDonation::newIncompletePayPalDonation() );
 
+		$mailer = $this->getMailer();
 		$mailer->expects( $this->once() )
 			->method( 'sendConfirmationMailFor' )
 			->willThrowException( new \RuntimeException( 'Oh noes!' ) );
+
 		$request = $this->newRequest( 1 );
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
 			$fakeRepository,
@@ -195,10 +192,14 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$mailer,
 			new NullLogger()
 		);
+
 		$this->assertTrue( $useCase->handleNotification( $request ) );
 	}
 
-	private function getMailer() {
+	/**
+	 * @return DonationConfirmationMailer|\PHPUnit_Framework_MockObject_MockObject
+	 */
+	private function getMailer(): DonationConfirmationMailer {
 		return $this->getMockBuilder( DonationConfirmationMailer::class )->disableOriginalConstructor()->getMock();
 	}
 

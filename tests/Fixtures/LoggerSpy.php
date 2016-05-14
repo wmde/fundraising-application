@@ -12,6 +12,10 @@ use Psr\Log\AbstractLogger;
  */
 class LoggerSpy extends AbstractLogger {
 
+	const LEVEL_INDEX = 0;
+	const MESSAGE_INDEX = 1;
+	const CONTEXT_INDEX = 2;
+
 	private $logCalls = [];
 
 	public function log( $level, $message, array $context = [] ) {
@@ -28,6 +32,19 @@ class LoggerSpy extends AbstractLogger {
 				'Logger calls where made while non where expected: ' . var_export( $this->logCalls, true )
 			);
 		}
+	}
+
+	public function assertCalledOnceWithMessage( string $expectedMessage, \PHPUnit_Framework_TestCase $testCase ) {
+		$testCase->assertEquals(
+			[ $expectedMessage ],
+			array_map(
+				function( array $logCall ) {
+					return $logCall[self::MESSAGE_INDEX];
+				},
+				$this->logCalls
+			),
+			'Should be called once with expected message'
+		);
 	}
 
 }
