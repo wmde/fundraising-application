@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
 
 use Doctrine\ORM\EntityManager;
-use WMDE\Fundraising\Entities\MembershipApplication as DoctrineMembershipApplication;
+use WMDE\Fundraising\Entities\MembershipApplication as DoctrineApplication;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipApplicationRepository;
 use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\Domain\Repositories\GetMembershipApplicationException;
@@ -49,7 +49,7 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit_Framework_Tes
 		return new DoctrineMembershipApplicationRepository( $this->entityManager );
 	}
 
-	private function assertDoctrineEntityIsInDatabase( DoctrineMembershipApplication $expected ) {
+	private function assertDoctrineEntityIsInDatabase( DoctrineApplication $expected ) {
 		$actual = $this->getApplicationFromDatabase( $expected->getId() );
 
 		$this->assertNotNull( $actual->getCreationTime() );
@@ -62,10 +62,10 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit_Framework_Tes
 		$this->assertEquals( $expected, $actual );
 	}
 
-	private function getApplicationFromDatabase( int $id ): DoctrineMembershipApplication {
-		$applicationRepo = $this->entityManager->getRepository( DoctrineMembershipApplication::class );
+	private function getApplicationFromDatabase( int $id ): DoctrineApplication {
+		$applicationRepo = $this->entityManager->getRepository( DoctrineApplication::class );
 		$donation = $applicationRepo->find( $id );
-		$this->assertInstanceOf( DoctrineMembershipApplication::class, $donation );
+		$this->assertInstanceOf( DoctrineApplication::class, $donation );
 		return $donation;
 	}
 
@@ -98,7 +98,7 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit_Framework_Tes
 		);
 	}
 
-	private function storeDoctrineApplication( DoctrineMembershipApplication $application ) {
+	private function storeDoctrineApplication( DoctrineApplication $application ) {
 		$this->entityManager->persist( $application );
 		$this->entityManager->flush();
 	}
@@ -152,6 +152,73 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit_Framework_Tes
 
 		$this->expectException( StoreMembershipApplicationException::class );
 		$repository->storeApplication( $application );
+	}
+
+	public function testWhenPersistingApplicationWithModerationFlag_doctrineApplicationHasFlag() {
+		$application = ValidMembershipApplication::newDomainEntity();
+		$application->markForModeration();
+
+		$this->newRepository()->storeApplication( $application );
+		$doctrineApplication = $this->getApplicationFromDatabase( $application->getId() );
+
+		$this->assertTrue( $doctrineApplication->needsModeration() );
+		$this->assertFalse( $doctrineApplication->isCancelled() );
+	}
+
+	public function testWhenPersistingApplicationWithCancelledFlag_doctrineApplicationHasFlag() {
+		$application = ValidMembershipApplication::newDomainEntity();
+		$application->cancel();
+
+		$this->newRepository()->storeApplication( $application );
+		$doctrineApplication = $this->getApplicationFromDatabase( $application->getId() );
+
+		$this->assertFalse( $doctrineApplication->needsModeration() );
+		$this->assertTrue( $doctrineApplication->isCancelled() );
+	}
+
+	public function testWhenPersistingCancelledModerationApplication_doctrineApplicationHasFlags() {
+		$application = ValidMembershipApplication::newDomainEntity();
+		$application->markForModeration();
+		$application->cancel();
+
+		$this->newRepository()->storeApplication( $application );
+		$doctrineApplication = $this->getApplicationFromDatabase( $application->getId() );
+
+		$this->assertTrue( $doctrineApplication->needsModeration() );
+		$this->assertTrue( $doctrineApplication->isCancelled() );
+	}
+
+	public function testGivenDoctrineApplicationWithModerationAndCancelled_domainEntityHasFlags() {
+		$doctrineApplication = ValidMembershipApplication::newDoctrineEntity();
+		$doctrineApplication->setStatus( DoctrineApplication::STATUS_CANCELED + DoctrineApplication::STATUS_MODERATION );
+
+		$this->storeDoctrineApplication( $doctrineApplication );
+		$application = $this->newRepository()->getApplicationById( $doctrineApplication->getId() );
+
+		$this->assertTrue( $application->needsModeration() );
+		$this->assertTrue( $application->isCancelled() );
+	}
+
+	public function testGivenDoctrineApplicationWithModerationFlag_domainEntityHasFlag() {
+		$doctrineApplication = ValidMembershipApplication::newDoctrineEntity();
+		$doctrineApplication->setStatus( DoctrineApplication::STATUS_MODERATION );
+
+		$this->storeDoctrineApplication( $doctrineApplication );
+		$application = $this->newRepository()->getApplicationById( $doctrineApplication->getId() );
+
+		$this->assertTrue( $application->needsModeration() );
+		$this->assertFalse( $application->isCancelled() );
+	}
+
+	public function testGivenDoctrineApplicationWithCancelledFlag_domainEntityHasFlag() {
+		$doctrineApplication = ValidMembershipApplication::newDoctrineEntity();
+		$doctrineApplication->setStatus( DoctrineApplication::STATUS_CANCELED );
+
+		$this->storeDoctrineApplication( $doctrineApplication );
+		$application = $this->newRepository()->getApplicationById( $doctrineApplication->getId() );
+
+		$this->assertFalse( $application->needsModeration() );
+		$this->assertTrue( $application->isCancelled() );
 	}
 
 }

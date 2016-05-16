@@ -16,8 +16,8 @@ class MembershipApplication {
 	const NO_MODERATION_NEEDED = false;
 	const NEEDS_MODERATION = true;
 
-	const IS_CURRENT = 0;
-	const IS_CANCELLED = 1;
+	const IS_CURRENT = false;
+	const IS_CANCELLED = true;
 
 	/**
 	 * @var int|null
@@ -42,7 +42,7 @@ class MembershipApplication {
 	}
 
 	public function __construct( int $id = null, string $type, MembershipApplicant $applicant, MembershipPayment $payment,
-		bool $needsModeration, int $isCancelled ) {
+		bool $needsModeration, bool $isCancelled ) {
 
 		$this->id = $id;
 		$this->type = $type;

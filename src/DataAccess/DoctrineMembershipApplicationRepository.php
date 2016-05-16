@@ -86,6 +86,8 @@ class DoctrineMembershipApplicationRepository implements MembershipApplicationRe
 			$doctrineApplication->getDecodedData(),
 			$this->getDataMap( $application )
 		) );
+
+		$doctrineApplication->setStatus( $this->getDoctrineStatus( $application ) );
 	}
 
 	private function setApplicantFields( DoctrineApplication $application, MembershipApplicant $applicant ) {
@@ -179,6 +181,20 @@ class DoctrineMembershipApplicationRepository implements MembershipApplicationRe
 			? 'active' : 'sustaining';
 	}
 
+	private function getDoctrineStatus( MembershipApplication $application ): int {
+		$status = DoctrineApplication::STATUS_NEUTRAL;
+
+		if ( $application->needsModeration() ) {
+			$status += DoctrineApplication::STATUS_MODERATION;
+		}
+
+		if ( $application->isCancelled() ) {
+			$status += DoctrineApplication::STATUS_CANCELED;
+		}
+
+		return $status;
+	}
+
 	/**
 	 * @param int $id
 	 *
@@ -225,8 +241,8 @@ class DoctrineMembershipApplicationRepository implements MembershipApplicationRe
 				Euro::newFromFloat( $application->getPaymentAmount() ),
 				$this->newBankData( $application )
 			),
-			MembershipApplication::NO_MODERATION_NEEDED, // TODO
-			MembershipApplication::IS_CURRENT // TODO
+			$application->needsModeration(),
+			$application->isCancelled()
 		);
 	}
 
