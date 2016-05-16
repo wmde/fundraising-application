@@ -124,7 +124,8 @@ class DoctrineMembershipApplicationRepository implements MembershipApplicationRe
 		return array_merge(
 			[
 				'membership_type' => $this->getDoctrineMembershipType( $application ),
-				'membership_fee' => $application->getPayment()->getAmount()->getEuroFloat()
+				'membership_fee' => $application->getPayment()->getAmount()->getEuroFloat(),
+				'member_agree' => '1',
 			],
 			$this->getDataFieldsFromApplicant( $application->getApplicant() ),
 			$this->getDataFieldsFromBankData( $application->getPayment()->getBankData() )

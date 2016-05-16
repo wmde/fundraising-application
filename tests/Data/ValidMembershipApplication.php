@@ -162,6 +162,8 @@ class ValidMembershipApplication {
 			'bic' => self::PAYMENT_BIC,
 			'account_number' => self::PAYMENT_BANK_ACCOUNT,
 			'bank_code' => self::PAYMENT_BANK_CODE,
+
+			'member_agree' => '1',
 		] );
 
 		return $application;
