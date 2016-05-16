@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\FreezableValueObject;
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class TrackingInfo {
+class DonationTrackingInfo {
 	use FreezableValueObject;
 
 	private $tracking;
