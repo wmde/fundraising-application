@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\UseCases\ListComments;
 
-use WMDE\Fundraising\Frontend\Domain\Repositories\CommentFinder;
+use WMDE\Fundraising\Frontend\Domain\CommentFinder;
 
 /**
  * @licence GNU GPL v2+

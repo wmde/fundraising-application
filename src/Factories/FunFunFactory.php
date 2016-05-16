@@ -53,7 +53,7 @@ use WMDE\Fundraising\Frontend\Presentation\PayPalUrlGenerator;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CancelMembershipApplicationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormViolationPresenter;
 use WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer;
-use WMDE\Fundraising\Frontend\Domain\Repositories\CommentFinder;
+use WMDE\Fundraising\Frontend\Domain\CommentFinder;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineSubscriptionRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Infrastructure\Honorifics;

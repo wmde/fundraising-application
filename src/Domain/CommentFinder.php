@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Domain\Repositories;
+namespace WMDE\Fundraising\Frontend\Domain;
 
 use WMDE\Fundraising\Frontend\Domain\ReadModel\CommentWithAmount;
 
