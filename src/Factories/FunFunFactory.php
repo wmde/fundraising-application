@@ -38,6 +38,7 @@ use WMDE\Fundraising\Frontend\DataAccess\UniqueTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\BankDataConverter;
 use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepository;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\LoggingMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\LoggingPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipAppAuthUpdater;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationAuthorizer;
@@ -511,8 +512,7 @@ class FunFunFactory {
 	}
 
 	private function newAddSubscriptionMailer(): TemplateBasedMailer {
-		return new TemplateBasedMailer(
-			$this->getMessenger(),
+		return $this->newTemplateMailer(
 			new TwigTemplate(
 				$this->getTwig(),
 				'Mail_Subscription_Request.twig',
@@ -521,20 +521,29 @@ class FunFunFactory {
 					'greeting_generator' => $this->getGreetingGenerator()
 				]
 			),
-			$this->getTranslator()->trans( 'mail_subject_membership' )
+			'mail_subject_membership'
 		);
 	}
 
 	private function newConfirmSubscriptionMailer(): TemplateBasedMailer {
-		return new TemplateBasedMailer(
-				$this->getMessenger(),
-				new TwigTemplate(
-						$this->getTwig(),
-						'Mail_Subscription_Confirmation.twig',
-						[ 'greeting_generator' => $this->getGreetingGenerator() ]
-				),
-				$this->getTranslator()->trans( 'mail_subject_membership' )
+		return $this->newTemplateMailer(
+			new TwigTemplate(
+					$this->getTwig(),
+					'Mail_Subscription_Confirmation.twig',
+					[ 'greeting_generator' => $this->getGreetingGenerator() ]
+			),
+			'mail_subject_membership'
 		);
+	}
+
+	private function newTemplateMailer( TwigTemplate $template, string $messageKey ): TemplateBasedMailer {
+		$mailer = new TemplateBasedMailer(
+			$this->getMessenger(),
+			$template,
+			$this->getTranslator()->trans( $messageKey )
+		);
+
+		return new LoggingMailer( $mailer, $this->getLogger() );
 	}
 
 	public function getGreetingGenerator() {
@@ -574,10 +583,9 @@ class FunFunFactory {
 	}
 
 	private function newContactConfirmationMailer(): TemplateBasedMailer {
-		return new TemplateBasedMailer(
-			$this->getMessenger(),
+		return $this->newTemplateMailer(
 			new TwigTemplate( $this->getTwig(), 'GetInTouchConfirmation.twig' ),
-			$this->getTranslator()->trans( 'mail_subject_getintouch' )
+			'mail_subject_getintouch'
 		);
 	}
 
@@ -679,14 +687,13 @@ class FunFunFactory {
 	}
 
 	private function newCancelDonationMailer(): TemplateBasedMailer {
-		return new TemplateBasedMailer(
-			$this->getMessenger(),
+		return $this->newTemplateMailer(
 			new TwigTemplate(
 				$this->getTwig(),
 				'Mail_Donation_Cancellation_Confirmation.twig',
 				[ 'greeting_generator' => $this->getGreetingGenerator() ]
 			),
-			$this->getTranslator()->trans( 'mail_subject_confirm_cancellation' )
+			'mail_subject_confirm_cancellation'
 		);
 	}
 
@@ -731,8 +738,7 @@ class FunFunFactory {
 
 	private function newDonationConfirmationMailer(): DonationConfirmationMailer {
 		return new DonationConfirmationMailer(
-			new TemplateBasedMailer(
-				$this->getMessenger(),
+			$this->newTemplateMailer(
 				new TwigTemplate(
 					$this->getTwig(),
 					'Mail_Donation_Confirmation.twig', // TODO: ongoing unification of different templates
@@ -740,7 +746,7 @@ class FunFunFactory {
 						'basepath' => $this->config['web-basepath']
 					]
 				),
-				$this->getTranslator()->trans( 'mail_subject_confirm_donation' )
+				'mail_subject_confirm_donation'
 			)
 		);
 	}
@@ -848,14 +854,13 @@ class FunFunFactory {
 	}
 
 	private function newApplyForMembershipMailer(): TemplateBasedMailer {
-		return new TemplateBasedMailer(
-			$this->getMessenger(),
+		return $this->newTemplateMailer(
 			new TwigTemplate(
 				$this->getTwig(),
 				'Mail_Membership_Application_Confirmation.twig',
 				[ 'greeting_generator' => $this->getGreetingGenerator() ]
 			),
-			$this->getTranslator()->trans( 'mail_subject_confirm_membership_application' ) // TODO: create
+			'mail_subject_confirm_membership_application' // TODO: create
 		);
 	}
 
@@ -892,14 +897,13 @@ class FunFunFactory {
 	}
 
 	private function newCancelMembershipApplicationMailer(): TemplateBasedMailer {
-		return new TemplateBasedMailer(
-			$this->getMessenger(),
+		return $this->newTemplateMailer(
 			new TwigTemplate(
 				$this->getTwig(),
 				'Mail_Membership_Application_Cancellation_Confirmation.twig',
 				[ 'greeting_generator' => $this->getGreetingGenerator() ]
 			),
-			$this->getTranslator()->trans( 'mail_subject_confirm_membership_application_cancellation' )
+			'mail_subject_confirm_membership_application_cancellation'
 		);
 	}
 
