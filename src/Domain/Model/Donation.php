@@ -186,4 +186,7 @@ class Donation {
 		return $this->status === self::STATUS_MODERATION;
 	}
 
+	public function isBooked(): bool {
+		return $this->status === self::STATUS_EXTERNAL_BOOKED;
+	}
 }

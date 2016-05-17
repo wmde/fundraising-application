@@ -59,6 +59,8 @@ class ValidDonation {
 	const TRACKING_TOTAL_IMPRESSION_COUNT = 3;
 	const TRACKING_TRACKING = 'test/gelb'; // WTF name?
 
+	const PAYPAL_TRANSACTION_ID = '61E67681CH3238416';
+
 	public static function newBankTransferDonation(): Donation {
 		return ( new self() )->createDonation(
 			new BankTransferPayment( self::PAYMENT_BANK_TRANSFER_CODE ),
@@ -74,8 +76,11 @@ class ValidDonation {
 	}
 
 	public static function newBookedPayPalDonation(): Donation {
+		$payPalData = new PayPalData();
+		$payPalData->setPaymentId( self::PAYPAL_TRANSACTION_ID );
+
 		return ( new self() )->createDonation(
-			new PayPalPayment( new PayPalData() ),
+			new PayPalPayment( $payPalData ),
 			Donation::STATUS_EXTERNAL_BOOKED
 		);
 	}

@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\HandlePayPalPayme
 
 use Psr\Log\NullLogger;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
-use WMDE\Fundraising\Frontend\Domain\Model\Euro;
+use WMDE\Fundraising\Frontend\Domain\Model\PayPalPayment;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidPayPalNotificationRequest;
@@ -16,13 +16,13 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\LoggerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
 use WMDE\Fundraising\Frontend\UseCases\HandlePayPalPaymentNotification\HandlePayPalPaymentNotificationUseCase;
-use WMDE\Fundraising\Frontend\UseCases\HandlePayPalPaymentNotification\PayPalNotificationRequest;
 
 /**
  * @covers WMDE\Fundraising\Frontend\UseCases\HandlePayPalPaymentNotification\HandlePayPalPaymentNotificationUseCase
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
+ * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
 class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
@@ -196,6 +196,34 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 
 		$this->assertTrue( $useCase->handleNotification( $request ) );
 	}
+
+	public function testGivenNewTransactionIdForBookedDonation_transactionIdShowsUpInChildPayments() {
+		$donation = ValidDonation::newBookedPayPalDonation();
+		$transactionId = '16R12136PU8783961';
+
+		$fakeRepository = new FakeDonationRepository();
+		$fakeRepository->storeDonation( $donation );
+
+		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( $donation->getId() );
+		$request->setTransactionId( $transactionId );
+
+		$useCase = new HandlePayPalPaymentNotificationUseCase(
+			$fakeRepository,
+			new SucceedingDonationAuthorizer(),
+			$this->getMailer(),
+			new NullLogger()
+		);
+
+		$this->assertTrue( $useCase->handleNotification( $request ) );
+		/** @var PayPalPayment $payment */
+		$payment = $donation->getPaymentMethod();
+		$this->assertTrue( $payment->getPayPalData()->hasChildPayment( $transactionId ),
+			'Parent payment must have new transaction ID in its list' );
+	}
+
+	// TODO testGivenNewTransactionIdForBookedDonation_childTransactionIsCreated
+	// TODO testGivenExistingTransactionIdForBookedDonation_handlerReturnsFalse
+	// TODO testGivenTransactionIdInBookedChildDonation_noNewDonationIsCreated
 
 	/**
 	 * @return DonationConfirmationMailer|\PHPUnit_Framework_MockObject_MockObject

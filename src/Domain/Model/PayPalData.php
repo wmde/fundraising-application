@@ -28,6 +28,7 @@ class PayPalData {
 	private $paymentType = '';
 	private $paymentStatus = '';
 	private $paymentTimestamp = '';
+	private $childPayments = [];
 
 	public function __construct() {
 		$this->amount = Euro::newFromInt( 0 );
@@ -183,6 +184,14 @@ class PayPalData {
 		$this->assertIsWritable();
 		$this->paymentTimestamp = $paymentTimestamp;
 		return $this;
+	}
+
+	public function addChildPayment( string $paymentId, int $entityId ) {
+		$this->childPayments[$paymentId] = $entityId;
+		return $this;
+	}
+	public function hasChildPayment( string $paymentId ): bool {
+		return isset( $this->childPayments[$paymentId] );
 	}
 
 }
