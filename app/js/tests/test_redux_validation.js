@@ -66,27 +66,6 @@ test( 'ValidationDispatcher calls validationFunction and dispatches action only 
 	t.end();
 } );
 
-test( 'When validationFunction returns null, ValidationDispatcher does nothing', function ( t ) {
-	var initialData = {},
-		testData = { importantField: 'just some data', ignoredData: 'this won\'t be validated' },
-		validationFunction = sinon.stub().returns( null ),
-		actionCreationFunction = sinon.stub(),
-		dispatcher = reduxValidation.createValidationDispatcher(
-			validationFunction,
-			actionCreationFunction,
-			[ 'importantField' ],
-			initialData
-		),
-		testStore = { dispatch: sinon.spy() };
-
-	dispatcher.dispatchIfChanged( testData, testStore );
-
-	t.ok( validationFunction.calledOnce, 'validation function is called once' );
-	t.notOk( actionCreationFunction.called, 'action is not created' );
-	t.notOk( testStore.dispatch.called, 'no action is dispatched' );
-	t.end();
-} );
-
 test( 'createValidationDispatcher accepts validator object as validation function', function ( t ) {
 	var validatorSpy = {
 			// use internal delegation to check if 'this' is bound correctly

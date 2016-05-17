@@ -24,9 +24,9 @@ var jQuery = require( 'jquery' ),
 					return { status: 'OK' };
 			}
 
-			// Return error status if not all required fields have been filled
+			// Return incomplete status if not all required fields have been filled
 			if ( this.formValuesHaveEmptyRequiredFields( formValues, requiredFields ) ) {
-				return { status: 'ERR' };
+				return { status: 'INCOMPLETE' };
 			}
 
 			return this.sendFunction( this.validationUrl, formValues, null, 'json' );
