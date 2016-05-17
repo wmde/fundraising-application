@@ -132,18 +132,6 @@ class FunFunFactory {
 	 */
 	private $pimple;
 
-	/**
-	 * @param array $config
-	 * - db: DBAL connection parameters
-	 * - cms-wiki-url
-	 * - bank-data-file: path to file to be used by bank data validation library
-	 * - cms-wiki-api-url
-	 * - cms-wiki-user
-	 * - cms-wiki-password
-	 * - enable-twig-cache: boolean
-	 * - operator-email: used as sender when sending emails
-	 * - operator-displayname: used as sender when sending emails
-	 */
 	public function __construct( array $config ) {
 		$this->config = $config;
 		$this->pimple = $this->newPimple();
