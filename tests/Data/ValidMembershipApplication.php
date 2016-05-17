@@ -153,12 +153,17 @@ class ValidMembershipApplication {
 			'phone' => self::APPLICANT_PHONE_NUMBER,
 			'dob' => self::APPLICANT_DATE_OF_BIRTH,
 
+			'membership_type' => self::MEMBERSHIP_TYPE,
+			'membership_fee' => self::PAYMENT_AMOUNT_IN_EURO,
+
 			'account_holder' => 'Potato The Great',
 			'bank_name' => self::PAYMENT_BANK_NAME,
 			'iban' => self::PAYMENT_IBAN,
 			'bic' => self::PAYMENT_BIC,
 			'account_number' => self::PAYMENT_BANK_ACCOUNT,
 			'bank_code' => self::PAYMENT_BANK_CODE,
+
+			'member_agree' => '1',
 		] );
 
 		return $application;
