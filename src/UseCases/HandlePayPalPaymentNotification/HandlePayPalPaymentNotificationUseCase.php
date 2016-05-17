@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\UseCases\HandlePayPalPaymentNotification;
 
 use Psr\Log\LoggerInterface;
+use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Model\PayPalData;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
@@ -32,23 +33,13 @@ class HandlePayPalPaymentNotificationUseCase {
 	}
 
 	public function handleNotification( PayPalNotificationRequest $request ): bool {
-		// Avoid handling notifications that are not successes
 		if ( !$request->isSuccessfulPaymentNotification() ) {
-			$logContext = [
-				'payment_status' => $request->getPaymentStatus(),
-				'txn_id' => $request->getTransactionId()
-			];
-			$this->logger->info( 'Unhandled PayPal notification: ' . $request->getPaymentStatus(), $logContext );
+			$this->logUnhandledStatus( $request );
 			return false;
 		}
 
-		// Avoid handling successful notifications that are subscription-related but not payments
 		if ( $this->transactionIsSubscriptionRelatedButNotAPayment( $request ) ) {
-			$logContext = [
-				'transaction_type' => $request->getTransactionType(),
-				'txn_id' => $request->getTransactionId()
-			];
-			$this->logger->info( 'Unhandled PayPal subscription notification: ' . $request->getTransactionType(), $logContext );
+			$this->logUnhandledNonPayment( $request );
 			return false;
 		}
 
@@ -86,18 +77,37 @@ class HandlePayPalPaymentNotificationUseCase {
 			return false;
 		}
 
-		try {
-			$this->mailer->sendConfirmationMailFor( $donation );
-		} catch ( \RuntimeException $ex ) {
-			// TODO log mail error like we do in the add donation use case, see https://phabricator.wikimedia.org/T133549
-
-			// no need to re-throw or return false, this is not a fatal error, only a minor inconvenience
-		}
+		$this->sendConfirmationEmailFor( $donation );
 
 		return true;
 	}
 
-	private function transactionIsSubscriptionRelatedButNotAPayment( PayPalNotificationRequest $request ) {
+	private function logUnhandledStatus( PayPalNotificationRequest $request ) {
+		$logContext = [
+			'payment_status' => $request->getPaymentStatus(),
+			'txn_id' => $request->getTransactionId()
+		];
+		$this->logger->info( 'Unhandled PayPal notification: ' . $request->getPaymentStatus(), $logContext );
+	}
+
+	private function logUnhandledNonPayment( PayPalNotificationRequest $request ) {
+		$logContext = [
+			'transaction_type' => $request->getTransactionType(),
+			'txn_id' => $request->getTransactionId()
+		];
+		$this->logger->info( 'Unhandled PayPal subscription notification: ' . $request->getTransactionType(), $logContext );
+	}
+
+	private function sendConfirmationEmailFor( Donation $donation ) {
+		try {
+			$this->mailer->sendConfirmationMailFor( $donation );
+		} catch ( \RuntimeException $ex ) {
+			// TODO log mail error like we do in the add donation use case, see https://phabricator.wikimedia.org/T133549
+			// no need to re-throw or return false, this is not a fatal error, only a minor inconvenience
+		}
+	}
+
+	private function transactionIsSubscriptionRelatedButNotAPayment( PayPalNotificationRequest $request ): bool {
 		$transactionType = $request->getTransactionType();
 		return strpos( $transactionType, 'subscr_' ) === 0 && $transactionType !== 'subscr_payment';
 	}

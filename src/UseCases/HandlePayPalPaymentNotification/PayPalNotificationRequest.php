@@ -247,7 +247,7 @@ class PayPalNotificationRequest {
 		return $this;
 	}
 
-	public function isSuccessfulPaymentNotification() {
+	public function isSuccessfulPaymentNotification(): bool {
 		return $this->paymentStatus === 'Completed' || $this->paymentStatus === 'Processed';
 	}
 
