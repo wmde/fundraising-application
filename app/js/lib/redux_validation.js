@@ -38,9 +38,6 @@ var objectAssign = require( 'object-assign' ),
 
 			this.previousFieldValues = selectedValues;
 			validationResult = this.validationFunction( selectedValues );
-			if ( validationResult === null ) {
-				return;
-			}
 			return store.dispatch( this.actionCreationFunction( validationResult ) );
 		}
 	},
