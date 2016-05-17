@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\UseCases\ApplyForMembership;
 use InvalidArgumentException;
 use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplicationValidationResult as Result;
+use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
 
 /**
  * @license GNU GPL v2+
@@ -18,6 +19,8 @@ class MembershipApplicationValidator {
 	/* private */ const MIN_COMPANY_YEARLY_PAYMENT_IN_EURO = 100;
 	/* private */ const MONTHS_PER_YEAR = 12;
 
+	private $feeValidator;
+
 	/**
 	 * @var ApplyForMembershipRequest
 	 */
@@ -28,45 +31,24 @@ class MembershipApplicationValidator {
 	 */
 	private $violations;
 
+	public function __construct( MembershipFeeValidator $feeValidator ) {
+		$this->feeValidator = $feeValidator;
+	}
+
 	public function validate( ApplyForMembershipRequest $applicationRequest ): Result {
 		$this->request = $applicationRequest;
 		$this->violations = [];
 
-		$this->validateAmount();
+		$result = new Result(
+			$this->feeValidator->validate(
+				$applicationRequest->getPaymentAmountInEuros(),
+				$applicationRequest->getPaymentIntervalInMonths(),
+				$applicationRequest->isCompanyApplication() ?
+					MembershipFeeValidator::APPLICANT_TYPE_COMPANY : MembershipFeeValidator::APPLICANT_TYPE_PERSON
+			)->getViolations()
+		);
 
-		return new Result( $this->violations );
-	}
-
-	private function validateAmount() {
-		try {
-			$amount = Euro::newFromString( $this->request->getPaymentAmountInEuros() );
-		}
-		catch ( InvalidArgumentException $ex ) {
-			$this->addViolation( Result::SOURCE_PAYMENT_AMOUNT, Result::VIOLATION_NOT_MONEY );
-			return;
-		}
-
-		$this->validateAmountMeetsYearlyMinimum( $amount );
-	}
-
-	private function addViolation( string $source, string $type ) {
-		$this->violations[$source] = $type;
-	}
-
-	private function validateAmountMeetsYearlyMinimum( Euro $amount ) {
-		if ( $this->getYearlyPaymentAmount( $amount ) < $this->getYearlyPaymentRequirement() ) {
-			$this->addViolation( Result::SOURCE_PAYMENT_AMOUNT, Result::VIOLATION_TOO_LOW );
-		}
-	}
-
-	private function getYearlyPaymentAmount( Euro $amount ): float {
-		return $amount->getEuroFloat() * self::MONTHS_PER_YEAR / $this->request->getPaymentIntervalInMonths();
-	}
-
-	private function getYearlyPaymentRequirement(): float {
-		return $this->request->isCompanyApplication() ?
-			self::MIN_COMPANY_YEARLY_PAYMENT_IN_EURO :
-			self::MIN_PERSON_YEARLY_PAYMENT_IN_EURO;
+		return $result;
 	}
 
 }

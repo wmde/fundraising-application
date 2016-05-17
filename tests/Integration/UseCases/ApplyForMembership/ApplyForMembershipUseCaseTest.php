@@ -4,10 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\ApplyForMembership;
 
-use PDepend\Application;
 use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
-use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepository;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipAppAuthUpdater;
@@ -19,9 +17,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplicationValidationResult;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipRequest;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipUseCase;
-use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\MembershipApplicationValidator;
-use WMDE\Fundraising\Frontend\Validation\ValidationResult;
 
 /**
  * @covers WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipUseCase
@@ -69,7 +65,8 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	private function newSucceedingValidator(): MembershipApplicationValidator {
-		$validator = $this->getMock( MembershipApplicationValidator::class );
+		$validator = $this->getMockBuilder( MembershipApplicationValidator::class )
+			->disableOriginalConstructor()->getMock();
 
 		$validator->expects( $this->any() )
 			->method( 'validate' )
@@ -186,7 +183,8 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	private function newFailingValidator(): MembershipApplicationValidator {
-		$validator = $this->getMock( MembershipApplicationValidator::class );
+		$validator = $this->getMockBuilder( MembershipApplicationValidator::class )
+			->disableOriginalConstructor()->getMock();
 
 		$validator->expects( $this->any() )
 			->method( 'validate' )

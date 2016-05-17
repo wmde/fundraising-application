@@ -104,6 +104,7 @@ use WMDE\Fundraising\Frontend\Validation\AllowedValuesValidator;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\Fundraising\Frontend\Validation\IbanValidator;
 use WMDE\Fundraising\Frontend\Validation\MailValidator;
+use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\MembershipApplicationValidator;
 use WMDE\Fundraising\Frontend\Validation\PersonalInfoValidator;
 use WMDE\Fundraising\Frontend\Validation\PersonNameValidator;
@@ -870,7 +871,7 @@ class FunFunFactory {
 	}
 
 	private function newMembershipApplicationValidator(): MembershipApplicationValidator {
-		return new MembershipApplicationValidator();
+		return new MembershipApplicationValidator( new MembershipFeeValidator() );
 	}
 
 	private function newMembershipAuthUpdater(): MembershipAppAuthUpdater {

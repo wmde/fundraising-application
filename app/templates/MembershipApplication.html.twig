@@ -1,6 +1,6 @@
 <!-- <html> -->
 
-<div id="validation-errors" class="errorbox" style="display:none">
+<div id="validation-errors" class="errorbox fixed" style="display:none">
 	<strong>Bei der Prüfung Ihrer Eingaben wurden Probleme bemerkt</strong>.
 	Bitte überprüfen Sie Ihre Angaben in folgenden Feldern: <strong class="fields">keine</strong>
 </div>
@@ -23,7 +23,7 @@
 <script id="init-form"
 		data-initial-form-values="{% if initialFormValues %}{$ initialFormValues|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
 		data-violated-fields="{% if violatedFields %}{$ violatedFields|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
-		data-validate-amount-url="{$ basepath|e('html_attr') $}/validate-amount"
+		data-validate-fee-url="{$ basepath|e('html_attr') $}/validate-fee"
 		data-validate-address-url="{$ basepath|e('html_attr') $}/validate-address"
 		data-validate-iban-url="{$ basepath $}/check-iban"
 		data-generate-iban-url="{$ basepath $}/generate-iban"
@@ -35,7 +35,7 @@
 			store = WMDE.Store.createMembershipStore(
 				WMDE.createInitialStateFromViolatedFields( initData.data( 'violatedFields' ) )
 			),
-				actions = WMDE.Actions;
+			actions = WMDE.Actions;
 
 		WMDE.StoreUpdates.connectComponentsToStore(
 			[
@@ -49,7 +49,7 @@
 				WMDE.Components.createTextComponent( store, $( '#street' ), 'street' ),
 				WMDE.Components.createTextComponent( store, $( '#post-code' ), 'postcode' ),
 				WMDE.Components.createTextComponent( store, $( '#city' ), 'city' ),
-				WMDE.Components.createRadioComponent( store, $( '#country' ), 'countryCode' ),
+				WMDE.Components.createRadioComponent( store, $( '#country' ), 'country' ),
 				WMDE.Components.createTextComponent( store, $( '#email' ), 'email' ),
 				WMDE.Components.createTextComponent( store, $( '#date-of-birth' ), 'dateOfBirth' ),
 				WMDE.Components.createTextComponent( store, $( '#phone' ), 'phoneNumber' ),
@@ -73,20 +73,27 @@
 			function ( initialValues ) {
 				return [
 					WMDE.ReduxValidation.createValidationDispatcher(
+						WMDE.FormValidation.createFeeValidator( initData.data( 'validate-fee-url' ) ),
+						actions.newFinishAmountValidationAction,
+						[ 'amount', 'paymentIntervalInMonths', 'addressType' ],
+						initialValues
+					),
+					WMDE.ReduxValidation.createValidationDispatcher(
 						WMDE.FormValidation.createAddressValidator( initData.data( 'validate-address-url' ) ),
 						actions.newFinishAddressValidationAction,
-								[
-									'salutation',
-									'title',
-									'firstName',
-									'lastName',
-									'companyName',
-									'street',
-									'postcode',
-									'city',
-									'countryCode',
-									'email'
-								],
+						[
+							'addressType',
+							'salutation',
+							'title',
+							'firstName',
+							'lastName',
+							'companyName',
+							'street',
+							'postcode',
+							'city',
+							'country',
+							'email'
+						],
 						initialValues
 					),
 					WMDE.ReduxValidation.createValidationDispatcher(
@@ -99,10 +106,10 @@
 						initialValues
 					),
 					WMDE.ReduxValidation.createValidationDispatcher(
-							WMDE.FormValidation.createSepaConfirmationValidator(),
-							actions.newFinishSepaConfirmationValidationAction,
-							[ 'confirmSepa', 'confirmShortTerm' ],
-							initialValues
+						WMDE.FormValidation.createSepaConfirmationValidator(),
+						actions.newFinishSepaConfirmationValidationAction,
+						[ 'confirmSepa', 'confirmShortTerm' ],
+						initialValues
 					)
 				];
 			},
@@ -113,97 +120,107 @@
 
 		// Connect view handlers to changes in specific parts in the global state, designated by 'stateKey'
 		WMDE.StoreUpdates.connectViewHandlersToStore(
-				[
-					{
-						viewHandler: WMDE.View.createFormPageVisibilityHandler( {
-							personalData: $( "#personalDataPage" ),
-							bankConfirmation: $( '#bankConfirmationPage' )
-						} ),
-						stateKey: 'formPagination'
-					},
-					{
-						viewHandler: WMDE.View.createErrorBoxHandler( $( '#validation-errors' ), {
-							amount: 'Betrag',
-							salutation: 'Anrede',
-							title: 'Titel',
-							firstName: 'Vorname',
-							lastName: 'Nachname',
-							company: 'Firma',
-							street: 'Straße',
-							postcode: 'PLZ',
-							city: 'Ort',
-							country: 'DE',
-							email: 'E-Mail'
-						} ),
-						stateKey: 'validationMessages'
-					},
-					{
-						viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.slide-sepa' ), 'sepa' ),
-						stateKey: 'membershipFormContent.debitType'
-					},
-					{
-						viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.slide-non-sepa' ), 'non-sepa' ),
-						stateKey: 'membershipFormContent.debitType'
-					},
-					{
-						viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.person-name' ), 'person' ),
-						stateKey: 'membershipFormContent.addressType'
-					},
-					{
-						viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.company-name' ), 'firma' ),
-						stateKey: 'membershipFormContent.addressType'
-					},
-					{
-						viewHandler: WMDE.View.createFeeOptionSwitcher( $( '#amount-1' ), 1 ),
-						stateKey: 'membershipFormContent.paymentIntervalInMonths'
-					},
-					{
-						viewHandler: WMDE.View.createFeeOptionSwitcher( $( '#amount-2' ), 6 ),
-						stateKey: 'membershipFormContent.paymentIntervalInMonths'
-					},
-					{
-						viewHandler: WMDE.View.createPaymentIntervalAndAmountDisplayHandler(
-								$( '#confirm-interval' ),
-								$( '#confirm-fee'),
-								{
-									'0': 'einmalig',
-									'1': 'monatlich',
-									'3': 'quartalsweise',
-									'6': 'halbjährlich',
-									'12': 'jährlich'
-								},
-								WMDE.CurrencyFormatter.createCurrencyFormatter( 'de' )
-						),
-						stateKey: 'membershipFormContent'
-					},
-					{
-						viewHandler: WMDE.View.createDisplayAddressHandler( {
-							fullName: $( '#confirm-name' ),
-							street: $( '#confirm-street' ),
-							postcode: $( '#confirm-postcode' ),
-							city: $( '#confirm-city' ),
-							country: $( '#confirm-country' ),
-							email: $( '#confirm-mail' )
-						} ),
-						stateKey: 'membershipFormContent'
-					},
-					{
-						viewHandler: WMDE.View.createBankDataDisplayHandler(
-								$( '#confirm-iban' ),
-								$( '#confirm-bic' ),
-								$( '#confirm-bankname' )
-						),
-						stateKey: 'membershipFormContent'
-					}
-				],
-				store
+			[
+				{
+					viewHandler: WMDE.View.createFormPageVisibilityHandler( {
+						personalData: $( "#personalDataPage" ),
+						bankConfirmation: $( '#bankConfirmationPage' )
+					} ),
+					stateKey: 'formPagination'
+				},
+				{
+					viewHandler: WMDE.View.createErrorBoxHandler( $( '#validation-errors' ), {
+						amount: 'Betrag',
+						salutation: 'Anrede',
+						title: 'Titel',
+						firstName: 'Vorname',
+						lastName: 'Nachname',
+						companyName: 'Firma',
+						street: 'Straße',
+						postcode: 'PLZ',
+						city: 'Ort',
+						country: 'Land',
+						email: 'E-Mail'
+					} ),
+					stateKey: 'validationMessages'
+				},
+				{
+					viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.slide-sepa' ), 'sepa' ),
+					stateKey: 'membershipFormContent.debitType'
+				},
+				{
+					viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.slide-non-sepa' ), 'non-sepa' ),
+					stateKey: 'membershipFormContent.debitType'
+				},
+				{
+					viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.person-name' ), 'person' ),
+					stateKey: 'membershipFormContent.addressType'
+				},
+				{
+					viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.company-name' ), 'firma' ),
+					stateKey: 'membershipFormContent.addressType'
+				},
+				{
+					viewHandler: WMDE.View.createFeeOptionSwitcher( $( '#amount-1' ), 1 ),
+					stateKey: 'membershipFormContent.paymentIntervalInMonths'
+				},
+				{
+					viewHandler: WMDE.View.createFeeOptionSwitcher( $( '#amount-2' ), 6 ),
+					stateKey: 'membershipFormContent.paymentIntervalInMonths'
+				},
+				{
+					viewHandler: WMDE.View.createPaymentIntervalAndAmountDisplayHandler(
+						$( '#confirm-interval' ),
+						$( '#confirm-fee'),
+						{
+							'0': 'einmalig',
+							'1': 'monatlich',
+							'3': 'quartalsweise',
+							'6': 'halbjährlich',
+							'12': 'jährlich'
+						},
+						WMDE.CurrencyFormatter.createCurrencyFormatter( 'de' )
+					),
+					stateKey: 'membershipFormContent'
+				},
+				{
+					viewHandler: WMDE.View.createDisplayAddressHandler( {
+						fullName: $( '#confirm-name' ),
+						street: $( '#confirm-street' ),
+						postcode: $( '#confirm-postcode' ),
+						city: $( '#confirm-city' ),
+						country: $( '#confirm-country' ),
+						email: $( '#confirm-mail' )
+					} ),
+					stateKey: 'membershipFormContent'
+				},
+				{
+					viewHandler: WMDE.View.createBankDataDisplayHandler(
+						$( '#confirm-iban' ),
+						$( '#confirm-bic' ),
+						$( '#confirm-bankname' )
+					),
+					stateKey: 'membershipFormContent'
+				}
+			],
+			store
 		);
 
 		// connect DOM elements to actions
 
+		function formDataIsValid() {
+			var validity = store.getState().validity,
+				addressIsValid = validity.address,
+				bankDataIsValid = validity.bankData;
+			return validity.amount && addressIsValid && bankDataIsValid;
+		}
+
 		$( '#continueFormSubmit' ).click( function () {
-			// TODO check if page is valid
-			store.dispatch( actions.newNextPageAction() );
+			if ( formDataIsValid() ) {
+				store.dispatch( actions.newNextPageAction() );
+			} else {
+				console.log('form data is invalid');
+			}
 		} );
 
 		$( '.back-button' ).click( function () {

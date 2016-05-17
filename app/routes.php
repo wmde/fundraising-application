@@ -31,6 +31,7 @@ use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanRequest;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentListingRequest;
 use WMDE\Fundraising\Frontend\UseCases\ShowDonationConfirmation\ShowDonationConfirmationRequest;
+use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
 
 $app->get(
 	'validate-email',
@@ -119,6 +120,25 @@ $app->post(
 		};
 
 		return $routeHandler->handle( $ffFactory, $app, $request );
+	}
+);
+
+$app->post(
+	'validate-fee',
+	function( Request $httpRequest ) use ( $app, $ffFactory ) {
+		$validator = new MembershipFeeValidator();
+		$result = $validator->validate(
+			str_replace( ',', '.', $httpRequest->request->get( 'amount', '' ) ),
+			(int) $httpRequest->request->get( 'paymentIntervalInMonths', '0' ),
+			$httpRequest->request->get( 'addressType', '' )
+		);
+
+		if ( $result->isSuccessful() ) {
+			return $app->json( [ 'status' => 'OK' ] );
+		} else {
+			$errors = $result->getViolations();
+			return $app->json( [ 'status' => 'ERR', 'message' => implode( "\n", $errors ) ] );
+		}
 	}
 );
 

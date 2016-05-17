@@ -24,9 +24,9 @@ var jQuery = require( 'jquery' ),
 					return { status: 'OK' };
 			}
 
-			// Skip validation if not all required fields have been filled
+			// Return incomplete status if not all required fields have been filled
 			if ( this.formValuesHaveEmptyRequiredFields( formValues, requiredFields ) ) {
-				return null;
+				return { status: 'INCOMPLETE' };
 			}
 
 			return this.sendFunction( this.validationUrl, formValues, null, 'json' );
@@ -45,6 +45,19 @@ var jQuery = require( 'jquery' ),
 			var postData = {
 				amount: formValues.amount,
 				paymentType: formValues.paymentType
+			};
+			return this.sendFunction( this.validationUrl, postData, null, 'json' );
+		}
+	},
+
+	FeeValidator = {
+		validationUrl: '',
+		sendFunction: null,
+		validate: function ( formValues ) {
+			var postData = {
+				amount: formValues.amount,
+				paymentIntervalInMonths: formValues.paymentIntervalInMonths,
+				addressType: formValues.addressType
 			};
 			return this.sendFunction( this.validationUrl, postData, null, 'json' );
 		}
@@ -103,6 +116,13 @@ var jQuery = require( 'jquery' ),
 		} );
 	},
 
+	createFeeValidator = function ( validationUrl, sendFunction ) {
+		return objectAssign( Object.create( FeeValidator ), {
+			validationUrl: validationUrl,
+			sendFunction: sendFunction || jQuery.post
+		} );
+	},
+
 	createBankDataValidator = function ( validationUrlForSepa, validationUrlForNonSepa, sendFunction ) {
 		return objectAssign( Object.create( BankDataValidator ), {
 			validationUrlForSepa: validationUrlForSepa,
@@ -114,6 +134,7 @@ var jQuery = require( 'jquery' ),
 
 module.exports = {
 	createAmountValidator: createAmountValidator,
+	createFeeValidator: createFeeValidator,
 	createAddressValidator: createAddressValidator,
 	createBankDataValidator: createBankDataValidator,
 	createSepaConfirmationValidator: function () {
