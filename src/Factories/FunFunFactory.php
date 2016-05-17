@@ -44,6 +44,10 @@ use WMDE\Fundraising\Frontend\Infrastructure\MembershipAppAuthUpdater;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationAuthorizer;
 use WMDE\Fundraising\Frontend\Infrastructure\PaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifier;
+use WMDE\Fundraising\Frontend\Infrastructure\Repositories\LoggingCommentRepository;
+use WMDE\Fundraising\Frontend\Infrastructure\Repositories\LoggingDonationRepository;
+use WMDE\Fundraising\Frontend\Infrastructure\Repositories\LoggingMembershipApplicationRepository;
+use WMDE\Fundraising\Frontend\Infrastructure\Repositories\LoggingSubscriptionRepository;
 use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
 use WMDE\Fundraising\Frontend\Presentation\CreditCardConfig;
 use WMDE\Fundraising\Frontend\Presentation\CreditCardUrlGenerator;
@@ -150,20 +154,33 @@ class FunFunFactory {
 		} );
 
 		$pimple['subscription_repository'] = $pimple->share( function() {
-			return new DoctrineSubscriptionRepository( $this->getEntityManager() );
+			return new LoggingSubscriptionRepository(
+				new DoctrineSubscriptionRepository( $this->getEntityManager() ),
+				$this->getLogger()
+			);
 		} );
 
 		$pimple['donation_repository'] = $pimple->share( function() {
-			return new DoctrineDonationRepository( $this->getEntityManager() );
+			return new LoggingDonationRepository(
+				new DoctrineDonationRepository( $this->getEntityManager() ),
+				$this->getLogger()
+			);
 		} );
 
 		$pimple['membership_application_repository'] = $pimple->share( function() {
-			return new DoctrineMembershipApplicationRepository( $this->getEntityManager() );
+			return new LoggingMembershipApplicationRepository(
+				new DoctrineMembershipApplicationRepository( $this->getEntityManager() ),
+				$this->getLogger()
+			);
 		} );
 
 		$pimple['comment_repository'] = $pimple->share( function() {
-			return new DoctrineCommentRepository(
-				$this->getEntityManager()
+			$repository = new DoctrineCommentRepository( $this->getEntityManager() );
+
+			return new LoggingCommentRepository(
+				$repository,
+				$repository,
+				$this->getLogger()
 			);
 		} );
 
