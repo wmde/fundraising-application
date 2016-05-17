@@ -70,8 +70,8 @@ class HandlePayPalPaymentNotificationUseCase {
 		}
 
 		if ( $this->donationWasBookedWithDifferentTransactionId( $donation, $request ) ) {
-			$this->createChildDonation( $donation, $request );
-			return true;
+			$childDonation = $this->createChildDonation( $donation, $request );
+			return $childDonation !== null;
 		}
 
 		$donation->addPayPalData( $this->newPayPalDataFromRequest( $request ) );
@@ -158,6 +158,10 @@ class HandlePayPalPaymentNotificationUseCase {
 			return false;
 		}
 
+		if ( $payment->getPayPalData()->hasChildPayment( $request->getTransactionId() ) ) {
+			return false;
+		}
+
 		return true;
 	}
 
@@ -174,7 +178,7 @@ class HandlePayPalPaymentNotificationUseCase {
 		try {
 			$this->repository->storeDonation( $childDonation );
 		} catch ( StoreDonationException $ex ) {
-			return;
+			return null;
 		}
 		/** @var PayPalPayment $paymentMethod */
 		$paymentMethod = $payment->getPaymentMethod();
@@ -182,8 +186,8 @@ class HandlePayPalPaymentNotificationUseCase {
 		try {
 			$this->repository->storeDonation( $donation );
 		} catch ( StoreDonationException $ex ) {
-			return;
+			return null;
 		}
-
+		return $childDonation;
 	}
 }

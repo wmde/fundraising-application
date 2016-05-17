@@ -194,4 +194,8 @@ class PayPalData {
 		return isset( $this->childPayments[$paymentId] );
 	}
 
+	public function getChildPaymentEntityId( string $paymentId ): int {
+		return $this->childPayments[$paymentId];
+	}
+
 }
