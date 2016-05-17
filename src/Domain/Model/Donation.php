@@ -46,12 +46,13 @@ class Donation {
 
 	/**
 	 * TODO: move out of Donation
-	 * @var TrackingInfo
+	 *
+	 * @var DonationTrackingInfo
 	 */
 	private $trackingInfo;
 
 	public function __construct( int $id = null, string $status, Donor $donor = null, DonationPayment $payment,
-		bool $optsIntoNewsletter, TrackingInfo $trackingInfo ) {
+		bool $optsIntoNewsletter, DonationTrackingInfo $trackingInfo ) {
 
 		$this->id = $id;
 		$this->status = $status;
@@ -151,7 +152,7 @@ class Donation {
 		$this->status = self::STATUS_MODERATION;
 	}
 
-	public function getTrackingInfo(): TrackingInfo {
+	public function getTrackingInfo(): DonationTrackingInfo {
 		return $this->trackingInfo;
 	}
 

@@ -17,7 +17,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\PayPalData;
 use WMDE\Fundraising\Frontend\Domain\Model\PayPalPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
-use WMDE\Fundraising\Frontend\Domain\Model\TrackingInfo;
+use WMDE\Fundraising\Frontend\Domain\Model\DonationTrackingInfo;
 
 /**
  * @licence GNU GPL v2+
@@ -134,8 +134,8 @@ class ValidDonation {
 		return $address->freeze()->assertNoNullFields();
 	}
 
-	public static function newTrackingInfo(): TrackingInfo {
-		$trackingInfo = new TrackingInfo();
+	public static function newTrackingInfo(): DonationTrackingInfo {
+		$trackingInfo = new DonationTrackingInfo();
 
 		$trackingInfo->setColor( self::TRACKING_COLOR );
 		$trackingInfo->setLayout( self::TRACKING_LAYOUT );

@@ -14,7 +14,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\PaymentMethod;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentWithoutAssociatedData;
 use WMDE\Fundraising\Frontend\Domain\Model\PayPalData;
 use WMDE\Fundraising\Frontend\Domain\Model\PayPalPayment;
-use WMDE\Fundraising\Frontend\Domain\Model\TrackingInfo;
+use WMDE\Fundraising\Frontend\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
@@ -201,8 +201,8 @@ class AddDonationUseCase {
 		return $bankData->freeze()->assertNoNullFields();
 	}
 
-	private function newTrackingInfoFromRequest( AddDonationRequest $request ): TrackingInfo {
-		$trackingInfo = new TrackingInfo();
+	private function newTrackingInfoFromRequest( AddDonationRequest $request ): DonationTrackingInfo {
+		$trackingInfo = new DonationTrackingInfo();
 
 		$trackingInfo->setTracking( $request->getTracking() );
 		$trackingInfo->setSource( $this->referrerGeneralizer->generalize( $request->getSource() ) );

@@ -20,7 +20,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\PayPalData;
 use WMDE\Fundraising\Frontend\Domain\Model\PayPalPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
-use WMDE\Fundraising\Frontend\Domain\Model\TrackingInfo;
+use WMDE\Fundraising\Frontend\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
@@ -129,7 +129,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		);
 	}
 
-	private function getDataFieldsFromTrackingInfo( TrackingInfo $trackingInfo ): array {
+	private function getDataFieldsFromTrackingInfo( DonationTrackingInfo $trackingInfo ): array {
 		return [
 			'layout' => $trackingInfo->getLayout(),
 			'impCount' => $trackingInfo->getTotalImpressionCount(),
@@ -352,10 +352,10 @@ class DoctrineDonationRepository implements DonationRepository {
 		return null;
 	}
 
-	private function getTrackingInfoFromEntity( DoctrineDonation $dd ): TrackingInfo {
+	private function getTrackingInfoFromEntity( DoctrineDonation $dd ): DonationTrackingInfo {
 		$data = $dd->getDecodedData();
 
-		$trackingInfo = new TrackingInfo();
+		$trackingInfo = new DonationTrackingInfo();
 
 		$trackingInfo->setLayout( $data['layout'] );
 		$trackingInfo->setTotalImpressionCount( $data['impCount'] );
