@@ -1,6 +1,5 @@
 <html>
 <form>
-
 	<!-- steps-overview -->
 	<div class="steps-overview container clearfix">
 		<div class="ltcol">
@@ -42,15 +41,14 @@
 							<h2 class="f-left no-margin">SEPA-Lastschriftmandat</h2><br /><br />
 
 							<p class="title">
-								Sie zahlen <span id="confirm-interval">{$ membershipAppl.payment.intervalText $}</span> einen
-								Mitgliedsbeitrag in H&ouml;he von <span id="confirm-fee"><strong>{$ membershipAppl.payment.fee $} €</strong></span> an
+								Sie zahlen <span id="membership-confirm-interval">{$ membershipAppl.payment.intervalText $}</span> einen
+								Mitgliedsbeitrag in H&ouml;he von <span id="membership-confirm-fee"><strong>{$ membershipAppl.payment.fee $} €</strong></span> an
 							</p>
 
 							<div class="address f-left">
 								Wikimedia Deutschland e.V.<br />
 								Tempelhofer Ufer 23-24<br />
 								10963 Berlin<br /><br />
-
 							</div>
 
 							<p class="label no-margin">
@@ -64,13 +62,13 @@
 						<div class="container clearfix">
 							<div class="address f-left">
 								<p>
-									<span id="confirm-name">{$ membershipAppl.person.name $}</span>
+									<span id="membership-confirm-name">{$ membershipAppl.person.name $}</span>
 								</p>
 
 								<p class="no-margin">
-									<span id="confirm-street">{$ membershipAppl.address.street $}</span><br/>
-									<span id="confirm-postcode">{$ membershipAppl.address.postCode $}</span> <span id="confirm-city">{$ membershipAppl.address.city $}</span><br/>
-									<span id="confirm-mail">{$ membershipAppl.emailAddress $}</span>
+									<span id="membership-confirm-street">{$ membershipAppl.address.street $}</span><br/>
+									<span id="membership-confirm-postcode">{$ membershipAppl.address.postCode $}</span> <span id="membership-confirm-city">{$ membershipAppl.address.city $}</span><br/>
+									<span id="membership-confirm-mail">{$ membershipAppl.emailAddress $}</span>
 								</p>
 							</div>
 
@@ -80,9 +78,9 @@
 								</p>
 
 								<p class="no-margin">
-									<span class="label">IBAN</span> <span id="confirm-iban">{$ membershipAppl.bankData.iban $}</span><br/>
-									<span class="label">BIC</span> <span id="confirm-bic">{$ membershipAppl.bankData.bic $}</span><br/>
-									<span class="label">Bankname</span> <span id="confirm-bankname">{$ membershipAppl.bankData.bankName $}</span>
+									<span class="label">IBAN</span> <span id="membership-confirm-iban">{$ membershipAppl.bankData.iban $}</span><br/>
+									<span class="label">BIC</span> <span id="membership-confirm-bic">{$ membershipAppl.bankData.bic $}</span><br/>
+									<span class="label">Bankname</span> <span id="membership-confirm-bankname">{$ membershipAppl.bankData.bankName $}</span>
 								</p>
 							</div>
 						</div>
@@ -136,7 +134,6 @@
 		</div>
 	</section>
 
-
 	<!-- donation submit -->
 	<section id="donation-submit" class="container clearfix">
 		<div class="ltcol">
@@ -162,10 +159,10 @@
 
 <div class="wlightbox-contents">
 	<div id="wlightbox-wohin-geht-das-geld">
-		</html>{{Web:Spendenseite-HK2013/test/10h16_Lightbox_Wohin_geht_das_Geld}}<html>
+		</html>{{Web:Spendenseite-HK2013/rewrite/10h16_Lightbox_Wohin_geht_das_Geld}}<html>
 	</div>
 	<div id="wlightbox-steuerlich-absetzbar">
-		</html>{{Web:Spendenseite-HK2013/test/10h16_Lightbox_Steuer}}<html>
+		</html>{{Web:Spendenseite-HK2013/rewrite/10h16_Lightbox_Steuer}}<html>
 	</div>
 </div>
 </html>

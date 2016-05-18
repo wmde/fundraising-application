@@ -23,28 +23,30 @@
 
 							<ul class="advantage-list">
 								<li class="first icon-ok _icon-list-item">
-									Langfristig die Wikipedia unterst&uuml;tzen
+									Langfristig und nachhaltig Wikipedia unterst&uuml;tzen.
 								</li>
 
 								<li class="icon-ok _icon-list-item">
-									Der Mitgliedsbeitrag ist absetzbar
+									Steuerlich absetzbar. Eine j&auml;hrliche Zuwendungsbest&auml;tigung wird automatisch im Folgejahr zugesendet.
 								</li>
 
 								<li class="icon-ok _icon-list-item">
-									Regelm&auml;&szlig;ig Infos &uuml;ber die Arbeit des Vereins erhalten
+									Regelm&auml;&szlig;ige Informationen &uuml;ber die Arbeit des Vereins.
 								</li>
 
 								<li class="icon-ok _icon-list-item">
-									Kostenfrei an Veranstaltungen rund um Wikipedia teilnehmen
+									Kostenfrei an Veranstaltungen rund um Wikipedia und Freies Wissen teilnehmen.
 								</li>
 
-								<li class="icon-ok _icon-list-item">
-									Die Mitgliedschaft ist jederzeit k&uuml;ndbar
+								<li class="{% if showMembershipTypeOption == false %}last{% endif %} icon-ok _icon-list-item">
+									Jederzeit formlos per E-Mail k&uuml;ndbar.
 								</li>
 
+{% if showMembershipTypeOption == true %}
 								<li class="last icon-ok _icon-list-item">
 									Aktiv Freies Wissen verbreiten
 								</li>
+{% endif %}
 							</ul>
 						</div>
 					</div>
@@ -59,7 +61,8 @@
 						<strong>Mehr Informationen</strong>
 					</p>
 					<p>
-						Erfahren Sie <a href="http://wikimedia.de/wiki/Mitgliedschaft" target="_blank">mehr</a> &uuml;ber Wikimedia Deutschland e. V. und seine Aktivit&auml;ten.
+						Erfahren Sie <a href="http://wikimedia.de/wiki/Mitgliedschaft" target="_blank">mehr</a>
+						&uuml;ber Wikimedia Deutschland e. V. und seine Aktivit&auml;ten.
 					</p>
 				</div>
 			</div>
@@ -67,7 +70,7 @@
 	</section>
 
 	<!-- personal data -->
-	<section id="personal-data" class="container clearfix">
+	<section id="personal-data" class="container {% if formSlideOpen == true %}slide no-display{% endif %} clearfix">
 		<div class="ltcol">
 			&nbsp;
 		</div>
@@ -76,8 +79,9 @@
 			<div class="box partial">
 
 				<div class="box-section approval">
+{% if showMembershipTypeOption == true %}
 					<div class="icon-ok _icon-list-item clearfix">
-						Ich werde Mitglied des Wikimedia e. V.
+						Ich werde Mitglied des Wikimedia Deutschland e. V.
 					</div>
 
 					<div class="container">
@@ -93,6 +97,10 @@
 							</li>
 						</ul>
 					</div>
+{% else %}
+					<span class="icon-ok _icon-list-item">Ich werde Fördermitglied des Wikimedia Deutschland e. V.</span>
+					<input type="hidden" name="membership_type" value="sustaining" />
+{% endif %}
 				</div>
 
 				<div class="box-section">
@@ -223,7 +231,7 @@
 
 
 	<!-- membership payment -->
-	<section class="container clearfix" id="membership-payment">
+		<section class="container {% if formSlideOpen == true %}slide no-display{% endif %} clearfix" id="membership-payment">
 		<div class="ltcol">
 			&nbsp;
 		</div>
@@ -409,9 +417,15 @@
 
 					<div class="box-footer clearfix">
 						<div class="tab-1 tab container clearfix ">
+{% if formSlideOpen == true %}
+							<span class="label f-right">Weiter mit Ihren<br/>Mitgliederdetails</span>
+							<a id="become-member-button" class="button f-right slide-toggle tab-toggle" data-slide-rel="section.slide" data-tab-rel="#become-member-submit .tab-2" data-tab-group-rel="#become-member-submit" href="#">Jetzt Mitglied werden<span class="icon-arrow-down"></span></a>
+						</div>
+					
+						<div class="tab-2 tab container clearfix no-display">
+{% endif %}
 							<span class="label f-right">Weiter Zur<br/>Best&auml;tigung</span>
 							<button id="continueFormSubmit" type="button" class="f-right">Mitgliedschaft abschlie&szlig;en<span class="icon-ok"></span></button>
-							<!--span class="logo-ssl-white f-right no-margin"></span-->
 						</div>
 					</div>
 
@@ -433,11 +447,6 @@
 			</div>
 		</div>
 	</section>
-	<input type="hidden" name="purpose" value="membership-full" />
-	<input type="hidden" name="back_form" value="Mitgliedschaft" />
-	<input type="hidden" name="member_agree" value="1" />
-	<input type="hidden" name="account_holder" value="blank" />
 	<input type="hidden" name="bank_name" id="field-bank-name" value="{$ membershipAppl.bankData.bankName $}" />
-	<input type="hidden" name="wikilogin" />
 </form>
 </html>
