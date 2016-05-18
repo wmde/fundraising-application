@@ -9,6 +9,7 @@ use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
+use WMDE\Fundraising\Frontend\Tests\Data\ValidPayPalNotificationRequest;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeDonationRepository;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\LoggerSpy;
@@ -32,7 +33,8 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$this->getMailer(),
 			new NullLogger()
 		);
-		$this->assertFalse( $useCase->handleNotification( $this->newRequest( 1 ) ) );
+		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 1 );
+		$this->assertFalse( $useCase->handleNotification( $request ) );
 	}
 
 	public function testWhenAuthorizationFails_handlerReturnsFalse() {
@@ -46,7 +48,8 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			new NullLogger()
 		);
 
-		$this->assertFalse( $useCase->handleNotification( $this->newRequest( 1 ) ) );
+		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 1 );
+		$this->assertFalse( $useCase->handleNotification( $request ) );
 	}
 
 	public function testWhenAuthorizationSucceeds_handlerReturnsTrue() {
@@ -60,14 +63,15 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			new NullLogger()
 		);
 
-		$this->assertTrue( $useCase->handleNotification( $this->newRequest( 1 ) ) );
+		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 1 );
+		$this->assertTrue( $useCase->handleNotification( $request ) );
 	}
 
 	public function testWhenDonationIsNotFound_handlerCreatesOneAndReturnsTrue() {
 		$fakeRepository = new FakeDonationRepository();
 		$fakeRepository->storeDonation( ValidDonation::newIncompletePayPalDonation() );
 
-		$request = $this->newRequest( 123456 );
+		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 12345 );
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
 			$fakeRepository,
 			new SucceedingDonationAuthorizer(),
@@ -82,7 +86,7 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$fakeRepository = new FakeDonationRepository();
 		$fakeRepository->storeDonation( ValidDonation::newDirectDebitDonation() );
 
-		$request = $this->newRequest( 1 );
+		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 1 );
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
 			$fakeRepository,
 			new SucceedingDonationAuthorizer(),
@@ -94,8 +98,7 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 	}
 
 	public function testWhenPaymentStatusIsPending_handlerReturnsFalse() {
-		$request = $this->newRequest( 1 );
-		$request->setPaymentStatus( 'Pending' );
+		$request = ValidPayPalNotificationRequest::newPendingPayment();
 
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
 			new FakeDonationRepository(),
@@ -110,8 +113,7 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 	public function testWhenPaymentStatusIsPending_handlerLogsStatus() {
 		$logger = new LoggerSpy();
 
-		$request = $this->newRequest( 1 );
-		$request->setPaymentStatus( 'Pending' );
+		$request = $request = ValidPayPalNotificationRequest::newPendingPayment();
 
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
 			new FakeDonationRepository(),
@@ -126,8 +128,8 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 	}
 
 	public function testWhenTransactionTypeIsForSubscriptionChanges_handlerReturnsFalse() {
-		$request = $this->newRequest( 1 );
-		$request->setTransactionType( 'subscr_modify' );
+		$request = ValidPayPalNotificationRequest::newSubscriptionModification();
+
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
 			new FakeDonationRepository(),
 			new SucceedingDonationAuthorizer(),
@@ -147,8 +149,7 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$logger
 		);
 
-		$request = $this->newRequest( 1 );
-		$request->setTransactionType( 'subscr_modify' );
+		$request = ValidPayPalNotificationRequest::newSubscriptionModification();
 
 		$useCase->handleNotification( $request );
 
@@ -165,7 +166,7 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			->method( 'sendConfirmationMailFor' )
 			->with( $this->equalTo( $donation ) );
 
-		$request = $this->newRequest( 1 );
+		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 1 );
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
 			$fakeRepository,
 			new SucceedingDonationAuthorizer(),
@@ -185,7 +186,7 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			->method( 'sendConfirmationMailFor' )
 			->willThrowException( new \RuntimeException( 'Oh noes!' ) );
 
-		$request = $this->newRequest( 1 );
+		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 1 );
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
 			$fakeRepository,
 			new SucceedingDonationAuthorizer(),
@@ -201,33 +202,6 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 	 */
 	private function getMailer(): DonationConfirmationMailer {
 		return $this->getMockBuilder( DonationConfirmationMailer::class )->disableOriginalConstructor()->getMock();
-	}
-
-	private function newRequest( int $donationId ) {
-		return ( new PayPalNotificationRequest() )
-			->setTransactionType( 'express_checkout' )
-			->setTransactionId( '61E67681CH3238416' )
-			->setPayerId( 'LPLWNMTBWMFAY' )
-			->setSubscriberId( '8RHHUM3W3PRH7QY6B59' )
-			->setPayerEmail( 'payer.email@address.com' )
-			->setPayerStatus( 'verified' )
-			->setPayerFirstName( 'Generous' )
-			->setPayerLastName( 'Donor' )
-			->setPayerAddressName( 'Generous Donor' )
-			->setPayerAddressStreet( '123, Some Street' )
-			->setPayerAddressPostalCode( '123456' )
-			->setPayerAddressCity( 'Some City' )
-			->setPayerAddressCountryCode( 'DE' )
-			->setPayerAddressStatus( 'confirmed' )
-			->setDonationId( $donationId )
-			->setToken( 'my_secret_token' )
-			->setCurrencyCode( 'EUR' )
-			->setTransactionFee( Euro::newFromCents( 27 ) )
-			->setAmountGross( Euro::newFromCents( 500 ) )
-			->setSettleAmount( Euro::newFromCents( 123 ) )
-			->setPaymentTimestamp( '20:12:59 Jan 13, 2009 PST' )
-			->setPaymentStatus( 'Completed' )
-			->setPaymentType( 'instant' );
 	}
 
 }
