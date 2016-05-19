@@ -29,11 +29,11 @@ class PersonName {
 		$this->personType = $nameType;
 	}
 
-	public static function newPrivatePersonName() {
+	public static function newPrivatePersonName(): PersonName {
 		return new self( self::PERSON_PRIVATE );
 	}
 
-	public static function newCompanyName() {
+	public static function newCompanyName(): PersonName {
 		return new self( self::PERSON_COMPANY );
 	}
 
