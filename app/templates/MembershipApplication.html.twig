@@ -46,16 +46,16 @@
 				WMDE.Components.createRadioComponent( store, $( '.address-type-select' ), 'addressType' ),
 				WMDE.Components.createRadioComponent( store, $( '.salutation-select' ), 'salutation' ),
 				WMDE.Components.createRadioComponent( store, $( '#personal-title' ), 'title' ),
-				WMDE.Components.createTextComponent( store, $( '#first-name' ), 'firstName' ),
-				WMDE.Components.createTextComponent( store, $( '#last-name' ), 'lastName' ),
-				WMDE.Components.createTextComponent( store, $( '#company-name' ), 'companyName' ),
-				WMDE.Components.createTextComponent( store, $( '#street' ), 'street' ),
-				WMDE.Components.createTextComponent( store, $( '#post-code' ), 'postcode' ),
-				WMDE.Components.createTextComponent( store, $( '#city' ), 'city' ),
+				WMDE.Components.createValidatingTextComponent( store, $( '#first-name' ), 'firstName' ),
+				WMDE.Components.createValidatingTextComponent( store, $( '#last-name' ), 'lastName' ),
+				WMDE.Components.createValidatingTextComponent( store, $( '#company-name' ), 'companyName' ),
+				WMDE.Components.createValidatingTextComponent( store, $( '#street' ), 'street' ),
+				WMDE.Components.createValidatingTextComponent( store, $( '#post-code' ), 'postcode' ),
+				WMDE.Components.createValidatingTextComponent( store, $( '#city' ), 'city' ),
 				WMDE.Components.createRadioComponent( store, $( '#country' ), 'country' ),
 				WMDE.Components.createTextComponent( store, $( '#email' ), 'email' ),
-				WMDE.Components.createTextComponent( store, $( '#date-of-birth' ), 'dateOfBirth' ),
-				WMDE.Components.createTextComponent( store, $( '#phone' ), 'phoneNumber' ),
+				WMDE.Components.createValidatingTextComponent( store, $( '#date-of-birth' ), 'dateOfBirth' ),
+				WMDE.Components.createValidatingTextComponent( store, $( '#phone' ), 'phoneNumber' ),
 				WMDE.Components.createRadioComponent( store, $( '.payment-period-select' ), 'paymentIntervalInMonths' ),
 				WMDE.Components.createAmountComponent( store, $( '.amount-input' ), $( '.amount-select' ) ),
 				WMDE.Components.createBankDataComponent( store, {
@@ -204,6 +204,38 @@
 						$( '#membership-confirm-bankname' )
 					),
 					stateKey: 'membershipFormContent'
+				},
+				{
+					viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#first-name' ) ),
+					stateKey: 'membershipInputValidation.firstName'
+				},
+				{
+					viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#last-name' ) ),
+					stateKey: 'membershipInputValidation.lastName'
+				},
+				{
+					viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#street' ) ),
+					stateKey: 'membershipInputValidation.street'
+				},
+				{
+					viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#post-code' ) ),
+					stateKey: 'membershipInputValidation.postcode'
+				},
+				{
+					viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#city' ) ),
+					stateKey: 'membershipInputValidation.city'
+				},
+				{
+					viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#company-name' ) ),
+					stateKey: 'membershipInputValidation.companyName'
+				},
+				{
+					viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#date-of-birth' ) ),
+					stateKey: 'membershipInputValidation.dateOfBirth'
+				},
+				{
+					viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#phone' ) ),
+					stateKey: 'membershipInputValidation.phoneNumber'
 				}
 			],
 			store

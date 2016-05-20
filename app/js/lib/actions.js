@@ -57,6 +57,17 @@ module.exports = {
 		};
 	},
 
+	newValidateInputAction: function ( contentName, newValue, pattern ) {
+		return {
+			type: 'VALIDATE_INPUT',
+			payload: {
+				contentName: contentName,
+				value: newValue,
+				pattern: pattern
+			}
+		};
+	},
+
 	/**
 	 *
 	 * @param {Object|Promise} validationResult

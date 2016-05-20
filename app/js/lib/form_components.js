@@ -8,6 +8,16 @@ var objectAssign = require( 'object-assign' ),
 		};
 	},
 
+	createRegexValidator = function ( store, contentName ) {
+		return function ( evt ) {
+			store.dispatch( actions.newValidateInputAction(
+				contentName,
+				evt.target.value,
+				evt.target.getAttribute( 'data-pattern' )
+			) );
+		};
+	},
+
 	RadioComponent = {
 		element: null,
 		contentName: '',
@@ -30,6 +40,7 @@ var objectAssign = require( 'object-assign' ),
 		element: null,
 		contentName: '',
 		onChange: null,
+		validator: null,
 		render: function ( formContent ) {
 			this.element.val( formContent[ this.contentName ] );
 		}
@@ -97,6 +108,14 @@ module.exports = {
 			onChange: createDefaultChangeHandler( store, contentName )
 		} );
 		element.on( 'change', component.onChange );
+		return component;
+	},
+
+	createValidatingTextComponent: function ( store, element, contentName ) {
+		var component = objectAssign( this.createTextComponent( store, element, contentName ), {
+			validator: createRegexValidator( store, contentName )
+		} );
+		element.on( 'change', component.validator );
 		return component;
 	},
 
