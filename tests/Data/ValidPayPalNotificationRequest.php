@@ -45,6 +45,15 @@ class ValidPayPalNotificationRequest {
 			->setPaymentStatus( self::PAYMENT_STATUS_COMPLETED );
 	}
 
+	public static function newDuplicatePaymentForDonation( int $donationId,
+														   string $transactionid ): PayPalNotificationRequest {
+		return self::newBaseRequest()
+			->setDonationId( $donationId )
+			->setTransactionType( 'express_checkout' )
+			->setTransactionId( $transactionid )
+			->setPaymentStatus( self::PAYMENT_STATUS_COMPLETED );
+	}
+
 	public static function newPendingPayment(): PayPalNotificationRequest {
 		return self::newBaseRequest()
 			->setDonationId( self::DONATION_ID )

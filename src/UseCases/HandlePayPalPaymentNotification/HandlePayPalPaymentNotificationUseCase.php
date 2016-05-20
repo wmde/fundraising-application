@@ -6,7 +6,9 @@ namespace WMDE\Fundraising\Frontend\UseCases\HandlePayPalPaymentNotification;
 
 use Psr\Log\LoggerInterface;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\Domain\Model\DonationPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\PayPalData;
+use WMDE\Fundraising\Frontend\Domain\Model\PayPalPayment;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
 use WMDE\Fundraising\Frontend\Domain\Repositories\StoreDonationException;
@@ -59,12 +61,22 @@ class HandlePayPalPaymentNotificationUseCase {
 			return true;
 		}
 
+		if ( !( $donation->getPayment()->getPaymentMethod() instanceof PayPalPayment ) ) {
+			return false;
+		}
+
 		if ( !$this->authorizationService->canModifyDonation( $request->getDonationId() ) ) {
 			return false;
 		}
 
+		if ( $this->donationWasBookedWithDifferentTransactionId( $donation, $request ) ) {
+			$childDonation = $this->createChildDonation( $donation, $request );
+			return $childDonation !== null;
+		}
+
+		$donation->addPayPalData( $this->newPayPalDataFromRequest( $request ) );
+
 		try {
-			$donation->addPayPalData( $this->newPayPalDataFromRequest( $request ) );
 			$donation->confirmBooked();
 		} catch ( \RuntimeException $ex ) {
 			return false;
@@ -131,4 +143,51 @@ class HandlePayPalPaymentNotificationUseCase {
 			->setPaymentTimestamp( $request->getPaymentTimestamp() );
 	}
 
+	private function donationWasBookedWithDifferentTransactionId( Donation $donation,
+																  PayPalNotificationRequest $request ): bool {
+		/**
+		 * @var PayPalPayment $payment
+		 */
+		$payment = $donation->getPaymentMethod();
+
+		if ( !$donation->isBooked() ) {
+			return false;
+		}
+
+		if ( $request->getTransactionId() === $payment->getPayPalData()->getPaymentId() ) {
+			return false;
+		}
+
+		if ( $payment->getPayPalData()->hasChildPayment( $request->getTransactionId() ) ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private function createChildDonation( Donation $donation, PayPalNotificationRequest $request ) {
+		$childPaymentMethod = new PayPalPayment( $this->newPayPalDataFromRequest( $request ) );
+		$payment = $donation->getPayment();
+		$childDonation = new Donation(
+			null,
+			Donation::STATUS_EXTERNAL_BOOKED,
+			$donation->getDonor(),
+			new DonationPayment( $payment->getAmount(), $payment->getIntervalInMonths(), $childPaymentMethod ),
+			$donation->getOptsIntoNewsletter(), $donation->getTrackingInfo()
+		);
+		try {
+			$this->repository->storeDonation( $childDonation );
+		} catch ( StoreDonationException $ex ) {
+			return null;
+		}
+		/** @var PayPalPayment $paymentMethod */
+		$paymentMethod = $payment->getPaymentMethod();
+		$paymentMethod->getPayPalData()->addChildPayment( $request->getTransactionId(), $childDonation->getId() );
+		try {
+			$this->repository->storeDonation( $donation );
+		} catch ( StoreDonationException $ex ) {
+			return null;
+		}
+		return $childDonation;
+	}
 }

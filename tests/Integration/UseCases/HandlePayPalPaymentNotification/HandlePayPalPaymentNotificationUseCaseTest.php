@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\HandlePayPalPayme
 
 use Psr\Log\NullLogger;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
-use WMDE\Fundraising\Frontend\Domain\Model\Euro;
+use WMDE\Fundraising\Frontend\Domain\Model\PayPalPayment;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidPayPalNotificationRequest;
@@ -16,13 +16,13 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\LoggerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
 use WMDE\Fundraising\Frontend\UseCases\HandlePayPalPaymentNotification\HandlePayPalPaymentNotificationUseCase;
-use WMDE\Fundraising\Frontend\UseCases\HandlePayPalPaymentNotification\PayPalNotificationRequest;
 
 /**
  * @covers WMDE\Fundraising\Frontend\UseCases\HandlePayPalPaymentNotification\HandlePayPalPaymentNotificationUseCase
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
+ * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
 class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
@@ -195,6 +195,97 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		);
 
 		$this->assertTrue( $useCase->handleNotification( $request ) );
+	}
+
+	public function testGivenNewTransactionIdForBookedDonation_transactionIdShowsUpInChildPayments() {
+		$donation = ValidDonation::newBookedPayPalDonation();
+		$transactionId = '16R12136PU8783961';
+
+		$fakeRepository = new FakeDonationRepository();
+		$fakeRepository->storeDonation( $donation );
+
+		$request = ValidPayPalNotificationRequest::newDuplicatePaymentForDonation( $donation->getId(), $transactionId );
+
+		$useCase = new HandlePayPalPaymentNotificationUseCase(
+			$fakeRepository,
+			new SucceedingDonationAuthorizer(),
+			$this->getMailer(),
+			new NullLogger()
+		);
+
+		$this->assertTrue( $useCase->handleNotification( $request ) );
+		/** @var PayPalPayment $payment */
+		$payment = $donation->getPaymentMethod();
+		$this->assertTrue( $payment->getPayPalData()->hasChildPayment( $transactionId ),
+			'Parent payment must have new transaction ID in its list' );
+		// TODO Check donation log for new entry, see https://phabricator.wikimedia.org/T135522
+	}
+
+	public function testGivenNewTransactionIdForBookedDonation_childTransactionWithSameDataIsCreated() {
+		$donation = ValidDonation::newBookedPayPalDonation();
+		$transactionId = '16R12136PU8783961';
+
+		$fakeRepository = new FakeDonationRepository();
+		$fakeRepository->storeDonation( $donation );
+
+		$request = ValidPayPalNotificationRequest::newDuplicatePaymentForDonation( $donation->getId(), $transactionId );
+
+		$useCase = new HandlePayPalPaymentNotificationUseCase(
+			$fakeRepository,
+			new SucceedingDonationAuthorizer(),
+			$this->getMailer(),
+			new NullLogger()
+		);
+
+		$this->assertTrue( $useCase->handleNotification( $request ) );
+		/** @var PayPalPayment $payment */
+		$payment = $donation->getPaymentMethod();
+		$childDonation = $fakeRepository->getDonationById( $payment->getPayPalData()->getChildPaymentEntityId( $transactionId ) );
+		$this->assertNotNull( $childDonation );
+		/** @var PayPalPayment $childDonationPaymentMethod */
+		$childDonationPaymentMethod = $childDonation->getPaymentMethod();
+		$this->assertEquals( $transactionId, $childDonationPaymentMethod->getPayPalData()->getPaymentId() );
+		$this->assertEquals( $donation->getAmount(), $childDonation->getAmount() );
+		$this->assertEquals( $donation->getDonor(), $childDonation->getDonor() );
+		$this->assertEquals( $donation->getPaymentIntervalInMonths(), $childDonation->getPaymentIntervalInMonths() );
+		// TODO Check donation log for new entry, see https://phabricator.wikimedia.org/T135522
+	}
+
+	public function testGivenExistingTransactionIdForBookedDonation_handlerReturnsFalse() {
+		$fakeRepository = new FakeDonationRepository();
+		$fakeRepository->storeDonation( ValidDonation::newBookedPayPalDonation() );
+
+		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 1 );
+
+		$useCase = new HandlePayPalPaymentNotificationUseCase(
+			$fakeRepository,
+			new SucceedingDonationAuthorizer(),
+			$this->getMailer(),
+			new NullLogger()
+		);
+
+		$this->assertFalse( $useCase->handleNotification( $request ) );
+	}
+
+	public function testGivenTransactionIdInBookedChildDonation_noNewDonationIsCreated() {
+		$transactionId = '16R12136PU8783961';
+		$fakeChildEntityId = 2;
+		$donation = ValidDonation::newBookedPayPalDonation();
+		$donation->getPaymentMethod()->getPaypalData()->addChildPayment( $transactionId, $fakeChildEntityId );
+
+		$fakeRepository = new FakeDonationRepository();
+		$fakeRepository->storeDonation( $donation );
+
+		$request = ValidPayPalNotificationRequest::newDuplicatePaymentForDonation( $donation->getId(), $transactionId );
+
+		$useCase = new HandlePayPalPaymentNotificationUseCase(
+			$fakeRepository,
+			new SucceedingDonationAuthorizer(),
+			$this->getMailer(),
+			new NullLogger()
+		);
+
+		$this->assertFalse( $useCase->handleNotification( $request ) );
 	}
 
 	/**
