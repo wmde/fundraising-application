@@ -1,0 +1,264 @@
+<!-- <html> -->
+{% set showMembershipTypeOption = false %}
+{% set membershipAppeal = 'Werden Sie Fördermitglied für 2016 (TODO: personal appeal' %}
+{% set formSlideOpen = true %}
+
+<div id="validation-errors" class="errorbox fixed" style="display:none">
+	<strong>Bei der Prüfung Ihrer Eingaben wurden Probleme bemerkt</strong>.
+	Bitte überprüfen Sie Ihre Angaben in folgenden Feldern: <strong class="fields">keine</strong>
+</div>
+
+{# TODO Remove this debugging code! #}
+{% if violatedFields %}
+	<script>
+		console.log("Server-side validation errors:", {$ violatedFields|json_encode|raw $} );
+	</script>
+{% endif %}
+
+<div id="personalDataPage">
+	{% include 'Membership_Application_Form1.html.twig' %}
+</div>
+
+<div id="bankConfirmationPage">
+	{% include 'Membership_Application_Form2.html.twig' %}
+</div>
+
+<script id="init-form"
+		data-initial-form-values="{% if initialFormValues %}{$ initialFormValues|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
+		data-violated-fields="{% if violatedFields %}{$ violatedFields|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
+		data-validate-fee-url="{$ basepath|e('html_attr') $}/validate-fee"
+		data-validate-address-url="{$ basepath|e('html_attr') $}/validate-address"
+		data-validate-iban-url="{$ basepath $}/check-iban"
+		data-generate-iban-url="{$ basepath $}/generate-iban"
+>
+
+	// Initialize the form
+	$( function () {
+		var initData = $( '#init-form' ),
+				store = WMDE.Store.createMembershipStore(
+						WMDE.createInitialStateFromViolatedFields( initData.data( 'violatedFields' ) )
+				),
+				actions = WMDE.Actions;
+
+		WMDE.StoreUpdates.connectComponentsToStore(
+				[
+					WMDE.Components.createRadioComponent( store, $( '.membership-type-select' ), 'membershipType' ),
+					WMDE.Components.createRadioComponent( store, $( '.address-type-select' ), 'addressType' ),
+					WMDE.Components.createRadioComponent( store, $( '.salutation-select' ), 'salutation' ),
+					WMDE.Components.createRadioComponent( store, $( '#personal-title' ), 'title' ),
+					WMDE.Components.createTextComponent( store, $( '#first-name' ), 'firstName' ),
+					WMDE.Components.createTextComponent( store, $( '#last-name' ), 'lastName' ),
+					WMDE.Components.createTextComponent( store, $( '#company-name' ), 'companyName' ),
+					WMDE.Components.createTextComponent( store, $( '#street' ), 'street' ),
+					WMDE.Components.createTextComponent( store, $( '#post-code' ), 'postcode' ),
+					WMDE.Components.createTextComponent( store, $( '#city' ), 'city' ),
+					WMDE.Components.createRadioComponent( store, $( '#country' ), 'country' ),
+					WMDE.Components.createTextComponent( store, $( '#email' ), 'email' ),
+					WMDE.Components.createTextComponent( store, $( '#date-of-birth' ), 'dateOfBirth' ),
+					WMDE.Components.createTextComponent( store, $( '#phone' ), 'phoneNumber' ),
+					WMDE.Components.createRadioComponent( store, $( '.payment-period-select' ), 'paymentIntervalInMonths' ),
+					WMDE.Components.createAmountComponent( store, $( '.amount-input' ), $( '.amount-select' ) ),
+					WMDE.Components.createBankDataComponent( store, {
+						ibanElement: $( '#iban' ),
+						bicElement: $( '#bic' ),
+						accountNumberElement: $( '#account-number' ),
+						bankCodeElement: $( '#bank-code' ),
+						bankNameFieldElement: $( '#field-bank-name' ),
+						bankNameDisplayElement: $( '#bank-name' ),
+						debitTypeElement: $( '.debit-type-select' )
+					} )
+				],
+				store,
+				'membershipFormContent'
+		);
+
+		WMDE.StoreUpdates.connectValidatorsToStore(
+				function ( initialValues ) {
+					return [
+						WMDE.ReduxValidation.createValidationDispatcher(
+								WMDE.FormValidation.createFeeValidator( initData.data( 'validate-fee-url' ) ),
+								actions.newFinishAmountValidationAction,
+								[ 'amount', 'paymentIntervalInMonths', 'addressType' ],
+								initialValues
+						),
+						WMDE.ReduxValidation.createValidationDispatcher(
+								WMDE.FormValidation.createAddressValidator( initData.data( 'validate-address-url' ) ),
+								actions.newFinishAddressValidationAction,
+								[
+									'addressType',
+									'salutation',
+									'title',
+									'firstName',
+									'lastName',
+									'companyName',
+									'street',
+									'postcode',
+									'city',
+									'country',
+									'email'
+								],
+								initialValues
+						),
+						WMDE.ReduxValidation.createValidationDispatcher(
+								WMDE.FormValidation.createBankDataValidator(
+										initData.data( 'validate-iban-url' ),
+										initData.data( 'generate-iban-url' )
+								),
+								actions.newFinishBankDataValidationAction,
+								[ 'iban', 'accountNumber', 'bankCode', 'debitType' ],
+								initialValues
+						),
+						WMDE.ReduxValidation.createValidationDispatcher(
+								WMDE.FormValidation.createSepaConfirmationValidator(),
+								actions.newFinishSepaConfirmationValidationAction,
+								[ 'confirmSepa', 'confirmShortTerm' ],
+								initialValues
+						)
+					];
+				},
+				store,
+				initData.data( 'initial-form-values' ),
+				'membershipFormContent'
+		);
+
+		// Connect view handlers to changes in specific parts in the global state, designated by 'stateKey'
+		WMDE.StoreUpdates.connectViewHandlersToStore(
+				[
+					{
+						viewHandler: WMDE.View.createFormPageVisibilityHandler( {
+							personalData: $( "#personalDataPage" ),
+							bankConfirmation: $( '#bankConfirmationPage' )
+						} ),
+						stateKey: 'formPagination'
+					},
+					{
+						viewHandler: WMDE.View.createErrorBoxHandler( $( '#validation-errors' ), {
+							amount: 'Betrag',
+							salutation: 'Anrede',
+							title: 'Titel',
+							firstName: 'Vorname',
+							lastName: 'Nachname',
+							companyName: 'Firma',
+							street: 'Straße',
+							postcode: 'PLZ',
+							city: 'Ort',
+							country: 'Land',
+							email: 'E-Mail'
+						} ),
+						stateKey: 'validationMessages'
+					},
+					{
+						viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.slide-sepa' ), 'sepa' ),
+						stateKey: 'membershipFormContent.debitType'
+					},
+					{
+						viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.slide-non-sepa' ), 'non-sepa' ),
+						stateKey: 'membershipFormContent.debitType'
+					},
+					{
+						viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.person-name' ), 'person' ),
+						stateKey: 'membershipFormContent.addressType'
+					},
+					{
+						viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.company-name' ), 'firma' ),
+						stateKey: 'membershipFormContent.addressType'
+					},
+					{
+						viewHandler: WMDE.View.createFeeOptionSwitcher( $( '#amount-1' ), 1 ),
+						stateKey: 'membershipFormContent.paymentIntervalInMonths'
+					},
+					{
+						viewHandler: WMDE.View.createFeeOptionSwitcher( $( '#amount-2' ), 6 ),
+						stateKey: 'membershipFormContent.paymentIntervalInMonths'
+					},
+					{
+						viewHandler: WMDE.View.createPaymentIntervalAndAmountDisplayHandler(
+								$( '#membership-confirm-interval' ),
+								$( '#membership-confirm-fee'),
+								{
+									'0': 'einmalig',
+									'1': 'monatlich',
+									'3': 'quartalsweise',
+									'6': 'halbjährlich',
+									'12': 'jährlich'
+								},
+								WMDE.CurrencyFormatter.createCurrencyFormatter( 'de' )
+						),
+						stateKey: 'membershipFormContent'
+					},
+					{
+						viewHandler: WMDE.View.createDisplayAddressHandler( {
+							fullName: $( '#membership-confirm-name' ),
+							street: $( '#membership-confirm-street' ),
+							postcode: $( '#membership-confirm-postcode' ),
+							city: $( '#membership-confirm-city' ),
+							country: $( '#membership-confirm-country' ),
+							email: $( '#membership-confirm-mail' )
+						} ),
+						stateKey: 'membershipFormContent'
+					},
+					{
+						viewHandler: WMDE.View.createBankDataDisplayHandler(
+								$( '#membership-confirm-iban' ),
+								$( '#membership-confirm-bic' ),
+								$( '#membership-confirm-bankname' )
+						),
+						stateKey: 'membershipFormContent'
+					}
+				],
+				store
+		);
+
+		// connect DOM elements to actions
+
+		function formDataIsValid() {
+			var validity = store.getState().validity,
+					addressIsValid = validity.address,
+					bankDataIsValid = validity.bankData;
+			return validity.amount && addressIsValid && bankDataIsValid;
+		}
+
+		$( '#continueFormSubmit' ).click( function () {
+			if ( formDataIsValid() ) {
+				store.dispatch( actions.newNextPageAction() );
+				$( 'section#donation-amount, section#donation-sheet' ).hide();
+			}
+		} );
+
+		$( '.back-button' ).click( function () {
+			// TODO check if page is valid
+			store.dispatch( actions.newPreviousPageAction() );
+		} );
+
+		$( '#finishFormSubmit' ).click( function () {
+			// TODO check if page is valid
+			$( '#memForm' ).submit();
+		} );
+
+		// Initialize form pages
+		store.dispatch( actions.newAddPageAction( 'personalData' ) );
+		store.dispatch( actions.newAddPageAction( 'bankConfirmation' ) );
+
+		// Set initial form values
+		store.dispatch( actions.newInitializeContentAction( initData.data( 'initial-form-values' ) ) );
+
+	} );
+</script>
+
+<!-- TODO
+<div class="wlightbox-contents">
+    <div id="wlightbox-wohin-geht-das-geld">
+</html>{{Web:Spendenseite-HK2013/rewrite/10h16_Lightbox_Wohin_geht_das_Geld}}<html>
+</div>
+<div id="wlightbox-steuerlich-absetzbar">
+</html>{{Web:Spendenseite-HK2013/rewrite/10h16_Lightbox_Steuer}}<html>
+</div>
+<div id="wlightbox-bitcoin">
+</html>{{Web:Spendenseite-HK2013/rewrite/10h16_Lightbox_BitCoin}}<html>
+</div>
+<div id="wlightbox-spendenkommentare"></html>{{Web:Spendenseite-HK2013/rewrite/10h16_Lightbox_Spendenkommentare}}<html></div>
+
+</div>
+</html>{{Web:Spendenseite-HK2013/rewrite/Bank Detail Banner}}<html>
+</html>
+-->

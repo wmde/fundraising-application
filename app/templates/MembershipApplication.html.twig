@@ -1,4 +1,7 @@
 <!-- <html> -->
+{% set showMembershipTypeOption = true %}
+{% set membershipAppeal = 'Werden Sie Fördermitglied für 2016 (TODO: personal appeal' %}
+{% set formSlideOpen = false %}
 
 <div id="validation-errors" class="errorbox fixed" style="display:none">
 	<strong>Bei der Prüfung Ihrer Eingaben wurden Probleme bemerkt</strong>.
@@ -170,8 +173,8 @@
 				},
 				{
 					viewHandler: WMDE.View.createPaymentIntervalAndAmountDisplayHandler(
-						$( '#confirm-interval' ),
-						$( '#confirm-fee'),
+						$( '#membership-confirm-interval' ),
+						$( '#membership-confirm-fee'),
 						{
 							'0': 'einmalig',
 							'1': 'monatlich',
@@ -185,20 +188,20 @@
 				},
 				{
 					viewHandler: WMDE.View.createDisplayAddressHandler( {
-						fullName: $( '#confirm-name' ),
-						street: $( '#confirm-street' ),
-						postcode: $( '#confirm-postcode' ),
-						city: $( '#confirm-city' ),
-						country: $( '#confirm-country' ),
-						email: $( '#confirm-mail' )
+						fullName: $( '#membership-confirm-name' ),
+						street: $( '#membership-confirm-street' ),
+						postcode: $( '#membership-confirm-postcode' ),
+						city: $( '#membership-confirm-city' ),
+						country: $( '#membership-confirm-country' ),
+						email: $( '#membership-confirm-mail' )
 					} ),
 					stateKey: 'membershipFormContent'
 				},
 				{
 					viewHandler: WMDE.View.createBankDataDisplayHandler(
-						$( '#confirm-iban' ),
-						$( '#confirm-bic' ),
-						$( '#confirm-bankname' )
+						$( '#membership-confirm-iban' ),
+						$( '#membership-confirm-bic' ),
+						$( '#membership-confirm-bankname' )
 					),
 					stateKey: 'membershipFormContent'
 				}
@@ -218,8 +221,6 @@
 		$( '#continueFormSubmit' ).click( function () {
 			if ( formDataIsValid() ) {
 				store.dispatch( actions.newNextPageAction() );
-			} else {
-				console.log('form data is invalid');
 			}
 		} );
 
