@@ -9,7 +9,11 @@ var inputValidationLib = require( './input_validation' ),
 		postcode: null,
 		city: null,
 		dateOfBirth: null,
-		phoneNumber: null
+		phoneNumber: null,
+		iban: null,
+		bic: null,
+		account: null,
+		bankCode: null
 	};
 
 module.exports = function membershipInputValidation( state, action ) {
