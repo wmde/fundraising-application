@@ -53,7 +53,7 @@
 				WMDE.Components.createValidatingTextComponent( store, $( '#post-code' ), 'postcode' ),
 				WMDE.Components.createValidatingTextComponent( store, $( '#city' ), 'city' ),
 				WMDE.Components.createRadioComponent( store, $( '#country' ), 'country' ),
-				WMDE.Components.createTextComponent( store, $( '#email' ), 'email' ),
+				WMDE.Components.createValidatingTextComponent( store, $( '#email' ), 'email' ),
 				WMDE.Components.createValidatingTextComponent( store, $( '#date-of-birth' ), 'dateOfBirth' ),
 				WMDE.Components.createValidatingTextComponent( store, $( '#phone' ), 'phoneNumber' ),
 				WMDE.Components.createRadioComponent( store, $( '.payment-period-select' ), 'paymentIntervalInMonths' ),
@@ -224,6 +224,10 @@
 				{
 					viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#city' ) ),
 					stateKey: 'membershipInputValidation.city'
+				},
+				{
+					viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#email' ) ),
+					stateKey: 'membershipInputValidation.email'
 				},
 				{
 					viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#company-name' ) ),

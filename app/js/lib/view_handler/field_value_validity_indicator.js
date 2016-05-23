@@ -10,10 +10,10 @@ var objectAssign = require( 'object-assign' ),
 		element: {},
 
 		update: function ( validationState ) {
-			if ( validationState === true ) {
+			if ( validationState.isValid === true ) {
 				this.element.addClass( 'valid' ).removeClass( 'invalid' )
 					.next().addClass( 'icon-ok' ).removeClass( 'icon-bug icon-placeholder' );
-			} else if ( validationState === false ) {
+			} else if ( validationState.isValid === false ) {
 				this.element.addClass( 'invalid' ).removeClass( 'valid' )
 					.next().addClass( 'icon-bug' ).removeClass( 'icon-ok icon-placeholder' );
 			}

@@ -30,7 +30,7 @@ ElementStub.prototype = {
 test( 'When validation state has initial status, nothing is indicated', function ( t ) {
 	var indicatorElement = new ElementStub(),
 		inputElement = new ElementStub( indicatorElement ),
-		validationState = null,
+		validationState = { dataEntered: false, isValid: null },
 		handler = createValidityIndicator( inputElement );
 
 	handler.update( validationState );
@@ -45,7 +45,7 @@ test( 'When validation state has initial status, nothing is indicated', function
 test( 'When validation state has valid status, it is indicated', function ( t ) {
 	var indicatorElement = new ElementStub(),
 		inputElement = new ElementStub( indicatorElement ),
-		validationState = true,
+		validationState = { dataEntered: true, isValid: true },
 		handler = createValidityIndicator( inputElement );
 
 	handler.update( validationState );
@@ -60,7 +60,7 @@ test( 'When validation state has valid status, it is indicated', function ( t ) 
 test( 'When validation state has invalid status, it is indicated', function ( t ) {
 	var indicatorElement = new ElementStub(),
 		inputElement = new ElementStub( indicatorElement ),
-		validationState = false,
+		validationState = { dataEntered: true, isValid: false },
 		handler = createValidityIndicator( inputElement );
 
 	handler.update( validationState );
