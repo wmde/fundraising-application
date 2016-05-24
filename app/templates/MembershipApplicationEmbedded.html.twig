@@ -1,7 +1,11 @@
 <!-- <html> -->
 {% set showMembershipTypeOption = false %}
-{% set membershipAppeal = 'Werden Sie Fördermitglied für 2016 (TODO: personal appeal' %}
 {% set formSlideOpen = true %}
+{% if person.salutation and person.lastName %}
+	{% set membershipAppeal = "#{person.salutation} #{person.lastName}, werden Sie Fördermitglied!" %}
+{% else %}
+	{% set membershipAppeal = 'Werden Sie Fördermitglied!' %}
+{% endif %}
 
 <div id="validation-errors" class="errorbox fixed" style="display:none">
 	<strong>Bei der Prüfung Ihrer Eingaben wurden Probleme bemerkt</strong>.
