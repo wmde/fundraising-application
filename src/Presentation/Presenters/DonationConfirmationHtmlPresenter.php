@@ -59,6 +59,8 @@ class DonationConfirmationHtmlPresenter {
 			return [
 				'salutation' => $donation->getDonor()->getPersonName()->getSalutation(),
 				'fullName' => $donation->getDonor()->getPersonName()->getFullName(),
+				'firstName' => $donation->getDonor()->getPersonName()->getFirstName(),
+				'lastName' => $donation->getDonor()->getPersonName()->getLastName(),
 				'streetAddress' => $donation->getDonor()->getPhysicalAddress()->getStreetAddress(),
 				'postalCode' => $donation->getDonor()->getPhysicalAddress()->getPostalCode(),
 				'city' => $donation->getDonor()->getPhysicalAddress()->getCity(),
