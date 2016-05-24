@@ -5,6 +5,7 @@ var Redux = require( 'redux' ),
 	membershipFormContent = require( './reducers/membership_form_content' ),
 	validity = require( './reducers/validity' ),
 	validationMessages = require( './reducers/validation_messages' ),
+	membershipInputValidation = require( './reducers/membership_input_validation' ),
 	middlewares = [ reduxPromise ];
 
 /* jshint ignore:start */ // Ignore console.log calls
@@ -50,7 +51,8 @@ module.exports = {
 			formPagination: formPagination,
 			membershipFormContent: membershipFormContent,
 			validity: validity,
-			validationMessages: validationMessages
+			validationMessages: validationMessages,
+			membershipInputValidation: membershipInputValidation
 		} ), initialState, Redux.applyMiddleware.apply( this, middlewares ) );
 	}
 };

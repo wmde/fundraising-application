@@ -40,6 +40,15 @@ test( 'Components add change handling function to their elements', function ( t 
 	t.end();
 } );
 
+test( 'Validating components add change handling function to their elements', function ( t ) {
+	var element = createSpyingElement(),
+		store = {},
+		component = formComponents.createValidatingTextComponent( store, element, 'value' );
+	t.ok( element.on.calledTwice, 'event binding function is called twice' );
+	t.ok( element.on.calledWith( 'change', component.onChange ) );
+	t.end();
+} );
+
 test( 'Change handler of components dispatches change action to store', function ( t ) {
 	var element = createSpyingElement(),
 		store = {
