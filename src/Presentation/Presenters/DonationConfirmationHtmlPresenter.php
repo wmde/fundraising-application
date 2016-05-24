@@ -5,6 +5,7 @@ namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 use WMDE\Fundraising\Frontend\Domain\Model\BankTransferPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentMethod;
 use WMDE\Fundraising\Frontend\Presentation\SelectedConfirmationPage;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
@@ -48,7 +49,8 @@ class DonationConfirmationHtmlPresenter {
 				'updateToken' => $updateToken
 			],
 			'person' => $this->getPersonArguments( $donation ),
-			'bankData' => $this->getBankDataArguments( $donation->getPaymentMethod() )
+			'bankData' => $this->getBankDataArguments( $donation->getPaymentMethod() ),
+			'initialFormValues' => $this->getInitialMembershipFormValues( $donation )
 		];
 	}
 
@@ -85,6 +87,51 @@ class DonationConfirmationHtmlPresenter {
 		}
 
 		return [];
+	}
+
+	private function getInitialMembershipFormValues( Donation $donation ) {
+		return array_merge(
+			$this->getMembershipFormPersonValues( $donation->getDonor() ),
+			$this->getMembershipFormBankDataValues( $donation->getPaymentMethod() )
+		);
+	}
+
+	/**
+	 * @param Donor|null $donor
+	 * @return array
+	 */
+	private function getMembershipFormPersonValues( $donor ) {
+		if ( $donor === null ) {
+			return [];
+		}
+
+		return [
+			'addressType' => $donor->getPersonName()->getPersonType(),
+			'salutation' => $donor->getPersonName()->getSalutation(),
+			'title' => $donor->getPersonName()->getTitle(),
+			'firstName' => $donor->getPersonName()->getFirstName(),
+			'lastName' => $donor->getPersonName()->getLastName(),
+			'companyName' => $donor->getPersonName()->getCompanyName(),
+			'street' => $donor->getPhysicalAddress()->getStreetAddress(),
+			'postcode' => $donor->getPhysicalAddress()->getPostalCode(),
+			'city' => $donor->getPhysicalAddress()->getCity(),
+			'country' => $donor->getPhysicalAddress()->getCountryCode(),
+			'email' => $donor->getEmailAddress(),
+		];
+	}
+
+	private function getMembershipFormBankDataValues( PaymentMethod $paymentMethod ) {
+		if ( !$paymentMethod instanceof DirectDebitPayment ) {
+			return [];
+		}
+
+		return [
+			'iban' => $paymentMethod->getBankData()->getIban()->toString(),
+			'bic' => $paymentMethod->getBankData()->getBic(),
+			'accountNumber' => $paymentMethod->getBankData()->getAccount(),
+			'bankCode' => $paymentMethod->getBankData()->getBankCode(),
+			'bankname' => $paymentMethod->getBankData()->getBankName(),
+		];
 	}
 
 }
