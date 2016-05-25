@@ -232,7 +232,7 @@ class HandlePayPalPaymentNotificationUseCase {
 			Donation::STATUS_EXTERNAL_BOOKED,
 			$this->newDonorFromRequest( $request ),
 			$payment,
-			false,
+			Donation::DOES_NOT_OPT_INTO_NEWSLETTER,
 			new DonationTrackingInfo()
 		);
 		$donation->addPayPalData( $this->newPayPalDataFromRequest( $request ) );

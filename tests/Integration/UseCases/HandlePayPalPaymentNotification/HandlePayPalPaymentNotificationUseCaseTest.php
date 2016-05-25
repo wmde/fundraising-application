@@ -293,8 +293,10 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$storeDonationCalls = $repositorySpy->getStoreDonationCalls();
 		$this->assertCount( 1, $storeDonationCalls, 'Donation is stored' );
 
-		/** @var Donation $donation */
-		$donation = $storeDonationCalls[0];
+		$this->assertDonationIsCreatedWithNotficationRequestData( $storeDonationCalls[0] );
+	}
+
+	private function assertDonationIsCreatedWithNotficationRequestData( Donation $donation ) {
 		$this->assertEquals( 0, $donation->getPaymentIntervalInMonths(), 'Payment interval is always empty' );
 
 		$this->assertNull( $donation->getId(), 'ID is not taken from request' );
@@ -317,7 +319,6 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		/** @var PayPalData $paypalData */
 		$paypalData = $payment->getPaymentMethod()->getPaypalData();
 		$this->assertEquals( ValidPayPalNotificationRequest::PAYER_ADDRESS_NAME, $paypalData->getAddressName() );
-
 	}
 
 	public function testWhenNotificationIsForNonExistingDonation_confirmationMailIsSent() {
