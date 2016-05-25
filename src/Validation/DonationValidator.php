@@ -6,7 +6,6 @@ namespace WMDE\Fundraising\Frontend\Validation;
 
 use WMDE\Fundraising\Frontend\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
-use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 
 /**
  * @license GNU GPL v2+

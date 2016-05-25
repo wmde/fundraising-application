@@ -9,8 +9,8 @@ use Mediawiki\Api\MediawikiApi;
 use Mediawiki\Api\Request;
 use Mediawiki\Api\UsageException;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\ApiPostRequestHandler;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\ApiPostRequestHandler;
 
 /**
  * @covers WMDE\Fundraising\Frontend\Presentation\Presenters\DisplayPagePresenter

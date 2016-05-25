@@ -5,10 +5,10 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\UseCases\GetInTouch;
 
 use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
-use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
-use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
 use WMDE\Fundraising\Frontend\Infrastructure\Message;
+use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 
 /**

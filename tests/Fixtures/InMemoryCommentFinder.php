@@ -4,8 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
-use WMDE\Fundraising\Frontend\Domain\ReadModel\CommentWithAmount;
 use WMDE\Fundraising\Frontend\Domain\CommentFinder;
+use WMDE\Fundraising\Frontend\Domain\ReadModel\CommentWithAmount;
 
 /**
  * @licence GNU GPL v2+

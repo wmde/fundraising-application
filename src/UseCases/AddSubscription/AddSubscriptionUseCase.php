@@ -6,11 +6,11 @@ namespace WMDE\Fundraising\Frontend\UseCases\AddSubscription;
 
 use WMDE\Fundraising\Entities\Address;
 use WMDE\Fundraising\Entities\Subscription;
-use WMDE\Fundraising\Frontend\Domain\Repositories\SubscriptionRepositoryException;
-use WMDE\Fundraising\Frontend\Domain\Repositories\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
-use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
+use WMDE\Fundraising\Frontend\Domain\Repositories\SubscriptionRepository;
+use WMDE\Fundraising\Frontend\Domain\Repositories\SubscriptionRepositoryException;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
 use WMDE\Fundraising\Frontend\Validation\SubscriptionValidator;
 
 /**

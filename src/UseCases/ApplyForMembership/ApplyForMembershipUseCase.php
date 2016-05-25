@@ -9,7 +9,6 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepositor
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipAppAuthUpdater;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
-use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\MembershipApplicationValidator;
 
 /**
  * @license GNU GPL v2+
