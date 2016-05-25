@@ -7,9 +7,13 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\HandlePayPalPayme
 use Psr\Log\NullLogger;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Model\PayPalPayment;
+use WMDE\Fundraising\Frontend\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\Domain\Model\PayPalData;
+use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidPayPalNotificationRequest;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\DonationRepositorySpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeDonationRepository;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\LoggerSpy;
@@ -64,21 +68,6 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		);
 
 		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 1 );
-		$this->assertTrue( $useCase->handleNotification( $request ) );
-	}
-
-	public function testWhenDonationIsNotFound_handlerCreatesOneAndReturnsTrue() {
-		$fakeRepository = new FakeDonationRepository();
-		$fakeRepository->storeDonation( ValidDonation::newIncompletePayPalDonation() );
-
-		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 12345 );
-		$useCase = new HandlePayPalPaymentNotificationUseCase(
-			$fakeRepository,
-			new SucceedingDonationAuthorizer(),
-			$this->getMailer(),
-			new NullLogger()
-		);
-
 		$this->assertTrue( $useCase->handleNotification( $request ) );
 	}
 
@@ -286,6 +275,66 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		);
 
 		$this->assertFalse( $useCase->handleNotification( $request ) );
+	}
+
+	public function testWhenNotificationIsForNonExistingDonation_newDonationIsCreated() {
+		$repositorySpy = new DonationRepositorySpy();
+
+		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 12345 );
+		$useCase = new HandlePayPalPaymentNotificationUseCase(
+				$repositorySpy,
+			new SucceedingDonationAuthorizer(),
+			$this->getMailer(),
+			new NullLogger()
+		);
+
+		$useCase->handleNotification( $request );
+
+		$storeDonationCalls = $repositorySpy->getStoreDonationCalls();
+		$this->assertCount( 1, $storeDonationCalls, 'Donation is stored' );
+
+		$this->assertDonationIsCreatedWithNotficationRequestData( $storeDonationCalls[0] );
+	}
+
+	private function assertDonationIsCreatedWithNotficationRequestData( Donation $donation ) {
+		$this->assertEquals( 0, $donation->getPaymentIntervalInMonths(), 'Payment interval is always empty' );
+
+		$this->assertNull( $donation->getId(), 'ID is not taken from request' );
+
+		$donorName = $donation->getDonor()->getPersonName();
+		$this->assertEquals( PersonName::PERSON_PRIVATE, $donorName->getPersonType(), 'Person is always private' );
+		$this->assertEquals( ValidPayPalNotificationRequest::PAYER_ADDRESS_NAME, $donorName->getFullName() );
+
+		$this->assertEquals( ValidPayPalNotificationRequest::PAYER_EMAIL, $donation->getDonor()->getEmailAddress() );
+
+		$address = $donation->getDonor()->getPhysicalAddress();
+		$this->assertEquals( ValidPayPalNotificationRequest::PAYER_ADDRESS_STREET, $address->getStreetAddress() );
+		$this->assertEquals( ValidPayPalNotificationRequest::PAYER_ADDRESS_CITY, $address->getCity() );
+		$this->assertEquals( ValidPayPalNotificationRequest::PAYER_ADDRESS_POSTAL_CODE, $address->getPostalCode() );
+		$this->assertEquals( ValidPayPalNotificationRequest::PAYER_ADDRESS_COUNTRY_CODE, $address->getCountryCode() );
+
+		$payment = $donation->getPayment();
+		$this->assertEquals( ValidPayPalNotificationRequest::AMOUNT_GROSS_CENTS, $payment->getAmount()->getEuroCents() );
+
+		/** @var PayPalData $paypalData */
+		$paypalData = $payment->getPaymentMethod()->getPaypalData();
+		$this->assertEquals( ValidPayPalNotificationRequest::PAYER_ADDRESS_NAME, $paypalData->getAddressName() );
+	}
+
+	public function testWhenNotificationIsForNonExistingDonation_confirmationMailIsSent() {
+		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 12345 );
+		$mailer = $this->getMailer();
+		$mailer->expects( $this->once() )
+			->method( 'sendConfirmationMailFor' )
+			->with( $this->anything() );
+		$useCase = new HandlePayPalPaymentNotificationUseCase(
+			new FakeDonationRepository(),
+			new SucceedingDonationAuthorizer(),
+			$mailer,
+			new NullLogger()
+		);
+
+		$useCase->handleNotification( $request );
 	}
 
 	/**

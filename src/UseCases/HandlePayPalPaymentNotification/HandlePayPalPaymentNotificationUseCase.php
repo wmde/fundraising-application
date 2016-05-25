@@ -9,6 +9,10 @@ use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Model\DonationPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\PayPalData;
 use WMDE\Fundraising\Frontend\Domain\Model\PayPalPayment;
+use WMDE\Fundraising\Frontend\Domain\Model\DonationTrackingInfo;
+use WMDE\Fundraising\Frontend\Domain\Model\Donor;
+use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
+use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
 use WMDE\Fundraising\Frontend\Domain\Repositories\StoreDonationException;
@@ -18,6 +22,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
 /**
  * @license GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
+ * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
 class HandlePayPalPaymentNotificationUseCase {
 
@@ -35,13 +40,7 @@ class HandlePayPalPaymentNotificationUseCase {
 	}
 
 	public function handleNotification( PayPalNotificationRequest $request ): bool {
-		if ( !$request->isSuccessfulPaymentNotification() ) {
-			$this->logUnhandledStatus( $request );
-			return false;
-		}
-
-		if ( $this->transactionIsSubscriptionRelatedButNotAPayment( $request ) ) {
-			$this->logUnhandledNonPayment( $request );
+		if ( !$this->requestCanBeHandled( $request ) ) {
 			return false;
 		}
 
@@ -52,15 +51,40 @@ class HandlePayPalPaymentNotificationUseCase {
 		}
 
 		if ( $donation === null ) {
-			// TODO: create new donation
-
-			// TODO: the id in PayPalNotificationRequest needs to be made nullable?
-
-			// TODO: when id is null, dont try getting donation.
-			// If it is not null, not finding donation should probably be error
-			return true;
+			return $this->handleRequestWithoutDonation( $request );
 		}
 
+		return $this->handleRequestForDonation( $request, $donation );
+	}
+
+	private function requestCanBeHandled( PayPalNotificationRequest $request ): bool {
+		if ( !$request->isSuccessfulPaymentNotification() ) {
+			$this->logUnhandledStatus( $request );
+			return false;
+		}
+
+		if ( $this->transactionIsSubscriptionRelatedButNotAPayment( $request ) ) {
+			$this->logUnhandledNonPayment( $request );
+			return false;
+		}
+		return true;
+	}
+
+	private function handleRequestWithoutDonation( PayPalNotificationRequest $request ): bool {
+		$donation = $this->newDonationFromRequest( $request );
+
+		try {
+			$this->repository->storeDonation( $donation );
+		} catch ( StoreDonationException $ex ) {
+			return false;
+		}
+
+		$this->sendConfirmationEmailFor( $donation );
+
+		return true;
+	}
+
+	private function handleRequestForDonation( PayPalNotificationRequest $request, Donation $donation ): bool {
 		if ( !( $donation->getPayment()->getPaymentMethod() instanceof PayPalPayment ) ) {
 			return false;
 		}
@@ -114,7 +138,6 @@ class HandlePayPalPaymentNotificationUseCase {
 		try {
 			$this->mailer->sendConfirmationMailFor( $donation );
 		} catch ( \RuntimeException $ex ) {
-			// TODO log mail error like we do in the add donation use case, see https://phabricator.wikimedia.org/T133549
 			// no need to re-throw or return false, this is not a fatal error, only a minor inconvenience
 		}
 	}
@@ -189,5 +212,45 @@ class HandlePayPalPaymentNotificationUseCase {
 			return null;
 		}
 		return $childDonation;
+	}
+
+	private function newDonorFromRequest( PayPalNotificationRequest $request ): Donor {
+		return new Donor(
+			$this->newPersonNameFromRequest( $request ),
+			$this->newPhysicalAddressFromRequest( $request ),
+			$request->getPayerEmail()
+		);
+	}
+
+	private function newPersonNameFromRequest( PayPalNotificationRequest $request ): PersonName {
+		$name = PersonName::newPrivatePersonName();
+		$name->setFirstName( $request->getPayerFirstName() );
+		$name->setLastName( $request->getPayerLastName() );
+		$name->freeze();
+		return $name;
+	}
+
+	private function newPhysicalAddressFromRequest( PayPalNotificationRequest $request ): PhysicalAddress {
+		$address = new PhysicalAddress();
+		$address->setStreetAddress( $request->getPayerAddressStreet() );
+		$address->setCity( $request->getPayerAddressCity() );
+		$address->setPostalCode( $request->getPayerAddressPostalCode() );
+		$address->setCountryCode( $request->getPayerAddressCountryCode() );
+		$address->freeze();
+		return $address;
+	}
+
+	private function newDonationFromRequest( PayPalNotificationRequest $request ): Donation {
+		$payment = new DonationPayment( $request->getAmountGross(), 0, new PayPalPayment() );
+		$donation = new Donation(
+			null,
+			Donation::STATUS_EXTERNAL_BOOKED,
+			$this->newDonorFromRequest( $request ),
+			$payment,
+			Donation::DOES_NOT_OPT_INTO_NEWSLETTER,
+			new DonationTrackingInfo()
+		);
+		$donation->addPayPalData( $this->newPayPalDataFromRequest( $request ) );
+		return $donation;
 	}
 }

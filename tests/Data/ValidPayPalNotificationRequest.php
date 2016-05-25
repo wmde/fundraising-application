@@ -68,6 +68,13 @@ class ValidPayPalNotificationRequest {
 			->setPaymentStatus( self::PAYMENT_STATUS_COMPLETED );
 	}
 
+	public static function newRecurringPayment( int $donationId ): PayPalNotificationRequest {
+		return self::newBaseRequest()
+			->setDonationId( $donationId )
+			->setTransactionType( 'subscr_payment' )
+			->setPaymentStatus( self::PAYMENT_STATUS_COMPLETED );
+	}
+
 	private static function newBaseRequest(): PayPalNotificationRequest {
 		return ( new PayPalNotificationRequest() )
 			->setTransactionId( self::TRANSACTION_ID )
