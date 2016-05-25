@@ -98,11 +98,7 @@ class DonationConfirmationHtmlPresenter {
 		);
 	}
 
-	/**
-	 * @param Donor|null $donor
-	 * @return array
-	 */
-	private function getMembershipFormPersonValues( $donor ) {
+	private function getMembershipFormPersonValues( Donor $donor = null ): array {
 		if ( $donor === null ) {
 			return [];
 		}
@@ -122,7 +118,7 @@ class DonationConfirmationHtmlPresenter {
 		];
 	}
 
-	private function getMembershipFormBankDataValues( PaymentMethod $paymentMethod ) {
+	private function getMembershipFormBankDataValues( PaymentMethod $paymentMethod ): array {
 		if ( !$paymentMethod instanceof DirectDebitPayment ) {
 			return [];
 		}
