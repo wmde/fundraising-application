@@ -322,15 +322,13 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 	}
 
 	public function testWhenNotificationIsForNonExistingDonation_confirmationMailIsSent() {
-		$repositorySpy = new DonationRepositorySpy();
-
 		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 12345 );
 		$mailer = $this->getMailer();
 		$mailer->expects( $this->once() )
 			->method( 'sendConfirmationMailFor' )
 			->with( $this->anything() );
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
-			$repositorySpy,
+			new FakeDonationRepository(),
 			new SucceedingDonationAuthorizer(),
 			$mailer,
 			new NullLogger()
