@@ -7,9 +7,9 @@ namespace WMDE\Fundraising\Frontend\DataAccess;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use WMDE\Fundraising\Entities\Donation;
+use WMDE\Fundraising\Frontend\Domain\CommentFinder;
 use WMDE\Fundraising\Frontend\Domain\Model\Comment;
 use WMDE\Fundraising\Frontend\Domain\ReadModel\CommentWithAmount;
-use WMDE\Fundraising\Frontend\Domain\CommentFinder;
 use WMDE\Fundraising\Frontend\Domain\Repositories\CommentRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\StoreCommentException;
 

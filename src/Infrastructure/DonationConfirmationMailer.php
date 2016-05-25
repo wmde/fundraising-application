@@ -4,10 +4,10 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Infrastructure;
 
+use WMDE\Fundraising\Frontend\Domain\Model\BankTransferPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentMethod;
-use WMDE\Fundraising\Frontend\Domain\Model\BankTransferPayment;
 
 /**
  * @license GNU GPL v2+

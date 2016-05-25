@@ -4,8 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\UseCases\AddDonation;
 
-use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Domain\Model\Donor;
+use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 
 /**
  * @license GNU GPL v2+
