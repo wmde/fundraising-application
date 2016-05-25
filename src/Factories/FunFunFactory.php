@@ -871,7 +871,10 @@ class FunFunFactory {
 	}
 
 	private function newMembershipApplicationValidator(): MembershipApplicationValidator {
-		return new MembershipApplicationValidator( new MembershipFeeValidator() );
+		return new MembershipApplicationValidator(
+			new MembershipFeeValidator(),
+			$this->newBankDataValidator()
+		);
 	}
 
 	private function newMembershipAuthUpdater(): MembershipAppAuthUpdater {

@@ -5,7 +5,9 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\UseCases\ApplyForMembership;
 
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplicationValidationResult as Result;
-use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
+use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
+use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
+use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator as FeeValidator;
 
 /**
  * @license GNU GPL v2+
@@ -14,6 +16,7 @@ use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
 class MembershipApplicationValidator {
 
 	private $feeValidator;
+	private $bankDataValidator;
 
 	/**
 	 * @var ApplyForMembershipRequest
@@ -21,28 +24,75 @@ class MembershipApplicationValidator {
 	private $request;
 
 	/**
-	 * @var string[]
+	 * @var string[] ApplicationValidationResult::SOURCE_ => ApplicationValidationResult::VIOLATION_
 	 */
 	private $violations;
 
-	public function __construct( MembershipFeeValidator $feeValidator ) {
+	public function __construct( FeeValidator $feeValidator, BankDataValidator $bankDataValidator ) {
 		$this->feeValidator = $feeValidator;
+		$this->bankDataValidator = $bankDataValidator;
 	}
 
 	public function validate( ApplyForMembershipRequest $applicationRequest ): Result {
 		$this->request = $applicationRequest;
 		$this->violations = [];
 
-		$result = new Result(
-			$this->feeValidator->validate(
-				$applicationRequest->getPaymentAmountInEuros(),
-				$applicationRequest->getPaymentIntervalInMonths(),
-				$applicationRequest->isCompanyApplication() ?
-					MembershipFeeValidator::APPLICANT_TYPE_COMPANY : MembershipFeeValidator::APPLICANT_TYPE_PERSON
-			)->getViolations()
+		$this->validateFee();
+		$this->validateBankData();
+
+		return new Result( $this->violations );
+	}
+
+	private function validateFee() {
+		$result = $this->feeValidator->validate(
+			$this->request->getPaymentAmountInEuros(),
+			$this->request->getPaymentIntervalInMonths(),
+			$this->getApplicantType()
 		);
 
-		return $result;
+		$this->addViolations( $result->getViolations() );
+	}
+
+	private function getApplicantType() {
+		return $this->request->isCompanyApplication() ?
+			FeeValidator::APPLICANT_TYPE_COMPANY : FeeValidator::APPLICANT_TYPE_PERSON;
+	}
+
+	private function addViolations( array $violations ) {
+		$this->violations = array_merge( $this->violations, $violations );
+	}
+
+	private function validateBankData() {
+		$validationResult = $this->bankDataValidator->validate( $this->request->getPaymentBankData() );
+		$violations = [];
+
+		foreach ( $validationResult->getViolations() as $violation ) {
+			$violations[$this->getBankDataViolationSource( $violation )] = $this->getBankDataViolationType( $violation );
+		}
+
+		$this->addViolations( $violations );
+	}
+
+	private function getBankDataViolationSource( ConstraintViolation $violation ): string {
+		switch ( $violation->getSource() ) {
+			case 'iban':
+				return Result::SOURCE_IBAN;
+			case 'bic':
+				return Result::SOURCE_BIC;
+			case 'bankname':
+				return Result::SOURCE_BANK_NAME;
+			default:
+				throw new \LogicException();
+		}
+	}
+
+	private function getBankDataViolationType( ConstraintViolation $violation ): string {
+		switch ( $violation->getMessageIdentifier() ) {
+			case 'field_required':
+				return Result::VIOLATION_MISSING;
+			default:
+				throw new \LogicException();
+		}
 	}
 
 }
