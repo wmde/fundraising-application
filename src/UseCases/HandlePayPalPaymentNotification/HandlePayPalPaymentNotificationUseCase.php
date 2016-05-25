@@ -40,13 +40,7 @@ class HandlePayPalPaymentNotificationUseCase {
 	}
 
 	public function handleNotification( PayPalNotificationRequest $request ): bool {
-		if ( !$request->isSuccessfulPaymentNotification() ) {
-			$this->logUnhandledStatus( $request );
-			return false;
-		}
-
-		if ( $this->transactionIsSubscriptionRelatedButNotAPayment( $request ) ) {
-			$this->logUnhandledNonPayment( $request );
+		if ( !$this->requestCanBeHandled( $request ) ) {
 			return false;
 		}
 
@@ -57,19 +51,40 @@ class HandlePayPalPaymentNotificationUseCase {
 		}
 
 		if ( $donation === null ) {
-			$donation = $this->newDonationFromRequest( $request );
-
-			try {
-				$this->repository->storeDonation( $donation );
-			} catch ( StoreDonationException $ex ) {
-				return false;
-			}
-
-			$this->sendConfirmationEmailFor( $donation );
-
-			return true;
+			return $this->handleRequestWithoutDonation( $request );
 		}
 
+		return $this->handleRequestForDonation( $request, $donation );
+	}
+
+	private function requestCanBeHandled( PayPalNotificationRequest $request ): bool {
+		if ( !$request->isSuccessfulPaymentNotification() ) {
+			$this->logUnhandledStatus( $request );
+			return false;
+		}
+
+		if ( $this->transactionIsSubscriptionRelatedButNotAPayment( $request ) ) {
+			$this->logUnhandledNonPayment( $request );
+			return false;
+		}
+		return true;
+	}
+
+	private function handleRequestWithoutDonation( PayPalNotificationRequest $request ): bool {
+		$donation = $this->newDonationFromRequest( $request );
+
+		try {
+			$this->repository->storeDonation( $donation );
+		} catch ( StoreDonationException $ex ) {
+			return false;
+		}
+
+		$this->sendConfirmationEmailFor( $donation );
+
+		return true;
+	}
+
+	private function handleRequestForDonation( PayPalNotificationRequest $request, Donation $donation ): bool {
 		if ( !( $donation->getPayment()->getPaymentMethod() instanceof PayPalPayment ) ) {
 			return false;
 		}
