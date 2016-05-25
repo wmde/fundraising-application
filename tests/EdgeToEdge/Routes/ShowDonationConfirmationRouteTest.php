@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
+use WMDE\Fundraising\Frontend\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Presentation\DonationConfirmationPageSelector;
@@ -39,7 +40,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 				]
 			);
 
-			$this->assertDonationDataInResponse( $donation, $client->getResponse() );
+			$this->assertDonationDataInResponse( $donation, $client->getResponse()->getContent() );
 			$this->assertContains( 'Template Name: 10h16_Bestätigung.twig', $client->getResponse()->getContent() );
 		} );
 	}
@@ -62,9 +63,56 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 				]
 			);
 
-			$this->assertDonationDataInResponse( $donation, $client->getResponse() );
+			$this->assertDonationDataInResponse( $donation, $client->getResponse()->getContent() );
 			$this->assertContains( 'Template Name: 10h16_Bestätigung.twig', $client->getResponse()->getContent() );
 		} );
+	}
+
+	public function testGivenValidPostRequest_embeddedMembershipFormContainsDonationData() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setDonationConfirmationPageSelector(
+				new DonationConfirmationPageSelector( $this->newEmptyConfirmationPageConfig() )
+			);
+
+			$donation = $this->newStoredDonation( $factory );
+
+			$client->request(
+				'POST',
+				'show-donation-confirmation',
+				[
+					'donationId' => $donation->getId(),
+					'accessToken' => self::CORRECT_ACCESS_TOKEN,
+					'updateToken' => self::SOME_UPDATE_TOKEN
+				]
+			);
+
+			$this->assertEmbeddedMembershipFormIsPrefilled( $donation, $client->getResponse()->getContent() );
+			$this->assertContains( 'Template Name: 10h16_Bestätigung.twig', $client->getResponse()->getContent() );
+		} );
+	}
+
+	private function assertEmbeddedMembershipFormIsPrefilled( Donation $donation, string $responseContent ) {
+		$personName = $donation->getDonor()->getPersonName();
+		$physicalAddress = $donation->getDonor()->getPhysicalAddress();
+		/** @var DirectDebitPayment $paymentMethod */
+		$paymentMethod = $donation->getPaymentMethod();
+		$bankData = $paymentMethod->getBankData();
+		$this->assertContains( 'initialFormValues.addressType: ' . $personName->getPersonType(), $responseContent );
+		$this->assertContains( 'initialFormValues.salutation: ' . $personName->getSalutation(), $responseContent );
+		$this->assertContains( 'initialFormValues.title: ' . $personName->getTitle(), $responseContent );
+		$this->assertContains( 'initialFormValues.firstName: ' . $personName->getFirstName(), $responseContent );
+		$this->assertContains( 'initialFormValues.lastName: ' . $personName->getLastName(), $responseContent );
+		$this->assertContains( 'initialFormValues.companyName: ' . $personName->getCompanyName(), $responseContent );
+		$this->assertContains( 'initialFormValues.street: ' . $physicalAddress->getStreetAddress(), $responseContent );
+		$this->assertContains( 'initialFormValues.postcode: ' . $physicalAddress->getPostalCode(), $responseContent );
+		$this->assertContains( 'initialFormValues.city: ' . $physicalAddress->getCity(), $responseContent );
+		$this->assertContains( 'initialFormValues.country: ' . $physicalAddress->getCountryCode(), $responseContent );
+		$this->assertContains( 'initialFormValues.email: ' . $donation->getDonor()->getEmailAddress(), $responseContent );
+		$this->assertContains( 'initialFormValues.iban: ' . $bankData->getIban()->toString(), $responseContent );
+		$this->assertContains( 'initialFormValues.bic: ' . $bankData->getBic(), $responseContent );
+		$this->assertContains( 'initialFormValues.accountNumber: ' . $bankData->getAccount(), $responseContent );
+		$this->assertContains( 'initialFormValues.bankCode: ' . $bankData->getBankCode(), $responseContent );
+		$this->assertContains( 'initialFormValues.bankname: ' . $bankData->getBankName(), $responseContent );
 	}
 
 	public function testGivenAlternativeConfirmationPageConfig_alternativeContentIsDisplayed() {
@@ -102,11 +150,32 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		return $donation;
 	}
 
-	private function assertDonationDataInResponse( Donation $donation, Response $response ) {
-		$content = $response->getContent();
+	private function assertDonationDataInResponse( Donation $donation, string $responseContent ) {
+		$donor = $donation->getDonor();
+		$personName = $donor->getPersonName();
+		$physicalAddress = $donor->getPhysicalAddress();
+		/** @var DirectDebitPayment $paymentMethod */
+		$paymentMethod = $donation->getPaymentMethod();
 
-		$this->assertContains( $donation->getDonor()->getPersonName()->getFirstName(), $content );
-		$this->assertContains( $donation->getDonor()->getPersonName()->getLastName(), $content );
+		$this->assertContains( 'donation.id: ' . $donation->getId(), $responseContent );
+		$this->assertContains( 'donation.status: ' . $donation->getStatus(), $responseContent );
+		$this->assertContains( 'donation.amount: ' . $donation->getAmount()->getEuroString(), $responseContent );
+		$this->assertContains( 'donation.interval: ' . $donation->getPaymentIntervalInMonths(), $responseContent );
+		$this->assertContains( 'donation.paymentType: ' . $donation->getPaymentType(), $responseContent );
+		$this->assertContains( 'donation.optsIntoNewsletter: ' . $donation->getOptsIntoNewsletter(), $responseContent );
+
+		$this->assertContains( 'person.salutation: ' . $personName->getSalutation(), $responseContent );
+		$this->assertContains( 'person.fullName: ' . $personName->getFullName(), $responseContent );
+		$this->assertContains( 'person.firstName: ' . $personName->getFirstName(), $responseContent );
+		$this->assertContains( 'person.lastName: ' . $personName->getLastName(), $responseContent );
+		$this->assertContains( 'person.streetAddress: ' . $physicalAddress->getStreetAddress(), $responseContent );
+		$this->assertContains( 'person.postalCode: ' . $physicalAddress->getPostalCode(), $responseContent );
+		$this->assertContains( 'person.city: ' . $physicalAddress->getCity(), $responseContent );
+		$this->assertContains( 'person.email: ' . $donor->getEmailAddress(), $responseContent );
+
+		$this->assertContains( 'bankData.iban: ' . $paymentMethod->getBankData()->getIban()->toString(), $responseContent );
+		$this->assertContains( 'bankData.bic: ' . $paymentMethod->getBankData()->getBic(), $responseContent );
+		$this->assertContains( 'bankData.bankname: ' . $paymentMethod->getBankData()->getBankName(), $responseContent );
 	}
 
 	public function testGivenWrongToken_accessIsDenied() {
