@@ -16,16 +16,8 @@ class MembershipApplicant {
 	private $phone;
 	private $dateOfBirth;
 
-	/**
-	 * MembershipApplicant constructor.
-	 * @param PersonName $name
-	 * @param PhysicalAddress $address
-	 * @param EmailAddress $email
-	 * @param PhoneNumber $phone
-	 * @param \DateTime|null $dateOfBirth
-	 */
 	public function __construct( PersonName $name, PhysicalAddress $address, EmailAddress $email,
-		PhoneNumber $phone, $dateOfBirth ) {
+		PhoneNumber $phone, \DateTime $dateOfBirth = null ) {
 
 		$this->personName = $name;
 		$this->physicalAddress = $address;
