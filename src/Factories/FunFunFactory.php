@@ -867,7 +867,7 @@ class FunFunFactory {
 				'Mail_Membership_Application_Confirmation.twig',
 				[ 'greeting_generator' => $this->getGreetingGenerator() ]
 			),
-			'mail_subject_confirm_membership_application' // TODO: create
+			'mail_subject_confirm_membership_application'
 		);
 	}
 
