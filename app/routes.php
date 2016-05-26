@@ -392,7 +392,7 @@ $app->post(
 
 		$response = $ffFactory->newApplyForMembershipUseCase()->applyForMembership( $request );
 
-		return $response->isSuccessful() ? 'TODO success' : 'TODO fail'; // TODO
+		return $response->isSuccessful() ? $ffFactory->newMembershipApplicationConfirmationHtmlPresenter()->present( $response ) : 'TODO fail'; // TODO
 	}
 );
 

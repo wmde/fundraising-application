@@ -32,7 +32,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 				$this->newValidHttpParameters()
 			);
 
-			$this->assertSame( 'TODO success', $client->getResponse()->getContent() );
+			$this->assertContains( 'Ihr Beleg', $client->getResponse()->getContent() );
 		} );
 	}
 
