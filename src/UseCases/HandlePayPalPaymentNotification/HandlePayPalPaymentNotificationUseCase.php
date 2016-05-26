@@ -54,6 +54,10 @@ class HandlePayPalPaymentNotificationUseCase {
 			return $this->handleRequestWithoutDonation( $request );
 		}
 
+		if ( $donation->isBooked() && $request->isRecurringPaymentCompletion() ) {
+			return $this->handleRequestWithoutDonation( $request );
+		}
+
 		return $this->handleRequestForDonation( $request, $donation );
 	}
 
@@ -92,7 +96,6 @@ class HandlePayPalPaymentNotificationUseCase {
 		if ( !$this->authorizationService->systemCanModifyDonation( $request->getDonationId() ) ) {
 			return false;
 		}
-
 		if ( $this->donationWasBookedWithDifferentTransactionId( $donation, $request ) ) {
 			$childDonation = $this->createChildDonation( $donation, $request );
 			return $childDonation !== null;
@@ -143,8 +146,7 @@ class HandlePayPalPaymentNotificationUseCase {
 	}
 
 	private function transactionIsSubscriptionRelatedButNotAPayment( PayPalNotificationRequest $request ): bool {
-		$transactionType = $request->getTransactionType();
-		return strpos( $transactionType, 'subscr_' ) === 0 && $transactionType !== 'subscr_payment';
+		return $request->isForRecurringPayment() && !$request->isRecurringPaymentCompletion();
 	}
 
 	private function newPayPalDataFromRequest( PayPalNotificationRequest $request ): PayPalData {
