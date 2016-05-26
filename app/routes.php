@@ -366,7 +366,7 @@ $app->post(
 		$request->setApplicantCompanyName( $httpRequest->request->get( 'firma', '' ) );
 
 		$request->setApplicantStreetAddress( $httpRequest->request->get( 'strasse', '' ) );
-		$request->setApplicantPostalCode( $httpRequest->request->get( 'plz', '' ) );
+		$request->setApplicantPostalCode( $httpRequest->request->get( 'postcode', '' ) );
 		$request->setApplicantCity( $httpRequest->request->get( 'ort', '' ) );
 		$request->setApplicantCountryCode( $httpRequest->request->get( 'country', '' ) );
 
@@ -374,9 +374,9 @@ $app->post(
 		$request->setApplicantPhoneNumber( $httpRequest->request->get( 'phone', '' ) );
 		$request->setApplicantDateOfBirth( $httpRequest->request->get( 'dob', '' ) );
 
-
 		$request->setPaymentIntervalInMonths( (int)$httpRequest->request->get( 'membership_fee_interval', 0 ) );
-		$request->setPaymentAmountInEuros( $httpRequest->request->get( 'membership_fee', '' ) );
+		// TODO: German format expected here, amount should be converted based on user's locale
+		$request->setPaymentAmountInEuros( str_replace( ',', '.', $httpRequest->request->get( 'membership_fee', '' ) ) );
 
 		$bankData = new \WMDE\Fundraising\Frontend\Domain\Model\BankData();
 
@@ -392,7 +392,7 @@ $app->post(
 
 		$response = $ffFactory->newApplyForMembershipUseCase()->applyForMembership( $request );
 
-		return $response->isSuccessful() ? 'TODO success' : 'TODO fail'; // TODO
+		return $response->isSuccessful() ? $ffFactory->newMembershipApplicationConfirmationHtmlPresenter()->present( $response ) : 'TODO fail'; // TODO
 	}
 );
 

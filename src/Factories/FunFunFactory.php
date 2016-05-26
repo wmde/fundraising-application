@@ -91,6 +91,7 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormViolationPrese
 use WMDE\Fundraising\Frontend\Presentation\Presenters\GetInTouchHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\IbanPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\InternalErrorHtmlPresenter;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentUseCase;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationUseCase;
@@ -959,6 +960,12 @@ class FunFunFactory {
 	public function newCancelMembershipApplicationHtmlPresenter() {
 		return new CancelMembershipApplicationHtmlPresenter(
 			$this->getIncludeTemplate( 'Membership_Application_Cancellation_Confirmation.twig' )
+		);
+	}
+
+	public function newMembershipApplicationConfirmationHtmlPresenter() {
+		return new MembershipApplicationConfirmationHtmlPresenter(
+			$this->getIncludeTemplate( 'MembershipApplicationConfirmation.html.twig' )
 		);
 	}
 

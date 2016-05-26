@@ -32,7 +32,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 				$this->newValidHttpParameters()
 			);
 
-			$this->assertSame( 'TODO success', $client->getResponse()->getContent() );
+			$this->assertContains( 'Ihr Beleg', $client->getResponse()->getContent() );
 		} );
 	}
 
@@ -48,7 +48,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			'firma' => '',
 
 			'strasse' => ValidMembershipApplication::APPLICANT_STREET_ADDRESS,
-			'plz' => ValidMembershipApplication::APPLICANT_POSTAL_CODE,
+			'postcode' => ValidMembershipApplication::APPLICANT_POSTAL_CODE,
 			'ort' => ValidMembershipApplication::APPLICANT_CITY,
 			'country' => ValidMembershipApplication::APPLICANT_COUNTRY_CODE,
 
