@@ -151,7 +151,7 @@ class DoctrineMembershipApplicationRepository implements MembershipApplicationRe
 			[
 				'email' => (string)$applicant->getEmailAddress(),
 				'phone' => (string)$applicant->getPhoneNumber(),
-				'dob' => $applicant->getDateOfBirth()->format( 'Y-m-d' )
+				'dob' => $applicant->getDateOfBirth() === null ? null : $applicant->getDateOfBirth()->format( 'Y-m-d' )
 			]
 		);
 	}

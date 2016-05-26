@@ -17,7 +17,7 @@ class MembershipApplicant {
 	private $dateOfBirth;
 
 	public function __construct( PersonName $name, PhysicalAddress $address, EmailAddress $email,
-		PhoneNumber $phone, \DateTime $dateOfBirth ) {
+		PhoneNumber $phone, \DateTime $dateOfBirth = null ) {
 
 		$this->personName = $name;
 		$this->physicalAddress = $address;
@@ -39,7 +39,10 @@ class MembershipApplicant {
 		return $this->email;
 	}
 
-	public function getDateOfBirth(): \DateTime {
+	/**
+	 * @return \DateTime|null
+	 */
+	public function getDateOfBirth() {
 		return $this->dateOfBirth;
 	}
 

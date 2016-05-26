@@ -35,7 +35,7 @@ class MembershipApplicationBuilder {
 			$this->newAddress( $request ),
 			new EmailAddress( $request->getApplicantEmailAddress() ),
 			new PhoneNumber( $request->getApplicantPhoneNumber() ),
-			new \DateTime( $request->getApplicantDateOfBirth() )
+			( $request->getApplicantDateOfBirth() === '' ) ? null : new \DateTime( $request->getApplicantDateOfBirth() )
 		);
 	}
 
