@@ -12,13 +12,19 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class DonationRepositorySpy implements DonationRepository {
+class DonationRepositorySpy extends FakeDonationRepository {
 
 	private $storeDonationCalls = [];
 	private $getDonationCalls = [];
 
+	public function __construct( Donation ...$donations ) {
+		parent::__construct( ...$donations );
+		$this->storeDonationCalls = []; // remove calls coming from initialization
+	}
+
 	public function storeDonation( Donation $donation ) {
-		$this->storeDonationCalls[] = $donation;
+		$this->storeDonationCalls[] = clone( $donation ); // protect against the donation being changed later
+		parent::storeDonation( $donation );
 	}
 
 	/**
@@ -36,6 +42,7 @@ class DonationRepositorySpy implements DonationRepository {
 	 */
 	public function getDonationById( int $id ) {
 		$this->getDonationCalls[] = $id;
+		return parent::getDonationById( $id );
 	}
 
 	/**

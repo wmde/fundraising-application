@@ -166,6 +166,38 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$this->assertTrue( $useCase->handleNotification( $request ) );
 	}
 
+	public function testWhenAuthorizationSucceeds_donationIsStored() {
+		$donation = ValidDonation::newIncompletePayPalDonation();
+		$repositorySpy = new DonationRepositorySpy( $donation );
+
+		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 1 );
+		$useCase = new HandlePayPalPaymentNotificationUseCase(
+			$repositorySpy,
+			new SucceedingDonationAuthorizer(),
+			$this->getMailer(),
+			new NullLogger()
+		);
+
+		$this->assertTrue( $useCase->handleNotification( $request ) );
+		$this->assertCount( 1, $repositorySpy->getStoreDonationCalls() );
+	}
+
+	public function testWhenAuthorizationSucceeds_donationIsBooked() {
+		$donation = ValidDonation::newIncompletePayPalDonation();
+		$repositorySpy = new DonationRepositorySpy( $donation );
+
+		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 1 );
+		$useCase = new HandlePayPalPaymentNotificationUseCase(
+			$repositorySpy,
+			new SucceedingDonationAuthorizer(),
+			$this->getMailer(),
+			new NullLogger()
+		);
+
+		$this->assertTrue( $useCase->handleNotification( $request ) );
+		$this->assertTrue( $donation->isBooked() );
+	}
+
 	public function testWhenSendingConfirmationMailFails_handlerReturnsTrue() {
 		$fakeRepository = new FakeDonationRepository();
 		$fakeRepository->storeDonation( ValidDonation::newIncompletePayPalDonation() );
@@ -237,6 +269,7 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$this->assertEquals( $donation->getAmount(), $childDonation->getAmount() );
 		$this->assertEquals( $donation->getDonor(), $childDonation->getDonor() );
 		$this->assertEquals( $donation->getPaymentIntervalInMonths(), $childDonation->getPaymentIntervalInMonths() );
+		$this->assertTrue( $childDonation->isBooked() );
 		// TODO Check donation log for new entry, see https://phabricator.wikimedia.org/T135522
 	}
 
@@ -292,14 +325,13 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 
 		$storeDonationCalls = $repositorySpy->getStoreDonationCalls();
 		$this->assertCount( 1, $storeDonationCalls, 'Donation is stored' );
-
+		$this->assertNull( $storeDonationCalls[0]->getId(), 'ID is not taken from request' );
 		$this->assertDonationIsCreatedWithNotficationRequestData( $storeDonationCalls[0] );
 	}
 
 	private function assertDonationIsCreatedWithNotficationRequestData( Donation $donation ) {
 		$this->assertEquals( 0, $donation->getPaymentIntervalInMonths(), 'Payment interval is always empty' );
-
-		$this->assertNull( $donation->getId(), 'ID is not taken from request' );
+		$this->assertTrue( $donation->isBooked() );
 
 		$donorName = $donation->getDonor()->getPersonName();
 		$this->assertEquals( PersonName::PERSON_PRIVATE, $donorName->getPersonType(), 'Person is always private' );
