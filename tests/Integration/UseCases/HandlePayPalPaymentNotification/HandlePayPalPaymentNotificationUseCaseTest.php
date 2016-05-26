@@ -329,28 +329,71 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$this->assertDonationIsCreatedWithNotficationRequestData( $storeDonationCalls[0] );
 	}
 
+	public function testGivenRecurringPaymentForBookedDonation_newDonationIsCreated() {
+		$donation = ValidDonation::newBookedPayPalDonation();
+		$repositorySpy = new DonationRepositorySpy( $donation );
+
+		$request = ValidPayPalNotificationRequest::newRecurringPayment( $donation->getId() );
+
+		$useCase = new HandlePayPalPaymentNotificationUseCase(
+			$repositorySpy,
+			new SucceedingDonationAuthorizer(),
+			$this->getMailer(),
+			new NullLogger()
+		);
+
+		$useCase->handleNotification( $request );
+
+		$this->assertCount( 1, $repositorySpy->getStoreDonationCalls() );
+		/** @var Donation $newDonation */
+		$newDonation = $repositorySpy->getStoreDonationCalls()[0];
+		$this->assertNotEquals( $donation, $newDonation );
+
+		$this->assertDonationIsCreatedWithNotficationRequestData( $newDonation );
+	}
+
+	public function testGivenRecurringPaymentForIncompleteDonation_donationIsBooked() {
+		$donation = ValidDonation::newIncompletePayPalDonation();
+		$repositorySpy = new DonationRepositorySpy( $donation );
+
+		$request = ValidPayPalNotificationRequest::newRecurringPayment( $donation->getId() );
+
+		$useCase = new HandlePayPalPaymentNotificationUseCase(
+			$repositorySpy,
+			new SucceedingDonationAuthorizer(),
+			$this->getMailer(),
+			new NullLogger()
+		);
+
+		$useCase->handleNotification( $request );
+
+		$this->assertCount( 1, $repositorySpy->getStoreDonationCalls() );
+		$this->assertEquals( $donation, $repositorySpy->getStoreDonationCalls()[0] );
+		$this->assertTrue( $donation->isBooked() );
+	}
+
 	private function assertDonationIsCreatedWithNotficationRequestData( Donation $donation ) {
-		$this->assertEquals( 0, $donation->getPaymentIntervalInMonths(), 'Payment interval is always empty' );
+		$this->assertSame( 0, $donation->getPaymentIntervalInMonths(), 'Payment interval is always empty' );
 		$this->assertTrue( $donation->isBooked() );
 
 		$donorName = $donation->getDonor()->getPersonName();
-		$this->assertEquals( PersonName::PERSON_PRIVATE, $donorName->getPersonType(), 'Person is always private' );
-		$this->assertEquals( ValidPayPalNotificationRequest::PAYER_ADDRESS_NAME, $donorName->getFullName() );
+		$this->assertSame( PersonName::PERSON_PRIVATE, $donorName->getPersonType(), 'Person is always private' );
+		$this->assertSame( ValidPayPalNotificationRequest::PAYER_ADDRESS_NAME, $donorName->getFullName() );
 
-		$this->assertEquals( ValidPayPalNotificationRequest::PAYER_EMAIL, $donation->getDonor()->getEmailAddress() );
+		$this->assertSame( ValidPayPalNotificationRequest::PAYER_EMAIL, $donation->getDonor()->getEmailAddress() );
 
 		$address = $donation->getDonor()->getPhysicalAddress();
-		$this->assertEquals( ValidPayPalNotificationRequest::PAYER_ADDRESS_STREET, $address->getStreetAddress() );
-		$this->assertEquals( ValidPayPalNotificationRequest::PAYER_ADDRESS_CITY, $address->getCity() );
-		$this->assertEquals( ValidPayPalNotificationRequest::PAYER_ADDRESS_POSTAL_CODE, $address->getPostalCode() );
-		$this->assertEquals( ValidPayPalNotificationRequest::PAYER_ADDRESS_COUNTRY_CODE, $address->getCountryCode() );
+		$this->assertSame( ValidPayPalNotificationRequest::PAYER_ADDRESS_STREET, $address->getStreetAddress() );
+		$this->assertSame( ValidPayPalNotificationRequest::PAYER_ADDRESS_CITY, $address->getCity() );
+		$this->assertSame( ValidPayPalNotificationRequest::PAYER_ADDRESS_POSTAL_CODE, $address->getPostalCode() );
+		$this->assertSame( ValidPayPalNotificationRequest::PAYER_ADDRESS_COUNTRY_CODE, $address->getCountryCode() );
 
 		$payment = $donation->getPayment();
-		$this->assertEquals( ValidPayPalNotificationRequest::AMOUNT_GROSS_CENTS, $payment->getAmount()->getEuroCents() );
+		$this->assertSame( ValidPayPalNotificationRequest::AMOUNT_GROSS_CENTS, $payment->getAmount()->getEuroCents() );
 
 		/** @var PayPalData $paypalData */
 		$paypalData = $payment->getPaymentMethod()->getPaypalData();
-		$this->assertEquals( ValidPayPalNotificationRequest::PAYER_ADDRESS_NAME, $paypalData->getAddressName() );
+		$this->assertSame( ValidPayPalNotificationRequest::PAYER_ADDRESS_NAME, $paypalData->getAddressName() );
 	}
 
 	public function testWhenNotificationIsForNonExistingDonation_confirmationMailIsSent() {
