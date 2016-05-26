@@ -374,9 +374,9 @@ $app->post(
 		$request->setApplicantPhoneNumber( $httpRequest->request->get( 'phone', '' ) );
 		$request->setApplicantDateOfBirth( $httpRequest->request->get( 'dob', '' ) );
 
-
 		$request->setPaymentIntervalInMonths( (int)$httpRequest->request->get( 'membership_fee_interval', 0 ) );
-		$request->setPaymentAmountInEuros( $httpRequest->request->get( 'membership_fee', '' ) );
+		// TODO: German format expected here, amount should be converted based on user's locale
+		$request->setPaymentAmountInEuros( str_replace( ',', '.', $httpRequest->request->get( 'membership_fee', '' ) ) );
 
 		$bankData = new \WMDE\Fundraising\Frontend\Domain\Model\BankData();
 
