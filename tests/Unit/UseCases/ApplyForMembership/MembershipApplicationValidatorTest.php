@@ -27,7 +27,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 	private $feeValidator;
 
 	/**
-	 * @var
+	 * @var BankDataValidator
 	 */
 	private $bankDataValidator;
 
