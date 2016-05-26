@@ -13,7 +13,12 @@ interface DonationAuthorizer {
 	/**
 	 * Should return false on infrastructure failure.
 	 */
-	public function canModifyDonation( int $donationId ): bool;
+	public function userCanModifyDonation( int $donationId ): bool;
+
+	/**
+	 * Should return false on infrastructure failure.
+	 */
+	public function systemCanModifyDonation( int $donationId ): bool;
 
 	/**
 	 * Should return false on infrastructure failure.

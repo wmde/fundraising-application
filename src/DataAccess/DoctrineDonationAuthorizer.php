@@ -25,7 +25,12 @@ class DoctrineDonationAuthorizer implements DonationAuthorizer {
 		$this->accessToken = $accessToken;
 	}
 
-	public function canModifyDonation( int $donationId ): bool {
+	/**
+	 * Check if donation exists, has matching token and token is not expired
+	 * @param int $donationId
+	 * @return bool
+	 */
+	public function userCanModifyDonation( int $donationId ): bool {
 		try {
 			$donation = $this->getDonationById( $donationId );
 		}
@@ -37,6 +42,24 @@ class DoctrineDonationAuthorizer implements DonationAuthorizer {
 		return $donation !== null
 			&& $this->updateTokenMatches( $donation )
 			&& $this->tokenHasNotExpired( $donation );
+	}
+
+	/**
+	 * Check if donation exists and has matching token
+	 * @param int $donationId
+	 * @return bool
+	 */
+	public function systemCanModifyDonation( int $donationId ): bool {
+		try {
+			$donation = $this->getDonationById( $donationId );
+		}
+		catch ( ORMException $ex ) {
+			// TODO: might want to log failure here
+			return false;
+		}
+
+		return $donation !== null
+		&& $this->updateTokenMatches( $donation );
 	}
 
 	/**
