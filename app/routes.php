@@ -366,7 +366,7 @@ $app->post(
 		$request->setApplicantCompanyName( $httpRequest->request->get( 'firma', '' ) );
 
 		$request->setApplicantStreetAddress( $httpRequest->request->get( 'strasse', '' ) );
-		$request->setApplicantPostalCode( $httpRequest->request->get( 'plz', '' ) );
+		$request->setApplicantPostalCode( $httpRequest->request->get( 'postcode', '' ) );
 		$request->setApplicantCity( $httpRequest->request->get( 'ort', '' ) );
 		$request->setApplicantCountryCode( $httpRequest->request->get( 'country', '' ) );
 
