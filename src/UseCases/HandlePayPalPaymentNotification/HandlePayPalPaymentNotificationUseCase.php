@@ -89,7 +89,7 @@ class HandlePayPalPaymentNotificationUseCase {
 			return false;
 		}
 
-		if ( !$this->authorizationService->canModifyDonation( $request->getDonationId() ) ) {
+		if ( !$this->authorizationService->systemCanModifyDonation( $request->getDonationId() ) ) {
 			return false;
 		}
 

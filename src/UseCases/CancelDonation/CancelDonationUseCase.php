@@ -30,7 +30,7 @@ class CancelDonationUseCase {
 	}
 
 	public function cancelDonation( CancelDonationRequest $cancellationRequest ): CancelDonationResponse {
-		if ( !$this->authorizationService->canModifyDonation( $cancellationRequest->getDonationId() ) ) {
+		if ( !$this->authorizationService->userCanModifyDonation( $cancellationRequest->getDonationId() ) ) {
 			return $this->newFailureResponse( $cancellationRequest );
 		}
 

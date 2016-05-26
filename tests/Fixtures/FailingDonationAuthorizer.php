@@ -12,7 +12,11 @@ use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizer;
  */
 class FailingDonationAuthorizer implements DonationAuthorizer {
 
-	public function canModifyDonation( int $donationId ): bool {
+	public function userCanModifyDonation( int $donationId ): bool {
+		return false;
+	}
+
+	public function systemCanModifyDonation( int $donationId ): bool {
 		return false;
 	}
 

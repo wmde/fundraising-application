@@ -41,7 +41,7 @@ class AddCommentUseCase {
 	}
 
 	private function requestIsAllowed( AddCommentRequest $addCommentRequest ): bool {
-		return $this->authorizationService->canModifyDonation( $addCommentRequest->getDonationId() );
+		return $this->authorizationService->userCanModifyDonation( $addCommentRequest->getDonationId() );
 	}
 
 	private function newCommentFromRequest( AddCommentRequest $request ): Comment {
