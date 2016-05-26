@@ -13,10 +13,6 @@ use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
  */
 class MembershipApplicationValidator {
 
-	/* private */ const MIN_PERSON_YEARLY_PAYMENT_IN_EURO = 24;
-	/* private */ const MIN_COMPANY_YEARLY_PAYMENT_IN_EURO = 100;
-	/* private */ const MONTHS_PER_YEAR = 12;
-
 	private $feeValidator;
 
 	/**
