@@ -13,10 +13,6 @@ class PhoneNumber {
 	private $phoneNumber;
 
 	public function __construct( string $phoneNumber ) {
-		if ( $phoneNumber === '' ) {
-			throw new \InvalidArgumentException( '$phoneNumber cannot be empty' );
-		}
-
 		$this->phoneNumber = $phoneNumber;
 	}
 

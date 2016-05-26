@@ -16,8 +16,16 @@ class MembershipApplicant {
 	private $phone;
 	private $dateOfBirth;
 
+	/**
+	 * MembershipApplicant constructor.
+	 * @param PersonName $name
+	 * @param PhysicalAddress $address
+	 * @param EmailAddress $email
+	 * @param PhoneNumber $phone
+	 * @param \DateTime|null $dateOfBirth
+	 */
 	public function __construct( PersonName $name, PhysicalAddress $address, EmailAddress $email,
-		PhoneNumber $phone, \DateTime $dateOfBirth ) {
+		PhoneNumber $phone, $dateOfBirth ) {
 
 		$this->personName = $name;
 		$this->physicalAddress = $address;
@@ -39,7 +47,10 @@ class MembershipApplicant {
 		return $this->email;
 	}
 
-	public function getDateOfBirth(): \DateTime {
+	/**
+	 * @return \DateTime|null
+	 */
+	public function getDateOfBirth() {
 		return $this->dateOfBirth;
 	}
 
