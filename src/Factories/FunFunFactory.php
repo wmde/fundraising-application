@@ -96,6 +96,7 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\GetInTouchHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\IbanPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\InternalErrorHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfirmationHtmlPresenter;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipFormViolationPresenter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentUseCase;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationUseCase;
@@ -980,6 +981,12 @@ class FunFunFactory {
 	public function newMembershipApplicationConfirmationHtmlPresenter() {
 		return new MembershipApplicationConfirmationHtmlPresenter(
 			$this->getIncludeTemplate( 'MembershipApplicationConfirmation.html.twig' )
+		);
+	}
+
+	public function newMembershipFormViolationPresenter() {
+		return new MembershipFormViolationPresenter(
+			$this->getIncludeTemplate( 'MembershipApplication.html.twig' )
 		);
 	}
 

@@ -9,39 +9,40 @@ use WMDE\Fundraising\Frontend\Domain\Model\MembershipApplication;
 /**
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
+ * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class ApplyForMembershipResponse {
 
 	public static function newSuccessResponse( string $accessToken, string $updateToken,
 		MembershipApplication $application ): self {
 
-		$response = new self( true );
+		$response = new self( new ApplicationValidationResult() );
 		$response->accessToken = $accessToken;
 		$response->updateToken = $updateToken;
 		$response->application = $application;
 		return $response;
 	}
 
-	public static function newFailureResponse(): self {
-		return new self( false );
+	public static function newFailureResponse( ApplicationValidationResult $validationResult ): self {
+		return new self( $validationResult );
 	}
 
-	private $isSuccess;
+	private $validationResult;
 
 	private $accessToken;
 	private $updateToken;
 	private $application;
 
-	private function __construct( bool $isSuccess ) {
-		$this->isSuccess = $isSuccess;
+	private function __construct( ApplicationValidationResult $validationResult ) {
+		$this->validationResult = $validationResult;
 	}
 
 	public function isSuccessful(): bool {
-		return $this->isSuccess;
+		return $this->validationResult->isSuccessful();
 	}
 
 	public function getAccessToken(): string {
-		if ( !$this->isSuccess ) {
+		if ( !$this->isSuccessful() ) {
 			throw new \RuntimeException( 'The result only has an access token when successful' );
 		}
 
@@ -49,7 +50,7 @@ class ApplyForMembershipResponse {
 	}
 
 	public function getUpdateToken(): string {
-		if ( !$this->isSuccess ) {
+		if ( !$this->isSuccessful() ) {
 			throw new \RuntimeException( 'The result only has an update token when successful' );
 		}
 
@@ -64,11 +65,14 @@ class ApplyForMembershipResponse {
 	 * @return MembershipApplication
 	 */
 	public function getMembershipApplication(): MembershipApplication {
-		if ( !$this->isSuccess ) {
+		if ( !$this->isSuccessful() ) {
 			throw new \RuntimeException( 'The result only has a membership application object when successful' );
 		}
 
 		return $this->application;
 	}
 
+	public function getValidationResult(): ApplicationValidationResult {
+		return $this->validationResult;
+	}
 }

@@ -90,8 +90,27 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 				$httpParameters
 			);
 
-			$this->assertSame( 'TODO fail', $client->getResponse()->getContent() );
+			$this->assertFormFieldsArePopulated( $client->getResponse()->getContent() );
 		} );
+	}
+
+	private function assertFormFieldsArePopulated( $response ) {
+		$this->assertContains( 'initialFormValues.addressType: person', $response );
+		$this->assertContains( 'initialFormValues.salutation: Herr', $response );
+		$this->assertContains( 'initialFormValues.title: ', $response );
+		$this->assertContains( 'initialFormValues.firstName: Potato', $response );
+		$this->assertContains( 'initialFormValues.lastName: The Great', $response );
+		$this->assertContains( 'initialFormValues.companyName: ', $response );
+		$this->assertContains( 'initialFormValues.street: Nyan street', $response );
+		$this->assertContains( 'initialFormValues.postcode: 1234', $response );
+		$this->assertContains( 'initialFormValues.city: Berlin', $response );
+		$this->assertContains( 'initialFormValues.country: DE', $response );
+		$this->assertContains( 'initialFormValues.email: jeroendedauw@gmail.com', $response );
+		$this->assertContains( 'initialFormValues.iban: DE12500105170648489890', $response );
+		$this->assertContains( 'initialFormValues.bic: INGDDEFFXXX', $response );
+		$this->assertContains( 'initialFormValues.accountNumber: 0648489890', $response );
+		$this->assertContains( 'initialFormValues.bankCode: 50010517', $response );
+		$this->assertContains( 'initialFormValues.bankname: ING-DiBa', $response );
 	}
 
 	public function testGivenValidRequest_applicationIsPersisted() {
