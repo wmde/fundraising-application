@@ -70,7 +70,14 @@ class ApplyForMembershipUseCase {
 	private function sendConfirmationEmail( MembershipApplication $application ) {
 		$this->mailer->sendMail(
 			$application->getApplicant()->getEmailAddress(),
-			[] // TODO
+			[
+				'membershipType' => $application->getType(),
+				'membershipFee' => $application->getPayment()->getAmount()->getEuroString(),
+				'paymentIntervalInMonths' => $application->getPayment()->getIntervalInMonths(),
+				'salutation' => $application->getApplicant()->getPersonName()->getSalutation(),
+				'title' => $application->getApplicant()->getPersonName()->getTitle(),
+				'lastName' => $application->getApplicant()->getPersonName()->getLastName()
+			]
 		);
 	}
 
