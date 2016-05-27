@@ -38,11 +38,11 @@
 									Kostenfrei an Veranstaltungen rund um Wikipedia und Freies Wissen teilnehmen.
 								</li>
 
-								<li class="{% if showMembershipTypeOption == false %}last{% endif %} icon-ok _icon-list-item">
+								<li class="{% if showMembershipTypeOption == 'false' %}last{% endif %} icon-ok _icon-list-item">
 									Jederzeit formlos per E-Mail k&uuml;ndbar.
 								</li>
 
-{% if showMembershipTypeOption == true %}
+{% if showMembershipTypeOption == 'true' %}
 								<li class="last icon-ok _icon-list-item">
 									Aktiv Freies Wissen verbreiten
 								</li>
@@ -79,7 +79,7 @@
 			<div class="box partial">
 
 				<div class="box-section approval">
-{% if showMembershipTypeOption == true %}
+{% if showMembershipTypeOption == 'true' %}
 					<div class="icon-ok _icon-list-item clearfix">
 						Ich werde Mitglied des Wikimedia Deutschland e. V.
 					</div>
@@ -96,10 +96,12 @@
 								<label for="membership-type-2">Aktives Mitglied</label>
 							</li>
 						</ul>
+						<input type="hidden" name="showMembershipTypeOption" value="true" />
 					</div>
 {% else %}
 					<span class="icon-ok _icon-list-item">Ich werde Fördermitglied des Wikimedia Deutschland e. V.</span>
 					<input type="hidden" name="membership_type" value="sustaining" />
+					<input type="hidden" name="showMembershipTypeOption" value="false" />
 {% endif %}
 				</div>
 

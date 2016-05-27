@@ -19,10 +19,11 @@ class MembershipFormViolationPresenter {
 		$this->template = $template;
 	}
 
-	public function present( ApplyForMembershipRequest $request ): string {
+	public function present( ApplyForMembershipRequest $request, bool $showMembershipTypeOption ): string {
 		return $this->template->render(
 			[
-				'initialFormValues' => $this->getMembershipFormArguments( $request )
+				'initialFormValues' => $this->getMembershipFormArguments( $request ),
+				'showMembershipTypeOption' => $showMembershipTypeOption ? 'true' : 'false'
 			]
 		);
 	}

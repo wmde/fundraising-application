@@ -1,3 +1,5 @@
+{% set showMembershipTypeOption = ( showMembershipTypeOption is defined ) ? showMembershipTypeOption : 'undefined' %}
+showMembershipTypeOption: {$ showMembershipTypeOption $}
 initialFormValues.addressType: {$ initialFormValues.addressType $}
 initialFormValues.salutation: {$ initialFormValues.salutation $}
 initialFormValues.title: {$ initialFormValues.title $}

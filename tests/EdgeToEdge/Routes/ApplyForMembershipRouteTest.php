@@ -113,6 +113,24 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'initialFormValues.bankname: ING-DiBa', $response );
 	}
 
+	public function testFlagForShowingMembershipTypeOptionGetsPassedAround() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setNullMessenger();
+
+			$httpParameters = $this->newValidHttpParameters();
+			$httpParameters['membership_fee'] = '0';
+			$httpParameters['showMembershipTypeOption'] = 'true';
+
+			$client->request(
+				'POST',
+				'apply-for-membership',
+				$httpParameters
+			);
+
+			$this->assertContains( 'showMembershipTypeOption: true', $client->getResponse()->getContent() );
+		} );
+	}
+
 	public function testGivenValidRequest_applicationIsPersisted() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setNullMessenger();

@@ -400,7 +400,10 @@ $app->post(
 
 		return $response->isSuccessful() ?
 			$ffFactory->newMembershipApplicationConfirmationHtmlPresenter()->present( $response ) :
-			$ffFactory->newMembershipFormViolationPresenter()->present( $request );
+			$ffFactory->newMembershipFormViolationPresenter()->present(
+				$request,
+				$httpRequest->request->get( 'showMembershipTypeOption' ) === 'true'
+			);
 	}
 );
 

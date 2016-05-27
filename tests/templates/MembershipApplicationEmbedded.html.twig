@@ -1,3 +1,5 @@
+{% set showMembershipTypeOption = ( showMembershipTypeOption is defined ) ? showMembershipTypeOption : 'undefined' %}
+showMembershipTypeOption: {$ showMembershipTypeOption $}
 donation.id: {$ donation.id $}
 donation.status: {$ donation.status $}
 donation.amount: {$ donation.amount $}
