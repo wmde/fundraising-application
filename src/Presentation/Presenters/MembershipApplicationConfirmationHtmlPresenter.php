@@ -43,7 +43,7 @@ class MembershipApplicationConfirmationHtmlPresenter {
 		return [
 			'id' => $membershipApplication->getId(),
 			'membershipFee' => $membershipApplication->getPayment()->getAmount()->getEuroString(),
-			'intervalText' => $membershipApplication->getPayment()->getIntervalInMonths(),
+			'paymentIntervalInMonths' => $membershipApplication->getPayment()->getIntervalInMonths(),
 			'updateToken' => $updateToken
 		];
 	}
