@@ -43,6 +43,9 @@ class DoctrineMembershipApplicationAuthorizerTest extends \PHPUnit_Framework_Tes
 		return new DoctrineMembershipApplicationAuthorizer( $entityManager, $updateToken, $accessToken );
 	}
 
+	/**
+	 * @slowThreshold 400
+	 */
 	public function testWhenNoMembershipApplications() {
 		$this->specify( 'update authorization fails', function() {
 			$authorizer = $this->newAuthorizerWithApplications( self::CORRECT_UPDATE_TOKEN );
@@ -55,6 +58,9 @@ class DoctrineMembershipApplicationAuthorizerTest extends \PHPUnit_Framework_Tes
 		} );
 	}
 
+	/**
+	 * @slowThreshold 1200
+	 */
 	public function testWhenApplicationWithTokenExists() {
 		$application = new MembershipApplication();
 
@@ -112,6 +118,9 @@ class DoctrineMembershipApplicationAuthorizerTest extends \PHPUnit_Framework_Tes
 		);
 	}
 
+	/**
+	 * @slowThreshold 400
+	 */
 	public function testWhenApplicationWithoutTokenExists() {
 		$application = new MembershipApplication();
 
@@ -132,6 +141,9 @@ class DoctrineMembershipApplicationAuthorizerTest extends \PHPUnit_Framework_Tes
 		);
 	}
 
+	/**
+	 * @slowThreshold 400
+	 */
 	public function testWhenDoctrineThrowsException() {
 		$authorizer = new DoctrineMembershipApplicationAuthorizer(
 			$this->getThrowingEntityManager(),
