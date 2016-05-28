@@ -15,6 +15,13 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
  */
 class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
+	public function setUp() {
+		if ( !function_exists( 'lut_init' ) ) {
+			$this->markTestSkipped( 'The konto_check needs to be installed!' );
+		}
+		parent::setUp();
+	}
+
 	public function testGivenGetRequest_resultHasMethodNotAllowedStatus() {
 		$this->assertGetRequestCausesMethodNotAllowedResponse(
 			'apply-for-membership',
