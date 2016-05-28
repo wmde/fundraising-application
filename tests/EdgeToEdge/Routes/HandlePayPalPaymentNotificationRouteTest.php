@@ -32,6 +32,8 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequest_applicationIndicatesSuccess() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setNullMessenger();
+
 			$factory->getDonationRepository()->storeDonation( ValidDonation::newIncompletePayPalDonation() );
 			$authorizer = new DoctrineDonationAuthorizationUpdater( $factory->getEntityManager() );
 			$authorizer->allowModificationViaToken(
