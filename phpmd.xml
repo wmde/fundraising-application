@@ -19,7 +19,13 @@
 
     <rule ref="rulesets/naming.xml">
         <exclude name="ShortVariable" />
+        <exclude name="LongVariable" />
     </rule>
 
     <rule ref="rulesets/unusedcode.xml" />
+
+    <exclude-pattern>*Validator</exclude-pattern>
+    <exclude-pattern>*Factory.php</exclude-pattern>
+    <exclude-pattern>ConfigReader.php</exclude-pattern>
+    <exclude-pattern>ListCommentsUseCase.php</exclude-pattern>
 </ruleset>
