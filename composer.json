@@ -89,7 +89,7 @@
 			"vendor/bin/phpcs src/* tests/* --standard=phpcs.xml --extensions=php -sp"
 		],
 		"phpmd": [
-			"vendor/bin/phpmd src/,tests/ text phpmd.xml"
+			"vendor/bin/phpmd src/ text phpmd.xml"
 		]
 	}
 }
