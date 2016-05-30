@@ -12,7 +12,6 @@ use GuzzleHttp\Client;
  */
 class PayPalPaymentNotificationVerifier implements PaymentNotificationVerifier {
 
-	/** @var Client */
 	private $httpClient;
 	private $config;
 	private $allowedStatuses = [ 'Completed' ];
@@ -29,7 +28,6 @@ class PayPalPaymentNotificationVerifier implements PaymentNotificationVerifier {
 	 *
 	 * @param array $request
 	 *
-	 * @return bool
 	 * @throws PayPalPaymentNotificationVerifierException
 	 */
 	public function verify( array $request ) {
