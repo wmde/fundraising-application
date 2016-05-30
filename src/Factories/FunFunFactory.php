@@ -30,6 +30,7 @@ use WMDE\Fundraising\Frontend\DataAccess\ApiBasedPageRetriever;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineCommentRepository;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationAuthorizationUpdater;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationAuthorizer;
+use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationEventLogger;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipAppAuthUpdater;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipApplicationAuthorizer;
@@ -51,6 +52,7 @@ use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizationUpdater;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizer;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\DonationEventLogger;
 use WMDE\Fundraising\Frontend\Infrastructure\Honorifics;
 use WMDE\Fundraising\Frontend\Infrastructure\LoggingMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\LoggingPaymentNotificationVerifier;
@@ -331,6 +333,10 @@ class FunFunFactory {
 
 	public function getEntityManager(): EntityManager {
 		return $this->pimple['entity_manager'];
+	}
+
+	private function newDonationEventLogger(): DonationEventLogger {
+		return new DoctrineDonationEventLogger( $this->getEntityManager() );
 	}
 
 	public function newInstaller(): Installer {
@@ -945,7 +951,8 @@ class FunFunFactory {
 			$this->getDonationRepository(),
 			$this->newDonationAuthorizer( $updateToken ),
 			$this->newDonationConfirmationMailer(),
-			$this->getLogger()
+			$this->getLogger(),
+			$this->newDonationEventLogger()
 		);
 	}
 

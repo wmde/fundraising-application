@@ -18,6 +18,8 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
 use WMDE\Fundraising\Frontend\Domain\Repositories\StoreDonationException;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizer;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\DonationEventLogException;
+use WMDE\Fundraising\Frontend\Infrastructure\DonationEventLogger;
 
 /**
  * @license GNU GPL v2+
@@ -30,13 +32,16 @@ class HandlePayPalPaymentNotificationUseCase {
 	private $authorizationService;
 	private $mailer;
 	private $logger;
+	private $donationEventLogger;
 
 	public function __construct( DonationRepository $repository, DonationAuthorizer $authorizationService,
-								 DonationConfirmationMailer $mailer, LoggerInterface $logger ) {
+								 DonationConfirmationMailer $mailer, LoggerInterface $logger,
+								 DonationEventLogger $donationEventLogger ) {
 		$this->repository = $repository;
 		$this->authorizationService = $authorizationService;
 		$this->mailer = $mailer;
 		$this->logger = $logger;
+		$this->donationEventLogger = $donationEventLogger;
 	}
 
 	public function handleNotification( PayPalNotificationRequest $request ): bool {
@@ -213,7 +218,32 @@ class HandlePayPalPaymentNotificationUseCase {
 		} catch ( StoreDonationException $ex ) {
 			return null;
 		}
+		$this->logChildDonationCreatedEvent( $donation->getId(), $childDonation->getId() );
 		return $childDonation;
+	}
+
+	private function logChildDonationCreatedEvent( $parentId, $childId ) {
+		$this->tryToLogDonationEvent(
+			$parentId,
+			"paypal_handler: new transaction id to corresponding child donation: $childId"
+		);
+		$this->tryToLogDonationEvent(
+			$childId,
+			"paypal_handler: new transaction id to corresponding parent donation: $parentId"
+		);
+	}
+
+	private function tryToLogDonationEvent( $donationId, $message ) {
+		try {
+			$this->donationEventLogger->log( $donationId, $message );
+		} catch ( DonationEventLogException $e ) {
+			$logContext = [
+				'donationId' => $donationId,
+				'exception' => $e,
+				'message'
+			];
+			$this->logger->error( 'Could not update parent donation event log', $logContext );
+		}
 	}
 
 	private function newDonorFromRequest( PayPalNotificationRequest $request ): Donor {
