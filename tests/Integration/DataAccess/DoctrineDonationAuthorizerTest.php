@@ -43,6 +43,9 @@ class DoctrineDonationAuthorizerTest extends \PHPUnit_Framework_TestCase {
 		return new DoctrineDonationAuthorizer( $entityManager, $updateToken, $accessToken );
 	}
 
+	/**
+	 * @slowThreshold 400
+	 */
 	public function testWhenNoDonations() {
 		$this->specify( 'update authorization fails', function() {
 			$authorizer = $this->newAuthorizationServiceWithDonations( self::CORRECT_UPDATE_TOKEN );
@@ -55,6 +58,9 @@ class DoctrineDonationAuthorizerTest extends \PHPUnit_Framework_TestCase {
 		} );
 	}
 
+	/**
+	 * @slowThreshold 1200
+	 */
 	public function testWhenDonationWithTokenExists() {
 		$donation = new Donation();
 		$donationData = $donation->getDataObject();
@@ -116,6 +122,9 @@ class DoctrineDonationAuthorizerTest extends \PHPUnit_Framework_TestCase {
 		return date( 'Y-m-d H:i:s', time() + 60 * 60 );
 	}
 
+	/**
+	 * @slowThreshold 400
+	 */
 	public function testWhenDonationWithoutTokenExists() {
 		$donation = new Donation();
 		$donation->encodeAndSetData( [] );
@@ -137,6 +146,9 @@ class DoctrineDonationAuthorizerTest extends \PHPUnit_Framework_TestCase {
 		);
 	}
 
+	/**
+	 * @slowThreshold 400
+	 */
 	public function testWhenUpdateTokenIsExpired() {
 		$donation = new Donation();
 		$donationData = $donation->getDataObject();
@@ -165,6 +177,9 @@ class DoctrineDonationAuthorizerTest extends \PHPUnit_Framework_TestCase {
 		return date( 'Y-m-d H:i:s', time() - 1 );
 	}
 
+	/**
+	 * @slowThreshold 400
+	 */
 	public function testWhenDoctrineThrowsException() {
 		$authorizer = new DoctrineDonationAuthorizer(
 			$this->getThrowingEntityManager(),
