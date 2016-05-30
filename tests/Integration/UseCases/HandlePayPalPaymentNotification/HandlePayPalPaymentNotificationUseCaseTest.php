@@ -11,8 +11,10 @@ use WMDE\Fundraising\Frontend\Domain\Model\PayPalData;
 use WMDE\Fundraising\Frontend\Domain\Model\PayPalPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\DonationEventLogger;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidPayPalNotificationRequest;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\DonationEventLoggerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\DonationRepositorySpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeDonationRepository;
@@ -35,7 +37,8 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			new DoctrineDonationRepository( ThrowingEntityManager::newInstance( $this ) ),
 			new FailingDonationAuthorizer(),
 			$this->getMailer(),
-			new NullLogger()
+			new NullLogger(),
+			$this->getEventLogger()
 		);
 		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 1 );
 		$this->assertFalse( $useCase->handleNotification( $request ) );
@@ -49,7 +52,8 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$fakeRepository,
 			new FailingDonationAuthorizer(),
 			$this->getMailer(),
-			new NullLogger()
+			new NullLogger(),
+			$this->getEventLogger()
 		);
 
 		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 1 );
@@ -64,7 +68,8 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$fakeRepository,
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
-			new NullLogger()
+			new NullLogger(),
+			$this->getEventLogger()
 		);
 
 		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 1 );
@@ -80,7 +85,8 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$fakeRepository,
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
-			new NullLogger()
+			new NullLogger(),
+			$this->getEventLogger()
 		);
 
 		$this->assertFalse( $useCase->handleNotification( $request ) );
@@ -93,7 +99,8 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			new FakeDonationRepository(),
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
-			new NullLogger()
+			new NullLogger(),
+			$this->getEventLogger()
 		);
 
 		$this->assertFalse( $useCase->handleNotification( $request ) );
@@ -108,7 +115,8 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			new FakeDonationRepository(),
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
-			$logger
+			$logger,
+			$this->getEventLogger()
 		);
 
 		$useCase->handleNotification( $request );
@@ -123,7 +131,8 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			new FakeDonationRepository(),
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
-			new NullLogger()
+			new NullLogger(),
+			$this->getEventLogger()
 		);
 		$this->assertFalse( $useCase->handleNotification( $request ) );
 	}
@@ -135,7 +144,8 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			new FakeDonationRepository(),
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
-			$logger
+			$logger,
+			$this->getEventLogger()
 		);
 
 		$request = ValidPayPalNotificationRequest::newSubscriptionModification();
@@ -160,7 +170,8 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$fakeRepository,
 			new SucceedingDonationAuthorizer(),
 			$mailer,
-			new NullLogger()
+			new NullLogger(),
+			$this->getEventLogger()
 		);
 
 		$this->assertTrue( $useCase->handleNotification( $request ) );
@@ -175,7 +186,8 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$repositorySpy,
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
-			new NullLogger()
+			new NullLogger(),
+			$this->getEventLogger()
 		);
 
 		$this->assertTrue( $useCase->handleNotification( $request ) );
@@ -191,7 +203,8 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$repositorySpy,
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
-			new NullLogger()
+			new NullLogger(),
+			$this->getEventLogger()
 		);
 
 		$this->assertTrue( $useCase->handleNotification( $request ) );
@@ -212,7 +225,8 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$fakeRepository,
 			new SucceedingDonationAuthorizer(),
 			$mailer,
-			new NullLogger()
+			new NullLogger(),
+			$this->getEventLogger()
 		);
 
 		$this->assertTrue( $useCase->handleNotification( $request ) );
@@ -231,7 +245,8 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$fakeRepository,
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
-			new NullLogger()
+			new NullLogger(),
+			$this->getEventLogger()
 		);
 
 		$this->assertTrue( $useCase->handleNotification( $request ) );
@@ -239,7 +254,6 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$payment = $donation->getPaymentMethod();
 		$this->assertTrue( $payment->getPayPalData()->hasChildPayment( $transactionId ),
 			'Parent payment must have new transaction ID in its list' );
-		// TODO Check donation log for new entry, see https://phabricator.wikimedia.org/T135522
 	}
 
 	public function testGivenNewTransactionIdForBookedDonation_childTransactionWithSameDataIsCreated() {
@@ -255,7 +269,8 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$fakeRepository,
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
-			new NullLogger()
+			new NullLogger(),
+			$this->getEventLogger()
 		);
 
 		$this->assertTrue( $useCase->handleNotification( $request ) );
@@ -270,7 +285,43 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$this->assertEquals( $donation->getDonor(), $childDonation->getDonor() );
 		$this->assertEquals( $donation->getPaymentIntervalInMonths(), $childDonation->getPaymentIntervalInMonths() );
 		$this->assertTrue( $childDonation->isBooked() );
-		// TODO Check donation log for new entry, see https://phabricator.wikimedia.org/T135522
+	}
+
+	public function testGivenNewTransactionIdForBookedDonation_childCreationeventIsLogged() {
+		$donation = ValidDonation::newBookedPayPalDonation();
+		$transactionId = '16R12136PU8783961';
+
+		$fakeRepository = new FakeDonationRepository();
+		$fakeRepository->storeDonation( $donation );
+
+		$request = ValidPayPalNotificationRequest::newDuplicatePaymentForDonation( $donation->getId(), $transactionId );
+
+		$eventLogger = new DonationEventLoggerSpy();
+
+		$useCase = new HandlePayPalPaymentNotificationUseCase(
+			$fakeRepository,
+			new SucceedingDonationAuthorizer(),
+			$this->getMailer(),
+			new NullLogger(),
+			$eventLogger
+		);
+
+		$this->assertTrue( $useCase->handleNotification( $request ) );
+
+		/** @var PayPalPayment $payment */
+		$payment = $donation->getPaymentMethod();
+		$childDonationId = $payment->getPayPalData()->getChildPaymentEntityId( $transactionId );
+
+		$this->assertEventLogContainsExpression( $eventLogger, $donation->getId(), '/child donation.*' . $childDonationId .'/' );
+		$this->assertEventLogContainsExpression( $eventLogger, $childDonationId, '/parent donation.*' . $donation->getId() .'/' );
+	}
+
+	private function assertEventLogContainsExpression( DonationEventLoggerSpy $eventLoggerSpy, int $donationId, string $expr ) {
+		$foundCalls = array_filter( $eventLoggerSpy->getLogCalls(), function( $call ) use ( $donationId, $expr ) {
+			return $call[0] == $donationId && preg_match( $expr, $call[1] );
+		} );
+		$assertMsg = 'Failed to assert that donation event log log contained "' . $expr . '" for donation id '.$donationId;
+		$this->assertCount( 1, $foundCalls, $assertMsg );
 	}
 
 	public function testGivenExistingTransactionIdForBookedDonation_handlerReturnsFalse() {
@@ -283,7 +334,8 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$fakeRepository,
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
-			new NullLogger()
+			new NullLogger(),
+			$this->getEventLogger()
 		);
 
 		$this->assertFalse( $useCase->handleNotification( $request ) );
@@ -304,7 +356,8 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$fakeRepository,
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
-			new NullLogger()
+			new NullLogger(),
+			$this->getEventLogger()
 		);
 
 		$this->assertFalse( $useCase->handleNotification( $request ) );
@@ -318,7 +371,8 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 				$repositorySpy,
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
-			new NullLogger()
+			new NullLogger(),
+			$this->getEventLogger()
 		);
 
 		$useCase->handleNotification( $request );
@@ -339,7 +393,8 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$repositorySpy,
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
-			new NullLogger()
+			new NullLogger(),
+			$this->getEventLogger()
 		);
 
 		$useCase->handleNotification( $request );
@@ -362,7 +417,8 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$repositorySpy,
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
-			new NullLogger()
+			new NullLogger(),
+			$this->getEventLogger()
 		);
 
 		$useCase->handleNotification( $request );
@@ -406,7 +462,8 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			new FakeDonationRepository(),
 			new SucceedingDonationAuthorizer(),
 			$mailer,
-			new NullLogger()
+			new NullLogger(),
+			$this->getEventLogger()
 		);
 
 		$useCase->handleNotification( $request );
@@ -417,6 +474,13 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 	 */
 	private function getMailer(): DonationConfirmationMailer {
 		return $this->getMockBuilder( DonationConfirmationMailer::class )->disableOriginalConstructor()->getMock();
+	}
+
+	/**
+	 * @return DonationEventLogger|\PHPUnit_Framework_MockObject_MockObject
+	 */
+	private function getEventLogger(): DonationEventLogger {
+		return $this->getMock( DonationEventLogger::class );
 	}
 
 }
