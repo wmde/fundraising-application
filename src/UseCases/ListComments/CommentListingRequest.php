@@ -10,7 +10,7 @@ namespace WMDE\Fundraising\Frontend\UseCases\ListComments;
  */
 class CommentListingRequest {
 
-	public $limit;
+	private $limit;
 
 	public function __construct( int $limit ) {
 		$this->limit = $limit;
