@@ -46,11 +46,18 @@
     "object-assign": "^4.0.1",
     "promise": "^7.1.1",
     "redux": "^3.3.1",
-    "redux-promise": "^0.5.1"
+    "redux-promise": "^0.5.1",
+    "underscore": "^1.8.3",
+    "underscore.path": "^0.1.4"
   },
   "browserify": {
     "transform": [
-      [ "polyify", { "browsers": "IE >= 8" } ],
+      [
+        "polyify",
+        {
+          "browsers": "IE >= 8"
+        }
+      ],
       "browserify-shim",
       "envify"
     ]

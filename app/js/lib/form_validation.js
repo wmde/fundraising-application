@@ -2,7 +2,7 @@
 
 var jQuery = require( 'jquery' ),
 	objectAssign = require( 'object-assign' ),
-	_ = require( 'lodash' ),
+	_ = require( 'underscore' ),
 
 	AddressValidator = {
 		validationUrl: '',

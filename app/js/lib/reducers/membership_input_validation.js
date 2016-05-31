@@ -1,6 +1,6 @@
 'use strict';
 
-var _ = require( 'lodash' ),
+var _ = require( 'underscore' ),
 	inputValidationLib = require( './input_validation' ),
 	objectFields = {
 		dataEntered: false,

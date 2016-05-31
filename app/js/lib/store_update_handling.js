@@ -8,7 +8,9 @@
  */
 
 var reduxValidation = require( './redux_validation' ),
-	_ = require( 'lodash' );
+	_ = require( 'underscore' );
+
+_.mixin( require( 'underscore.path' ) );
 
 module.exports = {
 	/**
@@ -21,7 +23,7 @@ module.exports = {
 	 * @param {string} formContentName Field name for the store to access form contents, e.g. 'donationFormContent' or 'membershipFormContent'
 	 */
 	connectValidatorsToStore: function ( validatorFactoryFunction, store, initialValues, formContentName ) {
-		var pickNonfalsy = _.partial( _.pickBy, _, _.identity ),
+		var pickNonfalsy = _.partial( _.pick, _, _.identity ),
 			completeInitialValues = _.extend( {}, store.getState()[ formContentName ], pickNonfalsy( initialValues ) ),
 			validators = validatorFactoryFunction( completeInitialValues );
 		reduxValidation.createValidationDispatcherCollection( store, validators, formContentName );
@@ -45,7 +47,7 @@ module.exports = {
 			viewHandlers.forEach( function ( viewHandlerConfig ) {
 				viewHandlerConfig.viewHandler.update.call(
 					viewHandlerConfig.viewHandler,
-					_.get( state, viewHandlerConfig.stateKey )
+					_.path( state, viewHandlerConfig.stateKey )
 				);
 			} );
 		} );

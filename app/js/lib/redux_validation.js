@@ -6,7 +6,7 @@
  */
 
 var objectAssign = require( 'object-assign' ),
-	_ = require( 'lodash' ),
+	_ = require( 'underscore' ),
 
 	/**
 	 * The dispatcher checks the form content for fields given in the `fields` property.
