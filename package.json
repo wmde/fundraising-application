@@ -35,6 +35,7 @@
     "jquery": "^2.2.0",
     "jscs": "^2.10.1",
     "jshint": "^2.9.1",
+    "polyify": "0.0.4",
     "sinon": "^1.17.3",
     "tap-min": "^1.1.0",
     "tape": "^4.4.0",
@@ -49,6 +50,7 @@
   },
   "browserify": {
     "transform": [
+      [ "polyify", { "browsers": "IE >= 8" } ],
       "browserify-shim",
       "envify"
     ]
