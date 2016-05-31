@@ -42,7 +42,6 @@
     "watchify": "^3.7.0"
   },
   "dependencies": {
-    "lodash": "^4.6.1",
     "object-assign": "^4.0.1",
     "promise": "^7.1.1",
     "redux": "^3.3.1",
@@ -55,7 +54,17 @@
       [
         "polyify",
         {
-          "browsers": "IE >= 8"
+          "browsers": "IE >= 8",
+          "include": [
+            "Object.getPrototypeOf",
+            "Object.keys",
+            "Array.prototype.every",
+            "Array.prototype.filter",
+            "Array.prototype.forEach",
+            "Array.prototype.indexOf",
+            "Array.prototype.map",
+            "Array.prototype.reduceRight"
+          ]
         }
       ],
       "browserify-shim",
