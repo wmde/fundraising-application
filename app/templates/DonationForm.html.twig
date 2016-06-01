@@ -43,8 +43,8 @@
             [
                 WMDE.Components.createAmountComponent( store, $( '.amount-input' ), $( '.amount-select' ) ),
                 WMDE.Components.createRadioComponent( store, $( '.payment-type-select' ), 'paymentType' ),
-                WMDE.Components.createRadioComponent( store, $( '.interval-type-select' ), 'paymentPeriodInMonths' ),
-                WMDE.Components.createRadioComponent( store, $( '.payment-period-select' ), 'paymentPeriodInMonths' ),
+                WMDE.Components.createRadioComponent( store, $( '.interval-type-select' ), 'paymentIntervalInMonths' ),
+                WMDE.Components.createRadioComponent( store, $( '.payment-period-select' ), 'paymentIntervalInMonths' ),
                 WMDE.Components.createBankDataComponent( store, {
                     ibanElement: $( '#iban' ),
                     bicElement: $( '#bic' ),
@@ -136,7 +136,7 @@
                     // show payment periods if interval payment is selected
                     {
                         viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.periode-2-list' ), /^(1|3|6|12)$/ ),
-                        stateKey: 'donationFormContent.paymentPeriodInMonths'
+                        stateKey: 'donationFormContent.paymentIntervalInMonths'
                     },
                     // Show bank data input when doing direct debit
                     {
