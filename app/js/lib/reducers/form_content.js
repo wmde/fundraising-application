@@ -1,7 +1,7 @@
 'use strict';
 
 var objectAssign = require( 'object-assign' ),
-	_ = require( 'lodash' );
+	_ = require( 'underscore' );
 
 /**
  * Return object keys that are not defined in initial state

@@ -1,6 +1,6 @@
 'use strict';
 
-var _ = require( 'lodash' ),
+var _ = require( 'underscore' ),
 	objectAssign = require( 'object-assign' );
 
 function inputIsValid( value, pattern ) {

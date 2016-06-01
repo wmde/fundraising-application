@@ -1,7 +1,7 @@
 'use strict';
 
 var objectAssign = require( 'object-assign' ),
-	_ = require( 'lodash' ),
+	_ = require( 'underscore' ),
 	AddressDisplayHandler = {
 		fullName: null,
 		street: null,
