@@ -16,3 +16,7 @@ app/config/
 
 res/blz.lut2f
 web/res/js/wmde.js
+
+deployment/deployment.retry
+deployment/inventory
+
