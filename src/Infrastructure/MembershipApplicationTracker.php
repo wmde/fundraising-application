@@ -7,10 +7,13 @@ namespace WMDE\Fundraising\Frontend\Infrastructure;
 /**
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
+ * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 interface MembershipApplicationTracker {
 
-	// TODO: exception
-	public function trackApplication( MembershipApplicationTrackingInfo $trackingInfo );
+	/**
+	 * @throws MembershipApplicationTracker
+	 */
+	public function trackApplication( int $applicationId, MembershipApplicationTrackingInfo $trackingInfo );
 
 }

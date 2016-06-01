@@ -12,6 +12,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\MembershipPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhoneNumber;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
+use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTrackingInfo;
 
 /**
  * @license GNU GPL v2+
@@ -25,7 +26,8 @@ class MembershipApplicationBuilder {
 		return MembershipApplication::newApplication(
 			$request->getMembershipType(),
 			$this->newApplicant( $request ),
-			$this->newPayment( $request )
+			$this->newPayment( $request ),
+			$request->getTrackingInfo()
 		);
 	}
 

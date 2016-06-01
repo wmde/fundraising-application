@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\UseCases\ApplyForMembership;
 
 use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\FreezableValueObject;
+use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTrackingInfo;
 
 /**
  * @license GNU GPL v2+
@@ -35,6 +36,8 @@ class ApplyForMembershipRequest {
 	private $paymentIntervalInMonths;
 	private $paymentAmount;
 	private $paymentBankData;
+
+	private $trackingInfo;
 
 	public function getMembershipType(): string {
 		return $this->membershipType;
@@ -189,6 +192,15 @@ class ApplyForMembershipRequest {
 	public function setPaymentBankData( BankData $paymentBankData ) {
 		$this->assertIsWritable();
 		$this->paymentBankData = $paymentBankData;
+	}
+
+	public function getTrackingInfo(): MembershipApplicationTrackingInfo {
+		return $this->trackingInfo;
+	}
+
+	public function setTrackingInfo( MembershipApplicationTrackingInfo $trackingInfo ) {
+		$this->assertIsWritable();
+		$this->trackingInfo = $trackingInfo;
 	}
 
 }

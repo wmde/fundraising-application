@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Domain\Model;
 
+use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTrackingInfo;
+
 /**
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >

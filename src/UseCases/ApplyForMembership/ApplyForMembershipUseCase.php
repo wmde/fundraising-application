@@ -7,6 +7,8 @@ namespace WMDE\Fundraising\Frontend\UseCases\ApplyForMembership;
 use WMDE\Fundraising\Frontend\Domain\Model\MembershipApplication;
 use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepository;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipAppAuthUpdater;
+use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTracker;
+use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTrackingInfo;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
 
@@ -26,13 +28,15 @@ class ApplyForMembershipUseCase {
 
 	public function __construct( MembershipApplicationRepository $repository,
 		MembershipAppAuthUpdater $authUpdater, TemplateBasedMailer $mailer,
-		TokenGenerator $tokenGenerator, MembershipApplicationValidator $validator ) {
+		TokenGenerator $tokenGenerator, MembershipApplicationValidator $validator,
+		MembershipApplicationTracker $tracker ) {
 
 		$this->repository = $repository;
 		$this->authUpdater = $authUpdater;
 		$this->mailer = $mailer;
 		$this->tokenGenerator = $tokenGenerator;
 		$this->validator = $validator;
+		$this->membershipApplicationTracker = $tracker;
 	}
 
 	public function applyForMembership( ApplyForMembershipRequest $request ): ApplyForMembershipResponse {
@@ -56,6 +60,9 @@ class ApplyForMembershipUseCase {
 		// TODO: handle exceptions
 		$this->authUpdater->allowAccessViaToken( $application->getId(), $accessToken );
 		$this->authUpdater->allowModificationViaToken( $application->getId(), $updateToken );
+
+		// TODO: handle exceptions
+		$this->membershipApplicationTracker->trackApplication( $application->getId(), $request->getTrackingInfo() );
 
 		// TODO: handle exceptions
 		$this->sendConfirmationEmail( $application );

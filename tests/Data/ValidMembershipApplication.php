@@ -15,6 +15,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\MembershipPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhoneNumber;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
+use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTrackingInfo;
 
 /**
  * newDomainEntity and newDoctrineEntity return equivalent objects.
@@ -49,6 +50,9 @@ class ValidMembershipApplication {
 	const PAYMENT_BANK_NAME = 'ING-DiBa';
 	const PAYMENT_BIC = 'INGDDEFFXXX';
 	const PAYMENT_IBAN = 'DE12500105170648489890';
+
+	const TEMPLATE_CAMPAIGN = 'test161012';
+	const TEMPLATE_NAME = 'Some_Membership_Form_Template.twig';
 
 	public static function newDomainEntity(): MembershipApplication {
 		return ( new self() )->createApplication();
