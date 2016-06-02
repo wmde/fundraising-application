@@ -398,7 +398,12 @@ $app->post(
 
 		$response = $ffFactory->newApplyForMembershipUseCase()->applyForMembership( $request );
 
-		return $response->isSuccessful() ? $ffFactory->newMembershipApplicationConfirmationHtmlPresenter()->present( $response ) : 'TODO fail'; // TODO
+		return $response->isSuccessful() ?
+			$ffFactory->newMembershipApplicationConfirmationHtmlPresenter()->present( $response ) :
+			$ffFactory->newMembershipFormViolationPresenter()->present(
+				$request,
+				$httpRequest->request->get( 'showMembershipTypeOption' ) === 'true'
+			);
 	}
 );
 

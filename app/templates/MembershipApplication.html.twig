@@ -1,5 +1,5 @@
 <!-- <html> -->
-{% set showMembershipTypeOption = true %}
+{% set showMembershipTypeOption = showMembershipTypeOption is defined ? showMembershipTypeOption : 'true' %}
 {% set membershipAppeal = 'Werden Sie Mitglied für Freies Wissen!' %}
 {% set formSlideOpen = false %}
 

@@ -40,9 +40,10 @@ class ApplyForMembershipUseCase {
 	}
 
 	public function applyForMembership( ApplyForMembershipRequest $request ): ApplyForMembershipResponse {
-		if ( !$this->validator->validate( $request )->isSuccessful() ) {
+		$validationResult = $this->validator->validate( $request );
+		if ( !$validationResult->isSuccessful() ) {
 			// TODO: return failures (note that we have infrastructure failures that are not ConstraintViolations)
-			return ApplyForMembershipResponse::newFailureResponse();
+			return ApplyForMembershipResponse::newFailureResponse( $validationResult );
 		}
 
 		$application = $this->newApplicationFromRequest( $request );
