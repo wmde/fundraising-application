@@ -39,6 +39,7 @@ class MembershipApplicationValidator {
 
 		$this->validateFee();
 		$this->validateBankData();
+		$this->validateApplicant();
 
 		return new Result( $this->violations );
 	}
@@ -96,8 +97,18 @@ class MembershipApplicationValidator {
 				return Result::VIOLATION_MISSING;
 			case 'incorrect_length':
 				return Result::VIOLATION_WRONG_LENGTH;
+			case 'iban_blocked':
+				return Result::VIOLATION_IBAN_BLOCKED;
+			case 'iban_invalid':
+				return Result::VIOLATION_IBAN_INVALID;
 			default:
 				throw new \LogicException();
+		}
+	}
+
+	private function validateApplicant() {
+		if ( !strtotime( $this->request->getApplicantDateOfBirth() ) ) {
+			$this->violations[Result::SOURCE_APPLICANT_DATE_OF_BIRTH] = Result::VIOLATION_NOT_DATE;
 		}
 	}
 

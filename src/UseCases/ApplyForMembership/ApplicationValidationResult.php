@@ -16,11 +16,15 @@ class ApplicationValidationResult {
 	const SOURCE_BANK_NAME = 'bank-name';
 	const SOURCE_BANK_CODE = 'bank-code';
 	const SOURCE_BANK_ACCOUNT = 'bank-account';
+	const SOURCE_APPLICANT_DATE_OF_BIRTH = 'applicant-dob';
 
 	const VIOLATION_TOO_LOW = 'too-low';
 	const VIOLATION_WRONG_LENGTH = 'wrong-length';
 	const VIOLATION_NOT_MONEY = 'not-money';
 	const VIOLATION_MISSING = 'missing';
+	const VIOLATION_IBAN_BLOCKED = 'iban-blocked';
+	const VIOLATION_IBAN_INVALID = 'iban-invalid';
+	const VIOLATION_NOT_DATE = 'not-date';
 
 	private $violations;
 

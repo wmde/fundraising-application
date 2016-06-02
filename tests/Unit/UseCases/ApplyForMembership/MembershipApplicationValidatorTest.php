@@ -197,4 +197,14 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 		);
 	}
 
+	public function testWhenDateOfBirthIsNotDate_validationFails() {
+		$request = $this->newValidRequest();
+		$request->setApplicantDateOfBirth( 'this is not a valid date' );
+
+		$this->assertEquals(
+			new Result( [ Result::SOURCE_APPLICANT_DATE_OF_BIRTH => Result::VIOLATION_NOT_DATE ] ),
+			$this->newValidator()->validate( $request )
+		);
+	}
+
 }
