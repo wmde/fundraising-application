@@ -1,6 +1,8 @@
 {
   "field_required": "Dieses Feld ist ein Pflichtfeld",
   "incorrect_length": "TODO: Value violates length limit constraints",
+  "iban_blocked": "TODO: IBAN is blocked",
+  "iban_invalid": "TODO: IBAN is not valid",
   "email_address_wrong_format": "Kein gültiges Email-Adressformat",
   "email_address_invalid": "Keine gültige E-Mail-Adresse",
   "email_address_domain_record_not_found": "Domain der Mailadresse nicht gefunden",
