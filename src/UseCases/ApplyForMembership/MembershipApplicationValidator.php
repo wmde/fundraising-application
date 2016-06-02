@@ -94,6 +94,8 @@ class MembershipApplicationValidator {
 		switch ( $violation->getMessageIdentifier() ) {
 			case 'field_required':
 				return Result::VIOLATION_MISSING;
+			case 'incorrect_length':
+				return Result::VIOLATION_WRONG_LENGTH;
 			default:
 				throw new \LogicException();
 		}

@@ -18,6 +18,7 @@ class ApplicationValidationResult {
 	const SOURCE_BANK_ACCOUNT = 'bank-account';
 
 	const VIOLATION_TOO_LOW = 'too-low';
+	const VIOLATION_WRONG_LENGTH = 'wrong-length';
 	const VIOLATION_NOT_MONEY = 'not-money';
 	const VIOLATION_MISSING = 'missing';
 

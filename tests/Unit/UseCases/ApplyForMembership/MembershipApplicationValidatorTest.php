@@ -173,4 +173,28 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 		);
 	}
 
+	public function testWhenTooLongBankAccount_validationFails() {
+		$this->bankDataValidator = $this->newRealBankDataValidator();
+
+		$request = $this->newValidRequest();
+		$request->getPaymentBankData()->setAccount( '01189998819991197253' );
+
+		$this->assertEquals(
+			new Result( [ Result::SOURCE_BANK_ACCOUNT => Result::VIOLATION_WRONG_LENGTH ] ),
+			$this->newValidator()->validate( $request )
+		);
+	}
+
+	public function testWhenTooLongBankCode_validationFails() {
+		$this->bankDataValidator = $this->newRealBankDataValidator();
+
+		$request = $this->newValidRequest();
+		$request->getPaymentBankData()->setBankCode( '01189998819991197253' );
+
+		$this->assertEquals(
+			new Result( [ Result::SOURCE_BANK_CODE => Result::VIOLATION_WRONG_LENGTH ] ),
+			$this->newValidator()->validate( $request )
+		);
+	}
+
 }
