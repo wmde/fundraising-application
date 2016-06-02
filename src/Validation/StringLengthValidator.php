@@ -12,7 +12,7 @@ class StringLengthValidator {
 
 	public function validate( $value, int $maxLength, int $minLength = 0 ): ValidationResult {
 		if ( strlen( $value ) < $minLength || strlen( $value ) > $maxLength ) {
-			return new ValidationResult( new ConstraintViolation( $value, 'Value violates length limit constraints.' ) );
+			return new ValidationResult( new ConstraintViolation( $value, 'incorrect_length' ) );
 		}
 
 		return new ValidationResult();
