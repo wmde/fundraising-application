@@ -4,12 +4,13 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\UseCases\ApplyForMembership;
 
+use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplicationRequest;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplicationValidationResult as Result;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipRequest;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\MembershipApplicationValidator;
 use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
-use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
+use WMDE\Fundraising\Frontend\Validation\IbanValidator;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
 use WMDE\Fundraising\Frontend\Validation\ValidationResult;
 
@@ -18,6 +19,7 @@ use WMDE\Fundraising\Frontend\Validation\ValidationResult;
  *
  * @license GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
+ * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 
@@ -97,45 +99,54 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 		return $feeValidator;
 	}
 
-	/**
-	 * @dataProvider bankDataViolationResultProvider
-	 */
-	public function testWhenBankDataValidationFails_overallValidationAlsoFails(
-		ValidationResult $result, Result $expectedResult ) {
+	public function testWhenIbanIsMissing_validationFails() {
+		$this->bankDataValidator = $this->newRealBankDataValidator();
 
-		$this->bankDataValidator = $this->newFailingBankDataValidator( $result );
+		$request = $this->newValidRequest();
+		$request->getPaymentBankData()->setIban( new Iban( '' ) );
 
 		$this->assertEquals(
-			$expectedResult,
-			$this->newValidator()->validate( $this->newValidRequest() )
+			new Result( [ Result::SOURCE_IBAN => Result::VIOLATION_MISSING ] ),
+			$this->newValidator()->validate( $request )
 		);
 	}
 
-	private function newFailingBankDataValidator( ValidationResult $result ): BankDataValidator {
-		$feeValidator = $this->getMockBuilder( BankDataValidator::class )
-			->disableOriginalConstructor()->getMock();
-
-		$feeValidator->method( 'validate' )
-			->willReturn( $result );
-
-		return $feeValidator;
+	private function newRealBankDataValidator(): BankDataValidator {
+		return new BankDataValidator( $this->newSucceedingIbanValidator() );
 	}
 
-	public function bankDataViolationResultProvider() {
-		return [
-			[
-				new ValidationResult( new ConstraintViolation( '', 'field_required', 'iban' ) ),
-				new Result( [ Result::SOURCE_IBAN => Result::VIOLATION_MISSING ] )
-			],
-			[
-				new ValidationResult( new ConstraintViolation( '', 'field_required', 'bic' ) ),
-				new Result( [ Result::SOURCE_BIC => Result::VIOLATION_MISSING ] )
-			],
-			[
-				new ValidationResult( new ConstraintViolation( '', 'field_required', 'bankname' ) ),
-				new Result( [ Result::SOURCE_BANK_NAME => Result::VIOLATION_MISSING ] )
-			]
-		];
+	private function newSucceedingIbanValidator(): IbanValidator {
+		$ibanValidator = $this->getMockBuilder( IbanValidator::class )
+			->disableOriginalConstructor()->getMock();
+
+		$ibanValidator->method( 'validate' )
+			->willReturn( new ValidationResult() );
+
+		return $ibanValidator;
+	}
+
+	public function testWhenBicIsMissing_validationFails() {
+		$this->bankDataValidator = $this->newRealBankDataValidator();
+
+		$request = $this->newValidRequest();
+		$request->getPaymentBankData()->setBic( '' );
+
+		$this->assertEquals(
+			new Result( [ Result::SOURCE_BIC => Result::VIOLATION_MISSING ] ),
+			$this->newValidator()->validate( $request )
+		);
+	}
+
+	public function testWhenBankNameIsMissing_validationFails() {
+		$this->bankDataValidator = $this->newRealBankDataValidator();
+
+		$request = $this->newValidRequest();
+		$request->getPaymentBankData()->setBankName( '' );
+
+		$this->assertEquals(
+			new Result( [ Result::SOURCE_BANK_NAME => Result::VIOLATION_MISSING ] ),
+			$this->newValidator()->validate( $request )
+		);
 	}
 
 }
