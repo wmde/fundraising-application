@@ -437,6 +437,13 @@ $app->post(
 	}
 );
 
+$app->post(
+	'handle-creditcard-payment-notification',
+	function ( Application $app, Request $request ) use ( $ffFactory ) {
+		return 'TODO';
+	}
+);
+
 $app->get( '/', function ( Application $app ) {
 
 	// TODO Move code from template to content wiki to have a page name without suffixes (/page/DonationForm)
