@@ -23,6 +23,10 @@ class ApplicationValidationResult {
 	const SOURCE_APPLICANT_FIRST_NAME = 'applicant-first-name';
 	const SOURCE_APPLICANT_LAST_NAME = 'applicant-last-name';
 	const SOURCE_APPLICANT_SALUTATION = 'applicant-salutation';
+	const SOURCE_APPLICANT_STREET_ADDRESS = 'street-address';
+	const SOURCE_APPLICANT_POSTAL_CODE = 'postal-code';
+	const SOURCE_APPLICANT_CITY = 'city';
+	const SOURCE_APPLICANT_COUNTRY = 'country-code';
 
 	const VIOLATION_TOO_LOW = 'too-low';
 	const VIOLATION_WRONG_LENGTH = 'wrong-length';

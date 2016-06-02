@@ -47,6 +47,7 @@ class MembershipApplicationValidator {
 		$this->validateApplicantName();
 		$this->validateApplicantContactInfo();
 		$this->validateApplicantDateOfBirth();
+		$this->validateApplicantAddress();
 
 		return new Result( $this->violations );
 	}
@@ -155,6 +156,24 @@ class MembershipApplicationValidator {
 
 		if ( $this->request->getApplicantSalutation() === '' ) {
 			$this->violations[Result::SOURCE_APPLICANT_SALUTATION] = Result::VIOLATION_MISSING;
+		}
+	}
+
+	private function validateApplicantAddress() {
+		if ( $this->request->getApplicantStreetAddress() === '' ) {
+			$this->violations[Result::SOURCE_APPLICANT_STREET_ADDRESS] = Result::VIOLATION_MISSING;
+		}
+
+		if ( $this->request->getApplicantPostalCode() === '' ) {
+			$this->violations[Result::SOURCE_APPLICANT_POSTAL_CODE] = Result::VIOLATION_MISSING;
+		}
+
+		if ( $this->request->getApplicantCity() === '' ) {
+			$this->violations[Result::SOURCE_APPLICANT_CITY] = Result::VIOLATION_MISSING;
+		}
+
+		if ( $this->request->getApplicantCountryCode() === '' ) {
+			$this->violations[Result::SOURCE_APPLICANT_COUNTRY] = Result::VIOLATION_MISSING;
 		}
 	}
 
