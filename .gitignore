@@ -3,6 +3,7 @@
 
 composer.phar
 composer.lock
+npm-debug.log
 
 vendor/
 node_modules/
