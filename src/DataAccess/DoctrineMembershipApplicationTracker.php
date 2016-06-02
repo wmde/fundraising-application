@@ -56,7 +56,7 @@ class DoctrineMembershipApplicationTracker implements MembershipApplicationTrack
 		}
 	}
 
-	private function concatenate( MembershipApplicationTrackingInfo $trackingInfo ) {
+	private function concatenate( MembershipApplicationTrackingInfo $trackingInfo ): string {
 		if ( $trackingInfo->getKeyword() === '' ) {
 			return '';
 		}

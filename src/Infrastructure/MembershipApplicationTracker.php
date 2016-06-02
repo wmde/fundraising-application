@@ -12,7 +12,7 @@ namespace WMDE\Fundraising\Frontend\Infrastructure;
 interface MembershipApplicationTracker {
 
 	/**
-	 * @throws MembershipApplicationTracker
+	 * @throws MembershipApplicationTrackingException
 	 */
 	public function trackApplication( int $applicationId, MembershipApplicationTrackingInfo $trackingInfo );
 
