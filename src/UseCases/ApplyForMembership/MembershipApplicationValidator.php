@@ -30,7 +30,9 @@ class MembershipApplicationValidator {
 	 */
 	private $violations;
 
-	public function __construct( FeeValidator $feeValidator, BankDataValidator $bankDataValidator, EmailValidator $emailValidator ) {
+	public function __construct( FeeValidator $feeValidator, BankDataValidator $bankDataValidator,
+		EmailValidator $emailValidator ) {
+
 		$this->feeValidator = $feeValidator;
 		$this->bankDataValidator = $bankDataValidator;
 		$this->emailValidator = $emailValidator;
@@ -42,7 +44,9 @@ class MembershipApplicationValidator {
 
 		$this->validateFee();
 		$this->validateBankData();
-		$this->validateApplicant();
+		$this->validateApplicantName();
+		$this->validateApplicantContactInfo();
+		$this->validateApplicantDateOfBirth();
 
 		return new Result( $this->violations );
 	}
@@ -109,17 +113,48 @@ class MembershipApplicationValidator {
 		}
 	}
 
-	private function validateApplicant() {
+	private function validateApplicantDateOfBirth() {
 		if ( !strtotime( $this->request->getApplicantDateOfBirth() ) ) {
 			$this->violations[Result::SOURCE_APPLICANT_DATE_OF_BIRTH] = Result::VIOLATION_NOT_DATE;
 		}
+	}
 
+	private function validateApplicantContactInfo() {
 		if ( !preg_match( '/^[0-9\+\-\(\)]+/i', $this->request->getApplicantPhoneNumber() ) ) {
 			$this->violations[Result::SOURCE_APPLICANT_PHONE_NUMBER] = Result::VIOLATION_NOT_PHONE_NUMBER;
 		}
 
 		if ( $this->emailValidator->validate( $this->request->getApplicantEmailAddress() )->hasViolations() ) {
 			$this->violations[Result::SOURCE_APPLICANT_EMAIL] = Result::VIOLATION_NOT_EMAIL;
+		}
+	}
+
+	private function validateApplicantName() {
+		if ( $this->request->isCompanyApplication() ) {
+			$this->validateCompanyName();
+		}
+		else {
+			$this->validatePersonName();
+		}
+	}
+
+	private function validateCompanyName() {
+		if ( $this->request->getApplicantCompanyName() === '' ) {
+			$this->violations[Result::SOURCE_APPLICANT_COMPANY] = Result::VIOLATION_MISSING;
+		}
+	}
+
+	private function validatePersonName() {
+		if ( $this->request->getApplicantFirstName() === '' ) {
+			$this->violations[Result::SOURCE_APPLICANT_FIRST_NAME] = Result::VIOLATION_MISSING;
+		}
+
+		if ( $this->request->getApplicantLastName() === '' ) {
+			$this->violations[Result::SOURCE_APPLICANT_LAST_NAME] = Result::VIOLATION_MISSING;
+		}
+
+		if ( $this->request->getApplicantSalutation() === '' ) {
+			$this->violations[Result::SOURCE_APPLICANT_SALUTATION] = Result::VIOLATION_MISSING;
 		}
 	}
 

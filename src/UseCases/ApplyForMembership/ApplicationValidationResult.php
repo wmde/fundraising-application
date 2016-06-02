@@ -19,6 +19,10 @@ class ApplicationValidationResult {
 	const SOURCE_APPLICANT_DATE_OF_BIRTH = 'applicant-dob';
 	const SOURCE_APPLICANT_PHONE_NUMBER = 'applicant-phone';
 	const SOURCE_APPLICANT_EMAIL = 'applicant-email';
+	const SOURCE_APPLICANT_COMPANY = 'company';
+	const SOURCE_APPLICANT_FIRST_NAME = 'applicant-first-name';
+	const SOURCE_APPLICANT_LAST_NAME = 'applicant-last-name';
+	const SOURCE_APPLICANT_SALUTATION = 'applicant-salutation';
 
 	const VIOLATION_TOO_LOW = 'too-low';
 	const VIOLATION_WRONG_LENGTH = 'wrong-length';

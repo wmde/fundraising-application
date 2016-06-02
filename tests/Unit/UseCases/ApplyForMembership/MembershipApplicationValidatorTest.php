@@ -287,4 +287,45 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 		return $feeValidator;
 	}
 
+	public function testWhenCompanyIsMissingFromCompanyApplication_validationFails() {
+		$request = $this->newValidRequest();
+		$request->markApplicantAsCompany();
+		$request->setApplicantCompanyName( '' );
+
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[ Result::SOURCE_APPLICANT_COMPANY => Result::VIOLATION_MISSING ]
+		);
+	}
+
+	public function testWhenFirstNameIsMissingFromPersonalApplication_validationFails() {
+		$request = $this->newValidRequest();
+		$request->setApplicantFirstName( '' );
+
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[ Result::SOURCE_APPLICANT_FIRST_NAME => Result::VIOLATION_MISSING ]
+		);
+	}
+
+	public function testWhenLastNameIsMissingFromPersonalApplication_validationFails() {
+		$request = $this->newValidRequest();
+		$request->setApplicantLastName( '' );
+
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[ Result::SOURCE_APPLICANT_LAST_NAME => Result::VIOLATION_MISSING ]
+		);
+	}
+
+	public function testWhenSalutationIsMissingFromPersonalApplication_validationFails() {
+		$request = $this->newValidRequest();
+		$request->setApplicantSalutation( '' );
+
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[ Result::SOURCE_APPLICANT_SALUTATION => Result::VIOLATION_MISSING ]
+		);
+	}
+
 }
