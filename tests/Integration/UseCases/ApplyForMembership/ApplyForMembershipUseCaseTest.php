@@ -4,11 +4,14 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\ApplyForMembership;
 
+use WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipApplicationTracker;
 use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepository;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipAppAuthUpdater;
+use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTracker;
+use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTrackingInfo;
 use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
@@ -56,12 +59,18 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 	 */
 	private $validator;
 
+	/**
+	 * @var MembershipApplicationTracker
+	 */
+	private $tracker;
+
 	public function setUp() {
 		$this->repository = new InMemoryMembershipApplicationRepository();
 		$this->authUpdater = $this->getMock( MembershipAppAuthUpdater::class );
 		$this->mailer = new TemplateBasedMailerSpy( $this );
 		$this->tokenGenerator = new FixedTokenGenerator( self::GENERATED_TOKEN );
 		$this->validator = $this->newSucceedingValidator();
+		$this->tracker = $this->getMock( MembershipApplicationTracker::class );
 	}
 
 	private function newSucceedingValidator(): MembershipApplicationValidator {
@@ -87,7 +96,8 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 			$this->authUpdater,
 			$this->mailer,
 			$this->tokenGenerator,
-			$this->validator
+			$this->validator,
+			$this->tracker
 		);
 	}
 
@@ -113,6 +123,8 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 		$request->setPaymentBankData( $this->newValidBankData() );
 
+		$request->setTrackingInfo( $this->newTrackingInfo() );
+
 		return $request->assertNoNullFields();
 	}
 
@@ -126,6 +138,13 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$bankData->setBankName( ValidMembershipApplication::PAYMENT_BANK_NAME );
 
 		return $bankData->assertNoNullFields()->freeze();
+	}
+
+	private function newTrackingInfo() {
+		return new MembershipApplicationTrackingInfo(
+			ValidMembershipApplication::TEMPLATE_CAMPAIGN,
+			ValidMembershipApplication::TEMPLATE_NAME
+		);
 	}
 
 	public function testGivenValidRequest_applicationGetsPersisted() {

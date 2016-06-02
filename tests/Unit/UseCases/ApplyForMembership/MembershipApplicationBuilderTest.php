@@ -9,6 +9,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
+use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTrackingInfo;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipRequest;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\MembershipApplicationBuilder;
@@ -63,6 +64,7 @@ class MembershipApplicationBuilderTest extends \PHPUnit_Framework_TestCase {
 		$request->setApplicantDateOfBirth(
 			$omitOptionalFields ? '' : ValidMembershipApplication::APPLICANT_DATE_OF_BIRTH
 		);
+		$request->setTrackingInfo( $this->newTrackingInfo() );
 
 		return $request->assertNoNullFields()->freeze();
 	}
@@ -77,6 +79,13 @@ class MembershipApplicationBuilderTest extends \PHPUnit_Framework_TestCase {
 		$bankData->setBankName( ValidMembershipApplication::PAYMENT_BANK_NAME );
 
 		return $bankData->assertNoNullFields()->freeze();
+	}
+
+	private function newTrackingInfo(): MembershipApplicationTrackingInfo {
+		return new MembershipApplicationTrackingInfo(
+			ValidMembershipApplication::TEMPLATE_CAMPAIGN,
+			ValidMembershipApplication::TEMPLATE_NAME
+		);
 	}
 
 	private function assertIsExpectedCompanyPersonName( PersonName $name ) {

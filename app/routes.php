@@ -21,6 +21,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTrackingInfo;
 use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\SubscriptionRequest;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipRequest;
@@ -385,6 +386,11 @@ $app->post(
 		$bankData->setBic( $httpRequest->request->get( 'bic', '' ) );
 		$bankData->setAccount( $httpRequest->request->get( 'account_number', '' ) );
 		$bankData->setBankCode( $httpRequest->request->get( 'bank_code', '' ) );
+
+		$request->setTrackingInfo( new MembershipApplicationTrackingInfo(
+			$httpRequest->request->get( 'templateCampaign', '' ),
+			$httpRequest->request->get( 'templateName', '' )
+		) );
 
 		$bankData->assertNoNullFields()->freeze();
 		$request->setPaymentBankData( $bankData );

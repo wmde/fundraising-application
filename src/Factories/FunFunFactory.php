@@ -35,6 +35,7 @@ use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipAppAuthUpdater;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipApplicationAuthorizer;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipApplicationRepository;
+use WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipApplicationTracker;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineSubscriptionRepository;
 use WMDE\Fundraising\Frontend\DataAccess\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\DataAccess\UniqueTransferCodeGenerator;
@@ -58,6 +59,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\LoggingMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\LoggingPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipAppAuthUpdater;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationAuthorizer;
+use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 use WMDE\Fundraising\Frontend\Infrastructure\PageRetriever;
 use WMDE\Fundraising\Frontend\Infrastructure\PaymentNotificationVerifier;
@@ -862,7 +864,8 @@ class FunFunFactory {
 			$this->newMembershipAuthUpdater(),
 			$this->newApplyForMembershipMailer(),
 			$this->newTokenGenerator(),
-			$this->newMembershipApplicationValidator()
+			$this->newMembershipApplicationValidator(),
+			$this->newMembershipApplicationTracker()
 		);
 	}
 
@@ -882,6 +885,10 @@ class FunFunFactory {
 			new MembershipFeeValidator(),
 			$this->newBankDataValidator()
 		);
+	}
+
+	private function newMembershipApplicationTracker(): MembershipApplicationTracker {
+		return new DoctrineMembershipApplicationTracker( $this->getEntityManager() );
 	}
 
 	private function newMembershipAuthUpdater(): MembershipAppAuthUpdater {

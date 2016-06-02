@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Data;
 
 use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Model\Iban;
+use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTrackingInfo;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipRequest;
 
 /**
@@ -46,6 +47,8 @@ class ValidMembershipApplicationRequest {
 		$request->setPaymentIntervalInMonths( ValidMembershipApplication::PAYMENT_PERIOD_IN_MONTHS );
 		$request->setPaymentAmountInEuros( (string)ValidMembershipApplication::PAYMENT_AMOUNT_IN_EURO );
 
+		$request->setTrackingInfo( $this->newTrackingInfo() );
+
 		$request->setPaymentBankData( $this->newValidBankData() );
 
 		return $request->assertNoNullFields();
@@ -61,6 +64,13 @@ class ValidMembershipApplicationRequest {
 		$bankData->setIban( new Iban( ValidMembershipApplication::PAYMENT_IBAN ) );
 
 		return $bankData->freeze()->assertNoNullFields();
+	}
+
+	private function newTrackingInfo() {
+		return new MembershipApplicationTrackingInfo(
+			ValidMembershipApplication::TEMPLATE_CAMPAIGN,
+			ValidMembershipApplication::TEMPLATE_NAME
+		);
 	}
 
 }
