@@ -110,6 +110,10 @@ class MembershipApplicationValidator {
 		if ( !strtotime( $this->request->getApplicantDateOfBirth() ) ) {
 			$this->violations[Result::SOURCE_APPLICANT_DATE_OF_BIRTH] = Result::VIOLATION_NOT_DATE;
 		}
+
+		if ( !preg_match( '/^[0-9\+\-\(\)]+/i', $this->request->getApplicantPhoneNumber() ) ) {
+			$this->violations[Result::SOURCE_APPLICANT_PHONE_NUMBER] = Result::VIOLATION_NOT_PHONE_NUMBER;
+		}
 	}
 
 }

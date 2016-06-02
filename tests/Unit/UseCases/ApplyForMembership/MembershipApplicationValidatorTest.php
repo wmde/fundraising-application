@@ -105,8 +105,15 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 		$request = $this->newValidRequest();
 		$request->getPaymentBankData()->setIban( new Iban( '' ) );
 
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[ Result::SOURCE_IBAN => Result::VIOLATION_MISSING ]
+		);
+	}
+
+	private function assertRequestValidationResultInErrors( ApplyForMembershipRequest $request, array $expectedErrors ) {
 		$this->assertEquals(
-			new Result( [ Result::SOURCE_IBAN => Result::VIOLATION_MISSING ] ),
+			new Result( $expectedErrors ),
 			$this->newValidator()->validate( $request )
 		);
 	}
@@ -131,9 +138,9 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 		$request = $this->newValidRequest();
 		$request->getPaymentBankData()->setBic( '' );
 
-		$this->assertEquals(
-			new Result( [ Result::SOURCE_BIC => Result::VIOLATION_MISSING ] ),
-			$this->newValidator()->validate( $request )
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[ Result::SOURCE_BIC => Result::VIOLATION_MISSING ]
 		);
 	}
 
@@ -143,9 +150,9 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 		$request = $this->newValidRequest();
 		$request->getPaymentBankData()->setBankName( '' );
 
-		$this->assertEquals(
-			new Result( [ Result::SOURCE_BANK_NAME => Result::VIOLATION_MISSING ] ),
-			$this->newValidator()->validate( $request )
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[ Result::SOURCE_BANK_NAME => Result::VIOLATION_MISSING ]
 		);
 	}
 
@@ -155,9 +162,9 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 		$request = $this->newValidRequest();
 		$request->getPaymentBankData()->setBankCode( '' );
 
-		$this->assertEquals(
-			new Result( [ Result::SOURCE_BANK_CODE => Result::VIOLATION_MISSING ] ),
-			$this->newValidator()->validate( $request )
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[ Result::SOURCE_BANK_CODE => Result::VIOLATION_MISSING ]
 		);
 	}
 
@@ -167,9 +174,9 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 		$request = $this->newValidRequest();
 		$request->getPaymentBankData()->setAccount( '' );
 
-		$this->assertEquals(
-			new Result( [ Result::SOURCE_BANK_ACCOUNT => Result::VIOLATION_MISSING ] ),
-			$this->newValidator()->validate( $request )
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[ Result::SOURCE_BANK_ACCOUNT => Result::VIOLATION_MISSING ]
 		);
 	}
 
@@ -179,9 +186,9 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 		$request = $this->newValidRequest();
 		$request->getPaymentBankData()->setAccount( '01189998819991197253' );
 
-		$this->assertEquals(
-			new Result( [ Result::SOURCE_BANK_ACCOUNT => Result::VIOLATION_WRONG_LENGTH ] ),
-			$this->newValidator()->validate( $request )
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[ Result::SOURCE_BANK_ACCOUNT => Result::VIOLATION_WRONG_LENGTH ]
 		);
 	}
 
@@ -191,9 +198,9 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 		$request = $this->newValidRequest();
 		$request->getPaymentBankData()->setBankCode( '01189998819991197253' );
 
-		$this->assertEquals(
-			new Result( [ Result::SOURCE_BANK_CODE => Result::VIOLATION_WRONG_LENGTH ] ),
-			$this->newValidator()->validate( $request )
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[ Result::SOURCE_BANK_CODE => Result::VIOLATION_WRONG_LENGTH ]
 		);
 	}
 
@@ -201,10 +208,32 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 		$request = $this->newValidRequest();
 		$request->setApplicantDateOfBirth( 'this is not a valid date' );
 
-		$this->assertEquals(
-			new Result( [ Result::SOURCE_APPLICANT_DATE_OF_BIRTH => Result::VIOLATION_NOT_DATE ] ),
-			$this->newValidator()->validate( $request )
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[ Result::SOURCE_APPLICANT_DATE_OF_BIRTH => Result::VIOLATION_NOT_DATE ]
 		);
+	}
+
+	/**
+	 * @dataProvider invalidPhoneNumberProvider
+	 */
+	public function testWhenApplicantPhoneNumberIsInvalid_validationFails( string $invalidPhoneNumber ) {
+		$request = $this->newValidRequest();
+		$request->setApplicantPhoneNumber( $invalidPhoneNumber );
+
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[ Result::SOURCE_APPLICANT_PHONE_NUMBER => Result::VIOLATION_NOT_PHONE_NUMBER ]
+		);
+	}
+
+	public function invalidPhoneNumberProvider() {
+		return [
+			'potato' => [ 'potato' ],
+
+			// TODO: we use the regex from the old app, which allows for lots of bugus. Improve when time
+//			'number plus stuff' => [ '01189998819991197253 (invalid edition)' ],
+		];
 	}
 
 }
