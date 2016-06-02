@@ -8,7 +8,7 @@ use WMDE\Fundraising\Frontend\Domain\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
-use WMDE\Fundraising\Frontend\Validation\MailValidator;
+use WMDE\Fundraising\Frontend\Validation\EmailValidator;
 
 /**
  * @licence GNU GPL v2+
@@ -17,7 +17,7 @@ use WMDE\Fundraising\Frontend\Validation\MailValidator;
 class GetInTouchValidatorTest extends ValidatorTestCase {
 
 	public function testNameFieldsAreOptional() {
-		$mailValidator = new MailValidator( new NullDomainNameValidator() );
+		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
 		$validator = new GetInTouchValidator( $mailValidator );
 		$request = new GetInTouchRequest(
 			'',
@@ -30,7 +30,7 @@ class GetInTouchValidatorTest extends ValidatorTestCase {
 	}
 
 	public function testEmailAddressIsValidated() {
-		$mailValidator = new MailValidator( new NullDomainNameValidator() );
+		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
 		$validator = new GetInTouchValidator( $mailValidator );
 		$request = new GetInTouchRequest(
 			'',
@@ -44,7 +44,7 @@ class GetInTouchValidatorTest extends ValidatorTestCase {
 	}
 
 	public function testSubjectIsValidated() {
-		$mailValidator = new MailValidator( new NullDomainNameValidator() );
+		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
 		$validator = new GetInTouchValidator( $mailValidator );
 		$request = new GetInTouchRequest(
 			'',
@@ -58,7 +58,7 @@ class GetInTouchValidatorTest extends ValidatorTestCase {
 	}
 
 	public function testMessageBodyIsValidated() {
-		$mailValidator = new MailValidator( new NullDomainNameValidator() );
+		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
 		$validator = new GetInTouchValidator( $mailValidator );
 		$request = new GetInTouchRequest(
 			'',

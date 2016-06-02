@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\UseCases\ApplyForMembership;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplicationValidationResult as Result;
 use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
+use WMDE\Fundraising\Frontend\Validation\EmailValidator;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator as FeeValidator;
 
 /**
@@ -17,6 +18,7 @@ class MembershipApplicationValidator {
 
 	private $feeValidator;
 	private $bankDataValidator;
+	private $emailValidator;
 
 	/**
 	 * @var ApplyForMembershipRequest
@@ -28,9 +30,10 @@ class MembershipApplicationValidator {
 	 */
 	private $violations;
 
-	public function __construct( FeeValidator $feeValidator, BankDataValidator $bankDataValidator ) {
+	public function __construct( FeeValidator $feeValidator, BankDataValidator $bankDataValidator, EmailValidator $emailValidator ) {
 		$this->feeValidator = $feeValidator;
 		$this->bankDataValidator = $bankDataValidator;
+		$this->emailValidator = $emailValidator;
 	}
 
 	public function validate( ApplyForMembershipRequest $applicationRequest ): Result {
@@ -113,6 +116,10 @@ class MembershipApplicationValidator {
 
 		if ( !preg_match( '/^[0-9\+\-\(\)]+/i', $this->request->getApplicantPhoneNumber() ) ) {
 			$this->violations[Result::SOURCE_APPLICANT_PHONE_NUMBER] = Result::VIOLATION_NOT_PHONE_NUMBER;
+		}
+
+		if ( $this->emailValidator->validate( $this->request->getApplicantEmailAddress() )->hasViolations() ) {
+			$this->violations[Result::SOURCE_APPLICANT_EMAIL] = Result::VIOLATION_NOT_EMAIL;
 		}
 	}
 

@@ -6,10 +6,13 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\UseCases\ApplyForMembership;
 
 use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplicationRequest;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingEmailValidator;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplicationValidationResult as Result;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipRequest;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\MembershipApplicationValidator;
 use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
+use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
+use WMDE\Fundraising\Frontend\Validation\EmailValidator;
 use WMDE\Fundraising\Frontend\Validation\IbanValidator;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
 use WMDE\Fundraising\Frontend\Validation\ValidationResult;
@@ -33,9 +36,15 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 	 */
 	private $bankDataValidator;
 
+	/**
+	 * @var EmailValidator
+	 */
+	private $emailValidator;
+
 	public function setUp() {
 		$this->feeValidator = $this->newSucceedingFeeValidator();
 		$this->bankDataValidator = $this->newSucceedingBankDataValidator();
+		$this->emailValidator = new SucceedingEmailValidator();
 	}
 
 	public function testGivenValidRequest_validationSucceeds() {
@@ -48,7 +57,11 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	private function newValidator() {
-		return new MembershipApplicationValidator( $this->feeValidator, $this->bankDataValidator );
+		return new MembershipApplicationValidator(
+			$this->feeValidator,
+			$this->bankDataValidator,
+			$this->emailValidator
+		);
 	}
 
 	public function testWhenFeeValidationFails_overallValidationAlsoFails() {
@@ -234,6 +247,44 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 			// TODO: we use the regex from the old app, which allows for lots of bugus. Improve when time
 //			'number plus stuff' => [ '01189998819991197253 (invalid edition)' ],
 		];
+	}
+
+	/**
+	 * @dataProvider emailViolationTypeProvider
+	 */
+	public function testWhenApplicantEmailIsInvalid_validationFails( string $emailViolationType ) {
+		$this->emailValidator = $this->newFailingEmailValidator( $emailViolationType );
+
+		$request = $this->newValidRequest();
+		$request->setApplicantEmailAddress( 'this is not a valid email' );
+
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[ Result::SOURCE_APPLICANT_EMAIL => Result::VIOLATION_NOT_EMAIL ]
+		);
+	}
+
+	public function emailViolationTypeProvider() {
+		return [
+			[ 'email_address_wrong_format' ],
+			[ 'email_address_invalid' ],
+			[ 'email_address_domain_record_not_found' ],
+		];
+	}
+
+	/**
+	 * @param string $violationType
+	 *
+	 * @return EmailValidator
+	 */
+	private function newFailingEmailValidator( string $violationType ): EmailValidator {
+		$feeValidator = $this->getMockBuilder( EmailValidator::class )
+			->disableOriginalConstructor()->getMock();
+
+		$feeValidator->method( 'validate' )
+			->willReturn( new ValidationResult( new ConstraintViolation( 'this is not a valid email', $violationType ) ) );
+
+		return $feeValidator;
 	}
 
 }

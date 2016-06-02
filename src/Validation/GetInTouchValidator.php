@@ -15,7 +15,7 @@ class GetInTouchValidator {
 
 	private $mailValidator;
 
-	public function __construct( MailValidator $mailValidator ) {
+	public function __construct( EmailValidator $mailValidator ) {
 		$this->mailValidator = $mailValidator;
 	}
 

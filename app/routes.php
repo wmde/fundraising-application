@@ -37,7 +37,7 @@ use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
 $app->get(
 	'validate-email',
 	function( Request $request ) use ( $app, $ffFactory ) {
-		$validationResult = $ffFactory->getMailValidator()->validate( $request->query->get( 'email', '' ) );
+		$validationResult = $ffFactory->getEmailValidator()->validate( $request->query->get( 'email', '' ) );
 		return $app->json( [ 'status' => $validationResult->isSuccessful() ? 'OK' : 'ERR' ] );
 	}
 );

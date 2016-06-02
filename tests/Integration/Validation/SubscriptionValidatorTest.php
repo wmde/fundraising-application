@@ -10,7 +10,7 @@ use WMDE\Fundraising\Frontend\Domain\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\InMemorySubscriptionRepository;
 use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
 use WMDE\Fundraising\Frontend\Validation\AllowedValuesValidator;
-use WMDE\Fundraising\Frontend\Validation\MailValidator;
+use WMDE\Fundraising\Frontend\Validation\EmailValidator;
 use WMDE\Fundraising\Frontend\Validation\SubscriptionDuplicateValidator;
 use WMDE\Fundraising\Frontend\Validation\SubscriptionValidator;
 use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
@@ -53,7 +53,7 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 	}
 
 	public function testEmailIsValidated() {
-		$mailValidator = new MailValidator( new NullDomainNameValidator() );
+		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
 		$subscriptionValidator = new SubscriptionValidator(
 			$mailValidator,
 			$this->getMockTextPolicyValidator(),
@@ -67,7 +67,7 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 	}
 
 	public function testFirstNameIsValidated() {
-		$mailValidator = new MailValidator( new NullDomainNameValidator() );
+		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
 		$subscriptionValidator = new SubscriptionValidator(
 			$mailValidator,
 			$this->getMockTextPolicyValidator(),
@@ -81,7 +81,7 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 	}
 
 	public function testLastNameIsValidated() {
-		$mailValidator = new MailValidator( new NullDomainNameValidator() );
+		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
 		$subscriptionValidator = new SubscriptionValidator(
 			$mailValidator,
 			$this->getMockTextPolicyValidator(),
@@ -95,7 +95,7 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 	}
 
 	public function testSalutationIsValidated() {
-		$mailValidator = new MailValidator( new NullDomainNameValidator() );
+		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
 		$subscriptionValidator = new SubscriptionValidator(
 			$mailValidator,
 			$this->getMockTextPolicyValidator(),
@@ -109,7 +109,7 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 	}
 
 	public function testGivenBadWords_subscriptionIsStillValid() {
-		$mailValidator = new MailValidator( new NullDomainNameValidator() );
+		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
 		$policyValidator = $this->getMock( TextPolicyValidator::class );
 		$policyValidator->method( 'hasHarmlessContent' )
 			->willReturn( false );
@@ -126,7 +126,7 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 	}
 
 	public function testGivenBadWords_needsModerationIsTrue() {
-		$mailValidator = new MailValidator( new NullDomainNameValidator() );
+		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
 		$policyValidator = $this->getMock( TextPolicyValidator::class );
 		$policyValidator->method( 'hasHarmlessContent' )
 			->willReturn( false );
@@ -148,7 +148,7 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 		$subscription->setEmail( 'nyan@meow.com' );
 		$subscription->setCreatedAt( new \DateTime( '5 minutes ago' ) );
 
-		$mailValidator = new MailValidator( new NullDomainNameValidator() );
+		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
 		$repository = new InMemorySubscriptionRepository();
 		$repository->storeSubscription( $subscription );
 		$duplicateValidator = new SubscriptionDuplicateValidator( $repository, new \DateTime( '30 minutes ago' ) );
@@ -171,7 +171,7 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 		$subscription->setAddress( $address );
 		$subscription->setEmail( 'nyan@meow.com' );
 
-		$mailValidator = new MailValidator( new NullDomainNameValidator() );
+		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
 		$subscriptionValidator = new SubscriptionValidator(
 			$mailValidator,
 			$this->getMockTextPolicyValidator(),
