@@ -6,15 +6,15 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit;
 
 use WMDE\Fundraising\Frontend\Domain\DomainNameValidator;
 use WMDE\Fundraising\Frontend\Domain\NullDomainNameValidator;
-use WMDE\Fundraising\Frontend\Validation\MailValidator;
+use WMDE\Fundraising\Frontend\Validation\EmailValidator;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Validation\MailValidator
+ * @covers WMDE\Fundraising\Frontend\Validation\EmailValidator
  *
  * @licence GNU GPL v2+
  * @author Christoph Fischer < christoph.fischer@wikimedia.de >
  */
-class MailValidatorTest extends \PHPUnit_Framework_TestCase {
+class EmailValidatorTest extends \PHPUnit_Framework_TestCase {
 
 	private function newStubDomainValidator(): DomainNameValidator {
 		return new class() implements DomainNameValidator {
@@ -33,7 +33,7 @@ class MailValidatorTest extends \PHPUnit_Framework_TestCase {
 	 * @dataProvider fullyValidEmailProvider
 	 */
 	public function testGivenValidMail_validationWithDomainNameCheckSucceeds( $validEmail ) {
-		$mailValidator = new MailValidator( $this->newStubDomainValidator() );
+		$mailValidator = new EmailValidator( $this->newStubDomainValidator() );
 
 		$this->assertTrue( $mailValidator->validate( $validEmail )->isSuccessful() );
 	}
@@ -53,7 +53,7 @@ class MailValidatorTest extends \PHPUnit_Framework_TestCase {
 	 * @dataProvider emailWithInvalidDomainProvider
 	 */
 	public function testGivenMailWithInvalidDomain_validationWithDomainNameCheckFails( $invalidEmail ) {
-		$mailValidator = new MailValidator( $this->newStubDomainValidator() );
+		$mailValidator = new EmailValidator( $this->newStubDomainValidator() );
 
 		$this->assertFalse( $mailValidator->validate( $invalidEmail )->isSuccessful() );
 	}
@@ -73,7 +73,7 @@ class MailValidatorTest extends \PHPUnit_Framework_TestCase {
 	 * @dataProvider emailWithInvalidFormatProvider
 	 */
 	public function testGivenMailWithInvalidFormat_validationWithoutDomainCheckFails( $invalidEmail ) {
-		$mailValidator = new MailValidator( new NullDomainNameValidator() );
+		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
 
 		$this->assertFalse( $mailValidator->validate( $invalidEmail )->isSuccessful() );
 	}

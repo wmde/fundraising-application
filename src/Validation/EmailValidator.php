@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class MailValidator {
+class EmailValidator {
 
 	private $domainValidator;
 

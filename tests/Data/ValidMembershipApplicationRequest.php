@@ -17,6 +17,8 @@ class ValidMembershipApplicationRequest {
 
 	/**
 	 * Returns a request with the same data as the constants in @see ValidMembershipApplication
+	 *
+	 * The object is purposely left mutable so tests can change a single value to something invalid.
 	 */
 	public static function newValidRequest(): ApplyForMembershipRequest {
 		return ( new self() )->createValidRequest();
@@ -63,7 +65,7 @@ class ValidMembershipApplicationRequest {
 		$bankData->setBic( ValidMembershipApplication::PAYMENT_BIC );
 		$bankData->setIban( new Iban( ValidMembershipApplication::PAYMENT_IBAN ) );
 
-		return $bankData->freeze()->assertNoNullFields();
+		return $bankData->assertNoNullFields();
 	}
 
 	private function newTrackingInfo() {

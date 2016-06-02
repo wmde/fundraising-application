@@ -17,7 +17,7 @@ class PersonalInfoValidator {
 
 	public function __construct( PersonNameValidator $nameValidator,
 								 PhysicalAddressValidator $addressValidator,
-								 MailValidator $mailValidator ) {
+								 EmailValidator $mailValidator ) {
 		$this->nameValidator = $nameValidator;
 		$this->addressValidator = $addressValidator;
 		$this->mailValidator = $mailValidator;

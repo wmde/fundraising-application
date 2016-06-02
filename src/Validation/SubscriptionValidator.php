@@ -20,7 +20,7 @@ class SubscriptionValidator {
 	private $textPolicyViolations;
 	private $titleValidator;
 
-	public function __construct( MailValidator $mailValidator, TextPolicyValidator $textPolicyValidator,
+	public function __construct( EmailValidator $mailValidator, TextPolicyValidator $textPolicyValidator,
 								 SubscriptionDuplicateValidator $duplicateValidator,
 								 AllowedValuesValidator $titleValidator ) {
 		$this->mailValidator = $mailValidator;

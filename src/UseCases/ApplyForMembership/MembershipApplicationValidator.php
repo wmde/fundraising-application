@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\UseCases\ApplyForMembership;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplicationValidationResult as Result;
 use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
+use WMDE\Fundraising\Frontend\Validation\EmailValidator;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator as FeeValidator;
 
 /**
@@ -17,6 +18,7 @@ class MembershipApplicationValidator {
 
 	private $feeValidator;
 	private $bankDataValidator;
+	private $emailValidator;
 
 	/**
 	 * @var ApplyForMembershipRequest
@@ -28,9 +30,12 @@ class MembershipApplicationValidator {
 	 */
 	private $violations;
 
-	public function __construct( FeeValidator $feeValidator, BankDataValidator $bankDataValidator ) {
+	public function __construct( FeeValidator $feeValidator, BankDataValidator $bankDataValidator,
+		EmailValidator $emailValidator ) {
+
 		$this->feeValidator = $feeValidator;
 		$this->bankDataValidator = $bankDataValidator;
+		$this->emailValidator = $emailValidator;
 	}
 
 	public function validate( ApplyForMembershipRequest $applicationRequest ): Result {
@@ -39,6 +44,9 @@ class MembershipApplicationValidator {
 
 		$this->validateFee();
 		$this->validateBankData();
+		$this->validateApplicantName();
+		$this->validateApplicantContactInfo();
+		$this->validateApplicantDateOfBirth();
 
 		return new Result( $this->violations );
 	}
@@ -81,6 +89,10 @@ class MembershipApplicationValidator {
 				return Result::SOURCE_BIC;
 			case 'bankname':
 				return Result::SOURCE_BANK_NAME;
+			case 'blz':
+				return Result::SOURCE_BANK_CODE;
+			case 'konto':
+				return Result::SOURCE_BANK_ACCOUNT;
 			default:
 				throw new \LogicException();
 		}
@@ -90,8 +102,59 @@ class MembershipApplicationValidator {
 		switch ( $violation->getMessageIdentifier() ) {
 			case 'field_required':
 				return Result::VIOLATION_MISSING;
+			case 'incorrect_length':
+				return Result::VIOLATION_WRONG_LENGTH;
+			case 'iban_blocked':
+				return Result::VIOLATION_IBAN_BLOCKED;
+			case 'iban_invalid':
+				return Result::VIOLATION_IBAN_INVALID;
 			default:
 				throw new \LogicException();
+		}
+	}
+
+	private function validateApplicantDateOfBirth() {
+		if ( !strtotime( $this->request->getApplicantDateOfBirth() ) ) {
+			$this->violations[Result::SOURCE_APPLICANT_DATE_OF_BIRTH] = Result::VIOLATION_NOT_DATE;
+		}
+	}
+
+	private function validateApplicantContactInfo() {
+		if ( !preg_match( '/^[0-9\+\-\(\)]+/i', $this->request->getApplicantPhoneNumber() ) ) {
+			$this->violations[Result::SOURCE_APPLICANT_PHONE_NUMBER] = Result::VIOLATION_NOT_PHONE_NUMBER;
+		}
+
+		if ( $this->emailValidator->validate( $this->request->getApplicantEmailAddress() )->hasViolations() ) {
+			$this->violations[Result::SOURCE_APPLICANT_EMAIL] = Result::VIOLATION_NOT_EMAIL;
+		}
+	}
+
+	private function validateApplicantName() {
+		if ( $this->request->isCompanyApplication() ) {
+			$this->validateCompanyName();
+		}
+		else {
+			$this->validatePersonName();
+		}
+	}
+
+	private function validateCompanyName() {
+		if ( $this->request->getApplicantCompanyName() === '' ) {
+			$this->violations[Result::SOURCE_APPLICANT_COMPANY] = Result::VIOLATION_MISSING;
+		}
+	}
+
+	private function validatePersonName() {
+		if ( $this->request->getApplicantFirstName() === '' ) {
+			$this->violations[Result::SOURCE_APPLICANT_FIRST_NAME] = Result::VIOLATION_MISSING;
+		}
+
+		if ( $this->request->getApplicantLastName() === '' ) {
+			$this->violations[Result::SOURCE_APPLICANT_LAST_NAME] = Result::VIOLATION_MISSING;
+		}
+
+		if ( $this->request->getApplicantSalutation() === '' ) {
+			$this->violations[Result::SOURCE_APPLICANT_SALUTATION] = Result::VIOLATION_MISSING;
 		}
 	}
 

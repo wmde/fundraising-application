@@ -4,12 +4,16 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\UseCases\ApplyForMembership;
 
+use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplicationRequest;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingEmailValidator;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplicationValidationResult as Result;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipRequest;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\MembershipApplicationValidator;
 use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
+use WMDE\Fundraising\Frontend\Validation\EmailValidator;
+use WMDE\Fundraising\Frontend\Validation\IbanValidator;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
 use WMDE\Fundraising\Frontend\Validation\ValidationResult;
 
@@ -18,6 +22,7 @@ use WMDE\Fundraising\Frontend\Validation\ValidationResult;
  *
  * @license GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
+ * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 
@@ -31,9 +36,15 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 	 */
 	private $bankDataValidator;
 
+	/**
+	 * @var EmailValidator
+	 */
+	private $emailValidator;
+
 	public function setUp() {
 		$this->feeValidator = $this->newSucceedingFeeValidator();
 		$this->bankDataValidator = $this->newSucceedingBankDataValidator();
+		$this->emailValidator = new SucceedingEmailValidator();
 	}
 
 	public function testGivenValidRequest_validationSucceeds() {
@@ -46,7 +57,11 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	private function newValidator() {
-		return new MembershipApplicationValidator( $this->feeValidator, $this->bankDataValidator );
+		return new MembershipApplicationValidator(
+			$this->feeValidator,
+			$this->bankDataValidator,
+			$this->emailValidator
+		);
 	}
 
 	public function testWhenFeeValidationFails_overallValidationAlsoFails() {
@@ -97,45 +112,220 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 		return $feeValidator;
 	}
 
-	/**
-	 * @dataProvider bankDataViolationResultProvider
-	 */
-	public function testWhenBankDataValidationFails_overallValidationAlsoFails(
-		ValidationResult $result, Result $expectedResult ) {
+	public function testWhenIbanIsMissing_validationFails() {
+		$this->bankDataValidator = $this->newRealBankDataValidator();
 
-		$this->bankDataValidator = $this->newFailingBankDataValidator( $result );
+		$request = $this->newValidRequest();
+		$request->getPaymentBankData()->setIban( new Iban( '' ) );
 
-		$this->assertEquals(
-			$expectedResult,
-			$this->newValidator()->validate( $this->newValidRequest() )
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[ Result::SOURCE_IBAN => Result::VIOLATION_MISSING ]
 		);
 	}
 
-	private function newFailingBankDataValidator( ValidationResult $result ): BankDataValidator {
-		$feeValidator = $this->getMockBuilder( BankDataValidator::class )
+	private function assertRequestValidationResultInErrors( ApplyForMembershipRequest $request, array $expectedErrors ) {
+		$this->assertEquals(
+			new Result( $expectedErrors ),
+			$this->newValidator()->validate( $request )
+		);
+	}
+
+	private function newRealBankDataValidator(): BankDataValidator {
+		return new BankDataValidator( $this->newSucceedingIbanValidator() );
+	}
+
+	private function newSucceedingIbanValidator(): IbanValidator {
+		$ibanValidator = $this->getMockBuilder( IbanValidator::class )
+			->disableOriginalConstructor()->getMock();
+
+		$ibanValidator->method( 'validate' )
+			->willReturn( new ValidationResult() );
+
+		return $ibanValidator;
+	}
+
+	public function testWhenBicIsMissing_validationFails() {
+		$this->bankDataValidator = $this->newRealBankDataValidator();
+
+		$request = $this->newValidRequest();
+		$request->getPaymentBankData()->setBic( '' );
+
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[ Result::SOURCE_BIC => Result::VIOLATION_MISSING ]
+		);
+	}
+
+	public function testWhenBankNameIsMissing_validationFails() {
+		$this->bankDataValidator = $this->newRealBankDataValidator();
+
+		$request = $this->newValidRequest();
+		$request->getPaymentBankData()->setBankName( '' );
+
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[ Result::SOURCE_BANK_NAME => Result::VIOLATION_MISSING ]
+		);
+	}
+
+	public function testWhenBankCodeIsMissing_validationFails() {
+		$this->bankDataValidator = $this->newRealBankDataValidator();
+
+		$request = $this->newValidRequest();
+		$request->getPaymentBankData()->setBankCode( '' );
+
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[ Result::SOURCE_BANK_CODE => Result::VIOLATION_MISSING ]
+		);
+	}
+
+	public function testWhenBankAccountIsMissing_validationFails() {
+		$this->bankDataValidator = $this->newRealBankDataValidator();
+
+		$request = $this->newValidRequest();
+		$request->getPaymentBankData()->setAccount( '' );
+
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[ Result::SOURCE_BANK_ACCOUNT => Result::VIOLATION_MISSING ]
+		);
+	}
+
+	public function testWhenTooLongBankAccount_validationFails() {
+		$this->bankDataValidator = $this->newRealBankDataValidator();
+
+		$request = $this->newValidRequest();
+		$request->getPaymentBankData()->setAccount( '01189998819991197253' );
+
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[ Result::SOURCE_BANK_ACCOUNT => Result::VIOLATION_WRONG_LENGTH ]
+		);
+	}
+
+	public function testWhenTooLongBankCode_validationFails() {
+		$this->bankDataValidator = $this->newRealBankDataValidator();
+
+		$request = $this->newValidRequest();
+		$request->getPaymentBankData()->setBankCode( '01189998819991197253' );
+
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[ Result::SOURCE_BANK_CODE => Result::VIOLATION_WRONG_LENGTH ]
+		);
+	}
+
+	public function testWhenDateOfBirthIsNotDate_validationFails() {
+		$request = $this->newValidRequest();
+		$request->setApplicantDateOfBirth( 'this is not a valid date' );
+
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[ Result::SOURCE_APPLICANT_DATE_OF_BIRTH => Result::VIOLATION_NOT_DATE ]
+		);
+	}
+
+	/**
+	 * @dataProvider invalidPhoneNumberProvider
+	 */
+	public function testWhenApplicantPhoneNumberIsInvalid_validationFails( string $invalidPhoneNumber ) {
+		$request = $this->newValidRequest();
+		$request->setApplicantPhoneNumber( $invalidPhoneNumber );
+
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[ Result::SOURCE_APPLICANT_PHONE_NUMBER => Result::VIOLATION_NOT_PHONE_NUMBER ]
+		);
+	}
+
+	public function invalidPhoneNumberProvider() {
+		return [
+			'potato' => [ 'potato' ],
+
+			// TODO: we use the regex from the old app, which allows for lots of bugus. Improve when time
+//			'number plus stuff' => [ '01189998819991197253 (invalid edition)' ],
+		];
+	}
+
+	/**
+	 * @dataProvider emailViolationTypeProvider
+	 */
+	public function testWhenApplicantEmailIsInvalid_validationFails( string $emailViolationType ) {
+		$this->emailValidator = $this->newFailingEmailValidator( $emailViolationType );
+
+		$request = $this->newValidRequest();
+		$request->setApplicantEmailAddress( 'this is not a valid email' );
+
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[ Result::SOURCE_APPLICANT_EMAIL => Result::VIOLATION_NOT_EMAIL ]
+		);
+	}
+
+	public function emailViolationTypeProvider() {
+		return [
+			[ 'email_address_wrong_format' ],
+			[ 'email_address_invalid' ],
+			[ 'email_address_domain_record_not_found' ],
+		];
+	}
+
+	/**
+	 * @param string $violationType
+	 *
+	 * @return EmailValidator
+	 */
+	private function newFailingEmailValidator( string $violationType ): EmailValidator {
+		$feeValidator = $this->getMockBuilder( EmailValidator::class )
 			->disableOriginalConstructor()->getMock();
 
 		$feeValidator->method( 'validate' )
-			->willReturn( $result );
+			->willReturn( new ValidationResult( new ConstraintViolation( 'this is not a valid email', $violationType ) ) );
 
 		return $feeValidator;
 	}
 
-	public function bankDataViolationResultProvider() {
-		return [
-			[
-				new ValidationResult( new ConstraintViolation( '', 'field_required', 'iban' ) ),
-				new Result( [ Result::SOURCE_IBAN => Result::VIOLATION_MISSING ] )
-			],
-			[
-				new ValidationResult( new ConstraintViolation( '', 'field_required', 'bic' ) ),
-				new Result( [ Result::SOURCE_BIC => Result::VIOLATION_MISSING ] )
-			],
-			[
-				new ValidationResult( new ConstraintViolation( '', 'field_required', 'bankname' ) ),
-				new Result( [ Result::SOURCE_BANK_NAME => Result::VIOLATION_MISSING ] )
-			]
-		];
+	public function testWhenCompanyIsMissingFromCompanyApplication_validationFails() {
+		$request = $this->newValidRequest();
+		$request->markApplicantAsCompany();
+		$request->setApplicantCompanyName( '' );
+
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[ Result::SOURCE_APPLICANT_COMPANY => Result::VIOLATION_MISSING ]
+		);
+	}
+
+	public function testWhenFirstNameIsMissingFromPersonalApplication_validationFails() {
+		$request = $this->newValidRequest();
+		$request->setApplicantFirstName( '' );
+
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[ Result::SOURCE_APPLICANT_FIRST_NAME => Result::VIOLATION_MISSING ]
+		);
+	}
+
+	public function testWhenLastNameIsMissingFromPersonalApplication_validationFails() {
+		$request = $this->newValidRequest();
+		$request->setApplicantLastName( '' );
+
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[ Result::SOURCE_APPLICANT_LAST_NAME => Result::VIOLATION_MISSING ]
+		);
+	}
+
+	public function testWhenSalutationIsMissingFromPersonalApplication_validationFails() {
+		$request = $this->newValidRequest();
+		$request->setApplicantSalutation( '' );
+
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[ Result::SOURCE_APPLICANT_SALUTATION => Result::VIOLATION_MISSING ]
+		);
 	}
 
 }

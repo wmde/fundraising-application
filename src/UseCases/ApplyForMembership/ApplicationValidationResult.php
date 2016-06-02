@@ -14,10 +14,25 @@ class ApplicationValidationResult {
 	const SOURCE_IBAN = 'iban';
 	const SOURCE_BIC = 'bic';
 	const SOURCE_BANK_NAME = 'bank-name';
+	const SOURCE_BANK_CODE = 'bank-code';
+	const SOURCE_BANK_ACCOUNT = 'bank-account';
+	const SOURCE_APPLICANT_DATE_OF_BIRTH = 'applicant-dob';
+	const SOURCE_APPLICANT_PHONE_NUMBER = 'applicant-phone';
+	const SOURCE_APPLICANT_EMAIL = 'applicant-email';
+	const SOURCE_APPLICANT_COMPANY = 'company';
+	const SOURCE_APPLICANT_FIRST_NAME = 'applicant-first-name';
+	const SOURCE_APPLICANT_LAST_NAME = 'applicant-last-name';
+	const SOURCE_APPLICANT_SALUTATION = 'applicant-salutation';
 
 	const VIOLATION_TOO_LOW = 'too-low';
+	const VIOLATION_WRONG_LENGTH = 'wrong-length';
 	const VIOLATION_NOT_MONEY = 'not-money';
 	const VIOLATION_MISSING = 'missing';
+	const VIOLATION_IBAN_BLOCKED = 'iban-blocked';
+	const VIOLATION_IBAN_INVALID = 'iban-invalid';
+	const VIOLATION_NOT_DATE = 'not-date';
+	const VIOLATION_NOT_PHONE_NUMBER = 'not-phone';
+	const VIOLATION_NOT_EMAIL = 'not-email';
 
 	private $violations;
 

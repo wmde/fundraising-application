@@ -120,7 +120,7 @@ use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
 use WMDE\Fundraising\Frontend\Validation\DonationValidator;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\Fundraising\Frontend\Validation\IbanValidator;
-use WMDE\Fundraising\Frontend\Validation\MailValidator;
+use WMDE\Fundraising\Frontend\Validation\EmailValidator;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
 use WMDE\Fundraising\Frontend\Validation\PersonalInfoValidator;
 use WMDE\Fundraising\Frontend\Validation\PersonNameValidator;
@@ -192,12 +192,12 @@ class FunFunFactory {
 		} );
 
 		$pimple['mail_validator'] = $pimple->share( function() {
-			return new MailValidator( new InternetDomainNameValidator() );
+			return new EmailValidator( new InternetDomainNameValidator() );
 		} );
 
 		$pimple['subscription_validator'] = $pimple->share( function() {
 			return new SubscriptionValidator(
-				$this->getMailValidator(),
+				$this->getEmailValidator(),
 				$this->getTextPolicyValidator( 'fields' ),
 				$this->newSubscriptionDuplicateValidator(),
 				$this->newHonorificValidator()
@@ -209,7 +209,7 @@ class FunFunFactory {
 		} );
 
 		$pimple['contact_validator'] = $pimple->share( function() {
-			return new GetInTouchValidator( $this->getMailValidator() );
+			return new GetInTouchValidator( $this->getEmailValidator() );
 		} );
 
 		$pimple['greeting_generator'] = $pimple->share( function() {
@@ -381,7 +381,7 @@ class FunFunFactory {
 		return $this->pimple['subscription_validator'];
 	}
 
-	public function getMailValidator(): MailValidator {
+	public function getEmailValidator(): EmailValidator {
 		return $this->pimple['mail_validator'];
 	}
 
@@ -748,7 +748,7 @@ class FunFunFactory {
 		return new PersonalInfoValidator(
 			new PersonNameValidator(),
 			new PhysicalAddressValidator(),
-			$this->getMailValidator()
+			$this->getEmailValidator()
 		);
 	}
 
@@ -884,7 +884,8 @@ class FunFunFactory {
 	private function newMembershipApplicationValidator(): MembershipApplicationValidator {
 		return new MembershipApplicationValidator(
 			new MembershipFeeValidator(),
-			$this->newBankDataValidator()
+			$this->newBankDataValidator(),
+			$this->getEmailValidator()
 		);
 	}
 

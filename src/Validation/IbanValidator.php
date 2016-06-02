@@ -28,11 +28,11 @@ class IbanValidator {
 
 	public function validate( Iban $value, string $fieldName = '' ): ValidationResult {
 		if ( in_array( $value->toString(), $this->bannedIbanNumbers ) ) {
-			return new ValidationResult( new ConstraintViolation( $value, 'IBAN is blocked', $fieldName ) );
+			return new ValidationResult( new ConstraintViolation( $value, 'iban_blocked', $fieldName ) );
 		}
 
 		if ( !$this->bankDataConverter->validateIban( $value ) ) {
-			return new ValidationResult( new ConstraintViolation( $value, 'IBAN is not valid', $fieldName ) );
+			return new ValidationResult( new ConstraintViolation( $value, 'iban_invalid', $fieldName ) );
 		}
 
 		return new ValidationResult();
