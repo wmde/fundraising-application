@@ -1,6 +1,8 @@
 {
 	"name": "wmde/fundraising-frontend",
 	"description": "WMDE fundraising application (end user facing part)",
+	"homepage": "https://github.com/wmde/FundraisingFrontend",
+	"license": "GPL-2.0+",
 	"require": {
 		"php": ">=7.0",
 		"ext-intl": "*",
