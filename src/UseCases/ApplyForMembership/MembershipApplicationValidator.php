@@ -81,6 +81,10 @@ class MembershipApplicationValidator {
 				return Result::SOURCE_BIC;
 			case 'bankname':
 				return Result::SOURCE_BANK_NAME;
+			case 'blz':
+				return Result::SOURCE_BANK_CODE;
+			case 'konto':
+				return Result::SOURCE_BANK_ACCOUNT;
 			default:
 				throw new \LogicException();
 		}

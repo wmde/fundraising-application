@@ -14,6 +14,8 @@ class ApplicationValidationResult {
 	const SOURCE_IBAN = 'iban';
 	const SOURCE_BIC = 'bic';
 	const SOURCE_BANK_NAME = 'bank-name';
+	const SOURCE_BANK_CODE = 'bank-code';
+	const SOURCE_BANK_ACCOUNT = 'bank-account';
 
 	const VIOLATION_TOO_LOW = 'too-low';
 	const VIOLATION_NOT_MONEY = 'not-money';

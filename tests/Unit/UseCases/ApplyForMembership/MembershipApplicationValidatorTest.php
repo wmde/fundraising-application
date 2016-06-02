@@ -149,4 +149,28 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 		);
 	}
 
+	public function testWhenBankCodeIsMissing_validationFails() {
+		$this->bankDataValidator = $this->newRealBankDataValidator();
+
+		$request = $this->newValidRequest();
+		$request->getPaymentBankData()->setBankCode( '' );
+
+		$this->assertEquals(
+			new Result( [ Result::SOURCE_BANK_CODE => Result::VIOLATION_MISSING ] ),
+			$this->newValidator()->validate( $request )
+		);
+	}
+
+	public function testWhenBankAccountIsMissing_validationFails() {
+		$this->bankDataValidator = $this->newRealBankDataValidator();
+
+		$request = $this->newValidRequest();
+		$request->getPaymentBankData()->setAccount( '' );
+
+		$this->assertEquals(
+			new Result( [ Result::SOURCE_BANK_ACCOUNT => Result::VIOLATION_MISSING ] ),
+			$this->newValidator()->validate( $request )
+		);
+	}
+
 }
