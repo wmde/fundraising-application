@@ -39,7 +39,7 @@ class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase {
 	private $mailer;
 
 	public function setUp() {
-		$this->repo = $this->getMock( SubscriptionRepository::class );
+		$this->repo = $this->createMock( SubscriptionRepository::class );
 
 		$this->validator = $this->getMockBuilder( SubscriptionValidator::class )
 			->disableOriginalConstructor()
@@ -66,7 +66,7 @@ class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase {
 	public function testGivenInvalidData_anErrorResponseTypeIsCreated() {
 		$this->validator->method( 'validate' )->willReturn( new FailedValidationResult() );
 		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->mailer );
-		$request = $this->getMock( SubscriptionRequest::class );
+		$request = $this->createMock( SubscriptionRequest::class );
 		$result = $useCase->addSubscription( $request );
 		$this->assertFalse( $result->isSuccessful() );
 	}
@@ -96,7 +96,7 @@ class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$this->validator->method( 'validate' )->willReturn( new FailedValidationResult() );
 		$this->repo->expects( $this->never() )->method( 'storeSubscription' );
 		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->mailer );
-		$request = $this->getMock( SubscriptionRequest::class );
+		$request = $this->createMock( SubscriptionRequest::class );
 		$useCase->addSubscription( $request );
 	}
 
@@ -125,7 +125,7 @@ class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$this->validator->method( 'validate' )->willReturn( new FailedValidationResult() );
 		$this->mailer->expects( $this->never() )->method( 'sendMail' );
 		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->mailer );
-		$request = $this->getMock( SubscriptionRequest::class );
+		$request = $this->createMock( SubscriptionRequest::class );
 		$useCase->addSubscription( $request );
 	}
 
@@ -134,7 +134,7 @@ class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$this->validator->method( 'needsModeration' )->willReturn( true );
 		$this->mailer->expects( $this->never() )->method( 'sendMail' );
 		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->mailer );
-		$request = $this->getMock( SubscriptionRequest::class );
+		$request = $this->createMock( SubscriptionRequest::class );
 		$useCase->addSubscription( $request );
 	}
 

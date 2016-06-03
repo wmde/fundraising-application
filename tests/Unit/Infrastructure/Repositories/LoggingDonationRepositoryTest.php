@@ -32,7 +32,7 @@ class LoggingDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	private function newThrowingRepository(): DonationRepository {
-		$repository = $this->getMock( DonationRepository::class );
+		$repository = $this->createMock( DonationRepository::class );
 
 		$repository->expects( $this->any() )
 			->method( 'getDonationById' )

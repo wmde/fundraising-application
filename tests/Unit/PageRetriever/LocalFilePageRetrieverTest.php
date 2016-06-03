@@ -17,8 +17,8 @@ use WMDE\Fundraising\Frontend\DataAccess\LocalFilePageRetriever;
 class LocalFilePageRetrieverTest extends \PHPUnit_Framework_TestCase {
 
 	private function createPageRetriever( $fileName, $expectedReturnValue ) {
-		$debugger = $this->getMock( LoggerInterface::class );
-		$fetcher = $this->getMock( FileFetcher::class );
+		$debugger = $this->createMock( LoggerInterface::class );
+		$fetcher = $this->createMock( FileFetcher::class );
 
 		$fetcher->expects( $this->once() )
 			->method( 'fetchFile' )

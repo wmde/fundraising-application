@@ -25,7 +25,7 @@ use WMDE\Fundraising\Frontend\Validation\ValidationResult;
 class SubscriptionValidatorTest extends ValidatorTestCase {
 
 	private function getMockTextPolicyValidator() {
-		$mock = $this->getMock( TextPolicyValidator::class );
+		$mock = $this->createMock( TextPolicyValidator::class );
 		$mock->method( 'hasHarmlessContent' )
 			->willReturn( true );
 		return $mock;
@@ -110,7 +110,7 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 
 	public function testGivenBadWords_subscriptionIsStillValid() {
 		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
-		$policyValidator = $this->getMock( TextPolicyValidator::class );
+		$policyValidator = $this->createMock( TextPolicyValidator::class );
 		$policyValidator->method( 'hasHarmlessContent' )
 			->willReturn( false );
 		$subscriptionValidator = new SubscriptionValidator(
@@ -127,7 +127,7 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 
 	public function testGivenBadWords_needsModerationIsTrue() {
 		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
-		$policyValidator = $this->getMock( TextPolicyValidator::class );
+		$policyValidator = $this->createMock( TextPolicyValidator::class );
 		$policyValidator->method( 'hasHarmlessContent' )
 			->willReturn( false );
 		$subscriptionValidator = new SubscriptionValidator(

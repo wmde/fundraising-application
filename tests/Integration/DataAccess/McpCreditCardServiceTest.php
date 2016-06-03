@@ -47,7 +47,7 @@ class McpCreditCardServiceTest extends \PHPUnit_Framework_TestCase {
 	 * @return \PHPUnit_Framework_MockObject_MockObject|\IMcpCreditcardService_v1_5
 	 */
 	private function getMicroPaymentServiceTestDouble() {
-		return $this->getMock( \IMcpCreditcardService_v1_5::class );
+		return $this->createMock( \IMcpCreditcardService_v1_5::class );
 	}
 
 	public function testWhenValidDataIsReturned_creditCardExpiryIsCreated() {

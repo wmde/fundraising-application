@@ -480,7 +480,7 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 	 * @return DonationEventLogger|\PHPUnit_Framework_MockObject_MockObject
 	 */
 	private function getEventLogger(): DonationEventLogger {
-		return $this->getMock( DonationEventLogger::class );
+		return $this->createMock( DonationEventLogger::class );
 	}
 
 }

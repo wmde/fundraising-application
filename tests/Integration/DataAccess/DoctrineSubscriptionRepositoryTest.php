@@ -63,13 +63,11 @@ class DoctrineSubscriptionRepositoryTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testDatabaseLayerExceptionsAreConvertedToDomainExceptions() {
-		$entityManager = $this->getMock(
-			EntityManager::class,
-			[ 'getRepository', 'getClassMetadata', 'persist', 'flush' ],
-			[],
-			'',
-			false
-		);
+		$entityManager = $this->getMockBuilder( EntityManager::class )
+			->setMethods( [ 'getRepository', 'getClassMetadata', 'persist', 'flush' ] )
+			->disableOriginalConstructor()
+			->getMock();
+
 		$entityManager->expects( $this->once() )->method( 'persist' )->willThrowException( new ORMException() );
 		$repository = new DoctrineSubscriptionRepository( $entityManager );
 		$subscription = new Subscription();

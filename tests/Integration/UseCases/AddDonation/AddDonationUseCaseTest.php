@@ -86,7 +86,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 	 * @return DonationAuthorizationUpdater|PHPUnit_Framework_MockObject_MockObject
 	 */
 	private function newAuthorizationUpdater(): DonationAuthorizationUpdater {
-		return $this->getMock( DonationAuthorizationUpdater::class );
+		return $this->createMock( DonationAuthorizationUpdater::class );
 	}
 
 	private function newOneHourInterval(): \DateInterval {
@@ -184,7 +184,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	private function newTransferCodeGenerator(): TransferCodeGenerator {
-		return $this->getMock( TransferCodeGenerator::class );
+		return $this->createMock( TransferCodeGenerator::class );
 	}
 
 	private function newBankDataConverter(): BankDataConverter {
