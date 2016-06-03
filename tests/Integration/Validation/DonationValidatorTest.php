@@ -104,7 +104,7 @@ class DonationValidatorTest extends ValidatorTestCase {
 	}
 
 	public function testGivenBadWords_needsModerationReturnsTrue() {
-		$textPolicyValidator = $this->getMock( TextPolicyValidator::class );
+		$textPolicyValidator = $this->createMock( TextPolicyValidator::class );
 		$textPolicyValidator->method( 'hasHarmlessContent' )
 			->willReturn( false );
 

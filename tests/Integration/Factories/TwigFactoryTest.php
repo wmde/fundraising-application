@@ -30,17 +30,17 @@ class TwigFactoryTest extends \PHPUnit_Framework_TestCase {
 
 	public function testTwigInstancesTryAllLoadersUntilTemplateIsFound() {
 		$loaderException = new Twig_Error_Loader( 'not found' );
-		$firstLoader = $this->getMock( Twig_LoaderInterface::class );
+		$firstLoader = $this->createMock( Twig_LoaderInterface::class );
 		$firstLoader->method( 'getSource' )->willThrowException( $loaderException );
 		$firstLoader->method( 'isFresh' )->willThrowException( $loaderException );
 		$firstLoader->method( 'getCacheKey' )->willThrowException( $loaderException );
 
-		$secondLoader = $this->getMock( Twig_LoaderInterface::class );
+		$secondLoader = $this->createMock( Twig_LoaderInterface::class );
 		$secondLoader->method( 'getSource' )->willReturn( 'Meeow!' );
 		$secondLoader->method( 'isFresh' )->willReturn( true );
 		$secondLoader->method( 'getCacheKey' )->willReturn( 'Canis_silvestris' );
 
-		$thirdLoader = $this->getMock( Twig_LoaderInterface::class );
+		$thirdLoader = $this->createMock( Twig_LoaderInterface::class );
 		$thirdLoader->expects( $this->never() )->method( $this->anything() );
 
 		$factory = new TwigFactory( [ 'enable-cache' => false ] );

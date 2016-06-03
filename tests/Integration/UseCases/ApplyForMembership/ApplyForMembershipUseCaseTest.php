@@ -66,11 +66,11 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 	public function setUp() {
 		$this->repository = new InMemoryMembershipApplicationRepository();
-		$this->authUpdater = $this->getMock( MembershipAppAuthUpdater::class );
+		$this->authUpdater = $this->createMock( MembershipAppAuthUpdater::class );
 		$this->mailer = new TemplateBasedMailerSpy( $this );
 		$this->tokenGenerator = new FixedTokenGenerator( self::GENERATED_TOKEN );
 		$this->validator = $this->newSucceedingValidator();
-		$this->tracker = $this->getMock( MembershipApplicationTracker::class );
+		$this->tracker = $this->createMock( MembershipApplicationTracker::class );
 	}
 
 	private function newSucceedingValidator(): MembershipApplicationValidator {
@@ -220,7 +220,7 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	private function newInvalidValidationResult(): ApplicationValidationResult {
-		$invalidResult = $this->getMock( ApplicationValidationResult::class );
+		$invalidResult = $this->createMock( ApplicationValidationResult::class );
 
 		$invalidResult->expects( $this->any() )
 			->method( 'isSuccessful' )
