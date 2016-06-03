@@ -5,10 +5,12 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\UseCases\CreditCardPaymentNotification;
 
 use Psr\Log\LoggerInterface;
+use WMDE\Fundraising\Frontend\Domain\Model\CreditCardTransactionData;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
+use WMDE\Fundraising\Frontend\Domain\Repositories\StoreDonationException;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizer;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationEventLogger;
@@ -58,6 +60,20 @@ class CreditCardNotificationUseCase {
 	}
 
 	private function handleRequest( CreditCardPaymentNotificationRequest $request, Donation $donation ): bool {
+		try {
+			$donation->addCreditCardData( $this->newCreditCardDataFromRequest( $request ) );
+			$donation->confirmBooked();
+		} catch ( \RuntimeException $e ) {
+			return false;
+		}
+
+		try {
+			$this->repository->storeDonation( $donation );
+		}
+		catch ( StoreDonationException $ex ) {
+			return false;
+		}
+
 		$this->sendConfirmationEmail( $donation );
 		return true;
 	}
@@ -68,6 +84,20 @@ class CreditCardNotificationUseCase {
 		} catch ( \RuntimeException $ex ) {
 			// no need to re-throw or return false, this is not a fatal error, only a minor inconvenience
 		}
+	}
+
+	private function newCreditCardDataFromRequest( CreditCardPaymentNotificationRequest $request ): CreditCardTransactionData {
+		return ( new CreditCardTransactionData() )
+			->setTransactionId( $request->getTransactionId() )
+			->setTransactionStatus( 'processed' )
+			->setTransactionTimestamp( new \DateTime() )
+			->setAmount( $request->getAmount() )
+			->setCustomerId( $request->getCustomerId() )
+			->setSessionId( $request->getSessionId() )
+			->setAuthId( $request->getAuthId() )
+			->setTitle( $request->getTitle() )
+			->setCountryCode( $request->getCountry() )
+			->setCurrencyCode( $request->getCurrency() );
 	}
 
 }

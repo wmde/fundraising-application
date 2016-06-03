@@ -88,6 +88,28 @@ class CreditCardNotificationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$this->assertTrue( $useCase->handleNotification( $request ) );
 	}
 
+	public function testWhenAuthorizationSucceeds_donationIsStored() {
+		$donation = ValidDonation::newIncompleteCreditCardDonation();
+		$this->repository = new DonationRepositorySpy( $donation );
+
+		$useCase = $this->newCreditCardNotificationUseCase();
+
+		$request = ValidCreditCardNotificationRequest::newBillingNotification( 1 );
+		$this->assertTrue( $useCase->handleNotification( $request ) );
+		$this->assertCount( 1, $this->repository->getStoreDonationCalls() );
+	}
+
+	public function testWhenAuthorizationSucceeds_donationIsBooked() {
+		$donation = ValidDonation::newIncompleteCreditCardDonation();
+		$this->repository = new DonationRepositorySpy( $donation );
+
+		$useCase = $this->newCreditCardNotificationUseCase();
+
+		$request = ValidCreditCardNotificationRequest::newBillingNotification( 1 );
+		$this->assertTrue( $useCase->handleNotification( $request ) );
+		$this->assertTrue( $donation->isBooked() );
+	}
+
 	public function testWhenSendingConfirmationMailFails_handlerReturnsTrue() {
 		$this->repository->storeDonation( ValidDonation::newIncompleteCreditCardDonation() );
 
