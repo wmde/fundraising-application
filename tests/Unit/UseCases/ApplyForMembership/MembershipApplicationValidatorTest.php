@@ -328,4 +328,44 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 		);
 	}
 
+	public function testWhenStreetAddressIsMissing_validationFails() {
+		$request = $this->newValidRequest();
+		$request->setApplicantStreetAddress( '' );
+
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[ Result::SOURCE_APPLICANT_STREET_ADDRESS => Result::VIOLATION_MISSING ]
+		);
+	}
+
+	public function testWhenPostalCodeIsMissing_validationFails() {
+		$request = $this->newValidRequest();
+		$request->setApplicantPostalCode( '' );
+
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[ Result::SOURCE_APPLICANT_POSTAL_CODE => Result::VIOLATION_MISSING ]
+		);
+	}
+
+	public function testWhenCityIsMissing_validationFails() {
+		$request = $this->newValidRequest();
+		$request->setApplicantCity( '' );
+
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[ Result::SOURCE_APPLICANT_CITY => Result::VIOLATION_MISSING ]
+		);
+	}
+
+	public function testWhenCountryCodeIsMissing_validationFails() {
+		$request = $this->newValidRequest();
+		$request->setApplicantCountryCode( '' );
+
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[ Result::SOURCE_APPLICANT_COUNTRY => Result::VIOLATION_MISSING ]
+		);
+	}
+
 }
