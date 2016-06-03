@@ -30,8 +30,6 @@ class CreditCardPaymentNotificationRequest {
 	private $country;
 	private $currency;
 
-	private $testMode;
-
 	public function getTransactionId(): string {
 		return $this->transactionId;
 	}
@@ -137,15 +135,6 @@ class CreditCardPaymentNotificationRequest {
 
 	public function setCurrency( string $currency ): self {
 		$this->currency = $currency;
-		return $this;
-	}
-
-	public function getTestMode(): bool {
-		return $this->testMode;
-	}
-
-	public function setTestMode( bool $testMode ): self {
-		$this->testMode = $testMode;
 		return $this;
 	}
 

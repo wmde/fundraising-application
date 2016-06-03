@@ -9,6 +9,8 @@ use Doctrine\ORM\ORMException;
 use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
 use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Model\BankTransferPayment;
+use WMDE\Fundraising\Frontend\Domain\Model\CreditCardPayment;
+use WMDE\Fundraising\Frontend\Domain\Model\CreditCardTransactionData;
 use WMDE\Fundraising\Frontend\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Model\DonationPayment;
@@ -150,6 +152,10 @@ class DoctrineDonationRepository implements DonationRepository {
 			return $this->getDataFieldsFromPayPalData( $paymentMethod->getPayPalData() );
 		}
 
+		if ( $paymentMethod instanceof CreditCardPayment ) {
+			return $this->getDataFieldsFromCreditCardData( $paymentMethod->getCreditCardData() );
+		}
+
 		return [];
 	}
 
@@ -214,6 +220,21 @@ class DoctrineDonationRepository implements DonationRepository {
 			'ext_payment_status' => $payPalData->getPaymentStatus(),
 			'ext_payment_account' => $payPalData->getPayerId(),
 			'ext_payment_timestamp' => $payPalData->getPaymentTimestamp()
+		];
+	}
+
+	private function getDataFieldsFromCreditCardData( CreditCardTransactionData $ccData ) {
+		return [
+			'ext_payment_id' => $ccData->getTransactionId(),
+			'ext_payment_status' => $ccData->getTransactionStatus(),
+			'ext_payment_timestamp' => $ccData->getTransactionTimestamp(),
+			'mcp_amount' => $ccData->getAmount()->getEuroString(),
+			'ext_payment_account' => $ccData->getCustomerId(),
+			'mcp_sessionid' => $ccData->getSessionId(),
+			'mcp_auth' => $ccData->getAuthId(),
+			'mcp_title' => $ccData->getTitle(),
+			'mcp_country' => $ccData->getCountryCode(),
+			'mcp_currency' => $ccData->getCurrencyCode()
 		];
 	}
 
@@ -297,6 +318,10 @@ class DoctrineDonationRepository implements DonationRepository {
 
 		if ( $dd->getPaymentType() === PaymentType::PAYPAL ) {
 			return new PayPalPayment( $this->getPayPalDataFromEntity( $dd ) );
+		}
+
+		if ( $dd->getPaymentType() === PaymentType::CREDIT_CARD ) {
+			return new CreditCardPayment( $this->getCreditCardDataFromEntity( $dd ) );
 		}
 
 		return new PaymentWithoutAssociatedData( $dd->getPaymentType() );
@@ -392,6 +417,31 @@ class DoctrineDonationRepository implements DonationRepository {
 				->setPaymentType( $data['ext_payment_type'] )
 				->setPaymentStatus( $data['ext_payment_status'] )
 				->setPaymentTimestamp( $data['ext_payment_timestamp'] )
+				->freeze()->assertNoNullFields();
+		}
+
+		return null;
+	}
+
+	/**
+	 * @param DoctrineDonation $dd
+	 * @return PayPalData|null
+	 */
+	private function getCreditCardDataFromEntity( DoctrineDonation $dd ) {
+		$data = $dd->getDecodedData();
+
+		if ( array_key_exists( 'mcp_auth', $data ) ) {
+			return ( new CreditCardTransactionData() )
+				->setTransactionId( $data['ext_payment_id'] )
+				->setTransactionStatus( $data['ext_payment_status'] )
+				->setTransactionTimestamp( $data['ext_payment_timestamp'] )
+				->setAmount( Euro::newFromString( $data['mcp_amount'] ) )
+				->setCustomerId( $data['ext_payment_account'] )
+				->setSessionId( $data['mcp_sessionid'] )
+				->setAuthId( $data['mcp_auth'] )
+				->setTitle( $data['mcp_title'] )
+				->setCountryCode( $data['mcp_country'] )
+				->setCurrencyCode( $data['mcp_currency'] )
 				->freeze()->assertNoNullFields();
 		}
 

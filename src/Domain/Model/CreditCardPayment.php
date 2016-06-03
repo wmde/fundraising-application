@@ -21,7 +21,7 @@ class CreditCardPayment implements PaymentMethod {
 	}
 
 	/**
-	 * @return PayPalData|null
+	 * @return CreditCardTransactionData|null
 	 */
 	public function getCreditCardData() {
 		return $this->creditCardData;

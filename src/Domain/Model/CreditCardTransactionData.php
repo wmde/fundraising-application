@@ -13,20 +13,21 @@ use WMDE\Fundraising\Frontend\FreezableValueObject;
 class CreditCardTransactionData {
 	use FreezableValueObject;
 
-	private $transactionId;
-	private $transactionStatus;
+	private $transactionId = '';
+	private $transactionStatus = '';
 	private $transactionTimestamp;
-	private $authId;
-	private $sessionId;
-	private $customerId;
+	private $authId = '';
+	private $sessionId = '';
+	private $customerId = '';
 
-	private $currencyCode;
+	private $currencyCode = '';
 	private $amount;
-	private $countryCode;
-	private $title;
+	private $countryCode = '';
+	private $title = '';
 
 	public function __construct() {
 		$this->amount = Euro::newFromInt( 0 );
+		$this->transactionTimestamp = new \DateTime();
 	}
 
 	public function getTransactionId(): string {

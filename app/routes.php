@@ -17,6 +17,7 @@ use WMDE\Fundraising\Frontend\App\RouteHandlers\AddDonationHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\PayPalNotificationHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowDonationConfirmationHandler;
 use WMDE\Fundraising\Frontend\Domain\Model\Donor;
+use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
@@ -30,6 +31,7 @@ use WMDE\Fundraising\Frontend\UseCases\CancelMembershipApplication\CancellationR
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageDisplayRequest;
 use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanRequest;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
+use WMDE\Fundraising\Frontend\UseCases\CreditCardPaymentNotification\CreditCardPaymentNotificationRequest;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentListingRequest;
 use WMDE\Fundraising\Frontend\UseCases\ShowDonationConfirmation\ShowDonationConfirmationRequest;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
@@ -440,7 +442,20 @@ $app->post(
 $app->post(
 	'handle-creditcard-payment-notification',
 	function ( Application $app, Request $request ) use ( $ffFactory ) {
-		return 'TODO';
+		$success = $ffFactory->newCreditCardNotificationUseCase( $request->request->get( 'utoken', '' ) )
+			->handleNotification(
+				( new CreditCardPaymentNotificationRequest() )
+					->setTransactionId( $request->request->get( 'transactionId', '' ) )
+					->setDonationId( (int)$request->request->get( 'donation_id', '' ) )
+					->setAmount( Euro::newFromCents( (int)$request->request->get( 'amount' ) ) )
+					->setCustomerId( $request->request->get( 'customerId', '' ) )
+					->setSessionId( $request->request->get( 'sessionId', '' ) )
+					->setAuthId( $request->request->get(  'auth', '' ) )
+					->setTitle( $request->request->get( 'title', '' ) )
+					->setCountry( $request->request->get( 'country', '' ) )
+					->setCurrency( $request->request->get( 'currency', '' ) )
+			);
+		return $success ? 'successful' : 'failed';
 	}
 );
 

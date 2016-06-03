@@ -110,6 +110,7 @@ use WMDE\Fundraising\Frontend\UseCases\ConfirmSubscription\ConfirmSubscriptionUs
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\DisplayPageUseCase;
 use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanUseCase;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
+use WMDE\Fundraising\Frontend\UseCases\CreditCardPaymentNotification\CreditCardNotificationUseCase;
 use WMDE\Fundraising\Frontend\UseCases\HandlePayPalPaymentNotification\HandlePayPalPaymentNotificationUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\ListCommentsUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ShowDonationConfirmation\ShowDonationConfirmationUseCase;
@@ -971,6 +972,16 @@ class FunFunFactory {
 
 	public function setPayPalPaymentNotificationVerifier( PaymentNotificationVerifier $verifier ) {
 		$this->pimple['paypal-payment-notification-verifier'] = $verifier;
+	}
+
+	public function newCreditCardNotificationUseCase( string $updateToken ) {
+		return new CreditCardNotificationUseCase(
+			$this->getDonationRepository(),
+			$this->newDonationAuthorizer( $updateToken ),
+			$this->newDonationConfirmationMailer(),
+			$this->getLogger(),
+			$this->newDonationEventLogger()
+		);
 	}
 
 	public function newCancelMembershipApplicationHtmlPresenter() {

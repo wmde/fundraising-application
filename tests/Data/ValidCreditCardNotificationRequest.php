@@ -24,7 +24,6 @@ class ValidCreditCardNotificationRequest {
 	const TITLE = 'Your generous donation';
 	const COUNTRY_CODE = 'DE';
 	const CURRENCY_CODE = 'EUR';
-	const TEST_MODE = false;
 
 	public static function newBillingNotification( int $donationId ): CreditCardPaymentNotificationRequest {
 		return self::newBaseRequest()
@@ -43,8 +42,7 @@ class ValidCreditCardNotificationRequest {
 			->setUpdateToken( self::UPDATE_TOKEN )
 			->setTitle( self::TITLE )
 			->setCountry( self::COUNTRY_CODE )
-			->setCurrency( self::CURRENCY_CODE )
-			->setTestMode( self::TEST_MODE );
+			->setCurrency( self::CURRENCY_CODE );
 	}
 
 }
