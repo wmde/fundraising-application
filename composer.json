@@ -48,19 +48,20 @@
 	"require-dev": {
 		"ext-pdo_sqlite": "*",
 
-		"phpunit/phpunit": "~5.2",
+		"phpunit/phpunit": "~5.4",
 		"codeception/specify": "~0.4.3",
 		"whatthejeff/nyancat-phpunit-resultprinter": "~1.2",
 		"ockcyp/covers-validator": "~0.4",
+		"johnkary/phpunit-speedtrap": "^1.0",
+		"mikey179/vfsStream": "~1.6",
+
 		"squizlabs/php_codesniffer": "~2.5",
 		"mediawiki/mediawiki-codesniffer": "~0.6.0",
 		"phpmd/phpmd": "~2.3",
 
 		"symfony/browser-kit": "~2.7",
-		"mikey179/vfsStream": "~1.6",
 		"silex/web-profiler": "~1.0",
-		"sorien/silex-dbal-profiler": "~1.1",
-		"johnkary/phpunit-speedtrap": "^1.0"
+		"sorien/silex-dbal-profiler": "~1.1"
 	},
 	"autoload": {
 		"psr-4": {
