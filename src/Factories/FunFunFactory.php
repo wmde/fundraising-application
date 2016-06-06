@@ -24,6 +24,7 @@ use Psr\Log\LoggerInterface;
 use Swift_MailTransport;
 use Swift_NullTransport;
 use Symfony\Component\Translation\TranslatorInterface;
+use TNvpServiceDispatcher;
 use Twig_Environment;
 use Twig_Extensions_Extension_Intl;
 use WMDE\Fundraising\Frontend\DataAccess\ApiBasedPageRetriever;
@@ -38,6 +39,7 @@ use WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipApplicationRepository
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipApplicationTracker;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineSubscriptionRepository;
 use WMDE\Fundraising\Frontend\DataAccess\InternetDomainNameValidator;
+use WMDE\Fundraising\Frontend\DataAccess\McpCreditCardService;
 use WMDE\Fundraising\Frontend\DataAccess\UniqueTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\BankDataConverter;
 use WMDE\Fundraising\Frontend\Domain\CommentFinder;
@@ -50,6 +52,7 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepositor
 use WMDE\Fundraising\Frontend\Domain\Repositories\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\Domain\SimpleTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
+use WMDE\Fundraising\Frontend\Infrastructure\CreditCardService;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizationUpdater;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizer;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
@@ -110,6 +113,7 @@ use WMDE\Fundraising\Frontend\UseCases\ConfirmSubscription\ConfirmSubscriptionUs
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\DisplayPageUseCase;
 use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanUseCase;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
+use WMDE\Fundraising\Frontend\UseCases\CreditCardPaymentNotification\CreditCardNotificationUseCase;
 use WMDE\Fundraising\Frontend\UseCases\HandlePayPalPaymentNotification\HandlePayPalPaymentNotificationUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\ListCommentsUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ShowDonationConfirmation\ShowDonationConfirmationUseCase;
@@ -324,6 +328,17 @@ class FunFunFactory {
 					$this->config['paypal']
 				),
 				$this->getLogger()
+			);
+		} );
+
+		$pimple['credit-card-api-service'] = $pimple->share( function() {
+			return new McpCreditCardService(
+				new TNvpServiceDispatcher(
+					'IMcpCreditcardService_v1_5',
+					'https://sipg.micropayment.de/public/creditcard/v1.5/nvp/'
+				),
+				'',
+				false
 			);
 		} );
 
@@ -973,6 +988,17 @@ class FunFunFactory {
 		$this->pimple['paypal-payment-notification-verifier'] = $verifier;
 	}
 
+	public function newCreditCardNotificationUseCase( string $updateToken ) {
+		return new CreditCardNotificationUseCase(
+			$this->getDonationRepository(),
+			$this->newDonationAuthorizer( $updateToken ),
+			$this->getCreditCardService(),
+			$this->newDonationConfirmationMailer(),
+			$this->getLogger(),
+			$this->newDonationEventLogger()
+		);
+	}
+
 	public function newCancelMembershipApplicationHtmlPresenter() {
 		return new CancelMembershipApplicationHtmlPresenter(
 			$this->getIncludeTemplate( 'Membership_Application_Cancellation_Confirmation.twig' )
@@ -989,6 +1015,14 @@ class FunFunFactory {
 		return new MembershipFormViolationPresenter(
 			$this->getIncludeTemplate( 'MembershipApplication.html.twig' )
 		);
+	}
+
+	public function setCreditCardService( CreditCardService $ccService ) {
+		$this->pimple['credit-card-api-service'] = $ccService;
+	}
+
+	public function getCreditCardService(): CreditCardService {
+		return $this->pimple['credit-card-api-service'];
 	}
 
 }

@@ -22,6 +22,15 @@ class CreditCardExpiry {
 		$this->year = $year;
 	}
 
+	public static function newFromString( string $expirationDate ) {
+		$dateParts = explode( '/', $expirationDate );
+		if ( count( $dateParts ) === 2 ) {
+			return new self( (int)$dateParts[0], (int)$dateParts[1] );
+		}
+
+		return null;
+	}
+
 	public function getMonth(): int {
 		return $this->month;
 	}

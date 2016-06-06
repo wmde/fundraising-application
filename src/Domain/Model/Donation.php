@@ -170,6 +170,20 @@ class Donation {
 		$paymentMethod->addPayPalData( $payPalData );
 	}
 
+	/**
+	 * @param CreditCardTransactionData $creditCardData
+	 * @throws RuntimeException
+	 */
+	public function addCreditCardData( CreditCardTransactionData $creditCardData ) {
+		$paymentMethod = $this->payment->getPaymentMethod();
+
+		if ( !( $paymentMethod instanceof CreditCardPayment ) ) {
+			throw new RuntimeException( 'Cannot set credit card transaction data on a non credit card payment' );
+		}
+
+		$paymentMethod->addCreditCardTransactionData( $creditCardData );
+	}
+
 	private function statusIsCancellable(): bool {
 		return $this->status === self::STATUS_NEW || $this->status === self::STATUS_MODERATION;
 	}

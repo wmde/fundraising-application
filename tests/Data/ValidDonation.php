@@ -6,6 +6,8 @@ namespace WMDE\Fundraising\Frontend\Tests\Data;
 
 use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Model\BankTransferPayment;
+use WMDE\Fundraising\Frontend\Domain\Model\CreditCardPayment;
+use WMDE\Fundraising\Frontend\Domain\Model\CreditCardTransactionData;
 use WMDE\Fundraising\Frontend\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Model\DonationPayment;
@@ -61,6 +63,8 @@ class ValidDonation {
 
 	const PAYPAL_TRANSACTION_ID = '61E67681CH3238416';
 
+	const CREDIT_CARD_TRANSACTION_ID = '';
+
 	public static function newBankTransferDonation(): Donation {
 		return ( new self() )->createDonation(
 			new BankTransferPayment( self::PAYMENT_BANK_TRANSFER_CODE ),
@@ -88,6 +92,23 @@ class ValidDonation {
 	public static function newIncompletePayPalDonation(): Donation {
 		return ( new self() )->createDonation(
 			new PayPalPayment( new PayPalData() ),
+			Donation::STATUS_EXTERNAL_INCOMPLETE
+		);
+	}
+
+	public static function newBookedCreditCardDonation() {
+		$creditCardData = new CreditCardTransactionData();
+		$creditCardData->setTransactionId( self::CREDIT_CARD_TRANSACTION_ID );
+
+		return ( new self() )->createDonation(
+			new CreditCardPayment( $creditCardData ),
+			Donation::STATUS_EXTERNAL_BOOKED
+		);
+	}
+
+	public static function newIncompleteCreditCardDonation(): Donation {
+		return ( new self() )->createDonation(
+			new CreditCardPayment( new CreditCardTransactionData() ),
 			Donation::STATUS_EXTERNAL_INCOMPLETE
 		);
 	}
