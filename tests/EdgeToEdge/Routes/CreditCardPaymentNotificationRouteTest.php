@@ -9,8 +9,10 @@ use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationAuthorizationUpdater;
 use WMDE\Fundraising\Frontend\Domain\Model\CreditCardPayment;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\CreditCardExpiry;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeCreditCardService;
 
 /**
  * @licence GNU GPL v2+
@@ -29,9 +31,11 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 	const TITLE = 'Your generous donation';
 	const COUNTRY_CODE = 'DE';
 	const CURRENCY_CODE = 'EUR';
+	const STATUS = 'processed';
 
 	public function testGivenInvalidRequest_applicationIndicatesError() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setCreditCardService( new FakeCreditCardService() );
 			$client->request(
 				'POST',
 				'/handle-creditcard-payment-notification',
@@ -45,6 +49,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequest_applicationIndicatesSuccess() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setCreditCardService( new FakeCreditCardService() );
 			$factory->setNullMessenger();
 
 			$factory->getDonationRepository()->storeDonation( ValidDonation::newIncompleteCreditCardDonation() );
@@ -96,10 +101,10 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 		$this->assertSame( $request['title'], $ccData->getTitle() );
 		$this->assertSame( $request['sessionId'], $ccData->getSessionId() );
 		$this->assertSame( $request['transactionId'], $ccData->getTransactionId() );
-		#$this->assertSame( $request['status'], $ccData->getTransactionStatus() );
+		$this->assertSame( self::STATUS, $ccData->getTransactionStatus() );
 		$this->assertSame( $request['customerId'], $ccData->getCustomerId() );
-		#$this->assertSame( $request['mcp_cc_expiry_date'], $ccData->getExpiryDate() );
-		#$this->assertSame( $request['ext_payment_timestamp'], $ccData->getTransactionTimestamp() );
+		$this->assertEquals( new CreditCardExpiry( 9, 2038 ), $ccData->getCardExpiry() );
+		$this->assertNotEmpty( $ccData->getTransactionTimestamp() );
 	}
 
 }

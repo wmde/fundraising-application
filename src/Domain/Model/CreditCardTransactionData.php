@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Domain\Model;
 
 use WMDE\Fundraising\Frontend\FreezableValueObject;
+use WMDE\Fundraising\Frontend\Infrastructure\CreditCardExpiry;
 
 /**
  * @licence GNU GPL v2+
@@ -19,6 +20,7 @@ class CreditCardTransactionData {
 	private $authId = '';
 	private $sessionId = '';
 	private $customerId = '';
+	private $cardExpiry;
 
 	private $currencyCode = '';
 	private $amount;
@@ -87,6 +89,23 @@ class CreditCardTransactionData {
 	public function setCustomerId( string $customerId ): self {
 		$this->assertIsWritable();
 		$this->customerId = $customerId;
+		return $this;
+	}
+
+	/**
+	 * @return CreditCardExpiry|null
+	 */
+	public function getCardExpiry() {
+		return $this->cardExpiry;
+	}
+
+	/**
+	 * @param CreditCardExpiry|null $cardExpiry
+	 * @return self
+	 */
+	public function setCardExpiry( $cardExpiry ) {
+		$this->assertIsWritable();
+		$this->cardExpiry = $cardExpiry;
 		return $this;
 	}
 

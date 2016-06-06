@@ -12,6 +12,7 @@ use WMDE\Fundraising\Frontend\Tests\Data\ValidCreditCardNotificationRequest;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\DonationRepositorySpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingDonationAuthorizer;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeCreditCardService;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeDonationRepository;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
@@ -30,12 +31,14 @@ class CreditCardNotificationUseCaseTest extends \PHPUnit_Framework_TestCase {
 	private $authorizer;
 	private $mailer;
 	private $eventLogger;
+	private $creditCardService;
 
 	public function setUp() {
 		$this->repository = new FakeDonationRepository();
 		$this->authorizer = new SucceedingDonationAuthorizer();
 		$this->mailer = $this->newMailer();
 		$this->eventLogger = $this->newEventLogger();
+		$this->creditCardService = new FakeCreditCardService();
 	}
 
 	public function testWhenRepositoryThrowsException_handlerReturnsFalse() {
@@ -141,6 +144,7 @@ class CreditCardNotificationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		return new CreditCardNotificationUseCase(
 			$this->repository,
 			$this->authorizer,
+			$this->creditCardService,
 			$this->mailer,
 			new NullLogger(),
 			$this->eventLogger

@@ -28,6 +28,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
 use WMDE\Fundraising\Frontend\Domain\Repositories\StoreDonationException;
+use WMDE\Fundraising\Frontend\Infrastructure\CreditCardExpiry;
 
 /**
  * @license GNU GPL v2+
@@ -234,8 +235,17 @@ class DoctrineDonationRepository implements DonationRepository {
 			'mcp_auth' => $ccData->getAuthId(),
 			'mcp_title' => $ccData->getTitle(),
 			'mcp_country' => $ccData->getCountryCode(),
-			'mcp_currency' => $ccData->getCurrencyCode()
+			'mcp_currency' => $ccData->getCurrencyCode(),
+			'mcp_cc_expiry_date' => $this->getExpirationDateAsString( $ccData->getCardExpiry() )
 		];
+	}
+
+	private function getExpirationDateAsString( CreditCardExpiry $cardExpiry = null ): string {
+		if ( $cardExpiry === null ) {
+			return '';
+		}
+
+		return implode( '/', [ $cardExpiry->getMonth(), $cardExpiry->getYear() ] );
 	}
 
 	/**
@@ -425,7 +435,7 @@ class DoctrineDonationRepository implements DonationRepository {
 
 	/**
 	 * @param DoctrineDonation $dd
-	 * @return PayPalData|null
+	 * @return CreditCardTransactionData|null
 	 */
 	private function getCreditCardDataFromEntity( DoctrineDonation $dd ) {
 		$data = $dd->getDecodedData();
@@ -439,10 +449,11 @@ class DoctrineDonationRepository implements DonationRepository {
 				->setCustomerId( $data['ext_payment_account'] )
 				->setSessionId( $data['mcp_sessionid'] )
 				->setAuthId( $data['mcp_auth'] )
+				->setCardExpiry( CreditCardExpiry::newFromString( $data['mcp_cc_expiry_date'] ) )
 				->setTitle( $data['mcp_title'] )
 				->setCountryCode( $data['mcp_country'] )
 				->setCurrencyCode( $data['mcp_currency'] )
-				->freeze()->assertNoNullFields();
+				->freeze();
 		}
 
 		return null;

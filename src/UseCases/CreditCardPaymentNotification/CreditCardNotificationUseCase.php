@@ -11,6 +11,8 @@ use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
 use WMDE\Fundraising\Frontend\Domain\Repositories\StoreDonationException;
+use WMDE\Fundraising\Frontend\Infrastructure\CreditCardExpiryFetchingException;
+use WMDE\Fundraising\Frontend\Infrastructure\CreditCardService;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizer;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationEventLogger;
@@ -28,10 +30,11 @@ class CreditCardNotificationUseCase {
 	private $donationEventLogger;
 
 	public function __construct( DonationRepository $repository, DonationAuthorizer $authorizationService,
-								 DonationConfirmationMailer $mailer, LoggerInterface $logger,
-								 DonationEventLogger $donationEventLogger ) {
+								 CreditCardService $creditCardService, DonationConfirmationMailer $mailer,
+								 LoggerInterface $logger, DonationEventLogger $donationEventLogger ) {
 		$this->repository = $repository;
 		$this->authorizationService = $authorizationService;
+		$this->creditCardService = $creditCardService;
 		$this->mailer = $mailer;
 		$this->logger = $logger;
 		$this->donationEventLogger = $donationEventLogger;
@@ -91,6 +94,7 @@ class CreditCardNotificationUseCase {
 			->setTransactionId( $request->getTransactionId() )
 			->setTransactionStatus( 'processed' )
 			->setTransactionTimestamp( new \DateTime() )
+			->setCardExpiry( $this->creditCardService->getExpirationDate( $request->getCustomerId() ) )
 			->setAmount( $request->getAmount() )
 			->setCustomerId( $request->getCustomerId() )
 			->setSessionId( $request->getSessionId() )
