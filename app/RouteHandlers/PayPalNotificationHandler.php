@@ -26,48 +26,25 @@ class PayPalNotificationHandler {
 	}
 
 	public function handle( Request $request ): Response {
+		$post = $request->request;
+
 		try {
-			$post = $request->request;
 			$this->ffFactory->getPayPalPaymentNotificationVerifier()->verify( $post->all() );
-
-			// TODO: check txn_type
-			// TODO: update donation's status and payment provider related fields
-
-			$useCase = $this->ffFactory->newHandlePayPalPaymentNotificationUseCase( $this->getUpdateToken( $post ) );
-
-			$useCase->handleNotification(
-				( new PayPalNotificationRequest() )
-					->setTransactionType( $post->get( 'txn_type', '' ) )
-					->setTransactionId( $post->get( 'txn_id', '' ) )
-					->setPayerId( $post->get( 'payer_id', '' ) )
-					->setSubscriberId( $post->get( 'subscr_id', '' ) )
-					->setPayerEmail( $post->get( 'payer_email', '' ) )
-					->setPayerStatus( $post->get( 'payer_status', '' ) )
-					->setPayerFirstName( $post->get( 'first_name', '' ) )
-					->setPayerLastName( $post->get( 'last_name', '' ) )
-					->setPayerAddressName( $post->get( 'address_name', '' ) )
-					->setPayerAddressStreet( $post->get( 'address_street', '' ) )
-					->setPayerAddressPostalCode( $post->get( 'address_zip', '' ) )
-					->setPayerAddressCity( $post->get( 'address_city', '' ) )
-					->setPayerAddressCountryCode( $post->get( 'address_country_code', '' ) )
-					->setPayerAddressStatus( $post->get( 'address_status', '' ) )
-					->setDonationId( (int)$post->get( 'item_number', 0 ) )
-					->setCurrencyCode( $post->get( 'mc_currency', '' ) )
-					->setTransactionFee( Euro::newFromString( $post->get( 'mc_fee', '0' ) ) )
-					->setAmountGross( Euro::newFromString( $post->get( 'mc_gross', '0' ) ) )
-					->setSettleAmount( Euro::newFromString( $post->get( 'settle_amount', '0' ) ) )
-					->setPaymentTimestamp( $post->get( 'payment_date', '' ) )
-					->setPaymentStatus( $post->get( 'payment_status', '' ) )
-					->setPaymentType( $post->get( 'payment_type', '' ) )
-			);
-
-			return new Response( '', Response::HTTP_OK ); # PayPal expects an empty response
 		} catch ( PayPalPaymentNotificationVerifierException $e ) {
 			// TODO: log error
 			// TODO: let PayPal resend IPN?
 			// TODO: is this the right Response?
 			return new Response( '', Response::HTTP_INTERNAL_SERVER_ERROR );
 		}
+
+		// TODO: check txn_type
+		// TODO: update donation's status and payment provider related fields
+
+		$useCase = $this->ffFactory->newHandlePayPalPaymentNotificationUseCase( $this->getUpdateToken( $post ) );
+
+		$useCase->handleNotification( $this->newUseCaseRequestFromPost( $post ) );
+
+		return new Response( '', Response::HTTP_OK ); # PayPal expects an empty response
 	}
 
 	private function getUpdateToken( ParameterBag $postRequest ): string {
@@ -77,6 +54,32 @@ class PayPalNotificationHandler {
 	private function getValueFromCustomVars( string $customVars, string $key ): string {
 		$vars = json_decode( $customVars, true );
 		return !empty( $vars[$key] ) ? $vars[$key] : '';
+	}
+
+	private function newUseCaseRequestFromPost( ParameterBag $postRequest ): PayPalNotificationRequest {
+		return ( new PayPalNotificationRequest() )
+			->setTransactionType( $postRequest->get( 'txn_type', '' ) )
+			->setTransactionId( $postRequest->get( 'txn_id', '' ) )
+			->setPayerId( $postRequest->get( 'payer_id', '' ) )
+			->setSubscriberId( $postRequest->get( 'subscr_id', '' ) )
+			->setPayerEmail( $postRequest->get( 'payer_email', '' ) )
+			->setPayerStatus( $postRequest->get( 'payer_status', '' ) )
+			->setPayerFirstName( $postRequest->get( 'first_name', '' ) )
+			->setPayerLastName( $postRequest->get( 'last_name', '' ) )
+			->setPayerAddressName( $postRequest->get( 'address_name', '' ) )
+			->setPayerAddressStreet( $postRequest->get( 'address_street', '' ) )
+			->setPayerAddressPostalCode( $postRequest->get( 'address_zip', '' ) )
+			->setPayerAddressCity( $postRequest->get( 'address_city', '' ) )
+			->setPayerAddressCountryCode( $postRequest->get( 'address_country_code', '' ) )
+			->setPayerAddressStatus( $postRequest->get( 'address_status', '' ) )
+			->setDonationId( (int)$postRequest->get( 'item_number', 0 ) )
+			->setCurrencyCode( $postRequest->get( 'mc_currency', '' ) )
+			->setTransactionFee( Euro::newFromString( $postRequest->get( 'mc_fee', '0' ) ) )
+			->setAmountGross( Euro::newFromString( $postRequest->get( 'mc_gross', '0' ) ) )
+			->setSettleAmount( Euro::newFromString( $postRequest->get( 'settle_amount', '0' ) ) )
+			->setPaymentTimestamp( $postRequest->get( 'payment_date', '' ) )
+			->setPaymentStatus( $postRequest->get( 'payment_status', '' ) )
+			->setPaymentType( $postRequest->get( 'payment_type', '' ) );
 	}
 
 }
