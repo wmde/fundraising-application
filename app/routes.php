@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\AddDonationHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\PayPalNotificationHandler;
+use WMDE\Fundraising\Frontend\App\RouteHandlers\RouteRedirectionHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowDonationConfirmationHandler;
 use WMDE\Fundraising\Frontend\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\Domain\Model\Iban;
@@ -444,5 +445,22 @@ $app->get( '/', function ( Application $app ) {
 
 	return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
 } );
+
+// redirect display page requests from old URLs
+$app->get( '/spenden/{page}', function( Application $app, Request $request, string $page ) {
+	return ( new RouteRedirectionHandler( $app, $request->getQueryString() ) )->handle( '/page/' . $page );
+} )->assert( 'page', '[a-zA-Z_\-\s\x7f-\xff]+' );
+
+// redirect different formats of comment lists
+$app->get( '/spenden/{outputFormat}.php', function( Application $app, Request $request, string $outputFormat ) {
+	return ( new RouteRedirectionHandler( $app, $request->getQueryString() ) )->handle(
+		'/list-comments.' . ( $outputFormat === 'list' ? 'html' : $outputFormat )
+	);
+} )->assert( 'outputFormat', 'list|rss|json' );
+
+// redirect all other calls to default route
+$app->get( '/spenden{page}', function( Application $app, Request $request ) {
+	return ( new RouteRedirectionHandler( $app, $request->getQueryString() ) )->handle( '/' );
+} )->assert( 'page', '/?([a-z]+\.php)?' );
 
 return $app;
