@@ -11,6 +11,7 @@ namespace WMDE\Fundraising\Frontend\Presentation;
 class DonationConfirmationPageSelector {
 
 	private $defaultPageTitle;
+
 	/** @var TemplateTestCampaign[] */
 	private $campaigns;
 
