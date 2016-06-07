@@ -202,4 +202,38 @@ class EuroTest extends \PHPUnit_Framework_TestCase {
 		Euro::newFromInt( -1 );
 	}
 
+	/**
+	 * @dataProvider euroProvider
+	 * @param Euro $euro
+	 */
+	public function testEuroEqualsItself( Euro $euro ) {
+		$this->assertTrue( $euro->equals( clone $euro ) );
+	}
+
+	public function euroProvider() {
+		return [
+			[ Euro::newFromCents( 0 ) ],
+			[ Euro::newFromCents( 1 ) ],
+			[ Euro::newFromCents( 99 ) ],
+			[ Euro::newFromCents( 100 ) ],
+			[ Euro::newFromCents( 9999 ) ],
+		];
+	}
+
+	public function testOneCentDoesNotEqualOneEuro() {
+		$this->assertFalse( Euro::newFromCents( 1 )->equals( Euro::newFromInt( 1 ) ) );
+	}
+
+	public function testOneCentDoesNotEqualTwoCents() {
+		$this->assertFalse( Euro::newFromCents( 1 )->equals( Euro::newFromCents( 2 ) ) );
+	}
+
+	public function testOneCentDoesNotEqualOneEuroAndOneCent() {
+		$this->assertFalse( Euro::newFromCents( 1 )->equals( Euro::newFromCents( 101 ) ) );
+	}
+
+	public function test9001centsDoesNotEqual9000cents() {
+		$this->assertFalse( Euro::newFromCents( 9001 )->equals( Euro::newFromCents( 9000 ) ) );
+	}
+
 }

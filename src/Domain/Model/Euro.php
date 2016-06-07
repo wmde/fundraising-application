@@ -98,4 +98,8 @@ final class Euro {
 		return number_format( $this->getEuroFloat(), self::$DECIMAL_COUNT, '.', '' );
 	}
 
+	public function equals( Euro $euro ): bool {
+		return $this->cents === $euro->cents;
+	}
+
 }
