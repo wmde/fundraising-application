@@ -10,6 +10,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationEventLogger;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidCreditCardNotificationRequest;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\DonationEventLoggerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\DonationRepositorySpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeCreditCardService;
@@ -113,6 +114,19 @@ class CreditCardNotificationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$this->assertTrue( $donation->isBooked() );
 	}
 
+	public function testWhenAuthorizationSucceeds_bookingEventIsLogged() {
+		$donation = ValidDonation::newIncompleteCreditCardDonation();
+		$this->repository = new DonationRepositorySpy( $donation );
+		$this->eventLogger = new DonationEventLoggerSpy();
+
+		$useCase = $this->newCreditCardNotificationUseCase();
+
+		$request = ValidCreditCardNotificationRequest::newBillingNotification( 1 );
+		$this->assertTrue( $useCase->handleNotification( $request ) );
+
+		$this->assertEventLogContainsExpression( $this->eventLogger, $donation->getId(), '/booked/' );
+	}
+
 	public function testWhenSendingConfirmationMailFails_handlerReturnsTrue() {
 		$this->repository->storeDonation( ValidDonation::newIncompleteCreditCardDonation() );
 
@@ -124,6 +138,14 @@ class CreditCardNotificationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 		$request = ValidCreditCardNotificationRequest::newBillingNotification( 1 );
 		$this->assertTrue( $useCase->handleNotification( $request ) );
+	}
+
+	private function assertEventLogContainsExpression( DonationEventLoggerSpy $eventLoggerSpy, int $donationId, string $expr ) {
+		$foundCalls = array_filter( $eventLoggerSpy->getLogCalls(), function( $call ) use ( $donationId, $expr ) {
+			return $call[0] == $donationId && preg_match( $expr, $call[1] );
+		} );
+		$assertMsg = 'Failed to assert that donation event log log contained "' . $expr . '" for donation id '.$donationId;
+		$this->assertCount( 1, $foundCalls, $assertMsg );
 	}
 
 	/**

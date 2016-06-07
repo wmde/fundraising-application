@@ -52,6 +52,7 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepositor
 use WMDE\Fundraising\Frontend\Domain\Repositories\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\Domain\SimpleTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
+use WMDE\Fundraising\Frontend\Infrastructure\BestEffortDonationEventLogger;
 use WMDE\Fundraising\Frontend\Infrastructure\CreditCardService;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizationUpdater;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizer;
@@ -354,7 +355,10 @@ class FunFunFactory {
 	}
 
 	private function newDonationEventLogger(): DonationEventLogger {
-		return new DoctrineDonationEventLogger( $this->getEntityManager() );
+		return new BestEffortDonationEventLogger(
+			new DoctrineDonationEventLogger( $this->getEntityManager() ),
+			$this->getLogger()
+		);
 	}
 
 	public function newInstaller(): Installer {
