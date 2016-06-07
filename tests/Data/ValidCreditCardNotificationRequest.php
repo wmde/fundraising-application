@@ -13,7 +13,6 @@ use WMDE\Fundraising\Frontend\UseCases\CreditCardPaymentNotification\CreditCardP
  */
 class ValidCreditCardNotificationRequest {
 
-	const DONATION_ID = 12345;
 	const AMOUNT = 500;
 	const PAYMENT_ID = 'customer.prefix-ID2tbnag4a9u';
 	const CUSTOMER_ID = 'e20fb9d5281c1bca1901c19f6e46213191bb4c17';
