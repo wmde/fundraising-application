@@ -12,10 +12,11 @@ use GuzzleHttp\Client;
  */
 class PayPalPaymentNotificationVerifier implements PaymentNotificationVerifier {
 
+	/* private */ const ALLOWED_STATUSES = [ 'Completed' ];
+	/* private */ const ALLOWED_CURRENCY_CODES = [ 'EUR' ];
+
 	private $httpClient;
 	private $config;
-	private $allowedStatuses = [ 'Completed' ];
-	private $allowedCurrencyCodes = [ 'EUR' ];
 
 	public function __construct( Client $httpClient, array $config ) {
 		$this->httpClient = $httpClient;
@@ -75,7 +76,7 @@ class PayPalPaymentNotificationVerifier implements PaymentNotificationVerifier {
 
 	private function hasAllowedPaymentStatus( array $request ): bool {
 		return array_key_exists( 'payment_status', $request ) &&
-			in_array( $request['payment_status'], $this->allowedStatuses );
+			in_array( $request['payment_status'], self::ALLOWED_STATUSES );
 	}
 
 	private function hasValidItemName( array $request ): bool {
@@ -85,6 +86,6 @@ class PayPalPaymentNotificationVerifier implements PaymentNotificationVerifier {
 
 	private function hasValidCurrencyCode( array $request ): bool {
 		return array_key_exists( 'mc_currency', $request ) &&
-			in_array( $request['mc_currency'], $this->allowedCurrencyCodes );
+			in_array( $request['mc_currency'], self::ALLOWED_CURRENCY_CODES );
 	}
 }
