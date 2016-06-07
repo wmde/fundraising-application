@@ -33,7 +33,6 @@ use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanRequest;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 use WMDE\Fundraising\Frontend\UseCases\CreditCardPaymentNotification\CreditCardPaymentNotificationRequest;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentListingRequest;
-use WMDE\Fundraising\Frontend\UseCases\ShowDonationConfirmation\ShowDonationConfirmationRequest;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
 
 $app->get(
