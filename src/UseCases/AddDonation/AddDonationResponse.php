@@ -83,7 +83,7 @@ class AddDonationResponse {
 	 * @return string|null
 	 */
 	public function getAccessToken() {
-		return $this->updateToken;
+		return $this->accessToken;
 	}
 
 }
