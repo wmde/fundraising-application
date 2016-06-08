@@ -141,11 +141,15 @@ class Donation {
 			throw new RuntimeException( 'Only external payments can be confirmed as booked' );
 		}
 
-		if ( !$this->isIncomplete() ) {
+		if ( !$this->statusAllowsForBooking() ) {
 			throw new RuntimeException( 'Only incomplete donations can be confirmed as booked' );
 		}
 
 		$this->status = self::STATUS_EXTERNAL_BOOKED;
+	}
+
+	private function statusAllowsForBooking(): bool {
+		return $this->isIncomplete() || $this->needsModeration();
 	}
 
 	public function markForModeration() {
