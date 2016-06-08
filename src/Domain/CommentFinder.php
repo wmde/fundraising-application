@@ -18,7 +18,7 @@ interface CommentFinder {
 	 * @param int $limit
 	 *
 	 * @return CommentWithAmount[]
-	 * TODO: add exception type
+	 * @throws CommentListingException
 	 */
 	public function getPublicComments( int $limit ): array;
 
