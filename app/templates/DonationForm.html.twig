@@ -63,7 +63,8 @@
                 WMDE.Components.createTextComponent( store, $( '#street' ), 'street' ),
                 WMDE.Components.createTextComponent( store, $( '#post-code' ), 'postcode' ),
                 WMDE.Components.createTextComponent( store, $( '#city' ), 'city' ),
-                WMDE.Components.createRadioComponent( store, $( '#country' ), 'country' ),
+                WMDE.Components.createSelectMenuComponent( store, $( '#country' ), 'country' ),
+                WMDE.Components.createCountrySpecificsUpdateTriggerComponent( store, $( '#country' ), 'country' ),
                 WMDE.Components.createTextComponent( store, $( '#email' ), 'email' ),
                 WMDE.Components.createCheckboxComponent( store, $( '#confirm_sepa' ), 'confirmSepa' ),
                 WMDE.Components.createCheckboxComponent( store, $( '#confirm_shortterm' ), 'confirmShortTerm' )
@@ -212,6 +213,10 @@
                             $( '.confirm-bank-name' )
                         ),
                         stateKey: 'donationFormContent'
+                    },
+                    {
+                        viewHandler: WMDE.View.createAttributeValueHandler( $( '#post-code' ), $( '#city' ), $( '#email' ) ),
+                        stateKey: 'countrySpecifics'
                     }
                 ],
                 store

@@ -44,7 +44,8 @@ module.exports = {
 			formPagination: formPagination,
 			donationFormContent: donationFormContent,
 			validity: validity,
-			validationMessages: validationMessages
+			validationMessages: validationMessages,
+			countrySpecifics: countrySpecifics
 		} ), initialState, Redux.applyMiddleware.apply( this, middlewares ) );
 	},
 	createMembershipStore: function ( initialState ) {
