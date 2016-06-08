@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\Infrastructure\Repositories;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use WMDE\Fundraising\Frontend\Domain\CommentFinder;
+use WMDE\Fundraising\Frontend\Domain\CommentListingException;
 use WMDE\Fundraising\Frontend\Domain\Model\Comment;
 use WMDE\Fundraising\Frontend\Domain\ReadModel\CommentWithAmount;
 use WMDE\Fundraising\Frontend\Domain\Repositories\CommentRepository;
@@ -54,13 +55,13 @@ class LoggingCommentRepository implements CommentRepository, CommentFinder {
 	 * @param int $limit
 	 *
 	 * @return CommentWithAmount[]
-	 * @throws \Exception
+	 * @throws CommentListingException
 	 */
 	public function getPublicComments( int $limit ): array {
 		try {
 			return $this->commentFinder->getPublicComments( $limit );
 		}
-		catch ( \Exception $ex ) { // TODO: use more specific exception type
+		catch ( CommentListingException $ex ) {
 			$this->logger->log( $this->logLevel, $ex->getMessage(), [ self::CONTEXT_EXCEPTION_KEY => $ex ] );
 			throw $ex;
 		}

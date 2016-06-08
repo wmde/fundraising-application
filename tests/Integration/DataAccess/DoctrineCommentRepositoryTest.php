@@ -6,8 +6,10 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
 
 use DateTime;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\ORMException;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineCommentRepository;
+use WMDE\Fundraising\Frontend\Domain\CommentListingException;
 use WMDE\Fundraising\Frontend\Domain\Model\Comment;
 use WMDE\Fundraising\Frontend\Domain\ReadModel\CommentWithAmount;
 use WMDE\Fundraising\Frontend\Domain\Repositories\StoreCommentException;
@@ -238,6 +240,23 @@ class DoctrineCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 			[ $expectedComment ],
 			$repository->getPublicComments( 10 )
 		);
+	}
+
+	public function testDoctrineThrowsException_getPublicCommentsRethrowsAsDomainException() {
+		$repository = new DoctrineCommentRepository( $this->newThrowingEntityManager() );
+
+		$this->expectException( CommentListingException::class );
+		$repository->getPublicComments( 10 );
+	}
+
+	private function newThrowingEntityManager(): EntityManager {
+		$entityManager = $this->createMock( EntityManager::class );
+
+		$entityManager->expects( $this->any() )
+			->method( $this->anything() )
+			->willThrowException( new ORMException( 'Such error!' ) );
+
+		return $entityManager;
 	}
 
 }

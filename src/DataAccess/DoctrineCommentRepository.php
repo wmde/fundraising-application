@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\Domain\CommentFinder;
+use WMDE\Fundraising\Frontend\Domain\CommentListingException;
 use WMDE\Fundraising\Frontend\Domain\Model\Comment;
 use WMDE\Fundraising\Frontend\Domain\ReadModel\CommentWithAmount;
 use WMDE\Fundraising\Frontend\Domain\Repositories\CommentRepository;
@@ -49,17 +50,21 @@ class DoctrineCommentRepository implements CommentRepository, CommentFinder {
 	}
 
 	private function getDonation( int $limit ): array {
-		// FIXME: catch exception
-		return $this->entityManager->getRepository( Donation::class )->findBy(
-			[
-				'isPublic' => true,
-				'deletionTime' => null
-			],
-			[
-				'creationTime' => 'DESC'
-			],
-			$limit
-		);
+		try {
+			return $this->entityManager->getRepository( Donation::class )->findBy(
+				[
+					'isPublic' => true,
+					'deletionTime' => null
+				],
+				[
+					'creationTime' => 'DESC'
+				],
+				$limit
+			);
+		}
+		catch ( ORMException $ex ) {
+			throw new CommentListingException( $ex );
+		}
 	}
 
 	/**
