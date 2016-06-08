@@ -8,12 +8,42 @@ User facing application for the WMDE fundraising.
 * php7.0-intl
 * php7.0-sqlite3 (only needed for running the tests)
 * Node.js and npm (only needed in development for compiling the JavaScript and running the JavaScript tests)
+* [kontocheck extension](http://kontocheck.sourceforge.net/ (only needed when you want to use or test direct debit)
 
 ## Installing the application
 
 	composer install
 	npm install
 	npm run build-js
+
+For the database connection you need to create the file `app/config/config.prod.json` and enter your database
+connection data. If you're using MySQL, [it's important](http://stackoverflow.com/questions/5391045/how-to-define-the-use-of-utf-8-in-doctrine-2-in-zend-framework-application-ini) to add the encoding to the `driverOptions` key.
+
+	"db": {
+		"driver": "pdo_mysql",
+		"user": "donations_user",
+		"password": "s00pa_s33cr1t",
+		"dbname": "all_donations",
+		"host": "localhost",
+		"charset": "utf8",
+		"driverOptions": {
+			"1002": "SET NAMES utf8"
+		}
+ 	}
+
+For a fully working instance with all payment types and working templates you'll also need to fill out the following
+configuration data:
+
+	 - `cms-wiki-url`
+	 - `bank-data-file`
+	 - `cms-wiki-api-url`
+	 - `cms-wiki-user`
+	 - `cms-wiki-password`
+	 - `cms-wiki-title-prefix`
+	 - `operator-email`
+	 - `operator-displayname`
+	 - `paypal`
+	 - `creditcard`
 
 ## Running the application
 
@@ -22,7 +52,7 @@ For development
 	cd web
 	php -S 0:8000
 
-The "add donation" form can then be found at http://localhost:8000/index.php/page/DonationForm.html.twig
+The "add donation" form can then be found at http://localhost:8000/index.php
 
 ## Running the tests
 
