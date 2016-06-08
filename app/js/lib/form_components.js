@@ -46,6 +46,15 @@ var objectAssign = require( 'object-assign' ),
 		}
 	},
 
+	CountrySpecificsUpdateTriggerComponent = {
+		element: null,
+		contentName: '',
+		onChange: null,
+		render: function ( formContent ) {
+			this.element.val( [ formContent[ this.contentName ] ] ); // Needs to be an array
+		}
+	},
+
 	AmountComponent = {
 		inputElement: null,
 		selectElement: null,
@@ -86,6 +95,16 @@ module.exports = {
 			onChange: createDefaultChangeHandler( store, contentName )
 		} );
 		element.on( 'change', component.onChange );
+		return component;
+	},
+
+	createSelectMenuComponent: function ( store, element, contentName ) {
+		var component = objectAssign( Object.create( RadioComponent ), {
+			element: element,
+			contentName: contentName,
+			onChange: createDefaultChangeHandler( store, contentName )
+		} );
+		element.on( 'selectmenuchange', component.onChange );
 		return component;
 	},
 
@@ -142,5 +161,18 @@ module.exports = {
 		bankDataElements.bankCodeElement.on( 'change', createDefaultChangeHandler( store, 'bankCode' ) );
 		bankDataElements.debitTypeElement.on( 'change', createDefaultChangeHandler( store, 'debitType' ) );
 		return component;
+	},
+
+	createCountrySpecificsUpdateTriggerComponent: function ( store, element, contentName ) {
+		var component = objectAssign( Object.create( CountrySpecificsUpdateTriggerComponent ), {
+			element: element,
+			contentName: contentName,
+			onChange: function ( evt ) {
+				store.dispatch( actions.newCountrySpecificsUpdateAction( evt.target.value ) );
+			}
+		} );
+		element.on( 'selectmenuchange', component.onChange );
+		return component;
 	}
+
 };

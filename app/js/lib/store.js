@@ -6,6 +6,7 @@ var Redux = require( 'redux' ),
 	validity = require( './reducers/validity' ),
 	validationMessages = require( './reducers/validation_messages' ),
 	membershipInputValidation = require( './reducers/membership_input_validation' ),
+	countrySpecifics = require( './reducers/country_specifics' ),
 	middlewares = [ reduxPromise ];
 
 /* jshint ignore:start */ // Ignore console.log calls
@@ -52,7 +53,8 @@ module.exports = {
 			membershipFormContent: membershipFormContent,
 			validity: validity,
 			validationMessages: validationMessages,
-			membershipInputValidation: membershipInputValidation
+			membershipInputValidation: membershipInputValidation,
+			countrySpecifics: countrySpecifics
 		} ), initialState, Redux.applyMiddleware.apply( this, middlewares ) );
 	}
 };
