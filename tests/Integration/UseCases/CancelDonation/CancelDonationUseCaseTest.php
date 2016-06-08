@@ -68,22 +68,14 @@ class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$this->assertTrue( $response->cancellationWasSuccessful() );
 	}
 
-	// TODO: refactor once token generation is done by the repo
 	private function storeDonation( Donation $donation, FunFunFactory $factory ) {
 		$factory->getDonationRepository()->storeDonation( $donation );
 
-		/**
-		 * @var DoctrineDonation $doctrineDonation
-		 */
-		$doctrineDonation = $factory->getEntityManager()->getRepository( DoctrineDonation::class )->find( $donation->getId() );
-
-		$donationData = $doctrineDonation->getDataObject();
-		$donationData->setUpdateToken( self::CORRECT_UPDATE_TOKEN );
-		$donationData->setUpdateTokenExpiry( date( 'Y-m-d H:i:s', time() + 60 * 60 ) );
-		$doctrineDonation->setDataObject( $donationData );
-
-		$factory->getEntityManager()->persist( $doctrineDonation );
-		$factory->getEntityManager()->flush();
+		$factory->newDonationAuthorizationUpdater()->allowModificationViaToken(
+			$donation->getId(),
+			self::CORRECT_UPDATE_TOKEN,
+			new \DateTime( '9001-01-01' )
+		);
 	}
 
 	public function testGivenIdOfNonCancellableDonation_cancellationIsNotSuccessful() {
