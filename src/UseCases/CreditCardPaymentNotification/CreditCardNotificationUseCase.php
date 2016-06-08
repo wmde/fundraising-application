@@ -55,6 +55,10 @@ class CreditCardNotificationUseCase {
 			return false;
 		}
 
+		if ( !$donation->getAmount()->equals( $request->getAmount() ) ) {
+			return false;
+		}
+
 		if ( !$this->authorizationService->systemCanModifyDonation( $request->getDonationId() ) ) {
 			return false;
 		}

@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\UseCases\CreditCardPaymentNotification\CreditCardP
  */
 class ValidCreditCardNotificationRequest {
 
-	const AMOUNT = 500;
+	const AMOUNT = 13.37;
 	const PAYMENT_ID = 'customer.prefix-ID2tbnag4a9u';
 	const CUSTOMER_ID = 'e20fb9d5281c1bca1901c19f6e46213191bb4c17';
 	const SESSION_ID = 'CC13064b2620f4028b7d340e3449676213336a4d';
@@ -33,7 +33,7 @@ class ValidCreditCardNotificationRequest {
 	private static function newBaseRequest(): CreditCardPaymentNotificationRequest {
 		return ( new CreditCardPaymentNotificationRequest() )
 			->setTransactionId( self::PAYMENT_ID )
-			->setAmount( Euro::newFromCents( self::AMOUNT ) )
+			->setAmount( Euro::newFromFloat( self::AMOUNT ) )
 			->setCustomerId( self::CUSTOMER_ID )
 			->setSessionId( self::SESSION_ID )
 			->setAuthId( self::AUTH_ID )

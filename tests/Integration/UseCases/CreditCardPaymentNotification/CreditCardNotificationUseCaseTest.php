@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\CreditCardPayment
 
 use Psr\Log\NullLogger;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
+use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationEventLogger;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidCreditCardNotificationRequest;
@@ -29,6 +30,7 @@ class CreditCardNotificationUseCaseTest extends \PHPUnit_Framework_TestCase {
 	/** @var DoctrineDonationRepository|FakeDonationRepository|DonationRepositorySpy */
 	private $repository;
 	private $authorizer;
+	/** @var DonationConfirmationMailer|\PHPUnit_Framework_MockObject_MockObject */
 	private $mailer;
 	private $eventLogger;
 	private $creditCardService;
@@ -149,6 +151,17 @@ class CreditCardNotificationUseCaseTest extends \PHPUnit_Framework_TestCase {
 			new NullLogger(),
 			$this->eventLogger
 		);
+	}
+
+	public function testWhenPaymentAmountMismatches_handlerReturnsFalse() {
+		$this->repository->storeDonation( ValidDonation::newIncompleteCreditCardDonation() );
+
+		$useCase = $this->newCreditCardNotificationUseCase();
+
+		$request = ValidCreditCardNotificationRequest::newBillingNotification( 1 );
+		$request->setAmount( Euro::newFromInt( 35505 ) );
+
+		$this->assertFalse( $useCase->handleNotification( $request ) );
 	}
 
 }
