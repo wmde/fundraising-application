@@ -116,8 +116,6 @@ $(function() {
       });
     }
 
-    $('#country').selectmenu({});
-
     /* amount-list */
     $('.amount-list').each(function () {
       var $container = $(this);
