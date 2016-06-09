@@ -3,7 +3,7 @@
 var test = require( 'tape' ),
 	sinon = require( 'sinon' ),
 	attributeValueHandler = require( '../../lib/view_handler/attribute_value_handler' ),
-	createAttributeValueHandler = attributeValueHandler.createAttributeValueHandler,
+	createAttributeValueHandler = attributeValueHandler.createCountrySpecificAttributesHandler,
 	createElement = function () {
 		return {
 			attr: sinon.spy()

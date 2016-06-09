@@ -3,16 +3,15 @@
 var objectAssign = require( 'object-assign' ),
 	_ = require( 'underscore' ),
 
-	AttributeValueHandler = {
-		'post-code': null,
+	CountrySpecificAttributesHandler = {
+		postCode: null,
 		city: null,
 		email: null,
 
-		update: function ( elements ) {
-			var self = this;
-			_.each( elements, function ( attributes, elementId ) {
-				self.setAttributesForElement( self[ elementId ], attributes );
-			} );
+		update: function ( countrySpecificAttributes ) {
+			this.setAttributesForElement( this.postCode, countrySpecificAttributes[ 'post-code' ] );
+			this.setAttributesForElement( this.city, countrySpecificAttributes.city );
+			this.setAttributesForElement( this.email, countrySpecificAttributes.email );
 		},
 
 		setAttributesForElement: function ( element, attributes ) {
@@ -23,9 +22,9 @@ var objectAssign = require( 'object-assign' ),
 	};
 
 module.exports = {
-	createAttributeValueHandler: function ( postCodeElement, cityElement, emailElement ) {
-		return objectAssign( Object.create( AttributeValueHandler ), {
-			'post-code': postCodeElement,
+	createCountrySpecificAttributesHandler: function ( postCodeElement, cityElement, emailElement ) {
+		return objectAssign( Object.create( CountrySpecificAttributesHandler ), {
+			postCode: postCodeElement,
 			city: cityElement,
 			email: emailElement
 		} );

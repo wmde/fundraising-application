@@ -59,7 +59,7 @@ var _ = require( 'underscore' ),
 module.exports = {
 	getCountrySpecifics: function ( countryCode ) {
 		if ( _.has( countrySpecifics, countryCode ) ) {
-			return _.extend( {}, countrySpecifics.generic, countrySpecifics[ countryCode ] );
+			return countrySpecifics[ countryCode ];
 		}
 
 		return countrySpecifics.generic;
