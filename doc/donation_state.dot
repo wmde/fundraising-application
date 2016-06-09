@@ -7,9 +7,9 @@ digraph G {
   "Moderation" ->  "External_Incomplete" [label="Moderate OK in backend"]
   "Moderation" ->  "External_Booked" [label="Moderate OK in backend"]
   "External_Booked" -> "Moderation" [label="Add comment with bad words"]
-  "New" [shape=circle]
-  "Promise"  [shape=circle]
-  "External_Incomplete" [shape=circle]
+  "New" [shape=circle,peripheries=2]
+  "Promise"  [shape=circle,peripheries=2]
+  "External_Incomplete" [shape=circle,peripheries=2]
   "External_Booked"  [shape=circle]
   "Moderation" [shape=circle]
 }
