@@ -116,25 +116,49 @@ class DonationTest extends \PHPUnit_Framework_TestCase {
 		$donation->confirmBooked();
 	}
 
-	public function testGivenNonIncompleteStatus_confirmBookedThrowsException() {
-		$donation = ValidDonation::newBookedPayPalDonation();
-
-		$this->setExpectedExceptionRegExp( RuntimeException::class, '/Only incomplete/' );
-		$donation->confirmBooked();
-	}
-
-	public function testGivenIncompleteStatus_confirmBookedSetsBookedStatus() {
-		$donation = ValidDonation::newIncompletePayPalDonation();
-		$donation->confirmBooked();
-
-		$this->assertSame( Donation::STATUS_EXTERNAL_BOOKED, $donation->getStatus() );
-	}
-
 	public function testAddingPayPalDataToNoPayPalDonationCausesException() {
 		$donation = ValidDonation::newDirectDebitDonation();
 
 		$this->expectException( RuntimeException::class );
 		$donation->addPayPalData( new PayPalData() );
+	}
+
+	/**
+	 * @dataProvider statusesThatDoNotAllowForBookingProvider
+	 */
+	public function testGivenStatusThatDoesNotAllowForBooking_confirmBookedThrowsException( Donation $donation ) {
+		$this->expectException( RuntimeException::class );
+		$donation->confirmBooked();
+	}
+
+	public function statusesThatDoNotAllowForBookingProvider() {
+		return [
+			[ ValidDonation::newBookedPayPalDonation() ],
+			[ ValidDonation::newBookedCreditCardDonation() ],
+		];
+	}
+
+	/**
+	 * @dataProvider statusesThatAllowsForBookingProvider
+	 */
+	public function testGivenStatusThatAllowsForBooking_confirmBookedSetsBookedStatus( Donation $donation ) {
+		$donation->confirmBooked();
+		$this->assertSame( Donation::STATUS_EXTERNAL_BOOKED, $donation->getStatus() );
+	}
+
+	public function statusesThatAllowsForBookingProvider() {
+		return [
+			[ ValidDonation::newIncompletePayPalDonation() ],
+			[ ValidDonation::newIncompleteCreditCardDonation() ],
+			[ $this->newInModerationPayPalDonation() ],
+			[ ValidDonation::newCancelledPayPalDonation() ],
+		];
+	}
+
+	private function newInModerationPayPalDonation(): Donation {
+		$donation = ValidDonation::newIncompletePayPalDonation();
+		$donation->markForModeration();
+		return $donation;
 	}
 
 }
