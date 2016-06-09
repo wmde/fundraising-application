@@ -5,10 +5,10 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use DateTime;
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpKernel\Client;
-use WMDE\Fundraising\Entities\Donation;
+use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
 /**
@@ -44,7 +44,7 @@ class AddCommentRouteTest extends WebRouteTestCase {
 
 	public function testGivenRequestWithoutTokens_resultIsError() {
 		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
-			$donation = $this->storeDonation( $factory->getEntityManager() );
+			$donation = $this->getNewlyStoredDonation( $factory );
 
 			$client->request(
 				'POST',
@@ -61,24 +61,22 @@ class AddCommentRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function storeDonation( EntityManager $entityManager ): Donation {
-		$donation = new Donation();
-		$donation->setAmount( '100' );
-		$donation->setCreationTime( new DateTime( '1984-01-01' ) );
+	private function getNewlyStoredDonation( FunFunFactory $factory ): Donation {
+		$donation = ValidDonation::newDirectDebitDonation();
 
-		$donationData = $donation->getDataObject();
-		$donationData->setUpdateToken( self::CORRECT_UPDATE_TOKEN );
-		$donationData->setUpdateTokenExpiry( date( 'Y-m-d H:i:s', time() + 60 * 60 ) );
-		$donation->setDataObject( $donationData );
+		$factory->getDonationRepository()->storeDonation( $donation );
+		$factory->newDonationAuthorizationUpdater()->allowModificationViaToken(
+			$donation->getId(),
+			self::CORRECT_UPDATE_TOKEN,
+			new \DateTime( '9001-01-01' )
+		);
 
-		$entityManager->persist( $donation );
-		$entityManager->flush();
 		return $donation;
 	}
 
 	public function testGivenRequestWithValidParameters_resultIsSuccess() {
 		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
-			$donation = $this->storeDonation( $factory->getEntityManager() );
+			$donation = $this->getNewlyStoredDonation( $factory );
 
 			$client->request(
 				'POST',
@@ -99,7 +97,7 @@ class AddCommentRouteTest extends WebRouteTestCase {
 
 	public function testGivenRequestWithUnknownDonationId_resultIsError() {
 		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
-			$this->storeDonation( $factory->getEntityManager() );
+			$donation = $this->getNewlyStoredDonation( $factory );
 
 			$client->request(
 				'POST',
@@ -120,7 +118,7 @@ class AddCommentRouteTest extends WebRouteTestCase {
 
 	public function testGivenRequestWithInvalidUpdateToken_resultIsError() {
 		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
-			$donation = $this->storeDonation( $factory->getEntityManager() );
+			$donation = $this->getNewlyStoredDonation( $factory );
 
 			$client->request(
 				'POST',

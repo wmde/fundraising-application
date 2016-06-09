@@ -13,6 +13,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\CreditCardPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\CreditCardTransactionData;
 use WMDE\Fundraising\Frontend\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\Domain\Model\DonationComment;
 use WMDE\Fundraising\Frontend\Domain\Model\DonationPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\Frontend\Domain\Model\Donor;
@@ -89,6 +90,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		$doctrineDonation->setId( $donation->getId() );
 		$this->updatePaymentInformation( $doctrineDonation, $donation );
 		$this->updateDonorInformation( $doctrineDonation, $donation->getDonor() );
+		$this->updateComment( $doctrineDonation, $donation->getComment() );
 		$doctrineDonation->setDonorOptsIntoNewsletter( $donation->getOptsIntoNewsletter() );
 
 		$doctrineDonation->encodeAndSetData( array_merge(
@@ -113,6 +115,18 @@ class DoctrineDonationRepository implements DonationRepository {
 			$doctrineDonation->setDonorCity( $donor->getPhysicalAddress()->getCity() );
 			$doctrineDonation->setDonorEmail( $donor->getEmailAddress() );
 			$doctrineDonation->setDonorFullName( $donor->getPersonName()->getFullName() );
+		}
+	}
+
+	private function updateComment( DoctrineDonation $doctrineDonation, DonationComment $comment = null ) {
+		if ( $comment === null ) {
+			$doctrineDonation->setIsPublic( false );
+			$doctrineDonation->setComment( '' );
+			$doctrineDonation->setPublicRecord( '' );
+		} else {
+			$doctrineDonation->setIsPublic( $comment->isPublic() );
+			$doctrineDonation->setComment( $comment->getCommentText() );
+			$doctrineDonation->setPublicRecord( $comment->getAuthorDisplayName() );
 		}
 	}
 
@@ -288,7 +302,8 @@ class DoctrineDonationRepository implements DonationRepository {
 			$this->getDonorFromEntity( $dd ),
 			$this->getPaymentFromEntity( $dd ),
 			(bool)$dd->getDonorOptsIntoNewsletter(),
-			$this->getTrackingInfoFromEntity( $dd )
+			$this->getTrackingInfoFromEntity( $dd ),
+			$this->getCommentFromEntity( $dd )
 		);
 	}
 
@@ -457,6 +472,22 @@ class DoctrineDonationRepository implements DonationRepository {
 		}
 
 		return null;
+	}
+
+	/**
+	 * @param DoctrineDonation $dd
+	 * @return DonationComment|null
+	 */
+	private function getCommentFromEntity( DoctrineDonation $dd ) {
+		if ( $dd->getComment() === '' ) {
+			return null;
+		}
+
+		return new DonationComment(
+			$dd->getComment(),
+			$dd->getIsPublic(),
+			$dd->getPublicRecord()
+		);
 	}
 
 }

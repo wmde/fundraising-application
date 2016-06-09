@@ -187,4 +187,37 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		return $this->getDoctrineDonationById( $donation->getId() );
 	}
 
+	public function testCommentGetPersistedAndRetrieved() {
+		$donation = ValidDonation::newDirectDebitDonation();
+		$donation->addComment( ValidDonation::newComment() );
+
+		$repository = $this->newRepository();
+		$repository->storeDonation( $donation );
+
+		$retrievedDonation = $repository->getDonationById( $donation->getId() );
+
+		$this->assertEquals( $donation, $retrievedDonation );
+	}
+
+	public function testPersistingDonationWithoutCommentCausesCommentToBeCleared() {
+		$donation = ValidDonation::newDirectDebitDonation();
+		$donation->addComment( ValidDonation::newComment() );
+
+		$repository = $this->newRepository();
+		$repository->storeDonation( $donation );
+
+		$newDonation = ValidDonation::newDirectDebitDonation();
+		$newDonation->assignId( $donation->getId() );
+
+		$repository->storeDonation( $newDonation );
+
+		$expectedDoctrineEntity = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
+		$expectedDoctrineEntity->setId( $donation->getId() );
+		$expectedDoctrineEntity->setComment( '' );
+		$expectedDoctrineEntity->setIsPublic( false );
+		$expectedDoctrineEntity->setPublicRecord( '' );
+
+		$this->assertDoctrineEntityIsInDatabase( $expectedDoctrineEntity );
+	}
+
 }

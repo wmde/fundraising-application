@@ -10,9 +10,7 @@ use Doctrine\ORM\ORMException;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineCommentRepository;
 use WMDE\Fundraising\Frontend\Domain\CommentListingException;
-use WMDE\Fundraising\Frontend\Domain\Model\Comment;
 use WMDE\Fundraising\Frontend\Domain\ReadModel\CommentWithAmount;
-use WMDE\Fundraising\Frontend\Domain\Repositories\StoreCommentException;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
@@ -195,51 +193,6 @@ class DoctrineCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 			->setDonationTime( new \DateTime( '1984-03-03' ) )
 			->setDonationId( $donationId )
 			->freeze()->assertNoNullFields();
-	}
-
-	public function testWhenNoDonation_storeCommentThrowsException() {
-		$repository = $this->newDbalCommentRepository();
-
-		$comment = $this->newValidCommentForStorage( 1337 );
-
-		$this->expectException( StoreCommentException::class );
-		$repository->storeComment( $comment );
-	}
-
-	private function newValidCommentForStorage( int $donationId ): Comment {
-		$expectedComment = new Comment();
-
-		$expectedComment->setCommentText( 'Your programmers deserve a raise' );
-		$expectedComment->setAuthorDisplayName( 'Uncle Bob' );
-		$expectedComment->setDonationId( $donationId );
-		$expectedComment->setIsPublic( true );
-
-		return $expectedComment->freeze()->assertNoNullFields();
-	}
-
-	public function testWhenDonationExists_storeCommentAddsItToDonation() {
-		$donation = new Donation();
-		$donation->setAmount( '100' );
-		$donation->setCreationTime( new DateTime( '1984-01-01' ) );
-		$this->entityManager->persist( $donation );
-		$this->entityManager->flush();
-
-		$repository = $this->newDbalCommentRepository();
-
-		$repository->storeComment( $this->newValidCommentForStorage( $donation->getId() ) );
-
-		$expectedComment = CommentWithAmount::newInstance()
-			->setCommentText( 'Your programmers deserve a raise' )
-			->setAuthorName( 'Uncle Bob' )
-			->setDonationAmount( 100 )
-			->setDonationId( $donation->getId() )
-			->setDonationTime( new DateTime( '1984-01-01' ) )
-			->freeze()->assertNoNullFields();
-
-		$this->assertEquals(
-			[ $expectedComment ],
-			$repository->getPublicComments( 10 )
-		);
 	}
 
 	public function testDoctrineThrowsException_getPublicCommentsRethrowsAsDomainException() {

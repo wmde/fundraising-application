@@ -25,34 +25,20 @@ class Donation {
 
 	const NO_APPLICANT = null;
 
-	/**
-	 * @var int|null
-	 */
 	private $id;
-
 	private $status;
-
-	private $optsIntoNewsletter;
-
-	/**
-	 * @var Donor|null
-	 */
 	private $donor;
-
-	/**
-	 * @var DonationPayment
-	 */
 	private $payment;
+	private $optsIntoNewsletter;
+	private $comment;
 
 	/**
 	 * TODO: move out of Donation
-	 *
-	 * @var DonationTrackingInfo
 	 */
 	private $trackingInfo;
 
 	public function __construct( int $id = null, string $status, Donor $donor = null, DonationPayment $payment,
-		bool $optsIntoNewsletter, DonationTrackingInfo $trackingInfo ) {
+		bool $optsIntoNewsletter, DonationTrackingInfo $trackingInfo, DonationComment $comment = null ) {
 
 		$this->id = $id;
 		$this->status = $status;
@@ -60,6 +46,7 @@ class Donation {
 		$this->payment = $payment;
 		$this->optsIntoNewsletter = $optsIntoNewsletter;
 		$this->trackingInfo = $trackingInfo;
+		$this->comment = $comment;
 	}
 
 	/**
@@ -104,6 +91,23 @@ class Donation {
 	 */
 	public function getDonor() {
 		return $this->donor;
+	}
+
+	/**
+	 * Returns the DonationComment or null for when there is none.
+	 *
+	 * @return DonationComment|null
+	 */
+	public function getComment() {
+		return $this->comment;
+	}
+
+	public function addComment( DonationComment $comment ) {
+		if ( $this->comment !== null ) {
+			throw new RuntimeException( 'Can only add a single comment to a donation' );
+		}
+
+		$this->comment = $comment;
 	}
 
 	public function getPayment(): DonationPayment {

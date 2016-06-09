@@ -4,12 +4,13 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\AddSubscription;
 
-use WMDE\Fundraising\Frontend\Domain\Model\Comment;
-use WMDE\Fundraising\Frontend\Domain\Repositories\CommentRepository;
-use WMDE\Fundraising\Frontend\Domain\Repositories\StoreCommentException;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\CommentRepositorySpy;
+use WMDE\Fundraising\Frontend\Domain\Model\DonationComment;
+use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\DonationRepositorySpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingDonationAuthorizer;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeDonationRepository;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingDonationAuthorizer;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingDonationRepository;
 use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentUseCase;
 
@@ -21,74 +22,85 @@ use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentUseCase;
  */
 class AddCommentUseCaseTest extends \PHPUnit_Framework_TestCase {
 
+	const DONATION_ID = 9001;
+	const COMMENT_TEXT = 'Your programmers deserve a raise';
+	const COMMENT_IS_PUBLIC = true;
+	const COMMENT_AUTHOR = 'Uncle Bob';
+
 	public function testGivenValidRequest_commentGetsAdded() {
-		$addCommentRequest = new AddCommentRequest();
-		$addCommentRequest->setCommentText( 'Your programmers deserve a raise' );
-		$addCommentRequest->setIsPublic( true );
-		$addCommentRequest->setAuthorDisplayName( 'Uncle Bob' );
-		$addCommentRequest->setDonationId( 9001 );
-		$addCommentRequest->freeze()->assertNoNullFields();
+		$donation = ValidDonation::newDirectDebitDonation();
+		$donation->assignId( self::DONATION_ID );
 
-		$commentRepository = new CommentRepositorySpy();
-		$useCase = new AddCommentUseCase( $commentRepository, new SucceedingDonationAuthorizer() );
-		$response = $useCase->addComment( $addCommentRequest );
+		$donationRepository = new FakeDonationRepository( $donation );
 
-		$expectedComment = new Comment();
-		$expectedComment->setAuthorDisplayName( 'Uncle Bob' );
-		$expectedComment->setDonationId( 9001 );
-		$expectedComment->setCommentText( 'Your programmers deserve a raise' );
-		$expectedComment->setIsPublic( true );
-		$expectedComment->freeze()->assertNoNullFields();
+		$useCase = new AddCommentUseCase( $donationRepository, new SucceedingDonationAuthorizer() );
+		$response = $useCase->addComment( $this->newValidRequest() );
+
+		$this->assertEquals(
+			new DonationComment(
+				self::COMMENT_TEXT,
+				self::COMMENT_IS_PUBLIC,
+				self::COMMENT_AUTHOR
+			),
+			$donationRepository->getDonationById( self::DONATION_ID )->getComment()
+		);
 
 		$this->assertTrue( $response->isSuccessful() );
-		$this->assertEquals(
-			[ $expectedComment ],
-			$commentRepository->getStoreCommentCalls()
-		);
 	}
 
-	public function testWhenRepositoryThrowsException_addCommentReturnsFailureResponse() {
+	private function newValidRequest(): AddCommentRequest {
 		$addCommentRequest = new AddCommentRequest();
-		$addCommentRequest->setCommentText( 'Your programmers deserve a raise' );
-		$addCommentRequest->setIsPublic( true );
-		$addCommentRequest->setAuthorDisplayName( 'Uncle Bob' );
-		$addCommentRequest->setDonationId( 9001 );
-		$addCommentRequest->freeze()->assertNoNullFields();
+
+		$addCommentRequest->setCommentText( self::COMMENT_TEXT );
+		$addCommentRequest->setIsPublic( self::COMMENT_IS_PUBLIC );
+		$addCommentRequest->setAuthorDisplayName( self::COMMENT_AUTHOR );
+		$addCommentRequest->setDonationId( self::DONATION_ID );
+
+		return $addCommentRequest->freeze()->assertNoNullFields();
+	}
+
+	public function testWhenRepositoryThrowsExceptionOnGet_failureResponseIsReturned() {
+		$throwingRepo = new ThrowingDonationRepository();
+		$throwingRepo->throwOnGetDonationById();
 
 		$useCase = new AddCommentUseCase(
-			$this->newThrowingCommentRepository(),
+			$throwingRepo,
 			new SucceedingDonationAuthorizer()
 		);
 
-		$response = $useCase->addComment( $addCommentRequest );
+		$response = $useCase->addComment( $this->newValidRequest() );
 
 		$this->assertFalse( $response->isSuccessful() );
 	}
 
-	private function newThrowingCommentRepository(): CommentRepository {
-		return new class () implements CommentRepository {
-			public function storeComment( Comment $comment ) {
-				throw new StoreCommentException();
-			}
-		};
+	public function testWhenRepositoryThrowsExceptionOnStore_failureResponseIsReturned() {
+		$throwingRepo = new ThrowingDonationRepository();
+		$throwingRepo->throwOnStoreDonation();
+
+		$useCase = new AddCommentUseCase(
+			$throwingRepo,
+			new SucceedingDonationAuthorizer()
+		);
+
+		$response = $useCase->addComment( $this->newValidRequest() );
+
+		$this->assertFalse( $response->isSuccessful() );
 	}
 
 	public function testAuthorizationFails_failureResponseIsReturned() {
-		$addCommentRequest = new AddCommentRequest();
-		$addCommentRequest->setCommentText( 'Your programmers deserve a raise' );
-		$addCommentRequest->setIsPublic( true );
-		$addCommentRequest->setAuthorDisplayName( 'Uncle Bob' );
-		$addCommentRequest->setDonationId( 9001 );
-		$addCommentRequest->freeze()->assertNoNullFields();
-
 		$useCase = new AddCommentUseCase(
-			new CommentRepositorySpy(),
+			new DonationRepositorySpy(),
 			new FailingDonationAuthorizer()
 		);
 
-		$response = $useCase->addComment( $addCommentRequest );
+		$response = $useCase->addComment( $this->newValidRequest() );
 
 		$this->assertFalse( $response->isSuccessful() );
+	}
+
+	public function testWhenDonationDoesNotExist_failureResponseIsReturned() {
+		$useCase = new AddCommentUseCase( new FakeDonationRepository(), new SucceedingDonationAuthorizer() );
+		$this->assertFalse( $useCase->addComment( $this->newValidRequest() )->isSuccessful() );
 	}
 
 }

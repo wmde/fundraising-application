@@ -187,11 +187,8 @@ class FunFunFactory {
 		} );
 
 		$pimple['comment_repository'] = $pimple->share( function() {
-			$repository = new DoctrineCommentRepository( $this->getEntityManager() );
-
 			return new LoggingCommentRepository(
-				$repository,
-				$repository,
+				new DoctrineCommentRepository( $this->getEntityManager() ),
 				$this->getLogger()
 			);
 		} );
@@ -826,7 +823,7 @@ class FunFunFactory {
 
 	public function newAddCommentUseCase( string $updateToken ): AddCommentUseCase {
 		return new AddCommentUseCase(
-			$this->getCommentRepository(),
+			$this->getDonationRepository(),
 			$this->newDonationAuthorizer( $updateToken )
 		);
 	}
@@ -841,14 +838,6 @@ class FunFunFactory {
 
 	public function newDonationAuthorizationUpdater(): DonationAuthorizationUpdater {
 		return new DoctrineDonationAuthorizationUpdater( $this->getEntityManager() );
-	}
-
-	private function getCommentRepository(): CommentRepository {
-		return $this->pimple['comment_repository'];
-	}
-
-	public function setCommentRepository( CommentRepository $commentRepository ) {
-		$this->pimple['comment_repository'] = $commentRepository;
 	}
 
 	public function newTokenGenerator(): TokenGenerator {
