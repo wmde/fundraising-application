@@ -82,6 +82,7 @@ class CreditCardNotificationUseCase {
 		}
 
 		$this->sendConfirmationEmail( $donation );
+		$this->donationEventLogger->log( $donation->getId(), 'mcp_handler: booked' );
 		return true;
 	}
 

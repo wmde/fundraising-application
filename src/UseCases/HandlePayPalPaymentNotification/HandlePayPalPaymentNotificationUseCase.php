@@ -18,7 +18,6 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
 use WMDE\Fundraising\Frontend\Domain\Repositories\StoreDonationException;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizer;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
-use WMDE\Fundraising\Frontend\Infrastructure\DonationEventLogException;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationEventLogger;
 
 /**
@@ -89,6 +88,7 @@ class HandlePayPalPaymentNotificationUseCase {
 		}
 
 		$this->sendConfirmationEmailFor( $donation );
+		$this->donationEventLogger->log( $donation->getId(), 'paypal_handler: booked' );
 
 		return true;
 	}
@@ -122,6 +122,7 @@ class HandlePayPalPaymentNotificationUseCase {
 		}
 
 		$this->sendConfirmationEmailFor( $donation );
+		$this->donationEventLogger->log( $donation->getId(), 'paypal_handler: booked' );
 
 		return true;
 	}
@@ -223,27 +224,14 @@ class HandlePayPalPaymentNotificationUseCase {
 	}
 
 	private function logChildDonationCreatedEvent( $parentId, $childId ) {
-		$this->tryToLogDonationEvent(
+		$this->donationEventLogger->log(
 			$parentId,
 			"paypal_handler: new transaction id to corresponding child donation: $childId"
 		);
-		$this->tryToLogDonationEvent(
+		$this->donationEventLogger->log(
 			$childId,
 			"paypal_handler: new transaction id to corresponding parent donation: $parentId"
 		);
-	}
-
-	private function tryToLogDonationEvent( $donationId, $message ) {
-		try {
-			$this->donationEventLogger->log( $donationId, $message );
-		} catch ( DonationEventLogException $e ) {
-			$logContext = [
-				'donationId' => $donationId,
-				'exception' => $e,
-				'message'
-			];
-			$this->logger->error( 'Could not update parent donation event log', $logContext );
-		}
 	}
 
 	private function newDonorFromRequest( PayPalNotificationRequest $request ): Donor {

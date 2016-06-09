@@ -211,6 +211,26 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$this->assertTrue( $donation->isBooked() );
 	}
 
+	public function testWhenAuthorizationSucceeds_bookingEventIsLogged() {
+		$donation = ValidDonation::newIncompletePayPalDonation();
+		$repositorySpy = new DonationRepositorySpy( $donation );
+
+		$eventLogger = new DonationEventLoggerSpy();
+
+		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 1 );
+		$useCase = new HandlePayPalPaymentNotificationUseCase(
+			$repositorySpy,
+			new SucceedingDonationAuthorizer(),
+			$this->getMailer(),
+			new NullLogger(),
+			$eventLogger
+		);
+
+		$this->assertTrue( $useCase->handleNotification( $request ) );
+
+		$this->assertEventLogContainsExpression( $eventLogger, $donation->getId(), '/booked/' );
+	}
+
 	public function testWhenSendingConfirmationMailFails_handlerReturnsTrue() {
 		$fakeRepository = new FakeDonationRepository();
 		$fakeRepository->storeDonation( ValidDonation::newIncompletePayPalDonation() );
@@ -314,14 +334,6 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 
 		$this->assertEventLogContainsExpression( $eventLogger, $donation->getId(), '/child donation.*' . $childDonationId .'/' );
 		$this->assertEventLogContainsExpression( $eventLogger, $childDonationId, '/parent donation.*' . $donation->getId() .'/' );
-	}
-
-	private function assertEventLogContainsExpression( DonationEventLoggerSpy $eventLoggerSpy, int $donationId, string $expr ) {
-		$foundCalls = array_filter( $eventLoggerSpy->getLogCalls(), function( $call ) use ( $donationId, $expr ) {
-			return $call[0] == $donationId && preg_match( $expr, $call[1] );
-		} );
-		$assertMsg = 'Failed to assert that donation event log log contained "' . $expr . '" for donation id '.$donationId;
-		$this->assertCount( 1, $foundCalls, $assertMsg );
 	}
 
 	public function testGivenExistingTransactionIdForBookedDonation_handlerReturnsFalse() {
@@ -428,6 +440,40 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$this->assertTrue( $donation->isBooked() );
 	}
 
+	public function testWhenNotificationIsForNonExistingDonation_confirmationMailIsSent() {
+		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 12345 );
+		$mailer = $this->getMailer();
+		$mailer->expects( $this->once() )
+			->method( 'sendConfirmationMailFor' )
+			->with( $this->anything() );
+		$useCase = new HandlePayPalPaymentNotificationUseCase(
+			new FakeDonationRepository(),
+			new SucceedingDonationAuthorizer(),
+			$mailer,
+			new NullLogger(),
+			$this->getEventLogger()
+		);
+
+		$useCase->handleNotification( $request );
+	}
+
+	public function testWhenNotificationIsForNonExistingDonation_bookingEventIsLogged() {
+		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 12345 );
+		$eventLogger = new DonationEventLoggerSpy();
+
+		$useCase = new HandlePayPalPaymentNotificationUseCase(
+			new FakeDonationRepository(),
+			new SucceedingDonationAuthorizer(),
+			$this->getMailer(),
+			new NullLogger(),
+			$eventLogger
+		);
+
+		$useCase->handleNotification( $request );
+
+		$this->assertEventLogContainsExpression( $eventLogger, 1, '/booked/' ); // 1 is the generated donation id
+	}
+
 	private function assertDonationIsCreatedWithNotficationRequestData( Donation $donation ) {
 		$this->assertSame( 0, $donation->getPaymentIntervalInMonths(), 'Payment interval is always empty' );
 		$this->assertTrue( $donation->isBooked() );
@@ -452,21 +498,12 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$this->assertSame( ValidPayPalNotificationRequest::PAYER_ADDRESS_NAME, $paypalData->getAddressName() );
 	}
 
-	public function testWhenNotificationIsForNonExistingDonation_confirmationMailIsSent() {
-		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 12345 );
-		$mailer = $this->getMailer();
-		$mailer->expects( $this->once() )
-			->method( 'sendConfirmationMailFor' )
-			->with( $this->anything() );
-		$useCase = new HandlePayPalPaymentNotificationUseCase(
-			new FakeDonationRepository(),
-			new SucceedingDonationAuthorizer(),
-			$mailer,
-			new NullLogger(),
-			$this->getEventLogger()
-		);
-
-		$useCase->handleNotification( $request );
+	private function assertEventLogContainsExpression( DonationEventLoggerSpy $eventLoggerSpy, int $donationId, string $expr ) {
+		$foundCalls = array_filter( $eventLoggerSpy->getLogCalls(), function( $call ) use ( $donationId, $expr ) {
+			return $call[0] == $donationId && preg_match( $expr, $call[1] );
+		} );
+		$assertMsg = 'Failed to assert that donation event log log contained "' . $expr . '" for donation id '.$donationId;
+		$this->assertCount( 1, $foundCalls, $assertMsg );
 	}
 
 	/**
