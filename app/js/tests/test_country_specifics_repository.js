@@ -8,9 +8,9 @@ test( 'Specifics for Germany', function ( t ) {
 	var countryCode = 'DE';
 
 	t.test( 'Method returns attributes for relevant fields', function ( t ) {
-		var countrySpecifics = getCountrySpecifics( countryCode, 'post-code' ),
+		var countrySpecifics = getCountrySpecifics( countryCode ),
 			expectedAttributes = {
-				'post-code': {
+				postCode: {
 					'data-pattern': '\\s*[0-9]{5}\\s*',
 					placeholder: 'z. B. 10117',
 					title: 'Fünfstellige Postleitzahl'
@@ -35,7 +35,7 @@ test( 'Generics', function ( t ) {
 	t.test( 'Method returns generic attributes for given field and undefined country code', function ( t ) {
 		var countrySpecifics = getCountrySpecifics( countryCode ),
 			expectedAttributes = {
-				'post-code': {
+				postCode: {
 					'data-pattern': '{1,}',
 					placeholder: 'z. B. 10117',
 					title: 'Postleitzahl'

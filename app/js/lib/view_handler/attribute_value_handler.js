@@ -9,7 +9,7 @@ var objectAssign = require( 'object-assign' ),
 		email: null,
 
 		update: function ( countrySpecificAttributes ) {
-			this.setAttributesForElement( this.postCode, countrySpecificAttributes[ 'post-code' ] );
+			this.setAttributesForElement( this.postCode, countrySpecificAttributes.postCode );
 			this.setAttributesForElement( this.city, countrySpecificAttributes.city );
 			this.setAttributesForElement( this.email, countrySpecificAttributes.email );
 		},

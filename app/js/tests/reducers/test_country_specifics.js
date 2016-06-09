@@ -7,7 +7,7 @@ var test = require( 'tape' ),
 test( 'CHANGE_CONTENT updates all defined element attributes', function ( t ) {
 	var stateBefore = {},
 		expectedState = {
-			'post-code': {
+			postCode: {
 				'data-pattern': '\\s*[1-9][0-9]{3}\\s*',
 				placeholder: 'z. B. 4020',
 				title: 'Vierstellige Postleitzahl'

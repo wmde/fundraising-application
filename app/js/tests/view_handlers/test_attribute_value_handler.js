@@ -18,7 +18,7 @@ test( 'Attribute values are changed', function ( t ) {
 
 	handler.update(
 		{
-			'post-code': {
+			postCode: {
 				'data-pattern': 'whatever'
 			},
 			city: {
