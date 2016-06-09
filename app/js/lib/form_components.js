@@ -46,15 +46,6 @@ var objectAssign = require( 'object-assign' ),
 		}
 	},
 
-	CountrySpecificsUpdateTriggerComponent = {
-		element: null,
-		contentName: '',
-		onChange: null,
-		render: function ( formContent ) {
-			this.element.val( [ formContent[ this.contentName ] ] ); // Needs to be an array
-		}
-	},
-
 	AmountComponent = {
 		inputElement: null,
 		selectElement: null,
@@ -160,18 +151,6 @@ module.exports = {
 		bankDataElements.accountNumberElement.on( 'change', createDefaultChangeHandler( store, 'accountNumber' ) );
 		bankDataElements.bankCodeElement.on( 'change', createDefaultChangeHandler( store, 'bankCode' ) );
 		bankDataElements.debitTypeElement.on( 'change', createDefaultChangeHandler( store, 'debitType' ) );
-		return component;
-	},
-
-	createCountrySpecificsUpdateTriggerComponent: function ( store, element, contentName ) {
-		var component = objectAssign( Object.create( CountrySpecificsUpdateTriggerComponent ), {
-			element: element,
-			contentName: contentName,
-			onChange: function ( evt ) {
-				store.dispatch( actions.newCountrySpecificsUpdateAction( evt.target.value ) );
-			}
-		} );
-		element.on( 'selectmenuchange', component.onChange );
 		return component;
 	}
 
