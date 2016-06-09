@@ -113,6 +113,13 @@ class ValidDonation {
 		);
 	}
 
+	public static function newCancelledPayPalDonation(): Donation {
+		return ( new self() )->createDonation(
+			new PayPalPayment( new PayPalData() ),
+			Donation::STATUS_CANCELLED
+		);
+	}
+
 	private function createDonation( PaymentMethod $paymentMethod, string $status ): Donation {
 		return new Donation(
 			null,

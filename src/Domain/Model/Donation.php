@@ -149,7 +149,7 @@ class Donation {
 	}
 
 	private function statusAllowsForBooking(): bool {
-		return $this->isIncomplete() || $this->needsModeration();
+		return $this->isIncomplete() || $this->needsModeration() || $this->isCancelled();
 	}
 
 	public function markForModeration() {
@@ -207,4 +207,9 @@ class Donation {
 	public function isBooked(): bool {
 		return $this->status === self::STATUS_EXTERNAL_BOOKED;
 	}
+
+	private function isCancelled(): bool {
+		return $this->status === self::STATUS_CANCELLED;
+	}
+
 }

@@ -151,6 +151,7 @@ class DonationTest extends \PHPUnit_Framework_TestCase {
 			[ ValidDonation::newIncompletePayPalDonation() ],
 			[ ValidDonation::newIncompleteCreditCardDonation() ],
 			[ $this->newInModerationPayPalDonation() ],
+			[ ValidDonation::newCancelledPayPalDonation() ],
 		];
 	}
 
