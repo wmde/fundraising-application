@@ -2,8 +2,8 @@
 
 var test = require( 'tape' ),
 	sinon = require( 'sinon' ),
-	attributeValueHandler = require( '../../lib/view_handler/attribute_value_handler' ),
-	createAttributeValueHandler = attributeValueHandler.createAttributeValueHandler,
+	attributeValueHandler = require( '../../lib/view_handler/country_specific_attributes' ),
+	createAttributeValueHandler = attributeValueHandler.createCountrySpecificAttributesHandler,
 	createElement = function () {
 		return {
 			attr: sinon.spy()
@@ -18,7 +18,7 @@ test( 'Attribute values are changed', function ( t ) {
 
 	handler.update(
 		{
-			'post-code': {
+			postCode: {
 				'data-pattern': 'whatever'
 			},
 			city: {

@@ -4,10 +4,10 @@ var test = require( 'tape' ),
 	deepFreeze = require( 'deep-freeze' ),
 	countrySpecificValidation = require( '../../lib/reducers/country_specifics' );
 
-test( 'UPDATE_ELEMENT_ATTRIBUTES updates all defined element attributes', function ( t ) {
+test( 'CHANGE_CONTENT updates all defined element attributes', function ( t ) {
 	var stateBefore = {},
 		expectedState = {
-			'post-code': {
+			postCode: {
 				'data-pattern': '\\s*[1-9][0-9]{3}\\s*',
 				placeholder: 'z. B. 4020',
 				title: 'Vierstellige Postleitzahl'
@@ -22,9 +22,10 @@ test( 'UPDATE_ELEMENT_ATTRIBUTES updates all defined element attributes', functi
 
 	deepFreeze( stateBefore );
 	t.deepEqual( countrySpecificValidation( stateBefore, {
-		type: 'UPDATE_ELEMENT_ATTRIBUTES',
+		type: 'CHANGE_CONTENT',
 		payload: {
-			countryCode: 'AT'
+			contentName: 'country',
+			value: 'AT'
 		}
 	} ), expectedState );
 	t.end();

@@ -3,7 +3,7 @@
 var _ = require( 'underscore' ),
 	countrySpecifics = {
 		generic: {
-			'post-code': {
+			postCode: {
 				'data-pattern': '{1,}',
 				placeholder: 'z. B. 10117',
 				title: 'Postleitzahl'
@@ -16,7 +16,7 @@ var _ = require( 'underscore' ),
 			}
 		},
 		DE: {
-			'post-code': {
+			postCode: {
 				'data-pattern': '\\s*[0-9]{5}\\s*',
 				placeholder: 'z. B. 10117',
 				title: 'Fünfstellige Postleitzahl'
@@ -29,7 +29,7 @@ var _ = require( 'underscore' ),
 			}
 		},
 		AT: {
-			'post-code': {
+			postCode: {
 				'data-pattern': '\\s*[1-9][0-9]{3}\\s*',
 				placeholder: 'z. B. 4020',
 				title: 'Vierstellige Postleitzahl'
@@ -42,7 +42,7 @@ var _ = require( 'underscore' ),
 			}
 		},
 		CH: {
-			'post-code': {
+			postCode: {
 				'data-pattern': '\\s*[1-9][0-9]{3}\\s*',
 				placeholder: 'z. B. 3556',
 				title: 'Vierstellige Postleitzahl'
@@ -58,8 +58,8 @@ var _ = require( 'underscore' ),
 
 module.exports = {
 	getCountrySpecifics: function ( countryCode ) {
-		if ( _.has( countrySpecifics, countryCode ) ) {
-			return _.extend( {}, countrySpecifics.generic, countrySpecifics[ countryCode ] );
+		if ( countryCode && _.has( countrySpecifics, countryCode ) ) {
+			return countrySpecifics[ countryCode ];
 		}
 
 		return countrySpecifics.generic;

@@ -1,61 +1,6 @@
 var formInitialized = false;
 
 $(function() {
-	/* country-specific validation patterns for zip codes */
-	var countrySpecifics = {
-		generic: {
-			'post-code': {
-				pattern: '{1,}',
-				placeholder: 'z. B. 10117',
-				title: 'Postleitzahl'
-			},
-			city: {
-				placeholder: 'z. B. Berlin'
-			},
-			email: {
-				placeholder: 'z. B. name@domain.com'
-			}
-		},
-		DE: {
-			'post-code': {
-				pattern: '\\s*[0-9]{5}\\s*',
-				placeholder: 'z. B. 10117',
-				title: 'Fünfstellige Postleitzahl'
-			},
-			city: {
-				placeholder: 'z. B. Berlin'
-			},
-			email: {
-				placeholder: 'z. B. name@domain.de'
-			}
-		},
-		AT: {
-			'post-code': {
-				pattern: '\\s*[1-9][0-9]{3}\\s*',
-				placeholder: 'z. B. 4020',
-				title: 'Vierstellige Postleitzahl'
-			},
-			city: {
-				placeholder: 'z. B. Linz'
-			},
-			email: {
-				placeholder: 'z. B. name@domain.at'
-			}
-		},
-		CH: {
-			'post-code': {
-				pattern: '\\s*[1-9][0-9]{3}\\s*',
-				placeholder: 'z. B. 3556',
-				title: 'Vierstellige Postleitzahl'
-			},
-			city: {
-				placeholder: 'z. B. Trub'
-			},
-			email: {
-				placeholder: 'z. B. name@domain.ch'
-			}
-		}
-	};
 
     if ($(".amount-custom :text").val() !== "") {
       $(".display-amount").text($(".amount-custom :text").val());
@@ -171,21 +116,7 @@ $(function() {
       });
     }
 
-    $('#country').selectmenu({
-      change: function () {
-        var countryCode = 'generic';
-        if (countrySpecifics[$(this).val()]) {
-          countryCode = $(this).val();
-        }
-
-        $.each(countrySpecifics[countryCode], function (id, values) {
-          var $field = $('#' + id);
-          $.each(values, function (key, value) {
-            $field.attr(key, value);
-          });
-        });
-      }
-    });
+    $('#country').selectmenu({});
 
     /* amount-list */
     $('.amount-list').each(function () {

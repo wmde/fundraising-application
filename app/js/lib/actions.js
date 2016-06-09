@@ -114,15 +114,6 @@ module.exports = {
 			type: 'FINISH_SEPA_CONFIRMATION_VALIDATION',
 			payload: validationResult
 		};
-	},
-
-	newCountrySpecificsUpdateAction: function ( countryCode ) {
-		return {
-			type: 'UPDATE_ELEMENT_ATTRIBUTES',
-			payload: {
-				countryCode: countryCode
-			}
-		};
 	}
 
 };

@@ -18,7 +18,7 @@ module.exports = {
 		createPaymentIntervalAndAmountDisplayHandler: require( './lib/view_handler/display_interval_and_amount' ).createPaymentIntervalAndAmountDisplayHandler,
 		createFeeOptionSwitcher: require( './lib/view_handler/fee_option_switcher' ).createFeeOptionSwitcher,
 		createFieldValueValidityIndicator: require( './lib/view_handler/field_value_validity_indicator' ).createFieldValueValidityIndicator,
-		createAttributeValueHandler: require( './lib/view_handler/attribute_value_handler' ).createAttributeValueHandler
+		createCountrySpecificAttributesHandler: require( './lib/view_handler/country_specific_attributes' ).createCountrySpecificAttributesHandler
 	},
 	Actions: require( './lib/actions' ),
 	CurrencyFormatter: require( './lib/simple_currency_formatter' ),

@@ -3,19 +3,22 @@
 var getCountrySpecifics = require( '../country_specifics_repository' ).getCountrySpecifics;
 
 function countrySpecificValidation( state, action ) {
-	var newState;
-	if ( typeof state !== 'object' ) {
-		newState = getCountrySpecifics( 'DE' );
-	} else {
-		newState = Object.assign( {}, state );
+	if ( typeof state === 'undefined' ) {
+		state = getCountrySpecifics( 'DE' );
 	}
-
 	switch ( action.type ) {
-		case 'UPDATE_ELEMENT_ATTRIBUTES':
-			newState = getCountrySpecifics( action.payload.countryCode );
-			return newState;
+		case 'CHANGE_CONTENT':
+			if ( action.payload.contentName !== 'country' ) {
+				return state;
+			}
+			return getCountrySpecifics( action.payload.value );
+		case 'INITIALIZE_CONTENT':
+			if ( action.payload.country ) {
+				return getCountrySpecifics( action.payload.country );
+			}
+			return state;
 		default:
-			return newState;
+			return state;
 	}
 }
 
