@@ -2,7 +2,7 @@
 
 var test = require( 'tape' ),
 	sinon = require( 'sinon' ),
-	attributeValueHandler = require( '../../lib/view_handler/attribute_value_handler' ),
+	attributeValueHandler = require( '../../lib/view_handler/country_specific_attributes' ),
 	createAttributeValueHandler = attributeValueHandler.createCountrySpecificAttributesHandler,
 	createElement = function () {
 		return {
