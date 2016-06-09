@@ -89,6 +89,16 @@ module.exports = {
 		return component;
 	},
 
+	createSelectMenuComponent: function ( store, element, contentName ) {
+		var component = objectAssign( Object.create( RadioComponent ), {
+			element: element,
+			contentName: contentName,
+			onChange: createDefaultChangeHandler( store, contentName )
+		} );
+		element.on( 'selectmenuchange', component.onChange );
+		return component;
+	},
+
 	createCheckboxComponent: function ( store, element, contentName ) {
 		var component = objectAssign( Object.create( CheckboxComponent ), {
 			element: element,
@@ -143,4 +153,5 @@ module.exports = {
 		bankDataElements.debitTypeElement.on( 'change', createDefaultChangeHandler( store, 'debitType' ) );
 		return component;
 	}
+
 };
