@@ -1,0 +1,15 @@
+digraph G {
+  "New" -> "Moderation" [label="Add comment with bad words"]
+  "New" -> "Cancelled" [label="Cancelled by user or in backend"]
+  "Promise" -> "Moderation" [label="Add comment with bad words"]
+  "External_Incomplete"  -> "Moderation" [label="Add comment with bad words"]
+  "External_Incomplete"  -> "External_Booked" [label="Book donation"]
+  "Moderation" ->  "External_Incomplete" [label="Moderate OK in backend"]
+  "Moderation" ->  "External_Booked" [label="Moderate OK in backend"]
+  "External_Booked" -> "Moderation" [label="Add comment with bad words"]
+  "New" [shape=circle,peripheries=2]
+  "Promise"  [shape=circle,peripheries=2]
+  "External_Incomplete" [shape=circle,peripheries=2]
+  "External_Booked"  [shape=circle]
+  "Moderation" [shape=circle]
+}
