@@ -4,7 +4,7 @@ var getCountrySpecifics = require( '../country_specifics_repository' ).getCountr
 
 function countrySpecificValidation( state, action ) {
 	if ( typeof state === 'undefined' ) {
-		state = {};
+		state = getCountrySpecifics( 'DE' );
 	}
 	switch ( action.type ) {
 		case 'CHANGE_CONTENT':
@@ -13,7 +13,10 @@ function countrySpecificValidation( state, action ) {
 			}
 			return getCountrySpecifics( action.payload.value );
 		case 'INITIALIZE_CONTENT':
-			return getCountrySpecifics( action.payload.country );
+			if ( action.payload.country ) {
+				return getCountrySpecifics( action.payload.country );
+			}
+			return state;
 		default:
 			return state;
 	}
