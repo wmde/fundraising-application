@@ -206,7 +206,7 @@ class ValidDonation {
 		return $bankData->freeze()->assertNoNullFields();
 	}
 
-	public static function newComment(): DonationComment {
+	public static function newPublicComment(): DonationComment {
 		return new DonationComment(
 			self::COMMENT_TEXT,
 			self::COMMENT_IS_PUBLIC,

@@ -166,11 +166,11 @@ class DonationTest extends \PHPUnit_Framework_TestCase {
 			ValidDonation::newDirectDebitPayment(),
 			Donation::OPTS_INTO_NEWSLETTER,
 			ValidDonation::newTrackingInfo(),
-			ValidDonation::newComment()
+			ValidDonation::newPublicComment()
 		);
 
 		$this->expectException( RuntimeException::class );
-		$donation->addComment( ValidDonation::newComment() );
+		$donation->addComment( ValidDonation::newPublicComment() );
 	}
 
 	public function testAddCommentSetsWhenCommentNotSetYet() {
@@ -184,12 +184,38 @@ class DonationTest extends \PHPUnit_Framework_TestCase {
 			null
 		);
 
-		$donation->addComment( ValidDonation::newComment() );
-		$this->assertEquals( ValidDonation::newComment(), $donation->getComment() );
+		$donation->addComment( ValidDonation::newPublicComment() );
+		$this->assertEquals( ValidDonation::newPublicComment(), $donation->getComment() );
 	}
 
 	public function testWhenNoCommentHasBeenSet_getCommentReturnsNull() {
 		$this->assertNull( ValidDonation::newDirectDebitDonation()->getComment() );
+	}
+
+	public function testWhenCompletingBookingOfExternalPaymentInModeration_commentIsMadePrivate() {
+		$donation = $this->newInModerationPayPalDonation();
+		$donation->addComment( ValidDonation::newPublicComment() );
+
+		$donation->confirmBooked();
+
+		$this->assertFalse( $donation->getComment()->isPublic() );
+	}
+
+	public function testWhenCompletingBookingOfCancelledExternalPayment_commentIsMadePrivate() {
+		$donation = ValidDonation::newCancelledPayPalDonation();
+		$donation->addComment( ValidDonation::newPublicComment() );
+
+		$donation->confirmBooked();
+
+		$this->assertFalse( $donation->getComment()->isPublic() );
+	}
+
+	public function testWhenCompletingBookingOfCancelledExternalPayment_lackOfCommentCausesNoError() {
+		$donation = ValidDonation::newCancelledPayPalDonation();
+
+		$donation->confirmBooked();
+
+		$this->assertFalse( $donation->hasComment() );
 	}
 
 }
