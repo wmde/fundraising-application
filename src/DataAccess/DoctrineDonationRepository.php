@@ -186,7 +186,7 @@ class DoctrineDonationRepository implements DonationRepository {
 
 	private function getDataFieldsFromDonor( Donor $personalInfo = null ): array {
 		if ( $personalInfo === null ) {
-			return [ 'addresstyp' => 'anonym' ];
+			return [ 'adresstyp' => 'anonym' ];
 		}
 
 		return array_merge(
@@ -242,7 +242,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		return [
 			'ext_payment_id' => $ccData->getTransactionId(),
 			'ext_payment_status' => $ccData->getTransactionStatus(),
-			'ext_payment_timestamp' => $ccData->getTransactionTimestamp(),
+			'ext_payment_timestamp' => $ccData->getTransactionTimestamp()->format( \DateTime::ATOM ),
 			'mcp_amount' => $ccData->getAmount()->getEuroString(),
 			'ext_payment_account' => $ccData->getCustomerId(),
 			'mcp_sessionid' => $ccData->getSessionId(),
@@ -459,7 +459,7 @@ class DoctrineDonationRepository implements DonationRepository {
 			return ( new CreditCardTransactionData() )
 				->setTransactionId( $data['ext_payment_id'] )
 				->setTransactionStatus( $data['ext_payment_status'] )
-				->setTransactionTimestamp( $data['ext_payment_timestamp'] )
+				->setTransactionTimestamp( new \DateTime( $data['ext_payment_timestamp'] ) )
 				->setAmount( Euro::newFromString( $data['mcp_amount'] ) )
 				->setCustomerId( $data['ext_payment_account'] )
 				->setSessionId( $data['mcp_sessionid'] )
