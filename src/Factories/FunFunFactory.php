@@ -691,12 +691,20 @@ class FunFunFactory {
 
 	private function getTextPolicyValidator( $policyName ) {
 		$policyValidator = new TextPolicyValidator();
+
 		$contentProvider = $this->newWikiContentProvider();
 		$textPolicyConfig = $this->config['text-policies'][$policyName];
-		$badWords = $this->loadWordsFromWiki( $contentProvider, $textPolicyConfig['badwords'] ?? '' );
-		$whiteWords = $this->loadWordsFromWiki( $contentProvider, $textPolicyConfig['whitewords'] ?? '' );
-		$policyValidator->addBadWordsFromArray( $badWords );
-		$policyValidator->addWhiteWordsFromArray( $whiteWords );
+
+		// TODO: this is not the place to retrieve resources over the network
+		$policyValidator->addBadWordsFromArray( $this->loadWordsFromWiki(
+			$contentProvider,
+			$textPolicyConfig['badwords'] ?? ''
+		) );
+		$policyValidator->addWhiteWordsFromArray( $this->loadWordsFromWiki(
+			$contentProvider,
+			$textPolicyConfig['whitewords'] ?? ''
+		) );
+
 		return $policyValidator;
 	}
 
