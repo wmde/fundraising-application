@@ -38,29 +38,11 @@ class TextPolicyValidator {
 		return true;
 	}
 
-	public function addBadWordsFromFile( string $badWordsFilePath ) {
-		$newBadWordsArray = file( $badWordsFilePath, FILE_IGNORE_NEW_LINES );
-		$this->addBadWordsFromArray( $newBadWordsArray );
-	}
-
-	public function addBadWordsFromString( string $newBadWordsString ) {
-		$this->addBadWordsFromArray( explode( '|', $newBadWordsString ) );
-	}
-
 	/**
 	 * @param string[] $newBadWordsArray
 	 */
 	public function addBadWordsFromArray( array $newBadWordsArray ) {
 		$this->badWordsArray = array_merge( $this->badWordsArray, $newBadWordsArray );
-	}
-
-	public function addWhiteWordsFromFile( string $whiteWordsFilePath ) {
-		$newWhiteWordsArray = file( $whiteWordsFilePath, FILE_IGNORE_NEW_LINES );
-		$this->addWhiteWordsFromArray( $newWhiteWordsArray );
-	}
-
-	public function addWhiteWordsFromString( string $newWhiteWordsString ) {
-		$this->addWhiteWordsFromArray( explode( '|', $newWhiteWordsString ) );
 	}
 
 	/**
@@ -153,4 +135,5 @@ class TextPolicyValidator {
 	private function composeRegex( array $wordArray ): string {
 		return '#(.*?)(' . implode( '|', $wordArray ) . ')#i';
 	}
+
 }
