@@ -8,7 +8,7 @@ User facing application for the WMDE fundraising.
 * php7.0-intl
 * php7.0-sqlite3 (only needed for running the tests)
 * Node.js and npm (only needed in development for compiling the JavaScript and running the JavaScript tests)
-* [kontocheck extension](http://kontocheck.sourceforge.net/ (only needed when you want to use or test direct debit)
+* [kontocheck extension](http://kontocheck.sourceforge.net/) (only needed when you want to use or test direct debit)
 
 ## Installing the application
 
