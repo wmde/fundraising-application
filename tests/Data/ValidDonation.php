@@ -154,7 +154,7 @@ class ValidDonation {
 		);
 	}
 
-	public static function newDirectDebtPayment(): DonationPayment {
+	public static function newDirectDebitPayment(): DonationPayment {
 		return self::newDonationPayment( new DirectDebitPayment( self::newBankData() ) );
 	}
 

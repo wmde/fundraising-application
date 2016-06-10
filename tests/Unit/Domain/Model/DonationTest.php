@@ -50,7 +50,7 @@ class DonationTest extends \PHPUnit_Framework_TestCase {
 			null,
 			$status,
 			ValidDonation::newDonor(),
-			ValidDonation::newDirectDebtPayment(),
+			ValidDonation::newDirectDebitPayment(),
 			Donation::OPTS_INTO_NEWSLETTER,
 			ValidDonation::newTrackingInfo()
 		);
@@ -163,7 +163,7 @@ class DonationTest extends \PHPUnit_Framework_TestCase {
 			null,
 			Donation::STATUS_NEW,
 			ValidDonation::newDonor(),
-			ValidDonation::newDirectDebtPayment(),
+			ValidDonation::newDirectDebitPayment(),
 			Donation::OPTS_INTO_NEWSLETTER,
 			ValidDonation::newTrackingInfo(),
 			ValidDonation::newComment()
@@ -178,7 +178,7 @@ class DonationTest extends \PHPUnit_Framework_TestCase {
 			null,
 			Donation::STATUS_NEW,
 			ValidDonation::newDonor(),
-			ValidDonation::newDirectDebtPayment(),
+			ValidDonation::newDirectDebitPayment(),
 			Donation::OPTS_INTO_NEWSLETTER,
 			ValidDonation::newTrackingInfo(),
 			null
