@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\AddSubscription;
 
 use WMDE\Fundraising\Frontend\Domain\Model\DonationComment;
+use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\DonationRepositorySpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingDonationAuthorizer;
@@ -13,6 +14,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingDonationRepository;
 use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentUseCase;
+use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
 
 /**
  * @covers WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentUseCase
@@ -27,14 +29,32 @@ class AddCommentUseCaseTest extends \PHPUnit_Framework_TestCase {
 	const COMMENT_IS_PUBLIC = true;
 	const COMMENT_AUTHOR = 'Uncle Bob';
 
+	private $donationRepository;
+	private $authorizer;
+	private $textPolicyValidator;
+
+	public function setUp() {
+		$this->donationRepository = new FakeDonationRepository();
+		$this->authorizer = new SucceedingDonationAuthorizer();
+		$this->textPolicyValidator = $this->newSucceedingTextPolicyValidator();
+	}
+
+	private function newSucceedingTextPolicyValidator(): TextPolicyValidator {
+		return $this->newStubTextPolicyValidator( true );
+	}
+
+	private function newStubTextPolicyValidator( bool $returnValue ): TextPolicyValidator {
+		$validator = $this->createMock( TextPolicyValidator::class );
+
+		$validator->expects( $this->any() )->method( 'textIsHarmless' )->willReturn( $returnValue );
+
+		return $validator;
+	}
+
 	public function testGivenValidRequest_commentGetsAdded() {
-		$donation = ValidDonation::newDirectDebitDonation();
-		$donation->assignId( self::DONATION_ID );
+		$this->donationRepository = $this->newFakeRepositoryWithDonation();
 
-		$donationRepository = new FakeDonationRepository( $donation );
-
-		$useCase = new AddCommentUseCase( $donationRepository, new SucceedingDonationAuthorizer() );
-		$response = $useCase->addComment( $this->newValidRequest() );
+		$response = $this->newUseCase()->addComment( $this->newValidRequest() );
 
 		$this->assertEquals(
 			new DonationComment(
@@ -42,10 +62,25 @@ class AddCommentUseCaseTest extends \PHPUnit_Framework_TestCase {
 				self::COMMENT_IS_PUBLIC,
 				self::COMMENT_AUTHOR
 			),
-			$donationRepository->getDonationById( self::DONATION_ID )->getComment()
+			$this->donationRepository->getDonationById( self::DONATION_ID )->getComment()
 		);
 
 		$this->assertTrue( $response->isSuccessful() );
+	}
+
+	private function newFakeRepositoryWithDonation(): FakeDonationRepository {
+		$donation = ValidDonation::newDirectDebitDonation();
+		$donation->assignId( self::DONATION_ID );
+
+		return new FakeDonationRepository( $donation );
+	}
+
+	private function newUseCase(): AddCommentUseCase {
+		return new AddCommentUseCase(
+			$this->donationRepository,
+			$this->authorizer,
+			$this->textPolicyValidator
+		);
 	}
 
 	private function newValidRequest(): AddCommentRequest {
@@ -60,47 +95,61 @@ class AddCommentUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testWhenRepositoryThrowsExceptionOnGet_failureResponseIsReturned() {
-		$throwingRepo = new ThrowingDonationRepository();
-		$throwingRepo->throwOnGetDonationById();
+		$this->donationRepository = new ThrowingDonationRepository();
+		$this->donationRepository->throwOnGetDonationById();
 
-		$useCase = new AddCommentUseCase(
-			$throwingRepo,
-			new SucceedingDonationAuthorizer()
-		);
-
-		$response = $useCase->addComment( $this->newValidRequest() );
+		$response = $this->newUseCase()->addComment( $this->newValidRequest() );
 
 		$this->assertFalse( $response->isSuccessful() );
 	}
 
 	public function testWhenRepositoryThrowsExceptionOnStore_failureResponseIsReturned() {
-		$throwingRepo = new ThrowingDonationRepository();
-		$throwingRepo->throwOnStoreDonation();
+		$this->donationRepository = new ThrowingDonationRepository();
+		$this->donationRepository->throwOnStoreDonation();
 
-		$useCase = new AddCommentUseCase(
-			$throwingRepo,
-			new SucceedingDonationAuthorizer()
-		);
-
-		$response = $useCase->addComment( $this->newValidRequest() );
+		$response = $this->newUseCase()->addComment( $this->newValidRequest() );
 
 		$this->assertFalse( $response->isSuccessful() );
 	}
 
 	public function testAuthorizationFails_failureResponseIsReturned() {
-		$useCase = new AddCommentUseCase(
-			new DonationRepositorySpy(),
-			new FailingDonationAuthorizer()
-		);
+		$this->authorizer = new FailingDonationAuthorizer();
 
-		$response = $useCase->addComment( $this->newValidRequest() );
+		$response = $this->newUseCase()->addComment( $this->newValidRequest() );
 
 		$this->assertFalse( $response->isSuccessful() );
 	}
 
 	public function testWhenDonationDoesNotExist_failureResponseIsReturned() {
-		$useCase = new AddCommentUseCase( new FakeDonationRepository(), new SucceedingDonationAuthorizer() );
-		$this->assertFalse( $useCase->addComment( $this->newValidRequest() )->isSuccessful() );
+		$this->assertFalse( $this->newUseCase()->addComment( $this->newValidRequest() )->isSuccessful() );
+	}
+
+	public function testWhenTextValidationFails_commentIsMadePrivate() {
+		$this->donationRepository = $this->newFakeRepositoryWithDonation();
+		$this->textPolicyValidator = $this->newFailingTextPolicyValidator();
+
+		$response = $this->newUseCase()->addComment( $this->newValidRequest() );
+		$this->assertTrue( $response->isSuccessful() );
+
+		$this->assertFalse(
+			$this->donationRepository->getDonationById( self::DONATION_ID )->getComment()->isPublic()
+		);
+	}
+
+	private function newFailingTextPolicyValidator(): TextPolicyValidator {
+		return $this->newStubTextPolicyValidator( false );
+	}
+
+	public function testWhenTextValidationFails_donationIsMarkedForModeration() {
+		$this->donationRepository = $this->newFakeRepositoryWithDonation();
+		$this->textPolicyValidator = $this->newFailingTextPolicyValidator();
+
+		$response = $this->newUseCase()->addComment( $this->newValidRequest() );
+		$this->assertTrue( $response->isSuccessful() );
+
+		$this->assertTrue(
+			$this->donationRepository->getDonationById( self::DONATION_ID )->needsModeration()
+		);
 	}
 
 }
