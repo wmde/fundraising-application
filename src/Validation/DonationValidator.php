@@ -103,10 +103,7 @@ class DonationValidator {
 	private function getBadWordViolations( Donation $donation ) {
 		$violations = [];
 
-		$flags = TextPolicyValidator::CHECK_BADWORDS |
-			TextPolicyValidator::IGNORE_WHITEWORDS |
-			TextPolicyValidator::CHECK_URLS;
-		$fieldTextValidator = new FieldTextPolicyValidator( $this->textPolicyValidator, $flags );
+		$fieldTextValidator = new FieldTextPolicyValidator( $this->textPolicyValidator );
 		$personalInfo = $donation->getDonor();
 
 		if ( $personalInfo ) {

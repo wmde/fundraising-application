@@ -68,11 +68,7 @@ class SubscriptionValidator {
 	}
 
 	private function getBadWordViolations( Subscription $subscription ) {
-		$flags = TextPolicyValidator::CHECK_BADWORDS |
-			TextPolicyValidator::IGNORE_WHITEWORDS |
-			TextPolicyValidator::CHECK_URLS;
-
-		$fieldTextValidator = new FieldTextPolicyValidator( $this->textPolicyValidator, $flags );
+		$fieldTextValidator = new FieldTextPolicyValidator( $this->textPolicyValidator );
 		$address = $subscription->getAddress();
 
 		return [
