@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Domain\Model;
 use RuntimeException;
 use WMDE\Fundraising\Frontend\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\Domain\Model\DonationComment;
 use WMDE\Fundraising\Frontend\Domain\Model\DonationPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Domain\Model\PayPalData;
@@ -49,11 +50,7 @@ class DonationTest extends \PHPUnit_Framework_TestCase {
 			null,
 			$status,
 			ValidDonation::newDonor(),
-			new DonationPayment(
-				Euro::newFromFloat( 13.37 ),
-				3,
-				new DirectDebitPayment( ValidDonation::newBankData() )
-			),
+			ValidDonation::newDirectDebtPayment(),
 			Donation::OPTS_INTO_NEWSLETTER,
 			ValidDonation::newTrackingInfo()
 		);
@@ -159,6 +156,40 @@ class DonationTest extends \PHPUnit_Framework_TestCase {
 		$donation = ValidDonation::newIncompletePayPalDonation();
 		$donation->markForModeration();
 		return $donation;
+	}
+
+	public function testAddCommentThrowsExceptionWhenCommentAlreadySet() {
+		$donation = new Donation(
+			null,
+			Donation::STATUS_NEW,
+			ValidDonation::newDonor(),
+			ValidDonation::newDirectDebtPayment(),
+			Donation::OPTS_INTO_NEWSLETTER,
+			ValidDonation::newTrackingInfo(),
+			ValidDonation::newComment()
+		);
+
+		$this->expectException( RuntimeException::class );
+		$donation->addComment( ValidDonation::newComment() );
+	}
+
+	public function testAddCommentSetsWhenCommentNotSetYet() {
+		$donation = new Donation(
+			null,
+			Donation::STATUS_NEW,
+			ValidDonation::newDonor(),
+			ValidDonation::newDirectDebtPayment(),
+			Donation::OPTS_INTO_NEWSLETTER,
+			ValidDonation::newTrackingInfo(),
+			null
+		);
+
+		$donation->addComment( ValidDonation::newComment() );
+		$this->assertEquals( ValidDonation::newComment(), $donation->getComment() );
+	}
+
+	public function testWhenNoCommentHasBeenSet_getCommentReturnsNull() {
+		$this->assertNull( ValidDonation::newDirectDebitDonation()->getComment() );
 	}
 
 }

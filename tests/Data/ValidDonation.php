@@ -10,6 +10,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\CreditCardPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\CreditCardTransactionData;
 use WMDE\Fundraising\Frontend\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\Domain\Model\DonationComment;
 use WMDE\Fundraising\Frontend\Domain\Model\DonationPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\Frontend\Domain\Model\Donor;
@@ -64,6 +65,10 @@ class ValidDonation {
 	const PAYPAL_TRANSACTION_ID = '61E67681CH3238416';
 
 	const CREDIT_CARD_TRANSACTION_ID = '';
+
+	const COMMENT_TEXT = 'For great justice!';
+	const COMMENT_IS_PUBLIC = true;
+	const COMMENT_AUTHOR_DISPLAY_NAME = 'Such a tomato';
 
 	public static function newBankTransferDonation(): Donation {
 		return ( new self() )->createDonation(
@@ -125,11 +130,7 @@ class ValidDonation {
 			null,
 			$status,
 			$this->newDonor(),
-			new DonationPayment(
-				Euro::newFromFloat( self::DONATION_AMOUNT ),
-				self::PAYMENT_INTERVAL_IN_MONTHS,
-				$paymentMethod
-			),
+			$this->newDonationPayment( $paymentMethod ),
 			self::OPTS_INTO_NEWSLETTER,
 			$this->newTrackingInfo()
 		);
@@ -143,6 +144,18 @@ class ValidDonation {
 			$self->newAddress(),
 			self::DONOR_EMAIL_ADDRESS
 		);
+	}
+
+	private static function newDonationPayment( PaymentMethod $paymentMethod ): DonationPayment {
+		return new DonationPayment(
+			Euro::newFromFloat( self::DONATION_AMOUNT ),
+			self::PAYMENT_INTERVAL_IN_MONTHS,
+			$paymentMethod
+		);
+	}
+
+	public static function newDirectDebtPayment(): DonationPayment {
+		return self::newDonationPayment( new DirectDebitPayment( self::newBankData() ) );
 	}
 
 	private function newPersonName(): PersonName {
@@ -191,6 +204,14 @@ class ValidDonation {
 		$bankData->setIban( new Iban( self::PAYMENT_IBAN ) );
 
 		return $bankData->freeze()->assertNoNullFields();
+	}
+
+	public static function newComment(): DonationComment {
+		return new DonationComment(
+			self::COMMENT_TEXT,
+			self::COMMENT_IS_PUBLIC,
+			self::COMMENT_AUTHOR_DISPLAY_NAME
+		);
 	}
 
 }

@@ -9,16 +9,13 @@ use Doctrine\ORM\ORMException;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\Domain\CommentFinder;
 use WMDE\Fundraising\Frontend\Domain\CommentListingException;
-use WMDE\Fundraising\Frontend\Domain\Model\Comment;
 use WMDE\Fundraising\Frontend\Domain\ReadModel\CommentWithAmount;
-use WMDE\Fundraising\Frontend\Domain\Repositories\CommentRepository;
-use WMDE\Fundraising\Frontend\Domain\Repositories\StoreCommentException;
 
 /**
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class DoctrineCommentRepository implements CommentRepository, CommentFinder {
+class DoctrineCommentRepository implements CommentFinder {
 
 	private $entityManager;
 
@@ -27,7 +24,7 @@ class DoctrineCommentRepository implements CommentRepository, CommentFinder {
 	}
 
 	/**
-	 * @see CommentRepository::getPublicComments
+	 * @see CommentFinder::getPublicComments
 	 *
 	 * @param int $limit
 	 *
@@ -45,11 +42,11 @@ class DoctrineCommentRepository implements CommentRepository, CommentFinder {
 					->freeze()
 					->assertNoNullFields();
 			},
-			$this->getDonation( $limit )
+			$this->getDonations( $limit )
 		);
 	}
 
-	private function getDonation( int $limit ): array {
+	private function getDonations( int $limit ): array {
 		try {
 			return $this->entityManager->getRepository( Donation::class )->findBy(
 				[
@@ -64,34 +61,6 @@ class DoctrineCommentRepository implements CommentRepository, CommentFinder {
 		}
 		catch ( ORMException $ex ) {
 			throw new CommentListingException( $ex );
-		}
-	}
-
-	/**
-	 * @param Comment $comment
-	 *
-	 * @throws StoreCommentException
-	 */
-	public function storeComment( Comment $comment ) {
-		try {
-			/**
-			 * @var Donation $donation
-			 */
-			$donation = $this->entityManager->find( Donation::class, $comment->getDonationId() );
-
-			if ( !is_object( $donation ) ) {
-				throw new StoreCommentException();
-			}
-
-			$donation->setIsPublic( $comment->isPublic() );
-			$donation->setComment( $comment->getCommentText() );
-			$donation->setPublicRecord( $comment->getAuthorDisplayName() );
-
-			$this->entityManager->persist( $donation );
-			$this->entityManager->flush();
-		}
-		catch ( ORMException $ex ) {
-			throw new StoreCommentException();
 		}
 	}
 
