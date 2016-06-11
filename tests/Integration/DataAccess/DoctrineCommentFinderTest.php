@@ -8,18 +8,18 @@ use DateTime;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use WMDE\Fundraising\Entities\Donation;
-use WMDE\Fundraising\Frontend\DataAccess\DoctrineCommentRepository;
+use WMDE\Fundraising\Frontend\DataAccess\DoctrineCommentFinder;
 use WMDE\Fundraising\Frontend\Domain\CommentListingException;
 use WMDE\Fundraising\Frontend\Domain\ReadModel\CommentWithAmount;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
- * @covers WMDE\Fundraising\Frontend\DataAccess\DoctrineCommentRepository
+ * @covers WMDE\Fundraising\Frontend\DataAccess\DoctrineCommentFinder
  *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class DoctrineCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
+class DoctrineCommentFinderTest extends \PHPUnit_Framework_TestCase {
 
 	/**
 	 * @var EntityManager
@@ -31,8 +31,8 @@ class DoctrineCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 		parent::setUp();
 	}
 
-	private function newDbalCommentRepository(): DoctrineCommentRepository {
-		return new DoctrineCommentRepository( $this->entityManager );
+	private function newDbalCommentRepository(): DoctrineCommentFinder {
+		return new DoctrineCommentFinder( $this->entityManager );
 	}
 
 	public function testWhenThereAreNoComments_anEmptyListIsReturned() {
@@ -196,7 +196,7 @@ class DoctrineCommentRepositoryTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testDoctrineThrowsException_getPublicCommentsRethrowsAsDomainException() {
-		$repository = new DoctrineCommentRepository( $this->newThrowingEntityManager() );
+		$repository = new DoctrineCommentFinder( $this->newThrowingEntityManager() );
 
 		$this->expectException( CommentListingException::class );
 		$repository->getPublicComments( 10 );
