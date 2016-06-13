@@ -3,13 +3,12 @@
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
 
+use Doctrine\ORM\EntityManager;
+use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationEventLogger;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationEventLogException;
-use WMDE\Fundraising\Frontend\Infrastructure\DonationEventLogger;
-use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
-use WMDE\Fundraising\Entities\Donation;
-use Doctrine\ORM\EntityManager;
+use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 class DoctrineDonationEventLoggerTest extends \PHPUnit_Framework_TestCase {
 
