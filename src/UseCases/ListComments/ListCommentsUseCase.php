@@ -12,6 +12,9 @@ use WMDE\Fundraising\Frontend\Domain\CommentFinder;
  */
 class ListCommentsUseCase {
 
+	const MAX_PAGE = 100;
+	const MAX_LIMIT = 100;
+
 	private $commentRepository;
 
 	public function __construct( CommentFinder $commentRepository ) {
@@ -19,15 +22,24 @@ class ListCommentsUseCase {
 	}
 
 	public function listComments( CommentListingRequest $listingRequest ): CommentList {
-		return new CommentList( ...$this->getListItems( $listingRequest ) );
+		$limit = $this->isValidLimit( $listingRequest->getLimit() ) ? $listingRequest->getLimit() : 10;
+		$page = $this->isValidPageNumber( $listingRequest->getPage() ) ? $listingRequest->getPage() : 1;
+
+		return new CommentList( ...$this->getListItems( $limit, $page ) );
 	}
 
-	private function getListItems( CommentListingRequest $listingRequest ): array {
-		$offset = ( $listingRequest->getPage() - 1 ) * $listingRequest->getLimit();
+	private function isValidPageNumber( int $pageNumber ): bool {
+		return $pageNumber <= self::MAX_PAGE && $pageNumber >= 1;
+	}
 
+	private function isValidLimit( int $limit ): bool {
+		return $limit <= self::MAX_LIMIT && $limit >= 1;
+	}
+
+	private function getListItems( int $limit, int $page ): array {
 		return $this->commentRepository->getPublicComments(
-			$listingRequest->getLimit(),
-			$offset
+			$limit,
+			( $page - 1 ) * $limit
 		);
 	}
 

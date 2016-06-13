@@ -85,4 +85,74 @@ class ListCommentsUseCaseTest extends \PHPUnit_Framework_TestCase {
 		);
 	}
 
+	/**
+	 * @dataProvider invalidPageNumberProvider
+	 */
+	public function testGivenInvalidPageNumber_firstPageIsReturned( int $invalidPageNumber ) {
+		$useCase = new ListCommentsUseCase( new InMemoryCommentFinder(
+			$this->newCommentWithAuthorName( 'name0' ),
+			$this->newCommentWithAuthorName( 'name1' ),
+			$this->newCommentWithAuthorName( 'name2' ),
+			$this->newCommentWithAuthorName( 'name3' )
+		) );
+
+		$this->assertEquals(
+			new CommentList(
+				$this->newCommentWithAuthorName( 'name0' ),
+				$this->newCommentWithAuthorName( 'name1' )
+			),
+			$useCase->listComments( new CommentListingRequest( 2, $invalidPageNumber ) )
+		);
+	}
+
+	public function invalidPageNumberProvider() {
+		return [
+			'too big' => [ 31337 ],
+			'upper limit boundary' => [ 101 ],
+			'lower limit boundary' => [ 0 ],
+			'too small' => [ -10 ],
+		];
+	}
+
+	/**
+	 * @dataProvider invalidLimitProvider
+	 */
+	public function testGivenInvalidLimit_10resultsAreReturned( int $invalidLimit ) {
+		$useCase = new ListCommentsUseCase( $this->newInMemoryCommentFinderWithComments( 20 ) );
+
+		$commentList = $useCase->listComments( new CommentListingRequest(
+			$invalidLimit,
+			CommentListingRequest::FIRST_PAGE
+		) );
+
+		$this->assertCount( 10, $commentList->toArray() );
+	}
+
+	private function newInMemoryCommentFinderWithComments( int $commentCount ) {
+		return new InMemoryCommentFinder(
+			...new \LimitIterator(
+				$this->newInfiniteCommentIterator(),
+				0,
+				$commentCount
+			)
+		);
+	}
+
+	private function newInfiniteCommentIterator(): \Iterator {
+		$commentNumber = 0;
+
+		while ( true ) {
+			yield $this->newCommentWithAuthorName( 'name' . $commentNumber++ );
+		}
+	}
+
+	public function invalidLimitProvider() {
+		return [
+			'too big' => [ 31337 ],
+			'upper limit boundary' => [ 101 ],
+			'lower limit boundary' => [ 0 ],
+			'too small' => [ -10 ],
+		];
+	}
+
 }
