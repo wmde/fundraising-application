@@ -23,7 +23,12 @@ class ListCommentsUseCase {
 	}
 
 	private function getListItems( CommentListingRequest $listingRequest ): array {
-		return $this->commentRepository->getPublicComments( $listingRequest->getLimit() );
+		$offset = ( $listingRequest->getPage() - 1 ) * $listingRequest->getLimit();
+
+		return $this->commentRepository->getPublicComments(
+			$listingRequest->getLimit(),
+			$offset
+		);
 	}
 
 }

@@ -10,14 +10,22 @@ namespace WMDE\Fundraising\Frontend\UseCases\ListComments;
  */
 class CommentListingRequest {
 
-	private $limit;
+	const FIRST_PAGE = 1;
 
-	public function __construct( int $limit ) {
+	private $limit;
+	private $page;
+
+	public function __construct( int $limit, int $page ) {
 		$this->limit = $limit;
+		$this->page = $page;
 	}
 
 	public function getLimit(): int {
 		return $this->limit;
+	}
+
+	public function getPage(): int {
+		return $this->page;
 	}
 
 }

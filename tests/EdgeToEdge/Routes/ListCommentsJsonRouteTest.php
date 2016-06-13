@@ -42,23 +42,31 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 
 		$this->assertJsonSuccessResponse(
 			[
-				[
-					'betrag' => 200,
-					'spender' => 'Second name',
-					'kommentar' => 'Second comment',
-					'datum' => 'Thu, 02 Feb 1984 00:00:00 +0100',
-					'id' => 2,
-				],
-				[
-					'betrag' => 100,
-					'spender' => 'First name',
-					'kommentar' => 'First comment',
-					'datum' => 'Sun, 01 Jan 1984 00:00:00 +0100',
-					'id' => 1,
-				],
+				$this->getSecondCommentAsArray(),
+				$this->getFirstCommentAsArray()
 			],
 			$client->getResponse()
 		);
+	}
+
+	private function getFirstCommentAsArray() {
+		return [
+			'betrag' => 100,
+			'spender' => 'First name',
+			'kommentar' => 'First comment',
+			'datum' => 'Sun, 01 Jan 1984 00:00:00 +0100',
+			'id' => 1,
+		];
+	}
+
+	private function getSecondCommentAsArray() {
+		return [
+			'betrag' => 200,
+			'spender' => 'Second name',
+			'kommentar' => 'Second comment',
+			'datum' => 'Thu, 02 Feb 1984 00:00:00 +0100',
+			'id' => 2,
+		];
 	}
 
 	private function persistFirstComment( EntityManager $entityManager ) {
@@ -92,13 +100,7 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 
 		$this->assertJsonSuccessResponse(
 			[
-				[
-					'betrag' => 200,
-					'spender' => 'Second name',
-					'kommentar' => 'Second comment',
-					'datum' => 'Thu, 02 Feb 1984 00:00:00 +0100',
-					'id' => 2,
-				]
+				$this->getSecondCommentAsArray()
 			],
 			$client->getResponse()
 		);
@@ -115,13 +117,7 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 
 		$this->assertJsonpSuccessResponse(
 			[
-				[
-					'betrag' => 200,
-					'spender' => 'Second name',
-					'kommentar' => 'Second comment',
-					'datum' => 'Thu, 02 Feb 1984 00:00:00 +0100',
-					'id' => 2,
-				]
+				$this->getSecondCommentAsArray()
 			],
 			'kittens',
 			$client->getResponse()
@@ -132,6 +128,23 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 		$this->assertSame(
 			'/**/' . $expectedCallback . '(' . json_encode( $expectedJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ) . ');',
 			$response->getContent()
+		);
+	}
+
+	public function testGivenLimitAndPageTwo_limitNumberOfCommentsAreSkipped() {
+		$client = $this->createClient( [], function( FunFunFactory $factory ) {
+			$this->persistFirstComment( $factory->getEntityManager() );
+			$this->persistSecondComment( $factory->getEntityManager() );
+			$factory->getEntityManager()->flush();
+		} );
+
+		$client->request( 'GET', '/list-comments.json?n=1&page=2' );
+
+		$this->assertJsonSuccessResponse(
+			[
+				$this->getFirstCommentAsArray()
+			],
+			$client->getResponse()
 		);
 	}
 

@@ -151,7 +151,10 @@ $app->get(
 		$response = $app->json(
 			$ffFactory->newCommentListJsonPresenter()->present(
 				$ffFactory->newListCommentsUseCase()->listComments(
-					new CommentListingRequest( (int)$request->query->get( 'n' ) )
+					new CommentListingRequest(
+						(int)$request->query->get( 'n', '10' ),
+						(int)$request->query->get( 'page', '1' )
+					)
 				)
 			)
 		);
@@ -169,7 +172,7 @@ $app->get(
 	function() use ( $app, $ffFactory ) {
 		$rss = $ffFactory->newCommentListRssPresenter()->present(
 			$ffFactory->newListCommentsUseCase()->listComments(
-				new CommentListingRequest( 100 )
+				new CommentListingRequest( 100, CommentListingRequest::FIRST_PAGE )
 			)
 		);
 
@@ -190,7 +193,7 @@ $app->get(
 		return new Response(
 			$ffFactory->newCommentListHtmlPresenter()->present(
 				$ffFactory->newListCommentsUseCase()->listComments(
-					new CommentListingRequest( 10 )
+					new CommentListingRequest( 10, CommentListingRequest::FIRST_PAGE )
 				)
 			)
 		);
