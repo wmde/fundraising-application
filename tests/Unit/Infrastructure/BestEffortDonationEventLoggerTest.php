@@ -4,11 +4,11 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
+use Psr\Log\LoggerInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\BestEffortDonationEventLogger;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationEventLogException;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationEventLogger;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\DonationEventLoggerSpy;
-use Psr\Log\LoggerInterface;
 
 /**
  * @covers WMDE\Fundraising\Frontend\Infrastructure\BestEffortDonationEventLogger
