@@ -189,11 +189,14 @@ $app->get(
 
 $app->get(
 	'list-comments.html',
-	function() use ( $app, $ffFactory ) {
+	function( Request $request ) use ( $app, $ffFactory ) {
 		return new Response(
 			$ffFactory->newCommentListHtmlPresenter()->present(
 				$ffFactory->newListCommentsUseCase()->listComments(
-					new CommentListingRequest( 10, CommentListingRequest::FIRST_PAGE )
+					new CommentListingRequest(
+						10,
+						(int)$request->query->get( 'page', '1' )
+					)
 				)
 			)
 		);

@@ -74,7 +74,7 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 		$secondDonation->setPublicRecord( 'Third name & company' );
 		$secondDonation->setComment( 'Third <script> comment' );
 		$secondDonation->setAmount( '9001' );
-		$secondDonation->setCreationTime( new DateTime( '1984-02-02' ) );
+		$secondDonation->setCreationTime( new DateTime( '1984-03-03' ) );
 		$secondDonation->setIsPublic( true );
 		$entityManager->persist( $secondDonation );
 	}
@@ -119,6 +119,21 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 			'Third &lt;script&gt; comment',
 			$client->getResponse()->getContent()
 		);
+	}
+
+	public function testGivenLimitAndPageTwo_limitNumberOfCommentsAreSkipped() {
+		$client = $this->createClient( [], function( FunFunFactory $factory ) {
+			$this->persistFirstComment( $factory->getEntityManager() );
+			$this->persistSecondComment( $factory->getEntityManager() );
+			$this->persistEvilComment( $factory->getEntityManager() );
+			$factory->getEntityManager()->flush();
+		} );
+
+		$client->request( 'GET', '/list-comments.json?n=2&page=2' );
+
+		$this->assertContains( 'First', $client->getResponse()->getContent() );
+		$this->assertNotContains( 'Second', $client->getResponse()->getContent() );
+		$this->assertNotContains( 'Third', $client->getResponse()->getContent() );
 	}
 
 }
