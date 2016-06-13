@@ -6,9 +6,9 @@ namespace WMDE\Fundraising\Frontend\DataAccess;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
+use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationEventLogException;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationEventLogger;
-use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
 
 /**
  * @license GNU GPL v2+
