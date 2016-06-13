@@ -103,7 +103,7 @@ class Donation {
 	}
 
 	public function addComment( DonationComment $comment ) {
-		if ( $this->comment !== null ) {
+		if ( $this->hasComment() ) {
 			throw new RuntimeException( 'Can only add a single comment to a donation' );
 		}
 
@@ -149,7 +149,23 @@ class Donation {
 			throw new RuntimeException( 'Only incomplete donations can be confirmed as booked' );
 		}
 
+		if ( $this->hasComment() && ( $this->needsModeration() || $this->isCancelled() ) ) {
+			$this->makeCommentPrivate();
+		}
+
 		$this->status = self::STATUS_EXTERNAL_BOOKED;
+	}
+
+	private function makeCommentPrivate() {
+		$this->comment = new DonationComment(
+			$this->comment->getCommentText(),
+			false,
+			$this->comment->getAuthorDisplayName()
+		);
+	}
+
+	public function hasComment(): bool {
+		return $this->comment !== null;
 	}
 
 	private function statusAllowsForBooking(): bool {

@@ -189,7 +189,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 	public function testCommentGetPersistedAndRetrieved() {
 		$donation = ValidDonation::newDirectDebitDonation();
-		$donation->addComment( ValidDonation::newComment() );
+		$donation->addComment( ValidDonation::newPublicComment() );
 
 		$repository = $this->newRepository();
 		$repository->storeDonation( $donation );
@@ -201,7 +201,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 	public function testPersistingDonationWithoutCommentCausesCommentToBeCleared() {
 		$donation = ValidDonation::newDirectDebitDonation();
-		$donation->addComment( ValidDonation::newComment() );
+		$donation->addComment( ValidDonation::newPublicComment() );
 
 		$repository = $this->newRepository();
 		$repository->storeDonation( $donation );
