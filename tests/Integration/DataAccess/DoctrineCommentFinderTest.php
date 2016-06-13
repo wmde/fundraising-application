@@ -212,4 +212,31 @@ class DoctrineCommentFinderTest extends \PHPUnit_Framework_TestCase {
 		return $entityManager;
 	}
 
+	public function testGivenOffsetOfOneCausesOneCommentToBeSkipped() {
+		$this->persistFirstDonationWithComment();
+		$this->persistSecondDonationWithComment();
+		$this->persistThirdDonationWithComment();
+		$this->entityManager->flush();
+
+		$this->assertEquals(
+			[
+				$this->getSecondComment(),
+				$this->getFirstComment(),
+			],
+			$this->newDbalCommentRepository()->getPublicComments( 10, 1 )
+		);
+	}
+
+	public function testGivenOffsetBeyondResultSetCausesEmptyResult() {
+		$this->persistFirstDonationWithComment();
+		$this->persistSecondDonationWithComment();
+		$this->persistThirdDonationWithComment();
+		$this->entityManager->flush();
+
+		$this->assertEquals(
+			[],
+			$this->newDbalCommentRepository()->getPublicComments( 10, 10 )
+		);
+	}
+
 }

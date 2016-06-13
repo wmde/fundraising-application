@@ -23,7 +23,7 @@ class ListCommentsUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertEquals(
 			new CommentList(),
-			$useCase->listComments( new CommentListingRequest( 10 ) )
+			$useCase->listComments( new CommentListingRequest( 10, CommentListingRequest::FIRST_PAGE ) )
 		);
 	}
 
@@ -40,7 +40,7 @@ class ListCommentsUseCaseTest extends \PHPUnit_Framework_TestCase {
 				$this->newCommentWithAuthorName( 'name1' ),
 				$this->newCommentWithAuthorName( 'name2' )
 			),
-			$useCase->listComments( new CommentListingRequest( 10 ) )
+			$useCase->listComments( new CommentListingRequest( 10, CommentListingRequest::FIRST_PAGE ) )
 		);
 	}
 
@@ -65,7 +65,23 @@ class ListCommentsUseCaseTest extends \PHPUnit_Framework_TestCase {
 				$this->newCommentWithAuthorName( 'name0' ),
 				$this->newCommentWithAuthorName( 'name1' )
 			),
-			$useCase->listComments( new CommentListingRequest( 2 ) )
+			$useCase->listComments( new CommentListingRequest( 2, CommentListingRequest::FIRST_PAGE ) )
+		);
+	}
+
+	public function testWhenPageParameterIsTwo_correctOffsetIsUsed() {
+		$useCase = new ListCommentsUseCase( new InMemoryCommentFinder(
+			$this->newCommentWithAuthorName( 'name0' ),
+			$this->newCommentWithAuthorName( 'name1' ),
+			$this->newCommentWithAuthorName( 'name2' ),
+			$this->newCommentWithAuthorName( 'name3' )
+		) );
+
+		$this->assertEquals(
+			new CommentList(
+				$this->newCommentWithAuthorName( 'name3' )
+			),
+			$useCase->listComments( new CommentListingRequest( 3, 2 ) )
 		);
 	}
 
