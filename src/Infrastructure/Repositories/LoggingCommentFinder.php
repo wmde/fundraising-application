@@ -14,7 +14,7 @@ use WMDE\Fundraising\Frontend\Domain\ReadModel\CommentWithAmount;
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class LoggingCommentRepository implements CommentFinder {
+class LoggingCommentFinder implements CommentFinder {
 
 	const CONTEXT_EXCEPTION_KEY = 'exception';
 

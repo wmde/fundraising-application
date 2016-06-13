@@ -28,7 +28,7 @@ use TNvpServiceDispatcher;
 use Twig_Environment;
 use Twig_Extensions_Extension_Intl;
 use WMDE\Fundraising\Frontend\DataAccess\ApiBasedPageRetriever;
-use WMDE\Fundraising\Frontend\DataAccess\DoctrineCommentRepository;
+use WMDE\Fundraising\Frontend\DataAccess\DoctrineCommentFinder;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationAuthorizationUpdater;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationAuthorizer;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationEventLogger;
@@ -69,7 +69,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\PageRetriever;
 use WMDE\Fundraising\Frontend\Infrastructure\PaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\RandomTokenGenerator;
-use WMDE\Fundraising\Frontend\Infrastructure\Repositories\LoggingCommentRepository;
+use WMDE\Fundraising\Frontend\Infrastructure\Repositories\LoggingCommentFinder;
 use WMDE\Fundraising\Frontend\Infrastructure\Repositories\LoggingDonationRepository;
 use WMDE\Fundraising\Frontend\Infrastructure\Repositories\LoggingMembershipApplicationRepository;
 use WMDE\Fundraising\Frontend\Infrastructure\Repositories\LoggingSubscriptionRepository;
@@ -187,8 +187,8 @@ class FunFunFactory {
 		} );
 
 		$pimple['comment_repository'] = $pimple->share( function() {
-			return new LoggingCommentRepository(
-				new DoctrineCommentRepository( $this->getEntityManager() ),
+			return new LoggingCommentFinder(
+				new DoctrineCommentFinder( $this->getEntityManager() ),
 				$this->getLogger()
 			);
 		} );

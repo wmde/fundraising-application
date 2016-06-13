@@ -15,7 +15,7 @@ use WMDE\Fundraising\Frontend\Domain\ReadModel\CommentWithAmount;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class DoctrineCommentRepository implements CommentFinder {
+class DoctrineCommentFinder implements CommentFinder {
 
 	private $entityManager;
 
