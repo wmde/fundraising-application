@@ -32,13 +32,14 @@ class LoggingCommentFinder implements CommentFinder {
 	 * @see CommentFinder::getPublicComments
 	 *
 	 * @param int $limit
+	 * @param int $offset
 	 *
 	 * @return CommentWithAmount[]
 	 * @throws CommentListingException
 	 */
-	public function getPublicComments( int $limit ): array {
+	public function getPublicComments( int $limit, int $offset = 0 ): array {
 		try {
-			return $this->commentFinder->getPublicComments( $limit );
+			return $this->commentFinder->getPublicComments( $limit, $offset );
 		}
 		catch ( CommentListingException $ex ) {
 			$this->logger->log( $this->logLevel, $ex->getMessage(), [ self::CONTEXT_EXCEPTION_KEY => $ex ] );

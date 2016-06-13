@@ -27,10 +27,11 @@ class DoctrineCommentFinder implements CommentFinder {
 	 * @see CommentFinder::getPublicComments
 	 *
 	 * @param int $limit
+	 * @param int $offset
 	 *
 	 * @return CommentWithAmount[]
 	 */
-	public function getPublicComments( int $limit ): array {
+	public function getPublicComments( int $limit, int $offset = 0 ): array {
 		return array_map(
 			function( Donation $donation ) {
 				return CommentWithAmount::newInstance()
@@ -42,11 +43,11 @@ class DoctrineCommentFinder implements CommentFinder {
 					->freeze()
 					->assertNoNullFields();
 			},
-			$this->getDonations( $limit )
+			$this->getDonations( $limit, $offset )
 		);
 	}
 
-	private function getDonations( int $limit ): array {
+	private function getDonations( int $limit, int $offset ): array {
 		try {
 			return $this->entityManager->getRepository( Donation::class )->findBy(
 				[
@@ -56,7 +57,8 @@ class DoctrineCommentFinder implements CommentFinder {
 				[
 					'creationTime' => 'DESC'
 				],
-				$limit
+				$limit,
+				$offset
 			);
 		}
 		catch ( ORMException $ex ) {
