@@ -832,7 +832,8 @@ class FunFunFactory {
 	public function newAddCommentUseCase( string $updateToken ): AddCommentUseCase {
 		return new AddCommentUseCase(
 			$this->getDonationRepository(),
-			$this->newDonationAuthorizer( $updateToken )
+			$this->newDonationAuthorizer( $updateToken ),
+			$this->getTextPolicyValidator( 'comment' )
 		);
 	}
 

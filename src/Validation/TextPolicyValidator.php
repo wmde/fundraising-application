@@ -14,9 +14,26 @@ class TextPolicyValidator {
 	private $whiteWordsArray = [];
 
 	const CHECK_URLS = 1;
-	const CHECK_URLS_DNS = 2;
 	const CHECK_BADWORDS = 4;
 	const IGNORE_WHITEWORDS = 8;
+
+	// FIXME: this should be factored out as it (checkdnsrr) depends on internets
+	// Could use an URL validation strategy
+	const CHECK_URLS_DNS = 2;
+
+	/**
+	 * @param string $text
+	 *
+	 * @return bool
+	 */
+	public function textIsHarmless( string $text ): bool {
+		return $this->hasHarmlessContent(
+			$text,
+			self::CHECK_BADWORDS
+			| self::IGNORE_WHITEWORDS
+			| self::CHECK_URLS
+		);
+	}
 
 	public function hasHarmlessContent( string $text, int $flags ): bool {
 		$ignoreWhiteWords = (bool) ( $flags & self::IGNORE_WHITEWORDS );
@@ -112,7 +129,6 @@ class TextPolicyValidator {
 	}
 
 	private function isExistingDomain( string $host ): bool {
-		// FIXME: this should be factored out as it depends on internets
 		return checkdnsrr( $host, 'A' );
 	}
 

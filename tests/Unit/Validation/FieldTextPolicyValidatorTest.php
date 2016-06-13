@@ -18,22 +18,22 @@ class FieldTextPolicyValidatorTest extends \PHPUnit_Framework_TestCase {
 
 	public function testGivenHarmlessText_itSucceeds(){
 		$textPolicy = $this->createMock( TextPolicyValidator::class );
-		$textPolicy->method( 'hasHarmlessContent' )->willReturn( true );
-		$validator = new FieldTextPolicyValidator( $textPolicy, 0 );
+		$textPolicy->method( $this->anything() )->willReturn( true );
+		$validator = new FieldTextPolicyValidator( $textPolicy );
 		$this->assertTrue( $validator->validate( 'tiny cat' )->isSuccessful() );
 	}
 
 	public function testGivenHarmfulText_itFails(){
 		$textPolicy = $this->createMock( TextPolicyValidator::class );
-		$textPolicy->method( 'hasHarmlessContent' )->willReturn( false );
-		$validator = new FieldTextPolicyValidator( $textPolicy, 0 );
+		$textPolicy->method( $this->anything() )->willReturn( false );
+		$validator = new FieldTextPolicyValidator( $textPolicy );
 		$this->assertFalse( $validator->validate( 'mean tiger' )->isSuccessful() );
 	}
 
 	public function testGivenHarmfulText_itProvidesAConstraintViolation(){
 		$textPolicy = $this->createMock( TextPolicyValidator::class );
-		$textPolicy->method( 'hasHarmlessContent' )->willReturn( false );
-		$validator = new FieldTextPolicyValidator( $textPolicy, 0 );
+		$textPolicy->method( $this->anything() )->willReturn( false );
+		$validator = new FieldTextPolicyValidator( $textPolicy );
 
 		$this->assertInstanceOf(
 			ConstraintViolation::class,

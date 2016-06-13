@@ -41,6 +41,10 @@
 		"fields": {
 			"whitewords": "",
 			"badwords": ""
+		},
+		"comment": {
+			"whitewords": "",
+			"badwords": ""
 		}
 	},
 	"subscription-interval": "PT30M",

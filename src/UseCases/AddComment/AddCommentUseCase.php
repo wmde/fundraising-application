@@ -9,6 +9,7 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
 use WMDE\Fundraising\Frontend\Domain\Repositories\StoreDonationException;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizer;
+use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
 
 /**
  * @license GNU GPL v2+
@@ -18,10 +19,14 @@ class AddCommentUseCase {
 
 	private $donationRepository;
 	private $authorizationService;
+	private $textPolicyValidator;
 
-	public function __construct( DonationRepository $repository, DonationAuthorizer $authorizationService ) {
+	public function __construct( DonationRepository $repository, DonationAuthorizer $authorizationService,
+		TextPolicyValidator $textPolicyValidator ) {
+
 		$this->donationRepository = $repository;
 		$this->authorizationService = $authorizationService;
+		$this->textPolicyValidator = $textPolicyValidator;
 	}
 
 	public function addComment( AddCommentRequest $addCommentRequest ): AddCommentResponse {
@@ -46,6 +51,10 @@ class AddCommentUseCase {
 
 		$donation->addComment( $this->newCommentFromRequest( $addCommentRequest ) );
 
+		if ( !$this->commentTextPassesValidation( $addCommentRequest->getCommentText() ) ) {
+			$donation->markForModeration();
+		}
+
 		try {
 			$this->donationRepository->storeDonation( $donation );
 		}
@@ -63,9 +72,18 @@ class AddCommentUseCase {
 	private function newCommentFromRequest( AddCommentRequest $request ): DonationComment {
 		return new DonationComment(
 			$request->getCommentText(),
-			$request->isPublic(),
+			$this->commentCanBePublic( $request ),
 			$request->getAuthorDisplayName()
 		);
+	}
+
+	private function commentCanBePublic( AddCommentRequest $request ): bool {
+		return $request->isPublic()
+			&& $this->commentTextPassesValidation( $request->getCommentText() );
+	}
+
+	private function commentTextPassesValidation( string $text ): bool {
+		return $this->textPolicyValidator->textIsHarmless( $text );
 	}
 
 }
