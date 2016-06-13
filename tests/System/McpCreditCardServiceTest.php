@@ -35,6 +35,10 @@ class McpCreditCardServiceTest extends \PHPUnit_Framework_TestCase {
 		$this->accessKey = $config['creditcard']['access-key'];
 		$this->projectId = $config['creditcard']['project-id'];
 
+		if ( $this->accessKey === '' || $this->projectId === '' ) {
+			$this->markTestSkipped( 'Need access key and project id to run MCP system tests' );
+		}
+
 		$emailAddress = 'test.this@email.address';
 		$random = bin2hex( random_bytes( 16 ) );
 		$this->customerId = md5( $emailAddress . $random );
