@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Silex\Application;
+use WMDE\Fundraising\Frontend\App\AccessDeniedException;
 
 $app = new Application();
 
@@ -31,6 +32,14 @@ $app->before(
 	},
 	Application::EARLY_EVENT
 );
+
+$app->error( function ( AccessDeniedException $e, $code ) use ( $ffFactory ) {
+	return new Response(
+		$ffFactory->newAccessDeniedHTMLPresenter()->present( $e ),
+		403,
+		[ 'X-Status-Code' => 403 ]
+	);
+} );
 
 $app->error( function ( \Exception $e, $code ) use ( $ffFactory, $app ) {
 	if ( $app['debug'] ) {
