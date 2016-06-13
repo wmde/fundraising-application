@@ -54,18 +54,18 @@ class DoctrineDonationRepository implements DonationRepository {
 	}
 
 	private function insertDonation( Donation $donation ) {
-		$doctrineApplication = new DoctrineDonation();
-		$this->updateDonationEntity( $doctrineApplication, $donation );
+		$doctrineDonation = new DoctrineDonation();
+		$this->updateDonationEntity( $doctrineDonation, $donation );
 
 		try {
-			$this->entityManager->persist( $doctrineApplication );
+			$this->entityManager->persist( $doctrineDonation );
 			$this->entityManager->flush();
 		}
 		catch ( ORMException $ex ) {
 			throw new StoreDonationException( $ex );
 		}
 
-		$donation->assignId( $doctrineApplication->getId() );
+		$donation->assignId( $doctrineDonation->getId() );
 	}
 
 	private function updateDonation( Donation $donation ) {
