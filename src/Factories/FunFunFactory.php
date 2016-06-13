@@ -677,6 +677,10 @@ class FunFunFactory {
 		return new InternalErrorHtmlPresenter( $this->getLayoutTemplate( 'Error.twig' ) );
 	}
 
+	public function newAccessDeniedHTMLPresenter(): InternalErrorHtmlPresenter {
+		return new InternalErrorHtmlPresenter( $this->getLayoutTemplate( 'AccessDenied.twig' ) );
+	}
+
 	public function getTranslator(): TranslatorInterface {
 		return $this->pimple['translator'];
 	}

@@ -8,6 +8,7 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use WMDE\Fundraising\Frontend\App\AccessDeniedException;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\UseCases\ShowDonationConfirmation\ShowDonationConfirmationRequest;
 
@@ -41,7 +42,7 @@ class ShowDonationConfirmationHandler {
 			);
 		}
 
-		return new Response( 'TODO: access not permitted' ); // TODO
+		throw new AccessDeniedException( 'access_denied_donation_confirmation' );
 	}
 
 }

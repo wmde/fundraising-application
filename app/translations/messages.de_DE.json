@@ -13,5 +13,7 @@
   "membership-cancellation-text": "Ihr Mitgliedschaftsantrag mit der Nummer %membership.id% wurde storniert. Wenn Sie noch Fragen haben oder uns auf Probleme hinweisen möchten, wenden Sie sich bitte an <a href=\"mailto:mitglieder@wikimedia.de?subject=Mitgliedschaft%20%membership.id%\">mitglieder@wikimedia.de</a>.",
   "membership-cancellation-failed-text": "Ihr Mitgliedschaftsantrag mit der Nummer %membership.id% konnte nicht storniert werden. Bitte wenden Sie sich an <a href=\"mailto:spenden@wikimedia.de?subject=Mitgliedschaftsantrag%20%membership.id%\">mitglieder@wikimedia.de</a>.",
   "mail_subject_confirm_membership_application": "Ihre Mitgliedschaft bei Wikimedia Deutschland e. V.",
-  "mail_subject_confirm_membership_application_cancellation": "Stornierung Ihres Mitgliedschaftsantrags bei Wikimedia Deutschland e. V."
+  "mail_subject_confirm_membership_application_cancellation": "Stornierung Ihres Mitgliedschaftsantrags bei Wikimedia Deutschland e. V.",
+  "access_denied": "Sie haben keine Berechtigung, diese Seite zu sehen.",
+  "access_denied_donation_confirmation": "Sie haben keine Berechtigung, diese Spende zu sehen."
 }

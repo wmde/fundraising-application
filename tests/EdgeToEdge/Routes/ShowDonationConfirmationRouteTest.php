@@ -22,6 +22,8 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	const CORRECT_ACCESS_TOKEN = 'KindlyAllowMeAccess';
 	const SOME_UPDATE_TOKEN = 'SomeUpdateToken';
 
+	const ACCESS_DENIED_TEXT = 'keine Berechtigung';
+
 	public function testGivenValidRequest_confirmationPageContainsDonationData() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setDonationConfirmationPageSelector(
@@ -205,7 +207,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		$this->assertNotContains( $donation->getDonor()->getPersonName()->getFirstName(), $content );
 		$this->assertNotContains( $donation->getDonor()->getPersonName()->getLastName(), $content );
 
-		$this->assertContains( 'TODO: access not permitted', $content );
+		$this->assertContains( self::ACCESS_DENIED_TEXT, $content );
 	}
 
 	public function testGivenWrongId_accessIsDenied() {
@@ -246,7 +248,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 				]
 			);
 
-			$this->assertContains( 'TODO: access not permitted', $client->getResponse()->getContent() );
+			$this->assertContains( self::ACCESS_DENIED_TEXT, $client->getResponse()->getContent() );
 		} );
 	}
 
