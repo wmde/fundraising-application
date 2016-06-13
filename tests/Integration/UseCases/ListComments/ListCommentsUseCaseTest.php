@@ -29,45 +29,41 @@ class ListCommentsUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 	public function testWhenThereAreLessCommentsThanTheLimit_theyAreAllPresented() {
 		$useCase = new ListCommentsUseCase( new InMemoryCommentFinder(
-			CommentWithAmount::newInstance()->setAuthorName( 'name0' )->setCommentText( 'comment' )
-				->setDonationAmount( 42 )->setDonationTime( new \DateTime( '1984-01-01' ) ),
-			CommentWithAmount::newInstance()->setAuthorName( 'name1' )->setCommentText( 'comment' )
-				->setDonationAmount( 42 )->setDonationTime( new \DateTime( '1984-01-01' ) ),
-			CommentWithAmount::newInstance()->setAuthorName( 'name2' )->setCommentText( 'comment' )
-				->setDonationAmount( 42 )->setDonationTime( new \DateTime( '1984-01-01' ) )
+			$this->newCommentWithAuthorName( 'name0' ),
+			$this->newCommentWithAuthorName( 'name1' ),
+			$this->newCommentWithAuthorName( 'name2' )
 		) );
 
 		$this->assertEquals(
 			new CommentList(
-				CommentWithAmount::newInstance()->setAuthorName( 'name0' )->setCommentText( 'comment' )
-					->setDonationAmount( 42 )->setDonationTime( new \DateTime( '1984-01-01' ) ),
-				CommentWithAmount::newInstance()->setAuthorName( 'name1' )->setCommentText( 'comment' )
-					->setDonationAmount( 42 )->setDonationTime( new \DateTime( '1984-01-01' ) ),
-				CommentWithAmount::newInstance()->setAuthorName( 'name2' )->setCommentText( 'comment' )
-					->setDonationAmount( 42 )->setDonationTime( new \DateTime( '1984-01-01' ) )
+				$this->newCommentWithAuthorName( 'name0' ),
+				$this->newCommentWithAuthorName( 'name1' ),
+				$this->newCommentWithAuthorName( 'name2' )
 			),
 			$useCase->listComments( new CommentListingRequest( 10 ) )
 		);
 	}
 
+	private function newCommentWithAuthorName( string $authorName ): CommentWithAmount {
+		return CommentWithAmount::newInstance()
+			->setAuthorName( $authorName )
+			->setCommentText( 'comment' )
+			->setDonationAmount( 42 )
+			->setDonationTime( new \DateTime( '1984-01-01' ) );
+	}
+
 	public function testWhenThereAreMoreCommentsThanTheLimit_onlyTheFirstFewArePresented() {
 		$useCase = new ListCommentsUseCase( new InMemoryCommentFinder(
-			CommentWithAmount::newInstance()->setAuthorName( 'name0' )->setCommentText( 'comment' )
-				->setDonationAmount( 42 )->setDonationTime( new \DateTime( '1984-01-01' ) ),
-			CommentWithAmount::newInstance()->setAuthorName( 'name1' )->setCommentText( 'comment' )
-				->setDonationAmount( 42 )->setDonationTime( new \DateTime( '1984-01-01' ) ),
-			CommentWithAmount::newInstance()->setAuthorName( 'name2' )->setCommentText( 'comment' )
-				->setDonationAmount( 42 )->setDonationTime( new \DateTime( '1984-01-01' ) ),
-			CommentWithAmount::newInstance()->setAuthorName( 'name3' )->setCommentText( 'comment' )
-				->setDonationAmount( 42 )->setDonationTime( new \DateTime( '1984-01-01' ) )
+			$this->newCommentWithAuthorName( 'name0' ),
+			$this->newCommentWithAuthorName( 'name1' ),
+			$this->newCommentWithAuthorName( 'name2' ),
+			$this->newCommentWithAuthorName( 'name3' )
 		) );
 
 		$this->assertEquals(
 			new CommentList(
-				CommentWithAmount::newInstance()->setAuthorName( 'name0' )->setCommentText( 'comment' )
-					->setDonationAmount( 42 )->setDonationTime( new \DateTime( '1984-01-01' ) ),
-				CommentWithAmount::newInstance()->setAuthorName( 'name1' )->setCommentText( 'comment' )
-					->setDonationAmount( 42 )->setDonationTime( new \DateTime( '1984-01-01' ) )
+				$this->newCommentWithAuthorName( 'name0' ),
+				$this->newCommentWithAuthorName( 'name1' )
 			),
 			$useCase->listComments( new CommentListingRequest( 2 ) )
 		);
