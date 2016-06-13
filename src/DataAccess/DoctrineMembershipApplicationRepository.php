@@ -20,7 +20,6 @@ use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Domain\Repositories\GetMembershipApplicationException;
 use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\StoreMembershipApplicationException;
-use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTrackingInfo;
 
 /**
  * @license GNU GPL v2+
