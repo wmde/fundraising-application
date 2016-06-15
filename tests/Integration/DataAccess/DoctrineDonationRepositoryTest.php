@@ -12,6 +12,7 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
 use WMDE\Fundraising\Frontend\Domain\Repositories\StoreDonationException;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDoctrineDonation;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
@@ -31,7 +32,9 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 	private $entityManager;
 
 	public function setUp() {
-		$this->entityManager = TestEnvironment::newInstance()->getFactory()->getEntityManager();
+		$factory = TestEnvironment::newInstance()->getFactory();
+		$factory->disableDoctrineSubscribers();
+		$this->entityManager = $factory->getEntityManager();
 		parent::setUp();
 	}
 
@@ -57,6 +60,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$actual->setCreationTime( null );
 
 		$this->assertEquals( $expected->getDecodedData(), $actual->getDecodedData() );
+		// TODO: is this still necessary?
 		$expected->encodeAndSetData( [] );
 		$actual->encodeAndSetData( [] );
 

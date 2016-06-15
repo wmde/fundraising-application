@@ -59,7 +59,7 @@ class DoctrineDonationAuthorizer implements DonationAuthorizer {
 		}
 
 		return $donation !== null
-		&& $this->updateTokenMatches( $donation );
+			&& $this->updateTokenMatches( $donation );
 	}
 
 	/**

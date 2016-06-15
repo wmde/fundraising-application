@@ -15,12 +15,11 @@ use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
-use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationUpdateException;
-use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizationUpdater;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
-use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
+use WMDE\Fundraising\Frontend\Infrastructure\DonationTokenFetcher;
+use WMDE\Fundraising\Frontend\Infrastructure\DonationTokens;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeDonationRepository;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedDonationTokenFetcher;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationUseCase;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
@@ -37,6 +36,7 @@ use WMDE\Fundraising\Frontend\Validation\ValidationResult;
 class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 	const UPDATE_TOKEN = 'a very nice token';
+	const ACCESS_TOKEN = 'kindly allow me access';
 
 	/**
 	 * @var \DateTime
@@ -61,8 +61,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 			$this->newMailer(),
 			$this->newTransferCodeGenerator(),
 			$this->newBankDataConverter(),
-			$this->newTokenGenerator(),
-			$this->newAuthorizationUpdater()
+			$this->newTokenFetcher()
 		);
 	}
 
@@ -75,18 +74,11 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 			->getMock();
 	}
 
-	private function newTokenGenerator(): TokenGenerator {
-		return new FixedTokenGenerator(
-			self::UPDATE_TOKEN,
-			$this->oneHourInTheFuture
-		);
-	}
-
-	/**
-	 * @return DonationAuthorizationUpdater|PHPUnit_Framework_MockObject_MockObject
-	 */
-	private function newAuthorizationUpdater(): DonationAuthorizationUpdater {
-		return $this->createMock( DonationAuthorizationUpdater::class );
+	private function newTokenFetcher(): DonationTokenFetcher {
+		return new FixedDonationTokenFetcher( new DonationTokens(
+			self::ACCESS_TOKEN,
+			self::UPDATE_TOKEN
+		) );
 	}
 
 	private function newOneHourInterval(): \DateInterval {
@@ -105,8 +97,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 			$this->newMailer(),
 			$this->newTransferCodeGenerator(),
 			$this->newBankDataConverter(),
-			$this->newTokenGenerator(),
-			$this->newAuthorizationUpdater()
+			$this->newTokenFetcher()
 		);
 
 		$result = $useCase->addDonation( $this->newMinimumDonationRequest() );
@@ -121,8 +112,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 			$this->newMailer(),
 			$this->newTransferCodeGenerator(),
 			$this->newBankDataConverter(),
-			$this->newTokenGenerator(),
-			$this->newAuthorizationUpdater()
+			$this->newTokenFetcher()
 		);
 
 		$request = $this->newInvalidDonationRequest();
@@ -176,8 +166,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 			$mailer,
 			$this->newTransferCodeGenerator(),
 			$this->newBankDataConverter(),
-			$this->newTokenGenerator(),
-			$this->newAuthorizationUpdater()
+			$this->newTokenFetcher()
 		);
 
 		$useCase->addDonation( $this->newMinimumDonationRequest() );
@@ -224,8 +213,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 			$mailer,
 			$this->newTransferCodeGenerator(),
 			$this->newBankDataConverter(),
-			$this->newTokenGenerator(),
-			$this->newAuthorizationUpdater()
+			$this->newTokenFetcher()
 		);
 	}
 
@@ -247,79 +235,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$response = $useCase->addDonation( $this->newMinimumDonationRequest() );
 
 		$this->assertSame( self::UPDATE_TOKEN, $response->getUpdateToken() );
-		$this->assertSame( self::UPDATE_TOKEN, $response->getAccessToken() );
-	}
-
-	public function testWhenAdditionWorks_updateTokenIsPersisted() {
-		$authorizationUpdater = $this->newAuthorizationUpdater();
-
-		$authorizationUpdater->expects( $this->once() )
-			->method( 'allowModificationViaToken' )
-			->with(
-				$this->equalTo( 1 ),
-				$this->equalTo( self::UPDATE_TOKEN ),
-				$this->equalTo( $this->oneHourInTheFuture )
-			);
-
-		$useCase = $this->newUseCaseWithAuthorizationUpdater( $authorizationUpdater );
-
-		$useCase->addDonation( $this->newMinimumDonationRequest() );
-	}
-
-	public function testWhenAdditionWorks_accessTokenIsPersisted() {
-		$authorizationUpdater = $this->newAuthorizationUpdater();
-
-		$authorizationUpdater->expects( $this->once() )
-			->method( 'allowAccessViaToken' )
-			->with(
-				$this->equalTo( 1 ),
-				$this->equalTo( self::UPDATE_TOKEN )
-			);
-
-		$useCase = $this->newUseCaseWithAuthorizationUpdater( $authorizationUpdater );
-
-		$useCase->addDonation( $this->newMinimumDonationRequest() );
-	}
-
-	private function newUseCaseWithAuthorizationUpdater( DonationAuthorizationUpdater $authUpdater ): AddDonationUseCase {
-		return new AddDonationUseCase(
-			$this->newRepository(),
-			$this->getSucceedingValidatorMock(),
-			new ReferrerGeneralizer( 'http://foo.bar', [] ),
-			$this->newMailer(),
-			$this->newTransferCodeGenerator(),
-			$this->newBankDataConverter(),
-			$this->newTokenGenerator(),
-			$authUpdater
-		);
-	}
-
-	public function testWhenUpdateAuthorizationUpdateFails_failureResponseIsReturned() {
-		$authorizationUpdater = $this->newAuthorizationUpdater();
-
-		$authorizationUpdater->expects( $this->any() )
-			->method( 'allowModificationViaToken' )
-			->willThrowException( new AuthorizationUpdateException( 'Auth update failed' ) );
-
-		$useCase = $this->newUseCaseWithAuthorizationUpdater( $authorizationUpdater );
-
-		$response = $useCase->addDonation( $this->newMinimumDonationRequest() );
-
-		$this->assertFalse( $response->isSuccessful() );
-	}
-
-	public function testWhenAccessAuthorizationUpdateFails_failureResponseIsReturned() {
-		$authorizationUpdater = $this->newAuthorizationUpdater();
-
-		$authorizationUpdater->expects( $this->any() )
-			->method( 'allowAccessViaToken' )
-			->willThrowException( new AuthorizationUpdateException( 'Auth update failed' ) );
-
-		$useCase = $this->newUseCaseWithAuthorizationUpdater( $authorizationUpdater );
-
-		$response = $useCase->addDonation( $this->newMinimumDonationRequest() );
-
-		$this->assertFalse( $response->isSuccessful() );
+		$this->assertSame( self::ACCESS_TOKEN, $response->getAccessToken() );
 	}
 
 }

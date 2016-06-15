@@ -12,6 +12,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Presentation\DonationConfirmationPageSelector;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 
 /**
  * @licence GNU GPL v2+
@@ -141,13 +142,13 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	}
 
 	private function newStoredDonation( FunFunFactory $factory ): Donation {
+		$factory->setTokenGenerator( new FixedTokenGenerator(
+			self::CORRECT_ACCESS_TOKEN
+		) );
+
 		$donation = ValidDonation::newDirectDebitDonation();
 
 		$factory->getDonationRepository()->storeDonation( $donation );
-		$factory->newDonationAuthorizationUpdater()->allowAccessViaToken(
-			$donation->getId(),
-			self::CORRECT_ACCESS_TOKEN
-		);
 
 		return $donation;
 	}

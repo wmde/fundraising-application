@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Symfony\Component\HttpKernel\Client;
-use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationAuthorizationUpdater;
 use WMDE\Fundraising\Frontend\Domain\Model\CreditCardPayment;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
@@ -13,6 +12,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\CreditCardExpiry;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeCreditCardService;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 
 /**
  * @licence GNU GPL v2+
@@ -51,16 +51,15 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequest_applicationIndicatesSuccess() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setTokenGenerator( new FixedTokenGenerator(
+				self::UPDATE_TOKEN,
+				\DateTime::createFromFormat( 'Y-m-d H:i:s', '2039-12-31 23:59:59' )
+			) );
+
 			$factory->setCreditCardService( new FakeCreditCardService() );
 			$factory->setNullMessenger();
 
 			$factory->getDonationRepository()->storeDonation( ValidDonation::newIncompleteCreditCardDonation() );
-			$authorizer = new DoctrineDonationAuthorizationUpdater( $factory->getEntityManager() );
-			$authorizer->allowModificationViaToken(
-				self::DONATION_ID,
-				self::UPDATE_TOKEN,
-				\DateTime::createFromFormat( 'Y-m-d H:i:s', '2039-12-31 23:59:59' )
-			);
 
 			$client->request(
 				'GET',
