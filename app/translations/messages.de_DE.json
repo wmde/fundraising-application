@@ -15,5 +15,13 @@
   "mail_subject_confirm_membership_application": "Ihre Mitgliedschaft bei Wikimedia Deutschland e. V.",
   "mail_subject_confirm_membership_application_cancellation": "Stornierung Ihres Mitgliedschaftsantrags bei Wikimedia Deutschland e. V.",
   "access_denied": "Sie haben keine Berechtigung, diese Seite zu sehen.",
-  "access_denied_donation_confirmation": "Sie haben keine Berechtigung, diese Spende zu sehen."
+  "access_denied_donation_confirmation": "Sie haben keine Berechtigung, diese Spende zu sehen.",
+  "comment_failure_access_denied": "Sie haben keine Berechtigung, auf diese Spende zuzugreifen.",
+  "comment_failure_donation_error": "Fehler beim Lesen der Spende.",
+  "comment_failure_donation_not_found": "Die Spende wurde nicht gefunden.",
+  "comment_failure_donation_has_comment": "Die Spende wurde bereits kommentiert.",
+  "comment_failure_save_error": "Der Kommentar konte nicht gespeichert werden.",
+  "comment_success_ok": "Vielen Dank! Die Nachricht wurde verschickt!",
+  "comment_success_needs_moderation": "Ihr Kommentar wurde von unserem System zur Überprüfung vorgemerkt und steht daher nicht automatisch in der öffentlichen Spenderliste."
+
 }

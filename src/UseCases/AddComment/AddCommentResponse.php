@@ -7,11 +7,12 @@ namespace WMDE\Fundraising\Frontend\UseCases\AddComment;
 /**
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
+ * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
 class AddCommentResponse {
 
-	public static function newSuccessResponse(): self {
-		return new self();
+	public static function newSuccessResponse( string $successMessage ): self {
+		return new self( '', $successMessage );
 	}
 
 	public static function newFailureResponse( string $errorMessage ): self {
@@ -19,9 +20,11 @@ class AddCommentResponse {
 	}
 
 	private $errorMessage;
+	private $successMessage;
 
-	private function __construct( string $errorMessage = '' ) {
+	private function __construct( string $errorMessage = '', string $successMessage = '' ) {
 		$this->errorMessage = $errorMessage;
+		$this->successMessage = $successMessage;
 	}
 
 	public function isSuccessful(): bool {
@@ -36,4 +39,7 @@ class AddCommentResponse {
 		return $this->errorMessage;
 	}
 
+	public function getSuccessMessage(): string {
+		return $this->successMessage;
+	}
 }

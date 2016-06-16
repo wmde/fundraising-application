@@ -18,7 +18,7 @@ interface CommentFinder {
 	 * @param int $limit
 	 * @param int $offset
 	 *
-	 * @return array|ReadModel\CommentWithAmount[]
+	 * @return CommentWithAmount[]
 	 */
 	public function getPublicComments( int $limit, int $offset = 0 ): array;
 

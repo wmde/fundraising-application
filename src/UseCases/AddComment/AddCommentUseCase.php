@@ -14,6 +14,7 @@ use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
 /**
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
+ * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
 class AddCommentUseCase {
 
@@ -31,38 +32,44 @@ class AddCommentUseCase {
 
 	public function addComment( AddCommentRequest $addCommentRequest ): AddCommentResponse {
 		if ( !$this->requestIsAllowed( $addCommentRequest ) ) {
-			return AddCommentResponse::newFailureResponse( 'Authorization failed' );
+			return AddCommentResponse::newFailureResponse( 'comment_failure_access_denied' );
 		}
 
 		try {
 			$donation = $this->donationRepository->getDonationById( $addCommentRequest->getDonationId() );
 		}
 		catch ( GetDonationException $ex ) {
-			return AddCommentResponse::newFailureResponse( 'Could not retrieve donation' );
+			return AddCommentResponse::newFailureResponse( 'comment_failure_donation_error' );
 		}
 
 		if ( $donation === null ) {
-			return AddCommentResponse::newFailureResponse( 'Donation not found' );
+			return AddCommentResponse::newFailureResponse( 'comment_failure_donation_not_found' );
 		}
 
 		if ( $donation->getComment() !== null ) {
-			return AddCommentResponse::newFailureResponse( 'A comment has already been added' );
+			return AddCommentResponse::newFailureResponse( 'comment_failure_donation_has_comment' );
+		}
+
+		$successMessage = 'comment_success_ok';
+		if ( $donation->needsModeration() ) {
+			$successMessage = 'comment_success_needs_moderation';
 		}
 
 		$donation->addComment( $this->newCommentFromRequest( $addCommentRequest ) );
 
 		if ( !$this->commentTextPassesValidation( $addCommentRequest->getCommentText() ) ) {
 			$donation->markForModeration();
+			$successMessage = 'comment_success_needs_moderation';
 		}
 
 		try {
 			$this->donationRepository->storeDonation( $donation );
 		}
 		catch ( StoreDonationException $ex ) {
-			return AddCommentResponse::newFailureResponse( 'Could not add comment to donation' );
+			return AddCommentResponse::newFailureResponse( 'comment_failure_save_error' );
 		}
 
-		return AddCommentResponse::newSuccessResponse();
+		return AddCommentResponse::newSuccessResponse( $successMessage );
 	}
 
 	private function requestIsAllowed( AddCommentRequest $addCommentRequest ): bool {
