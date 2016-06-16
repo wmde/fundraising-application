@@ -445,21 +445,21 @@ $app->post(
 	}
 );
 
-$app->post(
+$app->get(
 	'handle-creditcard-payment-notification',
 	function ( Application $app, Request $request ) use ( $ffFactory ) {
-		$success = $ffFactory->newCreditCardNotificationUseCase( $request->request->get( 'utoken', '' ) )
+		$success = $ffFactory->newCreditCardNotificationUseCase( $request->query->get( 'utoken', '' ) )
 			->handleNotification(
 				( new CreditCardPaymentNotificationRequest() )
-					->setTransactionId( $request->request->get( 'transactionId', '' ) )
-					->setDonationId( (int)$request->request->get( 'donation_id', '' ) )
-					->setAmount( Euro::newFromCents( (int)$request->request->get( 'amount' ) ) )
-					->setCustomerId( $request->request->get( 'customerId', '' ) )
-					->setSessionId( $request->request->get( 'sessionId', '' ) )
-					->setAuthId( $request->request->get(  'auth', '' ) )
-					->setTitle( $request->request->get( 'title', '' ) )
-					->setCountry( $request->request->get( 'country', '' ) )
-					->setCurrency( $request->request->get( 'currency', '' ) )
+					->setTransactionId( $request->query->get( 'transactionId', '' ) )
+					->setDonationId( (int)$request->query->get( 'donation_id', '' ) )
+					->setAmount( Euro::newFromCents( (int)$request->query->get( 'amount' ) ) )
+					->setCustomerId( $request->query->get( 'customerId', '' ) )
+					->setSessionId( $request->query->get( 'sessionId', '' ) )
+					->setAuthId( $request->query->get(  'auth', '' ) )
+					->setTitle( $request->query->get( 'title', '' ) )
+					->setCountry( $request->query->get( 'country', '' ) )
+					->setCurrency( $request->query->get( 'currency', '' ) )
 			);
 		return $success ? 'successful' : 'failed';
 	}

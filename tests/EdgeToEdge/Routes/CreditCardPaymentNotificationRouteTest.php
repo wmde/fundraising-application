@@ -37,7 +37,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setCreditCardService( new FakeCreditCardService() );
 			$client->request(
-				'POST',
+				'GET',
 				'/handle-creditcard-payment-notification',
 				[]
 			);
@@ -61,7 +61,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 			);
 
 			$client->request(
-				'POST',
+				'GET',
 				'/handle-creditcard-payment-notification',
 				$this->newRequest()
 			);
