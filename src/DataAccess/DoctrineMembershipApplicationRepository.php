@@ -82,11 +82,6 @@ class DoctrineMembershipApplicationRepository implements MembershipApplicationRe
 		$this->setApplicantFields( $doctrineApplication, $application->getApplicant() );
 		$this->setPaymentFields( $doctrineApplication, $application->getPayment() );
 
-		$doctrineApplication->encodeAndSetData( array_merge(
-			$doctrineApplication->getDecodedData(),
-			$this->getDataMap( $application )
-		) );
-
 		$doctrineApplication->setStatus( $this->getDoctrineStatus( $application ) );
 	}
 
@@ -120,65 +115,6 @@ class DoctrineMembershipApplicationRepository implements MembershipApplicationRe
 		$application->setPaymentBankName( $bankData->getBankName() );
 		$application->setPaymentBic( $bankData->getBic() );
 		$application->setPaymentIban( $bankData->getIban()->toString() );
-	}
-
-	private function getDataMap( MembershipApplication $application ): array {
-		return array_merge(
-			[
-				'membership_type' => $this->getDoctrineMembershipType( $application ),
-				'membership_fee' => $application->getPayment()->getAmount()->getEuroFloat(),
-				'member_agree' => '1',
-			],
-			$this->getDataFieldsFromApplicant( $application->getApplicant() ),
-			$this->getDataFieldsFromBankData( $application->getPayment()->getBankData() )
-		);
-	}
-
-	private function getDataFieldsFromBankData( BankData $bankData ): array {
-		return [
-			'iban' => $bankData->getIban()->toString(),
-			'bic' => $bankData->getBic(),
-			'account_number' => $bankData->getAccount(),
-			'bank_code' => $bankData->getBankCode(),
-			'bank_name' => $bankData->getBankName(),
-		];
-	}
-
-	private function getDataFieldsFromApplicant( MembershipApplicant $applicant ): array {
-		return array_merge(
-			$this->getDataFieldsFromPersonName( $applicant->getPersonName() ),
-			$this->getDataFieldsFromAddress( $applicant->getPhysicalAddress() ),
-			[
-				'email' => (string)$applicant->getEmailAddress(),
-				'phone' => (string)$applicant->getPhoneNumber(),
-				'dob' => $applicant->getDateOfBirth() === null ? null : $applicant->getDateOfBirth()->format( 'Y-m-d' )
-			]
-		);
-	}
-
-	private function getDataFieldsFromPersonName( PersonName $name ): array {
-		return [
-			'anrede' => $name->getSalutation(),
-			'titel' => $name->getTitle(),
-			'vorname' => $name->getFirstName(),
-			'nachname' => $name->getLastName(),
-			'firma' => $name->getCompanyName(),
-			'account_holder' => $name->getFirstName() . ' ' . $name->getLastName()
-		];
-	}
-
-	private function getDataFieldsFromAddress( PhysicalAddress $address ): array {
-		return [
-			'strasse' => $address->getStreetAddress(),
-			'plz' => $address->getPostalCode(),
-			'ort' => $address->getCity(),
-			'country' => $address->getCountryCode(),
-		];
-	}
-
-	private function getDoctrineMembershipType( MembershipApplication $application ): string {
-		return $application->getType() === MembershipApplication::ACTIVE_MEMBERSHIP
-			? 'active' : 'sustaining';
 	}
 
 	private function getDoctrineStatus( MembershipApplication $application ): int {

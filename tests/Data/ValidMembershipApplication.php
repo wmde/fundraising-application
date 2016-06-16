@@ -140,35 +140,6 @@ class ValidMembershipApplication {
 		$application->setPaymentBic( self::PAYMENT_BIC );
 		$application->setPaymentIban( self::PAYMENT_IBAN );
 
-		$application->encodeAndSetData( [
-			'anrede' => self::APPLICANT_SALUTATION,
-			'titel' => self::APPLICANT_TITLE,
-			'vorname' => self::APPLICANT_FIRST_NAME,
-			'nachname' => self::APPLICANT_LAST_NAME,
-			'firma' => '',
-
-			'strasse' => self::APPLICANT_STREET_ADDRESS,
-			'plz' => self::APPLICANT_POSTAL_CODE,
-			'ort' => self::APPLICANT_CITY,
-			'country' => self::APPLICANT_COUNTRY_CODE,
-
-			'email' => self::APPLICANT_EMAIL_ADDRESS,
-			'phone' => self::APPLICANT_PHONE_NUMBER,
-			'dob' => self::APPLICANT_DATE_OF_BIRTH,
-
-			'membership_type' => self::MEMBERSHIP_TYPE,
-			'membership_fee' => self::PAYMENT_AMOUNT_IN_EURO,
-
-			'account_holder' => 'Potato The Great',
-			'bank_name' => self::PAYMENT_BANK_NAME,
-			'iban' => self::PAYMENT_IBAN,
-			'bic' => self::PAYMENT_BIC,
-			'account_number' => self::PAYMENT_BANK_ACCOUNT,
-			'bank_code' => self::PAYMENT_BANK_CODE,
-
-			'member_agree' => '1',
-		] );
-
 		return $application;
 	}
 
