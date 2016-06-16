@@ -15,6 +15,7 @@ class PersonName {
 
 	const PERSON_PRIVATE = 'person';
 	const PERSON_COMPANY = 'firma';
+	const PERSON_ANONYMOUS = 'anonym';
 
 	private $personType = '';
 

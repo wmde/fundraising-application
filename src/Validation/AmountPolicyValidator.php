@@ -14,6 +14,8 @@ class AmountPolicyValidator {
 	private $maxAmountRecurring;
 	private $maxAmountRecurringAnnually;
 
+	const VIOLATION_TOO_HIGH = 'too_high';
+
 	public function __construct( int $maxAmount, int $maxAmountRecurring, $maxAmountRecurringAnnually ) {
 		$this->maxAmount = $maxAmount;
 		$this->maxAmountRecurring = $maxAmountRecurring;
@@ -25,7 +27,7 @@ class AmountPolicyValidator {
 			$this->isRecurringAmountTooHigh( $amount, $interval ) ||
 			$this->isAnuallyRecurringAmountTooHigh( $amount, $interval ) ) {
 
-			return new ValidationResult( new ConstraintViolation( $amount, 'field_required' ) );
+			return new ValidationResult( new ConstraintViolation( $amount, self::VIOLATION_TOO_HIGH ) );
 		}
 
 		return new ValidationResult();

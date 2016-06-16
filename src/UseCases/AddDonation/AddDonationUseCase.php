@@ -11,18 +11,23 @@ use WMDE\Fundraising\Frontend\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Model\DonationPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\DonationTrackingInfo;
+use WMDE\Fundraising\Frontend\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentMethod;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentWithoutAssociatedData;
 use WMDE\Fundraising\Frontend\Domain\Model\PayPalData;
 use WMDE\Fundraising\Frontend\Domain\Model\PayPalPayment;
+use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
+use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationTokenFetcher;
 use WMDE\Fundraising\Frontend\Validation\DonationValidator;
+use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
+use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 
 /**
  * @license GNU GPL v2+
@@ -33,38 +38,36 @@ class AddDonationUseCase {
 
 	private $donationRepository;
 	private $donationValidator;
+	private $policyValidator;
 	private $referrerGeneralizer;
 	private $mailer;
 	private $transferCodeGenerator;
-	private $bankDataConverter;
 	private $tokenFetcher;
 
-	public function __construct( DonationRepository $donationRepository, DonationValidator $donationValidator,
-								 ReferrerGeneralizer $referrerGeneralizer, DonationConfirmationMailer $mailer,
-								 TransferCodeGenerator $transferCodeGenerator, BankDataConverter $bankDataConverter,
+	public function __construct( DonationRepository $donationRepository, AddDonationValidator $donationValidator,
+								 AddDonationPolicyValidator $policyValidator, ReferrerGeneralizer $referrerGeneralizer,
+								 DonationConfirmationMailer $mailer, TransferCodeGenerator $transferCodeGenerator,
 								 DonationTokenFetcher $tokenFetcher ) {
-
 		$this->donationRepository = $donationRepository;
 		$this->donationValidator = $donationValidator;
+		$this->policyValidator = $policyValidator;
 		$this->referrerGeneralizer = $referrerGeneralizer;
 		$this->mailer = $mailer;
 		$this->transferCodeGenerator = $transferCodeGenerator;
-		$this->bankDataConverter = $bankDataConverter;
+
 		$this->tokenFetcher = $tokenFetcher;
 	}
 
 	public function addDonation( AddDonationRequest $donationRequest ): AddDonationResponse {
-		$donation = $this->newDonationFromRequest( $donationRequest );
-
-		$validationResult = $this->donationValidator->validate( $donation );
+		$validationResult = $this->donationValidator->validate( $donationRequest );
 
 		if ( $validationResult->hasViolations() ) {
 			return AddDonationResponse::newFailureResponse( $validationResult->getViolations() );
 		}
 
-		$needsModeration = $this->donationValidator->needsModeration( $donation );
+		$donation = $this->newDonationFromRequest( $donationRequest );
 
-		if ( $needsModeration ) {
+		if ( $this->policyValidator->needsModeration( $donationRequest ) ) {
 			$donation->markForModeration();
 		}
 
@@ -87,11 +90,45 @@ class AddDonationUseCase {
 		return new Donation(
 			null,
 			$this->getInitialDonationStatus( $donationRequest->getPaymentType() ),
-			$donationRequest->getDonor(),
+			$this->getPersonalInfoFromRequest( $donationRequest ),
 			$this->getPaymentFromRequest( $donationRequest ),
 			$donationRequest->getOptIn() === '1',
 			$this->newTrackingInfoFromRequest( $donationRequest )
 		);
+	}
+
+	private function getPersonalInfoFromRequest( AddDonationRequest $request ) {
+		if ( $request->donorIsAnonymous() ) {
+			return null;
+		}
+		return new Donor(
+			$this->getNameFromRequest( $request ),
+			$this->getPhysicalAddressFromRequest( $request ),
+			$request->getDonorEmailAddress()
+		);
+	}
+
+	private function getPhysicalAddressFromRequest( AddDonationRequest $request ): PhysicalAddress {
+		$address = new PhysicalAddress();
+
+		$address->setStreetAddress( $request->getDonorStreetAddress() );
+		$address->setPostalCode( $request->getDonorPostalCode() );
+		$address->setCity( $request->getDonorCity() );
+		$address->setCountryCode( $request->getDonorCountryCode() );
+
+		return $address->freeze()->assertNoNullFields();
+	}
+
+	private function getNameFromRequest( AddDonationRequest $request ): PersonName {
+		$name = $request->donorIsCompany() ? PersonName::newCompanyName() : PersonName::newPrivatePersonName();
+
+		$name->setSalutation( $request->getDonorSalutation() );
+		$name->setTitle( $request->getDonorTitle() );
+		$name->setCompanyName( $request->getDonorCompany() );
+		$name->setFirstName( $request->getDonorFirstName() );
+		$name->setLastName( $request->getDonorLastName() );
+
+		return $name->freeze()->assertNoNullFields();
 	}
 
 	private function getInitialDonationStatus( string $paymentType ): string {
@@ -120,7 +157,7 @@ class AddDonationUseCase {
 		}
 
 		if ( $donationRequest->getPaymentType() === PaymentType::DIRECT_DEBIT ) {
-			return new DirectDebitPayment( $this->newBankDataFromRequest( $donationRequest ) );
+			return new DirectDebitPayment( $donationRequest->getBankData() );
 		}
 
 		if ( $donationRequest->getPaymentType() === PaymentType::PAYPAL ) {
@@ -128,36 +165,6 @@ class AddDonationUseCase {
 		}
 
 		return new PaymentWithoutAssociatedData( $donationRequest->getPaymentType() );
-	}
-
-	private function newBankDataFromRequest( AddDonationRequest $request ): BankData {
-		$bankData = new BankData();
-
-		$bankData->setIban( new Iban( $request->getIban() ) )
-			->setBic( $request->getBic() )
-			->setAccount( $request->getBankAccount() )
-			->setBankCode( $request->getBankCode() )
-			->setBankName( $request->getBankName() );
-
-		if ( $bankData->hasIban() && !$bankData->hasCompleteLegacyBankData() ) {
-			$bankData = $this->newBankDataFromIban( $bankData->getIban() );
-		}
-
-		if ( $bankData->hasCompleteLegacyBankData() && !$bankData->hasIban() ) {
-			$bankData = $this->newBankDataFromAccountAndBankCode( $bankData->getAccount(), $bankData->getBankCode() );
-		}
-
-		return $bankData->freeze()->assertNoNullFields();
-	}
-
-	private function newBankDataFromIban( Iban $iban ): BankData {
-		$bankData = $this->bankDataConverter->getBankDataFromIban( $iban );
-		return $bankData->freeze()->assertNoNullFields();
-	}
-
-	private function newBankDataFromAccountAndBankCode( string $account, string $bankCode ): BankData {
-		$bankData = $this->bankDataConverter->getBankDataFromAccountData( $account, $bankCode );
-		return $bankData->freeze()->assertNoNullFields();
 	}
 
 	private function newTrackingInfoFromRequest( AddDonationRequest $request ): DonationTrackingInfo {

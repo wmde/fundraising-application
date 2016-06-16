@@ -7,7 +7,9 @@ namespace WMDE\Fundraising\Frontend\App\RouteHandlers;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Model\Euro;
+use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
@@ -80,15 +82,21 @@ class AddDonationHandler {
 		$donationRequest->setPaymentType( $request->get( 'zahlweise', '' ) );
 		$donationRequest->setInterval( intval( $request->get( 'periode', 0 ) ) );
 
-		$donationRequest->setPersonalInfo(
-			$request->get( 'addressType', '' ) === 'anonym' ? null :  $this->getPersonalInfoFromRequest( $request )
-		);
+		$donationRequest->setDonorType( $request->get( 'addressType', '' ) );
+		$donationRequest->setDonorSalutation( $request->get( 'salutation', '' ) );
+		$donationRequest->setDonorTitle( $request->get( 'title', '' ) );
+		$donationRequest->setDonorCompany( $request->get( 'company', '' ) );
+		$donationRequest->setDonorFirstName( $request->get( 'firstName', '' ) );
+		$donationRequest->setDonorLastName( $request->get( 'lastName', '' ) );
+		$donationRequest->setDonorStreetAddress( $request->get( 'street', '' ) );
+		$donationRequest->setDonorPostalCode( $request->get( 'postcode', '' ) );
+		$donationRequest->setDonorCity( $request->get( 'city', '' ) );
+		$donationRequest->setDonorCountryCode( $request->get( 'country', '' ) );
+		$donationRequest->setDonorEmailAddress( $request->get( 'email', '' ) );
 
-		$donationRequest->setIban( $request->get( 'iban', '' ) );
-		$donationRequest->setBic( $request->get( 'bic', '' ) );
-		$donationRequest->setBankAccount( $request->get( 'konto', '' ) );
-		$donationRequest->setBankCode( $request->get( 'blz', '' ) );
-		$donationRequest->setBankName( $request->get( 'bankname', '' ) );
+		if ( $request->get( 'zahlweise', '' ) === PaymentType::DIRECT_DEBIT ) {
+			$donationRequest->setBankData( $this->getBankDataFromRequest( $request ) );
+		}
 
 		$donationRequest->setTracking(
 			AddDonationRequest::getPreferredValue( [
@@ -118,42 +126,36 @@ class AddDonationHandler {
 		return $donationRequest;
 	}
 
+	private function getBankDataFromRequest( Request $request ): BankData {
+		$bankData = new BankData();
+		$bankData->setIban( new Iban( $request->get( 'iban', '' ) ) )
+			->setBic( $request->get( 'bic', '' ) )
+			->setAccount( $request->get( 'konto', '' ) )
+			->setBankCode( $request->get( 'blz', '' ) )
+			->setBankName( $request->get( 'bankname', '' ) );
+
+		if ( $bankData->hasIban() && !$bankData->hasCompleteLegacyBankData() ) {
+			$bankData = $this->newBankDataFromIban( $bankData->getIban() );
+		}
+		if ( $bankData->hasCompleteLegacyBankData() && !$bankData->hasIban() ) {
+			$bankData = $this->newBankDataFromAccountAndBankCode( $bankData->getAccount(), $bankData->getBankCode() );
+		}
+
+		return $bankData->freeze()->assertNoNullFields();
+	}
+
+	private function newBankDataFromIban( Iban $iban ): BankData {
+		return $this->ffFactory->newBankDataConverter()->getBankDataFromIban( $iban );
+	}
+
+	private function newBankDataFromAccountAndBankCode( string $account, string $bankCode ): BankData {
+		return $this->ffFactory->newBankDataConverter()->getBankDataFromAccountData( $account, $bankCode );
+	}
+
 	private function getEuroAmountFromString( string $amount ) {
 		$locale = 'de_DE'; // TODO: make this configurable for multilanguage support
 
 		return Euro::newFromFloat( ( new AmountParser( $locale ) )->parseAsFloat( $amount ) );
-	}
-
-	private function getPersonalInfoFromRequest( Request $request ): Donor {
-		return new Donor(
-			$this->getNameFromRequest( $request ),
-			$this->getPhysicalAddressFromRequest( $request ),
-			$request->get( 'email', '' )
-		);
-	}
-
-	private function getPhysicalAddressFromRequest( Request $request ): PhysicalAddress {
-		$address = new PhysicalAddress();
-
-		$address->setStreetAddress( $request->get( 'street', '' ) );
-		$address->setPostalCode( $request->get( 'postcode', '' ) );
-		$address->setCity( $request->get( 'city', '' ) );
-		$address->setCountryCode( $request->get( 'country', '' ) );
-
-		return $address->freeze()->assertNoNullFields();
-	}
-
-	private function getNameFromRequest( Request $request ): PersonName {
-		$name = $request->get( 'addressType', '' ) === PersonName::PERSON_COMPANY
-			? PersonName::newCompanyName() : PersonName::newPrivatePersonName();
-
-		$name->setSalutation( $request->get( 'salutation', '' ) );
-		$name->setTitle( $request->get( 'title', '' ) );
-		$name->setCompanyName( $request->get( 'company', '' ) );
-		$name->setFirstName( $request->get( 'firstName', '' ) );
-		$name->setLastName( $request->get( 'lastName', '' ) );
-
-		return $name->freeze()->assertNoNullFields();
 	}
 
 }

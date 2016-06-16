@@ -105,7 +105,9 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfi
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipFormViolationPresenter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentUseCase;
+use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationPolicyValidator;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationUseCase;
+use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationValidator;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\AddSubscriptionUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\MembershipApplicationValidator;
@@ -126,7 +128,6 @@ use WMDE\Fundraising\Frontend\Validation\AllowedValuesValidator;
 use WMDE\Fundraising\Frontend\Validation\AmountPolicyValidator;
 use WMDE\Fundraising\Frontend\Validation\AmountValidator;
 use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
-use WMDE\Fundraising\Frontend\Validation\DonationValidator;
 use WMDE\Fundraising\Frontend\Validation\EmailValidator;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\Fundraising\Frontend\Validation\IbanValidator;
@@ -758,10 +759,10 @@ class FunFunFactory {
 		return new AddDonationUseCase(
 			$this->getDonationRepository(),
 			$this->newDonationValidator(),
+			$this->newDonationPolicyValidator(),
 			$this->newReferrerGeneralizer(),
 			$this->newDonationConfirmationMailer(),
 			$this->newBankTransferCodeGenerator(),
-			$this->newBankDataConverter(),
 			$this->newDonationTokenFetcher()
 		);
 	}
@@ -773,14 +774,11 @@ class FunFunFactory {
 		);
 	}
 
-	private function newDonationValidator(): DonationValidator {
-		return new DonationValidator(
+	private function newDonationValidator(): AddDonationValidator {
+		return new AddDonationValidator(
 			$this->newAmountValidator(),
-			new AmountPolicyValidator( 1000, 200, 300 ),
-			$this->newPersonalInfoValidator(),
-			$this->getTextPolicyValidator( 'fields' ),
-			$this->newPaymentTypeValidator(),
-			$this->newBankDataValidator()
+			$this->newBankDataValidator(),
+			$this->getEmailValidator()
 		);
 	}
 
@@ -1087,6 +1085,18 @@ class FunFunFactory {
 		return new DoctrineMembershipApplicationTokenFetcher(
 			$this->getEntityManager()
 		);
+	}
+
+	private function newDonationPolicyValidator(): AddDonationPolicyValidator {
+		return new AddDonationPolicyValidator(
+			$this->newDonationAmountPolicyValidator(),
+			$this->getTextPolicyValidator( 'fields' )
+		);
+	}
+
+	private function newDonationAmountPolicyValidator(): AmountPolicyValidator {
+		// in the future, this might come from the configuration
+		return new AmountPolicyValidator( 1000, 200, 300 );
 	}
 
 }

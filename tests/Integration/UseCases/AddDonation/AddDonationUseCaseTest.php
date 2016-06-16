@@ -5,26 +5,25 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\AddDonation;
 
 use PHPUnit_Framework_MockObject_MockObject;
-use WMDE\Fundraising\Frontend\Domain\BankDataConverter;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
-use WMDE\Fundraising\Frontend\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
-use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationTokenFetcher;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationTokens;
+use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeDonationRepository;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedDonationTokenFetcher;
+use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationPolicyValidator;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationUseCase;
+use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationValidationResult;
+use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationValidator;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
-use WMDE\Fundraising\Frontend\Validation\DonationValidator;
-use WMDE\Fundraising\Frontend\Validation\ValidationResult;
 
 /**
  * @covers WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationUseCase
@@ -57,10 +56,10 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		return new AddDonationUseCase(
 			$this->newRepository(),
 			$this->getSucceedingValidatorMock(),
+			$this->getSucceedingPolicyValidatorMock(),
 			new ReferrerGeneralizer( 'http://foo.bar', [] ),
 			$this->newMailer(),
 			$this->newTransferCodeGenerator(),
-			$this->newBankDataConverter(),
 			$this->newTokenFetcher()
 		);
 	}
@@ -93,10 +92,10 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$useCase = new AddDonationUseCase(
 			$this->newRepository(),
 			$this->getFailingValidatorMock( new ConstraintViolation( 'foo', 'bar' ) ),
+			$this->getSucceedingPolicyValidatorMock(),
 			new ReferrerGeneralizer( 'http://foo.bar', [] ),
 			$this->newMailer(),
 			$this->newTransferCodeGenerator(),
-			$this->newBankDataConverter(),
 			$this->newTokenFetcher()
 		);
 
@@ -108,10 +107,10 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$useCase = new AddDonationUseCase(
 			$this->newRepository(),
 			$this->getFailingValidatorMock( new ConstraintViolation( 'foo', 'bar' ) ),
+			$this->getSucceedingPolicyValidatorMock(),
 			new ReferrerGeneralizer( 'http://foo.bar', [] ),
 			$this->newMailer(),
 			$this->newTransferCodeGenerator(),
-			$this->newBankDataConverter(),
 			$this->newTokenFetcher()
 		);
 
@@ -120,22 +119,42 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals( $this->newInvalidDonationRequest(), $request );
 	}
 
-	private function getSucceedingValidatorMock(): DonationValidator {
-		$validator = $this->getMockBuilder( DonationValidator::class )
+	private function getSucceedingValidatorMock(): AddDonationValidator {
+		$validator = $this->getMockBuilder( AddDonationValidator::class )
 			->disableOriginalConstructor()
 			->getMock();
 
-		$validator->method( 'validate' )->willReturn( new ValidationResult() );
+		$validator->method( 'validate' )->willReturn( new AddDonationValidationResult() );
 
 		return $validator;
 	}
 
-	private function getFailingValidatorMock( ConstraintViolation $violation ): DonationValidator {
-		$validator = $this->getMockBuilder( DonationValidator::class )
+	private function getFailingValidatorMock( ConstraintViolation $violation ): AddDonationValidator {
+		$validator = $this->getMockBuilder( AddDonationValidator::class )
 			->disableOriginalConstructor()
 			->getMock();
 
-		$validator->method( 'validate' )->willReturn( new ValidationResult( $violation ) );
+		$validator->method( 'validate' )->willReturn( new AddDonationValidationResult( $violation ) );
+
+		return $validator;
+	}
+
+	private function getSucceedingPolicyValidatorMock(): AddDonationPolicyValidator {
+		$validator = $this->getMockBuilder( AddDonationPolicyValidator::class )
+			->disableOriginalConstructor()
+			->getMock();
+
+		$validator->method( 'needsModeration' )->willReturn( false );
+
+		return $validator;
+	}
+
+	private function getFailingPolicyValidatorMock(): AddDonationPolicyValidator {
+		$validator = $this->getMockBuilder( AddDonationPolicyValidator::class )
+			->disableOriginalConstructor()
+			->getMock();
+
+		$validator->method( 'needsModeration' )->willReturn( true );
 
 		return $validator;
 	}
@@ -143,7 +162,8 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 	private function newMinimumDonationRequest(): AddDonationRequest {
 		$donationRequest = new AddDonationRequest();
 		$donationRequest->setAmount( Euro::newFromString( '1.00' ) );
-		$donationRequest->setPaymentType( PaymentType::DIRECT_DEBIT );
+		$donationRequest->setPaymentType( PaymentType::BANK_TRANSFER );
+		$donationRequest->setDonorType( PersonName::PERSON_ANONYMOUS );
 		return $donationRequest;
 	}
 
@@ -151,6 +171,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$donationRequest = new AddDonationRequest();
 		$donationRequest->setPaymentType( PaymentType::DIRECT_DEBIT );
 		$donationRequest->setAmount( Euro::newFromInt( 0 ) );
+		$donationRequest->setDonorType( PersonName::PERSON_ANONYMOUS );
 		return $donationRequest;
 	}
 
@@ -162,10 +183,10 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$useCase = new AddDonationUseCase(
 			$this->newRepository(),
 			$this->getFailingValidatorMock( new ConstraintViolation( 'foo', 'bar' ) ),
+			$this->getSucceedingPolicyValidatorMock(),
 			new ReferrerGeneralizer( 'http://foo.bar', [] ),
 			$mailer,
 			$this->newTransferCodeGenerator(),
-			$this->newBankDataConverter(),
 			$this->newTokenFetcher()
 		);
 
@@ -174,10 +195,6 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 	private function newTransferCodeGenerator(): TransferCodeGenerator {
 		return $this->createMock( TransferCodeGenerator::class );
-	}
-
-	private function newBankDataConverter(): BankDataConverter {
-		return $this->getMockBuilder( BankDataConverter::class )->disableOriginalConstructor()->getMock();
 	}
 
 	public function testGivenValidRequest_confirmationEmailIsSent() {
@@ -205,14 +222,29 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$useCase->addDonation( $request );
 	}
 
+	public function testGivenValidRequestWithPolicyViolation_donationIsModerated() {
+		$useCase = new AddDonationUseCase(
+			$this->newRepository(),
+			$this->getSucceedingValidatorMock(),
+			$this->getFailingPolicyValidatorMock(),
+			new ReferrerGeneralizer( 'http://foo.bar', [] ),
+			$this->newMailer(),
+			$this->newTransferCodeGenerator(),
+			$this->newTokenFetcher()
+		);
+
+		$response = $useCase->addDonation( $this->newValidAddDonationRequestWithEmail( 'foo@bar.baz' ) );
+		$this->assertTrue( $response->getDonation()->needsModeration() );
+	}
+
 	private function newUseCaseWithMailer( DonationConfirmationMailer $mailer ) {
 		return new AddDonationUseCase(
 			$this->newRepository(),
 			$this->getSucceedingValidatorMock(),
+			$this->getSucceedingPolicyValidatorMock(),
 			new ReferrerGeneralizer( 'http://foo.bar', [] ),
 			$mailer,
 			$this->newTransferCodeGenerator(),
-			$this->newBankDataConverter(),
 			$this->newTokenFetcher()
 		);
 	}
@@ -220,11 +252,17 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 	private function newValidAddDonationRequestWithEmail( string $email ): AddDonationRequest {
 		$request = $this->newMinimumDonationRequest();
 
-		$request->setPersonalInfo( new Donor(
-			PersonName::newPrivatePersonName(),
-			new PhysicalAddress(),
-			$email
-		) );
+		$request->setDonorType( PersonName::PERSON_PRIVATE );
+		$request->setDonorFirstName( ValidDonation::DONOR_FIRST_NAME );
+		$request->setDonorLastName( ValidDonation::DONOR_LAST_NAME );
+		$request->setDonorCompany( '' );
+		$request->setDonorSalutation( ValidDonation::DONOR_SALUTATION );
+		$request->setDonorTitle( ValidDonation::DONOR_TITLE );
+		$request->setDonorStreetAddress( ValidDonation::DONOR_STREET_ADDRESS );
+		$request->setDonorCity( ValidDonation::DONOR_CITY );
+		$request->setDonorPostalCode( ValidDonation::DONOR_POSTAL_CODE );
+		$request->setDonorCountryCode( ValidDonation::DONOR_COUNTRY_CODE );
+		$request->setDonorEmailAddress( $email );
 
 		return $request;
 	}
