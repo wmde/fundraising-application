@@ -16,13 +16,13 @@ class AddCommentResponse {
 	}
 
 	public static function newFailureResponse( string $errorMessage ): self {
-		return new self( $errorMessage );
+		return new self( $errorMessage, '' );
 	}
 
 	private $errorMessage;
 	private $successMessage;
 
-	private function __construct( string $errorMessage = '', string $successMessage = '' ) {
+	private function __construct( string $errorMessage, string $successMessage ) {
 		$this->errorMessage = $errorMessage;
 		$this->successMessage = $successMessage;
 	}
