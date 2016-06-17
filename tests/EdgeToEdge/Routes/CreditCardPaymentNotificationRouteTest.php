@@ -27,6 +27,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 	const CUSTOMER_ID = 'e20fb9d5281c1bca1901c19f6e46213191bb4c17';
 	const SESSION_ID = 'CC13064b2620f4028b7d340e3449676213336a4d';
 	const AUTH_ID = 'd1d6fae40cf96af52477a9e521558ab7';
+	const ACCESS_TOKEN = 'my_secret_access_token';
 	const UPDATE_TOKEN = 'my_secret_update_token';
 	const TITLE = 'Your generous donation';
 	const COUNTRY_CODE = 'DE';
@@ -43,7 +44,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 			);
 
 			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
-			$this->assertContains( 'failed', $client->getResponse()->getContent() );
+			$this->assertContains( 'status=error', $client->getResponse()->getContent() );
 		} );
 	}
 
@@ -67,7 +68,11 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 			);
 
 			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
-			$this->assertSame( 'successful', $client->getResponse()->getContent() );
+			$this->assertContains( 'status=ok', $client->getResponse()->getContent() );
+			$this->assertContains(
+				'url=http://my.donation.app/show-donation-confirmation?donationId=1&accessToken=my_secret_access_token',
+				$client->getResponse()->getContent()
+			);
 			$this->assertCreditCardDataGotPersisted( $factory->getDonationRepository(), $this->newRequest() );
 		} );
 	}
@@ -82,6 +87,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 			'sessionId' => self::SESSION_ID,
 			'auth' => self::AUTH_ID,
 			'utoken' => self::UPDATE_TOKEN,
+			'accessToken' => self::ACCESS_TOKEN,
 			'title' => self::TITLE,
 			'country' => self::COUNTRY_CODE,
 			'currency' => self::CURRENCY_CODE,

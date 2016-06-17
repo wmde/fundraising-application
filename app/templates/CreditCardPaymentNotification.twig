@@ -1,0 +1,9 @@
+{% if successful %}
+status=ok
+url={$ returnUrl $}?donationId={$ donationId $}&accessToken={$ accessToken $}
+target=_self
+forward=1
+{% else %}
+status=error
+msg=
+{% endif %}

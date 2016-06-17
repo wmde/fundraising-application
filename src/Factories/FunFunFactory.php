@@ -92,6 +92,7 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListJsonPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListRssPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\ConfirmSubscriptionHtmlPresenter;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\CreditCardNotificationPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CreditCardPaymentHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DisplayPagePresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationConfirmationHtmlPresenter;
@@ -111,6 +112,7 @@ use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationUseCase;
 use WMDE\Fundraising\Frontend\UseCases\CancelMembershipApplication\CancelMembershipApplicationUseCase;
 use WMDE\Fundraising\Frontend\UseCases\CheckIban\CheckIbanUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ConfirmSubscription\ConfirmSubscriptionUseCase;
+use WMDE\Fundraising\Frontend\UseCases\CreditCardPaymentNotification\CreditCardNotificationResponse;
 use WMDE\Fundraising\Frontend\UseCases\CreditCardPaymentNotification\CreditCardNotificationUseCase;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\DisplayPageUseCase;
 use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanUseCase;
@@ -335,8 +337,8 @@ class FunFunFactory {
 					'IMcpCreditcardService_v1_5',
 					'https://sipg.micropayment.de/public/creditcard/v1.5/nvp/'
 				),
-				'',
-				false
+				$this->config['creditcard']['access-key'],
+				$this->config['creditcard']['testmode']
 			);
 		} );
 
@@ -1029,6 +1031,16 @@ class FunFunFactory {
 
 	public function getCreditCardService(): CreditCardService {
 		return $this->pimple['credit-card-api-service'];
+	}
+
+	public function newCreditCardNotificationPresenter(): CreditCardNotificationPresenter {
+		return new CreditCardNotificationPresenter(
+			new TwigTemplate(
+				$this->getTwig(),
+				'CreditCardPaymentNotification.twig',
+				[ 'returnUrl' => $this->config['creditcard']['return-url'] ]
+			)
+		);
 	}
 
 }

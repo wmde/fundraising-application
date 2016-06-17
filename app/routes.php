@@ -29,6 +29,7 @@ use WMDE\Fundraising\Frontend\UseCases\AddSubscription\SubscriptionRequest;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipRequest;
 use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationRequest;
 use WMDE\Fundraising\Frontend\UseCases\CancelMembershipApplication\CancellationRequest;
+use WMDE\Fundraising\Frontend\UseCases\CreditCardPaymentNotification\CreditCardNotificationResponse;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageDisplayRequest;
 use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanRequest;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
@@ -448,8 +449,10 @@ $app->post(
 $app->get(
 	'handle-creditcard-payment-notification',
 	function ( Application $app, Request $request ) use ( $ffFactory ) {
-		$success = $ffFactory->newCreditCardNotificationUseCase( $request->query->get( 'utoken', '' ) )
-			->handleNotification(
+		$success = $ffFactory->newCreditCardNotificationUseCase(
+			$request->query->get( 'utoken', '' ),
+			$request->query->get( 'accessToken', '' )
+		)->handleNotification(
 				( new CreditCardPaymentNotificationRequest() )
 					->setTransactionId( $request->query->get( 'transactionId', '' ) )
 					->setDonationId( (int)$request->query->get( 'donation_id', '' ) )
@@ -460,8 +463,18 @@ $app->get(
 					->setTitle( $request->query->get( 'title', '' ) )
 					->setCountry( $request->query->get( 'country', '' ) )
 					->setCurrency( $request->query->get( 'currency', '' ) )
-			);
-		return $success ? 'successful' : 'failed';
+		);
+
+		return new Response(
+			$ffFactory->newCreditCardNotificationPresenter()->present(
+				new CreditCardNotificationResponse(
+					(int)$request->query->get( 'donation_id', '' ),
+					$request->query->get( 'accessToken', '' ),
+					$success
+				)
+			)
+		);
+
 	}
 );
 
