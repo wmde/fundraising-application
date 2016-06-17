@@ -15,24 +15,28 @@ class CreditCardConfig {
 	const CONFIG_KEY_BACKGROUND_COLOR = 'background-color';
 	const CONFIG_KEY_SKIN = 'skin';
 	const CONFIG_KEY_THEME = 'theme';
+	const CONFIG_KEY_TESTMODE = 'testmode';
 
 	private $baseUrl;
 	private $projectId;
 	private $backgroundColor;
 	private $skin;
 	private $theme;
+	private $testMode;
 
-	private function __construct( string $baseUrl, string $projectId, string $backgroundColor, string $skin, string $theme ) {
+	private function __construct( string $baseUrl, string $projectId, string $backgroundColor, string $skin, string $theme,
+								  bool $testMode ) {
 		$this->baseUrl = $baseUrl;
 		$this->projectId = $projectId;
 		$this->backgroundColor = $backgroundColor;
 		$this->skin = $skin;
 		$this->theme = $theme;
+		$this->testMode = $testMode;
 	}
 
 	/**
 	 * @param string[] $config
-	 * @return self
+	 * @return CreditCardConfig
 	 * @throws \RuntimeException
 	 */
 	public static function newFromConfig( array $config ): self {
@@ -41,13 +45,14 @@ class CreditCardConfig {
 			$config[self::CONFIG_KEY_PROJECT_ID],
 			$config[self::CONFIG_KEY_BACKGROUND_COLOR],
 			$config[self::CONFIG_KEY_SKIN],
-			$config[self::CONFIG_KEY_THEME]
+			$config[self::CONFIG_KEY_THEME],
+			$config[self::CONFIG_KEY_TESTMODE]
 		) )->assertNoEmptyFields();
 	}
 
 	private function assertNoEmptyFields(): self {
 		foreach ( get_object_vars( $this ) as $fieldName => $fieldValue ) {
-			if ( empty( $fieldValue ) ) {
+			if ( !isset( $fieldValue ) || $fieldValue === '' ) {
 				throw new \RuntimeException( "Configuration variable '$fieldName' can not be empty" );
 			}
 		}
@@ -73,6 +78,10 @@ class CreditCardConfig {
 
 	public function getTheme(): string {
 		return $this->theme;
+	}
+
+	public function isTestMode() {
+		return $this->testMode;
 	}
 
 }
