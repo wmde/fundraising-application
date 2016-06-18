@@ -304,13 +304,13 @@ $app->post(
 		if ( $response->isSuccessful() ) {
 			return $app->json( [
 				'status' => 'OK',
-				'message' => '',
+				'message' => $ffFactory->getTranslator()->trans( $response->getSuccessMessage() ),
 			] );
 		}
 
 		return $app->json( [
 			'status' => 'ERR',
-			'message' => $response->getErrorMessage(),
+			'message' => $ffFactory->getTranslator()->trans( $response->getErrorMessage() ),
 		] );
 	}
 );

@@ -150,4 +150,28 @@ class AddCommentUseCaseTest extends \PHPUnit_Framework_TestCase {
 		);
 	}
 
+	public function testWhenTextValidationFails_responseMessageDoesNotContainOK() {
+		$this->donationRepository = $this->newFakeRepositoryWithDonation();
+		$this->textPolicyValidator = $this->newFailingTextPolicyValidator();
+
+		$response = $this->newUseCase()->addComment( $this->newValidRequest() );
+		$this->assertTrue( $response->isSuccessful() );
+
+		$this->assertNotContains( 'ok', $response->getSuccessMessage() );
+	}
+
+	public function testWhenDonationIsMarkedForModeration_responseMessageDoesNotContainOK() {
+		$donation = ValidDonation::newDirectDebitDonation();
+		$donation->assignId( self::DONATION_ID );
+		$donation->markForModeration();
+
+		$this->donationRepository = new FakeDonationRepository( $donation );
+		$this->textPolicyValidator = $this->newFailingTextPolicyValidator();
+
+		$response = $this->newUseCase()->addComment( $this->newValidRequest() );
+		$this->assertTrue( $response->isSuccessful() );
+
+		$this->assertNotContains( 'ok', $response->getSuccessMessage() );
+	}
+
 }
