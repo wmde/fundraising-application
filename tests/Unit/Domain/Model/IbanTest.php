@@ -7,10 +7,10 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Domain\Model;
 use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 
 /**
+ * @covers WMDE\Fundraising\Frontend\Domain\Model\Iban
+ * 
  * @licence GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
- *
- * @covers WMDE\Fundraising\Frontend\Domain\Model\Iban
  */
 class IbanTest extends \PHPUnit_Framework_TestCase {
 
