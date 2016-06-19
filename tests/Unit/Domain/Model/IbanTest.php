@@ -8,7 +8,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 
 /**
  * @covers WMDE\Fundraising\Frontend\Domain\Model\Iban
- * 
+ *
  * @licence GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
