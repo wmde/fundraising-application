@@ -46,7 +46,6 @@ use WMDE\Fundraising\Frontend\Domain\CommentFinder;
 use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer;
-use WMDE\Fundraising\Frontend\Domain\Repositories\CommentRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\SubscriptionRepository;
