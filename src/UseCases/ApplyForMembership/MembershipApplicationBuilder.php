@@ -25,8 +25,7 @@ class MembershipApplicationBuilder {
 		return MembershipApplication::newApplication(
 			$request->getMembershipType(),
 			$this->newApplicant( $request ),
-			$this->newPayment( $request ),
-			$request->getTrackingInfo()
+			$this->newPayment( $request )
 		);
 	}
 
