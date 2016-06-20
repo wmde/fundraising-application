@@ -18,8 +18,8 @@ class CreditCardUrlGenerator {
 		$this->config = $config;
 	}
 
-	public function generateUrl( string $firstName, string $lastName, string $payText,
-								  int $donationId, string $updateToken, Euro $amount ) {
+	public function generateUrl( string $firstName, string $lastName, string $payText, int $donationId,
+								 string $accessToken, string $updateToken, Euro $amount ) {
 		// TODO: implement sealed parameters (https://techdoc.micropayment.de/payment/payments/payments_en.html#id302721)
 		$baseUrl = $this->config->getBaseUrl();
 		$params = [
@@ -30,6 +30,7 @@ class CreditCardUrlGenerator {
 			'mp_user_surname' => $lastName,
 			'sid' => $donationId,
 			'skin' => $this->config->getSkin(),
+			'token' => $accessToken,
 			'utoken' => $updateToken,
 			'amount' => $amount->getEuroCents(),
 			'theme' => $this->config->getTheme()

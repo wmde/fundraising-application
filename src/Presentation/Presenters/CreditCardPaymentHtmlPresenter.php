@@ -41,6 +41,7 @@ class CreditCardPaymentHtmlPresenter {
 				$this->translator->trans( 'paytext_cc', [], 'paymentIntervals' ) . ' ' .
 					$this->translator->trans( $response->getDonation()->getPaymentIntervalInMonths(), [], 'paymentIntervals' ),
 				$response->getDonation()->getId(),
+				$response->getAccessToken(),
 				$response->getUpdateToken(),
 				$response->getDonation()->getAmount()
 			),
