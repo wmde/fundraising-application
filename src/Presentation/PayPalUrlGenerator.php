@@ -19,7 +19,7 @@ class PayPalUrlGenerator {
 
 	private $config;
 
-	public function __construct( PayPalConfig $config ) {
+	public function __construct( PayPalUrlConfig $config ) {
 		$this->config = $config;
 	}
 

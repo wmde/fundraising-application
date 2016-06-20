@@ -77,11 +77,11 @@ use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
 use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
 use WMDE\Fundraising\Frontend\Presentation\Content\PageContentModifier;
 use WMDE\Fundraising\Frontend\Presentation\Content\WikiContentProvider;
-use WMDE\Fundraising\Frontend\Presentation\CreditCardConfig;
+use WMDE\Fundraising\Frontend\Presentation\CreditCardUrlConfig;
 use WMDE\Fundraising\Frontend\Presentation\CreditCardUrlGenerator;
 use WMDE\Fundraising\Frontend\Presentation\DonationConfirmationPageSelector;
 use WMDE\Fundraising\Frontend\Presentation\GreetingGenerator;
-use WMDE\Fundraising\Frontend\Presentation\PayPalConfig;
+use WMDE\Fundraising\Frontend\Presentation\PayPalUrlConfig;
 use WMDE\Fundraising\Frontend\Presentation\PayPalUrlGenerator;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionJsonPresenter;
@@ -797,19 +797,19 @@ class FunFunFactory {
 	}
 
 	public function newPayPalUrlGenerator() {
-		return new PayPalUrlGenerator( $this->getPayPalConfig() );
+		return new PayPalUrlGenerator( $this->getPayPalUrlConfig() );
 	}
 
-	private function getPayPalConfig() {
-		return PayPalConfig::newFromConfig( $this->config['paypal'] );
+	private function getPayPalUrlConfig() {
+		return PayPalUrlConfig::newFromConfig( $this->config['paypal'] );
 	}
 
 	private function newCreditCardUrlGenerator() {
-		return new CreditCardUrlGenerator( $this->newCreditCardConfig() );
+		return new CreditCardUrlGenerator( $this->newCreditCardUrlConfig() );
 	}
 
-	private function newCreditCardConfig() {
-		return CreditCardConfig::newFromConfig( $this->config['creditcard'] );
+	private function newCreditCardUrlConfig() {
+		return CreditCardUrlConfig::newFromConfig( $this->config['creditcard'] );
 	}
 
 	public function getDonationRepository(): DonationRepository {
