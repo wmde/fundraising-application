@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests;
 
 use WMDE\Fundraising\Frontend\Domain\Model\Euro;
-use WMDE\Fundraising\Frontend\Presentation\CreditCardConfig;
+use WMDE\Fundraising\Frontend\Presentation\CreditCardUrlConfig;
 use WMDE\Fundraising\Frontend\Presentation\CreditCardUrlGenerator;
 
 /**
@@ -20,7 +20,7 @@ class CreditCardUrlGeneratorTest extends \PHPUnit_Framework_TestCase {
 	public function testUrlGeneration( string $expected, string $firstName, string $lastName, string $payText,
 									   int $donationId, string $updateToken, Euro $amount ) {
 		$urlGenerator = new CreditCardUrlGenerator(
-			CreditCardConfig::newFromConfig( [
+			CreditCardUrlConfig::newFromConfig( [
 				'base-url' => 'https://credit-card.micropayment.de/creditcard/event/index.php?',
 				'project-id' => 'wikimedia',
 				'background-color' => 'CCE7CD',
@@ -37,7 +37,7 @@ class CreditCardUrlGeneratorTest extends \PHPUnit_Framework_TestCase {
 
 	public function testWhenTestModeIsEnabled_urlPassesProperParameter() {
 		$urlGenerator = new CreditCardUrlGenerator(
-			CreditCardConfig::newFromConfig( [
+			CreditCardUrlConfig::newFromConfig( [
 				'base-url' => 'https://credit-card.micropayment.de/creditcard/event/index.php?',
 				'project-id' => 'wikimedia',
 				'background-color' => 'CCE7CD',

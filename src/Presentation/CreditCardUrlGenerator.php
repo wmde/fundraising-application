@@ -14,7 +14,7 @@ class CreditCardUrlGenerator {
 
 	private $config;
 
-	public function __construct( CreditCardConfig $config ) {
+	public function __construct( CreditCardUrlConfig $config ) {
 		$this->config = $config;
 	}
 

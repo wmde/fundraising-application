@@ -8,7 +8,7 @@ namespace WMDE\Fundraising\Frontend\Presentation;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class CreditCardConfig {
+class CreditCardUrlConfig {
 
 	const CONFIG_KEY_BASE_URL = 'base-url';
 	const CONFIG_KEY_PROJECT_ID = 'project-id';
@@ -36,7 +36,7 @@ class CreditCardConfig {
 
 	/**
 	 * @param string[] $config
-	 * @return CreditCardConfig
+	 * @return CreditCardUrlConfig
 	 * @throws \RuntimeException
 	 */
 	public static function newFromConfig( array $config ): self {

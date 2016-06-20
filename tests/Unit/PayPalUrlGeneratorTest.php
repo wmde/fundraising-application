@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests;
 
 use WMDE\Fundraising\Frontend\Domain\Model\Euro;
-use WMDE\Fundraising\Frontend\Presentation\PayPalConfig;
+use WMDE\Fundraising\Frontend\Presentation\PayPalUrlConfig;
 use WMDE\Fundraising\Frontend\Presentation\PayPalUrlGenerator;
 
 /**
@@ -19,7 +19,7 @@ class PayPalUrlGeneratorTest extends \PHPUnit_Framework_TestCase {
 	const BASE_URL = 'https://www.sandbox.paypal.com/cgi-bin/webscr?';
 
 	public function testSubscriptions() {
-		$generator = new PayPalUrlGenerator( $this->newPayPalConfig() );
+		$generator = new PayPalUrlGenerator( $this->newPayPalUrlConfig() );
 
 		$this->assertSame(
 			'https://www.sandbox.paypal.com/cgi-bin/webscr' .
@@ -46,7 +46,7 @@ class PayPalUrlGeneratorTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testSinglePayments() {
-		$generator = new PayPalUrlGenerator( $this->newPayPalConfig() );
+		$generator = new PayPalUrlGenerator( $this->newPayPalUrlConfig() );
 
 		$this->assertSame(
 			'https://www.sandbox.paypal.com/cgi-bin/webscr' .
@@ -66,8 +66,8 @@ class PayPalUrlGeneratorTest extends \PHPUnit_Framework_TestCase {
 		);
 	}
 
-	private function newPayPalConfig(): PayPalConfig {
-		return PayPalConfig::newFromConfig( [
+	private function newPayPalUrlConfig(): PayPalUrlConfig {
+		return PayPalUrlConfig::newFromConfig( [
 			'base-url' => self::BASE_URL,
 			'account-address' => 'foerderpp@wikimedia.de',
 			'notify-url' => 'http://my.donation.app/handler/paypal/',
@@ -77,13 +77,13 @@ class PayPalUrlGeneratorTest extends \PHPUnit_Framework_TestCase {
 		] );
 	}
 
-	public function testGivenIncompletePayPalConfig_exceptionIsThrown() {
+	public function testGivenIncompletePayPalUrlConfig_exceptionIsThrown() {
 		$this->expectException( \RuntimeException::class );
-		$this->newIncompletePayPalConfig();
+		$this->newIncompletePayPalUrlConfig();
 	}
 
-	private function newIncompletePayPalConfig() {
-		return PayPalConfig::newFromConfig( [
+	private function newIncompletePayPalUrlConfig() {
+		return PayPalUrlConfig::newFromConfig( [
 			'base-url' => self::BASE_URL,
 			'account-address' => 'some@email-adress.com',
 			'notify-url' => 'http://my.donation.app/handler/paypal/',

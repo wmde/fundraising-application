@@ -8,7 +8,7 @@ namespace WMDE\Fundraising\Frontend\Presentation;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class PayPalConfig {
+class PayPalUrlConfig {
 
 	const CONFIG_KEY_ACCOUNT_ADDRESS = 'account-address';
 	const CONFIG_KEY_BASE_URL = 'base-url';
@@ -36,11 +36,11 @@ class PayPalConfig {
 
 	/**
 	 * @param string[] $config
-	 * @return self
+	 * @return PayPalUrlConfig
 	 * @throws \RuntimeException
 	 */
 	public static function newFromConfig( array $config ): self {
-		return ( new PayPalConfig(
+		return ( new PayPalUrlConfig(
 			$config[self::CONFIG_KEY_ACCOUNT_ADDRESS],
 			$config[self::CONFIG_KEY_BASE_URL],
 			$config[self::CONFIG_KEY_NOTIFY_URL],
