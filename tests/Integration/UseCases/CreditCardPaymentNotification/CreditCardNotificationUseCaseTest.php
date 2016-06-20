@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\CreditCardPayment
 use Psr\Log\NullLogger;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Model\Euro;
+use WMDE\Fundraising\Frontend\Infrastructure\CreditCardPaymentHandlerException;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationEventLogger;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidCreditCardNotificationRequest;
@@ -44,40 +45,51 @@ class CreditCardNotificationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$this->creditCardService = new FakeCreditCardService();
 	}
 
-	public function testWhenRepositoryThrowsException_handlerReturnsFalse() {
+	public function testWhenRepositoryThrowsException_handlerThrowsException() {
 		$this->repository = new DoctrineDonationRepository( ThrowingEntityManager::newInstance( $this ) );
 		$this->authorizer = new FailingDonationAuthorizer();
 		$useCase = $this->newCreditCardNotificationUseCase();
 		$request = ValidCreditCardNotificationRequest::newBillingNotification( 1 );
-		$this->assertFalse( $useCase->handleNotification( $request ) );
+
+		$this->expectException( CreditCardPaymentHandlerException::class );
+		$useCase->handleNotification( $request );
 	}
 
-	public function testWhenAuthorizationFails_handlerReturnsFalse() {
+	public function testWhenAuthorizationFails_handlerThrowsException() {
 		$this->authorizer = new FailingDonationAuthorizer();
 		$this->repository->storeDonation( ValidDonation::newIncompleteCreditCardDonation() );
 
 		$useCase = $this->newCreditCardNotificationUseCase();
 
 		$request = ValidCreditCardNotificationRequest::newBillingNotification( 1 );
-		$this->assertFalse( $useCase->handleNotification( $request ) );
+
+		$this->expectException( CreditCardPaymentHandlerException::class );
+		$useCase->handleNotification( $request );
 	}
 
-	public function testWhenAuthorizationSucceeds_handlerReturnsTrue() {
+	public function testWhenAuthorizationSucceeds_handlerDoesNotThrowException() {
 		$this->repository->storeDonation( ValidDonation::newIncompleteCreditCardDonation() );
 
 		$useCase = $this->newCreditCardNotificationUseCase();
 
 		$request = ValidCreditCardNotificationRequest::newBillingNotification( 1 );
-		$this->assertTrue( $useCase->handleNotification( $request ) );
+
+		try {
+			$useCase->handleNotification( $request );
+		} catch ( \Exception $e ) {
+			$this->fail();
+		}
 	}
 
-	public function testWhenPaymentTypeIsIncorrect_handlerReturnsFalse() {
+	public function testWhenPaymentTypeIsIncorrect_handlerThrowsException() {
 		$this->repository->storeDonation( ValidDonation::newDirectDebitDonation() );
 
 		$useCase = $this->newCreditCardNotificationUseCase();
 
 		$request = ValidCreditCardNotificationRequest::newBillingNotification( 1 );
-		$this->assertFalse( $useCase->handleNotification( $request ) );
+
+		$this->expectException( CreditCardPaymentHandlerException::class );
+		$useCase->handleNotification( $request );
 	}
 
 	public function testWhenAuthorizationSucceeds_confirmationMailIsSent() {
@@ -91,7 +103,7 @@ class CreditCardNotificationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$useCase = $this->newCreditCardNotificationUseCase();
 
 		$request = ValidCreditCardNotificationRequest::newBillingNotification( 1 );
-		$this->assertTrue( $useCase->handleNotification( $request ) );
+		$useCase->handleNotification( $request );
 	}
 
 	public function testWhenAuthorizationSucceeds_donationIsStored() {
@@ -101,7 +113,7 @@ class CreditCardNotificationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$useCase = $this->newCreditCardNotificationUseCase();
 
 		$request = ValidCreditCardNotificationRequest::newBillingNotification( 1 );
-		$this->assertTrue( $useCase->handleNotification( $request ) );
+		$useCase->handleNotification( $request );
 		$this->assertCount( 1, $this->repository->getStoreDonationCalls() );
 	}
 
@@ -112,7 +124,7 @@ class CreditCardNotificationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$useCase = $this->newCreditCardNotificationUseCase();
 
 		$request = ValidCreditCardNotificationRequest::newBillingNotification( 1 );
-		$this->assertTrue( $useCase->handleNotification( $request ) );
+		$useCase->handleNotification( $request );
 		$this->assertTrue( $donation->isBooked() );
 	}
 
@@ -124,12 +136,12 @@ class CreditCardNotificationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$useCase = $this->newCreditCardNotificationUseCase();
 
 		$request = ValidCreditCardNotificationRequest::newBillingNotification( 1 );
-		$this->assertTrue( $useCase->handleNotification( $request ) );
+		$useCase->handleNotification( $request );
 
 		$this->assertEventLogContainsExpression( $this->eventLogger, $donation->getId(), '/booked/' );
 	}
 
-	public function testWhenSendingConfirmationMailFails_handlerReturnsTrue() {
+	public function testWhenSendingConfirmationMailFails_handlerDoesNotThrowException() {
 		$this->repository->storeDonation( ValidDonation::newIncompleteCreditCardDonation() );
 
 		$this->mailer->expects( $this->once() )
@@ -139,7 +151,11 @@ class CreditCardNotificationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$useCase = $this->newCreditCardNotificationUseCase();
 
 		$request = ValidCreditCardNotificationRequest::newBillingNotification( 1 );
-		$this->assertTrue( $useCase->handleNotification( $request ) );
+		try {
+			$useCase->handleNotification( $request );
+		} catch ( \Exception $e ) {
+			$this->fail();
+		}
 	}
 
 	private function assertEventLogContainsExpression( DonationEventLoggerSpy $eventLoggerSpy, int $donationId, string $expr ) {
@@ -175,7 +191,7 @@ class CreditCardNotificationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		);
 	}
 
-	public function testWhenPaymentAmountMismatches_handlerReturnsFalse() {
+	public function testWhenPaymentAmountMismatches_handlerThreepwoodsException() {
 		$this->repository->storeDonation( ValidDonation::newIncompleteCreditCardDonation() );
 
 		$useCase = $this->newCreditCardNotificationUseCase();
@@ -183,7 +199,8 @@ class CreditCardNotificationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$request = ValidCreditCardNotificationRequest::newBillingNotification( 1 );
 		$request->setAmount( Euro::newFromInt( 35505 ) );
 
-		$this->assertFalse( $useCase->handleNotification( $request ) );
+		$this->expectException( CreditCardPaymentHandlerException::class );
+		$useCase->handleNotification( $request );
 	}
 
 }

@@ -11,6 +11,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
 use WMDE\Fundraising\Frontend\Domain\Repositories\StoreDonationException;
+use WMDE\Fundraising\Frontend\Infrastructure\CreditCardPaymentHandlerException;
 use WMDE\Fundraising\Frontend\Infrastructure\CreditCardService;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizer;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
@@ -39,50 +40,57 @@ class CreditCardNotificationUseCase {
 		$this->donationEventLogger = $donationEventLogger;
 	}
 
-	public function handleNotification( CreditCardPaymentNotificationRequest $request ): bool {
+	/**
+	 * @param CreditCardPaymentNotificationRequest $request
+	 * @throws CreditCardPaymentHandlerException
+	 */
+	public function handleNotification( CreditCardPaymentNotificationRequest $request ) {
 		try {
 			$donation = $this->repository->getDonationById( $request->getDonationId() );
 		} catch ( GetDonationException $ex ) {
-			return false;
+			throw new CreditCardPaymentHandlerException( 'data set could not be retrieved from database', $ex );
 		}
 
 		if ( $donation === null ) {
-			return false;
+			throw new CreditCardPaymentHandlerException( 'donation not found' );
 		}
 
 		if ( $donation->getPaymentType() !== PaymentType::CREDIT_CARD ) {
-			return false;
+			throw new CreditCardPaymentHandlerException( 'payment type mismatch' );
 		}
 
 		if ( !$donation->getAmount()->equals( $request->getAmount() ) ) {
-			return false;
+			throw new CreditCardPaymentHandlerException( 'amount mismatch' );
 		}
 
 		if ( !$this->authorizationService->systemCanModifyDonation( $request->getDonationId() ) ) {
-			return false;
+			throw new CreditCardPaymentHandlerException( 'invalid or expired token' );
 		}
 
-		return $this->handleRequest( $request, $donation );
+		$this->handleRequest( $request, $donation );
 	}
 
-	private function handleRequest( CreditCardPaymentNotificationRequest $request, Donation $donation ): bool {
+	/**
+	 * @param CreditCardPaymentNotificationRequest $request
+	 * @param Donation $donation
+	 */
+	private function handleRequest( CreditCardPaymentNotificationRequest $request, Donation $donation ) {
 		try {
 			$donation->addCreditCardData( $this->newCreditCardDataFromRequest( $request ) );
 			$donation->confirmBooked();
 		} catch ( \RuntimeException $e ) {
-			return false;
+			throw new CreditCardPaymentHandlerException( 'data set could not be updated', $e );
 		}
 
 		try {
 			$this->repository->storeDonation( $donation );
 		}
 		catch ( StoreDonationException $ex ) {
-			return false;
+			throw new CreditCardPaymentHandlerException( 'updated data set could not be stored', $ex );
 		}
 
 		$this->sendConfirmationEmail( $donation );
 		$this->donationEventLogger->log( $donation->getId(), 'mcp_handler: booked' );
-		return true;
 	}
 
 	private function sendConfirmationEmail( Donation $donation ) {

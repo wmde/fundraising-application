@@ -21,7 +21,8 @@ class CreditCardNotificationPresenter {
 		return $this->template->render( [
 			'donationId' => $response->getDonationId(),
 			'accessToken' => $response->getAccessToken(),
-			'successful' => $response->isSuccessful()
+			'successful' => $response->isSuccessful(),
+			'errorMessage' => $response->getErrorMessage()
 		] );
 	}
 
