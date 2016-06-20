@@ -29,6 +29,7 @@ use WMDE\Fundraising\Frontend\UseCases\AddSubscription\SubscriptionRequest;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipRequest;
 use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationRequest;
 use WMDE\Fundraising\Frontend\UseCases\CancelMembershipApplication\CancellationRequest;
+use WMDE\Fundraising\Frontend\UseCases\CreditCardPaymentNotification\CreditCardNotificationResponse;
 use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageDisplayRequest;
 use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanRequest;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
@@ -445,23 +446,35 @@ $app->post(
 	}
 );
 
-$app->post(
+$app->get(
 	'handle-creditcard-payment-notification',
 	function ( Application $app, Request $request ) use ( $ffFactory ) {
-		$success = $ffFactory->newCreditCardNotificationUseCase( $request->request->get( 'utoken', '' ) )
-			->handleNotification(
+		$success = $ffFactory->newCreditCardNotificationUseCase(
+			$request->query->get( 'utoken', '' ),
+			$request->query->get( 'accessToken', '' )
+		)->handleNotification(
 				( new CreditCardPaymentNotificationRequest() )
-					->setTransactionId( $request->request->get( 'transactionId', '' ) )
-					->setDonationId( (int)$request->request->get( 'donation_id', '' ) )
-					->setAmount( Euro::newFromCents( (int)$request->request->get( 'amount' ) ) )
-					->setCustomerId( $request->request->get( 'customerId', '' ) )
-					->setSessionId( $request->request->get( 'sessionId', '' ) )
-					->setAuthId( $request->request->get(  'auth', '' ) )
-					->setTitle( $request->request->get( 'title', '' ) )
-					->setCountry( $request->request->get( 'country', '' ) )
-					->setCurrency( $request->request->get( 'currency', '' ) )
-			);
-		return $success ? 'successful' : 'failed';
+					->setTransactionId( $request->query->get( 'transactionId', '' ) )
+					->setDonationId( (int)$request->query->get( 'donation_id', '' ) )
+					->setAmount( Euro::newFromCents( (int)$request->query->get( 'amount' ) ) )
+					->setCustomerId( $request->query->get( 'customerId', '' ) )
+					->setSessionId( $request->query->get( 'sessionId', '' ) )
+					->setAuthId( $request->query->get(  'auth', '' ) )
+					->setTitle( $request->query->get( 'title', '' ) )
+					->setCountry( $request->query->get( 'country', '' ) )
+					->setCurrency( $request->query->get( 'currency', '' ) )
+		);
+
+		return new Response(
+			$ffFactory->newCreditCardNotificationPresenter()->present(
+				new CreditCardNotificationResponse(
+					(int)$request->query->get( 'donation_id', '' ),
+					$request->query->get( 'accessToken', '' ),
+					$success
+				)
+			)
+		);
+
 	}
 );
 

@@ -40,7 +40,9 @@
 		"project-id": "myprojectid",
 		"background-color": "000000",
 		"skin": "default",
-		"theme": "default"
+		"theme": "default",
+		"return-url": "http://my.donation.app/show-donation-confirmation",
+		"testmode": true
 	},
 	"confirmation-pages": {
 		"default": "10h16_Bestätigung.twig",

@@ -25,12 +25,34 @@ class CreditCardUrlGeneratorTest extends \PHPUnit_Framework_TestCase {
 				'project-id' => 'wikimedia',
 				'background-color' => 'CCE7CD',
 				'skin' => '10h16',
-				'theme' => 'wikimedia'
+				'theme' => 'wikimedia',
+				'testmode' => false
 			] )
 		);
 		$this->assertSame(
 			$expected,
 			$urlGenerator->generateUrl( $firstName, $lastName, $payText, $donationId, $updateToken, $amount )
+		);
+	}
+
+	public function testWhenTestModeIsEnabled_urlPassesProperParameter() {
+		$urlGenerator = new CreditCardUrlGenerator(
+			CreditCardConfig::newFromConfig( [
+				'base-url' => 'https://credit-card.micropayment.de/creditcard/event/index.php?',
+				'project-id' => 'wikimedia',
+				'background-color' => 'CCE7CD',
+				'skin' => '10h16',
+				'theme' => 'wikimedia',
+				'testmode' => true
+			] )
+		);
+		$this->assertSame(
+			'https://credit-card.micropayment.de/creditcard/event/index.php?project=wikimedia&bgcolor=CCE7CD&' .
+			'paytext=Ich+spende+einmalig&mp_user_firstname=Kai&mp_user_surname=Nissen&sid=1234567&skin=10h16&' .
+			'utoken=my_update_token&amount=500&theme=wikimedia&testmode=1',
+			$urlGenerator->generateUrl(
+				'Kai', 'Nissen', 'Ich spende einmalig', 1234567, 'my_update_token', Euro::newFromFloat( 5.00 )
+			)
 		);
 	}
 

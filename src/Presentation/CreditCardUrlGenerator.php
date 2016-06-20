@@ -34,6 +34,9 @@ class CreditCardUrlGenerator {
 			'amount' => $amount->getEuroCents(),
 			'theme' => $this->config->getTheme()
 		];
+		if ( $this->config->isTestMode() ) {
+			$params['testmode'] = '1';
+		}
 
 		return $baseUrl . http_build_query( $params );
 	}
