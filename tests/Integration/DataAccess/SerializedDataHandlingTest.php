@@ -83,6 +83,8 @@ class SerializedDataHandlingTest extends \PHPUnit_Framework_TestCase {
 					// these values were stored as strings
 					'impCount' => 0,
 					'bImpCount' => 0,
+
+					'token' => 'cdd4e95145fb74cb87d7dab8f1e88599'
 				]
 			],
 			[
@@ -186,6 +188,8 @@ class SerializedDataHandlingTest extends \PHPUnit_Framework_TestCase {
 					// these values were stored as strings
 					'impCount' => 0,
 					'bImpCount' => 0,
+
+					'token' => 'cdd4e95145fb74cb87d7dab8f1e88599'
 				]
 			],
 			[
@@ -242,6 +246,8 @@ class SerializedDataHandlingTest extends \PHPUnit_Framework_TestCase {
 					// these values were stored as strings
 					'impCount' => 0,
 					'bImpCount' => 0,
+
+					'token' => 'cdd4e95145fb74cb87d7dab8f1e88599'
 				]
 			],
 			[
@@ -299,6 +305,8 @@ class SerializedDataHandlingTest extends \PHPUnit_Framework_TestCase {
 					// these values were stored as strings
 					'impCount' => 0,
 					'bImpCount' => 0,
+
+					'token' => 'cdd4e95145fb74cb87d7dab8f1e88599'
 				]
 			]
 		];

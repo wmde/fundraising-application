@@ -10,6 +10,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 
 /**
  * @licence GNU GPL v2+
@@ -62,14 +63,14 @@ class AddCommentRouteTest extends WebRouteTestCase {
 	}
 
 	private function getNewlyStoredDonation( FunFunFactory $factory ): Donation {
+		$factory->setTokenGenerator( new FixedTokenGenerator(
+			self::CORRECT_UPDATE_TOKEN,
+			new \DateTime( '9001-01-01' )
+		) );
+
 		$donation = ValidDonation::newDirectDebitDonation();
 
 		$factory->getDonationRepository()->storeDonation( $donation );
-		$factory->newDonationAuthorizationUpdater()->allowModificationViaToken(
-			$donation->getId(),
-			self::CORRECT_UPDATE_TOKEN,
-			new \DateTime( '9001-01-01' )
-		);
 
 		return $donation;
 	}
@@ -97,7 +98,7 @@ class AddCommentRouteTest extends WebRouteTestCase {
 
 	public function testGivenRequestWithUnknownDonationId_resultIsError() {
 		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
-			$donation = $this->getNewlyStoredDonation( $factory );
+			$this->getNewlyStoredDonation( $factory );
 
 			$client->request(
 				'POST',

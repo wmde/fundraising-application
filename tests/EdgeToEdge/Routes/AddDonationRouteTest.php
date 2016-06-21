@@ -8,12 +8,15 @@ use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 
 /**
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class AddDonationRouteTest extends WebRouteTestCase {
+
+	const SOME_TOKEN = 'SomeToken';
 
 	public function setUp() {
 		if ( !function_exists( 'lut_init' ) ) {
@@ -35,66 +38,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 				$this->newValidFormInput()
 			);
 
-			$donation = $this->getDonationFromDatabase( $factory );
-
-			$data = $donation->getDecodedData();
-			$this->assertSame( '5.51', $donation->getAmount() );
-			$this->assertSame( 'BEZ', $donation->getPaymentType() );
-			$this->assertSame( 0, $donation->getPaymentIntervalInMonths() );
-			$this->assertSame( 'DE12500105170648489890', $data['iban'] );
-			$this->assertSame( 'INGDDEFFXXX', $data['bic'] );
-			$this->assertSame( '0648489890', $data['konto'] );
-			$this->assertSame( '50010517', $data['blz'] );
-			$this->assertSame( 'ING-DiBa', $data['bankname'] );
-			$this->assertSame( 'person', $data['adresstyp'] );
-			$this->assertSame( 'Frau', $data['anrede'] );
-			$this->assertSame( 'Prof. Dr.', $data['titel'] );
-			$this->assertSame( '', $data['firma'] );
-			$this->assertSame( 'Karla', $data['vorname'] );
-			$this->assertSame( 'Kennichnich', $data['nachname'] );
-			$this->assertSame( 'Prof. Dr. Karla Kennichnich', $donation->getDonorFullName() );
-			$this->assertSame( 'Lehmgasse 12', $data['strasse'] );
-			$this->assertSame( '12345', $data['plz'] );
-			$this->assertSame( 'Einort', $data['ort'] );
-			$this->assertSame( 'Einort', $donation->getDonorCity() );
-			$this->assertSame( 'DE', $data['country'] );
-			$this->assertSame( 'karla@kennichnich.de', $data['email'] );
-			$this->assertSame( 'karla@kennichnich.de', $donation->getDonorEmail() );
-			$this->assertSame( 'test/gelb', $data['tracking'] );
-			$this->assertSame( 3, $data['impCount'] );
-			$this->assertSame( 1, $data['bImpCount'] );
-			$this->assertSame( 'Default', $data['layout'] );
-			$this->assertSame( 'blue', $data['color'] );
-			$this->assertSame( 'default', $data['skin'] );
-			$this->assertSame( 'en.wikipedia.org', $data['source'] );
-			$this->assertSame( 'N', $donation->getStatus() );
-			$this->assertTrue( $donation->getDonorOptsIntoNewsletter() );
-		} );
-	}
-
-	public function testGivenValidRequest_confirmationPageContainsEnteredData() {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setNullMessenger();
-
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newValidFormInput()
-			);
-
-			$response = $client->getResponse()->getContent();
-
-			$this->assertContains( '<strong>5,51 €</strong>', $response );
-			$this->assertContains( 'per Lastschrift', $response );
-			$this->assertContains( 'einmalig', $response );
-			$this->assertContains( 'DE12500105170648489890', $response );
-			$this->assertContains( 'INGDDEFFXXX', $response );
-			$this->assertContains( 'ING-DiBa', $response );
-			$this->assertContains( 'Prof. Dr. Karla Kennichnich', $response );
-			$this->assertContains( 'Lehmgasse 12', $response );
-			$this->assertContains( '<span id="confirm-postcode">12345</span> <span id="confirm-city">Einort</span>', $response );
-			$this->assertContains( 'karla@kennichnich.de', $response );
-			$this->assertContains( '<div id="send-info"', $response );
+			$this->assertIsExpectedDonation( $this->getDonationFromDatabase( $factory ) );
 		} );
 	}
 
@@ -128,6 +72,67 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			'color' => 'blue',
 			'skin' => 'default',
 		];
+	}
+
+	private function assertIsExpectedDonation( Donation $donation ) {
+		$data = $donation->getDecodedData();
+		$this->assertSame( '5.51', $donation->getAmount() );
+		$this->assertSame( 'BEZ', $donation->getPaymentType() );
+		$this->assertSame( 0, $donation->getPaymentIntervalInMonths() );
+		$this->assertSame( 'DE12500105170648489890', $data['iban'] );
+		$this->assertSame( 'INGDDEFFXXX', $data['bic'] );
+		$this->assertSame( '0648489890', $data['konto'] );
+		$this->assertSame( '50010517', $data['blz'] );
+		$this->assertSame( 'ING-DiBa', $data['bankname'] );
+		$this->assertSame( 'person', $data['adresstyp'] );
+		$this->assertSame( 'Frau', $data['anrede'] );
+		$this->assertSame( 'Prof. Dr.', $data['titel'] );
+		$this->assertSame( '', $data['firma'] );
+		$this->assertSame( 'Karla', $data['vorname'] );
+		$this->assertSame( 'Kennichnich', $data['nachname'] );
+		$this->assertSame( 'Prof. Dr. Karla Kennichnich', $donation->getDonorFullName() );
+		$this->assertSame( 'Lehmgasse 12', $data['strasse'] );
+		$this->assertSame( '12345', $data['plz'] );
+		$this->assertSame( 'Einort', $data['ort'] );
+		$this->assertSame( 'Einort', $donation->getDonorCity() );
+		$this->assertSame( 'DE', $data['country'] );
+		$this->assertSame( 'karla@kennichnich.de', $data['email'] );
+		$this->assertSame( 'karla@kennichnich.de', $donation->getDonorEmail() );
+		$this->assertSame( 'test/gelb', $data['tracking'] );
+		$this->assertSame( 3, $data['impCount'] );
+		$this->assertSame( 1, $data['bImpCount'] );
+		$this->assertSame( 'Default', $data['layout'] );
+		$this->assertSame( 'blue', $data['color'] );
+		$this->assertSame( 'default', $data['skin'] );
+		$this->assertSame( 'en.wikipedia.org', $data['source'] );
+		$this->assertSame( 'N', $donation->getStatus() );
+		$this->assertTrue( $donation->getDonorOptsIntoNewsletter() );
+	}
+
+	public function testGivenValidRequest_confirmationPageContainsEnteredData() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setNullMessenger();
+
+			$client->request(
+				'POST',
+				'/donation/add',
+				$this->newValidFormInput()
+			);
+
+			$response = $client->getResponse()->getContent();
+
+			$this->assertContains( '<strong>5,51 €</strong>', $response );
+			$this->assertContains( 'per Lastschrift', $response );
+			$this->assertContains( 'einmalig', $response );
+			$this->assertContains( 'DE12500105170648489890', $response );
+			$this->assertContains( 'INGDDEFFXXX', $response );
+			$this->assertContains( 'ING-DiBa', $response );
+			$this->assertContains( 'Prof. Dr. Karla Kennichnich', $response );
+			$this->assertContains( 'Lehmgasse 12', $response );
+			$this->assertContains( '<span id="confirm-postcode">12345</span> <span id="confirm-city">Einort</span>', $response );
+			$this->assertContains( 'karla@kennichnich.de', $response );
+			$this->assertContains( '<div id="send-info"', $response );
+		} );
 	}
 
 	public function testGivenValidBankTransferRequest_donationGetsPersisted() {
@@ -401,6 +406,26 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			'periode' => 1,
 			'addressType' => 'anonym'
 		];
+	}
+
+	public function testGivenValidRequest_tokensAreReturned() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setNullMessenger();
+			$factory->setTokenGenerator( new FixedTokenGenerator( self::SOME_TOKEN ) );
+
+			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
+			$client->followRedirects( false );
+
+			$client->request(
+				'POST',
+				'/donation/add',
+				$this->newValidCreditCardInput()
+			);
+
+			$response = $client->getResponse()->getContent();
+
+			$this->assertContains( self::SOME_TOKEN, $response );
+		} );
 	}
 
 }

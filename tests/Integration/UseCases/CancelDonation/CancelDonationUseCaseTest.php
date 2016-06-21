@@ -10,6 +10,7 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
@@ -42,6 +43,7 @@ class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$factory = TestEnvironment::newInstance()->getFactory();
 
 		$factory->setNullMessenger();
+		$factory->setTokenGenerator( new FixedTokenGenerator( self::CORRECT_UPDATE_TOKEN ) );
 
 		return $factory;
 	}
@@ -69,12 +71,6 @@ class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 	private function storeDonation( Donation $donation, FunFunFactory $factory ) {
 		$factory->getDonationRepository()->storeDonation( $donation );
-
-		$factory->newDonationAuthorizationUpdater()->allowModificationViaToken(
-			$donation->getId(),
-			self::CORRECT_UPDATE_TOKEN,
-			new \DateTime( '9001-01-01' )
-		);
 	}
 
 	public function testGivenIdOfNonCancellableDonation_cancellationIsNotSuccessful() {

@@ -29,10 +29,11 @@ use Twig_Environment;
 use Twig_Extensions_Extension_Intl;
 use WMDE\Fundraising\Frontend\DataAccess\ApiBasedPageRetriever;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineCommentFinder;
-use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationAuthorizationUpdater;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationAuthorizer;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationEventLogger;
+use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationPrePersistSubscriber;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
+use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationTokenFetcher;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipAppAuthUpdater;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipApplicationAuthorizer;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipApplicationRepository;
@@ -53,10 +54,10 @@ use WMDE\Fundraising\Frontend\Domain\SimpleTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\BestEffortDonationEventLogger;
 use WMDE\Fundraising\Frontend\Infrastructure\CreditCardService;
-use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizationUpdater;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizer;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationEventLogger;
+use WMDE\Fundraising\Frontend\Infrastructure\DonationTokenFetcher;
 use WMDE\Fundraising\Frontend\Infrastructure\Honorifics;
 use WMDE\Fundraising\Frontend\Infrastructure\LoggingMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\LoggingPaymentNotificationVerifier;
@@ -149,6 +150,8 @@ class FunFunFactory {
 	 * @var \Pimple
 	 */
 	private $pimple;
+	private $tokenGenerator;
+	private $addDoctrineSubscribers = true;
 
 	public function __construct( array $config ) {
 		$this->config = $config;
@@ -163,7 +166,12 @@ class FunFunFactory {
 		} );
 
 		$pimple['entity_manager'] = $pimple->share( function() {
-			return ( new StoreFactory( $this->getConnection() ) )->getEntityManager();
+			$entityManager = ( new StoreFactory( $this->getConnection() ) )->getEntityManager();
+			if ( $this->addDoctrineSubscribers ) {
+				$entityManager->getEventManager()->addEventSubscriber( $this->newDoctrineDonationPrePersistSubscriber() );
+			}
+
+			return $entityManager;
 		} );
 
 		$pimple['subscription_repository'] = $pimple->share( function() {
@@ -750,8 +758,7 @@ class FunFunFactory {
 			$this->newDonationConfirmationMailer(),
 			$this->newBankTransferCodeGenerator(),
 			$this->newBankDataConverter(),
-			$this->newTokenGenerator(),
-			$this->newDonationAuthorizationUpdater()
+			$this->newDonationTokenFetcher()
 		);
 	}
 
@@ -850,15 +857,15 @@ class FunFunFactory {
 		);
 	}
 
-	public function newDonationAuthorizationUpdater(): DonationAuthorizationUpdater {
-		return new DoctrineDonationAuthorizationUpdater( $this->getEntityManager() );
-	}
+	public function getTokenGenerator(): TokenGenerator {
+		if ( $this->tokenGenerator === null ) {
+			$this->tokenGenerator = new RandomTokenGenerator(
+				$this->config['token-length'],
+				new \DateInterval( $this->config['token-validity-timestamp'] )
+			);
+		}
 
-	public function newTokenGenerator(): TokenGenerator {
-		return new RandomTokenGenerator(
-			$this->config['token-length'],
-			new \DateInterval( $this->config['token-validity-timestamp'] )
-		);
+		return $this->tokenGenerator;
 	}
 
 	public function newDonationConfirmationPresenter() {
@@ -886,7 +893,7 @@ class FunFunFactory {
 			$this->getMembershipApplicationRepository(),
 			$this->newMembershipAuthUpdater(),
 			$this->newApplyForMembershipMailer(),
-			$this->newTokenGenerator(),
+			$this->getTokenGenerator(),
 			$this->newMembershipApplicationValidator(),
 			$this->newMembershipApplicationTracker()
 		);
@@ -1039,6 +1046,28 @@ class FunFunFactory {
 				'CreditCardPaymentNotification.twig',
 				[ 'returnUrl' => $this->config['creditcard']['return-url'] ]
 			)
+		);
+	}
+
+	private function newDoctrineDonationPrePersistSubscriber(): DoctrineDonationPrePersistSubscriber {
+		$tokenGenerator = $this->getTokenGenerator();
+		return new DoctrineDonationPrePersistSubscriber(
+			$tokenGenerator,
+			$tokenGenerator
+		);
+	}
+
+	public function setTokenGenerator( TokenGenerator $tokenGenerator ) {
+		$this->tokenGenerator = $tokenGenerator;
+	}
+
+	public function disableDoctrineSubscribers() {
+		$this->addDoctrineSubscribers = false;
+	}
+
+	private function newDonationTokenFetcher(): DonationTokenFetcher {
+		return new DoctrineDonationTokenFetcher(
+			$this->getEntityManager()
 		);
 	}
 

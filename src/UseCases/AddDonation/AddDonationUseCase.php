@@ -20,11 +20,8 @@ use WMDE\Fundraising\Frontend\Domain\Model\PayPalPayment;
 use WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
-use WMDE\Fundraising\Frontend\Infrastructure\AuthorizationUpdateException;
-use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizationUpdater;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
-use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
-use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
+use WMDE\Fundraising\Frontend\Infrastructure\DonationTokenFetcher;
 use WMDE\Fundraising\Frontend\Validation\DonationValidator;
 
 /**
@@ -40,13 +37,12 @@ class AddDonationUseCase {
 	private $mailer;
 	private $transferCodeGenerator;
 	private $bankDataConverter;
-	private $tokenGenerator;
-	private $authorizationUpdater;
+	private $tokenFetcher;
 
 	public function __construct( DonationRepository $donationRepository, DonationValidator $donationValidator,
 								 ReferrerGeneralizer $referrerGeneralizer, DonationConfirmationMailer $mailer,
 								 TransferCodeGenerator $transferCodeGenerator, BankDataConverter $bankDataConverter,
-								 TokenGenerator $tokenGenerator, DonationAuthorizationUpdater $authorizationUpdater ) {
+								 DonationTokenFetcher $tokenFetcher ) {
 
 		$this->donationRepository = $donationRepository;
 		$this->donationValidator = $donationValidator;
@@ -54,8 +50,7 @@ class AddDonationUseCase {
 		$this->mailer = $mailer;
 		$this->transferCodeGenerator = $transferCodeGenerator;
 		$this->bankDataConverter = $bankDataConverter;
-		$this->tokenGenerator = $tokenGenerator;
-		$this->authorizationUpdater = $authorizationUpdater;
+		$this->tokenFetcher = $tokenFetcher;
 	}
 
 	public function addDonation( AddDonationRequest $donationRequest ): AddDonationResponse {
@@ -76,52 +71,16 @@ class AddDonationUseCase {
 		// TODO: handle exceptions
 		$this->donationRepository->storeDonation( $donation );
 
-		try {
-			$updateToken = $this->assignAndReturnNewUpdateToken( $donation->getId() );
-			$accessToken = $this->assignAndReturnNewAccessToken( $donation->getId() );
-		}
-		catch ( AuthorizationUpdateException $ex ) {
-			// TODO: rollback side effects on failure
-
-			// TODO: the result format format is really weird for this failure case
-			return AddDonationResponse::newFailureResponse( [ new ConstraintViolation(
-				null,
-				'TODO'
-			) ] );
-		}
+		// TODO: handle exceptions
+		$tokens = $this->tokenFetcher->getTokens( $donation->getId() );
 
 		$this->sendDonationConfirmationEmail( $donation );
 
-		return AddDonationResponse::newSuccessResponse( $donation, $updateToken, $accessToken );
-	}
-
-	/**
-	 * @throws AuthorizationUpdateException
-	 */
-	private function assignAndReturnNewUpdateToken( int $donationId ): string {
-		$updateToken = $this->tokenGenerator->generateToken();
-
-		$this->authorizationUpdater->allowModificationViaToken(
-			$donationId,
-			$updateToken,
-			$this->tokenGenerator->generateTokenExpiry()
+		return AddDonationResponse::newSuccessResponse(
+			$donation,
+			$tokens->getUpdateToken(),
+			$tokens->getAccessToken()
 		);
-
-		return $updateToken;
-	}
-
-	/**
-	 * @throws AuthorizationUpdateException
-	 */
-	private function assignAndReturnNewAccessToken( int $donationId ): string {
-		$accessToken = $this->tokenGenerator->generateToken();
-
-		$this->authorizationUpdater->allowAccessViaToken(
-			$donationId,
-			$accessToken
-		);
-
-		return $accessToken;
 	}
 
 	private function newDonationFromRequest( AddDonationRequest $donationRequest ): Donation {
