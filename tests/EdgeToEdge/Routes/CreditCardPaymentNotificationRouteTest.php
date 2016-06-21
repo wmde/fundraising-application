@@ -45,6 +45,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 
 			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
 			$this->assertContains( 'status=error', $client->getResponse()->getContent() );
+			$this->assertContains( 'msg=', $client->getResponse()->getContent() );
 		} );
 	}
 

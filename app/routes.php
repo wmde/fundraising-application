@@ -23,6 +23,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\CreditCardPaymentHandlerException;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTrackingInfo;
 use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\SubscriptionRequest;
@@ -449,32 +450,30 @@ $app->post(
 $app->get(
 	'handle-creditcard-payment-notification',
 	function ( Application $app, Request $request ) use ( $ffFactory ) {
-		$success = $ffFactory->newCreditCardNotificationUseCase(
-			$request->query->get( 'utoken', '' ),
-			$request->query->get( 'accessToken', '' )
-		)->handleNotification(
-				( new CreditCardPaymentNotificationRequest() )
-					->setTransactionId( $request->query->get( 'transactionId', '' ) )
-					->setDonationId( (int)$request->query->get( 'donation_id', '' ) )
-					->setAmount( Euro::newFromCents( (int)$request->query->get( 'amount' ) ) )
-					->setCustomerId( $request->query->get( 'customerId', '' ) )
-					->setSessionId( $request->query->get( 'sessionId', '' ) )
-					->setAuthId( $request->query->get(  'auth', '' ) )
-					->setTitle( $request->query->get( 'title', '' ) )
-					->setCountry( $request->query->get( 'country', '' ) )
-					->setCurrency( $request->query->get( 'currency', '' ) )
-		);
+		try {
+			$ffFactory->newCreditCardNotificationUseCase( $request->query->get( 'utoken', '' ) )
+				->handleNotification(
+					( new CreditCardPaymentNotificationRequest() )
+						->setTransactionId( $request->query->get( 'transactionId', '' ) )
+						->setDonationId( (int)$request->query->get( 'donation_id', '' ) )
+						->setAmount( Euro::newFromCents( (int)$request->query->get( 'amount' ) ) )
+						->setCustomerId( $request->query->get( 'customerId', '' ) )
+						->setSessionId( $request->query->get( 'sessionId', '' ) )
+						->setAuthId( $request->query->get(  'auth', '' ) )
+						->setTitle( $request->query->get( 'title', '' ) )
+						->setCountry( $request->query->get( 'country', '' ) )
+						->setCurrency( $request->query->get( 'currency', '' ) )
+				);
 
-		return new Response(
-			$ffFactory->newCreditCardNotificationPresenter()->present(
-				new CreditCardNotificationResponse(
-					(int)$request->query->get( 'donation_id', '' ),
-					$request->query->get( 'accessToken', '' ),
-					$success
-				)
-			)
-		);
+			$response = CreditCardNotificationResponse::newSuccessResponse(
+				(int)$request->query->get( 'donation_id', '' ),
+				$request->query->get( 'accessToken', '' )
+ 			);
+		} catch ( CreditCardPaymentHandlerException $e ) {
+			$response = CreditCardNotificationResponse::newFailureResponse( $e->getMessage() );
+		}
 
+		return new Response( $ffFactory->newCreditCardNotificationPresenter()->present( $response ) );
 	}
 );
 
