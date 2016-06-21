@@ -101,6 +101,13 @@ class ValidDonation {
 		);
 	}
 
+	public static function newIncompleteAnonymousPayPalDonation(): Donation {
+		return ( new self() )->createAnonymousDonation(
+			new PayPalPayment( new PayPalData() ),
+			Donation::STATUS_EXTERNAL_INCOMPLETE
+		);
+	}
+
 	public static function newBookedCreditCardDonation() {
 		$creditCardData = new CreditCardTransactionData();
 		$creditCardData->setTransactionId( self::CREDIT_CARD_TRANSACTION_ID );
@@ -113,6 +120,13 @@ class ValidDonation {
 
 	public static function newIncompleteCreditCardDonation(): Donation {
 		return ( new self() )->createDonation(
+			new CreditCardPayment( new CreditCardTransactionData() ),
+			Donation::STATUS_EXTERNAL_INCOMPLETE
+		);
+	}
+
+	public static function newIncompleteAnonymousCreditCardDonation(): Donation {
+		return ( new self() )->createAnonymousDonation(
 			new CreditCardPayment( new CreditCardTransactionData() ),
 			Donation::STATUS_EXTERNAL_INCOMPLETE
 		);
@@ -132,6 +146,17 @@ class ValidDonation {
 			$this->newDonor(),
 			$this->newDonationPayment( $paymentMethod ),
 			self::OPTS_INTO_NEWSLETTER,
+			$this->newTrackingInfo()
+		);
+	}
+
+	private function createAnonymousDonation( PaymentMethod $paymentMethod, string $status ): Donation {
+		return new Donation(
+			null,
+			$status,
+			null,
+			$this->newDonationPayment( $paymentMethod ),
+			false,
 			$this->newTrackingInfo()
 		);
 	}

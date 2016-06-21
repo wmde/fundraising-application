@@ -87,7 +87,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 			'sessionId' => self::SESSION_ID,
 			'auth' => self::AUTH_ID,
 			'utoken' => self::UPDATE_TOKEN,
-			'accessToken' => self::ACCESS_TOKEN,
+			'token' => self::ACCESS_TOKEN,
 			'title' => self::TITLE,
 			'country' => self::COUNTRY_CODE,
 			'currency' => self::CURRENCY_CODE,

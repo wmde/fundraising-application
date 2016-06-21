@@ -177,6 +177,27 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$this->assertTrue( $useCase->handleNotification( $request ) );
 	}
 
+	public function testWhenAuthorizationSucceedsForAnonymousDonation_confirmationMailIsNotSent() {
+		$donation = ValidDonation::newIncompleteAnonymousPayPalDonation();
+		$fakeRepository = new FakeDonationRepository();
+		$fakeRepository->storeDonation( $donation );
+
+		$mailer = $this->getMailer();
+		$mailer->expects( $this->never() )
+			->method( 'sendConfirmationMailFor' );
+
+		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 1 );
+		$useCase = new HandlePayPalPaymentNotificationUseCase(
+			$fakeRepository,
+			new SucceedingDonationAuthorizer(),
+			$mailer,
+			new NullLogger(),
+			$this->getEventLogger()
+		);
+
+		$this->assertTrue( $useCase->handleNotification( $request ) );
+	}
+
 	public function testWhenAuthorizationSucceeds_donationIsStored() {
 		$donation = ValidDonation::newIncompletePayPalDonation();
 		$repositorySpy = new DonationRepositorySpy( $donation );
