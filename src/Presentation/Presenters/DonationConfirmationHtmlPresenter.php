@@ -32,8 +32,8 @@ class DonationConfirmationHtmlPresenter {
 												   SelectedConfirmationPage $selectedPage ) {
 
 		return [
+			'main_template' => $selectedPage->getPageTitle(),
 			'templateCampaign' => $selectedPage->getCampaignCode(),
-			'templateName' => $selectedPage->getPageTitle(),
 			'donation' => [
 				'id' => $donation->getId(),
 				'status' => $donation->getStatus(),

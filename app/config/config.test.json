@@ -45,7 +45,7 @@
 		"testmode": true
 	},
 	"confirmation-pages": {
-		"default": "10h16_Bestätigung.twig",
+		"default": "DonationConfirmation.twig",
 		"campaigns": [
 			{
 				"code": "testCampaign",

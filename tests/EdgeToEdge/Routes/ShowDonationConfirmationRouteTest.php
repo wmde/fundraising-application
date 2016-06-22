@@ -44,7 +44,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 			);
 
 			$this->assertDonationDataInResponse( $donation, $client->getResponse()->getContent() );
-			$this->assertContains( 'Template Name: 10h16_Bestätigung.twig', $client->getResponse()->getContent() );
+			$this->assertContains( 'Template Name: DonationConfirmation.twig', $client->getResponse()->getContent() );
 		} );
 	}
 
@@ -67,7 +67,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 			);
 
 			$this->assertDonationDataInResponse( $donation, $client->getResponse()->getContent() );
-			$this->assertContains( 'Template Name: 10h16_Bestätigung.twig', $client->getResponse()->getContent() );
+			$this->assertContains( 'Template Name: DonationConfirmation.twig', $client->getResponse()->getContent() );
 		} );
 	}
 
@@ -90,7 +90,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 			);
 
 			$this->assertEmbeddedMembershipFormIsPrefilled( $donation, $client->getResponse()->getContent() );
-			$this->assertContains( 'Template Name: 10h16_Bestätigung.twig', $client->getResponse()->getContent() );
+			$this->assertContains( 'Template Name: DonationConfirmation.twig', $client->getResponse()->getContent() );
 		} );
 	}
 
@@ -136,6 +136,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 			);
 
 			$content = $client->getResponse()->getContent();
+			$this->assertContains( 'Alternative content', $content );
 			$this->assertContains( 'Template Name: DonationConfirmationAlternative.twig', $content );
 			$this->assertContains( 'Template Campaign: example', $content );
 		} );
@@ -255,7 +256,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 	private function newConfirmationPageConfig() {
 		return [
-			'default' => '10h16_Bestätigung.twig',
+			'default' => 'DonationConfirmation.twig',
 			'campaigns' => [
 				[
 					'code' => 'example',
@@ -270,7 +271,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 	private function newEmptyConfirmationPageConfig() {
 		return [
-			'default' => '10h16_Bestätigung.twig',
+			'default' => 'DonationConfirmation.twig',
 			'campaigns' => [
 				[
 					'code' => 'example',
