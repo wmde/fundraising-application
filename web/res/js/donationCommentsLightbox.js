@@ -29,7 +29,7 @@ $.extend( DonationCommentsLightbox.prototype, {
 
 	update: function () {
 		var self = this;
-		$.ajax( 'json.php?n=100&anon=1', {
+		$.ajax( '../list-comments.json?n=100&anon=1', {
 			dataType: 'json',
 			success: function ( data ) {
 				self.numPages = Math.ceil( data.length / self.itemsPerPage );
