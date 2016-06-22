@@ -479,8 +479,7 @@ $app->get(
 
 $app->get( '/', function ( Application $app ) {
 
-	// TODO Move code from template to content wiki to have a page name without suffixes (/page/DonationForm)
-	$subRequest = Request::create('/page/DonationForm.html.twig', 'GET');
+	$subRequest = Request::create('/page/DonationForm', 'GET');
 
 	return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
 } );

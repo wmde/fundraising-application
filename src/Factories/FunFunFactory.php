@@ -980,7 +980,7 @@ class FunFunFactory {
 		$template = $this->getLayoutTemplate( 'DisplayPageLayout.twig' );
 		// TODO make this dependent on the 'form' value from the HTTP POST request
 		// (we need different form pages for A/B testing)
-		$template->context['main_template'] = 'DonationForm.html.twig';
+		$template->context['main_template'] = 'DonationForm.twig';
 		return new DonationFormViolationPresenter( $template, $this->newAmountFormatter() );
 	}
 
