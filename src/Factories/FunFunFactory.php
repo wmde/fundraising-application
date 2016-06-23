@@ -625,7 +625,7 @@ class FunFunFactory {
 
 	private function newContactConfirmationMailer(): TemplateBasedMailer {
 		return $this->newTemplateMailer(
-			new TwigTemplate( $this->getTwig(), 'GetInTouchConfirmation.twig' ),
+			new TwigTemplate( $this->getTwig(), 'KontaktMailExtern.twig' ),
 			'mail_subject_getintouch'
 		);
 	}
