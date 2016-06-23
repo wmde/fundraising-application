@@ -425,7 +425,7 @@ class FunFunFactory {
 	}
 
 	public function newAddSubscriptionHTMLPresenter(): AddSubscriptionHtmlPresenter {
-		return new AddSubscriptionHtmlPresenter( $this->getLayoutTemplate( 'AddSubscription.twig' ), $this->getTranslator() );
+		return new AddSubscriptionHtmlPresenter( $this->getIncludeTemplate( 'Subscription_Form.twig' ), $this->getTranslator() );
 	}
 
 	public function newConfirmSubscriptionHtmlPresenter(): ConfirmSubscriptionHtmlPresenter {
