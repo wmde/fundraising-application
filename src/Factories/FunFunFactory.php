@@ -683,7 +683,7 @@ class FunFunFactory {
 	}
 
 	public function newInternalErrorHTMLPresenter(): InternalErrorHtmlPresenter {
-		return new InternalErrorHtmlPresenter( $this->getLayoutTemplate( 'Error.twig' ) );
+		return new InternalErrorHtmlPresenter( $this->getIncludeTemplate( 'ErrorPage.twig' ) );
 	}
 
 	public function newAccessDeniedHTMLPresenter(): InternalErrorHtmlPresenter {
