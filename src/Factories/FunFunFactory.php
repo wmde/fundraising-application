@@ -440,7 +440,7 @@ class FunFunFactory {
 	}
 
 	public function newGetInTouchHTMLPresenter(): GetInTouchHtmlPresenter {
-		return new GetInTouchHtmlPresenter( $this->getLayoutTemplate( 'GetInTouch.twig' ), $this->getTranslator() );
+		return new GetInTouchHtmlPresenter( $this->getIncludeTemplate( 'Kontaktformular.twig' ), $this->getTranslator() );
 	}
 
 	public function getTwig(): Twig_Environment {
