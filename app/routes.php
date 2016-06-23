@@ -467,7 +467,7 @@ $app->get(
 
 			$response = CreditCardNotificationResponse::newSuccessResponse(
 				(int)$request->query->get( 'donation_id', '' ),
-				$request->query->get( 'accessToken', '' )
+				$request->query->get( 'token', '' )
  			);
 		} catch ( CreditCardPaymentHandlerException $e ) {
 			$response = CreditCardNotificationResponse::newFailureResponse( $e->getMessage() );

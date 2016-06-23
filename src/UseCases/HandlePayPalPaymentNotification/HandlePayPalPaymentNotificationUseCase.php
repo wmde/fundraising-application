@@ -144,10 +144,12 @@ class HandlePayPalPaymentNotificationUseCase {
 	}
 
 	private function sendConfirmationEmailFor( Donation $donation ) {
-		try {
-			$this->mailer->sendConfirmationMailFor( $donation );
-		} catch ( \RuntimeException $ex ) {
-			// no need to re-throw or return false, this is not a fatal error, only a minor inconvenience
+		if ( $donation->getDonor() !== null ) {
+			try {
+				$this->mailer->sendConfirmationMailFor( $donation );
+			} catch ( \RuntimeException $ex ) {
+				// no need to re-throw or return false, this is not a fatal error, only a minor inconvenience
+			}
 		}
 	}
 
