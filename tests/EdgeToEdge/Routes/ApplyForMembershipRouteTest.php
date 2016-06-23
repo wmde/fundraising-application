@@ -39,7 +39,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 				$this->newValidHttpParameters()
 			);
 
-			$this->assertContains( 'Ihr Beleg', $client->getResponse()->getContent() );
+			$this->assertContains( 'membership application confirmed', $client->getResponse()->getContent() );
 		} );
 	}
 

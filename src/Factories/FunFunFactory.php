@@ -1021,7 +1021,7 @@ class FunFunFactory {
 
 	public function newMembershipApplicationConfirmationHtmlPresenter() {
 		return new MembershipApplicationConfirmationHtmlPresenter(
-			$this->getIncludeTemplate( 'MembershipApplicationConfirmation.html.twig' )
+			$this->getIncludeTemplate( 'MembershipApplicationConfirmation.twig' )
 		);
 	}
 
