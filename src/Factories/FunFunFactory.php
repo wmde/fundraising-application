@@ -1027,7 +1027,7 @@ class FunFunFactory {
 
 	public function newMembershipFormViolationPresenter() {
 		return new MembershipFormViolationPresenter(
-			$this->getIncludeTemplate( 'MembershipApplication.html.twig' )
+			$this->getIncludeTemplate( 'MembershipApplication.twig' )
 		);
 	}
 
