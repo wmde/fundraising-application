@@ -870,7 +870,7 @@ class FunFunFactory {
 
 	public function newDonationConfirmationPresenter() {
 		return new DonationConfirmationHtmlPresenter(
-			$this->getLayoutTemplate( 'DonationConfirmation.twig' )
+			$this->getIncludeTemplate( 'DonationConfirmation.twig' )
 		);
 	}
 
