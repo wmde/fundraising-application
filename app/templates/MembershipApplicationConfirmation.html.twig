@@ -132,10 +132,7 @@
 					<strong>Stornierung möglich</strong>
 				</p>
 				<p>
-				<form action="{$ basepath $}/apply-for-membership" method="post">
-					<input type="hidden" name="rid" value="{$ membershipApplication.id $}" />
-					<input type="submit" value="Jetzt stornieren." style="cursor: pointer; background: none; border-width: 0px; color: #9D9D9D; text-decoration: underline;" />
-				</form>
+					<a href="{$ basepath $}/cancel-membership-application?id={$ membershipApplication.id $}&updateToken={$ membershipApplication.updateToken $}">Jetzt stornieren</a>
 				</p>
 			</div>
 		</div>

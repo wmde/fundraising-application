@@ -417,15 +417,15 @@ $app->post(
 	}
 );
 
-$app->post(
+$app->get(
 	'cancel-membership-application',
 	function( Application $app, Request $request ) use ( $ffFactory ) {
 		$cancellationRequest = new CancellationRequest(
-			(int)$request->request->get( 'sid', '' )
+			(int)$request->query->get( 'id', '' )
 		);
 
 		return $ffFactory->newCancelMembershipApplicationHtmlPresenter()->present(
-			$ffFactory->newCancelMembershipApplicationUseCase( $request->request->get( 'utoken', '' ) )
+			$ffFactory->newCancelMembershipApplicationUseCase( $request->query->get( 'updateToken', '' ) )
 				->cancelApplication( $cancellationRequest )
 		);
 	}
