@@ -115,18 +115,26 @@ class MembershipApplicationValidator {
 	}
 
 	private function validateApplicantDateOfBirth() {
-		if ( !strtotime( $this->request->getApplicantDateOfBirth() ) ) {
+		$dob = $this->request->getApplicantDateOfBirth();
+
+		if ( $dob !== '' && !strtotime( $dob ) ) {
 			$this->violations[Result::SOURCE_APPLICANT_DATE_OF_BIRTH] = Result::VIOLATION_NOT_DATE;
 		}
 	}
 
 	private function validateApplicantContactInfo() {
-		if ( !preg_match( '/^[0-9\+\-\(\)]+/i', $this->request->getApplicantPhoneNumber() ) ) {
-			$this->violations[Result::SOURCE_APPLICANT_PHONE_NUMBER] = Result::VIOLATION_NOT_PHONE_NUMBER;
-		}
+		$this->validatePhoneNumber();
 
 		if ( $this->emailValidator->validate( $this->request->getApplicantEmailAddress() )->hasViolations() ) {
 			$this->violations[Result::SOURCE_APPLICANT_EMAIL] = Result::VIOLATION_NOT_EMAIL;
+		}
+	}
+
+	private function validatePhoneNumber() {
+		$phoneNumber = $this->request->getApplicantPhoneNumber();
+
+		if ( $phoneNumber !== '' && !preg_match( '/^[0-9\+\-\(\)]+/i', $phoneNumber ) ) {
+			$this->violations[Result::SOURCE_APPLICANT_PHONE_NUMBER] = Result::VIOLATION_NOT_PHONE_NUMBER;
 		}
 	}
 

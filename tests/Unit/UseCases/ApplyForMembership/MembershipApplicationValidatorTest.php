@@ -368,4 +368,18 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 		);
 	}
 
+	public function testPhoneNumberIsNotProvided_validationDoesNotFail() {
+		$request = $this->newValidRequest();
+		$request->setApplicantPhoneNumber( '' );
+
+		$this->assertTrue( $this->newValidator()->validate( $request )->isSuccessful() );
+	}
+
+	public function testDateOfBirthIsNotProvided_validationDoesNotFail() {
+		$request = $this->newValidRequest();
+		$request->setApplicantDateOfBirth( '' );
+
+		$this->assertTrue( $this->newValidator()->validate( $request )->isSuccessful() );
+	}
+
 }
