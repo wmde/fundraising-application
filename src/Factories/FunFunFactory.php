@@ -425,7 +425,7 @@ class FunFunFactory {
 	}
 
 	public function newAddSubscriptionHTMLPresenter(): AddSubscriptionHtmlPresenter {
-		return new AddSubscriptionHtmlPresenter( $this->getLayoutTemplate( 'AddSubscription.twig' ), $this->getTranslator() );
+		return new AddSubscriptionHtmlPresenter( $this->getIncludeTemplate( 'Subscription_Form.twig' ), $this->getTranslator() );
 	}
 
 	public function newConfirmSubscriptionHtmlPresenter(): ConfirmSubscriptionHtmlPresenter {
@@ -440,7 +440,7 @@ class FunFunFactory {
 	}
 
 	public function newGetInTouchHTMLPresenter(): GetInTouchHtmlPresenter {
-		return new GetInTouchHtmlPresenter( $this->getLayoutTemplate( 'GetInTouch.twig' ), $this->getTranslator() );
+		return new GetInTouchHtmlPresenter( $this->getIncludeTemplate( 'Kontaktformular.twig' ), $this->getTranslator() );
 	}
 
 	public function getTwig(): Twig_Environment {
@@ -625,7 +625,7 @@ class FunFunFactory {
 
 	private function newContactConfirmationMailer(): TemplateBasedMailer {
 		return $this->newTemplateMailer(
-			new TwigTemplate( $this->getTwig(), 'GetInTouchConfirmation.twig' ),
+			new TwigTemplate( $this->getTwig(), 'KontaktMailExtern.twig' ),
 			'mail_subject_getintouch'
 		);
 	}
@@ -683,7 +683,7 @@ class FunFunFactory {
 	}
 
 	public function newInternalErrorHTMLPresenter(): InternalErrorHtmlPresenter {
-		return new InternalErrorHtmlPresenter( $this->getLayoutTemplate( 'Error.twig' ) );
+		return new InternalErrorHtmlPresenter( $this->getIncludeTemplate( 'ErrorPage.twig' ) );
 	}
 
 	public function newAccessDeniedHTMLPresenter(): InternalErrorHtmlPresenter {
@@ -876,7 +876,7 @@ class FunFunFactory {
 
 	public function newCreditCardPaymentHtmlPresenter() {
 		return new CreditCardPaymentHtmlPresenter(
-			$this->getIncludeTemplate( 'CreditCardPayment.html.twig' ),
+			$this->getIncludeTemplate( 'CreditCardPaymentIframe.twig' ),
 			$this->getTranslator(),
 			$this->newCreditCardUrlGenerator()
 		);
@@ -1021,7 +1021,7 @@ class FunFunFactory {
 
 	public function newMembershipApplicationConfirmationHtmlPresenter() {
 		return new MembershipApplicationConfirmationHtmlPresenter(
-			$this->getIncludeTemplate( 'MembershipApplicationConfirmation.html.twig' )
+			$this->getIncludeTemplate( 'MembershipApplicationConfirmation.twig' )
 		);
 	}
 
