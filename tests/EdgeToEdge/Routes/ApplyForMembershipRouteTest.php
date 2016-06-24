@@ -152,4 +152,20 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		} );
 	}
 
+	public function testGivenValidRequest_confirmationPageContainsCancellationParameters() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setNullMessenger();
+
+			$client->request(
+				'POST',
+				'apply-for-membership',
+				$this->newValidHttpParameters()
+			);
+
+			$responseContent = $client->getResponse()->getContent();
+			$this->assertContains( 'id=1', $responseContent );
+			$this->assertRegExp( '/updateToken=[a-z0-9]{32}/', $responseContent );
+		} );
+	}
+
 }
