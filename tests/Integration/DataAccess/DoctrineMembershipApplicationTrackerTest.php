@@ -29,18 +29,10 @@ class DoctrineMembershipApplicationTrackerTest extends \PHPUnit_Framework_TestCa
 		$this->entityManager = TestEnvironment::newInstance()->getFactory()->getEntityManager();
 	}
 
-	public function validTrackingDataProvider() {
-		return [
-			[ 'campaignCode', 'keyword', 'campaignCode/keyword' ],
-			[ '', 'keyword', 'keyword' ],
-			[ 'campaignCode', '', '' ],
-			[ '', '', '' ],
-		];
-	}
-
-	/** @dataProvider validTrackingDataProvider */
-	public function testValidTrackingDataIsProperlyApplied( string $campaignCode, string $keyword, $expectedTracking ) {
-		#$repository = $this->newRepository();
+	/**
+	 * @dataProvider validTrackingDataProvider
+	 */
+	public function testValidTrackingDataIsProperlyApplied( string $campaignCode, string $keyword ) {
 		$application = ValidMembershipApplication::newDoctrineEntity();
 		$this->persistApplication( $application );
 
@@ -49,16 +41,28 @@ class DoctrineMembershipApplicationTrackerTest extends \PHPUnit_Framework_TestCa
 			$this->newMembershipApplicationTrackingInfo( $campaignCode, $keyword )
 		);
 
-		$this->assertApplicationTrackedProperly( $application->getId(), $expectedTracking );
+		$storedApplication = $this->getApplicationById( $application->getId() );
+
+		$this->assertSame( $keyword, $storedApplication->getDecodedData()['confirmationPage'] );
+		$this->assertSame( $campaignCode, $storedApplication->getDecodedData()['confirmationPageCampaign'] );
 	}
 
-	private function getApplicationById( int $applicationId ): MembershipApplication {
-		return $this->entityManager->find( MembershipApplication::class, $applicationId );
+	public function validTrackingDataProvider() {
+		return [
+			[ 'campaignCode', 'keyword' ],
+			[ '', 'keyword', 'keyword' ],
+			[ 'campaignCode', '' ],
+			[ '', '' ],
+		];
 	}
 
 	private function persistApplication( MembershipApplication $application ) {
 		$this->entityManager->persist( $application );
 		$this->entityManager->flush();
+	}
+
+	private function getApplicationById( int $applicationId ): MembershipApplication {
+		return $this->entityManager->find( MembershipApplication::class, $applicationId );
 	}
 
 	private function newMembershipApplicationTracker(): MembershipApplicationTracker {
@@ -67,12 +71,6 @@ class DoctrineMembershipApplicationTrackerTest extends \PHPUnit_Framework_TestCa
 
 	private function newMembershipApplicationTrackingInfo( $campaignCode, $keyword ) {
 		return new MembershipApplicationTrackingInfo( $campaignCode, $keyword );
-	}
-
-	private function assertApplicationTrackedProperly( int $applicationId, $expectedTrackingData ) {
-		$application = $this->getApplicationById( $applicationId );
-
-		$this->assertSame( $expectedTrackingData, $application->getTracking() );
 	}
 
 }

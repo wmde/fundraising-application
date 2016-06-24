@@ -25,7 +25,11 @@ class DoctrineMembershipApplicationTracker implements MembershipApplicationTrack
 
 	public function trackApplication( int $applicationId, MembershipApplicationTrackingInfo $trackingInfo ) {
 		$application = $this->getApplicationById( $applicationId );
-		$application->setTracking( $this->concatenate( $trackingInfo ) );
+
+		$data = $application->getDecodedData();
+		$data['confirmationPageCampaign'] = $trackingInfo->getCampaignCode();
+		$data['confirmationPage'] = $trackingInfo->getKeyword();
+		$application->encodeAndSetData( $data );
 
 		$this->persistApplication( $application );
 	}
@@ -54,14 +58,6 @@ class DoctrineMembershipApplicationTracker implements MembershipApplicationTrack
 		catch ( ORMException $ex ) {
 			throw new MembershipApplicationTrackingException( 'Failed to persist membership application' );
 		}
-	}
-
-	private function concatenate( MembershipApplicationTrackingInfo $trackingInfo ): string {
-		if ( $trackingInfo->getKeyword() === '' ) {
-			return '';
-		}
-
-		return implode( '/', array_filter( [ $trackingInfo->getCampaignCode(), $trackingInfo->getKeyword() ] ) );
 	}
 
 }
