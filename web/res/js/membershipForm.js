@@ -131,6 +131,10 @@ $( function () {
 				stateKey: 'membershipFormContent.addressType'
 			},
 			{
+				viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '#address-type-2' ).parent(), 'sustaining' ),
+				stateKey: 'membershipFormContent.membershipType'
+			},
+			{
 				viewHandler: WMDE.View.createFeeOptionSwitcher( $( '#amount-1' ), 1 ),
 				stateKey: 'membershipFormContent.paymentIntervalInMonths'
 			},
