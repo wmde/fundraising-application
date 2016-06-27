@@ -36,6 +36,7 @@ use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanRequest;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 use WMDE\Fundraising\Frontend\UseCases\CreditCardPaymentNotification\CreditCardPaymentNotificationRequest;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentListingRequest;
+use WMDE\Fundraising\Frontend\UseCases\ShowMembershipApplicationConfirmation\ShowMembershipAppConfirmationRequest;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
 
 $app->get(
@@ -409,13 +410,34 @@ $app->post(
 		$response = $ffFactory->newApplyForMembershipUseCase()->applyForMembership( $request );
 
 		return $response->isSuccessful() ?
-			$ffFactory->newMembershipApplicationConfirmationHtmlPresenter()->present( $response ) :
+			$app->redirect(
+				$app['url_generator']->generate(
+					'show-membership-confirmation',
+					[
+						'id' => $response->getMembershipApplication()->getId(),
+						'token' => $response->getAccessToken()
+					]
+				),
+				Response::HTTP_SEE_OTHER
+			) :
 			$ffFactory->newMembershipFormViolationPresenter()->present(
 				$request,
 				$httpRequest->request->get( 'showMembershipTypeOption' ) === 'true'
 			);
 	}
 );
+
+$app->get(
+	'show-membership-confirmation',
+	function( Application $app, Request $request ) use ( $ffFactory ) {
+		$confirmationRequest = new ShowMembershipAppConfirmationRequest( (int)$request->query->get( 'id', 0 ) );
+
+		return $ffFactory->newMembershipApplicationConfirmationHtmlPresenter()->present(
+			$ffFactory->newMembershipApplicationConfirmationUseCase( $request->query->get( 'token', '' ) )
+				->showConfirmation( $confirmationRequest )
+		);
+	}
+)->bind( 'show-membership-confirmation' );
 
 $app->get(
 	'cancel-membership-application',

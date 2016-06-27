@@ -121,6 +121,7 @@ use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
 use WMDE\Fundraising\Frontend\UseCases\HandlePayPalPaymentNotification\HandlePayPalPaymentNotificationUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\ListCommentsUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ShowDonationConfirmation\ShowDonationConfirmationUseCase;
+use WMDE\Fundraising\Frontend\UseCases\ShowMembershipApplicationConfirmation\ShowMembershipApplicationConfirmationUseCase;
 use WMDE\Fundraising\Frontend\Validation\AllowedValuesValidator;
 use WMDE\Fundraising\Frontend\Validation\AmountPolicyValidator;
 use WMDE\Fundraising\Frontend\Validation\AmountValidator;
@@ -953,6 +954,13 @@ class FunFunFactory {
 				[ 'greeting_generator' => $this->getGreetingGenerator() ]
 			),
 			'mail_subject_confirm_membership_application_cancellation'
+		);
+	}
+
+	public function newMembershipApplicationConfirmationUseCase( string $accessToken ) {
+		return new ShowMembershipApplicationConfirmationUseCase(
+			$this->newMembershipApplicationAuthorizer( null, $accessToken ), $this->getMembershipApplicationRepository(),
+			$this->newMembershipApplicationTokenFetcher()
 		);
 	}
 

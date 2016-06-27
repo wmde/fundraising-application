@@ -33,20 +33,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	public function testGivenValidRequest_successResponseIsReturned() {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setNullMessenger();
-
-			$client->request(
-				'POST',
-				'apply-for-membership',
-				$this->newValidHttpParameters()
-			);
-
-			$this->assertContains( 'membership application confirmed', $client->getResponse()->getContent() );
-		} );
-	}
-
 	private function newValidHttpParameters(): array {
 		return [
 			'membership_type' => ValidMembershipApplication::MEMBERSHIP_TYPE,
@@ -168,8 +154,27 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			);
 
 			$responseContent = $client->getResponse()->getContent();
+
 			$this->assertContains( 'id=1', $responseContent );
-			$this->assertContains( 'updateToken=' . self::FIXED_TOKEN, $responseContent );
+			$this->assertContains( 'token=' . self::FIXED_TOKEN, $responseContent );
+		} );
+	}
+
+	public function testGivenValidRequest_requestIsRedirected() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setNullMessenger();
+
+			$client->followRedirects( false );
+
+			$client->request(
+				'POST',
+				'apply-for-membership',
+				$this->newValidHttpParameters()
+			);
+
+			$response = $client->getResponse();
+			$this->assertTrue( $response->isRedirect() );
+			$this->assertContains( 'show-membership-confirmation', $response->headers->get( 'Location' ) );
 		} );
 	}
 

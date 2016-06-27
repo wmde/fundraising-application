@@ -7,6 +7,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\MembershipApplicant;
 use WMDE\Fundraising\Frontend\Domain\Model\MembershipApplication;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipResponse;
+use WMDE\Fundraising\Frontend\UseCases\ShowMembershipApplicationConfirmation\ShowMembershipAppConfirmationResponse;
 
 /**
  * Render the confirmation pages for membership applications
@@ -22,10 +23,10 @@ class MembershipApplicationConfirmationHtmlPresenter {
 		$this->template = $template;
 	}
 
-	public function present( ApplyForMembershipResponse $response ): string {
+	public function present( ShowMembershipAppConfirmationResponse $response ): string {
 		return $this->template->render(
 			$this->getConfirmationPageArguments(
-				$response->getMembershipApplication(),
+				$response->getApplication(),
 				$response->getUpdateToken()
 			)
 		);
