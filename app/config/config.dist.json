@@ -21,7 +21,9 @@
 				"enabled": true,
 				"rawpages": [
 					"Mail_Subscription_Confirmation.twig",
-					"Mail_Subscription_Request.twig"
+					"Mail_Subscription_Request.twig",
+					"Mail_Membership_Application_Confirmation.twig",
+					"Mail_Membership_Application_Cancellation_Confirmation.twig"
 				]
 			},
 			"filesystem": {
