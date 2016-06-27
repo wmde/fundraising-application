@@ -6,10 +6,9 @@ namespace WMDE\Fundraising\Frontend\UseCases\ApplyForMembership;
 
 use WMDE\Fundraising\Frontend\Domain\Model\MembershipApplication;
 use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepository;
-use WMDE\Fundraising\Frontend\Infrastructure\MembershipAppAuthUpdater;
+use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTokenFetcher;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
-use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
 
 /**
  * @license GNU GPL v2+
@@ -20,20 +19,17 @@ class ApplyForMembershipUseCase {
 	/* private */ const YEARLY_PAYMENT_MODERATION_THRESHOLD_IN_EURO = 1000;
 
 	private $repository;
-	private $authUpdater;
+	private $tokenFetcher;
 	private $mailer;
-	private $tokenGenerator;
 	private $validator;
 
 	public function __construct( MembershipApplicationRepository $repository,
-		MembershipAppAuthUpdater $authUpdater, TemplateBasedMailer $mailer,
-		TokenGenerator $tokenGenerator, MembershipApplicationValidator $validator,
-		MembershipApplicationTracker $tracker ) {
+		MembershipApplicationTokenFetcher $tokenFetcher, TemplateBasedMailer $mailer,
+		MembershipApplicationValidator $validator, MembershipApplicationTracker $tracker ) {
 
 		$this->repository = $repository;
-		$this->authUpdater = $authUpdater;
+		$this->tokenFetcher = $tokenFetcher;
 		$this->mailer = $mailer;
-		$this->tokenGenerator = $tokenGenerator;
 		$this->validator = $validator;
 		$this->membershipApplicationTracker = $tracker;
 	}
@@ -54,12 +50,8 @@ class ApplyForMembershipUseCase {
 		// TODO: handle exceptions
 		$this->repository->storeApplication( $application );
 
-		$accessToken = $this->tokenGenerator->generateToken();
-		$updateToken = $this->tokenGenerator->generateToken();
-
 		// TODO: handle exceptions
-		$this->authUpdater->allowAccessViaToken( $application->getId(), $accessToken );
-		$this->authUpdater->allowModificationViaToken( $application->getId(), $updateToken );
+		$tokens = $this->tokenFetcher->getTokens( $application->getId() );
 
 		// TODO: handle exceptions
 		$this->membershipApplicationTracker->trackApplication( $application->getId(), $request->getTrackingInfo() );
@@ -67,7 +59,11 @@ class ApplyForMembershipUseCase {
 		// TODO: handle exceptions
 		$this->sendConfirmationEmail( $application );
 
-		return ApplyForMembershipResponse::newSuccessResponse( $accessToken, $updateToken, $application );
+		return ApplyForMembershipResponse::newSuccessResponse(
+			$tokens->getAccessToken(),
+			$tokens->getUpdateToken(),
+			$application
+		);
 	}
 
 	private function newApplicationFromRequest( ApplyForMembershipRequest $request ): MembershipApplication {

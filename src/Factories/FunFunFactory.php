@@ -34,9 +34,10 @@ use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationEventLogger;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationPrePersistSubscriber;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationTokenFetcher;
-use WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipAppAuthUpdater;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipApplicationAuthorizer;
+use WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipApplicationPrePersistSubscriber;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipApplicationRepository;
+use WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipApplicationTokenFetcher;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipApplicationTracker;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineSubscriptionRepository;
 use WMDE\Fundraising\Frontend\DataAccess\InternetDomainNameValidator;
@@ -61,8 +62,8 @@ use WMDE\Fundraising\Frontend\Infrastructure\DonationTokenFetcher;
 use WMDE\Fundraising\Frontend\Infrastructure\Honorifics;
 use WMDE\Fundraising\Frontend\Infrastructure\LoggingMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\LoggingPaymentNotificationVerifier;
-use WMDE\Fundraising\Frontend\Infrastructure\MembershipAppAuthUpdater;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationAuthorizer;
+use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTokenFetcher;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 use WMDE\Fundraising\Frontend\Infrastructure\PageRetriever;
@@ -169,6 +170,7 @@ class FunFunFactory {
 			$entityManager = ( new StoreFactory( $this->getConnection() ) )->getEntityManager();
 			if ( $this->addDoctrineSubscribers ) {
 				$entityManager->getEventManager()->addEventSubscriber( $this->newDoctrineDonationPrePersistSubscriber() );
+				$entityManager->getEventManager()->addEventSubscriber( $this->newDoctrineMembershipApplicationPrePersistSubscriber() );
 			}
 
 			return $entityManager;
@@ -891,9 +893,8 @@ class FunFunFactory {
 	public function newApplyForMembershipUseCase(): ApplyForMembershipUseCase {
 		return new ApplyForMembershipUseCase(
 			$this->getMembershipApplicationRepository(),
-			$this->newMembershipAuthUpdater(),
+			$this->newMembershipApplicationTokenFetcher(),
 			$this->newApplyForMembershipMailer(),
-			$this->getTokenGenerator(),
 			$this->newMembershipApplicationValidator(),
 			$this->newMembershipApplicationTracker()
 		);
@@ -920,12 +921,6 @@ class FunFunFactory {
 
 	private function newMembershipApplicationTracker(): MembershipApplicationTracker {
 		return new DoctrineMembershipApplicationTracker( $this->getEntityManager() );
-	}
-
-	private function newMembershipAuthUpdater(): MembershipAppAuthUpdater {
-		return new DoctrineMembershipAppAuthUpdater(
-			$this->getEntityManager()
-		);
 	}
 
 	public function newCancelMembershipApplicationUseCase( string $updateToken ): CancelMembershipApplicationUseCase {
@@ -1057,6 +1052,14 @@ class FunFunFactory {
 		);
 	}
 
+	private function newDoctrineMembershipApplicationPrePersistSubscriber(): DoctrineMembershipApplicationPrePersistSubscriber {
+		$tokenGenerator = $this->getTokenGenerator();
+		return new DoctrineMembershipApplicationPrePersistSubscriber(
+			$tokenGenerator,
+			$tokenGenerator
+		);
+	}
+
 	public function setTokenGenerator( TokenGenerator $tokenGenerator ) {
 		$this->tokenGenerator = $tokenGenerator;
 	}
@@ -1067,6 +1070,12 @@ class FunFunFactory {
 
 	private function newDonationTokenFetcher(): DonationTokenFetcher {
 		return new DoctrineDonationTokenFetcher(
+			$this->getEntityManager()
+		);
+	}
+
+	private function newMembershipApplicationTokenFetcher(): MembershipApplicationTokenFetcher {
+		return new DoctrineMembershipApplicationTokenFetcher(
 			$this->getEntityManager()
 		);
 	}
