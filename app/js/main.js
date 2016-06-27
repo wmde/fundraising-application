@@ -13,6 +13,7 @@ module.exports = {
 		createBankDataDisplayHandler: require( './lib/view_handler/display_bank_data' ).createBankDataDisplayHandler,
 		createSlidingVisibilitySwitcher: require( './lib/view_handler/element_visibility_switcher' ).createSlidingVisibilitySwitcher,
 		createSimpleVisibilitySwitcher: require( './lib/view_handler/element_visibility_switcher' ).createSimpleVisibilitySwitcher,
+		createDefaultValueSwitcher: require( './lib/view_handler/default_value_switcher' ).createDefaultValueSwitcher,
 		createErrorBoxHandler:  require( './lib/view_handler/error_box' ).createHandler,
 		createFormPageVisibilityHandler: require( './lib/view_handler/form_page_visibility' ).createHandler,
 		createPaymentIntervalAndAmountDisplayHandler: require( './lib/view_handler/display_interval_and_amount' ).createPaymentIntervalAndAmountDisplayHandler,
