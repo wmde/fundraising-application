@@ -12,6 +12,7 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\GetMembershipApplicationExcept
 use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\StoreMembershipApplicationException;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
@@ -32,7 +33,9 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit_Framework_Tes
 	private $entityManager;
 
 	public function setUp() {
-		$this->entityManager = TestEnvironment::newInstance()->getFactory()->getEntityManager();
+		$factory = TestEnvironment::newInstance()->getFactory();
+		$factory->disableDoctrineSubscribers();
+		$this->entityManager = $factory->getEntityManager();
 		parent::setUp();
 	}
 

@@ -8,12 +8,16 @@ use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 
 /**
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
+ * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class ApplyForMembershipRouteTest extends WebRouteTestCase {
+
+	const FIXED_TOKEN = 'fixed_token';
 
 	public function setUp() {
 		if ( !function_exists( 'lut_init' ) ) {
@@ -155,6 +159,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	public function testGivenValidRequest_confirmationPageContainsCancellationParameters() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setNullMessenger();
+			$factory->setTokenGenerator( new FixedTokenGenerator( self::FIXED_TOKEN ) );
 
 			$client->request(
 				'POST',
@@ -164,7 +169,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 			$responseContent = $client->getResponse()->getContent();
 			$this->assertContains( 'id=1', $responseContent );
-			$this->assertRegExp( '/updateToken=[a-z0-9]{32}/', $responseContent );
+			$this->assertContains( 'updateToken=' . self::FIXED_TOKEN, $responseContent );
 		} );
 	}
 

@@ -7,12 +7,15 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\ApplyForMembershi
 use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\Domain\Model\Iban;
+use WMDE\Fundraising\Frontend\Domain\Model\MembershipApplication;
 use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepository;
-use WMDE\Fundraising\Frontend\Infrastructure\MembershipAppAuthUpdater;
+use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTokenFetcher;
+use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTokens;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTrackingInfo;
 use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedMembershipApplicationTokenFetcher;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\InMemoryMembershipApplicationRepository;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
@@ -31,17 +34,13 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 	const ID_OF_NON_EXISTING_APPLICATION = 1337;
 	const FIRST_APPLICATION_ID = 1;
-	const GENERATED_TOKEN = 'Gimmeh all the access';
+	const ACCESS_TOKEN = 'Gimmeh all the access';
+	const UPDATE_TOKEN = 'Lemme change all the stuff';
 
 	/**
 	 * @var MembershipApplicationRepository
 	 */
 	private $repository;
-
-	/**
-	 * @var MembershipAppAuthUpdater|\PHPUnit_Framework_MockObject_MockObject
-	 */
-	private $authUpdater;
 
 	/**
 	 * @var TemplateBasedMailerSpy
@@ -65,9 +64,8 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 	public function setUp() {
 		$this->repository = new InMemoryMembershipApplicationRepository();
-		$this->authUpdater = $this->createMock( MembershipAppAuthUpdater::class );
 		$this->mailer = new TemplateBasedMailerSpy( $this );
-		$this->tokenGenerator = new FixedTokenGenerator( self::GENERATED_TOKEN );
+		$this->tokenGenerator = new FixedTokenGenerator( self::ACCESS_TOKEN );
 		$this->validator = $this->newSucceedingValidator();
 		$this->tracker = $this->createMock( MembershipApplicationTracker::class );
 	}
@@ -92,12 +90,18 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 	private function newUseCase(): ApplyForMembershipUseCase {
 		return new ApplyForMembershipUseCase(
 			$this->repository,
-			$this->authUpdater,
+			$this->newTokenFetcher(),
 			$this->mailer,
-			$this->tokenGenerator,
 			$this->validator,
 			$this->tracker
 		);
+	}
+
+	private function newTokenFetcher(): MembershipApplicationTokenFetcher {
+		return new FixedMembershipApplicationTokenFetcher( new MembershipApplicationTokens(
+			self::ACCESS_TOKEN,
+			self::UPDATE_TOKEN
+		) );
 	}
 
 	private function newValidRequest(): ApplyForMembershipRequest {
@@ -174,29 +178,11 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 		);
 	}
 
-	public function testGivenValidRequest_tokenIsGeneratedAndAssigned() {
-		$this->authUpdater->expects( $this->once() )
-			->method( 'allowModificationViaToken' )
-			->with(
-				$this->equalTo( self::FIRST_APPLICATION_ID ),
-				$this->equalTo( self::GENERATED_TOKEN )
-			);
-
-		$this->authUpdater->expects( $this->once() )
-			->method( 'allowAccessViaToken' )
-			->with(
-				$this->equalTo( self::FIRST_APPLICATION_ID ),
-				$this->equalTo( self::GENERATED_TOKEN )
-			);
-
-		$this->newUseCase()->applyForMembership( $this->newValidRequest() );
-	}
-
 	public function testGivenValidRequest_tokenIsGeneratedAndReturned() {
 		$response = $this->newUseCase()->applyForMembership( $this->newValidRequest() );
 
-		$this->assertSame( self::GENERATED_TOKEN, $response->getAccessToken() );
-		$this->assertSame( self::GENERATED_TOKEN, $response->getUpdateToken() );
+		$this->assertSame( self::ACCESS_TOKEN, $response->getAccessToken() );
+		$this->assertSame( self::UPDATE_TOKEN, $response->getUpdateToken() );
 	}
 
 	public function testWhenValidationFails_failureResultIsReturned() {
