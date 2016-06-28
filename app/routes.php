@@ -512,10 +512,10 @@ $app->get(
 );
 
 $app->get( '/', function ( Application $app ) {
-
-	$subRequest = Request::create('/page/DonationForm', 'GET');
-
-	return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+	return $app->handle(
+		Request::create( '/page/DonationForm', 'GET' ),
+		HttpKernelInterface::SUB_REQUEST
+	);
 } );
 
 // redirect display page requests from old URLs
