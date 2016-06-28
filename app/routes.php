@@ -409,8 +409,8 @@ $app->post(
 
 		$response = $ffFactory->newApplyForMembershipUseCase()->applyForMembership( $request );
 
-		return $response->isSuccessful() ?
-			$app->redirect(
+		if ( $response->isSuccessful() ) {
+			return $app->redirect(
 				$app['url_generator']->generate(
 					'show-membership-confirmation',
 					[
@@ -419,11 +419,13 @@ $app->post(
 					]
 				),
 				Response::HTTP_SEE_OTHER
-			) :
-			$ffFactory->newMembershipFormViolationPresenter()->present(
+			);
+		} else {
+			return $ffFactory->newMembershipFormViolationPresenter()->present(
 				$request,
 				$httpRequest->request->get( 'showMembershipTypeOption' ) === 'true'
 			);
+		}
 	}
 );
 
