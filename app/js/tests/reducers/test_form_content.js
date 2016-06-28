@@ -116,6 +116,16 @@ test( 'When CHANGE_CONTENT sets payment type to direct debit and address type is
 	t.end();
 } );
 
+test( 'When CHANGE_CONTENT is passed a value surrounded by whitespaces, the value is trimmed', function ( t ) {
+	var stateBefore = { name: '  Jack L. Hide   ' },
+		expectedState = { name: 'Jack L. Hide' },
+		action = { type: 'CHANGE_CONTENT', payload: { value: '  Jack L. Hide  ', contentName: 'name' } };
+
+	deepFreeze( stateBefore );
+	t.deepEqual( formContent( stateBefore, action ), expectedState );
+	t.end();
+} );
+
 test( 'FINISH_BANK_DATA_VALIDATION sets bank data when status is OK', function ( t ) {
 	var stateBefore = { iban: '', bic: '', accountNumber: '', bankCode: '', bankName: '' },
 		expectedState = {

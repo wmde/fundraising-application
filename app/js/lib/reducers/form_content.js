@@ -48,6 +48,10 @@ function forcePersonalDataForDirectDebit( state ) {
 	}
 }
 
+function trimValue( value ) {
+	return value.replace( /^\s+|\s+$/gm, '' );
+}
+
 module.exports = {
 	stateContainsUnknownKeys: function ( state, initialState ) {
 		return !_.isEmpty( getInvalidKeys( state, initialState ) );
@@ -73,7 +77,7 @@ module.exports = {
 				}
 				newState = _.clone( state );
 				clearFieldsIfAddressTypeChanges( newState, action.payload );
-				newState[ action.payload.contentName ] = action.payload.value;
+				newState[ action.payload.contentName ] = trimValue( action.payload.value );
 				newState = forcePersonalDataForDirectDebit( newState );
 				return newState;
 			case 'FINISH_BANK_DATA_VALIDATION':
