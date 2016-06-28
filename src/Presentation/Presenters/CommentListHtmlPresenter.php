@@ -20,7 +20,7 @@ class CommentListHtmlPresenter {
 		$this->template = $template;
 	}
 
-	public function present( CommentList $commentList ): string {
+	public function present( CommentList $commentList, int $pageNumber ): string {
 		return $this->template->render( [
 			'comments' => array_map(
 				function( CommentWithAmount $comment ) {
@@ -33,6 +33,8 @@ class CommentListHtmlPresenter {
 				},
 				$commentList->toArray()
 			),
+			'page' => $pageNumber,
+			'max_pages' => 100
 		] );
 	}
 

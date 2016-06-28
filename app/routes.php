@@ -200,7 +200,8 @@ $app->get(
 						10,
 						(int)$request->query->get( 'page', '1' )
 					)
-				)
+				),
+				(int)$request->query->get( 'page', '1' )
 			)
 		);
 	}
