@@ -6,11 +6,6 @@ $(function() {
       $(".display-amount").text($(".amount-custom :text").val());
     }
 
-    if (($('#membership-type-2').length > 0) && $("#membership-type-2").is(':checked')) {
-      $("#address-type-2").parent().hide();
-      $("#address-type-1").trigger('click');
-    }
-
     /* slide toggle */
     function initSlideToggle() {
       $('a.slide-toggle').click(function (e) {
