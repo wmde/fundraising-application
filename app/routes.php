@@ -39,6 +39,16 @@ use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentListingRequest;
 use WMDE\Fundraising\Frontend\UseCases\ShowMembershipApplicationConfirmation\ShowMembershipAppConfirmationRequest;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
 
+$app->before( function( Request $request ) {
+	foreach ( [ $request->request, $request->query ] as $parameterBag ) {
+		foreach ( $parameterBag->keys() as $key ) {
+			if ( is_string( $parameterBag->get( $key ) ) ) {
+				$parameterBag->set( $key, trim( $parameterBag->get( $key ) ) );
+			}
+		}
+	}
+}, Application::EARLY_EVENT );
+
 $app->get(
 	'validate-email',
 	function( Request $request ) use ( $app, $ffFactory ) {
