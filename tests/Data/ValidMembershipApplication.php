@@ -34,7 +34,7 @@ class ValidMembershipApplication {
 
 	const APPLICANT_CITY = 'Berlin';
 	const APPLICANT_COUNTRY_CODE = 'DE';
-	const APPLICANT_POSTAL_CODE = '1234	';
+	const APPLICANT_POSTAL_CODE = '1234';
 	const APPLICANT_STREET_ADDRESS = 'Nyan street';
 
 	const APPLICANT_EMAIL_ADDRESS = 'jeroendedauw@gmail.com';
