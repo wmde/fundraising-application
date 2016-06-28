@@ -116,6 +116,22 @@ test( 'When CHANGE_CONTENT sets payment type to direct debit and address type is
 	t.end();
 } );
 
+test( 'When CHANGE_CONTENT sets membership type to active, address type is switched to person', function ( t ) {
+	var stateBefore = {
+			membershipType: 'sustaining',
+			addressType: 'firma'
+		},
+		expectedState = {
+			membershipType: 'active',
+			addressType: 'person'
+		},
+		action = { type: 'CHANGE_CONTENT', payload: { value: 'active', contentName: 'membershipType' } };
+
+	deepFreeze( stateBefore );
+	t.deepEqual( formContent( stateBefore, action ), expectedState );
+	t.end();
+} );
+
 test( 'When CHANGE_CONTENT is passed a value surrounded by whitespaces, the value is trimmed', function ( t ) {
 	var stateBefore = { name: '  Jack L. Hide   ' },
 		expectedState = { name: 'Jack L. Hide' },

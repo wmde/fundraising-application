@@ -48,6 +48,14 @@ function forcePersonalDataForDirectDebit( state ) {
 	}
 }
 
+function forceAddressTypeForActiveMembership( state ) {
+	if ( state.membershipType === 'active' ) {
+		return objectAssign( {}, state, { addressType: 'person' } );
+	} else {
+		return state;
+	}
+}
+
 function trimValue( value ) {
 	return value.replace( /^\s+|\s+$/gm, '' );
 }
@@ -79,6 +87,7 @@ module.exports = {
 				clearFieldsIfAddressTypeChanges( newState, action.payload );
 				newState[ action.payload.contentName ] = trimValue( action.payload.value );
 				newState = forcePersonalDataForDirectDebit( newState );
+				newState = forceAddressTypeForActiveMembership( newState );
 				return newState;
 			case 'FINISH_BANK_DATA_VALIDATION':
 				if ( action.payload.status !== 'OK' ) {
