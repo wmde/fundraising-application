@@ -10,6 +10,8 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\DonationEventLoggerSpy;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeDonationRepository;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
@@ -114,7 +116,8 @@ class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$useCase = new CancelDonationUseCase(
 			$this->getDonationRepositoryWithDonation( $donation ),
 			$mailer,
-			new SucceedingDonationAuthorizer()
+			new SucceedingDonationAuthorizer(),
+			new DonationEventLoggerSpy()
 		);
 
 		$response = $useCase->cancelDonation( new CancelDonationRequest( $donation->getId() ) );
@@ -127,6 +130,40 @@ class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$donationRepository->storeDonation( $donation );
 
 		return $donationRepository;
+	}
+
+	public function testWhenDonationGetsCancelled_logEntryNeededByBackendIsWritten() {
+		$donationLogger = new DonationEventLoggerSpy();
+		$donation = $this->newCancelableDonation();
+
+		$useCase = new CancelDonationUseCase(
+			$this->getDonationRepositoryWithDonation( $donation ),
+			new TemplateBasedMailerSpy( $this ),
+			new SucceedingDonationAuthorizer(),
+			$donationLogger
+		);
+
+		$useCase->cancelDonation( new CancelDonationRequest( $donation->getId() ) );
+
+		$this->assertSame(
+			[ [ $donation->getId(), 'frontend: storno' ] ],
+			$donationLogger->getLogCalls()
+		);
+	}
+
+	public function testGivenIdOfNonCancellableDonation_nothingIsWrittenToTheLog() {
+		$donationLogger = new DonationEventLoggerSpy();
+
+		$useCase = new CancelDonationUseCase(
+			new FakeDonationRepository(),
+			new TemplateBasedMailerSpy( $this ),
+			new SucceedingDonationAuthorizer(),
+			$donationLogger
+		);
+
+		$useCase->cancelDonation( new CancelDonationRequest( 1 ) );
+
+		$this->assertSame( [], $donationLogger->getLogCalls() );
 	}
 
 }

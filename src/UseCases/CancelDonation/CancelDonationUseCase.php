@@ -9,6 +9,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizer;
+use WMDE\Fundraising\Frontend\Infrastructure\DonationEventLogger;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 
 /**
@@ -17,16 +18,20 @@ use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
  */
 class CancelDonationUseCase {
 
+	/* private */ const LOG_MESSAGE_FOR_BACKEND = 'frontend: storno';
+
 	private $donationRepository;
 	private $mailer;
 	private $authorizationService;
+	private $donationLogger;
 
 	public function __construct( DonationRepository $donationRepository, TemplateBasedMailer $mailer,
-		DonationAuthorizer $authorizationService ) {
+		DonationAuthorizer $authorizationService, DonationEventLogger $donationLogger ) {
 
 		$this->donationRepository = $donationRepository;
 		$this->mailer = $mailer;
 		$this->authorizationService = $authorizationService;
+		$this->donationLogger = $donationLogger;
 	}
 
 	public function cancelDonation( CancelDonationRequest $cancellationRequest ): CancelDonationResponse {
@@ -52,8 +57,7 @@ class CancelDonationUseCase {
 			return $this->newFailureResponse( $cancellationRequest );
 		}
 
-		// TODO: update donation status
-		// TODO: add log message to spenden.data['log']
+		$this->donationLogger->log( $donation->getId(), self::LOG_MESSAGE_FOR_BACKEND );
 
 		$this->sendConfirmationEmail( $donation );
 
