@@ -430,12 +430,12 @@ $app->post(
 				),
 				Response::HTTP_SEE_OTHER
 			);
-		} else {
-			return $ffFactory->newMembershipFormViolationPresenter()->present(
-				$request,
-				$httpRequest->request->get( 'showMembershipTypeOption' ) === 'true'
-			);
 		}
+
+		return $ffFactory->newMembershipFormViolationPresenter()->present(
+			$request,
+			$httpRequest->request->get( 'showMembershipTypeOption' ) === 'true'
+		);
 	}
 );
 
