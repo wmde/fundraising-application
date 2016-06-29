@@ -60,7 +60,21 @@
                             </div>
                         {% endfor %}
 
-                        <!-- TODO: pagination -->
+                        <div style="display: inline-block; width: 100%">
+                            <div style="display: inline-block; text-align:left; width: 33%;">
+                                {% if page > 1 %}
+                                    <a href="?page=1"><span class="icon-first"></span></a>
+                                    <a href="?page={$ page - 1 $}"><span class="icon-previous"></span></a>
+                                {% endif %}
+                            </div>
+                            <div style="display: inline-block; text-align:center; width: 32%;">{$ 'pagination_page_n_of_x'|trans( { '%page%': page, '%max_pages%': max_pages } ) $}</div>
+                            <div style="display: inline-block; text-align:right; width: 33%;">
+                                {% if page < max_pages %}
+                                    <a href="?page={$ page + 1 $}"><span class="icon-next"></span></a>
+                                    <a href="?page={$ max_pages $}"><span class="icon-last"></span></a>
+                                {% endif %}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
