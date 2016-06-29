@@ -22,6 +22,6 @@
   "comment_failure_donation_has_comment": "Die Spende wurde bereits kommentiert.",
   "comment_failure_save_error": "Der Kommentar konte nicht gespeichert werden.",
   "comment_success_ok": "Vielen Dank! Die Nachricht wurde verschickt!",
-  "comment_success_needs_moderation": "Ihr Kommentar wurde von unserem System zur Überprüfung vorgemerkt und steht daher nicht automatisch in der öffentlichen Spenderliste."
-
+  "comment_success_needs_moderation": "Ihr Kommentar wurde von unserem System zur Überprüfung vorgemerkt und steht daher nicht automatisch in der öffentlichen Spenderliste.",
+  "pagination_page_n_of_x": "Seite %page% von %max_pages%+"
 }
