@@ -375,69 +375,7 @@ $app->post(
 $app->post(
 	'apply-for-membership',
 	function( Application $app, Request $httpRequest ) use ( $ffFactory ) {
-		$request = new ApplyForMembershipRequest();
-
-		$request->setMembershipType( $httpRequest->request->get( 'membership_type', '' ) );
-
-		if ( $httpRequest->request->get( 'adresstyp', '' )  === 'firma' ) {
-			$request->markApplicantAsCompany();
-		}
-
-		$request->setApplicantSalutation( $httpRequest->request->get( 'anrede', '' ) );
-		$request->setApplicantTitle( $httpRequest->request->get( 'titel', '' ) );
-		$request->setApplicantFirstName( $httpRequest->request->get( 'vorname', '' ) );
-		$request->setApplicantLastName( $httpRequest->request->get( 'nachname', '' ) );
-		$request->setApplicantCompanyName( $httpRequest->request->get( 'firma', '' ) );
-
-		$request->setApplicantStreetAddress( $httpRequest->request->get( 'strasse', '' ) );
-		$request->setApplicantPostalCode( $httpRequest->request->get( 'postcode', '' ) );
-		$request->setApplicantCity( $httpRequest->request->get( 'ort', '' ) );
-		$request->setApplicantCountryCode( $httpRequest->request->get( 'country', '' ) );
-
-		$request->setApplicantEmailAddress( $httpRequest->request->get( 'email', '' ) );
-		$request->setApplicantPhoneNumber( $httpRequest->request->get( 'phone', '' ) );
-		$request->setApplicantDateOfBirth( $httpRequest->request->get( 'dob', '' ) );
-
-		$request->setPaymentIntervalInMonths( (int)$httpRequest->request->get( 'membership_fee_interval', 0 ) );
-		// TODO: German format expected here, amount should be converted based on user's locale
-		$request->setPaymentAmountInEuros( str_replace( ',', '.', $httpRequest->request->get( 'membership_fee', '' ) ) );
-
-		$bankData = new \WMDE\Fundraising\Frontend\Domain\Model\BankData();
-
-		$bankData->setBankName( $httpRequest->request->get( 'bank_name', '' ) );
-		$bankData->setIban( new Iban( $httpRequest->request->get( 'iban', '' ) ) );
-		$bankData->setBic( $httpRequest->request->get( 'bic', '' ) );
-		$bankData->setAccount( $httpRequest->request->get( 'account_number', '' ) );
-		$bankData->setBankCode( $httpRequest->request->get( 'bank_code', '' ) );
-
-		$request->setTrackingInfo( new MembershipApplicationTrackingInfo(
-			$httpRequest->request->get( 'templateCampaign', '' ),
-			$httpRequest->request->get( 'templateName', '' )
-		) );
-
-		$bankData->assertNoNullFields()->freeze();
-		$request->setPaymentBankData( $bankData );
-		$request->assertNoNullFields()->freeze();
-
-		$response = $ffFactory->newApplyForMembershipUseCase()->applyForMembership( $request );
-
-		if ( $response->isSuccessful() ) {
-			return $app->redirect(
-				$app['url_generator']->generate(
-					'show-membership-confirmation',
-					[
-						'id' => $response->getMembershipApplication()->getId(),
-						'token' => $response->getAccessToken()
-					]
-				),
-				Response::HTTP_SEE_OTHER
-			);
-		}
-
-		return $ffFactory->newMembershipFormViolationPresenter()->present(
-			$request,
-			$httpRequest->request->get( 'showMembershipTypeOption' ) === 'true'
-		);
+		return ( new ApplyForMembershipHandler( $ffFactory, $app ) )->handle( $httpRequest );
 	}
 );
 

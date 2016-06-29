@@ -1121,4 +1121,8 @@ class FunFunFactory {
 		return $test->render( [] );
 	}
 
+	public function getMembershipApplicationTimeframeLimit() {
+		return $this->config['membership-application-timeframe-limit'];
+	}
+
 }
