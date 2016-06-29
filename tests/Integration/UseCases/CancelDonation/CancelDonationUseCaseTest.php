@@ -59,13 +59,15 @@ class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testGivenIdOfCancellableDonation_cancellationIsSuccessful() {
-		$factory = $this->newFactoryWithNullMailer();
-
 		$donation = $this->newCancelableDonation();
 
-		$this->storeDonation( $donation, $factory );
+		$useCase = new CancelDonationUseCase(
+			new FakeDonationRepository( $donation ),
+			new TemplateBasedMailerSpy( $this ),
+			new SucceedingDonationAuthorizer(),
+			new DonationEventLoggerSpy()
+		);
 
-		$useCase = $factory->newCancelDonationUseCase( self::CORRECT_UPDATE_TOKEN );
 		$response = $useCase->cancelDonation( new CancelDonationRequest( $donation->getId() ) );
 
 		$this->assertTrue( $response->cancellationWasSuccessful() );
