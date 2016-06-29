@@ -88,6 +88,7 @@
 			"wikispecies.org": "wikispecies.org"
 		}
 	},
+	"donation-timeframe-limit": "PT15M",
 	"token-length": 16,
 	"token-validity-timestamp": "PT4H",
 	"paypal": {

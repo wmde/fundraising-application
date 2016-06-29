@@ -36,6 +36,10 @@ class AddDonationHandler {
 	}
 
 	public function handle( Request $request ): Response {
+		if ( !$this->isSubmissionAllowed() ) {
+			return new Response( $this->ffFactory->newRejectionMessageResponse() );
+		}
+
 		$addDonationRequest = $this->createDonationRequest( $request );
 		$responseModel = $this->ffFactory->newAddDonationUseCase()->addDonation( $addDonationRequest );
 
@@ -157,6 +161,20 @@ class AddDonationHandler {
 		$locale = 'de_DE'; // TODO: make this configurable for multilanguage support
 
 		return Euro::newFromFloat( ( new AmountParser( $locale ) )->parseAsFloat( $amount ) );
+	}
+
+	private function isSubmissionAllowed() {
+		$donationTimestamp = $this->ffFactory->getCookieHandler()->getCookie( 'donation_timestamp' );
+
+		if ( $donationTimestamp !== '' ) {
+			$minNextTimestamp = \DateTime::createFromFormat( 'Y-m-d H:i:s', $donationTimestamp )
+				->add( new \DateInterval( $this->ffFactory->getDonationTimeframeLimit() ) );
+			if ( $minNextTimestamp > new \DateTime() ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 }

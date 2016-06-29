@@ -1112,4 +1112,13 @@ class FunFunFactory {
 		$this->cookieHandler = $cookieHandler;
 	}
 
+	public function getDonationTimeframeLimit() {
+		return $this->config['donation-timeframe-limit'];
+	}
+
+	public function newRejectionMessageResponse() {
+		$test = $this->getIncludeTemplate( 'Donation_Rejection_Message.twig' );
+		return $test->render( [] );
+	}
+
 }

@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\AddDonationHandler;
+use WMDE\Fundraising\Frontend\App\RouteHandlers\ApplyForMembershipHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\PayPalNotificationHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\RouteRedirectionHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowDonationConfirmationHandler;
