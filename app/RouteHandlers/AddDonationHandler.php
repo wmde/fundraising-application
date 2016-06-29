@@ -43,6 +43,7 @@ class AddDonationHandler {
 			return new Response( $this->ffFactory->newDonationFormViolationPresenter()->present( $responseModel->getValidationErrors(), $addDonationRequest ) );
 		}
 
+		$this->ffFactory->getCookieHandler()->setCookie( 'donation_timestamp', ( new \DateTime() )->format( 'Y-m-d H:i:s' ) );
 		return $this->newHttpResponse( $responseModel, $this->ffFactory->getDonationConfirmationPageSelector()->selectPage() );
 	}
 

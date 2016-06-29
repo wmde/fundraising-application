@@ -8,6 +8,7 @@ use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\CookieHandlerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 
 /**
@@ -39,6 +40,24 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			);
 
 			$this->assertIsExpectedDonation( $this->getDonationFromDatabase( $factory ) );
+		} );
+	}
+
+	public function testWhenDonationGetsPersisted_timestampIsStoredInCookie() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setNullMessenger();
+
+			$cookieHandler = new CookieHandlerSpy();
+			$factory->setCookieHandler( $cookieHandler );
+
+			$client->request(
+				'POST',
+				'/donation/add',
+				$this->newValidFormInput()
+			);
+
+			$this->assertNotEmpty( $cookieHandler->getCookie( 'donation_timestamp' ) );
+			$this->assertSame( 1, $cookieHandler->getSetCalls() );
 		} );
 	}
 
