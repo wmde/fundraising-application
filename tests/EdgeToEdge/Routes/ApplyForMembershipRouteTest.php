@@ -6,8 +6,10 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\BrowserCookieHandler;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\CookieHandlerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 
 /**
@@ -18,6 +20,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	const FIXED_TOKEN = 'fixed_token';
+	const FIXED_TIMESTAMP = '2020-12-01 20:12:01';
 
 	public function setUp() {
 		if ( !function_exists( 'lut_init' ) ) {
@@ -176,6 +179,54 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			$this->assertTrue( $response->isRedirect() );
 			$this->assertContains( 'show-membership-confirmation', $response->headers->get( 'Location' ) );
 		} );
+	}
+
+	public function testWhenApplicationGetsPersisted_timestampIsStoredInCookie() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setNullMessenger();
+			$cookieHandler = new CookieHandlerSpy();
+			$factory->setCookieHandler( $cookieHandler );
+
+			$client->request(
+				'POST',
+				'/apply-for-membership',
+				$this->newValidHttpParameters()
+			);
+
+			$this->assertNotEmpty( $cookieHandler->getCookie( 'memapp_timestamp' ) );
+			$this->assertSame( 1, $cookieHandler->getSetCalls() );
+		} );
+	}
+
+	public function testWhenMultipleMembershipFormSubmissions_requestGetsRejected() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setNullMessenger();
+			$factory->setCookieHandler( $this->getTimestampReturningCookieHandler() );
+
+			$client->request(
+				'POST',
+				'/apply-for-membership',
+				$this->newValidHttpParameters()
+			);
+
+			$this->assertContains( 'Sie haben vor sehr kurzer Zeit bereits', $client->getResponse()->getContent() );
+		} );
+	}
+
+	private function getPastTimestamp() {
+		return ( new \DateTime() )->add( new \DateInterval( 'PT10S' ) )->format( 'Y-m-d H:i:s' );
+	}
+
+	private function getTimestampReturningCookieHandler(): BrowserCookieHandler {
+		$pastTimestamp = $this->getPastTimestamp();
+
+		$cookieHandler = $this->getMockBuilder( BrowserCookieHandler::class )
+			->disableOriginalConstructor()
+			->getMock();
+
+		$cookieHandler->method( 'getCookie' )->with( 'memapp_timestamp' )->willReturn( $pastTimestamp );
+		$cookieHandler->method( 'getCookies' )->willReturn( [ 'name' => 'memapp_timestamp', 'value' => $pastTimestamp ] );
+		return $cookieHandler;
 	}
 
 }

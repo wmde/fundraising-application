@@ -28,10 +28,16 @@ class ApplyForMembershipHandler {
 	}
 
 	public function handle( Request $request ): Response {
+		if ( !$this->isSubmissionAllowed() ) {
+			// TODO: use other template or reuse this, but pass message to be displayed
+			return new Response( $this->ffFactory->newRejectionMessageResponse() );
+		}
+
 		$applyForMembershipRequest = $this->createMembershipRequest( $request );
 		$responseModel = $this->ffFactory->newApplyForMembershipUseCase()->applyForMembership( $applyForMembershipRequest );
 
 		if ( $responseModel->isSuccessful() ) {
+			$this->ffFactory->getCookieHandler()->setCookie( 'memapp_timestamp', ( new \DateTime() )->format( 'Y-m-d H:i:s' ) );
 			return $this->app->redirect(
 				$this->app['url_generator']->generate(
 					'show-membership-confirmation',
@@ -98,6 +104,20 @@ class ApplyForMembershipHandler {
 		$request->assertNoNullFields()->freeze();
 
 		return $request;
+	}
+
+	private function isSubmissionAllowed() {
+		$applicationTimestamp = $this->ffFactory->getCookieHandler()->getCookie( 'memapp_timestamp' );
+
+		if ( $applicationTimestamp !== '' ) {
+			$minNextTimestamp = \DateTime::createFromFormat( 'Y-m-d H:i:s', $applicationTimestamp )
+				->add( new \DateInterval( $this->ffFactory->getMembershipApplicationTimeframeLimit() ) );
+			if ( $minNextTimestamp > new \DateTime() ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 }
