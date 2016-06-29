@@ -21,4 +21,5 @@ class DonationEventLoggerSpy implements DonationEventLogger {
 	public function getLogCalls() {
 		return $this->logCalls;
 	}
+
 }

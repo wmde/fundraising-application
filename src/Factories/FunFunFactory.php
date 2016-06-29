@@ -738,7 +738,8 @@ class FunFunFactory {
 		return new CancelDonationUseCase(
 			$this->getDonationRepository(),
 			$this->newCancelDonationMailer(),
-			$this->newDonationAuthorizer( $updateToken )
+			$this->newDonationAuthorizer( $updateToken ),
+			$this->newDonationEventLogger()
 		);
 	}
 

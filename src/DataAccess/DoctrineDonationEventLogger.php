@@ -14,7 +14,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\DonationEventLogger;
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class DoctrineDonationEventLogger implements DonationEventLogger{
+class DoctrineDonationEventLogger implements DonationEventLogger {
 
 	private $entityManager;
 	private $timestampFunction;
