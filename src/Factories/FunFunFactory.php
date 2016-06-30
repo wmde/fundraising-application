@@ -797,7 +797,8 @@ class FunFunFactory {
 					$this->getTwig(),
 					'Mail_Donation_Confirmation.twig', // TODO: ongoing unification of different templates
 					[
-						'basepath' => $this->config['web-basepath']
+						'basepath' => $this->config['web-basepath'],
+						'greeting_generator' => $this->getGreetingGenerator()
 					]
 				),
 				'mail_subject_confirm_donation'
