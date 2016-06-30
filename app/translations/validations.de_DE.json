@@ -7,5 +7,6 @@
   "email_address_invalid": "Keine gültige E-Mail-Adresse",
   "email_address_domain_record_not_found": "Domain der Mailadresse nicht gefunden",
   "subscription_confirmation_code_not_found": "Es konnte kein Eintrag mit diesem Bestätigungs-Code gefunden werden.",
-  "subscription_already_confirmed": "Diese E-Mail-Adresse wurde bereits bestätigt."
+  "subscription_already_confirmed": "Diese E-Mail-Adresse wurde bereits bestätigt.",
+  "invalid_payment_type": "Ungültige Zahlungsart"
 }

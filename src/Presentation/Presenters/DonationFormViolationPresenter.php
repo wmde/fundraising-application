@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
 use WMDE\Fundraising\Frontend\Domain\Model\Donor;
+use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
@@ -47,43 +48,41 @@ class DonationFormViolationPresenter {
 				'amount' => $this->amountFormatter->format( $request->getAmount() ),
 				'paymentType' => $request->getPaymentType(),
 				'paymentIntervalInMonths' => $request->getInterval(),
-				'iban' => $request->getIban(),
-				'bic' => $request->getBic(),
-				'bankName' => $request->getBankName()
 			],
-			$this->getPersonalInfo( $request->getDonor() )
+			$this->getBankData( $request ),
+			$this->getPersonalInfo( $request )
 		);
 	}
 
-	private function getPersonalInfo( Donor $personalInfo = null ) {
-		if ( $personalInfo === null ) {
+	private function getPersonalInfo( AddDonationRequest $request ) {
+		if ( $request->donorIsAnonymous() ) {
 			return [];
 		}
 
 		return array_merge(
-			$this->getPersonName( $personalInfo->getPersonName() ),
-			$this->getPhysicalAddress( $personalInfo->getPhysicalAddress() ),
-			[ 'email' => $personalInfo->getEmailAddress() ]
+			$this->getPersonName( $request ),
+			$this->getPhysicalAddress( $request ),
+			[ 'email' => $request->getDonorEmailAddress() ]
 		);
 	}
 
-	private function getPersonName( PersonName $personName ) {
+	private function getPersonName( AddDonationRequest $request ) {
 		return [
-			'addressType' => $personName->getPersonType(),
-			'salutation' => $personName->getSalutation(),
-			'title' => $personName->getTitle(),
-			'company' => $personName->getCompanyName(),
-			'firstName' => $personName->getFirstName(),
-			'lastName' => $personName->getLastName(),
+			'addressType' => $request->getDonorType(),
+			'salutation' => $request->getDonorSalutation(),
+			'title' => $request->getDonorTitle(),
+			'company' => $request->getDonorCompany(),
+			'firstName' => $request->getDonorFirstName(),
+			'lastName' => $request->getDonorLastName(),
 		];
 	}
 
-	private function getPhysicalAddress( PhysicalAddress $address ) {
+	private function getPhysicalAddress( AddDonationRequest $request ) {
 		return [
-			'street' => $address->getStreetAddress(),
-			'postcode' => $address->getPostalCode(),
-			'city' => $address->getCity(),
-			'country' => $address->getCountryCode(),
+			'street' => $request->getDonorStreetAddress(),
+			'postcode' => $request->getDonorPostalCode(),
+			'city' => $request->getDonorCity(),
+			'country' => $request->getDonorCountryCode(),
 		];
 	}
 
@@ -98,6 +97,18 @@ class DonationFormViolationPresenter {
 		}
 
 		return $fieldNames;
+	}
+
+	private function getBankData( AddDonationRequest $request ): array {
+		if ( $request->getPaymentType() !== PaymentType::DIRECT_DEBIT ) {
+			return [];
+		}
+		$bankData = $request->getBankData();
+		return [
+			'iban' => $bankData->getIban()->toString(),
+			'bic' => $bankData->getBic(),
+			'bankName' => $bankData->getBankName()
+		];
 	}
 
 }

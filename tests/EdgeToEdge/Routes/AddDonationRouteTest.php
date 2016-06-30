@@ -395,7 +395,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$this->assertContains( 'Amount: 0', $response );
 			$this->assertContains( 'Payment type: UEB', $response );
 			$this->assertContains( 'Interval: 1', $response );
-			$this->assertContains( 'Value of field "betrag" violates rule: Amount too low', $response );
+			$this->assertContains( 'Value of field "amount" violates rule: Amount too low', $response );
 		} );
 	}
 
