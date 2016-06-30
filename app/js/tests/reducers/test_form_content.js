@@ -142,6 +142,16 @@ test( 'When CHANGE_CONTENT is passed a value surrounded by whitespaces, the valu
 	t.end();
 } );
 
+test( 'When CHANGE_CONTENT is passed a non-string value, the value is not trimmed', function ( t ) {
+	var stateBefore = { amount: 5.00 },
+		expectedState = { amount: 5.00 },
+		action = { type: 'CHANGE_CONTENT', payload: { value: 5.00, contentName: 'amount' } };
+
+	deepFreeze( stateBefore );
+	t.deepEqual( formContent( stateBefore, action ), expectedState );
+	t.end();
+} );
+
 test( 'FINISH_BANK_DATA_VALIDATION sets bank data when status is OK', function ( t ) {
 	var stateBefore = { iban: '', bic: '', accountNumber: '', bankCode: '', bankName: '' },
 		expectedState = {

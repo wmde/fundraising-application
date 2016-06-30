@@ -85,7 +85,13 @@ module.exports = {
 				}
 				newState = _.clone( state );
 				clearFieldsIfAddressTypeChanges( newState, action.payload );
-				newState[ action.payload.contentName ] = trimValue( action.payload.value );
+
+				if ( _.isString( action.payload.value ) ) {
+					newState[ action.payload.contentName ] = trimValue( action.payload.value );
+				} else {
+					newState[ action.payload.contentName ] = action.payload.value;
+				}
+
 				newState = forcePersonalDataForDirectDebit( newState );
 				newState = forceAddressTypeForActiveMembership( newState );
 				return newState;
