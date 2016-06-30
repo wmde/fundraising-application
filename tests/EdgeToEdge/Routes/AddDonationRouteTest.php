@@ -7,7 +7,9 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\BrowserCookieHandler;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\CookieHandlerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 
 /**
@@ -40,6 +42,55 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 			$this->assertIsExpectedDonation( $this->getDonationFromDatabase( $factory ) );
 		} );
+	}
+
+	public function testWhenDonationGetsPersisted_timestampIsStoredInCookie() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setNullMessenger();
+
+			$cookieHandler = new CookieHandlerSpy();
+			$factory->setCookieHandler( $cookieHandler );
+
+			$client->request(
+				'POST',
+				'/donation/add',
+				$this->newValidFormInput()
+			);
+
+			$this->assertNotEmpty( $cookieHandler->getCookie( 'donation_timestamp' ) );
+			$this->assertSame( 1, $cookieHandler->getSetCalls() );
+		} );
+	}
+
+	public function testWhenMultipleDonationFormSubmissions_requestGetsRejected() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setNullMessenger();
+			$factory->setCookieHandler( $this->getTimestampReturningCookieHandler() );
+
+			$client->request(
+				'POST',
+				'/donation/add',
+				$this->newValidFormInput()
+			);
+
+			$this->assertContains( 'Sie haben vor sehr kurzer Zeit bereits gespendet', $client->getResponse()->getContent() );
+		} );
+	}
+
+	private function getPastTimestamp() {
+		return ( new \DateTime() )->add( new \DateInterval( 'PT10S' ) )->format( 'Y-m-d H:i:s' );
+	}
+
+	private function getTimestampReturningCookieHandler(): BrowserCookieHandler {
+		$pastTimestamp = $this->getPastTimestamp();
+
+		$cookieHandler = $this->getMockBuilder( BrowserCookieHandler::class )
+			->disableOriginalConstructor()
+			->getMock();
+
+		$cookieHandler->method( 'getCookie' )->with( 'donation_timestamp' )->willReturn( $pastTimestamp );
+		$cookieHandler->method( 'getCookies' )->willReturn( [ 'name' => 'donation_timestamp', 'value' => $pastTimestamp ] );
+		return $cookieHandler;
 	}
 
 	private function newValidFormInput() {

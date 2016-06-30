@@ -8,15 +8,20 @@
 
 declare( strict_types = 1 );
 
+use Silex\Provider\SessionServiceProvider;
+use Silex\Provider\UrlGeneratorServiceProvider;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Silex\Application;
 use WMDE\Fundraising\Frontend\App\AccessDeniedException;
+use WMDE\Fundraising\Frontend\Infrastructure\BrowserCookieHandler;
 
 $app = new Application();
 
-$app->register( new Silex\Provider\UrlGeneratorServiceProvider() );
+$app->register( new SessionServiceProvider() );
+$app->register( new UrlGeneratorServiceProvider() );
 
 $app->after( function( Request $request, Response $response ) {
 	if( $response instanceof JsonResponse ) {
@@ -31,6 +36,22 @@ $app->before(
 		$app['request.is_json'] = in_array( 'application/json', $request->getAcceptableContentTypes() );
 	},
 	Application::EARLY_EVENT
+);
+
+$app->before( function( Request $request ) use ( $ffFactory ) {
+	if ( $ffFactory->getCookieHandler() === null ) {
+		$ffFactory->setCookieHandler( new BrowserCookieHandler( $request->cookies ) );
+	}
+}, Application::EARLY_EVENT );
+
+$app->after(
+	function ( Request $request, Response $response ) use ( $ffFactory ) {
+		// store cookie values that were set in the route handlers
+		$cookieHandler = $ffFactory->getCookieHandler();
+		foreach ( $cookieHandler->getCookies() as $name => $value ) {
+			$response->headers->setCookie( new Cookie( $name, $value, 0, '/', null, true, true ) );
+		}
+	}
 );
 
 $app->error( function ( AccessDeniedException $e, $code ) use ( $ffFactory ) {

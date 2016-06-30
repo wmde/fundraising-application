@@ -36,6 +36,10 @@ class AddDonationHandler {
 	}
 
 	public function handle( Request $request ): Response {
+		if ( !$this->isSubmissionAllowed() ) {
+			return new Response( $this->ffFactory->newSystemMessageResponse( 'donation_rejected_limit' ) );
+		}
+
 		$addDonationRequest = $this->createDonationRequest( $request );
 		$responseModel = $this->ffFactory->newAddDonationUseCase()->addDonation( $addDonationRequest );
 
@@ -43,6 +47,7 @@ class AddDonationHandler {
 			return new Response( $this->ffFactory->newDonationFormViolationPresenter()->present( $responseModel->getValidationErrors(), $addDonationRequest ) );
 		}
 
+		$this->ffFactory->getCookieHandler()->setCookie( 'donation_timestamp', ( new \DateTime() )->format( 'Y-m-d H:i:s' ) );
 		return $this->newHttpResponse( $responseModel, $this->ffFactory->getDonationConfirmationPageSelector()->selectPage() );
 	}
 
@@ -156,6 +161,20 @@ class AddDonationHandler {
 		$locale = 'de_DE'; // TODO: make this configurable for multilanguage support
 
 		return Euro::newFromFloat( ( new AmountParser( $locale ) )->parseAsFloat( $amount ) );
+	}
+
+	private function isSubmissionAllowed() {
+		$donationTimestamp = $this->ffFactory->getCookieHandler()->getCookie( 'donation_timestamp' );
+
+		if ( $donationTimestamp !== '' ) {
+			$minNextTimestamp = \DateTime::createFromFormat( 'Y-m-d H:i:s', $donationTimestamp )
+				->add( new \DateInterval( $this->ffFactory->getDonationTimeframeLimit() ) );
+			if ( $minNextTimestamp > new \DateTime() ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 }

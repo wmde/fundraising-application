@@ -54,6 +54,7 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\Domain\SimpleTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\BestEffortDonationEventLogger;
+use WMDE\Fundraising\Frontend\Infrastructure\CookieHandler;
 use WMDE\Fundraising\Frontend\Infrastructure\CreditCardService;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizer;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
@@ -154,6 +155,7 @@ class FunFunFactory {
 	 */
 	private $pimple;
 	private $tokenGenerator;
+	private $cookieHandler;
 	private $addDoctrineSubscribers = true;
 
 	public function __construct( array $config ) {
@@ -1097,6 +1099,30 @@ class FunFunFactory {
 	private function newDonationAmountPolicyValidator(): AmountPolicyValidator {
 		// in the future, this might come from the configuration
 		return new AmountPolicyValidator( 1000, 200, 300 );
+	}
+
+	/**
+	 * @return CookieHandler|null
+	 */
+	public function getCookieHandler() {
+		return $this->cookieHandler;
+	}
+
+	public function setCookieHandler( CookieHandler $cookieHandler ) {
+		$this->cookieHandler = $cookieHandler;
+	}
+
+	public function getDonationTimeframeLimit() {
+		return $this->config['donation-timeframe-limit'];
+	}
+
+	public function newSystemMessageResponse( string $message ) {
+		$test = $this->getIncludeTemplate( 'System_Message.twig' );
+		return $test->render( [ 'message' => $message ] );
+	}
+
+	public function getMembershipApplicationTimeframeLimit() {
+		return $this->config['membership-application-timeframe-limit'];
 	}
 
 }
