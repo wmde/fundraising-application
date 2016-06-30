@@ -1116,9 +1116,9 @@ class FunFunFactory {
 		return $this->config['donation-timeframe-limit'];
 	}
 
-	public function newRejectionMessageResponse() {
-		$test = $this->getIncludeTemplate( 'Donation_Rejection_Message.twig' );
-		return $test->render( [] );
+	public function newSystemMessageResponse( string $message ) {
+		$test = $this->getIncludeTemplate( 'System_Message.twig' );
+		return $test->render( [ 'message' => $message ] );
 	}
 
 	public function getMembershipApplicationTimeframeLimit() {

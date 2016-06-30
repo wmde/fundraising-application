@@ -29,8 +29,7 @@ class ApplyForMembershipHandler {
 
 	public function handle( Request $request ): Response {
 		if ( !$this->isSubmissionAllowed() ) {
-			// TODO: use other template or reuse this, but pass message to be displayed
-			return new Response( $this->ffFactory->newRejectionMessageResponse() );
+			return new Response( $this->ffFactory->newSystemMessageResponse( 'membership_application_rejected_limit' ) );
 		}
 
 		$applyForMembershipRequest = $this->createMembershipRequest( $request );

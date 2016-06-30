@@ -37,7 +37,7 @@ class AddDonationHandler {
 
 	public function handle( Request $request ): Response {
 		if ( !$this->isSubmissionAllowed() ) {
-			return new Response( $this->ffFactory->newRejectionMessageResponse() );
+			return new Response( $this->ffFactory->newSystemMessageResponse( 'donation_rejected_limit' ) );
 		}
 
 		$addDonationRequest = $this->createDonationRequest( $request );
