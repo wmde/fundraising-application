@@ -1102,17 +1102,6 @@ class FunFunFactory {
 		return new AmountPolicyValidator( 1000, 200, 300 );
 	}
 
-	/**
-	 * @return CookieHandler|null
-	 */
-	public function getCookieHandler() {
-		return $this->cookieHandler;
-	}
-
-	public function setCookieHandler( CookieHandler $cookieHandler ) {
-		$this->cookieHandler = $cookieHandler;
-	}
-
 	public function getDonationTimeframeLimit() {
 		return $this->config['donation-timeframe-limit'];
 	}
