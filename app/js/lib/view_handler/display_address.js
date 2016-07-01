@@ -19,7 +19,7 @@ var objectAssign = require( 'object-assign' ),
 					formContent.lastName
 				].join( ' ' );
 			} else if ( formContent.addressType === 'firma' ) {
-				name = formContent.company;
+				name = formContent.companyName;
 			} else {
 				name = '';
 			}

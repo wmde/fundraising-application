@@ -10,7 +10,7 @@ var jQuery = require( 'jquery' ),
 
 		requiredFieldsForAll: [ 'street', 'postcode', 'city', 'email' ],
 		requiredFieldsForPerson: [ 'firstName', 'lastName', 'salutation' ],
-		requiredFieldsForCompany: [ 'company' ],
+		requiredFieldsForCompany: [ 'companyName' ],
 		validate: function ( formValues ) {
 			var requiredFields;
 			switch ( formValues.addressType ) {

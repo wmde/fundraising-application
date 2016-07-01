@@ -128,7 +128,7 @@ $app->post(
 
 				$name->setSalutation( $request->get( 'salutation', '' ) );
 				$name->setTitle( $request->get( 'title', '' ) );
-				$name->setCompanyName( $request->get( 'company', '' ) );
+				$name->setCompanyName( $request->get( 'companyName', '' ) );
 				$name->setFirstName( $request->get( 'firstName', '' ) );
 				$name->setLastName( $request->get( 'lastName', '' ) );
 

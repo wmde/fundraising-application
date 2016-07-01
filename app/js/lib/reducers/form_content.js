@@ -20,7 +20,7 @@ function clearFieldsIfAddressTypeChanges( newState, payload ) {
 	}
 	switch ( payload.value ) {
 		case 'person':
-			newState.company = '';
+			newState.companyName = '';
 			break;
 		case 'firma':
 			newState.title = '';
@@ -29,7 +29,7 @@ function clearFieldsIfAddressTypeChanges( newState, payload ) {
 			break;
 		case 'anonym':
 			newState.title = '';
-			newState.company = '';
+			newState.companyName = '';
 			newState.firstName = '';
 			newState.lastName = '';
 			newState.street = '';

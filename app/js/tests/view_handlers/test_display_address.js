@@ -56,7 +56,7 @@ test( 'Given a company address, Company name is displayed in address instead of 
 		title: 'Dr.',
 		firstName: 'Hans',
 		lastName: 'Gruber',
-		company: 'Nakatomi Corporation',
+		companyName: 'Nakatomi Corporation',
 		street: '2121 Avenue of the Stars',
 		postcode: '90067',
 		city: 'Los Angeles',
