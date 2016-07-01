@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\BrowserCookieHandler;
@@ -184,8 +185,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	public function testWhenApplicationGetsPersisted_timestampIsStoredInCookie() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setNullMessenger();
-			$cookieHandler = new CookieHandlerSpy();
-			$factory->setCookieHandler( $cookieHandler );
 
 			$client->request(
 				'POST',
@@ -193,15 +192,17 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 				$this->newValidHttpParameters()
 			);
 
-			$this->assertNotEmpty( $cookieHandler->getCookie( 'memapp_timestamp' ) );
-			$this->assertSame( 1, $cookieHandler->getSetCalls() );
+			$cookie = $client->getCookieJar()->get( 'memapp_timestamp' );
+			$this->assertNotNull( $cookie );
+			$donationTimestamp = new \DateTime( $cookie->getValue() );
+			$this->assertEquals( time(), $donationTimestamp->getTimestamp(), 'Timestamp should be not more than 5 seconds old', 5.0 );
 		} );
 	}
 
 	public function testWhenMultipleMembershipFormSubmissions_requestGetsRejected() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setNullMessenger();
-			$factory->setCookieHandler( $this->getTimestampReturningCookieHandler() );
+			$client->getCookieJar()->set( new Cookie( 'memapp_timestamp', $this->getPastTimestamp() ) );
 
 			$client->request(
 				'POST',
@@ -215,18 +216,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	private function getPastTimestamp() {
 		return ( new \DateTime() )->add( new \DateInterval( 'PT10S' ) )->format( 'Y-m-d H:i:s' );
-	}
-
-	private function getTimestampReturningCookieHandler(): BrowserCookieHandler {
-		$pastTimestamp = $this->getPastTimestamp();
-
-		$cookieHandler = $this->getMockBuilder( BrowserCookieHandler::class )
-			->disableOriginalConstructor()
-			->getMock();
-
-		$cookieHandler->method( 'getCookie' )->with( 'memapp_timestamp' )->willReturn( $pastTimestamp );
-		$cookieHandler->method( 'getCookies' )->willReturn( [ 'name' => 'memapp_timestamp', 'value' => $pastTimestamp ] );
-		return $cookieHandler;
 	}
 
 }

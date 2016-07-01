@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\App\RouteHandlers;
 
 use Silex\Application;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\Domain\Model\BankData;
@@ -19,6 +20,9 @@ use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipRequ
  */
 class ApplyForMembershipHandler {
 
+	const TIMESTAMP_FORMAT = 'Y-m-d H:i:s';
+	const SUBMISSION_COOKIE_NAME = 'memapp_timestamp';
+
 	private $ffFactory;
 	private $app;
 
@@ -28,7 +32,7 @@ class ApplyForMembershipHandler {
 	}
 
 	public function handle( Request $request ): Response {
-		if ( !$this->isSubmissionAllowed() ) {
+		if ( !$this->isSubmissionAllowed( $request ) ) {
 			return new Response( $this->ffFactory->newSystemMessageResponse( 'membership_application_rejected_limit' ) );
 		}
 
@@ -36,8 +40,7 @@ class ApplyForMembershipHandler {
 		$responseModel = $this->ffFactory->newApplyForMembershipUseCase()->applyForMembership( $applyForMembershipRequest );
 
 		if ( $responseModel->isSuccessful() ) {
-			$this->ffFactory->getCookieHandler()->setCookie( 'memapp_timestamp', ( new \DateTime() )->format( 'Y-m-d H:i:s' ) );
-			return $this->app->redirect(
+			$httpResponse = $this->app->redirect(
 				$this->app['url_generator']->generate(
 					'show-membership-confirmation',
 					[
@@ -47,6 +50,9 @@ class ApplyForMembershipHandler {
 				),
 				Response::HTTP_SEE_OTHER
 			);
+			$cookie = new Cookie( self::SUBMISSION_COOKIE_NAME, date( self::TIMESTAMP_FORMAT ) );
+			$httpResponse->headers->setCookie( $cookie );
+			return $httpResponse;
 		}
 
 		return new Response(
@@ -105,15 +111,16 @@ class ApplyForMembershipHandler {
 		return $request;
 	}
 
-	private function isSubmissionAllowed() {
-		$applicationTimestamp = $this->ffFactory->getCookieHandler()->getCookie( 'memapp_timestamp' );
+	private function isSubmissionAllowed( Request $request ) {
+		$lastSubmission = $request->cookies->get( self::SUBMISSION_COOKIE_NAME, '' );
+		if ( $lastSubmission === '' ) {
+			return true;
+		}
 
-		if ( $applicationTimestamp !== '' ) {
-			$minNextTimestamp = \DateTime::createFromFormat( 'Y-m-d H:i:s', $applicationTimestamp )
-				->add( new \DateInterval( $this->ffFactory->getMembershipApplicationTimeframeLimit() ) );
-			if ( $minNextTimestamp > new \DateTime() ) {
-				return false;
-			}
+		$minNextTimestamp = \DateTime::createFromFormat( self::TIMESTAMP_FORMAT, $lastSubmission )
+			->add( new \DateInterval( $this->ffFactory->getMembershipApplicationTimeframeLimit() ) );
+		if ( $minNextTimestamp > new \DateTime() ) {
+			return false;
 		}
 
 		return true;

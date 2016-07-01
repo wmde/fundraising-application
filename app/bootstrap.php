@@ -38,22 +38,6 @@ $app->before(
 	Application::EARLY_EVENT
 );
 
-$app->before( function( Request $request ) use ( $ffFactory ) {
-	if ( $ffFactory->getCookieHandler() === null ) {
-		$ffFactory->setCookieHandler( new BrowserCookieHandler( $request->cookies ) );
-	}
-}, Application::EARLY_EVENT );
-
-$app->after(
-	function ( Request $request, Response $response ) use ( $ffFactory ) {
-		// store cookie values that were set in the route handlers
-		$cookieHandler = $ffFactory->getCookieHandler();
-		foreach ( $cookieHandler->getCookies() as $name => $value ) {
-			$response->headers->setCookie( new Cookie( $name, $value, 0, '/', null, true, true ) );
-		}
-	}
-);
-
 $app->error( function ( AccessDeniedException $e, $code ) use ( $ffFactory ) {
 	return new Response(
 		$ffFactory->newAccessDeniedHTMLPresenter()->present( $e ),

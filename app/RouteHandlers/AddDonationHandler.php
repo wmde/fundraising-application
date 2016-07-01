@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\App\RouteHandlers;
 
 use Silex\Application;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\Domain\Model\BankData;
@@ -27,6 +28,9 @@ use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationResponse;
  */
 class AddDonationHandler {
 
+	const SUBMISSION_COOKIE_NAME = 'donation_timestamp';
+	const TIMESTAMP_FORMAT = 'Y-m-d H:i:s';
+
 	private $ffFactory;
 	private $app;
 
@@ -36,7 +40,7 @@ class AddDonationHandler {
 	}
 
 	public function handle( Request $request ): Response {
-		if ( !$this->isSubmissionAllowed() ) {
+		if ( !$this->isSubmissionAllowed( $request ) ) {
 			return new Response( $this->ffFactory->newSystemMessageResponse( 'donation_rejected_limit' ) );
 		}
 
@@ -47,7 +51,6 @@ class AddDonationHandler {
 			return new Response( $this->ffFactory->newDonationFormViolationPresenter()->present( $responseModel->getValidationErrors(), $addDonationRequest ) );
 		}
 
-		$this->ffFactory->getCookieHandler()->setCookie( 'donation_timestamp', ( new \DateTime() )->format( 'Y-m-d H:i:s' ) );
 		return $this->newHttpResponse( $responseModel, $this->ffFactory->getDonationConfirmationPageSelector()->selectPage() );
 	}
 
@@ -55,13 +58,14 @@ class AddDonationHandler {
 		switch( $responseModel->getDonation()->getPaymentType() ) {
 			case PaymentType::DIRECT_DEBIT:
 			case PaymentType::BANK_TRANSFER:
-				return new Response( $this->ffFactory->newDonationConfirmationPresenter()->present(
+				$httpResponse = new Response( $this->ffFactory->newDonationConfirmationPresenter()->present(
 					$responseModel->getDonation(),
 					$responseModel->getUpdateToken(),
 					$selectedPage
 				) );
+				break;
 			case PaymentType::PAYPAL:
-				return $this->app->redirect(
+				$httpResponse = $this->app->redirect(
 					$this->ffFactory->newPayPalUrlGenerator()->generateUrl(
 						$responseModel->getDonation()->getId(),
 						$responseModel->getDonation()->getAmount(),
@@ -70,13 +74,17 @@ class AddDonationHandler {
 						$responseModel->getAccessToken()
 					)
 				);
+				break;
 			case PaymentType::CREDIT_CARD:
-				return new Response(
+				$httpResponse = new Response(
 					$this->ffFactory->newCreditCardPaymentHtmlPresenter()->present( $responseModel )
 				);
+				break;
 			default:
 				throw new \LogicException( 'This code should not be reached' );
 		}
+		$httpResponse->headers->setCookie( new Cookie( self::SUBMISSION_COOKIE_NAME, date( self::TIMESTAMP_FORMAT ) ) );
+		return $httpResponse;
 	}
 
 	private function createDonationRequest( Request $request ): AddDonationRequest {
@@ -163,15 +171,16 @@ class AddDonationHandler {
 		return Euro::newFromFloat( ( new AmountParser( $locale ) )->parseAsFloat( $amount ) );
 	}
 
-	private function isSubmissionAllowed() {
-		$donationTimestamp = $this->ffFactory->getCookieHandler()->getCookie( 'donation_timestamp' );
+	private function isSubmissionAllowed( Request $request ) {
+		$lastSubmission = $request->cookies->get( self::SUBMISSION_COOKIE_NAME, '' );
+		if ( $lastSubmission === '' ) {
+			return true;
+		}
 
-		if ( $donationTimestamp !== '' ) {
-			$minNextTimestamp = \DateTime::createFromFormat( 'Y-m-d H:i:s', $donationTimestamp )
-				->add( new \DateInterval( $this->ffFactory->getDonationTimeframeLimit() ) );
-			if ( $minNextTimestamp > new \DateTime() ) {
-				return false;
-			}
+		$minNextTimestamp = \DateTime::createFromFormat( self::TIMESTAMP_FORMAT, $lastSubmission )
+			->add( new \DateInterval( $this->ffFactory->getMembershipApplicationTimeframeLimit() ) );
+		if ( $minNextTimestamp > new \DateTime() ) {
+			return false;
 		}
 
 		return true;
