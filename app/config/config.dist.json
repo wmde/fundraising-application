@@ -93,6 +93,7 @@
 	"membership-application-timeframe-limit": "PT15M",
 	"token-length": 16,
 	"token-validity-timestamp": "PT4H",
+	"purging-secret": "",
 	"paypal": {
 		"base-url": "https://www.paypal.com/cgi-bin/webscr?",
 		"account-address": "",

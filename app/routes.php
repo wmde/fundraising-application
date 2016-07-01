@@ -38,6 +38,7 @@ use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 use WMDE\Fundraising\Frontend\UseCases\CreditCardPaymentNotification\CreditCardPaymentNotificationRequest;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentListingRequest;
 use WMDE\Fundraising\Frontend\UseCases\PurgeCache\PurgeCacheRequest;
+use WMDE\Fundraising\Frontend\UseCases\PurgeCache\PurgeCacheResponse;
 use WMDE\Fundraising\Frontend\UseCases\ShowMembershipApplicationConfirmation\ShowMembershipAppConfirmationRequest;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
 
@@ -479,10 +480,15 @@ $app->get( '/spenden{page}', function( Application $app, Request $request ) {
 $app->get( '/purge-cache', function( Application $app, Request $request ) use ( $ffFactory ) {
 	$request = new PurgeCacheRequest( $request->query->get( 'secret', '' ) );
 
-	$ffFactory->newPurgeCacheUseCase()->purgeCache( $request );
+	$response = $ffFactory->newPurgeCacheUseCase()->purgeCache( $request );
 
-	// TODO
-	return new Response();
-} )->assert( 'page', '/?([a-z]+\.php)?' );
+	return new Response(
+		[
+			PurgeCacheResponse::SUCCESS => 'SUCCESS',
+			PurgeCacheResponse::ERROR => 'ERROR',
+			PurgeCacheResponse::ACCESS_DENIED=> 'ACCESS DENIED'
+		][$response->getState()]
+	);
+} );
 
 return $app;

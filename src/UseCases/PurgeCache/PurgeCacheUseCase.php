@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\UseCases\PurgeCache;
 
 use WMDE\Fundraising\Frontend\Infrastructure\CachePurger;
+use WMDE\Fundraising\Frontend\Infrastructure\CachePurgingException;
 
 /**
  * @licence GNU GPL v2+
@@ -20,12 +21,19 @@ class PurgeCacheUseCase {
 		$this->cachePurger = $cachePurger;
 	}
 
-	public function purgeCache( PurgeCacheRequest $request ) {
+	public function purgeCache( PurgeCacheRequest $request ): PurgeCacheResponse {
 		if ( !$this->purgeIsAllowed( $request ) ) {
-			return;
+			return new PurgeCacheResponse( PurgeCacheResponse::ACCESS_DENIED );
 		}
 
-		$this->cachePurger->purgeCache();
+		try {
+			$this->cachePurger->purgeCache();
+		}
+		catch ( CachePurgingException $ex ) {
+			return new PurgeCacheResponse( PurgeCacheResponse::ERROR );
+		}
+
+		return new PurgeCacheResponse( PurgeCacheResponse::SUCCESS );
 	}
 
 	private function purgeIsAllowed( PurgeCacheRequest $request ): bool {

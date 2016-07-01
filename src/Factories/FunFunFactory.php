@@ -77,6 +77,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\Repositories\LoggingMembershipAppli
 use WMDE\Fundraising\Frontend\Infrastructure\Repositories\LoggingSubscriptionRepository;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
+use WMDE\Fundraising\Frontend\Infrastructure\TwigCachePurger;
 use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
 use WMDE\Fundraising\Frontend\Presentation\Content\PageContentModifier;
 use WMDE\Fundraising\Frontend\Presentation\Content\WikiContentProvider;
@@ -305,6 +306,7 @@ class FunFunFactory {
 				$twigFactory->newTranslationExtension( $this->getTranslator() ),
 				new Twig_Extensions_Extension_Intl()
 			];
+
 			return $twigFactory->create( $loaders, $extensions );
 		} );
 
@@ -663,7 +665,10 @@ class FunFunFactory {
 	}
 
 	public function newPurgeCacheUseCase(): PurgeCacheUseCase {
-		// TODO
+		return new PurgeCacheUseCase(
+			new TwigCachePurger( $this->getTwig() ),
+			$this->config['purging-secret']
+		);
 	}
 
 	private function newPaymentTypeValidator(): AllowedValuesValidator {

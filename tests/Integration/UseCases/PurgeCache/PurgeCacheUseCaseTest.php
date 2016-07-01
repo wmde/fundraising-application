@@ -5,7 +5,9 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\PurgeCache;
 
 use WMDE\Fundraising\Frontend\Infrastructure\CachePurger;
+use WMDE\Fundraising\Frontend\Infrastructure\CachePurgingException;
 use WMDE\Fundraising\Frontend\UseCases\PurgeCache\PurgeCacheRequest;
+use WMDE\Fundraising\Frontend\UseCases\PurgeCache\PurgeCacheResponse;
 use WMDE\Fundraising\Frontend\UseCases\PurgeCache\PurgeCacheUseCase;
 
 /**
@@ -42,6 +44,34 @@ class PurgeCacheUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$useCase = new PurgeCacheUseCase( $cachePurger, self::CORRECT_SECRET );
 
 		$useCase->purgeCache( new PurgeCacheRequest( self::WRONG_SECRET ) );
+	}
+
+	public function testWhenPurgeHappens_successIsReturned() {
+		$useCase = new PurgeCacheUseCase( $this->newCachePurger(), self::CORRECT_SECRET );
+
+		$response = $useCase->purgeCache( new PurgeCacheRequest( self::CORRECT_SECRET ) );
+
+		$this->assertSame( PurgeCacheResponse::SUCCESS, $response->getState() );
+	}
+
+	public function testWhenSecretDoesNotMatch_accessDeniedIsReturned() {
+		$useCase = new PurgeCacheUseCase( $this->newCachePurger(), self::CORRECT_SECRET );
+
+		$response = $useCase->purgeCache( new PurgeCacheRequest( self::WRONG_SECRET ) );
+
+		$this->assertSame( PurgeCacheResponse::ACCESS_DENIED, $response->getState() );
+	}
+
+	public function testWhenCachePurgeThrowsException_errorIsReturned() {
+		$cachePurger = $this->newCachePurger();
+		$cachePurger->expects( $this->any() )
+			->method( 'purgeCache' )->willThrowException( new CachePurgingException( '' ) );
+
+		$useCase = new PurgeCacheUseCase( $cachePurger, self::CORRECT_SECRET );
+
+		$response = $useCase->purgeCache( new PurgeCacheRequest( self::CORRECT_SECRET ) );
+
+		$this->assertSame( PurgeCacheResponse::ERROR, $response->getState() );
 	}
 
 }
