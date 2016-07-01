@@ -154,8 +154,6 @@ class FunFunFactory {
 	 * @var \Pimple
 	 */
 	private $pimple;
-	private $tokenGenerator;
-	private $cookieHandler;
 	private $addDoctrineSubscribers = true;
 
 	public function __construct( array $config ) {
@@ -352,6 +350,13 @@ class FunFunFactory {
 				),
 				$this->config['creditcard']['access-key'],
 				$this->config['creditcard']['testmode']
+			);
+		} );
+
+		$pimple['token_generator'] = $pimple->share( function() {
+			return new RandomTokenGenerator(
+				$this->config['token-length'],
+				new \DateInterval( $this->config['token-validity-timestamp'] )
 			);
 		} );
 
@@ -863,14 +868,7 @@ class FunFunFactory {
 	}
 
 	public function getTokenGenerator(): TokenGenerator {
-		if ( $this->tokenGenerator === null ) {
-			$this->tokenGenerator = new RandomTokenGenerator(
-				$this->config['token-length'],
-				new \DateInterval( $this->config['token-validity-timestamp'] )
-			);
-		}
-
-		return $this->tokenGenerator;
+		return $this->pimple['token_generator'];
 	}
 
 	public function newDonationConfirmationPresenter() {
@@ -1071,7 +1069,7 @@ class FunFunFactory {
 	}
 
 	public function setTokenGenerator( TokenGenerator $tokenGenerator ) {
-		$this->tokenGenerator = $tokenGenerator;
+		$this->pimple['token_generator'] = $tokenGenerator;
 	}
 
 	public function disableDoctrineSubscribers() {
