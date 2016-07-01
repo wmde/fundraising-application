@@ -123,6 +123,7 @@ use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanUseCase;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
 use WMDE\Fundraising\Frontend\UseCases\HandlePayPalPaymentNotification\HandlePayPalPaymentNotificationUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\ListCommentsUseCase;
+use WMDE\Fundraising\Frontend\UseCases\PurgeCache\PurgeCacheUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ShowDonationConfirmation\ShowDonationConfirmationUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ShowMembershipApplicationConfirmation\ShowMembershipApplicationConfirmationUseCase;
 use WMDE\Fundraising\Frontend\Validation\AllowedValuesValidator;
@@ -659,6 +660,10 @@ class FunFunFactory {
 
 	private function getHonorifics(): Honorifics {
 		return $this->pimple['honorifics'];
+	}
+
+	public function newPurgeCacheUseCase(): PurgeCacheUseCase {
+		// TODO
 	}
 
 	private function newPaymentTypeValidator(): AllowedValuesValidator {

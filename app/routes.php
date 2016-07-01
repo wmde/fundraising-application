@@ -37,6 +37,7 @@ use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanRequest;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 use WMDE\Fundraising\Frontend\UseCases\CreditCardPaymentNotification\CreditCardPaymentNotificationRequest;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentListingRequest;
+use WMDE\Fundraising\Frontend\UseCases\PurgeCache\PurgeCacheRequest;
 use WMDE\Fundraising\Frontend\UseCases\ShowMembershipApplicationConfirmation\ShowMembershipAppConfirmationRequest;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
 
@@ -473,6 +474,15 @@ $app->get( '/spenden/{outputFormat}.php', function( Application $app, Request $r
 // redirect all other calls to default route
 $app->get( '/spenden{page}', function( Application $app, Request $request ) {
 	return ( new RouteRedirectionHandler( $app, $request->getQueryString() ) )->handle( '/' );
+} )->assert( 'page', '/?([a-z]+\.php)?' );
+
+$app->get( '/purge-cache', function( Application $app, Request $request ) use ( $ffFactory ) {
+	$request = new PurgeCacheRequest( $request->query->get( 'secret', '' ) );
+
+	$ffFactory->newPurgeCacheUseCase()->purgeCache( $request );
+
+	// TODO
+	return new Response();
 } )->assert( 'page', '/?([a-z]+\.php)?' );
 
 return $app;
