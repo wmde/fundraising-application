@@ -342,7 +342,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 			$response = $client->getResponse();
 			$this->assertSame( 200, $response->getStatusCode() );
-
+			$this->assertContains( 'Ich spende vierteljährlich 12,34 € per Kreditkarte.', $response->getContent() );
 			$this->assertContains( 'thatother.paymentprovider.com', $response->getContent() );
 		} );
 	}

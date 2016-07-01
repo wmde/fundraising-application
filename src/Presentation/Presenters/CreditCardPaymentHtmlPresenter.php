@@ -35,6 +35,10 @@ class CreditCardPaymentHtmlPresenter {
 	private function getArguments( AddDonationResponse $response ) {
 		$personalInfo = $response->getDonation()->getDonor();
 		return [
+			'donation' => [
+				'interval' => $response->getDonation()->getPaymentIntervalInMonths(),
+				'amount' => $response->getDonation()->getAmount()->getEuroString()
+			],
 			'iframeUrl' => $this->urlGenerator->generateUrl(
 				$personalInfo ? $personalInfo->getPersonName()->getFirstName() : '',
 				$personalInfo ? $personalInfo->getPersonName()->getLastName() : '',
