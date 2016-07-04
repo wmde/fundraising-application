@@ -129,3 +129,18 @@ test( 'If address data validation is successful, all fields retrieve valid statu
 	t.deepEqual( inputValidation( stateBefore, newAddressValidationAction( 'OK' ) ), expectedState );
 	t.end();
 } );
+
+test( 'If address data validation is successful, invalid fields remain invalid', function ( t ) {
+	var stateBefore = {
+			postCode: { dataEntered: true, isValid: false },
+			city: { dataEntered: true, isValid: true }
+		},
+		expectedState = {
+			postCode: { dataEntered: true, isValid: false },
+			city: { dataEntered: true, isValid: true }
+		};
+
+	deepFreeze( stateBefore );
+	t.deepEqual( inputValidation( stateBefore, newAddressValidationAction( 'OK' ) ), expectedState );
+	t.end();
+} );

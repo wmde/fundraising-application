@@ -34,7 +34,7 @@ function inputValidation( validationState, action ) {
 				if ( newValidationState[ key ].dataEntered === true ) {
 					newValidationState[ key ] = {
 						dataEntered: true,
-						isValid: !( _.has( action.payload.messages, key ) )
+						isValid: newValidationState[ key ].isValid !== false && !( _.has( action.payload.messages, key ) )
 					};
 				}
 			} );
