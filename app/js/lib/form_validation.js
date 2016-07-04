@@ -103,7 +103,7 @@ var jQuery = require( 'jquery' ),
 
 	SepaConfirmationValidator = {
 		validate: function ( formValues ) {
-			return formValues.confirmSepa && formValues.confirmShortTerm;
+			return formValues.confirmSepa && formValues.confirmShortTerm !== false;
 		}
 	},
 

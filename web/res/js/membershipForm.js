@@ -33,7 +33,8 @@ $( function () {
 				bankNameFieldElement: $( '#field-bank-name' ),
 				bankNameDisplayElement: $( '#bank-name' ),
 				debitTypeElement: $( '.debit-type-select' )
-			} )
+			} ),
+			WMDE.Components.createCheckboxComponent( store, $( '#confirmSepa' ), 'confirmSepa' )
 		],
 		store,
 		'membershipFormContent'
@@ -85,6 +86,12 @@ $( function () {
 					WMDE.FormValidation.createSepaConfirmationValidator(),
 					actions.newFinishSepaConfirmationValidationAction,
 					[ 'confirmSepa', 'confirmShortTerm' ],
+					initialValues
+				),
+				WMDE.ReduxValidation.createValidationDispatcher(
+					WMDE.FormValidation.createSepaConfirmationValidator(),
+					actions.newFinishSepaConfirmationValidationAction,
+					[ 'confirmSepa' ],
 					initialValues
 				)
 			];
@@ -266,6 +273,9 @@ $( function () {
 		if ( formDataIsValid() ) {
 			store.dispatch( actions.newNextPageAction() );
 			$( 'section#donation-amount, section#donation-sheet' ).hide();
+		} else {
+			// TODO: display nicer message
+			alert( 'Bitte füllen Sie das Formular vollständig aus.' );
 		}
 	} );
 
@@ -275,8 +285,12 @@ $( function () {
 	} );
 
 	$( '#finishFormSubmit' ).click( function () {
-		// TODO check if page is valid
-		$( '#memForm' ).submit();
+		if ( store.getState().validity.sepaConfirmation ) {
+			$( '#memForm' ).submit();
+		} else {
+			// TODO: display nicer message
+			alert( 'Bitte füllen Sie das Formular vollständig aus.' );
+		}
 	} );
 
 	// Initialize form pages
