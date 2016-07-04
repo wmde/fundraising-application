@@ -243,7 +243,18 @@ $( function () {
 			formContent = store.getState().donationFormContent,
 			addressIsValid = formContent.addressType === 'anonym' || validity.address,
 			bankDataIsValid = formContent.paymentType !== 'BEZ' || validity.bankData;
-		return validity.amount && addressIsValid && bankDataIsValid;
+		return !hasInvalidFields() && validity.amount && addressIsValid && bankDataIsValid;
+	}
+
+	function hasInvalidFields() {
+		var invalidFields = false;
+		$.each( store.getState().donationInputValidation, function( key, value ) {
+			if ( value.isValid === false ) {
+				invalidFields = true;
+			}
+		} );
+
+		return invalidFields;
 	}
 
 	function paymentDataPageIsValid() {
