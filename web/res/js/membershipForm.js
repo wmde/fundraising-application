@@ -20,7 +20,7 @@ $( function () {
 			WMDE.Components.createValidatingTextComponent( store, $( '#post-code' ), 'postcode' ),
 			WMDE.Components.createValidatingTextComponent( store, $( '#city' ), 'city' ),
 			WMDE.Components.createSelectMenuComponent( store, $( '#country' ), 'country' ),
-			WMDE.Components.createValidatingTextComponent( store, $( '#email' ), 'email' ),
+			WMDE.Components.createTextComponent( store, $( '#email' ), 'email' ),
 			WMDE.Components.createValidatingTextComponent( store, $( '#date-of-birth' ), 'dateOfBirth' ),
 			WMDE.Components.createValidatingTextComponent( store, $( '#phone' ), 'phoneNumber' ),
 			WMDE.Components.createRadioComponent( store, $( '.payment-period-select' ), 'paymentIntervalInMonths' ),
@@ -64,6 +64,12 @@ $( function () {
 						'country',
 						'email'
 					],
+					initialValues
+				),
+				WMDE.ReduxValidation.createValidationDispatcher(
+					WMDE.FormValidation.createEmailAddressValidator( initData.data( 'validate-email-address-url' ) ),
+					actions.newFinishEmailAddressValidationAction,
+					[ 'email' ],
 					initialValues
 				),
 				WMDE.ReduxValidation.createValidationDispatcher(
@@ -242,7 +248,18 @@ $( function () {
 		var validity = store.getState().validity,
 			addressIsValid = validity.address,
 			bankDataIsValid = validity.bankData;
-		return validity.amount && addressIsValid && bankDataIsValid;
+		return !hasInvalidFields() && validity.amount && addressIsValid && bankDataIsValid;
+	}
+
+	function hasInvalidFields() {
+		var invalidFields = false;
+		$.each( store.getState().membershipInputValidation, function( key, value ) {
+			if ( value.isValid === false ) {
+				invalidFields = true;
+			}
+		} );
+
+		return invalidFields;
 	}
 
 	$( '#continueFormSubmit' ).click( function () {
