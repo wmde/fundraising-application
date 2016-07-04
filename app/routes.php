@@ -37,6 +37,8 @@ use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanRequest;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 use WMDE\Fundraising\Frontend\UseCases\CreditCardPaymentNotification\CreditCardPaymentNotificationRequest;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentListingRequest;
+use WMDE\Fundraising\Frontend\UseCases\PurgeCache\PurgeCacheRequest;
+use WMDE\Fundraising\Frontend\UseCases\PurgeCache\PurgeCacheResponse;
 use WMDE\Fundraising\Frontend\UseCases\ShowMembershipApplicationConfirmation\ShowMembershipAppConfirmationRequest;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
 
@@ -474,5 +476,19 @@ $app->get( '/spenden/{outputFormat}.php', function( Application $app, Request $r
 $app->get( '/spenden{page}', function( Application $app, Request $request ) {
 	return ( new RouteRedirectionHandler( $app, $request->getQueryString() ) )->handle( '/' );
 } )->assert( 'page', '/?([a-z]+\.php)?' );
+
+$app->get( '/purge-cache', function( Application $app, Request $request ) use ( $ffFactory ) {
+	$request = new PurgeCacheRequest( $request->query->get( 'secret', '' ) );
+
+	$response = $ffFactory->newPurgeCacheUseCase()->purgeCache( $request );
+
+	return new Response(
+		[
+			PurgeCacheResponse::SUCCESS => 'SUCCESS',
+			PurgeCacheResponse::ERROR => 'ERROR',
+			PurgeCacheResponse::ACCESS_DENIED=> 'ACCESS DENIED'
+		][$response->getState()]
+	);
+} );
 
 return $app;

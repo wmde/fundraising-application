@@ -77,6 +77,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\Repositories\LoggingMembershipAppli
 use WMDE\Fundraising\Frontend\Infrastructure\Repositories\LoggingSubscriptionRepository;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
+use WMDE\Fundraising\Frontend\Infrastructure\TwigCachePurger;
 use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
 use WMDE\Fundraising\Frontend\Presentation\Content\PageContentModifier;
 use WMDE\Fundraising\Frontend\Presentation\Content\WikiContentProvider;
@@ -123,6 +124,7 @@ use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanUseCase;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
 use WMDE\Fundraising\Frontend\UseCases\HandlePayPalPaymentNotification\HandlePayPalPaymentNotificationUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ListComments\ListCommentsUseCase;
+use WMDE\Fundraising\Frontend\UseCases\PurgeCache\PurgeCacheUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ShowDonationConfirmation\ShowDonationConfirmationUseCase;
 use WMDE\Fundraising\Frontend\UseCases\ShowMembershipApplicationConfirmation\ShowMembershipApplicationConfirmationUseCase;
 use WMDE\Fundraising\Frontend\Validation\AllowedValuesValidator;
@@ -304,6 +306,7 @@ class FunFunFactory {
 				$twigFactory->newTranslationExtension( $this->getTranslator() ),
 				new Twig_Extensions_Extension_Intl()
 			];
+
 			return $twigFactory->create( $loaders, $extensions );
 		} );
 
@@ -659,6 +662,13 @@ class FunFunFactory {
 
 	private function getHonorifics(): Honorifics {
 		return $this->pimple['honorifics'];
+	}
+
+	public function newPurgeCacheUseCase(): PurgeCacheUseCase {
+		return new PurgeCacheUseCase(
+			new TwigCachePurger( $this->getTwig() ),
+			$this->config['purging-secret']
+		);
 	}
 
 	private function newPaymentTypeValidator(): AllowedValuesValidator {
