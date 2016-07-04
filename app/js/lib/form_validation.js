@@ -38,6 +38,17 @@ var jQuery = require( 'jquery' ),
 		}
 	},
 
+	EmailAddressValidator = {
+		validationUrl: '',
+		sendFunction: null,
+		validate: function ( formValues ) {
+			var postData = {
+				email: formValues.email
+			};
+			return this.sendFunction( this.validationUrl, postData, null, 'json' );
+		}
+	},
+
 	AmountValidator = {
 		validationUrl: '',
 		sendFunction: null,
@@ -103,6 +114,13 @@ var jQuery = require( 'jquery' ),
 		} );
 	},
 
+	createEmailAddressValidator = function ( validationUrl, sendFunction ) {
+		return objectAssign( Object.create( EmailAddressValidator ), {
+			validationUrl: validationUrl,
+			sendFunction: sendFunction || jQuery.post
+		} );
+	},
+
 	/**
 	 *
 	 * @param {string} validationUrl
@@ -136,6 +154,7 @@ module.exports = {
 	createAmountValidator: createAmountValidator,
 	createFeeValidator: createFeeValidator,
 	createAddressValidator: createAddressValidator,
+	createEmailAddressValidator: createEmailAddressValidator,
 	createBankDataValidator: createBankDataValidator,
 	createSepaConfirmationValidator: function () {
 		return Object.create( SepaConfirmationValidator );

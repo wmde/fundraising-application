@@ -16,7 +16,7 @@ class ValidateEmailRouteTest extends WebRouteTestCase {
 		$client = $this->createClient();
 
 		$client->request(
-			'GET',
+			'POST',
 			'/validate-email',
 			[ 'email' => 'jeroendedauw@gmail.com' ]
 		);
@@ -31,7 +31,7 @@ class ValidateEmailRouteTest extends WebRouteTestCase {
 		$client = $this->createClient();
 
 		$client->request(
-			'GET',
+			'POST',
 			'/validate-email',
 			[ 'email' => '~=[,,_,,]:3' ]
 		);
@@ -46,7 +46,7 @@ class ValidateEmailRouteTest extends WebRouteTestCase {
 		$client = $this->createClient();
 
 		$client->request(
-			'GET',
+			'POST',
 			'/validate-email'
 		);
 
