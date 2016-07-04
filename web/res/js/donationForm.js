@@ -228,6 +228,10 @@ $( function () {
 		}
 	} );
 
+	$( '.back-button' ).click( function () {
+		store.dispatch( actions.newPreviousPageAction() );
+	} );
+
 	$( '#finishFormSubmit3' ).click( function () {
 		var validity = store.getState().validity;
 		if ( validity.amount && validity.address && validity.bankData && validity.sepaConfirmation ) {
