@@ -20,7 +20,7 @@ $( function () {
 			WMDE.Components.createValidatingTextComponent( store, $( '#post-code' ), 'postcode' ),
 			WMDE.Components.createValidatingTextComponent( store, $( '#city' ), 'city' ),
 			WMDE.Components.createSelectMenuComponent( store, $( '#country' ), 'country' ),
-			WMDE.Components.createValidatingTextComponent( store, $( '#email' ), 'email' ),
+			WMDE.Components.createTextComponent( store, $( '#email' ), 'email' ),
 			WMDE.Components.createValidatingTextComponent( store, $( '#date-of-birth' ), 'dateOfBirth' ),
 			WMDE.Components.createValidatingTextComponent( store, $( '#phone' ), 'phoneNumber' ),
 			WMDE.Components.createRadioComponent( store, $( '.payment-period-select' ), 'paymentIntervalInMonths' ),
@@ -33,7 +33,8 @@ $( function () {
 				bankNameFieldElement: $( '#field-bank-name' ),
 				bankNameDisplayElement: $( '#bank-name' ),
 				debitTypeElement: $( '.debit-type-select' )
-			} )
+			} ),
+			WMDE.Components.createCheckboxComponent( store, $( '#confirmSepa' ), 'confirmSepa' )
 		],
 		store,
 		'membershipFormContent'
@@ -67,6 +68,12 @@ $( function () {
 					initialValues
 				),
 				WMDE.ReduxValidation.createValidationDispatcher(
+					WMDE.FormValidation.createEmailAddressValidator( initData.data( 'validate-email-address-url' ) ),
+					actions.newFinishEmailAddressValidationAction,
+					[ 'email' ],
+					initialValues
+				),
+				WMDE.ReduxValidation.createValidationDispatcher(
 					WMDE.FormValidation.createBankDataValidator(
 						initData.data( 'validate-iban-url' ),
 						initData.data( 'generate-iban-url' )
@@ -79,6 +86,12 @@ $( function () {
 					WMDE.FormValidation.createSepaConfirmationValidator(),
 					actions.newFinishSepaConfirmationValidationAction,
 					[ 'confirmSepa', 'confirmShortTerm' ],
+					initialValues
+				),
+				WMDE.ReduxValidation.createValidationDispatcher(
+					WMDE.FormValidation.createSepaConfirmationValidator(),
+					actions.newFinishSepaConfirmationValidationAction,
+					[ 'confirmSepa' ],
 					initialValues
 				)
 			];
@@ -242,13 +255,27 @@ $( function () {
 		var validity = store.getState().validity,
 			addressIsValid = validity.address,
 			bankDataIsValid = validity.bankData;
-		return validity.amount && addressIsValid && bankDataIsValid;
+		return !hasInvalidFields() && validity.amount && addressIsValid && bankDataIsValid;
+	}
+
+	function hasInvalidFields() {
+		var invalidFields = false;
+		$.each( store.getState().membershipInputValidation, function( key, value ) {
+			if ( value.isValid === false ) {
+				invalidFields = true;
+			}
+		} );
+
+		return invalidFields;
 	}
 
 	$( '#continueFormSubmit' ).click( function () {
 		if ( formDataIsValid() ) {
 			store.dispatch( actions.newNextPageAction() );
 			$( 'section#donation-amount, section#donation-sheet' ).hide();
+		} else {
+			// TODO: display nicer message
+			alert( 'Bitte füllen Sie das Formular vollständig aus.' );
 		}
 	} );
 
@@ -258,8 +285,12 @@ $( function () {
 	} );
 
 	$( '#finishFormSubmit' ).click( function () {
-		// TODO check if page is valid
-		$( '#memForm' ).submit();
+		if ( store.getState().validity.sepaConfirmation ) {
+			$( '#memForm' ).submit();
+		} else {
+			// TODO: display nicer message
+			alert( 'Bitte füllen Sie das Formular vollständig aus.' );
+		}
 	} );
 
 	// Initialize form pages

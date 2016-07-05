@@ -179,3 +179,35 @@ test( 'Given a non-debit payment type, bank data validation succeeds', function 
 	t.end();
 } );
 
+test( 'Given SEPA confirmation and short-term confirmation, validator passes', function ( t ) {
+	var sepaConfirmationValidator = validation.createSepaConfirmationValidator(),
+		validationResult = sepaConfirmationValidator.validate( {
+			confirmSepa: true,
+			confirmShortTerm: true
+		} );
+
+	t.ok( validationResult, 'validation is successful' );
+	t.end();
+} );
+
+test( 'Given SEPA is confirmed, but short-term is not, validator fails', function ( t ) {
+	var sepaConfirmationValidator = validation.createSepaConfirmationValidator(),
+		validationResult = sepaConfirmationValidator.validate( {
+			confirmSepa: true,
+			confirmShortTerm: false
+		} );
+
+	t.notOk( validationResult, 'validation fails' );
+	t.end();
+} );
+
+test( 'When only SEPA is given and confirmed, validator passes', function ( t ) {
+	var sepaConfirmationValidator = validation.createSepaConfirmationValidator(),
+		validationResult = sepaConfirmationValidator.validate( {
+			confirmSepa: true
+		} );
+
+	t.ok( validationResult, 'validation succeeds' );
+	t.end();
+} );
+

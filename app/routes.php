@@ -52,10 +52,10 @@ $app->before( function( Request $request ) {
 	}
 }, Application::EARLY_EVENT );
 
-$app->get(
+$app->post(
 	'validate-email',
 	function( Request $request ) use ( $app, $ffFactory ) {
-		$validationResult = $ffFactory->getEmailValidator()->validate( $request->query->get( 'email', '' ) );
+		$validationResult = $ffFactory->getEmailValidator()->validate( $request->request->get( 'email', '' ) );
 		return $app->json( [ 'status' => $validationResult->isSuccessful() ? 'OK' : 'ERR' ] );
 	}
 );

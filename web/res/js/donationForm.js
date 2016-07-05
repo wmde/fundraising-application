@@ -55,6 +55,12 @@ $( function () {
 					initialValues
 				),
 				WMDE.ReduxValidation.createValidationDispatcher(
+					WMDE.FormValidation.createEmailAddressValidator( initData.data( 'validate-email-address-url' ) ),
+					actions.newFinishEmailAddressValidationAction,
+					[ 'email' ],
+					initialValues
+				),
+				WMDE.ReduxValidation.createValidationDispatcher(
 					WMDE.FormValidation.createBankDataValidator( initData.data( 'validate-iban-url' ), initData.data( 'generate-iban-url' ) ),
 					actions.newFinishBankDataValidationAction,
 					[ 'iban', 'accountNumber', 'bankCode', 'debitType', 'paymentType' ],
@@ -243,7 +249,18 @@ $( function () {
 			formContent = store.getState().donationFormContent,
 			addressIsValid = formContent.addressType === 'anonym' || validity.address,
 			bankDataIsValid = formContent.paymentType !== 'BEZ' || validity.bankData;
-		return validity.amount && addressIsValid && bankDataIsValid;
+		return !hasInvalidFields() && validity.amount && addressIsValid && bankDataIsValid;
+	}
+
+	function hasInvalidFields() {
+		var invalidFields = false;
+		$.each( store.getState().donationInputValidation, function( key, value ) {
+			if ( value.isValid === false ) {
+				invalidFields = true;
+			}
+		} );
+
+		return invalidFields;
 	}
 
 	function paymentDataPageIsValid() {

@@ -29,12 +29,15 @@ function inputValidation( validationState, action ) {
 			newValidationState.account = { dataEntered: true, isValid: bankDataIsValid };
 			newValidationState.bankCode = { dataEntered: true, isValid: bankDataIsValid };
 			return newValidationState;
+		case 'FINISH_EMAIL_ADDRESS_VALIDATION':
+			newValidationState.email = { dataEntered: true, isValid: action.payload.status !== 'ERR' };
+			return newValidationState;
 		case 'FINISH_ADDRESS_VALIDATION':
 			_.forEach( newValidationState, function ( value, key ) {
 				if ( newValidationState[ key ].dataEntered === true ) {
 					newValidationState[ key ] = {
 						dataEntered: true,
-						isValid: !( _.has( action.payload.messages, key ) )
+						isValid: newValidationState[ key ].isValid !== false && !( _.has( action.payload.messages, key ) )
 					};
 				}
 			} );
