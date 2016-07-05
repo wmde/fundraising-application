@@ -97,7 +97,7 @@ $( function () {
 					title: 'Titel',
 					firstName: 'Vorname',
 					lastName: 'Nachname',
-					company: 'Firma',
+					companyName: 'Firma',
 					street: 'Straße',
 					postcode: 'PLZ',
 					city: 'Ort',

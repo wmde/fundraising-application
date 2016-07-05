@@ -20,7 +20,7 @@ class AddDonationValidationResult extends ValidationResult {
 	const SOURCE_BANK_CODE = 'blz';
 	const SOURCE_BANK_ACCOUNT = 'konto';
 	const SOURCE_DONOR_EMAIL = 'email';
-	const SOURCE_DONOR_COMPANY = 'company';
+	const SOURCE_DONOR_COMPANY = 'companyName';
 	const SOURCE_DONOR_FIRST_NAME = 'firstName';
 	const SOURCE_DONOR_LAST_NAME = 'lastName';
 	const SOURCE_DONOR_SALUTATION = 'salutation';

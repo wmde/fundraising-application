@@ -51,8 +51,8 @@ test( 'CHANGE_CONTENT throws an error if the field name is not allowed', functio
 } );
 
 test( 'When CHANGE_CONTENT sets address type to private, company name is cleared', function ( t ) {
-	var stateBefore = { company: 'Globex Corp', addressType: 'firma' },
-		expectedState = { company: '', addressType: 'person' },
+	var stateBefore = { companyName: 'Globex Corp', addressType: 'firma' },
+		expectedState = { companyName: '', addressType: 'person' },
 		action = { type: 'CHANGE_CONTENT', payload: { value: 'person', contentName: 'addressType' } };
 
 	deepFreeze( stateBefore );
@@ -72,7 +72,7 @@ test( 'When CHANGE_CONTENT sets address type to company, names are cleared', fun
 
 test( 'When CHANGE_CONTENT sets address type to anonymous, all personal data fields are cleared', function ( t ) {
 	var stateBefore = {
-			company: '',
+			companyName: '',
 			title: 'Dr.',
 			firstName: 'Hank',
 			lastName: 'Scorpio',
@@ -83,7 +83,7 @@ test( 'When CHANGE_CONTENT sets address type to anonymous, all personal data fie
 			email: 'hank@globex.com'
 		},
 		expectedState = {
-			company: '',
+			companyName: '',
 			title: '',
 			firstName: '',
 			lastName: '',

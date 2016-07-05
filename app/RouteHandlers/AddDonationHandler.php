@@ -98,7 +98,7 @@ class AddDonationHandler {
 		$donationRequest->setDonorType( $request->get( 'addressType', '' ) );
 		$donationRequest->setDonorSalutation( $request->get( 'salutation', '' ) );
 		$donationRequest->setDonorTitle( $request->get( 'title', '' ) );
-		$donationRequest->setDonorCompany( $request->get( 'company', '' ) );
+		$donationRequest->setDonorCompany( $request->get( 'companyName', '' ) );
 		$donationRequest->setDonorFirstName( $request->get( 'firstName', '' ) );
 		$donationRequest->setDonorLastName( $request->get( 'lastName', '' ) );
 		$donationRequest->setDonorStreetAddress( $request->get( 'street', '' ) );
