@@ -24,7 +24,7 @@ $( function () {
 			WMDE.Components.createValidatingTextComponent( store, $( '#date-of-birth' ), 'dateOfBirth' ),
 			WMDE.Components.createValidatingTextComponent( store, $( '#phone' ), 'phoneNumber' ),
 			WMDE.Components.createRadioComponent( store, $( '.payment-period-select' ), 'paymentIntervalInMonths' ),
-			WMDE.Components.createAmountComponent( store, $( '.amount-input' ), $( '.amount-select' ) ),
+			WMDE.Components.createAmountComponent( store, $( '.amount-input' ), $( '.amount-select' ), $( '#amount-hidden' ) ),
 			WMDE.Components.createBankDataComponent( store, {
 				ibanElement: $( '#iban' ),
 				bicElement: $( '#bic' ),
