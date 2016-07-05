@@ -24,14 +24,14 @@ $( function () {
 			WMDE.Components.createRadioComponent( store, $( '.address-type-select' ), 'addressType' ),
 			WMDE.Components.createRadioComponent( store, $( '.salutation' ), 'salutation' ),
 			WMDE.Components.createRadioComponent( store, $( '.personal-title' ), 'title' ),
-			WMDE.Components.createTextComponent( store, $( '#first-name' ), 'firstName' ),
-			WMDE.Components.createTextComponent( store, $( '#last-name' ), 'lastName' ),
-			WMDE.Components.createTextComponent( store, $( '#company-name' ), 'companyName' ),
-			WMDE.Components.createTextComponent( store, $( '#street' ), 'street' ),
-			WMDE.Components.createTextComponent( store, $( '#post-code' ), 'postcode' ),
-			WMDE.Components.createTextComponent( store, $( '#city' ), 'city' ),
+			WMDE.Components.createValidatingTextComponent( store, $( '#first-name' ), 'firstName' ),
+			WMDE.Components.createValidatingTextComponent( store, $( '#last-name' ), 'lastName' ),
+			WMDE.Components.createValidatingTextComponent( store, $( '#company-name' ), 'companyName' ),
+			WMDE.Components.createValidatingTextComponent( store, $( '#street' ), 'street' ),
+			WMDE.Components.createValidatingTextComponent( store, $( '#post-code' ), 'postcode' ),
+			WMDE.Components.createValidatingTextComponent( store, $( '#city' ), 'city' ),
 			WMDE.Components.createSelectMenuComponent( store, $( '#country' ), 'country' ),
-			WMDE.Components.createTextComponent( store, $( '#email' ), 'email' ),
+			WMDE.Components.createValidatingTextComponent( store, $( '#email' ), 'email' ),
 			WMDE.Components.createCheckboxComponent( store, $( '#confirm_sepa' ), 'confirmSepa' ),
 			WMDE.Components.createCheckboxComponent( store, $( '#confirm_shortterm' ), 'confirmShortTerm' )
 		],
@@ -179,6 +179,54 @@ $( function () {
 					$( '.confirm-bank-name' )
 				),
 				stateKey: 'donationFormContent'
+			},
+			{
+				viewHandler: WMDE.View.createCountrySpecificAttributesHandler( $( '#post-code' ), $( '#city' ), $( '#email' ) ),
+				stateKey: 'countrySpecifics'
+			},
+			{
+				viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#first-name' ) ),
+				stateKey: 'donationInputValidation.firstName'
+			},
+			{
+				viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#last-name' ) ),
+				stateKey: 'donationInputValidation.lastName'
+			},
+			{
+				viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#street' ) ),
+				stateKey: 'donationInputValidation.street'
+			},
+			{
+				viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#post-code' ) ),
+				stateKey: 'donationInputValidation.postcode'
+			},
+			{
+				viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#city' ) ),
+				stateKey: 'donationInputValidation.city'
+			},
+			{
+				viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#email' ) ),
+				stateKey: 'donationInputValidation.email'
+			},
+			{
+				viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#company-name' ) ),
+				stateKey: 'donationInputValidation.companyName'
+			},
+			{
+				viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#iban' ) ),
+				stateKey: 'donationInputValidation.iban'
+			},
+			{
+				viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#bic' ) ),
+				stateKey: 'donationInputValidation.bic'
+			},
+			{
+				viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#account-number' ) ),
+				stateKey: 'donationInputValidation.account'
+			},
+			{
+				viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#bank-code' ) ),
+				stateKey: 'donationInputValidation.bankCode'
 			},
 			{
 				viewHandler: WMDE.View.createCountrySpecificAttributesHandler( $( '#post-code' ), $( '#city' ), $( '#email' ) ),
