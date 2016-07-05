@@ -8,9 +8,7 @@ use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\BrowserCookieHandler;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\CookieHandlerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 
 /**
@@ -78,8 +76,28 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function getPastTimestamp() {
-		return ( new \DateTime() )->add( new \DateInterval( 'PT10S' ) )->format( 'Y-m-d H:i:s' );
+	public function testWhenMultipleDonationsInAccordanceToTimeLimit_requestIsNotRejected() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setNullMessenger();
+			$client->getCookieJar()->set(
+				new Cookie(
+					'donation_timestamp',
+					$this->getPastTimestamp( 'PT35M' )
+				)
+			);
+
+			$client->request(
+				'POST',
+				'/donation/add',
+				$this->newValidFormInput()
+			);
+
+			$this->assertNotContains( 'Sie haben vor sehr kurzer Zeit bereits gespendet', $client->getResponse()->getContent() );
+		} );
+	}
+
+	private function getPastTimestamp( string $interval = 'PT10S' ) {
+		return ( new \DateTime() )->sub( new \DateInterval( $interval ) )->format( 'Y-m-d H:i:s' );
 	}
 
 	private function newValidFormInput() {

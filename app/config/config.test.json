@@ -25,6 +25,8 @@
 			}
 		}
 	},
+	"donation-timeframe-limit": "PT30M",
+	"membership-application-timeframe-limit": "PT10M",
 	"operator-email": "email@operatorsownmailserver.com",
 	"operator-displayname": "Friendly Operator",
 	"paypal": {

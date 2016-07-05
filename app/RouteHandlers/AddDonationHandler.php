@@ -178,7 +178,7 @@ class AddDonationHandler {
 		}
 
 		$minNextTimestamp = \DateTime::createFromFormat( self::TIMESTAMP_FORMAT, $lastSubmission )
-			->add( new \DateInterval( $this->ffFactory->getMembershipApplicationTimeframeLimit() ) );
+			->add( new \DateInterval( $this->ffFactory->getDonationTimeframeLimit() ) );
 		if ( $minNextTimestamp > new \DateTime() ) {
 			return false;
 		}

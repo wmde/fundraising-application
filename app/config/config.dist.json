@@ -89,8 +89,8 @@
 			"wikispecies.org": "wikispecies.org"
 		}
 	},
-	"donation-timeframe-limit": "PT15M",
-	"membership-application-timeframe-limit": "PT15M",
+	"donation-timeframe-limit": "PT30M",
+	"membership-application-timeframe-limit": "PT10M",
 	"token-length": 16,
 	"token-validity-timestamp": "PT4H",
 	"purging-secret": "",
