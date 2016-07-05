@@ -214,8 +214,23 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function getPastTimestamp() {
-		return ( new \DateTime() )->add( new \DateInterval( 'PT10S' ) )->format( 'Y-m-d H:i:s' );
+	public function testWhenMultipleMembershipInAccordanceToTimeLimit_isNotRejected() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setNullMessenger();
+			$client->getCookieJar()->set( new Cookie( 'memapp_timestamp', $this->getPastTimestamp( 'PT12M' ) ) );
+
+			$client->request(
+				'POST',
+				'/apply-for-membership',
+				$this->newValidHttpParameters()
+			);
+
+			$this->assertNotContains( 'Sie haben vor sehr kurzer Zeit bereits', $client->getResponse()->getContent() );
+		} );
+	}
+
+	private function getPastTimestamp( string $interval = 'PT10S' ) {
+		return ( new \DateTime() )->sub( new \DateInterval( $interval ) )->format( 'Y-m-d H:i:s' );
 	}
 
 }
