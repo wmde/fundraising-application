@@ -8,7 +8,7 @@ $( function () {
 
 	WMDE.StoreUpdates.connectComponentsToStore(
 		[
-			WMDE.Components.createAmountComponent( store, $( '.amount-input' ), $( '.amount-select' ) ),
+			WMDE.Components.createAmountComponent( store, $( '.amount-input' ), $( '.amount-select' ), $( '.amount-hidden' ) ),
 			WMDE.Components.createRadioComponent( store, $( '.payment-type-select' ), 'paymentType' ),
 			WMDE.Components.createRadioComponent( store, $( '.interval-type-select' ), 'paymentIntervalInMonths' ),
 			WMDE.Components.createRadioComponent( store, $( '.payment-period-select' ), 'paymentIntervalInMonths' ),
@@ -31,7 +31,7 @@ $( function () {
 			WMDE.Components.createValidatingTextComponent( store, $( '#post-code' ), 'postcode' ),
 			WMDE.Components.createValidatingTextComponent( store, $( '#city' ), 'city' ),
 			WMDE.Components.createSelectMenuComponent( store, $( '#country' ), 'country' ),
-			WMDE.Components.createValidatingTextComponent( store, $( '#email' ), 'email' ),
+			WMDE.Components.createTextComponent( store, $( '#email' ), 'email' ),
 			WMDE.Components.createCheckboxComponent( store, $( '#confirm_sepa' ), 'confirmSepa' ),
 			WMDE.Components.createCheckboxComponent( store, $( '#confirm_shortterm' ), 'confirmShortTerm' )
 		],

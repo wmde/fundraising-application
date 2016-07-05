@@ -49,12 +49,15 @@ var objectAssign = require( 'object-assign' ),
 	AmountComponent = {
 		inputElement: null,
 		selectElement: null,
+		hiddenElement: null,
 		render: function ( formContent ) {
-			this.inputElement.val( formContent.amount || '' );
+			this.hiddenElement.val( formContent.amount || '' );
 			if ( formContent.isCustomAmount ) {
 				this.selectElement.prop( 'checked', false );
+				this.inputElement.val( formContent.amount );
 			} else {
 				this.selectElement.val( [ formContent.amount ] );
+				this.inputElement.val( '' );
 			}
 		}
 	},
@@ -129,10 +132,11 @@ module.exports = {
 		return component;
 	},
 
-	createAmountComponent: function ( store, inputElement, selectElement ) {
+	createAmountComponent: function ( store, inputElement, selectElement, hiddenElement ) {
 		var component = objectAssign( Object.create( AmountComponent ), {
 			inputElement: inputElement,
-			selectElement: selectElement
+			selectElement: selectElement,
+			hiddenElement: hiddenElement
 		} );
 		inputElement.on( 'change', function ( evt ) {
 			store.dispatch( actions.newInputAmountAction( evt.target.value ) );
