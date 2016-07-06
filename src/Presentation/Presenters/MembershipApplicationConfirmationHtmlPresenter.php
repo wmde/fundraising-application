@@ -6,7 +6,6 @@ use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Model\MembershipApplicant;
 use WMDE\Fundraising\Frontend\Domain\Model\MembershipApplication;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
-use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipResponse;
 use WMDE\Fundraising\Frontend\UseCases\ShowMembershipApplicationConfirmation\ShowMembershipAppConfirmationResponse;
 
 /**

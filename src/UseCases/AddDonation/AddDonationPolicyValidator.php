@@ -4,10 +4,10 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\UseCases\AddDonation;
 
+use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationValidationResult as Result;
 use WMDE\Fundraising\Frontend\Validation\AmountPolicyValidator;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
-use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationValidationResult as Result;
 
 /**
  * @license GNU GPL v2+

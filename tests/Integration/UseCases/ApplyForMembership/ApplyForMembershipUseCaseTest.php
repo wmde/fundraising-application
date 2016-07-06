@@ -7,7 +7,6 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\ApplyForMembershi
 use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\Domain\Model\Iban;
-use WMDE\Fundraising\Frontend\Domain\Model\MembershipApplication;
 use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepository;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTokenFetcher;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTokens;

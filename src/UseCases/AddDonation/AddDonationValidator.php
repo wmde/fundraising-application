@@ -5,11 +5,11 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\UseCases\AddDonation;
 
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
+use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationValidationResult as Result;
 use WMDE\Fundraising\Frontend\Validation\AmountValidator;
 use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 use WMDE\Fundraising\Frontend\Validation\EmailValidator;
-use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationValidationResult as Result;
 
 /**
  * @license GNU GPL v2+
