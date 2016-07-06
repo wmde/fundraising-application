@@ -13,14 +13,24 @@ var objectAssign = require( 'object-assign' ),
 	ErrorBox = {
 		el: null,
 		fieldNameTranslator: null,
-		update: function ( validationMessages ) {
-			if ( _.isEmpty( validationMessages ) ) {
+		collectFieldKeys: function ( fieldProperties ) {
+			var invalidFields = [];
+			_.forEach( fieldProperties, function ( properties, key ) {
+				if ( properties.isValid === false ) {
+					invalidFields.push( key );
+				}
+			} );
+			return invalidFields;
+		},
+		update: function ( fieldProperties ) {
+			var invalidFields = this.collectFieldKeys( fieldProperties );
+			if ( _.isEmpty( invalidFields ) ) {
 				this.el.hide();
 				return;
 			}
 			this.el.show();
 			this.el.find( '.fields' ).text(
-				Object.keys( validationMessages )
+				invalidFields
 					.map( this.fieldNameTranslator.translate.bind( this.fieldNameTranslator ) )
 					.join( ', ' )
 			);

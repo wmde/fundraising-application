@@ -102,9 +102,13 @@ $( function () {
 					postcode: 'PLZ',
 					city: 'Ort',
 					country: 'Land',
-					email: 'E-Mail'
+					email: 'E-Mail',
+					iban: 'IBAN',
+					bic: 'BIC',
+					account: 'Kontonummer',
+					bankCode: 'Bankleitzahl'
 				} ),
-				stateKey: 'validationMessages'
+				stateKey: 'donationInputValidation'
 			},
 			// show payment periods if interval payment is selected
 			{

@@ -125,7 +125,7 @@ $( function () {
 					country: 'Land',
 					email: 'E-Mail'
 				} ),
-				stateKey: 'validationMessages'
+				stateKey: 'membershipInputValidation'
 			},
 			{
 				viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.slide-sepa' ), 'sepa' ),
