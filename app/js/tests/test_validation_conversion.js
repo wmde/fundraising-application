@@ -9,31 +9,17 @@ test( 'empty violated fields return empty object', function ( t ) {
 	t.end();
 } );
 
-test( 'violated amount returns amount messages and violations', function ( t ) {
+test( 'violated amount returns violations', function ( t ) {
 	var violatedFields = { betrag: 'Amount too low' },
-		expectedState = {
-			validity: {
-				amount: false
-			},
-			validationMessages: {
-				amount: 'Amount too low'
-			}
-		};
+		expectedState = { validity: { amount: false } };
 
 	t.deepEqual( createInitialStateFromViolatedFields( violatedFields ), expectedState );
 	t.end();
 } );
 
-test( 'violated payment type returns amount messages and violations', function ( t ) {
+test( 'violated payment type returns violations', function ( t ) {
 	var violatedFields = { zahlweise: 'Not supported' },
-		expectedState = {
-			validity: {
-				amount: false
-			},
-			validationMessages: {
-				paymentType: 'Not supported'
-			}
-		};
+		expectedState = { validity: { amount: false } };
 
 	t.deepEqual( createInitialStateFromViolatedFields( violatedFields ), expectedState );
 	t.end();

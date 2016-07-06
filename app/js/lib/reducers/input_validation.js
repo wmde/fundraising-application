@@ -22,6 +22,9 @@ function inputValidation( validationState, action ) {
 				isValid: inputIsValid( action.payload.value, action.payload.pattern )
 			};
 			return newValidationState;
+		case 'FINISH_AMOUNT_VALIDATION':
+			newValidationState.amount = { dataEntered: true, isValid: action.payload.status !== 'ERR' };
+			return newValidationState;
 		case 'FINISH_BANK_DATA_VALIDATION':
 			bankDataIsValid = action.payload.status !== 'ERR';
 			newValidationState.iban = { dataEntered: true, isValid: bankDataIsValid };

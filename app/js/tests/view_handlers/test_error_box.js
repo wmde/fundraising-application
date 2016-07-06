@@ -5,18 +5,18 @@ var test = require( 'tape' ),
 	errorBoxHandler = require( '../../lib/view_handler/error_box' )
 	;
 
-test( 'When there are no messages, box is hidden', function ( t ) {
+test( 'When there are only valid fields, box is hidden', function ( t ) {
 	var box = {
 			hide: sinon.spy()
 		},
 		handler = errorBoxHandler.createHandler( box );
 
-	handler.update( {} );
+	handler.update( { amount: { isValid: true }, paymentType: { isValid: true } } );
 	t.ok( box.hide.calledOnce, 'error box should be hidden' );
 	t.end();
 } );
 
-test( 'When there are messages, ', function ( t ) {
+test( 'When there are invalid fields, ', function ( t ) {
 	var subElement = {
 			text: sinon.spy()
 		},
@@ -25,9 +25,9 @@ test( 'When there are messages, ', function ( t ) {
 			find: sinon.stub().returns( subElement )
 		},
 		handler = errorBoxHandler.createHandler( box ),
-		errorMessages = { amount: 'This will be discarded', paymentType: 'irrelevant' };
+		fieldProperties = { amount: { isValid: false }, paymentType: { isValid: false } };
 
-	handler.update( errorMessages );
+	handler.update( fieldProperties );
 
 	t.test( '    box is shown', function ( t ) {
 		t.ok( box.show.calledOnce, 'error box should be shown' );
