@@ -676,10 +676,6 @@ class FunFunFactory {
 		);
 	}
 
-	private function newPaymentTypeValidator(): AllowedValuesValidator {
-		return new AllowedValuesValidator( PaymentType::getPaymentTypes() );
-	}
-
 	private function newBankDataValidator(): BankDataValidator {
 		return new BankDataValidator( new IbanValidator( $this->newBankDataConverter() ) );
 	}
