@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Presentation\Content;
 
 use Twig_Error_Loader;
+use WMDE\Fundraising\Frontend\Infrastructure\PageRetriever;
 
 /**
  * @license GNU GPL v2+
@@ -12,13 +13,13 @@ use Twig_Error_Loader;
  */
 class TwigPageLoader implements \Twig_LoaderInterface {
 
-	private $contentProvider;
+	private $pageRetriever;
 	private $pageCache = [];
 	private $errorCache = [];
 	private $rawPagesList = [];
 
-	public function __construct( WikiContentProvider $contentProvider, array $rawPagesList = [] ) {
-		$this->contentProvider = $contentProvider;
+	public function __construct( PageRetriever $pageRetriever, array $rawPagesList = [] ) {
+		$this->pageRetriever = $pageRetriever;
 		$this->rawPagesList = $rawPagesList;
 	}
 
@@ -49,7 +50,7 @@ class TwigPageLoader implements \Twig_LoaderInterface {
 		if ( isset( $this->errorCache[$title] ) ) {
 			throw new Twig_Error_Loader( "Wiki page $title not found." );
 		}
-		$content = $this->contentProvider->getContent( $title, $fetchMode );
+		$content = $this->pageRetriever->fetchPage( $title, $fetchMode );
 		if ( $content !== '' ) {
 			$this->pageCache[$title] = $content;
 			return $content;

@@ -4,14 +4,17 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Validation;
 
+use WMDE\Fundraising\Frontend\Infrastructure\ArrayBasedStringList;
+use WMDE\Fundraising\Frontend\Infrastructure\StringList;
+
 /**
  * @licence GNU GPL v2+
  * @author Christoph Fischer < christoph.fischer@wikimedia.de >
  */
 class TextPolicyValidator {
 
-	private $badWordsArray = [];
-	private $whiteWordsArray = [];
+	private $badWords;
+	private $whiteWords;
 
 	const CHECK_URLS = 1;
 	const CHECK_BADWORDS = 4;
@@ -20,6 +23,25 @@ class TextPolicyValidator {
 	// FIXME: this should be factored out as it (checkdnsrr) depends on internets
 	// Could use an URL validation strategy
 	const CHECK_URLS_DNS = 2;
+
+	public function __construct( StringList $badWords = null, StringList $whiteWords = null ) {
+		$this->badWords = $badWords ?? new ArrayBasedStringList( [] );
+		$this->whiteWords = $whiteWords ?? new ArrayBasedStringList( [] );
+	}
+
+	/**
+	 * @return string[]
+	 */
+	private function getBadWords(): array {
+		return $this->badWords->toArray();
+	}
+
+	/**
+	 * @return string[]
+	 */
+	private function getWhiteWords(): array {
+		return $this->whiteWords->toArray();
+	}
 
 	/**
 	 * @param string $text
@@ -47,7 +69,7 @@ class TextPolicyValidator {
 		}
 
 		if ( $flags & self::CHECK_BADWORDS ) {
-			if ( count( $this->badWordsArray ) > 0 && $this->hasBadWords( $text, $ignoreWhiteWords ) ) {
+			if ( count( $this->getBadWords() ) > 0 && $this->hasBadWords( $text, $ignoreWhiteWords ) ) {
 				return false;
 			}
 		}
@@ -59,21 +81,21 @@ class TextPolicyValidator {
 	 * @param string[] $newBadWordsArray
 	 */
 	public function addBadWordsFromArray( array $newBadWordsArray ) {
-		$this->badWordsArray = array_merge( $this->badWordsArray, $newBadWordsArray );
+		$this->badWords = new ArrayBasedStringList( array_merge( $this->getBadWords(), $newBadWordsArray ) );
 	}
 
 	/**
 	 * @param string[] $newWhiteWordsArray
 	 */
 	public function addWhiteWordsFromArray( array $newWhiteWordsArray ) {
-		$this->whiteWordsArray = array_merge( $this->whiteWordsArray, $newWhiteWordsArray );
+		$this->whiteWords = new ArrayBasedStringList( array_merge( $this->getWhiteWords(), $newWhiteWordsArray ) );
 	}
 
 	private function hasBadWords( string $text, bool $ignoreWhiteWords ): bool {
-		$badMatches = $this->getMatches( $text, $this->badWordsArray );
+		$badMatches = $this->getMatches( $text, $this->getBadWords() );
 
 		if ( $ignoreWhiteWords ) {
-			$whiteMatches = $this->getMatches( $text, $this->whiteWordsArray );
+			$whiteMatches = $this->getMatches( $text, $this->getWhiteWords() );
 
 			if ( count( $whiteMatches ) > 0 ) {
 				return $this->hasBadWordNotMatchingWhiteWords( $badMatches, $whiteMatches );
@@ -99,7 +121,7 @@ class TextPolicyValidator {
 	}
 
 	private function wordMatchesWhiteWords( string $word ): bool {
-		return in_array( strtolower( $word ), array_map( 'strtolower', $this->whiteWordsArray ) );
+		return in_array( strtolower( $word ), array_map( 'strtolower', $this->getWhiteWords() ) );
 	}
 
 	private function hasUrls( string $text, bool $testWithDNS, bool $ignoreWhiteWords ): bool {

@@ -20,6 +20,7 @@ class PageContentModifier {
 	}
 
 	public function getProcessedContent( string $content, string $pageName ): string {
+		// TODO: this seems misplaced and presumably should go into ApiBasedPageRetriever
 		# full HTML document usually indicates an error (e.g. access denied)
 		if ( preg_match( '/^<!DOCTYPE html/', $content ) ) {
 			$this->logger->debug( __METHOD__ . ': fail, got error page', [ $content, $pageName ] );

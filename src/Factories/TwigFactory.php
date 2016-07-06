@@ -11,8 +11,8 @@ use Twig_Extension_StringLoader;
 use Twig_Lexer;
 use Twig_Loader_Array;
 use Twig_Loader_Filesystem;
+use WMDE\Fundraising\Frontend\Infrastructure\PageRetriever;
 use WMDE\Fundraising\Frontend\Presentation\Content\TwigPageLoader;
-use WMDE\Fundraising\Frontend\Presentation\Content\WikiContentProvider;
 
 /**
  * @license GNU GPL v2+
@@ -56,11 +56,11 @@ class TwigFactory {
 		return $twig;
 	}
 
-	public function newWikiPageLoader( WikiContentProvider $provider ) {
+	public function newWikiPageLoader( PageRetriever $pageRetriever ) {
 		if ( !$this->config['loaders']['wiki']['enabled'] ) {
 			return null;
 		}
-		return new TwigPageLoader( $provider, $this->config['loaders']['wiki']['rawpages'] ?? [] );
+		return new TwigPageLoader( $pageRetriever, $this->config['loaders']['wiki']['rawpages'] ?? [] );
 	}
 
 	public function newFileSystemLoader() {
