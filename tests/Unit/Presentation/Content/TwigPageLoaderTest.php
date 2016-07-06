@@ -4,29 +4,33 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation\Content;
 
+use WMDE\Fundraising\Frontend\Infrastructure\PageRetriever;
 use WMDE\Fundraising\Frontend\Presentation\Content\TwigPageLoader;
-use WMDE\Fundraising\Frontend\Presentation\Content\WikiContentProvider;
 
 class TwigPageLoaderTest extends \PHPUnit_Framework_TestCase {
 
 	public function testGivenAPageText_getSourceReturnsPageText() {
-		$pageRetriever = $this->getMockBuilder( WikiContentProvider::class )->disableOriginalConstructor()->getMock();
-		$pageRetriever->method( 'getContent' )->willReturn( 'template text' );
-		$loader = new TwigPageLoader( $pageRetriever );
+		$loader = new TwigPageLoader( $this->newPageRetrieverThatWillReturn( 'template text' ) );
 		$this->assertSame( 'template text', $loader->getSource( 'Felis silvestris' ) );
 	}
 
+	/**
+	 * @param string $content
+	 * @return PageRetriever|\PHPUnit_Framework_MockObject_MockObject
+	 */
+	private function newPageRetrieverThatWillReturn( string $content ): PageRetriever {
+		$pageRetriever = $this->createMock( PageRetriever::class );
+		$pageRetriever->method( 'fetchPage' )->willReturn( $content );
+		return $pageRetriever;
+	}
+
 	public function testGivenAPageText_getCacheKeyReturnsPageName() {
-		$pageRetriever = $this->getMockBuilder( WikiContentProvider::class )->disableOriginalConstructor()->getMock();
-		$pageRetriever->method( 'getContent' )->willReturn( 'template text' );
-		$loader = new TwigPageLoader( $pageRetriever );
+		$loader = new TwigPageLoader( $this->newPageRetrieverThatWillReturn( 'template text' ) );
 		$this->assertSame( 'Felis silvestris', $loader->getCacheKey( 'Felis silvestris' ) );
 	}
 
 	public function testGivenAPageText_isFreshKeyReturnsTrue() {
-		$pageRetriever = $this->getMockBuilder( WikiContentProvider::class )->disableOriginalConstructor()->getMock();
-		$pageRetriever->method( 'getContent' )->willReturn( 'template text' );
-		$loader = new TwigPageLoader( $pageRetriever );
+		$loader = new TwigPageLoader( $this->newPageRetrieverThatWillReturn( 'template text' ) );
 		$this->assertTrue( $loader->isFresh( 'Felis silvestris', 0 ) );
 	}
 
@@ -34,9 +38,7 @@ class TwigPageLoaderTest extends \PHPUnit_Framework_TestCase {
 	 * @expectedException \Twig_Error_Loader
 	 */
 	public function testGivenMissingPage_getSourceThrowsException() {
-		$pageRetriever = $this->getMockBuilder( WikiContentProvider::class )->disableOriginalConstructor()->getMock();
-		$pageRetriever->method( 'getContent' )->willReturn( '' );
-		$loader = new TwigPageLoader( $pageRetriever );
+		$loader = new TwigPageLoader( $this->newPageRetrieverThatWillReturn( '' ) );
 		$loader->getSource( 'Felis silvestris' );
 	}
 
@@ -44,24 +46,20 @@ class TwigPageLoaderTest extends \PHPUnit_Framework_TestCase {
 	 * @expectedException \Twig_Error_Loader
 	 */
 	public function testGivenMissingPage_getCacheKeyThrowsException() {
-		$pageRetriever = $this->getMockBuilder( WikiContentProvider::class )->disableOriginalConstructor()->getMock();
-		$pageRetriever->method( 'getContent' )->willReturn( '' );
-		$loader = new TwigPageLoader( $pageRetriever );
+		$loader = new TwigPageLoader( $this->newPageRetrieverThatWillReturn( '' ) );
 		$loader->getCacheKey( 'Felis silvestris' );
 	}
 
 	public function testGivenMissingPage_isFreshKeyStaysTrue() {
-		$pageRetriever = $this->getMockBuilder( WikiContentProvider::class )->disableOriginalConstructor()->getMock();
-		$pageRetriever->method( 'getContent' )->willReturn( '' );
-		$loader = new TwigPageLoader( $pageRetriever );
+		$loader = new TwigPageLoader( $this->newPageRetrieverThatWillReturn( 'template text' ) );
 		$this->assertTrue( $loader->isFresh( 'Felis silvestris', 0 ) );
 	}
 
 	public function testPageTitleConfiguredAsRawContent_pageRetrieverFetchesInRawMode() {
-		$pageRetriever = $this->getMockBuilder( WikiContentProvider::class )->disableOriginalConstructor()->getMock();
-		$pageRetriever->method( 'getContent' )->willReturn( 'template text' );
+		$pageRetriever = $this->newPageRetrieverThatWillReturn( 'template text' );
+
 		$pageRetriever->expects( $this->once() )
-			->method( 'getContent' )
+			->method( 'fetchPage' )
 			->with( 'FetchMeInRawMode', 'raw' );
 
 		$loader = new TwigPageLoader( $pageRetriever, [ 'FetchMeInRawMode' ] );
@@ -69,10 +67,10 @@ class TwigPageLoaderTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testPageTitleNotConfiguredAsRawContent_pageRetrieverFetchesInRenderMode() {
-		$pageRetriever = $this->getMockBuilder( WikiContentProvider::class )->disableOriginalConstructor()->getMock();
-		$pageRetriever->method( 'getContent' )->willReturn( 'template text' );
+		$pageRetriever = $this->newPageRetrieverThatWillReturn( 'template text' );
+
 		$pageRetriever->expects( $this->once() )
-			->method( 'getContent' )
+			->method( 'fetchPage' )
 			->with( 'FetchMeInRenderMode', 'render' );
 
 		$loader = new TwigPageLoader( $pageRetriever, [ 'FetchMeInRawMode' ] );

@@ -80,7 +80,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\TwigCachePurger;
 use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
 use WMDE\Fundraising\Frontend\Presentation\Content\PageContentModifier;
-use WMDE\Fundraising\Frontend\Presentation\Content\WikiContentProvider;
+use WMDE\Fundraising\Frontend\Infrastructure\ModifyingPageRetriever;
 use WMDE\Fundraising\Frontend\Presentation\CreditCardUrlConfig;
 use WMDE\Fundraising\Frontend\Presentation\CreditCardUrlGenerator;
 use WMDE\Fundraising\Frontend\Presentation\DonationConfirmationPageSelector;
@@ -529,7 +529,7 @@ class FunFunFactory {
 	}
 
 	private function newWikiContentProvider() {
-		return new WikiContentProvider(
+		return new ModifyingPageRetriever(
 			$this->newPageRetriever(),
 			$this->newPageContentModifier(),
 			$this->config['cms-wiki-title-prefix']
@@ -741,11 +741,11 @@ class FunFunFactory {
 		return $policyValidator;
 	}
 
-	private function loadWordsFromWiki( WikiContentProvider $contentProvider, string $pageName ): array {
+	private function loadWordsFromWiki( PageRetriever $contentProvider, string $pageName ): array {
 		if ( $pageName === '' ) {
 			return [ ];
 		}
-		$content = $contentProvider->getContent( $pageName, 'raw' );
+		$content = $contentProvider->fetchPage( $pageName, 'raw' );
 		$words = array_map( 'trim', explode( "\n", $content ) );
 
 		return array_filter( $words );

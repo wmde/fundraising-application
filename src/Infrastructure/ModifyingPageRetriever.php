@@ -2,15 +2,15 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Presentation\Content;
+namespace WMDE\Fundraising\Frontend\Infrastructure;
 
-use WMDE\Fundraising\Frontend\Infrastructure\PageRetriever;
+use WMDE\Fundraising\Frontend\Presentation\Content\PageContentModifier;
 
 /**
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class WikiContentProvider {
+class ModifyingPageRetriever implements PageRetriever {
 
 	private $pageRetriever;
 	private $contentModifier;
@@ -22,15 +22,16 @@ class WikiContentProvider {
 		$this->pageTitlePrefix = $pageTitlePrefix;
 	}
 
-	public function getContent( string $pageName, string $fetchMode = 'render' ): string {
-		$prefixedPageName = $this->getPrefixedPageTitle( $pageName );
-		$normalizedPageName = $this->normalizePageName( $prefixedPageName );
+	public function fetchPage( string $pageName, string $fetchMode ): string {
+		$normalizedPageName = $this->normalizePageName( $this->getPrefixedPageTitle( $pageName ) );
+
 		$content = $this->pageRetriever->fetchPage( $normalizedPageName, $fetchMode );
 		$content = $this->contentModifier->getProcessedContent( $content, $normalizedPageName );
 
 		return $content;
 	}
 
+	// TODO: seems misplaced. Should likely either be handled near input, or before sending to API or similar
 	private function normalizePageName( string $title ): string {
 		return ucfirst( str_replace( ' ', '_', trim( $title ) ) );
 	}
