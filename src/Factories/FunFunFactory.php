@@ -68,6 +68,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTokenFetcher;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 use WMDE\Fundraising\Frontend\Infrastructure\PageRetriever;
+use WMDE\Fundraising\Frontend\Infrastructure\PageRetrieverBasedStringList;
 use WMDE\Fundraising\Frontend\Infrastructure\PaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\RandomTokenGenerator;
@@ -722,33 +723,14 @@ class FunFunFactory {
 		return $this->pimple['twig_factory'];
 	}
 
-	private function getTextPolicyValidator( $policyName ) {
-		$policyValidator = new TextPolicyValidator();
-
+	private function getTextPolicyValidator( $policyName ): TextPolicyValidator {
 		$contentProvider = $this->newWikiContentProvider();
 		$textPolicyConfig = $this->config['text-policies'][$policyName];
 
-		// TODO: this is not the place to retrieve resources over the network
-		$policyValidator->addBadWordsFromArray( $this->loadWordsFromWiki(
-			$contentProvider,
-			$textPolicyConfig['badwords'] ?? ''
-		) );
-		$policyValidator->addWhiteWordsFromArray( $this->loadWordsFromWiki(
-			$contentProvider,
-			$textPolicyConfig['whitewords'] ?? ''
-		) );
-
-		return $policyValidator;
-	}
-
-	private function loadWordsFromWiki( PageRetriever $contentProvider, string $pageName ): array {
-		if ( $pageName === '' ) {
-			return [ ];
-		}
-		$content = $contentProvider->fetchPage( $pageName, 'raw' );
-		$words = array_map( 'trim', explode( "\n", $content ) );
-
-		return array_filter( $words );
+		return new TextPolicyValidator(
+			new PageRetrieverBasedStringList( $contentProvider, $textPolicyConfig['badwords'] ?? '' ),
+			new PageRetrieverBasedStringList( $contentProvider, $textPolicyConfig['whitewords'] ?? '' )
+		);
 	}
 
 	public function newCancelDonationUseCase( string $updateToken ): CancelDonationUseCase {
