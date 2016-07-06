@@ -6,7 +6,6 @@ namespace WMDE\Fundraising\Frontend\App\RouteHandlers;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\ParameterBag;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\App\AccessDeniedException;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;

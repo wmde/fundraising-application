@@ -4,15 +4,12 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\UseCases\AddDonation;
 
-use WMDE\Fundraising\Frontend\Domain\BankDataConverter;
-use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Model\BankTransferPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Model\DonationPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\Frontend\Domain\Model\Donor;
-use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentMethod;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentWithoutAssociatedData;
@@ -26,8 +23,6 @@ use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationTokenFetcher;
 use WMDE\Fundraising\Frontend\Validation\DonationValidator;
-use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
-use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 
 /**
  * @license GNU GPL v2+

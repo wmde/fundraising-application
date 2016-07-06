@@ -9,7 +9,6 @@ use WMDE\Fundraising\Frontend\Domain\Model\Euro;
 use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidAddDonationRequest;
-use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationValidationResult;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationValidator;
