@@ -64,7 +64,7 @@ final class Euro {
 	 * point number usage. Amounts with too many decimals are rounded to the
 	 * nearest whole euro cent amount.
 	 *
-	 * @param string $euroAmount
+	 * @param float $euroAmount
 	 * @return self
 	 * @throws InvalidArgumentException
 	 */
