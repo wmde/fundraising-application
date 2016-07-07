@@ -253,7 +253,31 @@ $( function () {
 			formContent = store.getState().donationFormContent,
 			addressIsValid = formContent.addressType === 'anonym' || validity.address,
 			bankDataIsValid = formContent.paymentType !== 'BEZ' || validity.bankData;
+
+		triggerFieldValidity( formContent, addressIsValid, bankDataIsValid );
 		return !hasInvalidFields() && validity.amount && addressIsValid && bankDataIsValid;
+	}
+
+	function triggerFieldValidity( formContent, addressIsValid, bankDataIsValid ) {
+		if ( !addressIsValid ) {
+			if ( formContent.addressType === 'person' ) {
+				store.dispatch( actions.newValidateFieldsetAction(
+					[ 'salutation', 'firstName', 'lastName', 'street', 'postcode', 'city', 'email' ],
+					[ 'companyName' ]
+				) );
+			} else if ( formContent.addressType === 'firma' ) {
+				store.dispatch( actions.newValidateFieldsetAction(
+					[ 'companyName', 'street', 'postcode', 'city', 'email' ],
+					[ 'salutation', 'firstName', 'lastName' ]
+				) );
+			}
+		}
+
+		if ( !bankDataIsValid ) {
+			store.dispatch( actions.newValidateFieldsetAction(
+				[ 'iban', 'bic', 'account', 'bankCode' ]
+			) );
+		}
 	}
 
 	function hasInvalidFields() {

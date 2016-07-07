@@ -68,6 +68,16 @@ module.exports = {
 		};
 	},
 
+	newValidateFieldsetAction: function ( requiredFields, neutralFields ) {
+		return {
+			type: 'VALIDATE_FIELDSET',
+			payload: {
+				requiredFields: requiredFields,
+				neutralFields: neutralFields
+			}
+		};
+	},
+
 	/**
 	 *
 	 * @param {Object|Promise} validationResult
