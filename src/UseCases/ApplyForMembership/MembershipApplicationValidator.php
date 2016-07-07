@@ -217,7 +217,7 @@ class MembershipApplicationValidator {
 		$this->validateFieldLength( $this->request->getApplicantCountryCode(), Result::SOURCE_APPLICANT_COUNTRY );
 	}
 
-	private function validateFieldLength( $value, $fieldName ) {
+	private function validateFieldLength( string $value, string $fieldName ) {
 		if ( strlen( $value ) > $this->maximumFieldLengths[$fieldName] )  {
 			$this->violations[$fieldName] = Result::VIOLATION_WRONG_LENGTH;
 		}
