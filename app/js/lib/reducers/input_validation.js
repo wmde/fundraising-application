@@ -22,6 +22,16 @@ function inputValidation( validationState, action ) {
 				isValid: inputIsValid( action.payload.value, action.payload.pattern )
 			};
 			return newValidationState;
+		case 'MARK_EMPTY_FIELD_INVALID':
+			_.each( action.payload.requiredFields, function ( key ) {
+				if ( newValidationState[ key ].isValid === null ) {
+					newValidationState[ key ].isValid = false;
+				}
+			} );
+			_.each( action.payload.neutralFields, function ( key ) {
+				newValidationState[ key ].isValid = null;
+			} );
+			return newValidationState;
 		case 'FINISH_AMOUNT_VALIDATION':
 			newValidationState.amount = { dataEntered: true, isValid: action.payload.status !== 'ERR' };
 			return newValidationState;
