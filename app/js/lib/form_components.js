@@ -42,7 +42,10 @@ var objectAssign = require( 'object-assign' ),
 		onChange: null,
 		validator: null,
 		render: function ( formContent ) {
-			this.element.val( formContent[ this.contentName ] );
+			if ( this.element.val() !== formContent[ this.contentName ] ) {
+				this.element.val( formContent[ this.contentName ] );
+				this.element.change();
+			}
 		}
 	},
 

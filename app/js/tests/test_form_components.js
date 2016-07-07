@@ -9,7 +9,8 @@ var test = require( 'tape' ),
 			on: sinon.spy(),
 			val: sinon.spy(),
 			prop: sinon.stub(),
-			text: sinon.spy()
+			text: sinon.spy(),
+			change: sinon.spy()
 		};
 	},
 	assertChangeHandlerWasSet = function ( t, spyingElement ) {
@@ -73,7 +74,7 @@ test( 'Rendering the text component sets the value', function ( t ) {
 
 	component.render( { value: 'the new awesome value' } );
 
-	t.ok( element.val.calledOnce, 'value is set once' );
+	t.ok( element.val.calledTwice, 'value is called twice (get/set)' );
 	t.ok( element.val.calledWith( 'the new awesome value' ) );
 	t.end();
 } );
