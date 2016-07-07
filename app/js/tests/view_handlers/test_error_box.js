@@ -29,11 +29,6 @@ test( 'When there are invalid fields, ', function ( t ) {
 
 	handler.update( fieldProperties );
 
-	t.test( '    box is shown', function ( t ) {
-		t.ok( box.show.calledOnce, 'error box should be shown' );
-		t.end();
-	} );
-
 	t.test( '    text is inserted in \'.fields\' subelement', function ( t ) {
 		t.ok( box.find.calledWith( '.fields' ) );
 		t.ok( subElement.text.calledOnce, 'text in subelement should be set' );

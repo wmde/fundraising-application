@@ -277,7 +277,7 @@ $( function () {
 		if ( paymentDataPageIsValid() ) {
 			store.dispatch( actions.newNextPageAction() );
 		} else {
-			alert( 'Bitte füllen Sie das Formular komplett aus.' );
+			$( '#validation-errors' ).show();
 		}
 	} );
 
@@ -285,7 +285,7 @@ $( function () {
 		if ( personalDataPageIsValid() ) {
 			store.dispatch( actions.newNextPageAction() );
 		} else {
-			alert( 'Bitte füllen Sie das Formular komplett aus.' );
+			$( '#validation-errors' ).show();
 		}
 	} );
 
@@ -293,7 +293,7 @@ $( function () {
 		if ( personalDataPageIsValid() ) {
 			$( '#donForm2' ).submit();
 		} else {
-			alert( 'Bitte füllen Sie das Formular komplett aus.' );
+			$( '#validation-errors' ).show();
 		}
 	} );
 
@@ -306,7 +306,7 @@ $( function () {
 		if ( validity.amount && validity.address && validity.bankData && validity.sepaConfirmation ) {
 			$( '#donForm2' ).submit();
 		} else {
-			alert( 'Bitte füllen Sie das Formular komplett aus.' );
+			$( '#validation-errors' ).show();
 		}
 	} );
 
