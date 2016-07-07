@@ -28,7 +28,6 @@ var objectAssign = require( 'object-assign' ),
 				this.el.hide();
 				return;
 			}
-			this.el.show();
 			this.el.find( '.fields' ).text(
 				invalidFields
 					.map( this.fieldNameTranslator.translate.bind( this.fieldNameTranslator ) )
