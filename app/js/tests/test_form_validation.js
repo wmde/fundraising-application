@@ -2,11 +2,12 @@
 
 var test = require( 'tape' ),
 	sinon = require( 'sinon' ),
+	Promise = require( 'promise' ),
 	validation = require( '../lib/form_validation' );
 
 test( 'Amount validation sends values to server', function ( t ) {
 	var positiveResult = { status: 'OK' },
-		postFunctionSpy = sinon.stub().returns( positiveResult ),
+		postFunctionSpy = sinon.stub().returns( Promise.resolve( positiveResult ) ),
 		amountValidator = validation.createAmountValidator(
 			'http://spenden.wikimedia.org/validate-amount',
 			postFunctionSpy
@@ -20,7 +21,9 @@ test( 'Amount validation sends values to server', function ( t ) {
 	t.equal( callParameters[ 0 ], 'http://spenden.wikimedia.org/validate-amount', 'validation calls configured URL' );
 	t.deepEqual( callParameters[ 1 ], { amount: 23, paymentType: 'BEZ' }, 'validation sends only necessary data' );
 	t.equal( callParameters[ 3 ], 'json', 'validation expects JSON data' );
-	t.deepEqual( validationResult, positiveResult, 'validation function returns result' );
+	validationResult.then( function ( resultData ) {
+		t.deepEqual( resultData, positiveResult, 'validation function returns promise result' );
+	} );
 	t.end();
 } );
 
@@ -43,7 +46,7 @@ test( 'Address validation is valid for anonymous address', function ( t ) {
 
 test( 'Given a private adddress, address validation sends values to server', function ( t ) {
 	var positiveResult = { status: 'OK' },
-		postFunctionSpy = sinon.stub().returns( positiveResult ),
+		postFunctionSpy = sinon.stub().returns( Promise.resolve( positiveResult ) ),
 		addressValidator = validation.createAddressValidator(
 			'http://spenden.wikimedia.org/validate-address',
 			validation.DefaultRequiredFieldsForAddressType,
@@ -68,7 +71,9 @@ test( 'Given a private adddress, address validation sends values to server', fun
 	t.equal( callParameters[ 0 ], 'http://spenden.wikimedia.org/validate-address', 'validation calls configured URL' );
 	t.deepEqual( callParameters[ 1 ], formData, 'validation sends all data' );
 	t.equal( callParameters[ 3 ], 'json', 'validation expects JSON data' );
-	t.deepEqual( validationResult, positiveResult, 'validation function returns result' );
+	validationResult.then( function ( resultData ) {
+		t.deepEqual( resultData, positiveResult, 'validation function returns promise result' );
+	} );
 	t.end();
 } );
 
@@ -101,7 +106,7 @@ test( 'Given an incomplete private adddress, address validation sends no values 
 
 test( 'Given sepa debit type, bank data validation sends IBAN to server', function ( t ) {
 	var positiveResult = { status: 'OK' }, // all other fields are not relevenat to the test
-		postFunctionSpy = sinon.stub().returns( positiveResult ),
+		postFunctionSpy = sinon.stub().returns( Promise.resolve( positiveResult ) ),
 		bankDataValidator = validation.createBankDataValidator(
 			'http://spenden.wikimedia.org/check-iban',
 			'http://spenden.wikimedia.org/generate-iban',
@@ -124,13 +129,15 @@ test( 'Given sepa debit type, bank data validation sends IBAN to server', functi
 	t.equal( callParameters[ 0 ], 'http://spenden.wikimedia.org/check-iban', 'validation calls URL for SEPA' );
 	t.deepEqual( callParameters[ 1 ], { iban: 'DE12500105170648489890' }, 'validation sends only necessary data' );
 	t.equal( callParameters[ 3 ], 'json', 'validation expects JSON data' );
-	t.deepEqual( validationResult, positiveResult, 'validation function returns result' );
+	validationResult.then( function ( resultData ) {
+		t.deepEqual( resultData, positiveResult, 'validation function returns promise result' );
+	} );
 	t.end();
 } );
 
 test( 'Given non-sepa debit type, bank data validation sends account number and bank code to server', function ( t ) {
 	var positiveResult = { status: 'OK' }, // all other fields are not relevenat to the test
-		postFunctionSpy = sinon.stub().returns( positiveResult ),
+		postFunctionSpy = sinon.stub().returns( Promise.resolve( positiveResult ) ),
 		bankDataValidator = validation.createBankDataValidator(
 			'http://spenden.wikimedia.org/check-iban',
 			'http://spenden.wikimedia.org/generate-iban',
@@ -153,7 +160,9 @@ test( 'Given non-sepa debit type, bank data validation sends account number and 
 	t.equal( callParameters[ 0 ], 'http://spenden.wikimedia.org/generate-iban', 'validation calls URL for SEPA' );
 	t.deepEqual( callParameters[ 1 ], { accountNumber: '0648489890', bankCode: '50010517' }, 'validation sends only necessary data' );
 	t.equal( callParameters[ 3 ], 'json', 'validation expects JSON data' );
-	t.deepEqual( validationResult, positiveResult, 'validation function returns result' );
+	validationResult.then( function ( resultData ) {
+		t.deepEqual( resultData, positiveResult, 'validation function returns promise result' );
+	} );
 	t.end();
 } );
 
