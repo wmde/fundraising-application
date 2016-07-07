@@ -23,7 +23,7 @@ class PageRetrieverBasedStringList implements StringList {
 			return [];
 		}
 
-		$content = $this->pageRetriever->fetchPage( $this->pageName, 'raw' );
+		$content = $this->pageRetriever->fetchPage( $this->pageName, PageRetriever::MODE_RAW );
 
 		return array_filter( array_map( 'trim', explode( "\n", $content ) ) );
 	}

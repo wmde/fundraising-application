@@ -34,7 +34,7 @@ class ApiBasedPageRetriever implements PageRetriever {
 	 * @throws \RuntimeException if the value of $action is not supported
 	 * @return string
 	 */
-	public function fetchPage( string $pageTitle, string $action = 'render' ): string {
+	public function fetchPage( string $pageTitle, string $action = PageRetriever::MODE_RENDERED ): string {
 		$this->logger->debug( __METHOD__ . ': pageTitle', [ $pageTitle ] );
 
 		if ( !$this->api->isLoggedin() ) {
