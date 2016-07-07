@@ -7,6 +7,8 @@ var _ = require( 'underscore' ),
 		isValid: null
 	},
 	initialState = {
+		amount: _.clone( objectFields ),
+		salutation: _.clone( objectFields ),
 		firstName: _.clone( objectFields ),
 		lastName: _.clone( objectFields ),
 		companyName: _.clone( objectFields ),
