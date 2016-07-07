@@ -30,6 +30,21 @@ class MembershipApplicationValidator {
 	 */
 	private $violations;
 
+	private $maximumFieldLengths = [
+		Result::SOURCE_APPLICANT_PHONE_NUMBER => 30,
+		Result::SOURCE_APPLICANT_EMAIL => 250,
+		Result::SOURCE_APPLICANT_COMPANY => 100,
+		Result::SOURCE_APPLICANT_FIRST_NAME => 50,
+		Result::SOURCE_APPLICANT_LAST_NAME => 50,
+		Result::SOURCE_APPLICANT_SALUTATION => 16,
+		Result::SOURCE_APPLICANT_STREET_ADDRESS => 100,
+		Result::SOURCE_APPLICANT_POSTAL_CODE => 8,
+		Result::SOURCE_APPLICANT_CITY => 100,
+		Result::SOURCE_APPLICANT_COUNTRY => 8,
+		Result::SOURCE_BANK_NAME => 50,
+		Result::SOURCE_BIC => 32,
+	];
+
 	public function __construct( FeeValidator $feeValidator, BankDataValidator $bankDataValidator,
 		EmailValidator $emailValidator ) {
 
@@ -72,8 +87,12 @@ class MembershipApplicationValidator {
 	}
 
 	private function validateBankData() {
-		$validationResult = $this->bankDataValidator->validate( $this->request->getPaymentBankData() );
+		$bankData = $this->request->getPaymentBankData();
+		$validationResult = $this->bankDataValidator->validate( $bankData );
 		$violations = [];
+
+		$this->validateFieldLength( $bankData->getBankName(), Result::SOURCE_BANK_NAME );
+		$this->validateFieldLength( $bankData->getBic(), Result::SOURCE_BIC );
 
 		foreach ( $validationResult->getViolations() as $violation ) {
 			$violations[$this->getBankDataViolationSource( $violation )] = $this->getBankDataViolationType( $violation );
@@ -125,6 +144,7 @@ class MembershipApplicationValidator {
 	private function validateApplicantContactInfo() {
 		$this->validatePhoneNumber();
 
+		$this->validateFieldLength( $this->request->getApplicantEmailAddress(), Result::SOURCE_APPLICANT_EMAIL );
 		if ( $this->emailValidator->validate( $this->request->getApplicantEmailAddress() )->hasViolations() ) {
 			$this->violations[Result::SOURCE_APPLICANT_EMAIL] = Result::VIOLATION_NOT_EMAIL;
 		}
@@ -133,6 +153,7 @@ class MembershipApplicationValidator {
 	private function validatePhoneNumber() {
 		$phoneNumber = $this->request->getApplicantPhoneNumber();
 
+		$this->validateFieldLength( $phoneNumber, Result::SOURCE_APPLICANT_PHONE_NUMBER );
 		if ( $phoneNumber !== '' && !preg_match( '/^[0-9\+\-\(\)]+/i', $phoneNumber ) ) {
 			$this->violations[Result::SOURCE_APPLICANT_PHONE_NUMBER] = Result::VIOLATION_NOT_PHONE_NUMBER;
 		}
@@ -151,37 +172,54 @@ class MembershipApplicationValidator {
 		if ( $this->request->getApplicantCompanyName() === '' ) {
 			$this->violations[Result::SOURCE_APPLICANT_COMPANY] = Result::VIOLATION_MISSING;
 		}
+		$this->validateFieldLength( $this->request->getApplicantCompanyName(), Result::SOURCE_APPLICANT_COMPANY );
 	}
 
 	private function validatePersonName() {
 		if ( $this->request->getApplicantFirstName() === '' ) {
 			$this->violations[Result::SOURCE_APPLICANT_FIRST_NAME] = Result::VIOLATION_MISSING;
 		}
+		$this->validateFieldLength( $this->request->getApplicantFirstName(), Result::SOURCE_APPLICANT_FIRST_NAME );
 
 		if ( $this->request->getApplicantLastName() === '' ) {
 			$this->violations[Result::SOURCE_APPLICANT_LAST_NAME] = Result::VIOLATION_MISSING;
 		}
+		$this->validateFieldLength( $this->request->getApplicantLastName(), Result::SOURCE_APPLICANT_LAST_NAME );
 
 		if ( $this->request->getApplicantSalutation() === '' ) {
 			$this->violations[Result::SOURCE_APPLICANT_SALUTATION] = Result::VIOLATION_MISSING;
 		}
+		$this->validateFieldLength( $this->request->getApplicantSalutation(), Result::SOURCE_APPLICANT_SALUTATION );
 	}
 
 	private function validateApplicantAddress() {
 		if ( $this->request->getApplicantStreetAddress() === '' ) {
 			$this->violations[Result::SOURCE_APPLICANT_STREET_ADDRESS] = Result::VIOLATION_MISSING;
 		}
+		$this->validateFieldLength(
+			$this->request->getApplicantStreetAddress(),
+			Result::SOURCE_APPLICANT_STREET_ADDRESS
+		);
 
 		if ( $this->request->getApplicantPostalCode() === '' ) {
 			$this->violations[Result::SOURCE_APPLICANT_POSTAL_CODE] = Result::VIOLATION_MISSING;
 		}
+		$this->validateFieldLength( $this->request->getApplicantPostalCode(), Result::SOURCE_APPLICANT_POSTAL_CODE );
 
 		if ( $this->request->getApplicantCity() === '' ) {
 			$this->violations[Result::SOURCE_APPLICANT_CITY] = Result::VIOLATION_MISSING;
 		}
+		$this->validateFieldLength( $this->request->getApplicantCity(), Result::SOURCE_APPLICANT_CITY );
 
 		if ( $this->request->getApplicantCountryCode() === '' ) {
 			$this->violations[Result::SOURCE_APPLICANT_COUNTRY] = Result::VIOLATION_MISSING;
+		}
+		$this->validateFieldLength( $this->request->getApplicantCountryCode(), Result::SOURCE_APPLICANT_COUNTRY );
+	}
+
+	private function validateFieldLength( $value, $fieldName ) {
+		if ( strlen( $value ) > $this->maximumFieldLengths[$fieldName] )  {
+			$this->violations[$fieldName] = Result::VIOLATION_WRONG_LENGTH;
 		}
 	}
 
