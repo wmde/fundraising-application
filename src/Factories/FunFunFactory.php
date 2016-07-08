@@ -108,6 +108,7 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfi
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipFormViolationPresenter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentUseCase;
+use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentValidator;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationPolicyValidator;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationUseCase;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationValidator;
@@ -842,7 +843,8 @@ class FunFunFactory {
 		return new AddCommentUseCase(
 			$this->getDonationRepository(),
 			$this->newDonationAuthorizer( $updateToken ),
-			$this->getTextPolicyValidator( 'comment' )
+			$this->getTextPolicyValidator( 'comment' ),
+			$this->newAddCommentValidator()
 		);
 	}
 
@@ -1098,6 +1100,10 @@ class FunFunFactory {
 
 	public function getMembershipApplicationTimeframeLimit() {
 		return $this->config['membership-application-timeframe-limit'];
+	}
+
+	private function newAddCommentValidator(): AddCommentValidator {
+		return new AddCommentValidator();
 	}
 
 }
