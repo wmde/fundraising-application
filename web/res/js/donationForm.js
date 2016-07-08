@@ -49,7 +49,10 @@ $( function () {
 					initialValues
 				),
 				WMDE.ReduxValidation.createValidationDispatcher(
-					WMDE.FormValidation.createAddressValidator( initData.data( 'validate-address-url' ) ),
+					WMDE.FormValidation.createAddressValidator( 
+						initData.data( 'validate-address-url' ),
+						WMDE.FormValidation.DefaultRequiredFieldsForAddressType
+					),
 					actions.newFinishAddressValidationAction,
 					[ 'addressType', 'salutation', 'title', 'firstName', 'lastName', 'companyName', 'street', 'postcode', 'city', 'country', 'email' ],
 					initialValues
@@ -246,20 +249,29 @@ $( function () {
 		store
 	);
 
-	// connect DOM elements to actions
+	// Validity checks for different form parts
 
-	function personalDataPageIsValid() {
+	function addressIsValid() {
 		var validity = store.getState().validity,
-			formContent = store.getState().donationFormContent,
-			addressIsValid = formContent.addressType === 'anonym' || validity.address,
-			bankDataIsValid = formContent.paymentType !== 'BEZ' || validity.bankData;
-
-		triggerFieldValidity( formContent, addressIsValid, bankDataIsValid );
-		return !hasInvalidFields() && validity.amount && addressIsValid && bankDataIsValid;
+			formContent = store.getState().donationFormContent;
+		return formContent.addressType === 'anonym' || validity.address;
 	}
 
-	function triggerFieldValidity( formContent, addressIsValid, bankDataIsValid ) {
-		if ( !addressIsValid ) {
+	function bankDataIsValid() {
+		var validity = store.getState().validity,
+			formContent = store.getState().donationFormContent;
+		return formContent.paymentType !== 'BEZ' || validity.bankData;
+	}
+
+	function personalDataPageIsValid() {
+		var validity = store.getState().validity;
+		return !hasInvalidFields() && validity.amount && addressIsValid() && bankDataIsValid();
+	}
+
+	function triggerValidityCheckForPersonalDataPage() {
+		var formContent = store.getState().donationFormContent;
+
+		if ( !addressIsValid() ) {
 			if ( formContent.addressType === 'person' ) {
 				store.dispatch( actions.newValidateFieldsetAction(
 					[ 'salutation', 'firstName', 'lastName', 'street', 'postcode', 'city', 'email' ],
@@ -273,9 +285,9 @@ $( function () {
 			}
 		}
 
-		if ( !bankDataIsValid ) {
+		if ( !bankDataIsValid() ) {
 			store.dispatch( actions.newValidateFieldsetAction(
-				[ 'iban', 'bic', 'account', 'bankCode' ]
+				[ 'iban', 'bic' ]
 			) );
 		}
 	}
@@ -297,10 +309,13 @@ $( function () {
 			( currentState.donationFormContent.amount && currentState.donationFormContent.paymentType ) ;
 	}
 
+	// connect DOM elements to actions
+
 	$( '#continueFormSubmit1' ).click( function () {
 		if ( paymentDataPageIsValid() ) {
 			store.dispatch( actions.newNextPageAction() );
 		} else {
+			// TODO: triggerValidityCheckForPaymentPage
 			$( '#validation-errors' ).show();
 		}
 	} );
@@ -309,6 +324,7 @@ $( function () {
 		if ( personalDataPageIsValid() ) {
 			store.dispatch( actions.newNextPageAction() );
 		} else {
+			triggerValidityCheckForPersonalDataPage();
 			$( '#validation-errors' ).show();
 		}
 	} );
@@ -317,6 +333,7 @@ $( function () {
 		if ( personalDataPageIsValid() ) {
 			$( '#donForm2' ).submit();
 		} else {
+			triggerValidityCheckForPersonalDataPage();
 			$( '#validation-errors' ).show();
 		}
 	} );
@@ -330,6 +347,7 @@ $( function () {
 		if ( validity.amount && validity.address && validity.bankData && validity.sepaConfirmation ) {
 			$( '#donForm2' ).submit();
 		} else {
+			// TODO: triggerValidityCheckForSEPAPage
 			$( '#validation-errors' ).show();
 		}
 	} );
