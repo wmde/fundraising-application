@@ -50,7 +50,10 @@ $( function () {
 					initialValues
 				),
 				WMDE.ReduxValidation.createValidationDispatcher(
-					WMDE.FormValidation.createAddressValidator( initData.data( 'validate-address-url' ) ),
+					WMDE.FormValidation.createAddressValidator(
+						initData.data( 'validate-address-url' ),
+						WMDE.FormValidation.DefaultRequiredFieldsForAddressType
+					),
 					actions.newFinishAddressValidationAction,
 					[
 						'addressType',
