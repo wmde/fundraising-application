@@ -49,6 +49,8 @@ class InMemorySubscriptionRepository implements SubscriptionRepository {
 				return $subscription;
 			}
 		}
+
+		return null;
 	}
 
 }
