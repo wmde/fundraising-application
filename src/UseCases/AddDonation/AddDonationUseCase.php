@@ -22,7 +22,6 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationTokenFetcher;
-use WMDE\Fundraising\Frontend\Validation\DonationValidator;
 
 /**
  * @license GNU GPL v2+
