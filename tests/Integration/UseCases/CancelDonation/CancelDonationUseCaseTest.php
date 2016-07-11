@@ -34,7 +34,7 @@ class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 		$response = $useCase->cancelDonation( new CancelDonationRequest( 1337 ) );
 
-		$this->assertFalse( $response->cancellationWasSuccessful() );
+		$this->assertFalse( $response->cancellationSucceeded() );
 	}
 
 	private function newUseCase(): CancelDonationUseCase {
@@ -70,7 +70,8 @@ class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 		$response = $useCase->cancelDonation( new CancelDonationRequest( $donation->getId() ) );
 
-		$this->assertTrue( $response->cancellationWasSuccessful() );
+		$this->assertTrue( $response->cancellationSucceeded() );
+		$this->assertFalse( $response->mailDeliveryFailed() );
 	}
 
 	private function storeDonation( Donation $donation, FunFunFactory $factory ) {
@@ -88,7 +89,7 @@ class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$useCase = $factory->newCancelDonationUseCase( self::CORRECT_UPDATE_TOKEN );
 		$response = $useCase->cancelDonation( new CancelDonationRequest( $donation->getId() ) );
 
-		$this->assertFalse( $response->cancellationWasSuccessful() );
+		$this->assertFalse( $response->cancellationSucceeded() );
 	}
 
 	private function newCancelableDonation(): Donation {
@@ -123,7 +124,7 @@ class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		);
 
 		$response = $useCase->cancelDonation( new CancelDonationRequest( $donation->getId() ) );
-		$this->assertTrue( $response->cancellationWasSuccessful() );
+		$this->assertTrue( $response->cancellationSucceeded() );
 	}
 
 	private function getDonationRepositoryWithDonation( Donation $donation ): DonationRepository {
@@ -166,6 +167,30 @@ class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$useCase->cancelDonation( new CancelDonationRequest( 1 ) );
 
 		$this->assertSame( [], $donationLogger->getLogCalls() );
+	}
+
+	public function testWhenConfirmationMailFails_mailDeliveryFailureResponseIsReturned() {
+		$donation = $this->newCancelableDonation();
+
+		$useCase = new CancelDonationUseCase(
+			$this->getDonationRepositoryWithDonation( $donation ),
+			$this->newThrowingMailer(),
+			new SucceedingDonationAuthorizer(),
+			new DonationEventLoggerSpy()
+		);
+
+		$response = $useCase->cancelDonation( new CancelDonationRequest( $donation->getId() ) );
+
+		$this->assertTrue( $response->cancellationSucceeded() );
+		$this->assertTrue( $response->mailDeliveryFailed() );
+	}
+
+	private function newThrowingMailer(): TemplateBasedMailer {
+		$mailer = $this->createMock( TemplateBasedMailer::class );
+
+		$mailer->method( $this->anything() )->willThrowException( new \RuntimeException() );
+
+		return $mailer;
 	}
 
 }
