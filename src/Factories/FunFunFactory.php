@@ -81,7 +81,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\Repositories\LoggingMembershipAppli
 use WMDE\Fundraising\Frontend\Infrastructure\Repositories\LoggingSubscriptionRepository;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
-use WMDE\Fundraising\Frontend\Infrastructure\TwigCachePurger;
+use WMDE\Fundraising\Frontend\Infrastructure\AllOfTheCachePurger;
 use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
 use WMDE\Fundraising\Frontend\Presentation\Content\PageContentModifier;
 use WMDE\Fundraising\Frontend\Infrastructure\ModifyingPageRetriever;
@@ -694,7 +694,7 @@ class FunFunFactory {
 
 	public function newPurgeCacheUseCase(): PurgeCacheUseCase {
 		return new PurgeCacheUseCase(
-			new TwigCachePurger( $this->getTwig() ),
+			new AllOfTheCachePurger( $this->getTwig(), $this->getPageCache() ),
 			$this->config['purging-secret']
 		);
 	}
