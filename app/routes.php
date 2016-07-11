@@ -299,9 +299,9 @@ $app->post(
 	'add-comment',
 	function( Request $request ) use ( $app, $ffFactory ) {
 		$addCommentRequest = new AddCommentRequest();
-		$addCommentRequest->setCommentText( $request->request->get( 'kommentar', '' ) );
+		$addCommentRequest->setCommentText( trim( $request->request->get( 'kommentar', '' ) ) );
 		$addCommentRequest->setIsPublic( $request->request->get( 'public', '0' ) === '1' );
-		$addCommentRequest->setAuthorDisplayName( $request->request->get( 'eintrag', '' ) );
+		$addCommentRequest->setAuthorDisplayName( trim( $request->request->get( 'eintrag', '' ) ) );
 		$addCommentRequest->setDonationId( (int)$request->request->get( 'sid', '' ) );
 		$addCommentRequest->freeze()->assertNoNullFields();
 
@@ -310,7 +310,7 @@ $app->post(
 		if ( $updateToken === '' ) {
 			return $app->json( [
 				'status' => 'ERR',
-				'message' => 'Required token is missing',
+				'message' => $ffFactory->getTranslator()->trans( 'comment_failure_access_denied' ),
 			] );
 		}
 

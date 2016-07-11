@@ -21,18 +21,25 @@ class AddCommentUseCase {
 	private $donationRepository;
 	private $authorizationService;
 	private $textPolicyValidator;
+	private $commentValidator;
 
 	public function __construct( DonationRepository $repository, DonationAuthorizer $authorizationService,
-		TextPolicyValidator $textPolicyValidator ) {
+		TextPolicyValidator $textPolicyValidator, AddCommentValidator $commentValidator ) {
 
 		$this->donationRepository = $repository;
 		$this->authorizationService = $authorizationService;
 		$this->textPolicyValidator = $textPolicyValidator;
+		$this->commentValidator = $commentValidator;
 	}
 
 	public function addComment( AddCommentRequest $addCommentRequest ): AddCommentResponse {
 		if ( !$this->requestIsAllowed( $addCommentRequest ) ) {
 			return AddCommentResponse::newFailureResponse( 'comment_failure_access_denied' );
+		}
+
+		$validationResult = $this->commentValidator->validate( $addCommentRequest );
+		if ( !$validationResult->isSuccessful() ) {
+			return AddCommentResponse::newFailureResponse( $validationResult->getFirstViolation() );
 		}
 
 		try {

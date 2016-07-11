@@ -12,6 +12,8 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingDonationRepository;
 use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentUseCase;
+use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentValidationResult;
+use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentValidator;
 use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
 
 /**
@@ -30,11 +32,13 @@ class AddCommentUseCaseTest extends \PHPUnit_Framework_TestCase {
 	private $donationRepository;
 	private $authorizer;
 	private $textPolicyValidator;
+	private $commentValidator;
 
 	public function setUp() {
 		$this->donationRepository = new FakeDonationRepository();
 		$this->authorizer = new SucceedingDonationAuthorizer();
 		$this->textPolicyValidator = $this->newSucceedingTextPolicyValidator();
+		$this->commentValidator = $this->newSucceedingAddCommentValidator();
 	}
 
 	private function newSucceedingTextPolicyValidator(): TextPolicyValidator {
@@ -77,7 +81,8 @@ class AddCommentUseCaseTest extends \PHPUnit_Framework_TestCase {
 		return new AddCommentUseCase(
 			$this->donationRepository,
 			$this->authorizer,
-			$this->textPolicyValidator
+			$this->textPolicyValidator,
+			$this->commentValidator
 		);
 	}
 
@@ -172,6 +177,23 @@ class AddCommentUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$this->assertTrue( $response->isSuccessful() );
 
 		$this->assertNotContains( 'ok', $response->getSuccessMessage() );
+	}
+
+	public function testWhenValidationFails_failureResponseIsReturned() {
+		$this->donationRepository = $this->newFakeRepositoryWithDonation();
+		$this->commentValidator = $this->createMock( AddCommentValidator::class );
+		$this->commentValidator->method( 'validate' )->willReturn( new AddCommentValidationResult( [
+			'comment' => 'failed'
+		] ) );
+
+		$response = $this->newUseCase()->addComment( $this->newValidRequest() );
+		$this->assertFalse( $response->isSuccessful() );
+	}
+
+	private function newSucceedingAddCommentValidator() {
+		$validator = $this->createMock( AddCommentValidator::class );
+		$validator->method( 'validate' )->willReturn( new AddCommentValidationResult( [] ) );
+		return $validator;
 	}
 
 }

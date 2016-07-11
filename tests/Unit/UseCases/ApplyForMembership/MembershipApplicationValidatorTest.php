@@ -382,4 +382,60 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 		$this->assertTrue( $this->newValidator()->validate( $request )->isSuccessful() );
 	}
 
+	public function testPersonalInfoWithLongFields_validationFails() {
+		$longText = str_repeat( 'Cats ', 500 );
+		$request = $this->newValidRequest();
+		$request->setApplicantFirstName( $longText );
+		$request->setApplicantLastName( $longText );
+		$request->setApplicantTitle( $longText );
+		$request->setApplicantSalutation( $longText );
+		$request->setApplicantStreetAddress( $longText );
+		$request->setApplicantPostalCode( $longText );
+		$request->setApplicantCity( $longText );
+		$request->setApplicantCountryCode( $longText );
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[
+				Result::SOURCE_APPLICANT_FIRST_NAME => Result::VIOLATION_WRONG_LENGTH,
+				Result::SOURCE_APPLICANT_LAST_NAME => Result::VIOLATION_WRONG_LENGTH,
+				Result::SOURCE_APPLICANT_SALUTATION => Result::VIOLATION_WRONG_LENGTH,
+				Result::SOURCE_APPLICANT_STREET_ADDRESS => Result::VIOLATION_WRONG_LENGTH,
+				Result::SOURCE_APPLICANT_POSTAL_CODE => Result::VIOLATION_WRONG_LENGTH,
+				Result::SOURCE_APPLICANT_CITY => Result::VIOLATION_WRONG_LENGTH,
+				Result::SOURCE_APPLICANT_COUNTRY => Result::VIOLATION_WRONG_LENGTH
+			]
+		);
+	}
+
+	public function testContactInfoWithLongFields_validationFails() {
+		$request = $this->newValidRequest();
+		$request->setApplicantEmailAddress( str_repeat( 'Cats', 500 ) . '@example.com' );
+		$request->setApplicantPhoneNumber( str_repeat( '1234', 500 ) );
+
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[
+				Result::SOURCE_APPLICANT_EMAIL => Result::VIOLATION_WRONG_LENGTH,
+				Result::SOURCE_APPLICANT_PHONE_NUMBER => Result::VIOLATION_WRONG_LENGTH
+			]
+		);
+	}
+
+	public function testBankDataWithLongFields_validationFails() {
+		$longText = str_repeat( 'Cats ', 500 );
+		$request = $this->newValidRequest();
+		$bankData = $request->getPaymentBankData();
+		$bankData->setBic( $longText );
+		$bankData->setBankName( $longText );
+		// Other length violations will be caught by IBAN validation
+
+		$this->assertRequestValidationResultInErrors(
+			$request,
+			[
+				Result::SOURCE_BANK_NAME => Result::VIOLATION_WRONG_LENGTH,
+				Result::SOURCE_BIC => Result::VIOLATION_WRONG_LENGTH
+			]
+		);
+	}
+
 }

@@ -30,6 +30,21 @@ class AddDonationValidator {
 	 */
 	private $violations;
 
+	private $maximumFieldLengths = [
+		Result::SOURCE_DONOR_EMAIL => 250,
+		Result::SOURCE_DONOR_COMPANY => 100,
+		Result::SOURCE_DONOR_FIRST_NAME => 50,
+		Result::SOURCE_DONOR_LAST_NAME => 50,
+		Result::SOURCE_DONOR_SALUTATION => 16,
+		Result::SOURCE_DONOR_TITLE => 16,
+		Result::SOURCE_DONOR_STREET_ADDRESS => 100,
+		Result::SOURCE_DONOR_POSTAL_CODE => 8,
+		Result::SOURCE_DONOR_CITY => 100,
+		Result::SOURCE_DONOR_COUNTRY => 8,
+		Result::SOURCE_BANK_NAME => 50,
+		Result::SOURCE_BIC => 32,
+	];
+
 	public function __construct( AmountValidator $amountValidator, BankDataValidator $bankDataValidator,
 								 EmailValidator $emailValidator ) {
 
@@ -75,9 +90,12 @@ class AddDonationValidator {
 			return;
 		}
 
-		$validationResult = $this->bankDataValidator->validate( $this->request->getBankData() );
+		$bankData = $this->request->getBankData();
+		$validationResult = $this->bankDataValidator->validate( $bankData );
 
 		$this->addViolations( $validationResult->getViolations() );
+		$this->validateFieldLength( $bankData->getBankName(), Result::SOURCE_BANK_NAME );
+		$this->validateFieldLength( $bankData->getBic(), Result::SOURCE_BIC );
 	}
 
 	private function validateDonorEmail() {
@@ -88,8 +106,10 @@ class AddDonationValidator {
 			$this->addViolations( [ new ConstraintViolation(
 				$this->request->getDonorEmailAddress(),
 				Result::VIOLATION_MISSING,
-				Result::VIOLATION_NOT_EMAIL
+				Result::SOURCE_DONOR_EMAIL
 			) ] );
+		} else {
+			$this->validateFieldLength( $this->request->getDonorEmailAddress(), Result::SOURCE_DONOR_EMAIL );
 		}
 	}
 
@@ -112,6 +132,8 @@ class AddDonationValidator {
 				Result::VIOLATION_MISSING,
 				Result::SOURCE_DONOR_COMPANY
 			);
+		} else {
+			$this->validateFieldLength( $this->request->getDonorCompany(), Result::SOURCE_DONOR_COMPANY );
 		}
 	}
 
@@ -124,6 +146,8 @@ class AddDonationValidator {
 				Result::VIOLATION_MISSING,
 				Result::SOURCE_DONOR_FIRST_NAME
 			);
+		} else {
+			$this->validateFieldLength( $this->request->getDonorFirstName(), Result::SOURCE_DONOR_FIRST_NAME );
 		}
 
 		if ( $this->request->getDonorLastName() === '' ) {
@@ -132,6 +156,8 @@ class AddDonationValidator {
 				Result::VIOLATION_MISSING,
 				Result::SOURCE_DONOR_LAST_NAME
 			);
+		} else {
+			$this->validateFieldLength( $this->request->getDonorLastName(), Result::SOURCE_DONOR_LAST_NAME );
 		}
 
 		if ( $this->request->getDonorSalutation() === '' ) {
@@ -140,8 +166,11 @@ class AddDonationValidator {
 				Result::VIOLATION_MISSING,
 				Result::SOURCE_DONOR_SALUTATION
 			);
+		} else {
+			$this->validateFieldLength( $this->request->getDonorSalutation(), Result::SOURCE_DONOR_SALUTATION );
 		}
 
+		$this->validateFieldLength( $this->request->getDonorTitle(), Result::SOURCE_DONOR_TITLE );
 		// TODO: check if donor title is in the list of allowed titles?
 
 		$this->addViolations( $violations );
@@ -160,6 +189,8 @@ class AddDonationValidator {
 				Result::VIOLATION_MISSING,
 				Result::SOURCE_DONOR_STREET_ADDRESS
 			);
+		} else {
+			$this->validateFieldLength( $this->request->getDonorStreetAddress(), Result::SOURCE_DONOR_STREET_ADDRESS );
 		}
 
 		if ( $this->request->getDonorPostalCode() === '' ) {
@@ -168,6 +199,8 @@ class AddDonationValidator {
 				Result::VIOLATION_MISSING,
 				Result::SOURCE_DONOR_POSTAL_CODE
 			);
+		} else {
+			$this->validateFieldLength( $this->request->getDonorPostalCode(), Result::SOURCE_DONOR_POSTAL_CODE );
 		}
 
 		if ( $this->request->getDonorCity() === '' ) {
@@ -176,6 +209,8 @@ class AddDonationValidator {
 				Result::VIOLATION_MISSING,
 				Result::SOURCE_DONOR_CITY
 			);
+		} else {
+			$this->validateFieldLength( $this->request->getDonorCity(), Result::SOURCE_DONOR_CITY );
 		}
 
 		if ( $this->request->getDonorCountryCode() === '' ) {
@@ -184,13 +219,15 @@ class AddDonationValidator {
 				Result::VIOLATION_MISSING,
 				Result::SOURCE_DONOR_COUNTRY
 			);
+		} else {
+			$this->validateFieldLength( $this->request->getDonorCountryCode(), Result::SOURCE_DONOR_COUNTRY );
 		}
 
 		if ( !preg_match( '/^\\d{4,5}$/', $this->request->getDonorPostalCode() ) ) {
 			$violations[] = new ConstraintViolation(
 				$this->request->getDonorPostalCode(),
 				Result::VIOLATION_NOT_POSTCODE,
-				Result::SOURCE_DONOR_COUNTRY
+				Result::SOURCE_DONOR_POSTAL_CODE
 			);
 		}
 
@@ -204,6 +241,12 @@ class AddDonationValidator {
 				Result::VIOLATION_WRONG_PAYMENT_TYPE,
 				Result::SOURCE_PAYMENT_TYPE
 			);
+		}
+	}
+
+	private function validateFieldLength( string $value, string $fieldName ) {
+		if ( strlen( $value ) > $this->maximumFieldLengths[$fieldName] )  {
+			$this->violations[] = new ConstraintViolation( $value, Result::VIOLATION_WRONG_LENGTH, $fieldName );
 		}
 	}
 }
