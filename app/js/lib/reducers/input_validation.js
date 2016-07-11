@@ -4,6 +4,9 @@ var _ = require( 'underscore' ),
 	objectAssign = require( 'object-assign' );
 
 function inputIsValid( value, pattern ) {
+	if ( pattern === null ) {
+		return value !== '';
+	}
 	return new RegExp( pattern ).test( value );
 }
 
