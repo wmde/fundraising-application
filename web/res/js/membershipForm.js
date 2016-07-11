@@ -34,7 +34,7 @@ $( function () {
 				bankNameDisplayElement: $( '#bank-name' ),
 				debitTypeElement: $( '.debit-type-select' )
 			} ),
-			WMDE.Components.createCheckboxComponent( store, $( '#confirmSepa' ), 'confirmSepa' )
+			WMDE.Components.createValidatingCheckboxComponent( store, $( '#confirmSepa' ), 'confirmSepa' )
 		],
 		store,
 		'membershipFormContent'
@@ -88,12 +88,6 @@ $( function () {
 				WMDE.ReduxValidation.createValidationDispatcher(
 					WMDE.FormValidation.createSepaConfirmationValidator(),
 					actions.newFinishSepaConfirmationValidationAction,
-					[ 'confirmSepa', 'confirmShortTerm' ],
-					initialValues
-				),
-				WMDE.ReduxValidation.createValidationDispatcher(
-					WMDE.FormValidation.createSepaConfirmationValidator(),
-					actions.newFinishSepaConfirmationValidationAction,
 					[ 'confirmSepa' ],
 					initialValues
 				)
@@ -126,7 +120,12 @@ $( function () {
 					postcode: 'PLZ',
 					city: 'Ort',
 					country: 'Land',
-					email: 'E-Mail'
+					email: 'E-Mail',
+					dateOfBirth: 'Geburtsdatum',
+					phone: 'Telefonnummer',
+					iban: 'IBAN',
+					bic: 'BIC',
+					confirmSepa: 'SEPA-Lastschrift'
 				} ),
 				stateKey: 'membershipInputValidation'
 			},
@@ -252,13 +251,47 @@ $( function () {
 		store
 	);
 
-	// connect DOM elements to actions
+	// Validity checks for different form parts
+
+	function addressIsValid() {
+		return store.getState().validity.address;
+	}
+
+	function bankDataIsValid() {
+		return store.getState().validity.bankData;
+	}
 
 	function formDataIsValid() {
-		var validity = store.getState().validity,
-			addressIsValid = validity.address,
-			bankDataIsValid = validity.bankData;
-		return !hasInvalidFields() && validity.amount && addressIsValid && bankDataIsValid;
+		var validity = store.getState().validity;
+		return !hasInvalidFields() && validity.amount && addressIsValid() && bankDataIsValid();
+	}
+
+	function triggerValidityCheckForPersonalDataPage() {
+		var formContent = store.getState().membershipFormContent;
+
+		if ( !addressIsValid() ) {
+			if ( formContent.addressType === 'person' ) {
+				store.dispatch( actions.newMarkEmptyFieldsInvalidAction(
+					[ 'firstName', 'lastName', 'street', 'postcode', 'city', 'email' ],
+					[ 'companyName' ]
+				) );
+			} else if ( formContent.addressType === 'firma' ) {
+				store.dispatch( actions.newMarkEmptyFieldsInvalidAction(
+					[ 'companyName', 'street', 'postcode', 'city', 'email' ],
+					[ 'firstName', 'lastName' ]
+				) );
+			}
+		}
+
+		if ( !bankDataIsValid() ) {
+			store.dispatch( actions.newMarkEmptyFieldsInvalidAction(
+				[ 'iban', 'bic' ]
+			) );
+		}
+
+		if ( !store.getState().validity.amount ) {
+			store.dispatch( actions.newMarkEmptyFieldsInvalidAction( [ 'amount' ] ) );
+		}
 	}
 
 	function hasInvalidFields() {
@@ -272,13 +305,19 @@ $( function () {
 		return invalidFields;
 	}
 
+	function triggerValidityCheckForSepaPage() {
+		if ( !store.getState().validity.sepaConfirmation ) {
+			store.dispatch( actions.newMarkEmptyFieldsInvalidAction( [ 'confirmSepa' ] ) );
+		}
+	}
+
 	$( '#continueFormSubmit' ).click( function () {
 		if ( formDataIsValid() ) {
 			store.dispatch( actions.newNextPageAction() );
 			$( 'section#donation-amount, section#donation-sheet' ).hide();
 		} else {
-			// TODO: display nicer message
-			alert( 'Bitte füllen Sie das Formular vollständig aus.' );
+			triggerValidityCheckForPersonalDataPage();
+			$( '#validation-errors' ).show();
 		}
 	} );
 
@@ -291,8 +330,8 @@ $( function () {
 		if ( store.getState().validity.sepaConfirmation ) {
 			$( '#memForm' ).submit();
 		} else {
-			// TODO: display nicer message
-			alert( 'Bitte füllen Sie das Formular vollständig aus.' );
+			triggerValidityCheckForSepaPage();
+			$( '#validation-errors' ).show();
 		}
 	} );
 
