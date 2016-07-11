@@ -22,7 +22,7 @@ class CancelDonationHtmlPresenter {
 	public function present( CancelDonationResponse $response ): string {
 		return $this->template->render( [
 			'donationId' => $response->getDonationId(),
-			'cancellationSuccessful' => $response->cancellationWasSuccessful()
+			'cancellationSuccessful' => $response->cancellationSucceeded()
 		] );
 	}
 

@@ -10,20 +10,28 @@ namespace WMDE\Fundraising\Frontend\UseCases\CancelDonation;
  */
 class CancelDonationResponse {
 
-	private $donationId;
-	private $isSuccess;
+	const SUCCESS = 'success';
+	const FAILURE = 'failure';
+	const MAIL_DELIVERY_FAILED = 'mail-not-send';
 
-	public function __construct( int $donationId, bool $isSuccess ) {
+	private $donationId;
+	private $state;
+
+	public function __construct( int $donationId, string $state ) {
 		$this->donationId = $donationId;
-		$this->isSuccess = $isSuccess;
+		$this->state = $state;
 	}
 
 	public function getDonationId(): int {
 		return $this->donationId;
 	}
 
-	public function cancellationWasSuccessful(): bool {
-		return $this->isSuccess;
+	public function cancellationSucceeded(): bool {
+		return $this->state !== self::FAILURE;
+	}
+
+	public function mailDeliveryFailed(): bool {
+		return $this->state === self::MAIL_DELIVERY_FAILED;
 	}
 
 }

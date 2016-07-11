@@ -59,17 +59,31 @@ class CancelDonationUseCase {
 
 		$this->donationLogger->log( $donation->getId(), self::LOG_MESSAGE_FOR_BACKEND );
 
-		$this->sendConfirmationEmail( $donation );
+		try {
+			$this->sendConfirmationEmail( $donation );
+		}
+		catch ( \RuntimeException $ex ) {
+			return new CancelDonationResponse(
+				$cancellationRequest->getDonationId(),
+				CancelDonationResponse::MAIL_DELIVERY_FAILED
+			);
+		}
 
 		return $this->newSuccessResponse( $cancellationRequest );
 	}
 
-	private function newSuccessResponse( CancelDonationRequest $cancellationRequest ): CancelDonationResponse {
-		return new CancelDonationResponse( $cancellationRequest->getDonationId(), true );
+	private function newFailureResponse( CancelDonationRequest $cancellationRequest ): CancelDonationResponse {
+		return new CancelDonationResponse(
+			$cancellationRequest->getDonationId(),
+			CancelDonationResponse::FAILURE
+		);
 	}
 
-	private function newFailureResponse( CancelDonationRequest $cancellationRequest ): CancelDonationResponse {
-		return new CancelDonationResponse( $cancellationRequest->getDonationId(), false );
+	private function newSuccessResponse( CancelDonationRequest $cancellationRequest ): CancelDonationResponse {
+		return new CancelDonationResponse(
+			$cancellationRequest->getDonationId(),
+			CancelDonationResponse::SUCCESS
+		);
 	}
 
 	private function sendConfirmationEmail( Donation $donation ) {
