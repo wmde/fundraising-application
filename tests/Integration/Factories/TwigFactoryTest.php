@@ -22,7 +22,7 @@ class TwigFactoryTest extends \PHPUnit_Framework_TestCase {
 			'loaders' => [
 				'array' => [ 'variableReplacement.twig' => '{$ testvar $}' ]
 			]
-		] );
+		], '/tmp/fun' );
 		$twig = $factory->create( [ $factory->newArrayLoader() ], [] );
 		$result = $twig->render( 'variableReplacement.twig', [ 'testvar' => 'Meeow!' ] );
 		$this->assertSame( 'Meeow!', $result );
@@ -43,7 +43,7 @@ class TwigFactoryTest extends \PHPUnit_Framework_TestCase {
 		$thirdLoader = $this->createMock( Twig_LoaderInterface::class );
 		$thirdLoader->expects( $this->never() )->method( $this->anything() );
 
-		$factory = new TwigFactory( [ 'enable-cache' => false ] );
+		$factory = new TwigFactory( [ 'enable-cache' => false ], '/tmp/fun' );
 		$twig = $factory->create( [ $firstLoader, $secondLoader, $thirdLoader ], [] );
 		$result = $twig->render( 'Canis_silvestris' );
 		$this->assertSame( 'Meeow!', $result );
@@ -56,7 +56,7 @@ class TwigFactoryTest extends \PHPUnit_Framework_TestCase {
 					'template-dir' => __DIR__ . '/../../templates'
 				]
 			]
-		] );
+		], '/tmp/fun' );
 		$loader = $factory->newFileSystemLoader();
 		$this->assertSame( [ __DIR__ . '/../../templates' ], $loader->getPaths() );
 	}
@@ -68,11 +68,11 @@ class TwigFactoryTest extends \PHPUnit_Framework_TestCase {
 					'template-dir' => 'tests/templates'
 				]
 			]
-		] );
+		], '/tmp/fun' );
 		$loader = $factory->newFileSystemLoader();
 		$realPath = realpath( $loader->getPaths()[0] );
 		$this->assertFalse( $realPath === false, 'path does not exist' );
-		$this->assertSame( $realPath, realPath( __DIR__ . '/../../templates' ) );
+		$this->assertSame( $realPath, realpath( __DIR__ . '/../../templates' ) );
 	}
 
 }

@@ -23,22 +23,22 @@ class TwigFactory {
 	const DEFAULT_TEMPLATE_DIR = 'app/templates';
 
 	private $config;
+	private $cachePath;
 
-	public function __construct( array $config ) {
+	public function __construct( array $config, string $cachePath ) {
 		$this->config = $config;
+		$this->cachePath = $cachePath;
 	}
 
 	public function create( array $loaders, array $extensions ): Twig_Environment {
 		$options = [];
 
 		if ( $this->config['enable-cache'] ) {
-			$options['cache'] = __DIR__ . '/../../var/cache';
+			$options['cache'] = $this->cachePath;
 		}
 
-		$loader = new \Twig_Loader_Chain( $loaders );
-
 		$twig = new Twig_Environment(
-			$loader,
+			new \Twig_Loader_Chain( $loaders ),
 			$options
 		);
 
@@ -46,12 +46,11 @@ class TwigFactory {
 			$twig->addExtension( $ext );
 		}
 
-		$lexer = new Twig_Lexer( $twig, [
+		$twig->setLexer( new Twig_Lexer( $twig, [
 			'tag_comment'   => [ '{#', '#}' ],
 			'tag_block'     => [ '{%', '%}' ],
 			'tag_variable'  => [ '{$', '$}' ]
-		] );
-		$twig->setLexer( $lexer );
+		] ) );
 
 		return $twig;
 	}

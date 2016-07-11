@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare( strict_types = 1 );
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -15,6 +15,8 @@ $ffFactory = call_user_func( function() {
 
 	return new \WMDE\Fundraising\Frontend\Factories\FunFunFactory( $configReader->getConfig() );
 } );
+
+$ffFactory->enablePageCache();
 
 /**
  * @var \Silex\Application $app

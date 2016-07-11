@@ -10,6 +10,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeDonationRepository;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingDonationRepository;
+use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentUseCase;
 use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentValidationResult;
