@@ -5,7 +5,7 @@
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 
-declare(strict_types = 1);
+declare( strict_types = 1 );
 
 error_reporting( E_ALL | E_STRICT );
 ini_set( 'display_errors', '1' );
@@ -46,7 +46,7 @@ $app['dbs'] = $app->share( function ( $app ) {
 $app->register(
 	new Silex\Provider\WebProfilerServiceProvider(),
 	[
-		'profiler.cache_dir' => __DIR__ . '/../app/cache/profiler',
+		'profiler.cache_dir' => $ffFactory->getCachePath() . '/profiler',
 		'profiler.mount_prefix' => '/_profiler',
 	]
 );

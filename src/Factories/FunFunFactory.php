@@ -4,6 +4,9 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Factories;
 
+use Doctrine\Common\Cache\Cache;
+use Doctrine\Common\Cache\FilesystemCache;
+use Doctrine\Common\Cache\VoidCache;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
@@ -54,6 +57,7 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\Domain\SimpleTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\BestEffortDonationEventLogger;
+use WMDE\Fundraising\Frontend\Infrastructure\CachingPageRetriever;
 use WMDE\Fundraising\Frontend\Infrastructure\CreditCardService;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizer;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
@@ -215,7 +219,7 @@ class FunFunFactory {
 		$pimple['subscription_validator'] = $pimple->share( function() {
 			return new SubscriptionValidator(
 				$this->getEmailValidator(),
-				$this->getTextPolicyValidator( 'fields' ),
+				$this->newTextPolicyValidator( 'fields' ),
 				$this->newSubscriptionDuplicateValidator(),
 				$this->newHonorificValidator()
 			);
@@ -290,7 +294,7 @@ class FunFunFactory {
 		} );
 
 		$pimple['twig_factory'] = $pimple->share( function () {
-			return new TwigFactory( $this->config['twig'] );
+			return new TwigFactory( $this->config['twig'], $this->getCachePath() . '/twig' );
 		} );
 
 		$pimple['twig'] = $pimple->share( function() {
@@ -298,7 +302,7 @@ class FunFunFactory {
 			$loaders = array_filter( [
 				$twigFactory->newFileSystemLoader(),
 				$twigFactory->newArrayLoader(), // This is just a fallback for testing
-				$twigFactory->newWikiPageLoader( $this->newWikiContentProvider() ),
+				$twigFactory->newWikiPageLoader( $this->newWikiPageRetriever() ),
 			] );
 			$extensions = [
 				$twigFactory->newTranslationExtension( $this->getTranslator() ),
@@ -361,6 +365,10 @@ class FunFunFactory {
 				$this->config['token-length'],
 				new \DateInterval( $this->config['token-validity-timestamp'] )
 			);
+		} );
+
+		$pimple['page_cache'] = $pimple->share( function() {
+			return new VoidCache();
 		} );
 
 		return $pimple;
@@ -487,7 +495,7 @@ class FunFunFactory {
 			'IncludeInLayout.twig',
 			array_merge(
 				$this->getDefaultTwigVariables(),
-				[ 'main_template' => $templateName]
+				[ 'main_template' => $templateName ]
 			)
 		);
 	}
@@ -509,14 +517,6 @@ class FunFunFactory {
 		);
 	}
 
-	private function newPageRetriever(): PageRetriever {
-		return new ApiBasedPageRetriever(
-			$this->getMediaWikiApi(),
-			new ApiUser( $this->config['cms-wiki-user'], $this->config['cms-wiki-password'] ),
-			$this->getLogger()
-		);
-	}
-
 	private function getMediaWikiApi(): MediawikiApi {
 		return $this->pimple['mw_api'];
 	}
@@ -529,11 +529,26 @@ class FunFunFactory {
 		return $this->pimple['guzzle_client'];
 	}
 
-	private function newWikiContentProvider() {
+	private function newWikiPageRetriever() {
 		return new ModifyingPageRetriever(
-			$this->newPageRetriever(),
+			$this->newCachedPageRetriever(),
 			$this->newPageContentModifier(),
 			$this->config['cms-wiki-title-prefix']
+		);
+	}
+
+	private function newCachedPageRetriever(): PageRetriever {
+		return new CachingPageRetriever(
+			$this->newNonCachedApiPageRetriever(),
+			$this->getPageCache()
+		);
+	}
+
+	private function newNonCachedApiPageRetriever(): PageRetriever {
+		return new ApiBasedPageRetriever(
+			$this->getMediaWikiApi(),
+			new ApiUser( $this->config['cms-wiki-user'], $this->config['cms-wiki-password'] ),
+			$this->getLogger()
 		);
 	}
 
@@ -542,7 +557,15 @@ class FunFunFactory {
 	}
 
 	private function newLoggerPath( string $fileName ): string {
-		return __DIR__ . '/../../var/log/' . $fileName . '.log';
+		return $this->getVarPath() . '/log/' . $fileName . '.log';
+	}
+
+	private function getVarPath(): string {
+		return __DIR__ . '/../../var';
+	}
+
+	public function getCachePath(): string {
+		return $this->getVarPath() . '/cache';
 	}
 
 	private function newPageContentModifier(): PageContentModifier {
@@ -719,14 +742,18 @@ class FunFunFactory {
 		return $this->pimple['twig_factory'];
 	}
 
-	private function getTextPolicyValidator( $policyName ): TextPolicyValidator {
-		$contentProvider = $this->newWikiContentProvider();
+	private function newTextPolicyValidator( string $policyName ): TextPolicyValidator {
+		$contentProvider = $this->newWikiPageRetriever();
 		$textPolicyConfig = $this->config['text-policies'][$policyName];
 
 		return new TextPolicyValidator(
 			new PageRetrieverBasedStringList( $contentProvider, $textPolicyConfig['badwords'] ?? '' ),
 			new PageRetrieverBasedStringList( $contentProvider, $textPolicyConfig['whitewords'] ?? '' )
 		);
+	}
+
+	private function newCommentPolicyValidator(): TextPolicyValidator {
+		return $this->newTextPolicyValidator( 'comment' );
 	}
 
 	public function newCancelDonationUseCase( string $updateToken ): CancelDonationUseCase {
@@ -842,7 +869,7 @@ class FunFunFactory {
 		return new AddCommentUseCase(
 			$this->getDonationRepository(),
 			$this->newDonationAuthorizer( $updateToken ),
-			$this->getTextPolicyValidator( 'comment' ),
+			$this->newCommentPolicyValidator(),
 			$this->newAddCommentValidator()
 		);
 	}
@@ -1079,7 +1106,7 @@ class FunFunFactory {
 	private function newDonationPolicyValidator(): AddDonationPolicyValidator {
 		return new AddDonationPolicyValidator(
 			$this->newDonationAmountPolicyValidator(),
-			$this->getTextPolicyValidator( 'fields' )
+			$this->newTextPolicyValidator( 'fields' )
 		);
 	}
 
@@ -1103,6 +1130,16 @@ class FunFunFactory {
 
 	private function newAddCommentValidator(): AddCommentValidator {
 		return new AddCommentValidator();
+	}
+
+	private function getPageCache(): Cache {
+		return $this->pimple['page_cache'];
+	}
+
+	public function enablePageCache() {
+		$this->pimple['page_cache'] = $this->pimple->share( function() {
+			return new FilesystemCache( $this->getCachePath() . '/pages' );
+		} );
 	}
 
 }
