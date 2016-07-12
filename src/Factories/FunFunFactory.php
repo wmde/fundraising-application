@@ -278,6 +278,12 @@ class FunFunFactory {
 				$locale,
 				'paymentIntervals'
 			);
+			$translator->addResource(
+				'json',
+				__DIR__ . '/../../app/translations/donationStatus.' . $locale . '.json',
+				$locale,
+				'donationStatus'
+			);
 			$translator->addResource( 'json', __DIR__ . '/../../app/translations/validations.' . $locale . '.json', $locale,
 				'validations' );
 			return $translator;
