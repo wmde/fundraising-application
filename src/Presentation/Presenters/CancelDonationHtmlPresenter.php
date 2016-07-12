@@ -6,7 +6,7 @@ use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationResponse;
 
 /**
- * Render the credit card payment page embedding an iframe
+ * Present the result of the donation cancellation request
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
