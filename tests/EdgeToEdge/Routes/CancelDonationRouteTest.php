@@ -9,6 +9,7 @@ use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Store\DonationData;
@@ -51,7 +52,7 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 				]
 			);
 
-			$this->assertContains( 'wurde storniert', $client->getResponse()->getContent() );
+			$this->assertContains( 'Cancellation status: successful', $client->getResponse()->getContent() );
 		} );
 	}
 
@@ -78,7 +79,7 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 				]
 			);
 
-			$this->assertContains( 'konnte nicht', $client->getResponse()->getContent() );
+			$this->assertContains( 'Cancellation status: failed', $client->getResponse()->getContent() );
 		} );
 	}
 
@@ -100,6 +101,30 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 		$entityManager->flush();
 
 		return $donation->getId();
+	}
+
+	public function testWhenMailDeliveryFails_noticeIsDisplayed() {
+		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
+			$donationId = $this->storeDonation( $factory->getDonationRepository(), $factory->getEntityManager() );
+			$factory->setMessenger( $this->newThrowingMessenger() );
+
+			$client->request(
+				'POST',
+				'/donation/cancel',
+				[
+					'sid' => (string)$donationId,
+					'utoken' => self::CORRECT_UPDATE_TOKEN,
+				]
+			);
+
+			$this->assertContains( 'Mail delivery status: failed', $client->getResponse()->getContent() );
+		} );
+	}
+
+	private function newThrowingMessenger() {
+		$failingMessenger = $this->getMockBuilder( Messenger::class )->disableOriginalConstructor()->getMock();
+		$failingMessenger->method( 'sendMessageToUser' )->willThrowException( new \RuntimeException() );
+		return $failingMessenger;
 	}
 
 }
