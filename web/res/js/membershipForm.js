@@ -253,6 +253,11 @@ $( function () {
 
 	// Validity checks for different form parts
 
+	function displayErrorBox() {
+		$( '#validation-errors' ).show();
+		$( 'html, body' ).animate( { scrollTop: $( '#validation-errors' ).offset().top } );
+	}
+
 	function addressIsValid() {
 		return store.getState().validity.address;
 	}
@@ -317,7 +322,7 @@ $( function () {
 			$( 'section#donation-amount, section#donation-sheet' ).hide();
 		} else {
 			triggerValidityCheckForPersonalDataPage();
-			$( '#validation-errors' ).show();
+			displayErrorBox();
 		}
 	} );
 
@@ -331,7 +336,7 @@ $( function () {
 			$( '#memForm' ).submit();
 		} else {
 			triggerValidityCheckForSepaPage();
-			$( '#validation-errors' ).show();
+			displayErrorBox();
 		}
 	} );
 

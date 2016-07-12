@@ -325,6 +325,11 @@ $( function () {
 			( currentState.donationFormContent.amount && currentState.donationFormContent.paymentType ) ;
 	}
 
+	function displayErrorBox() {
+		$( '#validation-errors' ).show();
+		$( 'html, body' ).animate( { scrollTop: $( '#validation-errors' ).offset().top } );
+	}
+
 	// connect DOM elements to actions
 
 	$( '#continueFormSubmit1' ).click( function () {
@@ -332,7 +337,7 @@ $( function () {
 			store.dispatch( actions.newNextPageAction() );
 		} else {
 			triggerValidityCheckForPaymentPage();
-			$( '#validation-errors' ).show();
+			displayErrorBox();
 		}
 	} );
 
@@ -341,7 +346,7 @@ $( function () {
 			store.dispatch( actions.newNextPageAction() );
 		} else {
 			triggerValidityCheckForPersonalDataPage();
-			$( '#validation-errors' ).show();
+			displayErrorBox();
 		}
 	} );
 
@@ -350,7 +355,7 @@ $( function () {
 			$( '#donForm2' ).submit();
 		} else {
 			triggerValidityCheckForPersonalDataPage();
-			$( '#validation-errors' ).show();
+			displayErrorBox();
 		}
 	} );
 
@@ -364,7 +369,7 @@ $( function () {
 			$( '#donForm2' ).submit();
 		} else {
 			triggerValidityCheckForSepaPage();
-			$( '#validation-errors' ).show();
+			displayErrorBox();
 		}
 	} );
 

@@ -626,15 +626,6 @@ div.errorbox {
 	background: #f3a5a5;
 	margin: 0 250px 10px 128px;
 }
-div.errorbox.fixed {
-    border: 1px solid #CC0000;
-    border-radius: 10px;
-    box-shadow: 0 0 20px;
-    position: fixed;
-    top: 20px;
-    width: 578px;
-    z-index: 100;
-}
 div.successbox {
 	color: #333;
 	display: block;
