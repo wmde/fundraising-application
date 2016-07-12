@@ -149,7 +149,7 @@ $( function () {
 				stateKey: 'donationFormContent.addressType'
 			},
 			{
-				viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.personal-data-full' ), /firma|person/ ),
+				viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.personal-data-full, #notice-unsubscribe' ), /firma|person/ ),
 				stateKey: 'donationFormContent.addressType'
 			},
 			{
