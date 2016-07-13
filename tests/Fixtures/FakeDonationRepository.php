@@ -6,6 +6,8 @@ namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
+use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
+use WMDE\Fundraising\Frontend\Domain\Repositories\StoreDonationException;
 
 /**
  * @licence GNU GPL v2+
@@ -15,6 +17,8 @@ class FakeDonationRepository implements DonationRepository {
 
 	private $calls = 0;
 	private $donations = [];
+	private $throwOnRead = false;
+	private $throwOnWrite = false;
 
 	public function __construct( Donation ...$donations ) {
 		foreach ( $donations as $donation ) {
@@ -22,15 +26,35 @@ class FakeDonationRepository implements DonationRepository {
 		}
 	}
 
+	public function throwOnRead() {
+		$this->throwOnRead = true;
+	}
+
+	public function throwOnWrite() {
+		$this->throwOnWrite = true;
+	}
+
 	public function storeDonation( Donation $donation ) {
+		if ( $this->throwOnWrite ) {
+			throw new StoreDonationException();
+		}
+
 		if ( $donation->getId() === null ) {
 			$donation->assignId( ++$this->calls );
 		}
-		$this->donations[$donation->getId()] = $donation;
+		$this->donations[$donation->getId()] = unserialize( serialize( $donation ) );
 	}
 
 	public function getDonationById( int $id ) {
-		return array_key_exists( $id, $this->donations ) ? $this->donations[$id] : null;
+		if ( $this->throwOnRead ) {
+			throw new GetDonationException();
+		}
+
+		if ( array_key_exists( $id, $this->donations ) ) {
+			return unserialize( serialize( $this->donations[$id] ) );
+		}
+
+		return null;
 	}
 
 }

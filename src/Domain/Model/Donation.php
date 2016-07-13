@@ -228,7 +228,7 @@ class Donation {
 		return $this->status === self::STATUS_EXTERNAL_BOOKED;
 	}
 
-	private function isCancelled(): bool {
+	public function isCancelled(): bool {
 		return $this->status === self::STATUS_CANCELLED;
 	}
 

@@ -6,17 +6,15 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\CancelDonation;
 
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
-use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
-use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizer;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\DonationEventLoggerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeDonationRepository;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
-use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationRequest;
+use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationResponse;
 use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationUseCase;
 
 /**
@@ -29,65 +27,74 @@ class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 	const CORRECT_UPDATE_TOKEN = 'b5b249c8beefb986faf8d186a3f16e86ef509ab2';
 
-	public function testGivenIdOfUnknownDonation_cancellationIsNotSuccessful() {
-		$useCase = $this->newUseCase();
+	/**
+	 * @var FakeDonationRepository
+	 */
+	private $repository;
 
-		$response = $useCase->cancelDonation( new CancelDonationRequest( 1337 ) );
+	/**
+	 * @var TemplateBasedMailer|TemplateBasedMailerSpy
+	 */
+	private $mailer;
+
+	/**
+	 * @var DonationAuthorizer
+	 */
+	private $authorizer;
+
+	/**
+	 * @var DonationEventLoggerSpy
+	 */
+	private $logger;
+
+	public function setUp() {
+		$this->repository = new FakeDonationRepository();
+		$this->mailer = new TemplateBasedMailerSpy( $this );
+		$this->authorizer = new SucceedingDonationAuthorizer();
+		$this->logger = new DonationEventLoggerSpy();
+	}
+
+	private function newCancelDonationUseCase(): CancelDonationUseCase {
+		return new CancelDonationUseCase(
+			$this->repository,
+			$this->mailer,
+			$this->authorizer,
+			$this->logger
+		);
+	}
+
+	public function testGivenIdOfUnknownDonation_cancellationIsNotSuccessful() {
+		$response = $this->newCancelDonationUseCase()->cancelDonation( new CancelDonationRequest( 1 ) );
 
 		$this->assertFalse( $response->cancellationSucceeded() );
 	}
 
-	private function newUseCase(): CancelDonationUseCase {
-		return $this->newFactoryWithNullMailer()->newCancelDonationUseCase( self::CORRECT_UPDATE_TOKEN );
-	}
-
-	private function newFactoryWithNullMailer(): FunFunFactory {
-		$factory = TestEnvironment::newInstance()->getFactory();
-
-		$factory->setNullMessenger();
-		$factory->setTokenGenerator( new FixedTokenGenerator( self::CORRECT_UPDATE_TOKEN ) );
-
-		return $factory;
-	}
-
 	public function testResponseContainsDonationId() {
-		$useCase = $this->newUseCase();
+		$response = $this->newCancelDonationUseCase()->cancelDonation( new CancelDonationRequest( 1337 ) );
 
-		$response = $useCase->cancelDonation( new CancelDonationRequest( 1337 ) );
-
-		$this->assertEquals( 1337, $response->getDonationId() );
+		$this->assertSame( 1337, $response->getDonationId() );
 	}
 
 	public function testGivenIdOfCancellableDonation_cancellationIsSuccessful() {
 		$donation = $this->newCancelableDonation();
+		$this->repository->storeDonation( $donation );
 
-		$useCase = new CancelDonationUseCase(
-			new FakeDonationRepository( $donation ),
-			new TemplateBasedMailerSpy( $this ),
-			new SucceedingDonationAuthorizer(),
-			new DonationEventLoggerSpy()
-		);
-
-		$response = $useCase->cancelDonation( new CancelDonationRequest( $donation->getId() ) );
+		$request = new CancelDonationRequest( $donation->getId() );
+		$response = $this->newCancelDonationUseCase()->cancelDonation( $request );
 
 		$this->assertTrue( $response->cancellationSucceeded() );
 		$this->assertFalse( $response->mailDeliveryFailed() );
-	}
 
-	private function storeDonation( Donation $donation, FunFunFactory $factory ) {
-		$factory->getDonationRepository()->storeDonation( $donation );
+		$this->assertTrue( $this->repository->getDonationById( $donation->getId() )->isCancelled() );
 	}
 
 	public function testGivenIdOfNonCancellableDonation_cancellationIsNotSuccessful() {
-		$factory = $this->newFactoryWithNullMailer();
-
-		$donation = ValidDonation::newDirectDebitDonation();
+		$donation = $this->newCancelableDonation();
 		$donation->cancel();
+		$this->repository->storeDonation( $donation );
 
-		$this->storeDonation( $donation, $factory );
-
-		$useCase = $factory->newCancelDonationUseCase( self::CORRECT_UPDATE_TOKEN );
-		$response = $useCase->cancelDonation( new CancelDonationRequest( $donation->getId() ) );
+		$request = new CancelDonationRequest( $donation->getId() );
+		$response = $this->newCancelDonationUseCase()->cancelDonation( $request );
 
 		$this->assertFalse( $response->cancellationSucceeded() );
 	}
@@ -98,11 +105,14 @@ class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 	public function testWhenDonationGetsCancelled_cancellationConfirmationEmailIsSend() {
 		$donation = $this->newCancelableDonation();
-		$mailerSpy = new TemplateBasedMailerSpy( $this );
+		$this->repository->storeDonation( $donation );
 
-		$this->saveAndCancelUsingMailer( $donation, $mailerSpy );
+		$request = new CancelDonationRequest( $donation->getId() );
+		$response = $this->newCancelDonationUseCase()->cancelDonation( $request );
 
-		$mailerSpy->assertCalledOnceWith(
+		$this->assertTrue( $response->cancellationSucceeded() );
+
+		$this->mailer->assertCalledOnceWith(
 			new EmailAddress( $donation->getDonor()->getEmailAddress() ),
 			[
 				'recipient' => [
@@ -115,71 +125,28 @@ class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		);
 	}
 
-	private function saveAndCancelUsingMailer( Donation $donation, TemplateBasedMailer $mailer ) {
-		$useCase = new CancelDonationUseCase(
-			$this->getDonationRepositoryWithDonation( $donation ),
-			$mailer,
-			new SucceedingDonationAuthorizer(),
-			new DonationEventLoggerSpy()
-		);
-
-		$response = $useCase->cancelDonation( new CancelDonationRequest( $donation->getId() ) );
-		$this->assertTrue( $response->cancellationSucceeded() );
-	}
-
-	private function getDonationRepositoryWithDonation( Donation $donation ): DonationRepository {
-		$donationRepository = TestEnvironment::newInstance()->getFactory()->getDonationRepository();
-
-		$donationRepository->storeDonation( $donation );
-
-		return $donationRepository;
-	}
-
 	public function testWhenDonationGetsCancelled_logEntryNeededByBackendIsWritten() {
-		$donationLogger = new DonationEventLoggerSpy();
 		$donation = $this->newCancelableDonation();
+		$this->repository->storeDonation( $donation );
 
-		$useCase = new CancelDonationUseCase(
-			$this->getDonationRepositoryWithDonation( $donation ),
-			new TemplateBasedMailerSpy( $this ),
-			new SucceedingDonationAuthorizer(),
-			$donationLogger
-		);
-
-		$useCase->cancelDonation( new CancelDonationRequest( $donation->getId() ) );
+		$this->newCancelDonationUseCase()->cancelDonation( new CancelDonationRequest( $donation->getId() ) );
 
 		$this->assertSame(
 			[ [ $donation->getId(), 'frontend: storno' ] ],
-			$donationLogger->getLogCalls()
+			$this->logger->getLogCalls()
 		);
 	}
 
 	public function testGivenIdOfNonCancellableDonation_nothingIsWrittenToTheLog() {
-		$donationLogger = new DonationEventLoggerSpy();
+		$this->newCancelDonationUseCase()->cancelDonation( new CancelDonationRequest( 1 ) );
 
-		$useCase = new CancelDonationUseCase(
-			new FakeDonationRepository(),
-			new TemplateBasedMailerSpy( $this ),
-			new SucceedingDonationAuthorizer(),
-			$donationLogger
-		);
-
-		$useCase->cancelDonation( new CancelDonationRequest( 1 ) );
-
-		$this->assertSame( [], $donationLogger->getLogCalls() );
+		$this->assertSame( [], $this->logger->getLogCalls() );
 	}
 
 	public function testWhenConfirmationMailFails_mailDeliveryFailureResponseIsReturned() {
-		$donation = $this->newCancelableDonation();
+		$this->mailer = $this->newThrowingMailer();
 
-		$useCase = new CancelDonationUseCase(
-			$this->getDonationRepositoryWithDonation( $donation ),
-			$this->newThrowingMailer(),
-			new SucceedingDonationAuthorizer(),
-			new DonationEventLoggerSpy()
-		);
-
-		$response = $useCase->cancelDonation( new CancelDonationRequest( $donation->getId() ) );
+		$response = $this->getResponseForCancellableDonation();
 
 		$this->assertTrue( $response->cancellationSucceeded() );
 		$this->assertTrue( $response->mailDeliveryFailed() );
@@ -191,6 +158,34 @@ class CancelDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$mailer->method( $this->anything() )->willThrowException( new \RuntimeException() );
 
 		return $mailer;
+	}
+
+	public function testWhenGetDonationFails_cancellationIsNotSuccessful() {
+		$this->repository->throwOnRead();
+
+		$response = $this->getResponseForCancellableDonation();
+
+		$this->assertFalse( $response->cancellationSucceeded() );
+	}
+
+	private function getResponseForCancellableDonation(): CancelDonationResponse {
+		$donation = $this->newCancelableDonation();
+		$this->repository->storeDonation( $donation );
+
+		$request = new CancelDonationRequest( $donation->getId() );
+		return $this->newCancelDonationUseCase()->cancelDonation( $request );
+	}
+
+	public function testWhenDonationSavingFails_cancellationIsNotSuccessful() {
+		$donation = $this->newCancelableDonation();
+		$this->repository->storeDonation( $donation );
+
+		$this->repository->throwOnWrite();
+
+		$request = new CancelDonationRequest( $donation->getId() );
+		$response = $this->newCancelDonationUseCase()->cancelDonation( $request );
+
+		$this->assertFalse( $response->cancellationSucceeded() );
 	}
 
 }
