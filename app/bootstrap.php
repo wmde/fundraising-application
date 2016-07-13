@@ -22,20 +22,28 @@ $app = new Application();
 $app->register( new SessionServiceProvider() );
 $app->register( new UrlGeneratorServiceProvider() );
 
-$app->after( function( Request $request, Response $response ) {
-	if( $response instanceof JsonResponse ) {
-		$response->setEncodingOptions( JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
-	}
-
-	return $response;
-} );
-
 $app->before(
 	function ( Request $request, Application $app ) {
 		$app['request.is_json'] = in_array( 'application/json', $request->getAcceptableContentTypes() );
 	},
 	Application::EARLY_EVENT
 );
+
+$app->after( function( Request $request, Response $response ) {
+	if( $response instanceof JsonResponse ) {
+		$response->setEncodingOptions( JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
+	}
+
+	if ( (string)$request->cookies->get( 'spenden_tracking' ) === '' &&
+			(string)$request->get( 'piwik_campaign' ) !== '' && (string)$request->get( 'piwik_kwd' ) !== '' ) {
+		$response->headers->setCookie( new \Symfony\Component\HttpFoundation\Cookie(
+			'spenden_tracking',
+			$request->get( 'piwik_campaign' ) . '/' . $request->get( 'piwik_kwd' )
+		) );
+	}
+
+	return $response;
+} );
 
 $app->error( function ( AccessDeniedException $e, $code ) use ( $ffFactory ) {
 	return new Response(

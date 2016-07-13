@@ -486,4 +486,22 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
+	public function testWhenTrackingCookieExists_valueIsPersisted() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setNullMessenger();
+			$client->getCookieJar()->set( new Cookie( 'spenden_tracking', 'test/blue' ) );
+
+			$client->request(
+				'POST',
+				'/donation/add',
+				$this->newComplementableFormInput()
+			);
+
+			$donation = $this->getDonationFromDatabase( $factory );
+			$data = $donation->getDecodedData();
+
+			$this->assertSame( 'test/blue', $data['tracking'] );
+		} );
+	}
+
 }
