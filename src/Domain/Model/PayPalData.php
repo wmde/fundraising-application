@@ -190,6 +190,7 @@ class PayPalData {
 		$this->childPayments[$paymentId] = $entityId;
 		return $this;
 	}
+
 	public function hasChildPayment( string $paymentId ): bool {
 		return isset( $this->childPayments[$paymentId] );
 	}

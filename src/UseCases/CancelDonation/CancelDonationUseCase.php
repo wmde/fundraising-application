@@ -8,6 +8,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
+use WMDE\Fundraising\Frontend\Domain\Repositories\StoreDonationException;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizer;
 use WMDE\Fundraising\Frontend\Infrastructure\DonationEventLogger;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
@@ -54,6 +55,13 @@ class CancelDonationUseCase {
 			$donation->cancel();
 		}
 		catch ( \RuntimeException $ex ) {
+			return $this->newFailureResponse( $cancellationRequest );
+		}
+
+		try {
+			$this->donationRepository->storeDonation( $donation );
+		}
+		catch ( StoreDonationException $ex ) {
 			return $this->newFailureResponse( $cancellationRequest );
 		}
 

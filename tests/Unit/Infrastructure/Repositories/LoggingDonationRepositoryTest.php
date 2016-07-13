@@ -84,7 +84,7 @@ class LoggingDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 			$logger
 		);
 
-		$this->assertSame( $donation, $loggingRepo->getDonationById( 1337 ) );
+		$this->assertEquals( $donation, $loggingRepo->getDonationById( 1337 ) );
 		$logger->assertNoCalls();
 	}
 
