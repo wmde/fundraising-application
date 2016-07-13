@@ -11,7 +11,7 @@ use Symfony\Component\BrowserKit\Cookie;
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class TrackingCookieTest extends WebRouteTestCase {
-	
+
 	const PARAM_NAME_CAMPAIGN = 'piwik_campaign';
 	const PARAM_NAME_KEYWORD = 'piwik_kwd';
 
@@ -46,7 +46,7 @@ class TrackingCookieTest extends WebRouteTestCase {
 
 	public function testNewValuesAreProvided_theOldOnesAreKept() {
 		$client = $this->createClient();
-		
+
 		$client->getCookieJar()->set( new Cookie(
 			self::COOKIE_NAME,
 			'leeroy jenkins'

@@ -8,6 +8,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepository;
+use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationPiwikTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTokenFetcher;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTokens;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTracker;
@@ -61,12 +62,18 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 	 */
 	private $tracker;
 
+	/**
+	 * @var MembershipApplicationPiwikTracker
+	 */
+	private $piwikTracker;
+
 	public function setUp() {
 		$this->repository = new InMemoryMembershipApplicationRepository();
 		$this->mailer = new TemplateBasedMailerSpy( $this );
 		$this->tokenGenerator = new FixedTokenGenerator( self::ACCESS_TOKEN );
 		$this->validator = $this->newSucceedingValidator();
 		$this->tracker = $this->createMock( MembershipApplicationTracker::class );
+		$this->piwikTracker = $this->createMock( MembershipApplicationPiwikTracker::class );
 	}
 
 	private function newSucceedingValidator(): MembershipApplicationValidator {
@@ -92,7 +99,8 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 			$this->newTokenFetcher(),
 			$this->mailer,
 			$this->validator,
-			$this->tracker
+			$this->tracker,
+			$this->piwikTracker
 		);
 	}
 
@@ -126,6 +134,7 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$request->setPaymentBankData( $this->newValidBankData() );
 
 		$request->setTrackingInfo( $this->newTrackingInfo() );
+		$request->setPiwikTrackingString( 'foo/bar' );
 
 		return $request->assertNoNullFields();
 	}

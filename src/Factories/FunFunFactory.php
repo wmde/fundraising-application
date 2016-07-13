@@ -38,6 +38,7 @@ use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationPrePersistSubscriber;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationTokenFetcher;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipApplicationAuthorizer;
+use WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipApplicationPiwikTracker;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipApplicationPrePersistSubscriber;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipApplicationRepository;
 use WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipApplicationTokenFetcher;
@@ -66,6 +67,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\Honorifics;
 use WMDE\Fundraising\Frontend\Infrastructure\LoggingMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\LoggingPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationAuthorizer;
+use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationPiwikTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTokenFetcher;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
@@ -911,7 +913,8 @@ class FunFunFactory {
 			$this->newMembershipApplicationTokenFetcher(),
 			$this->newApplyForMembershipMailer(),
 			$this->newMembershipApplicationValidator(),
-			$this->newMembershipApplicationTracker()
+			$this->newMembershipApplicationTracker(),
+			$this->newMembershipApplicationPiwikTracker()
 		);
 	}
 
@@ -936,6 +939,10 @@ class FunFunFactory {
 
 	private function newMembershipApplicationTracker(): MembershipApplicationTracker {
 		return new DoctrineMembershipApplicationTracker( $this->getEntityManager() );
+	}
+
+	private function newMembershipApplicationPiwikTracker(): MembershipApplicationPiwikTracker {
+		return new DoctrineMembershipApplicationPiwikTracker( $this->getEntityManager() );
 	}
 
 	public function newCancelMembershipApplicationUseCase( string $updateToken ): CancelMembershipApplicationUseCase {

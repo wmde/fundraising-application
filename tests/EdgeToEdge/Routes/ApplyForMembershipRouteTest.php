@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpKernel\Client;
+use WMDE\Fundraising\Entities\MembershipApplication;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
@@ -229,6 +230,29 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	private function getPastTimestamp( string $interval = 'PT10S' ) {
 		return ( new \DateTime() )->sub( new \DateInterval( $interval ) )->format( 'Y-m-d H:i:s' );
+	}
+
+	public function testWhenTrackingCookieExists_valueIsPersisted() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setNullMessenger();
+			$client->getCookieJar()->set( new Cookie( 'spenden_tracking', 'test/blue' ) );
+
+			$client->request(
+				'POST',
+				'/apply-for-membership',
+				$this->newValidHttpParameters()
+			);
+
+			$application = $this->getApplicationFromDatabase( $factory );
+			$this->assertSame( 'test/blue', $application->getTracking() );
+		} );
+	}
+
+	private function getApplicationFromDatabase( FunFunFactory $factory ): MembershipApplication {
+		$repository = $factory->getEntityManager()->getRepository( MembershipApplication::class );
+		$application = $repository->find( 1 );
+		$this->assertInstanceOf( MembershipApplication::class, $application );
+		return $application;
 	}
 
 }
