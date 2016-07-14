@@ -848,13 +848,7 @@ class FunFunFactory {
 	}
 
 	public function newAmountValidator(): AmountValidator {
-		return new AmountValidator(
-			0.01,
-			[
-				PaymentType::CREDIT_CARD => 1,
-				PaymentType::PAYPAL => 1,
-			]
-		);
+		return new AmountValidator( 1 );
 	}
 
 	private function newAmountFormatter(): AmountFormatter {
