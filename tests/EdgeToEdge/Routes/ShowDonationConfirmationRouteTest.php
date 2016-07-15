@@ -33,18 +33,10 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 			$donation = $this->newStoredDonation( $factory );
 
-			$client->request(
-				'GET',
-				'show-donation-confirmation',
-				[
-					'donationId' => $donation->getId(),
-					'accessToken' => self::CORRECT_ACCESS_TOKEN,
-					'updateToken' => self::SOME_UPDATE_TOKEN
-				]
-			);
+			$responseContent = $this->retrieveDonationConfirmation( $client, $donation->getId() );
 
-			$this->assertDonationDataInResponse( $donation, $client->getResponse()->getContent() );
-			$this->assertContains( 'Template Name: DonationConfirmation.twig', $client->getResponse()->getContent() );
+			$this->assertDonationDataInResponse( $donation, $responseContent );
+			$this->assertContains( 'Template Name: DonationConfirmation.twig', $responseContent );
 		} );
 	}
 
@@ -56,18 +48,10 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 			$donation = $this->newStoredDonation( $factory );
 
-			$client->request(
-				'POST',
-				'show-donation-confirmation',
-				[
-					'donationId' => $donation->getId(),
-					'accessToken' => self::CORRECT_ACCESS_TOKEN,
-					'updateToken' => self::SOME_UPDATE_TOKEN
-				]
-			);
+			$responseContent = $this->retrieveDonationConfirmation( $client, $donation->getId() );
 
-			$this->assertDonationDataInResponse( $donation, $client->getResponse()->getContent() );
-			$this->assertContains( 'Template Name: DonationConfirmation.twig', $client->getResponse()->getContent() );
+			$this->assertDonationDataInResponse( $donation, $responseContent );
+			$this->assertContains( 'Template Name: DonationConfirmation.twig', $responseContent );
 		} );
 	}
 
@@ -79,18 +63,10 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 			$donation = $this->newStoredDonation( $factory );
 
-			$client->request(
-				'POST',
-				'show-donation-confirmation',
-				[
-					'donationId' => $donation->getId(),
-					'accessToken' => self::CORRECT_ACCESS_TOKEN,
-					'updateToken' => self::SOME_UPDATE_TOKEN
-				]
-			);
+			$responseContent = $this->retrieveDonationConfirmation( $client, $donation->getId() );
 
-			$this->assertEmbeddedMembershipFormIsPrefilled( $donation, $client->getResponse()->getContent() );
-			$this->assertContains( 'Template Name: DonationConfirmation.twig', $client->getResponse()->getContent() );
+			$this->assertEmbeddedMembershipFormIsPrefilled( $donation, $responseContent );
+			$this->assertContains( 'Template Name: DonationConfirmation.twig', $responseContent );
 		} );
 	}
 
@@ -125,21 +101,46 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 			);
 			$donation = $this->newStoredDonation( $factory );
 
-			$client->request(
-				'GET',
-				'show-donation-confirmation',
-				[
-					'donationId' => $donation->getId(),
-					'accessToken' => self::CORRECT_ACCESS_TOKEN,
-					'updateToken' => self::SOME_UPDATE_TOKEN
-				]
-			);
+			$responseContent = $this->retrieveDonationConfirmation( $client, $donation->getId() );
 
-			$content = $client->getResponse()->getContent();
-			$this->assertContains( 'Alternative content', $content );
-			$this->assertContains( 'Template Name: DonationConfirmationAlternative.twig', $content );
-			$this->assertContains( 'Template Campaign: example', $content );
+			$this->assertContains( 'Alternative content', $responseContent );
+			$this->assertContains( 'Template Name: DonationConfirmationAlternative.twig', $responseContent );
+			$this->assertContains( 'Template Campaign: example', $responseContent );
 		} );
+	}
+
+	public function testGivenAnonymousDonation_confirmationPageReflectsThat() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$donation = $this->newBookedAnonymousPayPalDonation( $factory );
+
+			$responseContent = $this->retrieveDonationConfirmation( $client, $donation->getId() );
+
+			$this->assertContains( 'Anonym', $responseContent );
+		} );
+	}
+
+	public function testGivenAnonymousDonation_confirmationPageShowsStatusText() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$donation = $this->newBookedAnonymousPayPalDonation( $factory );
+
+			$responseContent = $this->retrieveDonationConfirmation( $client, $donation->getId() );
+
+			$this->assertContains( 'Ihre Spende per PayPal wurde gebucht', $responseContent );
+		} );
+	}
+
+	private function retrieveDonationConfirmation( Client $client, int $donationId ) {
+		$client->request(
+			'GET',
+			'show-donation-confirmation',
+			[
+				'donationId' => $donationId,
+				'accessToken' => self::CORRECT_ACCESS_TOKEN,
+				'updateToken' => self::SOME_UPDATE_TOKEN
+			]
+		);
+
+		return $client->getResponse()->getContent();
 	}
 
 	private function newStoredDonation( FunFunFactory $factory ): Donation {
@@ -149,6 +150,14 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 		$donation = ValidDonation::newDirectDebitDonation();
 
+		$factory->getDonationRepository()->storeDonation( $donation );
+
+		return $donation;
+	}
+
+	private function newBookedAnonymousPayPalDonation( FunFunFactory $factory ): Donation {
+		$factory->setTokenGenerator( new FixedTokenGenerator( self::CORRECT_ACCESS_TOKEN ) );
+		$donation = ValidDonation::newBookedAnonymousPayPalDonation();
 		$factory->getDonationRepository()->storeDonation( $donation );
 
 		return $donation;
@@ -199,17 +208,15 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 				]
 			);
 
-			$this->assertDonationIsNotShown( $donation, $client->getResponse() );
+			$this->assertDonationIsNotShown( $donation, $client->getResponse()->getContent() );
 		} );
 	}
 
-	private function assertDonationIsNotShown( Donation $donation, Response $response ) {
-		$content = $response->getContent();
+	private function assertDonationIsNotShown( Donation $donation, string $responseContent ) {
+		$this->assertNotContains( $donation->getDonor()->getPersonName()->getFirstName(), $responseContent );
+		$this->assertNotContains( $donation->getDonor()->getPersonName()->getLastName(), $responseContent );
 
-		$this->assertNotContains( $donation->getDonor()->getPersonName()->getFirstName(), $content );
-		$this->assertNotContains( $donation->getDonor()->getPersonName()->getLastName(), $content );
-
-		$this->assertContains( self::ACCESS_DENIED_TEXT, $content );
+		$this->assertContains( self::ACCESS_DENIED_TEXT, $responseContent );
 	}
 
 	public function testGivenWrongId_accessIsDenied() {
@@ -220,17 +227,9 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 			$donation = $this->newStoredDonation( $factory );
 
-			$client->request(
-				'GET',
-				'show-donation-confirmation',
-				[
-					'donationId' => $donation->getId() + 1,
-					'accessToken' => self::CORRECT_ACCESS_TOKEN,
-					'updateToken' => self::SOME_UPDATE_TOKEN
-				]
-			);
+			$responseContent = $this->retrieveDonationConfirmation( $client, $donation->getId() + 1 );
 
-			$this->assertDonationIsNotShown( $donation, $client->getResponse() );
+			$this->assertDonationIsNotShown( $donation, $responseContent );
 		} );
 	}
 
@@ -240,17 +239,8 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 				new DonationConfirmationPageSelector( $this->newEmptyConfirmationPageConfig() )
 			);
 
-			$client->request(
-				'GET',
-				'show-donation-confirmation',
-				[
-					'donationId' => 1,
-					'accessToken' => self::CORRECT_ACCESS_TOKEN,
-					'updateToken' => self::SOME_UPDATE_TOKEN
-				]
-			);
-
-			$this->assertContains( self::ACCESS_DENIED_TEXT, $client->getResponse()->getContent() );
+			$responseContent = $this->retrieveDonationConfirmation( $client, 1 );
+			$this->assertContains( self::ACCESS_DENIED_TEXT, $responseContent );
 		} );
 	}
 

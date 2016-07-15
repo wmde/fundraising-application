@@ -108,6 +108,16 @@ class ValidDonation {
 		);
 	}
 
+	public static function newBookedAnonymousPayPalDonation(): Donation {
+		$payPalData = new PayPalData();
+		$payPalData->setPaymentId( self::PAYPAL_TRANSACTION_ID );
+
+		return ( new self() )->createAnonymousDonation(
+			new PayPalPayment( $payPalData ),
+			Donation::STATUS_EXTERNAL_BOOKED
+		);
+	}
+
 	public static function newBookedCreditCardDonation() {
 		$creditCardData = new CreditCardTransactionData();
 		$creditCardData->setTransactionId( self::CREDIT_CARD_TRANSACTION_ID );

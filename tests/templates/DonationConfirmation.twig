@@ -100,15 +100,20 @@
 
 						<div class="container clearfix">
 							<div class="address f-left">
-								<p>
-									{$ donation.salutation $} <span id="confirm-name">{$ person.fullName $}</span>
-								</p>
-
-								<p class="no-margin">
-									<span id="confirm-street">{$ person.streetAddress $}</span><br/>
-									<span id="confirm-postcode">{$ person.postalCode $}</span> <span id="confirm-city">{$ person.city $}</span><br/>
-									<span id="confirm-mail">{$ person.email $}</span>
-								</p>
+								{% if person %}
+									<p>
+										{$ person.salutation $} <span id="confirm-name">{$ person.fullName $}</span>
+									</p>
+									<p class="no-margin">
+										<span id="confirm-street">{$ person.streetAddress $}</span><br/>
+										<span id="confirm-postcode">{$ person.postalCode $}</span> <span id="confirm-city">{$ person.city $}</span><br/>
+										<span id="confirm-mail">{$ person.email $}</span>
+									</p>
+								{% else %}
+									<p>
+										Anonym
+									</p>
+								{% endif %}
 							</div>
 
 							<div class="payment f-left">
