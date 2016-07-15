@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
 use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
@@ -35,6 +36,29 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 		);
 
 		$this->assertSame( 200, $client->getResponse()->getStatusCode() );
+	}
+
+	public function testCancellationIsSuccessful_cookieIsCleared() {
+		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
+			$client->getCookieJar()->set( new Cookie( 'donation_timestamp', '49152 B.C.' ) );
+			$factory->setNullMessenger();
+
+			$donationId = $this->storeDonation( $factory->getDonationRepository(), $factory->getEntityManager() );
+
+			$client->request(
+				'POST',
+				'/donation/cancel',
+				[
+					'sid' => (string)$donationId,
+					'utoken' => self::CORRECT_UPDATE_TOKEN,
+				]
+			);
+
+			/** @var Cookie $cookie */
+			$cookie = $client->getResponse()->headers->getCookies()[0];
+			$this->assertSame( 'donation_timestamp', $cookie->getName() );
+			$this->assertNull( $cookie->getValue() );
+		} );
 	}
 
 	public function testGivenValidUpdateToken_confirmationPageIsShown() {

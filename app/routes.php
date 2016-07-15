@@ -356,11 +356,15 @@ $app->post(
 			(int)$request->request->get( 'sid', '' )
 		);
 
-		$useCase = $ffFactory->newCancelDonationUseCase( $request->request->get( 'utoken', '' ) );
+		$responseModel = $ffFactory->newCancelDonationUseCase( $request->request->get( 'utoken', '' ) )
+			->cancelDonation( $cancellationRequest );
 
-		return $ffFactory->newCancelDonationHtmlPresenter()->present(
-			$useCase->cancelDonation( $cancellationRequest )
-		);
+		$httpResponse = new Response( $ffFactory->newCancelDonationHtmlPresenter()->present( $responseModel ) );
+		if ( $responseModel->cancellationSucceeded() ) {
+			$httpResponse->headers->clearCookie( 'donation_timestamp' );
+		}
+
+		return $httpResponse;
 	}
 );
 
