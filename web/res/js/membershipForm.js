@@ -244,6 +244,10 @@ $( function () {
 				stateKey: 'membershipInputValidation.bankCode'
 			},
 			{
+				viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.amount-input' ) ),
+				stateKey: 'membershipInputValidation.amount'
+			},
+			{
 				viewHandler: WMDE.View.createCountrySpecificAttributesHandler( $( '#post-code' ), $( '#city' ), $( '#email' ) ),
 				stateKey: 'countrySpecifics'
 			}

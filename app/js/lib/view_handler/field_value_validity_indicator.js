@@ -12,10 +12,10 @@ var objectAssign = require( 'object-assign' ),
 		update: function ( validationState ) {
 			if ( validationState.isValid === true ) {
 				this.element.addClass( 'valid' ).removeClass( 'invalid' )
-					.next().addClass( 'icon-ok' ).removeClass( 'icon-bug icon-placeholder' );
+					.next( 'span' ).addClass( 'icon-ok' ).removeClass( 'icon-bug icon-placeholder' );
 			} else if ( validationState.isValid === false ) {
 				this.element.addClass( 'invalid' ).removeClass( 'valid' )
-					.next().addClass( 'icon-bug' ).removeClass( 'icon-ok icon-placeholder' );
+					.next( 'span' ).addClass( 'icon-bug' ).removeClass( 'icon-ok icon-placeholder' );
 			}
 		}
 	};
