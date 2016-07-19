@@ -21,7 +21,8 @@
 		"symfony/translation": "^3.0",
 		"symfony/twig-bridge": "^3.0",
 		"twig/extensions": "^1.3",
-		"micropayment-de/service-client": "~1.19.0"
+		"micropayment-de/service-client": "~1.19.0",
+		"phpunit/phpunit": "~5.4"
 	},
 	"repositories": [
 		{
