@@ -207,10 +207,37 @@ class FunFunFactory {
 		} );
 
 		$pimple['comment_repository'] = $pimple->share( function() {
-			return new LoggingCommentFinder(
+			$finder = new LoggingCommentFinder(
 				new DoctrineCommentFinder( $this->getEntityManager() ),
 				$this->getLogger()
 			);
+
+			$magicalThinghyOfDoom = new class( $finder ) extends \PHPUnit_Framework_TestCase {
+				private $decorated;
+
+				public function __construct( $decorated ) {
+					$this->decorated = $decorated;
+				}
+
+				public function createDecorator() {
+					$className = CommentFinder::class;
+
+					/**
+					 * @var \PHPUnit_Framework_MockObject_MockObject $decorator
+					 */
+					$decorator = $this->getMockBuilder( $className )->getMock();
+
+					foreach ( get_class_methods( $className ) as $methodName ) {
+						$decorator->method( $methodName )->willReturnCallback(
+							[ $this->decorated, $methodName ]
+						);
+					}
+
+					return $decorator;
+				}
+			};
+
+			return $magicalThinghyOfDoom->createDecorator( $finder );
 		} );
 
 		$pimple['mail_validator'] = $pimple->share( function() {
