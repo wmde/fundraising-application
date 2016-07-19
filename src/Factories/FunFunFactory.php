@@ -212,24 +212,23 @@ class FunFunFactory {
 				$this->getLogger()
 			);
 
-			$magicalThinghyOfDoom = new class( $finder ) extends \PHPUnit_Framework_TestCase {
-				private $decorated;
+			$magicalThinghyOfDoom = new class() extends \PHPUnit_Framework_TestCase {
 
-				public function __construct( $decorated ) {
-					$this->decorated = $decorated;
-				}
-
-				public function createDecorator() {
-					$className = CommentFinder::class;
-
+				public function createDecorator( $decorated, string $typeName, callable $before, callable $after ) {
 					/**
 					 * @var \PHPUnit_Framework_MockObject_MockObject $decorator
 					 */
-					$decorator = $this->getMockBuilder( $className )->getMock();
+					$decorator = $this->createMock( $typeName );
 
-					foreach ( get_class_methods( $className ) as $methodName ) {
+					foreach ( get_class_methods( $typeName ) as $methodName ) {
 						$decorator->method( $methodName )->willReturnCallback(
-							[ $this->decorated, $methodName ]
+							function() use ( $decorated, $methodName, $before, $after ) {
+								call_user_func( $before );
+								$returnValue = call_user_func_array( [ $decorated, $methodName ], func_get_args() );
+								call_user_func( $after );
+
+								return $returnValue;
+							}
 						);
 					}
 
@@ -237,7 +236,12 @@ class FunFunFactory {
 				}
 			};
 
-			return $magicalThinghyOfDoom->createDecorator( $finder );
+			return $magicalThinghyOfDoom->createDecorator(
+				$finder,
+				CommentFinder::class,
+				function () {},
+				function () {}
+			);
 		} );
 
 		$pimple['mail_validator'] = $pimple->share( function() {
