@@ -207,9 +207,40 @@ class FunFunFactory {
 		} );
 
 		$pimple['comment_repository'] = $pimple->share( function() {
-			return new LoggingCommentFinder(
+			$finder = new LoggingCommentFinder(
 				new DoctrineCommentFinder( $this->getEntityManager() ),
 				$this->getLogger()
+			);
+
+			$magicalThinghyOfDoom = new class() extends \PHPUnit_Framework_TestCase {
+
+				public function createDecorator( $decorated, string $typeName, callable $before, callable $after ) {
+					/**
+					 * @var \PHPUnit_Framework_MockObject_MockObject $decorator
+					 */
+					$decorator = $this->createMock( $typeName );
+
+					foreach ( get_class_methods( $typeName ) as $methodName ) {
+						$decorator->method( $methodName )->willReturnCallback(
+							function() use ( $decorated, $methodName, $before, $after ) {
+								call_user_func( $before );
+								$returnValue = call_user_func_array( [ $decorated, $methodName ], func_get_args() );
+								call_user_func( $after );
+
+								return $returnValue;
+							}
+						);
+					}
+
+					return $decorator;
+				}
+			};
+
+			return $magicalThinghyOfDoom->createDecorator(
+				$finder,
+				CommentFinder::class,
+				function () { $GLOBALS['profiler']->start( 'comment repository' ); },
+				function () { $GLOBALS['profiler']->stop( 'comment repository' ); }
 			);
 		} );
 
