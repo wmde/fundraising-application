@@ -239,8 +239,8 @@ class FunFunFactory {
 			return $magicalThinghyOfDoom->createDecorator(
 				$finder,
 				CommentFinder::class,
-				function () {},
-				function () {}
+				function () { $GLOBALS['profiler']->start( 'comment repository' ); },
+				function () { $GLOBALS['profiler']->stop( 'comment repository' ); }
 			);
 		} );
 
