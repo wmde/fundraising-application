@@ -91,6 +91,13 @@ class ApplyForMembershipHandler {
 		// TODO: German format expected here, amount should be converted based on user's locale
 		$request->setPaymentAmountInEuros( str_replace( ',', '.', $httpRequest->request->get( 'membership_fee', '' ) ) );
 
+		$request->setTrackingInfo( new MembershipApplicationTrackingInfo(
+			$httpRequest->request->get( 'templateCampaign', '' ),
+			$httpRequest->request->get( 'templateName', '' )
+		) );
+
+		$request->setPiwikTrackingString( $httpRequest->cookies->get( 'spenden_tracking', '' ) );
+
 		$bankData = new BankData();
 
 		$bankData->setBankName( $httpRequest->request->get( 'bank_name', '' ) );
@@ -98,11 +105,6 @@ class ApplyForMembershipHandler {
 		$bankData->setBic( $httpRequest->request->get( 'bic', '' ) );
 		$bankData->setAccount( $httpRequest->request->get( 'account_number', '' ) );
 		$bankData->setBankCode( $httpRequest->request->get( 'bank_code', '' ) );
-
-		$request->setTrackingInfo( new MembershipApplicationTrackingInfo(
-			$httpRequest->request->get( 'templateCampaign', '' ),
-			$httpRequest->request->get( 'templateName', '' )
-		) );
 
 		$bankData->assertNoNullFields()->freeze();
 		$request->setPaymentBankData( $bankData );

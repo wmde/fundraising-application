@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\UseCases\ApplyForMembership;
 
 use WMDE\Fundraising\Frontend\Domain\Model\MembershipApplication;
 use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepository;
+use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationPiwikTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTokenFetcher;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
@@ -22,16 +23,19 @@ class ApplyForMembershipUseCase {
 	private $tokenFetcher;
 	private $mailer;
 	private $validator;
+	private $piwikTracker;
 
 	public function __construct( MembershipApplicationRepository $repository,
 		MembershipApplicationTokenFetcher $tokenFetcher, TemplateBasedMailer $mailer,
-		MembershipApplicationValidator $validator, MembershipApplicationTracker $tracker ) {
+		MembershipApplicationValidator $validator, MembershipApplicationTracker $tracker,
+		MembershipApplicationPiwikTracker $piwikTracker ) {
 
 		$this->repository = $repository;
 		$this->tokenFetcher = $tokenFetcher;
 		$this->mailer = $mailer;
 		$this->validator = $validator;
 		$this->membershipApplicationTracker = $tracker;
+		$this->piwikTracker = $piwikTracker;
 	}
 
 	public function applyForMembership( ApplyForMembershipRequest $request ): ApplyForMembershipResponse {
@@ -51,13 +55,16 @@ class ApplyForMembershipUseCase {
 		$this->repository->storeApplication( $application );
 
 		// TODO: handle exceptions
-		$tokens = $this->tokenFetcher->getTokens( $application->getId() );
-
-		// TODO: handle exceptions
 		$this->membershipApplicationTracker->trackApplication( $application->getId(), $request->getTrackingInfo() );
 
 		// TODO: handle exceptions
+		$this->piwikTracker->trackApplication( $application->getId(), $request->getPiwikTrackingString() );
+
+		// TODO: handle exceptions
 		$this->sendConfirmationEmail( $application );
+
+		// TODO: handle exceptions
+		$tokens = $this->tokenFetcher->getTokens( $application->getId() );
 
 		return ApplyForMembershipResponse::newSuccessResponse(
 			$tokens->getAccessToken(),

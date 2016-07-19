@@ -65,6 +65,7 @@ class MembershipApplicationBuilderTest extends \PHPUnit_Framework_TestCase {
 			$omitOptionalFields ? '' : ValidMembershipApplication::APPLICANT_DATE_OF_BIRTH
 		);
 		$request->setTrackingInfo( $this->newTrackingInfo() );
+		$request->setPiwikTrackingString( 'foo/bar' );
 
 		return $request->assertNoNullFields()->freeze();
 	}

@@ -50,6 +50,7 @@ class ValidMembershipApplicationRequest {
 		$request->setPaymentAmountInEuros( (string)ValidMembershipApplication::PAYMENT_AMOUNT_IN_EURO );
 
 		$request->setTrackingInfo( $this->newTrackingInfo() );
+		$request->setPiwikTrackingString( 'foo/bar' );
 
 		$request->setPaymentBankData( $this->newValidBankData() );
 

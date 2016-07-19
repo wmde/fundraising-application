@@ -38,6 +38,7 @@ class ApplyForMembershipRequest {
 	private $paymentBankData;
 
 	private $trackingInfo;
+	private $piwikTrackingString;
 
 	public function getMembershipType(): string {
 		return $this->membershipType;
@@ -201,6 +202,15 @@ class ApplyForMembershipRequest {
 	public function setTrackingInfo( MembershipApplicationTrackingInfo $trackingInfo ) {
 		$this->assertIsWritable();
 		$this->trackingInfo = $trackingInfo;
+	}
+
+	public function getPiwikTrackingString(): string {
+		return $this->piwikTrackingString;
+	}
+
+	public function setPiwikTrackingString( string $piwikTrackingString ) {
+		$this->assertIsWritable();
+		$this->piwikTrackingString = $piwikTrackingString;
 	}
 
 }
