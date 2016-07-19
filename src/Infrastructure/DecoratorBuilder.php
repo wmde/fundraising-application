@@ -32,24 +32,12 @@ class DecoratorBuilder {
 		$decorator = $this->newMock( $this->getDecoratedType() );
 
 		foreach ( $this->getMethodNames() as $methodName ) {
-			$decorator->method( $methodName )->willReturnCallback(
-				function() use ( $methodName ) {
-					call_user_func_array( $this->before, func_get_args() );
-					$returnValue = call_user_func_array( [ $this->objectToDecorate, $methodName ], func_get_args() );
-					call_user_func_array( $this->after, func_get_args() );
-
-					return $returnValue;
-				}
-			);
+			$this->decorateMethod( $decorator, $methodName );
 		}
 
 		$this->assertTypeRetained( $decorator );
 
 		return $decorator;
-	}
-
-	private function getDecoratedType(): string {
-		return get_class( $this->objectToDecorate );
 	}
 
 	private function newMock( string $type ): \PHPUnit_Framework_MockObject_MockObject {
@@ -63,11 +51,27 @@ class DecoratorBuilder {
 		return $mockBuilder->getMock();
 	}
 
+	private function getDecoratedType(): string {
+		return get_class( $this->objectToDecorate );
+	}
+
 	private function getMethodNames(): array {
 		return array_filter(
 			get_class_methods( $this->getDecoratedType() ),
 			function( string $methodName ) {
 				return $methodName !== '__construct';
+			}
+		);
+	}
+
+	private function decorateMethod( \PHPUnit_Framework_MockObject_MockObject $decorator, string $methodName ) {
+		$decorator->method( $methodName )->willReturnCallback(
+			function() use ( $methodName ) {
+				call_user_func_array( $this->before, func_get_args() );
+				$returnValue = call_user_func_array( [ $this->objectToDecorate, $methodName ], func_get_args() );
+				call_user_func_array( $this->after, func_get_args() );
+
+				return $returnValue;
 			}
 		);
 	}
