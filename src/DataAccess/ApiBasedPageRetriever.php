@@ -35,6 +35,7 @@ class ApiBasedPageRetriever implements PageRetriever {
 	 * @return string
 	 */
 	public function fetchPage( string $pageTitle, string $action = PageRetriever::MODE_RENDERED ): string {
+		$GLOBALS['profiler']->start( 'fetch_page' );
 		$this->logger->debug( __METHOD__ . ': pageTitle', [ $pageTitle ] );
 
 		if ( !$this->api->isLoggedin() ) {
@@ -43,6 +44,7 @@ class ApiBasedPageRetriever implements PageRetriever {
 
 		$content = $this->retrieveContent( $pageTitle, $action );
 
+		$GLOBALS['profiler']->stop( 'fetch_page' );
 		if ( $content === false || $content === null ) {
 			$this->logger->debug( __METHOD__ . ': fail, got non-value', [ $content ] );
 			return '';

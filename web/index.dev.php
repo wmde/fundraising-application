@@ -53,4 +53,6 @@ $app->register(
 
 $app->register( new Sorien\Provider\DoctrineProfilerServiceProvider() );
 
+$GLOBALS['profiler'] = $app['stopwatch'];
+
 $app->run();
