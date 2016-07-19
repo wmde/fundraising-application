@@ -942,7 +942,9 @@ class FunFunFactory {
 	}
 
 	private function newMembershipApplicationPiwikTracker(): MembershipApplicationPiwikTracker {
-		return new DoctrineMembershipApplicationPiwikTracker( $this->getEntityManager() );
+		return new DoctrineMembershipApplicationPiwikTracker(
+			new \WMDE\Fundraising\Store\MembershipApplicationRepository( $this->getEntityManager() )
+		);
 	}
 
 	public function newCancelMembershipApplicationUseCase( string $updateToken ): CancelMembershipApplicationUseCase {
