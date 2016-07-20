@@ -32,7 +32,8 @@ class DoctrineCommentFinder implements CommentFinder {
 	 * @return CommentWithAmount[]
 	 */
 	public function getPublicComments( int $limit, int $offset = 0 ): array {
-		return array_map(
+		$GLOBALS['profiler']->start( 'get_comments' );
+		$comments = array_map(
 			function( Donation $donation ) {
 				return CommentWithAmount::newInstance()
 					->setAuthorName( $donation->getPublicRecord() )
@@ -45,11 +46,15 @@ class DoctrineCommentFinder implements CommentFinder {
 			},
 			$this->getDonations( $limit, $offset )
 		);
+		$GLOBALS['profiler']->stop( 'get_comments' );
+
+		return $comments;
 	}
 
 	private function getDonations( int $limit, int $offset ): array {
 		try {
-			return $this->entityManager->getRepository( Donation::class )->findBy(
+			$GLOBALS['profiler']->start( 'get_donations' );
+			$donation = $this->entityManager->getRepository( Donation::class )->findBy(
 				[
 					'isPublic' => true,
 					'deletionTime' => null
@@ -60,6 +65,8 @@ class DoctrineCommentFinder implements CommentFinder {
 				$limit,
 				$offset
 			);
+			$GLOBALS['profiler']->stop( 'get_donations' );
+			return $donation;
 		}
 		catch ( ORMException $ex ) {
 			throw new CommentListingException( $ex );
