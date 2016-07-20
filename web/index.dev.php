@@ -12,6 +12,9 @@ ini_set( 'display_errors', '1' );
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+/**
+ * @var \WMDE\Fundraising\Frontend\Factories\FunFunFactory $ffFactory
+ */
 $ffFactory = call_user_func( function() {
 	$prodConfigPath = __DIR__ . '/../app/config/config.prod.json';
 
@@ -53,6 +56,6 @@ $app->register(
 
 $app->register( new Sorien\Provider\DoctrineProfilerServiceProvider() );
 
-$GLOBALS['profiler'] = $app['stopwatch'];
+$ffFactory->setProfiler( $app['stopwatch'] );
 
 $app->run();
