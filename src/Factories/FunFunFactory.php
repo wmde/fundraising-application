@@ -271,27 +271,40 @@ class FunFunFactory {
 			];
 			$locale = $this->config['locale'];
 			$translator = $translationFactory->create( $loaders, $locale );
-			$translator->addResource( 'json', __DIR__ . '/../../app/translations/messages.' . $locale . '.json', $locale );
+			$translator->addResource(
+				'json',
+				__DIR__ . '/../../app/translations/messages.' . $locale . '.json',
+				$locale
+			);
+
 			$translator->addResource(
 				'json',
 				__DIR__ . '/../../app/translations/paymentTypes.' . $locale . '.json',
 				$locale,
 				'paymentTypes'
 			);
+
 			$translator->addResource(
 				'json',
 				__DIR__ . '/../../app/translations/paymentIntervals.' . $locale . '.json',
 				$locale,
 				'paymentIntervals'
 			);
+
 			$translator->addResource(
 				'json',
 				__DIR__ . '/../../app/translations/donationStatus.' . $locale . '.json',
 				$locale,
 				'donationStatus'
 			);
-			$translator->addResource( 'json', __DIR__ . '/../../app/translations/validations.' . $locale . '.json', $locale,
-				'validations' );
+
+			$translator->addResource(
+				'json',
+				__DIR__ . '/../../app/translations/validations.' . $locale . '.json',
+				$locale,
+				'validations'
+			);
+
 			return $translator;
 		} );
 
@@ -635,7 +648,9 @@ class FunFunFactory {
 			$this->getTranslator()->trans( $messageKey )
 		);
 
-		return new LoggingMailer( $mailer, $this->getLogger() );
+		$mailer = new LoggingMailer( $mailer, $this->getLogger() );
+
+		return $this->addProfilingDecorator( $mailer, 'Mailer' );
 	}
 
 	public function getGreetingGenerator() {
