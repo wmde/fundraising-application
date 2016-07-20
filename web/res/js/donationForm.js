@@ -337,11 +337,18 @@ $( function () {
 		$( 'html, body' ).animate( { scrollTop: $( '#validation-errors' ).offset().top } );
 	}
 
+	function triggerPiwikEvent( eventData ) {
+		if ( typeof _paq !== 'undefined' ) {
+			_paq.push( eventData );
+		}
+	}
+
 	// connect DOM elements to actions
 
 	$( '#continueFormSubmit1' ).click( function () {
 		if ( paymentDataIsValid() ) {
 			store.dispatch( actions.newNextPageAction() );
+			triggerPiwikEvent( [ 'trackGoal', 2 ] );
 		} else {
 			triggerValidityCheckForPaymentPage();
 			displayErrorBox();
@@ -351,6 +358,7 @@ $( function () {
 	$( '#continueFormSubmit2' ).click( function () {
 		if ( personalDataPageIsValid() ) {
 			store.dispatch( actions.newNextPageAction() );
+			triggerPiwikEvent( [ 'trackGoal', 4 ] );
 		} else {
 			triggerValidityCheckForPersonalDataPage();
 			displayErrorBox();

@@ -94,5 +94,11 @@
 
 {% include 'Piwik.twig' %}
 
+<script>
+{% for goal in piwikGoals %}
+    _paq.push( [ 'trackGoal', '{$ goal $}' ] );
+{% endfor %}
+</script>
+
 </body>
 </html>
