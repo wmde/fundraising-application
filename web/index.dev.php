@@ -82,8 +82,31 @@ $app->register(
 	]
 );
 
+$ffFactory->setProfiler( $app['stopwatch'] );
+
 $app->register( new Sorien\Provider\DoctrineProfilerServiceProvider() );
 
-$ffFactory->setProfiler( $app['stopwatch'] );
+$app['data_collectors'] = array_merge(
+	$app['data_collectors'],
+	[
+		'fundraising' => $app->share( function () use ( $ffFactory ) {
+			return $ffFactory->getProfilerDataCollector();
+		})
+	]
+);
+
+$app['data_collector.templates'] = array_merge(
+	[ [ 'fundraising', '@FunProfiler/Profiler' ] ],
+	$app['data_collector.templates']
+);
+
+$app['twig.loader.filesystem'] = $app->share( $app->extend(
+	'twig.loader.filesystem',
+	function ( $loader ) use ( $ffFactory ) {
+		/** @var \Twig_Loader_Filesystem $loader */
+		$loader->addPath( $ffFactory->getTemplatePath(), 'FunProfiler' );
+		return $loader;
+	}
+) );
 
 $app->run();

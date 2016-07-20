@@ -14,9 +14,11 @@ use Symfony\Component\Stopwatch\Stopwatch;
 class ProfilingDecoratorBuilder {
 
 	private $stopwatch;
+	private $dataCollector;
 
-	public function __construct( Stopwatch $stopwatch ) {
+	public function __construct( Stopwatch $stopwatch, ProfilerDataCollector $dataCollector ) {
 		$this->stopwatch = $stopwatch;
+		$this->dataCollector = $dataCollector;
 	}
 
 	public function decorate( $objectToDecorate, string $profilingLabel ) {
@@ -26,8 +28,20 @@ class ProfilingDecoratorBuilder {
 			} )
 			->withAfter( function () use ( $profilingLabel ) {
 				$this->stopwatch->stop( $profilingLabel );
+
+				$this->dataCollector->addCall(
+					$profilingLabel,
+					$this->getCallingFunctionName(),
+					func_get_args()
+				);
 			} )
 			->newDecorator();
+	}
+
+	private function getCallingFunctionName(): string {
+		// TODO: this seems hardly robust! (ie will break when the PHPUnit part of the stack changes)
+		$trace = debug_backtrace();
+		return explode( '_', $trace[7]['class'] )[1] . '::' . $trace[7]['function'];
 	}
 
 }
