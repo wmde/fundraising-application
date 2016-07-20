@@ -72,6 +72,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\PageRetriever;
 use WMDE\Fundraising\Frontend\Infrastructure\PageRetrieverBasedStringList;
 use WMDE\Fundraising\Frontend\Infrastructure\PaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifier;
+use WMDE\Fundraising\Frontend\Infrastructure\ProfilerDataCollector;
 use WMDE\Fundraising\Frontend\Infrastructure\ProfilingDecoratorBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\RandomTokenGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\Repositories\LoggingCommentFinder;
@@ -177,6 +178,10 @@ class FunFunFactory {
 
 		$pimple['logger'] = $pimple->share( function() {
 			return new NullLogger();
+		} );
+
+		$pimple['profiler_data_collector'] = $pimple->share( function() {
+			return new ProfilerDataCollector();
 		} );
 
 		$pimple['dbal_connection'] = $pimple->share( function() {
@@ -326,6 +331,7 @@ class FunFunFactory {
 		} );
 
 		$pimple['twig_factory'] = $pimple->share( function () {
+			// TODO: like this we end up with two Twig instance, one created here and on in the framework
 			return new TwigFactory( $this->config['twig'], $this->getCachePath() . '/twig' );
 		} );
 
@@ -585,6 +591,10 @@ class FunFunFactory {
 
 	public function getLoggingPath(): string {
 		return $this->getVarPath() . '/log';
+	}
+
+	public function getTemplatePath(): string {
+		return __DIR__ . '/../../app/templates';
 	}
 
 	private function newPageContentModifier(): PageContentModifier {
@@ -1167,7 +1177,7 @@ class FunFunFactory {
 			return $objectToDecorate;
 		}
 
-		$builder = new ProfilingDecoratorBuilder( $this->profiler );
+		$builder = new ProfilingDecoratorBuilder( $this->profiler, $this->getProfilerDataCollector() );
 
 		return $builder->decorate( $objectToDecorate, $profilingLabel );
 	}
@@ -1178,6 +1188,10 @@ class FunFunFactory {
 
 	public function setLogger( LoggerInterface $logger ) {
 		$this->pimple['logger'] = $logger;
+	}
+
+	public function getProfilerDataCollector(): ProfilerDataCollector {
+		return $this->pimple['profiler_data_collector'];
 	}
 
 }
