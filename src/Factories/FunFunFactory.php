@@ -26,6 +26,7 @@ use NumberFormatter;
 use Psr\Log\LoggerInterface;
 use Swift_MailTransport;
 use Swift_NullTransport;
+use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Component\Translation\TranslatorInterface;
 use TNvpServiceDispatcher;
 use Twig_Environment;
@@ -162,7 +163,13 @@ class FunFunFactory {
 	 * @var \Pimple
 	 */
 	private $pimple;
+
 	private $addDoctrineSubscribers = true;
+
+	/**
+	 * @var Stopwatch|null
+	 */
+	private $profiler = null;
 
 	public function __construct( array $config ) {
 		$this->config = $config;
@@ -1156,13 +1163,17 @@ class FunFunFactory {
 	}
 
 	private function addProfilingDecorator( $objectToDecorate, string $profilingLabel ) {
-		if ( !isset( $GLOBALS['profiler'] ) ) { // TODO: do not use global
+		if ( $this->profiler === null ) {
 			return $objectToDecorate;
 		}
 
-		$builder = new ProfilingDecoratorBuilder( $GLOBALS['profiler'] );
+		$builder = new ProfilingDecoratorBuilder( $this->profiler );
 
 		return $builder->decorate( $objectToDecorate, $profilingLabel );
+	}
+
+	public function setProfiler( Stopwatch $profiler ) {
+		$this->profiler = $profiler;
 	}
 
 }
