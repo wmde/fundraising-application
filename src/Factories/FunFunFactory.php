@@ -17,13 +17,9 @@ use GuzzleHttp\HandlerStack;
 use Mediawiki\Api\ApiUser;
 use Mediawiki\Api\Guzzle\MiddlewareFactory;
 use Mediawiki\Api\MediawikiApi;
-use Monolog\Formatter\JsonFormatter;
-use Monolog\Formatter\LineFormatter;
-use Monolog\Handler\BufferHandler;
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
 use NumberFormatter;
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Swift_MailTransport;
 use Swift_NullTransport;
 use Symfony\Component\Stopwatch\Stopwatch;
@@ -178,6 +174,10 @@ class FunFunFactory {
 
 	private function newPimple(): \Pimple {
 		$pimple = new \Pimple();
+
+		$pimple['logger'] = $pimple->share( function() {
+			return new NullLogger();
+		} );
 
 		$pimple['dbal_connection'] = $pimple->share( function() {
 			return DriverManager::getConnection( $this->config['db'] );
@@ -342,21 +342,6 @@ class FunFunFactory {
 			];
 
 			return $twigFactory->create( $loaders, $extensions );
-		} );
-
-		$pimple['logger'] = $pimple->share( function() {
-			$logger = new Logger( 'WMDE Fundraising Frontend logger' );
-
-			$streamHandler = new StreamHandler( $this->newLoggerPath( ( new \DateTime() )->format( 'Y-m-d\TH:i:s\Z' ) ) );
-			$bufferHandler = new BufferHandler( $streamHandler, 500, Logger::DEBUG, true, true );
-			$streamHandler->setFormatter( new LineFormatter( "%message%\n" ) );
-			$logger->pushHandler( $bufferHandler );
-
-			$errorHandler = new StreamHandler( $this->newLoggerPath( 'error' ), Logger::ERROR );
-			$errorHandler->setFormatter( new JsonFormatter() );
-			$logger->pushHandler( $errorHandler );
-
-			return $logger;
 		} );
 
 		$pimple['messenger'] = $pimple->share( function() {
@@ -590,16 +575,16 @@ class FunFunFactory {
 		return $this->pimple['logger'];
 	}
 
-	private function newLoggerPath( string $fileName ): string {
-		return $this->getVarPath() . '/log/' . $fileName . '.log';
-	}
-
 	private function getVarPath(): string {
 		return __DIR__ . '/../../var';
 	}
 
 	public function getCachePath(): string {
 		return $this->getVarPath() . '/cache';
+	}
+
+	public function getLoggingPath(): string {
+		return $this->getVarPath() . '/log';
 	}
 
 	private function newPageContentModifier(): PageContentModifier {
@@ -1189,6 +1174,10 @@ class FunFunFactory {
 
 	public function setProfiler( Stopwatch $profiler ) {
 		$this->profiler = $profiler;
+	}
+
+	public function setLogger( LoggerInterface $logger ) {
+		$this->pimple['logger'] = $logger;
 	}
 
 }
