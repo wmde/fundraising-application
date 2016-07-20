@@ -75,6 +75,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\PageRetriever;
 use WMDE\Fundraising\Frontend\Infrastructure\PageRetrieverBasedStringList;
 use WMDE\Fundraising\Frontend\Infrastructure\PaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifier;
+use WMDE\Fundraising\Frontend\Infrastructure\ProfilingDecoratorBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\RandomTokenGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\Repositories\LoggingCommentFinder;
 use WMDE\Fundraising\Frontend\Infrastructure\Repositories\LoggingDonationRepository;
@@ -207,10 +208,12 @@ class FunFunFactory {
 		} );
 
 		$pimple['comment_repository'] = $pimple->share( function() {
-			return new LoggingCommentFinder(
+			$finder = new LoggingCommentFinder(
 				new DoctrineCommentFinder( $this->getEntityManager() ),
 				$this->getLogger()
 			);
+
+			return $this->addProfilingDecorator( $finder, 'CommentFinder' );
 		} );
 
 		$pimple['mail_validator'] = $pimple->share( function() {
@@ -252,11 +255,13 @@ class FunFunFactory {
 			$handlerStack = HandlerStack::create( new CurlHandler() );
 			$handlerStack->push( $middlewareFactory->retry() );
 
-			return new Client( [
+			$guzzle = new Client( [
 				'cookies' => true,
 				'handler' => $handlerStack,
 				'headers' => [ 'User-Agent' => 'WMDE Fundraising Frontend' ],
 			] );
+
+			return $this->addProfilingDecorator( $guzzle, 'Guzzle Client' );
 		} );
 
 		$pimple['translator'] = $pimple->share( function() {
@@ -536,12 +541,14 @@ class FunFunFactory {
 		return $this->pimple['guzzle_client'];
 	}
 
-	private function newWikiPageRetriever() {
-		return new ModifyingPageRetriever(
+	private function newWikiPageRetriever(): PageRetriever {
+		$PageRetriever = new ModifyingPageRetriever(
 			$this->newCachedPageRetriever(),
 			$this->newPageContentModifier(),
 			$this->config['cms-wiki-title-prefix']
 		);
+
+		return $this->addProfilingDecorator( $PageRetriever, 'PageRetriever' );
 	}
 
 	private function newCachedPageRetriever(): PageRetriever {
@@ -1146,6 +1153,16 @@ class FunFunFactory {
 		$this->pimple['page_cache'] = $this->pimple->share( function() {
 			return new FilesystemCache( $this->getCachePath() . '/pages' );
 		} );
+	}
+
+	private function addProfilingDecorator( $objectToDecorate, string $profilingLabel ) {
+		if ( !isset( $GLOBALS['profiler'] ) ) { // TODO: do not use global
+			return $objectToDecorate;
+		}
+
+		$builder = new ProfilingDecoratorBuilder( $GLOBALS['profiler'] );
+
+		return $builder->decorate( $objectToDecorate, $profilingLabel );
 	}
 
 }
