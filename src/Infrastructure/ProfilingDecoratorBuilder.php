@@ -26,22 +26,41 @@ class ProfilingDecoratorBuilder {
 			->withBefore( function () use ( $profilingLabel ) {
 				$this->stopwatch->start( $profilingLabel );
 			} )
-			->withAfter( function () use ( $profilingLabel ) {
+			->withAfter( function () use ( $objectToDecorate, $profilingLabel ) {
 				$this->stopwatch->stop( $profilingLabel );
+
+				$callingFunctionName = $this->getCallingFunctionName();
 
 				$this->dataCollector->addCall(
 					$profilingLabel,
-					$this->getCallingFunctionName(),
-					func_get_args()
+					$this->getClassAndFunction( $objectToDecorate, $callingFunctionName ),
+					$this->getFunctionArgumentsWithKeys( func_get_args(), get_class( $objectToDecorate ), $callingFunctionName )
 				);
 			} )
 			->newDecorator();
 	}
 
+	private function getClassAndFunction( $objectToDecorate, string $callingFunction ): string {
+		$classNameParts = explode( '\\', get_class( $objectToDecorate ) );
+		return end( $classNameParts ) . '::' . $callingFunction;
+	}
+
 	private function getCallingFunctionName(): string {
 		// TODO: this seems hardly robust! (ie will break when the PHPUnit part of the stack changes)
-		$trace = debug_backtrace();
-		return explode( '_', $trace[7]['class'] )[1] . '::' . $trace[7]['function'];
+		return debug_backtrace()[7]['function'];
+	}
+
+	private function getFunctionArgumentsWithKeys( array $arguments, string $className, string $methodName ) {
+		$reflection = new \ReflectionMethod( $className, $methodName );
+
+		foreach ( $reflection->getParameters() as $param ) {
+			if ( isset( $arguments[$param->getPosition()] ) ) {
+				$arguments[$param->getName()] = $arguments[$param->getPosition()];
+				unset( $arguments[$param->getPosition()] );
+			}
+		}
+
+		return $arguments;
 	}
 
 }

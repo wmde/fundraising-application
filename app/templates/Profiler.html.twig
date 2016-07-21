@@ -30,8 +30,8 @@
                     </td>
                     <td>
                         <ul>
-                            {% for argument in call.arguments %}
-                                <li>{{ argument|json_encode(constant('JSON_UNESCAPED_SLASHES')) }}</li>
+                            {% for name, value in call.arguments %}
+                                <li>{{ name }}: {{ value|json_encode(constant('JSON_UNESCAPED_SLASHES')) }}</li>
                             {% endfor %}
                         </ul>
                     </td>
