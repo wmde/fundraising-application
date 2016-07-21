@@ -12,6 +12,12 @@ ini_set( 'display_errors', '1' );
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use Monolog\Formatter\JsonFormatter;
+use Monolog\Formatter\LineFormatter;
+use Monolog\Handler\BufferHandler;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+
 /**
  * @var \WMDE\Fundraising\Frontend\Factories\FunFunFactory $ffFactory
  */
@@ -26,6 +32,28 @@ $ffFactory = call_user_func( function() {
 
 	return new \WMDE\Fundraising\Frontend\Factories\FunFunFactory( $configReader->getConfig() );
 } );
+
+$ffFactory->setLogger( call_user_func( function() use ( $ffFactory ) {
+	$logger = new Logger( 'WMDE Fundraising Frontend logger' );
+
+	$streamHandler = new StreamHandler(
+		$ffFactory->getLoggingPath() . '/' . ( new \DateTime() )->format( 'Y-m-d\TH:i:s\Z' ) . '.log'
+	);
+
+	$bufferHandler = new BufferHandler( $streamHandler, 500, Logger::DEBUG, true, true );
+	$streamHandler->setFormatter( new LineFormatter( "%message%\n" ) );
+	$logger->pushHandler( $bufferHandler );
+
+	$errorHandler = new StreamHandler(
+		$ffFactory->getLoggingPath() . '/error.log',
+		Logger::ERROR
+	);
+
+	$errorHandler->setFormatter( new JsonFormatter() );
+	$logger->pushHandler( $errorHandler );
+
+	return $logger;
+} ) );
 
 /**
  * @var \Silex\Application $app
@@ -54,8 +82,32 @@ $app->register(
 	]
 );
 
-$app->register( new Sorien\Provider\DoctrineProfilerServiceProvider() );
-
 $ffFactory->setProfiler( $app['stopwatch'] );
+
+$app->register( new Sorien\Provider\DoctrineProfilerServiceProvider() );
+$app->register( new WMDE\Fundraising\Frontend\App\ProfilerServiceProvider( $ffFactory->getProfilerDataCollector() ) );
+
+
+
+//$app['data_collectors'] = array_merge(
+//	$app['data_collectors'],
+//	[ 'wuha' => $app->share( function () use ( $ffFactory ) {
+//		return $ffFactory->getProfilerDataCollector();
+//	} ) ]
+//);
+//
+//$dataCollectorTemplates = $app['data_collector.templates'];
+//$dataCollectorTemplates[] = array( 'wuha', '@FunProfiler/Profiler.twig' );
+//$app['data_collector.templates'] = $dataCollectorTemplates;
+//
+//
+//$app['twig.loader.filesystem'] = $app->share( $app->extend(
+//	'twig.loader.filesystem',
+//	function ( $loader ) use ( $ffFactory ) {
+//		/** @var \Twig_Loader_Filesystem $loader */
+//		$loader->addPath( $ffFactory->getTemplatePath(), 'FunProfiler' );
+//		return $loader;
+//	}
+//) );
 
 $app->run();

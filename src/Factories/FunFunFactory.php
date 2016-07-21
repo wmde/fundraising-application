@@ -17,13 +17,9 @@ use GuzzleHttp\HandlerStack;
 use Mediawiki\Api\ApiUser;
 use Mediawiki\Api\Guzzle\MiddlewareFactory;
 use Mediawiki\Api\MediawikiApi;
-use Monolog\Formatter\JsonFormatter;
-use Monolog\Formatter\LineFormatter;
-use Monolog\Handler\BufferHandler;
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
 use NumberFormatter;
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Swift_MailTransport;
 use Swift_NullTransport;
 use Symfony\Component\Stopwatch\Stopwatch;
@@ -76,6 +72,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\PageRetriever;
 use WMDE\Fundraising\Frontend\Infrastructure\PageRetrieverBasedStringList;
 use WMDE\Fundraising\Frontend\Infrastructure\PaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifier;
+use WMDE\Fundraising\Frontend\Infrastructure\ProfilerDataCollector;
 use WMDE\Fundraising\Frontend\Infrastructure\ProfilingDecoratorBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\RandomTokenGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\Repositories\LoggingCommentFinder;
@@ -178,6 +175,14 @@ class FunFunFactory {
 
 	private function newPimple(): \Pimple {
 		$pimple = new \Pimple();
+
+		$pimple['logger'] = $pimple->share( function() {
+			return new NullLogger();
+		} );
+
+		$pimple['profiler_data_collector'] = $pimple->share( function() {
+			return new ProfilerDataCollector();
+		} );
 
 		$pimple['dbal_connection'] = $pimple->share( function() {
 			return DriverManager::getConnection( $this->config['db'] );
@@ -326,6 +331,7 @@ class FunFunFactory {
 		} );
 
 		$pimple['twig_factory'] = $pimple->share( function () {
+			// TODO: like this we end up with two Twig instance, one created here and on in the framework
 			return new TwigFactory( $this->config['twig'], $this->getCachePath() . '/twig' );
 		} );
 
@@ -342,21 +348,6 @@ class FunFunFactory {
 			];
 
 			return $twigFactory->create( $loaders, $extensions );
-		} );
-
-		$pimple['logger'] = $pimple->share( function() {
-			$logger = new Logger( 'WMDE Fundraising Frontend logger' );
-
-			$streamHandler = new StreamHandler( $this->newLoggerPath( ( new \DateTime() )->format( 'Y-m-d\TH:i:s\Z' ) ) );
-			$bufferHandler = new BufferHandler( $streamHandler, 500, Logger::DEBUG, true, true );
-			$streamHandler->setFormatter( new LineFormatter( "%message%\n" ) );
-			$logger->pushHandler( $bufferHandler );
-
-			$errorHandler = new StreamHandler( $this->newLoggerPath( 'error' ), Logger::ERROR );
-			$errorHandler->setFormatter( new JsonFormatter() );
-			$logger->pushHandler( $errorHandler );
-
-			return $logger;
 		} );
 
 		$pimple['messenger'] = $pimple->share( function() {
@@ -590,16 +581,20 @@ class FunFunFactory {
 		return $this->pimple['logger'];
 	}
 
-	private function newLoggerPath( string $fileName ): string {
-		return $this->getVarPath() . '/log/' . $fileName . '.log';
-	}
-
 	private function getVarPath(): string {
 		return __DIR__ . '/../../var';
 	}
 
 	public function getCachePath(): string {
 		return $this->getVarPath() . '/cache';
+	}
+
+	public function getLoggingPath(): string {
+		return $this->getVarPath() . '/log';
+	}
+
+	public function getTemplatePath(): string {
+		return __DIR__ . '/../../app/templates';
 	}
 
 	private function newPageContentModifier(): PageContentModifier {
@@ -1182,13 +1177,21 @@ class FunFunFactory {
 			return $objectToDecorate;
 		}
 
-		$builder = new ProfilingDecoratorBuilder( $this->profiler );
+		$builder = new ProfilingDecoratorBuilder( $this->profiler, $this->getProfilerDataCollector() );
 
 		return $builder->decorate( $objectToDecorate, $profilingLabel );
 	}
 
 	public function setProfiler( Stopwatch $profiler ) {
 		$this->profiler = $profiler;
+	}
+
+	public function setLogger( LoggerInterface $logger ) {
+		$this->pimple['logger'] = $logger;
+	}
+
+	public function getProfilerDataCollector(): ProfilerDataCollector {
+		return $this->pimple['profiler_data_collector'];
 	}
 
 }

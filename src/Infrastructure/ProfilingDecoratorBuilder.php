@@ -14,14 +14,17 @@ use Symfony\Component\Stopwatch\Stopwatch;
 class ProfilingDecoratorBuilder {
 
 	private $stopwatch;
+	private $dataCollector;
 
-	public function __construct( Stopwatch $stopwatch ) {
+	public function __construct( Stopwatch $stopwatch, ProfilerDataCollector $dataCollector ) {
 		$this->stopwatch = $stopwatch;
+		$this->dataCollector = $dataCollector;
 	}
 
 	public function decorate( $objectToDecorate, string $profilingLabel ) {
 		return ( new DecoratorBuilder( $objectToDecorate ) )
 			->withBefore( function () use ( $profilingLabel ) {
+				$this->dataCollector->getModifiableData()['calls'][$profilingLabel][] = func_get_args();
 				$this->stopwatch->start( $profilingLabel );
 			} )
 			->withAfter( function () use ( $profilingLabel ) {
