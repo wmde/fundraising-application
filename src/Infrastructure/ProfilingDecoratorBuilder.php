@@ -23,12 +23,7 @@ class ProfilingDecoratorBuilder {
 
 	public function decorate( $objectToDecorate, string $profilingLabel ) {
 		return ( new DecoratorBuilder( $objectToDecorate ) )
-			->withBefore( function () use ( $profilingLabel ) {
-				$this->stopwatch->start( $profilingLabel );
-			} )
-			->withAfter( function () use ( $objectToDecorate, $profilingLabel ) {
-				$this->stopwatch->stop( $profilingLabel );
-
+			->withBefore( function () use ( $objectToDecorate, $profilingLabel ) {
 				$callingFunctionName = $this->getCallingFunctionName();
 
 				$this->dataCollector->addCall(
@@ -36,6 +31,11 @@ class ProfilingDecoratorBuilder {
 					$this->getClassAndFunction( $objectToDecorate, $callingFunctionName ),
 					$this->getFunctionArgumentsWithKeys( func_get_args(), get_class( $objectToDecorate ), $callingFunctionName )
 				);
+
+				$this->stopwatch->start( $profilingLabel );
+			} )
+			->withAfter( function () use ( $profilingLabel ) {
+				$this->stopwatch->stop( $profilingLabel );
 			} )
 			->newDecorator();
 	}
