@@ -41,7 +41,7 @@ $ffFactory->setLogger( call_user_func( function() use ( $ffFactory ) {
 	);
 
 	$bufferHandler = new BufferHandler( $streamHandler, 500, Logger::DEBUG, true, true );
-	$streamHandler->setFormatter( new LineFormatter( "%message%\n" ) );
+	$streamHandler->setFormatter( new LineFormatter( "%message% - %context%\n" ) );
 	$logger->pushHandler( $bufferHandler );
 
 	$errorHandler = new StreamHandler(
