@@ -7,6 +7,7 @@ var _ = require( 'underscore' ),
 		isValid: null
 	},
 	initialState = {
+		amount: _.clone( objectFields ),
 		firstName: _.clone( objectFields ),
 		lastName: _.clone( objectFields ),
 		companyName: _.clone( objectFields ),
@@ -17,7 +18,9 @@ var _ = require( 'underscore' ),
 		iban: _.clone( objectFields ),
 		bic: _.clone( objectFields ),
 		account: _.clone( objectFields ),
-		bankCode: _.clone( objectFields )
+		bankCode: _.clone( objectFields ),
+		confirmSepa: _.clone( objectFields ),
+		confirmShortTerm: _.clone( objectFields )
 	};
 
 module.exports = function donationInputValidation( state, action ) {

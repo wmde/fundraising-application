@@ -4,37 +4,37 @@ var jQuery = require( 'jquery' ),
 	objectAssign = require( 'object-assign' ),
 	_ = require( 'underscore' ),
 
+	DefaultRequiredFieldsForAddressType = {
+		person: [ 'salutation', 'firstName', 'lastName', 'street', 'postcode', 'city', 'email' ],
+		firma: [ 'companyName', 'street', 'postcode', 'city', 'email' ],
+		anonym: []
+	},
+
 	AddressValidator = {
 		validationUrl: '',
 		sendFunction: null,
-
-		requiredFieldsForAll: [ 'street', 'postcode', 'city', 'email' ],
-		requiredFieldsForPerson: [ 'firstName', 'lastName', 'salutation' ],
-		requiredFieldsForCompany: [ 'companyName' ],
+		requiredFields: {},
 		validate: function ( formValues ) {
-			var requiredFields;
-			switch ( formValues.addressType ) {
-				case 'person':
-					requiredFields = this.requiredFieldsForAll.concat( this.requiredFieldsForPerson );
-					break;
-				case 'firma':
-					requiredFields = this.requiredFieldsForAll.concat( this.requiredFieldsForCompany );
-					break;
-				default:
-					return { status: 'OK' };
-			}
-
-			// Return incomplete status if not all required fields have been filled
+			var requiredFields = this.getRequiredFieldsForAddressType( formValues.addressType );
 			if ( this.formValuesHaveEmptyRequiredFields( formValues, requiredFields ) ) {
 				return { status: 'INCOMPLETE' };
 			}
-
+			// Don't send anything to server if there are no fields to validate
+			if ( requiredFields.length === 0 ) {
+				return { status: 'OK' };
+			}
 			return this.sendFunction( this.validationUrl, formValues, null, 'json' );
 		},
 		formValuesHaveEmptyRequiredFields: function ( formValues, requiredFields ) {
 			var objectWithOnlyTheRequiredFields = _.pick( formValues, requiredFields ),
 				isEmptyString = function ( value ) { return value === ''; };
 			return _.find( objectWithOnlyTheRequiredFields, isEmptyString ) !== undefined;
+		},
+		getRequiredFieldsForAddressType: function ( addressType ) {
+			if ( !_.has( this.requiredFields, addressType ) ) {
+				throw new Error( 'Invalid address type: ' + addressType );
+			}
+			return this.requiredFields[ addressType ];
 		}
 	},
 
@@ -107,9 +107,10 @@ var jQuery = require( 'jquery' ),
 		}
 	},
 
-	createAddressValidator = function ( validationUrl, sendFunction ) {
+	createAddressValidator = function ( validationUrl, requiredFields, sendFunction ) {
 		return objectAssign( Object.create( AddressValidator ), {
 			validationUrl: validationUrl,
+			requiredFields: requiredFields,
 			sendFunction: sendFunction || jQuery.post
 		} );
 	},
@@ -158,5 +159,6 @@ module.exports = {
 	createBankDataValidator: createBankDataValidator,
 	createSepaConfirmationValidator: function () {
 		return Object.create( SepaConfirmationValidator );
-	}
+	},
+	DefaultRequiredFieldsForAddressType: DefaultRequiredFieldsForAddressType
 };

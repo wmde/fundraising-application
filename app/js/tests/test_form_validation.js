@@ -29,6 +29,7 @@ test( 'Address validation is valid for anonymous address', function ( t ) {
 		postFunctionSpy = sinon.spy(),
 		addressValidator = validation.createAddressValidator(
 			'http://spenden.wikimedia.org/validate-address',
+			validation.DefaultRequiredFieldsForAddressType,
 			postFunctionSpy
 		),
 		validationResult;
@@ -45,6 +46,7 @@ test( 'Given a private adddress, address validation sends values to server', fun
 		postFunctionSpy = sinon.stub().returns( positiveResult ),
 		addressValidator = validation.createAddressValidator(
 			'http://spenden.wikimedia.org/validate-address',
+			validation.DefaultRequiredFieldsForAddressType,
 			postFunctionSpy
 		),
 		formData = {
@@ -75,6 +77,7 @@ test( 'Given an incomplete private adddress, address validation sends no values 
 		postFunctionSpy = sinon.spy(),
 		addressValidator = validation.createAddressValidator(
 			'http://spenden.wikimedia.org/validate-address',
+			validation.DefaultRequiredFieldsForAddressType,
 			postFunctionSpy
 		),
 		formData = {

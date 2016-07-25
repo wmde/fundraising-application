@@ -68,6 +68,16 @@ module.exports = {
 		};
 	},
 
+	newMarkEmptyFieldsInvalidAction: function ( requiredFields, neutralFields ) {
+		return {
+			type: 'MARK_EMPTY_FIELD_INVALID',
+			payload: {
+				requiredFields: requiredFields,
+				neutralFields: neutralFields
+			}
+		};
+	},
+
 	/**
 	 *
 	 * @param {Object|Promise} validationResult

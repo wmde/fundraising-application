@@ -4,6 +4,9 @@ var _ = require( 'underscore' ),
 	objectAssign = require( 'object-assign' );
 
 function inputIsValid( value, pattern ) {
+	if ( pattern === null ) {
+		return value !== '';
+	}
 	return new RegExp( pattern ).test( value );
 }
 
@@ -21,6 +24,19 @@ function inputValidation( validationState, action ) {
 				dataEntered: true,
 				isValid: inputIsValid( action.payload.value, action.payload.pattern )
 			};
+			return newValidationState;
+		case 'MARK_EMPTY_FIELD_INVALID':
+			_.each( action.payload.requiredFields, function ( key ) {
+				if ( newValidationState[ key ].isValid === null ) {
+					newValidationState[ key ].isValid = false;
+				}
+			} );
+			_.each( action.payload.neutralFields, function ( key ) {
+				newValidationState[ key ].isValid = null;
+			} );
+			return newValidationState;
+		case 'FINISH_AMOUNT_VALIDATION':
+			newValidationState.amount = { dataEntered: true, isValid: action.payload.status !== 'ERR' };
 			return newValidationState;
 		case 'FINISH_BANK_DATA_VALIDATION':
 			bankDataIsValid = action.payload.status !== 'ERR';

@@ -18,6 +18,15 @@ var objectAssign = require( 'object-assign' ),
 		};
 	},
 
+	createNoEmptyStringValidator = function ( store, contentName ) {
+		return function ( evt ) {
+			store.dispatch( actions.newValidateInputAction(
+				contentName,
+				evt.target.value
+			) );
+		};
+	},
+
 	RadioComponent = {
 		element: null,
 		contentName: '',
@@ -42,7 +51,10 @@ var objectAssign = require( 'object-assign' ),
 		onChange: null,
 		validator: null,
 		render: function ( formContent ) {
-			this.element.val( formContent[ this.contentName ] );
+			if ( this.element.val() !== formContent[ this.contentName ] ) {
+				this.element.val( formContent[ this.contentName ] );
+				this.element.change();
+			}
 		}
 	},
 
@@ -111,6 +123,14 @@ module.exports = {
 			}
 		} );
 		element.on( 'change', component.onChange );
+		return component;
+	},
+
+	createValidatingCheckboxComponent: function ( store, element, contentName ) {
+		var component = objectAssign( this.createCheckboxComponent( store, element, contentName ), {
+			validator: createNoEmptyStringValidator( store, contentName )
+		} );
+		element.on( 'change', component.validator );
 		return component;
 	},
 

@@ -8,8 +8,7 @@ var _ = require( 'underscore' ),
 	 */
 	createInitialStateFromViolatedFields = function ( violatedFields ) {
 		var state = {
-			validity: {},
-			validationMessages: {}
+			validity: {}
 		};
 		if ( _.isEmpty( violatedFields ) ) {
 			return {};
@@ -17,12 +16,10 @@ var _ = require( 'underscore' ),
 
 		if ( violatedFields.betrag ) {
 			state.validity.amount = false;
-			state.validationMessages.amount = violatedFields.betrag;
 		}
 
 		if ( violatedFields.zahlweise ) {
 			state.validity.amount = false;
-			state.validationMessages.paymentType = violatedFields.zahlweise;
 		}
 
 		return state;

@@ -4,7 +4,6 @@ var Redux = require( 'redux' ),
 	donationFormContent = require( './reducers/donation_form_content' ),
 	membershipFormContent = require( './reducers/membership_form_content' ),
 	validity = require( './reducers/validity' ),
-	validationMessages = require( './reducers/validation_messages' ),
 	donationInputValidation = require( './reducers/donation_input_validation' ),
 	membershipInputValidation = require( './reducers/membership_input_validation' ),
 	countrySpecifics = require( './reducers/country_specifics' ),
@@ -45,7 +44,6 @@ module.exports = {
 			formPagination: formPagination,
 			donationFormContent: donationFormContent,
 			validity: validity,
-			validationMessages: validationMessages,
 			donationInputValidation: donationInputValidation,
 			countrySpecifics: countrySpecifics
 		} ), initialState, Redux.applyMiddleware.apply( this, middlewares ) );
@@ -55,7 +53,6 @@ module.exports = {
 			formPagination: formPagination,
 			membershipFormContent: membershipFormContent,
 			validity: validity,
-			validationMessages: validationMessages,
 			membershipInputValidation: membershipInputValidation,
 			countrySpecifics: countrySpecifics
 		} ), initialState, Redux.applyMiddleware.apply( this, middlewares ) );
