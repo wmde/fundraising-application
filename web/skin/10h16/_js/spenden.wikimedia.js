@@ -19,7 +19,7 @@ $(function() {
         if ($toggle.hasClass('active')) {
           $($toggle.attr('data-slide-rel'))
               .removeClass('opened')
-              .slideUp(600, checkInvisibleInput)
+              .slideUp( 600 )
               .animate(
                   {opacity: 0},
                   {queue: false, duration: 600}
@@ -29,7 +29,7 @@ $(function() {
         } else {
           $($toggle.attr('data-slide-rel'))
               .addClass('opened')
-              .slideDown(600, checkInvisibleInput)
+              .slideDown( 600 )
               .animate(
                   {opacity: 1},
                   {queue: false, duration: 600}
@@ -42,15 +42,6 @@ $(function() {
       });
     }
 
-
-    /* check invisible input elems */
-    function checkInvisibleInput() {
-      // remove required attribute for hidden inputs
-      $(':input.required:hidden').removeAttr('required');
-      $(':input.required:visible').prop('required', true);
-    }
-
-
     /* tab toggle */
     /* Was only used in some old forms, may be deleted if not used by March 2016 */
     function initTabToggle() {
@@ -58,8 +49,6 @@ $(function() {
 
         $($(this).attr('data-tab-group-rel')).find('.tab').addClass('no-display');
         $($(this).attr('data-tab-rel')).removeClass('no-display');
-
-        checkInvisibleInput();
 
         e.preventDefault();
       });
