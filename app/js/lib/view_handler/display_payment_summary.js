@@ -1,7 +1,7 @@
 'use strict';
 
 var objectAssign = require( 'object-assign' ),
-	IntervalAndAmountDisplayHandler = {
+	PaymentSummaryDisplayHandler = {
 		intervalElement: null,
 		amountElement: null,
 		paymentTypeElement: null,
@@ -22,9 +22,9 @@ var objectAssign = require( 'object-assign' ),
 	};
 
 module.exports = {
-	createPaymentIntervalAndAmountDisplayHandler: function ( intervalElement, amountElement, paymentTypeElement,
-															intervalTranslations, paymentTypeTranslations, numberFormatter ) {
-		return objectAssign( Object.create( IntervalAndAmountDisplayHandler ), {
+	createPaymentSummaryDisplayHandler: function ( intervalElement, amountElement, paymentTypeElement,
+													intervalTranslations, paymentTypeTranslations, numberFormatter ) {
+		return objectAssign( Object.create( PaymentSummaryDisplayHandler ), {
 			intervalElement: intervalElement,
 			amountElement: amountElement,
 			paymentTypeElement: paymentTypeElement,

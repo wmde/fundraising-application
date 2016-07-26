@@ -158,7 +158,7 @@ $( function () {
 				stateKey: 'membershipFormContent.paymentIntervalInMonths'
 			},
 			{
-				viewHandler: WMDE.View.createPaymentIntervalAndAmountDisplayHandler(
+				viewHandler: WMDE.View.createPaymentSummaryDisplayHandler(
 					$( '#membership-confirm-interval' ),
 					$( '#membership-confirm-fee'),
 					{

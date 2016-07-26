@@ -162,7 +162,7 @@ $( function () {
 				stateKey: 'donationFormContent.addressType'
 			},
 			{
-				viewHandler: WMDE.View.createPaymentIntervalAndAmountDisplayHandler(
+				viewHandler: WMDE.View.createPaymentSummaryDisplayHandler(
 					$( '.interval-text' ),
 					$( '.amount-formatted'),
 					$( '#payment-display'),

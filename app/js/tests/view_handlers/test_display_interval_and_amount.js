@@ -2,7 +2,7 @@
 
 var test = require( 'tape' ),
 	sinon = require( 'sinon' ),
-	createPaymentIntervalAndAmountDisplayHandler = require( '../../lib/view_handler/display_interval_and_amount' ).createPaymentIntervalAndAmountDisplayHandler,
+	createPaymentSummaryDisplayHandler = require( '../../lib/view_handler/display_payment_summary' ).createPaymentSummaryDisplayHandler,
 	createElement = function () {
 		return {
 			text: sinon.spy()
@@ -31,7 +31,7 @@ test( 'The amount is passed to the curreny formatter', function ( t ) {
 	var amountElement = createElement(),
 		intervalElement = createElement(),
 		paymentTypeElement = createElement(),
-		handler = createPaymentIntervalAndAmountDisplayHandler( intervalElement, amountElement, paymentTypeElement,
+		handler = createPaymentSummaryDisplayHandler( intervalElement, amountElement, paymentTypeElement,
 			paymentIntervalTranslations, paymentTypeTranslations, currencyFormatter );
 	handler.update( {
 		amount: '23,00',
@@ -46,7 +46,7 @@ test( 'Formatted amount is set in amount element', function ( t ) {
 	var amountElement = createElement(),
 		intervalElement = createElement(),
 		paymentTypeElement = createElement(),
-		handler = createPaymentIntervalAndAmountDisplayHandler( intervalElement, amountElement, paymentTypeElement,
+		handler = createPaymentSummaryDisplayHandler( intervalElement, amountElement, paymentTypeElement,
 			paymentIntervalTranslations, paymentTypeTranslations, currencyFormatter );
 	handler.update( {
 		amount: '23,0',
@@ -62,7 +62,7 @@ test( 'Formatted Interval is set in Interval element', function ( t ) {
 	var amountElement = createElement(),
 		intervalElement = createElement(),
 		paymentTypeElement = createElement(),
-		handler = createPaymentIntervalAndAmountDisplayHandler( intervalElement, amountElement, paymentTypeElement,
+		handler = createPaymentSummaryDisplayHandler( intervalElement, amountElement, paymentTypeElement,
 			paymentIntervalTranslations, paymentTypeTranslations, currencyFormatter );
 	handler.update( {
 		amount: '23,0',
@@ -87,7 +87,7 @@ test( 'Formatted payment type is set in respective element', function ( t ) {
 	var amountElement = createElement(),
 		intervalElement = createElement(),
 		paymentTypeElement = createElement(),
-		handler = createPaymentIntervalAndAmountDisplayHandler( intervalElement, amountElement, paymentTypeElement,
+		handler = createPaymentSummaryDisplayHandler( intervalElement, amountElement, paymentTypeElement,
 			paymentIntervalTranslations, paymentTypeTranslations, currencyFormatter );
 	handler.update( {
 		amount: '23,0',
