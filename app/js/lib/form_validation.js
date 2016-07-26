@@ -4,6 +4,10 @@ var jQuery = require( 'jquery' ),
 	objectAssign = require( 'object-assign' ),
 	_ = require( 'underscore' ),
 
+	isEmptyString = function ( value ) {
+		return value === '';
+	},
+
 	DefaultRequiredFieldsForAddressType = {
 		person: [ 'salutation', 'firstName', 'lastName', 'street', 'postcode', 'city', 'email' ],
 		firma: [ 'companyName', 'street', 'postcode', 'city', 'email' ],
@@ -26,8 +30,7 @@ var jQuery = require( 'jquery' ),
 			return this.sendFunction( this.validationUrl, formValues, null, 'json' );
 		},
 		formValuesHaveEmptyRequiredFields: function ( formValues, requiredFields ) {
-			var objectWithOnlyTheRequiredFields = _.pick( formValues, requiredFields ),
-				isEmptyString = function ( value ) { return value === ''; };
+			var objectWithOnlyTheRequiredFields = _.pick( formValues, requiredFields );
 			return _.find( objectWithOnlyTheRequiredFields, isEmptyString ) !== undefined;
 		},
 		getRequiredFieldsForAddressType: function ( addressType ) {
@@ -96,6 +99,10 @@ var jQuery = require( 'jquery' ),
 					bankCode: formValues.bankCode
 				};
 				validationUrl = this.validationUrlForNonSepa;
+			}
+			// avoid sending incomplete data to the server
+			if ( _.find( data, isEmptyString ) !== undefined ) {
+				return { status: 'INCOMPLETE' };
 			}
 			return this.sendFunction( validationUrl, data, null, 'json' );
 		}

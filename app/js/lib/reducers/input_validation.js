@@ -39,6 +39,9 @@ function inputValidation( validationState, action ) {
 			newValidationState.amount = { dataEntered: true, isValid: action.payload.status !== 'ERR' };
 			return newValidationState;
 		case 'FINISH_BANK_DATA_VALIDATION':
+			if ( action.payload.status === 'INCOMPLETE' ) {
+				return newValidationState;
+			}
 			bankDataIsValid = action.payload.status !== 'ERR';
 			newValidationState.iban = { dataEntered: true, isValid: bankDataIsValid };
 			newValidationState.bic = { dataEntered: true, isValid: bankDataIsValid };
@@ -49,6 +52,9 @@ function inputValidation( validationState, action ) {
 			newValidationState.email = { dataEntered: true, isValid: action.payload.status !== 'ERR' };
 			return newValidationState;
 		case 'FINISH_ADDRESS_VALIDATION':
+			if ( action.payload.status === 'INCOMPLETE' ) {
+				return newValidationState;
+			}
 			_.forEach( newValidationState, function ( value, key ) {
 				if ( newValidationState[ key ].dataEntered === true ) {
 					newValidationState[ key ] = {

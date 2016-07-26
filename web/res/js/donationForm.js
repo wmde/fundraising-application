@@ -64,9 +64,12 @@ $( function () {
 					initialValues
 				),
 				WMDE.ReduxValidation.createValidationDispatcher(
-					WMDE.FormValidation.createBankDataValidator( initData.data( 'validate-iban-url' ), initData.data( 'generate-iban-url' ) ),
+					WMDE.FormValidation.createBankDataValidator(
+						initData.data( 'validate-iban-url' ),
+						initData.data( 'generate-iban-url' )
+					),
 					actions.newFinishBankDataValidationAction,
-					[ 'iban', 'accountNumber', 'bankCode' ],
+					[ 'iban', 'accountNumber', 'bankCode', 'debitType', 'paymentType' ],
 					initialValues
 				),
 				WMDE.ReduxValidation.createValidationDispatcher(
