@@ -103,6 +103,7 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\CreditCardNotificationPres
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CreditCardPaymentHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DisplayPagePresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationConfirmationHtmlPresenter;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormViolationPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\GetInTouchHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\IbanPresenter;
@@ -1030,6 +1031,14 @@ class FunFunFactory {
 		// (we need different form pages for A/B testing)
 		$template->context['main_template'] = 'DonationForm.twig';
 		return new DonationFormViolationPresenter( $template, $this->newAmountFormatter() );
+	}
+
+	public function newDonationFormPresenter() {
+		$template = $this->getLayoutTemplate( 'DisplayPageLayout.twig' );
+		// TODO make this dependent on the 'form' value from the HTTP POST request
+		// (we need different form pages for A/B testing)
+		$template->context['main_template'] = 'DonationForm.twig';
+		return new DonationFormPresenter( $template, $this->newAmountFormatter() );
 	}
 
 	public function newHandlePayPalPaymentNotificationUseCase( string $updateToken ) {

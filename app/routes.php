@@ -24,8 +24,10 @@ use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\AmountParser;
 use WMDE\Fundraising\Frontend\Infrastructure\CreditCardPaymentHandlerException;
 use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentRequest;
+use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\SubscriptionRequest;
 use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationRequest;
 use WMDE\Fundraising\Frontend\UseCases\CancelMembershipApplication\CancellationRequest;
@@ -455,11 +457,15 @@ $app->get(
 	}
 );
 
-$app->get( '/', function ( Application $app ) {
-	return $app->handle(
-		Request::create( '/page/DonationForm', 'GET' ),
-		HttpKernelInterface::SUB_REQUEST
-	);
+$app->get( '/', function ( Application $app, Request $request ) use ( $ffFactory ) {
+	$params = $request->query;
+	$amount = Euro::newFromFloat( ( new AmountParser( 'de_DE' ) )->parseAsFloat( $params->get( 'betrag', '' ) ) );
+	$donationRequest = new AddDonationRequest();
+	$donationRequest->setAmount( $amount );
+	$donationRequest->setPaymentType( $params->get( 'zahlweise', '' ) );
+	$donationRequest->setInterval( intval( $params->get( 'periode', 0 ) ) );
+
+	return new Response( $ffFactory->newDonationFormPresenter()->present( $donationRequest ) );
 } );
 
 // redirect display page requests from old URLs
