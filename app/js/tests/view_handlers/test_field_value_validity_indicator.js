@@ -36,9 +36,9 @@ test( 'When validation state has initial status, nothing is indicated', function
 	handler.update( validationState );
 
 	t.ok( inputElement.addClassSpy.notCalled, 'validity indication keeps initial status' );
-	t.ok( inputElement.removeClassSpy.notCalled, 'validity indication keeps initial status' );
-	t.ok( indicatorElement.addClassSpy.notCalled, 'validity indication keeps initial status' );
-	t.ok( indicatorElement.removeClassSpy.notCalled, 'validity indication keeps initial status' );
+	t.ok( inputElement.removeClassSpy.withArgs( 'valid invalid' ), 'validity indication is set to neutral' );
+	t.ok( indicatorElement.addClassSpy.withArgs( 'icon-placeholder' ), 'indicator is set to neutral placeholder' );
+	t.ok( indicatorElement.removeClassSpy.withArgs( 'icon-ok icon-bug' ), 'icons are hidden' );
 	t.end();
 } );
 

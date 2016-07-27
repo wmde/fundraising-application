@@ -16,6 +16,9 @@ var objectAssign = require( 'object-assign' ),
 			} else if ( validationState.isValid === false ) {
 				this.element.addClass( 'invalid' ).removeClass( 'valid' )
 					.next( 'span' ).addClass( 'icon-bug' ).removeClass( 'icon-ok icon-placeholder' );
+			} else if ( validationState.isValid === null ) {
+				this.element.removeClass( 'valid invalid' )
+					.next( 'span' ).addClass( 'icon-placeholder' ).removeClass( 'icon-ok icon-bug' );
 			}
 		}
 	};
