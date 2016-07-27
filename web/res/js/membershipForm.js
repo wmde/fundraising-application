@@ -161,12 +161,19 @@ $( function () {
 				viewHandler: WMDE.View.createPaymentSummaryDisplayHandler(
 					$( '#membership-confirm-interval' ),
 					$( '#membership-confirm-fee'),
+					$( '#membership-payment-type' ), // does not exist yet
 					{
 						'0': 'einmalig',
 						'1': 'monatlich',
 						'3': 'quartalsweise',
 						'6': 'halbjährlich',
 						'12': 'jährlich'
+					},
+					{
+						'BEZ': 'Lastschrift',
+						'UEB': 'Überweisung',
+						'MCP': 'Kreditkarte',
+						'PPL': 'PayPal'
 					},
 					WMDE.CurrencyFormatter.createCurrencyFormatter( 'de' )
 				),
