@@ -14,6 +14,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\AmountParser;
+use WMDE\Fundraising\Frontend\Infrastructure\PiwikVariableCollector;
 use WMDE\Fundraising\Frontend\Presentation\SelectedConfirmationPage;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationResponse;
@@ -36,7 +37,7 @@ class AddDonationHandler {
 		$this->app = $app;
 	}
 
-	public function handle( Request $request ): Response {
+	public function handle( Request $request, array $sessionTrackingData ): Response {
 		if ( !$this->isSubmissionAllowed( $request ) ) {
 			return new Response( $this->ffFactory->newSystemMessageResponse( 'donation_rejected_limit' ) );
 		}
@@ -48,17 +49,18 @@ class AddDonationHandler {
 			return new Response( $this->ffFactory->newDonationFormViolationPresenter()->present( $responseModel->getValidationErrors(), $addDonationRequest ) );
 		}
 
-		return $this->newHttpResponse( $responseModel, $this->ffFactory->getDonationConfirmationPageSelector()->selectPage() );
+		return $this->newHttpResponse( $responseModel, $this->ffFactory->getDonationConfirmationPageSelector()->selectPage(), $sessionTrackingData );
 	}
 
-	private function newHttpResponse( AddDonationResponse $responseModel, SelectedConfirmationPage $selectedPage ): Response {
+	private function newHttpResponse( AddDonationResponse $responseModel, SelectedConfirmationPage $selectedPage, array $sessionTrackingData ): Response {
 		switch( $responseModel->getDonation()->getPaymentType() ) {
 			case PaymentType::DIRECT_DEBIT:
 			case PaymentType::BANK_TRANSFER:
 				$httpResponse = new Response( $this->ffFactory->newDonationConfirmationPresenter()->present(
 					$responseModel->getDonation(),
 					$responseModel->getUpdateToken(),
-					$selectedPage
+					$selectedPage,
+					PiwikVariableCollector::newForDonation( $sessionTrackingData, $responseModel->getDonation() )
 				) );
 				break;
 			case PaymentType::PAYPAL:

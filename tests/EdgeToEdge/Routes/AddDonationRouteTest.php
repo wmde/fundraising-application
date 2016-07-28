@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use Silex\Application;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\Donation;
@@ -501,6 +502,45 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$data = $donation->getDecodedData();
 
 			$this->assertSame( 'test/blue', $data['tracking'] );
+		} );
+	}
+
+	public function testWhenTrackableInputDataIsSubmitted_theyAreStoredInSession() {
+		$this->createAppEnvironment( [], function ( Client $client, FunFunFactory $factory, Application $app ) {
+
+			$client->request(
+				'GET',
+				'/',
+				[
+					'betrag' => '5,00',
+					'periode' => 3,
+					'zahlweise' => 'BEZ'
+				]
+			);
+
+			$piwikTracking = $app['session']->get( 'piwikTracking' );
+			$this->assertSame( 'BEZ', $piwikTracking['paymentType'] );
+			$this->assertSame( 3, $piwikTracking['paymentInterval'] );
+			$this->assertSame( '5,00', $piwikTracking['paymentAmount'] );
+		} );
+	}
+
+	public function testWhenParameterIsOmitted_itIsNotStoredInSession() {
+		$this->createAppEnvironment( [], function ( Client $client, FunFunFactory $factory, Application $app ) {
+
+			$client->request(
+				'GET',
+				'/',
+				[
+					'betrag' => '5,00',
+					'zahlweise' => 'BEZ'
+				]
+			);
+
+			$piwikTracking = $app['session']->get( 'piwikTracking' );
+			$this->assertSame( 'BEZ', $piwikTracking['paymentType'] );
+			$this->assertSame( '5,00', $piwikTracking['paymentAmount'] );
+			$this->assertArrayNotHasKey( 'paymentInterval', $piwikTracking );
 		} );
 	}
 
