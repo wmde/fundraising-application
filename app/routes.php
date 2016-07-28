@@ -378,6 +378,18 @@ $app->post(
 	}
 );
 
+// Show a donation form with pre-filled payment values, e.g. when coming from a banner
+$app->get( 'donation/new', function ( Application $app, Request $request ) use ( $ffFactory ) {
+	$params = $request->query;
+	$amount = Euro::newFromFloat( ( new AmountParser( 'de_DE' ) )->parseAsFloat( $params->get( 'betrag', '' ) ) );
+	$donationRequest = new AddDonationRequest();
+	$donationRequest->setAmount( $amount );
+	$donationRequest->setPaymentType( $params->get( 'zahlweise', '' ) );
+	$donationRequest->setInterval( intval( $params->get( 'periode', 0 ) ) );
+
+	return new Response( $ffFactory->newDonationFormPresenter()->present( $donationRequest ) );
+} );
+
 $app->post(
 	'apply-for-membership',
 	function( Application $app, Request $httpRequest ) use ( $ffFactory ) {
@@ -458,14 +470,17 @@ $app->get(
 );
 
 $app->get( '/', function ( Application $app, Request $request ) use ( $ffFactory ) {
-	$params = $request->query;
-	$amount = Euro::newFromFloat( ( new AmountParser( 'de_DE' ) )->parseAsFloat( $params->get( 'betrag', '' ) ) );
-	$donationRequest = new AddDonationRequest();
-	$donationRequest->setAmount( $amount );
-	$donationRequest->setPaymentType( $params->get( 'zahlweise', '' ) );
-	$donationRequest->setInterval( intval( $params->get( 'periode', 0 ) ) );
-
-	return new Response( $ffFactory->newDonationFormPresenter()->present( $donationRequest ) );
+	return $app->handle(
+		Request::create(
+			'/donation/new',
+			'GET',
+			$request->query->all(),
+			$request->cookies->all(),
+			[],
+			$request->server->all()
+		),
+		HttpKernelInterface::SUB_REQUEST
+	);
 } );
 
 // redirect display page requests from old URLs
