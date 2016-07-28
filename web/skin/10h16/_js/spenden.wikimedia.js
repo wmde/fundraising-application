@@ -151,28 +151,6 @@ $(function() {
       }
     });
 
-    /* periode-2-list */
-    $('.periode-2-list').each(function(){
-      var $container = $(this);
-
-      $container.find(':radio').change(function(e){
-        if ( e.target.checked ) {
-          $('#interval-display').text($( "label[for='" + $container.find(':radio:checked').attr('id') + "']" ).text());
-        }
-      });
-    });
-
-    /* periode-2-list */
-    $('.payment-type-list').each(function(){
-      var $container = $(this);
-
-      $container.find(':radio').change(function(e){
-        if ( $container.find( ':radio:checked' ).length > 0 ) {
-            $('#payment-display').text(" per " + $( "label[for='" + $container.find(':radio:checked').attr('id') + "']" ).text());
-        }
-      });
-    });
-
 	$( document.commentForm ).bind( 'submit', function ( event ) {
 		event.preventDefault();
 		$.ajax( '../add-comment', {

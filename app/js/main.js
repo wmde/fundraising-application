@@ -15,7 +15,7 @@ module.exports = {
 		createSimpleVisibilitySwitcher: require( './lib/view_handler/element_visibility_switcher' ).createSimpleVisibilitySwitcher,
 		createErrorBoxHandler:  require( './lib/view_handler/error_box' ).createHandler,
 		createFormPageVisibilityHandler: require( './lib/view_handler/form_page_visibility' ).createHandler,
-		createPaymentIntervalAndAmountDisplayHandler: require( './lib/view_handler/display_interval_and_amount' ).createPaymentIntervalAndAmountDisplayHandler,
+		createPaymentSummaryDisplayHandler: require( './lib/view_handler/display_payment_summary' ).createPaymentSummaryDisplayHandler,
 		createFeeOptionSwitcher: require( './lib/view_handler/fee_option_switcher' ).createFeeOptionSwitcher,
 		createFieldValueValidityIndicator: require( './lib/view_handler/field_value_validity_indicator' ).createFieldValueValidityIndicator,
 		createCountrySpecificAttributesHandler: require( './lib/view_handler/country_specific_attributes' ).createCountrySpecificAttributesHandler
