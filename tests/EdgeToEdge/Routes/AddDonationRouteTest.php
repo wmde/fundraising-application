@@ -525,6 +525,32 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
+	public function testWhenTolstojNovelIsPassed_isIsNotStoredInSession() {
+		$this->createAppEnvironment( [], function ( Client $client, FunFunFactory $factory, Application $app ) {
+
+			$client->request(
+				'GET',
+				'/',
+				[
+					'betrag' => '5,00',
+					'periode' => 3,
+					'zahlweise' => 'Eh bien, mon prince. Gênes et Lucques ne sont plus que des apanages, des поместья, de la ' .
+						'famille Buonaparte. Non, je vous préviens que si vous ne me dites pas que nous avons la guerre, si ' .
+						'vous vous permettez encore de pallier toutes les infamies, toutes les atrocités de cet Antichrist ' .
+						'(ma parole, j’y crois) — je ne vous connais plus, vous n’êtes plus mon ami, vous n’êtes plus мой ' .
+						'верный раб, comme vous dites. Ну, здравствуйте,' .
+						'здравствуйте. Je vois que je vous fais peur, ' .
+						'садитесь и рассказывайте.'
+				]
+			);
+
+			$piwikTracking = $app['session']->get( 'piwikTracking' );
+			$this->assertArrayNotHasKey( 'paymentType', $piwikTracking );
+			$this->assertSame( 3, $piwikTracking['paymentInterval'] );
+			$this->assertSame( '5,00', $piwikTracking['paymentAmount'] );
+		} );
+	}
+
 	public function testWhenParameterIsOmitted_itIsNotStoredInSession() {
 		$this->createAppEnvironment( [], function ( Client $client, FunFunFactory $factory, Application $app ) {
 

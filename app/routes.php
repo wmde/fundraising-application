@@ -483,7 +483,14 @@ $app->get( '/', function ( Application $app, Request $request ) {
 	);
 
 	return $app->handle(
-		Request::create( '/page/DonationForm', 'GET' ),
+		Request::create(
+			'/donation/new',
+			'GET',
+			$request->query->all(),
+			$request->cookies->all(),
+			[],
+			$request->server->all()
+		),
 		HttpKernelInterface::SUB_REQUEST
 	);
 } );
