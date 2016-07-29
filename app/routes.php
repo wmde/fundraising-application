@@ -427,7 +427,7 @@ $app->match(
 	'show-donation-confirmation',
 	function( Application $app, Request $request ) use ( $ffFactory ) {
 		return ( new ShowDonationConfirmationHandler( $ffFactory ) )->handle(
-			$request->getMethod() === Request::METHOD_GET ? $request->query : $request->request,
+			$request,
 			$app['session']->get( 'piwikTracking', [] )
 		);
 	}
