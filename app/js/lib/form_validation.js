@@ -82,29 +82,50 @@ var jQuery = require( 'jquery' ),
 		validationUrlForNonSepa: '',
 		sendFunction: null,
 		validate: function ( formValues ) {
-			var data, validationUrl;
 			if ( formValues.paymentType && formValues.paymentType !== 'BEZ' ) {
 				return {
 					status: 'OK'
 				};
 			}
+
 			if ( formValues.debitType === 'sepa' ) {
-				data = {
-					iban: formValues.iban
-				};
-				validationUrl = this.validationUrlForSepa;
-			} else {
-				data = {
-					accountNumber: formValues.accountNumber,
-					bankCode: formValues.bankCode
-				};
-				validationUrl = this.validationUrlForNonSepa;
+				return this.validateSepa( formValues );
 			}
-			// avoid sending incomplete data to the server
-			if ( _.find( data, isEmptyString ) !== undefined ) {
+
+			return this.validateNonSepa( formValues );
+		},
+		validateSepa: function ( formValues ) {
+			if ( formValues.iban === '' ) {
 				return { status: 'INCOMPLETE' };
 			}
-			return this.sendFunction( validationUrl, data, null, 'json' );
+
+			return this.getValidationResultFromApi(
+				this.validationUrlForSepa,
+				{
+					iban: formValues.iban
+				}
+			);
+		},
+		validateNonSepa: function ( formValues ) {
+			if ( formValues.accountNumber === '' || formValues.bankCode === '' ) {
+				return { status: 'INCOMPLETE' };
+			}
+
+			return this.getValidationResultFromApi(
+				this.validationUrlForNonSepa,
+				{
+					accountNumber: formValues.accountNumber,
+					bankCode: formValues.bankCode
+				}
+			);
+		},
+		getValidationResultFromApi: function ( apiUrl, urlArguments ) {
+			return this.sendFunction(
+				apiUrl,
+				urlArguments,
+				null,
+				'json'
+			);
 		}
 	},
 
