@@ -89,30 +89,40 @@ var jQuery = require( 'jquery' ),
 			}
 
 			if ( formValues.debitType === 'sepa' ) {
-				if ( formValues.iban === '' ) {
-					return { status: 'INCOMPLETE' };
-				}
-
-				return this.sendFunction(
-					this.validationUrlForSepa,
-					{
-						iban: formValues.iban
-					},
-					null,
-					'json'
-				);
+				return this.validateSepa( formValues );
 			}
 
+			return this.validateNonSepa( formValues );
+		},
+		validateSepa: function ( formValues ) {
+			if ( formValues.iban === '' ) {
+				return { status: 'INCOMPLETE' };
+			}
+
+			return this.getValidationResultFromApi(
+				this.validationUrlForSepa,
+				{
+					iban: formValues.iban
+				}
+			);
+		},
+		validateNonSepa: function ( formValues ) {
 			if ( formValues.accountNumber === '' || formValues.bankCode === '' ) {
 				return { status: 'INCOMPLETE' };
 			}
 
-			return this.sendFunction(
+			return this.getValidationResultFromApi(
 				this.validationUrlForNonSepa,
 				{
 					accountNumber: formValues.accountNumber,
 					bankCode: formValues.bankCode
-				},
+				}
+			);
+		},
+		getValidationResultFromApi: function ( apiUrl, urlArguments ) {
+			return this.sendFunction(
+				apiUrl,
+				urlArguments,
 				null,
 				'json'
 			);
