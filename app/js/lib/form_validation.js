@@ -82,7 +82,6 @@ var jQuery = require( 'jquery' ),
 		validationUrlForNonSepa: '',
 		sendFunction: null,
 		validate: function ( formValues ) {
-			var data, validationUrl;
 			if ( formValues.paymentType && formValues.paymentType !== 'BEZ' ) {
 				return {
 					status: 'OK'
@@ -90,26 +89,33 @@ var jQuery = require( 'jquery' ),
 			}
 
 			if ( formValues.debitType === 'sepa' ) {
-				data = {
-					iban: formValues.iban
-				};
-				validationUrl = this.validationUrlForSepa;
-			} else {
-				data = {
-					accountNumber: formValues.accountNumber,
-					bankCode: formValues.bankCode
-				};
-				validationUrl = this.validationUrlForNonSepa;
+				if ( formValues.iban === '' ) {
+					return { status: 'INCOMPLETE' };
+				}
+
+				return this.sendFunction(
+					this.validationUrlForSepa,
+					{
+						iban: formValues.iban
+					},
+					null,
+					'json'
+				);
 			}
 
-			if ( this.dataIsIncomplete( data ) ) {
+			if ( formValues.accountNumber === '' || formValues.bankCode === '' ) {
 				return { status: 'INCOMPLETE' };
 			}
 
-			return this.sendFunction( validationUrl, data, null, 'json' );
-		},
-		dataIsIncomplete: function ( data ) {
-			return _.find( data, isEmptyString ) !== undefined;
+			return this.sendFunction(
+				this.validationUrlForNonSepa,
+				{
+					accountNumber: formValues.accountNumber,
+					bankCode: formValues.bankCode
+				},
+				null,
+				'json'
+			);
 		}
 	},
 
