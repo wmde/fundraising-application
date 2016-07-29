@@ -5,7 +5,7 @@
 	_paq.push( [ 'enableLinkTracking' ] );
 
 	{% for piwikEvent in piwikEvents %}
-	_paq.push( {$ piwikEvent | json_encode() | raw $} );
+	_paq.push( {$ piwikEvent | json_encode( constant( 'JSON_UNESCAPED_SLASHES' ) ) | raw $} );
 	{% endfor %}
 
 	( function () {

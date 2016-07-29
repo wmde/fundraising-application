@@ -544,4 +544,33 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
+	public function testWhenInitiallyIntendedPaymentOptionsDifferFromActual_itIsReflectedInPiwikTrackingEvents() {
+		$client = $this->createClient( [] );
+		$client->request(
+			'GET',
+			'/',
+			[
+				'betrag' => '5.00',
+				'zahlweise' => 'BEZ',
+				'periode' => 12
+			]
+		);
+
+		$client->request(
+			'POST',
+			'/donation/add',
+			[
+				'addressType' => 'anonym',
+				'betrag' => '12,34',
+				'periode' => '0',
+				'zahlweise' => 'UEB'
+			]
+		);
+
+		$responseContent = $client->getResponse()->getContent();
+		$this->assertContains( 'BEZ/UEB', $responseContent );
+		$this->assertContains( '5.00/12.34', $responseContent );
+		$this->assertContains( '12/0', $responseContent );
+	}
+
 }
