@@ -88,6 +88,7 @@ var jQuery = require( 'jquery' ),
 					status: 'OK'
 				};
 			}
+
 			if ( formValues.debitType === 'sepa' ) {
 				data = {
 					iban: formValues.iban
@@ -100,11 +101,15 @@ var jQuery = require( 'jquery' ),
 				};
 				validationUrl = this.validationUrlForNonSepa;
 			}
-			// avoid sending incomplete data to the server
-			if ( _.find( data, isEmptyString ) !== undefined ) {
+
+			if ( this.dataIsIncomplete( data ) ) {
 				return { status: 'INCOMPLETE' };
 			}
+
 			return this.sendFunction( validationUrl, data, null, 'json' );
+		},
+		dataIsIncomplete: function ( data ) {
+			return _.find( data, isEmptyString ) !== undefined;
 		}
 	},
 
