@@ -71,6 +71,34 @@ abstract class WebRouteTestCase extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 * Initializes a new test environment and Silex Application.
+	 * Invokes the provided callable with a HttpKernel client to make requests to the application
+	 * as first argument. The second argument is the top level factory which can be used for
+	 * both setup before requests to the client and validation tasks afterwards. The third argument
+	 * is the application instance itself.
+	 *
+	 * Use instead of createEnvironment when the application instance is needed.
+	 *
+	 * @param array $config
+	 * @param callable $onEnvironmentCreated
+	 */
+	public function createAppEnvironment( array $config, callable $onEnvironmentCreated ) {
+		$testEnvironment = TestEnvironment::newInstance( $config );
+
+		$this->onTestEnvironmentCreated( $testEnvironment->getFactory(), $testEnvironment->getConfig() );
+
+		$application = $this->createApplication( $testEnvironment->getFactory(), self::ENABLE_DEBUG );
+		$client = new Client( $application );
+
+		call_user_func(
+			$onEnvironmentCreated,
+			$client,
+			$testEnvironment->getFactory(),
+			$application
+		);
+	}
+
+	/**
 	 * Template method. No need to call the definition here from overriding methods as
 	 * this one will always be empty.
 	 *
@@ -88,6 +116,7 @@ abstract class WebRouteTestCase extends \PHPUnit_Framework_TestCase {
 
 		if ( $debug ) {
 			$app['debug'] = true;
+			$app['session.test'] = true;
 			unset( $app['exception_handler'] );
 		}
 

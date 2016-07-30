@@ -374,7 +374,8 @@ $app->post(
 $app->post(
 	'donation/add',
 	function( Application $app, Request $request ) use ( $ffFactory ) {
-		return ( new AddDonationHandler( $ffFactory, $app ) )->handle( $request );
+		return ( new AddDonationHandler( $ffFactory, $app ) )
+			->handle( $request, $app['session']->get( 'piwikTracking', [] ) );
 	}
 );
 
@@ -426,7 +427,8 @@ $app->match(
 	'show-donation-confirmation',
 	function( Application $app, Request $request ) use ( $ffFactory ) {
 		return ( new ShowDonationConfirmationHandler( $ffFactory ) )->handle(
-			$request->getMethod() === Request::METHOD_GET ? $request->query : $request->request
+			$request,
+			$app['session']->get( 'piwikTracking', [] )
 		);
 	}
 )->method( 'GET|POST' );
@@ -468,7 +470,18 @@ $app->get(
 	}
 );
 
-$app->get( '/', function ( Application $app, Request $request ) use ( $ffFactory ) {
+$app->get( '/', function ( Application $app, Request $request ) {
+	$app['session']->set( 'piwikTracking', array_filter(
+			[
+				'paymentType' => $request->get( 'zahlweise', '' ),
+				'paymentAmount' => $request->get( 'betrag', '' ),
+				'paymentInterval' => $request->get( 'periode', '' )
+			],
+			function ( string $value ) {
+				return $value !== '' && strlen( $value ) < 20;
+			} )
+	);
+
 	return $app->handle(
 		Request::create(
 			'/donation/new',

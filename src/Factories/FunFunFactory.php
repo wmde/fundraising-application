@@ -433,7 +433,7 @@ class FunFunFactory {
 	}
 
 	public function newCommentListHtmlPresenter(): CommentListHtmlPresenter {
-		return new CommentListHtmlPresenter( $this->getLayoutTemplate( 'CommentList.html.twig' ) );
+		return new CommentListHtmlPresenter( $this->getLayoutTemplate( 'CommentList.html.twig', [ 'piwikGoals' => [ 1 ] ] ) );
 	}
 
 	private function getCommentFinder(): CommentFinder {
@@ -499,11 +499,11 @@ class FunFunFactory {
 	 * @param string $templateName
 	 * @return TwigTemplate
 	 */
-	private function getLayoutTemplate( string $templateName ): TwigTemplate {
+	private function getLayoutTemplate( string $templateName, array $context = [] ): TwigTemplate {
 		 return new TwigTemplate(
 			$this->getTwig(),
 			$templateName,
-			$this->getDefaultTwigVariables()
+			array_merge( $this->getDefaultTwigVariables(), $context )
 		);
 	}
 
@@ -513,13 +513,14 @@ class FunFunFactory {
 	 * @param string $templateName Template to include
 	 * @return TwigTemplate
 	 */
-	private function getIncludeTemplate( string $templateName ): TwigTemplate {
+	private function getIncludeTemplate( string $templateName, array $context = [] ): TwigTemplate {
 		return new TwigTemplate(
 			$this->getTwig(),
 			'IncludeInLayout.twig',
 			array_merge(
 				$this->getDefaultTwigVariables(),
-				[ 'main_template' => $templateName ]
+				[ 'main_template' => $templateName ],
+				$context
 			)
 		);
 	}
@@ -531,6 +532,7 @@ class FunFunFactory {
 			'header_template' => $this->config['default-layout-templates']['header'],
 			'footer_template' => $this->config['default-layout-templates']['footer'],
 			'no_js_notice_template' => $this->config['default-layout-templates']['no-js-notice'],
+			'piwik' => $this->config['piwik'],
 		];
 	}
 
@@ -914,7 +916,7 @@ class FunFunFactory {
 
 	public function newDonationConfirmationPresenter() {
 		return new DonationConfirmationHtmlPresenter(
-			$this->getIncludeTemplate( 'DonationConfirmation.twig' )
+			$this->getIncludeTemplate( 'DonationConfirmation.twig', [ 'piwikGoals' => [ 3 ] ] )
 		);
 	}
 

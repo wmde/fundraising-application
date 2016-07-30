@@ -7,6 +7,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\Domain\Model\PaymentMethod;
+use WMDE\Fundraising\Frontend\Infrastructure\PiwikEvents;
 use WMDE\Fundraising\Frontend\Presentation\SelectedConfirmationPage;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
@@ -24,12 +25,15 @@ class DonationConfirmationHtmlPresenter {
 		$this->template = $template;
 	}
 
-	public function present( Donation $donation, string $updateToken, SelectedConfirmationPage $selectedPage ): string {
-		return $this->template->render( $this->getConfirmationPageArguments( $donation, $updateToken, $selectedPage ) );
+	public function present( Donation $donation, string $updateToken, SelectedConfirmationPage $selectedPage,
+							 PiwikEvents $piwikEvents ): string {
+		return $this->template->render(
+			$this->getConfirmationPageArguments( $donation, $updateToken, $selectedPage, $piwikEvents )
+		);
 	}
 
 	private function getConfirmationPageArguments( Donation $donation, string $updateToken,
-												   SelectedConfirmationPage $selectedPage ) {
+												   SelectedConfirmationPage $selectedPage, PiwikEvents $piwikEvents ) {
 
 		return [
 			'main_template' => $selectedPage->getPageTitle(),
@@ -50,7 +54,8 @@ class DonationConfirmationHtmlPresenter {
 			],
 			'person' => $this->getPersonArguments( $donation ),
 			'bankData' => $this->getBankDataArguments( $donation->getPaymentMethod() ),
-			'initialFormValues' => $this->getInitialMembershipFormValues( $donation )
+			'initialFormValues' => $this->getInitialMembershipFormValues( $donation ),
+			'piwikEvents' => $piwikEvents->getEvents()
 		];
 	}
 

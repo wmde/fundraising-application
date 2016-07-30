@@ -123,5 +123,9 @@
 				"templates": []
 			}
 		]
+	},
+	"piwik": {
+		"baseUrl": "//tracking.wikimedia.de/",
+		"siteId": 1
 	}
 }

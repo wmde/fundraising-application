@@ -4,11 +4,11 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\App\RouteHandlers;
 
-use Silex\Application;
-use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\App\AccessDeniedException;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\PiwikVariableCollector;
 use WMDE\Fundraising\Frontend\UseCases\ShowDonationConfirmation\ShowDonationConfirmationRequest;
 
 /**
@@ -23,11 +23,11 @@ class ShowDonationConfirmationHandler {
 		$this->ffFactory = $ffFactory;
 	}
 
-	public function handle( ParameterBag $params ): Response {
-		$useCase = $this->ffFactory->newShowDonationConfirmationUseCase( $params->get( 'accessToken', '' ) );
+	public function handle( Request $request, array $sessionTrackingData ): Response {
+		$useCase = $this->ffFactory->newShowDonationConfirmationUseCase( $request->get( 'accessToken', '' ) );
 
 		$responseModel = $useCase->showConfirmation( new ShowDonationConfirmationRequest(
-			(int)$params->get( 'donationId', '' )
+			(int)$request->get( 'donationId', '' )
 		) );
 
 		if ( $responseModel->accessIsPermitted() ) {
@@ -35,8 +35,9 @@ class ShowDonationConfirmationHandler {
 			return new Response(
 				$this->ffFactory->newDonationConfirmationPresenter()->present(
 					$responseModel->getDonation(),
-					$params->get( 'updateToken', '' ),
-					$selectedConfirmationPage
+					$request->get( 'updateToken', '' ),
+					$selectedConfirmationPage,
+					PiwikVariableCollector::newForDonation( $sessionTrackingData, $responseModel->getDonation() )
 				)
 			);
 		}
