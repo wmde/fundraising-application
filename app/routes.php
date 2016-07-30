@@ -24,8 +24,10 @@ use WMDE\Fundraising\Frontend\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\AmountParser;
 use WMDE\Fundraising\Frontend\Infrastructure\CreditCardPaymentHandlerException;
 use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentRequest;
+use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\Frontend\UseCases\AddSubscription\SubscriptionRequest;
 use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationRequest;
 use WMDE\Fundraising\Frontend\UseCases\CancelMembershipApplication\CancellationRequest;
@@ -376,6 +378,17 @@ $app->post(
 	}
 );
 
+// Show a donation form with pre-filled payment values, e.g. when coming from a banner
+$app->get( 'donation/new', function ( Application $app, Request $request ) use ( $ffFactory ) {
+	$amount = Euro::newFromFloat( ( new AmountParser( 'de_DE' ) )->parseAsFloat( $request->get( 'betrag', '' ) ) );
+
+	return new Response( $ffFactory->newDonationFormPresenter()->present(
+		$amount,
+		$request->get( 'zahlweise', '' ),
+		intval( $request->get( 'periode', 0 ) )
+	) );
+} );
+
 $app->post(
 	'apply-for-membership',
 	function( Application $app, Request $httpRequest ) use ( $ffFactory ) {
@@ -455,9 +468,16 @@ $app->get(
 	}
 );
 
-$app->get( '/', function ( Application $app ) {
+$app->get( '/', function ( Application $app, Request $request ) use ( $ffFactory ) {
 	return $app->handle(
-		Request::create( '/page/DonationForm', 'GET' ),
+		Request::create(
+			'/donation/new',
+			'GET',
+			$request->query->all(),
+			$request->cookies->all(),
+			[],
+			$request->server->all()
+		),
 		HttpKernelInterface::SUB_REQUEST
 	);
 } );
