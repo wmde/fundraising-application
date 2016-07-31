@@ -5,13 +5,13 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\HandlePayPalPaymentNotification;
 
 use Psr\Log\NullLogger;
-use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
-use WMDE\Fundraising\Frontend\Domain\Model\Donation;
-use WMDE\Fundraising\Frontend\Domain\Model\PayPalData;
-use WMDE\Fundraising\Frontend\Domain\Model\PayPalPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
-use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
-use WMDE\Fundraising\Frontend\Infrastructure\DonationEventLogger;
+use WMDE\Fundraising\Frontend\DonatingContext\DataAccess\DoctrineDonationRepository;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\DonationConfirmationMailer;
+use WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\DonationEventLogger;
+use WMDE\Fundraising\Frontend\DonatingContext\UseCases\HandlePayPalPaymentNotification\HandlePayPalPaymentNotificationUseCase;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalData;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidPayPalNotificationRequest;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\DonationEventLoggerSpy;
@@ -21,10 +21,9 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeDonationRepository;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\LoggerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
-use WMDE\Fundraising\Frontend\UseCases\HandlePayPalPaymentNotification\HandlePayPalPaymentNotificationUseCase;
 
 /**
- * @covers WMDE\Fundraising\Frontend\UseCases\HandlePayPalPaymentNotification\HandlePayPalPaymentNotificationUseCase
+ * @covers WMDE\Fundraising\Frontend\DonatingContext\UseCases\HandlePayPalPaymentNotification\HandlePayPalPaymentNotificationUseCase
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
@@ -292,7 +291,7 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 
 		$this->assertTrue( $useCase->handleNotification( $request ) );
 
-		/** @var PayPalPayment $payment */
+		/** @var \WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment $payment */
 		$payment = $fakeRepository->getDonationById( $donation->getId() )->getPaymentMethod();
 
 		$this->assertTrue(
@@ -321,11 +320,11 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$this->assertTrue( $useCase->handleNotification( $request ) );
 
 		$donation = $fakeRepository->getDonationById( $donation->getId() );
-		/** @var PayPalPayment $payment */
+		/** @var \WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment $payment */
 		$payment = $donation->getPaymentMethod();
 		$childDonation = $fakeRepository->getDonationById( $payment->getPayPalData()->getChildPaymentEntityId( $transactionId ) );
 		$this->assertNotNull( $childDonation );
-		/** @var PayPalPayment $childDonationPaymentMethod */
+		/** @var \WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment $childDonationPaymentMethod */
 		$childDonationPaymentMethod = $childDonation->getPaymentMethod();
 		$this->assertEquals( $transactionId, $childDonationPaymentMethod->getPayPalData()->getPaymentId() );
 		$this->assertEquals( $donation->getAmount(), $childDonation->getAmount() );
@@ -356,7 +355,7 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$this->assertTrue( $useCase->handleNotification( $request ) );
 
 		$donation = $fakeRepository->getDonationById( $donation->getId() );
-		/** @var PayPalPayment $payment */
+		/** @var \WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment $payment */
 		$payment = $donation->getPaymentMethod();
 		$childDonationId = $payment->getPayPalData()->getChildPaymentEntityId( $transactionId );
 
@@ -440,7 +439,7 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$useCase->handleNotification( $request );
 
 		$this->assertCount( 1, $repositorySpy->getStoreDonationCalls() );
-		/** @var Donation $newDonation */
+		/** @var \WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation $newDonation */
 		$newDonation = $repositorySpy->getStoreDonationCalls()[0];
 		$this->assertNotEquals( $donation, $newDonation );
 

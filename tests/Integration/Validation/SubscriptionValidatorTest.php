@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\Validation;
 
 use WMDE\Fundraising\Entities\Address;
 use WMDE\Fundraising\Entities\Subscription;
-use WMDE\Fundraising\Frontend\Domain\NullDomainNameValidator;
+use WMDE\Fundraising\Frontend\Infrastructure\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\InMemorySubscriptionRepository;
 use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
 use WMDE\Fundraising\Frontend\Validation\AllowedValuesValidator;

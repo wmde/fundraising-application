@@ -10,7 +10,7 @@ use Monolog\Handler\BufferHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
+use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\ConfigReader;
 
 /**
  * @var FunFunFactory $ffFactory

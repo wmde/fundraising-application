@@ -8,13 +8,13 @@ use DateTime;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use WMDE\Fundraising\Entities\Donation;
-use WMDE\Fundraising\Frontend\DataAccess\DoctrineCommentFinder;
-use WMDE\Fundraising\Frontend\Domain\CommentListingException;
-use WMDE\Fundraising\Frontend\Domain\ReadModel\CommentWithAmount;
+use WMDE\Fundraising\Frontend\DonatingContext\DataAccess\DoctrineCommentFinder;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\CommentListingException;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\CommentWithAmount;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
- * @covers WMDE\Fundraising\Frontend\DataAccess\DoctrineCommentFinder
+ * @covers WMDE\Fundraising\Frontend\DonatingContext\DataAccess\DoctrineCommentFinder
  *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >

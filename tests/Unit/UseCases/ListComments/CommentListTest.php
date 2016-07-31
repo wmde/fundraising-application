@@ -4,11 +4,11 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\UseCases\ListComments;
 
-use WMDE\Fundraising\Frontend\Domain\ReadModel\CommentWithAmount;
-use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentList;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\CommentWithAmount;
+use WMDE\Fundraising\Frontend\DonatingContext\UseCases\ListComments\CommentList;
 
 /**
- * @covers WMDE\Fundraising\Frontend\UseCases\ListComments\CommentList
+ * @covers WMDE\Fundraising\Frontend\DonatingContext\UseCases\ListComments\CommentList
  *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >

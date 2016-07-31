@@ -4,19 +4,19 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\CancelMembershipApplication;
 
-use WMDE\Fundraising\Frontend\Domain\Model\MembershipApplication;
-use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepository;
-use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationAuthorizer;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\MembershipApplicationAuthorizer;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplication;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\MembershipApplicationRepository;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\CancelMembershipApplication\CancellationRequest;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\CancelMembershipApplication\CancelMembershipApplicationUseCase;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingMembershipAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\InMemoryMembershipApplicationRepository;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingMembershipAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
-use WMDE\Fundraising\Frontend\UseCases\CancelMembershipApplication\CancellationRequest;
-use WMDE\Fundraising\Frontend\UseCases\CancelMembershipApplication\CancelMembershipApplicationUseCase;
 
 /**
- * @covers WMDE\Fundraising\Frontend\UseCases\CancelMembershipApplication\CancelMembershipApplicationUseCase
+ * @covers WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\CancelMembershipApplication\CancelMembershipApplicationUseCase
  *
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >

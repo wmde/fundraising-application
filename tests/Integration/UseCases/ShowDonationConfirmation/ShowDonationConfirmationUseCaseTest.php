@@ -4,15 +4,15 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\ShowDonationConfirmation;
 
+use WMDE\Fundraising\Frontend\DonatingContext\UseCases\ShowDonationConfirmation\ShowDonationConfirmationRequest;
+use WMDE\Fundraising\Frontend\DonatingContext\UseCases\ShowDonationConfirmation\ShowDonationConfirmationUseCase;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeDonationRepository;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingDonationAuthorizer;
-use WMDE\Fundraising\Frontend\UseCases\ShowDonationConfirmation\ShowDonationConfirmationRequest;
-use WMDE\Fundraising\Frontend\UseCases\ShowDonationConfirmation\ShowDonationConfirmationUseCase;
 
 /**
- * @covers WMDE\Fundraising\Frontend\UseCases\ShowDonationConfirmation\ShowDonationConfirmationUseCase
+ * @covers WMDE\Fundraising\Frontend\DonatingContext\UseCases\ShowDonationConfirmation\ShowDonationConfirmationUseCase
  *
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >

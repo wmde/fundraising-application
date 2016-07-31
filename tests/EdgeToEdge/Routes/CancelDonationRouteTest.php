@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
-use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;

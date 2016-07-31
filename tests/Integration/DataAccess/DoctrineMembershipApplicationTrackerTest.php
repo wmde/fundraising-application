@@ -6,14 +6,14 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
 
 use Doctrine\ORM\EntityManager;
 use WMDE\Fundraising\Entities\MembershipApplication;
-use WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipApplicationTracker;
-use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTracker;
-use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTrackingInfo;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess\DoctrineMembershipApplicationTracker;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\MembershipApplicationTracker;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\MembershipApplicationTrackingInfo;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
- * @covers WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipApplicationTracker
+ * @covers WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess\DoctrineMembershipApplicationTracker
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >

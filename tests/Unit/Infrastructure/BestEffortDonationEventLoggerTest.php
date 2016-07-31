@@ -5,19 +5,18 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
 use Psr\Log\LoggerInterface;
-use WMDE\Fundraising\Frontend\Infrastructure\BestEffortDonationEventLogger;
-use WMDE\Fundraising\Frontend\Infrastructure\DonationEventLogException;
-use WMDE\Fundraising\Frontend\Infrastructure\DonationEventLogger;
+use WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\BestEffortDonationEventLogger;
+use WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\DonationEventLogException;
+use WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\DonationEventLogger;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\DonationEventLoggerSpy;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Infrastructure\BestEffortDonationEventLogger
+ * @covers WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\BestEffortDonationEventLogger
  *
  * @licence GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class BestEffortDonationEventLoggerTest extends \PHPUnit_Framework_TestCase
-{
+class BestEffortDonationEventLoggerTest extends \PHPUnit_Framework_TestCase {
 
 	const DONATION_ID = 1337;
 	const MESSAGE = 'a semi-important event has occured';

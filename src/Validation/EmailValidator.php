@@ -4,8 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Validation;
 
-use WMDE\Fundraising\Frontend\Domain\DomainNameValidator;
-use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
+use WMDE\Fundraising\Frontend\Infrastructure\DomainNameValidator;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\EmailAddress;
 
 /**
  * @licence GNU GPL v2+

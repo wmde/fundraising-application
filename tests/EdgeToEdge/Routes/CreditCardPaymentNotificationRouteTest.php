@@ -5,10 +5,9 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Symfony\Component\HttpKernel\Client;
-use WMDE\Fundraising\Frontend\Domain\Model\CreditCardPayment;
-use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\CreditCardExpiry;
+use WMDE\Fundraising\Frontend\PaymentContext\Infrastructure\CreditCardExpiry;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeCreditCardService;
@@ -97,7 +96,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 	private function assertCreditCardDataGotPersisted( DonationRepository $donationRepo, $request ) {
 		$donation = $donationRepo->getDonationById( self::DONATION_ID );
 
-		/** @var CreditCardPayment $paymentMethod */
+		/** @var \WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\CreditCardPayment $paymentMethod */
 		$paymentMethod = $donation->getPayment()->getPaymentMethod();
 		$ccData = $paymentMethod->getCreditCardData();
 

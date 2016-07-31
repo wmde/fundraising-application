@@ -8,11 +8,11 @@ use PHPUnit_Framework_MockObject_MockObject;
 use WMDE\Fundraising\Entities\Address;
 use WMDE\Fundraising\Entities\Subscription;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\ConfirmSubscription\ConfirmSubscriptionUseCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\InMemorySubscriptionRepository;
-use WMDE\Fundraising\Frontend\UseCases\ConfirmSubscription\ConfirmSubscriptionUseCase;
 
 /**
- * @covers WMDE\Fundraising\Frontend\UseCases\ConfirmSubscription\ConfirmSubscriptionUseCase
+ * @covers WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\ConfirmSubscription\ConfirmSubscriptionUseCase
  *
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
@@ -87,7 +87,7 @@ class ConfirmSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$repo = new InMemorySubscriptionRepository();
 		$repo->storeSubscription( $this->newSubscription() );
 
-		$useCase = new ConfirmSubscriptionUseCase( $repo, $this->newMailer() );
+		$useCase = new \WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\ConfirmSubscription\ConfirmSubscriptionUseCase( $repo, $this->newMailer() );
 		$useCase->confirmSubscription( self::CONFIRMATION_CODE );
 
 		$this->assertSame(
@@ -104,7 +104,7 @@ class ConfirmSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$mailer = $this->newMailer();
 		$mailer->expects( $this->once() )->method( 'sendMail' );
 
-		$useCase = new ConfirmSubscriptionUseCase( $repo, $mailer );
+		$useCase = new \WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\ConfirmSubscription\ConfirmSubscriptionUseCase( $repo, $mailer );
 
 		$this->assertTrue( $useCase->confirmSubscription( self::CONFIRMATION_CODE )->isSuccessful() );
 	}

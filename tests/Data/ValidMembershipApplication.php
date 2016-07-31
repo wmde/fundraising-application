@@ -4,17 +4,17 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Data;
 
+use WMDE\Euro\Euro;
 use WMDE\Fundraising\Entities\MembershipApplication as DoctrineMembershipApplication;
-use WMDE\Fundraising\Frontend\Domain\Model\BankData;
-use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
-use WMDE\Fundraising\Frontend\Domain\Model\Euro;
-use WMDE\Fundraising\Frontend\Domain\Model\Iban;
-use WMDE\Fundraising\Frontend\Domain\Model\MembershipApplicant;
-use WMDE\Fundraising\Frontend\Domain\Model\MembershipApplication;
-use WMDE\Fundraising\Frontend\Domain\Model\MembershipPayment;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
-use WMDE\Fundraising\Frontend\Domain\Model\PhoneNumber;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\EmailAddress;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplicant;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplication;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipPayment;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\PhoneNumber;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 
 /**
  * newDomainEntity and newDoctrineEntity return equivalent objects.

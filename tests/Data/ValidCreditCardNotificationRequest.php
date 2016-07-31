@@ -4,8 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Data;
 
-use WMDE\Fundraising\Frontend\Domain\Model\Euro;
-use WMDE\Fundraising\Frontend\UseCases\CreditCardPaymentNotification\CreditCardPaymentNotificationRequest;
+use WMDE\Euro\Euro;
+use WMDE\Fundraising\Frontend\DonatingContext\UseCases\CreditCardPaymentNotification\CreditCardPaymentNotificationRequest;
 
 /**
  * @license GNU GPL v2+

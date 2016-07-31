@@ -4,8 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
+use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\DisplayPage\PageDisplayResponse;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
-use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageDisplayResponse;
 
 /**
  * @licence GNU GPL v2+

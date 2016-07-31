@@ -4,15 +4,15 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\GenerateIban;
 
-use WMDE\Fundraising\Frontend\Domain\BankDataConverter;
-use WMDE\Fundraising\Frontend\Domain\Model\BankData;
-use WMDE\Fundraising\Frontend\Domain\Model\Iban;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataConverter;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
+use WMDE\Fundraising\Frontend\PaymentContext\UseCases\GenerateIban\GenerateIbanRequest;
+use WMDE\Fundraising\Frontend\PaymentContext\UseCases\GenerateIban\GenerateIbanUseCase;
 use WMDE\Fundraising\Frontend\ResponseModel\IbanResponse;
-use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanRequest;
-use WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanUseCase;
 
 /**
- * @covers WMDE\Fundraising\Frontend\UseCases\GenerateIban\GenerateIbanUseCase
+ * @covers WMDE\Fundraising\Frontend\PaymentContext\UseCases\GenerateIban\GenerateIbanUseCase
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen <kai.nissen@wikimedia.de>

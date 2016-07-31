@@ -4,12 +4,12 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\UseCases\ApplyForMembership;
 
-use WMDE\Fundraising\Frontend\Domain\Model\Iban;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\ApplyForMembership\ApplicationValidationResult as Result;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\ApplyForMembership\ApplyForMembershipRequest;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\ApplyForMembership\MembershipApplicationValidator;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplicationRequest;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingEmailValidator;
-use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplicationValidationResult as Result;
-use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipRequest;
-use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\MembershipApplicationValidator;
 use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 use WMDE\Fundraising\Frontend\Validation\EmailValidator;
@@ -18,7 +18,7 @@ use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
 use WMDE\Fundraising\Frontend\Validation\ValidationResult;
 
 /**
- * @covers WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\MembershipApplicationValidator
+ * @covers WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator
  *
  * @license GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >

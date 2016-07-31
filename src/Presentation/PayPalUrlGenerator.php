@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Presentation;
 
-use WMDE\Fundraising\Frontend\Domain\Model\Euro;
+use WMDE\Euro\Euro;
 
 /**
  * @licence GNU GPL v2+

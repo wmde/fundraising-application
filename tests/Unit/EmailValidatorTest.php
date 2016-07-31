@@ -4,8 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit;
 
-use WMDE\Fundraising\Frontend\Domain\DomainNameValidator;
-use WMDE\Fundraising\Frontend\Domain\NullDomainNameValidator;
+use WMDE\Fundraising\Frontend\Infrastructure\DomainNameValidator;
+use WMDE\Fundraising\Frontend\Infrastructure\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Validation\EmailValidator;
 
 /**

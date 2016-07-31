@@ -12,9 +12,11 @@
 		"twig/twig": "~1.23",
 		"pimple/pimple": "~1.0",
 
+		"wmde/fundraising-store": "~2.0@dev",
+		"wmde/euro": "~1.0.0",
+
 		"jeroen/file-fetcher": "~3.1",
 		"jeroen/generic-decorator": "~0.1.0",
-		"wmde/fundraising-store": "~2.0@dev",
 		"addwiki/mediawiki-api-base": "~2.1",
 		"psr/log": "~1.0",
 		"monolog/monolog": "~1.17",
@@ -79,8 +81,8 @@
 	"scripts": {
 		"test": [
 			"composer validate --no-interaction",
-			"vendor/bin/phpunit",
-			"vendor/bin/covers-validator"
+			"vendor/bin/covers-validator",
+			"vendor/bin/phpunit"
 		],
 		"cs": [
 			"@phpcs"

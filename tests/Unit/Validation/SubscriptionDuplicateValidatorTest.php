@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Unit;
 
 use WMDE\Fundraising\Entities\Subscription;
-use WMDE\Fundraising\Frontend\Domain\Repositories\SubscriptionRepository;
+use WMDE\Fundraising\Frontend\SubscriptionContext\Domain\Repositories\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\Validation\SubscriptionDuplicateValidator;
 
 class SubscriptionDuplicateValidatorTest extends \PHPUnit_Framework_TestCase {

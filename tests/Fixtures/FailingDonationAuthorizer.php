@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
-use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizer;
+use WMDE\Fundraising\Frontend\DonatingContext\Authorization\DonationAuthorizer;
 
 /**
  * @licence GNU GPL v2+

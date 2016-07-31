@@ -2,12 +2,12 @@
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
-use WMDE\Fundraising\Frontend\Domain\Model\BankTransferPayment;
-use WMDE\Fundraising\Frontend\Domain\Model\DirectDebitPayment;
-use WMDE\Fundraising\Frontend\Domain\Model\Donation;
-use WMDE\Fundraising\Frontend\Domain\Model\Donor;
-use WMDE\Fundraising\Frontend\Domain\Model\PaymentMethod;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\Infrastructure\PiwikEvents;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankTransferPayment;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
 use WMDE\Fundraising\Frontend\Presentation\SelectedConfirmationPage;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 

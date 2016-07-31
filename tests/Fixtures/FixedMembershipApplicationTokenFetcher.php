@@ -4,9 +4,9 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
-use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTokenFetcher;
-use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTokenFetchingException;
-use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTokens;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\MembershipApplicationTokenFetcher;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\MembershipApplicationTokenFetchingException;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\MembershipApplicationTokens;
 
 /**
  * @licence GNU GPL v2+
@@ -23,7 +23,7 @@ class FixedMembershipApplicationTokenFetcher implements MembershipApplicationTok
 	/**
 	 * @param int $applicationId
 	 *
-	 * @return MembershipApplicationTokens
+	 * @return \WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\MembershipApplicationTokens
 	 * @throws MembershipApplicationTokenFetchingException
 	 */
 	public function getTokens( int $applicationId ): MembershipApplicationTokens {

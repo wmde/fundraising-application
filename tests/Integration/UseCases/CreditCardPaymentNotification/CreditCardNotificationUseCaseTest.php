@@ -5,11 +5,12 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\CreditCardPaymentNotification;
 
 use Psr\Log\NullLogger;
-use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
-use WMDE\Fundraising\Frontend\Domain\Model\Euro;
-use WMDE\Fundraising\Frontend\Infrastructure\CreditCardPaymentHandlerException;
-use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
-use WMDE\Fundraising\Frontend\Infrastructure\DonationEventLogger;
+use WMDE\Euro\Euro;
+use WMDE\Fundraising\Frontend\DonatingContext\DataAccess\DoctrineDonationRepository;
+use WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\DonationConfirmationMailer;
+use WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\DonationEventLogger;
+use WMDE\Fundraising\Frontend\DonatingContext\UseCases\CreditCardPaymentNotification\CreditCardNotificationUseCase;
+use WMDE\Fundraising\Frontend\DonatingContext\UseCases\CreditCardPaymentNotification\CreditCardPaymentHandlerException;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidCreditCardNotificationRequest;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\DonationEventLoggerSpy;
@@ -19,10 +20,9 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeCreditCardService;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeDonationRepository;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
-use WMDE\Fundraising\Frontend\UseCases\CreditCardPaymentNotification\CreditCardNotificationUseCase;
 
 /**
- * @covers WMDE\Fundraising\Frontend\UseCases\CreditCardPaymentNotification\CreditCardNotificationUseCase
+ * @covers WMDE\Fundraising\Frontend\DonatingContext\UseCases\CreditCardPaymentNotification\CreditCardNotificationUseCase
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >

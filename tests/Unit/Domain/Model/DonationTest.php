@@ -5,12 +5,11 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Domain\Model;
 
 use RuntimeException;
-use WMDE\Fundraising\Frontend\Domain\Model\Donation;
-use WMDE\Fundraising\Frontend\Domain\Model\PayPalData;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Domain\Model\Donation
+ * @covers WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation
  *
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
@@ -56,7 +55,7 @@ class DonationTest extends \PHPUnit_Framework_TestCase {
 		return [
 			[ Donation::STATUS_CANCELLED ],
 			[ Donation::STATUS_EXTERNAL_BOOKED ],
-			[ Donation::STATUS_EXTERNAL_INCOMPLETE ],
+			[ \WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation::STATUS_EXTERNAL_INCOMPLETE ],
 			[ Donation::STATUS_PROMISE ],
 		];
 	}
@@ -113,7 +112,7 @@ class DonationTest extends \PHPUnit_Framework_TestCase {
 		$donation = ValidDonation::newDirectDebitDonation();
 
 		$this->expectException( RuntimeException::class );
-		$donation->addPayPalData( new PayPalData() );
+		$donation->addPayPalData( new \WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalData() );
 	}
 
 	/**
@@ -155,12 +154,12 @@ class DonationTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testAddCommentThrowsExceptionWhenCommentAlreadySet() {
-		$donation = new Donation(
+		$donation = new \WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation(
 			null,
-			Donation::STATUS_NEW,
+			\WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation::STATUS_NEW,
 			ValidDonation::newDonor(),
 			ValidDonation::newDirectDebitPayment(),
-			Donation::OPTS_INTO_NEWSLETTER,
+			\WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation::OPTS_INTO_NEWSLETTER,
 			ValidDonation::newTrackingInfo(),
 			ValidDonation::newPublicComment()
 		);

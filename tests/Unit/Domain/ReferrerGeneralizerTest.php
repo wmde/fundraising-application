@@ -4,11 +4,11 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Tests\Unit;
 
-use WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer;
+use WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddDonation\ReferrerGeneralizer;
 use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer
+ * @covers WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddDonation\ReferrerGeneralizer
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >

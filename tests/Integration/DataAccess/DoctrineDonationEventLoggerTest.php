@@ -5,8 +5,8 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
 
 use Doctrine\ORM\EntityManager;
 use WMDE\Fundraising\Entities\Donation;
-use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationEventLogger;
-use WMDE\Fundraising\Frontend\Infrastructure\DonationEventLogException;
+use WMDE\Fundraising\Frontend\DonatingContext\DataAccess\DoctrineDonationEventLogger;
+use WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\DonationEventLogException;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 

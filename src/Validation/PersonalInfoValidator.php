@@ -2,7 +2,7 @@
 
 namespace WMDE\Fundraising\Frontend\Validation;
 
-use WMDE\Fundraising\Frontend\Domain\Model\Donor;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donor;
 
 /**
  * @license GNU GPL v2+

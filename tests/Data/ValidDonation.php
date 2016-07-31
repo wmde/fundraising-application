@@ -4,23 +4,23 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Data;
 
-use WMDE\Fundraising\Frontend\Domain\Model\BankData;
-use WMDE\Fundraising\Frontend\Domain\Model\BankTransferPayment;
-use WMDE\Fundraising\Frontend\Domain\Model\CreditCardPayment;
-use WMDE\Fundraising\Frontend\Domain\Model\CreditCardTransactionData;
-use WMDE\Fundraising\Frontend\Domain\Model\DirectDebitPayment;
-use WMDE\Fundraising\Frontend\Domain\Model\Donation;
-use WMDE\Fundraising\Frontend\Domain\Model\DonationComment;
-use WMDE\Fundraising\Frontend\Domain\Model\DonationPayment;
-use WMDE\Fundraising\Frontend\Domain\Model\DonationTrackingInfo;
-use WMDE\Fundraising\Frontend\Domain\Model\Donor;
-use WMDE\Fundraising\Frontend\Domain\Model\Euro;
-use WMDE\Fundraising\Frontend\Domain\Model\Iban;
-use WMDE\Fundraising\Frontend\Domain\Model\PaymentMethod;
-use WMDE\Fundraising\Frontend\Domain\Model\PayPalData;
-use WMDE\Fundraising\Frontend\Domain\Model\PayPalPayment;
+use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonationComment;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonationPayment;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonationTrackingInfo;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donor;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankTransferPayment;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\CreditCardPayment;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\CreditCardTransactionData;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalData;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
 
 /**
  * @licence GNU GPL v2+

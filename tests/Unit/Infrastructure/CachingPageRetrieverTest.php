@@ -7,7 +7,6 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\Cache;
 use WMDE\Fundraising\Frontend\Infrastructure\CachingPageRetriever;
-use WMDE\Fundraising\Frontend\Infrastructure\PageRetriever;
 
 /**
  * @covers WMDE\Fundraising\Frontend\Infrastructure\CachingPageRetriever
@@ -30,15 +29,15 @@ class CachingPageRetrieverTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertSame(
 			self::LIVE_CONTENT,
-			$cachingRetriever->fetchPage( self::PAGE_NAME, PageRetriever::MODE_RAW )
+			$cachingRetriever->fetchPage( self::PAGE_NAME, \WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\PageRetriever::MODE_RAW )
 		);
 	}
 
 	/**
-	 * @return PageRetriever|\PHPUnit_Framework_MockObject_MockObject
+	 * @return \WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\PageRetriever|\PHPUnit_Framework_MockObject_MockObject
 	 */
-	private function newLivePageRetriever(): PageRetriever {
-		$pageRetriever = $this->createMock( PageRetriever::class );
+	private function newLivePageRetriever(): \WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\PageRetriever {
+		$pageRetriever = $this->createMock( \WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\PageRetriever::class );
 		$pageRetriever->method( 'fetchPage' )->willReturn( self::LIVE_CONTENT );
 		return $pageRetriever;
 	}
@@ -63,7 +62,7 @@ class CachingPageRetrieverTest extends \PHPUnit_Framework_TestCase {
 			$cache
 		);
 
-		$cachingRetriever->fetchPage( self::PAGE_NAME, PageRetriever::MODE_RAW );
+		$cachingRetriever->fetchPage( self::PAGE_NAME, \WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\PageRetriever::MODE_RAW );
 
 		$this->assertSame(
 			self::LIVE_CONTENT,
@@ -82,7 +81,7 @@ class CachingPageRetrieverTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertSame(
 			self::CACHED_CONTENT,
-			$cachingRetriever->fetchPage( self::PAGE_NAME, PageRetriever::MODE_RAW )
+			$cachingRetriever->fetchPage( self::PAGE_NAME, \WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\PageRetriever::MODE_RAW )
 		);
 	}
 

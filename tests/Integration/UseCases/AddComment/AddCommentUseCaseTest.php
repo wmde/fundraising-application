@@ -4,21 +4,20 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\AddSubscription;
 
-use WMDE\Fundraising\Frontend\Domain\Model\DonationComment;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonationComment;
+use WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddComment\AddCommentRequest;
+use WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddComment\AddCommentUseCase;
+use WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddComment\AddCommentValidationResult;
+use WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddComment\AddCommentValidator;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeDonationRepository;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingDonationRepository;
-use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
-use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentRequest;
-use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentUseCase;
-use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentValidationResult;
-use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentValidator;
 use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
 
 /**
- * @covers WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentUseCase
+ * @covers WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddComment\AddCommentUseCase
  *
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >

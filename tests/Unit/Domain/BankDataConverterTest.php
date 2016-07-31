@@ -6,12 +6,12 @@ namespace WMDE\Fundraising\Tests\Unit;
 
 use InvalidArgumentException;
 use RuntimeException;
-use WMDE\Fundraising\Frontend\Domain\BankDataConverter;
-use WMDE\Fundraising\Frontend\Domain\Model\BankData;
-use WMDE\Fundraising\Frontend\Domain\Model\Iban;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataConverter;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Domain\BankDataConverter
+ * @covers WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataConverter
  *
  * @licence GNU GPL v2+
  * @author Christoph Fischer <christoph.fischer@wikimedia.de >
@@ -29,7 +29,7 @@ class BankDataConverterTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * @expectedException \WMDE\Fundraising\Frontend\Domain\BankDataLibraryInitializationException
+	 * @expectedException \WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataLibraryInitializationException
 	 */
 	public function testGivenNotExistingBankDataFile_constructorThrowsException() {
 		$this->newBankDataConverter( '/foo/bar/awesome.data' );

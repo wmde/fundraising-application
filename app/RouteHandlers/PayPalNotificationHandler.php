@@ -4,14 +4,13 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\App\RouteHandlers;
 
-use Silex\Application;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use WMDE\Fundraising\Frontend\Domain\Model\Euro;
+use WMDE\Euro\Euro;
+use WMDE\Fundraising\Frontend\DonatingContext\UseCases\HandlePayPalPaymentNotification\PayPalNotificationRequest;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifierException;
-use WMDE\Fundraising\Frontend\UseCases\HandlePayPalPaymentNotification\PayPalNotificationRequest;
 
 /**
  * @license GNU GPL v2+

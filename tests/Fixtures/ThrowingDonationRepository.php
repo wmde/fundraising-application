@@ -4,10 +4,10 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
-use WMDE\Fundraising\Frontend\Domain\Model\Donation;
-use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
-use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
-use WMDE\Fundraising\Frontend\Domain\Repositories\StoreDonationException;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\DonationRepository;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\GetDonationException;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\StoreDonationException;
 
 /**
  * @licence GNU GPL v2+
@@ -31,9 +31,9 @@ class ThrowingDonationRepository implements DonationRepository {
 	 * This means the id of new donations needs to be null. The id can be accessed by calling getId on
 	 * the passed in Donation.
 	 *
-	 * @param Donation $donation
+	 * @param \WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation $donation
 	 *
-	 * @throws StoreDonationException
+	 * @throws \WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\StoreDonationException
 	 */
 	public function storeDonation( Donation $donation ) {
 		if ( $this->throwOnStoreDonation ) {
@@ -45,7 +45,7 @@ class ThrowingDonationRepository implements DonationRepository {
 	 * @param int $id
 	 *
 	 * @return Donation|null
-	 * @throws GetDonationException
+	 * @throws \WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\GetDonationException
 	 */
 	public function getDonationById( int $id ) {
 		if ( $this->onGetDonationById ) {

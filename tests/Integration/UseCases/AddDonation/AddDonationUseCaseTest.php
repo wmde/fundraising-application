@@ -5,28 +5,28 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\AddDonation;
 
 use PHPUnit_Framework_MockObject_MockObject;
-use WMDE\Fundraising\Frontend\Domain\Model\Donation;
-use WMDE\Fundraising\Frontend\Domain\Model\Euro;
-use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
+use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
-use WMDE\Fundraising\Frontend\Domain\ReferrerGeneralizer;
-use WMDE\Fundraising\Frontend\Domain\Repositories\DonationRepository;
-use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
-use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
-use WMDE\Fundraising\Frontend\Infrastructure\DonationTokenFetcher;
-use WMDE\Fundraising\Frontend\Infrastructure\DonationTokens;
+use WMDE\Fundraising\Frontend\DonatingContext\Authorization\DonationTokenFetcher;
+use WMDE\Fundraising\Frontend\DonatingContext\Authorization\DonationTokens;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\DonationRepository;
+use WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\DonationConfirmationMailer;
+use WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddDonation\AddDonationPolicyValidator;
+use WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddDonation\AddDonationRequest;
+use WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddDonation\AddDonationUseCase;
+use WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddDonation\AddDonationValidationResult;
+use WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddDonation\AddDonationValidator;
+use WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddDonation\ReferrerGeneralizer;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeDonationRepository;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedDonationTokenFetcher;
-use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationPolicyValidator;
-use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationRequest;
-use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationUseCase;
-use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationValidationResult;
-use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationValidator;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 
 /**
- * @covers WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationUseCase
+ * @covers WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddDonation\AddDonationUseCase
  *
  * @license GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
