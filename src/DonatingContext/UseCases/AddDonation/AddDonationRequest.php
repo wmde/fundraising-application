@@ -42,9 +42,10 @@ class AddDonationRequest {
 	private $source = ''; # TODO: generated from referer
 	private $totalImpressionCount = 0;
 	private $singleBannerImpressionCount = 0;
-	private $color = ''; # TODO: drop this?
-	private $skin = ''; # TODO: drop this?
-	private $layout = ''; # TODO: drop this?
+	// Legacy values, will be deprecated in the future
+	private $color = '';
+	private $skin = '';
+	private $layout = '';
 
 	public function getOptIn(): string {
 		return $this->optIn;
@@ -121,28 +122,25 @@ class AddDonationRequest {
 		$this->singleBannerImpressionCount = $singleBannerImpressionCount;
 	}
 
+	/*
+	 * @deprecated
+	 */
 	public function getColor(): string {
 		return $this->color;
 	}
 
-	public function setColor( string $color ) {
-		$this->color = $color;
-	}
-
+	/*
+	 * @deprecated
+	 */
 	public function getSkin(): string {
 		return $this->skin;
 	}
 
-	public function setSkin( string $skin ) {
-		$this->skin = $skin;
-	}
-
+	/*
+	 * @deprecated
+	 */
 	public function getLayout(): string {
 		return $this->layout;
-	}
-
-	public function setLayout( string $layout ) {
-		$this->layout = $layout;
 	}
 
 	public function getDonorType(): string {

@@ -21,10 +21,8 @@ class ValidAddDonationRequest {
 		$request = new AddDonationRequest();
 		$request->setAmount( Euro::newFromInt( 5 ) );
 		$request->setBankData( self::newValidBankData() );
-		$request->setColor( ValidDonation::TRACKING_COLOR );
 		$request->setInterval( ValidDonation::PAYMENT_INTERVAL_IN_MONTHS );
 		$request->setOptIn( (string) ValidDonation::OPTS_INTO_NEWSLETTER );
-		$request->setLayout( ValidDonation::TRACKING_LAYOUT );
 		$request->setPaymentType( PaymentType::DIRECT_DEBIT );
 
 		$request->setDonorType( PersonName::PERSON_PRIVATE );
