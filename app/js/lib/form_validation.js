@@ -4,6 +4,13 @@ var jQuery = require( 'jquery' ),
 	objectAssign = require( 'object-assign' ),
 	_ = require( 'underscore' ),
 
+	ValidationStates = {
+		OK: 'OK',
+		ERR: 'ERR',
+		INCOMPLETE: 'INCOMPLETE',
+		NOT_APPLICABLE: 'NOT_APPLICABLE'
+	},
+
 	isEmptyString = function ( value ) {
 		return value === '';
 	},
@@ -21,11 +28,11 @@ var jQuery = require( 'jquery' ),
 		validate: function ( formValues ) {
 			var requiredFields = this.getRequiredFieldsForAddressType( formValues.addressType );
 			if ( this.formValuesHaveEmptyRequiredFields( formValues, requiredFields ) ) {
-				return { status: 'INCOMPLETE' };
+				return { status: ValidationStates.INCOMPLETE };
 			}
 			// Don't send anything to server if there are no fields to validate
 			if ( requiredFields.length === 0 ) {
-				return { status: 'OK' };
+				return { status: ValidationStates.OK };
 			}
 			return this.sendFunction( this.validationUrl, formValues, null, 'json' );
 		},
@@ -84,7 +91,7 @@ var jQuery = require( 'jquery' ),
 		validate: function ( formValues ) {
 			if ( formValues.paymentType && formValues.paymentType !== 'BEZ' ) {
 				return {
-					status: 'OK'
+					status: ValidationStates.NOT_APPLICABLE
 				};
 			}
 
@@ -99,7 +106,7 @@ var jQuery = require( 'jquery' ),
 		 */
 		validateSepa: function ( formValues ) {
 			if ( formValues.iban === '' ) {
-				return { status: 'INCOMPLETE' };
+				return { status: ValidationStates.INCOMPLETE };
 			}
 
 			return this.getValidationResultFromApi(
@@ -114,7 +121,7 @@ var jQuery = require( 'jquery' ),
 		 */
 		validateNonSepa: function ( formValues ) {
 			if ( formValues.accountNumber === '' || formValues.bankCode === '' ) {
-				return { status: 'INCOMPLETE' };
+				return { status: ValidationStates.INCOMPLETE };
 			}
 
 			return this.getValidationResultFromApi(
@@ -197,5 +204,6 @@ module.exports = {
 	createSepaConfirmationValidator: function () {
 		return Object.create( SepaConfirmationValidator );
 	},
-	DefaultRequiredFieldsForAddressType: DefaultRequiredFieldsForAddressType
+	DefaultRequiredFieldsForAddressType: DefaultRequiredFieldsForAddressType,
+	ValidationStates: ValidationStates
 };

@@ -157,14 +157,14 @@ test( 'Given non-sepa debit type, bank data validation sends account number and 
 	t.end();
 } );
 
-test( 'Given a non-debit payment type, bank data validation succeeds', function ( t ) {
+test( 'Given a non-debit payment type, bank data validation is not applicable', function ( t ) {
 	var postFunctionSpy = sinon.spy(),
 		bankDataValidator = validation.createBankDataValidator(
 			'http://spenden.wikimedia.org/check-iban',
 			'http://spenden.wikimedia.org/generate-iban',
 			postFunctionSpy
 		),
-		expectedValidationResult = { status: 'OK' },
+		expectedValidationResult = { status: 'NOT_APPLICABLE' },
 		validationResult;
 
 	validationResult = bankDataValidator.validate( {
@@ -178,7 +178,7 @@ test( 'Given a non-debit payment type, bank data validation succeeds', function 
 	} );
 
 	t.equal( postFunctionSpy.callCount, 0, 'data is not sent' );
-	t.deepEqual( validationResult, expectedValidationResult, 'validation is successful' );
+	t.deepEqual( validationResult, expectedValidationResult, 'validation result ' );
 	t.end();
 } );
 
