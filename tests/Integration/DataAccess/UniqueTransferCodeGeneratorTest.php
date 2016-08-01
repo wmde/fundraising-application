@@ -5,18 +5,18 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
 
 use Doctrine\ORM\EntityManager;
-use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
-use WMDE\Fundraising\Frontend\DataAccess\UniqueTransferCodeGenerator;
-use WMDE\Fundraising\Frontend\Domain\Model\BankTransferPayment;
-use WMDE\Fundraising\Frontend\Domain\Model\Donation;
-use WMDE\Fundraising\Frontend\Domain\Model\DonationPayment;
-use WMDE\Fundraising\Frontend\Domain\Model\Euro;
-use WMDE\Fundraising\Frontend\Domain\TransferCodeGenerator;
+use WMDE\Euro\Euro;
+use WMDE\Fundraising\Frontend\DonatingContext\DataAccess\DoctrineDonationRepository;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonationPayment;
+use WMDE\Fundraising\Frontend\PaymentContext\DataAccess\UniqueTransferCodeGenerator;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankTransferPayment;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
- * @covers WMDE\Fundraising\Frontend\DataAccess\UniqueTransferCodeGenerator
+ * @covers WMDE\Fundraising\Frontend\PaymentContext\DataAccess\UniqueTransferCodeGenerator
  *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >

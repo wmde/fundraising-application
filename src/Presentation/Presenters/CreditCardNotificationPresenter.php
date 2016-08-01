@@ -4,8 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
+use WMDE\Fundraising\Frontend\DonatingContext\UseCases\CreditCardPaymentNotification\CreditCardNotificationResponse;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
-use WMDE\Fundraising\Frontend\UseCases\CreditCardPaymentNotification\CreditCardNotificationResponse;
 
 /**
  * @licence GNU GPL v2+

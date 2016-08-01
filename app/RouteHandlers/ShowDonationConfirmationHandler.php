@@ -7,9 +7,9 @@ namespace WMDE\Fundraising\Frontend\App\RouteHandlers;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\App\AccessDeniedException;
+use WMDE\Fundraising\Frontend\DonatingContext\UseCases\ShowDonationConfirmation\ShowDonationConfirmationRequest;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\PiwikVariableCollector;
-use WMDE\Fundraising\Frontend\UseCases\ShowDonationConfirmation\ShowDonationConfirmationRequest;
 
 /**
  * @license GNU GPL v2+

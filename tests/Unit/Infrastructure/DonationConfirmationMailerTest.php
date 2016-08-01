@@ -4,15 +4,15 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
-use WMDE\Fundraising\Frontend\Domain\Model\Donation;
-use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
-use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
-use WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\DonationConfirmationMailer;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\EmailAddress;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Infrastructure\DonationConfirmationMailer
+ * @covers WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\DonationConfirmationMailer
  *
  * @licence GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
@@ -24,7 +24,7 @@ class DonationConfirmationMailerTest extends \PHPUnit_Framework_TestCase {
 	public function testMailerExtractsEmailFromDonation() {
 		$mailer = new TemplateBasedMailerSpy( $this );
 
-		$donationMailer = new DonationConfirmationMailer( $mailer );
+		$donationMailer = new \WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\DonationConfirmationMailer( $mailer );
 		$donationMailer->sendConfirmationMailFor( $this->newDonation() );
 
 		$mailer->assertCalledOnce();

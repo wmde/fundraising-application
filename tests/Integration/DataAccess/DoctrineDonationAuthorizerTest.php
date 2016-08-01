@@ -8,12 +8,12 @@ use Codeception\Specify;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use WMDE\Fundraising\Entities\Donation;
-use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationAuthorizer;
-use WMDE\Fundraising\Frontend\Infrastructure\DonationAuthorizer;
+use WMDE\Fundraising\Frontend\DonatingContext\Authorization\DonationAuthorizer;
+use WMDE\Fundraising\Frontend\DonatingContext\DataAccess\DoctrineDonationAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
- * @covers WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationAuthorizer
+ * @covers WMDE\Fundraising\Frontend\DonatingContext\DataAccess\DoctrineDonationAuthorizer
  *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >

@@ -4,8 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
-use WMDE\Fundraising\Frontend\Domain\Model\Donation;
-use WMDE\Fundraising\Frontend\Domain\Model\Euro;
+use WMDE\Euro\Euro;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Infrastructure\PiwikEvents;
 use WMDE\Fundraising\Frontend\Infrastructure\PiwikVariableCollector;
 

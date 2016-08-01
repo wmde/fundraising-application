@@ -4,14 +4,14 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\PurgeCache;
 
-use WMDE\Fundraising\Frontend\Infrastructure\CachePurger;
+use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\CachePurger;
+use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\PurgeCache\PurgeCacheRequest;
+use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\PurgeCache\PurgeCacheResponse;
+use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\PurgeCache\PurgeCacheUseCase;
 use WMDE\Fundraising\Frontend\Infrastructure\CachePurgingException;
-use WMDE\Fundraising\Frontend\UseCases\PurgeCache\PurgeCacheRequest;
-use WMDE\Fundraising\Frontend\UseCases\PurgeCache\PurgeCacheResponse;
-use WMDE\Fundraising\Frontend\UseCases\PurgeCache\PurgeCacheUseCase;
 
 /**
- * @covers WMDE\Fundraising\Frontend\UseCases\PurgeCache\PurgeCacheUseCase
+ * @covers WMDE\Fundraising\Frontend\ApplicationContext\UseCases\PurgeCache\PurgeCacheUseCase
  *
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >

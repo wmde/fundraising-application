@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Presentation\Content;
 
 use Twig_Error_Loader;
-use WMDE\Fundraising\Frontend\Infrastructure\PageRetriever;
+use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\PageRetriever;
 
 /**
  * @license GNU GPL v2+

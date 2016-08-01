@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
-use WMDE\Fundraising\Frontend\Infrastructure\DonationEventLogger;
+use WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\DonationEventLogger;
 
 /**
  * @license GNU GPL v2+

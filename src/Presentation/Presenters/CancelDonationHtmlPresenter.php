@@ -2,8 +2,8 @@
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
+use WMDE\Fundraising\Frontend\DonatingContext\UseCases\CancelDonation\CancelDonationResponse;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
-use WMDE\Fundraising\Frontend\UseCases\CancelDonation\CancelDonationResponse;
 
 /**
  * Present the result of the donation cancellation request

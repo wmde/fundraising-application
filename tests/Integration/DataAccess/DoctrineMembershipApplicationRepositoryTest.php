@@ -6,17 +6,17 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
 
 use Doctrine\ORM\EntityManager;
 use WMDE\Fundraising\Entities\MembershipApplication as DoctrineApplication;
-use WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipApplicationRepository;
-use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
-use WMDE\Fundraising\Frontend\Domain\Repositories\GetMembershipApplicationException;
-use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepository;
-use WMDE\Fundraising\Frontend\Domain\Repositories\StoreMembershipApplicationException;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess\DoctrineMembershipApplicationRepository;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\EmailAddress;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\GetMembershipApplicationException;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\MembershipApplicationRepository;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\StoreMembershipApplicationException;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
- * @covers WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipApplicationRepository
+ * @covers WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess\DoctrineMembershipApplicationRepository
  *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >

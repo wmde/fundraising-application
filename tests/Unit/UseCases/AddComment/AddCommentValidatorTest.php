@@ -4,8 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\UseCases\AddComment;
 
-use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentRequest;
-use WMDE\Fundraising\Frontend\UseCases\AddComment\AddCommentValidator;
+use WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddComment\AddCommentRequest;
+use WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddComment\AddCommentValidator;
 
 class AddCommentValidatorTest extends \PHPUnit_Framework_TestCase {
 

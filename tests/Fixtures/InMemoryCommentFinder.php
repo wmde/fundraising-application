@@ -4,8 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
-use WMDE\Fundraising\Frontend\Domain\CommentFinder;
-use WMDE\Fundraising\Frontend\Domain\ReadModel\CommentWithAmount;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\CommentFinder;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\CommentWithAmount;
 
 /**
  * @licence GNU GPL v2+
@@ -23,7 +23,7 @@ class InMemoryCommentFinder implements CommentFinder {
 	 * @param int $limit
 	 * @param int $offset
 	 *
-	 * @return CommentWithAmount[]
+	 * @return \WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\CommentWithAmount[]
 	 */
 	public function getPublicComments( int $limit, int $offset = 0 ): array {
 		return array_slice( $this->comments, $offset, $limit );

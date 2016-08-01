@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
-use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationAuthorizer;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\MembershipApplicationAuthorizer;
 
 /**
  * @licence GNU GPL v2+

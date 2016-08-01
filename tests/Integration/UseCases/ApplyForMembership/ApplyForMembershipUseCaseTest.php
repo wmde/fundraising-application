@@ -4,28 +4,28 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\ApplyForMembership;
 
-use WMDE\Fundraising\Frontend\Domain\Model\BankData;
-use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
-use WMDE\Fundraising\Frontend\Domain\Model\Iban;
-use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepository;
-use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationPiwikTracker;
-use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTokenFetcher;
-use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTokens;
-use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTracker;
-use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTrackingInfo;
 use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\MembershipApplicationTokenFetcher;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\MembershipApplicationTokens;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\EmailAddress;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\MembershipApplicationRepository;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\MembershipApplicationPiwikTracker;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\MembershipApplicationTracker;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\MembershipApplicationTrackingInfo;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\ApplyForMembership\ApplicationValidationResult;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\ApplyForMembership\ApplyForMembershipRequest;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\ApplyForMembership\ApplyForMembershipUseCase;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\ApplyForMembership\MembershipApplicationValidator;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedMembershipApplicationTokenFetcher;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\InMemoryMembershipApplicationRepository;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
-use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplicationValidationResult;
-use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipRequest;
-use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipUseCase;
-use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\MembershipApplicationValidator;
 
 /**
- * @covers WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipUseCase
+ * @covers WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\ApplyForMembership\ApplyForMembershipUseCase
  *
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >

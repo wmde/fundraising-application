@@ -4,14 +4,14 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\AddDonation;
 
-use WMDE\Fundraising\Frontend\Domain\Model\BankData;
-use WMDE\Fundraising\Frontend\Domain\Model\Euro;
-use WMDE\Fundraising\Frontend\Domain\Model\Iban;
+use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
+use WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddDonation\AddDonationValidationResult;
+use WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddDonation\AddDonationValidator;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidAddDonationRequest;
 use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
-use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationValidationResult;
-use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationValidator;
 use WMDE\Fundraising\Frontend\Validation\AmountValidator;
 use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
 use WMDE\Fundraising\Frontend\Validation\EmailValidator;
@@ -19,7 +19,7 @@ use WMDE\Fundraising\Frontend\Validation\IbanValidator;
 use WMDE\Fundraising\Frontend\Validation\ValidationResult;
 
 /**
- * @covers WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationValidator
+ * @covers WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddDonation\AddDonationValidator
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >

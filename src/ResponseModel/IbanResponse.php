@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\ResponseModel;
 
-use WMDE\Fundraising\Frontend\Domain\Model\BankData;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 
 /**
  * @licence GNU GPL v2+

@@ -6,17 +6,17 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
 
 use Doctrine\ORM\EntityManager;
 use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
-use WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository;
-use WMDE\Fundraising\Frontend\Domain\Model\Donation;
-use WMDE\Fundraising\Frontend\Domain\Repositories\GetDonationException;
-use WMDE\Fundraising\Frontend\Domain\Repositories\StoreDonationException;
+use WMDE\Fundraising\Frontend\DonatingContext\DataAccess\DoctrineDonationRepository;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\GetDonationException;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\StoreDonationException;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDoctrineDonation;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
- * @covers WMDE\Fundraising\Frontend\DataAccess\DoctrineDonationRepository
+ * @covers WMDE\Fundraising\Frontend\DonatingContext\DataAccess\DoctrineDonationRepository
  *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
@@ -48,7 +48,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$this->assertDoctrineEntityIsInDatabase( $expectedDoctrineEntity );
 	}
 
-	private function newRepository(): DoctrineDonationRepository {
+	private function newRepository(): \WMDE\Fundraising\Frontend\DonatingContext\DataAccess\DoctrineDonationRepository {
 		return new DoctrineDonationRepository( $this->entityManager );
 	}
 

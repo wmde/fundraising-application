@@ -5,12 +5,12 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\DisplayPage;
 
 use Mediawiki\Api\MediawikiApi;
+use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\DisplayPage\PageDisplayRequest;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ApiPostRequestHandler;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
-use WMDE\Fundraising\Frontend\UseCases\DisplayPage\PageDisplayRequest;
 
 /**
- * @covers WMDE\Fundraising\Frontend\UseCases\DisplayPage\DisplayPageUseCase
+ * @covers WMDE\Fundraising\Frontend\ApplicationContext\UseCases\DisplayPage\DisplayPageUseCase
  *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >

@@ -4,10 +4,10 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\UseCases\AddDonation;
 
-use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationRequest;
+use WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddDonation\AddDonationRequest;
 
 /**
- * @covers WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationRequest
+ * @covers WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddDonation\AddDonationRequest
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >

@@ -4,10 +4,10 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Store\Tests;
 
-use WMDE\Fundraising\Frontend\Domain\SimpleTransferCodeGenerator;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\SimpleTransferCodeGenerator;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Domain\SimpleTransferCodeGenerator
+ * @covers WMDE\Fundraising\Frontend\PaymentContext\Domain\SimpleTransferCodeGenerator
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >

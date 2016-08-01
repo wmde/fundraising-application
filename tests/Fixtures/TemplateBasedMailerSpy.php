@@ -5,8 +5,8 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
 use PHPUnit_Framework_TestCase;
-use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\EmailAddress;
 
 /**
  * @licence GNU GPL v2+

@@ -8,16 +8,16 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use WMDE\Fundraising\Frontend\Domain\Model\BankData;
-use WMDE\Fundraising\Frontend\Domain\Model\Euro;
-use WMDE\Fundraising\Frontend\Domain\Model\Iban;
-use WMDE\Fundraising\Frontend\Domain\Model\PaymentType;
+use WMDE\Euro\Euro;
+use WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddDonation\AddDonationRequest;
+use WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddDonation\AddDonationResponse;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\AmountParser;
 use WMDE\Fundraising\Frontend\Infrastructure\PiwikVariableCollector;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Presentation\SelectedConfirmationPage;
-use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationRequest;
-use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationResponse;
 
 /**
  * @license GNU GPL v2+

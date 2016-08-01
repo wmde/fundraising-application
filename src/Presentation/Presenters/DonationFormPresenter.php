@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
-use WMDE\Fundraising\Frontend\Domain\Model\Euro;
+use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 

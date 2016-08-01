@@ -2,10 +2,10 @@
 
 namespace WMDE\Fundraising\Tests\Integration\Validation;
 
-use WMDE\Fundraising\Frontend\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
-use WMDE\Fundraising\Frontend\Domain\NullDomainNameValidator;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donor;
+use WMDE\Fundraising\Frontend\Infrastructure\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
 use WMDE\Fundraising\Frontend\Validation\EmailValidator;
 use WMDE\Fundraising\Frontend\Validation\PersonalInfoValidator;

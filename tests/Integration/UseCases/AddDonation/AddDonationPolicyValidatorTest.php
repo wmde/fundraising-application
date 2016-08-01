@@ -4,16 +4,16 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\AddDonation;
 
+use WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddDonation\AddDonationPolicyValidator;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidAddDonationRequest;
 use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
-use WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationPolicyValidator;
 use WMDE\Fundraising\Frontend\Validation\AmountPolicyValidator;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
 use WMDE\Fundraising\Frontend\Validation\ValidationResult;
 
 /**
- * @covers WMDE\Fundraising\Frontend\UseCases\AddDonation\AddDonationPolicyValidator
+ * @covers WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddDonation\AddDonationPolicyValidator
  *
  * @licence GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >

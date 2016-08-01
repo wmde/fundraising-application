@@ -8,13 +8,13 @@ use Codeception\Specify;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use WMDE\Fundraising\Entities\MembershipApplication;
-use WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipApplicationAuthorizer;
-use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationAuthorizer;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\MembershipApplicationAuthorizer;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess\DoctrineMembershipApplicationAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 use WMDE\Fundraising\Store\MembershipApplicationData;
 
 /**
- * @covers WMDE\Fundraising\Frontend\DataAccess\DoctrineMembershipApplicationAuthorizer
+ * @covers WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess\DoctrineMembershipApplicationAuthorizer
  *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >

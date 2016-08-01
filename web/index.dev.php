@@ -24,7 +24,7 @@ use Monolog\Logger;
 $ffFactory = call_user_func( function() {
 	$prodConfigPath = __DIR__ . '/../app/config/config.prod.json';
 
-	$configReader = new \WMDE\Fundraising\Frontend\Infrastructure\ConfigReader(
+	$configReader = new \WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\ConfigReader(
 		new \FileFetcher\SimpleFileFetcher(),
 		__DIR__ . '/../app/config/config.dist.json',
 		is_readable( $prodConfigPath ) ? $prodConfigPath : null

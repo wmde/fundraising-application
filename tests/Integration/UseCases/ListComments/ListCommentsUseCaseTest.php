@@ -4,14 +4,14 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\ListComments;
 
-use WMDE\Fundraising\Frontend\Domain\ReadModel\CommentWithAmount;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\CommentWithAmount;
+use WMDE\Fundraising\Frontend\DonatingContext\UseCases\ListComments\CommentList;
+use WMDE\Fundraising\Frontend\DonatingContext\UseCases\ListComments\CommentListingRequest;
+use WMDE\Fundraising\Frontend\DonatingContext\UseCases\ListComments\ListCommentsUseCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\InMemoryCommentFinder;
-use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentList;
-use WMDE\Fundraising\Frontend\UseCases\ListComments\CommentListingRequest;
-use WMDE\Fundraising\Frontend\UseCases\ListComments\ListCommentsUseCase;
 
 /**
- * @covers WMDE\Fundraising\Frontend\UseCases\ListComments\ListCommentsUseCase
+ * @covers WMDE\Fundraising\Frontend\DonatingContext\UseCases\ListComments\ListCommentsUseCase
  *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >

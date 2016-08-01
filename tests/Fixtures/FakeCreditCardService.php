@@ -4,8 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
-use WMDE\Fundraising\Frontend\Infrastructure\CreditCardExpiry;
-use WMDE\Fundraising\Frontend\Infrastructure\CreditCardService;
+use WMDE\Fundraising\Frontend\PaymentContext\Infrastructure\CreditCardExpiry;
+use WMDE\Fundraising\Frontend\PaymentContext\Infrastructure\CreditCardService;
 
 /**
  * @licence GNU GPL v2+

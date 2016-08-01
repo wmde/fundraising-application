@@ -2,11 +2,11 @@
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
-use WMDE\Fundraising\Frontend\Domain\Model\BankData;
-use WMDE\Fundraising\Frontend\Domain\Model\MembershipApplicant;
-use WMDE\Fundraising\Frontend\Domain\Model\MembershipApplication;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplicant;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplication;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\ShowMembershipApplicationConfirmation\ShowMembershipAppConfirmationResponse;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
-use WMDE\Fundraising\Frontend\UseCases\ShowMembershipApplicationConfirmation\ShowMembershipAppConfirmationResponse;
 
 /**
  * Render the confirmation pages for membership applications

@@ -6,17 +6,17 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\AddSubscription;
 
 use PHPUnit_Framework_MockObject_MockObject;
 use WMDE\Fundraising\Entities\Subscription;
-use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
-use WMDE\Fundraising\Frontend\Domain\Repositories\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\EmailAddress;
+use WMDE\Fundraising\Frontend\SubscriptionContext\Domain\Repositories\SubscriptionRepository;
+use WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\AddSubscription\AddSubscriptionUseCase;
+use WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\AddSubscription\SubscriptionRequest;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FailedValidationResult;
-use WMDE\Fundraising\Frontend\UseCases\AddSubscription\AddSubscriptionUseCase;
-use WMDE\Fundraising\Frontend\UseCases\AddSubscription\SubscriptionRequest;
 use WMDE\Fundraising\Frontend\Validation\SubscriptionValidator;
 use WMDE\Fundraising\Frontend\Validation\ValidationResult;
 
 /**
- * @covers WMDE\Fundraising\Frontend\UseCases\AddSubscription\AddSubscriptionUseCase
+ * @covers WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\AddSubscription\AddSubscriptionUseCase
  *
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
@@ -50,15 +50,15 @@ class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase {
 			->getMock();
 	}
 
-	private function createValidSubscriptionRequest(): SubscriptionRequest {
-		$request = new SubscriptionRequest();
+	private function createValidSubscriptionRequest(): \WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\AddSubscription\SubscriptionRequest {
+		$request = new \WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\AddSubscription\SubscriptionRequest();
 		$request->setEmail( 'curious@nyancat.com' );
 		return $request;
 	}
 
 	public function testGivenValidData_aSuccessResponseIsCreated() {
 		$this->validator->method( 'validate' )->willReturn( new ValidationResult() );
-		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->mailer );
+		$useCase = new \WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\AddSubscription\AddSubscriptionUseCase( $this->repo, $this->validator, $this->mailer );
 		$result = $useCase->addSubscription( $this->createValidSubscriptionRequest() );
 		$this->assertTrue( $result->isSuccessful() );
 	}
@@ -66,7 +66,7 @@ class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase {
 	public function testGivenInvalidData_anErrorResponseTypeIsCreated() {
 		$this->validator->method( 'validate' )->willReturn( new FailedValidationResult() );
 		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->mailer );
-		$request = $this->createMock( SubscriptionRequest::class );
+		$request = $this->createMock( \WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\AddSubscription\SubscriptionRequest::class );
 		$result = $useCase->addSubscription( $request );
 		$this->assertFalse( $result->isSuccessful() );
 	}
@@ -88,14 +88,14 @@ class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase {
 			->with( $this->callback( function( Subscription $subscription ) {
 					return $subscription->getStatus() === Subscription::STATUS_MODERATION;
 			} ) );
-		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->mailer );
+		$useCase = new \WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\AddSubscription\AddSubscriptionUseCase( $this->repo, $this->validator, $this->mailer );
 		$useCase->addSubscription( $this->createValidSubscriptionRequest() );
 	}
 
 	public function testGivenInvalidData_requestWillNotBeStored() {
 		$this->validator->method( 'validate' )->willReturn( new FailedValidationResult() );
 		$this->repo->expects( $this->never() )->method( 'storeSubscription' );
-		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->mailer );
+		$useCase = new \WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\AddSubscription\AddSubscriptionUseCase( $this->repo, $this->validator, $this->mailer );
 		$request = $this->createMock( SubscriptionRequest::class );
 		$useCase->addSubscription( $request );
 	}
@@ -117,15 +117,15 @@ class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase {
 					return true;
 				} )
 			);
-		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->mailer );
+		$useCase = new \WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\AddSubscription\AddSubscriptionUseCase( $this->repo, $this->validator, $this->mailer );
 		$useCase->addSubscription( $this->createValidSubscriptionRequest() );
 	}
 
 	public function testGivenInvalidData_requestWillNotBeMailed() {
 		$this->validator->method( 'validate' )->willReturn( new FailedValidationResult() );
 		$this->mailer->expects( $this->never() )->method( 'sendMail' );
-		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->mailer );
-		$request = $this->createMock( SubscriptionRequest::class );
+		$useCase = new \WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\AddSubscription\AddSubscriptionUseCase( $this->repo, $this->validator, $this->mailer );
+		$request = $this->createMock( \WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\AddSubscription\SubscriptionRequest::class );
 		$useCase->addSubscription( $request );
 	}
 
@@ -133,7 +133,7 @@ class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$this->validator->method( 'validate' )->willReturn( new ValidationResult() );
 		$this->validator->method( 'needsModeration' )->willReturn( true );
 		$this->mailer->expects( $this->never() )->method( 'sendMail' );
-		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->mailer );
+		$useCase = new \WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\AddSubscription\AddSubscriptionUseCase( $this->repo, $this->validator, $this->mailer );
 		$request = $this->createMock( SubscriptionRequest::class );
 		$useCase->addSubscription( $request );
 	}

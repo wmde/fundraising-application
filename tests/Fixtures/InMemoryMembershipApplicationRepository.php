@@ -4,10 +4,9 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
-use WMDE\Fundraising\Frontend\Domain\Model\MembershipApplication;
-use WMDE\Fundraising\Frontend\Domain\Repositories\GetMembershipApplicationException;
-use WMDE\Fundraising\Frontend\Domain\Repositories\MembershipApplicationRepository;
-use WMDE\Fundraising\Frontend\Domain\Repositories\StoreMembershipApplicationException;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplication;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\MembershipApplicationRepository;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\StoreMembershipApplicationException;
 
 /**
  * @licence GNU GPL v2+
@@ -16,14 +15,14 @@ use WMDE\Fundraising\Frontend\Domain\Repositories\StoreMembershipApplicationExce
 class InMemoryMembershipApplicationRepository implements MembershipApplicationRepository {
 
 	/**
-	 * @var MembershipApplication[]
+	 * @var \WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplication[]
 	 */
 	private $applications = [];
 
 	private $nextNewId = 1;
 
 	/**
-	 * @param MembershipApplication $application
+	 * @param \WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplication $application
 	 *
 	 * @throws StoreMembershipApplicationException
 	 */
@@ -38,8 +37,8 @@ class InMemoryMembershipApplicationRepository implements MembershipApplicationRe
 	/**
 	 * @param int $id
 	 *
-	 * @return MembershipApplication|null
-	 * @throws GetMembershipApplicationException
+	 * @return \WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplication|null
+	 * @throws \WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\GetMembershipApplicationException
 	 */
 	public function getApplicationById( int $id ) {
 		return array_key_exists( $id, $this->applications ) ? $this->applications[$id] : null;

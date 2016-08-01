@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests;
 
-use WMDE\Fundraising\Frontend\Domain\Model\Euro;
+use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\Presentation\CreditCardUrlConfig;
 use WMDE\Fundraising\Frontend\Presentation\CreditCardUrlGenerator;
 

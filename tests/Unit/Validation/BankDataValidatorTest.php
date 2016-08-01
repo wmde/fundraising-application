@@ -4,8 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Validation;
 
-use WMDE\Fundraising\Frontend\Domain\Model\BankData;
-use WMDE\Fundraising\Frontend\Domain\Model\Iban;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
 use WMDE\Fundraising\Frontend\Validation\IbanValidator;
 use WMDE\Fundraising\Frontend\Validation\ValidationResult;

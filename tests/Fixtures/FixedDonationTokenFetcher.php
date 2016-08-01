@@ -4,9 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
-use WMDE\Fundraising\Frontend\Infrastructure\DonationTokenFetcher;
-use WMDE\Fundraising\Frontend\Infrastructure\DonationTokenFetchingException;
-use WMDE\Fundraising\Frontend\Infrastructure\DonationTokens;
+use WMDE\Fundraising\Frontend\DonatingContext\Authorization\DonationTokenFetcher;
+use WMDE\Fundraising\Frontend\DonatingContext\Authorization\DonationTokens;
 
 /**
  * @licence GNU GPL v2+
@@ -23,8 +22,8 @@ class FixedDonationTokenFetcher implements DonationTokenFetcher {
 	/**
 	 * @param int $donationId
 	 *
-	 * @return DonationTokens
-	 * @throws DonationTokenFetchingException
+	 * @return \WMDE\Fundraising\Frontend\DonatingContext\Authorization\DonationTokens
+	 * @throws \WMDE\Fundraising\Frontend\DonatingContext\Authorization\DonationTokenFetchingException
 	 */
 	public function getTokens( int $donationId ): DonationTokens {
 		return $this->tokens;

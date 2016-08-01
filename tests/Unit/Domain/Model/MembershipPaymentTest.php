@@ -4,12 +4,12 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Domain\Model;
 
-use WMDE\Fundraising\Frontend\Domain\Model\BankData;
-use WMDE\Fundraising\Frontend\Domain\Model\Euro;
-use WMDE\Fundraising\Frontend\Domain\Model\MembershipPayment;
+use WMDE\Euro\Euro;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipPayment;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Domain\Model\MembershipPayment
+ * @covers WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipPayment
  *
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
@@ -24,7 +24,7 @@ class MembershipPaymentTest extends \PHPUnit_Framework_TestCase {
 		new MembershipPayment(
 			$invalidInterval,
 			Euro::newFromInt( 42 ),
-			new BankData()
+			new \WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData()
 		);
 	}
 
@@ -39,7 +39,7 @@ class MembershipPaymentTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testWhenIntervalIsTwelveMonths_yearlyPaymentIsBasePayment() {
-		$payment = new MembershipPayment( 12, Euro::newFromInt( 42 ), new BankData() );
+		$payment = new MembershipPayment( 12, Euro::newFromInt( 42 ), new \WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData() );
 		$this->assertEquals( 42, $payment->getYearlyAmount()->getEuroFloat() );
 	}
 
@@ -49,7 +49,7 @@ class MembershipPaymentTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testWhenIntervalIsOneQuarter_yearlyPaymentIsFourTimesBasePayment() {
-		$payment = new MembershipPayment( 3, Euro::newFromInt( 50 ), new BankData() );
+		$payment = new MembershipPayment( 3, Euro::newFromInt( 50 ), new \WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData() );
 		$this->assertEquals( 200, $payment->getYearlyAmount()->getEuroFloat() );
 	}
 

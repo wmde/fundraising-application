@@ -4,8 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Validation;
 
-use WMDE\Fundraising\Frontend\Domain\BankDataConverter;
-use WMDE\Fundraising\Frontend\Domain\Model\Iban;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataConverter;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 
 /**
  * @licence GNU GPL v2+
@@ -18,7 +18,7 @@ class IbanValidator {
 	private $bannedIbanNumbers = [];
 
 	/**
-	 * @param BankDataConverter $bankDataConverter
+	 * @param \WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataConverter $bankDataConverter
 	 * @param string[] $bannedIbans
 	 */
 	public function __construct( BankDataConverter $bankDataConverter, array $bannedIbans = [] ) {

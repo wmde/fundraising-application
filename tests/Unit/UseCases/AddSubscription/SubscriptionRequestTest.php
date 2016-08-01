@@ -4,10 +4,10 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\UseCases\AddSubscription;
 
-use WMDE\Fundraising\Frontend\UseCases\AddSubscription\SubscriptionRequest;
+use WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\AddSubscription\SubscriptionRequest;
 
 /**
- * @covers WMDE\Fundraising\Frontend\UseCases\AddSubscription\SubscriptionRequest
+ * @covers WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\AddSubscription\SubscriptionRequest
  *
  * @licence GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >

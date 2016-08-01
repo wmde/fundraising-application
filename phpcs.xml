@@ -20,8 +20,9 @@
     <rule ref="Generic.Files.LineEndings" />
     <rule ref="Generic.Files.LineLength">
         <properties>
-            <property name="lineLimit" value="125" />
-            <property name="absoluteLineLimit" value="125" />
+            <!-- https://github.com/squizlabs/PHP_CodeSniffer/issues/1094 -->
+            <property name="lineLimit" value="170" />
+            <property name="absoluteLineLimit" value="170" />
         </properties>
     </rule>
 

@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Infrastructure;
 
-use WMDE\Fundraising\Frontend\Domain\Model\EmailAddress;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
 /**

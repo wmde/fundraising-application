@@ -4,12 +4,12 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
 
-use WMDE\Fundraising\Frontend\DataAccess\McpCreditCardService;
-use WMDE\Fundraising\Frontend\Infrastructure\CreditCardExpiry;
-use WMDE\Fundraising\Frontend\Infrastructure\CreditCardExpiryFetchingException;
+use WMDE\Fundraising\Frontend\PaymentContext\DataAccess\McpCreditCardService;
+use WMDE\Fundraising\Frontend\PaymentContext\Infrastructure\CreditCardExpiry;
+use WMDE\Fundraising\Frontend\PaymentContext\Infrastructure\CreditCardExpiryFetchingException;
 
 /**
- * @covers WMDE\Fundraising\Frontend\DataAccess\McpCreditCardService
+ * @covers WMDE\Fundraising\Frontend\PaymentContext\DataAccess\McpCreditCardService
  *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >

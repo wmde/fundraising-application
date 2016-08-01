@@ -4,10 +4,10 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Data;
 
-use WMDE\Fundraising\Frontend\Domain\Model\BankData;
-use WMDE\Fundraising\Frontend\Domain\Model\Iban;
-use WMDE\Fundraising\Frontend\Infrastructure\MembershipApplicationTrackingInfo;
-use WMDE\Fundraising\Frontend\UseCases\ApplyForMembership\ApplyForMembershipRequest;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\MembershipApplicationTrackingInfo;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\ApplyForMembership\ApplyForMembershipRequest;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 
 /**
  * @licence GNU GPL v2+
