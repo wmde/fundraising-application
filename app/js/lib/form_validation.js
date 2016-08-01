@@ -94,6 +94,9 @@ var jQuery = require( 'jquery' ),
 
 			return this.validateNonSepa( formValues );
 		},
+		/**
+		 * @private
+		 */
 		validateSepa: function ( formValues ) {
 			if ( formValues.iban === '' ) {
 				return { status: 'INCOMPLETE' };
@@ -106,6 +109,9 @@ var jQuery = require( 'jquery' ),
 				}
 			);
 		},
+		/**
+		 * @private
+		 */
 		validateNonSepa: function ( formValues ) {
 			if ( formValues.accountNumber === '' || formValues.bankCode === '' ) {
 				return { status: 'INCOMPLETE' };
@@ -119,6 +125,9 @@ var jQuery = require( 'jquery' ),
 				}
 			);
 		},
+		/**
+		 * @private
+		 */
 		getValidationResultFromApi: function ( apiUrl, urlArguments ) {
 			return this.sendFunction(
 				apiUrl,
