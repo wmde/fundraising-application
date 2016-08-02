@@ -14,7 +14,6 @@ install:
   - npm install
 
 before_script:
-  - phpenv config-rm xdebug.ini
   - bash build/travis/installKontoCheck.sh
   - if [ "$DB" == "mysql" ]; then bash build/travis/configureForMysql.sh; fi
   - if [ "$MCP_ACCESS_KEY" != "" ] && [ "$MCP_PROJECT_ID" != "" ]; then bash build/travis/createLocalTestConfig.sh > app/config/config.test.local.json; fi
@@ -24,7 +23,7 @@ script:
   - travis_retry phpunit tests/System/
 
 after_success:
-  - if [ "$TYPE" == "coverage" ]; then phpenv config-add xdebug.ini; bash build/travis/uploadCoverage.sh; fi
+  - if [ "$TYPE" == "coverage" ]; then bash build/travis/uploadCoverage.sh; fi
 
 cache:
   directories:
