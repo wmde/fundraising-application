@@ -43,6 +43,7 @@ class AddDonationValidator {
 		Result::SOURCE_DONOR_COUNTRY => 8,
 		Result::SOURCE_BANK_NAME => 50,
 		Result::SOURCE_BIC => 32,
+		Result::SOURCE_TRACKING_SOURCE => 250
 	];
 
 	public function __construct( AmountValidator $amountValidator, BankDataValidator $bankDataValidator,
@@ -63,6 +64,7 @@ class AddDonationValidator {
 		$this->validateDonorName();
 		$this->validateDonorEmail();
 		$this->validateDonorAddress();
+		$this->validateTrackingData();
 
 		return new Result( ...$this->violations );
 	}
@@ -248,5 +250,11 @@ class AddDonationValidator {
 		if ( strlen( $value ) > $this->maximumFieldLengths[$fieldName] )  {
 			$this->violations[] = new ConstraintViolation( $value, Result::VIOLATION_WRONG_LENGTH, $fieldName );
 		}
+	}
+
+	private function validateTrackingData() {
+		$this->validateFieldLength( $this->request->getSource(), Result::SOURCE_TRACKING_SOURCE );
+		// validation of impression counts is not needed because input is converted to int
+		// validation of skin, color and layout is not needed because they are static legacy values and empty.
 	}
 }

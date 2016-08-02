@@ -29,6 +29,7 @@ class AddDonationValidationResult extends ValidationResult {
 	const SOURCE_DONOR_POSTAL_CODE = 'postcode';
 	const SOURCE_DONOR_CITY = 'city';
 	const SOURCE_DONOR_COUNTRY = 'country';
+	const SOURCE_TRACKING_SOURCE = 'source';
 
 	const VIOLATION_TOO_LOW = 'too-low';
 	const VIOLATION_TOO_HIGH = 'too-high';

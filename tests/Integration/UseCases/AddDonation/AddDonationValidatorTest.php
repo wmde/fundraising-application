@@ -168,6 +168,16 @@ class AddDonationValidatorTest extends ValidatorTestCase {
 		$this->assertConstraintWasViolated( $result, AddDonationValidationResult::SOURCE_BIC );
 	}
 
+	public function testLongSource_validationFails() {
+		$request = ValidAddDonationRequest::getRequest();
+		$request->setSource( 'http://catlady.com/#' . str_repeat( 'Cats ', 500 ) );
+
+		$result = $this->donationValidator->validate( $request );
+		$this->assertFalse( $result->isSuccessful() );
+
+		$this->assertConstraintWasViolated( $result, AddDonationValidationResult::SOURCE_TRACKING_SOURCE );
+	}
+
 	private function newDonationValidator(): AddDonationValidator {
 		return new AddDonationValidator(
 			new AmountValidator( 1.0 ),

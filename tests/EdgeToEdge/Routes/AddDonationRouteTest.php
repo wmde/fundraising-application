@@ -160,9 +160,9 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertSame( 'test/gelb', $data['tracking'] );
 		$this->assertSame( 3, $data['impCount'] );
 		$this->assertSame( 1, $data['bImpCount'] );
-		$this->assertSame( 'Default', $data['layout'] );
-		$this->assertSame( 'blue', $data['color'] );
-		$this->assertSame( 'default', $data['skin'] );
+		$this->assertSame( '', $data['layout'] );
+		$this->assertSame( '', $data['color'] );
+		$this->assertSame( '', $data['skin'] );
 		$this->assertSame( 'en.wikipedia.org', $data['source'] );
 		$this->assertSame( 'N', $donation->getStatus() );
 		$this->assertTrue( $donation->getDonorOptsIntoNewsletter() );
@@ -235,9 +235,9 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$this->assertSame( 'test/gelb', $data['tracking'] );
 			$this->assertSame( 3, $data['impCount'] );
 			$this->assertSame( 1, $data['bImpCount'] );
-			$this->assertSame( 'Default', $data['layout'] );
-			$this->assertSame( 'blue', $data['color'] );
-			$this->assertSame( 'default', $data['skin'] );
+			$this->assertSame( '', $data['layout'] );
+			$this->assertSame( '', $data['color'] );
+			$this->assertSame( '', $data['skin'] );
 			$this->assertSame( 'en.wikipedia.org', $data['source'] );
 			$this->assertSame( true, $donation->getDonorOptsIntoNewsletter() );
 

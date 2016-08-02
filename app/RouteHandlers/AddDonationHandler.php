@@ -131,9 +131,6 @@ class AddDonationHandler {
 		);
 		$donationRequest->setTotalImpressionCount( intval( $request->get( 'impCount', 0 ) ) );
 		$donationRequest->setSingleBannerImpressionCount( intval( $request->get( 'bImpCount', 0 ) ) );
-		$donationRequest->setColor( $request->get( 'color', '' ) );
-		$donationRequest->setSkin( $request->get( 'skin', '' ) );
-		$donationRequest->setLayout( $request->get( 'layout', '' ) );
 
 		return $donationRequest;
 	}
