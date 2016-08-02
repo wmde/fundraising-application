@@ -602,7 +602,12 @@ class FunFunFactory {
 
 	private function newPageContentModifier(): PageContentModifier {
 		return new PageContentModifier(
-			$this->getLogger()
+			$this->getLogger(),
+			[
+				'/<!--\s*NewPP limit report.*?-->/s' => '',
+				'/<!--\s*Transclusion expansion time report.*?-->/s' => '',
+				'/<!--\s*Saved in parser cache with key.*?-->/s' => ''
+			]
 		);
 	}
 
