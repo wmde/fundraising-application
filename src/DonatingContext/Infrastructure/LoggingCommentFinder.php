@@ -8,6 +8,7 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\CommentFinder;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\CommentListingException;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\CommentWithAmount;
 
 /**
  * @license GNU GPL v2+
@@ -33,8 +34,8 @@ class LoggingCommentFinder implements CommentFinder {
 	 * @param int $limit
 	 * @param int $offset
 	 *
-	 * @return \WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\CommentWithAmount[]
-	 * @throws \WMDE\Fundraising\Frontend\DonatingContext\Domain\\WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\CommentListingException
+	 * @return CommentWithAmount[]
+	 * @throws CommentListingException
 	 */
 	public function getPublicComments( int $limit, int $offset = 0 ): array {
 		try {
