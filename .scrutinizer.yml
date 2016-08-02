@@ -1,7 +1,7 @@
 inherit: true
 
 tools:
-    php_code_coverage: false
+    external_code_coverage: true
     php_code_sniffer: true
     php_cpd: true
     php_cs_fixer: true

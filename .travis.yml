@@ -1,30 +1,40 @@
 language: php
+
 matrix:
   include:
   - php: 7
-    env: DB=sqlite
+    env: DB=sqlite; TYPE=coverage
   - php: 7
     env: DB=mysql
+
 sudo: false
+
 install:
-- travis_retry composer install
-- npm install
+  - travis_retry composer install
+  - npm install
+
 before_script:
-- phpenv config-rm xdebug.ini
-- bash build/travis/installKontoCheck.sh
-- if [ "$DB" == "mysql" ]; then bash build/travis/configureForMysql.sh; fi
-- if [ "$MCP_ACCESS_KEY" != "" ] && [ "$MCP_PROJECT_ID" != "" ]; then bash build/travis/createLocalTestConfig.sh > app/config/config.test.local.json; fi
+  - bash build/travis/installKontoCheck.sh
+  - if [ "$DB" == "mysql" ]; then bash build/travis/configureForMysql.sh; fi
+  - if [ "$MCP_ACCESS_KEY" != "" ] && [ "$MCP_PROJECT_ID" != "" ]; then bash build/travis/createLocalTestConfig.sh > app/config/config.test.local.json; fi
+
 script:
-- composer ci
-- travis_retry phpunit tests/System/
+  - composer ci
+  - travis_retry phpunit tests/System/
+
+after_success:
+  - if [ "$TYPE" == "coverage" ]; then bash build/travis/uploadCoverage.sh; fi
+
 cache:
   directories:
   - "$HOME/.composer/cache"
   - node_modules
+
 notifications:
   email:
     on_success: change
     on_failure: always
+
 env:
   global:
   - secure: BIyTpbKsguUv5+fkrEVauLZ+BPyTR+MMLtVpixlDntJsbb/yXAcAoWVvfbJm9bCa3Z9T1Hd4JYITUDuK1iZzSwVzlotkmyB/4enoqqpE6jR5IIOltISRcnVYK5iBpFG6YHynNuCJcx6TWv5lRL0bLV5NvDoV/hiX46bh9eYCMBy3g4Mpu/UI/GWum9sAXnxpWmR4n7holn5Qxo2uPviFNuc4uIgUF/rPWX+ahI0hDwsJobOcbEYwgm8tIvSaJkpFKIui76jXIjN+fnaU0jBmoQk9m2ae61PWPYdwTAYa54lyQCU+TEi3+yUCOlK/LMSsrXcw9WRwRIDo7TmqBJd8aKHHVxKtivFvMSqdt6Gi6xyc/UKVRyOGNrDHCGiHdV+xl23upZn6kUYlxWMAhoeim4Hwx/gHeZEgc1jvpOpcyrexfCZJAr1x8M9bBJcHXqJApa168O9Ok39bL3TZB+85RSBUg8hLT0OdgQY0QmvQz0DEIsu2XG+m1CB5iwcvS6Wtg8uwTzq8kux6MBgsO2wUwq1mT+Z7f3RGELN1lvJDGnC+oGEZgaTgZNCaG89cniWbLo4b5ayo/d20SetdxoyW8WpRmIvBqr1N7hDJErhY2WUU6Rn57gRWBkpD1bhnOs1h/jD5XzW7IjzvOUgSJro1lbK7FKYeZ/pcFi0Iw6ZG0kk=
