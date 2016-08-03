@@ -13,12 +13,6 @@ use WMDE\Fundraising\Frontend\FreezableValueObject;
 class ApplicantName {
 	use FreezableValueObject;
 
-	const PERSON_PRIVATE = 'person';
-	const PERSON_COMPANY = 'firma';
-	const PERSON_ANONYMOUS = 'anonym';
-
-	private $personType = '';
-
 	private $companyName = '';
 
 	private $salutation = '';
@@ -26,24 +20,15 @@ class ApplicantName {
 	private $firstName = '';
 	private $lastName = '';
 
-	private function __construct( string $nameType ) {
-		$this->personType = $nameType;
+	private function __construct() {
 	}
 
 	public static function newPrivatePersonName(): self {
-		return new self( self::PERSON_PRIVATE );
+		return new self();
 	}
 
 	public static function newCompanyName(): self {
-		return new self( self::PERSON_COMPANY );
-	}
-
-	public function getPersonType(): string {
-		return $this->personType;
-	}
-
-	public function getCompanyName(): string {
-		return $this->companyName;
+		return new self();
 	}
 
 	public function setCompanyName( string $companyName ) {
@@ -90,7 +75,7 @@ class ApplicantName {
 	public function getFullName(): string {
 		return join( ', ', array_filter( [
 			$this->getFullPrivatePersonName(),
-			$this->getCompanyName()
+			$this->companyName
 		] ) );
 	}
 

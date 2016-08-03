@@ -40,7 +40,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		return [
 			'membership_type' => ValidMembershipApplication::MEMBERSHIP_TYPE,
 
-			'adresstyp' => ValidMembershipApplication::APPLICANT_TYPE,
+			'adresstyp' => 'person',
 			'anrede' => ValidMembershipApplication::APPLICANT_SALUTATION,
 			'titel' => ValidMembershipApplication::APPLICANT_TITLE,
 			'vorname' => ValidMembershipApplication::APPLICANT_FIRST_NAME,

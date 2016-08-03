@@ -28,7 +28,6 @@ class ValidMembershipApplication {
 	const APPLICANT_LAST_NAME = 'The Great';
 	const APPLICANT_SALUTATION = 'Herr';
 	const APPLICANT_TITLE = '';
-	const APPLICANT_TYPE = ApplicantName::PERSON_PRIVATE;
 
 	const APPLICANT_DATE_OF_BIRTH = '1990-01-01';
 
