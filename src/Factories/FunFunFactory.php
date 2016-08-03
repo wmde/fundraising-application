@@ -556,10 +556,7 @@ class FunFunFactory {
 	}
 
 	private function newWikiPageRetriever(): PageRetriever {
-		$PageRetriever = new ModifyingPageRetriever(
-			$this->newCachedPageRetriever(),
-			$this->newPageContentModifier()
-		);
+		$PageRetriever = $this->newCachedPageRetriever();
 
 		return $this->addProfilingDecorator( $PageRetriever, 'PageRetriever' );
 	}
@@ -598,12 +595,6 @@ class FunFunFactory {
 
 	public function getTemplatePath(): string {
 		return __DIR__ . '/../../app/templates';
-	}
-
-	private function newPageContentModifier(): PageContentModifier {
-		return new PageContentModifier(
-			$this->getLogger()
-		);
 	}
 
 	public function newAddSubscriptionUseCase(): AddSubscriptionUseCase {
