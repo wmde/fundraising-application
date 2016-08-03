@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\SubscriptionContext\Domain\Repositories\Subscripti
 use WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\AddSubscription\AddSubscriptionUseCase;
 use WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\AddSubscription\SubscriptionRequest;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FailedValidationResult;
-use WMDE\Fundraising\Frontend\Validation\SubscriptionValidator;
+use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionValidator;
 use WMDE\Fundraising\Frontend\Validation\ValidationResult;
 
 /**
@@ -29,7 +29,7 @@ class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase {
 	private $repo;
 
 	/**
-	 * @var PHPUnit_Framework_MockObject_MockObject|SubscriptionValidator
+	 * @var PHPUnit_Framework_MockObject_MockObject|\WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionValidator
 	 */
 	private $validator;
 

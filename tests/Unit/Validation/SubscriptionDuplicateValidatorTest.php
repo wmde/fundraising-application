@@ -6,26 +6,34 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit;
 
 use WMDE\Fundraising\Entities\Subscription;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Domain\Repositories\SubscriptionRepository;
-use WMDE\Fundraising\Frontend\Validation\SubscriptionDuplicateValidator;
+use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionDuplicateValidator;
 
+/**
+ * @covers WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionDuplicateValidator
+ *
+ * @license GNU GPL v2+
+ * @author Gabriel Birke < gabriel.birke@wikimedia.de >
+ */
 class SubscriptionDuplicateValidatorTest extends \PHPUnit_Framework_TestCase {
 
 	public function testGivenSubscriptionCountOfZero_validationSucceeds() {
-		$repository = $this->getMockBuilder( SubscriptionRepository::class )->disableOriginalConstructor()->getMock();
+		$repository = $this->createMock( SubscriptionRepository::class );
 		$repository->method( 'countSimilar' )->willReturn( 0 );
-		$subscription = $this->createMock( Subscription::class );
+
 		$cutoffDateTime = new \DateTime( '3 hours ago' );
 		$validator = new SubscriptionDuplicateValidator( $repository, $cutoffDateTime );
-		$this->assertTrue( $validator->validate( $subscription )->isSuccessful() );
+
+		$this->assertTrue( $validator->validate( new Subscription() )->isSuccessful() );
 	}
 
 	public function testGivenSubscriptionCountGreaterThanZero_validationFails() {
-		$repository = $this->getMockBuilder( SubscriptionRepository::class )->disableOriginalConstructor()->getMock();
+		$repository = $this->createMock( SubscriptionRepository::class );
 		$repository->method( 'countSimilar' )->willReturn( 1 );
-		$subscription = $this->createMock( Subscription::class );
+
 		$cutoffDateTime = new \DateTime( '3 hours ago' );
 		$validator = new SubscriptionDuplicateValidator( $repository, $cutoffDateTime );
-		$this->assertFalse( $validator->validate( $subscription )->isSuccessful() );
+
+		$this->assertFalse( $validator->validate( new Subscription() )->isSuccessful() );
 	}
 
 }
