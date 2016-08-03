@@ -50,9 +50,9 @@ class MembershipApplicationConfirmationHtmlPresenter {
 
 	private function getPersonArguments( MembershipApplicant $applicant ): array {
 		return [
-			'salutation' => $applicant->getPersonName()->getSalutation(),
-			'title' => $applicant->getPersonName()->getTitle(),
-			'fullName' => $applicant->getPersonName()->getFullName(),
+			'salutation' => $applicant->getName()->getSalutation(),
+			'title' => $applicant->getName()->getTitle(),
+			'fullName' => $applicant->getName()->getFullName(),
 			'streetAddress' => $applicant->getPhysicalAddress()->getStreetAddress(),
 			'postalCode' => $applicant->getPhysicalAddress()->getPostalCode(),
 			'city' => $applicant->getPhysicalAddress()->getCity(),

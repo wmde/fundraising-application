@@ -4,10 +4,10 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Domain\Model;
 
-use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorName;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Domain\Model\PersonName
+ * @covers WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorName
  *
  * @license GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
@@ -18,7 +18,7 @@ class PersonNameTest extends \PHPUnit_Framework_TestCase {
 	 * @dataProvider privatePersonProvider
 	 */
 	public function testGivenPersonName_determineFullNameReturnsFullName( $expectedValue, $data ) {
-		$personName = PersonName::newPrivatePersonName();
+		$personName = DonorName::newPrivatePersonName();
 
 		$personName->setCompanyName( $data['company'] );
 		$personName->setFirstName( $data['firstName'] );

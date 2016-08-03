@@ -23,7 +23,7 @@ use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\DisplayPage\PageDispla
 use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\GetInTouch\GetInTouchRequest;
 use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\PurgeCache\PurgeCacheRequest;
 use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\PurgeCache\PurgeCacheResponse;
-use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddComment\AddCommentRequest;
@@ -123,9 +123,9 @@ $app->post(
 				return $address->freeze()->assertNoNullFields();
 			}
 
-			private function getNameFromRequest( Request $request ): PersonName {
+			private function getNameFromRequest( Request $request ): DonorName {
 				$name = $request->get( 'addressType', '' ) === 'firma'
-					? PersonName::newCompanyName() : PersonName::newPrivatePersonName();
+					? DonorName::newCompanyName() : DonorName::newPrivatePersonName();
 
 				$name->setSalutation( $request->get( 'salutation', '' ) );
 				$name->setTitle( $request->get( 'title', '' ) );

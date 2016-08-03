@@ -6,8 +6,8 @@ namespace WMDE\Fundraising\Frontend\Tests\Data;
 
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Entities\MembershipApplication as DoctrineMembershipApplication;
-use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\ApplicantName;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplicant;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplication;
@@ -28,7 +28,7 @@ class ValidMembershipApplication {
 	const APPLICANT_LAST_NAME = 'The Great';
 	const APPLICANT_SALUTATION = 'Herr';
 	const APPLICANT_TITLE = '';
-	const APPLICANT_TYPE = PersonName::PERSON_PRIVATE;
+	const APPLICANT_TYPE = ApplicantName::PERSON_PRIVATE;
 
 	const APPLICANT_DATE_OF_BIRTH = '1990-01-01';
 
@@ -61,7 +61,7 @@ class ValidMembershipApplication {
 		return MembershipApplication::newApplication(
 			self::MEMBERSHIP_TYPE,
 			new MembershipApplicant(
-				$this->newPersonName(),
+				$this->newApplicantName(),
 				$this->newAddress(),
 				new EmailAddress( self::APPLICANT_EMAIL_ADDRESS ),
 				new PhoneNumber( self::APPLICANT_PHONE_NUMBER ),
@@ -75,8 +75,8 @@ class ValidMembershipApplication {
 		);
 	}
 
-	private function newPersonName(): PersonName {
-		$personName = PersonName::newPrivatePersonName();
+	private function newApplicantName(): ApplicantName {
+		$personName = ApplicantName::newPrivatePersonName();
 
 		$personName->setFirstName( self::APPLICANT_FIRST_NAME );
 		$personName->setLastName( self::APPLICANT_LAST_NAME );

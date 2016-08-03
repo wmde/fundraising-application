@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Data;
 
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorName;
 use WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
@@ -25,7 +25,7 @@ class ValidAddDonationRequest {
 		$request->setOptIn( (string) ValidDonation::OPTS_INTO_NEWSLETTER );
 		$request->setPaymentType( PaymentType::DIRECT_DEBIT );
 
-		$request->setDonorType( PersonName::PERSON_PRIVATE );
+		$request->setDonorType( DonorName::PERSON_PRIVATE );
 		$request->setDonorSalutation( ValidDonation::DONOR_SALUTATION );
 		$request->setDonorTitle( ValidDonation::DONOR_TITLE );
 		$request->setDonorCompany( '' );

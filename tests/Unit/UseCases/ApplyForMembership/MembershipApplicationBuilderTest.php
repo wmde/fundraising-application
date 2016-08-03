@@ -5,8 +5,8 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Unit\UseCases\ApplyForMembership;
 
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\ApplicantName;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\MembershipApplicationTrackingInfo;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\ApplyForMembership\ApplyForMembershipRequest;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\ApplyForMembership\MembershipApplicationBuilder;
@@ -30,7 +30,7 @@ class MembershipApplicationBuilderTest extends \PHPUnit_Framework_TestCase {
 
 		$application = ( new MembershipApplicationBuilder() )->newApplicationFromRequest( $request );
 
-		$this->assertIsExpectedCompanyPersonName( $application->getApplicant()->getPersonName() );
+		$this->assertIsExpectedCompanyPersonName( $application->getApplicant()->getName() );
 		$this->assertIsExpectedAddress( $application->getApplicant()->getPhysicalAddress() );
 
 		$this->assertEquals(
@@ -89,15 +89,15 @@ class MembershipApplicationBuilderTest extends \PHPUnit_Framework_TestCase {
 		);
 	}
 
-	private function assertIsExpectedCompanyPersonName( PersonName $name ) {
+	private function assertIsExpectedCompanyPersonName( ApplicantName $name ) {
 		$this->assertEquals(
 			$this->getCompanyPersonName(),
 			$name
 		);
 	}
 
-	private function getCompanyPersonName(): PersonName {
-		$name = PersonName::newCompanyName();
+	private function getCompanyPersonName(): ApplicantName {
+		$name = ApplicantName::newCompanyName();
 
 		$name->setCompanyName( self::COMPANY_NAME );
 		$name->setSalutation( ValidMembershipApplication::APPLICANT_SALUTATION );
@@ -131,7 +131,7 @@ class MembershipApplicationBuilderTest extends \PHPUnit_Framework_TestCase {
 
 		$application = ( new MembershipApplicationBuilder() )->newApplicationFromRequest( $request );
 
-		$this->assertIsExpectedCompanyPersonName( $application->getApplicant()->getPersonName() );
+		$this->assertIsExpectedCompanyPersonName( $application->getApplicant()->getName() );
 		$this->assertIsExpectedAddress( $application->getApplicant()->getPhysicalAddress() );
 
 		$this->assertEquals(

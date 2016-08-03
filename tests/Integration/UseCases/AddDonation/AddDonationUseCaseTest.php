@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\AddDonation;
 
 use PHPUnit_Framework_MockObject_MockObject;
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorName;
 use WMDE\Fundraising\Frontend\DonatingContext\Authorization\DonationTokenFetcher;
 use WMDE\Fundraising\Frontend\DonatingContext\Authorization\DonationTokens;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation;
@@ -163,7 +163,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$donationRequest = new AddDonationRequest();
 		$donationRequest->setAmount( Euro::newFromString( '1.00' ) );
 		$donationRequest->setPaymentType( PaymentType::BANK_TRANSFER );
-		$donationRequest->setDonorType( PersonName::PERSON_ANONYMOUS );
+		$donationRequest->setDonorType( DonorName::PERSON_ANONYMOUS );
 		return $donationRequest;
 	}
 
@@ -171,7 +171,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$donationRequest = new AddDonationRequest();
 		$donationRequest->setPaymentType( PaymentType::DIRECT_DEBIT );
 		$donationRequest->setAmount( Euro::newFromInt( 0 ) );
-		$donationRequest->setDonorType( PersonName::PERSON_ANONYMOUS );
+		$donationRequest->setDonorType( DonorName::PERSON_ANONYMOUS );
 		return $donationRequest;
 	}
 
@@ -252,7 +252,7 @@ class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
 	private function newValidAddDonationRequestWithEmail( string $email ): AddDonationRequest {
 		$request = $this->newMinimumDonationRequest();
 
-		$request->setDonorType( PersonName::PERSON_PRIVATE );
+		$request->setDonorType( DonorName::PERSON_PRIVATE );
 		$request->setDonorFirstName( ValidDonation::DONOR_FIRST_NAME );
 		$request->setDonorLastName( ValidDonation::DONOR_LAST_NAME );
 		$request->setDonorCompany( '' );

@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Domain\Model;
+namespace WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model;
 
 use WMDE\Fundraising\Frontend\FreezableValueObject;
 
@@ -10,7 +10,7 @@ use WMDE\Fundraising\Frontend\FreezableValueObject;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class PersonName {
+class ApplicantName {
 	use FreezableValueObject;
 
 	const PERSON_PRIVATE = 'person';

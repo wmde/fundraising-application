@@ -98,9 +98,9 @@ class CancelMembershipApplicationUseCaseTest extends \PHPUnit_Framework_TestCase
 			$application->getApplicant()->getEmailAddress(),
 			[
 				'membershipApplicant' => [
-					'salutation' => $application->getApplicant()->getPersonName()->getSalutation(),
-					'title' => $application->getApplicant()->getPersonName()->getTitle(),
-					'lastName' => $application->getApplicant()->getPersonName()->getLastName()
+					'salutation' => $application->getApplicant()->getName()->getSalutation(),
+					'title' => $application->getApplicant()->getName()->getTitle(),
+					'lastName' => $application->getApplicant()->getName()->getLastName()
 				],
 			'applicationId' => 1
 			]

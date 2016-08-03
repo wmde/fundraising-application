@@ -84,9 +84,9 @@ class CancelMembershipApplicationUseCase {
 		return [
 			'applicationId' => $application->getId(),
 			'membershipApplicant' => [
-				'salutation' => $application->getApplicant()->getPersonName()->getSalutation(),
-				'title' => $application->getApplicant()->getPersonName()->getTitle(),
-				'lastName' => $application->getApplicant()->getPersonName()->getLastName()
+				'salutation' => $application->getApplicant()->getName()->getSalutation(),
+				'title' => $application->getApplicant()->getName()->getTitle(),
+				'lastName' => $application->getApplicant()->getName()->getLastName()
 			]
 		];
 	}

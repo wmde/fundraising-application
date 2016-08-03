@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
-use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonationComment;
@@ -196,7 +196,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		);
 	}
 
-	private function getDataFieldsFromPersonName( PersonName $name ) {
+	private function getDataFieldsFromPersonName( DonorName $name ) {
 		return [
 			'adresstyp' => $name->getPersonType(),
 			'anrede' => $name->getSalutation(),
@@ -352,11 +352,11 @@ class DoctrineDonationRepository implements DonationRepository {
 		return new PaymentWithoutAssociatedData( $dd->getPaymentType() );
 	}
 
-	private function getPersonNameFromEntity( DoctrineDonation $dd ): PersonName {
+	private function getPersonNameFromEntity( DoctrineDonation $dd ): DonorName {
 		$data = $dd->getDecodedData();
 
-		$name = $data['adresstyp'] === PersonName::PERSON_COMPANY
-			? PersonName::newCompanyName() : PersonName::newPrivatePersonName();
+		$name = $data['adresstyp'] === DonorName::PERSON_COMPANY
+			? DonorName::newCompanyName() : DonorName::newPrivatePersonName();
 
 		$name->setSalutation( $data['anrede'] );
 		$name->setTitle( $data['titel'] );

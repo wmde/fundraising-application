@@ -5,8 +5,8 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\ApplyForMembership;
 
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\ApplicantName;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplicant;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplication;
@@ -39,7 +39,7 @@ class MembershipApplicationBuilder {
 		);
 	}
 
-	private function newPersonName( ApplyForMembershipRequest $request ): PersonName {
+	private function newPersonName( ApplyForMembershipRequest $request ): ApplicantName {
 		$personName = $this->newBasePersonName( $request );
 
 		$personName->setFirstName( $request->getApplicantFirstName() );
@@ -50,14 +50,14 @@ class MembershipApplicationBuilder {
 		return $personName->freeze()->assertNoNullFields();
 	}
 
-	private function newBasePersonName( ApplyForMembershipRequest $request ): PersonName {
+	private function newBasePersonName( ApplyForMembershipRequest $request ): ApplicantName {
 		if ( $request->isCompanyApplication() ) {
-			$personName = PersonName::newCompanyName();
+			$personName = ApplicantName::newCompanyName();
 			$personName->setCompanyName( $request->getApplicantCompanyName() );
 			return $personName;
 		}
 
-		return PersonName::newPrivatePersonName();
+		return ApplicantName::newPrivatePersonName();
 	}
 
 	private function newAddress( ApplyForMembershipRequest $request ): PhysicalAddress {

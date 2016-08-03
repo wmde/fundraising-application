@@ -8,8 +8,8 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Entities\MembershipApplication as DoctrineApplication;
-use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\ApplicantName;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplicant;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplication;
@@ -86,10 +86,10 @@ class DoctrineMembershipApplicationRepository implements MembershipApplicationRe
 	}
 
 	private function setApplicantFields( DoctrineApplication $application, MembershipApplicant $applicant ) {
-		$application->setApplicantFirstName( $applicant->getPersonName()->getFirstName() );
-		$application->setApplicantLastName( $applicant->getPersonName()->getLastName() );
-		$application->setApplicantSalutation( $applicant->getPersonName()->getSalutation() );
-		$application->setApplicantTitle( $applicant->getPersonName()->getTitle() );
+		$application->setApplicantFirstName( $applicant->getName()->getFirstName() );
+		$application->setApplicantLastName( $applicant->getName()->getLastName() );
+		$application->setApplicantSalutation( $applicant->getName()->getSalutation() );
+		$application->setApplicantTitle( $applicant->getName()->getTitle() );
 
 		$application->setApplicantDateOfBirth( $applicant->getDateOfBirth() );
 
@@ -182,8 +182,8 @@ class DoctrineMembershipApplicationRepository implements MembershipApplicationRe
 		);
 	}
 
-	private function newPersonName( DoctrineApplication $application ): PersonName {
-		$personName = PersonName::newPrivatePersonName();
+	private function newPersonName( DoctrineApplication $application ): ApplicantName {
+		$personName = ApplicantName::newPrivatePersonName();
 
 		$personName->setFirstName( $application->getApplicantFirstName() );
 		$personName->setLastName( $application->getApplicantLastName() );

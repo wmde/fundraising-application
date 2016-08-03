@@ -2,7 +2,7 @@
 
 namespace WMDE\Fundraising\Tests\Integration\Validation;
 
-use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\Infrastructure\NullDomainNameValidator;
@@ -42,7 +42,7 @@ class PersonalInfoValidatorTest extends ValidatorTestCase {
 
 	public function testGivenMissingName_validationFails() {
 		$personalInfo = new Donor(
-			PersonName::newCompanyName(),
+			DonorName::newCompanyName(),
 			$this->newPhysicalAddress(),
 			self::VALID_EMAIL_ADDRESS
 		);
@@ -76,8 +76,8 @@ class PersonalInfoValidatorTest extends ValidatorTestCase {
 		);
 	}
 
-	private function newCompanyName(): PersonName {
-		$name = PersonName::newCompanyName();
+	private function newCompanyName(): DonorName {
+		$name = DonorName::newCompanyName();
 		$name->setCompanyName( 'Globex Corp.' );
 		return $name;
 	}
