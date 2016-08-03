@@ -11,13 +11,13 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\InMemorySubscriptionRepository;
 use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
 use WMDE\Fundraising\Frontend\Validation\AllowedValuesValidator;
 use WMDE\Fundraising\Frontend\Validation\EmailValidator;
-use WMDE\Fundraising\Frontend\Validation\SubscriptionDuplicateValidator;
-use WMDE\Fundraising\Frontend\Validation\SubscriptionValidator;
+use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionDuplicateValidator;
+use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionValidator;
 use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
 use WMDE\Fundraising\Frontend\Validation\ValidationResult;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Validation\SubscriptionValidator
+ * @covers WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionValidator
  *
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
@@ -32,7 +32,7 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 	}
 
 	private function getMockDuplicateValidator() {
-		$mock = $this->getMockBuilder( SubscriptionDuplicateValidator::class )
+		$mock = $this->getMockBuilder( \WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionDuplicateValidator::class )
 			->disableOriginalConstructor()->getMock();
 
 		$mock->method( 'validate' )->willReturn( new ValidationResult() );
@@ -54,7 +54,7 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 
 	public function testEmailIsValidated() {
 		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
-		$subscriptionValidator = new SubscriptionValidator(
+		$subscriptionValidator = new \WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionValidator(
 			$mailValidator,
 			$this->getMockTextPolicyValidator(),
 			$this->getMockDuplicateValidator(),
@@ -82,7 +82,7 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 
 	public function testLastNameIsValidated() {
 		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
-		$subscriptionValidator = new SubscriptionValidator(
+		$subscriptionValidator = new \WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionValidator(
 			$mailValidator,
 			$this->getMockTextPolicyValidator(),
 			$this->getMockDuplicateValidator(),
@@ -130,7 +130,7 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 		$policyValidator = $this->createMock( TextPolicyValidator::class );
 		$policyValidator->method( 'hasHarmlessContent' )
 			->willReturn( false );
-		$subscriptionValidator = new SubscriptionValidator(
+		$subscriptionValidator = new \WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionValidator(
 			$mailValidator,
 			$policyValidator,
 			$this->getMockDuplicateValidator(),

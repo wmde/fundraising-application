@@ -2,10 +2,19 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Validation;
+namespace WMDE\Fundraising\Frontend\SubscriptionContext\Validation;
 
 use WMDE\Fundraising\Entities\Subscription;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Domain\Repositories\SubscriptionRepositoryException;
+use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionDuplicateValidator;
+use WMDE\Fundraising\Frontend\Validation\AllowedValuesValidator;
+use WMDE\Fundraising\Frontend\Validation\CanValidateField;
+use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
+use WMDE\Fundraising\Frontend\Validation\EmailValidator;
+use WMDE\Fundraising\Frontend\Validation\FieldTextPolicyValidator;
+use WMDE\Fundraising\Frontend\Validation\RequiredFieldValidator;
+use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
+use WMDE\Fundraising\Frontend\Validation\ValidationResult;
 
 /**
  * @license GNU GPL v2+

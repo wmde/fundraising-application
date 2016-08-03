@@ -11,7 +11,7 @@ use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\EmailAdd
 use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Domain\Repositories\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Domain\Repositories\SubscriptionRepositoryException;
-use WMDE\Fundraising\Frontend\Validation\SubscriptionValidator;
+use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionValidator;
 
 /**
  * @license GNU GPL v2+
