@@ -5,11 +5,11 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\ApplyForMembership;
 
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\MembershipApplicationTokenFetcher;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplication;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\MembershipApplicationRepository;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\MembershipApplicationPiwikTracker;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\MembershipApplicationTracker;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\ApplicationTokenFetcher;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Application;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\ApplicationRepository;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\ApplicationPiwikTracker;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\ApplicationTracker;
 
 /**
  * @license GNU GPL v2+
@@ -25,10 +25,10 @@ class ApplyForMembershipUseCase {
 	private $validator;
 	private $piwikTracker;
 
-	public function __construct( MembershipApplicationRepository $repository,
-		MembershipApplicationTokenFetcher $tokenFetcher, TemplateBasedMailer $mailer,
-		MembershipApplicationValidator $validator, MembershipApplicationTracker $tracker,
-		MembershipApplicationPiwikTracker $piwikTracker ) {
+	public function __construct( ApplicationRepository $repository,
+		ApplicationTokenFetcher $tokenFetcher, TemplateBasedMailer $mailer,
+		MembershipApplicationValidator $validator, ApplicationTracker $tracker,
+		ApplicationPiwikTracker $piwikTracker ) {
 
 		$this->repository = $repository;
 		$this->tokenFetcher = $tokenFetcher;
@@ -73,11 +73,11 @@ class ApplyForMembershipUseCase {
 		);
 	}
 
-	private function newApplicationFromRequest( ApplyForMembershipRequest $request ): MembershipApplication {
+	private function newApplicationFromRequest( ApplyForMembershipRequest $request ): Application {
 		return ( new MembershipApplicationBuilder() )->newApplicationFromRequest( $request );
 	}
 
-	private function sendConfirmationEmail( MembershipApplication $application ) {
+	private function sendConfirmationEmail( Application $application ) {
 		$this->mailer->sendMail(
 			$application->getApplicant()->getEmailAddress(),
 			[
@@ -91,7 +91,7 @@ class ApplyForMembershipUseCase {
 		);
 	}
 
-	private function applicationNeedsModeration( MembershipApplication $application ): bool {
+	private function applicationNeedsModeration( Application $application ): bool {
 		return
 			$application->getPayment()->getYearlyAmount()->getEuroFloat()
 			> self::YEARLY_PAYMENT_MODERATION_THRESHOLD_IN_EURO;

@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\ApplyForMembership;
 
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplication;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Application;
 
 /**
  * @license GNU GPL v2+
@@ -14,7 +14,7 @@ use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Membersh
 class ApplyForMembershipResponse {
 
 	public static function newSuccessResponse( string $accessToken, string $updateToken,
-		MembershipApplication $application ): self {
+		Application $application ): self {
 
 		$response = new self( new ApplicationValidationResult() );
 		$response->accessToken = $accessToken;
@@ -62,9 +62,9 @@ class ApplyForMembershipResponse {
 	 * Keep in mind that you should not use domain logic in the presenter, or put presentation helpers
 	 * in the domain object!
 	 *
-	 * @return \WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplication
+	 * @return \WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Application
 	 */
-	public function getMembershipApplication(): MembershipApplication {
+	public function getMembershipApplication(): Application {
 		if ( !$this->isSuccessful() ) {
 			throw new \RuntimeException( 'The result only has a membership application object when successful' );
 		}

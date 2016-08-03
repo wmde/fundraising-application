@@ -6,17 +6,17 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
 
 use Doctrine\ORM\EntityManager;
 use WMDE\Fundraising\Entities\MembershipApplication as DoctrineApplication;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess\DoctrineMembershipApplicationRepository;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess\DoctrineApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\GetMembershipApplicationException;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\MembershipApplicationRepository;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\StoreMembershipApplicationException;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
- * @covers WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess\DoctrineMembershipApplicationRepository
+ * @covers WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess\DoctrineApplicationRepository
  *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
@@ -47,8 +47,8 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit_Framework_Tes
 		$this->assertDoctrineEntityIsInDatabase( $expectedDoctrineEntity );
 	}
 
-	private function newRepository(): MembershipApplicationRepository {
-		return new DoctrineMembershipApplicationRepository( $this->entityManager );
+	private function newRepository(): ApplicationRepository {
+		return new DoctrineApplicationRepository( $this->entityManager );
 	}
 
 	private function assertDoctrineEntityIsInDatabase( DoctrineApplication $expected ) {
@@ -82,7 +82,7 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit_Framework_Tes
 	public function testWhenPersistenceFails_domainExceptionIsThrown() {
 		$donation = ValidMembershipApplication::newDomainEntity();
 
-		$repository = new DoctrineMembershipApplicationRepository( ThrowingEntityManager::newInstance( $this ) );
+		$repository = new DoctrineApplicationRepository( ThrowingEntityManager::newInstance( $this ) );
 
 		$this->expectException( StoreMembershipApplicationException::class );
 		$repository->storeApplication( $donation );
@@ -110,7 +110,7 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit_Framework_Tes
 	}
 
 	public function testWhenReadFails_domainExceptionIsThrown() {
-		$repository = new DoctrineMembershipApplicationRepository( ThrowingEntityManager::newInstance( $this ) );
+		$repository = new DoctrineApplicationRepository( ThrowingEntityManager::newInstance( $this ) );
 
 		$this->expectException( GetMembershipApplicationException::class );
 		$repository->getApplicationById( self::ID_OF_APPLICATION_NOT_IN_DB );

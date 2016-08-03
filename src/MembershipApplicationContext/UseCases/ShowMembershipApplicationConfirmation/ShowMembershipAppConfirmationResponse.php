@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\ShowMembershipApplicationConfirmation;
 
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplication;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Application;
 
 /**
  * @license GNU GPL v2+
@@ -19,11 +19,11 @@ class ShowMembershipAppConfirmationResponse {
 		return new self();
 	}
 
-	public static function newValidResponse( MembershipApplication $membershipApplication, string $updateToken ): self {
+	public static function newValidResponse( Application $membershipApplication, string $updateToken ): self {
 		return new self( $membershipApplication, $updateToken );
 	}
 
-	private function __construct( MembershipApplication $membershipApplication = null, string $updateToken = null ) {
+	private function __construct( Application $membershipApplication = null, string $updateToken = null ) {
 		$this->membershipApplication = $membershipApplication;
 		$this->updateToken = $updateToken;
 	}
@@ -31,7 +31,7 @@ class ShowMembershipAppConfirmationResponse {
 	/**
 	 * Returns the MembershipApplication when @see accessIsPermitted returns true, or null otherwise.
 	 *
-	 * @return MembershipApplication|null
+	 * @return Application|null
 	 */
 	public function getApplication() {
 		return $this->membershipApplication;

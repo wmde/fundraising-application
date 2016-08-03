@@ -8,13 +8,13 @@ use Codeception\Specify;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use WMDE\Fundraising\Entities\MembershipApplication;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\MembershipApplicationAuthorizer;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess\DoctrineMembershipApplicationAuthorizer;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\ApplicationAuthorizer;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess\DoctrineApplicationAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 use WMDE\Fundraising\Store\MembershipApplicationData;
 
 /**
- * @covers WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess\DoctrineMembershipApplicationAuthorizer
+ * @covers WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess\DoctrineApplicationAuthorizer
  *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
@@ -30,7 +30,7 @@ class DoctrineMembershipApplicationAuthorizerTest extends \PHPUnit_Framework_Tes
 	const ID_OF_WRONG_APPLICATION = 42;
 
 	private function newAuthorizerWithApplications( string $updateToken = null,
-		string $accessToken = null, MembershipApplication ...$applications ): MembershipApplicationAuthorizer {
+		string $accessToken = null, MembershipApplication ...$applications ): ApplicationAuthorizer {
 
 		$entityManager = TestEnvironment::newInstance()->getFactory()->getEntityManager();
 
@@ -40,7 +40,7 @@ class DoctrineMembershipApplicationAuthorizerTest extends \PHPUnit_Framework_Tes
 
 		$entityManager->flush();
 
-		return new DoctrineMembershipApplicationAuthorizer( $entityManager, $updateToken, $accessToken );
+		return new DoctrineApplicationAuthorizer( $entityManager, $updateToken, $accessToken );
 	}
 
 	/**
@@ -145,7 +145,7 @@ class DoctrineMembershipApplicationAuthorizerTest extends \PHPUnit_Framework_Tes
 	 * @slowThreshold 400
 	 */
 	public function testWhenDoctrineThrowsException() {
-		$authorizer = new DoctrineMembershipApplicationAuthorizer(
+		$authorizer = new DoctrineApplicationAuthorizer(
 			$this->getThrowingEntityManager(),
 			self::CORRECT_UPDATE_TOKEN,
 			self::CORRECT_ACCESS_TOKEN

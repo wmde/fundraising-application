@@ -9,9 +9,9 @@ use WMDE\Fundraising\Entities\MembershipApplication as DoctrineMembershipApplica
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\ApplicantName;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\EmailAddress;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplicant;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplication;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipPayment;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Applicant;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Application;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Payment;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\PhoneNumber;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
@@ -39,7 +39,7 @@ class ValidMembershipApplication {
 	const APPLICANT_EMAIL_ADDRESS = 'jeroendedauw@gmail.com';
 	const APPLICANT_PHONE_NUMBER = '1337-1337-1337';
 
-	const MEMBERSHIP_TYPE = MembershipApplication::ACTIVE_MEMBERSHIP;
+	const MEMBERSHIP_TYPE = Application::ACTIVE_MEMBERSHIP;
 	const PAYMENT_PERIOD_IN_MONTHS = 3;
 	const PAYMENT_AMOUNT_IN_EURO = 10;
 
@@ -52,21 +52,21 @@ class ValidMembershipApplication {
 	const TEMPLATE_CAMPAIGN = 'test161012';
 	const TEMPLATE_NAME = 'Some_Membership_Form_Template.twig';
 
-	public static function newDomainEntity(): MembershipApplication {
+	public static function newDomainEntity(): Application {
 		return ( new self() )->createApplication();
 	}
 
-	private function createApplication(): MembershipApplication {
-		return MembershipApplication::newApplication(
+	private function createApplication(): Application {
+		return Application::newApplication(
 			self::MEMBERSHIP_TYPE,
-			new MembershipApplicant(
+			new Applicant(
 				$this->newApplicantName(),
 				$this->newAddress(),
 				new EmailAddress( self::APPLICANT_EMAIL_ADDRESS ),
 				new PhoneNumber( self::APPLICANT_PHONE_NUMBER ),
 				new \DateTime( self::APPLICANT_DATE_OF_BIRTH )
 			),
-			new MembershipPayment(
+			new Payment(
 				self::PAYMENT_PERIOD_IN_MONTHS,
 				Euro::newFromFloat( self::PAYMENT_AMOUNT_IN_EURO ),
 				$this->newBankData()

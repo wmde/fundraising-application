@@ -11,12 +11,12 @@ use WMDE\Fundraising\Entities\MembershipApplication as DoctrineApplication;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\ApplicantName;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\EmailAddress;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplicant;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplication;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipPayment;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Applicant;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Application;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Payment;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\PhoneNumber;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\GetMembershipApplicationException;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\MembershipApplicationRepository;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\StoreMembershipApplicationException;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
@@ -25,7 +25,7 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class DoctrineMembershipApplicationRepository implements MembershipApplicationRepository {
+class DoctrineApplicationRepository implements ApplicationRepository {
 
 	private $entityManager;
 
@@ -33,7 +33,7 @@ class DoctrineMembershipApplicationRepository implements MembershipApplicationRe
 		$this->entityManager = $entityManager;
 	}
 
-	public function storeApplication( MembershipApplication $application ) {
+	public function storeApplication( Application $application ) {
 		if ( $application->hasId() ) {
 			$this->updateApplication( $application );
 		}
@@ -42,7 +42,7 @@ class DoctrineMembershipApplicationRepository implements MembershipApplicationRe
 		}
 	}
 
-	private function insertApplication( MembershipApplication $application ) {
+	private function insertApplication( Application $application ) {
 		$doctrineApplication = new DoctrineApplication();
 		$this->updateDoctrineApplication( $doctrineApplication, $application );
 
@@ -57,7 +57,7 @@ class DoctrineMembershipApplicationRepository implements MembershipApplicationRe
 		$application->assignId( $doctrineApplication->getId() );
 	}
 
-	private function updateApplication( MembershipApplication $application ) {
+	private function updateApplication( Application $application ) {
 		$doctrineApplication = $this->getDoctrineApplicationById( $application->getId() );
 
 		if ( $doctrineApplication === null ) {
@@ -75,7 +75,7 @@ class DoctrineMembershipApplicationRepository implements MembershipApplicationRe
 		}
 	}
 
-	private function updateDoctrineApplication( DoctrineApplication $doctrineApplication, MembershipApplication $application ) {
+	private function updateDoctrineApplication( DoctrineApplication $doctrineApplication, Application $application ) {
 		$doctrineApplication->setId( $application->getId() );
 		$doctrineApplication->setMembershipType( $application->getType() );
 
@@ -85,7 +85,7 @@ class DoctrineMembershipApplicationRepository implements MembershipApplicationRe
 		$doctrineApplication->setStatus( $this->getDoctrineStatus( $application ) );
 	}
 
-	private function setApplicantFields( DoctrineApplication $application, MembershipApplicant $applicant ) {
+	private function setApplicantFields( DoctrineApplication $application, Applicant $applicant ) {
 		$application->setApplicantFirstName( $applicant->getName()->getFirstName() );
 		$application->setApplicantLastName( $applicant->getName()->getLastName() );
 		$application->setApplicantSalutation( $applicant->getName()->getSalutation() );
@@ -104,7 +104,7 @@ class DoctrineMembershipApplicationRepository implements MembershipApplicationRe
 		$application->setAddress( $address->getStreetAddress() );
 	}
 
-	private function setPaymentFields( DoctrineApplication $application, MembershipPayment $payment ) {
+	private function setPaymentFields( DoctrineApplication $application, Payment $payment ) {
 		$application->setPaymentIntervalInMonths( $payment->getIntervalInMonths() );
 		$application->setPaymentAmount( (int)$payment->getAmount()->getEuroFloat() );
 
@@ -117,7 +117,7 @@ class DoctrineMembershipApplicationRepository implements MembershipApplicationRe
 		$application->setPaymentIban( $bankData->getIban()->toString() );
 	}
 
-	private function getDoctrineStatus( MembershipApplication $application ): int {
+	private function getDoctrineStatus( Application $application ): int {
 		$status = DoctrineApplication::STATUS_NEUTRAL;
 
 		if ( $application->needsModeration() ) {
@@ -134,7 +134,7 @@ class DoctrineMembershipApplicationRepository implements MembershipApplicationRe
 	/**
 	 * @param int $id
 	 *
-	 * @return \WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplication|null
+	 * @return \WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Application|null
 	 * @throws \WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\GetMembershipApplicationException
 	 */
 	public function getApplicationById( int $id ) {
@@ -161,18 +161,18 @@ class DoctrineMembershipApplicationRepository implements MembershipApplicationRe
 		return $this->entityManager->find( DoctrineApplication::class, $id );
 	}
 
-	private function newApplicationDomainEntity( DoctrineApplication $application ): MembershipApplication {
-		return new MembershipApplication(
+	private function newApplicationDomainEntity( DoctrineApplication $application ): Application {
+		return new Application(
 			$application->getId(),
 			$application->getMembershipType(),
-			new MembershipApplicant(
+			new Applicant(
 				$this->newPersonName( $application ),
 				$this->newAddress( $application ),
 				new EmailAddress( $application->getApplicantEmailAddress() ),
 				new PhoneNumber( $application->getApplicantPhoneNumber() ),
 				$application->getApplicantDateOfBirth()
 			),
-			new MembershipPayment(
+			new Payment(
 				$application->getPaymentIntervalInMonths(),
 				Euro::newFromFloat( $application->getPaymentAmount() ),
 				$this->newBankData( $application )
