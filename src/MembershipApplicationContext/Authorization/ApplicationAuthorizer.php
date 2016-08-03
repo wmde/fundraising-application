@@ -8,7 +8,7 @@ namespace WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-interface MembershipApplicationAuthorizer {
+interface ApplicationAuthorizer {
 
 	/**
 	 * Should return false on infrastructure failure.

@@ -5,9 +5,9 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\ShowMembershipApplicationConfirmation;
 
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\GetDonationException;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\MembershipApplicationAuthorizer;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\MembershipApplicationTokenFetcher;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\MembershipApplicationRepository;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\ApplicationAuthorizer;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\ApplicationTokenFetcher;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\ApplicationRepository;
 
 /**
  * @license GNU GPL v2+
@@ -18,12 +18,12 @@ class ShowMembershipApplicationConfirmationUseCase {
 	private $authorizer;
 	private $repository;
 	/**
-	 * @var MembershipApplicationTokenFetcher
+	 * @var ApplicationTokenFetcher
 	 */
 	private $tokenFetcher;
 
-	public function __construct( MembershipApplicationAuthorizer $authorizer, MembershipApplicationRepository $repository,
-								 MembershipApplicationTokenFetcher $tokenFetcher ) {
+	public function __construct( ApplicationAuthorizer $authorizer, ApplicationRepository $repository,
+								 ApplicationTokenFetcher $tokenFetcher ) {
 		$this->authorizer = $authorizer;
 		$this->repository = $repository;
 		$this->tokenFetcher = $tokenFetcher;

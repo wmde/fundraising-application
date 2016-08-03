@@ -7,14 +7,14 @@ namespace WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use WMDE\Fundraising\Entities\MembershipApplication;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\MembershipApplicationPiwikTracker;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\MembershipApplicationPiwikTrackingException;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\ApplicationPiwikTracker;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\ApplicationPiwikTrackingException;
 
 /**
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class DoctrineMembershipApplicationPiwikTracker implements MembershipApplicationPiwikTracker {
+class DoctrineApplicationPiwikTracker implements ApplicationPiwikTracker {
 
 	private $entityManager;
 
@@ -36,11 +36,11 @@ class DoctrineMembershipApplicationPiwikTracker implements MembershipApplication
 		}
 		catch ( ORMException $ex ) {
 			// TODO: might want to log failure here
-			throw new MembershipApplicationPiwikTrackingException( 'Membership application could not be accessed' );
+			throw new ApplicationPiwikTrackingException( 'Membership application could not be accessed' );
 		}
 
 		if ( $application === null ) {
-			throw new MembershipApplicationPiwikTrackingException( 'Membership application does not exist' );
+			throw new ApplicationPiwikTrackingException( 'Membership application does not exist' );
 		}
 
 		return $application;
@@ -52,7 +52,7 @@ class DoctrineMembershipApplicationPiwikTracker implements MembershipApplication
 			$this->entityManager->flush();
 		}
 		catch ( ORMException $ex ) {
-			throw new MembershipApplicationPiwikTrackingException( 'Failed to persist membership application' );
+			throw new ApplicationPiwikTrackingException( 'Failed to persist membership application' );
 		}
 	}
 

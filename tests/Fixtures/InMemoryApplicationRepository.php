@@ -4,29 +4,29 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplication;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\MembershipApplicationRepository;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Application;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\StoreMembershipApplicationException;
 
 /**
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class InMemoryMembershipApplicationRepository implements MembershipApplicationRepository {
+class InMemoryApplicationRepository implements ApplicationRepository {
 
 	/**
-	 * @var \WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplication[]
+	 * @var \WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Application[]
 	 */
 	private $applications = [];
 
 	private $nextNewId = 1;
 
 	/**
-	 * @param \WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplication $application
+	 * @param \WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Application $application
 	 *
 	 * @throws StoreMembershipApplicationException
 	 */
-	public function storeApplication( MembershipApplication $application ) {
+	public function storeApplication( Application $application ) {
 		if ( !$application->hasId() ) {
 			$application->assignId( $this->nextNewId++ );
 		}
@@ -37,7 +37,7 @@ class InMemoryMembershipApplicationRepository implements MembershipApplicationRe
 	/**
 	 * @param int $id
 	 *
-	 * @return \WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplication|null
+	 * @return \WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Application|null
 	 * @throws \WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\GetMembershipApplicationException
 	 */
 	public function getApplicationById( int $id ) {

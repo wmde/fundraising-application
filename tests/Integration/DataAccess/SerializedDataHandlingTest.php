@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManager;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Entities\MembershipApplication;
 use WMDE\Fundraising\Frontend\DonatingContext\DataAccess\DoctrineDonationRepository;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess\DoctrineMembershipApplicationRepository;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess\DoctrineApplicationRepository;
 
 /**
  * @licence GNU GPL v2+
@@ -323,7 +323,7 @@ class SerializedDataHandlingTest extends \PHPUnit_Framework_TestCase {
 
 	/** @dataProvider encodedMembershipDataProvider */
 	public function testDataFieldOfMembershipApplicationIsInteractedWithCorrectly( $data ) {
-		$this->repository = new DoctrineMembershipApplicationRepository( $this->entityManager );
+		$this->repository = new DoctrineApplicationRepository( $this->entityManager );
 		$this->storeMembershipApplication( $data );
 
 		$donation = $this->repository->getApplicationById( 1 );

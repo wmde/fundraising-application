@@ -6,15 +6,15 @@ namespace WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess;
 
 use Doctrine\ORM\EntityManager;
 use WMDE\Fundraising\Entities\MembershipApplication;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\MembershipApplicationTokenFetcher;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\MembershipApplicationTokenFetchingException;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\ApplicationTokenFetcher;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\ApplicationTokenFetchingException;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\MembershipApplicationTokens;
 
 /**
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class DoctrineMembershipApplicationTokenFetcher implements MembershipApplicationTokenFetcher {
+class DoctrineApplicationTokenFetcher implements ApplicationTokenFetcher {
 
 	private $entityManager;
 
@@ -25,8 +25,8 @@ class DoctrineMembershipApplicationTokenFetcher implements MembershipApplication
 	/**
 	 * @param int $applicationId
 	 *
-	 * @return \WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\MembershipApplicationTokens
-	 * @throws MembershipApplicationTokenFetchingException
+	 * @return MembershipApplicationTokens
+	 * @throws ApplicationTokenFetchingException
 	 */
 	public function getTokens( int $applicationId ): MembershipApplicationTokens {
 		$application = $this->getApplicationById( $applicationId );

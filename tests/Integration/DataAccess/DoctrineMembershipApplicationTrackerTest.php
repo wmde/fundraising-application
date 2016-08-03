@@ -6,14 +6,14 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
 
 use Doctrine\ORM\EntityManager;
 use WMDE\Fundraising\Entities\MembershipApplication;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess\DoctrineMembershipApplicationTracker;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\MembershipApplicationTracker;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess\DoctrineApplicationTracker;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\ApplicationTracker;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\MembershipApplicationTrackingInfo;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
- * @covers WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess\DoctrineMembershipApplicationTracker
+ * @covers WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess\DoctrineApplicationTracker
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
@@ -65,8 +65,8 @@ class DoctrineMembershipApplicationTrackerTest extends \PHPUnit_Framework_TestCa
 		return $this->entityManager->find( MembershipApplication::class, $applicationId );
 	}
 
-	private function newMembershipApplicationTracker(): MembershipApplicationTracker {
-		return new DoctrineMembershipApplicationTracker( $this->entityManager );
+	private function newMembershipApplicationTracker(): ApplicationTracker {
+		return new DoctrineApplicationTracker( $this->entityManager );
 	}
 
 	private function newMembershipApplicationTrackingInfo( $campaignCode, $keyword ) {

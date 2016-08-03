@@ -2,8 +2,8 @@
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplicant;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplication;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Applicant;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Application;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\ShowMembershipApplicationConfirmation\ShowMembershipAppConfirmationResponse;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
@@ -31,7 +31,7 @@ class MembershipApplicationConfirmationHtmlPresenter {
 		);
 	}
 
-	private function getConfirmationPageArguments( MembershipApplication $membershipApplication, string $updateToken ): array {
+	private function getConfirmationPageArguments( Application $membershipApplication, string $updateToken ): array {
 		return [
 			'membershipApplication' => $this->getApplicationArguments( $membershipApplication, $updateToken ),
 			'person' => $this->getPersonArguments( $membershipApplication->getApplicant() ),
@@ -39,7 +39,7 @@ class MembershipApplicationConfirmationHtmlPresenter {
 		];
 	}
 
-	private function getApplicationArguments( MembershipApplication $membershipApplication, string $updateToken ): array {
+	private function getApplicationArguments( Application $membershipApplication, string $updateToken ): array {
 		return [
 			'id' => $membershipApplication->getId(),
 			'membershipFee' => $membershipApplication->getPayment()->getAmount()->getEuroString(),
@@ -48,7 +48,7 @@ class MembershipApplicationConfirmationHtmlPresenter {
 		];
 	}
 
-	private function getPersonArguments( MembershipApplicant $applicant ): array {
+	private function getPersonArguments( Applicant $applicant ): array {
 		return [
 			'salutation' => $applicant->getName()->getSalutation(),
 			'title' => $applicant->getName()->getTitle(),

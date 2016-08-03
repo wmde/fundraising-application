@@ -8,7 +8,7 @@ namespace WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class MembershipApplication {
+class Application {
 
 	const ACTIVE_MEMBERSHIP = 'active';
 	const SUSTAINING_MEMBERSHIP = 'sustaining';
@@ -30,7 +30,7 @@ class MembershipApplication {
 	private $needsModeration;
 	private $isCancelled;
 
-	public static function newApplication( string $type, MembershipApplicant $applicant, MembershipPayment $payment ): self {
+	public static function newApplication( string $type, Applicant $applicant, Payment $payment ): self {
 		return new self(
 			null,
 			$type,
@@ -41,7 +41,7 @@ class MembershipApplication {
 		);
 	}
 
-	public function __construct( int $id = null, string $type, MembershipApplicant $applicant, MembershipPayment $payment,
+	public function __construct( int $id = null, string $type, Applicant $applicant, Payment $payment,
 		bool $needsModeration, bool $isCancelled ) {
 
 		$this->id = $id;
@@ -63,11 +63,11 @@ class MembershipApplication {
 		return $this->id !== null;
 	}
 
-	public function getApplicant(): MembershipApplicant {
+	public function getApplicant(): Applicant {
 		return $this->applicant;
 	}
 
-	public function getPayment(): MembershipPayment {
+	public function getPayment(): Payment {
 		return $this->payment;
 	}
 

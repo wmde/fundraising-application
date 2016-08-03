@@ -6,16 +6,16 @@ namespace WMDE\Fundraising\Frontend\MembershipApplicationContext\Infrastructure;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplication;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Application;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\GetMembershipApplicationException;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\MembershipApplicationRepository;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\StoreMembershipApplicationException;
 
 /**
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class LoggingMembershipApplicationRepository implements MembershipApplicationRepository {
+class LoggingApplicationRepository implements ApplicationRepository {
 
 	const CONTEXT_EXCEPTION_KEY = 'exception';
 
@@ -23,7 +23,7 @@ class LoggingMembershipApplicationRepository implements MembershipApplicationRep
 	private $logger;
 	private $logLevel;
 
-	public function __construct( MembershipApplicationRepository $repository, LoggerInterface $logger ) {
+	public function __construct( ApplicationRepository $repository, LoggerInterface $logger ) {
 		$this->repository = $repository;
 		$this->logger = $logger;
 		$this->logLevel = LogLevel::CRITICAL;
@@ -32,11 +32,11 @@ class LoggingMembershipApplicationRepository implements MembershipApplicationRep
 	/**
 	 * @see MembershipApplicationRepository::storeApplication
 	 *
-	 * @param MembershipApplication $application
+	 * @param Application $application
 	 *
 	 * @throws StoreMembershipApplicationException
 	 */
-	public function storeApplication( MembershipApplication $application ) {
+	public function storeApplication( Application $application ) {
 		try {
 			$this->repository->storeApplication( $application );
 		}
@@ -51,7 +51,7 @@ class LoggingMembershipApplicationRepository implements MembershipApplicationRep
 	 *
 	 * @param int $id
 	 *
-	 * @return MembershipApplication|null
+	 * @return Application|null
 	 * @throws GetMembershipApplicationException
 	 */
 	public function getApplicationById( int $id ) {

@@ -8,7 +8,7 @@ use RuntimeException;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
 
 /**
- * @covers WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplication
+ * @covers WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Application
  *
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
