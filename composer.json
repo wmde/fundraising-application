@@ -98,5 +98,8 @@
 		"phpmd": [
 			"vendor/bin/phpmd src/ text phpmd.xml"
 		]
+	},
+	"config": {
+		"discard-changes": true
 	}
 }
