@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\ApplicationContext\UseCases\PurgeCache;
 
 use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\CachePurger;
-use WMDE\Fundraising\Frontend\Infrastructure\CachePurgingException;
+use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\CachePurgingException;
 
 /**
  * @licence GNU GPL v2+

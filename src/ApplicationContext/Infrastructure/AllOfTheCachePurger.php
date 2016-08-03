@@ -6,7 +6,6 @@ namespace WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure;
 
 use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Cache\FlushableCache;
-use WMDE\Fundraising\Frontend\Infrastructure\CachePurgingException;
 
 /**
  * @licence GNU GPL v2+
