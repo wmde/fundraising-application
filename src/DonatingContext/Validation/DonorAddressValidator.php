@@ -2,9 +2,12 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Validation;
+namespace WMDE\Fundraising\Frontend\DonatingContext\Validation;
 
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorAddress;
+use WMDE\Fundraising\Frontend\Validation\CanValidateField;
+use WMDE\Fundraising\Frontend\Validation\RequiredFieldValidator;
+use WMDE\Fundraising\Frontend\Validation\ValidationResult;
 
 /**
  * @license GNU GPL v2+

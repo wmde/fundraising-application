@@ -6,10 +6,10 @@ namespace WMDE\Fundraising\Tests\Unit;
 
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorAddress;
 use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
-use WMDE\Fundraising\Frontend\Validation\DonorAddressValidator;
+use WMDE\Fundraising\Frontend\DonatingContext\Validation\DonorAddressValidator;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Validation\DonorAddressValidator
+ * @covers WMDE\Fundraising\Frontend\DonatingContext\Validation\DonorAddressValidator
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >

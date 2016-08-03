@@ -1,8 +1,13 @@
 <?php
 
-namespace WMDE\Fundraising\Frontend\Validation;
+namespace WMDE\Fundraising\Frontend\DonatingContext\Validation;
 
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donor;
+use WMDE\Fundraising\Frontend\DonatingContext\Validation\DonorAddressValidator;
+use WMDE\Fundraising\Frontend\DonatingContext\Validation\DonorNameValidator;
+use WMDE\Fundraising\Frontend\Validation\CanValidateField;
+use WMDE\Fundraising\Frontend\Validation\EmailValidator;
+use WMDE\Fundraising\Frontend\Validation\ValidationResult;
 
 /**
  * @license GNU GPL v2+
@@ -15,7 +20,7 @@ class DonorValidator {
 	private $addressValidator;
 	private $mailValidator;
 
-	public function __construct( PersonNameValidator $nameValidator,
+	public function __construct( DonorNameValidator $nameValidator,
 								 DonorAddressValidator $addressValidator,
 								 EmailValidator $mailValidator ) {
 		$this->nameValidator = $nameValidator;

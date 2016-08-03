@@ -2,15 +2,18 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Validation;
+namespace WMDE\Fundraising\Frontend\DonatingContext\Validation;
 
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorName;
+use WMDE\Fundraising\Frontend\Validation\CanValidateField;
+use WMDE\Fundraising\Frontend\Validation\RequiredFieldValidator;
+use WMDE\Fundraising\Frontend\Validation\ValidationResult;
 
 /**
  * @license GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class PersonNameValidator {
+class DonorNameValidator {
 	use CanValidateField;
 
 	public function validate( DonorName $name ): ValidationResult {
