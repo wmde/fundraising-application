@@ -558,8 +558,7 @@ class FunFunFactory {
 	private function newWikiPageRetriever(): PageRetriever {
 		$PageRetriever = new ModifyingPageRetriever(
 			$this->newCachedPageRetriever(),
-			$this->newPageContentModifier(),
-			$this->config['cms-wiki-title-prefix']
+			$this->newPageContentModifier()
 		);
 
 		return $this->addProfilingDecorator( $PageRetriever, 'PageRetriever' );
@@ -576,7 +575,8 @@ class FunFunFactory {
 		return new ApiBasedPageRetriever(
 			$this->getMediaWikiApi(),
 			new ApiUser( $this->config['cms-wiki-user'], $this->config['cms-wiki-password'] ),
-			$this->getLogger()
+			$this->getLogger(),
+			$this->config['cms-wiki-title-prefix']
 		);
 	}
 

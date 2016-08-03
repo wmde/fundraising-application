@@ -6,12 +6,15 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
 use Mediawiki\Api\ApiUser;
 use Mediawiki\Api\MediawikiApi;
 use Mediawiki\Api\UsageException;
+use Mediawiki\Api\SimpleRequest;
 use WMDE\Fundraising\Frontend\ApplicationContext\DataAccess\ApiBasedPageRetriever;
 use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\PageRetriever;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\LoggerSpy;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 class ApiBasedPageRetrieverTest extends \PHPUnit_Framework_TestCase {
+
+	const PAGE_PREFIX = 'Web:SpendenseiteTestSkin/';
 
 	private $api;
 	private $apiUser;
@@ -26,7 +29,7 @@ class ApiBasedPageRetrieverTest extends \PHPUnit_Framework_TestCase {
 		$this->api = $this->getMockBuilder( MediawikiApi::class )->disableOriginalConstructor()->getMock();
 		$this->apiUser = $this->getMockBuilder( ApiUser::class )->disableOriginalConstructor()->getMock();
 		$this->logger = new LoggerSpy();
-		$this->pageRetriever = new ApiBasedPageRetriever( $this->api, $this->apiUser, $this->logger );
+		$this->pageRetriever = new ApiBasedPageRetriever( $this->api, $this->apiUser, $this->logger, self::PAGE_PREFIX );
 	}
 
 	public function testRetrieverReturnsApiResultInRenderMode() {
@@ -77,4 +80,15 @@ class ApiBasedPageRetrieverTest extends \PHPUnit_Framework_TestCase {
 		$this->assertSame( $expectedContent, $this->pageRetriever->fetchPage( 'PerformanceComment' ) );
 	}
 
+	public function testGivenPagenameWithSpaces_theyAreTrimmedAndReplacedWithUnderscores() {
+		$this->api->method( 'isLoggedin' )->willReturn( true );
+		$this->api->expects( $this->once() )
+			->method( 'postRequest' )
+			->with( new SimpleRequest( 'parse', [
+				'page' => self::PAGE_PREFIX . 'No_Spaces_Allowed',
+				'prop' => 'text'
+			] ) );
+
+		$this->pageRetriever->fetchPage( 'No Spaces Allowed ' );
+	}
 }

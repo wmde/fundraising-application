@@ -15,30 +15,16 @@ class ModifyingPageRetriever implements PageRetriever {
 
 	private $pageRetriever;
 	private $contentModifier;
-	private $pageTitlePrefix;
 
-	public function __construct( PageRetriever $pageRetriever, PageContentModifier $contentModifier, string $pageTitlePrefix ) {
+	public function __construct( PageRetriever $pageRetriever, PageContentModifier $contentModifier ) {
 		$this->pageRetriever = $pageRetriever;
 		$this->contentModifier = $contentModifier;
-		$this->pageTitlePrefix = $pageTitlePrefix;
 	}
 
 	public function fetchPage( string $pageName, string $fetchMode ): string {
-		$normalizedPageName = $this->normalizePageName( $this->getPrefixedPageTitle( $pageName ) );
-
-		$content = $this->pageRetriever->fetchPage( $normalizedPageName, $fetchMode );
-		$content = $this->contentModifier->getProcessedContent( $content, $normalizedPageName );
+		$content = $this->pageRetriever->fetchPage( $pageName, $fetchMode );
+		$content = $this->contentModifier->getProcessedContent( $content, $pageName );
 
 		return $content;
 	}
-
-	// TODO: seems misplaced. Should likely either be handled near input, or before sending to API or similar
-	private function normalizePageName( string $title ): string {
-		return ucfirst( str_replace( ' ', '_', trim( $title ) ) );
-	}
-
-	private function getPrefixedPageTitle( string $pageTitle ): string {
-		return $this->pageTitlePrefix . $pageTitle;
-	}
-
 }

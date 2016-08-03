@@ -14,6 +14,7 @@ use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\PageRetriever;
 /**
  * @licence GNU GPL v2+
  * @author Kai Nissen
+ * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class ApiBasedPageRetriever implements PageRetriever {
@@ -27,11 +28,13 @@ class ApiBasedPageRetriever implements PageRetriever {
 	private $api;
 	private $apiUser;
 	private $logger;
+	private $pageTitlePrefix;
 
-	public function __construct( MediawikiApi $api, ApiUser $apiUser, LoggerInterface $logger ) {
+	public function __construct( MediawikiApi $api, ApiUser $apiUser, LoggerInterface $logger, string $pageTitlePrefix ) {
 		$this->api = $api;
 		$this->apiUser = $apiUser;
 		$this->logger = $logger;
+		$this->pageTitlePrefix = $pageTitlePrefix;
 	}
 
 	/**
@@ -41,13 +44,15 @@ class ApiBasedPageRetriever implements PageRetriever {
 	 * @return string
 	 */
 	public function fetchPage( string $pageTitle, string $action = PageRetriever::MODE_RENDERED ): string {
-		$this->logger->debug( __METHOD__ . ': pageTitle', [ $pageTitle ] );
+		$normalizedPageName = $this->normalizePageName( $this->getPrefixedPageTitle( $pageTitle ) );
+
+		$this->logger->debug( __METHOD__ . ': pageTitle', [ $normalizedPageName ] );
 
 		if ( !$this->api->isLoggedin() ) {
 			$this->doLogin();
 		}
 
-		$content = $this->retrieveContent( $pageTitle, $action );
+		$content = $this->retrieveContent( $normalizedPageName, $action );
 
 		if ( $content === false || $content === null ) {
 			$this->logger->debug( __METHOD__ . ': fail, got non-value', [ $content ] );
@@ -125,7 +130,14 @@ class ApiBasedPageRetriever implements PageRetriever {
 				$text
 			)
 		);
+	}
 
+	private function normalizePageName( string $title ): string {
+		return ucfirst( str_replace( ' ', '_', trim( $title ) ) );
+	}
+
+	private function getPrefixedPageTitle( string $pageTitle ): string {
+		return $this->pageTitlePrefix . $pageTitle;
 	}
 
 }
