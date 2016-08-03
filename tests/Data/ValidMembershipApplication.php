@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Data;
 
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Entities\MembershipApplication as DoctrineMembershipApplication;
-use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\ApplicantAddress;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\ApplicantName;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Applicant;
@@ -85,8 +85,8 @@ class ValidMembershipApplication {
 		return $personName->freeze()->assertNoNullFields();
 	}
 
-	private function newAddress(): PhysicalAddress {
-		$address = new PhysicalAddress();
+	private function newAddress(): ApplicantAddress {
+		$address = new ApplicantAddress();
 
 		$address->setCity( self::APPLICANT_CITY );
 		$address->setCountryCode( self::APPLICANT_COUNTRY_CODE );

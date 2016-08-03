@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\ApplyForMembership;
 
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\ApplicantAddress;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\ApplicantName;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Applicant;
@@ -60,8 +60,8 @@ class MembershipApplicationBuilder {
 		return ApplicantName::newPrivatePersonName();
 	}
 
-	private function newAddress( ApplyForMembershipRequest $request ): PhysicalAddress {
-		$address = new PhysicalAddress();
+	private function newAddress( ApplyForMembershipRequest $request ): ApplicantAddress {
+		$address = new ApplicantAddress();
 
 		$address->setCity( $request->getApplicantCity() );
 		$address->setCountryCode( $request->getApplicantCountryCode() );

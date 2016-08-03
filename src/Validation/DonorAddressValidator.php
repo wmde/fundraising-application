@@ -4,16 +4,16 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Validation;
 
-use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorAddress;
 
 /**
  * @license GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class PhysicalAddressValidator {
+class DonorAddressValidator {
 	use CanValidateField;
 
-	public function validate( PhysicalAddress $address ): ValidationResult {
+	public function validate( DonorAddress $address ): ValidationResult {
 		$validator = new RequiredFieldValidator();
 
 		return new ValidationResult( ...array_filter( [

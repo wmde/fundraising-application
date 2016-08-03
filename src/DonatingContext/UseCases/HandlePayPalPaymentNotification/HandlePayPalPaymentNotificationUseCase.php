@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\DonatingContext\UseCases\HandlePayPalPayment
 
 use Psr\Log\LoggerInterface;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorName;
-use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorAddress;
 use WMDE\Fundraising\Frontend\DonatingContext\Authorization\DonationAuthorizer;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonationPayment;
@@ -252,8 +252,8 @@ class HandlePayPalPaymentNotificationUseCase {
 		return $name;
 	}
 
-	private function newPhysicalAddressFromRequest( PayPalNotificationRequest $request ): PhysicalAddress {
-		$address = new PhysicalAddress();
+	private function newPhysicalAddressFromRequest( PayPalNotificationRequest $request ): DonorAddress {
+		$address = new DonorAddress();
 		$address->setStreetAddress( $request->getPayerAddressStreet() );
 		$address->setCity( $request->getPayerAddressCity() );
 		$address->setPostalCode( $request->getPayerAddressPostalCode() );

@@ -8,7 +8,7 @@ use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donor;
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class PersonalInfoValidator {
+class DonorValidator {
 	use CanValidateField;
 
 	private $nameValidator;
@@ -16,7 +16,7 @@ class PersonalInfoValidator {
 	private $mailValidator;
 
 	public function __construct( PersonNameValidator $nameValidator,
-								 PhysicalAddressValidator $addressValidator,
+								 DonorAddressValidator $addressValidator,
 								 EmailValidator $mailValidator ) {
 		$this->nameValidator = $nameValidator;
 		$this->addressValidator = $addressValidator;

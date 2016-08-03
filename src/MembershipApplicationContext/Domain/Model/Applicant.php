@@ -4,8 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model;
 
-use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
-
 /**
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
@@ -18,7 +16,7 @@ class Applicant {
 	private $phone;
 	private $dateOfBirth;
 
-	public function __construct( ApplicantName $name, PhysicalAddress $address, EmailAddress $email,
+	public function __construct( ApplicantName $name, ApplicantAddress $address, EmailAddress $email,
 		PhoneNumber $phone, \DateTime $dateOfBirth = null ) {
 
 		$this->personName = $name;
@@ -32,7 +30,7 @@ class Applicant {
 		return $this->personName;
 	}
 
-	public function getPhysicalAddress(): PhysicalAddress {
+	public function getPhysicalAddress(): ApplicantAddress {
 		return $this->physicalAddress;
 	}
 
