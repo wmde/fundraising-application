@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Domain\Model;
+namespace WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model;
 
 use WMDE\Fundraising\Frontend\FreezableValueObject;
 
@@ -11,7 +11,7 @@ use WMDE\Fundraising\Frontend\FreezableValueObject;
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class PhysicalAddress {
+class ApplicantAddress {
 	use FreezableValueObject;
 
 	private $streetAddress = '';

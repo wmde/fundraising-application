@@ -4,21 +4,21 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Tests\Unit;
 
-use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorAddress;
 use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
-use WMDE\Fundraising\Frontend\Validation\PhysicalAddressValidator;
+use WMDE\Fundraising\Frontend\DonatingContext\Validation\DonorAddressValidator;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Validation\PhysicalAddressValidator
+ * @covers WMDE\Fundraising\Frontend\DonatingContext\Validation\DonorAddressValidator
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class PhysicalAddressValidatorTest extends ValidatorTestCase {
+class DonorAddressValidatorTest extends ValidatorTestCase {
 
 	public function testGivenValidAddress_validatorReturnsTrue_andConstraintViolationsAreEmpty() {
-		$validator = new PhysicalAddressValidator();
-		$physicalAddress = new PhysicalAddress();
+		$validator = new DonorAddressValidator();
+		$physicalAddress = new DonorAddress();
 		$physicalAddress->setStreetAddress( 'Stiftstr. 50' );
 		$physicalAddress->setPostalCode( '20099' );
 		$physicalAddress->setCity( 'Hamburg' );
@@ -29,13 +29,13 @@ class PhysicalAddressValidatorTest extends ValidatorTestCase {
 	}
 
 	public function testGivenEmptyAddress_validatorReturnsFalse() {
-		$validator = new PhysicalAddressValidator();
-		$this->assertFalse( $validator->validate( new PhysicalAddress() )->isSuccessful() );
+		$validator = new DonorAddressValidator();
+		$this->assertFalse( $validator->validate( new DonorAddress() )->isSuccessful() );
 	}
 
 	public function testGivenEmptyAddress_violationsContainsRequiredFieldNames() {
-		$validator = new PhysicalAddressValidator();
-		$result = $validator->validate( new PhysicalAddress() );
+		$validator = new DonorAddressValidator();
+		$result = $validator->validate( new DonorAddress() );
 
 		$this->assertConstraintWasViolated( $result, 'street' );
 		$this->assertConstraintWasViolated( $result, 'postcode' );

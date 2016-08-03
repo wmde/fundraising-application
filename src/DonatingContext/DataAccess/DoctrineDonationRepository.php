@@ -9,7 +9,7 @@ use Doctrine\ORM\ORMException;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorName;
-use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorAddress;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonationComment;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonationPayment;
@@ -207,7 +207,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		];
 	}
 
-	private function getDataFieldsFromAddress( PhysicalAddress $address ) {
+	private function getDataFieldsFromAddress( DonorAddress $address ) {
 		return [
 			'strasse' => $address->getStreetAddress(),
 			'plz' => $address->getPostalCode(),
@@ -367,10 +367,10 @@ class DoctrineDonationRepository implements DonationRepository {
 		return $name->freeze()->assertNoNullFields();
 	}
 
-	private function getPhysicalAddressFromEntity( DoctrineDonation $dd ): PhysicalAddress {
+	private function getPhysicalAddressFromEntity( DoctrineDonation $dd ): DonorAddress {
 		$data = $dd->getDecodedData();
 
-		$address = new PhysicalAddress();
+		$address = new DonorAddress();
 
 		$address->setStreetAddress( $data['strasse'] );
 		$address->setCity( $data['ort'] );

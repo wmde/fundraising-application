@@ -24,7 +24,7 @@ use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\GetInTouch\GetInTouchR
 use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\PurgeCache\PurgeCacheRequest;
 use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\PurgeCache\PurgeCacheResponse;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorName;
-use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorAddress;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddComment\AddCommentRequest;
 use WMDE\Fundraising\Frontend\DonatingContext\UseCases\CancelDonation\CancelDonationRequest;
@@ -112,8 +112,8 @@ $app->post(
 				);
 			}
 
-			private function getPhysicalAddressFromRequest( Request $request ): PhysicalAddress {
-				$address = new PhysicalAddress();
+			private function getPhysicalAddressFromRequest( Request $request ): DonorAddress {
+				$address = new DonorAddress();
 
 				$address->setStreetAddress( $request->get( 'street', '' ) );
 				$address->setPostalCode( $request->get( 'postcode', '' ) );

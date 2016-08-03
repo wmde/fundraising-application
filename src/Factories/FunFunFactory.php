@@ -140,11 +140,11 @@ use WMDE\Fundraising\Frontend\Validation\EmailValidator;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\Fundraising\Frontend\Validation\IbanValidator;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
-use WMDE\Fundraising\Frontend\Validation\PersonalInfoValidator;
-use WMDE\Fundraising\Frontend\Validation\PersonNameValidator;
-use WMDE\Fundraising\Frontend\Validation\PhysicalAddressValidator;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionDuplicateValidator;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionValidator;
+use WMDE\Fundraising\Frontend\DonatingContext\Validation\DonorValidator;
+use WMDE\Fundraising\Frontend\DonatingContext\Validation\DonorNameValidator;
+use WMDE\Fundraising\Frontend\DonatingContext\Validation\DonorAddressValidator;
 use WMDE\Fundraising\Frontend\Validation\TemplateNameValidator;
 use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
 use WMDE\Fundraising\Store\Factory as StoreFactory;
@@ -837,10 +837,10 @@ class FunFunFactory {
 		);
 	}
 
-	public function newPersonalInfoValidator(): PersonalInfoValidator {
-		return new PersonalInfoValidator(
-			new PersonNameValidator(),
-			new PhysicalAddressValidator(),
+	public function newPersonalInfoValidator(): DonorValidator {
+		return new DonorValidator(
+			new DonorNameValidator(),
+			new DonorAddressValidator(),
 			$this->getEmailValidator()
 		);
 	}

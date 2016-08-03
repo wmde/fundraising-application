@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Entities\MembershipApplication as DoctrineApplication;
-use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\ApplicantAddress;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\ApplicantName;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Applicant;
@@ -193,8 +193,8 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 		return $personName->freeze()->assertNoNullFields();
 	}
 
-	private function newAddress( DoctrineApplication $application ): PhysicalAddress {
-		$address = new PhysicalAddress();
+	private function newAddress( DoctrineApplication $application ): ApplicantAddress {
+		$address = new ApplicantAddress();
 
 		$address->setCity( $application->getCity() );
 		$address->setCountryCode( $application->getCountry() );

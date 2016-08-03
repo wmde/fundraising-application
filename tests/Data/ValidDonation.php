@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Data;
 
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorName;
-use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorAddress;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonationComment;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonationPayment;
@@ -204,8 +204,8 @@ class ValidDonation {
 		return $personName->freeze()->assertNoNullFields();
 	}
 
-	private function newAddress(): PhysicalAddress {
-		$address = new PhysicalAddress();
+	private function newAddress(): DonorAddress {
+		$address = new DonorAddress();
 
 		$address->setCity( self::DONOR_CITY );
 		$address->setCountryCode( self::DONOR_COUNTRY_CODE );

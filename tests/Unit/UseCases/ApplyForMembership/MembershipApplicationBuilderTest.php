@@ -5,7 +5,9 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Unit\UseCases\ApplyForMembership;
 
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorAddress;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Applicant;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\ApplicantAddress;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\ApplicantName;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\MembershipApplicationTrackingInfo;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\ApplyForMembership\ApplyForMembershipRequest;
@@ -108,15 +110,15 @@ class MembershipApplicationBuilderTest extends \PHPUnit_Framework_TestCase {
 		return $name->assertNoNullFields()->freeze();
 	}
 
-	private function assertIsExpectedAddress( PhysicalAddress $address ) {
+	private function assertIsExpectedAddress( ApplicantAddress $address ) {
 		$this->assertEquals(
 			$this->getPhysicalAddress(),
 			$address
 		);
 	}
 
-	private function getPhysicalAddress(): PhysicalAddress {
-		$address = new PhysicalAddress();
+	private function getPhysicalAddress(): ApplicantAddress {
+		$address = new ApplicantAddress();
 
 		$address->setStreetAddress( ValidMembershipApplication::APPLICANT_STREET_ADDRESS );
 		$address->setPostalCode( ValidMembershipApplication::APPLICANT_POSTAL_CODE );

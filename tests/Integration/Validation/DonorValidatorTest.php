@@ -2,21 +2,22 @@
 
 namespace WMDE\Fundraising\Tests\Integration\Validation;
 
-use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorName;
-use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donor;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorAddress;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorName;
+use WMDE\Fundraising\Frontend\DonatingContext\Validation\DonorAddressValidator;
+use WMDE\Fundraising\Frontend\DonatingContext\Validation\DonorValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
 use WMDE\Fundraising\Frontend\Validation\EmailValidator;
-use WMDE\Fundraising\Frontend\Validation\PersonalInfoValidator;
-use WMDE\Fundraising\Frontend\Validation\PersonNameValidator;
-use WMDE\Fundraising\Frontend\Validation\PhysicalAddressValidator;
 
 /**
+ * @covers WMDE\Fundraising\Frontend\DonatingContext\Validation\DonorValidator
+ *
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class PersonalInfoValidatorTest extends ValidatorTestCase {
+class DonorValidatorTest extends ValidatorTestCase {
 
 	const VALID_EMAIL_ADDRESS = 'hank.scorpio@globex.com';
 
@@ -27,7 +28,7 @@ class PersonalInfoValidatorTest extends ValidatorTestCase {
 			self::VALID_EMAIL_ADDRESS
 		);
 
-		$this->assertTrue( $this->newPersonalInfoValidator()->validate( $personalInfo )->isSuccessful() );
+		$this->assertTrue( $this->newDonorValidator()->validate( $personalInfo )->isSuccessful() );
 	}
 
 	public function testGivenMissingEmail_validationFails() {
@@ -37,7 +38,7 @@ class PersonalInfoValidatorTest extends ValidatorTestCase {
 			''
 		);
 
-		$this->assertFalse( $this->newPersonalInfoValidator()->validate( $personalInfo )->isSuccessful() );
+		$this->assertFalse( $this->newDonorValidator()->validate( $personalInfo )->isSuccessful() );
 	}
 
 	public function testGivenMissingName_validationFails() {
@@ -47,7 +48,7 @@ class PersonalInfoValidatorTest extends ValidatorTestCase {
 			self::VALID_EMAIL_ADDRESS
 		);
 
-		$validator = $this->newPersonalInfoValidator();
+		$validator = $this->newDonorValidator();
 
 		$this->assertFalse( $validator->validate( $personalInfo )->isSuccessful() );
 		$this->assertConstraintWasViolated(
@@ -63,7 +64,7 @@ class PersonalInfoValidatorTest extends ValidatorTestCase {
 			self::VALID_EMAIL_ADDRESS
 		);
 
-		$validator = $this->newPersonalInfoValidator();
+		$validator = $this->newDonorValidator();
 
 		$this->assertFalse( $validator->validate( $personalInfo )->isSuccessful() );
 		$this->assertConstraintWasViolated(
@@ -82,8 +83,8 @@ class PersonalInfoValidatorTest extends ValidatorTestCase {
 		return $name;
 	}
 
-	private function newPhysicalAddress(): PhysicalAddress {
-		$address = new PhysicalAddress();
+	private function newPhysicalAddress(): DonorAddress {
+		$address = new DonorAddress();
 		$address->setStreetAddress( 'PO box 1234' );
 		$address->setPostalCode( '90701' );
 		$address->setCity( 'Cypress Creek' );
@@ -92,8 +93,8 @@ class PersonalInfoValidatorTest extends ValidatorTestCase {
 		return $address;
 	}
 
-	private function newPhysicalAddressWithMissingData(): PhysicalAddress {
-		$address = new PhysicalAddress();
+	private function newPhysicalAddressWithMissingData(): DonorAddress {
+		$address = new DonorAddress();
 		$address->setStreetAddress( '' );
 		$address->setPostalCode( '' );
 		$address->setCity( 'Cypress Creek' );
@@ -102,10 +103,10 @@ class PersonalInfoValidatorTest extends ValidatorTestCase {
 		return $address;
 	}
 
-	private function newPersonalInfoValidator() {
-		return new PersonalInfoValidator(
-			new PersonNameValidator(),
-			new PhysicalAddressValidator(),
+	private function newDonorValidator() {
+		return new \WMDE\Fundraising\Frontend\DonatingContext\Validation\DonorValidator(
+			new \WMDE\Fundraising\Frontend\DonatingContext\Validation\DonorNameValidator(),
+			new DonorAddressValidator(),
 			new EmailValidator( new NullDomainNameValidator() )
 		);
 	}
