@@ -91,4 +91,16 @@ class ApiBasedPageRetrieverTest extends \PHPUnit_Framework_TestCase {
 
 		$this->pageRetriever->fetchPage( 'No Spaces Allowed ' );
 	}
+
+	public function testWhenMultiplePagesAreRetrieved_apiAuthenticatesOnlyForFirstPage() {
+		$this->api->method( 'isLoggedin' )->will( $this->onConsecutiveCalls( false, true, true ) );
+		$this->api->expects( $this->once() )
+			->method( 'login' )
+			->with( $this->apiUser );
+		$this->api->method( 'postRequest' )->willReturn( TestEnvironment::getJsonTestData( 'mwApiUnicornsPage.json' ) );
+
+		$this->pageRetriever->fetchPage( 'Unicorns' );
+		$this->pageRetriever->fetchPage( 'Lollipops' );
+		$this->pageRetriever->fetchPage( 'Rainbows' );
+	}
 }
