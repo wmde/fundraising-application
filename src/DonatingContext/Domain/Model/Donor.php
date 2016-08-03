@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\DonatingContext\Domain\Model;
 
-use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 
 /**
@@ -17,13 +16,13 @@ class Donor {
 	private $physicalAddress;
 	private $emailAddress;
 
-	public function __construct( PersonName $name, PhysicalAddress $address, string $emailAddress ) {
+	public function __construct( DonorName $name, PhysicalAddress $address, string $emailAddress ) {
 		$this->personName = $name;
 		$this->physicalAddress = $address;
 		$this->emailAddress = $emailAddress;
 	}
 
-	public function getPersonName(): PersonName {
+	public function getName(): DonorName {
 		return $this->personName;
 	}
 

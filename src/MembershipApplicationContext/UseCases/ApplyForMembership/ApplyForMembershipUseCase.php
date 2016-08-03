@@ -84,9 +84,9 @@ class ApplyForMembershipUseCase {
 				'membershipType' => $application->getType(),
 				'membershipFee' => $application->getPayment()->getAmount()->getEuroString(),
 				'paymentIntervalInMonths' => $application->getPayment()->getIntervalInMonths(),
-				'salutation' => $application->getApplicant()->getPersonName()->getSalutation(),
-				'title' => $application->getApplicant()->getPersonName()->getTitle(),
-				'lastName' => $application->getApplicant()->getPersonName()->getLastName()
+				'salutation' => $application->getApplicant()->getName()->getSalutation(),
+				'title' => $application->getApplicant()->getName()->getTitle(),
+				'lastName' => $application->getApplicant()->getName()->getLastName()
 			]
 		);
 	}

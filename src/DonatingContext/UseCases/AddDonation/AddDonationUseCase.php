@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddDonation;
 
-use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\DonatingContext\Authorization\DonationTokenFetcher;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation;
@@ -112,8 +112,8 @@ class AddDonationUseCase {
 		return $address->freeze()->assertNoNullFields();
 	}
 
-	private function getNameFromRequest( AddDonationRequest $request ): PersonName {
-		$name = $request->donorIsCompany() ? PersonName::newCompanyName() : PersonName::newPrivatePersonName();
+	private function getNameFromRequest( AddDonationRequest $request ): DonorName {
+		$name = $request->donorIsCompany() ? DonorName::newCompanyName() : DonorName::newPrivatePersonName();
 
 		$name->setSalutation( $request->getDonorSalutation() );
 		$name->setTitle( $request->getDonorTitle() );

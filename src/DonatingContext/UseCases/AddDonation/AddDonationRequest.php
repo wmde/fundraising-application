@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddDonation;
 
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorName;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 
 /**
@@ -250,10 +250,10 @@ class AddDonationRequest {
 	}
 
 	public function donorIsAnonymous(): bool {
-		return $this->getDonorType() === PersonName::PERSON_ANONYMOUS;
+		return $this->getDonorType() === DonorName::PERSON_ANONYMOUS;
 	}
 
 	public function donorIsCompany(): bool {
-		return $this->getDonorType() === PersonName::PERSON_COMPANY;
+		return $this->getDonorType() === DonorName::PERSON_COMPANY;
 	}
 }

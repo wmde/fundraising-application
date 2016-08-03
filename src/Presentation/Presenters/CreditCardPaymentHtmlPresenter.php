@@ -40,8 +40,8 @@ class CreditCardPaymentHtmlPresenter {
 				'amount' => $response->getDonation()->getAmount()->getEuroString()
 			],
 			'iframeUrl' => $this->urlGenerator->generateUrl(
-				$personalInfo ? $personalInfo->getPersonName()->getFirstName() : '',
-				$personalInfo ? $personalInfo->getPersonName()->getLastName() : '',
+				$personalInfo ? $personalInfo->getName()->getFirstName() : '',
+				$personalInfo ? $personalInfo->getName()->getLastName() : '',
 				$this->translator->trans( 'paytext_cc', [], 'paymentIntervals' ) . ' ' .
 					$this->translator->trans( $response->getDonation()->getPaymentIntervalInMonths(), [], 'paymentIntervals' ),
 				$response->getDonation()->getId(),

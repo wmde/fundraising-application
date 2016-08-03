@@ -108,9 +108,9 @@ class CancelDonationUseCase {
 			'donationId' => $donation->getId(),
 
 			'recipient' => [
-				'lastName' => $donation->getDonor()->getPersonName()->getLastName(),
-				'salutation' =>	$donation->getDonor()->getPersonName()->getSalutation(),
-				'title' => $donation->getDonor()->getPersonName()->getTitle()
+				'lastName' => $donation->getDonor()->getName()->getLastName(),
+				'salutation' =>	$donation->getDonor()->getName()->getSalutation(),
+				'title' => $donation->getDonor()->getName()->getTitle()
 			],
 		];
 	}

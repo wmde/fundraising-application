@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Validation;
 
-use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorName;
 
 /**
  * @license GNU GPL v2+
@@ -13,15 +13,15 @@ use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
 class PersonNameValidator {
 	use CanValidateField;
 
-	public function validate( PersonName $name ): ValidationResult {
-		if ( $name->getPersonType() === PersonName::PERSON_PRIVATE ) {
+	public function validate( DonorName $name ): ValidationResult {
+		if ( $name->getPersonType() === DonorName::PERSON_PRIVATE ) {
 			return $this->validatePrivatePerson( $name );
 		}
 
 		return $this->validateCompanyPerson( $name );
 	}
 
-	private function validatePrivatePerson( PersonName $instance ): ValidationResult {
+	private function validatePrivatePerson( DonorName $instance ): ValidationResult {
 		$validator = new RequiredFieldValidator();
 
 		return new ValidationResult( ...array_filter( [
@@ -31,7 +31,7 @@ class PersonNameValidator {
 		] ) );
 	}
 
-	private function validateCompanyPerson( PersonName $instance ): ValidationResult {
+	private function validateCompanyPerson( DonorName $instance ): ValidationResult {
 		return new ValidationResult( ...array_filter( [
 			$this->getFieldViolation( ( new RequiredFieldValidator() )->validate( $instance->getCompanyName() ), 'company' )
 		] ) );

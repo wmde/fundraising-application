@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\HandlePayPalPaymentNotification;
 
 use Psr\Log\NullLogger;
-use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorName;
 use WMDE\Fundraising\Frontend\DonatingContext\DataAccess\DoctrineDonationRepository;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\DonationConfirmationMailer;
@@ -506,8 +506,8 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$this->assertSame( 0, $donation->getPaymentIntervalInMonths(), 'Payment interval is always empty' );
 		$this->assertTrue( $donation->isBooked() );
 
-		$donorName = $donation->getDonor()->getPersonName();
-		$this->assertSame( PersonName::PERSON_PRIVATE, $donorName->getPersonType(), 'Person is always private' );
+		$donorName = $donation->getDonor()->getName();
+		$this->assertSame( DonorName::PERSON_PRIVATE, $donorName->getPersonType(), 'Person is always private' );
 		$this->assertSame( ValidPayPalNotificationRequest::PAYER_ADDRESS_NAME, $donorName->getFullName() );
 
 		$this->assertSame( ValidPayPalNotificationRequest::PAYER_EMAIL, $donation->getDonor()->getEmailAddress() );

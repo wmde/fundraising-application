@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\DonatingContext\UseCases\HandlePayPalPaymentNotification;
 
 use Psr\Log\LoggerInterface;
-use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\DonatingContext\Authorization\DonationAuthorizer;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation;
@@ -244,8 +244,8 @@ class HandlePayPalPaymentNotificationUseCase {
 		);
 	}
 
-	private function newPersonNameFromRequest( PayPalNotificationRequest $request ): PersonName {
-		$name = PersonName::newPrivatePersonName();
+	private function newPersonNameFromRequest( PayPalNotificationRequest $request ): DonorName {
+		$name = DonorName::newPrivatePersonName();
 		$name->setFirstName( $request->getPayerFirstName() );
 		$name->setLastName( $request->getPayerLastName() );
 		$name->freeze();

@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Data;
 
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\Frontend\Domain\Model\PersonName;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorName;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonationComment;
@@ -193,8 +193,8 @@ class ValidDonation {
 		return self::newDonationPayment( new DirectDebitPayment( self::newBankData() ) );
 	}
 
-	private function newPersonName(): PersonName {
-		$personName = PersonName::newPrivatePersonName();
+	private function newPersonName(): DonorName {
+		$personName = DonorName::newPrivatePersonName();
 
 		$personName->setFirstName( self::DONOR_FIRST_NAME );
 		$personName->setLastName( self::DONOR_LAST_NAME );
