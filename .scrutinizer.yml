@@ -1,7 +1,8 @@
 inherit: true
 
 tools:
-    external_code_coverage: true
+    external_code_coverage:
+        timeout: 3600
     php_code_sniffer: true
     php_cpd: true
     php_cs_fixer: true
