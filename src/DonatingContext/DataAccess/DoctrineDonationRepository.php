@@ -114,7 +114,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		} else {
 			$doctrineDonation->setDonorCity( $donor->getPhysicalAddress()->getCity() );
 			$doctrineDonation->setDonorEmail( $donor->getEmailAddress() );
-			$doctrineDonation->setDonorFullName( $donor->getPersonName()->getFullName() );
+			$doctrineDonation->setDonorFullName( $donor->getName()->getFullName() );
 		}
 	}
 
@@ -190,7 +190,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		}
 
 		return array_merge(
-			$this->getDataFieldsFromPersonName( $personalInfo->getPersonName() ),
+			$this->getDataFieldsFromPersonName( $personalInfo->getName() ),
 			$this->getDataFieldsFromAddress( $personalInfo->getPhysicalAddress() ),
 			[ 'email' => $personalInfo->getEmailAddress() ]
 		);

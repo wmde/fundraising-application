@@ -506,7 +506,7 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$this->assertSame( 0, $donation->getPaymentIntervalInMonths(), 'Payment interval is always empty' );
 		$this->assertTrue( $donation->isBooked() );
 
-		$donorName = $donation->getDonor()->getPersonName();
+		$donorName = $donation->getDonor()->getName();
 		$this->assertSame( DonorName::PERSON_PRIVATE, $donorName->getPersonType(), 'Person is always private' );
 		$this->assertSame( ValidPayPalNotificationRequest::PAYER_ADDRESS_NAME, $donorName->getFullName() );
 

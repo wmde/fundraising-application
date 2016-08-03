@@ -24,7 +24,7 @@ class PersonalInfoValidator {
 	}
 
 	public function validate( Donor $personalInfo ): ValidationResult {
-		$violations = $this->nameValidator->validate( $personalInfo->getPersonName() )->getViolations();
+		$violations = $this->nameValidator->validate( $personalInfo->getName() )->getViolations();
 		$violations = array_merge(
 			$violations,
 			$this->addressValidator->validate( $personalInfo->getPhysicalAddress() )->getViolations()

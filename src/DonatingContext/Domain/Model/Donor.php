@@ -22,7 +22,7 @@ class Donor {
 		$this->emailAddress = $emailAddress;
 	}
 
-	public function getPersonName(): DonorName {
+	public function getName(): DonorName {
 		return $this->personName;
 	}
 

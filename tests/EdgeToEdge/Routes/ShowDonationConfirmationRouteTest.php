@@ -70,7 +70,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	}
 
 	private function assertEmbeddedMembershipFormIsPrefilled( Donation $donation, string $responseContent ) {
-		$personName = $donation->getDonor()->getPersonName();
+		$personName = $donation->getDonor()->getName();
 		$physicalAddress = $donation->getDonor()->getPhysicalAddress();
 		/** @var DirectDebitPayment $paymentMethod */
 		$paymentMethod = $donation->getPaymentMethod();
@@ -164,7 +164,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 	private function assertDonationDataInResponse( Donation $donation, string $responseContent ) {
 		$donor = $donation->getDonor();
-		$personName = $donor->getPersonName();
+		$personName = $donor->getName();
 		$physicalAddress = $donor->getPhysicalAddress();
 		/** @var DirectDebitPayment $paymentMethod */
 		$paymentMethod = $donation->getPaymentMethod();
@@ -212,8 +212,8 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	}
 
 	private function assertDonationIsNotShown( Donation $donation, string $responseContent ) {
-		$this->assertNotContains( $donation->getDonor()->getPersonName()->getFirstName(), $responseContent );
-		$this->assertNotContains( $donation->getDonor()->getPersonName()->getLastName(), $responseContent );
+		$this->assertNotContains( $donation->getDonor()->getName()->getFirstName(), $responseContent );
+		$this->assertNotContains( $donation->getDonor()->getName()->getLastName(), $responseContent );
 
 		$this->assertContains( self::ACCESS_DENIED_TEXT, $responseContent );
 	}

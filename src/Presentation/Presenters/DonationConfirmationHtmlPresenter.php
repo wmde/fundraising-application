@@ -62,10 +62,10 @@ class DonationConfirmationHtmlPresenter {
 	private function getPersonArguments( Donation $donation ): array {
 		if ( $donation->getDonor() !== null ) {
 			return [
-				'salutation' => $donation->getDonor()->getPersonName()->getSalutation(),
-				'fullName' => $donation->getDonor()->getPersonName()->getFullName(),
-				'firstName' => $donation->getDonor()->getPersonName()->getFirstName(),
-				'lastName' => $donation->getDonor()->getPersonName()->getLastName(),
+				'salutation' => $donation->getDonor()->getName()->getSalutation(),
+				'fullName' => $donation->getDonor()->getName()->getFullName(),
+				'firstName' => $donation->getDonor()->getName()->getFirstName(),
+				'lastName' => $donation->getDonor()->getName()->getLastName(),
 				'streetAddress' => $donation->getDonor()->getPhysicalAddress()->getStreetAddress(),
 				'postalCode' => $donation->getDonor()->getPhysicalAddress()->getPostalCode(),
 				'city' => $donation->getDonor()->getPhysicalAddress()->getCity(),
@@ -109,12 +109,12 @@ class DonationConfirmationHtmlPresenter {
 		}
 
 		return [
-			'addressType' => $donor->getPersonName()->getPersonType(),
-			'salutation' => $donor->getPersonName()->getSalutation(),
-			'title' => $donor->getPersonName()->getTitle(),
-			'firstName' => $donor->getPersonName()->getFirstName(),
-			'lastName' => $donor->getPersonName()->getLastName(),
-			'companyName' => $donor->getPersonName()->getCompanyName(),
+			'addressType' => $donor->getName()->getPersonType(),
+			'salutation' => $donor->getName()->getSalutation(),
+			'title' => $donor->getName()->getTitle(),
+			'firstName' => $donor->getName()->getFirstName(),
+			'lastName' => $donor->getName()->getLastName(),
+			'companyName' => $donor->getName()->getCompanyName(),
 			'street' => $donor->getPhysicalAddress()->getStreetAddress(),
 			'postcode' => $donor->getPhysicalAddress()->getPostalCode(),
 			'city' => $donor->getPhysicalAddress()->getCity(),
