@@ -7,15 +7,15 @@ namespace WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use WMDE\Fundraising\Entities\MembershipApplication;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\MembershipApplicationTracker;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\MembershipApplicationTrackingException;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\ApplicationTracker;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\ApplicationTrackingException;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\MembershipApplicationTrackingInfo;
 
 /**
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class DoctrineMembershipApplicationTracker implements MembershipApplicationTracker {
+class DoctrineApplicationTracker implements ApplicationTracker {
 
 	private $entityManager;
 
@@ -40,11 +40,11 @@ class DoctrineMembershipApplicationTracker implements MembershipApplicationTrack
 		}
 		catch ( ORMException $ex ) {
 			// TODO: might want to log failure here
-			throw new MembershipApplicationTrackingException( 'Membership application could not be accessed' );
+			throw new ApplicationTrackingException( 'Membership application could not be accessed' );
 		}
 
 		if ( $application === null ) {
-			throw new MembershipApplicationTrackingException( 'Membership application does not exist' );
+			throw new ApplicationTrackingException( 'Membership application does not exist' );
 		}
 
 		return $application;
@@ -56,7 +56,7 @@ class DoctrineMembershipApplicationTracker implements MembershipApplicationTrack
 			$this->entityManager->flush();
 		}
 		catch ( ORMException $ex ) {
-			throw new MembershipApplicationTrackingException( 'Failed to persist membership application' );
+			throw new ApplicationTrackingException( 'Failed to persist membership application' );
 		}
 	}
 

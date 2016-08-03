@@ -7,13 +7,13 @@ namespace WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use WMDE\Fundraising\Entities\MembershipApplication;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\MembershipApplicationAuthorizer;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\ApplicationAuthorizer;
 
 /**
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class DoctrineMembershipApplicationAuthorizer implements MembershipApplicationAuthorizer {
+class DoctrineApplicationAuthorizer implements ApplicationAuthorizer {
 
 	private $entityManager;
 	private $updateToken;

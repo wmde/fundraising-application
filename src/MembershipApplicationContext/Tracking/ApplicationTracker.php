@@ -9,10 +9,10 @@ namespace WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking;
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-interface MembershipApplicationTracker {
+interface ApplicationTracker {
 
 	/**
-	 * @throws MembershipApplicationTrackingException
+	 * @throws ApplicationTrackingException
 	 */
 	public function trackApplication( int $applicationId, MembershipApplicationTrackingInfo $trackingInfo );
 

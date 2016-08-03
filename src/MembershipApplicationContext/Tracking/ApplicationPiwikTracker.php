@@ -8,13 +8,13 @@ namespace WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-interface MembershipApplicationPiwikTracker {
+interface ApplicationPiwikTracker {
 
 	/**
 	 * @param int $applicationId
 	 * @param string $trackingString
 	 *
-	 * @throws MembershipApplicationPiwikTrackingException
+	 * @throws ApplicationPiwikTrackingException
 	 */
 	public function trackApplication( int $applicationId, string $trackingString );
 

@@ -10,7 +10,7 @@ use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class MembershipApplicant {
+class Applicant {
 
 	private $personName;
 	private $physicalAddress;

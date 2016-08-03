@@ -4,15 +4,15 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\CancelMembershipApplication;
 
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\MembershipApplicationAuthorizer;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplication;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\MembershipApplicationRepository;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\ApplicationAuthorizer;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Application;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\CancelMembershipApplication\CancellationRequest;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\CancelMembershipApplication\CancelMembershipApplicationUseCase;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingMembershipAuthorizer;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\InMemoryMembershipApplicationRepository;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingMembershipAuthorizer;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingAuthorizer;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\InMemoryApplicationRepository;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
 
 /**
@@ -26,12 +26,12 @@ class CancelMembershipApplicationUseCaseTest extends \PHPUnit_Framework_TestCase
 	const ID_OF_NON_EXISTING_APPLICATION = 1337;
 
 	/**
-	 * @var MembershipApplicationAuthorizer
+	 * @var ApplicationAuthorizer
 	 */
 	private $authorizer;
 
 	/**
-	 * @var MembershipApplicationRepository
+	 * @var ApplicationRepository
 	 */
 	private $repository;
 
@@ -41,8 +41,8 @@ class CancelMembershipApplicationUseCaseTest extends \PHPUnit_Framework_TestCase
 	private $mailer;
 
 	public function setUp() {
-		$this->authorizer = new SucceedingMembershipAuthorizer();
-		$this->repository = new InMemoryMembershipApplicationRepository();
+		$this->authorizer = new SucceedingAuthorizer();
+		$this->repository = new InMemoryApplicationRepository();
 		$this->mailer = new TemplateBasedMailerSpy( $this );
 	}
 
@@ -80,11 +80,11 @@ class CancelMembershipApplicationUseCaseTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals( $application->getId(), $response->getMembershipApplicationId() );
 	}
 
-	private function newCancelableApplication(): MembershipApplication {
+	private function newCancelableApplication(): Application {
 		return ValidMembershipApplication::newDomainEntity();
 	}
 
-	private function storeApplication( MembershipApplication $application ) {
+	private function storeApplication( Application $application ) {
 		$this->repository->storeApplication( $application );
 	}
 
@@ -108,7 +108,7 @@ class CancelMembershipApplicationUseCaseTest extends \PHPUnit_Framework_TestCase
 	}
 
 	public function testNotAuthorized_cancellationFails() {
-		$this->authorizer = new FailingMembershipAuthorizer();
+		$this->authorizer = new FailingAuthorizer();
 
 		$application = $this->newCancelableApplication();
 		$this->storeApplication( $application );
@@ -119,7 +119,7 @@ class CancelMembershipApplicationUseCaseTest extends \PHPUnit_Framework_TestCase
 	}
 
 	public function testNotAuthorized_cancellationSucceeds() {
-		$this->authorizer = new SucceedingMembershipAuthorizer();
+		$this->authorizer = new SucceedingAuthorizer();
 
 		$application = $this->newCancelableApplication();
 		$this->storeApplication( $application );

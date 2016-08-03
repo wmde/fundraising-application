@@ -74,19 +74,19 @@ use WMDE\Fundraising\Frontend\Infrastructure\ProfilingDecoratorBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\RandomTokenGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\MembershipApplicationAuthorizer;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\MembershipApplicationTokenFetcher;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess\DoctrineMembershipApplicationAuthorizer;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess\DoctrineMembershipApplicationPiwikTracker;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\ApplicationAuthorizer;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\ApplicationTokenFetcher;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess\DoctrineApplicationAuthorizer;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess\DoctrineApplicationPiwikTracker;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess\DoctrineMembershipApplicationPrePersistSubscriber;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess\DoctrineMembershipApplicationRepository;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess\DoctrineMembershipApplicationTokenFetcher;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess\DoctrineMembershipApplicationTracker;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess\DoctrineApplicationRepository;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess\DoctrineApplicationTokenFetcher;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess\DoctrineApplicationTracker;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\EmailAddress;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\MembershipApplicationRepository;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Infrastructure\LoggingMembershipApplicationRepository;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\MembershipApplicationPiwikTracker;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\MembershipApplicationTracker;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\ApplicationRepository;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Infrastructure\LoggingApplicationRepository;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\ApplicationPiwikTracker;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\ApplicationTracker;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\ApplyForMembership\ApplyForMembershipUseCase;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\ApplyForMembership\MembershipApplicationValidator;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\CancelMembershipApplication\CancelMembershipApplicationUseCase;
@@ -214,8 +214,8 @@ class FunFunFactory {
 		} );
 
 		$pimple['membership_application_repository'] = $pimple->share( function() {
-			return new LoggingMembershipApplicationRepository(
-				new DoctrineMembershipApplicationRepository( $this->getEntityManager() ),
+			return new LoggingApplicationRepository(
+				new DoctrineApplicationRepository( $this->getEntityManager() ),
 				$this->getLogger()
 			);
 		} );
@@ -964,12 +964,12 @@ class FunFunFactory {
 		);
 	}
 
-	private function newMembershipApplicationTracker(): MembershipApplicationTracker {
-		return new DoctrineMembershipApplicationTracker( $this->getEntityManager() );
+	private function newMembershipApplicationTracker(): ApplicationTracker {
+		return new DoctrineApplicationTracker( $this->getEntityManager() );
 	}
 
-	private function newMembershipApplicationPiwikTracker(): MembershipApplicationPiwikTracker {
-		return new DoctrineMembershipApplicationPiwikTracker( $this->getEntityManager() );
+	private function newMembershipApplicationPiwikTracker(): ApplicationPiwikTracker {
+		return new DoctrineApplicationPiwikTracker( $this->getEntityManager() );
 	}
 
 	public function newCancelMembershipApplicationUseCase( string $updateToken ): CancelMembershipApplicationUseCase {
@@ -981,16 +981,16 @@ class FunFunFactory {
 	}
 
 	private function newMembershipApplicationAuthorizer(
-		string $updateToken = null, string $accessToken = null ): MembershipApplicationAuthorizer {
+		string $updateToken = null, string $accessToken = null ): ApplicationAuthorizer {
 
-		return new DoctrineMembershipApplicationAuthorizer(
+		return new DoctrineApplicationAuthorizer(
 			$this->getEntityManager(),
 			$updateToken,
 			$accessToken
 		);
 	}
 
-	public function getMembershipApplicationRepository(): MembershipApplicationRepository {
+	public function getMembershipApplicationRepository(): ApplicationRepository {
 		return $this->pimple['membership_application_repository'];
 	}
 
@@ -1138,8 +1138,8 @@ class FunFunFactory {
 		);
 	}
 
-	private function newMembershipApplicationTokenFetcher(): MembershipApplicationTokenFetcher {
-		return new DoctrineMembershipApplicationTokenFetcher(
+	private function newMembershipApplicationTokenFetcher(): ApplicationTokenFetcher {
+		return new DoctrineApplicationTokenFetcher(
 			$this->getEntityManager()
 		);
 	}

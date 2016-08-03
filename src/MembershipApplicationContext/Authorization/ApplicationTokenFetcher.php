@@ -8,13 +8,13 @@ namespace WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-interface MembershipApplicationTokenFetcher {
+interface ApplicationTokenFetcher {
 
 	/**
 	 * @param int $membershipApplicationId
 	 *
 	 * @return MembershipApplicationTokens
-	 * @throws MembershipApplicationTokenFetchingException
+	 * @throws ApplicationTokenFetchingException
 	 */
 	public function getTokens( int $membershipApplicationId ): MembershipApplicationTokens;
 

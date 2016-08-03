@@ -8,9 +8,9 @@ use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\Domain\Model\PhysicalAddress;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\ApplicantName;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\EmailAddress;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplicant;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipApplication;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\MembershipPayment;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Applicant;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Application;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Payment;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\PhoneNumber;
 
 /**
@@ -21,16 +21,16 @@ class MembershipApplicationBuilder {
 
 	const COMPANY_APPLICANT_TYPE = 'firma';
 
-	public function newApplicationFromRequest( ApplyForMembershipRequest $request ): MembershipApplication {
-		return MembershipApplication::newApplication(
+	public function newApplicationFromRequest( ApplyForMembershipRequest $request ): Application {
+		return Application::newApplication(
 			$request->getMembershipType(),
 			$this->newApplicant( $request ),
 			$this->newPayment( $request )
 		);
 	}
 
-	private function newApplicant( ApplyForMembershipRequest $request ): MembershipApplicant {
-		return new MembershipApplicant(
+	private function newApplicant( ApplyForMembershipRequest $request ): Applicant {
+		return new Applicant(
 			$this->newPersonName( $request ),
 			$this->newAddress( $request ),
 			new EmailAddress( $request->getApplicantEmailAddress() ),
@@ -71,8 +71,8 @@ class MembershipApplicationBuilder {
 		return $address->freeze()->assertNoNullFields();
 	}
 
-	private function newPayment( ApplyForMembershipRequest $request ): MembershipPayment {
-		return new MembershipPayment(
+	private function newPayment( ApplyForMembershipRequest $request ): Payment {
+		return new Payment(
 			$request->getPaymentIntervalInMonths(),
 			Euro::newFromString( $request->getPaymentAmountInEuros() ),
 			$request->getPaymentBankData()

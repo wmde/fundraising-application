@@ -5,12 +5,12 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\ApplyForMembership;
 
 use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\MembershipApplicationTokenFetcher;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\ApplicationTokenFetcher;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\MembershipApplicationTokens;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\EmailAddress;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\MembershipApplicationRepository;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\MembershipApplicationPiwikTracker;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\MembershipApplicationTracker;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\ApplicationRepository;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\ApplicationPiwikTracker;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\ApplicationTracker;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\MembershipApplicationTrackingInfo;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\ApplyForMembership\ApplicationValidationResult;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\ApplyForMembership\ApplyForMembershipRequest;
@@ -19,9 +19,9 @@ use WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\ApplyForMemb
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedMembershipApplicationTokenFetcher;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedApplicationTokenFetcher;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\InMemoryMembershipApplicationRepository;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\InMemoryApplicationRepository;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
 
 /**
@@ -38,7 +38,7 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 	const UPDATE_TOKEN = 'Lemme change all the stuff';
 
 	/**
-	 * @var MembershipApplicationRepository
+	 * @var ApplicationRepository
 	 */
 	private $repository;
 
@@ -58,22 +58,22 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 	private $validator;
 
 	/**
-	 * @var MembershipApplicationTracker
+	 * @var ApplicationTracker
 	 */
 	private $tracker;
 
 	/**
-	 * @var MembershipApplicationPiwikTracker
+	 * @var ApplicationPiwikTracker
 	 */
 	private $piwikTracker;
 
 	public function setUp() {
-		$this->repository = new InMemoryMembershipApplicationRepository();
+		$this->repository = new InMemoryApplicationRepository();
 		$this->mailer = new TemplateBasedMailerSpy( $this );
 		$this->tokenGenerator = new FixedTokenGenerator( self::ACCESS_TOKEN );
 		$this->validator = $this->newSucceedingValidator();
-		$this->tracker = $this->createMock( MembershipApplicationTracker::class );
-		$this->piwikTracker = $this->createMock( MembershipApplicationPiwikTracker::class );
+		$this->tracker = $this->createMock( ApplicationTracker::class );
+		$this->piwikTracker = $this->createMock( ApplicationPiwikTracker::class );
 	}
 
 	private function newSucceedingValidator(): MembershipApplicationValidator {
@@ -104,8 +104,8 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 		);
 	}
 
-	private function newTokenFetcher(): MembershipApplicationTokenFetcher {
-		return new FixedMembershipApplicationTokenFetcher( new MembershipApplicationTokens(
+	private function newTokenFetcher(): ApplicationTokenFetcher {
+		return new FixedApplicationTokenFetcher( new MembershipApplicationTokens(
 			self::ACCESS_TOKEN,
 			self::UPDATE_TOKEN
 		) );
