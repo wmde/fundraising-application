@@ -47,4 +47,17 @@ class LoggerSpy extends AbstractLogger {
 		);
 	}
 
+	public function assertCalledWithMessage( string $expectedMessage, \PHPUnit_Framework_TestCase $testCase ) {
+		$testCase->assertContains(
+			$expectedMessage,
+			array_map(
+				function( array $logCall ) {
+					return $logCall[self::MESSAGE_INDEX];
+				},
+				$this->logCalls
+			),
+			'Should be called with expected message'
+		);
+	}
+
 }

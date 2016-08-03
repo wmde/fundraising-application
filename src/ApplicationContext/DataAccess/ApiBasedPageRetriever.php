@@ -18,6 +18,12 @@ use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\PageRetriever;
  */
 class ApiBasedPageRetriever implements PageRetriever {
 
+	const MW_COMMENT_PATTERNS = [
+		'/<!--\s*NewPP limit report.*?-->/s' => '',
+		'/<!--\s*Transclusion expansion time report.*?-->/s' => '',
+		'/<!--\s*Saved in parser cache with key.*?-->/s' => ''
+	];
+
 	private $api;
 	private $apiUser;
 	private $logger;
@@ -64,10 +70,8 @@ class ApiBasedPageRetriever implements PageRetriever {
 		switch ( $action ) {
 			case 'raw':
 				return $this->retrieveWikiText( $pageTitle );
-				break;
 			case 'render':
 				return $this->retrieveRenderedPage( $pageTitle );
-				break;
 			default:
 				throw new \RuntimeException( 'Action "' . $action . '" not supported' );
 				break;
@@ -86,7 +90,10 @@ class ApiBasedPageRetriever implements PageRetriever {
 			return false;
 		}
 
-		return $response['parse']['text']['*'];
+		if ( !empty( $response['parse']['text']['*'] ) ) {
+			return $this->cleanupWikiHtml( $response['parse']['text']['*'] );
+		}
+		return null;
 	}
 
 	private function retrieveWikiText( $pageTitle ) {
@@ -108,6 +115,17 @@ class ApiBasedPageRetriever implements PageRetriever {
 		$page = reset( $response['query']['pages'] );
 
 		return $page['revisions'][0]['*'];
+	}
+
+	private function cleanupWikiHtml( string $text ): string {
+		return rtrim(
+			preg_replace(
+				array_keys( self::MW_COMMENT_PATTERNS ),
+				array_values( self::MW_COMMENT_PATTERNS ),
+				$text
+			)
+		);
+
 	}
 
 }
