@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\PaymentContext\UseCases\CheckIban;
 
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataConverter;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
-use WMDE\Fundraising\Frontend\ResponseModel\IbanResponse;
+use WMDE\Fundraising\Frontend\PaymentContext\ResponseModel\IbanResponse;
 
 /**
  * @licence GNU GPL v2+
