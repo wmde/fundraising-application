@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7b615133d5afb090c99a62ea0148769e",
-    "content-hash": "42d521f1eaceefd9046d687aeb4dfb3c",
+    "hash": "536d223da98e46d09cbf4e2cb732c96f",
+    "content-hash": "dbaf36b2860a07d45d92ce290c414f91",
     "packages": [
         {
             "name": "addwiki/mediawiki-api-base",
@@ -2419,16 +2419,16 @@
         },
         {
             "name": "wmde/fundraising-store",
-            "version": "dev-master",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/FundraisingStore.git",
-                "reference": "7a9cbf83db7867e0acbe622cdaba32e54b94990c"
+                "reference": "644d37299381ffc4e11e200dec8d4ef8ba474712"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/FundraisingStore/zipball/7a9cbf83db7867e0acbe622cdaba32e54b94990c",
-                "reference": "7a9cbf83db7867e0acbe622cdaba32e54b94990c",
+                "url": "https://api.github.com/repos/wmde/FundraisingStore/zipball/644d37299381ffc4e11e200dec8d4ef8ba474712",
+                "reference": "644d37299381ffc4e11e200dec8d4ef8ba474712",
                 "shasum": ""
             },
             "require": {
@@ -2438,6 +2438,7 @@
                 "php": ">=5.6"
             },
             "require-dev": {
+                "ockcyp/covers-validator": "~0.4.0",
                 "phpmd/phpmd": "~2.3",
                 "phpunit/phpunit": "~5.4",
                 "squizlabs/php_codesniffer": "~2.2"
@@ -2461,7 +2462,7 @@
                 "GPL-2.0+"
             ],
             "description": "Persistence services around the fundraising database",
-            "time": "2016-08-01 07:54:43"
+            "time": "2016-08-03 08:41:34"
         }
     ],
     "packages-dev": [
@@ -4530,9 +4531,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "wmde/fundraising-store": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

@@ -12,8 +12,8 @@
 		"twig/twig": "~1.23",
 		"pimple/pimple": "~1.0",
 
-		"wmde/fundraising-store": "~2.0@dev",
-		"wmde/euro": "~1.0.0",
+		"wmde/fundraising-store": "~2.0",
+		"wmde/euro": "~1.0",
 
 		"jeroen/file-fetcher": "~3.1",
 		"jeroen/generic-decorator": "~0.1.0",
