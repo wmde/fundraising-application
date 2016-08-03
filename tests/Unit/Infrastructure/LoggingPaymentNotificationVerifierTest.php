@@ -5,13 +5,13 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
 use Psr\Log\LogLevel;
-use WMDE\Fundraising\Frontend\Infrastructure\LoggingPaymentNotificationVerifier;
-use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifier;
-use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifierException;
+use WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\LoggingPaymentNotificationVerifier;
+use WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\PayPalPaymentNotificationVerifier;
+use WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\PayPalPaymentNotificationVerifierException;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\LoggerSpy;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Infrastructure\LoggingPaymentNotificationVerifier
+ * @covers WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\LoggingPaymentNotificationVerifier
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >

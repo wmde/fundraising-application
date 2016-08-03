@@ -63,12 +63,12 @@ use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\CachingPageRetri
 use WMDE\Fundraising\Frontend\Infrastructure\Honorifics;
 use WMDE\Fundraising\Frontend\Infrastructure\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\LoggingMailer;
-use WMDE\Fundraising\Frontend\Infrastructure\LoggingPaymentNotificationVerifier;
+use WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\LoggingPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\ModifyingPageRetriever;
 use WMDE\Fundraising\Frontend\Infrastructure\PageRetrieverBasedStringList;
-use WMDE\Fundraising\Frontend\Infrastructure\PaymentNotificationVerifier;
-use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifier;
+use WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\PaymentNotificationVerifier;
+use WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\PayPalPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\ProfilerDataCollector;
 use WMDE\Fundraising\Frontend\Infrastructure\ProfilingDecoratorBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\RandomTokenGenerator;

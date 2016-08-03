@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Infrastructure;
+namespace WMDE\Fundraising\Frontend\DonatingContext\Infrastructure;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;

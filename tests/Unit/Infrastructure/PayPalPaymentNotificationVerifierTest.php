@@ -5,11 +5,11 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Stream;
-use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifier;
-use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifierException;
+use WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\PayPalPaymentNotificationVerifier;
+use WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\PayPalPaymentNotificationVerifierException;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifier
+ * @covers WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\PayPalPaymentNotificationVerifier
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
