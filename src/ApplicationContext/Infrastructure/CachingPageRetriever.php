@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Infrastructure;
+namespace WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure;
 
 use Doctrine\Common\Cache\Cache;
 use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\PageRetriever;
