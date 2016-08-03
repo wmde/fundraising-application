@@ -60,7 +60,7 @@ use WMDE\Fundraising\Frontend\DonatingContext\UseCases\HandlePayPalPaymentNotifi
 use WMDE\Fundraising\Frontend\DonatingContext\UseCases\ListComments\ListCommentsUseCase;
 use WMDE\Fundraising\Frontend\DonatingContext\UseCases\ShowDonationConfirmation\ShowDonationConfirmationUseCase;
 use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\CachingPageRetriever;
-use WMDE\Fundraising\Frontend\Infrastructure\Honorifics;
+use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\Honorifics;
 use WMDE\Fundraising\Frontend\Infrastructure\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\LoggingMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\LoggingPaymentNotificationVerifier;

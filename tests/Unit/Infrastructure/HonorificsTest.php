@@ -4,10 +4,10 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
-use WMDE\Fundraising\Frontend\Infrastructure\Honorifics;
+use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\Honorifics;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Infrastructure\Honorifics
+ * @covers WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\Honorifics
  *
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
