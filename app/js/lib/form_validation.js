@@ -4,6 +4,17 @@ var jQuery = require( 'jquery' ),
 	objectAssign = require( 'object-assign' ),
 	_ = require( 'underscore' ),
 
+	ValidationStates = {
+		OK: 'OK',
+		ERR: 'ERR',
+		INCOMPLETE: 'INCOMPLETE',
+		NOT_APPLICABLE: 'NOT_APPLICABLE'
+	},
+
+	isEmptyString = function ( value ) {
+		return value === '';
+	},
+
 	DefaultRequiredFieldsForAddressType = {
 		person: [ 'salutation', 'firstName', 'lastName', 'street', 'postcode', 'city', 'email' ],
 		firma: [ 'companyName', 'street', 'postcode', 'city', 'email' ],
@@ -17,17 +28,16 @@ var jQuery = require( 'jquery' ),
 		validate: function ( formValues ) {
 			var requiredFields = this.getRequiredFieldsForAddressType( formValues.addressType );
 			if ( this.formValuesHaveEmptyRequiredFields( formValues, requiredFields ) ) {
-				return { status: 'INCOMPLETE' };
+				return { status: ValidationStates.INCOMPLETE };
 			}
 			// Don't send anything to server if there are no fields to validate
 			if ( requiredFields.length === 0 ) {
-				return { status: 'OK' };
+				return { status: ValidationStates.OK };
 			}
 			return this.sendFunction( this.validationUrl, formValues, null, 'json' );
 		},
 		formValuesHaveEmptyRequiredFields: function ( formValues, requiredFields ) {
-			var objectWithOnlyTheRequiredFields = _.pick( formValues, requiredFields ),
-				isEmptyString = function ( value ) { return value === ''; };
+			var objectWithOnlyTheRequiredFields = _.pick( formValues, requiredFields );
 			return _.find( objectWithOnlyTheRequiredFields, isEmptyString ) !== undefined;
 		},
 		getRequiredFieldsForAddressType: function ( addressType ) {
@@ -79,25 +89,59 @@ var jQuery = require( 'jquery' ),
 		validationUrlForNonSepa: '',
 		sendFunction: null,
 		validate: function ( formValues ) {
-			var data, validationUrl;
 			if ( formValues.paymentType && formValues.paymentType !== 'BEZ' ) {
 				return {
-					status: 'OK'
+					status: ValidationStates.NOT_APPLICABLE
 				};
 			}
+
 			if ( formValues.debitType === 'sepa' ) {
-				data = {
+				return this.validateSepa( formValues );
+			}
+
+			return this.validateNonSepa( formValues );
+		},
+		/**
+		 * @private
+		 */
+		validateSepa: function ( formValues ) {
+			if ( formValues.iban === '' ) {
+				return { status: ValidationStates.INCOMPLETE };
+			}
+
+			return this.getValidationResultFromApi(
+				this.validationUrlForSepa,
+				{
 					iban: formValues.iban
-				};
-				validationUrl = this.validationUrlForSepa;
-			} else {
-				data = {
+				}
+			);
+		},
+		/**
+		 * @private
+		 */
+		validateNonSepa: function ( formValues ) {
+			if ( formValues.accountNumber === '' || formValues.bankCode === '' ) {
+				return { status: ValidationStates.INCOMPLETE };
+			}
+
+			return this.getValidationResultFromApi(
+				this.validationUrlForNonSepa,
+				{
 					accountNumber: formValues.accountNumber,
 					bankCode: formValues.bankCode
-				};
-				validationUrl = this.validationUrlForNonSepa;
-			}
-			return this.sendFunction( validationUrl, data, null, 'json' );
+				}
+			);
+		},
+		/**
+		 * @private
+		 */
+		getValidationResultFromApi: function ( apiUrl, urlArguments ) {
+			return this.sendFunction(
+				apiUrl,
+				urlArguments,
+				null,
+				'json'
+			);
 		}
 	},
 
@@ -160,5 +204,6 @@ module.exports = {
 	createSepaConfirmationValidator: function () {
 		return Object.create( SepaConfirmationValidator );
 	},
-	DefaultRequiredFieldsForAddressType: DefaultRequiredFieldsForAddressType
+	DefaultRequiredFieldsForAddressType: DefaultRequiredFieldsForAddressType,
+	ValidationStates: ValidationStates
 };
