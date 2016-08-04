@@ -24,6 +24,7 @@ class CreditCardNotificationUseCase {
 
 	private $repository;
 	private $authorizationService;
+	private $creditCardService;
 	private $mailer;
 	private $logger;
 	private $donationEventLogger;
