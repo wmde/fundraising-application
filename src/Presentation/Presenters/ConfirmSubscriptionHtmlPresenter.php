@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
 use Symfony\Component\Translation\TranslatorInterface;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
-use WMDE\Fundraising\Frontend\ResponseModel\ValidationResponse;
+use WMDE\Fundraising\Frontend\Validation\ValidationResponse;
 
 /**
  * @license GNU GPL v2+
