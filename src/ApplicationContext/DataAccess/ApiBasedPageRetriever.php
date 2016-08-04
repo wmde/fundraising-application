@@ -59,6 +59,14 @@ class ApiBasedPageRetriever implements PageRetriever {
 			return '';
 		}
 
+		// Full HTML document usually indicates an error (e.g. access denied)
+		if ( preg_match( '/^<!DOCTYPE html/', $content ) ) {
+			$this->logger->debug( __METHOD__ . ': fail, got error page', [ $content, $normalizedPageName ] );
+			return '';
+		}
+
+		$content = trim( $content );
+
 		return $content;
 	}
 
