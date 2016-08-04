@@ -7,9 +7,11 @@ namespace WMDE\Fundraising\Frontend\DonatingContext\Domain\Model;
 use RuntimeException;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\CreditCardPayment;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\CreditCardTransactionData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalData;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
 
 /**
  * @licence GNU GPL v2+
@@ -131,7 +133,7 @@ class Donation {
 	 * @throws RuntimeException
 	 */
 	public function cancel() {
-		if ( $this->getPaymentType() !== \WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType::DIRECT_DEBIT ) {
+		if ( $this->getPaymentType() !== PaymentType::DIRECT_DEBIT ) {
 			throw new RuntimeException( 'Can only cancel direct debit' );
 		}
 
@@ -189,10 +191,10 @@ class Donation {
 	 * @param PayPalData $payPalData
 	 * @throws RuntimeException
 	 */
-	public function addPayPalData( \WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalData $payPalData ) {
+	public function addPayPalData( PayPalData $payPalData ) {
 		$paymentMethod = $this->payment->getPaymentMethod();
 
-		if ( !( $paymentMethod instanceof \WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment ) ) {
+		if ( !( $paymentMethod instanceof PayPalPayment ) ) {
 			throw new RuntimeException( 'Cannot set PayPal data on a non PayPal payment' );
 		}
 
@@ -200,11 +202,11 @@ class Donation {
 	}
 
 	/**
-	 * @param \WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\CreditCardTransactionData $creditCardData
+	 * @param CreditCardTransactionData $creditCardData
 	 *
-*@throws RuntimeException
+	 * @throws RuntimeException
 	 */
-	public function addCreditCardData( \WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\CreditCardTransactionData $creditCardData ) {
+	public function addCreditCardData( CreditCardTransactionData $creditCardData ) {
 		$paymentMethod = $this->payment->getPaymentMethod();
 
 		if ( !( $paymentMethod instanceof CreditCardPayment ) ) {

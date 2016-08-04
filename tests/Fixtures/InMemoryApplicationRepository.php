@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Application;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\ApplicationRepository;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\GetMembershipApplicationException;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\StoreMembershipApplicationException;
 
 /**
@@ -15,14 +16,14 @@ use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\S
 class InMemoryApplicationRepository implements ApplicationRepository {
 
 	/**
-	 * @var \WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Application[]
+	 * @var Application[]
 	 */
 	private $applications = [];
 
 	private $nextNewId = 1;
 
 	/**
-	 * @param \WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Application $application
+	 * @param Application $application
 	 *
 	 * @throws StoreMembershipApplicationException
 	 */
@@ -37,8 +38,8 @@ class InMemoryApplicationRepository implements ApplicationRepository {
 	/**
 	 * @param int $id
 	 *
-	 * @return \WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Application|null
-	 * @throws \WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\GetMembershipApplicationException
+	 * @return Application|null
+	 * @throws GetMembershipApplicationException
 	 */
 	public function getApplicationById( int $id ) {
 		return array_key_exists( $id, $this->applications ) ? $this->applications[$id] : null;

@@ -9,6 +9,7 @@ use Psr\Log\LogLevel;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\GetDonationException;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\StoreDonationException;
 
 /**
  * @license GNU GPL v2+
@@ -31,15 +32,15 @@ class LoggingDonationRepository implements DonationRepository {
 	/**
 	 * @see DonationRepository::storeDonation
 	 *
-	 * @param \WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation $donation
+	 * @param Donation $donation
 	 *
-	 * @throws \WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\StoreDonationException
+	 * @throws StoreDonationException
 	 */
 	public function storeDonation( Donation $donation ) {
 		try {
 			$this->repository->storeDonation( $donation );
 		}
-		catch ( \WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\StoreDonationException $ex ) {
+		catch ( StoreDonationException $ex ) {
 			$this->logger->log( $this->logLevel, $ex->getMessage(), [ self::CONTEXT_EXCEPTION_KEY => $ex ] );
 			throw $ex;
 		}
@@ -50,7 +51,7 @@ class LoggingDonationRepository implements DonationRepository {
 	 *
 	 * @param int $id
 	 *
-	 * @return \WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation|null
+	 * @return Donation|null
 	 * @throws GetDonationException
 	 */
 	public function getDonationById( int $id ) {

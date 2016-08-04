@@ -17,7 +17,7 @@ class DonationPayment {
 	private $intervalInMonths;
 	private $paymentMethod;
 
-	public function __construct( Euro $amount, int $intervalInMonths, \WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod $paymentMethod ) {
+	public function __construct( Euro $amount, int $intervalInMonths, PaymentMethod $paymentMethod ) {
 		$this->amount = $amount;
 		$this->intervalInMonths = $intervalInMonths;
 		$this->paymentMethod = $paymentMethod;

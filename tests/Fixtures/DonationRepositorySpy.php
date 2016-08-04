@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\GetDonationException;
 
 /**
  * @licence GNU GPL v2+
@@ -26,7 +27,7 @@ class DonationRepositorySpy extends FakeDonationRepository {
 	}
 
 	/**
-	 * @return \WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation[]
+	 * @return Donation[]
 	 */
 	public function getStoreDonationCalls(): array {
 		return $this->storeDonationCalls;
@@ -35,8 +36,8 @@ class DonationRepositorySpy extends FakeDonationRepository {
 	/**
 	 * @param int $id
 	 *
-	 * @return \WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation|null
-	 * @throws \WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\GetDonationException
+	 * @return Donation|null
+	 * @throws GetDonationException
 	 */
 	public function getDonationById( int $id ) {
 		$this->getDonationCalls[] = $id;

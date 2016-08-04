@@ -66,7 +66,7 @@ class AddDonationResponse {
 	 * Keep in mind that you should not use domain logic in the presenter, or put presentation helpers
 	 * in the domain object!
 	 *
-	 * @return \WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation|null
+	 * @return Donation|null
 	 */
 	public function getDonation() {
 		return $this->donation;
