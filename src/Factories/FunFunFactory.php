@@ -31,7 +31,6 @@ use WMDE\Fundraising\Frontend\ApplicationContext\DataAccess\ApiBasedPageRetrieve
 use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\AllOfTheCachePurger;
 use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\CachingPageRetriever;
 use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\Honorifics;
-use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\ModifyingPageRetriever;
 use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\PageRetriever;
 use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\DisplayPage\DisplayPageUseCase;
 use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\GetInTouch\GetInTouchUseCase;
