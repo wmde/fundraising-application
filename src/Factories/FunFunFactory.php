@@ -495,6 +495,7 @@ class FunFunFactory {
 	 * Get a template, with the content for the layout areas filled in.
 	 *
 	 * @param string $templateName
+	 * @param array $context Additional variables for the template
 	 * @return TwigTemplate
 	 */
 	private function getLayoutTemplate( string $templateName, array $context = [] ): TwigTemplate {
@@ -1017,18 +1018,16 @@ class FunFunFactory {
 	}
 
 	public function newDonationFormViolationPresenter() {
-		$template = $this->getLayoutTemplate( 'DisplayPageLayout.twig' );
-		// TODO make this dependent on the 'form' value from the HTTP POST request
+		// TODO make the template name dependent on the 'form' value from the HTTP POST request
 		// (we need different form pages for A/B testing)
-		$template->context['main_template'] = 'DonationForm.twig';
+		$template = $this->getLayoutTemplate( 'DisplayPageLayout.twig', [ 'main_template' => 'DonationForm.twig' ] );
 		return new DonationFormViolationPresenter( $template, $this->newAmountFormatter() );
 	}
 
 	public function newDonationFormPresenter() {
-		$template = $this->getLayoutTemplate( 'DisplayPageLayout.twig' );
-		// TODO make this dependent on the 'form' value from the HTTP POST request
+		// TODO make the template name dependent on the 'form' value from the HTTP POST request
 		// (we need different form pages for A/B testing)
-		$template->context['main_template'] = 'DonationForm.twig';
+		$template = $this->getLayoutTemplate( 'DisplayPageLayout.twig', [ 'main_template' => 'DonationForm.twig' ] );
 		return new DonationFormPresenter( $template, $this->newAmountFormatter() );
 	}
 

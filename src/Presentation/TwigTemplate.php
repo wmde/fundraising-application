@@ -12,6 +12,7 @@ class TwigTemplate {
 
 	private $twig;
 	private $templatePath;
+	private $context;
 
 	public function __construct( \Twig_Environment $twig, string $templatePath, array $context = [] ) {
 		$this->twig = $twig;
