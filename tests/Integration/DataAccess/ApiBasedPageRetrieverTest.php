@@ -5,8 +5,8 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
 
 use Mediawiki\Api\ApiUser;
 use Mediawiki\Api\MediawikiApi;
-use Mediawiki\Api\UsageException;
 use Mediawiki\Api\SimpleRequest;
+use Mediawiki\Api\UsageException;
 use WMDE\Fundraising\Frontend\ApplicationContext\DataAccess\ApiBasedPageRetriever;
 use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\PageRetriever;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\LoggerSpy;

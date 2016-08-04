@@ -7,8 +7,8 @@ namespace WMDE\Fundraising\Frontend\MembershipApplicationContext\Infrastructure;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Application;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\GetMembershipApplicationException;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\ApplicationRepository;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\GetMembershipApplicationException;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\StoreMembershipApplicationException;
 
 /**

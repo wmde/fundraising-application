@@ -6,7 +6,6 @@ namespace WMDE\Fundraising\Frontend\SubscriptionContext\Validation;
 
 use WMDE\Fundraising\Entities\Subscription;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Domain\Repositories\SubscriptionRepositoryException;
-use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionDuplicateValidator;
 use WMDE\Fundraising\Frontend\Validation\AllowedValuesValidator;
 use WMDE\Fundraising\Frontend\Validation\CanValidateField;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;

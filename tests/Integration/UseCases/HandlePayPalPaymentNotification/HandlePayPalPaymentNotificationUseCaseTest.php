@@ -5,9 +5,9 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\HandlePayPalPaymentNotification;
 
 use Psr\Log\NullLogger;
-use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorName;
 use WMDE\Fundraising\Frontend\DonatingContext\DataAccess\DoctrineDonationRepository;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorName;
 use WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\DonationConfirmationMailer;
 use WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\DonationEventLogger;
 use WMDE\Fundraising\Frontend\DonatingContext\UseCases\HandlePayPalPaymentNotification\HandlePayPalPaymentNotificationUseCase;

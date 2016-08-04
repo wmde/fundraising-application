@@ -5,8 +5,8 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Tests\Unit;
 
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorAddress;
-use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
 use WMDE\Fundraising\Frontend\DonatingContext\Validation\DonorAddressValidator;
+use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
 
 /**
  * @covers WMDE\Fundraising\Frontend\DonatingContext\Validation\DonorAddressValidator

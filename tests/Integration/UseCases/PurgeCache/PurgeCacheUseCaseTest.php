@@ -5,10 +5,10 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\PurgeCache;
 
 use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\CachePurger;
+use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\CachePurgingException;
 use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\PurgeCache\PurgeCacheRequest;
 use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\PurgeCache\PurgeCacheResponse;
 use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\PurgeCache\PurgeCacheUseCase;
-use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\CachePurgingException;
 
 /**
  * @covers WMDE\Fundraising\Frontend\ApplicationContext\UseCases\PurgeCache\PurgeCacheUseCase

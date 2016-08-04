@@ -5,8 +5,6 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Unit\UseCases\ApplyForMembership;
 
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorAddress;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Applicant;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\ApplicantAddress;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\ApplicantName;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tracking\MembershipApplicationTrackingInfo;

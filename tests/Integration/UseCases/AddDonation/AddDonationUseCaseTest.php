@@ -6,10 +6,10 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\AddDonation;
 
 use PHPUnit_Framework_MockObject_MockObject;
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorName;
 use WMDE\Fundraising\Frontend\DonatingContext\Authorization\DonationTokenFetcher;
 use WMDE\Fundraising\Frontend\DonatingContext\Authorization\DonationTokens;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorName;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\DonationConfirmationMailer;
 use WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddDonation\AddDonationPolicyValidator;

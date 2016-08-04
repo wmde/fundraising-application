@@ -5,11 +5,11 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\ApplyForMembership;
 
 use WMDE\Euro\Euro;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Applicant;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\ApplicantAddress;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\ApplicantName;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\EmailAddress;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Applicant;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Application;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Payment;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\PhoneNumber;
 

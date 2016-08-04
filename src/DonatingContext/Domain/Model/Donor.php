@@ -4,8 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\DonatingContext\Domain\Model;
 
-use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorAddress;
-
 /**
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
