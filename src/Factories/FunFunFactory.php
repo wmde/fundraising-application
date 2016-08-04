@@ -556,11 +556,7 @@ class FunFunFactory {
 	}
 
 	private function newWikiPageRetriever(): PageRetriever {
-		$PageRetriever = new ModifyingPageRetriever(
-			$this->newCachedPageRetriever(),
-			$this->newPageContentModifier(),
-			$this->config['cms-wiki-title-prefix']
-		);
+		$PageRetriever = $this->newCachedPageRetriever();
 
 		return $this->addProfilingDecorator( $PageRetriever, 'PageRetriever' );
 	}
@@ -576,7 +572,8 @@ class FunFunFactory {
 		return new ApiBasedPageRetriever(
 			$this->getMediaWikiApi(),
 			new ApiUser( $this->config['cms-wiki-user'], $this->config['cms-wiki-password'] ),
-			$this->getLogger()
+			$this->getLogger(),
+			$this->config['cms-wiki-title-prefix']
 		);
 	}
 
@@ -598,12 +595,6 @@ class FunFunFactory {
 
 	public function getTemplatePath(): string {
 		return __DIR__ . '/../../app/templates';
-	}
-
-	private function newPageContentModifier(): PageContentModifier {
-		return new PageContentModifier(
-			$this->getLogger()
-		);
 	}
 
 	public function newAddSubscriptionUseCase(): AddSubscriptionUseCase {
