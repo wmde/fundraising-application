@@ -62,7 +62,7 @@ class ApplyForMembershipResponse {
 	 * Keep in mind that you should not use domain logic in the presenter, or put presentation helpers
 	 * in the domain object!
 	 *
-	 * @return \WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Application
+	 * @return Application
 	 */
 	public function getMembershipApplication(): Application {
 		if ( !$this->isSuccessful() ) {

@@ -18,7 +18,7 @@ interface DonationRepository {
 	 * This means the id of new donations needs to be null. The id can be accessed by calling getId on
 	 * the passed in Donation.
 	 *
-	 * @param \WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation $donation
+	 * @param Donation $donation
 	 *
 	 * @throws StoreDonationException
 	 */
@@ -27,7 +27,7 @@ interface DonationRepository {
 	/**
 	 * @param int $id
 	 *
-	 * @return \WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation|null
+	 * @return Donation|null
 	 * @throws GetDonationException
 	 */
 	public function getDonationById( int $id );

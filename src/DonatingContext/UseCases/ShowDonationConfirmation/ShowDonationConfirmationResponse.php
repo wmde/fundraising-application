@@ -29,7 +29,7 @@ class ShowDonationConfirmationResponse {
 	/**
 	 * Returns the Donation when @see accessIsPermitted returns true, or null otherwise.
 	 *
-	 * @return \WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation|null
+	 * @return Donation|null
 	 */
 	public function getDonation() {
 		return $this->donation;

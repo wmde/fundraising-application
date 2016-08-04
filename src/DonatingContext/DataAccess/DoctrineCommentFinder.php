@@ -29,7 +29,7 @@ class DoctrineCommentFinder implements CommentFinder {
 	 * @param int $limit
 	 * @param int $offset
 	 *
-	 * @return \WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\CommentWithAmount[]
+	 * @return CommentWithAmount[]
 	 */
 	public function getPublicComments( int $limit, int $offset = 0 ): array {
 		return array_map(

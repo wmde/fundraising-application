@@ -265,7 +265,7 @@ class DoctrineDonationRepository implements DonationRepository {
 	/**
 	 * @param int $id
 	 *
-	 * @return \WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation|null
+	 * @return Donation|null
 	 * @throws GetDonationException
 	 */
 	public function getDonationById( int $id ) {
@@ -310,7 +310,7 @@ class DoctrineDonationRepository implements DonationRepository {
 	/**
 	 * @param DoctrineDonation $dd
 	 *
-	 * @return \WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donor|null
+	 * @return Donor|null
 	 */
 	private function getDonorFromEntity( DoctrineDonation $dd ) {
 		if ( $dd->getDonorEmail() === null ) {
@@ -383,7 +383,7 @@ class DoctrineDonationRepository implements DonationRepository {
 	/**
 	 * @param DoctrineDonation $dd
 	 *
-*@return \WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData|null
+	 * @return BankData|null
 	 */
 	private function getBankDataFromEntity( DoctrineDonation $dd ) {
 		$data = $dd->getDecodedData();

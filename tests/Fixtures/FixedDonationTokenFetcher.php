@@ -22,8 +22,8 @@ class FixedDonationTokenFetcher implements DonationTokenFetcher {
 	/**
 	 * @param int $donationId
 	 *
-	 * @return \WMDE\Fundraising\Frontend\DonatingContext\Authorization\DonationTokens
-	 * @throws \WMDE\Fundraising\Frontend\DonatingContext\Authorization\DonationTokenFetchingException
+	 * @return DonationTokens
+	 * @throws DonationTokenFetchingException
 	 */
 	public function getTokens( int $donationId ): DonationTokens {
 		return $this->tokens;

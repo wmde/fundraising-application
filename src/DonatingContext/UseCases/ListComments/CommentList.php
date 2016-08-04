@@ -19,7 +19,7 @@ class CommentList {
 	}
 
 	/**
-	 * @return \WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\CommentWithAmount[]
+	 * @return CommentWithAmount[]
 	 */
 	public function toArray(): array {
 		return $this->comments;

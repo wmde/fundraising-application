@@ -23,7 +23,7 @@ class FixedApplicationTokenFetcher implements ApplicationTokenFetcher {
 	/**
 	 * @param int $applicationId
 	 *
-	 * @return \WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\MembershipApplicationTokens
+	 * @return MembershipApplicationTokens
 	 * @throws ApplicationTokenFetchingException
 	 */
 	public function getTokens( int $applicationId ): MembershipApplicationTokens {

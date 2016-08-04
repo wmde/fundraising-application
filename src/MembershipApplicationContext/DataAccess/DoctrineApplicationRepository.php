@@ -134,8 +134,8 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 	/**
 	 * @param int $id
 	 *
-	 * @return \WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Application|null
-	 * @throws \WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\GetMembershipApplicationException
+	 * @return Application|null
+	 * @throws GetMembershipApplicationException
 	 */
 	public function getApplicationById( int $id ) {
 		try {
