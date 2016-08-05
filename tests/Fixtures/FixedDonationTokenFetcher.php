@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
 use WMDE\Fundraising\Frontend\DonatingContext\Authorization\DonationTokenFetcher;
+use WMDE\Fundraising\Frontend\DonatingContext\Authorization\DonationTokenFetchingException;
 use WMDE\Fundraising\Frontend\DonatingContext\Authorization\DonationTokens;
 
 /**
