@@ -158,16 +158,14 @@ class TextPolicyValidator {
 		$parsedUrl = parse_url( 'http://' . $url );
 
 		if ( !$parsedUrl ) {
-			return false;
+			return '';
 		}
 
 		if ( isset( $parsedUrl['host'] ) ) {
-			$host = $parsedUrl['host'];
-		} else {
-			$host = $parsedUrl['path'];
+			return $parsedUrl['host'];
 		}
 
-		return $host;
+		return $parsedUrl['path'];
 	}
 
 	private function composeRegex( array $wordArray ): string {
