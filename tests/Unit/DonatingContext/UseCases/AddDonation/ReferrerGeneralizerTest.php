@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Tests\Unit;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\DonatingContext\UseCases\AddDonation;
 
 use WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddDonation\ReferrerGeneralizer;
 use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;

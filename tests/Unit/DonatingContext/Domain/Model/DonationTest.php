@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\Domain\Model;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\DonatingContext\Domain\Model;
 
 use RuntimeException;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation;
@@ -55,7 +55,7 @@ class DonationTest extends \PHPUnit_Framework_TestCase {
 		return [
 			[ Donation::STATUS_CANCELLED ],
 			[ Donation::STATUS_EXTERNAL_BOOKED ],
-			[ \WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation::STATUS_EXTERNAL_INCOMPLETE ],
+			[ Donation::STATUS_EXTERNAL_INCOMPLETE ],
 			[ Donation::STATUS_PROMISE ],
 		];
 	}
@@ -154,12 +154,12 @@ class DonationTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testAddCommentThrowsExceptionWhenCommentAlreadySet() {
-		$donation = new \WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation(
+		$donation = new Donation(
 			null,
-			\WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation::STATUS_NEW,
+			Donation::STATUS_NEW,
 			ValidDonation::newDonor(),
 			ValidDonation::newDirectDebitPayment(),
-			\WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation::OPTS_INTO_NEWSLETTER,
+			Donation::OPTS_INTO_NEWSLETTER,
 			ValidDonation::newTrackingInfo(),
 			ValidDonation::newPublicComment()
 		);

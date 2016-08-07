@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\Domain\Model;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\PaymentContext\Domain\Model;
 
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 
