@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\Domain\Model;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\MembershipApplicationContext\Domain\Model;
 
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\EmailAddress;
 

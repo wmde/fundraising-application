@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\Domain\Model;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\DonatingContext\Domain\Model;
 
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorName;
 
@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorName;
  * @license GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class PersonNameTest extends \PHPUnit_Framework_TestCase {
+class DonorNameTest extends \PHPUnit_Framework_TestCase {
 
 	/**
 	 * @dataProvider privatePersonProvider

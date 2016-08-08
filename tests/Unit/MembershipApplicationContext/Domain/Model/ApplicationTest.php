@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\Domain\Model;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\MembershipApplicationContext\Domain\Model;
 
 use RuntimeException;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class MembershipApplicationTest extends \PHPUnit_Framework_TestCase {
+class ApplicationTest extends \PHPUnit_Framework_TestCase {
 
 	public function testIdIsNullWhenNotAssigned() {
 		$this->assertNull( ValidMembershipApplication::newDomainEntity()->getId() );

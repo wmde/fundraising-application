@@ -2,11 +2,12 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Tests\Unit;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\PaymentContext\Domain;
 
 use InvalidArgumentException;
 use RuntimeException;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataConverter;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataLibraryInitializationException;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 
@@ -28,10 +29,8 @@ class BankDataConverterTest extends \PHPUnit_Framework_TestCase {
 		$this->assertInstanceOf( BankDataConverter::class, $this->newBankDataConverter() );
 	}
 
-	/**
-	 * @expectedException \WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataLibraryInitializationException
-	 */
 	public function testGivenNotExistingBankDataFile_constructorThrowsException() {
+		$this->expectException( BankDataLibraryInitializationException::class );
 		$this->newBankDataConverter( '/foo/bar/awesome.data' );
 	}
 

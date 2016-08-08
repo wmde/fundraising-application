@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\Domain\Model;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\MembershipApplicationContext\Domain\Model;
 
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Payment;
@@ -14,7 +14,7 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class MembershipPaymentTest extends \PHPUnit_Framework_TestCase {
+class PaymentTest extends \PHPUnit_Framework_TestCase {
 
 	/**
 	 * @dataProvider invalidIntervalProvider
