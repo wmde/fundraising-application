@@ -94,6 +94,10 @@ If you want to debug problems in the Redux data flow, set the following variable
 
 Actions and their resulting state will be logged.
 
+## Deployment
+For an in-depth documentation how deployment on a server is done, 
+see [the deployment documentation](deployment/README.md).
+
 ## Profiling
 
 When accessing the API via `web/index.dev.php`, profiling information will be generated and in

@@ -1,8 +1,39 @@
-[production]
+[webservers]
+# Host name and deployment user name. The user's ssh key should be valid on the host
 spenden.wikimedia.de ansible_user=deploy
 
-[production:vars]
-deploy_dir = "/usr/share/nginx/www/spenden.wikimedia.de/html"
-deploy_branch = master
-composer_optimize_autoloader = yes
+
+[webservers:vars]
+# Base path where the code should be deployed. All following paths are relative to this. No slash at the end!
+app_dir = "/usr/share/nginx/www/test-spenden-2.wikimedia.de"
+
+# Prefix for release directories
+release_prefix = release-
+
+# Logs directory ( shared by all releases )
+logs_dir = logs
+
+# Name of current release (docroot in the NGINX config)
+current_dir = html
+
+# Configuration file ( shared by all releases )
+config_file = shared/config/config.prod.json
+
+
+# Just the localhost, don't change
+[local]
+127.0.0.1
+
+
+[local:vars]
+# Temporary directory for checking out the code. Will be created if it does nor exists and can persist between deployments
+# Should be unique in every inventory file (test, production, stage, etc)
+build_dir = /tmp/fundraising-deploy-production
+
+# Branch name from which to check out
+build_branch = master
+
+# Set to "no" if you want to install the development environment
 composer_no_dev = yes
+
+# vi: ft=dosini

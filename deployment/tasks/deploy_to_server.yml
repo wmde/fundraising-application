@@ -1,0 +1,45 @@
+- name: Create release directory
+  file: path={{ app_dir }}/{{ release_prefix }}{{ release_name }} state=directory
+
+- name: Expand release tarball
+  unarchive: src={{ local_archive }} dest={{ app_dir }}/{{ release_prefix }}{{ release_name }}
+
+- name: Set app directory ownership
+  file: path={{ app_dir }}/{{ release_prefix }}{{ release_name }} owner={{app_owner}} group={{app_group}} recurse=yes
+
+- name: Create var dir
+  file: path={{ app_dir }}/{{ release_prefix }}{{ release_name }}/var owner={{app_owner}} group={{app_group}} state=directory
+
+- name: Create var/cache dir
+  file: path={{ app_dir }}/{{ release_prefix }}{{ release_name }}/var/cache owner={{app_owner}} group={{app_group}} state=directory mode=775
+
+- name: Create symlink to log dir
+  file: src={{ app_dir }}/{{ logs_dir }} dest={{ app_dir }}/{{ release_prefix }}{{ release_name }}/var/logs state=link
+
+- name: Check if configuration file exists
+  stat: path={{ app_dir }}/{{ config_file }}
+  register: server_config_file
+  failed_when: not server_config_file.stat.exists
+
+- name: Check if configuration file is valid JSON
+  command: php -r 'json_decode( file_get_contents( "{{ app_dir }}/{{ config_file }}" ) ); echo json_last_error();'
+  register: decode_json_config
+  failed_when: decode_json_config.stdout != "0"
+
+- name: Create symlink to config file
+  file: src={{ app_dir }}/{{ config_file }} dest={{ app_dir }}/{{ release_prefix }}{{ release_name }}/app/config/config.prod.json state=link
+
+# TODO Validate JSON with schema to guard against empty/invalid configuration entries
+
+- name: Symlink the release
+  file: src={{ app_dir }}/{{ release_prefix }}{{ release_name }} dest={{ app_dir }}/{{ current_dir }} owner={{app_owner}} group={{app_group}} state=link
+
+- name: Download cachetool if needed
+  get_url: url=http://gordalina.github.io/cachetool/downloads/cachetool.phar dest={{ app_dir }}/cachetool.phar
+
+- name: Clear PHP-FPM opcache
+  command: php {{ app_dir }}/cachetool.phar opcache:reset --fcgi=/var/run/php/php7.0-fpm.sock
+
+- name: Remove old releases
+  shell: ls -d1 --format single-column {{ app_dir }}/{{ release_prefix }}* | sort -n | head -n -{{ keep_releases }} | xargs -I % rm -rf %
+  ignore_errors: yes # In case there is a file that can't be deleted for some reason
