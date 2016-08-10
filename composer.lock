@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "536d223da98e46d09cbf4e2cb732c96f",
-    "content-hash": "dbaf36b2860a07d45d92ce290c414f91",
+    "hash": "6100149d26a09f25676553d5a4e08abd",
+    "content-hash": "8fd4093be83c07640950e92bd02d874f",
     "packages": [
         {
             "name": "addwiki/mediawiki-api-base",
@@ -1092,22 +1092,87 @@
             "time": "2014-08-19 00:36:41"
         },
         {
+            "name": "league/json-guard",
+            "version": "0.3.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/json-guard.git",
+                "reference": "abea61b195da976f99c5c4f38db2837d1a179e74"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/json-guard/zipball/abea61b195da976f99c5c4f38db2837d1a179e74",
+                "reference": "abea61b195da976f99c5c4f38db2837d1a179e74",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "require-dev": {
+                "ext-bcmath": "*",
+                "ext-curl": "*",
+                "json-schema/json-schema-test-suite": "1.2.0",
+                "phpunit/phpunit": "4.*",
+                "scrutinizer/ocular": "~1.1",
+                "squizlabs/php_codesniffer": "~2.3"
+            },
+            "suggest": {
+                "ext-bcmath": "Required to properly check constraints for numbers larger than PHP_INT_MAX."
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "League\\JsonGuard\\": "src"
+                },
+                "files": [
+                    "src/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Matthew Allan",
+                    "email": "matthew.james.allan@gmail.com",
+                    "homepage": "https://mattallan.org",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A validator for JSON using json-schema.",
+            "homepage": "https://github.com/thephpleague/json-guard",
+            "keywords": [
+                "json",
+                "json-schema",
+                "json-schema.org",
+                "schema",
+                "validation"
+            ],
+            "time": "2016-07-26 22:50:34"
+        },
+        {
             "name": "micropayment-de/service-client",
             "version": "1.19.0",
             "dist": {
                 "type": "zip",
                 "url": "https://techdoc.micropayment.de/payment/serviceclient/download/mcp-serviceclient_1_19.zip",
-                "reference": "1.19.0",
+                "reference": null,
                 "shasum": null
             },
             "type": "library",
             "autoload": {
+                "files": [
+                    "lib/init.php"
+                ],
                 "classmap": [
                     "lib",
                     "services"
-                ],
-                "files": [
-                    "lib/init.php"
                 ]
             }
         },
