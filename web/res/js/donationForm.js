@@ -378,6 +378,7 @@ $( function () {
 	} );
 
 	$( '.back-button' ).click( function () {
+		store.dispatch( actions.newResetFieldValidityAction( [ 'confirmSepa', 'confirmShortTerm' ] ) );
 		store.dispatch( actions.newPreviousPageAction() );
 	} );
 
