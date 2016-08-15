@@ -73,6 +73,7 @@ class TextPolicyValidatorTest extends \PHPUnit_Framework_TestCase {
 			[ 'Wikipedia ist so super, meine Eltern sagen es ist eine toll Seite. Berlin ist auch Super.' ],
 			[ 'Ich mag Wikipedia. Aber meine Seite ist auch toll. Googelt mal nach Bunsenbrenner!!!1' ],
 			[ 'Bei Wikipedia kann man eine Menge zum Thema Hamster finden. Hamster fressen voll viel Zeug alter!' ],
+			[ 'Manche Seiten haben keinen Inhalt, das finde ich sch...e' ], // this also tests the domain detection
 		];
 	}
 
