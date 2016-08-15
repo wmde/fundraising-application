@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddDonation;
 
 use WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddDonation\AddDonationValidationResult as Result;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
-use WMDE\Fundraising\Frontend\Validation\AmountValidator;
+use WMDE\Fundraising\Frontend\Validation\PaymentDataValidator;
 use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 use WMDE\Fundraising\Frontend\Validation\EmailValidator;
@@ -46,7 +46,7 @@ class AddDonationValidator {
 		Result::SOURCE_TRACKING_SOURCE => 250
 	];
 
-	public function __construct( AmountValidator $amountValidator, BankDataValidator $bankDataValidator,
+	public function __construct( PaymentDataValidator $amountValidator, BankDataValidator $bankDataValidator,
 								 EmailValidator $emailValidator ) {
 
 		$this->amountValidator = $amountValidator;
