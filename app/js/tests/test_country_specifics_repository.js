@@ -11,7 +11,7 @@ test( 'Specifics for Germany', function ( t ) {
 		var countrySpecifics = getCountrySpecifics( countryCode ),
 			expectedAttributes = {
 				postCode: {
-					'data-pattern': '\\s*[0-9]{5}\\s*',
+					'data-pattern': '^\\s*[0-9]{5}\\s*$',
 					placeholder: 'z. B. 10117',
 					title: 'Fünfstellige Postleitzahl'
 				},

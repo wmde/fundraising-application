@@ -17,7 +17,7 @@ var _ = require( 'underscore' ),
 		},
 		DE: {
 			postCode: {
-				'data-pattern': '\\s*[0-9]{5}\\s*',
+				'data-pattern': '^\\s*[0-9]{5}\\s*$',
 				placeholder: 'z. B. 10117',
 				title: 'Fünfstellige Postleitzahl'
 			},
@@ -30,7 +30,7 @@ var _ = require( 'underscore' ),
 		},
 		AT: {
 			postCode: {
-				'data-pattern': '\\s*[1-9][0-9]{3}\\s*',
+				'data-pattern': '^\\s*[1-9][0-9]{3}\\s*$',
 				placeholder: 'z. B. 4020',
 				title: 'Vierstellige Postleitzahl'
 			},
@@ -43,7 +43,7 @@ var _ = require( 'underscore' ),
 		},
 		CH: {
 			postCode: {
-				'data-pattern': '\\s*[1-9][0-9]{3}\\s*',
+				'data-pattern': '^\\s*[1-9][0-9]{3}\\s*$',
 				placeholder: 'z. B. 3556',
 				title: 'Vierstellige Postleitzahl'
 			},
