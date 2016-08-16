@@ -3,7 +3,7 @@
 var objectAssign = require( 'object-assign' ),
 
 	defaultState = {
-		amount: null,
+		paymentData: null,
 		address: null,
 		bankData: null,
 		sepaConfirmation: null
@@ -33,8 +33,8 @@ function validity( state, action ) {
 		state = defaultState;
 	}
 	switch ( action.type ) {
-		case 'FINISH_AMOUNT_VALIDATION':
-			return objectAssign( {}, state, { amount: convertExternalResult( action ) } );
+		case 'FINISH_PAYMENT_DATA_VALIDATION':
+			return objectAssign( {}, state, { paymentData: convertExternalResult( action ) } );
 		case 'FINISH_ADDRESS_VALIDATION':
 			return objectAssign( {}, state, { address: convertExternalResult( action ) } );
 		case 'FINISH_BANK_DATA_VALIDATION':

@@ -17,6 +17,9 @@ class PaymentDataValidator {
 	const VIOLATION_AMOUNT_TOO_LOW = 'Amount too low';
 	const VIOLATION_UNKNOWN_PAYMENT_TYPE = 'Unknown payment type';
 
+	const SOURCE_AMOUNT = 'amount';
+	const SOURCE_PAYMENT_TYPE = 'paymentType';
+
 	private $minAmount;
 
 	private $minAmountPerType;
@@ -32,14 +35,26 @@ class PaymentDataValidator {
 
 	public function validate( $amount, string $paymentType ): ValidationResult {
 		if ( !in_array( $paymentType, PaymentType::getPaymentTypes() ) ) {
-			return new ValidationResult( new ConstraintViolation( $paymentType, self::VIOLATION_UNKNOWN_PAYMENT_TYPE ) );
+			return new ValidationResult( new ConstraintViolation(
+				$paymentType,
+				self::VIOLATION_UNKNOWN_PAYMENT_TYPE,
+				self::SOURCE_PAYMENT_TYPE
+			) );
 		}
 		if ( !is_numeric( $amount ) ) {
-			return new ValidationResult( new ConstraintViolation( $amount, self::VIOLATION_AMOUNT_NOT_NUMERIC ) );
+			return new ValidationResult( new ConstraintViolation(
+				$amount,
+				self::VIOLATION_AMOUNT_NOT_NUMERIC,
+				self::SOURCE_AMOUNT
+			) );
 		}
 
 		if ( $amount < $this->getMinAmountFor( $paymentType ) ) {
-			return new ValidationResult( new ConstraintViolation( $amount, self::VIOLATION_AMOUNT_TOO_LOW ) );
+			return new ValidationResult( new ConstraintViolation(
+				$amount,
+				self::VIOLATION_AMOUNT_TOO_LOW,
+				self::SOURCE_AMOUNT
+			) );
 		}
 
 		return new ValidationResult();

@@ -60,21 +60,21 @@ $app->post(
 );
 
 $app->post(
-	'validate-amount',
+	'validate-payment-data',
 	function( Request $request ) use ( $app, $ffFactory ) {
 
 		$amount = (float) $ffFactory->newDecimalNumberFormatter()->parse( $request->get( 'amount', '0' ) );
-		$amountValidator = $ffFactory->newAmountValidator();
-		$validationResult = $amountValidator->validate( $amount, (string) $request->get( 'paymentType', '' ) );
+		$validator = $ffFactory->newPaymentDataValidator();
+		$validationResult = $validator->validate( $amount, (string) $request->get( 'paymentType', '' ) );
 
 		if ( $validationResult->isSuccessful() ) {
 			return $app->json( [ 'status' => 'OK' ] );
 		} else {
 			$errors = [];
 			foreach( $validationResult->getViolations() as $violation ) {
-				$errors[] = $ffFactory->getTranslator()->trans( $violation->getMessageIdentifier() );
+				$errors[ $violation->getSource() ] = $ffFactory->getTranslator()->trans( $violation->getMessageIdentifier() );
 			}
-			return $app->json( [ 'status' => 'ERR', 'message' => implode( "\n", $errors ) ] );
+			return $app->json( [ 'status' => 'ERR', 'messages' => $errors ] );
 		}
 	}
 );

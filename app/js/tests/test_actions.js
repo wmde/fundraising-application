@@ -28,12 +28,12 @@ test( 'newPreviousPageAction returns action object', function ( t ) {
 	t.end();
 } );
 
-test( 'newValidateAmountAction returns action object', function ( t ) {
+test( 'newFinishPaymentDataValidationAction returns action object', function ( t ) {
 	var expectedAction = {
-		type: 'FINISH_AMOUNT_VALIDATION',
+		type: 'FINISH_PAYMENT_DATA_VALIDATION',
 		payload: { status: 'OK' }
 	};
-	t.deepEqual( actions.newFinishAmountValidationAction( { status: 'OK' } ), expectedAction );
+	t.deepEqual( actions.newFinishPaymentDataValidationAction( { status: 'OK' } ), expectedAction );
 	t.end();
 } );
 

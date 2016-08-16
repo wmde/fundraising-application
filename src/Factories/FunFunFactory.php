@@ -821,7 +821,7 @@ class FunFunFactory {
 
 	private function newDonationValidator(): AddDonationValidator {
 		return new AddDonationValidator(
-			$this->newAmountValidator(),
+			$this->newPaymentDataValidator(),
 			$this->newBankDataValidator(),
 			$this->getEmailValidator()
 		);
@@ -871,7 +871,7 @@ class FunFunFactory {
 		return $this->pimple['donation_repository'];
 	}
 
-	public function newAmountValidator(): PaymentDataValidator {
+	public function newPaymentDataValidator(): PaymentDataValidator {
 		return new PaymentDataValidator( 1 );
 	}
 

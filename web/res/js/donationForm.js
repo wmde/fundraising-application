@@ -44,7 +44,7 @@ $( function () {
 			return [
 				WMDE.ReduxValidation.createValidationDispatcher(
 					WMDE.FormValidation.createAmountValidator( initData.data( 'validate-amount-url' ) ),
-					actions.newFinishAmountValidationAction,
+					actions.newFinishPaymentDataValidationAction,
 					[ 'amount', 'paymentType' ],
 					initialValues
 				),
@@ -99,6 +99,7 @@ $( function () {
 			{
 				viewHandler: WMDE.View.createErrorBoxHandler( $( '#validation-errors' ), {
 					amount: 'Betrag',
+					paymentType: 'Zahlungsart',
 					salutation: 'Anrede',
 					title: 'Titel',
 					firstName: 'Vorname',
@@ -277,7 +278,7 @@ $( function () {
 
 	function personalDataPageIsValid() {
 		var validity = store.getState().validity;
-		return !hasInvalidFields() && validity.amount && addressIsValid() && bankDataIsValid();
+		return !hasInvalidFields() && paymentDataIsValid() && addressIsValid() && bankDataIsValid();
 	}
 
 	function triggerValidityCheckForPaymentPage() {
@@ -331,8 +332,7 @@ $( function () {
 
 	function paymentDataIsValid() {
 		var currentState = store.getState();
-		return currentState.validity.amount ||
-			( currentState.donationFormContent.amount && currentState.donationFormContent.paymentType ) ;
+		return currentState.validity.paymentData;
 	}
 
 	function displayErrorBox() {
@@ -384,7 +384,8 @@ $( function () {
 
 	$( '#finishFormSubmit3' ).click( function () {
 		var validity = store.getState().validity;
-		if ( validity.amount && validity.address && validity.bankData && validity.sepaConfirmation ) {
+		// we use validity directly here because SEPA really needs these values to be valid
+		if ( validity.paymentData && validity.address && validity.bankData && validity.sepaConfirmation ) {
 			$( '#donForm2' ).submit();
 		} else {
 			triggerValidityCheckForSepaPage();

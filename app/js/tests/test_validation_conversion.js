@@ -11,7 +11,7 @@ test( 'empty violated fields return empty object', function ( t ) {
 
 test( 'violated amount returns violations', function ( t ) {
 	var violatedFields = { betrag: 'Amount too low' },
-		expectedState = { validity: { amount: false } };
+		expectedState = { validity: { paymentData: false } };
 
 	t.deepEqual( createInitialStateFromViolatedFields( violatedFields ), expectedState );
 	t.end();
@@ -19,7 +19,7 @@ test( 'violated amount returns violations', function ( t ) {
 
 test( 'violated payment type returns violations', function ( t ) {
 	var violatedFields = { zahlweise: 'Not supported' },
-		expectedState = { validity: { amount: false } };
+		expectedState = { validity: { paymentData: false } };
 
 	t.deepEqual( createInitialStateFromViolatedFields( violatedFields ), expectedState );
 	t.end();

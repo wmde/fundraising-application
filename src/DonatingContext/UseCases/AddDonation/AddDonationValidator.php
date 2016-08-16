@@ -16,7 +16,7 @@ use WMDE\Fundraising\Frontend\Validation\EmailValidator;
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
 class AddDonationValidator {
-	private $amountValidator;
+	private $paymentDataValidator;
 	private $bankDataValidator;
 	private $emailValidator;
 
@@ -46,10 +46,10 @@ class AddDonationValidator {
 		Result::SOURCE_TRACKING_SOURCE => 250
 	];
 
-	public function __construct( PaymentDataValidator $amountValidator, BankDataValidator $bankDataValidator,
+	public function __construct( PaymentDataValidator $paymentDataValidator, BankDataValidator $bankDataValidator,
 								 EmailValidator $emailValidator ) {
 
-		$this->amountValidator = $amountValidator;
+		$this->paymentDataValidator = $paymentDataValidator;
 		$this->bankDataValidator = $bankDataValidator;
 		$this->emailValidator = $emailValidator;
 	}
@@ -70,8 +70,8 @@ class AddDonationValidator {
 	}
 
 	private function validateAmount() {
-		// TODO validate without euro class, put conversion in AmountValidator
-		$result = $this->amountValidator->validate(
+		// TODO validate without euro class, put conversion in PaymentDataValidator
+		$result = $this->paymentDataValidator->validate(
 			$this->request->getAmount()->getEuroFloat(),
 			$this->request->getPaymentType()
 		);
