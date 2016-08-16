@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidAddDonationRequest;
 use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
-use WMDE\Fundraising\Frontend\Validation\AmountValidator;
+use WMDE\Fundraising\Frontend\Validation\PaymentDataValidator;
 use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
 use WMDE\Fundraising\Frontend\Validation\EmailValidator;
 use WMDE\Fundraising\Frontend\Validation\IbanValidator;
@@ -180,7 +180,7 @@ class AddDonationValidatorTest extends ValidatorTestCase {
 
 	private function newDonationValidator(): AddDonationValidator {
 		return new AddDonationValidator(
-			new AmountValidator( 1.0 ),
+			new PaymentDataValidator( 1.0 ),
 			$this->newBankDataValidator(),
 			$this->newMockEmailValidator()
 		);

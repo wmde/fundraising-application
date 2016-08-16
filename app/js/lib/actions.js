@@ -116,9 +116,9 @@ module.exports = {
 	 * @param {Object|Promise} validationResult
 	 * @return {{type: string, payload: *}}
 	 */
-	newFinishAmountValidationAction: function ( validationResult ) {
+	newFinishPaymentDataValidationAction: function ( validationResult ) {
 		return {
-			type: 'FINISH_AMOUNT_VALIDATION',
+			type: 'FINISH_PAYMENT_DATA_VALIDATION',
 			payload: validationResult
 		};
 	},

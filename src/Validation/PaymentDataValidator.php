@@ -4,12 +4,21 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Validation;
 
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
+
 /**
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class AmountValidator {
+class PaymentDataValidator {
+
+	const VIOLATION_AMOUNT_NOT_NUMERIC = 'Amount is not numeric';
+	const VIOLATION_AMOUNT_TOO_LOW = 'Amount too low';
+	const VIOLATION_UNKNOWN_PAYMENT_TYPE = 'Unknown payment type';
+
+	const SOURCE_AMOUNT = 'amount';
+	const SOURCE_PAYMENT_TYPE = 'paymentType';
 
 	private $minAmount;
 
@@ -25,12 +34,27 @@ class AmountValidator {
 	}
 
 	public function validate( $amount, string $paymentType ): ValidationResult {
+		if ( !in_array( $paymentType, PaymentType::getPaymentTypes() ) ) {
+			return new ValidationResult( new ConstraintViolation(
+				$paymentType,
+				self::VIOLATION_UNKNOWN_PAYMENT_TYPE,
+				self::SOURCE_PAYMENT_TYPE
+			) );
+		}
 		if ( !is_numeric( $amount ) ) {
-			return new ValidationResult( new ConstraintViolation( $amount, 'Amount or interval is not numeric' ) );
+			return new ValidationResult( new ConstraintViolation(
+				$amount,
+				self::VIOLATION_AMOUNT_NOT_NUMERIC,
+				self::SOURCE_AMOUNT
+			) );
 		}
 
 		if ( $amount < $this->getMinAmountFor( $paymentType ) ) {
-			return new ValidationResult( new ConstraintViolation( $amount, 'Amount too low' ) );
+			return new ValidationResult( new ConstraintViolation(
+				$amount,
+				self::VIOLATION_AMOUNT_TOO_LOW,
+				self::SOURCE_AMOUNT
+			) );
 		}
 
 		return new ValidationResult();

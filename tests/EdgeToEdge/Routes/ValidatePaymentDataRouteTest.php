@@ -11,14 +11,14 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
  * @licence GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class ValidateAmountRouteTest extends WebRouteTestCase {
+class ValidatePaymentDataRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidAmount_successResponseIsReturned() {
 		$client = $this->createClient();
 
 		$client->request(
 			'POST',
-			'/validate-amount',
+			'/validate-payment-data',
 			[ 'amount' => '23', 'paymentType' => PaymentType::BANK_TRANSFER ]
 		);
 
@@ -33,7 +33,7 @@ class ValidateAmountRouteTest extends WebRouteTestCase {
 
 		$client->request(
 			'POST',
-			'/validate-amount',
+			'/validate-payment-data',
 			[ 'amount' => '-1', 'paymentType' => PaymentType::BANK_TRANSFER ]
 		);
 

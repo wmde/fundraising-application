@@ -41,8 +41,14 @@ function inputValidation( validationState, action ) {
 				newValidationState[ key ] = { dataEntered: false, isValid: null };
 			} );
 			return newValidationState;
-		case 'FINISH_AMOUNT_VALIDATION':
-			newValidationState.amount = { dataEntered: true, isValid: action.payload.status !== ValidationStates.ERR };
+		case 'FINISH_PAYMENT_DATA_VALIDATION':
+			if ( action.payload.status === ValidationStates.OK ) {
+				newValidationState.amount =  { dataEntered: true, isValid: true };
+				newValidationState.paymentType = { dataEntered: true, isValid: true };
+			} else {
+				newValidationState.amount = { dataEntered: true, isValid: action.payload.messages.amount ? false : true };
+				newValidationState.paymentType = { dataEntered: true, isValid: action.payload.messages.paymentType ? false : true };
+			}
 			return newValidationState;
 		case 'FINISH_BANK_DATA_VALIDATION':
 			if ( action.payload.status === ValidationStates.INCOMPLETE || action.payload.status === ValidationStates.NOT_APPLICABLE ) {

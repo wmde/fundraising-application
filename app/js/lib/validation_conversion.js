@@ -15,11 +15,11 @@ var _ = require( 'underscore' ),
 		}
 
 		if ( violatedFields.betrag ) {
-			state.validity.amount = false;
+			state.validity.paymentData = false;
 		}
 
 		if ( violatedFields.zahlweise ) {
-			state.validity.amount = false;
+			state.validity.paymentData = false;
 		}
 
 		return state;

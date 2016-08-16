@@ -137,7 +137,7 @@ use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionDuplica
 use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionValidator;
 use WMDE\Fundraising\Frontend\Validation\AllowedValuesValidator;
 use WMDE\Fundraising\Frontend\Validation\AmountPolicyValidator;
-use WMDE\Fundraising\Frontend\Validation\AmountValidator;
+use WMDE\Fundraising\Frontend\Validation\PaymentDataValidator;
 use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
 use WMDE\Fundraising\Frontend\Validation\EmailValidator;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
@@ -821,7 +821,7 @@ class FunFunFactory {
 
 	private function newDonationValidator(): AddDonationValidator {
 		return new AddDonationValidator(
-			$this->newAmountValidator(),
+			$this->newPaymentDataValidator(),
 			$this->newBankDataValidator(),
 			$this->getEmailValidator()
 		);
@@ -871,8 +871,8 @@ class FunFunFactory {
 		return $this->pimple['donation_repository'];
 	}
 
-	public function newAmountValidator(): AmountValidator {
-		return new AmountValidator( 1 );
+	public function newPaymentDataValidator(): PaymentDataValidator {
+		return new PaymentDataValidator( 1 );
 	}
 
 	private function newAmountFormatter(): AmountFormatter {

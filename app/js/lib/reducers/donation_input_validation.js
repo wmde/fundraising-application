@@ -8,6 +8,7 @@ var _ = require( 'underscore' ),
 	},
 	initialState = {
 		amount: _.clone( defaultFields ),
+		paymentType: _.clone( defaultFields ),
 		firstName: _.clone( defaultFields ),
 		lastName: _.clone( defaultFields ),
 		companyName: _.clone( defaultFields ),

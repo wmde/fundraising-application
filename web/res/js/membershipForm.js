@@ -45,7 +45,7 @@ $( function () {
 			return [
 				WMDE.ReduxValidation.createValidationDispatcher(
 					WMDE.FormValidation.createFeeValidator( initData.data( 'validate-fee-url' ) ),
-					actions.newFinishAmountValidationAction,
+					actions.newFinishPaymentDataValidationAction,
 					[ 'amount', 'paymentIntervalInMonths', 'addressType' ],
 					initialValues
 				),

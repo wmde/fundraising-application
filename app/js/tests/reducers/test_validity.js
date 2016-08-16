@@ -17,12 +17,12 @@ function createInvalidPayload() {
 	};
 }
 
-test( 'FINISH_AMOUNT_VALIDATION sets amount validation state', function ( t ) {
+test( 'FINISH_PAYMENT_DATA_VALIDATION sets paymentData validation state', function ( t ) {
 	var beforeState = { amount: null };
 
 	deepFreeze( beforeState );
-	t.ok( validity( beforeState, { type: 'FINISH_AMOUNT_VALIDATION', payload: createValidPayload() } ).amount );
-	t.notOk( validity( beforeState, { type: 'FINISH_AMOUNT_VALIDATION', payload: createInvalidPayload } ).amount );
+	t.ok( validity( beforeState, { type: 'FINISH_PAYMENT_DATA_VALIDATION', payload: createValidPayload() } ).paymentData );
+	t.notOk( validity( beforeState, { type: 'FINISH_PAYMENT_DATA_VALIDATION', payload: createInvalidPayload } ).paymentData );
 	t.end();
 } );
 
