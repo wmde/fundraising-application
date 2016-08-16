@@ -132,11 +132,9 @@ class TextPolicyValidator {
 
 		// check for non-obvious URLs with dns lookup
 		if ( $testWithDNS ) {
-			$possibleUrls = $this->extractPossibleUrls( $text );
-
-			foreach ( $possibleUrls as $url ) {
-				$host = $this->getHostFromUrl( $url );
-				if ( !( $ignoreWhiteWords && $this->wordMatchesWhiteWords( $host ) ) && $this->isExistingDomain( $url ) ) {
+			$possibleDomainNames = $this->extractPossibleDomainNames( $text );
+			foreach ( $possibleDomainNames as $domainName ) {
+				if ( !( $ignoreWhiteWords && $this->wordMatchesWhiteWords( $domainName ) ) && $this->isExistingDomain( $domainName ) ) {
 					return true;
 				}
 			}
@@ -145,27 +143,16 @@ class TextPolicyValidator {
 		return false;
 	}
 
-	private function extractPossibleUrls( string $text ): array {
-		preg_match_all( '|[a-z\.0-9]+\.[a-z]{2,6}|i', $text, $possibleUrls );
-		return $possibleUrls[0];
+	private function extractPossibleDomainNames( string $text ): array {
+		preg_match_all( '|[a-z\.0-9]+\.[a-z]{2,6}|i', $text, $possibleDomainNames );
+		return $possibleDomainNames[0];
 	}
 
-	private function isExistingDomain( string $host ): bool {
-		return checkdnsrr( $host, 'A' );
-	}
-
-	private function getHostFromUrl( string $url ): string {
-		$parsedUrl = parse_url( 'http://' . $url );
-
-		if ( !$parsedUrl ) {
-			return '';
+	private function isExistingDomain( string $domainName ): bool {
+		if ( filter_var( 'http://' . $domainName, FILTER_VALIDATE_URL ) === false ) {
+			return false;
 		}
-
-		if ( isset( $parsedUrl['host'] ) ) {
-			return $parsedUrl['host'];
-		}
-
-		return $parsedUrl['path'];
+		return checkdnsrr( $domainName, 'A' );
 	}
 
 	private function composeRegex( array $wordArray ): string {
