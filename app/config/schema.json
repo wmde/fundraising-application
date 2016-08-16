@@ -80,7 +80,7 @@
       "type": "string",
       "minLength": 1,
       "title": "Password",
-      "description": "Passworf for the CMS wiki API",
+      "description": "Password for the CMS wiki API",
       "default": ""
     },
     "cms-wiki-title-prefix": {
@@ -207,7 +207,7 @@
     "text-policies": {
       "type": "object",
       "title": "Text policy templates",
-      "description": "Page names for black- and whitelists of different parts of the application. The pages must be stored in the content wiki and share the same namespace and sub-page prefix as the templates. They must contain words, each word an a spearate line. Each \"word\" can also be a regular expression pattern.",
+      "description": "Page names for black- and whitelists of different parts of the application. The pages must be stored in the content wiki and share the same namespace and sub-page prefix as the templates. They must contain words, each word in a separate line. Each \"word\" can also be a regular expression pattern.",
       "properties": {
         "fields": {
           "type": "object",
@@ -323,7 +323,7 @@
       "exclusiveMaximum": false,
       "exclusiveMinimum": false,
       "title": "Access token length",
-      "description": "Length of randomly generated one-time access tokens, for email confirmation etc.",
+      "description": "Length of randomly generated one-time access tokens, for email confirmation etc. Generated tokens are hex representations of random bytes. Setting the length to 16 results in tokens with a length of 32 characters.",
       "default": 16
     },
     "token-validity-timestamp": {
