@@ -15,21 +15,25 @@ class PaymentDataValidator {
 
 	const VIOLATION_AMOUNT_NOT_NUMERIC = 'Amount is not numeric';
 	const VIOLATION_AMOUNT_TOO_LOW = 'Amount too low';
+	const VIOLATION_AMOUNT_TOO_HIGH = 'Amount too high';
 	const VIOLATION_UNKNOWN_PAYMENT_TYPE = 'Unknown payment type';
 
 	const SOURCE_AMOUNT = 'amount';
 	const SOURCE_PAYMENT_TYPE = 'paymentType';
 
 	private $minAmount;
+	private $maxAmount;
 
 	private $minAmountPerType;
 
 	/**
 	 * @param float $minAmount
+	 * @param float $maxAmount
 	 * @param float[] $minAmountPerType keys from the PaymentType enum
 	 */
-	public function __construct( float $minAmount, array $minAmountPerType = [] ) {
+	public function __construct( float $minAmount, float $maxAmount, array $minAmountPerType = [] ) {
 		$this->minAmount = $minAmount;
+		$this->maxAmount = $maxAmount;
 		$this->minAmountPerType = $minAmountPerType;
 	}
 
@@ -53,6 +57,14 @@ class PaymentDataValidator {
 			return new ValidationResult( new ConstraintViolation(
 				$amount,
 				self::VIOLATION_AMOUNT_TOO_LOW,
+				self::SOURCE_AMOUNT
+			) );
+		}
+
+		if ( $amount >= $this->maxAmount ) {
+			return new ValidationResult( new ConstraintViolation(
+				$amount,
+				self::VIOLATION_AMOUNT_TOO_HIGH,
 				self::SOURCE_AMOUNT
 			) );
 		}

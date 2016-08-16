@@ -872,7 +872,7 @@ class FunFunFactory {
 	}
 
 	public function newPaymentDataValidator(): PaymentDataValidator {
-		return new PaymentDataValidator( 1 );
+		return new PaymentDataValidator( 1, 100000 );
 	}
 
 	private function newAmountFormatter(): AmountFormatter {
