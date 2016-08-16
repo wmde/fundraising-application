@@ -557,7 +557,9 @@ class FunFunFactory {
 	private function newWikiPageRetriever(): PageRetriever {
 		$PageRetriever = $this->newCachedPageRetriever();
 
-		return $this->addProfilingDecorator( $PageRetriever, 'PageRetriever' );
+		// TODO: change return type when https://github.com/JeroenDeDauw/GenericDecorator/issues/1 is resolved
+		return $PageRetriever;
+		// return $this->addProfilingDecorator( $PageRetriever, 'PageRetriever' );
 	}
 
 	private function newCachedPageRetriever(): PageRetriever {
