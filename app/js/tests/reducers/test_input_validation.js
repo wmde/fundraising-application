@@ -33,6 +33,15 @@ function newAddressValidationAction( returnedStatus ) {
 	};
 }
 
+function newResetFieldValidityAction( affectedFields ) {
+	return {
+		type: 'RESET_FIELD_VALIDITY',
+		payload: {
+			affectedFields: affectedFields
+		}
+	};
+}
+
 test( 'If no data was entered yet, validation returns previous state', function ( t ) {
 	var stateBefore = { testField: { dataEntered: false, isValid: null } },
 		expectedState = { testField: { dataEntered: false, isValid: null } };
@@ -142,5 +151,20 @@ test( 'If address data validation is successful, invalid fields remain invalid',
 
 	deepFreeze( stateBefore );
 	t.deepEqual( inputValidation( stateBefore, newAddressValidationAction( 'OK' ) ), expectedState );
+	t.end();
+} );
+
+test( 'If the validity is reset for some fields, their validity status becomes null', function ( t ) {
+	var stateBefore = {
+			postCode: { dataEntered: true, isValid: true },
+			confirmSepa: { dataEntered: true, isValid: false }
+		},
+		expectedState = {
+			postCode: { dataEntered: true, isValid: true },
+			confirmSepa: { dataEntered: false, isValid: null }
+		};
+
+	deepFreeze( stateBefore );
+	t.deepEqual( inputValidation( stateBefore, newResetFieldValidityAction( [ 'confirmSepa' ] ) ), expectedState );
 	t.end();
 } );

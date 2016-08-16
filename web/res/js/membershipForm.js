@@ -339,6 +339,7 @@ $( function () {
 
 	$( '.back-button' ).click( function () {
 		// TODO check if page is valid
+		store.dispatch( actions.newResetFieldValidityAction( [ 'confirmSepa' ] ) );
 		store.dispatch( actions.newPreviousPageAction() );
 	} );
 

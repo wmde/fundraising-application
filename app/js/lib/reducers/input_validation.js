@@ -36,6 +36,11 @@ function inputValidation( validationState, action ) {
 				newValidationState[ key ].isValid = null;
 			} );
 			return newValidationState;
+		case 'RESET_FIELD_VALIDITY':
+			_.each( action.payload.affectedFields, function ( key ) {
+				newValidationState[ key ] = { dataEntered: false, isValid: null };
+			} );
+			return newValidationState;
 		case 'FINISH_AMOUNT_VALIDATION':
 			newValidationState.amount = { dataEntered: true, isValid: action.payload.status !== ValidationStates.ERR };
 			return newValidationState;
