@@ -88,6 +88,8 @@
 			"wikispecies.org": "wikispecies.org"
 		}
 	},
+	"donation-minimum-amount": 1,
+	"donation-maximum-amount": 100000,
 	"donation-timeframe-limit": "PT30M",
 	"membership-application-timeframe-limit": "PT10M",
 	"token-length": 16,

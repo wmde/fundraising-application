@@ -872,7 +872,7 @@ class FunFunFactory {
 	}
 
 	public function newPaymentDataValidator(): PaymentDataValidator {
-		return new PaymentDataValidator( 1, 100000 );
+		return new PaymentDataValidator( $this->config['donation-minimum-amount'], $this->config['donation-maximum-amount'] );
 	}
 
 	private function newAmountFormatter(): AmountFormatter {
