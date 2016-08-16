@@ -1,0 +1,593 @@
+{
+  "type": "object",
+  "title": "Fundraising app configuration",
+  "properties": {
+    "db": {
+      "type": "object",
+      "title": "Database settings",
+      "description": "Keys and values of all properties here depend on the database driver",
+      "properties": {
+        "driver": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Database driver name.",
+          "description": "A Doctrine database driver, e.g. mysql or sqlite",
+          "default": ""
+        },
+        "user": {
+          "type": "string",
+          "minLength": 1,
+          "title": "User name",
+          "default": ""
+        },
+        "password": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Password",
+          "default": ""
+        },
+        "dbname": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Database name",
+          "default": ""
+        },
+        "host": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Host name",
+          "description": "Database host name",
+          "default": ""
+        },
+        "port": {
+          "type": "integer",
+          "title": "Database port",
+          "default": ""
+        },
+        "driverOptions": {
+          "type": "object",
+          "description": "Additional options like encoding, etc. This is the fourth parameter for PDO::__construct.\nFor using the app with MySQL with the correct encoding, we need the object {\"1002\":\"SET NAMES utf8\"}\n'1002' is the value of the PHP constant PDO::MYSQL_ATTR_INIT_COMMAND"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "driver"
+      ]
+    },
+    "bank-data-file": {
+      "type": "string",
+      "minLength": 1,
+      "title": "Bank data file",
+      "description": "Absolute or relative path to the file (including the file name). Needed for the kontocheck extension. Example: res/blz.lut2f",
+      "default": ""
+    },
+    "cms-wiki-api-url": {
+      "type": "string",
+      "minLength": 1,
+      "title": "CMS wiki API URL",
+      "description": "URL to api.php of the mediawiki instance that acts as the content management",
+      "default": "",
+      "format": "uri"
+    },
+    "cms-wiki-user": {
+      "type": "string",
+      "minLength": 1,
+      "title": "User name",
+      "description": "User name for the CMS wiki API",
+      "default": ""
+    },
+    "cms-wiki-password": {
+      "type": "string",
+      "minLength": 1,
+      "title": "Password",
+      "description": "Passworf for the CMS wiki API",
+      "default": ""
+    },
+    "cms-wiki-title-prefix": {
+      "type": "string",
+      "minLength": 1,
+      "title": "CMS page title prefix",
+      "description": "Namespace and title prefix in the wiki. The subpage designates the stage name. Prefix must end with a slash. Example: Web:Spendenseite-HK2013/rewrite/ ",
+      "default": ""
+    },
+    "web-basepath": {
+      "type": "string",
+      "title": "Base URL",
+      "description": "Base url of the application. Can be a full URL, a path (without trailing slash), or blank. All generated URLs in the HTML output will be relative to this path.",
+      "default": ""
+    },
+    "twig": {
+      "type": "object",
+      "title": "Twig configuration settings",
+      "properties": {
+        "enable-cache": {
+          "type": "boolean",
+          "description": "If template caching should be enabled",
+          "default": true
+        },
+        "loaders": {
+          "type": "object",
+          "title": "Configuration for the different Twig template loaders.",
+          "properties": {
+            "wiki": {
+              "type": "object",
+              "description": "Configuration for the Wiki loader",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "description": "If this loader is enabled or not. Used for testing purposes when no wiki is available.",
+                  "default": true
+                },
+                "rawpages": {
+                  "type": "array",
+                  "title": "Raw page name",
+                  "description": "List of page templates that should be retrieved as plain text instead of rendered HTML"
+                }
+              }
+            },
+            "filesystem": {
+              "type": "object",
+              "description": "Configuration for the filesystem loader",
+              "properties": {
+                "template-dir": {
+                  "type": "array",
+                  "description": "Paths to the templates, absolute or relative to application",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "default": "app/templates"
+                  }
+                }
+              },
+              "required": [
+                "template-dir"
+              ]
+            },
+            "array": {
+              "type": "object",
+              "title": "Array loader configuration",
+              "description": "Inline templates in the configuration for testing purposes. Template name is the object key, template content is the value.",
+              "properties": {}
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "enable-cache",
+        "loaders"
+      ]
+    },
+    "default-layout-templates": {
+      "type": "object",
+      "title": "Layout templates",
+      "description": "Template names for defining parts of the site.",
+      "properties": {
+        "header": {
+          "type": "string",
+          "minLength": 1,
+          "default": "10hoch16/Seitenkopf"
+        },
+        "footer": {
+          "type": "string",
+          "minLength": 1,
+          "default": "10hoch16/Seitenfuß"
+        },
+        "no-js-notice": {
+          "type": "string",
+          "minLength": 1,
+          "title": "JavaScript notice",
+          "description": "The notice that appears when the user has turned off JavaScript",
+          "default": "JavaScript-Notice"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "header",
+        "footer",
+        "no-js-notice"
+      ]
+    },
+    "operator-email": {
+      "type": "string",
+      "minLength": 1,
+      "title": "Sender Email Address",
+      "description": "Sender address for all emails generated by the system",
+      "default": "",
+      "format": "email"
+    },
+    "operator-displayname": {
+      "type": "string",
+      "minLength": 1,
+      "title": "Sender Name",
+      "description": "Sender name for all emails generated by the system",
+      "default": ""
+    },
+    "text-policies": {
+      "type": "object",
+      "title": "Text policy templates",
+      "description": "Page names for black- and whitelists of different parts of the application. The pages must be stored in the content wiki and share the same namespace and sub-page prefix as the templates. They must contain words, each word an a spearate line. Each \"word\" can also be a regular expression pattern.",
+      "properties": {
+        "fields": {
+          "type": "object",
+          "title": "Address fields policy",
+          "description": "Page names for black- and whitelists of form fields (name, street, city, etc.). Blacklisted words lead to moderation of the donation/membership, not to blocking it",
+          "properties": {
+            "whitewords": {
+              "type": "string",
+              "minLength": 0,
+              "title": "Whitewords Page Name",
+              "default": ""
+            },
+            "badwords": {
+              "type": "string",
+              "minLength": 0,
+              "title": "Badwords Page Name",
+              "default": ""
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "whitewords",
+            "badwords"
+          ]
+        },
+        "comment": {
+          "type": "object",
+          "title": "Comment policy.",
+          "description": "Page names for black- and whitelists for comment texts. Blacklisted words lead to the moderation of the comment",
+          "properties": {
+            "whitewords": {
+              "type": "string",
+              "minLength": 0,
+              "title": "Whitewords Page Name",
+              "default": ""
+            },
+            "badwords": {
+              "type": "string",
+              "minLength": 0,
+              "title": "Badwords Page Name",
+              "default": ""
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "whitewords",
+            "badwords"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "fields",
+        "comment"
+      ]
+    },
+    "locale": {
+      "type": "string",
+      "minLength": 2,
+      "description": "Default locale, used for formatting numbers and displaying texts",
+      "default": "de_DE"
+    },
+    "referrer-generalization": {
+      "type": "object",
+      "title": "Referrer normalization",
+      "description": "Configuration for normalizing the HTTP referrer URL into a manageable string for the donation tracking information",
+      "properties": {
+        "default": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Default referrer",
+          "description": "What referrer to use when no host name from domain-map matches.",
+          "default": "web"
+        },
+        "domain-map": {
+          "type": "object",
+          "title": "Referrer domain map",
+          "description": "Map several subdomains to one domain, e.g. www.wikipedia.org to en.wikipedia.org, etc"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "default",
+        "domain-map"
+      ]
+    },
+    "subscription-interval": {
+      "type": "string",
+      "title": "Minimum time between subscription submissions per user",
+      "description": "Duration in ISO 8601 format, see https://en.wikipedia.org/wiki/ISO_8601#Time_intervals",
+      "default": "PT30M",
+      "pattern": "^P(?=\\w*\\d)(?:\\d+Y|Y)?(?:\\d+M|M)?(?:\\d+W|W)?(?:\\d+D|D)?(?:T(?:\\d+H|H)?(?:\\d+M|M)?(?:\\d+(?:\\­.\\d{1,2})?S|S)?)?$"
+    },
+    "donation-timeframe-limit": {
+      "type": "string",
+      "title": "Minimum time between donation submissions per user",
+      "description": "Duration in ISO 8601 format, see https://en.wikipedia.org/wiki/ISO_8601#Time_intervals",
+      "default": "PT30M",
+      "pattern": "^P(?=\\w*\\d)(?:\\d+Y|Y)?(?:\\d+M|M)?(?:\\d+W|W)?(?:\\d+D|D)?(?:T(?:\\d+H|H)?(?:\\d+M|M)?(?:\\d+(?:\\­.\\d{1,2})?S|S)?)?$"
+    },
+    "membership-application-timeframe-limit": {
+      "type": "string",
+      "title": "Minimum time between membership applications per user",
+      "description": "Duration in ISO 8601 format, see https://en.wikipedia.org/wiki/ISO_8601#Time_intervals",
+      "default": "PT10M",
+      "pattern": "^P(?=\\w*\\d)(?:\\d+Y|Y)?(?:\\d+M|M)?(?:\\d+W|W)?(?:\\d+D|D)?(?:T(?:\\d+H|H)?(?:\\d+M|M)?(?:\\d+(?:\\­.\\d{1,2})?S|S)?)?$"
+    },
+    "token-length": {
+      "type": "integer",
+      "multipleOf": 1,
+      "maximum": 1000,
+      "minimum": 8,
+      "exclusiveMaximum": false,
+      "exclusiveMinimum": false,
+      "title": "Access token length",
+      "description": "Length of randomly generated one-time access tokens, for email confirmation etc.",
+      "default": 16
+    },
+    "token-validity-timestamp": {
+      "type": "string",
+      "minLength": 1,
+      "title": "Access token life time duration",
+      "description": "How long generated one-time access tokens are valid. Duration in ISO 8601 format, see https://en.wikipedia.org/wiki/ISO_8601#Time_intervals",
+      "default": "PT4H",
+      "pattern": "^P(?=\\w*\\d)(?:\\d+Y|Y)?(?:\\d+M|M)?(?:\\d+W|W)?(?:\\d+D|D)?(?:T(?:\\d+H|H)?(?:\\d+M|M)?(?:\\d+(?:\\­.\\d{1,2})?S|S)?)?$"
+    },
+    "purging-secret": {
+      "type": "string",
+      "minLength": 1,
+      "title": "Purging Secret",
+      "description": "Secret parameter value for calling the \"Purge Cache\" page.",
+      "default": ""
+    },
+    "paypal": {
+      "type": "object",
+      "properties": {
+        "base-url": {
+          "type": "string",
+          "minLength": 1,
+          "title": "PayPal base URL",
+          "default": "https://www.paypal.com/cgi-bin/webscr?",
+          "format": "url"
+        },
+        "account-address": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Paypal account email address",
+          "description": "Email address associated with the PayPal account",
+          "default": "",
+          "format": "email"
+        },
+        "notify-url": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Payment notification URL",
+          "description": "Fundraising Application URL that gets called by PayPal for instant payment notifications (IPN)",
+          "default": "",
+          "format": "url"
+        },
+        "return-url": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Return URL",
+          "description": "Fundraising Application URL the user gets returned to when her payment was successful",
+          "default": "",
+          "format": "url"
+        },
+        "cancel-url": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Cancel URL",
+          "description": "Fundraising Application URL the user gets returned to when she cancels her payment on the PayPal page",
+          "default": "",
+          "format": "url"
+        },
+        "item-name": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Payment item name",
+          "description": "The \"item\" that shows up in the payment, i.e. what is paid for",
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "base-url",
+        "account-address",
+        "notify-url",
+        "return-url",
+        "cancel-url",
+        "item-name"
+      ]
+    },
+    "creditcard": {
+      "type": "object",
+      "properties": {
+        "access-key": {
+          "type": "string",
+          "minLength": 16,
+          "title": "API Key",
+          "description": "Hexadecimal access key",
+          "default": ""
+        },
+        "base-url": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Base URL",
+          "description": "Base URL for the MCP iframe. The fundraising application will add various parameters to the URL, some of them defined in this section.",
+          "default": "https://credit-card.micropayment.de/creditcard/event/index.php?",
+          "format": "url"
+        },
+        "project-id": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Project ID",
+          "description": "Unique identifier given by MCP",
+          "default": ""
+        },
+        "background-color": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Background color",
+          "description": "Iframe background color. Hex value, without leading hash",
+          "default": "000000",
+          "pattern": "^[0-9A-F]{6}$"
+        },
+        "skin": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Skin name",
+          "description": "TODO: This is probably a deprecated or misplaced config value.",
+          "default": "default"
+        },
+        "theme": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Theme name",
+          "description": "The CC payment form can be displayed in different skins (editable in the MCP backend).",
+          "default": "x1"
+        },
+        "return-url": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Return URL",
+          "description": "Fundraising Application URL the user gets sent to when her payment was successful",
+          "default": "https://spenden.wikimedia.de/show-donation-confirmation",
+          "format": "url"
+        },
+        "testmode": {
+          "type": "boolean",
+          "title": "Testmode Flag",
+          "description": "If the payment processing runs in test mode or not",
+          "default": true
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "access-key",
+        "base-url",
+        "project-id",
+        "background-color",
+        "theme",
+        "return-url",
+        "testmode"
+      ]
+    },
+    "confirmation-pages": {
+      "type": "object",
+      "title": "Confirmation page template selection configuration",
+      "properties": {
+        "default": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Default confirmation page",
+          "description": "Default confirmation page template name",
+          "default": "10h16_Bestätigung.twig"
+        },
+        "campaigns": {
+          "type": "array",
+          "title": "Campaign data with different confirmation pages",
+          "additionalItems": {
+            "type": "object",
+            "title": "Campaign data",
+            "properties": {
+              "code": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Campaign name",
+                "description": "Campaign name, will be used in URL parameters"
+              },
+              "active": {
+                "type": "boolean",
+                "title": "Active Flag",
+                "description": "Set to true if campaign is active"
+              },
+              "startDate": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Start date",
+                "description": "Defined as YYYY-MM-DD HH:MM:SS"
+              },
+              "endDate": {
+                "type": "string",
+                "minLength": 1,
+                "title": "End date",
+                "description": "Defined as YYYY-MM-DD HH:MM:SS"
+              },
+              "templates": {
+                "type": "array",
+                "title": "Template names",
+                "description": "Names of templates for the confirmation page, for A/B testing. One template will be randomly selected.",
+                "items": {}
+              }
+            },
+            "required": [
+              "code",
+              "active",
+              "startDate",
+              "endDate",
+              "templates"
+            ]
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "default",
+        "campaigns"
+      ]
+    },
+    "piwik": {
+      "type": "object",
+      "title": "Piwik settings",
+      "properties": {
+          "baseUrl": {
+            "type": "string",
+            "title": "Tracker URL",
+            "description": "Base URL for the Piwik installation",
+            "format": "url",
+            "default": "//tracking.wikimedia.de/"
+          },
+          "siteId": {
+            "type": "integer",
+            "title": "Site ID",
+            "description": "Unique site id (configured in Piwik)",
+            "default": 1
+          }
+      },
+      "additionalProperties": false,
+      "required": [
+        "baseUrl",
+        "siteId"
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "db",
+    "bank-data-file",
+    "cms-wiki-api-url",
+    "cms-wiki-user",
+    "cms-wiki-password",
+    "cms-wiki-title-prefix",
+    "web-basepath",
+    "twig",
+    "default-layout-templates",
+    "operator-email",
+    "operator-displayname",
+    "text-policies",
+    "subscription-interval",
+    "locale",
+    "referrer-generalization",
+    "donation-timeframe-limit",
+    "membership-application-timeframe-limit",
+    "token-length",
+    "token-validity-timestamp",
+    "purging-secret",
+    "paypal",
+    "creditcard",
+    "confirmation-pages",
+    "piwik"
+  ]
+}
