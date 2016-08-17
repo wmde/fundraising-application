@@ -92,14 +92,16 @@
 		"ci": [
 			"@test",
 			"@cs",
-			"npm run ci"
+			"npm run ci",
+			"@validate-app-config"
 		],
 		"phpcs": [
 			"vendor/bin/phpcs src/ tests/ --standard=phpcs.xml --extensions=php -sp"
 		],
 		"phpmd": [
 			"vendor/bin/phpmd src/ text phpmd.xml"
-		]
+		],
+		"validate-app-config": "app/bin/validate_config app/config/config.dist.json app/config/config.test.json"
 	},
 	"config": {
 		"discard-changes": true
