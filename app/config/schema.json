@@ -294,6 +294,16 @@
         "domain-map"
       ]
     },
+    "donation-minimum-amount": {
+      "type": "integer",
+      "title": "Minimum donation amount",
+      "description": "Donations below this amount will be rejected."
+    },
+    "donation-maximum-amount": {
+      "type": "integer",
+      "title": "Maximum donation amount",
+      "description": "Donations exceeding this amount will be rejected."
+    },
     "subscription-interval": {
       "type": "string",
       "title": "Minimum time between subscription submissions per user",
