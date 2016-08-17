@@ -255,6 +255,10 @@ $( function () {
 				stateKey: 'donationInputValidation.bankCode'
 			},
 			{
+				viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.amount-input' ) ),
+				stateKey: 'donationInputValidation.amount'
+			},
+			{
 				viewHandler: WMDE.View.createCountrySpecificAttributesHandler( $( '#post-code' ), $( '#city' ), $( '#email' ) ),
 				stateKey: 'countrySpecifics'
 			}

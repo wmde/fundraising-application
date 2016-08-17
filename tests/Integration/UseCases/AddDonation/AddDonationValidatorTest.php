@@ -180,7 +180,7 @@ class AddDonationValidatorTest extends ValidatorTestCase {
 
 	private function newDonationValidator(): AddDonationValidator {
 		return new AddDonationValidator(
-			new PaymentDataValidator( 1.0 ),
+			new PaymentDataValidator( 1.0, 100000 ),
 			$this->newBankDataValidator(),
 			$this->newMockEmailValidator()
 		);
