@@ -1,3 +1,0 @@
----
-- hosts: all
-- include: deployment.yml

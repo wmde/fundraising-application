@@ -7,6 +7,11 @@
 [production]
 192.168.33.19 ansible_ssh_user=vagrant
 
+[webservers]
+test
+stage
+production
+
 [test:vars]
 deploy_branch = master
 deploy_dir="/vagrant/www/test_spenden2"
