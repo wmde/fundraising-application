@@ -1,0 +1,10 @@
+#!/usr/bin/env php
+<?php
+
+use WMDE\Fundraising\Frontend\App\ConfigValidation\ValidateConfigApplication;
+
+require_once __DIR__ . '/../../vendor/autoload.php';
+
+$application = new ValidateConfigApplication();
+$application->run();
+
