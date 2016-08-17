@@ -55,10 +55,10 @@ class ConfigValidator {
 		}
 	}
 
-	private function convertConfigArrayToConfigObject( array $config ): stdClass {
+	private function convertConfigArrayToConfigObject( array $config ): \stdClass {
 		// empty array is converted to array not to object
 		if ( empty( $config['twig']['loaders']['array'] ) ) {
-			$config['twig']['loaders']['array'] = new stdClass();
+			$config['twig']['loaders']['array'] = new \stdClass();
 		}
 		return json_decode( json_encode( $config ), false );
 	}
@@ -82,7 +82,10 @@ class ConfigValidator {
 		exit( $returnCode );
 	}
 
-	private function renderErrors( ValidationError ...$errors ) {
+	/**
+	 * @param ValidationError[] $errors
+	 */
+	private function renderErrors( array $errors ) {
 		foreach ( $errors as $error ) {
 			if ( $error->getCode() === \League\JsonGuard\ErrorCode::MISSING_REQUIRED ) {
 				$keys = array_keys( get_object_vars( $error->getValue() ) );
