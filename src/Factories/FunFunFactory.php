@@ -653,11 +653,11 @@ class FunFunFactory {
 	}
 
 	public function newCheckIbanUseCase(): CheckIbanUseCase {
-		return new CheckIbanUseCase( $this->newBankDataConverter() );
+		return new CheckIbanUseCase( $this->newBankDataConverter(), $this->newIbanValidator() );
 	}
 
 	public function newGenerateIbanUseCase(): GenerateIbanUseCase {
-		return new GenerateIbanUseCase( $this->newBankDataConverter() );
+		return new GenerateIbanUseCase( $this->newBankDataConverter(), $this->newIbanValidator() );
 	}
 
 	public function newIbanPresenter(): IbanPresenter {
@@ -724,7 +724,7 @@ class FunFunFactory {
 	}
 
 	private function newBankDataValidator(): BankDataValidator {
-		return new BankDataValidator( new IbanValidator( $this->newBankDataConverter() ) );
+		return new BankDataValidator( $this->newIbanValidator() );
 	}
 
 	private function getMessenger(): Messenger {
@@ -1191,6 +1191,10 @@ class FunFunFactory {
 
 	public function getProfilerDataCollector(): ProfilerDataCollector {
 		return $this->pimple['profiler_data_collector'];
+	}
+
+	private function newIbanValidator(): IbanValidator {
+		return new IbanValidator( $this->newBankDataConverter(), $this->config['banned-ibans'] );
 	}
 
 }

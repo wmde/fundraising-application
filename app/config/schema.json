@@ -57,6 +57,11 @@
       "description": "Absolute or relative path to the file (including the file name). Needed for the kontocheck extension. Example: res/blz.lut2f",
       "default": ""
     },
+    "banned-ibans": {
+      "type": "array",
+      "title": "List of banned IBANs",
+      "description": "List of IBANs that lead to a failed IBAN validation"
+    },
     "cms-wiki-api-url": {
       "type": "string",
       "minLength": 1,

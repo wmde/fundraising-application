@@ -38,6 +38,23 @@ class CheckIbanRouteTest extends WebRouteTestCase {
 		);
 	}
 
+	public function testGivenBlockedBankAccountData_failureResponseIsReturned() {
+		$client = $this->createClient();
+
+		$client->request(
+			'GET',
+			'/check-iban',
+			[
+				'iban' => 'wait, this is my own IBAN!',
+			]
+		);
+
+		$this->assertJsonSuccessResponse(
+			[ 'status' => 'ERR' ],
+			$client->getResponse()
+		);
+	}
+
 	public function testGivenValidBankAccountData_successResponseIsReturned() {
 		$client = $this->createClient();
 
