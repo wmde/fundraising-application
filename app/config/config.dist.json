@@ -4,8 +4,7 @@
 		"user": "",
 		"password": "",
 		"dbname": "",
-		"host": "",
-		"port": ""
+		"host": ""
 	},
 	"bank-data-file": "",
 	"cms-wiki-api-url": "",

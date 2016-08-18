@@ -3,11 +3,11 @@
 		"driver": "pdo_sqlite",
 		"memory": true
 	},
-	"cms-wiki-url": "http://cms.wiki/",
 	"bank-data-file": "res/blz.lut2f",
 	"cms-wiki-api-url": "http://cms.wiki/api.php",
 	"cms-wiki-user": "Wiki User",
 	"cms-wiki-password": "Wiki Password",
+	"cms-wiki-title-prefix": "",
 	"twig": {
 		"enable-cache": false,
 		"loaders": {
@@ -44,7 +44,8 @@
 		"skin": "default",
 		"theme": "default",
 		"return-url": "http://my.donation.app/show-donation-confirmation",
-		"testmode": true
+		"testmode": true,
+		"access-key": "Not a real access key"
 	},
 	"confirmation-pages": {
 		"default": "DonationConfirmation.twig",
@@ -63,5 +64,6 @@
 	"piwik": {
 		"baseUrl": "//tracking.wikimedia.de/",
 		"siteId": 1234		
-	}
+	},
+	"purging-secret": "Not so secret, testing"
 }

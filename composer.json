@@ -25,7 +25,8 @@
 		"symfony/twig-bridge": "^3.0",
 		"twig/extensions": "^1.3",
 		"micropayment-de/service-client": "~1.19.0",
-		"league/json-guard": "^0.3.2"
+		"league/json-guard": "^0.3.2",
+		"symfony/console": "^2.3.0"
 	},
 	"repositories": [
 		{
@@ -71,7 +72,8 @@
 	"autoload": {
 		"psr-4": {
 			"WMDE\\Fundraising\\Frontend\\": "src/",
-			"WMDE\\Fundraising\\Frontend\\App\\": "app/"
+			"WMDE\\Fundraising\\Frontend\\App\\": "app/",
+			"WMDE\\Fundraising\\Frontend\\Cli\\": "cli/"
 		}
 	},
 	"autoload-dev": {
@@ -91,14 +93,16 @@
 		"ci": [
 			"@test",
 			"@cs",
-			"npm run ci"
+			"npm run ci",
+			"@validate-app-config"
 		],
 		"phpcs": [
-			"vendor/bin/phpcs src/ tests/ --standard=phpcs.xml --extensions=php -sp"
+			"vendor/bin/phpcs src/ tests/ cli/ --standard=phpcs.xml --extensions=php -sp"
 		],
 		"phpmd": [
 			"vendor/bin/phpmd src/ text phpmd.xml"
-		]
+		],
+		"validate-app-config": "./console validate-config app/config/config.dist.json app/config/config.test.json"
 	},
 	"config": {
 		"discard-changes": true

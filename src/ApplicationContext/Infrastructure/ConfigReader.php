@@ -49,6 +49,10 @@ class ConfigReader {
 		return array_replace_recursive( ...$configs );
 	}
 
+	public function getConfigObject(): \stdClass {
+		return $this->convertConfigArrayToConfigObject( $this->getConfig() );
+	}
+
 	private function getFileConfig( string $filePath ): array {
 		$config = json_decode( $this->getFileContents( $filePath ), true );
 
@@ -66,6 +70,16 @@ class ConfigReader {
 		catch ( FileFetchingException $ex ) {
 			throw new RuntimeException( 'Cannot read config file at path "' . $filePath . '"', 0, $ex );
 		}
+	}
+
+	private function convertConfigArrayToConfigObject( array $config ): \stdClass {
+		// Convert arrays that are supposed to be associative to empty objects,
+		// otherwise they will be empty numeric arrays
+		// can't use JSON_FORCE_OBJECT
+		if ( empty( $config['twig']['loaders']['array'] ) ) {
+			$config['twig']['loaders']['array'] = new \stdClass();
+		}
+		return json_decode( json_encode( $config ), false );
 	}
 
 }

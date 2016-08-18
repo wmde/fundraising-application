@@ -5,7 +5,7 @@
     "db": {
       "type": "object",
       "title": "Database settings",
-      "description": "Keys and values of all properties here depend on the database driver",
+      "description": "Keys and values of all properties here depend on the database driver. Expected properties for MySQL are 'user', 'password', 'dbname', 'host' and 'port'.",
       "properties": {
         "driver": {
           "type": "string",
@@ -16,25 +16,21 @@
         },
         "user": {
           "type": "string",
-          "minLength": 1,
           "title": "User name",
           "default": ""
         },
         "password": {
           "type": "string",
-          "minLength": 1,
           "title": "Password",
           "default": ""
         },
         "dbname": {
           "type": "string",
-          "minLength": 1,
           "title": "Database name",
           "default": ""
         },
         "host": {
           "type": "string",
-          "minLength": 1,
           "title": "Host name",
           "description": "Database host name",
           "default": ""
@@ -49,7 +45,7 @@
           "description": "Additional options like encoding, etc. This is the fourth parameter for PDO::__construct.\nFor using the app with MySQL with the correct encoding, we need the object {\"1002\":\"SET NAMES utf8\"}\n'1002' is the value of the PHP constant PDO::MYSQL_ATTR_INIT_COMMAND"
         }
       },
-      "additionalProperties": false,
+      "additionalProperties": true,
       "required": [
         "driver"
       ]
@@ -85,9 +81,8 @@
     },
     "cms-wiki-title-prefix": {
       "type": "string",
-      "minLength": 1,
       "title": "CMS page title prefix",
-      "description": "Namespace and title prefix in the wiki. The subpage designates the stage name. Prefix must end with a slash. Example: Web:Spendenseite-HK2013/rewrite/ ",
+      "description": "Namespace and title prefix in the wiki. The subpage designates the stage name. If set, prefix must end with a slash. Example: Web:DonationApp-DefaultSkin/rewrite/ ",
       "default": ""
     },
     "web-basepath": {
@@ -293,6 +288,16 @@
         "default",
         "domain-map"
       ]
+    },
+    "donation-minimum-amount": {
+      "type": "integer",
+      "title": "Minimum donation amount",
+      "description": "Donations below this amount will be rejected."
+    },
+    "donation-maximum-amount": {
+      "type": "integer",
+      "title": "Maximum donation amount",
+      "description": "Donations exceeding this amount will be rejected."
     },
     "subscription-interval": {
       "type": "string",
