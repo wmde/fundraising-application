@@ -2,10 +2,9 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\App\ConfigValidation;
+namespace WMDE\Fundraising\Frontend\Cli\ConfigValidation;
 
 use League\JsonGuard\ValidationError;
-use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @license GNU GPL v2+

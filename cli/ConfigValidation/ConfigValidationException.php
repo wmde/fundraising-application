@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\App\ConfigValidation;
+namespace WMDE\Fundraising\Frontend\Cli\ConfigValidation;
 
 /**
  * @license GNU GPL v2+

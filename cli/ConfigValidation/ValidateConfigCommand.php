@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\App\ConfigValidation;
+namespace WMDE\Fundraising\Frontend\Cli\ConfigValidation;
 
 use FileFetcher\SimpleFileFetcher;
 use League\JsonGuard\Validator as JSONSchemaValidator;
@@ -21,8 +21,8 @@ use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\ConfigReader;
  */
 class ValidateConfigCommand extends Command {
 
-	const NAME = 'app:validate-config';
-	const DEFAULT_SCHEMA = __DIR__ . '/../config/schema.json';
+	const NAME = 'validate-config';
+	const DEFAULT_SCHEMA = __DIR__ . '/../../app/config/schema.json';
 	const ERROR_RETURN_CODE = 1;
 
 	protected function configure()
@@ -52,7 +52,7 @@ class ValidateConfigCommand extends Command {
 
 	protected function execute( InputInterface $input, OutputInterface $output )
 	{
-		$configObject = $this->loadConfigObjectFromFiles( $input->getArguments()['config_file'] );
+		$configObject = $this->loadConfigObjectFromFiles( $input->getArgument( 'config_file' ) );
 
 		if ( $input->getOption( 'dump-config' ) ) {
 			$output->writeln( json_encode( $configObject, JSON_PRETTY_PRINT ) );

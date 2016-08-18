@@ -1,0 +1,10 @@
+#!/usr/bin/env php
+<?php
+
+use WMDE\Fundraising\Frontend\Cli\FundraisingCli;
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+( new FundraisingCli() )->run();
+
+

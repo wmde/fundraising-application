@@ -72,7 +72,8 @@
 	"autoload": {
 		"psr-4": {
 			"WMDE\\Fundraising\\Frontend\\": "src/",
-			"WMDE\\Fundraising\\Frontend\\App\\": "app/"
+			"WMDE\\Fundraising\\Frontend\\App\\": "app/",
+			"WMDE\\Fundraising\\Frontend\\Cli\\": "cli/"
 		}
 	},
 	"autoload-dev": {
@@ -96,12 +97,12 @@
 			"@validate-app-config"
 		],
 		"phpcs": [
-			"vendor/bin/phpcs src/ tests/ --standard=phpcs.xml --extensions=php -sp"
+			"vendor/bin/phpcs src/ tests/ cli/ --standard=phpcs.xml --extensions=php -sp"
 		],
 		"phpmd": [
 			"vendor/bin/phpmd src/ text phpmd.xml"
 		],
-		"validate-app-config": "app/bin/validate_config app/config/config.dist.json app/config/config.test.json"
+		"validate-app-config": "./console validate-config app/config/config.dist.json app/config/config.test.json"
 	},
 	"config": {
 		"discard-changes": true

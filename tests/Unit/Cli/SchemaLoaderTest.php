@@ -4,11 +4,11 @@
 namespace Unit\Application;
 
 use FileFetcher\FileFetcher;
-use WMDE\Fundraising\Frontend\App\ConfigValidation\ConfigValidationException;
-use WMDE\Fundraising\Frontend\App\ConfigValidation\SchemaLoader;
+use WMDE\Fundraising\Frontend\Cli\ConfigValidation\ConfigValidationException;
+use WMDE\Fundraising\Frontend\Cli\ConfigValidation\SchemaLoader;
 
 /**
- * @covers WMDE\Fundraising\Frontend\App\ConfigValidation\SchemaLoader
+ * @covers WMDE\Fundraising\Frontend\Cli\ConfigValidation\SchemaLoader
  */
 class SchemaLoaderTest extends \PHPUnit_Framework_TestCase {
 
