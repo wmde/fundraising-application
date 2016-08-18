@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
+namespace WMDE\Fundraising\Frontend\Tests\Integration\MembershipApplicationContext\DataAccess;
 
 use Codeception\Specify;
 use Doctrine\ORM\EntityManager;

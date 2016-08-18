@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
+namespace WMDE\Fundraising\Frontend\Tests\Integration\MembershipApplicationContext\DataAccess;
 
 use Doctrine\ORM\EntityManager;
 use WMDE\Fundraising\Entities\MembershipApplication as DoctrineApplication;

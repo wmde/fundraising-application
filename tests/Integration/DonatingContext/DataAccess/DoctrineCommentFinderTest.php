@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
+namespace WMDE\Fundraising\Frontend\Tests\Integration\DonatingContext\DataAccess;
 
 use DateTime;
 use Doctrine\ORM\EntityManager;

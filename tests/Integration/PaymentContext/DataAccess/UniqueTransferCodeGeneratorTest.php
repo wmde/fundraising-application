@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
+namespace WMDE\Fundraising\Frontend\Tests\Integration\PaymentContext\DataAccess;
 
 use Doctrine\ORM\EntityManager;
 use WMDE\Euro\Euro;

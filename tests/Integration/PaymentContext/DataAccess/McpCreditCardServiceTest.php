@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
+namespace WMDE\Fundraising\Frontend\Tests\Integration\PaymentContext\DataAccess;
 
 use WMDE\Fundraising\Frontend\PaymentContext\DataAccess\McpCreditCardService;
 use WMDE\Fundraising\Frontend\PaymentContext\Infrastructure\CreditCardExpiry;
