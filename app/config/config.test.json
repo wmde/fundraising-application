@@ -5,6 +5,9 @@
 	},
 	"cms-wiki-url": "http://cms.wiki/",
 	"bank-data-file": "res/blz.lut2f",
+	"banned-ibans": [
+		"wait, this is my own IBAN!"
+	],
 	"cms-wiki-api-url": "http://cms.wiki/api.php",
 	"cms-wiki-user": "Wiki User",
 	"cms-wiki-password": "Wiki Password",

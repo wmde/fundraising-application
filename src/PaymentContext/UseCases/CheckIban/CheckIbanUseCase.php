@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\PaymentContext\UseCases\CheckIban;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataConverter;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\PaymentContext\ResponseModel\IbanResponse;
+use WMDE\Fundraising\Frontend\Validation\IbanValidator;
 
 /**
  * @licence GNU GPL v2+
@@ -14,11 +15,16 @@ use WMDE\Fundraising\Frontend\PaymentContext\ResponseModel\IbanResponse;
  */
 class CheckIbanUseCase {
 
-	public function __construct( BankDataConverter $bankDataConverter ) {
+	public function __construct( BankDataConverter $bankDataConverter, IbanValidator $ibanValidator ) {
 		$this->bankDataConverter = $bankDataConverter;
+		$this->ibanValidator = $ibanValidator;
 	}
 
 	public function checkIban( Iban $iban ): IbanResponse {
+		if ( !$this->ibanValidator->validate( $iban )->isSuccessful() ) {
+			return IbanResponse::newFailureResponse();
+		}
+
 		if ( !$this->bankDataConverter->validateIban( $iban ) ) {
 			return IbanResponse::newFailureResponse();
 		}

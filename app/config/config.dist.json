@@ -8,6 +8,7 @@
 		"port": ""
 	},
 	"bank-data-file": "",
+	"banned-ibans": [],
 	"cms-wiki-api-url": "",
 	"cms-wiki-user": "",
 	"cms-wiki-password": "",
