@@ -1,7 +1,7 @@
 <?php
 
 
-namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
+namespace WMDE\Fundraising\Frontend\Tests\Integration\DonatingContext\DataAccess;
 
 use Doctrine\ORM\EntityManager;
 use WMDE\Fundraising\Entities\Donation;
@@ -10,6 +10,9 @@ use WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\DonationEventLogExc
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
+/**
+ * @covers WMDE\Fundraising\Frontend\DonatingContext\DataAccess\DoctrineDonationEventLogger
+ */
 class DoctrineDonationEventLoggerTest extends \PHPUnit_Framework_TestCase {
 
 	const DEFAULT_MESSAGE = 'Log message';

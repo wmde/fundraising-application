@@ -1,7 +1,7 @@
 <?php
 
 
-namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
+namespace WMDE\Fundraising\Frontend\Tests\Integration\ApplicationContext\DataAccess;
 
 use Mediawiki\Api\ApiUser;
 use Mediawiki\Api\MediawikiApi;
@@ -12,6 +12,9 @@ use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\PageRetriever;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\LoggerSpy;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
+/**
+ * @covers WMDE\Fundraising\Frontend\ApplicationContext\DataAccess\ApiBasedPageRetriever
+ */
 class ApiBasedPageRetrieverTest extends \PHPUnit_Framework_TestCase {
 
 	const PAGE_PREFIX = 'Web:SpendenseiteTestSkin/';
