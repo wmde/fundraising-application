@@ -27,7 +27,7 @@ class IbanValidator {
 	}
 
 	public function validate( Iban $value, string $fieldName = '' ): ValidationResult {
-		if ( in_array( $value->toString(), $this->bannedIbanNumbers ) ) {
+		if ( $this->isIbanBlocked( $value ) ) {
 			return new ValidationResult( new ConstraintViolation( $value, 'iban_blocked', $fieldName ) );
 		}
 
@@ -36,6 +36,10 @@ class IbanValidator {
 		}
 
 		return new ValidationResult();
+	}
+
+	public function isIbanBlocked( Iban $iban ): bool {
+		return in_array( $iban->toString(), $this->bannedIbanNumbers );
 	}
 
 }

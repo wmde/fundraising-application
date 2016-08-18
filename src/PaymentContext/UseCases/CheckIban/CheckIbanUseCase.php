@@ -25,10 +25,6 @@ class CheckIbanUseCase {
 			return IbanResponse::newFailureResponse();
 		}
 
-		if ( !$this->bankDataConverter->validateIban( $iban ) ) {
-			return IbanResponse::newFailureResponse();
-		}
-
 		return IbanResponse::newSuccessResponse(
 			$this->bankDataConverter->getBankDataFromIban( $iban )
 		);

@@ -10,6 +10,7 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\PaymentContext\ResponseModel\IbanResponse;
 use WMDE\Fundraising\Frontend\PaymentContext\UseCases\GenerateIban\GenerateIbanRequest;
 use WMDE\Fundraising\Frontend\PaymentContext\UseCases\GenerateIban\GenerateIbanUseCase;
+use WMDE\Fundraising\Frontend\Validation\IbanValidator;
 
 /**
  * @covers WMDE\Fundraising\Frontend\PaymentContext\UseCases\GenerateIban\GenerateIbanUseCase
@@ -26,7 +27,7 @@ class GenerateIbanUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testWhenValidBankAccountDataIsGiven_fullBankDataIsReturned() {
-		$useCase = new GenerateIbanUseCase( new BankDataConverter( 'res/blz.lut2f' ) );
+		$useCase = $this->newGenerateIbanUseCase();
 
 		$bankData = new BankData();
 		$bankData->setBic( 'HASPDEHHXXX' );
@@ -42,7 +43,7 @@ class GenerateIbanUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testWhenInvalidBankAccountDataIsGiven_failureResponseIsReturned() {
-		$useCase = new GenerateIbanUseCase( new BankDataConverter( 'res/blz.lut2f' ) );
+		$useCase = $this->newGenerateIbanUseCase();
 
 		$this->assertEquals(
 			IbanResponse::newFailureResponse(),
@@ -50,4 +51,20 @@ class GenerateIbanUseCaseTest extends \PHPUnit_Framework_TestCase {
 		);
 	}
 
+	public function testWhenBlockedBankAccountDataIsGiven_failureResponseIsReturned() {
+		$useCase = $this->newGenerateIbanUseCase();
+
+		$this->assertEquals(
+			IbanResponse::newFailureResponse(),
+			$useCase->generateIban( new GenerateIbanRequest( '1194700', '10020500' ) )
+		);
+	}
+
+	private function newGenerateIbanUseCase() {
+		$bankDataConverter = new BankDataConverter( 'res/blz.lut2f' );
+		return new GenerateIbanUseCase(
+			$bankDataConverter,
+			new IbanValidator( $bankDataConverter, [ 'DE33100205000001194700' ] )
+		);
+	}
 }

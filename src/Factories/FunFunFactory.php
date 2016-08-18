@@ -657,7 +657,7 @@ class FunFunFactory {
 	}
 
 	public function newGenerateIbanUseCase(): GenerateIbanUseCase {
-		return new GenerateIbanUseCase( $this->newBankDataConverter() );
+		return new GenerateIbanUseCase( $this->newBankDataConverter(), $this->newIbanValidator() );
 	}
 
 	public function newIbanPresenter(): IbanPresenter {
