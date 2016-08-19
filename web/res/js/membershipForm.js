@@ -150,12 +150,8 @@ $( function () {
 				stateKey: 'membershipFormContent.membershipType'
 			},
 			{
-				viewHandler: WMDE.View.createFeeOptionSwitcher( $( '#amount-1' ), 1 ),
-				stateKey: 'membershipFormContent.paymentIntervalInMonths'
-			},
-			{
-				viewHandler: WMDE.View.createFeeOptionSwitcher( $( '#amount-2' ), 6 ),
-				stateKey: 'membershipFormContent.paymentIntervalInMonths'
+				viewHandler: WMDE.View.createFeeOptionSwitcher( [ $( '#amount-1' ), $( '#amount-2' ), $( '#amount-3' ), $( '#amount-4' ), $( '#amount-5' ), $( '#amount-6' ), $( '#amount-7' ) ], { person: 24, firma: 100 } ),
+				stateKey: 'membershipFormContent'
 			},
 			{
 				viewHandler: WMDE.View.createPaymentSummaryDisplayHandler(
@@ -279,7 +275,7 @@ $( function () {
 
 	function formDataIsValid() {
 		var validity = store.getState().validity;
-		return !hasInvalidFields() && validity.amount && addressIsValid() && bankDataIsValid();
+		return !hasInvalidFields() && validity.paymentData && addressIsValid() && bankDataIsValid();
 	}
 
 	function triggerValidityCheckForPersonalDataPage() {
