@@ -2,6 +2,7 @@
 
 var jQuery = require( 'jquery' ),
 	objectAssign = require( 'object-assign' ),
+	Promise = require( 'promise' ),
 	_ = require( 'underscore' ),
 
 	ValidationStates = {
@@ -21,6 +22,24 @@ var jQuery = require( 'jquery' ),
 		anonym: []
 	},
 
+	/**
+	 * This function avoids an endless loop on failure.
+	 * The jQuery fail function returns the xhrObject, which is itself a Promise,
+	 * which will then be called by the Redux promise_middleware again and again.
+	 *
+	 * When IE support is finally ditched and we use jQuery >= 3.0, this wrapper method must be removed.
+	 *
+	 * @param jQueryDeferredObject
+	 * @returns {Promise}
+	 */
+	jQueryDeferredToPromise = function ( jQueryDeferredObject ) {
+		return new Promise( function ( resolve, reject ) {
+			jQueryDeferredObject.then( resolve, function ( xhrObject, statusCode, statusMessage ) {
+				reject( statusMessage );
+			} );
+		} );
+	},
+
 	AddressValidator = {
 		validationUrl: '',
 		sendFunction: null,
@@ -34,7 +53,8 @@ var jQuery = require( 'jquery' ),
 			if ( requiredFields.length === 0 ) {
 				return { status: ValidationStates.OK };
 			}
-			return this.sendFunction( this.validationUrl, formValues, null, 'json' );
+
+			return jQueryDeferredToPromise( this.sendFunction( this.validationUrl, formValues, null, 'json' ) );
 		},
 		formValuesHaveEmptyRequiredFields: function ( formValues, requiredFields ) {
 			var objectWithOnlyTheRequiredFields = _.pick( formValues, requiredFields );
@@ -55,7 +75,7 @@ var jQuery = require( 'jquery' ),
 			var postData = {
 				email: formValues.email
 			};
-			return this.sendFunction( this.validationUrl, postData, null, 'json' );
+			return jQueryDeferredToPromise( this.sendFunction( this.validationUrl, postData, null, 'json' ) );
 		}
 	},
 
@@ -67,7 +87,7 @@ var jQuery = require( 'jquery' ),
 				amount: formValues.amount,
 				paymentType: formValues.paymentType
 			};
-			return this.sendFunction( this.validationUrl, postData, null, 'json' );
+			return jQueryDeferredToPromise( this.sendFunction( this.validationUrl, postData, null, 'json' ) );
 		}
 	},
 
@@ -80,7 +100,7 @@ var jQuery = require( 'jquery' ),
 				paymentIntervalInMonths: formValues.paymentIntervalInMonths,
 				addressType: formValues.addressType
 			};
-			return this.sendFunction( this.validationUrl, postData, null, 'json' );
+			return jQueryDeferredToPromise( this.sendFunction( this.validationUrl, postData, null, 'json' ) );
 		}
 	},
 
@@ -136,11 +156,13 @@ var jQuery = require( 'jquery' ),
 		 * @private
 		 */
 		getValidationResultFromApi: function ( apiUrl, urlArguments ) {
-			return this.sendFunction(
-				apiUrl,
-				urlArguments,
-				null,
-				'json'
+			return jQueryDeferredToPromise(
+				this.sendFunction(
+					apiUrl,
+					urlArguments,
+					null,
+					'json'
+				)
 			);
 		}
 	},
