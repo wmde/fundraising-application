@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\AddSubscription;
+namespace WMDE\Fundraising\Frontend\Tests\Integration\DonatingContext\UseCases\AddSubscription;
 
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonationComment;
 use WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddComment\AddCommentRequest;
