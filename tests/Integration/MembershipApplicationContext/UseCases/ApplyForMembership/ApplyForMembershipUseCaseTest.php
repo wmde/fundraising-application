@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\ApplyForMembership;
+namespace WMDE\Fundraising\Frontend\Tests\Integration\MembershipApplicationContext\UseCases\ApplyForMembership;
 
 use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\ApplicationTokenFetcher;
