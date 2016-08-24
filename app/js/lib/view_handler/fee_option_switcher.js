@@ -3,6 +3,10 @@
 var objectAssign = require( 'object-assign' ),
 	_ = require( 'underscore' ),
 
+	feePerMonth = function ( intervalInMonths, fee ) {
+		return ( 12 / intervalInMonths ) * fee;
+	},
+
 	/**
 	 * View Handler for enabling and disabling elements if the update value exceeds a certain threshold
 	 * @class
@@ -13,9 +17,8 @@ var objectAssign = require( 'object-assign' ),
 		elements: [],
 
 		update: function ( state ) {
-			var self = this;
 			_.each( this.elements, function ( feeOption ) {
-				var shouldBeDisabled = self.minimumFee[ state.addressType ] > 12 / state.paymentIntervalInMonths * parseFloat( feeOption.val() );
+				var shouldBeDisabled = this.minimumFee[ state.addressType ] > feePerMonth( state.paymentIntervalInMonths, parseFloat( feeOption.val() ) ) ;
 
 				if ( shouldBeDisabled ) {
 					feeOption.prop( 'checked', false );
@@ -23,7 +26,7 @@ var objectAssign = require( 'object-assign' ),
 				} else {
 					feeOption.prop( 'disabled', false );
 				}
-			} );
+			}, this );
 		}
 	};
 
