@@ -1,6 +1,11 @@
 'use strict';
 
 var objectAssign = require( 'object-assign' ),
+	_ = require( 'underscore' ),
+
+	feePerMonth = function ( intervalInMonths, fee ) {
+		return ( 12 / intervalInMonths ) * fee;
+	},
 
 	/**
 	 * View Handler for enabling and disabling elements if the update value exceeds a certain threshold
@@ -8,37 +13,29 @@ var objectAssign = require( 'object-assign' ),
 	 */
 	FeeOptionSwitcher = {
 		isDisabled: null, // Null to always trigger show/hide on first call to update
-		thresholdValue: 0,
+		minimumFee: {},
+		elements: [],
 
-		update: function ( value ) {
-			if ( parseInt( value ) > this.thresholdValue ) {
-				if ( this.isDisabled === true ) {
-					return;
+		update: function ( state ) {
+			_.each( this.elements, function ( feeOption ) {
+				var shouldBeDisabled = this.minimumFee[ state.addressType ] > feePerMonth( state.paymentIntervalInMonths, parseFloat( feeOption.val() ) ) ;
+
+				if ( shouldBeDisabled ) {
+					feeOption.prop( 'checked', false );
+					feeOption.prop( 'disabled', true );
+				} else {
+					feeOption.prop( 'disabled', false );
 				}
-				this.element.prop( 'checked', false );
-				this.element.prop( 'disabled', true );
-				this.isDisabled = true;
-			} else {
-				if ( this.isDisabled === false ) {
-					return;
-				}
-				this.element.prop( 'disabled', false );
-				this.isDisabled = false;
-			}
+			}, this );
 		}
 	};
 
 module.exports = {
-	/**
-	 * @param {jQuery} element
-	 * @param {int} thresholdValue
-	 * @return {FeeOptionSwitcher}
-	 */
-	createFeeOptionSwitcher: function ( element, thresholdValue ) {
+	createFeeOptionSwitcher: function ( elements, minimumFee ) {
 		return objectAssign( Object.create( FeeOptionSwitcher ),
 			{
-				element: element,
-				thresholdValue: thresholdValue
+				elements: elements,
+				minimumFee: minimumFee
 			} );
 	},
 
