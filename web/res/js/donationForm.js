@@ -162,6 +162,10 @@ $( function () {
 				stateKey: 'donationFormContent.addressType'
 			},
 			{
+				viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.notice-anonymous' ), 'anonym' ),
+				stateKey: 'donationFormContent.addressType'
+			},
+			{
 				viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.personal-data-full, #notice-unsubscribe' ), /firma|person/ ),
 				stateKey: 'donationFormContent.addressType'
 			},
