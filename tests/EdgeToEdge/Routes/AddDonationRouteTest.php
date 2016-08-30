@@ -177,6 +177,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 				'/donation/add',
 				$this->newValidFormInput()
 			);
+			$client->followRedirect();
 
 			$response = $client->getResponse()->getContent();
 
@@ -487,6 +488,22 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
+	public function testGivenValidRequest_clientIsRedirected() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setNullMessenger();
+			$factory->setTokenGenerator( new FixedTokenGenerator( self::SOME_TOKEN ) );
+			$client->followRedirects( false );
+
+			$client->request(
+				'POST',
+				'/donation/add',
+				$this->newValidFormInput()
+			);
+
+			$this->assertTrue( $client->getResponse()->isRedirect() );
+		} );
+	}
+
 	public function testWhenTrackingCookieExists_valueIsPersisted() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setNullMessenger();
@@ -592,6 +609,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 				'zahlweise' => 'UEB'
 			]
 		);
+		$client->followRedirect();
 
 		$responseContent = $client->getResponse()->getContent();
 		$this->assertContains( 'BEZ/UEB', $responseContent );

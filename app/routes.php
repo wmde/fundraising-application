@@ -430,7 +430,7 @@ $app->match(
 			$app['session']->get( 'piwikTracking', [] )
 		);
 	}
-)->method( 'GET|POST' );
+)->bind( 'show-donation-confirmation' )->method( 'GET|POST' );
 
 $app->post(
 	'handle-paypal-payment-notification',

@@ -56,12 +56,17 @@ class AddDonationHandler {
 		switch( $responseModel->getDonation()->getPaymentType() ) {
 			case PaymentType::DIRECT_DEBIT:
 			case PaymentType::BANK_TRANSFER:
-				$httpResponse = new Response( $this->ffFactory->newDonationConfirmationPresenter()->present(
-					$responseModel->getDonation(),
-					$responseModel->getUpdateToken(),
-					$selectedPage,
-					PiwikVariableCollector::newForDonation( $sessionTrackingData, $responseModel->getDonation() )
-				) );
+				$httpResponse = $this->app->redirect(
+					$this->app['url_generator']->generate(
+						'show-donation-confirmation',
+						[
+							'donationId' => $responseModel->getDonation()->getId(),
+							'accessToken' => $responseModel->getAccessToken()
+						]
+					),
+					Response::HTTP_SEE_OTHER
+				);
+
 				break;
 			case PaymentType::PAYPAL:
 				$httpResponse = $this->app->redirect(
