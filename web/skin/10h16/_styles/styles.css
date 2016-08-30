@@ -737,3 +737,8 @@ div.notice-window {
     flex: 1 1 auto;
     text-align: center;
 }
+
+.notice-anonymous {
+    margin-top: 20px;
+    font-size: 0.9em;
+}
