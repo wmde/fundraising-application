@@ -73,7 +73,11 @@
 		"psr-4": {
 			"WMDE\\Fundraising\\Frontend\\": "src/",
 			"WMDE\\Fundraising\\Frontend\\App\\": "app/",
-			"WMDE\\Fundraising\\Frontend\\Cli\\": "cli/"
+			"WMDE\\Fundraising\\Frontend\\Cli\\": "cli/",
+			"WMDE\\Fundraising\\Frontend\\DonatingContext\\": "contexts/DonatingContext/src/",
+			"WMDE\\Fundraising\\Frontend\\MembershipApplicationContext\\": "contexts/MembershipApplicationContext/src/",
+			"WMDE\\Fundraising\\Frontend\\PaymentContext\\": "contexts/PaymentContext/src/",
+			"WMDE\\Fundraising\\Frontend\\SubscriptionContext\\": "contexts/SubscriptionContext/src/"
 		}
 	},
 	"autoload-dev": {
