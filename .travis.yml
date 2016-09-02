@@ -6,6 +6,7 @@ matrix:
     env: DB=sqlite; TYPE=coverage
   - php: 7
     env: DB=mysql
+  fast_finish: true
 
 sudo: false
 
