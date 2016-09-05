@@ -14,9 +14,11 @@
     <testsuites>
         <testsuite name="FundraisingFrontend-unit">
             <directory>tests/Unit</directory>
+            <directory>contexts/*/tests/Unit</directory>
         </testsuite>
         <testsuite name="FundraisingFrontend-integration">
             <directory>tests/Integration</directory>
+            <directory>contexts/*/tests/Integration</directory>
         </testsuite>
         <testsuite name="FundraisingFrontend-edgetoedge">
             <directory>tests/EdgeToEdge</directory>
