@@ -21,8 +21,8 @@ use WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddDonation\ReferrerGener
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeDonationRepository;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedDonationTokenFetcher;
+use WMDE\Fundraising\Frontend\DonatingContext\Tests\Fixtures\FakeDonationRepository;
+use WMDE\Fundraising\Frontend\DonatingContext\Tests\Fixtures\FixedDonationTokenFetcher;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 
 /**

@@ -13,12 +13,12 @@ use WMDE\Fundraising\Frontend\DonatingContext\UseCases\CreditCardPaymentNotifica
 use WMDE\Fundraising\Frontend\DonatingContext\UseCases\CreditCardPaymentNotification\CreditCardPaymentHandlerException;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidCreditCardNotificationRequest;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\DonationEventLoggerSpy;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\DonationRepositorySpy;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingDonationAuthorizer;
+use WMDE\Fundraising\Frontend\DonatingContext\Tests\Fixtures\DonationEventLoggerSpy;
+use WMDE\Fundraising\Frontend\DonatingContext\Tests\Fixtures\DonationRepositorySpy;
+use WMDE\Fundraising\Frontend\DonatingContext\Tests\Fixtures\FailingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeCreditCardService;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeDonationRepository;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingDonationAuthorizer;
+use WMDE\Fundraising\Frontend\DonatingContext\Tests\Fixtures\FakeDonationRepository;
+use WMDE\Fundraising\Frontend\DonatingContext\Tests\Fixtures\SucceedingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
 
 /**

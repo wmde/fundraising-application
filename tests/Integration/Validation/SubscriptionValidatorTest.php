@@ -9,7 +9,7 @@ use WMDE\Fundraising\Entities\Subscription;
 use WMDE\Fundraising\Frontend\Infrastructure\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionDuplicateValidator;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionValidator;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\InMemorySubscriptionRepository;
+use WMDE\Fundraising\Frontend\SubscriptionContext\Tests\Fixtures\InMemorySubscriptionRepository;
 use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
 use WMDE\Fundraising\Frontend\Validation\AllowedValuesValidator;
 use WMDE\Fundraising\Frontend\Validation\EmailValidator;

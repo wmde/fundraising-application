@@ -14,12 +14,12 @@ use WMDE\Fundraising\Frontend\DonatingContext\UseCases\HandlePayPalPaymentNotifi
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalData;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidPayPalNotificationRequest;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\DonationEventLoggerSpy;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\DonationRepositorySpy;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingDonationAuthorizer;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeDonationRepository;
+use WMDE\Fundraising\Frontend\DonatingContext\Tests\Fixtures\DonationEventLoggerSpy;
+use WMDE\Fundraising\Frontend\DonatingContext\Tests\Fixtures\DonationRepositorySpy;
+use WMDE\Fundraising\Frontend\DonatingContext\Tests\Fixtures\FailingDonationAuthorizer;
+use WMDE\Fundraising\Frontend\DonatingContext\Tests\Fixtures\FakeDonationRepository;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\LoggerSpy;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingDonationAuthorizer;
+use WMDE\Fundraising\Frontend\DonatingContext\Tests\Fixtures\SucceedingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
 
 /**

@@ -19,9 +19,9 @@ use WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\ApplyForMemb
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedApplicationTokenFetcher;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tests\Fixtures\FixedApplicationTokenFetcher;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\InMemoryApplicationRepository;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tests\Fixtures\InMemoryApplicationRepository;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
 
 /**

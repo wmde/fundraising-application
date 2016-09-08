@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
+namespace WMDE\Fundraising\Frontend\SubscriptionContext\Tests\Fixtures;
 
 use WMDE\Fundraising\Entities\Subscription;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Domain\Repositories\SubscriptionRepository;
