@@ -10,9 +10,9 @@ use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\A
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\CancelMembershipApplication\CancellationRequest;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\CancelMembershipApplication\CancelMembershipApplicationUseCase;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingAuthorizer;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\InMemoryApplicationRepository;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingAuthorizer;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tests\Fixtures\FailingAuthorizer;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tests\Fixtures\InMemoryApplicationRepository;
+use WMDE\Fundraising\Frontend\MembershipApplicationContext\Tests\Fixtures\SucceedingAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
 
 /**

@@ -7,9 +7,9 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\ShowDonationConfi
 use WMDE\Fundraising\Frontend\DonatingContext\UseCases\ShowDonationConfirmation\ShowDonationConfirmationRequest;
 use WMDE\Fundraising\Frontend\DonatingContext\UseCases\ShowDonationConfirmation\ShowDonationConfirmationUseCase;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingDonationAuthorizer;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeDonationRepository;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingDonationAuthorizer;
+use WMDE\Fundraising\Frontend\DonatingContext\Tests\Fixtures\FailingDonationAuthorizer;
+use WMDE\Fundraising\Frontend\DonatingContext\Tests\Fixtures\FakeDonationRepository;
+use WMDE\Fundraising\Frontend\DonatingContext\Tests\Fixtures\SucceedingDonationAuthorizer;
 
 /**
  * @covers WMDE\Fundraising\Frontend\DonatingContext\UseCases\ShowDonationConfirmation\ShowDonationConfirmationUseCase

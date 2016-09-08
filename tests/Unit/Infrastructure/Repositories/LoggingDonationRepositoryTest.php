@@ -10,7 +10,7 @@ use WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\GetDonationExc
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\StoreDonationException;
 use WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\LoggingDonationRepository;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeDonationRepository;
+use WMDE\Fundraising\Frontend\DonatingContext\Tests\Fixtures\FakeDonationRepository;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\LoggerSpy;
 
 /**

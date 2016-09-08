@@ -8,7 +8,7 @@ use Mediawiki\Api\MediawikiApi;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ApiPostRequestHandler;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\SubscriptionRepositorySpy;
+use WMDE\Fundraising\Frontend\SubscriptionContext\Tests\Fixtures\SubscriptionRepositorySpy;
 
 /**
  * @licence GNU GPL v2+

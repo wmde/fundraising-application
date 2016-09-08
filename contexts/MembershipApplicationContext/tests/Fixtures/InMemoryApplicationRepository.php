@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
+namespace WMDE\Fundraising\Frontend\MembershipApplicationContext\Tests\Fixtures;
 
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Application;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Repositories\ApplicationRepository;

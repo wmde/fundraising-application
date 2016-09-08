@@ -8,7 +8,7 @@ use Psr\Log\LoggerInterface;
 use WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\BestEffortDonationEventLogger;
 use WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\DonationEventLogException;
 use WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\DonationEventLogger;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\DonationEventLoggerSpy;
+use WMDE\Fundraising\Frontend\DonatingContext\Tests\Fixtures\DonationEventLoggerSpy;
 
 /**
  * @covers WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\BestEffortDonationEventLogger

@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
+namespace WMDE\Fundraising\Frontend\DonatingContext\Tests\Fixtures;
 
 use WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\DonationEventLogger;
 
