@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\ConfirmSubscription;
+namespace WMDE\Fundraising\Frontend\SubscriptionContext\Tests\Integration\UseCases\ConfirmSubscription;
 
 use PHPUnit_Framework_MockObject_MockObject;
 use WMDE\Fundraising\Entities\Address;

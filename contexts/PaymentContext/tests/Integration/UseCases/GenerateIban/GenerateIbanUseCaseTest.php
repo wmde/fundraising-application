@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\GenerateIban;
+namespace WMDE\Fundraising\Frontend\PaymentContext\Tests\Integration\UseCases\GenerateIban;
 
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataConverter;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;

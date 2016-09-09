@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\CancelMembershipApplication;
+namespace WMDE\Fundraising\Frontend\MembershipApplicationContext\Tests\Integration\UseCases\CancelMembershipApplication;
 
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Authorization\ApplicationAuthorizer;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Application;

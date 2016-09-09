@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\HandlePayPalPaymentNotification;
+namespace WMDE\Fundraising\Frontend\DonatingContext\Tests\Integration\UseCases\HandlePayPalPaymentNotification;
 
 use Psr\Log\NullLogger;
 use WMDE\Fundraising\Frontend\DonatingContext\DataAccess\DoctrineDonationRepository;

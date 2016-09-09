@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\CreditCardPaymentNotification;
+namespace WMDE\Fundraising\Frontend\DonatingContext\Tests\Integration\UseCases\CreditCardPaymentNotification;
 
 use Psr\Log\NullLogger;
 use WMDE\Euro\Euro;

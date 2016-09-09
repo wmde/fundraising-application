@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\AddDonation;
+namespace WMDE\Fundraising\Frontend\DonatingContext\Tests\Integration\UseCases\AddDonation;
 
 use WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddDonation\AddDonationPolicyValidator;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidAddDonationRequest;

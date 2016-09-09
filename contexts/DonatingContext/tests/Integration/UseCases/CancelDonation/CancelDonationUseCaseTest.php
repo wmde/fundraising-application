@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\CancelDonation;
+namespace WMDE\Fundraising\Frontend\DonatingContext\Tests\Integration\UseCases\CancelDonation;
 
 use WMDE\Fundraising\Frontend\DonatingContext\Authorization\DonationAuthorizer;
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation;
