@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\UseCases\ApplyForMembership;
+namespace WMDE\Fundraising\Frontend\MembershipApplicationContext\Tests\Unit\UseCases\ApplyForMembership;
 
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\ApplyForMembership\ApplicationValidationResult as Result;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\ApplyForMembership\ApplyForMembershipRequest;

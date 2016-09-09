@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManager;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Entities\MembershipApplication;
 use WMDE\Fundraising\Frontend\DonatingContext\DataAccess\DoctrineDonationRepository;
+use WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\MembershipApplicationContext\DataAccess\DoctrineApplicationRepository;
 
 /**
@@ -19,7 +20,7 @@ class SerializedDataHandlingTest extends \PHPUnit_Framework_TestCase {
 	/** @var EntityManager */
 	private $entityManager;
 
-	/** @var \WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\DonationRepository */
+	/** @var DonationRepository */
 	private $repository;
 
 	public function setUp() {

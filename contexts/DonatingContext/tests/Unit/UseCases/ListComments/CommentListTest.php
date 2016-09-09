@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\UseCases\ListComments;
+namespace WMDE\Fundraising\Frontend\DonatingContext\Tests\Unit\UseCases\ListComments;
 
 use WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\CommentWithAmount;
 use WMDE\Fundraising\Frontend\DonatingContext\UseCases\ListComments\CommentList;

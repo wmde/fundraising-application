@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\UseCases\AddComment;
+namespace WMDE\Fundraising\Frontend\DonatingContext\Tests\Unit\UseCases\AddComment;
 
 use WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddComment\AddCommentRequest;
 use WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddComment\AddCommentValidator;
