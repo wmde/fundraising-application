@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\ApplicationContext\UseCases\GetInTouch;
 use WMDE\Fundraising\Frontend\Infrastructure\Message;
 use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\EmailAddress;
+use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\Validation\ValidationResponse;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 

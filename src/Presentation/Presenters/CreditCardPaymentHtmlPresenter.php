@@ -4,7 +4,7 @@ namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Translation\TranslatorInterface;
-use WMDE\Fundraising\Frontend\DonatingContext\UseCases\AddDonation\AddDonationResponse;
+use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationResponse;
 use WMDE\Fundraising\Frontend\Presentation\CreditCardUrlGenerator;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 

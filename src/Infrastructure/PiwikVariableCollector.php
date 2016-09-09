@@ -2,7 +2,7 @@
 
 namespace WMDE\Fundraising\Frontend\Infrastructure;
 
-use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
 
 /**
  * Generates `PiwikEvents` objects

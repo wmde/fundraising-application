@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Symfony\Component\HttpKernel\Client;
-use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;

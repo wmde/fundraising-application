@@ -4,12 +4,12 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Tests\Unit;
 
-use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorAddress;
-use WMDE\Fundraising\Frontend\DonatingContext\Validation\DonorAddressValidator;
+use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonorAddress;
+use WMDE\Fundraising\Frontend\DonationContext\Validation\DonorAddressValidator;
 use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
 
 /**
- * @covers WMDE\Fundraising\Frontend\DonatingContext\Validation\DonorAddressValidator
+ * @covers WMDE\Fundraising\Frontend\DonationContext\Validation\DonorAddressValidator
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >

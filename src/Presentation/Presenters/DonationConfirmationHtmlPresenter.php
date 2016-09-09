@@ -2,8 +2,8 @@
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
-use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation;
-use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donor;
+use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\Infrastructure\PiwikEvents;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankTransferPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;

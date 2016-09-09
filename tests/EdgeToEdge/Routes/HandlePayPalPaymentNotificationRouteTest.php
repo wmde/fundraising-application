@@ -8,7 +8,7 @@ use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Stream;
 use Symfony\Component\HttpKernel\Client;
-use WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\DonationRepository;
+use WMDE\Fundraising\Frontend\DonationContext\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\LoggingPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifier;

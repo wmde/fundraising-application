@@ -6,9 +6,9 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\PaymentContext\DataAccess;
 
 use Doctrine\ORM\EntityManager;
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\Frontend\DonatingContext\DataAccess\DoctrineDonationRepository;
-use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donation;
-use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonationPayment;
+use WMDE\Fundraising\Frontend\DonationContext\DataAccess\DoctrineDonationRepository;
+use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonationPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\DataAccess\UniqueTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankTransferPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\TransferCodeGenerator;

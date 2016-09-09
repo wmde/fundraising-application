@@ -2,17 +2,17 @@
 
 namespace WMDE\Fundraising\Tests\Integration\Validation;
 
-use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\Donor;
-use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorAddress;
-use WMDE\Fundraising\Frontend\DonatingContext\Domain\Model\DonorName;
-use WMDE\Fundraising\Frontend\DonatingContext\Validation\DonorAddressValidator;
-use WMDE\Fundraising\Frontend\DonatingContext\Validation\DonorValidator;
+use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donor;
+use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonorAddress;
+use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonorName;
+use WMDE\Fundraising\Frontend\DonationContext\Validation\DonorAddressValidator;
+use WMDE\Fundraising\Frontend\DonationContext\Validation\DonorValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
 use WMDE\Fundraising\Frontend\Validation\EmailValidator;
 
 /**
- * @covers WMDE\Fundraising\Frontend\DonatingContext\Validation\DonorValidator
+ * @covers WMDE\Fundraising\Frontend\DonationContext\Validation\DonorValidator
  *
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
@@ -104,8 +104,8 @@ class DonorValidatorTest extends ValidatorTestCase {
 	}
 
 	private function newDonorValidator() {
-		return new \WMDE\Fundraising\Frontend\DonatingContext\Validation\DonorValidator(
-			new \WMDE\Fundraising\Frontend\DonatingContext\Validation\DonorNameValidator(),
+		return new \WMDE\Fundraising\Frontend\DonationContext\Validation\DonorValidator(
+			new \WMDE\Fundraising\Frontend\DonationContext\Validation\DonorNameValidator(),
 			new DonorAddressValidator(),
 			new EmailValidator( new NullDomainNameValidator() )
 		);

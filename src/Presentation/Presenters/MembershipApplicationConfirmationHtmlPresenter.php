@@ -2,9 +2,9 @@
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Applicant;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\Domain\Model\Application;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\ShowMembershipApplicationConfirmation\ShowMembershipAppConfirmationResponse;
+use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Applicant;
+use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
+use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowMembershipApplicationConfirmation\ShowMembershipAppConfirmationResponse;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
