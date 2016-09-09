@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\Validation;
 
 use InvalidArgumentException;
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\ApplyForMembership\ApplicationValidationResult as Result;
+use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplicationValidationResult as Result;
 
 /**
  * @license GNU GPL v2+

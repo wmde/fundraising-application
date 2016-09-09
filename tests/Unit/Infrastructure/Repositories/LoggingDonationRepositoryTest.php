@@ -5,16 +5,16 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Repositories;
 
 use Psr\Log\LogLevel;
-use WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\DonationRepository;
-use WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\GetDonationException;
-use WMDE\Fundraising\Frontend\DonatingContext\Domain\Repositories\StoreDonationException;
-use WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\LoggingDonationRepository;
+use WMDE\Fundraising\Frontend\DonationContext\Domain\Repositories\DonationRepository;
+use WMDE\Fundraising\Frontend\DonationContext\Domain\Repositories\GetDonationException;
+use WMDE\Fundraising\Frontend\DonationContext\Domain\Repositories\StoreDonationException;
+use WMDE\Fundraising\Frontend\DonationContext\Infrastructure\LoggingDonationRepository;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
-use WMDE\Fundraising\Frontend\DonatingContext\Tests\Fixtures\FakeDonationRepository;
+use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\FakeDonationRepository;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\LoggerSpy;
 
 /**
- * @covers WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\LoggingDonationRepository
+ * @covers WMDE\Fundraising\Frontend\DonationContext\Infrastructure\LoggingDonationRepository
  *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >

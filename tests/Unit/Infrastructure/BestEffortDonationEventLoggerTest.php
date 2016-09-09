@@ -5,13 +5,13 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
 use Psr\Log\LoggerInterface;
-use WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\BestEffortDonationEventLogger;
-use WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\DonationEventLogException;
-use WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\DonationEventLogger;
-use WMDE\Fundraising\Frontend\DonatingContext\Tests\Fixtures\DonationEventLoggerSpy;
+use WMDE\Fundraising\Frontend\DonationContext\Infrastructure\BestEffortDonationEventLogger;
+use WMDE\Fundraising\Frontend\DonationContext\Infrastructure\DonationEventLogException;
+use WMDE\Fundraising\Frontend\DonationContext\Infrastructure\DonationEventLogger;
+use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\DonationEventLoggerSpy;
 
 /**
- * @covers WMDE\Fundraising\Frontend\DonatingContext\Infrastructure\BestEffortDonationEventLogger
+ * @covers WMDE\Fundraising\Frontend\DonationContext\Infrastructure\BestEffortDonationEventLogger
  *
  * @licence GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >

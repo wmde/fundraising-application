@@ -2,7 +2,7 @@
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
-use WMDE\Fundraising\Frontend\MembershipApplicationContext\UseCases\CancelMembershipApplication\CancellationResponse;
+use WMDE\Fundraising\Frontend\MembershipContext\UseCases\CancelMembershipApplication\CancellationResponse;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
 /**

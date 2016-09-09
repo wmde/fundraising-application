@@ -74,8 +74,8 @@
 			"WMDE\\Fundraising\\Frontend\\": "src/",
 			"WMDE\\Fundraising\\Frontend\\App\\": "app/",
 			"WMDE\\Fundraising\\Frontend\\Cli\\": "cli/",
-			"WMDE\\Fundraising\\Frontend\\DonatingContext\\": "contexts/DonatingContext/src/",
-			"WMDE\\Fundraising\\Frontend\\MembershipApplicationContext\\": "contexts/MembershipApplicationContext/src/",
+			"WMDE\\Fundraising\\Frontend\\DonationContext\\": "contexts/DonationContext/src/",
+			"WMDE\\Fundraising\\Frontend\\MembershipContext\\": "contexts/MembershipContext/src/",
 			"WMDE\\Fundraising\\Frontend\\PaymentContext\\": "contexts/PaymentContext/src/",
 			"WMDE\\Fundraising\\Frontend\\SubscriptionContext\\": "contexts/SubscriptionContext/src/"
 		}
@@ -83,8 +83,8 @@
 	"autoload-dev": {
 		"psr-4": {
 			"WMDE\\Fundraising\\Frontend\\Tests\\": "tests/",
-			"WMDE\\Fundraising\\Frontend\\DonatingContext\\Tests\\": "contexts/DonatingContext/tests/",
-			"WMDE\\Fundraising\\Frontend\\MembershipApplicationContext\\Tests\\": "contexts/MembershipApplicationContext/tests/",
+			"WMDE\\Fundraising\\Frontend\\DonationContext\\Tests\\": "contexts/DonationContext/tests/",
+			"WMDE\\Fundraising\\Frontend\\MembershipContext\\Tests\\": "contexts/MembershipContext/tests/",
 			"WMDE\\Fundraising\\Frontend\\PaymentContext\\Tests\\": "contexts/PaymentContext/tests/",
 			"WMDE\\Fundraising\\Frontend\\SubscriptionContext\\Tests\\": "contexts/SubscriptionContext/tests/"
 		}

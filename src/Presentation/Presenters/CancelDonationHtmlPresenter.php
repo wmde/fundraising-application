@@ -2,7 +2,7 @@
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
-use WMDE\Fundraising\Frontend\DonatingContext\UseCases\CancelDonation\CancelDonationResponse;
+use WMDE\Fundraising\Frontend\DonationContext\UseCases\CancelDonation\CancelDonationResponse;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
 /**
