@@ -13,8 +13,6 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ApiPostRequestHandler;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Presentation\Presenters\DisplayPagePresenter
- *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
