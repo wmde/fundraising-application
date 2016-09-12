@@ -19,7 +19,6 @@ use WMDE\Fundraising\Frontend\App\RouteHandlers\ApplyForMembershipHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\PayPalNotificationHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\RouteRedirectionHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowDonationConfirmationHandler;
-use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\DisplayPage\PageDisplayRequest;
 use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\GetInTouch\GetInTouchRequest;
 use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\PurgeCache\PurgeCacheRequest;
 use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\PurgeCache\PurgeCacheResponse;
@@ -222,9 +221,11 @@ $app->get(
 $app->get(
 	'page/{pageName}',
 	function( Application $app, $pageName ) use ( $ffFactory ) {
-		return $ffFactory->newDisplayPagePresenter()->present(
-			$ffFactory->newDisplayPageUseCase()->getPage( new PageDisplayRequest( $pageName ) )
-		);
+		$templateExists = $ffFactory->getTemplateNameValidator()->validate( $pageName )->isSuccessful();
+
+		return $ffFactory->getLayoutTemplate( 'DisplayPageLayout.twig' )->render( [
+			'main_template' => $templateExists ? $pageName : '404message.html.twig',
+		] );
 	}
 )
 ->bind( 'page' );

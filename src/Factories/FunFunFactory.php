@@ -32,7 +32,6 @@ use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\AllOfTheCachePur
 use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\CachingPageRetriever;
 use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\Honorifics;
 use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\PageRetriever;
-use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\DisplayPage\DisplayPageUseCase;
 use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\GetInTouch\GetInTouchUseCase;
 use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\PurgeCache\PurgeCacheUseCase;
 use WMDE\Fundraising\Frontend\DonationContext\Authorization\DonationAuthorizer;
@@ -118,7 +117,6 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListRssPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\ConfirmSubscriptionHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CreditCardNotificationPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CreditCardPaymentHtmlPresenter;
-use WMDE\Fundraising\Frontend\Presentation\Presenters\DisplayPagePresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormViolationPresenter;
@@ -454,18 +452,8 @@ class FunFunFactory {
 		return $this->pimple['mail_validator'];
 	}
 
-	private function getTemplateNameValidator(): TemplateNameValidator {
+	public function getTemplateNameValidator(): TemplateNameValidator {
 		return $this->pimple['template_name_validator'];
-	}
-
-	public function newDisplayPageUseCase(): DisplayPageUseCase {
-		return new DisplayPageUseCase(
-			$this->getTemplateNameValidator()
-		);
-	}
-
-	public function newDisplayPagePresenter(): DisplayPagePresenter {
-		return new DisplayPagePresenter( $this->getLayoutTemplate( 'DisplayPageLayout.twig' ) );
 	}
 
 	public function newAddSubscriptionHTMLPresenter(): AddSubscriptionHtmlPresenter {
@@ -498,7 +486,7 @@ class FunFunFactory {
 	 * @param array $context Additional variables for the template
 	 * @return TwigTemplate
 	 */
-	private function getLayoutTemplate( string $templateName, array $context = [] ): TwigTemplate {
+	public function getLayoutTemplate( string $templateName, array $context = [] ): TwigTemplate {
 		 return new TwigTemplate(
 			$this->getTwig(),
 			$templateName,
