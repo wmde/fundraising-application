@@ -506,6 +506,7 @@ main { padding-top: 40px; padding-bottom: 100px; background: #f6f6f6; display: b
 #personal-data .approval { font-weight: bold; color: #000; }
 #personal-data .approval .icon-ok:before { color: #69c159; }
 #country { width: 350px; }
+#personal-data .anonymous-payment-select { margin-right: 4px; }
 
 #donation-payment label { width: 175px; }
 #donation-payment #card-number { width: 180px; }
