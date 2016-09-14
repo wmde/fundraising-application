@@ -105,6 +105,8 @@ When accessing the API via `web/index.dev.php`, profiling information will be ge
 
 ## Internal structure
 
+Note: this is currently out of date
+
 * `web/`: web accessible code
 	* `index.php`: production entry point
 * `app/`: contains configuration and all framework (Silex) dependent code
