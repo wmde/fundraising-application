@@ -5,7 +5,7 @@ spenden.wikimedia.de ansible_user=deploy
 
 [webservers:vars]
 # Base path where the code should be deployed. All following paths are relative to this. No slash at the end!
-app_dir = "/usr/share/nginx/www/test-spenden-2.wikimedia.de"
+app_dir = "/usr/share/nginx/www/spenden.wikimedia.de"
 
 # Prefix for release directories
 release_prefix = release-
@@ -37,3 +37,4 @@ build_branch = master
 composer_no_dev = yes
 
 # vi: ft=dosini
+
