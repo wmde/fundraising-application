@@ -19,6 +19,7 @@ use WMDE\Fundraising\Frontend\App\RouteHandlers\ApplyForMembershipHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\PayPalNotificationHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\RouteRedirectionHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowDonationConfirmationHandler;
+use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\CachePurgingException;
 use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\GetInTouch\GetInTouchRequest;
 use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\PurgeCache\PurgeCacheRequest;
 use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\PurgeCache\PurgeCacheResponse;
@@ -513,17 +514,20 @@ $app->get( '/spenden{page}', function( Application $app, Request $request ) {
 } )->assert( 'page', '/?([a-z]+\.php)?' );
 
 $app->get( '/purge-cache', function( Application $app, Request $request ) use ( $ffFactory ) {
-	$request = new PurgeCacheRequest( $request->query->get( 'secret', '' ) );
+	if ( $request->query->get( 'secret', '' ) !== $ffFactory->getCachePurgingSecret() ) {
+		return new Response( 'ACCESS DENIED' );
+	}
 
-	$response = $ffFactory->newPurgeCacheUseCase()->purgeCache( $request );
+	$purger = $ffFactory->newCachePurger();
 
-	return new Response(
-		[
-			PurgeCacheResponse::SUCCESS => 'SUCCESS',
-			PurgeCacheResponse::ERROR => 'ERROR',
-			PurgeCacheResponse::ACCESS_DENIED=> 'ACCESS DENIED'
-		][$response->getState()]
-	);
+	try {
+		$purger->purgeCache();
+	}
+	catch ( CachePurgingException $ex ) {
+		return new Response( 'ERROR' );
+	}
+
+	return new Response( 'SUCCESS' );
 } );
 
 return $app;
