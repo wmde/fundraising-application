@@ -356,7 +356,67 @@
       "description": "Secret parameter value for calling the \"Purge Cache\" page.",
       "default": ""
     },
-    "paypal": {
+    "paypal-donation": {
+      "type": "object",
+      "properties": {
+        "base-url": {
+          "type": "string",
+          "minLength": 1,
+          "title": "PayPal base URL",
+          "default": "https://www.paypal.com/cgi-bin/webscr?",
+          "format": "url"
+        },
+        "account-address": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Paypal account email address",
+          "description": "Email address associated with the PayPal account",
+          "default": "",
+          "format": "email"
+        },
+        "notify-url": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Payment notification URL",
+          "description": "Fundraising Application URL that gets called by PayPal for instant payment notifications (IPN)",
+          "default": "",
+          "format": "url"
+        },
+        "return-url": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Return URL",
+          "description": "Fundraising Application URL the user gets returned to when her payment was successful",
+          "default": "",
+          "format": "url"
+        },
+        "cancel-url": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Cancel URL",
+          "description": "Fundraising Application URL the user gets returned to when she cancels her payment on the PayPal page",
+          "default": "",
+          "format": "url"
+        },
+        "item-name": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Payment item name",
+          "description": "The \"item\" that shows up in the payment, i.e. what is paid for",
+          "default": ""
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "base-url",
+        "account-address",
+        "notify-url",
+        "return-url",
+        "cancel-url",
+        "item-name"
+      ]
+    },
+    "paypal-membership": {
       "type": "object",
       "properties": {
         "base-url": {
@@ -600,7 +660,8 @@
     "token-length",
     "token-validity-timestamp",
     "purging-secret",
-    "paypal",
+    "paypal-donation",
+    "paypal-membership",
     "creditcard",
     "confirmation-pages",
     "piwik"

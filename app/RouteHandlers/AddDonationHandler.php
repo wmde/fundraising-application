@@ -70,7 +70,7 @@ class AddDonationHandler {
 				break;
 			case PaymentType::PAYPAL:
 				$httpResponse = $this->app->redirect(
-					$this->ffFactory->newPayPalUrlGenerator()->generateUrl(
+					$this->ffFactory->newPayPalUrlGeneratorForDonations()->generateUrl(
 						$responseModel->getDonation()->getId(),
 						$responseModel->getDonation()->getAmount(),
 						$responseModel->getDonation()->getPaymentIntervalInMonths(),

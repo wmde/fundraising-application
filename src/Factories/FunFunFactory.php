@@ -855,12 +855,20 @@ class FunFunFactory {
 		);
 	}
 
-	public function newPayPalUrlGenerator() {
-		return new PayPalUrlGenerator( $this->getPayPalUrlConfig() );
+	public function newPayPalUrlGeneratorForDonations() {
+		return new PayPalUrlGenerator( $this->getPayPalUrlConfigForDonations() );
 	}
 
-	private function getPayPalUrlConfig() {
-		return PayPalUrlConfig::newFromConfig( $this->config['paypal'] );
+	public function newPayPalUrlGeneratorForMembershipApplications() {
+		return new PayPalUrlGenerator( $this->getPayPalUrlConfigForMembershipApplications() );
+	}
+
+	private function getPayPalUrlConfigForDonations() {
+		return PayPalUrlConfig::newFromConfig( $this->config['paypal-donation'] );
+	}
+
+	private function getPayPalUrlConfigForMembershipApplications() {
+		return PayPalUrlConfig::newFromConfig( $this->config['paypal-membership-application'] );
 	}
 
 	private function newCreditCardUrlGenerator() {

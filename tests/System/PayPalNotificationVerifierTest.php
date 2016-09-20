@@ -20,7 +20,7 @@ class PayPalNotificationVerifierTest extends \PHPUnit_Framework_TestCase {
 
 	public function setUp() {
 		$config = TestEnvironment::newInstance( [] )->getConfig();
-		$this->verifier = $this->newVerifier( $config['paypal'] );
+		$this->verifier = $this->newVerifier( $config['paypal-donation'] );
 	}
 
 	public function testWhenVerifyingInvalidRequest_externalServiceReturnsAnError() {
