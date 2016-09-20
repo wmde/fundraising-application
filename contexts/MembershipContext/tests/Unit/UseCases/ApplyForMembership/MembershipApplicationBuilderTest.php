@@ -12,7 +12,6 @@ use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\Appl
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\MembershipApplicationBuilder;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
 
 /**
@@ -59,7 +58,7 @@ class MembershipApplicationBuilderTest extends \PHPUnit_Framework_TestCase {
 		$request->setPaymentType( ValidMembershipApplication::PAYMENT_TYPE_DIRECT_DEBIT );
 		$request->setPaymentIntervalInMonths( ValidMembershipApplication::PAYMENT_PERIOD_IN_MONTHS );
 		$request->setPaymentAmountInEuros( (string)ValidMembershipApplication::PAYMENT_AMOUNT_IN_EURO );
-		$request->setPaymentBankData( $this->newValidBankData() );
+		$request->setBankData( $this->newValidBankData() );
 		$request->setApplicantPhoneNumber(
 			$omitOptionalFields ? '' : ValidMembershipApplication::APPLICANT_PHONE_NUMBER
 		);

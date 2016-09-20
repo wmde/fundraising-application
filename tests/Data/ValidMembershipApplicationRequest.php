@@ -53,7 +53,7 @@ class ValidMembershipApplicationRequest {
 		$request->setTrackingInfo( $this->newTrackingInfo() );
 		$request->setPiwikTrackingString( 'foo/bar' );
 
-		$request->setPaymentBankData( $this->newValidBankData() );
+		$request->setBankData( $this->newValidBankData() );
 
 		return $request->assertNoNullFields();
 	}

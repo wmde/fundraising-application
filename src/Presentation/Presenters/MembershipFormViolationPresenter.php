@@ -41,11 +41,11 @@ class MembershipFormViolationPresenter {
 			'city' => $request->getApplicantCity(),
 			'country' => $request->getApplicantCountryCode(),
 			'email' => $request->getApplicantEmailAddress(),
-			'iban' => $request->getPaymentBankData()->getIban()->toString(),
-			'bic' => $request->getPaymentBankData()->getBic(),
-			'accountNumber' => $request->getPaymentBankData()->getAccount(),
-			'bankCode' => $request->getPaymentBankData()->getBankCode(),
-			'bankname' => $request->getPaymentBankData()->getBankName()
+			'iban' => $request->getBankData()->getIban()->toString(),
+			'bic' => $request->getBankData()->getBic(),
+			'accountNumber' => $request->getBankData()->getAccount(),
+			'bankCode' => $request->getBankData()->getBankCode(),
+			'bankname' => $request->getBankData()->getBankName()
 		];
 	}
 

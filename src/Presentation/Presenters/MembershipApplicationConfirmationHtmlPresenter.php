@@ -35,7 +35,7 @@ class MembershipApplicationConfirmationHtmlPresenter {
 		return [
 			'membershipApplication' => $this->getApplicationArguments( $membershipApplication, $updateToken ),
 			'person' => $this->getPersonArguments( $membershipApplication->getApplicant() ),
-			'bankData' => $this->getBankDataArguments( $membershipApplication->getPayment()->getBankData() )
+			'bankData' => $this->getBankDataArguments( $membershipApplication->getPaymentMethod()->getBankData() )
 		];
 	}
 

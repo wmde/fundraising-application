@@ -116,7 +116,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 		$this->bankDataValidator = $this->newRealBankDataValidator();
 
 		$request = $this->newValidRequest();
-		$request->getPaymentBankData()->setIban( new Iban( '' ) );
+		$request->getBankData()->setIban( new Iban( '' ) );
 
 		$this->assertRequestValidationResultInErrors(
 			$request,
@@ -149,7 +149,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 		$this->bankDataValidator = $this->newRealBankDataValidator();
 
 		$request = $this->newValidRequest();
-		$request->getPaymentBankData()->setBic( '' );
+		$request->getBankData()->setBic( '' );
 
 		$this->assertRequestValidationResultInErrors(
 			$request,
@@ -161,7 +161,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 		$this->bankDataValidator = $this->newRealBankDataValidator();
 
 		$request = $this->newValidRequest();
-		$request->getPaymentBankData()->setBankName( '' );
+		$request->getBankData()->setBankName( '' );
 
 		$this->assertRequestValidationResultInErrors(
 			$request,
@@ -173,7 +173,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 		$this->bankDataValidator = $this->newRealBankDataValidator();
 
 		$request = $this->newValidRequest();
-		$request->getPaymentBankData()->setBankCode( '' );
+		$request->getBankData()->setBankCode( '' );
 
 		$this->assertRequestValidationResultInErrors(
 			$request,
@@ -185,7 +185,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 		$this->bankDataValidator = $this->newRealBankDataValidator();
 
 		$request = $this->newValidRequest();
-		$request->getPaymentBankData()->setAccount( '' );
+		$request->getBankData()->setAccount( '' );
 
 		$this->assertRequestValidationResultInErrors(
 			$request,
@@ -197,7 +197,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 		$this->bankDataValidator = $this->newRealBankDataValidator();
 
 		$request = $this->newValidRequest();
-		$request->getPaymentBankData()->setAccount( '01189998819991197253' );
+		$request->getBankData()->setAccount( '01189998819991197253' );
 
 		$this->assertRequestValidationResultInErrors(
 			$request,
@@ -209,7 +209,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 		$this->bankDataValidator = $this->newRealBankDataValidator();
 
 		$request = $this->newValidRequest();
-		$request->getPaymentBankData()->setBankCode( '01189998819991197253' );
+		$request->getBankData()->setBankCode( '01189998819991197253' );
 
 		$this->assertRequestValidationResultInErrors(
 			$request,
@@ -424,7 +424,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 	public function testBankDataWithLongFields_validationFails() {
 		$longText = str_repeat( 'Cats ', 500 );
 		$request = $this->newValidRequest();
-		$bankData = $request->getPaymentBankData();
+		$bankData = $request->getBankData();
 		$bankData->setBic( $longText );
 		$bankData->setBankName( $longText );
 		// Other length violations will be caught by IBAN validation

@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembershi
 use WMDE\Fundraising\Frontend\FreezableValueObject;
 use WMDE\Fundraising\Frontend\MembershipContext\Tracking\MembershipApplicationTrackingInfo;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
 
 /**
  * @license GNU GPL v2+
@@ -36,7 +37,7 @@ class ApplyForMembershipRequest {
 	private $paymentType;
 	private $paymentIntervalInMonths;
 	private $paymentAmount;
-	private $paymentBankData;
+	private $bankData;
 
 	private $trackingInfo;
 	private $piwikTrackingString;
@@ -187,13 +188,16 @@ class ApplyForMembershipRequest {
 		$this->paymentAmount = $paymentAmount;
 	}
 
-	public function getPaymentBankData(): BankData {
-		return $this->paymentBankData;
+	/**
+	 * @return BankData|null
+	 */
+	public function getBankData() {
+		return $this->bankData;
 	}
 
-	public function setPaymentBankData( BankData $paymentBankData ) {
+	public function setBankData( BankData $bankData ) {
 		$this->assertIsWritable();
-		$this->paymentBankData = $paymentBankData;
+		$this->bankData = $bankData;
 	}
 
 	public function getTrackingInfo(): MembershipApplicationTrackingInfo {
@@ -214,7 +218,11 @@ class ApplyForMembershipRequest {
 		$this->piwikTrackingString = $piwikTrackingString;
 	}
 
-	public function setPaymentType( $paymentType ) {
+	public function getPaymentType(): string {
+		return $this->paymentType;
+	}
+
+	public function setPaymentType( string $paymentType ) {
 		$this->assertIsWritable();
 		$this->paymentType = $paymentType;
 	}

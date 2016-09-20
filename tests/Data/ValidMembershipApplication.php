@@ -14,6 +14,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Payment;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\PhoneNumber;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 
 /**
@@ -116,8 +117,12 @@ class ValidMembershipApplication {
 		return new Payment(
 			self::PAYMENT_PERIOD_IN_MONTHS,
 			Euro::newFromFloat( self::PAYMENT_AMOUNT_IN_EURO ),
-			$this->newBankData()
+			$this->newDirectDebitPayment( $this->newBankData() )
 		);
+	}
+
+	private function newDirectDebitPayment( BankData $bankData ) {
+		return new DirectDebitPayment( $bankData );
 	}
 
 	private function newBankData(): BankData {
@@ -158,6 +163,7 @@ class ValidMembershipApplication {
 		$application->setApplicantDateOfBirth( new \DateTime( self::APPLICANT_DATE_OF_BIRTH ) );
 
 		$application->setMembershipType( self::MEMBERSHIP_TYPE );
+		$application->setPaymentType( self::PAYMENT_TYPE_DIRECT_DEBIT );
 		$application->setPaymentIntervalInMonths( self::PAYMENT_PERIOD_IN_MONTHS );
 		$application->setPaymentAmount( self::PAYMENT_AMOUNT_IN_EURO );
 

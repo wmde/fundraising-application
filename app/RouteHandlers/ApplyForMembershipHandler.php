@@ -108,7 +108,7 @@ class ApplyForMembershipHandler {
 		$bankData->setBankCode( $httpRequest->request->get( 'bank_code', '' ) );
 
 		$bankData->assertNoNullFields()->freeze();
-		$request->setPaymentBankData( $bankData );
+		$request->setBankData( $bankData );
 		$request->assertNoNullFields()->freeze();
 
 		return $request;

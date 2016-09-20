@@ -12,6 +12,11 @@ use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Payment;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\PhoneNumber;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalData;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
 
 /**
  * @license GNU GPL v2+
@@ -75,8 +80,18 @@ class MembershipApplicationBuilder {
 		return new Payment(
 			$request->getPaymentIntervalInMonths(),
 			Euro::newFromString( $request->getPaymentAmountInEuros() ),
-			$request->getPaymentBankData()
+			$this->newPaymentMethod( $request )
 		);
+	}
+
+	private function newPaymentMethod( ApplyForMembershipRequest $request ): PaymentMethod {
+		if ( $request->getPaymentType() === PaymentType::DIRECT_DEBIT ) {
+			return new DirectDebitPayment( $request->getBankData() );
+		}
+
+		if ( $request->getPaymentType() === PaymentType::PAYPAL ) {
+			return new PayPalPayment( new PayPalData() );
+		}
 	}
 
 }

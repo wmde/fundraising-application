@@ -132,7 +132,7 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$request->setPaymentIntervalInMonths( ValidMembershipApplication::PAYMENT_PERIOD_IN_MONTHS );
 		$request->setPaymentAmountInEuros( (string)ValidMembershipApplication::PAYMENT_AMOUNT_IN_EURO );
 
-		$request->setPaymentBankData( $this->newValidBankData() );
+		$request->setBankData( $this->newValidBankData() );
 
 		$request->setTrackingInfo( $this->newTrackingInfo() );
 		$request->setPiwikTrackingString( 'foo/bar' );

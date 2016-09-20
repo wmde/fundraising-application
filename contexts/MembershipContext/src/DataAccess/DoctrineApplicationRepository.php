@@ -19,8 +19,12 @@ use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationR
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\GetMembershipApplicationException;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\StoreMembershipApplicationException;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\Store\MembershipApplicationData;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
 
 /**
  * @license GNU GPL v2+
@@ -111,9 +115,15 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 	private function setPaymentFields( DoctrineApplication $application, Payment $payment ) {
 		$application->setPaymentIntervalInMonths( $payment->getIntervalInMonths() );
 		$application->setPaymentAmount( (int)$payment->getAmount()->getEuroFloat() );
+		$paymentMethod = $payment->getPaymentMethod();
 
-		$bankData = $payment->getBankData();
+		$application->setPaymentType( $paymentMethod->getType() );
+		if ( $paymentMethod instanceof DirectDebitPayment ) {
+			$this->setBankDataFields( $application, $paymentMethod->getBankData() );
+		}
+	}
 
+	private function setBankDataFields( DoctrineApplication $application, BankData $bankData ) {
 		$application->setPaymentBankAccount( $bankData->getAccount() );
 		$application->setPaymentBankCode( $bankData->getBankCode() );
 		$application->setPaymentBankName( $bankData->getBankName() );
@@ -191,7 +201,7 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 			new Payment(
 				$application->getPaymentIntervalInMonths(),
 				Euro::newFromFloat( $application->getPaymentAmount() ),
-				$this->newBankData( $application )
+				$this->newPaymentMethod( $application )
 			),
 			$application->needsModeration(),
 			$application->isCancelled()
@@ -218,6 +228,16 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 		$address->setStreetAddress( $application->getAddress() );
 
 		return $address->freeze()->assertNoNullFields();
+	}
+
+	private function newPaymentMethod( DoctrineApplication $application ): PaymentMethod {
+		if ( $application->getPaymentType() === PaymentType::DIRECT_DEBIT ) {
+			return new DirectDebitPayment( $this->newBankData( $application ) );
+		}
+
+		if ( $application->getPaymentType() === PaymentType::PAYPAL ) {
+			return new PayPalPayment();
+		}
 	}
 
 	private function newBankData( DoctrineApplication $application ): BankData {

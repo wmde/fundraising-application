@@ -87,7 +87,7 @@ class MembershipApplicationValidator {
 	}
 
 	private function validateBankData() {
-		$bankData = $this->request->getPaymentBankData();
+		$bankData = $this->request->getBankData();
 		$validationResult = $this->bankDataValidator->validate( $bankData );
 		$violations = [];
 
