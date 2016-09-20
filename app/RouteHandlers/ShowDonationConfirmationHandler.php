@@ -27,7 +27,7 @@ class ShowDonationConfirmationHandler {
 		$useCase = $this->ffFactory->newShowDonationConfirmationUseCase( $request->get( 'accessToken', '' ) );
 
 		$responseModel = $useCase->showConfirmation( new ShowDonationConfirmationRequest(
-			(int)$request->get( 'donationId', '' )
+			(int)$request->get( 'id', '' )
 		) );
 
 		if ( $responseModel->accessIsPermitted() ) {

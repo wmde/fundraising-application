@@ -132,7 +132,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 			'GET',
 			'show-donation-confirmation',
 			[
-				'donationId' => $donationId,
+				'id' => $donationId,
 				'accessToken' => self::CORRECT_ACCESS_TOKEN
 			]
 		);

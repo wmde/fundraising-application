@@ -49,7 +49,7 @@ class PayPalUrlGeneratorTest extends \PHPUnit_Framework_TestCase {
 		$this->assertContains( 'notify_url=http%3A%2F%2Fmy.donation.app%2Fhandler%2Fpaypal%2F', $generatedUrl );
 		$this->assertContains( 'cancel_return=http%3A%2F%2Fmy.donation.app%2Fdonation%2Fcancel%2F', $generatedUrl );
 		$this->assertContains(
-			'return=http%3A%2F%2Fmy.donation.app%2Fdonation%2Fconfirm%2F%3FdonationId%3D1234%26accessToken%3Datoken',
+			'return=http%3A%2F%2Fmy.donation.app%2Fdonation%2Fconfirm%2F%3Fid%3D1234%26accessToken%3Datoken',
 			$generatedUrl
 		);
 		$this->assertContains( 'custom=%7B%22sid%22%3A1234%2C%22utoken%22%3A%22utoken%22%7D', $generatedUrl );
@@ -75,7 +75,7 @@ class PayPalUrlGeneratorTest extends \PHPUnit_Framework_TestCase {
 		$this->assertContains( 'notify_url=http%3A%2F%2Fmy.donation.app%2Fhandler%2Fpaypal%2F', $generatedUrl );
 		$this->assertContains( 'cancel_return=http%3A%2F%2Fmy.donation.app%2Fdonation%2Fcancel%2F', $generatedUrl );
 		$this->assertContains(
-			'return=http%3A%2F%2Fmy.donation.app%2Fdonation%2Fconfirm%2F%3FdonationId%3D1234%26accessToken%3Datoken',
+			'return=http%3A%2F%2Fmy.donation.app%2Fdonation%2Fconfirm%2F%3Fid%3D1234%26accessToken%3Datoken',
 			$generatedUrl
 		);
 		$this->assertContains( 'custom=%7B%22sid%22%3A1234%2C%22utoken%22%3A%22utoken%22%7D', $generatedUrl );

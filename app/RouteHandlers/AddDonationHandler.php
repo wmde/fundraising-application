@@ -60,7 +60,7 @@ class AddDonationHandler {
 					$this->app['url_generator']->generate(
 						'show-donation-confirmation',
 						[
-							'donationId' => $responseModel->getDonation()->getId(),
+							'id' => $responseModel->getDonation()->getId(),
 							'accessToken' => $responseModel->getAccessToken()
 						]
 					),
