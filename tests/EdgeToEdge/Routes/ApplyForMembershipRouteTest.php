@@ -56,6 +56,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			'phone' => ValidMembershipApplication::APPLICANT_PHONE_NUMBER,
 			'dob' => ValidMembershipApplication::APPLICANT_DATE_OF_BIRTH,
 
+			'payment_type' => (string)ValidMembershipApplication::PAYMENT_TYPE_DIRECT_DEBIT,
 			'membership_fee_interval' => (string)ValidMembershipApplication::PAYMENT_PERIOD_IN_MONTHS,
 			'membership_fee' => (string)ValidMembershipApplication::PAYMENT_AMOUNT_IN_EURO, // TODO: change to localized
 

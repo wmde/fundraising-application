@@ -33,6 +33,7 @@ class ApplyForMembershipRequest {
 	private $applicantPhoneNumber;
 	private $applicantDateOfBirth;
 
+	private $paymentType;
 	private $paymentIntervalInMonths;
 	private $paymentAmount;
 	private $paymentBankData;
@@ -211,6 +212,11 @@ class ApplyForMembershipRequest {
 	public function setPiwikTrackingString( string $piwikTrackingString ) {
 		$this->assertIsWritable();
 		$this->piwikTrackingString = $piwikTrackingString;
+	}
+
+	public function setPaymentType( $paymentType ) {
+		$this->assertIsWritable();
+		$this->paymentType = $paymentType;
 	}
 
 }

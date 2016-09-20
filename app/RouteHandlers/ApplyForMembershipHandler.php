@@ -87,6 +87,7 @@ class ApplyForMembershipHandler {
 		$request->setApplicantPhoneNumber( $httpRequest->request->get( 'phone', '' ) );
 		$request->setApplicantDateOfBirth( $httpRequest->request->get( 'dob', '' ) );
 
+		$request->setPaymentType( $httpRequest->request->get( 'payment_type', '' ) );
 		$request->setPaymentIntervalInMonths( (int)$httpRequest->request->get( 'membership_fee_interval', 0 ) );
 		// TODO: German format expected here, amount should be converted based on user's locale
 		$request->setPaymentAmountInEuros( str_replace( ',', '.', $httpRequest->request->get( 'membership_fee', '' ) ) );
