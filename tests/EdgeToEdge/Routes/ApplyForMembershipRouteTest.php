@@ -256,4 +256,54 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		return $application;
 	}
 
+	public function testGivenValidRequestUsingPayPal_applicationIsPersisted() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setNullMessenger();
+
+			$client->request(
+				'POST',
+				'apply-for-membership',
+				$this->newValidHttpParametersUsingPayPal()
+			);
+
+			$application = $factory->getMembershipApplicationRepository()->getApplicationById( 1 );
+
+			$this->assertNotNull( $application );
+
+			$expectedApplication = ValidMembershipApplication::newDomainEntityUsingPayPal();
+			$expectedApplication->assignId( 1 );
+
+			$this->assertEquals( $expectedApplication, $application );
+		} );
+	}
+
+	private function newValidHttpParametersUsingPayPal(): array {
+		return [
+			'membership_type' => ValidMembershipApplication::MEMBERSHIP_TYPE,
+
+			'adresstyp' => 'person',
+			'anrede' => ValidMembershipApplication::APPLICANT_SALUTATION,
+			'titel' => ValidMembershipApplication::APPLICANT_TITLE,
+			'vorname' => ValidMembershipApplication::APPLICANT_FIRST_NAME,
+			'nachname' => ValidMembershipApplication::APPLICANT_LAST_NAME,
+			'firma' => '',
+
+			'strasse' => ValidMembershipApplication::APPLICANT_STREET_ADDRESS,
+			'postcode' => ValidMembershipApplication::APPLICANT_POSTAL_CODE,
+			'ort' => ValidMembershipApplication::APPLICANT_CITY,
+			'country' => ValidMembershipApplication::APPLICANT_COUNTRY_CODE,
+
+			'email' => ValidMembershipApplication::APPLICANT_EMAIL_ADDRESS,
+			'phone' => ValidMembershipApplication::APPLICANT_PHONE_NUMBER,
+			'dob' => ValidMembershipApplication::APPLICANT_DATE_OF_BIRTH,
+
+			'payment_type' => (string)ValidMembershipApplication::PAYMENT_TYPE_PAYPAL,
+			'membership_fee_interval' => (string)ValidMembershipApplication::PAYMENT_PERIOD_IN_MONTHS,
+			'membership_fee' => (string)ValidMembershipApplication::PAYMENT_AMOUNT_IN_EURO, // TODO: change to localized
+
+			'templateCampaign' => ValidMembershipApplication::TEMPLATE_CAMPAIGN,
+			'templateName' => ValidMembershipApplication::TEMPLATE_NAME,
+		];
+	}
+
 }

@@ -7,7 +7,9 @@ namespace WMDE\Fundraising\Frontend\MembershipContext\Tests\Unit\UseCases\ApplyF
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplicationValidationResult as Result;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipRequest;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\MembershipApplicationValidator;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
+use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplicationRequest;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingEmailValidator;
 use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
@@ -436,6 +438,22 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 				Result::SOURCE_BIC => Result::VIOLATION_WRONG_LENGTH
 			]
 		);
+	}
+
+	public function testGivenValidRequestUsingPayPal_validationSucceeds() {
+		$validRequest = $this->newValidRequestUsingPayPal();
+		$response = $this->newValidator()->validate( $validRequest );
+
+		$this->assertEquals( new Result(), $response );
+		$this->assertEmpty( $response->getViolationSources() );
+		$this->assertTrue( $response->isSuccessful() );
+	}
+
+	private function newValidRequestUsingPayPal(): ApplyForMembershipRequest {
+		$request = ValidMembershipApplicationRequest::newValidRequest();
+		$request->setPaymentType( ValidMembershipApplication::PAYMENT_TYPE_PAYPAL );
+		$request->setBankData( new BankData() );
+		return $request;
 	}
 
 }
