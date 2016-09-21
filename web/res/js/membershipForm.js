@@ -131,6 +131,14 @@ $( function () {
 				stateKey: 'membershipInputValidation'
 			},
 			{
+				viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '#finishFormSubmit' ), /^PPL$|^$/ ),
+				stateKey: 'membershipFormContent.paymentType'
+			},
+			{
+				viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '#continueFormSubmit' ), 'BEZ' ),
+				stateKey: 'membershipFormContent.paymentType'
+			},
+			{
 				viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.fields-direct-debit' ), 'BEZ' ),
 				stateKey: 'membershipFormContent.paymentType'
 			},
@@ -275,7 +283,7 @@ $( function () {
 	}
 
 	function bankDataIsValid() {
-		return store.getState().validity.bankData;
+		return store.getState().membershipFormContent.paymentType !== 'BEZ' || store.getState().validity.bankData;
 	}
 
 	function formDataIsValid() {
@@ -338,13 +346,22 @@ $( function () {
 		}
 	} );
 
+	$( '#finishFormSubmit' ).click( function () {
+		if ( formDataIsValid() ) {
+			$( '#memForm' ).submit();
+		} else {
+			triggerValidityCheckForPersonalDataPage();
+			displayErrorBox();
+		}
+	} );
+
 	$( '.back-button' ).click( function () {
 		// TODO check if page is valid
 		store.dispatch( actions.newResetFieldValidityAction( [ 'confirmSepa' ] ) );
 		store.dispatch( actions.newPreviousPageAction() );
 	} );
 
-	$( '#finishFormSubmit' ).click( function () {
+	$( '#finishFormSubmit2' ).click( function () {
 		if ( store.getState().validity.sepaConfirmation ) {
 			$( '#memForm' ).submit();
 		} else {
