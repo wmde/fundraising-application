@@ -6,6 +6,8 @@ use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Applicant;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowMembershipApplicationConfirmation\ShowMembershipAppConfirmationResponse;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
 /**
@@ -35,7 +37,7 @@ class MembershipApplicationConfirmationHtmlPresenter {
 		return [
 			'membershipApplication' => $this->getApplicationArguments( $membershipApplication, $updateToken ),
 			'person' => $this->getPersonArguments( $membershipApplication->getApplicant() ),
-			'bankData' => $this->getBankDataArguments( $membershipApplication->getPaymentMethod()->getBankData() )
+			'bankData' => $this->getBankDataArguments( $membershipApplication->getPayment()->getPaymentMethod() )
 		];
 	}
 
@@ -60,12 +62,16 @@ class MembershipApplicationConfirmationHtmlPresenter {
 		];
 	}
 
-	private function getBankDataArguments( BankData $bankData ): array {
-		return [
-			'iban' => $bankData->getIban()->toString(),
-			'bic' => $bankData->getBic(),
-			'bankName' => $bankData->getBankName(),
-		];
+	private function getBankDataArguments( PaymentMethod $payment ): array {
+		if ( $payment instanceof DirectDebitPayment ) {
+			return [
+				'iban' => $payment->getBankData()->getIban()->toString(),
+				'bic' => $payment->getBankData()->getBic(),
+				'bankName' => $payment->getBankData()->getBankName(),
+			];
+		}
+
+		return [];
 	}
 
 }
