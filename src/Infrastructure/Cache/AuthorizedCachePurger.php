@@ -4,9 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Infrastructure\Cache;
 
-use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\CachePurger;
-use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\CachePurgingException;
-
 /**
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >

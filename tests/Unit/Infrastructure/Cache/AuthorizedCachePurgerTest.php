@@ -4,8 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Cache;
 
-use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\CachePurger;
-use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\CachePurgingException;
+use WMDE\Fundraising\Frontend\Infrastructure\Cache\CachePurger;
+use WMDE\Fundraising\Frontend\Infrastructure\Cache\CachePurgingException;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 
 /**

@@ -28,7 +28,7 @@ use TNvpServiceDispatcher;
 use Twig_Environment;
 use Twig_Extensions_Extension_Intl;
 use WMDE\Fundraising\Frontend\ApplicationContext\DataAccess\ApiBasedPageRetriever;
-use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\AllOfTheCachePurger;
+use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
 use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\CachingPageRetriever;
 use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\Honorifics;
 use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\PageRetriever;

@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure;
+namespace WMDE\Fundraising\Frontend\Infrastructure\Cache;
 
 /**
  * @license GNU GPL v2+
