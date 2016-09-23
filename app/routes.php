@@ -220,7 +220,7 @@ $app->get(
 
 $app->get(
 	'page/{pageName}',
-	function( Application $app, $pageName ) use ( $ffFactory ) {
+	function( $pageName ) use ( $ffFactory ) {
 		$templateExists = $ffFactory->getTemplateNameValidator()->validate( $pageName )->isSuccessful();
 
 		return $ffFactory->getLayoutTemplate( 'DisplayPageLayout.twig' )->render( [
@@ -380,7 +380,7 @@ $app->post(
 );
 
 // Show a donation form with pre-filled payment values, e.g. when coming from a banner
-$app->get( 'donation/new', function ( Application $app, Request $request ) use ( $ffFactory ) {
+$app->get( 'donation/new', function ( Request $request ) use ( $ffFactory ) {
 	$amount = Euro::newFromFloat( ( new AmountParser( 'de_DE' ) )->parseAsFloat( $request->get( 'betrag', '' ) ) );
 
 	return new Response( $ffFactory->newDonationFormPresenter()->present(
@@ -399,7 +399,7 @@ $app->post(
 
 $app->get(
 	'show-membership-confirmation',
-	function( Application $app, Request $request ) use ( $ffFactory ) {
+	function( Request $request ) use ( $ffFactory ) {
 		$confirmationRequest = new ShowMembershipAppConfirmationRequest( (int)$request->query->get( 'id', 0 ) );
 
 		return $ffFactory->newMembershipApplicationConfirmationHtmlPresenter()->present(
@@ -411,7 +411,7 @@ $app->get(
 
 $app->get(
 	'cancel-membership-application',
-	function( Application $app, Request $request ) use ( $ffFactory ) {
+	function( Request $request ) use ( $ffFactory ) {
 		$cancellationRequest = new CancellationRequest(
 			(int)$request->query->get( 'id', '' )
 		);
@@ -435,14 +435,14 @@ $app->match(
 
 $app->post(
 	'handle-paypal-payment-notification',
-	function ( Application $app, Request $request ) use ( $ffFactory ) {
+	function ( Request $request ) use ( $ffFactory ) {
 		return ( new PayPalNotificationHandler( $ffFactory ) )->handle( $request );
 	}
 );
 
 $app->get(
 	'handle-creditcard-payment-notification',
-	function ( Application $app, Request $request ) use ( $ffFactory ) {
+	function ( Request $request ) use ( $ffFactory ) {
 		try {
 			$ffFactory->newCreditCardNotificationUseCase( $request->query->get( 'utoken', '' ) )
 				->handleNotification(
@@ -512,7 +512,7 @@ $app->get( '/spenden{page}', function( Application $app, Request $request ) {
 	return ( new RouteRedirectionHandler( $app, $request->getQueryString() ) )->handle( '/' );
 } )->assert( 'page', '/?([a-z]+\.php)?' );
 
-$app->get( '/purge-cache', function( Application $app, Request $request ) use ( $ffFactory ) {
+$app->get( '/purge-cache', function( Request $request ) use ( $ffFactory ) {
 	$request = new PurgeCacheRequest( $request->query->get( 'secret', '' ) );
 
 	$response = $ffFactory->newPurgeCacheUseCase()->purgeCache( $request );
