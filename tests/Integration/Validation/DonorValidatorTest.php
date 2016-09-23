@@ -6,7 +6,6 @@ use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonorAddress;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonorName;
 use WMDE\Fundraising\Frontend\DonationContext\Validation\DonorAddressValidator;
-use WMDE\Fundraising\Frontend\DonationContext\Validation\DonorValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
 use WMDE\Fundraising\Frontend\Validation\EmailValidator;
