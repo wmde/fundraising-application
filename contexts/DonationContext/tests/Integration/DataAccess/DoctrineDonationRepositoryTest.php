@@ -48,7 +48,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$this->assertDoctrineEntityIsInDatabase( $expectedDoctrineEntity );
 	}
 
-	private function newRepository(): \WMDE\Fundraising\Frontend\DonationContext\DataAccess\DoctrineDonationRepository {
+	private function newRepository(): DoctrineDonationRepository {
 		return new DoctrineDonationRepository( $this->entityManager );
 	}
 

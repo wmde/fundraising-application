@@ -95,13 +95,13 @@ class ConfigReaderTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testWhenInstanceFileIsEmpty_distConfigIsReturned() {
-		$reader = new \WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\ConfigReader( new SimpleFileFetcher(), $this->distPath, $this->emptyPath );
+		$reader = new ConfigReader( new SimpleFileFetcher(), $this->distPath, $this->emptyPath );
 
 		$this->assertEquals( $this->getDistConfig(), $reader->getConfig() );
 	}
 
 	public function testWhenDistFileDoesNotExist_exceptionIsThrown() {
-		$reader = new \WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\ConfigReader( new SimpleFileFetcher(), $this->distPath . 'foo', $this->emptyPath );
+		$reader = new ConfigReader( new SimpleFileFetcher(), $this->distPath . 'foo', $this->emptyPath );
 
 		$this->expectException( RuntimeException::class );
 		$this->expectExceptionMessageRegExp( '/Cannot read config file at path.*/' );
@@ -119,7 +119,7 @@ class ConfigReaderTest extends \PHPUnit_Framework_TestCase {
 	public function testWhenConfigIsNotJson_exceptionIsThrown() {
 		$notJsonPath = vfsStream::newFile( 'not.json' )->at( $this->dir )->withContent( 'kittens' )->url();
 
-		$reader = new \WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\ConfigReader( new SimpleFileFetcher(), $notJsonPath );
+		$reader = new ConfigReader( new SimpleFileFetcher(), $notJsonPath );
 
 		$this->expectException( RuntimeException::class );
 		$this->expectExceptionMessageRegExp( '/No valid config data found in config file at path.*/' );

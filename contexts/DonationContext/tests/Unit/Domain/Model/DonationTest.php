@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\DonationContext\Domain\Model;
 
 use RuntimeException;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalData;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 
 /**
@@ -112,7 +113,7 @@ class DonationTest extends \PHPUnit_Framework_TestCase {
 		$donation = ValidDonation::newDirectDebitDonation();
 
 		$this->expectException( RuntimeException::class );
-		$donation->addPayPalData( new \WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalData() );
+		$donation->addPayPalData( new PayPalData() );
 	}
 
 	/**

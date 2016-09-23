@@ -58,7 +58,7 @@ class CachingPageRetrieverTest extends \PHPUnit_Framework_TestCase {
 	public function testWhenPageNotInCache_itGetsPutIntoTheCache() {
 		$cache = $this->newCacheWithNoMatchingPages();
 
-		$cachingRetriever = new \WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\CachingPageRetriever(
+		$cachingRetriever = new CachingPageRetriever(
 			$this->newLivePageRetriever(),
 			$cache
 		);

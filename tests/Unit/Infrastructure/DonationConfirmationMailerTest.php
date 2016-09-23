@@ -24,7 +24,7 @@ class DonationConfirmationMailerTest extends \PHPUnit_Framework_TestCase {
 	public function testMailerExtractsEmailFromDonation() {
 		$mailer = new TemplateBasedMailerSpy( $this );
 
-		$donationMailer = new \WMDE\Fundraising\Frontend\DonationContext\Infrastructure\DonationConfirmationMailer( $mailer );
+		$donationMailer = new DonationConfirmationMailer( $mailer );
 		$donationMailer->sendConfirmationMailFor( $this->newDonation() );
 
 		$mailer->assertCalledOnce();
