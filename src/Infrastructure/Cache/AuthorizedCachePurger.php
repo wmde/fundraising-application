@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\ApplicationContext\UseCases\PurgeCache;
+namespace WMDE\Fundraising\Frontend\Infrastructure\Cache;
 
 use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\CachePurger;
 use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\CachePurgingException;
@@ -11,7 +11,11 @@ use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\CachePurgingExce
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class PurgeCacheUseCase {
+class AuthorizedCachePurger {
+
+	const RESULT_SUCCESS = 0;
+	const RESULT_ERROR = 1;
+	const RESULT_ACCESS_DENIED = 2;
 
 	private $expectedSecret;
 	private $cachePurger;
@@ -21,23 +25,23 @@ class PurgeCacheUseCase {
 		$this->cachePurger = $cachePurger;
 	}
 
-	public function purgeCache( PurgeCacheRequest $request ): PurgeCacheResponse {
-		if ( !$this->purgeIsAllowed( $request ) ) {
-			return new PurgeCacheResponse( PurgeCacheResponse::ACCESS_DENIED );
+	public function purgeCache( string $authorizationSecret ): int {
+		if ( !$this->purgeIsAllowed( $authorizationSecret ) ) {
+			return self::RESULT_ACCESS_DENIED;
 		}
 
 		try {
 			$this->cachePurger->purgeCache();
 		}
 		catch ( CachePurgingException $ex ) {
-			return new PurgeCacheResponse( PurgeCacheResponse::ERROR );
+			return self::RESULT_ERROR;
 		}
 
-		return new PurgeCacheResponse( PurgeCacheResponse::SUCCESS );
+		return self::RESULT_SUCCESS;
 	}
 
-	private function purgeIsAllowed( PurgeCacheRequest $request ): bool {
-		return $this->expectedSecret === $request->getSecret();
+	private function purgeIsAllowed( string $secret ): bool {
+		return $this->expectedSecret === $secret;
 	}
 
 }

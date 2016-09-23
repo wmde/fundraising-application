@@ -20,8 +20,6 @@ use WMDE\Fundraising\Frontend\App\RouteHandlers\PayPalNotificationHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\RouteRedirectionHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowDonationConfirmationHandler;
 use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\GetInTouch\GetInTouchRequest;
-use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\PurgeCache\PurgeCacheRequest;
-use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\PurgeCache\PurgeCacheResponse;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonorAddress;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonorName;
@@ -33,6 +31,7 @@ use WMDE\Fundraising\Frontend\DonationContext\UseCases\CreditCardPaymentNotifica
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\ListComments\CommentListingRequest;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\AmountParser;
+use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\CancelMembershipApplication\CancellationRequest;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowMembershipApplicationConfirmation\ShowMembershipAppConfirmationRequest;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
@@ -513,16 +512,14 @@ $app->get( '/spenden{page}', function( Application $app, Request $request ) {
 } )->assert( 'page', '/?([a-z]+\.php)?' );
 
 $app->get( '/purge-cache', function( Request $request ) use ( $ffFactory ) {
-	$request = new PurgeCacheRequest( $request->query->get( 'secret', '' ) );
-
-	$response = $ffFactory->newPurgeCacheUseCase()->purgeCache( $request );
+	$response = $ffFactory->newAuthorizedCachePurger()->purgeCache( $request->query->get( 'secret', '' ) );
 
 	return new Response(
 		[
-			PurgeCacheResponse::SUCCESS => 'SUCCESS',
-			PurgeCacheResponse::ERROR => 'ERROR',
-			PurgeCacheResponse::ACCESS_DENIED=> 'ACCESS DENIED'
-		][$response->getState()]
+			AuthorizedCachePurger::RESPONSE_SUCCESS => 'SUCCESS',
+			AuthorizedCachePurger::RESPONSE_ERROR => 'ERROR',
+			AuthorizedCachePurger::RESPONSE_ACCESS_DENIED=> 'ACCESS DENIED'
+		][$response]
 	);
 } );
 

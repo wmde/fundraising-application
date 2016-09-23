@@ -33,7 +33,7 @@ use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\CachingPageRetri
 use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\Honorifics;
 use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\PageRetriever;
 use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\GetInTouch\GetInTouchUseCase;
-use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\PurgeCache\PurgeCacheUseCase;
+use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 use WMDE\Fundraising\Frontend\DonationContext\Authorization\DonationAuthorizer;
 use WMDE\Fundraising\Frontend\DonationContext\Authorization\DonationTokenFetcher;
 use WMDE\Fundraising\Frontend\DonationContext\DataAccess\DoctrineCommentFinder;
@@ -704,8 +704,8 @@ class FunFunFactory {
 		return $this->pimple['honorifics'];
 	}
 
-	public function newPurgeCacheUseCase(): PurgeCacheUseCase {
-		return new PurgeCacheUseCase(
+	public function newAuthorizedCachePurger(): AuthorizedCachePurger {
+		return new AuthorizedCachePurger(
 			new AllOfTheCachePurger( $this->getTwig(), $this->getPageCache() ),
 			$this->config['purging-secret']
 		);
