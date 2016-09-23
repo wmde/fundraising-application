@@ -6,6 +6,7 @@ use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonorAddress;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonorName;
 use WMDE\Fundraising\Frontend\DonationContext\Validation\DonorAddressValidator;
+use WMDE\Fundraising\Frontend\DonationContext\Validation\DonorNameValidator;
 use WMDE\Fundraising\Frontend\DonationContext\Validation\DonorValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
@@ -104,8 +105,8 @@ class DonorValidatorTest extends ValidatorTestCase {
 	}
 
 	private function newDonorValidator() {
-		return new \WMDE\Fundraising\Frontend\DonationContext\Validation\DonorValidator(
-			new \WMDE\Fundraising\Frontend\DonationContext\Validation\DonorNameValidator(),
+		return new DonorValidator(
+			new DonorNameValidator(),
 			new DonorAddressValidator(),
 			new EmailValidator( new NullDomainNameValidator() )
 		);

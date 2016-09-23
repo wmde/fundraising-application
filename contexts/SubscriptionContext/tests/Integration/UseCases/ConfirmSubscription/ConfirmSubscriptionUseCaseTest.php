@@ -87,7 +87,7 @@ class ConfirmSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$repo = new InMemorySubscriptionRepository();
 		$repo->storeSubscription( $this->newSubscription() );
 
-		$useCase = new \WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\ConfirmSubscription\ConfirmSubscriptionUseCase( $repo, $this->newMailer() );
+		$useCase = new ConfirmSubscriptionUseCase( $repo, $this->newMailer() );
 		$useCase->confirmSubscription( self::CONFIRMATION_CODE );
 
 		$this->assertSame(
@@ -104,7 +104,7 @@ class ConfirmSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$mailer = $this->newMailer();
 		$mailer->expects( $this->once() )->method( 'sendMail' );
 
-		$useCase = new \WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\ConfirmSubscription\ConfirmSubscriptionUseCase( $repo, $mailer );
+		$useCase = new ConfirmSubscriptionUseCase( $repo, $mailer );
 
 		$this->assertTrue( $useCase->confirmSubscription( self::CONFIRMATION_CODE )->isSuccessful() );
 	}
