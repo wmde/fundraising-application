@@ -106,7 +106,7 @@ When accessing the API via `web/index.dev.php`, profiling information will be ge
 ## Project structure
 
 This codebase follows a modified version of [The Clean Architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html),
-combined with a partial application of []Domain Driven Design](https://en.wikipedia.org/wiki/Domain-driven_design).
+combined with a partial application of [Domain Driven Design](https://en.wikipedia.org/wiki/Domain-driven_design).
 The high level structure is represented by [this diagram](https://commons.wikimedia.org/wiki/File:Clean_Architecture_%2B_DDD,_full_application.svg).
 
 ### Production code layout
