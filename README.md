@@ -103,10 +103,23 @@ see [the deployment documentation](deployment/README.md).
 When accessing the API via `web/index.dev.php`, profiling information will be generated and in
 `app/cache/profiler`. You can access the profiler UI via `index.dev.php/_profiler`.
 
-## Internal structure
+## Project structure
 
-Note: this is currently out of date
+This codebase follows a modified version of [The Clean Architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html),
+combined with a partial application of []Domain Driven Design](https://en.wikipedia.org/wiki/Domain-driven_design).
+The high level structure is represented by [this diagram](https://commons.wikimedia.org/wiki/File:Clean_Architecture_%2B_DDD,_full_application.svg).
 
+### Production code layout
+
+* `src/`: framework agnostic code not belonging to any Bounded Context
+	* `Factories/`: application factories used by the framework, including top level factory `FFFactory`
+	* `Presentation/`: presentation code, including the `Presenters/`
+	* `Validation/`: validation code
+* `contexts/$ContextName/src/` framework agnostic code belonging to a specific Bounded Context
+	* `Domain/`: domain model and domain services
+	* `UseCases/`: one directory per use case
+	* `DataAccess/`: implementations of services that binds to database, network, etc
+	* `Infrastructure/`: implementations of services binding to cross cutting concerns, ie logging
 * `web/`: web accessible code
 	* `index.php`: production entry point
 * `app/`: contains configuration and all framework (Silex) dependent code
@@ -120,29 +133,29 @@ Note: this is currently out of date
 		* `config.prod.json`: instance specific (gitignored) production configuration (gets merged into default config)
 	* `js/lib`: Javascript modules, will be compiled into one file for the frontend.
 	* `js/test`: Unit tests for the JavaScript modules
-* `deployment/`: Ansible scripts and configuration for deploying the application
-* `src/`: contains framework agnostic code
-	* `DataAccess/`: persistence other data access (ie network) service implementations
-	* `Domain/`: application independent code belonging to the fundraising frontend bounded context
-	* `Factories/`: application factories used by the framework, including top level factory `FFFactory`
-	* `Infrastructure/`: services belonging to supporting domains
-	* `Presentation/`: presentation code, including the `Presenters/`
-	* `ResponseModel/`: common code for the response models of the use cases
-	* `UseCases/`: one directory per use case
-	* `Validation/`: validation code
-	* All dependencies are explicitly defined in `composer.json` (including those shared with Silex)
-* `tests/`: tests mirror the directory and namespace structure of the production code
-	* `Unit/`: small isolated tests (one class or a small number of related classes)
-	* `Integration/`: tests combining several units
-	* `EdgeToEdge/`: edge-to-edge tests (fake HTTP requests to the framework)
-	* `System/`: tests involving outside systems (ie, beyond our PHP app and database)
-	* `Fixtures/`: test doubles (stubs, spies and mocks)
-	* `TestEnvironment.php`: encapsulates application setup for integration and system tests
 * `var/`: Ephemeral application data
     * `log/`: Log files (in debug mode, every request creates a log file)
     * `cache/`: Cache directory for Twig templates
 
-## Test type restrictions
+### Test code layout
+
+The test directory structure (and namespace structure) mirrors the production code. Tests for code
+in `src/` can be found in `tests/`. Tests for code in `contexts/$ContextName/src/` can be found in
+`contexts/$ContextName/tests/`.
+
+Tests are categorized by their type. To run only tests of a given type, you can use one of the
+testsuites defined in `phpunit.xml.dist`.
+
+* `Unit/`: small isolated tests (one class or a small number of related classes)
+* `Integration/`: tests combining several units
+* `EdgeToEdge/`: edge-to-edge tests (fake HTTP requests to the framework)
+* `System/`: tests involving outside systems (ie, beyond our PHP app and database)
+* `Fixtures/`: test doubles (stubs, spies and mocks)
+
+If you need access to the application in your non-unit tests, for instance to interact with
+persistence, you should use `TestEnvironment` defined in `tests/TestEnvironment.php`.
+
+#### Test type restrictions
 
 <table>
 	<tr>
@@ -167,17 +180,23 @@ Note: this is currently out of date
 		<td>Read only</td>
 	</tr>
 	<tr>
-		<th>System (edge-to-edge)</th>
+		<th>EdgeToEdge</th>
 		<td>Yes</td>
 		<td>Yes</td>
 		<td>Yes</td>
 		<td>Read only</td>
 	</tr>
 	<tr>
-		<th>System (full)</th>
+		<th>System</th>
 		<td>Yes</td>
 		<td>Yes</td>
 		<td>Yes</td>
 		<td>Yes</td>
 	</tr>
 </table>
+
+### Other directories
+
+* `deployment/`: Ansible scripts and configuration for deploying the application
+
+
