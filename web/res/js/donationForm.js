@@ -2,7 +2,10 @@ $( function () {
 	/** global: WMDE */
 
 	var initData = $( '#init-form' ),
-		store = WMDE.Store.createDonationStore( WMDE.createInitialStateFromViolatedFields( initData.data( 'violatedFields' ) ) ),
+		store = WMDE.Store.createDonationStore( WMDE.createInitialStateFromViolatedFields(
+			initData.data( 'violatedFields' ),
+			initData.data( 'initial-validation-result' ) )
+		),
 		actions = WMDE.Actions
 		;
 

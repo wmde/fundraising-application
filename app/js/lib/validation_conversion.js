@@ -4,14 +4,16 @@ var _ = require( 'underscore' ),
 	 * Convert server-side validation messages to initial state for the store
 	 *
 	 * @param {Object} violatedFields
+	 * @param {Object} initialValidationState
 	 * @returns {Object}
 	 */
-	createInitialStateFromViolatedFields = function ( violatedFields ) {
+	createInitialStateFromViolatedFields = function ( violatedFields, initialValidationState ) {
 		var state = {
-			validity: {}
+			validity: initialValidationState || {}
 		};
+
 		if ( _.isEmpty( violatedFields ) ) {
-			return {};
+			return state;
 		}
 
 		if ( violatedFields.betrag ) {

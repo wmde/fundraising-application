@@ -3,7 +3,7 @@ $( function () {
 
 	var initData = $( '#init-form' ),
 		store = WMDE.Store.createMembershipStore(
-			WMDE.createInitialStateFromViolatedFields( initData.data( 'violatedFields' ) )
+			WMDE.createInitialStateFromViolatedFields( initData.data( 'violatedFields' ), {} )
 		),
 		actions = WMDE.Actions;
 
