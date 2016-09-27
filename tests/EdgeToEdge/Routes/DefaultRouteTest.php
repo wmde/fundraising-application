@@ -24,13 +24,27 @@ class DefaultRouteTest extends WebRouteTestCase {
 			]
 		);
 
-		$this->assertParametersArePassedToTemplate( $client->getResponse()->getContent() );
-	}
-
-	private function assertParametersArePassedToTemplate( string $responseContent ) {
+		$responseContent = $client->getResponse()->getContent();
 		$this->assertContains( 'Amount: 12,34', $responseContent );
 		$this->assertContains( 'Payment type: UEB', $responseContent );
 		$this->assertContains( 'Interval: 6', $responseContent );
 	}
 
+	public function testWhenFormParametersContainNegativeAmount_zeroAmountIsPassedToTheTemplate() {
+		$client = $this->createClient();
+		$client->request(
+			'GET',
+			'/',
+			[
+				'betrag' => '-12,34',
+				'zahlweise' => 'UEB',
+				'periode' => 6
+			]
+		);
+
+		$responseContent = $client->getResponse()->getContent();
+		$this->assertContains( 'Amount: 0,00', $responseContent );
+		$this->assertContains( 'Payment type: UEB', $responseContent );
+		$this->assertContains( 'Interval: 6', $responseContent );
+	}
 }

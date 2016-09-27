@@ -168,8 +168,12 @@ class AddDonationHandler {
 
 	private function getEuroAmountFromString( string $amount ) {
 		$locale = 'de_DE'; // TODO: make this configurable for multilanguage support
+		try {
+			return Euro::newFromFloat( ( new AmountParser( $locale ) )->parseAsFloat( $amount ) );
+		} catch ( \InvalidArgumentException $ex ) {
+			return Euro::newFromCents( 0 );
+		}
 
-		return Euro::newFromFloat( ( new AmountParser( $locale ) )->parseAsFloat( $amount ) );
 	}
 
 	private function isSubmissionAllowed( Request $request ) {

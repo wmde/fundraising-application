@@ -379,12 +379,16 @@ $app->post(
 );
 
 // Show a donation form with pre-filled payment values, e.g. when coming from a banner
-$app->match( 'donation/new', function ( Application $app, Request $request ) use ( $ffFactory ) {
-	$amount = $request->get( 'betrag', $request->get( 'betrag_auswahl', '' ) );
+$app->get( 'donation/new', function ( Request $request ) use ( $ffFactory ) {
+	try {
+		$amount = Euro::newFromFloat( ( new AmountParser( 'de_DE' ) )->parseAsFloat( $request->get( 'betrag', '' ) ) );
+	} catch ( \InvalidArgumentException $ex ) {
+		$amount = Euro::newFromCents( 0 );
+	}
 	$validationResult = $ffFactory->newPaymentDataValidator()->validate( $amount, (string) $request->get( 'zahlweise', '' ) );
 
 	return new Response( $ffFactory->newDonationFormPresenter()->present(
-		Euro::newFromFloat( ( new AmountParser( 'de_DE' ) )->parseAsFloat( $amount ) ),
+		$amount,
 		$request->get( 'zahlweise', '' ),
 		intval( $request->get( 'periode', 0 ) ),
 		$validationResult->isSuccessful()
