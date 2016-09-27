@@ -526,4 +526,8 @@ $app->get( '/purge-cache', function( Request $request ) use ( $ffFactory ) {
 	);
 } );
 
+$app->get( 'status', function() {
+	return 'Status: OK (Online)';
+} );
+
 return $app;
