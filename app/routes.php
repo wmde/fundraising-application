@@ -380,15 +380,17 @@ $app->post(
 );
 
 // Show a donation form with pre-filled payment values, e.g. when coming from a banner
-$app->get( 'donation/new', function ( Request $request ) use ( $ffFactory ) {
-	$amount = Euro::newFromFloat( ( new AmountParser( 'de_DE' ) )->parseAsFloat( $request->get( 'betrag', '' ) ) );
+$app->match( 'donation/new', function ( Application $app, Request $request ) use ( $ffFactory ) {
+	$amount = $request->get( 'betrag', $request->get( 'betrag_auswahl', '' ) );
+	$validationResult = $ffFactory->newPaymentDataValidator()->validate( $amount, (string) $request->get( 'zahlweise', '' ) );
 
 	return new Response( $ffFactory->newDonationFormPresenter()->present(
-		$amount,
+		Euro::newFromFloat( ( new AmountParser( 'de_DE' ) )->parseAsFloat( $amount ) ),
 		$request->get( 'zahlweise', '' ),
-		intval( $request->get( 'periode', 0 ) )
+		intval( $request->get( 'periode', 0 ) ),
+		$validationResult->isSuccessful()
 	) );
-} );
+} )->method( 'POST|GET' );
 
 $app->post(
 	'apply-for-membership',

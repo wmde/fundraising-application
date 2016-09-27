@@ -22,12 +22,15 @@ class DonationFormPresenter {
 		$this->amountFormatter = $amountFormatter;
 	}
 
-	public function present( Euro $amount, string $paymentType, int $paymentInterval ): string {
+	public function present( Euro $amount, string $paymentType, int $paymentInterval, bool $paymentDataIsValid ): string {
 		return $this->template->render( [
 			'initialFormValues' => [
 				'amount' => $this->amountFormatter->format( $amount ),
 				'paymentType' => $paymentType,
 				'paymentIntervalInMonths' => $paymentInterval
+			],
+			'validationResult' => [
+				'paymentData' => $paymentDataIsValid
 			]
 		] );
 	}
