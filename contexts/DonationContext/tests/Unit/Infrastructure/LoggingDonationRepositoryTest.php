@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Repositories;
+namespace WMDE\Fundraising\Frontend\DonationContext\Tests\Unit\Infrastructure;
 
 use Psr\Log\LogLevel;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Repositories\DonationRepository;
