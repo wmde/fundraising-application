@@ -115,6 +115,7 @@ class ValidMembershipApplication {
 	private function createDoctrineApplication(): DoctrineMembershipApplication {
 		$application = new DoctrineMembershipApplication();
 
+		$application->setStatus( DoctrineMembershipApplication::STATUS_CONFIRMED );
 		$application->setApplicantFirstName( self::APPLICANT_FIRST_NAME );
 		$application->setApplicantLastName( self::APPLICANT_LAST_NAME );
 		$application->setApplicantSalutation( self::APPLICANT_SALUTATION );

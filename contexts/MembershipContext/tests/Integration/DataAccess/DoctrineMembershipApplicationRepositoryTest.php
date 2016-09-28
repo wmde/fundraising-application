@@ -223,4 +223,14 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit_Framework_Tes
 		$this->assertTrue( $application->isCancelled() );
 	}
 
+	public function testGivenDoctrineApplicationWithCancelledFlag_initialStatusIsPreserved() {
+		$application = ValidMembershipApplication::newDomainEntity();
+		$application->cancel();
+
+		$this->newRepository()->storeApplication( $application );
+		$doctrineApplication = $this->getApplicationFromDatabase( $application->getId() );
+
+		$this->assertSame( DoctrineApplication::STATUS_CONFIRMED, $doctrineApplication->getDataObject()->getPreservedStatus() );
+	}
+
 }

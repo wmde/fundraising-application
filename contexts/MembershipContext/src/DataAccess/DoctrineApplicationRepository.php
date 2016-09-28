@@ -20,6 +20,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\GetMembershi
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\StoreMembershipApplicationException;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
+use WMDE\Fundraising\Store\MembershipApplicationData;
 
 /**
  * @license GNU GPL v2+
@@ -82,7 +83,9 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 		$this->setApplicantFields( $doctrineApplication, $application->getApplicant() );
 		$this->setPaymentFields( $doctrineApplication, $application->getPayment() );
 
-		$doctrineApplication->setStatus( $this->getDoctrineStatus( $application ) );
+		$doctrineStatus = $this->getDoctrineStatus( $application );
+		$this->preserveDoctrineStatus( $doctrineApplication, $doctrineStatus );
+		$doctrineApplication->setStatus( $doctrineStatus );
 	}
 
 	private function setApplicantFields( DoctrineApplication $application, Applicant $applicant ) {
@@ -128,7 +131,19 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 			$status += DoctrineApplication::STATUS_CANCELED;
 		}
 
+		if ( $status === DoctrineApplication::STATUS_NEUTRAL ) {
+			$status += DoctrineApplication::STATUS_CONFIRMED;
+		}
+
 		return $status;
+	}
+
+	private function preserveDoctrineStatus( DoctrineApplication $doctrineApplication, int $doctrineStatus ) {
+		if ( $doctrineStatus < DoctrineApplication::STATUS_CONFIRMED ) {
+			$doctrineApplication->modifyDataObject( function ( MembershipApplicationData $data ) {
+				$data->setPreservedStatus( DoctrineApplication::STATUS_CONFIRMED );
+			} );
+		}
 	}
 
 	/**
