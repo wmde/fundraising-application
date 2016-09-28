@@ -518,9 +518,9 @@ $app->get( '/purge-cache', function( Request $request ) use ( $ffFactory ) {
 
 	return new Response(
 		[
-			AuthorizedCachePurger::RESPONSE_SUCCESS => 'SUCCESS',
-			AuthorizedCachePurger::RESPONSE_ERROR => 'ERROR',
-			AuthorizedCachePurger::RESPONSE_ACCESS_DENIED=> 'ACCESS DENIED'
+			AuthorizedCachePurger::RESULT_SUCCESS => 'SUCCESS',
+			AuthorizedCachePurger::RESULT_ERROR => 'ERROR',
+			AuthorizedCachePurger::RESULT_ACCESS_DENIED=> 'ACCESS DENIED'
 		][$response]
 	);
 } );
