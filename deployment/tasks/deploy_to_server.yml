@@ -30,7 +30,7 @@
   file: path={{ app_dir }}/{{ release_prefix }}{{ release_name }}/var/cache owner={{app_owner}} group={{app_group}} state=directory mode=775
 
 - name: Create symlink to log dir
-  file: src={{ app_dir }}/{{ logs_dir }} dest={{ app_dir }}/{{ release_prefix }}{{ release_name }}/var/logs state=link
+  file: src={{ app_dir }}/{{ logs_dir }} dest={{ app_dir }}/{{ release_prefix }}{{ release_name }}/var/log state=link
 
 - name: Symlink the release
   file: src={{ app_dir }}/{{ release_prefix }}{{ release_name }} dest={{ app_dir }}/{{ current_dir }} owner={{app_owner}} group={{app_group}} state=link
