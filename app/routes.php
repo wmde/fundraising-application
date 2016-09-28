@@ -496,9 +496,25 @@ $app->get( '/', function ( Application $app, Request $request ) {
 	);
 } );
 
+// TODO Figure out how to rewrite with Nginx
+// See https://serverfault.com/questions/805881/nginx-populate-request-uri-with-rewritten-url
+$app->post(
+	'/spenden/paypal_handler.php',
+	function ( Request $request ) use ( $ffFactory ) {
+		return ( new PayPalNotificationHandler( $ffFactory ) )->handle( $request );
+	}
+);
+
 // redirect display page requests from old URLs
 $app->get( '/spenden/{page}', function( Application $app, Request $request, string $page ) {
-	return ( new RouteRedirectionHandler( $app, $request->getQueryString() ) )->handle( '/page/' . $page );
+	// Poor man's rewrite until someone has figured out how to do this with Nginx without breaking REQUEST_URI
+	// See https://serverfault.com/questions/805881/nginx-populate-request-uri-with-rewritten-url
+	switch ( $page ) {
+		case 'Mitgliedschaft':
+			return ( new RouteRedirectionHandler( $app, $request->getQueryString() ) )->handle( '/page/MembershipApplication' );
+		default:
+			return ( new RouteRedirectionHandler( $app, $request->getQueryString() ) )->handle( '/page/' . $page );
+	}
 } )->assert( 'page', '[a-zA-Z_\-\s\x7f-\xff]+' );
 
 // redirect different formats of comment lists
