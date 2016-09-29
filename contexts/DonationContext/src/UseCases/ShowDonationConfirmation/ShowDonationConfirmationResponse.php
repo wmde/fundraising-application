@@ -16,14 +16,16 @@ class ShowDonationConfirmationResponse {
 		return new self( null );
 	}
 
-	public static function newValidResponse( Donation $donation ): self {
-		return new self( $donation );
+	public static function newValidResponse( Donation $donation, string $updateToken ): self {
+		return new self( $donation, $updateToken );
 	}
 
 	private $donation;
+	private $updateToken;
 
-	private function __construct( Donation $donation = null ) {
+	private function __construct( Donation $donation = null, string $updateToken = null ) {
 		$this->donation = $donation;
+		$this->updateToken = $updateToken;
 	}
 
 	/**
@@ -37,6 +39,13 @@ class ShowDonationConfirmationResponse {
 
 	public function accessIsPermitted(): bool {
 		return $this->donation !== null;
+	}
+
+	/**
+	 * @return string|null
+	 */
+	public function getUpdateToken() {
+		return $this->updateToken;
 	}
 
 }
