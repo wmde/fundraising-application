@@ -2,6 +2,9 @@
 var objectAssign = require( 'object-assign' ),
 	actions = require( './actions' ),
 
+	INTERVAL_TYPE_ONE_OFF = 0,
+	INTERVAL_TYPE_RECURRING = 1,
+
 	createDefaultChangeHandler = function ( store, contentName ) {
 		return function ( evt ) {
 			store.dispatch( actions.newChangeContentAction( contentName, evt.target.value ) );
@@ -74,6 +77,18 @@ var objectAssign = require( 'object-assign' ),
 		}
 	},
 
+	PaymentIntervalComponent = {
+		decisionElement: null,
+		paymentIntervalElement: null,
+		render: function ( formContent ) {
+			var intervalType = formContent.paymentIntervalInMonths > 0 ?
+				INTERVAL_TYPE_RECURRING :
+				INTERVAL_TYPE_ONE_OFF;
+			this.paymentIntervalElement.val( [ formContent.paymentIntervalInMonths ] );
+			this.decisionElement.val( [ intervalType ] );
+		}
+	},
+
 	BankDataComponent = {
 		ibanElement: null,
 		bicElement: null,
@@ -94,6 +109,10 @@ var objectAssign = require( 'object-assign' ),
 	};
 
 module.exports = {
+
+	INTERVAL_TYPE_ONE_OFF: INTERVAL_TYPE_ONE_OFF,
+	INTERVAL_TYPE_RECURRING: INTERVAL_TYPE_RECURRING,
+
 	createRadioComponent: function ( store, element, contentName ) {
 		var component = objectAssign( Object.create( RadioComponent ), {
 			element: element,
@@ -164,6 +183,17 @@ module.exports = {
 		selectElement.on( 'change', function ( evt ) {
 			store.dispatch( actions.newSelectAmountAction( evt.target.value ) );
 		} );
+		return component;
+	},
+
+	createPaymentIntervalComponent: function ( store, decisionElement, intervalElement ) {
+		var component = objectAssign( Object.create( PaymentIntervalComponent ), {
+			decisionElement: decisionElement,
+			paymentIntervalElement: intervalElement,
+			onChange: createDefaultChangeHandler( store, 'paymentIntervalInMonths' )
+		} );
+		decisionElement.on( 'change', component.onChange );
+		intervalElement.on( 'change', component.onChange );
 		return component;
 	},
 

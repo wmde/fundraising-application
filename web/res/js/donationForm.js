@@ -13,8 +13,7 @@ $( function () {
 		[
 			WMDE.Components.createAmountComponent( store, $( '.amount-input' ), $( '.amount-select' ), $( '.amount-hidden' ) ),
 			WMDE.Components.createRadioComponent( store, $( '.payment-type-select' ), 'paymentType' ),
-			WMDE.Components.createRadioComponent( store, $( '.interval-type-select' ), 'paymentIntervalInMonths' ),
-			WMDE.Components.createRadioComponent( store, $( '.payment-period-select' ), 'paymentIntervalInMonths' ),
+			WMDE.Components.createPaymentIntervalComponent( store, $( '.interval-type-select' ), $( '.payment-period-select' ) ),
 			WMDE.Components.createBankDataComponent( store, {
 				ibanElement: $( '#iban' ),
 				bicElement: $( '#bic' ),
