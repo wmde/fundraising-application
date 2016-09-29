@@ -68,7 +68,7 @@ class DonationFormViolationPresenter {
 			'addressType' => $request->getDonorType(),
 			'salutation' => $request->getDonorSalutation(),
 			'title' => $request->getDonorTitle(),
-			'company' => $request->getDonorCompany(),
+			'companyName' => $request->getDonorCompany(),
 			'firstName' => $request->getDonorFirstName(),
 			'lastName' => $request->getDonorLastName(),
 		];
