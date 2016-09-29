@@ -30,7 +30,13 @@ $ffFactory = call_user_func( function() {
 		is_readable( $prodConfigPath ) ? $prodConfigPath : null
 	);
 
-	return new \WMDE\Fundraising\Frontend\Factories\FunFunFactory( $configReader->getConfig() );
+	$config = $configReader->getConfig();
+
+	if ( !$config['enable-dev-entry-point'] ) {
+		die( 'Dev entry point not available! Set enable-dev-entry-point to true to enable.' );
+	}
+
+	return new \WMDE\Fundraising\Frontend\Factories\FunFunFactory( $config );
 } );
 
 $ffFactory->setLogger( call_user_func( function() use ( $ffFactory ) {
