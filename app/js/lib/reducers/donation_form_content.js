@@ -14,7 +14,7 @@ var formContentLib = require( './form_content' ),
 		bankCode: '',
 		bankName: '',
 		addressType: 'person', // person, firma and anonym
-		salutation: 'Frau',
+		salutation: '',
 		title: '',
 		firstName: '',
 		lastName: '',
