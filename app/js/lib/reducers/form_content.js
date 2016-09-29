@@ -23,11 +23,13 @@ function clearFieldsIfAddressTypeChanges( newState, payload ) {
 			newState.companyName = '';
 			break;
 		case 'firma':
+			newState.salutation = '';
 			newState.title = '';
 			newState.firstName = '';
 			newState.lastName = '';
 			break;
 		case 'anonym':
+			newState.salutation = '';
 			newState.title = '';
 			newState.companyName = '';
 			newState.firstName = '';

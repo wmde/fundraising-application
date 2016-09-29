@@ -9,6 +9,7 @@ var _ = require( 'underscore' ),
 	initialState = {
 		amount: _.clone( defaultFields ),
 		paymentType: _.clone( defaultFields ),
+		salutation: _.clone( defaultFields ),
 		firstName: _.clone( defaultFields ),
 		lastName: _.clone( defaultFields ),
 		companyName: _.clone( defaultFields ),
@@ -22,6 +23,16 @@ var _ = require( 'underscore' ),
 		bankCode: _.clone( defaultFields ),
 		confirmSepa: _.clone( defaultFields ),
 		confirmShortTerm: _.clone( defaultFields )
+	},
+
+	setValidityOnSalutationChange = function ( state, action ) {
+		if ( action.type !== 'CHANGE_CONTENT' ||
+			action.payload.contentName !== 'salutation' ) {
+			return state;
+		}
+		return _.extend( {}, state, {
+			salutation: { dataEntered: true, isValid: true }
+		} );
 	},
 
 	clearBankDataValidityOnPaymentTypeChange = function ( state, action ) {
@@ -47,11 +58,13 @@ var _ = require( 'underscore' ),
 				return _.extend( {}, state, { companyName: _.clone( defaultFields ) } );
 			case 'firma':
 				return _.extend( {}, state, {
+					salutation: _.clone( defaultFields ),
 					firstName: _.clone( defaultFields ),
 					lastName: _.clone( defaultFields )
 				} );
 			case 'anonym':
 				return _.extend( {}, state, {
+					salutation: _.clone( defaultFields ),
 					firstName: _.clone( defaultFields ),
 					lastName: _.clone( defaultFields ),
 					companyName: _.clone( defaultFields ),
@@ -73,5 +86,6 @@ module.exports = function donationInputValidation( state, action ) {
 
 	state = clearAddressValidityOnAddressTypeChange( state, action );
 	state = clearBankDataValidityOnPaymentTypeChange( state, action );
+	state = setValidityOnSalutationChange( state, action );
 	return inputValidationLib.inputValidation( state, action );
 };

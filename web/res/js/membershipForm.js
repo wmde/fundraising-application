@@ -284,13 +284,13 @@ $( function () {
 		if ( !addressIsValid() ) {
 			if ( formContent.addressType === 'person' ) {
 				store.dispatch( actions.newMarkEmptyFieldsInvalidAction(
-					[ 'firstName', 'lastName', 'street', 'postcode', 'city', 'email' ],
+					[ 'salutation', 'firstName', 'lastName', 'street', 'postcode', 'city', 'email' ],
 					[ 'companyName' ]
 				) );
 			} else if ( formContent.addressType === 'firma' ) {
 				store.dispatch( actions.newMarkEmptyFieldsInvalidAction(
 					[ 'companyName', 'street', 'postcode', 'city', 'email' ],
-					[ 'firstName', 'lastName' ]
+					[ 'firstName', 'lastName', 'salutation' ]
 				) );
 			}
 		}
