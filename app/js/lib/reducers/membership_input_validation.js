@@ -23,6 +23,9 @@ var _ = require( 'underscore' ),
 		bankCode: _.clone( defaultFields ),
 		confirmSepa: _.clone( defaultFields )
 	},
+	optionalFields = [
+		'dateOfBirth', 'phoneNumber'
+	],
 
 	clearAddressValidityOnAddressTypeChange = function ( state, action ) {
 		if ( action.type !== 'CHANGE_CONTENT' || action.payload.contentName !== 'addressType' ) {
@@ -50,6 +53,18 @@ var _ = require( 'underscore' ),
 			return state;
 		}
 		return _.extend( {}, state, { companyName: _.clone( defaultFields ) } );
+	},
+
+	clearOptionalFieldValidityOnEmptying = function ( state, action ) {
+		var clearedField = {};
+		if ( action.type === 'CHANGE_CONTENT' ) {
+			if ( _.contains( optionalFields, action.payload.contentName ) ) {
+				clearedField[ action.payload.contentName ] = _.clone( defaultFields );
+				return _.extend( {}, state, clearedField );
+			}
+		}
+
+		return state;
 	};
 
 module.exports = function membershipInputValidation( state, action ) {
@@ -58,5 +73,6 @@ module.exports = function membershipInputValidation( state, action ) {
 	}
 	state = clearAddressValidityOnAddressTypeChange( state, action );
 	state = clearCompanyValidityOnActiveMembershipChange( state, action );
+	state = clearOptionalFieldValidityOnEmptying( state, action );
 	return inputValidationLib.inputValidation( state, action );
 };
