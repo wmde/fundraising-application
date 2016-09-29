@@ -20,7 +20,6 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 	const CORRECT_ACCESS_TOKEN = 'KindlyAllowMeAccess';
-	const SOME_UPDATE_TOKEN = 'SomeUpdateToken';
 
 	const ACCESS_DENIED_TEXT = 'keine Berechtigung';
 
@@ -134,8 +133,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 			'show-donation-confirmation',
 			[
 				'donationId' => $donationId,
-				'accessToken' => self::CORRECT_ACCESS_TOKEN,
-				'updateToken' => self::SOME_UPDATE_TOKEN
+				'accessToken' => self::CORRECT_ACCESS_TOKEN
 			]
 		);
 
@@ -175,6 +173,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'donation.interval: ' . $donation->getPaymentIntervalInMonths(), $responseContent );
 		$this->assertContains( 'donation.paymentType: ' . $donation->getPaymentType(), $responseContent );
 		$this->assertContains( 'donation.optsIntoNewsletter: ' . $donation->getOptsIntoNewsletter(), $responseContent );
+		$this->assertContains( 'donation.updateToken: ' . self::CORRECT_ACCESS_TOKEN, $responseContent );
 
 		$this->assertContains( 'person.salutation: ' . $personName->getSalutation(), $responseContent );
 		$this->assertContains( 'person.fullName: ' . $personName->getFullName(), $responseContent );
@@ -202,8 +201,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 				'show-donation-confirmation',
 				[
 					'donationId' => $donation->getId(),
-					'accessToken' => 'WrongAccessToken',
-					'updateToken' => self::SOME_UPDATE_TOKEN
+					'accessToken' => 'WrongAccessToken'
 				]
 			);
 

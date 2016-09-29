@@ -993,6 +993,7 @@ class FunFunFactory {
 	public function newShowDonationConfirmationUseCase( string $accessToken ): ShowDonationConfirmationUseCase {
 		return new ShowDonationConfirmationUseCase(
 			$this->newDonationAuthorizer( null, $accessToken ),
+			$this->newDonationTokenFetcher(),
 			$this->getDonationRepository()
 		);
 	}
