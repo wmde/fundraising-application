@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Tests\Unit;
+namespace WMDE\Fundraising\Frontend\Tests\System;
 
 use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
 
@@ -82,7 +82,8 @@ class TextPolicyValidatorTest extends \PHPUnit_Framework_TestCase {
 		$this->skipIfNoInternet();
 
 		if ( checkdnsrr( 'some-non-existing-domain-drfeszrfdaesr.sdferdyerdhgty', 'A' ) ) {
-			$this->markTestSkipped( 'Sure, blame it on your ISP!' );
+			// https://www.youtube.com/watch?v=HGBOeLdm-1s
+			$this->markTestSkipped( 'Your DNS/ISP provider gives results for impossible host names.' );
 		}
 
 		$textPolicyValidator = new TextPolicyValidator();
