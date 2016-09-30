@@ -50,6 +50,11 @@
         "driver"
       ]
     },
+    "enable-dev-entry-point": {
+      "type": "boolean",
+      "description": "If the dev entry point should be enabled",
+      "default": false
+    },
     "bank-data-file": {
       "type": "string",
       "minLength": 1,
