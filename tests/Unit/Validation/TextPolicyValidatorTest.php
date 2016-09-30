@@ -58,7 +58,7 @@ class TextPolicyValidatorTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * @dataProvider harmlessTestProvider
 	 */
-	public function testWhenGivenHarmlesComment_validatorReturnsTrue( $commentToTest ) {
+	public function testWhenGivenHarmlessComment_validatorReturnsTrue( $commentToTest ) {
 		$textPolicyValidator = new TextPolicyValidator();
 
 		$this->assertTrue( $textPolicyValidator->hasHarmlessContent(
