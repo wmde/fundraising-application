@@ -408,6 +408,25 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
+	public function testGivenNegativeDonationAmount_formIsReloadedAndPrefilledWithZero() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setNullMessenger();
+
+			$formValues = $this->newInvalidFormInput();
+			$formValues['betrag'] = '-5,00';
+
+			$client->request(
+				'POST',
+				'/donation/add',
+				$formValues
+			);
+
+			$response = $client->getResponse()->getContent();
+
+			$this->assertContains( 'Amount: 0,00', $response );
+		} );
+	}
+
 	private function newInvalidFormInput() {
 		return [
 			'betrag' => '0',
