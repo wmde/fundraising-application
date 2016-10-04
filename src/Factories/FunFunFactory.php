@@ -667,7 +667,7 @@ class FunFunFactory {
 	public function newGetInTouchUseCase() {
 		return new GetInTouchUseCase(
 			$this->getContactValidator(),
-			$this->getMessenger(),
+			$this->newContactForwardingMailer(),
 			$this->newContactConfirmationMailer()
 		);
 	}
@@ -676,6 +676,13 @@ class FunFunFactory {
 		return $this->newTemplateMailer(
 			new TwigTemplate( $this->getTwig(), 'KontaktMailExtern.twig' ),
 			'mail_subject_getintouch'
+		);
+	}
+
+	private function newContactForwardingMailer(): TemplateBasedMailer {
+		return $this->newTemplateMailer(
+			new TwigTemplate( $this->getTwig(), 'KontaktMailIntern.twig' ),
+			'mail_subject_getintouch_forward'
 		);
 	}
 

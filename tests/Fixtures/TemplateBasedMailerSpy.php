@@ -25,6 +25,10 @@ class TemplateBasedMailerSpy extends TemplateBasedMailer {
 		$this->sendMailCalls[] = func_get_args();
 	}
 
+	public function sendMailToOperator( EmailAddress $replyToAddress, array $templateArguments = [] ) {
+		$this->sendMailCalls[] = func_get_args();
+	}
+
 	public function getSendMailCalls(): array {
 		return $this->sendMailCalls;
 	}
