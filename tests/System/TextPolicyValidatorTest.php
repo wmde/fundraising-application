@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Tests\Unit;
+namespace WMDE\Fundraising\Frontend\Tests\System;
 
 use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
 
@@ -59,6 +59,8 @@ class TextPolicyValidatorTest extends \PHPUnit_Framework_TestCase {
 	 * @dataProvider harmlessTestProvider
 	 */
 	public function testWhenGivenHarmlessComment_validatorReturnsTrue( $commentToTest ) {
+		$this->skipIfNoInternet();
+
 		$textPolicyValidator = new TextPolicyValidator();
 
 		$this->assertTrue( $textPolicyValidator->hasHarmlessContent(
@@ -69,12 +71,27 @@ class TextPolicyValidatorTest extends \PHPUnit_Framework_TestCase {
 
 	public function harmlessTestProvider() {
 		return [
-			[ 'Ich mag Wikipedia.Wieso ? Weil ich es so toll finde!' ],
 			[ 'Wikipedia ist so super, meine Eltern sagen es ist eine toll Seite. Berlin ist auch Super.' ],
 			[ 'Ich mag Wikipedia. Aber meine Seite ist auch toll. Googelt mal nach Bunsenbrenner!!!1' ],
 			[ 'Bei Wikipedia kann man eine Menge zum Thema Hamster finden. Hamster fressen voll viel Zeug alter!' ],
 			[ 'Manche Seiten haben keinen Inhalt, das finde ich sch...e' ], // this also tests the domain detection
 		];
+	}
+
+	public function testHamlessContentWithDns() {
+		$this->skipIfNoInternet();
+
+		if ( checkdnsrr( 'some-non-existing-domain-drfeszrfdaesr.sdferdyerdhgty', 'A' ) ) {
+			// https://www.youtube.com/watch?v=HGBOeLdm-1s
+			$this->markTestSkipped( 'Your DNS/ISP provider gives results for impossible host names.' );
+		}
+
+		$textPolicyValidator = new TextPolicyValidator();
+
+		$this->assertTrue( $textPolicyValidator->hasHarmlessContent(
+			'Ich mag Wikipedia.Wieso ? Weil ich es so toll finde!',
+			TextPolicyValidator::CHECK_URLS | TextPolicyValidator::CHECK_URLS_DNS | TextPolicyValidator::CHECK_BADWORDS
+		) );
 	}
 
 	/**
