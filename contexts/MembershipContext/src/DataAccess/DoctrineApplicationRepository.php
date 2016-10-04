@@ -93,6 +93,7 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 		$application->setApplicantLastName( $applicant->getName()->getLastName() );
 		$application->setApplicantSalutation( $applicant->getName()->getSalutation() );
 		$application->setApplicantTitle( $applicant->getName()->getTitle() );
+		$application->setCompany( $applicant->getName()->getCompanyName() );
 
 		$application->setApplicantDateOfBirth( $applicant->getDateOfBirth() );
 

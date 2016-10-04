@@ -36,6 +36,10 @@ class ApplicantName {
 		$this->companyName = $companyName;
 	}
 
+	public function getCompanyName(): string {
+		return $this->companyName;
+	}
+
 	public function getSalutation(): string {
 		return $this->salutation;
 	}

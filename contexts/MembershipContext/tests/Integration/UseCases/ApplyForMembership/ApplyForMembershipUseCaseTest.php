@@ -176,7 +176,7 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$this->mailer->assertCalledOnceWith(
 			new EmailAddress( ValidMembershipApplication::APPLICANT_EMAIL_ADDRESS ),
 			[
-				'membershipType' => 'active',
+				'membershipType' => 'sustaining',
 				'membershipFee' => '10.00',
 				'paymentIntervalInMonths' => 3,
 				'salutation' => 'Herr',
