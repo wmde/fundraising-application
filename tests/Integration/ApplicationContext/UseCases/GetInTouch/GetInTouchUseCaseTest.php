@@ -29,38 +29,30 @@ class GetInTouchUseCaseTest extends \PHPUnit_Framework_TestCase {
 	private $validator;
 
 	/** @var TemplateBasedMailerSpy */
-	private $forwardMailer;
+	private $operatorMailer;
 
 	/** @var TemplateBasedMailerSpy */
-	private $confirmMailer;
+	private $userMailer;
 
 	public function setUp() {
 		$this->validator = $this->newSucceedingValidator();
-		$this->forwardMailer = new TemplateBasedMailerSpy( $this );
-		$this->confirmMailer = $this->newConfirmMailerDummy();
+		$this->operatorMailer = new TemplateBasedMailerSpy( $this );
+		$this->userMailer = new TemplateBasedMailerSpy( $this );
 	}
 
 	private function newGetInTouchUseCase(): GetInTouchUseCase {
 		return new GetInTouchUseCase(
 			$this->validator,
-			$this->forwardMailer,
-			$this->confirmMailer
+			$this->operatorMailer,
+			$this->userMailer
 		);
 	}
 
-	public function testGivenValidParameters_theyAreContainedInTheForwardingEmail() {
-		$request = new GetInTouchRequest(
-			self::INQUIRER_FIRST_NAME,
-			self::INQUIRER_LAST_NAME,
-			self::INQUIRER_EMAIL_ADDRESS,
-			self::INQUIRY_SUBJECT,
-			self::INQUIRY_MESSAGE
-		);
-
+	public function testGivenValidParameters_theyAreContainedInTheEmailToOperator() {
 		$useCase = $this->newGetInTouchUseCase();
-		$useCase->processContactRequest( $request );
-		$this->forwardMailer->assertCalledOnce();
-		$this->forwardMailer->assertCalledOnceWith(
+		$useCase->processContactRequest( $this->newRequest() );
+		$this->operatorMailer->assertCalledOnce();
+		$this->operatorMailer->assertCalledOnceWith(
 			new EmailAddress( self::INQUIRER_EMAIL_ADDRESS ),
 			[
 				'firstName' => self::INQUIRER_FIRST_NAME,
@@ -72,6 +64,26 @@ class GetInTouchUseCaseTest extends \PHPUnit_Framework_TestCase {
 		);
 	}
 
+	public function testGivenValidRequest_theUserIsNotified() {
+		$useCase = $this->newGetInTouchUseCase();
+		$useCase->processContactRequest( $this->newRequest() );
+		$this->userMailer->assertCalledOnce();
+		$this->userMailer->assertCalledOnceWith(
+			new EmailAddress( self::INQUIRER_EMAIL_ADDRESS ),
+			[]
+		);
+	}
+
+	private function newRequest() {
+		return new GetInTouchRequest(
+			self::INQUIRER_FIRST_NAME,
+			self::INQUIRER_LAST_NAME,
+			self::INQUIRER_EMAIL_ADDRESS,
+			self::INQUIRY_SUBJECT,
+			self::INQUIRY_MESSAGE
+		);
+	}
+
 	private function newSucceedingValidator() {
 		$validator = $this->getMockBuilder( GetInTouchValidator::class )
 			->disableOriginalConstructor()
@@ -79,12 +91,6 @@ class GetInTouchUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$validator->method( 'validate' )->willReturn( new ValidationResult() );
 
 		return $validator;
-	}
-
-	private function newConfirmMailerDummy() {
-		return $this->getMockBuilder( TemplateBasedMailer::class )
-			->disableOriginalConstructor()
-			->getMock();
 	}
 
 }

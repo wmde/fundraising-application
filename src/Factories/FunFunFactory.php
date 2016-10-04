@@ -667,19 +667,19 @@ class FunFunFactory {
 	public function newGetInTouchUseCase() {
 		return new GetInTouchUseCase(
 			$this->getContactValidator(),
-			$this->newContactForwardingMailer(),
-			$this->newContactConfirmationMailer()
+			$this->newContactOperatorMailer(),
+			$this->newContactUserMailer()
 		);
 	}
 
-	private function newContactConfirmationMailer(): TemplateBasedMailer {
+	private function newContactUserMailer(): TemplateBasedMailer {
 		return $this->newTemplateMailer(
 			new TwigTemplate( $this->getTwig(), 'KontaktMailExtern.twig' ),
 			'mail_subject_getintouch'
 		);
 	}
 
-	private function newContactForwardingMailer(): TemplateBasedMailer {
+	private function newContactOperatorMailer(): TemplateBasedMailer {
 		return $this->newTemplateMailer(
 			new TwigTemplate( $this->getTwig(), 'KontaktMailIntern.twig' ),
 			'mail_subject_getintouch_forward'
