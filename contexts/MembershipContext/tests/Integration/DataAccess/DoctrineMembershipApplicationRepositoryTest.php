@@ -38,7 +38,7 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit_Framework_Tes
 		parent::setUp();
 	}
 
-	public function testValidApplicationGetPersisted() {
+	public function testValidMembershipApplicationGetPersisted() {
 		$this->newRepository()->storeApplication( ValidMembershipApplication::newDomainEntity() );
 
 		$expectedDoctrineEntity = ValidMembershipApplication::newDoctrineEntity();
@@ -231,6 +231,15 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit_Framework_Tes
 		$doctrineApplication = $this->getApplicationFromDatabase( $application->getId() );
 
 		$this->assertSame( DoctrineApplication::STATUS_CONFIRMED, $doctrineApplication->getDataObject()->getPreservedStatus() );
+	}
+
+	public function testGivenCompanyApplication_companyNameIsPersisted() {
+		$this->newRepository()->storeApplication( ValidMembershipApplication::newCompanyApplication() );
+
+		$expectedDoctrineEntity = ValidMembershipApplication::newDoctrineCompanyEntity();
+		$expectedDoctrineEntity->setId( self::MEMBERSHIP_APPLICATION_ID );
+
+		$this->assertDoctrineEntityIsInDatabase( $expectedDoctrineEntity );
 	}
 
 }
