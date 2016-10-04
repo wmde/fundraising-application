@@ -26,7 +26,7 @@ class AmountPolicyValidatorTest extends \PHPUnit_Framework_TestCase {
 	 * @param int $interval
 	 */
 	public function testGivenAmountWithinLimits_validationSucceeds( float $amount, int $interval ) {
-		$this->assertTrue( $this->newAmountValidator()->validate( 50, 0 )->isSuccessful() );
+		$this->assertTrue( $this->newAmountValidator()->validate( $amount, $interval )->isSuccessful() );
 	}
 
 	public function smallAmountProvider() {
