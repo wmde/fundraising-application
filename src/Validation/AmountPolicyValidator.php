@@ -10,21 +10,18 @@ namespace WMDE\Fundraising\Frontend\Validation;
  */
 class AmountPolicyValidator {
 
-	private $maxAmount;
-	private $maxAmountRecurring;
+	private $maxAmountOneTime;
 	private $maxAmountRecurringAnnually;
 
 	const VIOLATION_TOO_HIGH = 'too_high';
 
-	public function __construct( int $maxAmount, int $maxAmountRecurring, $maxAmountRecurringAnnually ) {
-		$this->maxAmount = $maxAmount;
-		$this->maxAmountRecurring = $maxAmountRecurring;
+	public function __construct( int $maxAmountOneTime, int $maxAmountRecurringAnnually ) {
+		$this->maxAmountOneTime = $maxAmountOneTime;
 		$this->maxAmountRecurringAnnually = $maxAmountRecurringAnnually;
 	}
 
 	public function validate( float $amount, int $interval ): ValidationResult {
 		if ( $this->isOneTimeAmountTooHigh( $amount, $interval ) ||
-			$this->isRecurringAmountTooHigh( $amount, $interval ) ||
 			$this->isAnuallyRecurringAmountTooHigh( $amount, $interval ) ) {
 
 			return new ValidationResult( new ConstraintViolation( $amount, self::VIOLATION_TOO_HIGH ) );
@@ -35,21 +32,14 @@ class AmountPolicyValidator {
 
 	private function isOneTimeAmountTooHigh( float $amount, int $interval ): bool {
 		if ( $interval === 0 ) {
-			return $amount >= $this->maxAmount;
-		}
-		return false;
-	}
-
-	private function isRecurringAmountTooHigh( float $amount, int $interval ): bool {
-		if ( $interval > 0 && $interval < 12 ) {
-			return $amount >= $this->maxAmountRecurring;
+			return $amount >= $this->maxAmountOneTime;
 		}
 		return false;
 	}
 
 	private function isAnuallyRecurringAmountTooHigh( float $amount, int $interval ): bool {
-		if ( $interval === 12 ) {
-			return $amount >= $this->maxAmountRecurringAnnually;
+		if ( $interval > 0 ) {
+			return ( 12 / $interval ) * $amount >= $this->maxAmountRecurringAnnually;
 		}
 		return false;
 	}

@@ -1130,7 +1130,7 @@ class FunFunFactory {
 
 	private function newDonationAmountPolicyValidator(): AmountPolicyValidator {
 		// in the future, this might come from the configuration
-		return new AmountPolicyValidator( 1000, 200, 300 );
+		return new AmountPolicyValidator( 1000, 1000 );
 	}
 
 	public function getDonationTimeframeLimit() {
