@@ -11,12 +11,11 @@ namespace WMDE\Fundraising\Frontend\Validation;
 class AmountPolicyValidator {
 
 	private $maxAmountOneTime;
-	private $maxAmountRecurring;
 	private $maxAmountRecurringAnnually;
 
 	const VIOLATION_TOO_HIGH = 'too_high';
 
-	public function __construct( int $maxAmountOneTime, $maxAmountRecurringAnnually ) {
+	public function __construct( int $maxAmountOneTime, int $maxAmountRecurringAnnually ) {
 		$this->maxAmountOneTime = $maxAmountOneTime;
 		$this->maxAmountRecurringAnnually = $maxAmountRecurringAnnually;
 	}
