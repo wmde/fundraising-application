@@ -104,6 +104,7 @@ use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
 use WMDE\Fundraising\Frontend\Presentation\CreditCardUrlConfig;
 use WMDE\Fundraising\Frontend\Presentation\CreditCardUrlGenerator;
 use WMDE\Fundraising\Frontend\Presentation\DonationConfirmationPageSelector;
+use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
 use WMDE\Fundraising\Frontend\Presentation\GreetingGenerator;
 use WMDE\Fundraising\Frontend\Presentation\PayPalUrlConfig;
 use WMDE\Fundraising\Frontend\Presentation\PayPalUrlGenerator;
@@ -343,8 +344,13 @@ class FunFunFactory {
 				$twigFactory->newTranslationExtension( $this->getTranslator() ),
 				new Twig_Extensions_Extension_Intl()
 			];
+			$filters = [
+				$twigFactory->newFilePrefixFilter(
+					$this->newFilePrefixer()
+				)
+			];
 
-			return $twigFactory->create( $loaders, $extensions );
+			return $twigFactory->create( $loaders, $extensions, $filters );
 		} );
 
 		$pimple['messenger'] = $pimple->share( function() {
@@ -1184,6 +1190,18 @@ class FunFunFactory {
 
 	private function newIbanValidator(): IbanValidator {
 		return new IbanValidator( $this->newBankDataConverter(), $this->config['banned-ibans'] );
+	}
+
+	private function newFilePrefixer(): FilePrefixer {
+		return new FilePrefixer( $this->getFilePrefix() );
+	}
+
+	private function getFilePrefix(): string {
+		$prefixContentFile = $this->getVarPath() . '/file_prefix.txt';
+		if ( !file_exists( $prefixContentFile ) ) {
+			return '';
+		}
+		return $prefix = preg_replace( '/[^0-9a-f]/', '', file_get_contents( $prefixContentFile ) );
 	}
 
 }

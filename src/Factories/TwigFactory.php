@@ -13,6 +13,7 @@ use Twig_Loader_Array;
 use Twig_Loader_Filesystem;
 use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\PageRetriever;
 use WMDE\Fundraising\Frontend\Presentation\Content\TwigPageLoader;
+use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
 
 /**
  * @license GNU GPL v2+
@@ -30,7 +31,7 @@ class TwigFactory {
 		$this->cachePath = $cachePath;
 	}
 
-	public function create( array $loaders, array $extensions ): Twig_Environment {
+	public function create( array $loaders, array $extensions, array $filters ): Twig_Environment {
 		$options = [];
 
 		if ( $this->config['enable-cache'] ) {
@@ -41,6 +42,10 @@ class TwigFactory {
 			new \Twig_Loader_Chain( $loaders ),
 			$options
 		);
+
+		foreach ( $filters as $filter ) {
+			$twig->addFilter( $filter );
+		}
 
 		foreach ( $extensions as $ext ) {
 			$twig->addExtension( $ext );
@@ -116,5 +121,9 @@ class TwigFactory {
 
 	public function newTranslationExtension( TranslatorInterface $translator ) {
 		return new TranslationExtension( $translator );
+	}
+
+	public function newFilePrefixFilter( FilePrefixer $filePrefixer ) {
+		return new \Twig_SimpleFilter( 'prefix_file', [ $filePrefixer, 'prefixFile' ] );
 	}
 }
