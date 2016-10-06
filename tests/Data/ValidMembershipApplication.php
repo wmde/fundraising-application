@@ -57,7 +57,7 @@ class ValidMembershipApplication {
 		$self = ( new self() );
 		return Application::newApplication(
 			self::MEMBERSHIP_TYPE,
-			$self->newApplicant( $self->newPersonName() ),
+			$self->newApplicant( $self->newPersonApplicantName() ),
 			$self->newPayment()
 		);
 	}
@@ -66,7 +66,7 @@ class ValidMembershipApplication {
 		$self = ( new self() );
 		return Application::newApplication(
 			self::MEMBERSHIP_TYPE,
-			$self->newApplicant( $self->newCompanyName() ),
+			$self->newApplicant( $self->newCompanyApplicantName() ),
 			$self->newPayment()
 		);
 	}
@@ -81,7 +81,7 @@ class ValidMembershipApplication {
 		);
 	}
 
-	private function newPersonName(): ApplicantName {
+	private function newPersonApplicantName(): ApplicantName {
 		$personName = ApplicantName::newPrivatePersonName();
 
 		$personName->setFirstName( self::APPLICANT_FIRST_NAME );
@@ -92,7 +92,7 @@ class ValidMembershipApplication {
 		return $personName->freeze()->assertNoNullFields();
 	}
 
-	private function newCompanyName(): ApplicantName {
+	private function newCompanyApplicantName(): ApplicantName {
 		$companyName = ApplicantName::newCompanyName();
 		$companyName->setCompanyName( self::APPLICANT_COMPANY_NAME );
 
@@ -131,17 +131,20 @@ class ValidMembershipApplication {
 	}
 
 	public static function newDoctrineEntity(): DoctrineMembershipApplication {
-		return ( new self() )->createDoctrineApplication();
-	}
+		$application = self::createDoctrineApplicationWithoutApplicantName();
 
-	private function createDoctrineApplication(): DoctrineMembershipApplication {
-		$application = new DoctrineMembershipApplication();
-
-		$application->setStatus( DoctrineMembershipApplication::STATUS_CONFIRMED );
 		$application->setApplicantFirstName( self::APPLICANT_FIRST_NAME );
 		$application->setApplicantLastName( self::APPLICANT_LAST_NAME );
 		$application->setApplicantSalutation( self::APPLICANT_SALUTATION );
 		$application->setApplicantTitle( self::APPLICANT_TITLE );
+
+		return $application;
+	}
+
+	private static function createDoctrineApplicationWithoutApplicantName(): DoctrineMembershipApplication {
+		$application = new DoctrineMembershipApplication();
+
+		$application->setStatus( DoctrineMembershipApplication::STATUS_CONFIRMED );
 
 		$application->setCity( self::APPLICANT_CITY );
 		$application->setCountry( self::APPLICANT_COUNTRY_CODE );
@@ -165,32 +168,12 @@ class ValidMembershipApplication {
 		return $application;
 	}
 
-	public static function newDoctrineCompanyEntity() {
-		$application = new DoctrineMembershipApplication();
+	public static function newDoctrineCompanyEntity(): DoctrineMembershipApplication {
+		$application = self::createDoctrineApplicationWithoutApplicantName();
 
-		$application->setStatus( DoctrineMembershipApplication::STATUS_CONFIRMED );
 		$application->setCompany( self::APPLICANT_COMPANY_NAME );
 		$application->setApplicantTitle( '' );
 		$application->setApplicantSalutation( '' );
-
-		$application->setCity( self::APPLICANT_CITY );
-		$application->setCountry( self::APPLICANT_COUNTRY_CODE );
-		$application->setPostcode( self::APPLICANT_POSTAL_CODE );
-		$application->setAddress( self::APPLICANT_STREET_ADDRESS );
-
-		$application->setApplicantEmailAddress( self::APPLICANT_EMAIL_ADDRESS );
-		$application->setApplicantPhoneNumber( self::APPLICANT_PHONE_NUMBER );
-		$application->setApplicantDateOfBirth( new \DateTime( self::APPLICANT_DATE_OF_BIRTH ) );
-
-		$application->setMembershipType( self::MEMBERSHIP_TYPE );
-		$application->setPaymentIntervalInMonths( self::PAYMENT_PERIOD_IN_MONTHS );
-		$application->setPaymentAmount( self::PAYMENT_AMOUNT_IN_EURO );
-
-		$application->setPaymentBankAccount( self::PAYMENT_BANK_ACCOUNT );
-		$application->setPaymentBankCode( self::PAYMENT_BANK_CODE );
-		$application->setPaymentBankName( self::PAYMENT_BANK_NAME );
-		$application->setPaymentBic( self::PAYMENT_BIC );
-		$application->setPaymentIban( self::PAYMENT_IBAN );
 
 		return $application;
 	}
