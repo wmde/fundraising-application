@@ -22,7 +22,11 @@ class TemplateBasedMailerSpy extends TemplateBasedMailer {
 	}
 
 	public function sendMail( EmailAddress $recipient, array $templateArguments = [] ) {
-		$this->sendMailCalls[] = func_get_args();
+		$this->sendMailCalls[] = [ $recipient, $templateArguments ];
+	}
+
+	public function sendMailToOperator( EmailAddress $replyToAddress, array $templateArguments = [] ) {
+		$this->sendMailCalls[] = [ $replyToAddress, $templateArguments ];
 	}
 
 	public function getSendMailCalls(): array {

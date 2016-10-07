@@ -1,5 +1,6 @@
 {
   "mail_subject_getintouch": "Ihre Anfrage an Wikimedia",
+  "mail_subject_getintouch_forward": "Anfrage über das Kontaktformular",
   "mail_subject_membership": "Ihre Mitgliedschaft bei Wikimedia Deutschland",
   "mail_subject_confirm_donation": "Ihre Spende für Freies Wissen",
   "mail_subject_confirm_cancellation": "Stornierung Ihrer Spende",

@@ -18,13 +18,14 @@ use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 class GetInTouchUseCase {
 
 	private $validator;
-	private $messenger;
-	private $templateBasedMailer;
+	private $operatorMailer;
+	private $userMailer;
 
-	public function __construct( GetInTouchValidator $validator, Messenger $messenger, TemplateBasedMailer $templateMailer ) {
+	public function __construct( GetInTouchValidator $validator, TemplateBasedMailer $operatorMailer,
+								 TemplateBasedMailer $userMailer ) {
 		$this->validator = $validator;
-		$this->messenger = $messenger;
-		$this->templateBasedMailer = $templateMailer;
+		$this->operatorMailer = $operatorMailer;
+		$this->userMailer = $userMailer;
 	}
 
 	/**
@@ -37,24 +38,33 @@ class GetInTouchUseCase {
 			return ValidationResponse::newFailureResponse( $validationResult->getViolations() );
 		}
 
-		$this->forwardContactRequest( $request );
-		$this->confirmToUser( $request );
+		$this->sendContactRequestToOperator( $request );
+		$this->sendNotificationToUser( $request );
 
 		return ValidationResponse::newSuccessResponse();
 	}
 
-	private function forwardContactRequest( GetInTouchRequest $request ) {
-		$this->messenger->sendMessageToOperator(
-			new Message(
-				$request->getSubject(),
-				$request->getMessageBody()
-			),
-			new EmailAddress( $request->getEmailAddress() )
+	private function sendContactRequestToOperator( GetInTouchRequest $request ) {
+		$this->operatorMailer->sendMailToOperator(
+			new EmailAddress( $request->getEmailAddress() ),
+			$this->getTemplateParams( $request )
 		);
 	}
 
-	private function confirmToUser( GetInTouchRequest $request ) {
-		$this->templateBasedMailer->sendMail( new EmailAddress( $request->getEmailAddress() ) );
+	private function sendNotificationToUser( GetInTouchRequest $request ) {
+		// We don't send any template input here to avoid misusing the form for spam.
+		// The user just gets a "We received your inquiry and will contact you shortly" message
+		$this->userMailer->sendMail( new EmailAddress( $request->getEmailAddress() ) );
+	}
+
+	private function getTemplateParams( GetInTouchRequest $request ) {
+		return [
+			'firstName' => $request->getFirstName(),
+			'lastName' => $request->getLastName(),
+			'emailAddress' => $request->getEmailAddress(),
+			'subject' => $request->getSubject(),
+			'message' => $request->getMessageBody()
+		];
 	}
 
 }

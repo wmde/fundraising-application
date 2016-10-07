@@ -36,4 +36,17 @@ class TemplateBasedMailer {
 		);
 	}
 
+	/**
+	 * @throws \RuntimeException
+	 */
+	public function sendMailToOperator( EmailAddress $replyToAddress, array $templateArguments = [] ) {
+		$this->messenger->sendMessageToOperator(
+			new Message(
+				$this->subject,
+				$this->template->render( $templateArguments )
+			),
+			$replyToAddress
+		);
+	}
+
 }

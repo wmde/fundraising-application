@@ -39,4 +39,14 @@ class LoggingMailer extends TemplateBasedMailer {
 		}
 	}
 
+	public function sendMailToOperator( EmailAddress $replyToAddress, array $templateArguments = [] ) {
+		try {
+			$this->mailer->sendMailToOperator( $replyToAddress, $templateArguments );
+		}
+		catch ( \RuntimeException $ex ) {
+			$this->logger->log( $this->logLevel, $ex->getMessage(), [ self::CONTEXT_EXCEPTION_KEY => $ex ] );
+			throw $ex;
+		}
+	}
+
 }
