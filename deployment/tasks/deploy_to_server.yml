@@ -1,11 +1,17 @@
+# This file is meant to be included from the deployment.yml playbook
+# It will deploy the archive created by build.yml to the server
+#
+# The variable "release_name" contains a prefix and the release timestamp. It's passed in from deployment.yml
+# Most other variables come from the inventory file.
+
 - name: Create release directory
-  file: path={{ app_dir }}/{{ release_prefix }}{{ release_name }} state=directory
+  file: path={{ app_dir }}/{{ release_name }} state=directory
 
 - name: Expand release tarball
-  unarchive: src={{ local_archive }} dest={{ app_dir }}/{{ release_prefix }}{{ release_name }}
+  unarchive: src={{ local_archive }} dest={{ app_dir }}/{{ release_name }}
 
 - name: Set app directory ownership
-  file: path={{ app_dir }}/{{ release_prefix }}{{ release_name }} owner={{app_owner}} group={{app_group}} recurse=yes
+  file: path={{ app_dir }}/{{ release_name }} owner={{app_owner}} group={{app_group}} recurse=yes
 
 - name: Check if configuration file exists
   stat: path={{ app_dir }}/{{ config_file }}
@@ -18,24 +24,24 @@
   failed_when: decode_json_config.stdout != "0"
 
 - name: Validate config file against schema
-  command: ./console validate-config app/config/config.dist.json {{ app_dir }}/{{ config_file }} chdir={{ app_dir }}/{{ release_prefix }}{{ release_name }}
+  command: ./console validate-config app/config/config.dist.json {{ app_dir }}/{{ config_file }} chdir={{ app_dir }}/{{ release_name }}
 
 - name: Create symlink to config file
-  file: src={{ app_dir }}/{{ config_file }} dest={{ app_dir }}/{{ release_prefix }}{{ release_name }}/app/config/config.prod.json state=link
+  file: src={{ app_dir }}/{{ config_file }} dest={{ app_dir }}/{{ release_name }}/app/config/config.prod.json state=link
 
 - name: Create var dir
-  file: path={{ app_dir }}/{{ release_prefix }}{{ release_name }}/var owner={{app_owner}} group={{app_group}} state=directory
+  file: path={{ app_dir }}/{{ release_name }}/var owner={{app_owner}} group={{app_group}} state=directory
 
 - name: Create var/cache dir
-  file: path={{ app_dir }}/{{ release_prefix }}{{ release_name }}/var/cache owner={{app_owner}} group={{app_group}} state=directory mode=775
+  file: path={{ app_dir }}/{{ release_name }}/var/cache owner={{app_owner}} group={{app_group}} state=directory mode=775
 
 - name: Create symlink to log dir
-  file: src={{ app_dir }}/{{ logs_dir }} dest={{ app_dir }}/{{ release_prefix }}{{ release_name }}/var/log state=link
+  file: src={{ app_dir }}/{{ logs_dir }} dest={{ app_dir }}/{{ release_name }}/var/log state=link
 
 - name: Symlink the release
-  file: src={{ app_dir }}/{{ release_prefix }}{{ release_name }} dest={{ app_dir }}/{{ current_dir }} owner={{app_owner}} group={{app_group}} state=link
+  file: src={{ app_dir }}/{{ release_name }} dest={{ app_dir }}/{{ current_dir }} owner={{app_owner}} group={{app_group}} state=link
 
-- name: Download cachetool if needed
+- name: Download cachetool for clearing PHP-FPM opcache (if needed)
   get_url: url=http://gordalina.github.io/cachetool/downloads/cachetool.phar dest={{ app_dir }}/cachetool.phar
 
 - name: Clear PHP-FPM opcache
