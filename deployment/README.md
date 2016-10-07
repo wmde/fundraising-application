@@ -1,36 +1,10 @@
 # Deployment
 
-This directory contains the deployment files for the code of the fundraising frontend application.
+This directory contains the Ansible deployment files for the code of the fundraising frontend application.
 
-## Prerequisites on the Server
-The application requires the following infrastructure to be set up already on the server:
-
-- PHP 7 (with intl and [kontocheck extension](http://kontocheck.sourceforge.net/))
-- A web server with the correct document root and PHP configuration
-- A MySQL database server and database
-- SSH access for the deployment user
-
-Ansible scripts that set up this infrastructure are at the private Wikimedia Germany fundraising infrastructure GitHub repository.  
-
-On the machine that does the deployment, you need to have Git, [Ansible](http://ansible.com/), PHP 7 and Node.js to be installed.
-
-## Preparing the first deployment
-
-### Create the shared directories and application configuration file on the server
-
-Log in to the server and create the following directories:
-
- - **`logs`** - for the application logs (can be identical to web server log, must be writable by PHP-FPM process)
- - **`shared/config`** -  for the configuration file
-
- Create the file `shared/config/config.prod.json` with all the necessary application data. You need to configure the credentials for the database, MCP, Paypal and the content wiki. You don't need to change values that are similar to values in `app/config/config.dist.json`.
-
-### Create inventory files on the deployment machine
-Inventory files contain server/environment specific information.
-
-Duplicate the example file `deployment/inventory/production_example` and set server names and file paths (as determined by the server setup). You need three files, one for test, one for staging and one for production.
-
-For security reasons the contents of the `inventory` directory are not in the Git repository. **Do not check in your configurations.**
+The deployment scripts are structured in two phases - building the archive and all its PHP and Javascript dependencies on the "local" 
+machine (the machine that runs the playbook) and then deploying the archive to the server. The deployment is also made 
+in fashion that the old version will run until the new version is fully deployed and then the switch is made.   
 
 ## Deploy the application
 
@@ -61,6 +35,35 @@ To roll back ("undo") a deployment, log in to the server, change the symlink to 
 
 **Please note:** You should always delete the `release-XXX` folder of an unsuccessful or faulty deployment, otherwise the next person who does a rollback could point to it!
 
+## Preparing a new server for deployment
+
+### Prerequisites on the Server
+The application requires the following infrastructure to be set up already on the server:
+
+- PHP 7 (with intl and [kontocheck extension](http://kontocheck.sourceforge.net/))
+- A web server with the correct document root and PHP configuration
+- A MySQL database server and database
+- SSH access for the deployment user
+
+Ansible scripts that set up this infrastructure are at the Wikimedia Germany fundraising infrastructure GitHub repository (private).  
+
+On the machine that does the deployment, you need to have Git, [Ansible](http://ansible.com/), PHP 7 and Node.js to be installed.
+
+### Create the shared directories and application configuration file on the server
+
+Log in to the server and create the following directories:
+
+ - **`logs`** - for the application logs (can be identical to web server log, must be writable by PHP-FPM process)
+ - **`shared/config`** -  for the configuration file
+
+ Create the file `shared/config/config.prod.json` with all the necessary application data. You need to configure the credentials for the database, MCP, Paypal and the content wiki. You don't need to change values that are similar to values in `app/config/config.dist.json`.
+
+### Create inventory files on the deployment machine
+Inventory files contain server/environment specific information.
+
+Duplicate the example file `deployment/inventory/production_example` and set server names and file paths (as determined by the server setup). You need three files, one for test, one for staging and one for production.
+
+For security reasons the contents of the `inventory` directory are not in the Git repository. **Do not check in your configurations.**
 
 ## Test if the deployment works in all environments
 There is a Vagrant configuration for setting up three servers for test, staging and production in `deployment/test/Vagrantfile`. The LEMP stack for the three machines can be installed by running the Ansible playbook from the repository https://github.com/gbirke/wikimedia-fundraising-devbox and the inventory file `deployment/test/inventory`. When the machines are ready, the deployment can be tested with
