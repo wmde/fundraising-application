@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\ApplicationContext\UseCases\GetInTouch;
 
 use WMDE\Fundraising\Frontend\Infrastructure\Message;
 use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
+use WMDE\Fundraising\Frontend\Infrastructure\OperatorMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\Validation\ValidationResponse;
@@ -21,7 +22,7 @@ class GetInTouchUseCase {
 	private $operatorMailer;
 	private $userMailer;
 
-	public function __construct( GetInTouchValidator $validator, TemplateBasedMailer $operatorMailer,
+	public function __construct( GetInTouchValidator $validator, OperatorMailer $operatorMailer,
 								 TemplateBasedMailer $userMailer ) {
 		$this->validator = $validator;
 		$this->operatorMailer = $operatorMailer;

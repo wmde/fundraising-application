@@ -67,6 +67,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\LoggingMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\LoggingPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
+use WMDE\Fundraising\Frontend\Infrastructure\OperatorMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\PageRetrieverBasedStringList;
 use WMDE\Fundraising\Frontend\Infrastructure\PaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifier;
@@ -679,10 +680,11 @@ class FunFunFactory {
 		);
 	}
 
-	private function newContactOperatorMailer(): TemplateBasedMailer {
-		return $this->newTemplateMailer(
+	private function newContactOperatorMailer(): OperatorMailer {
+		return new OperatorMailer(
+			$this->getMessenger(),
 			new TwigTemplate( $this->getTwig(), 'KontaktMailIntern.twig' ),
-			'mail_subject_getintouch_forward'
+			$this->getTranslator()->trans( 'mail_subject_getintouch_forward' )
 		);
 	}
 
