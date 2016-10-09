@@ -2,10 +2,11 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\ApplicationContext\Integration\UseCases\CancelDonation;
+namespace WMDE\Fundraising\Frontend\Tests\Integration\ApplicationContext\UseCases\GetInTouch;
 
 use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\GetInTouch\GetInTouchRequest;
 use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\GetInTouch\GetInTouchUseCase;
+use WMDE\Fundraising\Frontend\Infrastructure\OperatorMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
@@ -28,7 +29,7 @@ class GetInTouchUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 	private $validator;
 
-	/** @var TemplateBasedMailerSpy */
+	/** @var OperatorMailer|\PHPUnit_Framework_MockObject_MockObject */
 	private $operatorMailer;
 
 	/** @var TemplateBasedMailerSpy */
@@ -36,7 +37,7 @@ class GetInTouchUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 	public function setUp() {
 		$this->validator = $this->newSucceedingValidator();
-		$this->operatorMailer = new TemplateBasedMailerSpy( $this );
+		$this->operatorMailer = $this->createMock( OperatorMailer::class );
 		$this->userMailer = new TemplateBasedMailerSpy( $this );
 	}
 
@@ -49,24 +50,27 @@ class GetInTouchUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testGivenValidParameters_theyAreContainedInTheEmailToOperator() {
+		$this->operatorMailer->expects( $this->once() )
+			->method( 'sendMailToOperator' )
+			->with(
+				$this->equalTo( new EmailAddress( self::INQUIRER_EMAIL_ADDRESS ) ),
+				$this->equalTo( [
+					'firstName' => self::INQUIRER_FIRST_NAME,
+					'lastName' => self::INQUIRER_LAST_NAME,
+					'emailAddress' => self::INQUIRER_EMAIL_ADDRESS,
+					'subject' => self::INQUIRY_SUBJECT,
+					'message' => self::INQUIRY_MESSAGE
+				] )
+			);
+
 		$useCase = $this->newGetInTouchUseCase();
 		$useCase->processContactRequest( $this->newRequest() );
-		$this->operatorMailer->assertCalledOnce();
-		$this->operatorMailer->assertCalledOnceWith(
-			new EmailAddress( self::INQUIRER_EMAIL_ADDRESS ),
-			[
-				'firstName' => self::INQUIRER_FIRST_NAME,
-				'lastName' => self::INQUIRER_LAST_NAME,
-				'emailAddress' => self::INQUIRER_EMAIL_ADDRESS,
-				'subject' => self::INQUIRY_SUBJECT,
-				'message' => self::INQUIRY_MESSAGE
-			]
-		);
 	}
 
 	public function testGivenValidRequest_theUserIsNotified() {
 		$useCase = $this->newGetInTouchUseCase();
 		$useCase->processContactRequest( $this->newRequest() );
+
 		$this->userMailer->assertCalledOnce();
 		$this->userMailer->assertCalledOnceWith(
 			new EmailAddress( self::INQUIRER_EMAIL_ADDRESS ),

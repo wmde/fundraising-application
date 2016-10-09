@@ -11,7 +11,7 @@ use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class TemplateBasedMailer {
+class OperatorMailer {
 
 	private $messenger;
 	private $template;
@@ -26,13 +26,13 @@ class TemplateBasedMailer {
 	/**
 	 * @throws \RuntimeException
 	 */
-	public function sendMail( EmailAddress $recipient, array $templateArguments = [] ) {
-		$this->messenger->sendMessageToUser(
+	public function sendMailToOperator( EmailAddress $replyToAddress, array $templateArguments = [] ) {
+		$this->messenger->sendMessageToOperator(
 			new Message(
 				$this->subject,
 				$this->template->render( $templateArguments )
 			),
-			$recipient
+			$replyToAddress
 		);
 	}
 
