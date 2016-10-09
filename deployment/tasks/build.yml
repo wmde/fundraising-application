@@ -1,3 +1,12 @@
+# This file is meant to be included from the deployment.yml playbook
+# It will create an archive of the source code and all its PHP and JavaScript dependencies
+#
+# The variable "build_dir" contains the inventory-specific path where all the code is checked out and assembled.
+# That path could be deleted between deployments, but for performance reasons the code should stay in place.
+# "buil_dir" is passed in from deployment.yml
+#
+# All other variables come from the inventory file.
+
 - name: Checkout code
   git: repo=https://github.com/wmde/FundraisingFrontend.git dest={{ build_dir }} version={{ build_branch }}
 

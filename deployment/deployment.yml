@@ -1,12 +1,14 @@
 ---
-- hosts: local
+- name: Create a new archive of the fundraising application on the local machine
+  hosts: local
   connection: local
   tasks:
     - include: tasks/build.yml
       vars:
         build_dir: "/tmp/fundraising-build-{{ hostvars[inventory_hostname]['inventory_file'] | basename }}"
 
-- hosts: webservers
+- name: Deploy the created archive to the server
+  hosts: webservers
   vars:
     app_owner: deploy
     app_group: www-data
@@ -19,7 +21,7 @@
 
     - include: tasks/deploy_to_server.yml
       vars:
-        release_name: "{{ release_timestamp.stdout }}"
+        release_name: "{{ release_prefix }}{{ release_timestamp.stdout }}"
         local_archive: "/tmp/fundraising-build-{{ hostvars[inventory_hostname]['inventory_file'] | basename }}.tar.gz"
 
     - name: Check if the website is reachable
