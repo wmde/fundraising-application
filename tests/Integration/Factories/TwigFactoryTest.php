@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\Factories;
 use Twig_Error_Loader;
 use Twig_LoaderInterface;
 use WMDE\Fundraising\Frontend\Factories\TwigFactory;
+use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
 
 /**
  * @covers WMDE\Fundraising\Frontend\Factories\TwigFactory
@@ -23,7 +24,7 @@ class TwigFactoryTest extends \PHPUnit_Framework_TestCase {
 				'array' => [ 'variableReplacement.twig' => '{$ testvar $}' ]
 			]
 		], '/tmp/fun' );
-		$twig = $factory->create( [ $factory->newArrayLoader() ], [] );
+		$twig = $factory->create( [ $factory->newArrayLoader() ], [], [] );
 		$result = $twig->render( 'variableReplacement.twig', [ 'testvar' => 'Meeow!' ] );
 		$this->assertSame( 'Meeow!', $result );
 	}
@@ -44,7 +45,7 @@ class TwigFactoryTest extends \PHPUnit_Framework_TestCase {
 		$thirdLoader->expects( $this->never() )->method( $this->anything() );
 
 		$factory = new TwigFactory( [ 'enable-cache' => false ], '/tmp/fun' );
-		$twig = $factory->create( [ $firstLoader, $secondLoader, $thirdLoader ], [] );
+		$twig = $factory->create( [ $firstLoader, $secondLoader, $thirdLoader ], [], [] );
 		$result = $twig->render( 'Canis_silvestris' );
 		$this->assertSame( 'Meeow!', $result );
 	}
@@ -73,6 +74,26 @@ class TwigFactoryTest extends \PHPUnit_Framework_TestCase {
 		$realPath = realpath( $loader->getPaths()[0] );
 		$this->assertFalse( $realPath === false, 'path does not exist' );
 		$this->assertSame( $realPath, realpath( __DIR__ . '/../../templates' ) );
+	}
+
+	public function testFilePrefixerIsCalledInTemplate() {
+		$prefixer = $this->getMockBuilder( FilePrefixer::class )->disableOriginalConstructor()->getMock();
+		$prefixer->expects( $this->once() )
+			->method( 'prefixFile' )
+			->willReturn( 'baaaaad.testfile.js' )
+			->with( 'testfile.js' );
+
+		$factory = new TwigFactory( [
+			'enable-cache' => false,
+			'loaders' => [
+				'array' => [ 'filePrefix.twig' => '{$ "testfile.js"|prefix_file $}' ]
+			]
+		], '/tmp/fun' );
+
+		$filters = [ $factory->newFilePrefixFilter( $prefixer ) ];
+		$twig = $factory->create( [ $factory->newArrayLoader() ], [], $filters );
+		$result = $twig->render( 'filePrefix.twig' );
+		$this->assertSame( 'baaaaad.testfile.js', $result );
 	}
 
 }

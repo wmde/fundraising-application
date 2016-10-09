@@ -29,6 +29,9 @@
 - name: Create var/cache dir
   file: path={{ app_dir }}/{{ release_prefix }}{{ release_name }}/var/cache owner={{app_owner}} group={{app_group}} state=directory mode=775
 
+- name: Create cache-busting prefix
+  copy: dest={{ app_dir }}/{{ release_prefix }}{{ release_name }}/var/file_prefix.txt content="{{ release_name|hash('md5') }}" owner={{app_owner}} group={{app_group}}
+
 - name: Create symlink to log dir
   file: src={{ app_dir }}/{{ logs_dir }} dest={{ app_dir }}/{{ release_prefix }}{{ release_name }}/var/log state=link
 
