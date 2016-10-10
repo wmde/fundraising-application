@@ -6,7 +6,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use Monolog\Formatter\JsonFormatter;
 use Monolog\Formatter\LineFormatter;
-use Monolog\Handler\BufferHandler;
+use Monolog\Handler\FingersCrossedHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
@@ -33,12 +33,12 @@ $ffFactory->setLogger( call_user_func( function() use ( $ffFactory ) {
 	$logger = new Logger( 'WMDE Fundraising Frontend logger' );
 
 	$streamHandler = new StreamHandler(
-		$ffFactory->getLoggingPath() . '/' . ( new \DateTime() )->format( 'Y-m-d\TH:i:s\Z' ) . '.log'
+		$ffFactory->getLoggingPath() . '/error-debug.log'
 	);
 
-	$bufferHandler = new BufferHandler( $streamHandler, 500, Logger::DEBUG, true, true );
-	$streamHandler->setFormatter( new LineFormatter( "%message% - %context%\n" ) );
-	$logger->pushHandler( $bufferHandler );
+	$fingersCrossedHandler = new FingersCrossedHandler( $streamHandler );
+	$streamHandler->setFormatter( new LineFormatter( LineFormatter::SIMPLE_FORMAT ) );
+	$logger->pushHandler( $fingersCrossedHandler );
 
 	$errorHandler = new StreamHandler(
 		$ffFactory->getLoggingPath() . '/error.log',
