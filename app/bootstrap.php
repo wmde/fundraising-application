@@ -9,22 +9,23 @@
 declare( strict_types = 1 );
 
 use Silex\Application;
+use Silex\Provider\RoutingServiceProvider;
 use Silex\Provider\SessionServiceProvider;
-use Silex\Provider\UrlGeneratorServiceProvider;
+use Silex\Provider\TwigServiceProvider;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\App\AccessDeniedException;
-use WMDE\Fundraising\Frontend\Infrastructure\BrowserCookieHandler;
 
 $app = new Application();
 
 $app->register( new SessionServiceProvider() );
-$app->register( new UrlGeneratorServiceProvider() );
+$app->register( new RoutingServiceProvider() );
+$app->register( new TwigServiceProvider() );
 
 $app->before(
 	function ( Request $request, Application $app ) {
-		$app['request.is_json'] = in_array( 'application/json', $request->getAcceptableContentTypes() );
+		$app['request_stack.is_json'] = in_array( 'application/json', $request->getAcceptableContentTypes() );
 	},
 	Application::EARLY_EVENT
 );
@@ -45,7 +46,7 @@ $app->after( function( Request $request, Response $response ) {
 	return $response;
 } );
 
-$app->error( function ( AccessDeniedException $e, $code ) use ( $ffFactory ) {
+$app->error( function ( AccessDeniedException $e ) use ( $ffFactory ) {
 	return new Response(
 		$ffFactory->newAccessDeniedHTMLPresenter()->present( $e ),
 		403,
@@ -53,7 +54,7 @@ $app->error( function ( AccessDeniedException $e, $code ) use ( $ffFactory ) {
 	);
 } );
 
-$app->error( function ( \Exception $e, $code ) use ( $ffFactory, $app ) {
+$app->error( function ( \Exception $e, Request $request, $code ) use ( $ffFactory, $app ) {
 	if ( $app['debug'] ) {
 		throw $e;
 	}
@@ -65,7 +66,7 @@ $app->error( function ( \Exception $e, $code ) use ( $ffFactory, $app ) {
 		'stack_trace' => $e->getTraceAsString()
 	] );
 
-	if ( $app['request.is_json'] ) {
+	if ( $app['request_stack.is_json'] ) {
 		return $app->json( [
 			'ERR' => $e->getMessage()
 		] );
