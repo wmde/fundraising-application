@@ -18,6 +18,7 @@ use Mediawiki\Api\ApiUser;
 use Mediawiki\Api\Guzzle\MiddlewareFactory;
 use Mediawiki\Api\MediawikiApi;
 use NumberFormatter;
+use Pimple\Container;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Swift_MailTransport;
@@ -156,7 +157,7 @@ class FunFunFactory {
 	private $config;
 
 	/**
-	 * @var \Pimple
+	 * @var Container
 	 */
 	private $pimple;
 
@@ -172,22 +173,22 @@ class FunFunFactory {
 		$this->pimple = $this->newPimple();
 	}
 
-	private function newPimple(): \Pimple {
-		$pimple = new \Pimple();
+	private function newPimple(): Container {
+		$pimple = new Container();
 
-		$pimple['logger'] = $pimple->share( function() {
+		$pimple['logger'] = function() {
 			return new NullLogger();
-		} );
+		};
 
-		$pimple['profiler_data_collector'] = $pimple->share( function() {
+		$pimple['profiler_data_collector'] = function() {
 			return new ProfilerDataCollector();
-		} );
+		};
 
-		$pimple['dbal_connection'] = $pimple->share( function() {
+		$pimple['dbal_connection'] = function() {
 			return DriverManager::getConnection( $this->config['db'] );
-		} );
+		};
 
-		$pimple['entity_manager'] = $pimple->share( function() {
+		$pimple['entity_manager'] = function() {
 			$entityManager = ( new StoreFactory( $this->getConnection() ) )->getEntityManager();
 			if ( $this->addDoctrineSubscribers ) {
 				$entityManager->getEventManager()->addEventSubscriber( $this->newDoctrineDonationPrePersistSubscriber() );
@@ -195,71 +196,71 @@ class FunFunFactory {
 			}
 
 			return $entityManager;
-		} );
+		};
 
-		$pimple['subscription_repository'] = $pimple->share( function() {
+		$pimple['subscription_repository'] = function() {
 			return new LoggingSubscriptionRepository(
 				new DoctrineSubscriptionRepository( $this->getEntityManager() ),
 				$this->getLogger()
 			);
-		} );
+		};
 
-		$pimple['donation_repository'] = $pimple->share( function() {
+		$pimple['donation_repository'] = function() {
 			return new LoggingDonationRepository(
 				new DoctrineDonationRepository( $this->getEntityManager() ),
 				$this->getLogger()
 			);
-		} );
+		};
 
-		$pimple['membership_application_repository'] = $pimple->share( function() {
+		$pimple['membership_application_repository'] = function() {
 			return new LoggingApplicationRepository(
 				new DoctrineApplicationRepository( $this->getEntityManager() ),
 				$this->getLogger()
 			);
-		} );
+		};
 
-		$pimple['comment_repository'] = $pimple->share( function() {
+		$pimple['comment_repository'] = function() {
 			$finder = new LoggingCommentFinder(
 				new DoctrineCommentFinder( $this->getEntityManager() ),
 				$this->getLogger()
 			);
 
 			return $this->addProfilingDecorator( $finder, 'CommentFinder' );
-		} );
+		};
 
-		$pimple['mail_validator'] = $pimple->share( function() {
+		$pimple['mail_validator'] = function() {
 			return new EmailValidator( new InternetDomainNameValidator() );
-		} );
+		};
 
-		$pimple['subscription_validator'] = $pimple->share( function() {
+		$pimple['subscription_validator'] = function() {
 			return new SubscriptionValidator(
 				$this->getEmailValidator(),
 				$this->newTextPolicyValidator( 'fields' ),
 				$this->newSubscriptionDuplicateValidator(),
 				$this->newHonorificValidator()
 			);
-		} );
+		};
 
-		$pimple['template_name_validator'] = $pimple->share( function() {
+		$pimple['template_name_validator'] = function() {
 			return new TemplateNameValidator( $this->getTwig() );
-		} );
+		};
 
-		$pimple['contact_validator'] = $pimple->share( function() {
+		$pimple['contact_validator'] = function() {
 			return new GetInTouchValidator( $this->getEmailValidator() );
-		} );
+		};
 
-		$pimple['greeting_generator'] = $pimple->share( function() {
+		$pimple['greeting_generator'] = function() {
 			return new GreetingGenerator();
-		} );
+		};
 
-		$pimple['mw_api'] = $pimple->share( function() {
+		$pimple['mw_api'] = function() {
 			return new MediawikiApi(
 				$this->config['cms-wiki-api-url'],
 				$this->getGuzzleClient()
 			);
-		} );
+		};
 
-		$pimple['guzzle_client'] = $pimple->share( function() {
+		$pimple['guzzle_client'] = function() {
 			$middlewareFactory = new MiddlewareFactory();
 			$middlewareFactory->setLogger( $this->getLogger() );
 
@@ -273,9 +274,9 @@ class FunFunFactory {
 			] );
 
 			return $this->addProfilingDecorator( $guzzle, 'Guzzle Client' );
-		} );
+		};
 
-		$pimple['translator'] = $pimple->share( function() {
+		$pimple['translator'] = function() {
 			$translationFactory = new TranslationFactory();
 			$loaders = [
 				'json' => $translationFactory->newJsonLoader()
@@ -317,24 +318,24 @@ class FunFunFactory {
 			);
 
 			return $translator;
-		} );
+		};
 
 		// In the future, this could be locale-specific or filled from a DB table
-		$pimple['honorifics'] = $pimple->share( function() {
+		$pimple['honorifics'] = function() {
 			return new Honorifics( [
 				'' => 'Kein Titel',
 				'Dr.' => 'Dr.',
 				'Prof.' => 'Prof.',
 				'Prof. Dr.' => 'Prof. Dr.'
 			] );
-		} );
+		};
 
-		$pimple['twig_factory'] = $pimple->share( function () {
+		$pimple['twig_factory'] = function () {
 			// TODO: like this we end up with two Twig instance, one created here and on in the framework
 			return new TwigFactory( $this->config['twig'], $this->getCachePath() . '/twig' );
-		} );
+		};
 
-		$pimple['twig'] = $pimple->share( function() {
+		$pimple['twig'] = function() {
 			$twigFactory = $this->getTwigFactory();
 			$loaders = array_filter( [
 				$twigFactory->newFileSystemLoader(),
@@ -352,21 +353,21 @@ class FunFunFactory {
 			];
 
 			return $twigFactory->create( $loaders, $extensions, $filters );
-		} );
+		};
 
-		$pimple['messenger'] = $pimple->share( function() {
+		$pimple['messenger'] = function() {
 			return new Messenger(
 				new Swift_MailTransport(),
 				$this->getOperatorAddress(),
 				$this->config['operator-displayname']
 			);
-		} );
+		};
 
-		$pimple['confirmation-page-selector'] = $pimple->share( function() {
+		$pimple['confirmation-page-selector'] = function() {
 			return new DonationConfirmationPageSelector( $this->config['confirmation-pages'] );
-		} );
+		};
 
-		$pimple['paypal-payment-notification-verifier'] = $pimple->share( function() {
+		$pimple['paypal-payment-notification-verifier'] = function() {
 			return new LoggingPaymentNotificationVerifier(
 				new PayPalPaymentNotificationVerifier(
 					new Client(),
@@ -374,9 +375,9 @@ class FunFunFactory {
 				),
 				$this->getLogger()
 			);
-		} );
+		};
 
-		$pimple['credit-card-api-service'] = $pimple->share( function() {
+		$pimple['credit-card-api-service'] = function() {
 			return new McpCreditCardService(
 				new TNvpServiceDispatcher(
 					'IMcpCreditcardService_v1_5',
@@ -385,18 +386,18 @@ class FunFunFactory {
 				$this->config['creditcard']['access-key'],
 				$this->config['creditcard']['testmode']
 			);
-		} );
+		};
 
-		$pimple['token_generator'] = $pimple->share( function() {
+		$pimple['token_generator'] = function() {
 			return new RandomTokenGenerator(
 				$this->config['token-length'],
 				new \DateInterval( $this->config['token-validity-timestamp'] )
 			);
-		} );
+		};
 
-		$pimple['page_cache'] = $pimple->share( function() {
+		$pimple['page_cache'] = function() {
 			return new VoidCache();
-		} );
+		};
 
 		return $pimple;
 	}
@@ -1170,9 +1171,9 @@ class FunFunFactory {
 	}
 
 	public function enablePageCache() {
-		$this->pimple['page_cache'] = $this->pimple->share( function() {
+		$this->pimple['page_cache'] = function() {
 			return new FilesystemCache( $this->getCachePath() . '/pages' );
-		} );
+		};
 	}
 
 	private function addProfilingDecorator( $objectToDecorate, string $profilingLabel ) {
