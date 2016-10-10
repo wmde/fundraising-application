@@ -30,14 +30,12 @@ class PayPalNotificationHandler {
 		try {
 			$this->ffFactory->getPayPalPaymentNotificationVerifier()->verify( $post->all() );
 		} catch ( PayPalPaymentNotificationVerifierException $e ) {
-			// TODO: log error
 			// TODO: let PayPal resend IPN?
 			// TODO: is this the right Response?
 			return new Response( '', Response::HTTP_INTERNAL_SERVER_ERROR );
 		}
 
 		// TODO: check txn_type
-		// TODO: update donation's status and payment provider related fields
 
 		$useCase = $this->ffFactory->newHandlePayPalPaymentNotificationUseCase( $this->getUpdateToken( $post ) );
 
