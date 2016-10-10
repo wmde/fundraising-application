@@ -28,7 +28,8 @@ class PayPalUrlGenerator {
 
 		$params = array_merge(
 			$this->getIntervalDependentParameters( $amount, $interval ),
-			$this->getIntervalAgnosticParameters( $itemId, $updateToken, $accessToken )
+			$this->getIntervalAgnosticParameters( $itemId, $updateToken, $accessToken ),
+			$this->getPaymentDelayParameters()
 		);
 
 		return $this->config->getPayPalBaseUrl() . http_build_query( $params );
@@ -49,6 +50,13 @@ class PayPalUrlGenerator {
 				'utoken' => $updateToken
 			] )
 		];
+	}
+
+	private function getPaymentDelayParameters() {
+		if ( $this->config->getDelayInDays() > 0 ) {
+			return $this->getDelayedSubscriptionParams( $this->config->getDelayInDays() );
+		}
+		return [];
 	}
 
 	private function getIntervalDependentParameters( Euro $amount, int $interval ): array {
@@ -73,6 +81,19 @@ class PayPalUrlGenerator {
 			'a3' => $amount->getEuroString(),
 			'p3' => $interval,
 			't3' => self::PAYMENT_CYCLE_MONTHLY,
+		];
+	}
+
+	/**
+	 * This method returns a set of parameters needed for delaying payments. It uses the parameters of one out of two
+	 * trial periods supported by PayPal.
+	 * @link https://developer.paypal.com/docs/classic/paypal-payments-standard/integration-guide/wp_standard_overview/
+	 */
+	private function getDelayedSubscriptionParams( int $delayInDays ): array {
+		return [
+			'a1' => 0,
+			'p1' => $delayInDays,
+			't1' => 'D'
 		];
 	}
 
