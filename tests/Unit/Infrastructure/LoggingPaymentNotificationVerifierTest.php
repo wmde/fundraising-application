@@ -58,13 +58,40 @@ class LoggingPaymentNotificationVerifierTest extends \PHPUnit_Framework_TestCase
 	private function assertExceptionLoggedAsCritical( string $expectedExceptionType, LoggerSpy $logger ) {
 		$logCalls = $logger->getLogCalls();
 
-		$this->assertCount( 1, $logCalls, 'There should be exactly one log call' );
+		$this->assertGreaterThan( 0, count( $logCalls ), 'There should be at least one log call' );
 		$logCall = $logCalls[0];
 
 		$this->assertSame( LogLevel::CRITICAL, $logCall[0] );
 		$this->assertInternalType( 'array', $logCall[2], 'the third log argument should be an array' );
 		$this->assertArrayHasKey( 'exception', $logCall[2], 'the log context should contain an exception element' );
 		$this->assertInstanceOf( $expectedExceptionType, $logCall[2]['exception'] );
+	}
+
+	public function testWhenVerifierThrowsException_requestIsLoggedAsDebugInfo() {
+		$logger = new LoggerSpy();
+
+		$loggingVerifier = new LoggingPaymentNotificationVerifier(
+			$this->newThrowingVerifier(),
+			$logger
+		);
+
+		try {
+			$loggingVerifier->verify( [ 'item_name'  => 'Welcome to Wikipedia' ] );
+		}
+		catch ( PayPalPaymentNotificationVerifierException $ex ) {
+		}
+
+		$this->assertRequestLoggedAsDebugInfo( PayPalPaymentNotificationVerifierException::class, $logger );
+	}
+
+	private function assertRequestLoggedAsDebugInfo( string $expectedExceptionType, LoggerSpy $logger ) {
+		$logCalls = $logger->getLogCalls();
+
+		$this->assertGreaterThan( 1, count( $logCalls ), 'There should be at least two log calls' );
+		$logCall = $logCalls[1];
+
+		$this->assertSame( LogLevel::DEBUG, $logCall[0] );
+		$this->assertEquals( [ 'item_name'  => 'Welcome to Wikipedia' ], $logCall[2], 'the third log argument should contain the request' );
 	}
 
 	public function testWhenVerifierSucceeds_nothingIsLogged() {

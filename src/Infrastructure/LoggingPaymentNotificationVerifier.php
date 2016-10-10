@@ -31,6 +31,7 @@ class LoggingPaymentNotificationVerifier implements PaymentNotificationVerifier 
 			$this->verifier->verify( $request );
 		} catch ( PayPalPaymentNotificationVerifierException $exception ) {
 			$this->logger->log( $this->logLevel, $exception->getMessage(), [ self::CONTEXT_EXCEPTION_KEY => $exception ] );
+			$this->logger->log( LogLevel::DEBUG, 'Paypal request data', $request );
 			throw $exception;
 		}
 	}
