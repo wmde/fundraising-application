@@ -58,7 +58,7 @@ class LoggingPaymentNotificationVerifierTest extends \PHPUnit_Framework_TestCase
 	private function assertExceptionLoggedAsCritical( string $expectedExceptionType, LoggerSpy $logger ) {
 		$logCalls = $logger->getLogCalls();
 
-		$this->assertGreaterThan( 0, count( $logCalls ), 'There should be at least one log call' );
+		$this->assertNotEmpty( $logCalls, 'There should be at least one log call' );
 		$logCall = $logCalls[0];
 
 		$this->assertSame( LogLevel::CRITICAL, $logCall[0] );
@@ -81,10 +81,10 @@ class LoggingPaymentNotificationVerifierTest extends \PHPUnit_Framework_TestCase
 		catch ( PayPalPaymentNotificationVerifierException $ex ) {
 		}
 
-		$this->assertRequestLoggedAsDebugInfo( PayPalPaymentNotificationVerifierException::class, $logger );
+		$this->assertRequestLoggedAsDebugInfo( $logger );
 	}
 
-	private function assertRequestLoggedAsDebugInfo( string $expectedExceptionType, LoggerSpy $logger ) {
+	private function assertRequestLoggedAsDebugInfo( LoggerSpy $logger ) {
 		$logCalls = $logger->getLogCalls();
 
 		$this->assertGreaterThan( 1, count( $logCalls ), 'There should be at least two log calls' );
