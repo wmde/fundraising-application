@@ -37,7 +37,7 @@ class AddDonationHandler {
 		$this->app = $app;
 	}
 
-	public function handle( Request $request, array $sessionTrackingData ): Response {
+	public function handle( Request $request ): Response {
 		if ( !$this->isSubmissionAllowed( $request ) ) {
 			return new Response( $this->ffFactory->newSystemMessageResponse( 'donation_rejected_limit' ) );
 		}
@@ -49,10 +49,10 @@ class AddDonationHandler {
 			return new Response( $this->ffFactory->newDonationFormViolationPresenter()->present( $responseModel->getValidationErrors(), $addDonationRequest ) );
 		}
 
-		return $this->newHttpResponse( $responseModel, $this->ffFactory->getDonationConfirmationPageSelector()->selectPage(), $sessionTrackingData );
+		return $this->newHttpResponse( $responseModel );
 	}
 
-	private function newHttpResponse( AddDonationResponse $responseModel, SelectedConfirmationPage $selectedPage, array $sessionTrackingData ): Response {
+	private function newHttpResponse( AddDonationResponse $responseModel ): Response {
 		switch( $responseModel->getDonation()->getPaymentType() ) {
 			case PaymentType::DIRECT_DEBIT:
 			case PaymentType::BANK_TRANSFER:
@@ -166,7 +166,7 @@ class AddDonationHandler {
 		return $this->ffFactory->newBankDataConverter()->getBankDataFromAccountData( $account, $bankCode );
 	}
 
-	private function getEuroAmountFromString( string $amount ) {
+	private function getEuroAmountFromString( string $amount ): Euro {
 		$locale = 'de_DE'; // TODO: make this configurable for multilanguage support
 		try {
 			return Euro::newFromFloat( ( new AmountParser( $locale ) )->parseAsFloat( $amount ) );

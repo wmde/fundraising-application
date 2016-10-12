@@ -2,8 +2,9 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Tests\Unit;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\Validation;
 
+use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Validation\PaymentDataValidator;
 
@@ -93,6 +94,15 @@ class PaymentDataValidatorTest extends \PHPUnit_Framework_TestCase {
 
 	private function newPaymentValidator(): PaymentDataValidator {
 		return new PaymentDataValidator( self::MIN_DONATION_AMOUNT, self::MAX_DONATION_AMOUNT );
+	}
+
+	public function testGivenEuroAmountWithinLimits_validationSucceeds() {
+		$this->assertTrue(
+			$this->newPaymentValidator()->validate(
+				Euro::newFromInt( 50 ),
+				PaymentType::BANK_TRANSFER
+			)->isSuccessful()
+		);
 	}
 
 }

@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Validation;
 
+use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
 
 /**
@@ -37,6 +38,12 @@ class PaymentDataValidator {
 		$this->minAmountPerType = $minAmountPerType;
 	}
 
+	/**
+	 * @param mixed $amount For validation to succeed, needs to be numeric or Euro
+	 * @param string $paymentType
+	 *
+	 * @return ValidationResult
+	 */
 	public function validate( $amount, string $paymentType ): ValidationResult {
 		if ( !in_array( $paymentType, PaymentType::getPaymentTypes() ) ) {
 			return new ValidationResult( new ConstraintViolation(
@@ -45,6 +52,11 @@ class PaymentDataValidator {
 				self::SOURCE_PAYMENT_TYPE
 			) );
 		}
+
+		if ( $amount instanceof Euro ) {
+			$amount = $amount->getEuroFloat();
+		}
+
 		if ( !is_numeric( $amount ) ) {
 			return new ValidationResult( new ConstraintViolation(
 				$amount,
