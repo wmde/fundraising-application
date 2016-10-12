@@ -9,6 +9,7 @@ use GuzzleHttp\Client;
 /**
  * @license GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
+ * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
 class PayPalPaymentNotificationVerifier implements PaymentNotificationVerifier {
 
@@ -33,15 +34,24 @@ class PayPalPaymentNotificationVerifier implements PaymentNotificationVerifier {
 	 */
 	public function verify( array $request ) {
 		if ( !$this->matchesReceiverAddress( $request ) ) {
-			throw new PayPalPaymentNotificationVerifierException( 'Payment receiver address does not match' );
+			throw new PayPalPaymentNotificationVerifierException(
+				'Payment receiver address does not match',
+				PayPalPaymentNotificationVerifierException::ERROR_WRONG_RECEIVER
+			);
 		}
 
 		if ( !$this->hasAllowedPaymentStatus( $request ) ) {
-			throw new PayPalPaymentNotificationVerifierException( 'Payment status is not configured as confirmable' );
+			throw new PayPalPaymentNotificationVerifierException(
+				'Payment status is not supported',
+				PayPalPaymentNotificationVerifierException::ERROR_UNSUPPORTED_STATUS
+			);
 		}
 
 		if ( !$this->hasValidCurrencyCode( $request ) ) {
-			throw new PayPalPaymentNotificationVerifierException( 'Invalid currency code' );
+			throw new PayPalPaymentNotificationVerifierException(
+				'Unsupported currency',
+				PayPalPaymentNotificationVerifierException::ERROR_UNSUPPORTED_CURRENCY
+			);
 		}
 
 		$result = $this->httpClient->post(
@@ -51,17 +61,24 @@ class PayPalPaymentNotificationVerifier implements PaymentNotificationVerifier {
 
 		if ( $result->getStatusCode() !== 200 ) {
 			throw new PayPalPaymentNotificationVerifierException(
-				'Payment provider returned an error (HTTP status: ' . $result->getStatusCode() . ')'
+				'Payment provider returned an error (HTTP status: ' . $result->getStatusCode() . ')',
+				PayPalPaymentNotificationVerifierException::ERROR_VERIFICATION_FAILED
 			);
 		}
 
 		$responseBody = trim( $result->getBody()->getContents() );
 		if ( $responseBody === 'INVALID' ) {
-			throw new PayPalPaymentNotificationVerifierException( 'Payment provider did not confirm the sent data' );
+			throw new PayPalPaymentNotificationVerifierException(
+				'Payment provider did not confirm the sent data',
+				PayPalPaymentNotificationVerifierException::ERROR_VERIFICATION_FAILED
+			);
 		}
 
 		if ( $responseBody !== 'VERIFIED' ) {
-			throw new PayPalPaymentNotificationVerifierException( 'An error occurred while trying to confirm the sent data' );
+			throw new PayPalPaymentNotificationVerifierException(
+				'An error occurred while trying to confirm the sent data',
+				PayPalPaymentNotificationVerifierException::ERROR_VERIFICATION_FAILED
+			);
 		}
 	}
 

@@ -10,8 +10,10 @@ namespace WMDE\Fundraising\Frontend\Infrastructure;
  */
 class PayPalPaymentNotificationVerifierException extends \RuntimeException {
 
-	public function __construct( string $message, \Exception $previous = null ) {
-		parent::__construct( $message, 0, $previous );
-	}
+	const ERROR_UNKNOWN = 0;
+	const ERROR_UNSUPPORTED_STATUS = 1;
+	const ERROR_WRONG_RECEIVER = 2;
+	const ERROR_VERIFICATION_FAILED = 3;
+	const ERROR_UNSUPPORTED_CURRENCY = 4;
 
 }
