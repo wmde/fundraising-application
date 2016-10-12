@@ -30,8 +30,13 @@ class LoggingPaymentNotificationVerifier implements PaymentNotificationVerifier 
 		try {
 			$this->verifier->verify( $request );
 		} catch ( PayPalPaymentNotificationVerifierException $exception ) {
-			$this->logger->log( $this->logLevel, $exception->getMessage(), [ self::CONTEXT_EXCEPTION_KEY => $exception ] );
-			$this->logger->log( LogLevel::DEBUG, 'Paypal request data', $request );
+			if ( $exception->getCode() == PayPalPaymentNotificationVerifierException::ERROR_UNSUPPORTED_STATUS ) {
+				$this->logger->log( LogLevel::INFO, 'Unsupported payment_status', $request );
+			} else {
+				$this->logger->log( $this->logLevel, $exception->getMessage(), [ self::CONTEXT_EXCEPTION_KEY => $exception ] );
+				$this->logger->log( LogLevel::DEBUG, 'Paypal request data', $request );
+			}
+
 			throw $exception;
 		}
 	}

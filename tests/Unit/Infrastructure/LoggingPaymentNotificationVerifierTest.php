@@ -28,12 +28,16 @@ class LoggingPaymentNotificationVerifierTest extends \PHPUnit_Framework_TestCase
 		$loggingVerifier->verify( [] );
 	}
 
-	private function newThrowingVerifier(): PayPalPaymentNotificationVerifier {
+	private function newThrowingVerifier( PayPalPaymentNotificationVerifierException $exception = null ): PayPalPaymentNotificationVerifier {
 		$verifier = $this->getMockBuilder( PayPalPaymentNotificationVerifier::class )->disableOriginalConstructor()->getMock();
+
+		if ( is_null( $exception ) ) {
+			$exception = new PayPalPaymentNotificationVerifierException( 'reticulation of splines failed' );
+		}
 
 		$verifier->expects( $this->any() )
 			->method( 'verify' )
-			->willThrowException( new PayPalPaymentNotificationVerifierException( 'reticulation of splines failed' ) );
+			->willThrowException( $exception );
 
 		return $verifier;
 	}
@@ -65,6 +69,38 @@ class LoggingPaymentNotificationVerifierTest extends \PHPUnit_Framework_TestCase
 		$this->assertInternalType( 'array', $logCall[2], 'the third log argument should be an array' );
 		$this->assertArrayHasKey( 'exception', $logCall[2], 'the log context should contain an exception element' );
 		$this->assertInstanceOf( $expectedExceptionType, $logCall[2]['exception'] );
+	}
+
+	public function testGivenAnExceptionForUnsupportedPaymentMethod_itIsLoggedAsInfo() {
+		$logger = new LoggerSpy();
+
+		$statusException = new PayPalPaymentNotificationVerifierException(
+			'Unsupported status',
+			PayPalPaymentNotificationVerifierException::ERROR_UNSUPPORTED_STATUS
+		);
+		$loggingVerifier = new LoggingPaymentNotificationVerifier(
+			$this->newThrowingVerifier( $statusException ),
+			$logger
+		);
+
+		try {
+			$loggingVerifier->verify( [ 'payment_status' => 'Unknown' ] );
+		}
+		catch ( PayPalPaymentNotificationVerifierException $ex ) {
+		}
+
+		$this->assertUnsupportedMethodWasLogged( 'Unknown', $logger );
+	}
+
+	private function assertUnsupportedMethodWasLogged( string $expectedMethodName, LoggerSpy $logger ) {
+		$logCalls = $logger->getLogCalls();
+
+		$this->assertCount( 1, $logCalls, 'There should only be one log call' );
+		$logCall = $logCalls[0];
+
+		$this->assertSame( LogLevel::INFO, $logCall[0] );
+		$this->assertArrayHasKey( 'payment_status', $logCall[2], 'the log context should contain an exception element' );
+		$this->assertSame( $expectedMethodName, $logCall[2]['payment_status'] );
 	}
 
 	public function testWhenVerifierThrowsException_requestIsLoggedAsDebugInfo() {
