@@ -12,7 +12,7 @@ use GuzzleHttp\Client;
  */
 class PayPalPaymentNotificationVerifier implements PaymentNotificationVerifier {
 
-	/* private */ const ALLOWED_STATUSES = [ 'Completed' ];
+	/* private */ const ALLOWED_STATUSES = [ 'Completed', 'Processed' ];
 	/* private */ const ALLOWED_CURRENCY_CODES = [ 'EUR' ];
 
 	private $httpClient;

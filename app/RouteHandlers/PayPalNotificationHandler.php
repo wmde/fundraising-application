@@ -31,7 +31,7 @@ class PayPalNotificationHandler {
 			$this->ffFactory->getPayPalPaymentNotificationVerifier()->verify( $post->all() );
 		} catch ( PayPalPaymentNotificationVerifierException $e ) {
 			// TODO: let PayPal resend IPN?
-			// TODO: is this the right Response?
+
 			return new Response( '', Response::HTTP_INTERNAL_SERVER_ERROR );
 		}
 
