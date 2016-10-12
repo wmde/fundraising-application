@@ -40,10 +40,6 @@ class PayPalPaymentNotificationVerifier implements PaymentNotificationVerifier {
 			throw new PayPalPaymentNotificationVerifierException( 'Payment status is not configured as confirmable' );
 		}
 
-		if ( !$this->hasValidItemName( $request ) ) {
-			throw new PayPalPaymentNotificationVerifierException( 'Invalid item name' );
-		}
-
 		if ( !$this->hasValidCurrencyCode( $request ) ) {
 			throw new PayPalPaymentNotificationVerifierException( 'Invalid currency code' );
 		}
@@ -77,11 +73,6 @@ class PayPalPaymentNotificationVerifier implements PaymentNotificationVerifier {
 	private function hasAllowedPaymentStatus( array $request ): bool {
 		return array_key_exists( 'payment_status', $request ) &&
 			in_array( $request['payment_status'], self::ALLOWED_STATUSES );
-	}
-
-	private function hasValidItemName( array $request ): bool {
-		return array_key_exists( 'item_name', $request ) &&
-			$request['item_name'] === $this->config['item-name'];
 	}
 
 	private function hasValidCurrencyCode( array $request ): bool {
