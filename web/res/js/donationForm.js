@@ -173,7 +173,7 @@ $( function () {
 			},
 			{
 				viewHandler: WMDE.View.createPPLRecurrentWarningHandler(
-					WMDE.View.Animator.createSlidingElementAnimator( $( '.ppl-recurrent-warning' ) )
+					WMDE.View.Animator.createSlidingElementAnimator( $( '.notice-ppl-recurrent' ) )
 				),
 				stateKey: 'donationFormContent'
 			},

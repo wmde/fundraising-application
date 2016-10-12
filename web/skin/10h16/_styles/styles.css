@@ -739,7 +739,8 @@ div.notice-window {
     text-align: center;
 }
 
-.notice-anonymous {
+/* small notice texts that are displayed in the form when specific items are selected */
+.notice-anonymous, .notice-ppl-recurrent {
     margin-top: 20px;
     font-size: 0.9em;
 }
