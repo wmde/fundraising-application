@@ -374,7 +374,7 @@ $app->post(
 	'donation/add',
 	function( Application $app, Request $request ) use ( $ffFactory ) {
 		return ( new AddDonationHandler( $ffFactory, $app ) )
-			->handle( $request, $app['session']->get( 'piwikTracking', [] ) );
+			->handle( $request );
 	}
 );
 
@@ -387,12 +387,16 @@ $app->get( 'donation/new', function ( Request $request ) use ( $ffFactory ) {
 	}
 	$validationResult = $ffFactory->newPaymentDataValidator()->validate( $amount, (string) $request->get( 'zahlweise', '' ) );
 
-	return new Response( $ffFactory->newDonationFormPresenter()->present(
-		$amount,
-		$request->get( 'zahlweise', '' ),
-		intval( $request->get( 'periode', 0 ) ),
-		$validationResult->isSuccessful()
-	) );
+	// TODO: don't we want to use newDonationFormViolationPresenter when !$validationResult->isSuccessful()?
+
+	return new Response(
+		$ffFactory->newDonationFormPresenter()->present(
+			$amount,
+			$request->get( 'zahlweise', '' ),
+			intval( $request->get( 'periode', 0 ) ),
+			$validationResult->isSuccessful()
+		)
+	);
 } )->method( 'POST|GET' );
 
 $app->post(
