@@ -381,7 +381,7 @@ $app->post(
 // Show a donation form with pre-filled payment values, e.g. when coming from a banner
 $app->get( 'donation/new', function ( Request $request ) use ( $ffFactory ) {
 	try {
-		$amount = Euro::newFromFloat( ( new AmountParser( 'de_DE' ) )->parseAsFloat(
+		$amount = Euro::newFromFloat( ( new AmountParser( 'en_EN' ) )->parseAsFloat(
 			$request->get( 'betrag_auswahl', $request->get( 'amountGiven', '' ) ) )
 		);
 	} catch ( \InvalidArgumentException $ex ) {

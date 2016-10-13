@@ -39,7 +39,7 @@ class NewDonationRouteTest extends WebRouteTestCase {
 			],
 			[
 				[
-					'amountGiven' => '123,45',
+					'amountGiven' => '123.45',
 					'zahlweise' => 'PPL',
 					'periode' => 6
 				],
