@@ -20,3 +20,6 @@ Violations:
 {% for fieldName, message in violatedFields %}
 	Value of field "{$ fieldName $}" violates rule: {$ message $}
 {% endfor %}
+
+Initial validity:
+Payment data: {% if validationResult.paymentData == true %}valid{% else %}invalid{% endif %}
