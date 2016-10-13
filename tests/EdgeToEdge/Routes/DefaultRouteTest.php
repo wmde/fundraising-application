@@ -18,7 +18,7 @@ class DefaultRouteTest extends WebRouteTestCase {
 			'GET',
 			'/',
 			[
-				'amountGiven' => '12,34',
+				'amountGiven' => '12.34',
 				'zahlweise' => 'UEB',
 				'periode' => 6
 			]
@@ -36,7 +36,7 @@ class DefaultRouteTest extends WebRouteTestCase {
 			'GET',
 			'/',
 			[
-				'amountGiven' => '-12,34',
+				'amountGiven' => '-12.34',
 				'zahlweise' => 'UEB',
 				'periode' => 6
 			]
