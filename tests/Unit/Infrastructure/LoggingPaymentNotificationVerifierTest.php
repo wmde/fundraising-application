@@ -99,7 +99,7 @@ class LoggingPaymentNotificationVerifierTest extends \PHPUnit_Framework_TestCase
 		$logCall = $logCalls[0];
 
 		$this->assertSame( LogLevel::INFO, $logCall[0] );
-		$this->assertArrayHasKey( 'payment_status', $logCall[2], 'the log context should contain an exception element' );
+		$this->assertArrayHasKey( 'payment_status', $logCall[2], 'the log context should contain a payment_status element' );
 		$this->assertSame( $expectedMethodName, $logCall[2]['payment_status'] );
 	}
 
