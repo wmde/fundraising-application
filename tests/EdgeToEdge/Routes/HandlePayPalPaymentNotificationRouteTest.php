@@ -43,7 +43,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			$factory->getDonationRepository()->storeDonation( ValidDonation::newIncompletePayPalDonation() );
 
 			$factory->setPayPalPaymentNotificationVerifier(
-				new LoggingPaymentNotificationVerifier( $this->newSuccessfulNotifierMock(), $factory->getLogger() )
+				new LoggingPaymentNotificationVerifier( $this->newSucceedingNotifierMock(), $factory->getLogger() )
 			);
 
 			$client->request(
@@ -57,7 +57,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function newSuccessfulNotifierMock() {
+	private function newSucceedingNotifierMock() {
 		return new PayPalPaymentNotificationVerifier(
 			$this->newGuzzleClientMock( self::VALID_VERIFICATION_RESPONSE ),
 			[
@@ -193,7 +193,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	public function testGivenInvalidReceiverEmail_applicationReturnsError() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setPayPalPaymentNotificationVerifier(
-				new LoggingPaymentNotificationVerifier( $this->newSuccessfulNotifierMock(), $factory->getLogger() )
+				new LoggingPaymentNotificationVerifier( $this->newSucceedingNotifierMock(), $factory->getLogger() )
 			);
 
 			$client->request(
@@ -213,7 +213,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	public function testGivenUnsupportedPaymentStatus_applicationReturnsOK() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setPayPalPaymentNotificationVerifier(
-				new LoggingPaymentNotificationVerifier( $this->newSuccessfulNotifierMock(), $factory->getLogger() )
+				new LoggingPaymentNotificationVerifier( $this->newSucceedingNotifierMock(), $factory->getLogger() )
 			);
 
 			$client->request(
