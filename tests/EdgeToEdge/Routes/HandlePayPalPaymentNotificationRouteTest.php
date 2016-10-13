@@ -28,6 +28,8 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	const ITEM_NAME = 'My preciousss';
 	const UPDATE_TOKEN = 'my_secret_token';
 	const DONATION_ID = 1;
+	const VALID_VERIFICATION_RESPONSE = 'VERIFIED';
+	const FAILING_VERIFICATION_RESPONSE = 'FAIL';
 
 	public function testGivenValidRequest_applicationIndicatesSuccess() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
@@ -41,7 +43,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			$factory->getDonationRepository()->storeDonation( ValidDonation::newIncompletePayPalDonation() );
 
 			$factory->setPayPalPaymentNotificationVerifier(
-				new LoggingPaymentNotificationVerifier( $this->newNotifierMock(), $factory->getLogger() )
+				new LoggingPaymentNotificationVerifier( $this->newSuccessfulNotifierMock(), $factory->getLogger() )
 			);
 
 			$client->request(
@@ -55,9 +57,9 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function newNotifierMock() {
+	private function newSuccessfulNotifierMock() {
 		return new PayPalPaymentNotificationVerifier(
-			$this->newGuzzleClientMock(),
+			$this->newGuzzleClientMock( self::VALID_VERIFICATION_RESPONSE ),
 			[
 				'base-url' => self::BASE_URL,
 				'account-address' => self::EMAIL_ADDRESS,
@@ -66,7 +68,18 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	private function newGuzzleClientMock(): GuzzleClient {
+	private function newFailingNotifierMock() {
+		return new PayPalPaymentNotificationVerifier(
+			$this->newGuzzleClientMock( self::FAILING_VERIFICATION_RESPONSE ),
+			[
+				'base-url' => self::BASE_URL,
+				'account-address' => self::EMAIL_ADDRESS,
+				'item-name' => self::ITEM_NAME
+			]
+		);
+	}
+
+	private function newGuzzleClientMock( string $responseBody ): GuzzleClient {
 		$body = $this->getMockBuilder( Stream::class )
 			->disableOriginalConstructor()
 			->setMethods( [ 'getContents' ] )
@@ -74,7 +87,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 
 		$body->expects( $this->any() )
 			->method( 'getContents' )
-			->willReturn( 'VERIFIED' );
+			->willReturn( $responseBody );
 
 		$response = $this->getMockBuilder( Response::class )
 			->disableOriginalConstructor()
@@ -152,7 +165,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		$this->assertSame( $request['subscr_id'], $pplData->getSubscriberId() );
 	}
 
-	private function newRequest() {
+	private function newRequest(): array {
 		return [
 			'receiver_email' => self::EMAIL_ADDRESS,
 			'payment_status' => 'Completed',
@@ -177,10 +190,30 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	public function testGivenInvalidRequest_applicationReturnsError() {
+	public function testGivenInvalidReceiverEmail_applicationReturnsError() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setPayPalPaymentNotificationVerifier(
-				new LoggingPaymentNotificationVerifier( $this->newNotifierMock(), $factory->getLogger() )
+				new LoggingPaymentNotificationVerifier( $this->newSuccessfulNotifierMock(), $factory->getLogger() )
+			);
+
+			$client->request(
+				'POST',
+				'/handle-paypal-payment-notification',
+				[
+					'receiver_email' => 'mr.robot@evilcorp.com',
+					'payment_status' => 'Completed'
+				]
+			);
+
+			$this->assertSame( 'Payment receiver address does not match', $client->getResponse()->getContent() );
+			$this->assertSame( 403, $client->getResponse()->getStatusCode() );
+		} );
+	}
+
+	public function testGivenUnsupportedPaymentStatus_applicationReturnsOK() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setPayPalPaymentNotificationVerifier(
+				new LoggingPaymentNotificationVerifier( $this->newSuccessfulNotifierMock(), $factory->getLogger() )
 			);
 
 			$client->request(
@@ -193,7 +226,43 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			);
 
 			$this->assertSame( '', $client->getResponse()->getContent() );
-			$this->assertSame( 500, $client->getResponse()->getStatusCode() );
+			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
+		} );
+	}
+
+	public function testGivenFailingVerification_applicationReturnsError() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setPayPalPaymentNotificationVerifier(
+				new LoggingPaymentNotificationVerifier( $this->newFailingNotifierMock(), $factory->getLogger() )
+			);
+
+			$client->request(
+				'POST',
+				'/handle-paypal-payment-notification',
+				$this->newRequest()
+			);
+
+			$this->assertSame( 'An error occurred while trying to confirm the sent data', $client->getResponse()->getContent() );
+			$this->assertSame( 403, $client->getResponse()->getStatusCode() );
+		} );
+	}
+
+	public function testGivenUnsupportedCurrency_applicationReturnsError() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setPayPalPaymentNotificationVerifier(
+				new LoggingPaymentNotificationVerifier( $this->newFailingNotifierMock(), $factory->getLogger() )
+			);
+
+			$requestData = $this->newRequest();
+			$requestData['mc_currency'] = 'DOGE';
+			$client->request(
+				'POST',
+				'/handle-paypal-payment-notification',
+				$requestData
+			);
+
+			$this->assertSame( 'Unsupported currency', $client->getResponse()->getContent() );
+			$this->assertSame( 406, $client->getResponse()->getStatusCode() );
 		} );
 	}
 

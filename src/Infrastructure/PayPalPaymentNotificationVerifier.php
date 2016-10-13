@@ -9,10 +9,11 @@ use GuzzleHttp\Client;
 /**
  * @license GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
+ * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
 class PayPalPaymentNotificationVerifier implements PaymentNotificationVerifier {
 
-	/* private */ const ALLOWED_STATUSES = [ 'Completed' ];
+	/* private */ const ALLOWED_STATUSES = [ 'Completed', 'Processed' ];
 	/* private */ const ALLOWED_CURRENCY_CODES = [ 'EUR' ];
 
 	private $httpClient;
@@ -33,19 +34,24 @@ class PayPalPaymentNotificationVerifier implements PaymentNotificationVerifier {
 	 */
 	public function verify( array $request ) {
 		if ( !$this->matchesReceiverAddress( $request ) ) {
-			throw new PayPalPaymentNotificationVerifierException( 'Payment receiver address does not match' );
+			throw new PayPalPaymentNotificationVerifierException(
+				'Payment receiver address does not match',
+				PayPalPaymentNotificationVerifierException::ERROR_WRONG_RECEIVER
+			);
 		}
 
 		if ( !$this->hasAllowedPaymentStatus( $request ) ) {
-			throw new PayPalPaymentNotificationVerifierException( 'Payment status is not configured as confirmable' );
-		}
-
-		if ( !$this->hasValidItemName( $request ) ) {
-			throw new PayPalPaymentNotificationVerifierException( 'Invalid item name' );
+			throw new PayPalPaymentNotificationVerifierException(
+				'Payment status is not supported',
+				PayPalPaymentNotificationVerifierException::ERROR_UNSUPPORTED_STATUS
+			);
 		}
 
 		if ( !$this->hasValidCurrencyCode( $request ) ) {
-			throw new PayPalPaymentNotificationVerifierException( 'Invalid currency code' );
+			throw new PayPalPaymentNotificationVerifierException(
+				'Unsupported currency',
+				PayPalPaymentNotificationVerifierException::ERROR_UNSUPPORTED_CURRENCY
+			);
 		}
 
 		$result = $this->httpClient->post(
@@ -55,17 +61,24 @@ class PayPalPaymentNotificationVerifier implements PaymentNotificationVerifier {
 
 		if ( $result->getStatusCode() !== 200 ) {
 			throw new PayPalPaymentNotificationVerifierException(
-				'Payment provider returned an error (HTTP status: ' . $result->getStatusCode() . ')'
+				'Payment provider returned an error (HTTP status: ' . $result->getStatusCode() . ')',
+				PayPalPaymentNotificationVerifierException::ERROR_VERIFICATION_FAILED
 			);
 		}
 
 		$responseBody = trim( $result->getBody()->getContents() );
 		if ( $responseBody === 'INVALID' ) {
-			throw new PayPalPaymentNotificationVerifierException( 'Payment provider did not confirm the sent data' );
+			throw new PayPalPaymentNotificationVerifierException(
+				'Payment provider did not confirm the sent data',
+				PayPalPaymentNotificationVerifierException::ERROR_VERIFICATION_FAILED
+			);
 		}
 
 		if ( $responseBody !== 'VERIFIED' ) {
-			throw new PayPalPaymentNotificationVerifierException( 'An error occurred while trying to confirm the sent data' );
+			throw new PayPalPaymentNotificationVerifierException(
+				'An error occurred while trying to confirm the sent data',
+				PayPalPaymentNotificationVerifierException::ERROR_VERIFICATION_FAILED
+			);
 		}
 	}
 
@@ -77,11 +90,6 @@ class PayPalPaymentNotificationVerifier implements PaymentNotificationVerifier {
 	private function hasAllowedPaymentStatus( array $request ): bool {
 		return array_key_exists( 'payment_status', $request ) &&
 			in_array( $request['payment_status'], self::ALLOWED_STATUSES );
-	}
-
-	private function hasValidItemName( array $request ): bool {
-		return array_key_exists( 'item_name', $request ) &&
-			$request['item_name'] === $this->config['item-name'];
 	}
 
 	private function hasValidCurrencyCode( array $request ): bool {

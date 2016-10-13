@@ -31,8 +31,8 @@ class PayPalNotificationHandler {
 			$this->ffFactory->getPayPalPaymentNotificationVerifier()->verify( $post->all() );
 		} catch ( PayPalPaymentNotificationVerifierException $e ) {
 			// TODO: let PayPal resend IPN?
-			// TODO: is this the right Response?
-			return new Response( '', Response::HTTP_INTERNAL_SERVER_ERROR );
+
+			return $this->createErrorResponse( $e );
 		}
 
 		// TODO: check txn_type
@@ -77,6 +77,22 @@ class PayPalNotificationHandler {
 			->setPaymentTimestamp( $postRequest->get( 'payment_date', '' ) )
 			->setPaymentStatus( $postRequest->get( 'payment_status', '' ) )
 			->setPaymentType( $postRequest->get( 'payment_type', '' ) );
+	}
+
+	private function createErrorResponse( PayPalPaymentNotificationVerifierException $e ): Response {
+		switch ( $e->getCode() ) {
+			case PayPalPaymentNotificationVerifierException::ERROR_UNSUPPORTED_STATUS;
+				// Just ignore IPN notices with a status we don't handle
+				return new Response( '', Response::HTTP_OK );
+			case PayPalPaymentNotificationVerifierException::ERROR_WRONG_RECEIVER:
+				return new Response( $e->getMessage(), Response::HTTP_FORBIDDEN );
+			case PayPalPaymentNotificationVerifierException::ERROR_VERIFICATION_FAILED:
+				return new Response( $e->getMessage(), Response::HTTP_FORBIDDEN );
+			case PayPalPaymentNotificationVerifierException::ERROR_UNSUPPORTED_CURRENCY:
+				return new Response( $e->getMessage(), Response::HTTP_NOT_ACCEPTABLE );
+			default:
+				return new Response( $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR );
+		}
 	}
 
 }
