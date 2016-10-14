@@ -18,7 +18,9 @@ module.exports = {
 		createPaymentSummaryDisplayHandler: require( './lib/view_handler/display_payment_summary' ).createPaymentSummaryDisplayHandler,
 		createFeeOptionSwitcher: require( './lib/view_handler/fee_option_switcher' ).createFeeOptionSwitcher,
 		createFieldValueValidityIndicator: require( './lib/view_handler/field_value_validity_indicator' ).createFieldValueValidityIndicator,
-		createCountrySpecificAttributesHandler: require( './lib/view_handler/country_specific_attributes' ).createCountrySpecificAttributesHandler
+		createCountrySpecificAttributesHandler: require( './lib/view_handler/country_specific_attributes' ).createCountrySpecificAttributesHandler,
+		createRecurrentPaypalNoticeHandler: require( './lib/view_handler/recurrent_paypal_notice' ).createRecurrentPaypalNoticeHandler,
+		Animator: require( './lib/view_handler/animator' )
 	},
 	Actions: require( './lib/actions' ),
 	CurrencyFormatter: require( './lib/simple_currency_formatter' ),

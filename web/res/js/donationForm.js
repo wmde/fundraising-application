@@ -172,6 +172,12 @@ $( function () {
 				stateKey: 'donationFormContent.addressType'
 			},
 			{
+				viewHandler: WMDE.View.createRecurrentPaypalNoticeHandler(
+					WMDE.View.Animator.createSlidingElementAnimator( $( '.notice-ppl-recurrent' ) )
+				),
+				stateKey: 'donationFormContent'
+			},
+			{
 				viewHandler: WMDE.View.createPaymentSummaryDisplayHandler(
 					$( '.interval-text' ),
 					$( '.amount-formatted'),
