@@ -317,6 +317,19 @@ class DoctrineDonationRepository implements DonationRepository {
 			return null;
 		}
 
+		// This should not happen, but it does (but only with PayPal payments in production), so as a step towards fixing this, we log
+		if ( $this->entityHasMissingFields( $dd ) ) {
+			error_log( sprintf(
+				'Entity %d has missing fields. Field data: %s',
+				$dd->getId(),
+				var_export( $dd->getDecodedData(), true ) )
+			);
+			error_log( implode( "\n", array_map( function( $bt ) {
+				return sprintf( '%s, line %d, %s', $bt['file'], $bt['line'], $bt['function'] );
+			}, debug_backtrace() ) ) );
+			return null;
+		}
+
 		return new Donor(
 			$this->getPersonNameFromEntity( $dd ),
 			$this->getPhysicalAddressFromEntity( $dd ),
@@ -489,6 +502,16 @@ class DoctrineDonationRepository implements DonationRepository {
 			$dd->getIsPublic(),
 			$dd->getPublicRecord()
 		);
+	}
+
+	private function entityHasMissingFields( DoctrineDonation $dd ): bool {
+		$data = $dd->getDecodedData();
+		return
+			!isset( $data['anrede'] ) || $data['anrede'] === null ||
+			!isset( $data['titel'] ) || $data['titel'] === null ||
+			!isset( $data['vorname'] ) || $data['vorname'] === null ||
+			!isset( $data['nachname'] ) || $data['nachname'] === null ||
+			!isset( $data['firma'] ) || $data['firma'] === null;
 	}
 
 }
