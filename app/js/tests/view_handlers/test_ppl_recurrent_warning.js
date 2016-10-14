@@ -2,8 +2,8 @@
 
 var test = require( 'tape' ),
 	sinon = require( 'sinon' ),
-	pplRecurrentWarning = require( '../../lib/view_handler/ppl_recurrent_warning' ),
-	createPPLRecurrentWarningHandler = pplRecurrentWarning.createPPLRecurrentWarningHandler
+	pplRecurrentWarning = require( '../../lib/view_handler/recurrent_paypal_notice' ),
+	createPPLRecurrentWarningHandler = pplRecurrentWarning.createRecurrentPaypalNoticeHandler
 	;
 
 function createAnimator() {

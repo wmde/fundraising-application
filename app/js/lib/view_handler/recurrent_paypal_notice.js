@@ -3,10 +3,10 @@
 var objectAssign = require( 'object-assign' ),
 
 	/**
-	 * View Handler for showing and hiding elements if the update value matches a regular expression
+	 * View Handler for displaying a notice when PayPal is used with recurrent payments
 	 * @class
 	 */
-	PPLRecurrentWarning = {
+	RecurrentPaypalNotice = {
 		isHidden: null,
 		animator: null,
 
@@ -29,8 +29,8 @@ var objectAssign = require( 'object-assign' ),
 	};
 
 module.exports = {
-	createPPLRecurrentWarningHandler: function ( animator ) {
-		return objectAssign( Object.create( PPLRecurrentWarning ), {
+	createRecurrentPaypalNoticeHandler: function ( animator ) {
+		return objectAssign( Object.create( RecurrentPaypalNotice ), {
 			animator: animator
 		} );
 	}

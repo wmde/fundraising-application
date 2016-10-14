@@ -172,7 +172,7 @@ $( function () {
 				stateKey: 'donationFormContent.addressType'
 			},
 			{
-				viewHandler: WMDE.View.createPPLRecurrentWarningHandler(
+				viewHandler: WMDE.View.createRecurrentPaypalNoticeHandler(
 					WMDE.View.Animator.createSlidingElementAnimator( $( '.notice-ppl-recurrent' ) )
 				),
 				stateKey: 'donationFormContent'
