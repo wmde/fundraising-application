@@ -6,11 +6,11 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\Cache;
-use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\CachingPageRetriever;
-use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\PageRetriever;
+use WMDE\Fundraising\Frontend\Infrastructure\CachingPageRetriever;
+use WMDE\Fundraising\Frontend\Infrastructure\PageRetriever;
 
 /**
- * @covers WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\CachingPageRetriever
+ * @covers WMDE\Fundraising\Frontend\Infrastructure\CachingPageRetriever
  *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >

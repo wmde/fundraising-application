@@ -2,10 +2,10 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Integration\ApplicationContext\UseCases\GetInTouch;
+namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\GetInTouch;
 
-use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\GetInTouch\GetInTouchRequest;
-use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\GetInTouch\GetInTouchUseCase;
+use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
+use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
 use WMDE\Fundraising\Frontend\Infrastructure\OperatorMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\EmailAddress;
@@ -14,7 +14,7 @@ use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\Fundraising\Frontend\Validation\ValidationResult;
 
 /**
- * @covers WMDE\Fundraising\Frontend\ApplicationContext\UseCases\GetInTouch\GetInTouchUseCase
+ * @covers WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase
  *
  * @license GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
@@ -79,7 +79,7 @@ class GetInTouchUseCaseTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	private function newRequest() {
-		return new GetInTouchRequest(
+		return new \WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest(
 			self::INQUIRER_FIRST_NAME,
 			self::INQUIRER_LAST_NAME,
 			self::INQUIRER_EMAIL_ADDRESS,

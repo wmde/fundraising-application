@@ -3,7 +3,7 @@
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use WMDE\Fundraising\Store\Factory;
-use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\ConfigReader;
+use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
 
 $prodConfigPath = __DIR__ . '/app/config/config.prod.json';
 
