@@ -30,7 +30,7 @@ $ffFactory = call_user_func( function() {
 $ffFactory->enablePageCache();
 
 $ffFactory->setLogger( call_user_func( function() use ( $ffFactory ) {
-	$logger = new Logger( 'WMDE Fundraising Frontend logger' );
+	$logger = new Logger( 'index.php logger' );
 
 	$streamHandler = new StreamHandler(
 		$ffFactory->getLoggingPath() . '/error-debug.log'
