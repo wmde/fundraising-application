@@ -70,15 +70,14 @@ $app['track_all_the_memory'] = $ffFactory;
 $app->register( new Silex\Provider\HttpFragmentServiceProvider() );
 $app->register( new Silex\Provider\ServiceControllerServiceProvider() );
 $app->register( new Silex\Provider\TwigServiceProvider() );
-$app->register( new Silex\Provider\UrlGeneratorServiceProvider() );
 
 $app->register( new Silex\Provider\DoctrineServiceProvider() );
 
 $app['db'] = $ffFactory->getConnection();
-$app['dbs'] = $app->share( function ( $app ) {
+$app['dbs'] = function ( $app ) {
 	$app['dbs.options.initializer']();
 	return [ 'default' => $app['db'] ];
-} );
+};
 
 $app->register(
 	new Silex\Provider\WebProfilerServiceProvider(),
@@ -95,9 +94,9 @@ $app->register( new Sorien\Provider\DoctrineProfilerServiceProvider() );
 $app['data_collectors'] = array_merge(
 	$app['data_collectors'],
 	[
-		'fundraising' => $app->share( function () use ( $ffFactory ) {
+		'fundraising' => function () use ( $ffFactory ) {
 			return $ffFactory->getProfilerDataCollector();
-		})
+		}
 	]
 );
 
@@ -106,13 +105,13 @@ $app['data_collector.templates'] = array_merge(
 	$app['data_collector.templates']
 );
 
-$app['twig.loader.filesystem'] = $app->share( $app->extend(
+$app['twig.loader.filesystem'] = $app->extend(
 	'twig.loader.filesystem',
 	function ( $loader ) use ( $ffFactory ) {
 		/** @var \Twig_Loader_Filesystem $loader */
 		$loader->addPath( $ffFactory->getTemplatePath(), 'FunProfiler' );
 		return $loader;
 	}
-) );
+);
 
 $app->run();
