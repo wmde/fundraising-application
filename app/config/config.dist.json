@@ -99,7 +99,15 @@
 	"token-length": 16,
 	"token-validity-timestamp": "PT4H",
 	"purging-secret": "",
-	"paypal": {
+	"paypal-donation": {
+		"base-url": "https://www.paypal.com/cgi-bin/webscr?",
+		"account-address": "",
+		"notify-url": "",
+		"return-url": "",
+		"cancel-url": "",
+		"item-name": ""
+	},
+	"paypal-membership": {
 		"base-url": "https://www.paypal.com/cgi-bin/webscr?",
 		"account-address": "",
 		"notify-url": "",

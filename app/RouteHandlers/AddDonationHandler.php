@@ -60,7 +60,7 @@ class AddDonationHandler {
 					$this->app['url_generator']->generate(
 						'show-donation-confirmation',
 						[
-							'donationId' => $responseModel->getDonation()->getId(),
+							'id' => $responseModel->getDonation()->getId(),
 							'accessToken' => $responseModel->getAccessToken()
 						]
 					),
@@ -70,7 +70,7 @@ class AddDonationHandler {
 				break;
 			case PaymentType::PAYPAL:
 				$httpResponse = $this->app->redirect(
-					$this->ffFactory->newPayPalUrlGenerator()->generateUrl(
+					$this->ffFactory->newPayPalUrlGeneratorForDonations()->generateUrl(
 						$responseModel->getDonation()->getId(),
 						$responseModel->getDonation()->getAmount(),
 						$responseModel->getDonation()->getPaymentIntervalInMonths(),

@@ -5,6 +5,7 @@ var formContentLib = require( './form_content' ),
 	initialState = {
 		membershipType: 'sustaining', // sustaining, active
 		amount: 0,
+		paymentType: '',
 		isCustomAmount: false,
 		paymentIntervalInMonths: 12, // 1, 3, 6, 12
 		debitType: 'sepa', // sepa and "non-sepa"

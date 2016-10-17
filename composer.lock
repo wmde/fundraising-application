@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "fe0938db28ebaadbb01a98cab5a4b8d2",
-    "content-hash": "5c1720f8285d85bbee2700eaec4551bc",
+    "hash": "91ec7bc01b279204046b4379c57d2f8e",
+    "content-hash": "ad65f2579fe485038ecb3ce37db2378a",
     "packages": [
         {
             "name": "addwiki/mediawiki-api-base",
@@ -1453,16 +1453,16 @@
         },
         {
             "name": "psr/log",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "5277094ed527a1c4477177d102fe4c53551953e0"
+                "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/5277094ed527a1c4477177d102fe4c53551953e0",
-                "reference": "5277094ed527a1c4477177d102fe4c53551953e0",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
+                "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
                 "shasum": ""
             },
             "require": {
@@ -1496,7 +1496,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2016-09-19 16:02:08"
+            "time": "2016-10-10 12:19:37"
         },
         {
             "name": "sebastian/exporter",
@@ -2504,16 +2504,16 @@
         },
         {
             "name": "wmde/fundraising-store",
-            "version": "2.0.1",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/FundraisingStore.git",
-                "reference": "89a19bb8418938e2937ba541c5049b8c7fab18fb"
+                "reference": "d6044b62b85bc67aa8ab44045aea2b1de8419d8b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/FundraisingStore/zipball/89a19bb8418938e2937ba541c5049b8c7fab18fb",
-                "reference": "89a19bb8418938e2937ba541c5049b8c7fab18fb",
+                "url": "https://api.github.com/repos/wmde/FundraisingStore/zipball/d6044b62b85bc67aa8ab44045aea2b1de8419d8b",
+                "reference": "d6044b62b85bc67aa8ab44045aea2b1de8419d8b",
                 "shasum": ""
             },
             "require": {
@@ -2547,7 +2547,7 @@
                 "GPL-2.0+"
             ],
             "description": "Persistence services around the fundraising database",
-            "time": "2016-09-28 15:30:18"
+            "time": "2016-10-10 22:26:14"
         }
     ],
     "packages-dev": [

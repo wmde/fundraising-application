@@ -23,6 +23,7 @@ $( function () {
 			WMDE.Components.createTextComponent( store, $( '#email' ), 'email' ),
 			WMDE.Components.createValidatingTextComponent( store, $( '#date-of-birth' ), 'dateOfBirth' ),
 			WMDE.Components.createValidatingTextComponent( store, $( '#phone' ), 'phoneNumber' ),
+			WMDE.Components.createRadioComponent( store, $( '.payment-type-select' ), 'paymentType' ),
 			WMDE.Components.createRadioComponent( store, $( '.payment-period-select' ), 'paymentIntervalInMonths' ),
 			WMDE.Components.createAmountComponent( store, $( '.amount-input' ), $( '.amount-select' ), $( '#amount-hidden' ) ),
 			WMDE.Components.createBankDataComponent( store, {
@@ -128,6 +129,18 @@ $( function () {
 					confirmSepa: 'SEPA-Lastschrift'
 				} ),
 				stateKey: 'membershipInputValidation'
+			},
+			{
+				viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '#finishFormSubmit' ), /^PPL$|^$/ ),
+				stateKey: 'membershipFormContent.paymentType'
+			},
+			{
+				viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '#continueFormSubmit' ), 'BEZ' ),
+				stateKey: 'membershipFormContent.paymentType'
+			},
+			{
+				viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.fields-direct-debit' ), 'BEZ' ),
+				stateKey: 'membershipFormContent.paymentType'
 			},
 			{
 				viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.slide-sepa' ), 'sepa' ),
@@ -270,7 +283,7 @@ $( function () {
 	}
 
 	function bankDataIsValid() {
-		return store.getState().validity.bankData;
+		return store.getState().membershipFormContent.paymentType !== 'BEZ' || store.getState().validity.bankData;
 	}
 
 	function formDataIsValid() {
@@ -333,13 +346,22 @@ $( function () {
 		}
 	} );
 
+	$( '#finishFormSubmit' ).click( function () {
+		if ( formDataIsValid() ) {
+			$( '#memForm' ).submit();
+		} else {
+			triggerValidityCheckForPersonalDataPage();
+			displayErrorBox();
+		}
+	} );
+
 	$( '.back-button' ).click( function () {
 		// TODO check if page is valid
 		store.dispatch( actions.newResetFieldValidityAction( [ 'confirmSepa' ] ) );
 		store.dispatch( actions.newPreviousPageAction() );
 	} );
 
-	$( '#finishFormSubmit' ).click( function () {
+	$( '#finishFormSubmit2' ).click( function () {
 		if ( store.getState().validity.sepaConfirmation ) {
 			$( '#memForm' ).submit();
 		} else {

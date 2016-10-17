@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership;
 
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplicationValidationResult as Result;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 use WMDE\Fundraising\Frontend\Validation\EmailValidator;
@@ -58,11 +59,13 @@ class MembershipApplicationValidator {
 		$this->violations = [];
 
 		$this->validateFee();
-		$this->validateBankData();
 		$this->validateApplicantName();
 		$this->validateApplicantContactInfo();
 		$this->validateApplicantDateOfBirth();
 		$this->validateApplicantAddress();
+		if ( $applicationRequest->getPaymentType() === PaymentType::DIRECT_DEBIT ) {
+			$this->validateBankData();
+		}
 
 		return new Result( $this->violations );
 	}
@@ -87,7 +90,7 @@ class MembershipApplicationValidator {
 	}
 
 	private function validateBankData() {
-		$bankData = $this->request->getPaymentBankData();
+		$bankData = $this->request->getBankData();
 		$validationResult = $this->bankDataValidator->validate( $bankData );
 		$violations = [];
 

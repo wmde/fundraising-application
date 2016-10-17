@@ -32,13 +32,21 @@
 	"membership-application-timeframe-limit": "PT10M",
 	"operator-email": "email@operatorsownmailserver.com",
 	"operator-displayname": "Friendly Operator",
-	"paypal": {
+	"paypal-donation": {
 		"base-url": "https://www.sandbox.paypal.com/cgi-bin/webscr?",
 		"account-address": "paypaldev-facilitator@wikimedia.de",
 		"notify-url": "http://my.donation.app/handler/paypal",
 		"return-url": "http://my.donation.app/fr-rewrite/donation/confirm",
 		"cancel-url": "http://my.donation.app/fr-rewrite/donation/cancel",
 		"item-name": "This appears on the invoice"
+	},
+	"paypal-membership": {
+		"base-url": "https://www.sandbox.paypal.com/cgi-bin/webscr?",
+		"account-address": "paypaldev-facilitator@wikimedia.de",
+		"notify-url": "http://my.donation.app/handler/paypal",
+		"return-url": "http://my.donation.app/membership/confirm",
+		"cancel-url": "http://my.donation.app/membership/cancel",
+		"item-name": "Your membership"
 	},
 	"creditcard": {
 		"base-url": "http://thatother.paymentprovider.com?",

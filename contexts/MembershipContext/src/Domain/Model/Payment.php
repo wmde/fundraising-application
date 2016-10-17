@@ -5,31 +5,32 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\MembershipContext\Domain\Model;
 
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
 
 /**
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
+ * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class Payment {
 
 	private $interval;
 	private $amount;
-	private $bankData;
+	private $paymentMethod;
 
 	/**
 	 * @param int $intervalInMonths
 	 * @param Euro $amount
-	 * @param BankData $bankData
+	 * @param PaymentMethod $paymentMethod
 	 *
 	 * @throws \InvalidArgumentException
 	 */
-	public function __construct( int $intervalInMonths, Euro $amount, BankData $bankData ) {
+	public function __construct( int $intervalInMonths, Euro $amount, PaymentMethod $paymentMethod ) {
 		$this->assertIsValidInterval( $intervalInMonths );
 
 		$this->interval = $intervalInMonths;
 		$this->amount = $amount;
-		$this->bankData = $bankData;
+		$this->paymentMethod = $paymentMethod;
 	}
 
 	private function assertIsValidInterval( int $intervalInMonths ) {
@@ -46,8 +47,8 @@ class Payment {
 		return $this->amount;
 	}
 
-	public function getBankData(): BankData {
-		return $this->bankData;
+	public function getPaymentMethod(): PaymentMethod {
+		return $this->paymentMethod;
 	}
 
 	public function getYearlyAmount(): Euro {

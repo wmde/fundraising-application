@@ -23,32 +23,40 @@ class PayPalUrlGenerator {
 		$this->config = $config;
 	}
 
-	public function generateUrl( int $donationId, Euro $amount, int $interval,
+	public function generateUrl( int $itemId, Euro $amount, int $interval,
 								 string $updateToken, string $accessToken ): string {
 
 		$params = array_merge(
 			$this->getIntervalDependentParameters( $amount, $interval ),
-			$this->getIntervalAgnosticParameters( $donationId, $updateToken, $accessToken )
+			$this->getIntervalAgnosticParameters( $itemId, $updateToken, $accessToken ),
+			$this->getPaymentDelayParameters()
 		);
 
 		return $this->config->getPayPalBaseUrl() . http_build_query( $params );
 	}
 
-	private function getIntervalAgnosticParameters( int $donationId, string $updateToken, string $accessToken ): array {
+	private function getIntervalAgnosticParameters( int $itemId, string $updateToken, string $accessToken ): array {
 		return [
 			'business' => $this->config->getPayPalAccountAddress(),
 			'currency_code' => 'EUR',
 			'lc' => 'de',
 			'item_name' => $this->config->getItemName(),
-			'item_number' => $donationId,
+			'item_number' => $itemId,
 			'notify_url' => $this->config->getNotifyUrl(),
 			'cancel_return' => $this->config->getCancelUrl(),
-			'return' => $this->config->getReturnUrl() . '?donationId=' . $donationId . '&accessToken=' . $accessToken,
+			'return' => $this->config->getReturnUrl() . '?id=' . $itemId . '&accessToken=' . $accessToken,
 			'custom' => json_encode( [
-				'sid' => $donationId,
+				'sid' => $itemId,
 				'utoken' => $updateToken
 			] )
 		];
+	}
+
+	private function getPaymentDelayParameters() {
+		if ( $this->config->getDelayInDays() > 0 ) {
+			return $this->getDelayedSubscriptionParams( $this->config->getDelayInDays() );
+		}
+		return [];
 	}
 
 	private function getIntervalDependentParameters( Euro $amount, int $interval ): array {
@@ -60,7 +68,7 @@ class PayPalUrlGenerator {
 	}
 
 	/**
-	 * This method returns a set of parameters needed for recurring donations.
+	 * This method returns a set of parameters needed for recurring payments.
 	 * @link https://developer.paypal.com/docs/classic/paypal-payments-standard/integration-guide/wp_standard_overview/
 	 */
 	private function getSubscriptionParams( Euro $amount, int $interval ): array {
@@ -77,7 +85,20 @@ class PayPalUrlGenerator {
 	}
 
 	/**
-	 * This method returns a set of parameters needed for one time donations.
+	 * This method returns a set of parameters needed for delaying payments. It uses the parameters of one out of two
+	 * trial periods supported by PayPal.
+	 * @link https://developer.paypal.com/docs/classic/paypal-payments-standard/integration-guide/wp_standard_overview/
+	 */
+	private function getDelayedSubscriptionParams( int $delayInDays ): array {
+		return [
+			'a1' => 0,
+			'p1' => $delayInDays,
+			't1' => 'D'
+		];
+	}
+
+	/**
+	 * This method returns a set of parameters needed for one time payments.
 	 * @link https://developer.paypal.com/docs/classic/paypal-payments-standard/integration-guide/wp_standard_overview/
 	 */
 	private function getSinglePaymentParams( Euro $amount ): array {

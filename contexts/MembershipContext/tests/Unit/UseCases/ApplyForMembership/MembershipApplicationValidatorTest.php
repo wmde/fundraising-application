@@ -7,7 +7,9 @@ namespace WMDE\Fundraising\Frontend\MembershipContext\Tests\Unit\UseCases\ApplyF
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplicationValidationResult as Result;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipRequest;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\MembershipApplicationValidator;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
+use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplicationRequest;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingEmailValidator;
 use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
@@ -116,7 +118,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 		$this->bankDataValidator = $this->newRealBankDataValidator();
 
 		$request = $this->newValidRequest();
-		$request->getPaymentBankData()->setIban( new Iban( '' ) );
+		$request->getBankData()->setIban( new Iban( '' ) );
 
 		$this->assertRequestValidationResultInErrors(
 			$request,
@@ -149,7 +151,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 		$this->bankDataValidator = $this->newRealBankDataValidator();
 
 		$request = $this->newValidRequest();
-		$request->getPaymentBankData()->setBic( '' );
+		$request->getBankData()->setBic( '' );
 
 		$this->assertRequestValidationResultInErrors(
 			$request,
@@ -161,7 +163,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 		$this->bankDataValidator = $this->newRealBankDataValidator();
 
 		$request = $this->newValidRequest();
-		$request->getPaymentBankData()->setBankName( '' );
+		$request->getBankData()->setBankName( '' );
 
 		$this->assertRequestValidationResultInErrors(
 			$request,
@@ -173,7 +175,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 		$this->bankDataValidator = $this->newRealBankDataValidator();
 
 		$request = $this->newValidRequest();
-		$request->getPaymentBankData()->setBankCode( '' );
+		$request->getBankData()->setBankCode( '' );
 
 		$this->assertRequestValidationResultInErrors(
 			$request,
@@ -185,7 +187,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 		$this->bankDataValidator = $this->newRealBankDataValidator();
 
 		$request = $this->newValidRequest();
-		$request->getPaymentBankData()->setAccount( '' );
+		$request->getBankData()->setAccount( '' );
 
 		$this->assertRequestValidationResultInErrors(
 			$request,
@@ -197,7 +199,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 		$this->bankDataValidator = $this->newRealBankDataValidator();
 
 		$request = $this->newValidRequest();
-		$request->getPaymentBankData()->setAccount( '01189998819991197253' );
+		$request->getBankData()->setAccount( '01189998819991197253' );
 
 		$this->assertRequestValidationResultInErrors(
 			$request,
@@ -209,7 +211,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 		$this->bankDataValidator = $this->newRealBankDataValidator();
 
 		$request = $this->newValidRequest();
-		$request->getPaymentBankData()->setBankCode( '01189998819991197253' );
+		$request->getBankData()->setBankCode( '01189998819991197253' );
 
 		$this->assertRequestValidationResultInErrors(
 			$request,
@@ -424,7 +426,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 	public function testBankDataWithLongFields_validationFails() {
 		$longText = str_repeat( 'Cats ', 500 );
 		$request = $this->newValidRequest();
-		$bankData = $request->getPaymentBankData();
+		$bankData = $request->getBankData();
 		$bankData->setBic( $longText );
 		$bankData->setBankName( $longText );
 		// Other length violations will be caught by IBAN validation
@@ -436,6 +438,22 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 				Result::SOURCE_BIC => Result::VIOLATION_WRONG_LENGTH
 			]
 		);
+	}
+
+	public function testGivenValidRequestUsingPayPal_validationSucceeds() {
+		$validRequest = $this->newValidRequestUsingPayPal();
+		$response = $this->newValidator()->validate( $validRequest );
+
+		$this->assertEquals( new Result(), $response );
+		$this->assertEmpty( $response->getViolationSources() );
+		$this->assertTrue( $response->isSuccessful() );
+	}
+
+	private function newValidRequestUsingPayPal(): ApplyForMembershipRequest {
+		$request = ValidMembershipApplicationRequest::newValidRequest();
+		$request->setPaymentType( ValidMembershipApplication::PAYMENT_TYPE_PAYPAL );
+		$request->setBankData( new BankData() );
+		return $request;
 	}
 
 }

@@ -14,7 +14,9 @@ use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Payment;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\PhoneNumber;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
 
 /**
  * newDomainEntity and newDoctrineEntity return equivalent objects.
@@ -41,6 +43,8 @@ class ValidMembershipApplication {
 	const APPLICANT_PHONE_NUMBER = '1337-1337-1337';
 
 	const MEMBERSHIP_TYPE = Application::SUSTAINING_MEMBERSHIP;
+	const PAYMENT_TYPE_PAYPAL = 'PPL';
+	const PAYMENT_TYPE_DIRECT_DEBIT = 'BEZ';
 	const PAYMENT_PERIOD_IN_MONTHS = 3;
 	const PAYMENT_AMOUNT_IN_EURO = 10;
 
@@ -71,6 +75,10 @@ class ValidMembershipApplication {
 		);
 	}
 
+	public static function newDomainEntityUsingPayPal(): Application {
+		return ( new self() )->createApplicationUsingPayPal();
+	}
+
 	private function newApplicant( ApplicantName $name ): Applicant {
 		return new Applicant(
 			$name,
@@ -78,6 +86,15 @@ class ValidMembershipApplication {
 			new EmailAddress( self::APPLICANT_EMAIL_ADDRESS ),
 			new PhoneNumber( self::APPLICANT_PHONE_NUMBER ),
 			new \DateTime( self::APPLICANT_DATE_OF_BIRTH )
+		);
+	}
+
+	private function createApplicationUsingPayPal(): Application {
+		$self = ( new self() );
+		return Application::newApplication(
+			self::MEMBERSHIP_TYPE,
+			$self->newApplicant( $self->newPersonApplicantName() ),
+			$this->newPayPalPayment()
 		);
 	}
 
@@ -114,7 +131,19 @@ class ValidMembershipApplication {
 		return new Payment(
 			self::PAYMENT_PERIOD_IN_MONTHS,
 			Euro::newFromFloat( self::PAYMENT_AMOUNT_IN_EURO ),
-			$this->newBankData()
+			$this->newDirectDebitPayment( $this->newBankData() )
+		);
+	}
+
+	private function newDirectDebitPayment( BankData $bankData ) {
+		return new DirectDebitPayment( $bankData );
+	}
+
+	private function newPayPalPayment() {
+		return new Payment(
+			self::PAYMENT_PERIOD_IN_MONTHS,
+			Euro::newFromFloat( self::PAYMENT_AMOUNT_IN_EURO ),
+			new PayPalPayment()
 		);
 	}
 
@@ -156,6 +185,7 @@ class ValidMembershipApplication {
 		$application->setApplicantDateOfBirth( new \DateTime( self::APPLICANT_DATE_OF_BIRTH ) );
 
 		$application->setMembershipType( self::MEMBERSHIP_TYPE );
+		$application->setPaymentType( self::PAYMENT_TYPE_DIRECT_DEBIT );
 		$application->setPaymentIntervalInMonths( self::PAYMENT_PERIOD_IN_MONTHS );
 		$application->setPaymentAmount( self::PAYMENT_AMOUNT_IN_EURO );
 

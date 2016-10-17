@@ -55,9 +55,10 @@ class MembershipApplicationBuilderTest extends \PHPUnit_Framework_TestCase {
 		$request->setApplicantCity( ValidMembershipApplication::APPLICANT_CITY );
 		$request->setApplicantCountryCode( ValidMembershipApplication::APPLICANT_COUNTRY_CODE );
 		$request->setApplicantEmailAddress( ValidMembershipApplication::APPLICANT_EMAIL_ADDRESS );
+		$request->setPaymentType( ValidMembershipApplication::PAYMENT_TYPE_DIRECT_DEBIT );
 		$request->setPaymentIntervalInMonths( ValidMembershipApplication::PAYMENT_PERIOD_IN_MONTHS );
 		$request->setPaymentAmountInEuros( (string)ValidMembershipApplication::PAYMENT_AMOUNT_IN_EURO );
-		$request->setPaymentBankData( $this->newValidBankData() );
+		$request->setBankData( $this->newValidBankData() );
 		$request->setApplicantPhoneNumber(
 			$omitOptionalFields ? '' : ValidMembershipApplication::APPLICANT_PHONE_NUMBER
 		);
