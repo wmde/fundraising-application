@@ -40,7 +40,7 @@ $ffFactory = call_user_func( function() {
 } );
 
 $ffFactory->setLogger( call_user_func( function() use ( $ffFactory ) {
-	$logger = new Logger( 'WMDE Fundraising Frontend logger' );
+	$logger = new Logger( 'index_dev_php' );
 
 	$streamHandler = new StreamHandler(
 		$ffFactory->getLoggingPath() . '/' . ( new \DateTime() )->format( 'Y-m-d\TH:i:s\Z' ) . '.log'
