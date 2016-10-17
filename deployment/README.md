@@ -33,8 +33,6 @@ To roll back ("undo") a deployment, log in to the server, change the symlink to 
 
     php cachetool.phar opcache:reset --fcgi=/var/run/php/php7.0-fpm.sock
 
-**Please note:** You should always delete the `release-XXX` folder of an unsuccessful or faulty deployment, otherwise the next person who does a rollback could point to it!
-
 ## Preparing a new server for deployment
 
 ### Prerequisites on the Server
