@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\ApplicationContext\UseCases\GetInTouch;
+namespace WMDE\Fundraising\Frontend\UseCases\GetInTouch;
 
 /**
  * @license GNU GPL v2+

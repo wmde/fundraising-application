@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Validation;
 
-use WMDE\Fundraising\Frontend\ApplicationContext\UseCases\GetInTouch\GetInTouchRequest;
+use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 
 /**
  * @license GNU GPL v2+

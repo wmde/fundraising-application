@@ -6,10 +6,10 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\PageRetriever;
 
 use FileFetcher\FileFetcher;
 use Psr\Log\LoggerInterface;
-use WMDE\Fundraising\Frontend\ApplicationContext\DataAccess\LocalFilePageRetriever;
+use WMDE\Fundraising\Frontend\DataAccess\LocalFilePageRetriever;
 
 /**
- * @covers WMDE\Fundraising\Frontend\ApplicationContext\DataAccess\LocalFilePageRetriever
+ * @covers WMDE\Fundraising\Frontend\DataAccess\LocalFilePageRetriever
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen

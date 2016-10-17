@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests;
 
 use FileFetcher\SimpleFileFetcher;
-use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\ConfigReader;
+use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
 /**

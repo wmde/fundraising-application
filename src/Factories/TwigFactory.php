@@ -11,7 +11,7 @@ use Twig_Extension_StringLoader;
 use Twig_Lexer;
 use Twig_Loader_Array;
 use Twig_Loader_Filesystem;
-use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\PageRetriever;
+use WMDE\Fundraising\Frontend\Infrastructure\PageRetriever;
 use WMDE\Fundraising\Frontend\Presentation\Content\TwigPageLoader;
 use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
 

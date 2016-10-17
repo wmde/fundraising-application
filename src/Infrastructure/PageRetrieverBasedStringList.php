@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Infrastructure;
 
-use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\PageRetriever;
+use WMDE\Fundraising\Frontend\Infrastructure\PageRetriever;
 
 /**
  * @licence GNU GPL v2+

@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation\Content;
 
-use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\PageRetriever;
+use WMDE\Fundraising\Frontend\Infrastructure\PageRetriever;
 use WMDE\Fundraising\Frontend\Presentation\Content\TwigPageLoader;
 
 class TwigPageLoaderTest extends \PHPUnit_Framework_TestCase {

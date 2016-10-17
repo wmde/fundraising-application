@@ -1,19 +1,19 @@
 <?php
 
 
-namespace WMDE\Fundraising\Frontend\Tests\Integration\ApplicationContext\DataAccess;
+namespace WMDE\Fundraising\Frontend\Tests\Integration\DataAccess;
 
 use Mediawiki\Api\ApiUser;
 use Mediawiki\Api\MediawikiApi;
 use Mediawiki\Api\SimpleRequest;
 use Mediawiki\Api\UsageException;
-use WMDE\Fundraising\Frontend\ApplicationContext\DataAccess\ApiBasedPageRetriever;
-use WMDE\Fundraising\Frontend\ApplicationContext\Infrastructure\PageRetriever;
+use WMDE\Fundraising\Frontend\DataAccess\ApiBasedPageRetriever;
+use WMDE\Fundraising\Frontend\Infrastructure\PageRetriever;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\LoggerSpy;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
- * @covers WMDE\Fundraising\Frontend\ApplicationContext\DataAccess\ApiBasedPageRetriever
+ * @covers WMDE\Fundraising\Frontend\DataAccess\ApiBasedPageRetriever
  */
 class ApiBasedPageRetrieverTest extends \PHPUnit_Framework_TestCase {
 
@@ -61,7 +61,7 @@ class ApiBasedPageRetrieverTest extends \PHPUnit_Framework_TestCase {
 
 		$this->pageRetriever->fetchPage( 'test page' );
 
-		$expectedLogMessage = 'WMDE\Fundraising\Frontend\ApplicationContext\DataAccess\ApiBasedPageRetriever::fetchPage: fail, got non-value';
+		$expectedLogMessage = 'WMDE\Fundraising\Frontend\DataAccess\ApiBasedPageRetriever::fetchPage: fail, got non-value';
 		$this->logger->assertCalledWithMessage( $expectedLogMessage, $this );
 	}
 
@@ -71,7 +71,7 @@ class ApiBasedPageRetrieverTest extends \PHPUnit_Framework_TestCase {
 
 		$this->pageRetriever->fetchPage( 'test page' );
 
-		$expectedLogMessage = 'WMDE\Fundraising\Frontend\ApplicationContext\DataAccess\ApiBasedPageRetriever::fetchPage: fail, got non-value';
+		$expectedLogMessage = 'WMDE\Fundraising\Frontend\DataAccess\ApiBasedPageRetriever::fetchPage: fail, got non-value';
 		$this->logger->assertCalledWithMessage( $expectedLogMessage, $this );
 	}
 
