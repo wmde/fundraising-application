@@ -7,42 +7,49 @@
 - name: Create release directory
   file: path={{ app_dir }}/{{ release_name }} state=directory
 
-- name: Expand release tarball
-  unarchive: src={{ local_archive }} dest={{ app_dir }}/{{ release_name }}
+- block:
+    - name: Expand release tarball
+      unarchive: src={{ local_archive }} dest={{ app_dir }}/{{ release_name }}
 
-- name: Set app directory ownership
-  file: path={{ app_dir }}/{{ release_name }} owner={{app_owner}} group={{app_group}} recurse=yes
+    - name: Set app directory ownership
+      file: path={{ app_dir }}/{{ release_name }} owner={{app_owner}} group={{app_group}} recurse=yes
 
-- name: Check if configuration file exists
-  stat: path={{ app_dir }}/{{ config_file }}
-  register: server_config_file
-  failed_when: not server_config_file.stat.exists
+    - name: Check if configuration file exists
+      stat: path={{ app_dir }}/{{ config_file }}
+      register: server_config_file
+      failed_when: not server_config_file.stat.exists
 
-- name: Check if configuration file is valid JSON
-  command: php -r 'json_decode( file_get_contents( "{{ app_dir }}/{{ config_file }}" ) ); echo json_last_error();'
-  register: decode_json_config
-  failed_when: decode_json_config.stdout != "0"
+    - name: Check if configuration file is valid JSON
+      command: php -r 'json_decode( file_get_contents( "{{ app_dir }}/{{ config_file }}" ) ); echo json_last_error();'
+      register: decode_json_config
+      failed_when: decode_json_config.stdout != "0"
 
-- name: Validate config file against schema
-  command: ./console validate-config app/config/config.dist.json {{ app_dir }}/{{ config_file }} chdir={{ app_dir }}/{{ release_name }}
+    - name: Validate config file against schema
+      command: ./console validate-config app/config/config.dist.json {{ app_dir }}/{{ config_file }} chdir={{ app_dir }}/{{ release_name }}
 
-- name: Create symlink to config file
-  file: src={{ app_dir }}/{{ config_file }} dest={{ app_dir }}/{{ release_name }}/app/config/config.prod.json state=link
+    - name: Create symlink to config file
+      file: src={{ app_dir }}/{{ config_file }} dest={{ app_dir }}/{{ release_name }}/app/config/config.prod.json state=link
 
-- name: Create var dir
-  file: path={{ app_dir }}/{{ release_name }}/var owner={{app_owner}} group={{app_group}} state=directory
+    - name: Create var dir
+      file: path={{ app_dir }}/{{ release_name }}/var owner={{app_owner}} group={{app_group}} state=directory
 
-- name: Create var/cache dir
-  file: path={{ app_dir }}/{{ release_name }}/var/cache owner={{app_owner}} group={{app_group}} state=directory mode=775
+    - name: Create var/cache dir
+      file: path={{ app_dir }}/{{ release_name }}/var/cache owner={{app_owner}} group={{app_group}} state=directory mode=775
 
-- name: Create cache-busting prefix
-  copy: dest={{ app_dir }}/{{ release_name }}/var/file_prefix.txt content="{{ release_name|hash('md5') }}" owner={{app_owner}} group={{app_group}}
+    - name: Create cache-busting prefix
+      copy: dest={{ app_dir }}/{{ release_name }}/var/file_prefix.txt content="{{ release_name|hash('md5') }}" owner={{app_owner}} group={{app_group}}
 
-- name: Create symlink to log dir
-  file: src={{ app_dir }}/{{ logs_dir }} dest={{ app_dir }}/{{ release_name }}/var/log state=link
+    - name: Create symlink to log dir
+      file: src={{ app_dir }}/{{ logs_dir }} dest={{ app_dir }}/{{ release_name }}/var/log state=link
 
-- name: Symlink the release
-  file: src={{ app_dir }}/{{ release_name }} dest={{ app_dir }}/{{ current_dir }} owner={{app_owner}} group={{app_group}} state=link
+    - name: Symlink the release
+      file: src={{ app_dir }}/{{ release_name }} dest={{ app_dir }}/{{ current_dir }} owner={{app_owner}} group={{app_group}} state=link
+
+  rescue:
+    - name: Remove directory of failed release
+      file: path={{ app_dir }}/{{ release_name }} state=absent
+
+    - fail: msg="An error occured during deployment on server"
 
 - name: Download cachetool for clearing PHP-FPM opcache (if needed)
   get_url: url=http://gordalina.github.io/cachetool/downloads/cachetool.phar dest={{ app_dir }}/cachetool.phar
