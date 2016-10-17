@@ -30,7 +30,7 @@ $ffFactory = call_user_func( function() {
 $ffFactory->enablePageCache();
 
 $ffFactory->setLogger( call_user_func( function() use ( $ffFactory ) {
-	$logger = new Logger( 'index.php logger' );
+	$logger = new Logger( 'index_php' );
 
 	$streamHandler = new StreamHandler(
 		$ffFactory->getLoggingPath() . '/error-debug.log'
