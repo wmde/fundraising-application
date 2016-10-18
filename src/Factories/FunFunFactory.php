@@ -367,11 +367,12 @@ class FunFunFactory {
 			return new DonationConfirmationPageSelector( $this->config['confirmation-pages'] );
 		};
 
+		// TODO split verifiers for donation and membership
 		$pimple['paypal-payment-notification-verifier'] = function() {
 			return new LoggingPaymentNotificationVerifier(
 				new PayPalPaymentNotificationVerifier(
 					new Client(),
-					$this->config['paypal']
+					$this->config['paypal-donation']
 				),
 				$this->getLogger()
 			);
