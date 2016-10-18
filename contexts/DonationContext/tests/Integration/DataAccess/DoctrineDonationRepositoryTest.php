@@ -184,6 +184,32 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$this->assertSame( 'untouched', $data['another'] );
 	}
 
+	/**
+	 * The backend application data purge script sets the personal information to empty strings
+	 */
+	public function testGivenPurgedDonationNoDonorIsCreated() {
+		$doctrineDonation = $this->getNewlyCreatedDoctrineDonation();
+		$doctrineDonation->setDtBackup( new \DateTime() );
+		$this->entityManager->persist( $doctrineDonation );
+		$this->entityManager->flush();
+
+		$donation = $this->newRepository()->getDonationById( $doctrineDonation->getId() );
+
+		$this->assertNull( $donation->getDonor() );
+	}
+
+	public function testGivenDonationUpdateWithoutDonorInformation_DonorNameStaysTheSame() {
+		$donation = ValidDonation::newBookedPayPalDonation();
+		$this->newRepository()->storeDonation( $donation );
+
+		$anonymousDonation = ValidDonation::newBookedAnonymousPayPalDonationUpdate( $donation->getId() );
+		$this->newRepository()->storeDonation( $anonymousDonation );
+
+		$doctrineDonation = $this->getDoctrineDonationById( $donation->getId() );
+
+		$this->assertSame( $donation->getDonor()->getName()->getFullName(), $doctrineDonation->getDonorFullName() );
+	}
+
 	private function getNewlyCreatedDoctrineDonation(): DoctrineDonation {
 		$donation = ValidDonation::newDirectDebitDonation();
 		$this->newRepository()->storeDonation( $donation );
