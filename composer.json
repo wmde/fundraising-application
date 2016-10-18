@@ -14,6 +14,7 @@
 
 		"wmde/fundraising-store": "~2.1",
 		"wmde/euro": "~1.0",
+		"wmde/page-retriever": "~1.0",
 
 		"jeroen/file-fetcher": "~3.1",
 		"jeroen/generic-decorator": "~0.1.1",

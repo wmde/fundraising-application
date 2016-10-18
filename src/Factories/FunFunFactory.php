@@ -28,11 +28,8 @@ use Symfony\Component\Translation\TranslatorInterface;
 use TNvpServiceDispatcher;
 use Twig_Environment;
 use Twig_Extensions_Extension_Intl;
-use WMDE\Fundraising\Frontend\DataAccess\ApiBasedPageRetriever;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
-use WMDE\Fundraising\Frontend\Infrastructure\CachingPageRetriever;
 use WMDE\Fundraising\Frontend\Presentation\Honorifics;
-use WMDE\Fundraising\Frontend\Infrastructure\PageRetriever;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 use WMDE\Fundraising\Frontend\DonationContext\Authorization\DonationAuthorizer;
@@ -148,6 +145,9 @@ use WMDE\Fundraising\Frontend\Validation\TemplateNameValidator;
 use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
 use WMDE\Fundraising\Store\Factory as StoreFactory;
 use WMDE\Fundraising\Store\Installer;
+use WMDE\PageRetriever\ApiBasedPageRetriever;
+use WMDE\PageRetriever\CachingPageRetriever;
+use WMDE\PageRetriever\PageRetriever;
 
 /**
  * @licence GNU GPL v2+
@@ -340,7 +340,10 @@ class FunFunFactory {
 			$loaders = array_filter( [
 				$twigFactory->newFileSystemLoader(),
 				$twigFactory->newArrayLoader(), // This is just a fallback for testing
-				$twigFactory->newWikiPageLoader( $this->newWikiPageRetriever() ),
+				$twigFactory->newWikiPageLoader(
+					$this->newRawWikiPageRetriever(),
+					$this->newRenderedWikiPageRetriever()
+				),
 			] );
 			$extensions = [
 				$twigFactory->newTranslationExtension( $this->getTranslator() ),
@@ -397,6 +400,10 @@ class FunFunFactory {
 		};
 
 		$pimple['page_cache'] = function() {
+			return new VoidCache();
+		};
+
+		$pimple['rendered_page_cache'] = function() {
 			return new VoidCache();
 		};
 
@@ -551,25 +558,41 @@ class FunFunFactory {
 		return $this->pimple['guzzle_client'];
 	}
 
-	private function newWikiPageRetriever(): PageRetriever {
-		$PageRetriever = $this->newCachedPageRetriever();
-
-		return $this->addProfilingDecorator( $PageRetriever, 'PageRetriever' );
-	}
-
-	private function newCachedPageRetriever(): PageRetriever {
-		return new CachingPageRetriever(
-			$this->newNonCachedApiPageRetriever(),
+	private function newRawWikiPageRetriever(): PageRetriever {
+		$pageRetriever = new CachingPageRetriever(
+			$this->newApiRawPageRetriever(),
 			$this->getPageCache()
 		);
+
+		return $this->addProfilingDecorator( $pageRetriever, 'PageRetriever' );
 	}
 
-	private function newNonCachedApiPageRetriever(): PageRetriever {
+	private function newRenderedWikiPageRetriever(): PageRetriever {
+		$pageRetriever = new CachingPageRetriever(
+			$this->newApiRenderedPageRetriever(),
+			$this->getRenderedPageCache()
+		);
+
+		return $this->addProfilingDecorator( $pageRetriever, 'PageRetriever' );
+	}
+
+	private function newApiRawPageRetriever(): PageRetriever {
 		return new ApiBasedPageRetriever(
 			$this->getMediaWikiApi(),
 			new ApiUser( $this->config['cms-wiki-user'], $this->config['cms-wiki-password'] ),
 			$this->getLogger(),
-			$this->config['cms-wiki-title-prefix']
+			$this->config['cms-wiki-title-prefix'],
+			ApiBasedPageRetriever::MODE_RAW
+		);
+	}
+
+	private function newApiRenderedPageRetriever(): PageRetriever {
+		return new ApiBasedPageRetriever(
+			$this->getMediaWikiApi(),
+			new ApiUser( $this->config['cms-wiki-user'], $this->config['cms-wiki-password'] ),
+			$this->getLogger(),
+			$this->config['cms-wiki-title-prefix'],
+			ApiBasedPageRetriever::MODE_RENDERED
 		);
 	}
 
@@ -772,7 +795,7 @@ class FunFunFactory {
 	}
 
 	private function newTextPolicyValidator( string $policyName ): TextPolicyValidator {
-		$contentProvider = $this->newWikiPageRetriever();
+		$contentProvider = $this->newRawWikiPageRetriever();
 		$textPolicyConfig = $this->config['text-policies'][$policyName];
 
 		return new TextPolicyValidator(
@@ -1179,9 +1202,17 @@ class FunFunFactory {
 		return $this->pimple['page_cache'];
 	}
 
+	private function getRenderedPageCache(): Cache {
+		return $this->pimple['rendered_page_cache'];
+	}
+
 	public function enablePageCache() {
 		$this->pimple['page_cache'] = function() {
-			return new FilesystemCache( $this->getCachePath() . '/pages' );
+			return new FilesystemCache( $this->getCachePath() . '/pages/raw' );
+		};
+
+		$this->pimple['rendered_page_cache'] = function() {
+			return new FilesystemCache( $this->getCachePath() . '/pages/rendered' );
 		};
 	}
 

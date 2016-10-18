@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Infrastructure;
 
-use WMDE\Fundraising\Frontend\Infrastructure\PageRetriever;
+use WMDE\PageRetriever\PageRetriever;
 
 /**
  * @licence GNU GPL v2+
@@ -25,7 +25,7 @@ class PageRetrieverBasedStringList implements StringList {
 			return [];
 		}
 
-		$content = $this->pageRetriever->fetchPage( $this->pageName, PageRetriever::MODE_RAW );
+		$content = $this->pageRetriever->fetchPage( $this->pageName );
 
 		return array_filter( array_map( 'trim', explode( "\n", $content ) ) );
 	}

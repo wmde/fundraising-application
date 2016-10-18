@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Presentation\Content;
 
 use Twig_Error_Loader;
-use WMDE\Fundraising\Frontend\Infrastructure\PageRetriever;
+use WMDE\PageRetriever\PageRetriever;
 
 /**
  * @license GNU GPL v2+
@@ -13,13 +13,15 @@ use WMDE\Fundraising\Frontend\Infrastructure\PageRetriever;
  */
 class TwigPageLoader implements \Twig_LoaderInterface {
 
-	private $pageRetriever;
+	private $rawPageRetriever;
+	private $renderedPageRetriever;
 	private $pageCache = [];
 	private $errorCache = [];
 	private $rawPagesList = [];
 
-	public function __construct( PageRetriever $pageRetriever, array $rawPagesList = [] ) {
-		$this->pageRetriever = $pageRetriever;
+	public function __construct( PageRetriever $rawPageRetriever, PageRetriever $renderedPageRetriever, array $rawPagesList = [] ) {
+		$this->rawPageRetriever = $rawPageRetriever;
+		$this->renderedPageRetriever = $renderedPageRetriever;
 		$this->rawPagesList = $rawPagesList;
 	}
 
@@ -42,21 +44,33 @@ class TwigPageLoader implements \Twig_LoaderInterface {
 	}
 
 	private function retrievePage( string $pageName ): string {
-		$fetchMode = in_array( $pageName, $this->rawPagesList ) ? 'raw' : 'render';
 		$title = preg_replace( '/\\.twig$/', '', $pageName );
+
 		if ( isset( $this->pageCache[$title] ) ) {
 			return $this->pageCache[$title];
 		}
+
 		if ( isset( $this->errorCache[$title] ) ) {
 			throw new Twig_Error_Loader( "Wiki page $title not found." );
 		}
-		$content = $this->pageRetriever->fetchPage( $title, $fetchMode );
-		if ( $content !== '' ) {
-			$this->pageCache[$title] = $content;
-			return $content;
+
+		$content = $this->getPageRetriever( $pageName )->fetchPage( $title );
+
+		if ( $content === '' ) {
+			$this->errorCache[$title] = true;
+			throw new Twig_Error_Loader( "Wiki page $title not found." );
 		}
-		$this->errorCache[$title] = true;
-		throw new Twig_Error_Loader( "Wiki page $title not found." );
+
+		$this->pageCache[$title] = $content;
+		return $content;
+	}
+
+	private function getPageRetriever( string $pageName ): PageRetriever {
+		if ( in_array( $pageName, $this->rawPagesList ) ) {
+			return $this->rawPageRetriever;
+		}
+
+		return $this->renderedPageRetriever;
 	}
 
 }

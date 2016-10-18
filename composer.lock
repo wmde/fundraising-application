@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "91ec7bc01b279204046b4379c57d2f8e",
-    "content-hash": "ad65f2579fe485038ecb3ce37db2378a",
+    "hash": "9d823d0d9917f04b29d3867c3bd283d7",
+    "content-hash": "1cc5bc5759596f5f38176f36cb5473ae",
     "packages": [
         {
             "name": "addwiki/mediawiki-api-base",
@@ -694,16 +694,16 @@
         },
         {
             "name": "gedmo/doctrine-extensions",
-            "version": "v2.4.23",
+            "version": "v2.4.24",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Atlantic18/DoctrineExtensions.git",
-                "reference": "c2f308fab900090c6c0f5b6f72f34a37b4dd2d84"
+                "reference": "a7f7243a19f79a99ac83a3570444d8795f665eef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/c2f308fab900090c6c0f5b6f72f34a37b4dd2d84",
-                "reference": "c2f308fab900090c6c0f5b6f72f34a37b4dd2d84",
+                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/a7f7243a19f79a99ac83a3570444d8795f665eef",
+                "reference": "a7f7243a19f79a99ac83a3570444d8795f665eef",
                 "shasum": ""
             },
             "require": {
@@ -769,7 +769,7 @@
                 "tree",
                 "uploadable"
             ],
-            "time": "2016-09-22 13:45:22"
+            "time": "2016-10-11 18:03:37"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -2548,21 +2548,67 @@
             ],
             "description": "Persistence services around the fundraising database",
             "time": "2016-10-10 22:26:14"
+        },
+        {
+            "name": "wmde/page-retriever",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wmde/PageRetriever.git",
+                "reference": "c68950faf7cfed4ee6e51b22ff05c3c867b8f622"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wmde/PageRetriever/zipball/c68950faf7cfed4ee6e51b22ff05c3c867b8f622",
+                "reference": "c68950faf7cfed4ee6e51b22ff05c3c867b8f622",
+                "shasum": ""
+            },
+            "require": {
+                "addwiki/mediawiki-api-base": "~2.1",
+                "doctrine/cache": "~1.6",
+                "jeroen/file-fetcher": "~3.1",
+                "php": ">=7.0",
+                "psr/log": "~1.0"
+            },
+            "require-dev": {
+                "mediawiki/mediawiki-codesniffer": "~0.6.0",
+                "ockcyp/covers-validator": "~0.4",
+                "squizlabs/php_codesniffer": "~2.5",
+                "wmde/psr-log-test-doubles": "~1.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "WMDE\\PageRetriever\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "description": "Interface and implementations for fetching MediaWiki page content",
+            "homepage": "https://github.com/wmde/PageRetriever",
+            "time": "2016-10-18 11:45:12"
         }
     ],
     "packages-dev": [
         {
             "name": "codeception/specify",
-            "version": "0.4.3",
+            "version": "0.4.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Specify.git",
-                "reference": "8efcd017687ebdae9c4d95bcbc1dc22a28561874"
+                "reference": "5fb1d68a737f31155a0f7410cf47dea479b33415"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Specify/zipball/8efcd017687ebdae9c4d95bcbc1dc22a28561874",
-                "reference": "8efcd017687ebdae9c4d95bcbc1dc22a28561874",
+                "url": "https://api.github.com/repos/Codeception/Specify/zipball/5fb1d68a737f31155a0f7410cf47dea479b33415",
+                "reference": "5fb1d68a737f31155a0f7410cf47dea479b33415",
                 "shasum": ""
             },
             "require": {
@@ -2586,7 +2632,7 @@
                 }
             ],
             "description": "BDD code blocks for PHPUnit and Codeception",
-            "time": "2015-11-26 23:35:52"
+            "time": "2016-10-17 22:28:20"
         },
         {
             "name": "johnkary/phpunit-speedtrap",
