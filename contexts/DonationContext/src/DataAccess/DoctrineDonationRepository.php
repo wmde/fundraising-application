@@ -324,9 +324,10 @@ class DoctrineDonationRepository implements DonationRepository {
 				$dd->getId(),
 				var_export( $dd->getDecodedData(), true ) )
 			);
-			error_log( implode( "\n", array_map( function( $bt ) {
-				return sprintf( '%s, line %d, %s', $bt['file'], $bt['line'], $bt['function'] );
-			}, debug_backtrace() ) ) );
+			// using an exception to get nicely formatted a backtrace instead of gathering data from debug_backtrace
+			// we don't throw it, because we only want the information
+			$ex = new \Exception();
+			error_log( $ex->getTraceAsString() );
 			return null;
 		}
 
