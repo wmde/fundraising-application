@@ -47,21 +47,24 @@ Ansible scripts that set up this infrastructure are at the Wikimedia Germany fun
 
 On the machine that does the deployment, you need to have Git, [Ansible](http://ansible.com/), PHP 7 and Node.js to be installed.
 
-### Create the shared directories and application configuration file on the server
+### Create the logging directories file on the server
 
-Log in to the server and create the following directories:
-
- - **`logs`** - for the application logs (can be identical to web server log, must be writable by PHP-FPM process)
- - **`shared/config`** -  for the configuration file
-
- Create the file `shared/config/config.prod.json` with all the necessary application data. You need to configure the credentials for the database, MCP, Paypal and the content wiki. You don't need to change values that are similar to values in `app/config/config.dist.json`.
+Log in to the server and create the directory **`/usr/share/nginx/www/DOMAIN_NAME/logs`** - for the application logs (can be identical to web server log, must be writable by PHP-FPM process)
 
 ### Create inventory files on the deployment machine
 Inventory files contain server/environment specific information.
 
 Duplicate the example file `deployment/inventory/production_example` and set server names and file paths (as determined by the server setup). You need three files, one for test, one for staging and one for production.
 
-For security reasons the contents of the `inventory` directory are not in the Git repository. **Do not check in your configurations.**
+For security reasons the contents of the `inventory` directory are not in the Git repository, except for the example. **Do not check in your inventory files.**
+
+### Create a configuration file on the deployment machine
+
+Log in to the deployment machine and in the configuration directory, create a new directory for the domain name.
+
+In the new directory create the file `config.prod.json` with all the necessary application data. You need to configure the credentials for the database, MCP, Paypal and the content wiki. You don't need to change values that are similar to values in `app/config/config.dist.json`.
+
+The configurations are kept in a local Git repository, so you should commit and push your changes.  
 
 ## Test if the deployment works in all environments
 There is a Vagrant configuration for setting up three servers for test, staging and production in `deployment/test/Vagrantfile`. The LEMP stack for the three machines can be installed by running the Ansible playbook from the repository https://github.com/gbirke/wikimedia-fundraising-devbox and the inventory file `deployment/test/inventory`. When the machines are ready, the deployment can be tested with

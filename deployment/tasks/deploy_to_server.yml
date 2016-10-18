@@ -14,21 +14,16 @@
     - name: Set app directory ownership
       file: path={{ app_dir }}/{{ release_name }} owner={{app_owner}} group={{app_group}} recurse=yes
 
-    - name: Check if configuration file exists
-      stat: path={{ app_dir }}/{{ config_file }}
-      register: server_config_file
-      failed_when: not server_config_file.stat.exists
+    - name: Copy config file
+      copy: src={{ config_dir }}/{{ inventory_hostname }}/config.prod.json  dest={{ app_dir }}/{{ release_name }}/app/config/config.prod.json
 
     - name: Check if configuration file is valid JSON
-      command: php -r 'json_decode( file_get_contents( "{{ app_dir }}/{{ config_file }}" ) ); echo json_last_error();'
+      command: php -r 'json_decode( file_get_contents( "{{ app_dir }}/{{ release_name }}/app/config/config.prod.json" ) ); echo json_last_error();'
       register: decode_json_config
       failed_when: decode_json_config.stdout != "0"
 
     - name: Validate config file against schema
-      command: ./console validate-config app/config/config.dist.json {{ app_dir }}/{{ config_file }} chdir={{ app_dir }}/{{ release_name }}
-
-    - name: Create symlink to config file
-      file: src={{ app_dir }}/{{ config_file }} dest={{ app_dir }}/{{ release_name }}/app/config/config.prod.json state=link
+      command: ./console validate-config app/config/config.dist.json app/config/config.prod.json chdir={{ app_dir }}/{{ release_name }}
 
     - name: Create var dir
       file: path={{ app_dir }}/{{ release_name }}/var owner={{app_owner}} group={{app_group}} state=directory

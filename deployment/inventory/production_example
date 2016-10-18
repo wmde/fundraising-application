@@ -16,8 +16,11 @@ logs_dir = logs
 # Name of current release (docroot in the NGINX config)
 current_dir = html
 
-# Configuration file ( shared by all releases )
-config_file = shared/config/config.prod.json
+# Path to configuration data ON THE DEPLOYMENT MACHINE. Should be outside of the FundraisingFrontend repo
+# and accessible by the deploy user only.
+# Path should contain a directory for each host name, with a config.prod.json
+# e.g. when config_dir is /home/deploy/etc/www, the file /home/deploy/etc/www/spenden.wikimedia.de/config.prod.json must exist
+config_dir = /home/deploy/configurations
 
 
 # Just the localhost, don't change
