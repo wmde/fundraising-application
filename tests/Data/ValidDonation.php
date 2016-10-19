@@ -118,6 +118,17 @@ class ValidDonation {
 		);
 	}
 
+	public static function newBookedAnonymousPayPalDonationUpdate( int $donationId ): Donation {
+		$payPalData = new PayPalData();
+		$payPalData->setPaymentId( self::PAYPAL_TRANSACTION_ID );
+
+		return ( new self() )->createAnonymousDonationWithId(
+			$donationId,
+			new PayPalPayment( $payPalData ),
+			Donation::STATUS_EXTERNAL_BOOKED
+		);
+	}
+
 	public static function newBookedCreditCardDonation() {
 		$creditCardData = new CreditCardTransactionData();
 		$creditCardData->setTransactionId( self::CREDIT_CARD_TRANSACTION_ID );
@@ -163,6 +174,17 @@ class ValidDonation {
 	private function createAnonymousDonation( PaymentMethod $paymentMethod, string $status ): Donation {
 		return new Donation(
 			null,
+			$status,
+			null,
+			$this->newDonationPayment( $paymentMethod ),
+			false,
+			$this->newTrackingInfo()
+		);
+	}
+
+	private function createAnonymousDonationWithId( int $donationId, PaymentMethod $paymentMethod, string $status ) {
+		return new Donation(
+			$donationId,
 			$status,
 			null,
 			$this->newDonationPayment( $paymentMethod ),

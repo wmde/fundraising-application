@@ -110,7 +110,7 @@ class DoctrineDonationRepository implements DonationRepository {
 
 	private function updateDonorInformation( DoctrineDonation $doctrineDonation, Donor $donor = null ) {
 		if ( $donor === null ) {
-			$doctrineDonation->setDonorFullName( 'Anonym' );
+			$doctrineDonation->setDonorFullName( $this->getFullnameForMissingDonorInformation( $doctrineDonation ) );
 		} else {
 			$doctrineDonation->setDonorCity( $donor->getPhysicalAddress()->getCity() );
 			$doctrineDonation->setDonorEmail( $donor->getEmailAddress() );
@@ -313,7 +313,7 @@ class DoctrineDonationRepository implements DonationRepository {
 	 * @return Donor|null
 	 */
 	private function getDonorFromEntity( DoctrineDonation $dd ) {
-		if ( $dd->getDonorEmail() === null ) {
+		if ( !$this->entityHasDonorInformation( $dd ) ) {
 			return null;
 		}
 
@@ -324,9 +324,10 @@ class DoctrineDonationRepository implements DonationRepository {
 				$dd->getId(),
 				var_export( $dd->getDecodedData(), true ) )
 			);
-			error_log( implode( "\n", array_map( function( $bt ) {
-				return sprintf( '%s, line %d, %s', $bt['file'], $bt['line'], $bt['function'] );
-			}, debug_backtrace() ) ) );
+			// using an exception to get nicely formatted a backtrace instead of gathering data from debug_backtrace
+			// we don't throw it, because we only want the information
+			$ex = new \Exception();
+			error_log( $ex->getTraceAsString() );
 			return null;
 		}
 
@@ -512,6 +513,27 @@ class DoctrineDonationRepository implements DonationRepository {
 			!isset( $data['vorname'] ) || $data['vorname'] === null ||
 			!isset( $data['nachname'] ) || $data['nachname'] === null ||
 			!isset( $data['firma'] ) || $data['firma'] === null;
+	}
+
+	private function getFullnameForMissingDonorInformation( DoctrineDonation $doctrineDonation ): string {
+		// When donation is new, this must be an anonymous one
+		if ( $doctrineDonation->getId() === null ) {
+			return 'Anonym';
+		} else {
+			// Missing donor information of an existing doctrine donation can mean that the info was purged,
+			// so we don't touch the name
+			return $doctrineDonation->getDonorFullName();
+		}
+	}
+
+	private function entityHasDonorInformation( DoctrineDonation $dd ): bool {
+		// If entity was backed up, its information was purged
+		if ( $dd->getDtBackup() !== null ) {
+			return false;
+		}
+
+		$data = $dd->getDecodedData();
+		return isset( $data['adresstyp'] ) && $data['adresstyp'] !== DonorName::PERSON_ANONYMOUS;
 	}
 
 }
