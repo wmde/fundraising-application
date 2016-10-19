@@ -892,7 +892,7 @@ class FunFunFactory {
 	}
 
 	private function getPayPalUrlConfigForMembershipApplications() {
-		return PayPalUrlConfig::newFromConfig( $this->config['paypal-membership-application'] );
+		return PayPalUrlConfig::newFromConfig( $this->config['paypal-membership'] );
 	}
 
 	private function newCreditCardUrlGenerator() {

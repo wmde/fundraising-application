@@ -414,7 +414,7 @@ $app->get(
 		$confirmationRequest = new ShowMembershipAppConfirmationRequest( (int)$request->query->get( 'id', 0 ) );
 
 		return $ffFactory->newMembershipApplicationConfirmationHtmlPresenter()->present(
-			$ffFactory->newMembershipApplicationConfirmationUseCase( $request->query->get( 'token', '' ) )
+			$ffFactory->newMembershipApplicationConfirmationUseCase( $request->query->get( 'accessToken', '' ) )
 				->showConfirmation( $confirmationRequest )
 		);
 	}
