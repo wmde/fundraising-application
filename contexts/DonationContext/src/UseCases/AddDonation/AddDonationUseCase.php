@@ -70,6 +70,7 @@ class AddDonationUseCase {
 		// TODO: handle exceptions
 		$tokens = $this->tokenFetcher->getTokens( $donation->getId() );
 
+		// TODO: handle exceptions
 		$this->sendDonationConfirmationEmail( $donation );
 
 		return AddDonationResponse::newSuccessResponse(
@@ -178,7 +179,6 @@ class AddDonationUseCase {
 	 * @param Donation $donation
 	 *
 	 * @throws \RuntimeException
-	 * TODO: handle exception
 	 */
 	private function sendDonationConfirmationEmail( Donation $donation ) {
 		if ( $donation->getDonor() !== null && !$donation->hasExternalPayment() ) {
