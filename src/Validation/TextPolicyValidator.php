@@ -115,7 +115,7 @@ class TextPolicyValidator {
 	private function hasBadWordNotMatchingWhiteWords( array $badMatches, array $whiteMatches ):bool {
 		return count(
 			array_udiff( $badMatches, $whiteMatches, function( $badMatch, $whiteMatch ) {
-				return !preg_match( $this->composeRegex( [ $badMatch ] ), $whiteMatch );
+				return !preg_match( $this->composeRegex( [ preg_quote( $badMatch, '#' ) ] ), $whiteMatch );
 			} )
 		) > 0;
 	}

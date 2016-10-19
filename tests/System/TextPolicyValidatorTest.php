@@ -166,6 +166,31 @@ class TextPolicyValidatorTest extends \PHPUnit_Framework_TestCase {
 		];
 	}
 
+	/**
+	 * @dataProvider insultingTestProviderWithRegexChars
+	 */
+	public function testGivenBadWordMatchContainingRegexChars_validatorReturnsFalse( $commentToTest ) {
+		$textPolicyValidator = $this->getPreFilledTextPolicyValidator();
+
+		$this->assertFalse(
+			$textPolicyValidator->hasHarmlessContent(
+				$commentToTest,
+				TextPolicyValidator::CHECK_URLS
+				| TextPolicyValidator::CHECK_URLS_DNS
+				| TextPolicyValidator::CHECK_BADWORDS
+				| TextPolicyValidator::IGNORE_WHITEWORDS
+			)
+		);
+	}
+
+	public function insultingTestProviderWithRegexChars() {
+		return [
+			[ 'Ich heisse Deppendorf (ihr Deppen und das ist auch gut so!' ],
+			[ 'Ihr [Arschgeigen], ich wohne in //Marsch// und das ist auch gut so!' ],
+			[ 'Bei #Wikipedia gibts echt tolle Arschkrampen!' ],
+		];
+	}
+
 	private function getPreFilledTextPolicyValidator() {
 		$textPolicyValidator = new TextPolicyValidator();
 		$textPolicyValidator->addBadWordsFromArray(
