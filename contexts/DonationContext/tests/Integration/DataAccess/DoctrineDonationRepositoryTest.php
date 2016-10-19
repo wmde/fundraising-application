@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Integration\DonationContext\DataAccess;
+namespace WMDE\Fundraising\Frontend\DonationContext\Tests\Integration\DataAccess;
 
 use Doctrine\ORM\EntityManager;
 use WMDE\Fundraising\Entities\Donation as DoctrineDonation;

@@ -481,6 +481,19 @@ $app->get(
 	}
 );
 
+$app->get(
+	'donation-accepted',
+	function( Request $request ) use ( $app, $ffFactory ) {
+
+		$eventHandler = $ffFactory->newDonationAcceptedEventHandler( $request->query->get( 'update_token', '' ) );
+		$result = $eventHandler->onDonationAccepted( (int)$request->query->get( 'donation_id', '' ) );
+
+		return $app->json(
+			$result === null ? [ 'status' => 'OK' ] : [ 'status' => 'ERR', 'message' => $result ]
+		);
+	}
+);
+
 $app->get( '/', function ( Application $app, Request $request ) {
 	$app['session']->set( 'piwikTracking', array_filter(
 			[

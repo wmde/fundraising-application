@@ -28,6 +28,7 @@ use Symfony\Component\Translation\TranslatorInterface;
 use TNvpServiceDispatcher;
 use Twig_Environment;
 use Twig_Extensions_Extension_Intl;
+use WMDE\Fundraising\Frontend\DonationContext\DonationAcceptedEventHandler;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
 use WMDE\Fundraising\Frontend\Presentation\Honorifics;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
@@ -1252,6 +1253,14 @@ class FunFunFactory {
 			return '';
 		}
 		return $prefix = preg_replace( '/[^0-9a-f]/', '', file_get_contents( $prefixContentFile ) );
+	}
+
+	public function newDonationAcceptedEventHandler( string $updateToken ): DonationAcceptedEventHandler {
+		return new DonationAcceptedEventHandler(
+			$this->newDonationAuthorizer( $updateToken ),
+			$this->getDonationRepository(),
+			$this->newDonationConfirmationMailer()
+		);
 	}
 
 }
