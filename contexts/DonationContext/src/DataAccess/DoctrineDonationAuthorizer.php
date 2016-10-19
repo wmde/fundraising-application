@@ -72,7 +72,7 @@ class DoctrineDonationAuthorizer implements DonationAuthorizer {
 	}
 
 	private function updateTokenMatches( Donation $donation ): bool {
-		return $donation->getDataObject()->getUpdateToken() === $this->updateToken;
+		return hash_equals( (string)$donation->getDataObject()->getUpdateToken(), (string)$this->updateToken );
 	}
 
 	private function tokenHasNotExpired( Donation $donation ): bool {
@@ -94,7 +94,7 @@ class DoctrineDonationAuthorizer implements DonationAuthorizer {
 	}
 
 	private function accessTokenMatches( Donation $donation ): bool {
-		return $donation->getDataObject()->getAccessToken() === $this->accessToken;
+		return hash_equals( (string)$donation->getDataObject()->getAccessToken(), (string)$this->accessToken );
 	}
 
 }

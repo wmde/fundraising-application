@@ -48,7 +48,7 @@ class DoctrineApplicationAuthorizer implements ApplicationAuthorizer {
 	}
 
 	private function updateTokenMatches( MembershipApplication $application ): bool {
-		return $application->getDataObject()->getUpdateToken() === $this->updateToken;
+		return hash_equals( (string)$application->getDataObject()->getUpdateToken(), (string)$this->updateToken );
 	}
 
 	public function canAccessApplication( int $applicationId ): bool {
@@ -65,7 +65,7 @@ class DoctrineApplicationAuthorizer implements ApplicationAuthorizer {
 	}
 
 	private function accessTokenMatches( MembershipApplication $application ): bool {
-		return $application->getDataObject()->getAccessToken() === $this->accessToken;
+		return hash_equals( (string)$application->getDataObject()->getAccessToken(), (string)$this->accessToken );
 	}
 
 }
