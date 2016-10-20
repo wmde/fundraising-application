@@ -11,8 +11,10 @@ use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\MembershipContext\Tracking\MembershipApplicationTrackingInfo;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipRequest;
+use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipResponse;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
 
 /**
  * @license GNU GPL v2+
@@ -40,16 +42,8 @@ class ApplyForMembershipHandler {
 		$responseModel = $this->ffFactory->newApplyForMembershipUseCase()->applyForMembership( $applyForMembershipRequest );
 
 		if ( $responseModel->isSuccessful() ) {
-			$httpResponse = $this->app->redirect(
-				$this->app['url_generator']->generate(
-					'show-membership-confirmation',
-					[
-						'id' => $responseModel->getMembershipApplication()->getId(),
-						'token' => $responseModel->getAccessToken()
-					]
-				),
-				Response::HTTP_SEE_OTHER
-			);
+			$httpResponse = $this->newHttpResponse( $responseModel );
+
 			$cookie = new Cookie( self::SUBMISSION_COOKIE_NAME, date( self::TIMESTAMP_FORMAT ) );
 			$httpResponse->headers->setCookie( $cookie );
 			return $httpResponse;
@@ -127,6 +121,39 @@ class ApplyForMembershipHandler {
 		}
 
 		return true;
+	}
+
+	private function newHttpResponse( ApplyForMembershipResponse $responseModel ): Response {
+		switch( $responseModel->getMembershipApplication()->getPayment()->getPaymentMethod()->getType() ) {
+			case PaymentType::DIRECT_DEBIT:
+				$httpResponse = $this->app->redirect(
+					$this->app['url_generator']->generate(
+						'show-membership-confirmation',
+						[
+							'id' => $responseModel->getMembershipApplication()->getId(),
+							'accessToken' => $responseModel->getAccessToken()
+						]
+					),
+					Response::HTTP_SEE_OTHER
+				);
+
+				break;
+			case PaymentType::PAYPAL:
+				$httpResponse = $this->app->redirect(
+					$this->ffFactory->newPayPalUrlGeneratorForMembershipApplications()->generateUrl(
+						$responseModel->getMembershipApplication()->getId(),
+						$responseModel->getMembershipApplication()->getPayment()->getAmount(),
+						$responseModel->getMembershipApplication()->getPayment()->getIntervalInMonths(),
+						$responseModel->getUpdateToken(),
+						$responseModel->getAccessToken()
+					)
+				);
+				break;
+			default:
+				throw new \LogicException( 'This code should not be reached' );
+		}
+		$httpResponse->headers->setCookie( new Cookie( self::SUBMISSION_COOKIE_NAME, date( self::TIMESTAMP_FORMAT ) ) );
+		return $httpResponse;
 	}
 
 }

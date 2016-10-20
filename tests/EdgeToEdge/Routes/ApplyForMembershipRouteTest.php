@@ -160,7 +160,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			$responseContent = $client->getResponse()->getContent();
 
 			$this->assertContains( 'id=1', $responseContent );
-			$this->assertContains( 'token=' . self::FIXED_TOKEN, $responseContent );
+			$this->assertContains( 'accessToken=' . self::FIXED_TOKEN, $responseContent );
 		} );
 	}
 
@@ -304,6 +304,24 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			'templateCampaign' => ValidMembershipApplication::TEMPLATE_CAMPAIGN,
 			'templateName' => ValidMembershipApplication::TEMPLATE_NAME,
 		];
+	}
+
+	public function testGivenValidRequestUsingPayPal_requestIsRedirectedToPayPalUrl() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setNullMessenger();
+
+			$client->followRedirects( false );
+
+			$client->request(
+				'POST',
+				'apply-for-membership',
+				$this->newValidHttpParametersUsingPayPal()
+			);
+
+			$response = $client->getResponse();
+			$this->assertTrue( $response->isRedirect() );
+			$this->assertContains( 'sandbox.paypal.com', $response->headers->get( 'Location' ) );
+		} );
 	}
 
 }
