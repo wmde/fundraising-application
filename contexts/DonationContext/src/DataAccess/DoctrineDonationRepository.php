@@ -447,7 +447,7 @@ class DoctrineDonationRepository implements DonationRepository {
 				->setPayerId( $data['paypal_payer_id'] )
 				->setSubscriberId( $data['paypal_subscr_id'] )
 				->setPayerStatus( $data['paypal_payer_status'] )
-				->setAddressStatus( $data['paypal_address_status'] )
+				->setAddressStatus( isset( $data['paypal_address_status'] ) ? $data['paypal_address_status'] : 'unknown' )
 				->setAmount( Euro::newFromString( $data['paypal_mc_gross'] ) )
 				->setCurrencyCode( $data['paypal_mc_currency'] )
 				->setFee( Euro::newFromString( $data['paypal_mc_fee'] ) )
