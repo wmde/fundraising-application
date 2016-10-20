@@ -273,4 +273,27 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		];
 	}
 
+	public function testWhenDonationTimestampCookieIsSet_itIsNotOverwritten() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$donation = $this->newStoredDonation( $factory );
+
+			$client->getCookieJar()->set(
+				new Cookie( ShowDonationConfirmationHandler::SUBMISSION_COOKIE_NAME, 'some value' )
+			);
+			$client->request(
+				'GET',
+				'show-donation-confirmation',
+				[
+					'id' => $donation->getId(),
+					'accessToken' => self::CORRECT_ACCESS_TOKEN
+				]
+			);
+
+			$this->assertSame(
+				'some value',
+				$client->getCookieJar()->get( ShowDonationConfirmationHandler::SUBMISSION_COOKIE_NAME )->getValue()
+			);
+		} );
+	}
+
 }

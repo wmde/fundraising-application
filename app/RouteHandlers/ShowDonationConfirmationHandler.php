@@ -45,7 +45,9 @@ class ShowDonationConfirmationHandler {
 				)
 			);
 
-			$httpResponse->headers->setCookie( new Cookie( self::SUBMISSION_COOKIE_NAME, date( self::TIMESTAMP_FORMAT ) ) );
+			if ( !$request->cookies->get( self::SUBMISSION_COOKIE_NAME ) ) {
+				$httpResponse->headers->setCookie( new Cookie( self::SUBMISSION_COOKIE_NAME, date( self::TIMESTAMP_FORMAT ) ) );
+			}
 			return $httpResponse;
 		}
 
