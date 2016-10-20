@@ -79,4 +79,24 @@ class CheckIbanRouteTest extends WebRouteTestCase {
 		);
 	}
 
+	public function testGivenValidBankAccountDataOfNonGermanBank_successResponseIsReturned() {
+		$client = $this->createClient();
+
+		$client->request(
+			'GET',
+			'/check-iban',
+			[
+				'iban' => 'AT022050302101023600',
+			]
+		);
+
+		$this->assertJsonSuccessResponse(
+			[
+				'status' => 'OK',
+				'iban' => 'AT022050302101023600',
+			],
+			$client->getResponse()
+		);
+	}
+
 }
