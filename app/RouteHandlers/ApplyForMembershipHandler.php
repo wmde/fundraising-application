@@ -22,9 +22,6 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
  */
 class ApplyForMembershipHandler {
 
-	const TIMESTAMP_FORMAT = 'Y-m-d H:i:s';
-	const SUBMISSION_COOKIE_NAME = 'memapp_timestamp';
-
 	private $ffFactory;
 	private $app;
 
@@ -44,7 +41,10 @@ class ApplyForMembershipHandler {
 		if ( $responseModel->isSuccessful() ) {
 			$httpResponse = $this->newHttpResponse( $responseModel );
 
-			$cookie = new Cookie( self::SUBMISSION_COOKIE_NAME, date( self::TIMESTAMP_FORMAT ) );
+			$cookie = new Cookie(
+				ShowMembershipConfirmationHandler::SUBMISSION_COOKIE_NAME,
+				date( ShowMembershipConfirmationHandler::TIMESTAMP_FORMAT )
+			);
 			$httpResponse->headers->setCookie( $cookie );
 			return $httpResponse;
 		}
@@ -109,12 +109,12 @@ class ApplyForMembershipHandler {
 	}
 
 	private function isSubmissionAllowed( Request $request ) {
-		$lastSubmission = $request->cookies->get( self::SUBMISSION_COOKIE_NAME, '' );
+		$lastSubmission = $request->cookies->get( ShowMembershipConfirmationHandler::SUBMISSION_COOKIE_NAME, '' );
 		if ( $lastSubmission === '' ) {
 			return true;
 		}
 
-		$minNextTimestamp = \DateTime::createFromFormat( self::TIMESTAMP_FORMAT, $lastSubmission )
+		$minNextTimestamp = \DateTime::createFromFormat( ShowMembershipConfirmationHandler::TIMESTAMP_FORMAT, $lastSubmission )
 			->add( new \DateInterval( $this->ffFactory->getMembershipApplicationTimeframeLimit() ) );
 		if ( $minNextTimestamp > new \DateTime() ) {
 			return false;
@@ -152,7 +152,6 @@ class ApplyForMembershipHandler {
 			default:
 				throw new \LogicException( 'This code should not be reached' );
 		}
-		$httpResponse->headers->setCookie( new Cookie( self::SUBMISSION_COOKIE_NAME, date( self::TIMESTAMP_FORMAT ) ) );
 		return $httpResponse;
 	}
 

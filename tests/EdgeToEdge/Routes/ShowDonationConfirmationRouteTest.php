@@ -4,7 +4,9 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpKernel\Client;
+use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowDonationConfirmationHandler;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
@@ -269,6 +271,29 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 				]
 			]
 		];
+	}
+
+	public function testWhenDonationTimestampCookieIsSet_itIsNotOverwritten() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$donation = $this->newStoredDonation( $factory );
+
+			$client->getCookieJar()->set(
+				new Cookie( ShowDonationConfirmationHandler::SUBMISSION_COOKIE_NAME, 'some value' )
+			);
+			$client->request(
+				'GET',
+				'show-donation-confirmation',
+				[
+					'id' => $donation->getId(),
+					'accessToken' => self::CORRECT_ACCESS_TOKEN
+				]
+			);
+
+			$this->assertSame(
+				'some value',
+				$client->getCookieJar()->get( ShowDonationConfirmationHandler::SUBMISSION_COOKIE_NAME )->getValue()
+			);
+		} );
 	}
 
 }

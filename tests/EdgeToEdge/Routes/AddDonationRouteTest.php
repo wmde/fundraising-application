@@ -48,6 +48,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setNullMessenger();
 
+			$client->followRedirects( true );
 			$client->request(
 				'POST',
 				'/donation/add',

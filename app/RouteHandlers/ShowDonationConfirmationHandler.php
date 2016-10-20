@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\App\RouteHandlers;
 
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\App\AccessDeniedException;
@@ -16,6 +17,9 @@ use WMDE\Fundraising\Frontend\Infrastructure\PiwikVariableCollector;
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class ShowDonationConfirmationHandler {
+
+	const SUBMISSION_COOKIE_NAME = 'donation_timestamp';
+	const TIMESTAMP_FORMAT = 'Y-m-d H:i:s';
 
 	private $ffFactory;
 
@@ -32,7 +36,7 @@ class ShowDonationConfirmationHandler {
 
 		if ( $responseModel->accessIsPermitted() ) {
 			$selectedConfirmationPage = $this->ffFactory->getDonationConfirmationPageSelector()->selectPage();
-			return new Response(
+			$httpResponse = new Response(
 				$this->ffFactory->newDonationConfirmationPresenter()->present(
 					$responseModel->getDonation(),
 					$responseModel->getUpdateToken(),
@@ -40,6 +44,11 @@ class ShowDonationConfirmationHandler {
 					PiwikVariableCollector::newForDonation( $sessionTrackingData, $responseModel->getDonation() )
 				)
 			);
+
+			if ( !$request->cookies->get( self::SUBMISSION_COOKIE_NAME ) ) {
+				$httpResponse->headers->setCookie( new Cookie( self::SUBMISSION_COOKIE_NAME, date( self::TIMESTAMP_FORMAT ) ) );
+			}
+			return $httpResponse;
 		}
 
 		throw new AccessDeniedException( 'access_denied_donation_confirmation' );

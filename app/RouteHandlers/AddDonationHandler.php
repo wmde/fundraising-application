@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\App\RouteHandlers;
 
 use Silex\Application;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Euro\Euro;
@@ -25,9 +24,6 @@ use WMDE\Fundraising\Frontend\Presentation\SelectedConfirmationPage;
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class AddDonationHandler {
-
-	const SUBMISSION_COOKIE_NAME = 'donation_timestamp';
-	const TIMESTAMP_FORMAT = 'Y-m-d H:i:s';
 
 	private $ffFactory;
 	private $app;
@@ -87,7 +83,6 @@ class AddDonationHandler {
 			default:
 				throw new \LogicException( 'This code should not be reached' );
 		}
-		$httpResponse->headers->setCookie( new Cookie( self::SUBMISSION_COOKIE_NAME, date( self::TIMESTAMP_FORMAT ) ) );
 		return $httpResponse;
 	}
 
@@ -177,12 +172,12 @@ class AddDonationHandler {
 	}
 
 	private function isSubmissionAllowed( Request $request ) {
-		$lastSubmission = $request->cookies->get( self::SUBMISSION_COOKIE_NAME, '' );
+		$lastSubmission = $request->cookies->get( ShowDonationConfirmationHandler::SUBMISSION_COOKIE_NAME, '' );
 		if ( $lastSubmission === '' ) {
 			return true;
 		}
 
-		$minNextTimestamp = \DateTime::createFromFormat( self::TIMESTAMP_FORMAT, $lastSubmission )
+		$minNextTimestamp = \DateTime::createFromFormat( ShowDonationConfirmationHandler::TIMESTAMP_FORMAT, $lastSubmission )
 			->add( new \DateInterval( $this->ffFactory->getDonationTimeframeLimit() ) );
 		if ( $minNextTimestamp > new \DateTime() ) {
 			return false;
