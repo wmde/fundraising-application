@@ -38,7 +38,9 @@ function validity( state, action ) {
 		case 'FINISH_ADDRESS_VALIDATION':
 			return objectAssign( {}, state, { address: convertExternalResult( action ) } );
 		case 'FINISH_BANK_DATA_VALIDATION':
-			return objectAssign( {}, state, { bankData: convertExternalResult( action ) } );
+			return objectAssign( {}, state, {
+				bankData: convertExternalResult( action ) && action.payload.bic
+			} );
 		case 'FINISH_SEPA_CONFIRMATION_VALIDATION':
 			return objectAssign( {}, state, { sepaConfirmation: action.payload } );
 		default:

@@ -35,3 +35,28 @@ test( 'FINISH_ADDRESS_VALIDATION sets amount validation state', function ( t ) {
 	t.end();
 } );
 
+test( 'FINISH_BANK_DATA_VALIDATION with BIC sets bank data validation state to valid', function ( t ) {
+	var beforeState = { bankData: null };
+
+	deepFreeze( beforeState );
+	t.ok( validity( beforeState, { type: 'FINISH_BANK_DATA_VALIDATION', payload: {
+		status: 'OK',
+		iban: 'DE12500105170648489890',
+		bic: 'INGDDEFFXXX',
+		bankCode: '50010517',
+		accountNumber: '064847930'
+	} } ).bankData );
+	t.notOk( validity( beforeState, { type: 'FINISH_BANK_DATA_VALIDATION', payload: createInvalidPayload } ).bankData );
+	t.end();
+} );
+
+test( 'FINISH_BANK_DATA_VALIDATION without BIC sets bank data validation state to invalid', function ( t ) {
+	var beforeState = { bankData: null };
+
+	deepFreeze( beforeState );
+	t.notOk( validity( beforeState, { type: 'FINISH_BANK_DATA_VALIDATION', payload: {
+		status: 'OK',
+		iban: 'AT022050302101023600'
+	} } ).bankData );
+	t.end();
+} );
