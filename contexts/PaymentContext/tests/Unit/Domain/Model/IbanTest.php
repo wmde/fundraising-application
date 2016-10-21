@@ -32,4 +32,12 @@ class IbanTest extends \PHPUnit_Framework_TestCase {
 		$iban = new Iban( self::TEST_LOWERCASE_IBAN );
 		$this->assertSame( 'DE', $iban->getCountryCode() );
 	}
+
+	public function testGivenSameIbanWithDifferentCapitalization_objectsAreEqual() {
+		$this->assertEquals(
+			new Iban( self::TEST_IBAN ),
+			new Iban( self::TEST_LOWERCASE_IBAN )
+		);
+	}
+
 }
