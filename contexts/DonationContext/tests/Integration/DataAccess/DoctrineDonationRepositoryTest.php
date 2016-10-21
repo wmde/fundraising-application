@@ -10,6 +10,8 @@ use WMDE\Fundraising\Frontend\DonationContext\DataAccess\DoctrineDonationReposit
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Repositories\GetDonationException;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Repositories\StoreDonationException;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDoctrineDonation;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
@@ -247,6 +249,27 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$expectedDoctrineEntity->setPublicRecord( '' );
 
 		$this->assertDoctrineEntityIsInDatabase( $expectedDoctrineEntity );
+	}
+
+	public function testDonationWithIncompletePaypalDataCanBeLoaded() {
+		$donationId = $this->createPaypalDonationWithMissingFields();
+		$repository = $this->newRepository();
+		$donation = $repository->getDonationById( $donationId );
+		/** @var PayPalPayment $paypalPayment */
+		$paypalPayment = $donation->getPaymentMethod();
+		$this->assertNotNull( $paypalPayment->getPayPalData() );
+		$this->assertSame( '', $paypalPayment->getPayPalData()->getFirstName() );
+	}
+
+	private function createPaypalDonationWithMissingFields(): int {
+		$doctrineDonation = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
+		$doctrineDonation->setPaymentType( PaymentType::PAYPAL );
+		$doctrineDonation->encodeAndSetData( array_merge( $doctrineDonation->getDecodedData(), [
+			'paypal_payer_id' => '1'
+		] ) );
+		$this->entityManager->persist( $doctrineDonation );
+		$this->entityManager->flush();
+	return $doctrineDonation->getId();
 	}
 
 }
