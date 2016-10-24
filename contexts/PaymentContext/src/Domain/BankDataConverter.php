@@ -47,6 +47,7 @@ class BankDataConverter {
 		$bankData->setAccount( $account );
 		$bankData->setBankCode( $bankCode );
 		$bankData->setBankName( $this->bankNameFromBankCode( $bankData->getBankCode() ) );
+		$bankData->freeze()->assertNoNullFields();
 
 		return $bankData;
 	}
@@ -70,7 +71,14 @@ class BankDataConverter {
 			$bankData->setAccount( $iban->accountNrFromDeIban() );
 			$bankData->setBankCode( $iban->bankCodeFromDeIban() );
 			$bankData->setBankName( $this->bankNameFromBankCode( $bankData->getBankCode() ) );
+		} else {
+			$bankData->setBic( '' );
+
+			$bankData->setAccount( '' );
+			$bankData->setBankCode( '' );
+			$bankData->setBankName( '' );
 		}
+		$bankData->freeze()->assertNoNullFields();
 
 		return $bankData;
 	}

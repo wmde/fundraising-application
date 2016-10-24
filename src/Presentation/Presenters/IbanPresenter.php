@@ -22,14 +22,14 @@ class IbanPresenter {
 	}
 
 	private function newSuccessResponse( BankData $bankData ) {
-		return [
+		return array_filter( [
 			'status' => 'OK',
 			'bic' => $bankData->getBic(),
 			'iban' => $bankData->getIban()->toString(),
 			'account' => $bankData->getAccount(),
 			'bankCode' => $bankData->getBankCode(),
 			'bankName' => $bankData->getBankName(),
-		];
+		] );
 	}
 
 	private function newErrorResponse() {

@@ -13,7 +13,7 @@ class Iban {
 	private $iban;
 
 	public function __construct( string $iban ) {
-		$this->iban = preg_replace( '/\s+/', '', $iban );
+		$this->iban = strtoupper( preg_replace( '/\s+/', '', $iban ) );
 	}
 
 	public function toString(): string {

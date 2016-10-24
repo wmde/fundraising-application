@@ -16,6 +16,7 @@ class IbanTest extends \PHPUnit_Framework_TestCase {
 
 	const TEST_IBAN_WITH_WHITESPACE = 'DE12 5001 0517 0648 4898 90 ';
 	const TEST_IBAN = 'DE12500105170648489890';
+	const TEST_LOWERCASE_IBAN = 'de12500105170648489890';
 
 	public function testGivenIbanWithWhitespace_WhitespaceIsRemoved() {
 		$iban = new Iban( self::TEST_IBAN_WITH_WHITESPACE );
@@ -26,4 +27,17 @@ class IbanTest extends \PHPUnit_Framework_TestCase {
 		$iban = new Iban( self::TEST_IBAN );
 		$this->assertSame( 'DE', $iban->getCountryCode() );
 	}
+
+	public function testCountryCodeIsReturnedCorrectlyForLowercase() {
+		$iban = new Iban( self::TEST_LOWERCASE_IBAN );
+		$this->assertSame( 'DE', $iban->getCountryCode() );
+	}
+
+	public function testGivenSameIbanWithDifferentCapitalization_objectsAreEqual() {
+		$this->assertEquals(
+			new Iban( self::TEST_IBAN ),
+			new Iban( self::TEST_LOWERCASE_IBAN )
+		);
+	}
+
 }

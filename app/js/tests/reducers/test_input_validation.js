@@ -15,12 +15,10 @@ function newAction( value ) {
 	};
 }
 
-function newBankDataValidationAction( returnedStatus ) {
+function newBankDataValidationAction( payload ) {
 	return {
 		type: 'FINISH_BANK_DATA_VALIDATION',
-		payload: {
-			status: returnedStatus
-		}
+		payload: payload
 	};
 }
 
@@ -78,7 +76,7 @@ test( 'If valid data was changed to invalid data, validation returns invalid sta
 	t.end();
 } );
 
-test( 'If bank data validation is successful, all fields retrieve valid status', function ( t ) {
+test( 'If bank data validation is successful, all fields in payload have valid status', function ( t ) {
 	var stateBefore = {
 			iban: { dataEntered: false, isValid: null },
 			bic: { dataEntered: false, isValid: null },
@@ -93,7 +91,35 @@ test( 'If bank data validation is successful, all fields retrieve valid status',
 		};
 
 	deepFreeze( stateBefore );
-	t.deepEqual( inputValidation( stateBefore, newBankDataValidationAction( 'OK' ) ), expectedState );
+	t.deepEqual( inputValidation( stateBefore, newBankDataValidationAction( {
+		status: 'OK',
+		iban: 'DE12500105170648489890',
+		bic: 'INGDDEFFXXX',
+		bankCode: '50010517',
+		accountNumber: '064847930'
+	} ) ), expectedState );
+	t.end();
+} );
+
+test( 'If bank data validation is successful, only fields in payload change status', function ( t ) {
+	var stateBefore = {
+			iban: { dataEntered: false, isValid: null },
+			bic: { dataEntered: false, isValid: null },
+			account: { dataEntered: false, isValid: null },
+			bankCode: { dataEntered: false, isValid: null }
+		},
+		expectedState = {
+			iban: { dataEntered: true, isValid: true },
+			bic: { dataEntered: false, isValid: null },
+			account: { dataEntered: false, isValid: null },
+			bankCode: { dataEntered: false, isValid: null }
+		};
+
+	deepFreeze( stateBefore );
+	t.deepEqual( inputValidation( stateBefore, newBankDataValidationAction( {
+		status: 'OK',
+		iban: 'DE12500105170648489890'
+	} ) ), expectedState );
 	t.end();
 } );
 
@@ -112,7 +138,7 @@ test( 'If bank data validation fails, all fields retrieve invalid status', funct
 		};
 
 	deepFreeze( stateBefore );
-	t.deepEqual( inputValidation( stateBefore, newBankDataValidationAction( 'ERR' ) ), expectedState );
+	t.deepEqual( inputValidation( stateBefore, newBankDataValidationAction( { status: 'ERR' } ) ), expectedState );
 	t.end();
 } );
 

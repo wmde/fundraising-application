@@ -56,9 +56,15 @@ function inputValidation( validationState, action ) {
 			}
 			bankDataIsValid = action.payload.status !== ValidationStates.ERR;
 			newValidationState.iban = { dataEntered: true, isValid: bankDataIsValid };
-			newValidationState.bic = { dataEntered: true, isValid: bankDataIsValid };
-			newValidationState.account = { dataEntered: true, isValid: bankDataIsValid };
-			newValidationState.bankCode = { dataEntered: true, isValid: bankDataIsValid };
+			if ( action.payload.bic || !bankDataIsValid ) {
+				newValidationState.bic = { dataEntered: true, isValid: bankDataIsValid };
+			}
+			if ( action.payload.accountNumber || !bankDataIsValid ) {
+				newValidationState.account = { dataEntered: true, isValid: bankDataIsValid };
+			}
+			if ( action.payload.bankCode || !bankDataIsValid ) {
+				newValidationState.bankCode = { dataEntered: true, isValid: bankDataIsValid };
+			}
 			return newValidationState;
 		case 'FINISH_EMAIL_ADDRESS_VALIDATION':
 			newValidationState.email = { dataEntered: true, isValid: action.payload.status !== ValidationStates.ERR };

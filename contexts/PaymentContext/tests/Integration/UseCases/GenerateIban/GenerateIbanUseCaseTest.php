@@ -35,6 +35,7 @@ class GenerateIbanUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$bankData->setAccount( '1015754243' );
 		$bankData->setBankCode( '20050550' );
 		$bankData->setBankName( 'Hamburger Sparkasse' );
+		$bankData->freeze()->assertNoNullFields();
 
 		$this->assertEquals(
 			IbanResponse::newSuccessResponse( $bankData ),
