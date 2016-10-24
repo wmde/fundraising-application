@@ -10,8 +10,11 @@ use WMDE\Fundraising\Frontend\DonationContext\DataAccess\DoctrineDonationReposit
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Repositories\GetDonationException;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Repositories\StoreDonationException;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\CreditCardPayment;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
+use WMDE\Fundraising\Frontend\Tests\Data\IncompleteDoctrineDonation;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDoctrineDonation;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
@@ -262,24 +265,58 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	private function createPaypalDonationWithMissingFields(): int {
-		$doctrineDonation = ValidDoctrineDonation::newPaypalDonationWithMissingFields();
+		$doctrineDonation = IncompleteDoctrineDonation::newPaypalDonationWithMissingFields();
 		$this->entityManager->persist( $doctrineDonation );
 		$this->entityManager->flush();
 		return $doctrineDonation->getId();
 	}
 
-	public function testDonationWithIncompleteTrackingInformationDataCanBeLoaded() {
+	public function testDonationWithMissingTrackingInformationDataCanBeLoaded() {
 		$donationId = $this->createPaypalDonationWithMissingTracking();
 		$repository = $this->newRepository();
 		$donation = $repository->getDonationById( $donationId );
 		$info = $donation->getTrackingInfo();
 		$this->assertNotNull( $info );
 		$this->assertSame( '', $info->getColor() );
-		$this->assertSame( ValidDonation::TRACKING_TOTAL_IMPRESSION_COUNT, $info->getTotalImpressionCount() );
+		$this->assertSame( 0, $info->getTotalImpressionCount() );
 	}
 
 	private function createPaypalDonationWithMissingTracking(): int {
-		$doctrineDonation = ValidDoctrineDonation::newPaypalDonationWithInconsistentTrackingData();
+		$doctrineDonation = IncompleteDoctrineDonation::newPaypalDonationWithMissingTrackingData();
+		$this->entityManager->persist( $doctrineDonation );
+		$this->entityManager->flush();
+		return $doctrineDonation->getId();
+	}
+
+	public function testDonationWithIncompleteBankDataCanBeLoaded() {
+		$donationId = $this->createDonationWithIncompleteBankData();
+		$repository = $this->newRepository();
+		$donation = $repository->getDonationById( $donationId );
+		/** @var DirectDebitPayment $paymentMethod */
+		$paymentMethod = $donation->getPaymentMethod();
+		$this->assertNotNull( $paymentMethod->getBankData() );
+		$this->assertSame( '', $paymentMethod->getBankData()->getIban()->toString() );
+	}
+
+	private function createDonationWithIncompleteBankData() {
+		$doctrineDonation = IncompleteDoctrineDonation::newDirectDebitDonationWithMissingFields();
+		$this->entityManager->persist( $doctrineDonation );
+		$this->entityManager->flush();
+		return $doctrineDonation->getId();
+	}
+
+	public function testDonationWithIncompleteCreditcardDataCanBeLoaded() {
+		$donationId = $this->createDonationWithIncompleteCreditcardData();
+		$repository = $this->newRepository();
+		$donation = $repository->getDonationById( $donationId );
+		/** @var CreditCardPayment $paymentMethod */
+		$paymentMethod = $donation->getPaymentMethod();
+		$this->assertNotNull( $paymentMethod->getCreditCardData() );
+		$this->assertSame( '', $paymentMethod->getCreditCardData()->getTitle() );
+	}
+
+	private function createDonationWithIncompleteCreditcardData() {
+		$doctrineDonation = IncompleteDoctrineDonation::newCreditcardDonationWithMissingFields();
 		$this->entityManager->persist( $doctrineDonation );
 		$this->entityManager->flush();
 		return $doctrineDonation->getId();

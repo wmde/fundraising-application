@@ -282,7 +282,12 @@ class DoctrineDonationRepository implements DonationRepository {
 			return null;
 		}
 
-		return $this->newDonationDomainObject( $donation );
+		$domainObject = $this->newDonationDomainObject( $donation );
+		// TODO: Remove these lines, they're just for keeping memory low during the "load all donations" test
+		$this->entityManager->detach( $donation );
+		$this->entityManager->flush();
+		$this->entityManager->clear();
+		return $domainObject;
 	}
 
 	/**
@@ -321,6 +326,7 @@ class DoctrineDonationRepository implements DonationRepository {
 
 		// This should not happen, but it does (but only with PayPal payments in production), so as a step towards fixing this, we log
 		if ( $this->entityHasMissingFields( $dd ) ) {
+			/*
 			error_log( sprintf(
 				'Entity %d has missing fields. Field data: %s',
 				$dd->getId(),
@@ -330,6 +336,7 @@ class DoctrineDonationRepository implements DonationRepository {
 			// we don't throw it, because we only want the information
 			$ex = new \Exception();
 			error_log( $ex->getTraceAsString() );
+			*/
 			return null;
 		}
 
@@ -396,27 +403,17 @@ class DoctrineDonationRepository implements DonationRepository {
 		return $address->freeze()->assertNoNullFields();
 	}
 
-	/**
-	 * @param DoctrineDonation $dd
-	 *
-	 * @return BankData|null
-	 */
 	private function getBankDataFromEntity( DoctrineDonation $dd ) {
 		$data = $dd->getDecodedData();
 
-		if ( array_key_exists( 'iban', $data ) ) {
-			$bankData = new BankData();
+		$bankData = new BankData();
+		$bankData->setIban( new Iban( $data['iban'] ?? '' ) );
+		$bankData->setBic( $data['bic'] ?? '' );
+		$bankData->setAccount( $data['konto'] ?? '' );
+		$bankData->setBankCode( $data['blz'] ?? '' );
+		$bankData->setBankName( $data['bankname'] ?? '' );
+		return $bankData->freeze()->assertNoNullFields();
 
-			$bankData->setIban( new Iban( $data['iban'] ) );
-			$bankData->setBic( $data['bic'] );
-			$bankData->setAccount( $data['konto'] );
-			$bankData->setBankCode( $data['blz'] );
-			$bankData->setBankName( $data['bankname'] );
-
-			return $bankData->freeze()->assertNoNullFields();
-		}
-
-		return null;
 	}
 
 	private function getTrackingInfoFromEntity( DoctrineDonation $dd ): DonationTrackingInfo {
@@ -424,9 +421,9 @@ class DoctrineDonationRepository implements DonationRepository {
 
 		$trackingInfo = new DonationTrackingInfo();
 
-		$trackingInfo->setLayout( $data['layout'] );
+		$trackingInfo->setLayout( $data['layout'] ?? '' );
 		$trackingInfo->setTotalImpressionCount( intval( $data['impCount'] ?? '0', 10 ) );
-		$trackingInfo->setSingleBannerImpressionCount( intval( $data['bImpCount'] ?? '0', 10) );
+		$trackingInfo->setSingleBannerImpressionCount( intval( $data['bImpCount'] ?? '0', 10 ) );
 		$trackingInfo->setTracking( $data['tracking'] ?? '' );
 		$trackingInfo->setSkin( $data['skin'] ?? '' );
 		$trackingInfo->setColor( $data['color'] ?? '' );
@@ -465,30 +462,23 @@ class DoctrineDonationRepository implements DonationRepository {
 		return null;
 	}
 
-	/**
-	 * @param DoctrineDonation $dd
-	 * @return CreditCardTransactionData|null
-	 */
 	private function getCreditCardDataFromEntity( DoctrineDonation $dd ) {
 		$data = $dd->getDecodedData();
 
-		if ( array_key_exists( 'mcp_auth', $data ) ) {
-			return ( new CreditCardTransactionData() )
-				->setTransactionId( $data['ext_payment_id'] )
-				->setTransactionStatus( $data['ext_payment_status'] )
-				->setTransactionTimestamp( new \DateTime( $data['ext_payment_timestamp'] ) )
-				->setAmount( Euro::newFromString( $data['mcp_amount'] ) )
-				->setCustomerId( $data['ext_payment_account'] )
-				->setSessionId( $data['mcp_sessionid'] )
-				->setAuthId( $data['mcp_auth'] )
-				->setCardExpiry( CreditCardExpiry::newFromString( $data['mcp_cc_expiry_date'] ) )
-				->setTitle( $data['mcp_title'] )
-				->setCountryCode( $data['mcp_country'] )
-				->setCurrencyCode( $data['mcp_currency'] )
-				->freeze();
-		}
+		return ( new CreditCardTransactionData() )
+			->setTransactionId( $data['ext_payment_id'] ?? '' )
+			->setTransactionStatus( $data['ext_payment_status'] ?? '' )
+			->setTransactionTimestamp( new \DateTime( $data['ext_payment_timestamp'] ?? 'now' ) )
+			->setAmount( Euro::newFromString( $data['mcp_amount'] ?? '0' ) )
+			->setCustomerId( $data['ext_payment_account'] ?? '' )
+			->setSessionId( $data['mcp_sessionid'] ?? '' )
+			->setAuthId( $data['mcp_auth'] ?? '' )
+			->setCardExpiry( CreditCardExpiry::newFromString( $data['mcp_cc_expiry_date'] ?? '' ) )
+			->setTitle( $data['mcp_title'] ?? '' )
+			->setCountryCode( $data['mcp_country'] ?? '' )
+			->setCurrencyCode( $data['mcp_currency'] ?? '' )
+			->freeze();
 
-		return null;
 	}
 
 	/**
