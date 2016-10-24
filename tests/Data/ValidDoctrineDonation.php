@@ -20,22 +20,33 @@ class ValidDoctrineDonation {
 	 * @return Donation
 	 */
 	public static function newDirectDebitDoctrineDonation(): Donation {
-		return ( new self() )->createDonation();
+		return ( new self() )->createDirectDebitDonation();
 	}
 
-	private function createDonation(): Donation {
+	/**
+	 * Returns a Doctrine Donation that is valid, but has "legacy" tracking data (wrong type and missing fields).
+	 *
+	 * @return Donation
+	 */
+	public static function newPaypalDonationWithInconsistentTrackingData(): Donation {
+		return ( new self() )->createPaypalDonationWithInconsistentTrackingData();
+	}
+
+	/**
+	 * Returns a Doctrine Donation that is valid, but has "legacy" content in the paypal data.
+	 *
+	 * @return Donation
+	 */
+	public static function newPaypalDonationWithMissingFields(): Donation {
+		return ( new self() )->createPaypalDonationWithMissingFields();
+	}
+
+	private function createDirectDebitDonation(): Donation {
 		$donation = new Donation();
-
-		$donation->setStatus( Donation::STATUS_NEW );
-
-		$donation->setAmount( (string)ValidDonation::DONATION_AMOUNT );
-		$donation->setPaymentIntervalInMonths( ValidDonation::PAYMENT_INTERVAL_IN_MONTHS );
+		$this->setPaymentData( $donation );
+		$this->setDonorData( $donation );
 		$donation->setPaymentType( PaymentType::DIRECT_DEBIT );
-
-		$donation->setDonorCity( ValidDonation::DONOR_CITY );
-		$donation->setDonorEmail( ValidDonation::DONOR_EMAIL_ADDRESS );
-		$donation->setDonorFullName( ValidDonation::DONOR_FULL_NAME );
-		$donation->setDonorOptsIntoNewsletter( ValidDonation::OPTS_INTO_NEWSLETTER );
+		$donation->setStatus( Donation::STATUS_NEW );
 
 		$donation->encodeAndSetData( array_merge(
 			$this->getTrackingInfoArray(),
@@ -44,6 +55,50 @@ class ValidDoctrineDonation {
 		) );
 
 		return $donation;
+	}
+
+	private function createPaypalDonationWithMissingFields() {
+		$donation = new Donation();
+		$this->setPaymentData( $donation );
+		$this->setDonorData( $donation );
+		$donation->setPaymentType( PaymentType::PAYPAL );
+		$donation->setStatus( Donation::STATUS_NEW );
+
+		$donation->encodeAndSetData( array_merge(
+			$this->getTrackingInfoArray(),
+			$this->getDonorArray(),
+			[ 'paypal_payer_id' => '1' ]
+		) );
+
+		return $donation;
+	}
+
+	private function createPaypalDonationWithInconsistentTrackingData() {
+		$donation = new Donation();
+		$this->setPaymentData( $donation );
+		$this->setDonorData( $donation );
+		$donation->setPaymentType( PaymentType::PAYPAL );
+		$donation->setStatus( Donation::STATUS_NEW );
+
+		$donation->encodeAndSetData( array_merge(
+			$this->getInconsistentTrackingInfoArray(),
+			$this->getDonorArray(),
+			$this->getPaypalArray()
+		) );
+
+		return $donation;
+	}
+
+	private function setPaymentData( Donation $donation ) {
+		$donation->setAmount( (string)ValidDonation::DONATION_AMOUNT );
+		$donation->setPaymentIntervalInMonths( ValidDonation::PAYMENT_INTERVAL_IN_MONTHS );
+	}
+
+	private function setDonorData( Donation $donation ) {
+		$donation->setDonorCity( ValidDonation::DONOR_CITY );
+		$donation->setDonorEmail( ValidDonation::DONOR_EMAIL_ADDRESS );
+		$donation->setDonorFullName( ValidDonation::DONOR_FULL_NAME );
+		$donation->setDonorOptsIntoNewsletter( ValidDonation::OPTS_INTO_NEWSLETTER );
 	}
 
 	private function getTrackingInfoArray(): array {
@@ -55,6 +110,14 @@ class ValidDoctrineDonation {
 			'skin' => ValidDonation::TRACKING_SKIN,
 			'color' => ValidDonation::TRACKING_COLOR,
 			'source' => ValidDonation::TRACKING_SOURCE,
+		];
+	}
+
+	private function getInconsistentTrackingInfoArray(): array {
+		return [
+			'layout' => ValidDonation::TRACKING_LAYOUT,
+			'impCount' => (string) ValidDonation::TRACKING_TOTAL_IMPRESSION_COUNT,
+			'bImpCount' => (string) ValidDonation::TRACKING_BANNER_IMPRESSION_COUNT,
 		];
 	}
 
@@ -93,6 +156,12 @@ class ValidDoctrineDonation {
 			'plz' => ValidDonation::DONOR_POSTAL_CODE,
 			'ort' => ValidDonation::DONOR_CITY,
 			'country' => ValidDonation::DONOR_COUNTRY_CODE,
+		];
+	}
+
+	private function getPaypalArray():array {
+		return [
+			// TODO
 		];
 	}
 

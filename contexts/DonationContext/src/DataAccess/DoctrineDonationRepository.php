@@ -425,12 +425,12 @@ class DoctrineDonationRepository implements DonationRepository {
 		$trackingInfo = new DonationTrackingInfo();
 
 		$trackingInfo->setLayout( $data['layout'] );
-		$trackingInfo->setTotalImpressionCount( $data['impCount'] );
-		$trackingInfo->setSingleBannerImpressionCount( $data['bImpCount'] );
-		$trackingInfo->setTracking( $data['tracking'] );
-		$trackingInfo->setSkin( $data['skin'] );
-		$trackingInfo->setColor( $data['color'] );
-		$trackingInfo->setSource( $data['source'] );
+		$trackingInfo->setTotalImpressionCount( intval( $data['impCount'] ?? '0', 10 ) );
+		$trackingInfo->setSingleBannerImpressionCount( intval( $data['bImpCount'] ?? '0', 10) );
+		$trackingInfo->setTracking( $data['tracking'] ?? '' );
+		$trackingInfo->setSkin( $data['skin'] ?? '' );
+		$trackingInfo->setColor( $data['color'] ?? '' );
+		$trackingInfo->setSource( $data['source'] ?? '' );
 
 		return $trackingInfo->freeze()->assertNoNullFields();
 	}
