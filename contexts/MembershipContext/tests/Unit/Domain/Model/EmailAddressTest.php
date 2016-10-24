@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\MembershipContext\Domain\Model;
+namespace WMDE\Fundraising\Frontend\MembershipContext\Tests\Unit\Domain\Model;
 
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\EmailAddress;
 
@@ -11,6 +11,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\EmailAddress;
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
+ * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class EmailAddressTest extends \PHPUnit_Framework_TestCase {
 
@@ -31,6 +32,11 @@ class EmailAddressTest extends \PHPUnit_Framework_TestCase {
 			[ '' ],
 			[ ' ' ]
 		];
+	}
+
+	public function testWhenDomainIsEmpty_constructorThrowsException() {
+		$this->expectException( \InvalidArgumentException::class );
+		new EmailAddress( 'jeroendedauw@' );
 	}
 
 	public function testGetFullAddressReturnsOriginalInput() {

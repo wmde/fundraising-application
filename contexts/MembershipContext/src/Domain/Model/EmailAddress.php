@@ -23,6 +23,10 @@ class EmailAddress {
 
 		$this->userName = $addressParts[0];
 		$this->domain = $addressParts[1];
+
+		if ( trim( $this->domain ) === '' ) {
+			throw new \InvalidArgumentException( 'Email domain cannot be empty' );
+		}
 	}
 
 	public function getUserName(): string {
