@@ -87,4 +87,16 @@ class DonationTrackingInfo {
 		$this->layout = $layout;
 	}
 
+	public static function newBlankTrackingInfo(): self {
+		$trackingInfo = new self();
+		$trackingInfo->setColor( '' );
+		$trackingInfo->setLayout( '' );
+		$trackingInfo->setSingleBannerImpressionCount( 0 );
+		$trackingInfo->setSkin( '' );
+		$trackingInfo->setSource( '' );
+		$trackingInfo->setTotalImpressionCount( 0 );
+		$trackingInfo->setTracking( '' );
+		return $trackingInfo;
+	}
+
 }
