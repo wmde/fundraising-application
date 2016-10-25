@@ -319,20 +319,6 @@ class DoctrineDonationRepository implements DonationRepository {
 			return null;
 		}
 
-		// This should not happen, but it does (but only with PayPal payments in production), so as a step towards fixing this, we log
-		if ( $this->entityHasMissingFields( $dd ) ) {
-			error_log( sprintf(
-				'Entity %d has missing fields. Field data: %s',
-				$dd->getId(),
-				var_export( $dd->getDecodedData(), true ) )
-			);
-			// using an exception to get nicely formatted a backtrace instead of gathering data from debug_backtrace
-			// we don't throw it, because we only want the information
-			$ex = new \Exception();
-			error_log( $ex->getTraceAsString() );
-			return null;
-		}
-
 		return new Donor(
 			$this->getPersonNameFromEntity( $dd ),
 			$this->getPhysicalAddressFromEntity( $dd ),
@@ -396,27 +382,17 @@ class DoctrineDonationRepository implements DonationRepository {
 		return $address->freeze()->assertNoNullFields();
 	}
 
-	/**
-	 * @param DoctrineDonation $dd
-	 *
-	 * @return BankData|null
-	 */
 	private function getBankDataFromEntity( DoctrineDonation $dd ) {
 		$data = $dd->getDecodedData();
 
-		if ( array_key_exists( 'iban', $data ) ) {
-			$bankData = new BankData();
+		$bankData = new BankData();
+		$bankData->setIban( new Iban( $data['iban'] ?? '' ) );
+		$bankData->setBic( $data['bic'] ?? '' );
+		$bankData->setAccount( $data['konto'] ?? '' );
+		$bankData->setBankCode( $data['blz'] ?? '' );
+		$bankData->setBankName( $data['bankname'] ?? '' );
+		return $bankData->freeze()->assertNoNullFields();
 
-			$bankData->setIban( new Iban( $data['iban'] ) );
-			$bankData->setBic( $data['bic'] );
-			$bankData->setAccount( $data['konto'] );
-			$bankData->setBankCode( $data['blz'] );
-			$bankData->setBankName( $data['bankname'] );
-
-			return $bankData->freeze()->assertNoNullFields();
-		}
-
-		return null;
 	}
 
 	private function getTrackingInfoFromEntity( DoctrineDonation $dd ): DonationTrackingInfo {
@@ -424,13 +400,13 @@ class DoctrineDonationRepository implements DonationRepository {
 
 		$trackingInfo = new DonationTrackingInfo();
 
-		$trackingInfo->setLayout( $data['layout'] );
-		$trackingInfo->setTotalImpressionCount( $data['impCount'] );
-		$trackingInfo->setSingleBannerImpressionCount( $data['bImpCount'] );
-		$trackingInfo->setTracking( $data['tracking'] );
-		$trackingInfo->setSkin( $data['skin'] );
-		$trackingInfo->setColor( $data['color'] );
-		$trackingInfo->setSource( $data['source'] );
+		$trackingInfo->setLayout( $data['layout'] ?? '' );
+		$trackingInfo->setTotalImpressionCount( intval( $data['impCount'] ?? '0', 10 ) );
+		$trackingInfo->setSingleBannerImpressionCount( intval( $data['bImpCount'] ?? '0', 10 ) );
+		$trackingInfo->setTracking( $data['tracking'] ?? '' );
+		$trackingInfo->setSkin( $data['skin'] ?? '' );
+		$trackingInfo->setColor( $data['color'] ?? '' );
+		$trackingInfo->setSource( $data['source'] ?? '' );
 
 		return $trackingInfo->freeze()->assertNoNullFields();
 	}
@@ -465,30 +441,23 @@ class DoctrineDonationRepository implements DonationRepository {
 		return null;
 	}
 
-	/**
-	 * @param DoctrineDonation $dd
-	 * @return CreditCardTransactionData|null
-	 */
 	private function getCreditCardDataFromEntity( DoctrineDonation $dd ) {
 		$data = $dd->getDecodedData();
 
-		if ( array_key_exists( 'mcp_auth', $data ) ) {
-			return ( new CreditCardTransactionData() )
-				->setTransactionId( $data['ext_payment_id'] )
-				->setTransactionStatus( $data['ext_payment_status'] )
-				->setTransactionTimestamp( new \DateTime( $data['ext_payment_timestamp'] ) )
-				->setAmount( Euro::newFromString( $data['mcp_amount'] ) )
-				->setCustomerId( $data['ext_payment_account'] )
-				->setSessionId( $data['mcp_sessionid'] )
-				->setAuthId( $data['mcp_auth'] )
-				->setCardExpiry( CreditCardExpiry::newFromString( $data['mcp_cc_expiry_date'] ) )
-				->setTitle( $data['mcp_title'] )
-				->setCountryCode( $data['mcp_country'] )
-				->setCurrencyCode( $data['mcp_currency'] )
-				->freeze();
-		}
+		return ( new CreditCardTransactionData() )
+			->setTransactionId( $data['ext_payment_id'] ?? '' )
+			->setTransactionStatus( $data['ext_payment_status'] ?? '' )
+			->setTransactionTimestamp( new \DateTime( $data['ext_payment_timestamp'] ?? 'now' ) )
+			->setAmount( Euro::newFromString( $data['mcp_amount'] ?? '0' ) )
+			->setCustomerId( $data['ext_payment_account'] ?? '' )
+			->setSessionId( $data['mcp_sessionid'] ?? '' )
+			->setAuthId( $data['mcp_auth'] ?? '' )
+			->setCardExpiry( CreditCardExpiry::newFromString( $data['mcp_cc_expiry_date'] ?? '' ) )
+			->setTitle( $data['mcp_title'] ?? '' )
+			->setCountryCode( $data['mcp_country'] ?? '' )
+			->setCurrencyCode( $data['mcp_currency'] ?? '' )
+			->freeze();
 
-		return null;
 	}
 
 	/**
@@ -505,16 +474,6 @@ class DoctrineDonationRepository implements DonationRepository {
 			$dd->getIsPublic(),
 			$dd->getPublicRecord()
 		);
-	}
-
-	private function entityHasMissingFields( DoctrineDonation $dd ): bool {
-		$data = $dd->getDecodedData();
-		return
-			!isset( $data['anrede'] ) || $data['anrede'] === null ||
-			!isset( $data['titel'] ) || $data['titel'] === null ||
-			!isset( $data['vorname'] ) || $data['vorname'] === null ||
-			!isset( $data['nachname'] ) || $data['nachname'] === null ||
-			!isset( $data['firma'] ) || $data['firma'] === null;
 	}
 
 	private function entityHasDonorInformation( DoctrineDonation $dd ): bool {
