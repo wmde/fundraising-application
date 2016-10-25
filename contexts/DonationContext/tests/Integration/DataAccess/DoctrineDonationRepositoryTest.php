@@ -262,14 +262,27 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	private function createPaypalDonationWithMissingFields(): int {
-		$doctrineDonation = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
-		$doctrineDonation->setPaymentType( PaymentType::PAYPAL );
-		$doctrineDonation->encodeAndSetData( array_merge( $doctrineDonation->getDecodedData(), [
-			'paypal_payer_id' => '1'
-		] ) );
+		$doctrineDonation = ValidDoctrineDonation::newPaypalDonationWithMissingFields();
 		$this->entityManager->persist( $doctrineDonation );
 		$this->entityManager->flush();
-	return $doctrineDonation->getId();
+		return $doctrineDonation->getId();
+	}
+
+	public function testDonationWithIncompleteTrackingInformationDataCanBeLoaded() {
+		$donationId = $this->createPaypalDonationWithMissingTracking();
+		$repository = $this->newRepository();
+		$donation = $repository->getDonationById( $donationId );
+		$info = $donation->getTrackingInfo();
+		$this->assertNotNull( $info );
+		$this->assertSame( '', $info->getColor() );
+		$this->assertSame( ValidDonation::TRACKING_TOTAL_IMPRESSION_COUNT, $info->getTotalImpressionCount() );
+	}
+
+	private function createPaypalDonationWithMissingTracking(): int {
+		$doctrineDonation = ValidDoctrineDonation::newPaypalDonationWithInconsistentTrackingData();
+		$this->entityManager->persist( $doctrineDonation );
+		$this->entityManager->flush();
+		return $doctrineDonation->getId();
 	}
 
 }
