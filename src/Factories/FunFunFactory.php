@@ -34,6 +34,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\PiwikServerSideTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\ServerSideTracker;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipPolicyValidator;
+use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionSignupNotification\HandleSubscriptionSignupNotificationUseCase;
 use WMDE\Fundraising\Frontend\Presentation\Honorifics;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\PageNotFoundPresenter;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
@@ -388,13 +389,23 @@ class FunFunFactory {
 			return new DonationConfirmationPageSelector( $this->config['confirmation-pages'] );
 		};
 
-		// TODO split verifiers for donation and membership
 		$pimple['paypal-payment-notification-verifier'] = function() {
 			return new LoggingPaymentNotificationVerifier(
 				new PayPalPaymentNotificationVerifier(
 					new Client(),
 					$this->config['paypal-donation']['base-url'],
 					$this->config['paypal-donation']['account-address']
+				),
+				$this->getLogger()
+			);
+		};
+
+		$pimple['paypal-membership-fee-notification-verifier'] = function() {
+			return new LoggingPaymentNotificationVerifier(
+				new PayPalPaymentNotificationVerifier(
+					new Client(),
+					$this->config['paypal-membership']['base-url'],
+					$this->config['paypal-membership']['account-address']
 				),
 				$this->getLogger()
 			);
@@ -1136,12 +1147,29 @@ class FunFunFactory {
 		);
 	}
 
+	public function newMembershipApplicationSubscriptionSignupNotificationUseCase( string $updateToken ) {
+		return new HandleSubscriptionSignupNotificationUseCase(
+			$this->getMembershipApplicationRepository(),
+			$this->newMembershipApplicationAuthorizer( $updateToken ),
+			$this->newApplyForMembershipMailer(),
+			$this->getLogger()
+		);
+	}
+
 	public function getPayPalPaymentNotificationVerifier(): PaymentNotificationVerifier {
 		return $this->pimple['paypal-payment-notification-verifier'];
 	}
 
 	public function setPayPalPaymentNotificationVerifier( PaymentNotificationVerifier $verifier ) {
 		$this->pimple['paypal-payment-notification-verifier'] = $verifier;
+	}
+
+	public function getPayPalMembershipFeeNotificationVerifier(): PaymentNotificationVerifier {
+		return $this->pimple['paypal-membership-fee-notification-verifier'];
+	}
+
+	public function setPayPalMembershipFeeNotificationVerifier( PaymentNotificationVerifier $verifier ) {
+		$this->pimple['paypal-membership-fee-notification-verifier'] = $verifier;
 	}
 
 	public function newCreditCardNotificationUseCase( string $updateToken ) {

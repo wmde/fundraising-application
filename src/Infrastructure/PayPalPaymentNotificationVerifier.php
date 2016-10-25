@@ -98,4 +98,5 @@ class PayPalPaymentNotificationVerifier implements PaymentNotificationVerifier {
 		return array_key_exists( 'txn_type', $request ) &&
 			in_array( $request['txn_type'], self::NOTIFICATION_TYPES_WITH_DIFFERENT_CURRENCY_FIELDS );
 	}
+
 }

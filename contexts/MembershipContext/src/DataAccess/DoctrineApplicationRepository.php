@@ -21,6 +21,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\StoreMembers
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
@@ -120,6 +121,8 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 		$application->setPaymentType( $paymentMethod->getType() );
 		if ( $paymentMethod instanceof DirectDebitPayment ) {
 			$this->setBankDataFields( $application, $paymentMethod->getBankData() );
+		} elseif ( $paymentMethod instanceof PayPalPayment && $paymentMethod->getPayPalData() !== null ) {
+			$this->setPayPalDataFields( $application, $paymentMethod->getPayPalData() );
 		}
 	}
 
@@ -129,6 +132,31 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 		$application->setPaymentBankName( $bankData->getBankName() );
 		$application->setPaymentBic( $bankData->getBic() );
 		$application->setPaymentIban( $bankData->getIban()->toString() );
+	}
+
+	private function setPayPalDataFields( DoctrineApplication $application, PayPalData $payPalData ) {
+		$application->encodeAndSetData( array_merge(
+			$application->getDecodedData(),
+			[
+				'paypal_payer_id' => $payPalData->getPayerId(),
+				'paypal_subscr_id' => $payPalData->getSubscriberId(),
+				'paypal_payer_status' => $payPalData->getPayerStatus(),
+				'paypal_address_status' => $payPalData->getAddressStatus(),
+				'paypal_mc_gross' => $payPalData->getAmount()->getEuroString(),
+				'paypal_mc_currency' => $payPalData->getCurrencyCode(),
+				'paypal_mc_fee' => $payPalData->getFee()->getEuroString(),
+				'paypal_settle_amount' => $payPalData->getSettleAmount()->getEuroString(),
+				'paypal_first_name' => $payPalData->getFirstName(),
+				'paypal_last_name' => $payPalData->getLastName(),
+				'paypal_address_name' => $payPalData->getAddressName(),
+				'ext_payment_id' => $payPalData->getPaymentId(),
+				'ext_subscr_id' => $payPalData->getSubscriberId(),
+				'ext_payment_type' => $payPalData->getPaymentType(),
+				'ext_payment_status' => $payPalData->getPaymentStatus(),
+				'ext_payment_account' => $payPalData->getPayerId(),
+				'ext_payment_timestamp' => $payPalData->getPaymentTimestamp()
+			]
+		) );
 	}
 
 	private function getDoctrineStatus( Application $application ): int {
@@ -142,11 +170,19 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 			$status += DoctrineApplication::STATUS_CANCELED;
 		}
 
-		if ( $status === DoctrineApplication::STATUS_NEUTRAL ) {
+		if ( $application->isConfirmed() || $this->isAutoConfirmed( $status, $application ) ) {
 			$status += DoctrineApplication::STATUS_CONFIRMED;
 		}
 
 		return $status;
+	}
+
+	private function isAutoConfirmed( int $status, Application $application ) {
+		return $status === DoctrineApplication::STATUS_NEUTRAL && $this->isDirectDebitPayment( $application );
+	}
+
+	private function isDirectDebitPayment( Application $application ) {
+		return $application->getPayment()->getPaymentMethod()->getType() === PaymentType::DIRECT_DEBIT;
 	}
 
 	private function preserveDoctrineStatus( DoctrineApplication $doctrineApplication, int $doctrineStatus ) {
@@ -204,7 +240,8 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 				$this->newPaymentMethod( $application )
 			),
 			$application->needsModeration(),
-			$application->isCancelled()
+			$application->isCancelled(),
+			!$application->isUnconfirmed()
 		);
 	}
 
@@ -236,7 +273,7 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 		}
 
 		if ( $application->getPaymentType() === PaymentType::PAYPAL ) {
-			return new PayPalPayment();
+			return new PayPalPayment( $this->newPayPalData( $application ) );
 		}
 	}
 
@@ -250,6 +287,36 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 		$bankData->setIban( new Iban( $application->getPaymentIban() ) );
 
 		return $bankData->freeze()->assertNoNullFields();
+	}
+
+	/**
+	 * @param DoctrineApplication $application
+	 * @return PayPalData|null
+	 */
+	private function newPayPalData( DoctrineApplication $application ) {
+		$data = $application->getDecodedData();
+
+		if ( array_key_exists( 'paypal_payer_id', $data ) ) {
+			return ( new PayPalData() )
+				->setPayerId( $data['paypal_payer_id'] )
+				->setSubscriberId( $data['paypal_subscr_id'] ?? '' )
+				->setPayerStatus( $data['paypal_payer_status'] ?? '' )
+				->setAddressStatus( $data['paypal_address_status']  ?? '' )
+				->setAmount( Euro::newFromString( $data['paypal_mc_gross']  ?? '0' ) )
+				->setCurrencyCode( $data['paypal_mc_currency'] ?? '' )
+				->setFee( Euro::newFromString( $data['paypal_mc_fee'] ?? '0' ) )
+				->setSettleAmount( Euro::newFromString( $data['paypal_settle_amount'] ?? '0' ) )
+				->setFirstName( $data['paypal_first_name'] ?? '' )
+				->setLastName( $data['paypal_last_name'] ?? '' )
+				->setAddressName( $data['paypal_address_name'] ?? '' )
+				->setPaymentId( $data['ext_payment_id'] ?? '' )
+				->setPaymentType( $data['ext_payment_type'] ?? '' )
+				->setPaymentStatus( $data['ext_payment_status'] ?? '' )
+				->setPaymentTimestamp( $data['ext_payment_timestamp'] ?? '' )
+				->freeze()->assertNoNullFields();
+		}
+
+		return null;
 	}
 
 }

@@ -136,7 +136,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 			$this->assertNotNull( $application );
 
-			$expectedApplication = ValidMembershipApplication::newDomainEntity();
+			$expectedApplication = ValidMembershipApplication::newAutoConfirmedDomainEntity();
 			$expectedApplication->assignId( 1 );
 
 			$this->assertEquals( $expectedApplication, $application );
@@ -330,6 +330,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 			$expectedApplication = ValidMembershipApplication::newDomainEntity();
 			$expectedApplication->assignId( 1 );
+			$expectedApplication->confirm();
 
 			$this->assertEquals( $expectedApplication, $application );
 		} );

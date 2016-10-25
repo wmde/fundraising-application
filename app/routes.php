@@ -19,6 +19,7 @@ use WMDE\Fundraising\Frontend\App\RouteHandlers\AddDonationHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\AddSubscriptionHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\ApplyForMembershipHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\PayPalNotificationHandler;
+use WMDE\Fundraising\Frontend\App\RouteHandlers\PayPalNotificationHandlerForMembershipFee;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\RouteRedirectionHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowDonationConfirmationHandler;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonationTrackingInfo;
@@ -466,6 +467,13 @@ $app->get(
 		return $app->json(
 			$result === null ? [ 'status' => 'OK' ] : [ 'status' => 'ERR', 'message' => $result ]
 		);
+	}
+);
+
+$app->post(
+	'handle-paypal-membership-fee-payments',
+	function ( Request $request ) use ( $ffFactory ) {
+		return ( new PayPalNotificationHandlerForMembershipFee( $ffFactory ) )->handle( $request->request );
 	}
 );
 

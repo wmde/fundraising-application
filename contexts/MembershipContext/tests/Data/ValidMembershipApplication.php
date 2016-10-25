@@ -16,6 +16,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\PhoneNumber;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
 
 /**
@@ -68,6 +69,12 @@ class ValidMembershipApplication {
 		);
 	}
 
+	public static function newAutoConfirmedDomainEntity(): Application {
+		$application = self::newDomainEntity();
+		$application->confirm();
+		return $application;
+	}
+
 	public static function newCompanyApplication(): Application {
 		$self = ( new self() );
 		return Application::newApplication(
@@ -97,6 +104,22 @@ class ValidMembershipApplication {
 
 	public static function newDomainEntityUsingPayPal(): Application {
 		return ( new self() )->createApplicationUsingPayPal();
+	}
+
+	public static function newConfirmedSubscriptionDomainEntity(): Application {
+		$self = ( new self() );
+
+		$payPalData = ( new PayPalData() )
+			->setSubscriberId( 'subscription_id' );
+
+		$application = Application::newApplication(
+			self::MEMBERSHIP_TYPE,
+			$self->newApplicant( $self->newPersonApplicantName() ),
+			$self->newPayPalPayment( $payPalData )
+		);
+		$application->confirm();
+
+		return $application;
 	}
 
 	private function newApplicant( ApplicantName $name ): Applicant {
@@ -167,11 +190,11 @@ class ValidMembershipApplication {
 		return new DirectDebitPayment( $bankData );
 	}
 
-	private function newPayPalPayment() {
+	private function newPayPalPayment( $payPalData = null ) {
 		return new Payment(
 			self::PAYMENT_PERIOD_IN_MONTHS,
 			Euro::newFromFloat( self::PAYMENT_AMOUNT_IN_EURO ),
-			new PayPalPayment()
+			new PayPalPayment( $payPalData ?: null )
 		);
 	}
 
