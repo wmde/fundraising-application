@@ -282,12 +282,7 @@ class DoctrineDonationRepository implements DonationRepository {
 			return null;
 		}
 
-		$domainObject = $this->newDonationDomainObject( $donation );
-		// TODO: Remove these lines, they're just for keeping memory low during the "load all donations" test
-		$this->entityManager->detach( $donation );
-		$this->entityManager->flush();
-		$this->entityManager->clear();
-		return $domainObject;
+		return $this->newDonationDomainObject( $donation );
 	}
 
 	/**
@@ -321,22 +316,6 @@ class DoctrineDonationRepository implements DonationRepository {
 	 */
 	private function getDonorFromEntity( DoctrineDonation $dd ) {
 		if ( !$this->entityHasDonorInformation( $dd ) ) {
-			return null;
-		}
-
-		// This should not happen, but it does (but only with PayPal payments in production), so as a step towards fixing this, we log
-		if ( $this->entityHasMissingFields( $dd ) ) {
-			/*
-			error_log( sprintf(
-				'Entity %d has missing fields. Field data: %s',
-				$dd->getId(),
-				var_export( $dd->getDecodedData(), true ) )
-			);
-			// using an exception to get nicely formatted a backtrace instead of gathering data from debug_backtrace
-			// we don't throw it, because we only want the information
-			$ex = new \Exception();
-			error_log( $ex->getTraceAsString() );
-			*/
 			return null;
 		}
 
@@ -495,16 +474,6 @@ class DoctrineDonationRepository implements DonationRepository {
 			$dd->getIsPublic(),
 			$dd->getPublicRecord()
 		);
-	}
-
-	private function entityHasMissingFields( DoctrineDonation $dd ): bool {
-		$data = $dd->getDecodedData();
-		return
-			!isset( $data['anrede'] ) || $data['anrede'] === null ||
-			!isset( $data['titel'] ) || $data['titel'] === null ||
-			!isset( $data['vorname'] ) || $data['vorname'] === null ||
-			!isset( $data['nachname'] ) || $data['nachname'] === null ||
-			!isset( $data['firma'] ) || $data['firma'] === null;
 	}
 
 	private function entityHasDonorInformation( DoctrineDonation $dd ): bool {
