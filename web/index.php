@@ -51,6 +51,19 @@ $ffFactory->setLogger( call_user_func( function() use ( $ffFactory ) {
 	return $logger;
 } ) );
 
+$ffFactory->setPaypalLogger( call_user_func( function() use ( $ffFactory ) {
+	$logger = new Logger( 'paypal' );
+
+	$streamHandler = new StreamHandler(
+		$ffFactory->getLoggingPath() . '/papyal.log'
+	);
+
+	$streamHandler->setFormatter( new JsonFormatter() );
+	$logger->pushHandler( $streamHandler );
+
+	return $logger;
+} ) );
+
 /**
  * @var \Silex\Application $app
  */

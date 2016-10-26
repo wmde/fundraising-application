@@ -4,11 +4,13 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\App\RouteHandlers;
 
+use Psr\Log\LogLevel;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\HandlePayPalPaymentNotification\PayPalNotificationRequest;
+use WMDE\Fundraising\Frontend\DonationContext\UseCases\HandlePayPalPaymentNotification\PaypalNotificationResponse;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifierException;
 
@@ -39,7 +41,8 @@ class PayPalNotificationHandler {
 
 		$useCase = $this->ffFactory->newHandlePayPalPaymentNotificationUseCase( $this->getUpdateToken( $post ) );
 
-		$useCase->handleNotification( $this->newUseCaseRequestFromPost( $post ) );
+		$response = $useCase->handleNotification( $this->newUseCaseRequestFromPost( $post ) );
+		$this->logResponseIfNeeded( $response );
 
 		return new Response( '', Response::HTTP_OK ); # PayPal expects an empty response
 	}
@@ -93,6 +96,18 @@ class PayPalNotificationHandler {
 			default:
 				return new Response( $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR );
 		}
+	}
+
+	private function logResponseIfNeeded( PaypalNotificationResponse $response )
+	{
+		if ( $response->notificationWasHandled() ) {
+			return;
+		}
+		$context = $response->getContext();
+		$message = $context['message'] ?? 'Paypal request not handled';
+		$logLevel = $response->hasErrors() ? LogLevel::ERROR : LogLevel::INFO;
+		unset( $context['message'] );
+		$this->ffFactory->getPaypalLogger()->log( $logLevel, $message, $context );
 	}
 
 }
