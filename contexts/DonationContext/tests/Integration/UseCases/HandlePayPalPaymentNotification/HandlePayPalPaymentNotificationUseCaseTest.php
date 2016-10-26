@@ -422,30 +422,6 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$this->assertDonationIsCreatedWithNotficationRequestData( $storeDonationCalls[0] );
 	}
 
-	public function testGivenRecurringPaymentForBookedDonation_newDonationIsCreated() {
-		$donation = ValidDonation::newBookedPayPalDonation();
-		$repositorySpy = new DonationRepositorySpy( $donation );
-
-		$request = ValidPayPalNotificationRequest::newRecurringPayment( $donation->getId() );
-
-		$useCase = new HandlePayPalPaymentNotificationUseCase(
-			$repositorySpy,
-			new SucceedingDonationAuthorizer(),
-			$this->getMailer(),
-			new NullLogger(),
-			$this->getEventLogger()
-		);
-
-		$useCase->handleNotification( $request );
-
-		$this->assertCount( 1, $repositorySpy->getStoreDonationCalls() );
-		/** @var \WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation $newDonation */
-		$newDonation = $repositorySpy->getStoreDonationCalls()[0];
-		$this->assertNotEquals( $donation, $newDonation );
-
-		$this->assertDonationIsCreatedWithNotficationRequestData( $newDonation );
-	}
-
 	public function testGivenRecurringPaymentForIncompleteDonation_donationIsBooked() {
 		$donation = ValidDonation::newIncompletePayPalDonation();
 		$repositorySpy = new DonationRepositorySpy( $donation );

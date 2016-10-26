@@ -58,10 +58,6 @@ class HandlePayPalPaymentNotificationUseCase {
 			return $this->handleRequestWithoutDonation( $request );
 		}
 
-		if ( $donation->isBooked() && $request->isRecurringPaymentCompletion() ) {
-			return $this->handleRequestWithoutDonation( $request );
-		}
-
 		return $this->handleRequestForDonation( $request, $donation );
 	}
 
