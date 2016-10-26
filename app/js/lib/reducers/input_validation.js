@@ -59,8 +59,8 @@ function inputValidation( validationState, action ) {
 			if ( action.payload.bic || !bankDataIsValid ) {
 				newValidationState.bic = { dataEntered: true, isValid: bankDataIsValid };
 			}
-			if ( action.payload.accountNumber || !bankDataIsValid ) {
-				newValidationState.account = { dataEntered: true, isValid: bankDataIsValid };
+			if ( action.payload.account || !bankDataIsValid ) {
+				newValidationState.accountNumber = { dataEntered: true, isValid: bankDataIsValid };
 			}
 			if ( action.payload.bankCode || !bankDataIsValid ) {
 				newValidationState.bankCode = { dataEntered: true, isValid: bankDataIsValid };

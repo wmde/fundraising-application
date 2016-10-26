@@ -80,13 +80,13 @@ test( 'If bank data validation is successful, all fields in payload have valid s
 	var stateBefore = {
 			iban: { dataEntered: false, isValid: null },
 			bic: { dataEntered: false, isValid: null },
-			account: { dataEntered: false, isValid: null },
+			accountNumber: { dataEntered: false, isValid: null },
 			bankCode: { dataEntered: false, isValid: null }
 		},
 		expectedState = {
 			iban: { dataEntered: true, isValid: true },
 			bic: { dataEntered: true, isValid: true },
-			account: { dataEntered: true, isValid: true },
+			accountNumber: { dataEntered: true, isValid: true },
 			bankCode: { dataEntered: true, isValid: true }
 		};
 
@@ -96,7 +96,7 @@ test( 'If bank data validation is successful, all fields in payload have valid s
 		iban: 'DE12500105170648489890',
 		bic: 'INGDDEFFXXX',
 		bankCode: '50010517',
-		accountNumber: '064847930'
+		account: '064847930'
 	} ) ), expectedState );
 	t.end();
 } );
@@ -105,13 +105,13 @@ test( 'If bank data validation is successful, only fields in payload change stat
 	var stateBefore = {
 			iban: { dataEntered: false, isValid: null },
 			bic: { dataEntered: false, isValid: null },
-			account: { dataEntered: false, isValid: null },
+			accountNumber: { dataEntered: false, isValid: null },
 			bankCode: { dataEntered: false, isValid: null }
 		},
 		expectedState = {
 			iban: { dataEntered: true, isValid: true },
 			bic: { dataEntered: false, isValid: null },
-			account: { dataEntered: false, isValid: null },
+			accountNumber: { dataEntered: false, isValid: null },
 			bankCode: { dataEntered: false, isValid: null }
 		};
 
@@ -127,13 +127,13 @@ test( 'If bank data validation fails, all fields retrieve invalid status', funct
 	var stateBefore = {
 			iban: { dataEntered: false, isValid: null },
 			bic: { dataEntered: false, isValid: null },
-			account: { dataEntered: false, isValid: null },
+			accountNumber: { dataEntered: false, isValid: null },
 			bankCode: { dataEntered: false, isValid: null }
 		},
 		expectedState = {
 			iban: { dataEntered: true, isValid: false },
 			bic: { dataEntered: true, isValid: false },
-			account: { dataEntered: true, isValid: false },
+			accountNumber: { dataEntered: true, isValid: false },
 			bankCode: { dataEntered: true, isValid: false }
 		};
 
