@@ -114,7 +114,7 @@ $( function () {
 					email: 'E-Mail',
 					iban: 'IBAN',
 					bic: 'BIC',
-					account: 'Kontonummer',
+					accountNumber: 'Kontonummer',
 					bankCode: 'Bankleitzahl',
 					confirmSepa: 'SEPA-Lastschrift',
 					confirmShortTerm: 'SEPA-Informationsfrist'
@@ -260,7 +260,7 @@ $( function () {
 			},
 			{
 				viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#account-number' ) ),
-				stateKey: 'donationInputValidation.account'
+				stateKey: 'donationInputValidation.accountNumber'
 			},
 			{
 				viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#bank-code' ) ),

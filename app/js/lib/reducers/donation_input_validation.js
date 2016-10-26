@@ -19,7 +19,7 @@ var _ = require( 'underscore' ),
 		email: _.clone( defaultFields ),
 		iban: _.clone( defaultFields ),
 		bic: _.clone( defaultFields ),
-		account: _.clone( defaultFields ),
+		accountNumber: _.clone( defaultFields ),
 		bankCode: _.clone( defaultFields ),
 		confirmSepa: _.clone( defaultFields ),
 		confirmShortTerm: _.clone( defaultFields )
@@ -44,7 +44,7 @@ var _ = require( 'underscore' ),
 		return _.extend( {}, state, {
 			iban: _.clone( defaultFields ),
 			bic: _.clone( defaultFields ),
-			account: _.clone( defaultFields ),
+			accountNumber: _.clone( defaultFields ),
 			bankCode: _.clone( defaultFields )
 		} );
 	},

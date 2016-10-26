@@ -126,6 +126,8 @@ $( function () {
 					phone: 'Telefonnummer',
 					iban: 'IBAN',
 					bic: 'BIC',
+					accountNumber: 'Kontonummer',
+					bankCode: 'Bankleitzahl',
 					confirmSepa: 'SEPA-Lastschrift'
 				} ),
 				stateKey: 'membershipInputValidation'
@@ -253,7 +255,7 @@ $( function () {
 			},
 			{
 				viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#account-number' ) ),
-				stateKey: 'membershipInputValidation.account'
+				stateKey: 'membershipInputValidation.accountNumber'
 			},
 			{
 				viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#bank-code' ) ),
