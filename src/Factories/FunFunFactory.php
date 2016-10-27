@@ -1082,7 +1082,6 @@ class FunFunFactory {
 			$this->getDonationRepository(),
 			$this->newDonationAuthorizer( $updateToken ),
 			$this->newDonationConfirmationMailer(),
-			$this->getPaypalLogger(),
 			$this->newDonationEventLogger()
 		);
 	}

@@ -4,14 +4,12 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\DonationContext\UseCases\HandlePayPalPaymentNotification;
 
-class PaypalNotificationResponse
-{
+class PaypalNotificationResponse {
 	private $wasHandled;
 	private $notificationFailed;
 	private $handlingContext;
 
-	private function __construct( bool $notficationWasHandled, bool $isError, array $handlingContext = [] )
-	{
+	private function __construct( bool $notficationWasHandled, bool $isError, array $handlingContext = [] ) {
 		$this->wasHandled = $notficationWasHandled;
 		$this->notificationFailed = $isError;
 		$this->handlingContext = $handlingContext;

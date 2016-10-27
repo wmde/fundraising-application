@@ -36,7 +36,6 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			new DoctrineDonationRepository( ThrowingEntityManager::newInstance( $this ) ),
 			new FailingDonationAuthorizer(),
 			$this->getMailer(),
-			new NullLogger(),
 			$this->getEventLogger()
 		);
 		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 1 );
@@ -53,7 +52,6 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$fakeRepository,
 			new FailingDonationAuthorizer(),
 			$this->getMailer(),
-			new NullLogger(),
 			$this->getEventLogger()
 		);
 
@@ -69,7 +67,6 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$fakeRepository,
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
-			new NullLogger(),
 			$this->getEventLogger()
 		);
 
@@ -86,7 +83,6 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$fakeRepository,
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
-			new NullLogger(),
 			$this->getEventLogger()
 		);
 
@@ -100,7 +96,6 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			new FakeDonationRepository(),
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
-			new NullLogger(),
 			$this->getEventLogger()
 		);
 
@@ -108,15 +103,12 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 	}
 
 	public function testWhenPaymentStatusIsPending_responseContainsMoreInformation() {
-		$logger = new LoggerSpy();
-
 		$request = $request = ValidPayPalNotificationRequest::newPendingPayment();
 
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
 			new FakeDonationRepository(),
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
-			$logger,
 			$this->getEventLogger()
 		);
 
@@ -132,20 +124,16 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			new FakeDonationRepository(),
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
-			new NullLogger(),
 			$this->getEventLogger()
 		);
 		$this->assertFalse( $useCase->handleNotification( $request )->notificationWasHandled() );
 	}
 
 	public function testWhenTransactionTypeIsForSubscriptionChanges_responseContainsMoreInformation() {
-		$logger = new LoggerSpy();
-
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
 			new FakeDonationRepository(),
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
-			$logger,
 			$this->getEventLogger()
 		);
 
@@ -170,7 +158,6 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$fakeRepository,
 			new SucceedingDonationAuthorizer(),
 			$mailer,
-			new NullLogger(),
 			$this->getEventLogger()
 		);
 
@@ -192,7 +179,6 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$fakeRepository,
 			new SucceedingDonationAuthorizer(),
 			$mailer,
-			new NullLogger(),
 			$this->getEventLogger()
 		);
 
@@ -208,7 +194,6 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$repositorySpy,
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
-			new NullLogger(),
 			$this->getEventLogger()
 		);
 
@@ -225,7 +210,6 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$repository,
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
-			new NullLogger(),
 			$this->getEventLogger()
 		);
 
@@ -244,7 +228,6 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$repositorySpy,
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
-			new NullLogger(),
 			$eventLogger
 		);
 
@@ -267,7 +250,6 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$fakeRepository,
 			new SucceedingDonationAuthorizer(),
 			$mailer,
-			new NullLogger(),
 			$this->getEventLogger()
 		);
 
@@ -287,7 +269,6 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$fakeRepository,
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
-			new NullLogger(),
 			$this->getEventLogger()
 		);
 
@@ -315,7 +296,6 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$fakeRepository,
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
-			new NullLogger(),
 			$this->getEventLogger()
 		);
 
@@ -350,7 +330,6 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$fakeRepository,
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
-			new NullLogger(),
 			$eventLogger
 		);
 
@@ -375,7 +354,6 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$fakeRepository,
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
-			new NullLogger(),
 			$this->getEventLogger()
 		);
 
@@ -397,7 +375,6 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$fakeRepository,
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
-			new NullLogger(),
 			$this->getEventLogger()
 		);
 
@@ -412,7 +389,6 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$repositorySpy,
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
-			new NullLogger(),
 			$this->getEventLogger()
 		);
 
@@ -434,7 +410,6 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$repositorySpy,
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
-			new NullLogger(),
 			$this->getEventLogger()
 		);
 
@@ -456,7 +431,6 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			new FakeDonationRepository(),
 			new SucceedingDonationAuthorizer(),
 			$mailer,
-			new NullLogger(),
 			$this->getEventLogger()
 		);
 
@@ -471,7 +445,6 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			new FakeDonationRepository(),
 			new SucceedingDonationAuthorizer(),
 			$this->getMailer(),
-			new NullLogger(),
 			$eventLogger
 		);
 

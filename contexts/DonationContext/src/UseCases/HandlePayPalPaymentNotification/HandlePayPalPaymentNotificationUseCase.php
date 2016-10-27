@@ -4,8 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\DonationContext\UseCases\HandlePayPalPaymentNotification;
 
-use Psr\Log\LoggerInterface;
-use Psr\Log\LogLevel;
 use WMDE\Fundraising\Frontend\DonationContext\Authorization\DonationAuthorizer;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonationPayment;
@@ -31,16 +29,13 @@ class HandlePayPalPaymentNotificationUseCase {
 	private $repository;
 	private $authorizationService;
 	private $mailer;
-	private $logger;
 	private $donationEventLogger;
 
 	public function __construct( DonationRepository $repository, DonationAuthorizer $authorizationService,
-								 DonationConfirmationMailer $mailer, LoggerInterface $logger,
-								 DonationEventLogger $donationEventLogger ) {
+								 DonationConfirmationMailer $mailer, DonationEventLogger $donationEventLogger ) {
 		$this->repository = $repository;
 		$this->authorizationService = $authorizationService;
 		$this->mailer = $mailer;
-		$this->logger = $logger;
 		$this->donationEventLogger = $donationEventLogger;
 	}
 
