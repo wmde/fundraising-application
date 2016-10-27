@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\DonationContext\Tests\Data;
 
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\Frontend\DonationContext\UseCases\HandlePayPalPaymentNotification\PayPalNotificationRequest;
+use WMDE\Fundraising\Frontend\PaymentContext\RequestModel\PayPalPaymentNotificationRequest;
 
 /**
  * @license GNU GPL v2+
@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\DonationContext\UseCases\HandlePayPalPaymentNotifi
  */
 class ValidPayPalNotificationRequest {
 
-	const DONATION_ID = 12345;
+	const DATA_SET_ID = 12345;
 	const TRANSACTION_ID = '61E67681CH3238416';
 	const PAYER_ID = 'LPLWNMTBWMFAY';
 	const SUBSCRIBER_ID = '8RHHUM3W3PRH7QY6B59';
@@ -42,39 +42,38 @@ class ValidPayPalNotificationRequest {
 	const PAYMENT_STATUS_COMPLETED = 'Completed';
 	const PAYMENT_STATUS_PENDING = 'Pending';
 
-	public static function newInstantPaymentForDonation( int $donationId ): PayPalNotificationRequest {
+	public static function newInstantPayment( int $dataSetId ): PayPalPaymentNotificationRequest {
 		return self::newBaseRequest()
-			->setDonationId( $donationId )
+			->setInternalId( $dataSetId )
 			->setTransactionType( 'express_checkout' )
 			->setPaymentStatus( self::PAYMENT_STATUS_COMPLETED );
 	}
 
-	public static function newDuplicatePaymentForDonation( int $donationId,
-														   string $transactionid ): PayPalNotificationRequest {
+	public static function newDuplicatePayment( int $dataSetId, string $transactionid ): PayPalPaymentNotificationRequest {
 		return self::newBaseRequest()
-			->setDonationId( $donationId )
+			->setInternalId( $dataSetId )
 			->setTransactionType( 'express_checkout' )
 			->setTransactionId( $transactionid )
 			->setPaymentStatus( self::PAYMENT_STATUS_COMPLETED );
 	}
 
-	public static function newPendingPayment(): PayPalNotificationRequest {
+	public static function newPendingPayment(): PayPalPaymentNotificationRequest {
 		return self::newBaseRequest()
-			->setDonationId( self::DONATION_ID )
+			->setInternalId( self::DATA_SET_ID )
 			->setTransactionType( 'express_checkout' )
 			->setPaymentStatus( self::PAYMENT_STATUS_PENDING );
 	}
 
-	public static function newSubscriptionModification(): PayPalNotificationRequest {
+	public static function newSubscriptionModification(): PayPalPaymentNotificationRequest {
 		return self::newBaseRequest()
-			->setDonationId( self::DONATION_ID )
+			->setInternalId( self::DATA_SET_ID )
 			->setTransactionType( 'subscr_modify' )
 			->setPaymentStatus( self::PAYMENT_STATUS_COMPLETED );
 	}
 
-	public static function newRecurringPayment( int $donationId ): PayPalNotificationRequest {
+	public static function newRecurringPayment( int $dataSetId ): PayPalPaymentNotificationRequest {
 		return self::newBaseRequest()
-			->setDonationId( $donationId )
+			->setInternalId( $dataSetId )
 			->setTransactionType( 'subscr_payment' )
 			->setPaymentStatus( self::PAYMENT_STATUS_COMPLETED );
 	}
@@ -107,11 +106,11 @@ class ValidPayPalNotificationRequest {
 		];
 	}
 
-	private static function newBaseRequest(): PayPalNotificationRequest {
-		return ( new PayPalNotificationRequest() )
+	private static function newBaseRequest(): PayPalPaymentNotificationRequest {
+		return ( new PayPalPaymentNotificationRequest() )
 			->setTransactionId( self::TRANSACTION_ID )
 			->setPayerId( self::PAYER_ID )
-			->setSubscriberId( self::SUBSCRIBER_ID )
+			->setSubscriptionId( self::SUBSCRIBER_ID )
 			->setPayerEmail( self::PAYER_EMAIL )
 			->setPayerStatus( self::PAYER_STATUS )
 			->setPayerFirstName( self::PAYER_FIRST_NAME )

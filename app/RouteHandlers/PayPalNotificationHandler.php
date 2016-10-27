@@ -9,10 +9,10 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\Frontend\DonationContext\UseCases\HandlePayPalPaymentNotification\PayPalNotificationRequest;
 use WMDE\Fundraising\Frontend\PaymentContext\ResponseModel\PaypalNotificationResponse;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifierException;
+use WMDE\Fundraising\Frontend\PaymentContext\RequestModel\PayPalPaymentNotificationRequest;
 
 /**
  * @license GNU GPL v2+
@@ -55,12 +55,12 @@ class PayPalNotificationHandler {
 		return !empty( $vars[$key] ) ? $vars[$key] : '';
 	}
 
-	private function newUseCaseRequestFromPost( ParameterBag $postRequest ): PayPalNotificationRequest {
-		return ( new PayPalNotificationRequest() )
+	private function newUseCaseRequestFromPost( ParameterBag $postRequest ): PayPalPaymentNotificationRequest {
+		return ( new PayPalPaymentNotificationRequest() )
 			->setTransactionType( $postRequest->get( 'txn_type', '' ) )
 			->setTransactionId( $postRequest->get( 'txn_id', '' ) )
 			->setPayerId( $postRequest->get( 'payer_id', '' ) )
-			->setSubscriberId( $postRequest->get( 'subscr_id', '' ) )
+			->setSubscriptionId( $postRequest->get( 'subscr_id', '' ) )
 			->setPayerEmail( $postRequest->get( 'payer_email', '' ) )
 			->setPayerStatus( $postRequest->get( 'payer_status', '' ) )
 			->setPayerFirstName( $postRequest->get( 'first_name', '' ) )
@@ -71,7 +71,7 @@ class PayPalNotificationHandler {
 			->setPayerAddressCity( $postRequest->get( 'address_city', '' ) )
 			->setPayerAddressCountryCode( $postRequest->get( 'address_country_code', '' ) )
 			->setPayerAddressStatus( $postRequest->get( 'address_status', '' ) )
-			->setDonationId( (int)$postRequest->get( 'item_number', 0 ) )
+			->setInternalId( (int)$postRequest->get( 'item_number', 0 ) )
 			->setCurrencyCode( $postRequest->get( 'mc_currency', '' ) )
 			->setTransactionFee( $postRequest->get( 'mc_fee', '0' ) ) // No Euro class to avoid exceptions on fees < 0
 			->setAmountGross( Euro::newFromString( $postRequest->get( 'mc_gross', '0' ) ) )
