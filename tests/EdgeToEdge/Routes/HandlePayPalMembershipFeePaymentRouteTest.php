@@ -125,7 +125,7 @@ class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testGivenWrongTransactionType_applicationIndicatesAnError() {
+	public function testGivenWrongTransactionType_applicationIgnoresRequest() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$invalidRequest = $this->newInvalidTransactionRequest();
 
@@ -137,8 +137,8 @@ class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 
 			$client->request( 'POST', '/handle-paypal-membership-fee-payments', $invalidRequest );
 
-			$this->assertSame( 403, $client->getResponse()->getStatusCode() );
-			$this->assertSame( 'Payment receiver address does not match', $client->getResponse()->getContent() );
+			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
+			$this->assertSame( '', $client->getResponse()->getContent() );
 		} );
 	}
 
@@ -168,6 +168,8 @@ class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 	private function newInvalidTransactionRequest() {
 		return [
 			'txn_type' => 'invalid_transaction',
+			'receiver_email' => 'paypaldev-facilitator@wikimedia.de',
+			'mc_currency' => 'EUR'
 		];
 	}
 
@@ -187,6 +189,46 @@ class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 		$this->assertSame( $request['address_status'], $pplData->getAddressStatus() );
 		$this->assertSame( $request['mc_currency'], $pplData->getCurrencyCode() );
 		$this->assertSame( $request['payment_type'], $pplData->getPaymentType() );
+	}
+
+	public function testGivenPaymentNotificationForInvalidMembershipId_applicationReturnsError() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$invalidRequest = $this->newInvalidMembershipIdRequest();
+
+			$factory->setPayPalMembershipFeeNotificationVerifier(
+				$this->newSucceedingVerifier(
+					array_merge( [ 'cmd' => '_notify-validate' ], $invalidRequest )
+				)
+			);
+
+			$client->request( 'POST', '/handle-paypal-membership-fee-payments', $invalidRequest );
+
+			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
+			$this->assertSame( '', $client->getResponse()->getContent() );
+		} );
+	}
+
+	private function newInvalidMembershipIdRequest() {
+		return [
+			'txn_type' => 'subscr_payment',
+
+			'receiver_email' => 'paypaldev-facilitator@wikimedia.de',
+			'item_number' => 12245589,
+			'item_name' => 'Your membership',
+			'payment_type' => 'instant',
+			'mc_currency' => 'EUR',
+
+			'subscr_id' => '8RHHUM3W3PRH7QY6B59',
+			'subscr_date' => '20:12:59 Jan 13, 2009 PST',
+			'payer_id' => 'LPLWNMTBWMFAY',
+			'payer_status' => 'verified',
+			'address_status' => 'confirmed',
+			'first_name' => 'Generous',
+			'last_name' => 'Donor',
+			'address_name' => 'Generous Donor',
+
+			'custom' => '{"id": "1", "utoken": "some token"}'
+		];
 	}
 
 }

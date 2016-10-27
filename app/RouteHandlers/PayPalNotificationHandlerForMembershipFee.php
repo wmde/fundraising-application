@@ -7,10 +7,12 @@ namespace WMDE\Fundraising\Frontend\App\RouteHandlers;
 use Psr\Log\LogLevel;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Response;
+use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifierException;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionSignupNotification\SubscriptionSignupRequest;
 use WMDE\Fundraising\Frontend\PaymentContext\ResponseModel\PaypalNotificationResponse;
+use WMDE\Fundraising\Frontend\PaymentContext\RequestModel\PayPalPaymentNotificationRequest;
 
 /**
  * @license GNU GPL v2+
@@ -37,9 +39,20 @@ class PayPalNotificationHandlerForMembershipFee {
 			return $this->createErrorResponse( $e );
 		}
 
-		$useCase = $this->ffFactory->newMembershipApplicationSubscriptionSignupNotificationUseCase( $this->getUpdateToken( $post ) );
-		$response = $useCase->handleNotification( $this->newSubscriptionSignupRequestFromPost( $post ) );
-		
+		switch ( $post->get( 'txn_type' ) ) {
+			case self::TYPE_SUBSCRIPTION_SIGNUP:
+				$useCase = $this->ffFactory->newMembershipApplicationSubscriptionSignupNotificationUseCase( $this->getUpdateToken( $post ) );
+				$response = $useCase->handleNotification( $this->newSubscriptionSignupRequestFromPost( $post ) );
+				break;
+			case self::TYPE_SUBSCRIPTION_PAYMENT:
+				$useCase = $this->ffFactory->newMembershipApplicationSubscriptionPaymentNotificationUseCase( $this->getUpdateToken( $post ) );
+				$response = $useCase->handleNotification( $this->newSubscriptionPaymentRequestFromPost( $post ) );
+				break;
+			default:
+				$response = PaypalNotificationResponse::newUnhandledResponse( [ 'message' => 'unsupported transaction type' ] );
+				break;
+		}
+
 		$this->logResponseIfNeeded( $response, $post );
 
 		return new Response( '', Response::HTTP_OK ); # PayPal expects an empty response
@@ -72,6 +85,32 @@ class PayPalNotificationHandlerForMembershipFee {
 			->setApplicationId( (int)$postRequest->get( 'item_number', 0 ) )
 			->setPaymentType( $postRequest->get( 'payment_type', '' ) )
 			->setCurrencyCode( $postRequest->get( 'mc_currency', '' ) );
+	}
+
+	private function newSubscriptionPaymentRequestFromPost( ParameterBag $postRequest ): PayPalPaymentNotificationRequest {
+		return ( new PayPalPaymentNotificationRequest() )
+			->setTransactionType( $postRequest->get( 'txn_type', '' ) )
+			->setTransactionId( $postRequest->get( 'txn_id', '' ) )
+			->setPayerId( $postRequest->get( 'payer_id', '' ) )
+			->setSubscriptionId( $postRequest->get( 'subscr_id', '' ) )
+			->setPayerEmail( $postRequest->get( 'payer_email', '' ) )
+			->setPayerStatus( $postRequest->get( 'payer_status', '' ) )
+			->setPayerFirstName( $postRequest->get( 'first_name', '' ) )
+			->setPayerLastName( $postRequest->get( 'last_name', '' ) )
+			->setPayerAddressName( $postRequest->get( 'address_name', '' ) )
+			->setPayerAddressStreet( $postRequest->get( 'address_street', '' ) )
+			->setPayerAddressPostalCode( $postRequest->get( 'address_zip', '' ) )
+			->setPayerAddressCity( $postRequest->get( 'address_city', '' ) )
+			->setPayerAddressCountryCode( $postRequest->get( 'address_country_code', '' ) )
+			->setPayerAddressStatus( $postRequest->get( 'address_status', '' ) )
+			->setInternalId( (int)$postRequest->get( 'item_number', 0 ) )
+			->setCurrencyCode( $postRequest->get( 'mc_currency', '' ) )
+			->setTransactionFee( $postRequest->get( 'mc_fee', '0' ) ) // No Euro class to avoid exceptions on fees < 0
+			->setAmountGross( Euro::newFromString( $postRequest->get( 'mc_gross', '0' ) ) )
+			->setSettleAmount( Euro::newFromString( $postRequest->get( 'settle_amount', '0' ) ) )
+			->setPaymentTimestamp( $postRequest->get( 'payment_date', '' ) )
+			->setPaymentStatus( $postRequest->get( 'payment_status', '' ) )
+			->setPaymentType( $postRequest->get( 'payment_type', '' ) );
 	}
 
 	private function createErrorResponse( PayPalPaymentNotificationVerifierException $e ): Response {

@@ -34,6 +34,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\PiwikServerSideTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\ServerSideTracker;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipPolicyValidator;
+use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionPaymentNotification\HandleSubscriptionPaymentNotificationUseCase;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionSignupNotification\HandleSubscriptionSignupNotificationUseCase;
 use WMDE\Fundraising\Frontend\Presentation\Honorifics;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\PageNotFoundPresenter;
@@ -1149,6 +1150,15 @@ class FunFunFactory {
 
 	public function newMembershipApplicationSubscriptionSignupNotificationUseCase( string $updateToken ) {
 		return new HandleSubscriptionSignupNotificationUseCase(
+			$this->getMembershipApplicationRepository(),
+			$this->newMembershipApplicationAuthorizer( $updateToken ),
+			$this->newApplyForMembershipMailer(),
+			$this->getLogger()
+		);
+	}
+
+	public function newMembershipApplicationSubscriptionPaymentNotificationUseCase( string $updateToken ) {
+		return new HandleSubscriptionPaymentNotificationUseCase(
 			$this->getMembershipApplicationRepository(),
 			$this->newMembershipApplicationAuthorizer( $updateToken ),
 			$this->newApplyForMembershipMailer(),
