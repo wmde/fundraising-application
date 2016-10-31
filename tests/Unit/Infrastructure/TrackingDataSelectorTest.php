@@ -4,15 +4,15 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\DonationContext\Tests\Unit\UseCases\AddDonation;
 
-use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationRequest;
+use WMDE\Fundraising\Frontend\Infrastructure\TrackingDataSelector;
 
 /**
- * @covers WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationRequest
+ * @covers WMDE\Fundraising\Frontend\Infrastructure\TrackingDataSelector
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class AddDonationRequestTest extends \PHPUnit_Framework_TestCase {
+class TrackingDataSelectorTest extends \PHPUnit_Framework_TestCase {
 
 	/**
 	 * @dataProvider preferredValueProvider
@@ -21,7 +21,7 @@ class AddDonationRequestTest extends \PHPUnit_Framework_TestCase {
 	 * @param string[] $values
 	 */
 	public function testGetPreferredValueReturnsFirstSetElementOrEmptyString( $expectedResult, $values ) {
-		$value = AddDonationRequest::getPreferredValue( $values );
+		$value = TrackingDataSelector::getFirstNonEmptyValue( $values );
 		$this->assertSame( $expectedResult, $value );
 	}
 
@@ -42,10 +42,10 @@ class AddDonationRequestTest extends \PHPUnit_Framework_TestCase {
 	 * @param $keyword
 	 */
 	public function testConcatTrackingFromVarCouple( $expectedResult, $campaign, $keyword ) {
-		$value = AddDonationRequest::getPreferredValue( [
+		$value = TrackingDataSelector::getFirstNonEmptyValue( [
 			'',
 			'',
-			AddDonationRequest::concatTrackingFromVarCouple( $campaign, $keyword )
+			TrackingDataSelector::concatTrackingFromVarTuple( $campaign, $keyword )
 		] );
 
 		$this->assertSame( $expectedResult, $value );

@@ -12,11 +12,10 @@ use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationRe
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationResponse;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\AmountParser;
-use WMDE\Fundraising\Frontend\Infrastructure\PiwikVariableCollector;
+use WMDE\Fundraising\Frontend\Infrastructure\TrackingDataSelector;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
-use WMDE\Fundraising\Frontend\Presentation\SelectedConfirmationPage;
 
 /**
  * @license GNU GPL v2+
@@ -111,10 +110,10 @@ class AddDonationHandler {
 		}
 
 		$donationRequest->setTracking(
-			AddDonationRequest::getPreferredValue( [
+			TrackingDataSelector::getFirstNonEmptyValue( [
 				$request->cookies->get( 'spenden_tracking' ),
 				$request->request->get( 'tracking' ),
-				AddDonationRequest::concatTrackingFromVarCouple(
+				TrackingDataSelector::concatTrackingFromVarTuple(
 					$request->get( 'piwik_campaign', '' ),
 					$request->get( 'piwik_kwd', '' )
 				)
@@ -123,7 +122,7 @@ class AddDonationHandler {
 
 		$donationRequest->setOptIn( $request->get( 'info', '' ) );
 		$donationRequest->setSource(
-			AddDonationRequest::getPreferredValue( [
+			TrackingDataSelector::getFirstNonEmptyValue( [
 				$request->cookies->get( 'spenden_source' ),
 				$request->request->get( 'source' ),
 				$request->server->get( 'HTTP_REFERER' )
