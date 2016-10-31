@@ -7,9 +7,9 @@ namespace WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\ConfirmSubscrip
 use WMDE\Fundraising\Entities\Subscription;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\EmailAddress;
-use WMDE\Fundraising\Frontend\Validation\ValidationResponse;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Domain\Repositories\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
+use WMDE\Fundraising\Frontend\Validation\ValidationResponse;
 
 /**
  * @license GNU GPL v2+

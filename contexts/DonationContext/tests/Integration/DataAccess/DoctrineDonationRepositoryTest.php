@@ -10,13 +10,12 @@ use WMDE\Fundraising\Frontend\DonationContext\DataAccess\DoctrineDonationReposit
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Repositories\GetDonationException;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Repositories\StoreDonationException;
+use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\IncompleteDoctrineDonation;
+use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidDoctrineDonation;
+use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\CreditCardPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
-use WMDE\Fundraising\Frontend\Tests\Data\IncompleteDoctrineDonation;
-use WMDE\Fundraising\Frontend\Tests\Data\ValidDoctrineDonation;
-use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 

@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Data;
+namespace WMDE\Fundraising\Frontend\MembershipContext\Tests\Data;
 
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\CreditCardPaymentNotification\CreditCardPaymentNotificationRequest;
