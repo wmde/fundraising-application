@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\DonationContext\UseCases\HandlePayPalPaymentNotification;
 
-use Psr\Log\LoggerInterface;
 use WMDE\Fundraising\Frontend\DonationContext\Authorization\DonationAuthorizer;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonationPayment;
@@ -30,28 +29,29 @@ class HandlePayPalPaymentNotificationUseCase {
 	private $repository;
 	private $authorizationService;
 	private $mailer;
-	private $logger;
 	private $donationEventLogger;
 
 	public function __construct( DonationRepository $repository, DonationAuthorizer $authorizationService,
-								 DonationConfirmationMailer $mailer, LoggerInterface $logger,
-								 DonationEventLogger $donationEventLogger ) {
+								 DonationConfirmationMailer $mailer, DonationEventLogger $donationEventLogger ) {
 		$this->repository = $repository;
 		$this->authorizationService = $authorizationService;
 		$this->mailer = $mailer;
-		$this->logger = $logger;
 		$this->donationEventLogger = $donationEventLogger;
 	}
 
-	public function handleNotification( PayPalNotificationRequest $request ): bool {
-		if ( !$this->requestCanBeHandled( $request ) ) {
-			return false;
+	public function handleNotification( PayPalNotificationRequest $request ): PaypalNotificationResponse {
+		if ( !$request->isSuccessfulPaymentNotification() ) {
+			return $this->createUnhandledResponse( 'Unhandled PayPal instant payment notification', $request );
+		}
+
+		if ( $this->transactionIsSubscriptionRelatedButNotAPayment( $request ) ) {
+			return $this->createUnhandledResponse( 'Unhandled PayPal subscription notification', $request );
 		}
 
 		try {
 			$donation = $this->repository->getDonationById( $request->getDonationId() );
 		} catch ( GetDonationException $ex ) {
-			return false;
+			return $this->createErrorResponse( $ex, $request );
 		}
 
 		if ( $donation === null ) {
@@ -61,45 +61,31 @@ class HandlePayPalPaymentNotificationUseCase {
 		return $this->handleRequestForDonation( $request, $donation );
 	}
 
-	private function requestCanBeHandled( PayPalNotificationRequest $request ): bool {
-		if ( !$request->isSuccessfulPaymentNotification() ) {
-			$this->logUnhandledStatus( $request );
-			return false;
-		}
-
-		if ( $this->transactionIsSubscriptionRelatedButNotAPayment( $request ) ) {
-			$this->logUnhandledNonPayment( $request );
-			return false;
-		}
-		return true;
-	}
-
-	private function handleRequestWithoutDonation( PayPalNotificationRequest $request ): bool {
+	private function handleRequestWithoutDonation( PayPalNotificationRequest $request ): PaypalNotificationResponse {
 		$donation = $this->newDonationFromRequest( $request );
 
 		try {
 			$this->repository->storeDonation( $donation );
 		} catch ( StoreDonationException $ex ) {
-			return false;
+			return $this->createErrorResponse( $ex, $request );
 		}
 
 		$this->sendConfirmationEmailFor( $donation );
 		$this->donationEventLogger->log( $donation->getId(), 'paypal_handler: booked' );
 
-		return true;
+		return PaypalNotificationResponse::newSuccessResponse();
 	}
 
-	private function handleRequestForDonation( PayPalNotificationRequest $request, Donation $donation ): bool {
+	private function handleRequestForDonation( PayPalNotificationRequest $request, Donation $donation ): PaypalNotificationResponse {
 		if ( !( $donation->getPayment()->getPaymentMethod() instanceof PayPalPayment ) ) {
-			return false;
+			return $this->createUnhandledResponse( 'Trying to handle IPN for non-Paypal donation', $request );
 		}
 
 		if ( !$this->authorizationService->systemCanModifyDonation( $request->getDonationId() ) ) {
-			return false;
+			return $this->createUnhandledResponse( 'Wrong access code for donation', $request );
 		}
 		if ( $this->donationWasBookedWithDifferentTransactionId( $donation, $request ) ) {
-			$childDonation = $this->createChildDonation( $donation, $request );
-			return $childDonation !== null;
+			return $this->createChildDonation( $donation, $request );
 		}
 
 		$donation->addPayPalData( $this->newPayPalDataFromRequest( $request ) );
@@ -107,36 +93,27 @@ class HandlePayPalPaymentNotificationUseCase {
 		try {
 			$donation->confirmBooked();
 		} catch ( \RuntimeException $ex ) {
-			return false;
+			return $this->createErrorResponse( $ex, $request );
 		}
 
 		try {
 			$this->repository->storeDonation( $donation );
 		}
 		catch ( StoreDonationException $ex ) {
-			return false;
+			return $this->createErrorResponse( $ex, $request );
 		}
 
 		$this->sendConfirmationEmailFor( $donation );
 		$this->donationEventLogger->log( $donation->getId(), 'paypal_handler: booked' );
 
-		return true;
+		return PaypalNotificationResponse::newSuccessResponse();
 	}
 
-	private function logUnhandledStatus( PayPalNotificationRequest $request ) {
-		$logContext = [
-			'payment_status' => $request->getPaymentStatus(),
-			'txn_id' => $request->getTransactionId()
-		];
-		$this->logger->info( 'Unhandled PayPal notification: ' . $request->getPaymentStatus(), $logContext );
-	}
-
-	private function logUnhandledNonPayment( PayPalNotificationRequest $request ) {
-		$logContext = [
-			'transaction_type' => $request->getTransactionType(),
-			'txn_id' => $request->getTransactionId()
-		];
-		$this->logger->info( 'Unhandled PayPal subscription notification: ' . $request->getTransactionType(), $logContext );
+	private function createUnhandledResponse( string $reason, PayPalNotificationRequest $request ): PaypalNotificationResponse {
+		return PaypalNotificationResponse::newUnhandledResponse( [
+			'message' => $reason,
+			'request' => $request->toArray()
+		] );
 	}
 
 	private function sendConfirmationEmailFor( Donation $donation ) {
@@ -194,7 +171,7 @@ class HandlePayPalPaymentNotificationUseCase {
 		return true;
 	}
 
-	private function createChildDonation( Donation $donation, PayPalNotificationRequest $request ) {
+	private function createChildDonation( Donation $donation, PayPalNotificationRequest $request ): PaypalNotificationResponse {
 		$childPaymentMethod = new PayPalPayment( $this->newPayPalDataFromRequest( $request ) );
 		$payment = $donation->getPayment();
 		$childDonation = new Donation(
@@ -207,7 +184,7 @@ class HandlePayPalPaymentNotificationUseCase {
 		try {
 			$this->repository->storeDonation( $childDonation );
 		} catch ( StoreDonationException $ex ) {
-			return null;
+			return $this->createErrorResponse( $ex, $request );
 		}
 		/** @var \WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment $paymentMethod */
 		$paymentMethod = $payment->getPaymentMethod();
@@ -215,10 +192,10 @@ class HandlePayPalPaymentNotificationUseCase {
 		try {
 			$this->repository->storeDonation( $donation );
 		} catch ( StoreDonationException $ex ) {
-			return null;
+			return $this->createErrorResponse( $ex, $request );
 		}
 		$this->logChildDonationCreatedEvent( $donation->getId(), $childDonation->getId() );
-		return $childDonation;
+		return PaypalNotificationResponse::newSuccessResponse();
 	}
 
 	private function logChildDonationCreatedEvent( $parentId, $childId ) {
@@ -271,4 +248,13 @@ class HandlePayPalPaymentNotificationUseCase {
 		$donation->addPayPalData( $this->newPayPalDataFromRequest( $request ) );
 		return $donation;
 	}
+
+	private function createErrorResponse( \Exception $ex, PayPalNotificationRequest $request ): PaypalNotificationResponse {
+		return PaypalNotificationResponse::newFailureResponse( [
+			'message' => $ex->getMessage(),
+			'stackTrace' => $ex->getTraceAsString(),
+			'request' => $request->toArray()
+		] );
+	}
+
 }

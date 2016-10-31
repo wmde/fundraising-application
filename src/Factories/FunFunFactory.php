@@ -181,6 +181,10 @@ class FunFunFactory {
 			return new NullLogger();
 		};
 
+		$pimple['paypal_logger'] = function() {
+			return new NullLogger();
+		};
+
 		$pimple['profiler_data_collector'] = function() {
 			return new ProfilerDataCollector();
 		};
@@ -599,6 +603,10 @@ class FunFunFactory {
 
 	public function getLogger(): LoggerInterface {
 		return $this->pimple['logger'];
+	}
+
+	public function getPaypalLogger(): LoggerInterface {
+		return $this->pimple['paypal_logger'];
 	}
 
 	private function getVarPath(): string {
@@ -1074,7 +1082,6 @@ class FunFunFactory {
 			$this->getDonationRepository(),
 			$this->newDonationAuthorizer( $updateToken ),
 			$this->newDonationConfirmationMailer(),
-			$this->getLogger(),
 			$this->newDonationEventLogger()
 		);
 	}
@@ -1233,6 +1240,10 @@ class FunFunFactory {
 
 	public function setLogger( LoggerInterface $logger ) {
 		$this->pimple['logger'] = $logger;
+	}
+
+	public function setPaypalLogger( LoggerInterface $logger ) {
+		$this->pimple['paypal_logger'] = $logger;
 	}
 
 	public function getProfilerDataCollector(): ProfilerDataCollector {
