@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\DonationContext\Domain\Model;
+namespace WMDE\Fundraising\Frontend\DonationContext\Tests\Unit\Domain\Model;
 
 use RuntimeException;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
@@ -212,6 +212,20 @@ class DonationTest extends \PHPUnit_Framework_TestCase {
 		$donation->confirmBooked();
 
 		$this->assertFalse( $donation->hasComment() );
+	}
+
+	public function testWhenConstructingWithInvalidStatus_exceptionIsThrown() {
+		$this->expectException( \InvalidArgumentException::class );
+
+		new Donation(
+			null,
+			'Such invalid status',
+			ValidDonation::newDonor(),
+			ValidDonation::newDirectDebitPayment(),
+			Donation::OPTS_INTO_NEWSLETTER,
+			ValidDonation::newTrackingInfo(),
+			null
+		);
 	}
 
 }

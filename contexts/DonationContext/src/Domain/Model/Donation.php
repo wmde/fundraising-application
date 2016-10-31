@@ -44,16 +44,49 @@ class Donation {
 	 */
 	private $trackingInfo;
 
+	/**
+	 * @param int|null $id
+	 * @param string $status Must be one of the Donation::STATUS_ constants
+	 * @param Donor|null $donor
+	 * @param DonationPayment $payment
+	 * @param bool $optsIntoNewsletter
+	 * @param DonationTrackingInfo $trackingInfo
+	 * @param DonationComment|null $comment
+	 *
+	 * @throws \InvalidArgumentException
+	 */
 	public function __construct( int $id = null, string $status, Donor $donor = null, DonationPayment $payment,
 		bool $optsIntoNewsletter, DonationTrackingInfo $trackingInfo, DonationComment $comment = null ) {
 
 		$this->id = $id;
-		$this->status = $status;
+		$this->setStatus( $status );
 		$this->donor = $donor;
 		$this->payment = $payment;
 		$this->optsIntoNewsletter = $optsIntoNewsletter;
 		$this->trackingInfo = $trackingInfo;
 		$this->comment = $comment;
+	}
+
+	private function setStatus( string $status ) {
+		if ( !$this->isValidStatus( $status ) ) {
+			throw new \InvalidArgumentException( 'Invalid donation status' );
+		}
+
+		$this->status = $status;
+	}
+
+	private function isValidStatus( string $status ) {
+		return in_array(
+			$status,
+			[
+				self::STATUS_NEW,
+				self::STATUS_PROMISE,
+				self::STATUS_EXTERNAL_INCOMPLETE,
+				self::STATUS_EXTERNAL_BOOKED,
+				self::STATUS_MODERATION,
+				self::STATUS_CANCELLED,
+			]
+		);
 	}
 
 	/**
@@ -75,6 +108,11 @@ class Donation {
 		$this->id = $id;
 	}
 
+	/**
+	 * Usage of more specific methods such as isBooked or statusAllowsForCancellation is recommended.
+	 *
+	 * @return string One of the Donation::STATUS_ constants
+	 */
 	public function getStatus(): string {
 		return $this->status;
 	}
