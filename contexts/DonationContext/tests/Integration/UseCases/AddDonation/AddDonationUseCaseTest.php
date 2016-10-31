@@ -12,6 +12,8 @@ use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonorName;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\DonationContext\Infrastructure\DonationConfirmationMailer;
+use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\FakeDonationRepository;
+use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\FixedDonationTokenFetcher;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationPolicyValidator;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationUseCase;
@@ -20,9 +22,7 @@ use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationVa
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\ReferrerGeneralizer;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\TransferCodeGenerator;
-use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
-use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\FakeDonationRepository;
-use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\FixedDonationTokenFetcher;
+use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 
 /**

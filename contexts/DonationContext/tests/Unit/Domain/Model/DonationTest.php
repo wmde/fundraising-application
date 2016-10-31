@@ -6,8 +6,8 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\DonationContext\Domain\Model;
 
 use RuntimeException;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalData;
-use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
 
 /**
  * @covers WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation

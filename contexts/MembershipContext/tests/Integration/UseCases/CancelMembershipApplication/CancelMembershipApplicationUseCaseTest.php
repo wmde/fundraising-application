@@ -7,12 +7,12 @@ namespace WMDE\Fundraising\Frontend\MembershipContext\Tests\Integration\UseCases
 use WMDE\Fundraising\Frontend\MembershipContext\Authorization\ApplicationAuthorizer;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationRepository;
-use WMDE\Fundraising\Frontend\MembershipContext\UseCases\CancelMembershipApplication\CancellationRequest;
-use WMDE\Fundraising\Frontend\MembershipContext\UseCases\CancelMembershipApplication\CancelMembershipApplicationUseCase;
-use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
+use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\FailingAuthorizer;
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\InMemoryApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\SucceedingAuthorizer;
+use WMDE\Fundraising\Frontend\MembershipContext\UseCases\CancelMembershipApplication\CancellationRequest;
+use WMDE\Fundraising\Frontend\MembershipContext\UseCases\CancelMembershipApplication\CancelMembershipApplicationUseCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
 
 /**

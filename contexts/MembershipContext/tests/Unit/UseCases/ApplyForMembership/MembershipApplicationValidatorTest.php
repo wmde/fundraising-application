@@ -4,13 +4,13 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\MembershipContext\Tests\Unit\UseCases\ApplyForMembership;
 
+use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplication;
+use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplicationRequest;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplicationValidationResult as Result;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipRequest;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\MembershipApplicationValidator;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
-use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
-use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplicationRequest;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingEmailValidator;
 use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;

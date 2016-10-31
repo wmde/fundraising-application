@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Unit\MembershipContext\Domain\Model;
 
 use RuntimeException;
-use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
+use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplication;
 
 /**
  * @covers WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application

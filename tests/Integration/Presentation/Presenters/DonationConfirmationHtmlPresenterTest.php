@@ -7,7 +7,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\PiwikEvents;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\SelectedConfirmationPage;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
-use WMDE\Fundraising\Frontend\Tests\Data\ValidDonation;
+use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidDonation;
 
 /**
  * @covers WMDE\Fundraising\Frontend\Presentation\Presenters\DonationConfirmationHtmlPresenter

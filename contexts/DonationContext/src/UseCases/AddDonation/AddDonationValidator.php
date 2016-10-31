@@ -6,10 +6,10 @@ namespace WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation;
 
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationValidationResult as Result;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
-use WMDE\Fundraising\Frontend\Validation\PaymentDataValidator;
 use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 use WMDE\Fundraising\Frontend\Validation\EmailValidator;
+use WMDE\Fundraising\Frontend\Validation\PaymentDataValidator;
 
 /**
  * @license GNU GPL v2+

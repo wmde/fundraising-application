@@ -7,12 +7,12 @@ namespace WMDE\Fundraising\Frontend\MembershipContext\Tests\Unit\UseCases\ApplyF
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\ApplicantAddress;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\ApplicantName;
+use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\Frontend\MembershipContext\Tracking\MembershipApplicationTrackingInfo;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipRequest;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\MembershipApplicationBuilder;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
-use WMDE\Fundraising\Frontend\Tests\Data\ValidMembershipApplication;
 
 /**
  * @covers WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\MembershipApplicationBuilder
