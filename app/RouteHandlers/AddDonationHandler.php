@@ -12,7 +12,6 @@ use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationRe
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationResponse;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\AmountParser;
-use WMDE\Fundraising\Frontend\Infrastructure\TrackingDataSelector;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
@@ -109,25 +108,9 @@ class AddDonationHandler {
 			$donationRequest->setBankData( $this->getBankDataFromRequest( $request ) );
 		}
 
-		$donationRequest->setTracking(
-			TrackingDataSelector::getFirstNonEmptyValue( [
-				$request->cookies->get( 'spenden_tracking' ),
-				$request->request->get( 'tracking' ),
-				TrackingDataSelector::concatTrackingFromVarTuple(
-					$request->get( 'piwik_campaign', '' ),
-					$request->get( 'piwik_kwd', '' )
-				)
-			] )
-		);
-
+		$donationRequest->setTracking( $request->attributes->get( 'trackingCode' ) );
 		$donationRequest->setOptIn( $request->get( 'info', '' ) );
-		$donationRequest->setSource(
-			TrackingDataSelector::getFirstNonEmptyValue( [
-				$request->cookies->get( 'spenden_source' ),
-				$request->request->get( 'source' ),
-				$request->server->get( 'HTTP_REFERER' )
-			] )
-		);
+		$donationRequest->setSource( $request->attributes->get( 'trackingSource' ) );
 		$donationRequest->setTotalImpressionCount( intval( $request->get( 'impCount', 0 ) ) );
 		$donationRequest->setSingleBannerImpressionCount( intval( $request->get( 'bImpCount', 0 ) ) );
 

@@ -91,7 +91,7 @@ class ApplyForMembershipHandler {
 			$httpRequest->request->get( 'templateName', '' )
 		) );
 
-		$request->setPiwikTrackingString( $httpRequest->cookies->get( 'spenden_tracking', '' ) );
+		$request->setPiwikTrackingString( $httpRequest->attributes->get( 'trackingCode' ) );
 
 		$bankData = new BankData();
 
