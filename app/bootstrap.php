@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\App\AccessDeniedException;
+use WMDE\Fundraising\Frontend\Infrastructure\TrackingDataSelector;
 
 $app = new Application();
 
@@ -26,6 +27,21 @@ $app->register( new TwigServiceProvider() );
 $app->before(
 	function ( Request $request, Application $app ) {
 		$app['request_stack.is_json'] = in_array( 'application/json', $request->getAcceptableContentTypes() );
+
+		$request->attributes->set( 'trackingCode', TrackingDataSelector::getFirstNonEmptyValue( [
+			$request->cookies->get( 'spenden_tracking' ),
+			$request->request->get( 'tracking' ),
+			TrackingDataSelector::concatTrackingFromVarTuple(
+				$request->get( 'piwik_campaign', '' ),
+				$request->get( 'piwik_kwd', '' )
+			)
+		] ) );
+
+		$request->attributes->set( 'trackingSource', TrackingDataSelector::getFirstNonEmptyValue( [
+			$request->cookies->get( 'spenden_source' ),
+			$request->request->get( 'source' ),
+			$request->server->get( 'HTTP_REFERER' )
+		] ) );
 	},
 	Application::EARLY_EVENT
 );

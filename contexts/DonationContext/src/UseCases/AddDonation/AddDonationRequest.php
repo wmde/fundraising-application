@@ -231,24 +231,6 @@ class AddDonationRequest {
 		$this->donorEmailAddress = $donorEmailAddress;
 	}
 
-	public static function getPreferredValue( array $values ) {
-		foreach ( $values as $value ) {
-			if ( $value !== null && $value !== '' ) {
-				return $value;
-			}
-		}
-
-		return '';
-	}
-
-	public static function concatTrackingFromVarCouple( string $campaign, string $keyword ): string {
-		if ( $campaign !== '' ) {
-			return strtolower( implode( '/', array_filter( [ $campaign, $keyword ] ) ) );
-		}
-
-		return '';
-	}
-
 	public function donorIsAnonymous(): bool {
 		return $this->getDonorType() === DonorName::PERSON_ANONYMOUS;
 	}
