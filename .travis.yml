@@ -9,7 +9,7 @@ matrix:
   - php: 7
     env: DB=sqlite; TYPE=coverage
   fast_finish: true
-  allow_failures:
+  allow_failures: # We allow this one to fail so fast_finish causes the build to not wait for it
   - env: DB=sqlite; TYPE=coverage
 
 sudo: false
