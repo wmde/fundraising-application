@@ -6,7 +6,7 @@ matrix:
     env: DB=sqlite
   - php: 7
     env: DB=mysql
-  - php: 7
+  - php: 7.1
     env: DB=sqlite; TYPE=coverage
   fast_finish: true
   allow_failures:
