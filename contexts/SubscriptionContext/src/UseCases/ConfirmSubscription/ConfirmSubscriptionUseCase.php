@@ -35,7 +35,7 @@ class ConfirmSubscriptionUseCase {
 			return ValidationResponse::newFailureResponse( [ new ConstraintViolation( $confirmationCode, $errorMsg ) ] );
 		}
 
-		if ( $subscription->getStatus() === Subscription::STATUS_NEUTRAL ) {
+		if ( $subscription->isUnconfirmed() ) {
 			$subscription->setStatus( Subscription::STATUS_CONFIRMED );
 			$this->subscriptionRepository->storeSubscription( $subscription );
 			$this->mailer->sendMail( new EmailAddress( $subscription->getEmail() ), [ 'subscription' => $subscription ] );

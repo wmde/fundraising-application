@@ -19,6 +19,8 @@ use WMDE\Fundraising\Frontend\Validation\ValidationResponse;
  */
 class AddSubscriptionUseCase {
 
+	/* private */ const CONFIRMATION_CODE_LENGTH = 16;
+
 	private $subscriptionRepository;
 	private $subscriptionValidator;
 	private $mailer;
@@ -82,13 +84,15 @@ class AddSubscriptionUseCase {
 	}
 
 	private function createSubscriptionFromRequest( SubscriptionRequest $subscriptionRequest ): Subscription {
-		$request = new Subscription();
+		$subscription = new Subscription();
 
-		$request->setAddress( $this->addressFromSubscriptionRequest( $subscriptionRequest ) );
-		$request->setEmail( $subscriptionRequest->getEmail() );
-		$request->setConfirmationCode( random_bytes( 16 ) ); // No need to use uuid library here
+		$subscription->setAddress( $this->addressFromSubscriptionRequest( $subscriptionRequest ) );
+		$subscription->setEmail( $subscriptionRequest->getEmail() );
+		$subscription->setTracking( $subscriptionRequest->getTrackingString() );
+		$subscription->setSource( $subscriptionRequest->getSource() );
+		$subscription->setConfirmationCode( random_bytes( self::CONFIRMATION_CODE_LENGTH ) );
 
-		return $request;
+		return $subscription;
 	}
 
 	private function addressFromSubscriptionRequest( SubscriptionRequest $subscriptionRequest ): Address {
