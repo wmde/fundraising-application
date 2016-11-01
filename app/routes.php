@@ -20,6 +20,7 @@ use WMDE\Fundraising\Frontend\App\RouteHandlers\PayPalNotificationHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\RouteRedirectionHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowDonationConfirmationHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowMembershipConfirmationHandler;
+use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonorAddress;
@@ -390,6 +391,10 @@ $app->get( 'donation/new', function ( Request $request ) use ( $ffFactory ) {
 	}
 	$validationResult = $ffFactory->newPaymentDataValidator()->validate( $amount, (string) $request->get( 'zahlweise', '' ) );
 
+	$trackingInfo = new DonationTrackingInfo();
+	$trackingInfo->setTotalImpressionCount( intval( $request->get( 'impCount' ) ) );
+	$trackingInfo->setSingleBannerImpressionCount( intval( $request->get( 'bImpCount' ) ) );
+
 	// TODO: don't we want to use newDonationFormViolationPresenter when !$validationResult->isSuccessful()?
 
 	return new Response(
@@ -397,7 +402,8 @@ $app->get( 'donation/new', function ( Request $request ) use ( $ffFactory ) {
 			$amount,
 			$request->get( 'zahlweise', '' ),
 			intval( $request->get( 'periode', 0 ) ),
-			$validationResult->isSuccessful()
+			$validationResult->isSuccessful(),
+			$trackingInfo
 		)
 	);
 } )->method( 'POST|GET' );

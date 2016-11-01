@@ -8,6 +8,7 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Euro\Euro;
+use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationResponse;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
@@ -40,7 +41,12 @@ class AddDonationHandler {
 		$responseModel = $this->ffFactory->newAddDonationUseCase()->addDonation( $addDonationRequest );
 
 		if ( !$responseModel->isSuccessful() ) {
-			return new Response( $this->ffFactory->newDonationFormViolationPresenter()->present( $responseModel->getValidationErrors(), $addDonationRequest ) );
+			return new Response(
+				$this->ffFactory->newDonationFormViolationPresenter()->present(
+					$responseModel->getValidationErrors(), $addDonationRequest,
+					$this->newTrackingInfoFromRequest( $request )
+				)
+			);
 		}
 
 		return $this->newHttpResponse( $responseModel );
@@ -166,6 +172,14 @@ class AddDonationHandler {
 		}
 
 		return true;
+	}
+
+	private function newTrackingInfoFromRequest( Request $request ): DonationTrackingInfo {
+		$tracking = new DonationTrackingInfo();
+		$tracking->setSingleBannerImpressionCount( intval( $request->get( 'bImpCount', 0 ) ) );
+		$tracking->setTotalImpressionCount( intval( $request->get( 'impCount', 0 ) ) );
+
+		return $tracking;
 	}
 
 }

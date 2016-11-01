@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
+use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
@@ -28,13 +29,18 @@ class DonationFormViolationPresenter {
 	/**
 	 * @param ConstraintViolation[] $violations
 	 * @param AddDonationRequest $request
+	 * @param DonationTrackingInfo $trackingData
 	 * @return string
 	 */
-	public function present( array $violations, AddDonationRequest $request ): string {
+	public function present( array $violations, AddDonationRequest $request, DonationTrackingInfo $trackingData ): string {
 		return $this->template->render(
 			[
 				'initialFormValues' => $this->getDonationFormArguments( $request ),
-				'violatedFields' => $this->getViolatedFields( $violations )
+				'violatedFields' => $this->getViolatedFields( $violations ),
+				'tracking' => [
+					'impressionCount' => $trackingData->getTotalImpressionCount(),
+					'bannerImpressionCount' => $trackingData->getSingleBannerImpressionCount()
+				]
 			]
 		);
 	}
