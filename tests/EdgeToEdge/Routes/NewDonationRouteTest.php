@@ -64,4 +64,20 @@ class NewDonationRouteTest extends WebRouteTestCase {
 		];
 	}
 
+	public function testWhenPassingTrackingData_itGetsPassedToThePresenter() {
+		$client = $this->createClient();
+		$client->request(
+			'POST',
+			'/donation/new',
+			[
+				'impCount' => 12,
+				'bImpCount' => 3
+			]
+		);
+
+		$response = $client->getResponse()->getContent();
+		$this->assertContains( 'Impression Count: 12', $response );
+		$this->assertContains( 'Banner Impression Count: 3', $response );
+	}
+
 }

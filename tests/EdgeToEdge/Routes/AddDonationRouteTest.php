@@ -409,6 +409,26 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
+	public function testGivenInvalidRequest_formStillContainsBannerTrackingData() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setNullMessenger();
+
+			$client->request(
+				'POST',
+				'/donation/add',
+				[
+					'impCount' => 12,
+					'bImpCount' => 3
+				]
+			);
+
+			$response = $client->getResponse()->getContent();
+
+			$this->assertContains( 'Impression Count: 12', $response );
+			$this->assertContains( 'Banner Impression Count: 3', $response );
+		} );
+	}
+
 	public function testGivenNegativeDonationAmount_formIsReloadedAndPrefilledWithZero() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setNullMessenger();

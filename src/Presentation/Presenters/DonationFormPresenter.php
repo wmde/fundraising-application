@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
 use WMDE\Euro\Euro;
+use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
@@ -22,7 +23,8 @@ class DonationFormPresenter {
 		$this->amountFormatter = $amountFormatter;
 	}
 
-	public function present( Euro $amount, string $paymentType, int $paymentInterval, bool $paymentDataIsValid ): string {
+	public function present( Euro $amount, string $paymentType, int $paymentInterval, bool $paymentDataIsValid,
+							 DonationTrackingInfo $trackingInfo ): string {
 		return $this->template->render( [
 			'initialFormValues' => [
 				'amount' => $this->amountFormatter->format( $amount ),
@@ -31,6 +33,10 @@ class DonationFormPresenter {
 			],
 			'validationResult' => [
 				'paymentData' => $paymentDataIsValid
+			],
+			'tracking' => [
+				'bannerImpressionCount' => $trackingInfo->getSingleBannerImpressionCount(),
+				'impressionCount' => $trackingInfo->getTotalImpressionCount()
 			]
 		] );
 	}
