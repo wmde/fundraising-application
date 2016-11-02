@@ -55,7 +55,7 @@ $ffFactory->setPaypalLogger( call_user_func( function() use ( $ffFactory ) {
 	$logger = new Logger( 'paypal' );
 
 	$streamHandler = new StreamHandler(
-		$ffFactory->getLoggingPath() . '/papyal.log'
+		$ffFactory->getLoggingPath() . '/paypal.log'
 	);
 
 	$streamHandler->setFormatter( new JsonFormatter() );
