@@ -64,7 +64,7 @@ class NewDonationRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	public function testWhenPassingTrackingData_theyCanBePassedThrough() {
+	public function testWhenPassingTrackingData_itGetsPassedToThePresenter() {
 		$client = $this->createClient();
 		$client->request(
 			'POST',
