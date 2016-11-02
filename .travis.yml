@@ -25,7 +25,7 @@ before_script:
 
 script:
   - composer ci
-  - travis_retry phpunit tests/System/
+  - travis_retry vendor/bin/phpunit tests/System/
 
 after_success:
   - if [ "$TYPE" == "coverage" ]; then bash build/travis/uploadCoverage.sh; fi
