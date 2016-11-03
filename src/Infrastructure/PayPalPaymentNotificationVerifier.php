@@ -40,13 +40,6 @@ class PayPalPaymentNotificationVerifier implements PaymentNotificationVerifier {
 			);
 		}
 
-		if ( !$this->hasAllowedPaymentStatus( $request ) ) {
-			throw new PayPalPaymentNotificationVerifierException(
-				'Payment status is not supported',
-				PayPalPaymentNotificationVerifierException::ERROR_UNSUPPORTED_STATUS
-			);
-		}
-
 		if ( !$this->hasValidCurrencyCode( $request ) ) {
 			throw new PayPalPaymentNotificationVerifierException(
 				'Unsupported currency',

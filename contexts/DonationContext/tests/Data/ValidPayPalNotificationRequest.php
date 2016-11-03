@@ -17,7 +17,7 @@ class ValidPayPalNotificationRequest {
 	const TRANSACTION_ID = '61E67681CH3238416';
 	const PAYER_ID = 'LPLWNMTBWMFAY';
 	const SUBSCRIBER_ID = '8RHHUM3W3PRH7QY6B59';
-	const PAYER_EMAIL = 'payer.email@address.com';
+	const PAYER_EMAIL = 'foerderpp@wikimedia.de';
 	const PAYER_STATUS = 'verified';
 	const PAYER_FIRST_NAME = 'Generous';
 	const PAYER_LAST_NAME = 'Donor';
@@ -30,10 +30,15 @@ class ValidPayPalNotificationRequest {
 	const TOKEN = 'my_secret_token';
 	const CURRENCY_CODE = 'EUR';
 	const TRANSACTION_FEE_CENTS = 27;
+	const TRANSACTION_FEE_EURO_STRING = '2.70';
 	const AMOUNT_GROSS_CENTS = 500;
+	const AMOUNT_GROSS_EURO_STRING = '5.00';
 	const SETTLE_AMOUNT_CENTS = 123;
+	const SETTLE_AMOUNT_EURO_STRING = '1.23';
 	const PAYMENT_TIMESTAMP = '20:12:59 Jan 13, 2009 PST';
 	const PAYMENT_TYPE = 'instant';
+	const ITEM_NAME = 'Spende an Wikimdia Deutschland';
+	const ITEM_NUMBER = 1;
 
 	const PAYMENT_STATUS_COMPLETED = 'Completed';
 	const PAYMENT_STATUS_PENDING = 'Pending';
@@ -73,6 +78,34 @@ class ValidPayPalNotificationRequest {
 			->setDonationId( $donationId )
 			->setTransactionType( 'subscr_payment' )
 			->setPaymentStatus( self::PAYMENT_STATUS_COMPLETED );
+	}
+
+	public static function newHttpParamsForSubscriptionModification(): array {
+		return [
+			'receiver_email' => self::PAYER_EMAIL,
+			'payment_status' => self::PAYMENT_STATUS_COMPLETED,
+			'payer_id' => self::PAYER_ID,
+			'subscr_id' => self::SUBSCRIBER_ID,
+			'payer_status' => self::PAYER_STATUS,
+			'address_status' => self::PAYER_ADDRESS_STATUS,
+			'mc_gross' => self::AMOUNT_GROSS_EURO_STRING,
+			'mc_currency' => self::CURRENCY_CODE,
+			'mc_fee' => self::TRANSACTION_FEE_EURO_STRING,
+			'settle_amount' => self::SETTLE_AMOUNT_EURO_STRING,
+			'first_name' => self::PAYER_FIRST_NAME,
+			'last_name' => self::PAYER_LAST_NAME,
+			'address_name' => self::PAYER_ADDRESS_NAME,
+			'item_name' => self::ITEM_NAME,
+			'item_number' => self::ITEM_NUMBER,
+			'custom' => json_encode( [
+				'id' => self::DONATION_ID,
+				'utoken' => self::TOKEN
+			] ),
+			'txn_id' => self::TRANSACTION_ID,
+			'payment_type' => self::PAYMENT_TYPE,
+			'txn_type' => 'subscr_modify',
+			'payment_date' => self::PAYMENT_TIMESTAMP,
+		];
 	}
 
 	private static function newBaseRequest(): PayPalNotificationRequest {

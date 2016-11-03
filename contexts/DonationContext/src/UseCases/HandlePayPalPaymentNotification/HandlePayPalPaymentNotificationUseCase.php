@@ -41,17 +41,17 @@ class HandlePayPalPaymentNotificationUseCase {
 
 	public function handleNotification( PayPalNotificationRequest $request ): PaypalNotificationResponse {
 		if ( !$request->isSuccessfulPaymentNotification() ) {
-			return $this->createUnhandledResponse( 'Unhandled PayPal instant payment notification', $request );
+			return $this->createUnhandledResponse( 'Unhandled PayPal instant payment notification' );
 		}
 
 		if ( $this->transactionIsSubscriptionRelatedButNotAPayment( $request ) ) {
-			return $this->createUnhandledResponse( 'Unhandled PayPal subscription notification', $request );
+			return $this->createUnhandledResponse( 'Unhandled PayPal subscription notification' );
 		}
 
 		try {
 			$donation = $this->repository->getDonationById( $request->getDonationId() );
 		} catch ( GetDonationException $ex ) {
-			return $this->createErrorResponse( $ex, $request );
+			return $this->createErrorResponse( $ex );
 		}
 
 		if ( $donation === null ) {
@@ -67,7 +67,7 @@ class HandlePayPalPaymentNotificationUseCase {
 		try {
 			$this->repository->storeDonation( $donation );
 		} catch ( StoreDonationException $ex ) {
-			return $this->createErrorResponse( $ex, $request );
+			return $this->createErrorResponse( $ex );
 		}
 
 		$this->sendConfirmationEmailFor( $donation );
@@ -78,11 +78,11 @@ class HandlePayPalPaymentNotificationUseCase {
 
 	private function handleRequestForDonation( PayPalNotificationRequest $request, Donation $donation ): PaypalNotificationResponse {
 		if ( !( $donation->getPayment()->getPaymentMethod() instanceof PayPalPayment ) ) {
-			return $this->createUnhandledResponse( 'Trying to handle IPN for non-Paypal donation', $request );
+			return $this->createUnhandledResponse( 'Trying to handle IPN for non-Paypal donation' );
 		}
 
 		if ( !$this->authorizationService->systemCanModifyDonation( $request->getDonationId() ) ) {
-			return $this->createUnhandledResponse( 'Wrong access code for donation', $request );
+			return $this->createUnhandledResponse( 'Wrong access code for donation' );
 		}
 		if ( $this->donationWasBookedWithDifferentTransactionId( $donation, $request ) ) {
 			return $this->createChildDonation( $donation, $request );
@@ -93,14 +93,14 @@ class HandlePayPalPaymentNotificationUseCase {
 		try {
 			$donation->confirmBooked();
 		} catch ( \RuntimeException $ex ) {
-			return $this->createErrorResponse( $ex, $request );
+			return $this->createErrorResponse( $ex );
 		}
 
 		try {
 			$this->repository->storeDonation( $donation );
 		}
 		catch ( StoreDonationException $ex ) {
-			return $this->createErrorResponse( $ex, $request );
+			return $this->createErrorResponse( $ex );
 		}
 
 		$this->sendConfirmationEmailFor( $donation );
@@ -109,10 +109,9 @@ class HandlePayPalPaymentNotificationUseCase {
 		return PaypalNotificationResponse::newSuccessResponse();
 	}
 
-	private function createUnhandledResponse( string $reason, PayPalNotificationRequest $request ): PaypalNotificationResponse {
+	private function createUnhandledResponse( string $reason ): PaypalNotificationResponse {
 		return PaypalNotificationResponse::newUnhandledResponse( [
-			'message' => $reason,
-			'request' => $request->toArray()
+			'message' => $reason
 		] );
 	}
 
@@ -184,7 +183,7 @@ class HandlePayPalPaymentNotificationUseCase {
 		try {
 			$this->repository->storeDonation( $childDonation );
 		} catch ( StoreDonationException $ex ) {
-			return $this->createErrorResponse( $ex, $request );
+			return $this->createErrorResponse( $ex );
 		}
 		/** @var \WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment $paymentMethod */
 		$paymentMethod = $payment->getPaymentMethod();
@@ -192,7 +191,7 @@ class HandlePayPalPaymentNotificationUseCase {
 		try {
 			$this->repository->storeDonation( $donation );
 		} catch ( StoreDonationException $ex ) {
-			return $this->createErrorResponse( $ex, $request );
+			return $this->createErrorResponse( $ex );
 		}
 		$this->logChildDonationCreatedEvent( $donation->getId(), $childDonation->getId() );
 		return PaypalNotificationResponse::newSuccessResponse();
@@ -249,11 +248,10 @@ class HandlePayPalPaymentNotificationUseCase {
 		return $donation;
 	}
 
-	private function createErrorResponse( \Exception $ex, PayPalNotificationRequest $request ): PaypalNotificationResponse {
+	private function createErrorResponse( \Exception $ex ): PaypalNotificationResponse {
 		return PaypalNotificationResponse::newFailureResponse( [
 			'message' => $ex->getMessage(),
-			'stackTrace' => $ex->getTraceAsString(),
-			'request' => $request->toArray()
+			'stackTrace' => $ex->getTraceAsString()
 		] );
 	}
 
