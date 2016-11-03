@@ -258,36 +258,4 @@ class PayPalNotificationRequest {
 	public function isForRecurringPayment(): bool {
 		return strpos( $this->transactionType, 'subscr_' ) === 0;
 	}
-
-	public function toArray(): array {
-		return [
-			'transactionType' => $this->transactionType,
-			'transactionId' => $this->transactionId,
-
-			'payerId' => $this->payerId,
-			'payerEmail' => $this->payerEmail,
-			'payerStatus' => $this->payerStatus,
-			'subscriberId' => $this->subscriberId,
-
-			'payerFirstName' => $this->payerFirstName,
-			'payerLastName' => $this->payerLastName,
-			'payerAddressName' => $this->payerAddressName,
-			'payerAddressStreet' => $this->payerAddressStreet,
-			'payerAddressPostalCode' => $this->payerAddressPostalCode,
-			'payerAddressCity' => $this->payerAddressCity,
-			'payerAddressCountryCode' => $this->payerAddressCountryCode,
-			'payerAddressStatus' => $this->payerAddressStatus,
-
-			'donationId' => $this->donationId,
-			'token' => $this->token,
-
-			'currencyCode' => $this->currencyCode,
-			'transactionFee' => $this->transactionFee,
-			'amountGross' => $this->amountGross,
-			'settleAmount' => $this->settleAmount,
-			'paymentTimestamp' => $this->paymentTimestamp,
-			'paymentStatus' => $this->paymentStatus,
-			'paymentType' => $this->paymentType
-		];
-	}
 }

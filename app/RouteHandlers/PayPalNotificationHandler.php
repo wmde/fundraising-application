@@ -34,6 +34,9 @@ class PayPalNotificationHandler {
 		} catch ( PayPalPaymentNotificationVerifierException $e ) {
 			// TODO: let PayPal resend IPN?
 
+			$this->ffFactory->getPaypalLogger()->log( LogLevel::ERROR, $e->getMessage(), [
+				'post_vars' => $request->request->all()
+			] );
 			return $this->createErrorResponse( $e );
 		}
 
@@ -42,7 +45,7 @@ class PayPalNotificationHandler {
 		$useCase = $this->ffFactory->newHandlePayPalPaymentNotificationUseCase( $this->getUpdateToken( $post ) );
 
 		$response = $useCase->handleNotification( $this->newUseCaseRequestFromPost( $post ) );
-		$this->logResponseIfNeeded( $response );
+		$this->logResponseIfNeeded( $response, $request );
 
 		return new Response( '', Response::HTTP_OK ); # PayPal expects an empty response
 	}
@@ -84,9 +87,6 @@ class PayPalNotificationHandler {
 
 	private function createErrorResponse( PayPalPaymentNotificationVerifierException $e ): Response {
 		switch ( $e->getCode() ) {
-			case PayPalPaymentNotificationVerifierException::ERROR_UNSUPPORTED_STATUS;
-				// Just ignore IPN notices with a status we don't handle
-				return new Response( '', Response::HTTP_OK );
 			case PayPalPaymentNotificationVerifierException::ERROR_WRONG_RECEIVER:
 				return new Response( $e->getMessage(), Response::HTTP_FORBIDDEN );
 			case PayPalPaymentNotificationVerifierException::ERROR_VERIFICATION_FAILED:
@@ -98,7 +98,7 @@ class PayPalNotificationHandler {
 		}
 	}
 
-	private function logResponseIfNeeded( PaypalNotificationResponse $response )
+	private function logResponseIfNeeded( PaypalNotificationResponse $response, Request $request )
 	{
 		if ( $response->notificationWasHandled() ) {
 			return;
@@ -107,6 +107,7 @@ class PayPalNotificationHandler {
 		$message = $context['message'] ?? 'Paypal request not handled';
 		$logLevel = $response->hasErrors() ? LogLevel::ERROR : LogLevel::INFO;
 		unset( $context['message'] );
+		$context['post_vars'] = $request->request->all();
 		$this->ffFactory->getPaypalLogger()->log( $logLevel, $message, $context );
 	}
 

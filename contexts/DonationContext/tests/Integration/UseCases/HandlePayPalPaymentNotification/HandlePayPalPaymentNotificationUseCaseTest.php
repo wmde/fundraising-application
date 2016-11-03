@@ -100,21 +100,6 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$this->assertFalse( $useCase->handleNotification( $request )->notificationWasHandled() );
 	}
 
-	public function testWhenPaymentStatusIsPending_responseContainsMoreInformation() {
-		$request = $request = ValidPayPalNotificationRequest::newPendingPayment();
-
-		$useCase = new HandlePayPalPaymentNotificationUseCase(
-			new FakeDonationRepository(),
-			new SucceedingDonationAuthorizer(),
-			$this->getMailer(),
-			$this->getEventLogger()
-		);
-
-		$response = $useCase->handleNotification( $request );
-		$this->assertSame( 'Unhandled PayPal instant payment notification', $response->getContext()['message'] );
-		$this->assertSame( 'Pending', $response->getContext()['request']['paymentStatus'] );
-	}
-
 	public function testWhenTransactionTypeIsForSubscriptionChanges_unhandledResponseIsReturned() {
 		$request = ValidPayPalNotificationRequest::newSubscriptionModification();
 
@@ -125,21 +110,6 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$this->getEventLogger()
 		);
 		$this->assertFalse( $useCase->handleNotification( $request )->notificationWasHandled() );
-	}
-
-	public function testWhenTransactionTypeIsForSubscriptionChanges_responseContainsMoreInformation() {
-		$useCase = new HandlePayPalPaymentNotificationUseCase(
-			new FakeDonationRepository(),
-			new SucceedingDonationAuthorizer(),
-			$this->getMailer(),
-			$this->getEventLogger()
-		);
-
-		$request = ValidPayPalNotificationRequest::newSubscriptionModification();
-
-		$response = $useCase->handleNotification( $request );
-		$this->assertSame( 'Unhandled PayPal subscription notification', $response->getContext()['message'] );
-		$this->assertSame( 'subscr_modify', $response->getContext()['request']['transactionType'] );
 	}
 
 	public function testWhenAuthorizationSucceeds_confirmationMailIsSent() {
