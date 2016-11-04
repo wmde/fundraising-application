@@ -12,6 +12,7 @@ declare( strict_types = 1 );
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\AddDonationHandler;
@@ -222,10 +223,12 @@ $app->get(
 $app->get(
 	'page/{pageName}',
 	function( $pageName ) use ( $ffFactory ) {
-		$templateExists = $ffFactory->getTemplateNameValidator()->validate( $pageName )->isSuccessful();
+		if ( !$ffFactory->getTemplateNameValidator()->validate( $pageName )->isSuccessful() ) {
+			throw new NotFoundHttpException( "Page '$pageName' not found." );
+		}
 
 		return $ffFactory->getLayoutTemplate( 'DisplayPageLayout.twig' )->render( [
-			'main_template' => $templateExists ? $pageName : '404message.html.twig',
+			'main_template' => $pageName
 		] );
 	}
 )

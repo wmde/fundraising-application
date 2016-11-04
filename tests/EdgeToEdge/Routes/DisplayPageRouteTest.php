@@ -18,6 +18,8 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\ApiPostRequestHandler;
  */
 class DisplayPageRouteTest extends WebRouteTestCase {
 
+	private $notFoundMessage;
+
 	// @codingStandardsIgnoreStart
 	protected function onTestEnvironmentCreated( FunFunFactory $factory, array $config ) {
 		// @codingStandardsIgnoreEnd
@@ -30,6 +32,7 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 			} );
 
 		$factory->setMediaWikiApi( $api );
+		$this->notFoundMessage = $factory->getTranslator()->trans( 'page_not_found' );
 	}
 
 	public function testWhenPageDoesNotExist_missingResponseIsReturned() {
@@ -37,7 +40,7 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 		$client->request( 'GET', '/page/kittens' );
 
 		$this->assertContains(
-			'Could not load main content!',
+			$this->notFoundMessage,
 			$client->getResponse()->getContent()
 		);
 	}

@@ -1,2 +1,5 @@
-Could not load main content!
-{# TODO translate this and add a link to main page #}
+{% extends 'BaseLayout.twig' %}
+
+{% block main %}
+    {$ message|default( 'page_not_found' )|trans()|raw $}
+{% endblock %}

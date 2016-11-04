@@ -15,6 +15,7 @@ use Silex\Provider\TwigServiceProvider;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use WMDE\Fundraising\Frontend\App\AccessDeniedException;
 use WMDE\Fundraising\Frontend\Infrastructure\TrackingDataSelector;
 
@@ -69,6 +70,19 @@ $app->error( function ( AccessDeniedException $e ) use ( $ffFactory ) {
 		[ 'X-Status-Code' => 403 ]
 	);
 } );
+
+$app->error( function ( NotFoundHttpException $e ) use ( $ffFactory, $app ) {
+	if ( $app['request_stack.is_json'] ) {
+		return $app->json( [ 'ERR' => $e->getMessage() ], 404, [ 'X-Status-Code' => 404 ] );
+	}
+
+	return new Response(
+		$ffFactory->newPageNotFoundHTMLPresenter()->present(),
+		404,
+		[ 'X-Status-Code' => 404 ]
+	);
+} );
+
 
 $app->error( function ( \Exception $e, Request $request, $code ) use ( $ffFactory, $app ) {
 	if ( $app['debug'] ) {
