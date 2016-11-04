@@ -31,6 +31,7 @@ use Twig_Extensions_Extension_Intl;
 use WMDE\Fundraising\Frontend\DonationContext\DonationAcceptedEventHandler;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
 use WMDE\Fundraising\Frontend\Presentation\Honorifics;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\PageNotFoundPresenter;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 use WMDE\Fundraising\Frontend\DonationContext\Authorization\DonationAuthorizer;
@@ -1272,6 +1273,10 @@ class FunFunFactory {
 			$this->getDonationRepository(),
 			$this->newDonationConfirmationMailer()
 		);
+	}
+
+	public function newPageNotFoundHTMLPresenter(): PageNotFoundPresenter {
+		return new PageNotFoundPresenter( $this->getLayoutTemplate( '404message.html.twig' ) );
 	}
 
 }

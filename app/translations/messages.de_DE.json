@@ -29,5 +29,6 @@
   "comment_success_needs_moderation": "Ihr Kommentar wurde von unserem System zur Überprüfung vorgemerkt und steht daher nicht automatisch in der öffentlichen Spenderliste.",
   "pagination_page_n_of_x": "Seite %page% von %max_pages%+",
   "donation_rejected_limit": "Sie haben vor sehr kurzer Zeit bereits gespendet. Bitte warten Sie einen Moment.<br />Wenn Sie Fragen dazu haben, wenden Sie sich bitte an <a href=\"mailto:spenden%40wikimedia.de\">spenden@wikimedia.de</a>.",
-  "membership_application_rejected_limit": "Sie haben vor sehr kurzer Zeit bereits einen Mitgliedschaftsantrag gesendet. Bitte warten Sie einen Moment.<br />Wenn Sie Fragen dazu haben, wenden Sie sich bitte an <a href=\"mailto:mitglieder%40wikimedia.de\">mitglieder@wikimedia.de</a>."
+  "membership_application_rejected_limit": "Sie haben vor sehr kurzer Zeit bereits einen Mitgliedschaftsantrag gesendet. Bitte warten Sie einen Moment.<br />Wenn Sie Fragen dazu haben, wenden Sie sich bitte an <a href=\"mailto:mitglieder%40wikimedia.de\">mitglieder@wikimedia.de</a>.",
+  "page_not_found": "Diese Seite existiert leider nicht.<br /><a href=\"/\">Klicken Sie hier, um unsere Spenden-Seite aufzurufen.</a>"
 }
