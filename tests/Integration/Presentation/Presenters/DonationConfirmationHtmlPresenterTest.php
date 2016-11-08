@@ -48,7 +48,7 @@ class DonationConfirmationHtmlPresenterTest extends \PHPUnit_Framework_TestCase 
 				'optsIntoNewsletter' => false,
 				'bankTransferCode' => '',
 				'creationDate' => ( new \DateTime() )->format( 'd.m.Y' ),
-				'cookieDuration' => '',
+				'cookieDuration' => '15552000',
 				'updateToken' => 'update_token'
 			],
 			'person' => [ ],
