@@ -49,7 +49,7 @@ class DonationConfirmationHtmlPresenter {
 				// TODO: use locale to determine the date format
 				'creationDate' => ( new \DateTime() )->format( 'd.m.Y' ),
 				// TODO: set cookie duration for "hide banner cookie"
-				'cookieDuration' => '',
+				'cookieDuration' => '15552000', // 180 days
 				'updateToken' => $updateToken
 			],
 			'person' => $this->getPersonArguments( $donation ),
