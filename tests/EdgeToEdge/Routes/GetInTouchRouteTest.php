@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingEmailValidator;
 
 /**
  * @licence GNU GPL v2+
@@ -21,7 +22,13 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_contactRequestIsProperlyProcessed() {
-		$client = $this->createClient();
+		$client = $this->createClient(
+			[],
+			function ( FunFunFactory $factory ) {
+				$factory->setEmailValidator( new SucceedingEmailValidator() );
+			},
+			self::DISABLE_DEBUG
+		);
 		$client->followRedirects( false );
 
 		$client->request(
@@ -80,6 +87,7 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 					->willThrowException( new \RuntimeException( 'Something unexpected happened' ) );
 
 				$factory->setMessenger( $messenger );
+				$factory->setEmailValidator( new SucceedingEmailValidator() );
 			},
 			self::DISABLE_DEBUG
 		);
