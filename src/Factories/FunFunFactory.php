@@ -1239,6 +1239,10 @@ class FunFunFactory {
 		$this->profiler = $profiler;
 	}
 
+	public function setEmailValidator( EmailValidator $validator ) {
+		$this->pimple['mail_validator'] = $validator;
+	}
+
 	public function setLogger( LoggerInterface $logger ) {
 		$this->pimple['logger'] = $logger;
 	}
