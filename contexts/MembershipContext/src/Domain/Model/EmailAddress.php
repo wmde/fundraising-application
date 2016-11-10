@@ -38,7 +38,7 @@ class EmailAddress {
 	}
 
 	public function getNormalizedDomain(): string {
-		return idn_to_ascii( $this->domain );
+		return (string) idn_to_ascii( $this->domain );
 	}
 
 	public function getFullAddress(): string {
