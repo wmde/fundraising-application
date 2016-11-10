@@ -62,6 +62,7 @@
 		"ockcyp/covers-validator": "~0.4",
 		"johnkary/phpunit-speedtrap": "^1.0",
 		"mikey179/vfsStream": "~1.6",
+		"wmde/psr-log-test-doubles": "~1.1",
 
 		"squizlabs/php_codesniffer": "~2.5",
 		"mediawiki/mediawiki-codesniffer": "~0.6.0",
