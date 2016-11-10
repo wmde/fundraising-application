@@ -142,7 +142,7 @@ $( function () {
 			},
 			// Hide anonymous payment when doing direct debit
 			{
-				viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '.anonymous-payment-select' ), /^MCP|PPL|UEB/ ),
+				viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '.anonymous-payment-select, #tooltip-icon-addresstype' ), /^MCP|PPL|UEB/ ),
 				stateKey: 'donationFormContent.paymentType'
 			},
 			// Switch bank data input between IBAN/BIC and Account Number/Bank code
@@ -164,13 +164,15 @@ $( function () {
 				stateKey: 'donationFormContent.addressType'
 			},
 			{
-				viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.notice-anonymous' ), 'anonym' ),
-				stateKey: 'donationFormContent.addressType'
-			},
-			{
 				viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.personal-data-full, #notice-unsubscribe' ), /firma|person/ ),
 				stateKey: 'donationFormContent.addressType'
 			},
+			// Show notice for anonymous donations
+			{
+				viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.notice-anonymous' ), 'anonym' ),
+				stateKey: 'donationFormContent.addressType'
+			},
+			// Show "credit card required" notice for recurrent payments via Paypal
 			{
 				viewHandler: WMDE.View.createRecurrentPaypalNoticeHandler(
 					WMDE.View.Animator.createSlidingElementAnimator( $( '.notice-ppl-recurrent' ) )
