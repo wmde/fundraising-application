@@ -30,6 +30,9 @@ use Twig_Environment;
 use Twig_Extensions_Extension_Intl;
 use WMDE\Fundraising\Frontend\DonationContext\DonationAcceptedEventHandler;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
+use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
+use WMDE\Fundraising\Frontend\Infrastructure\PiwikServerSideTracker;
+use WMDE\Fundraising\Frontend\Infrastructure\ServerSideTracker;
 use WMDE\Fundraising\Frontend\Presentation\Honorifics;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\PageNotFoundPresenter;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
@@ -411,6 +414,12 @@ class FunFunFactory {
 
 		$pimple['rendered_page_cache'] = function() {
 			return new VoidCache();
+		};
+
+		$this->pimple['server_side_tracker'] = function () {
+			return new PiwikServerSideTracker(
+				new \PiwikTracker( $this->config['piwik']['site_id'], 'https://' . $this->config['piwik']['baseUrl'] )
+			);
 		};
 
 		return $pimple;
@@ -1281,6 +1290,20 @@ class FunFunFactory {
 
 	public function newPageNotFoundHTMLPresenter(): PageNotFoundPresenter {
 		return new PageNotFoundPresenter( $this->getLayoutTemplate( '404message.html.twig' ) );
+	}
+
+	public function setServerSideTracker( ServerSideTracker $tracker ) {
+		$this->pimple['server_side_tracker'] = function () use ( $tracker )  {
+			return $tracker;
+		};
+	}
+
+	public function newPageViewTracker() {
+		return new PageViewTracker( $this->getServerSideTracker(), $this->config['piwik']['siteUrlBase'] );
+	}
+
+	public function getServerSideTracker(): ServerSideTracker {
+		return $this->pimple['server_side_tracker'];
 	}
 
 }

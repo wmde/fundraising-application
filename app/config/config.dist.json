@@ -139,6 +139,7 @@
 	},
 	"piwik": {
 		"baseUrl": "//tracking.wikimedia.de/",
-		"siteId": 1
+		"siteId": 1,
+		"siteUrlBase": ""
 	}
 }

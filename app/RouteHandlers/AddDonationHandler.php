@@ -49,6 +49,8 @@ class AddDonationHandler {
 			);
 		}
 
+		$this->sendTrackingDataIfNeeded( $request, $responseModel );
+
 		return $this->newHttpResponse( $responseModel );
 	}
 
@@ -180,6 +182,17 @@ class AddDonationHandler {
 		$tracking->setTotalImpressionCount( intval( $request->get( 'impCount', 0 ) ) );
 
 		return $tracking;
+	}
+
+	private function sendTrackingDataIfNeeded( Request $request, AddDonationResponse $responseModel ) {
+		if ( $request->get( 'mbt', '' ) !== '1' || $responseModel->getDonation()->getPaymentType() !== PaymentType::PAYPAL ) {
+			return;
+		}
+		$trackingCode = explode( '/', $request->attributes->get( 'trackingCode' ) );
+		$campaign = $trackingCode[0];
+		$keyword = $trackingCode[1] ?? '';
+		$this->ffFactory->getServerSideTracker()->setIp( $request->getClientIp() );
+		$this->ffFactory->newPageViewTracker()->trackPaypalRedirection( $campaign, $keyword );
 	}
 
 }

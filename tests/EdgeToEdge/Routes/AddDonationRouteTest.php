@@ -11,6 +11,7 @@ use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\ServerSideTrackerSpy;
 
 /**
  * @licence GNU GPL v2+
@@ -657,4 +658,72 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertContains( '12/0', $responseContent );
 	}
 
+	public function testWhenMobileTrackingIsRequested_piwikTrackerIsCalledForPaypalPayment() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setNullMessenger();
+			$client->followRedirects( false );
+
+			$trackerSpy = new ServerSideTrackerSpy();
+			$factory->setServerSideTracker( $trackerSpy );
+
+			$client->request(
+				'POST',
+				'/donation/add',
+				$this->newValidMobilePayPalInput(),
+				[],
+				[ 'REMOTE_ADDR' => '10.1.2.3' ]
+			);
+
+			$client->getResponse();
+
+			$this->assertSame( '10.1.2.3', $trackerSpy->getIps()[0] );
+			$pageViews = $trackerSpy->getPageViews();
+			$this->assertCount( 1, $pageViews, 'The page view should have been tracked' );
+			// Assembled from config.test.json and request values
+			$excpectedSourceUrl = 'http://test-spenden.wikimedia.local/paypal-redir/?piwik_campaign=test&piwik_kwd=gelb';
+			$this->assertEquals( $excpectedSourceUrl, $pageViews[0]['url'] );
+		} );
+	}
+
+	private function newValidMobilePayPalInput() {
+		return [
+			'betrag' => '12,34',
+			'zahlweise' => 'PPL',
+			'periode' => 3,
+			'addressType' => 'anonym',
+			'piwik_campaign' => 'test',
+			'piwik_kwd' => 'gelb',
+			'mbt' => '1' // mobile tracking param
+		];
+	}
+
+	public function testWhenMobileTrackingIsRequested_piwikTrackerIsNotCalledForCreditCardPayment() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setNullMessenger();
+			$client->followRedirects( false );
+
+			$trackerSpy = new ServerSideTrackerSpy();
+			$factory->setServerSideTracker( $trackerSpy );
+
+			$client->request(
+				'POST',
+				'/donation/add',
+				array_merge(
+					$this->newValidCreditCardInput(),
+					[ 'mbt' => '1' ]
+				)
+			);
+
+			$client->getResponse();
+
+			$this->assertCount( 0, $trackerSpy->getPageViews(), 'The page view should not have been tracked' );
+		} );
+	}
+
+	// strictly speaking, we should also write the tests
+	// testWhenMobileTrackingIsRequested_piwikTrackerIsNotCalledForDirectDebitPayment
+	// testWhenMobileTrackingIsRequested_piwikTrackerIsNotCalledForBankTransferPayment
+	// but somehow that feels ugly, especially when thinking about add more payment methods
+	// Maybe there should be a payment-specific ServersideTrackingStrategy class/factory that can be tested outside of
+	// the edge-to-edge routing test? Other ideas?
 }

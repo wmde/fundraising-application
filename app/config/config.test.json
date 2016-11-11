@@ -74,7 +74,8 @@
 	},
 	"piwik": {
 		"baseUrl": "//tracking.wikimedia.de/",
-		"siteId": 1234		
+		"siteId": 1234,
+		"siteUrlBase": "http://test-spenden.wikimedia.local"
 	},
 	"purging-secret": "Not so secret, testing"
 }
