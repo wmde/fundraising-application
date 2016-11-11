@@ -25,7 +25,7 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 		$client = $this->createClient( [], function ( FunFunFactory $factory ) {
 			$factory->setEmailValidator( new SucceedingEmailValidator() );
 		} );
-		
+
 		$client->followRedirects( false );
 
 		$client->request(
