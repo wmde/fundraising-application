@@ -16,6 +16,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\ServerSideTrackerSpy;
 /**
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
+ * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
 class AddDonationRouteTest extends WebRouteTestCase {
 
@@ -680,8 +681,8 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$pageViews = $trackerSpy->getPageViews();
 			$this->assertCount( 1, $pageViews, 'The page view should have been tracked' );
 			// Assembled from config.test.json and request values
-			$excpectedSourceUrl = 'http://test-spenden.wikimedia.local/paypal-redir/?piwik_campaign=test&piwik_kwd=gelb';
-			$this->assertEquals( $excpectedSourceUrl, $pageViews[0]['url'] );
+			$expectedSourceUrl = 'http://test-spenden.wikimedia.local/paypal-redir/?piwik_campaign=test&piwik_kwd=gelb';
+			$this->assertEquals( $expectedSourceUrl, $pageViews[0]['url'] );
 		} );
 	}
 

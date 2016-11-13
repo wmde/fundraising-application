@@ -29,7 +29,7 @@ class ServerSideTrackerSpy implements ServerSideTracker {
 	/**
 	 * @return string[]
 	 */
-	public function getPageViews() {
+	public function getPageViews(): array {
 		return $this->pageViews;
 	}
 
