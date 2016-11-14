@@ -629,12 +629,20 @@
             "title": "Site ID",
             "description": "Unique site id (configured in Piwik)",
             "default": 1
-          }
+          },
+        "siteUrlBase": {
+          "type": "string",
+          "title": "Site url",
+          "description": "Base URL for server-side piwik tracking. It must *not* have a slash at the end",
+          "format": "url",
+          "minLength": 1
+        }
       },
       "additionalProperties": false,
       "required": [
         "baseUrl",
-        "siteId"
+        "siteId",
+        "siteUrlBase"
       ]
     }
   },

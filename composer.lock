@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9d823d0d9917f04b29d3867c3bd283d7",
-    "content-hash": "1cc5bc5759596f5f38176f36cb5473ae",
+    "hash": "6ad0c16b1ca88ff87f16b10e338e3fe9",
+    "content-hash": "4d4feb4941246ee8219f960b96bd5d49",
     "packages": [
         {
             "name": "addwiki/mediawiki-api-base",
@@ -1163,17 +1163,17 @@
             "dist": {
                 "type": "zip",
                 "url": "https://techdoc.micropayment.de/payment/serviceclient/download/mcp-serviceclient_1_19.zip",
-                "reference": "1.19.0",
+                "reference": null,
                 "shasum": null
             },
             "type": "library",
             "autoload": {
+                "files": [
+                    "lib/init.php"
+                ],
                 "classmap": [
                     "lib",
                     "services"
-                ],
-                "files": [
-                    "lib/init.php"
                 ]
             }
         },
@@ -1400,6 +1400,46 @@
                 "dependency injection"
             ],
             "time": "2015-09-11 15:10:35"
+        },
+        {
+            "name": "piwik/piwik-php-tracker",
+            "version": "1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/piwik/piwik-php-tracker.git",
+                "reference": "eb4df1e223d4b377d06785c9b5fb3723d16d4465"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/piwik/piwik-php-tracker/zipball/eb4df1e223d4b377d06785c9b5fb3723d16d4465",
+                "reference": "eb4df1e223d4b377d06785c9b5fb3723d16d4465",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "."
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "The Piwik Team",
+                    "email": "hello@piwik.org",
+                    "homepage": "http://piwik.org/the-piwik-team/"
+                }
+            ],
+            "description": "PHP Client for Piwik Analytics Tracking API",
+            "homepage": "http://piwik.org",
+            "keywords": [
+                "analytics",
+                "piwik",
+                "tracker"
+            ],
+            "time": "2016-07-13 05:26:45"
         },
         {
             "name": "psr/http-message",

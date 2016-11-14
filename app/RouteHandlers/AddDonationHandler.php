@@ -49,7 +49,21 @@ class AddDonationHandler {
 			);
 		}
 
+		$this->sendTrackingDataIfNeeded( $request, $responseModel );
+
 		return $this->newHttpResponse( $responseModel );
+	}
+
+	private function sendTrackingDataIfNeeded( Request $request, AddDonationResponse $responseModel ) {
+		if ( $request->get( 'mbt', '' ) !== '1' || $responseModel->getDonation()->getPaymentType() !== PaymentType::PAYPAL ) {
+			return;
+		}
+
+		$trackingCode = explode( '/', $request->attributes->get( 'trackingCode' ) );
+		$campaign = $trackingCode[0];
+		$keyword = $trackingCode[1] ?? '';
+
+		$this->ffFactory->getPageViewTracker()->trackPaypalRedirection( $campaign, $keyword, $request->getClientIp() );
 	}
 
 	private function newHttpResponse( AddDonationResponse $responseModel ): Response {
@@ -165,8 +179,10 @@ class AddDonationHandler {
 			return true;
 		}
 
-		$minNextTimestamp = \DateTime::createFromFormat( ShowDonationConfirmationHandler::TIMESTAMP_FORMAT, $lastSubmission )
+		$minNextTimestamp =
+			\DateTime::createFromFormat( ShowDonationConfirmationHandler::TIMESTAMP_FORMAT, $lastSubmission )
 			->add( new \DateInterval( $this->ffFactory->getDonationTimeframeLimit() ) );
+
 		if ( $minNextTimestamp > new \DateTime() ) {
 			return false;
 		}

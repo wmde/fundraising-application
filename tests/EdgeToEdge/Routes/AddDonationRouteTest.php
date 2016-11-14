@@ -9,12 +9,14 @@ use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 
 /**
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
+ * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
 class AddDonationRouteTest extends WebRouteTestCase {
 
@@ -655,6 +657,64 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'BEZ/UEB', $responseContent );
 		$this->assertContains( '5.00/12.34', $responseContent );
 		$this->assertContains( '12/0', $responseContent );
+	}
+
+	public function testWhenMobileTrackingIsRequested_piwikTrackerIsCalledForPaypalPayment() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setNullMessenger();
+			$client->followRedirects( false );
+
+			$tracker = $this->getMockBuilder( PageViewTracker::class )->disableOriginalConstructor()->getMock();
+			$tracker->expects( $this->once() )
+				->method( 'trackPaypalRedirection' )
+				->with( 'test', 'gelb', '10.1.2.3' );
+			$factory->setPageViewTracker( $tracker );
+
+			$client->request(
+				'POST',
+				'/donation/add',
+				$this->newValidMobilePayPalInput(),
+				[],
+				[ 'REMOTE_ADDR' => '10.1.2.3' ]
+			);
+
+			$client->getResponse();
+		} );
+	}
+
+	private function newValidMobilePayPalInput() {
+		return [
+			'betrag' => '12,34',
+			'zahlweise' => 'PPL',
+			'periode' => 3,
+			'addressType' => 'anonym',
+			'piwik_campaign' => 'test',
+			'piwik_kwd' => 'gelb',
+			'mbt' => '1' // mobile tracking param
+		];
+	}
+
+	public function testWhenMobileTrackingIsRequested_piwikTrackerIsNotCalledForNonPaypalPayment() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setNullMessenger();
+			$client->followRedirects( false );
+
+			$tracker = $this->getMockBuilder( PageViewTracker::class )->disableOriginalConstructor()->getMock();
+			$tracker->expects( $this->never() )
+				->method( 'trackPaypalRedirection' );
+			$factory->setPageViewTracker( $tracker );
+
+			$client->request(
+				'POST',
+				'/donation/add',
+				array_merge(
+					$this->newValidCreditCardInput(),
+					[ 'mbt' => '1' ]
+				)
+			);
+
+			$client->getResponse();
+		} );
 	}
 
 }
