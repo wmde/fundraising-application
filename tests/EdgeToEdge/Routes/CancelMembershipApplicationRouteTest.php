@@ -21,7 +21,6 @@ class CancelMembershipApplicationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidUpdateToken_confirmationPageIsShown() {
 		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
-			$factory->setNullMessenger();
 
 			$applicationId = $this->storeApplication( $factory->getEntityManager() );
 

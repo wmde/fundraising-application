@@ -43,7 +43,6 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 	// @codingStandardsIgnoreStart
 	protected function onTestEnvironmentCreated( FunFunFactory $factory, array $config ) {
 		// @codingStandardsIgnoreEnd
-		$factory->setNullMessenger();
 	}
 
 	public function testValidSubscriptionRequestGetsPersisted() {

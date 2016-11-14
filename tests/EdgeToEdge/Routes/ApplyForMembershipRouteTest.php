@@ -73,7 +73,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	public function testGivenRequestWithInsufficientAmount_failureResponseIsReturned() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setNullMessenger();
 
 			$httpParameters = $this->newValidHttpParameters();
 			$httpParameters['membership_fee'] = '1.00'; // TODO: change to localized
@@ -109,7 +108,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	public function testFlagForShowingMembershipTypeOptionGetsPassedAround() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setNullMessenger();
 
 			$httpParameters = $this->newValidHttpParameters();
 			$httpParameters['membership_fee'] = '0';
@@ -127,7 +125,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequest_applicationIsPersisted() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setNullMessenger();
 
 			$client->request(
 				'POST',
@@ -148,7 +145,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequest_confirmationPageContainsCancellationParameters() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setNullMessenger();
 			$factory->setTokenGenerator( new FixedTokenGenerator( self::FIXED_TOKEN ) );
 
 			$client->request(
@@ -166,7 +162,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequest_requestIsRedirected() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setNullMessenger();
 
 			$client->followRedirects( false );
 
@@ -184,7 +179,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	public function testWhenApplicationGetsPersisted_timestampIsStoredInCookie() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setNullMessenger();
 
 			$client->request(
 				'POST',
@@ -201,7 +195,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	public function testWhenMultipleMembershipFormSubmissions_requestGetsRejected() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setNullMessenger();
 			$client->getCookieJar()->set( new Cookie( 'memapp_timestamp', $this->getPastTimestamp() ) );
 
 			$client->request(
@@ -216,7 +209,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	public function testWhenMultipleMembershipInAccordanceToTimeLimit_isNotRejected() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setNullMessenger();
 			$client->getCookieJar()->set( new Cookie( 'memapp_timestamp', $this->getPastTimestamp( 'PT12M' ) ) );
 
 			$client->request(
@@ -235,7 +227,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	public function testWhenTrackingCookieExists_valueIsPersisted() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setNullMessenger();
 			$client->getCookieJar()->set( new Cookie( 'spenden_tracking', 'test/blue' ) );
 
 			$client->request(
@@ -258,7 +249,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequestUsingPayPal_applicationIsPersisted() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setNullMessenger();
 
 			$client->request(
 				'POST',
@@ -308,7 +298,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequestUsingPayPal_requestIsRedirectedToPayPalUrl() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setNullMessenger();
 
 			$client->followRedirects( false );
 
