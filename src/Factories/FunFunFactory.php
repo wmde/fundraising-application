@@ -1302,7 +1302,7 @@ class FunFunFactory {
 
 	public function newServerSideTracker(): ServerSideTracker {
 		return new PiwikServerSideTracker(
-			new \PiwikTracker( $this->config['piwik']['site_id'], 'https://' . $this->config['piwik']['baseUrl'] )
+			new \PiwikTracker( $this->config['piwik']['siteId'], 'https://' . $this->config['piwik']['baseUrl'] )
 		);
 	}
 
