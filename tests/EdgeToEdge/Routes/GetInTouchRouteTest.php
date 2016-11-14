@@ -22,13 +22,10 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_contactRequestIsProperlyProcessed() {
-		$client = $this->createClient(
-			[],
-			function ( FunFunFactory $factory ) {
-				$factory->setEmailValidator( new SucceedingEmailValidator() );
-			},
-			self::DISABLE_DEBUG
-		);
+		$client = $this->createClient( [], function ( FunFunFactory $factory ) {
+			$factory->setEmailValidator( new SucceedingEmailValidator() );
+		} );
+
 		$client->followRedirects( false );
 
 		$client->request(
@@ -68,7 +65,6 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 		$errorsFound = preg_match( '/Errors: (\\d+)/s', $content, $errorMatches );
 
 		$this->assertContains( 'text/html', $contentType, 'Wrong content type: ' . $contentType );
-		$this->assertSame( 1, $errorsFound, 'No error count found in test template' );
 		$this->assertSame( 1, $errorsFound, 'No error count found in test template' );
 		$this->assertGreaterThan( 0, (int) $errorMatches[1], 'Error list was empty' );
 		$this->assertContains( 'First Name: Curious', $content );
