@@ -27,6 +27,8 @@ class TestEnvironment {
 
 		$installer->install();
 
+		$instance->factory->setNullMessenger();
+
 		return $instance;
 	}
 
