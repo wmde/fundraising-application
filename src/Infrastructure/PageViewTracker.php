@@ -20,11 +20,12 @@ class PageViewTracker {
 		$this->trackingUrlBase = $trackingUrlBase;
 	}
 
-	public function trackPaypalRedirection( string $campaign, string $keyword ) {
-		$this->trackPageView(
+	public function trackPaypalRedirection( string $campaign, string $keyword, string $visitorIP ) {
+		$this->tracker->trackPageView(
 			$this->getPaypalRedirectionTrackingUrl( $campaign, $keyword ),
 			self::TRACKING_TITLE_PAYPAL_REDIRECT
 		);
+		$this->tracker->setIp( $visitorIP );
 	}
 
 	private function getPaypalRedirectionTrackingUrl( string $campaign, string $keyword ): string {
@@ -32,9 +33,4 @@ class PageViewTracker {
 			'?piwik_campaign=' . urlencode( $campaign ) .
 			'&piwik_kwd=' . urlencode( $keyword );
 	}
-
-	private function trackPageView( string $trackingUrl, string $title ) {
-		$this->tracker->trackPageView( $trackingUrl, $title );
-	}
-
 }

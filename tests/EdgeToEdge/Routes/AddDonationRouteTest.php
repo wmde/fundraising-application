@@ -9,9 +9,9 @@ use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\ServerSideTrackerSpy;
 
 /**
  * @licence GNU GPL v2+
@@ -664,8 +664,11 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$factory->setNullMessenger();
 			$client->followRedirects( false );
 
-			$trackerSpy = new ServerSideTrackerSpy();
-			$factory->setServerSideTracker( $trackerSpy );
+			$tracker = $this->getMockBuilder( PageViewTracker::class )->disableOriginalConstructor()->getMock();
+			$tracker->expects( $this->once() )
+				->method( 'trackPaypalRedirection' )
+				->with( 'test', 'gelb', '10.1.2.3' );
+			$factory->setPageViewTracker( $tracker );
 
 			$client->request(
 				'POST',
@@ -676,13 +679,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			);
 
 			$client->getResponse();
-
-			$this->assertSame( '10.1.2.3', $trackerSpy->getIps()[0] );
-			$pageViews = $trackerSpy->getPageViews();
-			$this->assertCount( 1, $pageViews, 'The page view should have been tracked' );
-			// Assembled from config.test.json and request values
-			$expectedSourceUrl = 'http://test-spenden.wikimedia.local/paypal-redir/?piwik_campaign=test&piwik_kwd=gelb';
-			$this->assertEquals( $expectedSourceUrl, $pageViews[0]['url'] );
 		} );
 	}
 
@@ -698,13 +694,15 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	public function testWhenMobileTrackingIsRequested_piwikTrackerIsNotCalledForCreditCardPayment() {
+	public function testWhenMobileTrackingIsRequested_piwikTrackerIsNotCalledForNonPaypalPayment() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setNullMessenger();
 			$client->followRedirects( false );
 
-			$trackerSpy = new ServerSideTrackerSpy();
-			$factory->setServerSideTracker( $trackerSpy );
+			$tracker = $this->getMockBuilder( PageViewTracker::class )->disableOriginalConstructor()->getMock();
+			$tracker->expects( $this->never() )
+				->method( 'trackPaypalRedirection' );
+			$factory->setPageViewTracker( $tracker );
 
 			$client->request(
 				'POST',
@@ -716,15 +714,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			);
 
 			$client->getResponse();
-
-			$this->assertCount( 0, $trackerSpy->getPageViews(), 'The page view should not have been tracked' );
 		} );
 	}
 
-	// strictly speaking, we should also write the tests
-	// testWhenMobileTrackingIsRequested_piwikTrackerIsNotCalledForDirectDebitPayment
-	// testWhenMobileTrackingIsRequested_piwikTrackerIsNotCalledForBankTransferPayment
-	// but somehow that feels ugly, especially when thinking about add more payment methods
-	// Maybe there should be a payment-specific ServersideTrackingStrategy class/factory that can be tested outside of
-	// the edge-to-edge routing test? Other ideas?
 }

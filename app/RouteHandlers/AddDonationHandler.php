@@ -63,8 +63,7 @@ class AddDonationHandler {
 		$campaign = $trackingCode[0];
 		$keyword = $trackingCode[1] ?? '';
 
-		$this->ffFactory->getServerSideTracker()->setIp( $request->getClientIp() );
-		$this->ffFactory->newPageViewTracker()->trackPaypalRedirection( $campaign, $keyword );
+		$this->ffFactory->getPageViewTracker()->trackPaypalRedirection( $campaign, $keyword, $request->getClientIp() );
 	}
 
 	private function newHttpResponse( AddDonationResponse $responseModel ): Response {

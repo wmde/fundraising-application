@@ -37,7 +37,7 @@ class ServerSideTrackerSpy implements ServerSideTracker {
 		$this->ips[] = $ip;
 	}
 
-	public function getIps(): array {
+	public function getCallsToSetIp(): array {
 		return $this->ips;
 	}
 
