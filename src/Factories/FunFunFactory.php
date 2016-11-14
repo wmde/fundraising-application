@@ -1301,8 +1301,10 @@ class FunFunFactory {
 	}
 
 	public function newServerSideTracker(): ServerSideTracker {
+		// the "https:" prefix does NOT get any slashes because baseURL is stored in a protocol-agnostic way
+		// (e.g. "//tracking.wikimedia.de" )
 		return new PiwikServerSideTracker(
-			new \PiwikTracker( $this->config['piwik']['siteId'], 'https://' . $this->config['piwik']['baseUrl'] )
+			new \PiwikTracker( $this->config['piwik']['siteId'], 'https:' . $this->config['piwik']['baseUrl'] )
 		);
 	}
 
