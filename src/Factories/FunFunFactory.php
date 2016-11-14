@@ -416,7 +416,7 @@ class FunFunFactory {
 			return new VoidCache();
 		};
 
-		$this->pimple['page_view_tracker'] = function () {
+		$pimple['page_view_tracker'] = function () {
 			return new PageViewTracker( $this->newServerSideTracker(), $this->config['piwik']['siteUrlBase'] );
 		};
 
