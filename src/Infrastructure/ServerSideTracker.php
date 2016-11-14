@@ -13,6 +13,7 @@ namespace WMDE\Fundraising\Frontend\Infrastructure;
 interface ServerSideTracker {
 
 	public function trackPageView( string $url, string $title );
+
 	public function setIp( string $ip );
 
 }

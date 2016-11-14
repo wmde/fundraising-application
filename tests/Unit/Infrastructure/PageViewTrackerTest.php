@@ -1,6 +1,8 @@
 <?php
 
-namespace WMDE\Fundraising\Tests\Integration;
+declare( strict_types = 1 );
+
+namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ServerSideTrackerSpy;
 use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
@@ -21,11 +23,16 @@ class PageViewTrackerTest extends \PHPUnit_Framework_TestCase {
 
 		$trackedPageViews = $tracker->getPageViews();
 		$this->assertCount( 1, $trackedPageViews );
-		$this->assertEquals(
+
+		$this->assertSame(
 			'http://awesome.url/paypal-redir/?piwik_campaign=foo-campaign&piwik_kwd=foo-keyword',
 			$trackedPageViews[0]['url']
 		);
-		$this->assertEquals( 'Redirection from mobile banner to PayPal', $trackedPageViews[0]['title'] );
+
+		$this->assertSame(
+			'Redirection from mobile banner to PayPal',
+			$trackedPageViews[0]['title']
+		);
 	}
 
 }

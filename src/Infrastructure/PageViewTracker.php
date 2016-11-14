@@ -13,7 +13,6 @@ class PageViewTracker {
 	const TRACKING_TITLE_PAYPAL_REDIRECT = 'Redirection from mobile banner to PayPal';
 
 	private $tracker;
-
 	private $trackingUrlBase;
 
 	public function __construct( ServerSideTracker $tracker, string $trackingUrlBase ) {
@@ -22,14 +21,16 @@ class PageViewTracker {
 	}
 
 	public function trackPaypalRedirection( string $campaign, string $keyword ) {
-		$trackingUrl = $this->getPaypalRedirectionTrackingUrl( $campaign, $keyword );
-		$this->trackPageView( $trackingUrl, self::TRACKING_TITLE_PAYPAL_REDIRECT );
+		$this->trackPageView(
+			$this->getPaypalRedirectionTrackingUrl( $campaign, $keyword ),
+			self::TRACKING_TITLE_PAYPAL_REDIRECT
+		);
 	}
 
 	private function getPaypalRedirectionTrackingUrl( string $campaign, string $keyword ): string {
 		return $this->trackingUrlBase . '/paypal-redir/' .
-		'?piwik_campaign=' . urlencode( $campaign ) .
-		'&piwik_kwd=' . urlencode( $keyword );
+			'?piwik_campaign=' . urlencode( $campaign ) .
+			'&piwik_kwd=' . urlencode( $keyword );
 	}
 
 	private function trackPageView( string $trackingUrl, string $title ) {
