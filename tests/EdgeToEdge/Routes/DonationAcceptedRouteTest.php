@@ -51,7 +51,6 @@ class DonationAcceptedRouteTest extends WebRouteTestCase {
 
 	public function testGivenKnownIdAndValidUpdateToken_successIsReturned() {
 		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
-			$factory->setNullMessenger();
 
 			$existingDonationId = $this->storeDonation( $factory );
 

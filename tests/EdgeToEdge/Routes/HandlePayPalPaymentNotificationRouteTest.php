@@ -41,8 +41,6 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 				\DateTime::createFromFormat( 'Y-m-d H:i:s', '2039-12-31 23:59:59' )
 			) );
 
-			$factory->setNullMessenger();
-
 			$factory->getDonationRepository()->storeDonation( ValidDonation::newIncompletePayPalDonation() );
 
 			$factory->setPayPalPaymentNotificationVerifier(
@@ -268,7 +266,6 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			$factory->setPayPalPaymentNotificationVerifier(
 				$this->newSucceedingNotifierMock( $this->newSubscriptionModificationParams() )
 			);
-			$factory->setNullMessenger();
 			$logger = new LoggerSpy();
 			$factory->setPaypalLogger( $logger );
 

@@ -56,7 +56,6 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 			) );
 
 			$factory->setCreditCardService( new FakeCreditCardService() );
-			$factory->setNullMessenger();
 
 			$factory->getDonationRepository()->storeDonation( ValidDonation::newIncompleteCreditCardDonation() );
 

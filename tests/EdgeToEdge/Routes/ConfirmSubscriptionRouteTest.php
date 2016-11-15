@@ -18,7 +18,6 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 	// @codingStandardsIgnoreStart
 	protected function onTestEnvironmentCreated( FunFunFactory $factory, array $config ) {
 		// @codingStandardsIgnoreEnd
-		$factory->setNullMessenger();
 	}
 
 	private function newSubscriptionAddress() {

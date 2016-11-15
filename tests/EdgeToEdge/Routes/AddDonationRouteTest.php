@@ -31,7 +31,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequest_donationGetsPersisted() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setNullMessenger();
 
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
 			$client->followRedirects( false );
@@ -48,7 +47,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testWhenDonationGetsPersisted_timestampIsStoredInCookie() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setNullMessenger();
 
 			$client->followRedirects( true );
 			$client->request(
@@ -67,7 +65,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testWhenMultipleDonationFormSubmissions_requestGetsRejected() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setNullMessenger();
 			$client->getCookieJar()->set( new Cookie( 'donation_timestamp', $this->getPastTimestamp() ) );
 
 			$client->request(
@@ -82,7 +79,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testWhenMultipleDonationsInAccordanceToTimeLimit_requestIsNotRejected() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setNullMessenger();
 			$client->getCookieJar()->set(
 				new Cookie(
 					'donation_timestamp',
@@ -173,7 +169,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequest_confirmationPageContainsEnteredData() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setNullMessenger();
 
 			$client->request(
 				'POST',
@@ -205,7 +200,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$factory = null;
 
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setNullMessenger();
 
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
 			$client->followRedirects( false );
@@ -279,7 +273,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenComplementableBankData_donationStillGetsPersisted() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setNullMessenger();
 
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
 			$client->followRedirects( false );
@@ -329,7 +322,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidPayPalData_redirectsToPayPal() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setNullMessenger();
 			$client->followRedirects( false );
 
 			$client->request(
@@ -355,7 +347,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidCreditCardData_showsIframeEmbeddingPage() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setNullMessenger();
 
 			$client->request(
 				'POST',
@@ -381,7 +372,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenInvalidRequest_formIsReloadedAndPrefilled() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setNullMessenger();
 
 			$client->request(
 				'POST',
@@ -413,7 +403,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenInvalidRequest_formStillContainsBannerTrackingData() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setNullMessenger();
 
 			$client->request(
 				'POST',
@@ -433,7 +422,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenNegativeDonationAmount_formIsReloadedAndPrefilledWithZero() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setNullMessenger();
 
 			$formValues = $this->newInvalidFormInput();
 			$formValues['betrag'] = '-5,00';
@@ -484,7 +472,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenInvalidAnonymousRequest_formIsReloadedAndPrefilled() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setNullMessenger();
 
 			$client->request(
 				'POST',
@@ -512,7 +499,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequest_tokensAreReturned() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setNullMessenger();
 			$factory->setTokenGenerator( new FixedTokenGenerator( self::SOME_TOKEN ) );
 
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
@@ -532,7 +518,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequest_clientIsRedirected() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setNullMessenger();
 			$factory->setTokenGenerator( new FixedTokenGenerator( self::SOME_TOKEN ) );
 			$client->followRedirects( false );
 
@@ -548,7 +533,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testWhenTrackingCookieExists_valueIsPersisted() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setNullMessenger();
 			$client->getCookieJar()->set( new Cookie( 'spenden_tracking', 'test/blue' ) );
 
 			$client->request(

@@ -18,7 +18,6 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 	// @codingStandardsIgnoreStart
 	protected function onTestEnvironmentCreated( FunFunFactory $factory, array $config ) {
 		// @codingStandardsIgnoreEnd
-		$factory->setNullMessenger();
 	}
 
 	public function testGivenValidRequest_contactRequestIsProperlyProcessed() {
