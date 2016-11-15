@@ -24,12 +24,13 @@ class DonationFormPresenter {
 	}
 
 	public function present( Euro $amount, string $paymentType, int $paymentInterval, bool $paymentDataIsValid,
-							 DonationTrackingInfo $trackingInfo ): string {
+							 DonationTrackingInfo $trackingInfo, string $addressType ): string {
 		return $this->template->render( [
 			'initialFormValues' => [
 				'amount' => $this->amountFormatter->format( $amount ),
 				'paymentType' => $paymentType,
-				'paymentIntervalInMonths' => $paymentInterval
+				'paymentIntervalInMonths' => $paymentInterval,
+				'addressType' => $addressType
 			],
 			'validationResult' => [
 				'paymentData' => $paymentDataIsValid
