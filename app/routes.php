@@ -406,7 +406,8 @@ $app->get( 'donation/new', function ( Request $request ) use ( $ffFactory ) {
 			$request->get( 'zahlweise', '' ),
 			intval( $request->get( 'periode', 0 ) ),
 			$validationResult->isSuccessful(),
-			$trackingInfo
+			$trackingInfo,
+			$request->get( 'addressType', 'person' )
 		)
 	);
 } )->method( 'POST|GET' );
