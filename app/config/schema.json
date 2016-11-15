@@ -620,9 +620,10 @@
           "baseUrl": {
             "type": "string",
             "title": "Tracker URL",
-            "description": "Base URL for the Piwik installation",
+            "description": "Base URL for the Piwik installation. Make sure it starts with //, not with http:// or https://, that way the browser will automatically select the right transport when the URL is printed in a template",
             "format": "url",
-            "default": "//tracking.wikimedia.de/"
+            "default": "//tracking.wikimedia.de/",
+            "pattern": "^//"
           },
           "siteId": {
             "type": "integer",
