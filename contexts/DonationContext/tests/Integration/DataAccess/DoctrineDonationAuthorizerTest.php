@@ -127,7 +127,6 @@ class DoctrineDonationAuthorizerTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testWhenDonationWithoutTokenExists() {
 		$donation = new Donation();
-		$donation->encodeAndSetData( [] );
 
 		$this->specify(
 			'given correct donation id and a token, update authorization fails',
