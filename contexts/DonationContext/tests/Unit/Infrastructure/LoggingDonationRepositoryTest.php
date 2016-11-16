@@ -11,7 +11,7 @@ use WMDE\Fundraising\Frontend\DonationContext\Domain\Repositories\StoreDonationE
 use WMDE\Fundraising\Frontend\DonationContext\Infrastructure\LoggingDonationRepository;
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\FakeDonationRepository;
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidDonation;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\LoggerSpy;
+use WMDE\PsrLogTestDoubles\LoggerSpy;
 
 /**
  * @covers WMDE\Fundraising\Frontend\DonationContext\Infrastructure\LoggingDonationRepository
@@ -68,10 +68,10 @@ class LoggingDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$this->assertCount( 1, $logCalls, 'There should be exactly one log call' );
 		$logCall = $logCalls[0];
 
-		$this->assertSame( LogLevel::CRITICAL, $logCall[0] );
-		$this->assertInternalType( 'array', $logCall[2], 'the third log argument should be an array' );
-		$this->assertArrayHasKey( 'exception', $logCall[2], 'the log context should contain an exception element' );
-		$this->assertInstanceOf( $expectedExceptionType, $logCall[2]['exception'] );
+		$this->assertSame( LogLevel::CRITICAL, $logCall['level'] );
+		$this->assertInternalType( 'array', $logCall['context'], 'the third log argument should be an array' );
+		$this->assertArrayHasKey( 'exception', $logCall['context'], 'the log context should contain an exception element' );
+		$this->assertInstanceOf( $expectedExceptionType, $logCall['context']['exception'] );
 	}
 
 	public function testWhenGetDonationByIdDoesNotThrow_returnValueIsReturnedWithoutLogging() {
@@ -85,7 +85,7 @@ class LoggingDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		);
 
 		$this->assertEquals( $donation, $loggingRepo->getDonationById( 1337 ) );
-		$logger->assertNoCalls();
+		$logger->assertNoLoggingCallsWhereMade();
 	}
 
 	public function testWhenStoreDonationThrowException_itIsLogged() {

@@ -9,12 +9,10 @@ use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Stream;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Repositories\DonationRepository;
-use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidPayPalNotificationRequest;
+use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\LoggingPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
-use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\LoggerSpy;
@@ -220,7 +218,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			);
 
 			$logger->assertCalledOnceWithMessage( 'Unhandled PayPal instant payment notification', $this );
-			$context = $logger->getLogCalls()[0][LoggerSpy::CONTEXT_INDEX];
+			$context = $logger->getLogCalls()[0]['context'];
 			$this->assertSame( 'Pending', $context['post_vars']['payment_status'] );
 		} );
 	}
@@ -278,7 +276,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
 
 			$logger->assertCalledOnceWithMessage( 'Unhandled PayPal subscription notification', $this );
-			$context = $logger->getLogCalls()[0][LoggerSpy::CONTEXT_INDEX];
+			$context = $logger->getLogCalls()[0]['context'];
 			$this->assertSame( 'subscr_modify', $context['post_vars']['txn_type'] );
 		} );
 	}
