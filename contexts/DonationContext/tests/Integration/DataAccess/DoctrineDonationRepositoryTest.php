@@ -63,9 +63,6 @@ class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$actual->setCreationTime( null );
 
 		$this->assertEquals( $expected->getDecodedData(), $actual->getDecodedData() );
-		// TODO: is this still necessary?
-		$expected->encodeAndSetData( [] );
-		$actual->encodeAndSetData( [] );
 
 		$this->assertEquals( $expected, $actual );
 	}

@@ -58,8 +58,6 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit_Framework_Tes
 		$actual->setCreationTime( null );
 
 		$this->assertEquals( $expected->getDecodedData(), $actual->getDecodedData() );
-		$expected->encodeAndSetData( [] );
-		$actual->encodeAndSetData( [] );
 
 		$this->assertEquals( $expected, $actual );
 	}
