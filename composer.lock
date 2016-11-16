@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0ea6f774ad08382a4d7fa436112dd62e",
-    "content-hash": "337480aa3541c54423622c42334ba9e6",
+    "hash": "2d325231feb1761701859410ab75ad52",
+    "content-hash": "53ed77e1ca57e23565f18da1088584ee",
     "packages": [
         {
             "name": "addwiki/mediawiki-api-base",
@@ -2544,16 +2544,16 @@
         },
         {
             "name": "wmde/fundraising-store",
-            "version": "dev-master",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/FundraisingStore.git",
-                "reference": "5cade9ade31bf9f547a517bdfd9d4cfa02b6d8ec"
+                "reference": "7baeba3863600e7dcdc4bcd766c3919ca123ff6e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/FundraisingStore/zipball/5cade9ade31bf9f547a517bdfd9d4cfa02b6d8ec",
-                "reference": "5cade9ade31bf9f547a517bdfd9d4cfa02b6d8ec",
+                "url": "https://api.github.com/repos/wmde/FundraisingStore/zipball/7baeba3863600e7dcdc4bcd766c3919ca123ff6e",
+                "reference": "7baeba3863600e7dcdc4bcd766c3919ca123ff6e",
                 "shasum": ""
             },
             "require": {
@@ -2587,7 +2587,7 @@
                 "GPL-2.0+"
             ],
             "description": "Persistence services around the fundraising database",
-            "time": "2016-11-16 09:50:03"
+            "time": "2016-11-16 10:36:10"
         },
         {
             "name": "wmde/page-retriever",
@@ -4777,9 +4777,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "wmde/fundraising-store": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
