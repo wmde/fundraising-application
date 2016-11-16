@@ -35,7 +35,6 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 			$subscription->setHexConfirmationCode( 'deadbeef' );
 			$subscription->setEmail( 'tester@example.com' );
 			$subscription->setAddress( $this->newSubscriptionAddress() );
-			$subscription->setStatus( Subscription::STATUS_NEW );
 
 			$factory->getSubscriptionRepository()->storeSubscription( $subscription );
 		} );
@@ -80,7 +79,7 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 			$subscription->setHexConfirmationCode( 'deadbeef' );
 			$subscription->setEmail( 'tester@example.com' );
 			$subscription->setAddress( $this->newSubscriptionAddress() );
-			$subscription->setStatus( Subscription::STATUS_CONFIRMED );
+			$subscription->markAsConfirmed();
 
 			$factory->getSubscriptionRepository()->storeSubscription( $subscription );
 		} );

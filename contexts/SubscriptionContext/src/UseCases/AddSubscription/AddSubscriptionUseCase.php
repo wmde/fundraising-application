@@ -48,7 +48,7 @@ class AddSubscriptionUseCase {
 		}
 
 		if ( $this->subscriptionValidator->needsModeration( $subscription ) ) {
-			$subscription->setStatus( Subscription::STATUS_MODERATION );
+			$subscription->markForModeration();
 		}
 
 		$this->subscriptionRepository->storeSubscription( $subscription );

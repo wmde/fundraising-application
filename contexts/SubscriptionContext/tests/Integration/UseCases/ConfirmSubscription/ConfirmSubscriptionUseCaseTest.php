@@ -61,7 +61,7 @@ class ConfirmSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase {
 
 	public function testGivenASubscriptionWithWrongStatus_anErrorResponseIsCreated() {
 		$subscription = $this->newSubscription();
-		$subscription->setStatus( Subscription::STATUS_CONFIRMED );
+		$subscription->markAsConfirmed();
 
 		$repo = new InMemorySubscriptionRepository();
 		$repo->storeSubscription( $subscription );
@@ -90,11 +90,7 @@ class ConfirmSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$useCase = new ConfirmSubscriptionUseCase( $repo, $this->newMailer() );
 		$useCase->confirmSubscription( self::CONFIRMATION_CODE );
 
-		$this->assertSame(
-			Subscription::STATUS_CONFIRMED,
-			$repo->getSubscriptions()[0]->getStatus(),
-			'Confirmed status was not set.'
-		);
+		$this->assertFalse( $repo->getSubscriptions()[0]->isUnconfirmed(), 'Status needs to be set to confirmed' );
 	}
 
 	public function testGivenASubscription_aConfirmationMailIsSent() {

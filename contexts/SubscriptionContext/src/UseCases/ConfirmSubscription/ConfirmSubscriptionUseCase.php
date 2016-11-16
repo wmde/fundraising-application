@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\ConfirmSubscription;
 
-use WMDE\Fundraising\Entities\Subscription;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Domain\Repositories\SubscriptionRepository;
@@ -31,18 +30,21 @@ class ConfirmSubscriptionUseCase {
 		$subscription = $this->subscriptionRepository->findByConfirmationCode( $confirmationCode );
 
 		if ( $subscription === null ) {
-			$errorMsg = 'subscription_confirmation_code_not_found';
-			return ValidationResponse::newFailureResponse( [ new ConstraintViolation( $confirmationCode, $errorMsg ) ] );
+			return ValidationResponse::newFailureResponse( [
+				new ConstraintViolation( $confirmationCode, 'subscription_confirmation_code_not_found' )
+			] );
 		}
 
 		if ( $subscription->isUnconfirmed() ) {
-			$subscription->setStatus( Subscription::STATUS_CONFIRMED );
+			$subscription->markAsConfirmed();
 			$this->subscriptionRepository->storeSubscription( $subscription );
 			$this->mailer->sendMail( new EmailAddress( $subscription->getEmail() ), [ 'subscription' => $subscription ] );
 			return ValidationResponse::newSuccessResponse();
 		}
 
-		$errorMsg = 'subscription_already_confirmed';
-		return ValidationResponse::newFailureResponse( [ new ConstraintViolation( $confirmationCode, $errorMsg ) ] );
+		return ValidationResponse::newFailureResponse( [
+			new ConstraintViolation( $confirmationCode, 'subscription_already_confirmed' )
+		] );
 	}
+
 }
