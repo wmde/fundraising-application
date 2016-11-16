@@ -26,7 +26,9 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 		'city' => 'Berlin',
 		'postcode' => '12345',
 		'email' => 'jeroendedauw@gmail.com',
-		'wikilogin' => true
+		'wikilogin' => true,
+		'tracking' => 'test/blue',
+		'source' => 'testCampaign',
 	];
 
 	private $invalidFormInput = [
@@ -72,6 +74,8 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 		$this->assertSame( 'Berlin', $address->getCity() );
 		$this->assertSame( '12345', $address->getPostcode() );
 		$this->assertSame( 'jeroendedauw@gmail.com', $subscription->getEmail() );
+		$this->assertSame( 'test/blue', $subscription->getTracking() );
+		$this->assertSame( 'testCampaign', $subscription->getSource() );
 	}
 
 	public function testGivenValidDataAndNoContentType_routeReturnsRedirectToSucccessPage() {

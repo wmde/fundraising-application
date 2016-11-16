@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Integration\SubscriptionContext\UseCases\AddSubscription;
+namespace WMDE\Fundraising\Frontend\SubscriptionContext\Tests\Integration\UseCases\AddSubscription;
 
 use PHPUnit_Framework_MockObject_MockObject;
 use WMDE\Fundraising\Entities\Subscription;
@@ -86,8 +86,9 @@ class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$this->repo->expects( $this->once() )
 			->method( 'storeSubscription' )
 			->with( $this->callback( function( Subscription $subscription ) {
-					return $subscription->getStatus() === Subscription::STATUS_MODERATION;
+					return $subscription->needsModeration();
 			} ) );
+
 		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->mailer );
 		$useCase->addSubscription( $this->createValidSubscriptionRequest() );
 	}

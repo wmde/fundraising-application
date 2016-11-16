@@ -16,6 +16,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\AddDonationHandler;
+use WMDE\Fundraising\Frontend\App\RouteHandlers\AddSubscriptionHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\ApplyForMembershipHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\PayPalNotificationHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\RouteRedirectionHandler;
@@ -238,36 +239,8 @@ $app->get(
 $app->post(
 	'contact/subscribe',
 	function( Application $app, Request $request ) use ( $ffFactory ) {
-		$useCase = $ffFactory->newAddSubscriptionUseCase();
-
-		$subscriptionRequest = new SubscriptionRequest();
-		$subscriptionRequest->setAddress( $request->get( 'address', '' ) );
-		$subscriptionRequest->setCity( $request->get( 'city', '' ) );
-		$subscriptionRequest->setPostcode( $request->get( 'postcode', '' ) );
-
-		$subscriptionRequest->setFirstName( $request->get( 'firstName', '' ) );
-		$subscriptionRequest->setLastName( $request->get( 'lastName', '' ) );
-		$subscriptionRequest->setSalutation( $request->get( 'salutation', '' ) );
-		$subscriptionRequest->setTitle( $request->get( 'title', '' ) );
-
-		$subscriptionRequest->setEmail( $request->get( 'email', '' ) );
-
-		$subscriptionRequest->setWikiloginFromValues( [
-			$request->request->get( 'wikilogin' ),
-			$request->cookies->get( 'spenden_wikilogin' ),
-		] );
-
-		$responseModel = $useCase->addSubscription( $subscriptionRequest );
-		if ( $app['request_stack.is_json'] ) {
-			return $app->json( $ffFactory->newAddSubscriptionJSONPresenter()->present( $responseModel ) );
-		}
-		if ( $responseModel->isSuccessful() ) {
-			if ( $responseModel->needsModeration() ) {
-				return $app->redirect( $app['url_generator']->generate('page', [ 'pageName' => 'Subscription_Moderation' ] ) );
-			}
-			return $app->redirect( $app['url_generator']->generate('page', [ 'pageName' => 'Subscription_Success' ] ) );
-		}
-		return $ffFactory->newAddSubscriptionHTMLPresenter()->present( $responseModel, $request->request->all() );
+		return ( new AddSubscriptionHandler( $ffFactory, $app ) )
+			->handle( $request );
 	}
 )
 ->bind( 'subscribe' );

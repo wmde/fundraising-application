@@ -19,6 +19,8 @@ class SubscriptionRequest {
 	private $postcode = '';
 	private $city = '';
 	private $wikilogin = false;
+	private $trackingString = '';
+	private $source = '';
 
 	public function getSalutation(): string {
 		return $this->salutation;
@@ -90,6 +92,22 @@ class SubscriptionRequest {
 
 	public function setWikilogin( bool $wikilogin ) {
 		$this->wikilogin = $wikilogin;
+	}
+
+	public function getTrackingString(): string {
+		return $this->trackingString;
+	}
+
+	public function setTrackingString( string $trackingString ) {
+		$this->trackingString = $trackingString;
+	}
+
+	public function getSource(): string {
+		return $this->source;
+	}
+
+	public function setSource( string $source ) {
+		$this->source = $source;
 	}
 
 	/**
