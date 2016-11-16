@@ -20,7 +20,7 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 		// @codingStandardsIgnoreEnd
 	}
 
-	private function newSubscriptionAddress() {
+	private function newSubscriptionAddress(): Address {
 		$address = new Address();
 		$address->setSalutation( 'Herr' );
 		$address->setFirstName( 'Nyan' );
