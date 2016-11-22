@@ -41,7 +41,7 @@ class AddDonationValidator {
 		Result::SOURCE_DONOR_POSTAL_CODE => 8,
 		Result::SOURCE_DONOR_CITY => 100,
 		Result::SOURCE_DONOR_COUNTRY => 8,
-		Result::SOURCE_BANK_NAME => 50,
+		Result::SOURCE_BANK_NAME => 100,
 		Result::SOURCE_BIC => 32,
 		Result::SOURCE_TRACKING_SOURCE => 250
 	];
