@@ -42,7 +42,7 @@ class MembershipApplicationValidator {
 		Result::SOURCE_APPLICANT_POSTAL_CODE => 8,
 		Result::SOURCE_APPLICANT_CITY => 100,
 		Result::SOURCE_APPLICANT_COUNTRY => 8,
-		Result::SOURCE_BANK_NAME => 50,
+		Result::SOURCE_BANK_NAME => 100,
 		Result::SOURCE_BIC => 32,
 	];
 
