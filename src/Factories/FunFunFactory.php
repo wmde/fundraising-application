@@ -33,6 +33,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\PiwikServerSideTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\ServerSideTracker;
+use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipPolicyValidator;
 use WMDE\Fundraising\Frontend\Presentation\Honorifics;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\PageNotFoundPresenter;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
@@ -983,6 +984,7 @@ class FunFunFactory {
 			$this->newMembershipApplicationTokenFetcher(),
 			$this->newApplyForMembershipMailer(),
 			$this->newMembershipApplicationValidator(),
+			$this->newApplyForMembershipPolicyValidator(),
 			$this->newMembershipApplicationTracker(),
 			$this->newMembershipApplicationPiwikTracker()
 		);
@@ -1013,6 +1015,10 @@ class FunFunFactory {
 
 	private function newMembershipApplicationPiwikTracker(): ApplicationPiwikTracker {
 		return new DoctrineApplicationPiwikTracker( $this->getEntityManager() );
+	}
+
+	private function newApplyForMembershipPolicyValidator(): ApplyForMembershipPolicyValidator {
+		return new ApplyForMembershipPolicyValidator( $this->newTextPolicyValidator( 'fields' ) );
 	}
 
 	public function newCancelMembershipApplicationUseCase( string $updateToken ): CancelMembershipApplicationUseCase {
