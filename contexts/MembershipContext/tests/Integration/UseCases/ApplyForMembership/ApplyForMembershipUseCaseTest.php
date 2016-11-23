@@ -16,6 +16,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\Tracking\ApplicationPiwikTracker
 use WMDE\Fundraising\Frontend\MembershipContext\Tracking\ApplicationTracker;
 use WMDE\Fundraising\Frontend\MembershipContext\Tracking\MembershipApplicationTrackingInfo;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplicationValidationResult;
+use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipPolicyValidator;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipRequest;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipUseCase;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\MembershipApplicationValidator;
@@ -67,11 +68,15 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 	 */
 	private $piwikTracker;
 
+	/** @var  ApplyForMembershipPolicyValidator */
+	private $policyValidator;
+
 	public function setUp() {
 		$this->repository = new InMemoryApplicationRepository();
 		$this->mailer = new TemplateBasedMailerSpy( $this );
 		$this->tokenGenerator = new FixedTokenGenerator( self::ACCESS_TOKEN );
 		$this->validator = $this->newSucceedingValidator();
+		$this->policyValidator = $this->newSucceedingPolicyValidator();
 		$this->tracker = $this->createMock( ApplicationTracker::class );
 		$this->piwikTracker = $this->createMock( ApplicationPiwikTracker::class );
 	}
@@ -99,6 +104,7 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 			$this->newTokenFetcher(),
 			$this->mailer,
 			$this->validator,
+			$this->policyValidator,
 			$this->tracker,
 			$this->piwikTracker
 		);
@@ -229,25 +235,24 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$this->assertFalse( $response->getMembershipApplication()->needsModeration() );
 	}
 
-	public function testGivenRequestWithHighYearlyAmount_moderationIsNeeded() {
-		$request = $this->newValidRequest();
-		$request->setPaymentAmountInEuros( '1000.01' );
-		$request->setPaymentIntervalInMonths( 12 );
+	public function testGivenFailingPolicyValidator_moderationIsNeeded() {
+		$this->policyValidator = $this->newFailingPolicyValidator();
 
-		$this->assertRequestResultsInModeration( $request );
-	}
-
-	public function testGivenRequestWithHighQuarterlyAmount_moderationIsNeeded() {
-		$request = $this->newValidRequest();
-		$request->setPaymentAmountInEuros( '250.01' );
-		$request->setPaymentIntervalInMonths( 3 );
-
-		$this->assertRequestResultsInModeration( $request );
-	}
-
-	private function assertRequestResultsInModeration( ApplyForMembershipRequest $request ) {
-		$response = $this->newUseCase()->applyForMembership( $request );
+		$response = $this->newUseCase()->applyForMembership( $this->newValidRequest() );
 		$this->assertTrue( $response->getMembershipApplication()->needsModeration() );
 	}
 
+	private function newSucceedingPolicyValidator(): ApplyForMembershipPolicyValidator {
+		$policyValidator = $this->getMockBuilder( ApplyForMembershipPolicyValidator::class )
+			->disableOriginalConstructor()->getMock();
+		$policyValidator->method( 'needsModeration' )->willReturn( false );
+		return $policyValidator;
+	}
+
+	private function newFailingPolicyValidator(): ApplyForMembershipPolicyValidator {
+		$policyValidator = $this->getMockBuilder( ApplyForMembershipPolicyValidator::class )
+			->disableOriginalConstructor()->getMock();
+		$policyValidator->method( 'needsModeration' )->willReturn( true );
+		return $policyValidator;
+	}
 }

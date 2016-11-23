@@ -10,6 +10,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipContext\Tracking\ApplicationPiwikTracker;
 use WMDE\Fundraising\Frontend\MembershipContext\Tracking\ApplicationTracker;
+use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
 
 /**
  * @license GNU GPL v2+
@@ -17,23 +18,23 @@ use WMDE\Fundraising\Frontend\MembershipContext\Tracking\ApplicationTracker;
  */
 class ApplyForMembershipUseCase {
 
-	/* private */ const YEARLY_PAYMENT_MODERATION_THRESHOLD_IN_EURO = 1000;
-
 	private $repository;
 	private $tokenFetcher;
 	private $mailer;
 	private $validator;
+	private $policyValidator;
 	private $piwikTracker;
 
 	public function __construct( ApplicationRepository $repository,
 		ApplicationTokenFetcher $tokenFetcher, TemplateBasedMailer $mailer,
-		MembershipApplicationValidator $validator, ApplicationTracker $tracker,
-		ApplicationPiwikTracker $piwikTracker ) {
+		MembershipApplicationValidator $validator, ApplyForMembershipPolicyValidator $policyValidator,
+		ApplicationTracker $tracker, ApplicationPiwikTracker $piwikTracker ) {
 
 		$this->repository = $repository;
 		$this->tokenFetcher = $tokenFetcher;
 		$this->mailer = $mailer;
 		$this->validator = $validator;
+		$this->policyValidator = $policyValidator;
 		$this->membershipApplicationTracker = $tracker;
 		$this->piwikTracker = $piwikTracker;
 	}
@@ -47,7 +48,7 @@ class ApplyForMembershipUseCase {
 
 		$application = $this->newApplicationFromRequest( $request );
 
-		if ( $this->applicationNeedsModeration( $application ) ) {
+		if ( $this->policyValidator->needsModeration( $application ) ) {
 			$application->markForModeration();
 		}
 
@@ -89,12 +90,6 @@ class ApplyForMembershipUseCase {
 				'lastName' => $application->getApplicant()->getName()->getLastName()
 			]
 		);
-	}
-
-	private function applicationNeedsModeration( Application $application ): bool {
-		return
-			$application->getPayment()->getYearlyAmount()->getEuroFloat()
-			> self::YEARLY_PAYMENT_MODERATION_THRESHOLD_IN_EURO;
 	}
 
 }

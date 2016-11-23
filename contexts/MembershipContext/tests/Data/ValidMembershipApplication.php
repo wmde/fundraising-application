@@ -47,6 +47,8 @@ class ValidMembershipApplication {
 	const PAYMENT_TYPE_DIRECT_DEBIT = 'BEZ';
 	const PAYMENT_PERIOD_IN_MONTHS = 3;
 	const PAYMENT_AMOUNT_IN_EURO = 10;
+	const TOO_HIGH_QUARTERLY_PAYMENT_AMOUNT_IN_EURO = 250.1;
+	const TOO_HIGH_YEARLY_PAYMENT_AMOUNT_IN_EURO = 1000.1;
 
 	const PAYMENT_BANK_ACCOUNT = '0648489890';
 	const PAYMENT_BANK_CODE = '50010517';
@@ -72,6 +74,24 @@ class ValidMembershipApplication {
 			self::MEMBERSHIP_TYPE,
 			$self->newApplicant( $self->newCompanyApplicantName() ),
 			$self->newPayment()
+		);
+	}
+
+	public static function newApplicationWithTooHighQuarterlyAmount(): Application {
+		$self = ( new self() );
+		return Application::newApplication(
+			self::MEMBERSHIP_TYPE,
+			$self->newApplicant( $self->newPersonApplicantName() ),
+			$self->newPaymentWithHighAmount( self::PAYMENT_PERIOD_IN_MONTHS, self::TOO_HIGH_QUARTERLY_PAYMENT_AMOUNT_IN_EURO )
+		);
+	}
+
+	public static function newApplicationWithTooHighYearlyAmount(): Application {
+		$self = ( new self() );
+		return Application::newApplication(
+			self::MEMBERSHIP_TYPE,
+			$self->newApplicant( $self->newPersonApplicantName() ),
+			$self->newPaymentWithHighAmount( 12, self::TOO_HIGH_YEARLY_PAYMENT_AMOUNT_IN_EURO )
 		);
 	}
 
@@ -131,6 +151,14 @@ class ValidMembershipApplication {
 		return new Payment(
 			self::PAYMENT_PERIOD_IN_MONTHS,
 			Euro::newFromFloat( self::PAYMENT_AMOUNT_IN_EURO ),
+			$this->newDirectDebitPayment( $this->newBankData() )
+		);
+	}
+
+	private function newPaymentWithHighAmount( int $periodInMonths, float $amount ): Payment {
+		return new Payment(
+			$periodInMonths,
+			Euro::newFromFloat( $amount ),
 			$this->newDirectDebitPayment( $this->newBankData() )
 		);
 	}
