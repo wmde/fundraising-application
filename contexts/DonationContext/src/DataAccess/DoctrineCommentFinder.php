@@ -52,7 +52,8 @@ class DoctrineCommentFinder implements CommentFinder {
 			return $this->entityManager->getRepository( Donation::class )->findBy(
 				[
 					'isPublic' => true,
-					'deletionTime' => null
+					'deletionTime' => null,
+					'status' => [ Donation::STATUS_NEW, Donation::STATUS_EXTERNAL_BOOKED ]
 				],
 				[
 					'creationTime' => 'DESC'

@@ -100,6 +100,7 @@ class DoctrineCommentFinderTest extends \PHPUnit_Framework_TestCase {
 		$this->persistSecondDonationWithComment();
 		$this->persistDeletedDonationWithComment();
 		$this->persistThirdDonationWithComment();
+		$this->persistDeletedDonationWithoutDeletedTimestamp();
 		$this->entityManager->flush();
 
 		$repository = $this->newDbalCommentRepository();
@@ -162,6 +163,17 @@ class DoctrineCommentFinderTest extends \PHPUnit_Framework_TestCase {
 		$deletedDonation->setCreationTime( new DateTime( '1984-11-11' ) );
 		$deletedDonation->setIsPublic( true );
 		$deletedDonation->setDeletionTime( new DateTime( '2000-01-01' ) );
+		$this->entityManager->persist( $deletedDonation );
+	}
+
+	private function persistDeletedDonationWithoutDeletedTimestamp() {
+		$deletedDonation = new Donation();
+		$deletedDonation->setPublicRecord( 'Deleted name' );
+		$deletedDonation->setComment( 'Deleted comment' );
+		$deletedDonation->setAmount( '31337' );
+		$deletedDonation->setCreationTime( new DateTime( '1984-11-11' ) );
+		$deletedDonation->setIsPublic( true );
+		$deletedDonation->setStatus( Donation::STATUS_CANCELLED );
 		$this->entityManager->persist( $deletedDonation );
 	}
 
