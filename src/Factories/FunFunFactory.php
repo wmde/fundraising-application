@@ -1067,7 +1067,7 @@ class FunFunFactory {
 		$this->pimple['confirmation-page-selector'] = $selector;
 	}
 
-	public function getDonationConfirmationPageSelector() {
+	public function getDonationConfirmationPageSelector(): DonationConfirmationPageSelector {
 		return $this->pimple['confirmation-page-selector'];
 	}
 

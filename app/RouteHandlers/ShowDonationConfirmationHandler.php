@@ -34,24 +34,24 @@ class ShowDonationConfirmationHandler {
 			(int)$request->get( 'id', '' )
 		) );
 
-		if ( $responseModel->accessIsPermitted() ) {
-			$selectedConfirmationPage = $this->ffFactory->getDonationConfirmationPageSelector()->selectPage();
-			$httpResponse = new Response(
-				$this->ffFactory->newDonationConfirmationPresenter()->present(
-					$responseModel->getDonation(),
-					$responseModel->getUpdateToken(),
-					$selectedConfirmationPage,
-					PiwikVariableCollector::newForDonation( $sessionTrackingData, $responseModel->getDonation() )
-				)
-			);
-
-			if ( !$request->cookies->get( self::SUBMISSION_COOKIE_NAME ) ) {
-				$httpResponse->headers->setCookie( new Cookie( self::SUBMISSION_COOKIE_NAME, date( self::TIMESTAMP_FORMAT ) ) );
-			}
-			return $httpResponse;
+		if ( !$responseModel->accessIsPermitted() ) {
+			throw new AccessDeniedException( 'access_denied_donation_confirmation' );
 		}
 
-		throw new AccessDeniedException( 'access_denied_donation_confirmation' );
+		$selectedConfirmationPage = $this->ffFactory->getDonationConfirmationPageSelector()->selectPage();
+		$httpResponse = new Response(
+			$this->ffFactory->newDonationConfirmationPresenter()->present(
+				$responseModel->getDonation(),
+				$responseModel->getUpdateToken(),
+				$selectedConfirmationPage,
+				PiwikVariableCollector::newForDonation( $sessionTrackingData, $responseModel->getDonation() )
+			)
+		);
+
+		if ( !$request->cookies->get( self::SUBMISSION_COOKIE_NAME ) ) {
+			$httpResponse->headers->setCookie( new Cookie( self::SUBMISSION_COOKIE_NAME, date( self::TIMESTAMP_FORMAT ) ) );
+		}
+		return $httpResponse;
 	}
 
 }
