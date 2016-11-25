@@ -45,7 +45,7 @@ class InMemorySubscriptionRepository implements SubscriptionRepository {
 
 	public function findByConfirmationCode( string $confirmationCode ) {
 		foreach ( $this->subscriptions as $subscription ) {
-			if ( $subscription->getHexConfirmationCode() === $confirmationCode ) {
+			if ( $subscription->getConfirmationCode() === $confirmationCode ) {
 				return $subscription;
 			}
 		}

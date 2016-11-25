@@ -33,7 +33,7 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 	public function testGivenAnUnconfirmedSubscriptionRequest_successPageIsDisplayed() {
 		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
 			$subscription = new Subscription();
-			$subscription->setHexConfirmationCode( 'deadbeef' );
+			$subscription->setConfirmationCode( 'deadbeef' );
 			$subscription->setEmail( 'tester@example.com' );
 			$subscription->setAddress( $this->newSubscriptionAddress() );
 
@@ -77,7 +77,7 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 	public function testGivenAConfirmedSubscriptionRequest_successPageIsDisplayed() {
 		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
 			$subscription = new Subscription();
-			$subscription->setHexConfirmationCode( 'deadbeef' );
+			$subscription->setConfirmationCode( 'deadbeef' );
 			$subscription->setEmail( 'tester@example.com' );
 			$subscription->setAddress( $this->newSubscriptionAddress() );
 			$subscription->markAsConfirmed();
