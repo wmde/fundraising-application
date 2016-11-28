@@ -741,3 +741,8 @@ div.notice-window {
     margin-top: 20px;
     font-size: 0.9em;
 }
+
+/* Error page */
+#errorPage .box-header {
+    background: #84c5f1;
+}
