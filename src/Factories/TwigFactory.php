@@ -18,46 +18,50 @@ use WMDE\PageRetriever\PageRetriever;
 /**
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
+ * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class TwigFactory {
 
 	const DEFAULT_TEMPLATE_DIR = 'app/templates';
 
+	private $twig;
 	private $config;
 	private $cachePath;
 
-	public function __construct( array $config, string $cachePath ) {
+	public function __construct( Twig_Environment $twig, array $config, string $cachePath ) {
+		$this->twig = $twig;
 		$this->config = $config;
 		$this->cachePath = $cachePath;
 	}
 
 	public function create( array $loaders, array $extensions, array $filters ): Twig_Environment {
-		$options = [];
-
-		if ( $this->config['enable-cache'] ) {
-			$options['cache'] = $this->cachePath;
-		}
-
-		$twig = new Twig_Environment(
-			new \Twig_Loader_Chain( $loaders ),
-			$options
-		);
+		$this->twig->setLoader( new \Twig_Loader_Chain( $loaders ) );
 
 		foreach ( $filters as $filter ) {
-			$twig->addFilter( $filter );
+			$this->twig->addFilter( $filter );
 		}
 
 		foreach ( $extensions as $ext ) {
-			$twig->addExtension( $ext );
+			$this->twig->addExtension( $ext );
 		}
 
-		$twig->setLexer( new Twig_Lexer( $twig, [
+		if ( $this->config['enable-cache'] ) {
+			$this->twig->setCache( $this->cachePath );
+		}
+
+		if ( isset( $this->config['strict-variables'] ) && $this->config['strict-variables'] === true ) {
+			$this->twig->enableStrictVariables();
+		} else {
+			$this->twig->disableStrictVariables();
+		}
+
+		$this->twig->setLexer( new Twig_Lexer( $this->twig, [
 			'tag_comment'   => [ '{#', '#}' ],
 			'tag_block'     => [ '{%', '%}' ],
 			'tag_variable'  => [ '{$', '$}' ]
 		] ) );
 
-		return $twig;
+		return $this->twig;
 	}
 
 	public function newWikiPageLoader( PageRetriever $rawPageRetriever, PageRetriever $renderedPageRetriever ) {

@@ -110,6 +110,11 @@
           "description": "If template caching should be enabled",
           "default": true
         },
+        "strict-variables": {
+            "type": "boolean",
+            "description": "Make twig throw errors when templates refer to non-existing variables",
+            "default": false
+        },
         "loaders": {
           "type": "object",
           "title": "Configuration for the different Twig template loaders.",
@@ -161,6 +166,7 @@
       "additionalProperties": false,
       "required": [
         "enable-cache",
+        "strict-variables",
         "loaders"
       ]
     },

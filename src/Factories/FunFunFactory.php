@@ -341,8 +341,7 @@ class FunFunFactory {
 		};
 
 		$pimple['twig_factory'] = function () {
-			// TODO: like this we end up with two Twig instance, one created here and on in the framework
-			return new TwigFactory( $this->config['twig'], $this->getCachePath() . '/twig' );
+			return new TwigFactory( $this->pimple['twig_environment'], $this->config['twig'], $this->getCachePath() . '/twig' );
 		};
 
 		$pimple['twig'] = function() {
@@ -503,6 +502,10 @@ class FunFunFactory {
 
 	public function newGetInTouchHTMLPresenter(): GetInTouchHtmlPresenter {
 		return new GetInTouchHtmlPresenter( $this->getIncludeTemplate( 'Kontaktformular.twig' ), $this->getTranslator() );
+	}
+
+	public function setTwigEnvironment( Twig_Environment $twig ) {
+		$this->pimple['twig_environment'] = $twig;
 	}
 
 	public function getTwig(): Twig_Environment {
