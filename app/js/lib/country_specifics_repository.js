@@ -4,7 +4,7 @@ var _ = require( 'underscore' ),
 	countrySpecifics = {
 		generic: {
 			postCode: {
-				'data-pattern': '{1,}',
+				'data-pattern': '^\\s*[0-9]{1,6}\\s*$',
 				placeholder: 'z. B. 10117',
 				title: 'Postleitzahl'
 			},
