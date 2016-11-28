@@ -743,6 +743,6 @@ div.notice-window {
 }
 
 /* Error page */
-#errorPage .box-header {
+#error-page .box-header {
     background: #84c5f1;
 }
