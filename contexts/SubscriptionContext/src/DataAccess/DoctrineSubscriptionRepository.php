@@ -59,7 +59,7 @@ class DoctrineSubscriptionRepository implements SubscriptionRepository {
 	public function findByConfirmationCode( string $confirmationCode ) {
 		try {
 			return $this->entityManager->getRepository( Subscription::class )->findOneBy( [
-				'confirmationCode' => hex2bin( $confirmationCode )
+				'confirmationCode' => $confirmationCode
 			] );
 		}
 		catch ( ORMException $e ) {

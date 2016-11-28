@@ -19,7 +19,7 @@ use WMDE\Fundraising\Frontend\Validation\ValidationResponse;
  */
 class AddSubscriptionUseCase {
 
-	/* private */ const CONFIRMATION_CODE_LENGTH = 16;
+	/* private */ const CONFIRMATION_CODE_LENGTH_BYTES = 16;
 
 	private $subscriptionRepository;
 	private $subscriptionValidator;
@@ -90,9 +90,13 @@ class AddSubscriptionUseCase {
 		$subscription->setEmail( $subscriptionRequest->getEmail() );
 		$subscription->setTracking( $subscriptionRequest->getTrackingString() );
 		$subscription->setSource( $subscriptionRequest->getSource() );
-		$subscription->setConfirmationCode( random_bytes( self::CONFIRMATION_CODE_LENGTH ) );
+		$subscription->setConfirmationCode( $this->generateConfirmationCode() );
 
 		return $subscription;
+	}
+
+	private function generateConfirmationCode(): string {
+		return bin2hex( random_bytes( self::CONFIRMATION_CODE_LENGTH_BYTES ) );
 	}
 
 	private function addressFromSubscriptionRequest( SubscriptionRequest $subscriptionRequest ): Address {

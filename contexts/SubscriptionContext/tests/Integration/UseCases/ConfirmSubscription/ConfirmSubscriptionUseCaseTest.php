@@ -35,7 +35,7 @@ class ConfirmSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase {
 	private function newSubscription(): Subscription {
 		$subscription = new Subscription();
 
-		$subscription->setHexConfirmationCode( self::CONFIRMATION_CODE );
+		$subscription->setConfirmationCode( self::CONFIRMATION_CODE );
 		$subscription->setEmail( 'nyan@awesomecats.com' );
 		$subscription->setAddress( $this->newSubscriptionAddress() );
 
