@@ -16,6 +16,7 @@
 	"web-basepath": "",
 	"twig": {
 		"enable-cache": true,
+		"strict-variables": false,
 		"loaders": {
 			"wiki": {
 				"enabled": true,
