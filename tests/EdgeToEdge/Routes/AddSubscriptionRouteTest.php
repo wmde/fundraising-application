@@ -142,7 +142,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 		$responseData = json_decode( $response->getContent(), true );
 		$this->assertSame( 'ERR', $responseData['status'] );
 		$this->assertGreaterThan( 0, count( $responseData['errors'] ) );
-		$this->assertSame( 'Dieses Feld ist ein Pflichtfeld', $responseData['errors']['lastName'] );
+		$this->assertSame( 'Kein gültiges Email-Adressformat', $responseData['errors']['email'] );
 	}
 
 	public function testGivenDataNeedingModerationAndNoContentType_routeReturnsRedirectToModerationPage() {

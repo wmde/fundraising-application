@@ -68,9 +68,6 @@ class SubscriptionValidator {
 		$validator = new RequiredFieldValidator();
 
 		return [
-			$this->getFieldViolation( $validator->validate( $address->getSalutation() ), 'salutation' ),
-			$this->getFieldViolation( $validator->validate( $address->getFirstName() ), 'firstName' ),
-			$this->getFieldViolation( $validator->validate( $address->getLastName() ), 'lastName' ),
 			$this->getFieldViolation( $validator->validate( $subscription->getEmail() ), 'email' )
 		];
 	}
