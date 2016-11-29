@@ -250,7 +250,8 @@ $app->get( 'contact/confirm-subscription/{confirmationCode}', function ( $confir
 	$response = $useCase->confirmSubscription( $confirmationCode );
 	return $ffFactory->newConfirmSubscriptionHtmlPresenter()->present( $response );
 } )
-->assert( 'confirmationCode', '^[0-9a-f]+$' );
+->assert( 'confirmationCode', '^[0-9a-f]+$' )
+->bind( 'confirm-subscription' );
 
 $app->get(
 	'check-iban',
