@@ -7,19 +7,19 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\Factories;
 use Twig_Environment;
 use Twig_Error_Loader;
 use Twig_LoaderInterface;
-use WMDE\Fundraising\Frontend\Factories\TwigFactory;
+use WMDE\Fundraising\Frontend\Factories\TwigEnvironmentConfigurator;
 use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Factories\TwigFactory
+ * @covers WMDE\Fundraising\Frontend\Factories\TwigEnvironmentConfigurator
  *
  * @licence GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class TwigFactoryTest extends \PHPUnit_Framework_TestCase {
+class TwigEnvironmentConfiguratorTest extends \PHPUnit_Framework_TestCase {
 
 	public function testTwigInstanceUsesDollarPlaceholdersForVariables() {
-		$factory = new TwigFactory(
+		$factory = new TwigEnvironmentConfigurator(
 			$this->newTwigEnvironment(),
 			[
 				'enable-cache' => false,
@@ -29,7 +29,7 @@ class TwigFactoryTest extends \PHPUnit_Framework_TestCase {
 			],
 			'/tmp/fun'
 		);
-		$twig = $factory->create( [ $factory->newArrayLoader() ], [], [] );
+		$twig = $factory->getEnvironment( [ $factory->newArrayLoader() ], [], [] );
 		$result = $twig->render( 'variableReplacement.twig', [ 'testvar' => 'Meeow!' ] );
 		$this->assertSame( 'Meeow!', $result );
 	}
@@ -49,14 +49,14 @@ class TwigFactoryTest extends \PHPUnit_Framework_TestCase {
 		$thirdLoader = $this->createMock( Twig_LoaderInterface::class );
 		$thirdLoader->expects( $this->never() )->method( $this->anything() );
 
-		$factory = new TwigFactory( $this->newTwigEnvironment(), [ 'enable-cache' => false ], '/tmp/fun' );
-		$twig = $factory->create( [ $firstLoader, $secondLoader, $thirdLoader ], [], [] );
+		$factory = new TwigEnvironmentConfigurator( $this->newTwigEnvironment(), [ 'enable-cache' => false ], '/tmp/fun' );
+		$twig = $factory->getEnvironment( [ $firstLoader, $secondLoader, $thirdLoader ], [], [] );
 		$result = $twig->render( 'Canis_silvestris' );
 		$this->assertSame( 'Meeow!', $result );
 	}
 
 	public function testFilesystemLoaderConvertsStringPathToArray() {
-		$factory = new TwigFactory(
+		$factory = new TwigEnvironmentConfigurator(
 			$this->newTwigEnvironment(),
 			[
 				'loaders' => [
@@ -71,7 +71,7 @@ class TwigFactoryTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testFilesystemLoaderPrependsRelativePathsToArray() {
-		$factory = new TwigFactory(
+		$factory = new TwigEnvironmentConfigurator(
 			$this->newTwigEnvironment(),
 			[
 				'loaders' => [
@@ -95,7 +95,7 @@ class TwigFactoryTest extends \PHPUnit_Framework_TestCase {
 			->willReturn( 'baaaaad.testfile.js' )
 			->with( 'testfile.js' );
 
-		$factory = new TwigFactory(
+		$factory = new TwigEnvironmentConfigurator(
 			$this->newTwigEnvironment(),
 			[
 				'enable-cache' => false,
@@ -107,7 +107,7 @@ class TwigFactoryTest extends \PHPUnit_Framework_TestCase {
 		);
 
 		$filters = [ $factory->newFilePrefixFilter( $prefixer ) ];
-		$twig = $factory->create( [ $factory->newArrayLoader() ], [], $filters );
+		$twig = $factory->getEnvironment( [ $factory->newArrayLoader() ], [], $filters );
 		$result = $twig->render( 'filePrefix.twig' );
 		$this->assertSame( 'baaaaad.testfile.js', $result );
 	}

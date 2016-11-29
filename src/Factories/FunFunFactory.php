@@ -341,7 +341,7 @@ class FunFunFactory {
 		};
 
 		$pimple['twig_factory'] = function () {
-			return new TwigFactory( $this->pimple['twig_environment'], $this->config['twig'], $this->getCachePath() . '/twig' );
+			return new TwigEnvironmentConfigurator( $this->pimple['twig_environment'], $this->config['twig'], $this->getCachePath() . '/twig' );
 		};
 
 		$pimple['twig'] = function() {
@@ -364,7 +364,7 @@ class FunFunFactory {
 				)
 			];
 
-			return $twigFactory->create( $loaders, $extensions, $filters );
+			return $twigFactory->getEnvironment( $loaders, $extensions, $filters );
 		};
 
 		$pimple['messenger'] = function() {
@@ -811,7 +811,7 @@ class FunFunFactory {
 		$this->pimple['translator'] = $translator;
 	}
 
-	private function getTwigFactory(): TwigFactory {
+	private function getTwigFactory(): TwigEnvironmentConfigurator {
 		return $this->pimple['twig_factory'];
 	}
 

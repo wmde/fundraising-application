@@ -20,7 +20,7 @@ use WMDE\PageRetriever\PageRetriever;
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class TwigFactory {
+class TwigEnvironmentConfigurator {
 
 	const DEFAULT_TEMPLATE_DIR = 'app/templates';
 
@@ -34,7 +34,7 @@ class TwigFactory {
 		$this->cachePath = $cachePath;
 	}
 
-	public function create( array $loaders, array $extensions, array $filters ): Twig_Environment {
+	public function getEnvironment( array $loaders, array $extensions, array $filters ): Twig_Environment {
 		$this->twig->setLoader( new \Twig_Loader_Chain( $loaders ) );
 
 		foreach ( $filters as $filter ) {
