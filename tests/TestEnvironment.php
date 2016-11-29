@@ -28,6 +28,7 @@ class TestEnvironment {
 		$installer->install();
 
 		$instance->factory->setNullMessenger();
+		$instance->factory->setTwigEnvironment( new \Twig_Environment() );
 
 		return $instance;
 	}

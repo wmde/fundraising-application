@@ -24,7 +24,6 @@ $app = new Application();
 $app->register( new SessionServiceProvider() );
 $app->register( new RoutingServiceProvider() );
 $app->register( new TwigServiceProvider() );
-$ffFactory->setTwigEnvironment( $app['twig'] );
 
 $app->before(
 	function ( Request $request, Application $app ) {
