@@ -66,48 +66,6 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 		$this->assertConstraintWasViolated( $subscriptionValidator->validate( $subscription ), 'email' );
 	}
 
-	public function testFirstNameIsValidated() {
-		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
-		$subscriptionValidator = new SubscriptionValidator(
-			$mailValidator,
-			$this->getMockTextPolicyValidator(),
-			$this->getMockDuplicateValidator(),
-			new AllowedValuesValidator( [''] )
-		);
-		$subscription = new Subscription();
-		$subscription->setAddress( $this->createAddress( 'Herr', '', 'Cat' ) );
-		$subscription->setEmail( 'nyan@meow.com' );
-		$this->assertConstraintWasViolated( $subscriptionValidator->validate( $subscription ), 'firstName' );
-	}
-
-	public function testLastNameIsValidated() {
-		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
-		$subscriptionValidator = new SubscriptionValidator(
-			$mailValidator,
-			$this->getMockTextPolicyValidator(),
-			$this->getMockDuplicateValidator(),
-			new AllowedValuesValidator( [''] )
-		);
-		$subscription = new Subscription();
-		$subscription->setAddress( $this->createAddress( 'Herr', 'Nyan', '' ) );
-		$subscription->setEmail( 'nyan@meow.com' );
-		$this->assertConstraintWasViolated( $subscriptionValidator->validate( $subscription ), 'lastName' );
-	}
-
-	public function testSalutationIsValidated() {
-		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
-		$subscriptionValidator = new SubscriptionValidator(
-			$mailValidator,
-			$this->getMockTextPolicyValidator(),
-			$this->getMockDuplicateValidator(),
-			new AllowedValuesValidator( [''] )
-		);
-		$subscription = new Subscription();
-		$subscription->setAddress( $this->createAddress( '', 'Nyan', 'Cat' ) );
-		$subscription->setEmail( 'nyan@meow.com' );
-		$this->assertConstraintWasViolated( $subscriptionValidator->validate( $subscription ), 'salutation' );
-	}
-
 	public function testGivenBadWords_subscriptionIsStillValid() {
 		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
 		$policyValidator = $this->createMock( TextPolicyValidator::class );
