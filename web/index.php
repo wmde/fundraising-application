@@ -69,4 +69,6 @@ $ffFactory->setPaypalLogger( call_user_func( function() use ( $ffFactory ) {
  */
 $app = require __DIR__ . '/../app/bootstrap.php';
 
+$ffFactory->setTwigEnvironment( $app['twig'] );
+
 $app->run();

@@ -114,4 +114,6 @@ $app['twig.loader.filesystem'] = $app->extend(
 	}
 );
 
+$ffFactory->setTwigEnvironment( $app['twig'] );
+
 $app->run();
