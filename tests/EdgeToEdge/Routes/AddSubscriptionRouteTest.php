@@ -145,6 +145,25 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 		$this->assertSame( 'Kein gültiges Email-Adressformat', $responseData['errors']['email'] );
 	}
 
+	public function testGivenValidDataAndJSONPRequest_routeReturnsResult() {
+		$client = $this->createClient();
+
+		$client->request(
+			'GET',
+			'/contact/subscribe',
+			array_merge(
+				$this->validFormInput,
+				[ 'jsonp_callback' => 'test' ]
+			),
+			[],
+			[ 'HTTP_ACCEPT' => 'application/javascript' ]
+		);
+
+		$response = $client->getResponse();
+		//$this->assertTrue( $response->isSuccessful(), 'request is successful' );
+		$this->assertContains( 'test({"status":"OK"})', $response->getContent() );
+	}
+
 	public function testGivenDataNeedingModerationAndNoContentType_routeReturnsRedirectToModerationPage() {
 		$config = [ 'text-policies' => [ 'fields' => [ 'badwords' => 'No_Cats' ] ] ];
 		$client = $this->createClient( $config, function( FunFunFactory $factory ) {
