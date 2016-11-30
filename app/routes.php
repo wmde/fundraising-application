@@ -236,14 +236,16 @@ $app->get(
 ->bind( 'page' );
 
 // Form for this is provided by route page/Subscription_Form
-$app->post(
+$app->match(
 	'contact/subscribe',
 	function( Application $app, Request $request ) use ( $ffFactory ) {
 		return ( new AddSubscriptionHandler( $ffFactory, $app ) )
 			->handle( $request );
 	}
 )
+->method( 'GET|POST' )
 ->bind( 'subscribe' );
+
 
 $app->get( 'contact/confirm-subscription/{confirmationCode}', function ( $confirmationCode ) use ( $ffFactory ) {
 	$useCase = $ffFactory->newConfirmSubscriptionUseCase();
@@ -427,7 +429,8 @@ $app->match(
 			$app['session']->get( 'piwikTracking', [] )
 		);
 	}
-)->bind( 'show-donation-confirmation' )->method( 'GET|POST' );
+)->bind( 'show-donation-confirmation' )
+->method( 'GET|POST' );
 
 $app->post(
 	'handle-paypal-payment-notification',
