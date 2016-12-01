@@ -246,7 +246,6 @@ $app->match(
 ->method( 'GET|POST' )
 ->bind( 'subscribe' );
 
-
 $app->get( 'contact/confirm-subscription/{confirmationCode}', function ( $confirmationCode ) use ( $ffFactory ) {
 	$useCase = $ffFactory->newConfirmSubscriptionUseCase();
 	$response = $useCase->confirmSubscription( $confirmationCode );

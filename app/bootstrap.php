@@ -66,7 +66,7 @@ $app->after( function( Request $request, Response $response, Application $app ) 
 			$response->setCallBack( $request->get( 'jsonp_callback' ) );
 		} else {
 			$response->setContent(
-				$request->get( 'jsonp_callback' ) .	'(' . $response->getContent() . ');'
+				$request->get( 'jsonp_callback' ) . '(' . $response->getContent() . ');'
 			);
 		}
 	} elseif( $response instanceof JsonResponse ) {

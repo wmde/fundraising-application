@@ -160,7 +160,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 		);
 
 		$response = $client->getResponse();
-		//$this->assertTrue( $response->isSuccessful(), 'request is successful' );
+		$this->assertTrue( $response->isSuccessful(), 'request is successful' );
 		$this->assertContains( 'test({"status":"OK"})', $response->getContent() );
 	}
 
