@@ -25,7 +25,7 @@ $( function () {
 			} ),
 			WMDE.Components.createRadioComponent( store, $( '.address-type-select' ), 'addressType' ),
 			WMDE.Components.createRadioComponent( store, $( '.salutation' ), 'salutation' ),
-			WMDE.Components.createRadioComponent( store, $( '.personal-title' ), 'title' ),
+			WMDE.Components.createSelectMenuComponent( store, $( '.personal-title' ), 'title' ),
 			WMDE.Components.createValidatingTextComponent( store, $( '#first-name' ), 'firstName' ),
 			WMDE.Components.createValidatingTextComponent( store, $( '#last-name' ), 'lastName' ),
 			WMDE.Components.createValidatingTextComponent( store, $( '#company-name' ), 'companyName' ),
