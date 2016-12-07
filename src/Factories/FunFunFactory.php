@@ -767,7 +767,7 @@ class FunFunFactory {
 
 	public function newAuthorizedCachePurger(): AuthorizedCachePurger {
 		return new AuthorizedCachePurger(
-			new AllOfTheCachePurger( $this->getTwig(), $this->getPageCache() ),
+			new AllOfTheCachePurger( $this->getTwig(), $this->getPageCache(), $this->getRenderedPageCache() ),
 			$this->config['purging-secret']
 		);
 	}

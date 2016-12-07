@@ -14,11 +14,13 @@ use Doctrine\Common\Cache\FlushableCache;
 class AllOfTheCachePurger implements CachePurger {
 
 	private $twigEnvironment;
-	private $pageCache;
+	private $rawPageCache;
+	private $renderedPageCache;
 
-	public function __construct( \Twig_Environment $twigEnvironment, Cache $pageCache ) {
+	public function __construct( \Twig_Environment $twigEnvironment, Cache $rawPageCache, Cache $renderedPageCache ) {
 		$this->twigEnvironment = $twigEnvironment;
-		$this->pageCache = $pageCache;
+		$this->rawPageCache = $rawPageCache;
+		$this->renderedPageCache = $renderedPageCache;
 	}
 
 	/**
@@ -28,8 +30,12 @@ class AllOfTheCachePurger implements CachePurger {
 		$this->twigEnvironment->clearCacheFiles();
 		$this->twigEnvironment->clearTemplateCache();
 
-		if ( $this->pageCache instanceof FlushableCache ) {
-			$this->pageCache->flushAll();
+		if ( $this->rawPageCache instanceof FlushableCache ) {
+			$this->rawPageCache->flushAll();
+		}
+
+		if ( $this->renderedPageCache instanceof FlushableCache ) {
+			$this->renderedPageCache->flushAll();
 		}
 	}
 
