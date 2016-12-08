@@ -6,7 +6,6 @@ var Redux = require( 'redux' ),
 	validity = require( './reducers/validity' ),
 	donationInputValidation = require( './reducers/donation_input_validation' ),
 	membershipInputValidation = require( './reducers/membership_input_validation' ),
-	countrySpecifics = require( './reducers/country_specifics' ),
 	middlewares = [ reduxPromise ];
 
 /* jshint ignore:start */ // Ignore console.log calls
@@ -44,8 +43,7 @@ module.exports = {
 			formPagination: formPagination,
 			donationFormContent: donationFormContent,
 			validity: validity,
-			donationInputValidation: donationInputValidation,
-			countrySpecifics: countrySpecifics
+			donationInputValidation: donationInputValidation
 		} ), initialState, Redux.applyMiddleware.apply( this, middlewares ) );
 	},
 	createMembershipStore: function ( initialState ) {
@@ -53,8 +51,7 @@ module.exports = {
 			formPagination: formPagination,
 			membershipFormContent: membershipFormContent,
 			validity: validity,
-			membershipInputValidation: membershipInputValidation,
-			countrySpecifics: countrySpecifics
+			membershipInputValidation: membershipInputValidation
 		} ), initialState, Redux.applyMiddleware.apply( this, middlewares ) );
 	}
 };
