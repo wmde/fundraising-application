@@ -25,21 +25,9 @@ $app->register( new SessionServiceProvider() );
 $app->register( new RoutingServiceProvider() );
 $app->register( new TwigServiceProvider() );
 
-$app['request_is_jsonp'] = $app->protect( function ( Request $request ) {
-	$jsonpContentTypes = [
-		'application/json',
-		'application/json; charset=utf-8',
-		'application/javascript',
-	];
-	return $request->get( 'jsonp_callback' ) !== null &&
-		$request->getMethod() === 'GET' &&
-		count( array_intersect( $jsonpContentTypes, $request->getAcceptableContentTypes() ) ) > 0;
-} );
-
 $app->before(
 	function ( Request $request, Application $app ) {
 		$app['request_stack.is_json'] = in_array( 'application/json', $request->getAcceptableContentTypes() );
-		$app['request_stack.is_jsonp'] = $app['request_is_jsonp']( $request );
 
 		$request->attributes->set( 'trackingCode', TrackingDataSelector::getFirstNonEmptyValue( [
 			$request->cookies->get( 'spenden_tracking' ),
@@ -60,16 +48,7 @@ $app->before(
 );
 
 $app->after( function( Request $request, Response $response, Application $app ) {
-	if ( $app['request_stack.is_jsonp'] ) {
-		// For request content type application/javascript response can be something else than JsonResponse
-		if ( $response instanceof JsonResponse ) {
-			$response->setCallBack( $request->get( 'jsonp_callback' ) );
-		} else {
-			$response->setContent(
-				$request->get( 'jsonp_callback' ) . '(' . $response->getContent() . ');'
-			);
-		}
-	} elseif( $response instanceof JsonResponse ) {
+	if( $response instanceof JsonResponse ) {
 		$response->setEncodingOptions( JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
 	}
 
