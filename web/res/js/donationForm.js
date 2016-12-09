@@ -221,10 +221,6 @@ $( function () {
 				stateKey: 'donationFormContent'
 			},
 			{
-				viewHandler: WMDE.View.createCountrySpecificAttributesHandler( $( '#post-code' ), $( '#city' ), $( '#email' ) ),
-				stateKey: 'countrySpecifics'
-			},
-			{
 				viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#first-name' ) ),
 				stateKey: 'donationInputValidation.firstName'
 			},
@@ -271,10 +267,6 @@ $( function () {
 			{
 				viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.amount-input' ) ),
 				stateKey: 'donationInputValidation.amount'
-			},
-			{
-				viewHandler: WMDE.View.createCountrySpecificAttributesHandler( $( '#post-code' ), $( '#city' ), $( '#email' ) ),
-				stateKey: 'countrySpecifics'
 			}
 		],
 		store
