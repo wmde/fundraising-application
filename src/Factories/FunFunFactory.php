@@ -199,7 +199,8 @@ class FunFunFactory {
 		};
 
 		$pimple['entity_manager'] = function() {
-			$entityManager = ( new StoreFactory( $this->getConnection() ) )->getEntityManager();
+			$entityManager = ( new StoreFactory( $this->getConnection(), $this->getVarPath() . '/doctrine_proxies' ) )
+				->getEntityManager();
 			if ( $this->addDoctrineSubscribers ) {
 				$entityManager->getEventManager()->addEventSubscriber( $this->newDoctrineDonationPrePersistSubscriber() );
 				$entityManager->getEventManager()->addEventSubscriber( $this->newDoctrineMembershipApplicationPrePersistSubscriber() );
