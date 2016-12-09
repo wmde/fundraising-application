@@ -29,8 +29,11 @@ class AddSubscriptionHandler {
 
 		$responseModel = $useCase->addSubscription( $this->createSubscriptionRequest( $request ) );
 
-		if ( $this->app['request_stack.is_json'] || $this->app['request_stack.is_jsonp'] ) {
+		if ( $this->app['request_stack.is_json'] ) {
 			return $this->app->json( $this->ffFactory->newAddSubscriptionJSONPresenter()->present( $responseModel ) );
+		} elseif ( $request->query->has( 'callback' ) ) {
+			return $this->app->json( $this->ffFactory->newAddSubscriptionJSONPresenter()->present( $responseModel ) )
+				->setCallback( $request->query->get( 'callback' ) );
 		}
 
 		if ( $responseModel->isSuccessful() ) {

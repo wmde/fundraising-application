@@ -153,7 +153,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 			'/contact/subscribe',
 			array_merge(
 				$this->validFormInput,
-				[ 'jsonp_callback' => 'test' ]
+				[ 'callback' => 'test' ]
 			),
 			[],
 			[ 'HTTP_ACCEPT' => 'application/javascript' ]
@@ -161,7 +161,10 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 
 		$response = $client->getResponse();
 		$this->assertTrue( $response->isSuccessful(), 'request is successful' );
-		$this->assertContains( 'test({"status":"OK"})', $response->getContent() );
+		$this->assertSame(
+			file_get_contents( __DIR__ . '/../../Data/files/addSubscriptionResponse.js' ),
+			$response->getContent()
+		);
 	}
 
 	public function testGivenDataNeedingModerationAndNoContentType_routeReturnsRedirectToModerationPage() {
