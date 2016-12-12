@@ -11,7 +11,7 @@ namespace WMDE\Fundraising\Frontend\Infrastructure;
 class InternetDomainNameValidator implements DomainNameValidator {
 
 	public function isValid( string $domain ): bool {
-		return checkdnsrr( $domain, 'MX' ) || checkdnsrr( $domain, 'A' );
+		return checkdnsrr( $domain, 'MX' ) || checkdnsrr( $domain, 'A' ) || checkdnsrr( $domain, 'SOA' );
 	}
 
 }
