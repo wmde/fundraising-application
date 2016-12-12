@@ -701,4 +701,23 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
+	public function testGivenCommasInStreetInput_donationGetsPersisted() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+
+			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
+			$client->followRedirects( false );
+
+			$formInput = $this->newValidFormInput();
+			$formInput['street'] = ',Lehmgasse, 12,';
+
+			$client->request(
+				'POST',
+				'/donation/add',
+				$formInput
+			);
+
+			$this->assertIsExpectedDonation( $this->getDonationFromDatabase( $factory ) );
+		} );
+	}
+
 }
