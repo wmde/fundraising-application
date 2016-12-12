@@ -81,7 +81,7 @@ $(function() {
 
 		}
 
-      $( 'select' ).selectmenu( {
+      $( '.ctcol select' ).selectmenu( {
             positionOptions: {
               collision: 'none'
             },
