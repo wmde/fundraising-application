@@ -106,7 +106,7 @@ class PayPalUrlGeneratorTest extends \PHPUnit_Framework_TestCase {
 		$this->assertContains( 'https://www.sandbox.paypal.com/cgi-bin/webscr', $generatedUrl );
 		$this->assertContains( 'business=foerderpp%40wikimedia.de', $generatedUrl );
 		$this->assertContains( 'currency_code=EUR', $generatedUrl );
-		$this->assertContains( 'lc=de', $generatedUrl );
+		$this->assertContains( 'lc=de_DE', $generatedUrl );
 		$this->assertContains( 'item_name=Mentioning+that+awesome+organization+on+the+invoice', $generatedUrl );
 		$this->assertContains( 'item_number=1234', $generatedUrl );
 		$this->assertContains( 'notify_url=http%3A%2F%2Fmy.donation.app%2Fhandler%2Fpaypal%2F', $generatedUrl );

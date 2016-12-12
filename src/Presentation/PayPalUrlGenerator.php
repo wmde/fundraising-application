@@ -16,6 +16,7 @@ class PayPalUrlGenerator {
 	const PAYMENT_REATTEMPT = '1';
 	const PAYMENT_CYCLE_INFINITE = '0';
 	const PAYMENT_CYCLE_MONTHLY = 'M';
+	const DEFAULT_LOCALE = 'de_DE';
 
 	private $config;
 
@@ -39,7 +40,7 @@ class PayPalUrlGenerator {
 		return [
 			'business' => $this->config->getPayPalAccountAddress(),
 			'currency_code' => 'EUR',
-			'lc' => 'de',
+			'lc' => self::DEFAULT_LOCALE,
 			'item_name' => $this->config->getItemName(),
 			'item_number' => $itemId,
 			'notify_url' => $this->config->getNotifyUrl(),
