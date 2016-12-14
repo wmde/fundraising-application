@@ -600,7 +600,7 @@ class FunFunFactory {
 			new ApiUser( $this->config['cms-wiki-user'], $this->config['cms-wiki-password'] ),
 			$this->getLogger(),
 			$this->config['cms-wiki-title-prefix'],
-			ApiBasedPageRetriever::MODE_RAW
+			ApiBasedPageRetriever::MODE_RAW_EXPANDED
 		);
 	}
 
