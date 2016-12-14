@@ -2591,16 +2591,16 @@
         },
         {
             "name": "wmde/page-retriever",
-            "version": "1.0.0",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/PageRetriever.git",
-                "reference": "c68950faf7cfed4ee6e51b22ff05c3c867b8f622"
+                "reference": "cfcfaa4a09678606a73f0483e5d2689809e4018e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/PageRetriever/zipball/c68950faf7cfed4ee6e51b22ff05c3c867b8f622",
-                "reference": "c68950faf7cfed4ee6e51b22ff05c3c867b8f622",
+                "url": "https://api.github.com/repos/wmde/PageRetriever/zipball/cfcfaa4a09678606a73f0483e5d2689809e4018e",
+                "reference": "cfcfaa4a09678606a73f0483e5d2689809e4018e",
                 "shasum": ""
             },
             "require": {
@@ -2633,7 +2633,7 @@
             ],
             "description": "Interface and implementations for fetching MediaWiki page content",
             "homepage": "https://github.com/wmde/PageRetriever",
-            "time": "2016-10-18 11:45:12"
+            "time": "2016-12-14 11:02:04"
         }
     ],
     "packages-dev": [
