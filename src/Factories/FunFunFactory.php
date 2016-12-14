@@ -663,7 +663,7 @@ class FunFunFactory {
 					'greeting_generator' => $this->getGreetingGenerator()
 				]
 			),
-			'mail_subject_membership'
+			'mail_subject_subscription'
 		);
 	}
 
@@ -674,7 +674,7 @@ class FunFunFactory {
 					'Mail_Subscription_Confirmation.twig',
 					[ 'greeting_generator' => $this->getGreetingGenerator() ]
 			),
-			'mail_subject_membership'
+			'mail_subject_subscription'
 		);
 	}
 
