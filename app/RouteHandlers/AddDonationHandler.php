@@ -118,7 +118,7 @@ class AddDonationHandler {
 		$donationRequest->setDonorCompany( $request->get( 'companyName', '' ) );
 		$donationRequest->setDonorFirstName( $request->get( 'firstName', '' ) );
 		$donationRequest->setDonorLastName( $request->get( 'lastName', '' ) );
-		$donationRequest->setDonorStreetAddress( $request->get( 'street', '' ) );
+		$donationRequest->setDonorStreetAddress( $this->filterFormvalue( $request->get( 'street', '' ) ) );
 		$donationRequest->setDonorPostalCode( $request->get( 'postcode', '' ) );
 		$donationRequest->setDonorCity( $request->get( 'city', '' ) );
 		$donationRequest->setDonorCountryCode( $request->get( 'country', '' ) );
@@ -198,4 +198,7 @@ class AddDonationHandler {
 		return $tracking;
 	}
 
+	private function filterFormvalue( string $value ): string {
+		return trim( preg_replace( ['/,/', '/\s{2,}/'], [' ', ' '], $value ) );
+	}
 }
