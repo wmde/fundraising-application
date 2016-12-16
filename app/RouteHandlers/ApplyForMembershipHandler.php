@@ -72,7 +72,7 @@ class ApplyForMembershipHandler {
 		$request->setApplicantLastName( $httpRequest->request->get( 'nachname', '' ) );
 		$request->setApplicantCompanyName( $httpRequest->request->get( 'firma', '' ) );
 
-		$request->setApplicantStreetAddress( $httpRequest->request->get( 'strasse', '' ) );
+		$request->setApplicantStreetAddress( $this->filterAutofillCommas( $httpRequest->request->get( 'strasse', '' ) ) );
 		$request->setApplicantPostalCode( $httpRequest->request->get( 'postcode', '' ) );
 		$request->setApplicantCity( $httpRequest->request->get( 'ort', '' ) );
 		$request->setApplicantCountryCode( $httpRequest->request->get( 'country', '' ) );
@@ -155,4 +155,14 @@ class ApplyForMembershipHandler {
 		return $httpResponse;
 	}
 
+	/**
+	 * Safari and Chrome concatenate street autofill values (e.g. house number and street name) with a comma.
+	 * This method removes the commas.
+	 *
+	 * @param string $value
+	 * @return string
+	 */
+	private function filterAutofillCommas( string $value ): string {
+		return trim( preg_replace( ['/,/', '/\s{2,}/'], [' ', ' '], $value ) );
+	}
 }

@@ -313,4 +313,26 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		} );
 	}
 
+	public function testCommasInStreetNamesAreRemoved() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+
+			$params = $this->newValidHttpParameters();
+			$params['strasse'] = 'Nyan, street, ';
+			$client->request(
+				'POST',
+				'apply-for-membership',
+				$params
+			);
+
+			$application = $factory->getMembershipApplicationRepository()->getApplicationById( 1 );
+
+			$this->assertNotNull( $application );
+
+			$expectedApplication = ValidMembershipApplication::newDomainEntity();
+			$expectedApplication->assignId( 1 );
+
+			$this->assertEquals( $expectedApplication, $application );
+		} );
+	}
+
 }
