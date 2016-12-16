@@ -118,7 +118,7 @@ class AddDonationHandler {
 		$donationRequest->setDonorCompany( $request->get( 'companyName', '' ) );
 		$donationRequest->setDonorFirstName( $request->get( 'firstName', '' ) );
 		$donationRequest->setDonorLastName( $request->get( 'lastName', '' ) );
-		$donationRequest->setDonorStreetAddress( $this->filterFormvalue( $request->get( 'street', '' ) ) );
+		$donationRequest->setDonorStreetAddress( $this->filterAutofillCommas( $request->get( 'street', '' ) ) );
 		$donationRequest->setDonorPostalCode( $request->get( 'postcode', '' ) );
 		$donationRequest->setDonorCity( $request->get( 'city', '' ) );
 		$donationRequest->setDonorCountryCode( $request->get( 'country', '' ) );
@@ -198,7 +198,14 @@ class AddDonationHandler {
 		return $tracking;
 	}
 
-	private function filterFormvalue( string $value ): string {
+	/**
+	 * Safari and Chrome concatenate street autofill values (e.g. house number and street name) with a comma.
+	 * This method removes the commas.
+	 *
+	 * @param string $value
+	 * @return string
+	 */
+	private function filterAutofillCommas( string $value ): string {
 		return trim( preg_replace( ['/,/', '/\s{2,}/'], [' ', ' '], $value ) );
 	}
 }
