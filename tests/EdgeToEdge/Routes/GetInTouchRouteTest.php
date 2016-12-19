@@ -81,7 +81,7 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 					->method( 'sendMessageToUser' )
 					->willThrowException( new \RuntimeException( 'Something unexpected happened' ) );
 
-				$factory->setMessenger( $messenger );
+				$factory->setSuborganizationMessenger( $messenger );
 				$factory->setEmailValidator( new SucceedingEmailValidator() );
 			},
 			self::DISABLE_DEBUG

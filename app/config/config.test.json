@@ -31,7 +31,8 @@
 	"donation-timeframe-limit": "PT30M",
 	"membership-application-timeframe-limit": "PT10M",
 	"operator-email": "email@operatorsownmailserver.com",
-	"operator-displayname": "Friendly Operator",
+	"operator-displayname-organization": "Friendly Operator",
+	"operator-displayname-suborganization": "Alternative Operator",
 	"paypal-donation": {
 		"base-url": "https://www.sandbox.paypal.com/cgi-bin/webscr?",
 		"account-address": "paypaldev-facilitator@wikimedia.de",

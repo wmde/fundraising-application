@@ -368,11 +368,19 @@ class FunFunFactory {
 			return $twigFactory->getEnvironment( $loaders, $extensions, $filters );
 		};
 
-		$pimple['messenger'] = function() {
+		$pimple['messenger_suborganization'] = function() {
 			return new Messenger(
 				new Swift_MailTransport(),
 				$this->getOperatorAddress(),
-				$this->config['operator-displayname']
+				$this->config['operator-displayname-organization']
+			);
+		};
+
+		$pimple['messenger_organization'] = function() {
+			return new Messenger(
+				new Swift_MailTransport(),
+				$this->getOperatorAddress(),
+				$this->config['operator-displayname-suborganization']
 			);
 		};
 
@@ -655,6 +663,7 @@ class FunFunFactory {
 
 	private function newAddSubscriptionMailer(): TemplateBasedMailer {
 		return $this->newTemplateMailer(
+			$this->getSuborganizationMessenger(),
 			new TwigTemplate(
 				$this->getTwig(),
 				'Mail_Subscription_Request.twig',
@@ -669,6 +678,7 @@ class FunFunFactory {
 
 	private function newConfirmSubscriptionMailer(): TemplateBasedMailer {
 		return $this->newTemplateMailer(
+			$this->getSuborganizationMessenger(),
 			new TwigTemplate(
 					$this->getTwig(),
 					'Mail_Subscription_Confirmation.twig',
@@ -678,9 +688,9 @@ class FunFunFactory {
 		);
 	}
 
-	private function newTemplateMailer( TwigTemplate $template, string $messageKey ): TemplateBasedMailer {
+	private function newTemplateMailer( Messenger $messenger, TwigTemplate $template, string $messageKey ): TemplateBasedMailer {
 		$mailer = new TemplateBasedMailer(
-			$this->getMessenger(),
+			$messenger,
 			$template,
 			$this->getTranslator()->trans( $messageKey )
 		);
@@ -728,6 +738,7 @@ class FunFunFactory {
 
 	private function newContactUserMailer(): TemplateBasedMailer {
 		return $this->newTemplateMailer(
+			$this->getSuborganizationMessenger(),
 			new TwigTemplate( $this->getTwig(), 'KontaktMailExtern.twig' ),
 			'mail_subject_getintouch'
 		);
@@ -735,7 +746,7 @@ class FunFunFactory {
 
 	private function newContactOperatorMailer(): OperatorMailer {
 		return new OperatorMailer(
-			$this->getMessenger(),
+			$this->getSuborganizationMessenger(),
 			new TwigTemplate( $this->getTwig(), 'KontaktMailIntern.twig' ),
 			$this->getTranslator()->trans( 'mail_subject_getintouch_forward' )
 		);
@@ -777,16 +788,28 @@ class FunFunFactory {
 		return new BankDataValidator( $this->newIbanValidator() );
 	}
 
-	private function getMessenger(): Messenger {
-		return $this->pimple['messenger'];
+	private function getSuborganizationMessenger(): Messenger {
+		return $this->pimple['messenger_suborganization'];
 	}
 
-	public function setMessenger( Messenger $messenger ) {
-		$this->pimple['messenger'] = $messenger;
+	public function setSuborganizationMessenger( Messenger $messenger ) {
+		$this->pimple['messenger_suborganization'] = $messenger;
+	}
+
+	private function getOrganizationMessenger(): Messenger {
+		return $this->pimple['messenger_organization'];
+	}
+
+	public function setOrganizationMessenger( Messenger $messenger ) {
+		$this->pimple['messenger_organization'] = $messenger;
 	}
 
 	public function setNullMessenger() {
-		$this->setMessenger( new Messenger(
+		$this->setSuborganizationMessenger( new Messenger(
+			Swift_NullTransport::newInstance(),
+			$this->getOperatorAddress()
+		) );
+		$this->setOrganizationMessenger( new Messenger(
 			Swift_NullTransport::newInstance(),
 			$this->getOperatorAddress()
 		) );
@@ -841,6 +864,7 @@ class FunFunFactory {
 
 	private function newCancelDonationMailer(): TemplateBasedMailer {
 		return $this->newTemplateMailer(
+			$this->getSuborganizationMessenger(),
 			new TwigTemplate(
 				$this->getTwig(),
 				'Mail_Donation_Cancellation_Confirmation.twig',
@@ -888,6 +912,7 @@ class FunFunFactory {
 	private function newDonationConfirmationMailer(): DonationConfirmationMailer {
 		return new DonationConfirmationMailer(
 			$this->newTemplateMailer(
+				$this->getSuborganizationMessenger(),
 				new TwigTemplate(
 					$this->getTwig(),
 					'Mail_Donation_Confirmation.twig',
@@ -996,6 +1021,7 @@ class FunFunFactory {
 
 	private function newApplyForMembershipMailer(): TemplateBasedMailer {
 		return $this->newTemplateMailer(
+			$this->getOrganizationMessenger(),
 			new TwigTemplate(
 				$this->getTwig(),
 				'Mail_Membership_Application_Confirmation.twig',
@@ -1049,6 +1075,7 @@ class FunFunFactory {
 
 	private function newCancelMembershipApplicationMailer(): TemplateBasedMailer {
 		return $this->newTemplateMailer(
+			$this->getOrganizationMessenger(),
 			new TwigTemplate(
 				$this->getTwig(),
 				'Mail_Membership_Application_Cancellation_Confirmation.twig',
