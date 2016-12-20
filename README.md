@@ -43,7 +43,8 @@ configuration data:
 	 - `cms-wiki-password`
 	 - `cms-wiki-title-prefix`
 	 - `operator-email`
-	 - `operator-displayname`
+	 - `operator-displayname-organization`
+	 - `operator-displayname-suborganization`
 	 - `paypal`
 	 - `creditcard`
 
