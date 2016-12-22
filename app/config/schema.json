@@ -200,7 +200,7 @@
         "no-js-notice"
       ]
     },
-    "contact_info": {
+    "contact-info": {
       "type": "object",
       "title": "Contact information",
       "description": "Names and email addresses for creating email recipients and senders",
@@ -222,7 +222,7 @@
               "default": ""
             }
           },
-          "required": [ "name", "email"]
+          "required": [ "name", "email" ]
         },
         "suborganization": {
           "type": "object",
@@ -241,7 +241,7 @@
               "default": ""
             }
           },
-          "required": [ "name", "email"]
+          "required": [ "name", "email" ]
         }
       }
     },
@@ -694,7 +694,7 @@
     "web-basepath",
     "twig",
     "default-layout-templates",
-    "contact_info",
+    "contact-info",
     "text-policies",
     "subscription-interval",
     "locale",

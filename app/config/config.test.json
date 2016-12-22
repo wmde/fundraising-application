@@ -30,7 +30,7 @@
 	},
 	"donation-timeframe-limit": "PT30M",
 	"membership-application-timeframe-limit": "PT10M",
-	"contact_info": {
+	"contact-info": {
 		"organization": {
 			"email": "email@operatorsownmailserver.com",
 			"name": "Friendly Operator"

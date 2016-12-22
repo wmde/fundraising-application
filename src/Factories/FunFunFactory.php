@@ -372,7 +372,7 @@ class FunFunFactory {
 			return new Messenger(
 				new Swift_MailTransport(),
 				$this->getSubOrganizationEmailAddress(),
-				$this->config['contact_info']['suborganization']['name']
+				$this->config['contact-info']['suborganization']['name']
 			);
 		};
 
@@ -380,7 +380,7 @@ class FunFunFactory {
 			return new Messenger(
 				new Swift_MailTransport(),
 				$this->getOrganizationEmailAddress(),
-				$this->config['contact_info']['organization']['name']
+				$this->config['contact-info']['organization']['name']
 			);
 		};
 
@@ -816,11 +816,11 @@ class FunFunFactory {
 	}
 
 	public function getSubOrganizationEmailAddress(): EmailAddress {
-		return new EmailAddress( $this->config['contact_info']['suborganization']['email'] );
+		return new EmailAddress( $this->config['contact-info']['suborganization']['email'] );
 	}
 
 	public function getOrganizationEmailAddress() {
-		return new EmailAddress( $this->config['contact_info']['organization']['email'] );
+		return new EmailAddress( $this->config['contact-info']['organization']['email'] );
 	}
 
 	public function newInternalErrorHTMLPresenter(): InternalErrorHtmlPresenter {
