@@ -42,9 +42,16 @@
 		"footer": "10hoch16/Seitenfuß",
 		"no-js-notice": "JavaScript-Notice"
 	},
-	"operator-email": "",
-	"operator-displayname-organization": "",
-	"operator-displayname-suborganization": "",
+	"contact_info": {
+		"organization": {
+			"email": "",
+			"name": ""
+		},
+		"suborganization": {
+			"email": "",
+			"name": ""
+		}
+	},
 	"text-policies": {
 		"fields": {
 			"whitewords": "",
