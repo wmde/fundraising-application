@@ -371,16 +371,16 @@ class FunFunFactory {
 		$pimple['messenger_suborganization'] = function() {
 			return new Messenger(
 				new Swift_MailTransport(),
-				$this->getOperatorAddress(),
-				$this->config['operator-displayname-organization']
+				$this->getSubOrganizationEmailAddress(),
+				$this->config['contact-info']['suborganization']['name']
 			);
 		};
 
 		$pimple['messenger_organization'] = function() {
 			return new Messenger(
 				new Swift_MailTransport(),
-				$this->getOperatorAddress(),
-				$this->config['operator-displayname-suborganization']
+				$this->getOrganizationEmailAddress(),
+				$this->config['contact-info']['organization']['name']
 			);
 		};
 
@@ -807,16 +807,20 @@ class FunFunFactory {
 	public function setNullMessenger() {
 		$this->setSuborganizationMessenger( new Messenger(
 			Swift_NullTransport::newInstance(),
-			$this->getOperatorAddress()
+			$this->getSubOrganizationEmailAddress()
 		) );
 		$this->setOrganizationMessenger( new Messenger(
 			Swift_NullTransport::newInstance(),
-			$this->getOperatorAddress()
+			$this->getOrganizationEmailAddress()
 		) );
 	}
 
-	public function getOperatorAddress() {
-		return new EmailAddress( $this->config['operator-email'] );
+	public function getSubOrganizationEmailAddress(): EmailAddress {
+		return new EmailAddress( $this->config['contact-info']['suborganization']['email'] );
+	}
+
+	public function getOrganizationEmailAddress() {
+		return new EmailAddress( $this->config['contact-info']['organization']['email'] );
 	}
 
 	public function newInternalErrorHTMLPresenter(): InternalErrorHtmlPresenter {
