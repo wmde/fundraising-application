@@ -157,7 +157,7 @@ $app->post(
 			return $app->json( [ 'status' => 'OK' ] );
 		} else {
 			$errors = $result->getViolations();
-			return $app->json( [ 'status' => 'ERR', 'message' => implode( "\n", $errors ) ] );
+			return $app->json( [ 'status' => 'ERR', 'messages' => $errors ] );
 		}
 	}
 );
