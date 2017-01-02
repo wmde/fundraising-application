@@ -36,7 +36,18 @@ class ValidateFeeRouteTest extends WebRouteTestCase {
 			[ 'amount' => '12,34', 'paymentIntervalInMonths' => '6', 'addressType' => 'firma' ]
 		);
 
-		$this->assertErrorJsonResponse( $client->getResponse() );
+		$response = $client->getResponse();
+		$this->assertErrorJsonResponse( $response );
+		$this->assertSame( $this->newErrorResponse(), json_decode( $response->getContent(), true ) );
+	}
+
+	private function newErrorResponse() {
+		return [
+			'status' => 'ERR',
+			'messages' => [
+				'amount' => 'too-low'
+			]
+		];
 	}
 
 }
