@@ -50,11 +50,11 @@ test( 'FINISH_BANK_DATA_VALIDATION with BIC sets bank data validation state to v
 	t.end();
 } );
 
-test( 'FINISH_BANK_DATA_VALIDATION without BIC sets bank data validation state to invalid', function ( t ) {
+test( 'FINISH_BANK_DATA_VALIDATION without BIC does not set bank data validation state to invalid', function ( t ) {
 	var beforeState = { bankData: null };
 
 	deepFreeze( beforeState );
-	t.notOk( validity( beforeState, { type: 'FINISH_BANK_DATA_VALIDATION', payload: {
+	t.ok( validity( beforeState, { type: 'FINISH_BANK_DATA_VALIDATION', payload: {
 		status: 'OK',
 		iban: 'AT022050302101023600'
 	} } ).bankData );
