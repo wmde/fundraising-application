@@ -74,6 +74,10 @@ class BankData {
 		return !empty( $this->getIban()->toString() );
 	}
 
+	public function hasBic(): bool {
+		return !empty( $this->getBic() );
+	}
+
 	public function hasCompleteLegacyBankData(): bool {
 		return !empty( $this->getAccount() ) || !empty( $this->getBankCode() );
 	}

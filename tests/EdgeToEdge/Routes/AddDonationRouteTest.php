@@ -720,4 +720,29 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
+	public function testGivenSufficientForeignBankData_donationGetsPersisted() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$formInput = $this->newValidFormInput();
+			$formInput['iban'] = 'AT022050302101023600';
+			$formInput['bic'] = 'SPIHAT22XXX';
+			$formInput['konto'] = '';
+			$formInput['blz'] = '';
+			$formInput['bankname'] = '';
+			$client->request(
+				'POST',
+				'/donation/add',
+				$formInput
+			);
+
+			$donation = $this->getDonationFromDatabase( $factory );
+			$data = $donation->getDecodedData();
+
+			$this->assertSame( 'AT022050302101023600', $data['iban'] );
+			$this->assertSame( 'SPIHAT22XXX', $data['bic'] );
+			$this->assertSame( '', $data['konto'] );
+			$this->assertSame( '', $data['blz'] );
+			$this->assertSame( '', $data['bankname'] );
+		} );
+	}
+
 }
