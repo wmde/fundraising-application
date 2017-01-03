@@ -103,7 +103,7 @@ module.exports = {
 				}
 				return objectAssign( {}, state, {
 					iban: action.payload.iban || '',
-					bic: action.payload.bic || '',
+					bic: action.payload.bic || state.bic || '',
 					accountNumber: action.payload.account || '',
 					bankCode: action.payload.bankCode || '',
 					bankName: action.payload.bankName || ''
