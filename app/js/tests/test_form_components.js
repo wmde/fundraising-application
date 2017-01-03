@@ -13,8 +13,8 @@ var test = require( 'tape' ),
 			change: sinon.spy()
 		};
 	},
-	assertChangeHandlerWasSet = function ( t, spyingElement ) {
-		t.ok( spyingElement.on.calledOnce, 'event handler was set once' );
+	assertChangeHandlerWasSet = function ( t, spyingElement, expectedCallCount ) {
+		t.equal( spyingElement.on.callCount, expectedCallCount || 1, 'event handler was set' );
 		t.equal( spyingElement.on.firstCall.args[ 0 ], 'change', 'event handler was set for change events' );
 		t.equal( typeof spyingElement.on.firstCall.args[ 1 ], 'function', 'event handler is a function' );
 	},
@@ -244,7 +244,7 @@ test( 'Bank data component adds change handling function to its elements', funct
 	formComponents.createBankDataComponent( store, bankDataComponentConfig );
 
 	assertChangeHandlerWasSet( t, bankDataComponentConfig.ibanElement );
-	assertChangeHandlerWasSet( t, bankDataComponentConfig.bicElement );
+	assertChangeHandlerWasSet( t, bankDataComponentConfig.bicElement, 2 );
 	assertChangeHandlerWasSet( t, bankDataComponentConfig.accountNumberElement );
 	assertChangeHandlerWasSet( t, bankDataComponentConfig.bankCodeElement );
 	assertChangeHandlerWasSet( t, bankDataComponentConfig.debitTypeElement );

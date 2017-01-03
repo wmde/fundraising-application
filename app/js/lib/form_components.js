@@ -202,6 +202,7 @@ module.exports = {
 		var component = objectAssign( Object.create( BankDataComponent ), bankDataElements );
 		bankDataElements.ibanElement.on( 'change', createDefaultChangeHandler( store, 'iban' ) );
 		bankDataElements.bicElement.on( 'change', createDefaultChangeHandler( store, 'bic' ) );
+		bankDataElements.bicElement.on( 'change', createRegexValidator( store, 'bic' ) );
 		bankDataElements.accountNumberElement.on( 'change', createDefaultChangeHandler( store, 'accountNumber' ) );
 		bankDataElements.bankCodeElement.on( 'change', createDefaultChangeHandler( store, 'bankCode' ) );
 		bankDataElements.debitTypeElement.on( 'change', createDefaultChangeHandler( store, 'debitType' ) );
