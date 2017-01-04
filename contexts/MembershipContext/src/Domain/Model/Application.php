@@ -27,6 +27,9 @@ class Application {
 	private const IS_CONFIRMED = true;
 	private const IS_PENDING = false;
 
+	const IS_DELETED = true;
+	const IS_NOT_DELETED = false;
+
 	/**
 	 * @var int|null
 	 */
@@ -37,6 +40,7 @@ class Application {
 	private $payment;
 	private $needsModeration;
 	private $isCancelled;
+	private $isDeleted;
 
 	public static function newApplication( string $type, Applicant $applicant, Payment $payment ): self {
 		return new self(
@@ -46,13 +50,13 @@ class Application {
 			$payment,
 			self::NO_MODERATION_NEEDED,
 			self::IS_CURRENT,
-			self::IS_PENDING
+			self::IS_PENDING,
+			self::IS_NOT_DELETED
 		);
 	}
 
 	public function __construct( ?int $id, string $type, Applicant $applicant, Payment $payment,
-		bool $needsModeration, bool $isCancelled, bool $isConfirmed ) {
-
+		bool $needsModeration, bool $isCancelled, bool $isConfirmed, bool $isDeleted ) {
 		$this->id = $id;
 		$this->type = $type;
 		$this->applicant = $applicant;
@@ -60,6 +64,7 @@ class Application {
 		$this->needsModeration = $needsModeration;
 		$this->isCancelled = $isCancelled;
 		$this->isConfirmed = $isConfirmed;
+		$this->isDeleted = $isDeleted;
 	}
 
 	public function getId(): ?int {
@@ -150,6 +155,14 @@ class Application {
 
 	private function statusAllowsForBooking(): bool {
 		return !$this->isConfirmed() || $this->needsModeration() || $this->isCancelled();
+	}
+
+	public function markAsDeleted() {
+		$this->isDeleted = self::IS_DELETED;
+	}
+
+	public function isDeleted(): bool {
+		return $this->isDeleted;
 	}
 
 }

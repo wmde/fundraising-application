@@ -170,6 +170,10 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 			$status += DoctrineApplication::STATUS_CANCELED;
 		}
 
+		if ( $application->isDeleted() ) {
+			$status += DoctrineApplication::STATUS_DELETED;
+		}
+
 		if ( $application->isConfirmed() || $this->isAutoConfirmed( $status, $application ) ) {
 			$status += DoctrineApplication::STATUS_CONFIRMED;
 		}
@@ -241,7 +245,8 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 			),
 			$application->needsModeration(),
 			$application->isCancelled(),
-			!$application->isUnconfirmed()
+			!$application->isUnconfirmed(),
+			$application->isDeleted()
 		);
 	}
 

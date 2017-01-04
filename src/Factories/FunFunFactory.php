@@ -1065,7 +1065,10 @@ class FunFunFactory {
 	}
 
 	private function newApplyForMembershipPolicyValidator(): ApplyForMembershipPolicyValidator {
-		return new ApplyForMembershipPolicyValidator( $this->newTextPolicyValidator( 'fields' ) );
+		return new ApplyForMembershipPolicyValidator(
+			$this->newTextPolicyValidator( 'fields' ),
+			$this->config['email-address-blacklist']
+		);
 	}
 
 	public function newCancelMembershipApplicationUseCase( string $updateToken ): CancelMembershipApplicationUseCase {

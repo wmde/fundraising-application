@@ -10,17 +10,21 @@ use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
 class ApplyForMembershipPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 
 	public function testGivenQuarterlyAmountTooHigh_MembershipApplicationNeedsModeration() {
-		$textPolicyValidator = $this->createMock( TextPolicyValidator::class );
-		$textPolicyValidator->method( 'textIsHarmless' )->willReturn( true );
+		$textPolicyValidator = $this->newSucceedingTextPolicyValidator();
 		$policyValidator = new ApplyForMembershipPolicyValidator( $textPolicyValidator );
 		$this->assertTrue( $policyValidator->needsModeration(
 			ValidMembershipApplication::newApplicationWithTooHighQuarterlyAmount()
 		) );
 	}
 
-	public function testGivenYearlyAmountTooHigh_MembershipApplicationNeedsModeration() {
+	private function newSucceedingTextPolicyValidator(): TextPolicyValidator {
 		$textPolicyValidator = $this->createMock( TextPolicyValidator::class );
 		$textPolicyValidator->method( 'textIsHarmless' )->willReturn( true );
+		return $textPolicyValidator;
+	}
+
+	public function testGivenYearlyAmountTooHigh_MembershipApplicationNeedsModeration() {
+		$textPolicyValidator = $this->newSucceedingTextPolicyValidator();
 		$policyValidator = new ApplyForMembershipPolicyValidator( $textPolicyValidator );
 		$this->assertTrue( $policyValidator->needsModeration(
 			ValidMembershipApplication::newApplicationWithTooHighYearlyAmount()
@@ -34,6 +38,15 @@ class ApplyForMembershipPolicyValidatorTest extends \PHPUnit\Framework\TestCase 
 		$this->assertTrue( $policyValidator->needsModeration(
 			ValidMembershipApplication::newDomainEntity()
 		) );
+	}
+
+	public function testWhenEmailAddressIsBlacklisted_isAutoDeletedReturnsTrue() {
+		$textPolicyValidator = $this->newSucceedingTextPolicyValidator();
+		$policyValidator = new ApplyForMembershipPolicyValidator(
+			$textPolicyValidator,
+			[ ValidMembershipApplication::APPLICANT_EMAIL_ADDRESS ]
+		);
+		$this->assertTrue( $policyValidator->isAutoDeleted( ValidMembershipApplication::newDomainEntity() ) );
 	}
 
 }
