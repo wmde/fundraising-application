@@ -1268,7 +1268,8 @@ class FunFunFactory {
 	private function newDonationPolicyValidator(): AddDonationPolicyValidator {
 		return new AddDonationPolicyValidator(
 			$this->newDonationAmountPolicyValidator(),
-			$this->newTextPolicyValidator( 'fields' )
+			$this->newTextPolicyValidator( 'fields' ),
+			$this->config['email-address-blacklist']
 		);
 	}
 

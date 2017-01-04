@@ -17,10 +17,13 @@ class AddDonationPolicyValidator {
 
 	private $amountPolicyValidator;
 	private $textPolicyValidator;
+	private $emailAddressBlacklist;
 
-	public function __construct( AmountPolicyValidator $amountPolicyValidator, TextPolicyValidator $textPolicyValidator ) {
+	public function __construct( AmountPolicyValidator $amountPolicyValidator, TextPolicyValidator $textPolicyValidator,
+								 array $emailAddressBlacklist = [] ) {
 		$this->amountPolicyValidator = $amountPolicyValidator;
 		$this->textPolicyValidator = $textPolicyValidator;
+		$this->emailAddressBlacklist = $emailAddressBlacklist;
 	}
 
 	public function needsModeration( AddDonationRequest $request ): bool {
@@ -30,6 +33,10 @@ class AddDonationPolicyValidator {
 		);
 
 		return !empty( $violations );
+	}
+
+	public function isAutoDeleted( AddDonationRequest $request ): bool {
+		return in_array( $request->getDonorEmailAddress(), $this->emailAddressBlacklist );
 	}
 
 	private function getBadWordViolations( AddDonationRequest $request ): array {

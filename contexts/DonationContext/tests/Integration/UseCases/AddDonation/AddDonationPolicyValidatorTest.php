@@ -21,23 +21,17 @@ use WMDE\Fundraising\Frontend\Validation\ValidationResult;
 class AddDonationPolicyValidatorTest extends ValidatorTestCase {
 
 	public function testTooHighAmountGiven_needsModerationReturnsTrue() {
-		$succeedingTextPolicy = $this->createMock( TextPolicyValidator::class );
-		$succeedingTextPolicy->method( 'textIsHarmless' )->willReturn( true );
 		$policyValidator = new AddDonationPolicyValidator(
 			$this->newFailingAmountValidator(),
-			$succeedingTextPolicy
+			$this->newSucceedingTextPolicyValidator()
 		);
 		$this->assertTrue( $policyValidator->needsModeration( ValidAddDonationRequest::getRequest() ) );
 	}
 
 	public function testGivenBadWords_needsModerationReturnsTrue() {
-		$failingTextPolicyValidator = $this->createMock( TextPolicyValidator::class );
-		$failingTextPolicyValidator->method( 'hasHarmlessContent' )
-			->willReturn( false );
-
 		$policyValidator = new AddDonationPolicyValidator(
 			$this->newSucceedingAmountValidator(),
-			$failingTextPolicyValidator
+			$this->newFailingTextPolicyValidator()
 		);
 		$this->assertTrue( $policyValidator->needsModeration( ValidAddDonationRequest::getRequest() ) );
 	}
@@ -61,4 +55,38 @@ class AddDonationPolicyValidatorTest extends ValidatorTestCase {
 		$amountPolicyValidator->method( 'validate' )->willReturn( new ValidationResult() );
 		return $amountPolicyValidator;
 	}
+
+	private function newSucceedingTextPolicyValidator() {
+		$succeedingTextPolicyValidator = $this->createMock( TextPolicyValidator::class );
+		$succeedingTextPolicyValidator->method( 'textIsHarmless' )->willReturn( true );
+		return $succeedingTextPolicyValidator;
+	}
+
+	private function newFailingTextPolicyValidator() {
+		$failingTextPolicyValidator = $this->createMock( TextPolicyValidator::class );
+		$failingTextPolicyValidator->method( 'hasHarmlessContent' )
+			->willReturn( false );
+		return $failingTextPolicyValidator;
+	}
+
+	public function testWhenEmailAddressIsNotBlacklisted_isAutoDeletedReturnsFalse() {
+		$policyValidator = new AddDonationPolicyValidator(
+			$this->newSucceedingAmountValidator(),
+			$this->newSucceedingTextPolicyValidator(),
+			[]
+		);
+
+		$this->assertFalse( $policyValidator->isAutoDeleted( ValidAddDonationRequest::getRequest() ) );
+	}
+
+	public function testWhenEmailAddressIsBlacklisted_isAutoDeletedReturnsTrue() {
+		$policyValidator = new AddDonationPolicyValidator(
+			$this->newSucceedingAmountValidator(),
+			$this->newSucceedingTextPolicyValidator(),
+			[ 'foo@bar.baz' ]
+		);
+
+		$this->assertTrue( $policyValidator->isAutoDeleted( ValidAddDonationRequest::getRequest() ) );
+	}
+
 }
