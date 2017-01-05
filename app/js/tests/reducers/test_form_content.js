@@ -201,3 +201,14 @@ test( 'FINISH_BANK_DATA_VALIDATION does not modify state data when status is not
 	t.end();
 } );
 
+test( 'FINISH_BANK_DATA_VALIDATION does not clear BIC when it is not passed in validation response', function ( t ) {
+	var stateBefore = { iban: 'AT022050302101023600', bic: 'SPIHAT22XXX', accountNumber: '', bankCode: '', bankName: '' },
+		action = { type: 'FINISH_BANK_DATA_VALIDATION', payload: {
+			status: 'OK',
+			iban: 'AT022050302101023600'
+		} };
+
+	deepFreeze( stateBefore );
+	t.deepEqual( formContent( stateBefore, action ), stateBefore );
+	t.end();
+} );

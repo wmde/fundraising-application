@@ -27,6 +27,9 @@ use WMDE\Fundraising\Frontend\Validation\ValidationResult;
  */
 class AddDonationValidatorTest extends ValidatorTestCase {
 
+	const FOREIGN_IBAN = 'NL18ABNA0484869868';
+	const FOREIGN_BIC = 'ABNANL2A';
+
 	/** @var AddDonationValidator */
 	private $donationValidator;
 
@@ -107,7 +110,22 @@ class AddDonationValidatorTest extends ValidatorTestCase {
 
 		$this->assertConstraintWasViolated( $result, AddDonationValidationResult::SOURCE_IBAN );
 		$this->assertConstraintWasViolated( $result, AddDonationValidationResult::SOURCE_BIC );
-		$this->assertConstraintWasViolated( $result, AddDonationValidationResult::SOURCE_BANK_NAME );
+	}
+
+	public function testForeignDirectDebitMissingBankData_validationSucceeds() {
+		$bankData = new BankData();
+		$bankData->setIban( new Iban( self::FOREIGN_IBAN ) );
+		$bankData->setBic( self::FOREIGN_BIC );
+		$bankData->setBankName( '' );
+		$bankData->setAccount( '' );
+		$bankData->setBankCode( '' );
+
+		$request = ValidAddDonationRequest::getRequest();
+		$request->setBankData( $bankData );
+
+		$result = $this->donationValidator->validate( $request );
+		$this->assertTrue( $result->isSuccessful() );
+		$this->assertFalse( $result->hasViolations() );
 	}
 
 	public function testAmountTooLow_validatorReturnsFalse() {

@@ -83,7 +83,7 @@ $( function () {
 						initData.data( 'generate-iban-url' )
 					),
 					actions.newFinishBankDataValidationAction,
-					[ 'iban', 'accountNumber', 'bankCode', 'debitType', 'paymentType' ],
+					[ 'iban', 'bic', 'accountNumber', 'bankCode', 'debitType', 'paymentType' ],
 					initialValues
 				),
 				WMDE.ReduxValidation.createValidationDispatcher(

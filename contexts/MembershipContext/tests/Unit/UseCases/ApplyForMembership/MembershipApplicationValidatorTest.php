@@ -159,16 +159,16 @@ class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
 		);
 	}
 
-	public function testWhenBankNameIsMissing_validationFails() {
+	public function testWhenBankNameIsMissing_validationSucceeds() {
 		$this->bankDataValidator = $this->newRealBankDataValidator();
 
 		$request = $this->newValidRequest();
 		$request->getBankData()->setBankName( '' );
+		$response = $this->newValidator()->validate( $request );
 
-		$this->assertRequestValidationResultInErrors(
-			$request,
-			[ Result::SOURCE_BANK_NAME => Result::VIOLATION_MISSING ]
-		);
+		$this->assertEquals( new Result(), $response );
+		$this->assertEmpty( $response->getViolationSources() );
+		$this->assertTrue( $response->isSuccessful() );
 	}
 
 	public function testWhenBankCodeIsMissing_validationFails() {
