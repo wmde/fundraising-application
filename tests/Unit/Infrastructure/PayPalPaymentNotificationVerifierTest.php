@@ -22,6 +22,7 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit_Framework_TestCase 
 	const INVALID_PAYMENT_STATUS = 'Unknown';
 	const ITEM_NAME = 'My donation';
 	const CURRENCY_EUR = 'EUR';
+	const RECURRING_NO_PAYMENT = 'recurring_payment_suspended_due_to_max_failed_payment';
 
 	public function testReceiverAddressMismatches_verifierThrowsException() {
 		$this->expectException( PayPalPaymentNotificationVerifierException::class );
@@ -57,7 +58,7 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit_Framework_TestCase 
 		try {
 			$this->newVerifier( $this->newSucceedingClient() )->verify( $this->newRequest() );
 		} catch ( PayPalPaymentNotificationVerifierException $e ) {
-			$this->fail();
+			$this->fail( 'There should be no exception with valid data and succeeding client.' );
 		}
 	}
 
@@ -67,12 +68,39 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit_Framework_TestCase 
 		$verifier->verify( $this->newRequest() );
 	}
 
-	private function newRequest() {
+	public function testGivenRecurringPaymentStatusMessage_currencyIsCheckedInDifferentField() {
+		try {
+			$expectedParams = [
+				'cmd' => '_notify-validate',
+				'receiver_email' => self::VALID_ACCOUNT_EMAIL,
+				'payment_status' => self::VALID_PAYMENT_STATUS,
+				'item_name' => self::ITEM_NAME,
+				'txn_type' => self::RECURRING_NO_PAYMENT,
+				'currency_code' => self::CURRENCY_EUR
+			];
+			$this->newVerifier( $this->newSucceedingClientExpectingParams( $expectedParams ) )
+				->verify( $this->newFailedRecurringPaymentRequest() );
+		} catch ( PayPalPaymentNotificationVerifierException $e ) {
+			$this->fail( 'Currency in different field should be ok for non-payment-complete recurring notices.' );
+		}
+	}
+
+	private function newRequest(): array {
 		return [
 			'receiver_email' => self::VALID_ACCOUNT_EMAIL,
 			'payment_status' => self::VALID_PAYMENT_STATUS,
 			'item_name' => self::ITEM_NAME,
 			'mc_currency' => self::CURRENCY_EUR
+		];
+	}
+
+	private function newFailedRecurringPaymentRequest(): array {
+		return [
+			'receiver_email' => self::VALID_ACCOUNT_EMAIL,
+			'payment_status' => self::VALID_PAYMENT_STATUS,
+			'item_name' => self::ITEM_NAME,
+			'txn_type' => self::RECURRING_NO_PAYMENT,
+			'currency_code' => self::CURRENCY_EUR
 		];
 	}
 
@@ -100,6 +128,19 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit_Framework_TestCase 
 		return $this->newClient( $body );
 	}
 
+	private function newSucceedingClientExpectingParams( array $expectedParams ): Client {
+		$body = $this->getMockBuilder( Stream::class )
+			->disableOriginalConstructor()
+			->setMethods( [ 'getContents' ] )
+			->getMock();
+
+		$body->expects( $this->once() )
+			->method( 'getContents' )
+			->willReturn( 'VERIFIED' );
+
+		return $this->newClient( $body, $expectedParams );
+	}
+
 	private function newFailingClient(): Client {
 		$body = $this->getMockBuilder( Stream::class )
 			->disableOriginalConstructor()
@@ -113,7 +154,7 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit_Framework_TestCase 
 		return $this->newClient( $body );
 	}
 
-	private function newClient( Stream $body ): Client {
+	private function newClient( Stream $body, array $expectedParams=null ): Client {
 		$response = $this->getMockBuilder( Response::class )
 			->disableOriginalConstructor()
 			->setMethods( [ 'getBody' ] )
@@ -128,16 +169,19 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit_Framework_TestCase 
 			->setMethods( [ 'post' ] )
 			->getMock();
 
+		if ( is_null( $expectedParams ) ) {
+			$expectedParams = [
+				'cmd' => '_notify-validate',
+				'receiver_email' => self::VALID_ACCOUNT_EMAIL,
+				'payment_status' => self::VALID_PAYMENT_STATUS,
+				'item_name' => self::ITEM_NAME,
+				'mc_currency' => self::CURRENCY_EUR
+			];
+		}
 		$client->expects( $this->once() )
 			->method( 'post' )
 			->with( self::DUMMY_API_URL, [
-				'form_params' => [
-					'cmd' => '_notify-validate',
-					'receiver_email' => self::VALID_ACCOUNT_EMAIL,
-					'payment_status' => self::VALID_PAYMENT_STATUS,
-					'item_name' => self::ITEM_NAME,
-					'mc_currency' => self::CURRENCY_EUR
-				]
+				'form_params' => $expectedParams
 			] )
 			->willReturn( $response );
 
