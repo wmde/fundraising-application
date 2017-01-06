@@ -145,13 +145,15 @@ class AddDonationHandler {
 			->setBankCode( $request->get( 'blz', '' ) )
 			->setBankName( $request->get( 'bankname', '' ) );
 
-		if ( $bankData->hasIban() && !$bankData->hasBic() && !$bankData->hasCompleteLegacyBankData() ) {
-			$bankData = $this->newBankDataFromIban( $bankData->getIban() );
-		}
-		if ( $bankData->hasCompleteLegacyBankData() && !$bankData->hasIban() ) {
-			$bankData = $this->newBankDataFromAccountAndBankCode( $bankData->getAccount(), $bankData->getBankCode() );
+		if ( $bankData->isComplete() ) {
+			return $bankData->freeze()->assertNoNullFields();
 		}
 
+		if ( $bankData->hasIban() ) {
+			$bankData = $this->newBankDataFromIban( $bankData->getIban() );
+		} elseif ( $bankData->hasCompleteLegacyBankData() ) {
+			$bankData = $this->newBankDataFromAccountAndBankCode( $bankData->getAccount(), $bankData->getBankCode() );
+		}
 		return $bankData->freeze()->assertNoNullFields();
 	}
 
