@@ -154,7 +154,7 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit_Framework_TestCase 
 		return $this->newClient( $body );
 	}
 
-	private function newClient( Stream $body, array $expectedParams=null ): Client {
+	private function newClient( Stream $body, array $expectedParams = null ): Client {
 		$response = $this->getMockBuilder( Response::class )
 			->disableOriginalConstructor()
 			->setMethods( [ 'getBody' ] )
