@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\DonationContext\UseCases\HandlePayPalPaymentNotification;
 
+use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\DonationContext\Authorization\DonationAuthorizer;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonationPayment;
@@ -137,7 +138,7 @@ class HandlePayPalPaymentNotificationUseCase {
 			->setAddressStatus( $request->getPayerAddressStatus() )
 			->setAmount( $request->getAmountGross() )
 			->setCurrencyCode( $request->getCurrencyCode() )
-			->setFee( $request->getTransactionFee() )
+			->setFee( Euro::newFromString( $request->getTransactionFee() ) )
 			->setSettleAmount( $request->getSettleAmount() )
 			->setFirstName( $request->getPayerFirstName() )
 			->setLastName( $request->getPayerLastName() )

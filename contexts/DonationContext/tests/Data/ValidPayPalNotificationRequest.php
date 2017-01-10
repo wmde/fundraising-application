@@ -29,7 +29,6 @@ class ValidPayPalNotificationRequest {
 	const PAYER_ADDRESS_STATUS = 'confirmed';
 	const TOKEN = 'my_secret_token';
 	const CURRENCY_CODE = 'EUR';
-	const TRANSACTION_FEE_CENTS = 27;
 	const TRANSACTION_FEE_EURO_STRING = '2.70';
 	const AMOUNT_GROSS_CENTS = 500;
 	const AMOUNT_GROSS_EURO_STRING = '5.00';
@@ -125,7 +124,7 @@ class ValidPayPalNotificationRequest {
 			->setPayerAddressStatus( self::PAYER_ADDRESS_STATUS )
 			->setToken( self::TOKEN )
 			->setCurrencyCode( self::CURRENCY_CODE )
-			->setTransactionFee( Euro::newFromCents( self::TRANSACTION_FEE_CENTS ) )
+			->setTransactionFee( self::TRANSACTION_FEE_EURO_STRING )
 			->setAmountGross( Euro::newFromCents( self::AMOUNT_GROSS_CENTS ) )
 			->setSettleAmount( Euro::newFromCents( self::SETTLE_AMOUNT_CENTS ) )
 			->setPaymentTimestamp( self::PAYMENT_TIMESTAMP )

@@ -336,20 +336,23 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			$factory->getDonationRepository()->storeDonation( ValidDonation::newIncompletePayPalDonation() );
 			$factory->setPayPalPaymentNotificationVerifier( $this->newSucceedingNotificationVerifier() );
 
-			// TODO: change test and code so this exception does not happen
-			$this->expectException( \InvalidArgumentException::class );
+			$logger = new LoggerSpy();
+			$factory->setPaypalLogger( $logger );
 
 			$client->request(
 				'POST',
 				'/handle-paypal-payment-notification',
 				$this->newValidRequestParametersWithNegativeTransactionFee()
 			);
+
+			$logger->assertCalledOnceWithMessage( 'Unhandled PayPal instant payment notification', $this );
 		} );
 	}
 
 	private function newValidRequestParametersWithNegativeTransactionFee(): array {
 		$parameters = $this->newHttpParamsForPayment();
 		$parameters['mc_fee'] = '-12.34';
+		$parameters['payment_status'] = 'Refunded';
 		return $parameters;
 	}
 
