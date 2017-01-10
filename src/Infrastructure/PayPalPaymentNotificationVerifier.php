@@ -80,11 +80,6 @@ class PayPalPaymentNotificationVerifier implements PaymentNotificationVerifier {
 			$request['receiver_email'] === $this->config['account-address'];
 	}
 
-	private function hasAllowedPaymentStatus( array $request ): bool {
-		return array_key_exists( 'payment_status', $request ) &&
-			in_array( $request['payment_status'], self::ALLOWED_STATUSES );
-	}
-
 	private function hasValidCurrencyCode( array $request ): bool {
 		return array_key_exists( 'mc_currency', $request ) &&
 			in_array( $request['mc_currency'], self::ALLOWED_CURRENCY_CODES );
