@@ -301,7 +301,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	private function newPendingPaymentParams() {
+	private function newPendingPaymentParams(): array {
 		return [
 			'receiver_email' => self::EMAIL_ADDRESS,
 			'payment_status' => 'Pending',
@@ -328,12 +328,6 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 
 	public function testGivenNegativeTransactionFee_exceptionIsThrown() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setTokenGenerator( new FixedTokenGenerator(
-				self::UPDATE_TOKEN,
-				\DateTime::createFromFormat( 'Y-m-d H:i:s', '2039-12-31 23:59:59' )
-			) );
-
-			$factory->getDonationRepository()->storeDonation( ValidDonation::newIncompletePayPalDonation() );
 			$factory->setPayPalPaymentNotificationVerifier( $this->newSucceedingNotificationVerifier() );
 
 			$logger = new LoggerSpy();
