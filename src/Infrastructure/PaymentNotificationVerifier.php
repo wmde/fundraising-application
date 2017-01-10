@@ -10,6 +10,14 @@ namespace WMDE\Fundraising\Frontend\Infrastructure;
  */
 interface PaymentNotificationVerifier {
 
+	/**
+	 * Verifies the request's integrity and reassures with PayPal
+	 * servers that the request was not tampered with during transfer.
+	 *
+	 * @param array $request
+	 *
+	 * @throws PayPalPaymentNotificationVerifierException
+	 */
 	public function verify( array $request );
 
 }

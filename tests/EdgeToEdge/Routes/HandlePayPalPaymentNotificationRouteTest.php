@@ -60,22 +60,16 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	private function newSucceedingNotificationVerifierMock( array $requestParams ) {
 		return new PayPalPaymentNotificationVerifier(
 			$this->newGuzzleClientMock( self::VALID_VERIFICATION_RESPONSE, $requestParams ),
-			[
-				'base-url' => self::BASE_URL,
-				'account-address' => self::EMAIL_ADDRESS,
-				'item-name' => self::ITEM_NAME
-			]
+			self::BASE_URL,
+			self::EMAIL_ADDRESS
 		);
 	}
 
 	private function newFailingNotifierMock() {
 		return new PayPalPaymentNotificationVerifier(
 			$this->newGuzzleClientMock( self::FAILING_VERIFICATION_RESPONSE, $this->newHttpParamsForPayment() ),
-			[
-				'base-url' => self::BASE_URL,
-				'account-address' => self::EMAIL_ADDRESS,
-				'item-name' => self::ITEM_NAME
-			]
+			self::BASE_URL,
+			self::EMAIL_ADDRESS
 		);
 	}
 

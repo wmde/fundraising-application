@@ -393,7 +393,8 @@ class FunFunFactory {
 			return new LoggingPaymentNotificationVerifier(
 				new PayPalPaymentNotificationVerifier(
 					new Client(),
-					$this->config['paypal-donation']
+					$this->config['paypal-donation']['base-url'],
+					$this->config['paypal-donation']['account-address']
 				),
 				$this->getLogger()
 			);
