@@ -17,16 +17,17 @@ class PayPalPaymentNotificationVerifier implements PaymentNotificationVerifier {
 	/* private */ const ALLOWED_CURRENCY_CODES = [ 'EUR' ];
 
 	private $httpClient;
-	private $config;
+	private $baseUrl;
+	private $accountAddress;
 
-	public function __construct( Client $httpClient, array $config ) {
+	public function __construct( Client $httpClient, string $baseUrl, string $accountAddress ) {
 		$this->httpClient = $httpClient;
-		$this->config = $config;
+		$this->baseUrl = $baseUrl;
+		$this->accountAddress = $accountAddress;
 	}
 
 	/**
-	 * Verifies the request's integrity and reassures with PayPal
-	 * servers that the request wasn't tampered with during transfer
+	 * @see PaymentNotificationVerifier::verify
 	 *
 	 * @param array $request
 	 *
@@ -48,7 +49,7 @@ class PayPalPaymentNotificationVerifier implements PaymentNotificationVerifier {
 		}
 
 		$result = $this->httpClient->post(
-			$this->config['base-url'],
+			$this->baseUrl,
 			[ 'form_params' => array_merge( [ 'cmd' => '_notify-validate' ], $request ) ]
 		);
 
@@ -77,7 +78,7 @@ class PayPalPaymentNotificationVerifier implements PaymentNotificationVerifier {
 
 	private function matchesReceiverAddress( array $request ): bool {
 		return array_key_exists( 'receiver_email', $request ) &&
-			$request['receiver_email'] === $this->config['account-address'];
+			$request['receiver_email'] === $this->accountAddress;
 	}
 
 	private function hasValidCurrencyCode( array $request ): bool {

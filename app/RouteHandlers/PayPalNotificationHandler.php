@@ -77,7 +77,7 @@ class PayPalNotificationHandler {
 			->setPayerAddressStatus( $postRequest->get( 'address_status', '' ) )
 			->setDonationId( (int)$postRequest->get( 'item_number', 0 ) )
 			->setCurrencyCode( $postRequest->get( 'mc_currency', '' ) )
-			->setTransactionFee( Euro::newFromString( $postRequest->get( 'mc_fee', '0' ) ) )
+			->setTransactionFee( $postRequest->get( 'mc_fee', '0' ) )
 			->setAmountGross( Euro::newFromString( $postRequest->get( 'mc_gross', '0' ) ) )
 			->setSettleAmount( Euro::newFromString( $postRequest->get( 'settle_amount', '0' ) ) )
 			->setPaymentTimestamp( $postRequest->get( 'payment_date', '' ) )
@@ -98,11 +98,11 @@ class PayPalNotificationHandler {
 		}
 	}
 
-	private function logResponseIfNeeded( PaypalNotificationResponse $response, Request $request )
-	{
+	private function logResponseIfNeeded( PaypalNotificationResponse $response, Request $request ) {
 		if ( $response->notificationWasHandled() ) {
 			return;
 		}
+
 		$context = $response->getContext();
 		$message = $context['message'] ?? 'Paypal request not handled';
 		$logLevel = $response->hasErrors() ? LogLevel::ERROR : LogLevel::INFO;

@@ -11,6 +11,7 @@ use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\PaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
@@ -42,7 +43,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			$factory->getDonationRepository()->storeDonation( ValidDonation::newIncompletePayPalDonation() );
 
 			$factory->setPayPalPaymentNotificationVerifier(
-				$this->newSucceedingNotifierMock( $this->newHttpParamsForPayment() )
+				$this->newNonNetworkUsingNotificationVerifier( $this->newHttpParamsForPayment() )
 			);
 
 			$client->request(
@@ -56,25 +57,19 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function newSucceedingNotifierMock( array $requestParams ) {
+	private function newNonNetworkUsingNotificationVerifier( array $requestParams ) {
 		return new PayPalPaymentNotificationVerifier(
 			$this->newGuzzleClientMock( self::VALID_VERIFICATION_RESPONSE, $requestParams ),
-			[
-				'base-url' => self::BASE_URL,
-				'account-address' => self::EMAIL_ADDRESS,
-				'item-name' => self::ITEM_NAME
-			]
+			self::BASE_URL,
+			self::EMAIL_ADDRESS
 		);
 	}
 
 	private function newFailingNotifierMock() {
 		return new PayPalPaymentNotificationVerifier(
 			$this->newGuzzleClientMock( self::FAILING_VERIFICATION_RESPONSE, $this->newHttpParamsForPayment() ),
-			[
-				'base-url' => self::BASE_URL,
-				'account-address' => self::EMAIL_ADDRESS,
-				'item-name' => self::ITEM_NAME
-			]
+			self::BASE_URL,
+			self::EMAIL_ADDRESS
 		);
 	}
 
@@ -168,7 +163,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	public function testGivenInvalidReceiverEmail_applicationReturnsError() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setPayPalPaymentNotificationVerifier(
-				$this->newSucceedingNotifierMock( $this->newHttpParamsForPayment() )
+				$this->newNonNetworkUsingNotificationVerifier( $this->newHttpParamsForPayment() )
 			);
 
 			$client->request(
@@ -188,7 +183,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	public function testGivenUnsupportedPaymentStatus_applicationReturnsOK() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setPayPalPaymentNotificationVerifier(
-				$this->newSucceedingNotifierMock( $this->newPendingPaymentParams() )
+				$this->newNonNetworkUsingNotificationVerifier( $this->newPendingPaymentParams() )
 			);
 
 			$client->request(
@@ -205,7 +200,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	public function testGivenUnsupportedPaymentStatus_requestDataIsLogged() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setPayPalPaymentNotificationVerifier(
-				$this->newSucceedingNotifierMock( $this->newPendingPaymentParams() )
+				$this->newNonNetworkUsingNotificationVerifier( $this->newPendingPaymentParams() )
 			);
 
 			$logger = new LoggerSpy();
@@ -243,7 +238,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	public function testGivenUnsupportedCurrency_applicationReturnsError() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setPayPalPaymentNotificationVerifier(
-				$this->newSucceedingNotifierMock( $this->newHttpParamsForPayment() )
+				$this->newNonNetworkUsingNotificationVerifier( $this->newHttpParamsForPayment() )
 			);
 
 			$requestData = $this->newHttpParamsForPayment();
@@ -262,7 +257,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	public function testGivenTransactionTypeForSubscriptionChanges_requestDataIsLogged() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setPayPalPaymentNotificationVerifier(
-				$this->newSucceedingNotifierMock( $this->newSubscriptionModificationParams() )
+				$this->newNonNetworkUsingNotificationVerifier( $this->newSubscriptionModificationParams() )
 			);
 			$logger = new LoggerSpy();
 			$factory->setPaypalLogger( $logger );
@@ -306,7 +301,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	private function newPendingPaymentParams() {
+	private function newPendingPaymentParams(): array {
 		return [
 			'receiver_email' => self::EMAIL_ADDRESS,
 			'payment_status' => 'Pending',
@@ -329,6 +324,38 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			'txn_type' => 'express_checkout',
 			'payment_date' => '20:12:59 Jan 13, 2009 PST',
 		];
+	}
+
+	public function testGivenNegativeTransactionFee_exceptionIsThrown() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setPayPalPaymentNotificationVerifier( $this->newSucceedingNotificationVerifier() );
+
+			$logger = new LoggerSpy();
+			$factory->setPaypalLogger( $logger );
+
+			$client->request(
+				'POST',
+				'/handle-paypal-payment-notification',
+				$this->newValidRequestParametersWithNegativeTransactionFee()
+			);
+
+			$logger->assertCalledOnceWithMessage( 'Unhandled PayPal instant payment notification', $this );
+		} );
+	}
+
+	private function newValidRequestParametersWithNegativeTransactionFee(): array {
+		$parameters = $this->newHttpParamsForPayment();
+		$parameters['mc_fee'] = '-12.34';
+		$parameters['payment_status'] = 'Refunded';
+		return $parameters;
+	}
+
+	private function newSucceedingNotificationVerifier(): PaymentNotificationVerifier {
+		$verifier = $this->createMock( PaymentNotificationVerifier::class );
+
+		$verifier->expects( $this->any() )->method( 'verify' )->willReturn( true );
+
+		return $verifier;
 	}
 
 }

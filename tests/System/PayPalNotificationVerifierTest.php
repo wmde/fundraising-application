@@ -38,7 +38,11 @@ class PayPalNotificationVerifierTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	private function newVerifier( array $config ): PayPalPaymentNotificationVerifier {
-		return new PayPalPaymentNotificationVerifier( new Client(), $config );
+		return new PayPalPaymentNotificationVerifier(
+			new Client(),
+			$config['base-url'],
+			$config['account-address']
+		);
 	}
 
 	private function newPostRequest() {

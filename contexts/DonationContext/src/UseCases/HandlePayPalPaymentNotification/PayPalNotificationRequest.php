@@ -193,11 +193,11 @@ class PayPalNotificationRequest {
 		return $this;
 	}
 
-	public function getTransactionFee(): Euro {
+	public function getTransactionFee(): string {
 		return $this->transactionFee;
 	}
 
-	public function setTransactionFee( Euro $transactionFee ): self {
+	public function setTransactionFee( string $transactionFee ): self {
 		$this->transactionFee = $transactionFee;
 		return $this;
 	}

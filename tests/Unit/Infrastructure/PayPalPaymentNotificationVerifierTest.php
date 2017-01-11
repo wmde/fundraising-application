@@ -79,11 +79,8 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit_Framework_TestCase 
 	private function newVerifier( Client $httpClient ): PayPalPaymentNotificationVerifier {
 		return new PayPalPaymentNotificationVerifier(
 			$httpClient,
-			[
-				'base-url' => self::DUMMY_API_URL,
-				'account-address' => self::VALID_ACCOUNT_EMAIL,
-				'item-name' => self::ITEM_NAME
-			]
+			self::DUMMY_API_URL,
+			self::VALID_ACCOUNT_EMAIL
 		);
 	}
 
