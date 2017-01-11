@@ -77,7 +77,7 @@ class PayPalNotificationHandler {
 			->setPayerAddressStatus( $postRequest->get( 'address_status', '' ) )
 			->setDonationId( (int)$postRequest->get( 'item_number', 0 ) )
 			->setCurrencyCode( $postRequest->get( 'mc_currency', '' ) )
-			->setTransactionFee( $postRequest->get( 'mc_fee', '0' ) )
+			->setTransactionFee( $postRequest->get( 'mc_fee', '0' ) ) // No Euro class to avoid exceptions on fees < 0
 			->setAmountGross( Euro::newFromString( $postRequest->get( 'mc_gross', '0' ) ) )
 			->setSettleAmount( Euro::newFromString( $postRequest->get( 'settle_amount', '0' ) ) )
 			->setPaymentTimestamp( $postRequest->get( 'payment_date', '' ) )
