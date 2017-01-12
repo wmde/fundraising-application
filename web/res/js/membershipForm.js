@@ -44,13 +44,13 @@ $( function () {
 	WMDE.StoreUpdates.connectValidatorsToStore(
 		function ( initialValues ) {
 			return [
-				WMDE.ReduxValidation.createValidationDispatcher(
+				WMDE.ValidationDispatchers.createValidationDispatcher(
 					WMDE.FormValidation.createFeeValidator( initData.data( 'validate-fee-url' ) ),
 					actions.newFinishPaymentDataValidationAction,
 					[ 'amount', 'paymentIntervalInMonths', 'addressType' ],
 					initialValues
 				),
-				WMDE.ReduxValidation.createValidationDispatcher(
+				WMDE.ValidationDispatchers.createValidationDispatcher(
 					WMDE.FormValidation.createAddressValidator(
 						initData.data( 'validate-address-url' ),
 						WMDE.FormValidation.DefaultRequiredFieldsForAddressType
@@ -71,13 +71,13 @@ $( function () {
 					],
 					initialValues
 				),
-				WMDE.ReduxValidation.createValidationDispatcher(
+				WMDE.ValidationDispatchers.createValidationDispatcher(
 					WMDE.FormValidation.createEmailAddressValidator( initData.data( 'validate-email-address-url' ) ),
 					actions.newFinishEmailAddressValidationAction,
 					[ 'email' ],
 					initialValues
 				),
-				WMDE.ReduxValidation.createValidationDispatcher(
+				WMDE.ValidationDispatchers.createValidationDispatcher(
 					WMDE.FormValidation.createBankDataValidator(
 						initData.data( 'validate-iban-url' ),
 						initData.data( 'generate-iban-url' )
@@ -86,7 +86,7 @@ $( function () {
 					[ 'iban', 'bic', 'accountNumber', 'bankCode', 'debitType', 'paymentType' ],
 					initialValues
 				),
-				WMDE.ReduxValidation.createValidationDispatcher(
+				WMDE.ValidationDispatchers.createValidationDispatcher(
 					WMDE.FormValidation.createSepaConfirmationValidator(),
 					actions.newFinishSepaConfirmationValidationAction,
 					[ 'confirmSepa' ],
