@@ -2,7 +2,7 @@
 
 var test = require( 'tape' ),
 	sinon = require( 'sinon' ),
-	reduxValidation = require( '../lib/redux_validation' );
+	createValidationDispatcher = require( '../lib/validation_dispatcher' ).createValidationDispatcher;
 
 test( 'ValidationDispatcher calls validationFunction and dispatches action', function ( t ) {
 	var successResult = { status: 'OK' },
@@ -11,7 +11,7 @@ test( 'ValidationDispatcher calls validationFunction and dispatches action', fun
 		testData = { importantField: 'just some data', ignoredData: 'this won\'t be validated' },
 		validationFunction = sinon.stub().returns( successResult ),
 		actionCreationFunction = sinon.stub().returns( dummyAction ),
-		dispatcher = reduxValidation.createValidationDispatcher(
+		dispatcher = createValidationDispatcher(
 			validationFunction,
 			actionCreationFunction,
 			[ 'importantField' ],
@@ -35,7 +35,7 @@ test( 'ValidationDispatcher calls validationFunction and dispatches action every
 		initialData = {},
 		validationFunction = sinon.stub().returns( successResult ),
 		actionCreationFunction = sinon.stub().returns( dummyAction ),
-		dispatcher = reduxValidation.createValidationDispatcher(
+		dispatcher = createValidationDispatcher(
 			validationFunction,
 			actionCreationFunction,
 			[ 'importantField' ],
@@ -59,7 +59,7 @@ test( 'ValidationDispatcher calls validationFunction and dispatches action only 
 		initialData = {},
 		validationFunction = sinon.stub().returns( successResult ),
 		actionCreationFunction = sinon.stub().returns( dummyAction ),
-		dispatcher = reduxValidation.createValidationDispatcher(
+		dispatcher = createValidationDispatcher(
 			validationFunction,
 			actionCreationFunction,
 			[ 'importantField' ],
@@ -83,7 +83,7 @@ test( 'ValidationDispatcher does nothing if ignored data changes', function ( t 
 		initialData = {},
 		validationFunction = sinon.stub().returns( successResult ),
 		actionCreationFunction = sinon.stub().returns( dummyAction ),
-		dispatcher = reduxValidation.createValidationDispatcher(
+		dispatcher = createValidationDispatcher(
 			validationFunction,
 			actionCreationFunction,
 			[ 'importantField' ],
@@ -112,7 +112,7 @@ test( 'createValidationDispatcher accepts validator object as validation functio
 		},
 		testData = { importantField: 'just some data which will be ignored' },
 		actionCreationFunction = sinon.stub(),
-		dispatcher = reduxValidation.createValidationDispatcher(
+		dispatcher = createValidationDispatcher(
 			validatorSpy,
 			actionCreationFunction,
 			[ 'importantField' ],
@@ -124,35 +124,6 @@ test( 'createValidationDispatcher accepts validator object as validation functio
 
 	t.ok( validatorSpy.validatorDelegate.calledOnce, 'validate function is called once' );
 	t.ok( validatorSpy.validatorDelegate.calledWith( testData ), 'validation function is called with test data' );
-	t.end();
-} );
-
-test( 'ValidationDispatcherCollection listens to store updates', function ( t ) {
-	var storeSpy = {
-			subscribe: sinon.spy()
-		};
-
-	reduxValidation.createValidationDispatcherCollection( storeSpy, [], 'dummy' );
-
-	t.ok( storeSpy.subscribe.calledOnce, 'mapper subscribes to store updates' );
-	t.end();
-} );
-
-test( 'ValidationDispatcherCollection update method calls dispatchers', function ( t ) {
-	var formContent = { amount: 42 },
-		state = { donationForm: formContent },
-		storeSpy = {
-			subscribe: sinon.spy(),
-			getState: sinon.stub().returns( state )
-		},
-		validatorSpy = { dispatchIfChanged: sinon.spy() },
-		collection = reduxValidation.createValidationDispatcherCollection( storeSpy, [ validatorSpy ], 'donationForm' );
-
-	collection.onUpdate();
-
-	t.ok( storeSpy.getState.calledOnce, 'onUpdate gets state from the store' );
-	t.ok( validatorSpy.dispatchIfChanged.calledOnce, 'dispatchers are called' );
-	t.ok( validatorSpy.dispatchIfChanged.calledWith( formContent, storeSpy ), 'dispatchers are called' );
 	t.end();
 } );
 

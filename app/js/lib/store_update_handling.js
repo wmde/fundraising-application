@@ -4,10 +4,9 @@
  * Connect store updates to validators, components and view handlers
  *
  * @module store_update_handling
- * @requires redux_validation
  */
 
-var reduxValidation = require( './redux_validation' ),
+var createValidationDispatcherCollection = require( './validation_dispatcher_collection' ).createValidationDispatcherCollection,
 	_ = require( 'underscore' );
 
 _.mixin( require( 'underscore.path' ) );
@@ -26,7 +25,7 @@ module.exports = {
 		var pickNonfalsy = _.partial( _.pick, _, _.identity ),
 			completeInitialValues = _.extend( {}, store.getState()[ formContentName ], pickNonfalsy( initialValues ) ),
 			validators = validatorFactoryFunction( completeInitialValues );
-		reduxValidation.createValidationDispatcherCollection( store, validators, formContentName );
+		createValidationDispatcherCollection( store, validators, formContentName );
 	},
 	connectComponentsToStore: function ( components, store, formContentName ) {
 		store.subscribe( function () {

@@ -4,7 +4,10 @@
  */
 module.exports = {
 	FormValidation: require( './lib/form_validation' ),
-	ReduxValidation: require( './lib/redux_validation' ),
+	ReduxValidation: {
+		createValidationDispatcher: require( './lib/validation_dispatcher' ).createValidationDispatcher,
+		createValidationDispatcherCollection: require( './lib/validation_dispatcher_collection' ).createValidationDispatcherCollection
+	},
 	Components: require( './lib/form_components' ),
 	Store: require( './lib/store' ),
 	StoreUpdates: require( './lib/store_update_handling' ),
