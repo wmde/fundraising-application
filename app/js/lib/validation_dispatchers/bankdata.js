@@ -12,20 +12,20 @@ var objectAssign = require( 'object-assign' ),
 
 	/**
 	 *
-	 * @param {AmountValidator} validator
+	 * @param {BankDataValidator} validator
 	 * @param {Object} initialValues Initial form state. Only the keys and values from fieldNames will be used
 	 * @return {ValidationDispatcher}
 	 */
-	createAmountValidationDispatcher = function ( validator,  initialValues ) {
-		var fieldNames = [ 'amount', 'paymentType' ];
+	createBankDataValidationDispatcher = function ( validator,  initialValues ) {
+		var fieldNames = [ 'iban', 'bic', 'accountNumber', 'bankCode', 'debitType', 'paymentType' ];
 
 		return objectAssign( Object.create( ValidationDispatcher ), {
 			validationFunction: validator.validate.bind( validator ),
-			actionCreationFunction: Actions.newFinishPaymentDataValidationAction,
+			actionCreationFunction: Actions.newFinishBankDataValidationAction,
 			fields: fieldNames,
 			previousFieldValues: _.pick( initialValues || {}, fieldNames )
 		} );
 	};
 
-module.exports = createAmountValidationDispatcher;
+module.exports = createBankDataValidationDispatcher;
 

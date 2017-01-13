@@ -31,11 +31,8 @@ var objectAssign = require( 'object-assign' ),
 			'email'
 		];
 
-		if ( typeof validator === 'object' ) {
-			validator = validator.validate.bind( validator );
-		}
 		return objectAssign( Object.create( ValidationDispatcher ), {
-			validationFunction: validator,
+			validationFunction: validator.validate.bind( validator ),
 			actionCreationFunction: Actions.newFinishAddressValidationAction,
 			fields: fieldNames,
 			previousFieldValues: _.pick( initialValues || {}, fieldNames )

@@ -3,16 +3,15 @@
 var test = require( 'tape' ),
 	sinon = require( 'sinon' ),
 	Actions = require( '../../lib/actions' ),
-	createAddressValidationDispatcher = require( '../../lib/validation_dispatchers/address' );
+	createBankDataValidationDispatcher = require( '../../lib/validation_dispatchers/bankdata' );
 
-test( 'AddressValidationDispatcher calls validator', function ( t ) {
+test( 'BankDataValidationDispatcher calls validator', function ( t ) {
 	var successResult = { status: 'OK' },
 		initialData = {},
-		testData = { street: 'The Yellow Brick Road', city: 'Emerald City', ignoredData: 'this won\'t be validated' },
-		expectedData = { street: 'The Yellow Brick Road', city: 'Emerald City' },
+		testData = { iban: 'DE12500105170648489890', ignoredData: 'this won\'t be validated' },
 		validator = { validate: sinon.stub().returns( successResult ) },
 		testStore = { dispatch: sinon.stub() },
-		dispatcher = createAddressValidationDispatcher(
+		dispatcher = createBankDataValidationDispatcher(
 			validator,
 			initialData
 		);
@@ -20,39 +19,39 @@ test( 'AddressValidationDispatcher calls validator', function ( t ) {
 	dispatcher.dispatchIfChanged( testData, testStore );
 
 	t.ok( validator.validate.calledOnce, 'validation function is called once' );
-	t.ok( validator.validate.calledWith( expectedData ), 'validation function is called with selected fields' );
+	t.ok( validator.validate.calledWith( { iban: 'DE12500105170648489890' }  ), 'validation function is called with selected fields' );
 	t.end();
 } );
 
-test( 'AddressValidationDispatcher dispatches result as action', function ( t ) {
+test( 'BankDataValidationDispatcher dispatches result as action', function ( t ) {
 	var successResult = { status: 'OK' },
 		initialData = {},
-		testData = { street: 'The Yellow Brick Road', city: 'Emerald City', ignoredData: 'this won\'t be validated' },
+		testData = { iban: 'DE12500105170648489890', ignoredData: 'this won\'t be validated' },
 		validator = { validate: sinon.stub().returns( successResult ) },
 		testStore = { dispatch: sinon.spy() },
-		dispatcher = createAddressValidationDispatcher(
+		dispatcher = createBankDataValidationDispatcher(
 			validator,
 			initialData
 		);
 
 	dispatcher.dispatchIfChanged( testData, testStore );
 
-	t.ok( testStore.dispatch.calledWith( Actions.newFinishAddressValidationAction( successResult ) ) );
+	t.ok( testStore.dispatch.calledWith( Actions.newFinishBankDataValidationAction( successResult ) ) );
 	t.end();
 } );
 
-test( 'AddressValidationDispatcher calls validator and dispatches action every time the data changes', function ( t ) {
+test( 'BankDataValidationDispatcher calls validator and dispatches action every time the data changes', function ( t ) {
 	var successResult = { status: 'OK' },
 		initialData = {},
 		validator = { validate: sinon.stub().returns( successResult ) },
 		testStore = { dispatch: sinon.spy() },
-		dispatcher = createAddressValidationDispatcher(
+		dispatcher = createBankDataValidationDispatcher(
 			validator,
 			initialData
 		);
 
-	dispatcher.dispatchIfChanged( { street: 'The Yellow Brick Road' }, testStore );
-	dispatcher.dispatchIfChanged( { street: 'Emerald Lane' }, testStore );
+	dispatcher.dispatchIfChanged( { iban: 'DE12500105170648489890' }, testStore );
+	dispatcher.dispatchIfChanged( { iban: 'AT022050302101023600' }, testStore );
 
 	t.ok( validator.validate.calledTwice, 'validation function is called for every change' );
 	t.ok( testStore.dispatch.calledTwice, 'action is dispatched for every change' );
@@ -60,11 +59,11 @@ test( 'AddressValidationDispatcher calls validator and dispatches action every t
 	t.end();
 } );
 
-test( 'AddressValidationDispatcher does nothing if data does not change', function ( t ) {
+test( 'BankDataValidationDispatcher does nothing if data does not change', function ( t ) {
 	var initialData = { amount: '2.00' },
 		validator = { validate: sinon.spy() },
 		testStore = { dispatch: sinon.spy() },
-		dispatcher = createAddressValidationDispatcher(
+		dispatcher = createBankDataValidationDispatcher(
 			validator,
 			initialData
 		);
@@ -82,7 +81,7 @@ test( 'ValidationDispatcher does nothing if ignored data changes', function ( t 
 		initialData = {},
 		validator = { validate: sinon.spy() },
 		testStore = { dispatch: sinon.spy() },
-		dispatcher = createAddressValidationDispatcher(
+		dispatcher = createBankDataValidationDispatcher(
 			validator,
 			initialData
 		);

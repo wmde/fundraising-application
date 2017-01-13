@@ -63,13 +63,11 @@ $( function () {
 					[ 'email' ],
 					initialValues
 				),
-				WMDE.ValidationDispatchers.createValidationDispatcher(
+				WMDE.ValidationDispatchers.createBankDataValidationDispatcher(
 					WMDE.FormValidation.createBankDataValidator(
 						initData.data( 'validate-iban-url' ),
 						initData.data( 'generate-iban-url' )
 					),
-					actions.newFinishBankDataValidationAction,
-					[ 'iban', 'bic', 'accountNumber', 'bankCode', 'debitType', 'paymentType' ],
 					initialValues
 				),
 				WMDE.ValidationDispatchers.createValidationDispatcher(

@@ -18,5 +18,6 @@ var objectAssign = require( 'object-assign' ),
 module.exports = {
 	createAmountValidationDispatcher: require( './amount' ),
 	createAddressValidationDispatcher: require( './address' ),
+	createBankDataValidationDispatcher: require( './bankdata' ),
 	createValidationDispatcher: createValidationDispatcher
 };
