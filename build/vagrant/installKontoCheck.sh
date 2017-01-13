@@ -13,6 +13,6 @@ phpize
 ./configure
 make
 make install
-cp /tmp/konto_check-5.8/php/konto_check.ini /etc/php/7.0/mods-available
+cp /tmp/konto_check-5.8/php/konto_check.ini /etc/php/7.1/mods-available
 phpenmod konto_check
 
