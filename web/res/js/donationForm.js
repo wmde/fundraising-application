@@ -346,9 +346,7 @@ $( function () {
 		}
 	}
 
-	// connect DOM elements to actions
-
-	$( '#continueFormSubmit1' ).click( function () {
+	function handlePaymentDataSubmit() {
 		if ( paymentDataIsValid() ) {
 			store.dispatch( actions.newNextPageAction() );
 			triggerPiwikEvent( [ 'trackGoal', 2 ] );
@@ -356,9 +354,9 @@ $( function () {
 			triggerValidityCheckForPaymentPage();
 			displayErrorBox();
 		}
-	} );
+	}
 
-	$( '#continueFormSubmit2' ).click( function () {
+	function handlePersonalDataSubmitForDirectDebit() {
 		if ( personalDataPageIsValid() ) {
 			store.dispatch( actions.newNextPageAction() );
 			triggerPiwikEvent( [ 'trackGoal', 4 ] );
@@ -366,16 +364,24 @@ $( function () {
 			triggerValidityCheckForPersonalDataPage();
 			displayErrorBox();
 		}
-	} );
+	}
 
-	$( '#finishFormSubmit2' ).click( function () {
+	function handlePersonalDataSubmitForNonDirectDebit() {
 		if ( personalDataPageIsValid() ) {
 			$( '#donForm2' ).submit();
 		} else {
 			triggerValidityCheckForPersonalDataPage();
 			displayErrorBox();
 		}
-	} );
+	}
+
+	// connect DOM elements to actions
+
+	$( '#continueFormSubmit1' ).click( WMDE.StoreUpdates.makeEventHandlerWaitForAsyncFinish( handlePaymentDataSubmit, store ) );
+
+	$( '#continueFormSubmit2' ).click( WMDE.StoreUpdates.makeEventHandlerWaitForAsyncFinish( handlePersonalDataSubmitForDirectDebit, store )  );
+
+	$( '#finishFormSubmit2' ).click( WMDE.StoreUpdates.makeEventHandlerWaitForAsyncFinish( handlePersonalDataSubmitForDirectDebit, store ) );
 
 	$( '.back-button' ).click( function () {
 		store.dispatch( actions.newResetFieldValidityAction( [ 'confirmSepa', 'confirmShortTerm' ] ) );

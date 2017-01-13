@@ -4,7 +4,6 @@ var test = require( 'tape' ),
 	deepFreeze = require( 'deep-freeze' ),
 	asyncRequests = require( '../../lib/reducers/async_requests' );
 
-
 test( 'there are no asynchronous processes when starting out', function ( t ) {
 	var expectedState = { isValidating: false, runningValidations: 0 },
 		action = { type: 'DUMMY_ACTION' };

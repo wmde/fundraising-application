@@ -50,5 +50,27 @@ module.exports = {
 				);
 			} );
 		} );
+	},
+	makeEventHandlerWaitForAsyncFinish: function ( handler, store ) {
+		return function () {
+			var unsubscribe = null;
+
+			if ( !store.getState().asynchronousRequests.isValidating ) {
+				handler();
+				return;
+			}
+
+			if ( unsubscribe !== null ) {
+				return;
+			}
+			unsubscribe = store.subscribe( function () {
+				var state = store.getState();
+				if ( !state.asynchronousRequests.isValidating ) {
+					unsubscribe();
+					unsubscribe = null;
+					handler();
+				}
+			} );
+		};
 	}
 };

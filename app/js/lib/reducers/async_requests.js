@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = function ( state, action ) {
-	if ( typeof state === "undefined" ) {
+	if ( typeof state === 'undefined' ) {
 		state = { isValidating: false, runningValidations: 0 };
 	}
 	switch ( action.type ) {

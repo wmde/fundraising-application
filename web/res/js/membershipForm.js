@@ -312,7 +312,7 @@ $( function () {
 		}
 	}
 
-	$( '#continueFormSubmit' ).click( function () {
+	function handleMembershipDataSubmitForDirectDebit() {
 		if ( formDataIsValid() ) {
 			store.dispatch( actions.newNextPageAction() );
 			$( 'section#donation-amount, section#donation-sheet' ).hide();
@@ -320,16 +320,20 @@ $( function () {
 			triggerValidityCheckForPersonalDataPage();
 			displayErrorBox();
 		}
-	} );
+	}
 
-	$( '#finishFormSubmit' ).click( function () {
+	function handleMembershipDataSubmitForNonDirectDebit() {
 		if ( formDataIsValid() ) {
 			$( '#memForm' ).submit();
 		} else {
 			triggerValidityCheckForPersonalDataPage();
 			displayErrorBox();
 		}
-	} );
+	}
+
+	$( '#continueFormSubmit' ).click( WMDE.StoreUpdates.makeEventHandlerWaitForAsyncFinish( handleMembershipDataSubmitForDirectDebit, store ) );
+
+	$( '#finishFormSubmit' ).click( WMDE.StoreUpdates.makeEventHandlerWaitForAsyncFinish( handleMembershipDataSubmitForNonDirectDebit, store ) );
 
 	$( '.back-button' ).click( function () {
 		// TODO check if page is valid
