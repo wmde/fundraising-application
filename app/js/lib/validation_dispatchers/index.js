@@ -20,5 +20,6 @@ module.exports = {
 	createAddressValidationDispatcher: require( './address' ),
 	createBankDataValidationDispatcher: require( './bankdata' ),
 	createEmailValidationDispatcher: require( './email' ),
+	createSepaConfirmationValidationDispatcher: require( './sepa_confirmation' ),
 	createValidationDispatcher: createValidationDispatcher
 };

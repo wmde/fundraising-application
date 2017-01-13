@@ -66,10 +66,8 @@ $( function () {
 					),
 					initialValues
 				),
-				WMDE.ValidationDispatchers.createValidationDispatcher(
+				WMDE.ValidationDispatchers.createSepaConfirmationValidationDispatcher(
 					WMDE.FormValidation.createSepaConfirmationValidator(),
-					actions.newFinishSepaConfirmationValidationAction,
-					[ 'confirmSepa', 'confirmShortTerm' ],
 					initialValues
 				)
 			];
