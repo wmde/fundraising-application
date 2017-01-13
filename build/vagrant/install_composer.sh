@@ -13,5 +13,8 @@ fi
 
 php composer-setup.php --quiet
 RESULT=$?
+
+mv composer.phar /usr/local/bin/composer
+
 rm composer-setup.php
 exit $RESULT
