@@ -44,10 +44,8 @@ $( function () {
 	WMDE.StoreUpdates.connectValidatorsToStore(
 		function ( initialValues ) {
 			return [
-				WMDE.ValidationDispatchers.createValidationDispatcher(
+				WMDE.ValidationDispatchers.createFeeValidationDispatcher(
 					WMDE.FormValidation.createFeeValidator( initData.data( 'validate-fee-url' ) ),
-					actions.newFinishPaymentDataValidationAction,
-					[ 'amount', 'paymentIntervalInMonths', 'addressType' ],
 					initialValues
 				),
 				WMDE.ValidationDispatchers.createAddressValidationDispatcher(
