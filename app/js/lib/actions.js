@@ -145,6 +145,54 @@ module.exports = {
 			type: 'FINISH_SEPA_CONFIRMATION_VALIDATION',
 			payload: validationResult
 		};
+	},
+
+	/**
+	 *
+	 * @param {Object} formData
+	 * @return {{type: string, payload: *}}
+	 */
+	newBeginAddressValidationAction: function ( formData ) {
+		return {
+			type: 'BEGIN_ADDRESS_VALIDATION',
+			payload: formData
+		};
+	},
+
+	/**
+	 *
+	 * @param {Object} formData
+	 * @return {{type: string, payload: *}}
+	 */
+	newBeginEmailAddressValidationAction: function ( formData ) {
+		return {
+			type: 'BEGIN_EMAIL_ADDRESS_VALIDATION',
+			payload: formData
+		};
+	},
+
+	/**
+	 *
+	 * @param {Object} formData
+	 * @return {{type: string, payload: *}}
+	 */
+	newBeginPaymentDataValidationAction: function ( formData ) {
+		return {
+			type: 'BEGIN_PAYMENT_DATA_VALIDATION',
+			payload: formData
+		};
+	},
+
+	/**
+	 *
+	 * @param {Object} formData
+	 * @return {{type: string, payload: *}}
+	 */
+	newBeginBankDataValidationAction: function ( formData ) {
+		return {
+			type: 'BEGIN_BANK_DATA_VALIDATION',
+			payload: formData
+		};
 	}
 
 };

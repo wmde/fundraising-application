@@ -41,6 +41,23 @@ test( 'AddressValidationDispatcher dispatches result as action', function ( t ) 
 	t.end();
 } );
 
+test( 'AddressValidationDispatcher dispatches "begin" action', function ( t ) {
+	var initialData = {},
+		testData = { street: 'The Yellow Brick Road', city: 'Emerald City', ignoredData: 'this won\'t be validated' },
+		expectedData = { street: 'The Yellow Brick Road', city: 'Emerald City' },
+		validator = { validate: sinon.stub() },
+		testStore = { dispatch: sinon.spy() },
+		dispatcher = createAddressValidationDispatcher(
+			validator,
+			initialData
+		);
+
+	dispatcher.dispatchIfChanged( testData, testStore );
+
+	t.ok( testStore.dispatch.calledWith( Actions.newBeginAddressValidationAction( expectedData ) ) );
+	t.end();
+} );
+
 test( 'AddressValidationDispatcher calls validator and dispatches action every time the data changes', function ( t ) {
 	var successResult = { status: 'OK' },
 		initialData = {},
@@ -55,7 +72,7 @@ test( 'AddressValidationDispatcher calls validator and dispatches action every t
 	dispatcher.dispatchIfChanged( { street: 'Emerald Lane' }, testStore );
 
 	t.ok( validator.validate.calledTwice, 'validation function is called for every change' );
-	t.ok( testStore.dispatch.calledTwice, 'action is dispatched for every change' );
+	t.ok( testStore.dispatch.callCount === 4, 'begin and finish action is dispatched for every change' );
 
 	t.end();
 } );

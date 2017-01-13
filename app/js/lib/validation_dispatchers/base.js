@@ -11,13 +11,14 @@ var _ = require( 'underscore' ),
 	 * The dispatcher checks the form content for fields given in the `fields` property.
 	 * If they have changed (compared to their equivalent in the `previousFieldValues` property),
 	 * the `validationFunction` is called with an object with the selected fields.
-	 * If the validation result is not null, it is sent to the store via the `actionCreationFunction`.
+	 * If the validation result is not null, it is sent to the store via the `finishActionCreationFunction`.
 	 *
 	 * @class ValidationDispatcher
 	 */
 	ValidationDispatcher = {
 		validationFunction: null,
-		actionCreationFunction: null,
+		finishActionCreationFunction: null,
+		beginActionCreationFunction: null,
 		fields: null,
 		previousFieldValues: {},
 
@@ -36,8 +37,12 @@ var _ = require( 'underscore' ),
 			}
 
 			this.previousFieldValues = selectedValues;
+
+			if ( this.beginActionCreationFunction ) {
+				store.dispatch( this.beginActionCreationFunction( selectedValues ) );
+			}
 			validationResult = this.validationFunction( selectedValues );
-			return store.dispatch( this.actionCreationFunction( validationResult ) );
+			return store.dispatch( this.finishActionCreationFunction( validationResult ) );
 		}
 	};
 

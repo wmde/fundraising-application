@@ -33,7 +33,9 @@ var objectAssign = require( 'object-assign' ),
 
 		return objectAssign( Object.create( ValidationDispatcher ), {
 			validationFunction: validator.validate.bind( validator ),
+			finishActionCreationFunction: Actions.newFinishAddressValidationAction,
 			actionCreationFunction: Actions.newFinishAddressValidationAction,
+			beginActionCreationFunction: Actions.newBeginAddressValidationAction,
 			fields: fieldNames,
 			previousFieldValues: _.pick( initialValues || {}, fieldNames )
 		} );
