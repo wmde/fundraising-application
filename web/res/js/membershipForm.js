@@ -57,10 +57,8 @@ $( function () {
 					),
 					initialValues
 				),
-				WMDE.ValidationDispatchers.createValidationDispatcher(
+				WMDE.ValidationDispatchers.createEmailValidationDispatcher(
 					WMDE.FormValidation.createEmailAddressValidator( initData.data( 'validate-email-address-url' ) ),
-					actions.newFinishEmailAddressValidationAction,
-					[ 'email' ],
 					initialValues
 				),
 				WMDE.ValidationDispatchers.createBankDataValidationDispatcher(
