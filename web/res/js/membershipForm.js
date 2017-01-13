@@ -50,25 +50,11 @@ $( function () {
 					[ 'amount', 'paymentIntervalInMonths', 'addressType' ],
 					initialValues
 				),
-				WMDE.ValidationDispatchers.createValidationDispatcher(
+				WMDE.ValidationDispatchers.createAddressValidationDispatcher(
 					WMDE.FormValidation.createAddressValidator(
 						initData.data( 'validate-address-url' ),
 						WMDE.FormValidation.DefaultRequiredFieldsForAddressType
 					),
-					actions.newFinishAddressValidationAction,
-					[
-						'addressType',
-						'salutation',
-						'title',
-						'firstName',
-						'lastName',
-						'companyName',
-						'street',
-						'postcode',
-						'city',
-						'country',
-						'email'
-					],
 					initialValues
 				),
 				WMDE.ValidationDispatchers.createValidationDispatcher(
