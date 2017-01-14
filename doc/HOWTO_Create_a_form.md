@@ -9,8 +9,9 @@ the validity of those values, validation messages, which parts are displayed and
 the **Store**. To change the state, an **Action** is dispatched to the store, where it is handled by **Reducers** -
 [pure functions][pure_function] that have an initial state and the action as input and a changed state as output.
 
-Each action is created with an **Action Creators** - a function that makes sure the action object is created correctly. 
-Many actions have **payloads** - data that will be processed by the reducer functions. The payload given through the parameters of the action creator.
+Actions are plain objects with a `type` property and an optional `payload` property. The payload is the data that will 
+be processed by the reducer functions. Each action is created with an **Action Creator** - a function that makes sure 
+the action object is created correctly with the correct type and payload.
 
 **Form components** are wrappers for form fields that send the form field value to the store with a `CHANGE_CONTENT` action 
 and set the form field value when they receive form content updates from the store. This ensures that the store always 
@@ -21,17 +22,20 @@ form components and do not dispatch actions.
 
 For easier HTML updates both view handlers and components get a jQuery object passed in to their factory functions.
 
-**Validators** are also listening to changes in the state. If a value changes, they call a validation function and
-dispatch a "validation finished" action to the store, which then stores the validation result and validation error
-messages with its reducers. The changed validation state and error messages may trigger view handlers that set CSS 
-classes on validated fields and display the error messages. 
+**Validation Dispatchers** are also listening to changes in the state. If a value changes, they call a validator and
+dispatch a  validator-specific "validation finished" action to the store, which then stores the validation result and 
+validation error messages with its reducers. The changed validation state and error messages may trigger view handlers 
+that set CSS classes on validated fields and display the error messages.  
+Action names for storing validation results follow the naming pattern of `FINISH_XXX_VALIDATION`, 
+ their action creation functions follow the pattern `newFinishXXXValidationAction`
 
 ![Data flow in the architecture](architecture.svg)
 
 ### Reasons for this architecture
 - Redux allows for a clear data flow and a central storage of form state instead of state storage that's tied directly to the DOM.
-- We use view handlers and components instead of component libraries like [React][react] or [Vue][vue] because the view handlers can
-  decouple HTML manipulation from the actual markup. When the markup changes, view handlers and components can be reused.
+- We use view handlers and components instead of component libraries like [React][react] or [Vue][vue] because we are rendering 
+the HTML on the server side and want too keep the option for server-side generated a/b testing. Using our own components 
+  decouples HTML manipulation from the actual markup. When the markup changes, view handlers and components can be reused.
 
 ## Initializing the form
 
@@ -104,21 +108,17 @@ You can find all the available components in [`app/js/lib/form_components.js`](.
 
 Fill the validators function body with instances of `ValidationDispatcher` classes. A `ValidationDispatcher` calls a validation function with values from the `formContent` part of the store and dispatches an action to store the validation result. It only does this when the values from the store change and the validation function returns a value that is not `null`. If the validation function returns `null` that means that the validation was skipped - for example when preconditions for validating are not met.
 
-The `createValidationDispatcher` factory function has four arguments:
+The `createValidationDispatcher` factory function has two arguments:
 
-1. The **validation function** to call. The function has to have one parameter - an object of the values to validate. The "validation function" can also be an object that has a `validate` method.
-2. The action creator to call with the validation result.
-3. An array of field names from the `formContent` part of the global store. The field names will be used to construct the value object for the validation function.
-4. The `initialValues` parameter, which is passed on from the factory function
+1. The **Validator** to call. This must be an Object with a `validate` function.
+2. The `initialValues` parameter, which is passed on from the factory function
 
 ```JavaScript
 WMDE.StoreUpdates.connectValidatorsToStore(
     function ( initialValues ) {
         return [
-            WMDE.ReduxValidation.createValidationDispatcher(
+            WMDE.ReduxValidation.createAmountValidationDispatcher(
                 WMDE.FormValidation.createAmountValidator( '{$ basepath $}/validate-amount' ),
-                WMDE.Actions.newFinishAmountValidationAction,
-                [ 'amount', 'paymentType' ],
                 initialValues
             )
         ];
@@ -127,9 +127,6 @@ WMDE.StoreUpdates.connectValidatorsToStore(
     initialFormValues
 );
 ```
-
-Actions names for storing validation results should follow the naming pattern of `FINISH_XXX_VALIDATION`, 
-their action creation functions should follow the pattern `newFinishXXXValidationAction`
 
 You can find available validation functions and classes in [`app/lib/form_validation.js`](../app/lib/form_validation.js)
 
