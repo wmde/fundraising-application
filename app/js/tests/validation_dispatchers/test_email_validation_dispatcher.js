@@ -3,12 +3,12 @@
 var test = require( 'tape' ),
 	sinon = require( 'sinon' ),
 	Actions = require( '../../lib/actions' ),
-	createEmailValidationDispatcher = require( '../../lib/validation_dispatchers/email' );
+	createEmailValidationDispatcher = require( '../../lib/validation_dispatchers/email' ),
+	testData = { email: 'gandalf@example.com', ignoredData: 'this won\'t be validated' };
 
 test( 'EmailValidationDispatcher calls validator', function ( t ) {
 	var successResult = { status: 'OK' },
 		initialData = {},
-		testData = { email: 'gandalf@example.com', ignoredData: 'this won\'t be validated' },
 		validator = { validate: sinon.stub().returns( successResult ) },
 		testStore = { dispatch: sinon.stub() },
 		dispatcher = createEmailValidationDispatcher(
@@ -26,7 +26,6 @@ test( 'EmailValidationDispatcher calls validator', function ( t ) {
 test( 'EmailValidationDispatcher dispatches result as action', function ( t ) {
 	var successResult = { status: 'OK' },
 		initialData = {},
-		testData = { email: 'gandalf@example.com', ignoredData: 'this won\'t be validated' },
 		validator = { validate: sinon.stub().returns( successResult ) },
 		testStore = { dispatch: sinon.spy() },
 		dispatcher = createEmailValidationDispatcher(
@@ -60,25 +59,7 @@ test( 'EmailValidationDispatcher calls validator and dispatches action every tim
 } );
 
 test( 'EmailValidationDispatcher does nothing if data does not change', function ( t ) {
-	var initialData = { amount: '2.00' },
-		validator = { validate: sinon.spy() },
-		testStore = { dispatch: sinon.spy() },
-		dispatcher = createEmailValidationDispatcher(
-			validator,
-			initialData
-		);
-
-	dispatcher.dispatchIfChanged( initialData, testStore );
-
-	t.notOk( validator.validate.called, 'validation function is never called' );
-	t.notOk( testStore.dispatch.called, 'no action is dispatched' );
-
-	t.end();
-} );
-
-test( 'ValidationDispatcher does nothing if ignored data changes', function ( t ) {
-	var testData = { ignoredData: 'this won\'t be validated' },
-		initialData = {},
+	var initialData = testData,
 		validator = { validate: sinon.spy() },
 		testStore = { dispatch: sinon.spy() },
 		dispatcher = createEmailValidationDispatcher(
@@ -87,6 +68,23 @@ test( 'ValidationDispatcher does nothing if ignored data changes', function ( t 
 		);
 
 	dispatcher.dispatchIfChanged( testData, testStore );
+
+	t.notOk( validator.validate.called, 'validation function is never called' );
+	t.notOk( testStore.dispatch.called, 'no action is dispatched' );
+
+	t.end();
+} );
+
+test( 'ValidationDispatcher does nothing if ignored data changes', function ( t ) {
+	var initialData = {},
+		validator = { validate: sinon.spy() },
+		testStore = { dispatch: sinon.spy() },
+		dispatcher = createEmailValidationDispatcher(
+			validator,
+			initialData
+		);
+
+	dispatcher.dispatchIfChanged( { ignoredData: 'this won\'t be validated' }, testStore );
 
 	t.notOk( validator.validate.called, 'validation function is never called' );
 	t.notOk( testStore.dispatch.called, 'no action is dispatched' );
