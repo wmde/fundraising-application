@@ -27,6 +27,6 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", path: "build/vagrant/install_packages.sh"
   config.vm.provision "shell", path: "build/vagrant/install_composer.sh"
   config.vm.provision "shell", path: "build/vagrant/installKontoCheck.sh"
-  #config.vm.provision "shell", path: "build/travis/configureForMysql.sh"
+  config.vm.provision "shell", path: "build/vagrant/configureForMysql.sh"
 
 end
