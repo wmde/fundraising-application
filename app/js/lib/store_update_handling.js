@@ -52,9 +52,8 @@ module.exports = {
 		} );
 	},
 	makeEventHandlerWaitForAsyncFinish: function ( handler, store ) {
+		var unsubscribe = null;
 		return function () {
-			var unsubscribe = null;
-
 			if ( !store.getState().asynchronousRequests.isValidating ) {
 				handler();
 				return;
