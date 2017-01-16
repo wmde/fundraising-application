@@ -16,7 +16,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\LoggerSpy;
+use WMDE\PsrLogTestDoubles\LoggerSpy;
 
 /**
  * @licence GNU GPL v2+
@@ -212,9 +212,15 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 				$this->newPendingPaymentParams()
 			);
 
-			$logger->assertCalledOnceWithMessage( 'Unhandled PayPal instant payment notification', $this );
-			$context = $logger->getLogCalls()[0]['context'];
-			$this->assertSame( 'Pending', $context['post_vars']['payment_status'] );
+			$this->assertSame(
+				[ 'Unhandled PayPal instant payment notification' ],
+				$logger->getLogCalls()->getMessages()
+			);
+
+			$this->assertSame(
+				'Pending',
+				$logger->getLogCalls()->getFirstCall()->getContext()['post_vars']['payment_status']
+			);
 		} );
 	}
 
@@ -270,9 +276,15 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 
 			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
 
-			$logger->assertCalledOnceWithMessage( 'Unhandled PayPal subscription notification', $this );
-			$context = $logger->getLogCalls()[0]['context'];
-			$this->assertSame( 'subscr_modify', $context['post_vars']['txn_type'] );
+			$this->assertSame(
+				[ 'Unhandled PayPal subscription notification' ],
+				$logger->getLogCalls()->getMessages()
+			);
+
+			$this->assertSame(
+				'subscr_modify',
+				$logger->getLogCalls()->getFirstCall()->getContext()['post_vars']['txn_type']
+			);
 		} );
 	}
 
@@ -339,7 +351,10 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 				$this->newValidRequestParametersWithNegativeTransactionFee()
 			);
 
-			$logger->assertCalledOnceWithMessage( 'Unhandled PayPal instant payment notification', $this );
+			$this->assertSame(
+				[ 'Unhandled PayPal instant payment notification' ],
+				$logger->getLogCalls()->getMessages()
+			);
 		} );
 	}
 

@@ -63,15 +63,13 @@ class LoggingDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	private function assertExceptionLoggedAsCritical( string $expectedExceptionType, LoggerSpy $logger ) {
-		$logCalls = $logger->getLogCalls();
+		$this->assertCount( 1, $logger->getLogCalls(), 'There should be exactly one log call' );
 
-		$this->assertCount( 1, $logCalls, 'There should be exactly one log call' );
-		$logCall = $logCalls[0];
+		$logCall = $logger->getLogCalls()->getFirstCall();
 
-		$this->assertSame( LogLevel::CRITICAL, $logCall['level'] );
-		$this->assertInternalType( 'array', $logCall['context'], 'the third log argument should be an array' );
-		$this->assertArrayHasKey( 'exception', $logCall['context'], 'the log context should contain an exception element' );
-		$this->assertInstanceOf( $expectedExceptionType, $logCall['context']['exception'] );
+		$this->assertSame( LogLevel::CRITICAL, $logCall->getLevel() );
+		$this->assertArrayHasKey( 'exception', $logCall->getContext(), 'the log context should contain an exception element' );
+		$this->assertInstanceOf( $expectedExceptionType, $logCall->getContext()['exception'] );
 	}
 
 	public function testWhenGetDonationByIdDoesNotThrow_returnValueIsReturnedWithoutLogging() {
