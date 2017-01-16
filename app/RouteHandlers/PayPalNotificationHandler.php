@@ -32,15 +32,11 @@ class PayPalNotificationHandler {
 		try {
 			$this->ffFactory->getPayPalPaymentNotificationVerifier()->verify( $post->all() );
 		} catch ( PayPalPaymentNotificationVerifierException $e ) {
-			// TODO: let PayPal resend IPN?
-
 			$this->ffFactory->getPaypalLogger()->log( LogLevel::ERROR, $e->getMessage(), [
 				'post_vars' => $request->request->all()
 			] );
 			return $this->createErrorResponse( $e );
 		}
-
-		// TODO: check txn_type
 
 		$useCase = $this->ffFactory->newHandlePayPalPaymentNotificationUseCase( $this->getUpdateToken( $post ) );
 

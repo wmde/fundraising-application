@@ -15,6 +15,9 @@ class PayPalPaymentNotificationVerifier implements PaymentNotificationVerifier {
 
 	/* private */ const ALLOWED_STATUSES = [ 'Completed', 'Processed' ];
 	/* private */ const ALLOWED_CURRENCY_CODES = [ 'EUR' ];
+	/* private */ const NOTIFICATION_TYPES_WITH_DIFFERENT_CURRENCY_FIELDS = [
+		'recurring_payment_suspended_due_to_max_failed_payment'
+	];
 
 	private $httpClient;
 	private $baseUrl;
@@ -82,7 +85,17 @@ class PayPalPaymentNotificationVerifier implements PaymentNotificationVerifier {
 	}
 
 	private function hasValidCurrencyCode( array $request ): bool {
-		return array_key_exists( 'mc_currency', $request ) &&
+		if ( $this->hasDifferentCurrencyField( $request ) ) {
+			return array_key_exists( 'currency_code', $request ) &&
+				in_array( $request['currency_code'], self::ALLOWED_CURRENCY_CODES );
+		}
+		return
+			array_key_exists( 'mc_currency', $request ) &&
 			in_array( $request['mc_currency'], self::ALLOWED_CURRENCY_CODES );
+	}
+
+	private function hasDifferentCurrencyField( array $request ): bool {
+		return array_key_exists( 'txn_type', $request ) &&
+			in_array( $request['txn_type'], self::NOTIFICATION_TYPES_WITH_DIFFERENT_CURRENCY_FIELDS );
 	}
 }
