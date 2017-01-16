@@ -21,7 +21,6 @@ var objectAssign = require( 'object-assign' ),
 
 		return objectAssign( Object.create( ValidationDispatcher ), {
 			validationFunction: validator.validate.bind( validator ),
-			actionCreationFunction: Actions.newFinishBankDataValidationAction,
 			finishActionCreationFunction: Actions.newFinishBankDataValidationAction,
 			beginActionCreationFunction: Actions.newBeginBankDataValidationAction,
 			fields: fieldNames,
