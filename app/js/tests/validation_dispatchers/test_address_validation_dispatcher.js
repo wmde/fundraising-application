@@ -3,13 +3,12 @@
 var test = require( 'tape' ),
 	sinon = require( 'sinon' ),
 	Actions = require( '../../lib/actions' ),
-	createAddressValidationDispatcher = require( '../../lib/validation_dispatchers/address' );
+	createAddressValidationDispatcher = require( '../../lib/validation_dispatchers/address' ),
+	testData = { street: 'The Yellow Brick Road', city: 'Emerald City', ignoredData: 'this won\'t be validated' };
 
 test( 'AddressValidationDispatcher calls validator', function ( t ) {
 	var successResult = { status: 'OK' },
 		initialData = {},
-		testData = { street: 'The Yellow Brick Road', city: 'Emerald City', ignoredData: 'this won\'t be validated' },
-		expectedData = { street: 'The Yellow Brick Road', city: 'Emerald City' },
 		validator = { validate: sinon.stub().returns( successResult ) },
 		testStore = { dispatch: sinon.stub() },
 		dispatcher = createAddressValidationDispatcher(
@@ -20,14 +19,16 @@ test( 'AddressValidationDispatcher calls validator', function ( t ) {
 	dispatcher.dispatchIfChanged( testData, testStore );
 
 	t.ok( validator.validate.calledOnce, 'validation function is called once' );
-	t.ok( validator.validate.calledWith( expectedData ), 'validation function is called with selected fields' );
+	t.ok(
+		validator.validate.calledWith( { street: 'The Yellow Brick Road', city: 'Emerald City' } ),
+		'validation function is called with selected fields'
+	);
 	t.end();
 } );
 
 test( 'AddressValidationDispatcher dispatches result as action', function ( t ) {
 	var successResult = { status: 'OK' },
 		initialData = {},
-		testData = { street: 'The Yellow Brick Road', city: 'Emerald City', ignoredData: 'this won\'t be validated' },
 		validator = { validate: sinon.stub().returns( successResult ) },
 		testStore = { dispatch: sinon.spy() },
 		dispatcher = createAddressValidationDispatcher(
@@ -61,25 +62,7 @@ test( 'AddressValidationDispatcher calls validator and dispatches action every t
 } );
 
 test( 'AddressValidationDispatcher does nothing if data does not change', function ( t ) {
-	var initialData = { amount: '2.00' },
-		validator = { validate: sinon.spy() },
-		testStore = { dispatch: sinon.spy() },
-		dispatcher = createAddressValidationDispatcher(
-			validator,
-			initialData
-		);
-
-	dispatcher.dispatchIfChanged( initialData, testStore );
-
-	t.notOk( validator.validate.called, 'validation function is never called' );
-	t.notOk( testStore.dispatch.called, 'no action is dispatched' );
-
-	t.end();
-} );
-
-test( 'ValidationDispatcher does nothing if ignored data changes', function ( t ) {
-	var testData = { ignoredData: 'this won\'t be validated' },
-		initialData = {},
+	var initialData = testData,
 		validator = { validate: sinon.spy() },
 		testStore = { dispatch: sinon.spy() },
 		dispatcher = createAddressValidationDispatcher(
@@ -88,6 +71,23 @@ test( 'ValidationDispatcher does nothing if ignored data changes', function ( t 
 		);
 
 	dispatcher.dispatchIfChanged( testData, testStore );
+
+	t.notOk( validator.validate.called, 'validation function is never called' );
+	t.notOk( testStore.dispatch.called, 'no action is dispatched' );
+
+	t.end();
+} );
+
+test( 'ValidationDispatcher does nothing if ignored data changes', function ( t ) {
+	var initialData = {},
+		validator = { validate: sinon.spy() },
+		testStore = { dispatch: sinon.spy() },
+		dispatcher = createAddressValidationDispatcher(
+			validator,
+			initialData
+		);
+
+	dispatcher.dispatchIfChanged( { ignoredData: 'this won\'t be validated' }, testStore );
 
 	t.notOk( validator.validate.called, 'validation function is never called' );
 	t.notOk( testStore.dispatch.called, 'no action is dispatched' );

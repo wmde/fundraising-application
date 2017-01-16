@@ -3,12 +3,12 @@
 var test = require( 'tape' ),
 	sinon = require( 'sinon' ),
 	Actions = require( '../../lib/actions' ),
-	createBankDataValidationDispatcher = require( '../../lib/validation_dispatchers/bankdata' );
+	createBankDataValidationDispatcher = require( '../../lib/validation_dispatchers/bankdata' ),
+	testData =  { iban: 'DE12500105170648489890', ignoredData: 'this won\'t be validated' };
 
 test( 'BankDataValidationDispatcher calls validator', function ( t ) {
 	var successResult = { status: 'OK' },
 		initialData = {},
-		testData = { iban: 'DE12500105170648489890', ignoredData: 'this won\'t be validated' },
 		validator = { validate: sinon.stub().returns( successResult ) },
 		testStore = { dispatch: sinon.stub() },
 		dispatcher = createBankDataValidationDispatcher(
@@ -26,7 +26,6 @@ test( 'BankDataValidationDispatcher calls validator', function ( t ) {
 test( 'BankDataValidationDispatcher dispatches result as action', function ( t ) {
 	var successResult = { status: 'OK' },
 		initialData = {},
-		testData = { iban: 'DE12500105170648489890', ignoredData: 'this won\'t be validated' },
 		validator = { validate: sinon.stub().returns( successResult ) },
 		testStore = { dispatch: sinon.spy() },
 		dispatcher = createBankDataValidationDispatcher(
@@ -60,25 +59,7 @@ test( 'BankDataValidationDispatcher calls validator and dispatches action every 
 } );
 
 test( 'BankDataValidationDispatcher does nothing if data does not change', function ( t ) {
-	var initialData = { amount: '2.00' },
-		validator = { validate: sinon.spy() },
-		testStore = { dispatch: sinon.spy() },
-		dispatcher = createBankDataValidationDispatcher(
-			validator,
-			initialData
-		);
-
-	dispatcher.dispatchIfChanged( initialData, testStore );
-
-	t.notOk( validator.validate.called, 'validation function is never called' );
-	t.notOk( testStore.dispatch.called, 'no action is dispatched' );
-
-	t.end();
-} );
-
-test( 'ValidationDispatcher does nothing if ignored data changes', function ( t ) {
-	var testData = { ignoredData: 'this won\'t be validated' },
-		initialData = {},
+	var initialData = testData,
 		validator = { validate: sinon.spy() },
 		testStore = { dispatch: sinon.spy() },
 		dispatcher = createBankDataValidationDispatcher(
@@ -87,6 +68,23 @@ test( 'ValidationDispatcher does nothing if ignored data changes', function ( t 
 		);
 
 	dispatcher.dispatchIfChanged( testData, testStore );
+
+	t.notOk( validator.validate.called, 'validation function is never called' );
+	t.notOk( testStore.dispatch.called, 'no action is dispatched' );
+
+	t.end();
+} );
+
+test( 'ValidationDispatcher does nothing if ignored data changes', function ( t ) {
+	var initialData = {},
+		validator = { validate: sinon.spy() },
+		testStore = { dispatch: sinon.spy() },
+		dispatcher = createBankDataValidationDispatcher(
+			validator,
+			initialData
+		);
+
+	dispatcher.dispatchIfChanged( { ignoredData: 'this won\'t be validated' }, testStore );
 
 	t.notOk( validator.validate.called, 'validation function is never called' );
 	t.notOk( testStore.dispatch.called, 'no action is dispatched' );
