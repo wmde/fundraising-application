@@ -1,0 +1,38 @@
+{
+	"db": {
+		"driver": "pdo_mysql",
+		"user": "fundraising",
+		"password": "__DB_PASSWORD__",
+		"dbname": "fundraising",
+		"host": "localhost",
+		"port": 3306
+	},
+	"bank-data-file": "/vagrant/www/spenden2/res/blz.lut2f",
+	"cms-wiki-api-url": "https://fundraising-cms.wikimedia.de/api.php",
+	"cms-wiki-user": "LocalBot@LocalBot",
+	"cms-wiki-password": "__WIKI_PASSWORD__",
+	"cms-wiki-title-prefix": "Web:Spendenseite-DefaultSkin/test/",
+	"twig": {
+		"enable-cache": true,
+		"loaders": {
+			"wiki": {
+				"enabled": true,
+				"rawpages": []
+			},
+			"filesystem": {
+				"template-dir": [ "app/templates" ]
+			}
+		}
+	},
+	"contact-info": {
+		"organization": {
+			"email": "fake-address@example.com",
+			"name": "Webmaster"
+		},
+		"suborganization": {
+			"email": "fake-address@example.com",
+			"name": "Webmaster"
+		}
+	},
+	"purging-secret": "purgeme"
+}
