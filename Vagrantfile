@@ -24,9 +24,9 @@ Vagrant.configure(2) do |config|
      vb.cpus = 4
   end
 
-  config.vm.provision "shell", path: "build/vagrant/install_packages.sh"
-  config.vm.provision "shell", path: "build/vagrant/install_composer.sh"
-  config.vm.provision "shell", path: "build/vagrant/installKontoCheck.sh"
-  config.vm.provision "shell", path: "build/vagrant/configureForMysql.sh"
+  config.vm.provision "install_packages", type: "shell", path: "build/vagrant/install_packages.sh"
+  config.vm.provision "install_composer", type: "shell", path: "build/vagrant/install_composer.sh"
+  config.vm.provision "install_konto_check", type: "shell", path: "build/vagrant/installKontoCheck.sh"
+  config.vm.provision "configure_db", type: "shell", path: "build/vagrant/configureForMysql.sh"
 
 end
