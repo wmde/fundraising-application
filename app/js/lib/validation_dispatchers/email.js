@@ -21,7 +21,8 @@ var objectAssign = require( 'object-assign' ),
 
 		return objectAssign( Object.create( ValidationDispatcher ), {
 			validationFunction: validator.validate.bind( validator ),
-			actionCreationFunction: Actions.newFinishEmailAddressValidationAction,
+			finishActionCreationFunction: Actions.newFinishEmailAddressValidationAction,
+			beginActionCreationFunction: Actions.newBeginEmailAddressValidationAction,
 			fields: fieldNames,
 			previousFieldValues: _.pick( initialValues || {}, fieldNames )
 		} );

@@ -42,6 +42,22 @@ test( 'FeeValidationDispatcher dispatches result as action', function ( t ) {
 	t.end();
 } );
 
+test( 'FeeValidationDispatcher dispatches "begin" action', function ( t ) {
+	var initialData = {},
+		testData = { amount: '2.00', ignoredData: 'this won\'t be validated' },
+		validator = { validate: sinon.stub() },
+		testStore = { dispatch: sinon.spy() },
+		dispatcher = createFeeValidationDispatcher(
+			validator,
+			initialData
+		);
+
+	dispatcher.dispatchIfChanged( testData, testStore );
+
+	t.ok( testStore.dispatch.calledWith( Actions.newBeginPaymentDataValidationAction( { amount: '2.00' } ) ) );
+	t.end();
+} );
+
 test( 'FeeValidationDispatcher calls validator and dispatches action every time the data changes', function ( t ) {
 	var successResult = { status: 'OK' },
 		initialData = {},
@@ -56,7 +72,7 @@ test( 'FeeValidationDispatcher calls validator and dispatches action every time 
 	dispatcher.dispatchIfChanged( { amount: '99.00' }, testStore );
 
 	t.ok( validator.validate.calledTwice, 'validation function is called for every change' );
-	t.ok( testStore.dispatch.calledTwice, 'action is dispatched for every change' );
+	t.ok( testStore.dispatch.callCount === 4, 'begin and finish action is dispatched for every change' );
 
 	t.end();
 } );

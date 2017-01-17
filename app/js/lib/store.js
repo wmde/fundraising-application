@@ -6,6 +6,7 @@ var Redux = require( 'redux' ),
 	validity = require( './reducers/validity' ),
 	donationInputValidation = require( './reducers/donation_input_validation' ),
 	membershipInputValidation = require( './reducers/membership_input_validation' ),
+	asynchronousRequests = require( './reducers/async_requests' ),
 	middlewares = [ reduxPromise ];
 
 /* jshint ignore:start */ // Ignore console.log calls
@@ -36,14 +37,15 @@ if ( process.env.REDUX_LOG === 'on' ) {
 }
 /* jshint ignore:end */
 
-// Different stores for different pages, does not violate Reflux pattern
+// Different stores for different pages, does not violate Redux pattern
 module.exports = {
 	createDonationStore: function ( initialState ) {
 		return Redux.createStore( Redux.combineReducers( {
 			formPagination: formPagination,
 			donationFormContent: donationFormContent,
 			validity: validity,
-			donationInputValidation: donationInputValidation
+			donationInputValidation: donationInputValidation,
+			asynchronousRequests: asynchronousRequests
 		} ), initialState, Redux.applyMiddleware.apply( this, middlewares ) );
 	},
 	createMembershipStore: function ( initialState ) {
@@ -51,7 +53,8 @@ module.exports = {
 			formPagination: formPagination,
 			membershipFormContent: membershipFormContent,
 			validity: validity,
-			membershipInputValidation: membershipInputValidation
+			membershipInputValidation: membershipInputValidation,
+			asynchronousRequests: asynchronousRequests
 		} ), initialState, Redux.applyMiddleware.apply( this, middlewares ) );
 	}
 };

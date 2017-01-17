@@ -39,6 +39,22 @@ test( 'BankDataValidationDispatcher dispatches result as action', function ( t )
 	t.end();
 } );
 
+test( 'BankDataValidationDispatcher dispatches "begin" action', function ( t ) {
+	var initialData = {},
+		testData = { iban: 'DE12500105170648489890', ignoredData: 'this won\'t be validated' },
+		validator = { validate: sinon.stub() },
+		testStore = { dispatch: sinon.spy() },
+		dispatcher = createBankDataValidationDispatcher(
+			validator,
+			initialData
+		);
+
+	dispatcher.dispatchIfChanged( testData, testStore );
+
+	t.ok( testStore.dispatch.calledWith( Actions.newBeginBankDataValidationAction( { iban: 'DE12500105170648489890' } ) ) );
+	t.end();
+} );
+
 test( 'BankDataValidationDispatcher calls validator and dispatches action every time the data changes', function ( t ) {
 	var successResult = { status: 'OK' },
 		initialData = {},
@@ -53,7 +69,7 @@ test( 'BankDataValidationDispatcher calls validator and dispatches action every 
 	dispatcher.dispatchIfChanged( { iban: 'AT022050302101023600' }, testStore );
 
 	t.ok( validator.validate.calledTwice, 'validation function is called for every change' );
-	t.ok( testStore.dispatch.calledTwice, 'action is dispatched for every change' );
+	t.ok( testStore.dispatch.callCount === 4, 'begin and finish action is dispatched for every change' );
 
 	t.end();
 } );

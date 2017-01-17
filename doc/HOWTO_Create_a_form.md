@@ -22,12 +22,17 @@ form components and do not dispatch actions.
 
 For easier HTML updates both view handlers and components get a jQuery object passed in to their factory functions.
 
-**Validation Dispatchers** are also listening to changes in the state. If a value changes, they call a validator and
-dispatch a  validator-specific "validation finished" action to the store, which then stores the validation result and 
-validation error messages with its reducers. The changed validation state and error messages may trigger view handlers 
-that set CSS classes on validated fields and display the error messages.  
-Action names for storing validation results follow the naming pattern of `FINISH_XXX_VALIDATION`, 
- their action creation functions follow the pattern `newFinishXXXValidationAction`
+**Validation Dispatchers** are also listening to changes in the state. If one of the values they are observing changes, 
+they call a validator and dispatch a  validator-specific "validation finished" action to the store, which then stores 
+the validation result and validation error messages with its reducers. The changed validation state and error messages 
+may trigger view handlers that set CSS classes on validated fields and display the error messages.  
+
+Action names for storing validation results follow the naming pattern of `FINISH_XXX_VALIDATION`,  their action 
+creation functions follow the pattern `newFinishXXXValidationAction`
+
+Validation dispatchers where the validator returns an asynchronous result (a Promise), must also dispatch an action with 
+the name `BEGIN_XXX_VALIDATION`. This is used by the store to keep track if there are running asynchronous requests. 
+
 
 ![Data flow in the architecture](architecture.svg)
 
@@ -45,9 +50,11 @@ In the form code, insert the following initialization code. Its **TODO** parts w
 
 ```JavaScript
 
-var initialFormValues = {% if initialFormValues %}{$ initialFormValues|json_encode|raw $}{% else %}{}{% endif %};
-
-var store = WMDE.Store, // store object
+var initData = $( '#init-form' ),
+    store = WMDE.Store.createDonationStore( WMDE.createInitialStateFromViolatedFields(
+        initData.data( 'violatedFields' ),
+        initData.data( 'initial-validation-result' ) )
+    ),
     actions = WMDE.Actions; // action creators namespace
 WMDE.StoreUpdates.connectComponentsToStore(
     [

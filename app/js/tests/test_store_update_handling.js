@@ -6,8 +6,11 @@ var test = require( 'tape' ),
 	;
 
 function createFakeStore( storeData ) {
+	var unsubscribe = sinon.spy();
 	return {
-		subscribe: sinon.spy(),
+		// not an actual method of Redux store but convenient to access in tests
+		unsubscribe: unsubscribe,
+		subscribe: sinon.stub().returns( unsubscribe ),
 		getState: sinon.stub().returns( storeData ),
 		// Call all callback functions that were registered through calls to `subscribe`
 		fakeUpdate: function () {
@@ -125,5 +128,71 @@ test( 'connect view handlers to deeply nested store values', function ( t ) {
 
 	t.ok( viewHandler.update.calledOnce, 'view handler update method is only called once' );
 	t.ok( viewHandler.update.calledWith( 42 ), 'view handler get passed only selected state parts' );
+	t.end();
+} );
+
+test( 'when not validating, makeEventHandlerWaitForAsyncFinish executes handler instantly ', function ( t ) {
+	var eventHandler = sinon.spy(),
+		storeData = { asynchronousRequests: { isValidating: false } },
+		store = createFakeStore( storeData ),
+		wrappedHandler = storeUpdateHandling.makeEventHandlerWaitForAsyncFinish( eventHandler, store );
+
+	wrappedHandler();
+
+	t.ok( eventHandler.calledOnce );
+	t.end();
+} );
+
+test( 'when validating, makeEventHandlerWaitForAsyncFinish adds a new subscription to store ', function ( t ) {
+	var eventHandler = sinon.spy(),
+		storeData = { asynchronousRequests: { isValidating: true } },
+		store = createFakeStore( storeData ),
+		wrappedHandler = storeUpdateHandling.makeEventHandlerWaitForAsyncFinish( eventHandler, store );
+
+	wrappedHandler();
+
+	t.ok( store.subscribe.calledOnce, 'a new subscription was added' );
+	t.notOk( eventHandler.called, 'event handler should not be called' );
+	t.end();
+} );
+
+test( 'calling the subscription handler created by makeEventHandlerWaitForAsyncFinish and still validating, nothing happens', function ( t ) {
+	var eventHandler = sinon.spy(),
+		storeData = { asynchronousRequests: { isValidating: true } },
+		store = createFakeStore( storeData ),
+		wrappedHandler = storeUpdateHandling.makeEventHandlerWaitForAsyncFinish( eventHandler, store );
+
+	wrappedHandler();
+	store.fakeUpdate();
+
+	t.notOk( eventHandler.called, 'event handler should not be called' );
+	t.end();
+} );
+
+test( 'calling the subscription handler created by makeEventHandlerWaitForAsyncFinish and no longer validating, event handler is called', function ( t ) {
+	var eventHandler = sinon.spy(),
+		storeData = { asynchronousRequests: { isValidating: true } },
+		store = createFakeStore( storeData ),
+		wrappedHandler = storeUpdateHandling.makeEventHandlerWaitForAsyncFinish( eventHandler, store );
+
+	wrappedHandler();
+	store.getState = sinon.stub().returns( { asynchronousRequests: { isValidating: false } } );
+	store.fakeUpdate();
+
+	t.ok( eventHandler.calledOnce, 'event handler must be be called' );
+	t.end();
+} );
+
+test( 'calling the subscription handler created by makeEventHandlerWaitForAsyncFinish and no longer validating, unsubscribes from store', function ( t ) {
+	var eventHandler = sinon.spy(),
+		storeData = { asynchronousRequests: { isValidating: true } },
+		store = createFakeStore( storeData ),
+		wrappedHandler = storeUpdateHandling.makeEventHandlerWaitForAsyncFinish( eventHandler, store );
+
+	wrappedHandler();
+	store.getState = sinon.stub().returns( { asynchronousRequests: { isValidating: false } } );
+	store.fakeUpdate();
+
+	t.ok( store.unsubscribe.calledOnce, 'event handler must be be called' );
 	t.end();
 } );
