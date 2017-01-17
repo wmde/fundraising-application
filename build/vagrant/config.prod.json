@@ -2,7 +2,7 @@
 	"db": {
 		"driver": "pdo_mysql",
 		"user": "fundraising",
-		"password": "INSECURE PASSWORD",
+		"password": "__DB_PASSWORD__",
 		"dbname": "fundraising",
 		"host": "localhost",
 		"port": 3306
