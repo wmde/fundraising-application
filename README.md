@@ -4,6 +4,9 @@
 
 User facing application for the WMDE fundraising.
 
+The easiest way to get a working installation of the application is to use [Vagrant](https://www.vagrantup.com/).
+Just get a clone of our git repository and run `vagrant up` in it. Then `vagrant ssh` into it and go to `/vagrant`, where you will be able to run the full test suite. (Excluding a handful of payment provider system tests).
+
 ## System dependencies
 
 * PHP >= 7
@@ -13,10 +16,9 @@ User facing application for the WMDE fundraising.
 * Node.js and npm (only needed in development for compiling the JavaScript and running the JavaScript tests)
 * [kontocheck extension](http://kontocheck.sourceforge.net/) (only needed when you want to use or test direct debit)
 
-## Installing the application
+## Installation and configuration
 
-The easiest way to get a working installation of the application is to use [Vagrant](https://www.vagrantup.com/).
-Just get a clone of our git repository and run `vagrant up` in it. Then `vagrant ssh` into it and go to `/vagrant`, where you will be able to run the full test suite. (Excluding a handful of payment provider system tests).
+Get a clone of our git repository and then run these commands in it:
 
 	composer install
 	npm install
