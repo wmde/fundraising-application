@@ -2,10 +2,6 @@ var formInitialized = false;
 
 $(function() {
 
-    if ($(".amount-custom :text").val() !== "") {
-      $(".display-amount").text($(".amount-custom :text").val());
-    }
-
     if (($('#membership-type-2').length > 0) && $("#membership-type-2").is(':checked')) {
       $("#address-type-2").parent().hide();
       $("#address-type-1").trigger('click');
@@ -104,22 +100,6 @@ $(function() {
         $dropDown.width($dropDown.width() - 2);
       });
     }
-
-    /* amount-list */
-    $('.amount-list').each(function () {
-      var $container = $(this);
-
-      $container.find(':radio').change(function (e) {
-        $('.display-amount').text($container.find(':radio:checked').val());
-      });
-
-      $container.find('.amount-custom :text').on('load change keyup paste focus', function () {
-        var val = $.trim($(this).val());
-        if (val == '') val = 0;
-        //val = isNaN(parseInt(val)) ? 0 : parseInt(val);
-        $('.display-amount').text(val);
-      });
-    });
 
     /* iOS fix - label onclick, see http://stackoverflow.com/questions/7358781/tapping-on-label-in-mobile-safari */
     if (navigator.userAgent.match(/Safari/)) {

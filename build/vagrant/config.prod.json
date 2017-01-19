@@ -7,7 +7,7 @@
 		"host": "localhost",
 		"port": 3306
 	},
-	"bank-data-file": "/vagrant/www/spenden2/res/blz.lut2f",
+	"bank-data-file": "/vagrant/res/blz.lut2f",
 	"cms-wiki-api-url": "https://fundraising-cms.wikimedia.de/api.php",
 	"cms-wiki-user": "LocalBot@LocalBot",
 	"cms-wiki-password": "__WIKI_PASSWORD__",

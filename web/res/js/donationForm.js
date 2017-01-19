@@ -381,7 +381,7 @@ $( function () {
 
 	$( '#continueFormSubmit2' ).click( WMDE.StoreUpdates.makeEventHandlerWaitForAsyncFinish( handlePersonalDataSubmitForDirectDebit, store )  );
 
-	$( '#finishFormSubmit2' ).click( WMDE.StoreUpdates.makeEventHandlerWaitForAsyncFinish( handlePersonalDataSubmitForDirectDebit, store ) );
+	$( '#finishFormSubmit2' ).click( WMDE.StoreUpdates.makeEventHandlerWaitForAsyncFinish( handlePersonalDataSubmitForNonDirectDebit, store ) );
 
 	$( '.back-button' ).click( function () {
 		store.dispatch( actions.newResetFieldValidityAction( [ 'confirmSepa', 'confirmShortTerm' ] ) );
