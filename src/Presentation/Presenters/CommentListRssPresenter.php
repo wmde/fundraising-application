@@ -27,7 +27,7 @@ class CommentListRssPresenter {
 		] );
 	}
 
-	private function getCommentsViewModel( CommentList $commentList ) {
+	private function getCommentsViewModel( CommentList $commentList ): array {
 		return array_map(
 			function( CommentWithAmount $comment ) {
 				return [
@@ -41,7 +41,7 @@ class CommentListRssPresenter {
 		);
 	}
 
-	private function getPublicationTime( CommentList $commentList ) {
+	private function getPublicationTime( CommentList $commentList ): string {
 		if ( !array_key_exists( 0, $commentList->toArray() ) ) {
 			return '';
 		}
