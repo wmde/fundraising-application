@@ -47,6 +47,17 @@ $app->before(
 	Application::EARLY_EVENT
 );
 
+$app->before( function( Request $request ) {
+	foreach ( [ $request->request, $request->query ] as $parameterBag ) {
+		foreach ( $parameterBag->keys() as $key ) {
+			if ( is_string( $parameterBag->get( $key ) ) ) {
+				$parameterBag->set( $key, trim( $parameterBag->get( $key ) ) );
+			}
+		}
+	}
+}, Application::EARLY_EVENT );
+
+
 $app->after( function( Request $request, Response $response, Application $app ) {
 	if( $response instanceof JsonResponse ) {
 		$response->setEncodingOptions( JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );

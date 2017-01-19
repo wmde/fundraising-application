@@ -21,9 +21,7 @@ use WMDE\Fundraising\Frontend\App\RouteHandlers\ApplyForMembershipHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\PayPalNotificationHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\RouteRedirectionHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowDonationConfirmationHandler;
-use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowMembershipConfirmationHandler;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonationTrackingInfo;
-use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonorAddress;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonorName;
@@ -40,18 +38,8 @@ use WMDE\Fundraising\Frontend\MembershipContext\UseCases\CancelMembershipApplica
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowMembershipApplicationConfirmation\ShowMembershipAppConfirmationRequest;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\PaymentContext\UseCases\GenerateIban\GenerateIbanRequest;
-use WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\AddSubscription\SubscriptionRequest;
+use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
-
-$app->before( function( Request $request ) {
-	foreach ( [ $request->request, $request->query ] as $parameterBag ) {
-		foreach ( $parameterBag->keys() as $key ) {
-			if ( is_string( $parameterBag->get( $key ) ) ) {
-				$parameterBag->set( $key, trim( $parameterBag->get( $key ) ) );
-			}
-		}
-	}
-}, Application::EARLY_EVENT );
 
 $app->post(
 	'validate-email',
