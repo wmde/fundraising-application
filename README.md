@@ -2,7 +2,7 @@
 [![Code Coverage](https://scrutinizer-ci.com/g/wmde/FundraisingFrontend/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/wmde/FundraisingFrontend/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/wmde/FundraisingFrontend/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/wmde/FundraisingFrontend/?branch=master)
 
-User facing application for the WMDE fundraising.
+User facing application for the [Wikimedia Deutschland](https://wikimedia.de) fundraising.
 
 The easiest way to get a working installation of the application is to use [Vagrant](https://www.vagrantup.com/).
 Just get a clone of our git repository and run `vagrant up` in it. Then `vagrant ssh` into it and go to `/vagrant`, where you will be able to run the full test suite. (Excluding a handful of payment provider system tests).
