@@ -35,8 +35,8 @@ class CreditCardUrlConfig {
 	}
 
 	/**
-	 * @param string[] $config
-	 * @return CreditCardUrlConfig
+	 * @param array $config
+	 * @return self
 	 * @throws \RuntimeException
 	 */
 	public static function newFromConfig( array $config ): self {
