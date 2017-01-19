@@ -60,15 +60,13 @@ class LoggingPaymentNotificationVerifierTest extends \PHPUnit_Framework_TestCase
 	}
 
 	private function assertExceptionLoggedAsCritical( string $expectedExceptionType, LoggerSpy $logger ) {
-		$logCalls = $logger->getLogCalls();
+		$this->assertNotEmpty( $logger->getLogCalls(), 'There should be at least one log call' );
 
-		$this->assertNotEmpty( $logCalls, 'There should be at least one log call' );
-		$logCall = $logCalls[0];
+		$logCall = $logger->getLogCalls()->getFirstCall();
 
-		$this->assertSame( LogLevel::CRITICAL, $logCall['level'] );
-		$this->assertInternalType( 'array', $logCall['context'], 'the third log argument should be an array' );
-		$this->assertArrayHasKey( 'exception', $logCall['context'], 'the log context should contain an exception element' );
-		$this->assertInstanceOf( $expectedExceptionType, $logCall['context']['exception'] );
+		$this->assertSame( LogLevel::CRITICAL, $logCall->getLevel() );
+		$this->assertArrayHasKey( 'exception', $logCall->getContext(), 'the log context should contain an exception element' );
+		$this->assertInstanceOf( $expectedExceptionType, $logCall->getContext()['exception'] );
 	}
 
 	public function testGivenAnExceptionForUnsupportedPaymentMethod_itIsLoggedAsInfo() {
@@ -93,14 +91,13 @@ class LoggingPaymentNotificationVerifierTest extends \PHPUnit_Framework_TestCase
 	}
 
 	private function assertUnsupportedMethodWasLogged( string $expectedMethodName, LoggerSpy $logger ) {
-		$logCalls = $logger->getLogCalls();
+		$this->assertNotEmpty( $logger->getLogCalls(), 'There should be at least one log call' );
 
-		$this->assertCount( 1, $logCalls, 'There should only be one log call' );
-		$logCall = $logCalls[0];
+		$logCall = $logger->getLogCalls()->getFirstCall();
 
-		$this->assertSame( LogLevel::INFO, $logCall['level'] );
-		$this->assertArrayHasKey( 'payment_status', $logCall['context'], 'the log context should contain a payment_status element' );
-		$this->assertSame( $expectedMethodName, $logCall['context']['payment_status'] );
+		$this->assertSame( LogLevel::INFO, $logCall->getLevel() );
+		$this->assertArrayHasKey( 'payment_status', $logCall->getContext(), 'the log context should contain a payment_status element' );
+		$this->assertSame( $expectedMethodName, $logCall->getContext()['payment_status'] );
 	}
 
 	public function testWhenVerifierThrowsException_requestIsLoggedAsDebugInfo() {
@@ -121,13 +118,16 @@ class LoggingPaymentNotificationVerifierTest extends \PHPUnit_Framework_TestCase
 	}
 
 	private function assertRequestLoggedAsDebugInfo( LoggerSpy $logger ) {
-		$logCalls = $logger->getLogCalls();
+		$this->assertGreaterThan( 1, count( $logger->getLogCalls() ), 'There should be at least two log calls' );
 
-		$this->assertGreaterThan( 1, count( $logCalls ), 'There should be at least two log calls' );
-		$logCall = $logCalls[1];
+		$logCall = $logger->getLogCalls()->getIterator()[1];
 
-		$this->assertSame( LogLevel::DEBUG, $logCall['level'] );
-		$this->assertEquals( [ 'item_name'  => 'Welcome to Wikipedia' ], $logCall['context'], 'the third log argument should contain the request' );
+		$this->assertSame( LogLevel::DEBUG, $logCall->getLevel() );
+		$this->assertSame(
+			[ 'item_name'  => 'Welcome to Wikipedia' ],
+			$logCall->getContext(),
+			'the third log argument should contain the request'
+		);
 	}
 
 	public function testWhenVerifierSucceeds_nothingIsLogged() {
@@ -139,7 +139,7 @@ class LoggingPaymentNotificationVerifierTest extends \PHPUnit_Framework_TestCase
 		);
 		$verifier->verify( [] );
 
-		$logger->assertNoLoggingCallsWhereMade();
+		$this->assertEmpty( $logger->getLogCalls(), 'No log calls should be made' );
 	}
 
 }
