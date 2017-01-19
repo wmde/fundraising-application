@@ -19,7 +19,7 @@ use WMDE\Fundraising\Store\DonationData;
  */
 class DoctrineDonationPrePersistSubscriber implements EventSubscriber {
 
-	/* private */ const DATE_TIME_FORMAT = 'Y-m-d H:i:s';
+	private const DATE_TIME_FORMAT = 'Y-m-d H:i:s';
 
 	private $updateTokenGenerator;
 	private $accessTokenGenerator;

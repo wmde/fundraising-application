@@ -19,7 +19,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\EmailAddress;
  */
 class CancelDonationUseCase {
 
-	/* private */ const LOG_MESSAGE_FOR_BACKEND = 'frontend: storno';
+	private const LOG_MESSAGE_FOR_BACKEND = 'frontend: storno';
 
 	private $donationRepository;
 	private $mailer;

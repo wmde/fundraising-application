@@ -19,7 +19,7 @@ use WMDE\Fundraising\Frontend\Validation\ValidationResponse;
  */
 class AddSubscriptionUseCase {
 
-	/* private */ const CONFIRMATION_CODE_LENGTH_BYTES = 16;
+	private const CONFIRMATION_CODE_LENGTH_BYTES = 16;
 
 	private $subscriptionRepository;
 	private $subscriptionValidator;

@@ -13,9 +13,8 @@ use GuzzleHttp\Client;
  */
 class PayPalPaymentNotificationVerifier implements PaymentNotificationVerifier {
 
-	/* private */ const ALLOWED_STATUSES = [ 'Completed', 'Processed' ];
-	/* private */ const ALLOWED_CURRENCY_CODES = [ 'EUR' ];
-	/* private */ const NOTIFICATION_TYPES_WITH_DIFFERENT_CURRENCY_FIELDS = [
+	private const ALLOWED_CURRENCY_CODES = [ 'EUR' ];
+	private const NOTIFICATION_TYPES_WITH_DIFFERENT_CURRENCY_FIELDS = [
 		'recurring_payment_suspended_due_to_max_failed_payment'
 	];
 
