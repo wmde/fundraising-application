@@ -15,6 +15,9 @@ User facing application for the WMDE fundraising.
 
 ## Installing the application
 
+The easiest way to get a working installation of the application is to use [Vagrant](https://www.vagrantup.com/).
+Just get a clone of our git repository and run `vagrant up` in it. Then `vagrant ssh` into it and go to `/vagrant`, where you will be able to run the full test suite. (Excluding a handful of payment provider system tests).
+
 	composer install
 	npm install
 	npm run build-js
