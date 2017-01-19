@@ -4,9 +4,10 @@
 	- https://github.com/squizlabs/PHP_CodeSniffer/tree/master/CodeSniffer/Standards
 -->
 <ruleset name="FunFunFundraisingFrontend">
-    <rule ref="vendor/mediawiki/mediawiki-codesniffer/MediaWiki/Sniffs/WhiteSpace">
-        <exclude name="vendor/mediawiki/mediawiki-codesniffer/MediaWiki/Sniffs/WhiteSpace/SpaceBeforeSingleLineCommentSniff.php" />
-    </rule>
+    <!--<rule ref="vendor/mediawiki/mediawiki-codesniffer/MediaWiki/Sniffs/WhiteSpace">-->
+        <!--<exclude name="vendor/mediawiki/mediawiki-codesniffer/MediaWiki/Sniffs/WhiteSpace/SpaceBeforeSingleLineCommentSniff.php" />-->
+        <!--<exclude name="vendor/mediawiki/mediawiki-codesniffer/MediaWiki/Sniffs/WhiteSpace/SpaceyParenthesisSniff.php" />-->
+    <!--</rule>-->
 
     <rule ref="Generic.Arrays.DisallowLongArraySyntax" />
     <rule ref="Generic.Classes" />
@@ -96,6 +97,8 @@
         <properties>
             <property name="ignoreNewlines" value="true" />
         </properties>
+        <exclude name="Squiz.WhiteSpace.OperatorSpacing.NoSpaceBefore" />
+        <exclude name="Squiz.WhiteSpace.OperatorSpacing.NoSpaceAfter" />
     </rule>
 
     <rule ref="Squiz.WhiteSpace.ScopeClosingBrace" />

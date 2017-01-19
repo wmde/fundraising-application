@@ -47,7 +47,7 @@ class ThrowingDonationRepository implements DonationRepository {
 	 * @return Donation|null
 	 * @throws GetDonationException
 	 */
-	public function getDonationById( int $id ) {
+	public function getDonationById( int $id ): ?Donation {
 		if ( $this->onGetDonationById ) {
 			throw new GetDonationException();
 		}

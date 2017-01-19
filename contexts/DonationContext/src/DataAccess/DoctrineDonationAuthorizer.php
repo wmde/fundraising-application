@@ -62,12 +62,7 @@ class DoctrineDonationAuthorizer implements DonationAuthorizer {
 			&& $this->updateTokenMatches( $donation );
 	}
 
-	/**
-	 * @param int $donationId
-	 *
-	 * @return Donation|null
-	 */
-	private function getDonationById( int $donationId ) {
+	private function getDonationById( int $donationId ): ?Donation {
 		return $this->entityManager->find( Donation::class, $donationId );
 	}
 

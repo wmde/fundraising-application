@@ -45,7 +45,7 @@ class FakeDonationRepository implements DonationRepository {
 		$this->donations[$donation->getId()] = unserialize( serialize( $donation ) );
 	}
 
-	public function getDonationById( int $id ) {
+	public function getDonationById( int $id ): ?Donation {
 		if ( $this->throwOnRead ) {
 			throw new GetDonationException();
 		}

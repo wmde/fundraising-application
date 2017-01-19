@@ -79,10 +79,7 @@ class AddDonationRequest {
 		$this->interval = $interval;
 	}
 
-	/**
-	 * @return BankData|null
-	 */
-	public function getBankData() {
+	public function getBankData(): ?BankData {
 		return $this->bankData;
 	}
 

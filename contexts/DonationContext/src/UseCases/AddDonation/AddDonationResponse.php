@@ -65,24 +65,16 @@ class AddDonationResponse {
 	 * WARNING: we're returning the domain object to not have to create a  more verbose response model.
 	 * Keep in mind that you should not use domain logic in the presenter, or put presentation helpers
 	 * in the domain object!
-	 *
-	 * @return Donation|null
 	 */
-	public function getDonation() {
+	public function getDonation(): ?Donation {
 		return $this->donation;
 	}
 
-	/**
-	 * @return string|null
-	 */
-	public function getUpdateToken() {
+	public function getUpdateToken(): ?string {
 		return $this->updateToken;
 	}
 
-	/**
-	 * @return string|null
-	 */
-	public function getAccessToken() {
+	public function getAccessToken(): ?string {
 		return $this->accessToken;
 	}
 
