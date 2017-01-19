@@ -55,8 +55,11 @@ var objectAssign = require( 'object-assign' ),
 		validator: null,
 		render: function ( formContent ) {
 			if ( this.element.val() !== formContent[ this.contentName ] ) {
-				this.element.val( formContent[ this.contentName ] );
-				this.element.change();
+				// Avoid changing value while element is edited by the user
+				if ( !this.element.is( ':focus' ) ) {
+					this.element.val( formContent[ this.contentName ] );
+					this.element.change();
+				}
 			}
 		}
 	},

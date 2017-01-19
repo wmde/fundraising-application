@@ -7,6 +7,7 @@ var test = require( 'tape' ),
 	createSpyingElement = function () {
 		return {
 			on: sinon.spy(),
+			is: sinon.stub(),
 			val: sinon.spy(),
 			prop: sinon.stub(),
 			text: sinon.spy(),
@@ -76,6 +77,19 @@ test( 'Rendering the text component sets the value', function ( t ) {
 
 	t.ok( element.val.calledTwice, 'value is called twice (get/set)' );
 	t.ok( element.val.calledWith( 'the new awesome value' ) );
+	t.end();
+} );
+
+test( 'Text value is only set when element does not have focus', function ( t ) {
+	var element = createSpyingElement(),
+		store = {},
+		component = formComponents.createTextComponent( store, element, 'value' );
+
+	element.is.withArgs( ':focus' ).returns( true );
+	component.render( { value: 'the new awesome value' } );
+
+	t.ok( element.val.calledOnce, 'value is only read' );
+	t.ok( element.val.getCall( 0 ).notCalledWith( 'the new awesome value' ), 'value is only read' );
 	t.end();
 } );
 
