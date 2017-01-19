@@ -12,15 +12,15 @@
          stopOnSkipped="false"
          verbose="false">
     <testsuites>
-        <testsuite name="FundraisingFrontend-unit">
+        <testsuite name="unit">
             <directory>tests/Unit</directory>
             <directory>contexts/*/tests/Unit</directory>
         </testsuite>
-        <testsuite name="FundraisingFrontend-integration">
+        <testsuite name="integration">
             <directory>tests/Integration</directory>
             <directory>contexts/*/tests/Integration</directory>
         </testsuite>
-        <testsuite name="FundraisingFrontend-edgetoedge">
+        <testsuite name="edgetoedge">
             <directory>tests/EdgeToEdge</directory>
         </testsuite>
     </testsuites>
