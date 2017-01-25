@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\HandlePayPalPaymentNotification\PayPalNotificationRequest;
-use WMDE\Fundraising\Frontend\DonationContext\UseCases\HandlePayPalPaymentNotification\PaypalNotificationResponse;
+use WMDE\Fundraising\Frontend\PaymentContext\ResponseModel\PaypalNotificationResponse;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifierException;
 

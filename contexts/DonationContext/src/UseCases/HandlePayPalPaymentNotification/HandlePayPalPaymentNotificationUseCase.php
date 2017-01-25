@@ -19,6 +19,7 @@ use WMDE\Fundraising\Frontend\DonationContext\Infrastructure\DonationConfirmatio
 use WMDE\Fundraising\Frontend\DonationContext\Infrastructure\DonationEventLogger;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
+use WMDE\Fundraising\Frontend\PaymentContext\ResponseModel\PaypalNotificationResponse;
 
 /**
  * @license GNU GPL v2+
