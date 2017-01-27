@@ -502,6 +502,12 @@
           "default": ""
         }
       },
+      "delay-in-days": {
+        "type": "int",
+        "title": "Delay in days",
+        "description": "Number of days until the first payment will be made",
+        "default": 90
+      },
       "additionalProperties": false,
       "required": [
         "base-url",
