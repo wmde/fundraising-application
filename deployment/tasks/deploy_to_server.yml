@@ -56,7 +56,7 @@
   get_url: url=http://gordalina.github.io/cachetool/downloads/cachetool.phar dest={{ app_dir }}/cachetool.phar
 
 - name: Clear PHP-FPM opcache
-  command: php {{ app_dir }}/cachetool.phar opcache:reset --fcgi=/var/run/php/php7.0-fpm.sock
+  command: php {{ app_dir }}/cachetool.phar opcache:reset --fcgi=/var/run/php/php{{ php_version }}-fpm.sock
 
 - name: Remove old releases
   shell: ls -d1 --format single-column {{ app_dir }}/{{ release_prefix }}* | sort -n | head -n -{{ keep_releases }} | xargs -I % rm -rf %
