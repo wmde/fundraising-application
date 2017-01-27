@@ -18,7 +18,7 @@ To deploy, run the following command:
 
 To deploy a different branch than `master`, run the following command:
 
-    ansible-playbook -i inventory/test --extra-vars 'deploy_branch=test' deployment.yml
+    ansible-playbook -i inventory/test --extra-vars 'build_branch=test' deployment.yml
 
 ## Rolling back deployments and understanding atomic deploys
 Each deployment is "atomic", that means that while the deployment script is still running, the web server delivers the old version of the application. The last step of the deployment script is activating the new version.
