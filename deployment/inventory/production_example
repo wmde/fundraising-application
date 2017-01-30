@@ -10,6 +10,9 @@ app_dir = "/usr/share/nginx/www/spenden.wikimedia.de"
 # Prefix for release directories
 release_prefix = release-
 
+# PHP version (needed when clearing the opcache)
+php_version = "7.1"
+
 # Logs directory ( shared by all releases )
 logs_dir = logs
 

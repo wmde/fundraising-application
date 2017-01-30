@@ -13,19 +13,19 @@ stage
 production
 
 [test:vars]
-deploy_branch = master
+build_branch = master
 deploy_dir="/vagrant/www/test_spenden2"
 composer_optimize_autoloader = no
 composer_no_dev = no
 
 [stage:vars]
-deploy_branch = master
+build_branch = master
 deploy_dir=/vagrant/www/stage_spenden2
 composer_optimize_autoloader = yes
 composer_no_dev = yes
 
 [production:vars]
-deploy_branch = master
+build_branch = master
 deploy_dir=/vagrant/www/prod_spenden2
 composer_optimize_autoloader = yes
 composer_no_dev = yes
