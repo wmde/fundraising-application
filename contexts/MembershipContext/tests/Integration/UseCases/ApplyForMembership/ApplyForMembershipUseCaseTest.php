@@ -255,4 +255,39 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
 		$policyValidator->method( 'needsModeration' )->willReturn( true );
 		return $policyValidator;
 	}
+
+	public function testWhenApplicationIsUnconfirmed_confirmationEmailIsNotSent() {
+		$this->newUseCase()->applyForMembership( $this->newValidRequestForUnconfirmedApplication() );
+
+		$this->assertSame( 0, count( $this->mailer->getSendMailCalls() ) );
+	}
+
+	private function newValidRequestForUnconfirmedApplication(): ApplyForMembershipRequest {
+		$request = new ApplyForMembershipRequest();
+
+		$request->setMembershipType( ValidMembershipApplication::MEMBERSHIP_TYPE );
+		$request->setApplicantCompanyName( '' );
+		$request->setMembershipType( ValidMembershipApplication::MEMBERSHIP_TYPE );
+		$request->setApplicantSalutation( ValidMembershipApplication::APPLICANT_SALUTATION );
+		$request->setApplicantTitle( ValidMembershipApplication::APPLICANT_TITLE );
+		$request->setApplicantFirstName( ValidMembershipApplication::APPLICANT_FIRST_NAME );
+		$request->setApplicantLastName( ValidMembershipApplication::APPLICANT_LAST_NAME );
+		$request->setApplicantStreetAddress( ValidMembershipApplication::APPLICANT_STREET_ADDRESS );
+		$request->setApplicantPostalCode( ValidMembershipApplication::APPLICANT_POSTAL_CODE );
+		$request->setApplicantCity( ValidMembershipApplication::APPLICANT_CITY );
+		$request->setApplicantCountryCode( ValidMembershipApplication::APPLICANT_COUNTRY_CODE );
+		$request->setApplicantEmailAddress( ValidMembershipApplication::APPLICANT_EMAIL_ADDRESS );
+		$request->setApplicantPhoneNumber( ValidMembershipApplication::APPLICANT_PHONE_NUMBER );
+		$request->setApplicantDateOfBirth( ValidMembershipApplication::APPLICANT_DATE_OF_BIRTH );
+		$request->setPaymentType( ValidMembershipApplication::PAYMENT_TYPE_PAYPAL );
+		$request->setPaymentIntervalInMonths( ValidMembershipApplication::PAYMENT_PERIOD_IN_MONTHS );
+		$request->setPaymentAmountInEuros( (string)ValidMembershipApplication::PAYMENT_AMOUNT_IN_EURO );
+		$request->setBankData( new BankData() );
+
+		$request->setTrackingInfo( $this->newTrackingInfo() );
+		$request->setPiwikTrackingString( 'foo/bar' );
+
+		return $request->assertNoNullFields();
+	}
+
 }

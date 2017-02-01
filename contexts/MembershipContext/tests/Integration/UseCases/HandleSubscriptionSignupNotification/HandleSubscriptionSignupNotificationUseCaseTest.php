@@ -13,6 +13,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\SucceedingAuthori
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionSignupNotification\HandleSubscriptionSignupNotificationUseCase;
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\Frontend\PaymentContext\Tests\Data\ValidSubscriptionSignupRequest;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
 
 /**
@@ -22,6 +23,15 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class HandleSubscriptionSignupNotificationUseCaseTest extends \PHPUnit_Framework_TestCase {
+
+	/**
+	 * @var TemplateBasedMailerSpy
+	 */
+	private $mailerSpy;
+
+	public function setUp() {
+		$this->mailerSpy = new TemplateBasedMailerSpy( $this );
+	}
 
 	public function testWhenPaymentMethodIsNotPayPal_requestIsNotHandled() {
 		$fakeRepository = new FakeApplicationRepository();
@@ -105,6 +115,24 @@ class HandleSubscriptionSignupNotificationUseCaseTest extends \PHPUnit_Framework
 		$response = $useCase->handleNotification( $request );
 		$this->assertTrue( $response->notificationWasHandled() );
 		$this->assertFalse( $response->hasErrors() );
+	}
+
+	public function testWhenApplicationIsConfirmed_mailIsSent() {
+		$fakeRepository = new FakeApplicationRepository();
+
+		$application = ValidMembershipApplication::newDomainEntityUsingPayPal();
+		$fakeRepository->storeApplication( $application );
+
+		$useCase = new HandleSubscriptionSignupNotificationUseCase(
+			$fakeRepository,
+			new SucceedingAuthorizer(),
+			$this->mailerSpy,
+			new NullLogger()
+		);
+
+		$request = ValidSubscriptionSignupRequest::newValidRequest();
+		$useCase->handleNotification( $request );
+		$this->mailerSpy->assertCalledOnce();
 	}
 
 	/**
