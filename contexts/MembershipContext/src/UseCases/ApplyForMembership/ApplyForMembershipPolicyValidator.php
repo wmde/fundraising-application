@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
  */
 class ApplyForMembershipPolicyValidator {
 
-	/* private */ const YEARLY_PAYMENT_MODERATION_THRESHOLD_IN_EURO = 1000;
+	private const YEARLY_PAYMENT_MODERATION_THRESHOLD_IN_EURO = 1000;
 
 	private $textPolicyValidator;
 

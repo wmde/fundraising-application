@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "31275561c01f330f718499e6a64bc922",
+    "content-hash": "d2098d8dd71a15dfe6eed82c968063f9",
     "packages": [
         {
             "name": "addwiki/mediawiki-api-base",
@@ -4970,7 +4970,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.0",
+        "php": ">=7.1",
         "ext-intl": "*",
         "ext-curl": "*"
     },

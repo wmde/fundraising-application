@@ -15,10 +15,10 @@ use WMDE\Fundraising\Frontend\DonationContext\Infrastructure\DonationConfirmatio
  */
 class DonationAcceptedEventHandler {
 
-	/* public */ const AUTHORIZATION_FAILED = 'Authorization failed';
-	/* public */ const UNKNOWN_ID_PROVIDED = 'Unknown donation id';
-	/* public */ const DATABASE_ERROR_OCCURRED = 'Database error occurred';
-	/* public */ const SUCCESS = null;
+	public const AUTHORIZATION_FAILED = 'Authorization failed';
+	public const UNKNOWN_ID_PROVIDED = 'Unknown donation id';
+	public const DATABASE_ERROR_OCCURRED = 'Database error occurred';
+	public const SUCCESS = null;
 
 	private $authorizer;
 	private $repository;
