@@ -92,12 +92,10 @@ class HandleSubscriptionSignupNotificationUseCase {
 	}
 
 	private function sendConfirmationEmail( Application $application ) {
-		if ( $application->getApplicant() !== null ) {
-			try {
-				$this->mailer->sendMail( $application->getApplicant()->getEmailAddress() );
-			} catch ( \RuntimeException $ex ) {
-				// no need to re-throw or return false, this is not a fatal error, only a minor inconvenience
-			}
+		try {
+			$this->mailer->sendMail( $application->getApplicant()->getEmailAddress() );
+		} catch ( \RuntimeException $ex ) {
+			// no need to re-throw or return false, this is not a fatal error, only a minor inconvenience
 		}
 	}
 
