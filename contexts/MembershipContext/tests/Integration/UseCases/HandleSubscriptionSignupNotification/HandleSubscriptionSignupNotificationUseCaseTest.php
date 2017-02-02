@@ -49,6 +49,23 @@ class HandleSubscriptionSignupNotificationUseCaseTest extends \PHPUnit_Framework
 		$this->assertFalse( $response->notificationWasHandled() );
 	}
 
+	public function testWhenMembershipApplicationDoesNotExist_requestIsNotHandled() {
+		$fakeRepository = new FakeApplicationRepository();
+		$fakeRepository->storeApplication( ValidMembershipApplication::newDomainEntity() );
+
+		$useCase = new HandleSubscriptionSignupNotificationUseCase(
+			$fakeRepository,
+			new SucceedingAuthorizer(),
+			$this->getMailer(),
+			new NullLogger()
+		);
+
+		$request = ValidSubscriptionSignupRequest::newValidRequest();
+		$request->setApplicationId( 667 );
+		$response = $useCase->handleNotification( $request );
+		$this->assertFalse( $response->notificationWasHandled() );
+	}
+
 	public function testWhenRepositoryThrowsException_responseContainsErrors() {
 		$useCase = new HandleSubscriptionSignupNotificationUseCase(
 			new DoctrineApplicationRepository( ThrowingEntityManager::newInstance( $this ) ),

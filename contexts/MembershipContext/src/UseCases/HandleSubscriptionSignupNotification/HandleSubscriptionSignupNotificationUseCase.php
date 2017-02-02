@@ -41,6 +41,10 @@ class HandleSubscriptionSignupNotificationUseCase {
 			return $this->createErrorResponse( $ex );
 		}
 
+		if ( $membershipApplication === null ) {
+			return $this->createUnhandledResponse( 'specified data set could not be found' );
+		}
+
 		return $this->handleRequestForMembershipApplication( $request, $membershipApplication );
 	}
 
