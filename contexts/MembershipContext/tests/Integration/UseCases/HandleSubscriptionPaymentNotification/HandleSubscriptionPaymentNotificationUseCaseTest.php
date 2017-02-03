@@ -25,7 +25,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
  */
 class HandleSubscriptionPaymentNotificationUseCaseTest extends \PHPUnit_Framework_TestCase {
 
-	public function testWhenRepositoryThrowsException_handlerReturnsFalse() {
+	public function testWhenRepositoryThrowsException_requestIsNotHandled() {
 		$useCase = new HandleSubscriptionPaymentNotificationUseCase(
 			new DoctrineApplicationRepository( ThrowingEntityManager::newInstance( $this ) ),
 			new SucceedingAuthorizer(),
@@ -38,7 +38,24 @@ class HandleSubscriptionPaymentNotificationUseCaseTest extends \PHPUnit_Framewor
 		$this->assertTrue( $response->hasErrors() );
 	}
 
-	public function testWhenAuthorizationFails_handlerReturnsFalse() {
+	public function testWhenApplicationDoesNotExist_requestIsNotHandled() {
+		$fakeRepository = new FakeApplicationRepository();
+		$fakeRepository->storeApplication( ValidMembershipApplication::newDomainEntityUsingPayPal() );
+
+		$useCase = new HandleSubscriptionPaymentNotificationUseCase(
+			$fakeRepository,
+			new FailingAuthorizer(),
+			$this->getMailer(),
+			new NullLogger(),
+			$this->getEventLogger()
+		);
+
+		$request = ValidPayPalNotificationRequest::newInstantPayment( 667 );
+		$response = $useCase->handleNotification( $request );
+		$this->assertFalse( $response->notificationWasHandled() );
+	}
+
+	public function testWhenAuthorizationFails_requestIsNotHandled() {
 		$fakeRepository = new FakeApplicationRepository();
 		$fakeRepository->storeApplication( ValidMembershipApplication::newDomainEntityUsingPayPal() );
 
@@ -55,7 +72,7 @@ class HandleSubscriptionPaymentNotificationUseCaseTest extends \PHPUnit_Framewor
 		$this->assertFalse( $response->notificationWasHandled() );
 	}
 
-	public function testWhenTransactionTypeIsForSubscriptionChanges_handlerReturnsFalse() {
+	public function testWhenTransactionTypeIsForSubscriptionChanges_requestIsNotHandled() {
 		$request = ValidPayPalNotificationRequest::newSubscriptionModification();
 
 		$useCase = new HandleSubscriptionPaymentNotificationUseCase(
@@ -103,7 +120,7 @@ class HandleSubscriptionPaymentNotificationUseCaseTest extends \PHPUnit_Framewor
 		$this->assertTrue( $childApplication->isConfirmed() );
 	}
 
-	public function testGivenExistingTransactionId_handlerReturnsFalse() {
+	public function testGivenExistingTransactionId_requestIsNotHandled() {
 		$application = ValidMembershipApplication::newConfirmedSubscriptionDomainEntity();
 		/** @var PayPalPayment $payment */
 		$payment = $application->getPayment()->getPaymentMethod();

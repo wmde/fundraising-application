@@ -41,6 +41,10 @@ class HandleSubscriptionSignupNotificationUseCase {
 			return $this->createErrorResponse( $ex );
 		}
 
+		if ( $membershipApplication === null ) {
+			return $this->createUnhandledResponse( 'specified data set could not be found' );
+		}
+
 		return $this->handleRequestForMembershipApplication( $request, $membershipApplication );
 	}
 
@@ -88,12 +92,10 @@ class HandleSubscriptionSignupNotificationUseCase {
 	}
 
 	private function sendConfirmationEmail( Application $application ) {
-		if ( $application->getApplicant() !== null ) {
-			try {
-				$this->mailer->sendMail( $application->getApplicant()->getEmailAddress() );
-			} catch ( \RuntimeException $ex ) {
-				// no need to re-throw or return false, this is not a fatal error, only a minor inconvenience
-			}
+		try {
+			$this->mailer->sendMail( $application->getApplicant()->getEmailAddress() );
+		} catch ( \RuntimeException $ex ) {
+			// no need to re-throw or return false, this is not a fatal error, only a minor inconvenience
 		}
 	}
 

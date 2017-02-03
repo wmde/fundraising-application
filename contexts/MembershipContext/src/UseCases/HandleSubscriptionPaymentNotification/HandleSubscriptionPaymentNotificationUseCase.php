@@ -138,7 +138,7 @@ class HandleSubscriptionPaymentNotificationUseCase {
 		return $childApplication;
 	}
 
-	private function transactionAlreadyProcessed( Application $application, PayPalPaymentNotificationRequest $request ) {
+	private function transactionAlreadyProcessed( Application $application, PayPalPaymentNotificationRequest $request ): bool {
 		/** @var PayPalPayment $payment */
 		$payment = $application->getPayment()->getPaymentMethod();
 		return $payment->getPayPalData()->hasChildPayment( $request->getTransactionId() );
