@@ -318,9 +318,9 @@ class FunFunFactory {
 
 			$translator->addResource(
 				'json',
-				__DIR__ . '/../../app/translations/donationStatus.' . $locale . '.json',
+				__DIR__ . '/../../app/translations/paymentStatus.' . $locale . '.json',
 				$locale,
-				'donationStatus'
+				'paymentStatus'
 			);
 
 			$translator->addResource(

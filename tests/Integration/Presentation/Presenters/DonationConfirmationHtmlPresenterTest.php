@@ -2,7 +2,6 @@
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\Presentation\Presenters;
 
-use Silex\Translator;
 use WMDE\Fundraising\Frontend\Infrastructure\PiwikEvents;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\SelectedConfirmationPage;
@@ -17,16 +16,18 @@ use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidDonation;
  */
 class DonationConfirmationHtmlPresenterTest extends \PHPUnit_Framework_TestCase {
 
+	private const STATUS_BOOKED = 'status-booked';
+	private const STATUS_UNCONFIRMED = 'status-unconfirmed';
+
 	public function testWhenPresenterRenders_itPassedParamsToTemplate() {
 		$twig = $this->getMockBuilder( TwigTemplate::class )->disableOriginalConstructor()->getMock();
-		$translator = $this->getMockBuilder( Translator::class )->disableOriginalConstructor()->getMock();
 		$pageSelector = $this->getMockBuilder( SelectedConfirmationPage::class )->disableOriginalConstructor()->getMock();
 
 		$twig->expects( $this->once() )
 			->method( 'render' )
-			->with( $this->getExpectedRenderParams() );
+			->with( $this->getExpectedRenderParams( self::STATUS_BOOKED ) );
 
-		$presenter = new DonationConfirmationHtmlPresenter( $twig, $translator );
+		$presenter = new DonationConfirmationHtmlPresenter( $twig );
 		$presenter->present(
 			ValidDonation::newBookedAnonymousPayPalDonation(),
 			'update_token',
@@ -35,13 +36,13 @@ class DonationConfirmationHtmlPresenterTest extends \PHPUnit_Framework_TestCase 
 		);
 	}
 
-	private function getExpectedRenderParams(): array {
+	private function getExpectedRenderParams( string $mappedStatus ): array {
 		return [
 			'main_template' => '',
 			'templateCampaign' => '',
 			'donation' => [
 				'id' => null,
-				'status' => 'B',
+				'status' => $mappedStatus,
 				'amount' => 13.37,
 				'interval' => 3,
 				'paymentType' => 'PPL',
@@ -67,6 +68,23 @@ class DonationConfirmationHtmlPresenterTest extends \PHPUnit_Framework_TestCase 
 		$piwikEvents->triggerTrackGoal( 4095 );
 
 		return $piwikEvents;
+	}
+
+	public function testWhenPresenterPresents_itPassesMappedStatus() {
+		$twig = $this->getMockBuilder( TwigTemplate::class )->disableOriginalConstructor()->getMock();
+		$pageSelector = $this->getMockBuilder( SelectedConfirmationPage::class )->disableOriginalConstructor()->getMock();
+
+		$twig->expects( $this->once() )
+			->method( 'render' )
+			->with( $this->getExpectedRenderParams( self::STATUS_UNCONFIRMED ) );
+
+		$presenter = new DonationConfirmationHtmlPresenter( $twig );
+		$presenter->present(
+			ValidDonation::newIncompleteAnonymousPayPalDonation(),
+			'update_token',
+			$pageSelector,
+			$this->newPiwikEvents()
+		);
 	}
 
 }

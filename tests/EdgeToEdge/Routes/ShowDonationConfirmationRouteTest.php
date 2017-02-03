@@ -22,6 +22,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 	const CORRECT_ACCESS_TOKEN = 'KindlyAllowMeAccess';
+	const MAPPED_STATUS = 'status-new';
 
 	const ACCESS_DENIED_TEXT = 'keine Berechtigung';
 
@@ -170,7 +171,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		$paymentMethod = $donation->getPaymentMethod();
 
 		$this->assertContains( 'donation.id: ' . $donation->getId(), $responseContent );
-		$this->assertContains( 'donation.status: ' . $donation->getStatus(), $responseContent );
+		$this->assertContains( 'donation.status: ' . self::MAPPED_STATUS, $responseContent );
 		$this->assertContains( 'donation.amount: ' . $donation->getAmount()->getEuroString(), $responseContent );
 		$this->assertContains( 'donation.interval: ' . $donation->getPaymentIntervalInMonths(), $responseContent );
 		$this->assertContains( 'donation.paymentType: ' . $donation->getPaymentType(), $responseContent );
