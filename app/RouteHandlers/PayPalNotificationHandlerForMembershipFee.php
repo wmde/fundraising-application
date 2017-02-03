@@ -6,42 +6,54 @@ namespace WMDE\Fundraising\Frontend\App\RouteHandlers;
 
 use Psr\Log\LogLevel;
 use Symfony\Component\HttpFoundation\ParameterBag;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\Frontend\PaymentContext\ResponseModel\PaypalNotificationResponse;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifierException;
+use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionSignupNotification\SubscriptionSignupRequest;
+use WMDE\Fundraising\Frontend\PaymentContext\ResponseModel\PaypalNotificationResponse;
 use WMDE\Fundraising\Frontend\PaymentContext\RequestModel\PayPalPaymentNotificationRequest;
 
 /**
  * @license GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class PayPalNotificationHandler {
+class PayPalNotificationHandlerForMembershipFee {
 
+	const TYPE_SUBSCRIPTION_SIGNUP = 'subscr_signup';
+	const TYPE_SUBSCRIPTION_PAYMENT = 'subscr_payment';
+	
 	private $ffFactory;
 
 	public function __construct( FunFunFactory $ffFactory ) {
 		$this->ffFactory = $ffFactory;
 	}
 
-	public function handle( Request $request ): Response {
-		$post = $request->request;
-
+	public function handle( ParameterBag $post ): Response {
 		try {
-			$this->ffFactory->getPayPalPaymentNotificationVerifier()->verify( $post->all() );
+			$this->ffFactory->getPayPalMembershipFeeNotificationVerifier()->verify( $post->all() );
 		} catch ( PayPalPaymentNotificationVerifierException $e ) {
 			$this->ffFactory->getPaypalLogger()->log( LogLevel::ERROR, $e->getMessage(), [
-				'post_vars' => $request->request->all()
+				'post_vars' => $post->all()
 			] );
 			return $this->createErrorResponse( $e );
 		}
 
-		$useCase = $this->ffFactory->newHandlePayPalPaymentNotificationUseCase( $this->getUpdateToken( $post ) );
+		switch ( $post->get( 'txn_type' ) ) {
+			case self::TYPE_SUBSCRIPTION_SIGNUP:
+				$useCase = $this->ffFactory->newMembershipApplicationSubscriptionSignupNotificationUseCase( $this->getUpdateToken( $post ) );
+				$response = $useCase->handleNotification( $this->newSubscriptionSignupRequestFromPost( $post ) );
+				break;
+			case self::TYPE_SUBSCRIPTION_PAYMENT:
+				$useCase = $this->ffFactory->newMembershipApplicationSubscriptionPaymentNotificationUseCase( $this->getUpdateToken( $post ) );
+				$response = $useCase->handleNotification( $this->newSubscriptionPaymentRequestFromPost( $post ) );
+				break;
+			default:
+				$response = PaypalNotificationResponse::newUnhandledResponse( [ 'message' => 'unsupported transaction type' ] );
+				break;
+		}
 
-		$response = $useCase->handleNotification( $this->newUseCaseRequestFromPost( $post ) );
-		$this->logResponseIfNeeded( $response, $request );
+		$this->logResponseIfNeeded( $response, $post );
 
 		return new Response( '', Response::HTTP_OK ); # PayPal expects an empty response
 	}
@@ -55,7 +67,27 @@ class PayPalNotificationHandler {
 		return !empty( $vars[$key] ) ? $vars[$key] : '';
 	}
 
-	private function newUseCaseRequestFromPost( ParameterBag $postRequest ): PayPalPaymentNotificationRequest {
+	private function newSubscriptionSignupRequestFromPost( ParameterBag $postRequest ): SubscriptionSignupRequest {
+		return ( new SubscriptionSignupRequest() )
+			->setTransactionType( $postRequest->get( 'txn_type', '' ) )
+			->setPayerId( $postRequest->get( 'payer_id', '' ) )
+			->setSubscriptionId( $postRequest->get( 'subscr_id', '' ) )
+			->setPayerEmail( $postRequest->get( 'payer_email', '' ) )
+			->setPayerStatus( $postRequest->get( 'payer_status', '' ) )
+			->setPayerFirstName( $postRequest->get( 'first_name', '' ) )
+			->setPayerLastName( $postRequest->get( 'last_name', '' ) )
+			->setPayerAddressName( $postRequest->get( 'address_name', '' ) )
+			->setPayerAddressStreet( $postRequest->get( 'address_street', '' ) )
+			->setPayerAddressPostalCode( $postRequest->get( 'address_zip', '' ) )
+			->setPayerAddressCity( $postRequest->get( 'address_city', '' ) )
+			->setPayerAddressCountry( $postRequest->get( 'address_country_code', '' ) )
+			->setPayerAddressStatus( $postRequest->get( 'address_status', '' ) )
+			->setApplicationId( (int)$postRequest->get( 'item_number', 0 ) )
+			->setPaymentType( $postRequest->get( 'payment_type', '' ) )
+			->setCurrencyCode( $postRequest->get( 'mc_currency', '' ) );
+	}
+
+	private function newSubscriptionPaymentRequestFromPost( ParameterBag $postRequest ): PayPalPaymentNotificationRequest {
 		return ( new PayPalPaymentNotificationRequest() )
 			->setTransactionType( $postRequest->get( 'txn_type', '' ) )
 			->setTransactionId( $postRequest->get( 'txn_id', '' ) )
@@ -94,7 +126,7 @@ class PayPalNotificationHandler {
 		}
 	}
 
-	private function logResponseIfNeeded( PaypalNotificationResponse $response, Request $request ) {
+	private function logResponseIfNeeded( PaypalNotificationResponse $response, ParameterBag $post ) {
 		if ( $response->notificationWasHandled() ) {
 			return;
 		}
@@ -103,7 +135,7 @@ class PayPalNotificationHandler {
 		$message = $context['message'] ?? 'Paypal request not handled';
 		$logLevel = $response->hasErrors() ? LogLevel::ERROR : LogLevel::INFO;
 		unset( $context['message'] );
-		$context['post_vars'] = $request->request->all();
+		$context['post_vars'] = $post->all();
 		$this->ffFactory->getPaypalLogger()->log( $logLevel, $message, $context );
 	}
 

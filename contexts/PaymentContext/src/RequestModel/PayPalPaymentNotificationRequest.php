@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\DonationContext\UseCases\HandlePayPalPaymentNotification;
+namespace WMDE\Fundraising\Frontend\PaymentContext\RequestModel;
 
 use WMDE\Euro\Euro;
 
@@ -10,7 +10,7 @@ use WMDE\Euro\Euro;
  * @license GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class PayPalNotificationRequest {
+class PayPalPaymentNotificationRequest {
 
 	private $transactionType;
 	private $transactionId;
@@ -18,7 +18,7 @@ class PayPalNotificationRequest {
 	private $payerId;
 	private $payerEmail;
 	private $payerStatus;
-	private $subscriberId;
+	private $subscriptionId;
 
 	private $payerFirstName;
 	private $payerLastName;
@@ -29,7 +29,7 @@ class PayPalNotificationRequest {
 	private $payerAddressCountryCode;
 	private $payerAddressStatus;
 
-	private $donationId;
+	private $internalId;
 	private $token;
 
 	private $currencyCode;
@@ -67,12 +67,12 @@ class PayPalNotificationRequest {
 		return $this;
 	}
 
-	public function getSubscriberId(): string {
-		return $this->subscriberId;
+	public function getSubscriptionId(): string {
+		return $this->subscriptionId;
 	}
 
-	public function setSubscriberId( string $subscriberId ) {
-		$this->subscriberId = $subscriberId;
+	public function setSubscriptionId( string $subscriptionId ) {
+		$this->subscriptionId = $subscriptionId;
 		return $this;
 	}
 
@@ -166,12 +166,12 @@ class PayPalNotificationRequest {
 		return $this;
 	}
 
-	public function getDonationId(): int {
-		return $this->donationId;
+	public function getInternalId(): int {
+		return $this->internalId;
 	}
 
-	public function setDonationId( int $donationId ): self {
-		$this->donationId = $donationId;
+	public function setInternalId( int $internalId ): self {
+		$this->internalId = $internalId;
 		return $this;
 	}
 

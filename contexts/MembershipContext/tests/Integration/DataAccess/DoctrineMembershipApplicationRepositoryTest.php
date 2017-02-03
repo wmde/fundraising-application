@@ -86,10 +86,10 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit_Framework_Tes
 		$repository->storeApplication( $donation );
 	}
 
-	public function testWhenDonationInDatabase_itIsReturnedAsMatchingDomainEntity() {
+	public function testWhenMembershipApplicationInDatabase_itIsReturnedAsMatchingDomainEntity() {
 		$this->storeDoctrineApplication( ValidMembershipApplication::newDoctrineEntity() );
 
-		$expected = ValidMembershipApplication::newDomainEntity();
+		$expected = ValidMembershipApplication::newAutoConfirmedDomainEntity();
 		$expected->assignId( self::MEMBERSHIP_APPLICATION_ID );
 
 		$this->assertEquals(
@@ -134,7 +134,7 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit_Framework_Tes
 
 	public function testWriteAndReadRoundtrip() {
 		$repository = $this->newRepository();
-		$application = ValidMembershipApplication::newDomainEntity();
+		$application = ValidMembershipApplication::newAutoConfirmedDomainEntity();
 
 		$repository->storeApplication( $application );
 

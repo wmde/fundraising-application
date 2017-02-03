@@ -10,6 +10,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipContext\Tracking\ApplicationPiwikTracker;
 use WMDE\Fundraising\Frontend\MembershipContext\Tracking\ApplicationTracker;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
 
 /**
@@ -62,7 +63,9 @@ class ApplyForMembershipUseCase {
 		$this->piwikTracker->trackApplication( $application->getId(), $request->getPiwikTrackingString() );
 
 		// TODO: handle exceptions
-		$this->sendConfirmationEmail( $application );
+		if ( $this->isAutoConfirmed( $application ) ) {
+			$this->sendConfirmationEmail( $application );
+		}
 
 		// TODO: handle exceptions
 		$tokens = $this->tokenFetcher->getTokens( $application->getId() );
@@ -92,4 +95,7 @@ class ApplyForMembershipUseCase {
 		);
 	}
 
+	public function isAutoConfirmed( Application $application ): bool {
+		return $application->getPayment()->getPaymentMethod()->getType() === PaymentType::DIRECT_DEBIT;
+	}
 }

@@ -90,7 +90,7 @@ class MembershipApplicationBuilder {
 		}
 
 		if ( $request->getPaymentType() === PaymentType::PAYPAL ) {
-			return new PayPalPayment( new PayPalData() );
+			return new PayPalPayment();
 		}
 	}
 

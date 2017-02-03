@@ -19,6 +19,8 @@ use WMDE\Fundraising\Frontend\DonationContext\Infrastructure\DonationConfirmatio
 use WMDE\Fundraising\Frontend\DonationContext\Infrastructure\DonationEventLogger;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
+use WMDE\Fundraising\Frontend\PaymentContext\ResponseModel\PaypalNotificationResponse;
+use WMDE\Fundraising\Frontend\PaymentContext\RequestModel\PayPalPaymentNotificationRequest;
 
 /**
  * @license GNU GPL v2+
@@ -40,7 +42,7 @@ class HandlePayPalPaymentNotificationUseCase {
 		$this->donationEventLogger = $donationEventLogger;
 	}
 
-	public function handleNotification( PayPalNotificationRequest $request ): PaypalNotificationResponse {
+	public function handleNotification( PayPalPaymentNotificationRequest $request ): PaypalNotificationResponse {
 		if ( !$request->isSuccessfulPaymentNotification() ) {
 			return $this->createUnhandledResponse( 'Unhandled PayPal instant payment notification' );
 		}
@@ -50,7 +52,7 @@ class HandlePayPalPaymentNotificationUseCase {
 		}
 
 		try {
-			$donation = $this->repository->getDonationById( $request->getDonationId() );
+			$donation = $this->repository->getDonationById( $request->getInternalId() );
 		} catch ( GetDonationException $ex ) {
 			return $this->createErrorResponse( $ex );
 		}
@@ -62,7 +64,7 @@ class HandlePayPalPaymentNotificationUseCase {
 		return $this->handleRequestForDonation( $request, $donation );
 	}
 
-	private function handleRequestWithoutDonation( PayPalNotificationRequest $request ): PaypalNotificationResponse {
+	private function handleRequestWithoutDonation( PayPalPaymentNotificationRequest $request ): PaypalNotificationResponse {
 		$donation = $this->newDonationFromRequest( $request );
 
 		try {
@@ -77,12 +79,12 @@ class HandlePayPalPaymentNotificationUseCase {
 		return PaypalNotificationResponse::newSuccessResponse();
 	}
 
-	private function handleRequestForDonation( PayPalNotificationRequest $request, Donation $donation ): PaypalNotificationResponse {
+	private function handleRequestForDonation( PayPalPaymentNotificationRequest $request, Donation $donation ): PaypalNotificationResponse {
 		if ( !( $donation->getPayment()->getPaymentMethod() instanceof PayPalPayment ) ) {
 			return $this->createUnhandledResponse( 'Trying to handle IPN for non-Paypal donation' );
 		}
 
-		if ( !$this->authorizationService->systemCanModifyDonation( $request->getDonationId() ) ) {
+		if ( !$this->authorizationService->systemCanModifyDonation( $request->getInternalId() ) ) {
 			return $this->createUnhandledResponse( 'Wrong access code for donation' );
 		}
 		if ( $this->donationWasBookedWithDifferentTransactionId( $donation, $request ) ) {
@@ -126,14 +128,14 @@ class HandlePayPalPaymentNotificationUseCase {
 		}
 	}
 
-	private function transactionIsSubscriptionRelatedButNotAPayment( PayPalNotificationRequest $request ): bool {
+	private function transactionIsSubscriptionRelatedButNotAPayment( PayPalPaymentNotificationRequest $request ): bool {
 		return $request->isForRecurringPayment() && !$request->isRecurringPaymentCompletion();
 	}
 
-	private function newPayPalDataFromRequest( PayPalNotificationRequest $request ): PayPalData {
+	private function newPayPalDataFromRequest( PayPalPaymentNotificationRequest $request ): PayPalData {
 		return ( new PayPalData() )
 			->setPayerId( $request->getPayerId() )
-			->setSubscriberId( $request->getSubscriberId() )
+			->setSubscriberId( $request->getSubscriptionId() )
 			->setPayerStatus( $request->getPayerStatus() )
 			->setAddressStatus( $request->getPayerAddressStatus() )
 			->setAmount( $request->getAmountGross() )
@@ -150,7 +152,7 @@ class HandlePayPalPaymentNotificationUseCase {
 	}
 
 	private function donationWasBookedWithDifferentTransactionId( Donation $donation,
-																  PayPalNotificationRequest $request ): bool {
+																  PayPalPaymentNotificationRequest $request ): bool {
 		/**
 		 * @var PayPalPayment $payment
 		 */
@@ -171,7 +173,7 @@ class HandlePayPalPaymentNotificationUseCase {
 		return true;
 	}
 
-	private function createChildDonation( Donation $donation, PayPalNotificationRequest $request ): PaypalNotificationResponse {
+	private function createChildDonation( Donation $donation, PayPalPaymentNotificationRequest $request ): PaypalNotificationResponse {
 		$childPaymentMethod = new PayPalPayment( $this->newPayPalDataFromRequest( $request ) );
 		$payment = $donation->getPayment();
 		$childDonation = new Donation(
@@ -209,7 +211,7 @@ class HandlePayPalPaymentNotificationUseCase {
 		);
 	}
 
-	private function newDonorFromRequest( PayPalNotificationRequest $request ): Donor {
+	private function newDonorFromRequest( PayPalPaymentNotificationRequest $request ): Donor {
 		return new Donor(
 			$this->newPersonNameFromRequest( $request ),
 			$this->newPhysicalAddressFromRequest( $request ),
@@ -217,7 +219,7 @@ class HandlePayPalPaymentNotificationUseCase {
 		);
 	}
 
-	private function newPersonNameFromRequest( PayPalNotificationRequest $request ): DonorName {
+	private function newPersonNameFromRequest( PayPalPaymentNotificationRequest $request ): DonorName {
 		$name = DonorName::newPrivatePersonName();
 		$name->setFirstName( $request->getPayerFirstName() );
 		$name->setLastName( $request->getPayerLastName() );
@@ -225,7 +227,7 @@ class HandlePayPalPaymentNotificationUseCase {
 		return $name;
 	}
 
-	private function newPhysicalAddressFromRequest( PayPalNotificationRequest $request ): DonorAddress {
+	private function newPhysicalAddressFromRequest( PayPalPaymentNotificationRequest $request ): DonorAddress {
 		$address = new DonorAddress();
 		$address->setStreetAddress( $request->getPayerAddressStreet() );
 		$address->setCity( $request->getPayerAddressCity() );
@@ -235,7 +237,7 @@ class HandlePayPalPaymentNotificationUseCase {
 		return $address;
 	}
 
-	private function newDonationFromRequest( PayPalNotificationRequest $request ): Donation {
+	private function newDonationFromRequest( PayPalPaymentNotificationRequest $request ): Donation {
 		$payment = new DonationPayment( $request->getAmountGross(), 0, new PayPalPayment() );
 		$donation = new Donation(
 			null,

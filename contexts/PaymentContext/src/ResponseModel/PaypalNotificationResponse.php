@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\DonationContext\UseCases\HandlePayPalPaymentNotification;
+namespace WMDE\Fundraising\Frontend\PaymentContext\ResponseModel;
 
 class PaypalNotificationResponse {
 

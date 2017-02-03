@@ -36,7 +36,7 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$this->getMailer(),
 			$this->getEventLogger()
 		);
-		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 1 );
+		$request = ValidPayPalNotificationRequest::newInstantPayment( 1 );
 		$reponse = $useCase->handleNotification( $request );
 		$this->assertFalse( $reponse->notificationWasHandled() );
 		$this->assertTrue( $reponse->hasErrors() );
@@ -53,7 +53,7 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$this->getEventLogger()
 		);
 
-		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 1 );
+		$request = ValidPayPalNotificationRequest::newInstantPayment( 1 );
 		$this->assertFalse( $useCase->handleNotification( $request )->notificationWasHandled() );
 	}
 
@@ -68,7 +68,7 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$this->getEventLogger()
 		);
 
-		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 1 );
+		$request = ValidPayPalNotificationRequest::newInstantPayment( 1 );
 		$this->assertTrue( $useCase->handleNotification( $request )->notificationWasHandled() );
 	}
 
@@ -76,7 +76,7 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$fakeRepository = new FakeDonationRepository();
 		$fakeRepository->storeDonation( ValidDonation::newDirectDebitDonation() );
 
-		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 1 );
+		$request = ValidPayPalNotificationRequest::newInstantPayment( 1 );
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
 			$fakeRepository,
 			new SucceedingDonationAuthorizer(),
@@ -129,7 +129,7 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			$this->getEventLogger()
 		);
 
-		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 1 );
+		$request = ValidPayPalNotificationRequest::newInstantPayment( 1 );
 		$this->assertTrue( $useCase->handleNotification( $request )->notificationWasHandled() );
 	}
 
@@ -142,7 +142,7 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$mailer->expects( $this->never() )
 			->method( 'sendConfirmationMailFor' );
 
-		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 1 );
+		$request = ValidPayPalNotificationRequest::newInstantPayment( 1 );
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
 			$fakeRepository,
 			new SucceedingDonationAuthorizer(),
@@ -157,7 +157,7 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$donation = ValidDonation::newIncompletePayPalDonation();
 		$repositorySpy = new DonationRepositorySpy( $donation );
 
-		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 1 );
+		$request = ValidPayPalNotificationRequest::newInstantPayment( 1 );
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
 			$repositorySpy,
 			new SucceedingDonationAuthorizer(),
@@ -173,7 +173,7 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$donation = ValidDonation::newIncompletePayPalDonation();
 		$repository = new FakeDonationRepository( $donation );
 
-		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 1 );
+		$request = ValidPayPalNotificationRequest::newInstantPayment( 1 );
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
 			$repository,
 			new SucceedingDonationAuthorizer(),
@@ -191,7 +191,7 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 
 		$eventLogger = new DonationEventLoggerSpy();
 
-		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 1 );
+		$request = ValidPayPalNotificationRequest::newInstantPayment( 1 );
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
 			$repositorySpy,
 			new SucceedingDonationAuthorizer(),
@@ -213,7 +213,7 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 			->method( 'sendConfirmationMailFor' )
 			->willThrowException( new \RuntimeException( 'Oh noes!' ) );
 
-		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 1 );
+		$request = ValidPayPalNotificationRequest::newInstantPayment( 1 );
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
 			$fakeRepository,
 			new SucceedingDonationAuthorizer(),
@@ -231,7 +231,7 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$fakeRepository = new FakeDonationRepository();
 		$fakeRepository->storeDonation( $donation );
 
-		$request = ValidPayPalNotificationRequest::newDuplicatePaymentForDonation( $donation->getId(), $transactionId );
+		$request = ValidPayPalNotificationRequest::newDuplicatePayment( $donation->getId(), $transactionId );
 
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
 			$fakeRepository,
@@ -258,7 +258,7 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$fakeRepository = new FakeDonationRepository();
 		$fakeRepository->storeDonation( $donation );
 
-		$request = ValidPayPalNotificationRequest::newDuplicatePaymentForDonation( $donation->getId(), $transactionId );
+		$request = ValidPayPalNotificationRequest::newDuplicatePayment( $donation->getId(), $transactionId );
 
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
 			$fakeRepository,
@@ -290,7 +290,7 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$fakeRepository = new FakeDonationRepository();
 		$fakeRepository->storeDonation( $donation );
 
-		$request = ValidPayPalNotificationRequest::newDuplicatePaymentForDonation( $donation->getId(), $transactionId );
+		$request = ValidPayPalNotificationRequest::newDuplicatePayment( $donation->getId(), $transactionId );
 
 		$eventLogger = new DonationEventLoggerSpy();
 
@@ -316,7 +316,7 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$fakeRepository = new FakeDonationRepository();
 		$fakeRepository->storeDonation( ValidDonation::newBookedPayPalDonation() );
 
-		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 1 );
+		$request = ValidPayPalNotificationRequest::newInstantPayment( 1 );
 
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
 			$fakeRepository,
@@ -337,7 +337,7 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 		$fakeRepository = new FakeDonationRepository();
 		$fakeRepository->storeDonation( $donation );
 
-		$request = ValidPayPalNotificationRequest::newDuplicatePaymentForDonation( $donation->getId(), $transactionId );
+		$request = ValidPayPalNotificationRequest::newDuplicatePayment( $donation->getId(), $transactionId );
 
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
 			$fakeRepository,
@@ -352,7 +352,7 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 	public function testWhenNotificationIsForNonExistingDonation_newDonationIsCreated() {
 		$repositorySpy = new DonationRepositorySpy();
 
-		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 12345 );
+		$request = ValidPayPalNotificationRequest::newInstantPayment( 12345 );
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
 			$repositorySpy,
 			new SucceedingDonationAuthorizer(),
@@ -390,7 +390,7 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 	}
 
 	public function testWhenNotificationIsForNonExistingDonation_confirmationMailIsSent() {
-		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 12345 );
+		$request = ValidPayPalNotificationRequest::newInstantPayment( 12345 );
 		$mailer = $this->getMailer();
 		$mailer->expects( $this->once() )
 			->method( 'sendConfirmationMailFor' )
@@ -406,7 +406,7 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_Test
 	}
 
 	public function testWhenNotificationIsForNonExistingDonation_bookingEventIsLogged() {
-		$request = ValidPayPalNotificationRequest::newInstantPaymentForDonation( 12345 );
+		$request = ValidPayPalNotificationRequest::newInstantPayment( 12345 );
 		$eventLogger = new DonationEventLoggerSpy();
 
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
