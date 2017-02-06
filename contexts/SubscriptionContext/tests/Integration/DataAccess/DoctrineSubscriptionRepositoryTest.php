@@ -18,7 +18,7 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class DoctrineSubscriptionRepositoryTest extends \PHPUnit_Framework_TestCase {
+class DoctrineSubscriptionRepositoryTest extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * @var EntityManager

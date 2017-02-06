@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class PayPalNotificationVerifierTest extends \PHPUnit_Framework_TestCase {
+class PayPalNotificationVerifierTest extends \PHPUnit\Framework\TestCase {
 
 	/** @var PayPalPaymentNotificationVerifier */
 	private $verifier;

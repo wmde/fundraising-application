@@ -56,11 +56,10 @@
 	"require-dev": {
 		"ext-pdo_sqlite": "*",
 
-		"phpunit/phpunit": "~5.4",
+		"phpunit/phpunit": "~6.0",
 		"codeception/specify": "~0.4.3",
 		"whatthejeff/nyancat-phpunit-resultprinter": "~1.2",
-		"ockcyp/covers-validator": "~0.4",
-		"johnkary/phpunit-speedtrap": "^1.0",
+		"ockcyp/covers-validator": "@dev",
 		"mikey179/vfsStream": "~1.6",
 		"wmde/psr-log-test-doubles": "~2.1",
 

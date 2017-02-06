@@ -27,7 +27,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit_Framework_TestCase {
+class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit\Framework\TestCase {
 
 	public function testWhenRepositoryThrowsException_errorResponseIsReturned() {
 		$useCase = new HandlePayPalPaymentNotificationUseCase(

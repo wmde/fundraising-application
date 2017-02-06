@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
+use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -14,7 +15,7 @@ use PHPUnit_Framework_TestCase;
  */
 class ThrowingEntityManager {
 
-	public static function newInstance( PHPUnit_Framework_TestCase $testCase ): EntityManager {
+	public static function newInstance( TestCase $testCase ): EntityManager {
 		$entityManager = $testCase->getMockBuilder( EntityManager::class )
 			->disableOriginalConstructor()->getMock();
 

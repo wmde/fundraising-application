@@ -15,7 +15,7 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalData;
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class DonationTest extends \PHPUnit_Framework_TestCase {
+class DonationTest extends \PHPUnit\Framework\TestCase {
 
 	public function testGivenNonDirectDebitDonation_cancellationFails() {
 		$donation = ValidDonation::newBankTransferDonation();

@@ -14,7 +14,7 @@ use WMDE\Fundraising\Frontend\Presentation\CreditCardUrlGenerator;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class CreditCardUrlGeneratorTest extends \PHPUnit_Framework_TestCase {
+class CreditCardUrlGeneratorTest extends \PHPUnit\Framework\TestCase {
 
 	/** @dataProvider donationProvider */
 	public function testUrlGeneration( string $expected, string $firstName, string $lastName, string $payText,

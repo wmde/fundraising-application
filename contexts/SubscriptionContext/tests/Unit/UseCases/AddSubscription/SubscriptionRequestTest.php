@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\AddSubscription\Subsc
  * @licence GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class SubscriptionRequestTest extends \PHPUnit_Framework_TestCase {
+class SubscriptionRequestTest extends \PHPUnit\Framework\TestCase {
 
 	public function testGivenInvalidValues_WikiloginIsFalse() {
 		$request = new SubscriptionRequest();

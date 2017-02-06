@@ -11,7 +11,7 @@ use WMDE\Fundraising\Frontend\Validation\ValidationResult;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class ValidatorTestCase extends \PHPUnit_Framework_TestCase {
+class ValidatorTestCase extends \PHPUnit\Framework\TestCase {
 
 	protected function assertConstraintWasViolated( ValidationResult $result, string $fieldName ) {
 		$this->assertContainsOnlyInstancesOf( ConstraintViolation::class, $result->getViolations() );

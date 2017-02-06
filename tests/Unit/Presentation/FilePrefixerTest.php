@@ -6,7 +6,7 @@ namespace Unit\Presentation;
 
 use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
 
-class FilePrefixerTest extends \PHPUnit_Framework_TestCase {
+class FilePrefixerTest extends \PHPUnit\Framework\TestCase {
 
 	public function testGivenNoFilePrefixes_fileNameIsNotChanged() {
 		$prefixer = new FilePrefixer( '' );

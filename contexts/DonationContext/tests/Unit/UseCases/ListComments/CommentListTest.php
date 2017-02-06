@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\DonationContext\UseCases\ListComments\CommentList;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class CommentListTest extends \PHPUnit_Framework_TestCase {
+class CommentListTest extends \PHPUnit\Framework\TestCase {
 
 	public function testGivenNoArguments_constructorCreatesEmptyList() {
 		$this->assertSame( [], ( new CommentList() )->toArray() );

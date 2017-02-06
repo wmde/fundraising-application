@@ -16,7 +16,7 @@ use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class MembershipFeeValidatorTest extends \PHPUnit_Framework_TestCase {
+class MembershipFeeValidatorTest extends \PHPUnit\Framework\TestCase {
 
 	public function testGivenValidRequest_validationSucceeds() {
 		$validRequest = $this->newValidRequest();

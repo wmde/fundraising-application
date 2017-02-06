@@ -11,7 +11,7 @@ use WMDE\Fundraising\Frontend\Presentation\TemplateTestCampaign;
  * @author Leszek Manicki <leszek.manicki@wikimedia.de>
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class TemplateTestCampaignTest extends \PHPUnit_Framework_TestCase {
+class TemplateTestCampaignTest extends \PHPUnit\Framework\TestCase {
 
 	public function testConstructorSetsFields() {
 		$campaign = new TemplateTestCampaign( [

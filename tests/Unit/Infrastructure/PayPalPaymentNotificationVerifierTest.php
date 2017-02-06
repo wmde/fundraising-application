@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifierEx
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class PayPalPaymentNotificationVerifierTest extends \PHPUnit_Framework_TestCase {
+class PayPalPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase {
 
 	const VALID_ACCOUNT_EMAIL = 'foerderpp@wikimedia.de';
 	const INVALID_ACCOUNT_EMAIL = 'this.is.not@my.email.address';

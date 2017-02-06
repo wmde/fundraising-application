@@ -10,7 +10,7 @@ use WMDE\Fundraising\Frontend\Presentation\DonationConfirmationPageSelector;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class DonationConfirmationPageSelectorTest extends \PHPUnit_Framework_TestCase {
+class DonationConfirmationPageSelectorTest extends \PHPUnit\Framework\TestCase {
 
 	public function testWhenConfigIsEmpty_selectPageReturnsDefaultPageTitle() {
 		$selector = new DonationConfirmationPageSelector( $this->newCampaignConfig( [] ) );

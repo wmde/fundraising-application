@@ -8,7 +8,7 @@ use Twig_Environment;
 use Twig_Error_Loader;
 use WMDE\Fundraising\Frontend\Validation\TemplateNameValidator;
 
-class TemplateNameValidatorTest extends \PHPUnit_Framework_TestCase {
+class TemplateNameValidatorTest extends \PHPUnit\Framework\TestCase {
 
 	public function testWhenEnvironmentThrowsNoException_validationSuccceeds() {
 		$twig = $this->getMockBuilder( Twig_Environment::class )->disableOriginalConstructor()->getMock();

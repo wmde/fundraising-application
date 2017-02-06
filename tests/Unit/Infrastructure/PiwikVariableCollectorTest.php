@@ -15,7 +15,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\PiwikVariableCollector;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class PiwikVariableCollectorTest extends \PHPUnit_Framework_TestCase {
+class PiwikVariableCollectorTest extends \PHPUnit\Framework\TestCase {
 
 	const INITIAL_AMOUNT = '34.56';
 	const INITIAL_TYPE = 'BEZ';

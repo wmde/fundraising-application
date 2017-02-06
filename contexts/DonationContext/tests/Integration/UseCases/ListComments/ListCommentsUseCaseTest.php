@@ -16,7 +16,7 @@ use WMDE\Fundraising\Frontend\DonationContext\UseCases\ListComments\ListComments
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class ListCommentsUseCaseTest extends \PHPUnit_Framework_TestCase {
+class ListCommentsUseCaseTest extends \PHPUnit\Framework\TestCase {
 
 	public function testWhenThereAreNoComments_anEmptyListIsPresented() {
 		$useCase = new ListCommentsUseCase( new InMemoryCommentFinder() );

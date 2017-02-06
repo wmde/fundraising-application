@@ -31,7 +31,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class ApplyForMembershipUseCaseTest extends \PHPUnit_Framework_TestCase {
+class ApplyForMembershipUseCaseTest extends \PHPUnit\Framework\TestCase {
 
 	const ID_OF_NON_EXISTING_APPLICATION = 1337;
 	const FIRST_APPLICATION_ID = 1;

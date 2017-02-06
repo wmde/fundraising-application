@@ -16,7 +16,7 @@ use WMDE\PsrLogTestDoubles\LoggerSpy;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class LoggingPaymentNotificationVerifierTest extends \PHPUnit_Framework_TestCase {
+class LoggingPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase {
 
 	public function testWhenVerifierThrowsException_loggingVerifierPassesItOn() {
 		$loggingVerifier = new LoggingPaymentNotificationVerifier(

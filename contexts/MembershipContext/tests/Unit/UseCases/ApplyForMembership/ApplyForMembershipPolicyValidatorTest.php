@@ -7,7 +7,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplic
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipPolicyValidator;
 use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
 
-class ApplyForMembershipPolicyValidatorTest extends \PHPUnit_Framework_TestCase {
+class ApplyForMembershipPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 
 	public function testGivenQuarterlyAmountTooHigh_MembershipApplicationNeedsModeration() {
 		$textPolicyValidator = $this->createMock( TextPolicyValidator::class );

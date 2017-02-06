@@ -19,7 +19,7 @@ use WMDE\PsrLogTestDoubles\LoggerSpy;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class LoggingDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
+class LoggingDonationRepositoryTest extends \PHPUnit\Framework\TestCase {
 
 	public function testWhenGetDonationByIdThrowException_itIsLogged() {
 		$loggingRepo = new LoggingDonationRepository(

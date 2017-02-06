@@ -17,7 +17,7 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
  * @licence GNU GPL v2+
  * @author Christoph Fischer <christoph.fischer@wikimedia.de >
  */
-class BankDataConverterTest extends \PHPUnit_Framework_TestCase {
+class BankDataConverterTest extends \PHPUnit\Framework\TestCase {
 
 	public function setUp() {
 		if ( !function_exists( 'lut_init' ) ) {
