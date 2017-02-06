@@ -14,7 +14,7 @@ use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionDuplica
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class SubscriptionDuplicateValidatorTest extends \PHPUnit_Framework_TestCase {
+class SubscriptionDuplicateValidatorTest extends \PHPUnit\Framework\TestCase {
 
 	public function testGivenSubscriptionCountOfZero_validationSucceeds() {
 		$repository = $this->createMock( SubscriptionRepository::class );

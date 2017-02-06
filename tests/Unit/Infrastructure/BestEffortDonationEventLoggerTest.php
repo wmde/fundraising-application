@@ -16,7 +16,7 @@ use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\DonationEventLogger
  * @licence GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class BestEffortDonationEventLoggerTest extends \PHPUnit_Framework_TestCase {
+class BestEffortDonationEventLoggerTest extends \PHPUnit\Framework\TestCase {
 
 	const DONATION_ID = 1337;
 	const MESSAGE = 'a semi-important event has occured';

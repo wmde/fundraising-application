@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonorName;
  * @license GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class DonorNameTest extends \PHPUnit_Framework_TestCase {
+class DonorNameTest extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * @dataProvider privatePersonProvider

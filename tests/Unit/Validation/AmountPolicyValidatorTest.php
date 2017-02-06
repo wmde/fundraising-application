@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\Validation\AmountPolicyValidator;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class AmountPolicyValidatorTest extends \PHPUnit_Framework_TestCase {
+class AmountPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 
 	const INTERVAL_ONCE = 0;
 	const INTERVAL_MONTHLY = 1;

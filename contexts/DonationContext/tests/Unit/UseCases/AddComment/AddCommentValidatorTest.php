@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\DonationContext\Tests\Unit\UseCases\AddComme
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddComment\AddCommentRequest;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddComment\AddCommentValidator;
 
-class AddCommentValidatorTest extends \PHPUnit_Framework_TestCase {
+class AddCommentValidatorTest extends \PHPUnit\Framework\TestCase {
 
 	private function newValidAddCommentRequest(): AddCommentRequest {
 		$request = new AddCommentRequest();

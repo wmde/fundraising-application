@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation\Content;
 use WMDE\Fundraising\Frontend\Presentation\Content\TwigPageLoader;
 use WMDE\PageRetriever\PageRetriever;
 
-class TwigPageLoaderTest extends \PHPUnit_Framework_TestCase {
+class TwigPageLoaderTest extends \PHPUnit\Framework\TestCase {
 
 	public function testGivenAPageText_getSourceReturnsPageText() {
 		$loader = new TwigPageLoader(

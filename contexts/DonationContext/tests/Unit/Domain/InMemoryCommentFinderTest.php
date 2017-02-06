@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\InMemoryCommentFind
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class InMemoryCommentFinderTest extends \PHPUnit_Framework_TestCase {
+class InMemoryCommentFinderTest extends \PHPUnit\Framework\TestCase {
 
 	public function testWhenThereAreNoComments_getCommentsReturnsEmptyArray() {
 		$this->assertSame( [], ( new InMemoryCommentFinder() )->getPublicComments( 10 ) );

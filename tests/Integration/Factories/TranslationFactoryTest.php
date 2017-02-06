@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\Factories;
 use Symfony\Component\Translation\Loader\ArrayLoader;
 use WMDE\Fundraising\Frontend\Factories\TranslationFactory;
 
-class TranslationFactoryTest extends \PHPUnit_Framework_TestCase {
+class TranslationFactoryTest extends \PHPUnit\Framework\TestCase {
 	public function testLoadersAreSet(){
 		$factory = new TranslationFactory();
 		$loader = new ArrayLoader();

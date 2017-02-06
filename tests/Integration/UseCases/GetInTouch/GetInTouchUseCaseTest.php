@@ -19,7 +19,7 @@ use WMDE\Fundraising\Frontend\Validation\ValidationResult;
  * @license GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class GetInTouchUseCaseTest extends \PHPUnit_Framework_TestCase {
+class GetInTouchUseCaseTest extends \PHPUnit\Framework\TestCase {
 
 	const INQUIRER_FIRST_NAME = 'Curious';
 	const INQUIRER_LAST_NAME = 'Guy';

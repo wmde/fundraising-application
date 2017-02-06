@@ -14,7 +14,7 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class McpCreditCardServiceTest extends \PHPUnit_Framework_TestCase {
+class McpCreditCardServiceTest extends \PHPUnit\Framework\TestCase {
 
 	const TEST_MODE = 1;
 	const CARD_NUMBER = '4111111111111111';

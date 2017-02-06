@@ -21,7 +21,7 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit_Framework_TestCase {
+class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit\Framework\TestCase {
 
 	const MEMBERSHIP_APPLICATION_ID = 1;
 	const ID_OF_APPLICATION_NOT_IN_DB = 35505;

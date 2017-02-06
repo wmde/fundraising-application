@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation;
 
 use WMDE\Fundraising\Frontend\Presentation\GreetingGenerator;
 
-class GreetingGeneratorTest extends \PHPUnit_Framework_TestCase {
+class GreetingGeneratorTest extends \PHPUnit\Framework\TestCase {
 
 	public function testGivenNoLastName_neutralGreetingIsGenerated() {
 		$generator = new GreetingGenerator();

@@ -17,7 +17,7 @@ use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class ConfirmSubscriptionHtmlPresenterTest extends \PHPUnit_Framework_TestCase {
+class ConfirmSubscriptionHtmlPresenterTest extends \PHPUnit\Framework\TestCase {
 
 	public function testGivenSuccessResponse_templateIsRenderedWithoutMessages() {
 		$twig = $this->getMockBuilder( TwigTemplate::class )->disableOriginalConstructor()->getMock();

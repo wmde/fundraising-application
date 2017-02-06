@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 /**
  * @covers WMDE\Fundraising\Frontend\DonationContext\DataAccess\DoctrineDonationEventLogger
  */
-class DoctrineDonationEventLoggerTest extends \PHPUnit_Framework_TestCase {
+class DoctrineDonationEventLoggerTest extends \PHPUnit\Framework\TestCase {
 
 	const DEFAULT_MESSAGE = 'Log message';
 	const LOG_TIMESTAMP = '2015-10-21 21:00:04';

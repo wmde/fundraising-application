@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\TrackingDataSelector;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class TrackingDataSelectorTest extends \PHPUnit_Framework_TestCase {
+class TrackingDataSelectorTest extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * @dataProvider preferredValueProvider

@@ -16,7 +16,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class ConfigReaderTest extends \PHPUnit_Framework_TestCase {
+class ConfigReaderTest extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * @var vfsStreamDirectory

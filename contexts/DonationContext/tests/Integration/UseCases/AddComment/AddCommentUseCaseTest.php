@@ -22,7 +22,7 @@ use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class AddCommentUseCaseTest extends \PHPUnit_Framework_TestCase {
+class AddCommentUseCaseTest extends \PHPUnit\Framework\TestCase {
 
 	const DONATION_ID = 9001;
 	const COMMENT_TEXT = 'Your programmers deserve a raise';

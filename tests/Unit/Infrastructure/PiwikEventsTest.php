@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\PiwikEvents;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class PiwikEventsTest extends \PHPUnit_Framework_TestCase {
+class PiwikEventsTest extends \PHPUnit\Framework\TestCase {
 
 	public function testWhenPassedAnUndefinedCustomVarId_exceptionIsThrown() {
 		$piwikEvents = new PiwikEvents();

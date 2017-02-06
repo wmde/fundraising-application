@@ -14,7 +14,7 @@ use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidDonation;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class DonationConfirmationHtmlPresenterTest extends \PHPUnit_Framework_TestCase {
+class DonationConfirmationHtmlPresenterTest extends \PHPUnit\Framework\TestCase {
 
 	private const STATUS_BOOKED = 'status-booked';
 	private const STATUS_UNCONFIRMED = 'status-unconfirmed';
