@@ -18,7 +18,7 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class DoctrineMembershipApplicationTrackerTest extends \PHPUnit_Framework_TestCase {
+class DoctrineMembershipApplicationTrackerTest extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * @var EntityManager

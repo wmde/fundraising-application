@@ -14,7 +14,7 @@ use WMDE\Fundraising\Frontend\Presentation\PayPalUrlGenerator;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class PayPalUrlGeneratorTest extends \PHPUnit_Framework_TestCase {
+class PayPalUrlGeneratorTest extends \PHPUnit\Framework\TestCase {
 
 	const BASE_URL = 'https://www.sandbox.paypal.com/cgi-bin/webscr?';
 	const ACCOUNT_ADDRESS = 'foerderpp@wikimedia.de';

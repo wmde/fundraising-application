@@ -21,7 +21,7 @@ use WMDE\Fundraising\Frontend\Validation\ValidationResult;
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class AddSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase {
+class AddSubscriptionUseCaseTest extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * @var PHPUnit_Framework_MockObject_MockObject|SubscriptionRepository

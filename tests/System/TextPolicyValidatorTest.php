@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
  * @licence GNU GPL v2+
  * @author Christoph Fischer <christoph.fischer@wikimedia.de
  */
-class TextPolicyValidatorTest extends \PHPUnit_Framework_TestCase {
+class TextPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * @dataProvider urlTestProvider

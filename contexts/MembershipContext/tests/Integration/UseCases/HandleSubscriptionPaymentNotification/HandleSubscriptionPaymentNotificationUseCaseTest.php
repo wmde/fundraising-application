@@ -23,7 +23,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class HandleSubscriptionPaymentNotificationUseCaseTest extends \PHPUnit_Framework_TestCase {
+class HandleSubscriptionPaymentNotificationUseCaseTest extends \PHPUnit\Framework\TestCase {
 
 	public function testWhenRepositoryThrowsException_requestIsNotHandled() {
 		$useCase = new HandleSubscriptionPaymentNotificationUseCase(

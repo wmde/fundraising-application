@@ -17,7 +17,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
  * @licence GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class DonationConfirmationMailerTest extends \PHPUnit_Framework_TestCase {
+class DonationConfirmationMailerTest extends \PHPUnit\Framework\TestCase {
 
 	const DONATION_ID = 42;
 

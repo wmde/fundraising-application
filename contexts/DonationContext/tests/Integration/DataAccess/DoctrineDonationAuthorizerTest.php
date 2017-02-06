@@ -18,7 +18,7 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class DoctrineDonationAuthorizerTest extends \PHPUnit_Framework_TestCase {
+class DoctrineDonationAuthorizerTest extends \PHPUnit\Framework\TestCase {
 	use Specify;
 
 	const CORRECT_UPDATE_TOKEN = 'CorrectUpdateToken';

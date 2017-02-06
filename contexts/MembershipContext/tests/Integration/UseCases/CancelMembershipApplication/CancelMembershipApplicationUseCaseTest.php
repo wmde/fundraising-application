@@ -21,7 +21,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class CancelMembershipApplicationUseCaseTest extends \PHPUnit_Framework_TestCase {
+class CancelMembershipApplicationUseCaseTest extends \PHPUnit\Framework\TestCase {
 
 	const ID_OF_NON_EXISTING_APPLICATION = 1337;
 

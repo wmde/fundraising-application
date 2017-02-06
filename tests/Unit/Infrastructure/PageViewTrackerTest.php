@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
  * @licence GNU GPL v2+
  * @author Leszek Manicki <leszek.manicki@wikimedia.de>
  */
-class PageViewTrackerTest extends \PHPUnit_Framework_TestCase {
+class PageViewTrackerTest extends \PHPUnit\Framework\TestCase {
 
 	public function testTrackPaypalRedirection() {
 		$tracker = new ServerSideTrackerSpy();

@@ -19,7 +19,7 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class DoctrineCommentFinderTest extends \PHPUnit_Framework_TestCase {
+class DoctrineCommentFinderTest extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * @var EntityManager

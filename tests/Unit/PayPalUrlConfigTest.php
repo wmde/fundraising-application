@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\Presentation\PayPalUrlConfig;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class PayPalUrlConfigTest extends \PHPUnit_Framework_TestCase {
+class PayPalUrlConfigTest extends \PHPUnit\Framework\TestCase {
 
 	public function testGivenIncompletePayPalUrlConfig_exceptionIsThrown() {
 		$this->expectException( \RuntimeException::class );

@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\EmailAddress;
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class EmailAddressTest extends \PHPUnit_Framework_TestCase {
+class EmailAddressTest extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * @dataProvider unparsableAddressProvider

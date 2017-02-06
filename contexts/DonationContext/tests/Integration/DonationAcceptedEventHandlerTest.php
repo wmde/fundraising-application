@@ -20,7 +20,7 @@ use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\SucceedingDonationA
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class DonationAcceptedEventHandlerTest extends \PHPUnit_Framework_TestCase {
+class DonationAcceptedEventHandlerTest extends \PHPUnit\Framework\TestCase {
 
 	const UNKNOWN_ID = 32202;
 	const KNOWN_ID = 31337;

@@ -25,7 +25,7 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class DoctrineDonationRepositoryTest extends \PHPUnit_Framework_TestCase {
+class DoctrineDonationRepositoryTest extends \PHPUnit\Framework\TestCase {
 
 	const ID_OF_DONATION_NOT_IN_DB = 35505;
 

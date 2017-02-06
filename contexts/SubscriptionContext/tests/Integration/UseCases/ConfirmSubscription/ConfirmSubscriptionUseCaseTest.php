@@ -17,7 +17,7 @@ use WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\ConfirmSubscription\C
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class ConfirmSubscriptionUseCaseTest extends \PHPUnit_Framework_TestCase {
+class ConfirmSubscriptionUseCaseTest extends \PHPUnit\Framework\TestCase {
 
 	const CONFIRMATION_CODE = 'deadbeef';
 

@@ -14,7 +14,7 @@ use WMDE\Fundraising\Frontend\PaymentContext\Infrastructure\CreditCardExpiryFetc
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class McpCreditCardServiceTest extends \PHPUnit_Framework_TestCase {
+class McpCreditCardServiceTest extends \PHPUnit\Framework\TestCase {
 
 	const ACCESS_KEY = 'pink fluffy unicorns';
 	const CUSTOMER_ID = '31333333333333333337';

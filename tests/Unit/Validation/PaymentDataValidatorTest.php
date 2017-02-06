@@ -15,7 +15,7 @@ use WMDE\Fundraising\Frontend\Validation\PaymentDataValidator;
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class PaymentDataValidatorTest extends \PHPUnit_Framework_TestCase {
+class PaymentDataValidatorTest extends \PHPUnit\Framework\TestCase {
 
 	const MIN_DONATION_AMOUNT = 1;
 	const MAX_DONATION_AMOUNT = 100000;

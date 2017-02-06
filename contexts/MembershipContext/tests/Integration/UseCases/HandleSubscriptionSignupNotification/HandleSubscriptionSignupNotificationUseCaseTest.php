@@ -22,7 +22,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class HandleSubscriptionSignupNotificationUseCaseTest extends \PHPUnit_Framework_TestCase {
+class HandleSubscriptionSignupNotificationUseCaseTest extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * @var TemplateBasedMailerSpy

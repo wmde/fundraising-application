@@ -14,7 +14,7 @@ use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
  * @licence GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class FieldTextPolicyValidatorTest extends \PHPUnit_Framework_TestCase {
+class FieldTextPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 
 	public function testGivenHarmlessText_itSucceeds(){
 		$textPolicy = $this->createMock( TextPolicyValidator::class );

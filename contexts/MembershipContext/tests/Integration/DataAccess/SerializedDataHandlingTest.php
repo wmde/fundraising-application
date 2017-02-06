@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class SerializedDataHandlingTest extends \PHPUnit_Framework_TestCase {
+class SerializedDataHandlingTest extends \PHPUnit\Framework\TestCase {
 
 	/** @dataProvider encodedMembershipDataProvider */
 	public function testDataFieldOfMembershipApplicationIsInteractedWithCorrectly( $data ) {

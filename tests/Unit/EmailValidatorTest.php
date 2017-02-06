@@ -14,7 +14,7 @@ use WMDE\Fundraising\Frontend\Validation\EmailValidator;
  * @licence GNU GPL v2+
  * @author Christoph Fischer < christoph.fischer@wikimedia.de >
  */
-class EmailValidatorTest extends \PHPUnit_Framework_TestCase {
+class EmailValidatorTest extends \PHPUnit\Framework\TestCase {
 
 	private function newStubDomainValidator(): DomainNameValidator {
 		return new class() implements DomainNameValidator {

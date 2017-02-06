@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
  * @licence GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class IbanTest extends \PHPUnit_Framework_TestCase {
+class IbanTest extends \PHPUnit\Framework\TestCase {
 
 	const TEST_IBAN_WITH_WHITESPACE = 'DE12 5001 0517 0648 4898 90 ';
 	const TEST_IBAN = 'DE12500105170648489890';
