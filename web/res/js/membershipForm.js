@@ -35,7 +35,7 @@ $( function () {
 				bankNameDisplayElement: $( '#bank-name' ),
 				debitTypeElement: $( '.debit-type-select' )
 			} ),
-			WMDE.Components.createValidatingCheckboxComponent( store, $( '#confirmSepa' ), 'confirmSepa' )
+			WMDE.Components.createValidatingCheckboxComponent( store, $( '#confirm_sepa' ), 'confirmSepa' )
 		],
 		store,
 		'membershipFormContent'
