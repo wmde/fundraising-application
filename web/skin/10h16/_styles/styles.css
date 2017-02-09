@@ -528,17 +528,17 @@ main { padding-top: 40px; padding-bottom: 100px; background: #f6f6f6; display: b
 .donation-submit button[type="submit"] { vertical-align: bottom; }
 .donation-submit .label { font-size: 0.8em; line-height: 1.5em; margin-top: 2px; }
 
-#donation-sepa-confirmation .box-header { background: #64aadb; }
-#donation-sepa-confirmation .box-section { font-size: 0.8em; color: #000; }
-#donation-sepa-confirmation .title { font-size: 1.2em; }
-#donation-sepa-confirmation .address { width: 250px; line-height: 1.5em; }
-#donation-sepa-confirmation .payment { line-height: 1.5em; }
-#donation-sepa-confirmation .payment .label { width: 175px; }
-#donation-sepa-confirmation .address + .payment .label { width: 82px; }
-#donation-sepa-confirmation .step-list { font-size: 0.8em; }
-#donation-sepa-confirmation .step-list li { width: auto; padding-right: 25px; background: #80cd71 url(../_assets/img/sheet_step_list_item_2.png) right center no-repeat; color: #b6e6ad; }
-#donation-sepa-confirmation .step-list li.first { background: #85d576 url(../_assets/img/sheet_step_list_item_1.png) right center no-repeat; }
-#donation-sepa-confirmation .step-list li.last { background: #7bc46d; }
+section[id$="-sepa-confirmation"] .box-header { background: #64aadb; }
+section[id$="-sepa-confirmation"] .box-section { font-size: 0.8em; color: #000; }
+section[id$="-sepa-confirmation"] .title { font-size: 1.2em; }
+section[id$="-sepa-confirmation"] .address { width: 250px; line-height: 1.5em; }
+section[id$="-sepa-confirmation"] .payment { line-height: 1.5em; }
+section[id$="-sepa-confirmation"] .payment .label { width: 175px; }
+section[id$="-sepa-confirmation"] .address + .payment .label { width: 82px; }
+section[id$="-sepa-confirmation"] .step-list { font-size: 0.8em; }
+section[id$="-sepa-confirmation"] .step-list li { width: auto; padding-right: 25px; background: #80cd71 url(../_assets/img/sheet_step_list_item_2.png) right center no-repeat; color: #b6e6ad; }
+section[id$="-sepa-confirmation"] .step-list li.first { background: #85d576 url(../_assets/img/sheet_step_list_item_1.png) right center no-repeat; }
+section[id$="-sepa-confirmation"] .step-list li.last { background: #7bc46d; }
 
 .box-common .box-header { background: #84c5f1; }
 .box-common .box-header span[class^="icon-"] { padding-left: 30px; display: inline-block; }
