@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class MembershipApplicationConfirmationHtmlPresenterTest extends \PHPUnit_Framework_TestCase {
+class MembershipApplicationConfirmationHtmlPresenterTest extends \PHPUnit\Framework\TestCase {
 
 	private const STATUS_BOOKED = 'status-booked';
 	private const STATUS_UNCONFIRMED = 'status-unconfirmed';
