@@ -7,7 +7,6 @@ namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_TestCase;
 
 /**
  * @licence GNU GPL v2+
