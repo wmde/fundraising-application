@@ -89,10 +89,10 @@ class TwigEnvironmentConfigurator {
 		if ( empty( $config['template-dir'] ) ) {
 			$templateDir = [ self::DEFAULT_TEMPLATE_DIR ];
 		}
-		elseif( is_string( $config['template-dir'] ) ) {
+		elseif ( is_string( $config['template-dir'] ) ) {
 			$templateDir = [ $config['template-dir'] ];
 		}
-		elseif( is_array( $config['template-dir'] ) ) {
+		elseif ( is_array( $config['template-dir'] ) ) {
 			$templateDir = $config['template-dir'];
 		}
 		else {

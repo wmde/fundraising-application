@@ -39,7 +39,7 @@ class DonationRepositorySpy extends FakeDonationRepository {
 	 * @return Donation|null
 	 * @throws GetDonationException
 	 */
-	public function getDonationById( int $id ) {
+	public function getDonationById( int $id ): ?Donation {
 		$this->getDonationCalls[] = $id;
 		return parent::getDonationById( $id );
 	}

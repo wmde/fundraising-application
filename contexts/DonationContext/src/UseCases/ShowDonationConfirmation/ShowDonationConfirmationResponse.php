@@ -30,10 +30,8 @@ class ShowDonationConfirmationResponse {
 
 	/**
 	 * Returns the Donation when @see accessIsPermitted returns true, or null otherwise.
-	 *
-	 * @return Donation|null
 	 */
-	public function getDonation() {
+	public function getDonation(): ?Donation {
 		return $this->donation;
 	}
 
@@ -41,10 +39,7 @@ class ShowDonationConfirmationResponse {
 		return $this->donation !== null;
 	}
 
-	/**
-	 * @return string|null
-	 */
-	public function getUpdateToken() {
+	public function getUpdateToken(): ?string {
 		return $this->updateToken;
 	}
 

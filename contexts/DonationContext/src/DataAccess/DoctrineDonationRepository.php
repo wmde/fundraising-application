@@ -264,13 +264,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		return implode( '/', [ $cardExpiry->getMonth(), $cardExpiry->getYear() ] );
 	}
 
-	/**
-	 * @param int $id
-	 *
-	 * @return Donation|null
-	 * @throws GetDonationException
-	 */
-	public function getDonationById( int $id ) {
+	public function getDonationById( int $id ): ?Donation {
 		try {
 			$donation = $this->getDoctrineDonationById( $id );
 		}
@@ -290,7 +284,7 @@ class DoctrineDonationRepository implements DonationRepository {
 	 * @return DoctrineDonation|null
 	 * @throws ORMException
 	 */
-	public function getDoctrineDonationById( int $id ) {
+	public function getDoctrineDonationById( int $id ): ?DoctrineDonation {
 		return $this->entityManager->getRepository( DoctrineDonation::class )->findOneBy( [
 			'id' => $id,
 			'deletionTime' => null
@@ -309,12 +303,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		);
 	}
 
-	/**
-	 * @param DoctrineDonation $dd
-	 *
-	 * @return Donor|null
-	 */
-	private function getDonorFromEntity( DoctrineDonation $dd ) {
+	private function getDonorFromEntity( DoctrineDonation $dd ): ?Donor {
 		if ( !$this->entityHasDonorInformation( $dd ) ) {
 			return null;
 		}
@@ -411,11 +400,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		return $trackingInfo->freeze()->assertNoNullFields();
 	}
 
-	/**
-	 * @param DoctrineDonation $dd
-	 * @return PayPalData|null
-	 */
-	private function getPayPalDataFromEntity( DoctrineDonation $dd ) {
+	private function getPayPalDataFromEntity( DoctrineDonation $dd ): ?PayPalData {
 		$data = $dd->getDecodedData();
 
 		if ( array_key_exists( 'paypal_payer_id', $data ) ) {
@@ -423,8 +408,8 @@ class DoctrineDonationRepository implements DonationRepository {
 				->setPayerId( $data['paypal_payer_id'] )
 				->setSubscriberId( $data['paypal_subscr_id'] ?? '' )
 				->setPayerStatus( $data['paypal_payer_status'] ?? '' )
-				->setAddressStatus( $data['paypal_address_status']  ?? '' )
-				->setAmount( Euro::newFromString( $data['paypal_mc_gross']  ?? '0' ) )
+				->setAddressStatus( $data['paypal_address_status'] ?? '' )
+				->setAmount( Euro::newFromString( $data['paypal_mc_gross'] ?? '0' ) )
 				->setCurrencyCode( $data['paypal_mc_currency'] ?? '' )
 				->setFee( Euro::newFromString( $data['paypal_mc_fee'] ?? '0' ) )
 				->setSettleAmount( Euro::newFromString( $data['paypal_settle_amount'] ?? '0' ) )
@@ -460,11 +445,7 @@ class DoctrineDonationRepository implements DonationRepository {
 
 	}
 
-	/**
-	 * @param DoctrineDonation $dd
-	 * @return DonationComment|null
-	 */
-	private function getCommentFromEntity( DoctrineDonation $dd ) {
+	private function getCommentFromEntity( DoctrineDonation $dd ): ?DonationComment {
 		if ( $dd->getComment() === '' ) {
 			return null;
 		}

@@ -35,7 +35,7 @@ class DonationAcceptedEventHandler {
 	 *
 	 * @return string|null Null on success, string with error message otherwise
 	 */
-	public function onDonationAccepted( int $donationId ) {
+	public function onDonationAccepted( int $donationId ): ?string {
 		if ( !$this->authorizer->systemCanModifyDonation( $donationId ) ) {
 			return self::AUTHORIZATION_FAILED;
 		}

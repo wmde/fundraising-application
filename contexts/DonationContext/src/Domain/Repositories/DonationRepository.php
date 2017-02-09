@@ -30,6 +30,6 @@ interface DonationRepository {
 	 * @return Donation|null
 	 * @throws GetDonationException
 	 */
-	public function getDonationById( int $id );
+	public function getDonationById( int $id ): ?Donation;
 
 }
