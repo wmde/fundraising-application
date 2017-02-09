@@ -40,7 +40,7 @@ class DonationConfirmationHtmlPresenter {
 			'templateCampaign' => $selectedPage->getCampaignCode(),
 			'donation' => [
 				'id' => $donation->getId(),
-				'status' => $donation->getStatus(),
+				'status' => $this->mapStatus( $donation->getStatus() ),
 				'amount' => $donation->getAmount()->getEuroFloat(),
 				'interval' => $donation->getPaymentIntervalInMonths(),
 				'paymentType' => $donation->getPaymentType(),
@@ -137,4 +137,26 @@ class DonationConfirmationHtmlPresenter {
 		];
 	}
 
+	/**
+	 * Maps the membership application's status to a translatable message key
+	 *
+	 * @param string $status
+	 * @return string
+	 */
+	private function mapStatus( string $status ): string {
+		switch ( $status ) {
+			case Donation::STATUS_MODERATION:
+				return 'status-pending';
+			case Donation::STATUS_NEW:
+				return 'status-new';
+			case Donation::STATUS_EXTERNAL_INCOMPLETE:
+				return 'status-unconfirmed';
+			case Donation::STATUS_PROMISE:
+				return 'status-pledge';
+			case Donation::STATUS_EXTERNAL_BOOKED:
+				return 'status-booked';
+			default:
+				return 'status-unknown';
+		}
+	}
 }

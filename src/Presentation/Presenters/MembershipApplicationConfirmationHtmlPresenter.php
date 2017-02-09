@@ -5,7 +5,6 @@ namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Applicant;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowMembershipApplicationConfirmation\ShowMembershipAppConfirmationResponse;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
@@ -44,6 +43,8 @@ class MembershipApplicationConfirmationHtmlPresenter {
 	private function getApplicationArguments( Application $membershipApplication, string $updateToken ): array {
 		return [
 			'id' => $membershipApplication->getId(),
+			'paymentType' => $membershipApplication->getPayment()->getPaymentMethod()->getType(),
+			'status' => $this->mapStatus( $membershipApplication->isConfirmed() ),
 			'membershipFee' => $membershipApplication->getPayment()->getAmount()->getEuroString(),
 			'paymentIntervalInMonths' => $membershipApplication->getPayment()->getIntervalInMonths(),
 			'updateToken' => $updateToken
@@ -72,6 +73,16 @@ class MembershipApplicationConfirmationHtmlPresenter {
 		}
 
 		return [];
+	}
+
+	/**
+	 * Maps the membership application's status to a translatable message key
+	 *
+	 * @param bool $isConfirmed
+	 * @return string
+	 */
+	private function mapStatus( bool $isConfirmed ): string {
+		return $isConfirmed ? 'status-booked' : 'status-unconfirmed';
 	}
 
 }
