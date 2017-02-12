@@ -14,7 +14,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FrozenValueObject;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class FreezableValueObjectTest extends \PHPUnit_Framework_TestCase {
+class FreezableValueObjectTest extends \PHPUnit\Framework\TestCase {
 
 	public function testCanSetAndGetValuesBeforeFreeze() {
 		$object = new FrozenValueObject();

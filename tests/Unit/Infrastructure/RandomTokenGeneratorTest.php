@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\RandomTokenGenerator;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class RandomTokenGeneratorTest extends \PHPUnit_Framework_TestCase {
+class RandomTokenGeneratorTest extends \PHPUnit\Framework\TestCase {
 
 	public function testGenerateTokenReturnsHexString() {
 		$this->assertTrue( ctype_xdigit(

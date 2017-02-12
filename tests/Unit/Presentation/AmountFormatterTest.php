@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
  * @licence GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class AmountFormatterTest extends \PHPUnit_Framework_TestCase {
+class AmountFormatterTest extends \PHPUnit\Framework\TestCase {
 
 	public function testGivenGermanLocaleAndFractionalAmount_amountIsFormattedAsGermanString() {
 		$formatter = new AmountFormatter( 'de_DE' );

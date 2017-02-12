@@ -26,7 +26,7 @@ use WMDE\Fundraising\Frontend\Validation\ValidationResult;
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class MembershipApplicationValidatorTest extends \PHPUnit_Framework_TestCase {
+class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 
 	/*
 	 * @var MembershipFeeValidator

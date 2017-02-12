@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\SimpleTransferCodeGenerator;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class SimpleTransferCodeGeneratorTest extends \PHPUnit_Framework_TestCase {
+class SimpleTransferCodeGeneratorTest extends \PHPUnit\Framework\TestCase {
 
 	public function testGenerateBankTransferCode_matchesRegex() {
 		$generator = new SimpleTransferCodeGenerator();

@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplic
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class ApplicationTest extends \PHPUnit_Framework_TestCase {
+class ApplicationTest extends \PHPUnit\Framework\TestCase {
 
 	public function testIdIsNullWhenNotAssigned() {
 		$this->assertNull( ValidMembershipApplication::newDomainEntity()->getId() );

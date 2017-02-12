@@ -19,7 +19,7 @@ use WMDE\Fundraising\Store\MembershipApplicationData;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class DoctrineMembershipApplicationAuthorizerTest extends \PHPUnit_Framework_TestCase {
+class DoctrineMembershipApplicationAuthorizerTest extends \PHPUnit\Framework\TestCase {
 	use Specify;
 
 	const CORRECT_UPDATE_TOKEN = 'CorrectUpdateToken';

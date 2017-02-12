@@ -15,7 +15,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\EmailAddress;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class MessengerTest extends \PHPUnit_Framework_TestCase {
+class MessengerTest extends \PHPUnit\Framework\TestCase {
 
 	public function testWhenSendReturnsZero_exceptionIsThrown() {
 		$mailTransport = $this->getMockBuilder( Swift_NullTransport::class )

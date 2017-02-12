@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\AmountParser;
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class AmountParserTest extends \PHPUnit_Framework_TestCase {
+class AmountParserTest extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * @dataProvider valueProvider

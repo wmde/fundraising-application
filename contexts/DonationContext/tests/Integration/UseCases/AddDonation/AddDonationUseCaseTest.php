@@ -32,7 +32,7 @@ use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class AddDonationUseCaseTest extends \PHPUnit_Framework_TestCase {
+class AddDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 
 	const UPDATE_TOKEN = 'a very nice token';
 	const ACCESS_TOKEN = 'kindly allow me access';

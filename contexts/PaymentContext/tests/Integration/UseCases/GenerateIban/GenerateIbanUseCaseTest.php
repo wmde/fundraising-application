@@ -18,7 +18,7 @@ use WMDE\Fundraising\Frontend\Validation\IbanValidator;
  * @licence GNU GPL v2+
  * @author Kai Nissen <kai.nissen@wikimedia.de>
  */
-class GenerateIbanUseCaseTest extends \PHPUnit_Framework_TestCase {
+class GenerateIbanUseCaseTest extends \PHPUnit\Framework\TestCase {
 
 	public function setUp() {
 		if ( !function_exists( 'lut_init' ) ) {

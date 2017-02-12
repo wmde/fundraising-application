@@ -16,7 +16,7 @@ use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
  * @licence GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class TwigEnvironmentConfiguratorTest extends \PHPUnit_Framework_TestCase {
+class TwigEnvironmentConfiguratorTest extends \PHPUnit\Framework\TestCase {
 
 	public function testTwigInstanceUsesDollarPlaceholdersForVariables() {
 		$factory = new TwigEnvironmentConfigurator(

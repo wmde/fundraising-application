@@ -14,7 +14,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class AuthorizedCachePurgerTest extends \PHPUnit_Framework_TestCase {
+class AuthorizedCachePurgerTest extends \PHPUnit\Framework\TestCase {
 
 	const CORRECT_SECRET = 'correct secret';
 	const WRONG_SECRET = 'wrong secret';

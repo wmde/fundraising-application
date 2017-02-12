@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
+use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_TestCase;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\EmailAddress;
@@ -17,7 +18,7 @@ class TemplateBasedMailerSpy extends TemplateBasedMailer {
 	private $testCase;
 	private $sendMailCalls = [];
 
-	public function __construct( PHPUnit_Framework_TestCase $testCase ) {
+	public function __construct( TestCase $testCase ) {
 		$this->testCase = $testCase;
 	}
 

@@ -15,7 +15,7 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class PaymentTest extends \PHPUnit_Framework_TestCase {
+class PaymentTest extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * @dataProvider invalidIntervalProvider

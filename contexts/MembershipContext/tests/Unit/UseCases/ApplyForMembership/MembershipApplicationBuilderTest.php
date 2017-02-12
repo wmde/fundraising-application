@@ -20,7 +20,7 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class MembershipApplicationBuilderTest extends \PHPUnit_Framework_TestCase {
+class MembershipApplicationBuilderTest extends \PHPUnit\Framework\TestCase {
 
 	const COMPANY_NAME = 'Malenfant asteroid mining';
 	const OMIT_OPTIONAL_FIELDS = true;

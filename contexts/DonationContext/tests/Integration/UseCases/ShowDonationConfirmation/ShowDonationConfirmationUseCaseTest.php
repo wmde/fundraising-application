@@ -19,7 +19,7 @@ use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidDonation;
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class ShowDonationConfirmationUseCaseTest extends \PHPUnit_Framework_TestCase {
+class ShowDonationConfirmationUseCaseTest extends \PHPUnit\Framework\TestCase {
 
 	const CORRECT_DONATION_ID = 1;
 	const ACCESS_TOKEN = 'some token';
