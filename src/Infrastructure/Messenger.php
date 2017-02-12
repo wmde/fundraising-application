@@ -44,10 +44,11 @@ class Messenger {
 	private function createMessage( Message $messageContent, EmailAddress $recipient,
 									EmailAddress $replyTo = null ): Swift_Message {
 		$message = Swift_Message::newInstance( $messageContent->getSubject(), $messageContent->getMessageBody() );
-		$message->setFrom( $this->operatorAddress->getFullAddress(), $this->operatorName );
-		$message->setTo( $recipient->getFullAddress() );
+		$message->setFrom( $this->operatorAddress->getNormalizedAddress(), $this->operatorName );
+		$message->setTo( $recipient->getNormalizedAddress() );
+
 		if ( $replyTo ) {
-			$message->setReplyTo( $replyTo->getFullAddress() );
+			$message->setReplyTo( $replyTo->getNormalizedAddress() );
 		}
 
 		return $message;
