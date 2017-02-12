@@ -50,7 +50,7 @@ class Application {
 		);
 	}
 
-	public function __construct( int $id = null, string $type, Applicant $applicant, Payment $payment,
+	public function __construct( ?int $id, string $type, Applicant $applicant, Payment $payment,
 		bool $needsModeration, bool $isCancelled, bool $isConfirmed ) {
 
 		$this->id = $id;
@@ -62,10 +62,7 @@ class Application {
 		$this->isConfirmed = $isConfirmed;
 	}
 
-	/**
-	 * @return int|null
-	 */
-	public function getId() {
+	public function getId(): ?int {
 		return $this->id;
 	}
 

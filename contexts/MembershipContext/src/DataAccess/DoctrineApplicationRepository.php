@@ -199,7 +199,7 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 	 * @return Application|null
 	 * @throws GetMembershipApplicationException
 	 */
-	public function getApplicationById( int $id ) {
+	public function getApplicationById( int $id ): ?Application {
 		try {
 			$application = $this->getDoctrineApplicationById( $id );
 		}
