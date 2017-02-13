@@ -65,27 +65,37 @@ The "add donation" form can then be found at http://localhost:8000/index.php
 
 ## Running the tests
 
+**Full CI run**
+
+    composer ci
+
 For tests only
 
-    composer test
-    npm run test
+    composer test ; npm run test
 
 For style checks only
 
-	composer cs
-	npm run cs
+	composer cs ; npm run cs
+    
+**PHP**
 
-For a full CI run (including JavaScript CI)
+For tests only
 
-	composer ci
+    composer test
+    
+For x (unit/integration/edgetoedge) tests only
+
+    vendor/bin/phpunit --testsuite=x
+
+For one context only
+
+    vendor/bin/phpunit contexts/DonationContext/
+
+**JS**
 
 For a full JS CI run
 
 	npm run ci
-
-By default the PHP tests are run with a version of PHPUnit installed locally with Composer.
-To run the tests with your globally installed PHPUnit, you will need a recent version of
-PHPUnit. Consult the `require-dev` section of `composer.json` for up to date information.
 
 If JavaScript files where changed, you will first need to run
 
