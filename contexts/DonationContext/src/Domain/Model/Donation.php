@@ -75,7 +75,7 @@ class Donation {
 		$this->status = $status;
 	}
 
-	private function isValidStatus( string $status ) {
+	private function isValidStatus( string $status ): bool {
 		return in_array(
 			$status,
 			[
@@ -89,10 +89,7 @@ class Donation {
 		);
 	}
 
-	/**
-	 * @return int|null
-	 */
-	public function getId() {
+	public function getId(): ?int {
 		return $this->id;
 	}
 
@@ -131,19 +128,15 @@ class Donation {
 
 	/**
 	 * Returns the Donor or null for anonymous donations.
-	 *
-	 * @return Donor|null
 	 */
-	public function getDonor() {
+	public function getDonor(): ?Donor {
 		return $this->donor;
 	}
 
 	/**
 	 * Returns the DonationComment or null for when there is none.
-	 *
-	 * @return DonationComment|null
 	 */
-	public function getComment() {
+	public function getComment(): ?DonationComment {
 		return $this->comment;
 	}
 
