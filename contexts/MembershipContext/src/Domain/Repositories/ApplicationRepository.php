@@ -24,11 +24,8 @@ interface ApplicationRepository {
 	public function storeApplication( Application $application );
 
 	/**
-	 * @param int $id
-	 *
-	 * @return Application|null
 	 * @throws GetMembershipApplicationException
 	 */
-	public function getApplicationById( int $id );
+	public function getApplicationById( int $id ): ?Application;
 
 }

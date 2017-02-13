@@ -38,10 +38,7 @@ class Applicant {
 		return $this->email;
 	}
 
-	/**
-	 * @return \DateTime|null
-	 */
-	public function getDateOfBirth() {
+	public function getDateOfBirth(): ?\DateTime {
 		return $this->dateOfBirth;
 	}
 

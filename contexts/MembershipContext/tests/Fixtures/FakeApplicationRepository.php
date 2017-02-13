@@ -45,7 +45,7 @@ class FakeApplicationRepository implements ApplicationRepository {
 		$this->applications[$application->getId()] = unserialize( serialize( $application ) );
 	}
 
-	public function getApplicationById( int $id ) {
+	public function getApplicationById( int $id ): ?Application {
 		if ( $this->throwOnRead ) {
 			throw new GetMembershipApplicationException();
 		}

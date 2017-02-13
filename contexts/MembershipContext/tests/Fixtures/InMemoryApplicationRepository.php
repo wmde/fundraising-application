@@ -41,7 +41,7 @@ class InMemoryApplicationRepository implements ApplicationRepository {
 	 * @return Application|null
 	 * @throws GetMembershipApplicationException
 	 */
-	public function getApplicationById( int $id ) {
+	public function getApplicationById( int $id ): ?Application {
 		return array_key_exists( $id, $this->applications ) ? $this->applications[$id] : null;
 	}
 

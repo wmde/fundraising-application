@@ -39,7 +39,7 @@ class ApplicationRepositorySpy extends FakeApplicationRepository {
 	 * @return Application|null
 	 * @throws GetMembershipApplicationException
 	 */
-	public function getApplicationById( int $id ) {
+	public function getApplicationById( int $id ): ?Application {
 		$this->getApplicationCalls[] = $id;
 		return parent::getApplicationById( $id );
 	}

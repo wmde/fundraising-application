@@ -47,14 +47,13 @@ class LoggingApplicationRepository implements ApplicationRepository {
 	}
 
 	/**
-	 * @see MembershipApplicationRepository::getApplicationById
-	 *
 	 * @param int $id
 	 *
 	 * @return Application|null
+	 *
 	 * @throws GetMembershipApplicationException
 	 */
-	public function getApplicationById( int $id ) {
+	public function getApplicationById( int $id ): ?Application {
 		try {
 			return $this->repository->getApplicationById( $id );
 		}
