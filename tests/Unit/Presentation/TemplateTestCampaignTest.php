@@ -73,7 +73,15 @@ class TemplateTestCampaignTest extends \PHPUnit\Framework\TestCase {
 		$this->assertFalse( $notFinishedCampaign->hasEnded() );
 	}
 
-	public function testIsRunningDataProvider() {
+	/**
+	 * @dataProvider isRunningDataProvider
+	 */
+	public function testIsRunning( bool $expected, array $data ) {
+		$campaign = $this->newCampaign( $data );
+		$this->assertSame( $expected, $campaign->isRunning() );
+	}
+
+	public function isRunningDataProvider() {
 		return [
 			[
 				true,
@@ -108,14 +116,6 @@ class TemplateTestCampaignTest extends \PHPUnit\Framework\TestCase {
 				]
 			],
 		];
-	}
-
-	/**
-	 * @dataProvider testIsRunningDataProvider
-	 */
-	public function testIsRunning( bool $expected, array $data ) {
-		$campaign = $this->newCampaign( $data );
-		$this->assertSame( $expected, $campaign->isRunning() );
 	}
 
 }
