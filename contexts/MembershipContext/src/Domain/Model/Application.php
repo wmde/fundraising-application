@@ -15,17 +15,17 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
  */
 class Application {
 
-	const ACTIVE_MEMBERSHIP = 'active';
-	const SUSTAINING_MEMBERSHIP = 'sustaining';
+	public const ACTIVE_MEMBERSHIP = 'active';
+	public const SUSTAINING_MEMBERSHIP = 'sustaining';
 
-	const NO_MODERATION_NEEDED = false;
-	const NEEDS_MODERATION = true;
+	private const NO_MODERATION_NEEDED = false;
+	private const NEEDS_MODERATION = true;
 
-	const IS_CURRENT = false;
-	const IS_CANCELLED = true;
+	private const IS_CURRENT = false;
+	private const IS_CANCELLED = true;
 
-	const IS_CONFIRMED = true;
-	const IS_PENDING = false;
+	private const IS_CONFIRMED = true;
+	private const IS_PENDING = false;
 
 	/**
 	 * @var int|null

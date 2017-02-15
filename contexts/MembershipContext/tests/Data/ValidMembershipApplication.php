@@ -30,6 +30,7 @@ class ValidMembershipApplication {
 	const APPLICANT_FIRST_NAME = 'Potato';
 	const APPLICANT_LAST_NAME = 'The Great';
 	const APPLICANT_SALUTATION = 'Herr';
+	const APPLICANT_SALUTATION_COMPANY = ApplicantName::COMPANY_SALUTATION;
 	const APPLICANT_TITLE = '';
 	const APPLICANT_COMPANY_NAME = 'Evilcrop';
 
@@ -254,7 +255,7 @@ class ValidMembershipApplication {
 
 		$application->setCompany( self::APPLICANT_COMPANY_NAME );
 		$application->setApplicantTitle( '' );
-		$application->setApplicantSalutation( '' );
+		$application->setApplicantSalutation( self::APPLICANT_SALUTATION_COMPANY );
 
 		return $application;
 	}

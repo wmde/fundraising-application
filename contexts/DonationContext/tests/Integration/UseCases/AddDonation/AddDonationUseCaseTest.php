@@ -267,6 +267,24 @@ class AddDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		return $request;
 	}
 
+	private function newValidCompanyDonationRequest(): AddDonationRequest {
+		$request = $this->newMinimumDonationRequest();
+
+		$request->setDonorType( DonorName::PERSON_COMPANY );
+		$request->setDonorFirstName( '' );
+		$request->setDonorLastName( '' );
+		$request->setDonorCompany( ValidDonation::DONOR_LAST_NAME );
+		$request->setDonorSalutation( '' );
+		$request->setDonorTitle( '' );
+		$request->setDonorStreetAddress( ValidDonation::DONOR_STREET_ADDRESS );
+		$request->setDonorCity( ValidDonation::DONOR_CITY );
+		$request->setDonorPostalCode( ValidDonation::DONOR_POSTAL_CODE );
+		$request->setDonorCountryCode( ValidDonation::DONOR_COUNTRY_CODE );
+		$request->setDonorEmailAddress( ValidDonation::DONOR_EMAIL_ADDRESS );
+
+		return $request;
+	}
+
 	public function testWhenAdditionWorks_successResponseContainsTokens() {
 		$useCase = $this->newValidationSucceedingUseCase();
 
@@ -274,6 +292,14 @@ class AddDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 
 		$this->assertSame( self::UPDATE_TOKEN, $response->getUpdateToken() );
 		$this->assertSame( self::ACCESS_TOKEN, $response->getAccessToken() );
+	}
+
+	public function testWhenAddingCompanyDonation_salutationFieldIsSet() {
+		$useCase = $this->newValidationSucceedingUseCase();
+
+		$response = $useCase->addDonation( $this->newValidCompanyDonationRequest() );
+
+		$this->assertSame( DonorName::COMPANY_SALUTATION, $response->getDonation()->getDonor()->getName()->getSalutation() );
 	}
 
 }
