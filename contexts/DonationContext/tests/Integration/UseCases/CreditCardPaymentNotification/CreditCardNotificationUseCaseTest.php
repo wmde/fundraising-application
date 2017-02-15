@@ -76,6 +76,7 @@ class CreditCardNotificationUseCaseTest extends \PHPUnit\Framework\TestCase {
 
 		try {
 			$useCase->handleNotification( $request );
+			$this->assertTrue( true );
 		} catch ( \Exception $e ) {
 			$this->fail();
 		}
