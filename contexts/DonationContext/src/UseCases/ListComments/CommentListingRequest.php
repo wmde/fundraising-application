@@ -10,7 +10,7 @@ namespace WMDE\Fundraising\Frontend\DonationContext\UseCases\ListComments;
  */
 class CommentListingRequest {
 
-	const FIRST_PAGE = 1;
+	public const FIRST_PAGE = 1;
 
 	private $limit;
 	private $page;

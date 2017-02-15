@@ -25,8 +25,6 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
  */
 class CancelDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 
-	const CORRECT_UPDATE_TOKEN = 'b5b249c8beefb986faf8d186a3f16e86ef509ab2';
-
 	/**
 	 * @var FakeDonationRepository
 	 */

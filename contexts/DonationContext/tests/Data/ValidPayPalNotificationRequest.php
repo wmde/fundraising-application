@@ -13,34 +13,34 @@ use WMDE\Fundraising\Frontend\PaymentContext\RequestModel\PayPalPaymentNotificat
  */
 class ValidPayPalNotificationRequest {
 
-	const DATA_SET_ID = 12345;
-	const TRANSACTION_ID = '61E67681CH3238416';
-	const PAYER_ID = 'LPLWNMTBWMFAY';
-	const SUBSCRIBER_ID = '8RHHUM3W3PRH7QY6B59';
-	const PAYER_EMAIL = 'foerderpp@wikimedia.de';
-	const PAYER_STATUS = 'verified';
-	const PAYER_FIRST_NAME = 'Generous';
-	const PAYER_LAST_NAME = 'Donor';
-	const PAYER_ADDRESS_NAME = 'Generous Donor';
-	const PAYER_ADDRESS_STREET = '123, Some Street';
-	const PAYER_ADDRESS_POSTAL_CODE = '123456';
-	const PAYER_ADDRESS_CITY = 'Some City';
-	const PAYER_ADDRESS_COUNTRY_CODE = 'DE';
-	const PAYER_ADDRESS_STATUS = 'confirmed';
-	const TOKEN = 'my_secret_token';
-	const CURRENCY_CODE = 'EUR';
-	const TRANSACTION_FEE_EURO_STRING = '2.70';
-	const AMOUNT_GROSS_CENTS = 500;
-	const AMOUNT_GROSS_EURO_STRING = '5.00';
-	const SETTLE_AMOUNT_CENTS = 123;
-	const SETTLE_AMOUNT_EURO_STRING = '1.23';
-	const PAYMENT_TIMESTAMP = '20:12:59 Jan 13, 2009 PST';
-	const PAYMENT_TYPE = 'instant';
-	const ITEM_NAME = 'Spende an Wikimdia Deutschland';
-	const ITEM_NUMBER = 1;
+	public const DATA_SET_ID = 12345;
+	public const TRANSACTION_ID = '61E67681CH3238416';
+	public const PAYER_ID = 'LPLWNMTBWMFAY';
+	public const SUBSCRIBER_ID = '8RHHUM3W3PRH7QY6B59';
+	public const PAYER_EMAIL = 'foerderpp@wikimedia.de';
+	public const PAYER_STATUS = 'verified';
+	public const PAYER_FIRST_NAME = 'Generous';
+	public const PAYER_LAST_NAME = 'Donor';
+	public const PAYER_ADDRESS_NAME = 'Generous Donor';
+	public const PAYER_ADDRESS_STREET = '123, Some Street';
+	public const PAYER_ADDRESS_POSTAL_CODE = '123456';
+	public const PAYER_ADDRESS_CITY = 'Some City';
+	public const PAYER_ADDRESS_COUNTRY_CODE = 'DE';
+	public const PAYER_ADDRESS_STATUS = 'confirmed';
+	public const TOKEN = 'my_secret_token';
+	public const CURRENCY_CODE = 'EUR';
+	public const TRANSACTION_FEE_EURO_STRING = '2.70';
+	public const AMOUNT_GROSS_CENTS = 500;
+	public const AMOUNT_GROSS_EURO_STRING = '5.00';
+	public const SETTLE_AMOUNT_CENTS = 123;
+	public const SETTLE_AMOUNT_EURO_STRING = '1.23';
+	public const PAYMENT_TIMESTAMP = '20:12:59 Jan 13, 2009 PST';
+	public const PAYMENT_TYPE = 'instant';
+	public const ITEM_NAME = 'Spende an Wikimdia Deutschland';
+	public const ITEM_NUMBER = 1;
 
-	const PAYMENT_STATUS_COMPLETED = 'Completed';
-	const PAYMENT_STATUS_PENDING = 'Pending';
+	public const PAYMENT_STATUS_COMPLETED = 'Completed';
+	public const PAYMENT_STATUS_PENDING = 'Pending';
 
 	public static function newInstantPayment( int $dataSetId ): PayPalPaymentNotificationRequest {
 		return self::newBaseRequest()

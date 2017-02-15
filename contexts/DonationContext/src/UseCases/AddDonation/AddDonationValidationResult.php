@@ -12,37 +12,37 @@ use WMDE\Fundraising\Frontend\Validation\ValidationResult;
  */
 class AddDonationValidationResult extends ValidationResult {
 
-	const SOURCE_PAYMENT_TYPE = 'zahlweise';
-	const SOURCE_PAYMENT_AMOUNT = 'amount';
-	const SOURCE_IBAN = 'iban';
-	const SOURCE_BIC = 'bic';
-	const SOURCE_BANK_NAME = 'bankname';
-	const SOURCE_BANK_CODE = 'blz';
-	const SOURCE_BANK_ACCOUNT = 'konto';
-	const SOURCE_DONOR_EMAIL = 'email';
-	const SOURCE_DONOR_COMPANY = 'companyName';
-	const SOURCE_DONOR_FIRST_NAME = 'firstName';
-	const SOURCE_DONOR_LAST_NAME = 'lastName';
-	const SOURCE_DONOR_SALUTATION = 'salutation';
-	const SOURCE_DONOR_TITLE = 'title';
-	const SOURCE_DONOR_STREET_ADDRESS = 'street';
-	const SOURCE_DONOR_POSTAL_CODE = 'postcode';
-	const SOURCE_DONOR_CITY = 'city';
-	const SOURCE_DONOR_COUNTRY = 'country';
-	const SOURCE_TRACKING_SOURCE = 'source';
+	public const SOURCE_PAYMENT_TYPE = 'zahlweise';
+	public const SOURCE_PAYMENT_AMOUNT = 'amount';
+	public const SOURCE_IBAN = 'iban';
+	public const SOURCE_BIC = 'bic';
+	public const SOURCE_BANK_NAME = 'bankname';
+	public const SOURCE_BANK_CODE = 'blz';
+	public const SOURCE_BANK_ACCOUNT = 'konto';
+	public const SOURCE_DONOR_EMAIL = 'email';
+	public const SOURCE_DONOR_COMPANY = 'companyName';
+	public const SOURCE_DONOR_FIRST_NAME = 'firstName';
+	public const SOURCE_DONOR_LAST_NAME = 'lastName';
+	public const SOURCE_DONOR_SALUTATION = 'salutation';
+	public const SOURCE_DONOR_TITLE = 'title';
+	public const SOURCE_DONOR_STREET_ADDRESS = 'street';
+	public const SOURCE_DONOR_POSTAL_CODE = 'postcode';
+	public const SOURCE_DONOR_CITY = 'city';
+	public const SOURCE_DONOR_COUNTRY = 'country';
+	public const SOURCE_TRACKING_SOURCE = 'source';
 
-	const VIOLATION_TOO_LOW = 'too-low';
-	const VIOLATION_TOO_HIGH = 'too-high';
-	const VIOLATION_WRONG_LENGTH = 'wrong-length';
-	const VIOLATION_NOT_MONEY = 'not-money';
-	const VIOLATION_MISSING = 'missing';
-	const VIOLATION_IBAN_BLOCKED = 'iban-blocked';
-	const VIOLATION_IBAN_INVALID = 'iban-invalid';
-	const VIOLATION_NOT_DATE = 'not-date';
-	const VIOLATION_NOT_PHONE_NUMBER = 'not-phone';
-	const VIOLATION_NOT_EMAIL = 'not-email';
-	const VIOLATION_NOT_POSTCODE = 'not-postcode';
-	const VIOLATION_WRONG_PAYMENT_TYPE = 'invalid_payment_type';
-	const VIOLATION_TEXT_POLICY = 'text_policy';
+	public const VIOLATION_TOO_LOW = 'too-low';
+	public const VIOLATION_TOO_HIGH = 'too-high';
+	public const VIOLATION_WRONG_LENGTH = 'wrong-length';
+	public const VIOLATION_NOT_MONEY = 'not-money';
+	public const VIOLATION_MISSING = 'missing';
+	public const VIOLATION_IBAN_BLOCKED = 'iban-blocked';
+	public const VIOLATION_IBAN_INVALID = 'iban-invalid';
+	public const VIOLATION_NOT_DATE = 'not-date';
+	public const VIOLATION_NOT_PHONE_NUMBER = 'not-phone';
+	public const VIOLATION_NOT_EMAIL = 'not-email';
+	public const VIOLATION_NOT_POSTCODE = 'not-postcode';
+	public const VIOLATION_WRONG_PAYMENT_TYPE = 'invalid_payment_type';
+	public const VIOLATION_TEXT_POLICY = 'text_policy';
 
 }

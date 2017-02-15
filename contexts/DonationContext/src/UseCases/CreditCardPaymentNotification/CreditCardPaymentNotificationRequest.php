@@ -12,8 +12,8 @@ use WMDE\Euro\Euro;
  */
 class CreditCardPaymentNotificationRequest {
 
-	const NOTIFICATION_TYPE_BILLING = 'billing';
-	const NOTIFICATION_TYPE_ERROR = 'error';
+	public const NOTIFICATION_TYPE_BILLING = 'billing';
+	public const NOTIFICATION_TYPE_ERROR = 'error';
 
 	private $transactionId;
 	private $notificationType;

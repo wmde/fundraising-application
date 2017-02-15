@@ -24,10 +24,10 @@ use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
  */
 class AddCommentUseCaseTest extends \PHPUnit\Framework\TestCase {
 
-	const DONATION_ID = 9001;
-	const COMMENT_TEXT = 'Your programmers deserve a raise';
-	const COMMENT_IS_PUBLIC = true;
-	const COMMENT_AUTHOR = 'Uncle Bob';
+	private const DONATION_ID = 9001;
+	private const COMMENT_TEXT = 'Your programmers deserve a raise';
+	private const COMMENT_IS_PUBLIC = true;
+	private const COMMENT_AUTHOR = 'Uncle Bob';
 
 	private $donationRepository;
 	private $authorizer;

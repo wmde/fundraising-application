@@ -22,9 +22,9 @@ use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\SucceedingDonationA
  */
 class DonationAcceptedEventHandlerTest extends \PHPUnit\Framework\TestCase {
 
-	const UNKNOWN_ID = 32202;
-	const KNOWN_ID = 31337;
-	const UPDATE_TOKEN = 'valid-update-token';
+	private const UNKNOWN_ID = 32202;
+	private const KNOWN_ID = 31337;
+	private const UPDATE_TOKEN = 'valid-update-token';
 
 	/**
 	 * @var DonationAuthorizer

@@ -21,13 +21,13 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 class DoctrineDonationAuthorizerTest extends \PHPUnit\Framework\TestCase {
 	use Specify;
 
-	const CORRECT_UPDATE_TOKEN = 'CorrectUpdateToken';
-	const CORRECT_ACCESS_TOKEN = 'CorrectAccessToken';
-	const WRONG__UPDATE_TOKEN = 'WrongUpdateToken';
-	const WRONG_ACCESS_TOKEN = 'WrongAccessToken';
-	const MEANINGLESS_TOKEN = 'Some token';
-	const MEANINGLESS_DONATION_ID = 1337;
-	const ID_OF_WRONG_DONATION = 42;
+	private const CORRECT_UPDATE_TOKEN = 'CorrectUpdateToken';
+	private const CORRECT_ACCESS_TOKEN = 'CorrectAccessToken';
+	private const WRONG__UPDATE_TOKEN = 'WrongUpdateToken';
+	private const WRONG_ACCESS_TOKEN = 'WrongAccessToken';
+	private const MEANINGLESS_TOKEN = 'Some token';
+	private const MEANINGLESS_DONATION_ID = 1337;
+	private const ID_OF_WRONG_DONATION = 42;
 
 	private function newAuthorizationServiceWithDonations( string $updateToken = null,
 		string $accessToken = null, Donation ...$donations ): DonationAuthorizer {

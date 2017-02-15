@@ -10,11 +10,11 @@ namespace WMDE\Fundraising\Frontend\DonationContext\UseCases\AddComment;
  */
 class AddCommentValidationResult {
 
-	const VIOLATION_NAME_TOO_LONG = 'comment_failure_name_too_long';
-	const VIOLATION_COMMENT_TOO_LONG = 'comment_failure_text_too_long';
+	public const VIOLATION_NAME_TOO_LONG = 'comment_failure_name_too_long';
+	public const VIOLATION_COMMENT_TOO_LONG = 'comment_failure_text_too_long';
 
-	const SOURCE_COMMENT = 'kommentar';
-	const SOURCE_NAME = 'eintrag';
+	public const SOURCE_COMMENT = 'kommentar';
+	public const SOURCE_NAME = 'eintrag';
 
 	private $violations;
 

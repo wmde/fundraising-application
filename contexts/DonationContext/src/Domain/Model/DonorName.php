@@ -14,9 +14,9 @@ class DonorName {
 	use FreezableValueObject;
 
 	// FIXME: these constants are used in request models and the getPersonType result is stuffed in the db
-	const PERSON_PRIVATE = 'person';
-	const PERSON_COMPANY = 'firma';
-	const PERSON_ANONYMOUS = 'anonym';
+	public const PERSON_PRIVATE = 'person';
+	public const PERSON_COMPANY = 'firma';
+	public const PERSON_ANONYMOUS = 'anonym';
 
 	private $personType = '';
 

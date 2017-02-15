@@ -21,9 +21,9 @@ use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidDonation;
  */
 class ShowDonationConfirmationUseCaseTest extends \PHPUnit\Framework\TestCase {
 
-	const CORRECT_DONATION_ID = 1;
-	const ACCESS_TOKEN = 'some token';
-	const UPDATE_TOKEN = 'some other token';
+	private const CORRECT_DONATION_ID = 1;
+	private const ACCESS_TOKEN = 'some token';
+	private const UPDATE_TOKEN = 'some other token';
 
 	public function testWhenAuthorizerSaysNoCanHaz_accessIsNotPermitted() {
 		$useCase = new ShowDonationConfirmationUseCase(

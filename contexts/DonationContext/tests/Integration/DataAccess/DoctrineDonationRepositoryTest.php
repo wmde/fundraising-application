@@ -27,7 +27,7 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
  */
 class DoctrineDonationRepositoryTest extends \PHPUnit\Framework\TestCase {
 
-	const ID_OF_DONATION_NOT_IN_DB = 35505;
+	private const ID_OF_DONATION_NOT_IN_DB = 35505;
 
 	/**
 	 * @var EntityManager
