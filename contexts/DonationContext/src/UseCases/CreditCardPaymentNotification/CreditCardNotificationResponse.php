@@ -15,8 +15,8 @@ class CreditCardNotificationResponse {
 	private $errorMessage;
 	private $isSuccess;
 
-	const IS_SUCCESS = true;
-	const IS_FAILURE = false;
+	public const IS_SUCCESS = true;
+	public const IS_FAILURE = false;
 
 	public function __construct( int $donationId, string $accessToken, string $errorMessage, bool $isSuccess ) {
 		$this->donationId = $donationId;

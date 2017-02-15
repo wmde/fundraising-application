@@ -16,7 +16,7 @@ use WMDE\Fundraising\Frontend\DonationContext\Domain\Repositories\CommentWithAmo
  */
 class LoggingCommentFinder implements CommentFinder {
 
-	const CONTEXT_EXCEPTION_KEY = 'exception';
+	private const CONTEXT_EXCEPTION_KEY = 'exception';
 
 	private $commentFinder;
 	private $logger;

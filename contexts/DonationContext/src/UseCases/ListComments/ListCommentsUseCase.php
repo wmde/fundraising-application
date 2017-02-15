@@ -12,8 +12,8 @@ use WMDE\Fundraising\Frontend\DonationContext\Domain\Repositories\CommentFinder;
  */
 class ListCommentsUseCase {
 
-	const MAX_PAGE = 100;
-	const MAX_LIMIT = 100;
+	private const MAX_PAGE = 100;
+	private const MAX_LIMIT = 100;
 
 	private $commentRepository;
 

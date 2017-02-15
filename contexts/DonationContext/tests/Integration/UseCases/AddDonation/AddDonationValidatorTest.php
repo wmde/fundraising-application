@@ -27,8 +27,8 @@ use WMDE\Fundraising\Frontend\Validation\ValidationResult;
  */
 class AddDonationValidatorTest extends ValidatorTestCase {
 
-	const FOREIGN_IBAN = 'NL18ABNA0484869868';
-	const FOREIGN_BIC = 'ABNANL2A';
+	private const FOREIGN_IBAN = 'NL18ABNA0484869868';
+	private const FOREIGN_BIC = 'ABNANL2A';
 
 	/** @var AddDonationValidator */
 	private $donationValidator;

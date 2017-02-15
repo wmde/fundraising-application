@@ -34,8 +34,8 @@ use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
  */
 class AddDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 
-	const UPDATE_TOKEN = 'a very nice token';
-	const ACCESS_TOKEN = 'kindly allow me access';
+	private const UPDATE_TOKEN = 'a very nice token';
+	private const ACCESS_TOKEN = 'kindly allow me access';
 
 	/**
 	 * @var \DateTime

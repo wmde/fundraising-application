@@ -20,17 +20,17 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
  */
 class Donation {
 
-	const STATUS_NEW = 'N'; // status for direct debit
-	const STATUS_PROMISE = 'Z'; // status for bank transfer
-	const STATUS_EXTERNAL_INCOMPLETE = 'X'; // status for external payments
-	const STATUS_EXTERNAL_BOOKED = 'B'; // status for external payments
-	const STATUS_MODERATION = 'P';
-	const STATUS_CANCELLED = 'D';
+	public const STATUS_NEW = 'N'; // status for direct debit
+	public const STATUS_PROMISE = 'Z'; // status for bank transfer
+	public const STATUS_EXTERNAL_INCOMPLETE = 'X'; // status for external payments
+	public const STATUS_EXTERNAL_BOOKED = 'B'; // status for external payments
+	public const STATUS_MODERATION = 'P';
+	public const STATUS_CANCELLED = 'D';
 
-	const OPTS_INTO_NEWSLETTER = true;
-	const DOES_NOT_OPT_INTO_NEWSLETTER = false;
+	public const OPTS_INTO_NEWSLETTER = true;
+	public const DOES_NOT_OPT_INTO_NEWSLETTER = false;
 
-	const NO_APPLICANT = null;
+	public const NO_APPLICANT = null;
 
 	private $id;
 	private $status;

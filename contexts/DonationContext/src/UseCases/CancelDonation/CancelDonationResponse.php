@@ -10,9 +10,9 @@ namespace WMDE\Fundraising\Frontend\DonationContext\UseCases\CancelDonation;
  */
 class CancelDonationResponse {
 
-	const SUCCESS = 'success';
-	const FAILURE = 'failure';
-	const MAIL_DELIVERY_FAILED = 'mail-not-send';
+	public const SUCCESS = 'success';
+	public const FAILURE = 'failure';
+	public const MAIL_DELIVERY_FAILED = 'mail-not-send';
 
 	private $donationId;
 	private $state;

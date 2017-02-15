@@ -17,7 +17,7 @@ use WMDE\Fundraising\Frontend\DonationContext\Domain\Repositories\StoreDonationE
  */
 class LoggingDonationRepository implements DonationRepository {
 
-	const CONTEXT_EXCEPTION_KEY = 'exception';
+	private const CONTEXT_EXCEPTION_KEY = 'exception';
 
 	private $repository;
 	private $logger;

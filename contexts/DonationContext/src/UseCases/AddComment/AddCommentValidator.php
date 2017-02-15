@@ -12,8 +12,8 @@ use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddComment\AddCommentVali
  */
 class AddCommentValidator {
 
-	const MAX_NAME_LENGTH = 150;
-	const MAX_COMMENT_LENGTH = 2048;
+	private const MAX_NAME_LENGTH = 150;
+	private const MAX_COMMENT_LENGTH = 2048;
 
 	public function validate( AddCommentRequest $request ): Result {
 		$violations = [];

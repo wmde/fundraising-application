@@ -28,47 +28,47 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
  */
 class ValidDonation {
 
-	const DONOR_FIRST_NAME = 'Jeroen';
-	const DONOR_LAST_NAME = 'De Dauw';
-	const DONOR_SALUTATION = 'nyan';
-	const DONOR_TITLE = 'nyan';
-	const DONOR_FULL_NAME = 'nyan Jeroen De Dauw';
+	public const DONOR_FIRST_NAME = 'Jeroen';
+	public const DONOR_LAST_NAME = 'De Dauw';
+	public const DONOR_SALUTATION = 'nyan';
+	public const DONOR_TITLE = 'nyan';
+	public const DONOR_FULL_NAME = 'nyan Jeroen De Dauw';
 
-	const DONOR_CITY = 'Berlin';
-	const DONOR_POSTAL_CODE = '1234';
-	const DONOR_COUNTRY_CODE = 'DE';
-	const DONOR_STREET_ADDRESS = 'Nyan Street';
+	public const DONOR_CITY = 'Berlin';
+	public const DONOR_POSTAL_CODE = '1234';
+	public const DONOR_COUNTRY_CODE = 'DE';
+	public const DONOR_STREET_ADDRESS = 'Nyan Street';
 
-	const DONOR_EMAIL_ADDRESS = 'foo@bar.baz';
+	public const DONOR_EMAIL_ADDRESS = 'foo@bar.baz';
 
-	const DONATION_AMOUNT = 13.37; // Keep fractional to detect floating point issues
-	const PAYMENT_INTERVAL_IN_MONTHS = 3;
+	public const DONATION_AMOUNT = 13.37; // Keep fractional to detect floating point issues
+	public const PAYMENT_INTERVAL_IN_MONTHS = 3;
 
-	const PAYMENT_BANK_ACCOUNT = '0648489890';
-	const PAYMENT_BANK_CODE = '50010517';
-	const PAYMENT_BANK_NAME = 'ING-DiBa';
-	const PAYMENT_BIC = 'INGDDEFFXXX';
-	const PAYMENT_IBAN = 'DE12500105170648489890';
+	public const PAYMENT_BANK_ACCOUNT = '0648489890';
+	public const PAYMENT_BANK_CODE = '50010517';
+	public const PAYMENT_BANK_NAME = 'ING-DiBa';
+	public const PAYMENT_BIC = 'INGDDEFFXXX';
+	public const PAYMENT_IBAN = 'DE12500105170648489890';
 
-	const PAYMENT_BANK_TRANSFER_CODE = 'pink fluffy unicorns';
+	public const PAYMENT_BANK_TRANSFER_CODE = 'pink fluffy unicorns';
 
-	const OPTS_INTO_NEWSLETTER = Donation::OPTS_INTO_NEWSLETTER;
+	public const OPTS_INTO_NEWSLETTER = Donation::OPTS_INTO_NEWSLETTER;
 
-	const TRACKING_COLOR = 'blue';
-	const TRACKING_LAYOUT = 'Default';
-	const TRACKING_BANNER_IMPRESSION_COUNT = 1;
-	const TRACKING_SKIN = 'default';
-	const TRACKING_SOURCE = 'web';
-	const TRACKING_TOTAL_IMPRESSION_COUNT = 3;
-	const TRACKING_TRACKING = 'test/gelb'; // WTF name?
+	public const TRACKING_COLOR = 'blue';
+	public const TRACKING_LAYOUT = 'Default';
+	public const TRACKING_BANNER_IMPRESSION_COUNT = 1;
+	public const TRACKING_SKIN = 'default';
+	public const TRACKING_SOURCE = 'web';
+	public const TRACKING_TOTAL_IMPRESSION_COUNT = 3;
+	public const TRACKING_TRACKING = 'test/gelb'; // WTF name?
 
-	const PAYPAL_TRANSACTION_ID = '61E67681CH3238416';
+	public const PAYPAL_TRANSACTION_ID = '61E67681CH3238416';
 
-	const CREDIT_CARD_TRANSACTION_ID = '';
+	public const CREDIT_CARD_TRANSACTION_ID = '';
 
-	const COMMENT_TEXT = 'For great justice!';
-	const COMMENT_IS_PUBLIC = true;
-	const COMMENT_AUTHOR_DISPLAY_NAME = 'Such a tomato';
+	public const COMMENT_TEXT = 'For great justice!';
+	public const COMMENT_IS_PUBLIC = true;
+	public const COMMENT_AUTHOR_DISPLAY_NAME = 'Such a tomato';
 
 	public static function newBankTransferDonation(): Donation {
 		return ( new self() )->createDonation(
