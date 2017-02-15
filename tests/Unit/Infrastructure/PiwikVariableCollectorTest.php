@@ -74,10 +74,12 @@ class PiwikVariableCollectorTest extends \PHPUnit\Framework\TestCase {
 		];
 	}
 
-	private function assertCustomTrackingContainsEvents( $expectedEvents, $actualEvents ) {
+	private function assertCustomTrackingContainsEvents( array $expectedEvents, array $actualEvents ) {
 		foreach ( $expectedEvents as $event ) {
 			$this->assertContains( $event, $actualEvents );
 		}
+
+		$this->assertCount( count( $expectedEvents ), $actualEvents );
 	}
 
 	private function newDonationMock( string $amount, string $paymentType, int $paymentInterval ) {
