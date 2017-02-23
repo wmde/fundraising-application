@@ -49,6 +49,7 @@ class ValidMembershipApplication {
 	const PAYMENT_TYPE_DIRECT_DEBIT = 'BEZ';
 	const PAYMENT_PERIOD_IN_MONTHS = 3;
 	const PAYMENT_AMOUNT_IN_EURO = 10;
+	const COMPANY_PAYMENT_AMOUNT_IN_EURO = 25;
 	const TOO_HIGH_QUARTERLY_PAYMENT_AMOUNT_IN_EURO = 250.1;
 	const TOO_HIGH_YEARLY_PAYMENT_AMOUNT_IN_EURO = 1000.1;
 
@@ -81,7 +82,7 @@ class ValidMembershipApplication {
 		return Application::newApplication(
 			self::MEMBERSHIP_TYPE,
 			$self->newApplicant( $self->newCompanyApplicantName() ),
-			$self->newPayment()
+			$self->newPaymentWithHighAmount( self::PAYMENT_PERIOD_IN_MONTHS, self::COMPANY_PAYMENT_AMOUNT_IN_EURO )
 		);
 	}
 
@@ -256,6 +257,7 @@ class ValidMembershipApplication {
 		$application->setCompany( self::APPLICANT_COMPANY_NAME );
 		$application->setApplicantTitle( '' );
 		$application->setApplicantSalutation( self::APPLICANT_SALUTATION_COMPANY );
+		$application->setPaymentAmount( self::COMPANY_PAYMENT_AMOUNT_IN_EURO );
 
 		return $application;
 	}

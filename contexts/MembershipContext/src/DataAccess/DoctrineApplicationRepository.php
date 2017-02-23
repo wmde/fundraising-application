@@ -246,12 +246,17 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 	}
 
 	private function newPersonName( DoctrineApplication $application ): ApplicantName {
-		$personName = ApplicantName::newPrivatePersonName();
-
-		$personName->setFirstName( $application->getApplicantFirstName() );
-		$personName->setLastName( $application->getApplicantLastName() );
-		$personName->setSalutation( $application->getApplicantSalutation() );
-		$personName->setTitle( $application->getApplicantTitle() );
+		if ( empty( $application->getCompany() ) ) {
+			$personName = ApplicantName::newPrivatePersonName();
+			$personName->setFirstName( $application->getApplicantFirstName() );
+			$personName->setLastName( $application->getApplicantLastName() );
+			$personName->setSalutation( $application->getApplicantSalutation() );
+			$personName->setTitle( $application->getApplicantTitle() );
+		} else {
+			$personName = ApplicantName::newCompanyName();
+			$personName->setCompanyName( $application->getCompany() );
+			$personName->setSalutation( $application->getApplicantSalutation() );
+		}
 
 		return $personName->freeze()->assertNoNullFields();
 	}

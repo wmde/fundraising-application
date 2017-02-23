@@ -4,10 +4,10 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowMembershipApplicationConfirmation;
 
-use WMDE\Fundraising\Frontend\DonationContext\Domain\Repositories\GetDonationException;
 use WMDE\Fundraising\Frontend\MembershipContext\Authorization\ApplicationAuthorizer;
 use WMDE\Fundraising\Frontend\MembershipContext\Authorization\ApplicationTokenFetcher;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationRepository;
+use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\GetMembershipApplicationException;
 
 /**
  * @license GNU GPL v2+
@@ -31,11 +31,11 @@ class ShowMembershipApplicationConfirmationUseCase {
 
 	public function showConfirmation( ShowMembershipAppConfirmationRequest $request ): ShowMembershipAppConfirmationResponse {
 		if ( $this->authorizer->canAccessApplication( $request->getApplicationId() ) ) {
-			$donation = $this->getMembershipApplicationById( $request->getApplicationId() );
+			$application = $this->getMembershipApplicationById( $request->getApplicationId() );
 
-			if ( $donation !== null ) {
+			if ( $application !== null ) {
 				return ShowMembershipAppConfirmationResponse::newValidResponse(
-					$donation,
+					$application,
 					$this->tokenFetcher->getTokens( $request->getApplicationId() )->getUpdateToken()
 				);
 			}
@@ -44,11 +44,11 @@ class ShowMembershipApplicationConfirmationUseCase {
 		return ShowMembershipAppConfirmationResponse::newNotAllowedResponse();
 	}
 
-	private function getMembershipApplicationById( int $donationId ) {
+	private function getMembershipApplicationById( int $applicationId ) {
 		try {
-			return $this->repository->getApplicationById( $donationId );
+			return $this->repository->getApplicationById( $applicationId );
 		}
-		catch ( GetDonationException $ex ) {
+		catch ( GetMembershipApplicationException $ex ) {
 			return null;
 		}
 	}
