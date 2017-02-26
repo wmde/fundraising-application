@@ -18,6 +18,8 @@ class DonorName {
 	public const PERSON_COMPANY = 'firma';
 	public const PERSON_ANONYMOUS = 'anonym';
 
+	public const COMPANY_SALUTATION = 'Firma';
+
 	private $personType = '';
 
 	private $companyName = '';
@@ -53,7 +55,7 @@ class DonorName {
 	}
 
 	public function getSalutation(): string {
-		return $this->salutation;
+		return $this->personType === self::PERSON_COMPANY ? self::COMPANY_SALUTATION : $this->salutation;
 	}
 
 	public function setSalutation( string $salutation ) {

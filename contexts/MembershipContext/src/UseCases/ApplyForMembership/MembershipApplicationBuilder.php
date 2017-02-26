@@ -45,24 +45,26 @@ class MembershipApplicationBuilder {
 	}
 
 	private function newPersonName( ApplyForMembershipRequest $request ): ApplicantName {
-		$personName = $this->newBasePersonName( $request );
+		if ( $request->isCompanyApplication() ) {
+			return $this->newCompanyPersonName( $request );
+		} else {
+			return $this->newPrivatePersonName( $request );
+		}
+	}
 
+	private function newPrivatePersonName( ApplyForMembershipRequest $request ): ApplicantName {
+		$personName = ApplicantName::newPrivatePersonName();
 		$personName->setFirstName( $request->getApplicantFirstName() );
 		$personName->setLastName( $request->getApplicantLastName() );
 		$personName->setSalutation( $request->getApplicantSalutation() );
 		$personName->setTitle( $request->getApplicantTitle() );
-
 		return $personName->freeze()->assertNoNullFields();
 	}
 
-	private function newBasePersonName( ApplyForMembershipRequest $request ): ApplicantName {
-		if ( $request->isCompanyApplication() ) {
-			$personName = ApplicantName::newCompanyName();
-			$personName->setCompanyName( $request->getApplicantCompanyName() );
-			return $personName;
-		}
-
-		return ApplicantName::newPrivatePersonName();
+	private function newCompanyPersonName( ApplyForMembershipRequest $request ): ApplicantName {
+		$personName = ApplicantName::newCompanyName();
+		$personName->setCompanyName( $request->getApplicantCompanyName() );
+		return $personName->freeze()->assertNoNullFields();
 	}
 
 	private function newAddress( ApplyForMembershipRequest $request ): ApplicantAddress {

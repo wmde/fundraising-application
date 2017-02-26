@@ -13,6 +13,8 @@ use WMDE\Fundraising\Frontend\FreezableValueObject;
 class ApplicantName {
 	use FreezableValueObject;
 
+	public const COMPANY_SALUTATION = 'Firma';
+
 	private $companyName = '';
 
 	private $salutation = '';
@@ -28,7 +30,9 @@ class ApplicantName {
 	}
 
 	public static function newCompanyName(): self {
-		return new self();
+		$companyName = new self();
+		$companyName->setSalutation( self::COMPANY_SALUTATION );
+		return $companyName;
 	}
 
 	public function setCompanyName( string $companyName ) {

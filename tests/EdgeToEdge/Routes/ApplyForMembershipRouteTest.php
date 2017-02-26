@@ -336,4 +336,54 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		} );
 	}
 
+	public function testWhenCompaniesApply_salutationIsSetToFixedValue() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+
+			$params = $this->newValidHttpParametersForCompanies();
+			$client->request(
+				'POST',
+				'apply-for-membership',
+				$params
+			);
+
+			$application = $factory->getMembershipApplicationRepository()->getApplicationById( 1 );
+
+			$this->assertNotNull( $application );
+
+			$expectedApplication = ValidMembershipApplication::newCompanyApplication();
+			$expectedApplication->assignId( 1 );
+			$expectedApplication->confirm();
+
+			$this->assertEquals( $expectedApplication, $application );
+		} );
+	}
+
+	private function newValidHttpParametersForCompanies(): array {
+		return [
+			'membership_type' => ValidMembershipApplication::MEMBERSHIP_TYPE,
+
+			'adresstyp' => 'firma',
+			'firma' => ValidMembershipApplication::APPLICANT_COMPANY_NAME,
+
+			'strasse' => ValidMembershipApplication::APPLICANT_STREET_ADDRESS,
+			'postcode' => ValidMembershipApplication::APPLICANT_POSTAL_CODE,
+			'ort' => ValidMembershipApplication::APPLICANT_CITY,
+			'country' => ValidMembershipApplication::APPLICANT_COUNTRY_CODE,
+
+			'email' => ValidMembershipApplication::APPLICANT_EMAIL_ADDRESS,
+			'phone' => ValidMembershipApplication::APPLICANT_PHONE_NUMBER,
+			'dob' => ValidMembershipApplication::APPLICANT_DATE_OF_BIRTH,
+
+			'payment_type' => (string)ValidMembershipApplication::PAYMENT_TYPE_DIRECT_DEBIT,
+			'membership_fee_interval' => (string)ValidMembershipApplication::PAYMENT_PERIOD_IN_MONTHS,
+			'membership_fee' => (string)ValidMembershipApplication::COMPANY_PAYMENT_AMOUNT_IN_EURO, // TODO: change to localized
+
+			'bank_name' => ValidMembershipApplication::PAYMENT_BANK_NAME,
+			'iban' => ValidMembershipApplication::PAYMENT_IBAN,
+			'bic' => ValidMembershipApplication::PAYMENT_BIC,
+			'account_number' => ValidMembershipApplication::PAYMENT_BANK_ACCOUNT,
+			'bank_code' => ValidMembershipApplication::PAYMENT_BANK_CODE,
+		];
+	}
+
 }

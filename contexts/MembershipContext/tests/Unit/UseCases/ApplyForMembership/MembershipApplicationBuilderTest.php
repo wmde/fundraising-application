@@ -46,10 +46,10 @@ class MembershipApplicationBuilderTest extends \PHPUnit\Framework\TestCase {
 		$request->markApplicantAsCompany();
 		$request->setApplicantCompanyName( self::COMPANY_NAME );
 		$request->setMembershipType( ValidMembershipApplication::MEMBERSHIP_TYPE );
-		$request->setApplicantSalutation( ValidMembershipApplication::APPLICANT_SALUTATION );
-		$request->setApplicantTitle( ValidMembershipApplication::APPLICANT_TITLE );
-		$request->setApplicantFirstName( ValidMembershipApplication::APPLICANT_FIRST_NAME );
-		$request->setApplicantLastName( ValidMembershipApplication::APPLICANT_LAST_NAME );
+		$request->setApplicantSalutation( '' );
+		$request->setApplicantTitle( '' );
+		$request->setApplicantFirstName( '' );
+		$request->setApplicantLastName( '' );
 		$request->setApplicantStreetAddress( ValidMembershipApplication::APPLICANT_STREET_ADDRESS );
 		$request->setApplicantPostalCode( ValidMembershipApplication::APPLICANT_POSTAL_CODE );
 		$request->setApplicantCity( ValidMembershipApplication::APPLICANT_CITY );
@@ -101,10 +101,10 @@ class MembershipApplicationBuilderTest extends \PHPUnit\Framework\TestCase {
 		$name = ApplicantName::newCompanyName();
 
 		$name->setCompanyName( self::COMPANY_NAME );
-		$name->setSalutation( ValidMembershipApplication::APPLICANT_SALUTATION );
-		$name->setTitle( ValidMembershipApplication::APPLICANT_TITLE );
-		$name->setFirstName( ValidMembershipApplication::APPLICANT_FIRST_NAME );
-		$name->setLastName( ValidMembershipApplication::APPLICANT_LAST_NAME );
+		$name->setSalutation( ApplicantName::COMPANY_SALUTATION );
+		$name->setTitle( '' );
+		$name->setFirstName( '' );
+		$name->setLastName( '' );
 
 		return $name->assertNoNullFields()->freeze();
 	}
@@ -139,6 +139,14 @@ class MembershipApplicationBuilderTest extends \PHPUnit\Framework\TestCase {
 			Euro::newFromInt( ValidMembershipApplication::PAYMENT_AMOUNT_IN_EURO ),
 			$application->getPayment()->getAmount()
 		);
+	}
+
+	public function testWhenBuildingCompanyApplication_salutationFieldIsSet() {
+		$request = $this->newCompanyMembershipRequest( self::OMIT_OPTIONAL_FIELDS );
+
+		$application = ( new MembershipApplicationBuilder() )->newApplicationFromRequest( $request );
+
+		$this->assertSame( ApplicantName::COMPANY_SALUTATION, $application->getApplicant()->getName()->getSalutation() );
 	}
 
 }
