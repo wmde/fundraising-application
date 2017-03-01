@@ -60,7 +60,7 @@ class AddDonationUseCase {
 
 		$donation = $this->newDonationFromRequest( $donationRequest );
 
-		if ( $this->policyValidator->needsModeration( $donationRequest ) ) {
+		if ( !$donation->hasExternalPayment() && $this->policyValidator->needsModeration( $donationRequest ) ) {
 			$donation->markForModeration();
 		}
 
