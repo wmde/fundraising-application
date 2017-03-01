@@ -237,6 +237,23 @@ class AddDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$this->assertTrue( $response->getDonation()->needsModeration() );
 	}
 
+	public function testGivenPolicyViolationForExternalPaymentDonation_donationIsNotModerated() {
+		$useCase = new AddDonationUseCase(
+			$this->newRepository(),
+			$this->getSucceedingValidatorMock(),
+			$this->getFailingPolicyValidatorMock(),
+			new ReferrerGeneralizer( 'http://foo.bar', [] ),
+			$this->newMailer(),
+			$this->newTransferCodeGenerator(),
+			$this->newTokenFetcher()
+		);
+
+		$request = $this->newValidAddDonationRequestWithEmail( 'foo@bar.baz' );
+		$request->setPaymentType( 'PPL' );
+		$response = $useCase->addDonation( $request );
+		$this->assertFalse( $response->getDonation()->needsModeration() );
+	}
+
 	private function newUseCaseWithMailer( DonationConfirmationMailer $mailer ) {
 		return new AddDonationUseCase(
 			$this->newRepository(),
