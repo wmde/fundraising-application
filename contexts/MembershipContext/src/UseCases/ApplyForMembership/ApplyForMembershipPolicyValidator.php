@@ -29,7 +29,13 @@ class ApplyForMembershipPolicyValidator {
 	}
 
 	public function isAutoDeleted( Application $application ) {
-		return in_array( $application->getApplicant()->getEmailAddress()->getFullAddress(), $this->emailAddressBlacklist );
+		foreach( $this->emailAddressBlacklist as $blacklistEntry ) {
+			if ( preg_match( $blacklistEntry, $application->getApplicant()->getEmailAddress()->getFullAddress() ) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	private function yearlyAmountExceedsLimit( Application $application ): bool {

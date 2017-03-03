@@ -36,7 +36,13 @@ class AddDonationPolicyValidator {
 	}
 
 	public function isAutoDeleted( AddDonationRequest $request ): bool {
-		return in_array( $request->getDonorEmailAddress(), $this->emailAddressBlacklist );
+		foreach( $this->emailAddressBlacklist as $blacklistEntry ) {
+			if ( preg_match( $blacklistEntry, $request->getDonorEmailAddress() ) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	private function getBadWordViolations( AddDonationRequest $request ): array {

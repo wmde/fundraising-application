@@ -40,13 +40,53 @@ class ApplyForMembershipPolicyValidatorTest extends \PHPUnit\Framework\TestCase 
 		) );
 	}
 
-	public function testWhenEmailAddressIsBlacklisted_isAutoDeletedReturnsTrue() {
+	/** @dataProvider blacklistedEmailAddressProvider */
+	public function testWhenEmailAddressIsBlacklisted_isAutoDeletedReturnsTrue( $emailAddress ) {
+		$policyValidator = $this->newPolicyValidatorWithEmailBlacklist();
+		$this->assertTrue(
+			$policyValidator->isAutoDeleted(
+				ValidMembershipApplication::newDomainEntityWithEmailAddress( $emailAddress )
+			)
+		);
+	}
+
+	public function blacklistedEmailAddressProvider() {
+		return [
+			[ 'foo@bar.baz' ],
+			[ 'test@example.com' ],
+			[ 'Test@EXAMPLE.com' ]
+		];
+	}
+
+	/** @dataProvider allowedEmailAddressProvider */
+	public function testWhenEmailAddressIsNotBlacklisted_isAutoDeletedReturnsFalse( $emailAddress ) {
+		$policyValidator = $this->newPolicyValidatorWithEmailBlacklist();
+		$this->assertFalse(
+			$policyValidator->isAutoDeleted(
+				ValidMembershipApplication::newDomainEntityWithEmailAddress( $emailAddress )
+			)
+		);
+	}
+
+	public function allowedEmailAddressProvider() {
+		return [
+			[ 'other.person@bar.baz' ],
+			[ 'test@example.computer.says.no' ],
+			[ 'some.person@gmail.com' ]
+		];
+	}
+
+	/**
+	 * @return ApplyForMembershipPolicyValidator
+	 */
+	private function newPolicyValidatorWithEmailBlacklist(): ApplyForMembershipPolicyValidator {
 		$textPolicyValidator = $this->newSucceedingTextPolicyValidator();
 		$policyValidator = new ApplyForMembershipPolicyValidator(
 			$textPolicyValidator,
-			[ ValidMembershipApplication::APPLICANT_EMAIL_ADDRESS ]
+			[ '/^foo@bar\.baz$/', '/@example.com$/i' ]
 		);
-		$this->assertTrue( $policyValidator->isAutoDeleted( ValidMembershipApplication::newDomainEntity() ) );
+
+		return $policyValidator;
 	}
 
 }

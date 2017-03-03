@@ -69,24 +69,48 @@ class AddDonationPolicyValidatorTest extends ValidatorTestCase {
 		return $failingTextPolicyValidator;
 	}
 
-	public function testWhenEmailAddressIsNotBlacklisted_isAutoDeletedReturnsFalse() {
-		$policyValidator = new AddDonationPolicyValidator(
-			$this->newSucceedingAmountValidator(),
-			$this->newSucceedingTextPolicyValidator(),
-			[]
-		);
+	/** @dataProvider allowedEmailAddressProvider */
+	public function testWhenEmailAddressIsNotBlacklisted_isAutoDeletedReturnsFalse( $emailAddress ) {
+		$policyValidator = $this->newPolicyValidatorWithEmailBlacklist();
+		$request = ValidAddDonationRequest::getRequest();
+		$request->setDonorEmailAddress( $emailAddress );
 
 		$this->assertFalse( $policyValidator->isAutoDeleted( ValidAddDonationRequest::getRequest() ) );
 	}
 
-	public function testWhenEmailAddressIsBlacklisted_isAutoDeletedReturnsTrue() {
+	public function allowedEmailAddressProvider() {
+		return [
+			[ 'other.person@bar.baz' ],
+			[ 'test@example.computer.says.no' ],
+			[ 'some.person@gmail.com' ]
+		];
+	}
+
+	/** @dataProvider blacklistedEmailAddressProvider */
+	public function testWhenEmailAddressIsBlacklisted_isAutoDeletedReturnsTrue( $emailAddress ) {
+		$policyValidator = $this->newPolicyValidatorWithEmailBlacklist();
+		$request = ValidAddDonationRequest::getRequest();
+		$request->setDonorEmailAddress( $emailAddress );
+
+		$this->assertTrue( $policyValidator->isAutoDeleted( $request ) );
+	}
+
+	public function blacklistedEmailAddressProvider() {
+		return [
+			[ 'blocked.person@bar.baz' ],
+			[ 'test@example.com' ],
+			[ 'Test@EXAMPLE.com' ]
+		];
+	}
+
+	private function newPolicyValidatorWithEmailBlacklist(): AddDonationPolicyValidator {
 		$policyValidator = new AddDonationPolicyValidator(
 			$this->newSucceedingAmountValidator(),
 			$this->newSucceedingTextPolicyValidator(),
-			[ 'foo@bar.baz' ]
+			[ '/^blocked.person@bar\.baz$/', '/@example.com$/i' ]
 		);
 
-		$this->assertTrue( $policyValidator->isAutoDeleted( ValidAddDonationRequest::getRequest() ) );
+		return $policyValidator;
 	}
 
 }
