@@ -110,3 +110,20 @@ test( 'ValidationDispatcher does nothing if ignored data changes', function ( t 
 
 	t.end();
 } );
+
+test( 'ValidationDispatcher does nothing if required fields don\'t have a value', function ( t ) {
+	var initialData = { amount: 0, addressType: 'privat', paymentIntervalInMonths: 12 },
+		validator = { validate: sinon.spy() },
+		testStore = { dispatch: sinon.spy() },
+		dispatcher = createFeeValidationDispatcher(
+			validator,
+			initialData
+		);
+
+	dispatcher.dispatchIfChanged( { amount: 0, addressType: 'wtf', paymentIntervalInMonths: 12 }, testStore );
+
+	t.notOk( validator.validate.called, 'validation function is never called' );
+	t.notOk( testStore.dispatch.called, 'no action is dispatched' );
+
+	t.end();
+} );

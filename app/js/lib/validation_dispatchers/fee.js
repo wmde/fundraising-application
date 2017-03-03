@@ -17,13 +17,15 @@ var objectAssign = require( 'object-assign' ),
 	 * @return {ValidationDispatcher}
 	 */
 	createFeeValidationDispatcher = function ( validator,  initialValues ) {
-		var fieldNames = [ 'amount', 'paymentIntervalInMonths', 'addressType' ];
+		var fieldNames = [ 'amount', 'paymentIntervalInMonths', 'addressType' ],
+			fieldValuesIfNotSet = { amount: 0 };
 
 		return objectAssign( Object.create( ValidationDispatcher ), {
 			validationFunction: validator.validate.bind( validator ),
 			finishActionCreationFunction: Actions.newFinishPaymentDataValidationAction,
 			beginActionCreationFunction: Actions.newBeginPaymentDataValidationAction,
 			fields: fieldNames,
+			fieldValuesIfNotSet: fieldValuesIfNotSet,
 			previousFieldValues: _.pick( initialValues || {}, fieldNames )
 		} );
 	};
