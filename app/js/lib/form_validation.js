@@ -72,7 +72,11 @@ var jQuery = require( 'jquery' ),
 		validationUrl: '',
 		sendFunction: null,
 		validate: function ( formValues ) {
-			var postData = {
+			var postData;
+			if ( !formValues.email ) {
+				return { status: ValidationStates.INCOMPLETE };
+			}
+			postData = {
 				email: formValues.email
 			};
 			return jQueryDeferredToPromise( this.sendFunction( this.validationUrl, postData, null, 'json' ) );
@@ -83,7 +87,12 @@ var jQuery = require( 'jquery' ),
 		validationUrl: '',
 		sendFunction: null,
 		validate: function ( formValues ) {
-			var postData = {
+			var amountAsFloat = parseFloat( formValues.amount ),
+				postData;
+			if ( amountAsFloat === 0 || isNaN( amountAsFloat ) || !formValues.paymentType ) {
+				return { status: ValidationStates.INCOMPLETE };
+			}
+			postData = {
 				amount: formValues.amount,
 				paymentType: formValues.paymentType
 			};
@@ -95,7 +104,12 @@ var jQuery = require( 'jquery' ),
 		validationUrl: '',
 		sendFunction: null,
 		validate: function ( formValues ) {
-			var postData = {
+			var amountAsFloat = parseFloat( formValues.amount ),
+				postData;
+			if ( amountAsFloat === 0 || isNaN( amountAsFloat ) || !formValues.addressType || !formValues.paymentIntervalInMonths ) {
+				return { status: ValidationStates.INCOMPLETE };
+			}
+			postData = {
 				amount: formValues.amount,
 				paymentIntervalInMonths: formValues.paymentIntervalInMonths,
 				addressType: formValues.addressType

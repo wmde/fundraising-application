@@ -27,6 +27,24 @@ test( 'Amount validation sends values to server', function ( t ) {
 	t.end();
 } );
 
+test( 'Amount validation sends nothing to server if any of the necessary values are not set', function ( t ) {
+	var incompleteResult = { status: 'INCOMPLETE' },
+		postFunctionSpy = sinon.spy(),
+		amountValidator = validation.createAmountValidator(
+			'http://spenden.wikimedia.org/validate-amount',
+			postFunctionSpy
+		),
+		validationResults = [];
+
+	// Test multiple empty values
+	validationResults.push( amountValidator.validate( { amount: 0, paymentType: 'BEZ', otherStuff: 'foo' } ) );
+	validationResults.push( amountValidator.validate( { amount: '0,00', paymentType: 'BEZ', otherStuff: 'foo' } ) );
+	validationResults.push( amountValidator.validate( { amount: 23, paymentType: null, otherStuff: 'foo' } ) );
+
+	t.notOk( postFunctionSpy.called, 'no data is sent ' );
+	t.deepEquals( [ incompleteResult, incompleteResult, incompleteResult], validationResults, 'validation function returns incomplete result' );
+	t.end();
+} );
 test( 'Address validation is valid for anonymous address', function ( t ) {
 	var positiveResult = { status: 'OK' },
 		postFunctionSpy = sinon.spy(),
