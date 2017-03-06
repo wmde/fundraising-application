@@ -87,9 +87,8 @@ var jQuery = require( 'jquery' ),
 		validationUrl: '',
 		sendFunction: null,
 		validate: function ( formValues ) {
-			var amountAsFloat = parseFloat( formValues.amount ),
-				postData;
-			if ( amountAsFloat === 0 || isNaN( amountAsFloat ) || !formValues.paymentType ) {
+			var postData;
+			if ( this.formValuesHaveEmptyRequiredFields( formValues ) ) {
 				return { status: ValidationStates.INCOMPLETE };
 			}
 			postData = {
@@ -97,6 +96,12 @@ var jQuery = require( 'jquery' ),
 				paymentType: formValues.paymentType
 			};
 			return jQueryDeferredToPromise( this.sendFunction( this.validationUrl, postData, null, 'json' ) );
+		},
+		formValuesHaveEmptyRequiredFields: function ( formValues ) {
+			// WARNING: As we don't have localized money values at the moment,
+			// this method will behave incorrectly for amounts between 0 and 1
+			var amountAsFloat = parseFloat( formValues.amount );
+			return amountAsFloat === 0 || isNaN( amountAsFloat ) || !formValues.paymentType;
 		}
 	},
 
@@ -104,9 +109,8 @@ var jQuery = require( 'jquery' ),
 		validationUrl: '',
 		sendFunction: null,
 		validate: function ( formValues ) {
-			var amountAsFloat = parseFloat( formValues.amount ),
-				postData;
-			if ( amountAsFloat === 0 || isNaN( amountAsFloat ) || !formValues.addressType || !formValues.paymentIntervalInMonths ) {
+			var postData;
+			if ( this.formValuesHaveEmptyRequiredFields( formValues ) ) {
 				return { status: ValidationStates.INCOMPLETE };
 			}
 			postData = {
@@ -115,6 +119,12 @@ var jQuery = require( 'jquery' ),
 				addressType: formValues.addressType
 			};
 			return jQueryDeferredToPromise( this.sendFunction( this.validationUrl, postData, null, 'json' ) );
+		},
+		formValuesHaveEmptyRequiredFields: function ( formValues ) {
+			// WARNING: As we don't have localized money values at the moment,
+			// this method will behave incorrectly for amounts between 0 and 1
+			var amountAsFloat = parseFloat( formValues.amount );
+			return amountAsFloat === 0 || isNaN( amountAsFloat ) || !formValues.addressType || !formValues.paymentIntervalInMonths;
 		}
 	},
 
