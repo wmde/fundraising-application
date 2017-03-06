@@ -134,6 +134,25 @@ class ValidMembershipApplication {
 		);
 	}
 
+	public static function newDomainEntityWithEmailAddress( string $emailAddress ): Application {
+		$self = ( new self() );
+		return Application::newApplication(
+			self::MEMBERSHIP_TYPE,
+			$self->newApplicantWithEmailAddress( $self->newPersonApplicantName(), $emailAddress ),
+			$self->newPayment()
+		);
+	}
+
+	private function newApplicantWithEmailAddress( ApplicantName $name, string $emailAddress ): Applicant {
+		return new Applicant(
+			$name,
+			$this->newAddress(),
+			new EmailAddress( $emailAddress ),
+			new PhoneNumber( self::APPLICANT_PHONE_NUMBER ),
+			new \DateTime( self::APPLICANT_DATE_OF_BIRTH )
+		);
+	}
+
 	private function createApplicationUsingPayPal(): Application {
 		$self = ( new self() );
 		return Application::newApplication(

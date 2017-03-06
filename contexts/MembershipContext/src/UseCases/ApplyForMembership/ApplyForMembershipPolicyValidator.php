@@ -16,14 +16,26 @@ class ApplyForMembershipPolicyValidator {
 	private const YEARLY_PAYMENT_MODERATION_THRESHOLD_IN_EURO = 1000;
 
 	private $textPolicyValidator;
+	private $emailAddressBlacklist;
 
-	public function __construct( TextPolicyValidator $textPolicyValidator ) {
+	public function __construct( TextPolicyValidator $textPolicyValidator, array $emailAddressBlacklist = [] ) {
 		$this->textPolicyValidator = $textPolicyValidator;
+		$this->emailAddressBlacklist = $emailAddressBlacklist;
 	}
 
 	public function needsModeration( Application $application ): bool {
 		return $this->yearlyAmountExceedsLimit( $application ) ||
 			$this->addressContainsBadWords( $application );
+	}
+
+	public function isAutoDeleted( Application $application ) {
+		foreach( $this->emailAddressBlacklist as $blacklistEntry ) {
+			if ( preg_match( $blacklistEntry, $application->getApplicant()->getEmailAddress()->getFullAddress() ) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	private function yearlyAmountExceedsLimit( Application $application ): bool {

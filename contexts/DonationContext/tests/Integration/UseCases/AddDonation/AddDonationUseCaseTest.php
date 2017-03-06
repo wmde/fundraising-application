@@ -159,6 +159,16 @@ class AddDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		return $validator;
 	}
 
+	private function getAutoDeletingPolicyValidatorMock(): AddDonationPolicyValidator {
+		$validator = $this->getMockBuilder( AddDonationPolicyValidator::class )
+			->disableOriginalConstructor()
+			->getMock();
+
+		$validator->method( 'isAutoDeleted' )->willReturn( true );
+
+		return $validator;
+	}
+
 	private function newMinimumDonationRequest(): AddDonationRequest {
 		$donationRequest = new AddDonationRequest();
 		$donationRequest->setAmount( Euro::newFromString( '1.00' ) );
@@ -317,6 +327,22 @@ class AddDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$response = $useCase->addDonation( $this->newValidCompanyDonationRequest() );
 
 		$this->assertSame( DonorName::COMPANY_SALUTATION, $response->getDonation()->getDonor()->getName()->getSalutation() );
+	}
+
+	public function testWhenEmailAddressIsBlacklisted_donationIsMarkedAsDeleted() {
+		$repository = $this->newRepository();
+		$useCase = new AddDonationUseCase(
+			$repository,
+			$this->getSucceedingValidatorMock(),
+			$this->getAutoDeletingPolicyValidatorMock(),
+			new ReferrerGeneralizer( 'http://foo.bar', [] ),
+			$this->newMailer(),
+			$this->newTransferCodeGenerator(),
+			$this->newTokenFetcher()
+		);
+
+		$useCase->addDonation( $this->newValidAddDonationRequestWithEmail( 'foo@bar.baz' ) );
+		$this->assertSame( Donation::STATUS_CANCELLED, $repository->getDonationById( 1 )->getStatus() );
 	}
 
 }

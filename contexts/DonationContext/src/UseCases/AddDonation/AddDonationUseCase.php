@@ -64,6 +64,10 @@ class AddDonationUseCase {
 			$donation->markForModeration();
 		}
 
+		if ( $this->policyValidator->isAutoDeleted( $donationRequest ) ) {
+			$donation->markAsDeleted();
+		}
+
 		// TODO: handle exceptions
 		$this->donationRepository->storeDonation( $donation );
 

@@ -305,6 +305,11 @@
         "comment"
       ]
     },
+    "email-address-blacklist": {
+      "type": "array",
+      "title": "List of blocked e-mail addresses",
+      "description": "List of e-mail addresses that automatically mark data sets as deleted"
+    },
     "locale": {
       "type": "string",
       "minLength": 2,

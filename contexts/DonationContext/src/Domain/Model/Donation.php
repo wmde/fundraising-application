@@ -271,4 +271,8 @@ class Donation {
 		return $this->status === self::STATUS_CANCELLED;
 	}
 
+	public function markAsDeleted() {
+		$this->status = self::STATUS_CANCELLED;
+	}
+
 }

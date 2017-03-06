@@ -53,6 +53,9 @@ class ApplyForMembershipUseCase {
 			$application->markForModeration();
 		}
 
+		if ( $this->policyValidator->isAutoDeleted( $application ) ) {
+			$application->markAsDeleted();
+		}
 		// TODO: handle exceptions
 		$this->repository->storeApplication( $application );
 

@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\MembershipContext\UseCases
 use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
 use WMDE\Fundraising\Frontend\MembershipContext\Authorization\ApplicationTokenFetcher;
 use WMDE\Fundraising\Frontend\MembershipContext\Authorization\MembershipApplicationTokens;
+use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplication;
@@ -288,6 +289,19 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$request->setPiwikTrackingString( 'foo/bar' );
 
 		return $request->assertNoNullFields();
+	}
+
+	private function newAutoDeletingPolicyValidator(): ApplyForMembershipPolicyValidator {
+		$policyValidator = $this->getMockBuilder( ApplyForMembershipPolicyValidator::class )
+			->disableOriginalConstructor()->getMock();
+		$policyValidator->method( 'isAutoDeleted' )->willReturn( true );
+		return $policyValidator;
+	}
+
+	public function testWhenUsingBlacklistedEmailAddress_moderationIsAutomaticallyDeleted() {
+		$this->policyValidator = $this->newAutoDeletingPolicyValidator();
+		$this->newUseCase()->applyForMembership( $this->newValidRequest() );
+		$this->assertTrue( $this->repository->getApplicationById( 1 )->isDeleted() );
 	}
 
 }
