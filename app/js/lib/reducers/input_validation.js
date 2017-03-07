@@ -42,12 +42,14 @@ function inputValidation( validationState, action ) {
 			} );
 			return newValidationState;
 		case 'FINISH_PAYMENT_DATA_VALIDATION':
-			if ( action.payload.status === ValidationStates.OK ) {
+			if ( action.payload.status === ValidationStates.INCOMPLETE ) {
+				return newValidationState;
+			} else if ( action.payload.status === ValidationStates.OK ) {
 				newValidationState.amount =  { dataEntered: true, isValid: true };
 				newValidationState.paymentType = { dataEntered: true, isValid: true };
 			} else {
-				newValidationState.amount = { dataEntered: true, isValid: action.payload.messages.amount ? false : true };
-				newValidationState.paymentType = { dataEntered: true, isValid: action.payload.messages.paymentType ? false : true };
+				newValidationState.amount = { dataEntered: true, isValid: !action.payload.messages.amount };
+				newValidationState.paymentType = { dataEntered: true, isValid: !action.payload.messages.paymentType };
 			}
 			return newValidationState;
 		case 'FINISH_BANK_DATA_VALIDATION':
@@ -67,6 +69,9 @@ function inputValidation( validationState, action ) {
 			}
 			return newValidationState;
 		case 'FINISH_EMAIL_ADDRESS_VALIDATION':
+			if ( action.payload.status === ValidationStates.INCOMPLETE ) {
+				return newValidationState;
+			}
 			newValidationState.email = { dataEntered: true, isValid: action.payload.status !== ValidationStates.ERR };
 			return newValidationState;
 		case 'FINISH_ADDRESS_VALIDATION':

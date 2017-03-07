@@ -72,7 +72,11 @@ var jQuery = require( 'jquery' ),
 		validationUrl: '',
 		sendFunction: null,
 		validate: function ( formValues ) {
-			var postData = {
+			var postData;
+			if ( !formValues.email ) {
+				return { status: ValidationStates.INCOMPLETE };
+			}
+			postData = {
 				email: formValues.email
 			};
 			return jQueryDeferredToPromise( this.sendFunction( this.validationUrl, postData, null, 'json' ) );
@@ -83,11 +87,21 @@ var jQuery = require( 'jquery' ),
 		validationUrl: '',
 		sendFunction: null,
 		validate: function ( formValues ) {
-			var postData = {
+			var postData;
+			if ( this.formValuesHaveEmptyRequiredFields( formValues ) ) {
+				return { status: ValidationStates.INCOMPLETE };
+			}
+			postData = {
 				amount: formValues.amount,
 				paymentType: formValues.paymentType
 			};
 			return jQueryDeferredToPromise( this.sendFunction( this.validationUrl, postData, null, 'json' ) );
+		},
+		formValuesHaveEmptyRequiredFields: function ( formValues ) {
+			// WARNING: As we don't have localized money values at the moment,
+			// this method will behave incorrectly for amounts between 0 and 1
+			var amountAsFloat = parseFloat( formValues.amount );
+			return amountAsFloat === 0 || isNaN( amountAsFloat ) || !formValues.paymentType;
 		}
 	},
 
@@ -95,12 +109,22 @@ var jQuery = require( 'jquery' ),
 		validationUrl: '',
 		sendFunction: null,
 		validate: function ( formValues ) {
-			var postData = {
+			var postData;
+			if ( this.formValuesHaveEmptyRequiredFields( formValues ) ) {
+				return { status: ValidationStates.INCOMPLETE };
+			}
+			postData = {
 				amount: formValues.amount,
 				paymentIntervalInMonths: formValues.paymentIntervalInMonths,
 				addressType: formValues.addressType
 			};
 			return jQueryDeferredToPromise( this.sendFunction( this.validationUrl, postData, null, 'json' ) );
+		},
+		formValuesHaveEmptyRequiredFields: function ( formValues ) {
+			// WARNING: As we don't have localized money values at the moment,
+			// this method will behave incorrectly for amounts between 0 and 1
+			var amountAsFloat = parseFloat( formValues.amount );
+			return amountAsFloat === 0 || isNaN( amountAsFloat ) || !formValues.addressType || !formValues.paymentIntervalInMonths;
 		}
 	},
 
