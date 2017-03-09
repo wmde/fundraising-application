@@ -214,6 +214,16 @@ class Donation {
 		$this->status = self::STATUS_MODERATION;
 	}
 
+	public function notifyOfPolicyValidationFailure() {
+		if ( !$this->hasExternalPayment() ) {
+			$this->markForModeration();
+		}
+	}
+
+	public function notifyOfCommentValidationFailure() {
+		$this->markForModeration();
+	}
+
 	public function getTrackingInfo(): DonationTrackingInfo {
 		return $this->trackingInfo;
 	}
