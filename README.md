@@ -235,4 +235,7 @@ persistence, you should use `TestEnvironment` defined in `tests/TestEnvironment.
 
 * `deployment/`: Ansible scripts and configuration for deploying the application
 
+## See also
 
+* [Rewriting the Wikimedia Deutschland fundraising](https://www.entropywins.wtf/blog/2016/11/24/rewriting-the-wikimedia-deutschland-funrdraising/) - blog post on why we created this codebase
+* [Implementing the Clean Architecture](https://www.entropywins.wtf/blog/2016/11/24/implementing-the-clean-architecture/) - blog post on the architecture of this application
