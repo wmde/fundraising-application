@@ -229,4 +229,16 @@ class DonationTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
+	public function testWhenNonExternalPaymentIsNotifiedOfPolicyValidationFailure_itIsPutInModeration() {
+		$donation = ValidDonation::newBankTransferDonation();
+		$donation->notifyOfPolicyValidationFailure();
+		$this->assertTrue( $donation->needsModeration() );
+	}
+
+	public function testWhenExternalPaymentIsNotifiedOfPolicyValidationFailure_itIsNotPutInModeration() {
+		$donation = ValidDonation::newIncompletePayPalDonation();
+		$donation->notifyOfPolicyValidationFailure();
+		$this->assertFalse( $donation->needsModeration() );
+	}
+
 }

@@ -60,8 +60,8 @@ class AddDonationUseCase {
 
 		$donation = $this->newDonationFromRequest( $donationRequest );
 
-		if ( $this->donationNeedsModeration( $donationRequest, $donation ) ) {
-			$donation->markForModeration();
+		if ( $this->policyValidator->needsModeration( $donationRequest ) ) {
+			$donation->notifyOfPolicyValidationFailure();
 		}
 
 		if ( $this->policyValidator->isAutoDeleted( $donationRequest ) ) {
@@ -188,10 +188,6 @@ class AddDonationUseCase {
 		if ( $donation->getDonor() !== null && !$donation->hasExternalPayment() ) {
 			$this->mailer->sendConfirmationMailFor( $donation );
 		}
-	}
-
-	private function donationNeedsModeration( AddDonationRequest $donationRequest, Donation $donation ): bool {
-		return !$donation->hasExternalPayment() && $this->policyValidator->needsModeration( $donationRequest );
 	}
 
 }

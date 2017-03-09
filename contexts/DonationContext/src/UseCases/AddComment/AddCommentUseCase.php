@@ -65,7 +65,7 @@ class AddCommentUseCase {
 		$donation->addComment( $this->newCommentFromRequest( $addCommentRequest ) );
 
 		if ( !$this->commentTextPassesValidation( $addCommentRequest->getCommentText() ) ) {
-			$donation->markForModeration();
+			$donation->notifyOfCommentValidationFailure();
 			$successMessage = 'comment_success_needs_moderation';
 		}
 
