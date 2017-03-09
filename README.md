@@ -7,7 +7,26 @@ User facing application for the [Wikimedia Deutschland](https://wikimedia.de) fu
 The easiest way to get a working installation of the application is to use [Vagrant](https://www.vagrantup.com/).
 Just get a clone of our git repository and run `vagrant up` in it. Then `vagrant ssh` into it and go to `/vagrant`, where you will be able to run the full test suite. (Excluding a handful of payment provider system tests).
 
-## System dependencies
+
+## Installation
+
+### Using Vagrant
+
+Get a copy of the code and make sure you have [Vagrant](https://www.vagrantup.com/) installed.
+
+Inside the root directory of the project, execute
+
+    vagrant up
+    vagrant ssh
+
+Once you're ssh'd into the VM, you can find the application installed in `/vagrant`.
+At this point you will be able to run nearly all of the tests (those that you cannot run will be
+skipped automatically). To run the system tests and get the app to fully show in your browser,
+you will need to do additional configuration, as per the configuration section.
+
+### Local Installation
+
+System dependencies:
 
 * PHP >= 7
 * php7.0-intl
@@ -15,8 +34,6 @@ Just get a clone of our git repository and run `vagrant up` in it. Then `vagrant
 * php7.0-sqlite3 (only needed for running the tests)
 * Node.js and npm (only needed in development for compiling the JavaScript and running the JavaScript tests)
 * [kontocheck extension](http://kontocheck.sourceforge.net/) (only needed when you want to use or test direct debit)
-
-## Installation and configuration
 
 Get a clone of our git repository and then run these commands in it:
 
@@ -38,6 +55,8 @@ connection data. If you're using MySQL, [it's important](http://stackoverflow.co
 			"1002": "SET NAMES utf8"
 		}
  	}
+
+## Configuration
 
 For a fully working instance with all payment types and working templates you'll also need to fill out the following
 configuration data:
