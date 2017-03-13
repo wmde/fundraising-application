@@ -391,9 +391,9 @@ section.container { overflow: hidden; }
 .box .container .top { top: 0px; }
 .box .container .right { right: 0px; }
 
-.box-header { color: #FFF; padding: 12px 15px; overflow: hidden; }
-.box-header .icon-lock { padding-left: 30px; display: inline-block; }
-.box-header .icon-lock:before { font-size: 1.2em; position: absolute; margin-left: -30px; }
+.box-header { color: #FFF; padding: 12px 15px; overflow: hidden; background: #84c5f1; }
+.box-header span[class*=icon-] { padding-left: 30px; display: inline-block; }
+.box-header span[class*=icon-]:before { font-size: 1.2em; position: absolute; margin-left: -30px; }
 
 .box-footer { background: #FFF; padding: 15px 30px; }
 .box-footer .icon-ok-sign { padding-left: 30px; display: inline-block; }
