@@ -190,7 +190,7 @@
           "minLength": 1,
           "title": "JavaScript notice",
           "description": "The notice that appears when the user has turned off JavaScript",
-          "default": "JavaScript-Notice"
+          "default": "JavaScript_Notice"
         }
       },
       "additionalProperties": false,
@@ -605,7 +605,7 @@
           "minLength": 1,
           "title": "Default confirmation page",
           "description": "Default confirmation page template name",
-          "default": "10h16_Bestätigung.twig"
+          "default": "Donation_Confirmation.html.twig"
         },
         "campaigns": {
           "type": "array",

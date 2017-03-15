@@ -191,7 +191,7 @@ $app->get(
 			]
 		);
 	}
-);
+)->bind( 'list-comments.rss' );
 
 $app->get(
 	'list-comments.html',
@@ -208,17 +208,17 @@ $app->get(
 			)
 		);
 	}
-);
+)->bind( 'list-comments.html' );
 
 $app->get(
 	'page/{pageName}',
 	function( $pageName ) use ( $ffFactory ) {
-		if ( !$ffFactory->getTemplateNameValidator()->validate( $pageName )->isSuccessful() ) {
+		if ( !$ffFactory->getTemplateNameValidator()->validate( $pageName . '.html.twig' )->isSuccessful() ) {
 			throw new NotFoundHttpException( "Page '$pageName' not found." );
 		}
 
-		return $ffFactory->getLayoutTemplate( 'DisplayPageLayout.twig' )->render( [
-			'main_template' => $pageName
+		return $ffFactory->getLayoutTemplate( 'Display_Page_Layout.twig' )->render( [
+			'main_template' => $pageName . '.html.twig'
 		] );
 	}
 )
@@ -313,7 +313,7 @@ $app->post(
 
 		$contactFormResponse = $ffFactory->newGetInTouchUseCase()->processContactRequest( $contactFormRequest );
 		if ( $contactFormResponse->isSuccessful() ) {
-			return $app->redirect( $app['url_generator']->generate( 'page', [ 'pageName' => 'KontaktBestaetigung' ] ) );
+			return $app->redirect( $app['url_generator']->generate( 'page', [ 'pageName' => 'Kontakt_Bestaetigung' ] ) );
 		}
 		return $ffFactory->newGetInTouchHTMLPresenter()->present( $contactFormResponse, $request->request->all() );
 	}
@@ -500,7 +500,7 @@ $app->get( '/', function ( Application $app, Request $request ) {
 		),
 		HttpKernelInterface::SUB_REQUEST
 	);
-} );
+} )->bind( '/' );
 
 // TODO Figure out how to rewrite with Nginx
 // See https://serverfault.com/questions/805881/nginx-populate-request-uri-with-rewritten-url

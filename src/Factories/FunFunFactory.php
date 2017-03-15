@@ -475,12 +475,12 @@ class FunFunFactory {
 	public function newCommentListRssPresenter(): CommentListRssPresenter {
 		return new CommentListRssPresenter( new TwigTemplate(
 			$this->getTwig(),
-			'CommentList.rss.twig'
+			'Comment_List.rss.twig'
 		) );
 	}
 
 	public function newCommentListHtmlPresenter(): CommentListHtmlPresenter {
-		return new CommentListHtmlPresenter( $this->getLayoutTemplate( 'CommentList.html.twig', [ 'piwikGoals' => [ 1 ] ] ) );
+		return new CommentListHtmlPresenter( $this->getLayoutTemplate( 'Comment_List.html.twig', [ 'piwikGoals' => [ 1 ] ] ) );
 	}
 
 	private function getCommentFinder(): CommentFinder {
@@ -508,12 +508,12 @@ class FunFunFactory {
 	}
 
 	public function newAddSubscriptionHTMLPresenter(): AddSubscriptionHtmlPresenter {
-		return new AddSubscriptionHtmlPresenter( $this->getIncludeTemplate( 'Subscription_Form.twig' ), $this->getTranslator() );
+		return new AddSubscriptionHtmlPresenter( $this->getIncludeTemplate( 'Subscription_Form.html.twig' ), $this->getTranslator() );
 	}
 
 	public function newConfirmSubscriptionHtmlPresenter(): ConfirmSubscriptionHtmlPresenter {
 		return new ConfirmSubscriptionHtmlPresenter(
-			$this->getLayoutTemplate( 'ConfirmSubscription.html.twig' ),
+			$this->getLayoutTemplate( 'Confirm_Subscription.twig' ),
 			$this->getTranslator()
 		);
 	}
@@ -523,7 +523,7 @@ class FunFunFactory {
 	}
 
 	public function newGetInTouchHTMLPresenter(): GetInTouchHtmlPresenter {
-		return new GetInTouchHtmlPresenter( $this->getIncludeTemplate( 'Kontaktformular.twig' ), $this->getTranslator() );
+		return new GetInTouchHtmlPresenter( $this->getIncludeTemplate( 'Kontaktformular.html.twig' ), $this->getTranslator() );
 	}
 
 	public function setTwigEnvironment( Twig_Environment $twig ) {
@@ -558,7 +558,7 @@ class FunFunFactory {
 	private function getIncludeTemplate( string $templateName, array $context = [] ): TwigTemplate {
 		return new TwigTemplate(
 			$this->getTwig(),
-			'IncludeInLayout.twig',
+			'Include_in_Layout.twig',
 			array_merge(
 				$this->getDefaultTwigVariables(),
 				[ 'main_template' => $templateName ],
@@ -679,7 +679,7 @@ class FunFunFactory {
 			$this->getSuborganizationMessenger(),
 			new TwigTemplate(
 				$this->getTwig(),
-				'Mail_Subscription_Request.twig',
+				'Mail_Subscription_Request.txt.twig',
 				[
 					'basepath' => $this->config['web-basepath'],
 					'greeting_generator' => $this->getGreetingGenerator()
@@ -694,7 +694,7 @@ class FunFunFactory {
 			$this->getSuborganizationMessenger(),
 			new TwigTemplate(
 					$this->getTwig(),
-					'Mail_Subscription_Confirmation.twig',
+					'Mail_Subscription_Confirmation.txt.twig',
 					[ 'greeting_generator' => $this->getGreetingGenerator() ]
 			),
 			'mail_subject_subscription_confirmed'
@@ -752,7 +752,7 @@ class FunFunFactory {
 	private function newContactUserMailer(): TemplateBasedMailer {
 		return $this->newTemplateMailer(
 			$this->getSuborganizationMessenger(),
-			new TwigTemplate( $this->getTwig(), 'KontaktMailExtern.twig' ),
+			new TwigTemplate( $this->getTwig(), 'Mail_Contact_Confirm_to_User.txt.twig' ),
 			'mail_subject_getintouch'
 		);
 	}
@@ -760,7 +760,7 @@ class FunFunFactory {
 	private function newContactOperatorMailer(): OperatorMailer {
 		return new OperatorMailer(
 			$this->getSuborganizationMessenger(),
-			new TwigTemplate( $this->getTwig(), 'KontaktMailIntern.twig' ),
+			new TwigTemplate( $this->getTwig(), 'Mail_Contact_Forward_to_Operator.txt.twig' ),
 			$this->getTranslator()->trans( 'mail_subject_getintouch_forward' )
 		);
 	}
@@ -837,11 +837,11 @@ class FunFunFactory {
 	}
 
 	public function newInternalErrorHTMLPresenter(): InternalErrorHtmlPresenter {
-		return new InternalErrorHtmlPresenter( $this->getIncludeTemplate( 'ErrorPage.twig' ) );
+		return new InternalErrorHtmlPresenter( $this->getIncludeTemplate( 'Error_Page.html.twig' ) );
 	}
 
 	public function newAccessDeniedHTMLPresenter(): InternalErrorHtmlPresenter {
-		return new InternalErrorHtmlPresenter( $this->getLayoutTemplate( 'AccessDenied.twig' ) );
+		return new InternalErrorHtmlPresenter( $this->getLayoutTemplate( 'Access_Denied.twig' ) );
 	}
 
 	public function getTranslator(): TranslatorInterface {
@@ -884,7 +884,7 @@ class FunFunFactory {
 			$this->getSuborganizationMessenger(),
 			new TwigTemplate(
 				$this->getTwig(),
-				'Mail_Donation_Cancellation_Confirmation.twig',
+				'Mail_Donation_Cancellation_Confirmation.txt.twig',
 				[ 'greeting_generator' => $this->getGreetingGenerator() ]
 			),
 			'mail_subject_confirm_cancellation'
@@ -932,7 +932,7 @@ class FunFunFactory {
 				$this->getSuborganizationMessenger(),
 				new TwigTemplate(
 					$this->getTwig(),
-					'Mail_Donation_Confirmation.twig',
+					'Mail_Donation_Confirmation.txt.twig',
 					[
 						'basepath' => $this->config['web-basepath'],
 						'greeting_generator' => $this->getGreetingGenerator()
@@ -1006,13 +1006,13 @@ class FunFunFactory {
 
 	public function newDonationConfirmationPresenter() {
 		return new DonationConfirmationHtmlPresenter(
-			$this->getIncludeTemplate( 'DonationConfirmation.twig', [ 'piwikGoals' => [ 3 ] ] )
+			$this->getIncludeTemplate( 'Donation_Confirmation.html.twig', [ 'piwikGoals' => [ 3 ] ] )
 		);
 	}
 
 	public function newCreditCardPaymentHtmlPresenter() {
 		return new CreditCardPaymentHtmlPresenter(
-			$this->getIncludeTemplate( 'CreditCardPaymentIframe.twig' ),
+			$this->getIncludeTemplate( 'Credit_Card_Payment_Iframe.html.twig' ),
 			$this->getTranslator(),
 			$this->newCreditCardUrlGenerator()
 		);
@@ -1020,7 +1020,7 @@ class FunFunFactory {
 
 	public function newCancelDonationHtmlPresenter() {
 		return new CancelDonationHtmlPresenter(
-			$this->getIncludeTemplate( 'Donation_Cancellation_Confirmation.twig' )
+			$this->getIncludeTemplate( 'Donation_Cancellation_Confirmation.html.twig' )
 		);
 	}
 
@@ -1041,7 +1041,7 @@ class FunFunFactory {
 			$this->getOrganizationMessenger(),
 			new TwigTemplate(
 				$this->getTwig(),
-				'Mail_Membership_Application_Confirmation.twig',
+				'Mail_Membership_Application_Confirmation.txt.twig',
 				[ 'greeting_generator' => $this->getGreetingGenerator() ]
 			),
 			'mail_subject_confirm_membership_application'
@@ -1098,7 +1098,7 @@ class FunFunFactory {
 			$this->getOrganizationMessenger(),
 			new TwigTemplate(
 				$this->getTwig(),
-				'Mail_Membership_Application_Cancellation_Confirmation.twig',
+				'Mail_Membership_Application_Cancellation_Confirmation.txt.twig',
 				[ 'greeting_generator' => $this->getGreetingGenerator() ]
 			),
 			'mail_subject_confirm_membership_application_cancellation'
@@ -1131,14 +1131,14 @@ class FunFunFactory {
 	public function newDonationFormViolationPresenter() {
 		// TODO make the template name dependent on the 'form' value from the HTTP POST request
 		// (we need different form pages for A/B testing)
-		$template = $this->getLayoutTemplate( 'DisplayPageLayout.twig', [ 'main_template' => 'DonationForm.twig' ] );
+		$template = $this->getLayoutTemplate( 'Display_Page_Layout.twig', [ 'main_template' => 'Donation_Form.html.twig' ] );
 		return new DonationFormViolationPresenter( $template, $this->newAmountFormatter() );
 	}
 
 	public function newDonationFormPresenter() {
 		// TODO make the template name dependent on the 'form' value from the HTTP POST request
 		// (we need different form pages for A/B testing)
-		$template = $this->getLayoutTemplate( 'DisplayPageLayout.twig', [ 'main_template' => 'DonationForm.twig' ] );
+		$template = $this->getLayoutTemplate( 'Display_Page_Layout.twig', [ 'main_template' => 'Donation_Form.html.twig' ] );
 		return new DonationFormPresenter( $template, $this->newAmountFormatter() );
 	}
 
@@ -1198,19 +1198,19 @@ class FunFunFactory {
 
 	public function newCancelMembershipApplicationHtmlPresenter() {
 		return new CancelMembershipApplicationHtmlPresenter(
-			$this->getIncludeTemplate( 'Membership_Application_Cancellation_Confirmation.twig' )
+			$this->getIncludeTemplate( 'Membership_Application_Cancellation_Confirmation.html.twig' )
 		);
 	}
 
 	public function newMembershipApplicationConfirmationHtmlPresenter() {
 		return new MembershipApplicationConfirmationHtmlPresenter(
-			$this->getIncludeTemplate( 'MembershipApplicationConfirmation.twig' )
+			$this->getIncludeTemplate( 'Membership_Application_Confirmation.html.twig' )
 		);
 	}
 
 	public function newMembershipFormViolationPresenter() {
 		return new MembershipFormViolationPresenter(
-			$this->getIncludeTemplate( 'MembershipApplication.twig' )
+			$this->getIncludeTemplate( 'Membership_Application.html.twig' )
 		);
 	}
 
@@ -1226,7 +1226,7 @@ class FunFunFactory {
 		return new CreditCardNotificationPresenter(
 			new TwigTemplate(
 				$this->getTwig(),
-				'CreditCardPaymentNotification.twig',
+				'Credit_Card_Payment_Notification.txt.twig',
 				[ 'returnUrl' => $this->config['creditcard']['return-url'] ]
 			)
 		);
@@ -1286,7 +1286,7 @@ class FunFunFactory {
 	}
 
 	public function newSystemMessageResponse( string $message ) {
-		$test = $this->getIncludeTemplate( 'System_Message.twig' );
+		$test = $this->getIncludeTemplate( 'System_Message.html.twig' );
 		return $test->render( [ 'message' => $message ] );
 	}
 
@@ -1371,7 +1371,7 @@ class FunFunFactory {
 	}
 
 	public function newPageNotFoundHTMLPresenter(): PageNotFoundPresenter {
-		return new PageNotFoundPresenter( $this->getLayoutTemplate( '404message.html.twig' ) );
+		return new PageNotFoundPresenter( $this->getLayoutTemplate( 'Page_not_found.html.twig' ) );
 	}
 
 	public function setPageViewTracker( PageViewTracker $tracker ) {

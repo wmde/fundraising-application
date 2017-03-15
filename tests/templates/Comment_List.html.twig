@@ -1,0 +1,11 @@
+{% extends 'Base_Layout.html.twig' %}
+
+{% block main %}
+	Die {$ comments |length |e $} neuesten Spenderkommentare
+
+	{% for comment in comments %}
+		{$ comment.amount |number_format(2, ',', '.') |e $}&euro; von {$ comment.author |e $} am {$ comment.publicationDate |e $}
+		{$ comment.text |e $}
+	{% endfor %}
+
+{% endblock %}

@@ -179,7 +179,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 			$response = $client->getResponse()->getContent();
 
-			$this->assertContains( '<strong>5,51 €</strong>', $response );
+			$this->assertContains( '5,51 €', $response );
 			$this->assertContains( 'per Lastschrift', $response );
 			$this->assertContains( 'einmalig', $response );
 			$this->assertContains( 'DE12500105170648489890', $response );
@@ -189,7 +189,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$this->assertContains( 'Lehmgasse 12', $response );
 			$this->assertContains( '<span id="confirm-postcode">12345</span> <span id="confirm-city">Einort</span>', $response );
 			$this->assertContains( 'karla@kennichnich.de', $response );
-			$this->assertContains( '<div id="send-info"', $response );
+			$this->assertContains( 'send-info', $response );
 		} );
 	}
 

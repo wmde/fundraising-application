@@ -28,7 +28,7 @@ class TranslatorTest extends WebRouteTestCase {
 			'twig' => [
 				'loaders' => [
 					'array' => [
-						'TranslatedPage' => '<p>{$ \'my_translatable_message\'|trans $}</p>',
+						'TranslatedPage.html.twig' => '<p>{$ \'my_translatable_message\'|trans $}</p>',
 					],
 				]
 			]
@@ -42,7 +42,7 @@ class TranslatorTest extends WebRouteTestCase {
 			'twig' => [
 				'loaders' => [
 					'array' => [
-						'TranslatedPage' => '<p>{$ \'my_undefined_message\'|trans $}</p>',
+						'TranslatedPage.html.twig' => '{% block main %}<p>{$ \'my_undefined_message\'|trans $}</p>{% endblock %}',
 					],
 				]
 			]
