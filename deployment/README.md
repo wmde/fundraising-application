@@ -31,7 +31,7 @@ The deployment script accomplishes this with the following steps during the diff
 
 To roll back ("undo") a deployment, log in to the server, change the symlink to a previous deployment and clear the PHP-FPM opcache with the following command:
 
-    php cachetool.phar opcache:reset --fcgi=/var/run/php/php7.0-fpm.sock
+    php cachetool.phar opcache:reset --fcgi=/var/run/php/php-fpm-current.sock
 
 ## Preparing a new server for deployment
 
