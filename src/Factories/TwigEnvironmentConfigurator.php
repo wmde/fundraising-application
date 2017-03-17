@@ -64,13 +64,6 @@ class TwigEnvironmentConfigurator {
 		return $this->twig;
 	}
 
-	public function newWikiPageLoader( PageRetriever $rawPageRetriever, PageRetriever $renderedPageRetriever ) {
-		if ( !$this->config['loaders']['wiki']['enabled'] ) {
-			return null;
-		}
-		return new TwigPageLoader( $rawPageRetriever, $renderedPageRetriever, $this->config['loaders']['wiki']['rawpages'] ?? [] );
-	}
-
 	public function newFileSystemLoader() {
 		if ( empty( $this->config['loaders']['filesystem'] ) ) {
 			return null;

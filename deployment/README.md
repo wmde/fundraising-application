@@ -62,7 +62,7 @@ For security reasons the contents of the `inventory` directory are not in the Gi
 
 Log in to the deployment machine and in the configuration directory, create a new directory for the domain name.
 
-In the new directory create the file `config.prod.json` with all the necessary application data. You need to configure the credentials for the database, MCP, Paypal and the content wiki. You don't need to change values that are similar to values in `app/config/config.dist.json`.
+In the new directory create the file `config.prod.json` with all the necessary application data. You need to configure the credentials for the database, MCP and Paypal. You don't need to change values that are similar to values in `app/config/config.dist.json`.
 
 The configurations are kept in a local Git repository, so you should commit and push your changes.  
 

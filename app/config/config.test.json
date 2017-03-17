@@ -7,16 +7,9 @@
 	"banned-ibans": [
 		"wait, this is my own IBAN!"
 	],
-	"cms-wiki-api-url": "http://cms.wiki/api.php",
-	"cms-wiki-user": "Wiki User",
-	"cms-wiki-password": "Wiki Password",
-	"cms-wiki-title-prefix": "",
 	"twig": {
 		"enable-cache": false,
 		"loaders": {
-			"wiki": {
-				"enabled": false
-			},
 			"filesystem": {
 				"template-dir": [
 					"tests/templates"

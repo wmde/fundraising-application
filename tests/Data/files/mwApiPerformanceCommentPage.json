@@ -1,9 +1,0 @@
-{
-	"parse": {
-		"title": "Unicorns",
-		"pageid": 1337,
-		"text": {
-			"*": "<p>Pink fluffy unicorns dancing on rainbows</p>\n<!-- \nNewPP limit report\nCached time: 20160802140828\nCache expiry: 86400\nDynamic content: false\nCPU time usage: 0.004 seconds\nReal time usage: 0.001 seconds\nPreprocessor visited node count: 1/1000000\nPreprocessor generated node count: 4/1000000\nPost‐expand include size: 0/2097152 bytes\nTemplate argument size: 0/2097152 bytes\nHighest expansion depth: 1/40\nExpensive parser function count: 0/100\n-->\n\n<!-- \nTransclusion expansion time report (%,ms,calls,template)\n100.00%    0.000      1 - -total\n-->\n\n<!-- Saved in parser cache with key fundraising_cms:pcache:idhash:55-0!*!*!*!*!*!* and timestamp 20160802140828 and revision id 109\n -->"
-		}
-	}
-}

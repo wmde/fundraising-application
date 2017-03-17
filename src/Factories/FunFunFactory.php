@@ -10,13 +10,11 @@ use Doctrine\Common\Cache\VoidCache;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
+use FileFetcher\SimpleFileFetcher;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Handler\CurlHandler;
 use GuzzleHttp\HandlerStack;
-use Mediawiki\Api\ApiUser;
-use Mediawiki\Api\Guzzle\MiddlewareFactory;
-use Mediawiki\Api\MediawikiApi;
 use NumberFormatter;
 use Pimple\Container;
 use Psr\Log\LoggerInterface;
@@ -153,8 +151,7 @@ use WMDE\Fundraising\Frontend\Validation\TemplateNameValidator;
 use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
 use WMDE\Fundraising\Store\Factory as StoreFactory;
 use WMDE\Fundraising\Store\Installer;
-use WMDE\PageRetriever\ApiBasedPageRetriever;
-use WMDE\PageRetriever\CachingPageRetriever;
+use WMDE\PageRetriever\LocalFilePageRetriever;
 use WMDE\PageRetriever\PageRetriever;
 
 /**
@@ -266,13 +263,6 @@ class FunFunFactory {
 			return new GreetingGenerator();
 		};
 
-		$pimple['mw_api'] = function() {
-			return new MediawikiApi(
-				$this->config['cms-wiki-api-url'],
-				$this->getGuzzleClient()
-			);
-		};
-
 		$pimple['guzzle_client'] = function() {
 			$middlewareFactory = new MiddlewareFactory();
 			$middlewareFactory->setLogger( $this->getLogger() );
@@ -352,10 +342,6 @@ class FunFunFactory {
 			$loaders = array_filter( [
 				$twigFactory->newFileSystemLoader(),
 				$twigFactory->newArrayLoader(), // This is just a fallback for testing
-				$twigFactory->newWikiPageLoader(
-					$this->newRawWikiPageRetriever(),
-					$this->newRenderedWikiPageRetriever()
-				),
 			] );
 			$extensions = [
 				$twigFactory->newTranslationExtension( $this->getTranslator() ),
@@ -585,54 +571,17 @@ class FunFunFactory {
 		);
 	}
 
-	private function getMediaWikiApi(): MediawikiApi {
-		return $this->pimple['mw_api'];
-	}
-
-	public function setMediaWikiApi( MediawikiApi $api ) {
-		$this->pimple['mw_api'] = $api;
-	}
-
 	private function getGuzzleClient(): ClientInterface {
 		return $this->pimple['guzzle_client'];
 	}
 
-	private function newRawWikiPageRetriever(): PageRetriever {
-		$pageRetriever = new CachingPageRetriever(
-			$this->newApiRawPageRetriever(),
-			$this->getPageCache()
+	private function newLocalFilePageRetriever(): PageRetriever {
+		$pageRetriever = new LocalFilePageRetriever(
+			new SimpleFileFetcher(),
+			$this->getLogger()
 		);
 
 		return $this->addProfilingDecorator( $pageRetriever, 'PageRetriever' );
-	}
-
-	private function newRenderedWikiPageRetriever(): PageRetriever {
-		$pageRetriever = new CachingPageRetriever(
-			$this->newApiRenderedPageRetriever(),
-			$this->getRenderedPageCache()
-		);
-
-		return $this->addProfilingDecorator( $pageRetriever, 'PageRetriever' );
-	}
-
-	private function newApiRawPageRetriever(): PageRetriever {
-		return new ApiBasedPageRetriever(
-			$this->getMediaWikiApi(),
-			new ApiUser( $this->config['cms-wiki-user'], $this->config['cms-wiki-password'] ),
-			$this->getLogger(),
-			$this->config['cms-wiki-title-prefix'],
-			ApiBasedPageRetriever::MODE_RAW_EXPANDED
-		);
-	}
-
-	private function newApiRenderedPageRetriever(): PageRetriever {
-		return new ApiBasedPageRetriever(
-			$this->getMediaWikiApi(),
-			new ApiUser( $this->config['cms-wiki-user'], $this->config['cms-wiki-password'] ),
-			$this->getLogger(),
-			$this->config['cms-wiki-title-prefix'],
-			ApiBasedPageRetriever::MODE_RENDERED
-		);
 	}
 
 	public function getLogger(): LoggerInterface {
@@ -735,10 +684,6 @@ class FunFunFactory {
 
 	public function setSubscriptionValidator( SubscriptionValidator $subscriptionValidator ) {
 		$this->pimple['subscription_validator'] = $subscriptionValidator;
-	}
-
-	public function setPageTitlePrefix( string $prefix ) {
-		$this->config['cms-wiki-title-prefix'] = $prefix;
 	}
 
 	public function newGetInTouchUseCase() {
@@ -857,9 +802,8 @@ class FunFunFactory {
 	}
 
 	private function newTextPolicyValidator( string $policyName ): TextPolicyValidator {
-		$contentProvider = $this->newRawWikiPageRetriever();
+		$contentProvider = $this->newLocalFilePageRetriever();
 		$textPolicyConfig = $this->config['text-policies'][$policyName];
-
 		return new TextPolicyValidator(
 			new PageRetrieverBasedStringList( $contentProvider, $textPolicyConfig['badwords'] ?? '' ),
 			new PageRetrieverBasedStringList( $contentProvider, $textPolicyConfig['whitewords'] ?? '' )

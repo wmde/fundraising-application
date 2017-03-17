@@ -4,13 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
-use Mediawiki\Api\ApiUser;
-use Mediawiki\Api\MediawikiApi;
-use Mediawiki\Api\Request;
-use Mediawiki\Api\UsageException;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\ApiPostRequestHandler;
 
 /**
  * @licence GNU GPL v2+
@@ -23,15 +18,6 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 	// @codingStandardsIgnoreStart
 	protected function onTestEnvironmentCreated( FunFunFactory $factory, array $config ) {
 		// @codingStandardsIgnoreEnd
-		$api = $this->getMockBuilder( MediawikiApi::class )->disableOriginalConstructor()->getMock();
-
-		$api->expects( $this->any() )
-			->method( 'postRequest' )
-			->willReturnCallback( function( Request $request ) {
-				throw new UsageException( 'Page not found: ' . $request->getParams()['page'] );
-			} );
-
-		$factory->setMediaWikiApi( $api );
 		$this->notFoundMessage = $factory->getTranslator()->trans( 'page_not_found' );
 	}
 
@@ -78,7 +64,7 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 						'kittens.html.twig' => '{$ basepath $}/someFile.css'
 					]
 				]
-			] 
+			]
 		] );
 		$client->request( 'GET', '/page/kittens' );
 

@@ -1,9 +1,0 @@
-{
-	"parse": {
-		"title": "Unicorns",
-		"pageid": 1337,
-		"text": {
-			"*": "<p>Pink fluffy unicorns dancing on rainbows</p>"
-		}
-	}
-}

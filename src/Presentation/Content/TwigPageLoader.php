@@ -13,16 +13,12 @@ use WMDE\PageRetriever\PageRetriever;
  */
 class TwigPageLoader implements \Twig_LoaderInterface {
 
-	private $rawPageRetriever;
-	private $renderedPageRetriever;
+	private $pageRetriever;
 	private $pageCache = [];
 	private $errorCache = [];
-	private $rawPagesList = [];
 
-	public function __construct( PageRetriever $rawPageRetriever, PageRetriever $renderedPageRetriever, array $rawPagesList = [] ) {
-		$this->rawPageRetriever = $rawPageRetriever;
-		$this->renderedPageRetriever = $renderedPageRetriever;
-		$this->rawPagesList = $rawPagesList;
+	public function __construct( PageRetriever $pageRetriever ) {
+		$this->pageRetriever = $pageRetriever;
 	}
 
 	public function getSource( $name ): string {
@@ -51,26 +47,18 @@ class TwigPageLoader implements \Twig_LoaderInterface {
 		}
 
 		if ( isset( $this->errorCache[$title] ) ) {
-			throw new Twig_Error_Loader( "Wiki page $title not found." );
+			throw new Twig_Error_Loader( "Template $title not found." );
 		}
 
-		$content = $this->getPageRetriever( $pageName )->fetchPage( $title );
+		$content = $this->pageRetriever->fetchPage( $title );
 
 		if ( $content === '' ) {
 			$this->errorCache[$title] = true;
-			throw new Twig_Error_Loader( "Wiki page $title not found." );
+			throw new Twig_Error_Loader( "Template $title not found." );
 		}
 
 		$this->pageCache[$title] = $content;
 		return $content;
-	}
-
-	private function getPageRetriever( string $pageName ): PageRetriever {
-		if ( in_array( $pageName, $this->rawPagesList ) ) {
-			return $this->rawPageRetriever;
-		}
-
-		return $this->renderedPageRetriever;
 	}
 
 }
