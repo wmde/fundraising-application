@@ -73,7 +73,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 				$this->newValidFormInput()
 			);
 
-			$this->assertContains( 'Sie haben vor sehr kurzer Zeit bereits gespendet', $client->getResponse()->getContent() );
+			$this->assertContains( 'donation_rejected_limit', $client->getResponse()->getContent() );
 		} );
 	}
 
@@ -92,7 +92,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 				$this->newValidFormInput()
 			);
 
-			$this->assertNotContains( 'Sie haben vor sehr kurzer Zeit bereits gespendet', $client->getResponse()->getContent() );
+			$this->assertNotContains( 'donation_rejected_limit', $client->getResponse()->getContent() );
 		} );
 	}
 
@@ -180,8 +180,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$response = $client->getResponse()->getContent();
 
 			$this->assertContains( '5,51 €', $response );
-			$this->assertContains( 'per Lastschrift', $response );
-			$this->assertContains( 'einmalig', $response );
+			$this->assertContains( 'donation.interval: 0', $response );
 			$this->assertContains( 'DE12500105170648489890', $response );
 			$this->assertContains( 'INGDDEFFXXX', $response );
 			$this->assertContains( 'ING-DiBa', $response );
@@ -356,7 +355,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 			$response = $client->getResponse();
 			$this->assertSame( 200, $response->getStatusCode() );
-			$this->assertContains( 'Ich spende vierteljährlich 12,34 € per Kreditkarte.', $response->getContent() );
+			$this->assertContains( 'paytext_cc 3 12,34 € per Kreditkarte.', $response->getContent() );
 			$this->assertContains( 'thatother.paymentprovider.com', $response->getContent() );
 		} );
 	}

@@ -24,7 +24,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	const CORRECT_ACCESS_TOKEN = 'KindlyAllowMeAccess';
 	const MAPPED_STATUS = 'status-new';
 
-	const ACCESS_DENIED_TEXT = 'keine Berechtigung';
+	const ACCESS_DENIED_TEXT = 'access_denied_donation_confirmation';
 
 	public function testGivenValidRequest_confirmationPageContainsDonationData() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
@@ -126,7 +126,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 			$responseContent = $this->retrieveDonationConfirmation( $client, $donation->getId() );
 
-			$this->assertContains( 'Ihre Spende per PayPal wurde gebucht', $responseContent );
+			$this->assertContains( 'status-booked', $responseContent );
 		} );
 	}
 

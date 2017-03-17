@@ -140,7 +140,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 		$responseData = json_decode( $response->getContent(), true );
 		$this->assertSame( 'ERR', $responseData['status'] );
 		$this->assertGreaterThan( 0, count( $responseData['errors'] ) );
-		$this->assertSame( 'Kein gültiges Email-Adressformat', $responseData['errors']['email'] );
+		$this->assertSame( 'email_address_wrong_format', $responseData['errors']['email'] );
 	}
 
 	public function testGivenValidDataAndJSONPRequest_routeReturnsResult() {

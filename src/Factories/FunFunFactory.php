@@ -288,34 +288,34 @@ class FunFunFactory {
 			$translator = $translationFactory->create( $loaders, $locale );
 			$translator->addResource(
 				'json',
-				__DIR__ . '/../../app/translations/messages.' . $locale . '.json',
+				__DIR__ . '/../../app/fundraising-frontend-content/i18n/' . $locale . '/messages.json',
 				$locale
 			);
 
 			$translator->addResource(
 				'json',
-				__DIR__ . '/../../app/translations/paymentTypes.' . $locale . '.json',
+				__DIR__ . '/../../app/fundraising-frontend-content/i18n/' . $locale . '/paymentTypes.json',
 				$locale,
 				'paymentTypes'
 			);
 
 			$translator->addResource(
 				'json',
-				__DIR__ . '/../../app/translations/paymentIntervals.' . $locale . '.json',
+				__DIR__ . '/../../app/fundraising-frontend-content/i18n/' . $locale . '/paymentIntervals.json',
 				$locale,
 				'paymentIntervals'
 			);
 
 			$translator->addResource(
 				'json',
-				__DIR__ . '/../../app/translations/paymentStatus.' . $locale . '.json',
+				__DIR__ . '/../../app/fundraising-frontend-content/i18n/' . $locale . '/paymentStatus.json',
 				$locale,
 				'paymentStatus'
 			);
 
 			$translator->addResource(
 				'json',
-				__DIR__ . '/../../app/translations/validations.' . $locale . '.json',
+				__DIR__ . '/../../app/fundraising-frontend-content/i18n/' . $locale . '/validations.json',
 				$locale,
 				'validations'
 			);

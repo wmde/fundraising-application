@@ -33,7 +33,7 @@ class CancelMembershipApplicationRouteTest extends WebRouteTestCase {
 				]
 			);
 
-			$this->assertContains( 'wurde storniert', $client->getResponse()->getContent() );
+			$this->assertContains( 'membership-cancellation-text', $client->getResponse()->getContent() );
 		} );
 	}
 
@@ -50,7 +50,7 @@ class CancelMembershipApplicationRouteTest extends WebRouteTestCase {
 				]
 			);
 
-			$this->assertContains( 'konnte nicht storniert werden', $client->getResponse()->getContent() );
+			$this->assertContains( 'membership-cancellation-failed-text', $client->getResponse()->getContent() );
 		} );
 	}
 

@@ -71,7 +71,7 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 		$response = $client->getResponse();
 
 		$this->assertSame( 200, $response->getStatusCode() );
-		$this->assertContains( 'Es konnte kein Eintrag mit diesem Bestätigungs-Code gefunden werden', $response->getContent() );
+		$this->assertContains( 'subscription_confirmation_code_not_found', $response->getContent() );
 	}
 
 	public function testGivenAConfirmedSubscriptionRequest_successPageIsDisplayed() {
@@ -91,7 +91,7 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 			$response = $client->getResponse();
 
 			$this->assertSame( 200, $response->getStatusCode() );
-			$this->assertContains( 'Diese E-Mail-Adresse wurde bereits bestätigt.', $response->getContent() );
+			$this->assertContains( 'subscription_already_confirmed', $response->getContent() );
 		} );
 	}
 }
