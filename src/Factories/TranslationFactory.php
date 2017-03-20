@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\Factories;
 use Symfony\Component\Translation\Loader\JsonFileLoader;
 use Symfony\Component\Translation\MessageSelector;
 use Symfony\Component\Translation\Translator;
+use WMDE\Fundraising\Frontend\Infrastructure\DirectoryLoader;
 
 /**
  * @license GNU GPL v2+
@@ -25,4 +26,9 @@ class TranslationFactory {
 	public function newJsonLoader() {
 		return new JsonFileLoader();
 	}
+
+	public function newDirectoryLoader() {
+		return new DirectoryLoader();
+	}
+
 }

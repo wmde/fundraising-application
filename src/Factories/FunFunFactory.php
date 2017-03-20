@@ -282,42 +282,50 @@ class FunFunFactory {
 		$pimple['translator'] = function() {
 			$translationFactory = new TranslationFactory();
 			$loaders = [
-				'json' => $translationFactory->newJsonLoader()
+				'json' => $translationFactory->newJsonLoader(),
+				'directory' => $translationFactory->newDirectoryLoader()
 			];
 			$locale = $this->config['locale'];
 			$translator = $translationFactory->create( $loaders, $locale );
 			$translator->addResource(
 				'json',
-				__DIR__ . '/../../app/fundraising-frontend-content/i18n/' . $locale . '/messages.json',
+				__DIR__ . '/../../' . $this->config['i18n-base-path'] . '/' . $locale . '/messages.json',
 				$locale
 			);
 
 			$translator->addResource(
 				'json',
-				__DIR__ . '/../../app/fundraising-frontend-content/i18n/' . $locale . '/paymentTypes.json',
+				__DIR__ . '/../../' . $this->config['i18n-base-path'] . '/' . $locale . '/paymentTypes.json',
 				$locale,
 				'paymentTypes'
 			);
 
 			$translator->addResource(
 				'json',
-				__DIR__ . '/../../app/fundraising-frontend-content/i18n/' . $locale . '/paymentIntervals.json',
+				__DIR__ . '/../../' . $this->config['i18n-base-path'] . '/' . $locale . '/paymentIntervals.json',
 				$locale,
 				'paymentIntervals'
 			);
 
 			$translator->addResource(
 				'json',
-				__DIR__ . '/../../app/fundraising-frontend-content/i18n/' . $locale . '/paymentStatus.json',
+				__DIR__ . '/../../' . $this->config['i18n-base-path'] . '/' . $locale . '/paymentStatus.json',
 				$locale,
 				'paymentStatus'
 			);
 
 			$translator->addResource(
 				'json',
-				__DIR__ . '/../../app/fundraising-frontend-content/i18n/' . $locale . '/validations.json',
+				__DIR__ . '/../../' . $this->config['i18n-base-path'] . '/' . $locale . '/validations.json',
 				$locale,
 				'validations'
+			);
+
+			$translator->addResource(
+				'directory',
+				__DIR__ . '/../../' . $this->config['i18n-base-path'] . '/' . $locale,
+				$locale,
+				'pages'
 			);
 
 			return $translator;
