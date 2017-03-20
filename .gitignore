@@ -14,6 +14,8 @@ var/
 
 app/config/
 
+app/fundraising-frontend-content/
+
 res/blz.lut2f
 web/res/js/wmde.js
 
