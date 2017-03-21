@@ -58,20 +58,18 @@ connection data. If you're using MySQL, [it's important](http://stackoverflow.co
 
 ## Configuration
 
-For a fully working instance with all payment types and working templates you'll also need to fill out the following
+For a fully working instance with all payment types and working templates you need to fill out the following
 configuration data:
 
 	 - `cms-wiki-url`
 	 - `bank-data-file`
-	 - `cms-wiki-api-url`
-	 - `cms-wiki-user`
-	 - `cms-wiki-password`
-	 - `cms-wiki-title-prefix`
 	 - `operator-email`
 	 - `operator-displayname-organization`
 	 - `operator-displayname-suborganization`
 	 - `paypal`
 	 - `creditcard`
+
+Also, you need to check out the content repository at https://github.com/wmde/fundraising-frontend-content into the directory `app/fundraising-frontend-content`.
 
 ## Running the application
 
