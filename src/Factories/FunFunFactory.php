@@ -605,7 +605,7 @@ class FunFunFactory {
 	}
 
 	public function getTemplatePath(): string {
-		return __DIR__ . '/../../app/templates';
+		return __DIR__ . '/../../app/fundraising-frontend-content/templates';
 	}
 
 	public function newAddSubscriptionUseCase(): AddSubscriptionUseCase {

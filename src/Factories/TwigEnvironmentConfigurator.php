@@ -20,7 +20,7 @@ use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
  */
 class TwigEnvironmentConfigurator {
 
-	const DEFAULT_TEMPLATE_DIR = 'app/templates';
+	const DEFAULT_TEMPLATE_DIR = 'app/fundraising-frontend-content/templates';
 
 	private $twig;
 	private $config;
