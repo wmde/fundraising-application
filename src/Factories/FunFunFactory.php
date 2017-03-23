@@ -560,6 +560,7 @@ class FunFunFactory {
 			'header_template' => $this->config['default-layout-templates']['header'],
 			'footer_template' => $this->config['default-layout-templates']['footer'],
 			'no_js_notice_template' => $this->config['default-layout-templates']['no-js-notice'],
+			'locale' => $this->config['locale'],
 			'piwik' => $this->config['piwik'],
 		];
 	}
