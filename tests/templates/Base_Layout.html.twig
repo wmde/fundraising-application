@@ -1,0 +1,40 @@
+<html>
+<body>
+    <header id="header">
+        <div class="container clearfix">
+            {% block header %}
+                {% include [ header_template, 'Template_Missing.twig' ] with { missing_template: 'header' } %}
+            {% endblock %}
+        </div>
+    </header>
+    
+    
+    <!-- Main -->
+    <main id="main">
+        <div class="container">
+            {% block main %}
+                {$ main | raw $}
+            {% endblock %}
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer id="footer">
+        <div class="container">
+            {% block footer %}
+                {% include [ footer_template, 'Template_Missing.twig' ] with { missing_template: 'footer' } %}
+            {% endblock %}
+        </div>
+    </footer>
+    
+    <!-- notice for clients without javascript -->
+    <div id="notice-wrapper">
+        <div class="notice-window">
+            {% include [ no_js_notice_template, 'Template_Missing.twig' ] with { missing_template: 'no JS notice' } %}
+        </div>
+    </div>
+    
+    {% include 'Piwik.twig' %}
+
+</body>
+</html>

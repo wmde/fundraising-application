@@ -9,38 +9,21 @@
 	"enable-dev-entry-point": false,
 	"bank-data-file": "",
 	"banned-ibans": [],
-	"cms-wiki-api-url": "",
-	"cms-wiki-user": "",
-	"cms-wiki-password": "",
-	"cms-wiki-title-prefix": "",
 	"web-basepath": "",
 	"twig": {
 		"enable-cache": true,
 		"strict-variables": false,
 		"loaders": {
-			"wiki": {
-				"enabled": true,
-				"rawpages": [
-					"Mail_Subscription_Confirmation.twig",
-					"Mail_Subscription_Request.twig",
-					"Mail_Membership_Application_Confirmation.twig",
-					"Mail_Membership_Application_Cancellation_Confirmation.twig",
-					"Mail_Donation_Confirmation.twig",
-					"Mail_Donation_Cancellation_Confirmation.twig",
-					"KontaktMailIntern.twig",
-					"KontaktMailExtern.twig"
-				]
-			},
 			"filesystem": {
-				"template-dir": [ "app/templates" ]
+				"template-dir": []
 			},
 			"array": {}
 		}
 	},
 	"default-layout-templates": {
-		"header": "10hoch16/Seitenkopf",
-		"footer": "10hoch16/Seitenfuß",
-		"no-js-notice": "JavaScript-Notice"
+		"header": "Page_Header.html.twig",
+		"footer": "Page_Footer.html.twig",
+		"no-js-notice": "JavaScript_Notice.txt.twig"
 	},
 	"contact-info": {
 		"organization": {
@@ -136,7 +119,7 @@
 		"testmode": true
 	},
 	"confirmation-pages": {
-		"default": "10h16_Bestätigung.twig",
+		"default": "Donation_Confirmation.html.twig",
 		"campaigns": [
 			{
 				"code": "example",

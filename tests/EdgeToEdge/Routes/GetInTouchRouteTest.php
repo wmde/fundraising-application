@@ -40,7 +40,7 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 		);
 		$response = $client->getResponse();
 		$this->assertTrue( $response->isRedirect(), 'Is redirect response' );
-		$this->assertSame( '/page/KontaktBestaetigung', $response->headers->get( 'Location' ) );
+		$this->assertSame( '/page/Kontakt_Bestaetigung', $response->headers->get( 'Location' ) );
 	}
 
 	public function testGivenInvalidRequest_validationFails() {

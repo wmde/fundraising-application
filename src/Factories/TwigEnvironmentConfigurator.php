@@ -11,9 +11,7 @@ use Twig_Extension_StringLoader;
 use Twig_Lexer;
 use Twig_Loader_Array;
 use Twig_Loader_Filesystem;
-use WMDE\Fundraising\Frontend\Presentation\Content\TwigPageLoader;
 use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
-use WMDE\PageRetriever\PageRetriever;
 
 /**
  * @license GNU GPL v2+
@@ -22,7 +20,7 @@ use WMDE\PageRetriever\PageRetriever;
  */
 class TwigEnvironmentConfigurator {
 
-	const DEFAULT_TEMPLATE_DIR = 'app/templates';
+	const DEFAULT_TEMPLATE_DIR = 'app/fundraising-frontend-content/templates';
 
 	private $twig;
 	private $config;
@@ -62,13 +60,6 @@ class TwigEnvironmentConfigurator {
 		] ) );
 
 		return $this->twig;
-	}
-
-	public function newWikiPageLoader( PageRetriever $rawPageRetriever, PageRetriever $renderedPageRetriever ) {
-		if ( !$this->config['loaders']['wiki']['enabled'] ) {
-			return null;
-		}
-		return new TwigPageLoader( $rawPageRetriever, $renderedPageRetriever, $this->config['loaders']['wiki']['rawpages'] ?? [] );
 	}
 
 	public function newFileSystemLoader() {

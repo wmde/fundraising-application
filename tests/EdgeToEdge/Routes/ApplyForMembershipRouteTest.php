@@ -203,7 +203,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 				$this->newValidHttpParameters()
 			);
 
-			$this->assertContains( 'Sie haben vor sehr kurzer Zeit bereits', $client->getResponse()->getContent() );
+			$this->assertContains( 'membership_application_rejected_limit', $client->getResponse()->getContent() );
 		} );
 	}
 
@@ -217,7 +217,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 				$this->newValidHttpParameters()
 			);
 
-			$this->assertNotContains( 'Sie haben vor sehr kurzer Zeit bereits', $client->getResponse()->getContent() );
+			$this->assertNotContains( 'membership_application_rejected_limit', $client->getResponse()->getContent() );
 		} );
 	}
 

@@ -1,8 +1,0 @@
-{
-	"status-pending": "wurde registriert und wird geprüft",
-	"status-new": "wurde registriert und wird in Kürze gebucht",
-	"status-unconfirmed": "wurde registriert und wartet auf Bestätigung",
-	"status-pledge": "wurde zugesagt und wartet auf Buchung",
-	"status-booked": "wurde gebucht",
-	"status-booking": "ist in Buchung"
-}

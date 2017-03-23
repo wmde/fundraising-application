@@ -67,34 +67,6 @@
       "title": "List of banned IBANs",
       "description": "List of IBANs that lead to a failed IBAN validation"
     },
-    "cms-wiki-api-url": {
-      "type": "string",
-      "minLength": 1,
-      "title": "CMS wiki API URL",
-      "description": "URL to api.php of the mediawiki instance that acts as the content management",
-      "default": "",
-      "format": "uri"
-    },
-    "cms-wiki-user": {
-      "type": "string",
-      "minLength": 1,
-      "title": "User name",
-      "description": "User name for the CMS wiki API",
-      "default": ""
-    },
-    "cms-wiki-password": {
-      "type": "string",
-      "minLength": 1,
-      "title": "Password",
-      "description": "Password for the CMS wiki API",
-      "default": ""
-    },
-    "cms-wiki-title-prefix": {
-      "type": "string",
-      "title": "CMS page title prefix",
-      "description": "Namespace and title prefix in the wiki. The subpage designates the stage name. If set, prefix must end with a slash. Example: Web:DonationApp-DefaultSkin/rewrite/ ",
-      "default": ""
-    },
     "web-basepath": {
       "type": "string",
       "title": "Base URL",
@@ -119,22 +91,6 @@
           "type": "object",
           "title": "Configuration for the different Twig template loaders.",
           "properties": {
-            "wiki": {
-              "type": "object",
-              "description": "Configuration for the Wiki loader",
-              "properties": {
-                "enabled": {
-                  "type": "boolean",
-                  "description": "If this loader is enabled or not. Used for testing purposes when no wiki is available.",
-                  "default": true
-                },
-                "rawpages": {
-                  "type": "array",
-                  "title": "Raw page name",
-                  "description": "List of page templates that should be retrieved as plain text instead of rendered HTML"
-                }
-              }
-            },
             "filesystem": {
               "type": "object",
               "description": "Configuration for the filesystem loader",
@@ -190,7 +146,7 @@
           "minLength": 1,
           "title": "JavaScript notice",
           "description": "The notice that appears when the user has turned off JavaScript",
-          "default": "JavaScript-Notice"
+          "default": "JavaScript_Notice"
         }
       },
       "additionalProperties": false,
@@ -248,7 +204,7 @@
     "text-policies": {
       "type": "object",
       "title": "Text policy templates",
-      "description": "Page names for black- and whitelists of different parts of the application. The pages must be stored in the content wiki and share the same namespace and sub-page prefix as the templates. They must contain words, each word in a separate line. Each \"word\" can also be a regular expression pattern.",
+      "description": "Page names for black- and whitelists of different parts of the application. The pages must be stored in the content repository. They must contain words, each word in a separate line. Each \"word\" can also be a regular expression pattern.",
       "properties": {
         "fields": {
           "type": "object",
@@ -605,7 +561,7 @@
           "minLength": 1,
           "title": "Default confirmation page",
           "description": "Default confirmation page template name",
-          "default": "10h16_Bestätigung.twig"
+          "default": "Donation_Confirmation.html.twig"
         },
         "campaigns": {
           "type": "array",
@@ -698,10 +654,6 @@
   "required": [
     "db",
     "bank-data-file",
-    "cms-wiki-api-url",
-    "cms-wiki-user",
-    "cms-wiki-password",
-    "cms-wiki-title-prefix",
     "web-basepath",
     "twig",
     "default-layout-templates",

@@ -1,0 +1,6 @@
+<!-- Piwik -->
+{% for piwikEvent in piwikEvents %}
+	{$ piwikEvent | json_encode( constant( 'JSON_UNESCAPED_SLASHES' ) ) | raw $}
+{% endfor %}
+{$ piwik.baseUrl $}
+idsite={$ piwik.siteId $}

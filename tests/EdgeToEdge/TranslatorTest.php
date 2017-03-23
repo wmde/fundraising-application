@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 
-use Mediawiki\Api\MediawikiApi;
 use Symfony\Component\Translation\Loader\ArrayLoader;
 use Symfony\Component\Translation\Translator;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
@@ -18,8 +17,6 @@ class TranslatorTest extends WebRouteTestCase {
 	// @codingStandardsIgnoreStart
 	protected function onTestEnvironmentCreated( FunFunFactory $factory, array $config ) {
 		// @codingStandardsIgnoreEnd
-		$api = $this->getMockBuilder( MediawikiApi::class )->disableOriginalConstructor()->getMock();
-		$factory->setMediaWikiApi( $api );
 		$factory->setTranslator( $this->newTranslator( [ 'my_translatable_message' => 'this is what you expected' ], 'en' ) );
 	}
 
@@ -28,7 +25,7 @@ class TranslatorTest extends WebRouteTestCase {
 			'twig' => [
 				'loaders' => [
 					'array' => [
-						'TranslatedPage' => '<p>{$ \'my_translatable_message\'|trans $}</p>',
+						'TranslatedPage.html.twig' => '<p>{$ \'my_translatable_message\'|trans $}</p>',
 					],
 				]
 			]
@@ -42,7 +39,7 @@ class TranslatorTest extends WebRouteTestCase {
 			'twig' => [
 				'loaders' => [
 					'array' => [
-						'TranslatedPage' => '<p>{$ \'my_undefined_message\'|trans $}</p>',
+						'TranslatedPage.html.twig' => '{% block main %}<p>{$ \'my_undefined_message\'|trans $}</p>{% endblock %}',
 					],
 				]
 			]

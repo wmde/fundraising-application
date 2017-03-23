@@ -10,13 +10,11 @@ use Doctrine\Common\Cache\VoidCache;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
+use FileFetcher\SimpleFileFetcher;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Handler\CurlHandler;
 use GuzzleHttp\HandlerStack;
-use Mediawiki\Api\ApiUser;
-use Mediawiki\Api\Guzzle\MiddlewareFactory;
-use Mediawiki\Api\MediawikiApi;
 use NumberFormatter;
 use Pimple\Container;
 use Psr\Log\LoggerInterface;
@@ -153,8 +151,7 @@ use WMDE\Fundraising\Frontend\Validation\TemplateNameValidator;
 use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
 use WMDE\Fundraising\Store\Factory as StoreFactory;
 use WMDE\Fundraising\Store\Installer;
-use WMDE\PageRetriever\ApiBasedPageRetriever;
-use WMDE\PageRetriever\CachingPageRetriever;
+use WMDE\PageRetriever\LocalFilePageRetriever;
 use WMDE\PageRetriever\PageRetriever;
 
 /**
@@ -266,13 +263,6 @@ class FunFunFactory {
 			return new GreetingGenerator();
 		};
 
-		$pimple['mw_api'] = function() {
-			return new MediawikiApi(
-				$this->config['cms-wiki-api-url'],
-				$this->getGuzzleClient()
-			);
-		};
-
 		$pimple['guzzle_client'] = function() {
 			$middlewareFactory = new MiddlewareFactory();
 			$middlewareFactory->setLogger( $this->getLogger() );
@@ -298,34 +288,34 @@ class FunFunFactory {
 			$translator = $translationFactory->create( $loaders, $locale );
 			$translator->addResource(
 				'json',
-				__DIR__ . '/../../app/translations/messages.' . $locale . '.json',
+				__DIR__ . '/../../app/fundraising-frontend-content/i18n/' . $locale . '/messages.json',
 				$locale
 			);
 
 			$translator->addResource(
 				'json',
-				__DIR__ . '/../../app/translations/paymentTypes.' . $locale . '.json',
+				__DIR__ . '/../../app/fundraising-frontend-content/i18n/' . $locale . '/paymentTypes.json',
 				$locale,
 				'paymentTypes'
 			);
 
 			$translator->addResource(
 				'json',
-				__DIR__ . '/../../app/translations/paymentIntervals.' . $locale . '.json',
+				__DIR__ . '/../../app/fundraising-frontend-content/i18n/' . $locale . '/paymentIntervals.json',
 				$locale,
 				'paymentIntervals'
 			);
 
 			$translator->addResource(
 				'json',
-				__DIR__ . '/../../app/translations/paymentStatus.' . $locale . '.json',
+				__DIR__ . '/../../app/fundraising-frontend-content/i18n/' . $locale . '/paymentStatus.json',
 				$locale,
 				'paymentStatus'
 			);
 
 			$translator->addResource(
 				'json',
-				__DIR__ . '/../../app/translations/validations.' . $locale . '.json',
+				__DIR__ . '/../../app/fundraising-frontend-content/i18n/' . $locale . '/validations.json',
 				$locale,
 				'validations'
 			);
@@ -352,10 +342,6 @@ class FunFunFactory {
 			$loaders = array_filter( [
 				$twigFactory->newFileSystemLoader(),
 				$twigFactory->newArrayLoader(), // This is just a fallback for testing
-				$twigFactory->newWikiPageLoader(
-					$this->newRawWikiPageRetriever(),
-					$this->newRenderedWikiPageRetriever()
-				),
 			] );
 			$extensions = [
 				$twigFactory->newTranslationExtension( $this->getTranslator() ),
@@ -475,12 +461,12 @@ class FunFunFactory {
 	public function newCommentListRssPresenter(): CommentListRssPresenter {
 		return new CommentListRssPresenter( new TwigTemplate(
 			$this->getTwig(),
-			'CommentList.rss.twig'
+			'Comment_List.rss.twig'
 		) );
 	}
 
 	public function newCommentListHtmlPresenter(): CommentListHtmlPresenter {
-		return new CommentListHtmlPresenter( $this->getLayoutTemplate( 'CommentList.html.twig', [ 'piwikGoals' => [ 1 ] ] ) );
+		return new CommentListHtmlPresenter( $this->getLayoutTemplate( 'Comment_List.html.twig', [ 'piwikGoals' => [ 1 ] ] ) );
 	}
 
 	private function getCommentFinder(): CommentFinder {
@@ -508,12 +494,12 @@ class FunFunFactory {
 	}
 
 	public function newAddSubscriptionHTMLPresenter(): AddSubscriptionHtmlPresenter {
-		return new AddSubscriptionHtmlPresenter( $this->getIncludeTemplate( 'Subscription_Form.twig' ), $this->getTranslator() );
+		return new AddSubscriptionHtmlPresenter( $this->getIncludeTemplate( 'Subscription_Form.html.twig' ), $this->getTranslator() );
 	}
 
 	public function newConfirmSubscriptionHtmlPresenter(): ConfirmSubscriptionHtmlPresenter {
 		return new ConfirmSubscriptionHtmlPresenter(
-			$this->getLayoutTemplate( 'ConfirmSubscription.html.twig' ),
+			$this->getLayoutTemplate( 'Confirm_Subscription.twig' ),
 			$this->getTranslator()
 		);
 	}
@@ -523,7 +509,7 @@ class FunFunFactory {
 	}
 
 	public function newGetInTouchHTMLPresenter(): GetInTouchHtmlPresenter {
-		return new GetInTouchHtmlPresenter( $this->getIncludeTemplate( 'Kontaktformular.twig' ), $this->getTranslator() );
+		return new GetInTouchHtmlPresenter( $this->getIncludeTemplate( 'Kontaktformular.html.twig' ), $this->getTranslator() );
 	}
 
 	public function setTwigEnvironment( Twig_Environment $twig ) {
@@ -558,7 +544,7 @@ class FunFunFactory {
 	private function getIncludeTemplate( string $templateName, array $context = [] ): TwigTemplate {
 		return new TwigTemplate(
 			$this->getTwig(),
-			'IncludeInLayout.twig',
+			'Include_in_Layout.twig',
 			array_merge(
 				$this->getDefaultTwigVariables(),
 				[ 'main_template' => $templateName ],
@@ -585,54 +571,17 @@ class FunFunFactory {
 		);
 	}
 
-	private function getMediaWikiApi(): MediawikiApi {
-		return $this->pimple['mw_api'];
-	}
-
-	public function setMediaWikiApi( MediawikiApi $api ) {
-		$this->pimple['mw_api'] = $api;
-	}
-
 	private function getGuzzleClient(): ClientInterface {
 		return $this->pimple['guzzle_client'];
 	}
 
-	private function newRawWikiPageRetriever(): PageRetriever {
-		$pageRetriever = new CachingPageRetriever(
-			$this->newApiRawPageRetriever(),
-			$this->getPageCache()
+	private function newLocalFilePageRetriever(): PageRetriever {
+		$pageRetriever = new LocalFilePageRetriever(
+			new SimpleFileFetcher(),
+			$this->getLogger()
 		);
 
 		return $this->addProfilingDecorator( $pageRetriever, 'PageRetriever' );
-	}
-
-	private function newRenderedWikiPageRetriever(): PageRetriever {
-		$pageRetriever = new CachingPageRetriever(
-			$this->newApiRenderedPageRetriever(),
-			$this->getRenderedPageCache()
-		);
-
-		return $this->addProfilingDecorator( $pageRetriever, 'PageRetriever' );
-	}
-
-	private function newApiRawPageRetriever(): PageRetriever {
-		return new ApiBasedPageRetriever(
-			$this->getMediaWikiApi(),
-			new ApiUser( $this->config['cms-wiki-user'], $this->config['cms-wiki-password'] ),
-			$this->getLogger(),
-			$this->config['cms-wiki-title-prefix'],
-			ApiBasedPageRetriever::MODE_RAW_EXPANDED
-		);
-	}
-
-	private function newApiRenderedPageRetriever(): PageRetriever {
-		return new ApiBasedPageRetriever(
-			$this->getMediaWikiApi(),
-			new ApiUser( $this->config['cms-wiki-user'], $this->config['cms-wiki-password'] ),
-			$this->getLogger(),
-			$this->config['cms-wiki-title-prefix'],
-			ApiBasedPageRetriever::MODE_RENDERED
-		);
 	}
 
 	public function getLogger(): LoggerInterface {
@@ -656,7 +605,7 @@ class FunFunFactory {
 	}
 
 	public function getTemplatePath(): string {
-		return __DIR__ . '/../../app/templates';
+		return __DIR__ . '/../../app/fundraising-frontend-content/templates';
 	}
 
 	public function newAddSubscriptionUseCase(): AddSubscriptionUseCase {
@@ -679,7 +628,7 @@ class FunFunFactory {
 			$this->getSuborganizationMessenger(),
 			new TwigTemplate(
 				$this->getTwig(),
-				'Mail_Subscription_Request.twig',
+				'Mail_Subscription_Request.txt.twig',
 				[
 					'basepath' => $this->config['web-basepath'],
 					'greeting_generator' => $this->getGreetingGenerator()
@@ -694,7 +643,7 @@ class FunFunFactory {
 			$this->getSuborganizationMessenger(),
 			new TwigTemplate(
 					$this->getTwig(),
-					'Mail_Subscription_Confirmation.twig',
+					'Mail_Subscription_Confirmation.txt.twig',
 					[ 'greeting_generator' => $this->getGreetingGenerator() ]
 			),
 			'mail_subject_subscription_confirmed'
@@ -737,10 +686,6 @@ class FunFunFactory {
 		$this->pimple['subscription_validator'] = $subscriptionValidator;
 	}
 
-	public function setPageTitlePrefix( string $prefix ) {
-		$this->config['cms-wiki-title-prefix'] = $prefix;
-	}
-
 	public function newGetInTouchUseCase() {
 		return new GetInTouchUseCase(
 			$this->getContactValidator(),
@@ -752,7 +697,7 @@ class FunFunFactory {
 	private function newContactUserMailer(): TemplateBasedMailer {
 		return $this->newTemplateMailer(
 			$this->getSuborganizationMessenger(),
-			new TwigTemplate( $this->getTwig(), 'KontaktMailExtern.twig' ),
+			new TwigTemplate( $this->getTwig(), 'Mail_Contact_Confirm_to_User.txt.twig' ),
 			'mail_subject_getintouch'
 		);
 	}
@@ -760,7 +705,7 @@ class FunFunFactory {
 	private function newContactOperatorMailer(): OperatorMailer {
 		return new OperatorMailer(
 			$this->getSuborganizationMessenger(),
-			new TwigTemplate( $this->getTwig(), 'KontaktMailIntern.twig' ),
+			new TwigTemplate( $this->getTwig(), 'Mail_Contact_Forward_to_Operator.txt.twig' ),
 			$this->getTranslator()->trans( 'mail_subject_getintouch_forward' )
 		);
 	}
@@ -837,11 +782,11 @@ class FunFunFactory {
 	}
 
 	public function newInternalErrorHTMLPresenter(): InternalErrorHtmlPresenter {
-		return new InternalErrorHtmlPresenter( $this->getIncludeTemplate( 'ErrorPage.twig' ) );
+		return new InternalErrorHtmlPresenter( $this->getIncludeTemplate( 'Error_Page.html.twig' ) );
 	}
 
 	public function newAccessDeniedHTMLPresenter(): InternalErrorHtmlPresenter {
-		return new InternalErrorHtmlPresenter( $this->getLayoutTemplate( 'AccessDenied.twig' ) );
+		return new InternalErrorHtmlPresenter( $this->getLayoutTemplate( 'Access_Denied.twig' ) );
 	}
 
 	public function getTranslator(): TranslatorInterface {
@@ -857,9 +802,8 @@ class FunFunFactory {
 	}
 
 	private function newTextPolicyValidator( string $policyName ): TextPolicyValidator {
-		$contentProvider = $this->newRawWikiPageRetriever();
+		$contentProvider = $this->newLocalFilePageRetriever();
 		$textPolicyConfig = $this->config['text-policies'][$policyName];
-
 		return new TextPolicyValidator(
 			new PageRetrieverBasedStringList( $contentProvider, $textPolicyConfig['badwords'] ?? '' ),
 			new PageRetrieverBasedStringList( $contentProvider, $textPolicyConfig['whitewords'] ?? '' )
@@ -884,7 +828,7 @@ class FunFunFactory {
 			$this->getSuborganizationMessenger(),
 			new TwigTemplate(
 				$this->getTwig(),
-				'Mail_Donation_Cancellation_Confirmation.twig',
+				'Mail_Donation_Cancellation_Confirmation.txt.twig',
 				[ 'greeting_generator' => $this->getGreetingGenerator() ]
 			),
 			'mail_subject_confirm_cancellation'
@@ -932,7 +876,7 @@ class FunFunFactory {
 				$this->getSuborganizationMessenger(),
 				new TwigTemplate(
 					$this->getTwig(),
-					'Mail_Donation_Confirmation.twig',
+					'Mail_Donation_Confirmation.txt.twig',
 					[
 						'basepath' => $this->config['web-basepath'],
 						'greeting_generator' => $this->getGreetingGenerator()
@@ -1006,13 +950,13 @@ class FunFunFactory {
 
 	public function newDonationConfirmationPresenter() {
 		return new DonationConfirmationHtmlPresenter(
-			$this->getIncludeTemplate( 'DonationConfirmation.twig', [ 'piwikGoals' => [ 3 ] ] )
+			$this->getIncludeTemplate( 'Donation_Confirmation.html.twig', [ 'piwikGoals' => [ 3 ] ] )
 		);
 	}
 
 	public function newCreditCardPaymentHtmlPresenter() {
 		return new CreditCardPaymentHtmlPresenter(
-			$this->getIncludeTemplate( 'CreditCardPaymentIframe.twig' ),
+			$this->getIncludeTemplate( 'Credit_Card_Payment_Iframe.html.twig' ),
 			$this->getTranslator(),
 			$this->newCreditCardUrlGenerator()
 		);
@@ -1020,7 +964,7 @@ class FunFunFactory {
 
 	public function newCancelDonationHtmlPresenter() {
 		return new CancelDonationHtmlPresenter(
-			$this->getIncludeTemplate( 'Donation_Cancellation_Confirmation.twig' )
+			$this->getIncludeTemplate( 'Donation_Cancellation_Confirmation.html.twig' )
 		);
 	}
 
@@ -1041,7 +985,7 @@ class FunFunFactory {
 			$this->getOrganizationMessenger(),
 			new TwigTemplate(
 				$this->getTwig(),
-				'Mail_Membership_Application_Confirmation.twig',
+				'Mail_Membership_Application_Confirmation.txt.twig',
 				[ 'greeting_generator' => $this->getGreetingGenerator() ]
 			),
 			'mail_subject_confirm_membership_application'
@@ -1098,7 +1042,7 @@ class FunFunFactory {
 			$this->getOrganizationMessenger(),
 			new TwigTemplate(
 				$this->getTwig(),
-				'Mail_Membership_Application_Cancellation_Confirmation.twig',
+				'Mail_Membership_Application_Cancellation_Confirmation.txt.twig',
 				[ 'greeting_generator' => $this->getGreetingGenerator() ]
 			),
 			'mail_subject_confirm_membership_application_cancellation'
@@ -1131,14 +1075,14 @@ class FunFunFactory {
 	public function newDonationFormViolationPresenter() {
 		// TODO make the template name dependent on the 'form' value from the HTTP POST request
 		// (we need different form pages for A/B testing)
-		$template = $this->getLayoutTemplate( 'DisplayPageLayout.twig', [ 'main_template' => 'DonationForm.twig' ] );
+		$template = $this->getLayoutTemplate( 'Display_Page_Layout.twig', [ 'main_template' => 'Donation_Form.html.twig' ] );
 		return new DonationFormViolationPresenter( $template, $this->newAmountFormatter() );
 	}
 
 	public function newDonationFormPresenter() {
 		// TODO make the template name dependent on the 'form' value from the HTTP POST request
 		// (we need different form pages for A/B testing)
-		$template = $this->getLayoutTemplate( 'DisplayPageLayout.twig', [ 'main_template' => 'DonationForm.twig' ] );
+		$template = $this->getLayoutTemplate( 'Display_Page_Layout.twig', [ 'main_template' => 'Donation_Form.html.twig' ] );
 		return new DonationFormPresenter( $template, $this->newAmountFormatter() );
 	}
 
@@ -1198,19 +1142,19 @@ class FunFunFactory {
 
 	public function newCancelMembershipApplicationHtmlPresenter() {
 		return new CancelMembershipApplicationHtmlPresenter(
-			$this->getIncludeTemplate( 'Membership_Application_Cancellation_Confirmation.twig' )
+			$this->getIncludeTemplate( 'Membership_Application_Cancellation_Confirmation.html.twig' )
 		);
 	}
 
 	public function newMembershipApplicationConfirmationHtmlPresenter() {
 		return new MembershipApplicationConfirmationHtmlPresenter(
-			$this->getIncludeTemplate( 'MembershipApplicationConfirmation.twig' )
+			$this->getIncludeTemplate( 'Membership_Application_Confirmation.html.twig' )
 		);
 	}
 
 	public function newMembershipFormViolationPresenter() {
 		return new MembershipFormViolationPresenter(
-			$this->getIncludeTemplate( 'MembershipApplication.twig' )
+			$this->getIncludeTemplate( 'Membership_Application.html.twig' )
 		);
 	}
 
@@ -1226,7 +1170,7 @@ class FunFunFactory {
 		return new CreditCardNotificationPresenter(
 			new TwigTemplate(
 				$this->getTwig(),
-				'CreditCardPaymentNotification.twig',
+				'Credit_Card_Payment_Notification.txt.twig',
 				[ 'returnUrl' => $this->config['creditcard']['return-url'] ]
 			)
 		);
@@ -1286,7 +1230,7 @@ class FunFunFactory {
 	}
 
 	public function newSystemMessageResponse( string $message ) {
-		$test = $this->getIncludeTemplate( 'System_Message.twig' );
+		$test = $this->getIncludeTemplate( 'System_Message.html.twig' );
 		return $test->render( [ 'message' => $message ] );
 	}
 
@@ -1371,7 +1315,7 @@ class FunFunFactory {
 	}
 
 	public function newPageNotFoundHTMLPresenter(): PageNotFoundPresenter {
-		return new PageNotFoundPresenter( $this->getLayoutTemplate( '404message.html.twig' ) );
+		return new PageNotFoundPresenter( $this->getLayoutTemplate( 'Page_not_found.html.twig' ) );
 	}
 
 	public function setPageViewTracker( PageViewTracker $tracker ) {

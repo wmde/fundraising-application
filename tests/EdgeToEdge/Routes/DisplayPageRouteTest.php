@@ -4,13 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
-use Mediawiki\Api\ApiUser;
-use Mediawiki\Api\MediawikiApi;
-use Mediawiki\Api\Request;
-use Mediawiki\Api\UsageException;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\ApiPostRequestHandler;
 
 /**
  * @licence GNU GPL v2+
@@ -23,15 +18,6 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 	// @codingStandardsIgnoreStart
 	protected function onTestEnvironmentCreated( FunFunFactory $factory, array $config ) {
 		// @codingStandardsIgnoreEnd
-		$api = $this->getMockBuilder( MediawikiApi::class )->disableOriginalConstructor()->getMock();
-
-		$api->expects( $this->any() )
-			->method( 'postRequest' )
-			->willReturnCallback( function( Request $request ) {
-				throw new UsageException( 'Page not found: ' . $request->getParams()['page'] );
-			} );
-
-		$factory->setMediaWikiApi( $api );
 		$this->notFoundMessage = $factory->getTranslator()->trans( 'page_not_found' );
 	}
 
@@ -50,12 +36,12 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 		$client->request( 'GET', '/page/kittens' );
 
 		$this->assertContains(
-			'Could not load header!',
+			'page header',
 			$client->getResponse()->getContent()
 		);
 
 		$this->assertContains(
-			'Could not load footer!',
+			'page footer',
 			$client->getResponse()->getContent()
 		);
 	}
@@ -71,57 +57,52 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenWebBasePathIsEmpty_templatedPathsReferToRootPath() {
-		$client = $this->createClient();
+		$client = $this->createClient( [
+			'twig' => [
+				'loaders' => [
+					'array' => [
+						'kittens.html.twig' => '{$ basepath $}/someFile.css'
+					]
+				]
+			]
+		] );
 		$client->request( 'GET', '/page/kittens' );
 
 		$this->assertContains(
-			'"/res/css/fontcustom.css"',
+			'/someFile.css',
 			$client->getResponse()->getContent()
 		);
 	}
 
 	public function testWhenWebBasePathIsSet_itIsUsedInTemplatedPaths() {
-		$client = $this->createClient( [ 'web-basepath' => '/some-path' ] );
+		$client = $this->createClient( [
+			'twig' => [
+				'loaders' => [
+					'array' => [
+						'kittens.html.twig' => '{$ basepath $}/someFile.css'
+					]
+				]
+			],
+			'web-basepath' => '/some-path/someFile.css'
+		] );
 		$client->request( 'GET', '/page/kittens' );
 
 		$this->assertContains(
-			'"/some-path/res/css/fontcustom.css"',
+			'/some-path/someFile.css',
 			$client->getResponse()->getContent()
 		);
 	}
 
 	public function testWhenRequestedPageExists_itGetsEmbedded() {
-		$client = $this->createClient(
-			[
-				'twig' => [
-					'loaders' => [
-						'array' => [
-							'10hoch16/Seitenkopf' => '<p>I\'m a header</p>',
-							'10hoch16/Seitenfuß' => '<p>I\'m a footer</p>',
-							'JavaScript-Notice' => '<p>Y u no JavaScript!</p>',
-							],
-						'wiki' => [
-							'enabled' => true
-							]
-						]
+		$client = $this->createClient( [
+			'twig' => [
+				'loaders' => [
+					'array' => [
+						'unicorns.html.twig' => '<p>Pink fluffy unicorns dancing on rainbows</p>'
 					]
-			],
-		function( FunFunFactory $factory, array $config ) {
-			$api = $this->getMockBuilder( MediawikiApi::class )->disableOriginalConstructor()->getMock();
-
-			$api->expects( $this->atLeastOnce() )
-				->method( 'login' )
-				->with( new ApiUser(
-					$config['cms-wiki-user'],
-					$config['cms-wiki-password']
-				) );
-
-			$api->expects( $this->any() )
-				->method( 'postRequest' )
-				->willReturnCallback( new ApiPostRequestHandler() );
-
-			$factory->setMediaWikiApi( $api );
-		} );
+				]
+			]
+		] );
 
 		$client->request( 'GET', '/page/unicorns' );
 
@@ -132,17 +113,17 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 
 		// Test header, footer and noJS feature of the base template
 		$this->assertContains(
-			'<p>I\'m a header</p>',
+			'page header',
 			$client->getResponse()->getContent()
 		);
 
 		$this->assertContains(
-			'<p>I\'m a footer</p>',
+			'page footer',
 			$client->getResponse()->getContent()
 		);
 
 		$this->assertContains(
-			'<p>Y u no JavaScript!</p>',
+			'Y u no JavaScript!',
 			$client->getResponse()->getContent()
 		);
 	}

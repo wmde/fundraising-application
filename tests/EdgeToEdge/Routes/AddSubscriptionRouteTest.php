@@ -4,10 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
-use Mediawiki\Api\MediawikiApi;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\ApiPostRequestHandler;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Tests\Fixtures\SubscriptionRepositorySpy;
 
 /**
@@ -142,7 +140,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 		$responseData = json_decode( $response->getContent(), true );
 		$this->assertSame( 'ERR', $responseData['status'] );
 		$this->assertGreaterThan( 0, count( $responseData['errors'] ) );
-		$this->assertSame( 'Kein gültiges Email-Adressformat', $responseData['errors']['email'] );
+		$this->assertSame( 'email_address_wrong_format', $responseData['errors']['email'] );
 	}
 
 	public function testGivenValidDataAndJSONPRequest_routeReturnsResult() {
@@ -168,15 +166,8 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenDataNeedingModerationAndNoContentType_routeReturnsRedirectToModerationPage() {
-		$config = [ 'text-policies' => [ 'fields' => [ 'badwords' => 'No_Cats' ] ] ];
-		$client = $this->createClient( $config, function( FunFunFactory $factory ) {
-			$api = $this->getMockBuilder( MediawikiApi::class )->disableOriginalConstructor()->getMock();
-			$api->expects( $this->any() )
-				->method( 'postRequest' )
-				->willReturnCallback( new ApiPostRequestHandler() );
-
-			$factory->setMediaWikiApi( $api );
-		} );
+		$config = [ 'text-policies' => [ 'fields' => [ 'badwords' => 'tests/templates/Banned_Cats.txt' ] ] ];
+		$client = $this->createClient( $config );
 		$client->followRedirects( false );
 		$client->request(
 			'POST',
