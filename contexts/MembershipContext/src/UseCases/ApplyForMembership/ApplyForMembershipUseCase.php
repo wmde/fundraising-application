@@ -11,7 +11,6 @@ use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationR
 use WMDE\Fundraising\Frontend\MembershipContext\Tracking\ApplicationPiwikTracker;
 use WMDE\Fundraising\Frontend\MembershipContext\Tracking\ApplicationTracker;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
-use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
 
 /**
  * @license GNU GPL v2+
