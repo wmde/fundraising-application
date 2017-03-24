@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\MembershipContext\Tests\Integration\UseCases\HandleSubscriptionPaymentNotification;
+namespace WMDE\Fundraising\Frontend\MembershipContext\Tests\Integration\UseCases\HandleSubscriptionSignupNotification;
 
 use Psr\Log\NullLogger;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
