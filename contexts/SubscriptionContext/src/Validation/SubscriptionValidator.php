@@ -64,7 +64,6 @@ class SubscriptionValidator {
 	}
 
 	private function getRequiredFieldViolations( Subscription $subscription ): array {
-		$address = $subscription->getAddress();
 		$validator = new RequiredFieldValidator();
 
 		return [
