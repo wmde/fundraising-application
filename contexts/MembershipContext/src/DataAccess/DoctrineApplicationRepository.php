@@ -285,6 +285,8 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 		if ( $application->getPaymentType() === PaymentType::PAYPAL ) {
 			return new PayPalPayment( $this->newPayPalData( $application ) );
 		}
+
+		throw new \RuntimeException( 'Unsupported payment type' );
 	}
 
 	private function newBankData( DoctrineApplication $application ): BankData {
