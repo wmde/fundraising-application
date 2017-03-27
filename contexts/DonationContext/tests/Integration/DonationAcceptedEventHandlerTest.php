@@ -24,7 +24,6 @@ class DonationAcceptedEventHandlerTest extends \PHPUnit\Framework\TestCase {
 
 	private const UNKNOWN_ID = 32202;
 	private const KNOWN_ID = 31337;
-	private const UPDATE_TOKEN = 'valid-update-token';
 
 	/**
 	 * @var DonationAuthorizer
