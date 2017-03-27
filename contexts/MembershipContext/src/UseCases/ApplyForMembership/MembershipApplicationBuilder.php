@@ -15,7 +15,6 @@ use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\PhoneNumber;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
 
 /**
