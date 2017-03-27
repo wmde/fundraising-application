@@ -19,8 +19,6 @@ use WMDE\Fundraising\Store\MembershipApplicationData;
  */
 class DoctrineMembershipApplicationPrePersistSubscriber implements EventSubscriber {
 
-	private const DATE_TIME_FORMAT = 'Y-m-d H:i:s';
-
 	private $updateTokenGenerator;
 	private $accessTokenGenerator;
 
