@@ -93,6 +93,8 @@ class MembershipApplicationBuilder {
 		if ( $request->getPaymentType() === PaymentType::PAYPAL ) {
 			return new PayPalPayment();
 		}
+
+		throw new \RuntimeException( 'Unsupported payment type' );
 	}
 
 }
