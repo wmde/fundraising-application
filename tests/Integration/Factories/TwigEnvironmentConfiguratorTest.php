@@ -21,20 +21,26 @@ class TwigEnvironmentConfiguratorTest extends \PHPUnit\Framework\TestCase {
 	private const LOCALE = 'de_DE';
 
 	public function testTwigInstanceUsesDollarPlaceholdersForVariables() {
-		$factory = new TwigEnvironmentConfigurator(
-			$this->newTwigEnvironment(),
+		$factory = $this->newTwigEnvironmentConfigurator(
 			[
 				'enable-cache' => false,
 				'loaders' => [
 					'array' => [ 'variableReplacement.twig' => '{$ testvar $}' ]
 				]
-			],
-			'/tmp/fun',
-			self::LOCALE
+			]
 		);
 		$twig = $factory->getEnvironment( [ $factory->newArrayLoader() ], [], [] );
 		$result = $twig->render( 'variableReplacement.twig', [ 'testvar' => 'Meeow!' ] );
 		$this->assertSame( 'Meeow!', $result );
+	}
+
+	private function newTwigEnvironmentConfigurator( array $config ): TwigEnvironmentConfigurator {
+		return new TwigEnvironmentConfigurator(
+			$this->newTwigEnvironment(),
+			$config,
+			'/tmp/fun',
+			self::LOCALE
+		);
 	}
 
 	public function testTwigInstancesTryAllLoadersUntilTemplateIsFound() {
@@ -52,47 +58,32 @@ class TwigEnvironmentConfiguratorTest extends \PHPUnit\Framework\TestCase {
 		$thirdLoader = $this->createMock( Twig_LoaderInterface::class );
 		$thirdLoader->expects( $this->never() )->method( $this->anything() );
 
-		$factory = new TwigEnvironmentConfigurator(
-			$this->newTwigEnvironment(),
-			[ 'enable-cache' => false ],
-			'/tmp/fun',
-			self::LOCALE
-		);
+		$factory = $this->newTwigEnvironmentConfigurator( [ 'enable-cache' => false ] );
 		$twig = $factory->getEnvironment( [ $firstLoader, $secondLoader, $thirdLoader ], [], [] );
 		$result = $twig->render( 'Canis_silvestris' );
 		$this->assertSame( 'Meeow!', $result );
 	}
 
 	public function testFilesystemLoaderConvertsStringPathToArray() {
-		$factory = new TwigEnvironmentConfigurator(
-			$this->newTwigEnvironment(),
-			[
-				'loaders' => [
-					'filesystem' => [
-						'template-dir' => __DIR__ . '/../../templates'
-					]
+		$factory = $this->newTwigEnvironmentConfigurator( [
+			'loaders' => [
+				'filesystem' => [
+					'template-dir' => __DIR__ . '/../../templates'
 				]
-			],
-			'/tmp/fun',
-			self::LOCALE
-		);
+			]
+		] );
 		$loader = $factory->newFileSystemLoader();
 		$this->assertSame( [ __DIR__ . '/../../templates' ], $loader->getPaths() );
 	}
 
 	public function testFilesystemLoaderPrependsRelativePathsToArray() {
-		$factory = new TwigEnvironmentConfigurator(
-			$this->newTwigEnvironment(),
-			[
+		$factory = $this->newTwigEnvironmentConfigurator( [
 				'loaders' => [
 					'filesystem' => [
 						'template-dir' => 'tests/templates'
 					]
 				]
-			],
-			'/tmp/fun',
-			self::LOCALE
-		);
+		] );
 		$loader = $factory->newFileSystemLoader();
 		$realPath = realpath( $loader->getPaths()[0] );
 		$this->assertFalse( $realPath === false, 'path does not exist' );
@@ -106,17 +97,12 @@ class TwigEnvironmentConfiguratorTest extends \PHPUnit\Framework\TestCase {
 			->willReturn( 'baaaaad.testfile.js' )
 			->with( 'testfile.js' );
 
-		$factory = new TwigEnvironmentConfigurator(
-			$this->newTwigEnvironment(),
-			[
-				'enable-cache' => false,
-				'loaders' => [
-					'array' => [ 'filePrefix.twig' => '{$ "testfile.js"|prefix_file $}' ]
-				]
-			],
-			'/tmp/fun',
-			self::LOCALE
-		);
+		$factory = $this->newTwigEnvironmentConfigurator( [
+			'enable-cache' => false,
+			'loaders' => [
+				'array' => [ 'filePrefix.twig' => '{$ "testfile.js"|prefix_file $}' ]
+			]
+		] );
 
 		$filters = [ $factory->newFilePrefixFilter( $prefixer ) ];
 		$twig = $factory->getEnvironment( [ $factory->newArrayLoader() ], [], $filters );
@@ -129,22 +115,17 @@ class TwigEnvironmentConfiguratorTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public function testLocalePlaceholderIsBeingReplaced() {
-		$factory = new TwigEnvironmentConfigurator(
-			$this->newTwigEnvironment(),
-			[
-				'enable-cache' => false,
-				'loaders' => [
-					'filesystem' => [ 'template-dir' =>
-						[
-							__DIR__ . '/../../templates',
-							__DIR__ . '/../../templates/%_locale_%/pages'
-						]
+		$factory = $this->newTwigEnvironmentConfigurator( [
+			'enable-cache' => false,
+			'loaders' => [
+				'filesystem' => [ 'template-dir' =>
+					[
+						__DIR__ . '/../../templates',
+						__DIR__ . '/../../templates/%_locale_%/pages'
 					]
 				]
-			],
-			'/tmp/fun',
-			self::LOCALE
-		);
+			]
+		] );
 
 		$loaders = $factory->newFileSystemLoader();
 		$this->assertSame(
