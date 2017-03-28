@@ -20,16 +20,19 @@ use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
  */
 class TwigEnvironmentConfigurator {
 
-	const DEFAULT_TEMPLATE_DIR = 'app/fundraising-frontend-content/templates';
+	private const DEFAULT_TEMPLATE_DIR = 'app/fundraising-frontend-content/templates';
+	private const LOCALE_PLACEHOLDER = '%_locale_%';
 
 	private $twig;
 	private $config;
 	private $cachePath;
+	private $locale;
 
-	public function __construct( Twig_Environment $twig, array $config, string $cachePath ) {
+	public function __construct( Twig_Environment $twig, array $config, string $cachePath, string $locale ) {
 		$this->twig = $twig;
 		$this->config = $config;
 		$this->cachePath = $cachePath;
+		$this->locale = $locale;
 	}
 
 	public function getEnvironment( array $loaders, array $extensions, array $filters ): Twig_Environment {
@@ -90,6 +93,7 @@ class TwigEnvironmentConfigurator {
 			throw new \RuntimeException( 'wrong template directory type' );
 		}
 		$appRoot = realpath( __DIR__ . '/../..' ) . '/';
+		$templateDir = $this->insertLocale( $templateDir );
 		return $this->convertToAbsolute( $appRoot, $templateDir );
 	}
 
@@ -100,6 +104,15 @@ class TwigEnvironmentConfigurator {
 					return $root . $dir;
 				}
 				return $dir;
+			},
+			$dirs
+		);
+	}
+
+	private function insertLocale( array $dirs ): array {
+		return array_map(
+			function( $dir ) {
+				return str_replace( self::LOCALE_PLACEHOLDER, $this->locale, $dir );
 			},
 			$dirs
 		);
