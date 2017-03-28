@@ -156,6 +156,12 @@
         "no-js-notice"
       ]
     },
+    "i18n-base-path": {
+      "type": "string",
+      "title": "Base path for i18n files",
+      "description": "Base path for files related to internationalization. Must be a path (without trailing slash) that contains subfolders named according to the Locale ID defined in ICU (e.g. en_US).",
+      "default": ""
+    },
     "contact-info": {
       "type": "object",
       "title": "Contact information",
