@@ -135,4 +135,10 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 		$this->assert404( $client->getResponse() );
 	}
 
+	public function testWhenRequestedPageIsTranslated_itIsDisplayed() {
+		$client = $this->createClient();
+		$client->request( 'GET', '/page/Translated_Page' );
+		$this->assertContains( 'This is just a test.', $client->getResponse()->getContent() );
+	}
+
 }

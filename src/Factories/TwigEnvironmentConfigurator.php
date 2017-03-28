@@ -20,16 +20,19 @@ use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
  */
 class TwigEnvironmentConfigurator {
 
-	const DEFAULT_TEMPLATE_DIR = 'app/fundraising-frontend-content/templates';
+	private const DEFAULT_TEMPLATE_DIR = 'app/fundraising-frontend-content/templates';
+	private const LOCALE_PLACEHOLDER = '%_locale_%';
 
 	private $twig;
 	private $config;
 	private $cachePath;
+	private $locale;
 
-	public function __construct( Twig_Environment $twig, array $config, string $cachePath ) {
+	public function __construct( Twig_Environment $twig, array $config, string $cachePath, string $locale ) {
 		$this->twig = $twig;
 		$this->config = $config;
 		$this->cachePath = $cachePath;
+		$this->locale = $locale;
 	}
 
 	public function getEnvironment( array $loaders, array $extensions, array $filters ): Twig_Environment {
@@ -97,12 +100,16 @@ class TwigEnvironmentConfigurator {
 		return array_map(
 			function( $dir ) use ( $root ) {
 				if ( strlen( $dir ) == 0 || $dir{0} != '/' ) {
-					return $root . $dir;
+					$dir = $root . $dir;
 				}
-				return $dir;
+				return $this->insertLocale( $dir );
 			},
 			$dirs
 		);
+	}
+
+	private function insertLocale( string $path ): string {
+		return str_replace( self::LOCALE_PLACEHOLDER, $this->locale, $path );
 	}
 
 	public function newArrayLoader() {

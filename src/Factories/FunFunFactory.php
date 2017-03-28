@@ -307,7 +307,12 @@ class FunFunFactory {
 		};
 
 		$pimple['twig_factory'] = function () {
-			return new TwigEnvironmentConfigurator( $this->pimple['twig_environment'], $this->config['twig'], $this->getCachePath() . '/twig' );
+			return new TwigEnvironmentConfigurator(
+				$this->pimple['twig_environment'],
+				$this->config['twig'],
+				$this->getCachePath() . '/twig',
+				$this->config['locale']
+			);
 		};
 
 		$pimple['twig'] = function() {

@@ -12,7 +12,8 @@
 		"loaders": {
 			"filesystem": {
 				"template-dir": [
-					"tests/templates"
+					"tests/templates",
+					"tests/templates/%_locale_%/pages"
 				]
 			},
 			"array": {
