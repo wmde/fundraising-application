@@ -285,40 +285,13 @@ class FunFunFactory {
 				'json' => $translationFactory->newJsonLoader()
 			];
 			$locale = $this->config['locale'];
+			$i18nPath = __DIR__ . '/../../' . $this->config['i18n-base-path'] . '/' . $locale;
 			$translator = $translationFactory->create( $loaders, $locale );
-			$translator->addResource(
-				'json',
-				__DIR__ . '/../../app/fundraising-frontend-content/i18n/' . $locale . '/messages.json',
-				$locale
-			);
-
-			$translator->addResource(
-				'json',
-				__DIR__ . '/../../app/fundraising-frontend-content/i18n/' . $locale . '/paymentTypes.json',
-				$locale,
-				'paymentTypes'
-			);
-
-			$translator->addResource(
-				'json',
-				__DIR__ . '/../../app/fundraising-frontend-content/i18n/' . $locale . '/paymentIntervals.json',
-				$locale,
-				'paymentIntervals'
-			);
-
-			$translator->addResource(
-				'json',
-				__DIR__ . '/../../app/fundraising-frontend-content/i18n/' . $locale . '/paymentStatus.json',
-				$locale,
-				'paymentStatus'
-			);
-
-			$translator->addResource(
-				'json',
-				__DIR__ . '/../../app/fundraising-frontend-content/i18n/' . $locale . '/validations.json',
-				$locale,
-				'validations'
-			);
+			$translator->addResource( 'json', $i18nPath . '/messages.json', $locale );
+			$translator->addResource( 'json', $i18nPath . '/paymentTypes.json', $locale, 'paymentTypes' );
+			$translator->addResource( 'json', $i18nPath . '/paymentIntervals.json', $locale, 'paymentIntervals' );
+			$translator->addResource( 'json', $i18nPath . '/paymentStatus.json', $locale, 'paymentStatus' );
+			$translator->addResource( 'json', $i18nPath . '/validations.json', $locale, 'validations' );
 
 			return $translator;
 		};
@@ -334,7 +307,12 @@ class FunFunFactory {
 		};
 
 		$pimple['twig_factory'] = function () {
-			return new TwigEnvironmentConfigurator( $this->pimple['twig_environment'], $this->config['twig'], $this->getCachePath() . '/twig' );
+			return new TwigEnvironmentConfigurator(
+				$this->pimple['twig_environment'],
+				$this->config['twig'],
+				$this->getCachePath() . '/twig',
+				$this->config['locale']
+			);
 		};
 
 		$pimple['twig'] = function() {
@@ -560,6 +538,7 @@ class FunFunFactory {
 			'header_template' => $this->config['default-layout-templates']['header'],
 			'footer_template' => $this->config['default-layout-templates']['footer'],
 			'no_js_notice_template' => $this->config['default-layout-templates']['no-js-notice'],
+			'locale' => $this->config['locale'],
 			'piwik' => $this->config['piwik'],
 		];
 	}

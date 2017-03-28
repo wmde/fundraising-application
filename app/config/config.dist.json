@@ -20,6 +20,7 @@
 			"array": {}
 		}
 	},
+	"i18n-base-path": "",
 	"default-layout-templates": {
 		"header": "Page_Header.html.twig",
 		"footer": "Page_Footer.html.twig",
