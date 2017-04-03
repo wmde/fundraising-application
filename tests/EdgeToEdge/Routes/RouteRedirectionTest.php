@@ -14,11 +14,11 @@ class RouteRedirectionTest extends WebRouteTestCase {
 
 	public function simplePageDisplayProvider() {
 		return [
-			[ '/spenden/Mitgliedschaft', '/page/MembershipApplication' ],
+			[ '/spenden/Mitgliedschaft', '/page/Membership_Application' ],
 			[ '/spenden/Fördermitgliedschaft', '/page/Fördermitgliedschaft' ],
 			[ '/spenden/Kontaktformular', '/page/Kontaktformular' ],
 			[ '/spenden/Ihre_Spende_wirkt', '/page/Ihre_Spende_wirkt' ],
-			[ '/spenden/Mitgliedschaft?bar=baz&foo=bar', '/page/MembershipApplication?bar=baz&foo=bar' ],
+			[ '/spenden/Mitgliedschaft?bar=baz&foo=bar', '/page/Membership_Application?bar=baz&foo=bar' ],
 		];
 	}
 
