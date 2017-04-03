@@ -517,7 +517,7 @@ $app->get( '/spenden/{page}', function( Application $app, Request $request, stri
 	// See https://serverfault.com/questions/805881/nginx-populate-request-uri-with-rewritten-url
 	switch ( $page ) {
 		case 'Mitgliedschaft':
-			return ( new RouteRedirectionHandler( $app, $request->getQueryString() ) )->handle( '/page/MembershipApplication' );
+			return ( new RouteRedirectionHandler( $app, $request->getQueryString() ) )->handle( '/page/Membership_Application' );
 		default:
 			return ( new RouteRedirectionHandler( $app, $request->getQueryString() ) )->handle( '/page/' . $page );
 	}
