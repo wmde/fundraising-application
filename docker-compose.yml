@@ -1,0 +1,12 @@
+proxy:
+  image: nginx:stable
+  expose: "80:8000"
+  links:
+    - app
+  ports:
+    - "8080:80"
+
+app:
+  build: ./build/docker/app/Dockerfile
+  expose: "9000"
+
