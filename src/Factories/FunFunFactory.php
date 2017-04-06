@@ -539,6 +539,7 @@ class FunFunFactory {
 			'footer_template' => $this->config['default-layout-templates']['footer'],
 			'no_js_notice_template' => $this->config['default-layout-templates']['no-js-notice'],
 			'piwik' => $this->config['piwik'],
+			'locale' => $this->config['locale'],
 		];
 	}
 
