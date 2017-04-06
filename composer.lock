@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "282c31a4225665261b89ccb10157ccfc",
+    "content-hash": "d994d00647d373cb190cb44c4ee6d030",
     "packages": [
         {
             "name": "addwiki/mediawiki-api-base",
@@ -4834,6 +4834,31 @@
             "time": "2014-02-12T22:16:49+00:00"
         },
         {
+            "name": "wmde/fundraising-frontend-content",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wmde/fundraising-frontend-content.git",
+                "reference": "ac67e3e9adc5fecbdc2d57e58b190f5cc4a44603"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/ac67e3e9adc5fecbdc2d57e58b190f5cc4a44603",
+                "reference": "ac67e3e9adc5fecbdc2d57e58b190f5cc4a44603",
+                "shasum": ""
+            },
+            "type": "library",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "description": "i18n for FundraisingFrontend",
+            "support": {
+                "source": "https://github.com/wmde/fundraising-frontend-content/tree/master",
+                "issues": "https://github.com/wmde/fundraising-frontend-content/issues"
+            },
+            "time": "2017-04-04T15:02:29+00:00"
+        },
+        {
             "name": "wmde/psr-log-test-doubles",
             "version": "2.1.0",
             "source": {
@@ -4892,10 +4917,18 @@
             "time": "2017-01-17T09:04:52+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "alias": "1.0.x-dev",
+            "alias_normalized": "1.0.9999999.9999999-dev",
+            "version": "9999999-dev",
+            "package": "wmde/fundraising-frontend-content"
+        }
+    ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "ockcyp/covers-validator": 20
+        "ockcyp/covers-validator": 20,
+        "wmde/fundraising-frontend-content": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

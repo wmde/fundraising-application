@@ -50,6 +50,10 @@
 					]
 				}
 			}
+		},
+		{
+			"type": "vcs",
+			"url": "https://github.com/wmde/fundraising-frontend-content"
 		}
 	],
 	"require-dev": {
@@ -67,7 +71,8 @@
 
 		"symfony/browser-kit": "~2.7",
 		"silex/web-profiler": "~2.0",
-		"sorien/silex-dbal-profiler": "~2.0"
+		"sorien/silex-dbal-profiler": "~2.0",
+		"wmde/fundraising-frontend-content": "dev-master as 1.0.x-dev"
 	},
 	"autoload": {
 		"psr-4": {
