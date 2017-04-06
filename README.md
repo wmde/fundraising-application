@@ -28,12 +28,14 @@ you will need to do additional configuration, as per the configuration section.
 
 System dependencies:
 
-* PHP >= 7
-* php7.0-intl
-* php7.0-curl
-* php7.0-sqlite3 (only needed for running the tests)
+* PHP >= 7.1 with the following extensions:
+    * curl
+    * intl
+    * [kontocheck](http://kontocheck.sourceforge.net/) (only needed when you want to use or test direct debit)
+    * mbstring
+    * sqlite3
+    * xml
 * Node.js and npm (only needed in development for compiling the JavaScript and running the JavaScript tests)
-* [kontocheck extension](http://kontocheck.sourceforge.net/) (only needed when you want to use or test direct debit)
 
 Get a clone of our git repository and then run these commands in it:
 
@@ -61,15 +63,31 @@ connection data. If you're using MySQL, [it's important](http://stackoverflow.co
 For a fully working instance with all payment types and working templates you need to fill out the following
 configuration data:
 
-	 - `cms-wiki-url`
 	 - `bank-data-file`
 	 - `operator-email`
 	 - `operator-displayname-organization`
 	 - `operator-displayname-suborganization`
-	 - `paypal`
+	 - `paypal-donation`
+	 - `paypal-membership`
 	 - `creditcard`
 
-Also, you need to check out the content repository at https://github.com/wmde/fundraising-frontend-content into the directory `app/fundraising-frontend-content`.
+The application needs a copy of the content repository at https://github.com/wmde/fundraising-frontend-content to work properly. 
+On development machines, the content repository is in the composer dev-dependencies. If you put the content repository in another place, you need to configure the paths to it.
+The following example shows the configuration when the content repository is at the same level as the application directory:
+
+    "twig": {
+        "loaders": {
+            "filesystem": {
+                "template-dir": [
+                    "../fundraising-frontend-content/ab_tests/a/templates",
+                    "../fundraising-frontend-content/ab_tests/b/templates",
+                    "../fundraising-frontend-content/templates",
+                    "../fundraising-frontend-content/i18n/%_locale_%/pages"
+                ]
+            }
+        }
+    },
+    "i18n-base-path": "../fundraising-frontend-content/i18n"
 
 ## Running the application
 

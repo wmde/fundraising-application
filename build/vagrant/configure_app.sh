@@ -8,11 +8,9 @@ systemctl daemon-reload
 systemctl start fundraising_app.service
 
 # Configure app
-if [[ -z "$WIKI_PASSWD" ]]; then
-    WIKI_PASSWD="WIKI PASSWORD MISSING!!!"
+if [ ! -f /vagrant/app/config/config.prod.json ]; then
+    cp /vagrant/build/vagrant/config.prod.json /vagrant/app/config/config.prod.json
 fi
-cp /vagrant/build/vagrant/config.prod.json /vagrant/app/config/config.prod.json
-sed -i -e "s/__WIKI_PASSWORD__/$WIKI_PASSWD/" /vagrant/app/config/config.prod.json
 
 # Log all outgoing mails instead of sending them
 echo "cat >> /tmp/logmail.log" > /usr/local/bin/logmail
