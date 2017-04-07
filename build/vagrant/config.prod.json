@@ -13,8 +13,8 @@
 		"loaders": {
 			"filesystem": {
 				"template-dir": [
-					"vendor/wmde/fundraising-frontend-content/ab_tests/a/templates",
-					"vendor/wmde/fundraising-frontend-content/ab_tests/b/templates",
+					"vendor/wmde/fundraising-frontend-content/ab_test/a/templates",
+					"vendor/wmde/fundraising-frontend-content/ab_test/b/templates",
 					"vendor/wmde/fundraising-frontend-content/templates",
 					"vendor/wmde/fundraising-frontend-content/i18n/%_locale_%/pages"
 				]
