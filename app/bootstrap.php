@@ -77,7 +77,7 @@ $app->after( function( Request $request, Response $response, Application $app ) 
 
 $app->error( function ( AccessDeniedException $e ) use ( $ffFactory ) {
 	return new Response(
-		$ffFactory->newAccessDeniedHTMLPresenter()->present( $e ),
+		$ffFactory->newAccessDeniedHtmlPresenter()->present( $e ),
 		403,
 		[ 'X-Status-Code' => 403 ]
 	);
@@ -89,7 +89,7 @@ $app->error( function ( NotFoundHttpException $e ) use ( $ffFactory, $app ) {
 	}
 
 	return new Response(
-		$ffFactory->newPageNotFoundHTMLPresenter()->present(),
+		$ffFactory->newPageNotFoundHtmlPresenter()->present(),
 		404,
 		[ 'X-Status-Code' => 404 ]
 	);
@@ -115,7 +115,7 @@ $app->error( function ( \Exception $e, Request $request, $code ) use ( $ffFactor
 	}
 
 	return new Response(
-		$ffFactory->newInternalErrorHTMLPresenter()->present( $e ),
+		$ffFactory->newInternalErrorHtmlPresenter()->present( $e ),
 		$code
 	);
 } );

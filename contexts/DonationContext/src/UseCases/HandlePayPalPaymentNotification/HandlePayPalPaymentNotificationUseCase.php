@@ -47,7 +47,7 @@ class HandlePayPalPaymentNotificationUseCase {
 			return $this->createUnhandledResponse( 'Unhandled PayPal instant payment notification' );
 		}
 
-		if ( $this->transactionIsSubscriptionRelatedButNotAPayment( $request ) ) {
+		if ( $this->isSubscriptionRelatedNonPaymentTransaction( $request ) ) {
 			return $this->createUnhandledResponse( 'Unhandled PayPal subscription notification' );
 		}
 
@@ -128,7 +128,7 @@ class HandlePayPalPaymentNotificationUseCase {
 		}
 	}
 
-	private function transactionIsSubscriptionRelatedButNotAPayment( PayPalPaymentNotificationRequest $request ): bool {
+	private function isSubscriptionRelatedNonPaymentTransaction( PayPalPaymentNotificationRequest $request ): bool {
 		return $request->isForRecurringPayment() && !$request->isRecurringPaymentCompletion();
 	}
 

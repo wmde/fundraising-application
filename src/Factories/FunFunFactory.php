@@ -471,7 +471,7 @@ class FunFunFactory {
 		return $this->pimple['template_name_validator'];
 	}
 
-	public function newAddSubscriptionHTMLPresenter(): AddSubscriptionHtmlPresenter {
+	public function newAddSubscriptionHtmlPresenter(): AddSubscriptionHtmlPresenter {
 		return new AddSubscriptionHtmlPresenter( $this->getIncludeTemplate( 'Subscription_Form.html.twig' ), $this->getTranslator() );
 	}
 
@@ -482,11 +482,11 @@ class FunFunFactory {
 		);
 	}
 
-	public function newAddSubscriptionJSONPresenter(): AddSubscriptionJsonPresenter {
+	public function newAddSubscriptionJsonPresenter(): AddSubscriptionJsonPresenter {
 		return new AddSubscriptionJsonPresenter( $this->getTranslator() );
 	}
 
-	public function newGetInTouchHTMLPresenter(): GetInTouchHtmlPresenter {
+	public function newGetInTouchHtmlPresenter(): GetInTouchHtmlPresenter {
 		return new GetInTouchHtmlPresenter( $this->getIncludeTemplate( 'Kontaktformular.html.twig' ), $this->getTranslator() );
 	}
 
@@ -760,11 +760,11 @@ class FunFunFactory {
 		return new EmailAddress( $this->config['contact-info']['organization']['email'] );
 	}
 
-	public function newInternalErrorHTMLPresenter(): InternalErrorHtmlPresenter {
+	public function newInternalErrorHtmlPresenter(): InternalErrorHtmlPresenter {
 		return new InternalErrorHtmlPresenter( $this->getIncludeTemplate( 'Error_Page.html.twig' ) );
 	}
 
-	public function newAccessDeniedHTMLPresenter(): InternalErrorHtmlPresenter {
+	public function newAccessDeniedHtmlPresenter(): InternalErrorHtmlPresenter {
 		return new InternalErrorHtmlPresenter( $this->getLayoutTemplate( 'Access_Denied.twig' ) );
 	}
 
@@ -1293,7 +1293,7 @@ class FunFunFactory {
 		);
 	}
 
-	public function newPageNotFoundHTMLPresenter(): PageNotFoundPresenter {
+	public function newPageNotFoundHtmlPresenter(): PageNotFoundPresenter {
 		return new PageNotFoundPresenter( $this->getLayoutTemplate( 'Page_not_found.html.twig' ) );
 	}
 

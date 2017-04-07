@@ -315,7 +315,7 @@ $app->post(
 		if ( $contactFormResponse->isSuccessful() ) {
 			return $app->redirect( $app['url_generator']->generate( 'page', [ 'pageName' => 'Kontakt_Bestaetigung' ] ) );
 		}
-		return $ffFactory->newGetInTouchHTMLPresenter()->present( $contactFormResponse, $request->request->all() );
+		return $ffFactory->newGetInTouchHtmlPresenter()->present( $contactFormResponse, $request->request->all() );
 	}
 );
 
