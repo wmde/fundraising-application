@@ -8,22 +8,20 @@
 		"port": 3306
 	},
 	"bank-data-file": "/vagrant/res/blz.lut2f",
-	"cms-wiki-api-url": "https://fundraising-cms.wikimedia.de/api.php",
-	"cms-wiki-user": "LocalBot@LocalBot",
-	"cms-wiki-password": "__WIKI_PASSWORD__",
-	"cms-wiki-title-prefix": "Web:Spendenseite-DefaultSkin/test/",
 	"twig": {
 		"enable-cache": true,
 		"loaders": {
-			"wiki": {
-				"enabled": true,
-				"rawpages": []
-			},
 			"filesystem": {
-				"template-dir": [ "app/templates" ]
+				"template-dir": [
+					"vendor/wmde/fundraising-frontend-content/ab_test/a/templates",
+					"vendor/wmde/fundraising-frontend-content/ab_test/b/templates",
+					"vendor/wmde/fundraising-frontend-content/templates",
+					"vendor/wmde/fundraising-frontend-content/i18n/%_locale_%/pages"
+				]
 			}
 		}
 	},
+	"i18n-base-path": "vendor/wmde/fundraising-frontend-content/i18n",
 	"contact-info": {
 		"organization": {
 			"email": "fake-address@example.com",
@@ -34,5 +32,31 @@
 			"name": "Webmaster"
 		}
 	},
-	"purging-secret": "purgeme"
+	"purging-secret": "purgeme",
+	"paypal-donation": {
+		"base-url": "https://www.sandbox.paypal.com/cgi-bin/webscr?",
+		"account-address": "PAYPAL_USERNAME_IS_MISSING",
+		"notify-url": "http://localhost:31337/handle-paypal-payment-notification",
+		"return-url": "http://localhost:31337/show-donation-confirmation",
+		"cancel-url": "http://localhost:31337/",
+		"item-name": "Test-Spende bei Wikimedia"
+	},
+	"paypal-membership": {
+		"base-url": "https://www.sandbox.paypal.com/cgi-bin/webscr?",
+		"account-address": "PAYPAL_USERNAME_IS_MISSING",
+		"notify-url": "http://localhost:31337/handle-paypal-membership-fee-notification",
+		"return-url": "http://localhost:31337/show-membership-confirmation",
+		"cancel-url": "http://localhost:31337/",
+		"item-name": "Test-Mitgliedschaft bei Wikimedia"
+	},
+	"creditcard": {
+		"access-key": "",
+		"base-url": "https://credit-card.micropayment.de/creditcard/event/index.php?",
+		"project-id": "",
+		"background-color": "000000",
+		"skin": "default",
+		"theme": "x1",
+		"return-url": "https://spenden.wikimedia.de/show-donation-confirmation",
+		"testmode": true
+	}
 }

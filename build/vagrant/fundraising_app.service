@@ -3,8 +3,8 @@ Description=PHP Server
 After=home.mount network.target
 
 [Service]
-User=ubuntu
-Group=ubuntu
+User=vagrant
+Group=vagrant
 ExecStart=/usr/bin/php -S 0.0.0.0:8080 -t /vagrant/web
 ExecReload=/bin/kill -HUP $MAINPID
 KillMode=process
