@@ -474,8 +474,8 @@ header .ctcol,
 header .rtcol { padding-top: 30px; padding-bottom: 30px; }
 header h1 { margin-bottom: 10px; font-size: 1.2em; font-weight: bold; color: #9d9d9d; }
 header .subtitle { font-size: 0.875em; color: #9d9d9d; }
-header .logo { background: transparent url('../../../res/img/wikimedia_logo_black.png') no-repeat center; width: 98px; height: 108px; display: block; }
-header .wpde-logo { background: transparent url('../../../res/img/wikimedia_logo_black.png') no-repeat center; width: 98px; height: 108px; display: block; }
+header .logo { background: transparent url('../../../resources/wikimedia_logo_black.png') no-repeat center; width: 98px; height: 108px; display: block; }
+header .wpde-logo { background: transparent url('../../../resources/wikimedia_logo_black.png') no-repeat center; width: 98px; height: 108px; display: block; }
 header hr { position: absolute; bottom: 0; left: 128px; right: 0; margin: 0; }
 
 /* main */
