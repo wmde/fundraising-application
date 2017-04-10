@@ -1,0 +1,127 @@
+{% import 'Form_Utils.twig' as util %}
+
+<form method="POST" action="{$ basepath $}/contact/subscribe">
+    <section id="subscription-form">
+        <div class="container clearfix">
+            <div class="ltcol">
+                &nbsp;
+            </div>
+
+            <div class="ctcol">
+                <div class="box partial rounded no-margin">
+                    <div class="box-header container clearfix">
+                        <span class="icon-envelope-alt">Interessentenformular</span>
+                    </div>
+
+                    <div class="box-section">
+                        <div class="container clearfix">
+                            {% if errors.subscription_duplicate_subscription %}
+                                <div class="errorbox">Sie haben den Newsletter bereits mit dieser Mailadresse abonniert.</div>
+                            {% endif %}
+                            <div class="input-container">
+                                <label for="salutation-1">Anrede</label>
+                                <ul class="horizontal salutation">
+                                    <li class="first">
+                                        <input type="radio" class="required invalid" title="Frau" value="Frau" name="salutation"
+                                               id="salutation-1" required="" {% if salutation == 'Frau' %}checked="checked"{% endif %}>
+                                        <label for="salutation-1" class="icon-bug">Frau</label>
+                                    </li>
+
+                                    <li class="last">
+                                        <input type="radio" title="Herr" value="Herr" name="salutation" id="salutation-2"  {% if salutation == 'Herr' %}checked="checked"{% endif %}>
+                                        <label for="salutation-2">Herr</label>
+                                    </li>
+                                </ul>
+                                {$ util.form_error('salutation', errors) $}
+
+                                <select name="title" id="personal-title">
+                                    <option data-behavior="placeholder" value="">Kein Titel</option>
+                                    <option value="Dr."  {% if title == 'Dr.' %}selected="selected"{% endif %}>Dr.</option>
+                                    <option value="Prof." {% if title == 'Prof.' %}selected="selected"{% endif %}>Prof.</option>
+                                    <option value="Prof. Dr." {% if title == 'Prof. Dr.' %}selected="selected"{% endif %}>Prof. Dr.</option>
+                                </select>
+                                {$ util.form_error('title', errors) $}
+                            </div>
+
+                            <div class="input-container">
+                                <label for="first-name">Name</label>
+                                <input type="text" class="required" required="" placeholder="Vorname"
+                                       title="Groß- und Kleinbuchstaben, Bindestriche und Leerzeichen"
+                                       pattern="^((?![M|m]ustermann).)*$" name="firstName" id="first-name" value="{$ firstName $}">
+                                <span class="validation icon-placeholder"></span>
+                                {$ util.form_error('firstName', errors) $}
+
+                                <input type="text" class="required" required="" placeholder="Nachname"
+                                       title="Groß- und Kleinbuchstaben, Bindestriche, Leerzeichen und Punkte"
+                                       pattern="^((?![M|m]ustermann).)*$" name="lastName" id="last-name"  value="{$ lastName $}">
+                                <span class="validation icon-placeholder"></span>
+                                {$ util.form_error('lastName', errors) $}
+                            </div>
+
+                            <div class="input-container">
+                                <label for="email">E-Mail*</label>
+                                <input type="text" class="required" required="" placeholder="z.B. name@domain.de"  value="{$ email $}"
+                                       name="email" id="email">
+                                <span class="validation icon-placeholder"></span>
+                                {$ util.form_error('email', errors) $}
+                            </div>
+
+                            <div class="input-container">
+                                <label for="street">Straße</label>
+                                <input type="text" class="optional" placeholder="z.B. Musterstraße 123"
+                                       pattern="^((?![M|m]uster).)*$" name="address" id="street"  value="{$ street $}">
+                                <span class="validation icon-placeholder"></span>
+                                {$ util.form_error('street', errors) $}
+                            </div>
+
+                            <div class="input-container">
+                                <label for="post-code">PLZ &amp; Ort</label>
+                                <input type="text" class="optional" pattern="[0-9]{5}" title="Fünfstellige Postleitzahl"  value="{$ postcode $}"
+                                       placeholder="z.B. 10117" name="postcode" id="post-code">
+                                <span class="validation icon-placeholder"></span>
+                                <input type="text" class="optional" placeholder="z.B. Berlin" pattern="^((?![M|m]uster).)*$"  value="{$ city $}"
+                                       name="city" id="city">
+                                <span class="validation icon-placeholder"></span>
+                                {$ util.form_error('postcode', errors) $}
+                                {$ util.form_error('city', errors) $}
+                            </div>
+                        </div>{# end clearfix #}
+                    </div>{# end box-section #}
+                </div>{# end box #}
+            </div>{# end ctcol #}
+            <div class="rtcol">
+                <div class="icon-hand-right _icon-list-item last">
+                    <p>
+                        <strong>Spenden</strong>
+                    </p>
+                    <p>
+                        <a href="{$ path( '/' ) $}" target="_blank">Zurück</a> zur Spendenseite
+                    </p>
+                </div>
+            </div>
+        </div>{# end container #}
+    </section>
+
+    <section id="subscription-form-submit">
+        <div class="container clearfix">
+            <div class="ltcol">
+                &nbsp;
+            </div>
+
+            <div class="ctcol">
+                <div class="box partial rounded">
+
+                    <div class="box-footer clearfix">
+                        <div class="tab-1 tab container clearfix ">
+                            <button class="f-right" type="submit" id="subscriptionFormSubmit">Interesse anmelden<span class="icon-ok"></span></button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+</form>

@@ -1,0 +1,35 @@
+{$ greeting_generator.createGreeting( subscription.address.lastName, subscription.address.salutation, subscription.address.title ) $}
+
+herzlichen Dank für Ihr Interesse an der Förderung von Wikipedia und Freiem Wissen! Sie haben bei uns Ihre E-Mailadresse hinterlegt, damit wir Sie später kontaktieren können. Um Missbrauch vorzubeugen, bestätigen Sie bitte Ihre E-Mailadresse, indem Sie auf folgenden Link klicken:
+
+{$ url( 'confirm-subscription', { confirmationCode: subscription.confirmationCode } ) $}
+
+Mit der Bestätigung erklären Sie sich damit einverstanden, dass die Wikimedia Fördergesellschaft Sie in Zukunft per E-Mail zum Zweck der Erinnerung an eine Spende und auch dann kontaktieren darf, wenn Wikipedia Ihre Unterstützung benötigt.
+
+Sie können diese Einwilligung jederzeit z. B. per E-Mail an spenden@wikimedia.de mit Wirkung für die Zukunft widerrufen. Weiterführende zum Datenschutz erhalten Sie hier: https://spenden.wikimedia.de/spenden/Datenschutz
+
+Sollten Sie die E-Mailadresse nicht selbst bei uns eingegeben haben, können Sie diese E-Mail ignorieren.
+
+Falls Sie Fragen haben, erreichen Sie uns unter 030 / 219 15 826 19 oder per E-Mail an spenden@wikimedia.de
+
+Mit freundlichen Grüßen und bestem Dank für Ihre Unterstützungsbereitschaft.
+
+{% include 'Imprint_Name_Head_of_Suborganization.html.twig' %}
+{% include 'Imprint_Title_Head_of_Suborganization.html.twig' %}
+
+
+P.S. Eine Online-Spende können Sie auf unserer Spendenseite zu jeder Zeit abschließen. https://spenden.wikimedia.de/?piwik_campaign=mail-rml&piwik_kwd=requested
+
+-------------------------------------
+{% include 'Imprint_Address_of_Suborganization.txt.twig' %}
+Tel. 030 - 219 158 26-19
+Email spenden@wikimedia.de
+Spendenkonto der Wikimedia Foerdergesellschaft
+DE33100205000001194700 (IBAN) BFSWDE33BER (BIC)
+
+Gemeinnützige Wikimedia Fördergesellschaft mbH. Eingetragen beim Amtsgericht Berlin-Charlottenburg unter der Nummer 130183 B. Als gemeinnützig anerkannt durch das Finanzamt für Körperschaften I Berlin
+
+Wenn Sie keine weiteren E-Mails zur Spendenerinnerung (an: {$ subscription.email $}) empfangen möchten, antworten Sie auf diese E-Mail (spenden@wikimedia.de) mit der Betreffzeile "Abmelden".
+
+Dieser Newsletter wird Ihnen ausschließlich mit Ihrem Einverständnis zugesendet. Hier finden Sie Informationen zum Datenschutz:
+{$ url( 'page', { pageName: 'Datenschutz' } ) $}

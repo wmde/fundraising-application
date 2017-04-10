@@ -34,6 +34,8 @@ use WMDE\Fundraising\Frontend\Infrastructure\ServerSideTracker;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipPolicyValidator;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionPaymentNotification\HandleSubscriptionPaymentNotificationUseCase;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionSignupNotification\HandleSubscriptionSignupNotificationUseCase;
+use WMDE\Fundraising\Frontend\Presentation\ContentPage\ContentProvider;
+use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector;
 use WMDE\Fundraising\Frontend\Presentation\Honorifics;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\PageNotFoundPresenter;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
@@ -149,6 +151,7 @@ use WMDE\Fundraising\Frontend\Validation\IbanValidator;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
 use WMDE\Fundraising\Frontend\Validation\TemplateNameValidator;
 use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
+use WMDE\Fundraising\HtmlFilter\HtmlPurifier;
 use WMDE\Fundraising\Store\Factory as StoreFactory;
 use WMDE\Fundraising\Store\Installer;
 use WMDE\PageRetriever\LocalFilePageRetriever;
@@ -285,7 +288,7 @@ class FunFunFactory {
 				'json' => $translationFactory->newJsonLoader()
 			];
 			$locale = $this->config['locale'];
-			$messagesPath = __DIR__ . '/../../' . $this->config['i18n-base-path'] . '/' . $locale;
+			$messagesPath = $this->getI18nDirectory() . '/messages';
 			$translator = $translationFactory->create( $loaders, $locale );
 			$translator->addResource( 'json', $messagesPath . '/messages.json', $locale );
 			$translator->addResource( 'json', $messagesPath . '/paymentTypes.json', $locale, 'paymentTypes' );
@@ -307,7 +310,8 @@ class FunFunFactory {
 		};
 
 		$pimple['twig_factory'] = function () {
-			return new TwigFactory(
+			return new TwigEnvironmentConfigurator(
+				clone $this->pimple['twig_environment'],
 				$this->config['twig'],
 				$this->getCachePath() . '/twig',
 				$this->config['locale']
@@ -1060,14 +1064,14 @@ class FunFunFactory {
 	public function newDonationFormViolationPresenter() {
 		// TODO make the template name dependent on the 'form' value from the HTTP POST request
 		// (we need different form pages for A/B testing)
-		$template = $this->getLayoutTemplate( 'Display_Page_Layout.twig', [ 'main_template' => 'Donation_Form.html.twig' ] );
+		$template = $this->getLayoutTemplate( 'Donation_Form.html.twig' );
 		return new DonationFormViolationPresenter( $template, $this->newAmountFormatter() );
 	}
 
 	public function newDonationFormPresenter() {
 		// TODO make the template name dependent on the 'form' value from the HTTP POST request
 		// (we need different form pages for A/B testing)
-		$template = $this->getLayoutTemplate( 'Display_Page_Layout.twig', [ 'main_template' => 'Donation_Form.html.twig' ] );
+		$template = $this->getLayoutTemplate( 'Donation_Form.html.twig' );
 		return new DonationFormPresenter( $template, $this->newAmountFormatter() );
 	}
 
@@ -1324,4 +1328,24 @@ class FunFunFactory {
 			new \PiwikTracker( $this->config['piwik']['siteId'], 'https:' . $this->config['piwik']['baseUrl'] )
 		);
 	}
+
+    public function getI18nDirectory(): string {
+        return __DIR__ . '/../../' . $this->config['i18n-base-path'] . '/' . $this->config['locale'];
+    }
+
+	public function newContentPagePageSelector(): PageSelector {
+        return new PageSelector(
+            json_decode(
+                file_get_contents($this->getI18nDirectory() . '/data/pages.json'),
+                true
+            )
+        );
+    }
+
+    public function newContentPageContentProvider(): ContentProvider {
+        $loader = new \Twig_Loader_Filesystem( $this->getI18nDirectory() . '/pages' );
+        $environment = $this->getTwigFactory()->getEnvironment([$loader], [], []);
+
+        return new ContentProvider( $environment, new HtmlPurifier() );
+    }
 }

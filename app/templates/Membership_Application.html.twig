@@ -1,0 +1,22 @@
+{% set showMembershipTypeOption = showMembershipTypeOption is defined ? showMembershipTypeOption : 'true' %}
+{% set membershipAppeal = 'Werden Sie Mitglied für Freies Wissen!' %}
+{% set formSlideOpen = false %}
+
+{% include 'Validation_Errors.html.twig' %}
+
+<div id="personalDataPage">
+	{% include 'Membership_Application_Form.html.twig' %}
+</div>
+
+<div id="bankConfirmationPage">
+	{% include 'Membership_Application_Bank_Data_Confirmation.html.twig' %}
+</div>
+
+<script id="init-form" src="{$ basepath|e('html_attr') $}{$ '/res/js/membershipForm.js'|prefix_file $}"
+	data-initial-form-values="{% if initialFormValues %}{$ initialFormValues|merge({'paymentType': 'BEZ'})|json_encode|e('html_attr') $}{% else %}{$ {'paymentType': 'BEZ'}|json_encode|e('html_attr') $}{% endif %}"
+	data-violated-fields="{% if violatedFields %}{$ violatedFields|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
+	data-validate-fee-url="{$ basepath|e('html_attr') $}/validate-fee"
+	data-validate-address-url="{$ basepath|e('html_attr') $}/validate-address"
+	data-validate-email-address-url="{$ basepath|e('html_attr') $}/validate-email"
+	data-validate-iban-url="{$ basepath $}/check-iban"
+	data-generate-iban-url="{$ basepath $}/generate-iban"></script>

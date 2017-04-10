@@ -1,0 +1,127 @@
+<div class="wlightbox-title clearfix">
+    <span class="icon-gift wlightbox-icon"></span>Spenden Sie mit Bitcoins *
+</div>
+<div class="container clearfix">
+    <style>
+        .bitpay-donate {
+            margin: 20px 0;
+        }
+
+        .bitpay-donate fieldset {
+            border: 0;
+        }
+
+        .bitpay-donate ul, .bitpay-donate li {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        .bitpay-donate li {
+            padding: 10px 0;
+        }
+
+        .bitpay-donate-field {
+            clear: both;
+        }
+
+        .bitpay-donate-field label {
+            float: left;
+            width: 100px;
+            margin-top: 8px
+        }
+
+        .bitpay-donate-field div {
+            float: left;
+        }
+
+        .bitpay-donate-field-price {
+            width: 100px;
+        }
+
+        .bitpay-donate-button-wrapper {
+            clear: both;
+            margin: auto;
+            text-align: center;
+        }
+
+        #price {
+            padding-right: 0px;
+        }
+
+
+        #currency-button {
+            width: 150px;
+        }
+
+        #currency {
+            width: 150px;
+        }
+
+        #wlightbox-bitcoin {
+            width: 250px;
+        }
+
+        .bitcoin-label {
+            color: #7c8499;
+            font-size: 1.2em;
+            font-weight: bold;
+            width: 80px;
+        }
+    </style>
+    <form class="bitpay-donate" action="https://bitpay.com/checkout" method="post">
+        <input name="action" type="hidden" value="checkout"/>
+        <input name="itemDesc" type="hidden" value="Spenden Sie für Wikimedia"/>
+        <input name="transactionSpeed" type="hidden" value="high"/>
+
+        <fieldset>
+            <div class="input-container">
+                <label class="bitcoin-label" for="price">Betrag</label>
+                <input type="number" id="price" name="price" value="0.05" step="0.001" min="0" max="250" required=""
+                       class="required">
+                <span class="validation icon-placeholder"></span>
+            </div>
+            <div class="input-container">
+                <label class="bitcoin-label" for="currency">Währung</label>
+                <select name="currency" class="bitpay-donate-field-currency" id="currency">
+                    <option value="BTC" selected="selected">BTC</option>
+                    <option value="EUR">EUR</option>
+                </select>
+            </div>
+            <input type="hidden" name="data"
+                   value="qzmQdxwfdUmodwKMJNf1ZLCaqI7nSBHdcjBHeApe31R0EUwzdqP6TqwS93hoPmzWsymoXiG11qySu7u4AVKhfO9sLzrncIDmLRNRKEuPmQ1HEpkvWTMYTopkBfA5ue+TXevQn20G75ES5D6wymZJ2nlRpTGhE6Mu45SBBACMFvGrOmFr9VPBRO2eY84AcaeXhGT8t51qchSk0GHfYg5W1eMdE5yZygMG7dlxOXLSsvPqSpfR0dLCvcQbBo5/X4AQZsqrICGf/98a4CmXY/hu89l4sYw0cpqzLbDMwtG8NrxIIrzvq9e1yy6GAztQJvzI+r+RICaPN9LIlZ4Itye8iw==">
+
+            <div class="bitpay-donate-button-wrapper">
+                <input onclick="" class="bitpay-donate-button" name="submit"
+                       src="{$ basepath $}/resources/{$ locale $}/bitcoin_button.png"
+                       width="126"
+                       height="48" type="image" alt="Jetzt mit Bitcoins spenden." border="0">
+            </div>
+        </fieldset>
+    </form>
+</div>
+<div style="font-size: 0.9em; color: #666666; margin-top: 10px;">* Nach Drücken des Spendenbuttons werden Sie auf eine gesicherte Seite unseres Bitcoin-Dienstleisters BitPay weitergeleitet.</div>
+<script type="text/javascript">
+    $('#currency').change (function() {
+        var option = $(this).find('[value="' + $(this).find('option:selected').val() + '"]').text();
+        var priceElm = $('#price');
+        if(option == 'BTC') {
+            if(priceElm.val() > 250){
+                priceElm.val(250);
+            }
+            priceElm.next().removeClass('icon-bug icon-ok');
+            priceElm.next().addClass('icon-placeholder');
+            priceElm.attr('max', 250);
+            priceElm.attr('min', 0);
+        }
+        if(option == 'EUR') {
+            if(priceElm.val() > 60000){
+                priceElm.val(60000);
+            }
+            priceElm.next().removeClass('icon-bug icon-ok');
+            priceElm.next().addClass('icon-placeholder');
+            priceElm.attr('max', 60000);
+            priceElm.attr('min', 0.01);
+        }
+    });
+</script>

@@ -1,0 +1,49 @@
+<div class="wlightbox-title clearfix">
+  <span class="icon-coffee wlightbox-icon"></span>Ihre Geschichte
+</div>
+
+<p>
+  Erz&auml;hlen Sie uns Ihre Geschichte! Warum haben Sie gespendet?
+  Wie wichtig ist Ihnen Wikipedia? Was bedeutet Freies Wissen f&uuml;r
+  Sie? Millionen Menschen nutzen Wikipedia jeden Tag; doch nur die
+  wenigsten wissen, dass Wikipedia durch Spenden finanziert wird. Ihre
+  Geschichte hilft uns, die Bedeutung von Wikipedia f&uuml;r die Menschen
+  zu veranschaulichen. Wir wollen noch mehr Menschen von der Idee des
+  Freien Wissens begeistern. Daf&uuml;r brauchen wir Ihre pers&ouml;nliche
+  Geschichte! Herzlichen Dank.
+</p>
+
+<form name="commentForm" class="ajax-form" id="feedback" action="#" method="post" style="line-height: 1.6em;">
+  <div class="input-container clearfix">
+    <textarea id="feedback-message" name="kommentar" class="f-left" style="width: 360px; height: 255px;"></textarea>
+    <div class="container f-left no-margin" style="width: 300px;">
+      <ul>
+        <li class="first">
+          <input type="radio" id="feedback-author-type-1" name="eintrag" value="Anonym" title="Anonym" checked>
+          <label for="feedback-author-type-1">Anonym</label>
+        </li>
+	{% if person.fullName %}
+        <li class="last">
+          <input type="radio" id="feedback-author-type-3" name="eintrag" value="{$ person.fullName $}" title="{$ person.fullName $}">
+          <label for="feedback-author-type-3">{$ person.fullName $}</label>
+        </li>
+	{% endif %}
+      </ul>
+      <hr/>
+      <ul>
+        <li class="first">
+          <input type="radio" id="feedback-type-1" name="public" value="1" title="Ver&ouml;ffentlichen" checked>
+          <label for="feedback-type-1">Ver&ouml;ffentlichen</label>
+        </li>
+        <li class="last">
+          <input type="radio" id="feedback-type-2" name="public" value="0" title="Nicht Ver&ouml;ffentlichen">
+          <label for="feedback-type-2">Nicht Ver&ouml;ffentlichen</label>
+        </li>
+      </ul>
+      <hr/>
+      <input type="hidden" name="utoken" value="{$ donation.updateToken $}" />
+      <input type="hidden" name="sid" value="{$ donation.id $}" />
+      <button id="publishComment" type="submit">Abschicken<span class="icon-arrow-right"></span></button>
+    </div>
+  </div>
+</form>

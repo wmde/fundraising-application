@@ -1,0 +1,467 @@
+<!-- become member -->
+<form name="memForm" id="memForm" method="POST" action="{$ basepath $}/apply-for-membership">
+
+	<!-- header box -->
+	<section id="become-member">
+		<div class="container clearfix">
+			<div class="ltcol">
+				&nbsp;
+			</div>
+
+			<div class="ctcol">
+				<div class="box partial rounded no-margin">
+					<div class="box-header container clearfix">
+						<span class="icon-lock">{$ membershipAppeal $}</span>
+					</div>
+
+					<div class="box-section">
+						<div class="container clearfix">
+							<p class="h2">
+								Seien Sie dabei!
+							</p>
+
+							<ul class="advantage-list">
+								<li class="first icon-ok _icon-list-item">
+									Langfristig und nachhaltig Wikipedia unterst&uuml;tzen.
+								</li>
+
+								<li class="icon-ok _icon-list-item">
+									Steuerlich absetzbar. Eine j&auml;hrliche Zuwendungsbest&auml;tigung wird automatisch im Folgejahr zugesendet.
+								</li>
+
+								<li class="icon-ok _icon-list-item">
+									Regelm&auml;&szlig;ige Informationen &uuml;ber die Arbeit des Vereins.
+								</li>
+
+								<li class="icon-ok _icon-list-item">
+									Kostenfrei an Veranstaltungen rund um Wikipedia und Freies Wissen teilnehmen.
+								</li>
+
+								<li class="{% if showMembershipTypeOption == 'false' %}last{% endif %} icon-ok _icon-list-item">
+									Jederzeit formlos per E-Mail k&uuml;ndbar.
+								</li>
+
+{% if showMembershipTypeOption == 'true' %}
+								<li class="last icon-ok _icon-list-item">
+									Aktiv Freies Wissen verbreiten
+								</li>
+{% endif %}
+							</ul>
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+
+			<div class="rtcol">
+				<div class="icon-file-alt _icon-list-item last">
+					<p>
+						<strong>Mehr Informationen</strong>
+					</p>
+					<p>
+						Erfahren Sie <a href="http://wikimedia.de/wiki/Mitgliedschaft{% if trackOutgoingLinks is defined and trackOutgoingLinks == true %}?piwik_campaign=Spendenseite&piwik_kwd=membership-form-sidebar{% endif %}" target="_blank">mehr</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- personal data -->
+	<section id="personal-data" class="container {% if formSlideOpen == true %}slide no-display{% endif %} clearfix">
+		<div class="ltcol">
+			&nbsp;
+		</div>
+
+		<div class="ctcol">
+			<div class="box partial">
+
+				<div class="box-section approval">
+{% if showMembershipTypeOption == 'true' %}
+					<div class="icon-ok _icon-list-item clearfix">
+						Ich werde Mitglied des Wikimedia Deutschland e. V.
+					</div>
+
+					<div class="container">
+						<ul class="horizontal clearfix">
+							<li class="first">
+								<input type="radio" id="membership-type-1" class="membership-type-select" name="membership_type" value="sustaining" title="F&ouml;rdermitglied" {% if type == 'sustaining' or not type %}checked="checked"{% endif %}>
+								<label for="membership-type-1">F&ouml;rdermitglied</label>
+							</li>
+
+							<li class="last">
+								<input type="radio" id="membership-type-2" class="membership-type-select" name="membership_type" value="active" title="Aktives Mitglied" {% if type == 'active' or not type %}checked="checked"{% endif %}>
+								<label for="membership-type-2">Aktives Mitglied</label>
+							</li>
+						</ul>
+						<input type="hidden" name="showMembershipTypeOption" value="true" />
+					</div>
+{% else %}
+					<span class="icon-ok _icon-list-item">Ich werde Fördermitglied des Wikimedia Deutschland e. V.</span>
+					<input type="hidden" name="membership_type" value="sustaining" />
+					<input type="hidden" name="showMembershipTypeOption" value="false" />
+{% endif %}
+				</div>
+
+				<div class="box-section">
+					<div class="section-title clearfix">
+						<h2>Pers&ouml;nliche Daten</h2>
+					</div>
+
+					<div class="container">
+						<ul class="horizontal clearfix">
+							<li class="first">
+								<input type="radio" id="address-type-1" class="address-type-select slide-toggle" name="adresstyp" value="person" title="privat" data-slide-rel="#personal-data .slide-1" {% if person.addressType == 'person' or not person.addressType %}checked="checked"{% endif %}>
+								<label for="address-type-1">Privatperson</label>
+							</li>
+
+							<li class="last">
+								<input type="radio" id="address-type-2" class="address-type-select slide-toggle" name="adresstyp" value="firma" title="gesch&auml;ftlich" data-slide-rel="#personal-data .slide-2" {% if person.addressType == 'firma' %}checked="checked"{% endif %}>
+								<label for="address-type-2">Firma</label>
+							</li>
+						</ul>
+					</div>
+
+					<div class="slide-3">
+
+						<hr/>
+
+						<div class="person-name">
+
+							<div class="input-container">
+								<ul class="horizontal clearfix salutation">
+									<li class="first">
+										<input type="radio" id="salutation-1" class="salutation-select" name="anrede" value="Frau" title="Frau" {% if person.salutation == 'Frau' or not person.salutation %}checked="checked"{% endif %}>
+										<label for="salutation-1">Frau</label>
+									</li>
+
+									<li class="last">
+										<input type="radio" id="salutation-2" class="salutation-select" name="anrede" value="Herr" title="Herr" {% if person.salutation == 'Herr' %}checked="checked"{% endif %}>
+										<label for="salutation-2">Herr</label>
+									</li>
+								</ul>
+								<input type="radio" id="salutation-3" class="salutation-select" name="anrede" value="Firma" style="visibility: hidden">
+
+								<select id="personal-title" name="titel">
+									<option value="" data-behavior="placeholder" {% if person.title == '' or not person.title %}selected="selected"{% endif %}>Kein Titel</option>
+									<option value="Dr." {% if person.title == 'Dr.' %}selected="selected"{% endif %}>Dr.</option>
+									<option value="Prof." {% if person.title == 'Prof.' %}selected="selected"{% endif %}>Prof.</option>
+									<option value="Prof. Dr." {% if person.title == 'Prof. Dr.' %}selected="selected"{% endif %}>Prof. Dr.</option>
+								</select>
+							</div>
+
+							<div class="input-container">
+								<label for="first-name">Name</label>
+								<input id="first-name" name="vorname" type="text" value="{$ person.firstName $}" data-pattern="^(?![M|m]ustermann).+$" title="Groß- und Kleinbuchstaben, Bindestriche und Leerzeichen" placeholder="Vorname">
+								<span class="validation icon-placeholder"></span>
+								<input id="last-name" name="nachname" type="text" value="{$ person.lastName $}" data-pattern="^(?![M|m]ustermann).+$" title="Groß- und Kleinbuchstaben, Bindestriche, Leerzeichen und Punkte" placeholder="Nachname">
+								<span class="validation icon-placeholder"></span>
+							</div>
+						</div>
+
+						<div class="company-name">
+							<div class="input-container">
+								<label for="company-name">Firma</label>
+								<input id="company-name" name="firma" type="text" value="{$ person.company $}" placeholder="Firma">
+								<span class="validation icon-placeholder"></span>
+							</div>
+						</div>
+
+
+						<div class="input-container">
+							<label for="street">Stra&szlig;e</label>
+							<input id="street" name="strasse" type="text" value="{$ person.streetAddress $}" data-pattern="^(?![M|m]uster).+$" placeholder="z.B. Musterstra&szlig;e 123">
+							<span class="validation icon-placeholder"></span>
+						</div>
+
+						<div class="input-container">
+							<label for="post-code">PLZ &amp; Ort</label>
+							<input id="post-code" name="postcode" type="text" value="{$ person.postcode $}" data-pattern="[0-9]{4,5}" title="Fünfstellige Postleitzahl" placeholder="z.B. 10117">
+							<span class="validation icon-placeholder"></span>
+							<input id="city" name="ort" type="text" value="{$ person.city $}" data-pattern="^(?![M|m]uster).+$" placeholder="z.B. Berlin">
+							<span class="validation icon-placeholder"></span>
+						</div>
+
+						<div class="input-container">
+							<label for="country">Land</label>
+							<select id="country" name="country" title="Land">
+								<option value="DE" {% if person.countryCode == 'DE' or not person.countryCode %}selected="selected"{% endif %}>Deutschland</option>
+								<option value="AT" {% if person.countryCode == 'AT' %}selected="selected"{% endif %}>Österreich</option>
+								<option value="CH" {% if person.countryCode == 'CH' %}selected="selected"{% endif %}>Schweiz</option>
+								<option value="BE" {% if person.countryCode == 'BE' %}selected="selected"{% endif %}>Belgien</option>
+								<option value="IT" {% if person.countryCode == 'IT' %}selected="selected"{% endif %}>Italien</option>
+								<option value="LI" {% if person.countryCode == 'LI' %}selected="selected"{% endif %}>Liechtenstein</option>
+								<option value="LU" {% if person.countryCode == 'LU' %}selected="selected"{% endif %}>Luxemburg</option>
+							</select>
+						</div>
+
+						<div class="input-container">
+							<label for="email">E-Mail</label>
+							<input id="email" name="email" type="text" value="{$ person.emailAddress $}" placeholder="z.B. name@domain.de">
+							<span class="validation icon-placeholder"></span>
+						</div>
+
+						<div class="input-container">
+							<label for="date-of-birth">Geburtsdatum</label>
+							<input id="date-of-birth" class="optional" name="dob" type="text" value="" title="DD.MM.YYYY" optional="optional" placeholder="optional" data-pattern="^[0-3]?[0-9]\.[01]?[0-9]\.[0-9]{2,4}$">
+							<span class="validation icon-placeholder"></span>
+						</div>
+
+						<div class="input-container">
+							<label for="phone">Telefon</label>
+							<input id="phone" class="optional" name="phone" type="text" value="" title="Ziffern, runde Klammern, Plus und Minus" optional="optional" placeholder="optional" data-pattern="^[0-9\-\+\(\) ]{6,30}$">
+							<span class="validation icon-placeholder"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="rtcol">
+			<div class="icon-hand-right _icon-list-item first last">
+				<p>
+					<strong>Steuerlich absetzbar</strong>
+				</p>
+				<p>
+					Mitgliedsbeitr&auml;ge sind wie Spenden steuerlich absetzbar.
+				</p>
+			</div>
+		</div>
+	</section>
+
+
+	<!-- membership payment -->
+		<section class="container {% if formSlideOpen == true %}slide no-display{% endif %} clearfix" id="membership-payment">
+		<div class="ltcol">
+			&nbsp;
+		</div>
+
+		<div class="ctcol">
+			<div class="box rounded partial no-margin">
+				<div class="box-section">
+					<div class="section-title clearfix">
+						<h2 class="f-left no-margin">Ihr Mitgliedsbeitrag</h2>
+					</div>
+
+					<div class="container clearfix">
+						<!-- START payment options; uncomment this and remove the hidden field below to enable it -->
+ 		
+						<!--
+						<ul class="horizontal clearfix payment-type-list">
+							<li class="first">
+								<input type="radio" title="Lastschrift" value="BEZ" class="payment-type-select" name="payment_type" id="paymentType-1">
+								<label for="paymentType-1">Lastschrift</label>
+							</li>
+							<li>
+								<input type="radio" title="PayPal" value="PPL" class="payment-type-select" name="payment_type" id="paymentType-2">
+								<label for="paymentType-2">PayPal</label>
+							</li>
+						</ul>
+
+						<hr />
+                                                -->
+						<!-- END payment options; uncomment this and remove the hidden field below to enable it -->
+
+						<input type="hidden" name="payment_type" value="BEZ" />
+						<ul class="horizontal clearfix interval-list">
+							<li class="first">
+								<input type="radio" id="interval-1" name="membership_fee_interval" class="payment-period-select" value="1" title="monatlich">
+								<label for="interval-1">monatlich</label>
+							</li>
+
+							<li>
+								<input type="radio" id="interval-2" name="membership_fee_interval" class="payment-period-select" value="3" title="quartalsweise">
+								<label for="interval-2">quartalsweise</label>
+							</li>
+
+							<li>
+								<input type="radio" id="interval-3" name="membership_fee_interval" class="payment-period-select" value="6" title="halbjährlich">
+								<label for="interval-3">halbjährlich</label>
+							</li>
+
+							<li class="last">
+								<input type="radio" id="interval-4" name="membership_fee_interval" class="payment-period-select" value="12" title="jährlich" checked="checked">
+								<label for="interval-4">jährlich</label>
+							</li>
+						</ul>
+
+						<hr>
+
+						<ul class="horizontal clearfix amount-list">
+							<li class="first">
+								<input type="radio" id="amount-1" class="amount-select" name="membership_fee_select" value="5,00" title="5€">
+								<label for="amount-1">5€</label>
+							</li>
+
+							<li>
+								<input type="radio" id="amount-2" class="amount-select" name="membership_fee_select" value="15,00" title="15€">
+								<label for="amount-2">15€</label>
+							</li>
+
+							<li>
+								<input type="radio" id="amount-3" class="amount-select" name="membership_fee_select" value="25,00" title="25€">
+								<label for="amount-3">25€</label>
+							</li>
+
+							<li>
+								<input type="radio" id="amount-4" class="amount-select" name="membership_fee_select" value="50,00" title="50€">
+								<label for="amount-4">50€</label>
+							</li>
+
+							<li>
+								<input type="radio" id="amount-5" class="amount-select" name="membership_fee_select" value="75,00" title="75€">
+								<label for="amount-5">75€</label>
+							</li>
+
+							<li>
+								<input type="radio" id="amount-6" class="amount-select" name="membership_fee_select" value="100,00" title="100€">
+								<label for="amount-6">100€</label>
+							</li>
+
+							<li>
+								<input type="radio" id="amount-7" class="amount-select" name="membership_fee_select" value="250,00" title="250€">
+								<label for="amount-7">250€</label>
+							</li>
+
+							<li class="amount-custom last no-margin">
+								<div class="container" style="width: 100px;">
+									<input type="text" id="amount-8" class="amount-input" name="membership_fee_custom"
+										   title="Betrag zwischen 2 und 99999,99 Euro; Komma als Dezimaltrenner"
+										   data-pattern="^[1-9]{1}\d{0,4}(?:,\d\d)?$">
+									<label class="right top" for="amount-8">€</label>
+								</div>
+							</li>
+							<input id="amount-hidden" type="hidden" name="membership_fee" value="" />
+						</ul>
+					</div>
+
+					<hr>
+
+					<div class="fields-direct-debit">
+						<div class="container">
+							<ul class="horizontal clearfix">
+								<li class="first">
+									<input type="radio" data-slide-rel=".slide-sepa" class="debit-type-select slide-toggle" checked="checked"
+										   title="SEPA" name="debit-type" value="sepa" id="debit-type-1">
+									<label for="debit-type-1">IBAN</label>
+								</li>
+
+								<li class="last">
+									<input type="radio" data-slide-rel=".slide-non-sepa" class="debit-type-select slide-toggle" title="Konto/BLZ"
+										   name="debit-type" value="non-sepa" id="debit-type-2">
+									<label for="debit-type-2">Konto/Bankleitzahl</label>
+								</li>
+							</ul>
+						</div>
+						<hr>
+						<div class="slide-sepa opened" id="sepa">
+							<div class="input-container">
+								<label for="iban">IBAN</label>
+								<input type="text" title="Internationale Kontonummer"
+									   data-pattern="^DE[0-9]{20}$|^AT[0-9]{18}$|^CH[0-9]{7}[A-Za-z0-9]{12}$|^BE[0-8]{14}$|^IT[0-9]{2}[A-Z][0-9]{10}[A-Za-z0-9]{12}$|^LI[0-9]{7}[A-Za-z0-9]{12}$|^LU[0-9]{5}[A-Za-z0-9]{13}$"
+									   placeholder="IBAN" name="iban" id="iban" class="iban-check"
+									   value="{$ bankData.iban $}">
+								<span class="validation"></span>
+							</div>
+
+							<div class="input-container">
+								<label for="bic">BIC</label>
+								<input type="text" title="BIC"
+									   data-pattern="^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$" placeholder="BIC"
+									   name="bic" id="bic" value="{$ bankData.bic $}">
+								<span class="validation"></span>
+							</div>
+						</div>
+
+						<div class="slide-non-sepa" id="non-sepa" style="opacity: 0; display: none;">
+							<div class="input-container">
+								<label for="account-number">Kontonummer</label>
+								<input type="text" title="Bis zu zehnstellige Kontonummer" data-pattern="[0-9]{4,10}"
+									   placeholder="Kontonummer" name="account_number"
+									   id="account-number" class="bank-check">
+								<span class="validation"></span>
+							</div>
+
+							<div class="input-container">
+								<label for="bank-code">Bankleitzahl</label>
+								<input type="text" data-pattern="[0-9]{8}" title="Achtstellige Bankleitzahl"
+									   placeholder="Bankleitzahl" name="bank_code" id="bank-code"
+									   class="bank-check">
+								<span class="validation"></span>
+							</div>
+						</div>
+					</div>
+
+					<div style="margin-left: 180px" class="input-container">
+						<span id="bank-name"></span>
+					</div>
+
+					<hr>
+				</div>
+			</div>
+		</div>
+
+		<div class="rtcol">
+			<div class="icon-hand-right _icon-list-item firt last">
+				<p>
+					<strong>Mitgliedsbeitrag</strong>
+				</p>
+
+				<p>
+					Der Mindestbetrag für natürliche Personen beträgt 24 Euro, für juristische Personen 100 Euro im Jahr.
+				</p>
+
+				<p>
+					Für Personen mit eingeschränkter finanzieller Leistungskraft kann der Beitrag auf Antrag auf 12 Euro
+					ermäßigt werden.
+				</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- become member submit -->
+	<section id="become-member-submit">
+		<div class="container clearfix">
+			<div class="ltcol">
+				&nbsp;
+			</div>
+
+			<div class="ctcol">
+				<div class="box partial rounded">
+
+					<div class="box-footer clearfix">
+						<div class="tab-1 tab container clearfix ">
+{% if formSlideOpen == true %}
+							<span class="label f-right">Weiter mit Ihren<br/>Mitgliederdetails</span>
+							<a id="become-member-button" class="button f-right slide-toggle tab-toggle" data-slide-rel="section.slide" data-tab-rel="#become-member-submit .tab-2" data-tab-group-rel="#become-member-submit" href="#">Jetzt Mitglied werden<span class="icon-arrow-down"></span></a>
+						</div>
+
+						<div class="tab-2 tab container clearfix no-display">
+{% endif %}
+							<button id="continueFormSubmit" type="button" class="f-right">Weiter zur Bestätigung<span class="icon-ok"></span></button>
+							<button id="finishFormSubmit" type="button" class="f-right">Jetzt Mitgliedschaft abschlie&szlig;en<span class="icon-ok"></span></button>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="meta-nav container clearfix">
+					<a href="http://de.wikipedia.org" class="f-left">
+						<span class="icon-angle-left"></span>Zur&uuml;ck zur Wikipedia
+					</a>
+
+					<a href="http://wikimedia.de{% if trackOutgoingLinks is defined and trackOutgoingLinks == true %}?piwik_campaign=Spendenseite&piwik_kwd=membership-form-bottom{% endif %}" class="f-right">
+						Mehr Infos zu Wikimedia<span class="icon-angle-right _icon-right"></span>
+					</a>
+				</div>
+			</div>
+
+			<div class="rtcol">
+
+			</div>
+		</div>
+	</section>
+	<input type="hidden" name="bank_name" id="field-bank-name" value="{$ bankData.bankName $}" />
+	<input type="hidden" name="templateCampaign" value="{$ templateCampaign $}" />
+	<input type="hidden" name="templateName" value="{$ templateName $}" />
+</form>

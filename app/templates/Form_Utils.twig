@@ -1,0 +1,5 @@
+{% macro form_error( field_name, errors) %}
+  {% if field_name in errors %}
+    <span class="form-error">{$ errors[field_name]|trans({}, "validations") $}</span>
+  {% endif %}
+{% endmacro %}

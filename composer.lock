@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d994d00647d373cb190cb44c4ee6d030",
+    "content-hash": "ca89a2ce6afe62ba393122c67e246a79",
     "packages": [
         {
             "name": "addwiki/mediawiki-api-base",
@@ -691,6 +691,53 @@
                 "orm"
             ],
             "time": "2016-12-18T15:42:34+00:00"
+        },
+        {
+            "name": "ezyang/htmlpurifier",
+            "version": "v4.9.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ezyang/htmlpurifier.git",
+                "reference": "6d50e5282afdfdfc3e0ff6d192aff56c5629b3d4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/6d50e5282afdfdfc3e0ff6d192aff56c5629b3d4",
+                "reference": "6d50e5282afdfdfc3e0ff6d192aff56c5629b3d4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2"
+            },
+            "require-dev": {
+                "simpletest/simpletest": "^1.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "HTMLPurifier": "library/"
+                },
+                "files": [
+                    "library/HTMLPurifier.composer.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL"
+            ],
+            "authors": [
+                {
+                    "name": "Edward Z. Yang",
+                    "email": "admin@htmlpurifier.org",
+                    "homepage": "http://ezyang.com"
+                }
+            ],
+            "description": "Standards compliant HTML filter written in PHP",
+            "homepage": "http://htmlpurifier.org/",
+            "keywords": [
+                "html"
+            ],
+            "time": "2017-03-13T06:30:53+00:00"
         },
         {
             "name": "gedmo/doctrine-extensions",
@@ -2550,6 +2597,65 @@
             "description": "Value object for representing a positive amount of Euro",
             "homepage": "https://github.com/wmde/Euro",
             "time": "2016-07-31T05:48:08+00:00"
+        },
+        {
+            "name": "wmde/fundraising-html-filter",
+            "version": "dev-first-steps",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wmde/fundraising-html-filter.git",
+                "reference": "cd5aefae6e87ad36d2b23afb53d2869e02b05d9b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wmde/fundraising-html-filter/zipball/cd5aefae6e87ad36d2b23afb53d2869e02b05d9b",
+                "reference": "cd5aefae6e87ad36d2b23afb53d2869e02b05d9b",
+                "shasum": ""
+            },
+            "require": {
+                "ezyang/htmlpurifier": "^4.9",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.1",
+                "squizlabs/php_codesniffer": "^2.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "WMDE\\Fundraising\\HtmlFilter\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "WMDE\\Fundraising\\HtmlFilter\\Test\\": "test/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "composer validate --no-interaction",
+                    "vendor/bin/phpunit"
+                ],
+                "cs": [
+                    "@phpcs"
+                ],
+                "ci": [
+                    "@test",
+                    "@cs"
+                ],
+                "phpcs": [
+                    "vendor/bin/phpcs src/ test/ --standard=phpcs.xml --extensions=php -sp"
+                ]
+            },
+            "license": [
+                "GPL-2.0+"
+            ],
+            "description": "WMDE fundraising application content HTML filter",
+            "support": {
+                "source": "https://github.com/wmde/fundraising-html-filter/tree/first-steps",
+                "issues": "https://github.com/wmde/fundraising-html-filter/issues"
+            },
+            "time": "2017-04-11 13:36:48"
         },
         {
             "name": "wmde/fundraising-store",
@@ -4835,16 +4941,16 @@
         },
         {
             "name": "wmde/fundraising-frontend-content",
-            "version": "dev-master",
+            "version": "dev-templates-back-in-app",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content.git",
-                "reference": "ac67e3e9adc5fecbdc2d57e58b190f5cc4a44603"
+                "reference": "f27a15a348a7262066b24eefb514d2d031145398"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/ac67e3e9adc5fecbdc2d57e58b190f5cc4a44603",
-                "reference": "ac67e3e9adc5fecbdc2d57e58b190f5cc4a44603",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/f27a15a348a7262066b24eefb514d2d031145398",
+                "reference": "f27a15a348a7262066b24eefb514d2d031145398",
                 "shasum": ""
             },
             "type": "library",
@@ -4853,10 +4959,10 @@
             ],
             "description": "i18n for FundraisingFrontend",
             "support": {
-                "source": "https://github.com/wmde/fundraising-frontend-content/tree/master",
+                "source": "https://github.com/wmde/fundraising-frontend-content/tree/templates-back-in-app",
                 "issues": "https://github.com/wmde/fundraising-frontend-content/issues"
             },
-            "time": "2017-04-04T15:02:29+00:00"
+            "time": "2017-04-10 17:06:43"
         },
         {
             "name": "wmde/psr-log-test-doubles",
@@ -4917,16 +5023,10 @@
             "time": "2017-01-17T09:04:52+00:00"
         }
     ],
-    "aliases": [
-        {
-            "alias": "1.0.x-dev",
-            "alias_normalized": "1.0.9999999.9999999-dev",
-            "version": "9999999-dev",
-            "package": "wmde/fundraising-frontend-content"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "wmde/fundraising-html-filter": 20,
         "ockcyp/covers-validator": 20,
         "wmde/fundraising-frontend-content": 20
     },

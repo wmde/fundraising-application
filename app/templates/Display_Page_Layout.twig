@@ -1,0 +1,36 @@
+{% extends 'Base_Layout.html.twig' %}
+
+{% block main %}
+    <section>
+        <div class="container clearfix">
+            <div class="ltcol">
+                &nbsp;
+            </div>
+
+            <div class="ctcol">
+                <div class="box partial rounded no-margin">
+                    <div class="box-header container clearfix">
+                        <span class="icon-hand-right f-left">TODO</span>
+                    </div>
+
+                    <div class="box-section box-footer">
+                        <div class="container clearfix">
+                            {$ page_content|raw $}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="rtcol">
+                <div class="icon-hand-right _icon-list-item last">
+                    <p>
+                        <strong>Spenden</strong>
+                    </p>
+                    <p>
+                        <a href="{$ path( '/' ) $}" target="_blank">Zurück</a> zur Spendenseite
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

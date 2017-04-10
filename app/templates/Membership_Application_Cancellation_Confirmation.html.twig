@@ -1,0 +1,54 @@
+<section>
+	<div class="container clearfix">
+		<div class="ltcol">
+			&nbsp;
+		</div>
+
+		<div class="ctcol">
+			<div class="box box-common partial rounded no-margin">
+				<div class="box-header container clearfix">
+					{% if cancellationSuccessful %}
+					<span class="icon-ok">
+						{$ 'membership-cancellation-header'|trans({}) $}
+					</span>
+					{% else %}
+					<span class="icon-bug">
+						{$ 'membership-cancellation-failed-header'|trans({}) $}
+					</span>
+					{% endif %}
+				</div>
+
+				<div class="box-section box-footer">
+					<div class="container clearfix">
+						<p>
+							{% if cancellationSuccessful %}
+								{$ 'membership-cancellation-text'|trans( { '%membership.id%': membershipId } )|raw $}
+							{% else %}
+								{$ 'membership-cancellation-failed-text'|trans( { '%membership.id%': membershipId } )|raw $}
+							{% endif %}
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="rtcol">
+			<div class="icon-hand-right _icon-list-item first">
+				<p>
+					<strong>Mitgliedschaft</strong>
+				</p>
+				<p>
+					<a href="{$ path( 'page', { pageName: 'Membership_Application } ) $}" target="_blank">Zurück</a> zum Mitgliedschaftsformular
+				</p>
+			</div>
+			<div class="icon-hand-right _icon-list-item last">
+				<p>
+					<strong>Spenden</strong>
+				</p>
+				<p>
+					<a href="{$ path( '/' ) $}" target="_blank">Zurück</a> zur Spendenseite
+				</p>
+			</div>
+		</div>
+	</div>
+</section>

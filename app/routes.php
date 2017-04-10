@@ -39,6 +39,8 @@ use WMDE\Fundraising\Frontend\MembershipContext\UseCases\CancelMembershipApplica
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowMembershipApplicationConfirmation\ShowMembershipAppConfirmationRequest;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\PaymentContext\UseCases\GenerateIban\GenerateIbanRequest;
+use WMDE\Fundraising\Frontend\Presentation\ContentPage\ContentNotFoundException;
+use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageNotFoundException;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
 
@@ -213,12 +215,24 @@ $app->get(
 $app->get(
 	'page/{pageName}',
 	function( $pageName ) use ( $ffFactory ) {
-		if ( !$ffFactory->getTemplateNameValidator()->validate( $pageName . '.html.twig' )->isSuccessful() ) {
-			throw new NotFoundHttpException( "Page '$pageName' not found." );
+		$pageSelector = $ffFactory->newContentPagePageSelector();
+
+		try {
+			$pageId = $pageSelector->getPageId( $pageName );
+		} catch ( PageNotFoundException $exception ) {
+			throw new NotFoundHttpException( "Page page name '$pageName' not found." );
+		}
+
+		$contentProvider = $ffFactory->newContentPageContentProvider();
+
+		try {
+			$pageContent = $contentProvider->render( $pageId );
+		} catch ( ContentNotFoundException $exception ) {
+			throw new NotFoundHttpException( "Content for page id '$pageId' not found." );
 		}
 
 		return $ffFactory->getLayoutTemplate( 'Display_Page_Layout.twig' )->render( [
-			'main_template' => $pageName . '.html.twig'
+				'page_content' => $pageContent
 		] );
 	}
 )

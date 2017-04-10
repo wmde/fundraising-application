@@ -1,0 +1,478 @@
+<form name="donForm2" id="donForm2" method="POST" action="{$ basepath $}/donation/add">
+    <section id="donation-amount" class="container clearfix">
+        <div class="ltcol">
+            &nbsp;
+        </div>
+
+        <div class="ctcol">
+            <div class="box rounded">
+
+                <div class="box-section change-amount slide no-display no-opacity">
+                    <div class="container clearfix">
+                        <ul class="f-left horizontal clearfix amount-list">
+                            <li class="first">
+                                <input type="radio" class="amount-select" id="form2-amount-1" name="betrag_auswahl" value="5,00" title="5&euro;">
+                                <label for="form2-amount-1">5&euro;</label>
+                            </li>
+
+                            <li>
+                                <input type="radio" class="amount-select" id="form2-amount-2" name="betrag_auswahl" value="15,00" title="15&euro;">
+                                <label for="form2-amount-2">15&euro;</label>
+                            </li>
+
+                            <li>
+                                <input type="radio" class="amount-select" id="form2-amount-3" name="betrag_auswahl" value="25,00" title="25&euro;">
+                                <label for="form2-amount-3">25&euro;</label>
+                            </li>
+
+                            <li>
+                                <input type="radio" class="amount-select" id="form2-amount-4" name="betrag_auswahl" value="50,00" title="50&euro;">
+                                <label for="form2-amount-4">50&euro;</label>
+                            </li>
+
+                            <li>
+                                <input type="radio" class="amount-select" id="form2-amount-5" name="betrag_auswahl" value="75,00" title="75&euro;">
+                                <label for="form2-amount-5">75&euro;</label>
+                            </li>
+
+                            <li>
+                                <input type="radio" class="amount-select" id="form2-amount-6" name="betrag_auswahl" value="100,00" title="100&euro;">
+                                <label for="form2-amount-6">100&euro;</label>
+                            </li>
+
+                            <li>
+                                <input type="radio" class="amount-select" id="form2-amount-7" name="betrag_auswahl" value="250,00" title="250&euro;">
+                                <label for="form2-amount-7">250&euro;</label>
+                            </li>
+
+                            <li class="amount-custom last no-margin">
+                                <div class="container" style="width: 100px;">
+                                    <input id="form2-amount-8" class="amount-input" name="amountCustom" type="text" value="" title="Betrag zwischen 1 und 99999,99 Euro; Komma als Dezimaltrenner">
+                                    <label class="right top" for="form2-amount-8">&euro;</label>
+                                </div>
+                            </li>
+                            <input type="hidden" class="amount-hidden" name="betrag" value="" />
+                        </ul>
+
+
+                        <ul class="f-left periode-list no-margin">
+                            <li class="first">
+                                <input type="radio" id="form2-periode-1" name="intervalType" class="interval-type-select one-off" value="0" title="einmalig" >
+                                <label for="form2-periode-1">einmalig</label>
+                            </li>
+
+                            <li class="last">
+                                <input type="radio" id="form2-periode-2" name="intervalType" value="1" title="regelm&auml;&szlig;ig" class="interval-type-select recurring">
+                                <label for="form2-periode-2">regelm&auml;&szlig;ig</label>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="periode-2-list no-display no-opacity">
+                        <hr />
+
+                        <ul class="horizontal clearfix">
+                            <li class="first">
+                                <input type="radio" id="form2-periode-2-1" class="interval-radio payment-period-select" name="periode" value="1" title="monatlich" >
+                                <label for="form2-periode-2-1">monatlich</label>
+                            </li>
+
+                            <li>
+                                <input type="radio" id="form2-periode-2-2" class="interval-radio payment-period-select" name="periode" value="3" title="quartalsweise" >
+                                <label for="form2-periode-2-2">quartalsweise</label>
+                            </li>
+
+                            <li>
+                                <input type="radio" id="form2-periode-2-3" class="interval-radio payment-period-select" name="periode" value="6" title="halbj&auml;hrlich">
+                                <label for="form2-periode-2-3">halbj&auml;hrlich</label>
+                            </li>
+
+                            <li class="last">
+                                <input type="radio" id="form2-periode-2-4" class="interval-radio payment-period-select" name="periode" value="12" title="j&auml;hrlich">
+                                <label for="form2-periode-2-4">j&auml;hrlich</label>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="change-payment-type">
+                        <hr/>
+
+                        <!-- TODO Remove IDs and adjust JS in web/skin/10h16/_js/form-methods.js -->
+                        <ul class="horizontal clearfix payment-type-list">
+                            <li class="first">
+                                <input type="radio" class="payment-type-select" id="form2-payment-type-1" name="zahlweise" value="UEB" title="&Uuml;berweisung">
+                                <label for="form2-payment-type-1">&Uuml;berweisung</label>
+                            </li>
+
+                            <li>
+                                <input type="radio" class="payment-type-select" id="form2-payment-type-2" name="zahlweise" value="MCP" title="Kreditkarte">
+                                <label for="form2-payment-type-2">Kreditkarte</label>
+                            </li>
+
+                            <li>
+                                <input type="radio" class="payment-type-select" id="form2-payment-type-3" name="zahlweise" value="BEZ" title="Lastschrift">
+                                <label for="form2-payment-type-3">Lastschrift</label>
+                            </li>
+
+                            <li class="last">
+                                <input type="radio" class="payment-type-select" id="form2-payment-type-4" name="zahlweise" value="PPL" title="PayPal">
+                                <label for="form2-payment-type-4">Paypal</label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="box-footer clearfix">
+                    
+                    <span class="icon-ok-sign">Ich spende <span class="interval-text">einmalig</span>
+                        <strong><span class="amount-formatted">5</span></strong> per <span id="payment-display"></span>.</span>
+                    <a href="#" class="f-right slide-toggle" data-slide-rel="#donation-amount .slide.change-amount">
+                        <span class="down"><span class="icon-pencil"></span>&auml;ndern</span>
+                          <span class="up"><span class="icon-chevron-up"></span>schlie&szlig;en</span>
+                    </a>
+ <div class="notice-ppl-recurrent" style="display:none;margin-top:.5em">Für regelmäßige Spenden muss bei PayPal eine Kreditkarte hinterlegt sein.</div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="rtcol">
+            <div class="icon-bar-chart _icon-list-item first">
+                <p>
+                    <a class="wlightbox inline" href="#" data-href="#wlightbox-wohin-geht-das-geld"><strong>Wohin geht das Geld?</strong></a>
+                </p>
+            </div>
+
+            <div class="icon-hand-right _icon-list-item first last">
+                <p>
+                    <a class="wlightbox inline" href="#" data-href="#wlightbox-bitcoin"><strong>Bitcoins spenden</strong></a>
+                </p>
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- steps-overview -->
+    <div class="steps-overview container clearfix">
+        <div class="ltcol">
+            &nbsp;
+        </div>
+
+        <div class="ctcol">
+            <div class="box rounded partial no-margin">
+
+                <div class="box-header">
+                    <ul class="step-list horizontal clearfix">
+                        <li id="highlight-payment" class="first">Mein Betrag</li>
+                        <li id="highlight-personalData" class="active">Meine Daten</li>
+                        <li id="highlight-finished" class="last">Fertig!</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="rtcol">
+            <div class="icon-hand-right _icon-list-item first" style="margin-top: -9px;">
+                <p>
+                    <a class="wlightbox inline" href="#" data-href="#wlightbox-steuerlich-absetzbar"><strong>Steuerlich absetzbar</strong></a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- donation payment -->
+    <section id="bank-data" class="container clearfix no-display no-opacity">
+        <div class="ltcol">
+            &nbsp;
+        </div>
+
+        <div class="ctcol">
+            <div class="box partial">
+                <div class="box-section">
+                    <div class="section-title clearfix">
+                        <h2 class="f-left no-margin">Zahlung per Lastschrift</h2>
+                    </div>
+
+
+
+                    <div class="container">
+                        <ul class="horizontal clearfix">
+                            <li class="first">
+                                <input type="radio" id="debit-type-1" value="sepa" name="debit-type" title="SEPA" checked class="debit-type-select">
+                                <label for="debit-type-1">IBAN</label>
+                            </li>
+
+                            <li class="last">
+                                <input type="radio" id="debit-type-2" value="non-sepa" name="debit-type" title="Konto/BLZ" class="debit-type-select">
+                                <label for="debit-type-2">Konto/Bankleitzahl</label>
+                            </li>
+                        </ul>
+                    </div>
+
+
+                    <div class="slide-6">
+                        <hr/>
+                        <div id="sepa" class="slide-sepa">
+                            <div class="input-container">
+                                <label for="iban">IBAN</label>
+                                <input class="required iban-check" id="iban" name="iban" type="text" value="{$ iban $}" placeholder="IBAN" data-pattern="^DE[0-9]{20}$|^AT[0-9]{18}$|^CH[0-9]{7}[A-Za-z0-9]{12}$|^BE[0-9]{14}$|^IT[0-9]{2}[A-Z][0-9]{10}[A-Za-z0-9]{12}$|^LI[0-9]{7}[A-Za-z0-9]{12}$|^LU[0-9]{5}[A-Za-z0-9]{13}$" title="Internationale Kontonummer">
+                                <span class="validation"></span>
+                            </div>
+
+                            <div class="input-container">
+                                <label for="bic">BIC</label>
+                                <input class="required" id="bic" name="bic" type="text" value="{$ bic $}" placeholder="BIC" data-pattern="^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$" title="BIC">
+                                <span class="validation"></span>
+                            </div>
+                        </div>
+
+                        <div id="non-sepa" class="slide-non-sepa">
+                            <div class="input-container">
+                                <label for="account-number">Kontonummer</label>
+                                <input class="required bank-check" id="account-number" name="konto" type="tel" value="{$ konto $}" placeholder="Kontonummer" data-pattern="[0-9]{4,10}" title="Bis zu zehnstellige Kontonummer">
+                                <span class="validation"></span>
+                            </div>
+
+                            <div class="input-container">
+                                <label for="bank-code">Bankleitzahl</label>
+                                <input class="required bank-check" id="bank-code" name="blz" type="tel" value="{$ blz $}" placeholder="Bankleitzahl" title="Achtstellige Bankleitzahl" data-pattern="[0-9]{8}">
+                                <span class="validation"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-container" style="margin-left: 180px">
+                        <span id="bank-name"></span>
+                        <input type="hidden" name="bankname" id="field-bank-name" value="" />
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="rtcol">
+
+            <div class="_icon-list-item first">
+                <p>
+                    &nbsp;
+                </p>
+            </div>
+
+            <div class="_icon-list-item">
+                <p>
+                    &nbsp;
+                </p>
+            </div>
+
+            <div class="_icon-list-item">
+                <div id="logo-geotrust">
+                    <!--
+                    {% include 'Seal_GeoTrust.html.twig' %}
+                    -->
+                </div>
+                <div id="logo-owasp">
+                    <a title="OWASP Top 10 zertifiziert durch die plan42 GmbH" href="{$ basepath $}/resources/{$ locale $}/Wikimedia_OWASP_Top_10.pdf" target="_blank">
+                        <img height="54px" src="../skin/10h16/_assets/img/owasp.png" />
+                    </a>
+                </div>
+            </div>
+            <div class="icon-lock _icon-list-item last">
+                <p>
+                    <strong>SSL-Verschl&uuml;sselte Daten</strong>
+                </p>
+                <p>
+                    Ihre Spende wird &uuml;ber eine sichere SSL-Verschl&uuml;sselung aufgenommen und liegt sp&auml;ter auf deutschen Servern.
+                </p>
+                <!--div class="logo-ssl-grey"></div-->
+            </div>
+        </div>
+    </section>
+
+
+    <!-- personal data -->
+    <section id="personal-data" class="container clearfix">
+        <div class="ltcol">
+            &nbsp;
+        </div>
+
+        <div class="ctcol">
+            <div class="box partial">
+
+                <div class="box-section">
+                    <div class="section-title clearfix">
+                        <h2>Pers&ouml;nliche Daten</h2>
+                    </div>
+
+                    <div class="container">
+                        <ul class="horizontal clearfix">
+                            <li class="first">
+                                <input type="radio" id="address-type-1" name="addressType" value="person" title="privat" class="address-type-select" >
+                                <label for="address-type-1">Privatperson</label>
+                            </li>
+
+                            <li>
+                                <input type="radio" id="address-type-2" name="addressType" value="firma" title="gesch&auml;ftlich" class="address-type-select" >
+                                <label for="address-type-2">Firma</label>
+                            </li>
+
+                            <li class="last anonymous-payment-select">
+                                <input type="radio" id="address-type-3" name="addressType" value="anonym" title="anonym" class="address-type-select" >
+                                <label for="address-type-3">anonym</label>
+                            </li>
+
+                            <li>
+                              <a href="#" id="tooltip-icon-addresstype" class="top help tooltip icon-only tooltip-track" data-title="Adresstyp" title="Bitte beachten Sie, dass wir für eine spätere Zuordnung der Spende Ihren Namen und die Zahlungsinformationen vom Dienstleister erhalten.">
+                                <sup><span class="icon-question-sign"></span></sup>
+                              </a>
+                            </li>
+                        </ul>
+
+                    </div>
+
+                    <div class="notice-anonymous">
+                        Bitte beachten Sie, dass wir Ihnen ohne Adressdaten keine Zuwendungsbescheinigung ausstellen können.
+                    </div>
+
+                    <div class="personal-data-full">
+
+                        <hr/>
+
+                        <div class="personal-data-person">
+
+                            <div class="input-container">
+                                <ul class="horizontal clearfix salutation">
+                                    <li class="first">
+                                        <input type="radio" id="salutation-1" name="salutation" value="Frau" title="Frau" class="salutation" {% if salutation == 'Frau' or not salutation %}checked="checked"{% endif %}>
+                                        <label for="salutation-1">Frau</label>
+                                    </li>
+
+                                    <li class="last">
+                                        <input type="radio" id="salutation-2" name="salutation" value="Herr" title="Herr" class="salutation" {% if salutation == 'Herr' %}checked="checked"{% endif %}>
+                                        <label for="salutation-2">Herr</label>
+                                    </li>
+                                </ul>
+
+                                <select id="personal-title" name="title" class="personal-title">
+                                    <option value="" data-behavior="placeholder">Kein Titel</option>
+                                    <option value="Dr." {% if title == 'Dr.' %}selected{% endif %}>Dr.</option>
+                                    <option value="Prof." {% if title == 'Prof.' %}selected{% endif %}>Prof.</option>
+                                    <option value="Prof. Dr." {% if title == 'Prof. Dr.' %}selected{% endif %}>Prof. Dr.</option>
+                                </select>
+                            </div>
+
+                            <div class="input-container">
+                                <label for="first-name">Name</label>
+                                <input id="first-name" name="firstName" type="text" value="{$ firstName $}" data-pattern="^((?![M|m]ustermann).)+$" title="Groß- und Kleinbuchstaben, Bindestriche und Leerzeichen" placeholder="Vorname" class="required">
+                                <span class="validation icon-placeholder"></span>
+                                <input id="last-name" name="lastName" type="text" value="{$ lastName $}" data-pattern="^((?![M|m]ustermann).)+$" title="Groß- und Kleinbuchstaben, Bindestriche, Leerzeichen und Punkte" placeholder="Nachname" class="required">
+                                <span class="validation icon-placeholder"></span>
+                            </div>
+                        </div>
+
+                        <div class="personal-data-company">
+
+                            <div class="input-container">
+                                <label for="company-name">Firma</label>
+                                <input id="company-name" name="companyName" type="text" value="{$ company $}" placeholder="Firma" class="required">
+                                <span class="validation icon-placeholder"></span>
+                            </div>
+                        </div>
+
+
+                        <div class="input-container">
+                            <label for="street">Stra&szlig;e</label>
+                            <input id="street" name="street" type="text" value="{$ street $}" data-pattern="^((?![M|m]uster).)+$" placeholder="z.B. Musterstra&szlig;e 123" class="required">
+                            <span class="validation icon-placeholder"></span>
+                        </div>
+
+                        <div class="input-container">
+                            <label for="post-code">PLZ &amp; Ort</label>
+                            <input id="post-code" name="postcode" type="text" value="{$ postcode $}"  placeholder="z.B. 10117" title="Fünfstellige Postleitzahl" class="required" data-pattern="[0-9]{4,5}">
+                            <span class="validation icon-placeholder"></span>
+                            <input id="city" name="city" type="text" value="{$ city $}" data-pattern="^((?![M|m]uster).)+$" placeholder="z.B. Berlin" class="required">
+                            <span class="validation icon-placeholder"></span>
+                        </div>
+
+                        <div class="input-container">
+                            <label for="country">Land</label>
+                            <select id="country" name="country" title="Land">
+                                <option value="DE" {% if country == 'DE' %}selected{% endif %}>Deutschland</option>
+                                <option value="AT" {% if country == 'AT' %}selected{% endif %}>Österreich</option>
+                                <option value="CH" {% if country == 'CH' %}selected{% endif %}>Schweiz</option>
+                                <option value="BE" {% if country == 'BE' %}selected{% endif %}>Belgien</option>
+                                <option value="IT" {% if country == 'IT' %}selected{% endif %}>Italien</option>
+                                <option value="LI" {% if country == 'LI' %}selected{% endif %}>Liechtenstein</option>
+                                <option value="LU" {% if country == 'LU' %}selected{% endif %}>Luxemburg</option>
+                            </select>
+                        </div>
+
+                        <div class="input-container">
+                            <label for="email">E-Mail</label>
+                            <input id="email" name="email" type="text" value="{$ email $}" placeholder="z.B. name@domain.de" class="required">
+                            <span class="validation icon-placeholder"></span>
+                        </div>
+
+                        <!-- Informationsmaterial -->
+                        <div class="container" style="margin-top: 40px; font-size:90%">
+                            <input type="checkbox" id="send-information" name="info" value="1" title="Bitte senden Sie mir Informationsmaterial.">
+                            <label for="send-information" style="margin-right: 30px; width: auto;">Ja, ich bin damit einverstanden, dass Wikimedia mich per E-Mail kontaktiert, wenn Wikipedia meine Unterstützung benötigt.</label>
+                            <a href="#" class="right top help tooltip icon-only tooltip-track" data-title="Infomaterial_F2_Intrvar" title="Einmal im Jahr bitten wir die Leserinnen und Leser Wikipedias um Unterstützung. Wir würden uns freuen, wenn wir in Zukunft auf Sie zählen können, wenn es um die Verbreitung Freien Wissens geht."><span class="icon-question-sign"></span></a>
+                        </div>
+                        <!-- Informationsmaterial -->
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="rtcol">
+            <div class="icon-star-full _icon-list-item" style="margin-top: -16px">
+              <p>
+                <a class="wlightbox inline" href="{$ path( 'page', { pageName: 'Unterstuetzer' } ) $}" data-href="#wlightbox-supporter-list"><strong>Wikipedia-Unterstützerliste</strong></a>
+              </p>
+            </div>
+
+            <div class="icon-shield _icon-list-item first last">
+                {% include 'Sidebar_Privacy_Protection.html.twig' %}
+            </div>
+            <div id="notice-unsubscribe" class="icon-envelope-alt _icon-list-item first last slide-3 opened" style="position: absolute; bottom: -9px; width: 180px;/* IE8 fix */">
+                <p>
+                    <strong>Einfache Abmeldung</strong>
+                </p>
+                <p>
+                    Die Einwilligung können Sie jederzeit per E-Mail an <a href="mailto:spenden@wikimedia.de">spenden@wikimedia.de</a><br>mit Wirkung für die Zukunft widerrufen.
+                </p>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="donation-submit2" class="donation-submit container clearfix" >
+        <div class="ltcol">
+            &nbsp;
+        </div>
+
+        <div class="ctcol">
+            <div class="box rounded partial">
+
+                <div class="box-footer border-top clearfix">
+                    <button id="continueFormSubmit2" type="button" class="f-right">Weiter um Spende abzuschließen <span class="icon-arrow-right"></span></button>
+                    <button id="finishFormSubmit2" type="button" class="f-right" >Jetzt für Wikipedia spenden <span class="icon-arrow-right"></span></button>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="rtcol">
+        </div>
+    </section>
+
+    <input type="hidden" name="form" value="10h16_Form2_Ticker_Intrvar">
+    <input type="hidden" name="impCount" value="{$ tracking.impressionCount $}" />
+    <input type="hidden" name="bImpCount" value="{$ tracking.bannerImpressionCount $}" />
+
+</form>
