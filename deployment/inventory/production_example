@@ -7,6 +7,9 @@ spenden.wikimedia.de ansible_user=deploy
 # Base path where the code should be deployed. All following paths are relative to this. No slash at the end!
 app_dir = "/usr/share/nginx/www/spenden.wikimedia.de"
 
+# relative dir inside app_dir where the always up-to-date i18n content can be found (deployed independently)
+content_directory = "fundraising-frontend-content"
+
 # Prefix for release directories
 release_prefix = release-
 
@@ -32,7 +35,7 @@ config_dir = /home/deploy/configurations
 
 
 [local:vars]
-# Temporary directory for checking out the code. Will be created if it does nor exists and can persist between deployments
+# Temporary directory for checking out the code. Will be created if it does not exist and can persist between deployments
 # Should be unique in every inventory file (test, production, stage, etc)
 build_dir = /tmp/fundraising-deploy-production
 
