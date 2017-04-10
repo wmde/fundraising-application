@@ -52,7 +52,8 @@
     <rule ref="Generic.NamingConventions" />
     <!-- TODO: create variation of this sniff that allows underscores in test methods -->
     <rule ref="Generic.NamingConventions.CamelCapsFunctionName.ScopeNotCamelCaps">
-        <severity>0</severity>
+        <!-- Exclude test methods like "testGivenInvalidInput_methodThrowsException". -->
+        <exclude-pattern>*Test\.php</exclude-pattern>
     </rule>
 
     <rule ref="Generic.PHP.CharacterBeforePHPOpeningTag" />
@@ -68,7 +69,8 @@
     <rule ref="PSR1" />
     <!-- TODO: create variation of this sniff that allows underscores in test methods -->
     <rule ref="PSR1.Methods.CamelCapsMethodName.NotCamelCaps">
-        <severity>0</severity>
+        <!-- Exclude test methods like "testGivenInvalidInput_methodThrowsException". -->
+        <exclude-pattern>*Test\.php</exclude-pattern>
     </rule>
 
     <rule ref="PSR2.Classes.PropertyDeclaration" />

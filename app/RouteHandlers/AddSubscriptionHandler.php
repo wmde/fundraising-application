@@ -30,9 +30,9 @@ class AddSubscriptionHandler {
 		$responseModel = $useCase->addSubscription( $this->createSubscriptionRequest( $request ) );
 
 		if ( $this->app['request_stack.is_json'] ) {
-			return $this->app->json( $this->ffFactory->newAddSubscriptionJSONPresenter()->present( $responseModel ) );
+			return $this->app->json( $this->ffFactory->newAddSubscriptionJsonPresenter()->present( $responseModel ) );
 		} elseif ( $request->query->has( 'callback' ) ) {
-			return $this->app->json( $this->ffFactory->newAddSubscriptionJSONPresenter()->present( $responseModel ) )
+			return $this->app->json( $this->ffFactory->newAddSubscriptionJsonPresenter()->present( $responseModel ) )
 				->setCallback( $request->query->get( 'callback' ) );
 		}
 
@@ -44,7 +44,7 @@ class AddSubscriptionHandler {
 		}
 
 		return new Response(
-			$this->ffFactory->newAddSubscriptionHTMLPresenter()->present( $responseModel, $request->request->all() )
+			$this->ffFactory->newAddSubscriptionHtmlPresenter()->present( $responseModel, $request->request->all() )
 		);
 	}
 
