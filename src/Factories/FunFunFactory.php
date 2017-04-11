@@ -307,8 +307,7 @@ class FunFunFactory {
 		};
 
 		$pimple['twig_factory'] = function () {
-			return new TwigEnvironmentConfigurator(
-				$this->pimple['twig_environment'],
+			return new TwigFactory(
 				$this->config['twig'],
 				$this->getCachePath() . '/twig',
 				$this->config['locale']
@@ -317,6 +316,7 @@ class FunFunFactory {
 
 		$pimple['twig'] = function() {
 			$twigFactory = $this->getTwigFactory();
+			$configurator = $twigFactory->newTwigEnvironmentConfigurator();
 			$loaders = array_filter( [
 				$twigFactory->newFileSystemLoader(),
 				$twigFactory->newArrayLoader(), // This is just a fallback for testing
@@ -327,11 +327,11 @@ class FunFunFactory {
 			];
 			$filters = [
 				$twigFactory->newFilePrefixFilter(
-					$this->newFilePrefixer()
+					$this->getFilePrefixer()
 				)
 			];
 
-			return $twigFactory->getEnvironment( $loaders, $extensions, $filters );
+			return $configurator->getEnvironment( $this->pimple['twig_environment'], $loaders, $extensions, $filters );
 		};
 
 		$pimple['messenger_suborganization'] = function() {
@@ -404,6 +404,10 @@ class FunFunFactory {
 
 		$pimple['page_view_tracker'] = function () {
 			return new PageViewTracker( $this->newServerSideTracker(), $this->config['piwik']['siteUrlBase'] );
+		};
+
+		$pimple['cachebusting_fileprefixer'] = function () {
+			return new FilePrefixer( $this->getFilePrefix() );
 		};
 
 		return $pimple;
@@ -776,7 +780,7 @@ class FunFunFactory {
 		$this->pimple['translator'] = $translator;
 	}
 
-	private function getTwigFactory(): TwigEnvironmentConfigurator {
+	private function getTwigFactory(): TwigFactory {
 		return $this->pimple['twig_factory'];
 	}
 
@@ -1273,8 +1277,12 @@ class FunFunFactory {
 		return new IbanValidator( $this->newBankDataConverter(), $this->config['banned-ibans'] );
 	}
 
-	private function newFilePrefixer(): FilePrefixer {
-		return new FilePrefixer( $this->getFilePrefix() );
+	public function setFilePrefixer( FilePrefixer $prefixer ): void {
+		$this->pimple['cachebusting_fileprefixer'] = $prefixer;
+	}
+
+	private function getFilePrefixer(): FilePrefixer {
+		return $this->pimple['cachebusting_fileprefixer'];
 	}
 
 	private function getFilePrefix(): string {
@@ -1314,5 +1322,4 @@ class FunFunFactory {
 			new \PiwikTracker( $this->config['piwik']['siteId'], 'https:' . $this->config['piwik']['baseUrl'] )
 		);
 	}
-
 }
