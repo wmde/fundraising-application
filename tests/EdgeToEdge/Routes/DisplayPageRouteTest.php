@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
 /**
@@ -141,4 +142,28 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'This is just a test.', $client->getResponse()->getContent() );
 	}
 
+	public function testFilePrefixerIsCalledInTemplate() {
+		$client = $this->createClient(
+			[
+				'twig' => [
+					'loaders' => [
+						'array' => [
+							'unicorns.html.twig' => '{$ "testfile.js"|prefix_file $}'
+						]
+					]
+				]
+			],
+			function ( FunFunFactory $factory ) {
+				$prefixer = new FilePrefixer( 'mylittleprefix' );
+				$factory->setFilePrefixer( $prefixer );
+			}
+		);
+
+		$client->request( 'GET', '/page/unicorns' );
+
+		$this->assertContains(
+			'mylittleprefix.testfile.js',
+			$client->getResponse()->getContent()
+		);
+	}
 }
