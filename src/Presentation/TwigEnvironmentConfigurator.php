@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Factories;
+namespace WMDE\Fundraising\Frontend\Presentation;
 
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
 use Symfony\Component\Translation\TranslatorInterface;

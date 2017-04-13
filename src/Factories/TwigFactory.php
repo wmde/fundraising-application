@@ -12,6 +12,7 @@ use Twig_Extension_StringLoader;
 use Twig_Loader_Array;
 use Twig_Loader_Filesystem;
 use Twig_SimpleFilter;
+use WMDE\Fundraising\Frontend\Presentation\TwigEnvironmentConfigurator;
 
 class TwigFactory {
 

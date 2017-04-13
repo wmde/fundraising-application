@@ -25,7 +25,11 @@ use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Component\Translation\TranslatorInterface;
 use TNvpServiceDispatcher;
 use Twig_Environment;
+use Twig_Extension_Sandbox;
 use Twig_Extensions_Extension_Intl;
+use Twig_Loader_Filesystem;
+use Twig_LoaderInterface;
+use Twig_Sandbox_SecurityPolicy;
 use WMDE\Fundraising\Frontend\DonationContext\DonationAcceptedEventHandler;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
@@ -295,6 +299,7 @@ class FunFunFactory {
 			$translator->addResource( 'json', $messagesPath . '/paymentIntervals.json', $locale, 'paymentIntervals' );
 			$translator->addResource( 'json', $messagesPath . '/paymentStatus.json', $locale, 'paymentStatus' );
 			$translator->addResource( 'json', $messagesPath . '/validations.json', $locale, 'validations' );
+			$translator->addResource( 'json', $messagesPath . '/pageTitles.json', $locale, 'pageTitles' );
 
 			return $translator;
 		};
@@ -310,8 +315,7 @@ class FunFunFactory {
 		};
 
 		$pimple['twig_factory'] = function () {
-			return new TwigEnvironmentConfigurator(
-				clone $this->pimple['twig_environment'],
+			return new TwigFactory(
 				$this->config['twig'],
 				$this->getCachePath() . '/twig',
 				$this->config['locale']
@@ -412,6 +416,44 @@ class FunFunFactory {
 
 		$pimple['cachebusting_fileprefixer'] = function () {
 			return new FilePrefixer( $this->getFilePrefix() );
+		};
+
+		$pimple['content_page_selector'] = function () {
+			$json = (new SimpleFileFetcher())->fetchFile($this->getI18nDirectory() . '/data/pages.json');
+			$config = json_decode($json, true) ?? [];
+
+			return new PageSelector($config);
+		};
+
+		$pimple['content_page_content_provider'] = function () {
+			// @see https://twig.sensiolabs.org/doc/1.x/api.html#sandbox-extension
+			$policy = new Twig_Sandbox_SecurityPolicy(
+				['filter', 'include'],
+				['nl2br'],
+				[],
+				[],
+				[]
+			);
+			$sandbox = new Twig_Extension_Sandbox($policy, true);
+
+			$twig = new Twig_Environment();
+			$twig->addExtension($sandbox);
+
+			$environment = $this->getTwigFactory()->newTwigEnvironmentConfigurator()->getEnvironment(
+				$twig,
+				[$this->getContentPageTemplateLoader()],
+				[],
+				[]
+			);
+
+			return new ContentProvider( $environment, new HtmlPurifier() );
+		};
+
+		$pimple['content_page_template_loader'] = function () {
+			return new Twig_Loader_Filesystem( [
+				$this->getI18nDirectory() . '/pages',
+				$this->getI18nDirectory() . '/includes'
+			] );
 		};
 
 		return $pimple;
@@ -543,7 +585,7 @@ class FunFunFactory {
 
 	private function getDefaultTwigVariables() {
 		return [
-			'basepath' => $this->config['web-basepath'],
+			'basepath' => $this->config['web-basepath'],	// @todo mv to EnvConfigurator
 			'honorifics' => $this->getHonorifics()->getList(),
 			'header_template' => $this->config['default-layout-templates']['header'],
 			'footer_template' => $this->config['default-layout-templates']['footer'],
@@ -786,7 +828,7 @@ class FunFunFactory {
 		$this->pimple['translator'] = $translator;
 	}
 
-	private function getTwigFactory(): TwigFactory {
+	public function getTwigFactory(): TwigFactory {
 		return $this->pimple['twig_factory'];
 	}
 
@@ -1329,23 +1371,31 @@ class FunFunFactory {
 		);
 	}
 
-    public function getI18nDirectory(): string {
-        return __DIR__ . '/../../' . $this->config['i18n-base-path'] . '/' . $this->config['locale'];
-    }
+	public function getI18nDirectory(): string {
+		return __DIR__ . '/../../' . $this->config['i18n-base-path'] . '/' . $this->config['locale'];
+	}
 
-	public function newContentPagePageSelector(): PageSelector {
-        return new PageSelector(
-            json_decode(
-                file_get_contents($this->getI18nDirectory() . '/data/pages.json'),
-                true
-            )
-        );
-    }
+	public function setContentPagePageSelector( PageSelector $pageSelector ): void {
+		$this->pimple['content_page_selector'] = $pageSelector;
+	}
 
-    public function newContentPageContentProvider(): ContentProvider {
-        $loader = new \Twig_Loader_Filesystem( $this->getI18nDirectory() . '/pages' );
-        $environment = $this->getTwigFactory()->getEnvironment([$loader], [], []);
+	public function getContentPagePageSelector(): PageSelector {
+		return $this->pimple['content_page_selector'];
+	}
 
-        return new ContentProvider( $environment, new HtmlPurifier() );
-    }
+	public function setContentPageContentProvider( ContentProvider $contentProvider ): void {
+		$this->pimple['content_page_content_provider'] = $contentProvider;
+	}
+
+	public function getContentPageContentProvider(): ContentProvider {
+		return $this->pimple['content_page_content_provider'];
+	}
+
+	public function setContentPageTemplateLoader( Twig_LoaderInterface $loader ): void {
+		$this->pimple['content_page_template_loader'] = $loader;
+	}
+
+	public function getContentPageTemplateLoader(): Twig_LoaderInterface {
+		return $this->pimple['content_page_template_loader'];
+	}
 }

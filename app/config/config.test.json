@@ -13,7 +13,7 @@
 			"filesystem": {
 				"template-dir": [
 					"tests/templates",
-					"tests/templates/%_locale_%/pages"
+					"app/templates"
 				]
 			},
 			"array": {

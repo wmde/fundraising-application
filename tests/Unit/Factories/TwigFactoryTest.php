@@ -70,7 +70,7 @@ class TwigFactoryTest extends TestCase {
 					'filesystem' => [
 						'template-dir' => [
 							'tests/templates',
-							'tests/templates/%_locale_%/pages'
+							'vendor/wmde/fundraising-frontend-content/i18n/%_locale_%/pages'
 						]
 					]
 				]
@@ -83,7 +83,7 @@ class TwigFactoryTest extends TestCase {
 		$this->assertSame(
 			[
 				realpath( __DIR__ . '/../../templates' ),
-				realpath( __DIR__ . '/../../templates/de_DE/pages' )
+				realpath( __DIR__ . '/../../../vendor/wmde/fundraising-frontend-content/i18n/de_DE/pages' )
 			],
 			$loaders->getPaths()
 		);

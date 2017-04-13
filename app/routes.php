@@ -215,7 +215,7 @@ $app->get(
 $app->get(
 	'page/{pageName}',
 	function( $pageName ) use ( $ffFactory ) {
-		$pageSelector = $ffFactory->newContentPagePageSelector();
+		$pageSelector = $ffFactory->getContentPagePageSelector();
 
 		try {
 			$pageId = $pageSelector->getPageId( $pageName );
@@ -223,7 +223,7 @@ $app->get(
 			throw new NotFoundHttpException( "Page page name '$pageName' not found." );
 		}
 
-		$contentProvider = $ffFactory->newContentPageContentProvider();
+		$contentProvider = $ffFactory->getContentPageContentProvider();
 
 		try {
 			$pageContent = $contentProvider->render( $pageId );
@@ -232,7 +232,8 @@ $app->get(
 		}
 
 		return $ffFactory->getLayoutTemplate( 'Display_Page_Layout.twig' )->render( [
-				'page_content' => $pageContent
+			'page_content' => $pageContent,
+			'page_id' => $pageId
 		] );
 	}
 )
