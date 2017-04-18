@@ -30,6 +30,7 @@ use Twig_Extensions_Extension_Intl;
 use Twig_Loader_Filesystem;
 use Twig_LoaderInterface;
 use Twig_Sandbox_SecurityPolicy;
+use Twig_SimpleFunction;
 use WMDE\Fundraising\Frontend\DonationContext\DonationAcceptedEventHandler;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
@@ -313,7 +314,10 @@ class FunFunFactory {
 
 		$pimple['twig_factory'] = function () {
 			return new TwigFactory(
-				$this->config['twig'],
+				array_merge_recursive(
+					$this->config['twig'],
+					['web-basepath' => $this->config['web-basepath']]
+				),
 				$this->getCachePath() . '/twig',
 				$this->config['locale']
 			);
@@ -322,6 +326,7 @@ class FunFunFactory {
 		$pimple['twig'] = function() {
 			$twigFactory = $this->getTwigFactory();
 			$configurator = $twigFactory->newTwigEnvironmentConfigurator();
+
 			$loaders = array_filter( [
 				$twigFactory->newFileSystemLoader(),
 				$twigFactory->newArrayLoader(), // This is just a fallback for testing
@@ -335,8 +340,15 @@ class FunFunFactory {
 					$this->getFilePrefixer()
 				)
 			];
+			$functions = [
+				new Twig_SimpleFunction(
+					'sandboxed_content',
+					[$this->getContentPageContentProvider(), 'render'],
+					['is_safe' => ['html']]
+				)
+			];
 
-			return $configurator->getEnvironment( $this->pimple['twig_environment'], $loaders, $extensions, $filters );
+			return $configurator->getEnvironment( $this->pimple['twig_environment'], $loaders, $extensions, $filters, $functions );
 		};
 
 		$pimple['messenger_suborganization'] = function() {
@@ -426,7 +438,7 @@ class FunFunFactory {
 			// @see https://twig.sensiolabs.org/doc/1.x/api.html#sandbox-extension
 			$policy = new Twig_Sandbox_SecurityPolicy(
 				['filter', 'include'],
-				['nl2br'],
+				['nl2br', 'escape'],
 				[],
 				[],
 				[]
@@ -582,7 +594,6 @@ class FunFunFactory {
 
 	private function getDefaultTwigVariables() {
 		return [
-			'basepath' => $this->config['web-basepath'],	// @todo mv to EnvConfigurator
 			'honorifics' => $this->getHonorifics()->getList(),
 			'header_template' => $this->config['default-layout-templates']['header'],
 			'footer_template' => $this->config['default-layout-templates']['footer'],
@@ -1384,7 +1395,7 @@ class FunFunFactory {
 		$this->pimple['content_page_content_provider'] = $contentProvider;
 	}
 
-	public function getContentPageContentProvider(): ContentProvider {
+	private function getContentPageContentProvider(): ContentProvider {
 		return $this->pimple['content_page_content_provider'];
 	}
 
@@ -1392,7 +1403,7 @@ class FunFunFactory {
 		$this->pimple['content_page_template_loader'] = $loader;
 	}
 
-	public function getContentPageTemplateLoader(): Twig_LoaderInterface {
+	private function getContentPageTemplateLoader(): Twig_LoaderInterface {
 		return $this->pimple['content_page_template_loader'];
 	}
 }

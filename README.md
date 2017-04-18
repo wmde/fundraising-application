@@ -79,10 +79,7 @@ The following example shows the configuration when the content repository is at 
         "loaders": {
             "filesystem": {
                 "template-dir": [
-                    "../fundraising-frontend-content/ab_test/a/templates",
-                    "../fundraising-frontend-content/ab_test/b/templates",
                     "app/templates",
-                    "../fundraising-frontend-content/i18n/%_locale_%/pages"
                 ]
             }
         }

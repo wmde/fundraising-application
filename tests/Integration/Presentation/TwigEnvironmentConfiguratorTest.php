@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\Presentation;
 
 use Twig_Environment;
 use Twig_Error_Loader;
+use Twig_Error_Runtime;
 use Twig_Loader_Array;
 use Twig_LoaderInterface;
 use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
@@ -24,24 +25,19 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 	private const LOCALE = 'de_DE';
 
 	public function testTwigInstanceUsesDollarPlaceholdersForVariables() {
-		$factory = $this->newTwigEnvironmentConfigurator(
-			[
-				'enable-cache' => false,
+		$factory = TestEnvironment::newInstance( [
+			'twig' => [
+				'loaders' => [
+					'array' => [
+						'variableReplacement.twig' => '{$ testvar $}'
+					]
+				]
 			]
-		);
+		] )->getFactory();
 
-		$loader = new Twig_Loader_Array( [ 'variableReplacement.twig' => '{$ testvar $}' ] );
-
-		$twig = $factory->getEnvironment( $this->newTwigEnvironment(), [ $loader ], [], [] );
-		$result = $twig->render( 'variableReplacement.twig', [ 'testvar' => 'Meeow!' ] );
-		$this->assertSame( 'Meeow!', $result );
-	}
-
-	private function newTwigEnvironmentConfigurator( array $config ): TwigEnvironmentConfigurator {
-		return new TwigEnvironmentConfigurator(
-			$config,
-			'/tmp/fun',
-			self::LOCALE
+		$this->assertSame(
+			'Meeow!',
+			$factory->getLayoutTemplate( 'variableReplacement.twig' )->render( [ 'testvar' => 'Meeow!' ] )
 		);
 	}
 
@@ -60,7 +56,14 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 		$thirdLoader = $this->createMock( Twig_LoaderInterface::class );
 		$thirdLoader->expects( $this->never() )->method( $this->anything() );
 
-		$environmentConfigurator = $this->newTwigEnvironmentConfigurator( [ 'enable-cache' => false ] );
+		$environmentConfigurator = new TwigEnvironmentConfigurator(
+			[
+				'enable-cache' => false,
+				'web-basepath' => ''
+			],
+			'/tmp/fun',
+			self::LOCALE
+		);
 		$twig = $environmentConfigurator->getEnvironment( $this->newTwigEnvironment(), [ $firstLoader, $secondLoader, $thirdLoader ], [], [] );
 		$result = $twig->render( 'Canis_silvestris' );
 		$this->assertSame( 'Meeow!', $result );
@@ -78,7 +81,8 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 						'kittens.html.twig' => '<style src="{$ basepath $}/someFile.css">'
 					]
 				]
-			]
+			],
+			'web-basepath' => ''
 		] )->getFactory();
 
 		$this->assertSame(
@@ -123,5 +127,47 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 			'mylittleprefix.testfile.js',
 			$factory->getLayoutTemplate( 'unicorns.html.twig' )->render( [] )
 		);
+	}
+
+	public function testSandboxedContentExists_IsReturned(): void {
+		$factory = TestEnvironment::newInstance( [
+			'twig' => [
+				'loaders' => [
+					'array' => [
+						'template_with_content.twig' => '<p>{$ sandboxed_content("lorem") $}</p>',
+						'lorem.html.twig' => 'I am the wrong twig environment. Dragons here!'
+					]
+				]
+			]
+		] )->getFactory();
+
+		$factory->setContentPageTemplateLoader(
+			new Twig_Loader_Array( [
+				'lorem.html.twig' => 'ipsum. all is <strong>fine</strong>.'
+			] )
+		);
+
+		$this->assertSame(
+			'<p>ipsum. all is <strong>fine</strong>.</p>',
+			$factory->getLayoutTemplate( 'template_with_content.twig' )->render( [ ] )
+		);
+	}
+
+	public function testSandboxedContentDoesntExist_ExceptionIsThrown(): void {
+
+		$factory = TestEnvironment::newInstance( [
+			'twig' => [
+				'loaders' => [
+					'array' => [
+						'template_with_content.twig' => '{$ sandboxed_content("lorem") $}',
+					]
+				]
+			]
+		] )->getFactory();
+
+		$this->expectException( Twig_Error_Runtime::class );
+		$this->expectExceptionMessageRegExp('/Template for page \'lorem\' not found/');
+
+		$factory->getLayoutTemplate( 'template_with_content.twig' )->render( [ ] );
 	}
 }

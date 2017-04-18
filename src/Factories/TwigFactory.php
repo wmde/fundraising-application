@@ -16,8 +16,6 @@ use WMDE\Fundraising\Frontend\Presentation\TwigEnvironmentConfigurator;
 
 class TwigFactory {
 
-	private const LOCALE_PLACEHOLDER = '%_locale_%';
-
 	private $config;
 	private $cachePath;
 	private $locale;
@@ -62,14 +60,10 @@ class TwigFactory {
 					if ( strlen( $dir ) == 0 || $dir{0} != '/' ) {
 						$dir = $root . $dir;
 					}
-					return $this->insertLocale( $dir );
+					return $dir;
 				},
 				$dirs
 		);
-	}
-
-	private function insertLocale( string $path ): string {
-		return str_replace( self::LOCALE_PLACEHOLDER, $this->locale, $path );
 	}
 
 	public function newArrayLoader() {

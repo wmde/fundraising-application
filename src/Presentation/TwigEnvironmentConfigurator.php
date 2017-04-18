@@ -1,17 +1,11 @@
 <?php
 
-declare( strict_types = 1 );
+declare( strict_types=1 );
 
 namespace WMDE\Fundraising\Frontend\Presentation;
 
-use Symfony\Bridge\Twig\Extension\TranslationExtension;
-use Symfony\Component\Translation\TranslatorInterface;
 use Twig_Environment;
-use Twig_Extension_StringLoader;
 use Twig_Lexer;
-use Twig_Loader_Array;
-use Twig_Loader_Filesystem;
-use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
 
 /**
  * @license GNU GPL v2+
@@ -28,8 +22,13 @@ class TwigEnvironmentConfigurator {
 		$this->cachePath = $cachePath;
 	}
 
-	public function getEnvironment( Twig_Environment $twig, array $loaders, array $extensions, array $filters ): Twig_Environment {
+	public function getEnvironment( Twig_Environment $twig, array $loaders, array $extensions = [], array $filters = [],
+									array $functions = [] ): Twig_Environment {
 		$twig->setLoader( new \Twig_Loader_Chain( $loaders ) );
+
+		foreach ( $functions as $function ) {
+			$twig->addFunction( $function );
+		}
 
 		foreach ( $filters as $filter ) {
 			$twig->addFilter( $filter );
@@ -50,11 +49,18 @@ class TwigEnvironmentConfigurator {
 		}
 
 		$twig->setLexer( new Twig_Lexer( $twig, [
-			'tag_comment'   => [ '{#', '#}' ],
-			'tag_block'     => [ '{%', '%}' ],
-			'tag_variable'  => [ '{$', '$}' ]
+			'tag_comment' => ['{#', '#}'],
+			'tag_block' => ['{%', '%}'],
+			'tag_variable' => ['{$', '$}']
 		] ) );
+
+		$this->setDefaultTwigVariables( $twig );
 
 		return $twig;
 	}
+
+	private function setDefaultTwigVariables( Twig_Environment $twig ): void {
+		$twig->addGlobal( 'basepath', $this->config['web-basepath'] );
+	}
+
 }

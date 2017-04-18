@@ -40,9 +40,21 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 		);
 		$client->request( 'GET', '/page/kittens' );
 
+		$content = $client->getResponse()->getContent();
+
 		$this->assertContains(
 			$this->notFoundMessage,
-			$client->getResponse()->getContent()
+			$content
+		);
+
+		$this->assertContains(
+			'page header',
+			$content
+		);
+
+		$this->assertContains(
+			'page footer',
+			$content
 		);
 	}
 
@@ -68,9 +80,7 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 
 	public function testWhenRequestedContentPageExists_itGetsEmbeddedAndHasHeaderAndFooter() {
 		$this->createAppEnvironment(
-			[
-				'web-basepath' => '/some-path/someFile.css'
-			],
+			[ ],
 			function ( Client $client, FunFunFactory $factory, Application $app ) {
 
 				// @todo Make this the default behaviour of WebRouteTestCase::createAppEnvironment()
@@ -86,7 +96,7 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 
 				$factory->setContentPageTemplateLoader(
 					new Twig_Loader_Array( [
-						'unicorns.html.twig' => '<p>Rosa plüsch einhorns tanzen auf Regenbogen</p>'
+						'unicorns.html.twig' => '<p>Rosa plüsch einhorns tanzen auf Regenbogen</p>',
 					] )
 				);
 

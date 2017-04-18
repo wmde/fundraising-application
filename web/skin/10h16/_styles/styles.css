@@ -746,3 +746,16 @@ div.notice-window {
 #error-page .box-header {
     background: #84c5f1;
 }
+
+/**
+ * Reposition the content image of two content pages for design purposes
+ */
+.sandboxedcontent.use_of_resources img[src$='itz_logo_white.png'],
+.sandboxedcontent.donation_receipt img[src$='itz_logo_white.png'] {
+    float: right;
+}
+
+#wlightbox .sandboxedcontent.use_of_resources img[src$='itz_logo_white.png'],
+#wlightbox .sandboxedcontent.donation_receipt img[src$='itz_logo_white.png'] {
+    margin-top: -80px;
+}

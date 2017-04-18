@@ -14,8 +14,8 @@
                     </div>
 
                     <div class="box-section box-footer">
-                        <div class="container clearfix">
-                            {$ page_content|raw $}
+                        <div class="container clearfix sandboxedcontent {$ page_id $}">
+                            {$ sandboxed_content(page_id) $}
                         </div>
                     </div>
                 </div>

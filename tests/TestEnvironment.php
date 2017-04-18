@@ -5,6 +5,8 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests;
 
 use FileFetcher\SimpleFileFetcher;
+use Symfony\Component\Translation\Translator;
+use WMDE\Fundraising\Frontend\Factories\TranslationFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 

@@ -11,13 +11,13 @@
 			<span class="icon-hand-right wlightbox-icon"></span>Impressum
 		</div>
 
-		{% include 'Imprint_Content.html.twig' %}
+		{$ sandboxed_content('imprint') $}
 	</div>
 	<div id="wlightbox-datenschutz">
 		<div class="wlightbox-title clearfix">
 			<span class="icon-hand-right wlightbox-icon"></span>Datenschutz
 		</div>
 
-		{% include 'Privacy_Protection_Content.html.twig' %}
+		{$ sandboxed_content('privacy_protection') $}
 	</div>
 </div>

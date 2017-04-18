@@ -223,18 +223,17 @@ $app->get(
 			throw new NotFoundHttpException( "Page page name '$pageName' not found." );
 		}
 
-		$contentProvider = $ffFactory->getContentPageContentProvider();
-
 		try {
-			$pageContent = $contentProvider->render( $pageId );
-		} catch ( ContentNotFoundException $exception ) {
-			throw new NotFoundHttpException( "Content for page id '$pageId' not found." );
-		}
+			return $ffFactory->getLayoutTemplate( 'Display_Page_Layout.twig' )->render( [
+				'page_id' => $pageId
+			] );
+		} catch ( Twig_Error_Runtime $exception ) {
+			if ($exception->getPrevious() instanceof ContentNotFoundException) {
+				throw new NotFoundHttpException( "Content for page id '$pageId' not found." );
+			}
 
-		return $ffFactory->getLayoutTemplate( 'Display_Page_Layout.twig' )->render( [
-			'page_content' => $pageContent,
-			'page_id' => $pageId
-		] );
+			throw $exception;
+		}
 	}
 )
 ->bind( 'page' );
