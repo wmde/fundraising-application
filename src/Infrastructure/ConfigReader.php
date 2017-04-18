@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\Infrastructure;
 use FileFetcher\FileFetcher;
 use FileFetcher\FileFetchingException;
 use RuntimeException;
+use stdClass;
 
 /**
  * @licence GNU GPL v2+
@@ -72,12 +73,15 @@ class ConfigReader {
 		}
 	}
 
-	private function convertConfigArrayToConfigObject( array $config ): \stdClass {
+	private function convertConfigArrayToConfigObject( array $config ): stdClass {
 		// Convert arrays that are supposed to be associative to empty objects,
 		// otherwise they will be empty numeric arrays
 		// can't use JSON_FORCE_OBJECT
 		if ( empty( $config['twig']['loaders']['array'] ) ) {
-			$config['twig']['loaders']['array'] = new \stdClass();
+			$config['twig']['loaders']['array'] = new stdClass();
+		}
+		if ( empty( $config['translation']['files'] ) ) {
+			$config['translation']['files'] = new stdClass();
 		}
 		return json_decode( json_encode( $config ), false );
 	}

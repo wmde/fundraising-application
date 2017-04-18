@@ -135,5 +135,9 @@
 		"baseUrl": "//tracking.wikimedia.de/",
 		"siteId": 1,
 		"siteUrlBase": ""
+	},
+	"translation": {
+		"message-dir": "/messages",
+		"files": {}
 	}
 }

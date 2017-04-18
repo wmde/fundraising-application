@@ -292,14 +292,11 @@ class FunFunFactory {
 				'json' => $translationFactory->newJsonLoader()
 			];
 			$locale = $this->config['locale'];
-			$messagesPath = $this->getI18nDirectory() . '/messages';
+			$messagesPath = $this->getI18nDirectory() . $this->config['translation']['message-dir'];
 			$translator = $translationFactory->create( $loaders, $locale );
-			$translator->addResource( 'json', $messagesPath . '/messages.json', $locale );
-			$translator->addResource( 'json', $messagesPath . '/paymentTypes.json', $locale, 'paymentTypes' );
-			$translator->addResource( 'json', $messagesPath . '/paymentIntervals.json', $locale, 'paymentIntervals' );
-			$translator->addResource( 'json', $messagesPath . '/paymentStatus.json', $locale, 'paymentStatus' );
-			$translator->addResource( 'json', $messagesPath . '/validations.json', $locale, 'validations' );
-			$translator->addResource( 'json', $messagesPath . '/pageTitles.json', $locale, 'pageTitles' );
+			foreach ($this->config['translation']['files'] as $domain => $file) {
+				$translator->addResource( 'json', $messagesPath . '/' . $file, $locale, $domain );
+			}
 
 			return $translator;
 		};
