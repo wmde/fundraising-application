@@ -759,3 +759,18 @@ div.notice-window {
 #wlightbox .sandboxedcontent.donation_receipt img[src$='itz_logo_white.png'] {
     margin-top: -80px;
 }
+
+.sandboxedcontent.use_of_resources p a {
+    width: 49%;
+    display: inline-block;
+    text-align: center;
+}
+
+.page-use_of_resources #main > .container {
+    width: 1278px;
+}
+
+.page-use_of_resources .ctcol {
+    width: auto;
+    max-width: 760px;
+}
