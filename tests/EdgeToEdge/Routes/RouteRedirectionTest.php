@@ -16,8 +16,6 @@ class RouteRedirectionTest extends WebRouteTestCase {
 		return [
 			[ '/spenden/Mitgliedschaft', '/page/Membership_Application' ],
 			[ '/spenden/Fördermitgliedschaft', '/page/Fördermitgliedschaft' ],
-			[ '/spenden/Kontaktformular', '/page/Kontaktformular' ],
-			[ '/spenden/Ihre_Spende_wirkt', '/page/Ihre_Spende_wirkt' ],
 			[ '/spenden/Mitgliedschaft?bar=baz&foo=bar', '/page/Membership_Application?bar=baz&foo=bar' ],
 		];
 	}

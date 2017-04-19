@@ -129,7 +129,7 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 		);
 	}
 
-	public function testSandboxedContentExists_IsReturned(): void {
+	public function testSandboxedContentExists_isReturned(): void {
 		$factory = TestEnvironment::newInstance( [
 			'twig' => [
 				'loaders' => [
@@ -153,7 +153,7 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 		);
 	}
 
-	public function testSandboxedContentDoesntExist_ExceptionIsThrown(): void {
+	public function testSandboxedContentDoesntExist_exceptionIsThrown(): void {
 
 		$factory = TestEnvironment::newInstance( [
 			'twig' => [

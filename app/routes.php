@@ -329,7 +329,15 @@ $app->post(
 		if ( $contactFormResponse->isSuccessful() ) {
 			return $app->redirect( $app['url_generator']->generate( 'page', [ 'pageName' => 'Kontakt_Bestaetigung' ] ) );
 		}
+
 		return $ffFactory->newGetInTouchHtmlPresenter()->present( $contactFormResponse, $request->request->all() );
+	}
+);
+
+$app->get(
+	'contact/get-in-touch',
+	function() use ( $app, $ffFactory ) {
+		return $ffFactory->getLayoutTemplate( 'contact_form.html.twig' )->render( [ ] );
 	}
 );
 
@@ -351,7 +359,6 @@ $app->post(
 		return $httpResponse;
 	}
 );
-
 
 $app->post(
 	'donation/add',
@@ -394,6 +401,19 @@ $app->post(
 	'apply-for-membership',
 	function( Application $app, Request $httpRequest ) use ( $ffFactory ) {
 		return ( new ApplyForMembershipHandler( $ffFactory, $app ) )->handle( $httpRequest );
+	}
+);
+
+$app->get(
+	'apply-for-membership',
+	function( Request $request ) use ( $ffFactory ) {
+
+		$params = [];
+		if ( $request->query->get('type' ) === 'sustaining' ) {
+			$params['showMembershipTypeOption'] = false ;
+		}
+
+		return $ffFactory->getLayoutTemplate( 'Membership_Application.html.twig' )->render( $params );
 	}
 );
 

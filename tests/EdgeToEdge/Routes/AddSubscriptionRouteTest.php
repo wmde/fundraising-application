@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use Silex\Application;
+use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Tests\Fixtures\SubscriptionRepositorySpy;
@@ -90,23 +92,31 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenInvalidDataAndNoContentType_routeDisplaysFormPage() {
-		$client = $this->createClient();
 
-		$client->request(
-			'POST',
-			'/contact/subscribe',
-			$this->invalidFormInput
+		$this->createAppEnvironment(
+			[ ],
+			function ( Client $client, FunFunFactory $factory, Application $app ) {
+
+				// @todo Make this the default behaviour of WebRouteTestCase::createAppEnvironment()
+				$factory->setTwigEnvironment( $app['twig'] );
+
+				$client->request(
+					'POST',
+					'/contact/subscribe',
+					$this->invalidFormInput
+				);
+
+				$response = $client->getResponse();
+				$content = $response->getContent();
+				preg_match_all( '/<span class=\"form-error\">(\w+)<\/span>/s', $content, $errorMatches );
+
+				$errorMatches = $errorMatches[1];
+
+				$this->assertContains( 'text/html', $response->headers->get( 'Content-Type' ) );
+				$this->assertCount( 1, $errorMatches, 'No error count found in test template' );
+				$this->assertRegExp( '/id="first-name" value="Nyan"/', $content );
+			}
 		);
-
-		$response = $client->getResponse();
-		$contentType = $response->headers->get( 'Content-Type' );
-		$content = $response->getContent();
-		$errorsFound = preg_match( '/Errors: (\\d+)/s', $content, $errorMatches );
-
-		$this->assertContains( 'text/html', $contentType, 'Wrong content type: ' . $contentType );
-		$this->assertSame( 1, $errorsFound, 'No error count found in test template' );
-		$this->assertGreaterThan( 0, (int) $errorMatches[1], 'Error list was empty' );
-		$this->assertContains( 'First Name: Nyan', $content );
 	}
 
 	public function testGivenInvalidDataAndJSONContentType_routeReturnsSuccessResult() {

@@ -61,7 +61,7 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 		$this->assert404( $client->getResponse() );
 	}
 
-	public function testGivenNoSubscription_AnErrorIsDisplayed() {
+	public function testGivenNoSubscription_anErrorIsDisplayed() {
 		$client = $this->createClient();
 
 		$client->request(

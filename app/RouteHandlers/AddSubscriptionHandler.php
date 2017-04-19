@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\AddSubscription\SubscriptionRequest;
+use WMDE\Fundraising\Frontend\Validation\ValidationResponse;
 
 /**
  * @license GNU GPL v2+
@@ -25,27 +26,17 @@ class AddSubscriptionHandler {
 	}
 
 	public function handle( Request $request ): Response {
-		$useCase = $this->ffFactory->newAddSubscriptionUseCase();
 
+		$useCase = $this->ffFactory->newAddSubscriptionUseCase();
 		$responseModel = $useCase->addSubscription( $this->createSubscriptionRequest( $request ) );
 
-		if ( $this->app['request_stack.is_json'] ) {
-			return $this->app->json( $this->ffFactory->newAddSubscriptionJsonPresenter()->present( $responseModel ) );
-		} elseif ( $request->query->has( 'callback' ) ) {
-			return $this->app->json( $this->ffFactory->newAddSubscriptionJsonPresenter()->present( $responseModel ) )
-				->setCallback( $request->query->get( 'callback' ) );
+		if ( $request->query->has( 'callback' ) ) {
+			return $this->handleJSONP( $request, $responseModel );
+		} elseif ( $this->app['request_stack.is_json'] ) {
+			return $this->handleJSON( $request, $responseModel );
+		} else {
+			return $this->handleHTML( $request, $responseModel );
 		}
-
-		if ( $responseModel->isSuccessful() ) {
-			if ( $responseModel->needsModeration() ) {
-				return $this->app->redirect( $this->app['url_generator']->generate('page', [ 'pageName' => 'Subscription_Moderation' ] ) );
-			}
-			return $this->app->redirect( $this->app['url_generator']->generate('page', [ 'pageName' => 'Subscription_Success' ] ) );
-		}
-
-		return new Response(
-			$this->ffFactory->newAddSubscriptionHtmlPresenter()->present( $responseModel, $request->request->all() )
-		);
 	}
 
 	private function createSubscriptionRequest( Request $request ): SubscriptionRequest {
@@ -80,5 +71,33 @@ class AddSubscriptionHandler {
 	private function addTrackingDataFromRequest( SubscriptionRequest $subscriptionRequest, Request $request ) {
 		$subscriptionRequest->setSource( $request->get( 'source', '' ) );
 		$subscriptionRequest->setTrackingString( $request->attributes->get( 'trackingCode', '' ) );
+	}
+
+	private function handleHTML( Request $request, ValidationResponse $responseModel ): Response {
+		// "normal" request to get the form on first go
+		if ( $request->isMethod(Request::METHOD_GET) ) {
+			return new Response(
+				$this->ffFactory->getLayoutTemplate( 'Subscription_Form.html.twig' )->render( [] )
+			);
+		}
+
+		if ( $responseModel->isSuccessful() ) {
+			return $this->app->redirect( $this->app['url_generator']->generate('page', [
+				'pageName' => $responseModel->needsModeration() ? 'Subscription_Moderation' : 'Subscription_Success'
+			] ) );
+		}
+
+		return new Response(
+			$this->ffFactory->newAddSubscriptionHtmlPresenter()->present( $responseModel, $request->request->all() )
+		);
+	}
+
+	private function handleJSON( Request $request, ValidationResponse $responseModel ): Response {
+		return $this->app->json( $this->ffFactory->newAddSubscriptionJsonPresenter()->present( $responseModel ) );
+	}
+
+	private function handleJSONP( Request $request, ValidationResponse $responseModel ): Response {
+		return $this->app->json( $this->ffFactory->newAddSubscriptionJsonPresenter()->present( $responseModel ) )
+			->setCallback( $request->query->get( 'callback' ) );
 	}
 }

@@ -531,7 +531,7 @@ class FunFunFactory {
 	}
 
 	public function newAddSubscriptionHtmlPresenter(): AddSubscriptionHtmlPresenter {
-		return new AddSubscriptionHtmlPresenter( $this->getIncludeTemplate( 'Subscription_Form.html.twig' ), $this->getTranslator() );
+		return new AddSubscriptionHtmlPresenter( $this->getLayoutTemplate( 'Subscription_Form.html.twig' ), $this->getTranslator() );
 	}
 
 	public function newConfirmSubscriptionHtmlPresenter(): ConfirmSubscriptionHtmlPresenter {
@@ -546,7 +546,7 @@ class FunFunFactory {
 	}
 
 	public function newGetInTouchHtmlPresenter(): GetInTouchHtmlPresenter {
-		return new GetInTouchHtmlPresenter( $this->getIncludeTemplate( 'Kontaktformular.html.twig' ), $this->getTranslator() );
+		return new GetInTouchHtmlPresenter( $this->getLayoutTemplate( 'contact_form.html.twig' ), $this->getTranslator() );
 	}
 
 	public function setTwigEnvironment( Twig_Environment $twig ) {
@@ -1193,7 +1193,7 @@ class FunFunFactory {
 
 	public function newMembershipFormViolationPresenter() {
 		return new MembershipFormViolationPresenter(
-			$this->getIncludeTemplate( 'Membership_Application.html.twig' )
+			$this->getLayoutTemplate( 'Membership_Application.html.twig' )
 		);
 	}
 

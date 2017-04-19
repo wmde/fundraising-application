@@ -30,14 +30,14 @@ class ContentProviderTest extends TestCase {
 		$this->purifier->method( 'purify' )->willReturnArgument( 0 );
 	}
 
-	public function testPageFound_ReturnsString(): void {
+	public function testPageFound_returnsString(): void {
 		$this->env->method( 'render' )->willReturn( 'ipsum' );
 
 		$provider = new ContentProvider( $this->env, $this->purifier );
 		$this->assertSame( 'ipsum', $provider->render( 'lorem' ) );
 	}
 
-	public function testPageNotFound_ThrowsException(): void {
+	public function testPageNotFound_throwsException(): void {
 		$exception = new \Twig_Error_Loader( 'template not found' );
 		$this->env->method( 'render' )->willThrowException( $exception );
 
