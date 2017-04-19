@@ -520,6 +520,8 @@ class FunFunFactory {
 	/**
 	 * Get a layouted template that includes another template
 	 *
+	 * @deprecated Change the template to use extend and block and call getLayoutTemplate instead.
+	 *
 	 * @param string $templateName Template to include
 	 * @return TwigTemplate
 	 */
