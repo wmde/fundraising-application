@@ -10,12 +10,13 @@ use Symfony\Component\HttpKernel\Client;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-abstract class WebRouteTestCase extends \PHPUnit\Framework\TestCase {
+abstract class WebRouteTestCase extends TestCase {
 
 	const DISABLE_DEBUG = false;
 	const ENABLE_DEBUG = true;
@@ -172,4 +173,14 @@ abstract class WebRouteTestCase extends \PHPUnit\Framework\TestCase {
 		$this->assertArrayHasKey( 'message', $responseData );
 	}
 
+	protected function assertInitialFormValues( array $expected, Response $response ): void {
+		$this->assertGreaterThan(
+			0,
+			preg_match( '/data-initial-form-values="(.+?)"/', $response->getContent(), $match ),
+			'data-initial-form-values found in template'
+		);
+		$json = html_entity_decode( $match[1] );
+		$data = json_decode( $json, true );
+		$this->assertEquals( $expected, $data );
+	}
 }

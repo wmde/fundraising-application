@@ -130,11 +130,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 				$client->request( 'POST', 'apply-for-membership', $httpParameters );
 
-				preg_match('/data-initial-form-values="(.+?)"/', $client->getResponse()->getContent(), $match);
-				$json = html_entity_decode($match[1]);
-				$data = json_decode($json, true);
-
-				$this->assertEquals(
+				$this->assertInitialFormValues(
 					[
 						'addressType' => 'person',
 						'salutation' => 'Herr',
@@ -152,10 +148,9 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 						'accountNumber' => '0648489890',
 						'bankCode' => '50010517',
 						'bankname' => 'ING-DiBa',
-						'paymentType' => 'BEZ',
-
+						'paymentType' => 'BEZ'
 					],
-					$data
+					$client->getResponse()
 				);
 			}
 		);
