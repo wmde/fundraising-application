@@ -2,40 +2,26 @@
 {% if membershipType == 'sustaining' %}
 {$ greeting_generator.createGreeting( lastName, salutation, title ) $}
 {% else %}
-Liebes Neumitglied,
+{$ sandboxed_content('plaintext/mail_membership_application_confirmation/active_membership_salutation') $}
 {% endif %}
 
-herzlich willkommen bei Wikimedia Deutschland e.V.
+{$ sandboxed_content('plaintext/mail_membership_application_confirmation/body', {
+    'membership_type': membershipType|trans( {}, 'membershipTypes' ),
+    'payment_interval_in_months': paymentIntervalInMonths|trans( {}, 'paymentIntervals' ),
+    'formatted_amount': formattedAmount
+}) $}
 
-Ich freue mich, dass Sie sich als {% if membershipType == 'sustaining' %}Fördermitglied{% else %}aktives Mitglied{% endif %} dauerhaft für die Verbreitung von Freiem Wissen einsetzen möchten.
+{$ sandboxed_content('plaintext/name_head_of_organization') $}
+{$ sandboxed_content('plaintext/title_head_of_organization') $}
 
-Sie erhalten in Bälde Ihr offizielles Willkommensschreiben.
+---------------------------------------------------------------------------
+{$ sandboxed_content('plaintext/wikimedia_vision') $}
+https://www.wikimedia.de/
+---------------------------------------------------------------------------
 
-Nach dem Begrüßungsschreiben erhalten Sie auch eine Vorankündigung Ihres SEPA-Lastschriftmandats. Dort ist Ihre Mandatsreferenznummer enthalten. Ihren Mitgliedsbeitrag in Höhe von {$ formattedAmount $} werden wir von dem von Ihnen angegebenen Konto abbuchen. Wie von Ihnen gewünscht wird der Betrag {$ paymentIntervalInMonths|trans({}, 'paymentIntervals') $} abgebucht.
+{$ sandboxed_content('plaintext/address_of_organization') $}
 
-Ich freue mich, dass Sie langfristig dabei bleiben! Denn es gibt viel zu entdecken in der Welt hinter der Wikipedia! Besuchen Sie uns schon jetzt auf unserer Webseite unter <https://wikimedia.de/> und unserem Blog unter <https://blog.wikimedia.de/>.
-
-Sie werden sehen: Wikipedia ist so faszinierend wie einzigartig.
-
-Haben Sie Fragen zu Ihrer Mitgliedschaft?
-
-Sie können uns immer eine E-Mail an <mitglieder@wikimedia.de> schreiben oder uns telefonisch unter der Nummer 030-21915826-19 erreichen.
-
-Ich bedanke mich für Ihr Vertrauen und freue mich, dass Sie sich zukünftig als Mitglied für Freies Wissen einsetzen.
-
-Herzlichen Dank.
-
-Mit freundlichen Grüßen
-
-{% include 'Imprint_Name_Head_of_Organization.html.twig' %}
-{% include 'Imprint_Title_Head_of_Organization.html.twig' %}
-
--------------------------------------
-Stellen Sie sich eine Welt vor, in der jeder Mensch an der Menge allen Wissens frei teilhaben kann. Helfen Sie uns dabei! https://www.wikimedia.de/
-
-{% include 'Imprint_Address_of_Organization.txt.twig' %}
-
-Telefon 030 - 219 158 26-19
+{$ sandboxed_content('plaintext/phone') $}
 www.wikimedia.de
 
-Wikimedia Deutschland - Gesellschaft zur Förderung Freien Wissens e.V. Eingetragen im Vereinsregister des Amtsgerichts Berlin-Charlottenburg unter der Nummer 23855 B. Als gemeinnützig anerkannt durch das Finanzamt für Körperschaften I Berlin, Steuernummer 27 / 681 / 51985
+{$ sandboxed_content('plaintext/tax_id_organization') $}

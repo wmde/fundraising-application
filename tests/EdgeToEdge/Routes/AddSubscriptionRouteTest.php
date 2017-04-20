@@ -48,47 +48,64 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 	}
 
 	public function testValidSubscriptionRequestGetsPersisted() {
-		$subscriptionRepository = new SubscriptionRepositorySpy();
 
-		$client = $this->createClient( [], function( FunFunFactory $factory ) use ( $subscriptionRepository ) {
-			$factory->setSubscriptionRepository( $subscriptionRepository );
-		} );
-		$client->followRedirects( false );
+		$this->createAppEnvironment(
+			[ ],
+			function ( Client $client, FunFunFactory $factory, Application $app ) {
 
-		$client->request(
-			'POST',
-			'/contact/subscribe',
-			$this->validFormInput
+				// @todo Make this the default behaviour of WebRouteTestCase::createAppEnvironment()
+				$factory->setTwigEnvironment( $app['twig'] );
+
+				$subscriptionRepository = new SubscriptionRepositorySpy();
+				$factory->setSubscriptionRepository( $subscriptionRepository );
+
+				$client->followRedirects( false );
+
+				$client->request(
+					'POST',
+					'/contact/subscribe',
+					$this->validFormInput
+				);
+
+				$this->assertCount( 1, $subscriptionRepository->getSubscriptions() );
+
+				$subscription = $subscriptionRepository->getSubscriptions()[0];
+				$address = $subscription->getAddress();
+
+				$this->assertSame( 'Nyan', $address->getFirstName() );
+				$this->assertSame( 'Cat', $address->getLastName() );
+				$this->assertSame( 'Herr', $address->getSalutation() );
+				$this->assertSame( 'Prof. Dr.', $address->getTitle() );
+				$this->assertSame( 'Awesome Way 1', $address->getAddress() );
+				$this->assertSame( 'Berlin', $address->getCity() );
+				$this->assertSame( '12345', $address->getPostcode() );
+				$this->assertSame( 'jeroendedauw@gmail.com', $subscription->getEmail() );
+				$this->assertSame( 'test/blue', $subscription->getTracking() );
+				$this->assertSame( 'testCampaign', $subscription->getSource() );
+			}
 		);
 
-		$this->assertCount( 1, $subscriptionRepository->getSubscriptions() );
-
-		$subscription = $subscriptionRepository->getSubscriptions()[0];
-		$address = $subscription->getAddress();
-
-		$this->assertSame( 'Nyan', $address->getFirstName() );
-		$this->assertSame( 'Cat', $address->getLastName() );
-		$this->assertSame( 'Herr', $address->getSalutation() );
-		$this->assertSame( 'Prof. Dr.', $address->getTitle() );
-		$this->assertSame( 'Awesome Way 1', $address->getAddress() );
-		$this->assertSame( 'Berlin', $address->getCity() );
-		$this->assertSame( '12345', $address->getPostcode() );
-		$this->assertSame( 'jeroendedauw@gmail.com', $subscription->getEmail() );
-		$this->assertSame( 'test/blue', $subscription->getTracking() );
-		$this->assertSame( 'testCampaign', $subscription->getSource() );
 	}
 
 	public function testGivenValidDataAndNoContentType_routeReturnsRedirectToSucccessPage() {
-		$client = $this->createClient();
-		$client->followRedirects( false );
-		$client->request(
-			'POST',
-			'/contact/subscribe',
-			$this->validFormInput
+		$this->createAppEnvironment(
+			[ ],
+			function ( Client $client, FunFunFactory $factory, Application $app ) {
+
+				// @todo Make this the default behaviour of WebRouteTestCase::createAppEnvironment()
+				$factory->setTwigEnvironment( $app['twig'] );
+
+				$client->followRedirects( false );
+				$client->request(
+					'POST',
+					'/contact/subscribe',
+					$this->validFormInput
+				);
+				$response = $client->getResponse();
+				$this->assertTrue( $response->isRedirect(), 'Is redirect response' );
+				$this->assertSame( '/page/Subscription_Success', $response->headers->get( 'Location' ) );
+			}
 		);
-		$response = $client->getResponse();
-		$this->assertTrue( $response->isRedirect(), 'Is redirect response' );
-		$this->assertSame( '/page/Subscription_Success', $response->headers->get( 'Location' ) );
 	}
 
 	public function testGivenInvalidDataAndNoContentType_routeDisplaysFormPage() {
@@ -120,17 +137,25 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenInvalidDataAndJSONContentType_routeReturnsSuccessResult() {
-		$client = $this->createClient();
-		$client->followRedirects( false );
-		$client->request(
-			'POST',
-			'/contact/subscribe',
-			$this->validFormInput,
-			[],
-			[ 'HTTP_ACCEPT' => 'application/json' ]
+		$this->createAppEnvironment(
+			[ ],
+			function ( Client $client, FunFunFactory $factory, Application $app ) {
+
+				// @todo Make this the default behaviour of WebRouteTestCase::createAppEnvironment()
+				$factory->setTwigEnvironment( $app['twig'] );
+
+				$client->followRedirects( false );
+				$client->request(
+					'POST',
+					'/contact/subscribe',
+					$this->validFormInput,
+					[],
+					[ 'HTTP_ACCEPT' => 'application/json' ]
+				);
+				$response = $client->getResponse();
+				$this->assertJsonSuccessResponse( ['status' => 'OK'], $response );
+			}
 		);
-		$response = $client->getResponse();
-		$this->assertJsonSuccessResponse( ['status' => 'OK'], $response );
 	}
 
 	public function testGivenInvalidDataAndJSONContentType_routeReturnsErrorResult() {
@@ -154,24 +179,31 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidDataAndJSONPRequest_routeReturnsResult() {
-		$client = $this->createClient();
+		$this->createAppEnvironment(
+			[ ],
+			function ( Client $client, FunFunFactory $factory, Application $app ) {
 
-		$client->request(
-			'GET',
-			'/contact/subscribe',
-			array_merge(
-				$this->validFormInput,
-				[ 'callback' => 'test' ]
-			),
-			[],
-			[ 'HTTP_ACCEPT' => 'application/javascript' ]
-		);
+				// @todo Make this the default behaviour of WebRouteTestCase::createAppEnvironment()
+				$factory->setTwigEnvironment( $app['twig'] );
 
-		$response = $client->getResponse();
-		$this->assertTrue( $response->isSuccessful(), 'request is successful' );
-		$this->assertSame(
-			file_get_contents( __DIR__ . '/../../Data/files/addSubscriptionResponse.js' ),
-			$response->getContent()
+				$client->request(
+					'GET',
+					'/contact/subscribe',
+					array_merge(
+						$this->validFormInput,
+						['callback' => 'test']
+					),
+					[],
+					['HTTP_ACCEPT' => 'application/javascript']
+				);
+
+				$response = $client->getResponse();
+				$this->assertTrue( $response->isSuccessful(), 'request is successful' );
+				$this->assertSame(
+					file_get_contents( __DIR__ . '/../../Data/files/addSubscriptionResponse.js' ),
+					$response->getContent()
+				);
+			}
 		);
 	}
 

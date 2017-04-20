@@ -1,24 +1,17 @@
 {$ greeting_generator.createGreeting( recipient.lastName, recipient.salutation, recipient.title ) $}
 
-wir haben Ihre Spende mit der Nummer {$ donationId $} wie gewünscht storniert.
+{$ sandboxed_content('plaintext/mail_donation_cancellation_confirmation', {
+    'donation_id': donationId
+}) $}
 
-Herzliche Grüße
-
-{% include 'Imprint_Name_Head_of_Suborganization.html.twig' %}
-{% include 'Imprint_Title_Head_of_Suborganization.html.twig' %}
+{$ sandboxed_content('plaintext/name_head_of_suborganization') $}
+{$ sandboxed_content('plaintext/title_head_of_suborganization') $}
 
 ---------------------------------------------------------------------------
-Stellen Sie sich eine Welt vor, in der jeder Mensch an der Menge allen
-Wissens frei teilhaben kann. Helfen Sie uns dabei!
+{$ sandboxed_content('plaintext/wikimedia_vision') $}
 https://spenden.wikimedia.de/
 ---------------------------------------------------------------------------
 
-{% include 'Imprint_Address_of_Suborganization.txt.twig' %}
+{$ sandboxed_content('plaintext/address_of_suborganization') $}
 
-Eingetragen beim Amtsgericht Berlin-Charlottenburg unter der Nummer HRB
-130183 B. Die Wikimedia Fördergesellschaft ist durch die Bescheinigung
-vom 07.11.2014 durch das Finanzamt für Körperschaften I Berlin unter der
-Steuernummer 27/603/54814 nach § 5 Abs. 1 Nr. 9 des
-Körperschaftssteuergesetzes von der Körperschaftssteuer und nach § 9 Nr.
-5 des Gewerbesteuergesetzes von der Gewerbesteuer befreit und als
-gemeinnützig anerkannt.
+{$ sandboxed_content('plaintext/tax_id_suborganization_verbose') $}

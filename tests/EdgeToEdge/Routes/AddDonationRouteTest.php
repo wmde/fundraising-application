@@ -46,7 +46,10 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenDonationGetsPersisted_timestampIsStoredInCookie() {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createAppEnvironment( [], function ( Client $client, FunFunFactory $factory, Application $app ) {
+
+			// @todo Make this the default behaviour of WebRouteTestCase::createAppEnvironment()
+			$factory->setTwigEnvironment( $app['twig'] );
 
 			$client->followRedirects( true );
 			$client->request(
