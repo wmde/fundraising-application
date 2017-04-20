@@ -37,6 +37,15 @@ class ContentProviderTest extends TestCase {
 		$this->assertSame( 'ipsum', $provider->render( 'lorem' ) );
 	}
 
+	public function testContextIsPassedToRenderer(): void {
+		$this->env->method( 'render' )
+			->with('lorem.twig', ['lol' => 'cat'])
+			->willReturn( 'ipsum' );
+
+		$provider = new ContentProvider( $this->env, $this->purifier );
+		$this->assertSame( 'ipsum', $provider->render( 'lorem', ['lol' => 'cat'] ) );
+	}
+
 	public function testPageNotFound_throwsException(): void {
 		$exception = new \Twig_Error_Loader( 'template not found' );
 		$this->env->method( 'render' )->willThrowException( $exception );

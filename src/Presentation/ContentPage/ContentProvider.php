@@ -17,9 +17,9 @@ class ContentProvider {
 		$this->htmlPurifier = $purifier;
 	}
 
-	public function render( string $pageId ): string {
+	public function render( string $pageId, array $context = [] ): string {
 		try {
-			$html = $this->environment->render( $pageId . '.twig' );
+			$html = $this->environment->render( $pageId . '.twig', $context );
 		} catch ( Twig_Error_Loader $exception ) {
 			throw new ContentNotFoundException( "Template for page '$pageId' not found'", 0, $exception );
 		}

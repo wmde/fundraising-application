@@ -154,6 +154,32 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 		);
 	}
 
+	public function testSandboxedContentExists_isReturnedAndContextInterpolated(): void {
+		$factory = TestEnvironment::newInstance( [
+			'twig' => [
+				'loaders' => [
+					'array' => [
+						'template_with_content.twig' => '{$ sandboxed_content("lorem", { "user": "cat<br>"}) $}',
+					]
+				]
+			]
+		] )->getFactory();
+
+		$factory->setContentPageTemplateLoader(
+			new Twig_Loader_Array( [
+				'lorem.twig' => 'Willkommen +{$ dummy $}+ {$ user $}.'
+			] )
+		);
+
+		$this->assertSame(
+			'Willkommen ++ cat&lt;br&gt;.',
+			$factory->getLayoutTemplate( 'template_with_content.twig' )->render( [
+				'dummy' => 'not available in sandbox'
+			] ),
+			"expected main twig's var not filled, cat interpolated but html encoded"
+		);
+	}
+
 	public function testSandboxedContentDoesntExist_exceptionIsThrown(): void {
 
 		$factory = TestEnvironment::newInstance( [
