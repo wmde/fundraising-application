@@ -135,7 +135,8 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 				'loaders' => [
 					'array' => [
 						'template_with_content.twig' => '<p>{$ sandboxed_content("lorem") $}</p>',
-						'lorem.html.twig' => 'I am the wrong twig environment. Dragons here!'
+						'lorem.html.twig' => 'I am the wrong twig environment. Dragons here!',
+						'lorem.twig' => 'More Dragons!'
 					]
 				]
 			]
@@ -143,7 +144,7 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 
 		$factory->setContentPageTemplateLoader(
 			new Twig_Loader_Array( [
-				'lorem.html.twig' => 'ipsum. all is <strong>fine</strong>.'
+				'lorem.twig' => 'ipsum. all is <strong>fine</strong>.'
 			] )
 		);
 

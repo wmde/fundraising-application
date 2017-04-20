@@ -19,7 +19,7 @@ class ContentProvider {
 
 	public function render( string $pageId ): string {
 		try {
-			$html = $this->environment->render( $pageId . '.html.twig' );
+			$html = $this->environment->render( $pageId . '.twig' );
 		} catch ( Twig_Error_Loader $exception ) {
 			throw new ContentNotFoundException( "Template for page '$pageId' not found'", 0, $exception );
 		}

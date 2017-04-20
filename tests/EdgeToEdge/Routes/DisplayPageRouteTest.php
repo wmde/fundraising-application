@@ -96,7 +96,7 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 
 				$factory->setContentPageTemplateLoader(
 					new Twig_Loader_Array( [
-						'unicorns.html.twig' => '<p>Rosa plüsch einhorns tanzen auf Regenbogen</p>',
+						'unicorns.twig' => '<p>Rosa plüsch einhorns tanzen auf Regenbogen</p>',
 					] )
 				);
 
