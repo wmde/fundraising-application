@@ -1,0 +1,848 @@
+--- konto_check.c.orig	2015-10-26 22:35:43.937503849 +0100
++++ konto_check.c	2015-10-26 22:32:49.613506804 +0100
+@@ -53,6 +53,18 @@
+ 
+ #define ADD_ASSOC_STRING(dst,key,string,duplicate) do{if(string)add_assoc_string(dst,key,string,duplicate); else add_assoc_null(dst,key);}while(0)
+ 
++#ifdef ZEND_ENGINE_3
++
++#define ZVAL_DTOR(var) do switch(Z_TYPE_P(var)){ \
++   case IS_NULL: \
++   case IS_TRUE: \
++   case IS_FALSE: \
++   case IS_LONG: \
++   case IS_DOUBLE: break; \
++   default: zval_dtor(var); break; \
++}while(0)
++
++#else
+    /* das folgende Makro wird vor der Rückgabe von Variablen aufgerufen, die
+     * per reference übergeben wurden. Falls diese Variablen einen komplexen
+     * Datentyp enthalten (String, Array, ...) müssen sie vor der Benutzung
+@@ -67,6 +79,7 @@
+    default: zval_dtor(var); break; \
+ }while(0)
+ 
++#endif
+ 
+    /* Momentan (Februar 10) scheint es kein Speicherleck mehr zugeben. Daher
+     * könnte PHP_MALLOC wieder auf 1 gesetzt werden.
+@@ -90,13 +103,13 @@
+ #include "../konto_check.c"
+ 
+ static int search_lutfile(char *name);
+-#if PHP_MAJOR_VERSION==5 && PHP_MINOR_VERSION>=3
++#if PHP_MAJOR_VERSION==5 && PHP_MINOR_VERSION>=3 || defined(ZEND_ENGINE_3)
+ #define STATIC
+ #else
+ #define STATIC static
+ #endif
+ 
+-#ifdef ZEND_ENGINE_2
++#if defined(ZEND_ENGINE_2) || defined(ZEND_ENGINE_3)
+ STATIC ZEND_BEGIN_ARG_INFO(byref_0,1)
+ ZEND_END_ARG_INFO()
+ 
+@@ -171,6 +184,34 @@
+ #define FUNCTION_ENTRY function_entry
+ #endif
+ 
++#ifdef ZEND_ENGINE_3
++#define ZVAL_STRING_DUP(z, s) ZVAL_STRING(z, s)
++#define ZVAL_STRINGL_DUP(z, s, l) ZVAL_STRINGL(z, s, l)
++#define RETURN_STRING_DUP(s) RETURN_STRING(s)
++#define RETURN_STRING_NONDUP(s) RETVAL_STRING(s); efree(s); return
++#define ADD_ASSOC_STRING_DUP(arg, key, str) add_assoc_string(arg, key, str)
++#define ADD_INDEX_STRING_DUP(arg, idx, str) add_index_string(arg, idx, str)
++#else
++#define ZVAL_STRING_DUP(z, s) ZVAL_STRING(z, s, 1)
++#define ZVAL_STRINGL_DUP(z, s, l) ZVAL_STRINGL(z, s, l, 1)
++#define RETURN_STRING_DUP(s) RETURN_STRING(s, 1)
++#define RETURN_STRING_NONDUP(s) RETURN_STRING(s, 0)
++#define ADD_ASSOC_STRING_DUP(arg, key, str) add_assoc_string(arg, key, str, 1)
++#define ADD_INDEX_STRING_DUP(arg, idx, str) add_index_string(arg, idx, str, 1)
++#endif
++
++#ifdef ZEND_ENGINE_3
++#define HASHTABLE_FOREACH_BEGIN(ht, val, limit) ZEND_HASH_FOREACH_VAL(ht, val){
++#define HASHTABLE_FOREACH_END } ZEND_HASH_FOREACH_END();
++#define ZDATA_PTR *z_data
++#else
++#define HASHTABLE_FOREACH_BEGIN(ht, val, limit) for(zend_hash_internal_pointer_reset_ex(ht,&h_ptr),i=0; \
++zend_hash_get_current_data_ex(ht,(void**)&val,&h_ptr)==SUCCESS && i<limit; \
++zend_hash_move_forward_ex(ht,&h_ptr),i++){
++#define HASHTABLE_FOREACH_END }
++#define ZDATA_PTR **z_data
++#endif
++
+ static FUNCTION_ENTRY konto_check_functions[]={
+    PHP_FE(kto_check,NULL)
+    PHP_FE(kto_check_str,NULL)
+@@ -782,7 +823,7 @@
+    ret=lut_init(buffer,required,set);
+    if(z_used_lutfile){
+       ZVAL_DTOR(z_used_lutfile);
+-      ZVAL_STRING(z_used_lutfile,buffer,1);
++      ZVAL_STRING_DUP(z_used_lutfile,buffer);
+    }
+    RETURN_LONG(ret);
+ }
+@@ -872,9 +913,11 @@
+        *rq1,ret,filialen;
+    UINT4 felder_a[MAX_SLOTS+1];
+    long slots,lut_version,set;
+-   zval *z_felder,**z_data,temp;
++   zval *z_felder,ZDATA_PTR,temp;
+    HashTable *h_felder;
++#ifndef ZEND_ENGINE_3
+    HashPosition h_ptr;
++#endif
+ 
+    felder_1=271828182;
+    slots=lut_version=set=filialen=0;
+@@ -902,9 +945,7 @@
+          case IS_ARRAY: /* das Array aufdröseln, skalare Werte zum Initialisieren benutzen */
+             h_felder=Z_ARRVAL_P(z_felder);
+             cnt=zend_hash_num_elements(h_felder);
+-            for(zend_hash_internal_pointer_reset_ex(h_felder,&h_ptr),i=0;
+-                  zend_hash_get_current_data_ex(h_felder,(void**)&z_data,&h_ptr)==SUCCESS && i<MAX_SLOTS;
+-                  zend_hash_move_forward_ex(h_felder,&h_ptr),i++){
++            HASHTABLE_FOREACH_BEGIN(h_felder,z_data,MAX_SLOTS)
+                if(Z_TYPE_PP(z_data)==IS_LONG)felder_a[i]=Z_LVAL_PP(z_data);
+                if(Z_TYPE_PP(z_data)==IS_DOUBLE || Z_TYPE_PP(z_data)==IS_STRING){
+ 
+@@ -912,13 +953,13 @@
+                    * dazu wird vorher eine Kopie angelegt, damit der alte Typ
+                    * im Array erhalten bleibt.
+                    */
+-                  temp=**z_data;
++                  temp=ZDATA_PTR;
+                   zval_copy_ctor(&temp);
+                   convert_to_long(&temp);
+                   felder_a[i]=Z_LVAL(temp);
+                   zval_dtor(&temp); /* temporäre Variable wieder freigeben */
+                }
+-            }
++            HASHTABLE_FOREACH_END
+             felder_a[i]=0;  /* Endemarkierung einfügen */
+             felder_1=271828182;
+             break;
+@@ -993,9 +1034,11 @@
+ {
+    static char *lut_name,buffer[LUT_NAME_BUFFER];
+    int lut_name_len=0,required,set,ret,incremental;
+-   zval *z_required,*z_status,**z_data,*z_used_lutfile,temp;
++   zval *z_required,*z_status,ZDATA_PTR,*z_used_lutfile,temp;
+    HashTable *h_required;
++#ifndef ZEND_ENGINE_3
+    HashPosition h_ptr;
++#endif
+    int i,j,cnt,required_a[LAST_LUT_BLOCK],*status,*rq1;
+ 
+    set=incremental=0;
+@@ -1009,7 +1052,7 @@
+    ret=search_lutfile(buffer);
+    if(z_used_lutfile){
+       ZVAL_DTOR(z_used_lutfile);
+-      ZVAL_STRING(z_used_lutfile,buffer,1);
++      ZVAL_STRING_DUP(z_used_lutfile,buffer);
+    }
+    if(z_status)ZVAL_DTOR(z_status);
+    if(ret!=OK){
+@@ -1032,9 +1075,7 @@
+       case IS_ARRAY: /* das Array aufdröseln, skalare Werte zum Initialisieren benutzen */
+          h_required=Z_ARRVAL_P(z_required);
+          cnt=zend_hash_num_elements(h_required);
+-         for(zend_hash_internal_pointer_reset_ex(h_required,&h_ptr),i=0;
+-               zend_hash_get_current_data_ex(h_required,(void**)&z_data,&h_ptr)==SUCCESS && i<250;
+-               zend_hash_move_forward_ex(h_required,&h_ptr),i++){
++         HASHTABLE_FOREACH_BEGIN(h_required,z_data,250)
+             if(Z_TYPE_PP(z_data)==IS_LONG)required_a[i]=Z_LVAL_PP(z_data);
+             if(Z_TYPE_PP(z_data)==IS_DOUBLE || Z_TYPE_PP(z_data)==IS_STRING){
+ 
+@@ -1042,13 +1083,13 @@
+                     * dazu wird vorher eine Kopie angelegt, damit der alte Typ
+                     * im Array erhalten bleibt.
+                     */
+-               temp=**z_data;
++               temp=ZDATA_PTR;
+                zval_copy_ctor(&temp);
+                convert_to_long(&temp);
+                required_a[i]=Z_LVAL(temp);
+                zval_dtor(&temp); /* temporäre Variable wieder freigeben */
+             }
+-         }
++         HASHTABLE_FOREACH_END
+          required_a[i]=0;  /* Endemarkierung einfügen */
+          required=-1;
+          break;
+@@ -1152,7 +1193,7 @@
+ #if DEBUG
+    if(z_methode){
+       ZVAL_DTOR(z_methode);
+-      ZVAL_STRING(z_methode,retvals.methode,1);
++      ZVAL_STRING_DUP(z_methode,retvals.methode);
+    }
+    if(z_pz_methode){
+       ZVAL_DTOR(z_pz_methode);
+@@ -1203,18 +1244,18 @@
+    if(z_retvals){
+       ZVAL_DTOR(z_retvals);
+       array_init(z_retvals);
+-      add_assoc_string(z_retvals,"blz2",blz2,1);
+-      add_assoc_string(z_retvals,"kto2",kto2,1);
++      ADD_ASSOC_STRING_DUP(z_retvals,"blz2",blz2);
++      ADD_ASSOC_STRING_DUP(z_retvals,"kto2",kto2);
+       if(bic)
+-         add_assoc_string(z_retvals,"bic2",(char*)bic,1);
++         ADD_ASSOC_STRING_DUP(z_retvals,"bic2",(char*)bic);
+       else
+-         add_assoc_string(z_retvals,"bic2",(char*)"",1);
++         ADD_ASSOC_STRING_DUP(z_retvals,"bic2",(char*)"");
+       add_assoc_long(z_retvals,"regel",regel/100);
+       add_assoc_long(z_retvals,"regel_version",regel%100);
+       if(retvals.methode)
+-         add_assoc_string(z_retvals,"methode",(char*)retvals.methode,1);
++         ADD_ASSOC_STRING_DUP(z_retvals,"methode",(char*)retvals.methode);
+       else
+-         add_assoc_string(z_retvals,"methode",(char*)"",1);
++         ADD_ASSOC_STRING_DUP(z_retvals,"methode",(char*)"");
+       add_assoc_long(z_retvals,"pz_methode",retvals.pz_methode);
+       add_assoc_long(z_retvals,"pz",retvals.pz);
+       add_assoc_long(z_retvals,"pz_pos",retvals.pz_pos);
+@@ -1242,7 +1283,7 @@
+ #if DEBUG
+    if(z_methode){
+       ZVAL_DTOR(z_methode);
+-      ZVAL_STRING(z_methode,retvals.methode,1);
++      ZVAL_STRING_DUP(z_methode,retvals.methode);
+    }
+    if(z_pz_methode){
+       ZVAL_DTOR(z_pz_methode);
+@@ -1305,15 +1346,15 @@
+    else{
+       if(z_lut_filename){
+          ZVAL_DTOR(z_lut_filename);
+-         ZVAL_STRING(z_lut_filename,filename,1);
++         ZVAL_STRING_DUP(z_lut_filename,filename);
+       }
+       if(z_lut_blocks_ok){
+          ZVAL_DTOR(z_lut_blocks_ok);
+-         ZVAL_STRING(z_lut_blocks_ok,blocks_ok,1);
++         ZVAL_STRING_DUP(z_lut_blocks_ok,blocks_ok);
+       }
+       if(z_lut_blocks_fehler){
+          ZVAL_DTOR(z_lut_blocks_fehler);
+-         ZVAL_STRING(z_lut_blocks_fehler,blocks_fehler,1);
++         ZVAL_STRING_DUP(z_lut_blocks_fehler,blocks_fehler);
+       }
+       kc_free(filename);
+       kc_free(blocks_ok);
+@@ -1339,12 +1380,12 @@
+             &blz,&blz_len,&kto,&kto_len,&ret_type,&lut_name,&lut_name_len)==FAILURE)RETURN_NULL();
+    ret=kto_check(blz,kto,lut_name);
+    switch(ret_type){
+-      case 1: RETURN_STRING(kto_check_retval2txt_short(ret),1); break;
+-      case 2: RETURN_STRING(kto_check_retval2txt(ret),1); break;
+-      case 3: RETURN_STRING(kto_check_retval2html(ret),1); break;
+-      case 4: RETURN_STRING(kto_check_retval2dos(ret),1); break;
+-      case 5: RETURN_STRING(kto_check_retval2utf8(ret),1); break;
+-      default: RETURN_STRING(kto_check_retval2html(ret),1); break;
++      case 1: RETURN_STRING_DUP(kto_check_retval2txt_short(ret)); break;
++      case 2: RETURN_STRING_DUP(kto_check_retval2txt(ret)); break;
++      case 3: RETURN_STRING_DUP(kto_check_retval2html(ret)); break;
++      case 4: RETURN_STRING_DUP(kto_check_retval2dos(ret)); break;
++      case 5: RETURN_STRING_DUP(kto_check_retval2utf8(ret)); break;
++      default: RETURN_STRING_DUP(kto_check_retval2html(ret)); break;
+    }
+ }
+ 
+@@ -1395,7 +1436,7 @@
+       ZVAL_DTOR(z_ret);
+       ZVAL_LONG(z_ret,ret);
+    }
+-   RETURN_STRING(pz_s,1);
++   RETURN_STRING_DUP(pz_s);
+ }
+ 
+ #line 1415 "konto_check.lxx"
+@@ -1429,7 +1470,7 @@
+       ZVAL_DTOR(z_match);
+       ZVAL_NULL(z_match);
+       array_init(z_match);
+-      for(i=0;i<anz;i++)add_index_string(z_match,i,base_name[base_name_idx+i],1);
++      for(i=0;i<anz;i++)ADD_INDEX_STRING_DUP(z_match,i,base_name[base_name_idx+i]);
+    }
+ 
+       /* die weiteren Ausgabearrays aufbauen */
+@@ -1587,9 +1628,9 @@
+ 
+    if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,"l",&regel)==FAILURE)RETURN_NULL();
+ #if BESCHREIBUNG_TXT
+-   RETURN_STRING(iban_regel_txt(regel),1);
++   RETURN_STRING_DUP(iban_regel_txt(regel));
+ #else
+-   RETURN_STRING("Das Modul wurde ohne die Beschreibungstexte kompiliert",1);
++   RETURN_STRING_DUP("Das Modul wurde ohne die Beschreibungstexte kompiliert");
+ #endif
+ }
+ 
+@@ -1628,9 +1669,9 @@
+    for(ptr=mtxt(m);*dptr++=*ptr;ptr++)if(*ptr=='\n' && *(ptr+1))for(ptr1=line_begin;*dptr=*ptr1++;dptr++);
+ 
+       /* Buffer als String zurückgeben *ohne* Kopieren => free() wird von PHP erledigt */
+-   RETURN_STRING(buffer,0);
++   RETURN_STRING_NONDUP(buffer);
+ #else
+-   RETURN_STRING("Das Modul wurde ohne die Beschreibungstexte kompiliert",1);
++   RETURN_STRING_DUP("Das Modul wurde ohne die Beschreibungstexte kompiliert");
+ #endif
+ }
+ 
+@@ -1678,7 +1719,7 @@
+       case 'd': e=54; break;
+       default:  e=DEFAULT_ENCODING%10+50;   /* nicht recht spezifiziert, Makro+Default-Encoding nehmen */
+    }
+-   RETURN_STRING(kto_check_encoding_str(e),1);
++   RETURN_STRING_DUP(kto_check_encoding_str(e));
+ }
+ 
+ PHP_FUNCTION(kto_check_retval2txt)
+@@ -1687,7 +1728,7 @@
+ 
+    if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,"l",
+             &ret)==FAILURE)RETURN_NULL();
+-   RETURN_STRING(kto_check_retval2txt(ret),1);
++   RETURN_STRING_DUP(kto_check_retval2txt(ret));
+ }
+ 
+ PHP_FUNCTION(kto_check_retval2iso)
+@@ -1696,7 +1737,7 @@
+ 
+    if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,"l",
+             &ret)==FAILURE)RETURN_NULL();
+-   RETURN_STRING(kto_check_retval2iso(ret),1);
++   RETURN_STRING_DUP(kto_check_retval2iso(ret));
+ }
+ 
+ PHP_FUNCTION(kto_check_retval2html)
+@@ -1705,7 +1746,7 @@
+ 
+    if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,"l",
+             &ret)==FAILURE)RETURN_NULL();
+-   RETURN_STRING(kto_check_retval2html(ret),1);
++   RETURN_STRING_DUP(kto_check_retval2html(ret));
+ }
+ 
+ PHP_FUNCTION(kto_check_retval2txt_short)
+@@ -1714,7 +1755,7 @@
+ 
+    if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,"l",
+             &ret)==FAILURE)RETURN_NULL();
+-   RETURN_STRING(kto_check_retval2txt_short(ret),1);
++   RETURN_STRING_DUP(kto_check_retval2txt_short(ret));
+ }
+ 
+ PHP_FUNCTION(kto_check_retval2dos)
+@@ -1723,7 +1764,7 @@
+ 
+    if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,"l",
+             &ret)==FAILURE)RETURN_NULL();
+-   RETURN_STRING(kto_check_retval2dos(ret),1);
++   RETURN_STRING_DUP(kto_check_retval2dos(ret));
+ }
+ 
+ PHP_FUNCTION(kto_check_retval2utf8)
+@@ -1732,7 +1773,7 @@
+ 
+    if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,"l",
+             &ret)==FAILURE)RETURN_NULL();
+-   RETURN_STRING(kto_check_retval2utf8(ret),1);
++   RETURN_STRING_DUP(kto_check_retval2utf8(ret));
+ }
+ 
+ PHP_FUNCTION(lut_name)
+@@ -1754,7 +1795,7 @@
+       RETURN_NULL();
+    }
+    else
+-      RETURN_STRING(ret_str,1);
++      RETURN_STRING_DUP(ret_str);
+ }
+ 
+ PHP_FUNCTION(lut_name_kurz)
+@@ -1776,7 +1817,7 @@
+       RETURN_NULL();
+    }
+    else
+-      RETURN_STRING(ret_str,1);
++      RETURN_STRING_DUP(ret_str);
+ }
+ 
+ PHP_FUNCTION(lut_plz)
+@@ -1819,7 +1860,7 @@
+       RETURN_NULL();
+    }
+    else
+-      RETURN_STRING(ret_str,1);
++      RETURN_STRING_DUP(ret_str);
+ }
+ 
+ PHP_FUNCTION(lut_pan)
+@@ -1862,7 +1903,7 @@
+       RETURN_NULL();
+    }
+    else
+-      RETURN_STRING(ret_str,1);
++      RETURN_STRING_DUP(ret_str);
+ }
+ 
+ PHP_FUNCTION(lut_nr)
+@@ -1948,7 +1989,7 @@
+    else
+       ret_c[0]=ret_long;
+       ret_c[1]=0;
+-      RETURN_STRING(ret_c,1);
++      RETURN_STRING_DUP(ret_c);
+ }
+ 
+ PHP_FUNCTION(lut_loeschung)
+@@ -1971,7 +2012,7 @@
+    else
+       ret_c[0]=ret_long;
+       ret_c[1]=0;
+-      RETURN_STRING(ret_c,1);
++      RETURN_STRING_DUP(ret_c);
+ }
+ 
+ PHP_FUNCTION(lut_iban_regel)
+@@ -2015,7 +2056,7 @@
+    else
+       ret_c[0]=ret_long;
+       ret_c[1]=0;
+-      RETURN_STRING(ret_c,1);
++      RETURN_STRING_DUP(ret_c);
+ }
+ 
+ PHP_FUNCTION(bic_loeschung)
+@@ -2038,7 +2079,7 @@
+    else
+       ret_c[0]=ret_long;
+       ret_c[1]=0;
+-      RETURN_STRING(ret_c,1);
++      RETURN_STRING_DUP(ret_c);
+ }
+ 
+ PHP_FUNCTION(bic_iban_regel)
+@@ -2186,7 +2227,7 @@
+       RETURN_NULL();
+    }
+    else
+-      RETURN_STRING(ret_str,1);
++      RETURN_STRING_DUP(ret_str);
+ }
+ 
+ PHP_FUNCTION(bic_bic_h)
+@@ -2208,7 +2249,7 @@
+       RETURN_NULL();
+    }
+    else
+-      RETURN_STRING(ret_str,1);
++      RETURN_STRING_DUP(ret_str);
+ }
+ 
+ PHP_FUNCTION(bic_name)
+@@ -2230,7 +2271,7 @@
+       RETURN_NULL();
+    }
+    else
+-      RETURN_STRING(ret_str,1);
++      RETURN_STRING_DUP(ret_str);
+ }
+ 
+ PHP_FUNCTION(bic_name_kurz)
+@@ -2252,7 +2293,7 @@
+       RETURN_NULL();
+    }
+    else
+-      RETURN_STRING(ret_str,1);
++      RETURN_STRING_DUP(ret_str);
+ }
+ 
+ PHP_FUNCTION(bic_ort)
+@@ -2274,7 +2315,7 @@
+       RETURN_NULL();
+    }
+    else
+-      RETURN_STRING(ret_str,1);
++      RETURN_STRING_DUP(ret_str);
+ }
+ 
+ PHP_FUNCTION(biq_aenderung)
+@@ -2296,7 +2337,7 @@
+    else
+       ret_c[0]=ret_long;
+       ret_c[1]=0;
+-      RETURN_STRING(ret_c,1);
++      RETURN_STRING_DUP(ret_c);
+ }
+ 
+ PHP_FUNCTION(biq_loeschung)
+@@ -2318,7 +2359,7 @@
+    else
+       ret_c[0]=ret_long;
+       ret_c[1]=0;
+-      RETURN_STRING(ret_c,1);
++      RETURN_STRING_DUP(ret_c);
+ }
+ 
+ PHP_FUNCTION(biq_iban_regel)
+@@ -2452,7 +2493,7 @@
+       RETURN_NULL();
+    }
+    else
+-      RETURN_STRING(ret_str,1);
++      RETURN_STRING_DUP(ret_str);
+ }
+ 
+ PHP_FUNCTION(biq_bic_h)
+@@ -2472,7 +2513,7 @@
+       RETURN_NULL();
+    }
+    else
+-      RETURN_STRING(ret_str,1);
++      RETURN_STRING_DUP(ret_str);
+ }
+ 
+ PHP_FUNCTION(biq_name)
+@@ -2492,7 +2533,7 @@
+       RETURN_NULL();
+    }
+    else
+-      RETURN_STRING(ret_str,1);
++      RETURN_STRING_DUP(ret_str);
+ }
+ 
+ PHP_FUNCTION(biq_name_kurz)
+@@ -2512,7 +2553,7 @@
+       RETURN_NULL();
+    }
+    else
+-      RETURN_STRING(ret_str,1);
++      RETURN_STRING_DUP(ret_str);
+ }
+ 
+ PHP_FUNCTION(biq_ort)
+@@ -2532,7 +2573,7 @@
+       RETURN_NULL();
+    }
+    else
+-      RETURN_STRING(ret_str,1);
++      RETURN_STRING_DUP(ret_str);
+ }
+ 
+ PHP_FUNCTION(iban_aenderung)
+@@ -2555,7 +2596,7 @@
+    else
+       ret_c[0]=ret_long;
+       ret_c[1]=0;
+-      RETURN_STRING(ret_c,1);
++      RETURN_STRING_DUP(ret_c);
+ }
+ 
+ PHP_FUNCTION(iban_loeschung)
+@@ -2578,7 +2619,7 @@
+    else
+       ret_c[0]=ret_long;
+       ret_c[1]=0;
+-      RETURN_STRING(ret_c,1);
++      RETURN_STRING_DUP(ret_c);
+ }
+ 
+ PHP_FUNCTION(iban_iban_regel)
+@@ -2726,7 +2767,7 @@
+       RETURN_NULL();
+    }
+    else
+-      RETURN_STRING(ret_str,1);
++      RETURN_STRING_DUP(ret_str);
+ }
+ 
+ PHP_FUNCTION(iban_bic_h)
+@@ -2748,7 +2789,7 @@
+       RETURN_NULL();
+    }
+    else
+-      RETURN_STRING(ret_str,1);
++      RETURN_STRING_DUP(ret_str);
+ }
+ 
+ PHP_FUNCTION(iban_name)
+@@ -2770,7 +2811,7 @@
+       RETURN_NULL();
+    }
+    else
+-      RETURN_STRING(ret_str,1);
++      RETURN_STRING_DUP(ret_str);
+ }
+ 
+ PHP_FUNCTION(iban_name_kurz)
+@@ -2792,7 +2833,7 @@
+       RETURN_NULL();
+    }
+    else
+-      RETURN_STRING(ret_str,1);
++      RETURN_STRING_DUP(ret_str);
+ }
+ 
+ PHP_FUNCTION(iban_ort)
+@@ -2814,7 +2855,7 @@
+       RETURN_NULL();
+    }
+    else
+-      RETURN_STRING(ret_str,1);
++      RETURN_STRING_DUP(ret_str);
+ }
+ 
+ PHP_FUNCTION(current_lutfile_name)
+@@ -2839,7 +2880,7 @@
+       ZVAL_LONG(z_ret,ret);
+    }
+    if(lutfile_name){
+-      RETURN_STRING(lutfile_name,1);
++      RETURN_STRING_DUP(lutfile_name);
+    }
+    else{
+       RETURN_NULL();
+@@ -2863,7 +2904,7 @@
+       ZVAL_DTOR(z_retval);
+       ZVAL_LONG(z_retval,retval);
+    }
+-   ZVAL_STRINGL(return_value,data,block_len,1);
++   ZVAL_STRINGL_DUP(return_value,data,block_len);
+    FREE(data);
+ }
+ 
+@@ -2913,7 +2954,7 @@
+    if(z_info1){
+       ZVAL_DTOR(z_info1);
+       if(info1){
+-         ZVAL_STRING(z_info1,info1,1);
++         ZVAL_STRING_DUP(z_info1,info1);
+       }
+       else{
+          ZVAL_NULL(z_info1);
+@@ -2922,7 +2963,7 @@
+    if(z_info2){
+       ZVAL_DTOR(z_info2);
+       if(info2){
+-         ZVAL_STRING(z_info2,info2,1);
++         ZVAL_STRING_DUP(z_info2,info2);
+       }
+       else{
+          ZVAL_NULL(z_info2);
+@@ -2952,25 +2993,25 @@
+          if(z_slots){
+             array_init(z_slots);
+             snprintf(slot_buffer,512,"  Slot  retval   Typ      Inhalt              Laenge    kompr.   Verh.  Adler32   Test");
+-            add_index_string(z_slots,0,slot_buffer,1);
++            ADD_INDEX_STRING_DUP(z_slots,0,slot_buffer);
+          }
+          for(len1=len2=0,i=slot_cnt=1;i<=slot_cnt;i++){
+             retval=lut_dir(lut,i,&slot_cnt,&typ,&len,&compressed_len,&adler,NULL,NULL);
+             if(retval==LUT2_FILE_CORRUPTED){
+                if(z_slots){ZVAL_NULL(z_slots);}
+-               if(z_info3){ZVAL_STRING(z_info3,"Die LUT-Datei ist korrumpiert",1);}
++               if(z_info3){ZVAL_STRING_DUP(z_info3,"Die LUT-Datei ist korrumpiert");}
+                ok=0;
+                break;
+             }
+             if(retval==INVALID_LUT_FILE){
+                if(z_slots){ZVAL_NULL(z_slots);}
+-            if(z_info3){ZVAL_STRING(z_info3,"die Datei ist keine LUT-Datei",1);}
++            if(z_info3){ZVAL_STRING_DUP(z_info3,"die Datei ist keine LUT-Datei");}
+                ok=0;
+                break;
+             }
+             if(retval==LUT1_FILE_USED){
+                if(z_slots){ZVAL_NULL(z_slots);}
+-               if(z_info3){ZVAL_STRING(z_info3,"Die LUT-Datei ist im alten Format (1.0/1.1)",1);}
++               if(z_info3){ZVAL_STRING_DUP(z_info3,"Die LUT-Datei ist im alten Format (1.0/1.1)");}
+                ok=0;
+                break;
+             }
+@@ -2983,7 +3024,7 @@
+                else
+                   snprintf(slot_buffer,512,"%3d/%3u %3d %8d   %-20s %8u %8u%7s   0x%08x   %s",
+                         i,slot_cnt,1,0,"   (ungenutzt)",0,0,"-",0,"OK");
+-               add_index_string(z_slots,i,slot_buffer,1);
++               ADD_INDEX_STRING_DUP(z_slots,i,slot_buffer);
+             }
+             len1+=len;
+             len2+=compressed_len;
+@@ -2999,7 +3040,7 @@
+                snprintf(ptr,len,"%d ",slotdir[i]);
+                for(;*ptr;ptr++,len--);
+             }
+-            ZVAL_STRING(z_info3,slot_buffer,1);
++            ZVAL_STRING_DUP(z_info3,slot_buffer);
+          }
+          fclose(lut);
+       }
+@@ -3072,7 +3113,7 @@
+ 
+ #define Z_RETURN_STRING(z_name,lut2_name,p_name) if(z_name){ \
+       if(lut2_block_status[lut2_name]==OK){ \
+-         ZVAL_STRING(z_name,p_name[zweigstelle],1); \
++         ZVAL_STRING_DUP(z_name,p_name[zweigstelle]); \
+       } \
+       else{ \
+          ZVAL_NULL(z_name); \
+@@ -3105,7 +3146,7 @@
+    if(z_aenderung){
+       if(lut2_block_status[LUT2_AENDERUNG]==OK){
+          *short_buf=p_aenderung[zweigstelle];
+-         ZVAL_STRING(z_aenderung,short_buf,1);
++         ZVAL_STRING_DUP(z_aenderung,short_buf);
+       }
+       else{
+          ZVAL_NULL(z_aenderung);
+@@ -3138,11 +3179,11 @@
+    }
+    if(z_blz2){ /* Fehlerbehandlung erfolgt schon in der C-Funktion */
+       ZVAL_DTOR(z_blz2);
+-      ZVAL_STRING(z_blz2,blz2,1);
++      ZVAL_STRING_DUP(z_blz2,blz2);
+    }
+    if(z_kto2){
+       ZVAL_DTOR(z_kto2);
+-      ZVAL_STRING(z_kto2,kto2,1);
++      ZVAL_STRING_DUP(z_kto2,kto2);
+    }
+    if(z_regel){
+       ZVAL_DTOR(z_regel);
+@@ -3154,19 +3195,19 @@
+       *dptr=0;
+       if(z_papier){
+          ZVAL_DTOR(z_papier);
+-         ZVAL_STRING(z_papier,iban,1);
++         ZVAL_STRING_DUP(z_papier,iban);
+       }
+       if(z_bic){
+          ZVAL_DTOR(z_bic);
+          if(bic){
+-            ZVAL_STRING(z_bic,bic,1);
++            ZVAL_STRING_DUP(z_bic,bic);
+          }
+          else{
+             ZVAL_NULL(z_bic);
+          }
+       }
+       kc_free(iban);
+-      RETURN_STRING(i_buffer,1);
++      RETURN_STRING_DUP(i_buffer);
+    }
+    else{
+       if(z_papier){
+@@ -3176,7 +3217,7 @@
+       if(z_bic){
+          ZVAL_DTOR(z_bic);
+          if(bic){
+-            ZVAL_STRING(z_bic,bic,1);
++            ZVAL_STRING_DUP(z_bic,bic);
+          }
+          else{
+             ZVAL_NULL(z_bic);
+@@ -3279,13 +3320,13 @@
+    else{
+       if(z_blz){
+          ZVAL_DTOR(z_blz);
+-         ZVAL_STRING(z_blz,bptr,1);
++         ZVAL_STRING_DUP(z_blz,bptr);
+       }
+       if(z_kto){
+          ZVAL_DTOR(z_kto);
+-         ZVAL_STRING(z_kto,kptr,1);
++         ZVAL_STRING_DUP(z_kto,kptr);
+       }
+-      RETURN_STRING(bic1,1);
++      RETURN_STRING_DUP(bic1);
+    }
+ }
+ 
+@@ -3305,8 +3346,8 @@
+    }
+    if(z_papier)ZVAL_DTOR(z_papier);
+    if(ret==OK){
+-      if(z_papier)ZVAL_STRING(z_papier,papier,1);
+-      RETURN_STRING(dst,1);
++      if(z_papier)ZVAL_STRING_DUP(z_papier,papier);
++      RETURN_STRING_DUP(dst);
+    }
+    else{
+       if(z_papier)ZVAL_NULL(z_papier);
+@@ -3391,7 +3432,7 @@
+       if(z_blz)add_index_long(z_blz,i,blz_base[j]);   /* Zweigstellen-Index */
+       if(z_zweigstelle)add_index_long(z_zweigstelle,i,zweigstelle?zweigstelle[j]:0);   /* Zweigstelle */
+       if(z_cnt_o)add_index_long(z_cnt_o,i,cnt_o?cnt_o[i]:1);   /* Anzahl Zweigstellen pro BLZ (v.a. interessant bei uniq) */
+-      add_index_string(return_value,i,base_name[j],1);
++      ADD_INDEX_STRING_DUP(return_value,i,base_name[j]);
+    }
+    if(sort_uniq){
+       kc_free((char*)idx_o);
+@@ -3444,7 +3485,7 @@
+       if(z_blz)add_index_long(z_blz,i,blz_base[j]);   /* Zweigstellen-Index */
+       if(z_zweigstelle)add_index_long(z_zweigstelle,i,zweigstelle?zweigstelle[j]:0);   /* Zweigstelle */
+       if(z_cnt_o)add_index_long(z_cnt_o,i,cnt_o?cnt_o[i]:1);   /* Anzahl Zweigstellen pro BLZ (v.a. interessant bei uniq) */
+-      add_index_string(return_value,i,base_name[j],1);
++      ADD_INDEX_STRING_DUP(return_value,i,base_name[j]);
+    }
+    if(sort_uniq){
+       kc_free((char*)idx_o);
+@@ -3497,7 +3538,7 @@
+       if(z_blz)add_index_long(z_blz,i,blz_base[j]);   /* Zweigstellen-Index */
+       if(z_zweigstelle)add_index_long(z_zweigstelle,i,zweigstelle?zweigstelle[j]:0);   /* Zweigstelle */
+       if(z_cnt_o)add_index_long(z_cnt_o,i,cnt_o?cnt_o[i]:1);   /* Anzahl Zweigstellen pro BLZ (v.a. interessant bei uniq) */
+-      add_index_string(return_value,i,base_name[j],1);
++      ADD_INDEX_STRING_DUP(return_value,i,base_name[j]);
+    }
+    if(sort_uniq){
+       kc_free((char*)idx_o);
+@@ -3550,7 +3591,7 @@
+       if(z_blz)add_index_long(z_blz,i,blz_base[j]);   /* Zweigstellen-Index */
+       if(z_zweigstelle)add_index_long(z_zweigstelle,i,zweigstelle?zweigstelle[j]:0);   /* Zweigstelle */
+       if(z_cnt_o)add_index_long(z_cnt_o,i,cnt_o?cnt_o[i]:1);   /* Anzahl Zweigstellen pro BLZ (v.a. interessant bei uniq) */
+-      add_index_string(return_value,i,base_name[j],1);
++      ADD_INDEX_STRING_DUP(return_value,i,base_name[j]);
+    }
+    if(sort_uniq){
+       kc_free((char*)idx_o);
+@@ -3603,7 +3644,7 @@
+       if(z_blz)add_index_long(z_blz,i,blz_base[j]);   /* Zweigstellen-Index */
+       if(z_zweigstelle)add_index_long(z_zweigstelle,i,zweigstelle?zweigstelle[j]:0);   /* Zweigstelle */
+       if(z_cnt_o)add_index_long(z_cnt_o,i,cnt_o?cnt_o[i]:1);   /* Anzahl Zweigstellen pro BLZ (v.a. interessant bei uniq) */
+-      add_index_string(return_value,i,base_name[j],1);
++      ADD_INDEX_STRING_DUP(return_value,i,base_name[j]);
+    }
+    if(sort_uniq){
+       kc_free((char*)idx_o);
+@@ -3984,8 +4025,8 @@
+ 
+    if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,"|l",&type)==FAILURE)RETURN_NULL();
+    switch(type){
+-      case 0: RETURN_STRING(get_kto_check_version(),1);
+-      default: RETURN_STRING(get_kto_check_version_x(type),1);
++      case 0: RETURN_STRING_DUP(get_kto_check_version());
++      default: RETURN_STRING_DUP(get_kto_check_version_x(type));
+    }
+ }
+ 
+@@ -4000,7 +4041,7 @@
+ #if CHECK_MALLOC
+ PHP_FUNCTION(malloc_report)
+ {
+-   RETURN_STRING(malloc_report_string(0),1);
++   RETURN_STRING_DUP(malloc_report_string(0));
+ }
+ 
+ PHP_FUNCTION(malloc_cnt)
