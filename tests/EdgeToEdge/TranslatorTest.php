@@ -8,9 +8,6 @@ use Symfony\Component\Translation\Loader\ArrayLoader;
 use Symfony\Component\Translation\Translator;
 use Twig_Environment;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Presentation\ContentPage\ContentProvider;
-use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector;
-use WMDE\Fundraising\HtmlFilter\HtmlPurifier;
 
 /**
  * @licence GNU GPL v2+

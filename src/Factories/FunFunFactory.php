@@ -343,8 +343,13 @@ class FunFunFactory {
 			$functions = [
 				new Twig_SimpleFunction(
 					'sandboxed_content',
-					[$this->getContentPageContentProvider(), 'render'],
+					[$this->getWebContentProvider(), 'render'],
 					['is_safe' => ['html']]
+				),
+				new Twig_SimpleFunction(
+					'sandboxed_text',
+					[$this->getMailContentProvider(), 'render'],
+					['is_safe' => ['all']]
 				)
 			];
 
@@ -434,34 +439,39 @@ class FunFunFactory {
 			return new PageSelector($config);
 		};
 
-		$pimple['content_page_content_provider'] = function () {
-			// @see https://twig.sensiolabs.org/doc/1.x/api.html#sandbox-extension
-			$policy = new Twig_Sandbox_SecurityPolicy(
-				['filter', 'include'],
-				['nl2br', 'escape'],
-				[],
-				[],
-				[]
-			);
-			$sandbox = new Twig_Extension_Sandbox($policy, true);
-
-			$twig = new Twig_Environment();
-			$twig->addExtension($sandbox);
-
+		$pimple['web_content_provider'] = function () {
 			$environment = $this->getTwigFactory()->newTwigEnvironmentConfigurator()->getEnvironment(
-				$twig,
-				[$this->getContentPageTemplateLoader()],
-				[],
+				new Twig_Environment(),
+				[$this->getWebContentTemplateLoader()],
+				[$this->getContentSandbox()],
 				[]
 			);
 
 			return new ContentProvider( $environment, new HtmlPurifier() );
 		};
 
-		$pimple['content_page_template_loader'] = function () {
+		$pimple['mail_content_provider'] = function () {
+			$environment = $this->getTwigFactory()->newTwigEnvironmentConfigurator()->getEnvironment(
+				new Twig_Environment(null, ['autoescape' => false]),
+				[$this->getMailContentTemplateLoader()],
+				[$this->getContentSandbox()],
+				[]
+			);
+
+			return new ContentProvider( $environment );
+		};
+
+		$pimple['web_content_template_loader'] = function () {
 			return new Twig_Loader_Filesystem( [
-				$this->getI18nDirectory() . '/pages',
-				$this->getI18nDirectory() . '/includes'
+				$this->getI18nDirectory() . '/web',
+				$this->getI18nDirectory() . '/shared'
+			] );
+		};
+
+		$pimple['mail_content_template_loader'] = function () {
+			return new Twig_Loader_Filesystem( [
+				$this->getI18nDirectory() . '/mail',
+				$this->getI18nDirectory() . '/shared'
 			] );
 		};
 
@@ -1391,19 +1401,49 @@ class FunFunFactory {
 		return $this->pimple['content_page_selector'];
 	}
 
-	public function setContentPageContentProvider( ContentProvider $contentProvider ): void {
-		$this->pimple['content_page_content_provider'] = $contentProvider;
+	public function setWebContentProvider( ContentProvider $contentProvider ): void {
+		$this->pimple['web_content_provider'] = $contentProvider;
 	}
 
-	private function getContentPageContentProvider(): ContentProvider {
-		return $this->pimple['content_page_content_provider'];
+	private function getWebContentProvider(): ContentProvider {
+		return $this->pimple['web_content_provider'];
 	}
 
-	public function setContentPageTemplateLoader( Twig_LoaderInterface $loader ): void {
-		$this->pimple['content_page_template_loader'] = $loader;
+	public function setMailContentProvider( ContentProvider $contentProvider ): void {
+		$this->pimple['mail_content_provider'] = $contentProvider;
 	}
 
-	private function getContentPageTemplateLoader(): Twig_LoaderInterface {
-		return $this->pimple['content_page_template_loader'];
+	private function getMailContentProvider(): ContentProvider {
+		return $this->pimple['mail_content_provider'];
+	}
+
+	public function setWebContentTemplateLoader( Twig_LoaderInterface $loader ): void {
+		$this->pimple['web_content_template_loader'] = $loader;
+	}
+
+	private function getWebContentTemplateLoader(): Twig_LoaderInterface {
+		return $this->pimple['web_content_template_loader'];
+	}
+
+	public function setMailContentTemplateLoader( Twig_LoaderInterface $loader ): void {
+		$this->pimple['mail_content_template_loader'] = $loader;
+	}
+
+	private function getMailContentTemplateLoader(): Twig_LoaderInterface {
+		return $this->pimple['mail_content_template_loader'];
+	}
+
+	/**
+	 * @todo mv to content validation repo
+	 */
+	private function getContentSandbox(): Twig_Extension_Sandbox {
+		$policy = new Twig_Sandbox_SecurityPolicy(
+			['filter', 'include'],
+			['nl2br', 'escape'],
+			[],
+			[],
+			[]
+		);
+		return new Twig_Extension_Sandbox($policy, true);
 	}
 }

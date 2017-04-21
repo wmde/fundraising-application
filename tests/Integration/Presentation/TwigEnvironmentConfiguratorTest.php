@@ -142,7 +142,7 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 			]
 		] )->getFactory();
 
-		$factory->setContentPageTemplateLoader(
+		$factory->setWebContentTemplateLoader(
 			new Twig_Loader_Array( [
 				'lorem.twig' => 'ipsum. all is <strong>fine</strong>.'
 			] )
@@ -151,6 +151,31 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 		$this->assertSame(
 			'<p>ipsum. all is <strong>fine</strong>.</p>',
 			$factory->getLayoutTemplate( 'template_with_content.twig' )->render( [ ] )
+		);
+	}
+
+	public function testMailContentExists_isReturnedAndContextPassed(): void {
+		$factory = TestEnvironment::newInstance( [
+			'twig' => [
+				'loaders' => [
+					'array' => [
+						'application_template.twig' => '{$ sandboxed_text("mail_template", {"donation_id": 4}) $}',
+						'mail_template.html.twig' => 'I am the wrong twig environment. Dragons here!',
+						'mail_template.twig' => 'More Dragons!'
+					]
+				]
+			]
+		] )->getFactory();
+
+		$factory->setMailContentTemplateLoader(
+			new Twig_Loader_Array( [
+				'mail_template.twig' => 'Mail text for donation {$ donation_id $}. <http://wikimedia.de>'
+			] )
+		);
+
+		$this->assertSame(
+			'Mail text for donation 4. <http://wikimedia.de>',
+			$factory->getLayoutTemplate( 'application_template.twig' )->render( [ ] )
 		);
 	}
 
@@ -165,7 +190,7 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 			]
 		] )->getFactory();
 
-		$factory->setContentPageTemplateLoader(
+		$factory->setWebContentTemplateLoader(
 			new Twig_Loader_Array( [
 				'lorem.twig' => 'Willkommen +{$ dummy $}+ {$ user $}.'
 			] )
@@ -193,7 +218,7 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 		] )->getFactory();
 
 		$this->expectException( Twig_Error_Runtime::class );
-		$this->expectExceptionMessageRegExp('/Template for page \'lorem\' not found/');
+		$this->expectExceptionMessageRegExp('/Template \'lorem\' not found/');
 
 		$factory->getLayoutTemplate( 'template_with_content.twig' )->render( [ ] );
 	}

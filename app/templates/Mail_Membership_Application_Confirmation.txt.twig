@@ -2,26 +2,26 @@
 {% if membershipType == 'sustaining' %}
 {$ greeting_generator.createGreeting( lastName, salutation, title ) $}
 {% else %}
-{$ sandboxed_content('plaintext/mail_membership_application_confirmation/active_membership_salutation') $}
+{$ sandboxed_text('membership_application_confirmation/active_membership_salutation') $}
 {% endif %}
 
-{$ sandboxed_content('plaintext/mail_membership_application_confirmation/body', {
+{$ sandboxed_text('membership_application_confirmation/body', {
     'membership_type': membershipType|trans( {}, 'membershipTypes' ),
     'payment_interval_in_months': paymentIntervalInMonths|trans( {}, 'paymentIntervals' ),
     'formatted_amount': formattedAmount
 }) $}
 
-{$ sandboxed_content('plaintext/name_head_of_organization') $}
-{$ sandboxed_content('plaintext/title_head_of_organization') $}
+{$ sandboxed_text('name_head_of_organization') $}
+{$ sandboxed_text('title_head_of_organization') $}
 
 ---------------------------------------------------------------------------
-{$ sandboxed_content('plaintext/wikimedia_vision') $}
+{$ sandboxed_text('wikimedia_vision') $}
 https://www.wikimedia.de/
 ---------------------------------------------------------------------------
 
-{$ sandboxed_content('plaintext/address_of_organization') $}
+{$ sandboxed_text('address_of_organization') $}
 
-{$ sandboxed_content('plaintext/phone') $}
+{$ sandboxed_text('phone') $}
 www.wikimedia.de
 
-{$ sandboxed_content('plaintext/tax_id_organization') $}
+{$ sandboxed_text('tax_id_organization') $}

@@ -1,17 +1,17 @@
 {$ greeting_generator.createGreeting( recipient.lastName, recipient.salutation, recipient.title ) $}
 
-{$ sandboxed_content('plaintext/mail_donation_cancellation_confirmation', {
+{$ sandboxed_text('donation_cancellation_confirmation', {
     'donation_id': donationId
 }) $}
 
-{$ sandboxed_content('plaintext/name_head_of_suborganization') $}
-{$ sandboxed_content('plaintext/title_head_of_suborganization') $}
+{$ sandboxed_text('name_head_of_suborganization') $}
+{$ sandboxed_text('title_head_of_suborganization') $}
 
 ---------------------------------------------------------------------------
-{$ sandboxed_content('plaintext/wikimedia_vision') $}
+{$ sandboxed_text('wikimedia_vision') $}
 https://spenden.wikimedia.de/
 ---------------------------------------------------------------------------
 
-{$ sandboxed_content('plaintext/address_of_suborganization') $}
+{$ sandboxed_text('address_of_suborganization') $}
 
-{$ sandboxed_content('plaintext/tax_id_suborganization_verbose') $}
+{$ sandboxed_text('tax_id_suborganization_verbose') $}

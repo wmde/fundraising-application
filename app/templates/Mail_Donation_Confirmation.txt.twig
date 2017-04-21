@@ -1,16 +1,17 @@
 {% set formattedAmount = donation.amount|localizedcurrency('EUR', 'de_DE') %}
-{$ greeting_generator.createGreeting( recipient.lastName, recipient.salutation, recipient.title ) $}
 
-{$ sandboxed_content('plaintext/mail_donation_confirmation/intro') $}
+{$ greeting_generator.createGreeting( recipient.lastName, recipient.salutation, recipient.title )|raw $}
+
+{$ sandboxed_text('donation_confirmation/intro') $}
 
 {% if donation.needsModeration %}
-{$ sandboxed_content('plaintext/mail_donation_confirmation/needs_moderation', {
+{$ sandboxed_text('donation_confirmation/needs_moderation', {
     'formatted_amount': formattedAmount
 }) $}
 
 {% else %}
 {% if donation.paymentType == 'BEZ' %}
-{$ sandboxed_content('plaintext/mail_donation_confirmation/paymenttype_directdebit', {
+{$ sandboxed_text('donation_confirmation/paymenttype_directdebit', {
     'formatted_amount': formattedAmount
 }) $}
 {% if donation.interval > 0 %}
@@ -18,7 +19,7 @@
 {% endif %}
 
 {% elseif donation.paymentType == 'PPL' or donation.paymentType == 'MCP' %}
-{$ sandboxed_content('plaintext/mail_donation_confirmation/paymenttype_external', {
+{$ sandboxed_text('donation_confirmation/paymenttype_external', {
     'formatted_amount': formattedAmount,
     'payment_provider': donation.paymentType|trans({}, 'paymentTypes')
 }) $}
@@ -27,35 +28,35 @@
 {% endif %}
 
 {% elseif donation.paymentType == 'UEB' %}
-{$ sandboxed_content('plaintext/mail_donation_confirmation/paymenttype_banktransfer', {
+{$ sandboxed_text('donation_confirmation/paymenttype_banktransfer', {
     'formatted_amount': formattedAmount,
     'bank_transfer_code': donation.bankTransferCode
 }) $}
 
 {% endif %}
 {% endif %}
-{$ sandboxed_content('plaintext/mail_donation_confirmation/support', {
+{$ sandboxed_text('donation_confirmation/support', {
     'donation_id': donation.id
 }) $}
 
 {% if donation.paymentType == 'UEB' %}
-{$ sandboxed_content('plaintext/mail_donation_confirmation/paymenttype_banktransfer_hint') $}
+{$ sandboxed_text('donation_confirmation/paymenttype_banktransfer_hint') $}
 
 {% endif %}
-{$ sandboxed_content('plaintext/mail_donation_confirmation/greetings') $}
+{$ sandboxed_text('donation_confirmation/greetings') $}
 
-{$ sandboxed_content('plaintext/name_head_of_suborganization') $}
-{$ sandboxed_content('plaintext/title_head_of_suborganization') $}
+{$ sandboxed_text('name_head_of_suborganization') $}
+{$ sandboxed_text('title_head_of_suborganization') $}
 
 ---------------------------------------------------------------------------
-{$ sandboxed_content('plaintext/wikimedia_vision') $}
+{$ sandboxed_text('wikimedia_vision') $}
 https://spenden.wikimedia.de/
 ---------------------------------------------------------------------------
 
-{$ sandboxed_content('plaintext/address_of_suborganization') $}
+{$ sandboxed_text('address_of_suborganization') $}
 
-{$ sandboxed_content('plaintext/tax_id_suborganization_verbose') $}
+{$ sandboxed_text('tax_id_suborganization_verbose') $}
 
-{$ sandboxed_content('plaintext/mail_donation_confirmation/number', {
+{$ sandboxed_text('donation_confirmation/number', {
     'donation_id': donation.id
 }) $}
