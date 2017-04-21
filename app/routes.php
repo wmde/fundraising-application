@@ -339,7 +339,7 @@ $app->get(
 	function() use ( $app, $ffFactory ) {
 		return $ffFactory->getLayoutTemplate( 'contact_form.html.twig' )->render( [ ] );
 	}
-);
+)->bind('contact');
 
 $app->post(
 	'donation/cancel',
