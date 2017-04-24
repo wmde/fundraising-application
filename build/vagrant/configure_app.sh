@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
 
-# Create systemd service
-cp /vagrant/build/vagrant/fundraising_app.service /etc/systemd/system/
-chmod 664 /etc/systemd/system/fundraising_app.service
+# Create VHost
+cp /vagrant/build/vagrant/fundraising_nginx.conf /etc/nginx/sites-available/fundraising
+ln -s /etc/nginx/sites-available/fundraising /etc/nginx/sites-enabled/fundraising
 
-systemctl daemon-reload
-systemctl start fundraising_app.service
+# Configure PHP-FPM
+cp /vagrant/build/vagrant/php-fpm.www.conf /etc/php/7.1/fpm/pool.d/www.conf
+
+systemctl reload nginx
+systemctl restart php7.1-fpm
 
 # Configure app
 if [ ! -f /vagrant/app/config/config.prod.json ]; then
