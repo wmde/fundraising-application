@@ -1,6 +1,6 @@
 <?php
 
-declare( strict_types = 1 );
+declare( strict_types=1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\Presentation;
 
@@ -13,6 +13,8 @@ use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
 use WMDE\Fundraising\Frontend\Presentation\TwigEnvironmentConfigurator;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
+use WMDE\Fundraising\HtmlFilter\ContentException;
+use WMDE\Fundraising\HtmlFilter\ContentProvider;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Presentation\TwigEnvironmentConfigurator
@@ -37,7 +39,7 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 
 		$this->assertSame(
 			'Meeow!',
-			$factory->getLayoutTemplate( 'variableReplacement.twig' )->render( [ 'testvar' => 'Meeow!' ] )
+			$factory->getLayoutTemplate( 'variableReplacement.twig' )->render( ['testvar' => 'Meeow!'] )
 		);
 	}
 
@@ -64,7 +66,7 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 			'/tmp/fun',
 			self::LOCALE
 		);
-		$twig = $environmentConfigurator->getEnvironment( $this->newTwigEnvironment(), [ $firstLoader, $secondLoader, $thirdLoader ], [], [] );
+		$twig = $environmentConfigurator->getEnvironment( $this->newTwigEnvironment(), [$firstLoader, $secondLoader, $thirdLoader], [], [] );
 		$result = $twig->render( 'Canis_silvestris' );
 		$this->assertSame( 'Meeow!', $result );
 	}
@@ -129,12 +131,12 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 		);
 	}
 
-	public function testSandboxedContentExists_isReturned(): void {
+	public function testSandboxedWebContentExists_isReturnedAndContextPassed(): void {
 		$factory = TestEnvironment::newInstance( [
 			'twig' => [
 				'loaders' => [
 					'array' => [
-						'template_with_content.twig' => '<p>{$ sandboxed_content("lorem") $}</p>',
+						'template_with_content.twig' => '<p>{$ sandboxed_content("lorem", { "state": "fine" }) $}</p>',
 						'lorem.html.twig' => 'I am the wrong twig environment. Dragons here!',
 						'lorem.twig' => 'More Dragons!'
 					]
@@ -142,70 +144,46 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 			]
 		] )->getFactory();
 
-		$factory->setWebContentTemplateLoader(
-			new Twig_Loader_Array( [
-				'lorem.twig' => 'ipsum. all is <strong>fine</strong>.'
-			] )
-		);
+		$provider = $this->createMock( ContentProvider::class );
+		$provider->method( 'getWeb' )
+			->with( 'lorem', ['state' => 'fine'] )
+			->willReturn( 'ipsum. all is <strong>fine</strong>.' );
+
+		$factory->setContentProvider( $provider );
 
 		$this->assertSame(
 			'<p>ipsum. all is <strong>fine</strong>.</p>',
-			$factory->getLayoutTemplate( 'template_with_content.twig' )->render( [ ] )
+			$factory->getLayoutTemplate( 'template_with_content.twig' )->render( [] )
 		);
 	}
 
-	public function testMailContentExists_isReturnedAndContextPassed(): void {
+	public function testSandboxedMailContentExists_isReturnedAndContextPassed(): void {
 		$factory = TestEnvironment::newInstance( [
 			'twig' => [
 				'loaders' => [
 					'array' => [
-						'application_template.twig' => '{$ sandboxed_text("mail_template", {"donation_id": 4}) $}',
-						'mail_template.html.twig' => 'I am the wrong twig environment. Dragons here!',
-						'mail_template.twig' => 'More Dragons!'
+						'template_with_content.twig' => '{$ sandboxed_text("something", { "dontation_id": 45 }) $} end',
+						'lorem.html.twig' => 'I am the wrong twig environment. Dragons here!',
+						'lorem.twig' => 'More Dragons!'
 					]
 				]
 			]
 		] )->getFactory();
 
-		$factory->setMailContentTemplateLoader(
-			new Twig_Loader_Array( [
-				'mail_template.twig' => 'Mail text for donation {$ donation_id $}. <http://wikimedia.de>'
-			] )
-		);
+		$provider = $this->createMock( ContentProvider::class );
+		$provider->method( 'getMail' )
+			->with( 'something', ['dontation_id' => 45] )
+			->willReturn( 'you got mail' );
+
+		$factory->setContentProvider( $provider );
 
 		$this->assertSame(
-			'Mail text for donation 4. <http://wikimedia.de>',
-			$factory->getLayoutTemplate( 'application_template.twig' )->render( [ ] )
+			'you got mail end',
+			$factory->getLayoutTemplate( 'template_with_content.twig' )->render( [] )
 		);
 	}
 
-	public function testSandboxedContentExists_isReturnedAndContextInterpolated(): void {
-		$factory = TestEnvironment::newInstance( [
-			'twig' => [
-				'loaders' => [
-					'array' => [
-						'template_with_content.twig' => '{$ sandboxed_content("lorem", { "user": "cat<br>"}) $}',
-					]
-				]
-			]
-		] )->getFactory();
-
-		$factory->setWebContentTemplateLoader(
-			new Twig_Loader_Array( [
-				'lorem.twig' => 'Willkommen +{$ dummy $}+ {$ user $}.'
-			] )
-		);
-
-		$this->assertSame(
-			'Willkommen ++ cat&lt;br&gt;.',
-			$factory->getLayoutTemplate( 'template_with_content.twig' )->render( [
-				'dummy' => 'not available in sandbox'
-			] ),
-			"expected main twig's var not filled, cat interpolated but html encoded"
-		);
-	}
-
-	public function testSandboxedContentDoesntExist_exceptionIsThrown(): void {
+	public function testSandboxedWebContentDoesntExist_exceptionIsThrown(): void {
 
 		$factory = TestEnvironment::newInstance( [
 			'twig' => [
@@ -217,9 +195,16 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 			]
 		] )->getFactory();
 
-		$this->expectException( Twig_Error_Runtime::class );
-		$this->expectExceptionMessageRegExp('/Template \'lorem\' not found/');
+		$provider = $this->createMock( ContentProvider::class );
+		$provider->method( 'getWeb' )
+			->with( 'lorem' )
+			->willThrowException( new ContentException( "An exception occured rendering 'lorem'" ) );
 
-		$factory->getLayoutTemplate( 'template_with_content.twig' )->render( [ ] );
+		$factory->setContentProvider( $provider );
+
+		$this->expectException( Twig_Error_Runtime::class );
+		$this->expectExceptionMessageRegExp( '/An exception occured rendering \'lorem\'/' );
+
+		$factory->getLayoutTemplate( 'template_with_content.twig' )->render( [] );
 	}
 }

@@ -39,7 +39,6 @@ use WMDE\Fundraising\Frontend\Infrastructure\ServerSideTracker;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipPolicyValidator;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionPaymentNotification\HandleSubscriptionPaymentNotificationUseCase;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionSignupNotification\HandleSubscriptionSignupNotificationUseCase;
-use WMDE\Fundraising\Frontend\Presentation\ContentPage\ContentProvider;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector;
 use WMDE\Fundraising\Frontend\Presentation\Honorifics;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\PageNotFoundPresenter;
@@ -156,7 +155,7 @@ use WMDE\Fundraising\Frontend\Validation\IbanValidator;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
 use WMDE\Fundraising\Frontend\Validation\TemplateNameValidator;
 use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
-use WMDE\Fundraising\HtmlFilter\HtmlPurifier;
+use WMDE\Fundraising\HtmlFilter\ContentProvider;
 use WMDE\Fundraising\Store\Factory as StoreFactory;
 use WMDE\Fundraising\Store\Installer;
 use WMDE\PageRetriever\LocalFilePageRetriever;
@@ -343,12 +342,12 @@ class FunFunFactory {
 			$functions = [
 				new Twig_SimpleFunction(
 					'sandboxed_content',
-					[$this->getWebContentProvider(), 'render'],
+					[$this->getContentProvider(), 'getWeb'],
 					['is_safe' => ['html']]
 				),
 				new Twig_SimpleFunction(
 					'sandboxed_text',
-					[$this->getMailContentProvider(), 'render'],
+					[$this->getContentProvider(), 'getMail'],
 					['is_safe' => ['all']]
 				)
 			];
@@ -439,39 +438,13 @@ class FunFunFactory {
 			return new PageSelector($config);
 		};
 
-		$pimple['web_content_provider'] = function () {
-			$environment = $this->getTwigFactory()->newTwigEnvironmentConfigurator()->getEnvironment(
-				new Twig_Environment(),
-				[$this->getWebContentTemplateLoader()],
-				[$this->getContentSandbox()],
-				[]
-			);
-
-			return new ContentProvider( $environment, new HtmlPurifier() );
-		};
-
-		$pimple['mail_content_provider'] = function () {
-			$environment = $this->getTwigFactory()->newTwigEnvironmentConfigurator()->getEnvironment(
-				new Twig_Environment(null, ['autoescape' => false]),
-				[$this->getMailContentTemplateLoader()],
-				[$this->getContentSandbox()],
-				[]
-			);
-
-			return new ContentProvider( $environment );
-		};
-
-		$pimple['web_content_template_loader'] = function () {
-			return new Twig_Loader_Filesystem( [
-				$this->getI18nDirectory() . '/web',
-				$this->getI18nDirectory() . '/shared'
-			] );
-		};
-
-		$pimple['mail_content_template_loader'] = function () {
-			return new Twig_Loader_Filesystem( [
-				$this->getI18nDirectory() . '/mail',
-				$this->getI18nDirectory() . '/shared'
+		$pimple['content_provider'] = function () {
+			return new ContentProvider( [
+				'content_path' => $this->getI18nDirectory(),
+				'cache' => $this->getCachePath() . '/content',
+				'globals' => [
+					'basepath' => $this->config['web-basepath']
+				]
 			] );
 		};
 
@@ -1401,49 +1374,11 @@ class FunFunFactory {
 		return $this->pimple['content_page_selector'];
 	}
 
-	public function setWebContentProvider( ContentProvider $contentProvider ): void {
-		$this->pimple['web_content_provider'] = $contentProvider;
+	public function setContentProvider( ContentProvider $contentProvider ): void {
+		$this->pimple['content_provider'] = $contentProvider;
 	}
 
-	private function getWebContentProvider(): ContentProvider {
-		return $this->pimple['web_content_provider'];
-	}
-
-	public function setMailContentProvider( ContentProvider $contentProvider ): void {
-		$this->pimple['mail_content_provider'] = $contentProvider;
-	}
-
-	private function getMailContentProvider(): ContentProvider {
-		return $this->pimple['mail_content_provider'];
-	}
-
-	public function setWebContentTemplateLoader( Twig_LoaderInterface $loader ): void {
-		$this->pimple['web_content_template_loader'] = $loader;
-	}
-
-	private function getWebContentTemplateLoader(): Twig_LoaderInterface {
-		return $this->pimple['web_content_template_loader'];
-	}
-
-	public function setMailContentTemplateLoader( Twig_LoaderInterface $loader ): void {
-		$this->pimple['mail_content_template_loader'] = $loader;
-	}
-
-	private function getMailContentTemplateLoader(): Twig_LoaderInterface {
-		return $this->pimple['mail_content_template_loader'];
-	}
-
-	/**
-	 * @todo mv to content validation repo
-	 */
-	private function getContentSandbox(): Twig_Extension_Sandbox {
-		$policy = new Twig_Sandbox_SecurityPolicy(
-			['filter', 'include'],
-			['nl2br', 'escape'],
-			[],
-			[],
-			[]
-		);
-		return new Twig_Extension_Sandbox($policy, true);
+	private function getContentProvider(): ContentProvider {
+		return $this->pimple['content_provider'];
 	}
 }

@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use org\bovigo\vfs\vfsStream;
 use Silex\Application;
 use Symfony\Component\HttpKernel\Client;
 use Twig_Loader_Array;
@@ -11,6 +12,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageNotFoundException;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
+use WMDE\Fundraising\HtmlFilter\ContentProvider;
 
 /**
  * @licence GNU GPL v2+
@@ -94,11 +96,19 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 					->willReturn( 'unicorns' );
 				$factory->setContentPagePageSelector( $pageSelector );
 
-				$factory->setWebContentTemplateLoader(
-					new Twig_Loader_Array( [
-						'pages/unicorns.twig' => '<p>Rosa plüsch einhorns tanzen auf Regenbogen</p>',
-					] )
-				);
+				$content = vfsStream::setup( 'content', null, [
+					'web' => [
+						'pages' => [
+							'unicorns.twig' => '<p>Rosa plüsch einhorns tanzen auf Regenbogen</p>',
+						]
+					],
+					'mail' => [],
+					'shared' => [],
+				] );
+				$provider = new ContentProvider( [
+					'content_path' => $content->url()
+				] );
+				$factory->setContentProvider( $provider );
 
 				$client->request( 'GET', '/page/einhorns' );
 
