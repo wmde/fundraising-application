@@ -2604,12 +2604,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-html-filter.git",
-                "reference": "50664905946bdb2838d5c55a407fd221cb7a9305"
+                "reference": "2d8ca920413419b9612430372afb080e42b7061e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-html-filter/zipball/50664905946bdb2838d5c55a407fd221cb7a9305",
-                "reference": "50664905946bdb2838d5c55a407fd221cb7a9305",
+                "url": "https://api.github.com/repos/wmde/fundraising-html-filter/zipball/2d8ca920413419b9612430372afb080e42b7061e",
+                "reference": "2d8ca920413419b9612430372afb080e42b7061e",
                 "shasum": ""
             },
             "require": {
@@ -2622,6 +2622,9 @@
                 "phpunit/phpunit": "^6.1",
                 "squizlabs/php_codesniffer": "^2.8"
             },
+            "bin": [
+                "bin/twiglint"
+            ],
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -2656,7 +2659,7 @@
             "support": {
                 "source": "https://github.com/wmde/fundraising-html-filter/tree/content-service"
             },
-            "time": "2017-04-24 17:00:50"
+            "time": "2017-04-25 16:20:55"
         },
         {
             "name": "wmde/fundraising-store",
@@ -4946,12 +4949,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content.git",
-                "reference": "433137608b0980378ee5d9463021a57d094858d9"
+                "reference": "edf29fcac8bce700b7c1b8bdb17001bbdb286e9e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/433137608b0980378ee5d9463021a57d094858d9",
-                "reference": "433137608b0980378ee5d9463021a57d094858d9",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/edf29fcac8bce700b7c1b8bdb17001bbdb286e9e",
+                "reference": "edf29fcac8bce700b7c1b8bdb17001bbdb286e9e",
                 "shasum": ""
             },
             "type": "library",
@@ -4962,7 +4965,7 @@
             "support": {
                 "source": "https://github.com/wmde/fundraising-frontend-content/tree/templates-back-in-app"
             },
-            "time": "2017-04-21 16:19:54"
+            "time": "2017-04-25 16:30:12"
         },
         {
             "name": "wmde/psr-log-test-doubles",

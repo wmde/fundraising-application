@@ -160,4 +160,20 @@ $(function() {
 		});
 	});
 
+    $( 'table.donors' ).each(function () {
+        $( 'p', this ).hide();
+
+        var commentLink = $( '<a href="#">' + $( 'th:last-child', this ).html() + '</a>' );
+
+        $( 'tr td:first-child' ).each( function () {
+            if ( !$( this ).siblings().last().html() ) {
+                return;
+            }
+
+            $( this ).append( commentLink.clone().click( function ( event ) {
+                event.preventDefault();
+                $( this ).parent( 'td' ).siblings().last().children( 'p' ).toggle();
+            }) );
+        } );
+    });
 });

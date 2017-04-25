@@ -748,6 +748,14 @@ div.notice-window {
 }
 
 /**
+ * Header icons in lightboxes
+ */
+#wlightbox-content .box-header span[class*="icon-"]::before {
+    font-size: 0.9em;
+    position: relative;
+}
+
+/**
  * Reposition the content image of two content pages for design purposes
  */
 .sandboxedcontent.use_of_resources img[src$='itz_logo_white.png'],
@@ -773,4 +781,76 @@ div.notice-window {
 .page-use_of_resources .ctcol {
     width: auto;
     max-width: 760px;
+}
+
+/**
+ * Supporter list layout
+ */
+body.page-supporters section .box-header,
+#wlightbox-supporters .box-header
+{
+    background-color: #fdea33;
+    color: #000000;
+    font-weight: bold;
+}
+
+#wlightbox-supporters {
+    margin: -30px;
+}
+
+#wlightbox-supporters .box-header span:before,
+body.page-supporters section .box-header span:before {
+    content: "\e60a";
+    color: #000000;
+}
+
+.sandboxedcontent.supporters table {
+    font-size: 13px;
+    color: #000000;
+    border: 0 none;
+    border-collapse: collapse;
+    width: 570px;
+}
+
+.sandboxedcontent.supporters table thead {
+    display: none;
+}
+
+.sandboxedcontent.supporters table td {
+    display: inline-block;
+}
+
+.sandboxedcontent.supporters table td:nth-child(1),
+.sandboxedcontent.supporters table td:nth-child(2) {
+    padding: 12px 0;
+    border-top: 1px solid #e1dbaf;
+}
+
+.sandboxedcontent.supporters table tr:first-child td:nth-child(1),
+.sandboxedcontent.supporters table tr:first-child td:nth-child(2) {
+    padding-top: 0;
+    border-top: 0 none;
+}
+
+.sandboxedcontent.supporters table td:nth-child(1) {
+    width: 70%;
+}
+
+.sandboxedcontent.supporters table td:nth-child(1) a {
+    color: #608abf;
+    text-decoration: underline;
+    font-size: 0.75em;
+    padding-left: 1em;
+}
+
+.sandboxedcontent.supporters table td:nth-child(2) {
+    width: 25%;
+    text-align: right;
+}
+
+.sandboxedcontent.supporters table td:nth-child(3) p {
+    border-left: 5px solid #e1dbaf;
+    font-style: italic;
+    font-size: 0.9em;
+    padding: 0 40px 0 12px;
 }
