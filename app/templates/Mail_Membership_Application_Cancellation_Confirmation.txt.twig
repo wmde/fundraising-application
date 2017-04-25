@@ -1,20 +1,20 @@
-{$ greeting_generator.createGreeting( membershipApplicant.lastName, membershipApplicant.salutation, membershipApplicant.title ) $}
+{$ greeting_generator.createGreeting( membershipApplicant.lastName, membershipApplicant.salutation, membershipApplicant.title )|raw $}
 
-{$ sandboxed_text('membership_application_cancellation_confirmation', {
+{$ mail_content('membership_application_cancellation_confirmation', {
     'application_id': applicationId
 }) $}
 
-{$ sandboxed_text('name_head_of_organization') $}
-{$ sandboxed_text('title_head_of_organization') $}
+{$ mail_content('name_head_of_organization') $}
+{$ mail_content('title_head_of_organization') $}
 
 ---------------------------------------------------------------------------
-{$ sandboxed_text('wikimedia_vision') $}
+{$ mail_content('wikimedia_vision') $}
 https://spenden.wikimedia.de/
 ---------------------------------------------------------------------------
 
-{$ sandboxed_text('address_of_organization') $}
+{$ mail_content('address_of_organization') $}
 
-{$ sandboxed_text('phone') $}
+{$ mail_content('phone') $}
 www.wikimedia.de
 
-{$ sandboxed_text('tax_id_organization') $}
+{$ mail_content('tax_id_organization') $}

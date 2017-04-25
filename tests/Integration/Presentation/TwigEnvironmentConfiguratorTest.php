@@ -136,7 +136,7 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 			'twig' => [
 				'loaders' => [
 					'array' => [
-						'template_with_content.twig' => '<p>{$ sandboxed_content("lorem", { "state": "fine" }) $}</p>',
+						'template_with_content.twig' => '<p>{$ web_content("lorem", { "state": "fine" }) $}</p>',
 						'lorem.html.twig' => 'I am the wrong twig environment. Dragons here!',
 						'lorem.twig' => 'More Dragons!'
 					]
@@ -162,7 +162,7 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 			'twig' => [
 				'loaders' => [
 					'array' => [
-						'template_with_content.twig' => '{$ sandboxed_text("something", { "dontation_id": 45 }) $} end',
+						'template_with_content.twig' => '{$ mail_content("something", { "dontation_id": 45 }) $} end',
 						'lorem.html.twig' => 'I am the wrong twig environment. Dragons here!',
 						'lorem.twig' => 'More Dragons!'
 					]
@@ -189,7 +189,7 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 			'twig' => [
 				'loaders' => [
 					'array' => [
-						'template_with_content.twig' => '{$ sandboxed_content("lorem") $}',
+						'template_with_content.twig' => '{$ web_content("lorem") $}',
 					]
 				]
 			]

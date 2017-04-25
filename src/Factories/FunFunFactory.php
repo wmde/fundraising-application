@@ -341,12 +341,12 @@ class FunFunFactory {
 			];
 			$functions = [
 				new Twig_SimpleFunction(
-					'sandboxed_content',
+					'web_content',
 					[$this->getContentProvider(), 'getWeb'],
 					['is_safe' => ['html']]
 				),
 				new Twig_SimpleFunction(
-					'sandboxed_text',
+					'mail_content',
 					[$this->getContentProvider(), 'getMail'],
 					['is_safe' => ['all']]
 				)
@@ -441,7 +441,7 @@ class FunFunFactory {
 		$pimple['content_provider'] = function () {
 			return new ContentProvider( [
 				'content_path' => $this->getI18nDirectory(),
-				'cache' => $this->getCachePath() . '/content',
+				'cache' => $this->config['twig']['enable-cache'] ? $this->getCachePath() . '/content' : false,
 				'globals' => [
 					'basepath' => $this->config['web-basepath']
 				]
@@ -652,7 +652,6 @@ class FunFunFactory {
 				$this->getTwig(),
 				'Mail_Subscription_Request.txt.twig',
 				[
-					'basepath' => $this->config['web-basepath'],
 					'greeting_generator' => $this->getGreetingGenerator()
 				]
 			),
@@ -900,7 +899,6 @@ class FunFunFactory {
 					$this->getTwig(),
 					'Mail_Donation_Confirmation.txt.twig',
 					[
-						'basepath' => $this->config['web-basepath'],
 						'greeting_generator' => $this->getGreetingGenerator()
 					]
 				),
