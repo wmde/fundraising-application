@@ -28,7 +28,7 @@
 		"league/json-guard": "^0.3.2",
 		"symfony/console": "^2.3.0",
 		"piwik/piwik-php-tracker": "^1.0",
-		"wmde/fundraising-html-filter": "dev-content-service"
+		"wmde/fundraising-content-provider": "^1.0.0"
 	},
 	"repositories": [
 		{
@@ -58,7 +58,7 @@
 		},
 		{
 			"type": "vcs",
-			"url": "https://github.com/wmde/fundraising-html-filter"
+			"url": "https://github.com/wmde/fundraising-content-provider"
 		}
 	],
 	"require-dev": {

@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageNotFoundException;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
-use WMDE\Fundraising\HtmlFilter\ContentProvider;
+use WMDE\Fundraising\ContentProvider\ContentProvider;
 
 /**
  * @licence GNU GPL v2+

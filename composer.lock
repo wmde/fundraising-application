@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b735fa24a95e592025f1c2e9469d4c78",
+    "content-hash": "ebb1c5fb2f2e3c611e6ab39bf82d7d13",
     "packages": [
         {
             "name": "addwiki/mediawiki-api-base",
@@ -2599,17 +2599,17 @@
             "time": "2016-07-31T05:48:08+00:00"
         },
         {
-            "name": "wmde/fundraising-html-filter",
-            "version": "dev-content-service",
+            "name": "wmde/fundraising-content-provider",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/wmde/fundraising-html-filter.git",
-                "reference": "2d8ca920413419b9612430372afb080e42b7061e"
+                "url": "https://github.com/wmde/fundraising-content-provider.git",
+                "reference": "0f36f01b6b81679a4ec938e3cb772b92628868ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-html-filter/zipball/2d8ca920413419b9612430372afb080e42b7061e",
-                "reference": "2d8ca920413419b9612430372afb080e42b7061e",
+                "url": "https://api.github.com/repos/wmde/fundraising-content-provider/zipball/0f36f01b6b81679a4ec938e3cb772b92628868ad",
+                "reference": "0f36f01b6b81679a4ec938e3cb772b92628868ad",
                 "shasum": ""
             },
             "require": {
@@ -2628,12 +2628,12 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "WMDE\\Fundraising\\HtmlFilter\\": "src/"
+                    "WMDE\\Fundraising\\ContentProvider\\": "src/"
                 }
             },
             "autoload-dev": {
                 "psr-4": {
-                    "WMDE\\Fundraising\\HtmlFilter\\Test\\": "test/"
+                    "WMDE\\Fundraising\\ContentProvider\\Test\\": "test/"
                 }
             },
             "scripts": {
@@ -2657,9 +2657,9 @@
             ],
             "description": "WMDE fundraising application content provider and filter",
             "support": {
-                "source": "https://github.com/wmde/fundraising-html-filter/tree/content-service"
+                "source": "https://github.com/wmde/fundraising-content-provider/tree/v1.0.0"
             },
-            "time": "2017-04-25 16:20:55"
+            "time": "2017-04-26T10:51:16+00:00"
         },
         {
             "name": "wmde/fundraising-store",
@@ -4949,15 +4949,29 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content.git",
-                "reference": "edf29fcac8bce700b7c1b8bdb17001bbdb286e9e"
+                "reference": "c0744877665993d379e8f0819b04c88039937a84"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/edf29fcac8bce700b7c1b8bdb17001bbdb286e9e",
-                "reference": "edf29fcac8bce700b7c1b8bdb17001bbdb286e9e",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/c0744877665993d379e8f0819b04c88039937a84",
+                "reference": "c0744877665993d379e8f0819b04c88039937a84",
                 "shasum": ""
             },
+            "require-dev": {
+                "seld/jsonlint": "^1.6",
+                "wmde/fundraising-html-filter": "dev-master"
+            },
             "type": "library",
+            "scripts": {
+                "ci": [
+                    "@test"
+                ],
+                "test": [
+                    "composer validate --no-interaction",
+                    "find i18n/ -type f -name \\*.json -exec echo \"{}\" \\; -exec vendor/bin/jsonlint {} \\;",
+                    "find resources/ resources/ -type f -name \\*.twig -exec vendor/bin/twiglint {} \\;"
+                ]
+            },
             "license": [
                 "GPL-2.0+"
             ],
@@ -4965,7 +4979,7 @@
             "support": {
                 "source": "https://github.com/wmde/fundraising-frontend-content/tree/templates-back-in-app"
             },
-            "time": "2017-04-25 16:30:12"
+            "time": "2017-04-26 08:30:40"
         },
         {
             "name": "wmde/psr-log-test-doubles",
@@ -5029,7 +5043,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "wmde/fundraising-html-filter": 20,
         "ockcyp/covers-validator": 20,
         "wmde/fundraising-frontend-content": 20
     },

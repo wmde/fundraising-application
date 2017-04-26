@@ -13,8 +13,8 @@ use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
 use WMDE\Fundraising\Frontend\Presentation\TwigEnvironmentConfigurator;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
-use WMDE\Fundraising\HtmlFilter\ContentException;
-use WMDE\Fundraising\HtmlFilter\ContentProvider;
+use WMDE\Fundraising\ContentProvider\ContentException;
+use WMDE\Fundraising\ContentProvider\ContentProvider;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Presentation\TwigEnvironmentConfigurator

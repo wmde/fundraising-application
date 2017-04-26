@@ -155,7 +155,7 @@ use WMDE\Fundraising\Frontend\Validation\IbanValidator;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
 use WMDE\Fundraising\Frontend\Validation\TemplateNameValidator;
 use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
-use WMDE\Fundraising\HtmlFilter\ContentProvider;
+use WMDE\Fundraising\ContentProvider\ContentProvider;
 use WMDE\Fundraising\Store\Factory as StoreFactory;
 use WMDE\Fundraising\Store\Installer;
 use WMDE\PageRetriever\LocalFilePageRetriever;
