@@ -4949,12 +4949,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content.git",
-                "reference": "c0744877665993d379e8f0819b04c88039937a84"
+                "reference": "984dcb637be38fa910a5da12c89ecfa71a0bb527"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/c0744877665993d379e8f0819b04c88039937a84",
-                "reference": "c0744877665993d379e8f0819b04c88039937a84",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/984dcb637be38fa910a5da12c89ecfa71a0bb527",
+                "reference": "984dcb637be38fa910a5da12c89ecfa71a0bb527",
                 "shasum": ""
             },
             "require-dev": {
@@ -4979,7 +4979,7 @@
             "support": {
                 "source": "https://github.com/wmde/fundraising-frontend-content/tree/templates-back-in-app"
             },
-            "time": "2017-04-26 08:30:40"
+            "time": "2017-04-26T16:13:59+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",
