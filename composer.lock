@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ebb1c5fb2f2e3c611e6ab39bf82d7d13",
+    "content-hash": "207ee6d44946073cf50420bc1b0b738a",
     "packages": [
         {
             "name": "addwiki/mediawiki-api-base",
@@ -4979,7 +4979,7 @@
             "support": {
                 "source": "https://github.com/wmde/fundraising-frontend-content/tree/templates-back-in-app"
             },
-            "time": "2017-04-26T16:13:59+00:00"
+            "time": "2017-04-26 16:13:59"
         },
         {
             "name": "wmde/psr-log-test-doubles",

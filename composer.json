@@ -28,7 +28,7 @@
 		"league/json-guard": "^0.3.2",
 		"symfony/console": "^2.3.0",
 		"piwik/piwik-php-tracker": "^1.0",
-		"wmde/fundraising-content-provider": "^1.0.0"
+		"wmde/fundraising-content-provider": "^1.0"
 	},
 	"repositories": [
 		{
