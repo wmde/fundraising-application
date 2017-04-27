@@ -858,3 +858,64 @@ body.page-supporters section .box-header span:before {
 .sandboxedcontent.privacy_protection ul {
     list-style: disc inside;
 }
+
+/**
+ * bank detail banner
+ */
+#bank-details, #sms-details {
+    width: 948px;
+    height: 40px;
+    position: fixed;
+    bottom: 56px;
+    background: #479ee7;
+    padding: 15px;
+    border-radius: 8px;
+    color: white;
+    z-index: 1100;
+}
+
+.text-small {
+    font-size: 13px;
+}
+
+.text-large {
+    font-size: 19px;
+    font-weight: bold;
+}
+
+.text-lightblue {
+    color: #9fccf3;
+}
+
+.digit-group {
+    margin-right: 5px;
+    letter-spacing: 1px;
+}
+
+.switch-button {
+    color: #479EE7;
+    font-size: 19px;
+
+    height: 42px;
+    padding: 0 15px;
+    margin-right: 15px;
+
+    border-radius: 5px;
+    border: 1px solid #9fccf3;
+
+    background: #ffffff;
+    background: -moz-linear-gradient(top, #ffffff 0%, #f7f7f7 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(100%, #f7f7f7));
+    background: -webkit-linear-gradient(top, #ffffff 0%, #f7f7f7 100%);
+    background: -o-linear-gradient(top, #ffffff 0%, #f7f7f7 100%);
+    background: -ms-linear-gradient(top, #ffffff 0%, #f7f7f7 100%);
+    background: linear-gradient(to bottom, #ffffff 0%, #f7f7f7 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f7f7f7',GradientType=0 );
+}
+
+.banner-btn-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    cursor: pointer;
+}
