@@ -862,7 +862,11 @@ body.page-supporters section .box-header span:before {
 /**
  * bank detail banner
  */
-#bank-details, #sms-details {
+#bank-detail-banner {
+    display: none;
+}
+
+#bank-detail-banner #bank-details, #sms-details {
     width: 948px;
     height: 40px;
     position: fixed;
@@ -874,25 +878,35 @@ body.page-supporters section .box-header span:before {
     z-index: 1100;
 }
 
-.text-small {
+#bank-detail-banner .bank-details {
+    float: left;
+}
+
+#bank-detail-banner #sms-details .icon-phone {
+    float: left;
+    height: 40px;
+    font-size: 40px;
+}
+
+#bank-detail-banner .text-small {
     font-size: 13px;
 }
 
-.text-large {
+#bank-detail-banner .text-large {
     font-size: 19px;
     font-weight: bold;
 }
 
-.text-lightblue {
+#bank-detail-banner .text-lightblue {
     color: #9fccf3;
 }
 
-.digit-group {
+#bank-detail-banner .digit-group {
     margin-right: 5px;
     letter-spacing: 1px;
 }
 
-.switch-button {
+#bank-detail-banner .switch-button {
     color: #479EE7;
     font-size: 19px;
 
@@ -913,7 +927,20 @@ body.page-supporters section .box-header span:before {
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f7f7f7',GradientType=0 );
 }
 
-.banner-btn-close {
+#bank-detail-banner .tmessage-button {
+    float: right;
+}
+
+#bank-detail-banner .tmessage-button > span {
+    vertical-align: top;
+    padding-right: 10px;
+}
+
+#bank-detail-banner button.switch-button span[class^="icon-"] {
+    padding-right: 5px;
+}
+
+#bank-detail-banner .banner-btn-close {
     position: absolute;
     top: 8px;
     right: 8px;
