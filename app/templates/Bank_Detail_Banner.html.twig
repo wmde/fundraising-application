@@ -1,45 +1,45 @@
-<div class="container" id="bank-detail-banner" style="display: none">
 <script type="text/javascript">
-var timer, bankDetailBannerClosed = false;
-$( document ).ready( function() {
-  timer = window.setTimeout( function() {
-    $( '#bank-detail-banner' ).fadeIn();
-  }, 5000 );
+	var timer, bankDetailBannerClosed = false;
+	$( document ).ready( function() {
+		timer = window.setTimeout( function() {
+			$( '#bank-detail-banner' ).fadeIn();
+		}, 5000 );
 
-  $( 'input' ).focus( function() {
-    $( '#bank-detail-banner' ).fadeOut();
-    clearTimeout( timer );
-  } );
+		$( 'input' ).focus( function() {
+			$( '#bank-detail-banner' ).fadeOut();
+			clearTimeout( timer );
+		} );
 
-  // This is for our fake radio buttons
-  $( 'label' ).click( function() {
-    $( '#bank-detail-banner' ).fadeOut();
-    clearTimeout( timer );
-  } );
+		// This is for our fake radio buttons
+		$( 'label' ).click( function() {
+			$( '#bank-detail-banner' ).fadeOut();
+			clearTimeout( timer );
+		} );
 
-  $( '.banner-btn-close, .slide-toggle' ).click( function() {
-    $( '#bank-detail-banner' ).fadeOut();
-    bankDetailBannerClosed = false;
-  } );
+		$( '.banner-btn-close, .slide-toggle' ).click( function() {
+			$( '#bank-detail-banner' ).fadeOut();
+			bankDetailBannerClosed = false;
+		} );
 
-  $( 'body' ).on( 'click',  '#wlightbox-close', function () {
-    if( !bankDetailBannerClosed ) {
-       $( '#bank-detail-banner' ).fadeIn();
-    }
-  } );
+		$( 'body' ).on( 'click',  '#wlightbox-close', function () {
+			if( !bankDetailBannerClosed ) {
+				$( '#bank-detail-banner' ).fadeIn();
+			}
+		} );
 
-  $( 'a.wlightbox' ).click( function() {
-    $( '#bank-detail-banner' ).fadeOut();
-    clearTimeout( timer );
-  } );
+		$( 'a.wlightbox' ).click( function() {
+			$( '#bank-detail-banner' ).fadeOut();
+			clearTimeout( timer );
+		} );
 
-  /* switch banner pages */
-  $( '.switch-button' ).click( function() {
-    $( '#bank-details' ).slideToggle();
-  } );
-} );
+		/* switch banner pages */
+		$( '.switch-button' ).click( function() {
+			$( '#bank-details' ).slideToggle();
+		} );
+	} );
 </script>
 
+<div class="container" id="bank-detail-banner" style="display: none">
 <!-- sms details -->
 <div id="sms-details">
   <div class="icon-close text-lightblue banner-btn-close"></div>
