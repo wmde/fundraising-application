@@ -854,3 +854,7 @@ body.page-supporters section .box-header span:before {
     font-size: 0.9em;
     padding: 0 40px 0 12px;
 }
+
+.sandboxedcontent.privacy_protection ul {
+    list-style: disc inside;
+}
