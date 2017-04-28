@@ -12,7 +12,11 @@
 		"enable-cache": true,
 		"loaders": {
 			"filesystem": {
-				"template-dir": [ "app/templates" ]
+				"template-dir": [
+					"app/ab_test/a/templates",
+					"app/ab_test/b/templates",
+					"app/templates"
+				]
 			}
 		}
 	},
