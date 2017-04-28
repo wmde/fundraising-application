@@ -667,7 +667,8 @@
         },
         "files": {
           "type": "object",
-          "title": "Domain-Filename map of translation files"
+          "title": "Domain-Filename map of translation files",
+          "minProperties": 1
         }
       },
       "additionalProperties": false,
