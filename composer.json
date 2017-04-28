@@ -26,9 +26,9 @@
 		"twig/extensions": "^1.3",
 		"micropayment-de/service-client": "~1.21.0",
 		"league/json-guard": "^0.3.2",
-		"symfony/console": "^2.3.0",
+		"symfony/console": "^3.2",
 		"piwik/piwik-php-tracker": "^1.0",
-		"wmde/fundraising-content-provider": "^1.0"
+		"wmde/fundraising-content-provider": "^2.0"
 	},
 	"repositories": [
 		{

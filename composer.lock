@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "207ee6d44946073cf50420bc1b0b738a",
+    "content-hash": "9986e49a107ffc051065e07980d49a6b",
     "packages": [
         {
             "name": "addwiki/mediawiki-api-base",
@@ -1853,37 +1853,39 @@
         },
         {
             "name": "symfony/console",
-            "version": "v2.8.18",
+            "version": "v3.2.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "81508e6fac4476771275a3f4f53c3fee9b956bfa"
+                "reference": "c30243cc51f726812be3551316b109a2f5deaf8d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/81508e6fac4476771275a3f4f53c3fee9b956bfa",
-                "reference": "81508e6fac4476771275a3f4f53c3fee9b956bfa",
+                "url": "https://api.github.com/repos/symfony/console/zipball/c30243cc51f726812be3551316b109a2f5deaf8d",
+                "reference": "c30243cc51f726812be3551316b109a2f5deaf8d",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.9",
-                "symfony/debug": "^2.7.2|~3.0.0",
+                "php": ">=5.5.9",
+                "symfony/debug": "~2.8|~3.0",
                 "symfony/polyfill-mbstring": "~1.0"
             },
             "require-dev": {
                 "psr/log": "~1.0",
-                "symfony/event-dispatcher": "~2.1|~3.0.0",
-                "symfony/process": "~2.1|~3.0.0"
+                "symfony/event-dispatcher": "~2.8|~3.0",
+                "symfony/filesystem": "~2.8|~3.0",
+                "symfony/process": "~2.8|~3.0"
             },
             "suggest": {
                 "psr/log": "For using the console logger",
                 "symfony/event-dispatcher": "",
+                "symfony/filesystem": "",
                 "symfony/process": ""
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.8-dev"
+                    "dev-master": "3.2-dev"
                 }
             },
             "autoload": {
@@ -1910,7 +1912,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2017-03-04T11:00:12+00:00"
+            "time": "2017-04-04T14:33:42+00:00"
         },
         {
             "name": "symfony/debug",
@@ -2600,21 +2602,22 @@
         },
         {
             "name": "wmde/fundraising-content-provider",
-            "version": "v1.0.0",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-content-provider.git",
-                "reference": "0f36f01b6b81679a4ec938e3cb772b92628868ad"
+                "reference": "1e0b6a5a231256760f187fa7c7b6d41a27089d81"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-content-provider/zipball/0f36f01b6b81679a4ec938e3cb772b92628868ad",
-                "reference": "0f36f01b6b81679a4ec938e3cb772b92628868ad",
+                "url": "https://api.github.com/repos/wmde/fundraising-content-provider/zipball/1e0b6a5a231256760f187fa7c7b6d41a27089d81",
+                "reference": "1e0b6a5a231256760f187fa7c7b6d41a27089d81",
                 "shasum": ""
             },
             "require": {
                 "ezyang/htmlpurifier": "^4.9",
                 "php": ">=7.1",
+                "symfony/console": "^3.2",
                 "twig/twig": "~1.23"
             },
             "require-dev": {
@@ -2623,7 +2626,7 @@
                 "squizlabs/php_codesniffer": "^2.8"
             },
             "bin": [
-                "bin/twiglint"
+                "bin/lint_content"
             ],
             "type": "library",
             "autoload": {
@@ -2657,9 +2660,9 @@
             ],
             "description": "WMDE fundraising application content provider and filter",
             "support": {
-                "source": "https://github.com/wmde/fundraising-content-provider/tree/v1.0.0"
+                "source": "https://github.com/wmde/fundraising-content-provider/tree/v2.0.0"
             },
-            "time": "2017-04-26T10:51:16+00:00"
+            "time": "2017-04-28T12:49:42+00:00"
         },
         {
             "name": "wmde/fundraising-store",
@@ -4949,17 +4952,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content.git",
-                "reference": "984dcb637be38fa910a5da12c89ecfa71a0bb527"
+                "reference": "aded483f14cdd00dbe3a377ef52c95018be123ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/984dcb637be38fa910a5da12c89ecfa71a0bb527",
-                "reference": "984dcb637be38fa910a5da12c89ecfa71a0bb527",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/aded483f14cdd00dbe3a377ef52c95018be123ed",
+                "reference": "aded483f14cdd00dbe3a377ef52c95018be123ed",
                 "shasum": ""
             },
             "require-dev": {
                 "seld/jsonlint": "^1.6",
-                "wmde/fundraising-html-filter": "dev-master"
+                "wmde/fundraising-content-provider": "dev-master"
             },
             "type": "library",
             "scripts": {
@@ -4968,8 +4971,15 @@
                 ],
                 "test": [
                     "composer validate --no-interaction",
-                    "find i18n/ -type f -name \\*.json -exec echo \"{}\" \\; -exec vendor/bin/jsonlint {} \\;",
-                    "find resources/ resources/ -type f -name \\*.twig -exec vendor/bin/twiglint {} \\;"
+                    "@lint-json",
+                    "@lint-templates"
+                ],
+                "lint-json": [
+                    "find i18n/ -type f -name \\*.json -exec echo \"{}\" \\; -exec vendor/bin/jsonlint {} \\;"
+                ],
+                "lint-templates": [
+                    "find i18n/*/web i18n/*/shared -type f -name '*.twig' | sed -E 's#/web/|/shared/# #' | sed 's|.twig||' | cut -d' ' -f1,2 | xargs -n 2 bash -c './vendor/bin/lint_content --web $0 $1'",
+                    "find i18n/*/mail i18n/*/shared -type f -name '*.twig' | sed -E 's#/mail/|/shared/# #' | sed 's|.twig||' | cut -d' ' -f1,2 | xargs -n 2 bash -c './vendor/bin/lint_content $0 $1'"
                 ]
             },
             "license": [
@@ -4979,7 +4989,7 @@
             "support": {
                 "source": "https://github.com/wmde/fundraising-frontend-content/tree/templates-back-in-app"
             },
-            "time": "2017-04-26 16:13:59"
+            "time": "2017-04-28 10:22:19"
         },
         {
             "name": "wmde/psr-log-test-doubles",
