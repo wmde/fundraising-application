@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests;
 
 use FileFetcher\SimpleFileFetcher;
+use Symfony\Component\Translation\Translator;
 use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
@@ -29,6 +30,9 @@ class TestEnvironment {
 
 		$instance->factory->setNullMessenger();
 		$instance->factory->setTwigEnvironment( new \Twig_Environment() );
+
+		// disabling translations in tests (will result in returned keys we can more easily test for)
+		$instance->factory->setTranslator( new Translator( 'zz_ZZ' ) );
 
 		return $instance;
 	}

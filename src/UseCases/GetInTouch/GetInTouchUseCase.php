@@ -4,9 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\UseCases\GetInTouch;
 
-use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
-use WMDE\Fundraising\Frontend\Infrastructure\Message;
-use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 use WMDE\Fundraising\Frontend\Infrastructure\OperatorMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\EmailAddress;

@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use Silex\Application;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\MembershipApplication;
@@ -29,10 +30,53 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		parent::setUp();
 	}
 
-	public function testGivenGetRequest_resultHasMethodNotAllowedStatus() {
-		$this->assertGetRequestCausesMethodNotAllowedResponse(
-			'apply-for-membership',
-			[]
+	public function testGivenGetRequestMembership_formIsShown() {
+		$this->createAppEnvironment(
+			[ ],
+			function ( Client $client, FunFunFactory $factory, Application $app ) {
+
+				// @todo Make this the default behaviour of WebRouteTestCase::createAppEnvironment()
+				$factory->setTwigEnvironment( $app['twig'] );
+
+				$client->request( 'GET', 'apply-for-membership' );
+
+				$content = $client->getResponse()->getContent();
+
+				$this->assertRegExp(
+					'/<form name="memForm" id="memForm" method="POST" action="\/apply-for-membership">/',
+					$content
+				);
+
+				$this->assertContains(
+					'<input type="hidden" name="showMembershipTypeOption" value="true" />',
+					$content
+				);
+			}
+		);
+	}
+
+	public function testGivenGetRequestSustainingMembership_formIsShown() {
+		$this->createAppEnvironment(
+			[ ],
+			function ( Client $client, FunFunFactory $factory, Application $app ) {
+
+				// @todo Make this the default behaviour of WebRouteTestCase::createAppEnvironment()
+				$factory->setTwigEnvironment( $app['twig'] );
+
+				$client->request( 'GET', 'apply-for-membership', [ 'type' => 'sustaining' ] );
+
+				$content = $client->getResponse()->getContent();
+
+				$this->assertRegExp(
+					'/<form name="memForm" id="memForm" method="POST" action="\/apply-for-membership">/',
+					$content
+				);
+
+				$this->assertContains(
+					'<input type="hidden" name="showMembershipTypeOption" value="false" />',
+					$content
+				);
+			}
 		);
 	}
 
@@ -72,55 +116,69 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenRequestWithInsufficientAmount_failureResponseIsReturned() {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createAppEnvironment(
+			[ ],
+			function ( Client $client, FunFunFactory $factory, Application $app ) {
 
-			$httpParameters = $this->newValidHttpParameters();
-			$httpParameters['membership_fee'] = '1.00'; // TODO: change to localized
+				// @todo Make this the default behaviour of WebRouteTestCase::createAppEnvironment()
+				$factory->setTwigEnvironment( $app['twig'] );
 
-			$client->request(
-				'POST',
-				'apply-for-membership',
-				$httpParameters
-			);
+				$httpParameters = $this->newValidHttpParameters();
+				$httpParameters['membership_fee'] = '1.00'; // TODO: change to localized
 
-			$this->assertFormFieldsArePopulated( $client->getResponse()->getContent() );
-		} );
-	}
 
-	private function assertFormFieldsArePopulated( $response ) {
-		$this->assertContains( 'initialFormValues.addressType: person', $response );
-		$this->assertContains( 'initialFormValues.salutation: Herr', $response );
-		$this->assertContains( 'initialFormValues.title: ', $response );
-		$this->assertContains( 'initialFormValues.firstName: Potato', $response );
-		$this->assertContains( 'initialFormValues.lastName: The Great', $response );
-		$this->assertContains( 'initialFormValues.companyName: ', $response );
-		$this->assertContains( 'initialFormValues.street: Nyan street', $response );
-		$this->assertContains( 'initialFormValues.postcode: 1234', $response );
-		$this->assertContains( 'initialFormValues.city: Berlin', $response );
-		$this->assertContains( 'initialFormValues.country: DE', $response );
-		$this->assertContains( 'initialFormValues.email: jeroendedauw@gmail.com', $response );
-		$this->assertContains( 'initialFormValues.iban: DE12500105170648489890', $response );
-		$this->assertContains( 'initialFormValues.bic: INGDDEFFXXX', $response );
-		$this->assertContains( 'initialFormValues.accountNumber: 0648489890', $response );
-		$this->assertContains( 'initialFormValues.bankCode: 50010517', $response );
-		$this->assertContains( 'initialFormValues.bankname: ING-DiBa', $response );
+				$client->request( 'POST', 'apply-for-membership', $httpParameters );
+
+				$this->assertInitialFormValues(
+					[
+						'addressType' => 'person',
+						'salutation' => 'Herr',
+						'title' => '',
+						'firstName' => 'Potato',
+						'lastName' => 'The Great',
+						'companyName' => '',
+						'street' => 'Nyan street',
+						'postcode' => '1234',
+						'city' => 'Berlin',
+						'country' => 'DE',
+						'email' => 'jeroendedauw@gmail.com',
+						'iban' => 'DE12500105170648489890',
+						'bic' => 'INGDDEFFXXX',
+						'accountNumber' => '0648489890',
+						'bankCode' => '50010517',
+						'bankname' => 'ING-DiBa',
+						'paymentType' => 'BEZ'
+					],
+					$client->getResponse()
+				);
+			}
+		);
 	}
 
 	public function testFlagForShowingMembershipTypeOptionGetsPassedAround() {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createAppEnvironment(
+			[ ],
+			function ( Client $client, FunFunFactory $factory, Application $app ) {
 
-			$httpParameters = $this->newValidHttpParameters();
-			$httpParameters['membership_fee'] = '0';
-			$httpParameters['showMembershipTypeOption'] = 'true';
+				// @todo Make this the default behaviour of WebRouteTestCase::createAppEnvironment()
+				$factory->setTwigEnvironment( $app['twig'] );
 
-			$client->request(
-				'POST',
-				'apply-for-membership',
-				$httpParameters
-			);
+				$httpParameters = $this->newValidHttpParameters();
+				$httpParameters['membership_fee'] = '0';
+				$httpParameters['showMembershipTypeOption'] = 'true';
 
-			$this->assertContains( 'showMembershipTypeOption: true', $client->getResponse()->getContent() );
-		} );
+				$client->request(
+					'POST',
+					'apply-for-membership',
+					$httpParameters
+				);
+
+				$this->assertContains(
+					'<input type="hidden" name="showMembershipTypeOption" value="true" />',
+					$client->getResponse()->getContent()
+				);
+			}
+		);
 	}
 
 	public function testGivenValidRequest_applicationIsPersisted() {

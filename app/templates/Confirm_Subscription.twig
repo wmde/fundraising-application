@@ -1,0 +1,9 @@
+{% extends 'Base_Layout.html.twig' %}
+
+{% block main %}
+    {% if error_message %}
+        {$ include( 'WarningPage.html.twig', { 'message': error_message|trans( {}, 'validations' ) } ) $}
+    {% else %}
+        {$ include( 'Subscription_Confirmed.html.twig' ) $}
+    {% endif %}
+{% endblock %}

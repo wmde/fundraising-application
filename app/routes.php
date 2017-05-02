@@ -39,6 +39,8 @@ use WMDE\Fundraising\Frontend\MembershipContext\UseCases\CancelMembershipApplica
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowMembershipApplicationConfirmation\ShowMembershipAppConfirmationRequest;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\PaymentContext\UseCases\GenerateIban\GenerateIbanRequest;
+use WMDE\Fundraising\Frontend\Presentation\ContentPage\ContentNotFoundException;
+use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageNotFoundException;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
 
@@ -213,13 +215,25 @@ $app->get(
 $app->get(
 	'page/{pageName}',
 	function( $pageName ) use ( $ffFactory ) {
-		if ( !$ffFactory->getTemplateNameValidator()->validate( $pageName . '.html.twig' )->isSuccessful() ) {
-			throw new NotFoundHttpException( "Page '$pageName' not found." );
+		$pageSelector = $ffFactory->getContentPagePageSelector();
+
+		try {
+			$pageId = $pageSelector->getPageId( $pageName );
+		} catch ( PageNotFoundException $exception ) {
+			throw new NotFoundHttpException( "Page page name '$pageName' not found." );
 		}
 
-		return $ffFactory->getLayoutTemplate( 'Display_Page_Layout.twig' )->render( [
-			'main_template' => $pageName . '.html.twig'
-		] );
+		try {
+			return $ffFactory->getLayoutTemplate( 'Display_Page_Layout.twig' )->render( [
+				'page_id' => $pageId
+			] );
+		} catch ( Twig_Error_Runtime $exception ) {
+			if ($exception->getPrevious() instanceof ContentNotFoundException) {
+				throw new NotFoundHttpException( "Content for page id '$pageId' not found." );
+			}
+
+			throw $exception;
+		}
 	}
 )
 ->bind( 'page' );
@@ -315,9 +329,17 @@ $app->post(
 		if ( $contactFormResponse->isSuccessful() ) {
 			return $app->redirect( $app['url_generator']->generate( 'page', [ 'pageName' => 'Kontakt_Bestaetigung' ] ) );
 		}
+
 		return $ffFactory->newGetInTouchHtmlPresenter()->present( $contactFormResponse, $request->request->all() );
 	}
 );
+
+$app->get(
+	'contact/get-in-touch',
+	function() use ( $app, $ffFactory ) {
+		return $ffFactory->getLayoutTemplate( 'contact_form.html.twig' )->render( [ ] );
+	}
+)->bind('contact');
 
 $app->post(
 	'donation/cancel',
@@ -337,7 +359,6 @@ $app->post(
 		return $httpResponse;
 	}
 );
-
 
 $app->post(
 	'donation/add',
@@ -380,6 +401,19 @@ $app->post(
 	'apply-for-membership',
 	function( Application $app, Request $httpRequest ) use ( $ffFactory ) {
 		return ( new ApplyForMembershipHandler( $ffFactory, $app ) )->handle( $httpRequest );
+	}
+);
+
+$app->get(
+	'apply-for-membership',
+	function( Request $request ) use ( $ffFactory ) {
+
+		$params = [];
+		if ( $request->query->get('type' ) === 'sustaining' ) {
+			$params['showMembershipTypeOption'] = false ;
+		}
+
+		return $ffFactory->getLayoutTemplate( 'Membership_Application.html.twig' )->render( $params );
 	}
 );
 

@@ -72,21 +72,9 @@ configuration data:
 	 - `creditcard`
 
 The application needs a copy of the content repository at https://github.com/wmde/fundraising-frontend-content to work properly. 
-On development machines, the content repository is in the composer dev-dependencies. If you put the content repository in another place, you need to configure the paths to it.
+On development machines, the content repository is in the composer dev-dependencies. If you put the content repository in another place, you need to configure the `i18n-base-path` to point to it.
 The following example shows the configuration when the content repository is at the same level as the application directory:
 
-    "twig": {
-        "loaders": {
-            "filesystem": {
-                "template-dir": [
-                    "../fundraising-frontend-content/ab_test/a/templates",
-                    "../fundraising-frontend-content/ab_test/b/templates",
-                    "../fundraising-frontend-content/templates",
-                    "../fundraising-frontend-content/i18n/%_locale_%/pages"
-                ]
-            }
-        }
-    },
     "i18n-base-path": "../fundraising-frontend-content/i18n"
 
 ## Running the application

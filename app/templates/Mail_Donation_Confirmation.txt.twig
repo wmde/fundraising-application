@@ -1,0 +1,62 @@
+{% set formattedAmount = donation.amount|localizedcurrency('EUR', 'de_DE') %}
+
+{$ greeting_generator.createGreeting( recipient.lastName, recipient.salutation, recipient.title )|raw $}
+
+{$ mail_content('donation_confirmation/intro') $}
+
+{% if donation.needsModeration %}
+{$ mail_content('donation_confirmation/needs_moderation', {
+    'formatted_amount': formattedAmount
+}) $}
+
+{% else %}
+{% if donation.paymentType == 'BEZ' %}
+{$ mail_content('donation_confirmation/paymenttype_directdebit', {
+    'formatted_amount': formattedAmount
+}) $}
+{% if donation.interval > 0 %}
+{$ 'recurringDonation'|transchoice( donation.interval, { '%interval%': donation.interval } ) $}
+{% endif %}
+
+{% elseif donation.paymentType == 'PPL' or donation.paymentType == 'MCP' %}
+{$ mail_content('donation_confirmation/paymenttype_external', {
+    'formatted_amount': formattedAmount,
+    'payment_provider': donation.paymentType|trans({}, 'paymentTypes')
+}) $}
+{% if donation.interval > 0 %}
+{$ 'recurringDonation'|transchoice( donation.interval, { '%interval%': donation.interval } ) $}
+{% endif %}
+
+{% elseif donation.paymentType == 'UEB' %}
+{$ mail_content('donation_confirmation/paymenttype_banktransfer', {
+    'formatted_amount': formattedAmount,
+    'bank_transfer_code': donation.bankTransferCode
+}) $}
+
+{% endif %}
+{% endif %}
+{$ mail_content('donation_confirmation/support', {
+    'donation_id': donation.id
+}) $}
+
+{% if donation.paymentType == 'UEB' %}
+{$ mail_content('donation_confirmation/paymenttype_banktransfer_hint') $}
+
+{% endif %}
+{$ mail_content('donation_confirmation/greetings') $}
+
+{$ mail_content('name_head_of_suborganization') $}
+{$ mail_content('title_head_of_suborganization') $}
+
+---------------------------------------------------------------------------
+{$ mail_content('wikimedia_vision') $}
+<https://spenden.wikimedia.de/>
+---------------------------------------------------------------------------
+
+{$ mail_content('address_of_suborganization') $}
+
+{$ mail_content('tax_id_suborganization_verbose') $}
+
+{$ mail_content('donation_confirmation/number', {
+    'donation_id': donation.id
+}) $}

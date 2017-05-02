@@ -1,0 +1,165 @@
+<form>
+	<!-- steps-overview -->
+	<div class="steps-overview container clearfix">
+		<div class="ltcol">
+			&nbsp;
+		</div>
+
+		<div class="ctcol">
+			<div class="box rounded partial no-margin">
+
+				<div class="box-header">
+					<ul class="step-list horizontal clearfix">
+						<li class="first">Mein Betrag</li>
+						<li class="active">Meine Daten</li>
+						<li class="last">Fertig!</li>
+					</ul>
+				</div>
+
+			</div>
+		</div>
+
+		<div class="rtcol">
+			&nbsp;
+		</div>
+	</div>
+
+	<!-- sepa confirmation -->
+	<section id="membership-sepa-confirmation" class="container clearfix">
+		<div class="container clearfix">
+			<div class="ltcol">
+				&nbsp;
+			</div>
+
+			<div class="ctcol">
+				<div class="box rounded partial no-margin">
+					<div class="box-section">
+						<div class="container clearfix">
+							<div class="logo-wikimedia-white f-right"></div>
+
+							<h2 class="f-left no-margin">SEPA-Lastschriftmandat</h2><br /><br />
+
+							<p class="title">
+								Sie zahlen <span id="membership-confirm-interval">{$ membershipAppl.payment.intervalText $}</span> einen
+								Mitgliedsbeitrag in H&ouml;he von <span id="membership-confirm-fee"><strong>{$ membershipAppl.payment.fee $} €</strong></span> an
+							</p>
+
+							<div class="address f-left">
+								Wikimedia Deutschland e.V.<br />
+								Tempelhofer Ufer 23-24<br />
+								10963 Berlin<br /><br />
+							</div>
+
+							<p class="label no-margin">
+								Die Mandatsreferenznummer zur eindeutigen Identifizierung des SEPA-Lastschriftmandats wird Ihnen separat per E-Mail mitgeteilt.
+								Ihre Lastschrift wird als SEPA-Rahmenmandat behandelt.
+							</p>
+						</div>
+
+						<hr/>
+
+						<div class="container clearfix">
+							<div class="address f-left">
+								<p>
+									<span id="membership-confirm-name">{$ membershipAppl.person.name $}</span>
+								</p>
+
+								<p class="no-margin">
+									<span id="membership-confirm-street">{$ membershipAppl.address.street $}</span><br/>
+									<span id="membership-confirm-postcode">{$ membershipAppl.address.postCode $}</span> <span id="membership-confirm-city">{$ membershipAppl.address.city $}</span><br/>
+									<span id="membership-confirm-mail">{$ membershipAppl.emailAddress $}</span>
+								</p>
+							</div>
+
+							<div class="payment f-left">
+								<p>
+									Sie zahlen per Lastschrift
+								</p>
+
+								<p class="no-margin">
+									<span class="label">IBAN</span> <span id="membership-confirm-iban">{$ membershipAppl.bankData.iban $}</span><br/>
+									<span class="label">BIC</span> <span id="membership-confirm-bic">{$ membershipAppl.bankData.bic $}</span><br/>
+									<span class="label">Bankname</span> <span id="membership-confirm-bankname">{$ membershipAppl.bankData.bankName $}</span>
+								</p>
+							</div>
+						</div>
+
+						<hr/>
+
+						<div class="container clearfix" style="margin-bottom: 35px;">
+							<input type="checkbox" id="confirm_sepa" name="confirm_sepa" value="1" {% if membershipAppl.bankData.confirmSepa %}checked="checked"{% endif %} title="SEPA-Bestätigung">
+							<label for="confirm_sepa">
+								Ich ermächtige Wikimedia Deutschland e.V. (Gläubiger-ID: DE39ZZZ00000029337) Zahlungen
+								von meinem Konto mittels Lastschrift einzuziehen. Zugleich weise ich mein Kreditinstitut an, die von Wikimedia Deutschland e.V.
+								auf mein Konto gezogenen Lastschriften einzulösen.<br /><br />
+								Ich kann innerhalb von acht Wochen, beginnend mit dem Belastungsdatum, die Erstattung des belasteten Betrages
+								verlangen. Es gelten dabei die mit meinem Kreditinstitut vereinbarten Bedingungen.
+							</label>
+						</div>
+
+						<hr/>
+
+						<div class="container clearfix">
+							Berlin, {$ "now"|date("d.m.Y") $}
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+			<div class="rtcol">
+				<div class="icon-bar-chart _icon-list-item first">
+					<p>
+						<a class="wlightbox inline" href="#" data-href="#wlightbox-wohin-geht-das-geld"><strong>Wohin geht das Geld?</strong></a>
+					</p>
+				</div>
+
+				<div class="icon-hand-right _icon-list-item">
+					<p>
+						<a class="wlightbox inline" href="#" data-href="#wlightbox-steuerlich-absetzbar"><strong>Steuerlich absetzbar</strong></a>
+					</p>
+				</div>
+
+				<div class="icon-shield _icon-list-item last">
+					<p>
+						<strong>Ihre Daten sind sicher</strong>
+					</p>
+					<p>
+						Wir f&uuml;hlen uns dem  Datenschutz verpflichtet. Unsere Bestimmungen dazu k&ouml;nnen Sie <a href="{$ path( 'page', { pageName: 'Datenschutz' } ) $}">hier</a> einsehen.
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- donation submit -->
+	<section id="donation-submit" class="container clearfix">
+		<div class="ltcol">
+			&nbsp;
+		</div>
+
+		<div class="ctcol">
+			<div class="box rounded partial">
+
+				<div class="box-footer border-top clearfix">
+					<div class="container f-right">
+						<button type="button" class="back-button">Zurück</button>
+						<button id="finishFormSubmit2" type="button">Jetzt Mitglied werden <span class="icon-ok"></span></button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="rtcol">
+		</div>
+	</section>
+</form>
+
+<div class="wlightbox-contents">
+
+    {% include 'lightbox_content_use_of_resources.html.twig' %}
+
+    {% include 'lightbox_content_donation_receipt.html.twig' %}
+F
+</div>

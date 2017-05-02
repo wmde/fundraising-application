@@ -4,9 +4,14 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use org\bovigo\vfs\vfsStream;
+use Silex\Application;
+use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
+use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageNotFoundException;
+use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
+use WMDE\Fundraising\ContentProvider\ContentProvider;
 
 /**
  * @licence GNU GPL v2+
@@ -22,33 +27,50 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 		$this->notFoundMessage = $factory->getTranslator()->trans( 'page_not_found' );
 	}
 
-	public function testWhenPageDoesNotExist_missingResponseIsReturned() {
-		$client = $this->createClient();
+	public function testWhenPageDoesNotExist_missingResponseIsReturnedAndHasHeaderAndFooter() {
+		$client = $this->createClient(
+			[],
+			function ( FunFunFactory $factory ) {
+				$pageSelector = $this->createMock( PageSelector::class );
+				$pageSelector
+					->method( 'getPageId' )
+					->with('kittens')
+					->willThrowException( new PageNotFoundException() );
+				$factory->setContentPagePageSelector( $pageSelector );
+			}
+		);
 		$client->request( 'GET', '/page/kittens' );
+
+		$content = $client->getResponse()->getContent();
 
 		$this->assertContains(
 			$this->notFoundMessage,
-			$client->getResponse()->getContent()
+			$content
 		);
-	}
-
-	public function testFooterAndHeaderGetEmbedded() {
-		$client = $this->createClient();
-		$client->request( 'GET', '/page/kittens' );
 
 		$this->assertContains(
 			'page header',
-			$client->getResponse()->getContent()
+			$content
 		);
 
 		$this->assertContains(
 			'page footer',
-			$client->getResponse()->getContent()
+			$content
 		);
 	}
 
 	public function testWhenPageDoesNotExist_noUnescapedPageNameIsShown() {
-		$client = $this->createClient();
+		$client = $this->createClient(
+			[],
+			function ( FunFunFactory $factory ) {
+				$pageSelector = $this->createMock( PageSelector::class );
+				$pageSelector
+					->method( 'getPageId' )
+					->withAnyParameters()
+					->willThrowException( new PageNotFoundException() );
+				$factory->setContentPagePageSelector( $pageSelector );
+			}
+		);
 		$client->request( 'GET', '/page/<script>alert("kittens");' );
 
 		$this->assertNotContains(
@@ -57,75 +79,61 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	public function testWhenWebBasePathIsEmpty_templatedPathsReferToRootPath() {
-		$client = $this->createClient( [
-			'twig' => [
-				'loaders' => [
-					'array' => [
-						'kittens.html.twig' => '{$ basepath $}/someFile.css'
-					]
-				]
-			]
-		] );
-		$client->request( 'GET', '/page/kittens' );
+	public function testWhenRequestedContentPageExists_itGetsEmbeddedAndHasHeaderAndFooter() {
+		$this->createAppEnvironment(
+			[ ],
+			function ( Client $client, FunFunFactory $factory, Application $app ) {
 
-		$this->assertContains(
-			'/someFile.css',
-			$client->getResponse()->getContent()
-		);
-	}
+				// @todo Make this the default behaviour of WebRouteTestCase::createAppEnvironment()
+				$factory->setTwigEnvironment( $app['twig'] );
 
-	public function testWhenWebBasePathIsSet_itIsUsedInTemplatedPaths() {
-		$client = $this->createClient( [
-			'twig' => [
-				'loaders' => [
-					'array' => [
-						'kittens.html.twig' => '{$ basepath $}/someFile.css'
-					]
-				]
-			],
-			'web-basepath' => '/some-path/someFile.css'
-		] );
-		$client->request( 'GET', '/page/kittens' );
+				$pageSelector = $this->createMock( PageSelector::class );
+				$pageSelector
+					->method( 'getPageId' )
+					->willReturnArgument(0)
+					->with( 'einhorns' )
+					->willReturn( 'unicorns' );
+				$factory->setContentPagePageSelector( $pageSelector );
 
-		$this->assertContains(
-			'/some-path/someFile.css',
-			$client->getResponse()->getContent()
-		);
-	}
+				$content = vfsStream::setup( 'content', null, [
+					'web' => [
+						'pages' => [
+							'unicorns.twig' => '<p>Rosa plüsch einhorns tanzen auf Regenbogen</p>',
+						]
+					],
+					'mail' => [],
+					'shared' => [],
+				] );
+				$provider = new ContentProvider( [
+					'content_path' => $content->url()
+				] );
+				$factory->setContentProvider( $provider );
 
-	public function testWhenRequestedPageExists_itGetsEmbedded() {
-		$client = $this->createClient( [
-			'twig' => [
-				'loaders' => [
-					'array' => [
-						'unicorns.html.twig' => '<p>Pink fluffy unicorns dancing on rainbows</p>'
-					]
-				]
-			]
-		] );
+				$client->request( 'GET', '/page/einhorns' );
 
-		$client->request( 'GET', '/page/unicorns' );
+				$content = $client->getResponse()->getContent();
 
-		$this->assertContains(
-			'<p>Pink fluffy unicorns dancing on rainbows</p>',
-			$client->getResponse()->getContent()
-		);
+				$this->assertContains(
+					'<p>Rosa plüsch einhorns tanzen auf Regenbogen</p>',
+					$content
+				);
 
-		// Test header, footer and noJS feature of the base template
-		$this->assertContains(
-			'page header',
-			$client->getResponse()->getContent()
-		);
+				// Test header, footer and noJS feature of the base template
+				$this->assertContains(
+					'page header',
+					$content
+				);
 
-		$this->assertContains(
-			'page footer',
-			$client->getResponse()->getContent()
-		);
+				$this->assertContains(
+					'page footer',
+					$content
+				);
 
-		$this->assertContains(
-			'Y u no JavaScript!',
-			$client->getResponse()->getContent()
+				$this->assertContains(
+					'Y u no JavaScript!',
+					$content
+				);
+			}
 		);
 	}
 
@@ -134,36 +142,5 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 		$client->request( 'GET', '/page/unicorns/of-doom' );
 
 		$this->assert404( $client->getResponse() );
-	}
-
-	public function testWhenRequestedPageIsTranslated_itIsDisplayed() {
-		$client = $this->createClient();
-		$client->request( 'GET', '/page/Translated_Page' );
-		$this->assertContains( 'This is just a test.', $client->getResponse()->getContent() );
-	}
-
-	public function testFilePrefixerIsCalledInTemplate() {
-		$client = $this->createClient(
-			[
-				'twig' => [
-					'loaders' => [
-						'array' => [
-							'unicorns.html.twig' => '{$ "testfile.js"|prefix_file $}'
-						]
-					]
-				]
-			],
-			function ( FunFunFactory $factory ) {
-				$prefixer = new FilePrefixer( 'mylittleprefix' );
-				$factory->setFilePrefixer( $prefixer );
-			}
-		);
-
-		$client->request( 'GET', '/page/unicorns' );
-
-		$this->assertContains(
-			'mylittleprefix.testfile.js',
-			$client->getResponse()->getContent()
-		);
 	}
 }

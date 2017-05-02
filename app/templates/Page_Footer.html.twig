@@ -1,0 +1,23 @@
+<nav id="footer-menu">
+	<ul class="horizontal clearfix footer-menu-list">
+		<li><a href="{$ path( 'contact' ) $}">Kontakt</a></li>
+		<li><a class="wlightbox inline" href="{$ path( 'page', { pageName: 'Impressum' } ) $}" data-href="#wlightbox-impressum">Impressum</a></li>
+		<li class="last"><a class="wlightbox inline" href="{$ path( 'page', { pageName: 'Datenschutz' } ) $}" data-href="#wlightbox-datenschutz">Datenschutz</a></li>
+	</ul>
+</nav>
+<div class="wlightbox-contents">
+	<div id="wlightbox-impressum">
+		<div class="wlightbox-title clearfix">
+			<span class="icon-hand-right wlightbox-icon"></span>Impressum
+		</div>
+
+		{$ web_content('pages/imprint') $}
+	</div>
+	<div id="wlightbox-datenschutz">
+		<div class="wlightbox-title clearfix">
+			<span class="icon-hand-right wlightbox-icon"></span>Datenschutz
+		</div>
+
+		{$ web_content('pages/privacy_protection') $}
+	</div>
+</div>

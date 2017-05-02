@@ -62,30 +62,4 @@ class TwigFactoryTest extends TestCase {
 		$this->assertSame( $realPath, realpath( __DIR__ . '/../../templates' ) );
 	}
 
-	public function testLocalePlaceholderIsBeingReplaced(): void {
-		$factory = new TwigFactory(
-			[
-				'enable-cache' => false,
-				'loaders' => [
-					'filesystem' => [
-						'template-dir' => [
-							'tests/templates',
-							'tests/templates/%_locale_%/pages'
-						]
-					]
-				]
-			],
-			'/tmp',
-			'de_DE'
-		);
-
-		$loaders = $factory->newFileSystemLoader();
-		$this->assertSame(
-			[
-				realpath( __DIR__ . '/../../templates' ),
-				realpath( __DIR__ . '/../../templates/de_DE/pages' )
-			],
-			$loaders->getPaths()
-		);
-	}
 }

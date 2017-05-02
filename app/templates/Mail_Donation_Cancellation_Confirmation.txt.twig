@@ -1,0 +1,17 @@
+{$ greeting_generator.createGreeting( recipient.lastName, recipient.salutation, recipient.title )|raw $}
+
+{$ mail_content('donation_cancellation_confirmation', {
+    'donation_id': donationId
+}) $}
+
+{$ mail_content('name_head_of_suborganization') $}
+{$ mail_content('title_head_of_suborganization') $}
+
+---------------------------------------------------------------------------
+{$ mail_content('wikimedia_vision') $}
+<https://spenden.wikimedia.de/>
+---------------------------------------------------------------------------
+
+{$ mail_content('address_of_suborganization') $}
+
+{$ mail_content('tax_id_suborganization_verbose') $}

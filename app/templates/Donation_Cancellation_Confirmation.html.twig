@@ -1,0 +1,49 @@
+<section>
+	<div class="container clearfix">
+		<div class="ltcol">
+			&nbsp;
+		</div>
+
+		<div class="ctcol">
+			<div class="box box-common partial rounded no-margin">
+				<div class="box-header container clearfix">
+					<span class="icon-bug">
+						{% if cancellationSuccessful %}
+							{$ 'donation-cancellation-header'|trans({}) $}
+						{% else %}
+							{$ 'donation-cancellation-failed-header'|trans({}) $}
+						{% endif %}
+					</span>
+				</div>
+
+				<div class="box-section box-footer">
+					<div class="container clearfix">
+						<p>
+							{% if cancellationSuccessful %}
+								{$ 'donation-cancellation-text'|trans( { '%donation.id%': donationId } )|raw $}
+							{% else %}
+								{$ 'donation-cancellation-failed-text'|trans( { '%donation.id%': donationId } )|raw $}
+							{% endif %}
+						</p>
+						<p>
+							{% if mailDeliveryFailed %}
+								{$ 'donation-cancellation-mail-delivery-failure'|trans|raw $}
+							{% endif %}
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="rtcol">
+			<div class="icon-hand-right _icon-list-item last">
+				<p>
+					<strong>Spenden</strong>
+				</p>
+				<p>
+					<a href="{$ path( '/' ) $}" target="_blank">Zurück</a> zur Spendenseite
+				</p>
+			</div>
+		</div>
+	</div>
+</section>

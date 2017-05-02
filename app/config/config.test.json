@@ -13,7 +13,7 @@
 			"filesystem": {
 				"template-dir": [
 					"tests/templates",
-					"tests/templates/%_locale_%/pages"
+					"app/templates"
 				]
 			},
 			"array": {
@@ -78,5 +78,6 @@
 		"siteId": 1234,
 		"siteUrlBase": "http://test-spenden.wikimedia.local"
 	},
-	"purging-secret": "Not so secret, testing"
+	"purging-secret": "Not so secret, testing",
+	"i18n-base-path": "vendor/wmde/fundraising-frontend-content/i18n"
 }

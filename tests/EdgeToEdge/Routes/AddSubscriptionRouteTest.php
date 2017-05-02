@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use Silex\Application;
+use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Tests\Fixtures\SubscriptionRepositorySpy;
@@ -46,81 +48,114 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 	}
 
 	public function testValidSubscriptionRequestGetsPersisted() {
-		$subscriptionRepository = new SubscriptionRepositorySpy();
 
-		$client = $this->createClient( [], function( FunFunFactory $factory ) use ( $subscriptionRepository ) {
-			$factory->setSubscriptionRepository( $subscriptionRepository );
-		} );
-		$client->followRedirects( false );
+		$this->createAppEnvironment(
+			[ ],
+			function ( Client $client, FunFunFactory $factory, Application $app ) {
 
-		$client->request(
-			'POST',
-			'/contact/subscribe',
-			$this->validFormInput
+				// @todo Make this the default behaviour of WebRouteTestCase::createAppEnvironment()
+				$factory->setTwigEnvironment( $app['twig'] );
+
+				$subscriptionRepository = new SubscriptionRepositorySpy();
+				$factory->setSubscriptionRepository( $subscriptionRepository );
+
+				$client->followRedirects( false );
+
+				$client->request(
+					'POST',
+					'/contact/subscribe',
+					$this->validFormInput
+				);
+
+				$this->assertCount( 1, $subscriptionRepository->getSubscriptions() );
+
+				$subscription = $subscriptionRepository->getSubscriptions()[0];
+				$address = $subscription->getAddress();
+
+				$this->assertSame( 'Nyan', $address->getFirstName() );
+				$this->assertSame( 'Cat', $address->getLastName() );
+				$this->assertSame( 'Herr', $address->getSalutation() );
+				$this->assertSame( 'Prof. Dr.', $address->getTitle() );
+				$this->assertSame( 'Awesome Way 1', $address->getAddress() );
+				$this->assertSame( 'Berlin', $address->getCity() );
+				$this->assertSame( '12345', $address->getPostcode() );
+				$this->assertSame( 'jeroendedauw@gmail.com', $subscription->getEmail() );
+				$this->assertSame( 'test/blue', $subscription->getTracking() );
+				$this->assertSame( 'testCampaign', $subscription->getSource() );
+			}
 		);
 
-		$this->assertCount( 1, $subscriptionRepository->getSubscriptions() );
-
-		$subscription = $subscriptionRepository->getSubscriptions()[0];
-		$address = $subscription->getAddress();
-
-		$this->assertSame( 'Nyan', $address->getFirstName() );
-		$this->assertSame( 'Cat', $address->getLastName() );
-		$this->assertSame( 'Herr', $address->getSalutation() );
-		$this->assertSame( 'Prof. Dr.', $address->getTitle() );
-		$this->assertSame( 'Awesome Way 1', $address->getAddress() );
-		$this->assertSame( 'Berlin', $address->getCity() );
-		$this->assertSame( '12345', $address->getPostcode() );
-		$this->assertSame( 'jeroendedauw@gmail.com', $subscription->getEmail() );
-		$this->assertSame( 'test/blue', $subscription->getTracking() );
-		$this->assertSame( 'testCampaign', $subscription->getSource() );
 	}
 
 	public function testGivenValidDataAndNoContentType_routeReturnsRedirectToSucccessPage() {
-		$client = $this->createClient();
-		$client->followRedirects( false );
-		$client->request(
-			'POST',
-			'/contact/subscribe',
-			$this->validFormInput
+		$this->createAppEnvironment(
+			[ ],
+			function ( Client $client, FunFunFactory $factory, Application $app ) {
+
+				// @todo Make this the default behaviour of WebRouteTestCase::createAppEnvironment()
+				$factory->setTwigEnvironment( $app['twig'] );
+
+				$client->followRedirects( false );
+				$client->request(
+					'POST',
+					'/contact/subscribe',
+					$this->validFormInput
+				);
+				$response = $client->getResponse();
+				$this->assertTrue( $response->isRedirect(), 'Is redirect response' );
+				$this->assertSame( '/page/Subscription_Success', $response->headers->get( 'Location' ) );
+			}
 		);
-		$response = $client->getResponse();
-		$this->assertTrue( $response->isRedirect(), 'Is redirect response' );
-		$this->assertSame( '/page/Subscription_Success', $response->headers->get( 'Location' ) );
 	}
 
 	public function testGivenInvalidDataAndNoContentType_routeDisplaysFormPage() {
-		$client = $this->createClient();
 
-		$client->request(
-			'POST',
-			'/contact/subscribe',
-			$this->invalidFormInput
+		$this->createAppEnvironment(
+			[ ],
+			function ( Client $client, FunFunFactory $factory, Application $app ) {
+
+				// @todo Make this the default behaviour of WebRouteTestCase::createAppEnvironment()
+				$factory->setTwigEnvironment( $app['twig'] );
+
+				$client->request(
+					'POST',
+					'/contact/subscribe',
+					$this->invalidFormInput
+				);
+
+				$response = $client->getResponse();
+				$content = $response->getContent();
+				preg_match_all( '/<span class=\"form-error\">(\w+)<\/span>/s', $content, $errorMatches );
+
+				$errorMatches = $errorMatches[1];
+
+				$this->assertContains( 'text/html', $response->headers->get( 'Content-Type' ) );
+				$this->assertCount( 1, $errorMatches, 'No error count found in test template' );
+				$this->assertRegExp( '/id="first-name" value="Nyan"/', $content );
+			}
 		);
-
-		$response = $client->getResponse();
-		$contentType = $response->headers->get( 'Content-Type' );
-		$content = $response->getContent();
-		$errorsFound = preg_match( '/Errors: (\\d+)/s', $content, $errorMatches );
-
-		$this->assertContains( 'text/html', $contentType, 'Wrong content type: ' . $contentType );
-		$this->assertSame( 1, $errorsFound, 'No error count found in test template' );
-		$this->assertGreaterThan( 0, (int) $errorMatches[1], 'Error list was empty' );
-		$this->assertContains( 'First Name: Nyan', $content );
 	}
 
 	public function testGivenInvalidDataAndJSONContentType_routeReturnsSuccessResult() {
-		$client = $this->createClient();
-		$client->followRedirects( false );
-		$client->request(
-			'POST',
-			'/contact/subscribe',
-			$this->validFormInput,
-			[],
-			[ 'HTTP_ACCEPT' => 'application/json' ]
+		$this->createAppEnvironment(
+			[ ],
+			function ( Client $client, FunFunFactory $factory, Application $app ) {
+
+				// @todo Make this the default behaviour of WebRouteTestCase::createAppEnvironment()
+				$factory->setTwigEnvironment( $app['twig'] );
+
+				$client->followRedirects( false );
+				$client->request(
+					'POST',
+					'/contact/subscribe',
+					$this->validFormInput,
+					[],
+					[ 'HTTP_ACCEPT' => 'application/json' ]
+				);
+				$response = $client->getResponse();
+				$this->assertJsonSuccessResponse( ['status' => 'OK'], $response );
+			}
 		);
-		$response = $client->getResponse();
-		$this->assertJsonSuccessResponse( ['status' => 'OK'], $response );
 	}
 
 	public function testGivenInvalidDataAndJSONContentType_routeReturnsErrorResult() {
@@ -144,24 +179,31 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidDataAndJSONPRequest_routeReturnsResult() {
-		$client = $this->createClient();
+		$this->createAppEnvironment(
+			[ ],
+			function ( Client $client, FunFunFactory $factory, Application $app ) {
 
-		$client->request(
-			'GET',
-			'/contact/subscribe',
-			array_merge(
-				$this->validFormInput,
-				[ 'callback' => 'test' ]
-			),
-			[],
-			[ 'HTTP_ACCEPT' => 'application/javascript' ]
-		);
+				// @todo Make this the default behaviour of WebRouteTestCase::createAppEnvironment()
+				$factory->setTwigEnvironment( $app['twig'] );
 
-		$response = $client->getResponse();
-		$this->assertTrue( $response->isSuccessful(), 'request is successful' );
-		$this->assertSame(
-			file_get_contents( __DIR__ . '/../../Data/files/addSubscriptionResponse.js' ),
-			$response->getContent()
+				$client->request(
+					'GET',
+					'/contact/subscribe',
+					array_merge(
+						$this->validFormInput,
+						['callback' => 'test']
+					),
+					[],
+					['HTTP_ACCEPT' => 'application/javascript']
+				);
+
+				$response = $client->getResponse();
+				$this->assertTrue( $response->isSuccessful(), 'request is successful' );
+				$this->assertSame(
+					file_get_contents( __DIR__ . '/../../Data/files/addSubscriptionResponse.js' ),
+					$response->getContent()
+				);
+			}
 		);
 	}
 

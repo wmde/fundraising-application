@@ -1,0 +1,43 @@
+<section id="error-page">
+    <div class="container clearfix">
+      <div class="ltcol">
+        &nbsp;
+      </div>
+
+      <div class="ctcol">
+        <div class="box partial rounded no-margin">
+          <div class="box-header container clearfix">
+            <span class="icon-bug f-left">Fehler</span>
+          </div>
+
+          <div class="box-section box-footer">
+            <div class="container clearfix">
+              {% if message is defined %}
+              <p>
+                {$ message $}
+              </p>
+              {% else %}
+              <p>
+                Bei der Verarbeitung Ihrer Anfrage ist ein Fehler aufgetreten.
+                Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut.
+              </p>
+              {% endif %}
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="rtcol">
+        <div class="icon-hand-right _icon-list-item last">
+          <p>
+            <strong>Spenden</strong>
+          </p>
+          <p>
+            <a href="{$ path( '/' ) $}" target="_blank">Zurück</a> zur Spendenseite
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>

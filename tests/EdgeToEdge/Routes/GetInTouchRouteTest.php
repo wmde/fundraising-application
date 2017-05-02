@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use Silex\Application;
+use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
@@ -44,29 +46,60 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenInvalidRequest_validationFails() {
-		$client = $this->createClient();
 
-		$client->request(
-			'POST',
-			'/contact/get-in-touch',
-			[
-				'firstname' => 'Curious',
-				'lastname' => 'Guy',
-				'email' => 'curious.guy@gmail',
-				'subject' => 'What is it you are doing?!',
-				'messageBody' => 'Just tell me'
-			]
+		$this->createAppEnvironment(
+			[ ],
+			function ( Client $client, FunFunFactory $factory, Application $app ) {
+
+				// @todo Make this the default behaviour of WebRouteTestCase::createAppEnvironment()
+				$factory->setTwigEnvironment( $app['twig'] );
+
+				$client->request(
+					'POST',
+					'/contact/get-in-touch',
+					[
+						'firstname' => 'Curious',
+						'lastname' => 'Guy',
+						'email' => 'no.email.format',
+						'subject' => '',
+						'messageBody' => ''
+					]
+				);
+
+				$response = $client->getResponse();
+				$content = $response->getContent();
+				preg_match_all( '/<span class=\"form-error\">(\w+)<\/span>/s', $content, $errorMatches );
+
+				$errorMatches = $errorMatches[1];
+
+				$this->assertContains( 'text/html', $response->headers->get( 'Content-Type' ) );
+				$this->assertCount( 3, $errorMatches, 'No error count found in test template' );
+				$this->assertRegExp( '/<input .+? name="firstname" .+? value="Curious"/', $content );
+				$this->assertRegExp( '/<input .+? name="lastname" .+? value="Guy"/', $content );
+			}
 		);
+	}
 
-		$response = $client->getResponse();
-		$contentType = $response->headers->get( 'Content-Type' );
-		$content = $response->getContent();
-		$errorsFound = preg_match( '/Errors: (\\d+)/s', $content, $errorMatches );
+	public function testGivenGetRequest_formShownWithoutErrors() {
 
-		$this->assertContains( 'text/html', $contentType, 'Wrong content type: ' . $contentType );
-		$this->assertSame( 1, $errorsFound, 'No error count found in test template' );
-		$this->assertGreaterThan( 0, (int) $errorMatches[1], 'Error list was empty' );
-		$this->assertContains( 'First Name: Curious', $content );
+		$this->createAppEnvironment(
+			[ ],
+			function ( Client $client, FunFunFactory $factory, Application $app ) {
+
+				// @todo Make this the default behaviour of WebRouteTestCase::createAppEnvironment()
+				$factory->setTwigEnvironment( $app['twig'] );
+
+				$client->request(
+					'GET',
+					'/contact/get-in-touch'
+				);
+
+				$response = $client->getResponse();
+
+				$this->assertContains( 'text/html', $response->headers->get( 'Content-Type' ) );
+				$this->assertNotRegExp( '/<span class=\"form-error\">(\w+)<\/span>/s', $response->getContent() );
+			}
+		);
 	}
 
 	public function testOnException_errorPageIsRendered() {

@@ -26,6 +26,7 @@ use Symfony\Component\Translation\TranslatorInterface;
 use TNvpServiceDispatcher;
 use Twig_Environment;
 use Twig_Extensions_Extension_Intl;
+use Twig_SimpleFunction;
 use WMDE\Fundraising\Frontend\DonationContext\DonationAcceptedEventHandler;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
@@ -34,6 +35,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\ServerSideTracker;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipPolicyValidator;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionPaymentNotification\HandleSubscriptionPaymentNotificationUseCase;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionSignupNotification\HandleSubscriptionSignupNotificationUseCase;
+use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector;
 use WMDE\Fundraising\Frontend\Presentation\Honorifics;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\PageNotFoundPresenter;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
@@ -149,6 +151,7 @@ use WMDE\Fundraising\Frontend\Validation\IbanValidator;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
 use WMDE\Fundraising\Frontend\Validation\TemplateNameValidator;
 use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
+use WMDE\Fundraising\ContentProvider\ContentProvider;
 use WMDE\Fundraising\Store\Factory as StoreFactory;
 use WMDE\Fundraising\Store\Installer;
 use WMDE\PageRetriever\LocalFilePageRetriever;
@@ -285,13 +288,11 @@ class FunFunFactory {
 				'json' => $translationFactory->newJsonLoader()
 			];
 			$locale = $this->config['locale'];
-			$messagesPath = __DIR__ . '/../../' . $this->config['i18n-base-path'] . '/' . $locale;
+			$messagesPath = $this->getI18nDirectory() . $this->config['translation']['message-dir'];
 			$translator = $translationFactory->create( $loaders, $locale );
-			$translator->addResource( 'json', $messagesPath . '/messages.json', $locale );
-			$translator->addResource( 'json', $messagesPath . '/paymentTypes.json', $locale, 'paymentTypes' );
-			$translator->addResource( 'json', $messagesPath . '/paymentIntervals.json', $locale, 'paymentIntervals' );
-			$translator->addResource( 'json', $messagesPath . '/paymentStatus.json', $locale, 'paymentStatus' );
-			$translator->addResource( 'json', $messagesPath . '/validations.json', $locale, 'validations' );
+			foreach ($this->config['translation']['files'] as $domain => $file) {
+				$translator->addResource( 'json', $messagesPath . '/' . $file, $locale, $domain );
+			}
 
 			return $translator;
 		};
@@ -308,7 +309,10 @@ class FunFunFactory {
 
 		$pimple['twig_factory'] = function () {
 			return new TwigFactory(
-				$this->config['twig'],
+				array_merge_recursive(
+					$this->config['twig'],
+					['web-basepath' => $this->config['web-basepath']]
+				),
 				$this->getCachePath() . '/twig',
 				$this->config['locale']
 			);
@@ -317,6 +321,7 @@ class FunFunFactory {
 		$pimple['twig'] = function() {
 			$twigFactory = $this->getTwigFactory();
 			$configurator = $twigFactory->newTwigEnvironmentConfigurator();
+
 			$loaders = array_filter( [
 				$twigFactory->newFileSystemLoader(),
 				$twigFactory->newArrayLoader(), // This is just a fallback for testing
@@ -330,8 +335,20 @@ class FunFunFactory {
 					$this->getFilePrefixer()
 				)
 			];
+			$functions = [
+				new Twig_SimpleFunction(
+					'web_content',
+					[$this->getContentProvider(), 'getWeb'],
+					['is_safe' => ['html']]
+				),
+				new Twig_SimpleFunction(
+					'mail_content',
+					[$this->getContentProvider(), 'getMail'],
+					['is_safe' => ['all']]
+				)
+			];
 
-			return $configurator->getEnvironment( $this->pimple['twig_environment'], $loaders, $extensions, $filters );
+			return $configurator->getEnvironment( $this->pimple['twig_environment'], $loaders, $extensions, $filters, $functions );
 		};
 
 		$pimple['messenger_suborganization'] = function() {
@@ -410,6 +427,23 @@ class FunFunFactory {
 			return new FilePrefixer( $this->getFilePrefix() );
 		};
 
+		$pimple['content_page_selector'] = function () {
+			$json = (new SimpleFileFetcher())->fetchFile($this->getI18nDirectory() . '/data/pages.json');
+			$config = json_decode($json, true) ?? [];
+
+			return new PageSelector($config);
+		};
+
+		$pimple['content_provider'] = function () {
+			return new ContentProvider( [
+				'content_path' => $this->getI18nDirectory(),
+				'cache' => $this->config['twig']['enable-cache'] ? $this->getCachePath() . '/content' : false,
+				'globals' => [
+					'basepath' => $this->config['web-basepath']
+				]
+			] );
+		};
+
 		return $pimple;
 	}
 
@@ -476,7 +510,7 @@ class FunFunFactory {
 	}
 
 	public function newAddSubscriptionHtmlPresenter(): AddSubscriptionHtmlPresenter {
-		return new AddSubscriptionHtmlPresenter( $this->getIncludeTemplate( 'Subscription_Form.html.twig' ), $this->getTranslator() );
+		return new AddSubscriptionHtmlPresenter( $this->getLayoutTemplate( 'Subscription_Form.html.twig' ), $this->getTranslator() );
 	}
 
 	public function newConfirmSubscriptionHtmlPresenter(): ConfirmSubscriptionHtmlPresenter {
@@ -491,7 +525,7 @@ class FunFunFactory {
 	}
 
 	public function newGetInTouchHtmlPresenter(): GetInTouchHtmlPresenter {
-		return new GetInTouchHtmlPresenter( $this->getIncludeTemplate( 'Kontaktformular.html.twig' ), $this->getTranslator() );
+		return new GetInTouchHtmlPresenter( $this->getLayoutTemplate( 'contact_form.html.twig' ), $this->getTranslator() );
 	}
 
 	public function setTwigEnvironment( Twig_Environment $twig ) {
@@ -539,7 +573,6 @@ class FunFunFactory {
 
 	private function getDefaultTwigVariables() {
 		return [
-			'basepath' => $this->config['web-basepath'],
 			'honorifics' => $this->getHonorifics()->getList(),
 			'header_template' => $this->config['default-layout-templates']['header'],
 			'footer_template' => $this->config['default-layout-templates']['footer'],
@@ -615,7 +648,6 @@ class FunFunFactory {
 				$this->getTwig(),
 				'Mail_Subscription_Request.txt.twig',
 				[
-					'basepath' => $this->config['web-basepath'],
 					'greeting_generator' => $this->getGreetingGenerator()
 				]
 			),
@@ -782,7 +814,7 @@ class FunFunFactory {
 		$this->pimple['translator'] = $translator;
 	}
 
-	private function getTwigFactory(): TwigFactory {
+	public function getTwigFactory(): TwigFactory {
 		return $this->pimple['twig_factory'];
 	}
 
@@ -863,7 +895,6 @@ class FunFunFactory {
 					$this->getTwig(),
 					'Mail_Donation_Confirmation.txt.twig',
 					[
-						'basepath' => $this->config['web-basepath'],
 						'greeting_generator' => $this->getGreetingGenerator()
 					]
 				),
@@ -1060,14 +1091,14 @@ class FunFunFactory {
 	public function newDonationFormViolationPresenter() {
 		// TODO make the template name dependent on the 'form' value from the HTTP POST request
 		// (we need different form pages for A/B testing)
-		$template = $this->getLayoutTemplate( 'Display_Page_Layout.twig', [ 'main_template' => 'Donation_Form.html.twig' ] );
+		$template = $this->getLayoutTemplate( 'Donation_Form.html.twig' );
 		return new DonationFormViolationPresenter( $template, $this->newAmountFormatter() );
 	}
 
 	public function newDonationFormPresenter() {
 		// TODO make the template name dependent on the 'form' value from the HTTP POST request
 		// (we need different form pages for A/B testing)
-		$template = $this->getLayoutTemplate( 'Display_Page_Layout.twig', [ 'main_template' => 'Donation_Form.html.twig' ] );
+		$template = $this->getLayoutTemplate( 'Donation_Form.html.twig' );
 		return new DonationFormPresenter( $template, $this->newAmountFormatter() );
 	}
 
@@ -1139,7 +1170,7 @@ class FunFunFactory {
 
 	public function newMembershipFormViolationPresenter() {
 		return new MembershipFormViolationPresenter(
-			$this->getIncludeTemplate( 'Membership_Application.html.twig' )
+			$this->getLayoutTemplate( 'Membership_Application.html.twig' )
 		);
 	}
 
@@ -1323,5 +1354,25 @@ class FunFunFactory {
 		return new PiwikServerSideTracker(
 			new \PiwikTracker( $this->config['piwik']['siteId'], 'https:' . $this->config['piwik']['baseUrl'] )
 		);
+	}
+
+	public function getI18nDirectory(): string {
+		return __DIR__ . '/../../' . $this->config['i18n-base-path'] . '/' . $this->config['locale'];
+	}
+
+	public function setContentPagePageSelector( PageSelector $pageSelector ): void {
+		$this->pimple['content_page_selector'] = $pageSelector;
+	}
+
+	public function getContentPagePageSelector(): PageSelector {
+		return $this->pimple['content_page_selector'];
+	}
+
+	public function setContentProvider( ContentProvider $contentProvider ): void {
+		$this->pimple['content_provider'] = $contentProvider;
+	}
+
+	private function getContentProvider(): ContentProvider {
+		return $this->pimple['content_provider'];
 	}
 }

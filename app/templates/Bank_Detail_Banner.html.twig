@@ -1,0 +1,131 @@
+<div class="container" id="bank-detail-banner" style="display: none">
+  <style>
+  #bank-details, #sms-details {
+    width: 948px;
+    height: 40px;
+    position: fixed;
+    bottom: 56px;
+    background: #479ee7;
+    padding: 15px;
+    border-radius: 8px;
+    color: white;
+    z-index: 1100;
+  }
+  .text-small {
+    font-size: 13px;
+  }
+  .text-large {
+    font-size: 19px;
+    font-weight: bold;
+  }
+  .text-lightblue {
+    color: #9fccf3;
+   }
+  .digit-group {
+    margin-right: 5px;
+    letter-spacing: 1px;
+  }
+  .switch-button {
+    color: #479EE7;
+    font-size: 19px;
+
+    height: 42px;
+    padding: 0 15px;
+    margin-right: 15px;
+
+    border-radius: 5px;
+    border: 1px solid #9fccf3;
+
+    background: #ffffff;
+    background: -moz-linear-gradient(top, #ffffff 0%, #f7f7f7 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(100%, #f7f7f7));
+    background: -webkit-linear-gradient(top, #ffffff 0%, #f7f7f7 100%);
+    background: -o-linear-gradient(top, #ffffff 0%, #f7f7f7 100%);
+    background: -ms-linear-gradient(top, #ffffff 0%, #f7f7f7 100%);
+    background: linear-gradient(to bottom, #ffffff 0%, #f7f7f7 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f7f7f7',GradientType=0 );
+  }
+  .banner-btn-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    cursor: pointer;
+  }
+</style>
+<script type="text/javascript">
+var timer, bankDetailBannerClosed = false;
+$( document ).ready( function() {
+  timer = window.setTimeout( function() {
+    $( '#bank-detail-banner' ).fadeIn();
+  }, 5000 );
+
+  $( 'input' ).focus( function() {
+    $( '#bank-detail-banner' ).fadeOut();
+    clearTimeout( timer );
+  } );
+
+  // This is for our fake radio buttons
+  $( 'label' ).click( function() {
+    $( '#bank-detail-banner' ).fadeOut();
+    clearTimeout( timer );
+  } );
+
+  $( '.banner-btn-close, .slide-toggle' ).click( function() {
+    $( '#bank-detail-banner' ).fadeOut();
+    bankDetailBannerClosed = false;
+  } );
+
+  $( 'body' ).on( 'click',  '#wlightbox-close', function () {
+    if( !bankDetailBannerClosed ) {
+       $( '#bank-detail-banner' ).fadeIn();
+    }
+  } );
+
+  $( 'a.wlightbox' ).click( function() {
+    $( '#bank-detail-banner' ).fadeOut();
+    clearTimeout( timer );
+  } );
+
+  /* switch banner pages */
+  $( '.switch-button' ).click( function() {
+    $( '#bank-details' ).slideToggle();
+  } );
+} );
+</script>
+
+<!-- sms details -->
+<div id="sms-details">
+  <div class="icon-close text-lightblue banner-btn-close"></div>
+  <div style="float: left;" class="bank-details">
+    <div style="float: left; height: 40px; font-size: 40px" class="icon-phone text-lightblue"></div>
+    <span class="text-large"><strong>Helfen per SMS:</strong> Senden Sie das Wort <strong>"WIKI"</strong> an 81190</span><br>
+    <span class="text-small text-lightblue">
+      Von 5 Euro gehen 4,83 Euro an uns. Kosten zzgl. einer Standard-SMS
+    </span>
+  </div>
+  <div style="float: right;" class="tmessage-button">
+    <span style="vertical-align: top; padding-right: 10px;" class="text-small text-lightblue">oder:</span>
+    <button class="switch-button">Spenden per Überweisung</button>
+  </div>
+</div>
+
+<!-- bank details -->
+<div id="bank-details">
+  <div class="icon-close text-lightblue banner-btn-close"></div>
+  <div class="bank-details" style="float: left;">
+    <span class="text-small">Das Spendenkonto der Wikimedia Foerdergesellschaft</span><br>
+    <span class="text-large">
+      <span class="digit-group">DE33</span><span class="digit-group">1002</span><span class="digit-group">0500</span><span class="digit-group">0001</span><span class="digit-group">1947</span><span class="digit-group">00</span>
+      <span class="text-lightblue">(IBAN)</span>
+      <span class="digit-group">BFSW</span><span class="digit-group">DE33</span><span class="digit-group">BER</span>
+      <span class="text-lightblue">(BIC)</span>
+    </span>
+  </div>
+  <div class="tmessage-button" style="float: right;">
+    <span style="vertical-align: top; padding-right: 10px;" class="text-small text-lightblue">oder:</span>
+    <button class="switch-button"><span style="padding-right: 5px;" class="icon-phone"></span>Helfen per SMS</button>
+  </div>
+</div>
+
+<div style="clear: both;"></div>
+</div>
