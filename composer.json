@@ -14,7 +14,6 @@
 
 		"wmde/fundraising-store": "~4.1",
 		"wmde/euro": "~1.0",
-		"wmde/page-retriever": "~1.0",
 
 		"jeroen/file-fetcher": "~3.1",
 		"jeroen/generic-decorator": "~0.1.1",
@@ -79,7 +78,8 @@
 		"silex/web-profiler": "~2.0",
 		"sorien/silex-dbal-profiler": "~2.0",
 		"wmde/fundraising-frontend-content": "dev-master",
-		"symfony/css-selector": "^3.2"
+		"symfony/css-selector": "^3.2",
+		"guzzlehttp/guzzle": "^6.0"
 	},
 	"autoload": {
 		"psr-4": {
