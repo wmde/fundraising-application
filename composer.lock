@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "9986e49a107ffc051065e07980d49a6b",
+    "content-hash": "750e63648b75f2a4c275b71dbefe4bfb",
     "packages": [
         {
             "name": "addwiki/mediawiki-api-base",
@@ -4948,16 +4948,16 @@
         },
         {
             "name": "wmde/fundraising-frontend-content",
-            "version": "dev-templates-back-in-app",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content.git",
-                "reference": "6f501452a59bd136d83f4309590e17b44cc334cb"
+                "reference": "74f43a4b54f8ed44e8fcd1dd13b1b150e6e43f8d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/6f501452a59bd136d83f4309590e17b44cc334cb",
-                "reference": "6f501452a59bd136d83f4309590e17b44cc334cb",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/74f43a4b54f8ed44e8fcd1dd13b1b150e6e43f8d",
+                "reference": "74f43a4b54f8ed44e8fcd1dd13b1b150e6e43f8d",
                 "shasum": ""
             },
             "require-dev": {
@@ -4987,9 +4987,9 @@
             ],
             "description": "i18n for FundraisingFrontend",
             "support": {
-                "source": "https://github.com/wmde/fundraising-frontend-content/tree/templates-back-in-app"
+                "source": "https://github.com/wmde/fundraising-frontend-content/tree/master"
             },
-            "time": "2017-04-28T13:39:25+00:00"
+            "time": "2017-05-02T07:48:51+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",

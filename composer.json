@@ -77,7 +77,7 @@
 		"symfony/browser-kit": "~2.7",
 		"silex/web-profiler": "~2.0",
 		"sorien/silex-dbal-profiler": "~2.0",
-		"wmde/fundraising-frontend-content": "dev-templates-back-in-app"
+		"wmde/fundraising-frontend-content": "dev-master"
 	},
 	"autoload": {
 		"psr-4": {
