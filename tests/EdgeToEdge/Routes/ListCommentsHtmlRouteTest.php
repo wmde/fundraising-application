@@ -46,7 +46,6 @@ class ListCommentsHtmlRouteTest extends WebTestCase {
 		$this->persistSecondComment( $entityManager);
 		$this->persistEvilComment( $entityManager);
 		$entityManager->flush();
-
 	}
 
 	private function persistFirstComment( EntityManager $entityManager ) {
@@ -87,11 +86,6 @@ class ListCommentsHtmlRouteTest extends WebTestCase {
 
 		// TODO Restructure template to use elements and classes.
 		// Then we can use $crawler instead of searching strings
-
-		$this->assertContains(
-			'100,42&euro; von First name am',
-			$client->getResponse()->getContent()
-		);
 
 		$this->assertContains(
 			'100,42&euro; von First name am',
