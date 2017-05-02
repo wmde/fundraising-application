@@ -7,7 +7,6 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\Presentation;
 use Twig_Environment;
 use Twig_Error_Loader;
 use Twig_Error_Runtime;
-use Twig_Loader_Array;
 use Twig_LoaderInterface;
 use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
 use WMDE\Fundraising\Frontend\Presentation\TwigEnvironmentConfigurator;

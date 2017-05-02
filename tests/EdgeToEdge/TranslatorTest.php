@@ -6,7 +6,6 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 
 use Symfony\Component\Translation\Loader\ArrayLoader;
 use Symfony\Component\Translation\Translator;
-use Twig_Environment;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
 /**
