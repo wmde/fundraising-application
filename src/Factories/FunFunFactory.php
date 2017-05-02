@@ -29,6 +29,8 @@ use Twig_Extensions_Extension_Intl;
 use Twig_SimpleFunction;
 use WMDE\Fundraising\Frontend\DonationContext\DonationAcceptedEventHandler;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
+use WMDE\Fundraising\Frontend\Infrastructure\ErrorLoggingFileFetcher;
+use WMDE\Fundraising\Frontend\Infrastructure\WordListFileReader;
 use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\PiwikServerSideTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\ServerSideTracker;
@@ -74,7 +76,6 @@ use WMDE\Fundraising\Frontend\Infrastructure\LoggingMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\LoggingPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 use WMDE\Fundraising\Frontend\Infrastructure\OperatorMailer;
-use WMDE\Fundraising\Frontend\Infrastructure\PageRetrieverBasedStringList;
 use WMDE\Fundraising\Frontend\Infrastructure\PaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\ProfilerDataCollector;
@@ -154,8 +155,6 @@ use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
 use WMDE\Fundraising\ContentProvider\ContentProvider;
 use WMDE\Fundraising\Store\Factory as StoreFactory;
 use WMDE\Fundraising\Store\Installer;
-use WMDE\PageRetriever\LocalFilePageRetriever;
-use WMDE\PageRetriever\PageRetriever;
 
 /**
  * @licence GNU GPL v2+
@@ -593,15 +592,6 @@ class FunFunFactory {
 		return $this->pimple['guzzle_client'];
 	}
 
-	private function newLocalFilePageRetriever(): PageRetriever {
-		$pageRetriever = new LocalFilePageRetriever(
-			new SimpleFileFetcher(),
-			$this->getLogger()
-		);
-
-		return $this->addProfilingDecorator( $pageRetriever, 'PageRetriever' );
-	}
-
 	public function getLogger(): LoggerInterface {
 		return $this->pimple['logger'];
 	}
@@ -819,11 +809,14 @@ class FunFunFactory {
 	}
 
 	private function newTextPolicyValidator( string $policyName ): TextPolicyValidator {
-		$contentProvider = $this->newLocalFilePageRetriever();
+		$fetcher = new ErrorLoggingFileFetcher(
+			new SimpleFileFetcher(),
+			$this->getLogger()
+		);
 		$textPolicyConfig = $this->config['text-policies'][$policyName];
 		return new TextPolicyValidator(
-			new PageRetrieverBasedStringList( $contentProvider, $textPolicyConfig['badwords'] ?? '' ),
-			new PageRetrieverBasedStringList( $contentProvider, $textPolicyConfig['whitewords'] ?? '' )
+			new WordListFileReader( $fetcher, $textPolicyConfig['badwords'] ?? '' ),
+			new WordListFileReader( $fetcher, $textPolicyConfig['whitewords'] ?? '' )
 		);
 	}
 
