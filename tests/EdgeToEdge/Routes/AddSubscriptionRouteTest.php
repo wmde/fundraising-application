@@ -88,15 +88,13 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenInvalidDataAndNoContentType_routeDisplaysFormPage() {
-
 		$client = $this->createClient();
-		$client->request(
+
+		$crawler = $client->request(
 			'POST',
 			'/contact/subscribe',
 			$this->invalidFormInput
 		);
-
-		$crawler = $client->getCrawler();
 
 		$this->assertContains( 'text/html', $client->getResponse()->headers->get( 'Content-Type' ) );
 

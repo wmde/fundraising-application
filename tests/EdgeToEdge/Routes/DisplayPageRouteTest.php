@@ -97,9 +97,7 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 				] );
 				$factory->setContentProvider( $provider );
 
-				$client->request( 'GET', '/page/einhorns' );
-
-				$crawler = $client->getCrawler();
+				$crawler = $client->request( 'GET', '/page/einhorns' );
 
 				$this->assertCount( 1, $crawler->filter( 'header:contains("page header")' ) );
 				$this->assertCount( 1, $crawler->filter( 'main#main p:contains("Rosa plüsch einhorns tanzen auf Regenbogen")' ) );

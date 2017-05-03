@@ -42,7 +42,7 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 
 		$client = $this->createClient();
 
-		$client->request(
+		$crawler = $client->request(
 			'POST',
 			'/contact/get-in-touch',
 			[
@@ -55,8 +55,6 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 		);
 
 		$this->assertContains( 'text/html', $client->getResponse()->headers->get( 'Content-Type' ) );
-
-		$crawler = $client->getCrawler();
 
 		$this->assertCount(
 			3,
@@ -76,7 +74,7 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 
 		$client = $this->createClient();
 
-		$client->request(
+		$crawler = $client->request(
 			'GET',
 			'/contact/get-in-touch'
 		);
@@ -84,7 +82,7 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'text/html', $client->getResponse()->headers->get( 'Content-Type' ) );
 		$this->assertCount(
 			0,
-			$client->getCrawler()->filter( 'span.form-error' )
+			$crawler->filter( 'span.form-error' )
 		);
 	}
 

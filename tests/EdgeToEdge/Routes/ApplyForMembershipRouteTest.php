@@ -27,9 +27,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	public function testGivenGetRequestMembership_formIsShown() {
 		$client = $this->createClient();
 
-		$client->request( 'GET', 'apply-for-membership' );
-
-		$crawler = $client->getCrawler();
+		$crawler = $client->request( 'GET', 'apply-for-membership' );
 
 		$this->assertCount(
 			1,
@@ -44,9 +42,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	public function testGivenGetRequestSustainingMembership_formIsShown() {
 		$client = $this->createClient();
 
-		$client->request( 'GET', 'apply-for-membership', ['type' => 'sustaining'] );
-
-		$crawler = $client->getCrawler();
+		$crawler = $client->request( 'GET', 'apply-for-membership', ['type' => 'sustaining'] );
 
 		$this->assertCount(
 			1,
@@ -132,7 +128,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		$httpParameters['membership_fee'] = '0';
 		$httpParameters['showMembershipTypeOption'] = 'true';
 
-		$client->request(
+		$crawler = $client->request(
 			'POST',
 			'apply-for-membership',
 			$httpParameters
@@ -140,7 +136,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 		$this->assertCount(
 			1,
-			$client->getCrawler()->filter( 'input[type="hidden"][name="showMembershipTypeOption"][value="true"]' )
+			$crawler->filter( 'input[type="hidden"][name="showMembershipTypeOption"][value="true"]' )
 		);
 	}
 
