@@ -17,18 +17,13 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  * @author Kai Nissen < kai.nissen@wikimedia.de >
+ *
+ * @requires extension konto_check
  */
 class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	const FIXED_TOKEN = 'fixed_token';
 	const FIXED_TIMESTAMP = '2020-12-01 20:12:01';
-
-	public function setUp() {
-		if ( !function_exists( 'lut_init' ) ) {
-			$this->markTestSkipped( 'The konto_check needs to be installed!' );
-		}
-		parent::setUp();
-	}
 
 	public function testGivenGetRequestMembership_formIsShown() {
 		$this->createAppEnvironment(

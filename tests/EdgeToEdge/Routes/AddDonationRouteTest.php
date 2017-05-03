@@ -17,17 +17,12 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
+ *
+ * @requires extension konto_check
  */
 class AddDonationRouteTest extends WebRouteTestCase {
 
 	const SOME_TOKEN = 'SomeToken';
-
-	public function setUp() {
-		if ( !function_exists( 'lut_init' ) ) {
-			$this->markTestSkipped( 'The konto_check needs to be installed!' );
-		}
-		parent::setUp();
-	}
 
 	public function testGivenValidRequest_donationGetsPersisted() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
