@@ -42,11 +42,6 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 		'wikilogin' => true
 	];
 
-	// @codingStandardsIgnoreStart
-	protected function onTestEnvironmentCreated( FunFunFactory $factory, array $config ) {
-		// @codingStandardsIgnoreEnd
-	}
-
 	public function testValidSubscriptionRequestGetsPersisted() {
 
 		$this->createAppEnvironment(

@@ -17,11 +17,6 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
  */
 class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 
-	// @codingStandardsIgnoreStart
-	protected function onTestEnvironmentCreated( FunFunFactory $factory, array $config ) {
-		// @codingStandardsIgnoreEnd
-	}
-
 	private function newSubscriptionAddress(): Address {
 		$address = new Address();
 		$address->setSalutation( 'Herr' );

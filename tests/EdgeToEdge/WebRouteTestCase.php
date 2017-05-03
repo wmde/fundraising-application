@@ -34,8 +34,6 @@ abstract class WebRouteTestCase extends TestCase {
 	public function createClient( array $config = [], callable $onEnvironmentCreated = null, bool $debug = true ): Client {
 		$testEnvironment = TestEnvironment::newInstance( $config );
 
-		$this->onTestEnvironmentCreated( $testEnvironment->getFactory(), $testEnvironment->getConfig() );
-
 		if ( is_callable( $onEnvironmentCreated ) ) {
 			call_user_func( $onEnvironmentCreated, $testEnvironment->getFactory(), $testEnvironment->getConfig() );
 		}
@@ -56,8 +54,6 @@ abstract class WebRouteTestCase extends TestCase {
 	 */
 	public function createEnvironment( array $config, callable $onEnvironmentCreated ) {
 		$testEnvironment = TestEnvironment::newInstance( $config );
-
-		$this->onTestEnvironmentCreated( $testEnvironment->getFactory(), $testEnvironment->getConfig() );
 
 		$client = new Client( $this->createApplication(
 			$testEnvironment->getFactory(),
@@ -86,8 +82,6 @@ abstract class WebRouteTestCase extends TestCase {
 	public function createAppEnvironment( array $config, callable $onEnvironmentCreated ) {
 		$testEnvironment = TestEnvironment::newInstance( $config );
 
-		$this->onTestEnvironmentCreated( $testEnvironment->getFactory(), $testEnvironment->getConfig() );
-
 		$application = $this->createApplication( $testEnvironment->getFactory(), self::ENABLE_DEBUG );
 		$client = new Client( $application );
 
@@ -97,17 +91,6 @@ abstract class WebRouteTestCase extends TestCase {
 			$testEnvironment->getFactory(),
 			$application
 		);
-	}
-
-	/**
-	 * Template method. No need to call the definition here from overriding methods as
-	 * this one will always be empty.
-	 *
-	 * @param FunFunFactory $factory
-	 * @param array $config
-	 */
-	protected function onTestEnvironmentCreated( FunFunFactory $factory, array $config ) {
-		// No-op
 	}
 
 	// @codingStandardsIgnoreStart

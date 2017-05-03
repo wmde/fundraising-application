@@ -17,11 +17,6 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingEmailValidator;
  */
 class GetInTouchRouteTest extends WebRouteTestCase {
 
-	// @codingStandardsIgnoreStart
-	protected function onTestEnvironmentCreated( FunFunFactory $factory, array $config ) {
-		// @codingStandardsIgnoreEnd
-	}
-
 	public function testGivenValidRequest_contactRequestIsProperlyProcessed() {
 		$client = $this->createClient( [], function ( FunFunFactory $factory ) {
 			$factory->setEmailValidator( new SucceedingEmailValidator() );

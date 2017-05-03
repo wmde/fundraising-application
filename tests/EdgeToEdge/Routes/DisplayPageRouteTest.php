@@ -19,14 +19,6 @@ use WMDE\Fundraising\ContentProvider\ContentProvider;
  */
 class DisplayPageRouteTest extends WebRouteTestCase {
 
-	private $notFoundMessage;
-
-	// @codingStandardsIgnoreStart
-	protected function onTestEnvironmentCreated( FunFunFactory $factory, array $config ) {
-		// @codingStandardsIgnoreEnd
-		$this->notFoundMessage = $factory->getTranslator()->trans( 'page_not_found' );
-	}
-
 	public function testWhenPageDoesNotExist_missingResponseIsReturnedAndHasHeaderAndFooter() {
 		$client = $this->createClient(
 			[],
@@ -44,7 +36,7 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 		$content = $client->getResponse()->getContent();
 
 		$this->assertContains(
-			$this->notFoundMessage,
+			'page_not_found',
 			$content
 		);
 
