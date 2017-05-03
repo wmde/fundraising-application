@@ -1,11 +1,10 @@
 <?php
 
-declare( strict_types = 1 );
+declare( strict_types=1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use org\bovigo\vfs\vfsStream;
-use Silex\Application;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageNotFoundException;
@@ -26,7 +25,7 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 				$pageSelector = $this->createMock( PageSelector::class );
 				$pageSelector
 					->method( 'getPageId' )
-					->with('kittens')
+					->with( 'kittens' )
 					->willThrowException( new PageNotFoundException() );
 				$factory->setContentPagePageSelector( $pageSelector );
 			}
@@ -72,17 +71,14 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenRequestedContentPageExists_itGetsEmbeddedAndHasHeaderAndFooter() {
-		$this->createAppEnvironment(
-			[ ],
-			function ( Client $client, FunFunFactory $factory, Application $app ) {
-
-				// @todo Make this the default behaviour of WebRouteTestCase::createAppEnvironment()
-				$factory->setTwigEnvironment( $app['twig'] );
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ) {
 
 				$pageSelector = $this->createMock( PageSelector::class );
 				$pageSelector
 					->method( 'getPageId' )
-					->willReturnArgument(0)
+					->willReturnArgument( 0 )
 					->with( 'einhorns' )
 					->willReturn( 'unicorns' );
 				$factory->setContentPagePageSelector( $pageSelector );
@@ -103,28 +99,12 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 
 				$client->request( 'GET', '/page/einhorns' );
 
-				$content = $client->getResponse()->getContent();
+				$crawler = $client->getCrawler();
 
-				$this->assertContains(
-					'<p>Rosa plüsch einhorns tanzen auf Regenbogen</p>',
-					$content
-				);
-
-				// Test header, footer and noJS feature of the base template
-				$this->assertContains(
-					'page header',
-					$content
-				);
-
-				$this->assertContains(
-					'page footer',
-					$content
-				);
-
-				$this->assertContains(
-					'Y u no JavaScript!',
-					$content
-				);
+				$this->assertCount( 1, $crawler->filter( 'header:contains("page header")' ) );
+				$this->assertCount( 1, $crawler->filter( 'main#main p:contains("Rosa plüsch einhorns tanzen auf Regenbogen")' ) );
+				$this->assertCount( 1, $crawler->filter( 'footer:contains("page footer")' ) );
+				$this->assertCount( 1, $crawler->filter( 'div#notice-wrapper:contains("Y u no JavaScript!")' ) );
 			}
 		);
 	}

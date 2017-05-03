@@ -1,10 +1,9 @@
 <?php
 
-declare( strict_types = 1 );
+declare( strict_types=1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
-use Silex\Application;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\Address;
 use WMDE\Fundraising\Entities\Subscription;
@@ -27,32 +26,23 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenAnUnconfirmedSubscriptionRequest_successPageIsDisplayed() {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$subscription = new Subscription();
+			$subscription->setConfirmationCode( 'deadbeef' );
+			$subscription->setEmail( 'tester@example.com' );
+			$subscription->setAddress( $this->newSubscriptionAddress() );
 
-		$this->createAppEnvironment(
-			[ ],
-			function ( Client $client, FunFunFactory $factory, Application $app ) {
+			$factory->getSubscriptionRepository()->storeSubscription( $subscription );
 
-				// @todo Make this the default behaviour of WebRouteTestCase::createAppEnvironment()
-				$factory->setTwigEnvironment( $app['twig'] );
+			$client->request(
+				'GET',
+				'/contact/confirm-subscription/deadbeef'
+			);
+			$response = $client->getResponse();
 
-				$subscription = new Subscription();
-				$subscription->setConfirmationCode( 'deadbeef' );
-				$subscription->setEmail( 'tester@example.com' );
-				$subscription->setAddress( $this->newSubscriptionAddress() );
-
-				$factory->getSubscriptionRepository()->storeSubscription( $subscription );
-
-				$client->request(
-					'GET',
-					'/contact/confirm-subscription/deadbeef'
-				);
-				$response = $client->getResponse();
-
-				$this->assertSame( 200, $response->getStatusCode() );
-				$this->assertContains( 'Subscription confirmed.', $response->getContent() );
-			}
-		);
-
+			$this->assertSame( 200, $response->getStatusCode() );
+			$this->assertContains( 'Subscription confirmed.', $response->getContent() );
+		} );
 	}
 
 	public function testGivenANonHexadecimalConfirmationCode_confirmationPageIsNotFound() {
@@ -80,7 +70,7 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenAConfirmedSubscriptionRequest_successPageIsDisplayed() {
-		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$subscription = new Subscription();
 			$subscription->setConfirmationCode( 'deadbeef' );
 			$subscription->setEmail( 'tester@example.com' );

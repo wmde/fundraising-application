@@ -1,6 +1,6 @@
 <?php
 
-declare( strict_types = 1 );
+declare( strict_types=1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 
@@ -94,7 +94,7 @@ abstract class WebRouteTestCase extends TestCase {
 	}
 
 	// @codingStandardsIgnoreStart
-	private function createApplication( FunFunFactory $ffFactory, bool $debug ) : Application {
+	private function createApplication( FunFunFactory $ffFactory, bool $debug ): Application {
 		// @codingStandardsIgnoreEnd
 		$app = require __DIR__ . ' /../../app/bootstrap.php';
 
@@ -103,6 +103,8 @@ abstract class WebRouteTestCase extends TestCase {
 			$app['session.test'] = true;
 			unset( $app['exception_handler'] );
 		}
+
+		$ffFactory->setTwigEnvironment( $app['twig'] );
 
 		return $app;
 	}
@@ -156,13 +158,13 @@ abstract class WebRouteTestCase extends TestCase {
 		$this->assertArrayHasKey( 'message', $responseData );
 	}
 
-	protected function assertInitialFormValues( array $expected, Response $response ): void {
+	protected function assertInitialFormValues( array $expected, Client $client ): void {
+		$initialFormValues = $client->getCrawler()->filter( 'script[data-initial-form-values]' );
 		$this->assertGreaterThan(
 			0,
-			preg_match( '/data-initial-form-values="(.+?)"/', $response->getContent(), $match ),
-			'data-initial-form-values found in template'
+			$initialFormValues->count()
 		);
-		$json = html_entity_decode( $match[1] );
+		$json = $initialFormValues->attr( 'data-initial-form-values' );
 		$data = json_decode( $json, true );
 		$this->assertEquals( $expected, $data );
 	}
