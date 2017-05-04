@@ -111,4 +111,13 @@
     </rule>
 
     <rule ref="Zend.Files.ClosingTag" />
+
+    <!-- Using 3rd party sniff while Squiz isn't there, yet. https://github.com/squizlabs/PHP_CodeSniffer/issues/911 -->
+    <rule ref="./vendor/slevomat/coding-standard/SlevomatCodingStandard/Sniffs/TypeHints/DeclareStrictTypesSniff.php" />
+    <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
+        <properties>
+            <property name="newlinesCountBetweenOpenTagAndDeclare" value="2" />
+            <property name="spacesCountAroundEqualsSign" value="1" />
+        </properties>
+    </rule>
 </ruleset>

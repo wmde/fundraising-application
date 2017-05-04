@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace WMDE\Fundraising\Frontend\Infrastructure;
 
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
