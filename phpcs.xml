@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 	- https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml
-	- https://github.com/squizlabs/PHP_CodeSniffer/tree/master/CodeSniffer/Standards
+	- https://github.com/squizlabs/PHP_CodeSniffer/tree/master/src/Standards
 -->
 <ruleset name="FunFunFundraisingFrontend">
     <!--<rule ref="vendor/mediawiki/mediawiki-codesniffer/MediaWiki/Sniffs/WhiteSpace">-->
