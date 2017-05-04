@@ -24,6 +24,7 @@ class ValidateConfigCommand extends Command {
 	const NAME = 'validate-config';
 	const DEFAULT_SCHEMA = __DIR__ . '/../../app/config/schema.json';
 	const ERROR_RETURN_CODE = 1;
+	const OK_RETURN_CODE = 0;
 
 	protected function configure(): void {
 		$this->setName( self::NAME )
@@ -64,7 +65,7 @@ class ValidateConfigCommand extends Command {
 		);
 
 		if ( $validator->passes() ) {
-			return null;
+			return self::OK_RETURN_CODE;
 		}
 
 		$renderer = new ValidationErrorRenderer( $schema );
