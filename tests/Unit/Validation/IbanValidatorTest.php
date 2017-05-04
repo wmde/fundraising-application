@@ -14,14 +14,10 @@ use WMDE\Fundraising\Frontend\Validation\IbanValidator;
  *
  * @licence GNU GPL v2+
  * @author Leszek Manicki <leszek.manicki@wikimedia.de>
+ *
+ * @requires extension konto_check
  */
 class IbanValidatorTest extends \PHPUnit\Framework\TestCase {
-
-	public function setUp() {
-		if ( !function_exists( 'lut_init' ) ) {
-			$this->markTestSkipped( 'The konto_check library needs to be installed' );
-		}
-	}
 
 	private function newValidator( array $bannedIbans = [] ) {
 		return new IbanValidator( new BankDataConverter( 'res/blz.lut2f' ), $bannedIbans );

@@ -11,15 +11,10 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
  *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
+ *
+ * @requires extension konto_check
  */
 class CheckIbanRouteTest extends WebRouteTestCase {
-
-	public function setUp() {
-		if ( !function_exists( 'lut_init' ) ) {
-			$this->markTestSkipped( 'The konto_check needs to be installed!' );
-		}
-		parent::setUp();
-	}
 
 	public function testGivenInvalidBankAccountData_failureResponseIsReturned() {
 		$client = $this->createClient();

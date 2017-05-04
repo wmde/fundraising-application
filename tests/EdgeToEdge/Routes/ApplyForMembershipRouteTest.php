@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
-use Silex\Application;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\MembershipApplication;
@@ -17,66 +16,41 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  * @author Kai Nissen < kai.nissen@wikimedia.de >
+ *
+ * @requires extension konto_check
  */
 class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	const FIXED_TOKEN = 'fixed_token';
 	const FIXED_TIMESTAMP = '2020-12-01 20:12:01';
 
-	public function setUp() {
-		if ( !function_exists( 'lut_init' ) ) {
-			$this->markTestSkipped( 'The konto_check needs to be installed!' );
-		}
-		parent::setUp();
-	}
-
 	public function testGivenGetRequestMembership_formIsShown() {
-		$this->createAppEnvironment(
-			[ ],
-			function ( Client $client, FunFunFactory $factory, Application $app ) {
+		$client = $this->createClient();
 
-				// @todo Make this the default behaviour of WebRouteTestCase::createAppEnvironment()
-				$factory->setTwigEnvironment( $app['twig'] );
+		$crawler = $client->request( 'GET', 'apply-for-membership' );
 
-				$client->request( 'GET', 'apply-for-membership' );
-
-				$content = $client->getResponse()->getContent();
-
-				$this->assertRegExp(
-					'/<form name="memForm" id="memForm" method="POST" action="\/apply-for-membership">/',
-					$content
-				);
-
-				$this->assertContains(
-					'<input type="hidden" name="showMembershipTypeOption" value="true" />',
-					$content
-				);
-			}
+		$this->assertCount(
+			1,
+			$crawler->filter( 'form#memForm[method="POST"][action="/apply-for-membership"]' )
+		);
+		$this->assertCount(
+			1,
+			$crawler->filter( 'input[name="showMembershipTypeOption"][type="hidden"][value="true"]' )
 		);
 	}
 
 	public function testGivenGetRequestSustainingMembership_formIsShown() {
-		$this->createAppEnvironment(
-			[ ],
-			function ( Client $client, FunFunFactory $factory, Application $app ) {
+		$client = $this->createClient();
 
-				// @todo Make this the default behaviour of WebRouteTestCase::createAppEnvironment()
-				$factory->setTwigEnvironment( $app['twig'] );
+		$crawler = $client->request( 'GET', 'apply-for-membership', ['type' => 'sustaining'] );
 
-				$client->request( 'GET', 'apply-for-membership', [ 'type' => 'sustaining' ] );
-
-				$content = $client->getResponse()->getContent();
-
-				$this->assertRegExp(
-					'/<form name="memForm" id="memForm" method="POST" action="\/apply-for-membership">/',
-					$content
-				);
-
-				$this->assertContains(
-					'<input type="hidden" name="showMembershipTypeOption" value="false" />',
-					$content
-				);
-			}
+		$this->assertCount(
+			1,
+			$crawler->filter( 'form#memForm[method="POST"][action="/apply-for-membership"]' )
+		);
+		$this->assertCount(
+			1,
+			$crawler->filter( 'input[name="showMembershipTypeOption"][type="hidden"][value="false"]' )
 		);
 	}
 
@@ -116,68 +90,53 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenRequestWithInsufficientAmount_failureResponseIsReturned() {
-		$this->createAppEnvironment(
-			[ ],
-			function ( Client $client, FunFunFactory $factory, Application $app ) {
+		$client = $this->createClient();
 
-				// @todo Make this the default behaviour of WebRouteTestCase::createAppEnvironment()
-				$factory->setTwigEnvironment( $app['twig'] );
+		$httpParameters = $this->newValidHttpParameters();
+		$httpParameters['membership_fee'] = '1.00'; // TODO: change to localized
 
-				$httpParameters = $this->newValidHttpParameters();
-				$httpParameters['membership_fee'] = '1.00'; // TODO: change to localized
+		$client->request( 'POST', 'apply-for-membership', $httpParameters );
 
-
-				$client->request( 'POST', 'apply-for-membership', $httpParameters );
-
-				$this->assertInitialFormValues(
-					[
-						'addressType' => 'person',
-						'salutation' => 'Herr',
-						'title' => '',
-						'firstName' => 'Potato',
-						'lastName' => 'The Great',
-						'companyName' => '',
-						'street' => 'Nyan street',
-						'postcode' => '1234',
-						'city' => 'Berlin',
-						'country' => 'DE',
-						'email' => 'jeroendedauw@gmail.com',
-						'iban' => 'DE12500105170648489890',
-						'bic' => 'INGDDEFFXXX',
-						'accountNumber' => '0648489890',
-						'bankCode' => '50010517',
-						'bankname' => 'ING-DiBa',
-						'paymentType' => 'BEZ'
-					],
-					$client->getResponse()
-				);
-			}
+		$this->assertInitialFormValues(
+			[
+				'addressType' => 'person',
+				'salutation' => 'Herr',
+				'title' => '',
+				'firstName' => 'Potato',
+				'lastName' => 'The Great',
+				'companyName' => '',
+				'street' => 'Nyan street',
+				'postcode' => '1234',
+				'city' => 'Berlin',
+				'country' => 'DE',
+				'email' => 'jeroendedauw@gmail.com',
+				'iban' => 'DE12500105170648489890',
+				'bic' => 'INGDDEFFXXX',
+				'accountNumber' => '0648489890',
+				'bankCode' => '50010517',
+				'bankname' => 'ING-DiBa',
+				'paymentType' => 'BEZ'
+			],
+			$client
 		);
 	}
 
 	public function testFlagForShowingMembershipTypeOptionGetsPassedAround() {
-		$this->createAppEnvironment(
-			[ ],
-			function ( Client $client, FunFunFactory $factory, Application $app ) {
+		$client = $this->createClient();
 
-				// @todo Make this the default behaviour of WebRouteTestCase::createAppEnvironment()
-				$factory->setTwigEnvironment( $app['twig'] );
+		$httpParameters = $this->newValidHttpParameters();
+		$httpParameters['membership_fee'] = '0';
+		$httpParameters['showMembershipTypeOption'] = 'true';
 
-				$httpParameters = $this->newValidHttpParameters();
-				$httpParameters['membership_fee'] = '0';
-				$httpParameters['showMembershipTypeOption'] = 'true';
+		$crawler = $client->request(
+			'POST',
+			'apply-for-membership',
+			$httpParameters
+		);
 
-				$client->request(
-					'POST',
-					'apply-for-membership',
-					$httpParameters
-				);
-
-				$this->assertContains(
-					'<input type="hidden" name="showMembershipTypeOption" value="true" />',
-					$client->getResponse()->getContent()
-				);
-			}
+		$this->assertCount(
+			1,
+			$crawler->filter( 'input[type="hidden"][name="showMembershipTypeOption"][value="true"]' )
 		);
 	}
 
@@ -219,64 +178,58 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_requestIsRedirected() {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$client = $this->createClient();
+		$client->followRedirects( false );
 
-			$client->followRedirects( false );
+		$client->request(
+			'POST',
+			'apply-for-membership',
+			$this->newValidHttpParameters()
+		);
 
-			$client->request(
-				'POST',
-				'apply-for-membership',
-				$this->newValidHttpParameters()
-			);
-
-			$response = $client->getResponse();
-			$this->assertTrue( $response->isRedirect() );
-			$this->assertContains( 'show-membership-confirmation', $response->headers->get( 'Location' ) );
-		} );
+		$response = $client->getResponse();
+		$this->assertTrue( $response->isRedirect() );
+		$this->assertContains( 'show-membership-confirmation', $response->headers->get( 'Location' ) );
 	}
 
 	public function testWhenApplicationGetsPersisted_timestampIsStoredInCookie() {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$client = $this->createClient();
+		$client->request(
+			'POST',
+			'/apply-for-membership',
+			$this->newValidHttpParameters()
+		);
 
-			$client->request(
-				'POST',
-				'/apply-for-membership',
-				$this->newValidHttpParameters()
-			);
-
-			$cookie = $client->getCookieJar()->get( 'memapp_timestamp' );
-			$this->assertNotNull( $cookie );
-			$donationTimestamp = new \DateTime( $cookie->getValue() );
-			$this->assertEquals( time(), $donationTimestamp->getTimestamp(), 'Timestamp should be not more than 5 seconds old', 5.0 );
-		} );
+		$cookie = $client->getCookieJar()->get( 'memapp_timestamp' );
+		$this->assertNotNull( $cookie );
+		$donationTimestamp = new \DateTime( $cookie->getValue() );
+		$this->assertEquals( time(), $donationTimestamp->getTimestamp(), 'Timestamp should be not more than 5 seconds old', 5.0 );
 	}
 
 	public function testWhenMultipleMembershipFormSubmissions_requestGetsRejected() {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$client->getCookieJar()->set( new Cookie( 'memapp_timestamp', $this->getPastTimestamp() ) );
+		$client = $this->createClient();
+		$client->getCookieJar()->set( new Cookie( 'memapp_timestamp', $this->getPastTimestamp() ) );
 
-			$client->request(
-				'POST',
-				'/apply-for-membership',
-				$this->newValidHttpParameters()
-			);
+		$client->request(
+			'POST',
+			'/apply-for-membership',
+			$this->newValidHttpParameters()
+		);
 
-			$this->assertContains( 'membership_application_rejected_limit', $client->getResponse()->getContent() );
-		} );
+		$this->assertContains( 'membership_application_rejected_limit', $client->getResponse()->getContent() );
 	}
 
 	public function testWhenMultipleMembershipInAccordanceToTimeLimit_isNotRejected() {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$client->getCookieJar()->set( new Cookie( 'memapp_timestamp', $this->getPastTimestamp( 'PT12M' ) ) );
+		$client = $this->createClient();
+		$client->getCookieJar()->set( new Cookie( 'memapp_timestamp', $this->getPastTimestamp( 'PT12M' ) ) );
 
-			$client->request(
-				'POST',
-				'/apply-for-membership',
-				$this->newValidHttpParameters()
-			);
+		$client->request(
+			'POST',
+			'/apply-for-membership',
+			$this->newValidHttpParameters()
+		);
 
-			$this->assertNotContains( 'membership_application_rejected_limit', $client->getResponse()->getContent() );
-		} );
+		$this->assertNotContains( 'membership_application_rejected_limit', $client->getResponse()->getContent() );
 	}
 
 	private function getPastTimestamp( string $interval = 'PT10S' ) {
@@ -355,20 +308,18 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequestUsingPayPal_requestIsRedirectedToPayPalUrl() {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$client = $this->createClient();
+		$client->followRedirects( false );
 
-			$client->followRedirects( false );
+		$client->request(
+			'POST',
+			'apply-for-membership',
+			$this->newValidHttpParametersUsingPayPal()
+		);
 
-			$client->request(
-				'POST',
-				'apply-for-membership',
-				$this->newValidHttpParametersUsingPayPal()
-			);
-
-			$response = $client->getResponse();
-			$this->assertTrue( $response->isRedirect() );
-			$this->assertContains( 'sandbox.paypal.com', $response->headers->get( 'Location' ) );
-		} );
+		$response = $client->getResponse();
+		$this->assertTrue( $response->isRedirect() );
+		$this->assertContains( 'sandbox.paypal.com', $response->headers->get( 'Location' ) );
 	}
 
 	public function testCommasInStreetNamesAreRemoved() {

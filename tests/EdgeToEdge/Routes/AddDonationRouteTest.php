@@ -17,17 +17,12 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
+ *
+ * @requires extension konto_check
  */
 class AddDonationRouteTest extends WebRouteTestCase {
 
 	const SOME_TOKEN = 'SomeToken';
-
-	public function setUp() {
-		if ( !function_exists( 'lut_init' ) ) {
-			$this->markTestSkipped( 'The konto_check needs to be installed!' );
-		}
-		parent::setUp();
-	}
 
 	public function testGivenValidRequest_donationGetsPersisted() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
@@ -46,57 +41,49 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenDonationGetsPersisted_timestampIsStoredInCookie() {
-		$this->createAppEnvironment( [], function ( Client $client, FunFunFactory $factory, Application $app ) {
+		$client = $this->createClient();
+		$client->followRedirects( true );
+		$client->request(
+			'POST',
+			'/donation/add',
+			$this->newValidFormInput()
+		);
 
-			// @todo Make this the default behaviour of WebRouteTestCase::createAppEnvironment()
-			$factory->setTwigEnvironment( $app['twig'] );
-
-			$client->followRedirects( true );
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newValidFormInput()
-			);
-
-			$cookie = $client->getCookieJar()->get( 'donation_timestamp' );
-			$this->assertNotNull( $cookie );
-			$donationTimestamp = new \DateTime( $cookie->getValue() );
-			$this->assertEquals( time(), $donationTimestamp->getTimestamp(), 'Timestamp should be not more than 5 seconds old', 5.0 );
-
-		} );
+		$cookie = $client->getCookieJar()->get( 'donation_timestamp' );
+		$this->assertNotNull( $cookie );
+		$donationTimestamp = new \DateTime( $cookie->getValue() );
+		$this->assertEquals( time(), $donationTimestamp->getTimestamp(), 'Timestamp should be not more than 5 seconds old', 5.0 );
 	}
 
 	public function testWhenMultipleDonationFormSubmissions_requestGetsRejected() {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$client->getCookieJar()->set( new Cookie( 'donation_timestamp', $this->getPastTimestamp() ) );
+		$client = $this->createClient();
+		$client->getCookieJar()->set( new Cookie( 'donation_timestamp', $this->getPastTimestamp() ) );
 
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newValidFormInput()
-			);
+		$client->request(
+			'POST',
+			'/donation/add',
+			$this->newValidFormInput()
+		);
 
-			$this->assertContains( 'donation_rejected_limit', $client->getResponse()->getContent() );
-		} );
+		$this->assertContains( 'donation_rejected_limit', $client->getResponse()->getContent() );
 	}
 
 	public function testWhenMultipleDonationsInAccordanceToTimeLimit_requestIsNotRejected() {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$client->getCookieJar()->set(
-				new Cookie(
-					'donation_timestamp',
-					$this->getPastTimestamp( 'PT35M' )
-				)
-			);
+		$client = $this->createClient();
+		$client->getCookieJar()->set(
+			new Cookie(
+				'donation_timestamp',
+				$this->getPastTimestamp( 'PT35M' )
+			)
+		);
 
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newValidFormInput()
-			);
+		$client->request(
+			'POST',
+			'/donation/add',
+			$this->newValidFormInput()
+		);
 
-			$this->assertNotContains( 'donation_rejected_limit', $client->getResponse()->getContent() );
-		} );
+		$this->assertNotContains( 'donation_rejected_limit', $client->getResponse()->getContent() );
 	}
 
 	private function getPastTimestamp( string $interval = 'PT10S' ) {
@@ -171,28 +158,26 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_confirmationPageContainsEnteredData() {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$client = $this->createClient();
+		$client->request(
+			'POST',
+			'/donation/add',
+			$this->newValidFormInput()
+		);
+		$client->followRedirect();
 
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newValidFormInput()
-			);
-			$client->followRedirect();
+		$response = $client->getResponse()->getContent();
 
-			$response = $client->getResponse()->getContent();
-
-			$this->assertContains( '5,51 €', $response );
-			$this->assertContains( 'donation.interval: 0', $response );
-			$this->assertContains( 'DE12500105170648489890', $response );
-			$this->assertContains( 'INGDDEFFXXX', $response );
-			$this->assertContains( 'ING-DiBa', $response );
-			$this->assertContains( 'Prof. Dr. Karla Kennichnich', $response );
-			$this->assertContains( 'Lehmgasse 12', $response );
-			$this->assertContains( '<span id="confirm-postcode">12345</span> <span id="confirm-city">Einort</span>', $response );
-			$this->assertContains( 'karla@kennichnich.de', $response );
-			$this->assertContains( 'send-info', $response );
-		} );
+		$this->assertContains( '5,51 €', $response );
+		$this->assertContains( 'donation.interval: 0', $response );
+		$this->assertContains( 'DE12500105170648489890', $response );
+		$this->assertContains( 'INGDDEFFXXX', $response );
+		$this->assertContains( 'ING-DiBa', $response );
+		$this->assertContains( 'Prof. Dr. Karla Kennichnich', $response );
+		$this->assertContains( 'Lehmgasse 12', $response );
+		$this->assertContains( '<span id="confirm-postcode">12345</span> <span id="confirm-city">Einort</span>', $response );
+		$this->assertContains( 'karla@kennichnich.de', $response );
+		$this->assertContains( 'send-info', $response );
 	}
 
 	public function testGivenValidBankTransferRequest_donationGetsPersisted() {
@@ -323,19 +308,18 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidPayPalData_redirectsToPayPal() {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$client->followRedirects( false );
+		$client = $this->createClient();
+		$client->followRedirects( false );
 
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newValidPayPalInput()
-			);
+		$client->request(
+			'POST',
+			'/donation/add',
+			$this->newValidPayPalInput()
+		);
 
-			$response = $client->getResponse();
-			$this->assertSame( 302, $response->getStatusCode() );
-			$this->assertContains( 'sandbox.paypal.com', $response->getContent() );
-		} );
+		$response = $client->getResponse();
+		$this->assertSame( 302, $response->getStatusCode() );
+		$this->assertContains( 'sandbox.paypal.com', $response->getContent() );
 	}
 
 	private function newValidPayPalInput() {
@@ -348,19 +332,17 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidCreditCardData_showsIframeEmbeddingPage() {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$client = $this->createClient();
+		$client->request(
+			'POST',
+			'/donation/add',
+			$this->newValidCreditCardInput()
+		);
 
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newValidCreditCardInput()
-			);
-
-			$response = $client->getResponse();
-			$this->assertSame( 200, $response->getStatusCode() );
-			$this->assertContains( 'paytext_cc 3 12,34 € per Kreditkarte.', $response->getContent() );
-			$this->assertContains( 'thatother.paymentprovider.com', $response->getContent() );
-		} );
+		$response = $client->getResponse();
+		$this->assertSame( 200, $response->getStatusCode() );
+		$this->assertContains( 'paytext_cc 3 12,34 € per Kreditkarte.', $response->getContent() );
+		$this->assertContains( 'thatother.paymentprovider.com', $response->getContent() );
 	}
 
 	private function newValidCreditCardInput() {
@@ -373,71 +355,66 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenInvalidRequest_formIsReloadedAndPrefilled() {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$client = $this->createClient();
+		$client->request(
+			'POST',
+			'/donation/add',
+			$this->newInvalidFormInput()
+		);
 
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newInvalidFormInput()
-			);
+		$response = $client->getResponse()->getContent();
 
-			$response = $client->getResponse()->getContent();
-
-			$this->assertContains( 'Amount: 0,00', $response );
-			$this->assertContains( 'Payment type: BEZ', $response );
-			$this->assertContains( 'Interval: 3', $response );
-			$this->assertContains( 'IBAN: DE12500105170648489890', $response );
-			$this->assertContains( 'BIC: INGDDEFFXXX', $response );
-			$this->assertContains( 'Bank name: ING-DiBa', $response );
-			$this->assertContains( 'Address type: person', $response );
-			$this->assertContains( 'Salutation: Frau', $response );
-			$this->assertContains( 'Title: Prof. Dr.', $response );
-			$this->assertContains( 'Company: ', $response );
-			$this->assertContains( 'First name: Karla', $response );
-			$this->assertContains( 'Last name: Kennichnich', $response );
-			$this->assertContains( 'Street: Lehmgasse 12', $response );
-			$this->assertContains( 'Postal code: 12345', $response );
-			$this->assertContains( 'City: Einort', $response );
-			$this->assertContains( 'Country code: DE', $response );
-			$this->assertContains( 'Email address: karla@kennichnich.de', $response );
-		} );
+		$this->assertContains( 'Amount: 0,00', $response );
+		$this->assertContains( 'Payment type: BEZ', $response );
+		$this->assertContains( 'Interval: 3', $response );
+		$this->assertContains( 'IBAN: DE12500105170648489890', $response );
+		$this->assertContains( 'BIC: INGDDEFFXXX', $response );
+		$this->assertContains( 'Bank name: ING-DiBa', $response );
+		$this->assertContains( 'Address type: person', $response );
+		$this->assertContains( 'Salutation: Frau', $response );
+		$this->assertContains( 'Title: Prof. Dr.', $response );
+		$this->assertContains( 'Company: ', $response );
+		$this->assertContains( 'First name: Karla', $response );
+		$this->assertContains( 'Last name: Kennichnich', $response );
+		$this->assertContains( 'Street: Lehmgasse 12', $response );
+		$this->assertContains( 'Postal code: 12345', $response );
+		$this->assertContains( 'City: Einort', $response );
+		$this->assertContains( 'Country code: DE', $response );
+		$this->assertContains( 'Email address: karla@kennichnich.de', $response );
 	}
 
 	public function testGivenInvalidRequest_formStillContainsBannerTrackingData() {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$client = $this->createClient();
+		$client->request(
+			'POST',
+			'/donation/add',
+			[
+				'impCount' => 12,
+				'bImpCount' => 3
+			]
+		);
 
-			$client->request(
-				'POST',
-				'/donation/add',
-				[
-					'impCount' => 12,
-					'bImpCount' => 3
-				]
-			);
+		$response = $client->getResponse()->getContent();
 
-			$response = $client->getResponse()->getContent();
-
-			$this->assertContains( 'Impression Count: 12', $response );
-			$this->assertContains( 'Banner Impression Count: 3', $response );
-		} );
+		$this->assertContains( 'Impression Count: 12', $response );
+		$this->assertContains( 'Banner Impression Count: 3', $response );
 	}
 
 	public function testGivenNegativeDonationAmount_formIsReloadedAndPrefilledWithZero() {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$client = $this->createClient();
 
-			$formValues = $this->newInvalidFormInput();
-			$formValues['betrag'] = '-5,00';
+		$formValues = $this->newInvalidFormInput();
+		$formValues['betrag'] = '-5,00';
 
-			$client->request(
-				'POST',
-				'/donation/add',
-				$formValues
-			);
+		$client->request(
+			'POST',
+			'/donation/add',
+			$formValues
+		);
 
-			$response = $client->getResponse()->getContent();
+		$response = $client->getResponse()->getContent();
 
-			$this->assertContains( 'Amount: 0,00', $response );
-		} );
+		$this->assertContains( 'Amount: 0,00', $response );
 	}
 
 	private function newInvalidFormInput() {
@@ -473,21 +450,19 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenInvalidAnonymousRequest_formIsReloadedAndPrefilled() {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$client = $this->createClient();
+		$client->request(
+			'POST',
+			'/donation/add',
+			$this->newAnonymousFormInput()
+		);
 
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newAnonymousFormInput()
-			);
+		$response = $client->getResponse()->getContent();
 
-			$response = $client->getResponse()->getContent();
-
-			$this->assertContains( 'Amount: 0', $response );
-			$this->assertContains( 'Payment type: UEB', $response );
-			$this->assertContains( 'Interval: 1', $response );
-			$this->assertContains( 'Value of field "amount" violates rule: Amount too low', $response );
-		} );
+		$this->assertContains( 'Amount: 0', $response );
+		$this->assertContains( 'Payment type: UEB', $response );
+		$this->assertContains( 'Interval: 1', $response );
+		$this->assertContains( 'Value of field "amount" violates rule: Amount too low', $response );
 	}
 
 	private function newAnonymousFormInput() {
@@ -661,7 +636,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 				'/donation/add',
 				$this->newValidMobilePayPalInput(),
 				[],
-				[ 'REMOTE_ADDR' => '10.1.2.3' ]
+				['REMOTE_ADDR' => '10.1.2.3']
 			);
 
 			$client->getResponse();
@@ -695,7 +670,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 				'/donation/add',
 				array_merge(
 					$this->newValidCreditCardInput(),
-					[ 'mbt' => '1' ]
+					['mbt' => '1']
 				)
 			);
 

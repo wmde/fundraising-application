@@ -34,8 +34,6 @@ abstract class WebRouteTestCase extends TestCase {
 	public function createClient( array $config = [], callable $onEnvironmentCreated = null, bool $debug = true ): Client {
 		$testEnvironment = TestEnvironment::newInstance( $config );
 
-		$this->onTestEnvironmentCreated( $testEnvironment->getFactory(), $testEnvironment->getConfig() );
-
 		if ( is_callable( $onEnvironmentCreated ) ) {
 			call_user_func( $onEnvironmentCreated, $testEnvironment->getFactory(), $testEnvironment->getConfig() );
 		}
@@ -56,8 +54,6 @@ abstract class WebRouteTestCase extends TestCase {
 	 */
 	public function createEnvironment( array $config, callable $onEnvironmentCreated ) {
 		$testEnvironment = TestEnvironment::newInstance( $config );
-
-		$this->onTestEnvironmentCreated( $testEnvironment->getFactory(), $testEnvironment->getConfig() );
 
 		$client = new Client( $this->createApplication(
 			$testEnvironment->getFactory(),
@@ -86,8 +82,6 @@ abstract class WebRouteTestCase extends TestCase {
 	public function createAppEnvironment( array $config, callable $onEnvironmentCreated ) {
 		$testEnvironment = TestEnvironment::newInstance( $config );
 
-		$this->onTestEnvironmentCreated( $testEnvironment->getFactory(), $testEnvironment->getConfig() );
-
 		$application = $this->createApplication( $testEnvironment->getFactory(), self::ENABLE_DEBUG );
 		$client = new Client( $application );
 
@@ -99,19 +93,8 @@ abstract class WebRouteTestCase extends TestCase {
 		);
 	}
 
-	/**
-	 * Template method. No need to call the definition here from overriding methods as
-	 * this one will always be empty.
-	 *
-	 * @param FunFunFactory $factory
-	 * @param array $config
-	 */
-	protected function onTestEnvironmentCreated( FunFunFactory $factory, array $config ) {
-		// No-op
-	}
-
 	// @codingStandardsIgnoreStart
-	private function createApplication( FunFunFactory $ffFactory, bool $debug ) : Application {
+	private function createApplication( FunFunFactory $ffFactory, bool $debug ): Application {
 		// @codingStandardsIgnoreEnd
 		$app = require __DIR__ . ' /../../app/bootstrap.php';
 
@@ -120,6 +103,8 @@ abstract class WebRouteTestCase extends TestCase {
 			$app['session.test'] = true;
 			unset( $app['exception_handler'] );
 		}
+
+		$ffFactory->setTwigEnvironment( $app['twig'] );
 
 		return $app;
 	}
@@ -173,13 +158,13 @@ abstract class WebRouteTestCase extends TestCase {
 		$this->assertArrayHasKey( 'message', $responseData );
 	}
 
-	protected function assertInitialFormValues( array $expected, Response $response ): void {
+	protected function assertInitialFormValues( array $expected, Client $client ): void {
+		$initialFormValues = $client->getCrawler()->filter( 'script[data-initial-form-values]' );
 		$this->assertGreaterThan(
 			0,
-			preg_match( '/data-initial-form-values="(.+?)"/', $response->getContent(), $match ),
-			'data-initial-form-values found in template'
+			$initialFormValues->count()
 		);
-		$json = html_entity_decode( $match[1] );
+		$json = $initialFormValues->attr( 'data-initial-form-values' );
 		$data = json_decode( $json, true );
 		$this->assertEquals( $expected, $data );
 	}

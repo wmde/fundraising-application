@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
-use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
 /**
@@ -14,44 +13,39 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 class ValidateAddressRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidAddress_validationReturnsSuccess() {
-		$this->createEnvironment( [], function ( Client $client ) {
+		$client = $this->createClient();
+		$client->followRedirects( false );
 
-			$client->followRedirects( false );
+		$client->request(
+			'POST',
+			'/validate-address',
+			$this->newPersonFormInput()
+		);
 
-			$client->request(
-				'POST',
-				'/validate-address',
-				$this->newPersonFormInput()
-			);
+		$response = $client->getResponse();
 
-			$response = $client->getResponse();
-
-			$this->assertJsonSuccessResponse( [ 'status' => 'OK' ], $response );
-		} );
+		$this->assertJsonSuccessResponse( ['status' => 'OK'], $response );
 	}
 
 	public function testGivenInvalidCompanyAddress_validationReturnsErrorMessage() {
-		$this->createEnvironment( [], function ( Client $client ) {
+		$client = $this->createClient();
+		$client->followRedirects( false );
 
-			$client->followRedirects( false );
+		$client->request(
+			'POST',
+			'/validate-address',
+			$this->newCompanyWithMissingNameFormInput()
+		);
 
-			$client->request(
-				'POST',
-				'/validate-address',
-				$this->newCompanyWithMissingNameFormInput()
-			);
+		$response = $client->getResponse();
 
-			$response = $client->getResponse();
-
-			$expectedResponse = [
-				'status' => 'ERR',
-				'messages' => [
-					'company' => 'field_required'
-				]
-			];
-			$this->assertJsonSuccessResponse( $expectedResponse, $response );
-
-		} );
+		$expectedResponse = [
+			'status' => 'ERR',
+			'messages' => [
+				'company' => 'field_required'
+			]
+		];
+		$this->assertJsonSuccessResponse( $expectedResponse, $response );
 	}
 
 	private function newPersonFormInput() {

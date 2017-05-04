@@ -7,13 +7,14 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 use DateTime;
 use Doctrine\ORM\EntityManager;
 use WMDE\Fundraising\Entities\Donation;
-use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebTestCase;
+use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
 /**
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class ListCommentsHtmlRouteTest extends WebTestCase {
+class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 
 	public function testWhenThereAreNoComments_rssFeedIsEmpty() {
 		$client = $this->createClient();
@@ -24,27 +25,27 @@ class ListCommentsHtmlRouteTest extends WebTestCase {
 		$this->assertCount(
 			1,
 			// TODO Change template to use class instead of element
-			$crawler->filter( 'h2:contains("Die 0 neuesten Spenderkommentare")')
+			$crawler->filter( 'h2:contains("Die 0 neuesten Spenderkommentare")' )
 		);
 	}
 
 	public function testWhenAreThreeComments_listSizeIsShownAsThree() {
-		$this->createThreeComments();
+		$client = $this->createClient( [], function ( FunFunFactory $factory ) {
+			$this->createThreeComments( $factory->getEntityManager() );
+		} );
 
-		$client = $this->createClient();
 		$crawler = $client->request( 'GET', '/list-comments.html' );
 
 		$this->assertCount(
 			1,
-			$crawler->filter( 'h2:contains("Die 3 neuesten Spenderkommentare")')
+			$crawler->filter( 'h2:contains("Die 3 neuesten Spenderkommentare")' )
 		);
 	}
 
-	private function createThreeComments(): void {
-		$entityManager = $this->ffFactory->getEntityManager();
+	private function createThreeComments( EntityManager $entityManager ): void {
 		$this->persistFirstComment( $entityManager );
-		$this->persistSecondComment( $entityManager);
-		$this->persistEvilComment( $entityManager);
+		$this->persistSecondComment( $entityManager );
+		$this->persistEvilComment( $entityManager );
 		$entityManager->flush();
 	}
 
@@ -79,9 +80,10 @@ class ListCommentsHtmlRouteTest extends WebTestCase {
 	}
 
 	public function testWhenAreComments_theyAreInTheHtml() {
-		$this->createThreeComments();
+		$client = $this->createClient( [], function ( FunFunFactory $factory ) {
+			$this->createThreeComments( $factory->getEntityManager() );
+		} );
 
-		$client = $this->createClient();
 		$client->request( 'GET', '/list-comments.html' );
 
 		// TODO Restructure template to use elements and classes.
@@ -114,9 +116,10 @@ class ListCommentsHtmlRouteTest extends WebTestCase {
 	}
 
 	public function testCommentsGetEscaped() {
-		$this->createThreeComments();
+		$client = $this->createClient( [], function ( FunFunFactory $factory ) {
+			$this->createThreeComments( $factory->getEntityManager() );
+		} );
 
-		$client = $this->createClient();
 		$client->request( 'GET', '/list-comments.html' );
 
 		$this->assertContains(
@@ -126,9 +129,10 @@ class ListCommentsHtmlRouteTest extends WebTestCase {
 	}
 
 	public function testGivenLimitAndPageTwo_limitNumberOfCommentsAreSkipped() {
-		$this->createThreeComments();
+		$client = $this->createClient( [], function ( FunFunFactory $factory ) {
+			$this->createThreeComments( $factory->getEntityManager() );
+		} );
 
-		$client = $this->createClient();
 		$client->request( 'GET', '/list-comments.json?n=2&page=2' );
 
 		$this->assertContains( 'First', $client->getResponse()->getContent() );
