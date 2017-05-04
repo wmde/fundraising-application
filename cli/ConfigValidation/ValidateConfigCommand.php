@@ -25,8 +25,7 @@ class ValidateConfigCommand extends Command {
 	const DEFAULT_SCHEMA = __DIR__ . '/../../app/config/schema.json';
 	const ERROR_RETURN_CODE = 1;
 
-	protected function configure()
-	{
+	protected function configure(): void {
 		$this->setName( self::NAME )
 			->setDescription( 'Validate configuration files' )
 			->setHelp( 'This command merges the specified configuration files and validates them against a JSON schema' )
@@ -50,8 +49,7 @@ class ValidateConfigCommand extends Command {
 			);
 	}
 
-	protected function execute( InputInterface $input, OutputInterface $output )
-	{
+	protected function execute( InputInterface $input, OutputInterface $output ): int {
 		$configObject = $this->loadConfigObjectFromFiles( $input->getArgument( 'config_file' ) );
 
 		if ( $input->getOption( 'dump-config' ) ) {
@@ -78,8 +76,9 @@ class ValidateConfigCommand extends Command {
 	}
 
 	/**
-	 * @param array $configFiles
 	 * @throws \RuntimeException
+	 * @param array $configFiles
+	 * @return \stdClass
 	 */
 	private function loadConfigObjectFromFiles( array $configFiles ): \stdClass {
 		$configReader = new ConfigReader(
