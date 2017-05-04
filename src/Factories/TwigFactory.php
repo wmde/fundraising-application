@@ -20,7 +20,7 @@ class TwigFactory {
 	private $cachePath;
 	private $locale;
 
-	public function __construct(array $config, string $cachePath, string $locale) {
+	public function __construct( array $config, string $cachePath, string $locale ) {
 		$this->config = $config;
 		$this->cachePath = $cachePath;
 		$this->locale = $locale;
@@ -84,6 +84,6 @@ class TwigFactory {
 	}
 
 	public function newTwigEnvironmentConfigurator() {
-		return new TwigEnvironmentConfigurator($this->config, $this->cachePath);
+		return new TwigEnvironmentConfigurator( $this->config, $this->cachePath );
 	}
 }
