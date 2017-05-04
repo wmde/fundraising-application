@@ -120,4 +120,6 @@
             <property name="spacesCountAroundEqualsSign" value="1" />
         </properties>
     </rule>
+
+    <rule ref="./vendor/slevomat/coding-standard/SlevomatCodingStandard/Sniffs/TypeHints/ReturnTypeHintSpacingSniff.php" />
 </ruleset>

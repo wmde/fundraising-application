@@ -26,7 +26,7 @@ class TwigFactory {
 		$this->locale = $locale;
 	}
 
-	public function newFileSystemLoader(): ? Twig_Loader_Filesystem {
+	public function newFileSystemLoader(): ?Twig_Loader_Filesystem {
 		if ( empty( $this->config['loaders']['filesystem'] ) ) {
 			return null;
 		}

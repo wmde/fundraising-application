@@ -142,7 +142,7 @@ class IncompleteDoctrineDonation {
 		];
 	}
 
-	private function getPaypalArray():array {
+	private function getPaypalArray(): array {
 		return [
 			'paypal_payer_id' => ValidPayPalNotificationRequest::PAYER_ID,
 			'paypal_subscr_id' => ValidPayPalNotificationRequest::SUBSCRIBER_ID,
