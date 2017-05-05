@@ -428,10 +428,10 @@ class FunFunFactory {
 		};
 
 		$pimple['content_page_selector'] = function () {
-			$json = (new SimpleFileFetcher())->fetchFile($this->getI18nDirectory() . '/data/pages.json');
-			$config = json_decode($json, true) ?? [];
+			$json = (new SimpleFileFetcher())->fetchFile( $this->getI18nDirectory() . '/data/pages.json' );
+			$config = json_decode( $json, true ) ?? [];
 
-			return new PageSelector($config);
+			return new PageSelector( $config );
 		};
 
 		$pimple['content_provider'] = function () {

@@ -16,21 +16,21 @@ use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
  */
 class FieldTextPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 
-	public function testGivenHarmlessText_itSucceeds(){
+	public function testGivenHarmlessText_itSucceeds(): void {
 		$textPolicy = $this->createMock( TextPolicyValidator::class );
 		$textPolicy->method( $this->anything() )->willReturn( true );
 		$validator = new FieldTextPolicyValidator( $textPolicy );
 		$this->assertTrue( $validator->validate( 'tiny cat' )->isSuccessful() );
 	}
 
-	public function testGivenHarmfulText_itFails(){
+	public function testGivenHarmfulText_itFails(): void {
 		$textPolicy = $this->createMock( TextPolicyValidator::class );
 		$textPolicy->method( $this->anything() )->willReturn( false );
 		$validator = new FieldTextPolicyValidator( $textPolicy );
 		$this->assertFalse( $validator->validate( 'mean tiger' )->isSuccessful() );
 	}
 
-	public function testGivenHarmfulText_itProvidesAConstraintViolation(){
+	public function testGivenHarmfulText_itProvidesAConstraintViolation(): void {
 		$textPolicy = $this->createMock( TextPolicyValidator::class );
 		$textPolicy->method( $this->anything() )->willReturn( false );
 		$validator = new FieldTextPolicyValidator( $textPolicy );

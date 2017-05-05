@@ -1,12 +1,21 @@
 <?xml version="1.0"?>
 <!--
 	- https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml
-	- https://github.com/squizlabs/PHP_CodeSniffer/tree/master/CodeSniffer/Standards
+	- https://github.com/squizlabs/PHP_CodeSniffer/tree/master/src/Standards
 -->
 <ruleset name="FunFunFundraisingFrontend">
+
+    <file>src/</file>
+    <file>tests/</file>
+    <file>contexts/</file>
+    <file>cli/</file>
+
+    <arg name="extensions" value="php"/>
+    <arg value="s"/>
+    <arg value="p"/>
+
     <!--<rule ref="vendor/mediawiki/mediawiki-codesniffer/MediaWiki/Sniffs/WhiteSpace">-->
         <!--<exclude name="vendor/mediawiki/mediawiki-codesniffer/MediaWiki/Sniffs/WhiteSpace/SpaceBeforeSingleLineCommentSniff.php" />-->
-        <!--<exclude name="vendor/mediawiki/mediawiki-codesniffer/MediaWiki/Sniffs/WhiteSpace/SpaceyParenthesisSniff.php" />-->
     <!--</rule>-->
 
     <rule ref="Generic.Arrays.DisallowLongArraySyntax" />
@@ -32,8 +41,7 @@
     <rule ref="Generic.Functions.CallTimePassByReference" />
     <rule ref="Generic.Functions.FunctionCallArgumentSpacing" />
 
-    <!-- Does not yet work with PHP7 return types -->
-    <!--<rule ref="Generic.Functions.OpeningFunctionBraceKernighanRitchie" />-->
+    <rule ref="Generic.Functions.OpeningFunctionBraceKernighanRitchie" />
 
     <rule ref="Generic.Metrics.NestingLevel">
         <properties>
@@ -112,4 +120,36 @@
     </rule>
 
     <rule ref="Zend.Files.ClosingTag" />
+
+    <!-- Using 3rd party sniff while Squiz isn't there, yet. https://github.com/squizlabs/PHP_CodeSniffer/issues/911 -->
+    <rule ref="./vendor/slevomat/coding-standard/SlevomatCodingStandard/Sniffs/TypeHints/DeclareStrictTypesSniff.php" />
+    <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
+        <properties>
+            <property name="newlinesCountBetweenOpenTagAndDeclare" value="2" />
+            <property name="spacesCountAroundEqualsSign" value="1" />
+        </properties>
+    </rule>
+
+    <rule ref="./vendor/slevomat/coding-standard/SlevomatCodingStandard/Sniffs/TypeHints/ReturnTypeHintSpacingSniff.php" />
+
+    <rule ref="./vendor/slevomat/coding-standard/SlevomatCodingStandard/Sniffs/Namespaces/UseDoesNotStartWithBackslashSniff.php" />
+
+    <!-- MediaWiki.WhiteSpace.SpaceyParenthesis replica for up-to-date codesniffer version -->
+    <rule ref="Squiz.Functions.FunctionDeclarationArgumentSpacing">
+        <properties>
+            <property name="equalsSpacing" value="1" />
+            <property name="requiredSpacesAfterOpen" value="1" />
+            <property name="requiredSpacesBeforeClose" value="1" />
+        </properties>
+    </rule>
+
+    <rule ref="PEAR.Functions.FunctionCallSignature">
+        <properties>
+            <property name="requiredSpacesAfterOpen" value="1" />
+            <property name="requiredSpacesBeforeClose" value="1" />
+        </properties>
+        <exclude name="PEAR.Functions.FunctionCallSignature.Indent" />
+        <exclude name="PEAR.Functions.FunctionCallSignature.ContentAfterOpenBracket" />
+        <exclude name="PEAR.Functions.FunctionCallSignature.CloseBracketLine" />
+    </rule>
 </ruleset>

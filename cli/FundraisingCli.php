@@ -18,7 +18,7 @@ class FundraisingCli {
 	 */
 	private $app;
 
-	public function newApplication() :Application {
+	public function newApplication(): Application {
 		$this->app = new Application();
 		$this->setApplicationInfo();
 		$this->registerCommands();

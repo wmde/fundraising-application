@@ -8,7 +8,8 @@ use Symfony\Component\Translation\Loader\ArrayLoader;
 use WMDE\Fundraising\Frontend\Factories\TranslationFactory;
 
 class TranslationFactoryTest extends \PHPUnit\Framework\TestCase {
-	public function testLoadersAreSet(){
+
+	public function testLoadersAreSet(): void {
 		$factory = new TranslationFactory();
 		$loader = new ArrayLoader();
 		$translator = $factory->create( ['array' => $loader] );

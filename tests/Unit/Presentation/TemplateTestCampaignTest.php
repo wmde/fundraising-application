@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace WMDE\Fundraising\Tests\Unit\Presentation;
 
 use WMDE\Fundraising\Frontend\Presentation\TemplateTestCampaign;

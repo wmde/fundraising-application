@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace WMDE\Fundraising\Tests\Integration\Validation;
 
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donor;
