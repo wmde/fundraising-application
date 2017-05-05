@@ -815,8 +815,14 @@ class FunFunFactory {
 		);
 		$textPolicyConfig = $this->config['text-policies'][$policyName];
 		return new TextPolicyValidator(
-			new WordListFileReader( $fetcher, $textPolicyConfig['badwords'] ?? '' ),
-			new WordListFileReader( $fetcher, $textPolicyConfig['whitewords'] ?? '' )
+			new WordListFileReader(
+				$fetcher,
+				$textPolicyConfig['badwords'] ? $this->getAbsolutePath( $textPolicyConfig['badwords'] ) : ''
+			),
+			new WordListFileReader(
+				$fetcher,
+				$textPolicyConfig['whitewords'] ? $this->getAbsolutePath( $textPolicyConfig['whitewords'] ) : ''
+			)
 		);
 	}
 
@@ -1350,7 +1356,17 @@ class FunFunFactory {
 	}
 
 	public function getI18nDirectory(): string {
-		return __DIR__ . '/../../' . $this->config['i18n-base-path'] . '/' . $this->config['locale'];
+		return $this->getAbsolutePath( $this->config['i18n-base-path'] ) . '/' . $this->config['locale'];
+	}
+
+	/**
+	 * If the pathname does not start with a slash, make the path absolute to root dir of application
+	 */
+	private function getAbsolutePath( string $path ): string {
+		if ( $path[0] === '/' ) {
+			return $path;
+		}
+		return __DIR__ . '/../../' . $path;
 	}
 
 	public function setContentPagePageSelector( PageSelector $pageSelector ): void {
