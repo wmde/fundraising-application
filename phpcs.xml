@@ -4,6 +4,16 @@
 	- https://github.com/squizlabs/PHP_CodeSniffer/tree/master/src/Standards
 -->
 <ruleset name="FunFunFundraisingFrontend">
+
+    <file>src/</file>
+    <file>tests/</file>
+    <file>contexts/</file>
+    <file>cli/</file>
+
+    <arg name="extensions" value="php"/>
+    <arg value="s"/>
+    <arg value="p"/>
+
     <!--<rule ref="vendor/mediawiki/mediawiki-codesniffer/MediaWiki/Sniffs/WhiteSpace">-->
         <!--<exclude name="vendor/mediawiki/mediawiki-codesniffer/MediaWiki/Sniffs/WhiteSpace/SpaceBeforeSingleLineCommentSniff.php" />-->
     <!--</rule>-->

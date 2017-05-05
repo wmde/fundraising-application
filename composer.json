@@ -117,7 +117,7 @@
 			"@validate-app-config"
 		],
 		"phpcs": [
-			"vendor/bin/phpcs src/ tests/ contexts/ cli/ --standard=phpcs.xml --extensions=php -sp"
+			"vendor/bin/phpcs"
 		],
 		"phpmd": [
 			"vendor/bin/phpmd src/ text phpmd.xml"
