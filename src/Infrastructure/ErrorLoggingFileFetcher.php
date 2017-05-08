@@ -6,10 +6,9 @@ namespace WMDE\Fundraising\Frontend\Infrastructure;
 
 use FileFetcher\FileFetcher;
 use FileFetcher\FileFetchingException;
-use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 
-class ErrorLoggingFileFetcher implements FileFetcher, LoggerAwareInterface {
+class ErrorLoggingFileFetcher implements FileFetcher {
 
 	private $wrappedFileFetcher;
 
@@ -20,21 +19,18 @@ class ErrorLoggingFileFetcher implements FileFetcher, LoggerAwareInterface {
 		$this->logger = $logger;
 	}
 
+	/**
+	 * @inheritdoc
+	 */
 	public function fetchFile( $fileUrl ) {
 		try {
 			return $this->wrappedFileFetcher->fetchFile( $fileUrl );
 		} catch ( FileFetchingException $e ) {
 			$this->logger->error( $e->getMessage(), [
-				'code' => $e->getCode(),
-				'trace' => $e->getTraceAsString()
+				'exception' => $e
 			] );
-			return '';
+			throw $e;
 		}
 	}
-
-	public function setLogger( LoggerInterface $logger ) {
-		$this->logger = $logger;
-	}
-
 
 }
