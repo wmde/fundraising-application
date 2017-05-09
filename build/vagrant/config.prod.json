@@ -21,6 +21,16 @@
 		}
 	},
 	"i18n-base-path": "vendor/wmde/fundraising-frontend-content/i18n",
+	"text-policies": {
+		"fields": {
+			"whitewords": "vendor/wmde/fundraising-frontend-content/data/white_words.txt",
+			"badwords": "vendor/wmde/fundraising-frontend-content/data/bad_words.txt"
+		},
+		"comment": {
+			"whitewords": "vendor/wmde/fundraising-frontend-content/data/white_words.txt",
+			"badwords": "vendor/wmde/fundraising-frontend-content/data/bad_words.txt"
+		}
+	},
 	"contact-info": {
 		"organization": {
 			"email": "fake-address@example.com",
