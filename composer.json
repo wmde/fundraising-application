@@ -15,7 +15,7 @@
 		"wmde/fundraising-store": "~4.1",
 		"wmde/euro": "~1.0",
 
-		"jeroen/file-fetcher": "~3.1",
+		"jeroen/file-fetcher": "~4.0",
 		"jeroen/generic-decorator": "~0.1.1",
 		"psr/log": "~1.0",
 		"monolog/monolog": "~1.17",
