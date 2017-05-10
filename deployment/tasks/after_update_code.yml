@@ -14,3 +14,9 @@
   command: npm run build-js
   args:
     chdir: "{{ build_dir }}"
+
+# @todo think about the differences between dev and prod (one-time vs repeated builds)
+- name: Remove node modules
+  file:
+    path: "{{ build_dir }}/node_modules"
+    state: absent
