@@ -1,0 +1,6 @@
+---
+- name: Download cachetool for clearing PHP-FPM opcache (if needed)
+  get_url: url=http://gordalina.github.io/cachetool/downloads/cachetool.phar dest={{ app_dir }}/cachetool.phar
+
+- name: Clear PHP-FPM opcache
+  command: php {{ app_dir }}/cachetool.phar opcache:reset --fcgi=/var/run/php/php{{ php_version }}-fpm.sock
