@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a14bebf9accda5d933e840f5682f1a86",
+    "content-hash": "888a47ab6f016d9a046e38862a540466",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -773,32 +773,34 @@
         },
         {
             "name": "jeroen/file-fetcher",
-            "version": "3.1.0",
+            "version": "4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JeroenDeDauw/FileFetcher.git",
-                "reference": "818da8261c256aac137f000cabbe59bd4c348a44"
+                "reference": "9a0b2c9ba177a78f97f4f71ddf260b8889ab590c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JeroenDeDauw/FileFetcher/zipball/818da8261c256aac137f000cabbe59bd4c348a44",
-                "reference": "818da8261c256aac137f000cabbe59bd4c348a44",
+                "url": "https://api.github.com/repos/JeroenDeDauw/FileFetcher/zipball/9a0b2c9ba177a78f97f4f71ddf260b8889ab590c",
+                "reference": "9a0b2c9ba177a78f97f4f71ddf260b8889ab590c",
                 "shasum": ""
             },
             "require": {
                 "jeroen/simple-cache": "~2.0",
-                "php": ">=5.3.0"
+                "php": ">=7.0",
+                "psr/log": "~1.0"
             },
             "require-dev": {
-                "ockcyp/covers-validator": "~0.4",
+                "ockcyp/covers-validator": "~0.6",
                 "phpmd/phpmd": "~2.1",
-                "phpunit/phpunit": "~4.0",
-                "squizlabs/php_codesniffer": "~2.1"
+                "phpunit/phpunit": "~6.1",
+                "squizlabs/php_codesniffer": "~2.1",
+                "wmde/psr-log-test-doubles": "~2.1"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.1.x-dev"
+                    "dev-master": "4.0.x-dev"
                 }
             },
             "autoload": {
@@ -827,7 +829,7 @@
                 "file_get_contents",
                 "wget"
             ],
-            "time": "2016-01-07T21:17:42+00:00"
+            "time": "2017-05-09T16:57:50+00:00"
         },
         {
             "name": "jeroen/generic-decorator",
@@ -1525,16 +1527,16 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v5.4.7",
+            "version": "v5.4.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "56db4ed32a6d5c9824c3ecc1d2e538f663f47eb4"
+                "reference": "9a06dc570a0367850280eefd3f1dc2da45aef517"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/56db4ed32a6d5c9824c3ecc1d2e538f663f47eb4",
-                "reference": "56db4ed32a6d5c9824c3ecc1d2e538f663f47eb4",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/9a06dc570a0367850280eefd3f1dc2da45aef517",
+                "reference": "9a06dc570a0367850280eefd3f1dc2da45aef517",
                 "shasum": ""
             },
             "require": {
@@ -1575,7 +1577,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2017-04-20T17:32:18+00:00"
+            "time": "2017-05-01T15:54:03+00:00"
         },
         {
             "name": "symfony/console",
@@ -5097,12 +5099,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content.git",
-                "reference": "74f43a4b54f8ed44e8fcd1dd13b1b150e6e43f8d"
+                "reference": "08b93fbaac3f3208cc21a4e3ebef6fd7a0921013"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/74f43a4b54f8ed44e8fcd1dd13b1b150e6e43f8d",
-                "reference": "74f43a4b54f8ed44e8fcd1dd13b1b150e6e43f8d",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/08b93fbaac3f3208cc21a4e3ebef6fd7a0921013",
+                "reference": "08b93fbaac3f3208cc21a4e3ebef6fd7a0921013",
                 "shasum": ""
             },
             "require-dev": {
@@ -5134,7 +5136,7 @@
             "support": {
                 "source": "https://github.com/wmde/fundraising-frontend-content/tree/master"
             },
-            "time": "2017-05-02 07:48:51"
+            "time": "2017-05-07T19:07:34+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",

@@ -4,10 +4,10 @@ declare( strict_types = 1 );
 
 namespace Unit\Infrastructure;
 
+use FileFetcher\ErrorLoggingFileFetcher;
 use FileFetcher\InMemoryFileFetcher;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
-use WMDE\Fundraising\Frontend\Infrastructure\ErrorLoggingFileFetcher;
 use WMDE\Fundraising\Frontend\Infrastructure\WordListFileReader;
 
 class WordListFileReaderTest extends TestCase {
