@@ -1,29 +1,32 @@
 ---
 - name: Copy config file
   copy:
+    # @todo We need the config_dir
+    # @todo We need the inventory_hostname. Can this be deducted from stage?
     src: "{{ config_dir }}/{{ inventory_hostname }}/config.prod.json"
-    dest: "{{ app_dir }}/{{ release_name }}/app/config/config.prod.json"
+    dest: "{{ project_dir }}/app/config/config.prod.json"
 
 - name: Check if configuration file is valid JSON
-  command: php -r 'json_decode( file_get_contents( "{{ app_dir }}/{{ release_name }}/app/config/config.prod.json" ) ); echo json_last_error();'
+  command: php -r 'json_decode( file_get_contents( "{{ project_dir }}/app/config/config.prod.json" ) ); echo json_last_error();'
   register: decode_json_config
   failed_when: decode_json_config.stdout != "0"
 
 - name: Validate config file against schema
   command: ./console validate-config app/config/config.dist.json app/config/config.prod.json
   args:
-    chdir: "{{ app_dir }}/{{ release_name }}"
+    chdir: "{{ project_dir }}"
 
 - name: Create var dir
   file:
-    path: "{{ app_dir }}/{{ release_name }}/var"
+    path: "{{ project_dir }}/var"
+    # @todo need to pass owner/group to all hooks?
     owner: "{{ app_owner }}"
     group: "{{ app_group }}"
     state: directory
 
 - name: Create var/cache dir
   file:
-    path: "{{ app_dir }}/{{ release_name }}/var/cache"
+    path: "{{ project_dir }}/var/cache"
     owner: "{{ app_owner }}"
     group: "{{ app_group }}"
     state: directory
@@ -31,28 +34,31 @@
 
 - name: Create web resources symlink
   file:
+    # @todo How do we elegantly link FE & content?
     src: "{{ app_dir }}/{{ content_directory }}/resources"
-    dest: "{{ app_dir }}/{{ release_name }}/web/resources"
+    dest: "{{ project_dir }}/web/resources"
     owner: "{{ app_owner }}"
     group: "{{ app_group }}"
     state: link
 
 - name: Create cache-busting prefix
   copy:
-    dest: "{{ app_dir }}/{{ release_name }}/var/file_prefix.txt"
-    content: "{{ release_name|hash('md5') }}"
+    dest: "{{ project_dir }}/var/file_prefix.txt"
+    content: "{{ project_dir|hash('md5') }}"
     owner: "{{ app_owner }}"
     group: "{{ app_group }}"
 
 - name: Create symlink to log dir
   file:
+    # @todo Can/Should we use project_dir/..?
+    # @todo Hard-code logs_dir?
     src: "{{ app_dir }}/{{ logs_dir }}"
-    dest: "{{ app_dir }}/{{ release_name }}/var/log"
+    dest: "{{ project_dir }}/var/log"
     state: link
 
 - name: Create var/doctrine_proxies dir
   file:
-    path: "{{ app_dir }}/{{ release_name }}/var/doctrine_proxies"
+    path: "{{ project_dir }}/var/doctrine_proxies"
     owner: "{{ app_owner }}"
     group: "{{ app_group }}"
     state: directory
@@ -61,4 +67,4 @@
 - name: Create Doctrine proxy classes
   command: vendor/bin/doctrine orm:generate-proxies var/doctrine_proxies
   args:
-    chdir: "{{ app_dir }}/{{ release_name }}"
+    chdir: "{{ project_dir }}"

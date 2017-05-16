@@ -2,38 +2,14 @@
 
 This directory contains the Ansible deployment files for the code of the fundraising frontend application.
 
-The deployment scripts are structured in two phases - building the archive and all its PHP and Javascript dependencies on the "local" 
-machine (the machine that runs the playbook) and then deploying the archive to the server. The deployment is also made 
-in fashion that the old version will run until the new version is fully deployed and then the switch is made.   
+Deployment is done using the `wmde.atomic-deploy` role in 
+[Wikimedia Germany fundraising infrastructure GitHub repository (private)](https://github.com/wmde/fundraising-infrastructure).
+The files in `tasks` are hooks called by this role during deployment that can be used to build the 
+project (e.g. resolving PHP and Javascript dependencies).
 
 ## Deploy the application
 
-All commands assume you're in the `deployment` directory, but you can change paths as needed.
-
-To deploy, run the following command:
-
-    ansible-playbook -i inventory/test deployment.yml
-
-`inventory/test` is the path to your inventory file. Use a different inventory file to deploy to a different environment.
-
-To deploy a different branch than `master`, run the following command:
-
-    ansible-playbook -i inventory/test --extra-vars 'build_branch=test' deployment.yml
-
-## Rolling back deployments and understanding atomic deploys
-Each deployment is "atomic", that means that while the deployment script is still running, the web server delivers the old version of the application. The last step of the deployment script is activating the new version.
-
-The deployment script accomplishes this with the following steps during the different stages of the deployment process:
-
- - At the start of the process, create a new directory with a timestamp in its name, e.g. `release-20160816120255`.
- - At the end of the deployment process, change the symbolic link to the new directory.
- - If everything went well, delete the oldest `release-XXX` directory, keeping only the last 5 deployments on the server. The number of kept deployments can be adjusted by changing the variable `keep_releases` in the file `deployment/deployment.yml`
-
-To roll back ("undo") a deployment, log in to the server, change the symlink to a previous deployment and clear the PHP-FPM opcache with the following command:
-
-    php cachetool.phar opcache:reset --fcgi=/var/run/php/php-fpm-current.sock
-
-## Preparing a new server for deployment
+See the documentation in the infrastructure repo.
 
 ### Prerequisites on the Server
 The application requires the following infrastructure to be set up already on the server:
