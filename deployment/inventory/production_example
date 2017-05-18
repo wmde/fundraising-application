@@ -8,7 +8,7 @@ spenden.wikimedia.de ansible_user=deploy
 app_dir = "/usr/share/nginx/www/spenden.wikimedia.de"
 
 # relative dir inside app_dir where the always up-to-date i18n content can be found (deployed independently)
-content_directory = "fundraising-frontend-content"
+content_directory = "fundraising-frontend-content/current"
 
 # Prefix for release directories
 release_prefix = release-
