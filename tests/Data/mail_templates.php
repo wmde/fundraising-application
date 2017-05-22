@@ -29,43 +29,58 @@ $mailTemplates = [
 
 	'Mail_Donation_Confirmation.txt.twig' => [
 		'context' => [
+			'greeting_generator' => $ffFactory->getGreetingGenerator(),
 			'donation' => [
 				'id' => 42,
 				'amount' => 12.34,
+				'needsModeration' => false,
+			],
+			'recipient' => [
+				'lastName' => "姜",
+				'salutation' => 'Frau',
+				'title' => ''
 			],
 		],
 		'variants' => [
 			'deposit_unmoderated_non_recurring' => [
-				'needsModeration' => false,
-				'paymentType' => 'UEB',
-				'interval' => 0
+				'donation' => [
+					'paymentType' => 'UEB',
+					'interval' => 0,
+					'bankTransferCode' => 'WZF3984Y',
+				]
 			],
 			'direct_debit_unmoderated_non_recurring' => [
-				'needsModeration' => false,
-				'paymentType' => 'BEZ',
-				'interval' => 0
+				'donation' => [
+					'paymentType' => 'BEZ',
+					'interval' => 0,
+				]
 			],
 			'direct_debit_unmoderated_recurring' => [
-				'needsModeration' => false,
-				'paymentType' => 'BEZ',
-				'interval' => 3
+				'donation' => [
+					'paymentType' => 'BEZ',
+					'interval' => 3,
+				]
 			],
 			'paypal_unmoderated_non_recurring' => [
-				'needsModeration' => false,
-				'paymentType' => 'PPL',
-				'interval' => 0
+				'donation' => [
+					'paymentType' => 'PPL',
+					'interval' => 0,
+				]
 			],
 			// PPL and MCP follow the same code path for recurring, no need to test each separately
 			'micropayment_unmoderated_recurring' => [
-				'needsModeration' => false,
-				'paymentType' => 'MCP',
-				'interval' => 6
+				'donation' => [
+					'paymentType' => 'MCP',
+					'interval' => 6,
+				]
 			],
 			// moderated all generate the same message, no need to test different payment types
 			'micropayment_moderated_recurring' => [
-				'needsModeration' => true,
-				'paymentType' => 'MCP',
-				'interval' => 6
+				'donation' => [
+					'needsModeration' => true,
+					'paymentType' => 'MCP',
+					'interval' => 6
+				],
 			]
 		],
 	],
@@ -88,7 +103,8 @@ $mailTemplates = [
 			'lastName' => "O'Reilly",
 			'salutation' => 'Herr',
 			'title' => 'Dr.',
-			'applicationId' => 23
+			'applicationId' => 23,
+			'membershipFee' => 15.23,
 		],
 		'variants' => [
 			'active_yearly' => [
@@ -104,6 +120,7 @@ $mailTemplates = [
 
 	'Mail_Subscription_Confirmation.txt.twig' => [
 		'context' => [
+			'greeting_generator' => $ffFactory->getGreetingGenerator(),
 			'subscription' => [
 				'email' => 'test@example.com',
 				'address' => [
@@ -117,6 +134,7 @@ $mailTemplates = [
 
 	'Mail_Subscription_Request.txt.twig' => [
 		'context' => [
+			'greeting_generator' => $ffFactory->getGreetingGenerator(),
 			'subscription' => [
 				'email' => 'test@example.com',
 				'confirmationCode' => '00deadbeef',

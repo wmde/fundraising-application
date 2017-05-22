@@ -93,7 +93,7 @@ class RenderMailTemplatesCommand extends Command {
 				}
 
 				try {
-					file_put_contents( $outputName, $twig->render( $template, array_merge(
+					file_put_contents( $outputName, $twig->render( $template, array_merge_recursive(
 						$config['context'],
 						$config['variants'][$variantName]
 					) ) );
