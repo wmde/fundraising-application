@@ -2,77 +2,78 @@
 	var timer, bankDetailBannerClosed = false;
 	$( document ).ready( function() {
 		timer = window.setTimeout( function() {
-			$( '#bank-detail-banner' ).fadeIn();
+			$( '.sliding-banner' ).fadeIn();
 		}, 5000 );
 
-		$( 'input' ).focus( function() {
-			$( '#bank-detail-banner' ).fadeOut();
-			clearTimeout( timer );
-		} );
-
-		// This is for our fake radio buttons
-		$( 'label' ).click( function() {
-			$( '#bank-detail-banner' ).fadeOut();
+		$( 'input, label' ).focus( function() {
+			$( '.sliding-banner' ).fadeOut();
 			clearTimeout( timer );
 		} );
 
 		$( '.banner-btn-close, .slide-toggle' ).click( function() {
-			$( '#bank-detail-banner' ).fadeOut();
+			$( '.sliding-banner' ).fadeOut();
 			bankDetailBannerClosed = false;
 		} );
 
 		$( 'body' ).on( 'click',  '#wlightbox-close', function () {
 			if( !bankDetailBannerClosed ) {
-				$( '#bank-detail-banner' ).fadeIn();
+				$( '.sliding-banner' ).fadeIn();
 			}
 		} );
 
 		$( 'a.wlightbox' ).click( function() {
-			$( '#bank-detail-banner' ).fadeOut();
+			$( '.sliding-banner' ).fadeOut();
 			clearTimeout( timer );
 		} );
 
 		/* switch banner pages */
 		$( '.switch-button' ).click( function() {
-			$( '#bank-details' ).slideToggle();
+			var contentWrapper = $( '.content-wrapper' ),
+				newValue = contentWrapper.css( 'top' ) === '0px'
+                    ? '-4.4em' : '0em';
+			contentWrapper.animate( { top: newValue } );
 		} );
 	} );
 </script>
 
-<div id="bank-detail-banner">
-	<!-- sms details -->
-	<div id="sms-details">
-		<div class="icon-close text-lightblue banner-btn-close"></div>
-		<div class="bank-details">
-			<div class="icon-phone text-lightblue"></div>
-			<span class="text-large"><strong>Helfen per SMS:</strong> Senden Sie das Wort <strong>"WIKI"</strong> an 81190</span><br>
-			<span class="text-small text-lightblue">
-				Von 5 Euro gehen 4,83 Euro an uns. Kosten zzgl. einer Standard-SMS
-			</span>
-		</div>
-		<div class="tmessage-button">
-			<span class="text-small text-lightblue">oder:</span>
-			<button class="switch-button">Spenden per Überweisung</button>
-		</div>
+<div class="sliding-banner">
+
+	<div class="content-wrapper">
+
+		<ul>
+			<li class="banner-content">
+				<div class="icon-close text-lightblue banner-btn-close"></div>
+				<div class="bank-details">
+					<span class="text-small">Das Spendenkonto der Wikimedia Foerdergesellschaft</span><br>
+					<span class="text-large">
+						<span class="digit-group">DE33</span><span class="digit-group">1002</span><span class="digit-group">0500</span><span class="digit-group">0001</span><span class="digit-group">1947</span><span class="digit-group">00</span>
+						<span class="text-lightblue">(IBAN)</span>
+						<span class="digit-group">BFSW</span><span class="digit-group">DE33</span><span class="digit-group">BER</span>
+						<span class="text-lightblue">(BIC)</span>
+					</span>
+				</div>
+				<div class="tmessage-button">
+					<span class="text-small text-lightblue">oder:</span>
+					<button class="switch-button"><span class="icon-phone"></span>Helfen per SMS</button>
+				</div>
+			</li>
+	
+			<li class="banner-content">
+				<div class="icon-close text-lightblue banner-btn-close"></div>
+				<div class="bank-details">
+					<div class="icon-phone text-lightblue"></div>
+					<span class="text-large"><strong>Helfen per SMS:</strong> Senden Sie das Wort <strong>"WIKI"</strong> an 81190</span><br>
+					<span class="text-small text-lightblue">
+						Von 5 Euro gehen 4,83 Euro an uns. Kosten zzgl. einer Standard-SMS
+					</span>
+				</div>
+				<div class="tmessage-button">
+					<span class="text-small text-lightblue">oder:</span>
+					<button class="switch-button">Spenden per Überweisung</button>
+				</div>
+			</li>
+		</ul>
+
 	</div>
 
-	<!-- bank details -->
-	<div id="bank-details">
-		<div class="icon-close text-lightblue banner-btn-close"></div>
-		<div class="bank-details">
-			<span class="text-small">Das Spendenkonto der Wikimedia Foerdergesellschaft</span><br>
-			<span class="text-large">
-				<span class="digit-group">DE33</span><span class="digit-group">1002</span><span class="digit-group">0500</span><span class="digit-group">0001</span><span class="digit-group">1947</span><span class="digit-group">00</span>
-				<span class="text-lightblue">(IBAN)</span>
-				<span class="digit-group">BFSW</span><span class="digit-group">DE33</span><span class="digit-group">BER</span>
-				<span class="text-lightblue">(BIC)</span>
-			</span>
-		</div>
-		<div class="tmessage-button">
-			<span class="text-small text-lightblue">oder:</span>
-			<button class="switch-button"><span class="icon-phone"></span>Helfen per SMS</button>
-		</div>
-	</div>
-	
-	<div style="clear: both;"></div>
 </div>
