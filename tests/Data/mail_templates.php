@@ -1,15 +1,14 @@
 <?php
 
 declare( strict_types = 1 );
+
 /**
  * This file contains a list of all Mail templates and the variables rendered in them.
  *
- * Some templates contain if statements, leading to different outputs, these outputs are covered by additional context
- * variables called "variants".
+ * Some templates contain if statements, leading to different permutations of output, which are rendered individually.
+ * These outputs are covered by the "variants", which are automatically recursively merged into the main "context".
  */
-
-
-$mailTemplates = [
+return [
 
 	'Mail_Contact_Confirm_to_User.txt.twig' => [
 		'context' => []
@@ -36,7 +35,7 @@ $mailTemplates = [
 				'needsModeration' => false,
 			],
 			'recipient' => [
-				'lastName' => "姜",
+				'lastName' => '姜',
 				'salutation' => 'Frau',
 				'title' => ''
 			],
@@ -147,5 +146,3 @@ $mailTemplates = [
 		]
 	],
 ];
-
-return $mailTemplates;
