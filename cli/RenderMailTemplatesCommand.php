@@ -1,5 +1,6 @@
 <?php
-declare(strict_types=1);
+
+declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Cli;
 
@@ -11,7 +12,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
-
 
 /**
  * A temporary command to dump all the mail templates
@@ -35,8 +35,7 @@ class RenderMailTemplatesCommand extends Command {
 						'Output path for rendered text'
 					),
 				] )
-			)
-		;
+			);
 	}
 
 	protected function execute( InputInterface $input, OutputInterface $output ) {
@@ -64,7 +63,7 @@ class RenderMailTemplatesCommand extends Command {
 		$testData = require __DIR__ . '/../tests/Data/mail_templates.php';
 
 		$outputPath = $input->getOption( 'output-path' ) ?? '';
-		if ( $outputPath && substr($outputPath, -1) !== '/' ) {
+		if ( $outputPath && substr( $outputPath, -1 ) !== '/' ) {
 			$outputPath .= '/';
 		}
 
@@ -84,7 +83,7 @@ class RenderMailTemplatesCommand extends Command {
 
 				$output->write( "$outputName" );
 				if ( file_exists( $outputName ) ) {
-					$output->writeln( "$outputName already exists, skipping ...");
+					$output->writeln( "$outputName already exists, skipping ..." );
 					continue;
 				}
 
@@ -94,11 +93,11 @@ class RenderMailTemplatesCommand extends Command {
 						$config['variants'][$variantName]
 					) ) );
 				} catch( \Twig_Error $e ) {
-					$output->writeln("<error>".$e->getMessage()."</error>");
-					$output->writeln(var_export($e->getSourceContext(), true));
+					$output->writeln( '<error>' . $e->getMessage() . '</error>' );
+					$output->writeln( var_export( $e->getSourceContext(), true ) );
 
 				}
-				$output->writeln( "" );
+				$output->writeln( '' );
 			}
 
 		}

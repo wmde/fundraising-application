@@ -1,5 +1,6 @@
 <?php
-declare( strict_types=1 );
+
+declare( strict_types = 1 );
 /**
  * This file contains a list of all Mail templates and the variables rendered in them.
  *
