@@ -113,7 +113,7 @@ $mailTemplates = [
 			],
 			'sustaining_quarterly' => [
 				'membershipType' => 'sustaining',
-				'paymentIntervalInMonths' => 4,
+				'paymentIntervalInMonths' => 3,
 			]
 		]
 	],
