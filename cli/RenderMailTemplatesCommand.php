@@ -50,7 +50,11 @@ class RenderMailTemplatesCommand extends Command {
 				is_readable( $prodConfigPath ) ? $prodConfigPath : null
 			);
 
-			return new FunFunFactory( $configReader->getConfig() );
+			$config = $configReader->getConfig();
+
+			$config['twig']['strict-variables'] = true;
+
+			return new FunFunFactory( $config );
 		} );
 
 		$app = require __DIR__ . '/../app/bootstrap.php';
