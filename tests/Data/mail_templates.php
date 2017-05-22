@@ -14,6 +14,16 @@ return [
 		'context' => []
 	],
 
+	'Mail_Contact_Forward_to_Operator.txt.twig' => [
+		'context' => [
+			'firstName' => 'John',
+			'lastName' => 'Doe',
+			'emailAddress' => 'j.doe808@example.com',
+			'subject' => 'Missing Link',
+			'message' => 'Please advise',
+		],
+	],
+
 	'Mail_Donation_Cancellation_Confirmation.txt.twig' => [
 		'context' => [
 			'greeting_generator' => $ffFactory->getGreetingGenerator(),
