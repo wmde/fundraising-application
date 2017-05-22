@@ -4,18 +4,19 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Cli;
 
+use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
 use FileFetcher\SimpleFileFetcher;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
+use Twig_Environment;
 use Twig_Error;
 
 /**
- * A temporary command to dump all the mail templates
+ * A command to check and dump mail templates
  *
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
@@ -40,18 +41,9 @@ class RenderMailTemplatesCommand extends Command {
 	}
 
 	protected function execute( InputInterface $input, OutputInterface $output ) {
-		$prodConfigPath = __DIR__ . '/../app/config/config.prod.json';
 
-		$configReader = new ConfigReader(
-			new SimpleFileFetcher(),
-			__DIR__ . '/../app/config/config.dist.json',
-			is_readable( $prodConfigPath ) ? $prodConfigPath : null
-		);
-
-		$config = $configReader->getConfig();
-
+		$config = $this->getDefaultConfig();
 		$config['twig']['strict-variables'] = true;
-		$mailTemplatePaths = $config['twig']['loaders']['filesystem']['template-dir'];
 
 		$ffFactory = new FunFunFactory( $config );
 
@@ -61,52 +53,38 @@ class RenderMailTemplatesCommand extends Command {
 
 		$ffFactory->setTwigEnvironment( $app['twig'] );
 
-		$twig = $ffFactory->getTwig();
-
 		$testData = require __DIR__ . '/../tests/Data/mail_templates.php';
 
-		$this->checkExistingTests( $testData, $mailTemplatePaths, $output );
+		$this->validateTemplateFixtures( $testData, $config['twig']['loaders']['filesystem']['template-dir'], $output );
 
 		$outputPath = $input->getOption( 'output-path' ) ?? '';
 		if ( $outputPath && substr( $outputPath, -1 ) !== '/' ) {
 			$outputPath .= '/';
 		}
 
-		foreach( $testData as $template => $config ) {
-
-			if ( empty( $config['variants'] ) ) {
-				$config['variants'] = [ '' => [] ];
-			}
-
-			foreach( $config['variants'] as $variantName => $additionalContext ) {
-				$outputName =
-					$outputPath .
-					basename( $template, '.txt.twig' ) .
-					( $variantName ? ".$variantName" : '' ) .
-					'.txt';
-
-				$output->write( "$outputName" );
-				if ( file_exists( $outputName ) ) {
-					$output->writeln( "$outputName already exists, skipping ..." );
-					continue;
-				}
-
-				try {
-					file_put_contents( $outputName, $twig->render( $template, array_merge_recursive(
-						$config['context'],
-						$config['variants'][$variantName]
-					) ) );
-				} catch( Twig_Error $e ) {
-					$output->writeln( '' );
-					$output->writeln( '<error>' . $e->getMessage() . '</error>' );
-					$output->writeln( var_export( $e->getSourceContext(), true ) );
-				}
-				$output->writeln( '' );
-			}
-		}
+		$this->renderTemplates( $testData, $ffFactory->getTwig(), $outputPath, $output );
 	}
 
-	private function checkExistingTests( array $testData, array $mailTemplatePaths, OutputInterface $output ): void {
+	private function getDefaultConfig(): array {
+		$prodConfigPath = __DIR__ . '/../app/config/config.prod.json';
+
+		$configReader = new ConfigReader(
+			new SimpleFileFetcher(),
+			__DIR__ . '/../app/config/config.dist.json',
+			is_readable( $prodConfigPath ) ? $prodConfigPath : null
+		);
+
+		return $configReader->getConfig();
+	}
+
+	/**
+	 * Check that there are templates for all fixtures and (even more important) vice-versa
+	 *
+	 * @param array $testData Template names and fixture information to render these templates
+	 * @param array $mailTemplatePaths Directories containing templates
+	 * @param OutputInterface $output Command output
+	 */
+	private function validateTemplateFixtures( array $testData, array $mailTemplatePaths, OutputInterface $output ): void {
 		$mailTemplatesOnDisk = [];
 		foreach ( $mailTemplatePaths as $path ) {
 			$mailFilesInFolder = glob( $path . '/Mail_*' );
@@ -130,6 +108,49 @@ class RenderMailTemplatesCommand extends Command {
 			$output->writeln(
 				'<error>There are tests for non-existing templates: ' . implode( ', ', $strayTemplates ) . '</error>'
 			);
+		}
+	}
+
+	/**
+	 * Render all templates and write them to disk to allow a comparison with an alternative data set
+	 *
+	 * @param array $testData Template names and fixture information to render these templates
+	 * @param Twig_Environment $twig The templating engine to render the templates
+	 * @param string $outputPath Path where rendered templates will be written to
+	 * @param OutputInterface $output Command output
+	 */
+	private function renderTemplates( array $testData, Twig_Environment $twig, string $outputPath, OutputInterface $output ): void {
+		foreach( $testData as $template => $templateSettings ) {
+
+			if ( empty( $templateSettings['variants'] ) ) {
+				$templateSettings['variants'] = [ '' => [] ];
+			}
+
+			foreach( $templateSettings['variants'] as $variantName => $additionalContext ) {
+				$outputName =
+					$outputPath .
+					basename( $template, '.txt.twig' ) .
+					( $variantName ? ".$variantName" : '' ) .
+					'.txt';
+
+				$output->write( "$outputName" );
+				if ( file_exists( $outputName ) ) {
+					$output->writeln( "$outputName already exists, skipping ..." );
+					continue;
+				}
+
+				try {
+					file_put_contents( $outputName, $twig->render( $template, array_merge_recursive(
+						$templateSettings['context'],
+						$templateSettings['variants'][$variantName]
+					) ) );
+				} catch( Twig_Error $e ) {
+					$output->writeln( '' );
+					$output->writeln( '<error>' . $e->getMessage() . '</error>' );
+					$output->writeln( var_export( $e->getSourceContext(), true ) );
+				}
+				$output->writeln( '' );
+			}
 		}
 	}
 }
