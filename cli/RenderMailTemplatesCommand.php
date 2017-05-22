@@ -75,12 +75,12 @@ class RenderMailTemplatesCommand extends Command {
 			}
 
 			foreach( $config['variants'] as $variantName => $additionalContext ) {
-				$outputName = implode('', [
-					$outputPath ,
-					basename( $template, '.txt.twig' ),
-					( $variantName ? ".$variantName" : '' ),
+				$outputName =
+					$outputPath .
+					basename( $template, '.txt.twig' ) .
+					( $variantName ? ".$variantName" : '' ) .
 					'.txt'
-				] );
+				;
 
 				$output->write( "$outputName" );
 				if ( file_exists( $outputName ) ) {
