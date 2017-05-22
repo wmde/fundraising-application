@@ -12,6 +12,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
+use Twig_Error;
 
 /**
  * A temporary command to dump all the mail templates
@@ -92,10 +93,10 @@ class RenderMailTemplatesCommand extends Command {
 						$config['context'],
 						$config['variants'][$variantName]
 					) ) );
-				} catch( \Twig_Error $e ) {
+				} catch( Twig_Error $e ) {
+					$output->writeln( '' );
 					$output->writeln( '<error>' . $e->getMessage() . '</error>' );
 					$output->writeln( var_export( $e->getSourceContext(), true ) );
-
 				}
 				$output->writeln( '' );
 			}
