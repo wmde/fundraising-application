@@ -40,22 +40,20 @@ class RenderMailTemplatesCommand extends Command {
 	}
 
 	protected function execute( InputInterface $input, OutputInterface $output ) {
-		/** @var FunFunFactory $ffFactory */
-		$ffFactory = call_user_func( function() {
-			$prodConfigPath = __DIR__ . '/../app/config/config.prod.json';
+		$prodConfigPath = __DIR__ . '/../app/config/config.prod.json';
 
-			$configReader = new ConfigReader(
-				new SimpleFileFetcher(),
-				__DIR__ . '/../app/config/config.dist.json',
-				is_readable( $prodConfigPath ) ? $prodConfigPath : null
-			);
+		$configReader = new ConfigReader(
+			new SimpleFileFetcher(),
+			__DIR__ . '/../app/config/config.dist.json',
+			is_readable( $prodConfigPath ) ? $prodConfigPath : null
+		);
 
-			$config = $configReader->getConfig();
+		$config = $configReader->getConfig();
 
-			$config['twig']['strict-variables'] = true;
+		$config['twig']['strict-variables'] = true;
+		$mailTemplatePaths = $config['twig']['loaders']['filesystem']['template-dir'];
 
-			return new FunFunFactory( $config );
-		} );
+		$ffFactory = new FunFunFactory( $config );
 
 		$app = require __DIR__ . '/../app/bootstrap.php';
 
@@ -66,6 +64,8 @@ class RenderMailTemplatesCommand extends Command {
 		$twig = $ffFactory->getTwig();
 
 		$testData = require __DIR__ . '/../tests/Data/mail_templates.php';
+
+		$this->checkExistingTests( $testData, $mailTemplatePaths, $output );
 
 		$outputPath = $input->getOption( 'output-path' ) ?? '';
 		if ( $outputPath && substr( $outputPath, -1 ) !== '/' ) {
@@ -83,8 +83,7 @@ class RenderMailTemplatesCommand extends Command {
 					$outputPath .
 					basename( $template, '.txt.twig' ) .
 					( $variantName ? ".$variantName" : '' ) .
-					'.txt'
-				;
+					'.txt';
 
 				$output->write( "$outputName" );
 				if ( file_exists( $outputName ) ) {
@@ -104,9 +103,33 @@ class RenderMailTemplatesCommand extends Command {
 				}
 				$output->writeln( '' );
 			}
-
 		}
-
 	}
 
+	private function checkExistingTests( array $testData, array $mailTemplatePaths, OutputInterface $output ): void {
+		$mailTemplatesOnDisk = [];
+		foreach ( $mailTemplatePaths as $path ) {
+			$mailFilesInFolder = glob( $path . '/Mail_*' );
+			array_walk( $mailFilesInFolder, function( & $filename ) {
+				$filename = basename( $filename ); // this would cause problems w/ mail templates in sub-folders
+			} );
+			$mailTemplatesOnDisk = array_merge( $mailTemplatesOnDisk, $mailFilesInFolder );
+		}
+
+		$testTemplateNames = array_keys( $testData );
+
+		$untestedTemplates = array_diff( $mailTemplatesOnDisk, $testTemplateNames );
+		if ( count( $untestedTemplates ) ) {
+			$output->writeln(
+				'<error>There are untested templates: ' . implode( ', ', $untestedTemplates ) . '</error>'
+			);
+		}
+
+		$strayTemplates = array_diff( $testTemplateNames, $mailTemplatesOnDisk );
+		if ( count( $strayTemplates ) ) {
+			$output->writeln(
+				'<error>There are tests for non-existing templates: ' . implode( ', ', $strayTemplates ) . '</error>'
+			);
+		}
+	}
 }
