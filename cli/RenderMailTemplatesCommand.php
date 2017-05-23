@@ -18,6 +18,11 @@ use Twig_Error;
 /**
  * A command to check and dump mail templates
  *
+ * The most useful way to apply this is probably to...
+ * - run this once before starting the work on a feature that touches emails, dumping the rendered templates
+ * - run it again after the changes, dumping to another folder
+ * - then diffing the resulting folders
+ *
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
