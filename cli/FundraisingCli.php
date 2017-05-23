@@ -30,6 +30,7 @@ class FundraisingCli {
 	}
 	private function registerCommands() {
 		$this->app->add( new ValidateConfigCommand() );
+		$this->app->add( new RenderMailTemplatesCommand() );
 	}
 	public function run() {
 		$this->newApplication()->run();
