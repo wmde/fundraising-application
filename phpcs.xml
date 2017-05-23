@@ -18,6 +18,10 @@
         <!--<exclude name="vendor/mediawiki/mediawiki-codesniffer/MediaWiki/Sniffs/WhiteSpace/SpaceBeforeSingleLineCommentSniff.php" />-->
     <!--</rule>-->
 
+    <rule ref="vendor/mediawiki/mediawiki-codesniffer/MediaWiki/Sniffs/WhiteSpace.SpaceBeforeSingleLineComment.SingleSpaceBeforeSingleLineComment">
+        <severity>0</severity>
+    </rule>
+
     <rule ref="Generic.Arrays.DisallowLongArraySyntax" />
     <rule ref="Generic.Classes" />
     <rule ref="Generic.CodeAnalysis">
