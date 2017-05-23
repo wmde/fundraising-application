@@ -112,7 +112,6 @@ return [
 			'lastName' => "O'Reilly",
 			'salutation' => 'Herr',
 			'title' => 'Dr.',
-			'applicationId' => 23,
 			'membershipFee' => 15.23,
 		],
 		'variants' => [
