@@ -114,7 +114,8 @@
 			"@test",
 			"@cs",
 			"npm run ci",
-			"@validate-app-config"
+			"@validate-app-config",
+			"@stan"
 		],
 		"phpcs": [
 			"vendor/bin/phpcs"
@@ -122,7 +123,12 @@
 		"phpmd": [
 			"vendor/bin/phpmd src/ text phpmd.xml"
 		],
-		"validate-app-config": "./console validate-config app/config/config.dist.json app/config/config.test.json"
+		"validate-app-config": "./console validate-config app/config/config.dist.json app/config/config.test.json",
+		"stan": [
+			"composer install --ignore-platform-reqs --no-dev",
+			"docker run -v $PWD:/app --rm phpstan/phpstan analyse src"
+		]
+
 	},
 	"config": {
 		"discard-changes": true
