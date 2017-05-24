@@ -107,3 +107,20 @@ test( 'ValidationDispatcher does nothing if ignored data changes', function ( t 
 
 	t.end();
 } );
+
+test( 'ValidationDispatcher does nothing if required fields don\'t have a value', function ( t ) {
+	var initialData = { amount: '0,00', paymentType: '' },
+		validator = { validate: sinon.spy() },
+		testStore = { dispatch: sinon.spy() },
+		dispatcher = createAmountValidationDispatcher(
+			validator,
+			initialData
+		);
+
+	dispatcher.dispatchIfChanged( { amount: '0,00', paymentType: 'BEZ' }, testStore );
+
+	t.notOk( validator.validate.called, 'validation function is never called' );
+	t.notOk( testStore.dispatch.called, 'no action is dispatched' );
+
+	t.end();
+} );

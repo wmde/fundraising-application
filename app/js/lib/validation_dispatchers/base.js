@@ -20,6 +20,7 @@ var _ = require( 'underscore' ),
 		finishActionCreationFunction: null,
 		beginActionCreationFunction: null,
 		fields: null,
+		fieldValuesIfNotSet: null,
 		previousFieldValues: {},
 
 		/**
@@ -36,6 +37,10 @@ var _ = require( 'underscore' ),
 				return;
 			}
 
+			if ( !this.fieldsRequiredForDispatchAreSet( selectedValues ) ) {
+				return;
+			}
+
 			this.previousFieldValues = selectedValues;
 
 			if ( this.beginActionCreationFunction ) {
@@ -43,6 +48,20 @@ var _ = require( 'underscore' ),
 			}
 			validationResult = this.validationFunction( selectedValues );
 			return store.dispatch( this.finishActionCreationFunction( validationResult ) );
+		},
+
+		fieldsRequiredForDispatchAreSet: function ( formValues ) {
+			var allFieldsSet = true;
+
+			if ( _.isObject( formValues ) && this.fieldValuesIfNotSet !== null ) {
+				_.each( this.fieldValuesIfNotSet, function ( initalValue, fieldName ) {
+					if ( initalValue === formValues[ fieldName ] ) {
+						allFieldsSet = false;
+					}
+				} );
+			}
+
+			return allFieldsSet;
 		}
 	};
 
