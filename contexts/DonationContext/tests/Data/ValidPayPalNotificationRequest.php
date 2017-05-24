@@ -41,6 +41,7 @@ class ValidPayPalNotificationRequest {
 
 	public const PAYMENT_STATUS_COMPLETED = 'Completed';
 	public const PAYMENT_STATUS_PENDING = 'Pending';
+	public const DONATION_ID = null; /// FIXME
 
 	public static function newInstantPayment( int $dataSetId ): PayPalPaymentNotificationRequest {
 		return self::newBaseRequest()
