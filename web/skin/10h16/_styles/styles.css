@@ -858,3 +858,107 @@ body.page-supporters section .box-header span:before {
 .sandboxedcontent.privacy_protection ul {
     list-style: disc inside;
 }
+
+/**
+ * bank detail banner
+ */
+.sliding-banner {
+    display: none;
+    width: 100%;
+    min-width: 57.1em;
+    position: fixed;
+    overflow: hidden;
+    bottom: 3.5em;
+    height: 4.4em;
+    text-align: center;
+}
+
+.content-wrapper {
+    position: relative;
+}
+
+.sliding-banner ul {
+    color: white;
+    display: inline-block;
+    text-align: left;
+}
+
+.sliding-banner li {
+    position: relative;
+    margin: 0;
+    padding: 0.95em;
+    height: 2.5em;
+    background: #479ee7;
+    border-radius: 0.4em;
+}
+
+.sliding-banner .bank-details {
+    margin-right: 1em;
+    float: left;
+}
+
+.sliding-banner .bank-details .icon-phone {
+    float: left;
+    height: 1em;
+    font-size: 2.5em;
+}
+
+.sliding-banner .text-small {
+    font-size: 0.8em;
+}
+
+.sliding-banner .text-large {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.sliding-banner .text-lightblue {
+    color: #9fccf3;
+}
+
+.sliding-banner .digit-group {
+    margin-right: 0.25em;
+    letter-spacing: 0.1em;
+}
+
+.sliding-banner .switch-button {
+    color: #479EE7;
+    font-size: 19px;
+
+    height: 42px;
+    padding: 0 15px;
+
+    border-radius: 5px;
+    border: 1px solid #9fccf3;
+
+    background: #ffffff;
+    background: -moz-linear-gradient(top, #ffffff 0%, #f7f7f7 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(100%, #f7f7f7));
+    background: -webkit-linear-gradient(top, #ffffff 0%, #f7f7f7 100%);
+    background: -o-linear-gradient(top, #ffffff 0%, #f7f7f7 100%);
+    background: -ms-linear-gradient(top, #ffffff 0%, #f7f7f7 100%);
+    background: linear-gradient(to bottom, #ffffff 0%, #f7f7f7 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f7f7f7',GradientType=0 );
+}
+
+.sliding-banner .tmessage-button {
+    float: right;
+    margin-right: 1em;
+}
+
+.sliding-banner .tmessage-button > span {
+    vertical-align: top;
+    padding-right: 10px;
+}
+
+.sliding-banner button.switch-button span[class^="icon-"] {
+    padding-right: 5px;
+}
+
+.sliding-banner .banner-btn-close {
+    position: absolute;
+    top: 0.4em;
+    right: 0.4em;
+    cursor: pointer;
+}
+
