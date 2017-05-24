@@ -114,8 +114,7 @@
 			"@test",
 			"@cs",
 			"npm run ci",
-			"@validate-app-config",
-			"@stan"
+			"@validate-app-config"
 		],
 		"phpcs": [
 			"vendor/bin/phpcs"
