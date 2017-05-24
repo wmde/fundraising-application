@@ -1,3 +1,5 @@
+dist: trusty
+
 language: php
 
 matrix:
@@ -32,6 +34,8 @@ script:
   - composer ci
   - travis_retry vendor/bin/phpunit tests/System/
   - composer install --ignore-platform-reqs --no-dev
+  - docker ps
+  - docker images
   - docker run -v $PWD:/app --rm phpstan/phpstan analyse src
 
 after_success:
