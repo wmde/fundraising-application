@@ -31,6 +31,8 @@ before_script:
 script:
   - composer ci
   - travis_retry vendor/bin/phpunit tests/System/
+  - composer install --ignore-platform-reqs --no-dev
+  - docker run -v $PWD:/app --rm phpstan/phpstan analyse src
 
 after_success:
   - if [ "$TYPE" == "coverage" ]; then bash build/travis/uploadCoverage.sh; fi
