@@ -1,9 +1,9 @@
 <script type="text/javascript">
-	var timer, bankDetailBannerClosed = false;
 	$( document ).ready( function() {
-		timer = window.setTimeout( function() {
-			$( '.sliding-banner' ).fadeIn();
-		}, 5000 );
+		var bankDetailBannerClosed = false,
+			timer = window.setTimeout( function() {
+				$( '.sliding-banner' ).fadeIn();
+			}, 5000 );
 
 		$( 'input, label' ).focus( function() {
 			$( '.sliding-banner' ).fadeOut();
