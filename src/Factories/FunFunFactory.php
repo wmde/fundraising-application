@@ -13,9 +13,6 @@ use Doctrine\ORM\EntityManager;
 use FileFetcher\ErrorLoggingFileFetcher;
 use FileFetcher\SimpleFileFetcher;
 use GuzzleHttp\Client;
-use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Handler\CurlHandler;
-use GuzzleHttp\HandlerStack;
 use NumberFormatter;
 use Pimple\Container;
 use Psr\Log\LoggerInterface;
@@ -263,22 +260,6 @@ class FunFunFactory {
 
 		$pimple['greeting_generator'] = function() {
 			return new GreetingGenerator();
-		};
-
-		$pimple['guzzle_client'] = function() {
-			$middlewareFactory = new MiddlewareFactory();
-			$middlewareFactory->setLogger( $this->getLogger() );
-
-			$handlerStack = HandlerStack::create( new CurlHandler() );
-			$handlerStack->push( $middlewareFactory->retry() );
-
-			$guzzle = new Client( [
-				'cookies' => true,
-				'handler' => $handlerStack,
-				'headers' => [ 'User-Agent' => 'WMDE Fundraising Frontend' ],
-			] );
-
-			return $this->addProfilingDecorator( $guzzle, 'Guzzle Client' );
 		};
 
 		$pimple['translator'] = function() {
@@ -586,10 +567,6 @@ class FunFunFactory {
 			$this->config['referrer-generalization']['default'],
 			$this->config['referrer-generalization']['domain-map']
 		);
-	}
-
-	private function getGuzzleClient(): ClientInterface {
-		return $this->pimple['guzzle_client'];
 	}
 
 	public function getLogger(): LoggerInterface {
