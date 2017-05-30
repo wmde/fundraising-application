@@ -40,6 +40,7 @@ class Application {
 	private $payment;
 	private $needsModeration;
 	private $isCancelled;
+	private $isConfirmed;
 	private $isDeleted;
 
 	public static function newApplication( string $type, Applicant $applicant, Payment $payment ): self {
