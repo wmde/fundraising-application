@@ -15,6 +15,9 @@ use WMDE\Fundraising\Frontend\Validation\IbanValidator;
  */
 class CheckIbanUseCase {
 
+	private $bankDataConverter;
+	private $ibanValidator;
+
 	public function __construct( BankDataConverter $bankDataConverter, IbanValidator $ibanValidator ) {
 		$this->bankDataConverter = $bankDataConverter;
 		$this->ibanValidator = $ibanValidator;
