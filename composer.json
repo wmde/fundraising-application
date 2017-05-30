@@ -28,7 +28,8 @@
 		"symfony/console": "^3.2",
 		"piwik/piwik-php-tracker": "^1.0",
 		"wmde/fundraising-content-provider": "^2.0",
-		"guzzlehttp/guzzle": "^6.0"
+		"guzzlehttp/guzzle": "^6.0",
+		"symfony/stopwatch": "^3.3"
 	},
 	"repositories": [
 		{
