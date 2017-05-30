@@ -13,6 +13,8 @@ use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
  */
 class CreditCardNotificationPresenter {
 
+	private $template;
+
 	public function __construct( TwigTemplate $template ) {
 		$this->template = $template;
 	}
