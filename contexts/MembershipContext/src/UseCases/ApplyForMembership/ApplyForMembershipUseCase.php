@@ -23,6 +23,7 @@ class ApplyForMembershipUseCase {
 	private $mailer;
 	private $validator;
 	private $policyValidator;
+	private $membershipApplicationTracker;
 	private $piwikTracker;
 
 	public function __construct( ApplicationRepository $repository,
