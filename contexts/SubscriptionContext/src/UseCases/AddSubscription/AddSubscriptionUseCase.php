@@ -71,16 +71,7 @@ class AddSubscriptionUseCase {
 	}
 
 	private function newMailAddressFromSubscription( Subscription $subscription ): EmailAddress {
-		return new EmailAddress(
-			$subscription->getEmail(),
-			implode(
-				' ',
-				[
-					$subscription->getAddress()->getFirstName(),
-					$subscription->getAddress()->getLastName()
-				]
-			)
-		);
+		return new EmailAddress( $subscription->getEmail() );
 	}
 
 	private function createSubscriptionFromRequest( SubscriptionRequest $subscriptionRequest ): Subscription {
