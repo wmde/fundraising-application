@@ -79,6 +79,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\ProfilerDataCollector;
 use WMDE\Fundraising\Frontend\Infrastructure\ProfilingDecoratorBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\RandomTokenGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\TemplateMailerInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
 use WMDE\Fundraising\Frontend\MembershipContext\Authorization\ApplicationAuthorizer;
 use WMDE\Fundraising\Frontend\MembershipContext\Authorization\ApplicationTokenFetcher;
@@ -608,7 +609,7 @@ class FunFunFactory {
 		);
 	}
 
-	private function newAddSubscriptionMailer(): TemplateBasedMailer {
+	private function newAddSubscriptionMailer(): TemplateMailerInterface {
 		return $this->newTemplateMailer(
 			$this->getSuborganizationMessenger(),
 			new TwigTemplate(
@@ -622,7 +623,7 @@ class FunFunFactory {
 		);
 	}
 
-	private function newConfirmSubscriptionMailer(): TemplateBasedMailer {
+	private function newConfirmSubscriptionMailer(): TemplateMailerInterface {
 		return $this->newTemplateMailer(
 			$this->getSuborganizationMessenger(),
 			new TwigTemplate(
@@ -634,7 +635,13 @@ class FunFunFactory {
 		);
 	}
 
-	private function newTemplateMailer( Messenger $messenger, TwigTemplate $template, string $messageKey ): TemplateBasedMailer {
+	/**
+	 * Create a new TemplateMailer instance
+	 *
+	 * So much decoration going on that explicitly hinting what we return (Robustness principle) would be confusing
+	 * (you'd expect a TemplateBasedMailer, not a LoggingMailer), so we hint the interface instead.
+	 */
+	private function newTemplateMailer( Messenger $messenger, TwigTemplate $template, string $messageKey ): TemplateMailerInterface {
 		$mailer = new TemplateBasedMailer(
 			$messenger,
 			$template,
@@ -678,7 +685,7 @@ class FunFunFactory {
 		);
 	}
 
-	private function newContactUserMailer(): TemplateBasedMailer {
+	private function newContactUserMailer(): TemplateMailerInterface {
 		return $this->newTemplateMailer(
 			$this->getSuborganizationMessenger(),
 			new TwigTemplate( $this->getTwig(), 'Mail_Contact_Confirm_to_User.txt.twig' ),
@@ -816,7 +823,7 @@ class FunFunFactory {
 		);
 	}
 
-	private function newCancelDonationMailer(): TemplateBasedMailer {
+	private function newCancelDonationMailer(): TemplateMailerInterface {
 		return $this->newTemplateMailer(
 			$this->getSuborganizationMessenger(),
 			new TwigTemplate(
@@ -972,7 +979,7 @@ class FunFunFactory {
 		);
 	}
 
-	private function newApplyForMembershipMailer(): TemplateBasedMailer {
+	private function newApplyForMembershipMailer(): TemplateMailerInterface {
 		return $this->newTemplateMailer(
 			$this->getOrganizationMessenger(),
 			new TwigTemplate(
@@ -1029,7 +1036,7 @@ class FunFunFactory {
 		return $this->pimple['membership_application_repository'];
 	}
 
-	private function newCancelMembershipApplicationMailer(): TemplateBasedMailer {
+	private function newCancelMembershipApplicationMailer(): TemplateMailerInterface {
 		return $this->newTemplateMailer(
 			$this->getOrganizationMessenger(),
 			new TwigTemplate(
