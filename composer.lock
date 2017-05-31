@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "1ea88c74065b069e79082b2095b4e740",
+    "content-hash": "e27236f0d6df6a76f11fafc041a82fea",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2841,7 +2841,7 @@
                 }
             ],
             "description": "Validates @covers tags in PHPUnit tests",
-            "time": "2017-04-24T20:32:12+00:00"
+            "time": "2017-04-24 20:32:12"
         },
         {
             "name": "paragonie/random_compat",
@@ -5095,16 +5095,16 @@
         },
         {
             "name": "wmde/fundraising-frontend-content",
-            "version": "dev-master",
+            "version": "dev-test",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content.git",
-                "reference": "08b93fbaac3f3208cc21a4e3ebef6fd7a0921013"
+                "reference": "30d7d8557f991e013aa378c6134d6d1712f4d7b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/08b93fbaac3f3208cc21a4e3ebef6fd7a0921013",
-                "reference": "08b93fbaac3f3208cc21a4e3ebef6fd7a0921013",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/30d7d8557f991e013aa378c6134d6d1712f4d7b9",
+                "reference": "30d7d8557f991e013aa378c6134d6d1712f4d7b9",
                 "shasum": ""
             },
             "require-dev": {
@@ -5134,9 +5134,9 @@
             ],
             "description": "i18n for FundraisingFrontend",
             "support": {
-                "source": "https://github.com/wmde/fundraising-frontend-content/tree/master"
+                "source": "https://github.com/wmde/fundraising-frontend-content/tree/test"
             },
-            "time": "2017-05-07T19:07:34+00:00"
+            "time": "2017-05-30 12:29:02"
         },
         {
             "name": "wmde/psr-log-test-doubles",
