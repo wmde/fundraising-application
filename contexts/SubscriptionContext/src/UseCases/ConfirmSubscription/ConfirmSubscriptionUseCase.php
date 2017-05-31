@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\ConfirmSubscription;
 
-use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\TemplateMailerInterface;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Domain\Repositories\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
@@ -20,7 +20,7 @@ class ConfirmSubscriptionUseCase {
 
 	private $mailer;
 
-	public function __construct( SubscriptionRepository $subscriptionRepository, TemplateBasedMailer $mailer ) {
+	public function __construct( SubscriptionRepository $subscriptionRepository, TemplateMailerInterface $mailer ) {
 		$this->subscriptionRepository = $subscriptionRepository;
 		$this->mailer = $mailer;
 	}
