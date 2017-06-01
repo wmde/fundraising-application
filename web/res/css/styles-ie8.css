@@ -37,3 +37,7 @@ input[type=checkbox] + label:before { background: none }*/
 .box.rounded.partial { behavior:url("_styles/PIE.php"); }
 .box.rounded.partial .box-header { behavior:url("_styles/PIE.php"); }
 .box.rounded.partial .box-footer { behavior:url("_styles/PIE.php"); }*/
+
+.sandboxedcontent.supporters table tr td {
+	float: left;
+}
