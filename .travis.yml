@@ -1,3 +1,8 @@
+dist: trusty
+
+services:
+  - docker
+
 language: php
 
 matrix:
@@ -13,7 +18,8 @@ matrix:
 #  allow_failures: # We allow this one to fail so fast_finish causes the build to not wait for it
 #  - env: DB=sqlite; TYPE=coverage
 
-sudo: false
+before_install:
+  - docker build -t wmde/fundraising-frontend-phpstan docker/phpstan
 
 install:
   - travis_retry composer install
@@ -28,6 +34,8 @@ before_script:
 script:
   - composer ci
   - travis_retry vendor/bin/phpunit tests/System/
+  - composer install --ignore-platform-reqs --no-dev
+  - docker run -v $PWD:/app --rm wmde/fundraising-frontend-phpstan analyse -c phpstan.neon --level 1 --no-progress cli/ contexts/ src/
 
 after_success:
   - if [ "$TYPE" == "coverage" ]; then bash build/travis/uploadCoverage.sh; fi

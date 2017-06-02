@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\SubscriptionContext\Tests\Integration\UseCases\AddSubscription;
 
-use PHPUnit_Framework_MockObject_MockObject;
 use WMDE\Fundraising\Entities\Subscription;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\EmailAddress;
@@ -14,14 +13,17 @@ use WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\AddSubscription\Subsc
 use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionValidator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FailedValidationResult;
 use WMDE\Fundraising\Frontend\Validation\ValidationResult;
+use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_MockObject_MockObject;
+use ReflectionClass;
 
 /**
- * @covers WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\AddSubscription\AddSubscriptionUseCase
+ * @covers \WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\AddSubscription\AddSubscriptionUseCase
  *
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class AddSubscriptionUseCaseTest extends \PHPUnit\Framework\TestCase {
+class AddSubscriptionUseCaseTest extends TestCase {
 
 	/**
 	 * @var PHPUnit_Framework_MockObject_MockObject|SubscriptionRepository
@@ -139,4 +141,19 @@ class AddSubscriptionUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$useCase->addSubscription( $request );
 	}
 
+	public function testNewMailAddressFromSubscription(): void {
+		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->mailer );
+		$class = new ReflectionClass( AddSubscriptionUseCase::class );
+
+		$method = $class->getMethod( 'newMailAddressFromSubscription' );
+		$method->setAccessible( true );
+
+		$subscription = $this->createMock( Subscription::class );
+		$subscription->expects( $this->once() )->method( 'getEmail' )->willReturn( 'lorem@ipsum.com' );
+
+		$email = $method->invoke( $useCase, $subscription );
+
+		$this->assertInstanceOf( EmailAddress::class, $email );
+		$this->assertSame( 'lorem@ipsum.com', $email->getFullAddress() );
+	}
 }

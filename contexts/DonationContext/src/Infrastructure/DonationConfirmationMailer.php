@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\DonationContext\Infrastructure;
 
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
-use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\TemplateMailerInterface;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankTransferPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
@@ -18,7 +18,7 @@ class DonationConfirmationMailer {
 
 	private $mailer;
 
-	public function __construct( TemplateBasedMailer $mailer ) {
+	public function __construct( TemplateMailerInterface $mailer ) {
 		$this->mailer = $mailer;
 	}
 

@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionSignupNotification;
 
 use Psr\Log\LoggerInterface;
-use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\TemplateMailerInterface;
 use WMDE\Fundraising\Frontend\MembershipContext\Authorization\ApplicationAuthorizer;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationRepository;
@@ -27,7 +27,8 @@ class HandleSubscriptionSignupNotificationUseCase {
 	private $logger;
 
 	public function __construct( ApplicationRepository $repository, ApplicationAuthorizer $authorizationService,
-								 TemplateBasedMailer $mailer, LoggerInterface $logger ) {
+		TemplateMailerInterface $mailer, LoggerInterface $logger ) {
+
 		$this->repository = $repository;
 		$this->authorizationService = $authorizationService;
 		$this->mailer = $mailer;

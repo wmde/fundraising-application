@@ -11,7 +11,7 @@ use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class TemplateBasedMailer {
+class TemplateBasedMailer implements TemplateMailerInterface {
 
 	private $messenger;
 	private $template;
@@ -24,9 +24,10 @@ class TemplateBasedMailer {
 	}
 
 	/**
+	 * @inheritdoc
 	 * @throws \RuntimeException
 	 */
-	public function sendMail( EmailAddress $recipient, array $templateArguments = [] ) {
+	public function sendMail( EmailAddress $recipient, array $templateArguments = [] ): void {
 		$this->messenger->sendMessageToUser(
 			new Message(
 				$this->subject,

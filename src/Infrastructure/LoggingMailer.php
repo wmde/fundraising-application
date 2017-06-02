@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\EmailAddress;
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class LoggingMailer extends TemplateBasedMailer {
+class LoggingMailer implements TemplateMailerInterface {
 
 	const CONTEXT_EXCEPTION_KEY = 'exception';
 
@@ -20,16 +20,17 @@ class LoggingMailer extends TemplateBasedMailer {
 	private $logger;
 	private $logLevel;
 
-	public function __construct( TemplateBasedMailer $mailer, LoggerInterface $logger ) {
+	public function __construct( TemplateMailerInterface $mailer, LoggerInterface $logger ) {
 		$this->mailer = $mailer;
 		$this->logger = $logger;
 		$this->logLevel = LogLevel::CRITICAL;
 	}
 
 	/**
+	 * @inheritdoc
 	 * @throws \RuntimeException
 	 */
-	public function sendMail( EmailAddress $recipient, array $templateArguments = [] ) {
+	public function sendMail( EmailAddress $recipient, array $templateArguments = [] ): void {
 		try {
 			$this->mailer->sendMail( $recipient, $templateArguments );
 		}
@@ -38,5 +39,4 @@ class LoggingMailer extends TemplateBasedMailer {
 			throw $ex;
 		}
 	}
-
 }

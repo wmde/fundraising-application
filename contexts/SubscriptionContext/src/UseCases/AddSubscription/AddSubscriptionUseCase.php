@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\AddSubscription
 
 use WMDE\Fundraising\Entities\Address;
 use WMDE\Fundraising\Entities\Subscription;
-use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\TemplateMailerInterface;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Domain\Repositories\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Domain\Repositories\SubscriptionRepositoryException;
@@ -26,7 +26,7 @@ class AddSubscriptionUseCase {
 	private $mailer;
 
 	public function __construct( SubscriptionRepository $subscriptionRepository,
-		SubscriptionValidator $subscriptionValidator, TemplateBasedMailer $mailer ) {
+		SubscriptionValidator $subscriptionValidator, TemplateMailerInterface $mailer ) {
 
 		$this->subscriptionRepository = $subscriptionRepository;
 		$this->subscriptionValidator = $subscriptionValidator;
@@ -71,16 +71,7 @@ class AddSubscriptionUseCase {
 	}
 
 	private function newMailAddressFromSubscription( Subscription $subscription ): EmailAddress {
-		return new EmailAddress(
-			$subscription->getEmail(),
-			implode(
-				' ',
-				[
-					$subscription->getAddress()->getFirstName(),
-					$subscription->getAddress()->getLastName()
-				]
-			)
-		);
+		return new EmailAddress( $subscription->getEmail() );
 	}
 
 	private function createSubscriptionFromRequest( SubscriptionRequest $subscriptionRequest ): Subscription {

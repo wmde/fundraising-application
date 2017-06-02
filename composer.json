@@ -28,7 +28,8 @@
 		"symfony/console": "^3.2",
 		"piwik/piwik-php-tracker": "^1.0",
 		"wmde/fundraising-content-provider": "^2.0",
-		"guzzlehttp/guzzle": "^6.0"
+		"guzzlehttp/guzzle": "^6.0",
+		"symfony/stopwatch": "^3.3"
 	},
 	"repositories": [
 		{
@@ -79,7 +80,8 @@
 		"silex/web-profiler": "~2.0",
 		"sorien/silex-dbal-profiler": "~2.0",
 		"wmde/fundraising-frontend-content": "dev-test",
-		"symfony/css-selector": "^3.2"
+		"symfony/css-selector": "^3.2",
+		"phpstan/phpstan": "^0.7.0"
 	},
 	"autoload": {
 		"psr-4": {
@@ -122,7 +124,8 @@
 		"phpmd": [
 			"vendor/bin/phpmd src/ text phpmd.xml"
 		],
-		"validate-app-config": "./console validate-config app/config/config.dist.json app/config/config.test.json"
+		"validate-app-config": "./console validate-config app/config/config.dist.json app/config/config.test.json",
+		"stan": "./vendor/bin/phpstan analyse -c phpstan.neon --level 1 cli/ contexts/ src/"
 	},
 	"config": {
 		"discard-changes": true

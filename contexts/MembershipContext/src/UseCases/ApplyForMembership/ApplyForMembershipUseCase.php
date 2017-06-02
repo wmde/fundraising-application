@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership;
 
-use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\TemplateMailerInterface;
 use WMDE\Fundraising\Frontend\MembershipContext\Authorization\ApplicationTokenFetcher;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationRepository;
@@ -23,10 +23,11 @@ class ApplyForMembershipUseCase {
 	private $mailer;
 	private $validator;
 	private $policyValidator;
+	private $membershipApplicationTracker;
 	private $piwikTracker;
 
 	public function __construct( ApplicationRepository $repository,
-		ApplicationTokenFetcher $tokenFetcher, TemplateBasedMailer $mailer,
+		ApplicationTokenFetcher $tokenFetcher, TemplateMailerInterface $mailer,
 		MembershipApplicationValidator $validator, ApplyForMembershipPolicyValidator $policyValidator,
 		ApplicationTracker $tracker, ApplicationPiwikTracker $piwikTracker ) {
 
