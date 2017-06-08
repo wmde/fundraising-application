@@ -25,6 +25,8 @@ use ReflectionClass;
  */
 class AddSubscriptionUseCaseTest extends TestCase {
 
+	private const A_SPECIFIC_EMAIL_ADDRESS = 'curious@nyancat.com';
+
 	/**
 	 * @var PHPUnit_Framework_MockObject_MockObject|SubscriptionRepository
 	 */
@@ -54,7 +56,7 @@ class AddSubscriptionUseCaseTest extends TestCase {
 
 	private function createValidSubscriptionRequest(): SubscriptionRequest {
 		$request = new SubscriptionRequest();
-		$request->setEmail( 'curious@nyancat.com' );
+		$request->setEmail( self::A_SPECIFIC_EMAIL_ADDRESS );
 		return $request;
 	}
 
@@ -108,7 +110,7 @@ class AddSubscriptionUseCaseTest extends TestCase {
 		$this->mailer->expects( $this->once() )
 			->method( 'sendMail' )
 			->with(
-				$this->equalTo( new EmailAddress( 'curious@nyancat.com' ) ),
+				$this->equalTo( new EmailAddress( self::A_SPECIFIC_EMAIL_ADDRESS ) ),
 				$this->callback( function( $value ) {
 					$this->assertInternalType( 'array', $value );
 					$this->assertArrayHasKey( 'subscription', $value );
@@ -141,19 +143,4 @@ class AddSubscriptionUseCaseTest extends TestCase {
 		$useCase->addSubscription( $request );
 	}
 
-	public function testNewMailAddressFromSubscription(): void {
-		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->mailer );
-		$class = new ReflectionClass( AddSubscriptionUseCase::class );
-
-		$method = $class->getMethod( 'newMailAddressFromSubscription' );
-		$method->setAccessible( true );
-
-		$subscription = $this->createMock( Subscription::class );
-		$subscription->expects( $this->once() )->method( 'getEmail' )->willReturn( 'lorem@ipsum.com' );
-
-		$email = $method->invoke( $useCase, $subscription );
-
-		$this->assertInstanceOf( EmailAddress::class, $email );
-		$this->assertSame( 'lorem@ipsum.com', $email->getFullAddress() );
-	}
 }
