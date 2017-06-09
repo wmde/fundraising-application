@@ -20,7 +20,7 @@
 			"array": {}
 		}
 	},
-	"i18n-base-path": "",
+	"i18n-base-path": "vendor/wmde/fundraising-frontend-content/i18n",
 	"default-layout-templates": {
 		"header": "Page_Header.html.twig",
 		"footer": "Page_Footer.html.twig",
