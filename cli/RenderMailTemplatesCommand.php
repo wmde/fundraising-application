@@ -4,8 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Cli;
 
-use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
 use FileFetcher\SimpleFileFetcher;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -14,6 +12,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Twig_Environment;
 use Twig_Error;
+use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
 
 /**
  * A command to check and dump mail templates
@@ -28,7 +28,7 @@ use Twig_Error;
  */
 class RenderMailTemplatesCommand extends Command {
 
-	const NAME = 'dump-mail-tpl';
+	private const NAME = 'dump-mail-tpl';
 
 	protected function configure() {
 		$this->setName( self::NAME )
@@ -46,7 +46,6 @@ class RenderMailTemplatesCommand extends Command {
 	}
 
 	protected function execute( InputInterface $input, OutputInterface $output ) {
-
 		$config = $this->getDefaultConfig();
 		$config['twig']['strict-variables'] = true;
 
@@ -90,7 +89,29 @@ class RenderMailTemplatesCommand extends Command {
 	 * @param OutputInterface $output Command output
 	 */
 	private function validateTemplateFixtures( array $testData, array $mailTemplatePaths, OutputInterface $output ): void {
+		$mailTemplatesOnDisk = $this->getMailTemplatesOnDisk( $mailTemplatePaths );
+		$testTemplateNames = array_keys( $testData );
+
+		$untestedTemplates = array_diff( $mailTemplatesOnDisk, $testTemplateNames );
+
+		if ( count( $untestedTemplates ) ) {
+			$output->writeln(
+				'<error>There are untested templates: ' . implode( ', ', $untestedTemplates ) . '</error>'
+			);
+		}
+
+		$strayTemplates = array_diff( $testTemplateNames, $mailTemplatesOnDisk );
+
+		if ( count( $strayTemplates ) ) {
+			$output->writeln(
+				'<error>There are tests for non-existing templates: ' . implode( ', ', $strayTemplates ) . '</error>'
+			);
+		}
+	}
+
+	private function getMailTemplatesOnDisk( array $mailTemplatePaths ): array {
 		$mailTemplatesOnDisk = [];
+
 		foreach ( $mailTemplatePaths as $path ) {
 			$mailFilesInFolder = glob( $path . '/Mail_*' );
 			array_walk( $mailFilesInFolder, function( & $filename ) {
@@ -99,21 +120,7 @@ class RenderMailTemplatesCommand extends Command {
 			$mailTemplatesOnDisk = array_merge( $mailTemplatesOnDisk, $mailFilesInFolder );
 		}
 
-		$testTemplateNames = array_keys( $testData );
-
-		$untestedTemplates = array_diff( $mailTemplatesOnDisk, $testTemplateNames );
-		if ( count( $untestedTemplates ) ) {
-			$output->writeln(
-				'<error>There are untested templates: ' . implode( ', ', $untestedTemplates ) . '</error>'
-			);
-		}
-
-		$strayTemplates = array_diff( $testTemplateNames, $mailTemplatesOnDisk );
-		if ( count( $strayTemplates ) ) {
-			$output->writeln(
-				'<error>There are tests for non-existing templates: ' . implode( ', ', $strayTemplates ) . '</error>'
-			);
-		}
+		return $mailTemplatesOnDisk;
 	}
 
 	/**
