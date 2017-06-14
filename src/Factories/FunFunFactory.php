@@ -319,13 +319,17 @@ class FunFunFactory {
 			$functions = [
 				new Twig_SimpleFunction(
 					'web_content',
-					[$this->getContentProvider(), 'getWeb'],
-					['is_safe' => ['html']]
+					function( string $name, array $context = [] ) {
+						return $this->getContentProvider()->getWeb( $name, $context );
+					},
+					[ 'is_safe' => [ 'html' ] ]
 				),
 				new Twig_SimpleFunction(
 					'mail_content',
-					[$this->getContentProvider(), 'getMail'],
-					['is_safe' => ['all']]
+					function( string $name, array $context = [] ) {
+						return $this->getContentProvider()->getMail( $name, $context );
+					},
+					[ 'is_safe' => [ 'all' ] ]
 				)
 			];
 
