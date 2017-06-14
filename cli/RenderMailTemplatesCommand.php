@@ -94,7 +94,7 @@ class RenderMailTemplatesCommand extends Command {
 
 		$untestedTemplates = array_diff( $mailTemplatesOnDisk, $testTemplateNames );
 
-		if ( count( $untestedTemplates ) ) {
+		if ( !empty( $untestedTemplates ) ) {
 			$output->writeln(
 				'<error>There are untested templates: ' . implode( ', ', $untestedTemplates ) . '</error>'
 			);
@@ -102,7 +102,7 @@ class RenderMailTemplatesCommand extends Command {
 
 		$strayTemplates = array_diff( $testTemplateNames, $mailTemplatesOnDisk );
 
-		if ( count( $strayTemplates ) ) {
+		if ( !empty( $strayTemplates ) ) {
 			$output->writeln(
 				'<error>There are tests for non-existing templates: ' . implode( ', ', $strayTemplates ) . '</error>'
 			);
