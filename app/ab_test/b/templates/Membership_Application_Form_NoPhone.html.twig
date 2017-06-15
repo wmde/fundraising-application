@@ -60,8 +60,7 @@
 						<strong>Mehr Informationen</strong>
 					</p>
 					<p>
-						Erfahren Sie <a href="http://wikimedia.de/wiki/Mitgliedschaft" target="_blank">mehr</a>
-						&uuml;ber Wikimedia Deutschland e. V. und seine Aktivit&auml;ten.
+						Erfahren Sie <a href="http://wikimedia.de/wiki/Mitgliedschaft{% if trackOutgoingLinks is defined and trackOutgoingLinks == true %}?piwik_campaign=Spendenseite&piwik_kwd=membership-form-sidebar{% endif %}" target="_blank">mehr</a>
 					</p>
 				</div>
 			</div>
@@ -446,7 +445,7 @@
 						<span class="icon-angle-left"></span>Zur&uuml;ck zur Wikipedia
 					</a>
 
-					<a href="http://wikimedia.de" class="f-right">
+					<a href="http://wikimedia.de{% if trackOutgoingLinks is defined and trackOutgoingLinks == true %}?piwik_campaign=Spendenseite&piwik_kwd=membership-form-bottom{% endif %}" class="f-right">
 						Mehr Infos zu Wikimedia<span class="icon-angle-right _icon-right"></span>
 					</a>
 				</div>
