@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "f3aa471083e3b986baf760ae1308df06",
+    "content-hash": "411a9e8d76ad5a404a39af4dd7c22124",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2745,6 +2745,91 @@
             ],
             "description": "Persistence services around the fundraising database",
             "time": "2017-01-06T11:34:58+00:00"
+        },
+        {
+            "name": "wmde/iterable-functions",
+            "version": "0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wmde/iterable-functions.git",
+                "reference": "2579436b4a8c629975037fb8bcf1db840cb01306"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wmde/iterable-functions/zipball/2579436b4a8c629975037fb8bcf1db840cb01306",
+                "reference": "2579436b4a8c629975037fb8bcf1db840cb01306",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1",
+                "wmde/traversable-iterator": "~1.0"
+            },
+            "require-dev": {
+                "mediawiki/mediawiki-codesniffer": "~0.8.0",
+                "ockcyp/covers-validator": "~0.6",
+                "phpunit/phpunit": "~6.2",
+                "squizlabs/php_codesniffer": "~2.9"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.1.x-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "description": "Functions to transform iterables into more specific types",
+            "homepage": "https://github.com/wmde/iterable-functions",
+            "time": "2017-06-17T17:13:51+00:00"
+        },
+        {
+            "name": "wmde/traversable-iterator",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wmde/traversable-iterator.git",
+                "reference": "a09656ab1c3a26596ba2c4d76da4c02e2db148a9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wmde/traversable-iterator/zipball/a09656ab1c3a26596ba2c4d76da4c02e2db148a9",
+                "reference": "a09656ab1c3a26596ba2c4d76da4c02e2db148a9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "mediawiki/mediawiki-codesniffer": "~0.8.0",
+                "ockcyp/covers-validator": "~0.6",
+                "phpunit/phpunit": "~6.2",
+                "squizlabs/php_codesniffer": "~2.9"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "WMDE\\TraversableIterator\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "description": "Turn Traversable objects into Iterators. Fixed version of the native IteratorIterator",
+            "homepage": "https://github.com/wmde/traversable-iterator",
+            "time": "2017-06-17T16:55:16+00:00"
         }
     ],
     "packages-dev": [

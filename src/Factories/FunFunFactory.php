@@ -27,6 +27,7 @@ use Twig_Extensions_Extension_Intl;
 use Twig_SimpleFunction;
 use WMDE\Fundraising\Frontend\DonationContext\DonationAcceptedEventHandler;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
+use WMDE\Fundraising\Frontend\Infrastructure\MailTemplateFilenameTraversable;
 use WMDE\Fundraising\Frontend\Infrastructure\WordListFileReader;
 use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\PiwikServerSideTracker;
@@ -1372,4 +1373,11 @@ class FunFunFactory {
 	private function getContentProvider(): ContentProvider {
 		return $this->pimple['content_provider'];
 	}
+
+	public function newMailTemplateFilenameTraversable(): \Traversable {
+		return new MailTemplateFilenameTraversable(
+			$this->config['twig']['loaders']['filesystem']['template-dir']
+		);
+	}
+
 }

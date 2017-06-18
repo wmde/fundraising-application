@@ -59,7 +59,11 @@ class RenderMailTemplatesCommand extends Command {
 
 		$testData = require __DIR__ . '/../tests/Data/mail_templates.php';
 
-		$this->validateTemplateFixtures( $testData, $config['twig']['loaders']['filesystem']['template-dir'], $output );
+		$this->validateTemplateFixtures(
+			$testData,
+			iterator_to_array( $ffFactory->newMailTemplateFilenameTraversable() ),
+			$output
+		);
 
 		$outputPath = $input->getOption( 'output-path' ) ?? '';
 		if ( $outputPath && substr( $outputPath, -1 ) !== '/' ) {
@@ -85,14 +89,13 @@ class RenderMailTemplatesCommand extends Command {
 	 * Check that there are templates for all fixtures and (even more important) vice-versa
 	 *
 	 * @param array $testData Template names and fixture information to render these templates
-	 * @param array $mailTemplatePaths Directories containing templates
+	 * @param array $mailTemplatePaths
 	 * @param OutputInterface $output Command output
 	 */
 	private function validateTemplateFixtures( array $testData, array $mailTemplatePaths, OutputInterface $output ): void {
-		$mailTemplatesOnDisk = $this->getMailTemplatesOnDisk( $mailTemplatePaths );
 		$testTemplateNames = array_keys( $testData );
 
-		$untestedTemplates = array_diff( $mailTemplatesOnDisk, $testTemplateNames );
+		$untestedTemplates = array_diff( $mailTemplatePaths, $testTemplateNames );
 
 		if ( !empty( $untestedTemplates ) ) {
 			$output->writeln(
@@ -100,27 +103,13 @@ class RenderMailTemplatesCommand extends Command {
 			);
 		}
 
-		$strayTemplates = array_diff( $testTemplateNames, $mailTemplatesOnDisk );
+		$strayTemplates = array_diff( $testTemplateNames, $mailTemplatePaths );
 
 		if ( !empty( $strayTemplates ) ) {
 			$output->writeln(
 				'<error>There are tests for non-existing templates: ' . implode( ', ', $strayTemplates ) . '</error>'
 			);
 		}
-	}
-
-	private function getMailTemplatesOnDisk( array $mailTemplatePaths ): array {
-		$mailTemplatesOnDisk = [];
-
-		foreach ( $mailTemplatePaths as $path ) {
-			$mailFilesInFolder = glob( $path . '/Mail_*' );
-			array_walk( $mailFilesInFolder, function( & $filename ) {
-				$filename = basename( $filename ); // this would cause problems w/ mail templates in sub-folders
-			} );
-			$mailTemplatesOnDisk = array_merge( $mailTemplatesOnDisk, $mailFilesInFolder );
-		}
-
-		return $mailTemplatesOnDisk;
 	}
 
 	/**
@@ -132,7 +121,7 @@ class RenderMailTemplatesCommand extends Command {
 	 * @param OutputInterface $output Command output
 	 */
 	private function renderTemplates( array $testData, Twig_Environment $twig, string $outputPath, OutputInterface $output ): void {
-		foreach( $testData as $template => $templateSettings ) {
+		foreach( $testData as $templateFileName => $templateSettings ) {
 
 			if ( empty( $templateSettings['variants'] ) ) {
 				$templateSettings['variants'] = [ '' => [] ];
@@ -141,7 +130,7 @@ class RenderMailTemplatesCommand extends Command {
 			foreach( $templateSettings['variants'] as $variantName => $additionalContext ) {
 				$outputName =
 					$outputPath .
-					basename( $template, '.txt.twig' ) .
+					basename( $templateFileName, '.txt.twig' ) .
 					( $variantName ? ".$variantName" : '' ) .
 					'.txt';
 
@@ -152,10 +141,16 @@ class RenderMailTemplatesCommand extends Command {
 				}
 
 				try {
-					file_put_contents( $outputName, $twig->render( $template, array_merge_recursive(
-						$templateSettings['context'],
-						$templateSettings['variants'][$variantName]
-					) ) );
+					file_put_contents(
+						$outputName,
+						$twig->render(
+							$templateFileName,
+							array_merge_recursive(
+								$templateSettings['context'],
+								$additionalContext
+							)
+						)
+					);
 				} catch( Twig_Error $e ) {
 					$output->writeln( '' );
 					$output->writeln( '<error>' . $e->getMessage() . '</error>' );

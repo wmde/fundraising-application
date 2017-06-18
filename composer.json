@@ -13,7 +13,9 @@
 		"pimple/pimple": "~3.0",
 
 		"wmde/fundraising-store": "~4.1",
+		"wmde/fundraising-content-provider": "^2.0",
 		"wmde/euro": "~1.0",
+		"wmde/iterable-functions": "~0.1.0",
 
 		"jeroen/file-fetcher": "~4.0",
 		"jeroen/generic-decorator": "~0.1.1",
@@ -27,7 +29,6 @@
 		"league/json-guard": "^0.3.2",
 		"symfony/console": "^3.2",
 		"piwik/piwik-php-tracker": "^1.0",
-		"wmde/fundraising-content-provider": "^2.0",
 		"guzzlehttp/guzzle": "^6.0",
 		"symfony/stopwatch": "^3.3"
 	},
