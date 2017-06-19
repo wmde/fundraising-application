@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
  */
 class MailTemplateFilenameTraversableTest extends \PHPUnit\Framework\TestCase {
 
-	public function testStuff() {
+	public function testTraversableContainsSomeEntriesInTheRightFormat() {
 		$mailTemplatePaths = TestEnvironment::newInstance()->getFactory()->newMailTemplateFilenameTraversable();
 
 		$pathArray = iterator_to_array( $mailTemplatePaths );
