@@ -1,26 +1,12 @@
-Vielen Dank für Ihre Anfrage.
-Wir werden uns in Kürze bei Ihnen melden.
-
-
---
-Mit freundlichen Grüßen
-
-Till Mletzko
-Teamleiter Fundraising
+contact_confirm_to_user
 
 -------------------------------------
-Gemeinnützige Wikimedia Fördergesellschaft mbH
-Tempelhofer Ufer 23-24
-10963 Berlin
+address_of_suborganization
 
-Telefon 030 - 219 158 26-19
+phone
 www.wikimedia.de
 
-Stellen Sie sich eine Welt vor, in der jeder Mensch an der Menge allen
-Wissens frei teilhaben kann. Helfen Sie uns dabei!
+wikimedia_vision
 <https://spenden.wikimedia.de/>
 
-Gemeinnützige Wikimedia Fördergesellschaft mbH.
-Eingetragen beim Amtsgericht Berlin-Charlottenburg unter der Nummer 130183 B.
-Als gemeinnützig anerkannt durch das Finanzamt für Körperschaften I Berlin,
-Steuernummer 27/613/02448.
+tax_id_suborganization

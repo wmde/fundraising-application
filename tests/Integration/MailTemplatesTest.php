@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration;
 
+use WMDE\Fundraising\ContentProvider\ContentProvider;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
@@ -19,13 +20,29 @@ class MailTemplatesTest extends \PHPUnit\Framework\TestCase {
 	private $factory;
 
 	public function setUp() {
+		$this->createMissingTestFiles();
+	}
+
+	private function createMissingTestFiles() {
+		foreach ( $this->getFreshlyRenderedContent() as $testFilePath => $testFileContent ) {
+			if ( !file_exists( $testFilePath ) ) {
+				file_put_contents( $testFilePath, $testFileContent );
+			}
+		}
+	}
+
+	private function getFreshlyRenderedContent() {
 		$this->factory = $this->newFactory();
 
-		$this->createMissingTestFiles();
+		foreach ( $this->getTestData() as $templateFileName => $templateTestData ) {
+			 yield from $this->getFreshlyRenderedContentForTemplate( $templateFileName, $templateTestData );
+		}
 	}
 
 	private function newFactory(): FunFunFactory {
 		$ffFactory = TestEnvironment::newInstance( $this->getConfig() )->getFactory();
+
+		$ffFactory->setContentProvider( $this->newContentKeyReturningContentProvider() );
 
 		$app = require __DIR__ . '/../../app/bootstrap.php';
 		$app->flush();
@@ -43,23 +60,19 @@ class MailTemplatesTest extends \PHPUnit\Framework\TestCase {
 		];
 	}
 
+	private function newContentKeyReturningContentProvider(): ContentProvider {
+		return new class() extends ContentProvider {
+			public function __construct() {
+			}
+			public function getMail( string $contentKey, array $context = [] ): string {
+				return $contentKey;
+			}
+		};
+	}
+
 	private function getTestData(): array {
 		$ffFactory = $this->factory;
 		return require __DIR__ . '/../Data/mail_templates.php';
-	}
-
-	private function createMissingTestFiles() {
-		foreach ( $this->getFreshlyRenderedContent() as $testFilePath => $testFileContent ) {
-			if ( !file_exists( $testFilePath ) ) {
-				file_put_contents( $testFilePath, $testFileContent );
-			}
-		}
-	}
-
-	private function getFreshlyRenderedContent() {
-		foreach ( $this->getTestData() as $templateFileName => $templateTestData ) {
-			 yield from $this->getFreshlyRenderedContentForTemplate( $templateFileName, $templateTestData );
-		}
 	}
 
 	private function getFreshlyRenderedContentForTemplate( string $templateFileName, array $templateTestData ) {
@@ -87,12 +100,19 @@ class MailTemplatesTest extends \PHPUnit\Framework\TestCase {
 			. '.txt';
 	}
 
-	public function testCurrentRenderingMatchesTestFiles() {
+	/**
+	 * @dataProvider storedRenderedContentProvider
+	 */
+	public function testCurrentRenderingMatchesStoredRendering( string $testFilePath, string $testFileContent ) {
+		$this->assertSame(
+			file_get_contents( $testFilePath ),
+			$testFileContent
+		);
+	}
+
+	public function storedRenderedContentProvider() {
 		foreach ( $this->getFreshlyRenderedContent() as $testFilePath => $testFileContent ) {
-			$this->assertSame(
-				file_get_contents( $testFilePath ),
-				$testFileContent
-			);
+			yield $testFilePath => [ $testFilePath, $testFileContent ];
 		}
 	}
 
