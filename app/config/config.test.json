@@ -47,7 +47,8 @@
 		"notify-url": "http://my.donation.app/handler/paypal",
 		"return-url": "http://my.donation.app/membership/confirm",
 		"cancel-url": "http://my.donation.app/membership/cancel",
-		"item-name": "Your membership"
+		"item-name": "Your membership",
+		"delay-in-days": 90
 	},
 	"creditcard": {
 		"base-url": "http://thatother.paymentprovider.com?",
