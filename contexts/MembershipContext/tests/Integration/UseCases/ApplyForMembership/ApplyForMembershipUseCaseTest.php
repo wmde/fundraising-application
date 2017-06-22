@@ -22,6 +22,9 @@ use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\Appl
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\MembershipApplicationValidator;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentDelayCalculator;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedPaymentDelayCalculator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
 
@@ -37,6 +40,7 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit\Framework\TestCase {
 	const FIRST_APPLICATION_ID = 1;
 	const ACCESS_TOKEN = 'Gimmeh all the access';
 	const UPDATE_TOKEN = 'Lemme change all the stuff';
+	const FIRST_PAYMENT_DATE = '2017-08-07';
 
 	/**
 	 * @var ApplicationRepository
@@ -106,7 +110,8 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit\Framework\TestCase {
 			$this->validator,
 			$this->policyValidator,
 			$this->tracker,
-			$this->piwikTracker
+			$this->piwikTracker,
+			$this->newFixedPaymentDelayCalculator()
 		);
 	}
 
@@ -115,6 +120,10 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit\Framework\TestCase {
 			self::ACCESS_TOKEN,
 			self::UPDATE_TOKEN
 		) );
+	}
+
+	private function newFixedPaymentDelayCalculator(): PaymentDelayCalculator {
+		return new FixedPaymentDelayCalculator( new \DateTime( self::FIRST_PAYMENT_DATE ) );
 	}
 
 	private function newValidRequest(): ApplyForMembershipRequest {
@@ -301,6 +310,15 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$this->policyValidator = $this->newAutoDeletingPolicyValidator();
 		$this->newUseCase()->applyForMembership( $this->newValidRequest() );
 		$this->assertTrue( $this->repository->getApplicationById( 1 )->isDeleted() );
+	}
+
+	public function testWhenUsingPayPalPayment_delayInDaysIsPersisted() {
+		$request = $this->newValidRequest();
+		$request->setPaymentType( 'PPL' );
+		$this->newUseCase()->applyForMembership( $request );
+		/** @var PayPalPayment $payPalPayment */
+		$payPalPayment = $this->repository->getApplicationById( 1 )->getPayment()->getPaymentMethod();
+		$this->assertSame( self::FIRST_PAYMENT_DATE, $payPalPayment->getPayPalData()->getFirstPaymentDate() );
 	}
 
 }

@@ -166,4 +166,16 @@ class Application {
 		return $this->isDeleted;
 	}
 
+	public function setFirstPaymentDate( string $firstPaymentDate ) {
+		/** @var PayPalPayment $payPalPayment */
+		$payPalPayment = $this->getPayment()->getPaymentMethod();
+		$payPalData = $payPalPayment->getPayPalData();
+		if ( $payPalData === null ) {
+			$payPalData = new PayPalData();
+		}
+
+		$payPalData->setFirstPaymentDate( $firstPaymentDate );
+		$this->addPayPalData( $payPalData );
+	}
+
 }

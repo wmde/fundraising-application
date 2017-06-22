@@ -67,7 +67,10 @@ class MembershipApplicationConfirmationHtmlPresenterTest extends \PHPUnit\Framew
 				'city' => 'Berlin',
 				'email' => 'jeroendedauw@gmail.com',
 			],
-			'bankData' => []
+			'bankData' => [],
+			'payPalData' => [
+				'firstPaymentDate' => '01.02.2021'
+			]
 		];
 	}
 

@@ -34,6 +34,8 @@ use WMDE\Fundraising\Frontend\Infrastructure\ServerSideTracker;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipPolicyValidator;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionPaymentNotification\HandleSubscriptionPaymentNotificationUseCase;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionSignupNotification\HandleSubscriptionSignupNotificationUseCase;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\CalculatingPaymentDelayCalculator;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentDelayCalculator;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector;
 use WMDE\Fundraising\Frontend\Presentation\Honorifics;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\PageNotFoundPresenter;
@@ -427,6 +429,10 @@ class FunFunFactory {
 					'basepath' => $this->config['web-basepath']
 				]
 			] );
+		};
+
+		$pimple['payment-delay-calculator'] = function() {
+			return new CalculatingPaymentDelayCalculator( $this->getPayPalUrlConfigForMembershipApplications()->getDelayInDays() );
 		};
 
 		return $pimple;
@@ -979,7 +985,8 @@ class FunFunFactory {
 			$this->newMembershipApplicationValidator(),
 			$this->newApplyForMembershipPolicyValidator(),
 			$this->newMembershipApplicationTracker(),
-			$this->newMembershipApplicationPiwikTracker()
+			$this->newMembershipApplicationPiwikTracker(),
+			$this->getPaymentDelayCalculator()
 		);
 	}
 
@@ -1009,6 +1016,14 @@ class FunFunFactory {
 
 	private function newMembershipApplicationPiwikTracker(): ApplicationPiwikTracker {
 		return new DoctrineApplicationPiwikTracker( $this->getEntityManager() );
+	}
+
+	private function getPaymentDelayCalculator() {
+		return $this->pimple['payment-delay-calculator'];
+	}
+
+	public function setPaymentDelayCalculator( PaymentDelayCalculator $paymentDelayCalculator ) {
+		$this->pimple['payment-delay-calculator'] = $paymentDelayCalculator;
 	}
 
 	private function newApplyForMembershipPolicyValidator(): ApplyForMembershipPolicyValidator {

@@ -4,11 +4,13 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
+use DateTime;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Applicant;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowMembershipApplicationConfirmation\ShowMembershipAppConfirmationResponse;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
 /**
@@ -38,7 +40,10 @@ class MembershipApplicationConfirmationHtmlPresenter {
 		return [
 			'membershipApplication' => $this->getApplicationArguments( $membershipApplication, $updateToken ),
 			'person' => $this->getPersonArguments( $membershipApplication->getApplicant() ),
-			'bankData' => $this->getBankDataArguments( $membershipApplication->getPayment()->getPaymentMethod() )
+			'bankData' => $this->getBankDataArguments( $membershipApplication->getPayment()->getPaymentMethod() ),
+			'payPalData' => $this->getPayPalDataArguments(
+				$membershipApplication->getPayment()->getPaymentMethod()
+			)
 		];
 	}
 
@@ -71,6 +76,16 @@ class MembershipApplicationConfirmationHtmlPresenter {
 				'iban' => $payment->getBankData()->getIban()->toString(),
 				'bic' => $payment->getBankData()->getBic(),
 				'bankName' => $payment->getBankData()->getBankName(),
+			];
+		}
+
+		return [];
+	}
+
+	private function getPayPalDataArguments( PaymentMethod $payment ) {
+		if ( $payment instanceof PayPalPayment ) {
+			return [
+				'firstPaymentDate' => ( new DateTime( $payment->getPayPalData()->getFirstPaymentDate() ) )->format( 'd.m.Y' )
 			];
 		}
 
