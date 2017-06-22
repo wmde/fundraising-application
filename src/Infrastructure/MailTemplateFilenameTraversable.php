@@ -16,7 +16,7 @@ class MailTemplateFilenameTraversable implements \IteratorAggregate {
 		$this->mailTemplatePaths = $mailTemplatePaths;
 	}
 
-	public function getIterator() {
+	public function getIterator(): \Iterator {
 		foreach ( $this->mailTemplatePaths as $path ) {
 			foreach ( glob( $path . '/Mail_*' ) as $fileName ) {
 				yield basename( $fileName );

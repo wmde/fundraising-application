@@ -31,7 +31,7 @@ class MailTemplatesTest extends \PHPUnit\Framework\TestCase {
 		}
 	}
 
-	private function getFreshlyRenderedContent() {
+	private function getFreshlyRenderedContent(): \Iterator {
 		$this->factory = $this->newFactory();
 
 		foreach ( $this->getTestData() as $templateFileName => $templateTestData ) {
@@ -75,7 +75,7 @@ class MailTemplatesTest extends \PHPUnit\Framework\TestCase {
 		return require __DIR__ . '/../Data/mail_templates.php';
 	}
 
-	private function getFreshlyRenderedContentForTemplate( string $templateFileName, array $templateTestData ) {
+	private function getFreshlyRenderedContentForTemplate( string $templateFileName, array $templateTestData ): \Iterator {
 		if ( empty( $templateTestData['variants'] ) ) {
 			$templateTestData['variants'] = [ '' => [] ];
 		}
@@ -110,7 +110,7 @@ class MailTemplatesTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function storedRenderedContentProvider() {
+	public function storedRenderedContentProvider(): \Iterator {
 		foreach ( $this->getFreshlyRenderedContent() as $testFilePath => $testFileContent ) {
 			yield $testFilePath => [ $testFilePath, $testFileContent ];
 		}

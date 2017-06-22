@@ -1374,7 +1374,7 @@ class FunFunFactory {
 		return $this->pimple['content_provider'];
 	}
 
-	public function newMailTemplateFilenameTraversable(): \Traversable {
+	public function newMailTemplateFilenameTraversable(): MailTemplateFilenameTraversable {
 		return new MailTemplateFilenameTraversable(
 			$this->config['twig']['loaders']['filesystem']['template-dir']
 		);
