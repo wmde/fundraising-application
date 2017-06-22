@@ -1,0 +1,18 @@
+Sehr geehrter Herr Dr. O'Reilly,
+
+membership_application_confirmation/body
+
+name_head_of_organization
+title_head_of_organization
+
+---------------------------------------------------------------------------
+wikimedia_vision
+<https://www.wikimedia.de/>
+---------------------------------------------------------------------------
+
+address_of_organization
+
+phone
+www.wikimedia.de
+
+tax_id_organization
