@@ -264,6 +264,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequestUsingPayPal_applicationIsPersisted() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setPaymentDelayCalculator( new FixedPaymentDelayCalculator( new \DateTime( self::FIRST_PAYMENT_DATE ) ) );
 
 			$client->request(
 				'POST',
