@@ -238,8 +238,13 @@ class HandlePayPalPaymentNotificationUseCase {
 	}
 
 	private function newDonationFromRequest( PayPalPaymentNotificationRequest $request ): Donation {
-		$payment = new DonationPayment( $request->getAmountGross(), 0, new PayPalPayment() );
-		$donation = new Donation(
+		$payment = new DonationPayment(
+			$request->getAmountGross(),
+			0,
+			new PayPalPayment( $this->newPayPalDataFromRequest( $request ) )
+		);
+
+		return new Donation(
 			null,
 			Donation::STATUS_EXTERNAL_BOOKED,
 			$this->newDonorFromRequest( $request ),
@@ -247,8 +252,6 @@ class HandlePayPalPaymentNotificationUseCase {
 			Donation::DOES_NOT_OPT_INTO_NEWSLETTER,
 			DonationTrackingInfo::newBlankTrackingInfo()->freeze()->assertNoNullFields()
 		);
-		$donation->addPayPalData( $this->newPayPalDataFromRequest( $request ) );
-		return $donation;
 	}
 
 	private function createErrorResponse( \Exception $ex ): PaypalNotificationResponse {
