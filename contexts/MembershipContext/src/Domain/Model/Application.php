@@ -166,7 +166,7 @@ class Application {
 		return $this->isDeleted;
 	}
 
-	public function setFirstPaymentDate( string $firstPaymentDate ) {
+	public function notifyOfFirstPaymentDate( string $firstPaymentDate ) {
 		$paymentMethod = $this->getPayment()->getPaymentMethod();
 		if ( $paymentMethod instanceof PayPalPayment ) {
 			$payPalData = $paymentMethod->getPayPalData() ?: new PayPalData();

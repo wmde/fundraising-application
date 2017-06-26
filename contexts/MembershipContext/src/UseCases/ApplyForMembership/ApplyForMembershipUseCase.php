@@ -61,7 +61,7 @@ class ApplyForMembershipUseCase {
 			$application->markAsDeleted();
 		}
 
-		$application->setFirstPaymentDate( $this->paymentDelayCalculator->calculateFirstPaymentDate()->format( 'Y-m-d' ) );
+		$application->notifyOfFirstPaymentDate( $this->paymentDelayCalculator->calculateFirstPaymentDate()->format( 'Y-m-d' ) );
 
 		// TODO: handle exceptions
 		$this->repository->storeApplication( $application );
