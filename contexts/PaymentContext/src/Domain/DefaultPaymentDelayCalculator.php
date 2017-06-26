@@ -11,7 +11,7 @@ use DateTime;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class CalculatingPaymentDelayCalculator implements PaymentDelayCalculator {
+class DefaultPaymentDelayCalculator implements PaymentDelayCalculator {
 
 	private $paymentDelayInDays;
 
