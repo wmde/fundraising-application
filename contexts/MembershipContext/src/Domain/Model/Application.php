@@ -167,15 +167,12 @@ class Application {
 	}
 
 	public function setFirstPaymentDate( string $firstPaymentDate ) {
-		/** @var PayPalPayment $payPalPayment */
-		$payPalPayment = $this->getPayment()->getPaymentMethod();
-		$payPalData = $payPalPayment->getPayPalData();
-		if ( $payPalData === null ) {
-			$payPalData = new PayPalData();
+		$paymentMethod = $this->getPayment()->getPaymentMethod();
+		if ( $paymentMethod instanceof PayPalPayment ) {
+			$payPalData = $paymentMethod->getPayPalData() ?: new PayPalData();
+			$payPalData->setFirstPaymentDate( $firstPaymentDate );
+			$this->addPayPalData( $payPalData );
 		}
-
-		$payPalData->setFirstPaymentDate( $firstPaymentDate );
-		$this->addPayPalData( $payPalData );
 	}
 
 }

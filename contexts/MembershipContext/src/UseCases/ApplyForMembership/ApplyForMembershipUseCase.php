@@ -61,9 +61,7 @@ class ApplyForMembershipUseCase {
 			$application->markAsDeleted();
 		}
 
-		if ( $application->getPayment()->getPaymentMethod()->getType() === PaymentType::PAYPAL ) {
-			$application->setFirstPaymentDate( $this->paymentDelayCalculator->calculateFirstPaymentDate()->format( 'Y-m-d' ) );
-		}
+		$application->setFirstPaymentDate( $this->paymentDelayCalculator->calculateFirstPaymentDate()->format( 'Y-m-d' ) );
 
 		// TODO: handle exceptions
 		$this->repository->storeApplication( $application );
