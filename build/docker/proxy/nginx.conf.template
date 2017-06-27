@@ -1,0 +1,46 @@
+server {
+        server_name ${NGINX_HOST};
+
+        add_header 'Access-Control-Allow-Origin' 'tracking.wikimedia.de';
+        add_header 'Access-Control-Allow-Credentials' 'true';
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE, OPTIONS';
+        add_header 'Access-Control-Allow-Headers' 'Accept,Authorization,Cache-Control,Content-Type,DNT,If-Modified-Since,Keep-Alive,Origin,User-Agent,X-Mx-ReqToken,X-Requested-With';
+
+        listen ${NGINX_PORT};
+
+        root   /usr/share/nginx/www/spenden.wikimedia.de/current/web;
+        index  index.php index.html;
+
+        # piwik
+        location ^~ /piwik/ {
+            rewrite ^/piwik/(.*) https://tracking.wikimedia.de/$1 permanent;
+        }
+
+        # deny access to dot files
+        location ~ (^|/)\. {
+                return 403;
+        }
+
+        # deny access to backups
+        location ~ .*~$ {
+                return 403;
+        }
+
+        include conf.d/includes/fundraising-redirects;
+
+        location ~ ^/index\.php(/|$) {
+            proxy_read_timeout 300;
+            include        fastcgi_params;
+            fastcgi_split_path_info ^(.+\.php)(/.*)$;
+            fastcgi_param  SCRIPT_FILENAME /usr/share/nginx/www/spenden.wikimedia.de/current/web$fastcgi_script_name;
+            fastcgi_param  PATH_INFO       $fastcgi_path_info;
+            fastcgi_param  REQUEST_URI     $saved_uri;
+            fastcgi_param  PATH_TRANSLATED $document_root$fastcgi_script_name;
+            fastcgi_pass   app:9000;
+        }
+
+		location = /status {
+			add_header Content-Type text/plain;
+			return 200 "Web server status: OK (Online)";
+		}
+}

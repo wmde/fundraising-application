@@ -1,0 +1,51 @@
+# Cache busting rewrite for asset files
+# Remove hex-hash portion from filenames like /res/js/deadbeef.wmde.js
+location ~ ^(/res/(?:\w+)/|/skin/10h16/(?:\w+)/)[0-9a-f]+\.(.*)$ {
+    try_files $uri $1$2;
+}
+
+location / {
+    # Redirect shortcut URLs from old application to regular routes
+    rewrite ^/spenden/Mitgliedschaft /apply-for-membership$1 permanent;
+    rewrite ^/spenden/Kontaktformular /contact/get-in-touch$1 permanent;
+
+    # Redirect URLs of changed routes
+    rewrite ^/page/Kontaktformular /contact/get-in-touch$1 permanent;
+    rewrite ^/page/Membership_Application /apply-for-membership permanent;
+    rewrite ^/page/Fördermitgliedschaft /apply-for-membership?type=sustaining permanent;
+
+    # Shortcut/Convenience URLs
+    rewrite ^/Fördermitgliedschaft /apply-for-membership?type=sustaining last;
+    rewrite ^/Foerdermitgliedschaft /apply-for-membership?type=sustaining last;
+    rewrite ^/Mitgliedschaft /apply-for-membership$1 last;
+    rewrite ^/Impressum$ /page/Impressum$1 last;
+    rewrite ^/Datenschutz$ /page/Datenschutz last;
+
+
+    # Save rewritten or original URL to be used later for REQUEST_URI routing in the PHP app
+    set $saved_uri $uri;
+
+    # try to serve file directly, fallback to front controller
+    try_files $uri /index.php$is_args$args;
+}
+
+# Donation buttons from old application
+location ~ ^/spenden/banner/(.*)$ {
+    return 301 /res/img/banner/$1;
+}
+
+location ~ ^/spenden/.*\.php$ {
+
+    # rewrite URLs from old application to new paths
+    rewrite /spenden/paypal_handler.php /handle-paypal-payment-notification$1 last;
+    rewrite /spenden/mcp_handler.php /handle-creditcard-payment-notification$1 last;
+    rewrite /spenden/rss.php /list-comments.rss last;
+    rewrite /spenden/json.php /list-comments.json last;
+    rewrite /spenden/list.php /list-comments.html last;
+
+    # Save rewritten or original URL to be used later for REQUEST_URI routing in the PHP app
+    set $saved_uri $uri;
+
+    # try to serve file directly, fallback to front controller
+    try_files $uri /index.php$is_args$args;
+}
