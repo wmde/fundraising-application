@@ -124,20 +124,6 @@ class Application {
 		$this->isConfirmed = self::IS_CONFIRMED;
 	}
 
-	/**
-	 * @param PayPalData $payPalData
-	 * @throws RuntimeException
-	 */
-	public function addPayPalData( PayPalData $payPalData ) {
-		$paymentMethod = $this->payment->getPaymentMethod();
-
-		if ( !( $paymentMethod instanceof PayPalPayment ) ) {
-			throw new RuntimeException( 'Cannot set PayPal data on a non PayPal payment' );
-		}
-
-		$paymentMethod->addPayPalData( $payPalData );
-	}
-
 	public function confirmSubscriptionCreated() {
 		if ( !$this->hasExternalPayment() ) {
 			throw new RuntimeException( 'Only external payments can be confirmed as booked' );
@@ -168,10 +154,9 @@ class Application {
 
 	public function notifyOfFirstPaymentDate( string $firstPaymentDate ) {
 		$paymentMethod = $this->getPayment()->getPaymentMethod();
+
 		if ( $paymentMethod instanceof PayPalPayment ) {
-			$payPalData = $paymentMethod->getPayPalData() ?: new PayPalData();
-			$payPalData->setFirstPaymentDate( $firstPaymentDate );
-			$this->addPayPalData( $payPalData );
+			$paymentMethod->getPayPalData()->setFirstPaymentDate( $firstPaymentDate );
 		}
 	}
 

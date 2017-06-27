@@ -51,7 +51,9 @@ class HandleSubscriptionSignupNotificationUseCase {
 
 	private function handleRequestForMembershipApplication( SubscriptionSignupRequest $request,
 															Application $application ): PaypalNotificationResponse {
-		if ( !( $application->getPayment()->getPaymentMethod() instanceof PayPalPayment ) ) {
+		$paymentMethod = $application->getPayment()->getPaymentMethod();
+
+		if ( !( $paymentMethod instanceof PayPalPayment ) ) {
 			return $this->createUnhandledResponse( 'Trying to handle IPN for non-PayPal membership application' );
 		}
 
@@ -59,7 +61,7 @@ class HandleSubscriptionSignupNotificationUseCase {
 			return $this->createUnhandledResponse( 'Wrong access code for membership application' );
 		}
 
-		$application->addPayPalData( $this->newPayPalDataFromRequest( $request ) );
+		$paymentMethod->addPayPalData( $this->newPayPalDataFromRequest( $request ) );
 
 		try {
 			$application->confirmSubscriptionCreated();

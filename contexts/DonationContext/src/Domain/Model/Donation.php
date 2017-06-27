@@ -229,20 +229,6 @@ class Donation {
 	}
 
 	/**
-	 * @param PayPalData $payPalData
-	 * @throws RuntimeException
-	 */
-	public function addPayPalData( PayPalData $payPalData ) {
-		$paymentMethod = $this->payment->getPaymentMethod();
-
-		if ( !( $paymentMethod instanceof PayPalPayment ) ) {
-			throw new RuntimeException( 'Cannot set PayPal data on a non PayPal payment' );
-		}
-
-		$paymentMethod->addPayPalData( $payPalData );
-	}
-
-	/**
 	 * @param CreditCardTransactionData $creditCardData
 	 *
 	 * @throws RuntimeException

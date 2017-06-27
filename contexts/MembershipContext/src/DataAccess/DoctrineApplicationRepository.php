@@ -121,7 +121,7 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 		$application->setPaymentType( $paymentMethod->getType() );
 		if ( $paymentMethod instanceof DirectDebitPayment ) {
 			$this->setBankDataFields( $application, $paymentMethod->getBankData() );
-		} elseif ( $paymentMethod instanceof PayPalPayment && $paymentMethod->getPayPalData() !== null ) {
+		} elseif ( $paymentMethod instanceof PayPalPayment && $paymentMethod->getPayPalData() != new PayPalData() ) {
 			$this->setPayPalDataFields( $application, $paymentMethod->getPayPalData() );
 		}
 	}

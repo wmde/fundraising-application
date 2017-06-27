@@ -280,9 +280,8 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			$payPalData->setFirstPaymentDate( self::FIRST_PAYMENT_DATE );
 			$payPalData->freeze();
 
-			$expectedApplication = ValidMembershipApplication::newDomainEntityUsingPayPal();
+			$expectedApplication = ValidMembershipApplication::newDomainEntityUsingPayPal( $payPalData );
 			$expectedApplication->assignId( 1 );
-			$expectedApplication->addPayPalData( $payPalData );
 
 			$this->assertEquals( $expectedApplication, $application );
 		} );
