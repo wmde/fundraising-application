@@ -29,6 +29,7 @@ class PayPalData {
 	private $paymentType = '';
 	private $paymentStatus = '';
 	private $paymentTimestamp = '';
+	private $firstPaymentDate = '';
 	private $childPayments = [];
 
 	public function __construct() {
@@ -184,6 +185,16 @@ class PayPalData {
 	public function setPaymentTimestamp( string $paymentTimestamp ) {
 		$this->assertIsWritable();
 		$this->paymentTimestamp = $paymentTimestamp;
+		return $this;
+	}
+
+	public function getFirstPaymentDate(): string {
+		return $this->firstPaymentDate;
+	}
+
+	public function setFirstPaymentDate( string $firstPaymentDate ) {
+		$this->assertIsWritable();
+		$this->firstPaymentDate = $firstPaymentDate;
 		return $this;
 	}
 

@@ -9,7 +9,9 @@ use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\MembershipApplication;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplication;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalData;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedPaymentDelayCalculator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 
 /**
@@ -23,6 +25,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	const FIXED_TOKEN = 'fixed_token';
 	const FIXED_TIMESTAMP = '2020-12-01 20:12:01';
+	const FIRST_PAYMENT_DATE = '2017-09-21';
 
 	public function testGivenGetRequestMembership_formIsShown() {
 		$client = $this->createClient();
@@ -142,6 +145,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequest_applicationIsPersisted() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setPaymentDelayCalculator( new FixedPaymentDelayCalculator( new \DateTime( self::FIRST_PAYMENT_DATE ) ) );
 
 			$client->request(
 				'POST',
@@ -260,6 +264,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequestUsingPayPal_applicationIsPersisted() {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$factory->setPaymentDelayCalculator( new FixedPaymentDelayCalculator( new \DateTime( self::FIRST_PAYMENT_DATE ) ) );
 
 			$client->request(
 				'POST',
@@ -271,8 +276,13 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 			$this->assertNotNull( $application );
 
+			$payPalData = new PayPalData();
+			$payPalData->setFirstPaymentDate( self::FIRST_PAYMENT_DATE );
+			$payPalData->freeze();
+
 			$expectedApplication = ValidMembershipApplication::newDomainEntityUsingPayPal();
 			$expectedApplication->assignId( 1 );
+			$expectedApplication->addPayPalData( $payPalData );
 
 			$this->assertEquals( $expectedApplication, $application );
 		} );

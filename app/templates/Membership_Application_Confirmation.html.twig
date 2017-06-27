@@ -48,12 +48,26 @@
 						<h2 class="f-left no-margin">SEPA-Lastschriftmandat</h2><br /><br />
 
 						<p class="title">Sie zahlen {$ membershipApplication.paymentIntervalInMonths|trans({}, 'paymentIntervals') $} einen Mitgliedsbeitrag in H&ouml;he von <strong>{$ formattedAmount $}</strong> an Wikimedia Deutschland e. V., Tempelhofer Ufer 23-24, 10963 Berlin</p>
+
+						<p class="title">Sie zahlen per {$ membershipApplication.paymentType|trans({}, 'paymentTypes') $}.</p>
+{% if membershipApplication.paymentType == 'PPL' %}
+						<p class="title">
+							Die erste Zahlung wird am {$ payPalData.firstPaymentDate $} erfolgen. Vorher werden Sie noch ein
+							Begrüßungsschreiben von uns erhalten. Wir freuen uns, dass Sie dabei sind.
+						</p>
+{% elseif membershipApplication.paymentType == 'BEZ' %}
+						<p class="title">
+							Sie werden in Kürze ein Begrüßungsschreiben von uns erhalten. Wir freuen uns, dass Sie dabei sind.
+						</p>
+{% endif %}
+						<p class="title"></p>
 					</div>
 
 					<hr/>
 
 					<div class="container clearfix">
 						<div class="address f-left">
+							<p class="title"><strong>Ihre Daten</strong></p>
 							<p>
 								<span class="confirm-name">{$ person.salutation $} {$ person.title $} {$ person.fullName $}</span>
 							</p>
@@ -66,14 +80,18 @@
 						</div>
 
 						<div class="payment f-left">
-							<p>
-								Sie zahlen per Lastschrift
-							</p>
-
 							<p class="no-margin">
+{% if membershipApplication.paymentType == 'PPL' %}
+								<p class="title"><strong>Unsere Daten</strong></p>
+								Wikimedia Deutschland e. V.<br />
+								Tempelhofer Ufer 23-24<br />
+								10963 Berlin<br />
+{% elseif membershipApplication.paymentType == 'BEZ' %}
+								<p class="title"><strong>Ihre Bankverbindung</strong></p>
 								<span class="label">IBAN</span> {$ bankData.iban $}<br/>
 								<span class="label">BIC</span> {$ bankData.bic $}<br/>
 								<span class="label">Bankname</span> {$ bankData.bankName $}
+{% endif %}
 							</p>
 						</div>
 					</div>
