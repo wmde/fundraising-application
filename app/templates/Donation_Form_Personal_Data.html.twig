@@ -97,28 +97,7 @@
                     <div class="change-payment-type">
                         <hr/>
 
-                        <!-- TODO Remove IDs and adjust JS in web/skin/10h16/_js/form-methods.js -->
-                        <ul class="horizontal clearfix payment-type-list">
-                            <li class="first">
-                                <input type="radio" class="payment-type-select" id="form2-payment-type-1" name="zahlweise" value="UEB" title="&Uuml;berweisung">
-                                <label for="form2-payment-type-1">&Uuml;berweisung</label>
-                            </li>
-
-                            <li>
-                                <input type="radio" class="payment-type-select" id="form2-payment-type-2" name="zahlweise" value="MCP" title="Kreditkarte">
-                                <label for="form2-payment-type-2">Kreditkarte</label>
-                            </li>
-
-                            <li>
-                                <input type="radio" class="payment-type-select" id="form2-payment-type-3" name="zahlweise" value="BEZ" title="Lastschrift">
-                                <label for="form2-payment-type-3">Lastschrift</label>
-                            </li>
-
-                            <li class="last">
-                                <input type="radio" class="payment-type-select" id="form2-payment-type-4" name="zahlweise" value="PPL" title="PayPal">
-                                <label for="form2-payment-type-4">Paypal</label>
-                            </li>
-                        </ul>
+                        {% include 'payment_type_list.twig' with {'formId': 'form2'} only %}
                     </div>
                 </div>
 
