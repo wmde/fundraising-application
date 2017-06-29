@@ -295,7 +295,10 @@ class FunFunFactory {
 			return new TwigFactory(
 				array_merge_recursive(
 					$this->config['twig'],
-					['web-basepath' => $this->config['web-basepath']]
+					[
+						'web-basepath' => $this->config['web-basepath'],
+						'payment-types' => $this->config['payment-types']
+					]
 				),
 				$this->getCachePath() . '/twig',
 				$this->config['locale']

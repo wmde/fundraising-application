@@ -1,29 +1,33 @@
 {# paramters:
 	formId
+	appconfig
 	paymentTypesRequired (optional)
 	checkedPaymentType (optional)
 #}
 <ul class="horizontal clearfix payment-type-list">
-{% for paymentType in ['UEB', 'MCP', 'BEZ', 'PPL'] %}
-	<li
-	{% if loop.first %}
-		class="first"
-	{% elseif loop.last %}
-		class="last"
-	{% endif %}>
-		<input
-			id="{$ formId $}-payment-type-{$ loop.index $}"
-			type="radio"
-			class="payment-type-select"
-			name="zahlweise"
-			value="{$ paymentType $}"
-			title="{$ paymentType|trans({}, 'paymentTypes') $}"
-			{% if paymentTypesRequired %}required="required"{% endif %}
-			{% if checkedPaymentType == paymentType %}checked="checked"{% endif %}
-		>
-		<label for="{$ formId $}-payment-type-{$ loop.index $}">
-			{$ paymentType|trans({}, 'paymentTypes') $}
-		</label>
-	</li>
+{% for paymentType, options in appconfig['payment-types'] %}
+	{# Not using if on loop to make sure loop.index stays the same #}
+	{% if options.enabled %}
+		<li
+		{% if loop.first %}
+			class="first"
+		{% elseif loop.last %}
+			class="last"
+		{% endif %}>
+			<input
+				id="{$ formId $}-payment-type-{$ loop.index $}"
+				type="radio"
+				class="payment-type-select"
+				name="zahlweise"
+				value="{$ paymentType $}"
+				title="{$ paymentType|trans({}, 'paymentTypes') $}"
+				{% if paymentTypesRequired %}required="required"{% endif %}
+				{% if checkedPaymentType == paymentType %}checked="checked"{% endif %}
+			>
+			<label for="{$ formId $}-payment-type-{$ loop.index $}">
+				{$ paymentType|trans({}, 'paymentTypes') $}
+			</label>
+		</li>
+	{% endif %}
 {% endfor %}
 </ul>

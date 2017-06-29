@@ -676,6 +676,28 @@
         "message-dir",
         "files"
       ]
+    },
+    "payment-types": {
+      "type": "object",
+      "title": "Known payment types",
+      "patternProperties": {
+        "^.*$": {
+          "type" : "object",
+          "properties" : {
+            "enabled": {
+              "type": "boolean",
+              "title": "Enabled Flag",
+              "description": "Set to true if payment type is to be offered"
+            }
+          },
+          "required": [
+            "enabled"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false,
+      "minProperties": 1
     }
   },
   "additionalProperties": false,
@@ -700,6 +722,7 @@
     "creditcard",
     "confirmation-pages",
     "piwik",
-    "translation"
+    "translation",
+    "payment-types"
   ]
 }

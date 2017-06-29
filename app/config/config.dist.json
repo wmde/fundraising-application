@@ -147,5 +147,19 @@
 			"pageTitles": "pageTitles.json",
 			"membershipTypes": "membershipTypes.json"
 		}
+	},
+	"payment-types": {
+		"BEZ": {
+			"enabled": true
+		},
+		"UEB": {
+			"enabled": true
+		},
+		"MCP": {
+			"enabled": true
+		},
+		"PPL": {
+			"enabled": true
+		}
 	}
 }
