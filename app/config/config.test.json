@@ -60,6 +60,12 @@
 		"testmode": true,
 		"access-key": "Not a real access key"
 	},
+	"sofort": {
+		"config-key": "fff:ggg:hhh:iii",
+		"return-url": "http://my.donation.app/show-donation-confirmation",
+		"cancel-url": "http://my.donation.app/donation/cancel",
+		"item-name": "Danke für Ihre Spende"
+	},
 	"confirmation-pages": {
 		"default": "DonationConfirmation.twig",
 		"campaigns": [

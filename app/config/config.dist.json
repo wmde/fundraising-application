@@ -119,6 +119,12 @@
 		"return-url": "https://spenden.wikimedia.de/show-donation-confirmation",
 		"testmode": true
 	},
+	"sofort": {
+		"config-key": "",
+		"return-url": "",
+		"cancel-url": "",
+		"item-name": ""
+	},
 	"confirmation-pages": {
 		"default": "Donation_Confirmation.html.twig",
 		"campaigns": [
