@@ -160,6 +160,9 @@
 		},
 		"PPL": {
 			"enabled": true
+		},
+		"SUB": {
+			"enabled": true
 		}
 	}
 }

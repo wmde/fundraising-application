@@ -162,7 +162,8 @@ $( function () {
 						'BEZ': 'Lastschrift',
 						'UEB': 'Überweisung',
 						'MCP': 'Kreditkarte',
-						'PPL': 'PayPal'
+						'PPL': 'PayPal',
+						'SUB': 'Sofortüberweisung'
 					},
 					WMDE.CurrencyFormatter.createCurrencyFormatter( 'de' )
 				),
