@@ -93,6 +93,15 @@ class AddDonationHandler {
 					)
 				);
 				break;
+			case PaymentType::SOFORT:
+				$httpResponse = $this->app->redirect(
+					$this->ffFactory->newSofortUrlGeneratorForDonations()->generateUrl(
+						$responseModel->getDonation()->getId(),
+						$responseModel->getDonation()->getAmount(),
+						$responseModel->getAccessToken()
+					)
+				);
+				break;
 			case PaymentType::CREDIT_CARD:
 				$httpResponse = new Response(
 					$this->ffFactory->newCreditCardPaymentHtmlPresenter()->present( $responseModel )

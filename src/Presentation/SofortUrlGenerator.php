@@ -26,7 +26,7 @@ class SofortUrlGenerator {
 		$this->api = $api;
 	}
 
-	public function generateUrl( string $itemId, Euro $amount, string $accessToken ): string {
+	public function generateUrl( int $itemId, Euro $amount, string $accessToken ): string {
 		$this->api->setAmount( $amount->getEuroString() );
 		$this->api->setCurrencyCode( self::CURRENCY );
 		$this->api->setReason( $this->config->getItemName(), $itemId );

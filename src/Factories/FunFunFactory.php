@@ -17,6 +17,7 @@ use NumberFormatter;
 use Pimple\Container;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use Sofort\SofortLib\Sofortueberweisung;
 use Swift_MailTransport;
 use Swift_NullTransport;
 use Symfony\Component\Stopwatch\Stopwatch;
@@ -40,6 +41,8 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentDelayCalculator;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector;
 use WMDE\Fundraising\Frontend\Presentation\Honorifics;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\PageNotFoundPresenter;
+use WMDE\Fundraising\Frontend\Presentation\SofortUrlConfig;
+use WMDE\Fundraising\Frontend\Presentation\SofortUrlGenerator;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 use WMDE\Fundraising\Frontend\DonationContext\Authorization\DonationAuthorizer;
@@ -911,6 +914,11 @@ class FunFunFactory {
 
 	private function getPayPalUrlConfigForMembershipApplications() {
 		return PayPalUrlConfig::newFromConfig( $this->config['paypal-membership'] );
+	}
+
+	public function newSofortUrlGeneratorForDonations(): SofortUrlGenerator {
+		$config = SofortUrlConfig::newFromConfig( $this->config['sofort'] );
+		return new SofortUrlGenerator( $config, new Sofortueberweisung( $config->getConfigkey() ) );
 	}
 
 	private function newCreditCardUrlGenerator() {

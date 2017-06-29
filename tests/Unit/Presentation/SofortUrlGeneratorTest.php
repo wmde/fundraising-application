@@ -13,7 +13,12 @@ use WMDE\Fundraising\Frontend\Presentation\SofortUrlGenerator;
 class SofortUrlGeneratorTest extends TestCase {
 
 	public function testGenerateUrlSuccess(): void {
-		$config = new SofortUrlConfig( 'fff', 'Donation', 'https://us.org/yes', 'https://us.org/no' );
+		$config = SofortUrlConfig::newFromConfig( [
+			'config-key' => 'fff',
+			'item-name' => 'Donation',
+			'return-url' => 'https://us.org/yes',
+			'cancel-url' => 'https://us.org/no'
+		] );
 
 		$api = $this->createMock( Sofortueberweisung::class );
 		$api
@@ -29,12 +34,12 @@ class SofortUrlGeneratorTest extends TestCase {
 		$api
 			->expects( $this->once() )
 			->method( 'setReason' )
-			->with( 'Donation', 'idofdonation' )
+			->with( 'Donation', 529836 )
 			->willReturnSelf();
 		$api
 			->expects( $this->once() )
 			->method( 'setSuccessUrl' )
-			->with( 'https://us.org/yes?id=idofdonation&accessToken=letmein', true )
+			->with( 'https://us.org/yes?id=529836&accessToken=letmein', true )
 			->willReturnSelf();
 		$api
 			->expects( $this->once() )
@@ -64,12 +69,17 @@ class SofortUrlGeneratorTest extends TestCase {
 		$sut = new SofortUrlGenerator( $config, $api );
 		$this->assertSame(
 			'https://awsomepaymentprovider.tld/784trhhrf4',
-			$sut->generateUrl( 'idofdonation', Euro::newFromCents( 500 ), 'letmein' )
+			$sut->generateUrl( 529836, Euro::newFromCents( 500 ), 'letmein' )
 		);
 	}
 
 	public function testGenerateUrlApiError(): void {
-		$config = new SofortUrlConfig( 'ggg', 'Buy', 'https://irreleva.nt', 'http://irreleva.nt' );
+		$config = SofortUrlConfig::newFromConfig( [
+			'config-key' => 'ggg',
+			'item-name' => 'Buy',
+			'return-url' => 'https://irreleva.nt',
+			'cancel-url' => 'http://irreleva.nt'
+		] );
 
 		$api = $this->createMock( Sofortueberweisung::class );
 
@@ -87,6 +97,6 @@ class SofortUrlGeneratorTest extends TestCase {
 		$this->expectException( \RuntimeException::class );
 		$this->expectExceptionMessage( 'Could not generate Sofort URL: boo boo' );
 
-		$sut->generateUrl( 'idofdonation', Euro::newFromCents( 300 ), 'letmein' );
+		$sut->generateUrl( 529837, Euro::newFromCents( 300 ), 'letmein' );
 	}
 }
