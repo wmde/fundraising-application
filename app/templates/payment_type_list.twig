@@ -1,7 +1,6 @@
 {# paramters:
 	formId
 	appconfig
-	paymentTypesRequired (optional)
 	checkedPaymentType (optional)
 #}
 <ul class="horizontal clearfix payment-type-list">
@@ -21,7 +20,6 @@
 				name="zahlweise"
 				value="{$ paymentType $}"
 				title="{$ paymentType|trans({}, 'paymentTypes') $}"
-				{% if paymentTypesRequired %}required="required"{% endif %}
 				{% if checkedPaymentType == paymentType %}checked="checked"{% endif %}
 			>
 			<label for="{$ formId $}-payment-type-{$ loop.index $}">

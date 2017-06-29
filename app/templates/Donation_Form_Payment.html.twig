@@ -215,7 +215,7 @@
                         <h2>Meine Zahlungsweise</h2>
                     </div>
 
-					{% include 'payment_type_list.twig' with {'formId': 'form1', 'paymentTypesRequired': true, 'checkedPaymentType': 'BEZ'} only %}
+					{% include 'payment_type_list.twig' with {'formId': 'form1', 'checkedPaymentType': 'BEZ'} only %}
 
                     <div class="notice-ppl-recurrent" style="display:none">Für regelmäßige Spenden muss bei PayPal eine Kreditkarte hinterlegt sein.</div>
                 </div>
