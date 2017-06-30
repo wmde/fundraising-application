@@ -917,8 +917,16 @@ class FunFunFactory {
 	}
 
 	public function newSofortUrlGeneratorForDonations(): SofortUrlGenerator {
-		$config = SofortUrlConfig::newFromConfig( $this->config['sofort'] );
-		return new SofortUrlGenerator( $config, new Sofortueberweisung( $config->getConfigkey() ) );
+		$config = $this->config['sofort'];
+
+		return new SofortUrlGenerator(
+			new SofortUrlConfig(
+				$this->getTranslator()->trans( $config[ 'reason-text-translation-key' ], [], 'paymentSubjects' ),
+				$config[ 'return-url' ],
+				$config[ 'cancel-url' ]
+			),
+			new Sofortueberweisung( $config[ 'config-key' ] )
+		);
 	}
 
 	private function newCreditCardUrlGenerator() {

@@ -29,7 +29,7 @@ class SofortUrlGenerator {
 	public function generateUrl( int $itemId, Euro $amount, string $accessToken ): string {
 		$this->api->setAmount( $amount->getEuroString() );
 		$this->api->setCurrencyCode( self::CURRENCY );
-		$this->api->setReason( $this->config->getItemName(), $itemId );
+		$this->api->setReason( $this->config->getReasonText(), $itemId );
 
 		$this->api->setSuccessUrl(
 			$this->config->getReturnUrl() . '?' . http_build_query( [

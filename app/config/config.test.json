@@ -64,7 +64,7 @@
 		"config-key": "fff:ggg:hhh:iii",
 		"return-url": "http://my.donation.app/show-donation-confirmation",
 		"cancel-url": "http://my.donation.app/donation/cancel",
-		"item-name": "Danke fuer Ihre Spende"
+		"reason-text-translation-key": "SUB"
 	},
 	"confirmation-pages": {
 		"default": "DonationConfirmation.twig",
