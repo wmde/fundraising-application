@@ -921,11 +921,11 @@ class FunFunFactory {
 
 		return new SofortUrlGenerator(
 			new SofortUrlConfig(
-				$this->getTranslator()->trans( $config[ 'reason-text-translation-key' ], [], 'paymentSubjects' ),
-				$config[ 'return-url' ],
-				$config[ 'cancel-url' ]
+				$this->getTranslator()->trans( $config['reason-text-translation-key'], [], 'paymentSubjects' ),
+				$config['return-url'],
+				$config['cancel-url']
 			),
-			new Sofortueberweisung( $config[ 'config-key' ] )
+			new Sofortueberweisung( $config['config-key'] )
 		);
 	}
 

@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\Presentation\SofortUrlGenerator;
 class SofortUrlGeneratorTest extends TestCase {
 
 	public function testGenerateUrlSuccess(): void {
-		$config = new SofortUrlConfig( 'Donation','https://us.org/yes','https://us.org/no' );
+		$config = new SofortUrlConfig( 'Donation', 'https://us.org/yes', 'https://us.org/no' );
 
 		$api = $this->createMock( Sofortueberweisung::class );
 		$api
@@ -69,7 +69,7 @@ class SofortUrlGeneratorTest extends TestCase {
 	}
 
 	public function testGenerateUrlApiError(): void {
-		$config = new SofortUrlConfig( 'Your purchase','https://irreleva.nt','http://irreleva.nt' );
+		$config = new SofortUrlConfig( 'Your purchase', 'https://irreleva.nt', 'http://irreleva.nt' );
 
 		$api = $this->createMock( Sofortueberweisung::class );
 
