@@ -96,6 +96,7 @@ class AddDonationHandler {
 			case PaymentType::SOFORT:
 				$httpResponse = $this->app->redirect(
 					$this->ffFactory->newSofortUrlGeneratorForDonations()->generateUrl(
+						// @todo Is id the right criteria to pass? Will be put in the reason field. Cp. WQ-Code debate
 						$responseModel->getDonation()->getId(),
 						$responseModel->getDonation()->getAmount(),
 						$responseModel->getAccessToken()
