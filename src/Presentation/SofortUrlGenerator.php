@@ -42,8 +42,6 @@ class SofortUrlGenerator {
 
 		// @todo Do we need that?
 		//$this->api->setNotificationUrl('YOUR_NOTIFICATION_URL');
-		// @todo Research what this does
-		//$this->api->setCustomerprotection(true);
 
 		$this->api->sendRequest();
 
