@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation;
 
+use RuntimeException;
 use PHPUnit\Framework\TestCase;
 use Sofort\SofortLib\Sofortueberweisung;
 use WMDE\Euro\Euro;
@@ -12,7 +13,7 @@ use WMDE\Fundraising\Frontend\Presentation\SofortUrlGenerator;
 
 class SofortUrlGeneratorTest extends TestCase {
 
-	public function testGenerateUrlSuccess(): void {
+	public function testWhenApiReturnsSuccessfullyAUrlIsReturned(): void {
 		$config = new SofortUrlConfig( 'Donation', 'https://us.org/yes', 'https://us.org/no' );
 
 		$api = $this->createMock( Sofortueberweisung::class );
@@ -61,14 +62,14 @@ class SofortUrlGeneratorTest extends TestCase {
 			->method( 'getPaymentUrl' )
 			->willReturn( 'https://awsomepaymentprovider.tld/784trhhrf4' );
 
-		$sut = new SofortUrlGenerator( $config, $api );
+		$urlGenerator = new SofortUrlGenerator( $config, $api );
 		$this->assertSame(
 			'https://awsomepaymentprovider.tld/784trhhrf4',
-			$sut->generateUrl( 529836, Euro::newFromCents( 500 ), 'letmein' )
+			$urlGenerator->generateUrl( 529836, Euro::newFromCents( 500 ), 'letmein' )
 		);
 	}
 
-	public function testGenerateUrlApiError(): void {
+	public function testWhenApiReturnsErrorAnExceptionWithApiErrorMessageIsThrown(): void {
 		$config = new SofortUrlConfig( 'Your purchase', 'https://irreleva.nt', 'http://irreleva.nt' );
 
 		$api = $this->createMock( Sofortueberweisung::class );
@@ -82,11 +83,11 @@ class SofortUrlGeneratorTest extends TestCase {
 			->method( 'getError' )
 			->willReturn( 'boo boo' );
 
-		$sut = new SofortUrlGenerator( $config, $api );
+		$urlGenerator = new SofortUrlGenerator( $config, $api );
 
-		$this->expectException( \RuntimeException::class );
+		$this->expectException( RuntimeException::class );
 		$this->expectExceptionMessage( 'Could not generate Sofort URL: boo boo' );
 
-		$sut->generateUrl( 529837, Euro::newFromCents( 300 ), 'letmein' );
+		$urlGenerator->generateUrl( 529837, Euro::newFromCents( 300 ), 'letmein' );
 	}
 }
