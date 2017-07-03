@@ -26,8 +26,8 @@ class SofortUrlGeneratorTest extends TestCase {
 		$request = new Request();
 		$request->setAmount( $amount );
 		$request->setCurrencyCode( 'EUR' );
-		$request->setReasons( [ 'Donation', '529836' ] );
-		$request->setSuccessUrl( 'https://us.org/yes?id=529836&accessToken=letmein' );
+		$request->setReasons( [ 'Donation', 'wx529836' ] );
+		$request->setSuccessUrl( 'https://us.org/yes?id=44&accessToken=letmein' );
 		$request->setAbortUrl( 'https://us.org/no' );
 		$request->setNotificationUrl( '' );
 
@@ -45,7 +45,7 @@ class SofortUrlGeneratorTest extends TestCase {
 		$urlGenerator = new SofortUrlGenerator( $config, $client );
 		$this->assertSame(
 			'https://awsomepaymentprovider.tld/784trhhrf4',
-			$urlGenerator->generateUrl( 529836, $amount, 'letmein' )
+			$urlGenerator->generateUrl( 44, 'wx529836', $amount, 'letmein' )
 		);
 	}
 
@@ -65,6 +65,6 @@ class SofortUrlGeneratorTest extends TestCase {
 		$this->expectException( RuntimeException::class );
 		$this->expectExceptionMessage( 'Could not generate Sofort URL: boo boo' );
 
-		$urlGenerator->generateUrl( 529837, Euro::newFromCents( 300 ), 'letmein' );
+		$urlGenerator->generateUrl( 23, 'dq529837', Euro::newFromCents( 300 ), 'letmein' );
 	}
 }

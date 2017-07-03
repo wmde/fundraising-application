@@ -33,19 +33,20 @@ class SofortUrlGenerator {
 	/**
 	 * Generate a URL to use (refer the donor to) to finalize a purchase on a 3rd party payment provider page
 	 *
-	 * @param int $itemId Id of the item to pay
+	 * @param int $internalItemId Internal (WMDE-use only) Id of the item to pay
+	 * @param string $externalItemId External (3rd parties may use to reference the item with this) Id of the item to pay
 	 * @param Euro $amount The amount of money to pay
 	 * @param string $accessToken A token to return to the payment process after completing the 3rd party process
 	 * @return string
 	 */
-	public function generateUrl( int $itemId, Euro $amount, string $accessToken ): string {
+	public function generateUrl( int $internalItemId, string $externalItemId, Euro $amount, string $accessToken ): string {
 		$request = new Request();
 		$request->setAmount( $amount );
 		$request->setCurrencyCode( self::CURRENCY );
-		$request->setReasons( [ $this->config->getReasonText(), $itemId ] );
+		$request->setReasons( [ $this->config->getReasonText(), $externalItemId ] );
 		$request->setSuccessUrl(
 			$this->config->getReturnUrl() . '?' . http_build_query( [
-				'id' => $itemId,
+				'id' => $internalItemId,
 				'accessToken' => $accessToken
 			] )
 		);

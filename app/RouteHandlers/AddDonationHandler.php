@@ -80,7 +80,6 @@ class AddDonationHandler {
 					),
 					Response::HTTP_SEE_OTHER
 				);
-
 				break;
 			case PaymentType::PAYPAL:
 				$httpResponse = $this->app->redirect(
@@ -96,8 +95,8 @@ class AddDonationHandler {
 			case PaymentType::SOFORT:
 				$httpResponse = $this->app->redirect(
 					$this->ffFactory->newSofortUrlGeneratorForDonations()->generateUrl(
-						// @todo Is the id the right criteria to pass? Will be put in the reason field. Cp. WQ-Code debate
 						$responseModel->getDonation()->getId(),
+						$responseModel->getDonation()->getPayment()->getPaymentMethod()->getUuid(),
 						$responseModel->getDonation()->getAmount(),
 						$responseModel->getAccessToken()
 					)

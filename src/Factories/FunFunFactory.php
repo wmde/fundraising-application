@@ -439,6 +439,11 @@ class FunFunFactory {
 			return new DefaultPaymentDelayCalculator( $this->getPayPalUrlConfigForMembershipApplications()->getDelayInDays() );
 		};
 
+		$pimple['sofort-client'] = function () {
+			$config = $this->config['sofort'];
+			return new SofortClient( $config['config-key'] );
+		};
+
 		return $pimple;
 	}
 
@@ -925,8 +930,16 @@ class FunFunFactory {
 				$config['return-url'],
 				$config['cancel-url']
 			),
-			new SofortClient( $config['config-key'] )
+			$this->getSofortClient()
 		);
+	}
+
+	public function setSofortClient( SofortClient $client ): void {
+		$this->pimple['sofort-client'] = $client;
+	}
+
+	private function getSofortClient(): SofortClient {
+		return $this->pimple['sofort-client'];
 	}
 
 	private function newCreditCardUrlGenerator() {
