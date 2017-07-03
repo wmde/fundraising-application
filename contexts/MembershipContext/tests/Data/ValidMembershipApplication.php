@@ -105,8 +105,8 @@ class ValidMembershipApplication {
 		);
 	}
 
-	public static function newDomainEntityUsingPayPal(): Application {
-		return ( new self() )->createApplicationUsingPayPal();
+	public static function newDomainEntityUsingPayPal( PayPalData $payPalData = null ): Application {
+		return ( new self() )->createApplicationUsingPayPal( $payPalData );
 	}
 
 	public static function newConfirmedSubscriptionDomainEntity(): Application {
@@ -154,12 +154,12 @@ class ValidMembershipApplication {
 		);
 	}
 
-	private function createApplicationUsingPayPal(): Application {
+	private function createApplicationUsingPayPal( $payPalData ): Application {
 		$self = ( new self() );
 		return Application::newApplication(
 			self::MEMBERSHIP_TYPE,
 			$self->newApplicant( $self->newPersonApplicantName() ),
-			$this->newPayPalPayment()
+			$this->newPayPalPayment( $payPalData )
 		);
 	}
 

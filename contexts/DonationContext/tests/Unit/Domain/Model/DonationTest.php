@@ -110,13 +110,6 @@ class DonationTest extends \PHPUnit\Framework\TestCase {
 		$donation->confirmBooked();
 	}
 
-	public function testAddingPayPalDataToNoPayPalDonationCausesException() {
-		$donation = ValidDonation::newDirectDebitDonation();
-
-		$this->expectException( RuntimeException::class );
-		$donation->addPayPalData( new PayPalData() );
-	}
-
 	/**
 	 * @dataProvider statusesThatDoNotAllowForBookingProvider
 	 */

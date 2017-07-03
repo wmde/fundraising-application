@@ -80,7 +80,9 @@ class HandlePayPalPaymentNotificationUseCase {
 	}
 
 	private function handleRequestForDonation( PayPalPaymentNotificationRequest $request, Donation $donation ): PaypalNotificationResponse {
-		if ( !( $donation->getPayment()->getPaymentMethod() instanceof PayPalPayment ) ) {
+		$paymentMethod = $donation->getPayment()->getPaymentMethod();
+
+		if ( !( $paymentMethod instanceof PayPalPayment ) ) {
 			return $this->createUnhandledResponse( 'Trying to handle IPN for non-Paypal donation' );
 		}
 
@@ -91,7 +93,7 @@ class HandlePayPalPaymentNotificationUseCase {
 			return $this->createChildDonation( $donation, $request );
 		}
 
-		$donation->addPayPalData( $this->newPayPalDataFromRequest( $request ) );
+		$paymentMethod->addPayPalData( $this->newPayPalDataFromRequest( $request ) );
 
 		try {
 			$donation->confirmBooked();
