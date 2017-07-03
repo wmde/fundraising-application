@@ -115,13 +115,20 @@ return [
 			'membershipFee' => 15.23,
 		],
 		'variants' => [
-			'active_yearly' => [
+			'direct_debit_active_yearly' => [
 				'membershipType' => 'active',
 				'paymentIntervalInMonths' => 12,
+				'paymentType' => 'BEZ',
 			],
-			'sustaining_quarterly' => [
+			'direct_debit_sustaining_quarterly' => [
 				'membershipType' => 'sustaining',
 				'paymentIntervalInMonths' => 3,
+				'paymentType' => 'BEZ',
+			],
+			'paypal_sustaining_monthly' => [
+				'membershipType' => 'sustaining',
+				'paymentIntervalInMonths' => 1,
+				'paymentType' => 'PPL',
 			]
 		]
 	],

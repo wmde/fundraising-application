@@ -4,11 +4,15 @@
 {% else %}
 {$ mail_content('membership_application_confirmation/active_membership_salutation') $}
 {% endif %}
+{% if paymentType == 'BEZ' %}
+{% set payment_notice = 'membership_application_confirmation/payment_notice_direct_debit' %}
+{% else %}
+{% set payment_notice = 'membership_application_confirmation/payment_notice_paypal' %}
+{% endif %}
 
 {$ mail_content('membership_application_confirmation/body', {
     'membership_type': membershipType|trans( {}, 'membershipTypes' ),
-    'payment_interval_in_months': paymentIntervalInMonths|trans( {}, 'paymentIntervals' ),
-    'formatted_amount': formattedAmount
+    'payment_notice': mail_content(payment_notice, { 'formatted_amount': formattedAmount, 'payment_interval_in_months': paymentIntervalInMonths|trans( {}, 'paymentIntervals' ) })
 }) $}
 
 {$ mail_content('name_head_of_organization') $}
