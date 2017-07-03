@@ -13,6 +13,9 @@ use WMDE\Fundraising\Frontend\Infrastructure\Sofort\Transfer\Response;
 use WMDE\Fundraising\Frontend\Presentation\SofortUrlConfig;
 use WMDE\Fundraising\Frontend\Presentation\SofortUrlGenerator;
 
+/**
+ * @covers \WMDE\Fundraising\Frontend\Presentation\SofortUrlGenerator
+ */
 class SofortUrlGeneratorTest extends TestCase {
 
 	public function testWhenClientReturnsSuccessResponseAUrlIsReturned(): void {

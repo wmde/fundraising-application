@@ -9,6 +9,9 @@ use WMDE\Fundraising\Frontend\Infrastructure\Sofort\Transfer\Request;
 use WMDE\Euro\Euro;
 use RuntimeException;
 
+/**
+ * Generate the URL of the Sofort checkout process
+ */
 class SofortUrlGenerator {
 
 	private const CURRENCY = 'EUR';
@@ -27,8 +30,15 @@ class SofortUrlGenerator {
 		$this->client = $client;
 	}
 
+	/**
+	 * Generate a URL to use (refer the donor to) to finalize a purchase on a 3rd party payment provider page
+	 *
+	 * @param int $itemId Id of the item to pay
+	 * @param Euro $amount The amount of money to pay
+	 * @param string $accessToken A token to return to the payment process after completing the 3rd party process
+	 * @return string
+	 */
 	public function generateUrl( int $itemId, Euro $amount, string $accessToken ): string {
-
 		$request = new Request();
 		$request->setAmount( $amount );
 		$request->setCurrencyCode( self::CURRENCY );

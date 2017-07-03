@@ -8,6 +8,9 @@ use WMDE\Fundraising\Frontend\Infrastructure\Sofort\Transfer\Request;
 use PHPUnit\Framework\TestCase;
 use WMDE\Euro\Euro;
 
+/**
+ * @covers \WMDE\Fundraising\Frontend\Infrastructure\Sofort\Transfer\Request
+ */
 class RequestTest extends TestCase {
 
 	public function testAccessors(): void {
@@ -33,4 +36,3 @@ class RequestTest extends TestCase {
 		$this->assertSame( 'notify', $request->getNotificationUrl() );
 	}
 }
-

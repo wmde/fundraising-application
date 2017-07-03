@@ -7,9 +7,12 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Sofort\Transfer;
 use WMDE\Fundraising\Frontend\Infrastructure\Sofort\Transfer\Response;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \WMDE\Fundraising\Frontend\Infrastructure\Sofort\Transfer\Response
+ */
 class ResponseTest extends TestCase {
 
-	public function testResponse(): void {
+	public function testAccessors(): void {
 		$response = new Response();
 
 		$this->assertSame( '', $response->getPaymentUrl() );
@@ -18,7 +21,7 @@ class ResponseTest extends TestCase {
 		$response->setPaymentUrl( 'foo.com' );
 		$response->setTransactionId( '12345' );
 
-		$this->assertEquals( 'foo.com', $response->getPaymentUrl() );
-		$this->assertEquals( '12345', $response->getTransactionId() );
+		$this->assertSame( 'foo.com', $response->getPaymentUrl() );
+		$this->assertSame( '12345', $response->getTransactionId() );
 	}
 }

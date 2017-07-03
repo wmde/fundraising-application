@@ -18,14 +18,14 @@ class Response {
 	/**
 	 * @return string
 	 */
-	public function getTransactionId() {
+	public function getTransactionId(): string {
 		return $this->transactionId;
 	}
 
 	/**
 	 * @param mixed $transactionId
 	 */
-	public function setTransactionId( $transactionId ) {
+	public function setTransactionId( $transactionId ): void {
 		$this->transactionId = $transactionId;
 	}
 
@@ -39,7 +39,7 @@ class Response {
 	/**
 	 * @param string $paymentUrl
 	 */
-	public function setPaymentUrl( string $paymentUrl ) {
+	public function setPaymentUrl( string $paymentUrl ): void {
 		$this->paymentUrl = $paymentUrl;
 	}
 }

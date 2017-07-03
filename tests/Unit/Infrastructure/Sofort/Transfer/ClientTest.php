@@ -11,6 +11,9 @@ use WMDE\Fundraising\Frontend\Infrastructure\Sofort\Transfer\Client;
 use WMDE\Fundraising\Frontend\Infrastructure\Sofort\Transfer\Request;
 use RuntimeException;
 
+/**
+ * @covers \WMDE\Fundraising\Frontend\Infrastructure\Sofort\Transfer\Client
+ */
 class ClientTest extends TestCase {
 
 	public function testGet(): void {
@@ -20,53 +23,37 @@ class ClientTest extends TestCase {
 		$amountConvertedToFloat = $amount->getEuroFloat();
 
 		$api = $this->createMock( Sofortueberweisung::class );
+
 		$api
-			->expects( $this->once() )
 			->method( 'setAmount' )
-			->with( $amountConvertedToFloat )
-			->willReturnSelf();
+			->with( $amountConvertedToFloat );
 		$api
-			->expects( $this->once() )
 			->method( 'setCurrencyCode' )
-			->with( 'EUR' )
-			->willReturnSelf();
+			->with( 'EUR' );
 		$api
-			->expects( $this->once() )
 			->method( 'setReason' )
-			->with( 'Donation', '529836' )
-			->willReturnSelf();
+			->with( 'Donation', '529836' );
 		$api
-			->expects( $this->once() )
 			->method( 'setSuccessUrl' )
-			->with( 'https://us.org/yes?id=529836&accessToken=letmein', true )
-			->willReturnSelf();
+			->with( 'https://us.org/yes?id=529836&accessToken=letmein', true );
 		$api
-			->expects( $this->once() )
 			->method( 'setAbortUrl' )
-			->with( 'https://us.org/no' )
-			->willReturnSelf();
+			->with( 'https://us.org/no' );
 		$api
-			->expects( $this->once() )
 			->method( 'setNotificationUrl' )
-			->with( 'https://us.org/callback' )
-			->willReturnSelf();
+			->with( 'https://us.org/callback' );
 		$api
-			->expects( $this->once() )
-			->method( 'sendRequest' )
-			->willReturn( null );
+			->method( 'sendRequest' );
 		$api
-			->expects( $this->once() )
 			->method( 'isError' )
 			->willReturn( false );
 		$api
 			->expects( $this->never() )
 			->method( 'getError' );
 		$api
-			->expects( $this->once() )
 			->method( 'getTransactionId' )
 			->willReturn( 'tr4ns4ct10n' );
 		$api
-			->expects( $this->once() )
 			->method( 'getPaymentUrl' )
 			->willReturn( 'https://awsomepaymentprovider.tld/784trhhrf4' );
 
@@ -91,11 +78,9 @@ class ClientTest extends TestCase {
 		$api = $this->createMock( Sofortueberweisung::class );
 
 		$api
-			->expects( $this->once() )
 			->method( 'isError' )
 			->willReturn( true );
 		$api
-			->expects( $this->once() )
 			->method( 'getError' )
 			->willReturn( 'boo boo' );
 
