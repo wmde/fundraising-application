@@ -17,7 +17,6 @@ use NumberFormatter;
 use Pimple\Container;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use Sofort\SofortLib\Sofortueberweisung;
 use Swift_MailTransport;
 use Swift_NullTransport;
 use Symfony\Component\Stopwatch\Stopwatch;
@@ -43,6 +42,7 @@ use WMDE\Fundraising\Frontend\Presentation\Honorifics;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\PageNotFoundPresenter;
 use WMDE\Fundraising\Frontend\Presentation\SofortUrlConfig;
 use WMDE\Fundraising\Frontend\Presentation\SofortUrlGenerator;
+use WMDE\Fundraising\Frontend\Infrastructure\Sofort\Transfer\Client as SofortClient;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 use WMDE\Fundraising\Frontend\DonationContext\Authorization\DonationAuthorizer;
@@ -925,7 +925,7 @@ class FunFunFactory {
 				$config['return-url'],
 				$config['cancel-url']
 			),
-			new Sofortueberweisung( $config['config-key'] )
+			new SofortClient( $config['config-key'] )
 		);
 	}
 

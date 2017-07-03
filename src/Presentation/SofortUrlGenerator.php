@@ -4,7 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Presentation;
 
-use Sofort\SofortLib\Sofortueberweisung;
+use WMDE\Fundraising\Frontend\Infrastructure\Sofort\Transfer\Client;
+use WMDE\Fundraising\Frontend\Infrastructure\Sofort\Transfer\Request;
 use WMDE\Euro\Euro;
 use RuntimeException;
 
@@ -13,46 +14,41 @@ class SofortUrlGenerator {
 	private const CURRENCY = 'EUR';
 
 	/**
-	 * @var \WMDE\Fundraising\Frontend\Presentation\SofortUrlConfig
+	 * @var SofortUrlConfig
 	 */
 	private $config;
 	/**
-	 * @var \Sofort\SofortLib\Sofortueberweisung
+	 * @var Client
 	 */
-	private $api;
+	private $client;
 
-	public function __construct( SofortUrlConfig $config, Sofortueberweisung $api ) {
+	public function __construct( SofortUrlConfig $config, Client $client ) {
 		$this->config = $config;
-		$this->api = $api;
+		$this->client = $client;
 	}
 
 	public function generateUrl( int $itemId, Euro $amount, string $accessToken ): string {
-		$this->api->setAmount( $amount->getEuroString() );
-		$this->api->setCurrencyCode( self::CURRENCY );
-		$this->api->setReason( $this->config->getReasonText(), $itemId );
 
-		$this->api->setSuccessUrl(
+		$request = new Request();
+		$request->setAmount( $amount );
+		$request->setCurrencyCode( self::CURRENCY );
+		$request->setReasons( [ $this->config->getReasonText(), $itemId ] );
+		$request->setSuccessUrl(
 			$this->config->getReturnUrl() . '?' . http_build_query( [
 				'id' => $itemId,
 				'accessToken' => $accessToken
-			] ),
-			true
+			] )
 		);
-		$this->api->setAbortUrl( $this->config->getCancelUrl() );
+		$request->setAbortUrl( $this->config->getCancelUrl() );
+		// @todo To use in T167882
+		$request->setNotificationUrl( '' );
 
-		// @todo Do we need that?
-		//$this->api->setNotificationUrl('YOUR_NOTIFICATION_URL');
-
-		$this->api->sendRequest();
-
-		if ( $this->api->isError() ) {
-			throw new RuntimeException( 'Could not generate Sofort URL: ' . $this->api->getError() );
+		try {
+			$response = $this->client->get( $request );
+		} catch ( RuntimeException $exception ) {
+			throw new RuntimeException( 'Could not generate Sofort URL: ' . $exception->getMessage() );
 		}
 
-		// @todo Do we have use for that?
-		// unique transaction-ID useful to check payment status
-		$transactionId = $this->api->getTransactionId();
-
-		return $this->api->getPaymentUrl();
+		return $response->getPaymentUrl();
 	}
 }

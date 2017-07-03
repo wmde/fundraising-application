@@ -6,84 +6,58 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation;
 
 use RuntimeException;
 use PHPUnit\Framework\TestCase;
-use Sofort\SofortLib\Sofortueberweisung;
+use WMDE\Fundraising\Frontend\Infrastructure\Sofort\Transfer\Client;
 use WMDE\Euro\Euro;
+use WMDE\Fundraising\Frontend\Infrastructure\Sofort\Transfer\Request;
+use WMDE\Fundraising\Frontend\Infrastructure\Sofort\Transfer\Response;
 use WMDE\Fundraising\Frontend\Presentation\SofortUrlConfig;
 use WMDE\Fundraising\Frontend\Presentation\SofortUrlGenerator;
 
 class SofortUrlGeneratorTest extends TestCase {
 
-	public function testWhenApiReturnsSuccessfullyAUrlIsReturned(): void {
+	public function testWhenClientReturnsSuccessResponseAUrlIsReturned(): void {
 		$config = new SofortUrlConfig( 'Donation', 'https://us.org/yes', 'https://us.org/no' );
 
-		$api = $this->createMock( Sofortueberweisung::class );
-		$api
-			->expects( $this->once() )
-			->method( 'setAmount' )
-			->with( '5.00' )
-			->willReturnSelf();
-		$api
-			->expects( $this->once() )
-			->method( 'setCurrencyCode' )
-			->with( 'EUR' )
-			->willReturnSelf();
-		$api
-			->expects( $this->once() )
-			->method( 'setReason' )
-			->with( 'Donation', 529836 )
-			->willReturnSelf();
-		$api
-			->expects( $this->once() )
-			->method( 'setSuccessUrl' )
-			->with( 'https://us.org/yes?id=529836&accessToken=letmein', true )
-			->willReturnSelf();
-		$api
-			->expects( $this->once() )
-			->method( 'setAbortUrl' )
-			->with( 'https://us.org/no' )
-			->willReturnSelf();
-		$api
-			->expects( $this->once() )
-			->method( 'sendRequest' )
-			->willReturn( null );
-		$api
-			->expects( $this->once() )
-			->method( 'isError' )
-			->willReturn( false );
-		$api
-			->expects( $this->never() )
-			->method( 'getError' );
-		$api
-			->expects( $this->once() )
-			->method( 'getTransactionId' )
-			->willReturn( 'tr4ns4ct10n' );
-		$api
-			->expects( $this->once() )
-			->method( 'getPaymentUrl' )
-			->willReturn( 'https://awsomepaymentprovider.tld/784trhhrf4' );
+		$amount = Euro::newFromCents( 600 );
 
-		$urlGenerator = new SofortUrlGenerator( $config, $api );
+		$request = new Request();
+		$request->setAmount( $amount );
+		$request->setCurrencyCode( 'EUR' );
+		$request->setReasons( [ 'Donation', '529836' ] );
+		$request->setSuccessUrl( 'https://us.org/yes?id=529836&accessToken=letmein' );
+		$request->setAbortUrl( 'https://us.org/no' );
+		$request->setNotificationUrl( '' );
+
+		$response = new Response();
+		$response->setTransactionId( '500m1l35' );
+		$response->setPaymentUrl( 'https://awsomepaymentprovider.tld/784trhhrf4' );
+
+		$client = $this->createMock( Client::class );
+		$client
+			->expects( $this->once() )
+			->method( 'get' )
+			->with( $request )
+			->willReturn( $response );
+
+		$urlGenerator = new SofortUrlGenerator( $config, $client );
 		$this->assertSame(
 			'https://awsomepaymentprovider.tld/784trhhrf4',
-			$urlGenerator->generateUrl( 529836, Euro::newFromCents( 500 ), 'letmein' )
+			$urlGenerator->generateUrl( 529836, $amount, 'letmein' )
 		);
 	}
 
 	public function testWhenApiReturnsErrorAnExceptionWithApiErrorMessageIsThrown(): void {
 		$config = new SofortUrlConfig( 'Your purchase', 'https://irreleva.nt', 'http://irreleva.nt' );
 
-		$api = $this->createMock( Sofortueberweisung::class );
+		$client = $this->createMock( Client::class );
 
-		$api
+		$client
 			->expects( $this->once() )
-			->method( 'isError' )
-			->willReturn( true );
-		$api
-			->expects( $this->once() )
-			->method( 'getError' )
-			->willReturn( 'boo boo' );
+			->method( 'get' )
+			->withAnyParameters()
+			->willThrowException( new RuntimeException( 'boo boo' ) );
 
-		$urlGenerator = new SofortUrlGenerator( $config, $api );
+		$urlGenerator = new SofortUrlGenerator( $config, $client );
 
 		$this->expectException( RuntimeException::class );
 		$this->expectExceptionMessage( 'Could not generate Sofort URL: boo boo' );
