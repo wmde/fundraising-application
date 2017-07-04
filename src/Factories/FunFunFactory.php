@@ -295,10 +295,7 @@ class FunFunFactory {
 			return new TwigFactory(
 				array_merge_recursive(
 					$this->config['twig'],
-					[
-						'web-basepath' => $this->config['web-basepath'],
-						'payment-types' => $this->config['payment-types']
-					]
+					['web-basepath' => $this->config['web-basepath']]
 				),
 				$this->getCachePath() . '/twig',
 				$this->config['locale']
@@ -1095,17 +1092,19 @@ class FunFunFactory {
 	}
 
 	public function newDonationFormViolationPresenter() {
-		// TODO make the template name dependent on the 'form' value from the HTTP POST request
-		// (we need different form pages for A/B testing)
-		$template = $this->getLayoutTemplate( 'Donation_Form.html.twig' );
-		return new DonationFormViolationPresenter( $template, $this->newAmountFormatter() );
+		return new DonationFormViolationPresenter( $this->getDonationFormTemplate(), $this->newAmountFormatter() );
 	}
 
 	public function newDonationFormPresenter() {
+		return new DonationFormPresenter( $this->getDonationFormTemplate(), $this->newAmountFormatter() );
+	}
+
+	private function getDonationFormTemplate(): TwigTemplate {
 		// TODO make the template name dependent on the 'form' value from the HTTP POST request
 		// (we need different form pages for A/B testing)
-		$template = $this->getLayoutTemplate( 'Donation_Form.html.twig' );
-		return new DonationFormPresenter( $template, $this->newAmountFormatter() );
+		return $this->getLayoutTemplate( 'Donation_Form.html.twig', [
+			'paymentTypes' => $this->config['payment-types']
+		] );
 	}
 
 	public function newHandlePayPalPaymentNotificationUseCase( string $updateToken ) {

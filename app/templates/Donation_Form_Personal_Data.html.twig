@@ -97,7 +97,7 @@
                     <div class="change-payment-type">
                         <hr/>
 
-                        {% include 'payment_type_list.twig' with {'formId': 'form2'} only %}
+                        {% include 'payment_type_list.twig' with {'paymentTypes': paymentTypes, 'formId': 'form2'} only %}
                     </div>
                 </div>
 

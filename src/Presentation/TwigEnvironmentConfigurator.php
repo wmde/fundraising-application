@@ -61,7 +61,5 @@ class TwigEnvironmentConfigurator {
 
 	private function setDefaultTwigVariables( Twig_Environment $twig ): void {
 		$twig->addGlobal( 'basepath', $this->config['web-basepath'] );
-		$twig->addGlobal( 'appconfig', $this->config );
 	}
-
 }

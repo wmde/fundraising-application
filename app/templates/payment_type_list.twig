@@ -1,11 +1,11 @@
 {# paramters:
+	paymentTypes
 	formId
-	appconfig
 	checkedPaymentType (optional)
 #}
 <ul class="horizontal clearfix payment-type-list">
-{% for paymentType, options in appconfig['payment-types'] %}
-	{# Not using if on loop to make sure loop.index stays the same #}
+{% for paymentType, options in paymentTypes %}
+	{# Not using if on loop to make sure loop.index of items stays the same #}
 	{% if options.enabled %}
 		<li
 		{% if loop.first %}
