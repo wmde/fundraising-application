@@ -159,7 +159,8 @@ $( function () {
 						'12': 'jährlich'
 					},
 					{
-						'BEZ': 'Lastschrift'
+						'BEZ': 'Lastschrift',
+						'PPL': 'PayPal'
 					},
 					WMDE.CurrencyFormatter.createCurrencyFormatter( 'de' )
 				),
