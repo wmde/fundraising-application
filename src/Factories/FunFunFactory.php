@@ -959,7 +959,7 @@ class FunFunFactory {
 		return new PaymentDataValidator(
 			$this->config['donation-minimum-amount'],
 			$this->config['donation-maximum-amount'],
-			PaymentType::getPaymentTypes()
+			$this->getEnabledDonationPaymentTypes()
 		);
 	}
 
