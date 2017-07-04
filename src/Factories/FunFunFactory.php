@@ -36,6 +36,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\Appl
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionPaymentNotification\HandleSubscriptionPaymentNotificationUseCase;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionSignupNotification\HandleSubscriptionSignupNotificationUseCase;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\DefaultPaymentDelayCalculator;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentDelayCalculator;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector;
 use WMDE\Fundraising\Frontend\Presentation\Honorifics;
@@ -955,7 +956,11 @@ class FunFunFactory {
 	}
 
 	public function newPaymentDataValidator(): PaymentDataValidator {
-		return new PaymentDataValidator( $this->config['donation-minimum-amount'], $this->config['donation-maximum-amount'] );
+		return new PaymentDataValidator(
+			$this->config['donation-minimum-amount'],
+			$this->config['donation-maximum-amount'],
+			PaymentType::getPaymentTypes()
+		);
 	}
 
 	private function newAmountFormatter(): AmountFormatter {
