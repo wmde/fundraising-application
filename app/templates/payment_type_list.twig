@@ -4,28 +4,25 @@
 	checkedPaymentType (optional)
 #}
 <ul class="horizontal clearfix payment-type-list">
-{% for paymentType, options in paymentTypes %}
-	{# Not using if on loop to make sure loop.index of items stays the same #}
-	{% if options.enabled %}
-		<li
-		{% if loop.first %}
-			class="first"
-		{% elseif loop.last %}
-			class="last"
-		{% endif %}>
-			<input
-				id="{$ formId $}-payment-type-{$ loop.index $}"
-				type="radio"
-				class="payment-type-select"
-				name="zahlweise"
-				value="{$ paymentType $}"
-				title="{$ paymentType|trans({}, 'paymentTypes') $}"
-				{% if checkedPaymentType == paymentType %}checked="checked"{% endif %}
-			>
-			<label for="{$ formId $}-payment-type-{$ loop.index $}">
-				{$ paymentType|trans({}, 'paymentTypes') $}
-			</label>
-		</li>
-	{% endif %}
+{% for paymentType in paymentTypes %}
+	<li
+	{% if loop.first %}
+		class="first"
+	{% elseif loop.last %}
+		class="last"
+	{% endif %}>
+		<input
+			id="{$ formId $}-payment-type-{$ loop.index $}"
+			type="radio"
+			class="payment-type-select"
+			name="zahlweise"
+			value="{$ paymentType $}"
+			title="{$ paymentType|trans({}, 'paymentTypes') $}"
+			{% if checkedPaymentType == paymentType %}checked="checked"{% endif %}
+		>
+		<label for="{$ formId $}-payment-type-{$ loop.index $}">
+			{$ paymentType|trans({}, 'paymentTypes') $}
+		</label>
+	</li>
 {% endfor %}
 </ul>

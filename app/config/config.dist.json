@@ -150,19 +150,19 @@
 	},
 	"payment-types": {
 		"BEZ": {
-			"enabled": true
+			"donation-enabled": true
 		},
 		"UEB": {
-			"enabled": true
+			"donation-enabled": true
 		},
 		"MCP": {
-			"enabled": true
+			"donation-enabled": true
 		},
 		"PPL": {
-			"enabled": true
+			"donation-enabled": true
 		},
 		"SUB": {
-			"enabled": true
+			"donation-enabled": true
 		}
 	}
 }

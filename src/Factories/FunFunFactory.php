@@ -1103,8 +1103,14 @@ class FunFunFactory {
 		// TODO make the template name dependent on the 'form' value from the HTTP POST request
 		// (we need different form pages for A/B testing)
 		return $this->getLayoutTemplate( 'Donation_Form.html.twig', [
-			'paymentTypes' => $this->config['payment-types']
+			'paymentTypes' => $this->getEnabledDonationPaymentTypes()
 		] );
+	}
+
+	private function getEnabledDonationPaymentTypes(): array {
+		return array_keys( array_filter( $this->config['payment-types'], function ( $config ) {
+			return ( $config['donation-enabled'] === true );
+		} ) );
 	}
 
 	public function newHandlePayPalPaymentNotificationUseCase( string $updateToken ) {

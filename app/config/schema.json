@@ -679,19 +679,19 @@
     },
     "payment-types": {
       "type": "object",
-      "title": "Known payment types",
+      "title": "Known payment types and their configuration",
       "patternProperties": {
         "^.*$": {
           "type" : "object",
           "properties" : {
-            "enabled": {
+            "donation-enabled": {
               "type": "boolean",
-              "title": "Enabled Flag",
-              "description": "Set to true if payment type is to be offered"
+              "title": "Donation Enabled Flag",
+              "description": "Set to true if payment type is to be offered for donations"
             }
           },
           "required": [
-            "enabled"
+            "donation-enabled"
           ],
           "additionalProperties": false
         }
