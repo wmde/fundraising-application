@@ -159,11 +159,7 @@ $( function () {
 						'12': 'jährlich'
 					},
 					{
-						'BEZ': 'Lastschrift',
-						'UEB': 'Überweisung',
-						'MCP': 'Kreditkarte',
-						'PPL': 'PayPal',
-						'SUB': 'Sofortüberweisung'
+						'BEZ': 'Lastschrift'
 					},
 					WMDE.CurrencyFormatter.createCurrencyFormatter( 'de' )
 				),
