@@ -347,7 +347,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'thatother.paymentprovider.com', $response->getContent() );
 	}
 
-	public function testValidSofortInput_RedirectsTo3rdPartyPage() {
+	public function testValidSofortInput_redirectsTo3rdPartyPage(): void {
 
 		$response = new SofortResponse();
 		$response->setPaymentUrl( 'https://bankingpin.please' );
@@ -379,7 +379,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	private function newValidSofortInput() {
+	private function newValidSofortInput(): array {
 		return [
 			'betrag' => '100,00',
 			'zahlweise' => 'SUB',
