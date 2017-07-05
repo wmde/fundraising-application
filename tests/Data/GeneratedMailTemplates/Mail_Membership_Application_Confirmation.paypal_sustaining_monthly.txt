@@ -1,6 +1,10 @@
 Sehr geehrter Herr Dr. O'Reilly,
 
-membership_application_confirmation/body
+membership_application_confirmation/intro
+
+membership_application_confirmation/payment_notice_paypal
+
+membership_application_confirmation/outro
 
 name_head_of_organization
 title_head_of_organization
