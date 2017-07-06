@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a5f60fce76f25a12679b34e33728582c",
+    "content-hash": "abaab64de21fe61aabca596d82655e6a",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -5876,16 +5876,16 @@
         },
         {
             "name": "wmde/fundraising-frontend-content",
-            "version": "dev-sofort",
+            "version": "dev-test",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content.git",
-                "reference": "1d1a2f3f876add99c307da9a67fed477939e2277"
+                "reference": "f5f292f74695f8d8f3ba4f820c238903c7709da2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/1d1a2f3f876add99c307da9a67fed477939e2277",
-                "reference": "1d1a2f3f876add99c307da9a67fed477939e2277",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/f5f292f74695f8d8f3ba4f820c238903c7709da2",
+                "reference": "f5f292f74695f8d8f3ba4f820c238903c7709da2",
                 "shasum": ""
             },
             "require-dev": {
@@ -5915,9 +5915,9 @@
             ],
             "description": "i18n for FundraisingFrontend",
             "support": {
-                "source": "https://github.com/wmde/fundraising-frontend-content/tree/sofort"
+                "source": "https://github.com/wmde/fundraising-frontend-content/tree/test"
             },
-            "time": "2017-07-06T10:33:36+00:00"
+            "time": "2017-07-06T13:44:34+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",
