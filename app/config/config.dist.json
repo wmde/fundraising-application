@@ -169,7 +169,7 @@
 			"donation-enabled": true
 		},
 		"SUB": {
-			"donation-enabled": true
+			"donation-enabled": false
 		}
 	}
 }

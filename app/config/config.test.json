@@ -86,5 +86,22 @@
 		"siteUrlBase": "http://test-spenden.wikimedia.local"
 	},
 	"purging-secret": "Not so secret, testing",
-	"i18n-base-path": "vendor/wmde/fundraising-frontend-content/i18n"
+	"i18n-base-path": "vendor/wmde/fundraising-frontend-content/i18n",
+	"payment-types": {
+		"BEZ": {
+			"donation-enabled": true
+		},
+		"UEB": {
+			"donation-enabled": true
+		},
+		"MCP": {
+			"donation-enabled": true
+		},
+		"PPL": {
+			"donation-enabled": true
+		},
+		"SUB": {
+			"donation-enabled": true
+		}
+	}
 }
