@@ -18,7 +18,7 @@
 {$ 'recurringDonation'|transchoice( donation.interval, { '%interval%': donation.interval } ) $}
 {% endif %}
 
-{% elseif donation.paymentType == 'PPL' or donation.paymentType == 'MCP' %}
+{% elseif donation.paymentType == 'PPL' or donation.paymentType == 'MCP' or donation.paymentType == 'SUB' %}
 {$ mail_content('donation_confirmation/paymenttype_external', {
     'formatted_amount': formattedAmount,
     'payment_provider': donation.paymentType|trans({}, 'paymentTypes')

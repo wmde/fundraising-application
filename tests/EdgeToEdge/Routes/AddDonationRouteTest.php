@@ -12,6 +12,8 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
+use WMDE\Fundraising\Frontend\Infrastructure\Sofort\Transfer\Client as SofortClient;
+use WMDE\Fundraising\Frontend\Infrastructure\Sofort\Transfer\Response as SofortResponse;
 
 /**
  * @licence GNU GPL v2+
@@ -345,11 +347,43 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'thatother.paymentprovider.com', $response->getContent() );
 	}
 
+	public function testValidSofortInput_redirectsTo3rdPartyPage(): void {
+
+		$response = new SofortResponse();
+		$response->setPaymentUrl( 'https://bankingpin.please' );
+
+		$client = $this->createClient( [], function ( FunFunFactory $factory ) use ( $response ) {
+			$sofortClient = $this->createMock( SofortClient::class );
+			$sofortClient
+				->method( 'get' )
+				->willReturn( $response );
+			$factory->setSofortClient( $sofortClient );
+		} );
+
+		$client->followRedirects( false );
+		$client->request(
+			'POST',
+			'/donation/add',
+			$this->newValidSofortInput()
+		);
+
+		$this->assertTrue( $client->getResponse()->isRedirect( 'https://bankingpin.please' ) );
+	}
+
 	private function newValidCreditCardInput() {
 		return [
 			'betrag' => '12,34',
 			'zahlweise' => 'MCP',
 			'periode' => 3,
+			'addressType' => 'anonym',
+		];
+	}
+
+	private function newValidSofortInput(): array {
+		return [
+			'betrag' => '100,00',
+			'zahlweise' => 'SUB',
+			'periode' => 0,
 			'addressType' => 'anonym',
 		];
 	}
@@ -721,5 +755,4 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$this->assertSame( '', $data['bankname'] );
 		} );
 	}
-
 }

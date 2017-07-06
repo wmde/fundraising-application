@@ -15,6 +15,7 @@ final class PaymentType {
 	const CREDIT_CARD = 'MCP';
 	const DIRECT_DEBIT = 'BEZ';
 	const PAYPAL = 'PPL';
+	const SOFORT = 'SUB';
 
 	public static function getPaymentTypes(): array {
 		return ( new \ReflectionClass( self::class ) )->getConstants();

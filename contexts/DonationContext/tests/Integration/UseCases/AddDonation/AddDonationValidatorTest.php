@@ -19,7 +19,7 @@ use WMDE\Fundraising\Frontend\Validation\PaymentDataValidator;
 use WMDE\Fundraising\Frontend\Validation\ValidationResult;
 
 /**
- * @covers WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationValidator
+ * @covers \WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationValidator
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
@@ -198,7 +198,7 @@ class AddDonationValidatorTest extends ValidatorTestCase {
 
 	private function newDonationValidator(): AddDonationValidator {
 		return new AddDonationValidator(
-			new PaymentDataValidator( 1.0, 100000 ),
+			new PaymentDataValidator( 1.0, 100000, [ 'BEZ' ] ),
 			$this->newBankDataValidator(),
 			$this->newMockEmailValidator()
 		);

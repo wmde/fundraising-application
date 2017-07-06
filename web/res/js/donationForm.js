@@ -123,7 +123,7 @@ $( function () {
 			},
 			// Show the right submit buttons on page 2, depending on payment type
 			{
-				viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '#finishFormSubmit2' ), /^MCP|PPL|UEB/ ),
+				viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '#finishFormSubmit2' ), /^MCP|PPL|UEB|SUB/ ),
 				stateKey: 'donationFormContent.paymentType'
 			},
 			{
@@ -132,7 +132,7 @@ $( function () {
 			},
 			// Hide anonymous payment when doing direct debit
 			{
-				viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '.anonymous-payment-select, #tooltip-icon-addresstype' ), /^MCP|PPL|UEB/ ),
+				viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '.anonymous-payment-select, #tooltip-icon-addresstype' ), /^MCP|PPL|UEB|SUB/ ),
 				stateKey: 'donationFormContent.paymentType'
 			},
 			// Switch bank data input between IBAN/BIC and Account Number/Bank code
@@ -185,7 +185,8 @@ $( function () {
 						'BEZ': 'Lastschrift',
 						'UEB': 'Überweisung',
 						'MCP': 'Kreditkarte',
-						'PPL': 'PayPal'
+						'PPL': 'PayPal',
+						'SUB': 'Sofortüberweisung'
 					},
 					WMDE.CurrencyFormatter.createCurrencyFormatter( 'de' )
 				),

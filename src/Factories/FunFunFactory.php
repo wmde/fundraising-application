@@ -36,10 +36,14 @@ use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\Appl
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionPaymentNotification\HandleSubscriptionPaymentNotificationUseCase;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionSignupNotification\HandleSubscriptionSignupNotificationUseCase;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\DefaultPaymentDelayCalculator;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentDelayCalculator;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector;
 use WMDE\Fundraising\Frontend\Presentation\Honorifics;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\PageNotFoundPresenter;
+use WMDE\Fundraising\Frontend\Presentation\SofortUrlConfig;
+use WMDE\Fundraising\Frontend\Presentation\SofortUrlGenerator;
+use WMDE\Fundraising\Frontend\Infrastructure\Sofort\Transfer\Client as SofortClient;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 use WMDE\Fundraising\Frontend\DonationContext\Authorization\DonationAuthorizer;
@@ -434,6 +438,11 @@ class FunFunFactory {
 
 		$pimple['payment-delay-calculator'] = function() {
 			return new DefaultPaymentDelayCalculator( $this->getPayPalUrlConfigForMembershipApplications()->getDelayInDays() );
+		};
+
+		$pimple['sofort-client'] = function () {
+			$config = $this->config['sofort'];
+			return new SofortClient( $config['config-key'] );
 		};
 
 		return $pimple;
@@ -913,6 +922,27 @@ class FunFunFactory {
 		return PayPalUrlConfig::newFromConfig( $this->config['paypal-membership'] );
 	}
 
+	public function newSofortUrlGeneratorForDonations(): SofortUrlGenerator {
+		$config = $this->config['sofort'];
+
+		return new SofortUrlGenerator(
+			new SofortUrlConfig(
+				$this->getTranslator()->trans( 'item_name_donation', [], 'messages' ),
+				$config['return-url'],
+				$config['cancel-url']
+			),
+			$this->getSofortClient()
+		);
+	}
+
+	public function setSofortClient( SofortClient $client ): void {
+		$this->pimple['sofort-client'] = $client;
+	}
+
+	private function getSofortClient(): SofortClient {
+		return $this->pimple['sofort-client'];
+	}
+
 	private function newCreditCardUrlGenerator() {
 		return new CreditCardUrlGenerator( $this->newCreditCardUrlConfig() );
 	}
@@ -926,7 +956,11 @@ class FunFunFactory {
 	}
 
 	public function newPaymentDataValidator(): PaymentDataValidator {
-		return new PaymentDataValidator( $this->config['donation-minimum-amount'], $this->config['donation-maximum-amount'] );
+		return new PaymentDataValidator(
+			$this->config['donation-minimum-amount'],
+			$this->config['donation-maximum-amount'],
+			$this->getEnabledDonationPaymentTypes()
+		);
 	}
 
 	private function newAmountFormatter(): AmountFormatter {
@@ -1092,17 +1126,25 @@ class FunFunFactory {
 	}
 
 	public function newDonationFormViolationPresenter() {
-		// TODO make the template name dependent on the 'form' value from the HTTP POST request
-		// (we need different form pages for A/B testing)
-		$template = $this->getLayoutTemplate( 'Donation_Form.html.twig' );
-		return new DonationFormViolationPresenter( $template, $this->newAmountFormatter() );
+		return new DonationFormViolationPresenter( $this->getDonationFormTemplate(), $this->newAmountFormatter() );
 	}
 
 	public function newDonationFormPresenter() {
+		return new DonationFormPresenter( $this->getDonationFormTemplate(), $this->newAmountFormatter() );
+	}
+
+	private function getDonationFormTemplate(): TwigTemplate {
 		// TODO make the template name dependent on the 'form' value from the HTTP POST request
 		// (we need different form pages for A/B testing)
-		$template = $this->getLayoutTemplate( 'Donation_Form.html.twig' );
-		return new DonationFormPresenter( $template, $this->newAmountFormatter() );
+		return $this->getLayoutTemplate( 'Donation_Form.html.twig', [
+			'paymentTypes' => $this->getEnabledDonationPaymentTypes()
+		] );
+	}
+
+	private function getEnabledDonationPaymentTypes(): array {
+		return array_keys( array_filter( $this->config['payment-types'], function ( $config ) {
+			return ( $config['donation-enabled'] === true );
+		} ) );
 	}
 
 	public function newHandlePayPalPaymentNotificationUseCase( string $updateToken ) {

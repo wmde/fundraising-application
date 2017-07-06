@@ -19,7 +19,8 @@ var test = require( 'tape' ),
 		BEZ: 'Lastschrift',
 		UEB: 'Überweisung',
 		MCP: 'Kreditkarte',
-		PPL: 'PayPal'
+		PPL: 'PayPal',
+		SUB: 'Sofortüberweisung'
 	},
 	formattedAmount = '23,00 EUR',
 	currencyFormatter = {

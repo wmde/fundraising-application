@@ -558,6 +558,33 @@
         "testmode"
       ]
     },
+    "sofort": {
+      "type": "object",
+      "title": "Configuration for the Sofortüberweisung payment provider",
+      "properties": {
+        "config-key": {
+          "type": "string",
+          "title": "The API key for communication",
+          "minLength": 1
+        },
+        "return-url": {
+          "type": "string",
+          "title": "Return URL",
+          "minLength": 1
+        },
+        "cancel-url": {
+          "type": "string",
+          "title": "Cancel URL",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "config-key",
+        "return-url",
+        "cancel-url"
+      ]
+    },
     "confirmation-pages": {
       "type": "object",
       "title": "Confirmation page template selection configuration",
@@ -676,6 +703,28 @@
         "message-dir",
         "files"
       ]
+    },
+    "payment-types": {
+      "type": "object",
+      "title": "Known payment types and their configuration",
+      "patternProperties": {
+        "^.*$": {
+          "type" : "object",
+          "properties" : {
+            "donation-enabled": {
+              "type": "boolean",
+              "title": "Donation Enabled Flag",
+              "description": "Set to true if payment type is to be offered for donations"
+            }
+          },
+          "required": [
+            "donation-enabled"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false,
+      "minProperties": 1
     }
   },
   "additionalProperties": false,
@@ -698,8 +747,10 @@
     "paypal-donation",
     "paypal-membership",
     "creditcard",
+    "sofort",
     "confirmation-pages",
     "piwik",
-    "translation"
+    "translation",
+    "payment-types"
   ]
 }

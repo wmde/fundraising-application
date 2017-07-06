@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Validation;
 
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
 
 /**
  * @licence GNU GPL v2+
@@ -14,27 +13,30 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
  */
 class PaymentDataValidator {
 
-	const VIOLATION_AMOUNT_NOT_NUMERIC = 'Amount is not numeric';
-	const VIOLATION_AMOUNT_TOO_LOW = 'Amount too low';
-	const VIOLATION_AMOUNT_TOO_HIGH = 'Amount too high';
-	const VIOLATION_UNKNOWN_PAYMENT_TYPE = 'Unknown payment type';
+	private const VIOLATION_AMOUNT_NOT_NUMERIC = 'Amount is not numeric';
+	private const VIOLATION_AMOUNT_TOO_LOW = 'Amount too low';
+	private const VIOLATION_AMOUNT_TOO_HIGH = 'Amount too high';
+	private const VIOLATION_UNKNOWN_PAYMENT_TYPE = 'Unknown payment type';
 
-	const SOURCE_AMOUNT = 'amount';
-	const SOURCE_PAYMENT_TYPE = 'paymentType';
+	private const SOURCE_AMOUNT = 'amount';
+	private const SOURCE_PAYMENT_TYPE = 'paymentType';
 
 	private $minAmount;
 	private $maxAmount;
+	private $allowedTypes = [];
 
 	private $minAmountPerType;
 
 	/**
 	 * @param float $minAmount
 	 * @param float $maxAmount
+	 * @param array $allowedTypes
 	 * @param float[] $minAmountPerType keys from the PaymentType enum
 	 */
-	public function __construct( float $minAmount, float $maxAmount, array $minAmountPerType = [] ) {
+	public function __construct( float $minAmount, float $maxAmount, array $allowedTypes, array $minAmountPerType = [] ) {
 		$this->minAmount = $minAmount;
 		$this->maxAmount = $maxAmount;
+		$this->allowedTypes = $allowedTypes;
 		$this->minAmountPerType = $minAmountPerType;
 	}
 
@@ -45,7 +47,7 @@ class PaymentDataValidator {
 	 * @return ValidationResult
 	 */
 	public function validate( $amount, string $paymentType ): ValidationResult {
-		if ( !in_array( $paymentType, PaymentType::getPaymentTypes() ) ) {
+		if ( !in_array( $paymentType, $this->allowedTypes ) ) {
 			return new ValidationResult( new ConstraintViolation(
 				$paymentType,
 				self::VIOLATION_UNKNOWN_PAYMENT_TYPE,
@@ -91,5 +93,4 @@ class PaymentDataValidator {
 
 		return $this->minAmount;
 	}
-
 }
