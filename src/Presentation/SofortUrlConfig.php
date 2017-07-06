@@ -6,8 +6,17 @@ namespace WMDE\Fundraising\Frontend\Presentation;
 
 class SofortUrlConfig {
 
+	/**
+	 * @var string
+	 */
 	private $reasonText;
+	/**
+	 * @var string
+	 */
 	private $returnUrl;
+	/**
+	 * @var string
+	 */
 	private $cancelUrl;
 
 	public function __construct( string $reasonText, string $returnUrl, string $cancelUrl ) {

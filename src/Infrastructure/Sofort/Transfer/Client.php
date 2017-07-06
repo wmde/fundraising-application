@@ -17,27 +17,21 @@ class Client {
 	 */
 	private $api;
 
-	/**
-	 * @param string $configkey The secret key to use for Sofort API communication
-	 */
 	public function __construct( string $configkey ) {
 		$this->api = new Sofortueberweisung( $configkey );
 	}
 
 	/**
 	 * Set API to use instead of the one chosen by the facade
-	 *
-	 * @param Sofortueberweisung $sofortueberweisung
 	 */
 	public function setApi( Sofortueberweisung $sofortueberweisung ): void {
 		$this->api = $sofortueberweisung;
 	}
 
 	/**
-	 * @throws RuntimeException
+	 * Perform the given request and return a response
 	 *
-	 * @param Request $request
-	 * @return Response
+	 * @throws RuntimeException
 	 */
 	public function get( Request $request ): Response {
 

@@ -15,30 +15,18 @@ class Response {
 	 */
 	private $paymentUrl = '';
 
-	/**
-	 * @return string
-	 */
 	public function getTransactionId(): string {
 		return $this->transactionId;
 	}
 
-	/**
-	 * @param mixed $transactionId
-	 */
-	public function setTransactionId( $transactionId ): void {
+	public function setTransactionId( string $transactionId ): void {
 		$this->transactionId = $transactionId;
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getPaymentUrl(): string {
 		return $this->paymentUrl;
 	}
 
-	/**
-	 * @param string $paymentUrl
-	 */
 	public function setPaymentUrl( string $paymentUrl ): void {
 		$this->paymentUrl = $paymentUrl;
 	}
