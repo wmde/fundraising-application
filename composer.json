@@ -29,7 +29,8 @@
 		"symfony/console": "^3.2",
 		"piwik/piwik-php-tracker": "^1.0",
 		"guzzlehttp/guzzle": "^6.0",
-		"symfony/stopwatch": "^3.3"
+		"symfony/stopwatch": "^3.3",
+		"sofort/sofortlib-php": "^3.2"
 	},
 	"repositories": [
 		{

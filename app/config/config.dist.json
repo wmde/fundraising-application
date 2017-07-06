@@ -119,6 +119,11 @@
 		"return-url": "https://spenden.wikimedia.de/show-donation-confirmation",
 		"testmode": true
 	},
+	"sofort": {
+		"config-key": "",
+		"return-url": "",
+		"cancel-url": ""
+	},
 	"confirmation-pages": {
 		"default": "Donation_Confirmation.html.twig",
 		"campaigns": [
@@ -146,6 +151,23 @@
 			"validations": "validations.json",
 			"pageTitles": "pageTitles.json",
 			"membershipTypes": "membershipTypes.json"
+		}
+	},
+	"payment-types": {
+		"BEZ": {
+			"donation-enabled": true
+		},
+		"UEB": {
+			"donation-enabled": true
+		},
+		"MCP": {
+			"donation-enabled": true
+		},
+		"PPL": {
+			"donation-enabled": true
+		},
+		"SUB": {
+			"donation-enabled": false
 		}
 	}
 }

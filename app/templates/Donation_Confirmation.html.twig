@@ -116,7 +116,7 @@
 						</div>
 
 						<div class="payment f-left">
-							{% if donation.paymentType == 'PPL' or donation.paymentType == 'MCP' %}
+							{% if donation.paymentType == 'PPL' or donation.paymentType == 'MCP' or donation.paymentType == 'SUB' %}
 							<p>
 								Ihre Spende per {$ donation.paymentType|trans({}, 'paymentTypes') $} {$ donation.status|trans({}, 'paymentStatus') $}.
 							</p>
