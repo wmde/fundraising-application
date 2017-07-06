@@ -2,13 +2,13 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Sofort\Transfer;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\PaymentContext\DataAccess\Sofort\Transfer;
 
-use WMDE\Fundraising\Frontend\Infrastructure\Sofort\Transfer\Response;
 use PHPUnit\Framework\TestCase;
+use WMDE\Fundraising\Frontend\PaymentContext\DataAccess\Sofort\Transfer\Response;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\Sofort\Transfer\Response
+ * @covers \WMDE\Fundraising\Frontend\PaymentContext\DataAccess\Sofort\Transfer\Response
  */
 class ResponseTest extends TestCase {
 

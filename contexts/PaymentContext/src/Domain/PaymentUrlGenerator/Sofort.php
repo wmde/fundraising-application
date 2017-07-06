@@ -2,22 +2,22 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Presentation;
+namespace WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator;
 
-use WMDE\Fundraising\Frontend\Infrastructure\Sofort\Transfer\Client;
-use WMDE\Fundraising\Frontend\Infrastructure\Sofort\Transfer\Request;
-use WMDE\Euro\Euro;
 use RuntimeException;
+use WMDE\Euro\Euro;
+use WMDE\Fundraising\Frontend\PaymentContext\DataAccess\Sofort\Transfer\Client;
+use WMDE\Fundraising\Frontend\PaymentContext\DataAccess\Sofort\Transfer\Request;
 
 /**
  * Generate the URL of the Sofort checkout process
  */
-class SofortUrlGenerator {
+class Sofort {
 
 	private const CURRENCY = 'EUR';
 
 	/**
-	 * @var SofortUrlConfig
+	 * @var SofortConfig
 	 */
 	private $config;
 	/**
@@ -25,7 +25,7 @@ class SofortUrlGenerator {
 	 */
 	private $client;
 
-	public function __construct( SofortUrlConfig $config, Client $client ) {
+	public function __construct( SofortConfig $config, Client $client ) {
 		$this->config = $config;
 		$this->client = $client;
 	}

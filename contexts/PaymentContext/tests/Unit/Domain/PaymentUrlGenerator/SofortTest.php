@@ -2,21 +2,21 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\PaymentContext\Domain\PaymentUrlGenerator;
 
-use RuntimeException;
 use PHPUnit\Framework\TestCase;
-use WMDE\Fundraising\Frontend\Infrastructure\Sofort\Transfer\Client;
+use RuntimeException;
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\Frontend\Infrastructure\Sofort\Transfer\Request;
-use WMDE\Fundraising\Frontend\Infrastructure\Sofort\Transfer\Response;
-use WMDE\Fundraising\Frontend\Presentation\SofortUrlConfig;
-use WMDE\Fundraising\Frontend\Presentation\SofortUrlGenerator;
+use WMDE\Fundraising\Frontend\PaymentContext\DataAccess\Sofort\Transfer\Client;
+use WMDE\Fundraising\Frontend\PaymentContext\DataAccess\Sofort\Transfer\Request;
+use WMDE\Fundraising\Frontend\PaymentContext\DataAccess\Sofort\Transfer\Response;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\SofortConfig as SofortUrlConfig;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\Sofort as SofortUrlGenerator;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\Presentation\SofortUrlGenerator
+ * @covers \WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\Sofort
  */
-class SofortUrlGeneratorTest extends TestCase {
+class SofortTest extends TestCase {
 
 	public function testWhenClientReturnsSuccessResponseAUrlIsReturned(): void {
 		$config = new SofortUrlConfig( 'Donation', 'https://us.org/yes', 'https://us.org/no' );

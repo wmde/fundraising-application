@@ -2,17 +2,17 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Sofort\Transfer;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\PaymentContext\DataAccess\Sofort\Transfer;
 
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Sofort\SofortLib\Sofortueberweisung;
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\Frontend\Infrastructure\Sofort\Transfer\Client;
-use WMDE\Fundraising\Frontend\Infrastructure\Sofort\Transfer\Request;
-use RuntimeException;
+use WMDE\Fundraising\Frontend\PaymentContext\DataAccess\Sofort\Transfer\Client;
+use WMDE\Fundraising\Frontend\PaymentContext\DataAccess\Sofort\Transfer\Request;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\Sofort\Transfer\Client
+ * @covers \WMDE\Fundraising\Frontend\PaymentContext\DataAccess\Sofort\Transfer\Client
  */
 class ClientTest extends TestCase {
 
