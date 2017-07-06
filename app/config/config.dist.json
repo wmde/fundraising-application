@@ -121,7 +121,6 @@
 	},
 	"sofort": {
 		"config-key": "",
-		"reason-text-translation-key": "SUB",
 		"return-url": "",
 		"cancel-url": ""
 	},
@@ -151,8 +150,7 @@
 			"paymentStatus": "paymentStatus.json",
 			"validations": "validations.json",
 			"pageTitles": "pageTitles.json",
-			"membershipTypes": "membershipTypes.json",
-			"paymentSubjects": "paymentSubjects.json"
+			"membershipTypes": "membershipTypes.json"
 		}
 	},
 	"payment-types": {

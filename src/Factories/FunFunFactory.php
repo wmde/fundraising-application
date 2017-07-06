@@ -927,7 +927,7 @@ class FunFunFactory {
 
 		return new SofortUrlGenerator(
 			new SofortUrlConfig(
-				$this->getTranslator()->trans( $config['reason-text-translation-key'], [], 'paymentSubjects' ),
+				$this->getTranslator()->trans( 'item_name_donation', [], 'messages' ),
 				$config['return-url'],
 				$config['cancel-url']
 			),

@@ -567,11 +567,6 @@
           "title": "The API key for communication",
           "minLength": 1
         },
-        "reason-text-translation-key": {
-          "type": "string",
-          "title": "The key from content:i18n/*/messages/paymentSubjects.json to use when generating bank transfer reason",
-          "minLength": 1
-        },
         "return-url": {
           "type": "string",
           "title": "Return URL",
@@ -586,7 +581,6 @@
       "additionalProperties": false,
       "required": [
         "config-key",
-        "reason-text-translation-key",
         "return-url",
         "cancel-url"
       ]
