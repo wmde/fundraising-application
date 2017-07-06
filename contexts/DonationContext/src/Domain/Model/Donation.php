@@ -248,7 +248,7 @@ class Donation {
 	}
 
 	public function hasExternalPayment(): bool {
-		return in_array( $this->getPaymentType(), [ PaymentType::PAYPAL, PaymentType::CREDIT_CARD ] );
+		return in_array( $this->getPaymentType(), [ PaymentType::PAYPAL, PaymentType::CREDIT_CARD, PaymentType::SOFORT ] );
 	}
 
 	private function isIncomplete(): bool {

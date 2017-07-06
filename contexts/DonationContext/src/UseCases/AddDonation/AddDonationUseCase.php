@@ -20,6 +20,7 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentWithoutAssociatedData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\SofortPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\TransferCodeGenerator;
 
 /**
@@ -150,19 +151,20 @@ class AddDonationUseCase {
 	}
 
 	private function getPaymentMethodFromRequest( AddDonationRequest $donationRequest ): PaymentMethod {
-		if ( $donationRequest->getPaymentType() === PaymentType::BANK_TRANSFER ) {
-			return new BankTransferPayment( $this->transferCodeGenerator->generateTransferCode() );
-		}
+		$paymentType = $donationRequest->getPaymentType();
 
-		if ( $donationRequest->getPaymentType() === PaymentType::DIRECT_DEBIT ) {
-			return new DirectDebitPayment( $donationRequest->getBankData() );
+		switch ( $paymentType ) {
+			case PaymentType::BANK_TRANSFER:
+				return new BankTransferPayment( $this->transferCodeGenerator->generateTransferCode() );
+			case PaymentType::DIRECT_DEBIT:
+				return new DirectDebitPayment( $donationRequest->getBankData() );
+			case PaymentType::PAYPAL:
+				return new PayPalPayment( new PayPalData() );
+			case PaymentType::SOFORT:
+				return new SofortPayment( $this->transferCodeGenerator->generateTransferCode() );
+			default:
+				return new PaymentWithoutAssociatedData( $paymentType );
 		}
-
-		if ( $donationRequest->getPaymentType() === PaymentType::PAYPAL ) {
-			return new PayPalPayment( new PayPalData() );
-		}
-
-		return new PaymentWithoutAssociatedData( $donationRequest->getPaymentType() );
 	}
 
 	private function newTrackingInfoFromRequest( AddDonationRequest $request ): DonationTrackingInfo {

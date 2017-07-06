@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7eb3835ed59ffe01118996a174d546ed",
+    "content-hash": "abaab64de21fe61aabca596d82655e6a",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1756,6 +1756,48 @@
                 "microframework"
             ],
             "time": "2017-05-03T15:21:42+00:00"
+        },
+        {
+            "name": "sofort/sofortlib-php",
+            "version": "3.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sofort/sofortlib-php.git",
+                "reference": "35362fee0427d0811cbab0ba35435920b14f22d6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sofort/sofortlib-php/zipball/35362fee0427d0811cbab0ba35435920b14f22d6",
+                "reference": "35362fee0427d0811cbab0ba35435920b14f22d6",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.10"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.5.1"
+            },
+            "suggest": {
+                "ext-curl": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Sofort\\SofortLib\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3"
+            ],
+            "authors": [
+                {
+                    "name": "Sofort GmbH",
+                    "email": "opensource@sofort.com"
+                }
+            ],
+            "description": "SOFORT API wrapper for PHP",
+            "time": "2016-11-22T14:45:03+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -5834,16 +5876,16 @@
         },
         {
             "name": "wmde/fundraising-frontend-content",
-            "version": "dev-sofort",
+            "version": "dev-test",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content.git",
-                "reference": "e3d834967d8979241f72e215a720f9e8deadb2ee"
+                "reference": "f5f292f74695f8d8f3ba4f820c238903c7709da2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/e3d834967d8979241f72e215a720f9e8deadb2ee",
-                "reference": "e3d834967d8979241f72e215a720f9e8deadb2ee",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/f5f292f74695f8d8f3ba4f820c238903c7709da2",
+                "reference": "f5f292f74695f8d8f3ba4f820c238903c7709da2",
                 "shasum": ""
             },
             "require-dev": {
@@ -5873,9 +5915,9 @@
             ],
             "description": "i18n for FundraisingFrontend",
             "support": {
-                "source": "https://github.com/wmde/fundraising-frontend-content/tree/sofort"
+                "source": "https://github.com/wmde/fundraising-frontend-content/tree/test"
             },
-            "time": "2017-06-29T09:21:20+00:00"
+            "time": "2017-07-06T13:44:34+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",
