@@ -8,7 +8,7 @@ language: php
 matrix:
   fast_finish: true
   include:
-  - php: 7.1
+  - php: master
     env: DB=sqlite
   - php: 7.1
     env: DB=mysql
