@@ -118,8 +118,8 @@ use WMDE\Fundraising\Frontend\Presentation\CreditCardUrlGenerator;
 use WMDE\Fundraising\Frontend\Presentation\DonationConfirmationPageSelector;
 use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
 use WMDE\Fundraising\Frontend\Presentation\GreetingGenerator;
-use WMDE\Fundraising\Frontend\Presentation\PayPalUrlConfig;
-use WMDE\Fundraising\Frontend\Presentation\PayPalUrlGenerator;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\PayPalConfig;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\PayPal as PayPalUrlGenerator;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionJsonPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CancelDonationHtmlPresenter;
@@ -914,11 +914,11 @@ class FunFunFactory {
 	}
 
 	private function getPayPalUrlConfigForDonations() {
-		return PayPalUrlConfig::newFromConfig( $this->config['paypal-donation'] );
+		return PayPalConfig::newFromConfig( $this->config['paypal-donation'] );
 	}
 
 	private function getPayPalUrlConfigForMembershipApplications() {
-		return PayPalUrlConfig::newFromConfig( $this->config['paypal-membership'] );
+		return PayPalConfig::newFromConfig( $this->config['paypal-membership'] );
 	}
 
 	public function newSofortUrlGeneratorForDonations(): SofortUrlGenerator {

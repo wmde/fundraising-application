@@ -2,19 +2,19 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\PaymentContext\Domain\PaymentUrlGenerator;
 
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\Frontend\Presentation\PayPalUrlConfig;
-use WMDE\Fundraising\Frontend\Presentation\PayPalUrlGenerator;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\PayPalConfig;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\PayPal as PaypalUrlGenerator;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Presentation\PayPalUrlGenerator
+ * @covers \WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\PayPal
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class PayPalUrlGeneratorTest extends \PHPUnit\Framework\TestCase {
+class PayPalTest extends \PHPUnit\Framework\TestCase {
 
 	const BASE_URL = 'https://www.sandbox.paypal.com/cgi-bin/webscr?';
 	const ACCOUNT_ADDRESS = 'foerderpp@wikimedia.de';
@@ -49,8 +49,8 @@ class PayPalUrlGeneratorTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSinglePaymentRelatedParamsSet( $generatedUrl );
 	}
 
-	private function newPayPalUrlConfig(): PayPalUrlConfig {
-		return PayPalUrlConfig::newFromConfig( [
+	private function newPayPalUrlConfig(): PayPalConfig {
+		return PayPalConfig::newFromConfig( [
 			'base-url' => self::BASE_URL,
 			'account-address' => self::ACCOUNT_ADDRESS,
 			'notify-url' => self::NOTIFY_URL,
@@ -66,7 +66,7 @@ class PayPalUrlGeneratorTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	private function newIncompletePayPalUrlConfig() {
-		return PayPalUrlConfig::newFromConfig( [
+		return PayPalConfig::newFromConfig( [
 			'base-url' => self::BASE_URL,
 			'account-address' => 'some@email-adress.com',
 			'notify-url' => self::NOTIFY_URL,
@@ -90,8 +90,8 @@ class PayPalUrlGeneratorTest extends \PHPUnit\Framework\TestCase {
 		$this->assertTrialPeriodRelatedParametersSet( $generatedUrl );
 	}
 
-	private function newPayPalUrlConfigWithDelayedPayment(): PayPalUrlConfig {
-		return PayPalUrlConfig::newFromConfig( [
+	private function newPayPalUrlConfigWithDelayedPayment(): PayPalConfig {
+		return PayPalConfig::newFromConfig( [
 			'base-url' => self::BASE_URL,
 			'account-address' => self::ACCOUNT_ADDRESS,
 			'notify-url' => self::NOTIFY_URL,
