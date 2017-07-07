@@ -113,8 +113,8 @@ use WMDE\Fundraising\Frontend\PaymentContext\Infrastructure\CreditCardService;
 use WMDE\Fundraising\Frontend\PaymentContext\UseCases\CheckIban\CheckIbanUseCase;
 use WMDE\Fundraising\Frontend\PaymentContext\UseCases\GenerateIban\GenerateIbanUseCase;
 use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
-use WMDE\Fundraising\Frontend\Presentation\CreditCardUrlConfig;
-use WMDE\Fundraising\Frontend\Presentation\CreditCardUrlGenerator;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\CreditCardConfig;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\CreditCard as CreditCardUrlGenerator;
 use WMDE\Fundraising\Frontend\Presentation\DonationConfirmationPageSelector;
 use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
 use WMDE\Fundraising\Frontend\Presentation\GreetingGenerator;
@@ -942,12 +942,12 @@ class FunFunFactory {
 		return $this->pimple['sofort-client'];
 	}
 
-	private function newCreditCardUrlGenerator() {
+	private function newCreditCardUrlGenerator(): CreditCardUrlGenerator {
 		return new CreditCardUrlGenerator( $this->newCreditCardUrlConfig() );
 	}
 
-	private function newCreditCardUrlConfig() {
-		return CreditCardUrlConfig::newFromConfig( $this->config['creditcard'] );
+	private function newCreditCardUrlConfig(): CreditCardConfig {
+		return CreditCardConfig::newFromConfig( $this->config['creditcard'] );
 	}
 
 	public function getDonationRepository(): DonationRepository {

@@ -2,25 +2,25 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\PaymentContext\Domain\PaymentUrlGenerator;
 
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\Frontend\Presentation\CreditCardUrlConfig;
-use WMDE\Fundraising\Frontend\Presentation\CreditCardUrlGenerator;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\CreditCardConfig;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\CreditCard;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Presentation\CreditCardUrlGenerator
+ * @covers \WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\CreditCard
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class CreditCardUrlGeneratorTest extends \PHPUnit\Framework\TestCase {
+class CreditCardTest extends \PHPUnit\Framework\TestCase {
 
 	/** @dataProvider donationProvider */
 	public function testUrlGeneration( string $expected, string $firstName, string $lastName, string $payText,
 									   int $donationId, string $accessToken, string $updateToken, Euro $amount ) {
-		$urlGenerator = new CreditCardUrlGenerator(
-			CreditCardUrlConfig::newFromConfig( [
+		$urlGenerator = new CreditCard(
+			CreditCardConfig::newFromConfig( [
 				'base-url' => 'https://credit-card.micropayment.de/creditcard/event/index.php?',
 				'project-id' => 'wikimedia',
 				'background-color' => 'CCE7CD',
@@ -36,8 +36,8 @@ class CreditCardUrlGeneratorTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public function testWhenTestModeIsEnabled_urlPassesProperParameter() {
-		$urlGenerator = new CreditCardUrlGenerator(
-			CreditCardUrlConfig::newFromConfig( [
+		$urlGenerator = new CreditCard(
+			CreditCardConfig::newFromConfig( [
 				'base-url' => 'https://credit-card.micropayment.de/creditcard/event/index.php?',
 				'project-id' => 'wikimedia',
 				'background-color' => 'CCE7CD',
