@@ -28,7 +28,7 @@ class AmountParserTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function valueProvider() {
+	public function valueProvider(): array {
 		return [
 			[ 'de_DE', 29.5, '29,50' ],
 			[ 'de_DE', 0.1, '0,10' ],

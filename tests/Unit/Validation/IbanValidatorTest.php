@@ -19,11 +19,11 @@ use WMDE\Fundraising\Frontend\Validation\IbanValidator;
  */
 class IbanValidatorTest extends \PHPUnit\Framework\TestCase {
 
-	private function newValidator( array $bannedIbans = [] ) {
+	private function newValidator( array $bannedIbans = [] ): IbanValidator {
 		return new IbanValidator( new BankDataConverter( 'res/blz.lut2f' ), $bannedIbans );
 	}
 
-	public function validIbanProvider() {
+	public function validIbanProvider(): array {
 		return [
 			[ 'DE89370400440532013000' ],
 			[ 'AT611904300234573201' ],
@@ -43,7 +43,7 @@ class IbanValidatorTest extends \PHPUnit\Framework\TestCase {
 		$this->assertTrue( $validator->validate( new Iban( $iban ) )->isSuccessful() );
 	}
 
-	public function wellFormedInvalidIbanProvider() {
+	public function wellFormedInvalidIbanProvider(): array {
 		return [
 			[ 'DE01234567890123456789' ],
 			[ 'AT012345678901234567' ],
@@ -58,12 +58,12 @@ class IbanValidatorTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider wellFormedInvalidIbanProvider
 	 */
-	public function testGivenWellFormedButInvalidIban_validateReturnsFalse( $iban ): void {
+	public function testGivenWellFormedButInvalidIban_validateReturnsFalse( string $iban ): void {
 		$validator = $this->newValidator();
 		$this->assertFalse( $validator->validate( new Iban( $iban ) )->isSuccessful() );
 	}
 
-	public function notWellFormedIbanProvider() {
+	public function notWellFormedIbanProvider(): array {
 		return [
 			[ 'DE0123456789012345678' ],
 			[ 'DE012345678901234567890' ],
@@ -75,7 +75,7 @@ class IbanValidatorTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider notWellFormedIbanProvider
 	 */
-	public function testGivenNotWellFormedIban_validateReturnsFalse( $iban ): void {
+	public function testGivenNotWellFormedIban_validateReturnsFalse( string $iban ): void {
 		$validator = $this->newValidator();
 		$this->assertFalse( $validator->validate( new Iban( $iban ) )->isSuccessful() );
 	}

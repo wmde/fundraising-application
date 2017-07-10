@@ -70,7 +70,7 @@ class ValidMembershipApplicationRequest {
 		return $bankData->assertNoNullFields();
 	}
 
-	private function newTrackingInfo() {
+	private function newTrackingInfo(): MembershipApplicationTrackingInfo {
 		return new MembershipApplicationTrackingInfo(
 			ValidMembershipApplication::TEMPLATE_CAMPAIGN,
 			ValidMembershipApplication::TEMPLATE_NAME

@@ -54,7 +54,7 @@ class DoctrineDonationPrePersistSubscriber implements EventSubscriber {
 		}
 	}
 
-	private function isEmpty( $stringOrNull ): bool {
+	private function isEmpty( ?string $stringOrNull ): bool {
 		return $stringOrNull === null || $stringOrNull === '';
 	}
 

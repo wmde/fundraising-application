@@ -20,12 +20,12 @@ class TrackingDataSelectorTest extends \PHPUnit\Framework\TestCase {
 	 * @param string $expectedResult
 	 * @param string[] $values
 	 */
-	public function testGetPreferredValueReturnsFirstSetElementOrEmptyString( string $expectedResult, $values ): void {
+	public function testGetPreferredValueReturnsFirstSetElementOrEmptyString( string $expectedResult, array $values ): void {
 		$value = TrackingDataSelector::getFirstNonEmptyValue( $values );
 		$this->assertSame( $expectedResult, $value );
 	}
 
-	public function preferredValueProvider() {
+	public function preferredValueProvider(): array {
 		return [
 			[ 'chocolate', [ 'chocolate', 'hazelnuts', 'campaign/keyword' ] ],
 			[ 'hazelnuts', [ '', 'hazelnuts', 'campaign/keyword' ] ],
@@ -37,11 +37,11 @@ class TrackingDataSelectorTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider trackingVarProvider
 	 *
-	 * @param $expectedResult
-	 * @param $campaign
-	 * @param $keyword
+	 * @param $expectedResult string
+	 * @param $campaign string
+	 * @param $keyword string
 	 */
-	public function testConcatTrackingFromVarCouple( $expectedResult, $campaign, $keyword ): void {
+	public function testConcatTrackingFromVarCouple( string $expectedResult, string $campaign, string $keyword ): void {
 		$value = TrackingDataSelector::getFirstNonEmptyValue( [
 			'',
 			'',
@@ -51,7 +51,7 @@ class TrackingDataSelectorTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( $expectedResult, $value );
 	}
 
-	public function trackingVarProvider() {
+	public function trackingVarProvider(): array {
 		return [
 			[ 'campaign/keyword', 'campaign', 'keyword' ],
 			[ 'campaign/keyword', 'Campaign', 'Keyword' ],

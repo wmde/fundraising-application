@@ -57,15 +57,15 @@ class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function newSucceedingVerifier( array $request ) {
+	private function newSucceedingVerifier( array $request ): PayPalPaymentNotificationVerifier {
 		return $this->newVerifierMock( $request, self::VERIFICATION_SUCCESSFUL );
 	}
 
-	private function newFailingVerifier( array $request ) {
+	private function newFailingVerifier( array $request ): PayPalPaymentNotificationVerifier {
 		return $this->newVerifierMock( $request, self::VERIFICATION_FAILED );
 	}
 
-	private function newVerifierMock( array $request, string $expectedResponse ) {
+	private function newVerifierMock( array $request, string $expectedResponse ): PayPalPaymentNotificationVerifier {
 		return new PayPalPaymentNotificationVerifier(
 			$this->newGuzzleClientMock( $request, $expectedResponse ),
 			self::BASE_URL,
@@ -142,7 +142,7 @@ class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function newSubscriptionSignupRequest() {
+	private function newSubscriptionSignupRequest(): array {
 		return [
 			'txn_type' => 'subscr_signup',
 
@@ -165,7 +165,7 @@ class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	private function newInvalidTransactionRequest() {
+	private function newInvalidTransactionRequest(): array {
 		return [
 			'txn_type' => 'invalid_transaction',
 			'receiver_email' => 'paypaldev-facilitator@wikimedia.de',
@@ -208,7 +208,7 @@ class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function newInvalidMembershipIdRequest() {
+	private function newInvalidMembershipIdRequest(): array {
 		return [
 			'txn_type' => 'subscr_payment',
 

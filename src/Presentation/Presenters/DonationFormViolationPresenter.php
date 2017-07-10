@@ -45,7 +45,7 @@ class DonationFormViolationPresenter {
 		);
 	}
 
-	private function getDonationFormArguments( AddDonationRequest $request ) {
+	private function getDonationFormArguments( AddDonationRequest $request ): array {
 		return array_merge(
 			[
 				'amount' => $this->amountFormatter->format( $request->getAmount() ),
@@ -57,7 +57,7 @@ class DonationFormViolationPresenter {
 		);
 	}
 
-	private function getPersonalInfo( AddDonationRequest $request ) {
+	private function getPersonalInfo( AddDonationRequest $request ): array {
 		if ( $request->donorIsAnonymous() ) {
 			return [];
 		}
@@ -69,7 +69,7 @@ class DonationFormViolationPresenter {
 		);
 	}
 
-	private function getPersonName( AddDonationRequest $request ) {
+	private function getPersonName( AddDonationRequest $request ): array {
 		return [
 			'addressType' => $request->getDonorType(),
 			'salutation' => $request->getDonorSalutation(),
@@ -80,7 +80,7 @@ class DonationFormViolationPresenter {
 		];
 	}
 
-	private function getPhysicalAddress( AddDonationRequest $request ) {
+	private function getPhysicalAddress( AddDonationRequest $request ): array {
 		return [
 			'street' => $request->getDonorStreetAddress(),
 			'postcode' => $request->getDonorPostalCode(),

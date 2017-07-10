@@ -45,7 +45,7 @@ class PayPalNotificationVerifierTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	private function newPostRequest() {
+	private function newPostRequest(): array {
 		return [
 			'mc_gross' => '5.00',
 			'protection_eligibility' => 'Eligible',

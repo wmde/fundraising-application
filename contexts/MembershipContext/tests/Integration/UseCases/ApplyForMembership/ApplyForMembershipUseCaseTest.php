@@ -167,7 +167,7 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit\Framework\TestCase {
 		return $bankData->assertNoNullFields()->freeze();
 	}
 
-	private function newTrackingInfo() {
+	private function newTrackingInfo(): MembershipApplicationTrackingInfo {
 		return new MembershipApplicationTrackingInfo(
 			ValidMembershipApplication::TEMPLATE_CAMPAIGN,
 			ValidMembershipApplication::TEMPLATE_NAME

@@ -42,7 +42,7 @@ class ApplyForMembershipPolicyValidatorTest extends \PHPUnit\Framework\TestCase 
 	}
 
 	/** @dataProvider blacklistedEmailAddressProvider */
-	public function testWhenEmailAddressIsBlacklisted_isAutoDeletedReturnsTrue( $emailAddress ): void {
+	public function testWhenEmailAddressIsBlacklisted_isAutoDeletedReturnsTrue( string $emailAddress ): void {
 		$policyValidator = $this->newPolicyValidatorWithEmailBlacklist();
 		$this->assertTrue(
 			$policyValidator->isAutoDeleted(
@@ -51,7 +51,7 @@ class ApplyForMembershipPolicyValidatorTest extends \PHPUnit\Framework\TestCase 
 		);
 	}
 
-	public function blacklistedEmailAddressProvider() {
+	public function blacklistedEmailAddressProvider(): array {
 		return [
 			[ 'foo@bar.baz' ],
 			[ 'test@example.com' ],
@@ -60,7 +60,7 @@ class ApplyForMembershipPolicyValidatorTest extends \PHPUnit\Framework\TestCase 
 	}
 
 	/** @dataProvider allowedEmailAddressProvider */
-	public function testWhenEmailAddressIsNotBlacklisted_isAutoDeletedReturnsFalse( $emailAddress ): void {
+	public function testWhenEmailAddressIsNotBlacklisted_isAutoDeletedReturnsFalse( string $emailAddress ): void {
 		$policyValidator = $this->newPolicyValidatorWithEmailBlacklist();
 		$this->assertFalse(
 			$policyValidator->isAutoDeleted(
@@ -69,7 +69,7 @@ class ApplyForMembershipPolicyValidatorTest extends \PHPUnit\Framework\TestCase 
 		);
 	}
 
-	public function allowedEmailAddressProvider() {
+	public function allowedEmailAddressProvider(): array {
 		return [
 			[ 'other.person@bar.baz' ],
 			[ 'test@example.computer.says.no' ],

@@ -47,7 +47,7 @@ class DoctrineMembershipApplicationTrackerTest extends \PHPUnit\Framework\TestCa
 		$this->assertSame( $campaignCode, $storedApplication->getDecodedData()['confirmationPageCampaign'] );
 	}
 
-	public function validTrackingDataProvider() {
+	public function validTrackingDataProvider(): array {
 		return [
 			[ 'campaignCode', 'keyword' ],
 			[ '', 'keyword', 'keyword' ],
@@ -69,7 +69,7 @@ class DoctrineMembershipApplicationTrackerTest extends \PHPUnit\Framework\TestCa
 		return new DoctrineApplicationTracker( $this->entityManager );
 	}
 
-	private function newMembershipApplicationTrackingInfo( $campaignCode, $keyword ) {
+	private function newMembershipApplicationTrackingInfo( string $campaignCode, string $keyword ): MembershipApplicationTrackingInfo {
 		return new MembershipApplicationTrackingInfo( $campaignCode, $keyword );
 	}
 

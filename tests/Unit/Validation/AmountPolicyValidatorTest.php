@@ -29,7 +29,7 @@ class AmountPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 		$this->assertTrue( $this->newAmountValidator()->validate( $amount, $interval )->isSuccessful() );
 	}
 
-	public function smallAmountProvider() {
+	public function smallAmountProvider(): array {
 		return [
 			[ 750.0, self::INTERVAL_ONCE ],
 			[ 20.0, self::INTERVAL_MONTHLY ],
@@ -48,7 +48,7 @@ class AmountPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 		$this->assertFalse( $this->newAmountValidator()->validate( $amount, $interval )->isSuccessful() );
 	}
 
-	public function offLimitAmountProvider() {
+	public function offLimitAmountProvider(): array {
 		return [
 			[ 1750.0, self::INTERVAL_ONCE ],
 			[ 101.0, self::INTERVAL_MONTHLY ],
@@ -58,7 +58,7 @@ class AmountPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 		];
 	}
 
-	private function newAmountValidator() {
+	private function newAmountValidator(): AmountPolicyValidator {
 		return new AmountPolicyValidator( 1000, 1000 );
 	}
 

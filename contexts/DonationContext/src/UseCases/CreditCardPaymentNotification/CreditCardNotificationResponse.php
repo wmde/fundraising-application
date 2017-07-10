@@ -25,11 +25,11 @@ class CreditCardNotificationResponse {
 		$this->isSuccess = $isSuccess;
 	}
 
-	public static function newFailureResponse( string $errorMessage ) {
+	public static function newFailureResponse( string $errorMessage ): self {
 		return new self( 0, '', $errorMessage, false );
 	}
 
-	public static function newSuccessResponse( int $donationId, string $accessToken ) {
+	public static function newSuccessResponse( int $donationId, string $accessToken ): self {
 		return new self( $donationId, $accessToken, '', true );
 	}
 

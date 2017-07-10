@@ -49,7 +49,7 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	private function getFirstCommentAsArray() {
+	private function getFirstCommentAsArray(): array {
 		return [
 			'betrag' => 100,
 			'spender' => 'First name',
@@ -59,7 +59,7 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	private function getSecondCommentAsArray() {
+	private function getSecondCommentAsArray(): array {
 		return [
 			'betrag' => 200,
 			'spender' => 'Second name',
@@ -124,7 +124,7 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	private function assertJsonpSuccessResponse( $expectedJson, string $expectedCallback, Response $response ): void {
+	private function assertJsonpSuccessResponse( array $expectedJson, string $expectedCallback, Response $response ): void {
 		$this->assertSame(
 			'/**/' . $expectedCallback . '(' . json_encode( $expectedJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ) . ');',
 			$response->getContent()

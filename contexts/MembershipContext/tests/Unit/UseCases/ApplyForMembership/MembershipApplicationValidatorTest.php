@@ -58,7 +58,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 		$this->assertTrue( $response->isSuccessful() );
 	}
 
-	private function newValidator() {
+	private function newValidator(): MembershipApplicationValidator {
 		return new MembershipApplicationValidator(
 			$this->feeValidator,
 			$this->bankDataValidator,
@@ -98,7 +98,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 		return ValidMembershipApplicationRequest::newValidRequest();
 	}
 
-	private function newFeeViolationResult() {
+	private function newFeeViolationResult(): Result {
 		return new Result( [
 			Result::SOURCE_PAYMENT_AMOUNT => Result::VIOLATION_NOT_MONEY
 		] );
@@ -242,7 +242,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function invalidPhoneNumberProvider() {
+	public function invalidPhoneNumberProvider(): array {
 		return [
 			'potato' => [ 'potato' ],
 
@@ -266,7 +266,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function emailViolationTypeProvider() {
+	public function emailViolationTypeProvider(): array {
 		return [
 			[ 'email_address_wrong_format' ],
 			[ 'email_address_invalid' ],

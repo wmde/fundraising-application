@@ -86,7 +86,7 @@ class SubscriptionRequest {
 		$this->city = $city;
 	}
 
-	public function getWikilogin() {
+	public function getWikilogin(): bool {
 		return $this->wikilogin;
 	}
 

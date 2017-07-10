@@ -10,6 +10,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\Fundraising\Frontend\Validation\ValidationResult;
+use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 
 /**
  * @covers WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase
@@ -76,8 +77,8 @@ class GetInTouchUseCaseTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	private function newRequest() {
-		return new \WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest(
+	private function newRequest(): GetInTouchRequest {
+		return new GetInTouchRequest(
 			self::INQUIRER_FIRST_NAME,
 			self::INQUIRER_LAST_NAME,
 			self::INQUIRER_EMAIL_ADDRESS,
@@ -86,7 +87,7 @@ class GetInTouchUseCaseTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	private function newSucceedingValidator() {
+	private function newSucceedingValidator(): GetInTouchValidator {
 		$validator = $this->getMockBuilder( GetInTouchValidator::class )
 			->disableOriginalConstructor()
 			->getMock();

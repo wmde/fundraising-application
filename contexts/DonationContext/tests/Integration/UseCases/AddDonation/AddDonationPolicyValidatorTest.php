@@ -56,13 +56,13 @@ class AddDonationPolicyValidatorTest extends ValidatorTestCase {
 		return $amountPolicyValidator;
 	}
 
-	private function newSucceedingTextPolicyValidator() {
+	private function newSucceedingTextPolicyValidator(): TextPolicyValidator {
 		$succeedingTextPolicyValidator = $this->createMock( TextPolicyValidator::class );
 		$succeedingTextPolicyValidator->method( 'textIsHarmless' )->willReturn( true );
 		return $succeedingTextPolicyValidator;
 	}
 
-	private function newFailingTextPolicyValidator() {
+	private function newFailingTextPolicyValidator(): TextPolicyValidator {
 		$failingTextPolicyValidator = $this->createMock( TextPolicyValidator::class );
 		$failingTextPolicyValidator->method( 'hasHarmlessContent' )
 			->willReturn( false );
@@ -70,7 +70,7 @@ class AddDonationPolicyValidatorTest extends ValidatorTestCase {
 	}
 
 	/** @dataProvider allowedEmailAddressProvider */
-	public function testWhenEmailAddressIsNotBlacklisted_isAutoDeletedReturnsFalse( $emailAddress ): void {
+	public function testWhenEmailAddressIsNotBlacklisted_isAutoDeletedReturnsFalse( string $emailAddress ): void {
 		$policyValidator = $this->newPolicyValidatorWithEmailBlacklist();
 		$request = ValidAddDonationRequest::getRequest();
 		$request->setDonorEmailAddress( $emailAddress );
@@ -78,7 +78,7 @@ class AddDonationPolicyValidatorTest extends ValidatorTestCase {
 		$this->assertFalse( $policyValidator->isAutoDeleted( ValidAddDonationRequest::getRequest() ) );
 	}
 
-	public function allowedEmailAddressProvider() {
+	public function allowedEmailAddressProvider(): array {
 		return [
 			[ 'other.person@bar.baz' ],
 			[ 'test@example.computer.says.no' ],
@@ -87,7 +87,7 @@ class AddDonationPolicyValidatorTest extends ValidatorTestCase {
 	}
 
 	/** @dataProvider blacklistedEmailAddressProvider */
-	public function testWhenEmailAddressIsBlacklisted_isAutoDeletedReturnsTrue( $emailAddress ): void {
+	public function testWhenEmailAddressIsBlacklisted_isAutoDeletedReturnsTrue( string $emailAddress ): void {
 		$policyValidator = $this->newPolicyValidatorWithEmailBlacklist();
 		$request = ValidAddDonationRequest::getRequest();
 		$request->setDonorEmailAddress( $emailAddress );
@@ -95,7 +95,7 @@ class AddDonationPolicyValidatorTest extends ValidatorTestCase {
 		$this->assertTrue( $policyValidator->isAutoDeleted( $request ) );
 	}
 
-	public function blacklistedEmailAddressProvider() {
+	public function blacklistedEmailAddressProvider(): array {
 		return [
 			[ 'blocked.person@bar.baz' ],
 			[ 'test@example.com' ],

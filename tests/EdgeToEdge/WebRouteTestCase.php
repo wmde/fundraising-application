@@ -113,14 +113,14 @@ abstract class WebRouteTestCase extends TestCase {
 		$this->assertSame( 404, $response->getStatusCode() );
 	}
 
-	protected function assertJsonResponse( $expected, Response $response ): void {
+	protected function assertJsonResponse( array $expected, Response $response ): void {
 		$this->assertSame(
 			json_encode( $expected, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ),
 			$response->getContent()
 		);
 	}
 
-	protected function assertJsonSuccessResponse( $expected, Response $response ): void {
+	protected function assertJsonSuccessResponse( array $expected, Response $response ): void {
 		$this->assertTrue( $response->isSuccessful(), 'request is successful' );
 		$this->assertJson( $response->getContent(), 'response is json' );
 		$this->assertJsonResponse( $expected, $response );
@@ -146,7 +146,7 @@ abstract class WebRouteTestCase extends TestCase {
 		);
 	}
 
-	protected function getJsonFromResponse( Response $response ) {
+	protected function getJsonFromResponse( Response $response ): array {
 		$this->assertJson( $response->getContent(), 'response is json' );
 		return json_decode( $response->getContent(), true );
 	}

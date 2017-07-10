@@ -75,7 +75,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function newRequest() {
+	private function newRequest(): array {
 		return [
 			'function' => self::FUNCTION,
 			'donation_id' => (string)self::DONATION_ID,
@@ -92,7 +92,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	private function assertCreditCardDataGotPersisted( DonationRepository $donationRepo, $request ): void {
+	private function assertCreditCardDataGotPersisted( DonationRepository $donationRepo, array $request ): void {
 		$donation = $donationRepo->getDonationById( self::DONATION_ID );
 
 		/** @var \WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\CreditCardPayment $paymentMethod */

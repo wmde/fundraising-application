@@ -19,7 +19,7 @@ class PayPalConfigTest extends \PHPUnit\Framework\TestCase {
 		$this->newIncompletePayPalUrlConfig();
 	}
 
-	private function newIncompletePayPalUrlConfig() {
+	private function newIncompletePayPalUrlConfig(): PayPalConfig {
 		return PayPalConfig::newFromConfig( [
 			PayPalConfig::CONFIG_KEY_BASE_URL => 'http://that.paymentprovider.com/?',
 			PayPalConfig::CONFIG_KEY_ACCOUNT_ADDRESS => 'some@email-adress.com',
@@ -34,7 +34,7 @@ class PayPalConfigTest extends \PHPUnit\Framework\TestCase {
 		$this->assertInstanceOf( PayPalConfig::class, $this->newPayPalUrlConfig() );
 	}
 
-	private function newPayPalUrlConfig() {
+	private function newPayPalUrlConfig(): PayPalConfig {
 		return PayPalConfig::newFromConfig( [
 			PayPalConfig::CONFIG_KEY_BASE_URL => 'http://that.paymentprovider.com/?',
 			PayPalConfig::CONFIG_KEY_ACCOUNT_ADDRESS => 'some@email-adress.com',

@@ -37,7 +37,7 @@ class BankDataConverterTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider ibanTestProvider
 	 */
-	public function testWhenGivenInvalidIban_converterThrowsException( $ibanToTest ): void {
+	public function testWhenGivenInvalidIban_converterThrowsException( string $ibanToTest ): void {
 		$bankConverter = $this->newBankDataConverter();
 
 		$this->expectException( InvalidArgumentException::class );
@@ -45,7 +45,7 @@ class BankDataConverterTest extends \PHPUnit\Framework\TestCase {
 		$bankConverter->getBankDataFromIban( new Iban( $ibanToTest ) );
 	}
 
-	public function ibanTestProvider() {
+	public function ibanTestProvider(): array {
 		return [
 			[ '' ],
 			[ 'DE120105170648489892' ],
@@ -57,7 +57,7 @@ class BankDataConverterTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider ibanTestProvider
 	 */
-	public function testWhenGivenInvalidIban_validateIbanReturnsFalse( $ibanToTest ): void {
+	public function testWhenGivenInvalidIban_validateIbanReturnsFalse( string $ibanToTest ): void {
 		$bankConverter = $this->newBankDataConverter();
 
 		$this->assertFalse( $bankConverter->validateIban( new Iban( $ibanToTest ) ) );
@@ -107,7 +107,7 @@ class BankDataConverterTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider accountTestProvider
 	 */
-	public function testWhenGivenInvalidAccountData_converterThrowsException( $accountToTest, $bankCodeToTest ): void {
+	public function testWhenGivenInvalidAccountData_converterThrowsException( string $accountToTest, string $bankCodeToTest ): void {
 		$bankConverter = $this->newBankDataConverter();
 
 		$this->expectException( RuntimeException::class );
@@ -115,7 +115,7 @@ class BankDataConverterTest extends \PHPUnit\Framework\TestCase {
 		$bankConverter->getBankDataFromAccountData( $accountToTest, $bankCodeToTest );
 	}
 
-	public function accountTestProvider() {
+	public function accountTestProvider(): array {
 		return [
 			[ '', '' ],
 			[ '0648489890', '' ],
@@ -142,7 +142,7 @@ class BankDataConverterTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	private function newBankDataConverter( string $filePath = 'res/blz.lut2f' ) {
+	private function newBankDataConverter( string $filePath = 'res/blz.lut2f' ): BankDataConverter {
 		return new BankDataConverter( $filePath );
 	}
 

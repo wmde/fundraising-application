@@ -53,7 +53,7 @@ class PayPal {
 		];
 	}
 
-	private function getPaymentDelayParameters() {
+	private function getPaymentDelayParameters(): array {
 		if ( $this->config->getDelayInDays() > 0 ) {
 			return $this->getDelayedSubscriptionParams( $this->config->getDelayInDays() );
 		}

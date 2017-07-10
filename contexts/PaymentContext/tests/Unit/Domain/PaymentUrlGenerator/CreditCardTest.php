@@ -56,7 +56,7 @@ class CreditCardTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function donationProvider() {
+	public function donationProvider(): array {
 		return [
 			[
 				'https://credit-card.micropayment.de/creditcard/event/index.php?project=wikimedia&bgcolor=CCE7CD&' .

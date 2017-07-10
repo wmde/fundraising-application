@@ -33,7 +33,7 @@ class MessengerTest extends \PHPUnit\Framework\TestCase {
 			);
 	}
 
-	private function newMailTransport() {
+	private function newMailTransport(): Swift_NullTransport {
 		return $this->getMockBuilder( Swift_NullTransport::class )
 			->disableOriginalConstructor()
 			->getMock();

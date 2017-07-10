@@ -19,7 +19,7 @@ class CreditCard {
 	}
 
 	public function generateUrl( string $firstName, string $lastName, string $payText, int $donationId,
-								 string $accessToken, string $updateToken, Euro $amount ) {
+								 string $accessToken, string $updateToken, Euro $amount ): string {
 		// TODO: implement sealed parameters (https://techdoc.micropayment.de/payment/payments/payments_en.html#id302721)
 		$baseUrl = $this->config->getBaseUrl();
 		$params = [

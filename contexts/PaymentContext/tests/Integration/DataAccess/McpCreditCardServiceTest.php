@@ -81,7 +81,7 @@ class McpCreditCardServiceTest extends \PHPUnit\Framework\TestCase {
 		$creditCardService->getExpirationDate( self::CUSTOMER_ID );
 	}
 
-	public function invalidReturnDataProvider() {
+	public function invalidReturnDataProvider(): array {
 		return [
 			[ [
 				'expiryMonth' => 'potato',

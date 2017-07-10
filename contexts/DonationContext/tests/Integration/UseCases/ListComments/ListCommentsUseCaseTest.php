@@ -105,7 +105,7 @@ class ListCommentsUseCaseTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function invalidPageNumberProvider() {
+	public function invalidPageNumberProvider(): array {
 		return [
 			'too big' => [ 31337 ],
 			'upper limit boundary' => [ 101 ],
@@ -128,7 +128,7 @@ class ListCommentsUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$this->assertCount( 10, $commentList->toArray() );
 	}
 
-	private function newInMemoryCommentFinderWithComments( int $commentCount ) {
+	private function newInMemoryCommentFinderWithComments( int $commentCount ): InMemoryCommentFinder {
 		return new InMemoryCommentFinder(
 			...new \LimitIterator(
 				$this->newInfiniteCommentIterator(),
@@ -146,7 +146,7 @@ class ListCommentsUseCaseTest extends \PHPUnit\Framework\TestCase {
 		}
 	}
 
-	public function invalidLimitProvider() {
+	public function invalidLimitProvider(): array {
 		return [
 			'too big' => [ 31337 ],
 			'upper limit boundary' => [ 101 ],

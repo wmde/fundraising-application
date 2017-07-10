@@ -154,7 +154,7 @@ class ValidMembershipApplication {
 		);
 	}
 
-	private function createApplicationUsingPayPal( $payPalData ): Application {
+	private function createApplicationUsingPayPal( PayPalData $payPalData = null ): Application {
 		$self = ( new self() );
 		return Application::newApplication(
 			self::MEMBERSHIP_TYPE,
@@ -208,11 +208,11 @@ class ValidMembershipApplication {
 		);
 	}
 
-	private function newDirectDebitPayment( BankData $bankData ) {
+	private function newDirectDebitPayment( BankData $bankData ): DirectDebitPayment {
 		return new DirectDebitPayment( $bankData );
 	}
 
-	private function newPayPalPayment( $payPalData = null ) {
+	private function newPayPalPayment( PayPalData $payPalData = null ): Payment {
 		return new Payment(
 			self::PAYMENT_PERIOD_IN_MONTHS,
 			Euro::newFromFloat( self::PAYMENT_AMOUNT_IN_EURO ),

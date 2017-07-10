@@ -130,7 +130,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function retrieveDonationConfirmation( Client $client, int $donationId ) {
+	private function retrieveDonationConfirmation( Client $client, int $donationId ): string {
 		$client->request(
 			'GET',
 			'show-donation-confirmation',
@@ -244,7 +244,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function newConfirmationPageConfig() {
+	private function newConfirmationPageConfig(): array {
 		return [
 			'default' => 'DonationConfirmation.twig',
 			'campaigns' => [
@@ -259,7 +259,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	private function newEmptyConfirmationPageConfig() {
+	private function newEmptyConfirmationPageConfig(): array {
 		return [
 			'default' => 'DonationConfirmation.twig',
 			'campaigns' => [

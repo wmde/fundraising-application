@@ -34,14 +34,14 @@ class DonationTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider nonCancellableStatusProvider
 	 */
-	public function testGivenNonNewStatus_cancellationFails( $nonCancellableStatus ): void {
+	public function testGivenNonNewStatus_cancellationFails( string $nonCancellableStatus ): void {
 		$donation = $this->newDirectDebitDonationWithStatus( $nonCancellableStatus );
 
 		$this->expectException( RuntimeException::class );
 		$donation->cancel();
 	}
 
-	private function newDirectDebitDonationWithStatus( string $status ) {
+	private function newDirectDebitDonationWithStatus( string $status ): Donation {
 		return new Donation(
 			null,
 			$status,
@@ -52,7 +52,7 @@ class DonationTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function nonCancellableStatusProvider() {
+	public function nonCancellableStatusProvider(): array {
 		return [
 			[ Donation::STATUS_CANCELLED ],
 			[ Donation::STATUS_EXTERNAL_BOOKED ],
@@ -118,7 +118,7 @@ class DonationTest extends \PHPUnit\Framework\TestCase {
 		$donation->confirmBooked();
 	}
 
-	public function statusesThatDoNotAllowForBookingProvider() {
+	public function statusesThatDoNotAllowForBookingProvider(): array {
 		return [
 			[ ValidDonation::newBookedPayPalDonation() ],
 			[ ValidDonation::newBookedCreditCardDonation() ],
@@ -133,7 +133,7 @@ class DonationTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( Donation::STATUS_EXTERNAL_BOOKED, $donation->getStatus() );
 	}
 
-	public function statusesThatAllowsForBookingProvider() {
+	public function statusesThatAllowsForBookingProvider(): array {
 		return [
 			[ ValidDonation::newIncompletePayPalDonation() ],
 			[ ValidDonation::newIncompleteCreditCardDonation() ],

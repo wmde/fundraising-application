@@ -55,7 +55,7 @@ class SubscriptionValidator {
 		) );
 	}
 
-	public function needsModeration( $subscription ): bool {
+	public function needsModeration( Subscription $subscription ): bool {
 		$this->textPolicyViolations = array_filter(
 			$this->getBadWordViolations( $subscription )
 		);
@@ -71,7 +71,7 @@ class SubscriptionValidator {
 		];
 	}
 
-	private function getBadWordViolations( Subscription $subscription ) {
+	private function getBadWordViolations( Subscription $subscription ): array {
 		$fieldTextValidator = new FieldTextPolicyValidator( $this->textPolicyValidator );
 		$address = $subscription->getAddress();
 

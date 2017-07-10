@@ -61,7 +61,7 @@ class GenerateIbanUseCaseTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	private function newGenerateIbanUseCase() {
+	private function newGenerateIbanUseCase(): GenerateIbanUseCase {
 		$bankDataConverter = new BankDataConverter( 'res/blz.lut2f' );
 		return new GenerateIbanUseCase(
 			$bankDataConverter,

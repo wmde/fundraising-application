@@ -29,7 +29,7 @@ class IncompleteDoctrineDonation {
 		return ( new self() )->createCreditcardDonationWithMissingFields();
 	}
 
-	private function createPaypalDonationWithMissingFields() {
+	private function createPaypalDonationWithMissingFields(): Donation {
 		$donation = new Donation();
 		$this->setPaymentData( $donation );
 		$this->setDonorData( $donation );
@@ -45,7 +45,7 @@ class IncompleteDoctrineDonation {
 		return $donation;
 	}
 
-	private function createPaypalDonationWithMissingTrackingData() {
+	private function createPaypalDonationWithMissingTrackingData(): Donation {
 		$donation = new Donation();
 		$this->setPaymentData( $donation );
 		$this->setDonorData( $donation );
@@ -60,7 +60,7 @@ class IncompleteDoctrineDonation {
 		return $donation;
 	}
 
-	private function createDirectDebitDonationWithMissingFields() {
+	private function createDirectDebitDonationWithMissingFields(): Donation {
 		$donation = new Donation();
 		$this->setPaymentData( $donation );
 		$this->setDonorData( $donation );
@@ -75,7 +75,7 @@ class IncompleteDoctrineDonation {
 		return $donation;
 	}
 
-	private function createCreditcardDonationWithMissingFields() {
+	private function createCreditcardDonationWithMissingFields(): Donation {
 		$donation = new Donation();
 		$this->setPaymentData( $donation );
 		$this->setDonorData( $donation );

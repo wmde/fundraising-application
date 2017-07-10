@@ -28,7 +28,7 @@ class ApplyForMembershipPolicyValidator {
 			$this->addressContainsBadWords( $application );
 	}
 
-	public function isAutoDeleted( Application $application ) {
+	public function isAutoDeleted( Application $application ): bool {
 		foreach( $this->emailAddressBlacklist as $blacklistEntry ) {
 			if ( preg_match( $blacklistEntry, $application->getApplicant()->getEmailAddress()->getFullAddress() ) ) {
 				return true;
@@ -44,7 +44,7 @@ class ApplyForMembershipPolicyValidator {
 			> self::YEARLY_PAYMENT_MODERATION_THRESHOLD_IN_EURO;
 	}
 
-	private function addressContainsBadWords( Application $application ) {
+	private function addressContainsBadWords( Application $application ): bool {
 		$applicant = $application->getApplicant();
 		$harmless = $this->textPolicyValidator->textIsHarmless( $applicant->getName()->getFirstName() ) &&
 			$this->textPolicyValidator->textIsHarmless( $applicant->getName()->getLastName() ) &&

@@ -34,7 +34,7 @@ class TemplateTestCampaignTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( [ 'bar', 'baz' ], $campaign->getTemplates() );
 	}
 
-	private function newCampaign( array $campaignData ) {
+	private function newCampaign( array $campaignData ): TemplateTestCampaign {
 		$campaignTemplate = [
 			'code' => 'FOO',
 			'active' => true,
@@ -83,7 +83,7 @@ class TemplateTestCampaignTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( $expected, $campaign->isRunning() );
 	}
 
-	public function isRunningDataProvider() {
+	public function isRunningDataProvider(): array {
 		return [
 			[
 				true,

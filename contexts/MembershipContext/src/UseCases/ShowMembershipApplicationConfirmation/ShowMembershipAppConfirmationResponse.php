@@ -37,7 +37,7 @@ class ShowMembershipAppConfirmationResponse {
 		return $this->membershipApplication;
 	}
 
-	public function getUpdateToken() {
+	public function getUpdateToken(): ?string {
 		return $this->updateToken;
 	}
 

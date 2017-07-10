@@ -88,11 +88,11 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertNotContains( 'donation_rejected_limit', $client->getResponse()->getContent() );
 	}
 
-	private function getPastTimestamp( string $interval = 'PT10S' ) {
+	private function getPastTimestamp( string $interval = 'PT10S' ): string {
 		return ( new \DateTime() )->sub( new \DateInterval( $interval ) )->format( 'Y-m-d H:i:s' );
 	}
 
-	private function newValidFormInput() {
+	private function newValidFormInput(): array {
 		return [
 			'betrag' => '5,51',
 			'zahlweise' => 'BEZ',
@@ -233,7 +233,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function newValidBankTransferInput() {
+	private function newValidBankTransferInput(): array {
 		return [
 			'betrag' => '12,34',
 			'zahlweise' => 'UEB',
@@ -283,7 +283,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function newComplementableFormInput() {
+	private function newComplementableFormInput(): array {
 		return [
 			'betrag' => '5,51',
 			'zahlweise' => 'BEZ',
@@ -324,7 +324,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'sandbox.paypal.com', $response->getContent() );
 	}
 
-	private function newValidPayPalInput() {
+	private function newValidPayPalInput(): array {
 		return [
 			'betrag' => '12,34',
 			'zahlweise' => 'PPL',
@@ -370,7 +370,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertTrue( $client->getResponse()->isRedirect( 'https://bankingpin.please' ) );
 	}
 
-	private function newValidCreditCardInput() {
+	private function newValidCreditCardInput(): array {
 		return [
 			'betrag' => '12,34',
 			'zahlweise' => 'MCP',
@@ -451,7 +451,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'Amount: 0,00', $response );
 	}
 
-	private function newInvalidFormInput() {
+	private function newInvalidFormInput(): array {
 		return [
 			'betrag' => '0',
 			'zahlweise' => 'BEZ',
@@ -499,7 +499,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'Value of field "amount" violates rule: Amount too low', $response );
 	}
 
-	private function newAnonymousFormInput() {
+	private function newAnonymousFormInput(): array {
 		return [
 			'betrag' => '0',
 			'zahlweise' => 'UEB',
@@ -677,7 +677,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function newValidMobilePayPalInput() {
+	private function newValidMobilePayPalInput(): array {
 		return [
 			'betrag' => '12,34',
 			'zahlweise' => 'PPL',

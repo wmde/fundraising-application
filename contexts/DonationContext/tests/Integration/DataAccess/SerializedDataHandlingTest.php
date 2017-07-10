@@ -27,7 +27,7 @@ class SerializedDataHandlingTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	/** @dataProvider donationDataProvider */
-	public function testDataFieldOfDonationIsInteractedWithCorrectly( $paymentType, $data ): void {
+	public function testDataFieldOfDonationIsInteractedWithCorrectly( string $paymentType, array $data ): void {
 		$this->repository = new DoctrineDonationRepository( $this->entityManager );
 		$this->storeDonation( $paymentType, $data );
 
@@ -39,7 +39,7 @@ class SerializedDataHandlingTest extends \PHPUnit\Framework\TestCase {
 		$this->assertEquals( $data, $dd->getDecodedData() );
 	}
 
-	public function donationDataProvider() {
+	public function donationDataProvider(): array {
 		return [
 			[
 				'UEB',

@@ -194,7 +194,7 @@ class CreditCardNotificationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		return $this->createMock( DonationEventLogger::class );
 	}
 
-	private function newCreditCardNotificationUseCase() {
+	private function newCreditCardNotificationUseCase(): CreditCardNotificationUseCase {
 		return new CreditCardNotificationUseCase(
 			$this->repository,
 			$this->authorizer,

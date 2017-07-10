@@ -35,7 +35,7 @@ class ReferrerGeneralizerTest extends ValidatorTestCase {
 		$this->assertSame( $expected, $generalizer->generalize( $url ) );
 	}
 
-	public function urlProvider() {
+	public function urlProvider(): array {
 		return [
 			[ 'http://de.wikipedia.org/wiki/Hauptseite', 'de.wikipedia.org' ],
 			[ 'https://en.wikipedia.org/wiki/Main_Page', 'en.wikipedia.org' ],

@@ -16,7 +16,7 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 class SerializedDataHandlingTest extends \PHPUnit\Framework\TestCase {
 
 	/** @dataProvider encodedMembershipDataProvider */
-	public function testDataFieldOfMembershipApplicationIsInteractedWithCorrectly( $data ): void {
+	public function testDataFieldOfMembershipApplicationIsInteractedWithCorrectly( array $data ): void {
 		$entityManager = TestEnvironment::newInstance()->getFactory()->getEntityManager();
 
 		$repository = new DoctrineApplicationRepository( $entityManager );
@@ -30,7 +30,7 @@ class SerializedDataHandlingTest extends \PHPUnit\Framework\TestCase {
 		$this->assertEquals( $data, $dma->getDecodedData() );
 	}
 
-	public function encodedMembershipDataProvider() {
+	public function encodedMembershipDataProvider(): array {
 		return [
 			[
 				[

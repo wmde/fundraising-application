@@ -18,14 +18,14 @@ class EmailAddressTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider unparsableAddressProvider
 	 */
-	public function testWhenGivenMail_validatorMXValidatesCorrectly( $mailToTest ): void {
+	public function testWhenGivenMail_validatorMXValidatesCorrectly( string $mailToTest ): void {
 		$this->expectException( \InvalidArgumentException::class );
 		$this->expectExceptionMessage( 'Given email address could not be parsed' );
 
 		new EmailAddress( $mailToTest );
 	}
 
-	public function unparsableAddressProvider() {
+	public function unparsableAddressProvider(): array {
 		return [
 			[ 'just.testing' ],
 			[ 'can.you@deliver@this' ],

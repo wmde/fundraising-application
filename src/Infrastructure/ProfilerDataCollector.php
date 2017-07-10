@@ -29,7 +29,7 @@ class ProfilerDataCollector extends DataCollector {
 		return 'fundraising';
 	}
 
-	public function getCalls() {
+	public function getCalls(): array {
 		return $this->data['calls'];
 	}
 

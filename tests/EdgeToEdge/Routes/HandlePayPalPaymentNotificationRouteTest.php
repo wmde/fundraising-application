@@ -57,7 +57,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function newNonNetworkUsingNotificationVerifier( array $requestParams ) {
+	private function newNonNetworkUsingNotificationVerifier( array $requestParams ): PayPalPaymentNotificationVerifier {
 		return new PayPalPaymentNotificationVerifier(
 			$this->newGuzzleClientMock( self::VALID_VERIFICATION_RESPONSE, $requestParams ),
 			self::BASE_URL,
@@ -65,7 +65,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	private function newFailingNotifierMock() {
+	private function newFailingNotifierMock(): PayPalPaymentNotificationVerifier {
 		return new PayPalPaymentNotificationVerifier(
 			$this->newGuzzleClientMock( self::FAILING_VERIFICATION_RESPONSE, $this->newHttpParamsForPayment() ),
 			self::BASE_URL,

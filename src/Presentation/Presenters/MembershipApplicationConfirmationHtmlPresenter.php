@@ -82,7 +82,7 @@ class MembershipApplicationConfirmationHtmlPresenter {
 		return [];
 	}
 
-	private function getPayPalDataArguments( PaymentMethod $payment ) {
+	private function getPayPalDataArguments( PaymentMethod $payment ): array {
 		if ( $payment instanceof PayPalPayment ) {
 			return [
 				'firstPaymentDate' => ( new DateTime( $payment->getPayPalData()->getFirstPaymentDate() ) )->format( 'd.m.Y' )

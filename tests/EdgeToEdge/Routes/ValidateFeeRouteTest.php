@@ -41,7 +41,7 @@ class ValidateFeeRouteTest extends WebRouteTestCase {
 		$this->assertSame( $this->newErrorResponse(), json_decode( $response->getContent(), true ) );
 	}
 
-	private function newErrorResponse() {
+	private function newErrorResponse(): array {
 		return [
 			'status' => 'ERR',
 			'messages' => [

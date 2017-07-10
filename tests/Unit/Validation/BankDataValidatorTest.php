@@ -29,7 +29,7 @@ class BankDataValidatorTest extends ValidatorTestCase {
 		$this->assertFalse( $bankDataValidator->validate( $bankData )->isSuccessful() );
 	}
 
-	public function invalidBankDataProvider() {
+	public function invalidBankDataProvider(): array {
 		return [
 			[
 				'DB00123456789012345678',
@@ -69,7 +69,7 @@ class BankDataValidatorTest extends ValidatorTestCase {
 		$this->assertTrue( $bankDataValidator->validate( $bankData )->isSuccessful() );
 	}
 
-	public function validBankDataProvider() {
+	public function validBankDataProvider(): array {
 		return [
 			[
 				'DB00123456789012345678',
@@ -97,7 +97,7 @@ class BankDataValidatorTest extends ValidatorTestCase {
 			->setAccount( $account );
 	}
 
-	private function newBankDataValidator() {
+	private function newBankDataValidator(): BankDataValidator {
 		$ibanValidatorMock = $this->getMockBuilder( IbanValidator::class )->disableOriginalConstructor()->getMock();
 		$ibanValidatorMock->method( 'validate' )
 			->willReturn( new ValidationResult() );

@@ -48,7 +48,7 @@ class ValidateAddressRouteTest extends WebRouteTestCase {
 		$this->assertJsonSuccessResponse( $expectedResponse, $response );
 	}
 
-	private function newPersonFormInput() {
+	private function newPersonFormInput(): array {
 		return [
 			'addressType' => 'person',
 			'salutation' => 'Frau',
@@ -64,7 +64,7 @@ class ValidateAddressRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	private function newCompanyWithMissingNameFormInput() {
+	private function newCompanyWithMissingNameFormInput(): array {
 		return [
 			'addressType' => 'firma',
 			'salutation' => 'Frau',

@@ -17,7 +17,7 @@ class TextPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider urlTestProvider
 	 */
-	public function testWhenGivenCommentHasURL_validatorReturnsFalse( $commentToTest ): void {
+	public function testWhenGivenCommentHasURL_validatorReturnsFalse( string $commentToTest ): void {
 		$this->skipIfNoInternet();
 
 		$textPolicyValidator = new TextPolicyValidator();
@@ -40,7 +40,7 @@ class TextPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 		}
 	}
 
-	public function urlTestProvider() {
+	public function urlTestProvider(): array {
 		return [
 			[ 'www.example.com' ],
 			[ 'http://www.example.com' ],
@@ -58,7 +58,7 @@ class TextPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider harmlessTestProvider
 	 */
-	public function testWhenGivenHarmlessComment_validatorReturnsTrue( $commentToTest ): void {
+	public function testWhenGivenHarmlessComment_validatorReturnsTrue( string $commentToTest ): void {
 		$this->skipIfNoInternet();
 
 		$textPolicyValidator = new TextPolicyValidator();
@@ -69,7 +69,7 @@ class TextPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 		) );
 	}
 
-	public function harmlessTestProvider() {
+	public function harmlessTestProvider(): array {
 		return [
 			[ 'Wikipedia ist so super, meine Eltern sagen es ist eine toll Seite. Berlin ist auch Super.' ],
 			[ 'Ich mag Wikipedia. Aber meine Seite ist auch toll. Googelt mal nach Bunsenbrenner!!!1' ],
@@ -97,7 +97,7 @@ class TextPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider insultingTestProvider
 	 */
-	public function testWhenGivenInsultingComment_validatorReturnsFalse( $commentToTest ): void {
+	public function testWhenGivenInsultingComment_validatorReturnsFalse( string $commentToTest ): void {
 		$textPolicyValidator = $this->getPreFilledTextPolicyValidator();
 
 		$this->assertFalse( $textPolicyValidator->hasHarmlessContent(
@@ -106,7 +106,7 @@ class TextPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 		) );
 	}
 
-	public function insultingTestProvider() {
+	public function insultingTestProvider(): array {
 		return [
 			[ 'Alles Deppen!' ],
 			[ 'Heil Hitler!' ],
@@ -118,7 +118,7 @@ class TextPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider whiteWordsInsultingTestProvider
 	 */
-	public function testWhenGivenInsultingCommentAndWhiteWords_validatorReturnsFalse( $commentToTest ): void {
+	public function testWhenGivenInsultingCommentAndWhiteWords_validatorReturnsFalse( string $commentToTest ): void {
 		$textPolicyValidator = $this->getPreFilledTextPolicyValidator();
 
 		$this->assertFalse(
@@ -132,7 +132,7 @@ class TextPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function whiteWordsInsultingTestProvider() {
+	public function whiteWordsInsultingTestProvider(): array {
 		return [
 			[ 'Ich heisse Deppendorf ihr Deppen und das ist auch gut so!' ],
 			[ 'Ihr Arschgeigen, ich wohne in Marsch und das ist auch gut so!' ],
@@ -143,7 +143,7 @@ class TextPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider whiteWordsHarmlessTestProvider
 	 */
-	public function testWhenGivenHarmlessCommentAndWhiteWords_validatorReturnsTrue( $commentToTest ): void {
+	public function testWhenGivenHarmlessCommentAndWhiteWords_validatorReturnsTrue( string $commentToTest ): void {
 		$textPolicyValidator = $this->getPreFilledTextPolicyValidator();
 
 		$this->assertTrue(
@@ -157,7 +157,7 @@ class TextPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function whiteWordsHarmlessTestProvider() {
+	public function whiteWordsHarmlessTestProvider(): array {
 		return [
 			[ 'Wikipedia ist so super, meine Eltern sagen es ist eine toll Seite. Berlin ist auch Super.' ],
 			[ 'Ich heisse Deppendorf ihr und das ist auch gut so!' ],
@@ -169,7 +169,7 @@ class TextPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider insultingTestProviderWithRegexChars
 	 */
-	public function testGivenBadWordMatchContainingRegexChars_validatorReturnsFalse( $commentToTest ): void {
+	public function testGivenBadWordMatchContainingRegexChars_validatorReturnsFalse( string $commentToTest ): void {
 		$textPolicyValidator = $this->getPreFilledTextPolicyValidator();
 
 		$this->assertFalse(
@@ -183,7 +183,7 @@ class TextPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function insultingTestProviderWithRegexChars() {
+	public function insultingTestProviderWithRegexChars(): array {
 		return [
 			[ 'Ich heisse Deppendorf (ihr Deppen und das ist auch gut so!' ],
 			[ 'Ihr [Arschgeigen], ich wohne in //Marsch// und das ist auch gut so!' ],
@@ -191,7 +191,7 @@ class TextPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 		];
 	}
 
-	private function getPreFilledTextPolicyValidator() {
+	private function getPreFilledTextPolicyValidator(): TextPolicyValidator {
 		$textPolicyValidator = new TextPolicyValidator();
 		$textPolicyValidator->addBadWordsFromArray(
 			[

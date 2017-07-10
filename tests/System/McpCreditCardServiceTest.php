@@ -59,7 +59,7 @@ class McpCreditCardServiceTest extends \PHPUnit\Framework\TestCase {
 		$this->dispatcher->transactionPurchase( $this->accessKey, self::TEST_MODE, $sessionId, self::CARD_CVC2 );
 	}
 
-	private function createSession( $amountInCents, $currencyCode, $title, $payText, $localIpAddress ): string {
+	private function createSession( int $amountInCents, string $currencyCode, string $title, string $payText, string $localIpAddress ): string {
 		$result = $this->dispatcher->sessionCreate(
 			$this->accessKey, self::TEST_MODE, $this->customerId, null, $this->projectId, null, null, null, $amountInCents,
 			$currencyCode, $title, $payText, $localIpAddress, false

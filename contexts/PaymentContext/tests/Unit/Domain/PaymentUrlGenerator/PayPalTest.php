@@ -31,7 +31,7 @@ class PayPalTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	private function assertUrlValidForSubscriptions( $generatedUrl ): void {
+	private function assertUrlValidForSubscriptions( string $generatedUrl ): void {
 		$this->assertCommonParamsSet( $generatedUrl );
 		$this->assertSubscriptionRelatedParamsSet( $generatedUrl );
 	}
@@ -44,7 +44,7 @@ class PayPalTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	private function assertUrlValidForSinglePayments( $generatedUrl ): void {
+	private function assertUrlValidForSinglePayments( string $generatedUrl ): void {
 		$this->assertCommonParamsSet( $generatedUrl );
 		$this->assertSinglePaymentRelatedParamsSet( $generatedUrl );
 	}
@@ -65,7 +65,7 @@ class PayPalTest extends \PHPUnit\Framework\TestCase {
 		$this->newIncompletePayPalUrlConfig();
 	}
 
-	private function newIncompletePayPalUrlConfig() {
+	private function newIncompletePayPalUrlConfig(): PayPalConfig {
 		return PayPalConfig::newFromConfig( [
 			'base-url' => self::BASE_URL,
 			'account-address' => 'some@email-adress.com',
@@ -84,7 +84,7 @@ class PayPalTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	private function assertUrlValidForDelayedSubscriptions( $generatedUrl ): void {
+	private function assertUrlValidForDelayedSubscriptions( string $generatedUrl ): void {
 		$this->assertCommonParamsSet( $generatedUrl );
 		$this->assertSubscriptionRelatedParamsSet( $generatedUrl );
 		$this->assertTrialPeriodRelatedParametersSet( $generatedUrl );
@@ -102,7 +102,7 @@ class PayPalTest extends \PHPUnit\Framework\TestCase {
 		] );
 	}
 
-	private function assertCommonParamsSet( $generatedUrl ): void {
+	private function assertCommonParamsSet( string $generatedUrl ): void {
 		$this->assertContains( 'https://www.sandbox.paypal.com/cgi-bin/webscr', $generatedUrl );
 		$this->assertContains( 'business=foerderpp%40wikimedia.de', $generatedUrl );
 		$this->assertContains( 'currency_code=EUR', $generatedUrl );

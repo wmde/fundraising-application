@@ -39,7 +39,7 @@ class MembershipApplicationBuilderTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	private function newCompanyMembershipRequest( bool $omitOptionalFields = false ) {
+	private function newCompanyMembershipRequest( bool $omitOptionalFields = false ): ApplyForMembershipRequest {
 		$request = new ApplyForMembershipRequest();
 
 		$request->setMembershipType( ValidMembershipApplication::MEMBERSHIP_TYPE );

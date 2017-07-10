@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\DonationContext\UseCases\ShowDonationConfirm
 
 use WMDE\Fundraising\Frontend\DonationContext\Authorization\DonationAuthorizer;
 use WMDE\Fundraising\Frontend\DonationContext\Authorization\DonationTokenFetcher;
+use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Repositories\GetDonationException;
 
@@ -41,7 +42,7 @@ class ShowDonationConfirmationUseCase {
 		return ShowDonationConfirmationResponse::newNotAllowedResponse();
 	}
 
-	private function getDonationById( int $donationId ) {
+	private function getDonationById( int $donationId ): ?Donation {
 		try {
 			return $this->donationRepository->getDonationById( $donationId );
 		}

@@ -24,14 +24,14 @@ use WMDE\Fundraising\Frontend\Validation\ValidationResult;
  */
 class SubscriptionValidatorTest extends ValidatorTestCase {
 
-	private function getMockTextPolicyValidator() {
+	private function getMockTextPolicyValidator(): TextPolicyValidator {
 		$mock = $this->createMock( TextPolicyValidator::class );
 		$mock->method( 'hasHarmlessContent' )
 			->willReturn( true );
 		return $mock;
 	}
 
-	private function getMockDuplicateValidator() {
+	private function getMockDuplicateValidator(): SubscriptionDuplicateValidator {
 		$mock = $this->getMockBuilder( SubscriptionDuplicateValidator::class )
 			->disableOriginalConstructor()->getMock();
 

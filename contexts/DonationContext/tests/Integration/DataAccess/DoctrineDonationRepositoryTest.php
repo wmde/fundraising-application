@@ -294,7 +294,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( '', $paymentMethod->getBankData()->getIban()->toString() );
 	}
 
-	private function createDonationWithIncompleteBankData() {
+	private function createDonationWithIncompleteBankData(): ?int {
 		$doctrineDonation = IncompleteDoctrineDonation::newDirectDebitDonationWithMissingFields();
 		$this->entityManager->persist( $doctrineDonation );
 		$this->entityManager->flush();
@@ -311,7 +311,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( '', $paymentMethod->getCreditCardData()->getTitle() );
 	}
 
-	private function createDonationWithIncompleteCreditcardData() {
+	private function createDonationWithIncompleteCreditcardData(): ?int {
 		$doctrineDonation = IncompleteDoctrineDonation::newCreditcardDonationWithMissingFields();
 		$this->entityManager->persist( $doctrineDonation );
 		$this->entityManager->flush();

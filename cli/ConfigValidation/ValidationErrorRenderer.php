@@ -18,7 +18,7 @@ class ValidationErrorRenderer {
 		$this->schema = $schema;
 	}
 
-	public function render( ValidationError $error ) {
+	public function render( ValidationError $error ): string {
 		switch ( $error->getCode() ) {
 			case \League\JsonGuard\ErrorCode::MISSING_REQUIRED:
 				$keys = array_keys( get_object_vars( $error->getValue() ) );

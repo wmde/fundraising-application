@@ -264,7 +264,7 @@ class AddDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$this->assertFalse( $response->getDonation()->needsModeration() );
 	}
 
-	private function newUseCaseWithMailer( DonationConfirmationMailer $mailer ) {
+	private function newUseCaseWithMailer( DonationConfirmationMailer $mailer ): AddDonationUseCase {
 		return new AddDonationUseCase(
 			$this->newRepository(),
 			$this->getSucceedingValidatorMock(),

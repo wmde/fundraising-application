@@ -57,7 +57,7 @@ class GetInTouchUseCase {
 		$this->userMailer->sendMail( new EmailAddress( $request->getEmailAddress() ) );
 	}
 
-	private function getTemplateParams( GetInTouchRequest $request ) {
+	private function getTemplateParams( GetInTouchRequest $request ): array {
 		return [
 			'firstName' => $request->getFirstName(),
 			'lastName' => $request->getLastName(),

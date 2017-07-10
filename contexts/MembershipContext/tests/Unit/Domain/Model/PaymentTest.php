@@ -29,7 +29,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function invalidIntervalProvider() {
+	public function invalidIntervalProvider(): array {
 		return [
 			'you cant have infinity moneys' => [ 0 ],
 			'time travel is also not allowed' => [ -1 ],

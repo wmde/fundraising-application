@@ -20,7 +20,7 @@ class CommentWithAmount {
 	private $donationTime;
 	private $donationId;
 
-	public static function newInstance() {
+	public static function newInstance(): self {
 		return new self();
 	}
 

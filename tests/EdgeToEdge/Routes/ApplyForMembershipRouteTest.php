@@ -236,7 +236,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		$this->assertNotContains( 'membership_application_rejected_limit', $client->getResponse()->getContent() );
 	}
 
-	private function getPastTimestamp( string $interval = 'PT10S' ) {
+	private function getPastTimestamp( string $interval = 'PT10S' ): string {
 		return ( new \DateTime() )->sub( new \DateInterval( $interval ) )->format( 'Y-m-d H:i:s' );
 	}
 

@@ -182,11 +182,11 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 		return $status;
 	}
 
-	private function isAutoConfirmed( int $status, Application $application ) {
+	private function isAutoConfirmed( int $status, Application $application ): bool {
 		return $status === DoctrineApplication::STATUS_NEUTRAL && $this->isDirectDebitPayment( $application );
 	}
 
-	private function isDirectDebitPayment( Application $application ) {
+	private function isDirectDebitPayment( Application $application ): bool {
 		return $application->getPayment()->getPaymentMethod()->getType() === PaymentType::DIRECT_DEBIT;
 	}
 

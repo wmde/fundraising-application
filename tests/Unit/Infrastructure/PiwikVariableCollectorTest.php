@@ -26,8 +26,8 @@ class PiwikVariableCollectorTest extends \PHPUnit\Framework\TestCase {
 	const ACTUAL_INTERVAL = 3;
 
 	/** @dataProvider sessionAndDonationDataProvider */
-	public function testVariableCollectorReturnsCorrectEvents( $initialAmount, $initialType, $initialInterval,
-															   $expectedResult ): void {
+	public function testVariableCollectorReturnsCorrectEvents( ?string $initialAmount, ?string $initialType,
+																?string $initialInterval, array $expectedResult ): void {
 		$sessionData = $this->newSessionData( $initialAmount, $initialType, $initialInterval );
 		$donation = $this->newDonationMock( self::ACTUAL_AMOUNT, self::ACTUAL_TYPE, self::ACTUAL_INTERVAL );
 
@@ -35,7 +35,7 @@ class PiwikVariableCollectorTest extends \PHPUnit\Framework\TestCase {
 		$this->assertCustomTrackingContainsEvents( $expectedResult, $tracking->getEvents() );
 	}
 
-	public function sessionAndDonationDataProvider() {
+	public function sessionAndDonationDataProvider(): array {
 		return [
 			[
 				self::INITIAL_AMOUNT,
@@ -82,7 +82,7 @@ class PiwikVariableCollectorTest extends \PHPUnit\Framework\TestCase {
 		$this->assertCount( count( $expectedEvents ), $actualEvents );
 	}
 
-	private function newDonationMock( string $amount, string $paymentType, int $paymentInterval ) {
+	private function newDonationMock( string $amount, string $paymentType, int $paymentInterval ): Donation {
 		$amount = Euro::newFromString( $amount );
 
 		$donationMock = $this->getMockBuilder( Donation::class )->disableOriginalConstructor()->getMock();
@@ -92,7 +92,7 @@ class PiwikVariableCollectorTest extends \PHPUnit\Framework\TestCase {
 		return $donationMock;
 	}
 
-	private function newSessionData( $amount, $paymentType, $paymentInterval ) {
+	private function newSessionData( ?string $amount, ?string $paymentType, ?string $paymentInterval ): array {
 		return [
 			'paymentAmount' => $amount,
 			'paymentType' => $paymentType,

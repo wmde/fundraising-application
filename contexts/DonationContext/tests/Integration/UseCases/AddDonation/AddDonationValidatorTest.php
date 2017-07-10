@@ -212,7 +212,7 @@ class AddDonationValidatorTest extends ValidatorTestCase {
 		return new BankDataValidator( $ibanValidatorMock );
 	}
 
-	private function newMockEmailValidator() {
+	private function newMockEmailValidator(): EmailValidator {
 		$validator = $this->getMockBuilder( EmailValidator::class )->disableOriginalConstructor()->getMock();
 		$validator->method( 'validate' )->willReturn( new ValidationResult() );
 		return $validator;

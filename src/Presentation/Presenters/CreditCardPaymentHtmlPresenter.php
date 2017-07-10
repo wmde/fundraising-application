@@ -34,7 +34,7 @@ class CreditCardPaymentHtmlPresenter {
 		return $this->template->render( $this->getArguments( $response ) );
 	}
 
-	private function getArguments( AddDonationResponse $response ) {
+	private function getArguments( AddDonationResponse $response ): array {
 		$personalInfo = $response->getDonation()->getDonor();
 		return [
 			'donation' => [

@@ -80,7 +80,7 @@ class MembershipApplicationValidator {
 		$this->addViolations( $result->getViolations() );
 	}
 
-	private function getApplicantType() {
+	private function getApplicantType(): string {
 		return $this->request->isCompanyApplication() ?
 			FeeValidator::APPLICANT_TYPE_COMPANY : FeeValidator::APPLICANT_TYPE_PERSON;
 	}

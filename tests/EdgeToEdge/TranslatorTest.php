@@ -31,7 +31,7 @@ class TranslatorTest extends WebRouteTestCase {
 		$this->assertContains( 'page_not_found', $client->getResponse()->getContent() );
 	}
 
-	private function newTranslator( array $translatableMessages, string $locale ) {
+	private function newTranslator( array $translatableMessages, string $locale ): Translator {
 		$translator = new Translator( $locale );
 		$translator->addLoader( 'array', new ArrayLoader() );
 		$translator->addResource( 'array', $translatableMessages, $locale );

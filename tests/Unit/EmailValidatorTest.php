@@ -32,13 +32,13 @@ class EmailValidatorTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider fullyValidEmailProvider
 	 */
-	public function testGivenValidMail_validationWithDomainNameCheckSucceeds( $validEmail ): void {
+	public function testGivenValidMail_validationWithDomainNameCheckSucceeds( string $validEmail ): void {
 		$mailValidator = new EmailValidator( $this->newStubDomainValidator() );
 
 		$this->assertTrue( $mailValidator->validate( $validEmail )->isSuccessful() );
 	}
 
-	public function fullyValidEmailProvider() {
+	public function fullyValidEmailProvider(): array {
 		return [
 			[ 'christoph.fischer@wikimedia.de' ],
 			[ 'test@nick.berlin' ],
@@ -52,13 +52,13 @@ class EmailValidatorTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider emailWithInvalidDomainProvider
 	 */
-	public function testGivenMailWithInvalidDomain_validationWithDomainNameCheckFails( $invalidEmail ): void {
+	public function testGivenMailWithInvalidDomain_validationWithDomainNameCheckFails( string $invalidEmail ): void {
 		$mailValidator = new EmailValidator( $this->newStubDomainValidator() );
 
 		$this->assertFalse( $mailValidator->validate( $invalidEmail )->isSuccessful() );
 	}
 
-	public function emailWithInvalidDomainProvider() {
+	public function emailWithInvalidDomainProvider(): array {
 		return [
 			[ 'chrifi.asfsfas.de  ' ],
 			[ ' ' ],
@@ -73,13 +73,13 @@ class EmailValidatorTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider emailWithInvalidFormatProvider
 	 */
-	public function testGivenMailWithInvalidFormat_validationWithoutDomainCheckFails( $invalidEmail ): void {
+	public function testGivenMailWithInvalidFormat_validationWithoutDomainCheckFails( string $invalidEmail ): void {
 		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
 
 		$this->assertFalse( $mailValidator->validate( $invalidEmail )->isSuccessful() );
 	}
 
-	public function emailWithInvalidFormatProvider() {
+	public function emailWithInvalidFormatProvider(): array {
 		return [
 			[ 'chrifi.asfsfas.de  ' ],
 			[ ' ' ],

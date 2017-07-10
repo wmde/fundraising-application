@@ -28,7 +28,7 @@ class TrimValuesTest extends WebRouteTestCase {
 		$this->assertSame( $this->trimArray( $params ), $client->getRequest()->request->all() );
 	}
 
-	private function newParams() {
+	private function newParams(): array {
 		return [
 			'var1' => '  val1 ',
 			'var2' => 'val2 ',
@@ -39,7 +39,7 @@ class TrimValuesTest extends WebRouteTestCase {
 		];
 	}
 
-	private function trimArray( array $params ) {
+	private function trimArray( array $params ): array {
 		array_walk( $params, [ self::class, 'trimValue' ] );
 		return $params;
 	}

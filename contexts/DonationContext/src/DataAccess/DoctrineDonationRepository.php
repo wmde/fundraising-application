@@ -198,7 +198,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		);
 	}
 
-	private function getDataFieldsFromPersonName( DonorName $name ) {
+	private function getDataFieldsFromPersonName( DonorName $name ): array {
 		return [
 			'adresstyp' => $name->getPersonType(),
 			'anrede' => $name->getSalutation(),
@@ -209,7 +209,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		];
 	}
 
-	private function getDataFieldsFromAddress( DonorAddress $address ) {
+	private function getDataFieldsFromAddress( DonorAddress $address ): array {
 		return [
 			'strasse' => $address->getStreetAddress(),
 			'plz' => $address->getPostalCode(),
@@ -218,7 +218,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		];
 	}
 
-	private function getDataFieldsFromPayPalData( PayPalData $payPalData ) {
+	private function getDataFieldsFromPayPalData( PayPalData $payPalData ): array {
 		return [
 			'paypal_payer_id' => $payPalData->getPayerId(),
 			'paypal_subscr_id' => $payPalData->getSubscriberId(),
@@ -240,7 +240,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		];
 	}
 
-	private function getDataFieldsFromCreditCardData( CreditCardTransactionData $ccData ) {
+	private function getDataFieldsFromCreditCardData( CreditCardTransactionData $ccData ): array {
 		return [
 			'ext_payment_id' => $ccData->getTransactionId(),
 			'ext_payment_status' => $ccData->getTransactionStatus(),
@@ -371,7 +371,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		return $address->freeze()->assertNoNullFields();
 	}
 
-	private function getBankDataFromEntity( DoctrineDonation $dd ) {
+	private function getBankDataFromEntity( DoctrineDonation $dd ): BankData {
 		$data = $dd->getDecodedData();
 
 		$bankData = new BankData();
@@ -426,7 +426,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		return null;
 	}
 
-	private function getCreditCardDataFromEntity( DoctrineDonation $dd ) {
+	private function getCreditCardDataFromEntity( DoctrineDonation $dd ): CreditCardTransactionData {
 		$data = $dd->getDecodedData();
 
 		return ( new CreditCardTransactionData() )
@@ -442,7 +442,6 @@ class DoctrineDonationRepository implements DonationRepository {
 			->setCountryCode( $data['mcp_country'] ?? '' )
 			->setCurrencyCode( $data['mcp_currency'] ?? '' )
 			->freeze();
-
 	}
 
 	private function getCommentFromEntity( DoctrineDonation $dd ): ?DonationComment {

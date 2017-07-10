@@ -50,7 +50,7 @@ class ProfilingDecoratorBuilder {
 		return debug_backtrace()[7]['function'];
 	}
 
-	private function getFunctionArgumentsWithKeys( array $arguments, string $className, string $methodName ) {
+	private function getFunctionArgumentsWithKeys( array $arguments, string $className, string $methodName ): array {
 		$reflection = new \ReflectionMethod( $className, $methodName );
 
 		foreach ( $reflection->getParameters() as $param ) {

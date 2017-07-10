@@ -190,7 +190,7 @@ class AddCommentUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$this->assertFalse( $response->isSuccessful() );
 	}
 
-	private function newSucceedingAddCommentValidator() {
+	private function newSucceedingAddCommentValidator(): AddCommentValidator {
 		$validator = $this->createMock( AddCommentValidator::class );
 		$validator->method( 'validate' )->willReturn( new AddCommentValidationResult( [] ) );
 		return $validator;

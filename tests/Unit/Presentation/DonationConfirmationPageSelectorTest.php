@@ -32,7 +32,7 @@ class DonationConfirmationPageSelectorTest extends \PHPUnit\Framework\TestCase {
 		$this->assertNotEmpty( $selector->selectPage()->getPageTitle() );
 	}
 
-	private function newCampaignConfig( array $templates ) {
+	private function newCampaignConfig( array $templates ): array {
 		return [
 			'default' => 'defaultConfirmationPage',
 			'campaigns' => [

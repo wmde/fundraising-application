@@ -39,7 +39,7 @@ class ConfirmSubscriptionHtmlPresenterTest extends \PHPUnit\Framework\TestCase {
 		$presenter->present( ValidationResponse::newFailureResponse( [ $constraintViolation ] ) );
 	}
 
-	private function getTranslator() {
+	private function getTranslator(): Translator {
 		$translator = new Translator( 'en' );
 		$translator->addLoader( 'array', new ArrayLoader() );
 		$translator->addResource(

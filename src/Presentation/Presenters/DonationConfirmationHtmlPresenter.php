@@ -35,7 +35,7 @@ class DonationConfirmationHtmlPresenter {
 	}
 
 	private function getConfirmationPageArguments( Donation $donation, string $updateToken,
-												   SelectedConfirmationPage $selectedPage, PiwikEvents $piwikEvents ) {
+												   SelectedConfirmationPage $selectedPage, PiwikEvents $piwikEvents ): array {
 
 		return [
 			'main_template' => $selectedPage->getPageTitle(),
@@ -98,7 +98,7 @@ class DonationConfirmationHtmlPresenter {
 		return [];
 	}
 
-	private function getInitialMembershipFormValues( Donation $donation ) {
+	private function getInitialMembershipFormValues( Donation $donation ): array {
 		return array_merge(
 			$this->getMembershipFormPersonValues( $donation->getDonor() ),
 			$this->getMembershipFormBankDataValues( $donation->getPaymentMethod() )

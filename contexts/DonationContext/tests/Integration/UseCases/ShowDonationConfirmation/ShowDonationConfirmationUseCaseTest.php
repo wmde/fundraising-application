@@ -85,7 +85,7 @@ class ShowDonationConfirmationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$this->assertEquals( $donation, $response->getDonation() );
 	}
 
-	private function newFixedTokenFetcher() {
+	private function newFixedTokenFetcher(): FixedDonationTokenFetcher {
 		return new FixedDonationTokenFetcher( new DonationTokens( self::ACCESS_TOKEN, self::UPDATE_TOKEN ) );
 	}
 }

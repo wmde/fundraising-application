@@ -4,11 +4,13 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\SubscriptionContext\DataAccess;
 
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use WMDE\Fundraising\Entities\Address;
 use WMDE\Fundraising\Entities\Subscription;
 use WMDE\Fundraising\Frontend\SubscriptionContext\DataAccess\DoctrineSubscriptionRepository;
+use WMDE\Fundraising\Frontend\SubscriptionContext\Domain\Repositories\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Domain\Repositories\SubscriptionRepositoryException;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
@@ -30,7 +32,7 @@ class DoctrineSubscriptionRepositoryTest extends \PHPUnit\Framework\TestCase {
 		parent::setUp();
 	}
 
-	private function getOrmRepository() {
+	private function getOrmRepository(): EntityRepository {
 		return $this->entityManager->getRepository( Subscription::class );
 	}
 

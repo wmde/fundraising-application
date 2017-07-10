@@ -106,7 +106,7 @@ class DonorValidatorTest extends ValidatorTestCase {
 		return $address;
 	}
 
-	private function newDonorValidator() {
+	private function newDonorValidator(): DonorValidator {
 		return new DonorValidator(
 			new DonorNameValidator(),
 			new DonorAddressValidator(),
