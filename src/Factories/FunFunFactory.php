@@ -36,14 +36,13 @@ use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\Appl
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionPaymentNotification\HandleSubscriptionPaymentNotificationUseCase;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionSignupNotification\HandleSubscriptionSignupNotificationUseCase;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\DefaultPaymentDelayCalculator;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentDelayCalculator;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector;
 use WMDE\Fundraising\Frontend\Presentation\Honorifics;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\PageNotFoundPresenter;
-use WMDE\Fundraising\Frontend\Presentation\SofortUrlConfig;
-use WMDE\Fundraising\Frontend\Presentation\SofortUrlGenerator;
-use WMDE\Fundraising\Frontend\Infrastructure\Sofort\Transfer\Client as SofortClient;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\SofortConfig;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\Sofort as SofortUrlGenerator;
+use WMDE\Fundraising\Frontend\PaymentContext\DataAccess\Sofort\Transfer\Client as SofortClient;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 use WMDE\Fundraising\Frontend\DonationContext\Authorization\DonationAuthorizer;
@@ -114,13 +113,13 @@ use WMDE\Fundraising\Frontend\PaymentContext\Infrastructure\CreditCardService;
 use WMDE\Fundraising\Frontend\PaymentContext\UseCases\CheckIban\CheckIbanUseCase;
 use WMDE\Fundraising\Frontend\PaymentContext\UseCases\GenerateIban\GenerateIbanUseCase;
 use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
-use WMDE\Fundraising\Frontend\Presentation\CreditCardUrlConfig;
-use WMDE\Fundraising\Frontend\Presentation\CreditCardUrlGenerator;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\CreditCardConfig;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\CreditCard as CreditCardUrlGenerator;
 use WMDE\Fundraising\Frontend\Presentation\DonationConfirmationPageSelector;
 use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
 use WMDE\Fundraising\Frontend\Presentation\GreetingGenerator;
-use WMDE\Fundraising\Frontend\Presentation\PayPalUrlConfig;
-use WMDE\Fundraising\Frontend\Presentation\PayPalUrlGenerator;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\PayPalConfig;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\PayPal as PayPalUrlGenerator;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionJsonPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CancelDonationHtmlPresenter;
@@ -915,18 +914,18 @@ class FunFunFactory {
 	}
 
 	private function getPayPalUrlConfigForDonations() {
-		return PayPalUrlConfig::newFromConfig( $this->config['paypal-donation'] );
+		return PayPalConfig::newFromConfig( $this->config['paypal-donation'] );
 	}
 
 	private function getPayPalUrlConfigForMembershipApplications() {
-		return PayPalUrlConfig::newFromConfig( $this->config['paypal-membership'] );
+		return PayPalConfig::newFromConfig( $this->config['paypal-membership'] );
 	}
 
 	public function newSofortUrlGeneratorForDonations(): SofortUrlGenerator {
 		$config = $this->config['sofort'];
 
 		return new SofortUrlGenerator(
-			new SofortUrlConfig(
+			new SofortConfig(
 				$this->getTranslator()->trans( 'item_name_donation', [], 'messages' ),
 				$config['return-url'],
 				$config['cancel-url']
@@ -943,12 +942,12 @@ class FunFunFactory {
 		return $this->pimple['sofort-client'];
 	}
 
-	private function newCreditCardUrlGenerator() {
+	private function newCreditCardUrlGenerator(): CreditCardUrlGenerator {
 		return new CreditCardUrlGenerator( $this->newCreditCardUrlConfig() );
 	}
 
-	private function newCreditCardUrlConfig() {
-		return CreditCardUrlConfig::newFromConfig( $this->config['creditcard'] );
+	private function newCreditCardUrlConfig(): CreditCardConfig {
+		return CreditCardConfig::newFromConfig( $this->config['creditcard'] );
 	}
 
 	public function getDonationRepository(): DonationRepository {

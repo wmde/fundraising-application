@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Infrastructure\Sofort\Transfer;
+namespace WMDE\Fundraising\Frontend\PaymentContext\DataAccess\Sofort\Transfer;
 
 use RuntimeException;
 use Sofort\SofortLib\Sofortueberweisung;
