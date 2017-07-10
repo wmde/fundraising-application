@@ -19,11 +19,11 @@ class MailTemplatesTest extends \PHPUnit\Framework\TestCase {
 	 */
 	private $factory;
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->createMissingTestFiles();
 	}
 
-	private function createMissingTestFiles() {
+	private function createMissingTestFiles(): void {
 		foreach ( $this->getFreshlyRenderedContent() as $testFilePath => $testFileContent ) {
 			if ( !file_exists( $testFilePath ) ) {
 				file_put_contents( $testFilePath, $testFileContent );
@@ -103,7 +103,7 @@ class MailTemplatesTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider storedRenderedContentProvider
 	 */
-	public function testCurrentRenderingMatchesStoredRendering( string $testFilePath, string $testFileContent ) {
+	public function testCurrentRenderingMatchesStoredRendering( string $testFilePath, string $testFileContent ): void {
 		$this->assertSame(
 			file_get_contents( $testFilePath ),
 			$testFileContent

@@ -27,7 +27,7 @@ class PiwikVariableCollectorTest extends \PHPUnit\Framework\TestCase {
 
 	/** @dataProvider sessionAndDonationDataProvider */
 	public function testVariableCollectorReturnsCorrectEvents( $initialAmount, $initialType, $initialInterval,
-															   $expectedResult ) {
+															   $expectedResult ): void {
 		$sessionData = $this->newSessionData( $initialAmount, $initialType, $initialInterval );
 		$donation = $this->newDonationMock( self::ACTUAL_AMOUNT, self::ACTUAL_TYPE, self::ACTUAL_INTERVAL );
 
@@ -74,7 +74,7 @@ class PiwikVariableCollectorTest extends \PHPUnit\Framework\TestCase {
 		];
 	}
 
-	private function assertCustomTrackingContainsEvents( array $expectedEvents, array $actualEvents ) {
+	private function assertCustomTrackingContainsEvents( array $expectedEvents, array $actualEvents ): void {
 		foreach ( $expectedEvents as $event ) {
 			$this->assertContains( $event, $actualEvents );
 		}

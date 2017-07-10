@@ -27,7 +27,7 @@ class DoctrineSubscriptionRepository implements SubscriptionRepository {
 	 * @param Subscription $subscription
 	 * @throws SubscriptionRepositoryException
 	 */
-	public function storeSubscription( Subscription $subscription ) {
+	public function storeSubscription( Subscription $subscription ): void {
 		try {
 			$this->entityManager->persist( $subscription );
 			$this->entityManager->persist( $subscription->getAddress() );
@@ -56,7 +56,10 @@ class DoctrineSubscriptionRepository implements SubscriptionRepository {
 
 	}
 
-	public function findByConfirmationCode( string $confirmationCode ) {
+	/**
+	 * @throws SubscriptionRepositoryException
+	 */
+	public function findByConfirmationCode( string $confirmationCode ): ?Subscription {
 		try {
 			return $this->entityManager->getRepository( Subscription::class )->findOneBy( [
 				'confirmationCode' => $confirmationCode

@@ -20,7 +20,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider invalidIntervalProvider
 	 */
-	public function testGivenInvalidInterval_constructorThrowsException( int $invalidInterval ) {
+	public function testGivenInvalidInterval_constructorThrowsException( int $invalidInterval ): void {
 		$this->expectException( \InvalidArgumentException::class );
 		new Payment(
 			$invalidInterval,
@@ -39,17 +39,17 @@ class PaymentTest extends \PHPUnit\Framework\TestCase {
 		];
 	}
 
-	public function testWhenIntervalIsTwelveMonths_yearlyPaymentIsBasePayment() {
+	public function testWhenIntervalIsTwelveMonths_yearlyPaymentIsBasePayment(): void {
 		$payment = new Payment( 12, Euro::newFromInt( 42 ), new DirectDebitPayment( new BankData() ) );
 		$this->assertEquals( 42, $payment->getYearlyAmount()->getEuroFloat() );
 	}
 
-	public function testWhenIntervalIsOneMonth_yearlyPaymentIsTwelveTimesBasePayment() {
+	public function testWhenIntervalIsOneMonth_yearlyPaymentIsTwelveTimesBasePayment(): void {
 		$payment = new Payment( 1, Euro::newFromInt( 10 ), new DirectDebitPayment( new BankData() ) );
 		$this->assertEquals( 120, $payment->getYearlyAmount()->getEuroFloat() );
 	}
 
-	public function testWhenIntervalIsOneQuarter_yearlyPaymentIsFourTimesBasePayment() {
+	public function testWhenIntervalIsOneQuarter_yearlyPaymentIsFourTimesBasePayment(): void {
 		$payment = new Payment( 3, Euro::newFromInt( 50 ), new DirectDebitPayment( new BankData() ) );
 		$this->assertEquals( 200, $payment->getYearlyAmount()->getEuroFloat() );
 	}

@@ -19,7 +19,7 @@ use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
  */
 class ConfirmSubscriptionHtmlPresenterTest extends \PHPUnit\Framework\TestCase {
 
-	public function testGivenSuccessResponse_templateIsRenderedWithoutMessages() {
+	public function testGivenSuccessResponse_templateIsRenderedWithoutMessages(): void {
 		$twig = $this->getMockBuilder( TwigTemplate::class )->disableOriginalConstructor()->getMock();
 		$translator = $this->getMockBuilder( Translator::class )->disableOriginalConstructor()->getMock();
 		$twig->expects( $this->once() )
@@ -29,7 +29,7 @@ class ConfirmSubscriptionHtmlPresenterTest extends \PHPUnit\Framework\TestCase {
 		$presenter->present( ValidationResponse::newSuccessResponse() );
 	}
 
-	public function testGivenFailureResponse_templateIsRenderedWithoutMessages() {
+	public function testGivenFailureResponse_templateIsRenderedWithoutMessages(): void {
 		$twig = $this->getMockBuilder( TwigTemplate::class )->disableOriginalConstructor()->getMock();
 		$twig->expects( $this->once() )
 			->method( 'render' )

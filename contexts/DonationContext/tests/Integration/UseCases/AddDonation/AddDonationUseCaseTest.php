@@ -42,11 +42,11 @@ class AddDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 	 */
 	private $oneHourInTheFuture;
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->oneHourInTheFuture = ( new \DateTime() )->add( $this->newOneHourInterval() );
 	}
 
-	public function testWhenValidationSucceeds_successResponseIsCreated() {
+	public function testWhenValidationSucceeds_successResponseIsCreated(): void {
 		$useCase = $this->newValidationSucceedingUseCase();
 
 		$this->assertTrue( $useCase->addDonation( $this->newMinimumDonationRequest() )->isSuccessful() );
@@ -88,7 +88,7 @@ class AddDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		return new FakeDonationRepository();
 	}
 
-	public function testValidationFails_responseObjectContainsViolations() {
+	public function testValidationFails_responseObjectContainsViolations(): void {
 		$useCase = new AddDonationUseCase(
 			$this->newRepository(),
 			$this->getFailingValidatorMock( new ConstraintViolation( 'foo', 'bar' ) ),
@@ -103,7 +103,7 @@ class AddDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$this->assertEquals( [ new ConstraintViolation( 'foo', 'bar' ) ], $result->getValidationErrors() );
 	}
 
-	public function testValidationFails_responseObjectContainsRequestObject() {
+	public function testValidationFails_responseObjectContainsRequestObject(): void {
 		$useCase = new AddDonationUseCase(
 			$this->newRepository(),
 			$this->getFailingValidatorMock( new ConstraintViolation( 'foo', 'bar' ) ),
@@ -185,7 +185,7 @@ class AddDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		return $donationRequest;
 	}
 
-	public function testGivenInvalidRequest_noConfirmationEmailIsSend() {
+	public function testGivenInvalidRequest_noConfirmationEmailIsSend(): void {
 		$mailer = $this->newMailer();
 
 		$mailer->expects( $this->never() )->method( $this->anything() );
@@ -207,7 +207,7 @@ class AddDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		return $this->createMock( TransferCodeGenerator::class );
 	}
 
-	public function testGivenValidRequest_confirmationEmailIsSent() {
+	public function testGivenValidRequest_confirmationEmailIsSent(): void {
 		$mailer = $this->newMailer();
 		$donation = $this->newValidAddDonationRequestWithEmail( 'foo@bar.baz' );
 
@@ -220,7 +220,7 @@ class AddDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$useCase->addDonation( $donation );
 	}
 
-	public function testGivenValidRequestWithExternalPaymentType_confirmationEmailIsNotSent() {
+	public function testGivenValidRequestWithExternalPaymentType_confirmationEmailIsNotSent(): void {
 		$mailer = $this->newMailer();
 
 		$mailer->expects( $this->never() )->method( $this->anything() );
@@ -232,7 +232,7 @@ class AddDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$useCase->addDonation( $request );
 	}
 
-	public function testGivenValidRequestWithPolicyViolation_donationIsModerated() {
+	public function testGivenValidRequestWithPolicyViolation_donationIsModerated(): void {
 		$useCase = new AddDonationUseCase(
 			$this->newRepository(),
 			$this->getSucceedingValidatorMock(),
@@ -247,7 +247,7 @@ class AddDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$this->assertTrue( $response->getDonation()->needsModeration() );
 	}
 
-	public function testGivenPolicyViolationForExternalPaymentDonation_donationIsNotModerated() {
+	public function testGivenPolicyViolationForExternalPaymentDonation_donationIsNotModerated(): void {
 		$useCase = new AddDonationUseCase(
 			$this->newRepository(),
 			$this->getSucceedingValidatorMock(),
@@ -312,7 +312,7 @@ class AddDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		return $request;
 	}
 
-	public function testWhenAdditionWorks_successResponseContainsTokens() {
+	public function testWhenAdditionWorks_successResponseContainsTokens(): void {
 		$useCase = $this->newValidationSucceedingUseCase();
 
 		$response = $useCase->addDonation( $this->newMinimumDonationRequest() );
@@ -321,7 +321,7 @@ class AddDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( self::ACCESS_TOKEN, $response->getAccessToken() );
 	}
 
-	public function testWhenAddingCompanyDonation_salutationFieldIsSet() {
+	public function testWhenAddingCompanyDonation_salutationFieldIsSet(): void {
 		$useCase = $this->newValidationSucceedingUseCase();
 
 		$response = $useCase->addDonation( $this->newValidCompanyDonationRequest() );
@@ -329,7 +329,7 @@ class AddDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( DonorName::COMPANY_SALUTATION, $response->getDonation()->getDonor()->getName()->getSalutation() );
 	}
 
-	public function testWhenEmailAddressIsBlacklisted_donationIsMarkedAsDeleted() {
+	public function testWhenEmailAddressIsBlacklisted_donationIsMarkedAsDeleted(): void {
 		$repository = $this->newRepository();
 		$useCase = new AddDonationUseCase(
 			$repository,

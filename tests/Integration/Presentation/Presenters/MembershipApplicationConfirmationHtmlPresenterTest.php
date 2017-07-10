@@ -21,7 +21,7 @@ class MembershipApplicationConfirmationHtmlPresenterTest extends \PHPUnit\Framew
 	private const STATUS_UNCONFIRMED = 'status-unconfirmed';
 
 	/** @dataProvider applicationStatusProvider */
-	public function testWhenPresenterPresents_itPassesParametersToTemplate( $isConfirmed, $expectedMappedStatus ) {
+	public function testWhenPresenterPresents_itPassesParametersToTemplate( $isConfirmed, $expectedMappedStatus ): void {
 		$twig = $this->getMockBuilder( TwigTemplate::class )->disableOriginalConstructor()->getMock();
 		$twig->expects( $this->once() )
 			->method( 'render' )

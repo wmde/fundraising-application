@@ -44,14 +44,14 @@ class GetInTouchUseCase {
 		return ValidationResponse::newSuccessResponse();
 	}
 
-	private function sendContactRequestToOperator( GetInTouchRequest $request ) {
+	private function sendContactRequestToOperator( GetInTouchRequest $request ): void {
 		$this->operatorMailer->sendMailToOperator(
 			new EmailAddress( $request->getEmailAddress() ),
 			$this->getTemplateParams( $request )
 		);
 	}
 
-	private function sendNotificationToUser( GetInTouchRequest $request ) {
+	private function sendNotificationToUser( GetInTouchRequest $request ): void {
 		// We don't send any template input here to avoid misusing the form for spam.
 		// The user just gets a "We received your inquiry and will contact you shortly" message
 		$this->userMailer->sendMail( new EmailAddress( $request->getEmailAddress() ) );

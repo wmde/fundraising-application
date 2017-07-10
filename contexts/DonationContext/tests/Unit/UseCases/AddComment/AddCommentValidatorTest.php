@@ -19,19 +19,19 @@ class AddCommentValidatorTest extends \PHPUnit\Framework\TestCase {
 		return $request;
 	}
 
-	public function testValidCommentRequest_isSuccessful() {
+	public function testValidCommentRequest_isSuccessful(): void {
 		$validator = new AddCommentValidator();
 		$this->assertTrue( $validator->validate( $this->newValidAddCommentRequest() )->isSuccessful() );
 	}
 
-	public function testLongComment_isNotSuccessful() {
+	public function testLongComment_isNotSuccessful(): void {
 		$validator = new AddCommentValidator();
 		$request = $this->newValidAddCommentRequest();
 		$request->setCommentText( str_repeat( 'All work and no play makes jack a dull boy.', 1000 ) );
 		$this->assertFalse( $validator->validate( $request )->isSuccessful() );
 	}
 
-	public function testLongName_isNotSuccessful() {
+	public function testLongName_isNotSuccessful(): void {
 		$validator = new AddCommentValidator();
 		$request = $this->newValidAddCommentRequest();
 		$request->setAuthorDisplayName( str_repeat( 'Dr. ', 50 ) . $request->getAuthorDisplayName() );

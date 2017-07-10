@@ -22,7 +22,7 @@ interface DonationRepository {
 	 *
 	 * @throws StoreDonationException
 	 */
-	public function storeDonation( Donation $donation );
+	public function storeDonation( Donation $donation ): void;
 
 	/**
 	 * @param int $id

@@ -17,7 +17,7 @@ class TextPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider urlTestProvider
 	 */
-	public function testWhenGivenCommentHasURL_validatorReturnsFalse( $commentToTest ) {
+	public function testWhenGivenCommentHasURL_validatorReturnsFalse( $commentToTest ): void {
 		$this->skipIfNoInternet();
 
 		$textPolicyValidator = new TextPolicyValidator();
@@ -28,7 +28,7 @@ class TextPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 		) );
 	}
 
-	private function skipIfNoInternet() {
+	private function skipIfNoInternet(): void {
 		static $isConnected = null;
 
 		if ( $isConnected === null ) {
@@ -58,7 +58,7 @@ class TextPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider harmlessTestProvider
 	 */
-	public function testWhenGivenHarmlessComment_validatorReturnsTrue( $commentToTest ) {
+	public function testWhenGivenHarmlessComment_validatorReturnsTrue( $commentToTest ): void {
 		$this->skipIfNoInternet();
 
 		$textPolicyValidator = new TextPolicyValidator();
@@ -78,7 +78,7 @@ class TextPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 		];
 	}
 
-	public function testHamlessContentWithDns() {
+	public function testHamlessContentWithDns(): void {
 		$this->skipIfNoInternet();
 
 		if ( checkdnsrr( 'some-non-existing-domain-drfeszrfdaesr.sdferdyerdhgty', 'A' ) ) {
@@ -97,7 +97,7 @@ class TextPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider insultingTestProvider
 	 */
-	public function testWhenGivenInsultingComment_validatorReturnsFalse( $commentToTest ) {
+	public function testWhenGivenInsultingComment_validatorReturnsFalse( $commentToTest ): void {
 		$textPolicyValidator = $this->getPreFilledTextPolicyValidator();
 
 		$this->assertFalse( $textPolicyValidator->hasHarmlessContent(
@@ -118,7 +118,7 @@ class TextPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider whiteWordsInsultingTestProvider
 	 */
-	public function testWhenGivenInsultingCommentAndWhiteWords_validatorReturnsFalse( $commentToTest ) {
+	public function testWhenGivenInsultingCommentAndWhiteWords_validatorReturnsFalse( $commentToTest ): void {
 		$textPolicyValidator = $this->getPreFilledTextPolicyValidator();
 
 		$this->assertFalse(
@@ -143,7 +143,7 @@ class TextPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider whiteWordsHarmlessTestProvider
 	 */
-	public function testWhenGivenHarmlessCommentAndWhiteWords_validatorReturnsTrue( $commentToTest ) {
+	public function testWhenGivenHarmlessCommentAndWhiteWords_validatorReturnsTrue( $commentToTest ): void {
 		$textPolicyValidator = $this->getPreFilledTextPolicyValidator();
 
 		$this->assertTrue(
@@ -169,7 +169,7 @@ class TextPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider insultingTestProviderWithRegexChars
 	 */
-	public function testGivenBadWordMatchContainingRegexChars_validatorReturnsFalse( $commentToTest ) {
+	public function testGivenBadWordMatchContainingRegexChars_validatorReturnsFalse( $commentToTest ): void {
 		$textPolicyValidator = $this->getPreFilledTextPolicyValidator();
 
 		$this->assertFalse(

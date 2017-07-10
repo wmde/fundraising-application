@@ -18,7 +18,7 @@ class CreditCardTest extends \PHPUnit\Framework\TestCase {
 
 	/** @dataProvider donationProvider */
 	public function testUrlGeneration( string $expected, string $firstName, string $lastName, string $payText,
-									   int $donationId, string $accessToken, string $updateToken, Euro $amount ) {
+									   int $donationId, string $accessToken, string $updateToken, Euro $amount ): void {
 		$urlGenerator = new CreditCard(
 			CreditCardConfig::newFromConfig( [
 				'base-url' => 'https://credit-card.micropayment.de/creditcard/event/index.php?',
@@ -35,7 +35,7 @@ class CreditCardTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testWhenTestModeIsEnabled_urlPassesProperParameter() {
+	public function testWhenTestModeIsEnabled_urlPassesProperParameter(): void {
 		$urlGenerator = new CreditCard(
 			CreditCardConfig::newFromConfig( [
 				'base-url' => 'https://credit-card.micropayment.de/creditcard/event/index.php?',

@@ -14,7 +14,7 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\PayPalCo
  */
 class PayPalConfigTest extends \PHPUnit\Framework\TestCase {
 
-	public function testGivenIncompletePayPalUrlConfig_exceptionIsThrown() {
+	public function testGivenIncompletePayPalUrlConfig_exceptionIsThrown(): void {
 		$this->expectException( \RuntimeException::class );
 		$this->newIncompletePayPalUrlConfig();
 	}
@@ -30,7 +30,7 @@ class PayPalConfigTest extends \PHPUnit\Framework\TestCase {
 		] );
 	}
 
-	public function testGivenValidPayPalUrlConfig_payPalConfigIsReturned() {
+	public function testGivenValidPayPalUrlConfig_payPalConfigIsReturned(): void {
 		$this->assertInstanceOf( PayPalConfig::class, $this->newPayPalUrlConfig() );
 	}
 

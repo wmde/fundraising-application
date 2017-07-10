@@ -42,7 +42,7 @@ class AddSubscriptionUseCaseTest extends TestCase {
 	 */
 	private $mailer;
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->repo = $this->createMock( SubscriptionRepository::class );
 
 		$this->validator = $this->getMockBuilder( SubscriptionValidator::class )
@@ -60,14 +60,14 @@ class AddSubscriptionUseCaseTest extends TestCase {
 		return $request;
 	}
 
-	public function testGivenValidData_aSuccessResponseIsCreated() {
+	public function testGivenValidData_aSuccessResponseIsCreated(): void {
 		$this->validator->method( 'validate' )->willReturn( new ValidationResult() );
 		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->mailer );
 		$result = $useCase->addSubscription( $this->createValidSubscriptionRequest() );
 		$this->assertTrue( $result->isSuccessful() );
 	}
 
-	public function testGivenInvalidData_anErrorResponseTypeIsCreated() {
+	public function testGivenInvalidData_anErrorResponseTypeIsCreated(): void {
 		$this->validator->method( 'validate' )->willReturn( new FailedValidationResult() );
 		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->mailer );
 		$request = $this->createMock( SubscriptionRequest::class );
@@ -75,7 +75,7 @@ class AddSubscriptionUseCaseTest extends TestCase {
 		$this->assertFalse( $result->isSuccessful() );
 	}
 
-	public function testGivenValidData_requestWillBeStored() {
+	public function testGivenValidData_requestWillBeStored(): void {
 		$this->validator->method( 'validate' )->willReturn( new ValidationResult() );
 		$this->repo->expects( $this->once() )
 			->method( 'storeSubscription' )
@@ -84,7 +84,7 @@ class AddSubscriptionUseCaseTest extends TestCase {
 		$useCase->addSubscription( $this->createValidSubscriptionRequest() );
 	}
 
-	public function testGivenDataThatNeedsToBeModerated_requestWillBeStored() {
+	public function testGivenDataThatNeedsToBeModerated_requestWillBeStored(): void {
 		$this->validator->method( 'validate' )->willReturn( new ValidationResult() );
 		$this->validator->method( 'needsModeration' )->willReturn( true );
 		$this->repo->expects( $this->once() )
@@ -97,7 +97,7 @@ class AddSubscriptionUseCaseTest extends TestCase {
 		$useCase->addSubscription( $this->createValidSubscriptionRequest() );
 	}
 
-	public function testGivenInvalidData_requestWillNotBeStored() {
+	public function testGivenInvalidData_requestWillNotBeStored(): void {
 		$this->validator->method( 'validate' )->willReturn( new FailedValidationResult() );
 		$this->repo->expects( $this->never() )->method( 'storeSubscription' );
 		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->mailer );
@@ -105,7 +105,7 @@ class AddSubscriptionUseCaseTest extends TestCase {
 		$useCase->addSubscription( $request );
 	}
 
-	public function testGivenValidData_requestWillBeMailed() {
+	public function testGivenValidData_requestWillBeMailed(): void {
 		$this->validator->method( 'validate' )->willReturn( new ValidationResult() );
 		$this->mailer->expects( $this->once() )
 			->method( 'sendMail' )
@@ -126,7 +126,7 @@ class AddSubscriptionUseCaseTest extends TestCase {
 		$useCase->addSubscription( $this->createValidSubscriptionRequest() );
 	}
 
-	public function testGivenInvalidData_requestWillNotBeMailed() {
+	public function testGivenInvalidData_requestWillNotBeMailed(): void {
 		$this->validator->method( 'validate' )->willReturn( new FailedValidationResult() );
 		$this->mailer->expects( $this->never() )->method( 'sendMail' );
 		$useCase = new AddSubscriptionUseCase( $this->repo, $this->validator, $this->mailer );
@@ -134,7 +134,7 @@ class AddSubscriptionUseCaseTest extends TestCase {
 		$useCase->addSubscription( $request );
 	}
 
-	public function testGivenDataThatNeedsToBeModerated_requestNotBeMailed() {
+	public function testGivenDataThatNeedsToBeModerated_requestNotBeMailed(): void {
 		$this->validator->method( 'validate' )->willReturn( new ValidationResult() );
 		$this->validator->method( 'needsModeration' )->willReturn( true );
 		$this->mailer->expects( $this->never() )->method( 'sendMail' );

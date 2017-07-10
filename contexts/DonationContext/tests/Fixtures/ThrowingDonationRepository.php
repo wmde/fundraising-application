@@ -18,11 +18,11 @@ class ThrowingDonationRepository implements DonationRepository {
 	private $throwOnStoreDonation;
 	private $onGetDonationById;
 
-	public function throwOnStoreDonation() {
+	public function throwOnStoreDonation(): void {
 		$this->throwOnStoreDonation = true;
 	}
 
-	public function throwOnGetDonationById() {
+	public function throwOnGetDonationById(): void {
 		$this->onGetDonationById = true;
 	}
 
@@ -35,7 +35,7 @@ class ThrowingDonationRepository implements DonationRepository {
 	 *
 	 * @throws StoreDonationException
 	 */
-	public function storeDonation( Donation $donation ) {
+	public function storeDonation( Donation $donation ): void {
 		if ( $this->throwOnStoreDonation ) {
 			throw new StoreDonationException();
 		}

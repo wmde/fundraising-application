@@ -18,22 +18,22 @@ class IbanTest extends \PHPUnit\Framework\TestCase {
 	const TEST_IBAN = 'DE12500105170648489890';
 	const TEST_LOWERCASE_IBAN = 'de12500105170648489890';
 
-	public function testGivenIbanWithWhitespace_WhitespaceIsRemoved() {
+	public function testGivenIbanWithWhitespace_WhitespaceIsRemoved(): void {
 		$iban = new Iban( self::TEST_IBAN_WITH_WHITESPACE );
 		$this->assertSame( self::TEST_IBAN, $iban->toString() );
 	}
 
-	public function testCountryCodeIsReturnedCorrectly() {
+	public function testCountryCodeIsReturnedCorrectly(): void {
 		$iban = new Iban( self::TEST_IBAN );
 		$this->assertSame( 'DE', $iban->getCountryCode() );
 	}
 
-	public function testCountryCodeIsReturnedCorrectlyForLowercase() {
+	public function testCountryCodeIsReturnedCorrectlyForLowercase(): void {
 		$iban = new Iban( self::TEST_LOWERCASE_IBAN );
 		$this->assertSame( 'DE', $iban->getCountryCode() );
 	}
 
-	public function testGivenSameIbanWithDifferentCapitalization_objectsAreEqual() {
+	public function testGivenSameIbanWithDifferentCapitalization_objectsAreEqual(): void {
 		$this->assertEquals(
 			new Iban( self::TEST_IBAN ),
 			new Iban( self::TEST_LOWERCASE_IBAN )

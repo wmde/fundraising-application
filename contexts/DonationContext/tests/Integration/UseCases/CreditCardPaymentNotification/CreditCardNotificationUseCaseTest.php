@@ -37,7 +37,7 @@ class CreditCardNotificationUseCaseTest extends \PHPUnit\Framework\TestCase {
 	private $eventLogger;
 	private $creditCardService;
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->repository = new FakeDonationRepository();
 		$this->authorizer = new SucceedingDonationAuthorizer();
 		$this->mailer = $this->newMailer();
@@ -45,7 +45,7 @@ class CreditCardNotificationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$this->creditCardService = new FakeCreditCardService();
 	}
 
-	public function testWhenRepositoryThrowsException_handlerThrowsException() {
+	public function testWhenRepositoryThrowsException_handlerThrowsException(): void {
 		$this->repository = new DoctrineDonationRepository( ThrowingEntityManager::newInstance( $this ) );
 		$this->authorizer = new FailingDonationAuthorizer();
 		$useCase = $this->newCreditCardNotificationUseCase();
@@ -55,7 +55,7 @@ class CreditCardNotificationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$useCase->handleNotification( $request );
 	}
 
-	public function testWhenAuthorizationFails_handlerThrowsException() {
+	public function testWhenAuthorizationFails_handlerThrowsException(): void {
 		$this->authorizer = new FailingDonationAuthorizer();
 		$this->repository->storeDonation( ValidDonation::newIncompleteCreditCardDonation() );
 
@@ -67,7 +67,7 @@ class CreditCardNotificationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$useCase->handleNotification( $request );
 	}
 
-	public function testWhenAuthorizationSucceeds_handlerDoesNotThrowException() {
+	public function testWhenAuthorizationSucceeds_handlerDoesNotThrowException(): void {
 		$this->repository->storeDonation( ValidDonation::newIncompleteCreditCardDonation() );
 
 		$useCase = $this->newCreditCardNotificationUseCase();
@@ -82,7 +82,7 @@ class CreditCardNotificationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		}
 	}
 
-	public function testWhenPaymentTypeIsIncorrect_handlerThrowsException() {
+	public function testWhenPaymentTypeIsIncorrect_handlerThrowsException(): void {
 		$this->repository->storeDonation( ValidDonation::newDirectDebitDonation() );
 
 		$useCase = $this->newCreditCardNotificationUseCase();
@@ -93,7 +93,7 @@ class CreditCardNotificationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$useCase->handleNotification( $request );
 	}
 
-	public function testWhenAuthorizationSucceeds_confirmationMailIsSent() {
+	public function testWhenAuthorizationSucceeds_confirmationMailIsSent(): void {
 		$donation = ValidDonation::newIncompleteCreditCardDonation();
 		$this->repository->storeDonation( $donation );
 
@@ -107,7 +107,7 @@ class CreditCardNotificationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$useCase->handleNotification( $request );
 	}
 
-	public function testWhenAuthorizationSucceedsForAnonymousDonation_confirmationMailIsNotSent() {
+	public function testWhenAuthorizationSucceedsForAnonymousDonation_confirmationMailIsNotSent(): void {
 		$donation = ValidDonation::newIncompleteAnonymousCreditCardDonation();
 		$this->repository->storeDonation( $donation );
 
@@ -120,7 +120,7 @@ class CreditCardNotificationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$useCase->handleNotification( $request );
 	}
 
-	public function testWhenAuthorizationSucceeds_donationIsStored() {
+	public function testWhenAuthorizationSucceeds_donationIsStored(): void {
 		$donation = ValidDonation::newIncompleteCreditCardDonation();
 		$this->repository = new DonationRepositorySpy( $donation );
 
@@ -131,7 +131,7 @@ class CreditCardNotificationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$this->assertCount( 1, $this->repository->getStoreDonationCalls() );
 	}
 
-	public function testWhenAuthorizationSucceeds_donationIsBooked() {
+	public function testWhenAuthorizationSucceeds_donationIsBooked(): void {
 		$donation = ValidDonation::newIncompleteCreditCardDonation();
 		$this->repository = new DonationRepositorySpy( $donation );
 
@@ -142,7 +142,7 @@ class CreditCardNotificationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$this->assertTrue( $this->repository->getDonationById( $donation->getId() )->isBooked() );
 	}
 
-	public function testWhenAuthorizationSucceeds_bookingEventIsLogged() {
+	public function testWhenAuthorizationSucceeds_bookingEventIsLogged(): void {
 		$donation = ValidDonation::newIncompleteCreditCardDonation();
 		$this->repository = new DonationRepositorySpy( $donation );
 		$this->eventLogger = new DonationEventLoggerSpy();
@@ -155,7 +155,7 @@ class CreditCardNotificationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$this->assertEventLogContainsExpression( $this->eventLogger, $donation->getId(), '/booked/' );
 	}
 
-	public function testWhenSendingConfirmationMailFails_handlerDoesNotThrowException() {
+	public function testWhenSendingConfirmationMailFails_handlerDoesNotThrowException(): void {
 		$this->repository->storeDonation( ValidDonation::newIncompleteCreditCardDonation() );
 
 		$this->mailer->expects( $this->once() )
@@ -172,7 +172,7 @@ class CreditCardNotificationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		}
 	}
 
-	private function assertEventLogContainsExpression( DonationEventLoggerSpy $eventLoggerSpy, int $donationId, string $expr ) {
+	private function assertEventLogContainsExpression( DonationEventLoggerSpy $eventLoggerSpy, int $donationId, string $expr ): void {
 		$foundCalls = array_filter( $eventLoggerSpy->getLogCalls(), function( $call ) use ( $donationId, $expr ) {
 			return $call[0] == $donationId && preg_match( $expr, $call[1] );
 		} );
@@ -205,7 +205,7 @@ class CreditCardNotificationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testWhenPaymentAmountMismatches_handlerThreepwoodsException() {
+	public function testWhenPaymentAmountMismatches_handlerThreepwoodsException(): void {
 		$this->repository->storeDonation( ValidDonation::newIncompleteCreditCardDonation() );
 
 		$useCase = $this->newCreditCardNotificationUseCase();

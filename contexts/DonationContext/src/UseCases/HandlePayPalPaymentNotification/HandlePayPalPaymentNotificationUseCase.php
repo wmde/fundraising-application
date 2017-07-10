@@ -120,7 +120,7 @@ class HandlePayPalPaymentNotificationUseCase {
 		] );
 	}
 
-	private function sendConfirmationEmailFor( Donation $donation ) {
+	private function sendConfirmationEmailFor( Donation $donation ): void {
 		if ( $donation->getDonor() !== null ) {
 			try {
 				$this->mailer->sendConfirmationMailFor( $donation );
@@ -202,7 +202,7 @@ class HandlePayPalPaymentNotificationUseCase {
 		return PaypalNotificationResponse::newSuccessResponse();
 	}
 
-	private function logChildDonationCreatedEvent( $parentId, $childId ) {
+	private function logChildDonationCreatedEvent( $parentId, $childId ): void {
 		$this->donationEventLogger->log(
 			$parentId,
 			"paypal_handler: new transaction id to corresponding child donation: $childId"

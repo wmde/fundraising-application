@@ -73,7 +73,7 @@ class CancelMembershipApplicationUseCase {
 		return new CancellationResponse( $request->getApplicationId(), CancellationResponse::IS_SUCCESS );
 	}
 
-	private function sendConfirmationEmail( Application $application ) {
+	private function sendConfirmationEmail( Application $application ): void {
 		$this->mailer->sendMail(
 			$application->getApplicant()->getEmailAddress(),
 			$this->getConfirmationMailTemplateArguments( $application )

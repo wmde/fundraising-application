@@ -33,7 +33,7 @@ class GetInTouchUseCaseTest extends \PHPUnit\Framework\TestCase {
 	/** @var TemplateBasedMailerSpy */
 	private $userMailer;
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->validator = $this->newSucceedingValidator();
 		$this->operatorMailer = $this->createMock( OperatorMailer::class );
 		$this->userMailer = new TemplateBasedMailerSpy( $this );
@@ -47,7 +47,7 @@ class GetInTouchUseCaseTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testGivenValidParameters_theyAreContainedInTheEmailToOperator() {
+	public function testGivenValidParameters_theyAreContainedInTheEmailToOperator(): void {
 		$this->operatorMailer->expects( $this->once() )
 			->method( 'sendMailToOperator' )
 			->with(
@@ -65,7 +65,7 @@ class GetInTouchUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$useCase->processContactRequest( $this->newRequest() );
 	}
 
-	public function testGivenValidRequest_theUserIsNotified() {
+	public function testGivenValidRequest_theUserIsNotified(): void {
 		$useCase = $this->newGetInTouchUseCase();
 		$useCase->processContactRequest( $this->newRequest() );
 

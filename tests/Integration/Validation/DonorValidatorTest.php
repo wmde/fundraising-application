@@ -24,7 +24,7 @@ class DonorValidatorTest extends ValidatorTestCase {
 
 	const VALID_EMAIL_ADDRESS = 'hank.scorpio@globex.com';
 
-	public function testGivenValidPersonalInfo_validationIsSuccessful() {
+	public function testGivenValidPersonalInfo_validationIsSuccessful(): void {
 		$personalInfo = new Donor(
 			$this->newCompanyName(),
 			$this->newPhysicalAddress(),
@@ -34,7 +34,7 @@ class DonorValidatorTest extends ValidatorTestCase {
 		$this->assertTrue( $this->newDonorValidator()->validate( $personalInfo )->isSuccessful() );
 	}
 
-	public function testGivenMissingEmail_validationFails() {
+	public function testGivenMissingEmail_validationFails(): void {
 		$personalInfo = new Donor(
 			$this->newCompanyName(),
 			$this->newPhysicalAddress(),
@@ -44,7 +44,7 @@ class DonorValidatorTest extends ValidatorTestCase {
 		$this->assertFalse( $this->newDonorValidator()->validate( $personalInfo )->isSuccessful() );
 	}
 
-	public function testGivenMissingName_validationFails() {
+	public function testGivenMissingName_validationFails(): void {
 		$personalInfo = new Donor(
 			DonorName::newCompanyName(),
 			$this->newPhysicalAddress(),
@@ -60,7 +60,7 @@ class DonorValidatorTest extends ValidatorTestCase {
 		);
 	}
 
-	public function testGivenMissingAddressFields_validationFails() {
+	public function testGivenMissingAddressFields_validationFails(): void {
 		$personalInfo = new Donor(
 			$this->newCompanyName(),
 			$this->newPhysicalAddressWithMissingData(),

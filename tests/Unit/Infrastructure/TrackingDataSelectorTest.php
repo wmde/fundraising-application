@@ -20,7 +20,7 @@ class TrackingDataSelectorTest extends \PHPUnit\Framework\TestCase {
 	 * @param string $expectedResult
 	 * @param string[] $values
 	 */
-	public function testGetPreferredValueReturnsFirstSetElementOrEmptyString( $expectedResult, $values ) {
+	public function testGetPreferredValueReturnsFirstSetElementOrEmptyString( string $expectedResult, $values ): void {
 		$value = TrackingDataSelector::getFirstNonEmptyValue( $values );
 		$this->assertSame( $expectedResult, $value );
 	}
@@ -41,7 +41,7 @@ class TrackingDataSelectorTest extends \PHPUnit\Framework\TestCase {
 	 * @param $campaign
 	 * @param $keyword
 	 */
-	public function testConcatTrackingFromVarCouple( $expectedResult, $campaign, $keyword ) {
+	public function testConcatTrackingFromVarCouple( $expectedResult, $campaign, $keyword ): void {
 		$value = TrackingDataSelector::getFirstNonEmptyValue( [
 			'',
 			'',

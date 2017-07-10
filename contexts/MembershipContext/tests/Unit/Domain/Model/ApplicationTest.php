@@ -15,18 +15,18 @@ use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplic
  */
 class ApplicationTest extends \PHPUnit\Framework\TestCase {
 
-	public function testIdIsNullWhenNotAssigned() {
+	public function testIdIsNullWhenNotAssigned(): void {
 		$this->assertNull( ValidMembershipApplication::newDomainEntity()->getId() );
 	}
 
-	public function testCanAssignIdToNewDonation() {
+	public function testCanAssignIdToNewDonation(): void {
 		$donation = ValidMembershipApplication::newDomainEntity();
 
 		$donation->assignId( 42 );
 		$this->assertSame( 42, $donation->getId() );
 	}
 
-	public function testCannotAssignIdToDonationWithIdentity() {
+	public function testCannotAssignIdToDonationWithIdentity(): void {
 		$donation = ValidMembershipApplication::newDomainEntity();
 		$donation->assignId( 42 );
 
@@ -34,7 +34,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase {
 		$donation->assignId( 43 );
 	}
 
-	public function testNewApplicationHasExpectedDefaults() {
+	public function testNewApplicationHasExpectedDefaults(): void {
 		$application = ValidMembershipApplication::newDomainEntity();
 
 		$this->assertNull( $application->getId() );
@@ -42,14 +42,14 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase {
 		$this->assertFalse( $application->needsModeration() );
 	}
 
-	public function testCancellationResultsInCancelledApplication() {
+	public function testCancellationResultsInCancelledApplication(): void {
 		$application = ValidMembershipApplication::newDomainEntity();
 		$application->cancel();
 
 		$this->assertTrue( $application->isCancelled() );
 	}
 
-	public function testMarkForModerationResultsInApplicationThatNeedsModeration() {
+	public function testMarkForModerationResultsInApplicationThatNeedsModeration(): void {
 		$application = ValidMembershipApplication::newDomainEntity();
 		$application->markForModeration();
 

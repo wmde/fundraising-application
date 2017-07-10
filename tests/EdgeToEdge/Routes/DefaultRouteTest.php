@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
  */
 class DefaultRouteTest extends WebRouteTestCase {
 
-	public function testWhenFormParametersArePassedInRequest_theyArePassedToTheTemplate() {
+	public function testWhenFormParametersArePassedInRequest_theyArePassedToTheTemplate(): void {
 		$client = $this->createClient();
 		$client->request(
 			'GET',
@@ -30,7 +30,7 @@ class DefaultRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'Interval: 6', $responseContent );
 	}
 
-	public function testWhenFormParametersContainNegativeAmount_zeroAmountIsPassedToTheTemplate() {
+	public function testWhenFormParametersContainNegativeAmount_zeroAmountIsPassedToTheTemplate(): void {
 		$client = $this->createClient();
 		$client->request(
 			'GET',

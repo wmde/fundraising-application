@@ -18,7 +18,7 @@ use WMDE\Fundraising\Frontend\DonationContext\UseCases\ListComments\ListComments
  */
 class ListCommentsUseCaseTest extends \PHPUnit\Framework\TestCase {
 
-	public function testWhenThereAreNoComments_anEmptyListIsPresented() {
+	public function testWhenThereAreNoComments_anEmptyListIsPresented(): void {
 		$useCase = new ListCommentsUseCase( new InMemoryCommentFinder() );
 
 		$this->assertEquals(
@@ -27,7 +27,7 @@ class ListCommentsUseCaseTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testWhenThereAreLessCommentsThanTheLimit_theyAreAllPresented() {
+	public function testWhenThereAreLessCommentsThanTheLimit_theyAreAllPresented(): void {
 		$useCase = new ListCommentsUseCase( new InMemoryCommentFinder(
 			$this->newCommentWithAuthorName( 'name0' ),
 			$this->newCommentWithAuthorName( 'name1' ),
@@ -52,7 +52,7 @@ class ListCommentsUseCaseTest extends \PHPUnit\Framework\TestCase {
 			->setDonationTime( new \DateTime( '1984-01-01' ) );
 	}
 
-	public function testWhenThereAreMoreCommentsThanTheLimit_onlyTheFirstFewArePresented() {
+	public function testWhenThereAreMoreCommentsThanTheLimit_onlyTheFirstFewArePresented(): void {
 		$useCase = new ListCommentsUseCase( new InMemoryCommentFinder(
 			$this->newCommentWithAuthorName( 'name0' ),
 			$this->newCommentWithAuthorName( 'name1' ),
@@ -69,7 +69,7 @@ class ListCommentsUseCaseTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testWhenPageParameterIsTwo_correctOffsetIsUsed() {
+	public function testWhenPageParameterIsTwo_correctOffsetIsUsed(): void {
 		$useCase = new ListCommentsUseCase( new InMemoryCommentFinder(
 			$this->newCommentWithAuthorName( 'name0' ),
 			$this->newCommentWithAuthorName( 'name1' ),
@@ -88,7 +88,7 @@ class ListCommentsUseCaseTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider invalidPageNumberProvider
 	 */
-	public function testGivenInvalidPageNumber_firstPageIsReturned( int $invalidPageNumber ) {
+	public function testGivenInvalidPageNumber_firstPageIsReturned( int $invalidPageNumber ): void {
 		$useCase = new ListCommentsUseCase( new InMemoryCommentFinder(
 			$this->newCommentWithAuthorName( 'name0' ),
 			$this->newCommentWithAuthorName( 'name1' ),
@@ -117,7 +117,7 @@ class ListCommentsUseCaseTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider invalidLimitProvider
 	 */
-	public function testGivenInvalidLimit_10resultsAreReturned( int $invalidLimit ) {
+	public function testGivenInvalidLimit_10resultsAreReturned( int $invalidLimit ): void {
 		$useCase = new ListCommentsUseCase( $this->newInMemoryCommentFinderWithComments( 20 ) );
 
 		$commentList = $useCase->listComments( new CommentListingRequest(

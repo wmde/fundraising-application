@@ -25,14 +25,14 @@ class DoctrineMembershipApplicationTrackerTest extends \PHPUnit\Framework\TestCa
 	 */
 	private $entityManager;
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->entityManager = TestEnvironment::newInstance()->getFactory()->getEntityManager();
 	}
 
 	/**
 	 * @dataProvider validTrackingDataProvider
 	 */
-	public function testValidTrackingDataIsProperlyApplied( string $campaignCode, string $keyword ) {
+	public function testValidTrackingDataIsProperlyApplied( string $campaignCode, string $keyword ): void {
 		$application = ValidMembershipApplication::newDoctrineEntity();
 		$this->persistApplication( $application );
 
@@ -56,7 +56,7 @@ class DoctrineMembershipApplicationTrackerTest extends \PHPUnit\Framework\TestCa
 		];
 	}
 
-	private function persistApplication( MembershipApplication $application ) {
+	private function persistApplication( MembershipApplication $application ): void {
 		$this->entityManager->persist( $application );
 		$this->entityManager->flush();
 	}

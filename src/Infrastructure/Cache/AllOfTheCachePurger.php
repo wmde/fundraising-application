@@ -26,7 +26,7 @@ class AllOfTheCachePurger implements CachePurger {
 	/**
 	 * @throws CachePurgingException
 	 */
-	public function purgeCache() {
+	public function purgeCache(): void {
 		$this->twigEnvironment->clearCacheFiles();
 		$this->twigEnvironment->clearTemplateCache();
 

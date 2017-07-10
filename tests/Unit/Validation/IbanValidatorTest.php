@@ -38,7 +38,7 @@ class IbanValidatorTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider validIbanProvider
 	 */
-	public function testGivenValidIban_validateReturnsTrue( string $iban ) {
+	public function testGivenValidIban_validateReturnsTrue( string $iban ): void {
 		$validator = $this->newValidator();
 		$this->assertTrue( $validator->validate( new Iban( $iban ) )->isSuccessful() );
 	}
@@ -58,7 +58,7 @@ class IbanValidatorTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider wellFormedInvalidIbanProvider
 	 */
-	public function testGivenWellFormedButInvalidIban_validateReturnsFalse( $iban ) {
+	public function testGivenWellFormedButInvalidIban_validateReturnsFalse( $iban ): void {
 		$validator = $this->newValidator();
 		$this->assertFalse( $validator->validate( new Iban( $iban ) )->isSuccessful() );
 	}
@@ -75,12 +75,12 @@ class IbanValidatorTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider notWellFormedIbanProvider
 	 */
-	public function testGivenNotWellFormedIban_validateReturnsFalse( $iban ) {
+	public function testGivenNotWellFormedIban_validateReturnsFalse( $iban ): void {
 		$validator = $this->newValidator();
 		$this->assertFalse( $validator->validate( new Iban( $iban ) )->isSuccessful() );
 	}
 
-	public function testGivenBannedIban_validateReturnsFalse() {
+	public function testGivenBannedIban_validateReturnsFalse(): void {
 		$validator = $this->newValidator( [ 'DE33100205000001194700' ] );
 		$this->assertFalse( $validator->validate( new Iban( 'DE33100205000001194700' ) )->isSuccessful() );
 	}

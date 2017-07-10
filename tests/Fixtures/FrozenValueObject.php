@@ -21,7 +21,7 @@ class FrozenValueObject {
 		return $this->mainContent;
 	}
 
-	public function setMainContent( string $mainContent ) {
+	public function setMainContent( string $mainContent ): void {
 		$this->assertIsWritable();
 		$this->mainContent = $mainContent;
 	}
@@ -30,7 +30,7 @@ class FrozenValueObject {
 		return $this->headerContent;
 	}
 
-	public function setHeaderContent( string $headerContent ) {
+	public function setHeaderContent( string $headerContent ): void {
 		$this->assertIsWritable();
 		$this->headerContent = $headerContent;
 	}
@@ -39,7 +39,7 @@ class FrozenValueObject {
 		return $this->footerContent;
 	}
 
-	public function setFooterContent( string $footerContent ) {
+	public function setFooterContent( string $footerContent ): void {
 		$this->assertIsWritable();
 		$this->footerContent = $footerContent;
 	}

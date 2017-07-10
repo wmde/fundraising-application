@@ -32,7 +32,7 @@ class EmailValidatorTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider fullyValidEmailProvider
 	 */
-	public function testGivenValidMail_validationWithDomainNameCheckSucceeds( $validEmail ) {
+	public function testGivenValidMail_validationWithDomainNameCheckSucceeds( $validEmail ): void {
 		$mailValidator = new EmailValidator( $this->newStubDomainValidator() );
 
 		$this->assertTrue( $mailValidator->validate( $validEmail )->isSuccessful() );
@@ -52,7 +52,7 @@ class EmailValidatorTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider emailWithInvalidDomainProvider
 	 */
-	public function testGivenMailWithInvalidDomain_validationWithDomainNameCheckFails( $invalidEmail ) {
+	public function testGivenMailWithInvalidDomain_validationWithDomainNameCheckFails( $invalidEmail ): void {
 		$mailValidator = new EmailValidator( $this->newStubDomainValidator() );
 
 		$this->assertFalse( $mailValidator->validate( $invalidEmail )->isSuccessful() );
@@ -73,7 +73,7 @@ class EmailValidatorTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider emailWithInvalidFormatProvider
 	 */
-	public function testGivenMailWithInvalidFormat_validationWithoutDomainCheckFails( $invalidEmail ) {
+	public function testGivenMailWithInvalidFormat_validationWithoutDomainCheckFails( $invalidEmail ): void {
 		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
 
 		$this->assertFalse( $mailValidator->validate( $invalidEmail )->isSuccessful() );

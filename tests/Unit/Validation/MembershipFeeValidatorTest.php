@@ -18,7 +18,7 @@ use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
  */
 class MembershipFeeValidatorTest extends \PHPUnit\Framework\TestCase {
 
-	public function testGivenValidRequest_validationSucceeds() {
+	public function testGivenValidRequest_validationSucceeds(): void {
 		$validRequest = $this->newValidRequest();
 		$response = $this->newValidator()->validate(
 			$validRequest->getPaymentAmountInEuros(),
@@ -42,7 +42,7 @@ class MembershipFeeValidatorTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider invalidAmountProvider
 	 */
-	public function testGivenInvalidAmount_validationFails( string $amount, int $intervalInMonths, string $expectedViolation ) {
+	public function testGivenInvalidAmount_validationFails( string $amount, int $intervalInMonths, string $expectedViolation ): void {
 		$request = $this->newValidRequestWithPaymentAmount( $amount, $intervalInMonths );
 
 		$response = $this->newValidator()->validate(
@@ -80,7 +80,7 @@ class MembershipFeeValidatorTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider validAmountProvider
 	 */
-	public function testGivenValidAmount_validationSucceeds( string $amount, int $intervalInMonths ) {
+	public function testGivenValidAmount_validationSucceeds( string $amount, int $intervalInMonths ): void {
 		$request = $this->newValidRequestWithPaymentAmount( $amount, $intervalInMonths );
 
 		$this->assertTrue(
@@ -101,7 +101,7 @@ class MembershipFeeValidatorTest extends \PHPUnit\Framework\TestCase {
 		];
 	}
 
-	public function testGivenValidCompanyAmount_validationSucceeds() {
+	public function testGivenValidCompanyAmount_validationSucceeds(): void {
 		$request = $this->newValidRequestWithPaymentAmount( '100.00', 12 );
 		$request->markApplicantAsCompany();
 
@@ -112,7 +112,7 @@ class MembershipFeeValidatorTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testGivenInvalidCompanyAmount_validationFails() {
+	public function testGivenInvalidCompanyAmount_validationFails(): void {
 		$request = $this->newValidRequestWithPaymentAmount( '99.99', 12 );
 		$request->markApplicantAsCompany();
 

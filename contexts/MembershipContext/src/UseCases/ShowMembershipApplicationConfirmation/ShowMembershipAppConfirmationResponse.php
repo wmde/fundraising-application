@@ -33,7 +33,7 @@ class ShowMembershipAppConfirmationResponse {
 	 *
 	 * @return Application|null
 	 */
-	public function getApplication() {
+	public function getApplication(): ?Application {
 		return $this->membershipApplication;
 	}
 

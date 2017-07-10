@@ -35,7 +35,7 @@ class PayPalPaymentNotificationVerifier implements PaymentNotificationVerifier {
 	 *
 	 * @throws PayPalPaymentNotificationVerifierException
 	 */
-	public function verify( array $request ) {
+	public function verify( array $request ): void {
 		if ( !$this->matchesReceiverAddress( $request ) ) {
 			throw new PayPalPaymentNotificationVerifierException(
 				'Payment receiver address does not match',

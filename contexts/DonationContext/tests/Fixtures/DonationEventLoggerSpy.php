@@ -14,7 +14,7 @@ class DonationEventLoggerSpy implements DonationEventLogger {
 
 	private $logCalls = [];
 
-	public function log( int $donationId, string $message ) {
+	public function log( int $donationId, string $message ): void {
 		$this->logCalls[] = [ $donationId, $message ];
 	}
 

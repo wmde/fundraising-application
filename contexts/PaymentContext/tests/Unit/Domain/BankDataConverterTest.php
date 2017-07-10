@@ -19,17 +19,17 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
  */
 class BankDataConverterTest extends \PHPUnit\Framework\TestCase {
 
-	public function setUp() {
+	public function setUp(): void {
 		if ( !function_exists( 'lut_init' ) ) {
 			$this->markTestSkipped( 'The konto_check needs to be installed!' );
 		}
 	}
 
-	public function testWhenUsingConfigLutPath_constructorCreatesConverter() {
+	public function testWhenUsingConfigLutPath_constructorCreatesConverter(): void {
 		$this->assertInstanceOf( BankDataConverter::class, $this->newBankDataConverter() );
 	}
 
-	public function testGivenNotExistingBankDataFile_constructorThrowsException() {
+	public function testGivenNotExistingBankDataFile_constructorThrowsException(): void {
 		$this->expectException( BankDataLibraryInitializationException::class );
 		$this->newBankDataConverter( '/foo/bar/awesome.data' );
 	}
@@ -37,7 +37,7 @@ class BankDataConverterTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider ibanTestProvider
 	 */
-	public function testWhenGivenInvalidIban_converterThrowsException( $ibanToTest ) {
+	public function testWhenGivenInvalidIban_converterThrowsException( $ibanToTest ): void {
 		$bankConverter = $this->newBankDataConverter();
 
 		$this->expectException( InvalidArgumentException::class );
@@ -57,13 +57,13 @@ class BankDataConverterTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider ibanTestProvider
 	 */
-	public function testWhenGivenInvalidIban_validateIbanReturnsFalse( $ibanToTest ) {
+	public function testWhenGivenInvalidIban_validateIbanReturnsFalse( $ibanToTest ): void {
 		$bankConverter = $this->newBankDataConverter();
 
 		$this->assertFalse( $bankConverter->validateIban( new Iban( $ibanToTest ) ) );
 	}
 
-	public function testWhenGivenValidIban_converterReturnsBankData() {
+	public function testWhenGivenValidIban_converterReturnsBankData(): void {
 		$bankConverter = $this->newBankDataConverter();
 
 		$bankData = new BankData();
@@ -80,7 +80,7 @@ class BankDataConverterTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testWhenGivenValidNonDEIban_converterReturnsIBAN() {
+	public function testWhenGivenValidNonDEIban_converterReturnsIBAN(): void {
 		$bankConverter = $this->newBankDataConverter();
 
 		$bankData = new BankData();
@@ -97,7 +97,7 @@ class BankDataConverterTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testWhenGivenValidIban_validateIbanReturnsTrue() {
+	public function testWhenGivenValidIban_validateIbanReturnsTrue(): void {
 		$bankConverter = $this->newBankDataConverter();
 
 		$this->assertTrue( $bankConverter->validateIban( new Iban( 'DE12500105170648489890' ) ) );
@@ -107,7 +107,7 @@ class BankDataConverterTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider accountTestProvider
 	 */
-	public function testWhenGivenInvalidAccountData_converterThrowsException( $accountToTest, $bankCodeToTest ) {
+	public function testWhenGivenInvalidAccountData_converterThrowsException( $accountToTest, $bankCodeToTest ): void {
 		$bankConverter = $this->newBankDataConverter();
 
 		$this->expectException( RuntimeException::class );
@@ -125,7 +125,7 @@ class BankDataConverterTest extends \PHPUnit\Framework\TestCase {
 		];
 	}
 
-	public function testWhenGivenValidAccountData_converterReturnsBankData() {
+	public function testWhenGivenValidAccountData_converterReturnsBankData(): void {
 		$bankConverter = $this->newBankDataConverter();
 
 		$bankData = new BankData();

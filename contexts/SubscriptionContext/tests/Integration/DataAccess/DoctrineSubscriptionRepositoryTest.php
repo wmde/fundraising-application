@@ -25,7 +25,7 @@ class DoctrineSubscriptionRepositoryTest extends \PHPUnit\Framework\TestCase {
 	 */
 	private $entityManager;
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->entityManager = TestEnvironment::newInstance()->getFactory()->getEntityManager();
 		parent::setUp();
 	}
@@ -34,7 +34,7 @@ class DoctrineSubscriptionRepositoryTest extends \PHPUnit\Framework\TestCase {
 		return $this->entityManager->getRepository( Subscription::class );
 	}
 
-	public function testGivenASubscription_itIsStored() {
+	public function testGivenASubscription_itIsStored(): void {
 		$subscription = new Subscription();
 		$subscription->setEmail( 'nyan@awesomecats.com' );
 		$subscription->setAddress( new Address() );
@@ -44,14 +44,14 @@ class DoctrineSubscriptionRepositoryTest extends \PHPUnit\Framework\TestCase {
 		$this->assertEquals( [$subscription], $expected );
 	}
 
-	public function testGivenARecentSubscription_itIsCounted() {
+	public function testGivenARecentSubscription_itIsCounted(): void {
 		$firstSubscription = $this->persistFirstSubscription();
 		$this->entityManager->flush();
 		$repository = new DoctrineSubscriptionRepository( $this->entityManager );
 		$this->assertSame( 1, $repository->countSimilar( $firstSubscription, new \DateTime( '100 years ago' ) ) );
 	}
 
-	public function testMultipleSubscriptions_onlySimilarAreCounted() {
+	public function testMultipleSubscriptions_onlySimilarAreCounted(): void {
 		$this->persistFirstSubscription();
 		$this->persistSecondSubscription();
 		$thirdSubscription = $this->persistThirdSubscription();
@@ -62,7 +62,7 @@ class DoctrineSubscriptionRepositoryTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( 2, $repository->countSimilar( $thirdSubscription, new \DateTime( '100 years ago' ) ) );
 	}
 
-	public function testDatabaseLayerExceptionsAreConvertedToDomainExceptions() {
+	public function testDatabaseLayerExceptionsAreConvertedToDomainExceptions(): void {
 		$entityManager = $this->getMockBuilder( EntityManager::class )
 			->setMethods( [ 'getRepository', 'getClassMetadata', 'persist', 'flush' ] )
 			->disableOriginalConstructor()

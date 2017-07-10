@@ -25,7 +25,7 @@ class ShowDonationConfirmationUseCaseTest extends \PHPUnit\Framework\TestCase {
 	private const ACCESS_TOKEN = 'some token';
 	private const UPDATE_TOKEN = 'some other token';
 
-	public function testWhenAuthorizerSaysNoCanHaz_accessIsNotPermitted() {
+	public function testWhenAuthorizerSaysNoCanHaz_accessIsNotPermitted(): void {
 		$useCase = new ShowDonationConfirmationUseCase(
 			new FailingDonationAuthorizer(),
 			$this->newFixedTokenFetcher(),
@@ -40,7 +40,7 @@ class ShowDonationConfirmationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$this->assertNull( $response->getDonation() );
 	}
 
-	public function testWhenAuthorizerSaysSureThingBro_accessIsPermitted() {
+	public function testWhenAuthorizerSaysSureThingBro_accessIsPermitted(): void {
 		$useCase = new ShowDonationConfirmationUseCase(
 			new SucceedingDonationAuthorizer(),
 			$this->newFixedTokenFetcher(),
@@ -54,7 +54,7 @@ class ShowDonationConfirmationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$this->assertTrue( $response->accessIsPermitted() );
 	}
 
-	public function testWhenDonationDoesNotExist_accessIsNotPermitted() {
+	public function testWhenDonationDoesNotExist_accessIsNotPermitted(): void {
 		$useCase = new ShowDonationConfirmationUseCase(
 			new SucceedingDonationAuthorizer(),
 			$this->newFixedTokenFetcher(),
@@ -69,7 +69,7 @@ class ShowDonationConfirmationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$this->assertNull( $response->getDonation() );
 	}
 
-	public function testWhenDonationExistsAndAccessIsAllowed_donationIsReturned() {
+	public function testWhenDonationExistsAndAccessIsAllowed_donationIsReturned(): void {
 		$donation = ValidDonation::newDirectDebitDonation();
 
 		$useCase = new ShowDonationConfirmationUseCase(

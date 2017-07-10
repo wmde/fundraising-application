@@ -91,7 +91,7 @@ class ApplyForMembershipUseCase {
 		return ( new MembershipApplicationBuilder() )->newApplicationFromRequest( $request );
 	}
 
-	private function sendConfirmationEmail( Application $application ) {
+	private function sendConfirmationEmail( Application $application ): void {
 		$this->mailer->sendMail(
 			$application->getApplicant()->getEmailAddress(),
 			[

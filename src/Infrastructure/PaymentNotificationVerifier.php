@@ -18,6 +18,6 @@ interface PaymentNotificationVerifier {
 	 *
 	 * @throws PayPalPaymentNotificationVerifierException
 	 */
-	public function verify( array $request );
+	public function verify( array $request ): void;
 
 }

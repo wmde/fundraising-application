@@ -44,7 +44,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		$this->entityManager = $entityManager;
 	}
 
-	public function storeDonation( Donation $donation ) {
+	public function storeDonation( Donation $donation ): void {
 		if ( $donation->getId() === null ) {
 			$this->insertDonation( $donation );
 		}
@@ -53,7 +53,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		}
 	}
 
-	private function insertDonation( Donation $donation ) {
+	private function insertDonation( Donation $donation ): void {
 		$doctrineDonation = new DoctrineDonation();
 		$this->updateDonationEntity( $doctrineDonation, $donation );
 
@@ -68,7 +68,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		$donation->assignId( $doctrineDonation->getId() );
 	}
 
-	private function updateDonation( Donation $donation ) {
+	private function updateDonation( Donation $donation ): void {
 		$doctrineDonation = $this->getDoctrineDonationById( $donation->getId() );
 
 		if ( $doctrineDonation === null ) {
@@ -86,7 +86,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		}
 	}
 
-	private function updateDonationEntity( DoctrineDonation $doctrineDonation, Donation $donation ) {
+	private function updateDonationEntity( DoctrineDonation $doctrineDonation, Donation $donation ): void {
 		$doctrineDonation->setId( $donation->getId() );
 		$this->updatePaymentInformation( $doctrineDonation, $donation );
 		$this->updateDonorInformation( $doctrineDonation, $donation->getDonor() );
@@ -99,7 +99,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		) );
 	}
 
-	private function updatePaymentInformation( DoctrineDonation $doctrineDonation, Donation $donation ) {
+	private function updatePaymentInformation( DoctrineDonation $doctrineDonation, Donation $donation ): void {
 		$doctrineDonation->setStatus( $donation->getStatus() );
 		$doctrineDonation->setAmount( $donation->getAmount()->getEuroString() );
 		$doctrineDonation->setPaymentIntervalInMonths( $donation->getPaymentIntervalInMonths() );
@@ -108,7 +108,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		$doctrineDonation->setBankTransferCode( $this->getBankTransferCode( $donation->getPaymentMethod() ) );
 	}
 
-	private function updateDonorInformation( DoctrineDonation $doctrineDonation, Donor $donor = null ) {
+	private function updateDonorInformation( DoctrineDonation $doctrineDonation, Donor $donor = null ): void {
 		if ( $donor === null ) {
 			if ( $doctrineDonation->getId() === null ) {
 				$doctrineDonation->setDonorFullName( 'Anonym' );
@@ -120,7 +120,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		}
 	}
 
-	private function updateComment( DoctrineDonation $doctrineDonation, DonationComment $comment = null ) {
+	private function updateComment( DoctrineDonation $doctrineDonation, DonationComment $comment = null ): void {
 		if ( $comment === null ) {
 			$doctrineDonation->setIsPublic( false );
 			$doctrineDonation->setComment( '' );

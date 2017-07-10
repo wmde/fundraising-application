@@ -33,7 +33,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 	const CURRENCY_CODE = 'EUR';
 	const STATUS = 'processed';
 
-	public function testGivenInvalidRequest_applicationIndicatesError() {
+	public function testGivenInvalidRequest_applicationIndicatesError(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setCreditCardService( new FakeCreditCardService() );
 			$client->request(
@@ -48,7 +48,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testGivenValidRequest_applicationIndicatesSuccess() {
+	public function testGivenValidRequest_applicationIndicatesSuccess(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setTokenGenerator( new FixedTokenGenerator(
 				self::UPDATE_TOKEN,
@@ -92,7 +92,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	private function assertCreditCardDataGotPersisted( DonationRepository $donationRepo, $request ) {
+	private function assertCreditCardDataGotPersisted( DonationRepository $donationRepo, $request ): void {
 		$donation = $donationRepo->getDonationById( self::DONATION_ID );
 
 		/** @var \WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\CreditCardPayment $paymentMethod */

@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\Cli\ConfigValidation\SchemaLoader;
  */
 class SchemaLoaderTest extends \PHPUnit\Framework\TestCase {
 
-	public function testOnFileFetchingError_runtimeExceptionIsThrown() {
+	public function testOnFileFetchingError_runtimeExceptionIsThrown(): void {
 		$fileFetcher = $this->createMock( FileFetcher::class );
 		$fileFetcher->method( 'fetchFile' )->willThrowException( new \RuntimeException() );
 		$loader = new SchemaLoader( $fileFetcher );
@@ -21,7 +21,7 @@ class SchemaLoaderTest extends \PHPUnit\Framework\TestCase {
 		$loader->loadSchema( 'test.json' );
 	}
 
-	public function testGivenInvalidJson_validationExceptionIsThrown() {
+	public function testGivenInvalidJson_validationExceptionIsThrown(): void {
 		$fileFetcher = $this->createMock( FileFetcher::class );
 		$fileFetcher->method( 'fetchFile' )->willReturn( 'Not a valid JSON string' );
 		$loader = new SchemaLoader( $fileFetcher );
@@ -29,7 +29,7 @@ class SchemaLoaderTest extends \PHPUnit\Framework\TestCase {
 		$loader->loadSchema( 'test.json' );
 	}
 
-	public function testGivenJsonRootIsNotAnObject_validationExceptionIsThrown() {
+	public function testGivenJsonRootIsNotAnObject_validationExceptionIsThrown(): void {
 		$fileFetcher = $this->createMock( FileFetcher::class );
 		$fileFetcher->method( 'fetchFile' )->willReturn( '"A valid JSON string"' );
 		$loader = new SchemaLoader( $fileFetcher );
@@ -37,7 +37,7 @@ class SchemaLoaderTest extends \PHPUnit\Framework\TestCase {
 		$loader->loadSchema( 'test.json' );
 	}
 
-	public function testGivenValidJson_itIsReturnedAsObject() {
+	public function testGivenValidJson_itIsReturnedAsObject(): void {
 		$fileFetcher = $this->createMock( FileFetcher::class );
 		$fileFetcher->method( 'fetchFile' )->willReturn( '{"testProperty": "A valid JSON string"}' );
 		$loader = new SchemaLoader( $fileFetcher );

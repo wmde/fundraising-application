@@ -19,7 +19,7 @@ class GenerateIbanRouteTest extends WebRouteTestCase {
 	const INVALID_ACCOUNT_NUMBER = '1015754241';
 	const VALID_ACCOUNT_NUMBER = '1015754243';
 
-	public function testGivenInvalidBankAccountData_failureResponseIsReturned() {
+	public function testGivenInvalidBankAccountData_failureResponseIsReturned(): void {
 		$client = $this->createClient();
 
 		$client->request(
@@ -37,7 +37,7 @@ class GenerateIbanRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	public function testGivenValidBankAccountData_successResponseIsReturned() {
+	public function testGivenValidBankAccountData_successResponseIsReturned(): void {
 		$client = $this->createClient();
 
 		$client->request(

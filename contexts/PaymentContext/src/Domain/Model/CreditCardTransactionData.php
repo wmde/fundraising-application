@@ -93,18 +93,11 @@ class CreditCardTransactionData {
 		return $this;
 	}
 
-	/**
-	 * @return CreditCardExpiry|null
-	 */
-	public function getCardExpiry() {
+	public function getCardExpiry(): ?CreditCardExpiry {
 		return $this->cardExpiry;
 	}
 
-	/**
-	 * @param CreditCardExpiry|null $cardExpiry
-	 * @return self
-	 */
-	public function setCardExpiry( $cardExpiry ) {
+	public function setCardExpiry( ?CreditCardExpiry $cardExpiry ): self {
 		$this->assertIsWritable();
 		$this->cardExpiry = $cardExpiry;
 		return $this;

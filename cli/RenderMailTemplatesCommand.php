@@ -30,7 +30,7 @@ class RenderMailTemplatesCommand extends Command {
 
 	private const NAME = 'dump-mail-tpl';
 
-	protected function configure() {
+	protected function configure(): void {
 		$this->setName( self::NAME )
 			->setDescription( 'Dump rendered Mail_* Twig templates' )
 			->setDefinition(
@@ -45,7 +45,7 @@ class RenderMailTemplatesCommand extends Command {
 			);
 	}
 
-	protected function execute( InputInterface $input, OutputInterface $output ) {
+	protected function execute( InputInterface $input, OutputInterface $output ): void {
 		$config = $this->getDefaultConfig();
 		$config['twig']['strict-variables'] = true;
 

@@ -25,7 +25,7 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 		return $address;
 	}
 
-	public function testGivenAnUnconfirmedSubscriptionRequest_successPageIsDisplayed() {
+	public function testGivenAnUnconfirmedSubscriptionRequest_successPageIsDisplayed(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$subscription = new Subscription();
 			$subscription->setConfirmationCode( 'deadbeef' );
@@ -45,7 +45,7 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testGivenANonHexadecimalConfirmationCode_confirmationPageIsNotFound() {
+	public function testGivenANonHexadecimalConfirmationCode_confirmationPageIsNotFound(): void {
 		$client = $this->createClient( [], null, self::DISABLE_DEBUG );
 
 		$client->request(
@@ -56,7 +56,7 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 		$this->assert404( $client->getResponse() );
 	}
 
-	public function testGivenNoSubscription_anErrorIsDisplayed() {
+	public function testGivenNoSubscription_anErrorIsDisplayed(): void {
 		$client = $this->createClient();
 
 		$client->request(
@@ -69,7 +69,7 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'subscription_confirmation_code_not_found', $response->getContent() );
 	}
 
-	public function testGivenAConfirmedSubscriptionRequest_successPageIsDisplayed() {
+	public function testGivenAConfirmedSubscriptionRequest_successPageIsDisplayed(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$subscription = new Subscription();
 			$subscription->setConfirmationCode( 'deadbeef' );

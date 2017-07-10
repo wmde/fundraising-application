@@ -93,7 +93,7 @@ class DonationFormViolationPresenter {
 	 * @param ConstraintViolation[] $violations
 	 * @return array
 	 */
-	private function getViolatedFields( array $violations ) {
+	private function getViolatedFields( array $violations ): array {
 		$fieldNames = [];
 		foreach ( $violations as $violation ) {
 			$fieldNames[$violation->getSource()] = $violation->getMessageIdentifier();

@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\Validation\ValidationResult;
  */
 class ValidatorTestCase extends \PHPUnit\Framework\TestCase {
 
-	protected function assertConstraintWasViolated( ValidationResult $result, string $fieldName ) {
+	protected function assertConstraintWasViolated( ValidationResult $result, string $fieldName ): void {
 		$this->assertContainsOnlyInstancesOf( ConstraintViolation::class, $result->getViolations() );
 		$this->assertTrue( $result->hasViolations() );
 

@@ -30,7 +30,7 @@ class ReferrerGeneralizerTest extends ValidatorTestCase {
 	 * @param string $expected
 	 * @param string $url
 	 */
-	public function testGeneralization( string $url, string $expected ) {
+	public function testGeneralization( string $url, string $expected ): void {
 		$generalizer = new ReferrerGeneralizer( 'web', $this->domainMap );
 		$this->assertSame( $expected, $generalizer->generalize( $url ) );
 	}

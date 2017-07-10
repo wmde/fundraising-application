@@ -25,7 +25,7 @@ class MembershipApplicationBuilderTest extends \PHPUnit\Framework\TestCase {
 	const COMPANY_NAME = 'Malenfant asteroid mining';
 	const OMIT_OPTIONAL_FIELDS = true;
 
-	public function testCompanyMembershipRequestGetsBuildCorrectly() {
+	public function testCompanyMembershipRequestGetsBuildCorrectly(): void {
 		$request = $this->newCompanyMembershipRequest();
 
 		$application = ( new MembershipApplicationBuilder() )->newApplicationFromRequest( $request );
@@ -90,7 +90,7 @@ class MembershipApplicationBuilderTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	private function assertIsExpectedCompanyPersonName( ApplicantName $name ) {
+	private function assertIsExpectedCompanyPersonName( ApplicantName $name ): void {
 		$this->assertEquals(
 			$this->getCompanyPersonName(),
 			$name
@@ -109,7 +109,7 @@ class MembershipApplicationBuilderTest extends \PHPUnit\Framework\TestCase {
 		return $name->assertNoNullFields()->freeze();
 	}
 
-	private function assertIsExpectedAddress( ApplicantAddress $address ) {
+	private function assertIsExpectedAddress( ApplicantAddress $address ): void {
 		$this->assertEquals(
 			$this->getPhysicalAddress(),
 			$address
@@ -127,7 +127,7 @@ class MembershipApplicationBuilderTest extends \PHPUnit\Framework\TestCase {
 		return $address->assertNoNullFields()->freeze();
 	}
 
-	public function testWhenNoBirthDateAndPhoneNumberIsGiven_membershipApplicationIsStillBuiltCorrectly() {
+	public function testWhenNoBirthDateAndPhoneNumberIsGiven_membershipApplicationIsStillBuiltCorrectly(): void {
 		$request = $this->newCompanyMembershipRequest( self::OMIT_OPTIONAL_FIELDS );
 
 		$application = ( new MembershipApplicationBuilder() )->newApplicationFromRequest( $request );
@@ -141,7 +141,7 @@ class MembershipApplicationBuilderTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testWhenBuildingCompanyApplication_salutationFieldIsSet() {
+	public function testWhenBuildingCompanyApplication_salutationFieldIsSet(): void {
 		$request = $this->newCompanyMembershipRequest( self::OMIT_OPTIONAL_FIELDS );
 
 		$application = ( new MembershipApplicationBuilder() )->newApplicationFromRequest( $request );

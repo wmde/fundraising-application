@@ -30,7 +30,7 @@ class McpCreditCardServiceTest extends \PHPUnit\Framework\TestCase {
 
 	private $customerId;
 
-	public function setUp() {
+	public function setUp(): void {
 		$config = TestEnvironment::newInstance( [] )->getConfig();
 		$this->accessKey = $config['creditcard']['access-key'];
 		$this->projectId = $config['creditcard']['project-id'];
@@ -67,17 +67,14 @@ class McpCreditCardServiceTest extends \PHPUnit\Framework\TestCase {
 		return $result['sessionId'];
 	}
 
-	public function testGivenValidCustomerId_expirationDateIsRetrieved() {
+	public function testGivenValidCustomerId_expirationDateIsRetrieved(): void {
 		$service = new McpCreditCardService( $this->dispatcher, $this->accessKey, true );
 		$creditCardInfo = $service->getExpirationDate( $this->customerId );
 		$this->assertSame( (int)self::CARD_EXPIRY_MONTH, $creditCardInfo->getMonth() );
 		$this->assertSame( (int)self::CARD_EXPIRY_YEAR, $creditCardInfo->getYear() );
 	}
 
-	/**
-	 * @return IMcpCreditcardService_v1_5
-	 */
-	private function newDispatcher() {
+	private function newDispatcher(): IMcpCreditcardService_v1_5 {
 		return new TNvpServiceDispatcher(
 			'IMcpCreditcardService_v1_5',
 			'https://sipg.micropayment.de/public/creditcard/v1.5/nvp/'

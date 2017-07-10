@@ -16,7 +16,7 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
  */
 class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 
-	public function testWhenThereAreNoComments_rssFeedIsEmpty() {
+	public function testWhenThereAreNoComments_rssFeedIsEmpty(): void {
 		$client = $this->createClient();
 		$crawler = $client->request( 'GET', '/list-comments.html' );
 
@@ -29,7 +29,7 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	public function testWhenAreThreeComments_listSizeIsShownAsThree() {
+	public function testWhenAreThreeComments_listSizeIsShownAsThree(): void {
 		$client = $this->createClient( [], function ( FunFunFactory $factory ) {
 			$this->createThreeComments( $factory->getEntityManager() );
 		} );
@@ -49,7 +49,7 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 		$entityManager->flush();
 	}
 
-	private function persistFirstComment( EntityManager $entityManager ) {
+	private function persistFirstComment( EntityManager $entityManager ): void {
 		$firstDonation = new Donation();
 		$firstDonation->setPublicRecord( 'First name' );
 		$firstDonation->setComment( 'First comment' );
@@ -59,7 +59,7 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 		$entityManager->persist( $firstDonation );
 	}
 
-	private function persistSecondComment( EntityManager $entityManager ) {
+	private function persistSecondComment( EntityManager $entityManager ): void {
 		$secondDonation = new Donation();
 		$secondDonation->setPublicRecord( 'Second name' );
 		$secondDonation->setComment( 'Second comment' );
@@ -69,7 +69,7 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 		$entityManager->persist( $secondDonation );
 	}
 
-	private function persistEvilComment( EntityManager $entityManager ) {
+	private function persistEvilComment( EntityManager $entityManager ): void {
 		$secondDonation = new Donation();
 		$secondDonation->setPublicRecord( 'Third name & company' );
 		$secondDonation->setComment( 'Third <script> comment' );
@@ -79,7 +79,7 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 		$entityManager->persist( $secondDonation );
 	}
 
-	public function testWhenAreComments_theyAreInTheHtml() {
+	public function testWhenAreComments_theyAreInTheHtml(): void {
 		$client = $this->createClient( [], function ( FunFunFactory $factory ) {
 			$this->createThreeComments( $factory->getEntityManager() );
 		} );
@@ -115,7 +115,7 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	public function testCommentsGetEscaped() {
+	public function testCommentsGetEscaped(): void {
 		$client = $this->createClient( [], function ( FunFunFactory $factory ) {
 			$this->createThreeComments( $factory->getEntityManager() );
 		} );
@@ -128,7 +128,7 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	public function testGivenLimitAndPageTwo_limitNumberOfCommentsAreSkipped() {
+	public function testGivenLimitAndPageTwo_limitNumberOfCommentsAreSkipped(): void {
 		$client = $this->createClient( [], function ( FunFunFactory $factory ) {
 			$this->createThreeComments( $factory->getEntityManager() );
 		} );

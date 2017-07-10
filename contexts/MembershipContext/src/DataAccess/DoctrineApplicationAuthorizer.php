@@ -38,12 +38,7 @@ class DoctrineApplicationAuthorizer implements ApplicationAuthorizer {
 			&& $this->updateTokenMatches( $application );
 	}
 
-	/**
-	 * @param int $applicationId
-	 *
-	 * @return MembershipApplication|null
-	 */
-	private function getApplicationById( int $applicationId ) {
+	private function getApplicationById( int $applicationId ): ?MembershipApplication {
 		return $this->entityManager->find( MembershipApplication::class, $applicationId );
 	}
 

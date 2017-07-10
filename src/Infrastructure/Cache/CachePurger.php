@@ -13,6 +13,6 @@ interface CachePurger {
 	/**
 	 * @throws CachePurgingException
 	 */
-	public function purgeCache();
+	public function purgeCache(): void;
 
 }

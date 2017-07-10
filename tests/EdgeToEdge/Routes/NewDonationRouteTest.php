@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 class NewDonationRouteTest extends WebRouteTestCase {
 
 	/** @dataProvider paymentInputProvider */
-	public function testGivenPaymentInput_paymentDataIsInitiallyValidated( $validPaymentInput, $expectedValidity ) {
+	public function testGivenPaymentInput_paymentDataIsInitiallyValidated( $validPaymentInput, $expectedValidity ): void {
 		$client = $this->createClient();
 		$client->request(
 			'POST',
@@ -64,7 +64,7 @@ class NewDonationRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	public function testWhenPassingTrackingData_itGetsPassedToThePresenter() {
+	public function testWhenPassingTrackingData_itGetsPassedToThePresenter(): void {
 		$client = $this->createClient();
 		$client->request(
 			'POST',

@@ -24,18 +24,18 @@ class DoctrineDonationEventLoggerTest extends \PHPUnit\Framework\TestCase {
 	 */
 	private $entityManager;
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->entityManager = TestEnvironment::newInstance()->getFactory()->getEntityManager();
 	}
 
-	public function testIfDonationDoesNotExistLoggingFails() {
+	public function testIfDonationDoesNotExistLoggingFails(): void {
 		$logger = new DoctrineDonationEventLogger( $this->entityManager, $this->getDefaultTimeFunction() );
 
 		$this->expectException( DonationEventLogException::class );
 		$logger->log( 1234, self::DEFAULT_MESSAGE );
 	}
 
-	public function testWhenPersistenceFails_domainExceptionIsThrown() {
+	public function testWhenPersistenceFails_domainExceptionIsThrown(): void {
 		$logger = new DoctrineDonationEventLogger(
 			ThrowingEntityManager::newInstance( $this ),
 			$this->getDefaultTimeFunction()
@@ -45,7 +45,7 @@ class DoctrineDonationEventLoggerTest extends \PHPUnit\Framework\TestCase {
 		$logger->log( 1234, self::DEFAULT_MESSAGE );
 	}
 
-	public function testWhenNoLogExists_logGetsAdded() {
+	public function testWhenNoLogExists_logGetsAdded(): void {
 		$donation = new Donation();
 		$this->entityManager->persist( $donation );
 		$this->entityManager->flush();
@@ -65,7 +65,7 @@ class DoctrineDonationEventLoggerTest extends \PHPUnit\Framework\TestCase {
 		$this->assertEquals( $expectedLog, $data['log'] );
 	}
 
-	public function testWhenLogExists_logGetsAppended() {
+	public function testWhenLogExists_logGetsAppended(): void {
 		$donation = new Donation();
 		$donation->encodeAndSetData( [ 'log' => [ '2014-01-01 0:00:00' => 'New year!' ] ] );
 		$this->entityManager->persist( $donation );

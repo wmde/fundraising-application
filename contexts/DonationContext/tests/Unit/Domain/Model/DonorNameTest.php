@@ -17,7 +17,7 @@ class DonorNameTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider privatePersonProvider
 	 */
-	public function testGivenPersonName_determineFullNameReturnsFullName( $expectedValue, $data ) {
+	public function testGivenPersonName_determineFullNameReturnsFullName( $expectedValue, $data ): void {
 		$personName = DonorName::newPrivatePersonName();
 
 		$personName->setCompanyName( $data['company'] );

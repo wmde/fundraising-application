@@ -16,7 +16,7 @@ use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
  */
 class DonorNameValidatorTest extends ValidatorTestCase {
 
-	public function testGivenValidPersonName_validationSucceeds() {
+	public function testGivenValidPersonName_validationSucceeds(): void {
 		$validator = new DonorNameValidator();
 		$personName = DonorName::newPrivatePersonName();
 		$personName->setSalutation( 'Mr.' );
@@ -27,7 +27,7 @@ class DonorNameValidatorTest extends ValidatorTestCase {
 		$this->assertTrue( $validator->validate( $personName )->isSuccessful() );
 	}
 
-	public function testGivenEmptyPersonName_validationFails() {
+	public function testGivenEmptyPersonName_validationFails(): void {
 		$validator = new DonorNameValidator();
 		$personName = DonorName::newPrivatePersonName();
 
@@ -37,7 +37,7 @@ class DonorNameValidatorTest extends ValidatorTestCase {
 		$this->assertConstraintWasViolated( $result, 'lastName' );
 	}
 
-	public function testGivenValidCompanyName_validationSucceeds() {
+	public function testGivenValidCompanyName_validationSucceeds(): void {
 		$validator = new DonorNameValidator();
 		$personName = DonorName::newCompanyName();
 		$personName->setCompanyName( 'Globex Corp.' );
@@ -45,7 +45,7 @@ class DonorNameValidatorTest extends ValidatorTestCase {
 		$this->assertTrue( $validator->validate( $personName )->isSuccessful() );
 	}
 
-	public function testGivenEmptyCompanyName_validationFails() {
+	public function testGivenEmptyCompanyName_validationFails(): void {
 		$validator = new DonorNameValidator();
 
 		$this->assertConstraintWasViolated(

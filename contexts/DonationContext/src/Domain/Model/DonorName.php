@@ -49,7 +49,7 @@ class DonorName {
 		return $this->companyName;
 	}
 
-	public function setCompanyName( string $companyName ) {
+	public function setCompanyName( string $companyName ): void {
 		$this->assertIsWritable();
 		$this->companyName = $companyName;
 	}
@@ -58,7 +58,7 @@ class DonorName {
 		return $this->personType === self::PERSON_COMPANY ? self::COMPANY_SALUTATION : $this->salutation;
 	}
 
-	public function setSalutation( string $salutation ) {
+	public function setSalutation( string $salutation ): void {
 		$this->assertIsWritable();
 		$this->salutation = $salutation;
 	}
@@ -67,7 +67,7 @@ class DonorName {
 		return $this->title;
 	}
 
-	public function setTitle( string $title ) {
+	public function setTitle( string $title ): void {
 		$this->assertIsWritable();
 		$this->title = $title;
 	}
@@ -76,7 +76,7 @@ class DonorName {
 		return $this->firstName;
 	}
 
-	public function setFirstName( string $firstName ) {
+	public function setFirstName( string $firstName ): void {
 		$this->assertIsWritable();
 		$this->firstName = $firstName;
 	}
@@ -85,7 +85,7 @@ class DonorName {
 		return $this->lastName;
 	}
 
-	public function setLastName( string $lastName ) {
+	public function setLastName( string $lastName ): void {
 		$this->assertIsWritable();
 		$this->lastName = $lastName;
 	}

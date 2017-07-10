@@ -21,7 +21,7 @@ class BestEffortDonationEventLoggerTest extends \PHPUnit\Framework\TestCase {
 	const DONATION_ID = 1337;
 	const MESSAGE = 'a semi-important event has occured';
 
-	public function testLogDataIsPassed() {
+	public function testLogDataIsPassed(): void {
 		$eventLogger = new DonationEventLoggerSpy();
 		$bestEffortLogger = new BestEffortDonationEventLogger(
 			$eventLogger,
@@ -31,7 +31,7 @@ class BestEffortDonationEventLoggerTest extends \PHPUnit\Framework\TestCase {
 		$this->assertCount( 1, $eventLogger->getLogCalls() );
 	}
 
-	public function testWhenNoExceptionOccurs_nothingIsLogged() {
+	public function testWhenNoExceptionOccurs_nothingIsLogged(): void {
 		$eventLogger = new DonationEventLoggerSpy();
 		$logger = $this->getLogger();
 		$logger->expects( $this->never() )->method( $this->anything() );
@@ -42,7 +42,7 @@ class BestEffortDonationEventLoggerTest extends \PHPUnit\Framework\TestCase {
 		$bestEffortLogger->log( self::DONATION_ID, self::MESSAGE );
 	}
 
-	public function testWhenEventLoggerThrows_itIsLogged() {
+	public function testWhenEventLoggerThrows_itIsLogged(): void {
 		$eventLogger = $this->createMock( DonationEventLogger::class );
 		$eventLogger->method( 'log' )->will( $this->throwException( new DonationEventLogException( 'Fire Alarm!' ) ) );
 		$logger = $this->getLogger();

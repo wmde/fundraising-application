@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
  */
 class ValidateAddressRouteTest extends WebRouteTestCase {
 
-	public function testGivenValidAddress_validationReturnsSuccess() {
+	public function testGivenValidAddress_validationReturnsSuccess(): void {
 		$client = $this->createClient();
 		$client->followRedirects( false );
 
@@ -27,7 +27,7 @@ class ValidateAddressRouteTest extends WebRouteTestCase {
 		$this->assertJsonSuccessResponse( ['status' => 'OK'], $response );
 	}
 
-	public function testGivenInvalidCompanyAddress_validationReturnsErrorMessage() {
+	public function testGivenInvalidCompanyAddress_validationReturnsErrorMessage(): void {
 		$client = $this->createClient();
 		$client->followRedirects( false );
 

@@ -42,7 +42,7 @@ class MembershipFeeValidator {
 		return new Result( $this->violations );
 	}
 
-	private function validateAmount() {
+	private function validateAmount(): void {
 		try {
 			$amount = Euro::newFromString( $this->membershipFee );
 		}
@@ -54,11 +54,11 @@ class MembershipFeeValidator {
 		$this->validateAmountMeetsYearlyMinimum( $amount );
 	}
 
-	private function addViolation( string $source, string $type ) {
+	private function addViolation( string $source, string $type ): void {
 		$this->violations[$source] = $type;
 	}
 
-	private function validateAmountMeetsYearlyMinimum( Euro $amount ) {
+	private function validateAmountMeetsYearlyMinimum( Euro $amount ): void {
 		if ( $this->getYearlyPaymentAmount( $amount ) < $this->getYearlyPaymentRequirement() ) {
 			$this->addViolation( Result::SOURCE_PAYMENT_AMOUNT, Result::VIOLATION_TOO_LOW );
 		}

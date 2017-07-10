@@ -22,12 +22,12 @@ class SerializedDataHandlingTest extends \PHPUnit\Framework\TestCase {
 	/** @var DonationRepository */
 	private $repository;
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->entityManager = TestEnvironment::newInstance()->getFactory()->getEntityManager();
 	}
 
 	/** @dataProvider donationDataProvider */
-	public function testDataFieldOfDonationIsInteractedWithCorrectly( $paymentType, $data ) {
+	public function testDataFieldOfDonationIsInteractedWithCorrectly( $paymentType, $data ): void {
 		$this->repository = new DoctrineDonationRepository( $this->entityManager );
 		$this->storeDonation( $paymentType, $data );
 
@@ -311,7 +311,7 @@ class SerializedDataHandlingTest extends \PHPUnit\Framework\TestCase {
 		];
 	}
 
-	private function storeDonation( string $paymentType, array $data ) {
+	private function storeDonation( string $paymentType, array $data ): void {
 		$dd = new Donation();
 		$dd->setDonorEmail( 'max.muster@mydomain.com' );
 		$dd->setAmount( '1.00' );

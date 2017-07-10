@@ -21,7 +21,7 @@ class RouteRedirectionTest extends WebRouteTestCase {
 	}
 
 	/** @dataProvider simplePageDisplayProvider */
-	public function testPageDisplayRequestsAreRedirected( $requestedUrl, $expectedRedirection ) {
+	public function testPageDisplayRequestsAreRedirected( $requestedUrl, $expectedRedirection ): void {
 		$client = $this->createClient();
 		$client->followRedirects( false );
 		$client->request( 'GET', $requestedUrl );
@@ -44,7 +44,7 @@ class RouteRedirectionTest extends WebRouteTestCase {
 	}
 
 	/** @dataProvider shouldRedirectToDefaultRouteProvider */
-	public function testRequestsAreRedirectedToDefaultRoute( $requestedUrl, $expectedRedirection ) {
+	public function testRequestsAreRedirectedToDefaultRoute( $requestedUrl, $expectedRedirection ): void {
 		$client = $this->createClient();
 		$client->followRedirects( false );
 		$client->request( 'GET', $requestedUrl );
@@ -63,7 +63,7 @@ class RouteRedirectionTest extends WebRouteTestCase {
 	}
 
 	/** @dataProvider commentListUrlProvider */
-	public function testCallsToCommentListIsRedirected( $requestedUrl, $expectedRedirection ) {
+	public function testCallsToCommentListIsRedirected( $requestedUrl, $expectedRedirection ): void {
 		$client = $this->createClient();
 		$client->followRedirects( false );
 		$client->request( 'GET', $requestedUrl );

@@ -39,7 +39,7 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 		$this->entityManager = $entityManager;
 	}
 
-	public function storeApplication( Application $application ) {
+	public function storeApplication( Application $application ): void {
 		if ( $application->hasId() ) {
 			$this->updateApplication( $application );
 		}
@@ -48,7 +48,7 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 		}
 	}
 
-	private function insertApplication( Application $application ) {
+	private function insertApplication( Application $application ): void {
 		$doctrineApplication = new DoctrineApplication();
 		$this->updateDoctrineApplication( $doctrineApplication, $application );
 
@@ -63,7 +63,7 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 		$application->assignId( $doctrineApplication->getId() );
 	}
 
-	private function updateApplication( Application $application ) {
+	private function updateApplication( Application $application ): void {
 		$doctrineApplication = $this->getDoctrineApplicationById( $application->getId() );
 
 		if ( $doctrineApplication === null ) {
@@ -81,7 +81,7 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 		}
 	}
 
-	private function updateDoctrineApplication( DoctrineApplication $doctrineApplication, Application $application ) {
+	private function updateDoctrineApplication( DoctrineApplication $doctrineApplication, Application $application ): void {
 		$doctrineApplication->setId( $application->getId() );
 		$doctrineApplication->setMembershipType( $application->getType() );
 
@@ -93,7 +93,7 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 		$doctrineApplication->setStatus( $doctrineStatus );
 	}
 
-	private function setApplicantFields( DoctrineApplication $application, Applicant $applicant ) {
+	private function setApplicantFields( DoctrineApplication $application, Applicant $applicant ): void {
 		$application->setApplicantFirstName( $applicant->getName()->getFirstName() );
 		$application->setApplicantLastName( $applicant->getName()->getLastName() );
 		$application->setApplicantSalutation( $applicant->getName()->getSalutation() );
@@ -113,7 +113,7 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 		$application->setAddress( $address->getStreetAddress() );
 	}
 
-	private function setPaymentFields( DoctrineApplication $application, Payment $payment ) {
+	private function setPaymentFields( DoctrineApplication $application, Payment $payment ): void {
 		$application->setPaymentIntervalInMonths( $payment->getIntervalInMonths() );
 		$application->setPaymentAmount( (int)$payment->getAmount()->getEuroFloat() );
 		$paymentMethod = $payment->getPaymentMethod();
@@ -126,7 +126,7 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 		}
 	}
 
-	private function setBankDataFields( DoctrineApplication $application, BankData $bankData ) {
+	private function setBankDataFields( DoctrineApplication $application, BankData $bankData ): void {
 		$application->setPaymentBankAccount( $bankData->getAccount() );
 		$application->setPaymentBankCode( $bankData->getBankCode() );
 		$application->setPaymentBankName( $bankData->getBankName() );
@@ -134,7 +134,7 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 		$application->setPaymentIban( $bankData->getIban()->toString() );
 	}
 
-	private function setPayPalDataFields( DoctrineApplication $application, PayPalData $payPalData ) {
+	private function setPayPalDataFields( DoctrineApplication $application, PayPalData $payPalData ): void {
 		$application->encodeAndSetData( array_merge(
 			$application->getDecodedData(),
 			[
@@ -190,7 +190,7 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 		return $application->getPayment()->getPaymentMethod()->getType() === PaymentType::DIRECT_DEBIT;
 	}
 
-	private function preserveDoctrineStatus( DoctrineApplication $doctrineApplication, int $doctrineStatus ) {
+	private function preserveDoctrineStatus( DoctrineApplication $doctrineApplication, int $doctrineStatus ): void {
 		if ( $doctrineStatus < DoctrineApplication::STATUS_CONFIRMED ) {
 			$doctrineApplication->modifyDataObject( function ( MembershipApplicationData $data ) {
 				$data->setPreservedStatus( DoctrineApplication::STATUS_CONFIRMED );
@@ -224,7 +224,7 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 	 * @return DoctrineApplication|null
 	 * @throws ORMException
 	 */
-	public function getDoctrineApplicationById( int $id ) {
+	public function getDoctrineApplicationById( int $id ): ?DoctrineApplication {
 		return $this->entityManager->find( DoctrineApplication::class, $id );
 	}
 
@@ -302,11 +302,7 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 		return $bankData->freeze()->assertNoNullFields();
 	}
 
-	/**
-	 * @param DoctrineApplication $application
-	 * @return PayPalData|null
-	 */
-	private function newPayPalData( DoctrineApplication $application ) {
+	private function newPayPalData( DoctrineApplication $application ): ?PayPalData {
 		$data = $application->getDecodedData();
 
 		return ( new PayPalData() )

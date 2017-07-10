@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
  */
 class ValidateEmailRouteTest extends WebRouteTestCase {
 
-	public function testGivenValidEmail_successResponseIsReturned() {
+	public function testGivenValidEmail_successResponseIsReturned(): void {
 		$client = $this->createClient();
 
 		$client->request(
@@ -27,7 +27,7 @@ class ValidateEmailRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	public function testGivenInvalidEmail_errorResponseIsReturned() {
+	public function testGivenInvalidEmail_errorResponseIsReturned(): void {
 		$client = $this->createClient();
 
 		$client->request(
@@ -42,7 +42,7 @@ class ValidateEmailRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	public function testGivenNoEmail_errorResponseIsReturned() {
+	public function testGivenNoEmail_errorResponseIsReturned(): void {
 		$client = $this->createClient();
 
 		$client->request(

@@ -70,7 +70,7 @@ class MembershipApplicationValidator {
 		return new Result( $this->violations );
 	}
 
-	private function validateFee() {
+	private function validateFee(): void {
 		$result = $this->feeValidator->validate(
 			$this->request->getPaymentAmountInEuros(),
 			$this->request->getPaymentIntervalInMonths(),
@@ -85,11 +85,11 @@ class MembershipApplicationValidator {
 			FeeValidator::APPLICANT_TYPE_COMPANY : FeeValidator::APPLICANT_TYPE_PERSON;
 	}
 
-	private function addViolations( array $violations ) {
+	private function addViolations( array $violations ): void {
 		$this->violations = array_merge( $this->violations, $violations );
 	}
 
-	private function validateBankData() {
+	private function validateBankData(): void {
 		$bankData = $this->request->getBankData();
 		$validationResult = $this->bankDataValidator->validate( $bankData );
 		$violations = [];
@@ -136,7 +136,7 @@ class MembershipApplicationValidator {
 		}
 	}
 
-	private function validateApplicantDateOfBirth() {
+	private function validateApplicantDateOfBirth(): void {
 		$dob = $this->request->getApplicantDateOfBirth();
 
 		if ( $dob !== '' && !strtotime( $dob ) ) {
@@ -144,7 +144,7 @@ class MembershipApplicationValidator {
 		}
 	}
 
-	private function validateApplicantContactInfo() {
+	private function validateApplicantContactInfo(): void {
 		$this->validatePhoneNumber();
 
 		$this->validateFieldLength( $this->request->getApplicantEmailAddress(), Result::SOURCE_APPLICANT_EMAIL );
@@ -153,7 +153,7 @@ class MembershipApplicationValidator {
 		}
 	}
 
-	private function validatePhoneNumber() {
+	private function validatePhoneNumber(): void {
 		$phoneNumber = $this->request->getApplicantPhoneNumber();
 
 		$this->validateFieldLength( $phoneNumber, Result::SOURCE_APPLICANT_PHONE_NUMBER );
@@ -162,7 +162,7 @@ class MembershipApplicationValidator {
 		}
 	}
 
-	private function validateApplicantName() {
+	private function validateApplicantName(): void {
 		if ( $this->request->isCompanyApplication() ) {
 			$this->validateCompanyName();
 		}
@@ -171,14 +171,14 @@ class MembershipApplicationValidator {
 		}
 	}
 
-	private function validateCompanyName() {
+	private function validateCompanyName(): void {
 		if ( $this->request->getApplicantCompanyName() === '' ) {
 			$this->violations[Result::SOURCE_APPLICANT_COMPANY] = Result::VIOLATION_MISSING;
 		}
 		$this->validateFieldLength( $this->request->getApplicantCompanyName(), Result::SOURCE_APPLICANT_COMPANY );
 	}
 
-	private function validatePersonName() {
+	private function validatePersonName(): void {
 		if ( $this->request->getApplicantFirstName() === '' ) {
 			$this->violations[Result::SOURCE_APPLICANT_FIRST_NAME] = Result::VIOLATION_MISSING;
 		}
@@ -195,7 +195,7 @@ class MembershipApplicationValidator {
 		$this->validateFieldLength( $this->request->getApplicantSalutation(), Result::SOURCE_APPLICANT_SALUTATION );
 	}
 
-	private function validateApplicantAddress() {
+	private function validateApplicantAddress(): void {
 		if ( $this->request->getApplicantStreetAddress() === '' ) {
 			$this->violations[Result::SOURCE_APPLICANT_STREET_ADDRESS] = Result::VIOLATION_MISSING;
 		}
@@ -220,7 +220,7 @@ class MembershipApplicationValidator {
 		$this->validateFieldLength( $this->request->getApplicantCountryCode(), Result::SOURCE_APPLICANT_COUNTRY );
 	}
 
-	private function validateFieldLength( string $value, string $fieldName ) {
+	private function validateFieldLength( string $value, string $fieldName ): void {
 		if ( strlen( $value ) > $this->maximumFieldLengths[$fieldName] )  {
 			$this->violations[$fieldName] = Result::VIOLATION_WRONG_LENGTH;
 		}

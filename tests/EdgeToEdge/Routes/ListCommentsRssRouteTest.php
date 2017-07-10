@@ -17,7 +17,7 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
  */
 class ListCommentsRssRouteTest extends WebRouteTestCase {
 
-	public function testWhenThereAreNoComments_rssFeedIsEmpty() {
+	public function testWhenThereAreNoComments_rssFeedIsEmpty(): void {
 		$client = $this->createClient();
 		$client->request( 'GET', '/list-comments.rss' );
 
@@ -29,7 +29,7 @@ class ListCommentsRssRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	public function testWhenAreComments_theyAreInTheRss() {
+	public function testWhenAreComments_theyAreInTheRss(): void {
 		$client = $this->createClient( [], function( FunFunFactory $factory ) {
 			$this->persistFirstComment( $factory->getEntityManager() );
 			$this->persistSecondComment( $factory->getEntityManager() );
@@ -72,7 +72,7 @@ class ListCommentsRssRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	private function persistFirstComment( EntityManager $entityManager ) {
+	private function persistFirstComment( EntityManager $entityManager ): void {
 		$firstDonation = new Donation();
 		$firstDonation->setPublicRecord( 'First name' );
 		$firstDonation->setComment( 'First comment' );
@@ -82,7 +82,7 @@ class ListCommentsRssRouteTest extends WebRouteTestCase {
 		$entityManager->persist( $firstDonation );
 	}
 
-	private function persistSecondComment( EntityManager $entityManager ) {
+	private function persistSecondComment( EntityManager $entityManager ): void {
 		$secondDonation = new Donation();
 		$secondDonation->setPublicRecord( 'Second name' );
 		$secondDonation->setComment( 'Second comment' );
@@ -92,7 +92,7 @@ class ListCommentsRssRouteTest extends WebRouteTestCase {
 		$entityManager->persist( $secondDonation );
 	}
 
-	private function persistEvilComment( EntityManager $entityManager ) {
+	private function persistEvilComment( EntityManager $entityManager ): void {
 		$secondDonation = new Donation();
 		$secondDonation->setPublicRecord( 'Third name & company' );
 		$secondDonation->setComment( 'Third <script> comment' );

@@ -25,7 +25,7 @@ class AmountPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 	 * @param float $amount
 	 * @param int $interval
 	 */
-	public function testGivenAmountWithinLimits_validationSucceeds( float $amount, int $interval ) {
+	public function testGivenAmountWithinLimits_validationSucceeds( float $amount, int $interval ): void {
 		$this->assertTrue( $this->newAmountValidator()->validate( $amount, $interval )->isSuccessful() );
 	}
 
@@ -44,7 +44,7 @@ class AmountPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 	 * @param float $amount
 	 * @param int $interval
 	 */
-	public function testGivenAmountTooHigh_validationFails( float $amount, int $interval ) {
+	public function testGivenAmountTooHigh_validationFails( float $amount, int $interval ): void {
 		$this->assertFalse( $this->newAmountValidator()->validate( $amount, $interval )->isSuccessful() );
 	}
 

@@ -10,7 +10,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
  */
 class TrimValuesTest extends WebRouteTestCase {
 
-	public function testPassedGetParametersAreTrimmed() {
+	public function testPassedGetParametersAreTrimmed(): void {
 		$params = $this->newParams();
 
 		$client = $this->createClient( [], null, self::DISABLE_DEBUG );
@@ -19,7 +19,7 @@ class TrimValuesTest extends WebRouteTestCase {
 		$this->assertSame( $this->trimArray( $params ), $client->getRequest()->query->all() );
 	}
 
-	public function testPassedPostParametersAreTrimmed() {
+	public function testPassedPostParametersAreTrimmed(): void {
 		$params = $this->newParams();
 
 		$client = $this->createClient( [], null, self::DISABLE_DEBUG );
@@ -44,7 +44,7 @@ class TrimValuesTest extends WebRouteTestCase {
 		return $params;
 	}
 
-	private function trimValue( &$value ) {
+	private function trimValue( &$value ): void {
 		$value = is_string( $value ) ? trim( $value ) : $value;
 	}
 

@@ -493,7 +493,7 @@ class FunFunFactory {
 		return $this->pimple['subscription_repository'];
 	}
 
-	public function setSubscriptionRepository( SubscriptionRepository $subscriptionRepository ) {
+	public function setSubscriptionRepository( SubscriptionRepository $subscriptionRepository ): void {
 		$this->pimple['subscription_repository'] = $subscriptionRepository;
 	}
 
@@ -528,7 +528,7 @@ class FunFunFactory {
 		return new GetInTouchHtmlPresenter( $this->getLayoutTemplate( 'contact_form.html.twig' ), $this->getTranslator() );
 	}
 
-	public function setTwigEnvironment( Twig_Environment $twig ) {
+	public function setTwigEnvironment( Twig_Environment $twig ): void {
 		$this->pimple['twig_environment'] = $twig;
 	}
 
@@ -692,7 +692,7 @@ class FunFunFactory {
 		return new BankDataConverter( $this->config['bank-data-file'] );
 	}
 
-	public function setSubscriptionValidator( SubscriptionValidator $subscriptionValidator ) {
+	public function setSubscriptionValidator( SubscriptionValidator $subscriptionValidator ): void {
 		$this->pimple['subscription_validator'] = $subscriptionValidator;
 	}
 
@@ -760,7 +760,7 @@ class FunFunFactory {
 		return $this->pimple['messenger_suborganization'];
 	}
 
-	public function setSuborganizationMessenger( Messenger $messenger ) {
+	public function setSuborganizationMessenger( Messenger $messenger ): void {
 		$this->pimple['messenger_suborganization'] = $messenger;
 	}
 
@@ -768,11 +768,11 @@ class FunFunFactory {
 		return $this->pimple['messenger_organization'];
 	}
 
-	public function setOrganizationMessenger( Messenger $messenger ) {
+	public function setOrganizationMessenger( Messenger $messenger ): void {
 		$this->pimple['messenger_organization'] = $messenger;
 	}
 
-	public function setNullMessenger() {
+	public function setNullMessenger(): void {
 		$this->setSuborganizationMessenger( new Messenger(
 			Swift_NullTransport::newInstance(),
 			$this->getSubOrganizationEmailAddress()
@@ -803,7 +803,7 @@ class FunFunFactory {
 		return $this->pimple['translator'];
 	}
 
-	public function setTranslator( TranslatorInterface $translator ) {
+	public function setTranslator( TranslatorInterface $translator ): void {
 		$this->pimple['translator'] = $translator;
 	}
 
@@ -1056,7 +1056,7 @@ class FunFunFactory {
 		return $this->pimple['payment-delay-calculator'];
 	}
 
-	public function setPaymentDelayCalculator( PaymentDelayCalculator $paymentDelayCalculator ) {
+	public function setPaymentDelayCalculator( PaymentDelayCalculator $paymentDelayCalculator ): void {
 		$this->pimple['payment-delay-calculator'] = $paymentDelayCalculator;
 	}
 
@@ -1116,7 +1116,7 @@ class FunFunFactory {
 		);
 	}
 
-	public function setDonationConfirmationPageSelector( DonationConfirmationPageSelector $selector ) {
+	public function setDonationConfirmationPageSelector( DonationConfirmationPageSelector $selector ): void {
 		$this->pimple['confirmation-page-selector'] = $selector;
 	}
 
@@ -1177,7 +1177,7 @@ class FunFunFactory {
 		return $this->pimple['paypal-payment-notification-verifier'];
 	}
 
-	public function setPayPalPaymentNotificationVerifier( PaymentNotificationVerifier $verifier ) {
+	public function setPayPalPaymentNotificationVerifier( PaymentNotificationVerifier $verifier ): void {
 		$this->pimple['paypal-payment-notification-verifier'] = $verifier;
 	}
 
@@ -1185,7 +1185,7 @@ class FunFunFactory {
 		return $this->pimple['paypal-membership-fee-notification-verifier'];
 	}
 
-	public function setPayPalMembershipFeeNotificationVerifier( PaymentNotificationVerifier $verifier ) {
+	public function setPayPalMembershipFeeNotificationVerifier( PaymentNotificationVerifier $verifier ): void {
 		$this->pimple['paypal-membership-fee-notification-verifier'] = $verifier;
 	}
 
@@ -1218,7 +1218,7 @@ class FunFunFactory {
 		);
 	}
 
-	public function setCreditCardService( CreditCardService $ccService ) {
+	public function setCreditCardService( CreditCardService $ccService ): void {
 		$this->pimple['credit-card-api-service'] = $ccService;
 	}
 
@@ -1252,11 +1252,11 @@ class FunFunFactory {
 		);
 	}
 
-	public function setTokenGenerator( TokenGenerator $tokenGenerator ) {
+	public function setTokenGenerator( TokenGenerator $tokenGenerator ): void {
 		$this->pimple['token_generator'] = $tokenGenerator;
 	}
 
-	public function disableDoctrineSubscribers() {
+	public function disableDoctrineSubscribers(): void {
 		$this->addDoctrineSubscribers = false;
 	}
 
@@ -1310,7 +1310,7 @@ class FunFunFactory {
 		return $this->pimple['rendered_page_cache'];
 	}
 
-	public function enablePageCache() {
+	public function enablePageCache(): void {
 		$this->pimple['page_cache'] = function() {
 			return new FilesystemCache( $this->getCachePath() . '/pages/raw' );
 		};
@@ -1330,19 +1330,19 @@ class FunFunFactory {
 		return $builder->decorate( $objectToDecorate, $profilingLabel );
 	}
 
-	public function setProfiler( Stopwatch $profiler ) {
+	public function setProfiler( Stopwatch $profiler ): void {
 		$this->profiler = $profiler;
 	}
 
-	public function setEmailValidator( EmailValidator $validator ) {
+	public function setEmailValidator( EmailValidator $validator ): void {
 		$this->pimple['mail_validator'] = $validator;
 	}
 
-	public function setLogger( LoggerInterface $logger ) {
+	public function setLogger( LoggerInterface $logger ): void {
 		$this->pimple['logger'] = $logger;
 	}
 
-	public function setPaypalLogger( LoggerInterface $logger ) {
+	public function setPaypalLogger( LoggerInterface $logger ): void {
 		$this->pimple['paypal_logger'] = $logger;
 	}
 
@@ -1382,7 +1382,7 @@ class FunFunFactory {
 		return new PageNotFoundPresenter( $this->getLayoutTemplate( 'Page_not_found.html.twig' ) );
 	}
 
-	public function setPageViewTracker( PageViewTracker $tracker ) {
+	public function setPageViewTracker( PageViewTracker $tracker ): void {
 		$this->pimple['page_view_tracker'] = function () use ( $tracker )  {
 			return $tracker;
 		};

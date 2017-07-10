@@ -20,7 +20,7 @@ use WMDE\Fundraising\Frontend\Validation\ValidationResult;
  */
 class AddDonationPolicyValidatorTest extends ValidatorTestCase {
 
-	public function testTooHighAmountGiven_needsModerationReturnsTrue() {
+	public function testTooHighAmountGiven_needsModerationReturnsTrue(): void {
 		$policyValidator = new AddDonationPolicyValidator(
 			$this->newFailingAmountValidator(),
 			$this->newSucceedingTextPolicyValidator()
@@ -28,7 +28,7 @@ class AddDonationPolicyValidatorTest extends ValidatorTestCase {
 		$this->assertTrue( $policyValidator->needsModeration( ValidAddDonationRequest::getRequest() ) );
 	}
 
-	public function testGivenBadWords_needsModerationReturnsTrue() {
+	public function testGivenBadWords_needsModerationReturnsTrue(): void {
 		$policyValidator = new AddDonationPolicyValidator(
 			$this->newSucceedingAmountValidator(),
 			$this->newFailingTextPolicyValidator()
@@ -70,7 +70,7 @@ class AddDonationPolicyValidatorTest extends ValidatorTestCase {
 	}
 
 	/** @dataProvider allowedEmailAddressProvider */
-	public function testWhenEmailAddressIsNotBlacklisted_isAutoDeletedReturnsFalse( $emailAddress ) {
+	public function testWhenEmailAddressIsNotBlacklisted_isAutoDeletedReturnsFalse( $emailAddress ): void {
 		$policyValidator = $this->newPolicyValidatorWithEmailBlacklist();
 		$request = ValidAddDonationRequest::getRequest();
 		$request->setDonorEmailAddress( $emailAddress );
@@ -87,7 +87,7 @@ class AddDonationPolicyValidatorTest extends ValidatorTestCase {
 	}
 
 	/** @dataProvider blacklistedEmailAddressProvider */
-	public function testWhenEmailAddressIsBlacklisted_isAutoDeletedReturnsTrue( $emailAddress ) {
+	public function testWhenEmailAddressIsBlacklisted_isAutoDeletedReturnsTrue( $emailAddress ): void {
 		$policyValidator = $this->newPolicyValidatorWithEmailBlacklist();
 		$request = ValidAddDonationRequest::getRequest();
 		$request->setDonorEmailAddress( $emailAddress );

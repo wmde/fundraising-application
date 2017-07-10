@@ -28,7 +28,7 @@ class DonationTrackingInfo {
 		return $this->tracking;
 	}
 
-	public function setTracking( string $tracking ) {
+	public function setTracking( string $tracking ): void {
 		$this->assertIsWritable();
 		$this->tracking = $tracking;
 	}
@@ -37,7 +37,7 @@ class DonationTrackingInfo {
 		return $this->source;
 	}
 
-	public function setSource( string $source ) {
+	public function setSource( string $source ): void {
 		$this->assertIsWritable();
 		$this->source = $source;
 	}
@@ -46,7 +46,7 @@ class DonationTrackingInfo {
 		return $this->totalImpressionCount;
 	}
 
-	public function setTotalImpressionCount( int $totalImpressionCount ) {
+	public function setTotalImpressionCount( int $totalImpressionCount ): void {
 		$this->assertIsWritable();
 		$this->totalImpressionCount = $totalImpressionCount;
 	}
@@ -55,7 +55,7 @@ class DonationTrackingInfo {
 		return $this->singleBannerImpressionCount;
 	}
 
-	public function setSingleBannerImpressionCount( int $singleBannerImpressionCount ) {
+	public function setSingleBannerImpressionCount( int $singleBannerImpressionCount ): void {
 		$this->assertIsWritable();
 		$this->singleBannerImpressionCount = $singleBannerImpressionCount;
 	}
@@ -64,7 +64,7 @@ class DonationTrackingInfo {
 		return $this->color;
 	}
 
-	public function setColor( string $color ) {
+	public function setColor( string $color ): void {
 		$this->assertIsWritable();
 		$this->color = $color;
 	}
@@ -73,7 +73,7 @@ class DonationTrackingInfo {
 		return $this->skin;
 	}
 
-	public function setSkin( string $skin ) {
+	public function setSkin( string $skin ): void {
 		$this->assertIsWritable();
 		$this->skin = $skin;
 	}
@@ -82,7 +82,7 @@ class DonationTrackingInfo {
 		return $this->layout;
 	}
 
-	public function setLayout( string $layout ) {
+	public function setLayout( string $layout ): void {
 		$this->assertIsWritable();
 		$this->layout = $layout;
 	}

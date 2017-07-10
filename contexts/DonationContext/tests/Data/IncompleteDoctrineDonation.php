@@ -90,12 +90,12 @@ class IncompleteDoctrineDonation {
 		return $donation;
 	}
 
-	private function setPaymentData( Donation $donation ) {
+	private function setPaymentData( Donation $donation ): void {
 		$donation->setAmount( (string)ValidDonation::DONATION_AMOUNT );
 		$donation->setPaymentIntervalInMonths( ValidDonation::PAYMENT_INTERVAL_IN_MONTHS );
 	}
 
-	private function setDonorData( Donation $donation ) {
+	private function setDonorData( Donation $donation ): void {
 		$donation->setDonorCity( ValidDonation::DONOR_CITY );
 		$donation->setDonorEmail( ValidDonation::DONOR_EMAIL_ADDRESS );
 		$donation->setDonorFullName( ValidDonation::DONOR_FULL_NAME );

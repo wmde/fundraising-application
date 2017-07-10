@@ -90,7 +90,7 @@ class ValidateConfigCommand extends Command {
 		return $configReader->getConfigObject();
 	}
 
-	private function writeError( OutputInterface $output, string $message ) {
+	private function writeError( OutputInterface $output, string $message ): void {
 		$errOutput = $output instanceof ConsoleOutputInterface ? $output->getErrorOutput() : $output;
 		$errOutput->writeln( $message );
 	}

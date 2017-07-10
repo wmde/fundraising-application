@@ -20,13 +20,13 @@ use WMDE\Fundraising\Frontend\Validation\IbanValidator;
  */
 class GenerateIbanUseCaseTest extends \PHPUnit\Framework\TestCase {
 
-	public function setUp() {
+	public function setUp(): void {
 		if ( !function_exists( 'lut_init' ) ) {
 			$this->markTestSkipped( 'The konto_check needs to be installed!' );
 		}
 	}
 
-	public function testWhenValidBankAccountDataIsGiven_fullBankDataIsReturned() {
+	public function testWhenValidBankAccountDataIsGiven_fullBankDataIsReturned(): void {
 		$useCase = $this->newGenerateIbanUseCase();
 
 		$bankData = new BankData();
@@ -43,7 +43,7 @@ class GenerateIbanUseCaseTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testWhenInvalidBankAccountDataIsGiven_failureResponseIsReturned() {
+	public function testWhenInvalidBankAccountDataIsGiven_failureResponseIsReturned(): void {
 		$useCase = $this->newGenerateIbanUseCase();
 
 		$this->assertEquals(
@@ -52,7 +52,7 @@ class GenerateIbanUseCaseTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testWhenBlockedBankAccountDataIsGiven_failureResponseIsReturned() {
+	public function testWhenBlockedBankAccountDataIsGiven_failureResponseIsReturned(): void {
 		$useCase = $this->newGenerateIbanUseCase();
 
 		$this->assertEquals(

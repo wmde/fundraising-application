@@ -40,7 +40,7 @@ class TwigFactory {
 	 * @param array $config Configuration for the filesystem loader. The key 'template-dir' can be a string or an array.
 	 * @return array
 	 */
-	private function getTemplateDir( $config ): array {
+	private function getTemplateDir( array $config ): array {
 		if ( is_string( $config['template-dir'] ) ) {
 			$templateDir = [ $config['template-dir'] ];
 		}

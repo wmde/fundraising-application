@@ -33,7 +33,7 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 		return $membershipApplication;
 	}
 
-	public function testWhenDonationTimestampCookieIsSet_itIsNotOverwritten() {
+	public function testWhenDonationTimestampCookieIsSet_itIsNotOverwritten(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$donation = $this->newStoredMembershipApplication( $factory );
 

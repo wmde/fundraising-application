@@ -94,7 +94,7 @@ class HandleSubscriptionSignupNotificationUseCase {
 		] );
 	}
 
-	private function sendConfirmationEmail( Application $application ) {
+	private function sendConfirmationEmail( Application $application ): void {
 		try {
 			$this->mailer->sendMail( $application->getApplicant()->getEmailAddress() );
 		} catch ( \RuntimeException $ex ) {

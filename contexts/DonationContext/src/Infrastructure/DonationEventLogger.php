@@ -18,6 +18,6 @@ interface DonationEventLogger {
 	 *
 	 * @throws DonationEventLogException
 	 */
-	public function log( int $donationId, string $message );
+	public function log( int $donationId, string $message ): void;
 
 }

@@ -21,7 +21,7 @@ use WMDE\PsrLogTestDoubles\LoggerSpy;
  */
 class LoggingDonationRepositoryTest extends \PHPUnit\Framework\TestCase {
 
-	public function testWhenGetDonationByIdThrowException_itIsLogged() {
+	public function testWhenGetDonationByIdThrowException_itIsLogged(): void {
 		$loggingRepo = new LoggingDonationRepository(
 			$this->newThrowingRepository(),
 			new LoggerSpy()
@@ -45,7 +45,7 @@ class LoggingDonationRepositoryTest extends \PHPUnit\Framework\TestCase {
 		return $repository;
 	}
 
-	public function testWhenGetDonationByIdThrowException_itIsNotFullyCaught() {
+	public function testWhenGetDonationByIdThrowException_itIsNotFullyCaught(): void {
 		$logger = new LoggerSpy();
 
 		$loggingRepo = new LoggingDonationRepository(
@@ -62,7 +62,7 @@ class LoggingDonationRepositoryTest extends \PHPUnit\Framework\TestCase {
 		$this->assertExceptionLoggedAsCritical( GetDonationException::class, $logger );
 	}
 
-	private function assertExceptionLoggedAsCritical( string $expectedExceptionType, LoggerSpy $logger ) {
+	private function assertExceptionLoggedAsCritical( string $expectedExceptionType, LoggerSpy $logger ): void {
 		$this->assertCount( 1, $logger->getLogCalls(), 'There should be exactly one log call' );
 
 		$logCall = $logger->getLogCalls()->getFirstCall();
@@ -72,7 +72,7 @@ class LoggingDonationRepositoryTest extends \PHPUnit\Framework\TestCase {
 		$this->assertInstanceOf( $expectedExceptionType, $logCall->getContext()['exception'] );
 	}
 
-	public function testWhenGetDonationByIdDoesNotThrow_returnValueIsReturnedWithoutLogging() {
+	public function testWhenGetDonationByIdDoesNotThrow_returnValueIsReturnedWithoutLogging(): void {
 		$logger = new LoggerSpy();
 		$donation = ValidDonation::newDirectDebitDonation();
 		$donation->assignId( 1337 );
@@ -86,7 +86,7 @@ class LoggingDonationRepositoryTest extends \PHPUnit\Framework\TestCase {
 		$logger->assertNoLoggingCallsWhereMade();
 	}
 
-	public function testWhenStoreDonationThrowException_itIsLogged() {
+	public function testWhenStoreDonationThrowException_itIsLogged(): void {
 		$loggingRepo = new LoggingDonationRepository(
 			$this->newThrowingRepository(),
 			new LoggerSpy()
@@ -96,7 +96,7 @@ class LoggingDonationRepositoryTest extends \PHPUnit\Framework\TestCase {
 		$loggingRepo->storeDonation( ValidDonation::newDirectDebitDonation() );
 	}
 
-	public function testWhenStoreDonationThrowException_itIsNotFullyCaught() {
+	public function testWhenStoreDonationThrowException_itIsNotFullyCaught(): void {
 		$logger = new LoggerSpy();
 
 		$loggingRepo = new LoggingDonationRepository(

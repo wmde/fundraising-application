@@ -94,7 +94,7 @@ class CancelDonationUseCase {
 		);
 	}
 
-	private function sendConfirmationEmail( Donation $donation ) {
+	private function sendConfirmationEmail( Donation $donation ): void {
 		if ( $donation->getDonor() !== null ) {
 			$this->mailer->sendMail(
 				new EmailAddress( $donation->getDonor()->getEmailAddress() ),

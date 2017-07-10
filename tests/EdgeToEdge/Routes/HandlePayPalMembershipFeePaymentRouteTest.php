@@ -30,7 +30,7 @@ class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 	const VERIFICATION_SUCCESSFUL = 'VERIFIED';
 	const VERIFICATION_FAILED = 'INVALID';
 
-	public function testGivenValidSubscriptionSignupRequest_applicationIndicatesSuccess() {
+	public function testGivenValidSubscriptionSignupRequest_applicationIndicatesSuccess(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setTokenGenerator( new FixedTokenGenerator(
 				self::UPDATE_TOKEN,
@@ -108,7 +108,7 @@ class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 		return $client;
 	}
 
-	public function testWhenPaymentProviderDoesNotVerify_errorCodeIsReturned() {
+	public function testWhenPaymentProviderDoesNotVerify_errorCodeIsReturned(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$request = $this->newSubscriptionSignupRequest();
 
@@ -125,7 +125,7 @@ class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testGivenWrongTransactionType_applicationIgnoresRequest() {
+	public function testGivenWrongTransactionType_applicationIgnoresRequest(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$invalidRequest = $this->newInvalidTransactionRequest();
 
@@ -173,7 +173,7 @@ class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	private function assertPayPalDataGotPersisted( ApplicationRepository $applicationRepo, array $request ) {
+	private function assertPayPalDataGotPersisted( ApplicationRepository $applicationRepo, array $request ): void {
 		$membershipApplication = $applicationRepo->getApplicationById( self::MEMBERSHIP_APPLICATION_ID );
 
 		/** @var PayPalPayment $paymentMethod */
@@ -191,7 +191,7 @@ class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 		$this->assertSame( $request['payment_type'], $pplData->getPaymentType() );
 	}
 
-	public function testGivenPaymentNotificationForInvalidMembershipId_applicationReturnsError() {
+	public function testGivenPaymentNotificationForInvalidMembershipId_applicationReturnsError(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$invalidRequest = $this->newInvalidMembershipIdRequest();
 

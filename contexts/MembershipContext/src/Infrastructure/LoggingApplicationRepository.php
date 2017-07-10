@@ -36,7 +36,7 @@ class LoggingApplicationRepository implements ApplicationRepository {
 	 *
 	 * @throws StoreMembershipApplicationException
 	 */
-	public function storeApplication( Application $application ) {
+	public function storeApplication( Application $application ): void {
 		try {
 			$this->repository->storeApplication( $application );
 		}

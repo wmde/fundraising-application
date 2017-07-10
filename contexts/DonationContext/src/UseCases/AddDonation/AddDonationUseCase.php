@@ -186,7 +186,7 @@ class AddDonationUseCase {
 	 *
 	 * @throws \RuntimeException
 	 */
-	private function sendDonationConfirmationEmail( Donation $donation ) {
+	private function sendDonationConfirmationEmail( Donation $donation ): void {
 		if ( $donation->getDonor() !== null && !$donation->hasExternalPayment() ) {
 			$this->mailer->sendConfirmationMailFor( $donation );
 		}

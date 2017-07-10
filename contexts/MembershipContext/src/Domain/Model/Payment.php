@@ -33,7 +33,7 @@ class Payment {
 		$this->paymentMethod = $paymentMethod;
 	}
 
-	private function assertIsValidInterval( int $intervalInMonths ) {
+	private function assertIsValidInterval( int $intervalInMonths ): void {
 		if ( !in_array( $intervalInMonths, [ 1, 3, 6, 12 ] ) ) {
 			throw new \InvalidArgumentException( 'Interval needs to be 1, 3, 6 or 12' );
 		}

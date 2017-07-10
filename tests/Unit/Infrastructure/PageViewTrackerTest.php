@@ -15,7 +15,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
  */
 class PageViewTrackerTest extends \PHPUnit\Framework\TestCase {
 
-	public function testTrackPaypalRedirection() {
+	public function testTrackPaypalRedirection(): void {
 		$tracker = new ServerSideTrackerSpy();
 		$pageViewTracker = new PageViewTracker( $tracker, 'http://awesome.url' );
 

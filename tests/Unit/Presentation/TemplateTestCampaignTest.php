@@ -15,7 +15,7 @@ use WMDE\Fundraising\Frontend\Presentation\TemplateTestCampaign;
  */
 class TemplateTestCampaignTest extends \PHPUnit\Framework\TestCase {
 
-	public function testConstructorSetsFields() {
+	public function testConstructorSetsFields(): void {
 		$campaign = new TemplateTestCampaign( [
 			'code' => 'FOO',
 			'active' => true,
@@ -48,7 +48,7 @@ class TemplateTestCampaignTest extends \PHPUnit\Framework\TestCase {
 		return new TemplateTestCampaign( array_merge( $campaignTemplate, $campaignData ) );
 	}
 
-	public function testHasStarted() {
+	public function testHasStarted(): void {
 		$startedCampaign = $this->newCampaign( [
 			'startDate' => '2015-01-01 08:00:00',
 			'endDate' => '2115-01-01 08:00:00',
@@ -62,7 +62,7 @@ class TemplateTestCampaignTest extends \PHPUnit\Framework\TestCase {
 
 	}
 
-	public function testHasEnded() {
+	public function testHasEnded(): void {
 		$finishedCampaign = $this->newCampaign( [
 			'startDate' => '2015-01-01 08:00:00',
 			'endDate' => '2015-09-01 08:00:00',
@@ -78,7 +78,7 @@ class TemplateTestCampaignTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider isRunningDataProvider
 	 */
-	public function testIsRunning( bool $expected, array $data ) {
+	public function testIsRunning( bool $expected, array $data ): void {
 		$campaign = $this->newCampaign( $data );
 		$this->assertSame( $expected, $campaign->isRunning() );
 	}

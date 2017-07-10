@@ -75,7 +75,7 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit\Framework\TestCase {
 	/** @var  ApplyForMembershipPolicyValidator */
 	private $policyValidator;
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->repository = new InMemoryApplicationRepository();
 		$this->mailer = new TemplateBasedMailerSpy( $this );
 		$this->tokenGenerator = new FixedTokenGenerator( self::ACCESS_TOKEN );
@@ -96,7 +96,7 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit\Framework\TestCase {
 		return $validator;
 	}
 
-	public function testGivenValidRequest_applicationSucceeds() {
+	public function testGivenValidRequest_applicationSucceeds(): void {
 		$response = $this->newUseCase()->applyForMembership( $this->newValidRequest() );
 
 		$this->assertTrue( $response->isSuccessful() );
@@ -174,7 +174,7 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testGivenValidRequest_applicationGetsPersisted() {
+	public function testGivenValidRequest_applicationGetsPersisted(): void {
 		$this->newUseCase()->applyForMembership( $this->newValidRequest() );
 
 		$expectedApplication = ValidMembershipApplication::newDomainEntity();
@@ -186,7 +186,7 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$this->assertEquals( $expectedApplication, $application );
 	}
 
-	public function testGivenValidRequest_confirmationEmailIsSend() {
+	public function testGivenValidRequest_confirmationEmailIsSend(): void {
 		$this->newUseCase()->applyForMembership( $this->newValidRequest() );
 
 		$this->mailer->assertCalledOnceWith(
@@ -202,14 +202,14 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testGivenValidRequest_tokenIsGeneratedAndReturned() {
+	public function testGivenValidRequest_tokenIsGeneratedAndReturned(): void {
 		$response = $this->newUseCase()->applyForMembership( $this->newValidRequest() );
 
 		$this->assertSame( self::ACCESS_TOKEN, $response->getAccessToken() );
 		$this->assertSame( self::UPDATE_TOKEN, $response->getUpdateToken() );
 	}
 
-	public function testWhenValidationFails_failureResultIsReturned() {
+	public function testWhenValidationFails_failureResultIsReturned(): void {
 		$this->validator = $this->newFailingValidator();
 
 		$response = $this->newUseCase()->applyForMembership( $this->newValidRequest() );
@@ -238,13 +238,13 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit\Framework\TestCase {
 		return $invalidResult;
 	}
 
-	public function testGivenValidRequest_moderationIsNotNeeded() {
+	public function testGivenValidRequest_moderationIsNotNeeded(): void {
 		$response = $this->newUseCase()->applyForMembership( $this->newValidRequest() );
 
 		$this->assertFalse( $response->getMembershipApplication()->needsModeration() );
 	}
 
-	public function testGivenFailingPolicyValidator_moderationIsNeeded() {
+	public function testGivenFailingPolicyValidator_moderationIsNeeded(): void {
 		$this->policyValidator = $this->newFailingPolicyValidator();
 
 		$response = $this->newUseCase()->applyForMembership( $this->newValidRequest() );
@@ -265,7 +265,7 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit\Framework\TestCase {
 		return $policyValidator;
 	}
 
-	public function testWhenApplicationIsUnconfirmed_confirmationEmailIsNotSent() {
+	public function testWhenApplicationIsUnconfirmed_confirmationEmailIsNotSent(): void {
 		$this->newUseCase()->applyForMembership( $this->newValidRequestForUnconfirmedApplication() );
 
 		$this->assertSame( 0, count( $this->mailer->getSendMailCalls() ) );
@@ -306,13 +306,13 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit\Framework\TestCase {
 		return $policyValidator;
 	}
 
-	public function testWhenUsingBlacklistedEmailAddress_moderationIsAutomaticallyDeleted() {
+	public function testWhenUsingBlacklistedEmailAddress_moderationIsAutomaticallyDeleted(): void {
 		$this->policyValidator = $this->newAutoDeletingPolicyValidator();
 		$this->newUseCase()->applyForMembership( $this->newValidRequest() );
 		$this->assertTrue( $this->repository->getApplicationById( 1 )->isDeleted() );
 	}
 
-	public function testWhenUsingPayPalPayment_delayInDaysIsPersisted() {
+	public function testWhenUsingPayPalPayment_delayInDaysIsPersisted(): void {
 		$request = $this->newValidRequest();
 		$request->setPaymentType( 'PPL' );
 		$this->newUseCase()->applyForMembership( $request );
