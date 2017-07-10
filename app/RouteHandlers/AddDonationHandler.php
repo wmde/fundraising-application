@@ -96,7 +96,7 @@ class AddDonationHandler {
 				$httpResponse = $this->app->redirect(
 					$this->ffFactory->newSofortUrlGeneratorForDonations()->generateUrl(
 						$responseModel->getDonation()->getId(),
-						$responseModel->getDonation()->getPayment()->getPaymentMethod()->getUuid(),
+						$responseModel->getDonation()->getPayment()->getPaymentMethod()->getBankTransferCode(),
 						$responseModel->getDonation()->getAmount(),
 						$responseModel->getAccessToken()
 					)
