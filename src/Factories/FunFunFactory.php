@@ -493,7 +493,7 @@ class FunFunFactory {
 		return $this->pimple['subscription_repository'];
 	}
 
-	public function setSubscriptionRepository( SubscriptionRepository $subscriptionRepository ) {
+	public function setSubscriptionRepository( SubscriptionRepository $subscriptionRepository ): void {
 		$this->pimple['subscription_repository'] = $subscriptionRepository;
 	}
 
@@ -528,7 +528,7 @@ class FunFunFactory {
 		return new GetInTouchHtmlPresenter( $this->getLayoutTemplate( 'contact_form.html.twig' ), $this->getTranslator() );
 	}
 
-	public function setTwigEnvironment( Twig_Environment $twig ) {
+	public function setTwigEnvironment( Twig_Environment $twig ): void {
 		$this->pimple['twig_environment'] = $twig;
 	}
 
@@ -571,7 +571,7 @@ class FunFunFactory {
 		);
 	}
 
-	private function getDefaultTwigVariables() {
+	private function getDefaultTwigVariables(): array {
 		return [
 			'honorifics' => $this->getHonorifics()->getList(),
 			'header_template' => $this->config['default-layout-templates']['header'],
@@ -582,7 +582,7 @@ class FunFunFactory {
 		];
 	}
 
-	private function newReferrerGeneralizer() {
+	private function newReferrerGeneralizer(): ReferrerGeneralizer {
 		return new ReferrerGeneralizer(
 			$this->config['referrer-generalization']['default'],
 			$this->config['referrer-generalization']['domain-map']
@@ -672,7 +672,7 @@ class FunFunFactory {
 		return $this->addProfilingDecorator( $mailer, 'Mailer' );
 	}
 
-	public function getGreetingGenerator() {
+	public function getGreetingGenerator(): GreetingGenerator {
 		return $this->pimple['greeting_generator'];
 	}
 
@@ -688,15 +688,15 @@ class FunFunFactory {
 		return new IbanPresenter();
 	}
 
-	public function newBankDataConverter() {
+	public function newBankDataConverter(): BankDataConverter {
 		return new BankDataConverter( $this->config['bank-data-file'] );
 	}
 
-	public function setSubscriptionValidator( SubscriptionValidator $subscriptionValidator ) {
+	public function setSubscriptionValidator( SubscriptionValidator $subscriptionValidator ): void {
 		$this->pimple['subscription_validator'] = $subscriptionValidator;
 	}
 
-	public function newGetInTouchUseCase() {
+	public function newGetInTouchUseCase(): GetInTouchUseCase {
 		return new GetInTouchUseCase(
 			$this->getContactValidator(),
 			$this->newContactOperatorMailer(),
@@ -760,7 +760,7 @@ class FunFunFactory {
 		return $this->pimple['messenger_suborganization'];
 	}
 
-	public function setSuborganizationMessenger( Messenger $messenger ) {
+	public function setSuborganizationMessenger( Messenger $messenger ): void {
 		$this->pimple['messenger_suborganization'] = $messenger;
 	}
 
@@ -768,11 +768,11 @@ class FunFunFactory {
 		return $this->pimple['messenger_organization'];
 	}
 
-	public function setOrganizationMessenger( Messenger $messenger ) {
+	public function setOrganizationMessenger( Messenger $messenger ): void {
 		$this->pimple['messenger_organization'] = $messenger;
 	}
 
-	public function setNullMessenger() {
+	public function setNullMessenger(): void {
 		$this->setSuborganizationMessenger( new Messenger(
 			Swift_NullTransport::newInstance(),
 			$this->getSubOrganizationEmailAddress()
@@ -787,7 +787,7 @@ class FunFunFactory {
 		return new EmailAddress( $this->config['contact-info']['suborganization']['email'] );
 	}
 
-	public function getOrganizationEmailAddress() {
+	public function getOrganizationEmailAddress(): EmailAddress {
 		return new EmailAddress( $this->config['contact-info']['organization']['email'] );
 	}
 
@@ -803,7 +803,7 @@ class FunFunFactory {
 		return $this->pimple['translator'];
 	}
 
-	public function setTranslator( TranslatorInterface $translator ) {
+	public function setTranslator( TranslatorInterface $translator ): void {
 		$this->pimple['translator'] = $translator;
 	}
 
@@ -905,19 +905,19 @@ class FunFunFactory {
 		);
 	}
 
-	public function newPayPalUrlGeneratorForDonations() {
+	public function newPayPalUrlGeneratorForDonations(): PayPalUrlGenerator {
 		return new PayPalUrlGenerator( $this->getPayPalUrlConfigForDonations() );
 	}
 
-	public function newPayPalUrlGeneratorForMembershipApplications() {
+	public function newPayPalUrlGeneratorForMembershipApplications(): PayPalUrlGenerator {
 		return new PayPalUrlGenerator( $this->getPayPalUrlConfigForMembershipApplications() );
 	}
 
-	private function getPayPalUrlConfigForDonations() {
+	private function getPayPalUrlConfigForDonations(): PayPalConfig {
 		return PayPalConfig::newFromConfig( $this->config['paypal-donation'] );
 	}
 
-	private function getPayPalUrlConfigForMembershipApplications() {
+	private function getPayPalUrlConfigForMembershipApplications(): PayPalConfig {
 		return PayPalConfig::newFromConfig( $this->config['paypal-membership'] );
 	}
 
@@ -991,13 +991,13 @@ class FunFunFactory {
 		return $this->pimple['token_generator'];
 	}
 
-	public function newDonationConfirmationPresenter() {
+	public function newDonationConfirmationPresenter(): DonationConfirmationHtmlPresenter {
 		return new DonationConfirmationHtmlPresenter(
 			$this->getIncludeTemplate( 'Donation_Confirmation.html.twig', [ 'piwikGoals' => [ 3 ] ] )
 		);
 	}
 
-	public function newCreditCardPaymentHtmlPresenter() {
+	public function newCreditCardPaymentHtmlPresenter(): CreditCardPaymentHtmlPresenter {
 		return new CreditCardPaymentHtmlPresenter(
 			$this->getIncludeTemplate( 'Credit_Card_Payment_Iframe.html.twig' ),
 			$this->getTranslator(),
@@ -1005,7 +1005,7 @@ class FunFunFactory {
 		);
 	}
 
-	public function newCancelDonationHtmlPresenter() {
+	public function newCancelDonationHtmlPresenter(): CancelDonationHtmlPresenter {
 		return new CancelDonationHtmlPresenter(
 			$this->getIncludeTemplate( 'Donation_Cancellation_Confirmation.html.twig' )
 		);
@@ -1052,11 +1052,11 @@ class FunFunFactory {
 		return new DoctrineApplicationPiwikTracker( $this->getEntityManager() );
 	}
 
-	private function getPaymentDelayCalculator() {
+	private function getPaymentDelayCalculator(): PaymentDelayCalculator {
 		return $this->pimple['payment-delay-calculator'];
 	}
 
-	public function setPaymentDelayCalculator( PaymentDelayCalculator $paymentDelayCalculator ) {
+	public function setPaymentDelayCalculator( PaymentDelayCalculator $paymentDelayCalculator ): void {
 		$this->pimple['payment-delay-calculator'] = $paymentDelayCalculator;
 	}
 
@@ -1101,7 +1101,7 @@ class FunFunFactory {
 		);
 	}
 
-	public function newMembershipApplicationConfirmationUseCase( string $accessToken ) {
+	public function newMembershipApplicationConfirmationUseCase( string $accessToken ): ShowMembershipApplicationConfirmationUseCase {
 		return new ShowMembershipApplicationConfirmationUseCase(
 			$this->newMembershipApplicationAuthorizer( null, $accessToken ), $this->getMembershipApplicationRepository(),
 			$this->newMembershipApplicationTokenFetcher()
@@ -1116,7 +1116,7 @@ class FunFunFactory {
 		);
 	}
 
-	public function setDonationConfirmationPageSelector( DonationConfirmationPageSelector $selector ) {
+	public function setDonationConfirmationPageSelector( DonationConfirmationPageSelector $selector ): void {
 		$this->pimple['confirmation-page-selector'] = $selector;
 	}
 
@@ -1124,11 +1124,11 @@ class FunFunFactory {
 		return $this->pimple['confirmation-page-selector'];
 	}
 
-	public function newDonationFormViolationPresenter() {
+	public function newDonationFormViolationPresenter(): DonationFormViolationPresenter {
 		return new DonationFormViolationPresenter( $this->getDonationFormTemplate(), $this->newAmountFormatter() );
 	}
 
-	public function newDonationFormPresenter() {
+	public function newDonationFormPresenter(): DonationFormPresenter {
 		return new DonationFormPresenter( $this->getDonationFormTemplate(), $this->newAmountFormatter() );
 	}
 
@@ -1146,7 +1146,7 @@ class FunFunFactory {
 		} ) );
 	}
 
-	public function newHandlePayPalPaymentNotificationUseCase( string $updateToken ) {
+	public function newHandlePayPalPaymentNotificationUseCase( string $updateToken ): HandlePayPalPaymentNotificationUseCase {
 		return new HandlePayPalPaymentNotificationUseCase(
 			$this->getDonationRepository(),
 			$this->newDonationAuthorizer( $updateToken ),
@@ -1155,7 +1155,7 @@ class FunFunFactory {
 		);
 	}
 
-	public function newMembershipApplicationSubscriptionSignupNotificationUseCase( string $updateToken ) {
+	public function newMembershipApplicationSubscriptionSignupNotificationUseCase( string $updateToken ): HandleSubscriptionSignupNotificationUseCase {
 		return new HandleSubscriptionSignupNotificationUseCase(
 			$this->getMembershipApplicationRepository(),
 			$this->newMembershipApplicationAuthorizer( $updateToken ),
@@ -1164,7 +1164,7 @@ class FunFunFactory {
 		);
 	}
 
-	public function newMembershipApplicationSubscriptionPaymentNotificationUseCase( string $updateToken ) {
+	public function newMembershipApplicationSubscriptionPaymentNotificationUseCase( string $updateToken ): HandleSubscriptionPaymentNotificationUseCase {
 		return new HandleSubscriptionPaymentNotificationUseCase(
 			$this->getMembershipApplicationRepository(),
 			$this->newMembershipApplicationAuthorizer( $updateToken ),
@@ -1177,7 +1177,7 @@ class FunFunFactory {
 		return $this->pimple['paypal-payment-notification-verifier'];
 	}
 
-	public function setPayPalPaymentNotificationVerifier( PaymentNotificationVerifier $verifier ) {
+	public function setPayPalPaymentNotificationVerifier( PaymentNotificationVerifier $verifier ): void {
 		$this->pimple['paypal-payment-notification-verifier'] = $verifier;
 	}
 
@@ -1185,11 +1185,11 @@ class FunFunFactory {
 		return $this->pimple['paypal-membership-fee-notification-verifier'];
 	}
 
-	public function setPayPalMembershipFeeNotificationVerifier( PaymentNotificationVerifier $verifier ) {
+	public function setPayPalMembershipFeeNotificationVerifier( PaymentNotificationVerifier $verifier ): void {
 		$this->pimple['paypal-membership-fee-notification-verifier'] = $verifier;
 	}
 
-	public function newCreditCardNotificationUseCase( string $updateToken ) {
+	public function newCreditCardNotificationUseCase( string $updateToken ): CreditCardNotificationUseCase {
 		return new CreditCardNotificationUseCase(
 			$this->getDonationRepository(),
 			$this->newDonationAuthorizer( $updateToken ),
@@ -1200,25 +1200,25 @@ class FunFunFactory {
 		);
 	}
 
-	public function newCancelMembershipApplicationHtmlPresenter() {
+	public function newCancelMembershipApplicationHtmlPresenter(): CancelMembershipApplicationHtmlPresenter {
 		return new CancelMembershipApplicationHtmlPresenter(
 			$this->getIncludeTemplate( 'Membership_Application_Cancellation_Confirmation.html.twig' )
 		);
 	}
 
-	public function newMembershipApplicationConfirmationHtmlPresenter() {
+	public function newMembershipApplicationConfirmationHtmlPresenter(): MembershipApplicationConfirmationHtmlPresenter {
 		return new MembershipApplicationConfirmationHtmlPresenter(
 			$this->getIncludeTemplate( 'Membership_Application_Confirmation.html.twig' )
 		);
 	}
 
-	public function newMembershipFormViolationPresenter() {
+	public function newMembershipFormViolationPresenter(): MembershipFormViolationPresenter {
 		return new MembershipFormViolationPresenter(
 			$this->getLayoutTemplate( 'Membership_Application.html.twig' )
 		);
 	}
 
-	public function setCreditCardService( CreditCardService $ccService ) {
+	public function setCreditCardService( CreditCardService $ccService ): void {
 		$this->pimple['credit-card-api-service'] = $ccService;
 	}
 
@@ -1252,11 +1252,11 @@ class FunFunFactory {
 		);
 	}
 
-	public function setTokenGenerator( TokenGenerator $tokenGenerator ) {
+	public function setTokenGenerator( TokenGenerator $tokenGenerator ): void {
 		$this->pimple['token_generator'] = $tokenGenerator;
 	}
 
-	public function disableDoctrineSubscribers() {
+	public function disableDoctrineSubscribers(): void {
 		$this->addDoctrineSubscribers = false;
 	}
 
@@ -1285,16 +1285,16 @@ class FunFunFactory {
 		return new AmountPolicyValidator( 1000, 1000 );
 	}
 
-	public function getDonationTimeframeLimit() {
+	public function getDonationTimeframeLimit(): string {
 		return $this->config['donation-timeframe-limit'];
 	}
 
-	public function newSystemMessageResponse( string $message ) {
+	public function newSystemMessageResponse( string $message ): string {
 		$test = $this->getIncludeTemplate( 'System_Message.html.twig' );
 		return $test->render( [ 'message' => $message ] );
 	}
 
-	public function getMembershipApplicationTimeframeLimit() {
+	public function getMembershipApplicationTimeframeLimit(): string {
 		return $this->config['membership-application-timeframe-limit'];
 	}
 
@@ -1310,7 +1310,7 @@ class FunFunFactory {
 		return $this->pimple['rendered_page_cache'];
 	}
 
-	public function enablePageCache() {
+	public function enablePageCache(): void {
 		$this->pimple['page_cache'] = function() {
 			return new FilesystemCache( $this->getCachePath() . '/pages/raw' );
 		};
@@ -1320,7 +1320,7 @@ class FunFunFactory {
 		};
 	}
 
-	private function addProfilingDecorator( $objectToDecorate, string $profilingLabel ) {
+	private function addProfilingDecorator( $objectToDecorate, string $profilingLabel ) {	// @codingStandardsIgnoreLine
 		if ( $this->profiler === null ) {
 			return $objectToDecorate;
 		}
@@ -1330,19 +1330,19 @@ class FunFunFactory {
 		return $builder->decorate( $objectToDecorate, $profilingLabel );
 	}
 
-	public function setProfiler( Stopwatch $profiler ) {
+	public function setProfiler( Stopwatch $profiler ): void {
 		$this->profiler = $profiler;
 	}
 
-	public function setEmailValidator( EmailValidator $validator ) {
+	public function setEmailValidator( EmailValidator $validator ): void {
 		$this->pimple['mail_validator'] = $validator;
 	}
 
-	public function setLogger( LoggerInterface $logger ) {
+	public function setLogger( LoggerInterface $logger ): void {
 		$this->pimple['logger'] = $logger;
 	}
 
-	public function setPaypalLogger( LoggerInterface $logger ) {
+	public function setPaypalLogger( LoggerInterface $logger ): void {
 		$this->pimple['paypal_logger'] = $logger;
 	}
 
@@ -1382,7 +1382,7 @@ class FunFunFactory {
 		return new PageNotFoundPresenter( $this->getLayoutTemplate( 'Page_not_found.html.twig' ) );
 	}
 
-	public function setPageViewTracker( PageViewTracker $tracker ) {
+	public function setPageViewTracker( PageViewTracker $tracker ): void {
 		$this->pimple['page_view_tracker'] = function () use ( $tracker )  {
 			return $tracker;
 		};

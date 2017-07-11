@@ -21,7 +21,7 @@ class DonationConfirmationMailerTest extends \PHPUnit\Framework\TestCase {
 
 	const DONATION_ID = 42;
 
-	public function testMailerExtractsEmailFromDonation() {
+	public function testMailerExtractsEmailFromDonation(): void {
 		$mailer = new TemplateBasedMailerSpy( $this );
 
 		$donationMailer = new DonationConfirmationMailer( $mailer );
@@ -40,7 +40,7 @@ class DonationConfirmationMailerTest extends \PHPUnit\Framework\TestCase {
 		return $donation;
 	}
 
-	public function testMailerAssemblesTemplateData() {
+	public function testMailerAssemblesTemplateData(): void {
 		$mailer = new TemplateBasedMailerSpy( $this );
 
 		$donationMailer = new DonationConfirmationMailer( $mailer );

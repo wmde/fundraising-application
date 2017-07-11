@@ -14,26 +14,26 @@ use WMDE\Fundraising\Frontend\Infrastructure\RandomTokenGenerator;
  */
 class RandomTokenGeneratorTest extends \PHPUnit\Framework\TestCase {
 
-	public function testGenerateTokenReturnsHexString() {
+	public function testGenerateTokenReturnsHexString(): void {
 		$this->assertTrue( ctype_xdigit(
 			( new RandomTokenGenerator( 10, new \DateInterval( 'PT1H' ) ) )->generateToken()
 		) );
 	}
 
-	public function testGenerateTokenReturnsDifferentStringsOnSuccessiveCalls() {
+	public function testGenerateTokenReturnsDifferentStringsOnSuccessiveCalls(): void {
 		$generator = new RandomTokenGenerator( 10, new \DateInterval( 'PT1H' ) );
 
 		$this->assertNotSame( $generator->generateToken(), $generator->generateToken() );
 	}
 
-	public function testGenerateTokenReturnsDifferentStringsForInitialCalls() {
+	public function testGenerateTokenReturnsDifferentStringsForInitialCalls(): void {
 		$this->assertNotSame(
 			( new RandomTokenGenerator( 10, new \DateInterval( 'PT1H' ) ) )->generateToken(),
 			( new RandomTokenGenerator( 10, new \DateInterval( 'PT1H' ) ) )->generateToken()
 		);
 	}
 
-	public function testGenerateTokenExpiryAddsInterval() {
+	public function testGenerateTokenExpiryAddsInterval(): void {
 		$generator = new RandomTokenGenerator( 10, new \DateInterval( 'PT1H' ) );
 
 		$this->assertGreaterThan(

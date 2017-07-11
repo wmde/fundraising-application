@@ -22,7 +22,7 @@ class CreditCardExpiry {
 		$this->year = $year;
 	}
 
-	public static function newFromString( string $expirationDate ) {
+	public static function newFromString( string $expirationDate ): ?self {
 		$dateParts = explode( '/', $expirationDate );
 		if ( count( $dateParts ) === 2 ) {
 			return new self( (int)$dateParts[0], (int)$dateParts[1] );

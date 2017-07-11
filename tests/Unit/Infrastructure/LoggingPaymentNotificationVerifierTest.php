@@ -18,7 +18,7 @@ use WMDE\PsrLogTestDoubles\LoggerSpy;
  */
 class LoggingPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase {
 
-	public function testWhenVerifierThrowsException_loggingVerifierPassesItOn() {
+	public function testWhenVerifierThrowsException_loggingVerifierPassesItOn(): void {
 		$loggingVerifier = new LoggingPaymentNotificationVerifier(
 			$this->newThrowingVerifier(),
 			new LoggerSpy()
@@ -42,7 +42,7 @@ class LoggingPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase
 		return $verifier;
 	}
 
-	public function testWhenVerifierThrowsException_itIsLogged() {
+	public function testWhenVerifierThrowsException_itIsLogged(): void {
 		$logger = new LoggerSpy();
 
 		$loggingVerifier = new LoggingPaymentNotificationVerifier(
@@ -59,7 +59,7 @@ class LoggingPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase
 		$this->assertExceptionLoggedAsCritical( PayPalPaymentNotificationVerifierException::class, $logger );
 	}
 
-	private function assertExceptionLoggedAsCritical( string $expectedExceptionType, LoggerSpy $logger ) {
+	private function assertExceptionLoggedAsCritical( string $expectedExceptionType, LoggerSpy $logger ): void {
 		$this->assertNotEmpty( $logger->getLogCalls(), 'There should be at least one log call' );
 
 		$logCall = $logger->getLogCalls()->getFirstCall();
@@ -69,7 +69,7 @@ class LoggingPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase
 		$this->assertInstanceOf( $expectedExceptionType, $logCall->getContext()['exception'] );
 	}
 
-	public function testGivenAnExceptionForUnsupportedPaymentMethod_itIsLoggedAsInfo() {
+	public function testGivenAnExceptionForUnsupportedPaymentMethod_itIsLoggedAsInfo(): void {
 		$logger = new LoggerSpy();
 
 		$statusException = new PayPalPaymentNotificationVerifierException(
@@ -90,7 +90,7 @@ class LoggingPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase
 		$this->assertUnsupportedMethodWasLogged( 'Unknown', $logger );
 	}
 
-	private function assertUnsupportedMethodWasLogged( string $expectedMethodName, LoggerSpy $logger ) {
+	private function assertUnsupportedMethodWasLogged( string $expectedMethodName, LoggerSpy $logger ): void {
 		$this->assertNotEmpty( $logger->getLogCalls(), 'There should be at least one log call' );
 
 		$logCall = $logger->getLogCalls()->getFirstCall();
@@ -100,7 +100,7 @@ class LoggingPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase
 		$this->assertSame( $expectedMethodName, $logCall->getContext()['payment_status'] );
 	}
 
-	public function testWhenVerifierThrowsException_requestIsLoggedAsDebugInfo() {
+	public function testWhenVerifierThrowsException_requestIsLoggedAsDebugInfo(): void {
 		$logger = new LoggerSpy();
 
 		$loggingVerifier = new LoggingPaymentNotificationVerifier(
@@ -117,7 +117,7 @@ class LoggingPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase
 		$this->assertRequestLoggedAsDebugInfo( $logger );
 	}
 
-	private function assertRequestLoggedAsDebugInfo( LoggerSpy $logger ) {
+	private function assertRequestLoggedAsDebugInfo( LoggerSpy $logger ): void {
 		$this->assertGreaterThan( 1, count( $logger->getLogCalls() ), 'There should be at least two log calls' );
 
 		$logCall = $logger->getLogCalls()->getIterator()[1];
@@ -130,7 +130,7 @@ class LoggingPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase
 		);
 	}
 
-	public function testWhenVerifierSucceeds_nothingIsLogged() {
+	public function testWhenVerifierSucceeds_nothingIsLogged(): void {
 		$logger = new LoggerSpy();
 		$verifierMock = $this->getMockBuilder( PayPalPaymentNotificationVerifier::class )->disableOriginalConstructor()->getMock();
 		$verifier = new LoggingPaymentNotificationVerifier(

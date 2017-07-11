@@ -27,7 +27,7 @@ class InMemoryApplicationRepository implements ApplicationRepository {
 	 *
 	 * @throws StoreMembershipApplicationException
 	 */
-	public function storeApplication( Application $application ) {
+	public function storeApplication( Application $application ): void {
 		if ( !$application->hasId() ) {
 			$application->assignId( $this->nextNewId++ );
 		}

@@ -88,7 +88,7 @@ class PayPalConfig {
 		return $this->itemName;
 	}
 
-	public function getDelayInDays() {
+	public function getDelayInDays(): int {
 		return $this->delayInDays;
 	}
 

@@ -22,14 +22,14 @@ class BankDataValidatorTest extends ValidatorTestCase {
 	 * @dataProvider invalidBankDataProvider
 	 */
 	public function testFieldsMissing_validationFails( string $iban, string $bic, string $bankName,
-		string $bankCode, string $account ) {
+		string $bankCode, string $account ): void {
 
 		$bankDataValidator = $this->newBankDataValidator();
 		$bankData = $this->newBankData( $iban, $bic, $bankName, $bankCode, $account );
 		$this->assertFalse( $bankDataValidator->validate( $bankData )->isSuccessful() );
 	}
 
-	public function invalidBankDataProvider() {
+	public function invalidBankDataProvider(): array {
 		return [
 			[
 				'DB00123456789012345678',
@@ -63,13 +63,13 @@ class BankDataValidatorTest extends ValidatorTestCase {
 		];
 	}
 
-	public function testAllRequiredFieldsGiven_validationSucceeds() {
+	public function testAllRequiredFieldsGiven_validationSucceeds(): void {
 		$bankDataValidator = $this->newBankDataValidator();
 		$bankData = $this->newBankData( 'DE00123456789012345678', 'SCROUSDBXXX', 'Scrooge Bank', '12345678', '1234567890' );
 		$this->assertTrue( $bankDataValidator->validate( $bankData )->isSuccessful() );
 	}
 
-	public function validBankDataProvider() {
+	public function validBankDataProvider(): array {
 		return [
 			[
 				'DB00123456789012345678',
@@ -97,7 +97,7 @@ class BankDataValidatorTest extends ValidatorTestCase {
 			->setAccount( $account );
 	}
 
-	private function newBankDataValidator() {
+	private function newBankDataValidator(): BankDataValidator {
 		$ibanValidatorMock = $this->getMockBuilder( IbanValidator::class )->disableOriginalConstructor()->getMock();
 		$ibanValidatorMock->method( 'validate' )
 			->willReturn( new ValidationResult() );

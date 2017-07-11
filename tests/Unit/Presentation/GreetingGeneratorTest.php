@@ -8,12 +8,12 @@ use WMDE\Fundraising\Frontend\Presentation\GreetingGenerator;
 
 class GreetingGeneratorTest extends \PHPUnit\Framework\TestCase {
 
-	public function testGivenNoLastName_neutralGreetingIsGenerated() {
+	public function testGivenNoLastName_neutralGreetingIsGenerated(): void {
 		$generator = new GreetingGenerator();
 		$this->assertSame( 'Sehr geehrte Damen und Herren,', $generator->createGreeting( '', 'Herr', '' ) );
 	}
 
-	public function testGivenNoSalutation_neutralGreetingIsGenerated() {
+	public function testGivenNoSalutation_neutralGreetingIsGenerated(): void {
 		$generator = new GreetingGenerator();
 		$this->assertSame( 'Sehr geehrte Damen und Herren,', $generator->createGreeting( 'Nyan', '', '' ) );
 	}
@@ -21,12 +21,12 @@ class GreetingGeneratorTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider greetingProvider
 	 */
-	public function testGivenASalutation_specificGreetingIsGenerated( $salutation, $expected ) {
+	public function testGivenASalutation_specificGreetingIsGenerated( string $salutation, string $expected ): void {
 		$generator = new GreetingGenerator();
 		$this->assertSame( $expected, $generator->createGreeting( 'Nyan', $salutation, '' ) );
 	}
 
-	public function greetingProvider() {
+	public function greetingProvider(): array {
 		return [
 			[ 'Herr', 'Sehr geehrter Herr Nyan,' ],
 			[ 'Frau', 'Sehr geehrte Frau Nyan,' ],
@@ -37,12 +37,12 @@ class GreetingGeneratorTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider greetingTitleProvider
 	 */
-	public function testGivenATitle_itIsMentionInGreeting( $salutation, $title, $expected ) {
+	public function testGivenATitle_itIsMentionInGreeting( string $salutation, string $title, string $expected ): void {
 		$generator = new GreetingGenerator();
 		$this->assertSame( $expected, $generator->createGreeting( 'Nyan', $salutation, $title ) );
 	}
 
-	public function greetingTitleProvider() {
+	public function greetingTitleProvider(): array {
 		return [
 			[ 'Herr', 'Dr.', 'Sehr geehrter Herr Dr. Nyan,' ],
 			[ 'Frau', 'Prof.', 'Sehr geehrte Frau Prof. Nyan,' ],

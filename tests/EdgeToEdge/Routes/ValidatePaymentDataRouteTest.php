@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
  */
 class ValidatePaymentDataRouteTest extends WebRouteTestCase {
 
-	public function testGivenValidAmount_successResponseIsReturned() {
+	public function testGivenValidAmount_successResponseIsReturned(): void {
 		$client = $this->createClient();
 
 		$client->request(
@@ -28,7 +28,7 @@ class ValidatePaymentDataRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	public function testGivenInvalidAmount_failureResponseIsReturned() {
+	public function testGivenInvalidAmount_failureResponseIsReturned(): void {
 		$client = $this->createClient();
 
 		$client->request(

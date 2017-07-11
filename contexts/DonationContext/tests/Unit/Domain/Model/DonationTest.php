@@ -17,14 +17,14 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalData;
  */
 class DonationTest extends \PHPUnit\Framework\TestCase {
 
-	public function testGivenNonDirectDebitDonation_cancellationFails() {
+	public function testGivenNonDirectDebitDonation_cancellationFails(): void {
 		$donation = ValidDonation::newBankTransferDonation();
 
 		$this->expectException( RuntimeException::class );
 		$donation->cancel();
 	}
 
-	public function testGivenDirectDebitDonation_cancellationSucceeds() {
+	public function testGivenDirectDebitDonation_cancellationSucceeds(): void {
 		$donation = ValidDonation::newDirectDebitDonation();
 
 		$donation->cancel();
@@ -34,14 +34,14 @@ class DonationTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider nonCancellableStatusProvider
 	 */
-	public function testGivenNonNewStatus_cancellationFails( $nonCancellableStatus ) {
+	public function testGivenNonNewStatus_cancellationFails( string $nonCancellableStatus ): void {
 		$donation = $this->newDirectDebitDonationWithStatus( $nonCancellableStatus );
 
 		$this->expectException( RuntimeException::class );
 		$donation->cancel();
 	}
 
-	private function newDirectDebitDonationWithStatus( string $status ) {
+	private function newDirectDebitDonationWithStatus( string $status ): Donation {
 		return new Donation(
 			null,
 			$status,
@@ -52,7 +52,7 @@ class DonationTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function nonCancellableStatusProvider() {
+	public function nonCancellableStatusProvider(): array {
 		return [
 			[ Donation::STATUS_CANCELLED ],
 			[ Donation::STATUS_EXTERNAL_BOOKED ],
@@ -61,21 +61,21 @@ class DonationTest extends \PHPUnit\Framework\TestCase {
 		];
 	}
 
-	public function testGivenNewStatus_cancellationSucceeds() {
+	public function testGivenNewStatus_cancellationSucceeds(): void {
 		$donation = ValidDonation::newDirectDebitDonation();
 
 		$donation->cancel();
 		$this->assertSame( Donation::STATUS_CANCELLED, $donation->getStatus() );
 	}
 
-	public function testModerationStatusCanBeQueried() {
+	public function testModerationStatusCanBeQueried(): void {
 		$donation = ValidDonation::newDirectDebitDonation();
 
 		$donation->markForModeration();
 		$this->assertTrue( $donation->needsModeration() );
 	}
 
-	public function testGivenModerationStatus_cancellationSucceeds() {
+	public function testGivenModerationStatus_cancellationSucceeds(): void {
 		$donation = ValidDonation::newDirectDebitDonation();
 
 		$donation->markForModeration();
@@ -83,18 +83,18 @@ class DonationTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( Donation::STATUS_CANCELLED, $donation->getStatus() );
 	}
 
-	public function testIdIsNullWhenNotAssigned() {
+	public function testIdIsNullWhenNotAssigned(): void {
 		$this->assertNull( ValidDonation::newDirectDebitDonation()->getId() );
 	}
 
-	public function testCanAssignIdToNewDonation() {
+	public function testCanAssignIdToNewDonation(): void {
 		$donation = ValidDonation::newDirectDebitDonation();
 
 		$donation->assignId( 42 );
 		$this->assertSame( 42, $donation->getId() );
 	}
 
-	public function testCannotAssignIdToDonationWithIdentity() {
+	public function testCannotAssignIdToDonationWithIdentity(): void {
 		$donation = ValidDonation::newDirectDebitDonation();
 		$donation->assignId( 42 );
 
@@ -102,7 +102,7 @@ class DonationTest extends \PHPUnit\Framework\TestCase {
 		$donation->assignId( 43 );
 	}
 
-	public function testGivenNonExternalPaymentType_confirmBookedThrowsException() {
+	public function testGivenNonExternalPaymentType_confirmBookedThrowsException(): void {
 		$donation = ValidDonation::newDirectDebitDonation();
 
 		$this->expectException( RuntimeException::class );
@@ -113,12 +113,12 @@ class DonationTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider statusesThatDoNotAllowForBookingProvider
 	 */
-	public function testGivenStatusThatDoesNotAllowForBooking_confirmBookedThrowsException( Donation $donation ) {
+	public function testGivenStatusThatDoesNotAllowForBooking_confirmBookedThrowsException( Donation $donation ): void {
 		$this->expectException( RuntimeException::class );
 		$donation->confirmBooked();
 	}
 
-	public function statusesThatDoNotAllowForBookingProvider() {
+	public function statusesThatDoNotAllowForBookingProvider(): array {
 		return [
 			[ ValidDonation::newBookedPayPalDonation() ],
 			[ ValidDonation::newBookedCreditCardDonation() ],
@@ -128,12 +128,12 @@ class DonationTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider statusesThatAllowsForBookingProvider
 	 */
-	public function testGivenStatusThatAllowsForBooking_confirmBookedSetsBookedStatus( Donation $donation ) {
+	public function testGivenStatusThatAllowsForBooking_confirmBookedSetsBookedStatus( Donation $donation ): void {
 		$donation->confirmBooked();
 		$this->assertSame( Donation::STATUS_EXTERNAL_BOOKED, $donation->getStatus() );
 	}
 
-	public function statusesThatAllowsForBookingProvider() {
+	public function statusesThatAllowsForBookingProvider(): array {
 		return [
 			[ ValidDonation::newIncompletePayPalDonation() ],
 			[ ValidDonation::newIncompleteCreditCardDonation() ],
@@ -148,7 +148,7 @@ class DonationTest extends \PHPUnit\Framework\TestCase {
 		return $donation;
 	}
 
-	public function testAddCommentThrowsExceptionWhenCommentAlreadySet() {
+	public function testAddCommentThrowsExceptionWhenCommentAlreadySet(): void {
 		$donation = new Donation(
 			null,
 			Donation::STATUS_NEW,
@@ -163,7 +163,7 @@ class DonationTest extends \PHPUnit\Framework\TestCase {
 		$donation->addComment( ValidDonation::newPublicComment() );
 	}
 
-	public function testAddCommentSetsWhenCommentNotSetYet() {
+	public function testAddCommentSetsWhenCommentNotSetYet(): void {
 		$donation = new Donation(
 			null,
 			Donation::STATUS_NEW,
@@ -178,11 +178,11 @@ class DonationTest extends \PHPUnit\Framework\TestCase {
 		$this->assertEquals( ValidDonation::newPublicComment(), $donation->getComment() );
 	}
 
-	public function testWhenNoCommentHasBeenSet_getCommentReturnsNull() {
+	public function testWhenNoCommentHasBeenSet_getCommentReturnsNull(): void {
 		$this->assertNull( ValidDonation::newDirectDebitDonation()->getComment() );
 	}
 
-	public function testWhenCompletingBookingOfExternalPaymentInModeration_commentIsMadePrivate() {
+	public function testWhenCompletingBookingOfExternalPaymentInModeration_commentIsMadePrivate(): void {
 		$donation = $this->newInModerationPayPalDonation();
 		$donation->addComment( ValidDonation::newPublicComment() );
 
@@ -191,7 +191,7 @@ class DonationTest extends \PHPUnit\Framework\TestCase {
 		$this->assertFalse( $donation->getComment()->isPublic() );
 	}
 
-	public function testWhenCompletingBookingOfCancelledExternalPayment_commentIsMadePrivate() {
+	public function testWhenCompletingBookingOfCancelledExternalPayment_commentIsMadePrivate(): void {
 		$donation = ValidDonation::newCancelledPayPalDonation();
 		$donation->addComment( ValidDonation::newPublicComment() );
 
@@ -200,7 +200,7 @@ class DonationTest extends \PHPUnit\Framework\TestCase {
 		$this->assertFalse( $donation->getComment()->isPublic() );
 	}
 
-	public function testWhenCompletingBookingOfCancelledExternalPayment_lackOfCommentCausesNoError() {
+	public function testWhenCompletingBookingOfCancelledExternalPayment_lackOfCommentCausesNoError(): void {
 		$donation = ValidDonation::newCancelledPayPalDonation();
 
 		$donation->confirmBooked();
@@ -208,7 +208,7 @@ class DonationTest extends \PHPUnit\Framework\TestCase {
 		$this->assertFalse( $donation->hasComment() );
 	}
 
-	public function testWhenConstructingWithInvalidStatus_exceptionIsThrown() {
+	public function testWhenConstructingWithInvalidStatus_exceptionIsThrown(): void {
 		$this->expectException( \InvalidArgumentException::class );
 
 		new Donation(
@@ -222,13 +222,13 @@ class DonationTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testWhenNonExternalPaymentIsNotifiedOfPolicyValidationFailure_itIsPutInModeration() {
+	public function testWhenNonExternalPaymentIsNotifiedOfPolicyValidationFailure_itIsPutInModeration(): void {
 		$donation = ValidDonation::newBankTransferDonation();
 		$donation->notifyOfPolicyValidationFailure();
 		$this->assertTrue( $donation->needsModeration() );
 	}
 
-	public function testWhenExternalPaymentIsNotifiedOfPolicyValidationFailure_itIsNotPutInModeration() {
+	public function testWhenExternalPaymentIsNotifiedOfPolicyValidationFailure_itIsNotPutInModeration(): void {
 		$donation = ValidDonation::newIncompletePayPalDonation();
 		$donation->notifyOfPolicyValidationFailure();
 		$this->assertFalse( $donation->needsModeration() );

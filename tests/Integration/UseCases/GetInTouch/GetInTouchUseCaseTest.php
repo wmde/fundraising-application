@@ -10,6 +10,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\EmailAddress;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\Fundraising\Frontend\Validation\ValidationResult;
+use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 
 /**
  * @covers WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase
@@ -33,7 +34,7 @@ class GetInTouchUseCaseTest extends \PHPUnit\Framework\TestCase {
 	/** @var TemplateBasedMailerSpy */
 	private $userMailer;
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->validator = $this->newSucceedingValidator();
 		$this->operatorMailer = $this->createMock( OperatorMailer::class );
 		$this->userMailer = new TemplateBasedMailerSpy( $this );
@@ -47,7 +48,7 @@ class GetInTouchUseCaseTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testGivenValidParameters_theyAreContainedInTheEmailToOperator() {
+	public function testGivenValidParameters_theyAreContainedInTheEmailToOperator(): void {
 		$this->operatorMailer->expects( $this->once() )
 			->method( 'sendMailToOperator' )
 			->with(
@@ -65,7 +66,7 @@ class GetInTouchUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$useCase->processContactRequest( $this->newRequest() );
 	}
 
-	public function testGivenValidRequest_theUserIsNotified() {
+	public function testGivenValidRequest_theUserIsNotified(): void {
 		$useCase = $this->newGetInTouchUseCase();
 		$useCase->processContactRequest( $this->newRequest() );
 
@@ -76,8 +77,8 @@ class GetInTouchUseCaseTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	private function newRequest() {
-		return new \WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest(
+	private function newRequest(): GetInTouchRequest {
+		return new GetInTouchRequest(
 			self::INQUIRER_FIRST_NAME,
 			self::INQUIRER_LAST_NAME,
 			self::INQUIRER_EMAIL_ADDRESS,
@@ -86,7 +87,7 @@ class GetInTouchUseCaseTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	private function newSucceedingValidator() {
+	private function newSucceedingValidator(): GetInTouchValidator {
 		$validator = $this->getMockBuilder( GetInTouchValidator::class )
 			->disableOriginalConstructor()
 			->getMock();

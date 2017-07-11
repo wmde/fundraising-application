@@ -31,7 +31,7 @@ class DoctrineMembershipApplicationPrePersistSubscriber implements EventSubscrib
 		return [ Events::prePersist ];
 	}
 
-	public function prePersist( LifecycleEventArgs $args ) {
+	public function prePersist( LifecycleEventArgs $args ): void {
 		$entity = $args->getObject();
 
 		if ( $entity instanceof MembershipApplication ) {
@@ -47,7 +47,7 @@ class DoctrineMembershipApplicationPrePersistSubscriber implements EventSubscrib
 		}
 	}
 
-	private function isEmpty( $stringOrNull ): bool {
+	private function isEmpty( ?string $stringOrNull ): bool {
 		return $stringOrNull === null || $stringOrNull === '';
 	}
 

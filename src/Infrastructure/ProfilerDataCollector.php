@@ -22,18 +22,18 @@ class ProfilerDataCollector extends DataCollector {
 		$this->data['calls'] = [];
 	}
 
-	public function collect( Request $request, Response $response, \Exception $exception = null ) {
+	public function collect( Request $request, Response $response, \Exception $exception = null ): void {
 	}
 
 	public function getName(): string {
 		return 'fundraising';
 	}
 
-	public function getCalls() {
+	public function getCalls(): array {
 		return $this->data['calls'];
 	}
 
-	public function addCall( string $serviceName, string $functionName, array $arguments ) {
+	public function addCall( string $serviceName, string $functionName, array $arguments ): void {
 		$this->data['calls'][] = [
 			'service' => $serviceName,
 			'function' => $functionName,

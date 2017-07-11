@@ -19,7 +19,7 @@ class AuthorizedCachePurgerTest extends \PHPUnit\Framework\TestCase {
 	const CORRECT_SECRET = 'correct secret';
 	const WRONG_SECRET = 'wrong secret';
 
-	public function testWhenSecretMatches_purgeHappens() {
+	public function testWhenSecretMatches_purgeHappens(): void {
 		$cachePurger = $this->newCachePurger();
 		$cachePurger->expects( $this->once() )->method( 'purgeCache' );
 
@@ -35,7 +35,7 @@ class AuthorizedCachePurgerTest extends \PHPUnit\Framework\TestCase {
 		return $this->createMock( CachePurger::class );
 	}
 
-	public function testWhenSecretDoesNotMatch_purgeDoesNotHappen() {
+	public function testWhenSecretDoesNotMatch_purgeDoesNotHappen(): void {
 		$cachePurger = $this->newCachePurger();
 		$cachePurger->expects( $this->never() )->method( 'purgeCache' );
 
@@ -44,7 +44,7 @@ class AuthorizedCachePurgerTest extends \PHPUnit\Framework\TestCase {
 		$useCase->purgeCache( self::WRONG_SECRET );
 	}
 
-	public function testWhenPurgeHappens_successIsReturned() {
+	public function testWhenPurgeHappens_successIsReturned(): void {
 		$useCase = new AuthorizedCachePurger( $this->newCachePurger(), self::CORRECT_SECRET );
 
 		$this->assertSame(
@@ -53,7 +53,7 @@ class AuthorizedCachePurgerTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testWhenSecretDoesNotMatch_accessDeniedIsReturned() {
+	public function testWhenSecretDoesNotMatch_accessDeniedIsReturned(): void {
 		$useCase = new AuthorizedCachePurger( $this->newCachePurger(), self::CORRECT_SECRET );
 
 		$this->assertSame(
@@ -62,7 +62,7 @@ class AuthorizedCachePurgerTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testWhenCachePurgeThrowsException_errorIsReturned() {
+	public function testWhenCachePurgeThrowsException_errorIsReturned(): void {
 		$cachePurger = $this->newCachePurger();
 		$cachePurger->expects( $this->any() )
 			->method( 'purgeCache' )->willThrowException( new CachePurgingException( '' ) );

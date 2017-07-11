@@ -14,6 +14,6 @@ interface ApplicationTracker {
 	/**
 	 * @throws ApplicationTrackingException
 	 */
-	public function trackApplication( int $applicationId, MembershipApplicationTrackingInfo $trackingInfo );
+	public function trackApplication( int $applicationId, MembershipApplicationTrackingInfo $trackingInfo ): void;
 
 }

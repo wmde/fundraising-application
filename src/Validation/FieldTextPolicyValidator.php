@@ -18,7 +18,7 @@ class FieldTextPolicyValidator {
 		$this->textPolicyValidator = $textPolicyValidator;
 	}
 
-	public function validate( $value ): ValidationResult {
+	public function validate( $value ): ValidationResult {	// @codingStandardsIgnoreLine
 		if ( $value === '' ) {
 			return new ValidationResult();
 		}

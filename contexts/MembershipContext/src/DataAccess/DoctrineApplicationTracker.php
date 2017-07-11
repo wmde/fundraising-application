@@ -23,7 +23,7 @@ class DoctrineApplicationTracker implements ApplicationTracker {
 		$this->entityManager = $entityManager;
 	}
 
-	public function trackApplication( int $applicationId, MembershipApplicationTrackingInfo $trackingInfo ) {
+	public function trackApplication( int $applicationId, MembershipApplicationTrackingInfo $trackingInfo ): void {
 		$application = $this->getApplicationById( $applicationId );
 
 		$data = $application->getDecodedData();
@@ -50,7 +50,7 @@ class DoctrineApplicationTracker implements ApplicationTracker {
 		return $application;
 	}
 
-	private function persistApplication( MembershipApplication $application ) {
+	private function persistApplication( MembershipApplication $application ): void {
 		try {
 			$this->entityManager->persist( $application );
 			$this->entityManager->flush();

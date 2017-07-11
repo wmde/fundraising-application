@@ -15,7 +15,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
  */
 class TestEnvironment {
 
-	public static function newInstance( array $config = [] ) {
+	public static function newInstance( array $config = [] ): self {
 		$instance = new self( $config );
 
 		$installer = $instance->factory->newInstaller();
@@ -52,7 +52,7 @@ class TestEnvironment {
 		$this->factory = new FunFunFactory( $this->config );
 	}
 
-	private function getConfigFromFiles() {
+	private function getConfigFromFiles(): array {
 		$readerArguments = [
 			new SimpleFileFetcher(),
 			__DIR__ . '/../app/config/config.dist.json',
@@ -81,7 +81,7 @@ class TestEnvironment {
 		return file_get_contents( __DIR__ . '/Data/files/' . $fileName );
 	}
 
-	public static function getJsonTestData( string $fileName ) {
+	public static function getJsonTestData( string $fileName ): array {
 		return json_decode( self::getTestData( $fileName ), true );
 	}
 

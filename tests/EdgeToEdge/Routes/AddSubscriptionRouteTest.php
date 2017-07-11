@@ -40,7 +40,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 		'wikilogin' => true
 	];
 
-	public function testValidSubscriptionRequestGetsPersisted() {
+	public function testValidSubscriptionRequestGetsPersisted(): void {
 
 		$subscriptionRepository = new SubscriptionRepositorySpy();
 
@@ -74,7 +74,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 
 	}
 
-	public function testGivenValidDataAndNoContentType_routeReturnsRedirectToSucccessPage() {
+	public function testGivenValidDataAndNoContentType_routeReturnsRedirectToSucccessPage(): void {
 		$client = $this->createClient();
 		$client->followRedirects( false );
 		$client->request(
@@ -87,7 +87,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 		$this->assertSame( '/page/Subscription_Success', $response->headers->get( 'Location' ) );
 	}
 
-	public function testGivenInvalidDataAndNoContentType_routeDisplaysFormPage() {
+	public function testGivenInvalidDataAndNoContentType_routeDisplaysFormPage(): void {
 		$client = $this->createClient();
 
 		$crawler = $client->request(
@@ -109,7 +109,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	public function testGivenInvalidDataAndJSONContentType_routeReturnsSuccessResult() {
+	public function testGivenInvalidDataAndJSONContentType_routeReturnsSuccessResult(): void {
 		$client = $this->createClient();
 		$client->followRedirects( false );
 		$client->request(
@@ -123,7 +123,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 		$this->assertJsonSuccessResponse( ['status' => 'OK'], $response );
 	}
 
-	public function testGivenInvalidDataAndJSONContentType_routeReturnsErrorResult() {
+	public function testGivenInvalidDataAndJSONContentType_routeReturnsErrorResult(): void {
 		$client = $this->createClient();
 
 		$client->request(
@@ -143,7 +143,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 		$this->assertSame( 'email_address_wrong_format', $responseData['errors']['email'] );
 	}
 
-	public function testGivenValidDataAndJSONPRequest_routeReturnsResult() {
+	public function testGivenValidDataAndJSONPRequest_routeReturnsResult(): void {
 		$client = $this->createClient();
 		$client->request(
 			'GET',
@@ -164,7 +164,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	public function testGivenDataNeedingModerationAndNoContentType_routeReturnsRedirectToModerationPage() {
+	public function testGivenDataNeedingModerationAndNoContentType_routeReturnsRedirectToModerationPage(): void {
 		$config = ['text-policies' => ['fields' => ['badwords' => 'tests/templates/Banned_Cats.txt']]];
 		$client = $this->createClient( $config );
 		$client->followRedirects( false );

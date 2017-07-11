@@ -27,7 +27,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	const FIXED_TIMESTAMP = '2020-12-01 20:12:01';
 	const FIRST_PAYMENT_DATE = '2017-09-21';
 
-	public function testGivenGetRequestMembership_formIsShown() {
+	public function testGivenGetRequestMembership_formIsShown(): void {
 		$client = $this->createClient();
 
 		$crawler = $client->request( 'GET', 'apply-for-membership' );
@@ -42,7 +42,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	public function testGivenGetRequestSustainingMembership_formIsShown() {
+	public function testGivenGetRequestSustainingMembership_formIsShown(): void {
 		$client = $this->createClient();
 
 		$crawler = $client->request( 'GET', 'apply-for-membership', ['type' => 'sustaining'] );
@@ -92,7 +92,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	public function testGivenRequestWithInsufficientAmount_failureResponseIsReturned() {
+	public function testGivenRequestWithInsufficientAmount_failureResponseIsReturned(): void {
 		$client = $this->createClient();
 
 		$httpParameters = $this->newValidHttpParameters();
@@ -124,7 +124,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	public function testFlagForShowingMembershipTypeOptionGetsPassedAround() {
+	public function testFlagForShowingMembershipTypeOptionGetsPassedAround(): void {
 		$client = $this->createClient();
 
 		$httpParameters = $this->newValidHttpParameters();
@@ -143,7 +143,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	public function testGivenValidRequest_applicationIsPersisted() {
+	public function testGivenValidRequest_applicationIsPersisted(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setPaymentDelayCalculator( new FixedPaymentDelayCalculator( new \DateTime( self::FIRST_PAYMENT_DATE ) ) );
 
@@ -164,7 +164,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testGivenValidRequest_confirmationPageContainsCancellationParameters() {
+	public function testGivenValidRequest_confirmationPageContainsCancellationParameters(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setTokenGenerator( new FixedTokenGenerator( self::FIXED_TOKEN ) );
 
@@ -181,7 +181,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testGivenValidRequest_requestIsRedirected() {
+	public function testGivenValidRequest_requestIsRedirected(): void {
 		$client = $this->createClient();
 		$client->followRedirects( false );
 
@@ -196,7 +196,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'show-membership-confirmation', $response->headers->get( 'Location' ) );
 	}
 
-	public function testWhenApplicationGetsPersisted_timestampIsStoredInCookie() {
+	public function testWhenApplicationGetsPersisted_timestampIsStoredInCookie(): void {
 		$client = $this->createClient();
 		$client->request(
 			'POST',
@@ -210,7 +210,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		$this->assertEquals( time(), $donationTimestamp->getTimestamp(), 'Timestamp should be not more than 5 seconds old', 5.0 );
 	}
 
-	public function testWhenMultipleMembershipFormSubmissions_requestGetsRejected() {
+	public function testWhenMultipleMembershipFormSubmissions_requestGetsRejected(): void {
 		$client = $this->createClient();
 		$client->getCookieJar()->set( new Cookie( 'memapp_timestamp', $this->getPastTimestamp() ) );
 
@@ -223,7 +223,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'membership_application_rejected_limit', $client->getResponse()->getContent() );
 	}
 
-	public function testWhenMultipleMembershipInAccordanceToTimeLimit_isNotRejected() {
+	public function testWhenMultipleMembershipInAccordanceToTimeLimit_isNotRejected(): void {
 		$client = $this->createClient();
 		$client->getCookieJar()->set( new Cookie( 'memapp_timestamp', $this->getPastTimestamp( 'PT12M' ) ) );
 
@@ -236,11 +236,11 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		$this->assertNotContains( 'membership_application_rejected_limit', $client->getResponse()->getContent() );
 	}
 
-	private function getPastTimestamp( string $interval = 'PT10S' ) {
+	private function getPastTimestamp( string $interval = 'PT10S' ): string {
 		return ( new \DateTime() )->sub( new \DateInterval( $interval ) )->format( 'Y-m-d H:i:s' );
 	}
 
-	public function testWhenTrackingCookieExists_valueIsPersisted() {
+	public function testWhenTrackingCookieExists_valueIsPersisted(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$client->getCookieJar()->set( new Cookie( 'spenden_tracking', 'test/blue' ) );
 
@@ -262,7 +262,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		return $application;
 	}
 
-	public function testGivenValidRequestUsingPayPal_applicationIsPersisted() {
+	public function testGivenValidRequestUsingPayPal_applicationIsPersisted(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setPaymentDelayCalculator( new FixedPaymentDelayCalculator( new \DateTime( self::FIRST_PAYMENT_DATE ) ) );
 
@@ -316,7 +316,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	public function testGivenValidRequestUsingPayPal_requestIsRedirectedToPayPalUrl() {
+	public function testGivenValidRequestUsingPayPal_requestIsRedirectedToPayPalUrl(): void {
 		$client = $this->createClient();
 		$client->followRedirects( false );
 
@@ -331,7 +331,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'sandbox.paypal.com', $response->headers->get( 'Location' ) );
 	}
 
-	public function testCommasInStreetNamesAreRemoved() {
+	public function testCommasInStreetNamesAreRemoved(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 
 			$params = $this->newValidHttpParameters();
@@ -354,7 +354,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testWhenCompaniesApply_salutationIsSetToFixedValue() {
+	public function testWhenCompaniesApply_salutationIsSetToFixedValue(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 
 			$params = $this->newValidHttpParametersForCompanies();

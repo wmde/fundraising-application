@@ -46,7 +46,7 @@ class DoctrineDonationAuthorizerTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @slowThreshold 400
 	 */
-	public function testWhenNoDonations() {
+	public function testWhenNoDonations(): void {
 		$this->specify( 'update authorization fails', function() {
 			$authorizer = $this->newAuthorizationServiceWithDonations( self::CORRECT_UPDATE_TOKEN );
 			$this->assertFalse( $authorizer->userCanModifyDonation( self::MEANINGLESS_DONATION_ID ) );
@@ -61,7 +61,7 @@ class DoctrineDonationAuthorizerTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @slowThreshold 1200
 	 */
-	public function testWhenDonationWithTokenExists() {
+	public function testWhenDonationWithTokenExists(): void {
 		$donation = new Donation();
 		$donationData = $donation->getDataObject();
 		$donationData->setUpdateToken( self::CORRECT_UPDATE_TOKEN );
@@ -125,7 +125,7 @@ class DoctrineDonationAuthorizerTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @slowThreshold 400
 	 */
-	public function testWhenDonationWithoutTokenExists() {
+	public function testWhenDonationWithoutTokenExists(): void {
 		$donation = new Donation();
 
 		$this->specify(
@@ -148,7 +148,7 @@ class DoctrineDonationAuthorizerTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @slowThreshold 400
 	 */
-	public function testWhenUpdateTokenIsExpired() {
+	public function testWhenUpdateTokenIsExpired(): void {
 		$donation = new Donation();
 		$donationData = $donation->getDataObject();
 		$donationData->setUpdateToken( self::CORRECT_UPDATE_TOKEN );
@@ -179,7 +179,7 @@ class DoctrineDonationAuthorizerTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @slowThreshold 400
 	 */
-	public function testWhenDoctrineThrowsException() {
+	public function testWhenDoctrineThrowsException(): void {
 		$authorizer = new DoctrineDonationAuthorizer(
 			$this->getThrowingEntityManager(),
 			self::CORRECT_UPDATE_TOKEN,

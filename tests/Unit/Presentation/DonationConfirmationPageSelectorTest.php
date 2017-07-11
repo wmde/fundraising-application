@@ -12,19 +12,19 @@ use WMDE\Fundraising\Frontend\Presentation\DonationConfirmationPageSelector;
  */
 class DonationConfirmationPageSelectorTest extends \PHPUnit\Framework\TestCase {
 
-	public function testWhenConfigIsEmpty_selectPageReturnsDefaultPageTitle() {
+	public function testWhenConfigIsEmpty_selectPageReturnsDefaultPageTitle(): void {
 		$selector = new DonationConfirmationPageSelector( $this->newCampaignConfig( [] ) );
 		$this->assertSame( '', $selector->selectPage()->getCampaignCode() );
 		$this->assertSame( 'defaultConfirmationPage', $selector->selectPage()->getPageTitle() );
 	}
 
-	public function testWhenConfigContainsOneElement_selectPageReturnsThatElement() {
+	public function testWhenConfigContainsOneElement_selectPageReturnsThatElement(): void {
 		$selector = new DonationConfirmationPageSelector( $this->newCampaignConfig( [ 'ThisIsJustATest.twig' ] ) );
 		$this->assertSame( 'example', $selector->selectPage()->getCampaignCode() );
 		$this->assertSame( 'ThisIsJustATest.twig', $selector->selectPage()->getPageTitle() );
 	}
 
-	public function testWhenConfigContainsSomeElements_selectPageReturnsOne() {
+	public function testWhenConfigContainsSomeElements_selectPageReturnsOne(): void {
 		$selector = new DonationConfirmationPageSelector(
 			$this->newCampaignConfig( [ 'ThisIsJustATest.twig', 'AnotherOne.twig' ] )
 		);
@@ -32,7 +32,7 @@ class DonationConfirmationPageSelectorTest extends \PHPUnit\Framework\TestCase {
 		$this->assertNotEmpty( $selector->selectPage()->getPageTitle() );
 	}
 
-	private function newCampaignConfig( array $templates ) {
+	private function newCampaignConfig( array $templates ): array {
 		return [
 			'default' => 'defaultConfirmationPage',
 			'campaigns' => [

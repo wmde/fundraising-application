@@ -80,7 +80,7 @@ class CreditCardConfig {
 		return $this->theme;
 	}
 
-	public function isTestMode() {
+	public function isTestMode(): bool {
 		return $this->testMode;
 	}
 

@@ -26,7 +26,7 @@ class DoctrineCommentFinderTest extends \PHPUnit\Framework\TestCase {
 	 */
 	private $entityManager;
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->entityManager = TestEnvironment::newInstance()->getFactory()->getEntityManager();
 		parent::setUp();
 	}
@@ -35,13 +35,13 @@ class DoctrineCommentFinderTest extends \PHPUnit\Framework\TestCase {
 		return new DoctrineCommentFinder( $this->entityManager );
 	}
 
-	public function testWhenThereAreNoComments_anEmptyListIsReturned() {
+	public function testWhenThereAreNoComments_anEmptyListIsReturned(): void {
 		$repository = $this->newDbalCommentRepository();
 
 		$this->assertEmpty( $repository->getPublicComments( 10 ) );
 	}
 
-	public function testWhenThereAreLessCommentsThanTheLimit_theyAreAllReturned() {
+	public function testWhenThereAreLessCommentsThanTheLimit_theyAreAllReturned(): void {
 		$this->persistFirstDonationWithComment();
 		$this->persistSecondDonationWithComment();
 		$this->persistThirdDonationWithComment();
@@ -59,7 +59,7 @@ class DoctrineCommentFinderTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testWhenThereAreMoreCommentsThanTheLimit_aLimitedNumberAreReturned() {
+	public function testWhenThereAreMoreCommentsThanTheLimit_aLimitedNumberAreReturned(): void {
 		$this->persistFirstDonationWithComment();
 		$this->persistSecondDonationWithComment();
 		$this->persistThirdDonationWithComment();
@@ -76,7 +76,7 @@ class DoctrineCommentFinderTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testOnlyPublicCommentsGetReturned() {
+	public function testOnlyPublicCommentsGetReturned(): void {
 		$this->persistFirstDonationWithComment();
 		$this->persistSecondDonationWithComment();
 		$this->persistDonationWithPrivateComment();
@@ -95,7 +95,7 @@ class DoctrineCommentFinderTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testOnlyNonDeletedCommentsGetReturned() {
+	public function testOnlyNonDeletedCommentsGetReturned(): void {
 		$this->persistFirstDonationWithComment();
 		$this->persistSecondDonationWithComment();
 		$this->persistDeletedDonationWithComment();
@@ -115,7 +115,7 @@ class DoctrineCommentFinderTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	private function persistFirstDonationWithComment() {
+	private function persistFirstDonationWithComment(): void {
 		$firstDonation = new Donation();
 		$firstDonation->setPublicRecord( 'First name' );
 		$firstDonation->setComment( 'First comment' );
@@ -125,7 +125,7 @@ class DoctrineCommentFinderTest extends \PHPUnit\Framework\TestCase {
 		$this->entityManager->persist( $firstDonation );
 	}
 
-	private function persistSecondDonationWithComment() {
+	private function persistSecondDonationWithComment(): void {
 		$secondDonation = new Donation();
 		$secondDonation->setPublicRecord( 'Second name' );
 		$secondDonation->setComment( 'Second comment' );
@@ -135,7 +135,7 @@ class DoctrineCommentFinderTest extends \PHPUnit\Framework\TestCase {
 		$this->entityManager->persist( $secondDonation );
 	}
 
-	private function persistThirdDonationWithComment() {
+	private function persistThirdDonationWithComment(): void {
 		$thirdDonation = new Donation();
 		$thirdDonation->setPublicRecord( 'Third name' );
 		$thirdDonation->setComment( 'Third comment' );
@@ -145,7 +145,7 @@ class DoctrineCommentFinderTest extends \PHPUnit\Framework\TestCase {
 		$this->entityManager->persist( $thirdDonation );
 	}
 
-	private function persistDonationWithPrivateComment() {
+	private function persistDonationWithPrivateComment(): void {
 		$privateDonation = new Donation();
 		$privateDonation->setPublicRecord( 'Private name' );
 		$privateDonation->setComment( 'Private comment' );
@@ -155,7 +155,7 @@ class DoctrineCommentFinderTest extends \PHPUnit\Framework\TestCase {
 		$this->entityManager->persist( $privateDonation );
 	}
 
-	private function persistDeletedDonationWithComment() {
+	private function persistDeletedDonationWithComment(): void {
 		$deletedDonation = new Donation();
 		$deletedDonation->setPublicRecord( 'Deleted name' );
 		$deletedDonation->setComment( 'Deleted comment' );
@@ -166,7 +166,7 @@ class DoctrineCommentFinderTest extends \PHPUnit\Framework\TestCase {
 		$this->entityManager->persist( $deletedDonation );
 	}
 
-	private function persistDeletedDonationWithoutDeletedTimestamp() {
+	private function persistDeletedDonationWithoutDeletedTimestamp(): void {
 		$deletedDonation = new Donation();
 		$deletedDonation->setPublicRecord( 'Deleted name' );
 		$deletedDonation->setComment( 'Deleted comment' );
@@ -207,7 +207,7 @@ class DoctrineCommentFinderTest extends \PHPUnit\Framework\TestCase {
 			->freeze()->assertNoNullFields();
 	}
 
-	public function testDoctrineThrowsException_getPublicCommentsRethrowsAsDomainException() {
+	public function testDoctrineThrowsException_getPublicCommentsRethrowsAsDomainException(): void {
 		$repository = new DoctrineCommentFinder( $this->newThrowingEntityManager() );
 
 		$this->expectException( CommentListingException::class );
@@ -224,7 +224,7 @@ class DoctrineCommentFinderTest extends \PHPUnit\Framework\TestCase {
 		return $entityManager;
 	}
 
-	public function testGivenOffsetOfOneCausesOneCommentToBeSkipped() {
+	public function testGivenOffsetOfOneCausesOneCommentToBeSkipped(): void {
 		$this->persistFirstDonationWithComment();
 		$this->persistSecondDonationWithComment();
 		$this->persistThirdDonationWithComment();
@@ -239,7 +239,7 @@ class DoctrineCommentFinderTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testGivenOffsetBeyondResultSetCausesEmptyResult() {
+	public function testGivenOffsetBeyondResultSetCausesEmptyResult(): void {
 		$this->persistFirstDonationWithComment();
 		$this->persistSecondDonationWithComment();
 		$this->persistThirdDonationWithComment();

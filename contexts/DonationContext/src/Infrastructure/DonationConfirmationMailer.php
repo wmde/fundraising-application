@@ -22,7 +22,7 @@ class DonationConfirmationMailer {
 		$this->mailer = $mailer;
 	}
 
-	public function sendConfirmationMailFor( Donation $donation ) {
+	public function sendConfirmationMailFor( Donation $donation ): void {
 		$this->mailer->sendMail(
 			new EmailAddress( $donation->getDonor()->getEmailAddress() ),
 			$this->getConfirmationMailTemplateArguments( $donation )

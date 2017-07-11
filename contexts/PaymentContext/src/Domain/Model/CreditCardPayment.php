@@ -20,14 +20,11 @@ class CreditCardPayment implements PaymentMethod {
 		return PaymentType::CREDIT_CARD;
 	}
 
-	/**
-	 * @return CreditCardTransactionData|null
-	 */
-	public function getCreditCardData() {
+	public function getCreditCardData(): ?CreditCardTransactionData {
 		return $this->creditCardData;
 	}
 
-	public function addCreditCardTransactionData( CreditCardTransactionData $creditCardData ) {
+	public function addCreditCardTransactionData( CreditCardTransactionData $creditCardData ): void {
 		$this->creditCardData = $creditCardData;
 	}
 }

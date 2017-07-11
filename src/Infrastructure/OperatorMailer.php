@@ -26,7 +26,7 @@ class OperatorMailer {
 	/**
 	 * @throws \RuntimeException
 	 */
-	public function sendMailToOperator( EmailAddress $replyToAddress, array $templateArguments = [] ) {
+	public function sendMailToOperator( EmailAddress $replyToAddress, array $templateArguments = [] ): void {
 		$this->messenger->sendMessageToOperator(
 			new Message(
 				$this->subject,

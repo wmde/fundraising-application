@@ -12,8 +12,8 @@ namespace WMDE\Fundraising\Frontend\Infrastructure;
  */
 interface ServerSideTracker {
 
-	public function trackPageView( string $url, string $title );
+	public function trackPageView( string $url, string $title ): void;
 
-	public function setIp( string $ip );
+	public function setIp( string $ip ): void;
 
 }

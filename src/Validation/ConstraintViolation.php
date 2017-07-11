@@ -39,7 +39,7 @@ class ConstraintViolation {
 		return $this->source;
 	}
 
-	public function setSource( string $source ) {
+	public function setSource( string $source ): void {
 		$this->source = $source;
 	}
 

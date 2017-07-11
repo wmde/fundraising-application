@@ -38,7 +38,7 @@ class AddSubscriptionUseCase {
 	 * @return ValidationResponse
 	 * @throws SubscriptionRepositoryException
 	 */
-	public function addSubscription( SubscriptionRequest $subscriptionRequest ) {
+	public function addSubscription( SubscriptionRequest $subscriptionRequest ): ValidationResponse {
 		$subscription = $this->createSubscriptionFromRequest( $subscriptionRequest );
 
 		$validationResult = $this->subscriptionValidator->validate( $subscription );
@@ -62,7 +62,7 @@ class AddSubscriptionUseCase {
 		return ValidationResponse::newSuccessResponse();
 	}
 
-	private function sendSubscriptionNotification( Subscription $subscription ) {
+	private function sendSubscriptionNotification( Subscription $subscription ): void {
 		$this->mailer->sendMail(
 			$this->newMailAddressFromSubscription( $subscription ),
 			// FIXME: this is an output similar to the main response model and should similarly not be an entity

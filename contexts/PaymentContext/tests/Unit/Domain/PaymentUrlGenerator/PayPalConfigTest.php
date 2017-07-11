@@ -14,12 +14,12 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\PayPalCo
  */
 class PayPalConfigTest extends \PHPUnit\Framework\TestCase {
 
-	public function testGivenIncompletePayPalUrlConfig_exceptionIsThrown() {
+	public function testGivenIncompletePayPalUrlConfig_exceptionIsThrown(): void {
 		$this->expectException( \RuntimeException::class );
 		$this->newIncompletePayPalUrlConfig();
 	}
 
-	private function newIncompletePayPalUrlConfig() {
+	private function newIncompletePayPalUrlConfig(): PayPalConfig {
 		return PayPalConfig::newFromConfig( [
 			PayPalConfig::CONFIG_KEY_BASE_URL => 'http://that.paymentprovider.com/?',
 			PayPalConfig::CONFIG_KEY_ACCOUNT_ADDRESS => 'some@email-adress.com',
@@ -30,11 +30,11 @@ class PayPalConfigTest extends \PHPUnit\Framework\TestCase {
 		] );
 	}
 
-	public function testGivenValidPayPalUrlConfig_payPalConfigIsReturned() {
+	public function testGivenValidPayPalUrlConfig_payPalConfigIsReturned(): void {
 		$this->assertInstanceOf( PayPalConfig::class, $this->newPayPalUrlConfig() );
 	}
 
-	private function newPayPalUrlConfig() {
+	private function newPayPalUrlConfig(): PayPalConfig {
 		return PayPalConfig::newFromConfig( [
 			PayPalConfig::CONFIG_KEY_BASE_URL => 'http://that.paymentprovider.com/?',
 			PayPalConfig::CONFIG_KEY_ACCOUNT_ADDRESS => 'some@email-adress.com',

@@ -21,7 +21,7 @@ class DonationConfirmationHtmlPresenterTest extends \PHPUnit\Framework\TestCase 
 	private const STATUS_BOOKED = 'status-booked';
 	private const STATUS_UNCONFIRMED = 'status-unconfirmed';
 
-	public function testWhenPresenterRenders_itPassedParamsToTemplate() {
+	public function testWhenPresenterRenders_itPassedParamsToTemplate(): void {
 		$twig = $this->getMockBuilder( TwigTemplate::class )->disableOriginalConstructor()->getMock();
 		$pageSelector = $this->getMockBuilder( SelectedConfirmationPage::class )->disableOriginalConstructor()->getMock();
 
@@ -72,7 +72,7 @@ class DonationConfirmationHtmlPresenterTest extends \PHPUnit\Framework\TestCase 
 		return $piwikEvents;
 	}
 
-	public function testWhenPresenterPresents_itPassesMappedStatus() {
+	public function testWhenPresenterPresents_itPassesMappedStatus(): void {
 		$twig = $this->getMockBuilder( TwigTemplate::class )->disableOriginalConstructor()->getMock();
 		$pageSelector = $this->getMockBuilder( SelectedConfirmationPage::class )->disableOriginalConstructor()->getMock();
 

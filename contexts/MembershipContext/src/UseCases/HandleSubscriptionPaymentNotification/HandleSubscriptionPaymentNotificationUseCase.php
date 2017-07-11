@@ -113,10 +113,7 @@ class HandleSubscriptionPaymentNotificationUseCase {
 			->setPaymentTimestamp( $request->getPaymentTimestamp() );
 	}
 
-	/**
-	 * @return null|Application
-	 */
-	private function createChildApplication( Application $application, PayPalPaymentNotificationRequest $request ) {
+	private function createChildApplication( Application $application, PayPalPaymentNotificationRequest $request ): ?Application {
 		$childApplication = Application::newApplication(
 			$application->getType(),
 			$application->getApplicant(),

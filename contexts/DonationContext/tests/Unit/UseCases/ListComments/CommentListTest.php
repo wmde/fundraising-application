@@ -15,11 +15,11 @@ use WMDE\Fundraising\Frontend\DonationContext\UseCases\ListComments\CommentList;
  */
 class CommentListTest extends \PHPUnit\Framework\TestCase {
 
-	public function testGivenNoArguments_constructorCreatesEmptyList() {
+	public function testGivenNoArguments_constructorCreatesEmptyList(): void {
 		$this->assertSame( [], ( new CommentList() )->toArray() );
 	}
 
-	public function testGivenOneComment_constructorCreatesListWithComment() {
+	public function testGivenOneComment_constructorCreatesListWithComment(): void {
 		$comment = CommentWithAmount::newInstance()
 			->setAuthorName( 'name0' )
 			->setCommentText( 'comment' )
@@ -29,7 +29,7 @@ class CommentListTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( [ $comment ], ( new CommentList( $comment ) )->toArray() );
 	}
 
-	public function testGivenMultipleComments_constructorCreatesListWithAllComments() {
+	public function testGivenMultipleComments_constructorCreatesListWithAllComments(): void {
 		$comment0 = CommentWithAmount::newInstance()
 			->setAuthorName( 'name0' )
 			->setCommentText( 'comment' )

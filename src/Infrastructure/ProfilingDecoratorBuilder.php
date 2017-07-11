@@ -21,7 +21,7 @@ class ProfilingDecoratorBuilder {
 		$this->dataCollector = $dataCollector;
 	}
 
-	public function decorate( $objectToDecorate, string $profilingLabel ) {
+	public function decorate( $objectToDecorate, string $profilingLabel ) {	// @codingStandardsIgnoreLine
 		return ( new DecoratorBuilder( $objectToDecorate ) )
 			->withBefore( function () use ( $objectToDecorate, $profilingLabel ) {
 				$callingFunctionName = $this->getCallingFunctionName();
@@ -40,7 +40,7 @@ class ProfilingDecoratorBuilder {
 			->newDecorator();
 	}
 
-	private function getClassAndFunction( $objectToDecorate, string $callingFunction ): string {
+	private function getClassAndFunction( $objectToDecorate, string $callingFunction ): string {	// @codingStandardsIgnoreLine
 		$classNameParts = explode( '\\', get_class( $objectToDecorate ) );
 		return end( $classNameParts ) . '::' . $callingFunction;
 	}
@@ -50,7 +50,7 @@ class ProfilingDecoratorBuilder {
 		return debug_backtrace()[7]['function'];
 	}
 
-	private function getFunctionArgumentsWithKeys( array $arguments, string $className, string $methodName ) {
+	private function getFunctionArgumentsWithKeys( array $arguments, string $className, string $methodName ): array {
 		$reflection = new \ReflectionMethod( $className, $methodName );
 
 		foreach ( $reflection->getParameters() as $param ) {

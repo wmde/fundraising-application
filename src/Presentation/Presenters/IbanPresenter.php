@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\PaymentContext\ResponseModel\IbanResponse;
  */
 class IbanPresenter {
 
-	public function present( IbanResponse $iban ) {
+	public function present( IbanResponse $iban ): array {
 		if ( $iban->isSuccessful() ) {
 			return $this->newSuccessResponse( $iban->getBankData() );
 		}
@@ -21,7 +21,7 @@ class IbanPresenter {
 		return $this->newErrorResponse();
 	}
 
-	private function newSuccessResponse( BankData $bankData ) {
+	private function newSuccessResponse( BankData $bankData ): array {
 		return array_filter( [
 			'status' => 'OK',
 			'bic' => $bankData->getBic(),
@@ -32,7 +32,7 @@ class IbanPresenter {
 		] );
 	}
 
-	private function newErrorResponse() {
+	private function newErrorResponse(): array {
 		return [ 'status' => 'ERR' ];
 	}
 

@@ -12,13 +12,13 @@ class PiwikTest extends WebRouteTestCase {
 
 	const PIWIK_SITE_ID = 1;
 
-	public function testPiwikScriptGetsEmbedded() {
+	public function testPiwikScriptGetsEmbedded(): void {
 		$client = $this->createClient( [], null, self::DISABLE_DEBUG );
 		$client->request( 'GET', '/' );
 		$this->assertContains( '<!-- Piwik -->', $client->getResponse()->getContent() );
 	}
 
-	public function testConfigParametersAreUsed() {
+	public function testConfigParametersAreUsed(): void {
 		$client = $this->createClient( [], null, self::DISABLE_DEBUG );
 		$client->request( 'GET', '/' );
 

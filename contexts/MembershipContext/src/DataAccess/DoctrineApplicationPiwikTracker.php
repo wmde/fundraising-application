@@ -22,7 +22,7 @@ class DoctrineApplicationPiwikTracker implements ApplicationPiwikTracker {
 		$this->entityManager = $entityManager;
 	}
 
-	public function trackApplication( int $applicationId, string $trackingString ) {
+	public function trackApplication( int $applicationId, string $trackingString ): void {
 		$application = $this->getApplicationById( $applicationId );
 
 		$application->setTracking( $trackingString );
@@ -46,7 +46,7 @@ class DoctrineApplicationPiwikTracker implements ApplicationPiwikTracker {
 		return $application;
 	}
 
-	private function persistApplication( MembershipApplication $application ) {
+	private function persistApplication( MembershipApplication $application ): void {
 		try {
 			$this->entityManager->persist( $application );
 			$this->entityManager->flush();

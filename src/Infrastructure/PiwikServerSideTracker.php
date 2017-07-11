@@ -16,12 +16,12 @@ class PiwikServerSideTracker implements ServerSideTracker {
 		$this->tracker = $tracker;
 	}
 
-	public function trackPageView( string $url, string $title ) {
+	public function trackPageView( string $url, string $title ): void {
 		$this->tracker->setUrl( $url );
 		$this->tracker->doTrackPageView( $title );
 	}
 
-	public function setIp( string $ip ) {
+	public function setIp( string $ip ): void {
 		$this->tracker->setIp( $ip );
 	}
 

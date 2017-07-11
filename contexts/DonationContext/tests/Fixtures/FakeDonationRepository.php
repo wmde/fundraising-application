@@ -26,15 +26,15 @@ class FakeDonationRepository implements DonationRepository {
 		}
 	}
 
-	public function throwOnRead() {
+	public function throwOnRead(): void {
 		$this->throwOnRead = true;
 	}
 
-	public function throwOnWrite() {
+	public function throwOnWrite(): void {
 		$this->throwOnWrite = true;
 	}
 
-	public function storeDonation( Donation $donation ) {
+	public function storeDonation( Donation $donation ): void {
 		if ( $this->throwOnWrite ) {
 			throw new StoreDonationException();
 		}

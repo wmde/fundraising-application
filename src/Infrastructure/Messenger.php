@@ -30,14 +30,14 @@ class Messenger {
 	/**
 	 * @throws RuntimeException
 	 */
-	public function sendMessageToUser( Message $messageContent, EmailAddress $recipient ) {
+	public function sendMessageToUser( Message $messageContent, EmailAddress $recipient ): void {
 		$this->sendMessage( $this->createMessage( $messageContent, $recipient ) );
 	}
 
 	/**
 	 * @throws RuntimeException
 	 */
-	public function sendMessageToOperator( Message $messageContent, EmailAddress $replyTo = null ) {
+	public function sendMessageToOperator( Message $messageContent, EmailAddress $replyTo = null ): void {
 		$this->sendMessage( $this->createMessage( $messageContent, $this->operatorAddress, $replyTo ) );
 	}
 
@@ -54,7 +54,7 @@ class Messenger {
 		return $message;
 	}
 
-	private function sendMessage( Swift_Message $message ) {
+	private function sendMessage( Swift_Message $message ): void {
 		$deliveryCount = $this->mailTransport->send( $message );
 		if ( $deliveryCount === 0 ) {
 			throw new RuntimeException( 'Message delivery failed' );

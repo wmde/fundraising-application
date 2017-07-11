@@ -92,7 +92,7 @@ class Application {
 	 * @param int $id
 	 * @throws \RuntimeException
 	 */
-	public function assignId( int $id ) {
+	public function assignId( int $id ): void {
 		if ( $this->id !== null && $this->id !== $id ) {
 			throw new \RuntimeException( 'Id cannot be changed after initial assignment' );
 		}
@@ -100,11 +100,11 @@ class Application {
 		$this->id = $id;
 	}
 
-	public function cancel() {
+	public function cancel(): void {
 		$this->isCancelled = self::IS_CANCELLED;
 	}
 
-	public function markForModeration() {
+	public function markForModeration(): void {
 		$this->needsModeration = self::NEEDS_MODERATION;
 	}
 
@@ -120,11 +120,11 @@ class Application {
 		return $this->isConfirmed === self::IS_CONFIRMED;
 	}
 
-	public function confirm() {
+	public function confirm(): void {
 		$this->isConfirmed = self::IS_CONFIRMED;
 	}
 
-	public function confirmSubscriptionCreated() {
+	public function confirmSubscriptionCreated(): void {
 		if ( !$this->hasExternalPayment() ) {
 			throw new RuntimeException( 'Only external payments can be confirmed as booked' );
 		}
@@ -144,7 +144,7 @@ class Application {
 		return !$this->isConfirmed() || $this->needsModeration() || $this->isCancelled();
 	}
 
-	public function markAsDeleted() {
+	public function markAsDeleted(): void {
 		$this->isDeleted = self::IS_DELETED;
 	}
 
@@ -152,7 +152,7 @@ class Application {
 		return $this->isDeleted;
 	}
 
-	public function notifyOfFirstPaymentDate( string $firstPaymentDate ) {
+	public function notifyOfFirstPaymentDate( string $firstPaymentDate ): void {
 		$paymentMethod = $this->getPayment()->getPaymentMethod();
 
 		if ( $paymentMethod instanceof PayPalPayment ) {

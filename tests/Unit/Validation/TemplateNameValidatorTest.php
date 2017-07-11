@@ -10,13 +10,13 @@ use WMDE\Fundraising\Frontend\Validation\TemplateNameValidator;
 
 class TemplateNameValidatorTest extends \PHPUnit\Framework\TestCase {
 
-	public function testWhenEnvironmentThrowsNoException_validationSuccceeds() {
+	public function testWhenEnvironmentThrowsNoException_validationSuccceeds(): void {
 		$twig = $this->getMockBuilder( Twig_Environment::class )->disableOriginalConstructor()->getMock();
 		$validator = new TemplateNameValidator( $twig );
 		$this->assertTrue( $validator->validate( 'Unicorns' )->isSuccessful() );
 	}
 
-	public function testWhenEnvironmentThrowsLoadException_validationFails() {
+	public function testWhenEnvironmentThrowsLoadException_validationFails(): void {
 		$twig = $this->getMockBuilder( Twig_Environment::class )->disableOriginalConstructor()->getMock();
 		$twig->method( 'loadTemplate' )->willThrowException( new Twig_Error_Loader( 'That template was not found' ) );
 		$validator = new TemplateNameValidator( $twig );

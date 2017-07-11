@@ -12,11 +12,11 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
  */
 class IbanResponse {
 
-	public static function newSuccessResponse( BankData $bankData ) {
+	public static function newSuccessResponse( BankData $bankData ): self {
 		return new self( $bankData );
 	}
 
-	public static function newFailureResponse() {
+	public static function newFailureResponse(): self {
 		return new self();
 	}
 

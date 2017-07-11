@@ -35,7 +35,7 @@ class ApplicantName {
 		return $companyName;
 	}
 
-	public function setCompanyName( string $companyName ) {
+	public function setCompanyName( string $companyName ): void {
 		$this->assertIsWritable();
 		$this->companyName = $companyName;
 	}
@@ -48,7 +48,7 @@ class ApplicantName {
 		return $this->salutation;
 	}
 
-	public function setSalutation( string $salutation ) {
+	public function setSalutation( string $salutation ): void {
 		$this->assertIsWritable();
 		$this->salutation = $salutation;
 	}
@@ -57,7 +57,7 @@ class ApplicantName {
 		return $this->title;
 	}
 
-	public function setTitle( string $title ) {
+	public function setTitle( string $title ): void {
 		$this->assertIsWritable();
 		$this->title = $title;
 	}
@@ -66,7 +66,7 @@ class ApplicantName {
 		return $this->firstName;
 	}
 
-	public function setFirstName( string $firstName ) {
+	public function setFirstName( string $firstName ): void {
 		$this->assertIsWritable();
 		$this->firstName = $firstName;
 	}
@@ -75,7 +75,7 @@ class ApplicantName {
 		return $this->lastName;
 	}
 
-	public function setLastName( string $lastName ) {
+	public function setLastName( string $lastName ): void {
 		$this->assertIsWritable();
 		$this->lastName = $lastName;
 	}

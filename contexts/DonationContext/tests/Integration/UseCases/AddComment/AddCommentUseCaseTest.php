@@ -34,7 +34,7 @@ class AddCommentUseCaseTest extends \PHPUnit\Framework\TestCase {
 	private $textPolicyValidator;
 	private $commentValidator;
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->donationRepository = new FakeDonationRepository();
 		$this->authorizer = new SucceedingDonationAuthorizer();
 		$this->textPolicyValidator = $this->newSucceedingTextPolicyValidator();
@@ -53,7 +53,7 @@ class AddCommentUseCaseTest extends \PHPUnit\Framework\TestCase {
 		return $validator;
 	}
 
-	public function testGivenValidRequest_commentGetsAdded() {
+	public function testGivenValidRequest_commentGetsAdded(): void {
 		$this->donationRepository = $this->newFakeRepositoryWithDonation();
 
 		$response = $this->newUseCase()->addComment( $this->newValidRequest() );
@@ -97,7 +97,7 @@ class AddCommentUseCaseTest extends \PHPUnit\Framework\TestCase {
 		return $addCommentRequest->freeze()->assertNoNullFields();
 	}
 
-	public function testWhenRepositoryThrowsExceptionOnGet_failureResponseIsReturned() {
+	public function testWhenRepositoryThrowsExceptionOnGet_failureResponseIsReturned(): void {
 		$this->donationRepository = new ThrowingDonationRepository();
 		$this->donationRepository->throwOnGetDonationById();
 
@@ -106,7 +106,7 @@ class AddCommentUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$this->assertFalse( $response->isSuccessful() );
 	}
 
-	public function testWhenRepositoryThrowsExceptionOnStore_failureResponseIsReturned() {
+	public function testWhenRepositoryThrowsExceptionOnStore_failureResponseIsReturned(): void {
 		$this->donationRepository = new ThrowingDonationRepository();
 		$this->donationRepository->throwOnStoreDonation();
 
@@ -115,7 +115,7 @@ class AddCommentUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$this->assertFalse( $response->isSuccessful() );
 	}
 
-	public function testAuthorizationFails_failureResponseIsReturned() {
+	public function testAuthorizationFails_failureResponseIsReturned(): void {
 		$this->authorizer = new FailingDonationAuthorizer();
 
 		$response = $this->newUseCase()->addComment( $this->newValidRequest() );
@@ -123,11 +123,11 @@ class AddCommentUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$this->assertFalse( $response->isSuccessful() );
 	}
 
-	public function testWhenDonationDoesNotExist_failureResponseIsReturned() {
+	public function testWhenDonationDoesNotExist_failureResponseIsReturned(): void {
 		$this->assertFalse( $this->newUseCase()->addComment( $this->newValidRequest() )->isSuccessful() );
 	}
 
-	public function testWhenTextValidationFails_commentIsMadePrivate() {
+	public function testWhenTextValidationFails_commentIsMadePrivate(): void {
 		$this->donationRepository = $this->newFakeRepositoryWithDonation();
 		$this->textPolicyValidator = $this->newFailingTextPolicyValidator();
 
@@ -143,7 +143,7 @@ class AddCommentUseCaseTest extends \PHPUnit\Framework\TestCase {
 		return $this->newStubTextPolicyValidator( false );
 	}
 
-	public function testWhenTextValidationFails_donationIsMarkedForModeration() {
+	public function testWhenTextValidationFails_donationIsMarkedForModeration(): void {
 		$this->donationRepository = $this->newFakeRepositoryWithDonation();
 		$this->textPolicyValidator = $this->newFailingTextPolicyValidator();
 
@@ -155,7 +155,7 @@ class AddCommentUseCaseTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testWhenTextValidationFails_responseMessageDoesNotContainOK() {
+	public function testWhenTextValidationFails_responseMessageDoesNotContainOK(): void {
 		$this->donationRepository = $this->newFakeRepositoryWithDonation();
 		$this->textPolicyValidator = $this->newFailingTextPolicyValidator();
 
@@ -165,7 +165,7 @@ class AddCommentUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$this->assertNotContains( 'ok', $response->getSuccessMessage() );
 	}
 
-	public function testWhenDonationIsMarkedForModeration_responseMessageDoesNotContainOK() {
+	public function testWhenDonationIsMarkedForModeration_responseMessageDoesNotContainOK(): void {
 		$donation = ValidDonation::newDirectDebitDonation();
 		$donation->assignId( self::DONATION_ID );
 		$donation->markForModeration();
@@ -179,7 +179,7 @@ class AddCommentUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$this->assertNotContains( 'ok', $response->getSuccessMessage() );
 	}
 
-	public function testWhenValidationFails_failureResponseIsReturned() {
+	public function testWhenValidationFails_failureResponseIsReturned(): void {
 		$this->donationRepository = $this->newFakeRepositoryWithDonation();
 		$this->commentValidator = $this->createMock( AddCommentValidator::class );
 		$this->commentValidator->method( 'validate' )->willReturn( new AddCommentValidationResult( [
@@ -190,7 +190,7 @@ class AddCommentUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$this->assertFalse( $response->isSuccessful() );
 	}
 
-	private function newSucceedingAddCommentValidator() {
+	private function newSucceedingAddCommentValidator(): AddCommentValidator {
 		$validator = $this->createMock( AddCommentValidator::class );
 		$validator->method( 'validate' )->willReturn( new AddCommentValidationResult( [] ) );
 		return $validator;

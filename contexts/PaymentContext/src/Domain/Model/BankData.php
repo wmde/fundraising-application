@@ -24,7 +24,7 @@ class BankData {
 		return $this->bic;
 	}
 
-	public function setBic( string $bic ) {
+	public function setBic( string $bic ): self {
 		$this->assertIsWritable();
 		$this->bic = $bic;
 		return $this;
@@ -34,7 +34,7 @@ class BankData {
 		return $this->iban;
 	}
 
-	public function setIban( Iban $iban ) {
+	public function setIban( Iban $iban ): self {
 		$this->assertIsWritable();
 		$this->iban = $iban;
 		return $this;
@@ -44,7 +44,7 @@ class BankData {
 		return $this->account;
 	}
 
-	public function setAccount( string $account ) {
+	public function setAccount( string $account ): self {
 		$this->assertIsWritable();
 		$this->account = $account;
 		return $this;
@@ -54,7 +54,7 @@ class BankData {
 		return $this->bankCode;
 	}
 
-	public function setBankCode( string $bankCode ) {
+	public function setBankCode( string $bankCode ): self {
 		$this->assertIsWritable();
 		$this->bankCode = $bankCode;
 		return $this;
@@ -64,7 +64,7 @@ class BankData {
 		return $this->bankName;
 	}
 
-	public function setBankName( string $bankName ) {
+	public function setBankName( string $bankName ): self {
 		$this->assertIsWritable();
 		$this->bankName = $bankName;
 		return $this;

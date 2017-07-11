@@ -31,14 +31,14 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit\Framework\Tes
 	 */
 	private $entityManager;
 
-	public function setUp() {
+	public function setUp(): void {
 		$factory = TestEnvironment::newInstance()->getFactory();
 		$factory->disableDoctrineSubscribers();
 		$this->entityManager = $factory->getEntityManager();
 		parent::setUp();
 	}
 
-	public function testValidMembershipApplicationGetPersisted() {
+	public function testValidMembershipApplicationGetPersisted(): void {
 		$this->newRepository()->storeApplication( ValidMembershipApplication::newDomainEntity() );
 
 		$expectedDoctrineEntity = ValidMembershipApplication::newDoctrineEntity();
@@ -51,7 +51,7 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit\Framework\Tes
 		return new DoctrineApplicationRepository( $this->entityManager );
 	}
 
-	private function assertDoctrineEntityIsInDatabase( DoctrineApplication $expected ) {
+	private function assertDoctrineEntityIsInDatabase( DoctrineApplication $expected ): void {
 		$actual = $this->getApplicationFromDatabase( $expected->getId() );
 
 		$this->assertNotNull( $actual->getCreationTime() );
@@ -69,7 +69,7 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit\Framework\Tes
 		return $donation;
 	}
 
-	public function testIdGetsAssigned() {
+	public function testIdGetsAssigned(): void {
 		$application = ValidMembershipApplication::newDomainEntity();
 
 		$this->newRepository()->storeApplication( $application );
@@ -77,7 +77,7 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit\Framework\Tes
 		$this->assertSame( self::MEMBERSHIP_APPLICATION_ID, $application->getId() );
 	}
 
-	public function testWhenPersistenceFails_domainExceptionIsThrown() {
+	public function testWhenPersistenceFails_domainExceptionIsThrown(): void {
 		$donation = ValidMembershipApplication::newDomainEntity();
 
 		$repository = new DoctrineApplicationRepository( ThrowingEntityManager::newInstance( $this ) );
@@ -86,7 +86,7 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit\Framework\Tes
 		$repository->storeApplication( $donation );
 	}
 
-	public function testWhenMembershipApplicationInDatabase_itIsReturnedAsMatchingDomainEntity() {
+	public function testWhenMembershipApplicationInDatabase_itIsReturnedAsMatchingDomainEntity(): void {
 		$this->storeDoctrineApplication( ValidMembershipApplication::newDoctrineEntity() );
 
 		$expected = ValidMembershipApplication::newAutoConfirmedDomainEntity();
@@ -98,23 +98,23 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit\Framework\Tes
 		);
 	}
 
-	private function storeDoctrineApplication( DoctrineApplication $application ) {
+	private function storeDoctrineApplication( DoctrineApplication $application ): void {
 		$this->entityManager->persist( $application );
 		$this->entityManager->flush();
 	}
 
-	public function testWhenEntityDoesNotExist_getEntityReturnsNull() {
+	public function testWhenEntityDoesNotExist_getEntityReturnsNull(): void {
 		$this->assertNull( $this->newRepository()->getApplicationById( self::ID_OF_APPLICATION_NOT_IN_DB ) );
 	}
 
-	public function testWhenReadFails_domainExceptionIsThrown() {
+	public function testWhenReadFails_domainExceptionIsThrown(): void {
 		$repository = new DoctrineApplicationRepository( ThrowingEntityManager::newInstance( $this ) );
 
 		$this->expectException( GetMembershipApplicationException::class );
 		$repository->getApplicationById( self::ID_OF_APPLICATION_NOT_IN_DB );
 	}
 
-	public function testWhenApplicationAlreadyExists_persistingCausesUpdate() {
+	public function testWhenApplicationAlreadyExists_persistingCausesUpdate(): void {
 		$repository = $this->newRepository();
 		$originalApplication = ValidMembershipApplication::newDomainEntity();
 
@@ -132,7 +132,7 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit\Framework\Tes
 		$this->assertSame( 'chuck.norris@always.win', $doctrineApplication->getApplicantEmailAddress() );
 	}
 
-	public function testWriteAndReadRoundtrip() {
+	public function testWriteAndReadRoundtrip(): void {
 		$repository = $this->newRepository();
 		$application = ValidMembershipApplication::newAutoConfirmedDomainEntity();
 
@@ -144,7 +144,7 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit\Framework\Tes
 		);
 	}
 
-	public function testWhenPersistingDeletedApplication_exceptionIsThrown() {
+	public function testWhenPersistingDeletedApplication_exceptionIsThrown(): void {
 		$application = ValidMembershipApplication::newDomainEntity();
 		$application->assignId( self::ID_OF_APPLICATION_NOT_IN_DB );
 
@@ -154,7 +154,7 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit\Framework\Tes
 		$repository->storeApplication( $application );
 	}
 
-	public function testWhenPersistingApplicationWithModerationFlag_doctrineApplicationHasFlag() {
+	public function testWhenPersistingApplicationWithModerationFlag_doctrineApplicationHasFlag(): void {
 		$application = ValidMembershipApplication::newDomainEntity();
 		$application->markForModeration();
 
@@ -165,7 +165,7 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit\Framework\Tes
 		$this->assertFalse( $doctrineApplication->isCancelled() );
 	}
 
-	public function testWhenPersistingApplicationWithCancelledFlag_doctrineApplicationHasFlag() {
+	public function testWhenPersistingApplicationWithCancelledFlag_doctrineApplicationHasFlag(): void {
 		$application = ValidMembershipApplication::newDomainEntity();
 		$application->cancel();
 
@@ -176,7 +176,7 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit\Framework\Tes
 		$this->assertTrue( $doctrineApplication->isCancelled() );
 	}
 
-	public function testWhenPersistingCancelledModerationApplication_doctrineApplicationHasFlags() {
+	public function testWhenPersistingCancelledModerationApplication_doctrineApplicationHasFlags(): void {
 		$application = ValidMembershipApplication::newDomainEntity();
 		$application->markForModeration();
 		$application->cancel();
@@ -188,7 +188,7 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit\Framework\Tes
 		$this->assertTrue( $doctrineApplication->isCancelled() );
 	}
 
-	public function testGivenDoctrineApplicationWithModerationAndCancelled_domainEntityHasFlags() {
+	public function testGivenDoctrineApplicationWithModerationAndCancelled_domainEntityHasFlags(): void {
 		$doctrineApplication = ValidMembershipApplication::newDoctrineEntity();
 		$doctrineApplication->setStatus( DoctrineApplication::STATUS_CANCELED + DoctrineApplication::STATUS_MODERATION );
 
@@ -199,7 +199,7 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit\Framework\Tes
 		$this->assertTrue( $application->isCancelled() );
 	}
 
-	public function testGivenDoctrineApplicationWithModerationFlag_domainEntityHasFlag() {
+	public function testGivenDoctrineApplicationWithModerationFlag_domainEntityHasFlag(): void {
 		$doctrineApplication = ValidMembershipApplication::newDoctrineEntity();
 		$doctrineApplication->setStatus( DoctrineApplication::STATUS_MODERATION );
 
@@ -210,7 +210,7 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit\Framework\Tes
 		$this->assertFalse( $application->isCancelled() );
 	}
 
-	public function testGivenDoctrineApplicationWithCancelledFlag_domainEntityHasFlag() {
+	public function testGivenDoctrineApplicationWithCancelledFlag_domainEntityHasFlag(): void {
 		$doctrineApplication = ValidMembershipApplication::newDoctrineEntity();
 		$doctrineApplication->setStatus( DoctrineApplication::STATUS_CANCELED );
 
@@ -221,7 +221,7 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit\Framework\Tes
 		$this->assertTrue( $application->isCancelled() );
 	}
 
-	public function testGivenDoctrineApplicationWithCancelledFlag_initialStatusIsPreserved() {
+	public function testGivenDoctrineApplicationWithCancelledFlag_initialStatusIsPreserved(): void {
 		$application = ValidMembershipApplication::newDomainEntity();
 		$application->cancel();
 
@@ -231,7 +231,7 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit\Framework\Tes
 		$this->assertSame( DoctrineApplication::STATUS_CONFIRMED, $doctrineApplication->getDataObject()->getPreservedStatus() );
 	}
 
-	public function testGivenCompanyApplication_companyNameIsPersisted() {
+	public function testGivenCompanyApplication_companyNameIsPersisted(): void {
 		$this->newRepository()->storeApplication( ValidMembershipApplication::newCompanyApplication() );
 
 		$expectedDoctrineEntity = ValidMembershipApplication::newDoctrineCompanyEntity();

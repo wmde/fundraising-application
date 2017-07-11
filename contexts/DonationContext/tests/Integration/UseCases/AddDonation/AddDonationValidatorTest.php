@@ -33,16 +33,16 @@ class AddDonationValidatorTest extends ValidatorTestCase {
 	/** @var AddDonationValidator */
 	private $donationValidator;
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->donationValidator = $this->newDonationValidator();
 	}
 
-	public function testGivenValidDonation_validationIsSuccessful() {
+	public function testGivenValidDonation_validationIsSuccessful(): void {
 		$request = ValidAddDonationRequest::getRequest();
 		$this->assertEmpty( $this->donationValidator->validate( $request )->getViolations() );
 	}
 
-	public function testGivenAnonymousDonorAndEmptyAddressFields_validatorReturnsNoViolations() {
+	public function testGivenAnonymousDonorAndEmptyAddressFields_validatorReturnsNoViolations(): void {
 		$request = ValidAddDonationRequest::getRequest();
 
 		$request->setDonorType( DonorName::PERSON_ANONYMOUS );
@@ -60,7 +60,7 @@ class AddDonationValidatorTest extends ValidatorTestCase {
 		$this->assertEmpty( $this->donationValidator->validate( $request )->getViolations() );
 	}
 
-	public function testGivenNoPaymentType_validatorReturnsFalse() {
+	public function testGivenNoPaymentType_validatorReturnsFalse(): void {
 		$request = ValidAddDonationRequest::getRequest();
 		$request->setPaymentType( '' );
 
@@ -72,7 +72,7 @@ class AddDonationValidatorTest extends ValidatorTestCase {
 		);
 	}
 
-	public function testGivenUnsupportedPaymentType_validatorReturnsFalse() {
+	public function testGivenUnsupportedPaymentType_validatorReturnsFalse(): void {
 		$request = ValidAddDonationRequest::getRequest();
 		$request->setPaymentType( 'KaiCoin' );
 
@@ -84,7 +84,7 @@ class AddDonationValidatorTest extends ValidatorTestCase {
 		);
 	}
 
-	public function testPersonalInfoValidationFails_validatorReturnsFalse() {
+	public function testPersonalInfoValidationFails_validatorReturnsFalse(): void {
 		$request = ValidAddDonationRequest::getRequest();
 		$request->setDonorType( DonorName::PERSON_COMPANY );
 		$request->setDonorCompany( '' );
@@ -97,7 +97,7 @@ class AddDonationValidatorTest extends ValidatorTestCase {
 		);
 	}
 
-	public function testDirectDebitMissingBankData_validatorReturnsFalse() {
+	public function testDirectDebitMissingBankData_validatorReturnsFalse(): void {
 		$bankData = new BankData();
 		$bankData->setIban( new Iban( '' ) );
 		$bankData->setBic( '' );
@@ -112,7 +112,7 @@ class AddDonationValidatorTest extends ValidatorTestCase {
 		$this->assertConstraintWasViolated( $result, AddDonationValidationResult::SOURCE_BIC );
 	}
 
-	public function testForeignDirectDebitMissingBankData_validationSucceeds() {
+	public function testForeignDirectDebitMissingBankData_validationSucceeds(): void {
 		$bankData = new BankData();
 		$bankData->setIban( new Iban( self::FOREIGN_IBAN ) );
 		$bankData->setBic( self::FOREIGN_BIC );
@@ -128,7 +128,7 @@ class AddDonationValidatorTest extends ValidatorTestCase {
 		$this->assertFalse( $result->hasViolations() );
 	}
 
-	public function testAmountTooLow_validatorReturnsFalse() {
+	public function testAmountTooLow_validatorReturnsFalse(): void {
 		$request = ValidAddDonationRequest::getRequest();
 		$request->setAmount( Euro::newFromCents( 50 ) );
 
@@ -138,7 +138,7 @@ class AddDonationValidatorTest extends ValidatorTestCase {
 		$this->assertConstraintWasViolated( $result, AddDonationValidationResult::SOURCE_PAYMENT_AMOUNT );
 	}
 
-	public function testPersonalInfoWithLongFields_validationFails() {
+	public function testPersonalInfoWithLongFields_validationFails(): void {
 		$longText = str_repeat( 'Cats ', 500 );
 		$request = ValidAddDonationRequest::getRequest();
 		$request->setDonorFirstName( $longText );
@@ -165,7 +165,7 @@ class AddDonationValidatorTest extends ValidatorTestCase {
 		$this->assertConstraintWasViolated( $result, AddDonationValidationResult::SOURCE_DONOR_EMAIL );
 	}
 
-	public function testBankDataWithLongFields_validationFails() {
+	public function testBankDataWithLongFields_validationFails(): void {
 		$longText = str_repeat( 'Cats ', 500 );
 		$request = ValidAddDonationRequest::getRequest();
 		$validBankData = $request->getBankData();
@@ -186,7 +186,7 @@ class AddDonationValidatorTest extends ValidatorTestCase {
 		$this->assertConstraintWasViolated( $result, AddDonationValidationResult::SOURCE_BIC );
 	}
 
-	public function testLongSource_validationFails() {
+	public function testLongSource_validationFails(): void {
 		$request = ValidAddDonationRequest::getRequest();
 		$request->setSource( 'http://catlady.com/#' . str_repeat( 'Cats ', 500 ) );
 
@@ -212,7 +212,7 @@ class AddDonationValidatorTest extends ValidatorTestCase {
 		return new BankDataValidator( $ibanValidatorMock );
 	}
 
-	private function newMockEmailValidator() {
+	private function newMockEmailValidator(): EmailValidator {
 		$validator = $this->getMockBuilder( EmailValidator::class )->disableOriginalConstructor()->getMock();
 		$validator->method( 'validate' )->willReturn( new ValidationResult() );
 		return $validator;

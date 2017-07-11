@@ -10,7 +10,7 @@ namespace WMDE\Fundraising\Frontend\Validation;
  */
 class RequiredFieldValidator {
 
-	public function validate( $value ): ValidationResult {
+	public function validate( $value ): ValidationResult {	// @codingStandardsIgnoreLine
 		if ( $value === '' ) {
 			return new ValidationResult( new ConstraintViolation( $value, 'field_required' ) );
 		}

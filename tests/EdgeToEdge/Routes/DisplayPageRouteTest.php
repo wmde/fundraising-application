@@ -18,7 +18,7 @@ use WMDE\Fundraising\ContentProvider\ContentProvider;
  */
 class DisplayPageRouteTest extends WebRouteTestCase {
 
-	public function testWhenPageDoesNotExist_missingResponseIsReturnedAndHasHeaderAndFooter() {
+	public function testWhenPageDoesNotExist_missingResponseIsReturnedAndHasHeaderAndFooter(): void {
 		$client = $this->createClient(
 			[],
 			function ( FunFunFactory $factory ) {
@@ -50,7 +50,7 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	public function testWhenPageDoesNotExist_noUnescapedPageNameIsShown() {
+	public function testWhenPageDoesNotExist_noUnescapedPageNameIsShown(): void {
 		$client = $this->createClient(
 			[],
 			function ( FunFunFactory $factory ) {
@@ -70,7 +70,7 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	public function testWhenRequestedContentPageExists_itGetsEmbeddedAndHasHeaderAndFooter() {
+	public function testWhenRequestedContentPageExists_itGetsEmbeddedAndHasHeaderAndFooter(): void {
 		$this->createEnvironment(
 			[],
 			function ( Client $client, FunFunFactory $factory ) {
@@ -107,7 +107,7 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	public function testWhenPageNameContainsSlash_404isReturned() {
+	public function testWhenPageNameContainsSlash_404isReturned(): void {
 		$client = $this->createClient( [], null, self::DISABLE_DEBUG );
 		$client->request( 'GET', '/page/unicorns/of-doom' );
 

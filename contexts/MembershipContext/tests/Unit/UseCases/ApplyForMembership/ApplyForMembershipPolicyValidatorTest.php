@@ -10,7 +10,7 @@ use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
 
 class ApplyForMembershipPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 
-	public function testGivenQuarterlyAmountTooHigh_MembershipApplicationNeedsModeration() {
+	public function testGivenQuarterlyAmountTooHigh_MembershipApplicationNeedsModeration(): void {
 		$textPolicyValidator = $this->newSucceedingTextPolicyValidator();
 		$policyValidator = new ApplyForMembershipPolicyValidator( $textPolicyValidator );
 		$this->assertTrue( $policyValidator->needsModeration(
@@ -24,7 +24,7 @@ class ApplyForMembershipPolicyValidatorTest extends \PHPUnit\Framework\TestCase 
 		return $textPolicyValidator;
 	}
 
-	public function testGivenYearlyAmountTooHigh_MembershipApplicationNeedsModeration() {
+	public function testGivenYearlyAmountTooHigh_MembershipApplicationNeedsModeration(): void {
 		$textPolicyValidator = $this->newSucceedingTextPolicyValidator();
 		$policyValidator = new ApplyForMembershipPolicyValidator( $textPolicyValidator );
 		$this->assertTrue( $policyValidator->needsModeration(
@@ -32,7 +32,7 @@ class ApplyForMembershipPolicyValidatorTest extends \PHPUnit\Framework\TestCase 
 		) );
 	}
 
-	public function testFailingTextPolicyValidation_MembershipApplicationNeedsModeration() {
+	public function testFailingTextPolicyValidation_MembershipApplicationNeedsModeration(): void {
 		$textPolicyValidator = $this->createMock( TextPolicyValidator::class );
 		$textPolicyValidator->method( 'textIsHarmless' )->willReturn( false );
 		$policyValidator = new ApplyForMembershipPolicyValidator( $textPolicyValidator );
@@ -42,7 +42,7 @@ class ApplyForMembershipPolicyValidatorTest extends \PHPUnit\Framework\TestCase 
 	}
 
 	/** @dataProvider blacklistedEmailAddressProvider */
-	public function testWhenEmailAddressIsBlacklisted_isAutoDeletedReturnsTrue( $emailAddress ) {
+	public function testWhenEmailAddressIsBlacklisted_isAutoDeletedReturnsTrue( string $emailAddress ): void {
 		$policyValidator = $this->newPolicyValidatorWithEmailBlacklist();
 		$this->assertTrue(
 			$policyValidator->isAutoDeleted(
@@ -51,7 +51,7 @@ class ApplyForMembershipPolicyValidatorTest extends \PHPUnit\Framework\TestCase 
 		);
 	}
 
-	public function blacklistedEmailAddressProvider() {
+	public function blacklistedEmailAddressProvider(): array {
 		return [
 			[ 'foo@bar.baz' ],
 			[ 'test@example.com' ],
@@ -60,7 +60,7 @@ class ApplyForMembershipPolicyValidatorTest extends \PHPUnit\Framework\TestCase 
 	}
 
 	/** @dataProvider allowedEmailAddressProvider */
-	public function testWhenEmailAddressIsNotBlacklisted_isAutoDeletedReturnsFalse( $emailAddress ) {
+	public function testWhenEmailAddressIsNotBlacklisted_isAutoDeletedReturnsFalse( string $emailAddress ): void {
 		$policyValidator = $this->newPolicyValidatorWithEmailBlacklist();
 		$this->assertFalse(
 			$policyValidator->isAutoDeleted(
@@ -69,7 +69,7 @@ class ApplyForMembershipPolicyValidatorTest extends \PHPUnit\Framework\TestCase 
 		);
 	}
 
-	public function allowedEmailAddressProvider() {
+	public function allowedEmailAddressProvider(): array {
 		return [
 			[ 'other.person@bar.baz' ],
 			[ 'test@example.computer.says.no' ],
@@ -77,9 +77,6 @@ class ApplyForMembershipPolicyValidatorTest extends \PHPUnit\Framework\TestCase 
 		];
 	}
 
-	/**
-	 * @return ApplyForMembershipPolicyValidator
-	 */
 	private function newPolicyValidatorWithEmailBlacklist(): ApplyForMembershipPolicyValidator {
 		$textPolicyValidator = $this->newSucceedingTextPolicyValidator();
 		$policyValidator = new ApplyForMembershipPolicyValidator(

@@ -19,7 +19,7 @@ class SchemaLoader {
 		$this->fileFetcher = $fileFetcher;
 	}
 
-	public function loadSchema( $schema ): \stdClass {
+	public function loadSchema( string $schema ): \stdClass {
 		try {
 			$schemaString = $this->fileFetcher->fetchFile( $schema );
 		} catch ( FileFetchingException $e ) {

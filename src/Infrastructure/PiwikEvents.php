@@ -37,11 +37,11 @@ class PiwikEvents {
 	 *
 	 * @throws \InvalidArgumentException
 	 */
-	public function triggerSetCustomVariable( int $variableId, string $value, string $scope ) {
+	public function triggerSetCustomVariable( int $variableId, string $value, string $scope ): void {
 		$this->events[] = [ self::EVENT_SET_CUSTOM_VARIABLE, $variableId, $this->getVariableName( $variableId ), $value, $scope ];
 	}
 
-	public function triggerTrackGoal( int $goalId ) {
+	public function triggerTrackGoal( int $goalId ): void {
 		$this->events[] = [ self::EVENT_TRACK_GOAL, $goalId ];
 	}
 

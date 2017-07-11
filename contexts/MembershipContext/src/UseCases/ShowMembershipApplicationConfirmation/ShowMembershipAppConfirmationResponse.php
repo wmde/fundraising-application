@@ -33,11 +33,11 @@ class ShowMembershipAppConfirmationResponse {
 	 *
 	 * @return Application|null
 	 */
-	public function getApplication() {
+	public function getApplication(): ?Application {
 		return $this->membershipApplication;
 	}
 
-	public function getUpdateToken() {
+	public function getUpdateToken(): ?string {
 		return $this->updateToken;
 	}
 

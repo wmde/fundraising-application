@@ -52,7 +52,7 @@ abstract class WebRouteTestCase extends TestCase {
 	 * @param array $config
 	 * @param callable $onEnvironmentCreated
 	 */
-	public function createEnvironment( array $config, callable $onEnvironmentCreated ) {
+	public function createEnvironment( array $config, callable $onEnvironmentCreated ): void {
 		$testEnvironment = TestEnvironment::newInstance( $config );
 
 		$client = new Client( $this->createApplication(
@@ -79,7 +79,7 @@ abstract class WebRouteTestCase extends TestCase {
 	 * @param array $config
 	 * @param callable $onEnvironmentCreated
 	 */
-	public function createAppEnvironment( array $config, callable $onEnvironmentCreated ) {
+	public function createAppEnvironment( array $config, callable $onEnvironmentCreated ): void {
 		$testEnvironment = TestEnvironment::newInstance( $config );
 
 		$application = $this->createApplication( $testEnvironment->getFactory(), self::ENABLE_DEBUG );
@@ -109,31 +109,31 @@ abstract class WebRouteTestCase extends TestCase {
 		return $app;
 	}
 
-	protected function assert404( Response $response ) {
+	protected function assert404( Response $response ): void {
 		$this->assertSame( 404, $response->getStatusCode() );
 	}
 
-	protected function assertJsonResponse( $expected, Response $response ) {
+	protected function assertJsonResponse( array $expected, Response $response ): void {
 		$this->assertSame(
 			json_encode( $expected, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ),
 			$response->getContent()
 		);
 	}
 
-	protected function assertJsonSuccessResponse( $expected, Response $response ) {
+	protected function assertJsonSuccessResponse( array $expected, Response $response ): void {
 		$this->assertTrue( $response->isSuccessful(), 'request is successful' );
 		$this->assertJson( $response->getContent(), 'response is json' );
 		$this->assertJsonResponse( $expected, $response );
 	}
 
-	protected function assertGetRequestCausesMethodNotAllowedResponse( string $route, array $params ) {
+	protected function assertGetRequestCausesMethodNotAllowedResponse( string $route, array $params ): void {
 		$client = $this->createClient();
 
 		$this->expectException( MethodNotAllowedHttpException::class );
 		$client->request( 'GET', $route, $params );
 	}
 
-	protected function assertErrorJsonResponse( Response $response ) {
+	protected function assertErrorJsonResponse( Response $response ): void {
 		$responseData = $this->getJsonFromResponse( $response );
 		$this->assertArrayHasKey( 'status', $responseData );
 		$this->assertEquals( $responseData['status'], 'ERR' );
@@ -146,12 +146,12 @@ abstract class WebRouteTestCase extends TestCase {
 		);
 	}
 
-	protected function getJsonFromResponse( Response $response ) {
+	protected function getJsonFromResponse( Response $response ): array {
 		$this->assertJson( $response->getContent(), 'response is json' );
 		return json_decode( $response->getContent(), true );
 	}
 
-	protected function assertSuccessJsonResponse( Response $response ) {
+	protected function assertSuccessJsonResponse( Response $response ): void {
 		$responseData = $this->getJsonFromResponse( $response );
 		$this->assertArrayHasKey( 'status', $responseData );
 		$this->assertEquals( $responseData['status'], 'OK' );

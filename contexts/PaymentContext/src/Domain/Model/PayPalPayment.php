@@ -24,7 +24,7 @@ class PayPalPayment implements PaymentMethod {
 		return $this->payPalData;
 	}
 
-	public function addPayPalData( PayPalData $palPayData ) {
+	public function addPayPalData( PayPalData $palPayData ): void {
 		$this->payPalData = $palPayData;
 	}
 }

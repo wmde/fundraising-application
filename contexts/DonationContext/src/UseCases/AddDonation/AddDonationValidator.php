@@ -69,7 +69,7 @@ class AddDonationValidator {
 		return new Result( ...$this->violations );
 	}
 
-	private function validateAmount() {
+	private function validateAmount(): void {
 		// TODO validate without euro class, put conversion in PaymentDataValidator
 		$result = $this->paymentDataValidator->validate(
 			$this->request->getAmount()->getEuroFloat(),
@@ -83,11 +83,11 @@ class AddDonationValidator {
 		$this->addViolations( $violations );
 	}
 
-	private function addViolations( array $violations ) {
+	private function addViolations( array $violations ): void {
 		$this->violations = array_merge( $this->violations, $violations );
 	}
 
-	private function validateBankData() {
+	private function validateBankData(): void {
 		if ( $this->request->getPaymentType() !== PaymentType::DIRECT_DEBIT ) {
 			return;
 		}
@@ -100,7 +100,7 @@ class AddDonationValidator {
 		$this->validateFieldLength( $bankData->getBic(), Result::SOURCE_BIC );
 	}
 
-	private function validateDonorEmail() {
+	private function validateDonorEmail(): void {
 		if ( $this->request->donorIsAnonymous() ) {
 			return;
 		}
@@ -115,7 +115,7 @@ class AddDonationValidator {
 		}
 	}
 
-	private function validateDonorName() {
+	private function validateDonorName(): void {
 		if ( $this->request->donorIsAnonymous() ) {
 			return;
 		}
@@ -127,7 +127,7 @@ class AddDonationValidator {
 		}
 	}
 
-	private function validateCompanyName() {
+	private function validateCompanyName(): void {
 		if ( $this->request->getDonorCompany() === '' ) {
 			$this->violations[] = new ConstraintViolation(
 				$this->request->getDonorCompany(),
@@ -139,7 +139,7 @@ class AddDonationValidator {
 		}
 	}
 
-	private function validatePersonName() {
+	private function validatePersonName(): void {
 		$violations = [];
 
 		if ( $this->request->getDonorFirstName() === '' ) {
@@ -178,7 +178,7 @@ class AddDonationValidator {
 		$this->addViolations( $violations );
 	}
 
-	private function validateDonorAddress() {
+	private function validateDonorAddress(): void {
 		if ( $this->request->donorIsAnonymous() ) {
 			return;
 		}
@@ -236,7 +236,7 @@ class AddDonationValidator {
 		$this->addViolations( $violations );
 	}
 
-	private function validatePayment() {
+	private function validatePayment(): void {
 		if ( ! in_array( $this->request->getPaymentType(), PaymentType::getPaymentTypes() ) ) {
 			$this->violations[] = new ConstraintViolation(
 				$this->request->getPaymentType(),
@@ -246,13 +246,13 @@ class AddDonationValidator {
 		}
 	}
 
-	private function validateFieldLength( string $value, string $fieldName ) {
+	private function validateFieldLength( string $value, string $fieldName ): void {
 		if ( strlen( $value ) > $this->maximumFieldLengths[$fieldName] )  {
 			$this->violations[] = new ConstraintViolation( $value, Result::VIOLATION_WRONG_LENGTH, $fieldName );
 		}
 	}
 
-	private function validateTrackingData() {
+	private function validateTrackingData(): void {
 		$this->validateFieldLength( $this->request->getSource(), Result::SOURCE_TRACKING_SOURCE );
 		// validation of impression counts is not needed because input is converted to int
 		// validation of skin, color and layout is not needed because they are static legacy values and empty.

@@ -16,7 +16,7 @@ use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
  */
 class GetInTouchValidatorTest extends ValidatorTestCase {
 
-	public function testNameFieldsAreOptional() {
+	public function testNameFieldsAreOptional(): void {
 		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
 		$validator = new GetInTouchValidator( $mailValidator );
 		$request = new GetInTouchRequest(
@@ -29,7 +29,7 @@ class GetInTouchValidatorTest extends ValidatorTestCase {
 		$this->assertTrue( $validator->validate( $request )->isSuccessful() );
 	}
 
-	public function testEmailAddressIsValidated() {
+	public function testEmailAddressIsValidated(): void {
 		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
 		$validator = new GetInTouchValidator( $mailValidator );
 		$request = new GetInTouchRequest(
@@ -43,7 +43,7 @@ class GetInTouchValidatorTest extends ValidatorTestCase {
 		$this->assertConstraintWasViolated( $validator->validate( $request ), 'email' );
 	}
 
-	public function testSubjectIsValidated() {
+	public function testSubjectIsValidated(): void {
 		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
 		$validator = new GetInTouchValidator( $mailValidator );
 		$request = new GetInTouchRequest(
@@ -57,7 +57,7 @@ class GetInTouchValidatorTest extends ValidatorTestCase {
 		$this->assertConstraintWasViolated( $validator->validate( $request ), 'subject' );
 	}
 
-	public function testMessageBodyIsValidated() {
+	public function testMessageBodyIsValidated(): void {
 		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
 		$validator = new GetInTouchValidator( $mailValidator );
 		$request = new GetInTouchRequest(

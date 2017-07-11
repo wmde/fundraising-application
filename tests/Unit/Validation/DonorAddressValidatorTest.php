@@ -16,7 +16,7 @@ use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
  */
 class DonorAddressValidatorTest extends ValidatorTestCase {
 
-	public function testGivenValidAddress_validatorReturnsTrue_andConstraintViolationsAreEmpty() {
+	public function testGivenValidAddress_validatorReturnsTrue_andConstraintViolationsAreEmpty(): void {
 		$validator = new DonorAddressValidator();
 		$physicalAddress = new DonorAddress();
 		$physicalAddress->setStreetAddress( 'Stiftstr. 50' );
@@ -28,12 +28,12 @@ class DonorAddressValidatorTest extends ValidatorTestCase {
 		$this->assertTrue( $validator->validate( $physicalAddress )->isSuccessful() );
 	}
 
-	public function testGivenEmptyAddress_validatorReturnsFalse() {
+	public function testGivenEmptyAddress_validatorReturnsFalse(): void {
 		$validator = new DonorAddressValidator();
 		$this->assertFalse( $validator->validate( new DonorAddress() )->isSuccessful() );
 	}
 
-	public function testGivenEmptyAddress_violationsContainsRequiredFieldNames() {
+	public function testGivenEmptyAddress_violationsContainsRequiredFieldNames(): void {
 		$validator = new DonorAddressValidator();
 		$result = $validator->validate( new DonorAddress() );
 

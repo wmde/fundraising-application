@@ -26,15 +26,15 @@ class FakeApplicationRepository implements ApplicationRepository {
 		}
 	}
 
-	public function throwOnRead() {
+	public function throwOnRead(): void {
 		$this->throwOnRead = true;
 	}
 
-	public function throwOnWrite() {
+	public function throwOnWrite(): void {
 		$this->throwOnWrite = true;
 	}
 
-	public function storeApplication( Application $application ) {
+	public function storeApplication( Application $application ): void {
 		if ( $this->throwOnWrite ) {
 			throw new StoreMembershipApplicationException();
 		}

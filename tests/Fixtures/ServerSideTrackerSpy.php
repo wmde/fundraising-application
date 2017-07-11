@@ -19,7 +19,7 @@ class ServerSideTrackerSpy implements ServerSideTracker {
 
 	private $ips = [];
 
-	public function trackPageView( string $url, string $title ) {
+	public function trackPageView( string $url, string $title ): void {
 		$this->pageViews[] = [
 			'url' => $url,
 			'title' => $title,
@@ -33,7 +33,7 @@ class ServerSideTrackerSpy implements ServerSideTracker {
 		return $this->pageViews;
 	}
 
-	public function setIp( string $ip ) {
+	public function setIp( string $ip ): void {
 		$this->ips[] = $ip;
 	}
 

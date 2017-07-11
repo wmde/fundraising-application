@@ -46,7 +46,7 @@ class DoctrineMembershipApplicationAuthorizerTest extends \PHPUnit\Framework\Tes
 	/**
 	 * @slowThreshold 400
 	 */
-	public function testWhenNoMembershipApplications() {
+	public function testWhenNoMembershipApplications(): void {
 		$this->specify( 'update authorization fails', function() {
 			$authorizer = $this->newAuthorizerWithApplications( self::CORRECT_UPDATE_TOKEN );
 			$this->assertFalse( $authorizer->canModifyApplication( self::MEANINGLESS_APPLICATION_ID ) );
@@ -61,7 +61,7 @@ class DoctrineMembershipApplicationAuthorizerTest extends \PHPUnit\Framework\Tes
 	/**
 	 * @slowThreshold 1200
 	 */
-	public function testWhenApplicationWithTokenExists() {
+	public function testWhenApplicationWithTokenExists(): void {
 		$application = new MembershipApplication();
 
 		$application->modifyDataObject( function( MembershipApplicationData $data ) {
@@ -121,7 +121,7 @@ class DoctrineMembershipApplicationAuthorizerTest extends \PHPUnit\Framework\Tes
 	/**
 	 * @slowThreshold 400
 	 */
-	public function testWhenApplicationWithoutTokenExists() {
+	public function testWhenApplicationWithoutTokenExists(): void {
 		$application = new MembershipApplication();
 
 		$this->specify(
@@ -144,7 +144,7 @@ class DoctrineMembershipApplicationAuthorizerTest extends \PHPUnit\Framework\Tes
 	/**
 	 * @slowThreshold 400
 	 */
-	public function testWhenDoctrineThrowsException() {
+	public function testWhenDoctrineThrowsException(): void {
 		$authorizer = new DoctrineApplicationAuthorizer(
 			$this->getThrowingEntityManager(),
 			self::CORRECT_UPDATE_TOKEN,

@@ -42,7 +42,7 @@ class Applicant {
 		return $this->dateOfBirth;
 	}
 
-	public function changeEmailAddress( EmailAddress $email ) {
+	public function changeEmailAddress( EmailAddress $email ): void {
 		$this->email = $email;
 	}
 

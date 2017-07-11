@@ -40,7 +40,7 @@ class ValidAddDonationRequest {
 		return $request;
 	}
 
-	private static function newValidBankData() {
+	private static function newValidBankData(): BankData {
 		$bankData = new BankData();
 
 		$bankData->setAccount( ValidDonation::PAYMENT_BANK_ACCOUNT );

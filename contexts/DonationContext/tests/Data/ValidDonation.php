@@ -129,7 +129,7 @@ class ValidDonation {
 		);
 	}
 
-	public static function newBookedCreditCardDonation() {
+	public static function newBookedCreditCardDonation(): Donation {
 		$creditCardData = new CreditCardTransactionData();
 		$creditCardData->setTransactionId( self::CREDIT_CARD_TRANSACTION_ID );
 
@@ -182,7 +182,7 @@ class ValidDonation {
 		);
 	}
 
-	private function createAnonymousDonationWithId( int $donationId, PaymentMethod $paymentMethod, string $status ) {
+	private function createAnonymousDonationWithId( int $donationId, PaymentMethod $paymentMethod, string $status ): Donation {
 		return new Donation(
 			$donationId,
 			$status,

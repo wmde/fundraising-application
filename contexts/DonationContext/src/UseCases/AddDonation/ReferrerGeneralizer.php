@@ -22,7 +22,7 @@ class ReferrerGeneralizer {
 		$this->domainMap = $domainMap;
 	}
 
-	public function generalize( string $referrer ) {
+	public function generalize( string $referrer ): string {
 		$parsedUrl = parse_url( $referrer );
 		if ( array_key_exists( 'host', $parsedUrl ) && array_key_exists( $parsedUrl['host'], $this->domainMap ) ) {
 			return $this->domainMap[$parsedUrl['host']];

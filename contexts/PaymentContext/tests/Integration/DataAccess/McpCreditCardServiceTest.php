@@ -27,7 +27,7 @@ class McpCreditCardServiceTest extends \PHPUnit\Framework\TestCase {
 		'expiryYear' => self::EXPIRY_YEAR,
 	];
 
-	public function testMicroPaymentServiceGetsCalledWithAccessKeyAndCustomerId() {
+	public function testMicroPaymentServiceGetsCalledWithAccessKeyAndCustomerId(): void {
 		$microPaymentServiceMock = $this->getMicroPaymentServiceTestDouble();
 
 		$microPaymentServiceMock->expects( $this->once() )
@@ -50,7 +50,7 @@ class McpCreditCardServiceTest extends \PHPUnit\Framework\TestCase {
 		return $this->createMock( \IMcpCreditcardService_v1_5::class );
 	}
 
-	public function testWhenValidDataIsReturned_creditCardExpiryIsCreated() {
+	public function testWhenValidDataIsReturned_creditCardExpiryIsCreated(): void {
 		$microPaymentServiceStub = $this->getMicroPaymentServiceTestDouble();
 
 		$microPaymentServiceStub->expects( $this->any() )
@@ -68,7 +68,7 @@ class McpCreditCardServiceTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider invalidReturnDataProvider
 	 */
-	public function testWhenInvalidDataIsReturned_exceptionIsThrown( array $invalidReturnData ) {
+	public function testWhenInvalidDataIsReturned_exceptionIsThrown( array $invalidReturnData ): void {
 		$microPaymentServiceStub = $this->getMicroPaymentServiceTestDouble();
 
 		$microPaymentServiceStub->expects( $this->any() )
@@ -81,7 +81,7 @@ class McpCreditCardServiceTest extends \PHPUnit\Framework\TestCase {
 		$creditCardService->getExpirationDate( self::CUSTOMER_ID );
 	}
 
-	public function invalidReturnDataProvider() {
+	public function invalidReturnDataProvider(): array {
 		return [
 			[ [
 				'expiryMonth' => 'potato',

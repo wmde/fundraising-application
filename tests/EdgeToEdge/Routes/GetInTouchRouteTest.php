@@ -15,7 +15,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingEmailValidator;
  */
 class GetInTouchRouteTest extends WebRouteTestCase {
 
-	public function testGivenValidRequest_contactRequestIsProperlyProcessed() {
+	public function testGivenValidRequest_contactRequestIsProperlyProcessed(): void {
 		$client = $this->createClient( [], function ( FunFunFactory $factory ) {
 			$factory->setEmailValidator( new SucceedingEmailValidator() );
 		} );
@@ -38,7 +38,7 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 		$this->assertSame( '/page/Kontakt_Bestaetigung', $response->headers->get( 'Location' ) );
 	}
 
-	public function testGivenInvalidRequest_validationFails() {
+	public function testGivenInvalidRequest_validationFails(): void {
 
 		$client = $this->createClient();
 
@@ -70,7 +70,7 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	public function testGivenGetRequest_formShownWithoutErrors() {
+	public function testGivenGetRequest_formShownWithoutErrors(): void {
 
 		$client = $this->createClient();
 
@@ -86,7 +86,7 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	public function testOnException_errorPageIsRendered() {
+	public function testOnException_errorPageIsRendered(): void {
 		$client = $this->createClient(
 			[],
 			function ( FunFunFactory $factory ) {

@@ -14,7 +14,7 @@ class PurgeCacheRouteTest extends WebRouteTestCase {
 
 	const INVALID_SECRET = 'pedo mellon a minno';
 
-	public function testGivenInvalidSecret_responseIsReturned() {
+	public function testGivenInvalidSecret_responseIsReturned(): void {
 		$client = $this->createClient();
 
 		$client->request(

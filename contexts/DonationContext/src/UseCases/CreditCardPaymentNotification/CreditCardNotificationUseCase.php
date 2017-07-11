@@ -44,7 +44,7 @@ class CreditCardNotificationUseCase {
 	 * @param CreditCardPaymentNotificationRequest $request
 	 * @throws CreditCardPaymentHandlerException
 	 */
-	public function handleNotification( CreditCardPaymentNotificationRequest $request ) {
+	public function handleNotification( CreditCardPaymentNotificationRequest $request ): void {
 		try {
 			$donation = $this->repository->getDonationById( $request->getDonationId() );
 		} catch ( GetDonationException $ex ) {
@@ -70,11 +70,7 @@ class CreditCardNotificationUseCase {
 		$this->handleRequest( $request, $donation );
 	}
 
-	/**
-	 * @param CreditCardPaymentNotificationRequest $request
-	 * @param \WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation $donation
-	 */
-	private function handleRequest( CreditCardPaymentNotificationRequest $request, Donation $donation ) {
+	private function handleRequest( CreditCardPaymentNotificationRequest $request, Donation $donation ): void {
 		try {
 			$donation->addCreditCardData( $this->newCreditCardDataFromRequest( $request ) );
 			$donation->confirmBooked();
@@ -93,7 +89,7 @@ class CreditCardNotificationUseCase {
 		$this->donationEventLogger->log( $donation->getId(), 'mcp_handler: booked' );
 	}
 
-	private function sendConfirmationEmail( Donation $donation ) {
+	private function sendConfirmationEmail( Donation $donation ): void {
 		if ( $donation->getDonor() !== null ) {
 			try {
 				$this->mailer->sendConfirmationMailFor( $donation );

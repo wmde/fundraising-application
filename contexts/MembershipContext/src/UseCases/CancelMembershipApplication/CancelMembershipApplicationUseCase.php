@@ -55,7 +55,7 @@ class CancelMembershipApplicationUseCase {
 		return $this->newSuccessResponse( $request );
 	}
 
-	private function getApplicationById( int $id ) {
+	private function getApplicationById( int $id ): ?Application {
 		try {
 			return $this->repository->getApplicationById( $id );
 		}
@@ -65,15 +65,15 @@ class CancelMembershipApplicationUseCase {
 		}
 	}
 
-	private function newFailureResponse( CancellationRequest $request ) {
+	private function newFailureResponse( CancellationRequest $request ): CancellationResponse {
 		return new CancellationResponse( $request->getApplicationId(), CancellationResponse::IS_FAILURE );
 	}
 
-	private function newSuccessResponse( CancellationRequest $request ) {
+	private function newSuccessResponse( CancellationRequest $request ): CancellationResponse {
 		return new CancellationResponse( $request->getApplicationId(), CancellationResponse::IS_SUCCESS );
 	}
 
-	private function sendConfirmationEmail( Application $application ) {
+	private function sendConfirmationEmail( Application $application ): void {
 		$this->mailer->sendMail(
 			$application->getApplicant()->getEmailAddress(),
 			$this->getConfirmationMailTemplateArguments( $application )

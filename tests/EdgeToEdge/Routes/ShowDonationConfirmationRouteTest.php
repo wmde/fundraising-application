@@ -26,7 +26,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 	const ACCESS_DENIED_TEXT = 'access_denied_donation_confirmation';
 
-	public function testGivenValidRequest_confirmationPageContainsDonationData() {
+	public function testGivenValidRequest_confirmationPageContainsDonationData(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setDonationConfirmationPageSelector(
 				new DonationConfirmationPageSelector( $this->newEmptyConfirmationPageConfig() )
@@ -41,7 +41,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testGivenValidPostRequest_confirmationPageContainsDonationData() {
+	public function testGivenValidPostRequest_confirmationPageContainsDonationData(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setDonationConfirmationPageSelector(
 				new DonationConfirmationPageSelector( $this->newEmptyConfirmationPageConfig() )
@@ -56,7 +56,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testGivenValidPostRequest_embeddedMembershipFormContainsDonationData() {
+	public function testGivenValidPostRequest_embeddedMembershipFormContainsDonationData(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setDonationConfirmationPageSelector(
 				new DonationConfirmationPageSelector( $this->newEmptyConfirmationPageConfig() )
@@ -71,7 +71,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function assertEmbeddedMembershipFormIsPrefilled( Donation $donation, string $responseContent ) {
+	private function assertEmbeddedMembershipFormIsPrefilled( Donation $donation, string $responseContent ): void {
 		$personName = $donation->getDonor()->getName();
 		$physicalAddress = $donation->getDonor()->getPhysicalAddress();
 		/** @var DirectDebitPayment $paymentMethod */
@@ -95,7 +95,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'initialFormValues.bankname: ' . $bankData->getBankName(), $responseContent );
 	}
 
-	public function testGivenAlternativeConfirmationPageConfig_alternativeContentIsDisplayed() {
+	public function testGivenAlternativeConfirmationPageConfig_alternativeContentIsDisplayed(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setDonationConfirmationPageSelector(
 				new DonationConfirmationPageSelector( $this->newConfirmationPageConfig() )
@@ -110,7 +110,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testGivenAnonymousDonation_confirmationPageReflectsThat() {
+	public function testGivenAnonymousDonation_confirmationPageReflectsThat(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$donation = $this->newBookedAnonymousPayPalDonation( $factory );
 
@@ -120,7 +120,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testGivenAnonymousDonation_confirmationPageShowsStatusText() {
+	public function testGivenAnonymousDonation_confirmationPageShowsStatusText(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$donation = $this->newBookedAnonymousPayPalDonation( $factory );
 
@@ -130,7 +130,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function retrieveDonationConfirmation( Client $client, int $donationId ) {
+	private function retrieveDonationConfirmation( Client $client, int $donationId ): string {
 		$client->request(
 			'GET',
 			'show-donation-confirmation',
@@ -163,7 +163,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		return $donation;
 	}
 
-	private function assertDonationDataInResponse( Donation $donation, string $responseContent ) {
+	private function assertDonationDataInResponse( Donation $donation, string $responseContent ): void {
 		$donor = $donation->getDonor();
 		$personName = $donor->getName();
 		$physicalAddress = $donor->getPhysicalAddress();
@@ -192,7 +192,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'bankData.bankname: ' . $paymentMethod->getBankData()->getBankName(), $responseContent );
 	}
 
-	public function testGivenWrongToken_accessIsDenied() {
+	public function testGivenWrongToken_accessIsDenied(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setDonationConfirmationPageSelector(
 				new DonationConfirmationPageSelector( $this->newEmptyConfirmationPageConfig() )
@@ -212,14 +212,14 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function assertDonationIsNotShown( Donation $donation, string $responseContent ) {
+	private function assertDonationIsNotShown( Donation $donation, string $responseContent ): void {
 		$this->assertNotContains( $donation->getDonor()->getName()->getFirstName(), $responseContent );
 		$this->assertNotContains( $donation->getDonor()->getName()->getLastName(), $responseContent );
 
 		$this->assertContains( self::ACCESS_DENIED_TEXT, $responseContent );
 	}
 
-	public function testGivenWrongId_accessIsDenied() {
+	public function testGivenWrongId_accessIsDenied(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setDonationConfirmationPageSelector(
 				new DonationConfirmationPageSelector( $this->newEmptyConfirmationPageConfig() )
@@ -233,7 +233,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testWhenNoDonation_accessIsDenied() {
+	public function testWhenNoDonation_accessIsDenied(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setDonationConfirmationPageSelector(
 				new DonationConfirmationPageSelector( $this->newEmptyConfirmationPageConfig() )
@@ -244,7 +244,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function newConfirmationPageConfig() {
+	private function newConfirmationPageConfig(): array {
 		return [
 			'default' => 'DonationConfirmation.twig',
 			'campaigns' => [
@@ -259,7 +259,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	private function newEmptyConfirmationPageConfig() {
+	private function newEmptyConfirmationPageConfig(): array {
 		return [
 			'default' => 'DonationConfirmation.twig',
 			'campaigns' => [
@@ -274,7 +274,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	public function testWhenDonationTimestampCookieIsSet_itIsNotOverwritten() {
+	public function testWhenDonationTimestampCookieIsSet_itIsNotOverwritten(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$donation = $this->newStoredDonation( $factory );
 

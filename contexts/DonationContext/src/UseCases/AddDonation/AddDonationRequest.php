@@ -51,7 +51,7 @@ class AddDonationRequest {
 		return $this->optIn;
 	}
 
-	public function setOptIn( string $optIn ) {
+	public function setOptIn( string $optIn ): void {
 		$this->optIn = $optIn;
 	}
 
@@ -59,7 +59,7 @@ class AddDonationRequest {
 		return $this->amount;
 	}
 
-	public function setAmount( Euro $amount ) {
+	public function setAmount( Euro $amount ): void {
 		$this->amount = $amount;
 	}
 
@@ -67,7 +67,7 @@ class AddDonationRequest {
 		return $this->paymentType;
 	}
 
-	public function setPaymentType( string $paymentType ) {
+	public function setPaymentType( string $paymentType ): void {
 		$this->paymentType = $paymentType;
 	}
 
@@ -75,7 +75,7 @@ class AddDonationRequest {
 		return $this->interval;
 	}
 
-	public function setInterval( int $interval ) {
+	public function setInterval( int $interval ): void {
 		$this->interval = $interval;
 	}
 
@@ -83,7 +83,7 @@ class AddDonationRequest {
 		return $this->bankData;
 	}
 
-	public function setBankData( BankData $bankData ) {
+	public function setBankData( BankData $bankData ): void {
 		$this->bankData = $bankData;
 	}
 
@@ -91,7 +91,7 @@ class AddDonationRequest {
 		return $this->tracking;
 	}
 
-	public function setTracking( string $tracking ) {
+	public function setTracking( string $tracking ): void {
 		$this->tracking = $tracking;
 	}
 
@@ -99,7 +99,7 @@ class AddDonationRequest {
 		return $this->source;
 	}
 
-	public function setSource( string $source ) {
+	public function setSource( string $source ): void {
 		$this->source = $source;
 	}
 
@@ -107,7 +107,7 @@ class AddDonationRequest {
 		return $this->totalImpressionCount;
 	}
 
-	public function setTotalImpressionCount( int $totalImpressionCount ) {
+	public function setTotalImpressionCount( int $totalImpressionCount ): void {
 		$this->totalImpressionCount = $totalImpressionCount;
 	}
 
@@ -115,7 +115,7 @@ class AddDonationRequest {
 		return $this->singleBannerImpressionCount;
 	}
 
-	public function setSingleBannerImpressionCount( int $singleBannerImpressionCount ) {
+	public function setSingleBannerImpressionCount( int $singleBannerImpressionCount ): void {
 		$this->singleBannerImpressionCount = $singleBannerImpressionCount;
 	}
 
@@ -144,7 +144,7 @@ class AddDonationRequest {
 		return $this->donorType;
 	}
 
-	public function setDonorType( string $donorType ) {
+	public function setDonorType( string $donorType ): void {
 		$this->donorType = $donorType;
 	}
 
@@ -152,7 +152,7 @@ class AddDonationRequest {
 		return $this->donorFirstName;
 	}
 
-	public function setDonorFirstName( string $donorFirstName ) {
+	public function setDonorFirstName( string $donorFirstName ): void {
 		$this->donorFirstName = $donorFirstName;
 	}
 
@@ -160,7 +160,7 @@ class AddDonationRequest {
 		return $this->donorLastName;
 	}
 
-	public function setDonorLastName( string $donorLastName ) {
+	public function setDonorLastName( string $donorLastName ): void {
 		$this->donorLastName = $donorLastName;
 	}
 
@@ -168,7 +168,7 @@ class AddDonationRequest {
 		return $this->donorSalutation;
 	}
 
-	public function setDonorSalutation( string $donorSalutation ) {
+	public function setDonorSalutation( string $donorSalutation ): void {
 		$this->donorSalutation = $donorSalutation;
 	}
 
@@ -176,7 +176,7 @@ class AddDonationRequest {
 		return $this->donorTitle;
 	}
 
-	public function setDonorTitle( string $donorTitle ) {
+	public function setDonorTitle( string $donorTitle ): void {
 		$this->donorTitle = $donorTitle;
 	}
 
@@ -184,7 +184,7 @@ class AddDonationRequest {
 		return $this->donorCompany;
 	}
 
-	public function setDonorCompany( string $donorCompany ) {
+	public function setDonorCompany( string $donorCompany ): void {
 		$this->donorCompany = $donorCompany;
 	}
 
@@ -192,7 +192,7 @@ class AddDonationRequest {
 		return $this->donorStreetAddress;
 	}
 
-	public function setDonorStreetAddress( string $donorStreetAddress ) {
+	public function setDonorStreetAddress( string $donorStreetAddress ): void {
 		$this->donorStreetAddress = $donorStreetAddress;
 	}
 
@@ -200,7 +200,7 @@ class AddDonationRequest {
 		return $this->donorPostalCode;
 	}
 
-	public function setDonorPostalCode( string $donorPostalCode ) {
+	public function setDonorPostalCode( string $donorPostalCode ): void {
 		$this->donorPostalCode = $donorPostalCode;
 	}
 
@@ -208,7 +208,7 @@ class AddDonationRequest {
 		return $this->donorCity;
 	}
 
-	public function setDonorCity( string $donorCity ) {
+	public function setDonorCity( string $donorCity ): void {
 		$this->donorCity = $donorCity;
 	}
 
@@ -216,7 +216,7 @@ class AddDonationRequest {
 		return $this->donorCountryCode;
 	}
 
-	public function setDonorCountryCode( string $donorCountryCode ) {
+	public function setDonorCountryCode( string $donorCountryCode ): void {
 		$this->donorCountryCode = $donorCountryCode;
 	}
 
@@ -224,7 +224,7 @@ class AddDonationRequest {
 		return $this->donorEmailAddress;
 	}
 
-	public function setDonorEmailAddress( string $donorEmailAddress ) {
+	public function setDonorEmailAddress( string $donorEmailAddress ): void {
 		$this->donorEmailAddress = $donorEmailAddress;
 	}
 

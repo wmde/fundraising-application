@@ -17,7 +17,7 @@ class ValidationResponse {
 	 * @param ConstraintViolation[] $requestValidationErrors
 	 * @param bool $needsModeration
 	 */
-	public function __construct( array $requestValidationErrors = [], $needsModeration = false ) {
+	public function __construct( array $requestValidationErrors = [], bool $needsModeration = false ) {
 		$this->validationErrors = $requestValidationErrors;
 		$this->needsModerationValue = $needsModeration;
 	}

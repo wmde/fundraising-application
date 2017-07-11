@@ -29,11 +29,11 @@ class HandleSubscriptionSignupNotificationUseCaseTest extends \PHPUnit\Framework
 	 */
 	private $mailerSpy;
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->mailerSpy = new TemplateBasedMailerSpy( $this );
 	}
 
-	public function testWhenPaymentMethodIsNotPayPal_requestIsNotHandled() {
+	public function testWhenPaymentMethodIsNotPayPal_requestIsNotHandled(): void {
 		$fakeRepository = new FakeApplicationRepository();
 		$fakeRepository->storeApplication( ValidMembershipApplication::newDomainEntity() );
 
@@ -49,7 +49,7 @@ class HandleSubscriptionSignupNotificationUseCaseTest extends \PHPUnit\Framework
 		$this->assertFalse( $response->notificationWasHandled() );
 	}
 
-	public function testWhenMembershipApplicationDoesNotExist_requestIsNotHandled() {
+	public function testWhenMembershipApplicationDoesNotExist_requestIsNotHandled(): void {
 		$fakeRepository = new FakeApplicationRepository();
 		$fakeRepository->storeApplication( ValidMembershipApplication::newDomainEntity() );
 
@@ -66,7 +66,7 @@ class HandleSubscriptionSignupNotificationUseCaseTest extends \PHPUnit\Framework
 		$this->assertFalse( $response->notificationWasHandled() );
 	}
 
-	public function testWhenRepositoryThrowsException_responseContainsErrors() {
+	public function testWhenRepositoryThrowsException_responseContainsErrors(): void {
 		$useCase = new HandleSubscriptionSignupNotificationUseCase(
 			new DoctrineApplicationRepository( ThrowingEntityManager::newInstance( $this ) ),
 			new SucceedingAuthorizer(),
@@ -79,7 +79,7 @@ class HandleSubscriptionSignupNotificationUseCaseTest extends \PHPUnit\Framework
 		$this->assertTrue( $response->hasErrors() );
 	}
 
-	public function testWhenAuthorizationFails_requestIsNotHandled() {
+	public function testWhenAuthorizationFails_requestIsNotHandled(): void {
 		$fakeRepository = new FakeApplicationRepository();
 		$fakeRepository->storeApplication( ValidMembershipApplication::newDomainEntityUsingPayPal() );
 
@@ -95,7 +95,7 @@ class HandleSubscriptionSignupNotificationUseCaseTest extends \PHPUnit\Framework
 		$this->assertFalse( $response->notificationWasHandled() );
 	}
 
-	public function testWhenStatusIsNotAllowedForConfirming_requestIsNotHandled() {
+	public function testWhenStatusIsNotAllowedForConfirming_requestIsNotHandled(): void {
 		$fakeRepository = new FakeApplicationRepository();
 
 		$application = ValidMembershipApplication::newDomainEntityUsingPayPal();
@@ -115,7 +115,7 @@ class HandleSubscriptionSignupNotificationUseCaseTest extends \PHPUnit\Framework
 		$this->assertTrue( $response->hasErrors() );
 	}
 
-	public function testWhenValidRequestIsSent_itIsHandled() {
+	public function testWhenValidRequestIsSent_itIsHandled(): void {
 		$fakeRepository = new FakeApplicationRepository();
 
 		$application = ValidMembershipApplication::newDomainEntityUsingPayPal();
@@ -134,7 +134,7 @@ class HandleSubscriptionSignupNotificationUseCaseTest extends \PHPUnit\Framework
 		$this->assertFalse( $response->hasErrors() );
 	}
 
-	public function testWhenApplicationIsConfirmed_mailIsSent() {
+	public function testWhenApplicationIsConfirmed_mailIsSent(): void {
 		$fakeRepository = new FakeApplicationRepository();
 
 		$application = ValidMembershipApplication::newDomainEntityUsingPayPal();

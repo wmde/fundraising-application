@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowMembershipApp
 
 use WMDE\Fundraising\Frontend\MembershipContext\Authorization\ApplicationAuthorizer;
 use WMDE\Fundraising\Frontend\MembershipContext\Authorization\ApplicationTokenFetcher;
+use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\GetMembershipApplicationException;
 
@@ -44,7 +45,7 @@ class ShowMembershipApplicationConfirmationUseCase {
 		return ShowMembershipAppConfirmationResponse::newNotAllowedResponse();
 	}
 
-	private function getMembershipApplicationById( int $applicationId ) {
+	private function getMembershipApplicationById( int $applicationId ): ?Application {
 		try {
 			return $this->repository->getApplicationById( $applicationId );
 		}

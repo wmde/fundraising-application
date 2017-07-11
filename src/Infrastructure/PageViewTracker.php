@@ -20,7 +20,7 @@ class PageViewTracker {
 		$this->trackingUrlBase = $trackingUrlBase;
 	}
 
-	public function trackPaypalRedirection( string $campaign, string $keyword, string $visitorIP ) {
+	public function trackPaypalRedirection( string $campaign, string $keyword, string $visitorIP ): void {
 		$this->tracker->trackPageView(
 			$this->getPaypalRedirectionTrackingUrl( $campaign, $keyword ),
 			self::TRACKING_TITLE_PAYPAL_REDIRECT
