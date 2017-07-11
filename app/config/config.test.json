@@ -63,7 +63,8 @@
 	"sofort": {
 		"config-key": "fff:ggg:hhh:iii",
 		"return-url": "http://my.donation.app/show-donation-confirmation",
-		"cancel-url": "http://my.donation.app/donation/cancel"
+		"cancel-url": "http://my.donation.app/donation/cancel",
+		"notification-url": "http://my.donation.app/sofort-payment-notification"
 	},
 	"confirmation-pages": {
 		"default": "DonationConfirmation.twig",

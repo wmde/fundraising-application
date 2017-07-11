@@ -122,7 +122,8 @@
 	"sofort": {
 		"config-key": "",
 		"return-url": "",
-		"cancel-url": ""
+		"cancel-url": "",
+		"notification-url": ""
 	},
 	"confirmation-pages": {
 		"default": "Donation_Confirmation.html.twig",

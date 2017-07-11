@@ -936,7 +936,8 @@ class FunFunFactory {
 			new SofortConfig(
 				$this->getTranslator()->trans( 'item_name_donation', [], 'messages' ),
 				$config['return-url'],
-				$config['cancel-url']
+				$config['cancel-url'],
+				$config['notification-url']
 			),
 			$this->getSofortClient()
 		);
