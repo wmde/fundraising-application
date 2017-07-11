@@ -353,8 +353,6 @@ section.container { overflow: hidden; }
 .logo-itz-white { background: transparent url(../_assets/img/itz_logo_white.png) no-repeat center center; width: 103px; height: 38px; display: block; }
 .logo-ssl-grey { background: transparent url(../_assets/img/ssl_logo_grey.png) no-repeat center center; width: 62px; height: 28px; display: block; margin-top: 15px; }
 .logo-ssl-white { background: transparent url(../_assets/img/ssl_logo_white.png) no-repeat center center; width: 62px; height: 28px; display: block; margin-top: 15px; }
-.logo-wikimedia-grey { background: transparent url(../_assets/img/wikimedia_logo_grey.png) no-repeat center center; width: 38px; height: 38px; display: block; }
-.logo-wikimedia-white { background: transparent url(../_assets/img/wikimedia_logo_white.png) no-repeat center center; width: 38px; height: 39px; display: block; }
 
 .ltcol,
 .ctcol,
