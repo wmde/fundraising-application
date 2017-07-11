@@ -74,7 +74,7 @@ class McpCreditCardServiceTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( (int)self::CARD_EXPIRY_YEAR, $creditCardInfo->getYear() );
 	}
 
-	private function newDispatcher(): IMcpCreditcardService_v1_5 {
+	private function newDispatcher(): TNvpServiceDispatcher {
 		return new TNvpServiceDispatcher(
 			'IMcpCreditcardService_v1_5',
 			'https://sipg.micropayment.de/public/creditcard/v1.5/nvp/'
