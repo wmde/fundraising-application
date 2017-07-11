@@ -16,7 +16,7 @@ class SucceedingEmailValidator extends EmailValidator {
 	public function __construct() {
 	}
 
-	public function validate( $emailAddress ): ValidationResult {
+	public function validate( $emailAddress ): ValidationResult {	// @codingStandardsIgnoreLine
 		return new ValidationResult();
 	}
 

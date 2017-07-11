@@ -1320,7 +1320,7 @@ class FunFunFactory {
 		};
 	}
 
-	private function addProfilingDecorator( $objectToDecorate, string $profilingLabel ) {
+	private function addProfilingDecorator( $objectToDecorate, string $profilingLabel ) {	// @codingStandardsIgnoreLine
 		if ( $this->profiler === null ) {
 			return $objectToDecorate;
 		}

@@ -44,7 +44,7 @@ class TrimValuesTest extends WebRouteTestCase {
 		return $params;
 	}
 
-	private function trimValue( &$value ): void {
+	private function trimValue( &$value ): void {	// @codingStandardsIgnoreLine
 		$value = is_string( $value ) ? trim( $value ) : $value;
 	}
 

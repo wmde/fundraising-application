@@ -16,7 +16,7 @@ class SucceedingStringLengthValidator extends StringLengthValidator {
 	public function __construct() {
 	}
 
-	public function validate( $string ): ValidationResult {
+	public function validate( $string ): ValidationResult {	// @codingStandardsIgnoreLine
 		return new ValidationResult();
 	}
 }

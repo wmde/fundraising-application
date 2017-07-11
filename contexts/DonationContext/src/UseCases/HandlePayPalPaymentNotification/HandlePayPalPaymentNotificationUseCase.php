@@ -202,7 +202,7 @@ class HandlePayPalPaymentNotificationUseCase {
 		return PaypalNotificationResponse::newSuccessResponse();
 	}
 
-	private function logChildDonationCreatedEvent( $parentId, $childId ): void {
+	private function logChildDonationCreatedEvent( $parentId, $childId ): void {	// @codingStandardsIgnoreLine
 		$this->donationEventLogger->log(
 			$parentId,
 			"paypal_handler: new transaction id to corresponding child donation: $childId"

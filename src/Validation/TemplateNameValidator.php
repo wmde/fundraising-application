@@ -17,11 +17,9 @@ class TemplateNameValidator {
 	}
 
 	/**
-	 * @param $value
-	 * @return ValidationResult+
 	 * @throws \Twig_Error_Syntax
 	 */
-	public function validate( $value ): ValidationResult {
+	public function validate( $value ): ValidationResult {	// @codingStandardsIgnoreLine
 		try {
 			$this->twig->loadTemplate( $value );
 		}

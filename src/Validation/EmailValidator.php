@@ -21,7 +21,7 @@ class EmailValidator {
 		$this->domainValidator = $tldValidator;
 	}
 
-	public function validate( $emailAddress ): ValidationResult {
+	public function validate( $emailAddress ): ValidationResult {	// @codingStandardsIgnoreLine
 		$mailAddress = null;
 
 		try {
