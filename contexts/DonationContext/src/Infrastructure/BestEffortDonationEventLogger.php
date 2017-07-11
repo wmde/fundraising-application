@@ -20,7 +20,7 @@ class BestEffortDonationEventLogger implements DonationEventLogger {
 		$this->logger = $logger;
 	}
 
-	public function log( int $donationId, string $message ) {
+	public function log( int $donationId, string $message ): void {
 		try {
 			$this->donationEventLogger->log( $donationId, $message );
 		} catch ( DonationEventLogException $e ) {

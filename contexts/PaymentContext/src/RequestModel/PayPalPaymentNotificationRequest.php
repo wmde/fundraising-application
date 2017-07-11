@@ -71,7 +71,7 @@ class PayPalPaymentNotificationRequest {
 		return $this->subscriptionId;
 	}
 
-	public function setSubscriptionId( string $subscriptionId ) {
+	public function setSubscriptionId( string $subscriptionId ): self {
 		$this->subscriptionId = $subscriptionId;
 		return $this;
 	}
@@ -238,11 +238,11 @@ class PayPalPaymentNotificationRequest {
 		return $this;
 	}
 
-	public function getSettleAmount() {
+	public function getSettleAmount(): Euro {
 		return $this->settleAmount;
 	}
 
-	public function setSettleAmount( Euro $settleAmount ) {
+	public function setSettleAmount( Euro $settleAmount ): self {
 		$this->settleAmount = $settleAmount;
 		return $this;
 	}

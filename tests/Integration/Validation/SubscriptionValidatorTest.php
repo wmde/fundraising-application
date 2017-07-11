@@ -24,14 +24,14 @@ use WMDE\Fundraising\Frontend\Validation\ValidationResult;
  */
 class SubscriptionValidatorTest extends ValidatorTestCase {
 
-	private function getMockTextPolicyValidator() {
+	private function getMockTextPolicyValidator(): TextPolicyValidator {
 		$mock = $this->createMock( TextPolicyValidator::class );
 		$mock->method( 'hasHarmlessContent' )
 			->willReturn( true );
 		return $mock;
 	}
 
-	private function getMockDuplicateValidator() {
+	private function getMockDuplicateValidator(): SubscriptionDuplicateValidator {
 		$mock = $this->getMockBuilder( SubscriptionDuplicateValidator::class )
 			->disableOriginalConstructor()->getMock();
 
@@ -52,7 +52,7 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 		return $address;
 	}
 
-	public function testEmailIsValidated() {
+	public function testEmailIsValidated(): void {
 		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
 		$subscriptionValidator = new SubscriptionValidator(
 			$mailValidator,
@@ -66,7 +66,7 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 		$this->assertConstraintWasViolated( $subscriptionValidator->validate( $subscription ), 'email' );
 	}
 
-	public function testGivenBadWords_subscriptionIsStillValid() {
+	public function testGivenBadWords_subscriptionIsStillValid(): void {
 		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
 		$policyValidator = $this->createMock( TextPolicyValidator::class );
 		$policyValidator->method( 'hasHarmlessContent' )
@@ -83,7 +83,7 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 		$this->assertTrue( $subscriptionValidator->validate( $subscription )->isSuccessful() );
 	}
 
-	public function testGivenBadWords_needsModerationIsTrue() {
+	public function testGivenBadWords_needsModerationIsTrue(): void {
 		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
 		$policyValidator = $this->createMock( TextPolicyValidator::class );
 		$policyValidator->method( 'hasHarmlessContent' )
@@ -100,7 +100,7 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 		$this->assertTrue( $subscriptionValidator->needsModeration( $subscription ) );
 	}
 
-	public function testDuplicateSubscriptionIsValidated() {
+	public function testDuplicateSubscriptionIsValidated(): void {
 		$subscription = new Subscription();
 		$subscription->setAddress( $this->createAddress( 'Herr', 'Nyan', 'Cat' ) );
 		$subscription->setEmail( 'nyan@meow.com' );
@@ -122,7 +122,7 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 		);
 	}
 
-	public function testHonorificIsValidated() {
+	public function testHonorificIsValidated(): void {
 		$subscription = new Subscription();
 		$address = $this->createAddress( 'Herr', 'Nyan', 'Cat' );
 		$address->setTitle( 'Overlord' );

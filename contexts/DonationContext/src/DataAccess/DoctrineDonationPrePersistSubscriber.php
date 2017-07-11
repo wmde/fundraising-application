@@ -33,7 +33,7 @@ class DoctrineDonationPrePersistSubscriber implements EventSubscriber {
 		return [ Events::prePersist ];
 	}
 
-	public function prePersist( LifecycleEventArgs $args ) {
+	public function prePersist( LifecycleEventArgs $args ): void {
 		$entity = $args->getObject();
 
 		if ( $entity instanceof Donation ) {
@@ -54,7 +54,7 @@ class DoctrineDonationPrePersistSubscriber implements EventSubscriber {
 		}
 	}
 
-	private function isEmpty( $stringOrNull ): bool {
+	private function isEmpty( ?string $stringOrNull ): bool {
 		return $stringOrNull === null || $stringOrNull === '';
 	}
 

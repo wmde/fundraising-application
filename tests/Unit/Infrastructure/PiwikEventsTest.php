@@ -14,13 +14,13 @@ use WMDE\Fundraising\Frontend\Infrastructure\PiwikEvents;
  */
 class PiwikEventsTest extends \PHPUnit\Framework\TestCase {
 
-	public function testWhenPassedAnUndefinedCustomVarId_exceptionIsThrown() {
+	public function testWhenPassedAnUndefinedCustomVarId_exceptionIsThrown(): void {
 		$piwikEvents = new PiwikEvents();
 		$this->expectException( \InvalidArgumentException::class );
 		$piwikEvents->triggerSetCustomVariable( 4095, 'an event has no definition', PiwikEvents::SCOPE_PAGE );
 	}
 
-	public function testWhenPassedValidCustomVarId_eventIsAdded() {
+	public function testWhenPassedValidCustomVarId_eventIsAdded(): void {
 		$piwikEvents = new PiwikEvents();
 		$piwikEvents->triggerSetCustomVariable(
 			PiwikEvents::CUSTOM_VARIABLE_PAYMENT_TYPE,
@@ -43,7 +43,7 @@ class PiwikEventsTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testWhenCallingTrackGoal_eventIsAdded() {
+	public function testWhenCallingTrackGoal_eventIsAdded(): void {
 		$piwikEvents = new PiwikEvents();
 		$piwikEvents->triggerTrackGoal( 4 );
 		$this->assertContains(

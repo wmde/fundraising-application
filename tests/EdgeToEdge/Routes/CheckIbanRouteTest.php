@@ -16,7 +16,7 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
  */
 class CheckIbanRouteTest extends WebRouteTestCase {
 
-	public function testGivenInvalidBankAccountData_failureResponseIsReturned() {
+	public function testGivenInvalidBankAccountData_failureResponseIsReturned(): void {
 		$client = $this->createClient();
 
 		$client->request(
@@ -33,7 +33,7 @@ class CheckIbanRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	public function testGivenBlockedBankAccountData_failureResponseIsReturned() {
+	public function testGivenBlockedBankAccountData_failureResponseIsReturned(): void {
 		$client = $this->createClient();
 
 		$client->request(
@@ -50,7 +50,7 @@ class CheckIbanRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	public function testGivenValidBankAccountData_successResponseIsReturned() {
+	public function testGivenValidBankAccountData_successResponseIsReturned(): void {
 		$client = $this->createClient();
 
 		$client->request(
@@ -74,7 +74,7 @@ class CheckIbanRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	public function testGivenValidBankAccountDataOfNonGermanBank_successResponseIsReturned() {
+	public function testGivenValidBankAccountDataOfNonGermanBank_successResponseIsReturned(): void {
 		$client = $this->createClient();
 
 		$client->request(

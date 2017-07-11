@@ -10,7 +10,7 @@ namespace WMDE\Fundraising\Frontend\DonationContext\Domain\Repositories;
  */
 class StoreDonationException extends \RuntimeException {
 
-	public function __construct( \Exception $previous = null, $message = 'Could not store donation' ) {
+	public function __construct( \Exception $previous = null, string $message = 'Could not store donation' ) {
 		parent::__construct( $message, 0, $previous );
 	}
 

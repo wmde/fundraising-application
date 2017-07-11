@@ -25,7 +25,7 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 
 	private const LOCALE = 'de_DE';
 
-	public function testTwigInstanceUsesDollarPlaceholdersForVariables() {
+	public function testTwigInstanceUsesDollarPlaceholdersForVariables(): void {
 		$factory = TestEnvironment::newInstance( [
 			'twig' => [
 				'loaders' => [
@@ -42,7 +42,7 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 		);
 	}
 
-	public function testTwigInstancesTryAllLoadersUntilTemplateIsFound() {
+	public function testTwigInstancesTryAllLoadersUntilTemplateIsFound(): void {
 		$loaderException = new Twig_Error_Loader( 'not found' );
 		$firstLoader = $this->createMock( Twig_LoaderInterface::class );
 		$firstLoader->method( 'getSource' )->willThrowException( $loaderException );
@@ -74,7 +74,7 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 		return new Twig_Environment();
 	}
 
-	public function testWhenWebBasePathIsEmpty_templatedPathsReferToRootPath() {
+	public function testWhenWebBasePathIsEmpty_templatedPathsReferToRootPath(): void {
 		$factory = TestEnvironment::newInstance( [
 			'twig' => [
 				'loaders' => [
@@ -92,7 +92,7 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 		);
 	}
 
-	public function testWhenWebBasePathIsNotEmpty_templatedPathsReferToRootPath() {
+	public function testWhenWebBasePathIsNotEmpty_templatedPathsReferToRootPath(): void {
 		$factory = TestEnvironment::newInstance( [
 			'twig' => [
 				'loaders' => [
@@ -110,7 +110,7 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 		);
 	}
 
-	public function testFilePrefixerIsCalledInTemplate() {
+	public function testFilePrefixerIsCalledInTemplate(): void {
 		$factory = TestEnvironment::newInstance( [
 			'twig' => [
 				'loaders' => [

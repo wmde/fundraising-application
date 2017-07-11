@@ -39,7 +39,7 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 		$this->entityManager = $entityManager;
 	}
 
-	public function storeApplication( Application $application ) {
+	public function storeApplication( Application $application ): void {
 		if ( $application->hasId() ) {
 			$this->updateApplication( $application );
 		}
@@ -48,7 +48,7 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 		}
 	}
 
-	private function insertApplication( Application $application ) {
+	private function insertApplication( Application $application ): void {
 		$doctrineApplication = new DoctrineApplication();
 		$this->updateDoctrineApplication( $doctrineApplication, $application );
 
@@ -63,7 +63,7 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 		$application->assignId( $doctrineApplication->getId() );
 	}
 
-	private function updateApplication( Application $application ) {
+	private function updateApplication( Application $application ): void {
 		$doctrineApplication = $this->getDoctrineApplicationById( $application->getId() );
 
 		if ( $doctrineApplication === null ) {
@@ -81,7 +81,7 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 		}
 	}
 
-	private function updateDoctrineApplication( DoctrineApplication $doctrineApplication, Application $application ) {
+	private function updateDoctrineApplication( DoctrineApplication $doctrineApplication, Application $application ): void {
 		$doctrineApplication->setId( $application->getId() );
 		$doctrineApplication->setMembershipType( $application->getType() );
 
@@ -93,7 +93,7 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 		$doctrineApplication->setStatus( $doctrineStatus );
 	}
 
-	private function setApplicantFields( DoctrineApplication $application, Applicant $applicant ) {
+	private function setApplicantFields( DoctrineApplication $application, Applicant $applicant ): void {
 		$application->setApplicantFirstName( $applicant->getName()->getFirstName() );
 		$application->setApplicantLastName( $applicant->getName()->getLastName() );
 		$application->setApplicantSalutation( $applicant->getName()->getSalutation() );
@@ -113,7 +113,7 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 		$application->setAddress( $address->getStreetAddress() );
 	}
 
-	private function setPaymentFields( DoctrineApplication $application, Payment $payment ) {
+	private function setPaymentFields( DoctrineApplication $application, Payment $payment ): void {
 		$application->setPaymentIntervalInMonths( $payment->getIntervalInMonths() );
 		$application->setPaymentAmount( (int)$payment->getAmount()->getEuroFloat() );
 		$paymentMethod = $payment->getPaymentMethod();
@@ -121,12 +121,12 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 		$application->setPaymentType( $paymentMethod->getType() );
 		if ( $paymentMethod instanceof DirectDebitPayment ) {
 			$this->setBankDataFields( $application, $paymentMethod->getBankData() );
-		} elseif ( $paymentMethod instanceof PayPalPayment && $paymentMethod->getPayPalData() !== null ) {
+		} elseif ( $paymentMethod instanceof PayPalPayment && $paymentMethod->getPayPalData() != new PayPalData() ) {
 			$this->setPayPalDataFields( $application, $paymentMethod->getPayPalData() );
 		}
 	}
 
-	private function setBankDataFields( DoctrineApplication $application, BankData $bankData ) {
+	private function setBankDataFields( DoctrineApplication $application, BankData $bankData ): void {
 		$application->setPaymentBankAccount( $bankData->getAccount() );
 		$application->setPaymentBankCode( $bankData->getBankCode() );
 		$application->setPaymentBankName( $bankData->getBankName() );
@@ -134,7 +134,7 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 		$application->setPaymentIban( $bankData->getIban()->toString() );
 	}
 
-	private function setPayPalDataFields( DoctrineApplication $application, PayPalData $payPalData ) {
+	private function setPayPalDataFields( DoctrineApplication $application, PayPalData $payPalData ): void {
 		$application->encodeAndSetData( array_merge(
 			$application->getDecodedData(),
 			[
@@ -154,7 +154,8 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 				'ext_payment_type' => $payPalData->getPaymentType(),
 				'ext_payment_status' => $payPalData->getPaymentStatus(),
 				'ext_payment_account' => $payPalData->getPayerId(),
-				'ext_payment_timestamp' => $payPalData->getPaymentTimestamp()
+				'ext_payment_timestamp' => $payPalData->getPaymentTimestamp(),
+				'first_payment_date' => $payPalData->getFirstPaymentDate()
 			]
 		) );
 	}
@@ -181,15 +182,15 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 		return $status;
 	}
 
-	private function isAutoConfirmed( int $status, Application $application ) {
+	private function isAutoConfirmed( int $status, Application $application ): bool {
 		return $status === DoctrineApplication::STATUS_NEUTRAL && $this->isDirectDebitPayment( $application );
 	}
 
-	private function isDirectDebitPayment( Application $application ) {
+	private function isDirectDebitPayment( Application $application ): bool {
 		return $application->getPayment()->getPaymentMethod()->getType() === PaymentType::DIRECT_DEBIT;
 	}
 
-	private function preserveDoctrineStatus( DoctrineApplication $doctrineApplication, int $doctrineStatus ) {
+	private function preserveDoctrineStatus( DoctrineApplication $doctrineApplication, int $doctrineStatus ): void {
 		if ( $doctrineStatus < DoctrineApplication::STATUS_CONFIRMED ) {
 			$doctrineApplication->modifyDataObject( function ( MembershipApplicationData $data ) {
 				$data->setPreservedStatus( DoctrineApplication::STATUS_CONFIRMED );
@@ -223,7 +224,7 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 	 * @return DoctrineApplication|null
 	 * @throws ORMException
 	 */
-	public function getDoctrineApplicationById( int $id ) {
+	public function getDoctrineApplicationById( int $id ): ?DoctrineApplication {
 		return $this->entityManager->find( DoctrineApplication::class, $id );
 	}
 
@@ -301,34 +302,27 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 		return $bankData->freeze()->assertNoNullFields();
 	}
 
-	/**
-	 * @param DoctrineApplication $application
-	 * @return PayPalData|null
-	 */
-	private function newPayPalData( DoctrineApplication $application ) {
+	private function newPayPalData( DoctrineApplication $application ): ?PayPalData {
 		$data = $application->getDecodedData();
 
-		if ( array_key_exists( 'paypal_payer_id', $data ) ) {
-			return ( new PayPalData() )
-				->setPayerId( $data['paypal_payer_id'] )
-				->setSubscriberId( $data['paypal_subscr_id'] ?? '' )
-				->setPayerStatus( $data['paypal_payer_status'] ?? '' )
-				->setAddressStatus( $data['paypal_address_status'] ?? '' )
-				->setAmount( Euro::newFromString( $data['paypal_mc_gross'] ?? '0' ) )
-				->setCurrencyCode( $data['paypal_mc_currency'] ?? '' )
-				->setFee( Euro::newFromString( $data['paypal_mc_fee'] ?? '0' ) )
-				->setSettleAmount( Euro::newFromString( $data['paypal_settle_amount'] ?? '0' ) )
-				->setFirstName( $data['paypal_first_name'] ?? '' )
-				->setLastName( $data['paypal_last_name'] ?? '' )
-				->setAddressName( $data['paypal_address_name'] ?? '' )
-				->setPaymentId( $data['ext_payment_id'] ?? '' )
-				->setPaymentType( $data['ext_payment_type'] ?? '' )
-				->setPaymentStatus( $data['ext_payment_status'] ?? '' )
-				->setPaymentTimestamp( $data['ext_payment_timestamp'] ?? '' )
-				->freeze()->assertNoNullFields();
-		}
-
-		return null;
+		return ( new PayPalData() )
+			->setPayerId( $data['paypal_payer_id'] ?? '' )
+			->setSubscriberId( $data['paypal_subscr_id'] ?? '' )
+			->setPayerStatus( $data['paypal_payer_status'] ?? '' )
+			->setAddressStatus( $data['paypal_address_status'] ?? '' )
+			->setAmount( Euro::newFromString( $data['paypal_mc_gross'] ?? '0' ) )
+			->setCurrencyCode( $data['paypal_mc_currency'] ?? '' )
+			->setFee( Euro::newFromString( $data['paypal_mc_fee'] ?? '0' ) )
+			->setSettleAmount( Euro::newFromString( $data['paypal_settle_amount'] ?? '0' ) )
+			->setFirstName( $data['paypal_first_name'] ?? '' )
+			->setLastName( $data['paypal_last_name'] ?? '' )
+			->setAddressName( $data['paypal_address_name'] ?? '' )
+			->setPaymentId( $data['ext_payment_id'] ?? '' )
+			->setPaymentType( $data['ext_payment_type'] ?? '' )
+			->setPaymentStatus( $data['ext_payment_status'] ?? '' )
+			->setPaymentTimestamp( $data['ext_payment_timestamp'] ?? '' )
+			->setFirstPaymentDate( $data['first_payment_date'] ?? '' )
+			->freeze()->assertNoNullFields();
 	}
 
 }

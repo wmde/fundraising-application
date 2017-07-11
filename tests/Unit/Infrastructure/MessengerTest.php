@@ -17,7 +17,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\EmailAddress;
  */
 class MessengerTest extends \PHPUnit\Framework\TestCase {
 
-	public function testWhenSendReturnsZero_exceptionIsThrown() {
+	public function testWhenSendReturnsZero_exceptionIsThrown(): void {
 		$mailTransport = $this->newMailTransport();
 
 		$mailTransport->expects( $this->once() )
@@ -33,13 +33,13 @@ class MessengerTest extends \PHPUnit\Framework\TestCase {
 			);
 	}
 
-	private function newMailTransport() {
+	private function newMailTransport(): Swift_NullTransport {
 		return $this->getMockBuilder( Swift_NullTransport::class )
 			->disableOriginalConstructor()
 			->getMock();
 	}
 
-	public function testSendToAddressWithInternationalCharacters_doesNotCauseException() {
+	public function testSendToAddressWithInternationalCharacters_doesNotCauseException(): void {
 		$messenger = new Messenger(
 			$this->newMailTransport(),
 			new EmailAddress( 'hostmaster@thatoperator.com' )

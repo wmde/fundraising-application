@@ -34,14 +34,14 @@ class DoctrineDonationRepositoryTest extends \PHPUnit\Framework\TestCase {
 	 */
 	private $entityManager;
 
-	public function setUp() {
+	public function setUp(): void {
 		$factory = TestEnvironment::newInstance()->getFactory();
 		$factory->disableDoctrineSubscribers();
 		$this->entityManager = $factory->getEntityManager();
 		parent::setUp();
 	}
 
-	public function testValidDonationGetPersisted() {
+	public function testValidDonationGetPersisted(): void {
 		$donation = ValidDonation::newDirectDebitDonation();
 
 		$this->newRepository()->storeDonation( $donation );
@@ -56,7 +56,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit\Framework\TestCase {
 		return new DoctrineDonationRepository( $this->entityManager );
 	}
 
-	private function assertDoctrineEntityIsInDatabase( DoctrineDonation $expected ) {
+	private function assertDoctrineEntityIsInDatabase( DoctrineDonation $expected ): void {
 		$actual = $this->getDoctrineDonationById( $expected->getId() );
 
 		$this->assertNotNull( $actual->getCreationTime() );
@@ -74,7 +74,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit\Framework\TestCase {
 		return $donation;
 	}
 
-	public function testWhenPersistenceFails_domainExceptionIsThrown() {
+	public function testWhenPersistenceFails_domainExceptionIsThrown(): void {
 		$donation = ValidDonation::newDirectDebitDonation();
 
 		$repository = new DoctrineDonationRepository( ThrowingEntityManager::newInstance( $this ) );
@@ -83,7 +83,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit\Framework\TestCase {
 		$repository->storeDonation( $donation );
 	}
 
-	public function testNewDonationPersistenceRoundTrip() {
+	public function testNewDonationPersistenceRoundTrip(): void {
 		$donation = ValidDonation::newDirectDebitDonation();
 
 		$repository = $this->newRepository();
@@ -96,7 +96,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testWhenDonationAlreadyExists_persistingCausesUpdate() {
+	public function testWhenDonationAlreadyExists_persistingCausesUpdate(): void {
 		$repository = $this->newRepository();
 
 		$donation = ValidDonation::newDirectDebitDonation();
@@ -111,20 +111,20 @@ class DoctrineDonationRepositoryTest extends \PHPUnit\Framework\TestCase {
 		$this->assertEquals( $newDonation, $repository->getDonationById( $newDonation->getId() ) );
 	}
 
-	public function testWhenDonationDoesNotExist_getDonationReturnsNull() {
+	public function testWhenDonationDoesNotExist_getDonationReturnsNull(): void {
 		$repository = $this->newRepository();
 
 		$this->assertNull( $repository->getDonationById( self::ID_OF_DONATION_NOT_IN_DB ) );
 	}
 
-	public function testWhenDoctrineThrowsException_domainExceptionIsThrown() {
+	public function testWhenDoctrineThrowsException_domainExceptionIsThrown(): void {
 		$repository = new DoctrineDonationRepository( ThrowingEntityManager::newInstance( $this ) );
 
 		$this->expectException( GetDonationException::class );
 		$repository->getDonationById( self::ID_OF_DONATION_NOT_IN_DB );
 	}
 
-	public function testWhenDonationDoesNotExist_persistingCausesException() {
+	public function testWhenDonationDoesNotExist_persistingCausesException(): void {
 		$donation = ValidDonation::newDirectDebitDonation();
 		$donation->assignId( self::ID_OF_DONATION_NOT_IN_DB );
 
@@ -134,7 +134,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit\Framework\TestCase {
 		$repository->storeDonation( $donation );
 	}
 
-	public function testWhenDeletionDateGetsSet_repositoryNoLongerReturnsEntity() {
+	public function testWhenDeletionDateGetsSet_repositoryNoLongerReturnsEntity(): void {
 		$donation = $this->createDeletedDonation();
 		$repository = $this->newRepository();
 
@@ -151,7 +151,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit\Framework\TestCase {
 		return $donation;
 	}
 
-	public function testWhenDeletionDateGetsSet_repositoryNoLongerPersistsEntity() {
+	public function testWhenDeletionDateGetsSet_repositoryNoLongerPersistsEntity(): void {
 		$donation = $this->createDeletedDonation();
 		$repository = $this->newRepository();
 
@@ -159,7 +159,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit\Framework\TestCase {
 		$repository->storeDonation( $donation );
 	}
 
-	public function testDataFieldsAreRetainedOrUpdatedOnUpdate() {
+	public function testDataFieldsAreRetainedOrUpdatedOnUpdate(): void {
 		$doctrineDonation = $this->getNewlyCreatedDoctrineDonation();
 
 		$doctrineDonation->encodeAndSetData( array_merge(
@@ -188,7 +188,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * The backend application data purge script sets the personal information to empty strings
 	 */
-	public function testGivenPurgedDonationNoDonorIsCreated() {
+	public function testGivenPurgedDonationNoDonorIsCreated(): void {
 		$doctrineDonation = $this->getNewlyCreatedDoctrineDonation();
 		$doctrineDonation->setDtBackup( new \DateTime() );
 		$this->entityManager->persist( $doctrineDonation );
@@ -199,7 +199,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit\Framework\TestCase {
 		$this->assertNull( $donation->getDonor() );
 	}
 
-	public function testGivenDonationUpdateWithoutDonorInformation_DonorNameStaysTheSame() {
+	public function testGivenDonationUpdateWithoutDonorInformation_DonorNameStaysTheSame(): void {
 		$donation = ValidDonation::newBookedPayPalDonation();
 		$this->newRepository()->storeDonation( $donation );
 
@@ -217,7 +217,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit\Framework\TestCase {
 		return $this->getDoctrineDonationById( $donation->getId() );
 	}
 
-	public function testCommentGetPersistedAndRetrieved() {
+	public function testCommentGetPersistedAndRetrieved(): void {
 		$donation = ValidDonation::newDirectDebitDonation();
 		$donation->addComment( ValidDonation::newPublicComment() );
 
@@ -229,7 +229,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit\Framework\TestCase {
 		$this->assertEquals( $donation, $retrievedDonation );
 	}
 
-	public function testPersistingDonationWithoutCommentCausesCommentToBeCleared() {
+	public function testPersistingDonationWithoutCommentCausesCommentToBeCleared(): void {
 		$donation = ValidDonation::newDirectDebitDonation();
 		$donation->addComment( ValidDonation::newPublicComment() );
 
@@ -250,7 +250,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit\Framework\TestCase {
 		$this->assertDoctrineEntityIsInDatabase( $expectedDoctrineEntity );
 	}
 
-	public function testDonationWithIncompletePaypalDataCanBeLoaded() {
+	public function testDonationWithIncompletePaypalDataCanBeLoaded(): void {
 		$donationId = $this->createPaypalDonationWithMissingFields();
 		$repository = $this->newRepository();
 		$donation = $repository->getDonationById( $donationId );
@@ -267,7 +267,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit\Framework\TestCase {
 		return $doctrineDonation->getId();
 	}
 
-	public function testDonationWithMissingTrackingInformationDataCanBeLoaded() {
+	public function testDonationWithMissingTrackingInformationDataCanBeLoaded(): void {
 		$donationId = $this->createPaypalDonationWithMissingTracking();
 		$repository = $this->newRepository();
 		$donation = $repository->getDonationById( $donationId );
@@ -284,7 +284,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit\Framework\TestCase {
 		return $doctrineDonation->getId();
 	}
 
-	public function testDonationWithIncompleteBankDataCanBeLoaded() {
+	public function testDonationWithIncompleteBankDataCanBeLoaded(): void {
 		$donationId = $this->createDonationWithIncompleteBankData();
 		$repository = $this->newRepository();
 		$donation = $repository->getDonationById( $donationId );
@@ -294,14 +294,14 @@ class DoctrineDonationRepositoryTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( '', $paymentMethod->getBankData()->getIban()->toString() );
 	}
 
-	private function createDonationWithIncompleteBankData() {
+	private function createDonationWithIncompleteBankData(): ?int {
 		$doctrineDonation = IncompleteDoctrineDonation::newDirectDebitDonationWithMissingFields();
 		$this->entityManager->persist( $doctrineDonation );
 		$this->entityManager->flush();
 		return $doctrineDonation->getId();
 	}
 
-	public function testDonationWithIncompleteCreditcardDataCanBeLoaded() {
+	public function testDonationWithIncompleteCreditcardDataCanBeLoaded(): void {
 		$donationId = $this->createDonationWithIncompleteCreditcardData();
 		$repository = $this->newRepository();
 		$donation = $repository->getDonationById( $donationId );
@@ -311,7 +311,7 @@ class DoctrineDonationRepositoryTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( '', $paymentMethod->getCreditCardData()->getTitle() );
 	}
 
-	private function createDonationWithIncompleteCreditcardData() {
+	private function createDonationWithIncompleteCreditcardData(): ?int {
 		$doctrineDonation = IncompleteDoctrineDonation::newCreditcardDonationWithMissingFields();
 		$this->entityManager->persist( $doctrineDonation );
 		$this->entityManager->flush();

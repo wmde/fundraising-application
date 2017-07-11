@@ -4,13 +4,14 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership;
 
-use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\TemplateMailerInterface;
 use WMDE\Fundraising\Frontend\MembershipContext\Authorization\ApplicationTokenFetcher;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipContext\Tracking\ApplicationPiwikTracker;
 use WMDE\Fundraising\Frontend\MembershipContext\Tracking\ApplicationTracker;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentDelayCalculator;
 
 /**
  * @license GNU GPL v2+
@@ -23,12 +24,15 @@ class ApplyForMembershipUseCase {
 	private $mailer;
 	private $validator;
 	private $policyValidator;
+	private $membershipApplicationTracker;
 	private $piwikTracker;
+	private $paymentDelayCalculator;
 
 	public function __construct( ApplicationRepository $repository,
-		ApplicationTokenFetcher $tokenFetcher, TemplateBasedMailer $mailer,
+		ApplicationTokenFetcher $tokenFetcher, TemplateMailerInterface $mailer,
 		MembershipApplicationValidator $validator, ApplyForMembershipPolicyValidator $policyValidator,
-		ApplicationTracker $tracker, ApplicationPiwikTracker $piwikTracker ) {
+		ApplicationTracker $tracker, ApplicationPiwikTracker $piwikTracker,
+		PaymentDelayCalculator $paymentDelayCalculator ) {
 
 		$this->repository = $repository;
 		$this->tokenFetcher = $tokenFetcher;
@@ -37,6 +41,7 @@ class ApplyForMembershipUseCase {
 		$this->policyValidator = $policyValidator;
 		$this->membershipApplicationTracker = $tracker;
 		$this->piwikTracker = $piwikTracker;
+		$this->paymentDelayCalculator = $paymentDelayCalculator;
 	}
 
 	public function applyForMembership( ApplyForMembershipRequest $request ): ApplyForMembershipResponse {
@@ -55,6 +60,9 @@ class ApplyForMembershipUseCase {
 		if ( $this->policyValidator->isAutoDeleted( $application ) ) {
 			$application->markAsDeleted();
 		}
+
+		$application->notifyOfFirstPaymentDate( $this->paymentDelayCalculator->calculateFirstPaymentDate()->format( 'Y-m-d' ) );
+
 		// TODO: handle exceptions
 		$this->repository->storeApplication( $application );
 
@@ -83,7 +91,7 @@ class ApplyForMembershipUseCase {
 		return ( new MembershipApplicationBuilder() )->newApplicationFromRequest( $request );
 	}
 
-	private function sendConfirmationEmail( Application $application ) {
+	private function sendConfirmationEmail( Application $application ): void {
 		$this->mailer->sendMail(
 			$application->getApplicant()->getEmailAddress(),
 			[

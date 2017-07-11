@@ -23,7 +23,7 @@ class DonorAddress {
 		return $this->streetAddress;
 	}
 
-	public function setStreetAddress( string $streetAddress ) {
+	public function setStreetAddress( string $streetAddress ): void {
 		$this->assertIsWritable();
 		$this->streetAddress = $streetAddress;
 	}
@@ -32,7 +32,7 @@ class DonorAddress {
 		return $this->postalCode;
 	}
 
-	public function setPostalCode( string $postalCode ) {
+	public function setPostalCode( string $postalCode ): void {
 		$this->assertIsWritable();
 		$this->postalCode = $postalCode;
 	}
@@ -41,7 +41,7 @@ class DonorAddress {
 		return $this->city;
 	}
 
-	public function setCity( string $city ) {
+	public function setCity( string $city ): void {
 		$this->assertIsWritable();
 		$this->city = $city;
 	}
@@ -50,7 +50,7 @@ class DonorAddress {
 		return $this->countryCode;
 	}
 
-	public function setCountryCode( string $countryCode ) {
+	public function setCountryCode( string $countryCode ): void {
 		$this->assertIsWritable();
 		$this->countryCode = $countryCode;
 	}

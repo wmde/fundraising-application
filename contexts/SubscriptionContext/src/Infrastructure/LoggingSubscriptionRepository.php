@@ -35,7 +35,7 @@ class LoggingSubscriptionRepository implements SubscriptionRepository {
 	 *
 	 * @throws SubscriptionRepositoryException
 	 */
-	public function storeSubscription( Subscription $subscription ) {
+	public function storeSubscription( Subscription $subscription ): void {
 		try {
 			$this->repository->storeSubscription( $subscription );
 		}
@@ -72,7 +72,7 @@ class LoggingSubscriptionRepository implements SubscriptionRepository {
 	 * @return Subscription|null
 	 * @throws SubscriptionRepositoryException
 	 */
-	public function findByConfirmationCode( string $confirmationCode ) {
+	public function findByConfirmationCode( string $confirmationCode ): ?Subscription {
 		try {
 			return $this->repository->findByConfirmationCode( $confirmationCode );
 		}

@@ -29,6 +29,7 @@ class PayPalData {
 	private $paymentType = '';
 	private $paymentStatus = '';
 	private $paymentTimestamp = '';
+	private $firstPaymentDate = '';
 	private $childPayments = [];
 
 	public function __construct() {
@@ -41,7 +42,7 @@ class PayPalData {
 		return $this->payerId;
 	}
 
-	public function setPayerId( string $payerId ) {
+	public function setPayerId( string $payerId ): self {
 		$this->assertIsWritable();
 		$this->payerId = $payerId;
 		return $this;
@@ -51,7 +52,7 @@ class PayPalData {
 		return $this->subscriberId;
 	}
 
-	public function setSubscriberId( string $subscriberId ) {
+	public function setSubscriberId( string $subscriberId ): self {
 		$this->assertIsWritable();
 		$this->subscriberId = $subscriberId;
 		return $this;
@@ -61,7 +62,7 @@ class PayPalData {
 		return $this->payerStatus;
 	}
 
-	public function setPayerStatus( string $payerStatus ) {
+	public function setPayerStatus( string $payerStatus ): self {
 		$this->assertIsWritable();
 		$this->payerStatus = $payerStatus;
 		return $this;
@@ -71,7 +72,7 @@ class PayPalData {
 		return $this->addressStatus;
 	}
 
-	public function setAddressStatus( string $addressStatus ) {
+	public function setAddressStatus( string $addressStatus ): self {
 		$this->assertIsWritable();
 		$this->addressStatus = $addressStatus;
 		return $this;
@@ -81,7 +82,7 @@ class PayPalData {
 		return $this->amount;
 	}
 
-	public function setAmount( Euro $amount ) {
+	public function setAmount( Euro $amount ): self {
 		$this->assertIsWritable();
 		$this->amount = $amount;
 		return $this;
@@ -91,7 +92,7 @@ class PayPalData {
 		return $this->currencyCode;
 	}
 
-	public function setCurrencyCode( string $currencyCode ) {
+	public function setCurrencyCode( string $currencyCode ): self {
 		$this->assertIsWritable();
 		$this->currencyCode = $currencyCode;
 		return $this;
@@ -101,7 +102,7 @@ class PayPalData {
 		return $this->fee;
 	}
 
-	public function setFee( Euro $fee ) {
+	public function setFee( Euro $fee ): self {
 		$this->assertIsWritable();
 		$this->fee = $fee;
 		return $this;
@@ -111,7 +112,7 @@ class PayPalData {
 		return $this->settleAmount;
 	}
 
-	public function setSettleAmount( Euro $settleAmount ) {
+	public function setSettleAmount( Euro $settleAmount ): self {
 		$this->assertIsWritable();
 		$this->settleAmount = $settleAmount;
 		return $this;
@@ -121,7 +122,7 @@ class PayPalData {
 		return $this->firstName;
 	}
 
-	public function setFirstName( string $firstName ) {
+	public function setFirstName( string $firstName ): self {
 		$this->assertIsWritable();
 		$this->firstName = $firstName;
 		return $this;
@@ -131,7 +132,7 @@ class PayPalData {
 		return $this->lastName;
 	}
 
-	public function setLastName( string $lastName ) {
+	public function setLastName( string $lastName ): self {
 		$this->assertIsWritable();
 		$this->lastName = $lastName;
 		return $this;
@@ -141,7 +142,7 @@ class PayPalData {
 		return $this->addressName;
 	}
 
-	public function setAddressName( string $addressName ) {
+	public function setAddressName( string $addressName ): self {
 		$this->assertIsWritable();
 		$this->addressName = $addressName;
 		return $this;
@@ -151,7 +152,7 @@ class PayPalData {
 		return $this->paymentId;
 	}
 
-	public function setPaymentId( string $paymentId ) {
+	public function setPaymentId( string $paymentId ): self {
 		$this->assertIsWritable();
 		$this->paymentId = $paymentId;
 		return $this;
@@ -161,7 +162,7 @@ class PayPalData {
 		return $this->paymentType;
 	}
 
-	public function setPaymentType( string $paymentType ) {
+	public function setPaymentType( string $paymentType ): self {
 		$this->assertIsWritable();
 		$this->paymentType = $paymentType;
 		return $this;
@@ -171,7 +172,7 @@ class PayPalData {
 		return $this->paymentStatus;
 	}
 
-	public function setPaymentStatus( string $paymentStatus ) {
+	public function setPaymentStatus( string $paymentStatus ): self {
 		$this->assertIsWritable();
 		$this->paymentStatus = $paymentStatus;
 		return $this;
@@ -181,13 +182,23 @@ class PayPalData {
 		return $this->paymentTimestamp;
 	}
 
-	public function setPaymentTimestamp( string $paymentTimestamp ) {
+	public function setPaymentTimestamp( string $paymentTimestamp ): self {
 		$this->assertIsWritable();
 		$this->paymentTimestamp = $paymentTimestamp;
 		return $this;
 	}
 
-	public function addChildPayment( string $paymentId, int $entityId ) {
+	public function getFirstPaymentDate(): string {
+		return $this->firstPaymentDate;
+	}
+
+	public function setFirstPaymentDate( string $firstPaymentDate ): self {
+		$this->assertIsWritable();
+		$this->firstPaymentDate = $firstPaymentDate;
+		return $this;
+	}
+
+	public function addChildPayment( string $paymentId, int $entityId ): self {
 		$this->childPayments[$paymentId] = $entityId;
 		return $this;
 	}

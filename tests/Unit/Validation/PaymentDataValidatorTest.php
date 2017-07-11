@@ -9,7 +9,7 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Validation\PaymentDataValidator;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Validation\PaymentDataValidator
+ * @covers \WMDE\Fundraising\Frontend\Validation\PaymentDataValidator
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
@@ -20,87 +20,91 @@ class PaymentDataValidatorTest extends \PHPUnit\Framework\TestCase {
 	const MIN_DONATION_AMOUNT = 1;
 	const MAX_DONATION_AMOUNT = 100000;
 
-	public function testGivenAmountWithinLimits_validationSucceeds() {
+	public function testGivenAmountWithinLimits_validationSucceeds(): void {
 		$validator = $this->newPaymentValidator();
-		$this->assertTrue( $validator->validate( 50, PaymentType::BANK_TRANSFER )->isSuccessful() );
+		$this->assertTrue( $validator->validate( 50, 'UEB' )->isSuccessful() );
 	}
 
-	public function testGivenAmountTooLow_validationFails() {
+	public function testGivenAmountTooLow_validationFails(): void {
 		$validator = $this->newPaymentValidator();
-		$this->assertFalse( $validator->validate( 0.2, PaymentType::BANK_TRANSFER )->isSuccessful() );
+		$this->assertFalse( $validator->validate( 0.2, 'UEB' )->isSuccessful() );
 	}
 
-	public function testGivenAmountTooHigh_validationFails() {
+	public function testGivenAmountTooHigh_validationFails(): void {
 		$validator = $this->newPaymentValidator();
-		$this->assertFalse( $validator->validate( 100000, PaymentType::BANK_TRANSFER )->isSuccessful() );
+		$this->assertFalse( $validator->validate( 100000, 'UEB' )->isSuccessful() );
 	}
 
-	public function testGivenAmountIsNotANumber_validationFails() {
+	public function testGivenAmountIsNotANumber_validationFails(): void {
 		$validator = $this->newPaymentValidator();
-		$this->assertFalse( $validator->validate( 'much money', PaymentType::BANK_TRANSFER )->isSuccessful() );
+		$this->assertFalse( $validator->validate( 'much money', 'UEB' )->isSuccessful() );
 	}
 
-	public function testGivenPaymentTypeSpecificLimits_differentPaymentTypeUsesMainLimit() {
-		$validator = new PaymentDataValidator( 1, 100000, [ PaymentType::DIRECT_DEBIT => 100, PaymentType::PAYPAL => 200 ] );
-		$this->assertTrue( $validator->validate( 50, PaymentType::BANK_TRANSFER )->isSuccessful() );
+	public function testGivenPaymentTypeSpecificLimits_differentPaymentTypeUsesMainLimit(): void {
+		$validator = new PaymentDataValidator( 1, 100000, [ 'UEB', 'BEZ', 'PPL' ], [ 'BEZ' => 100, 'PPL' => 200 ] );
+		$this->assertTrue( $validator->validate( 50, 'UEB' )->isSuccessful() );
 	}
 
-	public function testGivenPaymentWithTypeSpecificLimits_specificLimitIsUsed() {
-		$validator = new PaymentDataValidator( 10, 100000, [ PaymentType::DIRECT_DEBIT => 50, PaymentType::BANK_TRANSFER => 100 ] );
+	public function testGivenPaymentWithTypeSpecificLimits_specificLimitIsUsed(): void {
+		$validator = new PaymentDataValidator( 10, 100000, [ 'UEB', 'BEZ', 'PPL' ], [ 'BEZ' => 50, 'UEB' => 100 ] );
 
-		$this->assertTrue( $validator->validate( 60, PaymentType::DIRECT_DEBIT )->isSuccessful() );
-		$this->assertFalse( $validator->validate( 40, PaymentType::DIRECT_DEBIT )->isSuccessful() );
+		$this->assertTrue( $validator->validate( 60, 'BEZ' )->isSuccessful() );
+		$this->assertFalse( $validator->validate( 40, 'BEZ' )->isSuccessful() );
 	}
 
-	public function testNumberEqualToBoundIsAllowed() {
+	public function testNumberEqualToBoundIsAllowed(): void {
 		$validator = $this->newPaymentValidator();
-		$this->assertTrue( $validator->validate( 1, PaymentType::BANK_TRANSFER )->isSuccessful() );
+		$this->assertTrue( $validator->validate( 1, 'UEB' )->isSuccessful() );
 	}
 
-	public function testStringNotationBelowLowerBoundIsNotAllowed() {
+	public function testStringNotationBelowLowerBoundIsNotAllowed(): void {
 		$validator = $this->newPaymentValidator();
-		$this->assertFalse( $validator->validate( '0.1', PaymentType::BANK_TRANSFER )->isSuccessful() );
+		$this->assertFalse( $validator->validate( '0.1', 'UEB' )->isSuccessful() );
 	}
 
-	public function testStringNotationAboveLowerBoundIsAllowed() {
+	public function testStringNotationAboveLowerBoundIsAllowed(): void {
 		$validator = $this->newPaymentValidator();
-		$this->assertTrue( $validator->validate( '1.1', PaymentType::BANK_TRANSFER )->isSuccessful() );
+		$this->assertTrue( $validator->validate( '1.1', 'UEB' )->isSuccessful() );
 	}
 
-	public function testNumberEqualToUpperBoundIsNotAllowed() {
+	public function testNumberEqualToUpperBoundIsNotAllowed(): void {
 		$validator = $this->newPaymentValidator();
-		$this->assertFalse( $validator->validate( 100000, PaymentType::BANK_TRANSFER )->isSuccessful() );
+		$this->assertFalse( $validator->validate( 100000, 'UEB' )->isSuccessful() );
 	}
 
-	public function testStringNotationAboveUpperBoundIsNotAllowed() {
+	public function testStringNotationAboveUpperBoundIsNotAllowed(): void {
 		$validator = $this->newPaymentValidator();
-		$this->assertFalse( $validator->validate( '123456.78', PaymentType::BANK_TRANSFER )->isSuccessful() );
+		$this->assertFalse( $validator->validate( '123456.78', 'UEB' )->isSuccessful() );
 	}
 
-	public function testStringNotationBelowUpperBoundIsAllowed() {
+	public function testStringNotationBelowUpperBoundIsAllowed(): void {
 		$validator = $this->newPaymentValidator();
-		$this->assertTrue( $validator->validate( '99999.99', PaymentType::BANK_TRANSFER )->isSuccessful() );
+		$this->assertTrue( $validator->validate( '99999.99', 'UEB' )->isSuccessful() );
 	}
 
-	public function testBinaryNotationIsNotAllowed() {
+	public function testBinaryNotationIsNotAllowed(): void {
 		$validator = $this->newPaymentValidator();
-		$this->assertFalse( $validator->validate( '0b10100111001', PaymentType::BANK_TRANSFER )->isSuccessful() );
+		$this->assertFalse( $validator->validate( '0b10100111001', 'UEB' )->isSuccessful() );
 	}
 
-	public function testUnknownPaymentMethodsAreNotAllowed() {
+	public function testUnknownPaymentMethodsAreNotAllowed(): void {
 		$validator = $this->newPaymentValidator();
 		$this->assertFalse( $validator->validate( 99, 'DOGE' )->isSuccessful() );
 	}
 
 	private function newPaymentValidator(): PaymentDataValidator {
-		return new PaymentDataValidator( self::MIN_DONATION_AMOUNT, self::MAX_DONATION_AMOUNT );
+		return new PaymentDataValidator(
+			self::MIN_DONATION_AMOUNT,
+			self::MAX_DONATION_AMOUNT,
+			[ 'UEB', 'BEZ', 'PPL' ]
+		);
 	}
 
-	public function testGivenEuroAmountWithinLimits_validationSucceeds() {
+	public function testGivenEuroAmountWithinLimits_validationSucceeds(): void {
 		$this->assertTrue(
 			$this->newPaymentValidator()->validate(
 				Euro::newFromInt( 50 ),
-				PaymentType::BANK_TRANSFER
+				'UEB'
 			)->isSuccessful()
 		);
 	}

@@ -40,7 +40,7 @@ class DonationAcceptedEventHandlerTest extends \PHPUnit\Framework\TestCase {
 	 */
 	private $mailer;
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->authorizer = new SucceedingDonationAuthorizer();
 		$this->repository = new FakeDonationRepository( $this->newDonation() );
 		$this->mailer = $this->createMock( DonationConfirmationMailer::class );
@@ -52,7 +52,7 @@ class DonationAcceptedEventHandlerTest extends \PHPUnit\Framework\TestCase {
 		return $donation;
 	}
 
-	public function testWhenAuthorizationFails_errorIsReturned() {
+	public function testWhenAuthorizationFails_errorIsReturned(): void {
 		$this->authorizer = new FailingDonationAuthorizer();
 		$eventHandler = $this->newDonationAcceptedEventHandler();
 
@@ -69,7 +69,7 @@ class DonationAcceptedEventHandlerTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testGivenIdOfUnknownDonation_errorIsReturned() {
+	public function testGivenIdOfUnknownDonation_errorIsReturned(): void {
 		$eventHandler = $this->newDonationAcceptedEventHandler();
 
 		$result = $eventHandler->onDonationAccepted( self::UNKNOWN_ID );
@@ -77,7 +77,7 @@ class DonationAcceptedEventHandlerTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( DonationAcceptedEventHandler::UNKNOWN_ID_PROVIDED, $result );
 	}
 
-	public function testGivenKnownIdAndValidAuth_successIsReturned() {
+	public function testGivenKnownIdAndValidAuth_successIsReturned(): void {
 		$eventHandler = $this->newDonationAcceptedEventHandler();
 
 		$result = $eventHandler->onDonationAccepted( self::KNOWN_ID );
@@ -85,7 +85,7 @@ class DonationAcceptedEventHandlerTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( DonationAcceptedEventHandler::SUCCESS, $result );
 	}
 
-	public function testGivenKnownIdAndValidAuth_mailerIsInvoked() {
+	public function testGivenKnownIdAndValidAuth_mailerIsInvoked(): void {
 		$this->mailer->expects( $this->once() )
 			->method( 'sendConfirmationMailFor' )
 			->with( $this->equalTo( $this->newDonation() ) );
@@ -93,12 +93,12 @@ class DonationAcceptedEventHandlerTest extends \PHPUnit\Framework\TestCase {
 		$this->newDonationAcceptedEventHandler()->onDonationAccepted( self::KNOWN_ID );
 	}
 
-	public function testGivenIdOfUnknownDonation_mailerIsNotInvoked() {
+	public function testGivenIdOfUnknownDonation_mailerIsNotInvoked(): void {
 		$this->mailer->expects( $this->never() )->method( $this->anything() );
 		$this->newDonationAcceptedEventHandler()->onDonationAccepted( self::UNKNOWN_ID );
 	}
 
-	public function testWhenAuthorizationFails_mailerIsNotInvoked() {
+	public function testWhenAuthorizationFails_mailerIsNotInvoked(): void {
 		$this->authorizer = new FailingDonationAuthorizer();
 		$this->mailer->expects( $this->never() )->method( $this->anything() );
 		$this->newDonationAcceptedEventHandler()->onDonationAccepted( self::KNOWN_ID );

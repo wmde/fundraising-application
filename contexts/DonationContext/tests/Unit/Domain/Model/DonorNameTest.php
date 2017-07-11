@@ -17,7 +17,7 @@ class DonorNameTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider privatePersonProvider
 	 */
-	public function testGivenPersonName_determineFullNameReturnsFullName( $expectedValue, $data ) {
+	public function testGivenPersonName_determineFullNameReturnsFullName( string $expectedValue, array $data ): void {
 		$personName = DonorName::newPrivatePersonName();
 
 		$personName->setCompanyName( $data['company'] );
@@ -28,7 +28,7 @@ class DonorNameTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( $expectedValue, $personName->getFullName() );
 	}
 
-	public function privatePersonProvider() {
+	public function privatePersonProvider(): array {
 		return [
 			[
 				'Ebenezer Scrooge',

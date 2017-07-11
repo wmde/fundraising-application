@@ -88,7 +88,7 @@ The "add donation" form can then be found at http://localhost:8000/index.php
 
 ## Running the tests
 
-**Full CI run**
+## Full CI run
 
     composer ci
 
@@ -100,7 +100,7 @@ For style checks only
 
 	composer cs ; npm run cs
     
-**PHP**
+## PHP
 
 For tests only
 
@@ -114,7 +114,21 @@ For one context only
 
     vendor/bin/phpunit contexts/DonationContext/
 
-**JS**
+### phpstan
+
+Static code analysis can be performed via [phpstan](https://github.com/phpstan/phpstan/), either via
+
+    composer stan
+    
+while dev-dependencies are present, or via
+
+    docker build -t wmde/fundraising-frontend-phpstan docker/phpstan
+    docker run -v $PWD:/app --rm wmde/fundraising-frontend-phpstan analyse -c phpstan.neon --level 1 --no-progress cli/ contexts/ src/
+
+in the absence of dev-dependencies (i.e. to simulate the vendor/ code on production).
+These tasks are also performed during the [travis](.travis.yml) runs.
+
+## JS
 
 For a full JS CI run
 

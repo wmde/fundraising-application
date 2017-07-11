@@ -26,7 +26,7 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase 
 	const CURRENCY_EUR = 'EUR';
 	const RECURRING_NO_PAYMENT = 'recurring_payment_suspended_due_to_max_failed_payment';
 
-	public function testReceiverAddressMismatches_verifierThrowsException() {
+	public function testReceiverAddressMismatches_verifierThrowsException(): void {
 		$this->expectException( PayPalPaymentNotificationVerifierException::class );
 
 		$this->newVerifier( new Client() )->verify( [
@@ -35,20 +35,20 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase 
 		] );
 	}
 
-	public function testReceiverAddressNotGiven_verifierThrowsException() {
+	public function testReceiverAddressNotGiven_verifierThrowsException(): void {
 		$this->expectException( PayPalPaymentNotificationVerifierException::class );
 
 		$this->newVerifier( new Client() )->verify( [] );
 	}
 
-	public function testPaymentStatusNotGiven_verifierThrowsException() {
+	public function testPaymentStatusNotGiven_verifierThrowsException(): void {
 		$this->expectException( PayPalPaymentNotificationVerifierException::class );
 		$this->newVerifier( new Client() )->verify( [
 			'receiver_email' => self::VALID_ACCOUNT_EMAIL
 		] );
 	}
 
-	public function testPaymentStatusNotConfirmable_verifierThrowsException() {
+	public function testPaymentStatusNotConfirmable_verifierThrowsException(): void {
 		$this->expectException( PayPalPaymentNotificationVerifierException::class );
 		$this->newVerifier( new Client() )->verify( [
 			'receiver_email' => self::VALID_ACCOUNT_EMAIL,
@@ -56,7 +56,7 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase 
 		] );
 	}
 
-	public function testReassuringReceivedDataSucceeds_verifierDoesNotThrowException() {
+	public function testReassuringReceivedDataSucceeds_verifierDoesNotThrowException(): void {
 		try {
 			$this->newVerifier( $this->newSucceedingClient() )->verify( $this->newRequest() );
 		} catch ( PayPalPaymentNotificationVerifierException $e ) {
@@ -64,13 +64,13 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase 
 		}
 	}
 
-	public function testReassuringReceivedDataFails_verifierThrowsException() {
+	public function testReassuringReceivedDataFails_verifierThrowsException(): void {
 		$this->expectException( PayPalPaymentNotificationVerifierException::class );
 		$verifier = $this->newVerifier( $this->newFailingClient() );
 		$verifier->verify( $this->newRequest() );
 	}
 
-	public function testGivenRecurringPaymentStatusMessage_currencyIsCheckedInDifferentField() {
+	public function testGivenRecurringPaymentStatusMessage_currencyIsCheckedInDifferentField(): void {
 		try {
 			$expectedParams = [
 				'cmd' => '_notify-validate',

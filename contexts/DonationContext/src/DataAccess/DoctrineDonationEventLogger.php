@@ -30,7 +30,7 @@ class DoctrineDonationEventLogger implements DonationEventLogger {
 		}
 	}
 
-	public function log( int $donationId, string $message ) {
+	public function log( int $donationId, string $message ): void {
 		try {
 			/** @var DoctrineDonation $donation */
 			$donation = $this->entityManager->find( DoctrineDonation::class, $donationId );

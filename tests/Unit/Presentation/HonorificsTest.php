@@ -14,7 +14,7 @@ use WMDE\Fundraising\Frontend\Presentation\Honorifics;
  */
 class HonorificsTest extends \PHPUnit\Framework\TestCase {
 
-	public function testGetKeys_returnsOnlyKeys() {
+	public function testGetKeys_returnsOnlyKeys(): void {
 		$honorifics = new Honorifics( [ '' => 'None', 'Dr.' => 'Dr.' ] );
 		$this->assertSame( [ '', 'Dr.' ], $honorifics->getKeys() );
 	}

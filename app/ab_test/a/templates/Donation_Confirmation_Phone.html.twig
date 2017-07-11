@@ -52,7 +52,6 @@
 
 				<div class="box-section">
 					<div class="container clearfix">
-						<div class="logo-wikimedia-grey f-right"></div>
 						{% if donation.paymentType == 'UEB' %}
 						<p class="title">Sie möchten {$ donation.interval|trans({}, 'paymentIntervals') $} <span class="amount-formatted">{$ formattedAmount $}</span> an die Wikimedia Fördergesellschaft spenden. Bitte überweisen Sie jetzt Ihre Spende mit den unten angebenen Zahlungsinformationen.</p>
 						{% elseif donation.paymentType == 'BEZ' %}
@@ -116,9 +115,9 @@
 						</div>
 
 						<div class="payment f-left">
-							{% if donation.paymentType == 'PPL' or donation.paymentType == 'MCP' %}
+							{% if donation.paymentType == 'PPL' or donation.paymentType == 'MCP' or donation.paymentType == 'SUB' %}
 							<p>
-								Ihre Spende per {$ donation.paymentType|trans({}, 'paymentTypes') $} {$ donation.status|trans({}, 'donationStatus') $}.
+								Ihre Spende per {$ donation.paymentType|trans({}, 'paymentTypes') $} {$ donation.status|trans({}, 'paymentStatus') $}.
 							</p>
 							{% elseif donation.paymentType == 'BEZ' %}
 							<p>

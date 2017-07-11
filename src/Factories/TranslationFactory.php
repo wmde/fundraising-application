@@ -22,7 +22,7 @@ class TranslationFactory {
 		return $translator;
 	}
 
-	public function newJsonLoader() {
+	public function newJsonLoader(): JsonFileLoader {
 		return new JsonFileLoader();
 	}
 }

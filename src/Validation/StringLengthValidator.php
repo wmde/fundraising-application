@@ -10,7 +10,7 @@ namespace WMDE\Fundraising\Frontend\Validation;
  */
 class StringLengthValidator {
 
-	public function validate( $value, int $maxLength, int $minLength = 0 ): ValidationResult {
+	public function validate( $value, int $maxLength, int $minLength = 0 ): ValidationResult {	// @codingStandardsIgnoreLine
 		if ( strlen( $value ) < $minLength || strlen( $value ) > $maxLength ) {
 			return new ValidationResult( new ConstraintViolation( $value, 'incorrect_length' ) );
 		}

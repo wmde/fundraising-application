@@ -17,11 +17,11 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
  */
 class ListCommentsJsonRouteTest extends WebRouteTestCase {
 
-	public function setUp() {
+	public function setUp(): void {
 		date_default_timezone_set( 'Europe/Berlin' );
 	}
 
-	public function testWhenThereAreNoComments_emptyArrayIsShown() {
+	public function testWhenThereAreNoComments_emptyArrayIsShown(): void {
 		$client = $this->createClient();
 		$client->request( 'GET', '/list-comments.json?n=10' );
 
@@ -31,7 +31,7 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	public function testRouteShowsComments() {
+	public function testRouteShowsComments(): void {
 		$client = $this->createClient( [], function( FunFunFactory $factory ) {
 			$this->persistFirstComment( $factory->getEntityManager() );
 			$this->persistSecondComment( $factory->getEntityManager() );
@@ -49,7 +49,7 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	private function getFirstCommentAsArray() {
+	private function getFirstCommentAsArray(): array {
 		return [
 			'betrag' => 100,
 			'spender' => 'First name',
@@ -59,7 +59,7 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	private function getSecondCommentAsArray() {
+	private function getSecondCommentAsArray(): array {
 		return [
 			'betrag' => 200,
 			'spender' => 'Second name',
@@ -69,7 +69,7 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	private function persistFirstComment( EntityManager $entityManager ) {
+	private function persistFirstComment( EntityManager $entityManager ): void {
 		$firstDonation = new Donation();
 		$firstDonation->setPublicRecord( 'First name' );
 		$firstDonation->setComment( 'First comment' );
@@ -79,7 +79,7 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 		$entityManager->persist( $firstDonation );
 	}
 
-	private function persistSecondComment( EntityManager $entityManager ) {
+	private function persistSecondComment( EntityManager $entityManager ): void {
 		$secondDonation = new Donation();
 		$secondDonation->setPublicRecord( 'Second name' );
 		$secondDonation->setComment( 'Second comment' );
@@ -89,7 +89,7 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 		$entityManager->persist( $secondDonation );
 	}
 
-	public function testGivenLimitSmallerThanCommentCount_onlySoManyCommentsAreShown() {
+	public function testGivenLimitSmallerThanCommentCount_onlySoManyCommentsAreShown(): void {
 		$client = $this->createClient( [], function( FunFunFactory $factory ) {
 			$this->persistFirstComment( $factory->getEntityManager() );
 			$this->persistSecondComment( $factory->getEntityManager() );
@@ -106,7 +106,7 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	public function testGivenJsonpCallback_jsonIsWrappedInCallback() {
+	public function testGivenJsonpCallback_jsonIsWrappedInCallback(): void {
 		$client = $this->createClient( [], function( FunFunFactory $factory ) {
 			$this->persistFirstComment( $factory->getEntityManager() );
 			$this->persistSecondComment( $factory->getEntityManager() );
@@ -124,14 +124,14 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	private function assertJsonpSuccessResponse( $expectedJson, string $expectedCallback, Response $response ) {
+	private function assertJsonpSuccessResponse( array $expectedJson, string $expectedCallback, Response $response ): void {
 		$this->assertSame(
 			'/**/' . $expectedCallback . '(' . json_encode( $expectedJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ) . ');',
 			$response->getContent()
 		);
 	}
 
-	public function testGivenLimitAndPageTwo_limitNumberOfCommentsAreSkipped() {
+	public function testGivenLimitAndPageTwo_limitNumberOfCommentsAreSkipped(): void {
 		$client = $this->createClient( [], function( FunFunFactory $factory ) {
 			$this->persistFirstComment( $factory->getEntityManager() );
 			$this->persistSecondComment( $factory->getEntityManager() );

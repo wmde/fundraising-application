@@ -23,7 +23,7 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 
 	const CORRECT_UPDATE_TOKEN = 'b5b249c8beefb986faf8d186a3f16e86ef509ab2';
 
-	public function testGivenValidArguments_requestResultsIn200() {
+	public function testGivenValidArguments_requestResultsIn200(): void {
 		$client = $this->createClient();
 
 		$client->request(
@@ -38,7 +38,7 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 		$this->assertSame( 200, $client->getResponse()->getStatusCode() );
 	}
 
-	public function testCancellationIsSuccessful_cookieIsCleared() {
+	public function testCancellationIsSuccessful_cookieIsCleared(): void {
 		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
 			$client->getCookieJar()->set( new Cookie( 'donation_timestamp', '49152 B.C.' ) );
 
@@ -60,7 +60,7 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testGivenValidUpdateToken_confirmationPageIsShown() {
+	public function testGivenValidUpdateToken_confirmationPageIsShown(): void {
 		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
 
 			$donationId = $this->storeDonation( $factory->getDonationRepository(), $factory->getEntityManager() );
@@ -78,7 +78,7 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testGivenGetRequest_resultHasMethodNotAllowedStatus() {
+	public function testGivenGetRequest_resultHasMethodNotAllowedStatus(): void {
 		$this->assertGetRequestCausesMethodNotAllowedResponse(
 			'/donation/cancel',
 			[
@@ -88,7 +88,7 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	public function testGivenInvalidUpdateToken_resultIsError() {
+	public function testGivenInvalidUpdateToken_resultIsError(): void {
 		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
 			$donationId = $this->storeDonation( $factory->getDonationRepository(), $factory->getEntityManager() );
 
@@ -125,7 +125,7 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 		return $donation->getId();
 	}
 
-	public function testWhenMailDeliveryFails_noticeIsDisplayed() {
+	public function testWhenMailDeliveryFails_noticeIsDisplayed(): void {
 		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
 			$donationId = $this->storeDonation( $factory->getDonationRepository(), $factory->getEntityManager() );
 			$factory->setSuborganizationMessenger( $this->newThrowingMessenger() );
@@ -143,7 +143,7 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function newThrowingMessenger() {
+	private function newThrowingMessenger(): Messenger {
 		$failingMessenger = $this->getMockBuilder( Messenger::class )->disableOriginalConstructor()->getMock();
 		$failingMessenger->method( 'sendMessageToUser' )->willThrowException( new \RuntimeException() );
 		return $failingMessenger;

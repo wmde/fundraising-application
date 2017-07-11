@@ -2,13 +2,13 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Presentation;
+namespace WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator;
 
 /**
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class PayPalUrlConfig {
+class PayPalConfig {
 
 	const CONFIG_KEY_ACCOUNT_ADDRESS = 'account-address';
 	const CONFIG_KEY_BASE_URL = 'base-url';
@@ -39,11 +39,11 @@ class PayPalUrlConfig {
 
 	/**
 	 * @param string[] $config
-	 * @return PayPalUrlConfig
+	 * @return PayPalConfig
 	 * @throws \RuntimeException
 	 */
 	public static function newFromConfig( array $config ): self {
-		return ( new PayPalUrlConfig(
+		return ( new self(
 			$config[self::CONFIG_KEY_ACCOUNT_ADDRESS],
 			$config[self::CONFIG_KEY_BASE_URL],
 			$config[self::CONFIG_KEY_NOTIFY_URL],
@@ -88,7 +88,7 @@ class PayPalUrlConfig {
 		return $this->itemName;
 	}
 
-	public function getDelayInDays() {
+	public function getDelayInDays(): int {
 		return $this->delayInDays;
 	}
 

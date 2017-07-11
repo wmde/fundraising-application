@@ -21,7 +21,7 @@ class MembershipApplicationConfirmationHtmlPresenterTest extends \PHPUnit\Framew
 	private const STATUS_UNCONFIRMED = 'status-unconfirmed';
 
 	/** @dataProvider applicationStatusProvider */
-	public function testWhenPresenterPresents_itPassesParametersToTemplate( $isConfirmed, $expectedMappedStatus ) {
+	public function testWhenPresenterPresents_itPassesParametersToTemplate( bool $isConfirmed, string $expectedMappedStatus ): void {
 		$twig = $this->getMockBuilder( TwigTemplate::class )->disableOriginalConstructor()->getMock();
 		$twig->expects( $this->once() )
 			->method( 'render' )
@@ -41,7 +41,7 @@ class MembershipApplicationConfirmationHtmlPresenterTest extends \PHPUnit\Framew
 		);
 	}
 
-	public function applicationStatusProvider() {
+	public function applicationStatusProvider(): array {
 		return [
 			[ true, self::STATUS_BOOKED ],
 			[ false, self::STATUS_UNCONFIRMED ]
@@ -67,7 +67,10 @@ class MembershipApplicationConfirmationHtmlPresenterTest extends \PHPUnit\Framew
 				'city' => 'Berlin',
 				'email' => 'jeroendedauw@gmail.com',
 			],
-			'bankData' => []
+			'bankData' => [],
+			'payPalData' => [
+				'firstPaymentDate' => '01.02.2021'
+			]
 		];
 	}
 

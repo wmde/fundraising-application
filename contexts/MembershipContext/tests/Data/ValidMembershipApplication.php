@@ -61,6 +61,7 @@ class ValidMembershipApplication {
 
 	const TEMPLATE_CAMPAIGN = 'test161012';
 	const TEMPLATE_NAME = 'Some_Membership_Form_Template.twig';
+	const FIRST_PAYMENT_DATE = '2021-02-01';
 
 	public static function newDomainEntity(): Application {
 		$self = ( new self() );
@@ -104,8 +105,8 @@ class ValidMembershipApplication {
 		);
 	}
 
-	public static function newDomainEntityUsingPayPal(): Application {
-		return ( new self() )->createApplicationUsingPayPal();
+	public static function newDomainEntityUsingPayPal( PayPalData $payPalData = null ): Application {
+		return ( new self() )->createApplicationUsingPayPal( $payPalData );
 	}
 
 	public static function newConfirmedSubscriptionDomainEntity(): Application {
@@ -153,12 +154,12 @@ class ValidMembershipApplication {
 		);
 	}
 
-	private function createApplicationUsingPayPal(): Application {
+	private function createApplicationUsingPayPal( PayPalData $payPalData = null ): Application {
 		$self = ( new self() );
 		return Application::newApplication(
 			self::MEMBERSHIP_TYPE,
 			$self->newApplicant( $self->newPersonApplicantName() ),
-			$this->newPayPalPayment()
+			$this->newPayPalPayment( $payPalData )
 		);
 	}
 
@@ -207,16 +208,22 @@ class ValidMembershipApplication {
 		);
 	}
 
-	private function newDirectDebitPayment( BankData $bankData ) {
+	private function newDirectDebitPayment( BankData $bankData ): DirectDebitPayment {
 		return new DirectDebitPayment( $bankData );
 	}
 
-	private function newPayPalPayment( $payPalData = null ) {
+	private function newPayPalPayment( PayPalData $payPalData = null ): Payment {
 		return new Payment(
 			self::PAYMENT_PERIOD_IN_MONTHS,
 			Euro::newFromFloat( self::PAYMENT_AMOUNT_IN_EURO ),
-			new PayPalPayment( $payPalData ?: null )
+			new PayPalPayment( $payPalData ?: $this->newPayPalData() )
 		);
+	}
+
+	private function newPayPalData(): PayPalData {
+		$payPalData = new PayPalData();
+		$payPalData->setFirstPaymentDate( self::FIRST_PAYMENT_DATE );
+		return $payPalData;
 	}
 
 	private function newBankData(): BankData {

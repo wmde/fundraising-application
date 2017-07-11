@@ -16,7 +16,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FrozenValueObject;
  */
 class FreezableValueObjectTest extends \PHPUnit\Framework\TestCase {
 
-	public function testCanSetAndGetValuesBeforeFreeze() {
+	public function testCanSetAndGetValuesBeforeFreeze(): void {
 		$object = new FrozenValueObject();
 
 		$object->setHeaderContent( 'header' );
@@ -28,7 +28,7 @@ class FreezableValueObjectTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( 'footer', $object->getFooterContent() );
 	}
 
-	public function testCanBeforeFreezeAndGetValuesAfter() {
+	public function testCanBeforeFreezeAndGetValuesAfter(): void {
 		$object = new FrozenValueObject();
 
 		$object->setHeaderContent( 'header' );
@@ -42,7 +42,7 @@ class FreezableValueObjectTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( 'footer', $object->getFooterContent() );
 	}
 
-	public function testWhenFreezing_settersCauseException() {
+	public function testWhenFreezing_settersCauseException(): void {
 		$object = new FrozenValueObject();
 
 		$object->setHeaderContent( 'header' );
@@ -56,7 +56,7 @@ class FreezableValueObjectTest extends \PHPUnit\Framework\TestCase {
 		$object->setHeaderContent( 'header' );
 	}
 
-	public function testWhenFreezingAndValueNotSet_settersCauseException() {
+	public function testWhenFreezingAndValueNotSet_settersCauseException(): void {
 		$object = new FrozenValueObject();
 
 		$object->freeze();
@@ -66,7 +66,7 @@ class FreezableValueObjectTest extends \PHPUnit\Framework\TestCase {
 		$object->setHeaderContent( 'header' );
 	}
 
-	public function testWhenNoValuesAreSet_assertNoNullFieldsThrowsException() {
+	public function testWhenNoValuesAreSet_assertNoNullFieldsThrowsException(): void {
 		$object = new FrozenValueObject();
 
 		$this->expectException( RuntimeException::class );
@@ -74,7 +74,7 @@ class FreezableValueObjectTest extends \PHPUnit\Framework\TestCase {
 		$object->assertNoNullFields();
 	}
 
-	public function testWhenSettingAllValues_assertNoNullFieldsDoesNothing() {
+	public function testWhenSettingAllValues_assertNoNullFieldsDoesNothing(): void {
 		$object = new FrozenValueObject();
 
 		$object->setHeaderContent( 'header' );

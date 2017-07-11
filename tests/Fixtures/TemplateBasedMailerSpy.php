@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_TestCase;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\EmailAddress;
 
@@ -22,7 +21,7 @@ class TemplateBasedMailerSpy extends TemplateBasedMailer {
 		$this->testCase = $testCase;
 	}
 
-	public function sendMail( EmailAddress $recipient, array $templateArguments = [] ) {
+	public function sendMail( EmailAddress $recipient, array $templateArguments = [] ): void {
 		$this->sendMailCalls[] = [ $recipient, $templateArguments ];
 	}
 
@@ -30,7 +29,7 @@ class TemplateBasedMailerSpy extends TemplateBasedMailer {
 		return $this->sendMailCalls;
 	}
 
-	public function assertCalledOnceWith( EmailAddress $expectedEmail, array $expectedArguments ) {
+	public function assertCalledOnceWith( EmailAddress $expectedEmail, array $expectedArguments ): void {
 		$this->assertCalledOnce();
 
 		$this->testCase->assertEquals(
@@ -42,7 +41,7 @@ class TemplateBasedMailerSpy extends TemplateBasedMailer {
 		);
 	}
 
-	public function assertCalledOnce() {
+	public function assertCalledOnce(): void {
 		$this->testCase->assertCount( 1, $this->sendMailCalls, 'Mailer should be called exactly once' );
 	}
 

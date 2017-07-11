@@ -44,7 +44,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		$this->entityManager = $entityManager;
 	}
 
-	public function storeDonation( Donation $donation ) {
+	public function storeDonation( Donation $donation ): void {
 		if ( $donation->getId() === null ) {
 			$this->insertDonation( $donation );
 		}
@@ -53,7 +53,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		}
 	}
 
-	private function insertDonation( Donation $donation ) {
+	private function insertDonation( Donation $donation ): void {
 		$doctrineDonation = new DoctrineDonation();
 		$this->updateDonationEntity( $doctrineDonation, $donation );
 
@@ -68,7 +68,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		$donation->assignId( $doctrineDonation->getId() );
 	}
 
-	private function updateDonation( Donation $donation ) {
+	private function updateDonation( Donation $donation ): void {
 		$doctrineDonation = $this->getDoctrineDonationById( $donation->getId() );
 
 		if ( $doctrineDonation === null ) {
@@ -86,7 +86,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		}
 	}
 
-	private function updateDonationEntity( DoctrineDonation $doctrineDonation, Donation $donation ) {
+	private function updateDonationEntity( DoctrineDonation $doctrineDonation, Donation $donation ): void {
 		$doctrineDonation->setId( $donation->getId() );
 		$this->updatePaymentInformation( $doctrineDonation, $donation );
 		$this->updateDonorInformation( $doctrineDonation, $donation->getDonor() );
@@ -99,7 +99,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		) );
 	}
 
-	private function updatePaymentInformation( DoctrineDonation $doctrineDonation, Donation $donation ) {
+	private function updatePaymentInformation( DoctrineDonation $doctrineDonation, Donation $donation ): void {
 		$doctrineDonation->setStatus( $donation->getStatus() );
 		$doctrineDonation->setAmount( $donation->getAmount()->getEuroString() );
 		$doctrineDonation->setPaymentIntervalInMonths( $donation->getPaymentIntervalInMonths() );
@@ -108,7 +108,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		$doctrineDonation->setBankTransferCode( $this->getBankTransferCode( $donation->getPaymentMethod() ) );
 	}
 
-	private function updateDonorInformation( DoctrineDonation $doctrineDonation, Donor $donor = null ) {
+	private function updateDonorInformation( DoctrineDonation $doctrineDonation, Donor $donor = null ): void {
 		if ( $donor === null ) {
 			if ( $doctrineDonation->getId() === null ) {
 				$doctrineDonation->setDonorFullName( 'Anonym' );
@@ -120,7 +120,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		}
 	}
 
-	private function updateComment( DoctrineDonation $doctrineDonation, DonationComment $comment = null ) {
+	private function updateComment( DoctrineDonation $doctrineDonation, DonationComment $comment = null ): void {
 		if ( $comment === null ) {
 			$doctrineDonation->setIsPublic( false );
 			$doctrineDonation->setComment( '' );
@@ -198,7 +198,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		);
 	}
 
-	private function getDataFieldsFromPersonName( DonorName $name ) {
+	private function getDataFieldsFromPersonName( DonorName $name ): array {
 		return [
 			'adresstyp' => $name->getPersonType(),
 			'anrede' => $name->getSalutation(),
@@ -209,7 +209,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		];
 	}
 
-	private function getDataFieldsFromAddress( DonorAddress $address ) {
+	private function getDataFieldsFromAddress( DonorAddress $address ): array {
 		return [
 			'strasse' => $address->getStreetAddress(),
 			'plz' => $address->getPostalCode(),
@@ -218,7 +218,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		];
 	}
 
-	private function getDataFieldsFromPayPalData( PayPalData $payPalData ) {
+	private function getDataFieldsFromPayPalData( PayPalData $payPalData ): array {
 		return [
 			'paypal_payer_id' => $payPalData->getPayerId(),
 			'paypal_subscr_id' => $payPalData->getSubscriberId(),
@@ -240,7 +240,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		];
 	}
 
-	private function getDataFieldsFromCreditCardData( CreditCardTransactionData $ccData ) {
+	private function getDataFieldsFromCreditCardData( CreditCardTransactionData $ccData ): array {
 		return [
 			'ext_payment_id' => $ccData->getTransactionId(),
 			'ext_payment_status' => $ccData->getTransactionStatus(),
@@ -371,7 +371,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		return $address->freeze()->assertNoNullFields();
 	}
 
-	private function getBankDataFromEntity( DoctrineDonation $dd ) {
+	private function getBankDataFromEntity( DoctrineDonation $dd ): BankData {
 		$data = $dd->getDecodedData();
 
 		$bankData = new BankData();
@@ -426,7 +426,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		return null;
 	}
 
-	private function getCreditCardDataFromEntity( DoctrineDonation $dd ) {
+	private function getCreditCardDataFromEntity( DoctrineDonation $dd ): CreditCardTransactionData {
 		$data = $dd->getDecodedData();
 
 		return ( new CreditCardTransactionData() )
@@ -442,7 +442,6 @@ class DoctrineDonationRepository implements DonationRepository {
 			->setCountryCode( $data['mcp_country'] ?? '' )
 			->setCurrencyCode( $data['mcp_currency'] ?? '' )
 			->freeze();
-
 	}
 
 	private function getCommentFromEntity( DoctrineDonation $dd ): ?DonationComment {

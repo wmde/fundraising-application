@@ -18,7 +18,7 @@ class InMemorySubscriptionRepository implements SubscriptionRepository {
 	 */
 	private $subscriptions = [];
 
-	public function storeSubscription( Subscription $subscription ) {
+	public function storeSubscription( Subscription $subscription ): void {
 		$subscriptionKey = array_search( $subscription, $this->subscriptions, true );
 		if ( $subscriptionKey === false ) {
 			$subscriptionKey = count( $this->subscriptions );
@@ -43,7 +43,7 @@ class InMemorySubscriptionRepository implements SubscriptionRepository {
 		return $count;
 	}
 
-	public function findByConfirmationCode( string $confirmationCode ) {
+	public function findByConfirmationCode( string $confirmationCode ): ?Subscription {
 		foreach ( $this->subscriptions as $subscription ) {
 			if ( $subscription->getConfirmationCode() === $confirmationCode ) {
 				return $subscription;

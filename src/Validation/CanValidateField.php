@@ -10,13 +10,7 @@ namespace WMDE\Fundraising\Frontend\Validation;
  */
 trait CanValidateField {
 
-	/**
-	 * @param ValidationResult $validationResult
-	 * @param string $fieldName
-	 *
-	 * @return ConstraintViolation|null
-	 */
-	private function getFieldViolation( ValidationResult $validationResult, string $fieldName ) {
+	private function getFieldViolation( ValidationResult $validationResult, string $fieldName ): ?ConstraintViolation {
 		if ( $validationResult->isSuccessful() ) {
 			return null;
 		}

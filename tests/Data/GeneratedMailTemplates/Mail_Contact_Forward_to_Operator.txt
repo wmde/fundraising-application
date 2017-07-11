@@ -1,0 +1,8 @@
+Über das Kontaktformular wurde eine Anfrage gesendet.
+Folgende Daten wurden übermittelt:
+
+Vorname: John
+Nachname: Doe
+E-Mail-Adresse: j.doe808@example.com
+Betreff: Missing Link
+Anfrage: Please advise

@@ -22,6 +22,9 @@ use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\Appl
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\MembershipApplicationValidator;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentDelayCalculator;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedPaymentDelayCalculator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
 
@@ -37,6 +40,7 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit\Framework\TestCase {
 	const FIRST_APPLICATION_ID = 1;
 	const ACCESS_TOKEN = 'Gimmeh all the access';
 	const UPDATE_TOKEN = 'Lemme change all the stuff';
+	const FIRST_PAYMENT_DATE = '2017-08-07';
 
 	/**
 	 * @var ApplicationRepository
@@ -71,7 +75,7 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit\Framework\TestCase {
 	/** @var  ApplyForMembershipPolicyValidator */
 	private $policyValidator;
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->repository = new InMemoryApplicationRepository();
 		$this->mailer = new TemplateBasedMailerSpy( $this );
 		$this->tokenGenerator = new FixedTokenGenerator( self::ACCESS_TOKEN );
@@ -92,7 +96,7 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit\Framework\TestCase {
 		return $validator;
 	}
 
-	public function testGivenValidRequest_applicationSucceeds() {
+	public function testGivenValidRequest_applicationSucceeds(): void {
 		$response = $this->newUseCase()->applyForMembership( $this->newValidRequest() );
 
 		$this->assertTrue( $response->isSuccessful() );
@@ -106,7 +110,8 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit\Framework\TestCase {
 			$this->validator,
 			$this->policyValidator,
 			$this->tracker,
-			$this->piwikTracker
+			$this->piwikTracker,
+			$this->newFixedPaymentDelayCalculator()
 		);
 	}
 
@@ -115,6 +120,10 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit\Framework\TestCase {
 			self::ACCESS_TOKEN,
 			self::UPDATE_TOKEN
 		) );
+	}
+
+	private function newFixedPaymentDelayCalculator(): PaymentDelayCalculator {
+		return new FixedPaymentDelayCalculator( new \DateTime( self::FIRST_PAYMENT_DATE ) );
 	}
 
 	private function newValidRequest(): ApplyForMembershipRequest {
@@ -158,14 +167,14 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit\Framework\TestCase {
 		return $bankData->assertNoNullFields()->freeze();
 	}
 
-	private function newTrackingInfo() {
+	private function newTrackingInfo(): MembershipApplicationTrackingInfo {
 		return new MembershipApplicationTrackingInfo(
 			ValidMembershipApplication::TEMPLATE_CAMPAIGN,
 			ValidMembershipApplication::TEMPLATE_NAME
 		);
 	}
 
-	public function testGivenValidRequest_applicationGetsPersisted() {
+	public function testGivenValidRequest_applicationGetsPersisted(): void {
 		$this->newUseCase()->applyForMembership( $this->newValidRequest() );
 
 		$expectedApplication = ValidMembershipApplication::newDomainEntity();
@@ -177,7 +186,7 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$this->assertEquals( $expectedApplication, $application );
 	}
 
-	public function testGivenValidRequest_confirmationEmailIsSend() {
+	public function testGivenValidRequest_confirmationEmailIsSend(): void {
 		$this->newUseCase()->applyForMembership( $this->newValidRequest() );
 
 		$this->mailer->assertCalledOnceWith(
@@ -193,14 +202,14 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testGivenValidRequest_tokenIsGeneratedAndReturned() {
+	public function testGivenValidRequest_tokenIsGeneratedAndReturned(): void {
 		$response = $this->newUseCase()->applyForMembership( $this->newValidRequest() );
 
 		$this->assertSame( self::ACCESS_TOKEN, $response->getAccessToken() );
 		$this->assertSame( self::UPDATE_TOKEN, $response->getUpdateToken() );
 	}
 
-	public function testWhenValidationFails_failureResultIsReturned() {
+	public function testWhenValidationFails_failureResultIsReturned(): void {
 		$this->validator = $this->newFailingValidator();
 
 		$response = $this->newUseCase()->applyForMembership( $this->newValidRequest() );
@@ -229,13 +238,13 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit\Framework\TestCase {
 		return $invalidResult;
 	}
 
-	public function testGivenValidRequest_moderationIsNotNeeded() {
+	public function testGivenValidRequest_moderationIsNotNeeded(): void {
 		$response = $this->newUseCase()->applyForMembership( $this->newValidRequest() );
 
 		$this->assertFalse( $response->getMembershipApplication()->needsModeration() );
 	}
 
-	public function testGivenFailingPolicyValidator_moderationIsNeeded() {
+	public function testGivenFailingPolicyValidator_moderationIsNeeded(): void {
 		$this->policyValidator = $this->newFailingPolicyValidator();
 
 		$response = $this->newUseCase()->applyForMembership( $this->newValidRequest() );
@@ -256,7 +265,7 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit\Framework\TestCase {
 		return $policyValidator;
 	}
 
-	public function testWhenApplicationIsUnconfirmed_confirmationEmailIsNotSent() {
+	public function testWhenApplicationIsUnconfirmed_confirmationEmailIsNotSent(): void {
 		$this->newUseCase()->applyForMembership( $this->newValidRequestForUnconfirmedApplication() );
 
 		$this->assertSame( 0, count( $this->mailer->getSendMailCalls() ) );
@@ -297,10 +306,19 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit\Framework\TestCase {
 		return $policyValidator;
 	}
 
-	public function testWhenUsingBlacklistedEmailAddress_moderationIsAutomaticallyDeleted() {
+	public function testWhenUsingBlacklistedEmailAddress_moderationIsAutomaticallyDeleted(): void {
 		$this->policyValidator = $this->newAutoDeletingPolicyValidator();
 		$this->newUseCase()->applyForMembership( $this->newValidRequest() );
 		$this->assertTrue( $this->repository->getApplicationById( 1 )->isDeleted() );
+	}
+
+	public function testWhenUsingPayPalPayment_delayInDaysIsPersisted(): void {
+		$request = $this->newValidRequest();
+		$request->setPaymentType( 'PPL' );
+		$this->newUseCase()->applyForMembership( $request );
+		/** @var PayPalPayment $payPalPayment */
+		$payPalPayment = $this->repository->getApplicationById( 1 )->getPayment()->getPaymentMethod();
+		$this->assertSame( self::FIRST_PAYMENT_DATE, $payPalPayment->getPayPalData()->getFirstPaymentDate() );
 	}
 
 }

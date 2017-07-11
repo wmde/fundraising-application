@@ -30,7 +30,7 @@ class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 	const VERIFICATION_SUCCESSFUL = 'VERIFIED';
 	const VERIFICATION_FAILED = 'INVALID';
 
-	public function testGivenValidSubscriptionSignupRequest_applicationIndicatesSuccess() {
+	public function testGivenValidSubscriptionSignupRequest_applicationIndicatesSuccess(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setTokenGenerator( new FixedTokenGenerator(
 				self::UPDATE_TOKEN,
@@ -57,15 +57,15 @@ class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function newSucceedingVerifier( array $request ) {
+	private function newSucceedingVerifier( array $request ): PayPalPaymentNotificationVerifier {
 		return $this->newVerifierMock( $request, self::VERIFICATION_SUCCESSFUL );
 	}
 
-	private function newFailingVerifier( array $request ) {
+	private function newFailingVerifier( array $request ): PayPalPaymentNotificationVerifier {
 		return $this->newVerifierMock( $request, self::VERIFICATION_FAILED );
 	}
 
-	private function newVerifierMock( array $request, string $expectedResponse ) {
+	private function newVerifierMock( array $request, string $expectedResponse ): PayPalPaymentNotificationVerifier {
 		return new PayPalPaymentNotificationVerifier(
 			$this->newGuzzleClientMock( $request, $expectedResponse ),
 			self::BASE_URL,
@@ -108,7 +108,7 @@ class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 		return $client;
 	}
 
-	public function testWhenPaymentProviderDoesNotVerify_errorCodeIsReturned() {
+	public function testWhenPaymentProviderDoesNotVerify_errorCodeIsReturned(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$request = $this->newSubscriptionSignupRequest();
 
@@ -125,7 +125,7 @@ class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testGivenWrongTransactionType_applicationIgnoresRequest() {
+	public function testGivenWrongTransactionType_applicationIgnoresRequest(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$invalidRequest = $this->newInvalidTransactionRequest();
 
@@ -142,7 +142,7 @@ class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function newSubscriptionSignupRequest() {
+	private function newSubscriptionSignupRequest(): array {
 		return [
 			'txn_type' => 'subscr_signup',
 
@@ -165,7 +165,7 @@ class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	private function newInvalidTransactionRequest() {
+	private function newInvalidTransactionRequest(): array {
 		return [
 			'txn_type' => 'invalid_transaction',
 			'receiver_email' => 'paypaldev-facilitator@wikimedia.de',
@@ -173,7 +173,7 @@ class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	private function assertPayPalDataGotPersisted( ApplicationRepository $applicationRepo, array $request ) {
+	private function assertPayPalDataGotPersisted( ApplicationRepository $applicationRepo, array $request ): void {
 		$membershipApplication = $applicationRepo->getApplicationById( self::MEMBERSHIP_APPLICATION_ID );
 
 		/** @var PayPalPayment $paymentMethod */
@@ -191,7 +191,7 @@ class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 		$this->assertSame( $request['payment_type'], $pplData->getPaymentType() );
 	}
 
-	public function testGivenPaymentNotificationForInvalidMembershipId_applicationReturnsError() {
+	public function testGivenPaymentNotificationForInvalidMembershipId_applicationReturnsError(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$invalidRequest = $this->newInvalidMembershipIdRequest();
 
@@ -208,7 +208,7 @@ class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function newInvalidMembershipIdRequest() {
+	private function newInvalidMembershipIdRequest(): array {
 		return [
 			'txn_type' => 'subscr_payment',
 

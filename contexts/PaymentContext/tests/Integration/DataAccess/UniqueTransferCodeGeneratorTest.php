@@ -28,7 +28,7 @@ class UniqueTransferCodeGeneratorTest extends \PHPUnit\Framework\TestCase {
 	 */
 	private $entityManager;
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->entityManager = TestEnvironment::newInstance()->getFactory()->getEntityManager();
 	}
 
@@ -49,16 +49,16 @@ class UniqueTransferCodeGeneratorTest extends \PHPUnit\Framework\TestCase {
 		};
 	}
 
-	public function testWhenFirstResultIsUnique_itGetsReturned() {
+	public function testWhenFirstResultIsUnique_itGetsReturned(): void {
 		$this->assertSame( 'first', $this->newUniqueGenerator()->generateTransferCode() );
 	}
 
-	public function testWhenFirstResultIsNotUnique_secondResultGetsReturned() {
+	public function testWhenFirstResultIsNotUnique_secondResultGetsReturned(): void {
 		$this->storeDonationWithTransferCode( 'first' );
 		$this->assertSame( 'second', $this->newUniqueGenerator()->generateTransferCode() );
 	}
 
-	private function storeDonationWithTransferCode( string $code ) {
+	private function storeDonationWithTransferCode( string $code ): void {
 		$donation = new Donation(
 			null,
 			Donation::STATUS_NEW,
@@ -75,7 +75,7 @@ class UniqueTransferCodeGeneratorTest extends \PHPUnit\Framework\TestCase {
 		( new DoctrineDonationRepository( $this->entityManager ) )->storeDonation( $donation );
 	}
 
-	public function testWhenFirstAndSecondResultsAreNotUnique_thirdResultGetsReturned() {
+	public function testWhenFirstAndSecondResultsAreNotUnique_thirdResultGetsReturned(): void {
 		$this->storeDonationWithTransferCode( 'first' );
 		$this->storeDonationWithTransferCode( 'second' );
 		$this->assertSame( 'third', $this->newUniqueGenerator()->generateTransferCode() );

@@ -1,0 +1,20 @@
+Sehr geehrter Herr Dr. O'Reilly,
+
+subscription_confirmation/body
+
+name_head_of_suborganization
+title_head_of_suborganization
+
+donation_hint
+
+-------------------------------------
+address_of_suborganization
+
+phone
+email
+
+bank_account
+
+tax_id_suborganization
+
+unsubscribe_hint

@@ -18,7 +18,7 @@ use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
  */
 class MembershipFeeValidatorTest extends \PHPUnit\Framework\TestCase {
 
-	public function testGivenValidRequest_validationSucceeds() {
+	public function testGivenValidRequest_validationSucceeds(): void {
 		$validRequest = $this->newValidRequest();
 		$response = $this->newValidator()->validate(
 			$validRequest->getPaymentAmountInEuros(),
@@ -31,7 +31,7 @@ class MembershipFeeValidatorTest extends \PHPUnit\Framework\TestCase {
 		$this->assertTrue( $response->isSuccessful() );
 	}
 
-	private function newValidator() {
+	private function newValidator(): MembershipFeeValidator {
 		return new MembershipFeeValidator();
 	}
 
@@ -42,7 +42,7 @@ class MembershipFeeValidatorTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider invalidAmountProvider
 	 */
-	public function testGivenInvalidAmount_validationFails( string $amount, int $intervalInMonths, string $expectedViolation ) {
+	public function testGivenInvalidAmount_validationFails( string $amount, int $intervalInMonths, string $expectedViolation ): void {
 		$request = $this->newValidRequestWithPaymentAmount( $amount, $intervalInMonths );
 
 		$response = $this->newValidator()->validate(
@@ -56,7 +56,7 @@ class MembershipFeeValidatorTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( $expectedViolation, $response->getViolationType( Result::SOURCE_PAYMENT_AMOUNT ) );
 	}
 
-	public function invalidAmountProvider() {
+	public function invalidAmountProvider(): array {
 		return [
 			'invalid: negative' => [ '-1.00', 3, Result::VIOLATION_NOT_MONEY ],
 			'invalid' => [ 'y u no btc', 3, Result::VIOLATION_NOT_MONEY ],
@@ -70,7 +70,7 @@ class MembershipFeeValidatorTest extends \PHPUnit\Framework\TestCase {
 		];
 	}
 
-	private function newValidRequestWithPaymentAmount( string $amount, int $intervalInMonths ) {
+	private function newValidRequestWithPaymentAmount( string $amount, int $intervalInMonths ): ApplyForMembershipRequest {
 		$request = $this->newValidRequest();
 		$request->setPaymentAmountInEuros( $amount );
 		$request->setPaymentIntervalInMonths( $intervalInMonths );
@@ -80,7 +80,7 @@ class MembershipFeeValidatorTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider validAmountProvider
 	 */
-	public function testGivenValidAmount_validationSucceeds( string $amount, int $intervalInMonths ) {
+	public function testGivenValidAmount_validationSucceeds( string $amount, int $intervalInMonths ): void {
 		$request = $this->newValidRequestWithPaymentAmount( $amount, $intervalInMonths );
 
 		$this->assertTrue(
@@ -90,7 +90,7 @@ class MembershipFeeValidatorTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function validAmountProvider() {
+	public function validAmountProvider(): array {
 		return [
 			'single payment' => [ '50.00', 12 ],
 			'just enough single payment' => [ '24.00', 12 ],
@@ -101,7 +101,7 @@ class MembershipFeeValidatorTest extends \PHPUnit\Framework\TestCase {
 		];
 	}
 
-	public function testGivenValidCompanyAmount_validationSucceeds() {
+	public function testGivenValidCompanyAmount_validationSucceeds(): void {
 		$request = $this->newValidRequestWithPaymentAmount( '100.00', 12 );
 		$request->markApplicantAsCompany();
 
@@ -112,7 +112,7 @@ class MembershipFeeValidatorTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testGivenInvalidCompanyAmount_validationFails() {
+	public function testGivenInvalidCompanyAmount_validationFails(): void {
 		$request = $this->newValidRequestWithPaymentAmount( '99.99', 12 );
 		$request->markApplicantAsCompany();
 
@@ -123,7 +123,7 @@ class MembershipFeeValidatorTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	private function getRequestAddressType( ApplyForMembershipRequest $request ) {
+	private function getRequestAddressType( ApplyForMembershipRequest $request ): string {
 		return $request->isCompanyApplication() ? 'firma' : 'person';
 	}
 

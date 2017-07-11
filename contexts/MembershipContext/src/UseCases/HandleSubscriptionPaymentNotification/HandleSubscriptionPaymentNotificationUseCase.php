@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptio
 
 use Psr\Log\LoggerInterface;
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\TemplateMailerInterface;
 use WMDE\Fundraising\Frontend\MembershipContext\Authorization\ApplicationAuthorizer;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Payment;
@@ -30,7 +30,8 @@ class HandleSubscriptionPaymentNotificationUseCase {
 	private $logger;
 
 	public function __construct( ApplicationRepository $repository, ApplicationAuthorizer $authorizationService,
-								 TemplateBasedMailer $mailer, LoggerInterface $logger ) {
+		TemplateMailerInterface $mailer, LoggerInterface $logger ) {
+
 		$this->repository = $repository;
 		$this->authorizationService = $authorizationService;
 		$this->mailer = $mailer;
@@ -112,20 +113,16 @@ class HandleSubscriptionPaymentNotificationUseCase {
 			->setPaymentTimestamp( $request->getPaymentTimestamp() );
 	}
 
-	/**
-	 * @return null|Application
-	 */
-	private function createChildApplication( Application $application, PayPalPaymentNotificationRequest $request ) {
+	private function createChildApplication( Application $application, PayPalPaymentNotificationRequest $request ): ?Application {
 		$childApplication = Application::newApplication(
 			$application->getType(),
 			$application->getApplicant(),
 			new Payment(
 				$application->getPayment()->getIntervalInMonths(),
 				$application->getPayment()->getAmount(),
-				new PayPalPayment()
+				new PayPalPayment( $this->newPayPalDataFromRequest( $request ) )
 			)
 		);
-		$childApplication->addPayPalData( $this->newPayPalDataFromRequest( $request ) );
 		$childApplication->confirm();
 
 		try {

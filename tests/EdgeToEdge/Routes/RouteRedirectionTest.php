@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
  */
 class RouteRedirectionTest extends WebRouteTestCase {
 
-	public function simplePageDisplayProvider() {
+	public function simplePageDisplayProvider(): array {
 		return [
 			[ '/spenden/Mitgliedschaft', '/page/Membership_Application' ],
 			[ '/spenden/Fördermitgliedschaft', '/page/Fördermitgliedschaft' ],
@@ -21,7 +21,7 @@ class RouteRedirectionTest extends WebRouteTestCase {
 	}
 
 	/** @dataProvider simplePageDisplayProvider */
-	public function testPageDisplayRequestsAreRedirected( $requestedUrl, $expectedRedirection ) {
+	public function testPageDisplayRequestsAreRedirected( string $requestedUrl, string $expectedRedirection ): void {
 		$client = $this->createClient();
 		$client->followRedirects( false );
 		$client->request( 'GET', $requestedUrl );
@@ -31,7 +31,7 @@ class RouteRedirectionTest extends WebRouteTestCase {
 		$this->assertSame( $expectedRedirection, $response->headers->get( 'Location' ) );
 	}
 
-	public function shouldRedirectToDefaultRouteProvider() {
+	public function shouldRedirectToDefaultRouteProvider(): array {
 		return [
 			[ '/spenden/spende.php', '/' ],
 			[ '/spenden/contact.php', '/' ],
@@ -44,7 +44,7 @@ class RouteRedirectionTest extends WebRouteTestCase {
 	}
 
 	/** @dataProvider shouldRedirectToDefaultRouteProvider */
-	public function testRequestsAreRedirectedToDefaultRoute( $requestedUrl, $expectedRedirection ) {
+	public function testRequestsAreRedirectedToDefaultRoute( string $requestedUrl, string $expectedRedirection ): void {
 		$client = $this->createClient();
 		$client->followRedirects( false );
 		$client->request( 'GET', $requestedUrl );
@@ -54,7 +54,7 @@ class RouteRedirectionTest extends WebRouteTestCase {
 		$this->assertSame( $expectedRedirection, $response->headers->get( 'Location' ) );
 	}
 
-	public function commentListUrlProvider() {
+	public function commentListUrlProvider(): array {
 		return [
 			[ '/spenden/list.php', '/list-comments.html' ],
 			[ '/spenden/rss.php', '/list-comments.rss' ],
@@ -63,7 +63,7 @@ class RouteRedirectionTest extends WebRouteTestCase {
 	}
 
 	/** @dataProvider commentListUrlProvider */
-	public function testCallsToCommentListIsRedirected( $requestedUrl, $expectedRedirection ) {
+	public function testCallsToCommentListIsRedirected( string $requestedUrl, string $expectedRedirection ): void {
 		$client = $this->createClient();
 		$client->followRedirects( false );
 		$client->request( 'GET', $requestedUrl );

@@ -28,7 +28,7 @@ class MembershipFormViolationPresenter {
 		);
 	}
 
-	private function getMembershipFormArguments( ApplyForMembershipRequest $request ) {
+	private function getMembershipFormArguments( ApplyForMembershipRequest $request ): array {
 		return [
 			'addressType' => $request->isCompanyApplication() ? 'firma' : 'person',
 			'salutation' => $request->getApplicantSalutation(),

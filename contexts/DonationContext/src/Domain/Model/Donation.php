@@ -67,7 +67,7 @@ class Donation {
 		$this->comment = $comment;
 	}
 
-	private function setStatus( string $status ) {
+	private function setStatus( string $status ): void {
 		if ( !$this->isValidStatus( $status ) ) {
 			throw new \InvalidArgumentException( 'Invalid donation status' );
 		}
@@ -97,7 +97,7 @@ class Donation {
 	 * @param int $id
 	 * @throws \RuntimeException
 	 */
-	public function assignId( int $id ) {
+	public function assignId( int $id ): void {
 		if ( $this->id !== null && $this->id !== $id ) {
 			throw new \RuntimeException( 'Id cannot be changed after initial assignment' );
 		}
@@ -140,7 +140,7 @@ class Donation {
 		return $this->comment;
 	}
 
-	public function addComment( DonationComment $comment ) {
+	public function addComment( DonationComment $comment ): void {
 		if ( $this->hasComment() ) {
 			throw new RuntimeException( 'Can only add a single comment to a donation' );
 		}
@@ -163,7 +163,7 @@ class Donation {
 	/**
 	 * @throws RuntimeException
 	 */
-	public function cancel() {
+	public function cancel(): void {
 		if ( $this->getPaymentType() !== PaymentType::DIRECT_DEBIT ) {
 			throw new RuntimeException( 'Can only cancel direct debit' );
 		}
@@ -178,7 +178,7 @@ class Donation {
 	/**
 	 * @throws RuntimeException
 	 */
-	public function confirmBooked() {
+	public function confirmBooked(): void {
 		if ( !$this->hasExternalPayment() ) {
 			throw new RuntimeException( 'Only external payments can be confirmed as booked' );
 		}
@@ -194,7 +194,7 @@ class Donation {
 		$this->status = self::STATUS_EXTERNAL_BOOKED;
 	}
 
-	private function makeCommentPrivate() {
+	private function makeCommentPrivate(): void {
 		$this->comment = new DonationComment(
 			$this->comment->getCommentText(),
 			false,
@@ -210,17 +210,17 @@ class Donation {
 		return $this->isIncomplete() || $this->needsModeration() || $this->isCancelled();
 	}
 
-	public function markForModeration() {
+	public function markForModeration(): void {
 		$this->status = self::STATUS_MODERATION;
 	}
 
-	public function notifyOfPolicyValidationFailure() {
+	public function notifyOfPolicyValidationFailure(): void {
 		if ( !$this->hasExternalPayment() ) {
 			$this->markForModeration();
 		}
 	}
 
-	public function notifyOfCommentValidationFailure() {
+	public function notifyOfCommentValidationFailure(): void {
 		$this->markForModeration();
 	}
 
@@ -229,25 +229,11 @@ class Donation {
 	}
 
 	/**
-	 * @param PayPalData $payPalData
-	 * @throws RuntimeException
-	 */
-	public function addPayPalData( PayPalData $payPalData ) {
-		$paymentMethod = $this->payment->getPaymentMethod();
-
-		if ( !( $paymentMethod instanceof PayPalPayment ) ) {
-			throw new RuntimeException( 'Cannot set PayPal data on a non PayPal payment' );
-		}
-
-		$paymentMethod->addPayPalData( $payPalData );
-	}
-
-	/**
 	 * @param CreditCardTransactionData $creditCardData
 	 *
 	 * @throws RuntimeException
 	 */
-	public function addCreditCardData( CreditCardTransactionData $creditCardData ) {
+	public function addCreditCardData( CreditCardTransactionData $creditCardData ): void {
 		$paymentMethod = $this->payment->getPaymentMethod();
 
 		if ( !( $paymentMethod instanceof CreditCardPayment ) ) {
@@ -262,7 +248,7 @@ class Donation {
 	}
 
 	public function hasExternalPayment(): bool {
-		return in_array( $this->getPaymentType(), [ PaymentType::PAYPAL, PaymentType::CREDIT_CARD ] );
+		return in_array( $this->getPaymentType(), [ PaymentType::PAYPAL, PaymentType::CREDIT_CARD, PaymentType::SOFORT ] );
 	}
 
 	private function isIncomplete(): bool {
@@ -281,7 +267,7 @@ class Donation {
 		return $this->status === self::STATUS_CANCELLED;
 	}
 
-	public function markAsDeleted() {
+	public function markAsDeleted(): void {
 		$this->status = self::STATUS_CANCELLED;
 	}
 

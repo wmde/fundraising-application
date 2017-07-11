@@ -22,7 +22,7 @@ interface SubscriptionRepository {
 	 * @param Subscription $subscription
 	 * @throws SubscriptionRepositoryException
 	 */
-	public function storeSubscription( Subscription $subscription );
+	public function storeSubscription( Subscription $subscription ): void;
 
 	/**
 	 * Count the number of subscriptions with the same email address that were created after the cutoff date.
@@ -39,6 +39,6 @@ interface SubscriptionRepository {
 	 * @return Subscription|null
 	 * @throws SubscriptionRepositoryException
 	 */
-	public function findByConfirmationCode( string $confirmationCode );
+	public function findByConfirmationCode( string $confirmationCode ): ?Subscription;
 
 }

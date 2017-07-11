@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
  */
 class WebRouteTestSetupTest extends WebRouteTestCase {
 
-	public function testPersistenceGetsInitialized() {
+	public function testPersistenceGetsInitialized(): void {
 		$factory = TestEnvironment::newInstance()->getFactory();
 
 		$tableNames = $this->removeDatabaseNames(

@@ -26,7 +26,7 @@ class LoggingPaymentNotificationVerifier implements PaymentNotificationVerifier 
 		$this->logLevel = LogLevel::CRITICAL;
 	}
 
-	public function verify( array $request ) {
+	public function verify( array $request ): void {
 		try {
 			$this->verifier->verify( $request );
 		} catch ( PayPalPaymentNotificationVerifierException $exception ) {

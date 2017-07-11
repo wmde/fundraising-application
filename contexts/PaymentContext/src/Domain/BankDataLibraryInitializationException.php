@@ -15,12 +15,7 @@ class BankDataLibraryInitializationException extends \RuntimeException {
 	 */
 	private $bankDataFile;
 
-	/**
-	 * @param string $bankDataFile
-	 * @param string|null $message
-	 * @param \Exception $previous
-	 */
-	public function __construct( $bankDataFile, $message = null, \Exception $previous = null ) {
+	public function __construct( string $bankDataFile, ?string $message = null, \Exception $previous = null ) {
 		$this->bankDataFile = $bankDataFile;
 		parent::__construct(
 			$message !== null ?: 'Could not initialize library with bank data file: ' . $bankDataFile,
@@ -29,10 +24,7 @@ class BankDataLibraryInitializationException extends \RuntimeException {
 		);
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getBankDataFile() {
+	public function getBankDataFile(): string {
 		return $this->bankDataFile;
 	}
 

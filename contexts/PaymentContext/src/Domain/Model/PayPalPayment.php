@@ -12,7 +12,7 @@ class PayPalPayment implements PaymentMethod {
 
 	private $payPalData;
 
-	public function __construct( PayPalData $payPalData = null ) {
+	public function __construct( PayPalData $payPalData ) {
 		$this->payPalData = $payPalData;
 	}
 
@@ -20,14 +20,11 @@ class PayPalPayment implements PaymentMethod {
 		return PaymentType::PAYPAL;
 	}
 
-	/**
-	 * @return PayPalData|null
-	 */
-	public function getPayPalData() {
+	public function getPayPalData(): PayPalData {
 		return $this->payPalData;
 	}
 
-	public function addPayPalData( PayPalData $palPayData ) {
+	public function addPayPalData( PayPalData $palPayData ): void {
 		$this->payPalData = $palPayData;
 	}
 }

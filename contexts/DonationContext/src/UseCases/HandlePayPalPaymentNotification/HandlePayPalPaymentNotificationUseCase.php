@@ -80,7 +80,9 @@ class HandlePayPalPaymentNotificationUseCase {
 	}
 
 	private function handleRequestForDonation( PayPalPaymentNotificationRequest $request, Donation $donation ): PaypalNotificationResponse {
-		if ( !( $donation->getPayment()->getPaymentMethod() instanceof PayPalPayment ) ) {
+		$paymentMethod = $donation->getPayment()->getPaymentMethod();
+
+		if ( !( $paymentMethod instanceof PayPalPayment ) ) {
 			return $this->createUnhandledResponse( 'Trying to handle IPN for non-Paypal donation' );
 		}
 
@@ -91,7 +93,7 @@ class HandlePayPalPaymentNotificationUseCase {
 			return $this->createChildDonation( $donation, $request );
 		}
 
-		$donation->addPayPalData( $this->newPayPalDataFromRequest( $request ) );
+		$paymentMethod->addPayPalData( $this->newPayPalDataFromRequest( $request ) );
 
 		try {
 			$donation->confirmBooked();
@@ -118,7 +120,7 @@ class HandlePayPalPaymentNotificationUseCase {
 		] );
 	}
 
-	private function sendConfirmationEmailFor( Donation $donation ) {
+	private function sendConfirmationEmailFor( Donation $donation ): void {
 		if ( $donation->getDonor() !== null ) {
 			try {
 				$this->mailer->sendConfirmationMailFor( $donation );
@@ -200,7 +202,7 @@ class HandlePayPalPaymentNotificationUseCase {
 		return PaypalNotificationResponse::newSuccessResponse();
 	}
 
-	private function logChildDonationCreatedEvent( $parentId, $childId ) {
+	private function logChildDonationCreatedEvent( $parentId, $childId ): void {	// @codingStandardsIgnoreLine
 		$this->donationEventLogger->log(
 			$parentId,
 			"paypal_handler: new transaction id to corresponding child donation: $childId"
@@ -238,8 +240,13 @@ class HandlePayPalPaymentNotificationUseCase {
 	}
 
 	private function newDonationFromRequest( PayPalPaymentNotificationRequest $request ): Donation {
-		$payment = new DonationPayment( $request->getAmountGross(), 0, new PayPalPayment() );
-		$donation = new Donation(
+		$payment = new DonationPayment(
+			$request->getAmountGross(),
+			0,
+			new PayPalPayment( $this->newPayPalDataFromRequest( $request ) )
+		);
+
+		return new Donation(
 			null,
 			Donation::STATUS_EXTERNAL_BOOKED,
 			$this->newDonorFromRequest( $request ),
@@ -247,8 +254,6 @@ class HandlePayPalPaymentNotificationUseCase {
 			Donation::DOES_NOT_OPT_INTO_NEWSLETTER,
 			DonationTrackingInfo::newBlankTrackingInfo()->freeze()->assertNoNullFields()
 		);
-		$donation->addPayPalData( $this->newPayPalDataFromRequest( $request ) );
-		return $donation;
 	}
 
 	private function createErrorResponse( \Exception $ex ): PaypalNotificationResponse {

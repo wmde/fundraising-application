@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Translation\TranslatorInterface;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationResponse;
-use WMDE\Fundraising\Frontend\Presentation\CreditCardUrlGenerator;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\CreditCard as CreditCardUrlGenerator;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
 /**
@@ -24,7 +24,7 @@ class CreditCardPaymentHtmlPresenter {
 	private $urlGenerator;
 
 	public function __construct( TwigTemplate $template, TranslatorInterface $translator,
-								 CreditCardUrlGenerator $urlGenerator ) {
+								CreditCardUrlGenerator $urlGenerator ) {
 		$this->template = $template;
 		$this->translator = $translator;
 		$this->urlGenerator = $urlGenerator;
@@ -34,7 +34,7 @@ class CreditCardPaymentHtmlPresenter {
 		return $this->template->render( $this->getArguments( $response ) );
 	}
 
-	private function getArguments( AddDonationResponse $response ) {
+	private function getArguments( AddDonationResponse $response ): array {
 		$personalInfo = $response->getDonation()->getDonor();
 		return [
 			'donation' => [

@@ -17,7 +17,7 @@ class TrackingCookieTest extends WebRouteTestCase {
 
 	const COOKIE_NAME = 'spenden_tracking';
 
-	public function testWhenTrackingParamsArePassed_valuesAreStoredInCookie() {
+	public function testWhenTrackingParamsArePassed_valuesAreStoredInCookie(): void {
 		$client = $this->createClient();
 		$client->request( 'get', '/', [
 			self::PARAM_NAME_CAMPAIGN => 'campaign',
@@ -27,14 +27,14 @@ class TrackingCookieTest extends WebRouteTestCase {
 		$this->assertSame( 'campaign/keyword', $client->getCookieJar()->get( self::COOKIE_NAME )->getValue() );
 	}
 
-	public function testWhenTrackingParamsAreNotPassed_noCookieIsCreated() {
+	public function testWhenTrackingParamsAreNotPassed_noCookieIsCreated(): void {
 		$client = $this->createClient();
 		$client->request( 'get', '/', [] );
 
 		$this->assertNull( $client->getCookieJar()->get( self::COOKIE_NAME ) );
 	}
 
-	public function testWhenEmptyTrackingParamsArePassed_noCookieIsCreated() {
+	public function testWhenEmptyTrackingParamsArePassed_noCookieIsCreated(): void {
 		$client = $this->createClient();
 		$client->request( 'get', '/', [
 			self::PARAM_NAME_CAMPAIGN => '',
@@ -44,7 +44,7 @@ class TrackingCookieTest extends WebRouteTestCase {
 		$this->assertNull( $client->getCookieJar()->get( self::COOKIE_NAME ) );
 	}
 
-	public function testNewValuesAreProvided_theOldOnesAreKept() {
+	public function testNewValuesAreProvided_theOldOnesAreKept(): void {
 		$client = $this->createClient();
 
 		$client->getCookieJar()->set( new Cookie(

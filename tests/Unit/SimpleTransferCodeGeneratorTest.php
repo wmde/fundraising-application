@@ -14,7 +14,7 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\SimpleTransferCodeGenerator;
  */
 class SimpleTransferCodeGeneratorTest extends \PHPUnit\Framework\TestCase {
 
-	public function testGenerateBankTransferCode_matchesRegex() {
+	public function testGenerateBankTransferCode_matchesRegex(): void {
 		$generator = new SimpleTransferCodeGenerator();
 		$this->assertRegExp( '/W-Q-[A-Z]{6}-[A-Z]/', $generator->generateTransferCode() );
 	}

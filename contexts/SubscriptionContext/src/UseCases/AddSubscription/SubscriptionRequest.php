@@ -26,7 +26,7 @@ class SubscriptionRequest {
 		return $this->salutation;
 	}
 
-	public function setSalutation( string $salutation ) {
+	public function setSalutation( string $salutation ): void {
 		$this->salutation = $salutation;
 	}
 
@@ -34,7 +34,7 @@ class SubscriptionRequest {
 		return $this->title;
 	}
 
-	public function setTitle( string $title ) {
+	public function setTitle( string $title ): void {
 		$this->title = $title;
 	}
 
@@ -42,7 +42,7 @@ class SubscriptionRequest {
 		return $this->firstName;
 	}
 
-	public function setFirstName( string $firstName ) {
+	public function setFirstName( string $firstName ): void {
 		$this->firstName = $firstName;
 	}
 
@@ -50,7 +50,7 @@ class SubscriptionRequest {
 		return $this->lastName;
 	}
 
-	public function setLastName( string $lastName ) {
+	public function setLastName( string $lastName ): void {
 		$this->lastName = $lastName;
 	}
 
@@ -58,7 +58,7 @@ class SubscriptionRequest {
 		return $this->email;
 	}
 
-	public function setEmail( string $email ) {
+	public function setEmail( string $email ): void {
 		$this->email = $email;
 	}
 
@@ -66,7 +66,7 @@ class SubscriptionRequest {
 		return $this->address;
 	}
 
-	public function setAddress( string $address ) {
+	public function setAddress( string $address ): void {
 		$this->address = $address;
 	}
 
@@ -74,7 +74,7 @@ class SubscriptionRequest {
 		return $this->postcode;
 	}
 
-	public function setPostcode( string $postcode ) {
+	public function setPostcode( string $postcode ): void {
 		$this->postcode = $postcode;
 	}
 
@@ -82,15 +82,15 @@ class SubscriptionRequest {
 		return $this->city;
 	}
 
-	public function setCity( string $city ) {
+	public function setCity( string $city ): void {
 		$this->city = $city;
 	}
 
-	public function getWikilogin() {
+	public function getWikilogin(): bool {
 		return $this->wikilogin;
 	}
 
-	public function setWikilogin( bool $wikilogin ) {
+	public function setWikilogin( bool $wikilogin ): void {
 		$this->wikilogin = $wikilogin;
 	}
 
@@ -98,7 +98,7 @@ class SubscriptionRequest {
 		return $this->trackingString;
 	}
 
-	public function setTrackingString( string $trackingString ) {
+	public function setTrackingString( string $trackingString ): void {
 		$this->trackingString = $trackingString;
 	}
 
@@ -106,7 +106,7 @@ class SubscriptionRequest {
 		return $this->source;
 	}
 
-	public function setSource( string $source ) {
+	public function setSource( string $source ): void {
 		$this->source = $source;
 	}
 
@@ -115,7 +115,7 @@ class SubscriptionRequest {
 	 *
 	 * @param array $values
 	 */
-	public function setWikiloginFromValues( array $values ) {
+	public function setWikiloginFromValues( array $values ): void {
 		$trueValues = ['yes', '1'];
 		$falseValues = ['no', '0'];
 		$matchingValues = array_intersect( $values, array_merge( $trueValues, $falseValues ) );

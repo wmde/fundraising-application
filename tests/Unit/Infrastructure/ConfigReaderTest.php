@@ -26,7 +26,7 @@ class ConfigReaderTest extends \PHPUnit\Framework\TestCase {
 	private $distPath;
 	private $emptyPath;
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->dir = vfsStream::setup( 'ConfigReaderTest' );
 
 		$this->distPath = vfsStream::newFile( 'config.dist.json' )
@@ -68,13 +68,13 @@ class ConfigReaderTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testReadSingleConfigFile() {
+	public function testReadSingleConfigFile(): void {
 		$reader = new ConfigReader( new SimpleFileFetcher(), $this->distPath );
 
 		$this->assertEquals( $this->getDistConfig(), $reader->getConfig() );
 	}
 
-	public function testWhenReadingDistAndInstanceConfig_instanceGetsMergedIntoDist() {
+	public function testWhenReadingDistAndInstanceConfig_instanceGetsMergedIntoDist(): void {
 		$instancePath = vfsStream::newFile( 'config.json' )
 			->at( $this->dir )->withContent( $this->getInstanceConfigContents() )->url();
 
@@ -94,13 +94,13 @@ class ConfigReaderTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testWhenInstanceFileIsEmpty_distConfigIsReturned() {
+	public function testWhenInstanceFileIsEmpty_distConfigIsReturned(): void {
 		$reader = new ConfigReader( new SimpleFileFetcher(), $this->distPath, $this->emptyPath );
 
 		$this->assertEquals( $this->getDistConfig(), $reader->getConfig() );
 	}
 
-	public function testWhenDistFileDoesNotExist_exceptionIsThrown() {
+	public function testWhenDistFileDoesNotExist_exceptionIsThrown(): void {
 		$reader = new ConfigReader( new SimpleFileFetcher(), $this->distPath . 'foo', $this->emptyPath );
 
 		$this->expectException( RuntimeException::class );
@@ -108,7 +108,7 @@ class ConfigReaderTest extends \PHPUnit\Framework\TestCase {
 		$reader->getConfig();
 	}
 
-	public function testWhenInstanceFileDoesNotExist_exceptionIsThrown() {
+	public function testWhenInstanceFileDoesNotExist_exceptionIsThrown(): void {
 		$reader = new \WMDE\Fundraising\Frontend\Infrastructure\ConfigReader( new SimpleFileFetcher(), $this->distPath, $this->emptyPath . 'foo' );
 
 		$this->expectException( RuntimeException::class );
@@ -116,7 +116,7 @@ class ConfigReaderTest extends \PHPUnit\Framework\TestCase {
 		$reader->getConfig();
 	}
 
-	public function testWhenConfigIsNotJson_exceptionIsThrown() {
+	public function testWhenConfigIsNotJson_exceptionIsThrown(): void {
 		$notJsonPath = vfsStream::newFile( 'not.json' )->at( $this->dir )->withContent( 'kittens' )->url();
 
 		$reader = new ConfigReader( new SimpleFileFetcher(), $notJsonPath );
@@ -126,7 +126,7 @@ class ConfigReaderTest extends \PHPUnit\Framework\TestCase {
 		$reader->getConfig();
 	}
 
-	public function testWhenConfigJsonIsNotArray_exceptionIsThrown() {
+	public function testWhenConfigJsonIsNotArray_exceptionIsThrown(): void {
 		$notArrayPath = vfsStream::newFile( 'not-array.json' )->at( $this->dir )->withContent( '42' )->url();
 
 		$reader = new \WMDE\Fundraising\Frontend\Infrastructure\ConfigReader( new SimpleFileFetcher(), $notArrayPath );

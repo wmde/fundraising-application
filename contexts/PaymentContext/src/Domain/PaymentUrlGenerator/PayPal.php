@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Presentation;
+namespace WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator;
 
 use WMDE\Euro\Euro;
 
@@ -10,7 +10,7 @@ use WMDE\Euro\Euro;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class PayPalUrlGenerator {
+class PayPal {
 
 	const PAYMENT_RECUR = '1';
 	const PAYMENT_REATTEMPT = '1';
@@ -20,7 +20,7 @@ class PayPalUrlGenerator {
 
 	private $config;
 
-	public function __construct( PayPalUrlConfig $config ) {
+	public function __construct( PayPalConfig $config ) {
 		$this->config = $config;
 	}
 
@@ -53,7 +53,7 @@ class PayPalUrlGenerator {
 		];
 	}
 
-	private function getPaymentDelayParameters() {
+	private function getPaymentDelayParameters(): array {
 		if ( $this->config->getDelayInDays() > 0 ) {
 			return $this->getDelayedSubscriptionParams( $this->config->getDelayInDays() );
 		}

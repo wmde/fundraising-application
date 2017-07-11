@@ -51,7 +51,7 @@ class ConfirmSubscriptionUseCaseTest extends \PHPUnit\Framework\TestCase {
 			->getMock();
 	}
 
-	public function testGivenNoSubscriptions_anErrorResponseIsCreated() {
+	public function testGivenNoSubscriptions_anErrorResponseIsCreated(): void {
 		$mailer = $this->newMailer();
 		$mailer->expects( $this->never() )->method( 'sendMail' );
 		$useCase = new ConfirmSubscriptionUseCase( new InMemorySubscriptionRepository(), $mailer );
@@ -59,7 +59,7 @@ class ConfirmSubscriptionUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$this->assertFalse( $result->isSuccessful() );
 	}
 
-	public function testGivenASubscriptionWithWrongStatus_anErrorResponseIsCreated() {
+	public function testGivenASubscriptionWithWrongStatus_anErrorResponseIsCreated(): void {
 		$subscription = $this->newSubscription();
 		$subscription->markAsConfirmed();
 
@@ -74,7 +74,7 @@ class ConfirmSubscriptionUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$this->assertFalse( $useCase->confirmSubscription( self::CONFIRMATION_CODE )->isSuccessful() );
 	}
 
-	public function testGivenASubscription_aSuccessIsCreated() {
+	public function testGivenASubscription_aSuccessIsCreated(): void {
 		$repo = new InMemorySubscriptionRepository();
 		$repo->storeSubscription( $this->newSubscription() );
 
@@ -83,7 +83,7 @@ class ConfirmSubscriptionUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$this->assertTrue( $useCase->confirmSubscription( self::CONFIRMATION_CODE )->isSuccessful() );
 	}
 
-	public function testGivenASubscription_statusIsSetToConfirmed() {
+	public function testGivenASubscription_statusIsSetToConfirmed(): void {
 		$repo = new InMemorySubscriptionRepository();
 		$repo->storeSubscription( $this->newSubscription() );
 
@@ -93,7 +93,7 @@ class ConfirmSubscriptionUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$this->assertFalse( $repo->getSubscriptions()[0]->isUnconfirmed(), 'Status needs to be set to confirmed' );
 	}
 
-	public function testGivenASubscription_aConfirmationMailIsSent() {
+	public function testGivenASubscription_aConfirmationMailIsSent(): void {
 		$repo = new InMemorySubscriptionRepository();
 		$repo->storeSubscription( $this->newSubscription() );
 

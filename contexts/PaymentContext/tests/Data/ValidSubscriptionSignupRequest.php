@@ -30,7 +30,7 @@ class ValidSubscriptionSignupRequest {
 	const PAYER_ADDRESS_COUNTRY = 'US';
 	const PAYER_EMAIL = 'hank.scorpio@globex.com';
 
-	public static function newValidRequest() {
+	public static function newValidRequest(): SubscriptionSignupRequest {
 		$request = new SubscriptionSignupRequest();
 		$request->setSubscriptionId( self::SUBSCRIPTION_ID );
 		$request->setSubscriptionDate( self::SUBSCRIPTION_DATE );

@@ -12,6 +12,8 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
+use WMDE\Fundraising\Frontend\PaymentContext\DataAccess\Sofort\Transfer\Client as SofortClient;
+use WMDE\Fundraising\Frontend\PaymentContext\DataAccess\Sofort\Transfer\Response as SofortResponse;
 
 /**
  * @licence GNU GPL v2+
@@ -24,7 +26,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	const SOME_TOKEN = 'SomeToken';
 
-	public function testGivenValidRequest_donationGetsPersisted() {
+	public function testGivenValidRequest_donationGetsPersisted(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
@@ -40,7 +42,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testWhenDonationGetsPersisted_timestampIsStoredInCookie() {
+	public function testWhenDonationGetsPersisted_timestampIsStoredInCookie(): void {
 		$client = $this->createClient();
 		$client->followRedirects( true );
 		$client->request(
@@ -55,7 +57,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertEquals( time(), $donationTimestamp->getTimestamp(), 'Timestamp should be not more than 5 seconds old', 5.0 );
 	}
 
-	public function testWhenMultipleDonationFormSubmissions_requestGetsRejected() {
+	public function testWhenMultipleDonationFormSubmissions_requestGetsRejected(): void {
 		$client = $this->createClient();
 		$client->getCookieJar()->set( new Cookie( 'donation_timestamp', $this->getPastTimestamp() ) );
 
@@ -68,7 +70,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'donation_rejected_limit', $client->getResponse()->getContent() );
 	}
 
-	public function testWhenMultipleDonationsInAccordanceToTimeLimit_requestIsNotRejected() {
+	public function testWhenMultipleDonationsInAccordanceToTimeLimit_requestIsNotRejected(): void {
 		$client = $this->createClient();
 		$client->getCookieJar()->set(
 			new Cookie(
@@ -86,11 +88,11 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertNotContains( 'donation_rejected_limit', $client->getResponse()->getContent() );
 	}
 
-	private function getPastTimestamp( string $interval = 'PT10S' ) {
+	private function getPastTimestamp( string $interval = 'PT10S' ): string {
 		return ( new \DateTime() )->sub( new \DateInterval( $interval ) )->format( 'Y-m-d H:i:s' );
 	}
 
-	private function newValidFormInput() {
+	private function newValidFormInput(): array {
 		return [
 			'betrag' => '5,51',
 			'zahlweise' => 'BEZ',
@@ -122,7 +124,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	private function assertIsExpectedDonation( Donation $donation ) {
+	private function assertIsExpectedDonation( Donation $donation ): void {
 		$data = $donation->getDecodedData();
 		$this->assertSame( '5.51', $donation->getAmount() );
 		$this->assertSame( 'BEZ', $donation->getPaymentType() );
@@ -157,7 +159,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertTrue( $donation->getDonorOptsIntoNewsletter() );
 	}
 
-	public function testGivenValidRequest_confirmationPageContainsEnteredData() {
+	public function testGivenValidRequest_confirmationPageContainsEnteredData(): void {
 		$client = $this->createClient();
 		$client->request(
 			'POST',
@@ -180,7 +182,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'send-info', $response );
 	}
 
-	public function testGivenValidBankTransferRequest_donationGetsPersisted() {
+	public function testGivenValidBankTransferRequest_donationGetsPersisted(): void {
 		/**
 		 * @var FunFunFactory
 		 */
@@ -231,7 +233,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function newValidBankTransferInput() {
+	private function newValidBankTransferInput(): array {
 		return [
 			'betrag' => '12,34',
 			'zahlweise' => 'UEB',
@@ -258,7 +260,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	public function testGivenComplementableBankData_donationStillGetsPersisted() {
+	public function testGivenComplementableBankData_donationStillGetsPersisted(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
@@ -281,7 +283,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function newComplementableFormInput() {
+	private function newComplementableFormInput(): array {
 		return [
 			'betrag' => '5,51',
 			'zahlweise' => 'BEZ',
@@ -307,7 +309,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		return $donation;
 	}
 
-	public function testGivenValidPayPalData_redirectsToPayPal() {
+	public function testGivenValidPayPalData_redirectsToPayPal(): void {
 		$client = $this->createClient();
 		$client->followRedirects( false );
 
@@ -322,7 +324,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'sandbox.paypal.com', $response->getContent() );
 	}
 
-	private function newValidPayPalInput() {
+	private function newValidPayPalInput(): array {
 		return [
 			'betrag' => '12,34',
 			'zahlweise' => 'PPL',
@@ -331,7 +333,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	public function testGivenValidCreditCardData_showsIframeEmbeddingPage() {
+	public function testGivenValidCreditCardData_showsIframeEmbeddingPage(): void {
 		$client = $this->createClient();
 		$client->request(
 			'POST',
@@ -345,7 +347,30 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'thatother.paymentprovider.com', $response->getContent() );
 	}
 
-	private function newValidCreditCardInput() {
+	public function testValidSofortInput_redirectsTo3rdPartyPage(): void {
+
+		$response = new SofortResponse();
+		$response->setPaymentUrl( 'https://bankingpin.please' );
+
+		$client = $this->createClient( [], function ( FunFunFactory $factory ) use ( $response ) {
+			$sofortClient = $this->createMock( SofortClient::class );
+			$sofortClient
+				->method( 'get' )
+				->willReturn( $response );
+			$factory->setSofortClient( $sofortClient );
+		} );
+
+		$client->followRedirects( false );
+		$client->request(
+			'POST',
+			'/donation/add',
+			$this->newValidSofortInput()
+		);
+
+		$this->assertTrue( $client->getResponse()->isRedirect( 'https://bankingpin.please' ) );
+	}
+
+	private function newValidCreditCardInput(): array {
 		return [
 			'betrag' => '12,34',
 			'zahlweise' => 'MCP',
@@ -354,7 +379,16 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	public function testGivenInvalidRequest_formIsReloadedAndPrefilled() {
+	private function newValidSofortInput(): array {
+		return [
+			'betrag' => '100,00',
+			'zahlweise' => 'SUB',
+			'periode' => 0,
+			'addressType' => 'anonym',
+		];
+	}
+
+	public function testGivenInvalidRequest_formIsReloadedAndPrefilled(): void {
 		$client = $this->createClient();
 		$client->request(
 			'POST',
@@ -383,7 +417,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'Email address: karla@kennichnich.de', $response );
 	}
 
-	public function testGivenInvalidRequest_formStillContainsBannerTrackingData() {
+	public function testGivenInvalidRequest_formStillContainsBannerTrackingData(): void {
 		$client = $this->createClient();
 		$client->request(
 			'POST',
@@ -400,7 +434,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'Banner Impression Count: 3', $response );
 	}
 
-	public function testGivenNegativeDonationAmount_formIsReloadedAndPrefilledWithZero() {
+	public function testGivenNegativeDonationAmount_formIsReloadedAndPrefilledWithZero(): void {
 		$client = $this->createClient();
 
 		$formValues = $this->newInvalidFormInput();
@@ -417,7 +451,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'Amount: 0,00', $response );
 	}
 
-	private function newInvalidFormInput() {
+	private function newInvalidFormInput(): array {
 		return [
 			'betrag' => '0',
 			'zahlweise' => 'BEZ',
@@ -449,7 +483,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	public function testGivenInvalidAnonymousRequest_formIsReloadedAndPrefilled() {
+	public function testGivenInvalidAnonymousRequest_formIsReloadedAndPrefilled(): void {
 		$client = $this->createClient();
 		$client->request(
 			'POST',
@@ -465,7 +499,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'Value of field "amount" violates rule: Amount too low', $response );
 	}
 
-	private function newAnonymousFormInput() {
+	private function newAnonymousFormInput(): array {
 		return [
 			'betrag' => '0',
 			'zahlweise' => 'UEB',
@@ -474,7 +508,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	public function testGivenValidRequest_tokensAreReturned() {
+	public function testGivenValidRequest_tokensAreReturned(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setTokenGenerator( new FixedTokenGenerator( self::SOME_TOKEN ) );
 
@@ -493,7 +527,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testGivenValidRequest_clientIsRedirected() {
+	public function testGivenValidRequest_clientIsRedirected(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setTokenGenerator( new FixedTokenGenerator( self::SOME_TOKEN ) );
 			$client->followRedirects( false );
@@ -508,7 +542,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testWhenTrackingCookieExists_valueIsPersisted() {
+	public function testWhenTrackingCookieExists_valueIsPersisted(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$client->getCookieJar()->set( new Cookie( 'spenden_tracking', 'test/blue' ) );
 
@@ -525,7 +559,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testWhenTrackableInputDataIsSubmitted_theyAreStoredInSession() {
+	public function testWhenTrackableInputDataIsSubmitted_theyAreStoredInSession(): void {
 		$this->createAppEnvironment( [], function ( Client $client, FunFunFactory $factory, Application $app ) {
 
 			$client->request(
@@ -545,7 +579,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testWhenTolstojNovelIsPassed_isIsNotStoredInSession() {
+	public function testWhenTolstojNovelIsPassed_isIsNotStoredInSession(): void {
 		$this->createAppEnvironment( [], function ( Client $client, FunFunFactory $factory, Application $app ) {
 
 			$client->request(
@@ -571,7 +605,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testWhenParameterIsOmitted_itIsNotStoredInSession() {
+	public function testWhenParameterIsOmitted_itIsNotStoredInSession(): void {
 		$this->createAppEnvironment( [], function ( Client $client, FunFunFactory $factory, Application $app ) {
 
 			$client->request(
@@ -590,7 +624,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testWhenInitiallyIntendedPaymentOptionsDifferFromActual_itIsReflectedInPiwikTrackingEvents() {
+	public function testWhenInitiallyIntendedPaymentOptionsDifferFromActual_itIsReflectedInPiwikTrackingEvents(): void {
 		$client = $this->createClient( [] );
 		$client->request(
 			'GET',
@@ -620,7 +654,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertContains( '12/0', $responseContent );
 	}
 
-	public function testWhenMobileTrackingIsRequested_piwikTrackerIsCalledForPaypalPayment() {
+	public function testWhenMobileTrackingIsRequested_piwikTrackerIsCalledForPaypalPayment(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setNullMessenger();
 			$client->followRedirects( false );
@@ -643,7 +677,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function newValidMobilePayPalInput() {
+	private function newValidMobilePayPalInput(): array {
 		return [
 			'betrag' => '12,34',
 			'zahlweise' => 'PPL',
@@ -655,7 +689,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	public function testWhenMobileTrackingIsRequested_piwikTrackerIsNotCalledForNonPaypalPayment() {
+	public function testWhenMobileTrackingIsRequested_piwikTrackerIsNotCalledForNonPaypalPayment(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setNullMessenger();
 			$client->followRedirects( false );
@@ -678,7 +712,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testGivenCommasInStreetInput_donationGetsPersisted() {
+	public function testGivenCommasInStreetInput_donationGetsPersisted(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
@@ -697,7 +731,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testGivenSufficientForeignBankData_donationGetsPersisted() {
+	public function testGivenSufficientForeignBankData_donationGetsPersisted(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$formInput = $this->newValidFormInput();
 			$formInput['iban'] = 'AT022050302101023600';
@@ -721,5 +755,4 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$this->assertSame( '', $data['bankname'] );
 		} );
 	}
-
 }

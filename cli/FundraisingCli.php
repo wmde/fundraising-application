@@ -24,14 +24,15 @@ class FundraisingCli {
 		$this->registerCommands();
 		return $this->app;
 	}
-	private function setApplicationInfo() {
+	private function setApplicationInfo(): void {
 		$this->app->setName( 'Fundraising Console' );
 		$this->app->setVersion( '2.0' );
 	}
-	private function registerCommands() {
+	private function registerCommands(): void {
 		$this->app->add( new ValidateConfigCommand() );
+		$this->app->add( new RenderMailTemplatesCommand() );
 	}
-	public function run() {
+	public function run(): void {
 		$this->newApplication()->run();
 	}
 

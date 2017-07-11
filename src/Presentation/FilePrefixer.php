@@ -16,7 +16,7 @@ class FilePrefixer {
 		$this->filePrefix = $filePrefix;
 	}
 
-	public function prefixFile( $filename ) {
+	public function prefixFile( string $filename ): string {
 		if ( !$this->filePrefix ) {
 			return $filename;
 		}

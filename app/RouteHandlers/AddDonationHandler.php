@@ -80,7 +80,6 @@ class AddDonationHandler {
 					),
 					Response::HTTP_SEE_OTHER
 				);
-
 				break;
 			case PaymentType::PAYPAL:
 				$httpResponse = $this->app->redirect(
@@ -89,6 +88,16 @@ class AddDonationHandler {
 						$responseModel->getDonation()->getAmount(),
 						$responseModel->getDonation()->getPaymentIntervalInMonths(),
 						$responseModel->getUpdateToken(),
+						$responseModel->getAccessToken()
+					)
+				);
+				break;
+			case PaymentType::SOFORT:
+				$httpResponse = $this->app->redirect(
+					$this->ffFactory->newSofortUrlGeneratorForDonations()->generateUrl(
+						$responseModel->getDonation()->getId(),
+						$responseModel->getDonation()->getPayment()->getPaymentMethod()->getBankTransferCode(),
+						$responseModel->getDonation()->getAmount(),
 						$responseModel->getAccessToken()
 					)
 				);

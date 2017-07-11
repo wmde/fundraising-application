@@ -18,7 +18,7 @@ class SubscriptionRepositorySpy implements SubscriptionRepository {
 	 */
 	private $subscriptions = [];
 
-	public function storeSubscription( Subscription $subscription ) {
+	public function storeSubscription( Subscription $subscription ): void {
 		$this->subscriptions[] = $subscription;
 	}
 
@@ -33,7 +33,7 @@ class SubscriptionRepositorySpy implements SubscriptionRepository {
 		return 0;
 	}
 
-	public function findByConfirmationCode( string $confirmationCode ) {
+	public function findByConfirmationCode( string $confirmationCode ): ?Subscription {
 		return null;
 	}
 

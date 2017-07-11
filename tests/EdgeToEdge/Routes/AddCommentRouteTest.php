@@ -20,14 +20,14 @@ class AddCommentRouteTest extends WebRouteTestCase {
 	const CORRECT_UPDATE_TOKEN = 'b5b249c8beefb986faf8d186a3f16e86ef509ab2';
 	const NON_EXISTING_DONATION_ID = 25502;
 
-	public function testGivenGetRequest_resultHasMethodNotAllowedStatus() {
+	public function testGivenGetRequest_resultHasMethodNotAllowedStatus(): void {
 		$this->assertGetRequestCausesMethodNotAllowedResponse(
 			'add-comment',
 			[]
 		);
 	}
 
-	public function testGivenRequestWithoutParameters_resultIsError() {
+	public function testGivenRequestWithoutParameters_resultIsError(): void {
 		$client = $this->createClient();
 
 		$client->request(
@@ -42,7 +42,7 @@ class AddCommentRouteTest extends WebRouteTestCase {
 		$this->assertErrorJsonResponse( $response );
 	}
 
-	public function testGivenRequestWithoutTokens_resultIsError() {
+	public function testGivenRequestWithoutTokens_resultIsError(): void {
 		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
 			$donation = $this->getNewlyStoredDonation( $factory );
 
@@ -74,7 +74,7 @@ class AddCommentRouteTest extends WebRouteTestCase {
 		return $donation;
 	}
 
-	public function testGivenRequestWithValidParameters_resultIsSuccess() {
+	public function testGivenRequestWithValidParameters_resultIsSuccess(): void {
 		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
 			$donation = $this->getNewlyStoredDonation( $factory );
 
@@ -95,7 +95,7 @@ class AddCommentRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testGivenRequestWithUnknownDonationId_resultIsError() {
+	public function testGivenRequestWithUnknownDonationId_resultIsError(): void {
 		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
 			$this->getNewlyStoredDonation( $factory );
 
@@ -116,7 +116,7 @@ class AddCommentRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testGivenRequestWithInvalidUpdateToken_resultIsError() {
+	public function testGivenRequestWithInvalidUpdateToken_resultIsError(): void {
 		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
 			$donation = $this->getNewlyStoredDonation( $factory );
 

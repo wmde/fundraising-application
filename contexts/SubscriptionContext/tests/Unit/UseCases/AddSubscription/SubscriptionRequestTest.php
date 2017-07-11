@@ -14,13 +14,13 @@ use WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\AddSubscription\Subsc
  */
 class SubscriptionRequestTest extends \PHPUnit\Framework\TestCase {
 
-	public function testGivenInvalidValues_WikiloginIsFalse() {
+	public function testGivenInvalidValues_WikiloginIsFalse(): void {
 		$request = new SubscriptionRequest();
 		$request->setWikiloginFromValues( ['', 'foo', 'bar' ] );
 		$this->assertFalse( $request->getWikilogin() );
 	}
 
-	public function testGivenValues_WikiloginChoosesTheFirstValidValue() {
+	public function testGivenValues_WikiloginChoosesTheFirstValidValue(): void {
 		$request = new SubscriptionRequest();
 		$request->setWikiloginFromValues( ['', 'yes' ] );
 		$this->assertTrue( $request->getWikilogin() );

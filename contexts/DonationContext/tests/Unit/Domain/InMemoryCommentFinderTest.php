@@ -15,11 +15,11 @@ use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\InMemoryCommentFind
  */
 class InMemoryCommentFinderTest extends \PHPUnit\Framework\TestCase {
 
-	public function testWhenThereAreNoComments_getCommentsReturnsEmptyArray() {
+	public function testWhenThereAreNoComments_getCommentsReturnsEmptyArray(): void {
 		$this->assertSame( [], ( new InMemoryCommentFinder() )->getPublicComments( 10 ) );
 	}
 
-	public function testWhenThereAreComments_getCommentsReturnsThem() {
+	public function testWhenThereAreComments_getCommentsReturnsThem(): void {
 		$this->assertEquals(
 			[
 				CommentWithAmount::newInstance()->setAuthorName( 'name0' )->setCommentText( 'comment' )
@@ -40,7 +40,7 @@ class InMemoryCommentFinderTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testGivenLimitSmallerThanCommentCount_getCommentsLimitsItsResult() {
+	public function testGivenLimitSmallerThanCommentCount_getCommentsLimitsItsResult(): void {
 		$this->assertEquals(
 			[
 				CommentWithAmount::newInstance()->setAuthorName( 'name0' )->setCommentText( 'comment' )

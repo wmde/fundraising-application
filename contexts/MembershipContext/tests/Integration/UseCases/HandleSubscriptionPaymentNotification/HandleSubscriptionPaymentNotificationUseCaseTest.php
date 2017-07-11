@@ -25,7 +25,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
  */
 class HandleSubscriptionPaymentNotificationUseCaseTest extends \PHPUnit\Framework\TestCase {
 
-	public function testWhenRepositoryThrowsException_requestIsNotHandled() {
+	public function testWhenRepositoryThrowsException_requestIsNotHandled(): void {
 		$useCase = new HandleSubscriptionPaymentNotificationUseCase(
 			new DoctrineApplicationRepository( ThrowingEntityManager::newInstance( $this ) ),
 			new SucceedingAuthorizer(),
@@ -38,7 +38,7 @@ class HandleSubscriptionPaymentNotificationUseCaseTest extends \PHPUnit\Framewor
 		$this->assertTrue( $response->hasErrors() );
 	}
 
-	public function testWhenApplicationDoesNotExist_requestIsNotHandled() {
+	public function testWhenApplicationDoesNotExist_requestIsNotHandled(): void {
 		$fakeRepository = new FakeApplicationRepository();
 		$fakeRepository->storeApplication( ValidMembershipApplication::newDomainEntityUsingPayPal() );
 
@@ -55,7 +55,7 @@ class HandleSubscriptionPaymentNotificationUseCaseTest extends \PHPUnit\Framewor
 		$this->assertFalse( $response->notificationWasHandled() );
 	}
 
-	public function testWhenAuthorizationFails_requestIsNotHandled() {
+	public function testWhenAuthorizationFails_requestIsNotHandled(): void {
 		$fakeRepository = new FakeApplicationRepository();
 		$fakeRepository->storeApplication( ValidMembershipApplication::newDomainEntityUsingPayPal() );
 
@@ -72,7 +72,7 @@ class HandleSubscriptionPaymentNotificationUseCaseTest extends \PHPUnit\Framewor
 		$this->assertFalse( $response->notificationWasHandled() );
 	}
 
-	public function testWhenTransactionTypeIsForSubscriptionChanges_requestIsNotHandled() {
+	public function testWhenTransactionTypeIsForSubscriptionChanges_requestIsNotHandled(): void {
 		$request = ValidPayPalNotificationRequest::newSubscriptionModification();
 
 		$useCase = new HandleSubscriptionPaymentNotificationUseCase(
@@ -86,7 +86,7 @@ class HandleSubscriptionPaymentNotificationUseCaseTest extends \PHPUnit\Framewor
 		$this->assertFalse( $response->notificationWasHandled() );
 	}
 
-	public function testGivenSubscriptionPaymentRequest_childDataSetIsCreated() {
+	public function testGivenSubscriptionPaymentRequest_childDataSetIsCreated(): void {
 		$application = ValidMembershipApplication::newConfirmedSubscriptionDomainEntity();
 
 		$fakeRepository = new FakeApplicationRepository();
@@ -120,7 +120,7 @@ class HandleSubscriptionPaymentNotificationUseCaseTest extends \PHPUnit\Framewor
 		$this->assertTrue( $childApplication->isConfirmed() );
 	}
 
-	public function testGivenExistingTransactionId_requestIsNotHandled() {
+	public function testGivenExistingTransactionId_requestIsNotHandled(): void {
 		$application = ValidMembershipApplication::newConfirmedSubscriptionDomainEntity();
 		/** @var PayPalPayment $payment */
 		$payment = $application->getPayment()->getPaymentMethod();
@@ -157,7 +157,7 @@ class HandleSubscriptionPaymentNotificationUseCaseTest extends \PHPUnit\Framewor
 		return $this->createMock( DonationEventLogger::class );
 	}
 
-	public function testGivenSubscriptionPaymentRequest_parentDataSetReferencesChildPaymentId() {
+	public function testGivenSubscriptionPaymentRequest_parentDataSetReferencesChildPaymentId(): void {
 		$application = ValidMembershipApplication::newConfirmedSubscriptionDomainEntity();
 
 		$fakeRepository = new FakeApplicationRepository();

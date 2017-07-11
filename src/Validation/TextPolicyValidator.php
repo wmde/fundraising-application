@@ -43,11 +43,6 @@ class TextPolicyValidator {
 		return $this->whiteWords->toArray();
 	}
 
-	/**
-	 * @param string $text
-	 *
-	 * @return bool
-	 */
 	public function textIsHarmless( string $text ): bool {
 		return $this->hasHarmlessContent(
 			$text,
@@ -80,14 +75,14 @@ class TextPolicyValidator {
 	/**
 	 * @param string[] $newBadWordsArray
 	 */
-	public function addBadWordsFromArray( array $newBadWordsArray ) {
+	public function addBadWordsFromArray( array $newBadWordsArray ): void {
 		$this->badWords = new ArrayBasedStringList( array_merge( $this->getBadWords(), $newBadWordsArray ) );
 	}
 
 	/**
 	 * @param string[] $newWhiteWordsArray
 	 */
-	public function addWhiteWordsFromArray( array $newWhiteWordsArray ) {
+	public function addWhiteWordsFromArray( array $newWhiteWordsArray ): void {
 		$this->whiteWords = new ArrayBasedStringList( array_merge( $this->getWhiteWords(), $newWhiteWordsArray ) );
 	}
 

@@ -43,13 +43,13 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 	 */
 	private $emailValidator;
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->feeValidator = $this->newSucceedingFeeValidator();
 		$this->bankDataValidator = $this->newSucceedingBankDataValidator();
 		$this->emailValidator = new SucceedingEmailValidator();
 	}
 
-	public function testGivenValidRequest_validationSucceeds() {
+	public function testGivenValidRequest_validationSucceeds(): void {
 		$validRequest = $this->newValidRequest();
 		$response = $this->newValidator()->validate( $validRequest );
 
@@ -58,7 +58,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 		$this->assertTrue( $response->isSuccessful() );
 	}
 
-	private function newValidator() {
+	private function newValidator(): MembershipApplicationValidator {
 		return new MembershipApplicationValidator(
 			$this->feeValidator,
 			$this->bankDataValidator,
@@ -66,7 +66,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testWhenFeeValidationFails_overallValidationAlsoFails() {
+	public function testWhenFeeValidationFails_overallValidationAlsoFails(): void {
 		$this->feeValidator = $this->newFailingFeeValidator();
 
 		$response = $this->newValidator()->validate( $this->newValidRequest() );
@@ -98,7 +98,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 		return ValidMembershipApplicationRequest::newValidRequest();
 	}
 
-	private function newFeeViolationResult() {
+	private function newFeeViolationResult(): Result {
 		return new Result( [
 			Result::SOURCE_PAYMENT_AMOUNT => Result::VIOLATION_NOT_MONEY
 		] );
@@ -114,7 +114,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 		return $feeValidator;
 	}
 
-	public function testWhenIbanIsMissing_validationFails() {
+	public function testWhenIbanIsMissing_validationFails(): void {
 		$this->bankDataValidator = $this->newRealBankDataValidator();
 
 		$request = $this->newValidRequest();
@@ -126,7 +126,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	private function assertRequestValidationResultInErrors( ApplyForMembershipRequest $request, array $expectedErrors ) {
+	private function assertRequestValidationResultInErrors( ApplyForMembershipRequest $request, array $expectedErrors ): void {
 		$this->assertEquals(
 			new Result( $expectedErrors ),
 			$this->newValidator()->validate( $request )
@@ -147,7 +147,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 		return $ibanValidator;
 	}
 
-	public function testWhenBicIsMissing_validationFails() {
+	public function testWhenBicIsMissing_validationFails(): void {
 		$this->bankDataValidator = $this->newRealBankDataValidator();
 
 		$request = $this->newValidRequest();
@@ -159,7 +159,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testWhenBankNameIsMissing_validationSucceeds() {
+	public function testWhenBankNameIsMissing_validationSucceeds(): void {
 		$this->bankDataValidator = $this->newRealBankDataValidator();
 
 		$request = $this->newValidRequest();
@@ -171,7 +171,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 		$this->assertTrue( $response->isSuccessful() );
 	}
 
-	public function testWhenBankCodeIsMissing_validationFails() {
+	public function testWhenBankCodeIsMissing_validationFails(): void {
 		$this->bankDataValidator = $this->newRealBankDataValidator();
 
 		$request = $this->newValidRequest();
@@ -183,7 +183,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testWhenBankAccountIsMissing_validationFails() {
+	public function testWhenBankAccountIsMissing_validationFails(): void {
 		$this->bankDataValidator = $this->newRealBankDataValidator();
 
 		$request = $this->newValidRequest();
@@ -195,7 +195,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testWhenTooLongBankAccount_validationFails() {
+	public function testWhenTooLongBankAccount_validationFails(): void {
 		$this->bankDataValidator = $this->newRealBankDataValidator();
 
 		$request = $this->newValidRequest();
@@ -207,7 +207,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testWhenTooLongBankCode_validationFails() {
+	public function testWhenTooLongBankCode_validationFails(): void {
 		$this->bankDataValidator = $this->newRealBankDataValidator();
 
 		$request = $this->newValidRequest();
@@ -219,7 +219,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testWhenDateOfBirthIsNotDate_validationFails() {
+	public function testWhenDateOfBirthIsNotDate_validationFails(): void {
 		$request = $this->newValidRequest();
 		$request->setApplicantDateOfBirth( 'this is not a valid date' );
 
@@ -232,7 +232,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider invalidPhoneNumberProvider
 	 */
-	public function testWhenApplicantPhoneNumberIsInvalid_validationFails( string $invalidPhoneNumber ) {
+	public function testWhenApplicantPhoneNumberIsInvalid_validationFails( string $invalidPhoneNumber ): void {
 		$request = $this->newValidRequest();
 		$request->setApplicantPhoneNumber( $invalidPhoneNumber );
 
@@ -242,7 +242,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function invalidPhoneNumberProvider() {
+	public function invalidPhoneNumberProvider(): array {
 		return [
 			'potato' => [ 'potato' ],
 
@@ -254,7 +254,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider emailViolationTypeProvider
 	 */
-	public function testWhenApplicantEmailIsInvalid_validationFails( string $emailViolationType ) {
+	public function testWhenApplicantEmailIsInvalid_validationFails( string $emailViolationType ): void {
 		$this->emailValidator = $this->newFailingEmailValidator( $emailViolationType );
 
 		$request = $this->newValidRequest();
@@ -266,7 +266,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function emailViolationTypeProvider() {
+	public function emailViolationTypeProvider(): array {
 		return [
 			[ 'email_address_wrong_format' ],
 			[ 'email_address_invalid' ],
@@ -274,11 +274,6 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 		];
 	}
 
-	/**
-	 * @param string $violationType
-	 *
-	 * @return EmailValidator
-	 */
 	private function newFailingEmailValidator( string $violationType ): EmailValidator {
 		$feeValidator = $this->getMockBuilder( EmailValidator::class )
 			->disableOriginalConstructor()->getMock();
@@ -289,7 +284,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 		return $feeValidator;
 	}
 
-	public function testWhenCompanyIsMissingFromCompanyApplication_validationFails() {
+	public function testWhenCompanyIsMissingFromCompanyApplication_validationFails(): void {
 		$request = $this->newValidRequest();
 		$request->markApplicantAsCompany();
 		$request->setApplicantCompanyName( '' );
@@ -300,7 +295,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testWhenFirstNameIsMissingFromPersonalApplication_validationFails() {
+	public function testWhenFirstNameIsMissingFromPersonalApplication_validationFails(): void {
 		$request = $this->newValidRequest();
 		$request->setApplicantFirstName( '' );
 
@@ -310,7 +305,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testWhenLastNameIsMissingFromPersonalApplication_validationFails() {
+	public function testWhenLastNameIsMissingFromPersonalApplication_validationFails(): void {
 		$request = $this->newValidRequest();
 		$request->setApplicantLastName( '' );
 
@@ -320,7 +315,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testWhenSalutationIsMissingFromPersonalApplication_validationFails() {
+	public function testWhenSalutationIsMissingFromPersonalApplication_validationFails(): void {
 		$request = $this->newValidRequest();
 		$request->setApplicantSalutation( '' );
 
@@ -330,7 +325,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testWhenStreetAddressIsMissing_validationFails() {
+	public function testWhenStreetAddressIsMissing_validationFails(): void {
 		$request = $this->newValidRequest();
 		$request->setApplicantStreetAddress( '' );
 
@@ -340,7 +335,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testWhenPostalCodeIsMissing_validationFails() {
+	public function testWhenPostalCodeIsMissing_validationFails(): void {
 		$request = $this->newValidRequest();
 		$request->setApplicantPostalCode( '' );
 
@@ -350,7 +345,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testWhenCityIsMissing_validationFails() {
+	public function testWhenCityIsMissing_validationFails(): void {
 		$request = $this->newValidRequest();
 		$request->setApplicantCity( '' );
 
@@ -360,7 +355,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testWhenCountryCodeIsMissing_validationFails() {
+	public function testWhenCountryCodeIsMissing_validationFails(): void {
 		$request = $this->newValidRequest();
 		$request->setApplicantCountryCode( '' );
 
@@ -370,21 +365,21 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testPhoneNumberIsNotProvided_validationDoesNotFail() {
+	public function testPhoneNumberIsNotProvided_validationDoesNotFail(): void {
 		$request = $this->newValidRequest();
 		$request->setApplicantPhoneNumber( '' );
 
 		$this->assertTrue( $this->newValidator()->validate( $request )->isSuccessful() );
 	}
 
-	public function testDateOfBirthIsNotProvided_validationDoesNotFail() {
+	public function testDateOfBirthIsNotProvided_validationDoesNotFail(): void {
 		$request = $this->newValidRequest();
 		$request->setApplicantDateOfBirth( '' );
 
 		$this->assertTrue( $this->newValidator()->validate( $request )->isSuccessful() );
 	}
 
-	public function testPersonalInfoWithLongFields_validationFails() {
+	public function testPersonalInfoWithLongFields_validationFails(): void {
 		$longText = str_repeat( 'Cats ', 500 );
 		$request = $this->newValidRequest();
 		$request->setApplicantFirstName( $longText );
@@ -409,7 +404,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testContactInfoWithLongFields_validationFails() {
+	public function testContactInfoWithLongFields_validationFails(): void {
 		$request = $this->newValidRequest();
 		$request->setApplicantEmailAddress( str_repeat( 'Cats', 500 ) . '@example.com' );
 		$request->setApplicantPhoneNumber( str_repeat( '1234', 500 ) );
@@ -423,7 +418,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testBankDataWithLongFields_validationFails() {
+	public function testBankDataWithLongFields_validationFails(): void {
 		$longText = str_repeat( 'Cats ', 500 );
 		$request = $this->newValidRequest();
 		$bankData = $request->getBankData();
@@ -440,7 +435,7 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testGivenValidRequestUsingPayPal_validationSucceeds() {
+	public function testGivenValidRequestUsingPayPal_validationSucceeds(): void {
 		$validRequest = $this->newValidRequestUsingPayPal();
 		$response = $this->newValidator()->validate( $validRequest );
 

@@ -45,7 +45,7 @@ class CancelDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 	 */
 	private $logger;
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->repository = new FakeDonationRepository();
 		$this->mailer = new TemplateBasedMailerSpy( $this );
 		$this->authorizer = new SucceedingDonationAuthorizer();
@@ -61,19 +61,19 @@ class CancelDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testGivenIdOfUnknownDonation_cancellationIsNotSuccessful() {
+	public function testGivenIdOfUnknownDonation_cancellationIsNotSuccessful(): void {
 		$response = $this->newCancelDonationUseCase()->cancelDonation( new CancelDonationRequest( 1 ) );
 
 		$this->assertFalse( $response->cancellationSucceeded() );
 	}
 
-	public function testResponseContainsDonationId() {
+	public function testResponseContainsDonationId(): void {
 		$response = $this->newCancelDonationUseCase()->cancelDonation( new CancelDonationRequest( 1337 ) );
 
 		$this->assertSame( 1337, $response->getDonationId() );
 	}
 
-	public function testGivenIdOfCancellableDonation_cancellationIsSuccessful() {
+	public function testGivenIdOfCancellableDonation_cancellationIsSuccessful(): void {
 		$donation = $this->newCancelableDonation();
 		$this->repository->storeDonation( $donation );
 
@@ -86,7 +86,7 @@ class CancelDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		$this->assertTrue( $this->repository->getDonationById( $donation->getId() )->isCancelled() );
 	}
 
-	public function testGivenIdOfNonCancellableDonation_cancellationIsNotSuccessful() {
+	public function testGivenIdOfNonCancellableDonation_cancellationIsNotSuccessful(): void {
 		$donation = $this->newCancelableDonation();
 		$donation->cancel();
 		$this->repository->storeDonation( $donation );
@@ -101,7 +101,7 @@ class CancelDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		return ValidDonation::newDirectDebitDonation();
 	}
 
-	public function testWhenDonationGetsCancelled_cancellationConfirmationEmailIsSend() {
+	public function testWhenDonationGetsCancelled_cancellationConfirmationEmailIsSend(): void {
 		$donation = $this->newCancelableDonation();
 		$this->repository->storeDonation( $donation );
 
@@ -123,7 +123,7 @@ class CancelDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testWhenDonationGetsCancelled_logEntryNeededByBackendIsWritten() {
+	public function testWhenDonationGetsCancelled_logEntryNeededByBackendIsWritten(): void {
 		$donation = $this->newCancelableDonation();
 		$this->repository->storeDonation( $donation );
 
@@ -135,13 +135,13 @@ class CancelDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testGivenIdOfNonCancellableDonation_nothingIsWrittenToTheLog() {
+	public function testGivenIdOfNonCancellableDonation_nothingIsWrittenToTheLog(): void {
 		$this->newCancelDonationUseCase()->cancelDonation( new CancelDonationRequest( 1 ) );
 
 		$this->assertSame( [], $this->logger->getLogCalls() );
 	}
 
-	public function testWhenConfirmationMailFails_mailDeliveryFailureResponseIsReturned() {
+	public function testWhenConfirmationMailFails_mailDeliveryFailureResponseIsReturned(): void {
 		$this->mailer = $this->newThrowingMailer();
 
 		$response = $this->getResponseForCancellableDonation();
@@ -158,7 +158,7 @@ class CancelDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		return $mailer;
 	}
 
-	public function testWhenGetDonationFails_cancellationIsNotSuccessful() {
+	public function testWhenGetDonationFails_cancellationIsNotSuccessful(): void {
 		$this->repository->throwOnRead();
 
 		$response = $this->getResponseForCancellableDonation();
@@ -174,7 +174,7 @@ class CancelDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		return $this->newCancelDonationUseCase()->cancelDonation( $request );
 	}
 
-	public function testWhenDonationSavingFails_cancellationIsNotSuccessful() {
+	public function testWhenDonationSavingFails_cancellationIsNotSuccessful(): void {
 		$donation = $this->newCancelableDonation();
 		$this->repository->storeDonation( $donation );
 

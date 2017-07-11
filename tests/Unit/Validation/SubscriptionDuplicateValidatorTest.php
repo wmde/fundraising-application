@@ -16,7 +16,7 @@ use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionDuplica
  */
 class SubscriptionDuplicateValidatorTest extends \PHPUnit\Framework\TestCase {
 
-	public function testGivenSubscriptionCountOfZero_validationSucceeds() {
+	public function testGivenSubscriptionCountOfZero_validationSucceeds(): void {
 		$repository = $this->createMock( SubscriptionRepository::class );
 		$repository->method( 'countSimilar' )->willReturn( 0 );
 
@@ -26,7 +26,7 @@ class SubscriptionDuplicateValidatorTest extends \PHPUnit\Framework\TestCase {
 		$this->assertTrue( $validator->validate( new Subscription() )->isSuccessful() );
 	}
 
-	public function testGivenSubscriptionCountGreaterThanZero_validationFails() {
+	public function testGivenSubscriptionCountGreaterThanZero_validationFails(): void {
 		$repository = $this->createMock( SubscriptionRepository::class );
 		$repository->method( 'countSimilar' )->willReturn( 1 );
 

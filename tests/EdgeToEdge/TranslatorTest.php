@@ -14,7 +14,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
  */
 class TranslatorTest extends WebRouteTestCase {
 
-	public function testGivenDefinedMessageKey_responseContainsTranslatedMessages() {
+	public function testGivenDefinedMessageKey_responseContainsTranslatedMessages(): void {
 		$client = $this->createClient(
 			[],
 			function ( FunFunFactory $factory ) {
@@ -25,13 +25,13 @@ class TranslatorTest extends WebRouteTestCase {
 		$this->assertContains( 'Seite nicht gefunden', $client->getResponse()->getContent() );
 	}
 
-	public function testGivenUndefinedMessageKey_responseContainsMessageKey() {
+	public function testGivenUndefinedMessageKey_responseContainsMessageKey(): void {
 		$client = $this->createClient();
 		$client->request( 'GET', '/anything' );
 		$this->assertContains( 'page_not_found', $client->getResponse()->getContent() );
 	}
 
-	private function newTranslator( array $translatableMessages, string $locale ) {
+	private function newTranslator( array $translatableMessages, string $locale ): Translator {
 		$translator = new Translator( $locale );
 		$translator->addLoader( 'array', new ArrayLoader() );
 		$translator->addResource( 'array', $translatableMessages, $locale );

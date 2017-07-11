@@ -43,7 +43,7 @@ class DonationConfirmationPageSelector {
 		);
 	}
 
-	private function parseCampaigns( $campaigns ) {
+	private function parseCampaigns( array $campaigns ): void {
 		foreach ( $campaigns as $campaign ) {
 			$this->campaigns[] = new TemplateTestCampaign( $campaign );
 		}

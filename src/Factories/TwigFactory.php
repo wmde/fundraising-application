@@ -40,7 +40,7 @@ class TwigFactory {
 	 * @param array $config Configuration for the filesystem loader. The key 'template-dir' can be a string or an array.
 	 * @return array
 	 */
-	private function getTemplateDir( $config ): array {
+	private function getTemplateDir( array $config ): array {
 		if ( is_string( $config['template-dir'] ) ) {
 			$templateDir = [ $config['template-dir'] ];
 		}
@@ -54,7 +54,7 @@ class TwigFactory {
 		return $this->convertToAbsolute( $appRoot, $templateDir );
 	}
 
-	private function convertToAbsolute( $root, array $dirs ): array {
+	private function convertToAbsolute( string $root, array $dirs ): array {
 		return array_map(
 				function( $dir ) use ( $root ) {
 					if ( strlen( $dir ) == 0 || $dir{0} != '/' ) {
@@ -66,24 +66,24 @@ class TwigFactory {
 		);
 	}
 
-	public function newArrayLoader() {
+	public function newArrayLoader(): Twig_Loader_Array {
 		$templates = $this->config['loaders']['array'] ?? [];
 		return new Twig_Loader_Array( $templates );
 	}
 
-	public function newStringLoaderExtension() {
+	public function newStringLoaderExtension(): Twig_Extension_StringLoader {
 		return new Twig_Extension_StringLoader();
 	}
 
-	public function newTranslationExtension( TranslatorInterface $translator ) {
+	public function newTranslationExtension( TranslatorInterface $translator ): TranslationExtension {
 		return new TranslationExtension( $translator );
 	}
 
-	public function newFilePrefixFilter( FilePrefixer $filePrefixer ) {
+	public function newFilePrefixFilter( FilePrefixer $filePrefixer ): Twig_SimpleFilter {
 		return new Twig_SimpleFilter( 'prefix_file', [ $filePrefixer, 'prefixFile' ] );
 	}
 
-	public function newTwigEnvironmentConfigurator() {
+	public function newTwigEnvironmentConfigurator(): TwigEnvironmentConfigurator {
 		return new TwigEnvironmentConfigurator( $this->config, $this->cachePath );
 	}
 }

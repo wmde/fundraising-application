@@ -21,14 +21,14 @@ class AmountParserTest extends \PHPUnit\Framework\TestCase {
 	 * @param float $expectedValue
 	 * @param string $inputValue
 	 */
-	public function testGivenFormattedString_setAmountFromStringParsesIntoFloat( $locale, $expectedValue, $inputValue ) {
+	public function testGivenFormattedString_setAmountFromStringParsesIntoFloat( string $locale, float $expectedValue, string $inputValue ): void {
 		$this->assertSame(
 			$expectedValue,
 			( new AmountParser( $locale ) )->parseAsFloat( $inputValue )
 		);
 	}
 
-	public function valueProvider() {
+	public function valueProvider(): array {
 		return [
 			[ 'de_DE', 29.5, '29,50' ],
 			[ 'de_DE', 0.1, '0,10' ],

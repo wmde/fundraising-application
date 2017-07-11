@@ -21,7 +21,7 @@ interface ApplicationRepository {
 	 *
 	 * @throws StoreMembershipApplicationException
 	 */
-	public function storeApplication( Application $application );
+	public function storeApplication( Application $application ): void;
 
 	/**
 	 * @throws GetMembershipApplicationException

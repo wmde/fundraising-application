@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionSignupNotification;
 
 use Psr\Log\LoggerInterface;
-use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\TemplateMailerInterface;
 use WMDE\Fundraising\Frontend\MembershipContext\Authorization\ApplicationAuthorizer;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationRepository;
@@ -27,7 +27,8 @@ class HandleSubscriptionSignupNotificationUseCase {
 	private $logger;
 
 	public function __construct( ApplicationRepository $repository, ApplicationAuthorizer $authorizationService,
-								 TemplateBasedMailer $mailer, LoggerInterface $logger ) {
+		TemplateMailerInterface $mailer, LoggerInterface $logger ) {
+
 		$this->repository = $repository;
 		$this->authorizationService = $authorizationService;
 		$this->mailer = $mailer;
@@ -50,7 +51,9 @@ class HandleSubscriptionSignupNotificationUseCase {
 
 	private function handleRequestForMembershipApplication( SubscriptionSignupRequest $request,
 															Application $application ): PaypalNotificationResponse {
-		if ( !( $application->getPayment()->getPaymentMethod() instanceof PayPalPayment ) ) {
+		$paymentMethod = $application->getPayment()->getPaymentMethod();
+
+		if ( !( $paymentMethod instanceof PayPalPayment ) ) {
 			return $this->createUnhandledResponse( 'Trying to handle IPN for non-PayPal membership application' );
 		}
 
@@ -58,7 +61,7 @@ class HandleSubscriptionSignupNotificationUseCase {
 			return $this->createUnhandledResponse( 'Wrong access code for membership application' );
 		}
 
-		$application->addPayPalData( $this->newPayPalDataFromRequest( $request ) );
+		$paymentMethod->addPayPalData( $this->newPayPalDataFromRequest( $request ) );
 
 		try {
 			$application->confirmSubscriptionCreated();
@@ -91,7 +94,7 @@ class HandleSubscriptionSignupNotificationUseCase {
 		] );
 	}
 
-	private function sendConfirmationEmail( Application $application ) {
+	private function sendConfirmationEmail( Application $application ): void {
 		try {
 			$this->mailer->sendMail( $application->getApplicant()->getEmailAddress() );
 		} catch ( \RuntimeException $ex ) {

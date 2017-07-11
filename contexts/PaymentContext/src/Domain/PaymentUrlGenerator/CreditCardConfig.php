@@ -2,13 +2,13 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Presentation;
+namespace WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator;
 
 /**
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class CreditCardUrlConfig {
+class CreditCardConfig {
 
 	const CONFIG_KEY_BASE_URL = 'base-url';
 	const CONFIG_KEY_PROJECT_ID = 'project-id';
@@ -80,7 +80,7 @@ class CreditCardUrlConfig {
 		return $this->theme;
 	}
 
-	public function isTestMode() {
+	public function isTestMode(): bool {
 		return $this->testMode;
 	}
 
