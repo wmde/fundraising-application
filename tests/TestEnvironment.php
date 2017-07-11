@@ -38,7 +38,7 @@ class TestEnvironment {
 	}
 
 	/**
-	 * @var array[]
+	 * @var array
 	 */
 	private $config;
 

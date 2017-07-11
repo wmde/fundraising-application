@@ -60,7 +60,7 @@ class TemplateTestCampaign {
 		return $this->isActive() && $this->hasStarted() && !$this->hasEnded();
 	}
 
-	public function getRandomTemplate() {
+	public function getRandomTemplate(): string {
 		return $this->templates[array_rand( $this->templates )];
 	}
 

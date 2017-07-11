@@ -1285,7 +1285,7 @@ class FunFunFactory {
 		return new AmountPolicyValidator( 1000, 1000 );
 	}
 
-	public function getDonationTimeframeLimit() {
+	public function getDonationTimeframeLimit(): string {
 		return $this->config['donation-timeframe-limit'];
 	}
 
@@ -1294,7 +1294,7 @@ class FunFunFactory {
 		return $test->render( [ 'message' => $message ] );
 	}
 
-	public function getMembershipApplicationTimeframeLimit() {
+	public function getMembershipApplicationTimeframeLimit(): string {
 		return $this->config['membership-application-timeframe-limit'];
 	}
 
