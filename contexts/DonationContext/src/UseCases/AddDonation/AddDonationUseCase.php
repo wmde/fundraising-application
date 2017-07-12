@@ -133,9 +133,9 @@ class AddDonationUseCase {
 	private function getInitialDonationStatus( string $paymentType ): string {
 		if ( $paymentType === PaymentType::DIRECT_DEBIT ) {
 			return Donation::STATUS_NEW;
-		}
-
-		if ( $paymentType === PaymentType::BANK_TRANSFER ) {
+		} elseif ( $paymentType === PaymentType::BANK_TRANSFER ) {
+			return Donation::STATUS_PROMISE;
+		} elseif ( $paymentType === PaymentType::SOFORT ) {
 			return Donation::STATUS_PROMISE;
 		}
 
