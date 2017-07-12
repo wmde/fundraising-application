@@ -29,6 +29,7 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentWithoutAssociatedData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\SofortPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Infrastructure\CreditCardExpiry;
 
 /**
@@ -134,6 +135,8 @@ class DoctrineDonationRepository implements DonationRepository {
 
 	private function getBankTransferCode( PaymentMethod $paymentMethod ): string {
 		if ( $paymentMethod instanceof BankTransferPayment ) {
+			return $paymentMethod->getBankTransferCode();
+		} elseif ( $paymentMethod instanceof SofortPayment ) {
 			return $paymentMethod->getBankTransferCode();
 		}
 

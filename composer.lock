@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "abaab64de21fe61aabca596d82655e6a",
+    "content-hash": "5340fe50fe8235882ab6c37987e93b3c",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2743,29 +2743,28 @@
         },
         {
             "name": "wmde/fundraising-store",
-            "version": "4.2.0",
+            "version": "dev-central-bank-code",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/FundraisingStore.git",
-                "reference": "cc996570ea2e41096ab6cd0161dc08b30eef0863"
+                "reference": "9df98089f117f9bea5b050815ea330ccc14a92a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/FundraisingStore/zipball/cc996570ea2e41096ab6cd0161dc08b30eef0863",
-                "reference": "cc996570ea2e41096ab6cd0161dc08b30eef0863",
+                "url": "https://api.github.com/repos/wmde/FundraisingStore/zipball/9df98089f117f9bea5b050815ea330ccc14a92a9",
+                "reference": "9df98089f117f9bea5b050815ea330ccc14a92a9",
                 "shasum": ""
             },
             "require": {
                 "doctrine/dbal": "~2.4",
                 "doctrine/orm": "~2.4",
                 "gedmo/doctrine-extensions": "^2.4",
-                "php": ">=7.0"
+                "php": ">=7.1"
             },
             "require-dev": {
-                "ockcyp/covers-validator": "~0.4.0",
-                "phpmd/phpmd": "~2.3",
-                "phpunit/phpunit": "~5.4",
-                "squizlabs/php_codesniffer": "~2.2"
+                "ockcyp/covers-validator": "~0.6.1",
+                "phpunit/phpunit": "~6.2",
+                "squizlabs/php_codesniffer": "~3.0"
             },
             "bin": [
                 "cli-config.php"
@@ -2773,7 +2772,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.0.x-dev"
+                    "dev-master": "5.0.x-dev"
                 }
             },
             "autoload": {
@@ -2786,7 +2785,7 @@
                 "GPL-2.0+"
             ],
             "description": "Persistence services around the fundraising database",
-            "time": "2017-01-06T11:34:58+00:00"
+            "time": "2017-07-12 15:21:28"
         }
     ],
     "packages-dev": [
@@ -5917,7 +5916,7 @@
             "support": {
                 "source": "https://github.com/wmde/fundraising-frontend-content/tree/test"
             },
-            "time": "2017-07-06T13:44:34+00:00"
+            "time": "2017-07-06 13:44:34"
         },
         {
             "name": "wmde/psr-log-test-doubles",
@@ -5982,6 +5981,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "wmde/fundraising-store": 20,
         "ockcyp/covers-validator": 20,
         "wmde/fundraising-frontend-content": 20
     },
