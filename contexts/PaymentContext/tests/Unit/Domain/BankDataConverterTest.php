@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Unit\PaymentContext\Domain;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataConverter;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataLibraryInitializationException;
@@ -12,18 +13,14 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 
 /**
- * @covers WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataConverter
+ * @covers \WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataConverter
  *
  * @licence GNU GPL v2+
  * @author Christoph Fischer <christoph.fischer@wikimedia.de >
+ *
+ * @requires extension konto_check
  */
-class BankDataConverterTest extends \PHPUnit\Framework\TestCase {
-
-	public function setUp(): void {
-		if ( !function_exists( 'lut_init' ) ) {
-			$this->markTestSkipped( 'The konto_check needs to be installed!' );
-		}
-	}
+class BankDataConverterTest extends TestCase {
 
 	public function testWhenUsingConfigLutPath_constructorCreatesConverter(): void {
 		$this->assertInstanceOf( BankDataConverter::class, $this->newBankDataConverter() );
