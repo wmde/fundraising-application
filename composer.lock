@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "5340fe50fe8235882ab6c37987e93b3c",
+    "content-hash": "0460739f4cb1106603faf440e5fa0dbb",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2743,16 +2743,16 @@
         },
         {
             "name": "wmde/fundraising-store",
-            "version": "dev-central-bank-code",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/FundraisingStore.git",
-                "reference": "9df98089f117f9bea5b050815ea330ccc14a92a9"
+                "reference": "54c197ac7cb2d91da1ef5fc6c19dc31e6b5548c0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/FundraisingStore/zipball/9df98089f117f9bea5b050815ea330ccc14a92a9",
-                "reference": "9df98089f117f9bea5b050815ea330ccc14a92a9",
+                "url": "https://api.github.com/repos/wmde/FundraisingStore/zipball/54c197ac7cb2d91da1ef5fc6c19dc31e6b5548c0",
+                "reference": "54c197ac7cb2d91da1ef5fc6c19dc31e6b5548c0",
                 "shasum": ""
             },
             "require": {
@@ -2785,7 +2785,7 @@
                 "GPL-2.0+"
             ],
             "description": "Persistence services around the fundraising database",
-            "time": "2017-07-12 15:21:28"
+            "time": "2017-07-13 08:28:16"
         }
     ],
     "packages-dev": [

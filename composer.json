@@ -12,7 +12,7 @@
 		"twig/twig": "~1.23",
 		"pimple/pimple": "~3.0",
 
-		"wmde/fundraising-store": "dev-central-bank-code",
+		"wmde/fundraising-store": "dev-master",
 		"wmde/fundraising-content-provider": "^2.0",
 		"wmde/euro": "~1.0",
 
