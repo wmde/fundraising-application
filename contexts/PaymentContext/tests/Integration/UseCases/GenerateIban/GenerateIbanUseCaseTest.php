@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\PaymentContext\Tests\Integration\UseCases\GenerateIban;
 
+use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataConverter;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
@@ -13,18 +14,14 @@ use WMDE\Fundraising\Frontend\PaymentContext\UseCases\GenerateIban\GenerateIbanU
 use WMDE\Fundraising\Frontend\Validation\IbanValidator;
 
 /**
- * @covers WMDE\Fundraising\Frontend\PaymentContext\UseCases\GenerateIban\GenerateIbanUseCase
+ * @covers \WMDE\Fundraising\Frontend\PaymentContext\UseCases\GenerateIban\GenerateIbanUseCase
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen <kai.nissen@wikimedia.de>
+ *
+ * @requires extension konto_check
  */
-class GenerateIbanUseCaseTest extends \PHPUnit\Framework\TestCase {
-
-	public function setUp(): void {
-		if ( !function_exists( 'lut_init' ) ) {
-			$this->markTestSkipped( 'The konto_check needs to be installed!' );
-		}
-	}
+class GenerateIbanUseCaseTest extends TestCase {
 
 	public function testWhenValidBankAccountDataIsGiven_fullBankDataIsReturned(): void {
 		$useCase = $this->newGenerateIbanUseCase();
