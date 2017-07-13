@@ -18,11 +18,11 @@ class AddDonationUseCaseTest extends TestCase {
 		$method = new ReflectionMethod( $useCase, 'getInitialDonationStatus' );
 		$method->setAccessible( true );
 
-		$this->assertEquals( 'N', $method->invoke( $useCase, 'BEZ' ) );
-		$this->assertEquals( 'Z', $method->invoke( $useCase, 'UEB' ) );
-		$this->assertEquals( 'Z', $method->invoke( $useCase, 'SUB' ) );
+		$this->assertSame( 'N', $method->invoke( $useCase, 'BEZ' ) );
+		$this->assertSame( 'Z', $method->invoke( $useCase, 'UEB' ) );
+		$this->assertSame( 'Z', $method->invoke( $useCase, 'SUB' ) );
 
-		$this->assertEquals( 'X', $method->invoke( $useCase, 'MCP' ) );
-		$this->assertEquals( 'X', $method->invoke( $useCase, 'foo' ) );
+		$this->assertSame( 'X', $method->invoke( $useCase, 'MCP' ) );
+		$this->assertSame( 'X', $method->invoke( $useCase, 'foo' ) );
 	}
 }
