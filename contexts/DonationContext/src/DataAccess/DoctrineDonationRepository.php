@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
+use WMDE\Fundraising\Entities\DonationPayments\SofortPayment as DoctrineSofortPayment;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonationComment;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonationPayment;
@@ -107,6 +108,13 @@ class DoctrineDonationRepository implements DonationRepository {
 
 		$doctrineDonation->setPaymentType( $donation->getPaymentType() );
 		$doctrineDonation->setBankTransferCode( self::getBankTransferCode( $donation->getPaymentMethod() ) );
+
+		$paymentMethod = $donation->getPaymentMethod();
+		if ( $paymentMethod instanceof SofortPayment ) {
+			$doctrineSofortPayment = new DoctrineSofortPayment();
+			$doctrineSofortPayment->setConfirmedAt( $paymentMethod->getConfirmedAt() );
+			$doctrineDonation->setPayment( $doctrineSofortPayment );
+		}
 	}
 
 	private function updateDonorInformation( DoctrineDonation $doctrineDonation, Donor $donor = null ): void {
@@ -337,7 +345,12 @@ class DoctrineDonationRepository implements DonationRepository {
 			case PaymentType::CREDIT_CARD:
 				return new CreditCardPayment( $this->getCreditCardDataFromEntity( $dd ) );
 			case PaymentType::SOFORT:
-				return new SofortPayment( $dd->getBankTransferCode() );
+				$sofortPayment = new SofortPayment( $dd->getBankTransferCode() );
+				$doctrinePayment = $dd->getPayment();
+				if ( $doctrinePayment instanceof DoctrineSofortPayment ) {
+					$sofortPayment->setConfirmedAt( $doctrinePayment->getConfirmedAt() );
+				}
+				return $sofortPayment;
 		}
 		return new PaymentWithoutAssociatedData( $dd->getPaymentType() );
 	}

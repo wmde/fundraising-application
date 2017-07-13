@@ -19,6 +19,7 @@ use WMDE\Fundraising\Frontend\App\RouteHandlers\AddDonationHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\AddSubscriptionHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\ApplyForMembershipHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\PayPalNotificationHandler;
+use WMDE\Fundraising\Frontend\App\RouteHandlers\SofortNotificationHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\PayPalNotificationHandlerForMembershipFee;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\RouteRedirectionHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowDonationConfirmationHandler;
@@ -458,6 +459,13 @@ $app->post(
 	'handle-paypal-payment-notification',
 	function ( Request $request ) use ( $ffFactory ) {
 		return ( new PayPalNotificationHandler( $ffFactory ) )->handle( $request );
+	}
+);
+
+$app->post(
+	'sofort-payment-notification',
+	function ( Request $request ) use ( $ffFactory ) {
+		return ( new SofortNotificationHandler( $ffFactory ) )->handle( $request );
 	}
 );
 

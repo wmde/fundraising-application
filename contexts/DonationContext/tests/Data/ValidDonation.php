@@ -109,6 +109,13 @@ class ValidDonation {
 		);
 	}
 
+	public static function newIncompleteSofortDonation(): Donation {
+		return ( new self() )->createDonation(
+			new SofortPayment( self::PAYMENT_BANK_TRANSFER_CODE ),
+			Donation::STATUS_PROMISE
+		);
+	}
+
 	public static function newIncompleteAnonymousPayPalDonation(): Donation {
 		return ( new self() )->createAnonymousDonation(
 			new PayPalPayment( new PayPalData() ),
