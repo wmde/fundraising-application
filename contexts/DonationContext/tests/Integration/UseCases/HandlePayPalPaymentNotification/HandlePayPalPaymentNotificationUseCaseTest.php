@@ -15,19 +15,23 @@ use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\DonationRepositoryS
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\FailingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\FakeDonationRepository;
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\SucceedingDonationAuthorizer;
+use WMDE\Fundraising\Frontend\DonationContext\Tests\Integration\DonationEventLoggerAsserter;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\HandlePayPalPaymentNotification\HandlePayPalPaymentNotificationUseCase;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalData;
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
+use PHPUnit\Framework\TestCase;
 
 /**
- * @covers WMDE\Fundraising\Frontend\DonationContext\UseCases\HandlePayPalPaymentNotification\HandlePayPalPaymentNotificationUseCase
+ * @covers \WMDE\Fundraising\Frontend\DonationContext\UseCases\HandlePayPalPaymentNotification\HandlePayPalPaymentNotificationUseCase
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit\Framework\TestCase {
+class HandlePayPalPaymentNotificationUseCaseTest extends TestCase {
+
+	use DonationEventLoggerAsserter;
 
 	public function testWhenRepositoryThrowsException_errorResponseIsReturned(): void {
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
@@ -443,14 +447,6 @@ class HandlePayPalPaymentNotificationUseCaseTest extends \PHPUnit\Framework\Test
 		/** @var PayPalData $paypalData */
 		$paypalData = $payment->getPaymentMethod()->getPaypalData();
 		$this->assertSame( ValidPayPalNotificationRequest::PAYER_ADDRESS_NAME, $paypalData->getAddressName() );
-	}
-
-	private function assertEventLogContainsExpression( DonationEventLoggerSpy $eventLoggerSpy, int $donationId, string $expr ): void {
-		$foundCalls = array_filter( $eventLoggerSpy->getLogCalls(), function( $call ) use ( $donationId, $expr ) {
-			return $call[0] == $donationId && preg_match( $expr, $call[1] );
-		} );
-		$assertMsg = 'Failed to assert that donation event log log contained "' . $expr . '" for donation id '.$donationId;
-		$this->assertCount( 1, $foundCalls, $assertMsg );
 	}
 
 	/**

@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\DonationContext\Tests\Integration\UseCases\CreditCardPaymentNotification;
 
 use Psr\Log\NullLogger;
+use PHPUnit\Framework\TestCase;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\DonationContext\DataAccess\DoctrineDonationRepository;
 use WMDE\Fundraising\Frontend\DonationContext\Infrastructure\DonationConfirmationMailer;
@@ -14,6 +15,7 @@ use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\DonationRepositoryS
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\FailingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\FakeDonationRepository;
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\SucceedingDonationAuthorizer;
+use WMDE\Fundraising\Frontend\DonationContext\Tests\Integration\DonationEventLoggerAsserter;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\CreditCardPaymentNotification\CreditCardNotificationUseCase;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\CreditCardPaymentNotification\CreditCardPaymentHandlerException;
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidCreditCardNotificationRequest;
@@ -22,12 +24,14 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeCreditCardService;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
 
 /**
- * @covers WMDE\Fundraising\Frontend\DonationContext\UseCases\CreditCardPaymentNotification\CreditCardNotificationUseCase
+ * @covers \WMDE\Fundraising\Frontend\DonationContext\UseCases\CreditCardPaymentNotification\CreditCardNotificationUseCase
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class CreditCardNotificationUseCaseTest extends \PHPUnit\Framework\TestCase {
+class CreditCardNotificationUseCaseTest extends TestCase {
+
+	use DonationEventLoggerAsserter;
 
 	/** @var DoctrineDonationRepository|FakeDonationRepository|DonationRepositorySpy */
 	private $repository;
@@ -170,14 +174,6 @@ class CreditCardNotificationUseCaseTest extends \PHPUnit\Framework\TestCase {
 		} catch ( \Exception $e ) {
 			$this->fail();
 		}
-	}
-
-	private function assertEventLogContainsExpression( DonationEventLoggerSpy $eventLoggerSpy, int $donationId, string $expr ): void {
-		$foundCalls = array_filter( $eventLoggerSpy->getLogCalls(), function( $call ) use ( $donationId, $expr ) {
-			return $call[0] == $donationId && preg_match( $expr, $call[1] );
-		} );
-		$assertMsg = 'Failed to assert that donation event log log contained "' . $expr . '" for donation id '.$donationId;
-		$this->assertCount( 1, $foundCalls, $assertMsg );
 	}
 
 	/**
