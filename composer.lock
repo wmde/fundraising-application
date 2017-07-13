@@ -5928,7 +5928,7 @@
             "support": {
                 "source": "https://github.com/wmde/fundraising-frontend-content/tree/test"
             },
-            "time": "2017-07-19T00:10:29+00:00"
+            "time": "2017-07-19 00:10:29"
         },
         {
             "name": "wmde/psr-log-test-doubles",
