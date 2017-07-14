@@ -123,7 +123,7 @@ Static code analysis can be performed via [phpstan](https://github.com/phpstan/p
 while dev-dependencies are present, or via
 
     docker build -t wmde/fundraising-frontend-phpstan docker/phpstan
-    docker run -v $PWD:/app --rm wmde/fundraising-frontend-phpstan analyse -c phpstan.neon --level 1 --no-progress cli/ contexts/ src/
+    docker run -v $PWD:/app --rm wmde/fundraising-frontend-phpstan analyse --level=1 --no-progress cli/ contexts/ src/
 
 in the absence of dev-dependencies (i.e. to simulate the vendor/ code on production).
 These tasks are also performed during the [travis](.travis.yml) runs.

@@ -117,7 +117,8 @@
 			"@test",
 			"@cs",
 			"npm run ci",
-			"@validate-app-config"
+			"@validate-app-config",
+			"@stan"
 		],
 		"phpcs": [
 			"vendor/bin/phpcs"
@@ -126,7 +127,7 @@
 			"vendor/bin/phpmd src/ text phpmd.xml"
 		],
 		"validate-app-config": "./console validate-config app/config/config.dist.json app/config/config.test.json",
-		"stan": "./vendor/bin/phpstan analyse -c phpstan.neon --level 1 cli/ contexts/ src/"
+		"stan": "./vendor/bin/phpstan analyse --level=1 --no-progress cli/ contexts/ src/ tests/"
 	},
 	"config": {
 		"discard-changes": true
