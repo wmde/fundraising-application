@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Integration\MembershipContext\DataAccess;
+namespace WMDE\Fundraising\Frontend\MembershipContext\Tests\Integration\DataAccess;
 
 use Codeception\Specify;
 use Doctrine\ORM\EntityManager;
@@ -14,7 +14,7 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 use WMDE\Fundraising\Store\MembershipApplicationData;
 
 /**
- * @covers WMDE\Fundraising\Frontend\MembershipContext\DataAccess\DoctrineApplicationAuthorizer
+ * @covers \WMDE\Fundraising\Frontend\MembershipContext\DataAccess\DoctrineApplicationAuthorizer
  *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >

@@ -2,13 +2,13 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\MembershipContext\Domain\Model;
+namespace WMDE\Fundraising\Frontend\MembershipContext\Tests\Unit\Domain\Model;
 
 use RuntimeException;
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplication;
 
 /**
- * @covers WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application
+ * @covers \WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application
  *
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >

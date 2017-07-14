@@ -46,8 +46,7 @@ class HandleSubscriptionPaymentNotificationUseCaseTest extends \PHPUnit\Framewor
 			$fakeRepository,
 			new FailingAuthorizer(),
 			$this->getMailer(),
-			new NullLogger(),
-			$this->getEventLogger()
+			new NullLogger()
 		);
 
 		$request = ValidPayPalNotificationRequest::newInstantPayment( 667 );
@@ -63,8 +62,7 @@ class HandleSubscriptionPaymentNotificationUseCaseTest extends \PHPUnit\Framewor
 			$fakeRepository,
 			new FailingAuthorizer(),
 			$this->getMailer(),
-			new NullLogger(),
-			$this->getEventLogger()
+			new NullLogger()
 		);
 
 		$request = ValidPayPalNotificationRequest::newInstantPayment( 1 );
@@ -79,8 +77,7 @@ class HandleSubscriptionPaymentNotificationUseCaseTest extends \PHPUnit\Framewor
 			new FakeApplicationRepository(),
 			new SucceedingAuthorizer(),
 			$this->getMailer(),
-			new NullLogger(),
-			$this->getEventLogger()
+			new NullLogger()
 		);
 		$response = $useCase->handleNotification( $request );
 		$this->assertFalse( $response->notificationWasHandled() );
@@ -98,8 +95,7 @@ class HandleSubscriptionPaymentNotificationUseCaseTest extends \PHPUnit\Framewor
 			$fakeRepository,
 			new SucceedingAuthorizer(),
 			$this->getMailer(),
-			new NullLogger(),
-			$this->getEventLogger()
+			new NullLogger()
 		);
 
 		$response = $useCase->handleNotification( $request );
@@ -135,8 +131,7 @@ class HandleSubscriptionPaymentNotificationUseCaseTest extends \PHPUnit\Framewor
 			$fakeRepository,
 			new SucceedingAuthorizer(),
 			$this->getMailer(),
-			new NullLogger(),
-			$this->getEventLogger()
+			new NullLogger()
 		);
 
 		$response = $useCase->handleNotification( $request );
@@ -169,8 +164,7 @@ class HandleSubscriptionPaymentNotificationUseCaseTest extends \PHPUnit\Framewor
 			$fakeRepository,
 			new SucceedingAuthorizer(),
 			$this->getMailer(),
-			new NullLogger(),
-			$this->getEventLogger()
+			new NullLogger()
 		);
 		$useCase->handleNotification( $request );
 

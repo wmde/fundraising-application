@@ -2,12 +2,12 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\PaymentContext\Domain\Model;
+namespace WMDE\Fundraising\Frontend\PaymentContext\Tests\Unit\Domain\Model;
 
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 
 /**
- * @covers WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban
+ * @covers \WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban
  *
  * @licence GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
