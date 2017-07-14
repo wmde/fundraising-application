@@ -2,14 +2,14 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\Validation;
 
 use WMDE\Fundraising\Entities\Subscription;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Domain\Repositories\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionDuplicateValidator;
 
 /**
- * @covers WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionDuplicateValidator
+ * @covers \WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionDuplicateValidator
  *
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >

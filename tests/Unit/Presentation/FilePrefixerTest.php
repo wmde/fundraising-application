@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace Unit\Presentation;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation;
 
 use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
 

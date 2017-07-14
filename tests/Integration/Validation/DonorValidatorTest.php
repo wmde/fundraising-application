@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Tests\Integration\Validation;
+namespace WMDE\Fundraising\Frontend\Tests\Integration\Validation;
 
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonorAddress;
@@ -15,7 +15,7 @@ use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
 use WMDE\Fundraising\Frontend\Validation\EmailValidator;
 
 /**
- * @covers WMDE\Fundraising\Frontend\DonationContext\Validation\DonorValidator
+ * @covers \WMDE\Fundraising\Frontend\DonationContext\Validation\DonorValidator
  *
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >

@@ -2,14 +2,14 @@
 
 declare( strict_types = 1 );
 
-namespace Unit\Application;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\Cli;
 
 use FileFetcher\FileFetcher;
 use WMDE\Fundraising\Frontend\Cli\ConfigValidation\ConfigValidationException;
 use WMDE\Fundraising\Frontend\Cli\ConfigValidation\SchemaLoader;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Cli\ConfigValidation\SchemaLoader
+ * @covers \WMDE\Fundraising\Frontend\Cli\ConfigValidation\SchemaLoader
  */
 class SchemaLoaderTest extends \PHPUnit\Framework\TestCase {
 

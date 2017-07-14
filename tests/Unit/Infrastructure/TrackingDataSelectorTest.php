@@ -2,12 +2,12 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\DonationContext\Tests\Unit\UseCases\AddDonation;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
 use WMDE\Fundraising\Frontend\Infrastructure\TrackingDataSelector;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Infrastructure\TrackingDataSelector
+ * @covers \WMDE\Fundraising\Frontend\Infrastructure\TrackingDataSelector
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >

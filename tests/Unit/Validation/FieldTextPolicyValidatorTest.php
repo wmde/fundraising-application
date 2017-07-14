@@ -2,14 +2,14 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Tests\Unit;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\Validation;
 
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 use WMDE\Fundraising\Frontend\Validation\FieldTextPolicyValidator;
 use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Validation\FieldTextPolicyValidator
+ * @covers \WMDE\Fundraising\Frontend\Validation\FieldTextPolicyValidator
  *
  * @licence GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >

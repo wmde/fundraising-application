@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace Unit\Infrastructure;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
 use FileFetcher\ErrorLoggingFileFetcher;
 use FileFetcher\InMemoryFileFetcher;

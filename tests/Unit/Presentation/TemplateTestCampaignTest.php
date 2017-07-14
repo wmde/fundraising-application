@@ -2,12 +2,12 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Tests\Unit\Presentation;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation;
 
 use WMDE\Fundraising\Frontend\Presentation\TemplateTestCampaign;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Presentation\TemplateTestCampaign
+ * @covers \WMDE\Fundraising\Frontend\Presentation\TemplateTestCampaign
  *
  * @licence GNU GPL v2+
  * @author Leszek Manicki <leszek.manicki@wikimedia.de>
