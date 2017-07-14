@@ -19,9 +19,11 @@ class PayPal {
 	const DEFAULT_LOCALE = 'de_DE';
 
 	private $config;
+	private $itemName;
 
-	public function __construct( PayPalConfig $config ) {
+	public function __construct( PayPalConfig $config, string $itemName ) {
 		$this->config = $config;
+		$this->itemName = $itemName;
 	}
 
 	public function generateUrl( int $itemId, Euro $amount, int $interval,
@@ -41,7 +43,7 @@ class PayPal {
 			'business' => $this->config->getPayPalAccountAddress(),
 			'currency_code' => 'EUR',
 			'lc' => self::DEFAULT_LOCALE,
-			'item_name' => $this->config->getItemName(),
+			'item_name' => $this->itemName,
 			'item_number' => $itemId,
 			'notify_url' => $this->config->getNotifyUrl(),
 			'cancel_return' => $this->config->getCancelUrl(),

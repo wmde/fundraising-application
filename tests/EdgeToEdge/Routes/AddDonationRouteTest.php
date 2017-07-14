@@ -324,6 +324,21 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'sandbox.paypal.com', $response->getContent() );
 	}
 
+	public function testWhenRedirectingToPayPal_translatedItemNameIsPassed(): void {
+		$client = $this->createClient();
+		$client->followRedirects( false );
+
+		$client->request(
+			'POST',
+			'/donation/add',
+			$this->newValidPayPalInput()
+		);
+
+		$response = $client->getResponse();
+		$this->assertSame( 302, $response->getStatusCode() );
+		$this->assertContains( 'item_name=item_name_donation', $response->getContent() );
+	}
+
 	private function newValidPayPalInput(): array {
 		return [
 			'betrag' => '12,34',
