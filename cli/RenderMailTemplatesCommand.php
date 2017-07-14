@@ -14,6 +14,7 @@ use Twig_Environment;
 use Twig_Error;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
+use WMDE\Fundraising\Frontend\Tests\Data\MailTemplates;
 
 /**
  * A command to check and dump mail templates
@@ -57,7 +58,8 @@ class RenderMailTemplatesCommand extends Command {
 
 		$ffFactory->setTwigEnvironment( $app['twig'] );
 
-		$testData = require __DIR__ . '/../tests/Data/mail_templates.php';
+		$mailTemplates = new MailTemplates( $ffFactory );
+		$testData = $mailTemplates->get();
 
 		$this->validateTemplateFixtures(
 			$testData,
