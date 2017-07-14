@@ -21,6 +21,7 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\SofortPayment;
 
 /**
  * @licence GNU GPL v2+
@@ -74,6 +75,13 @@ class ValidDonation {
 		return ( new self() )->createDonation(
 			new BankTransferPayment( self::PAYMENT_BANK_TRANSFER_CODE ),
 			Donation::STATUS_NEW
+		);
+	}
+
+	public static function newSofortDonation(): Donation {
+		return ( new self() )->createDonation(
+			new SofortPayment( self::PAYMENT_BANK_TRANSFER_CODE ),
+			Donation::STATUS_PROMISE
 		);
 	}
 

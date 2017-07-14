@@ -327,22 +327,18 @@ class DoctrineDonationRepository implements DonationRepository {
 	}
 
 	private function getPaymentMethodFromEntity( DoctrineDonation $dd ): PaymentMethod {
-		if ( $dd->getPaymentType() === PaymentType::BANK_TRANSFER ) {
-			return new BankTransferPayment( $dd->getBankTransferCode() );
+		switch ( $dd->getPaymentType() ) {
+			case PaymentType::BANK_TRANSFER:
+				return new BankTransferPayment( $dd->getBankTransferCode() );
+			case PaymentType::DIRECT_DEBIT:
+				return new DirectDebitPayment( $this->getBankDataFromEntity( $dd ) );
+			case PaymentType::PAYPAL:
+				return new PayPalPayment( $this->getPayPalDataFromEntity( $dd ) );
+			case PaymentType::CREDIT_CARD:
+				return new CreditCardPayment( $this->getCreditCardDataFromEntity( $dd ) );
+			case PaymentType::SOFORT:
+				return new SofortPayment( $dd->getBankTransferCode() );
 		}
-
-		if ( $dd->getPaymentType() === PaymentType::DIRECT_DEBIT ) {
-			return new DirectDebitPayment( $this->getBankDataFromEntity( $dd ) );
-		}
-
-		if ( $dd->getPaymentType() === PaymentType::PAYPAL ) {
-			return new PayPalPayment( $this->getPayPalDataFromEntity( $dd ) );
-		}
-
-		if ( $dd->getPaymentType() === PaymentType::CREDIT_CARD ) {
-			return new CreditCardPayment( $this->getCreditCardDataFromEntity( $dd ) );
-		}
-
 		return new PaymentWithoutAssociatedData( $dd->getPaymentType() );
 	}
 

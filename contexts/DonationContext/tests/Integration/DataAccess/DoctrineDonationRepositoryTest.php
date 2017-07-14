@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\DonationContext\Tests\Integration\DataAccess;
 
 use Doctrine\ORM\EntityManager;
+use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
 use WMDE\Fundraising\Frontend\DonationContext\DataAccess\DoctrineDonationRepository;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
@@ -13,19 +14,21 @@ use WMDE\Fundraising\Frontend\DonationContext\Domain\Repositories\StoreDonationE
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\IncompleteDoctrineDonation;
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidDoctrineDonation;
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidDonation;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankTransferPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\CreditCardPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\SofortPayment;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
- * @covers WMDE\Fundraising\Frontend\DonationContext\DataAccess\DoctrineDonationRepository
+ * @covers \WMDE\Fundraising\Frontend\DonationContext\DataAccess\DoctrineDonationRepository
  *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class DoctrineDonationRepositoryTest extends \PHPUnit\Framework\TestCase {
+class DoctrineDonationRepositoryTest extends TestCase {
 
 	private const ID_OF_DONATION_NOT_IN_DB = 35505;
 
@@ -94,6 +97,36 @@ class DoctrineDonationRepositoryTest extends \PHPUnit\Framework\TestCase {
 			$donation,
 			$repository->getDonationById( $donation->getId() )
 		);
+	}
+
+	public function testNewBankTransferPayment_persistingSavesBankTransferCode(): void {
+		$donation = ValidDonation::newBankTransferDonation();
+
+		$repository = $this->newRepository();
+
+		$repository->storeDonation( $donation );
+
+		$retrievedDonation = $repository->getDonationById( $donation->getId() );
+		/**
+		 * @var $payment BankTransferPayment
+		 */
+		$payment = $retrievedDonation->getPaymentMethod();
+		$this->assertSame( ValidDonation::PAYMENT_BANK_TRANSFER_CODE, $payment->getBankTransferCode() );
+	}
+
+	public function testNewSofortPayment_persistingSavesBankTransferCode(): void {
+		$donation = ValidDonation::newSofortDonation();
+
+		$repository = $this->newRepository();
+
+		$repository->storeDonation( $donation );
+
+		$retrievedDonation = $repository->getDonationById( $donation->getId() );
+		/**
+		 * @var $payment SofortPayment
+		 */
+		$payment = $retrievedDonation->getPaymentMethod();
+		$this->assertSame( ValidDonation::PAYMENT_BANK_TRANSFER_CODE, $payment->getBankTransferCode() );
 	}
 
 	public function testWhenDonationAlreadyExists_persistingCausesUpdate(): void {
