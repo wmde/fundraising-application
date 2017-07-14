@@ -26,6 +26,7 @@ use Twig_Environment;
 use Twig_Extensions_Extension_Intl;
 use Twig_SimpleFunction;
 use WMDE\Fundraising\Frontend\DonationContext\DonationAcceptedEventHandler;
+use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\InitialDonationStatusPicker;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\MailTemplateFilenameTraversable;
 use WMDE\Fundraising\Frontend\Infrastructure\WordListFileReader;
@@ -862,7 +863,8 @@ class FunFunFactory {
 			$this->newReferrerGeneralizer(),
 			$this->newDonationConfirmationMailer(),
 			$this->newBankTransferCodeGenerator(),
-			$this->newDonationTokenFetcher()
+			$this->newDonationTokenFetcher(),
+			new InitialDonationStatusPicker()
 		);
 	}
 

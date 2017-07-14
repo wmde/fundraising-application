@@ -37,19 +37,20 @@ class AddDonationUseCase {
 	private $mailer;
 	private $transferCodeGenerator;
 	private $tokenFetcher;
+	private $initialDonationStatusPicker;
 
 	public function __construct( DonationRepository $donationRepository, AddDonationValidator $donationValidator,
 								 AddDonationPolicyValidator $policyValidator, ReferrerGeneralizer $referrerGeneralizer,
 								 DonationConfirmationMailer $mailer, TransferCodeGenerator $transferCodeGenerator,
-								 DonationTokenFetcher $tokenFetcher ) {
+								 DonationTokenFetcher $tokenFetcher, InitialDonationStatusPicker $initialDonationStatusPicker ) {
 		$this->donationRepository = $donationRepository;
 		$this->donationValidator = $donationValidator;
 		$this->policyValidator = $policyValidator;
 		$this->referrerGeneralizer = $referrerGeneralizer;
 		$this->mailer = $mailer;
 		$this->transferCodeGenerator = $transferCodeGenerator;
-
 		$this->tokenFetcher = $tokenFetcher;
+		$this->initialDonationStatusPicker = $initialDonationStatusPicker;
 	}
 
 	public function addDonation( AddDonationRequest $donationRequest ): AddDonationResponse {
@@ -88,7 +89,7 @@ class AddDonationUseCase {
 	private function newDonationFromRequest( AddDonationRequest $donationRequest ): Donation {
 		return new Donation(
 			null,
-			$this->getInitialDonationStatus( $donationRequest->getPaymentType() ),
+			( $this->initialDonationStatusPicker )( $donationRequest->getPaymentType() ),
 			$this->getPersonalInfoFromRequest( $donationRequest ),
 			$this->getPaymentFromRequest( $donationRequest ),
 			$donationRequest->getOptIn() === '1',
@@ -128,18 +129,6 @@ class AddDonationUseCase {
 		$name->setLastName( $request->getDonorLastName() );
 
 		return $name->freeze()->assertNoNullFields();
-	}
-
-	private function getInitialDonationStatus( string $paymentType ): string {
-		if ( $paymentType === PaymentType::DIRECT_DEBIT ) {
-			return Donation::STATUS_NEW;
-		} elseif ( $paymentType === PaymentType::BANK_TRANSFER ) {
-			return Donation::STATUS_PROMISE;
-		} elseif ( $paymentType === PaymentType::SOFORT ) {
-			return Donation::STATUS_PROMISE;
-		}
-
-		return Donation::STATUS_EXTERNAL_INCOMPLETE;
 	}
 
 	private function getPaymentFromRequest( AddDonationRequest $donationRequest ): DonationPayment {
