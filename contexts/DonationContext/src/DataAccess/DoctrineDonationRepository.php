@@ -106,7 +106,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		$doctrineDonation->setPaymentIntervalInMonths( $donation->getPaymentIntervalInMonths() );
 
 		$doctrineDonation->setPaymentType( $donation->getPaymentType() );
-		$doctrineDonation->setBankTransferCode( $this->getBankTransferCode( $donation->getPaymentMethod() ) );
+		$doctrineDonation->setBankTransferCode( self::getBankTransferCode( $donation->getPaymentMethod() ) );
 	}
 
 	private function updateDonorInformation( DoctrineDonation $doctrineDonation, Donor $donor = null ): void {
@@ -133,7 +133,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		}
 	}
 
-	private function getBankTransferCode( PaymentMethod $paymentMethod ): string {
+	public static function getBankTransferCode( PaymentMethod $paymentMethod ): string {
 		if ( $paymentMethod instanceof BankTransferPayment ) {
 			return $paymentMethod->getBankTransferCode();
 		} elseif ( $paymentMethod instanceof SofortPayment ) {
