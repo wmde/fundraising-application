@@ -27,7 +27,7 @@ install:
   - npm install
 
 before_script:
-  - bash build/travis/installKontoCheck.sh
+  - bash build/installKontoCheck.sh
   - if [ "$DB" == "mysql" ]; then bash build/travis/configureForMysql.sh; fi
   - if [ "$MCP_ACCESS_KEY" != "" ] && [ "$MCP_PROJECT_ID" != "" ]; then bash build/travis/createLocalTestConfig.sh > app/config/config.test.local.json; fi
 
