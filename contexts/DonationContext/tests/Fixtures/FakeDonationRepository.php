@@ -17,6 +17,7 @@ class FakeDonationRepository implements DonationRepository {
 
 	private $calls = 0;
 	private $donations = [];
+	private $donationClones = [];
 	private $throwOnRead = false;
 	private $throwOnWrite = false;
 
@@ -42,7 +43,10 @@ class FakeDonationRepository implements DonationRepository {
 		if ( $donation->getId() === null ) {
 			$donation->assignId( ++$this->calls );
 		}
-		$this->donations[$donation->getId()] = unserialize( serialize( $donation ) );
+
+		$this->donations[$donation->getId()] = $donation;
+		// guard against memory-modification after store
+		$this->donationClones[$donation->getId()] = clone $donation;
 	}
 
 	public function getDonationById( int $id ): ?Donation {
@@ -51,7 +55,12 @@ class FakeDonationRepository implements DonationRepository {
 		}
 
 		if ( array_key_exists( $id, $this->donations ) ) {
-			return unserialize( serialize( $this->donations[$id] ) );
+			if ( serialize( $this->donationClones[$id] ) !== serialize( $this->donations[$id] ) ) {
+				// return object value at the time of storing
+				return $this->donationClones[$id];
+			}
+			// return original object (===)
+			return $this->donations[$id];
 		}
 
 		return null;

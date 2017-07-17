@@ -102,8 +102,8 @@ class CreditCardNotificationUseCaseTest extends TestCase {
 		$this->repository->storeDonation( $donation );
 
 		$this->mailer->expects( $this->once() )
-			->method( 'sendConfirmationMailFor' );
-			// TODO: assert that the correct values are passed to the mailer
+			->method( 'sendConfirmationMailFor' )
+			->with( $donation );
 
 		$useCase = $this->newCreditCardNotificationUseCase();
 

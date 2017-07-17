@@ -134,14 +134,7 @@ class SofortPaymentNotificationUseCaseTest extends TestCase {
 		$mailer
 			->expects( $this->once() )
 			->method( 'sendConfirmationMailFor' )
-			->with( $this->callback( function ( Donation $value ) use ( $donation ) {
-				$this->assertSame( $donation->getId(), $value->getId() );
-				$this->assertEquals( $donation->getDonor(), $value->getDonor() );
-				$this->assertEquals( $donation->getPayment()->getAmount(), $value->getPayment()->getAmount() );
-				$this->assertSame( $donation->getPayment()->getIntervalInMonths(), $value->getPayment()->getIntervalInMonths() );
-				$this->assertSame( $donation->getPaymentType(), $value->getPaymentType() );
-				return true;
-			} ) );
+			->with( $donation );
 
 		$useCase = new SofortPaymentNotificationUseCase(
 			$fakeRepository,

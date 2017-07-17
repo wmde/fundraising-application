@@ -123,8 +123,8 @@ class HandlePayPalPaymentNotificationUseCaseTest extends TestCase {
 
 		$mailer = $this->getMailer();
 		$mailer->expects( $this->once() )
-			->method( 'sendConfirmationMailFor' );
-			// TODO: assert that the correct values are passed to the mailer
+			->method( 'sendConfirmationMailFor' )
+			->with( $donation );
 
 		$useCase = new HandlePayPalPaymentNotificationUseCase(
 			$fakeRepository,
