@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Data;
+namespace WMDE\Fundraising\Frontend\App;
 
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 

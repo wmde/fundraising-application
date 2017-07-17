@@ -14,7 +14,7 @@ use Twig_Environment;
 use Twig_Error;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
-use WMDE\Fundraising\Frontend\Tests\Data\MailTemplates;
+use WMDE\Fundraising\Frontend\App\MailTemplates;
 
 /**
  * A command to check and dump mail templates

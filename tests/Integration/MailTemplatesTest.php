@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration;
 use WMDE\Fundraising\ContentProvider\ContentProvider;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
-use WMDE\Fundraising\Frontend\Tests\Data\MailTemplates;
+use WMDE\Fundraising\Frontend\App\MailTemplates;
 
 /**
  * @licence GNU GPL v2+
