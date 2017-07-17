@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\DonationContext\Tests\Integration\UseCases\SofortPaymentNotification;
 
 use PHPUnit\Framework\TestCase;
-use WMDE\Fundraising\Entities\Donation;
+use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\DonationContext\DataAccess\DoctrineDonationRepository;
 use WMDE\Fundraising\Frontend\DonationContext\Infrastructure\DonationConfirmationMailer;
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\DonationEventLoggerSpy;
@@ -131,9 +131,17 @@ class SofortPaymentNotificationUseCaseTest extends TestCase {
 		$fakeRepository->storeDonation( $donation );
 
 		$mailer = $this->getMailer();
-		$mailer->expects( $this->once() )
-			->method( 'sendConfirmationMailFor' );
-		// TODO: assert that the correct values are passed to the mailer
+		$mailer
+			->expects( $this->once() )
+			->method( 'sendConfirmationMailFor' )
+			->with( $this->callback( function ( Donation $value ) use ( $donation ) {
+				$this->assertSame( $donation->getId(), $value->getId() );
+				$this->assertEquals( $donation->getDonor(), $value->getDonor() );
+				$this->assertEquals( $donation->getPayment()->getAmount(), $value->getPayment()->getAmount() );
+				$this->assertSame( $donation->getPayment()->getIntervalInMonths(), $value->getPayment()->getIntervalInMonths() );
+				$this->assertSame( $donation->getPaymentType(), $value->getPaymentType() );
+				return true;
+			} ) );
 
 		$useCase = new SofortPaymentNotificationUseCase(
 			$fakeRepository,
