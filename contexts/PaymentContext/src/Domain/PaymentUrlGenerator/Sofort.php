@@ -36,11 +36,11 @@ class Sofort {
 	 * @param int $internalItemId Internal (WMDE-use only) Id of the item to pay
 	 * @param string $externalItemId External (3rd parties may use to reference the item with this) Id of the item to pay
 	 * @param Euro $amount The amount of money to pay
-	 * @param string $accessToken A token to use to return to the payment process after completing the 3rd party process
 	 * @param string $updateToken A token to use to invoke our API to change payment details at a later point in time
+	 * @param string $accessToken A token to use to return to the payment process after completing the 3rd party process
 	 * @return string
 	 */
-	public function generateUrl( int $internalItemId, string $externalItemId, Euro $amount, string $accessToken, string $updateToken ): string {
+	public function generateUrl( int $internalItemId, string $externalItemId, Euro $amount, string $updateToken, string $accessToken ): string {
 		$request = new Request();
 		$request->setAmount( $amount );
 		$request->setCurrencyCode( self::CURRENCY );

@@ -50,7 +50,7 @@ class SofortTest extends TestCase {
 		$urlGenerator = new SofortUrlGenerator( $config, $client );
 		$this->assertSame(
 			'https://awsomepaymentprovider.tld/784trhhrf4',
-			$urlGenerator->generateUrl( 44, 'wx529836', $amount, 'letmein', 'makesandwich' )
+			$urlGenerator->generateUrl( 44, 'wx529836', $amount, 'makesandwich', 'letmein' )
 		);
 	}
 
@@ -75,6 +75,6 @@ class SofortTest extends TestCase {
 		$this->expectException( RuntimeException::class );
 		$this->expectExceptionMessage( 'Could not generate Sofort URL: boo boo' );
 
-		$urlGenerator->generateUrl( 23, 'dq529837', Euro::newFromCents( 300 ), 'letmein', 'makesandwich' );
+		$urlGenerator->generateUrl( 23, 'dq529837', Euro::newFromCents( 300 ), 'makesandwich', 'letmein' );
 	}
 }
