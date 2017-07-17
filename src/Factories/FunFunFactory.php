@@ -1168,8 +1168,7 @@ class FunFunFactory {
 		return new SofortPaymentNotificationUseCase(
 			$this->getDonationRepository(),
 			$this->newDonationAuthorizer( $updateToken ),
-			$this->newDonationConfirmationMailer(),
-			$this->newDonationEventLogger()
+			$this->newDonationConfirmationMailer()
 		);
 	}
 

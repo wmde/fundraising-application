@@ -28,12 +28,12 @@ class SofortNotificationHandler {
 		$this->logResponseIfNeeded( $response, $request );
 
 		if ( !$response->notificationWasHandled() ) {
-			return new Response( '', Response::HTTP_BAD_REQUEST );
+			return new Response( 'Bad request', Response::HTTP_BAD_REQUEST );
 		} elseif ( $response->hasErrors() ) {
-			return new Response( '', Response::HTTP_INTERNAL_SERVER_ERROR );
+			return new Response( 'Error', Response::HTTP_INTERNAL_SERVER_ERROR );
 		}
 
-		return new Response( '', Response::HTTP_OK );
+		return new Response( 'Ok', Response::HTTP_OK );
 	}
 
 	private function newUseCaseRequestFromRequest( Request $request ): SofortNotificationRequest {
@@ -54,10 +54,14 @@ class SofortNotificationHandler {
 		}
 
 		$context = $response->getContext();
-		$message = $context['message'] ?? 'Sofort request not handled';
+
 		$logLevel = $response->hasErrors() ? LogLevel::ERROR : LogLevel::INFO;
+
+		$message = $context['message'] ?? 'Sofort request not handled';
 		unset( $context['message'] );
-		$context['post_vars'] = array_merge( $request->query->all(), $request->request->all() );
+
+		$context['post_vars'] = $request->request->all();
+		$context['query_vars'] = $request->query->all();
 		$this->ffFactory->getSofortLogger()->log( $logLevel, $message, $context );
 	}
 

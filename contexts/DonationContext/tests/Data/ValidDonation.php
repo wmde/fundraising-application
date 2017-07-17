@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\DonationContext\Tests\Data;
 
+use DateTime;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonationComment;
@@ -71,6 +72,8 @@ class ValidDonation {
 	public const COMMENT_IS_PUBLIC = true;
 	public const COMMENT_AUTHOR_DISPLAY_NAME = 'Such a tomato';
 
+	public const SOFORT_DONATION_CONFIRMED_AT = '-1 hour';
+
 	public static function newBankTransferDonation(): Donation {
 		return ( new self() )->createDonation(
 			new BankTransferPayment( self::PAYMENT_BANK_TRANSFER_CODE ),
@@ -112,6 +115,15 @@ class ValidDonation {
 	public static function newIncompleteSofortDonation(): Donation {
 		return ( new self() )->createDonation(
 			new SofortPayment( self::PAYMENT_BANK_TRANSFER_CODE ),
+			Donation::STATUS_PROMISE
+		);
+	}
+
+	public static function newCompletedSofortDonation(): Donation {
+		$payment = new SofortPayment( self::PAYMENT_BANK_TRANSFER_CODE );
+		$payment->setConfirmedAt( new DateTime( self::SOFORT_DONATION_CONFIRMED_AT ) );
+		return ( new self() )->createDonation(
+			$payment,
 			Donation::STATUS_PROMISE
 		);
 	}

@@ -4,13 +4,13 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\DonationContext\UseCases\SofortPaymentNotification;
 
+use RuntimeException;
 use WMDE\Fundraising\Frontend\DonationContext\Authorization\DonationAuthorizer;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Repositories\GetDonationException;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Repositories\StoreDonationException;
 use WMDE\Fundraising\Frontend\DonationContext\Infrastructure\DonationConfirmationMailer;
-use WMDE\Fundraising\Frontend\DonationContext\Infrastructure\DonationEventLogger;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\SofortPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\ResponseModel\SofortNotificationResponse;
 use WMDE\Fundraising\Frontend\PaymentContext\RequestModel\SofortNotificationRequest;
@@ -20,14 +20,12 @@ class SofortPaymentNotificationUseCase {
 	private $repository;
 	private $authorizationService;
 	private $mailer;
-	private $donationEventLogger;
 
 	public function __construct( DonationRepository $repository, DonationAuthorizer $authorizationService,
-								 DonationConfirmationMailer $mailer, DonationEventLogger $donationEventLogger ) {
+								 DonationConfirmationMailer $mailer ) {
 		$this->repository = $repository;
 		$this->authorizationService = $authorizationService;
 		$this->mailer = $mailer;
-		$this->donationEventLogger = $donationEventLogger;
 	}
 
 	public function handleNotification( SofortNotificationRequest $request ): SofortNotificationResponse {
@@ -39,7 +37,7 @@ class SofortPaymentNotificationUseCase {
 		}
 
 		if ( $donation === null ) {
-			return $this->createErrorResponse( new \Exception( 'Donation not found' ) );
+			return $this->createErrorResponse( new RuntimeException( 'Donation not found' ) );
 		}
 
 		return $this->handleRequestForDonation( $request, $donation );
@@ -51,14 +49,14 @@ class SofortPaymentNotificationUseCase {
 		if ( !( $paymentMethod instanceof SofortPayment ) ) {
 			return $this->createUnhandledResponse( 'Trying to handle notification for non-sofort donation' );
 		}
-		if ( !$this->authorizationService->systemCanModifyDonation( $request->getDonationId() ) ) {
+		if ( !$this->authorizationService->systemCanModifyDonation( $donation->getId() ) ) {
 			return $this->createUnhandledResponse( 'Wrong access code for donation' );
+		}
+		if ( $paymentMethod->isConfirmedPayment() ) {
+			return $this->createUnhandledResponse( 'Duplicate notification' );
 		}
 
 		$paymentMethod->setConfirmedAt( $request->getTime() );
-
-		// todo ?
-		//$donation->confirmBooked();
 
 		try {
 			$this->repository->storeDonation( $donation );
@@ -68,7 +66,6 @@ class SofortPaymentNotificationUseCase {
 		}
 
 		$this->sendConfirmationEmailFor( $donation );
-		$this->donationEventLogger->log( $donation->getId(), 'sofort_handler: booked' );
 
 		return SofortNotificationResponse::newSuccessResponse();
 	}
@@ -83,13 +80,13 @@ class SofortPaymentNotificationUseCase {
 		if ( $donation->getDonor() !== null ) {
 			try {
 				$this->mailer->sendConfirmationMailFor( $donation );
-			} catch ( \RuntimeException $ex ) {
+			} catch ( RuntimeException $ex ) {
 				// no need to re-throw or return false, this is not a fatal error, only a minor inconvenience
 			}
 		}
 	}
 
-	private function createErrorResponse( \Exception $ex ): SofortNotificationResponse {
+	private function createErrorResponse( RuntimeException $ex ): SofortNotificationResponse {
 		return SofortNotificationResponse::newFailureResponse( [
 			'message' => $ex->getMessage(),
 			'stackTrace' => $ex->getTraceAsString()

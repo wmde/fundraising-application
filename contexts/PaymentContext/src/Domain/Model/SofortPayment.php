@@ -36,4 +36,8 @@ class SofortPayment implements PaymentMethod {
 	public function setConfirmedAt( ?DateTime $confirmedAt ): void {
 		$this->confirmedAt = $confirmedAt;
 	}
+
+	public function isConfirmedPayment(): bool {
+		return !is_null( $this->getConfirmedAt() );
+	}
 }

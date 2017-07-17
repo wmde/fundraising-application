@@ -8,13 +8,11 @@ use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\DonationContext\DataAccess\DoctrineDonationRepository;
 use WMDE\Fundraising\Frontend\DonationContext\Infrastructure\DonationConfirmationMailer;
-use WMDE\Fundraising\Frontend\DonationContext\Infrastructure\DonationEventLogger;
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\DonationEventLoggerSpy;
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\DonationRepositorySpy;
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\FailingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\FakeDonationRepository;
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\SucceedingDonationAuthorizer;
-use WMDE\Fundraising\Frontend\DonationContext\Tests\Integration\DonationEventLoggerAsserter;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\SofortPaymentNotification\SofortPaymentNotificationUseCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidDonation;
@@ -25,14 +23,11 @@ use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidSofortNotification
  */
 class SofortPaymentNotificationUseCaseTest extends TestCase {
 
-	use DonationEventLoggerAsserter;
-
 	public function testWhenRepositoryThrowsException_errorResponseIsReturned(): void {
 		$useCase = new SofortPaymentNotificationUseCase(
 			new DoctrineDonationRepository( ThrowingEntityManager::newInstance( $this ) ),
 			new FailingDonationAuthorizer(),
-			$this->getMailer(),
-			$this->getEventLogger()
+			$this->getMailer()
 		);
 
 		$request = ValidSofortNotificationRequest::newInstantPayment();
@@ -46,8 +41,7 @@ class SofortPaymentNotificationUseCaseTest extends TestCase {
 		$useCase = new SofortPaymentNotificationUseCase(
 			new FakeDonationRepository(),
 			new FailingDonationAuthorizer(),
-			$this->getMailer(),
-			$this->getEventLogger()
+			$this->getMailer()
 		);
 
 		$request = ValidSofortNotificationRequest::newInstantPayment( 4711 );
@@ -62,8 +56,7 @@ class SofortPaymentNotificationUseCaseTest extends TestCase {
 		$useCase = new SofortPaymentNotificationUseCase(
 			$fakeRepository,
 			new FailingDonationAuthorizer(),
-			$this->getMailer(),
-			$this->getEventLogger()
+			$this->getMailer()
 		);
 
 		$request = ValidSofortNotificationRequest::newInstantPayment();
@@ -78,8 +71,7 @@ class SofortPaymentNotificationUseCaseTest extends TestCase {
 		$useCase = new SofortPaymentNotificationUseCase(
 			$fakeRepository,
 			new SucceedingDonationAuthorizer(),
-			$this->getMailer(),
-			$this->getEventLogger()
+			$this->getMailer()
 		);
 
 		$request = ValidSofortNotificationRequest::newInstantPayment();
@@ -93,8 +85,7 @@ class SofortPaymentNotificationUseCaseTest extends TestCase {
 		$useCase = new SofortPaymentNotificationUseCase(
 			$repositorySpy,
 			new SucceedingDonationAuthorizer(),
-			$this->getMailer(),
-			$this->getEventLogger()
+			$this->getMailer()
 		);
 
 		$request = ValidSofortNotificationRequest::newInstantPayment();
@@ -110,34 +101,13 @@ class SofortPaymentNotificationUseCaseTest extends TestCase {
 		$useCase = new SofortPaymentNotificationUseCase(
 			$repository,
 			new SucceedingDonationAuthorizer(),
-			$this->getMailer(),
-			$this->getEventLogger()
+			$this->getMailer()
 		);
 
 		$request = ValidSofortNotificationRequest::newInstantPayment();
 
 		$this->assertTrue( $useCase->handleNotification( $request )->notificationWasHandled() );
 		$this->assertSame( Donation::STATUS_PROMISE, $repository->getDonationById( $donation->getId() )->getStatus() );
-	}
-
-
-	public function testWhenAuthorizationSucceeds_bookingEventIsLogged(): void {
-		$donation = ValidDonation::newIncompleteSofortDonation();
-		$repositorySpy = new DonationRepositorySpy( $donation );
-
-		$eventLogger = new DonationEventLoggerSpy();
-
-		$useCase = new SofortPaymentNotificationUseCase(
-			$repositorySpy,
-			new SucceedingDonationAuthorizer(),
-			$this->getMailer(),
-			$eventLogger
-		);
-
-		$request = ValidSofortNotificationRequest::newInstantPayment();
-
-		$this->assertTrue( $useCase->handleNotification( $request )->notificationWasHandled() );
-		$this->assertEventLogContainsExpression( $eventLogger, $donation->getId(), '/booked/' );
 	}
 
 	public function testWhenPaymentTypeIsNonSofort_unhandledResponseIsReturned(): void {
@@ -147,8 +117,7 @@ class SofortPaymentNotificationUseCaseTest extends TestCase {
 		$useCase = new SofortPaymentNotificationUseCase(
 			$fakeRepository,
 			new SucceedingDonationAuthorizer(),
-			$this->getMailer(),
-			$this->getEventLogger()
+			$this->getMailer()
 		);
 
 		$request = ValidSofortNotificationRequest::newInstantPayment();
@@ -157,7 +126,24 @@ class SofortPaymentNotificationUseCaseTest extends TestCase {
 	}
 
 	public function testWhenAuthorizationSucceeds_confirmationMailIsSent(): void {
-		$this->markTestIncomplete( 'Do we send mail on notification or when creating the donation? Given notification means little.' );
+		$donation = ValidDonation::newIncompleteSofortDonation();
+		$fakeRepository = new FakeDonationRepository();
+		$fakeRepository->storeDonation( $donation );
+
+		$mailer = $this->getMailer();
+		$mailer->expects( $this->once() )
+			->method( 'sendConfirmationMailFor' );
+		// TODO: assert that the correct values are passed to the mailer
+
+		$useCase = new SofortPaymentNotificationUseCase(
+			$fakeRepository,
+			new SucceedingDonationAuthorizer(),
+			$mailer
+		);
+
+		$request = ValidSofortNotificationRequest::newInstantPayment( 1 );
+		$this->assertTrue( $useCase->handleNotification( $request )->notificationWasHandled() );
+
 	}
 
 	public function testWhenSendingConfirmationMailFails_handlerReturnsTrue(): void {
@@ -172,8 +158,7 @@ class SofortPaymentNotificationUseCaseTest extends TestCase {
 		$useCase = new SofortPaymentNotificationUseCase(
 			$fakeRepository,
 			new SucceedingDonationAuthorizer(),
-			$mailer,
-			$this->getEventLogger()
+			$mailer
 		);
 
 		$request = ValidSofortNotificationRequest::newInstantPayment();
@@ -181,8 +166,26 @@ class SofortPaymentNotificationUseCaseTest extends TestCase {
 		$this->assertTrue( $useCase->handleNotification( $request )->notificationWasHandled() );
 	}
 
-	public function testGivenExistingTransactionIdForBookedDonation_handlerReturnsFalse(): void {
-		$this->markTestIncomplete( 'What do we do if donation payment has "createdAt" information already?' );
+	public function testGivenExistingTransactionIdForBookedDonation_errorResponseIsReturned(): void {
+
+		$fakeRepository = new FakeDonationRepository();
+		$fakeRepository->storeDonation( ValidDonation::newCompletedSofortDonation() );
+
+		$eventLogger = new DonationEventLoggerSpy();
+
+		$useCase = new SofortPaymentNotificationUseCase(
+			$fakeRepository,
+			new SucceedingDonationAuthorizer(),
+			$this->getMailer(),
+			$eventLogger
+		);
+
+		$request = ValidSofortNotificationRequest::newInstantPayment();
+
+		$response = $useCase->handleNotification( $request );
+		$this->assertFalse( $response->notificationWasHandled() );
+		$this->assertFalse( $response->hasErrors() );
+		$this->assertSame( 'Duplicate notification', $response->getContext()['message'] );
 	}
 
 	/**
@@ -190,12 +193,5 @@ class SofortPaymentNotificationUseCaseTest extends TestCase {
 	 */
 	private function getMailer(): DonationConfirmationMailer {
 		return $this->getMockBuilder( DonationConfirmationMailer::class )->disableOriginalConstructor()->getMock();
-	}
-
-	/**
-	 * @return DonationEventLogger|\PHPUnit_Framework_MockObject_MockObject
-	 */
-	private function getEventLogger(): DonationEventLogger {
-		return $this->createMock( DonationEventLogger::class );
 	}
 }
