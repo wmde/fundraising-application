@@ -92,6 +92,13 @@ class MailTemplates {
 							'interval' => 0,
 						]
 					],
+					'sofort_unmoderated_non_recurring' => [
+						'donation' => [
+							'paymentType' => 'SUB',
+							'interval' => 0,
+							'status' => 'Z'
+						]
+					],
 					// PPL and MCP follow the same code path for recurring, no need to test each separately
 					'micropayment_unmoderated_recurring' => [
 						'donation' => [
