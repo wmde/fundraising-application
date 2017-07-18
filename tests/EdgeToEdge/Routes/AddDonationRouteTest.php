@@ -347,27 +347,32 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'thatother.paymentprovider.com', $response->getContent() );
 	}
 
-	public function testValidSofortInput_redirectsTo3rdPartyPage(): void {
+	public function testValidSofortInput_savesDonationAndRedirectsTo3rdPartyPage(): void {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$response = new SofortResponse();
+			$response->setPaymentUrl( 'https://bankingpin.please' );
 
-		$response = new SofortResponse();
-		$response->setPaymentUrl( 'https://bankingpin.please' );
-
-		$client = $this->createClient( [], function ( FunFunFactory $factory ) use ( $response ) {
 			$sofortClient = $this->createMock( SofortClient::class );
 			$sofortClient
 				->method( 'get' )
 				->willReturn( $response );
 			$factory->setSofortClient( $sofortClient );
+
+
+			$client->followRedirects( false );
+			$client->request(
+				'POST',
+				'/donation/add',
+				$this->newValidSofortInput()
+			);
+
+			$donation = $this->getDonationFromDatabase( $factory );
+
+			$this->assertSame( 'Z', $donation->getStatus() );
+			$this->assertRegExp( '/W-Q-[A-Z]{6}-[A-Z]/', $donation->getBankTransferCode() );
+
+			$this->assertTrue( $client->getResponse()->isRedirect( 'https://bankingpin.please' ) );
 		} );
-
-		$client->followRedirects( false );
-		$client->request(
-			'POST',
-			'/donation/add',
-			$this->newValidSofortInput()
-		);
-
-		$this->assertTrue( $client->getResponse()->isRedirect( 'https://bankingpin.please' ) );
 	}
 
 	private function newValidCreditCardInput(): array {

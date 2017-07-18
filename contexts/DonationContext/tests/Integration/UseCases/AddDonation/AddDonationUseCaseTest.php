@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\DonationContext\Tests\Integration\UseCases\AddDonation;
 
 use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\TestCase;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\DonationContext\Authorization\DonationTokenFetcher;
 use WMDE\Fundraising\Frontend\DonationContext\Authorization\DonationTokens;
@@ -19,6 +20,7 @@ use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationRe
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationUseCase;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationValidationResult;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationValidator;
+use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\InitialDonationStatusPicker;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\ReferrerGeneralizer;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\TransferCodeGenerator;
@@ -26,13 +28,13 @@ use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 
 /**
- * @covers WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationUseCase
+ * @covers \WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationUseCase
  *
  * @license GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class AddDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
+class AddDonationUseCaseTest extends TestCase {
 
 	private const UPDATE_TOKEN = 'a very nice token';
 	private const ACCESS_TOKEN = 'kindly allow me access';
@@ -60,7 +62,8 @@ class AddDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 			new ReferrerGeneralizer( 'http://foo.bar', [] ),
 			$this->newMailer(),
 			$this->newTransferCodeGenerator(),
-			$this->newTokenFetcher()
+			$this->newTokenFetcher(),
+			new InitialDonationStatusPicker()
 		);
 	}
 
@@ -96,7 +99,8 @@ class AddDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 			new ReferrerGeneralizer( 'http://foo.bar', [] ),
 			$this->newMailer(),
 			$this->newTransferCodeGenerator(),
-			$this->newTokenFetcher()
+			$this->newTokenFetcher(),
+			new InitialDonationStatusPicker()
 		);
 
 		$result = $useCase->addDonation( $this->newMinimumDonationRequest() );
@@ -111,7 +115,8 @@ class AddDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 			new ReferrerGeneralizer( 'http://foo.bar', [] ),
 			$this->newMailer(),
 			$this->newTransferCodeGenerator(),
-			$this->newTokenFetcher()
+			$this->newTokenFetcher(),
+			new InitialDonationStatusPicker()
 		);
 
 		$request = $this->newInvalidDonationRequest();
@@ -197,7 +202,8 @@ class AddDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 			new ReferrerGeneralizer( 'http://foo.bar', [] ),
 			$mailer,
 			$this->newTransferCodeGenerator(),
-			$this->newTokenFetcher()
+			$this->newTokenFetcher(),
+			new InitialDonationStatusPicker()
 		);
 
 		$useCase->addDonation( $this->newMinimumDonationRequest() );
@@ -240,7 +246,8 @@ class AddDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 			new ReferrerGeneralizer( 'http://foo.bar', [] ),
 			$this->newMailer(),
 			$this->newTransferCodeGenerator(),
-			$this->newTokenFetcher()
+			$this->newTokenFetcher(),
+			new InitialDonationStatusPicker()
 		);
 
 		$response = $useCase->addDonation( $this->newValidAddDonationRequestWithEmail( 'foo@bar.baz' ) );
@@ -255,7 +262,8 @@ class AddDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 			new ReferrerGeneralizer( 'http://foo.bar', [] ),
 			$this->newMailer(),
 			$this->newTransferCodeGenerator(),
-			$this->newTokenFetcher()
+			$this->newTokenFetcher(),
+			new InitialDonationStatusPicker()
 		);
 
 		$request = $this->newValidAddDonationRequestWithEmail( 'foo@bar.baz' );
@@ -272,7 +280,8 @@ class AddDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 			new ReferrerGeneralizer( 'http://foo.bar', [] ),
 			$mailer,
 			$this->newTransferCodeGenerator(),
-			$this->newTokenFetcher()
+			$this->newTokenFetcher(),
+			new InitialDonationStatusPicker()
 		);
 	}
 
@@ -338,7 +347,8 @@ class AddDonationUseCaseTest extends \PHPUnit\Framework\TestCase {
 			new ReferrerGeneralizer( 'http://foo.bar', [] ),
 			$this->newMailer(),
 			$this->newTransferCodeGenerator(),
-			$this->newTokenFetcher()
+			$this->newTokenFetcher(),
+			new InitialDonationStatusPicker()
 		);
 
 		$useCase->addDonation( $this->newValidAddDonationRequestWithEmail( 'foo@bar.baz' ) );

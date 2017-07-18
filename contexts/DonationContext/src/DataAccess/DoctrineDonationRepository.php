@@ -29,6 +29,7 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentWithoutAssociatedData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\SofortPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Infrastructure\CreditCardExpiry;
 
 /**
@@ -105,7 +106,7 @@ class DoctrineDonationRepository implements DonationRepository {
 		$doctrineDonation->setPaymentIntervalInMonths( $donation->getPaymentIntervalInMonths() );
 
 		$doctrineDonation->setPaymentType( $donation->getPaymentType() );
-		$doctrineDonation->setBankTransferCode( $this->getBankTransferCode( $donation->getPaymentMethod() ) );
+		$doctrineDonation->setBankTransferCode( self::getBankTransferCode( $donation->getPaymentMethod() ) );
 	}
 
 	private function updateDonorInformation( DoctrineDonation $doctrineDonation, Donor $donor = null ): void {
@@ -132,8 +133,10 @@ class DoctrineDonationRepository implements DonationRepository {
 		}
 	}
 
-	private function getBankTransferCode( PaymentMethod $paymentMethod ): string {
+	public static function getBankTransferCode( PaymentMethod $paymentMethod ): string {
 		if ( $paymentMethod instanceof BankTransferPayment ) {
+			return $paymentMethod->getBankTransferCode();
+		} elseif ( $paymentMethod instanceof SofortPayment ) {
 			return $paymentMethod->getBankTransferCode();
 		}
 
@@ -324,22 +327,18 @@ class DoctrineDonationRepository implements DonationRepository {
 	}
 
 	private function getPaymentMethodFromEntity( DoctrineDonation $dd ): PaymentMethod {
-		if ( $dd->getPaymentType() === PaymentType::BANK_TRANSFER ) {
-			return new BankTransferPayment( $dd->getBankTransferCode() );
+		switch ( $dd->getPaymentType() ) {
+			case PaymentType::BANK_TRANSFER:
+				return new BankTransferPayment( $dd->getBankTransferCode() );
+			case PaymentType::DIRECT_DEBIT:
+				return new DirectDebitPayment( $this->getBankDataFromEntity( $dd ) );
+			case PaymentType::PAYPAL:
+				return new PayPalPayment( $this->getPayPalDataFromEntity( $dd ) );
+			case PaymentType::CREDIT_CARD:
+				return new CreditCardPayment( $this->getCreditCardDataFromEntity( $dd ) );
+			case PaymentType::SOFORT:
+				return new SofortPayment( $dd->getBankTransferCode() );
 		}
-
-		if ( $dd->getPaymentType() === PaymentType::DIRECT_DEBIT ) {
-			return new DirectDebitPayment( $this->getBankDataFromEntity( $dd ) );
-		}
-
-		if ( $dd->getPaymentType() === PaymentType::PAYPAL ) {
-			return new PayPalPayment( $this->getPayPalDataFromEntity( $dd ) );
-		}
-
-		if ( $dd->getPaymentType() === PaymentType::CREDIT_CARD ) {
-			return new CreditCardPayment( $this->getCreditCardDataFromEntity( $dd ) );
-		}
-
 		return new PaymentWithoutAssociatedData( $dd->getPaymentType() );
 	}
 

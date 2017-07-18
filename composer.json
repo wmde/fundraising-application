@@ -12,7 +12,7 @@
 		"twig/twig": "~1.23",
 		"pimple/pimple": "~3.0",
 
-		"wmde/fundraising-store": "~4.1",
+		"wmde/fundraising-store": "~6.0",
 		"wmde/fundraising-content-provider": "^2.0",
 		"wmde/euro": "~1.0",
 

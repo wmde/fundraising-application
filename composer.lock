@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "abaab64de21fe61aabca596d82655e6a",
+    "content-hash": "8f43acd30f65436e3c9c3cc179b6932a",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2743,29 +2743,28 @@
         },
         {
             "name": "wmde/fundraising-store",
-            "version": "4.2.0",
+            "version": "6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/FundraisingStore.git",
-                "reference": "cc996570ea2e41096ab6cd0161dc08b30eef0863"
+                "reference": "cfb7e7a1aad8a04517948319a15a66811d7e71d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/FundraisingStore/zipball/cc996570ea2e41096ab6cd0161dc08b30eef0863",
-                "reference": "cc996570ea2e41096ab6cd0161dc08b30eef0863",
+                "url": "https://api.github.com/repos/wmde/FundraisingStore/zipball/cfb7e7a1aad8a04517948319a15a66811d7e71d0",
+                "reference": "cfb7e7a1aad8a04517948319a15a66811d7e71d0",
                 "shasum": ""
             },
             "require": {
                 "doctrine/dbal": "~2.4",
                 "doctrine/orm": "~2.4",
                 "gedmo/doctrine-extensions": "^2.4",
-                "php": ">=7.0"
+                "php": ">=7.1"
             },
             "require-dev": {
-                "ockcyp/covers-validator": "~0.4.0",
-                "phpmd/phpmd": "~2.3",
-                "phpunit/phpunit": "~5.4",
-                "squizlabs/php_codesniffer": "~2.2"
+                "ockcyp/covers-validator": "~0.6.1",
+                "phpunit/phpunit": "~6.2",
+                "squizlabs/php_codesniffer": "~3.0"
             },
             "bin": [
                 "cli-config.php"
@@ -2773,7 +2772,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.0.x-dev"
+                    "dev-master": "6.0.x-dev"
                 }
             },
             "autoload": {
@@ -2786,7 +2785,7 @@
                 "GPL-2.0+"
             ],
             "description": "Persistence services around the fundraising database",
-            "time": "2017-01-06T11:34:58+00:00"
+            "time": "2017-07-18T14:50:46+00:00"
         }
     ],
     "packages-dev": [
@@ -3506,7 +3505,7 @@
                 }
             ],
             "description": "Validates @covers tags in PHPUnit tests",
-            "time": "2017-04-24T20:32:12+00:00"
+            "time": "2017-04-24 20:32:12"
         },
         {
             "name": "paragonie/random_compat",
@@ -5917,7 +5916,7 @@
             "support": {
                 "source": "https://github.com/wmde/fundraising-frontend-content/tree/test"
             },
-            "time": "2017-07-06T13:44:34+00:00"
+            "time": "2017-07-06 13:44:34"
         },
         {
             "name": "wmde/psr-log-test-doubles",
