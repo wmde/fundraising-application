@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "0460739f4cb1106603faf440e5fa0dbb",
+    "content-hash": "8f43acd30f65436e3c9c3cc179b6932a",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2743,16 +2743,16 @@
         },
         {
             "name": "wmde/fundraising-store",
-            "version": "dev-master",
+            "version": "6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/FundraisingStore.git",
-                "reference": "54c197ac7cb2d91da1ef5fc6c19dc31e6b5548c0"
+                "reference": "cfb7e7a1aad8a04517948319a15a66811d7e71d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/FundraisingStore/zipball/54c197ac7cb2d91da1ef5fc6c19dc31e6b5548c0",
-                "reference": "54c197ac7cb2d91da1ef5fc6c19dc31e6b5548c0",
+                "url": "https://api.github.com/repos/wmde/FundraisingStore/zipball/cfb7e7a1aad8a04517948319a15a66811d7e71d0",
+                "reference": "cfb7e7a1aad8a04517948319a15a66811d7e71d0",
                 "shasum": ""
             },
             "require": {
@@ -2772,7 +2772,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.0.x-dev"
+                    "dev-master": "6.0.x-dev"
                 }
             },
             "autoload": {
@@ -2785,7 +2785,7 @@
                 "GPL-2.0+"
             ],
             "description": "Persistence services around the fundraising database",
-            "time": "2017-07-13 08:28:16"
+            "time": "2017-07-18T14:50:46+00:00"
         }
     ],
     "packages-dev": [
@@ -3505,7 +3505,7 @@
                 }
             ],
             "description": "Validates @covers tags in PHPUnit tests",
-            "time": "2017-04-24T20:32:12+00:00"
+            "time": "2017-04-24 20:32:12"
         },
         {
             "name": "paragonie/random_compat",
@@ -5981,7 +5981,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "wmde/fundraising-store": 20,
         "ockcyp/covers-validator": 20,
         "wmde/fundraising-frontend-content": 20
     },
