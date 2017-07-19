@@ -10,7 +10,7 @@ wget -q -O konto_check-5.8.zip http://sourceforge.net/projects/kontocheck/files/
 wget -q -O php7.zip https://sourceforge.net/projects/kontocheck/files/konto_check-de/5.8/php7.zip/download
 unzip konto_check-5.8.zip
 unzip php7.zip
-cd konto_check-5.*
+cd konto_check-5.8
 cp blz.lut2f ${original_dir}/res
 unzip php.zip
 cd php
@@ -23,8 +23,10 @@ phpize
 make
 make install
 if [ -x "$(command -v phpenv)" ]; then
+	# environments with php version management (e.g. travis)
 	phpenv config-add konto_check.ini
 else
+	# environments with one php installation
 	cp konto_check.ini /etc/php/7.1/mods-available
 	phpenmod konto_check
 fi
