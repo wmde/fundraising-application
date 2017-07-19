@@ -164,7 +164,7 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testGivenUnknowDonation_requestDataIsLogged(): void {
+	public function testGivenUnknownDonation_requestDataIsLogged(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 
 			$logger = new LoggerSpy();
@@ -187,8 +187,8 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 				]
 			);
 
-			$this->assertSame( 'Bad request', $client->getResponse()->getContent() );
-			$this->assertSame( Response::HTTP_BAD_REQUEST, $client->getResponse()->getStatusCode() );
+			$this->assertSame( 'Error', $client->getResponse()->getContent() );
+			$this->assertSame( Response::HTTP_INTERNAL_SERVER_ERROR, $client->getResponse()->getStatusCode() );
 
 			$this->assertSame(
 				[ 'Donation not found' ],

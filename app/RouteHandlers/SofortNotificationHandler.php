@@ -27,13 +27,15 @@ class SofortNotificationHandler {
 
 		$this->logResponseIfNeeded( $response, $request );
 
-		if ( !$response->notificationWasHandled() ) {
-			return new Response( 'Bad request', Response::HTTP_BAD_REQUEST );
-		} elseif ( $response->hasErrors() ) {
+		if ( $response->hasErrors() ) {
 			return new Response( 'Error', Response::HTTP_INTERNAL_SERVER_ERROR );
 		}
 
-		return new Response( 'Ok', Response::HTTP_OK );
+		if ( $response->notificationWasHandled() ) {
+			return new Response( 'Ok', Response::HTTP_OK );
+		}
+
+		return new Response( 'Bad request', Response::HTTP_BAD_REQUEST );
 	}
 
 	private function newUseCaseRequestFromRequest( Request $request ): SofortNotificationRequest {
