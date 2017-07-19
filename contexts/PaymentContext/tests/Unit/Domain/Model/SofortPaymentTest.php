@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\PaymentContext\Domain\Model;
+namespace WMDE\Fundraising\Frontend\PaymentContext\Tests\Unit\Domain\Model;
 
 use DateTime;
 use PHPUnit\Framework\TestCase;
