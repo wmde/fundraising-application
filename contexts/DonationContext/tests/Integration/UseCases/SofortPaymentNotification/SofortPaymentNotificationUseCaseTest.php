@@ -5,10 +5,11 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\DonationContext\Tests\Integration\UseCases\SofortPaymentNotification;
 
 use PHPUnit\Framework\TestCase;
-use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\DonationContext\DataAccess\DoctrineDonationRepository;
+use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\DonationContext\Infrastructure\DonationConfirmationMailer;
-use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\DonationEventLoggerSpy;
+use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidDonation;
+use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidSofortNotificationRequest;
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\DonationRepositorySpy;
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\FailingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\FakeDonationRepository;
@@ -16,8 +17,6 @@ use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\SucceedingDonationA
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\SofortPaymentNotification\SofortPaymentNotificationUseCase;
 use WMDE\Fundraising\Frontend\PaymentContext\RequestModel\SofortNotificationRequest;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
-use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidDonation;
-use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidSofortNotificationRequest;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\DonationContext\UseCases\SofortPaymentNotification\SofortPaymentNotificationUseCase
@@ -33,9 +32,16 @@ class SofortPaymentNotificationUseCaseTest extends TestCase {
 
 		$request = ValidSofortNotificationRequest::newInstantPayment();
 
-		$reponse = $useCase->handleNotification( $request );
-		$this->assertFalse( $reponse->notificationWasHandled() );
-		$this->assertTrue( $reponse->hasErrors() );
+		$response = $useCase->handleNotification( $request );
+		$this->assertFalse( $response->notificationWasHandled() );
+		$this->assertTrue( $response->hasErrors() );
+	}
+
+	/**
+	 * @return DonationConfirmationMailer|\PHPUnit_Framework_MockObject_MockObject
+	 */
+	private function getMailer(): DonationConfirmationMailer {
+		return $this->createMock( DonationConfirmationMailer::class );
 	}
 
 	public function testWhenNotificationIsForNonExistingDonation_unhandledResponseIsReturned(): void {
@@ -152,20 +158,28 @@ class SofortPaymentNotificationUseCaseTest extends TestCase {
 		$fakeRepository = new FakeDonationRepository();
 		$fakeRepository->storeDonation( ValidDonation::newIncompleteSofortDonation() );
 
-		$mailer = $this->getMailer();
-		$mailer->expects( $this->once() )
-			->method( 'sendConfirmationMailFor' )
-			->willThrowException( new \RuntimeException( 'Oh noes!' ) );
-
 		$useCase = new SofortPaymentNotificationUseCase(
 			$fakeRepository,
 			new SucceedingDonationAuthorizer(),
-			$mailer
+			$this->newThrowingMailer()
 		);
 
 		$request = ValidSofortNotificationRequest::newInstantPayment();
 
 		$this->assertTrue( $useCase->handleNotification( $request )->notificationWasHandled() );
+	}
+
+	/**
+	 * @return DonationConfirmationMailer|\PHPUnit_Framework_MockObject_MockObject
+	 */
+	private function newThrowingMailer() {
+		$mailer = $this->getMailer();
+
+		$mailer->expects( $this->once() )
+			->method( 'sendConfirmationMailFor' )
+			->willThrowException( new \RuntimeException( 'Oh noes!' ) );
+
+		return $mailer;
 	}
 
 	public function testGivenSetConfirmedAtForBookedDonation_unhandledResponseIsReturned(): void {
@@ -209,10 +223,4 @@ class SofortPaymentNotificationUseCaseTest extends TestCase {
 		$this->assertSame( 'Bad notification time', $response->getContext()['message'] );
 	}
 
-	/**
-	 * @return DonationConfirmationMailer|\PHPUnit_Framework_MockObject_MockObject
-	 */
-	private function getMailer(): DonationConfirmationMailer {
-		return $this->getMockBuilder( DonationConfirmationMailer::class )->disableOriginalConstructor()->getMock();
-	}
 }
