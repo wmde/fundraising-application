@@ -26,7 +26,7 @@ class SofortPaymentNotificationUseCaseTest extends TestCase {
 	public function testWhenRepositoryThrowsException_errorResponseIsReturned(): void {
 		$useCase = new SofortPaymentNotificationUseCase(
 			new DoctrineDonationRepository( ThrowingEntityManager::newInstance( $this ) ),
-			new FailingDonationAuthorizer(),
+			new SucceedingDonationAuthorizer(),
 			$this->getMailer()
 		);
 
@@ -47,7 +47,7 @@ class SofortPaymentNotificationUseCaseTest extends TestCase {
 	public function testWhenNotificationIsForNonExistingDonation_unhandledResponseIsReturned(): void {
 		$useCase = new SofortPaymentNotificationUseCase(
 			new FakeDonationRepository(),
-			new FailingDonationAuthorizer(),
+			new SucceedingDonationAuthorizer(),
 			$this->getMailer()
 		);
 
