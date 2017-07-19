@@ -14,6 +14,7 @@ use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\FailingDonationAuth
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\FakeDonationRepository;
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Fixtures\SucceedingDonationAuthorizer;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\SofortPaymentNotification\SofortPaymentNotificationUseCase;
+use WMDE\Fundraising\Frontend\PaymentContext\RequestModel\SofortNotificationRequest;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidSofortNotificationRequest;
@@ -167,7 +168,7 @@ class SofortPaymentNotificationUseCaseTest extends TestCase {
 		$this->assertTrue( $useCase->handleNotification( $request )->notificationWasHandled() );
 	}
 
-	public function testGivenExistingTransactionIdForBookedDonation_errorResponseIsReturned(): void {
+	public function testGivenSetConfirmedAtForBookedDonation_unhandledResponseIsReturned(): void {
 
 		$fakeRepository = new FakeDonationRepository();
 		$fakeRepository->storeDonation( ValidDonation::newCompletedSofortDonation() );
@@ -187,6 +188,31 @@ class SofortPaymentNotificationUseCaseTest extends TestCase {
 		$this->assertFalse( $response->notificationWasHandled() );
 		$this->assertFalse( $response->hasErrors() );
 		$this->assertSame( 'Duplicate notification', $response->getContext()['message'] );
+	}
+
+	public function testGivenBadNotificationTime_unhandledResponseIsReturned(): void {
+
+		$fakeRepository = new FakeDonationRepository();
+		$fakeRepository->storeDonation( ValidDonation::newIncompleteSofortDonation() );
+
+		$eventLogger = new DonationEventLoggerSpy();
+
+		$useCase = new SofortPaymentNotificationUseCase(
+			$fakeRepository,
+			new SucceedingDonationAuthorizer(),
+			$this->getMailer(),
+			$eventLogger
+		);
+
+		$request = new SofortNotificationRequest();
+		$request->setDonationId( 1 );
+		$request->setTransactionId( 'fff-ggg-hhh' );
+		// $request->setTime() never called with a valid DateTime
+
+		$response = $useCase->handleNotification( $request );
+		$this->assertFalse( $response->notificationWasHandled() );
+		$this->assertFalse( $response->hasErrors() );
+		$this->assertSame( 'Bad notification time', $response->getContext()['message'] );
 	}
 
 	/**

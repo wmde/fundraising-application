@@ -21,7 +21,7 @@ class SofortNotificationRequest {
 	 */
 	private $time;
 
-	public function getDonationId(): int {
+	public function getDonationId(): ?int {
 		return $this->donationId;
 	}
 
@@ -30,7 +30,7 @@ class SofortNotificationRequest {
 		return $this;
 	}
 
-	public function getTransactionId(): string {
+	public function getTransactionId(): ?string {
 		return $this->transactionId;
 	}
 
@@ -39,7 +39,7 @@ class SofortNotificationRequest {
 		return $this;
 	}
 
-	public function getTime(): DateTime {
+	public function getTime(): ?DateTime {
 		return $this->time;
 	}
 

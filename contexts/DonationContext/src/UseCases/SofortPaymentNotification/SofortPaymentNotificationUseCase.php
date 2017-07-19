@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\DonationContext\UseCases\SofortPaymentNotification;
 
+use DateTime;
 use RuntimeException;
 use WMDE\Fundraising\Frontend\DonationContext\Authorization\DonationAuthorizer;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
@@ -55,8 +56,12 @@ class SofortPaymentNotificationUseCase {
 		if ( $paymentMethod->isConfirmedPayment() ) {
 			return $this->createUnhandledResponse( 'Duplicate notification' );
 		}
+		$confirmedTime = $request->getTime();
+		if ( !( $confirmedTime instanceof DateTime ) ) {
+			return $this->createUnhandledResponse( 'Bad notification time' );
+		}
 
-		$paymentMethod->setConfirmedAt( $request->getTime() );
+		$paymentMethod->setConfirmedAt( $confirmedTime );
 
 		try {
 			$this->repository->storeDonation( $donation );
