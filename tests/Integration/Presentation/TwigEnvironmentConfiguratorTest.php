@@ -62,8 +62,7 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 				'enable-cache' => false,
 				'web-basepath' => ''
 			],
-			'/tmp/fun',
-			self::LOCALE
+			'/tmp/fun'
 		);
 		$twig = $environmentConfigurator->getEnvironment( $this->newTwigEnvironment(), [$firstLoader, $secondLoader, $thirdLoader], [], [] );
 		$result = $twig->render( 'Canis_silvestris' );

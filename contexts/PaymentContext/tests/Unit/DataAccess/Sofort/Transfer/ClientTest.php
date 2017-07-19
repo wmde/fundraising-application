@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\PaymentContext\DataAccess\Sofort\Transfer;
+namespace WMDE\Fundraising\Frontend\PaymentContext\Tests\Unit\DataAccess\Sofort\Transfer;
 
 use PHPUnit\Framework\TestCase;
 use RuntimeException;

@@ -2,12 +2,12 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Tests\Unit;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\Validation;
 
 use WMDE\Fundraising\Frontend\Validation\AmountPolicyValidator;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Validation\AmountPolicyValidator
+ * @covers \WMDE\Fundraising\Frontend\Validation\AmountPolicyValidator
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >

@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration;
 use WMDE\Fundraising\ContentProvider\ContentProvider;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
+use WMDE\Fundraising\Frontend\App\MailTemplates;
 
 /**
  * @licence GNU GPL v2+
@@ -71,8 +72,8 @@ class MailTemplatesTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	private function getTestData(): array {
-		$ffFactory = $this->factory;
-		return require __DIR__ . '/../Data/mail_templates.php';
+		$mailTemplates = new MailTemplates( $this->factory );
+		return $mailTemplates->get();
 	}
 
 	private function getFreshlyRenderedContentForTemplate( string $templateFileName, array $templateTestData ): \Iterator {

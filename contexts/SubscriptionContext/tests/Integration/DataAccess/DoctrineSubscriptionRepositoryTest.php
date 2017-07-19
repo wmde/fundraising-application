@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Integration\SubscriptionContext\DataAccess;
+namespace WMDE\Fundraising\Frontend\SubscriptionContext\Tests\Integration\DataAccess;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityManager;
@@ -15,7 +15,7 @@ use WMDE\Fundraising\Frontend\SubscriptionContext\Domain\Repositories\Subscripti
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
- * @covers WMDE\Fundraising\Frontend\SubscriptionContext\DataAccess\DoctrineSubscriptionRepository
+ * @covers \WMDE\Fundraising\Frontend\SubscriptionContext\DataAccess\DoctrineSubscriptionRepository
  *
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >

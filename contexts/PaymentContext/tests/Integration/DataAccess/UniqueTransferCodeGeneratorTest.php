@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Integration\PaymentContext\DataAccess;
+namespace WMDE\Fundraising\Frontend\PaymentContext\Tests\Integration\DataAccess;
 
 use Doctrine\ORM\EntityManager;
 use WMDE\Euro\Euro;
@@ -16,7 +16,7 @@ use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
- * @covers WMDE\Fundraising\Frontend\PaymentContext\DataAccess\UniqueTransferCodeGenerator
+ * @covers \WMDE\Fundraising\Frontend\PaymentContext\DataAccess\UniqueTransferCodeGenerator
  *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >

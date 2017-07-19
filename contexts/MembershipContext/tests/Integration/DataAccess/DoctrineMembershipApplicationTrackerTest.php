@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Integration\MembershipContext\DataAccess;
+namespace WMDE\Fundraising\Frontend\MembershipContext\Tests\Integration\DataAccess;
 
 use Doctrine\ORM\EntityManager;
 use WMDE\Fundraising\Entities\MembershipApplication;
@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\Tracking\MembershipApplicationTr
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
- * @covers WMDE\Fundraising\Frontend\MembershipContext\DataAccess\DoctrineApplicationTracker
+ * @covers \WMDE\Fundraising\Frontend\MembershipContext\DataAccess\DoctrineApplicationTracker
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >

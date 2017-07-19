@@ -13,23 +13,7 @@ use WMDE\Fundraising\Frontend\Validation\ValidationResult;
  */
 class FailedValidationResult extends ValidationResult {
 
-	/** @noinspection PhpMissingParentConstructorInspection */
 	public function __construct() {
+		parent::__construct( new ConstraintViolation( '', '' ) );
 	}
-
-	public function isSuccessful(): bool {
-		return false;
-	}
-
-	public function hasViolations(): bool {
-		return true;
-	}
-
-	/**
-	 * @return ConstraintViolation[]
-	 */
-	public function getViolations(): array {
-		return [ new ConstraintViolation( '', '' ) ];
-	}
-
 }

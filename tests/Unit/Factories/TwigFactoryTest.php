@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace Unit\Factories;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\Factories;
 
 use WMDE\Fundraising\Frontend\Factories\TwigFactory;
 use Twig_Loader_Filesystem;

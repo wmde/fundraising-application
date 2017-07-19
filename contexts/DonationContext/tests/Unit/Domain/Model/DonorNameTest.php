@@ -2,12 +2,12 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\DonationContext\Domain\Model;
+namespace WMDE\Fundraising\Frontend\DonationContext\Tests\Unit\Domain\Model;
 
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonorName;
 
 /**
- * @covers WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonorName
+ * @covers \WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonorName
  *
  * @license GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
