@@ -15,7 +15,6 @@ class PayPalConfig {
 	const CONFIG_KEY_NOTIFY_URL = 'notify-url';
 	const CONFIG_KEY_RETURN_URL = 'return-url';
 	const CONFIG_KEY_CANCEL_URL = 'cancel-url';
-	const CONFIG_KEY_ITEM_NAME = 'item-name';
 	const CONFIG_KEY_DELAY_IN_DAYS = 'delay-in-days';
 
 	private $payPalAccountAddress;
@@ -23,17 +22,15 @@ class PayPalConfig {
 	private $notifyUrl;
 	private $returnUrl;
 	private $cancelUrl;
-	private $itemName;
 	private $delayInDays;
 
 	private function __construct( string $payPalAccountAddress, string $payPalBaseUrl, string $notifyUrl,
-								 string $returnUrl, string $cancelUrl, string $itemName, int $delayInDays ) {
+								 string $returnUrl, string $cancelUrl, int $delayInDays ) {
 		$this->payPalAccountAddress = $payPalAccountAddress;
 		$this->payPalBaseUrl = $payPalBaseUrl;
 		$this->notifyUrl = $notifyUrl;
 		$this->returnUrl = $returnUrl;
 		$this->cancelUrl = $cancelUrl;
-		$this->itemName = $itemName;
 		$this->delayInDays = $delayInDays;
 	}
 
@@ -49,7 +46,6 @@ class PayPalConfig {
 			$config[self::CONFIG_KEY_NOTIFY_URL],
 			$config[self::CONFIG_KEY_RETURN_URL],
 			$config[self::CONFIG_KEY_CANCEL_URL],
-			$config[self::CONFIG_KEY_ITEM_NAME],
 			isset( $config[self::CONFIG_KEY_DELAY_IN_DAYS] ) ? (int)$config[self::CONFIG_KEY_DELAY_IN_DAYS] : -1
 		) )->assertNoEmptyFields();
 	}
@@ -82,10 +78,6 @@ class PayPalConfig {
 
 	public function getCancelUrl(): string {
 		return $this->cancelUrl;
-	}
-
-	public function getItemName(): string {
-		return $this->itemName;
 	}
 
 	public function getDelayInDays(): int {

@@ -908,11 +908,17 @@ class FunFunFactory {
 	}
 
 	public function newPayPalUrlGeneratorForDonations(): PayPalUrlGenerator {
-		return new PayPalUrlGenerator( $this->getPayPalUrlConfigForDonations() );
+		return new PayPalUrlGenerator(
+			$this->getPayPalUrlConfigForDonations(),
+			$this->getTranslator()->trans( 'item_name_donation' )
+		);
 	}
 
 	public function newPayPalUrlGeneratorForMembershipApplications(): PayPalUrlGenerator {
-		return new PayPalUrlGenerator( $this->getPayPalUrlConfigForMembershipApplications() );
+		return new PayPalUrlGenerator(
+			$this->getPayPalUrlConfigForMembershipApplications(),
+			$this->getTranslator()->trans( 'item_name_membership' )
+		);
 	}
 
 	private function getPayPalUrlConfigForDonations(): PayPalConfig {

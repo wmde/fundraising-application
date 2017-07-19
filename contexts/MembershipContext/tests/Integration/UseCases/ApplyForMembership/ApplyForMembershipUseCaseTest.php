@@ -197,7 +197,8 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit\Framework\TestCase {
 				'paymentIntervalInMonths' => 3,
 				'salutation' => 'Herr',
 				'title' => '',
-				'lastName' => 'The Great'
+				'lastName' => 'The Great',
+				'paymentType' => 'BEZ'
 			]
 		);
 	}

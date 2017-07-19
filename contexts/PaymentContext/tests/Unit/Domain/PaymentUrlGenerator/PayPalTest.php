@@ -24,7 +24,7 @@ class PayPalTest extends \PHPUnit\Framework\TestCase {
 	const ITEM_NAME = 'Mentioning that awesome organization on the invoice';
 
 	public function testSubscriptions(): void {
-		$generator = new PayPalUrlGenerator( $this->newPayPalUrlConfig() );
+		$generator = new PayPalUrlGenerator( $this->newPayPalUrlConfig(), self::ITEM_NAME );
 
 		$this->assertUrlValidForSubscriptions(
 			$generator->generateUrl( 1234, Euro::newFromString( '12.34' ), 3, 'utoken', 'atoken' )
@@ -37,7 +37,7 @@ class PayPalTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public function testSinglePayments(): void {
-		$generator = new PayPalUrlGenerator( $this->newPayPalUrlConfig() );
+		$generator = new PayPalUrlGenerator( $this->newPayPalUrlConfig(), self::ITEM_NAME );
 
 		$this->assertUrlValidForSinglePayments(
 			$generator->generateUrl( 1234, Euro::newFromString( '12.34' ), 0, 'utoken', 'atoken' )
@@ -55,8 +55,7 @@ class PayPalTest extends \PHPUnit\Framework\TestCase {
 			'account-address' => self::ACCOUNT_ADDRESS,
 			'notify-url' => self::NOTIFY_URL,
 			'return-url' => self::RETURN_URL,
-			'cancel-url' => self::CANCEL_URL,
-			'item-name' => self::ITEM_NAME
+			'cancel-url' => self::CANCEL_URL
 		] );
 	}
 
@@ -71,13 +70,12 @@ class PayPalTest extends \PHPUnit\Framework\TestCase {
 			'account-address' => 'some@email-adress.com',
 			'notify-url' => self::NOTIFY_URL,
 			'return-url' => self::RETURN_URL,
-			'cancel-url' => self::CANCEL_URL,
-			'item-name' => ''
+			'cancel-url' => ''
 		] );
 	}
 
 	public function testDelayedSubscriptions(): void {
-		$generator = new PayPalUrlGenerator( $this->newPayPalUrlConfigWithDelayedPayment() );
+		$generator = new PayPalUrlGenerator( $this->newPayPalUrlConfigWithDelayedPayment(), self::ITEM_NAME );
 
 		$this->assertUrlValidForDelayedSubscriptions(
 			$generator->generateUrl( 1234, Euro::newFromString( '12.34' ), 3, 'utoken', 'atoken' )
@@ -97,7 +95,6 @@ class PayPalTest extends \PHPUnit\Framework\TestCase {
 			'notify-url' => self::NOTIFY_URL,
 			'return-url' => self::RETURN_URL,
 			'cancel-url' => self::CANCEL_URL,
-			'item-name' => self::ITEM_NAME,
 			'delay-in-days' => 90
 		] );
 	}

@@ -331,6 +331,21 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'sandbox.paypal.com', $response->headers->get( 'Location' ) );
 	}
 
+	public function testWhenRedirectingToPayPal_translatedItemNameIsPassed(): void {
+		$client = $this->createClient();
+		$client->followRedirects( false );
+
+		$client->request(
+			'POST',
+			'/apply-for-membership',
+			$this->newValidHttpParametersUsingPayPal()
+		);
+
+		$response = $client->getResponse();
+		$this->assertSame( 302, $response->getStatusCode() );
+		$this->assertContains( 'item_name=item_name_membership', $response->getContent() );
+	}
+
 	public function testCommasInStreetNamesAreRemoved(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 
