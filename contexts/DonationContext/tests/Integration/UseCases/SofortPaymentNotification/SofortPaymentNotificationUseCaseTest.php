@@ -173,13 +173,10 @@ class SofortPaymentNotificationUseCaseTest extends TestCase {
 		$fakeRepository = new FakeDonationRepository();
 		$fakeRepository->storeDonation( ValidDonation::newCompletedSofortDonation() );
 
-		$eventLogger = new DonationEventLoggerSpy();
-
 		$useCase = new SofortPaymentNotificationUseCase(
 			$fakeRepository,
 			new SucceedingDonationAuthorizer(),
-			$this->getMailer(),
-			$eventLogger
+			$this->getMailer()
 		);
 
 		$request = ValidSofortNotificationRequest::newInstantPayment();
@@ -195,13 +192,10 @@ class SofortPaymentNotificationUseCaseTest extends TestCase {
 		$fakeRepository = new FakeDonationRepository();
 		$fakeRepository->storeDonation( ValidDonation::newIncompleteSofortDonation() );
 
-		$eventLogger = new DonationEventLoggerSpy();
-
 		$useCase = new SofortPaymentNotificationUseCase(
 			$fakeRepository,
 			new SucceedingDonationAuthorizer(),
-			$this->getMailer(),
-			$eventLogger
+			$this->getMailer()
 		);
 
 		$request = new SofortNotificationRequest();
