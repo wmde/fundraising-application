@@ -37,15 +37,17 @@ class SofortNotificationHandler {
 	}
 
 	private function newUseCaseRequestFromRequest( Request $request ): SofortNotificationRequest {
-		$usecaseRequest = new SofortNotificationRequest();
-		$usecaseRequest->setDonationId( $request->query->getInt( 'id' ) );
-		$usecaseRequest->setTransactionId( $request->request->get( 'transaction', '' ) );
+		$useCaseRequest = new SofortNotificationRequest();
+		$useCaseRequest->setDonationId( $request->query->getInt( 'id' ) );
+		$useCaseRequest->setTransactionId( $request->request->get( 'transaction', '' ) );
+
 		$time = DateTime::createFromFormat( DateTime::ATOM, $request->request->get( 'time', '' ) );
+
 		if ( $time instanceof DateTime ) {
-			$usecaseRequest->setTime( $time );
+			$useCaseRequest->setTime( $time );
 		}
 
-		return $usecaseRequest;
+		return $useCaseRequest;
 	}
 
 	private function logResponseIfNeeded( SofortNotificationResponse $response, Request $request ) {
