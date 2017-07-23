@@ -25,12 +25,7 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 	private const VALID_TRANSACTION_TIME = '2010-04-14T19:01:08+02:00';
 
 	public function testGivenWrongPaymentType_applicationRefuses(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setTokenGenerator( new FixedTokenGenerator(
-				self::VALID_TOKEN,
-				new DateTime( '2039-12-31 23:59:59Z' )
-			) );
-
+		$this->newEnvironment( function ( Client $client, FunFunFactory $factory ) {
 			$donation = ValidDonation::newIncompletePayPalDonation();
 			$factory->getDonationRepository()->storeDonation( $donation );
 
@@ -48,13 +43,22 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testGivenWrongToken_applicationRefuses(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setTokenGenerator( new FixedTokenGenerator(
-				self::VALID_TOKEN,
-				new DateTime( '2039-12-31 23:59:59Z' )
-			) );
+	private function newEnvironment( callable $onEnvironmentCreated ): void {
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ) use ( $onEnvironmentCreated ) {
+				$factory->setTokenGenerator( new FixedTokenGenerator(
+					self::VALID_TOKEN,
+					new DateTime( '2039-12-31 23:59:59Z' )
+				) );
 
+				$onEnvironmentCreated( $client, $factory );
+			}
+		);
+	}
+
+	public function testGivenWrongToken_applicationRefuses(): void {
+		$this->newEnvironment( function ( Client $client, FunFunFactory $factory ) {
 			$donation = ValidDonation::newIncompleteSofortDonation();
 			$factory->getDonationRepository()->storeDonation( $donation );
 
@@ -73,12 +77,7 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenBadTimeFormat_applicationRefuses(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setTokenGenerator( new FixedTokenGenerator(
-				self::VALID_TOKEN,
-				new DateTime( '2039-12-31 23:59:59Z' )
-			) );
-
+		$this->newEnvironment( function ( Client $client, FunFunFactory $factory ) {
 			$donation = ValidDonation::newIncompleteSofortDonation();
 			$factory->getDonationRepository()->storeDonation( $donation );
 
@@ -97,12 +96,7 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_applicationIndicatesSuccess(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$factory->setTokenGenerator( new FixedTokenGenerator(
-				self::VALID_TOKEN,
-				new DateTime( '2039-12-31 23:59:59Z' )
-			) );
-
+		$this->newEnvironment( function ( Client $client, FunFunFactory $factory ) {
 			$donation = ValidDonation::newIncompleteSofortDonation();
 			$factory->getDonationRepository()->storeDonation( $donation );
 
@@ -125,15 +119,9 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenAlreadyConfirmedPayment_requestDataIsLogged(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-
+		$this->newEnvironment( function ( Client $client, FunFunFactory $factory ) {
 			$logger = new LoggerSpy();
 			$factory->setSofortLogger( $logger );
-
-			$factory->setTokenGenerator( new FixedTokenGenerator(
-				self::VALID_TOKEN,
-				\DateTime::createFromFormat( 'Y-m-d H:i:s', '2039-12-31 23:59:59' )
-			) );
 
 			$donation = ValidDonation::newCompletedSofortDonation();
 			$factory->getDonationRepository()->storeDonation( $donation );
@@ -170,15 +158,9 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenUnknownDonation_requestDataIsLogged(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-
+		$this->newEnvironment( function ( Client $client, FunFunFactory $factory ) {
 			$logger = new LoggerSpy();
 			$factory->setSofortLogger( $logger );
-
-			$factory->setTokenGenerator( new FixedTokenGenerator(
-				self::VALID_TOKEN,
-				\DateTime::createFromFormat( 'Y-m-d H:i:s', '2039-12-31 23:59:59' )
-			) );
 
 			$donation = ValidDonation::newCompletedSofortDonation();
 			$factory->getDonationRepository()->storeDonation( $donation );
