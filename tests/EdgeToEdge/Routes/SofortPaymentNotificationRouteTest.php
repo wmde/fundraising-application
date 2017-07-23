@@ -38,8 +38,7 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 				]
 			);
 
-			$this->assertSame( 'Bad request', $client->getResponse()->getContent() );
-			$this->assertSame( Response::HTTP_BAD_REQUEST, $client->getResponse()->getStatusCode() );
+			$this->assertIsBadRequestResponse( $client->getResponse() );
 		} );
 	}
 
@@ -57,6 +56,11 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 		);
 	}
 
+	private function assertIsBadRequestResponse( Response $response ): void {
+		$this->assertSame( 'Bad request', $response->getContent() );
+		$this->assertSame( Response::HTTP_BAD_REQUEST, $response->getStatusCode() );
+	}
+
 	public function testGivenWrongToken_applicationRefuses(): void {
 		$this->newEnvironment( function ( Client $client, FunFunFactory $factory ) {
 			$donation = ValidDonation::newIncompleteSofortDonation();
@@ -71,8 +75,7 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 				]
 			);
 
-			$this->assertSame( 'Bad request', $client->getResponse()->getContent() );
-			$this->assertSame( Response::HTTP_BAD_REQUEST, $client->getResponse()->getStatusCode() );
+			$this->assertIsBadRequestResponse( $client->getResponse() );
 		} );
 	}
 
@@ -90,8 +93,7 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 				]
 			);
 
-			$this->assertSame( 'Bad request', $client->getResponse()->getContent() );
-			$this->assertSame( Response::HTTP_BAD_REQUEST, $client->getResponse()->getStatusCode() );
+			$this->assertIsBadRequestResponse( $client->getResponse() );
 		} );
 	}
 
