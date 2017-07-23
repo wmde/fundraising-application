@@ -137,8 +137,7 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 				]
 			);
 
-			$this->assertSame( 'Bad request', $client->getResponse()->getContent() );
-			$this->assertSame( Response::HTTP_BAD_REQUEST, $client->getResponse()->getStatusCode() );
+			$this->assertIsBadRequestResponse( $client->getResponse() );
 
 			$this->assertSame(
 				[ 'Duplicate notification' ],
@@ -176,8 +175,7 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 				]
 			);
 
-			$this->assertSame( 'Error', $client->getResponse()->getContent() );
-			$this->assertSame( Response::HTTP_INTERNAL_SERVER_ERROR, $client->getResponse()->getStatusCode() );
+			$this->assertIsErrorResponse( $client->getResponse() );
 
 			$this->assertSame(
 				[ 'Donation not found' ],
@@ -197,4 +195,10 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 			$this->assertSame( LogLevel::ERROR, $logger->getLogCalls()->getFirstCall()->getLevel() );
 		} );
 	}
+
+	private function assertIsErrorResponse( Response $response ): void {
+		$this->assertSame( 'Error', $response->getContent() );
+		$this->assertSame( Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode() );
+	}
+
 }
