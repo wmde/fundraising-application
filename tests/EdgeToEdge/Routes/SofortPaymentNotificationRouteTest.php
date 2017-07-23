@@ -86,7 +86,7 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 
 			$client->request(
 				Request::METHOD_POST,
-				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::INVALID_TOKEN,
+				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::VALID_TOKEN,
 				[
 					'transaction' => self::VALID_TRANSACTION_ID,
 					'time' => 'now'
