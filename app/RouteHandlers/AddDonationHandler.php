@@ -98,6 +98,7 @@ class AddDonationHandler {
 						$responseModel->getDonation()->getId(),
 						$responseModel->getDonation()->getPayment()->getPaymentMethod()->getBankTransferCode(),
 						$responseModel->getDonation()->getAmount(),
+						$responseModel->getUpdateToken(),
 						$responseModel->getAccessToken()
 					)
 				);

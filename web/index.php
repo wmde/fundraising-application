@@ -64,6 +64,17 @@ $ffFactory->setPaypalLogger( call_user_func( function() use ( $ffFactory ) {
 	return $logger;
 } ) );
 
+$ffFactory->setSofortLogger( call_user_func( function() use ( $ffFactory ) {
+	$logger = new Logger( 'sofort' );
+
+	$streamHandler = new StreamHandler( $ffFactory->getLoggingPath() . '/sofort.log' );
+
+	$streamHandler->setFormatter( new JsonFormatter() );
+	$logger->pushHandler( $streamHandler );
+
+	return $logger;
+} ) );
+
 /**
  * @var \Silex\Application $app
  */

@@ -18,11 +18,16 @@ class SofortConfig {
 	 * @var string
 	 */
 	private $cancelUrl;
+	/**
+	 * @var string
+	 */
+	private $notificationUrl;
 
-	public function __construct( string $reasonText, string $returnUrl, string $cancelUrl ) {
+	public function __construct( string $reasonText, string $returnUrl, string $cancelUrl, string $notificationUrl ) {
 		$this->reasonText = $reasonText;
 		$this->returnUrl = $returnUrl;
 		$this->cancelUrl = $cancelUrl;
+		$this->notificationUrl = $notificationUrl;
 	}
 
 	public function getReasonText(): string {
@@ -35,5 +40,9 @@ class SofortConfig {
 
 	public function getCancelUrl(): string {
 		return $this->cancelUrl;
+	}
+
+	public function getNotificationUrl(): string {
+		return $this->notificationUrl;
 	}
 }

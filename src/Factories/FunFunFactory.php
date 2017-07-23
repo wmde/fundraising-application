@@ -70,6 +70,7 @@ use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\ReferrerGener
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\CancelDonation\CancelDonationUseCase;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\CreditCardPaymentNotification\CreditCardNotificationUseCase;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\HandlePayPalPaymentNotification\HandlePayPalPaymentNotificationUseCase;
+use WMDE\Fundraising\Frontend\DonationContext\UseCases\SofortPaymentNotification\SofortPaymentNotificationUseCase;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\ListComments\ListCommentsUseCase;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\ShowDonationConfirmation\ShowDonationConfirmationUseCase;
 use WMDE\Fundraising\Frontend\DonationContext\Validation\DonorAddressValidator;
@@ -193,6 +194,10 @@ class FunFunFactory {
 		};
 
 		$pimple['paypal_logger'] = function() {
+			return new NullLogger();
+		};
+
+		$pimple['sofort_logger'] = function() {
 			return new NullLogger();
 		};
 
@@ -598,6 +603,10 @@ class FunFunFactory {
 		return $this->pimple['paypal_logger'];
 	}
 
+	public function getSofortLogger(): LoggerInterface {
+		return $this->pimple['sofort_logger'];
+	}
+
 	private function getVarPath(): string {
 		return __DIR__ . '/../../var';
 	}
@@ -936,7 +945,8 @@ class FunFunFactory {
 			new SofortConfig(
 				$this->getTranslator()->trans( 'item_name_donation', [], 'messages' ),
 				$config['return-url'],
-				$config['cancel-url']
+				$config['cancel-url'],
+				$config['notification-url']
 			),
 			$this->getSofortClient()
 		);
@@ -1154,6 +1164,14 @@ class FunFunFactory {
 		} ) );
 	}
 
+	public function newHandleSofortPaymentNotificationUseCase( string $updateToken ): SofortPaymentNotificationUseCase {
+		return new SofortPaymentNotificationUseCase(
+			$this->getDonationRepository(),
+			$this->newDonationAuthorizer( $updateToken ),
+			$this->newDonationConfirmationMailer()
+		);
+	}
+
 	public function newHandlePayPalPaymentNotificationUseCase( string $updateToken ): HandlePayPalPaymentNotificationUseCase {
 		return new HandlePayPalPaymentNotificationUseCase(
 			$this->getDonationRepository(),
@@ -1352,6 +1370,10 @@ class FunFunFactory {
 
 	public function setPaypalLogger( LoggerInterface $logger ): void {
 		$this->pimple['paypal_logger'] = $logger;
+	}
+
+	public function setSofortLogger( LoggerInterface $logger ): void {
+		$this->pimple['sofort_logger'] = $logger;
 	}
 
 	public function getProfilerDataCollector(): ProfilerDataCollector {

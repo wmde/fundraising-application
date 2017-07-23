@@ -19,7 +19,12 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\Sofort a
 class SofortTest extends TestCase {
 
 	public function testWhenClientReturnsSuccessResponseAUrlIsReturned(): void {
-		$config = new SofortUrlConfig( 'Donation', 'https://us.org/yes', 'https://us.org/no' );
+		$config = new SofortUrlConfig(
+			'Donation',
+			'https://us.org/yes',
+			'https://us.org/no',
+			'https://us.org/callback'
+		);
 
 		$amount = Euro::newFromCents( 600 );
 
@@ -29,7 +34,7 @@ class SofortTest extends TestCase {
 		$request->setReasons( [ 'Donation', 'wx529836' ] );
 		$request->setSuccessUrl( 'https://us.org/yes?id=44&accessToken=letmein' );
 		$request->setAbortUrl( 'https://us.org/no' );
-		$request->setNotificationUrl( '' );
+		$request->setNotificationUrl( 'https://us.org/callback?id=44&updateToken=makesandwich' );
 
 		$response = new Response();
 		$response->setTransactionId( '500m1l35' );
@@ -45,12 +50,17 @@ class SofortTest extends TestCase {
 		$urlGenerator = new SofortUrlGenerator( $config, $client );
 		$this->assertSame(
 			'https://awsomepaymentprovider.tld/784trhhrf4',
-			$urlGenerator->generateUrl( 44, 'wx529836', $amount, 'letmein' )
+			$urlGenerator->generateUrl( 44, 'wx529836', $amount, 'makesandwich', 'letmein' )
 		);
 	}
 
 	public function testWhenApiReturnsErrorAnExceptionWithApiErrorMessageIsThrown(): void {
-		$config = new SofortUrlConfig( 'Your purchase', 'https://irreleva.nt', 'http://irreleva.nt' );
+		$config = new SofortUrlConfig(
+			'Your purchase',
+			'https://irreleva.nt/y',
+			'https://irreleva.nt/n',
+			'https://irreleva.nt/api'
+		);
 
 		$client = $this->createMock( Client::class );
 
@@ -65,6 +75,6 @@ class SofortTest extends TestCase {
 		$this->expectException( RuntimeException::class );
 		$this->expectExceptionMessage( 'Could not generate Sofort URL: boo boo' );
 
-		$urlGenerator->generateUrl( 23, 'dq529837', Euro::newFromCents( 300 ), 'letmein' );
+		$urlGenerator->generateUrl( 23, 'dq529837', Euro::newFromCents( 300 ), 'makesandwich', 'letmein' );
 	}
 }

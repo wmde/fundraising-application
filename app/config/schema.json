@@ -569,12 +569,17 @@
         },
         "return-url": {
           "type": "string",
-          "title": "Return URL",
+          "title": "Return URL - for after successful payment",
           "minLength": 1
         },
         "cancel-url": {
           "type": "string",
-          "title": "Cancel URL",
+          "title": "Cancel URL - for aborted payment",
+          "minLength": 1
+        },
+        "notification-url": {
+          "type": "string",
+          "title": "Notification URL - our endpoint for payment provider API calls",
           "minLength": 1
         }
       },

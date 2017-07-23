@@ -18,7 +18,7 @@
 {$ 'recurringDonation'|transchoice( donation.interval, { '%interval%': donation.interval } ) $}
 {% endif %}
 
-{% elseif donation.paymentType == 'PPL' or donation.paymentType == 'MCP' or donation.paymentType == 'SUB' %}
+{% elseif donation.paymentType == 'PPL' or donation.paymentType == 'MCP' %}
 {$ mail_content('donation_confirmation/paymenttype_external', {
     'formatted_amount': formattedAmount,
     'payment_provider': donation.paymentType|trans({}, 'paymentTypes')
@@ -31,6 +31,13 @@
 {$ mail_content('donation_confirmation/paymenttype_banktransfer', {
     'formatted_amount': formattedAmount,
     'bank_transfer_code': donation.bankTransferCode
+}) $}
+
+{% elseif donation.paymentType == 'SUB' %}
+{$ mail_content('donation_confirmation/paymenttype_sofort', {
+	'formatted_amount': formattedAmount,
+	'payment_provider': donation.paymentType|trans({}, 'paymentTypes'),
+	'payment_status': donation.status|trans({}, 'paymentStatus')
 }) $}
 
 {% endif %}
