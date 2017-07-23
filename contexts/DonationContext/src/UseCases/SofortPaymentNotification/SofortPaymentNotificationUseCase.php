@@ -30,15 +30,14 @@ class SofortPaymentNotificationUseCase {
 	}
 
 	public function handleNotification( SofortNotificationRequest $request ): SofortNotificationResponse {
-
 		try {
 			$donation = $this->repository->getDonationById( $request->getDonationId() );
 		} catch ( GetDonationException $ex ) {
-			return $this->createErrorResponse( $ex );
+			return $this->createFailureResponse( $ex );
 		}
 
 		if ( $donation === null ) {
-			return $this->createErrorResponse( new RuntimeException( 'Donation not found' ) );
+			return $this->createFailureResponse( new RuntimeException( 'Donation not found' ) );
 		}
 
 		return $this->handleRequestForDonation( $request, $donation );
@@ -50,24 +49,22 @@ class SofortPaymentNotificationUseCase {
 		if ( !( $paymentMethod instanceof SofortPayment ) ) {
 			return $this->createUnhandledResponse( 'Trying to handle notification for non-sofort donation' );
 		}
+
 		if ( !$this->authorizationService->systemCanModifyDonation( $donation->getId() ) ) {
 			return $this->createUnhandledResponse( 'Wrong access code for donation' );
 		}
+
 		if ( $paymentMethod->isConfirmedPayment() ) {
 			return $this->createUnhandledResponse( 'Duplicate notification' );
 		}
-		$confirmedTime = $request->getTime();
-		if ( !( $confirmedTime instanceof DateTime ) ) {
-			return $this->createUnhandledResponse( 'Bad notification time' );
-		}
 
-		$paymentMethod->setConfirmedAt( $confirmedTime );
+		$paymentMethod->setConfirmedAt( $request->getTime() );
 
 		try {
 			$this->repository->storeDonation( $donation );
 		}
 		catch ( StoreDonationException $ex ) {
-			return $this->createErrorResponse( $ex );
+			return $this->createFailureResponse( $ex );
 		}
 
 		$this->sendConfirmationEmailFor( $donation );
@@ -91,7 +88,7 @@ class SofortPaymentNotificationUseCase {
 		}
 	}
 
-	private function createErrorResponse( RuntimeException $ex ): SofortNotificationResponse {
+	private function createFailureResponse( RuntimeException $ex ): SofortNotificationResponse {
 		return SofortNotificationResponse::newFailureResponse( [
 			'message' => $ex->getMessage(),
 			'stackTrace' => $ex->getTraceAsString()

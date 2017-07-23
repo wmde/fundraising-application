@@ -39,7 +39,7 @@ class SofortNotificationRequest {
 		return $this;
 	}
 
-	public function getTime(): ?DateTime {
+	public function getTime(): DateTime {
 		return $this->time;
 	}
 
