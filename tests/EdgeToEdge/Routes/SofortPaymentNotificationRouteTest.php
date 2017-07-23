@@ -9,6 +9,7 @@ use Psr\Log\LogLevel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
+use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
@@ -27,12 +28,12 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 				new DateTime( '2039-12-31 23:59:59Z' )
 			) );
 
-			$repo = $factory->getDonationRepository();
-			$repo->storeDonation( ValidDonation::newIncompletePayPalDonation() );	// creates donation w/ id=1
+			$donation = ValidDonation::newIncompletePayPalDonation();
+			$factory->getDonationRepository()->storeDonation( $donation );
 
 			$client->request(
 				Request::METHOD_POST,
-				'/sofort-payment-notification?id=1&updateToken=' . self::TOKEN_VALID,
+				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::TOKEN_VALID,
 				[
 					'transaction' => '99999-53245-5483-4891',
 					'time' => '2010-04-14T19:01:08+02:00'
@@ -51,12 +52,12 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 				new DateTime( '2039-12-31 23:59:59Z' )
 			) );
 
-			$repo = $factory->getDonationRepository();
-			$repo->storeDonation( ValidDonation::newIncompleteSofortDonation() );	// creates donation w/ id=1
+			$donation = ValidDonation::newIncompleteSofortDonation();
+			$factory->getDonationRepository()->storeDonation( $donation );
 
 			$client->request(
 				Request::METHOD_POST,
-				'/sofort-payment-notification?id=1&updateToken=' . self::TOKEN_INVALID,
+				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::TOKEN_INVALID,
 				[
 					'transaction' => '99999-53245-5483-4891',
 					'time' => '2010-04-14T19:01:08+02:00'
@@ -75,12 +76,12 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 				new DateTime( '2039-12-31 23:59:59Z' )
 			) );
 
-			$repo = $factory->getDonationRepository();
-			$repo->storeDonation( ValidDonation::newIncompleteSofortDonation() );	// creates donation w/ id=1
+			$donation = ValidDonation::newIncompleteSofortDonation();
+			$factory->getDonationRepository()->storeDonation( $donation );
 
 			$client->request(
 				Request::METHOD_POST,
-				'/sofort-payment-notification?id=1&updateToken=' . self::TOKEN_INVALID,
+				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::TOKEN_INVALID,
 				[
 					'transaction' => '99999-53245-5483-4891',
 					'time' => 'now'
@@ -99,12 +100,12 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 				new DateTime( '2039-12-31 23:59:59Z' )
 			) );
 
-			$repo = $factory->getDonationRepository();
-			$repo->storeDonation( ValidDonation::newIncompleteSofortDonation() );	// creates donation w/ id=1
+			$donation = ValidDonation::newIncompleteSofortDonation();
+			$factory->getDonationRepository()->storeDonation( $donation );
 
 			$client->request(
 				Request::METHOD_POST,
-				'/sofort-payment-notification?id=1&updateToken=' . self::TOKEN_VALID,
+				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::TOKEN_VALID,
 				[
 					'transaction' => '99999-53245-5483-4891',
 					'time' => '2010-04-14T19:01:08+02:00'
@@ -114,7 +115,8 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 			$this->assertSame( 'Ok', $client->getResponse()->getContent() );
 			$this->assertSame( Response::HTTP_OK, $client->getResponse()->getStatusCode() );
 
-			$donation = $repo->getDonationById( 1 );
+			$donation = $factory->getDonationRepository()->getDonationById( $donation->getId() );
+
 			$this->assertEquals( new DateTime( '2010-04-14T19:01:08+02:00' ), $donation->getPaymentMethod()->getConfirmedAt() );
 		} );
 	}
@@ -130,12 +132,12 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 				\DateTime::createFromFormat( 'Y-m-d H:i:s', '2039-12-31 23:59:59' )
 			) );
 
-			$repo = $factory->getDonationRepository();
-			$repo->storeDonation( ValidDonation::newCompletedSofortDonation() );	// creates donation w/ id=1
+			$donation = ValidDonation::newCompletedSofortDonation();
+			$factory->getDonationRepository()->storeDonation( $donation );
 
 			$client->request(
 				Request::METHOD_POST,
-				'/sofort-payment-notification?id=1&updateToken=' . self::TOKEN_VALID,
+				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::TOKEN_VALID,
 				[
 					'transaction' => '99999-53245-5483-4891',
 					'time' => '2010-04-14T19:01:08+02:00'
@@ -155,8 +157,8 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 				$logger->getLogCalls()->getFirstCall()->getContext()['post_vars']['transaction']
 			);
 
-			$this->assertSame(
-				'1',
+			$this->assertEquals(
+				$donation->getId(),
 				$logger->getLogCalls()->getFirstCall()->getContext()['query_vars']['id']
 			);
 
@@ -175,12 +177,12 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 				\DateTime::createFromFormat( 'Y-m-d H:i:s', '2039-12-31 23:59:59' )
 			) );
 
-			$repo = $factory->getDonationRepository();
-			$repo->storeDonation( ValidDonation::newCompletedSofortDonation() );	// creates donation w/ id=1
+			$donation = ValidDonation::newCompletedSofortDonation();
+			$factory->getDonationRepository()->storeDonation( $donation );
 
 			$client->request(
 				Request::METHOD_POST,
-				'/sofort-payment-notification?id=2&updateToken=' . self::TOKEN_VALID,
+				'/sofort-payment-notification?id=' . ( $donation->getId() + 1 ) . '&updateToken=' . self::TOKEN_VALID,
 				[
 					'transaction' => '99999-53245-5483-4893',
 					'time' => '2010-04-14T19:01:08+02:00'
@@ -200,8 +202,8 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 				$logger->getLogCalls()->getFirstCall()->getContext()['post_vars']['transaction']
 			);
 
-			$this->assertSame(
-				'2',
+			$this->assertEquals(
+				$donation->getId() + 1,
 				$logger->getLogCalls()->getFirstCall()->getContext()['query_vars']['id']
 			);
 
