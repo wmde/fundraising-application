@@ -18,13 +18,16 @@ use WMDE\PsrLogTestDoubles\LoggerSpy;
 
 class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 
-	private const TOKEN_VALID = 'my-secret_token';
-	private const TOKEN_INVALID = 'fffffggggg';
+	private const VALID_TOKEN = 'my-secret_token';
+	private const INVALID_TOKEN = 'fffffggggg';
+
+	private const VALID_TRANSACTION_ID = '99999-53245-5483-4891';
+	private const VALID_TRANSACTION_TIME = '2010-04-14T19:01:08+02:00';
 
 	public function testGivenWrongPaymentType_applicationRefuses(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setTokenGenerator( new FixedTokenGenerator(
-				self::TOKEN_VALID,
+				self::VALID_TOKEN,
 				new DateTime( '2039-12-31 23:59:59Z' )
 			) );
 
@@ -33,10 +36,10 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 
 			$client->request(
 				Request::METHOD_POST,
-				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::TOKEN_VALID,
+				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::VALID_TOKEN,
 				[
-					'transaction' => '99999-53245-5483-4891',
-					'time' => '2010-04-14T19:01:08+02:00'
+					'transaction' => self::VALID_TRANSACTION_ID,
+					'time' => self::VALID_TRANSACTION_TIME
 				]
 			);
 
@@ -48,7 +51,7 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 	public function testGivenWrongToken_applicationRefuses(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setTokenGenerator( new FixedTokenGenerator(
-				self::TOKEN_VALID,
+				self::VALID_TOKEN,
 				new DateTime( '2039-12-31 23:59:59Z' )
 			) );
 
@@ -57,10 +60,10 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 
 			$client->request(
 				Request::METHOD_POST,
-				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::TOKEN_INVALID,
+				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::INVALID_TOKEN,
 				[
-					'transaction' => '99999-53245-5483-4891',
-					'time' => '2010-04-14T19:01:08+02:00'
+					'transaction' => self::VALID_TRANSACTION_ID,
+					'time' => self::VALID_TRANSACTION_TIME
 				]
 			);
 
@@ -72,7 +75,7 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 	public function testGivenBadTimeFormat_applicationRefuses(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setTokenGenerator( new FixedTokenGenerator(
-				self::TOKEN_VALID,
+				self::VALID_TOKEN,
 				new DateTime( '2039-12-31 23:59:59Z' )
 			) );
 
@@ -81,9 +84,9 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 
 			$client->request(
 				Request::METHOD_POST,
-				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::TOKEN_INVALID,
+				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::INVALID_TOKEN,
 				[
-					'transaction' => '99999-53245-5483-4891',
+					'transaction' => self::VALID_TRANSACTION_ID,
 					'time' => 'now'
 				]
 			);
@@ -96,7 +99,7 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 	public function testGivenValidRequest_applicationIndicatesSuccess(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
 			$factory->setTokenGenerator( new FixedTokenGenerator(
-				self::TOKEN_VALID,
+				self::VALID_TOKEN,
 				new DateTime( '2039-12-31 23:59:59Z' )
 			) );
 
@@ -105,10 +108,10 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 
 			$client->request(
 				Request::METHOD_POST,
-				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::TOKEN_VALID,
+				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::VALID_TOKEN,
 				[
-					'transaction' => '99999-53245-5483-4891',
-					'time' => '2010-04-14T19:01:08+02:00'
+					'transaction' => self::VALID_TRANSACTION_ID,
+					'time' => self::VALID_TRANSACTION_TIME
 				]
 			);
 
@@ -117,7 +120,7 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 
 			$donation = $factory->getDonationRepository()->getDonationById( $donation->getId() );
 
-			$this->assertEquals( new DateTime( '2010-04-14T19:01:08+02:00' ), $donation->getPaymentMethod()->getConfirmedAt() );
+			$this->assertEquals( new DateTime( self::VALID_TRANSACTION_TIME ), $donation->getPaymentMethod()->getConfirmedAt() );
 		} );
 	}
 
@@ -128,7 +131,7 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 			$factory->setSofortLogger( $logger );
 
 			$factory->setTokenGenerator( new FixedTokenGenerator(
-				self::TOKEN_VALID,
+				self::VALID_TOKEN,
 				\DateTime::createFromFormat( 'Y-m-d H:i:s', '2039-12-31 23:59:59' )
 			) );
 
@@ -137,10 +140,10 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 
 			$client->request(
 				Request::METHOD_POST,
-				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::TOKEN_VALID,
+				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::VALID_TOKEN,
 				[
-					'transaction' => '99999-53245-5483-4891',
-					'time' => '2010-04-14T19:01:08+02:00'
+					'transaction' => self::VALID_TRANSACTION_ID,
+					'time' => self::VALID_TRANSACTION_TIME
 				]
 			);
 
@@ -153,7 +156,7 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 			);
 
 			$this->assertSame(
-				'99999-53245-5483-4891',
+				self::VALID_TRANSACTION_ID,
 				$logger->getLogCalls()->getFirstCall()->getContext()['post_vars']['transaction']
 			);
 
@@ -173,7 +176,7 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 			$factory->setSofortLogger( $logger );
 
 			$factory->setTokenGenerator( new FixedTokenGenerator(
-				self::TOKEN_VALID,
+				self::VALID_TOKEN,
 				\DateTime::createFromFormat( 'Y-m-d H:i:s', '2039-12-31 23:59:59' )
 			) );
 
@@ -182,10 +185,10 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 
 			$client->request(
 				Request::METHOD_POST,
-				'/sofort-payment-notification?id=' . ( $donation->getId() + 1 ) . '&updateToken=' . self::TOKEN_VALID,
+				'/sofort-payment-notification?id=' . ( $donation->getId() + 1 ) . '&updateToken=' . self::VALID_TOKEN,
 				[
-					'transaction' => '99999-53245-5483-4893',
-					'time' => '2010-04-14T19:01:08+02:00'
+					'transaction' => self::VALID_TRANSACTION_ID,
+					'time' => self::VALID_TRANSACTION_TIME
 				]
 			);
 
@@ -198,7 +201,7 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 			);
 
 			$this->assertSame(
-				'99999-53245-5483-4893',
+				self::VALID_TRANSACTION_ID,
 				$logger->getLogCalls()->getFirstCall()->getContext()['post_vars']['transaction']
 			);
 
