@@ -201,26 +201,4 @@ class SofortPaymentNotificationUseCaseTest extends TestCase {
 		$this->assertSame( 'Duplicate notification', $response->getContext()['message'] );
 	}
 
-	public function testGivenBadNotificationTime_unhandledResponseIsReturned(): void {
-
-		$fakeRepository = new FakeDonationRepository();
-		$fakeRepository->storeDonation( ValidDonation::newIncompleteSofortDonation() );
-
-		$useCase = new SofortPaymentNotificationUseCase(
-			$fakeRepository,
-			new SucceedingDonationAuthorizer(),
-			$this->getMailer()
-		);
-
-		$request = new SofortNotificationRequest();
-		$request->setDonationId( 1 );
-		$request->setTransactionId( 'fff-ggg-hhh' );
-		// $request->setTime() never called with a valid DateTime
-
-		$response = $useCase->handleNotification( $request );
-		$this->assertFalse( $response->notificationWasHandled() );
-		$this->assertFalse( $response->hasErrors() );
-		$this->assertSame( 'Bad notification time', $response->getContext()['message'] );
-	}
-
 }
