@@ -5,9 +5,11 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\App\RouteHandlers;
 
 use DateTime;
+use UnexpectedValueException;
 use Psr\Log\LogLevel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\SofortPaymentNotification\SofortPaymentNotificationUseCase;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\PaymentContext\RequestModel\SofortNotificationRequest;
@@ -29,10 +31,10 @@ class SofortNotificationHandler {
 	public function handle( Request $request ): Response {
 		$this->request = $request;
 
-		$useCaseRequest = $this->newUseCaseRequest();
-
-		if ( $useCaseRequest === null ) {
-			$this->logWebRequest( [ 'message' => 'Bad notification time' ], LogLevel::ERROR );
+		try {
+			$useCaseRequest = $this->newUseCaseRequest();
+		} catch ( UnexpectedValueException $e )  {
+			$this->logWebRequest( [ 'message' => $e->getMessage() ], LogLevel::ERROR );
 			return new Response( 'Bad request', Response::HTTP_BAD_REQUEST );
 		}
 
@@ -55,11 +57,11 @@ class SofortNotificationHandler {
 		return $this->ffFactory->newHandleSofortPaymentNotificationUseCase( $this->request->query->get( 'updateToken' ) );
 	}
 
-	private function newUseCaseRequest(): ?SofortNotificationRequest {
+	private function newUseCaseRequest(): SofortNotificationRequest {
 		$time = $this->getTimeFromRequest();
 
 		if ( $time === false ) {
-			return null;
+			throw new UnexpectedValueException( 'Invalid notification time' );
 		}
 
 		$useCaseRequest = new SofortNotificationRequest();
@@ -71,11 +73,14 @@ class SofortNotificationHandler {
 		return $useCaseRequest;
 	}
 
+	/**
+	 * @return bool|DateTime
+	 */
 	private function getTimeFromRequest() {
 		return DateTime::createFromFormat( DateTime::ATOM, $this->request->request->get( 'time', '' ) );
 	}
 
-	private function logResponseIfNeeded( SofortNotificationResponse $response ) {
+	private function logResponseIfNeeded( SofortNotificationResponse $response ): void {
 		if ( $response->notificationWasHandled() ) {
 			return;
 		}
@@ -86,7 +91,7 @@ class SofortNotificationHandler {
 		);
 	}
 
-	private function logWebRequest( array $context, string $logLevel ) {
+	private function logWebRequest( array $context, string $logLevel ): void {
 		$message = $context['message'] ?? 'Sofort request not handled';
 		unset( $context['message'] );
 
