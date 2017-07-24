@@ -195,4 +195,28 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 		$this->assertSame( Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode() );
 	}
 
+	public function testGivenBadTime_requestDataIsLogged(): void {
+		$this->newEnvironment( function ( Client $client, FunFunFactory $factory ) {
+			$logger = new LoggerSpy();
+			$factory->setSofortLogger( $logger );
+
+			$donation = ValidDonation::newCompletedSofortDonation();
+			$factory->getDonationRepository()->storeDonation( $donation );
+
+			$client->request(
+				Request::METHOD_POST,
+				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::VALID_TOKEN,
+				[
+					'transaction' => self::VALID_TRANSACTION_ID,
+					'time' => 'now'
+				]
+			);
+
+			$this->assertIsBadRequestResponse( $client->getResponse() );
+			$this->assertErrorCauseIsLogged( $logger, 'Bad notification time' );
+			$this->assertRequestVarsAreLogged( $logger );
+			$this->assertLogLevel( $logger, LogLevel::ERROR );
+		} );
+	}
+
 }
