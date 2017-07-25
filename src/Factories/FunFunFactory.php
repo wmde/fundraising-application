@@ -1070,7 +1070,7 @@ class FunFunFactory {
 		return new DoctrineApplicationPiwikTracker( $this->getEntityManager() );
 	}
 
-	private function getPaymentDelayCalculator(): PaymentDelayCalculator {
+	public function getPaymentDelayCalculator(): PaymentDelayCalculator {
 		return $this->pimple['payment-delay-calculator'];
 	}
 

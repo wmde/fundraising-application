@@ -41,6 +41,7 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit\Framework\TestCase {
 	const ACCESS_TOKEN = 'Gimmeh all the access';
 	const UPDATE_TOKEN = 'Lemme change all the stuff';
 	const FIRST_PAYMENT_DATE = '2017-08-07';
+	const PAYMENT_DELAY_IN_DAYS = 42;
 
 	/**
 	 * @var ApplicationRepository
@@ -123,7 +124,10 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	private function newFixedPaymentDelayCalculator(): PaymentDelayCalculator {
-		return new FixedPaymentDelayCalculator( new \DateTime( self::FIRST_PAYMENT_DATE ) );
+		return new FixedPaymentDelayCalculator(
+			new \DateTime( self::FIRST_PAYMENT_DATE ),
+			self::PAYMENT_DELAY_IN_DAYS
+		);
 	}
 
 	private function newValidRequest(): ApplyForMembershipRequest {

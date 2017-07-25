@@ -25,4 +25,7 @@ class DefaultPaymentDelayCalculator implements PaymentDelayCalculator {
 		return $date;
 	}
 
+	public function getPaymentDelayInDays(): int {
+		return $this->paymentDelayInDays;
+	}
 }

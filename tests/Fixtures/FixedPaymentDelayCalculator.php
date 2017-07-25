@@ -13,13 +13,19 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentDelayCalculator;
 class FixedPaymentDelayCalculator implements PaymentDelayCalculator {
 
 	private $fixedDate;
+	private $fixedDelayInDays;
 
-	public function __construct( \DateTime $fixedDate ) {
+	public function __construct( \DateTime $fixedDate, int $fixedDelayInDays ) {
 		$this->fixedDate = $fixedDate;
+		$this->fixedDelayInDays = $fixedDelayInDays;
 	}
 
 	public function calculateFirstPaymentDate(): \DateTime {
 		return $this->fixedDate;
+	}
+
+	public function getPaymentDelayInDays(): int {
+		return $this->fixedDelayInDays;
 	}
 
 }

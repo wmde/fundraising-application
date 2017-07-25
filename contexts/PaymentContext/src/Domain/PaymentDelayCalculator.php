@@ -14,4 +14,6 @@ interface PaymentDelayCalculator {
 
 	public function calculateFirstPaymentDate(): \DateTime;
 
+	public function getPaymentDelayInDays(): int;
+
 }

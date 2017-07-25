@@ -38,6 +38,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\AmountParser;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\CancelMembershipApplication\CancellationRequest;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowMembershipApplicationConfirmation\ShowMembershipAppConfirmationRequest;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\DefaultPaymentDelayCalculator;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\PaymentContext\UseCases\GenerateIban\GenerateIbanRequest;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\ContentNotFoundException;
@@ -409,7 +410,8 @@ $app->get(
 	'apply-for-membership',
 	function( Request $request ) use ( $ffFactory ) {
 
-		$params = [];
+		$paymentDelayCalculator = $ffFactory->getPaymentDelayCalculator();
+		$params = [ 'delay_in_days' => $paymentDelayCalculator->getPaymentDelayInDays() ];
 		if ( $request->query->get('type' ) === 'sustaining' ) {
 			$params['showMembershipTypeOption'] = false ;
 		}

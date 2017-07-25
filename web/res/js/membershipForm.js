@@ -119,6 +119,12 @@ $( function () {
 				stateKey: 'membershipFormContent.paymentType'
 			},
 			{
+				viewHandler: WMDE.View.createRecurrentPaypalNoticeHandler(
+					WMDE.View.Animator.createSlidingElementAnimator( $( '.notice-ppl-recurrent' ) )
+				),
+				stateKey: 'membershipFormContent'
+			},
+			{
 				viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.fields-direct-debit' ), 'BEZ' ),
 				stateKey: 'membershipFormContent.paymentType'
 			},
