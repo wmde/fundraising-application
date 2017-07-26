@@ -125,8 +125,7 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit\Framework\TestCase {
 
 	private function newFixedPaymentDelayCalculator(): PaymentDelayCalculator {
 		return new FixedPaymentDelayCalculator(
-			new \DateTime( self::FIRST_PAYMENT_DATE ),
-			self::PAYMENT_DELAY_IN_DAYS
+			new \DateTime( self::FIRST_PAYMENT_DATE )
 		);
 	}
 

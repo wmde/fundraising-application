@@ -24,10 +24,8 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
  */
 class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
-	const FIXED_TOKEN = 'fixed_token';
-	const FIXED_TIMESTAMP = '2020-12-01 20:12:01';
-	const FIRST_PAYMENT_DATE = '2017-09-21';
-	const FIXED_PAYMENT_DELAY = 42;
+	private const FIXED_TOKEN = 'fixed_token';
+	private const FIRST_PAYMENT_DATE = '2017-09-21';
 
 	public function testGivenGetRequestMembership_formIsShown(): void {
 		$client = $this->createClient();
@@ -423,8 +421,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	private function newFixedPaymentDelayCalculator(): PaymentDelayCalculator {
 		return new FixedPaymentDelayCalculator(
-			new \DateTime( self::FIRST_PAYMENT_DATE ),
-			self::FIXED_PAYMENT_DELAY
+			new \DateTime( self::FIRST_PAYMENT_DATE )
 		);
 	}
 
