@@ -442,7 +442,7 @@ class FunFunFactory {
 		};
 
 		$pimple['payment-delay-calculator'] = function() {
-			return new DefaultPaymentDelayCalculator( $this->getPayPalUrlConfigForMembershipApplications()->getDelayInDays() );
+			return new DefaultPaymentDelayCalculator( $this->getPaymentDelayInDays() );
 		};
 
 		$pimple['sofort-client'] = function () {
@@ -1072,6 +1072,10 @@ class FunFunFactory {
 
 	private function getPaymentDelayCalculator(): PaymentDelayCalculator {
 		return $this->pimple['payment-delay-calculator'];
+	}
+
+	public function getPaymentDelayInDays(): int {
+		return $this->getPayPalUrlConfigForMembershipApplications()->getDelayInDays();
 	}
 
 	public function setPaymentDelayCalculator( PaymentDelayCalculator $paymentDelayCalculator ): void {
