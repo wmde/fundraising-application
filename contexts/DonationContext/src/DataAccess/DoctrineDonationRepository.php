@@ -110,11 +110,21 @@ class DoctrineDonationRepository implements DonationRepository {
 		$doctrineDonation->setBankTransferCode( self::getBankTransferCode( $donation->getPaymentMethod() ) );
 
 		$paymentMethod = $donation->getPaymentMethod();
+
 		if ( $paymentMethod instanceof SofortPayment ) {
-			$doctrineSofortPayment = new DoctrineSofortPayment();
-			$doctrineSofortPayment->setConfirmedAt( $paymentMethod->getConfirmedAt() );
-			$doctrineDonation->setPayment( $doctrineSofortPayment );
+			$this->updateSofortPaymentInformation( $doctrineDonation, $paymentMethod );
 		}
+	}
+
+	private function updateSofortPaymentInformation( DoctrineDonation $doctrineDonation, SofortPayment $paymentMethod ): void {
+		$doctrineSofortPayment = $doctrineDonation->getPayment();
+
+		if ( $doctrineSofortPayment === null ) {
+			$doctrineSofortPayment = new DoctrineSofortPayment();
+		}
+
+		$doctrineSofortPayment->setConfirmedAt( $paymentMethod->getConfirmedAt() );
+		$doctrineDonation->setPayment( $doctrineSofortPayment );
 	}
 
 	private function updateDonorInformation( DoctrineDonation $doctrineDonation, Donor $donor = null ): void {
