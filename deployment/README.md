@@ -33,6 +33,22 @@ To roll back ("undo") a deployment, log in to the server, change the symlink to 
 
     php cachetool.phar opcache:reset --fcgi=/var/run/php/php-fpm-current.sock
 
+## Deploying a release that needs database changes
+
+Call the playbook with the `skip_symlink` variable:
+
+    ansible-playbook -i inventory/test --extra-vars 'skip_symlink=1' deployment.yml
+
+Afterwards, you have login to the server, change to the new release directory and use the 
+[Doctrine command line](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/tools.html#database-schema-generation)
+to update the database. The recommended way of doing this is to run
+
+    vendor/bin/doctrine orm:schema-tool:create --dump-sql
+
+and apply the database changes from a console MySQL client.
+
+When you're finished with the database changes, do a new deployment to ensure the symlink is changed and the cache is purged. 
+
 ## Preparing a new server for deployment
 
 ### Prerequisites on the Server

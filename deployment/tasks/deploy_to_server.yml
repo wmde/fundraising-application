@@ -48,6 +48,7 @@
 
     - name: Symlink the release
       file: src={{ app_dir }}/{{ release_name }} dest={{ app_dir }}/{{ current_dir }} owner={{app_owner}} group={{app_group}} state=link
+      when: skip_symlink is undefined
 
   rescue:
     - name: Remove directory of failed release
