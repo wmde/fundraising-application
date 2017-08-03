@@ -129,6 +129,24 @@ class DoctrineDonationRepositoryTest extends TestCase {
 		$this->assertSame( ValidDonation::PAYMENT_BANK_TRANSFER_CODE, $payment->getBankTransferCode() );
 	}
 
+	public function testSofortPaymentDateUpdate_paymentEntityIdStaysTheSame(): void {
+		$donation = ValidDonation::newSofortDonation();
+		$repository = $this->newRepository();
+		$repository->storeDonation( $donation );
+
+		$paymentId = $this->getDoctrineDonationById( $donation->getId() )->getPayment()->getId();
+
+		/**
+		 * @var $sofortPayment SofortPayment
+		 */
+		$sofortPayment = $donation->getPayment()->getPaymentMethod();
+		$sofortPayment->setConfirmedAt( new \DateTime( '2017-08-03T12:44:42' ) );
+
+		$repository->storeDonation( $donation );
+
+		$this->assertSame( $paymentId, $this->getDoctrineDonationById( $donation->getId() )->getPayment()->getId() );
+	}
+
 	public function testWhenDonationAlreadyExists_persistingCausesUpdate(): void {
 		$repository = $this->newRepository();
 
