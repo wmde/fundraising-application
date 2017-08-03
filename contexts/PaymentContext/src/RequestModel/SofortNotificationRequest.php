@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\PaymentContext\RequestModel;
 
+use Sofort\SofortLib\Notification as VendorNotification;
 use DateTime;
 
 class SofortNotificationRequest {
@@ -46,5 +47,26 @@ class SofortNotificationRequest {
 	public function setTime( DateTime $time ): self {
 		$this->time = $time;
 		return $this;
+	}
+
+	public static function fromRawRequest( string $content ): ?self {
+		$vendorNotification = new VendorNotification();
+		$result = $vendorNotification->getNotification( $content );
+
+		if ( $result === false ) {
+			return null;
+		}
+
+		$time = DateTime::createFromFormat( DateTime::ATOM, $vendorNotification->getTime() );
+
+		if ( $time === false ) {
+			return null;
+		}
+
+		$notification = new self();
+		$notification->setTime( $time );
+		$notification->setTransactionId( $vendorNotification->getTransactionId() );
+
+		return $notification;
 	}
 }

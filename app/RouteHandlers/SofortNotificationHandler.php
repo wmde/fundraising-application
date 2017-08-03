@@ -58,26 +58,15 @@ class SofortNotificationHandler {
 	}
 
 	private function newUseCaseRequest(): SofortNotificationRequest {
-		$time = $this->getTimeFromRequest();
+		$useCaseRequest = SofortNotificationRequest::fromRawRequest( $this->request->getContent() );
 
-		if ( $time === false ) {
-			throw new UnexpectedValueException( 'Invalid notification time' );
+		if ( !( $useCaseRequest instanceof SofortNotificationRequest ) ) {
+			throw new UnexpectedValueException( 'Invalid notification request' );
 		}
 
-		$useCaseRequest = new SofortNotificationRequest();
-
-		$useCaseRequest->setTime( $time );
 		$useCaseRequest->setDonationId( $this->request->query->getInt( 'id' ) );
-		$useCaseRequest->setTransactionId( $this->request->request->get( 'transaction', '' ) );
 
 		return $useCaseRequest;
-	}
-
-	/**
-	 * @return bool|DateTime
-	 */
-	private function getTimeFromRequest() {
-		return DateTime::createFromFormat( DateTime::ATOM, $this->request->request->get( 'time', '' ) );
 	}
 
 	private function logResponseIfNeeded( SofortNotificationResponse $response ): void {
@@ -95,7 +84,7 @@ class SofortNotificationHandler {
 		$message = $context['message'] ?? 'Sofort request not handled';
 		unset( $context['message'] );
 
-		$context['post_vars'] = $this->request->request->all();
+		$context['request_content'] = $this->request->getContent();
 		$context['query_vars'] = $this->request->query->all();
 		$this->ffFactory->getSofortLogger()->log( $logLevel, $message, $context );
 	}
