@@ -31,10 +31,10 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 			$client->request(
 				Request::METHOD_POST,
 				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::VALID_TOKEN,
-				[
-					'transaction' => self::VALID_TRANSACTION_ID,
-					'time' => self::VALID_TRANSACTION_TIME
-				]
+				[],
+				[],
+				[],
+				$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, self::VALID_TRANSACTION_TIME )
 			);
 
 			$this->assertIsBadRequestResponse( $client->getResponse() );
@@ -68,10 +68,10 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 			$client->request(
 				Request::METHOD_POST,
 				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::INVALID_TOKEN,
-				[
-					'transaction' => self::VALID_TRANSACTION_ID,
-					'time' => self::VALID_TRANSACTION_TIME
-				]
+				[],
+				[],
+				[],
+				$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, self::VALID_TRANSACTION_TIME )
 			);
 
 			$this->assertIsBadRequestResponse( $client->getResponse() );
@@ -86,10 +86,10 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 			$client->request(
 				Request::METHOD_POST,
 				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::VALID_TOKEN,
-				[
-					'transaction' => self::VALID_TRANSACTION_ID,
-					'time' => 'now'
-				]
+				[],
+				[],
+				[],
+				$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, 'now' )
 			);
 
 			$this->assertIsBadRequestResponse( $client->getResponse() );
@@ -104,10 +104,10 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 			$client->request(
 				Request::METHOD_POST,
 				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::VALID_TOKEN,
-				[
-					'transaction' => self::VALID_TRANSACTION_ID,
-					'time' => self::VALID_TRANSACTION_TIME
-				]
+				[],
+				[],
+				[],
+				$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, self::VALID_TRANSACTION_TIME )
 			);
 
 			$this->assertSame( 'Ok', $client->getResponse()->getContent() );
@@ -130,10 +130,10 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 			$client->request(
 				Request::METHOD_POST,
 				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::VALID_TOKEN,
-				[
-					'transaction' => self::VALID_TRANSACTION_ID,
-					'time' => self::VALID_TRANSACTION_TIME
-				]
+				[],
+				[],
+				[],
+				$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, self::VALID_TRANSACTION_TIME )
 			);
 
 			$this->assertIsBadRequestResponse( $client->getResponse() );
@@ -151,9 +151,9 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	private function assertRequestVarsAreLogged( LoggerSpy $logger ): void {
-		$this->assertSame(
-			self::VALID_TRANSACTION_ID,
-			$logger->getLogCalls()->getFirstCall()->getContext()['post_vars']['transaction']
+		$this->assertContains(
+			'<transaction>' . self::VALID_TRANSACTION_ID . '</transaction>',
+			$logger->getLogCalls()->getFirstCall()->getContext()['request_content']
 		);
 
 		$this->assertEquals(
@@ -177,10 +177,10 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 			$client->request(
 				Request::METHOD_POST,
 				'/sofort-payment-notification?id=' . ( $donation->getId() + 1 ) . '&updateToken=' . self::VALID_TOKEN,
-				[
-					'transaction' => self::VALID_TRANSACTION_ID,
-					'time' => self::VALID_TRANSACTION_TIME
-				]
+				[],
+				[],
+				[],
+				$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, self::VALID_TRANSACTION_TIME )
 			);
 
 			$this->assertIsErrorResponse( $client->getResponse() );
@@ -206,10 +206,10 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 			$client->request(
 				Request::METHOD_POST,
 				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::VALID_TOKEN,
-				[
-					'transaction' => self::VALID_TRANSACTION_ID,
-					'time' => 'now'
-				]
+				[],
+				[],
+				[],
+				$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, 'now' )
 			);
 
 			$this->assertIsBadRequestResponse( $client->getResponse() );
@@ -217,6 +217,13 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 			$this->assertRequestVarsAreLogged( $logger );
 			$this->assertLogLevel( $logger, LogLevel::ERROR );
 		} );
+	}
+
+	private function buildRawRequestBody( string $transactionId, string $time ): string {
+		return "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n"
+			. "<status_notification><transaction>$transactionId</transaction>"
+			. "<time>$time</time>"
+			. "</status_notification>";
 	}
 
 }
