@@ -213,7 +213,7 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 			);
 
 			$this->assertIsBadRequestResponse( $client->getResponse() );
-			$this->assertErrorCauseIsLogged( $logger, 'Invalid notification time' );
+			$this->assertErrorCauseIsLogged( $logger, 'Invalid notification request' );
 			$this->assertRequestVarsAreLogged( $logger );
 			$this->assertLogLevel( $logger, LogLevel::ERROR );
 		} );
@@ -223,7 +223,7 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 		return "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n"
 			. "<status_notification><transaction>$transactionId</transaction>"
 			. "<time>$time</time>"
-			. "</status_notification>";
+			. '</status_notification>';
 	}
 
 }
