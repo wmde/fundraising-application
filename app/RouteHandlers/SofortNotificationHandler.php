@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\App\RouteHandlers;
 
 use DateTime;
+use Sofort\SofortLib\Notification;
 use UnexpectedValueException;
 use Psr\Log\LogLevel;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,7 +59,7 @@ class SofortNotificationHandler {
 	}
 
 	private function newUseCaseRequest(): SofortNotificationRequest {
-		$useCaseRequest = SofortNotificationRequest::fromRawRequest( $this->request->getContent() );
+		$useCaseRequest = self::fromUseCaseRequestFromRequestContent( $this->request->getContent() );
 
 		if ( !( $useCaseRequest instanceof SofortNotificationRequest ) ) {
 			throw new UnexpectedValueException( 'Invalid notification request' );
@@ -67,6 +68,27 @@ class SofortNotificationHandler {
 		$useCaseRequest->setDonationId( $this->request->query->getInt( 'id' ) );
 
 		return $useCaseRequest;
+	}
+
+	public static function fromUseCaseRequestFromRequestContent( string $content ): ?SofortNotificationRequest {
+		$vendorNotification = new Notification();
+		$result = $vendorNotification->getNotification( $content );
+
+		if ( $result === false ) {
+			return null;
+		}
+
+		$time = DateTime::createFromFormat( DateTime::ATOM, $vendorNotification->getTime() );
+
+		if ( $time === false ) {
+			return null;
+		}
+
+		$notification = new SofortNotificationRequest();
+		$notification->setTime( $time );
+		$notification->setTransactionId( $vendorNotification->getTransactionId() );
+
+		return $notification;
 	}
 
 	private function logResponseIfNeeded( SofortNotificationResponse $response ): void {

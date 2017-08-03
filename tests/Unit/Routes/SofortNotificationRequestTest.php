@@ -2,8 +2,9 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\PaymentContext\Tests\Unit\RequestModel;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\Routes;
 
+use WMDE\Fundraising\Frontend\App\RouteHandlers\SofortNotificationHandler;
 use WMDE\Fundraising\Frontend\PaymentContext\RequestModel\SofortNotificationRequest;
 use DateTime;
 use PHPUnit\Framework\TestCase;
@@ -15,7 +16,7 @@ class SofortNotificationRequestTest extends TestCase {
 			. '<status_notification><transaction>555-777</transaction>'
 			. '<time>2010-04-14T19:01:08+02:00</time>'
 			. '</status_notification>';
-		$request = SofortNotificationRequest::fromRawRequest( $content );
+		$request = SofortNotificationHandler::fromUseCaseRequestFromRequestContent( $content );
 
 		$this->assertInstanceOf( SofortNotificationRequest::class, $request );
 		$this->assertSame( '555-777', $request->getTransactionId() );
@@ -24,7 +25,7 @@ class SofortNotificationRequestTest extends TestCase {
 	}
 
 	public function testAbsurdRequest_nullIsReturned(): void {
-		$request = SofortNotificationRequest::fromRawRequest( 'fff' );
+		$request = SofortNotificationHandler::fromUseCaseRequestFromRequestContent( 'fff' );
 
 		$this->assertNull( $request );
 	}
@@ -34,7 +35,7 @@ class SofortNotificationRequestTest extends TestCase {
 			. '<status_notification>'
 			. '<time>2013-06-25T11:04:03+05:00</time>'
 			. '</status_notification>';
-		$request = SofortNotificationRequest::fromRawRequest( $content );
+		$request = SofortNotificationHandler::fromUseCaseRequestFromRequestContent( $content );
 
 		$this->assertNull( $request );
 	}
@@ -44,7 +45,7 @@ class SofortNotificationRequestTest extends TestCase {
 			. '<status_notification><transaction>555-777</transaction>'
 			. '<time>now</time>'
 			. '</status_notification>';
-		$request = SofortNotificationRequest::fromRawRequest( $content );
+		$request = SofortNotificationHandler::fromUseCaseRequestFromRequestContent( $content );
 
 		$this->assertNull( $request );
 	}
