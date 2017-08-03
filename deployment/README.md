@@ -35,15 +35,15 @@ To roll back ("undo") a deployment, log in to the server, change the symlink to 
 
 ## Deploying a release that needs database changes
 
-Call the playbook with the `skip_symlink` variable:
+Call the playbook (in this case for the test server) with the `skip_symlink` variable:
 
     ansible-playbook -i inventory/test --extra-vars 'skip_symlink=1' deployment.yml
 
-Afterwards, you have login to the server, change to the new release directory and use the 
+Afterwards, you login to the server, change to the new release directory and use the
 [Doctrine command line](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/tools.html#database-schema-generation)
 to update the database. The recommended way of doing this is to run
 
-    vendor/bin/doctrine orm:schema-tool:create --dump-sql
+    vendor/bin/doctrine orm:schema-tool:update --dump-sql
 
 and apply the database changes from a console MySQL client.
 
