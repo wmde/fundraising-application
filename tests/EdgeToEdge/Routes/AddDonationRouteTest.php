@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Silex\Application;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
@@ -320,7 +321,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		);
 
 		$response = $client->getResponse();
-		$this->assertSame( 302, $response->getStatusCode() );
+		$this->assertSame( Response::HTTP_FOUND, $response->getStatusCode() );
 		$this->assertContains( 'sandbox.paypal.com', $response->getContent() );
 	}
 
@@ -335,7 +336,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		);
 
 		$response = $client->getResponse();
-		$this->assertSame( 302, $response->getStatusCode() );
+		$this->assertSame( Response::HTTP_FOUND, $response->getStatusCode() );
 		$this->assertContains( 'item_name=item_name_donation', $response->getContent() );
 	}
 
@@ -357,8 +358,9 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		);
 
 		$response = $client->getResponse();
-		$this->assertSame( 200, $response->getStatusCode() );
-		$this->assertContains( 'paytext_cc 3 12,34 € per Kreditkarte.', $response->getContent() );
+		$this->assertSame( Response::HTTP_FOUND, $response->getStatusCode() );
+		$this->assertContains( 'amount=1234', $response->getContent() );
+		$this->assertContains( 'Redirecting to', $response->getContent() );
 		$this->assertContains( 'thatother.paymentprovider.com', $response->getContent() );
 	}
 

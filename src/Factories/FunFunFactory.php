@@ -131,7 +131,7 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListJsonPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListRssPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\ConfirmSubscriptionHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CreditCardNotificationPresenter;
-use WMDE\Fundraising\Frontend\Presentation\Presenters\CreditCardPaymentHtmlPresenter;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\CreditCardPaymentUrlGenerator;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormViolationPresenter;
@@ -1015,9 +1015,8 @@ class FunFunFactory {
 		);
 	}
 
-	public function newCreditCardPaymentHtmlPresenter(): CreditCardPaymentHtmlPresenter {
-		return new CreditCardPaymentHtmlPresenter(
-			$this->getIncludeTemplate( 'Credit_Card_Payment_Iframe.html.twig' ),
+	public function newCreditCardPaymentUrlGenerator(): CreditCardPaymentUrlGenerator {
+		return new CreditCardPaymentUrlGenerator(
 			$this->getTranslator(),
 			$this->newCreditCardUrlGenerator()
 		);

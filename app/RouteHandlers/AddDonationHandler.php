@@ -70,7 +70,7 @@ class AddDonationHandler {
 		switch( $responseModel->getDonation()->getPaymentType() ) {
 			case PaymentType::DIRECT_DEBIT:
 			case PaymentType::BANK_TRANSFER:
-				$httpResponse = $this->app->redirect(
+				return $this->app->redirect(
 					$this->app['url_generator']->generate(
 						'show-donation-confirmation',
 						[
@@ -82,7 +82,7 @@ class AddDonationHandler {
 				);
 				break;
 			case PaymentType::PAYPAL:
-				$httpResponse = $this->app->redirect(
+				return $this->app->redirect(
 					$this->ffFactory->newPayPalUrlGeneratorForDonations()->generateUrl(
 						$responseModel->getDonation()->getId(),
 						$responseModel->getDonation()->getAmount(),
@@ -93,7 +93,7 @@ class AddDonationHandler {
 				);
 				break;
 			case PaymentType::SOFORT:
-				$httpResponse = $this->app->redirect(
+				return $this->app->redirect(
 					$this->ffFactory->newSofortUrlGeneratorForDonations()->generateUrl(
 						$responseModel->getDonation()->getId(),
 						$responseModel->getDonation()->getPayment()->getPaymentMethod()->getBankTransferCode(),
@@ -104,14 +104,13 @@ class AddDonationHandler {
 				);
 				break;
 			case PaymentType::CREDIT_CARD:
-				$httpResponse = new Response(
-					$this->ffFactory->newCreditCardPaymentHtmlPresenter()->present( $responseModel )
+				return $this->app->redirect(
+					$this->ffFactory->newCreditCardPaymentUrlGenerator()->buildUrl( $responseModel )
 				);
 				break;
 			default:
 				throw new \LogicException( 'This code should not be reached' );
 		}
-		return $httpResponse;
 	}
 
 	private function createDonationRequest( Request $request ): AddDonationRequest {
