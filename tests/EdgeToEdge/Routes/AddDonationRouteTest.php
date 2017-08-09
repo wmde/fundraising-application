@@ -360,9 +360,9 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 		$response = $client->getResponse();
 		$this->assertSame( Response::HTTP_FOUND, $response->getStatusCode() );
+		$this->assertTrue( $response->isRedirect() );
 		$this->assertContains( 'amount=1234', $response->getContent() );
-		$this->assertContains( 'Redirecting to', $response->getContent() );
-		$this->assertContains( 'thatother.paymentprovider.com', $response->getContent() );
+		$this->assertContains( 'thatother.paymentprovider.com', $response->headers->get( 'Location' ) );
 	}
 
 	public function testValidSofortInput_savesDonationAndRedirectsTo3rdPartyPage(): void {
