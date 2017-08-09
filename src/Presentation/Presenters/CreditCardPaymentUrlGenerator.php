@@ -9,8 +9,6 @@ use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationRe
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\CreditCard;
 
 /**
- * Render the credit card payment page embedding an iframe
- *
  * @licence GNU GPL v2+
  */
 class CreditCardPaymentUrlGenerator {
