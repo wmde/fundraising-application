@@ -107,7 +107,8 @@
 		"notify-url": "",
 		"return-url": "",
 		"cancel-url": "",
-		"item-name": ""
+		"item-name": "",
+		"delay-in-days": 90
 	},
 	"creditcard": {
 		"access-key": "",

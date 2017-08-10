@@ -56,7 +56,8 @@
 		"notify-url": "http://localhost:31337/handle-paypal-membership-fee-notification",
 		"return-url": "http://localhost:31337/show-membership-confirmation",
 		"cancel-url": "http://localhost:31337/",
-		"item-name": "Test-Mitgliedschaft bei Wikimedia"
+		"item-name": "Test-Mitgliedschaft bei Wikimedia",
+		"delay-in-days": 90
 	},
 	"creditcard": {
 		"access-key": "",
