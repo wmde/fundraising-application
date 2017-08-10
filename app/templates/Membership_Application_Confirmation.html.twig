@@ -97,24 +97,15 @@
 
 					<hr/>
 
-					<p class="label no-margin">
-						Gläubiger-ID Wikimedia Deutschland e. V.: DE39ZZZ00000029337<br/><br/>
-						Die Mandatsreferenznummer zur eindeutigen Identifizierung des SEPA-Lastschriftmandats wird Ihnen separat per E-Mail mitgeteilt.
-						Ihre Lastschrift wird als SEPA-Rahmenmandat behandelt.<br/><br/>
-
-						<div class="label">
-							<img src="../skin/10h16/_assets/img/checked-box.png" style="float: left;">
-							<div style="padding-left: 25px;">
-								Ich ermächtige Wikimedia Deutschland e. V. (Gläubiger-ID: DE39ZZZ00000029337) Zahlungen
-								von meinem Konto mittels Lastschrift einzuziehen. Zugleich weise ich mein Kreditinstitut an, die von 
-								Wikimedia Deutschland e. V. auf mein Konto gezogenen Lastschriften einzulösen.<br /><br />
-								Ich kann innerhalb von acht Wochen, beginnend mit dem Belastungsdatum, die Erstattung des belasteten Betrages
-								verlangen. Es gelten dabei die mit meinem Kreditinstitut vereinbarten Bedingungen.
-							</div>
+					{% if membershipApplication.paymentType == 'BEZ' %}
+						<div class="directdebit-mandate">
+							{$ web_content('membership_application_confirmation/paymenttype_directdebit_mandate') $}
 						</div>
+						<div class="directdebit-affirmation">
+							{$ web_content('membership_application_confirmation/paymenttype_directdebit_affirmation') $}
+						</div>
+					{% endif %}
 
-					</p>
-					<br/>
 					<div class="container clearfix">
 						Berlin, {$ "now"|date("d.m.Y") $}
 					</div>

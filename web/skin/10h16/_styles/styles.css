@@ -554,6 +554,17 @@ section[id$="-sepa-confirmation"] .step-list li.last { background: #7bc46d; }
 #donation-sheet .step-list li.first { background: #85d576 url(../_assets/img/sheet_step_list_item_1.png) right center no-repeat; }
 #donation-sheet .step-list li.last { background: #7bc46d; }
 
+#sepa-membership-confirmation .directdebit-mandate,
+#sepa-membership-confirmation .directdebit-affirmation {
+    color: #666666;
+}
+
+#sepa-membership-confirmation .directdebit-affirmation {
+    padding-left: 25px;
+    background: transparent url(../_assets/img/checked-box.png) left top no-repeat;
+    margin-bottom: 3ex;
+}
+
 /*#donation-periode .box-section { min-height: 160px; }*/
 
 #membership-payment .amount-list { width: 390px; }
