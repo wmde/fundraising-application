@@ -33,7 +33,8 @@ class CreditCard {
 			'token' => $accessToken,
 			'utoken' => $updateToken,
 			'amount' => $amount->getEuroCents(),
-			'theme' => $this->config->getTheme()
+			'theme' => $this->config->getTheme(),
+			'producttype' => 'fee'
 		];
 		if ( $this->config->isTestMode() ) {
 			$params['testmode'] = '1';

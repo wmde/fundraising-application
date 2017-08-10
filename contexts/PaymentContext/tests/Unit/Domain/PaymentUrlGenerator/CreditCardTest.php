@@ -49,7 +49,7 @@ class CreditCardTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame(
 			'https://credit-card.micropayment.de/creditcard/event/index.php?project=wikimedia&bgcolor=CCE7CD&' .
 			'paytext=Ich+spende+einmalig&mp_user_firstname=Kai&mp_user_surname=Nissen&sid=1234567&gfx=wikimedia_black&' .
-			'token=my_access_token&utoken=my_update_token&amount=500&theme=wikimedia&testmode=1',
+			'token=my_access_token&utoken=my_update_token&amount=500&theme=wikimedia&producttype=fee&testmode=1',
 			$urlGenerator->generateUrl(
 				'Kai', 'Nissen', 'Ich spende einmalig', 1234567, 'my_access_token', 'my_update_token', Euro::newFromFloat( 5.00 )
 			)
@@ -61,7 +61,7 @@ class CreditCardTest extends \PHPUnit\Framework\TestCase {
 			[
 				'https://credit-card.micropayment.de/creditcard/event/index.php?project=wikimedia&bgcolor=CCE7CD&' .
 					'paytext=Ich+spende+einmalig&mp_user_firstname=Kai&mp_user_surname=Nissen&sid=1234567&gfx=wikimedia_black&' .
-					'token=my_access_token&utoken=my_update_token&amount=500&theme=wikimedia',
+					'token=my_access_token&utoken=my_update_token&amount=500&theme=wikimedia&producttype=fee',
 				'Kai',
 				'Nissen',
 				'Ich spende einmalig',
@@ -73,7 +73,7 @@ class CreditCardTest extends \PHPUnit\Framework\TestCase {
 			[
 				'https://credit-card.micropayment.de/creditcard/event/index.php?project=wikimedia&bgcolor=CCE7CD&' .
 					'paytext=Ich+spende+monatlich&mp_user_firstname=Kai&mp_user_surname=Nissen&sid=1234567&gfx=wikimedia_black&' .
-					'token=my_access_token&utoken=my_update_token&amount=123&theme=wikimedia',
+					'token=my_access_token&utoken=my_update_token&amount=123&theme=wikimedia&producttype=fee',
 				'Kai',
 				'Nissen',
 				'Ich spende monatlich',
@@ -85,7 +85,8 @@ class CreditCardTest extends \PHPUnit\Framework\TestCase {
 			[
 				'https://credit-card.micropayment.de/creditcard/event/index.php?project=wikimedia&bgcolor=CCE7CD&' .
 					'paytext=Ich+spende+halbj%C3%A4hrlich&mp_user_firstname=Kai&mp_user_surname=Nissen&sid=1234567&' .
-					'gfx=wikimedia_black&token=my_access_token&utoken=my_update_token&amount=1250&theme=wikimedia',
+					'gfx=wikimedia_black&token=my_access_token&utoken=my_update_token&amount=1250&theme=wikimedia&' .
+					'producttype=fee',
 				'Kai',
 				'Nissen',
 				'Ich spende halbjährlich',
