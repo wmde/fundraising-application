@@ -5,32 +5,20 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
 use PHPUnit\Framework\TestCase;
-use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
-use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
-use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\TemplateMailerInterface;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\EmailAddress;
 
 /**
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class TemplateBasedMailerSpy extends TemplateBasedMailer {
+class TemplateBasedMailerSpy implements TemplateMailerInterface {
 
 	private $testCase;
 	private $sendMailCalls = [];
 
 	public function __construct( TestCase $testCase ) {
 		$this->testCase = $testCase;
-
-		$messenger = $this->testCase->getMockBuilder( Messenger::class )
-			->disableOriginalConstructor()
-			->getMock();
-
-		$template = $this->testCase->getMockBuilder( TwigTemplate::class )
-			->disableOriginalConstructor()
-			->getMock();
-
-		parent::__construct( $messenger, $template, 'Hello' );
 	}
 
 	public function sendMail( EmailAddress $recipient, array $templateArguments = [] ): void {
