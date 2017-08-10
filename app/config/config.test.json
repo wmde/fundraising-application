@@ -51,7 +51,7 @@
 		"base-url": "http://thatother.paymentprovider.com?",
 		"project-id": "myprojectid",
 		"background-color": "000000",
-		"skin": "default",
+		"logo": "wikimedia_black",
 		"theme": "default",
 		"return-url": "http://my.donation.app/show-donation-confirmation",
 		"testmode": true,
