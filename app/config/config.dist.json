@@ -114,7 +114,7 @@
 		"base-url": "https://credit-card.micropayment.de/creditcard/event/index.php?",
 		"project-id": "",
 		"background-color": "000000",
-		"skin": "default",
+		"logo": "",
 		"theme": "x1",
 		"return-url": "https://spenden.wikimedia.de/show-donation-confirmation",
 		"testmode": true

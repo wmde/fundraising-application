@@ -29,7 +29,7 @@ class CreditCard {
 			'mp_user_firstname' => $firstName,
 			'mp_user_surname' => $lastName,
 			'sid' => $donationId,
-			'skin' => $this->config->getSkin(),
+			'gfx' => $this->config->getLogo(),
 			'token' => $accessToken,
 			'utoken' => $updateToken,
 			'amount' => $amount->getEuroCents(),
