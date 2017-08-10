@@ -350,7 +350,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	public function testGivenValidCreditCardData_showsIframeEmbeddingPage(): void {
+	public function testGivenValidCreditCardData_redirectsToPaymentProvider(): void {
 		$client = $this->createClient();
 		$client->request(
 			'POST',
@@ -361,7 +361,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$response = $client->getResponse();
 		$this->assertSame( Response::HTTP_FOUND, $response->getStatusCode() );
 		$this->assertTrue( $response->isRedirect() );
-		$this->assertContains( 'amount=1234', $response->getContent() );
+		$this->assertContains( 'amount=1234', $response->headers->get( 'Location' ) );
 		$this->assertContains( 'thatother.paymentprovider.com', $response->headers->get( 'Location' ) );
 	}
 
