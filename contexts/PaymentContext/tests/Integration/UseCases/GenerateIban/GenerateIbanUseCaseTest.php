@@ -11,7 +11,7 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\PaymentContext\ResponseModel\IbanResponse;
 use WMDE\Fundraising\Frontend\PaymentContext\UseCases\GenerateIban\GenerateIbanRequest;
 use WMDE\Fundraising\Frontend\PaymentContext\UseCases\GenerateIban\GenerateIbanUseCase;
-use WMDE\Fundraising\Frontend\Validation\IbanValidator;
+use WMDE\Fundraising\Frontend\Validation\KontoCheckIbanValidator;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\PaymentContext\UseCases\GenerateIban\GenerateIbanUseCase
@@ -62,7 +62,7 @@ class GenerateIbanUseCaseTest extends TestCase {
 		$bankDataConverter = new BankDataConverter( 'res/blz.lut2f' );
 		return new GenerateIbanUseCase(
 			$bankDataConverter,
-			new IbanValidator( $bankDataConverter, [ 'DE33100205000001194700' ] )
+			new KontoCheckIbanValidator( $bankDataConverter, [ 'DE33100205000001194700' ] )
 		);
 	}
 }

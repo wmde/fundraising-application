@@ -6,10 +6,10 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Validation;
 
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataConverter;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
-use WMDE\Fundraising\Frontend\Validation\IbanValidator;
+use WMDE\Fundraising\Frontend\Validation\KontoCheckIbanValidator;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Validation\IbanValidator
+ * @covers WMDE\Fundraising\Frontend\Validation\KontoCheckIbanValidator
  * Valid IBAN number examples taken from http://www.iban-rechner.eu/ibancalculator/iban.html#examples.
  *
  * @licence GNU GPL v2+
@@ -17,10 +17,10 @@ use WMDE\Fundraising\Frontend\Validation\IbanValidator;
  *
  * @requires extension konto_check
  */
-class IbanValidatorTest extends \PHPUnit\Framework\TestCase {
+class KontoCheckIbanValidatorTest extends \PHPUnit\Framework\TestCase {
 
-	private function newValidator( array $bannedIbans = [] ): IbanValidator {
-		return new IbanValidator( new BankDataConverter( 'res/blz.lut2f' ), $bannedIbans );
+	private function newValidator( array $bannedIbans = [] ): KontoCheckIbanValidator {
+		return new KontoCheckIbanValidator( new BankDataConverter( 'res/blz.lut2f' ), $bannedIbans );
 	}
 
 	public function validIbanProvider(): array {

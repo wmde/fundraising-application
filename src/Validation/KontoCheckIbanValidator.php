@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
  * @author Leszek Manicki <leszek.manicki@wikimedia.de>
  * @author Kai Nissen <leszek.manicki@wikimedia.de>
  */
-class IbanValidator {
+class KontoCheckIbanValidator implements IbanValidator {
 
 	private $bankDataConverter;
 	private $bannedIbanNumbers = [];
