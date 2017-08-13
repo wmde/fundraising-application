@@ -88,11 +88,7 @@
 						<div class="container clearfix" style="margin-bottom: 35px;">
 							<input type="checkbox" id="confirm_sepa" name="confirm_sepa" value="1" {% if membershipAppl.bankData.confirmSepa %}checked="checked"{% endif %} title="SEPA-Bestätigung">
 							<label for="confirm_sepa">
-								Ich ermächtige Wikimedia Deutschland e.V. (Gläubiger-ID: DE39ZZZ00000029337) Zahlungen
-								von meinem Konto mittels Lastschrift einzuziehen. Zugleich weise ich mein Kreditinstitut an, die von Wikimedia Deutschland e.V.
-								auf mein Konto gezogenen Lastschriften einzulösen.<br /><br />
-								Ich kann innerhalb von acht Wochen, beginnend mit dem Belastungsdatum, die Erstattung des belasteten Betrages
-								verlangen. Es gelten dabei die mit meinem Kreditinstitut vereinbarten Bedingungen.
+								{$ web_content('membership/application/paymenttype_directdebit_affirmation') $}
 							</label>
 						</div>
 
