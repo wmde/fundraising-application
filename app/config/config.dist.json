@@ -157,19 +157,24 @@
 	},
 	"payment-types": {
 		"BEZ": {
-			"donation-enabled": true
+			"donation-enabled": true,
+			"membership-enabled": true
 		},
 		"UEB": {
-			"donation-enabled": true
+			"donation-enabled": true,
+			"membership-enabled": false
 		},
 		"MCP": {
-			"donation-enabled": true
+			"donation-enabled": true,
+			"membership-enabled": false
 		},
 		"PPL": {
-			"donation-enabled": true
+			"donation-enabled": true,
+			"membership-enabled": false
 		},
 		"SUB": {
-			"donation-enabled": false
+			"donation-enabled": false,
+			"membership-enabled": false
 		}
 	}
 }

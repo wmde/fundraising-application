@@ -245,6 +245,7 @@
 
 					<div class="container clearfix">
 
+{% if 'PPL' in paymentTypes %}
 						<ul class="horizontal clearfix payment-type-list">
 							<li class="first">
 								<input type="radio" title="Lastschrift" value="BEZ" class="payment-type-select" name="payment_type" id="paymentType-1">
@@ -262,6 +263,7 @@
 
 						<hr />
 
+{% endif %}
 						<ul class="horizontal clearfix interval-list">
 							<li class="first">
 								<input type="radio" id="interval-1" name="membership_fee_interval" class="payment-period-select" value="1" title="monatlich">

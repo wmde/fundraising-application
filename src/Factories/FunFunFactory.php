@@ -1011,7 +1011,13 @@ class FunFunFactory {
 
 	public function newDonationConfirmationPresenter(): DonationConfirmationHtmlPresenter {
 		return new DonationConfirmationHtmlPresenter(
-			$this->getIncludeTemplate( 'Donation_Confirmation.html.twig', [ 'piwikGoals' => [ 3 ] ] )
+			$this->getIncludeTemplate(
+				'Donation_Confirmation.html.twig',
+				[
+					'piwikGoals' => [ 3 ],
+					'paymentTypes' => $this->getEnabledMembershipApplicationPaymentTypes()
+				]
+			)
 		);
 	}
 
@@ -1168,6 +1174,18 @@ class FunFunFactory {
 		} ) );
 	}
 
+	public function getMembershipApplicationFormTemplate(): TwigTemplate {
+		return $this->getLayoutTemplate( 'Membership_Application.html.twig', [
+			'paymentTypes' => $this->getEnabledMembershipApplicationPaymentTypes()
+		] );
+	}
+
+	private function getEnabledMembershipApplicationPaymentTypes(): array {
+		return array_keys( array_filter( $this->config['payment-types'], function ( $config ) {
+			return ( $config['membership-enabled'] === true );
+		} ) );
+	}
+
 	public function newHandleSofortPaymentNotificationUseCase( string $updateToken ): SofortPaymentNotificationUseCase {
 		return new SofortPaymentNotificationUseCase(
 			$this->getDonationRepository(),
@@ -1244,7 +1262,7 @@ class FunFunFactory {
 
 	public function newMembershipFormViolationPresenter(): MembershipFormViolationPresenter {
 		return new MembershipFormViolationPresenter(
-			$this->getLayoutTemplate( 'Membership_Application.html.twig' )
+			$this->getMembershipApplicationFormTemplate()
 		);
 	}
 
