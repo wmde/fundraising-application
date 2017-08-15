@@ -19,7 +19,7 @@ matrix:
 #  - env: DB=sqlite; TYPE=coverage
 
 before_install:
-  - docker build -t wmde/fundraising-frontend-phpstan docker/phpstan
+  - docker build -t wmde/fundraising-frontend-phpstan build/phpstan
 
 install:
   - travis_retry composer install
