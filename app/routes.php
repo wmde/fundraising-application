@@ -409,7 +409,7 @@ $app->post(
 $app->get(
 	'apply-for-membership',
 	function( Request $request ) use ( $ffFactory ) {
-		$params = [ 'delay_in_days' => $ffFactory->getPaymentDelayInDays() ];
+		$params = [];
 
 		if ( $request->query->get('type' ) === 'sustaining' ) {
 			$params['showMembershipTypeOption'] = false ;
