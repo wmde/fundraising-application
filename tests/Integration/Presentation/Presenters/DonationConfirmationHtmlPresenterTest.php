@@ -20,6 +20,7 @@ class DonationConfirmationHtmlPresenterTest extends \PHPUnit\Framework\TestCase 
 
 	private const STATUS_BOOKED = 'status-booked';
 	private const STATUS_UNCONFIRMED = 'status-unconfirmed';
+	private const MEMBERSHIP_FEE_PAYMENT_DELAY = 42;
 
 	public function testWhenPresenterRenders_itPassedParamsToTemplate(): void {
 		$twig = $this->getMockBuilder( TwigTemplate::class )->disableOriginalConstructor()->getMock();
@@ -34,7 +35,8 @@ class DonationConfirmationHtmlPresenterTest extends \PHPUnit\Framework\TestCase 
 			ValidDonation::newBookedAnonymousPayPalDonation(),
 			'update_token',
 			$pageSelector,
-			$this->newPiwikEvents()
+			$this->newPiwikEvents(),
+			self::MEMBERSHIP_FEE_PAYMENT_DELAY
 		);
 	}
 
@@ -60,7 +62,8 @@ class DonationConfirmationHtmlPresenterTest extends \PHPUnit\Framework\TestCase 
 			'piwikEvents' => [
 				[ 'setCustomVariable', 1, 'Payment', 'some value', PiwikEvents::SCOPE_VISIT ],
 				[ 'trackGoal', 4095 ]
-			]
+			],
+			'delay_in_days' => 42
 		];
 	}
 
@@ -85,7 +88,8 @@ class DonationConfirmationHtmlPresenterTest extends \PHPUnit\Framework\TestCase 
 			ValidDonation::newIncompleteAnonymousPayPalDonation(),
 			'update_token',
 			$pageSelector,
-			$this->newPiwikEvents()
+			$this->newPiwikEvents(),
+			self::MEMBERSHIP_FEE_PAYMENT_DELAY
 		);
 	}
 

@@ -28,14 +28,17 @@ class DonationConfirmationHtmlPresenter {
 	}
 
 	public function present( Donation $donation, string $updateToken, SelectedConfirmationPage $selectedPage,
-							 PiwikEvents $piwikEvents ): string {
+							 PiwikEvents $piwikEvents, int $membershipFeePaymentDelay ): string {
 		return $this->template->render(
-			$this->getConfirmationPageArguments( $donation, $updateToken, $selectedPage, $piwikEvents )
+			$this->getConfirmationPageArguments(
+				$donation, $updateToken, $selectedPage, $piwikEvents, $membershipFeePaymentDelay
+			)
 		);
 	}
 
 	private function getConfirmationPageArguments( Donation $donation, string $updateToken,
-												   SelectedConfirmationPage $selectedPage, PiwikEvents $piwikEvents ): array {
+												   SelectedConfirmationPage $selectedPage, PiwikEvents $piwikEvents,
+												   int $membershipFeePaymentDelay ): array {
 
 		return [
 			'main_template' => $selectedPage->getPageTitle(),
@@ -57,7 +60,8 @@ class DonationConfirmationHtmlPresenter {
 			'person' => $this->getPersonArguments( $donation ),
 			'bankData' => $this->getBankDataArguments( $donation->getPaymentMethod() ),
 			'initialFormValues' => $this->getInitialMembershipFormValues( $donation ),
-			'piwikEvents' => $piwikEvents->getEvents()
+			'piwikEvents' => $piwikEvents->getEvents(),
+			'delay_in_days' => $membershipFeePaymentDelay
 		];
 	}
 

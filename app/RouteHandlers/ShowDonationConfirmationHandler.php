@@ -44,7 +44,8 @@ class ShowDonationConfirmationHandler {
 				$responseModel->getDonation(),
 				$responseModel->getUpdateToken(),
 				$selectedConfirmationPage,
-				PiwikVariableCollector::newForDonation( $sessionTrackingData, $responseModel->getDonation() )
+				PiwikVariableCollector::newForDonation( $sessionTrackingData, $responseModel->getDonation() ),
+				$this->ffFactory->getPaymentDelayInDays()
 			)
 		);
 
