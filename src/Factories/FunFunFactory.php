@@ -154,7 +154,7 @@ use WMDE\Fundraising\Frontend\Validation\PaymentDataValidator;
 use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
 use WMDE\Fundraising\Frontend\Validation\EmailValidator;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
-use WMDE\Fundraising\Frontend\Validation\IbanValidator;
+use WMDE\Fundraising\Frontend\Validation\KontoCheckIbanValidator;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
 use WMDE\Fundraising\Frontend\Validation\TemplateNameValidator;
 use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
@@ -1384,8 +1384,8 @@ class FunFunFactory {
 		return $this->pimple['profiler_data_collector'];
 	}
 
-	private function newIbanValidator(): IbanValidator {
-		return new IbanValidator( $this->newBankDataConverter(), $this->config['banned-ibans'] );
+	private function newIbanValidator(): KontoCheckIbanValidator {
+		return new KontoCheckIbanValidator( $this->newBankDataConverter(), $this->config['banned-ibans'] );
 	}
 
 	public function setFilePrefixer( FilePrefixer $prefixer ): void {

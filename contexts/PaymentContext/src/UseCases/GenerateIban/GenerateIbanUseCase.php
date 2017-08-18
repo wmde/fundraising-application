@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\PaymentContext\UseCases\GenerateIban;
 
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataConverter;
 use WMDE\Fundraising\Frontend\PaymentContext\ResponseModel\IbanResponse;
-use WMDE\Fundraising\Frontend\Validation\IbanValidator;
+use WMDE\Fundraising\Frontend\Validation\KontoCheckIbanValidator;
 
 /**
  * @licence GNU GPL v2+
@@ -17,7 +17,7 @@ class GenerateIbanUseCase {
 	private $bankDataConverter;
 	private $ibanValidator;
 
-	public function __construct( BankDataConverter $bankDataConverter, IbanValidator $ibanValidator ) {
+	public function __construct( BankDataConverter $bankDataConverter, KontoCheckIbanValidator $ibanValidator ) {
 		$this->bankDataConverter = $bankDataConverter;
 		$this->ibanValidator = $ibanValidator;
 	}

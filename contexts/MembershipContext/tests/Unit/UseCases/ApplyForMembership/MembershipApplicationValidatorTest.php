@@ -15,7 +15,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingEmailValidator;
 use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 use WMDE\Fundraising\Frontend\Validation\EmailValidator;
-use WMDE\Fundraising\Frontend\Validation\IbanValidator;
+use WMDE\Fundraising\Frontend\Validation\KontoCheckIbanValidator;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
 use WMDE\Fundraising\Frontend\Validation\ValidationResult;
 
@@ -137,8 +137,8 @@ class MembershipApplicationValidatorTest extends \PHPUnit\Framework\TestCase {
 		return new BankDataValidator( $this->newSucceedingIbanValidator() );
 	}
 
-	private function newSucceedingIbanValidator(): IbanValidator {
-		$ibanValidator = $this->getMockBuilder( IbanValidator::class )
+	private function newSucceedingIbanValidator(): KontoCheckIbanValidator {
+		$ibanValidator = $this->getMockBuilder( KontoCheckIbanValidator::class )
 			->disableOriginalConstructor()->getMock();
 
 		$ibanValidator->method( 'validate' )

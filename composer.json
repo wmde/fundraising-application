@@ -13,6 +13,7 @@
 		"pimple/pimple": "~3.0",
 
 		"wmde/fundraising-store": "~6.0",
+		"wmde/fundraising-donations": "@dev",
 		"wmde/fundraising-content-provider": "^2.0",
 		"wmde/euro": "~1.0",
 
@@ -29,8 +30,7 @@
 		"symfony/console": "^3.2",
 		"piwik/piwik-php-tracker": "^1.0",
 		"guzzlehttp/guzzle": "^6.0",
-		"symfony/stopwatch": "^3.3",
-		"sofort/sofortlib-php": "^3.2"
+		"symfony/stopwatch": "^3.3"
 	},
 	"repositories": [
 		{
@@ -53,6 +53,10 @@
 					]
 				}
 			}
+		},
+		{
+			"type": "vcs",
+			"url": "https://github.com/wmde/fundraising-donations"
 		},
 		{
 			"type": "vcs",
@@ -89,7 +93,6 @@
 			"WMDE\\Fundraising\\Frontend\\": "src/",
 			"WMDE\\Fundraising\\Frontend\\App\\": "app/",
 			"WMDE\\Fundraising\\Frontend\\Cli\\": "cli/",
-			"WMDE\\Fundraising\\Frontend\\DonationContext\\": "contexts/DonationContext/src/",
 			"WMDE\\Fundraising\\Frontend\\MembershipContext\\": "contexts/MembershipContext/src/",
 			"WMDE\\Fundraising\\Frontend\\PaymentContext\\": "contexts/PaymentContext/src/",
 			"WMDE\\Fundraising\\Frontend\\SubscriptionContext\\": "contexts/SubscriptionContext/src/"
@@ -98,7 +101,6 @@
 	"autoload-dev": {
 		"psr-4": {
 			"WMDE\\Fundraising\\Frontend\\Tests\\": "tests/",
-			"WMDE\\Fundraising\\Frontend\\DonationContext\\Tests\\": "contexts/DonationContext/tests/",
 			"WMDE\\Fundraising\\Frontend\\MembershipContext\\Tests\\": "contexts/MembershipContext/tests/",
 			"WMDE\\Fundraising\\Frontend\\PaymentContext\\Tests\\": "contexts/PaymentContext/tests/",
 			"WMDE\\Fundraising\\Frontend\\SubscriptionContext\\Tests\\": "contexts/SubscriptionContext/tests/"
