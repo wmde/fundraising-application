@@ -1,5 +1,6 @@
 {% set showMembershipTypeOption = false %}
 {% set formSlideOpen = true %}
+{% set initialPaymentType = paymentTypes|length == 1 ? paymentTypes|first : '' %}
 {% set trackOutgoingLinks = true %}
 {% if person.salutation and person.lastName %}
 	{% set membershipAppeal = "#{person.salutation} #{person.lastName}, werden Sie Fördermitglied!" %}
@@ -18,7 +19,7 @@
 </div>
 
 <script id="init-form" src="{$ basepath|e('html_attr') $}/res/js/membershipForm.js"
-		data-initial-form-values="{% if initialFormValues %}{$ initialFormValues|merge({'paymentType': 'BEZ'})|json_encode|e('html_attr') $}{% else %}{$ {'paymentType': 'BEZ'}|json_encode|e('html_attr') $}{% endif %}"
+		data-initial-form-values="{% if initialFormValues %}{$ initialFormValues|merge({'paymentType': initialPaymentType})|json_encode|e('html_attr') $}{% else %}{$ {'paymentType': initialPaymentType}|json_encode|e('html_attr') $}{% endif %}"
 		data-violated-fields="{% if violatedFields %}{$ violatedFields|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
 		data-validate-fee-url="{$ basepath|e('html_attr') $}/validate-fee"
 		data-validate-address-url="{$ basepath|e('html_attr') $}/validate-address"

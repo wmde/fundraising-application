@@ -245,17 +245,22 @@
 
 					<div class="container clearfix">
 
-						<ul class="horizontal clearfix payment-type-list">
+						<ul class="horizontal clearfix payment-type-list" style="{% if paymentTypes|length < 2 %}display: none;{% endif %}">
+{% if 'BEZ' in paymentTypes %}
 							<li class="first">
 								<input type="radio" title="Lastschrift" value="BEZ" class="payment-type-select" name="payment_type" id="paymentType-1">
 								<label for="paymentType-1">Lastschrift</label>
 							</li>
+{% endif %}
+{% if 'PPL' in paymentTypes %}
 							<li>
 								<input type="radio" title="PayPal" value="PPL" class="payment-type-select" name="payment_type" id="paymentType-2">
 								<label for="paymentType-2">PayPal</label>
 							</li>
+{% endif %}
 						</ul>
 
+{% if 'PPL' in paymentTypes %}
 						<div class="notice-ppl-recurrent">
 							<p>
 								{$ 'notice_membership_paypal'|trans $}
@@ -266,6 +271,7 @@
 						</div>
 
 						<hr />
+{% endif %}
 
 						<ul class="horizontal clearfix interval-list">
 							<li class="first">
@@ -339,6 +345,7 @@
 						</ul>
 					</div>
 
+{% if 'BEZ' in paymentTypes %}
 					<div class="fields-direct-debit">
 
 						<hr />
@@ -400,6 +407,7 @@
 					<div style="margin-left: 180px" class="input-container">
 						<span id="bank-name"></span>
 					</div>
+{% endif %}
 
 					<hr>
 				</div>

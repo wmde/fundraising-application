@@ -415,7 +415,7 @@ $app->get(
 			$params['showMembershipTypeOption'] = false ;
 		}
 
-		return $ffFactory->getLayoutTemplate( 'Membership_Application.html.twig' )->render( $params );
+		return $ffFactory->getMembershipApplicationFormTemplate()->render( $params );
 	}
 );
 

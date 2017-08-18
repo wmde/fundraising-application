@@ -720,16 +720,22 @@
               "type": "boolean",
               "title": "Donation Enabled Flag",
               "description": "Set to true if payment type is to be offered for donations"
+            },
+            "membership-enabled": {
+              "type": "boolean",
+              "title": "Membership application enabled flag",
+              "description": "Set to true if payment type is to be offered for membership applications"
             }
           },
           "required": [
-            "donation-enabled"
+            "donation-enabled",
+            "membership-enabled"
           ],
           "additionalProperties": false
         }
       },
       "additionalProperties": false,
-      "minProperties": 1
+      "minProperties": 2
     }
   },
   "additionalProperties": false,
