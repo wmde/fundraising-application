@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Infrastructure;
 use RuntimeException;
 use Swift_Message;
 use Swift_Transport;
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\EmailAddress;
+use WMDE\Fundraising\Frontend\Infrastructure\EmailAddress;
 
 /**
  * @licence GNU GPL v2+

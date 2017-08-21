@@ -9,7 +9,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Applicant;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\ApplicantAddress;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\ApplicantName;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\EmailAddress;
+use WMDE\Fundraising\Frontend\Infrastructure\EmailAddress;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Payment;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\PhoneNumber;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
