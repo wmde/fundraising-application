@@ -97,7 +97,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\DataAccess\DoctrineApplicationRe
 use WMDE\Fundraising\Frontend\MembershipContext\DataAccess\DoctrineApplicationTokenFetcher;
 use WMDE\Fundraising\Frontend\MembershipContext\DataAccess\DoctrineApplicationTracker;
 use WMDE\Fundraising\Frontend\MembershipContext\DataAccess\DoctrineMembershipApplicationPrePersistSubscriber;
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\EmailAddress;
+use WMDE\Fundraising\Frontend\Infrastructure\EmailAddress;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipContext\Infrastructure\LoggingApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipContext\Tracking\ApplicationPiwikTracker;

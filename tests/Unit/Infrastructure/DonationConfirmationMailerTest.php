@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\DonationContext\Infrastructure\DonationConfirmationMailer;
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\EmailAddress;
+use WMDE\Fundraising\Frontend\Infrastructure\EmailAddress;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;

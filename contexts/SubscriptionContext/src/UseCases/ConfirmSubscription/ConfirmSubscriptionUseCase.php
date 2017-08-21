@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\ConfirmSubscription;
 
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateMailerInterface;
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\EmailAddress;
+use WMDE\Fundraising\Frontend\Infrastructure\EmailAddress;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Domain\Repositories\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
 use WMDE\Fundraising\Frontend\Validation\ValidationResponse;

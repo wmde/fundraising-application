@@ -582,16 +582,16 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "v2.5.8",
+            "version": "v2.5.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/doctrine2.git",
-                "reference": "e3aa3f2d1d7ac4bc732f8630f78fcb92d2885e68"
+                "reference": "c78afd51721804f4f76ff30d9b6f6159eb046161"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/e3aa3f2d1d7ac4bc732f8630f78fcb92d2885e68",
-                "reference": "e3aa3f2d1d7ac4bc732f8630f78fcb92d2885e68",
+                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/c78afd51721804f4f76ff30d9b6f6159eb046161",
+                "reference": "c78afd51721804f4f76ff30d9b6f6159eb046161",
                 "shasum": ""
             },
             "require": {
@@ -654,7 +654,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2017-08-13T18:46:56+00:00"
+            "time": "2017-08-18T19:17:35+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -2247,16 +2247,16 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.4.0",
+            "version": "v1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "f29dca382a6485c3cbe6379f0c61230167681937"
+                "reference": "7c8fae0ac1d216eb54349e6a8baa57d515fe8803"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/f29dca382a6485c3cbe6379f0c61230167681937",
-                "reference": "f29dca382a6485c3cbe6379f0c61230167681937",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/7c8fae0ac1d216eb54349e6a8baa57d515fe8803",
+                "reference": "7c8fae0ac1d216eb54349e6a8baa57d515fe8803",
                 "shasum": ""
             },
             "require": {
@@ -2268,7 +2268,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.4-dev"
+                    "dev-master": "1.5-dev"
                 }
             },
             "autoload": {
@@ -2302,7 +2302,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2017-06-09T14:24:12+00:00"
+            "time": "2017-06-14T15:44:48+00:00"
         },
         {
             "name": "symfony/routing",
@@ -2815,12 +2815,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations.git",
-                "reference": "c1f55700fcba71ecc1cf0523cf50b54e82054618"
+                "reference": "cd720cfc462ebe88e2295cc9f560fc81ae9abe3a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/c1f55700fcba71ecc1cf0523cf50b54e82054618",
-                "reference": "c1f55700fcba71ecc1cf0523cf50b54e82054618",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/cd720cfc462ebe88e2295cc9f560fc81ae9abe3a",
+                "reference": "cd720cfc462ebe88e2295cc9f560fc81ae9abe3a",
                 "shasum": ""
             },
             "require": {
@@ -2861,30 +2861,6 @@
                     "WMDE\\Fundraising\\Frontend\\PaymentContext\\Tests\\": "contexts/PaymentContext/tests/"
                 }
             },
-            "scripts": {
-                "test": [
-                    "composer validate --no-interaction",
-                    "vendor/bin/covers-validator",
-                    "vendor/bin/phpunit"
-                ],
-                "cs": [
-                    "@phpcs"
-                ],
-                "ci": [
-                    "@test",
-                    "@cs",
-                    "@stan"
-                ],
-                "phpcs": [
-                    "vendor/bin/phpcs"
-                ],
-                "phpmd": [
-                    "vendor/bin/phpmd src/ text phpmd.xml"
-                ],
-                "stan": [
-                    "./vendor/bin/phpstan analyse --level=1 --no-progress contexts/ src/ tests/"
-                ]
-            },
             "license": [
                 "GPL-2.0+"
             ],
@@ -2893,20 +2869,20 @@
                 "source": "https://github.com/wmde/fundraising-donations/tree/master",
                 "issues": "https://github.com/wmde/fundraising-donations/issues"
             },
-            "time": "2017-08-11T03:54:44+00:00"
+            "time": "2017-08-21T09:07:23+00:00"
         },
         {
             "name": "wmde/fundraising-store",
-            "version": "6.0.1",
+            "version": "6.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/FundraisingStore.git",
-                "reference": "0a02a47c63eec93b4020cd48876979956314e393"
+                "reference": "259aca641737c169413518057a84dce7ebaea053"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/FundraisingStore/zipball/0a02a47c63eec93b4020cd48876979956314e393",
-                "reference": "0a02a47c63eec93b4020cd48876979956314e393",
+                "url": "https://api.github.com/repos/wmde/FundraisingStore/zipball/259aca641737c169413518057a84dce7ebaea053",
+                "reference": "259aca641737c169413518057a84dce7ebaea053",
                 "shasum": ""
             },
             "require": {
@@ -2926,7 +2902,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "6.0.x-dev"
+                    "dev-master": "6.1.x-dev"
                 }
             },
             "autoload": {
@@ -2939,7 +2915,7 @@
                 "GPL-2.0+"
             ],
             "description": "Persistence services around the fundraising database",
-            "time": "2017-08-02T17:10:17+00:00"
+            "time": "2017-08-17T15:36:57+00:00"
         }
     ],
     "packages-dev": [
@@ -4342,16 +4318,16 @@
         },
         {
             "name": "phpunit/php-token-stream",
-            "version": "2.0.0",
+            "version": "2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-token-stream.git",
-                "reference": "ecb0b2cdaa0add708fe6f329ef65ae0c5225130b"
+                "reference": "9a02332089ac48e704c70f6cefed30c224e3c0b0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/ecb0b2cdaa0add708fe6f329ef65ae0c5225130b",
-                "reference": "ecb0b2cdaa0add708fe6f329ef65ae0c5225130b",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/9a02332089ac48e704c70f6cefed30c224e3c0b0",
+                "reference": "9a02332089ac48e704c70f6cefed30c224e3c0b0",
                 "shasum": ""
             },
             "require": {
@@ -4387,7 +4363,7 @@
             "keywords": [
                 "tokenizer"
             ],
-            "time": "2017-08-03T14:17:41+00:00"
+            "time": "2017-08-20T05:47:52+00:00"
         },
         {
             "name": "phpunit/phpunit",
@@ -5530,16 +5506,16 @@
         },
         {
             "name": "symfony/polyfill-php70",
-            "version": "v1.4.0",
+            "version": "v1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php70.git",
-                "reference": "032fd647d5c11a9ceab8ee8747e13b5448e93874"
+                "reference": "b6482e68974486984f59449ecea1fbbb22ff840f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php70/zipball/032fd647d5c11a9ceab8ee8747e13b5448e93874",
-                "reference": "032fd647d5c11a9ceab8ee8747e13b5448e93874",
+                "url": "https://api.github.com/repos/symfony/polyfill-php70/zipball/b6482e68974486984f59449ecea1fbbb22ff840f",
+                "reference": "b6482e68974486984f59449ecea1fbbb22ff840f",
                 "shasum": ""
             },
             "require": {
@@ -5549,7 +5525,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.4-dev"
+                    "dev-master": "1.5-dev"
                 }
             },
             "autoload": {
@@ -5585,7 +5561,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2017-06-09T14:24:12+00:00"
+            "time": "2017-06-14T15:44:48+00:00"
         },
         {
             "name": "symfony/var-dumper",
@@ -5986,12 +5962,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content.git",
-                "reference": "520efb5d1e010c6aa46918bf1533b15f36ede91a"
+                "reference": "3f9f183de6650acfbad6ba72c40d4008da719cd6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/520efb5d1e010c6aa46918bf1533b15f36ede91a",
-                "reference": "520efb5d1e010c6aa46918bf1533b15f36ede91a",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/3f9f183de6650acfbad6ba72c40d4008da719cd6",
+                "reference": "3f9f183de6650acfbad6ba72c40d4008da719cd6",
                 "shasum": ""
             },
             "require-dev": {
@@ -6023,7 +5999,7 @@
             "support": {
                 "source": "https://github.com/wmde/fundraising-frontend-content/tree/test"
             },
-            "time": "2017-08-11T08:34:27+00:00"
+            "time": "2017-08-17T14:12:00+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",
