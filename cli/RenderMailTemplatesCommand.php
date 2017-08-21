@@ -56,7 +56,7 @@ class RenderMailTemplatesCommand extends Command {
 
 		$app->flush();
 
-		$ffFactory->setTwigEnvironment( $app['twig'] );
+		$ffFactory->setSkinTwigEnvironment( $app['twig'] );
 
 		$mailTemplates = new MailTemplates( $ffFactory );
 		$testData = $mailTemplates->get();
@@ -72,7 +72,7 @@ class RenderMailTemplatesCommand extends Command {
 			$outputPath .= '/';
 		}
 
-		$this->renderTemplates( $testData, $ffFactory->getTwig(), $outputPath, $output );
+		$this->renderTemplates( $testData, $ffFactory->getSkinTwig(), $outputPath, $output );
 	}
 
 	private function getDefaultConfig(): array {

@@ -8,6 +8,7 @@ use FileFetcher\SimpleFileFetcher;
 use Symfony\Component\Translation\Translator;
 use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeUrlGenerator;
 
 /**
  * @licence GNU GPL v2+
@@ -29,7 +30,8 @@ class TestEnvironment {
 		$installer->install();
 
 		$instance->factory->setNullMessenger();
-		$instance->factory->setTwigEnvironment( new \Twig_Environment() );
+		$instance->factory->setSkinTwigEnvironment( new \Twig_Environment() );
+		$instance->factory->setUrlGenerator( new FakeUrlGenerator() );
 
 		// disabling translations in tests (will result in returned keys we can more easily test for)
 		$instance->factory->setTranslator( new Translator( 'zz_ZZ' ) );

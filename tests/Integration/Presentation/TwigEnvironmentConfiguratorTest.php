@@ -157,7 +157,7 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 
 	public function testSandboxedMailContentExists_isReturnedAndContextPassed(): void {
 		$factory = TestEnvironment::newInstance( [
-			'twig' => [
+			'mailer-twig' => [
 				'loaders' => [
 					'array' => [
 						'template_with_content.twig' => '{$ mail_content("something", { "dontation_id": 45 }) $} end',
@@ -170,14 +170,14 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 
 		$provider = $this->createMock( ContentProvider::class );
 		$provider->method( 'getMail' )
-			->with( 'something', ['dontation_id' => 45] )
+			->with( 'something', [ 'dontation_id' => 45 ] )
 			->willReturn( 'you got mail' );
 
 		$factory->setContentProvider( $provider );
 
 		$this->assertSame(
 			'you got mail end',
-			$factory->getLayoutTemplate( 'template_with_content.twig' )->render( [] )
+			$factory->getMailerTemplate( 'template_with_content.twig' )->render( [] )
 		);
 	}
 

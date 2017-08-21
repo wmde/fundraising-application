@@ -9,8 +9,10 @@ use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\FingersCrossedHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use Symfony\Bridge\Twig\Extension\RoutingExtension;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
+use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 
 /**
  * @var FunFunFactory $ffFactory
@@ -80,6 +82,20 @@ $ffFactory->setSofortLogger( call_user_func( function() use ( $ffFactory ) {
  */
 $app = require __DIR__ . '/../app/bootstrap.php';
 
-$ffFactory->setTwigEnvironment( $app['twig'] );
+$ffFactory->setSkinTwigEnvironment( $app['twig'] );
+
+$ffFactory->setUrlGenerator(
+	new class( $app['twig']->getExtension( RoutingExtension::class ) ) implements UrlGenerator {
+		private $routingExtension;
+
+		public function __construct( RoutingExtension $routingExtension ) {
+			$this->routingExtension = $routingExtension;
+		}
+
+		public function generateUrl( string $name, array $parameters = [] ): string {
+			return $this->routingExtension->getUrl( $name, $parameters );
+		}
+	}
+);
 
 $app->run();

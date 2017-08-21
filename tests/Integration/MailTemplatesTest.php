@@ -36,7 +36,7 @@ class MailTemplatesTest extends \PHPUnit\Framework\TestCase {
 		$this->factory = $this->newFactory();
 
 		foreach ( $this->getTestData() as $templateFileName => $templateTestData ) {
-			 yield from $this->getFreshlyRenderedContentForTemplate( $templateFileName, $templateTestData );
+			yield from $this->getFreshlyRenderedContentForTemplate( $templateFileName, $templateTestData );
 		}
 	}
 
@@ -47,8 +47,6 @@ class MailTemplatesTest extends \PHPUnit\Framework\TestCase {
 
 		$app = require __DIR__ . '/../../app/bootstrap.php';
 		$app->flush();
-
-		$ffFactory->setTwigEnvironment( $app['twig'] );
 
 		return $ffFactory;
 	}
@@ -83,13 +81,15 @@ class MailTemplatesTest extends \PHPUnit\Framework\TestCase {
 
 		foreach( $templateTestData['variants'] as $variantName => $additionalContext ) {
 			$filePath = $this->createTestFilePath( $templateFileName, $variantName );
-			$content = $this->factory->getTwig()->render(
+
+			$content = $this->factory->getMailerTwig()->render(
 				$templateFileName,
 				array_merge_recursive(
 					$templateTestData['context'],
 					$additionalContext
 				)
 			);
+
 			yield $filePath => $content;
 		}
 	}

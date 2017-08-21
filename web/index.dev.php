@@ -17,6 +17,8 @@ use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\BufferHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use Symfony\Bridge\Twig\Extension\RoutingExtension;
+use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 
 /**
  * @var \WMDE\Fundraising\Frontend\Factories\FunFunFactory $ffFactory
@@ -114,6 +116,20 @@ $app['twig.loader.filesystem'] = $app->extend(
 	}
 );
 
-$ffFactory->setTwigEnvironment( $app['twig'] );
+$ffFactory->setSkinTwigEnvironment( $app['twig'] );
+
+$ffFactory->setUrlGenerator(
+	new class( $app['twig']->getExtension( RoutingExtension::class ) ) implements UrlGenerator {
+		private $routingExtension;
+
+		public function __construct( RoutingExtension $routingExtension ) {
+			$this->routingExtension = $routingExtension;
+		}
+
+		public function generateUrl( string $name, array $parameters = [] ): string {
+			return $this->routingExtension->getUrl( $name, $parameters );
+		}
+	}
+);
 
 $app->run();

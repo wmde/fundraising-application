@@ -20,6 +20,15 @@
 			"array": {}
 		}
 	},
+	"mailer-twig": {
+		"enable-cache": true,
+		"strict-variables": false,
+		"loaders": {
+			"filesystem": {
+				"template-dir": ""
+			}
+		}
+	},
 	"i18n-base-path": "",
 	"default-layout-templates": {
 		"header": "Page_Header.html.twig",
