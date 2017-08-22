@@ -99,8 +99,10 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 
 				$crawler = $client->request( 'GET', '/page/einhorns' );
 
+				$this->assertCount( 1, $crawler->filter( 'body.page-unicorns' ) );
 				$this->assertCount( 1, $crawler->filter( 'header:contains("page header")' ) );
 				$this->assertCount( 1, $crawler->filter( 'main#main p:contains("Rosa plüsch einhorns tanzen auf Regenbogen")' ) );
+				$this->assertCount( 1, $crawler->filter( 'main#main div.sandboxedcontent.unicorns' ) );
 				$this->assertCount( 1, $crawler->filter( 'footer:contains("page footer")' ) );
 				$this->assertCount( 1, $crawler->filter( 'div#notice-wrapper:contains("Y u no JavaScript!")' ) );
 			}
