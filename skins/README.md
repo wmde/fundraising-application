@@ -4,8 +4,8 @@ Skins that the application can be used with.
 
 This is an example, how a skin's files could be organized.
 
-	FundraisingFrontend
-	|- […]
+    FundraisingFrontend
+    |- […]
     |- skins
     |  |- mySkin
     |     |- templates [1]
@@ -36,7 +36,7 @@ kept and versioned here.
 Only files in the `/web` folder are web-accessible.
 Skin files that have to be web-accessible (e.g. CSS, in contras to e.g. the templates)
 should be generated and explicitly copied to the `/web/skins/mySkin` folder
-during the build process using a build tool of your choice (e.g. Grunt).
+during the build process, using a build tool of your choice (e.g. Grunt).
 Naturally, these derived sources should not be checked into version control.
 
 - `x` Build result `2` (e.g. a minified javascript package)
