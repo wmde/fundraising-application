@@ -1,9 +1,5 @@
 {% import 'Form_Utils.twig' as util %}
 
-{% extends 'Base_Layout.html.twig' %}
-
-{% block main %}
-
 <form method="post" action="{$ basepath $}/contact/get-in-touch" novalidate="">
 
 	<label for="first-name">Name</label>
@@ -32,5 +28,3 @@
 	<button id="contactFormSubmit" type="submit" class="f-right">Kontaktanfrage absenden<span class="icon-ok"></span></button>
 
 </form>
-
-{% endblock %}

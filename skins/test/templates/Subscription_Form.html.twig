@@ -1,9 +1,5 @@
 {% import 'Form_Utils.twig' as util %}
 
-{% extends 'Base_Layout.html.twig' %}
-
-{% block main %}
-
 <form method="POST" action="{$ path('subscribe') $}">
 
 	<label for="salutation-1">Anrede*</label>
@@ -67,5 +63,3 @@
 	<button class="f-right" type="submit" id="subscriptionFormSubmit">Interesse anmelden<span class="icon-ok"></span></button>
 
 </form>
-
-{% endblock %}
