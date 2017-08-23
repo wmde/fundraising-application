@@ -20,6 +20,7 @@ app:
     - "9000"
   volumes:
     - .:/usr/share/nginx/www/spenden.wikimedia.de/current
+  working_dir: /usr/share/nginx/www/spenden.wikimedia.de/current
 
 # This is a PoC
 # Many files are shameless copies of other files from this repo / infrastructure
@@ -29,4 +30,4 @@ app:
 # http://localhost:8080/
 
 # run tests via
-# $ docker-compose run -w /usr/share/nginx/www/spenden.wikimedia.de app vendor/bin/phpunit
+# $ docker-compose run --rm app vendor/bin/phpunit
