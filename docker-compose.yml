@@ -8,6 +8,7 @@ proxy:
     - ./build/docker/proxy/nginx.conf.template:/etc/nginx/conf.d/nginx.conf.template:ro
     - ./build/docker/proxy/includes:/etc/nginx/conf.d/includes:ro
     - ./web:/usr/share/nginx/www/spenden.wikimedia.de/current/web:ro
+    - ./vendor/wmde/fundraising-frontend-content/resources:/usr/share/nginx/www/spenden.wikimedia.de/current/web/resources:ro
   environment:
     - NGINX_HOST=spenden.wikimedia.de
     - NGINX_PORT=8080
