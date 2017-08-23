@@ -20,6 +20,14 @@
 			}
 		}
 	},
+	"mailer-twig": {
+		"enable-cache": false,
+		"loaders": {
+			"filesystem": {
+				"template-dir": "app/mail_templates"
+			}
+		}
+	},
 	"i18n-base-path": "vendor/wmde/fundraising-frontend-content/i18n",
 	"text-policies": {
 		"fields": {
