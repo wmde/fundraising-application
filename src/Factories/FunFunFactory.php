@@ -343,11 +343,7 @@ class FunFunFactory {
 				$twigFactory->newTranslationExtension( $this->getTranslator() ),
 				new Twig_Extensions_Extension_Intl(),
 			];
-			$filters = [
-				$twigFactory->newFilePrefixFilter(
-					$this->getFilePrefixer()
-				)
-			];
+			$filters = [];
 			$functions = [
 				new Twig_SimpleFunction(
 					'mail_content',
