@@ -11,7 +11,7 @@ wget -q -O php7.zip https://sourceforge.net/projects/kontocheck/files/konto_chec
 unzip konto_check-5.8.zip
 unzip php7.zip
 cd konto_check-5.8
-cp blz.lut2f ${original_dir}/res
+cp blz.lut2f /usr/local/etc/
 unzip php.zip
 cd php
 cp /tmp/php/konto_check.c .

@@ -752,7 +752,7 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function newBankDataConverter(): BankDataGenerator {
-		return new KontoCheckBankDataGenerator( $this->config['bank-data-file'], $this->newIbanValidator() );
+		return new KontoCheckBankDataGenerator( $this->newIbanValidator() );
 	}
 
 	public function setSubscriptionValidator( SubscriptionValidator $subscriptionValidator ): void {
@@ -1465,7 +1465,7 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	private function newIbanValidator(): KontoCheckIbanValidator {
-		return new KontoCheckIbanValidator( $this->config['bank-data-file'], $this->config['banned-ibans'] );
+		return new KontoCheckIbanValidator( $this->config['banned-ibans'] );
 	}
 
 	public function setFilePrefixer( FilePrefixer $prefixer ): void {

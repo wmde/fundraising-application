@@ -7,7 +7,6 @@
 		"host": ""
 	},
 	"enable-dev-entry-point": false,
-	"bank-data-file": "",
 	"banned-ibans": [],
 	"web-basepath": "",
 	"twig": {

@@ -7,7 +7,6 @@
 		"host": "localhost",
 		"port": 3306
 	},
-	"bank-data-file": "/vagrant/res/blz.lut2f",
 	"twig": {
 		"enable-cache": true,
 		"loaders": {
