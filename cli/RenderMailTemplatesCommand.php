@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Cli;
 
 use FileFetcher\SimpleFileFetcher;
+use Symfony\Bridge\Twig\Extension\RoutingExtension;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
@@ -12,6 +13,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Twig_Environment;
 use Twig_Error;
+use WMDE\Fundraising\Frontend\App\UrlGenerator;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
 use WMDE\Fundraising\Frontend\App\MailTemplates;
@@ -56,7 +58,7 @@ class RenderMailTemplatesCommand extends Command {
 
 		$app->flush();
 
-		$ffFactory->setTwigEnvironment( $app['twig'] );
+		$ffFactory->setUrlGenerator( new UrlGenerator( $app['twig']->getExtension( RoutingExtension::class ) ) );
 
 		$mailTemplates = new MailTemplates( $ffFactory );
 		$testData = $mailTemplates->get();
@@ -72,7 +74,7 @@ class RenderMailTemplatesCommand extends Command {
 			$outputPath .= '/';
 		}
 
-		$this->renderTemplates( $testData, $ffFactory->getTwig(), $outputPath, $output );
+		$this->renderTemplates( $testData, $ffFactory->getMailerTwig(), $outputPath, $output );
 	}
 
 	private function getDefaultConfig(): array {

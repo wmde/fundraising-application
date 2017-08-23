@@ -104,7 +104,7 @@ abstract class WebRouteTestCase extends TestCase {
 			unset( $app['exception_handler'] );
 		}
 
-		$ffFactory->setTwigEnvironment( $app['twig'] );
+		$ffFactory->setSkinTwigEnvironment( $app['twig'] );
 
 		return $app;
 	}

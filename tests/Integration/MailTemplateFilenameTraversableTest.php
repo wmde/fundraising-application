@@ -17,8 +17,8 @@ class MailTemplateFilenameTraversableTest extends \PHPUnit\Framework\TestCase {
 
 		$pathArray = iterator_to_array( $mailTemplatePaths );
 
-		$this->assertContains( 'Mail_Contact_Confirm_to_User.txt.twig', $pathArray );
-		$this->assertContains( 'Mail_Subscription_Request.txt.twig', $pathArray );
+		$this->assertContains( 'Contact_Confirm_to_User.txt.twig', $pathArray );
+		$this->assertContains( 'Subscription_Request.txt.twig', $pathArray );
 	}
 
 }

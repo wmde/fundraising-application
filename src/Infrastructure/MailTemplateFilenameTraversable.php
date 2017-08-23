@@ -10,17 +10,15 @@ namespace WMDE\Fundraising\Frontend\Infrastructure;
  */
 class MailTemplateFilenameTraversable implements \IteratorAggregate {
 
-	private $mailTemplatePaths;
+	private $mailTemplatePath;
 
-	public function __construct( array $mailTemplatePaths ) {
-		$this->mailTemplatePaths = $mailTemplatePaths;
+	public function __construct( string $mailTemplatePath ) {
+		$this->mailTemplatePath = $mailTemplatePath;
 	}
 
 	public function getIterator(): \Iterator {
-		foreach ( $this->mailTemplatePaths as $path ) {
-			foreach ( glob( $path . '/Mail_*' ) as $fileName ) {
-				yield basename( $fileName );
-			}
+		foreach ( glob( $this->mailTemplatePath . '/*\.twig' ) as $fileName ) {
+			yield basename( $fileName );
 		}
 	}
 

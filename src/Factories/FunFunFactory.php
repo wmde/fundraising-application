@@ -25,27 +25,7 @@ use TNvpServiceDispatcher;
 use Twig_Environment;
 use Twig_Extensions_Extension_Intl;
 use Twig_SimpleFunction;
-use WMDE\Fundraising\Frontend\DonationContext\DonationAcceptedEventHandler;
-use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\InitialDonationStatusPicker;
-use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
-use WMDE\Fundraising\Frontend\Infrastructure\MailTemplateFilenameTraversable;
-use WMDE\Fundraising\Frontend\Infrastructure\WordListFileReader;
-use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
-use WMDE\Fundraising\Frontend\Infrastructure\PiwikServerSideTracker;
-use WMDE\Fundraising\Frontend\Infrastructure\ServerSideTracker;
-use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipPolicyValidator;
-use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionPaymentNotification\HandleSubscriptionPaymentNotificationUseCase;
-use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionSignupNotification\HandleSubscriptionSignupNotificationUseCase;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\DefaultPaymentDelayCalculator;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentDelayCalculator;
-use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector;
-use WMDE\Fundraising\Frontend\Presentation\Honorifics;
-use WMDE\Fundraising\Frontend\Presentation\Presenters\PageNotFoundPresenter;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\SofortConfig;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\Sofort as SofortUrlGenerator;
-use WMDE\Fundraising\Frontend\PaymentContext\DataAccess\Sofort\Transfer\Client as SofortClient;
-use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
-use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
+use WMDE\Fundraising\ContentProvider\ContentProvider;
 use WMDE\Fundraising\Frontend\DonationContext\Authorization\DonationAuthorizer;
 use WMDE\Fundraising\Frontend\DonationContext\Authorization\DonationTokenFetcher;
 use WMDE\Fundraising\Frontend\DonationContext\DataAccess\DoctrineCommentFinder;
@@ -56,6 +36,7 @@ use WMDE\Fundraising\Frontend\DonationContext\DataAccess\DoctrineDonationReposit
 use WMDE\Fundraising\Frontend\DonationContext\DataAccess\DoctrineDonationTokenFetcher;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Repositories\CommentFinder;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Repositories\DonationRepository;
+use WMDE\Fundraising\Frontend\DonationContext\DonationAcceptedEventHandler;
 use WMDE\Fundraising\Frontend\DonationContext\Infrastructure\BestEffortDonationEventLogger;
 use WMDE\Fundraising\Frontend\DonationContext\Infrastructure\DonationConfirmationMailer;
 use WMDE\Fundraising\Frontend\DonationContext\Infrastructure\DonationEventLogger;
@@ -66,29 +47,39 @@ use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddComment\AddCommentVali
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationPolicyValidator;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationUseCase;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationValidator;
+use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\InitialDonationStatusPicker;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\ReferrerGeneralizer;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\CancelDonation\CancelDonationUseCase;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\CreditCardPaymentNotification\CreditCardNotificationUseCase;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\HandlePayPalPaymentNotification\HandlePayPalPaymentNotificationUseCase;
-use WMDE\Fundraising\Frontend\DonationContext\UseCases\SofortPaymentNotification\SofortPaymentNotificationUseCase;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\ListComments\ListCommentsUseCase;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\ShowDonationConfirmation\ShowDonationConfirmationUseCase;
+use WMDE\Fundraising\Frontend\DonationContext\UseCases\SofortPaymentNotification\SofortPaymentNotificationUseCase;
 use WMDE\Fundraising\Frontend\DonationContext\Validation\DonorAddressValidator;
 use WMDE\Fundraising\Frontend\DonationContext\Validation\DonorNameValidator;
 use WMDE\Fundraising\Frontend\DonationContext\Validation\DonorValidator;
+use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
+use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
+use WMDE\Fundraising\Frontend\Infrastructure\EmailAddress;
 use WMDE\Fundraising\Frontend\Infrastructure\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\LoggingMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\LoggingPaymentNotificationVerifier;
+use WMDE\Fundraising\Frontend\Infrastructure\MailTemplateFilenameTraversable;
 use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 use WMDE\Fundraising\Frontend\Infrastructure\OperatorMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\PaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifier;
+use WMDE\Fundraising\Frontend\Infrastructure\PiwikServerSideTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\ProfilerDataCollector;
 use WMDE\Fundraising\Frontend\Infrastructure\ProfilingDecoratorBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\RandomTokenGenerator;
+use WMDE\Fundraising\Frontend\Infrastructure\ServerSideTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateMailerInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
+use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
+use WMDE\Fundraising\Frontend\Infrastructure\WordListFileReader;
 use WMDE\Fundraising\Frontend\MembershipContext\Authorization\ApplicationAuthorizer;
 use WMDE\Fundraising\Frontend\MembershipContext\Authorization\ApplicationTokenFetcher;
 use WMDE\Fundraising\Frontend\MembershipContext\DataAccess\DoctrineApplicationAuthorizer;
@@ -97,31 +88,40 @@ use WMDE\Fundraising\Frontend\MembershipContext\DataAccess\DoctrineApplicationRe
 use WMDE\Fundraising\Frontend\MembershipContext\DataAccess\DoctrineApplicationTokenFetcher;
 use WMDE\Fundraising\Frontend\MembershipContext\DataAccess\DoctrineApplicationTracker;
 use WMDE\Fundraising\Frontend\MembershipContext\DataAccess\DoctrineMembershipApplicationPrePersistSubscriber;
-use WMDE\Fundraising\Frontend\Infrastructure\EmailAddress;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipContext\Infrastructure\LoggingApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipContext\Tracking\ApplicationPiwikTracker;
 use WMDE\Fundraising\Frontend\MembershipContext\Tracking\ApplicationTracker;
+use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipPolicyValidator;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipUseCase;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\MembershipApplicationValidator;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\CancelMembershipApplication\CancelMembershipApplicationUseCase;
+use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionPaymentNotification\HandleSubscriptionPaymentNotificationUseCase;
+use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionSignupNotification\HandleSubscriptionSignupNotificationUseCase;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowMembershipApplicationConfirmation\ShowMembershipApplicationConfirmationUseCase;
 use WMDE\Fundraising\Frontend\PaymentContext\DataAccess\McpCreditCardService;
+use WMDE\Fundraising\Frontend\PaymentContext\DataAccess\Sofort\Transfer\Client as SofortClient;
 use WMDE\Fundraising\Frontend\PaymentContext\DataAccess\UniqueTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataConverter;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\DefaultPaymentDelayCalculator;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentDelayCalculator;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\CreditCard as CreditCardUrlGenerator;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\CreditCardConfig;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\PayPal as PayPalUrlGenerator;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\PayPalConfig;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\Sofort as SofortUrlGenerator;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\SofortConfig;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\SimpleTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\Frontend\PaymentContext\Infrastructure\CreditCardService;
 use WMDE\Fundraising\Frontend\PaymentContext\UseCases\CheckIban\CheckIbanUseCase;
 use WMDE\Fundraising\Frontend\PaymentContext\UseCases\GenerateIban\GenerateIbanUseCase;
 use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\CreditCardConfig;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\CreditCard as CreditCardUrlGenerator;
+use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector;
 use WMDE\Fundraising\Frontend\Presentation\DonationConfirmationPageSelector;
 use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
 use WMDE\Fundraising\Frontend\Presentation\GreetingGenerator;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\PayPalConfig;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\PayPal as PayPalUrlGenerator;
+use WMDE\Fundraising\Frontend\Presentation\Honorifics;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionJsonPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CancelDonationHtmlPresenter;
@@ -140,6 +140,7 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\IbanPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\InternalErrorHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipFormViolationPresenter;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\PageNotFoundPresenter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\Frontend\SubscriptionContext\DataAccess\DoctrineSubscriptionRepository;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Domain\Repositories\SubscriptionRepository;
@@ -148,17 +149,17 @@ use WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\AddSubscription\AddSu
 use WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\ConfirmSubscription\ConfirmSubscriptionUseCase;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionDuplicateValidator;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionValidator;
+use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
 use WMDE\Fundraising\Frontend\Validation\AllowedValuesValidator;
 use WMDE\Fundraising\Frontend\Validation\AmountPolicyValidator;
-use WMDE\Fundraising\Frontend\Validation\PaymentDataValidator;
 use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
 use WMDE\Fundraising\Frontend\Validation\EmailValidator;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\Fundraising\Frontend\Validation\KontoCheckIbanValidator;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
+use WMDE\Fundraising\Frontend\Validation\PaymentDataValidator;
 use WMDE\Fundraising\Frontend\Validation\TemplateNameValidator;
 use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
-use WMDE\Fundraising\ContentProvider\ContentProvider;
 use WMDE\Fundraising\Store\Factory as StoreFactory;
 use WMDE\Fundraising\Store\Installer;
 
@@ -264,7 +265,7 @@ class FunFunFactory {
 		};
 
 		$pimple['template_name_validator'] = function() {
-			return new TemplateNameValidator( $this->getTwig() );
+			return new TemplateNameValidator( $this->getSkinTwig() );
 		};
 
 		$pimple['contact_validator'] = function() {
@@ -300,19 +301,8 @@ class FunFunFactory {
 			] );
 		};
 
-		$pimple['twig_factory'] = function () {
-			return new TwigFactory(
-				array_merge_recursive(
-					$this->config['twig'],
-					['web-basepath' => $this->config['web-basepath']]
-				),
-				$this->getCachePath() . '/twig',
-				$this->config['locale']
-			);
-		};
-
 		$pimple['twig'] = function() {
-			$twigFactory = $this->getTwigFactory();
+			$twigFactory = $this->newTwigFactory( $this->config['twig'] );
 			$configurator = $twigFactory->newTwigEnvironmentConfigurator();
 
 			$loaders = array_filter( [
@@ -331,21 +321,48 @@ class FunFunFactory {
 			$functions = [
 				new Twig_SimpleFunction(
 					'web_content',
-					function( string $name, array $context = [] ) {
+					function( string $name, array $context = [] ): string {
 						return $this->getContentProvider()->getWeb( $name, $context );
 					},
 					[ 'is_safe' => [ 'html' ] ]
 				),
+			];
+
+			return $configurator->getEnvironment( $this->pimple['skin_twig_environment'], $loaders, $extensions, $filters, $functions );
+		};
+
+		$pimple['mailer_twig'] = function() {
+			$twigFactory = $this->newTwigFactory( $this->config['mailer-twig'] );
+			$configurator = $twigFactory->newTwigEnvironmentConfigurator();
+
+			$loaders = array_filter( [
+				$twigFactory->newFileSystemLoader(),
+				$twigFactory->newArrayLoader(), // This is just a fallback for testing
+			] );
+			$extensions = [
+				$twigFactory->newTranslationExtension( $this->getTranslator() ),
+				new Twig_Extensions_Extension_Intl(),
+			];
+			$filters = [];
+			$functions = [
 				new Twig_SimpleFunction(
 					'mail_content',
-					function( string $name, array $context = [] ) {
+					function( string $name, array $context = [] ): string {
 						return $this->getContentProvider()->getMail( $name, $context );
 					},
 					[ 'is_safe' => [ 'all' ] ]
+				),
+				new Twig_SimpleFunction(
+					'url',
+					function( string $name, array $parameters = [] ): string {
+						return $this->getUrlGenerator()->generateUrl( $name, $parameters );
+					}
 				)
 			];
 
-			return $configurator->getEnvironment( $this->pimple['twig_environment'], $loaders, $extensions, $filters, $functions );
+			$twigEnvironment = new Twig_Environment();
+
+			return $configurator->getEnvironment( $twigEnvironment, $loaders, $extensions, $filters, $functions );
 		};
 
 		$pimple['messenger_suborganization'] = function() {
@@ -482,7 +499,7 @@ class FunFunFactory {
 
 	public function newCommentListRssPresenter(): CommentListRssPresenter {
 		return new CommentListRssPresenter( new TwigTemplate(
-			$this->getTwig(),
+			$this->getSkinTwig(),
 			'Comment_List.rss.twig'
 		) );
 	}
@@ -534,12 +551,16 @@ class FunFunFactory {
 		return new GetInTouchHtmlPresenter( $this->getLayoutTemplate( 'contact_form.html.twig' ), $this->getTranslator() );
 	}
 
-	public function setTwigEnvironment( Twig_Environment $twig ): void {
-		$this->pimple['twig_environment'] = $twig;
+	public function setSkinTwigEnvironment( Twig_Environment $twig ): void {
+		$this->pimple['skin_twig_environment'] = $twig;
 	}
 
-	public function getTwig(): Twig_Environment {
+	public function getSkinTwig(): Twig_Environment {
 		return $this->pimple['twig'];
+	}
+
+	public function getMailerTwig(): Twig_Environment {
+		return $this->pimple['mailer_twig'];
 	}
 
 	/**
@@ -551,7 +572,15 @@ class FunFunFactory {
 	 */
 	public function getLayoutTemplate( string $templateName, array $context = [] ): TwigTemplate {
 		 return new TwigTemplate(
-			$this->getTwig(),
+			$this->getSkinTwig(),
+			$templateName,
+			array_merge( $this->getDefaultTwigVariables(), $context )
+		);
+	}
+
+	public function getMailerTemplate( string $templateName, array $context = [] ): TwigTemplate {
+		return new TwigTemplate(
+			$this->getMailerTwig(),
 			$templateName,
 			array_merge( $this->getDefaultTwigVariables(), $context )
 		);
@@ -567,7 +596,7 @@ class FunFunFactory {
 	 */
 	private function getIncludeTemplate( string $templateName, array $context = [] ): TwigTemplate {
 		return new TwigTemplate(
-			$this->getTwig(),
+			$this->getSkinTwig(),
 			'Include_in_Layout.twig',
 			array_merge(
 				$this->getDefaultTwigVariables(),
@@ -642,8 +671,8 @@ class FunFunFactory {
 		return $this->newTemplateMailer(
 			$this->getSuborganizationMessenger(),
 			new TwigTemplate(
-				$this->getTwig(),
-				'Mail_Subscription_Request.txt.twig',
+				$this->getMailerTwig(),
+				'Subscription_Request.txt.twig',
 				[
 					'greeting_generator' => $this->getGreetingGenerator()
 				]
@@ -656,8 +685,8 @@ class FunFunFactory {
 		return $this->newTemplateMailer(
 			$this->getSuborganizationMessenger(),
 			new TwigTemplate(
-					$this->getTwig(),
-					'Mail_Subscription_Confirmation.txt.twig',
+					$this->getMailerTwig(),
+					'Subscription_Confirmation.txt.twig',
 					[ 'greeting_generator' => $this->getGreetingGenerator() ]
 			),
 			'mail_subject_subscription_confirmed'
@@ -717,7 +746,7 @@ class FunFunFactory {
 	private function newContactUserMailer(): TemplateMailerInterface {
 		return $this->newTemplateMailer(
 			$this->getSuborganizationMessenger(),
-			new TwigTemplate( $this->getTwig(), 'Mail_Contact_Confirm_to_User.txt.twig' ),
+			new TwigTemplate( $this->getMailerTwig(), 'Contact_Confirm_to_User.txt.twig' ),
 			'mail_subject_getintouch'
 		);
 	}
@@ -725,7 +754,7 @@ class FunFunFactory {
 	private function newContactOperatorMailer(): OperatorMailer {
 		return new OperatorMailer(
 			$this->getSuborganizationMessenger(),
-			new TwigTemplate( $this->getTwig(), 'Mail_Contact_Forward_to_Operator.txt.twig' ),
+			new TwigTemplate( $this->getMailerTwig(), 'Contact_Forward_to_Operator.txt.twig' ),
 			$this->getTranslator()->trans( 'mail_subject_getintouch_forward' )
 		);
 	}
@@ -757,7 +786,7 @@ class FunFunFactory {
 
 	public function newAuthorizedCachePurger(): AuthorizedCachePurger {
 		return new AuthorizedCachePurger(
-			new AllOfTheCachePurger( $this->getTwig(), $this->getPageCache(), $this->getRenderedPageCache() ),
+			new AllOfTheCachePurger( $this->getSkinTwig(), $this->getPageCache(), $this->getRenderedPageCache() ),
 			$this->config['purging-secret']
 		);
 	}
@@ -817,8 +846,15 @@ class FunFunFactory {
 		$this->pimple['translator'] = $translator;
 	}
 
-	public function getTwigFactory(): TwigFactory {
-		return $this->pimple['twig_factory'];
+	private function newTwigFactory( array $twigConfig ): TwigFactory {
+		return new TwigFactory(
+			array_merge_recursive(
+				$twigConfig,
+				[ 'web-basepath' => $this->config['web-basepath'] ]
+			),
+			$this->getCachePath() . '/twig',
+			$this->config['locale']
+		);
 	}
 
 	private function newTextPolicyValidator( string $policyName ): TextPolicyValidator {
@@ -856,8 +892,8 @@ class FunFunFactory {
 		return $this->newTemplateMailer(
 			$this->getSuborganizationMessenger(),
 			new TwigTemplate(
-				$this->getTwig(),
-				'Mail_Donation_Cancellation_Confirmation.txt.twig',
+				$this->getMailerTwig(),
+				'Donation_Cancellation_Confirmation.txt.twig',
 				[ 'greeting_generator' => $this->getGreetingGenerator() ]
 			),
 			'mail_subject_confirm_cancellation'
@@ -905,8 +941,8 @@ class FunFunFactory {
 			$this->newTemplateMailer(
 				$this->getSuborganizationMessenger(),
 				new TwigTemplate(
-					$this->getTwig(),
-					'Mail_Donation_Confirmation.txt.twig',
+					$this->getMailerTwig(),
+					'Donation_Confirmation.txt.twig',
 					[
 						'greeting_generator' => $this->getGreetingGenerator()
 					]
@@ -1052,8 +1088,8 @@ class FunFunFactory {
 		return $this->newTemplateMailer(
 			$this->getOrganizationMessenger(),
 			new TwigTemplate(
-				$this->getTwig(),
-				'Mail_Membership_Application_Confirmation.txt.twig',
+				$this->getMailerTwig(),
+				'Membership_Application_Confirmation.txt.twig',
 				[ 'greeting_generator' => $this->getGreetingGenerator() ]
 			),
 			'mail_subject_confirm_membership_application'
@@ -1121,8 +1157,8 @@ class FunFunFactory {
 		return $this->newTemplateMailer(
 			$this->getOrganizationMessenger(),
 			new TwigTemplate(
-				$this->getTwig(),
-				'Mail_Membership_Application_Cancellation_Confirmation.txt.twig',
+				$this->getMailerTwig(),
+				'Membership_Application_Cancellation_Confirmation.txt.twig',
 				[ 'greeting_generator' => $this->getGreetingGenerator() ]
 			),
 			'mail_subject_confirm_membership_application_cancellation'
@@ -1277,7 +1313,7 @@ class FunFunFactory {
 	public function newCreditCardNotificationPresenter(): CreditCardNotificationPresenter {
 		return new CreditCardNotificationPresenter(
 			new TwigTemplate(
-				$this->getTwig(),
+				$this->getSkinTwig(),
 				'Credit_Card_Payment_Notification.txt.twig',
 				[ 'returnUrl' => $this->config['creditcard']['return-url'] ]
 			)
@@ -1484,8 +1520,16 @@ class FunFunFactory {
 
 	public function newMailTemplateFilenameTraversable(): MailTemplateFilenameTraversable {
 		return new MailTemplateFilenameTraversable(
-			$this->config['twig']['loaders']['filesystem']['template-dir']
+			$this->config['mailer-twig']['loaders']['filesystem']['template-dir']
 		);
+	}
+
+	public function getUrlGenerator(): UrlGenerator {
+		return $this->pimple['url_generator'];
+	}
+
+	public function setUrlGenerator( UrlGenerator $urlGenerator ): void {
+		$this->pimple['url_generator'] = $urlGenerator;
 	}
 
 }

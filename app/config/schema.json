@@ -75,7 +75,7 @@
     },
     "twig": {
       "type": "object",
-      "title": "Twig configuration settings",
+      "title": "Twig configuration settings for the skin Twig instance",
       "properties": {
         "enable-cache": {
           "type": "boolean",
@@ -83,9 +83,9 @@
           "default": true
         },
         "strict-variables": {
-            "type": "boolean",
-            "description": "Make twig throw errors when templates refer to non-existing variables",
-            "default": false
+          "type": "boolean",
+          "description": "Make twig throw errors when templates refer to non-existing variables",
+          "default": false
         },
         "loaders": {
           "type": "object",
@@ -114,6 +114,48 @@
               "title": "Array loader configuration",
               "description": "Inline templates in the configuration for testing purposes. Template name is the object key, template content is the value.",
               "properties": {}
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "enable-cache",
+        "strict-variables",
+        "loaders"
+      ]
+    },
+    "mailer-twig": {
+      "type": "object",
+      "title": "Twig configuration settings for the mailer Twig instance",
+      "properties": {
+        "enable-cache": {
+          "type": "boolean",
+          "description": "If template caching should be enabled",
+          "default": true
+        },
+        "strict-variables": {
+          "type": "boolean",
+          "description": "Make twig throw errors when templates refer to non-existing variables",
+          "default": false
+        },
+        "loaders": {
+          "type": "object",
+          "title": "Configuration for the different Twig template loaders.",
+          "properties": {
+            "filesystem": {
+              "type": "object",
+              "description": "Configuration for the filesystem loader",
+              "properties": {
+                "template-dir": {
+                  "type": "string",
+                  "description": "Path to the templates, absolute or relative to application"
+                }
+              },
+              "required": [
+                "template-dir"
+              ]
             }
           },
           "additionalProperties": false

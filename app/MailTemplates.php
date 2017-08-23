@@ -26,11 +26,11 @@ class MailTemplates {
 	public function get(): array {
 		return [
 
-			'Mail_Contact_Confirm_to_User.txt.twig' => [
+			'Contact_Confirm_to_User.txt.twig' => [
 				'context' => []
 			],
 
-			'Mail_Contact_Forward_to_Operator.txt.twig' => [
+			'Contact_Forward_to_Operator.txt.twig' => [
 				'context' => [
 					'firstName' => 'John',
 					'lastName' => 'Doe',
@@ -40,7 +40,7 @@ class MailTemplates {
 				],
 			],
 
-			'Mail_Donation_Cancellation_Confirmation.txt.twig' => [
+			'Donation_Cancellation_Confirmation.txt.twig' => [
 				'context' => [
 					'greeting_generator' => $this->factory->getGreetingGenerator(),
 					'recipient' => [
@@ -52,7 +52,7 @@ class MailTemplates {
 				]
 			],
 
-			'Mail_Donation_Confirmation.txt.twig' => [
+			'Donation_Confirmation.txt.twig' => [
 				'context' => [
 					'greeting_generator' => $this->factory->getGreetingGenerator(),
 					'donation' => [
@@ -117,7 +117,7 @@ class MailTemplates {
 				],
 			],
 
-			'Mail_Membership_Application_Cancellation_Confirmation.txt.twig' => [
+			'Membership_Application_Cancellation_Confirmation.txt.twig' => [
 				'context' => [
 					'greeting_generator' => $this->factory->getGreetingGenerator(),
 					'membershipApplicant' => [
@@ -129,7 +129,7 @@ class MailTemplates {
 				]
 			],
 
-			'Mail_Membership_Application_Confirmation.txt.twig' => [
+			'Membership_Application_Confirmation.txt.twig' => [
 				'context' => [
 					'greeting_generator' => $this->factory->getGreetingGenerator(),
 					'lastName' => "O'Reilly",
@@ -156,7 +156,7 @@ class MailTemplates {
 				]
 			],
 
-			'Mail_Subscription_Confirmation.txt.twig' => [
+			'Subscription_Confirmation.txt.twig' => [
 				'context' => [
 					'greeting_generator' => $this->factory->getGreetingGenerator(),
 					'subscription' => [
@@ -170,7 +170,7 @@ class MailTemplates {
 				]
 			],
 
-			'Mail_Subscription_Request.txt.twig' => [
+			'Subscription_Request.txt.twig' => [
 				'context' => [
 					'greeting_generator' => $this->factory->getGreetingGenerator(),
 					'subscription' => [
