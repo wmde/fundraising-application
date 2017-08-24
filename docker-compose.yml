@@ -21,6 +21,18 @@ app:
   volumes:
     - .:/usr/share/nginx/www/spenden.wikimedia.de/current
   working_dir: /usr/share/nginx/www/spenden.wikimedia.de/current
+  links:
+    - database
+
+database:
+  image: mysql:5.6
+  environment:
+    - MYSQL_RANDOM_ROOT_PASSWORD=yes
+    - MYSQL_USER="fundraising"
+    - MYSQL_PASSWORD="INSECURE PASSWORD"
+    - MYSQL_DATABASE="fundraising"
+  expose:
+    - "3306"
 
 # This is a PoC
 # Many files are shameless copies of other files from this repo / infrastructure
@@ -30,4 +42,4 @@ app:
 # http://localhost:8080/
 
 # run tests via
-# $ docker-compose run --rm app vendor/bin/phpunit
+# $ docker-compose run --rm --no-deps app vendor/bin/phpunit

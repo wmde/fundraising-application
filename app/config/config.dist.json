@@ -1,10 +1,11 @@
 {
 	"db": {
-		"driver": "",
-		"user": "",
-		"password": "",
-		"dbname": "",
-		"host": ""
+		"driver": "pdo_mysql",
+		"user": "fundraising",
+		"password": "INSECURE PASSWORD",
+		"dbname": "fundraising",
+		"host": "database",
+		"port": 3306
 	},
 	"enable-dev-entry-point": false,
 	"banned-ibans": [],
