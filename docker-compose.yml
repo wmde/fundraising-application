@@ -27,6 +27,7 @@ services:
     working_dir: /usr/share/nginx/www/spenden.wikimedia.de/current
     links:
       - database
+      - mailhog
 
   database:
     image: mysql:5.6
@@ -37,6 +38,13 @@ services:
       - MYSQL_DATABASE=fundraising
     expose:
       - "3306"
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+    expose:
+      - "1025"
 
 volumes:
   var-data:

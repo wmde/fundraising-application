@@ -39,3 +39,9 @@ RUN \
 	docker-php-ext-configure /tmp/konto_check-$KONTOCHECK_VERSION/php && \
 	docker-php-ext-install /tmp/konto_check-$KONTOCHECK_VERSION/php && \
 	docker-php-source delete
+
+RUN apt-get install -y ssmtp
+
+RUN echo "mailhub=mailhog:1025" >> /etc/ssmtp/ssmtp.conf
+
+COPY ./mailhog.ini /usr/local/etc/php/conf.d/mailhog.ini

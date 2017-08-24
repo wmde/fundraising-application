@@ -98,6 +98,12 @@ In the absence of dev-dependencies (i.e. to simulate the vendor/ code on product
 These tasks are also performed during the [travis](.travis.yml) runs.
 
 ### JS
+## Emails
+
+All emails sent by the application can be inspected via [mailhog](https://github.com/mailhog/MailHog)
+at [http://localhost:8025/](http://localhost:8025/)
+
+## JS
 
 For a full JS CI run
 
