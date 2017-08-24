@@ -23,4 +23,20 @@ clear:
 
 ui: clear js
 
-.PHONY: js clear ui install-php install-js
+cs:
+	docker-compose run --rm app ./vendor/bin/phpcs
+
+test: covers phpunit
+
+covers:
+	docker-compose run --rm app ./vendor/bin/covers-validator
+
+phpunit:
+	docker-compose run --rm app ./vendor/bin/phpunit
+
+stan:
+	docker-compose run --rm app ./vendor/bin/phpstan analyse --level=1 --no-progress cli/ contexts/ src/ tests/
+
+ci: covers phpunit cs stan
+
+.PHONY: js clear ui ci test covers phpunit cs stan install-php install-js
