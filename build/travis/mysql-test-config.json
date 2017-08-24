@@ -1,9 +1,0 @@
-{
-	"db": {
-		"driver": "pdo_mysql",
-		"user": "root",
-		"password": "",
-		"dbname": "spenden",
-		"host": "localhost"
-	}
-}
