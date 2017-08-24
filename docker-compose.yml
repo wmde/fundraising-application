@@ -1,38 +1,46 @@
-proxy:
-  image: nginx:stable
-  links:
-    - app
-  ports:
-    - "8080:8080"
-  volumes:
-    - ./build/proxy/nginx.conf.template:/etc/nginx/conf.d/nginx.conf.template:ro
-    - ./build/proxy/includes:/etc/nginx/conf.d/includes:ro
-    - ./web:/usr/share/nginx/www/spenden.wikimedia.de/current/web:ro
-    - ./vendor/wmde/fundraising-frontend-content/resources:/usr/share/nginx/www/spenden.wikimedia.de/current/web/resources:ro
-  environment:
-    - NGINX_HOST=spenden.wikimedia.de
-    - NGINX_PORT=8080
-  command: /bin/bash -c "envsubst '$$NGINX_HOST $$NGINX_PORT' < /etc/nginx/conf.d/nginx.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+version: '3'
 
-app:
-  build: ./build/app
-  expose:
-    - "9000"
-  volumes:
-    - .:/usr/share/nginx/www/spenden.wikimedia.de/current
-  working_dir: /usr/share/nginx/www/spenden.wikimedia.de/current
-  links:
-    - database
+services:
+  proxy:
+    image: nginx:stable
+    links:
+      - app
+    ports:
+      - "8082:8080"
+    volumes:
+      - ./build/proxy/nginx.conf.template:/etc/nginx/conf.d/nginx.conf.template:ro
+      - ./build/proxy/includes:/etc/nginx/conf.d/includes:ro
+      - ./web:/usr/share/nginx/www/spenden.wikimedia.de/current/web:ro
+      - ./vendor/wmde/fundraising-frontend-content/resources:/usr/share/nginx/www/spenden.wikimedia.de/current/web/resources:ro
+    environment:
+      - NGINX_HOST=spenden.wikimedia.de
+      - NGINX_PORT=8080
+    command: /bin/bash -c "envsubst '$$NGINX_HOST $$NGINX_PORT' < /etc/nginx/conf.d/nginx.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
 
-database:
-  image: mysql:5.6
-  environment:
-    - MYSQL_RANDOM_ROOT_PASSWORD=yes
-    - MYSQL_USER="fundraising"
-    - MYSQL_PASSWORD="INSECURE PASSWORD"
-    - MYSQL_DATABASE="fundraising"
-  expose:
-    - "3306"
+  app:
+    build: ./build/app
+    expose:
+      - "9000"
+    volumes:
+      - .:/usr/share/nginx/www/spenden.wikimedia.de/current:ro
+      - log-data:/usr/share/nginx/www/spenden.wikimedia.de/current/var/log
+    working_dir: /usr/share/nginx/www/spenden.wikimedia.de/current
+    links:
+      - database
+
+  database:
+    image: mysql:5.6
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+      - MYSQL_USER=fundraising
+      - MYSQL_PASSWORD=INSECURE PASSWORD
+      - MYSQL_DATABASE=fundraising
+    expose:
+      - "3306"
+
+volumes:
+  log-data:
+
 
 # This is a PoC
 # Many files are shameless copies of other files from this repo / infrastructure

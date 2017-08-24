@@ -1,5 +1,8 @@
 FROM php:7.1-fpm
 
+RUN mkdir -p /usr/share/nginx/www/spenden.wikimedia.de/current/var/log
+RUN chown www-data:www-data /usr/share/nginx/www/spenden.wikimedia.de/current/var/log
+
 RUN apt-get update \
     # for intl
     && apt-get install -y libicu-dev \
