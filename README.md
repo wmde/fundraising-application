@@ -36,6 +36,19 @@ The following example shows the configuration when the content repository is at 
 
     "i18n-base-path": "../fundraising-frontend-content/i18n"
 
+### SQLite instead of real MYSQL for tests
+
+To speed up the tests when running them locally, add the file `app/config/config.test.local.json`
+with the following content
+
+    {
+    	"db": {
+    		"driver": "pdo_sqlite",
+    		"memory": true
+    	}
+    }
+
+
 ## Development
 
 System dependencies:

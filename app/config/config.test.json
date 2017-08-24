@@ -1,8 +1,4 @@
 {
-	"db": {
-		"driver": "pdo_sqlite",
-		"memory": true
-	},
 	"banned-ibans": [
 		"wait, this is my own IBAN!"
 	],
