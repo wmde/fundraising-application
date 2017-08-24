@@ -23,7 +23,7 @@ services:
       - "9000"
     volumes:
       - .:/usr/share/nginx/www/spenden.wikimedia.de/current:ro
-      - log-data:/usr/share/nginx/www/spenden.wikimedia.de/current/var/log
+      - var-data:/usr/share/nginx/www/spenden.wikimedia.de/current/var
     working_dir: /usr/share/nginx/www/spenden.wikimedia.de/current
     links:
       - database
@@ -39,8 +39,7 @@ services:
       - "3306"
 
 volumes:
-  log-data:
-
+  var-data:
 
 # This is a PoC
 # Many files are shameless copies of other files from this repo / infrastructure

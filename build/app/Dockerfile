@@ -1,7 +1,9 @@
 FROM php:7.1-fpm
 
+RUN mkdir -p /usr/share/nginx/www/spenden.wikimedia.de/current/var/cache
+RUN mkdir -p /usr/share/nginx/www/spenden.wikimedia.de/current/var/doctrine_proxies
 RUN mkdir -p /usr/share/nginx/www/spenden.wikimedia.de/current/var/log
-RUN chown www-data:www-data /usr/share/nginx/www/spenden.wikimedia.de/current/var/log
+RUN chown -R www-data:www-data /usr/share/nginx/www/spenden.wikimedia.de/current/var
 
 RUN apt-get update \
     # for intl
