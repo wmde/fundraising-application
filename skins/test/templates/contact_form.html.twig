@@ -1,0 +1,30 @@
+{% import 'Form_Utils.twig' as util %}
+
+<form method="post" action="{$ basepath $}/contact/get-in-touch" novalidate="">
+
+	<label for="first-name">Name</label>
+	<input id="first-name" name="firstname" type="text" value="{$ firstname $}" autocomplete="off" pattern="^((?![M|m]ustermann).)*$" title="Groß- und Kleinbuchstaben, Bindestriche und Leerzeichen" placeholder="Vorname" optional="optional" class="optional">
+	<span class="validation icon-placeholder"></span>
+	{$ util.form_error('firstname', errors) $}
+
+	<input id="last-name" name="lastname" type="text" value="{$ lastname $}" autocomplete="off" pattern="^((?![M|m]ustermann).)*$" title="Groß- und Kleinbuchstaben, Bindestriche, Leerzeichen und Punkte" placeholder="Nachname" optional="optional" class="optional">
+	<span class="validation icon-placeholder"></span>
+	{$ util.form_error('lastname', errors) $}
+
+	<label for="email">Email-Adresse</label>
+	<input id="email" name="email" type="text" value="{$ email $}" autocomplete="off" placeholder="z.B. name@domain.de" required="required" class="required">
+	<span class="validation icon-placeholder"></span>
+	{$ util.form_error('email', errors) $}
+
+	<label for="subject">Betreff</label>
+	<input id="subject" class="required" name="subject" type="text" value="{$ subject $}" autocomplete="off" required="required" class="required" placeholder="Betreff">
+	<span class="validation icon-placeholder"></span>
+	{$ util.form_error('subject', errors) $}
+
+	<label for="messageBody">Nachricht</label>
+	<textarea id="messageBody" class="required" name="messageBody" type="text" required="required" placeholder="Ihre Nachricht an uns">{$ messageBody $}</textarea>
+	{$ util.form_error('messageBody', errors) $}
+
+	<button id="contactFormSubmit" type="submit" class="f-right">Kontaktanfrage absenden<span class="icon-ok"></span></button>
+
+</form>

@@ -12,8 +12,7 @@
 		"loaders": {
 			"filesystem": {
 				"template-dir": [
-					"tests/templates",
-					"app/templates"
+					"skins/test/templates"
 				]
 			},
 			"array": {

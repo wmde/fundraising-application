@@ -1,0 +1,16 @@
+{% set showMembershipTypeOption = showMembershipTypeOption is defined ? showMembershipTypeOption : 'true' %}
+{% set formSlideOpen = false %}
+{% set initialPaymentType = paymentTypes|length == 1 ? paymentTypes|first : '' %}
+
+<form name="memForm" id="memForm" method="POST" action="{$ basepath $}/apply-for-membership">
+
+	{% if showMembershipTypeOption == 'true' %}
+		<input type="hidden" name="showMembershipTypeOption" value="true" />
+	{% else %}
+		<input type="hidden" name="membership_type" value="sustaining" />
+		<input type="hidden" name="showMembershipTypeOption" value="false" />
+	{% endif %}
+
+</form>
+
+<script data-initial-form-values="{% if initialFormValues %}{$ initialFormValues|merge({'paymentType': initialPaymentType})|json_encode|e('html_attr') $}{% else %}{$ {'paymentType': initialPaymentType}|json_encode|e('html_attr') $}{% endif %}"></script>

@@ -165,7 +165,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenDataNeedingModerationAndNoContentType_routeReturnsRedirectToModerationPage(): void {
-		$config = ['text-policies' => ['fields' => ['badwords' => 'tests/templates/Banned_Cats.txt']]];
+		$config = ['text-policies' => ['fields' => ['badwords' => 'tests/Data/files/Banned_Cats.txt']]];
 		$client = $this->createClient( $config );
 		$client->followRedirects( false );
 		$client->request(

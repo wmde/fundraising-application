@@ -1,0 +1,8 @@
+
+<h2>Die {$ comments |length |e $} neuesten Spenderkommentare</h2>
+{% for comment in comments %}
+	<div>
+		<strong>{$ comment.amount |number_format(2, ',', '.') |e $}&euro; von {$ comment.author |e $} am {$ comment.publicationDate |e $}</strong><br />
+		{$ comment.text |e $}
+	</div>
+{% endfor %}

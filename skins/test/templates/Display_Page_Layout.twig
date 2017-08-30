@@ -1,0 +1,13 @@
+{% extends 'Base_Layout.html.twig' %}
+
+{% block page_identifier %}page-{$ page_id $}{% endblock %}
+
+{% block main %}
+
+	{$ page_id|trans({}, 'pageTitles') $}
+
+	<div class="sandboxedcontent {$ page_id $}">
+		{$ web_content("pages/#{page_id}") $}
+	</div>
+
+{% endblock %}

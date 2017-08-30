@@ -1,0 +1,6 @@
+
+{% if error_message %}
+    {$ include( 'Warning_Page.html.twig', { 'message': error_message|trans( {}, 'validations' ) } ) $}
+{% else %}
+    {$ include( 'Subscription_Confirmed.html.twig' ) $}
+{% endif %}
