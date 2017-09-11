@@ -8,6 +8,7 @@
     "test": "app/js/tests"
   },
   "scripts": {
+    "build-assets": "mkdir -p web/skins/10h16/ && cp -r skins/10h16/_* web/skins/10h16/",
     "build-js": "browserify app/js/main.js -s WMDE -o web/res/js/wmde.js",
     "watch-js": "watchify app/js/main.js -v -s WMDE -o web/res/js/wmde.js",
     "test": "tape 'app/js/tests/**/*.js' | tap-min",
