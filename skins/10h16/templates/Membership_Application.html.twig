@@ -17,7 +17,7 @@
 		{% include 'Membership_Application_Bank_Data_Confirmation.html.twig' %}
 	</div>
 
-	<script id="init-form" src="{$ basepath|e('html_attr') $}{$ '/res/js/membershipForm.js'|prefix_file $}"
+	<script id="init-form" src="{$ basepath|e('html_attr') $}{$ '/skins/10h16/_js/membershipForm.js'|prefix_file $}"
 		data-initial-form-values="{% if initialFormValues %}{$ initialFormValues|merge({'paymentType': initialPaymentType})|json_encode|e('html_attr') $}{% else %}{$ {'paymentType': initialPaymentType}|json_encode|e('html_attr') $}{% endif %}"
 		data-violated-fields="{% if violatedFields %}{$ violatedFields|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
 		data-validate-fee-url="{$ basepath|e('html_attr') $}/validate-fee"

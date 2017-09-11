@@ -3,7 +3,7 @@ main > .container,
 footer > .container { margin: 0 auto; width: 600px; display: block; } /*CHANGED*/
 header { padding-top: 10px; background-color: #ffffff; }
 header h1 { height: 104px; line-height: 104px; }  /*CHANGED*/
-header .logo { background: transparent url('../../../res/img/wmfg_logo_vert_RGB-98px.png') no-repeat center; width: 98px; height: 104px; display: block; float: left } /*CHANGED*/
+header .logo { background: transparent url('../_assets/img/wmfg_logo_vert_RGB-98px.png') no-repeat center; width: 98px; height: 104px; display: block; float: left } /*CHANGED*/
 header hr { position: absolute; bottom: 0; left: 0px; right: 0; margin: 0; }
 header .ctcol { padding-top: 0px; padding-bottom: 0px; }
 main { padding-top: 10px; background-color: #ffffff; }
