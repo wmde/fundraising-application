@@ -9,11 +9,11 @@
   },
   "scripts": {
     "build-assets": "mkdir -p web/skins/10h16/ && cp -r skins/10h16/_* web/skins/10h16/",
-    "build-js": "browserify app/js/main.js -s WMDE -o web/res/js/wmde.js",
-    "watch-js": "watchify app/js/main.js -v -s WMDE -o web/res/js/wmde.js",
-    "test": "tape 'app/js/tests/**/*.js' | tap-min",
-    "cs": "jshint app/js && jscs app/js",
-    "ci": "npm run cs && npm run test && browserify app/js/main.js -s WMDE -o /dev/null"
+    "build-js": "browserify skins/10h16/js/main.js -s WMDE -o web/skins/10h16/_js/wmde.js",
+    "watch-js": "watchify skins/10h16/js/main.js -v -s WMDE -o web/skins/10h16/_js/wmde.js",
+    "test": "tape 'skins/10h16/js/tests/**/*.js' | tap-min",
+    "cs": "jshint skins/10h16/js && jscs skins/10h16/js",
+    "ci": "npm run cs && npm run test && browserify skins/10h16/js/main.js -s WMDE -o /dev/null"
   },
   "repository": {
     "type": "git",
