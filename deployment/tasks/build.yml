@@ -16,11 +16,11 @@
 - name: Install JavaScript dependencies
   npm: path={{ build_dir }}
 
-- name: Compile JavaScript
-  command: npm run build-js chdir={{ build_dir }}
-
 - name: Build assets
   command: npm run build-assets chdir={{ build_dir }}
+
+- name: Compile JavaScript
+  command: npm run build-js chdir={{ build_dir }}
 
 - name: Create tarball
   shell: tar -czf {{ build_dir }}.tar.gz --exclude=".git" --exclude=node_modules -C {{ build_dir }} . warn=no
