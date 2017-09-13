@@ -286,7 +286,7 @@ button.back-button:active { background: #cccccc; }
 }
 
 .ui-widget-content {
-    background: url("../../../res/css/lib/jquery.ui/images/ui-bg_flat_75_ffffff_40x100.png") repeat-x scroll 50% 50% #ffffff;
+    background: url("lib/jquery.ui/images/ui-bg_flat_75_ffffff_40x100.png") repeat-x scroll 50% 50% #ffffff;
     border: 1px solid #aaaaaa;
     color: #222222;
 }
@@ -313,7 +313,7 @@ button.back-button:active { background: #cccccc; }
 }
 
 .ui-selectmenu-button span.ui-icon {
-    background-image: url("../../../res/css/lib/jquery.ui/images/ui-icons_222222_256x240.png");
+    background-image: url("lib/jquery.ui/images/ui-icons_222222_256x240.png");
 }
 
 /* ui-tooltip */
