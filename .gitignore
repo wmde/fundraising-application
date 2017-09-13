@@ -17,8 +17,10 @@ app/config/
 app/fundraising-frontend-content/
 
 res/blz.lut2f
+
 web/res/js/wmde.js
 web/resources
+web/skins
 
 deployment/deployment.retry
 deployment/inventory

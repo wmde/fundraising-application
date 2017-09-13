@@ -16,6 +16,9 @@
 - name: Install JavaScript dependencies
   npm: path={{ build_dir }}
 
+- name: Build assets
+  command: npm run build-assets chdir={{ build_dir }}
+
 - name: Compile JavaScript
   command: npm run build-js chdir={{ build_dir }}
 

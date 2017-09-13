@@ -8,6 +8,7 @@ composer install --no-interaction
 ln -fs ../vendor/wmde/fundraising-frontend-content/resources web/resources
 
 npm install
+npm run build-assets
 npm run build-js
 
 mkdir -p var/cache

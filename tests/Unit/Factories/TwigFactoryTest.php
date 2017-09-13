@@ -15,7 +15,7 @@ class TwigFactoryTest extends TestCase {
 			[
 				'loaders' => [
 					'filesystem' => [
-						'template-dir' => __DIR__ . '/../../../app/templates'
+						'template-dir' => __DIR__
 					]
 				]
 			],
@@ -25,7 +25,7 @@ class TwigFactoryTest extends TestCase {
 
 		$loader = $factory->newFileSystemLoader();
 		$this->assertInstanceOf( Twig_Loader_Filesystem::class, $loader );
-		$this->assertSame( [__DIR__ . '/../../../app/templates'], $loader->getPaths() );
+		$this->assertSame( [ __DIR__ ], $loader->getPaths() );
 	}
 
 	public function testNewFilesystemLoaderUnconfigured_returnsNoInstance(): void {
@@ -48,7 +48,7 @@ class TwigFactoryTest extends TestCase {
 			[
 				'loaders' => [
 					'filesystem' => [
-						'template-dir' => 'app/templates'
+						'template-dir' => 'tests'
 					]
 				]
 			],
@@ -59,7 +59,7 @@ class TwigFactoryTest extends TestCase {
 		$this->assertInstanceOf( Twig_Loader_Filesystem::class, $loader );
 		$realPath = realpath( $loader->getPaths()[0] );
 		$this->assertFalse( $realPath === false, 'path does not exist' );
-		$this->assertSame( $realPath, realpath( __DIR__ . '/../../../app/templates' ) );
+		$this->assertSame( $realPath, realpath( __DIR__ . '/../../../tests' ) );
 	}
 
 }
