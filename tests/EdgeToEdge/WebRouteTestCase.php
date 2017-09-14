@@ -28,17 +28,22 @@ abstract class WebRouteTestCase extends TestCase {
 	 * @param array $config
 	 * @param callable|null $onEnvironmentCreated Gets called after onTestEnvironmentCreated, same signature
 	 * @param bool $debug
+	 * @param array $serverConfig
 	 *
 	 * @return Client
 	 */
-	public function createClient( array $config = [], callable $onEnvironmentCreated = null, bool $debug = true ): Client {
+	public function createClient( array $config = [], callable $onEnvironmentCreated = null, bool $debug = true,
+								  array $serverConfig = [] ): Client {
 		$testEnvironment = TestEnvironment::newInstance( $config );
 
 		if ( is_callable( $onEnvironmentCreated ) ) {
 			call_user_func( $onEnvironmentCreated, $testEnvironment->getFactory(), $testEnvironment->getConfig() );
 		}
 
-		return new Client( $this->createApplication( $testEnvironment->getFactory(), $debug ) );
+		return new Client(
+			$this->createApplication( $testEnvironment->getFactory(), $debug ),
+			$serverConfig
+		);
 	}
 
 	/**
@@ -51,14 +56,15 @@ abstract class WebRouteTestCase extends TestCase {
 	 *
 	 * @param array $config
 	 * @param callable $onEnvironmentCreated
+	 * @param array $serverConfig
 	 */
-	public function createEnvironment( array $config, callable $onEnvironmentCreated ): void {
+	public function createEnvironment( array $config, callable $onEnvironmentCreated, array $serverConfig = [] ): void {
 		$testEnvironment = TestEnvironment::newInstance( $config );
 
-		$client = new Client( $this->createApplication(
-			$testEnvironment->getFactory(),
-			self::ENABLE_DEBUG
-		) );
+		$client = new Client(
+			$this->createApplication( $testEnvironment->getFactory(), self::ENABLE_DEBUG ),
+			$serverConfig
+		);
 
 		call_user_func(
 			$onEnvironmentCreated,

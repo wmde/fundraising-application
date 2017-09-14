@@ -185,5 +185,14 @@
 			"donation-enabled": false,
 			"membership-enabled": false
 		}
+	},
+	"cookie": {
+		"expiration": 0,
+		"path": "/",
+		"domain": null,
+		"secure": true,
+		"httpOnly": true,
+		"raw": false,
+		"sameSite": null
 	}
 }

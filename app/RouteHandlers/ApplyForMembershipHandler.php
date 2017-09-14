@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\ConfigurableCookie;
 use WMDE\Fundraising\Frontend\MembershipContext\Tracking\MembershipApplicationTrackingInfo;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipRequest;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipResponse;
@@ -41,11 +42,13 @@ class ApplyForMembershipHandler {
 		if ( $responseModel->isSuccessful() ) {
 			$httpResponse = $this->newHttpResponse( $responseModel );
 
-			$cookie = new Cookie(
-				ShowMembershipConfirmationHandler::SUBMISSION_COOKIE_NAME,
-				date( ShowMembershipConfirmationHandler::TIMESTAMP_FORMAT )
+			$cookie = $this->ffFactory->newCookieBuilder();
+			$httpResponse->headers->setCookie(
+				$cookie->newCookie(
+					ShowMembershipConfirmationHandler::SUBMISSION_COOKIE_NAME,
+					date( ShowMembershipConfirmationHandler::TIMESTAMP_FORMAT )
+				)
 			);
-			$httpResponse->headers->setCookie( $cookie );
 			return $httpResponse;
 		}
 

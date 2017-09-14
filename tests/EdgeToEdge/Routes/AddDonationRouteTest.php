@@ -8,6 +8,7 @@ use Silex\Application;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\Donation;
+use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowDonationConfirmationHandler;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
@@ -775,4 +776,22 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$this->assertSame( '', $data['bankname'] );
 		} );
 	}
+
+	public function testCookieFlagsSecureAndHttpOnlyAreSet(): void {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+			$client->followRedirects( true );
+			$client->request(
+				'POST',
+				'/donation/add',
+				$this->newValidFormInput()
+			);
+
+			$cookieJar = $client->getCookieJar();
+			$cookieJar->updateFromResponse( $client->getInternalResponse() );
+			$cookie = $cookieJar->get( ShowDonationConfirmationHandler::SUBMISSION_COOKIE_NAME );
+			$this->assertTrue( $cookie->isSecure() );
+			$this->assertTrue( $cookie->isHttpOnly() );
+		}, [ 'HTTPS' => true ] );
+	}
+
 }
