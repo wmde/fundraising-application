@@ -2,7 +2,7 @@
 
 {% block main %}
 
-    <script id="init-form" src="{$ basepath|e('html_attr') $}{$ '/res/js/donationForm.js'|prefix_file $}"
+    <script id="init-form" src="{$ basepath|e('html_attr') $}{$ '/skins/10h16/_js/donationForm.js'|prefix_file $}"
             data-initial-form-values="{% if initialFormValues %}{$ initialFormValues|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
             data-violated-fields="{% if violatedFields %}{$ violatedFields|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
             data-initial-validation-result="{% if validationResult %}{$ validationResult|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
