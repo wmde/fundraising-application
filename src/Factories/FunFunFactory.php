@@ -60,6 +60,7 @@ use WMDE\Fundraising\Frontend\DonationContext\Validation\DonorNameValidator;
 use WMDE\Fundraising\Frontend\DonationContext\Validation\DonorValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
+use WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\EmailAddress;
 use WMDE\Fundraising\Frontend\Infrastructure\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\LoggingMailer;
@@ -1530,6 +1531,18 @@ class FunFunFactory {
 
 	public function setUrlGenerator( UrlGenerator $urlGenerator ): void {
 		$this->pimple['url_generator'] = $urlGenerator;
+	}
+
+	public function newCookieBuilder(): CookieBuilder {
+		return new CookieBuilder(
+			$this->config['cookie']['expiration'],
+			$this->config['cookie']['path'],
+			$this->config['cookie']['domain'],
+			$this->config['cookie']['secure'],
+			$this->config['cookie']['httpOnly'],
+			$this->config['cookie']['raw'],
+			$this->config['cookie']['sameSite']
+		);
 	}
 
 }

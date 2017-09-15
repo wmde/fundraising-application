@@ -778,6 +778,57 @@
       },
       "additionalProperties": false,
       "minProperties": 2
+    },
+    "cookie": {
+      "type": "object",
+      "title": "Configuration values for cookies",
+      "properties": {
+        "expiration": {
+          "type": "integer",
+          "description": "The time the cookie expires",
+          "default": 0
+        },
+        "path": {
+          "type": "string",
+          "description": "The path on the server in which the cookie will be available on",
+          "default": "/"
+        },
+        "domain": {
+          "type": [ "string", "null" ],
+          "description": "The domain that the cookie is available to",
+          "default": null
+        },
+        "secure": {
+          "type": "boolean",
+          "description": "Whether the cookie should only be transmitted over a secure HTTPS connection from the client",
+          "default": false
+        },
+        "httpOnly": {
+          "type": "boolean",
+          "description": "Whether the cookie will be made accessible only through the HTTP protocol",
+          "default": true
+        },
+        "raw": {
+          "type": "boolean",
+          "description": "Whether the cookie value should be sent with no url encoding",
+          "default": false
+        },
+        "sameSite": {
+          "type": [ "string", "null" ],
+          "description": "Whether the cookie will be available for cross-site requests",
+          "default": null
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "expiration",
+        "path",
+        "domain",
+        "secure",
+        "httpOnly",
+        "raw",
+        "sameSite"
+      ]
     }
   },
   "additionalProperties": false,

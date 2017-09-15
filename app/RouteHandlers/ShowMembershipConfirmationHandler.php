@@ -39,7 +39,10 @@ class ShowMembershipConfirmationHandler {
 			);
 
 			if ( $request->cookies->get( self::SUBMISSION_COOKIE_NAME ) ) {
-				$httpResponse->headers->setCookie( new Cookie( self::SUBMISSION_COOKIE_NAME, date( self::TIMESTAMP_FORMAT ) ) );
+				$cookie = $this->ffFactory->newCookieBuilder();
+				$httpResponse->headers->setCookie(
+					$cookie->newCookie( self::SUBMISSION_COOKIE_NAME, date( self::TIMESTAMP_FORMAT ) )
+				);
 			}
 
 			return $httpResponse;
