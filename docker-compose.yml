@@ -22,7 +22,7 @@ services:
     expose:
       - "9000"
     volumes:
-      - .:/usr/share/nginx/www/spenden.wikimedia.de/current:ro
+      - .:/usr/share/nginx/www/spenden.wikimedia.de/current
       - var-data:/usr/share/nginx/www/spenden.wikimedia.de/current/var
     working_dir: /usr/share/nginx/www/spenden.wikimedia.de/current
     links:
