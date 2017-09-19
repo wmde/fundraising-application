@@ -14,9 +14,26 @@ class LessSimpleTransferCodeGenerator implements TransferCodeGenerator {
 	private $characterSource;
 	private $checksumGenerator;
 
-	public function __construct( \Iterator $characterSource ) {
+	private function __construct( \Iterator $characterSource ) {
 		$this->characterSource = $characterSource;
+
 		$this->checksumGenerator = new ChecksumGenerator( str_split( self::ALLOWED_CHARACTERS ) );
+	}
+
+	public static function newRandomGenerator(): self {
+		return new self(
+			( function() {
+				$characterCount = strlen( self::ALLOWED_CHARACTERS );
+				$characters = str_split( self::ALLOWED_CHARACTERS );
+				while ( true ) {
+					yield $characters[mt_rand( 0, $characterCount - 1 )];
+				}
+			} )()
+		);
+	}
+
+	public static function newDeterministicGenerator( \Iterator $characterSource ): self {
+		return new self( $characterSource );
 	}
 
 	public function generateTransferCode(): string {
@@ -24,7 +41,7 @@ class LessSimpleTransferCodeGenerator implements TransferCodeGenerator {
 		return $code . $this->checksumGenerator->createChecksum( $code );
 	}
 
-	public function generateCode(): string {
+	private function generateCode(): string {
 		return $this->getCharacter()
 			. $this->getCharacter()
 			. $this->getCharacter()

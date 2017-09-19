@@ -18,7 +18,7 @@ class LessSimpleTransferCodeGeneratorTest extends TestCase {
 	 * @dataProvider characterAndCodeProvider
 	 */
 	public function testGenerateBankTransferCode( string $expectedCode, string $usedCharacters ): void {
-		$generator = new LessSimpleTransferCodeGenerator(
+		$generator = LessSimpleTransferCodeGenerator::newDeterministicGenerator(
 			$this->newFixedCharacterGenerator( $usedCharacters )
 		);
 
@@ -44,7 +44,7 @@ class LessSimpleTransferCodeGeneratorTest extends TestCase {
 	}
 
 	private function newGenerator(): LessSimpleTransferCodeGenerator {
-		return new LessSimpleTransferCodeGenerator(
+		return LessSimpleTransferCodeGenerator::newDeterministicGenerator(
 			$this->newFixedCharacterGenerator( 'ACDEFKLMNPRSTWXYZ349' )
 		);
 	}
@@ -68,6 +68,14 @@ class LessSimpleTransferCodeGeneratorTest extends TestCase {
 	 */
 	public function testValidTransferCodesAreValid( string $transferCode ): void {
 		$this->assertTrue( $this->newGenerator()->transferCodeIsValid( $transferCode ) );
+	}
+
+	public function testRandomGeneratorProducesValidCodes(): void {
+		$generator = LessSimpleTransferCodeGenerator::newRandomGenerator();
+
+		for ( $i = 0; $i < 42; $i++ ) {
+			$this->assertTrue( $generator->transferCodeIsValid( $generator->generateTransferCode() ) );
+		}
 	}
 
 }
