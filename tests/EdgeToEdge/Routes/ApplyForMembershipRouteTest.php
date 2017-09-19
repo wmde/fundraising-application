@@ -7,8 +7,6 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\MembershipApplication;
-use WMDE\Fundraising\Frontend\App\RouteHandlers\ApplyForMembershipHandler;
-use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowDonationConfirmationHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowMembershipConfirmationHandler;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplication;
@@ -429,20 +427,23 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testCookieFlagsSecureAndHttpOnlyAreSet(): void {
-		$this->createEnvironment( [], function ( Client $client ) {
-			$client->request(
-				'POST',
-				'apply-for-membership',
-				$this->newValidHttpParameters()
-			);
+		$client = new Client(
+			$this->createSilexApplication(),
+			[ 'HTTPS' => true ]
+		);
 
-			$cookieJar = $client->getCookieJar();
-			$cookieJar->updateFromResponse( $client->getInternalResponse() );
-			$cookie = $cookieJar->get( ShowMembershipConfirmationHandler::SUBMISSION_COOKIE_NAME );
+		$client->request(
+			'POST',
+			'apply-for-membership',
+			$this->newValidHttpParameters()
+		);
 
-			$this->assertTrue( $cookie->isHttpOnly() );
-			$this->assertTrue( $cookie->isSecure() );
-		}, [ 'HTTPS' => true ] );
+		$cookieJar = $client->getCookieJar();
+		$cookieJar->updateFromResponse( $client->getInternalResponse() );
+		$cookie = $cookieJar->get( ShowMembershipConfirmationHandler::SUBMISSION_COOKIE_NAME );
+
+		$this->assertTrue( $cookie->isHttpOnly() );
+		$this->assertTrue( $cookie->isSecure() );
 	}
 
 }

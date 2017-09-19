@@ -778,20 +778,23 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testCookieFlagsSecureAndHttpOnlyAreSet(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
-			$client->followRedirects( true );
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newValidFormInput()
-			);
+		$client = new Client(
+			$this->createSilexApplication(),
+			[ 'HTTPS' => true ]
+		);
+		$client->followRedirects( true );
 
-			$cookieJar = $client->getCookieJar();
-			$cookieJar->updateFromResponse( $client->getInternalResponse() );
-			$cookie = $cookieJar->get( ShowDonationConfirmationHandler::SUBMISSION_COOKIE_NAME );
-			$this->assertTrue( $cookie->isSecure() );
-			$this->assertTrue( $cookie->isHttpOnly() );
-		}, [ 'HTTPS' => true ] );
+		$client->request(
+			'POST',
+			'/donation/add',
+			$this->newValidFormInput()
+		);
+
+		$cookieJar = $client->getCookieJar();
+		$cookieJar->updateFromResponse( $client->getInternalResponse() );
+		$cookie = $cookieJar->get( ShowDonationConfirmationHandler::SUBMISSION_COOKIE_NAME );
+		$this->assertTrue( $cookie->isSecure() );
+		$this->assertTrue( $cookie->isHttpOnly() );
 	}
 
 }

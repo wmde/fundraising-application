@@ -18,8 +18,8 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class WebRouteTestCase extends TestCase {
 
-	const DISABLE_DEBUG = false;
-	const ENABLE_DEBUG = true;
+	protected const DISABLE_DEBUG = false;
+	protected const ENABLE_DEBUG = true;
 
 	/**
 	 * Initializes a new test environment and Silex Application and returns a HttpKernel client to
@@ -32,7 +32,7 @@ abstract class WebRouteTestCase extends TestCase {
 	 *
 	 * @return Client
 	 */
-	public function createClient( array $config = [], callable $onEnvironmentCreated = null, bool $debug = true,
+	protected function createClient( array $config = [], callable $onEnvironmentCreated = null, bool $debug = true,
 								  array $serverConfig = [] ): Client {
 		$testEnvironment = TestEnvironment::newInstance( $config );
 
@@ -56,14 +56,12 @@ abstract class WebRouteTestCase extends TestCase {
 	 *
 	 * @param array $config
 	 * @param callable $onEnvironmentCreated
-	 * @param array $serverConfig
 	 */
-	public function createEnvironment( array $config, callable $onEnvironmentCreated, array $serverConfig = [] ): void {
+	protected function createEnvironment( array $config, callable $onEnvironmentCreated ): void {
 		$testEnvironment = TestEnvironment::newInstance( $config );
 
 		$client = new Client(
-			$this->createApplication( $testEnvironment->getFactory(), self::ENABLE_DEBUG ),
-			$serverConfig
+			$this->createApplication( $testEnvironment->getFactory(), self::ENABLE_DEBUG )
 		);
 
 		call_user_func(
@@ -85,7 +83,7 @@ abstract class WebRouteTestCase extends TestCase {
 	 * @param array $config
 	 * @param callable $onEnvironmentCreated
 	 */
-	public function createAppEnvironment( array $config, callable $onEnvironmentCreated ): void {
+	protected function createAppEnvironment( array $config, callable $onEnvironmentCreated ): void {
 		$testEnvironment = TestEnvironment::newInstance( $config );
 
 		$application = $this->createApplication( $testEnvironment->getFactory(), self::ENABLE_DEBUG );
@@ -113,6 +111,12 @@ abstract class WebRouteTestCase extends TestCase {
 		$ffFactory->setSkinTwigEnvironment( $app['twig'] );
 
 		return $app;
+	}
+
+	protected function createSilexApplication(): Application {
+		$testEnvironment = TestEnvironment::newInstance( [] );
+
+		return $this->createApplication( $testEnvironment->getFactory(), self::ENABLE_DEBUG );
 	}
 
 	protected function assert404( Response $response ): void {
