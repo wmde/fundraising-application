@@ -12,13 +12,7 @@
 	"web-basepath": "",
 	"twig": {
 		"enable-cache": true,
-		"strict-variables": false,
-		"loaders": {
-			"filesystem": {
-				"template-dir": []
-			},
-			"array": {}
-		}
+		"strict-variables": false
 	},
 	"mailer-twig": {
 		"enable-cache": true,
@@ -194,5 +188,11 @@
 		"httpOnly": true,
 		"raw": false,
 		"sameSite": null
+	},
+	"skin": {
+		"options": [
+			"10h16"
+		],
+		"default": "10h16"
 	}
 }

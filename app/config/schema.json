@@ -829,6 +829,33 @@
         "raw",
         "sameSite"
       ]
+    },
+    "skin": {
+      "type": "object",
+      "title": "Skin configuration",
+      "properties": {
+        "options": {
+          "type": "array",
+          "title": "List of possible skin names",
+          "description": "A subsets of skins present in /skins",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "default": {
+          "type": "string",
+          "title": "Name of the default skin",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "options",
+        "default"
+      ]
     }
   },
   "additionalProperties": false,
@@ -856,6 +883,7 @@
     "piwik",
     "translation",
     "payment-types",
-    "cookie"
+    "cookie",
+    "skin"
   ]
 }

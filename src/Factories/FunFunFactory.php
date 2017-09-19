@@ -303,7 +303,10 @@ class FunFunFactory {
 		};
 
 		$pimple['twig'] = function() {
-			$twigFactory = $this->newTwigFactory( $this->config['twig'] );
+			$config = $this->config['twig'];
+			$config['loaders']['filesystem']['template-dir'] = 'skins/' . $this->getSkin() . '/templates';
+
+			$twigFactory = $this->newTwigFactory( $config );
 			$configurator = $twigFactory->newTwigEnvironmentConfigurator();
 
 			$loaders = array_filter( [
@@ -466,6 +469,10 @@ class FunFunFactory {
 		$pimple['sofort-client'] = function () {
 			$config = $this->config['sofort'];
 			return new SofortClient( $config['config-key'] );
+		};
+
+		$pimple['skin'] = function () {
+			return $this->config['skin']['default'];
 		};
 
 		return $pimple;
@@ -1543,6 +1550,18 @@ class FunFunFactory {
 			$this->config['cookie']['raw'],
 			$this->config['cookie']['sameSite']
 		);
+	}
+
+	public function getSkin(): string {
+		return $this->pimple['skin'];
+	}
+
+	public function setSkin( string $skin ): void {
+		$this->pimple['skin'] = $skin;
+	}
+
+	public function getSkinOptions(): array {
+		return $this->config['skin']['options'];
 	}
 
 }
