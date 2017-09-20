@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
 class SkinServiceProvider implements ServiceProviderInterface {
 
-	private const GET_PARAM_NAME = 'skin';
+	private const QUERY_PARAM_NAME = 'skin';
 	private const COOKIE_NAME = 'skin';
 
 	private $ffFactory;
@@ -28,7 +28,7 @@ class SkinServiceProvider implements ServiceProviderInterface {
 		$app->before( function( Request $request, Application $app ) {
 
 			$skin = $this->getSkinFromQuery( $request );
-			if ( $skin ) {
+			if ( $skin && $skin !== $this->ffFactory->getDefaultSkin() ) {
 				$this->updatedSkin = $skin;
 				$this->ffFactory->setSkin( $skin );
 				return;
@@ -54,7 +54,7 @@ class SkinServiceProvider implements ServiceProviderInterface {
 	}
 
 	private function getSkinFromQuery( Request $request ): ?string {
-		$skin = $request->query->get( self::GET_PARAM_NAME, '' );
+		$skin = $request->query->get( self::QUERY_PARAM_NAME, '' );
 		return $this->validateSkin( $skin ) ? $skin : null;
 	}
 

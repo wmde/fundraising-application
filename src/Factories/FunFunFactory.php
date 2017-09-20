@@ -471,8 +471,8 @@ class FunFunFactory {
 			return new SofortClient( $config['config-key'] );
 		};
 
-		$pimple['skin'] = function () {
-			return $this->config['skin']['default'];
+		$pimple['skin'] = function (): string {
+			return $this->getDefaultSkin();
 		};
 
 		return $pimple;
@@ -1562,6 +1562,10 @@ class FunFunFactory {
 
 	public function getSkinOptions(): array {
 		return $this->config['skin']['options'];
+	}
+
+	public function getDefaultSkin(): string {
+		return $this->config['skin']['default'];
 	}
 
 }
