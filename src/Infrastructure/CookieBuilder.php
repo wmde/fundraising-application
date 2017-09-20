@@ -20,8 +20,7 @@ class CookieBuilder {
 	private $raw;
 	private $sameSite;
 
-	public function __construct( int $expire = 0, string $path = '', string $domain = null, bool $secure = false,
-								 bool $httpOnly = false, bool $raw = false, string $sameSite = null ) {
+	public function __construct( int $expire, string $path, ?string $domain, bool $secure, bool $httpOnly, bool $raw, ?string $sameSite ) {
 		$this->expire = $expire;
 		$this->path = $path;
 		$this->domain = $domain;
@@ -31,17 +30,18 @@ class CookieBuilder {
 		$this->sameSite = $sameSite;
 	}
 
-	public function newCookie( string $name, string $value ): Cookie {
+	public function newCookie( string $name, string $value, ?int $expire = null, ?string $path = null, ?string $domain = null,
+								?bool $raw = false, ?string $sameSite = null ): Cookie {
 		return new Cookie(
 			$name,
 			$value,
-			$this->expire,
-			$this->path,
-			$this->domain,
+			$expire ?? $this->expire,
+			$path ?? $this->path,
+			$domain ?? $this->domain,
 			$this->secure,
 			$this->httpOnly,
-			$this->raw,
-			$this->sameSite
+			$raw ?? $this->raw,
+			$sameSite ?? $this->sameSite
 		);
 	}
 
