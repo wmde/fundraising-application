@@ -781,7 +781,7 @@
     },
     "cookie": {
       "type": "object",
-      "title": "Configuration values for cookies",
+      "title": "Default Configuration values for cookies",
       "properties": {
         "expiration": {
           "type": "integer",
@@ -855,6 +855,7 @@
     "confirmation-pages",
     "piwik",
     "translation",
-    "payment-types"
+    "payment-types",
+    "cookie"
   ]
 }
