@@ -1,6 +1,6 @@
 # Cache busting rewrite for asset files
 # Remove hex-hash portion from filenames like /res/js/deadbeef.wmde.js
-location ~ ^(/res/(?:\w+)/|/skin/10h16/(?:\w+)/)[0-9a-f]+\.(.*)$ {
+location ~ "^(/skins/.+/)[0-9a-f]{32}\.(.*)$" {
     try_files $uri $1$2;
 }
 
