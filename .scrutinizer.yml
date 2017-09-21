@@ -15,5 +15,6 @@ tools:
 filter:
     excluded_paths:
         - 'vendor/*'
-        - 'web/res/js/lib/*'
+        - 'web/skins/*'
+        - 'skins/10h16/_js/lib/*'
         - 'node_modules/*'
