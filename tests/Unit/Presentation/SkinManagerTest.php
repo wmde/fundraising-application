@@ -13,17 +13,17 @@ use InvalidArgumentException;
  */
 class SkinManagerTest extends TestCase {
 
-	public function testDefaultSkinSet(): void {
+	public function testDefaultSkinIsSet(): void {
 		$manager = new SkinManager( ['a', 'b'], 'a', 500 );
 		$this->assertSame( 'a', $manager->getDefaultSkin() );
 	}
 
-	public function testDefaultSkinUsed(): void {
-		$manager = new SkinManager( ['a', 'b'], 'a', 500 );
-		$this->assertSame( 'a', $manager->getSkin() );
+	public function testDefaultSkinGetsUsedOnConstruct(): void {
+		$manager = new SkinManager( ['a', 'c', 'b'], 'b', 500 );
+		$this->assertSame( 'b', $manager->getSkin() );
 	}
 
-	public function testCookieLifetimeSet(): void {
+	public function testCookieLifetimeIsSet(): void {
 		$manager = new SkinManager( ['a', 'b'], 'a', 500 );
 		$this->assertSame( 500, $manager->getCookieLifetime() );
 	}
