@@ -9,7 +9,7 @@ namespace WMDE\Fundraising\Frontend\PaymentContext\Domain;
  */
 class LessSimpleTransferCodeGenerator implements TransferCodeGenerator {
 
-	public const ALLOWED_CHARACTERS = 'ACDEFKLMNPRSTWXYZ349';
+	public const ALLOWED_CHARACTERS = 'ACDEFKLMNPRTWXYZ349';
 
 	private $characterSource;
 	private $checksumGenerator;

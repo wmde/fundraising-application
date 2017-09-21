@@ -26,10 +26,10 @@ class LessSimpleTransferCodeGeneratorTest extends TestCase {
 	}
 
 	public function characterAndCodeProvider(): iterable {
-		yield [ 'ACD-EFK-X', 'ACDEFKLMNPRSTWXYZ349ACDEF' ];
-		yield [ 'AAA-AAA-D', 'AAAAAAAAAAAAAAAAAAAAAAAAA' ];
-		yield [ 'CAA-AAA-S', 'CAAAAAAAAAAAAAAAAAAAAAAAA' ];
-		yield [ 'ACA-CAC-L', 'ACACACACACACACACACACACACA' ];
+		yield [ 'ACD-EFK-E', 'ACDEFKLMNPRSTWXYZ349ACDEF' ];
+		yield [ 'AAA-AAA-F', 'AAAAAAAAAAAAAAAAAAAAAAAAA' ];
+		yield [ 'CAA-AAA-K', 'CAAAAAAAAAAAAAAAAAAAAAAAA' ];
+		yield [ 'ACA-CAC-9', 'ACACACACACACACACACACACACA' ];
 	}
 
 	private function newFixedCharacterGenerator( string $characters ): \Generator {
