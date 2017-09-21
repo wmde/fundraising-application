@@ -53,8 +53,8 @@ phpmd:
 	docker-compose run --rm --no-deps app ./vendor/bin/phpmd src/ text phpmd.xml
 
 npm-ci:
-	docker run -it -v $(shell pwd):/code -w /code node:8 npm run ci
+	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR):/code -w /code -e NO_UPDATE_NOTIFIER=1 node:8 npm run ci
 
-ci: covers phpunit phpunit-system phpmd cs npm-ci validate-app-config stan
+ci: covers phpunit cs npm-ci validate-app-config stan
 
-.PHONY: js clear ui setup ci test covers phpunit phpunit-system cs stan validate-app-config phpmd npm-ci install-php install-js
+.PHONY: ci clear covers cs install-php install-js js npm-ci npm-install phpmd phpunit phpunit-system setup stan test ui validate-app-config

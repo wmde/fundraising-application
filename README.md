@@ -68,10 +68,11 @@ Get a clone of our git repository and then run these commands in it:
     docker-compose run --rm app ./vendor/bin/doctrine orm:schema-tool:create
     docker-compose run --rm app ./vendor/bin/doctrine orm:generate-proxies var/doctrine_proxies
 
-### Build Javascript
+### Build Assets & Javascript
 
-    npm install
-    npm run build-js
+    make npm-install
+    docker run -it --rm --user $(id -u):$(id -g) -v "$PWD":/data digitallyseamless/nodejs-bower-grunt npm run build-assets
+    docker run -it --rm --user $(id -u):$(id -g) -v "$PWD":/data digitallyseamless/nodejs-bower-grunt npm run build-js
 
 ### Running the application
 
@@ -88,12 +89,12 @@ The application can now be reached at http://localhost:8000/index.php, debug inf
 ### For tests only
 
     make test
-    npm run test
+    docker run -it --rm --user $(id -u):$(id -g) -v "$PWD":/data digitallyseamless/nodejs-bower-grunt npm run test
 
 ### For style checks only
 
     make cs
-    npm run cs
+    docker run -it --rm --user $(id -u):$(id -g) -v "$PWD":/data digitallyseamless/nodejs-bower-grunt npm run cs
 
 For one context only
 
@@ -120,12 +121,15 @@ at [http://localhost:8025/](http://localhost:8025/)
 
 For a full JS CI run
 
-	npm run ci
+	docker run -it --rm --user $(id -u):$(id -g) -v "$PWD":/data digitallyseamless/nodejs-bower-grunt npm run ci
 
 If JavaScript files where changed, you will need to (re)run
 
-	npm run build-assets
-	npm run copy-assets
+    docker run -it --rm --user $(id -u):$(id -g) -v "$PWD":/data digitallyseamless/nodejs-bower-grunt npm run build-js
+
+If you are working on the JavaScript files and need automatic recompilation when a files changes, then run
+
+    docker run -it --rm --user $(id -u):$(id -g) -v "$PWD":/data digitallyseamless/nodejs-bower-grunt npm run watch-js
 
 If you want to debug problems in the Redux data flow, set the following variable in the shell environment:
 
@@ -137,10 +141,7 @@ Actions and their resulting state will be logged.
 
 If skin assets where changed, you will need to run
 
-    npm run build-assets
-    npm run copy-assets
-
-For more information on skins, including how to change which one is used, see [skins/README.md](skins/README.md).
+    docker run -it --rm --user $(id -u):$(id -g) -v "$PWD":/data digitallyseamless/nodejs-bower-grunt npm run build-assets
 
 ## Deployment
 

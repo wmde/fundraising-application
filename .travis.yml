@@ -23,8 +23,7 @@ before_install:
 
 install:
   - travis_retry composer install
-  - rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
-  - npm install
+  - make npm-install
 
 before_script:
   - if [ "$MCP_ACCESS_KEY" != "" ] && [ "$MCP_PROJECT_ID" != "" ]; then bash build/travis/createLocalTestConfig.sh > app/config/config.test.local.json; fi
@@ -54,4 +53,3 @@ env:
   global:
   - secure: BIyTpbKsguUv5+fkrEVauLZ+BPyTR+MMLtVpixlDntJsbb/yXAcAoWVvfbJm9bCa3Z9T1Hd4JYITUDuK1iZzSwVzlotkmyB/4enoqqpE6jR5IIOltISRcnVYK5iBpFG6YHynNuCJcx6TWv5lRL0bLV5NvDoV/hiX46bh9eYCMBy3g4Mpu/UI/GWum9sAXnxpWmR4n7holn5Qxo2uPviFNuc4uIgUF/rPWX+ahI0hDwsJobOcbEYwgm8tIvSaJkpFKIui76jXIjN+fnaU0jBmoQk9m2ae61PWPYdwTAYa54lyQCU+TEi3+yUCOlK/LMSsrXcw9WRwRIDo7TmqBJd8aKHHVxKtivFvMSqdt6Gi6xyc/UKVRyOGNrDHCGiHdV+xl23upZn6kUYlxWMAhoeim4Hwx/gHeZEgc1jvpOpcyrexfCZJAr1x8M9bBJcHXqJApa168O9Ok39bL3TZB+85RSBUg8hLT0OdgQY0QmvQz0DEIsu2XG+m1CB5iwcvS6Wtg8uwTzq8kux6MBgsO2wUwq1mT+Z7f3RGELN1lvJDGnC+oGEZgaTgZNCaG89cniWbLo4b5ayo/d20SetdxoyW8WpRmIvBqr1N7hDJErhY2WUU6Rn57gRWBkpD1bhnOs1h/jD5XzW7IjzvOUgSJro1lbK7FKYeZ/pcFi0Iw6ZG0kk=
   - secure: oxBNul0N2NH96jmL+q/1O/gSI+co8iLMqLRkoJnhMRVV5rwCHmrtG0ulFk+a4UZDjqrwlWYD501hGeSopOXPU9YPBB/5sSluhPErkTwYzLpFCf3pFoDdajZRqramwGLZzSoBds8K5hobpg/2OsmR7K7mchUtcAlVIOS+VwagQO/SvhrLlPRFpyubXwWD3iLoh7ParQFlKyOfXjOr6plg/QOdTCK4nuiIKFd+sYs2r1T82L/S2dAT9LbpdS12cFOSvzNwE/W95l8YALdCUAcuHQDUWrqOkOMrRMRwziDeUQaZp7/5Xl555z3n4r1Arje/ox7cDGGDUHQtGC5MRhborGWh8Bj5R1a+tGZSvgUJciegT+QSdv0ujb1HlKiaN8g8lNJ/UGRT86zW7KAxWsGmQKBaLEs45WxQDEMlGMoqo3hiRFLNh4zozb8MJStrobN6eZ5ugXCWTcLen5nZySCgU6yfWHeTtCufzkhxkTolbH7z+vJ1Ndq8mdTCgua4b/pood/2O+97ORWo8KvTVTLWl6TMLIwcCbAogaNOw6Hmu3dPPXNY0gBtLkfk5xGJVRke6/XDCuVZJCYyWOo3cqyWx12wci5IgwKVorOfNAxFZ7ezMTxn963Ys6t4Rrhc0jvJfUao47SOFYdFLOkDRaksRriZXDFtlxsu/qidSMCNxyQ=
-  - TRAVIS_NODE_VERSION="6"
