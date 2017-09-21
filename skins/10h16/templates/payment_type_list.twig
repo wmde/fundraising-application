@@ -3,7 +3,7 @@
 	formId
 	checkedPaymentType (optional)
 #}
-<ul class="horizontal clearfix payment-type-list">
+<ul class="clearfix payment-type-list {% if paymentTypes|length % 4 == 1 %}three-col{% else %}four-col{% endif %}">
 {% for paymentType in paymentTypes %}
 	<li
 	{% if loop.first %}
