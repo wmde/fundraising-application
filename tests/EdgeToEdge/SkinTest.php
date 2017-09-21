@@ -15,7 +15,7 @@ class SkinTest extends WebRouteTestCase {
 	private const SKIN_2 = 'cat17';
 	private const DEFAULT_SKIN = self::SKIN_1;
 
-	public function testDefaultSkinUsed(): void {
+	public function testDefaultSkinGetsUsed(): void {
 		$client = $this->createClient( $this->getDummyConfig(), null, self::DISABLE_DEBUG );
 		$client->request( 'GET', '/' );
 
@@ -31,9 +31,18 @@ class SkinTest extends WebRouteTestCase {
 		$this->assertNoSkinResponseCookie( $client->getResponse() );
 	}
 
+	public function testDefaultSkinUsedAndCookieRemovedWhenRequestedViaQueryWithOpposingCookie(): void {
+		$client = $this->createClient( $this->getDummyConfig(), null, self::DISABLE_DEBUG );
+		$client->getCookieJar()->set( new RequestCookie( SkinSettings::COOKIE_NAME, self::SKIN_2 ) );
+		$client->request( 'GET', '/', [ SkinSettings::QUERY_PARAM_NAME => self::DEFAULT_SKIN ] );
+
+		$this->assertContains( self::DEFAULT_SKIN, $client->getResponse()->getContent() );
+		$this->assertSkinResponseCookie( '', false, $client->getResponse() );
+	}
+
 	public function testSkinChoosableViaCookie(): void {
 		$client = $this->createClient( $this->getDummyConfig(), null, self::DISABLE_DEBUG );
-		$client->getCookieJar()->set( new RequestCookie( SkinSettings::QUERY_PARAM_NAME, self::SKIN_2 ) );
+		$client->getCookieJar()->set( new RequestCookie( SkinSettings::COOKIE_NAME, self::SKIN_2 ) );
 		$client->request( 'GET', '/' );
 
 		$this->assertContains( self::SKIN_2, $client->getResponse()->getContent() );
@@ -45,7 +54,7 @@ class SkinTest extends WebRouteTestCase {
 		$client->request( 'GET', '/', [ SkinSettings::QUERY_PARAM_NAME => self::SKIN_2 ] );
 
 		$this->assertContains( self::SKIN_2, $client->getResponse()->getContent() );
-		$this->assertSkinResponseCookie( self::SKIN_2, $client->getResponse() );
+		$this->assertSkinResponseCookie( self::SKIN_2, true, $client->getResponse() );
 	}
 
 	public function testSkinViaQuerySuperseedsCookie(): void {
@@ -54,7 +63,7 @@ class SkinTest extends WebRouteTestCase {
 		$client->request( 'GET', '/', [ SkinSettings::QUERY_PARAM_NAME => self::SKIN_2 ] );
 
 		$this->assertContains( self::SKIN_2, $client->getResponse()->getContent() );
-		$this->assertSkinResponseCookie( self::SKIN_2, $client->getResponse() );
+		$this->assertSkinResponseCookie( self::SKIN_2, true, $client->getResponse() );
 	}
 
 	public function testInvalidQueryIgnored(): void {
@@ -87,7 +96,7 @@ class SkinTest extends WebRouteTestCase {
 		];
 	}
 
-	private function assertSkinResponseCookie( string $expectedValue, Response $response ): void {
+	private function assertSkinResponseCookie( string $expectedValue, bool $positiveExpiresTime, Response $response ): void {
 		$cookies = $response->headers->getCookies();
 		foreach ( $cookies as $cookie ) {
 			/**
@@ -95,7 +104,11 @@ class SkinTest extends WebRouteTestCase {
 			 */
 			if ( $cookie->getName() === SkinSettings::COOKIE_NAME ) {
 				$this->assertSame( $expectedValue, $cookie->getValue() );
-				$this->assertGreaterThan( 0, $cookie->getExpiresTime() );
+				if ( $positiveExpiresTime ) {
+					$this->assertGreaterThan( time(), $cookie->getExpiresTime() );
+				} else {
+					$this->assertLessThan( time(), $cookie->getExpiresTime() );
+				}
 				return;
 			}
 		}

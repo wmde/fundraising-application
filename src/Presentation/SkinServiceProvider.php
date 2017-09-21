@@ -31,18 +31,17 @@ class SkinServiceProvider implements ServiceProviderInterface, BootableProviderI
 	public function register( Container $app ): void {
 	}
 
-	public function boot( Application $app ) {
+	public function boot( Application $app ): void {
 		$app->before( function( Request $request ) {
-			$skin = $this->getSkinFromQuery( $request );
-			if ( $skin && $skin !== $this->skinSettings->getDefaultSkin() ) {
-				$this->updatedSkin = $skin;
-				$this->skinSettings->setSkin( $skin );
-				return;
+			$skinFromCookie = $this->getSkinFromCookie( $request );
+			if ( $skinFromCookie ) {
+				$this->skinSettings->setSkin( $skinFromCookie );
 			}
 
-			$skin = $this->getSkinFromCookie( $request );
-			if ( $skin ) {
-				$this->skinSettings->setSkin( $skin );
+			$skinFromQuery = $this->getSkinFromQuery( $request );
+			if ( $skinFromQuery && $skinFromQuery !== $this->skinSettings->getSkin() ) {
+				$this->skinSettings->setSkin( $skinFromQuery );
+				$this->updatedSkin = $skinFromQuery;
 			}
 		}, Application::EARLY_EVENT );
 
@@ -51,13 +50,21 @@ class SkinServiceProvider implements ServiceProviderInterface, BootableProviderI
 				return;
 			}
 
-			$response->headers->setCookie(
-				$this->cookieBuilder->newCookie(
+			if ( $this->updatedSkin === $this->skinSettings->getDefaultSkin() ) {
+				$cookie = $this->cookieBuilder->newCookie(
+					SkinSettings::COOKIE_NAME,
+					'',
+					time() - 3600
+				);
+			} else {
+				$cookie = $this->cookieBuilder->newCookie(
 					SkinSettings::COOKIE_NAME,
 					$this->updatedSkin,
 					time() + $this->skinSettings->getCookieLifetime()
-				)
-			);
+				);
+			}
+
+			$response->headers->setCookie( $cookie );
 		} );
 	}
 
