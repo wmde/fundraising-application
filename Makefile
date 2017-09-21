@@ -23,9 +23,6 @@ clear:
 
 ui: clear js
 
-cs:
-	docker-compose run --rm app ./vendor/bin/phpcs
-
 test: covers phpunit
 
 setup:
@@ -43,9 +40,21 @@ phpunit-system:
 cs:
 	docker-compose run --rm --no-deps app ./vendor/bin/phpcs
 
+fix-cs:
+	docker-compose run --rm --no-deps app ./vendor/bin/phpcbf
+
 stan:
 	docker-compose run --rm --no-deps app php -d memory_limit=-1 vendor/bin/phpstan analyse --level=1 --no-progress cli/ contexts/ src/ tests/
 
-ci: covers phpunit cs stan phpunit-system
+validate-app-config:
+	docker-compose run --rm --no-deps app ./console validate-config app/config/config.dist.json app/config/config.test.json
 
-.PHONY: js clear ui setup ci test covers phpunit phpunit-system cs stan install-php install-js
+phpmd:
+	docker-compose run --rm --no-deps app ./vendor/bin/phpmd src/ text phpmd.xml
+
+npm-ci:
+	docker run -it -v $(shell pwd):/code -w /code node:8 npm run ci
+
+ci: covers phpunit phpunit-system phpmd cs npm-ci validate-app-config stan
+
+.PHONY: js clear ui setup ci test covers phpunit phpunit-system cs stan validate-app-config phpmd npm-ci install-php install-js

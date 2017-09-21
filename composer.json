@@ -123,35 +123,6 @@
 			"WMDE\\Fundraising\\Frontend\\SubscriptionContext\\Tests\\": "contexts/SubscriptionContext/tests/"
 		}
 	},
-	"scripts": {
-		"test": [
-			"composer validate --no-interaction",
-			"vendor/bin/covers-validator",
-			"vendor/bin/phpunit"
-		],
-		"cs": [
-			"@phpcs"
-		],
-		"ci": [
-			"@test",
-			"@cs",
-			"@phpmd",
-			"npm run ci",
-			"@validate-app-config",
-			"@stan"
-		],
-		"fix": [
-			"vendor/bin/phpcbf"
-		],
-		"phpcs": [
-			"vendor/bin/phpcs"
-		],
-		"phpmd": [
-			"vendor/bin/phpmd src/ text phpmd.xml"
-		],
-		"validate-app-config": "./console validate-config app/config/config.dist.json app/config/config.test.json",
-		"stan": "./vendor/bin/phpstan analyse --level=1 --no-progress cli/ contexts/ src/ tests/"
-	},
 	"config": {
 		"discard-changes": true
 	}
