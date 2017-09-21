@@ -193,6 +193,7 @@
 		"options": [
 			"10h16"
 		],
-		"default": "10h16"
+		"default": "10h16",
+		"cookie-lifetime": 1209600
 	}
 }

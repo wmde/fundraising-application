@@ -47,9 +47,13 @@ class SkinServiceProvider implements ServiceProviderInterface {
 				return;
 			}
 
-			$cookieBuilder = $this->ffFactory->newCookieBuilder();
-			$cookie = $cookieBuilder->newCookie( self::COOKIE_NAME, $this->updatedSkin );
-			$response->headers->setCookie( $cookie );
+			$response->headers->setCookie(
+				$this->ffFactory->newCookieBuilder()->newCookie(
+					self::COOKIE_NAME,
+					$this->updatedSkin,
+					time() + $this->ffFactory->getSkinCookieLifetime()
+				)
+			);
 		} );
 	}
 

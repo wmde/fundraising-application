@@ -849,12 +849,19 @@
           "type": "string",
           "title": "Name of the default skin",
           "minLength": 1
+        },
+        "cookie-lifetime": {
+          "type": "integer",
+          "minimum": 0,
+          "title": "Lifetime of the cookie used to persist the desired skin",
+          "description": "Number of seconds the skin cookie should be sent by clients"
         }
       },
       "additionalProperties": false,
       "required": [
         "options",
-        "default"
+        "default",
+        "cookie-lifetime"
       ]
     }
   },

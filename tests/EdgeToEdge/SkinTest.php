@@ -4,7 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 
-use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\BrowserKit\Cookie as RequestCookie;
+use Symfony\Component\HttpFoundation\Cookie as ResponseCookie;
 use Symfony\Component\HttpFoundation\Response;
 
 class SkinTest extends WebRouteTestCase {
@@ -31,7 +32,7 @@ class SkinTest extends WebRouteTestCase {
 
 	public function testSkinChoosableViaCookie(): void {
 		$client = $this->createClient( $this->getDummyConfig(), null, self::DISABLE_DEBUG );
-		$client->getCookieJar()->set( new Cookie( 'skin', self::SKIN_2 ) );
+		$client->getCookieJar()->set( new RequestCookie( 'skin', self::SKIN_2 ) );
 		$client->request( 'GET', '/' );
 
 		$this->assertContains( self::SKIN_2, $client->getResponse()->getContent() );
@@ -48,7 +49,7 @@ class SkinTest extends WebRouteTestCase {
 
 	public function testSkinViaQuerySuperseedsCookie(): void {
 		$client = $this->createClient( $this->getDummyConfig(), null, self::DISABLE_DEBUG );
-		$client->getCookieJar()->set( new Cookie( 'skin', self::SKIN_1 ) );
+		$client->getCookieJar()->set( new RequestCookie( 'skin', self::SKIN_1 ) );
 		$client->request( 'GET', '/', [ 'skin' => self::SKIN_2 ] );
 
 		$this->assertContains( self::SKIN_2, $client->getResponse()->getContent() );
@@ -65,7 +66,7 @@ class SkinTest extends WebRouteTestCase {
 
 	public function testInvalidCookieIgnored(): void {
 		$client = $this->createClient( $this->getDummyConfig(), null, self::DISABLE_DEBUG );
-		$client->getCookieJar()->set( new Cookie( 'skin', 'ggg' ) );
+		$client->getCookieJar()->set( new RequestCookie( 'skin', 'ggg' ) );
 		$client->request( 'GET', '/' );
 
 		$this->assertContains( self::DEFAULT_SKIN, $client->getResponse()->getContent() );
@@ -79,19 +80,21 @@ class SkinTest extends WebRouteTestCase {
 		return [
 			'skin' => [
 				'options' => [ self::SKIN_1, self::SKIN_2 ],
-				'default' => self::DEFAULT_SKIN
+				'default' => self::DEFAULT_SKIN,
+				'cookie-lifetime' => 5
 			]
 		];
 	}
 
-	private function assertSkinResponseCookie( string $expected, Response $response ): void {
+	private function assertSkinResponseCookie( string $expectedValue, Response $response ): void {
 		$cookies = $response->headers->getCookies();
 		foreach ( $cookies as $cookie ) {
 			/**
-			 * @var Cookie $cookie
+			 * @var ResponseCookie $cookie
 			 */
 			if ( $cookie->getName() === 'skin' ) {
-				$this->assertSame( $expected, $cookie->getValue() );
+				$this->assertSame( $expectedValue, $cookie->getValue() );
+				$this->assertGreaterThan( 0, $cookie->getExpiresTime() );
 				return;
 			}
 		}
@@ -102,7 +105,7 @@ class SkinTest extends WebRouteTestCase {
 		$cookies = $response->headers->getCookies();
 		foreach ( $cookies as $cookie ) {
 			/**
-			 * @var Cookie $cookie
+			 * @var ResponseCookie $cookie
 			 */
 			if ( $cookie->getName() === 'skin' ) {
 				$this->fail( 'Found an unexpected "skin" response cookie.' );

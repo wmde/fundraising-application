@@ -1568,4 +1568,8 @@ class FunFunFactory {
 		return $this->config['skin']['default'];
 	}
 
+	public function getSkinCookieLifetime(): int {
+		return $this->config['skin']['cookie-lifetime'];
+	}
+
 }
