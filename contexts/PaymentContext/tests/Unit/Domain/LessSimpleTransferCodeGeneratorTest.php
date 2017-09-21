@@ -26,10 +26,10 @@ class LessSimpleTransferCodeGeneratorTest extends TestCase {
 	}
 
 	public function characterAndCodeProvider(): iterable {
-		yield [ 'ACDE-FKLM-X', 'ACDEFKLMNPRSTWXYZ349ACDEF' ];
-		yield [ 'AAAA-AAAA-L', 'AAAAAAAAAAAAAAAAAAAAAAAAA' ];
-		yield [ 'CAAA-AAAA-9', 'CAAAAAAAAAAAAAAAAAAAAAAAA' ];
-		yield [ 'ACAC-ACAC-K', 'ACACACACACACACACACACACACA' ];
+		yield [ 'ACD-EFK-X', 'ACDEFKLMNPRSTWXYZ349ACDEF' ];
+		yield [ 'AAA-AAA-D', 'AAAAAAAAAAAAAAAAAAAAAAAAA' ];
+		yield [ 'CAA-AAA-S', 'CAAAAAAAAAAAAAAAAAAAAAAAA' ];
+		yield [ 'ACA-CAC-L', 'ACACACACACACACACACACACACA' ];
 	}
 
 	private function newFixedCharacterGenerator( string $characters ): \Generator {
@@ -51,16 +51,16 @@ class LessSimpleTransferCodeGeneratorTest extends TestCase {
 
 	public function invalidCodeProvider(): iterable {
 		yield 'Empty code' => [ '' ];
-		yield 'Without checksum' => [ 'ACDE-FKLM-' ];
-		yield 'Missing dash' => [ 'ACDEFKLM-X' ];
-		yield 'Missing checksum dash' => [ 'ACDE-FKLMX' ];
-		yield 'Missing both dashes' => [ 'ACDEFKLMX' ];
-		yield 'Extra dash' => [ 'ACDE-FKLM-X-' ];
-		yield 'Extra character' => [ 'ACDE-FKLMM-X' ];
-		yield 'Extra checksum character' => [ 'ACDE-FKLM-XX' ];
-		yield 'Not allowed character' => [ '0CDE-FKLM-X' ];
-		yield 'Extra character at front' => [ 'AACDE-FKLM-X' ];
-		yield 'Invalid checksum' => [ 'ACDE-FKLM-A' ];
+		yield 'Without checksum' => [ 'ACD-EFK-' ];
+		yield 'Missing dash' => [ 'ACDEFK-X' ];
+		yield 'Missing checksum dash' => [ 'ACD-EFK' ];
+		yield 'Missing both dashes' => [ 'ACDEFK' ];
+		yield 'Extra dash' => [ 'ACD-EFK-X-' ];
+		yield 'Extra character' => [ 'ACD-EFKK-X' ];
+		yield 'Extra checksum character' => [ 'ACD-EFK-XX' ];
+		yield 'Not allowed character' => [ '0CD-EFK-X' ];
+		yield 'Extra character at front' => [ 'AACD-EFK-X' ];
+		yield 'Invalid checksum' => [ 'ACD-EFK-A' ];
 	}
 
 	/**

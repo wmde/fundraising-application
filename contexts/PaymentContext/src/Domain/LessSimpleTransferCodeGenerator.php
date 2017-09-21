@@ -45,9 +45,7 @@ class LessSimpleTransferCodeGenerator implements TransferCodeGenerator {
 		return $this->getCharacter()
 			. $this->getCharacter()
 			. $this->getCharacter()
-			. $this->getCharacter()
 			. '-'
-			. $this->getCharacter()
 			. $this->getCharacter()
 			. $this->getCharacter()
 			. $this->getCharacter();
@@ -66,7 +64,7 @@ class LessSimpleTransferCodeGenerator implements TransferCodeGenerator {
 
 	private function formatIsValid( string $code ): bool {
 		$allowedChars = '[' . self::ALLOWED_CHARACTERS . ']';
-		$pattern = '/^' . $allowedChars . '{4}-' . $allowedChars . '{4}-' . $allowedChars . '$/';
+		$pattern = '/^' . $allowedChars . '{3}-' . $allowedChars . '{3}-' . $allowedChars . '$/';
 		return preg_match( $pattern, $code ) === 1;
 	}
 
