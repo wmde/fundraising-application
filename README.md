@@ -4,8 +4,8 @@
 
 User facing application for the [Wikimedia Deutschland](https://wikimedia.de) fundraising.
 
-The easiest way to get a working installation of the application is to use [Vagrant](https://www.vagrantup.com/).
-Just get a clone of our git repository and run `vagrant up` in it. Then `vagrant ssh` into it and go to `/vagrant`, where you will be able to run the full test suite. (Excluding a handful of payment provider system tests).
+The easiest way to get a working installation of the application is to use [docker-compose](https://docs.docker.com/compose/).
+Just get a clone of our git repository and run the commands shown in the Development section.
 
 * [Installation](#installation)
 * [Configuration](#configuration)

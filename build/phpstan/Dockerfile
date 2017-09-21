@@ -10,11 +10,9 @@ RUN \
 	apk add --no-cache --virtual .persistent-deps curl-dev && \
 	# for xml
 	apk add --no-cache --virtual .persistent-deps libxml2-dev && \
-	# compare vagrant/install_packages.sh
 	docker-php-ext-configure intl --enable-intl && \
 	docker-php-ext-install intl curl xml pdo_mysql mbstring
 
-# compare vagrant/installKontoCheck.sh
 ENV KONTOCHECK_VERSION 5.8
 
 RUN \

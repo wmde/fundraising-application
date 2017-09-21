@@ -14,11 +14,9 @@ RUN apt-get update \
     && apt-get install -y libxml2-dev \
     # for konto_check
     && apt-get install -y unzip patch libz-dev \
-    # compare vagrant/install_packages.sh
     #&& docker-php-ext-install -j$(nproc) pdo_sqlite \
     && docker-php-ext-install -j$(nproc) intl curl xml pdo_mysql mbstring
 
-# compare vagrant/installKontoCheck.sh
 ENV KONTOCHECK_VERSION 5.8
 
 RUN \
