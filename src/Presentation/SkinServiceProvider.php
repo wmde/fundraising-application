@@ -6,12 +6,13 @@ namespace WMDE\Fundraising\Frontend\Presentation;
 
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use Silex\Api\BootableProviderInterface;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder;
 
-class SkinServiceProvider implements ServiceProviderInterface {
+class SkinServiceProvider implements ServiceProviderInterface, BootableProviderInterface {
 
 	private $skinSettings;
 	private $cookieBuilder;
@@ -23,10 +24,15 @@ class SkinServiceProvider implements ServiceProviderInterface {
 		$this->cookieBuilder = $cookieBuilder;
 	}
 
+	/**
+	 * Ideally, SkinSettings would be registered to app as a service here - but $pimple['twig'] in FunFunFactory needs it
+	 * and does not have access to app
+	 */
 	public function register( Container $app ): void {
+	}
 
-		$app->before( function( Request $request, Application $app ) {
-
+	public function boot( Application $app ) {
+		$app->before( function( Request $request ) {
 			$skin = $this->getSkinFromQuery( $request );
 			if ( $skin && $skin !== $this->skinSettings->getDefaultSkin() ) {
 				$this->updatedSkin = $skin;
@@ -38,11 +44,9 @@ class SkinServiceProvider implements ServiceProviderInterface {
 			if ( $skin ) {
 				$this->skinSettings->setSkin( $skin );
 			}
-
 		}, Application::EARLY_EVENT );
 
-		$app->after( function( Request $request, Response $response, Application $app ) {
-
+		$app->after( function( Request $request, Response $response ) {
 			if ( !$this->updatedSkin ) {
 				return;
 			}
