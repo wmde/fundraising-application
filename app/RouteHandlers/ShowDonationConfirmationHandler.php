@@ -49,7 +49,7 @@ class ShowDonationConfirmationHandler {
 		);
 
 		if ( !$request->cookies->get( self::SUBMISSION_COOKIE_NAME ) ) {
-			$cookie = $this->ffFactory->newCookieBuilder();
+			$cookie = $this->ffFactory->getCookieBuilder();
 			$httpResponse->headers->setCookie(
 				$cookie->newCookie( self::SUBMISSION_COOKIE_NAME, date( self::TIMESTAMP_FORMAT ) )
 			);

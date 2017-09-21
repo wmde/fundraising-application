@@ -142,6 +142,7 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\InternalErrorHtmlPresenter
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipFormViolationPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\PageNotFoundPresenter;
+use WMDE\Fundraising\Frontend\Presentation\SkinManager;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\Frontend\SubscriptionContext\DataAccess\DoctrineSubscriptionRepository;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Domain\Repositories\SubscriptionRepository;
@@ -304,7 +305,7 @@ class FunFunFactory {
 
 		$pimple['twig'] = function() {
 			$config = $this->config['twig'];
-			$config['loaders']['filesystem']['template-dir'] = 'skins/' . $this->getSkin() . '/templates';
+			$config['loaders']['filesystem']['template-dir'] = 'skins/' . $this->getSkinManager()->getSkin() . '/templates';
 
 			$twigFactory = $this->newTwigFactory( $config );
 			$configurator = $twigFactory->newTwigEnvironmentConfigurator();
@@ -471,8 +472,21 @@ class FunFunFactory {
 			return new SofortClient( $config['config-key'] );
 		};
 
-		$pimple['skin'] = function (): string {
-			return $this->getDefaultSkin();
+		$pimple['cookie-builder'] = function (): CookieBuilder {
+			return new CookieBuilder(
+				$this->config['cookie']['expiration'],
+				$this->config['cookie']['path'],
+				$this->config['cookie']['domain'],
+				$this->config['cookie']['secure'],
+				$this->config['cookie']['httpOnly'],
+				$this->config['cookie']['raw'],
+				$this->config['cookie']['sameSite']
+			);
+		};
+
+		$pimple['skin-manager'] = function (): SkinManager {
+			$config = $this->config['skin'];
+			return new SkinManager( $config['options'], $config['default'], $config['cookie-lifetime'] );
 		};
 
 		return $pimple;
@@ -1540,36 +1554,12 @@ class FunFunFactory {
 		$this->pimple['url_generator'] = $urlGenerator;
 	}
 
-	public function newCookieBuilder(): CookieBuilder {
-		return new CookieBuilder(
-			$this->config['cookie']['expiration'],
-			$this->config['cookie']['path'],
-			$this->config['cookie']['domain'],
-			$this->config['cookie']['secure'],
-			$this->config['cookie']['httpOnly'],
-			$this->config['cookie']['raw'],
-			$this->config['cookie']['sameSite']
-		);
+	public function getCookieBuilder(): CookieBuilder {
+		return $this->pimple['cookie-builder'];
 	}
 
-	public function getSkin(): string {
-		return $this->pimple['skin'];
-	}
-
-	public function setSkin( string $skin ): void {
-		$this->pimple['skin'] = $skin;
-	}
-
-	public function getSkinOptions(): array {
-		return $this->config['skin']['options'];
-	}
-
-	public function getDefaultSkin(): string {
-		return $this->config['skin']['default'];
-	}
-
-	public function getSkinCookieLifetime(): int {
-		return $this->config['skin']['cookie-lifetime'];
+	public function getSkinManager(): SkinManager {
+		return $this->pimple['skin-manager'];
 	}
 
 }

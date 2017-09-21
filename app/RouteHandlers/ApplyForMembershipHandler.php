@@ -40,7 +40,7 @@ class ApplyForMembershipHandler {
 		if ( $responseModel->isSuccessful() ) {
 			$httpResponse = $this->newHttpResponse( $responseModel );
 
-			$cookie = $this->ffFactory->newCookieBuilder();
+			$cookie = $this->ffFactory->getCookieBuilder();
 			$httpResponse->headers->setCookie(
 				$cookie->newCookie(
 					ShowMembershipConfirmationHandler::SUBMISSION_COOKIE_NAME,

@@ -9,18 +9,18 @@ use Pimple\ServiceProviderInterface;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder;
 
 class SkinServiceProvider implements ServiceProviderInterface {
 
-	private const QUERY_PARAM_NAME = 'skin';
-	private const COOKIE_NAME = 'skin';
+	private $skinManager;
+	private $cookieBuilder;
 
-	private $ffFactory;
 	private $updatedSkin;
 
-	public function __construct( FunFunFactory $factory ) {
-		$this->ffFactory = $factory;
+	public function __construct( SkinManager $skinManager, CookieBuilder $cookieBuilder ) {
+		$this->skinManager = $skinManager;
+		$this->cookieBuilder = $cookieBuilder;
 	}
 
 	public function register( Container $app ): void {
@@ -28,15 +28,15 @@ class SkinServiceProvider implements ServiceProviderInterface {
 		$app->before( function( Request $request, Application $app ) {
 
 			$skin = $this->getSkinFromQuery( $request );
-			if ( $skin && $skin !== $this->ffFactory->getDefaultSkin() ) {
+			if ( $skin && $skin !== $this->skinManager->getDefaultSkin() ) {
 				$this->updatedSkin = $skin;
-				$this->ffFactory->setSkin( $skin );
+				$this->skinManager->setSkin( $skin );
 				return;
 			}
 
 			$skin = $this->getSkinFromCookie( $request );
 			if ( $skin ) {
-				$this->ffFactory->setSkin( $skin );
+				$this->skinManager->setSkin( $skin );
 			}
 
 		}, Application::EARLY_EVENT );
@@ -48,26 +48,22 @@ class SkinServiceProvider implements ServiceProviderInterface {
 			}
 
 			$response->headers->setCookie(
-				$this->ffFactory->newCookieBuilder()->newCookie(
-					self::COOKIE_NAME,
+				$this->cookieBuilder->newCookie(
+					SkinManager::COOKIE_NAME,
 					$this->updatedSkin,
-					time() + $this->ffFactory->getSkinCookieLifetime()
+					time() + $this->skinManager->getCookieLifetime()
 				)
 			);
 		} );
 	}
 
 	private function getSkinFromQuery( Request $request ): ?string {
-		$skin = $request->query->get( self::QUERY_PARAM_NAME, '' );
-		return $this->validateSkin( $skin ) ? $skin : null;
+		$skin = $request->query->get( SkinManager::QUERY_PARAM_NAME, '' );
+		return $this->skinManager->isValidSkin( $skin ) ? $skin : null;
 	}
 
 	private function getSkinFromCookie( Request $request ): ?string {
-		$skin = $request->cookies->get( self::COOKIE_NAME, '' );
-		return $this->validateSkin( $skin ) ? $skin : null;
-	}
-
-	private function validateSkin( string $skin ): bool {
-		return in_array( $skin, $this->ffFactory->getSkinOptions(), true );
+		$skin = $request->cookies->get( SkinManager::COOKIE_NAME, '' );
+		return $this->skinManager->isValidSkin( $skin ) ? $skin : null;
 	}
 }

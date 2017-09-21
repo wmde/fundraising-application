@@ -25,7 +25,7 @@ $app = new Application();
 $app->register( new SessionServiceProvider() );
 $app->register( new RoutingServiceProvider() );
 $app->register( new TwigServiceProvider() );
-$app->register( new SkinServiceProvider( $ffFactory ) );
+$app->register( new SkinServiceProvider( $ffFactory->getSkinManager(), $ffFactory->getCookieBuilder() ) );
 
 $app->before(
 	function ( Request $request, Application $app ) {
