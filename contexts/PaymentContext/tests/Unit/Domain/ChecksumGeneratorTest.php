@@ -22,16 +22,24 @@ class ChecksumGeneratorTest extends TestCase {
 	public function testCanGenerateChecksumWithTwoCharacters(): void {
 		$generator = new ChecksumGenerator( [ 'a', 'b' ] );
 
-		$this->assertSame( 'a', $generator->createChecksum( 'cats' ) );
-		$this->assertSame( 'b', $generator->createChecksum( 'cast' ) );
+		$this->assertSame( 'a', $generator->createChecksum( 'bbbb' ) );
+		$this->assertSame( 'b', $generator->createChecksum( 'abab' ) );
+	}
+
+	public function testIgnoresCharsNotInRepertoire(): void {
+		$generator = new ChecksumGenerator( [ 'a', 'b' ] );
+
+		$this->assertSame( 'a', $generator->createChecksum( 'cat' ) );
+		$this->assertSame( 'a', $generator->createChecksum( 'rat' ) );
+		$this->assertSame( 'a', $generator->createChecksum( 'c-a-t' ) );
 	}
 
 	public function testCanGenerateChecksumWithManyCharacters(): void {
 		$generator = new ChecksumGenerator( str_split( 'ACDEFKLMNPRSTWXYZ349' ) );
 
-		$this->assertSame( 'L', $generator->createChecksum( 'AAAA-AAAA-' ) );
-		$this->assertSame( 'W', $generator->createChecksum( 'ABCD-EFGH-' ) );
-		$this->assertSame( 'R', $generator->createChecksum( 'QAQA-QAQA-' ) );
+		$this->assertSame( 'F', $generator->createChecksum( 'AAAA-AAAA-' ) );
+		$this->assertSame( '4', $generator->createChecksum( 'ABCD-EFGH-' ) );
+		$this->assertSame( 'K', $generator->createChecksum( 'QAQA-QAQA-' ) );
 		$this->assertSame( '9', $generator->createChecksum( 'AAAAXXXX-' ) );
 	}
 
