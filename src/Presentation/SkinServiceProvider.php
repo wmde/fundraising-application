@@ -13,13 +13,13 @@ use WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder;
 
 class SkinServiceProvider implements ServiceProviderInterface {
 
-	private $skinManager;
+	private $skinSettings;
 	private $cookieBuilder;
 
 	private $updatedSkin;
 
-	public function __construct( SkinManager $skinManager, CookieBuilder $cookieBuilder ) {
-		$this->skinManager = $skinManager;
+	public function __construct( SkinSettings $skinSettings, CookieBuilder $cookieBuilder ) {
+		$this->skinSettings = $skinSettings;
 		$this->cookieBuilder = $cookieBuilder;
 	}
 
@@ -28,15 +28,15 @@ class SkinServiceProvider implements ServiceProviderInterface {
 		$app->before( function( Request $request, Application $app ) {
 
 			$skin = $this->getSkinFromQuery( $request );
-			if ( $skin && $skin !== $this->skinManager->getDefaultSkin() ) {
+			if ( $skin && $skin !== $this->skinSettings->getDefaultSkin() ) {
 				$this->updatedSkin = $skin;
-				$this->skinManager->setSkin( $skin );
+				$this->skinSettings->setSkin( $skin );
 				return;
 			}
 
 			$skin = $this->getSkinFromCookie( $request );
 			if ( $skin ) {
-				$this->skinManager->setSkin( $skin );
+				$this->skinSettings->setSkin( $skin );
 			}
 
 		}, Application::EARLY_EVENT );
@@ -49,21 +49,21 @@ class SkinServiceProvider implements ServiceProviderInterface {
 
 			$response->headers->setCookie(
 				$this->cookieBuilder->newCookie(
-					SkinManager::COOKIE_NAME,
+					SkinSettings::COOKIE_NAME,
 					$this->updatedSkin,
-					time() + $this->skinManager->getCookieLifetime()
+					time() + $this->skinSettings->getCookieLifetime()
 				)
 			);
 		} );
 	}
 
 	private function getSkinFromQuery( Request $request ): ?string {
-		$skin = $request->query->get( SkinManager::QUERY_PARAM_NAME, '' );
-		return $this->skinManager->isValidSkin( $skin ) ? $skin : null;
+		$skin = $request->query->get( SkinSettings::QUERY_PARAM_NAME, '' );
+		return $this->skinSettings->isValidSkin( $skin ) ? $skin : null;
 	}
 
 	private function getSkinFromCookie( Request $request ): ?string {
-		$skin = $request->cookies->get( SkinManager::COOKIE_NAME, '' );
-		return $this->skinManager->isValidSkin( $skin ) ? $skin : null;
+		$skin = $request->cookies->get( SkinSettings::COOKIE_NAME, '' );
+		return $this->skinSettings->isValidSkin( $skin ) ? $skin : null;
 	}
 }

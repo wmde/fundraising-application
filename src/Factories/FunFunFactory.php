@@ -142,7 +142,7 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\InternalErrorHtmlPresenter
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipFormViolationPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\PageNotFoundPresenter;
-use WMDE\Fundraising\Frontend\Presentation\SkinManager;
+use WMDE\Fundraising\Frontend\Presentation\SkinSettings;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\Frontend\SubscriptionContext\DataAccess\DoctrineSubscriptionRepository;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Domain\Repositories\SubscriptionRepository;
@@ -305,7 +305,7 @@ class FunFunFactory {
 
 		$pimple['twig'] = function() {
 			$config = $this->config['twig'];
-			$config['loaders']['filesystem']['template-dir'] = 'skins/' . $this->getSkinManager()->getSkin() . '/templates';
+			$config['loaders']['filesystem']['template-dir'] = 'skins/' . $this->getSkinSettings()->getSkin() . '/templates';
 
 			$twigFactory = $this->newTwigFactory( $config );
 			$configurator = $twigFactory->newTwigEnvironmentConfigurator();
@@ -484,9 +484,9 @@ class FunFunFactory {
 			);
 		};
 
-		$pimple['skin-manager'] = function (): SkinManager {
+		$pimple['skin-settings'] = function (): SkinSettings {
 			$config = $this->config['skin'];
-			return new SkinManager( $config['options'], $config['default'], $config['cookie-lifetime'] );
+			return new SkinSettings( $config['options'], $config['default'], $config['cookie-lifetime'] );
 		};
 
 		return $pimple;
@@ -1558,8 +1558,8 @@ class FunFunFactory {
 		return $this->pimple['cookie-builder'];
 	}
 
-	public function getSkinManager(): SkinManager {
-		return $this->pimple['skin-manager'];
+	public function getSkinSettings(): SkinSettings {
+		return $this->pimple['skin-settings'];
 	}
 
 }

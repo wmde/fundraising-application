@@ -4,38 +4,38 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation;
 
-use WMDE\Fundraising\Frontend\Presentation\SkinManager;
+use WMDE\Fundraising\Frontend\Presentation\SkinSettings;
 use PHPUnit\Framework\TestCase;
 use InvalidArgumentException;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\Presentation\SkinManager
+ * @covers \WMDE\Fundraising\Frontend\Presentation\SkinSettings
  */
-class SkinManagerTest extends TestCase {
+class SkinSettingsTest extends TestCase {
 
 	public function testDefaultSkinIsSet(): void {
-		$manager = new SkinManager( ['a', 'b'], 'a', 500 );
+		$manager = new SkinSettings( ['a', 'b'], 'a', 500 );
 		$this->assertSame( 'a', $manager->getDefaultSkin() );
 	}
 
 	public function testDefaultSkinGetsUsedOnConstruct(): void {
-		$manager = new SkinManager( ['a', 'c', 'b'], 'b', 500 );
+		$manager = new SkinSettings( ['a', 'c', 'b'], 'b', 500 );
 		$this->assertSame( 'b', $manager->getSkin() );
 	}
 
 	public function testCookieLifetimeIsSet(): void {
-		$manager = new SkinManager( ['a', 'b'], 'a', 500 );
+		$manager = new SkinSettings( ['a', 'b'], 'a', 500 );
 		$this->assertSame( 500, $manager->getCookieLifetime() );
 	}
 
 	public function testValidateSkin(): void {
-		$manager = new SkinManager( ['c', 'd'], 'd', 300 );
+		$manager = new SkinSettings( ['c', 'd'], 'd', 300 );
 		$this->assertTrue( $manager->isValidSkin( 'c' ) );
 		$this->assertFalse( $manager->isValidSkin( 'f' ) );
 	}
 
 	public function testSetSkinValid(): void {
-		$manager = new SkinManager( ['c', 'd'], 'd', 300 );
+		$manager = new SkinSettings( ['c', 'd'], 'd', 300 );
 		$manager->setSkin( 'c' );
 		$this->assertSame( 'c', $manager->getSkin() );
 	}
@@ -45,7 +45,7 @@ class SkinManagerTest extends TestCase {
 	 * @expectedExceptionMessage 'z' is not a valid skin name
 	 */
 	public function testSetSkinInvalid(): void {
-		$manager = new SkinManager( ['x', 'y'], 'y', 100 );
+		$manager = new SkinSettings( ['x', 'y'], 'y', 100 );
 		$manager->setSkin( 'z' );
 	}
 
@@ -54,7 +54,7 @@ class SkinManagerTest extends TestCase {
 	 * @expectedExceptionMessage 'init' is not a valid skin name
 	 */
 	public function testInvalidDefaultSkin(): void {
-		new SkinManager( ['f', 'g'], 'init', 700 );
+		new SkinSettings( ['f', 'g'], 'init', 700 );
 	}
 
 }

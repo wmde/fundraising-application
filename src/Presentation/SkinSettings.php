@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\Presentation;
 
 use InvalidArgumentException;
 
-class SkinManager {
+class SkinSettings {
 
 	public const QUERY_PARAM_NAME = 'skin';
 	public const COOKIE_NAME = 'skin';
