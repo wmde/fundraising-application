@@ -503,7 +503,6 @@ main { padding-top: 40px; padding-bottom: 100px; background: #f6f6f6; display: b
 #country { width: 350px; }
 #personal-data .anonymous-payment-select { margin-right: 4px; }
 
-#donation-payment label { width: 175px; }
 #donation-payment #card-number { width: 180px; }
 #donation-payment #first-name,
 #donation-payment #last-name { width: 220px; }
@@ -519,6 +518,21 @@ main { padding-top: 40px; padding-bottom: 100px; background: #f6f6f6; display: b
 #donation-payment button[type="submit"] { margin-left: 10px; vertical-align: bottom; }
 #donation-payment .hosted-by { font-size: 0.6em; color: #b2b2b2; margin-bottom: 15px; }
 #donation-payment .hosted-by a { text-decoration: underline; color: #b2b2b2; }
+
+.payment-type-list li {
+    box-sizing: border-box;
+    display: inline-block;
+    padding-right: 15px;
+    margin-bottom: 15px;
+}
+
+.payment-type-list.four-col li {
+    min-width: 20%;
+}
+
+.payment-type-list.three-col li {
+    min-width: 33.3%;
+}
 
 .slide-sepa label, .slide-non-sepa label { width: 175px; }
 
