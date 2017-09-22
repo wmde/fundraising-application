@@ -3,6 +3,7 @@
 	formId
 	checkedPaymentType (optional)
 #}
+{% spaceless %}
 <ul class="clearfix payment-type-list {% if paymentTypes|length % 4 == 1 %}three-col{% else %}four-col{% endif %}">
 {% for paymentType in paymentTypes %}
 	<li
@@ -26,3 +27,4 @@
 	</li>
 {% endfor %}
 </ul>
+{% endspaceless %}
