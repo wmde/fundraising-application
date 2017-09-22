@@ -43,6 +43,19 @@ class ChecksumGeneratorTest extends TestCase {
 		$this->assertSame( '9', $generator->createChecksum( 'AAAAXXXX-' ) );
 	}
 
+	public function testLowerAndMixedCaseProduceConsistentChecksum(): void {
+		$generator = new ChecksumGenerator( str_split( 'ACDEFKLMNPRSTWXYZ349' ) );
+
+		$this->assertSame( 'F', $generator->createChecksum( 'aAaa-aaaa-' ) );
+		$this->assertSame( 'F', $generator->createChecksum( 'aaaa-aaaa-' ) );
+		$this->assertSame( '4', $generator->createChecksum( 'abcd-efGh-' ) );
+		$this->assertSame( '4', $generator->createChecksum( 'abcd-efgh-' ) );
+		$this->assertSame( 'K', $generator->createChecksum( 'QaQa-qaqa-' ) );
+		$this->assertSame( 'K', $generator->createChecksum( 'qaqa-qaqa-' ) );
+		$this->assertSame( '9', $generator->createChecksum( 'aaAa-XXXX-' ) );
+		$this->assertSame( '9', $generator->createChecksum( 'aaaaxxxx-' ) );
+	}
+
 	public function testChecksumIsOneOfTheExpectedCharacters(): void {
 		$characters = [ 'A', 'B', 'C' ];
 		$generator = new ChecksumGenerator( $characters );
