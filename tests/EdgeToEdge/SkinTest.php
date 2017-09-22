@@ -57,7 +57,7 @@ class SkinTest extends WebRouteTestCase {
 		$this->assertSkinResponseCookie( self::SKIN_2, true, $client->getResponse() );
 	}
 
-	public function testSkinViaQuerySuperseedsCookie(): void {
+	public function testSkinViaQuerySupersedesCookie(): void {
 		$client = $this->createClient( $this->getDummyConfig(), null, self::DISABLE_DEBUG );
 		$client->getCookieJar()->set( new RequestCookie( SkinSettings::COOKIE_NAME, self::SKIN_1 ) );
 		$client->request( 'GET', '/', [ SkinSettings::QUERY_PARAM_NAME => self::SKIN_2 ] );
