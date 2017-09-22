@@ -531,9 +531,8 @@ main { padding-top: 40px; padding-bottom: 100px; background: #f6f6f6; display: b
 }
 
 .payment-type-list.three-col li {
-    min-width: 30%;
+    min-width: 33.3%;
 }
-
 
 .slide-sepa label, .slide-non-sepa label { width: 175px; }
 
