@@ -837,7 +837,7 @@
         "options": {
           "type": "array",
           "title": "List of possible skin names",
-          "description": "A subsets of skins present in /skins",
+          "description": "A subset of skins present in /skins",
           "items": {
             "type": "string",
             "minLength": 1
@@ -848,13 +848,14 @@
         "default": {
           "type": "string",
           "title": "Name of the default skin",
+          "description": "The name must be one of the values given in 'options'.",
           "minLength": 1
         },
         "cookie-lifetime": {
           "type": "integer",
           "minimum": 0,
           "title": "Lifetime of the cookie used to persist the desired skin",
-          "description": "Number of seconds the skin cookie should be sent by clients"
+          "description": "Number of seconds the skin cookie should be persisted by clients"
         }
       },
       "additionalProperties": false,
