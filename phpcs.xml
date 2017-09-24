@@ -145,6 +145,7 @@
 				@see,
 				@throws,
 				@expectException,
+				@expectedExceptionMessage,
 				@dataProvider,
 				@slowThreshold,
 				@noinspection

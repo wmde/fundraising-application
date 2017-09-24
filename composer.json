@@ -86,7 +86,7 @@
 		"sorien/silex-dbal-profiler": "~2.0",
 		"wmde/fundraising-frontend-content": "dev-test",
 		"symfony/css-selector": "^3.2",
-		"phpstan/phpstan": "^0.7.0"
+		"phpstan/phpstan": "^0.8.0"
 	},
 	"autoload": {
 		"psr-4": {

@@ -18,12 +18,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use WMDE\Fundraising\Frontend\App\AccessDeniedException;
 use WMDE\Fundraising\Frontend\Infrastructure\TrackingDataSelector;
+use WMDE\Fundraising\Frontend\Presentation\SkinServiceProvider;
 
 $app = new Application();
 
 $app->register( new SessionServiceProvider() );
 $app->register( new RoutingServiceProvider() );
 $app->register( new TwigServiceProvider() );
+$app->register( new SkinServiceProvider( $ffFactory->getSkinSettings(), $ffFactory->getCookieBuilder() ) );
 
 $app->before(
 	function ( Request $request, Application $app ) {
@@ -56,7 +58,6 @@ $app->before( function( Request $request ) {
 		}
 	}
 }, Application::EARLY_EVENT );
-
 
 $app->after( function( Request $request, Response $response, Application $app ) {
 	if( $response instanceof JsonResponse ) {

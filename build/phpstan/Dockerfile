@@ -1,7 +1,7 @@
 # phpstan in docker
 # used as sanity check of code when installed via "composer install --no-dev" (so on prod) w/o other dev tools to check
 
-FROM phpstan/phpstan:latest
+FROM phpstan/phpstan:0.8
 
 RUN \
 	# for intl

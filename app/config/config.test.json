@@ -8,17 +8,7 @@
 		"wait, this is my own IBAN!"
 	],
 	"twig": {
-		"enable-cache": false,
-		"loaders": {
-			"filesystem": {
-				"template-dir": [
-					"skins/test/templates"
-				]
-			},
-			"array": {
-				"KontaktMailExtern.twig": "this is just a test template"
-			}
-		}
+		"enable-cache": false
 	},
 	"mailer-twig": {
 		"enable-cache": false,
@@ -110,5 +100,11 @@
 		"SUB": {
 			"donation-enabled": true
 		}
+	},
+	"skin": {
+		"options": [
+			"test"
+		],
+		"default": "test"
 	}
 }

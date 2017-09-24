@@ -829,6 +829,41 @@
         "raw",
         "sameSite"
       ]
+    },
+    "skin": {
+      "type": "object",
+      "title": "Skin configuration",
+      "properties": {
+        "options": {
+          "type": "array",
+          "title": "List of possible skin names",
+          "description": "A subset of skins present in /skins",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "default": {
+          "type": "string",
+          "title": "Name of the default skin",
+          "description": "The name must be one of the values given in 'options'.",
+          "minLength": 1
+        },
+        "cookie-lifetime": {
+          "type": "integer",
+          "minimum": 0,
+          "title": "Lifetime of the cookie used to persist the desired skin",
+          "description": "Number of seconds the skin cookie should be persisted by clients"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "options",
+        "default",
+        "cookie-lifetime"
+      ]
     }
   },
   "additionalProperties": false,
@@ -856,6 +891,7 @@
     "piwik",
     "translation",
     "payment-types",
-    "cookie"
+    "cookie",
+    "skin"
   ]
 }
