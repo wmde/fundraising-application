@@ -11,8 +11,6 @@ class ChecksumGenerator {
 
 	private $checksumCharacters;
 
-	private $cleanupPattern;
-
 	/**
 	 * @param array $checksumCharacters Characters that can be used for the checksum
 	 */
@@ -24,7 +22,6 @@ class ChecksumGenerator {
 		}
 
 		$this->checksumCharacters = $checksumCharacters;
-		$this->cleanupPattern = '/[^' . implode( '', $checksumCharacters ) . ']/';
 	}
 
 	/**
@@ -39,7 +36,7 @@ class ChecksumGenerator {
 	}
 
 	private function normalizeString( string $string ): string {
-		return strtoupper( preg_replace( $this->cleanupPattern, '', $string ) );
+		return strtoupper( str_replace( [ '-', '_', ' ' ], [ '', '', '' ], $string ) );
 	}
 
 }
