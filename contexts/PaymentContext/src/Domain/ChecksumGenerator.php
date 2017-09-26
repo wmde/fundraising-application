@@ -30,9 +30,16 @@ class ChecksumGenerator {
 	 * @return string The checksum as a single character present in the constructors array argument
 	 */
 	public function createChecksum( string $string ): string {
-		$checksum = hexdec( substr( md5( $this->normalizeString( $string ) ), 0, 8 ) );
+		$checksum = substr( md5( $this->normalizeString( $string ) ), 0, 8 );
+		if(PHP_INT_SIZE > 4) {
+			return $this->checksumCharacters[hexdec( $checksum ) % count( $this->checksumCharacters )];
+		} else {
+			return $this->checksumCharacters[(int) fmod(
+				(float) base_convert( $checksum, 16, 10 ),
+				count( $this->checksumCharacters )
+			)];
+		}
 
-		return $this->checksumCharacters[$checksum % count( $this->checksumCharacters )];
 	}
 
 	private function normalizeString( string $string ): string {
