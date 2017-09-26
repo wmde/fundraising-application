@@ -14,30 +14,30 @@ use InvalidArgumentException;
 class SkinSettingsTest extends TestCase {
 
 	public function testDefaultSkinIsSet(): void {
-		$manager = new SkinSettings( ['a', 'b'], 'a', 500 );
-		$this->assertSame( 'a', $manager->getDefaultSkin() );
+		$settings = new SkinSettings( ['a', 'b'], 'a', 500 );
+		$this->assertSame( 'a', $settings->getDefaultSkin() );
 	}
 
 	public function testDefaultSkinGetsUsedOnConstruct(): void {
-		$manager = new SkinSettings( ['a', 'c', 'b'], 'b', 500 );
-		$this->assertSame( 'b', $manager->getSkin() );
+		$settings = new SkinSettings( ['a', 'c', 'b'], 'b', 500 );
+		$this->assertSame( 'b', $settings->getSkin() );
 	}
 
 	public function testCookieLifetimeIsSet(): void {
-		$manager = new SkinSettings( ['a', 'b'], 'a', 500 );
-		$this->assertSame( 500, $manager->getCookieLifetime() );
+		$settings = new SkinSettings( ['a', 'b'], 'a', 500 );
+		$this->assertSame( 500, $settings->getCookieLifetime() );
 	}
 
 	public function testValidateSkin(): void {
-		$manager = new SkinSettings( ['c', 'd'], 'd', 300 );
-		$this->assertTrue( $manager->isValidSkin( 'c' ) );
-		$this->assertFalse( $manager->isValidSkin( 'f' ) );
+		$settings = new SkinSettings( ['c', 'd'], 'd', 300 );
+		$this->assertTrue( $settings->isValidSkin( 'c' ) );
+		$this->assertFalse( $settings->isValidSkin( 'f' ) );
 	}
 
 	public function testSetSkinValid(): void {
-		$manager = new SkinSettings( ['c', 'd'], 'd', 300 );
-		$manager->setSkin( 'c' );
-		$this->assertSame( 'c', $manager->getSkin() );
+		$settings = new SkinSettings( ['c', 'd'], 'd', 300 );
+		$settings->setSkin( 'c' );
+		$this->assertSame( 'c', $settings->getSkin() );
 	}
 
 	/**
@@ -45,8 +45,8 @@ class SkinSettingsTest extends TestCase {
 	 * @expectedExceptionMessage 'z' is not a valid skin name
 	 */
 	public function testSetSkinInvalid(): void {
-		$manager = new SkinSettings( ['x', 'y'], 'y', 100 );
-		$manager->setSkin( 'z' );
+		$settings = new SkinSettings( ['x', 'y'], 'y', 100 );
+		$settings->setSkin( 'z' );
 	}
 
 	/**
