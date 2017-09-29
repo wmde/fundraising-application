@@ -1,0 +1,34 @@
+.introduction {
+	.strong {
+		color: $brand-primary;
+		text-transform: uppercase;
+		> span {
+			text-transform: lowercase;
+		}
+	}
+	.link-back {
+		margin-top: 22px;
+
+		@include bkp(md) {
+			padding-left: 30px;
+		}
+		@include bkp(lg) {
+			padding-left: 52px;
+		}
+		a {
+			display: block;
+			border-bottom: 1px solid $gray-light;
+			padding: 10px 0;
+			&:after {
+				content: '\e315';
+				font-family: 'icomoon';
+				position: absolute;
+				right: 15px;
+				top: 29%;
+				width: auto;
+				height: auto;
+				font-size: 20px;
+			}
+		}
+	}
+}

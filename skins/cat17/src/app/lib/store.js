@@ -40,6 +40,7 @@ if ( process.env.REDUX_LOG === 'on' ) {
 // Different stores for different pages, does not violate Redux pattern
 module.exports = {
 	createDonationStore: function ( initialState ) {
+    console.log("Donation Store");
 		return Redux.createStore( Redux.combineReducers( {
 			formPagination: formPagination,
 			donationFormContent: donationFormContent,

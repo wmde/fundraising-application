@@ -7,7 +7,7 @@ var _ = require( 'underscore' ),
 	 * @param {Object} initialValidationState
 	 * @returns {Object}
 	 */
-	createInitialStateFromViolatedFields = function ( violatedFields, initialValidationState ) {
+  createInitialStateFromViolatedFields = function ( violatedFields, initialValidationState ) {
 		var state = {
 			validity: initialValidationState || {}
 		};
@@ -28,5 +28,6 @@ var _ = require( 'underscore' ),
 	};
 
 module.exports = {
-	createInitialStateFromViolatedFields: createInitialStateFromViolatedFields
+  createInitialStateFromViolatedFields: createInitialStateFromViolatedFields
 };
+

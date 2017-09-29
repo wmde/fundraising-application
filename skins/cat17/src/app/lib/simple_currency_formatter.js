@@ -12,6 +12,9 @@ var parseGermanFloat = function ( amountStr ) {
 	GermanCurrencyFormatter = {
 		format: function ( amountStr ) {
 			var amount = this.parse( amountStr );
+      if (amount == 0) {
+        return String("Betrag noch nicht ausgewählt.");
+      }
 			return String( amount.toFixed( 2 ) ).replace( '.', ',' ) + String.fromCharCode( 160 ) + '€';
 		},
 		parse: parseGermanFloat
@@ -20,6 +23,9 @@ var parseGermanFloat = function ( amountStr ) {
 	EnglishCurrencyFormatter = {
 		format: function ( amountStr ) {
 			var amount = this.parse( amountStr );
+      if (amount == 0) {
+        return String("Amount not yet selected.");
+      }
 			return '€' + String( amount.toFixed( 2 ) );
 		},
 		parse: parseGermanFloat // just to be sure.

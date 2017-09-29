@@ -1,0 +1,59 @@
+.btn {
+   	width: 100%;
+
+	&.btn-donation {
+		display: block;
+		background-color: $brand-primary;
+		color: #fff;
+		margin:0 auto;
+		width: 100%;
+		height: 66px;
+		pointer-events: auto;
+		&.btn-introduction {
+			height: 44px;
+			padding-top: 10px;
+			@include bkp(md) {
+				display: none;
+			}
+		}
+		&:hover, &:focus {
+			background-color: $brand-primary-dark;
+			color: #fff;
+		}
+		&:active {
+			margin: 0 auto;
+			width: 90%;
+			@include bkp(xs) {
+				//width: calc(280px - 10%);
+			}
+		}
+
+		&.btn-unactive {
+			background-color: $gray-light;
+			color: #ffffff;
+			pointer-events: none;
+		}
+
+		@include bkp(xs) {
+			//max-width: 280px;
+		}
+		@include bkp(sm) {
+			max-width: 226px;
+			float: right;
+		}
+	}
+	&.btn-membership {
+		background-color: $brand-primary;
+		color: #fff;
+		&:hover, &:focus {
+			background-color: $brand-primary-dark;
+			color: #fff;
+		}
+		&.btn-unactive {
+			background-color: $gray-light;
+			color: $text-color;
+		}
+	}
+
+}
+

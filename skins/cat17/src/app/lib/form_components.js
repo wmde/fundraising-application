@@ -1,4 +1,5 @@
 'use strict';
+
 var objectAssign = require( 'object-assign' ),
 	actions = require( './actions' ),
 
@@ -71,9 +72,11 @@ var objectAssign = require( 'object-assign' ),
 		render: function ( formContent ) {
 			this.hiddenElement.val( formContent.amount || '' );
 			if ( formContent.isCustomAmount ) {
+        this.inputElement.parent().addClass('filled');
 				this.selectElement.prop( 'checked', false );
 				this.inputElement.val( formContent.amount );
 			} else {
+        this.inputElement.parent().removeClass('filled');
 				this.selectElement.val( [ formContent.amount ] );
 				this.inputElement.val( '' );
 			}
@@ -84,6 +87,9 @@ var objectAssign = require( 'object-assign' ),
 		decisionElement: null,
 		paymentIntervalElement: null,
 		render: function ( formContent ) {
+      if (formContent.paymentIntervalInMonths < 0) {
+        return;
+      }
 			var intervalType = formContent.paymentIntervalInMonths > 0 ?
 				INTERVAL_TYPE_RECURRING :
 				INTERVAL_TYPE_ONE_OFF;
@@ -132,7 +138,7 @@ module.exports = {
 			contentName: contentName,
 			onChange: createDefaultChangeHandler( store, contentName )
 		} );
-		element.on( 'selectmenuchange', component.onChange );
+		element.on( 'selectmenuchange, change', component.onChange );
 		return component;
 	},
 

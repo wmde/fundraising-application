@@ -5,15 +5,15 @@ var formContentLib = require( './form_content' ),
 	initialState = {
 		amount: 0,
 		isCustomAmount: false,
-		paymentType: 'BEZ',
-		paymentIntervalInMonths: 0, // 0, 1, 3, 6 or 12, 0 = non-recurring payment
+		paymentType: '',
+		paymentIntervalInMonths: -1, // 0, 1, 3, 6 or 12, 0 = non-recurring payment
 		debitType: 'sepa', // sepa and "non-sepa"
 		iban: '',
 		bic: '',
 		accountNumber: '',
 		bankCode: '',
 		bankName: '',
-		addressType: 'person', // person, firma and anonym
+		addressType: '', // person, firma and anonym
 		salutation: '',
 		title: '',
 		firstName: '',
@@ -25,7 +25,10 @@ var formContentLib = require( './form_content' ),
 		country: 'DE',
 		email: '',
 		confirmSepa: false,
-		confirmShortTerm: false
+		confirmShortTerm: false,
+    confirmNewsletter: false,
+    contactPerson: '',
+    activePresets: false
 	};
 
 module.exports = function donationFormContent( state, action ) {
