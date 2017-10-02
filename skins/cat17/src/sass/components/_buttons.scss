@@ -1,21 +1,15 @@
 .btn {
    	width: 100%;
 
-	&.btn-donation {
+	&.btn-donation, &.btn-membership {
 		display: block;
 		background-color: $brand-primary;
+		background-color: var(--brand-primary);
 		color: #fff;
 		margin:0 auto;
 		width: 100%;
 		height: 66px;
 		pointer-events: auto;
-		&.btn-introduction {
-			height: 44px;
-			padding-top: 10px;
-			@include bkp(md) {
-				display: none;
-			}
-		}
 		&:hover, &:focus {
 			background-color: $brand-primary-dark;
 			color: #fff;
@@ -24,10 +18,8 @@
 			margin: 0 auto;
 			width: 90%;
 			@include bkp(xs) {
-				//width: calc(280px - 10%);
 			}
 		}
-
 		&.btn-unactive {
 			background-color: $gray-light;
 			color: #ffffff;
@@ -43,7 +35,9 @@
 		}
 	}
 	&.btn-membership {
-		background-color: $brand-primary;
+		//background-color: $brand-primary;
+		height: 44px;
+		padding-top: 10px;
 		color: #fff;
 		&:hover, &:focus {
 			background-color: $brand-primary-dark;
@@ -52,6 +46,13 @@
 		&.btn-unactive {
 			background-color: $gray-light;
 			color: $text-color;
+		}
+	}
+	&.btn-donation.btn-introduction {
+		height: 44px;
+		padding-top: 10px;
+		@include bkp(md) {
+			display: none;
 		}
 	}
 

@@ -27,7 +27,7 @@
 
 form {
 	@include bkp(sm) {
-		margin-top: 80px;
+		margin-top: 60px;
 	}
 
 	section {
@@ -166,7 +166,7 @@ form {
 
 	section.donation-amount {
 		.amount-qty {
-			margin-bottom: 45px;
+			margin-bottom: 25px;
 			div {
 				display: flex;
 				justify-content: space-between;
@@ -384,6 +384,7 @@ form {
                         a {
                             display: flex;
                             justify-content: space-between;
+							align-items: flex-end;
                             span , i {
                                 display: block;
                             }
@@ -436,7 +437,7 @@ form {
 
 }
 
-form#form-donation {
+form#form-donation, form#form-membership {
 	@include bkp(sm) {
 		box-shadow: 0 -5px 9px -5px rgba(0,0,0,0.65);
 	}

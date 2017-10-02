@@ -33,7 +33,7 @@
 		</section>
 		<div class="row">
 
-			<div class="form-shadow-wrap col-xs-12 col-sm-8">
+			<div class="form-shadow-wrap col-xs-12 col-sm-8 col-md-8">
 
 				<section id="membership-type" class="donation-amount clearfix">
 					<h2 class="">Mitgliedschaftsart</h2>
@@ -55,7 +55,7 @@
 						<div class="wrap-field">
 							<span class="border-bt"></span>
 							<div class="wrap-input">
-								<input type="radio" name="periode" id="aktive" value="1">
+								<input type="radio" name="intervalType" id="aktive" value="1">
 								<label for="aktive"><span>Aktive Mitgliedschaft</span><i class="icon-flash_on"></i></label>
 							</div>
 
@@ -315,14 +315,16 @@
 							</p>
 						</div>
 
-					</fieldset>
-					<div class="more-info">
-						<p>Der Mindestbetrag für natürliche Personen beträgt 24 Euro, für juristische Personen 100 Euro
-							im Jahr.</p>
+						<div class="more-info">
+							<p>Der Mindestbetrag für natürliche Personen beträgt 24 Euro, für juristische Personen 100 Euro
+								im Jahr.</p>
 
-						<p>Für Personen mit eingeschränkter finanzieller Leistungskraft kann der Beitrag auf Antrag auf
-							12 Euro ermäßigt werden.</p>
-					</div>
+							<p>Für Personen mit eingeschränkter finanzieller Leistungskraft kann der Beitrag auf Antrag auf
+								12 Euro ermäßigt werden.</p>
+						</div>
+
+					</fieldset>
+
 				</section>
 
 				<section id="donation-payment" class="donation-payment-method clearfix">
@@ -374,7 +376,7 @@
 	</div>
 	<hr id="form-end">
 
-	@@include('./overview.html')
+	@@include('./membership-overview.html')
 
 	</div>
 

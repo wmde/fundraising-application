@@ -1,6 +1,10 @@
 $( function () {
   /** global: WMDE */
 
+  if ($('body#donation').length == 0) {
+    return;
+  }
+
   var initData = $( '#init-form' ),
     store = WMDE.Store.createDonationStore( WMDE.createInitialStateFromViolatedFields(
         initData.data( 'violatedFields' ),

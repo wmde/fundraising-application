@@ -1,5 +1,40 @@
 
 .membership {
+		.introduction {
+			p.h1 {
+				@include bkp(sm) {
+					width: 80%;
+				}
+			}
+			p.h1 + a {
+				margin-top: 40px;
+			}
+			.resum h2 {
+				line-height: 1.4em;
+				padding-bottom: 10px;
+				border-bottom: 1px solid $brand-primary-membership;
+				@include bkp(sm) {
+					display: inline-block;
+				}
+			}
+			.list-membership {
+				margin-top: 30px;
+				li {
+					list-style-type: none;
+					margin-bottom: 25px;
+					@include bkp(xs) {
+						padding-left: 20px;
+						text-indent: -16px;
+						&:before {
+							content: '•';
+							margin-right: 10px;
+							color: $brand-primary-membership;
+						}
+					}
+				}
+			}
+		}
+
 
 		#payment-method {
 			min-height: 285px;
@@ -23,25 +58,39 @@
 				}
 			}
 		}
-
 		#membership-type {
 			.wrap-field {
 				border-bottom: none;
+				margin-bottom: 40px;
 				.border-bt {
 					z-index: 99;
 				}
-
 			}
 			.wrap-input {
 				border-bottom: 1px solid $gray-light;
 			}
 			.info-text.opened {
 				border-left: none;
+				top: 20px;
 			}
 			.info-text.opened[data-info="aktive"] {
-				top: 86px;
+				top: 122px;
 			}
 		}
 
+		#recurrence {
+			.more-info {
+				margin-top: 30px;
+			}
+		}
+
+	form .wrap-overview #overview .overview .wrap-field {
+		@include bkp(lg) {
+			min-height: 200px;
+			&:last-child {
+				min-height: auto;
+			}
+		}
+	}
 }
 
