@@ -39,6 +39,9 @@ form {
 
 		.wrap-field {
 			border-bottom: 1px solid $gray-light;
+			&:hover {
+				border-bottom: 1px solid $text-color;
+			}
 			@include bkp(sm) {
 				position: static;
 			}
@@ -109,7 +112,6 @@ form {
 				content: '';
 				margin-left: 40px;
 			}
-
             input {
                 opacity: 0;
             }
@@ -126,6 +128,8 @@ form {
 							border-left: 1px solid $brand-primary;
 							min-height: 205px;
 							padding-top: 0;
+							height: auto;
+							height: 100%;
 						}
 						@include bkp(md) {
 							right: -296px;
@@ -161,7 +165,11 @@ form {
             }
 
 		}
-
+		#type-donator {
+			.info-text.opened {
+				height: auto;
+			}
+		}
 	}
 
 	section.donation-amount {
@@ -312,6 +320,9 @@ form {
 					max-width: 730px;
 				}
 				.wrap-field {
+					&:hover {
+						border-bottom: none ;
+					}
                     @include bkp(md) {
                         border-bottom: none;
                     }
@@ -370,6 +381,9 @@ form {
                         }
                         .info-detail {
                             padding-right: 30px;
+							@include bkp(lg) {
+								padding-right: 0;
+							}
                         }
 					}
 					.wrap-input {
@@ -377,6 +391,9 @@ form {
                         display: block;
 						&:after {
 							margin-left: 0;
+						}
+						&:hover {
+							border-bottom: 1px solid $brand-primary;
 						}
                         @include bkp(md) {
                             border-bottom: 1px solid $gray-light;
@@ -389,7 +406,7 @@ form {
                                 display: block;
                             }
 							&:hover {
-								color: $text-color;
+								color: $brand-primary;
 							}
                         }
 					}
@@ -450,7 +467,7 @@ form#form-donation, form#form-membership {
 	margin-bottom: 60px;
     padding-bottom: 40px;
 	@include bkp(md) {
-        box-shadow: 1px 1px 8px 0px rgba(0,0,0,0.65);
+        box-shadow: 1px 1px 6px 0px rgba(0,0,0,0.35);
         width: calc(66.6666666667% + 30px);
         margin-left: -30px;
         margin-bottom: 30px;

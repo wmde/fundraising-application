@@ -524,6 +524,7 @@ $( function () {
   // connect DOM elements to actions
   //$( '#continueFormSubmit1' ).click( WMDE.StoreUpdates.makeEventHandlerWaitForAsyncFinish( handlePaymentDataSubmit, store ) );
   $('input').on('click, change', WMDE.StoreUpdates.makeEventHandlerWaitForAsyncFinish( handleGroupValidations, store ) );
+  handleGroupValidations();
 
   $('input[name="payment-info"]').click(function () {
     if ($(this).val() == 'BEZ') {
@@ -534,21 +535,6 @@ $( function () {
     }
   });
 
-  $( '.back-button' ).click( function () {
-    store.dispatch( actions.newResetFieldValidityAction( [ 'confirmSepa', 'confirmShortTerm' ] ) );
-    store.dispatch( actions.newPreviousPageAction() );
-  } );
-
-  $( '#finishFormSubmit3' ).click( function () {
-    var validity = store.getState().validity;
-    // we use validity directly here because SEPA really needs these values to be valid
-    if ( validity.paymentData && validity.address && validity.bankData && validity.sepaConfirmation ) {
-      $( '#donForm2' ).submit();
-    } else {
-      triggerValidityCheckForSepaPage();
-      displayErrorBox();
-    }
-  } );
 
   // Set initial form values
   var initSetup = initData.data( 'initial-form-values' );

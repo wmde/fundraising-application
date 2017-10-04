@@ -9,13 +9,13 @@
 							<i class="periodicity-icon" data-display-error="false"></i>
 						</a>
 					</li>
-					<li class="payment-method disabled">
+					<li class="payment-method">
 						<a href="#donation-payment">
 							<span class="text" data-display-error="false">Zahlart</span>
 							<i class="payment-icon" data-display-error="false"></i>
 						</a>
 					</li>
-					<li class="donator-type disabled">
+					<li class="donator-type">
 						<a href="#donation-type">
 							<span class="text" data-display-error="false">Daten</span>
 							<i class="address-icon" data-display-error="false"></i>
@@ -240,17 +240,17 @@
 							<div class="wrap-info">
 								<div class="info-text" data-info="personal">
 									<div class="wrap-select-50 clearfix">
-										<select id="treatment" name="treatment" placeholder="Anrede"
+										<select class="jcf-hidden" id="treatment" name="treatment" placeholder="Anrede"
 												data-jcf='{"wrapNative": false }' class="salutation">
-											<option value="hide">Anrede</option>
+											<option class="hideme" value="anrede">Anrede</option>
 											<option value="familie">Familie</option>
 											<option value="herr">Herr</option>
 											<option value="frau">Frau</option>
 											<option value="anderes">Anderes</option>
 										</select>
-										<select id="title" name="title"
+										<select  class="jcf-hidden" id="title" name="title"
 												data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true}' class="personal-title">
-											<option value="titel">Titel</option>
+											<option class="hideme" vaue="vtitle">Titel</option>
 											<option value="kein-title">Kein Titel</option>
 											<option value="dr">Dr.</option>
 											<option value="prof">Prof.</option>
@@ -374,7 +374,7 @@
 						</div>
 
 
-						<div class="wrap-field">
+						<div class="wrap-field anonym">
 							<span class="border-bt"></span>
 							<div class="wrap-input">
 								<input type="radio" name="addressType" id="anonymus" value="anonym">

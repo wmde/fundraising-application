@@ -139,6 +139,7 @@
 		transition: all 0.3s;
 		background-color: white;
 		z-index: 9;
+		height: 100%;
 		li {
 			margin: 5px 0;
 			display: inline-block;
@@ -150,6 +151,9 @@
 					display: none;
 				}
 			}
+		}
+		@include bkp(sm) {
+			height: auto;
 		}
 		@include bkp(md) {
 			display: flex;
@@ -199,10 +203,10 @@
         &.under-bar {
             top: 83px;
             @include bkp(sm) {
-                top: 110px;
+                top: 105px;
             }
             @include bkp(md) {
-                top: 45px;
+                top: 0;
             }
         }
 	}

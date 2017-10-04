@@ -1,20 +1,26 @@
 .state-overview {
 	li {
-		a {
-			 display: block;
-			 color: rgba(0, 0, 0, .5);
-			 padding: 0;
-			 transition: all 200ms;
-			 i {
-				 opacity: 0;
-			 }
-			 &:hover {
-				 color: rgba(0, 0, 0, 1);
-				 //font-size: 16px;
-			 }
-		 }
 		border-bottom: 1px solid $gray-light;
-		&.enabled, &.completed.enabled, &.disabled.enabled {
+		a {
+			display: block;
+			text-align: center;
+			color: rgba(0, 0, 0, .5);
+			padding: 0;
+			transition: all 200ms;
+			i {
+				opacity: 0;
+			}
+			&:hover {
+				color: rgba(0, 0, 0, 1);
+				@include bkp(md) {
+					font-size: 16px;
+				}
+			}
+		}
+		&:hover {
+			border-bottom: 1px solid $text-color;
+		}
+		&.enabled {
 			border-bottom: 1px solid $brand-primary;
 			a {
 				color: $brand-primary;
@@ -22,31 +28,45 @@
 				&:hover {
 					color: $brand-primary;
 				}
-
 				@include bkp(md) {
-					 font-size: 16px;
-				 }
-				i {
-					opacity: 0;
+					font-size: 16px;
 				}
 			}
 		}
 		&.completed.enabled {
-			a i {
-				opacity: 1;
+			border-bottom: 1px solid $brand-primary;
+			a {
+				color: $brand-primary;
+				@include bkp(sm) {
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+				}
+				i {
+					opacity: 0;
+					@include bkp(sm) {
+						opacity: 1;
+					}
+				}
 			}
 		}
 		&.completed {
 			border-bottom: 1px solid $text-color;
 			a {
-                color: $text-color;
+				color: $text-color;
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
-                i {
-                    opacity: 1;
-                }
+				i {
+					opacity: 1;
+				}
 			}
+			&.amount {
+				a i {
+					opacity: 1;
+				}
+			}
+
 			&.payment-method, &.donator-type {
 				a {
 					display: block;
@@ -68,13 +88,7 @@
 				}
 			}
 		}
-		&.completed.enabled {
-			a {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-			}
-		}
+
 		&.disabled {
 			//border-bottom: 1px solid $white;
 			a {
@@ -102,21 +116,21 @@
 				}
 			}
 		}
-	/*	&:hover, &:focus {
-			border-bottom: 1px solid $brand-primary;
-			a {
-				color: $brand-primary;
-			}
-		}*/
+		/*	&:hover, &:focus {
+				border-bottom: 1px solid $brand-primary;
+				a {
+					color: $brand-primary;
+				}
+			}*/
 		&.btn-steps {
-			@include bkp (sm) {
+			@include bkp(sm) {
 				display: block;
 				a {
 					height: 44px;
 					line-height: 44px;
 					padding: 0;
 					font-size: 14px;
-                    max-width: 100%;
+					max-width: 100%;
 				}
 			}
 		}
@@ -162,6 +176,7 @@
 			font-size: 12px;
 			flex: 1 1 31.33%;
 			margin: 0 2%;
+			border-bottom: 1px solid transparent;
 			@include bkp(xs) {
 				max-width: 83px;
 			}
@@ -169,6 +184,22 @@
 				max-width: none;
 				padding: 15px 1px;
 				font-size: 14px;
+			}
+			a {
+				@include bkp(sm) {
+					/*	display: flex;
+						justify-content: space-between;
+						align-items: center;
+						i {
+							opacity: 1;
+						}*/
+				}
+			}
+			&.completed {
+				border-bottom: 1px solid transparent;
+			}
+			&.enabled {
+				border-bottom: 1px solid $brand-primary;
 			}
 		}
 	}
@@ -190,11 +221,12 @@
 		font-size: 16px;
 	}
 }
+
 .state-bar-lateral {
 	display: none;
-    opacity: 0;
-    transition: opacity 0.3s;
-    pointer-events: none;
+	opacity: 0;
+	transition: opacity 0.3s;
+	pointer-events: none;
 	@include bkp(md) {
 		display: block;
 		padding-left: 30px;
@@ -202,35 +234,33 @@
 	@include bkp(lg) {
 		padding-left: 52px;
 	}
-    &.active {
-        opacity: 1;
-        a {
-            pointer-events: auto;
-        }
-    }
+	&.active {
+		opacity: 1;
+		a {
+			pointer-events: auto;
+		}
+	}
 	h2 {
 		margin-bottom: 15px;
 	}
 	.wrap-bar {
-        &.fixed {
-            position: fixed;
-            display: block;
-            width: 279px;
-            top: 45px;
+		&.fixed {
+			position: fixed;
+			display: block;
+			width: 279px;
+			top: 45px;
 			@include bkp(md) {
 				top: 85px;
 			}
-        }
-
+		}
 		li {
 			a {
 				padding: 10px 0;
+				text-align: left;
 			}
 			&.btn-steps {
-				@include bkp (sm) {
-
+				@include bkp(sm) {
 					margin-top: 45px;
-
 				}
 			}
 		}
@@ -250,34 +280,40 @@
 
 .info-text, .info-text-bottom {
 	margin-bottom: 0;
-	&.opened, &.opened p{
+	&.opened, &.opened p {
 		padding: 20px 0 15px;
 	}
 	@include bkp(lg) {
 		margin: 20px 0 15px;
 		//font-size: 12px;
 		p {
-		//	font-size: 12px;
+			//	font-size: 12px;
 		}
 	}
 	&:after {
-	/*	content: '\e254';
-		font-family: 'icomoon';
-		position: absolute;
-		right: 15px;
-		top: 75px;
-		width: auto;
-		height: auto;*/
+		/*	content: '\e254';
+			font-family: 'icomoon';
+			position: absolute;
+			right: 15px;
+			top: 75px;
+			width: auto;
+			height: auto;*/
 	}
 	i {
 		display: block;
 		text-align: right;
 		//font-size: 16px;
 		float: right;
+
+		@include bkp(lg) {
+			display: none;
+		}
+
 	}
 }
+
 .info-text-bottom {
-    &.opened, &.opened p {
-        border-top: 1px solid $gray-light;
-    }
+	&.opened, &.opened p {
+		border-top: 1px solid $gray-light;
+	}
 }

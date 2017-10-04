@@ -5,7 +5,7 @@ $( function () {
     return;
   }
 
-  var initData = $( '#init-form' ),
+  var initData = $( '#init-form.membership' ),
     store = WMDE.Store.createMembershipStore(
       WMDE.createInitialStateFromViolatedFields( initData.data( 'violatedFields' ), {} )
     ),
@@ -14,22 +14,22 @@ $( function () {
   WMDE.StoreUpdates.connectComponentsToStore(
     [
       WMDE.Components.createRadioComponent( store, $( 'input[name="intervalType"]' ), 'membershipType' ),
-      WMDE.Components.createRadioComponent( store, $( '.address-type-select' ), 'addressType' ),
+      WMDE.Components.createRadioComponent( store, $( 'input[name="addressType"]' ), 'addressType' ),
       WMDE.Components.createRadioComponent( store, $( '.salutation-select' ), 'salutation' ),
       WMDE.Components.createSelectMenuComponent( store, $( '#personal-title' ), 'title' ),
-      WMDE.Components.createValidatingTextComponent( store, $( '#first-name' ), 'firstName' ),
-      WMDE.Components.createValidatingTextComponent( store, $( '#last-name' ), 'lastName' ),
+      WMDE.Components.createValidatingTextComponent( store, $( '.first-name' ), 'firstName' ),
+      WMDE.Components.createValidatingTextComponent( store, $( '#surname' ), 'lastName' ),
       WMDE.Components.createValidatingTextComponent( store, $( '#company-name' ), 'companyName' ),
-      WMDE.Components.createValidatingTextComponent( store, $( '#street' ), 'street' ),
+      WMDE.Components.createValidatingTextComponent( store, $( '.street' ), 'street' ),
       WMDE.Components.createValidatingTextComponent( store, $( '#post-code' ), 'postcode' ),
       WMDE.Components.createValidatingTextComponent( store, $( '#city' ), 'city' ),
       WMDE.Components.createSelectMenuComponent( store, $( '#country' ), 'country' ),
       WMDE.Components.createTextComponent( store, $( '#email' ), 'email' ),
       WMDE.Components.createValidatingTextComponent( store, $( '#date-of-birth' ), 'dateOfBirth' ),
       WMDE.Components.createValidatingTextComponent( store, $( '#phone' ), 'phoneNumber' ),
-      WMDE.Components.createRadioComponent( store, $( '.payment-type-select' ), 'paymentType' ),
-      WMDE.Components.createRadioComponent( store, $( '.payment-period-select' ), 'paymentIntervalInMonths' ),
-      WMDE.Components.createAmountComponent( store, $( '.amount-input' ), $( '.amount-select' ), $( '#amount-hidden' ) ),
+      WMDE.Components.createRadioComponent( store, $( 'input[name="payment-info"]' ), 'paymentType' ),
+      WMDE.Components.createRadioComponent( store, $( 'input[name="periode"]' ), 'paymentIntervalInMonths' ),
+      WMDE.Components.createAmountComponent( store, $( '#amount-typed' ), $( 'input[name="amount-grp"]' ), $( '#amount-hidden' ) ),
       WMDE.Components.createBankDataComponent( store, {
         ibanElement: $( '#iban' ),
         bicElement: $( '#bic' ),
@@ -39,7 +39,8 @@ $( function () {
         bankNameDisplayElement: $( '#bank-name' ),
         debitTypeElement: $( '.debit-type-select' )
       } ),
-      WMDE.Components.createValidatingCheckboxComponent( store, $( '#confirm_sepa' ), 'confirmSepa' )
+      WMDE.Components.createValidatingCheckboxComponent( store, $( '#confirm_sepa' ), 'confirmSepa' ),
+      WMDE.Components.createTextComponent( store, $( '#contact-person' ), 'contactPerson' )
     ],
     store,
     'membershipFormContent'
@@ -392,6 +393,81 @@ $( function () {
       displayErrorBox();
     }
   }
+
+  handleGroupValidations = function () {
+    var state = store.getState();
+
+    //1st Group Amount & Periodicity
+    var amount = $('.amount'),
+      paymentMethod = $('.payment-method'),
+      donatorType = $('.donator-type');
+
+    console.log(state);
+    if (state.membershipFormContent.paymentIntervalInMonths >= 0) {
+      amount.addClass('completed').removeClass('disabled invalid');
+      paymentMethod.removeClass('disabled');
+      if (state.membershipInputValidation.amount.dataEntered && !state.membershipInputValidation.amount.isValid) {
+        amount.removeClass('completed').addClass('invalid');
+        amount.find('.periodicity-icon').removeClass().addClass('periodicity-icon icon-error');
+      }
+    }
+    else {
+      paymentMethod.addClass('disabled');
+    }
+
+    if (state.membershipFormContent.paymentType) {
+      paymentMethod.addClass('completed').removeClass('disabled invalid');
+      donatorType.removeClass('disabled');
+      /*if (state.membershipInputValidation.paymentType.dataEntered && !state.membershipInputValidation.paymentType.isValid) {
+        paymentMethod.removeClass('completed').addClass('invalid');
+        paymentMethod.find('.payment-icon').removeClass().addClass('payment-icon icon-error');
+      }*/
+    }
+    else {
+      donatorType.addClass('disabled');
+    }
+
+    if (state.membershipFormContent.addressType) {
+      donatorType.addClass('completed').removeClass('disabled invalid');
+      var validators = state.membershipInputValidation;
+      if (
+        state.membershipFormContent.addressType == 'personal' &&
+        (
+        (validators.email.dataEntered && !validators.email.isValid) ||
+        (validators.city.dataEntered && !validators.city.isValid) ||
+        (validators.firstName.dataEntered && !validators.firstName.isValid) ||
+        (validators.lastName.dataEntered && !validators.lastName.isValid) ||
+        (validators.street.dataEntered && !validators.street.isValid) ||
+        (validators.postcode.dataEntered && !validators.postcode.isValid) ||
+        (validators.salutation.dataEntered && !validators.salutation.isValid) ||
+        (validators.firstName.dataEntered && !validators.firstName.isValid)
+        )
+        ||
+        state.membershipFormContent.addressType == 'firma' &&
+        (
+        (validators.contactPerson.dataEntered && !validators.contactPerson.isValid) ||
+        (validators.companyName.dataEntered && !validators.companyName.isValid) ||
+        (validators.firstName.dataEntered && !validators.firstName.isValid) ||
+        (validators.email.dataEntered && !validators.email.isValid) ||
+        (validators.city.dataEntered && !validators.city.isValid) ||
+        (validators.street.dataEntered && !validators.street.isValid) ||
+        (validators.postcode.dataEntered && !validators.postcode.isValid)
+        )){
+        donatorType.removeClass('completed').addClass('invalid');
+        donatorType.find('.payment-icon').removeClass().addClass('payment-icon icon-error');
+      }
+    }
+
+
+    if (state.validity.paymentData && state.validity.address && (state.membershipFormContent.paymentType != 'BEZ' || state.validity.bankData) ) {
+      $('form input[type="submit"]').removeClass('btn-unactive');
+    }
+    else {
+      $('form input[type="submit"]').addClass('btn-unactive');
+    }
+  };
+  $('input').on('click, change', WMDE.StoreUpdates.makeEventHandlerWaitForAsyncFinish( handleGroupValidations, store ) );
+  handleGroupValidations();
 
   $( '#continueFormSubmit' ).click( WMDE.StoreUpdates.makeEventHandlerWaitForAsyncFinish( handleMembershipDataSubmitForDirectDebit, store ) );
 

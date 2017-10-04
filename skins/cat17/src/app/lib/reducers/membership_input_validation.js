@@ -23,7 +23,8 @@ var _ = require( 'underscore' ),
 		bic: _.clone( defaultFields ),
 		accountNumber: _.clone( defaultFields ),
 		bankCode: _.clone( defaultFields ),
-		confirmSepa: _.clone( defaultFields )
+		confirmSepa: _.clone( defaultFields ),
+    contactPerson: _.clone( defaultFields )
 	},
 	optionalFields = [
 		'dateOfBirth', 'phoneNumber'
@@ -64,7 +65,8 @@ var _ = require( 'underscore' ),
 				return _.extend( {}, state, {
 					salutation: _.clone( defaultFields ),
 					firstName: _.clone( defaultFields ),
-					lastName: _.clone( defaultFields )
+					lastName: _.clone( defaultFields ),
+          contactPerson: _.clone( defaultFields )
 				} );
 			default:
 				// just a guard against field value changes, should not happen normally
