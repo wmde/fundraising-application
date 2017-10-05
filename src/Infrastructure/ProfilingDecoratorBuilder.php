@@ -23,7 +23,7 @@ class ProfilingDecoratorBuilder {
 
 	public function decorate( $objectToDecorate, string $profilingLabel ) {	// @codingStandardsIgnoreLine
 		return ( new DecoratorBuilder( $objectToDecorate ) )
-			->withBefore( function () use ( $objectToDecorate, $profilingLabel ) {
+			->withBefore( function () use ( $objectToDecorate, $profilingLabel ): void {
 				$callingFunctionName = $this->getCallingFunctionName();
 
 				$this->dataCollector->addCall(
@@ -34,7 +34,7 @@ class ProfilingDecoratorBuilder {
 
 				$this->stopwatch->start( $profilingLabel );
 			} )
-			->withAfter( function () use ( $profilingLabel ) {
+			->withAfter( function () use ( $profilingLabel ): void {
 				$this->stopwatch->stop( $profilingLabel );
 			} )
 			->newDecorator();

@@ -43,7 +43,7 @@ class AddCommentRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenRequestWithoutTokens_resultIsError(): void {
-		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ): void {
 			$donation = $this->getNewlyStoredDonation( $factory );
 
 			$client->request(
@@ -75,7 +75,7 @@ class AddCommentRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenRequestWithValidParameters_resultIsSuccess(): void {
-		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ): void {
 			$donation = $this->getNewlyStoredDonation( $factory );
 
 			$client->request(
@@ -96,7 +96,7 @@ class AddCommentRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenRequestWithUnknownDonationId_resultIsError(): void {
-		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ): void {
 			$this->getNewlyStoredDonation( $factory );
 
 			$client->request(
@@ -117,7 +117,7 @@ class AddCommentRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenRequestWithInvalidUpdateToken_resultIsError(): void {
-		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ): void {
 			$donation = $this->getNewlyStoredDonation( $factory );
 
 			$client->request(

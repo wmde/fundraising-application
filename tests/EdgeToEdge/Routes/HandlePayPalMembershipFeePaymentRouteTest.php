@@ -31,7 +31,7 @@ class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 	const VERIFICATION_FAILED = 'INVALID';
 
 	public function testGivenValidSubscriptionSignupRequest_applicationIndicatesSuccess(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setTokenGenerator( new FixedTokenGenerator(
 				self::UPDATE_TOKEN,
 				\DateTime::createFromFormat( 'Y-m-d H:i:s', '2039-12-31 23:59:59' )
@@ -109,7 +109,7 @@ class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenPaymentProviderDoesNotVerify_errorCodeIsReturned(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$request = $this->newSubscriptionSignupRequest();
 
 			$factory->setPayPalMembershipFeeNotificationVerifier(
@@ -126,7 +126,7 @@ class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenWrongTransactionType_applicationIgnoresRequest(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$invalidRequest = $this->newInvalidTransactionRequest();
 
 			$factory->setPayPalMembershipFeeNotificationVerifier(
@@ -192,7 +192,7 @@ class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenPaymentNotificationForInvalidMembershipId_applicationReturnsError(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$invalidRequest = $this->newInvalidMembershipIdRequest();
 
 			$factory->setPayPalMembershipFeeNotificationVerifier(

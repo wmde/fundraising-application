@@ -560,11 +560,11 @@
           "default": "000000",
           "pattern": "^[0-9A-F]{6}$"
         },
-        "skin": {
+        "logo": {
           "type": "string",
           "minLength": 1,
-          "title": "Skin name",
-          "description": "TODO: This is probably a deprecated or misplaced config value.",
+          "title": "Logo name to display",
+          "description": "Logo name of the displayed logo on the MCP page (editable in the MCP backend).",
           "default": "default"
         },
         "theme": {

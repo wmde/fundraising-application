@@ -35,7 +35,7 @@ class DoctrineMembershipApplicationPrePersistSubscriber implements EventSubscrib
 		$entity = $args->getObject();
 
 		if ( $entity instanceof MembershipApplication ) {
-			$entity->modifyDataObject( function ( MembershipApplicationData $data ) {
+			$entity->modifyDataObject( function ( MembershipApplicationData $data ): void {
 				if ( $this->isEmpty( $data->getAccessToken() ) ) {
 					$data->setAccessToken( $this->accessTokenGenerator->generateToken() );
 				}

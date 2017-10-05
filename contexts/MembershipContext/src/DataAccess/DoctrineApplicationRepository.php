@@ -192,7 +192,7 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 
 	private function preserveDoctrineStatus( DoctrineApplication $doctrineApplication, int $doctrineStatus ): void {
 		if ( $doctrineStatus < DoctrineApplication::STATUS_CONFIRMED ) {
-			$doctrineApplication->modifyDataObject( function ( MembershipApplicationData $data ) {
+			$doctrineApplication->modifyDataObject( function ( MembershipApplicationData $data ): void {
 				$data->setPreservedStatus( DoctrineApplication::STATUS_CONFIRMED );
 			} );
 		}

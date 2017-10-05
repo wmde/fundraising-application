@@ -44,7 +44,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 
 		$subscriptionRepository = new SubscriptionRepositorySpy();
 
-		$client = $this->createClient( [], function ( FunFunFactory $factory ) use ( $subscriptionRepository ) {
+		$client = $this->createClient( [], function ( FunFunFactory $factory ) use ( $subscriptionRepository ): void {
 			$factory->setSubscriptionRepository( $subscriptionRepository );
 		} );
 

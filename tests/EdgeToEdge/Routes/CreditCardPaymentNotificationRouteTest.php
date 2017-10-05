@@ -34,7 +34,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 	const STATUS = 'processed';
 
 	public function testGivenInvalidRequest_applicationIndicatesError(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setCreditCardService( new FakeCreditCardService() );
 			$client->request(
 				'GET',
@@ -49,7 +49,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_applicationIndicatesSuccess(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setTokenGenerator( new FixedTokenGenerator(
 				self::UPDATE_TOKEN,
 				\DateTime::createFromFormat( 'Y-m-d H:i:s', '2039-12-31 23:59:59' )

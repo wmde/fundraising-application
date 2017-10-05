@@ -27,7 +27,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	const ACCESS_DENIED_TEXT = 'access_denied_donation_confirmation';
 
 	public function testGivenValidRequest_confirmationPageContainsDonationData(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setDonationConfirmationPageSelector(
 				new DonationConfirmationPageSelector( $this->newEmptyConfirmationPageConfig() )
 			);
@@ -42,7 +42,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidPostRequest_confirmationPageContainsDonationData(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setDonationConfirmationPageSelector(
 				new DonationConfirmationPageSelector( $this->newEmptyConfirmationPageConfig() )
 			);
@@ -57,7 +57,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidPostRequest_embeddedMembershipFormContainsDonationData(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setDonationConfirmationPageSelector(
 				new DonationConfirmationPageSelector( $this->newEmptyConfirmationPageConfig() )
 			);
@@ -96,7 +96,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenAlternativeConfirmationPageConfig_alternativeContentIsDisplayed(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setDonationConfirmationPageSelector(
 				new DonationConfirmationPageSelector( $this->newConfirmationPageConfig() )
 			);
@@ -111,7 +111,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenAnonymousDonation_confirmationPageReflectsThat(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$donation = $this->newBookedAnonymousPayPalDonation( $factory );
 
 			$responseContent = $this->retrieveDonationConfirmation( $client, $donation->getId() );
@@ -121,7 +121,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenAnonymousDonation_confirmationPageShowsStatusText(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$donation = $this->newBookedAnonymousPayPalDonation( $factory );
 
 			$responseContent = $this->retrieveDonationConfirmation( $client, $donation->getId() );
@@ -193,7 +193,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenWrongToken_accessIsDenied(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setDonationConfirmationPageSelector(
 				new DonationConfirmationPageSelector( $this->newEmptyConfirmationPageConfig() )
 			);
@@ -220,7 +220,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenWrongId_accessIsDenied(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setDonationConfirmationPageSelector(
 				new DonationConfirmationPageSelector( $this->newEmptyConfirmationPageConfig() )
 			);
@@ -234,7 +234,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenNoDonation_accessIsDenied(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setDonationConfirmationPageSelector(
 				new DonationConfirmationPageSelector( $this->newEmptyConfirmationPageConfig() )
 			);
@@ -275,7 +275,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenDonationTimestampCookieIsSet_itIsNotOverwritten(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$donation = $this->newStoredDonation( $factory );
 
 			$client->getCookieJar()->set(

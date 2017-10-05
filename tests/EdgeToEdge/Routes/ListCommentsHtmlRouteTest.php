@@ -30,7 +30,7 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenAreThreeComments_listSizeIsShownAsThree(): void {
-		$client = $this->createClient( [], function ( FunFunFactory $factory ) {
+		$client = $this->createClient( [], function ( FunFunFactory $factory ): void {
 			$this->createThreeComments( $factory->getEntityManager() );
 		} );
 
@@ -80,7 +80,7 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenAreComments_theyAreInTheHtml(): void {
-		$client = $this->createClient( [], function ( FunFunFactory $factory ) {
+		$client = $this->createClient( [], function ( FunFunFactory $factory ): void {
 			$this->createThreeComments( $factory->getEntityManager() );
 		} );
 
@@ -116,7 +116,7 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 	}
 
 	public function testCommentsGetEscaped(): void {
-		$client = $this->createClient( [], function ( FunFunFactory $factory ) {
+		$client = $this->createClient( [], function ( FunFunFactory $factory ): void {
 			$this->createThreeComments( $factory->getEntityManager() );
 		} );
 
@@ -129,7 +129,7 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenLimitAndPageTwo_limitNumberOfCommentsAreSkipped(): void {
-		$client = $this->createClient( [], function ( FunFunFactory $factory ) {
+		$client = $this->createClient( [], function ( FunFunFactory $factory ): void {
 			$this->createThreeComments( $factory->getEntityManager() );
 		} );
 

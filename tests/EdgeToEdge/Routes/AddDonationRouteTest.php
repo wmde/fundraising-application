@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Silex\Application;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowDonationConfirmationHandler;
@@ -28,7 +29,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	const SOME_TOKEN = 'SomeToken';
 
 	public function testGivenValidRequest_donationGetsPersisted(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
 			$client->followRedirects( false );
@@ -189,7 +190,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		 */
 		$factory = null;
 
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
 			$client->followRedirects( false );
@@ -262,7 +263,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenComplementableBankData_donationStillGetsPersisted(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
 			$client->followRedirects( false );
@@ -321,7 +322,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		);
 
 		$response = $client->getResponse();
-		$this->assertSame( 302, $response->getStatusCode() );
+		$this->assertSame( Response::HTTP_FOUND, $response->getStatusCode() );
 		$this->assertContains( 'sandbox.paypal.com', $response->getContent() );
 	}
 
@@ -336,7 +337,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		);
 
 		$response = $client->getResponse();
-		$this->assertSame( 302, $response->getStatusCode() );
+		$this->assertSame( Response::HTTP_FOUND, $response->getStatusCode() );
 		$this->assertContains( 'item_name=item_name_donation', $response->getContent() );
 	}
 
@@ -349,7 +350,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	public function testGivenValidCreditCardData_showsIframeEmbeddingPage(): void {
+	public function testGivenValidCreditCardData_redirectsToPaymentProvider(): void {
 		$client = $this->createClient();
 		$client->request(
 			'POST',
@@ -358,13 +359,14 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		);
 
 		$response = $client->getResponse();
-		$this->assertSame( 200, $response->getStatusCode() );
-		$this->assertContains( 'paytext_cc 3 12,34 € per Kreditkarte.', $response->getContent() );
-		$this->assertContains( 'thatother.paymentprovider.com', $response->getContent() );
+		$this->assertSame( Response::HTTP_FOUND, $response->getStatusCode() );
+		$this->assertTrue( $response->isRedirect() );
+		$this->assertContains( 'amount=1234', $response->headers->get( 'Location' ) );
+		$this->assertContains( 'thatother.paymentprovider.com', $response->headers->get( 'Location' ) );
 	}
 
 	public function testValidSofortInput_savesDonationAndRedirectsTo3rdPartyPage(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$response = new SofortResponse();
 			$response->setPaymentUrl( 'https://bankingpin.please' );
 
@@ -530,7 +532,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_tokensAreReturned(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setTokenGenerator( new FixedTokenGenerator( self::SOME_TOKEN ) );
 
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
@@ -549,7 +551,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_clientIsRedirected(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setTokenGenerator( new FixedTokenGenerator( self::SOME_TOKEN ) );
 			$client->followRedirects( false );
 
@@ -564,7 +566,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenTrackingCookieExists_valueIsPersisted(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$client->getCookieJar()->set( new Cookie( 'spenden_tracking', 'test/blue' ) );
 
 			$client->request(
@@ -581,7 +583,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenTrackableInputDataIsSubmitted_theyAreStoredInSession(): void {
-		$this->createAppEnvironment( [], function ( Client $client, FunFunFactory $factory, Application $app ) {
+		$this->createAppEnvironment( [], function ( Client $client, FunFunFactory $factory, Application $app ): void {
 
 			$client->request(
 				'GET',
@@ -601,7 +603,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenTolstojNovelIsPassed_isIsNotStoredInSession(): void {
-		$this->createAppEnvironment( [], function ( Client $client, FunFunFactory $factory, Application $app ) {
+		$this->createAppEnvironment( [], function ( Client $client, FunFunFactory $factory, Application $app ): void {
 
 			$client->request(
 				'GET',
@@ -627,7 +629,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenParameterIsOmitted_itIsNotStoredInSession(): void {
-		$this->createAppEnvironment( [], function ( Client $client, FunFunFactory $factory, Application $app ) {
+		$this->createAppEnvironment( [], function ( Client $client, FunFunFactory $factory, Application $app ): void {
 
 			$client->request(
 				'GET',
@@ -676,7 +678,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenMobileTrackingIsRequested_piwikTrackerIsCalledForPaypalPayment(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setNullMessenger();
 			$client->followRedirects( false );
 
@@ -711,7 +713,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenMobileTrackingIsRequested_piwikTrackerIsNotCalledForNonPaypalPayment(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setNullMessenger();
 			$client->followRedirects( false );
 
@@ -734,7 +736,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenCommasInStreetInput_donationGetsPersisted(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
 			$client->followRedirects( false );
@@ -753,7 +755,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenSufficientForeignBankData_donationGetsPersisted(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$formInput = $this->newValidFormInput();
 			$formInput['iban'] = 'AT022050302101023600';
 			$formInput['bic'] = 'SPIHAT22XXX';

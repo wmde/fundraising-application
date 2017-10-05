@@ -145,7 +145,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_applicationIsPersisted(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
 
 			$client->request(
@@ -166,7 +166,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_confirmationPageContainsCancellationParameters(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setTokenGenerator( new FixedTokenGenerator( self::FIXED_TOKEN ) );
 
 			$client->request(
@@ -242,7 +242,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenTrackingCookieExists_valueIsPersisted(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$client->getCookieJar()->set( new Cookie( 'spenden_tracking', 'test/blue' ) );
 
 			$client->request(
@@ -264,7 +264,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequestUsingPayPal_applicationIsPersisted(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
 
 			$client->request(
@@ -348,7 +348,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testCommasInStreetNamesAreRemoved(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 
 			$params = $this->newValidHttpParameters();
 			$params['strasse'] = 'Nyan, street, ';
@@ -371,7 +371,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenCompaniesApply_salutationIsSetToFixedValue(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 
 			$params = $this->newValidHttpParametersForCompanies();
 			$client->request(

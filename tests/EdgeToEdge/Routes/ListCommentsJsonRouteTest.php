@@ -32,7 +32,7 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 	}
 
 	public function testRouteShowsComments(): void {
-		$client = $this->createClient( [], function( FunFunFactory $factory ) {
+		$client = $this->createClient( [], function( FunFunFactory $factory ): void {
 			$this->persistFirstComment( $factory->getEntityManager() );
 			$this->persistSecondComment( $factory->getEntityManager() );
 			$factory->getEntityManager()->flush();
@@ -90,7 +90,7 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenLimitSmallerThanCommentCount_onlySoManyCommentsAreShown(): void {
-		$client = $this->createClient( [], function( FunFunFactory $factory ) {
+		$client = $this->createClient( [], function( FunFunFactory $factory ): void {
 			$this->persistFirstComment( $factory->getEntityManager() );
 			$this->persistSecondComment( $factory->getEntityManager() );
 			$factory->getEntityManager()->flush();
@@ -107,7 +107,7 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenJsonpCallback_jsonIsWrappedInCallback(): void {
-		$client = $this->createClient( [], function( FunFunFactory $factory ) {
+		$client = $this->createClient( [], function( FunFunFactory $factory ): void {
 			$this->persistFirstComment( $factory->getEntityManager() );
 			$this->persistSecondComment( $factory->getEntityManager() );
 			$factory->getEntityManager()->flush();
@@ -132,7 +132,7 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenLimitAndPageTwo_limitNumberOfCommentsAreSkipped(): void {
-		$client = $this->createClient( [], function( FunFunFactory $factory ) {
+		$client = $this->createClient( [], function( FunFunFactory $factory ): void {
 			$this->persistFirstComment( $factory->getEntityManager() );
 			$this->persistSecondComment( $factory->getEntityManager() );
 			$factory->getEntityManager()->flush();
