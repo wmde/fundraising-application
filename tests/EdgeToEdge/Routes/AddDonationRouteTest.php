@@ -29,7 +29,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	const SOME_TOKEN = 'SomeToken';
 
 	public function testGivenValidRequest_donationGetsPersisted(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
 			$client->followRedirects( false );
@@ -190,7 +190,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		 */
 		$factory = null;
 
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
 			$client->followRedirects( false );
@@ -263,7 +263,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenComplementableBankData_donationStillGetsPersisted(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
 			$client->followRedirects( false );
@@ -366,7 +366,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testValidSofortInput_savesDonationAndRedirectsTo3rdPartyPage(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$response = new SofortResponse();
 			$response->setPaymentUrl( 'https://bankingpin.please' );
 
@@ -532,7 +532,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_tokensAreReturned(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setTokenGenerator( new FixedTokenGenerator( self::SOME_TOKEN ) );
 
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
@@ -551,7 +551,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_clientIsRedirected(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setTokenGenerator( new FixedTokenGenerator( self::SOME_TOKEN ) );
 			$client->followRedirects( false );
 
@@ -566,7 +566,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenTrackingCookieExists_valueIsPersisted(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$client->getCookieJar()->set( new Cookie( 'spenden_tracking', 'test/blue' ) );
 
 			$client->request(
@@ -583,7 +583,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenTrackableInputDataIsSubmitted_theyAreStoredInSession(): void {
-		$this->createAppEnvironment( [], function ( Client $client, FunFunFactory $factory, Application $app ) {
+		$this->createAppEnvironment( [], function ( Client $client, FunFunFactory $factory, Application $app ): void {
 
 			$client->request(
 				'GET',
@@ -603,7 +603,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenTolstojNovelIsPassed_isIsNotStoredInSession(): void {
-		$this->createAppEnvironment( [], function ( Client $client, FunFunFactory $factory, Application $app ) {
+		$this->createAppEnvironment( [], function ( Client $client, FunFunFactory $factory, Application $app ): void {
 
 			$client->request(
 				'GET',
@@ -629,7 +629,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenParameterIsOmitted_itIsNotStoredInSession(): void {
-		$this->createAppEnvironment( [], function ( Client $client, FunFunFactory $factory, Application $app ) {
+		$this->createAppEnvironment( [], function ( Client $client, FunFunFactory $factory, Application $app ): void {
 
 			$client->request(
 				'GET',
@@ -678,7 +678,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenMobileTrackingIsRequested_piwikTrackerIsCalledForPaypalPayment(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setNullMessenger();
 			$client->followRedirects( false );
 
@@ -713,7 +713,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenMobileTrackingIsRequested_piwikTrackerIsNotCalledForNonPaypalPayment(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setNullMessenger();
 			$client->followRedirects( false );
 
@@ -736,7 +736,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenCommasInStreetInput_donationGetsPersisted(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
 			$client->followRedirects( false );
@@ -755,7 +755,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenSufficientForeignBankData_donationGetsPersisted(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$formInput = $this->newValidFormInput();
 			$formInput['iban'] = 'AT022050302101023600';
 			$formInput['bic'] = 'SPIHAT22XXX';

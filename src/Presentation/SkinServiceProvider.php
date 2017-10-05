@@ -32,7 +32,7 @@ class SkinServiceProvider implements ServiceProviderInterface, BootableProviderI
 	}
 
 	public function boot( Application $app ): void {
-		$app->before( function( Request $request ) {
+		$app->before( function( Request $request ): void {
 			$skinFromCookie = $this->getSkinFromCookie( $request );
 			if ( $skinFromCookie ) {
 				$this->skinSettings->setSkin( $skinFromCookie );
@@ -45,7 +45,7 @@ class SkinServiceProvider implements ServiceProviderInterface, BootableProviderI
 			}
 		}, Application::EARLY_EVENT );
 
-		$app->after( function( Request $request, Response $response ) {
+		$app->after( function( Request $request, Response $response ): void {
 			if ( !$this->updatedSkin ) {
 				return;
 			}

@@ -30,7 +30,7 @@ class ListCommentsRssRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenAreComments_theyAreInTheRss(): void {
-		$client = $this->createClient( [], function( FunFunFactory $factory ) {
+		$client = $this->createClient( [], function( FunFunFactory $factory ): void {
 			$this->persistFirstComment( $factory->getEntityManager() );
 			$this->persistSecondComment( $factory->getEntityManager() );
 			$this->persistEvilComment( $factory->getEntityManager() );

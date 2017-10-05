@@ -21,7 +21,7 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 	public function testWhenPageDoesNotExist_missingResponseIsReturnedAndHasHeaderAndFooter(): void {
 		$client = $this->createClient(
 			[],
-			function ( FunFunFactory $factory ) {
+			function ( FunFunFactory $factory ): void {
 				$pageSelector = $this->createMock( PageSelector::class );
 				$pageSelector
 					->method( 'getPageId' )
@@ -53,7 +53,7 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 	public function testWhenPageDoesNotExist_noUnescapedPageNameIsShown(): void {
 		$client = $this->createClient(
 			[],
-			function ( FunFunFactory $factory ) {
+			function ( FunFunFactory $factory ): void {
 				$pageSelector = $this->createMock( PageSelector::class );
 				$pageSelector
 					->method( 'getPageId' )
@@ -73,7 +73,7 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 	public function testWhenRequestedContentPageExists_itGetsEmbeddedAndHasHeaderAndFooter(): void {
 		$this->createEnvironment(
 			[],
-			function ( Client $client, FunFunFactory $factory ) {
+			function ( Client $client, FunFunFactory $factory ): void {
 
 				$pageSelector = $this->createMock( PageSelector::class );
 				$pageSelector

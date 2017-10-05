@@ -17,7 +17,7 @@ class TranslatorTest extends WebRouteTestCase {
 	public function testGivenDefinedMessageKey_responseContainsTranslatedMessages(): void {
 		$client = $this->createClient(
 			[],
-			function ( FunFunFactory $factory ) {
+			function ( FunFunFactory $factory ): void {
 				$factory->setTranslator( $this->newTranslator( [ 'page_not_found' => 'Seite nicht gefunden' ], 'de' ) );
 			}
 		);
