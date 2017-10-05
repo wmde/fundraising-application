@@ -28,14 +28,10 @@
 	});
 
 	var selectedSelect = function () {
-
-		$("#treatment").change(function()  {
-			console.log("hola");
+		$("select").change(function()  {
+			$(this).next("span").addClass("selected-item");
 		});
-
-		if($("#treatment option:selected").length) {
-		//	console.log("selected");
-		}
+		$(".country-select").next("span").addClass("selected-item");
 	};
 
 	var heightInfo = function () {
@@ -190,7 +186,7 @@
 				donatorElements.removeClass('enabled');
 				amountElements.removeClass('enabled');
 				paymentElemnts.removeClass('enabled');
-
+				ACTIVE_THRESHOLD = 0;
 				if (currentScroll >= donationPaymentSection - ACTIVE_THRESHOLD) {
 					paymentElemnts.addClass('enabled');
 				}
@@ -218,15 +214,12 @@
 				donatorElements.removeClass('enabled');
 				if (currentScroll >= donationTypeSection - ACTIVE_THRESHOLD) {
 					donatorElements.addClass('enabled');
-					donatorElements.removeClass('disabled');
 				}
 				else if (currentScroll >= donationPaymentSection - ACTIVE_THRESHOLD) {
 					paymentElemnts.addClass('enabled');
-					paymentElemnts.removeClass('disabled');
 				}
 				else if (currentScroll >= donationSection - ACTIVE_THRESHOLD) {
 					amountElements.addClass('enabled');
-					amountElements.removeClass('disabled');
 				}
 			});
 		}

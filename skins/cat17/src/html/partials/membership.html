@@ -3,14 +3,14 @@
 		<section class="state-bar state-overview col-xs-12 ">
 			<div class="wrap-bar container ">
 				<ul class="">
-					<li class="member-type disabled">
+					<li class="member-type">
 						<a href="#membership-type">
 							<span class="text" data-display-error="false">Mitgliedschaft</span>
 							<i class="address-icon" data-display-error="false"></i>
 						</a>
 					</li>
 
-					<li class="donator-type disabled">
+					<li class="donator-type">
 						<a href="#donation-type">
 							<span class="text" data-display-error="false">Daten</span>
 							<i class="address-icon" data-display-error="false"></i>
@@ -22,7 +22,7 @@
 							<i class="periodicity-icon" data-display-error="false"></i>
 						</a>
 					</li>
-					<li class="payment-method disabled">
+					<li class="payment-method">
 						<a href="#donation-payment">
 							<span class="text" data-display-error="false">Zahlung</span>
 							<i class="payment-icon" data-display-error="false"></i>
@@ -44,7 +44,7 @@
 						<div class="wrap-field">
 							<span class="border-bt"></span>
 							<div class="wrap-input">
-								<input type="radio" name="intervalType" id="support" value="0">
+								<input type="radio" name="membership_type" id="support" value="sustaining">
 								<label for="support"><span>Fördermitgliedschaft</span><i class="icon-favorite"></i></label>
 							</div>
 
@@ -55,7 +55,7 @@
 						<div class="wrap-field">
 							<span class="border-bt"></span>
 							<div class="wrap-input">
-								<input type="radio" name="intervalType" id="aktive" value="1">
+								<input type="radio" name="membership_type" id="aktive" value="active">
 								<label for="aktive"><span>Aktive Mitgliedschaft</span><i class="icon-flash_on"></i></label>
 							</div>
 
@@ -80,7 +80,7 @@
 							Angabe Ihrer Adresse spenden.
 						</legend>
 
-						<div class="wrap-field">
+						<div class="wrap-field personal">
 							<span class="border-bt"></span>
 							<div class="wrap-input">
 								<input type="radio" name="addressType" id="personal" value="person">
@@ -89,17 +89,17 @@
 							<div class="wrap-info">
 								<div class="info-text" data-info="personal">
 									<div class="wrap-select-50 clearfix">
-										<select id="treatment" name="treatment" placeholder="Anrede"
+										<select class="jcf-hidden" id="treatment" name="treatment" placeholder="Anrede"
 												data-jcf='{"wrapNative": false }'>
-											<option value="hide">Anrede</option>
+											<option class="hideme" value="anrede">Anrede</option>
 											<option value="familie">Familie</option>
 											<option value="herr">Herr</option>
 											<option value="frau">Frau</option>
 											<option value="anderes">Anderes</option>
 										</select>
-										<select id="title" name="title"
+										<select class="jcf-hidden" id="title" name="title"
 												data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true}'>
-											<option value="titel">Titel</option>
+											<option class="hideme" value="titel">Titel</option>
 											<option value="kein-title">Kein Titel</option>
 											<option value="dr">Dr.</option>
 											<option value="prof">Prof.</option>
@@ -110,32 +110,38 @@
 									<div class="field-grp">
 										<input type="text" id="first-name" class="first-name" placeholder="Vorname">
 										<label for="first-name" class="sr-only">Vorname</label>
+										<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 									</div>
 									<div class="field-grp">
 										<input type="text" id="surname" placeholder="Name">
 										<label for="surname" class="sr-only">Name</label>
+										<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 									</div>
 									<div class="field-grp">
 										<input type="email" id="email" class="invalid" placeholder="E-Mail">
 										<label for="email" class="sr-only">E-Mail</label>
+										<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 									</div>
 									<div class="field-grp">
 										<input type="text" id="street" class="street"
 											   placeholder="Straße und Hausnummer">
 										<label for="street" class="sr-only">Straße und Hausnummer</label>
+										<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 									</div>
 									<div class="field-grp">
 										<input type="text" id="post-code" placeholder="Postleitzahl">
 										<label for="post-code" class="sr-only">Postleitzahl</label>
+										<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 									</div>
 									<div class="field-grp">
 										<input type="text" id="city" placeholder="Stadt">
 										<label for="city" class="sr-only">City</label>
+										<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 									</div>
 
 									<select id="country" name="country"
 											data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true,  "maxVisibleItems": 6}'
-											class="no-outline">
+											class="no-outline country-select">
 										<option value="DE">Deutschland</option>
 										<option value="AT">Österreich</option>
 										<option value="CH">Schweiz</option>
@@ -147,7 +153,7 @@
 								</div>
 								<div class="wrap-check">
 									<input type="checkbox" id="newsletter" data-jcf='{"wrapNative": true}' class="jcf">
-									<label for="newsletter">
+									<label class="news" for="newsletter">
 										Ja, ich bin damit einverstanden, dass Wikimedia mich per E-Mail kontaktiert,
 										wenn Wikipedia
 										meine Unterstützung benötigt.<br>
@@ -157,7 +163,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="wrap-field">
+						<div class="wrap-field firma">
 							<span class="border-bt"></span>
 							<div class="wrap-input">
 								<input type="radio" name="addressType" id="company" value="firma">
@@ -192,7 +198,7 @@
 
 									<select id="country-company" name="country-company" title="Land"
 											data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true,  "maxVisibleItems": 6}'
-											class="no-outline">
+											class="no-outline country-select">
 										<option value="DE">Deutschland</option>
 										<option value="AT">Österreich</option>
 										<option value="CH">Schweiz</option>
@@ -204,7 +210,7 @@
 								</div>
 								<div class="wrap-check">
 									<input type="checkbox" id="newsletter-company">
-									<label for="newsletter-company">
+									<label class="news" for="newsletter-company">
 										Ja, ich bin damit einverstanden, dass Wikimedia mich per E-Mail kontaktiert,
 										wenn Wikipedia
 										meine Unterstützung benötigt.
@@ -378,7 +384,6 @@
 
 	@@include('./membership-overview.html')
 
-	</div>
 
 
 	<input type="submit" value="Spende abschließen" class="btn btn-donation btn-unactive visible-xs-block">

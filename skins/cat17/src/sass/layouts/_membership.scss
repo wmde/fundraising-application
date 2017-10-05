@@ -1,88 +1,93 @@
-
 .membership {
-		.introduction {
-			p.h1 {
-				@include bkp(sm) {
-					width: 80%;
-				}
+	.introduction {
+		p.h1 {
+			@include bkp(sm) {
+				width: 80%;
 			}
-			p.h1 + a {
-				margin-top: 40px;
+		}
+		p.h1 + a {
+			margin-top: 40px;
+		}
+		.resum h2 {
+			line-height: 1.4em;
+			padding-bottom: 10px;
+			@include themify($themes) {
+				border-bottom: themed('border1pxPrimary');
 			}
-			.resum h2 {
-				line-height: 1.4em;
-				padding-bottom: 10px;
-				border-bottom: 1px solid $brand-primary-membership;
-				@include bkp(sm) {
-					display: inline-block;
-				}
+			@include bkp(sm) {
+				display: inline-block;
 			}
-			.list-membership {
-				margin-top: 30px;
-				li {
-					list-style-type: none;
-					margin-bottom: 25px;
-					@include bkp(xs) {
-						padding-left: 20px;
-						text-indent: -16px;
-						&:before {
-							content: '•';
-							margin-right: 10px;
-							color: $brand-primary-membership;
+		}
+		.list-membership {
+			margin-top: 30px;
+			li {
+				list-style-type: none;
+				margin-bottom: 25px;
+				@include bkp(xs) {
+					padding-left: 20px;
+					text-indent: -16px;
+					&:before {
+						content: '•';
+						margin-right: 10px;
+						@include themify($themes) {
+							color: themed('brandPrimary');
 						}
 					}
 				}
 			}
 		}
+	}
 
-
-		#payment-method {
-			min-height: 285px;
-			margin-bottom: 20px;
-			input + label {
-				&:after {
-					content: '';
-					background: $brand-primary;
-					border-radius: 100%;
-					border: none;
-					width: 10px;
-					height: 10px;
-					position: absolute;
-					left: -30px;
-					top: 8px;
-					margin-right: 1em;
-					vertical-align: top;
-					cursor: pointer;
-					text-align: center;
-					transition: all 250ms ease;
+	#payment-method {
+		min-height: 285px;
+		margin-bottom: 20px;
+		input + label {
+			&:after {
+				content: '';
+				@include themify($themes) {
+					background-color: themed('brandPrimary');
 				}
+				border-radius: 100%;
+				border: none;
+				width: 10px;
+				height: 10px;
+				position: absolute;
+				left: -30px;
+				top: 8px;
+				margin-right: 1em;
+				vertical-align: top;
+				cursor: pointer;
+				text-align: center;
+				transition: all 250ms ease;
 			}
 		}
-		#membership-type {
-			.wrap-field {
-				border-bottom: none;
-				margin-bottom: 40px;
-				.border-bt {
-					z-index: 99;
-				}
-			}
-			.wrap-input {
-				border-bottom: 1px solid $gray-light;
-			}
-			.info-text.opened {
-				border-left: none;
-				top: 20px;
-			}
-			.info-text.opened[data-info="aktive"] {
-				top: 122px;
-			}
-		}
+	}
 
-		#recurrence {
-			.more-info {
-				margin-top: 30px;
+	#membership-type {
+		.wrap-field {
+			border-bottom: none;
+			margin-bottom: 40px;
+			.border-bt {
+				z-index: 99;
 			}
 		}
+		.wrap-input {
+			border-bottom: 1px solid $gray-light;
+		}
+		.info-text.opened {
+			border-left: none;
+			top: 20px;
+		}
+		.info-text.opened[data-info="aktive"] {
+			top: 122px;
+		}
+	}
+
+	#recurrence {
+		.more-info {
+			margin-top: 30px;
+		}
+	}
 
 	form .wrap-overview #overview .overview .wrap-field {
 		@include bkp(lg) {
@@ -92,5 +97,61 @@
 			}
 		}
 	}
+
 }
 
+
+
+.membership {
+
+	.select, .jcf-select {
+
+		&:hover {
+			&:after {
+				border-color: $brand-primary-membership transparent transparent transparent;
+			}
+		}
+		&.jcf-drop-active {
+			&:hover {
+				&:after {
+					border-color: $brand-primary-membership transparent transparent transparent;
+				}
+			}
+			&:active, &.jcf-focus {
+
+				border: 2px solid $brand-primary-membership !important;
+				&:after {
+					border-color: $brand-primary-membership transparent transparent transparent !important;
+				}
+
+			}
+		}
+		&:active, &.active {
+			&:after {
+				border-color: $brand-primary-membership transparent transparent transparent;
+			}
+			@include bkp(sm) {
+				border-bottom: none;
+			}
+		}
+	}
+
+	#form-donation .jcf-select.jcf-select-jcf-hidden.jcf-focus, #form-donation .jcf-select.jcf-select-jcf-hidden.jcf-focus * {
+		//border-color: transparent !important;
+	}
+	.jcf-unselectable.jcf-focus {
+		border-color: transparent !important;
+	}
+
+	#form-donation .jcf-select.jcf-select-jcf-hidden.jcf-drop-active.jcf-focus, #form-donation .jcf-select.jcf-select-jcf-hidden.jcf-drop-active.jcf-focus * {
+		border-color: $brand-primary-membership !important;
+	}
+
+	.jcf-select-drop .jcf-select-drop-content {
+		border-top: none !important;
+		li span {
+			border-bottom: 1px solid #C6DBC3 !important;
+		}
+	}
+
+}

@@ -1,4 +1,4 @@
-<form id="form-donation" class="" action="ACTION_URL">
+<form id="form-donation" action="ACTION_URL">
 	<div class="container">
 		<section class="state-bar state-overview col-xs-12 ">
 			<div class="wrap-bar container ">
@@ -292,7 +292,7 @@
 
 									<select id="country" name="country"
 											data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true,  "maxVisibleItems": 6}'
-											class="no-outline">
+											class="no-outline country-select">
 										<option value="DE">Deutschland</option>
 										<option value="AT">Österreich</option>
 										<option value="CH">Schweiz</option>
@@ -304,7 +304,7 @@
 								</div>
 								<div class="wrap-check">
 									<input type="checkbox" id="newsletter" data-jcf='{"wrapNative": true}' class="jcf">
-									<label for="newsletter">
+									<label class="news" for="newsletter">
 										Ja, ich bin damit einverstanden, dass Wikimedia mich per E-Mail kontaktiert,
 										wenn Wikipedia
 										meine Unterstützung benötigt.<br>
@@ -349,7 +349,7 @@
 
 									<select id="country-company" name="country-company" title="Land"
 											data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true,  "maxVisibleItems": 6}'
-											class="no-outline">
+											class="no-outline country-select">
 										<option value="DE">Deutschland</option>
 										<option value="AT">Österreich</option>
 										<option value="CH">Schweiz</option>
@@ -361,7 +361,7 @@
 								</div>
 								<div class="wrap-check">
 									<input type="checkbox" id="newsletter-company">
-									<label for="newsletter-company">
+									<label class="news" for="newsletter-company">
 										Ja, ich bin damit einverstanden, dass Wikimedia mich per E-Mail kontaktiert,
 										wenn Wikipedia
 										meine Unterstützung benötigt.
@@ -400,7 +400,7 @@
 
 	@@include('./overview.html')
 
-	</div>
+
 
 
 	<input type="submit" value="Spende abschließen" class="btn btn-donation btn-unactive visible-xs-block">

@@ -3,7 +3,7 @@
 var formContentLib = require( './form_content' ),
 	objectAssign = require( 'object-assign' ),
 	initialState = {
-		membershipType: 'sustaining', // sustaining, active
+		membershipType: '', // sustaining, active
 		amount: 0,
 		paymentType: 'BEZ',
 		isCustomAmount: false,

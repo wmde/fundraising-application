@@ -394,6 +394,9 @@ form {
 						}
 						&:hover {
 							border-bottom: 1px solid $brand-primary;
+							a {
+								color: $brand-primary;
+							}
 						}
                         @include bkp(md) {
                             border-bottom: 1px solid $gray-light;
@@ -405,9 +408,7 @@ form {
                             span , i {
                                 display: block;
                             }
-							&:hover {
-								color: $brand-primary;
-							}
+
                         }
 					}
 				}

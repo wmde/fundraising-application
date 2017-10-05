@@ -3,21 +3,13 @@ body {
 	font-family: $font-main;
 	line-height: 24px;
 	font-size: 16px;
+	overflow-x: hidden;
 	@include bkp(sm) {
 		font-size: 14px;
 	}
 	@include bkp(lg) {
 		font-size: 12px;
 	}
-}
-
-body#donation {
-	--brand-primary: #00adee;
-	--brand-primary-dark: #0C69A3;
-}
-body#membership {
-	--brand-primary: #69c159;
-	--brand-primary-dark: #4E9242;
 }
 
 section {
@@ -34,8 +26,9 @@ a {
 		text-decoration: none;
 	}
 	&.link {
-		color: $brand-primary;
-		color: var(--brand-primary);
+		@include themify($themes) {
+			color: themed('brandPrimary');
+		}
 	}
 }
 

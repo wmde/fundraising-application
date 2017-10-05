@@ -46,7 +46,11 @@
 		left: -9999px;
 		&:checked {
 			+ .menu-toggler {
-				background-color: $brand-primary;
+
+				@include themify($themes) {
+					background-color: themed('brandPrimary');
+				}
+
 				.menu-toggler-line {
 					background-color: #fff;
 					&:nth-child(1) {
@@ -169,6 +173,7 @@
 	}
 
 	.menu-main {
+		z-index: 10;
 		ul {
 			margin-bottom: 0;
 		}
@@ -187,11 +192,15 @@
 					padding-bottom: 31px;
 				}
 				&:hover, &:focus {
-					border-bottom: 2px solid $brand-primary;
+					@include themify($themes) {
+						border-bottom: themed('border2pxPrimary');
+					}
 				}
 				&.selected {
 					color: $brand-primary;
-					border-bottom: 2px solid $brand-primary;
+					@include themify($themes) {
+						background-color: themed('border2pxPrimary');
+					}
 				}
 			}
 
@@ -199,15 +208,6 @@
 				width: auto;
 				float: none;
 			}
-        }
-        &.under-bar {
-            top: 83px;
-            @include bkp(sm) {
-                top: 105px;
-            }
-            @include bkp(md) {
-                top: 0;
-            }
         }
 	}
 }

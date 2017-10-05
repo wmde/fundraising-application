@@ -15,7 +15,7 @@ var parseGermanFloat = function ( amountStr ) {
       if (amount == 0) {
         return String("Betrag noch nicht ausgewählt.");
       }
-			return String( amount.toFixed( 2 ) ).replace( '.', ',' ) + String.fromCharCode( 160 ) + '€';
+			return String( amount.toFixed( 0 ) ).replace( '.', ',' ) + String.fromCharCode( 160 ) + '€';
 		},
 		parse: parseGermanFloat
 	},
@@ -26,7 +26,7 @@ var parseGermanFloat = function ( amountStr ) {
       if (amount == 0) {
         return String("Amount not yet selected.");
       }
-			return '€' + String( amount.toFixed( 2 ) );
+			return '€' + String( amount.toFixed( 0 ) );
 		},
 		parse: parseGermanFloat // just to be sure.
 	};

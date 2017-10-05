@@ -1,12 +1,4 @@
 'use strict';
-/*DE">Deutschland</option>
- <option value="AT">Österreich</option>
- <option value="CH">Schweiz</option>
- <option value="BE">Belgien</option>
- <option value="IT">Italien</option>
- <option value="LI">Liechtenstein</option>
- <option value="LU">Luxemburg</option>
- */
 var objectAssign = require( 'object-assign' ),
   PaymentSummaryDisplayHandler = {
     intervalElement: null,
@@ -31,6 +23,10 @@ var objectAssign = require( 'object-assign' ),
     countriesDictionary: {'DE': 'Deutschland', 'AT': 'Österreich', 'CH': 'Schweiz', 'BE': 'Belgien', 'IT': 'Italien', 'LU': 'Luxemburg'},
     intervalTextElement: null,
     intervalText: null,
+    memberShipTypeElement: null,
+    memberShipType: null,
+    memberShipTypeIconElement: null,
+    memberShipTypeIcon: null,
     update: function ( formContent ) {
       this.intervalElement.text( this.formatPaymentInterval( formContent.paymentIntervalInMonths ) );
       this.intervalTextElement.text( this.intervalText[formContent.paymentIntervalInMonths] );
@@ -67,18 +63,29 @@ var objectAssign = require( 'object-assign' ),
       else {
         this.addressTypeElement.each(function () {
           if ($(this).data('display-error') === undefined) {
-            $(this).text("Betrag noch nicht ausgewählt.");
+            $(this).text("Daten noch nicht ausgewählt.");
           }
         });
       }
 
       this.addressTypeTextElement.html(this.getAddressSummaryContent(formContent));
+
+      if (this.memberShipTypeElement) {
+        var textMemberShipType = this.memberShipType[formContent.membershipType];
+        this.memberShipTypeElement.each(function () {
+          if (formContent.membershipType) {
+            $(this).text(textMemberShipType);
+          }
+        });
+
+        this.setSummaryIcon(this.memberShipTypeIconElement, formContent.membershipType, this.memberShipTypeIcon);
+      }
     },
     formatPaymentInterval: function ( paymentIntervalInMonths ) {
       return this.intervalTranslations[ paymentIntervalInMonths ];
     },
     formatPaymentType: function ( paymentType ) {
-      return paymentType=="" ? String("Betrag noch nicht ausgewählt.") : this.paymentTypeTranslations[ paymentType ];
+      return paymentType=="" ? String("Zahlung noch nicht ausgewählt.") : this.paymentTypeTranslations[ paymentType ];
     },
     getAddressSummaryContent: function (formContent) {
       if (formContent.addressType !== "anonym") {
@@ -111,7 +118,9 @@ module.exports = {
                                                  intervalIconElement, intervalIcons, paymentIconsElement, paymentIcons,
                                                  periodicityTextElement, periodicityText, paymentElement, paymentText,
                                                  addressTypeIconElement, addressTypeIcon, addressTypeElement, addressType,
-                                                 addressTypeTextElement, intervalTextElement, intervalText) {
+                                                 addressTypeTextElement, intervalTextElement, intervalText,
+                                                 memberShipTypeElement, memberShipType, memberShipTypeIconElement,
+                                                 memberShipTypeIcon) {
     return objectAssign( Object.create( PaymentSummaryDisplayHandler ), {
       intervalElement: intervalElement,
       amountElement: amountElement,
@@ -133,7 +142,11 @@ module.exports = {
       addressType: addressType,
       addressTypeTextElement: addressTypeTextElement,
       intervalTextElement: intervalTextElement,
-      intervalText: intervalText
+      intervalText: intervalText,
+      memberShipTypeElement: memberShipTypeElement,
+      memberShipType: memberShipType,
+      memberShipTypeIconElement: memberShipTypeIconElement,
+      memberShipTypeIcon: memberShipTypeIcon
     } );
   }
 };

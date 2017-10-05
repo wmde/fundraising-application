@@ -8,6 +8,14 @@ input[type=number]::-webkit-outer-spin-button {
 	margin: 0; /* Removes leftover margin */
 }
 
+input::-webkit-contacts-auto-fill-button {
+	visibility: hidden;
+	display: none !important;
+	pointer-events: none;
+	position: absolute;
+	right: 0;
+}
+
 input.novalid, input.invalid {
 	border-bottom: 2px solid $brand-error;
 	background-color: $brand-error-rgba;
@@ -19,8 +27,12 @@ input.novalid, input.invalid {
 
 	&.valid {
 		input[type="text"], input[type="email"] {
-			background-color: $bk-selected;
-			border-bottom: 2px solid $bk-selected;
+			@include themify($themes) {
+				background-color: themed('fieldSelected');
+				border-bottom: themed('border2pxfieldSelected');
+			}
+		//	background-color: $bk-selected;
+	//		border-bottom: 2px solid $bk-selected;
 		}
 		&:after {
 			content: '\e876';
@@ -33,13 +45,28 @@ input.novalid, input.invalid {
 	}
 	&.invalid {
 		input[type="text"], input[type="email"] {
-			background-color: $brand-error-rgba;
-			border-bottom: 2px solid $brand-error;
+			@include themify($themes) {
+				background-color: themed('brandErrorRgba');
+				border-bottom: themed('border2pxError');
+			}
+			&:hover {
+				@include themify($themes) {
+					border-bottom: themed('border2pxError');
+				}
+			}
+		//	background-color: $brand-error-rgba;
+	//		border-bottom: 2px solid $brand-error;
 		}
 	}
 
 	input[type="text"], input[type="email"] {
-		background-color: $brand-footer;
+
+		@include themify($themes) {
+			background-color: themed('fieldNormal');
+			border-bottom: themed('border2pxfieldSelected');
+		}
+	//	background-color: $brand-footer;
+		//border-bottom: 2px solid $brand-footer;
 		width: 100%;
 		height: 48px;
 		padding: 13px 16px;
@@ -47,7 +74,7 @@ input.novalid, input.invalid {
 		font-weight: 300;
 		margin-bottom: 12px;
 		border: none;
-		border-bottom: 2px solid $brand-footer;
+
 		@include bkp(sm) {
 			font-size: 14px;
 		}
@@ -55,14 +82,18 @@ input.novalid, input.invalid {
 			font-size: 12px;
 		}
 		&:hover {
-			border-bottom: 2px solid $brand-primary;
+			//border-bottom: 2px solid $brand-primary;
+			@include themify($themes) {
+				border-bottom: themed('border2pxPrimary');
+			}
 		}
 		&:focus {
 			outline: none;
-			background-color: $bk-selected;
-			border-bottom: 2px solid $brand-primary;
+			@include themify($themes) {
+				background-color: themed('fieldSelected');
+				border-bottom: themed('border2pxPrimary');
+			}
 		}
-
 	}
 }
 
@@ -95,6 +126,10 @@ label {
 		&:after {
 			content: '';
 			background: $brand-primary;
+			@include themify($themes) {
+				background-color: themed('brandPrimary');
+				border-bottom: themed('border2pxPrimary');
+			}
 			border-radius: 100%;
 			border: none;
 			width: 10px;
@@ -107,6 +142,9 @@ label {
 			cursor: pointer;
 			text-align: center;
 			transition: all 250ms ease;
+		}
+		&.news:after {
+			border-radius: 0;
 		}
 	}
 	label {
@@ -149,7 +187,17 @@ label {
 		}
 	}
 }
-
+.wrap-input {
+	&.disabled {
+		pointer-events: none;
+		label:before {
+			border-color: $gray-light;
+		}
+		span, i {
+			color: $gray-light;
+		}
+	}
+}
 
 ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
 	color: $text-color;
@@ -171,10 +219,7 @@ label {
 //select custom style
 
 
-$select-color: $text-color;
-$select-background: $brand-footer;
-$select-width: 100%;
-$select-height: 50px;
+
 
 
 .select-hidden {
@@ -209,6 +254,8 @@ p.legend {
 		font-size: 12px;
 	}
 }
+
+
 .select, .jcf-select {
 	cursor: pointer;
 	display: inline-block;
@@ -219,20 +266,33 @@ p.legend {
 	height: $select-height;
 	padding: 13px 16px;
 	margin-bottom: 12px;
-	background-color: $select-background;
-	border: 2px solid $select-background;
+	@include themify($themes) {
+		background-color: themed('fieldNormal');
+		border: themed('border2pxfieldNormal');
+	}
 	cursor: pointer;
 	font-weight: 300;
-
+	@include bkp(sm) {
+		font-size: 14px;
+	}
 	@include bkp(md) {
 		font-size: 12px;
+	}
+	&.selected-item {
+		@include themify($themes) {
+			background-color: themed('fieldSelected');
+			border: themed('border2pxfieldSelected');
+		}
 	}
 
 	.jcf-select-text {
 		margin: 0;
 		cursor: pointer;
 		font-size: 16px;
-		@include bkp(md) {
+		@include bkp(sm) {
+			font-size: 14px;
+		}
+		@include bkp(lg) {
 			font-size: 12px;
 		}
 	}
@@ -257,7 +317,10 @@ p.legend {
 		right: 13px;
 	}
 	&:hover {
-		border-bottom: 2px solid $brand-primary;
+		//border-bottom: 2px solid $brand-primary;
+		@include themify($themes) {
+			border-bottom: themed('border2pxPrimary');
+		}
 		cursor: pointer;
 		&:after {
 			border-color: $brand-primary transparent transparent transparent;
@@ -265,31 +328,37 @@ p.legend {
 	}
 	&.jcf-drop-active {
 		&:hover {
-			border-bottom: 2px solid $brand-primary;
+			@include themify($themes) {
+				border-bottom: themed('border2pxPrimary');
+			}
 			&:after {
 				border-color: $brand-primary transparent transparent transparent;
 			}
 		}
 		&:active, &.jcf-focus {
-			background-color: $bk-selected;
-			border: 2px solid $brand-primary !important;
+			@include themify($themes) {
+				background-color: themed('fieldNormal');
+			}
+
+			//border: 2px solid $brand-primary !important;
 			&:after {
 				border-color: $brand-primary transparent transparent transparent !important;
 			}
 			@include bkp(sm) {
-				background-color: $select-background;
 				border-bottom: none !important;
 			}
 		}
 	}
 	&:active, &.active {
-		background-color: $bk-selected;
-		border: 2px solid $brand-primary;
+		@include themify($themes) {
+			background-color: themed('fieldNormal');
+			border: themed('border2pxPrimary');
+		}
+
 		&:after {
 			border-color: $brand-primary transparent transparent transparent;
 		}
 		@include bkp(sm) {
-			background-color: $select-background;
 			border-bottom: none;
 		}
 	}
@@ -304,37 +373,42 @@ p.legend {
 #form-donation .jcf-select.jcf-select-jcf-hidden.jcf-drop-active.jcf-focus, #form-donation .jcf-select.jcf-select-jcf-hidden.jcf-drop-active.jcf-focus * {
 	border-color: $brand-primary !important;
 }
+
 .jcf-select-drop .jcf-select-drop-content {
 	border: none;
-	background-color: $bk-selected;
-	border: 2px solid $brand-primary;
-	border-top: none;
-	@include bkp(sm) {
-		border: 2px solid $brand-primary;
-		border-top: none;
+	@include themify($themes) {
+		background-color: themed('fieldSelected');
+		border: themed('border2pxPrimary');
 	}
+	border-top: none !important;
 	li span {
 		margin: 0;
 		padding: 15px 13px 15px 16px;
 		font-weight: 300;
 		//font-size: 16px;
-		border-bottom: 1px solid $gray-lighter;
-		background-color: $bk-selected;
+		//border-bottom: 1px solid $gray-lighter;
+		@include themify($themes) {
+			background-color: themed('fieldSelected');
+		}
+		//background-color: $bk-selected;
 		cursor: pointer;
-	color: black;
+		color: black;
 
 		&[rel="hide"] {
 			display: none;
 		}
 	}
 	.jcf-list-content {
-		 .jcf-hover, .jcf-selected {
+		.jcf-hover, .jcf-selected {
 			// background: none;
 			color: $text-color;
-			 &:hover {
-				 background: $brand-primary-dark;
-				 color: $white;
-			 }
+			&:hover {
+				// background: $brand-primary-dark;
+				@include themify($themes) {
+					background-color: themed('brandPrimaryDark');
+				}
+				color: $white;
+			}
 		}
 	}
 	.jcf-option-hideme {
@@ -342,43 +416,35 @@ p.legend {
 	}
 }
 .jcf-scrollbar-vertical {
-	background-color: $brand-primary;
+	//background-color: $brand-primary;
+	@include themify($themes) {
+		background-color: themed('brandPrimary');
+	}
 	.jcf-scrollbar-dec, .jcf-scrollbar-inc {
-		background-color: $brand-primary;
+		//	background-color: $brand-primary;
+		@include themify($themes) {
+			background-color: themed('brandPrimary');
+		}
 	}
 	.jcf-scrollbar-handle {
-		background-color: $brand-primary-dark;
+		//	background-color: $brand-primary-dark;
+		@include themify($themes) {
+			background-color: themed('brandPrimaryDark');
+		}
 	}
 }
 
-.wrap-check {
-	display: flex;
-	justify-content: space-between;
-	.jcf-checkbox {
-		border-color: $text-color !important;
-		margin: 5px -2px 0 -35px;
-		span {
-			height: 5px;
-			width: 9px;
-			border: 1px solid $brand-primary;
-			border-color: $brand-primary !important;
-			border-width: 0 0 2px 2px;
-		}
-		&.jcf-focus.jcf-checked, &.jcf-checked {
-			border-color: $brand-primary !important;
-		}
 
-	}
-	.jcf-checkbox.jcf-unchecked {
-		span  {
-			//border-color: $text-color !important;
-		}
-	}
 
-	label {
-		margin-left: 20px;
-	}
-}
+
+
+
+
+
+
+
+
+
 
 
 

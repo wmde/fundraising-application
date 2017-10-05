@@ -14,7 +14,7 @@
 		</div>
 
 </footer>
-
+</div>
 <!--build:js js/main.min.js -->
 <script type="text/javascript" src="scripts/vendor/jquery/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="scripts/vendor/jcf/jcf.js"></script>
@@ -36,15 +36,14 @@
         ></script>
 
 <script src="scripts/membershipForm.js" id="init-form" class="membership"
-        data-initial-form-values="{}"
+        data-initial-form-values="{&quot;paymentType&quot;:&quot;BEZ&quot;}"
         data-violated-fields="{}"
-        data-initial-validation-result="&#x7B;&quot;paymentData&quot;&#x3A;false&#x7D;"
-        data-validate-amount-url="https://spenden.wikimedia.de/validate-payment-data"
+        data-validate-fee-url="https://spenden.wikimedia.de/validate-fee"
         data-validate-address-url="https://spenden.wikimedia.de/validate-address"
         data-validate-email-address-url="https://spenden.wikimedia.de/validate-email"
         data-validate-iban-url="https://spenden.wikimedia.de/check-iban"
-        data-generate-iban-url="https://spenden.wikimedia.de/generate-iban"
-        ></script>
+        data-generate-iban-url="https://spenden.wikimedia.de/generate-iban">
+        </script>
 
 </body>
 </html>

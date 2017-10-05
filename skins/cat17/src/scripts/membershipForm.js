@@ -13,7 +13,7 @@ $( function () {
 
   WMDE.StoreUpdates.connectComponentsToStore(
     [
-      WMDE.Components.createRadioComponent( store, $( 'input[name="intervalType"]' ), 'membershipType' ),
+      WMDE.Components.createRadioComponent( store, $( 'input[name="membership_type"]' ), 'membershipType' ),
       WMDE.Components.createRadioComponent( store, $( 'input[name="addressType"]' ), 'addressType' ),
       WMDE.Components.createRadioComponent( store, $( '.salutation-select' ), 'salutation' ),
       WMDE.Components.createSelectMenuComponent( store, $( '#personal-title' ), 'title' ),
@@ -227,6 +227,16 @@ $( function () {
             '3': 'Vierteljährlich',
             '6': 'Halbjährlich',
             '12': 'Jährlich'
+          },
+          $('.member-type .text'),
+          {
+            'sustaining': 'Fördermitgliedschaft',
+            'active': 'Aktive Mitgliedschaft'
+          },
+          $('.membership-type-icon'),
+          {
+            'sustaining': 'icon-favorite',
+            'active': 'icon-flash_on'
           }
         ),
         stateKey: 'membershipFormContent'
@@ -369,22 +379,6 @@ $( function () {
     return invalidFields;
   }
 
-  function triggerValidityCheckForSepaPage() {
-    if ( !store.getState().validity.sepaConfirmation ) {
-      store.dispatch( actions.newMarkEmptyFieldsInvalidAction( [ 'confirmSepa' ] ) );
-    }
-  }
-
-  function handleMembershipDataSubmitForDirectDebit() {
-    if ( formDataIsValid() ) {
-      store.dispatch( actions.newNextPageAction() );
-      $( 'section#donation-amount, section#donation-sheet' ).hide();
-    } else {
-      triggerValidityCheckForPersonalDataPage();
-      displayErrorBox();
-    }
-  }
-
   function handleMembershipDataSubmitForNonDirectDebit() {
     if ( formDataIsValid() ) {
       $( '#memForm' ).submit();
@@ -398,11 +392,20 @@ $( function () {
     var state = store.getState();
 
     //1st Group Amount & Periodicity
-    var amount = $('.amount'),
+    var memberType = $('.member-type'),
+      amount = $('.amount'),
       paymentMethod = $('.payment-method'),
       donatorType = $('.donator-type');
 
     console.log(state);
+    if (state.membershipFormContent.membershipType) {
+      memberType.addClass('completed').removeClass('disabled invalid');
+      donatorType.removeClass('disabled');
+    }
+    else {
+      memberType.addClass('disabled');
+    }
+
     if (state.membershipFormContent.paymentIntervalInMonths >= 0) {
       amount.addClass('completed').removeClass('disabled invalid');
       paymentMethod.removeClass('disabled');
@@ -469,15 +472,17 @@ $( function () {
   $('input').on('click, change', WMDE.StoreUpdates.makeEventHandlerWaitForAsyncFinish( handleGroupValidations, store ) );
   handleGroupValidations();
 
-  $( '#continueFormSubmit' ).click( WMDE.StoreUpdates.makeEventHandlerWaitForAsyncFinish( handleMembershipDataSubmitForDirectDebit, store ) );
+
+  $('input[name="membership_type"]').on('click', function () {
+    if ($(this).val() == 'active') {
+      $('#company').parent().addClass('disabled');
+    }
+    else {
+      $('#company').parent().removeClass('disabled');
+    }
+  });
 
   $( '#finishFormSubmit' ).click( WMDE.StoreUpdates.makeEventHandlerWaitForAsyncFinish( handleMembershipDataSubmitForNonDirectDebit, store ) );
-
-  $( '.back-button' ).click( function () {
-    // TODO check if page is valid
-    store.dispatch( actions.newResetFieldValidityAction( [ 'confirmSepa' ] ) );
-    store.dispatch( actions.newPreviousPageAction() );
-  } );
 
   $( '#finishFormSubmit2' ).click( function () {
     if ( store.getState().validity.sepaConfirmation ) {

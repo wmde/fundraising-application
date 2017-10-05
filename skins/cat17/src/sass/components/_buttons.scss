@@ -1,17 +1,20 @@
 .btn {
    	width: 100%;
-
 	&.btn-donation, &.btn-membership {
 		display: block;
-		background-color: $brand-primary;
-		background-color: var(--brand-primary);
+		@include themify($themes) {
+			background-color: themed('brandPrimary');
+		}
+
 		color: #fff;
 		margin:0 auto;
 		width: 100%;
 		height: 66px;
 		pointer-events: auto;
 		&:hover, &:focus {
-			background-color: $brand-primary-dark;
+			@include themify($themes) {
+				background-color: themed('brandPrimaryDark');
+			}
 			color: #fff;
 		}
 		&:active {
@@ -35,14 +38,9 @@
 		}
 	}
 	&.btn-membership {
-		//background-color: $brand-primary;
 		height: 44px;
 		padding-top: 10px;
 		color: #fff;
-		&:hover, &:focus {
-			background-color: $brand-primary-dark;
-			color: #fff;
-		}
 		&.btn-unactive {
 			background-color: $gray-light;
 			color: $text-color;
