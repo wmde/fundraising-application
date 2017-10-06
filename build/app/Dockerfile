@@ -1,9 +1,9 @@
 FROM php:7.1-fpm
 
-RUN mkdir -p /usr/share/nginx/www/spenden.wikimedia.de/current/var/cache
-RUN mkdir -p /usr/share/nginx/www/spenden.wikimedia.de/current/var/doctrine_proxies
-RUN mkdir -p /usr/share/nginx/www/spenden.wikimedia.de/current/var/log
-RUN chown -R www-data:www-data /usr/share/nginx/www/spenden.wikimedia.de/current/var
+RUN mkdir -p /usr/share/nginx/www/spenden.wikimedia.de/current/var/cache \
+    && mkdir -p /usr/share/nginx/www/spenden.wikimedia.de/current/var/doctrine_proxies \
+    && mkdir -p /usr/share/nginx/www/spenden.wikimedia.de/current/var/log \
+    && chown -R www-data:www-data /usr/share/nginx/www/spenden.wikimedia.de/current/var
 
 RUN apt-get update \
     # for intl
@@ -38,8 +38,7 @@ RUN \
 	docker-php-ext-install /tmp/konto_check-$KONTOCHECK_VERSION/php && \
 	docker-php-source delete
 
-RUN apt-get install -y ssmtp
-
-RUN echo "mailhub=mailhog:1025" >> /etc/ssmtp/ssmtp.conf
+RUN apt-get install -y ssmtp \
+    && echo "mailhub=mailhog:1025" >> /etc/ssmtp/ssmtp.conf
 
 COPY ./mailhog.ini /usr/local/etc/php/conf.d/mailhog.ini
