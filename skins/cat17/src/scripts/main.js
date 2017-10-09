@@ -11,11 +11,14 @@
 
 		heightInfo();
 
+		containersManager()
+
+		//paginationManager();
+
 		// replace all form elements with modified default options
 		jcf.replaceAll();
 
 		selectedSelect();
-
 
 	};
 
@@ -26,6 +29,34 @@
 	$(window).resize(function () {
 		init();
 	});
+
+
+
+	var paginationManager = function() {
+		var $element = $('.paginator');
+
+		if($element.length) {
+			if ($(window).width() < 992) {
+				$($element).prependTo("main");
+			} else {
+				$($element).insertAfter(".introduction");
+			}
+		}
+	};
+
+
+	var containersManager = function() {
+		var $element = $('.switch-container');
+		if($element.length) {
+			if ($(window).width() < 660) {
+				$($element).addClass("container-fluid no-gutter");
+				$($element).removeClass("container");
+			} else {
+				$($element).addClass("container");
+				$($element).removeClass("container-fluid no-gutter");
+			}
+		}
+	};
 
 	var selectedSelect = function () {
 		$("select").change(function()  {
@@ -49,56 +80,59 @@
 	var formInfosManager = function () {
 		//console.log("infos");
 		var $element = $("section.donation-amount");
-		var rt = ($(window).width() - ($element.offset().left + $element.outerWidth()));
+		if($element.length) {
+			var rt = ($(window).width() - ($element.offset().left + $element.outerWidth()));
 
-		if ($(window).width() < 660) {
+			if ($(window).width() < 660) {
 
-			$(".wrap-field").css({"margin-right": -rt, "margin-left": -rt});
-			$(".wrap-field  .wrap-input").css({"padding-right": rt, "padding-left": rt});
-			$(".wrap-field  .wrap-check").css({"padding-right": rt, "padding-left": rt + 34});
-			$(".wrap-field  .info-text").css({"padding-right": rt, "padding-left": rt + 36});
-			$(".wrap-field  .info-text-bottom").css({"padding-right": rt, "padding-left": rt});
-			$(".wrap-field .border-bt").css({"width": rt + 38});
-			$("#overview .wrap-field .border-bt").css({"width": rt});
+				$(".wrap-field").css({"margin-right": -rt, "margin-left": -rt});
+				$(".wrap-field  .wrap-input").css({"padding-right": rt, "padding-left": rt});
+				$(".wrap-field  .wrap-check").css({"padding-right": rt, "padding-left": rt + 34});
+				$(".wrap-field  .info-text").css({"padding-right": rt, "padding-left": rt + 36});
+				$(".wrap-field  .info-text-bottom").css({"padding-right": rt, "padding-left": rt});
+				$(".wrap-field .border-bt").css({"width": rt + 38});
+				$("#overview .wrap-field .border-bt").css({"width": rt});
 
-			//console.log(rt);
-		} else {
-			rt = 0;
-			$(".wrap-field").css({"margin-right": -rt, "margin-left": -rt});
-			$(".wrap-field  .wrap-input").css({"padding-right": rt, "padding-left": rt});
-			$(".wrap-field  .wrap-check").css({"padding-right": rt, "padding-left": rt + 4});
-			$(".wrap-field  .info-text").css({"padding-right": rt, "padding-left": rt + 36});
-			$(".wrap-field  .info-text-bottom").css({"padding-right": rt, "padding-left": rt});
-			$(".wrap-field .border-bt").css({"width": rt + 34});
-			$("#overview .wrap-field .border-bt").css({"width": rt});
-		}
-
-		$(".show-info input[type=radio]").on("click", function () {
-
-			var id = this.id
-			var fieldsetId = $(this).parents("fieldset").prop("id");
-
-			var bodyId = $("body").prop("id");
-
-			if (fieldsetId != 'type-membership') {
-				$('fieldset#' + fieldsetId + ' .wrap-field').removeClass("selected notselected");
-				$('fieldset#' + fieldsetId + ' .info-text').removeClass("opened");
-				$('[data-info="' + id + '"]').toggleClass("opened");
-				$(this).parents(".wrap-field").toggleClass("selected");
-				$(this).parents(".selected").prevAll('.wrap-field:first').toggleClass("notselected");
+				//console.log(rt);
+			} else {
+				rt = 0;
+				$(".wrap-field").css({"margin-right": -rt, "margin-left": -rt});
+				$(".wrap-field  .wrap-input").css({"padding-right": rt, "padding-left": rt});
+				$(".wrap-field  .wrap-check").css({"padding-right": rt, "padding-left": rt + 4});
+				$(".wrap-field  .info-text").css({"padding-right": rt, "padding-left": rt + 36});
+				$(".wrap-field  .info-text-bottom").css({"padding-right": rt, "padding-left": rt});
+				$(".wrap-field .border-bt").css({"width": rt + 34});
+				$("#overview .wrap-field .border-bt").css({"width": rt});
 			}
 
-		});
+			$(".show-info input[type=radio]").on("click", function () {
 
-		if ($(window).width() < 1200) {
-			$("#overview").on("click", ".wrap-field.completed .wrap-input, .wrap-field.invalid .wrap-input", function (e) {
-				e.preventDefault();
-				$(this).next(".info-text-bottom").toggleClass("opened");
+				var id = this.id
+				var fieldsetId = $(this).parents("fieldset").prop("id");
+
+				var bodyId = $("body").prop("id");
+
+				if (fieldsetId != 'type-membership') {
+					$('fieldset#' + fieldsetId + ' .wrap-field').removeClass("selected notselected");
+					$('fieldset#' + fieldsetId + ' .info-text').removeClass("opened");
+					$('[data-info="' + id + '"]').toggleClass("opened");
+					$(this).parents(".wrap-field").toggleClass("selected");
+					$(this).parents(".selected").prevAll('.wrap-field:first').toggleClass("notselected");
+				}
+
 			});
-		} else {
 
+			if ($(window).width() < 1200) {
+				$("#overview").on("click", ".wrap-field.completed .wrap-input, .wrap-field.invalid .wrap-input", function (e) {
+					e.preventDefault();
+					$(this).closest(".wrap-field").toggleClass("opened");
+					$(this).toggleClass("opened");
+					$(this).next(".info-text-bottom").toggleClass("opened");
+				});
+			} else {
+
+			}
 		}
-
 
 	};
 
@@ -133,6 +167,8 @@
 
 		if ($(window).width() < 1023) {
 			$(window).scroll(function () {
+
+
 				var currentScroll = $(window).scrollTop();
 				if (currentScroll + 70 >= fixBarTop) {
 					$('.state-bar').addClass('active');
@@ -158,12 +194,13 @@
 			$(window).scroll(function () {
 				var currentScroll = $(window).scrollTop();
 				var initialTop = 200;
+				//console.log("wrap bar" + currentScroll);
 				if (currentScroll >= initialTop) {
 					$('.state-overview .wrap-bar').addClass('fixed');
+					//console.log("wrap bar" + currentScroll);
 				} else {
 					$('.state-overview .wrap-bar').removeClass('fixed');
 				}
-				;
 				if ($(".overview").isVisible('lateral') || $('#other-info').isVisible('lateral')) {
 					$(".state-bar-lateral").removeClass('active');
 				} else {

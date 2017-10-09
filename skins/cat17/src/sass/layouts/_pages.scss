@@ -1,0 +1,259 @@
+.donation-conclusion {
+
+	p.h1 {
+		margin-bottom: 40px;
+	}
+	.list-unstyled {
+		clear: both;
+	}
+
+	.btn-donation.btn-introduction {
+		margin: 20px 0;
+		widht: 100%;
+		max-width: 100%;
+		height: 66px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		padding: 0;
+		@include bkp(sm) {
+			height: 45px;
+		}
+		@include bkp(md) {
+			display: flex;
+			margin-top: -50px;
+			&.btn-side {
+				margin-top: 0;
+			}
+		}
+	}
+
+	.text-moved {
+		margin: 40px 0;
+		@include bkp(sm) {
+			margin: 80px 0 0;
+			width: 55%;
+		}
+		@include bkp(md) {
+			width: 85%;
+		}
+	}
+
+	.cancel-block {
+		margin-top: 40px;
+		@include bkp(sm) {
+			margin-top: -120px;
+		}
+		@include bkp(md) {
+			margin-top: 80px;
+		}
+	}
+	.footer {
+		margin-top: 0;
+		@include bkp(sm) {
+			margin-top: 70px;
+		}
+	}
+
+	.side {
+		margin-top: -150px;
+	}
+}
+
+.introduction p {
+	@include bkp(sm) {
+		width: 75%;
+	}
+	@include bkp(md) {
+		width: 85%;
+	}
+}
+
+.others {
+	.h2 {
+		font-size: 16px;
+		line-height: 26px;
+	}
+}
+
+.transfer-data-list {
+	margin-top: 30px;
+	@include bkp(sm) {
+		width: 65%;
+	}
+	@include bkp(md) {
+		width: 75%;
+	}
+	dt, dd {
+		display: inline-block;
+	}
+	.wrap-def {
+		padding: 6px 0;
+		@include bkp(sm) {
+			padding: 6px 30px;
+		}
+		&:nth-child(odd) {
+			background-color: $gray-light;
+		}
+		.container {
+			@include bkp(sm) {
+				width: auto;
+				max-width: none;
+				padding: 0;
+			}
+		}
+	}
+}
+
+.donation-cancel {
+	.introduction {
+		margin-bottom: 60px;
+		@include bkp(sm) {
+			margin-bottom: 25vh;
+		}
+	}
+}
+
+.donation-contact {
+	form {
+		margin-top: 50px;
+	}
+	.field-grp {
+		.error-text {
+			display: none;
+		}
+		#subject {
+			@include bkp(sm) {
+				max-width: 227px;
+			}
+		}
+		textarea {
+			height: 180px;
+		}
+	}
+
+	.btn-donation.btn-introduction {
+		max-width: 100%;
+		display: flex;
+		margin-top: 80px;
+		padding: 0;
+		height: 66px;
+		@include bkp(sm) {
+			height: 45px;
+		}
+	}
+	.list-menu {
+		margin-top: 30px;
+	}
+}
+
+.donation-contact-sent {
+	.introduction {
+		margin-bottom: 300px;
+	}
+}
+
+.donation-comment {
+	form {
+		margin-top: 25px;
+		fieldset {
+			padding-top: 25px;
+		}
+	}
+	textarea {
+		height: 180px;
+	}
+}
+
+.comments-list {
+	.introduction {
+		padding-top: 85px;
+		@include bkp(md) {
+			padding-top: 45px;
+		}
+	}
+	article {
+		margin: 40px 0 0;
+		span {
+			display: block;
+			margin-bottom: 10px;
+			font-size: 22px;
+			&:first-child {
+				font-weight: $font-main-semibold;
+			}
+			&.date-time {
+				font-weight: $font-main-light;
+			}
+		}
+		&:last-child {
+			margin-bottom: 60px;
+		}
+	}
+
+
+	.paginator {
+		background-color: #ffffff;
+		margin-top: -1px;
+		position: fixed;
+		padding-right: 0;
+		padding-left: 0;
+		z-index: 8;
+		border-bottom: 1px solid $gray-light;
+		@include bkp(md) {
+			margin-top: 40px;
+			position: static;
+			padding-right: 15px;
+			padding-left: 15px;
+		}
+		&.paginator-top {
+			display: block;
+			@include bkp(md) {
+				display: none;
+			}
+		}
+		&.paginator-sidebar {
+			display: none;
+			@include bkp(md) {
+				display: block;
+			}
+		}
+		.pages-wrap {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+
+			padding: 20px 0 0;
+			@include bkp(md) {
+				padding-top: 30px;
+			}
+		}
+		span.controls {
+			padding-bottom: 15px;
+			font-size: 22px;
+			a:hover {
+				color: $brand-primary;
+			}
+		}
+		li {
+			a, span {
+				display: block;
+				// border-bottom: 2px solid $brand-primary;
+				padding: 0 7px 15px;
+				margin-left: 5px;
+				margin-bottom: -2px;
+
+			}
+			&.selected span, a:hover {
+
+				border-bottom: 2px solid $brand-primary;
+				font-size: 24px;
+				font-weight: $font-main-semibold;
+				@include bkp(sm) {
+					font-size: 16px;
+				}
+
+			}
+		}
+	}
+
+}

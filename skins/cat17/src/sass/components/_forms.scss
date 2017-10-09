@@ -59,11 +59,11 @@ input.novalid, input.invalid {
 		}
 	}
 
-	input[type="text"], input[type="email"] {
+	input[type="text"], input[type="email"], textarea {
 
 		@include themify($themes) {
 			background-color: themed('fieldNormal');
-			border-bottom: themed('border2pxfieldSelected');
+			border-bottom: themed('border2pxfieldNormal');
 		}
 	//	background-color: $brand-footer;
 		//border-bottom: 2px solid $brand-footer;

@@ -18,6 +18,9 @@ $themes: (
 				borderColorTrianglePrimary: #00adee transparent transparent transparent,
 				brandError: #812923,
 				brandErrorRgba: rgba(129, 41, 35, 0.2),
+				border1pxGrayLight: 1px solid #ddd,
+				border2pxGrayLight: 2px solid #ddd,
+				borderNone: none,
 		),
 		membership: (
 				brandPrimary: #69c159,
@@ -33,7 +36,9 @@ $themes: (
 				borderColorTrianglePrimary: #69c159 transparent transparent transparent,
 				brandError: #812923,
 				brandErrorRgba: rgba(129, 41, 35, 0.2),
-
+				border1pxGrayLight: 1px solid #ddd,
+				border2pxGrayLight: 2px solid #ddd,
+				borderNone: none,
 		),
 );
 

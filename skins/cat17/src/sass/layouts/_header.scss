@@ -186,12 +186,13 @@
 			}
 			a {
 				color: $text-color;
-
 				border-bottom: 2px solid transparent;
 				@include bkp(md) {
-					padding-bottom: 31px;
+
+					padding: 0 5px 31px;
 				}
 				&:hover, &:focus {
+					margin: 0;
 					@include themify($themes) {
 						border-bottom: themed('border2pxPrimary');
 					}

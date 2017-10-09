@@ -1,0 +1,59 @@
+@@include('./head.html', {"title": "Contact", "id": "donation-contact", "themeclass": "donation", "classes": "donation-contact "})
+@@include('./header.html')
+<main class="contact">
+    <div class="container">
+        <div class="row">
+            <div class="introduction col-xs-12 col-md-9">
+                <h2 class="h1">Kontakt</h2>
+                <form id="contact-form" class="row">
+                    <fieldset class="col-xs-12 col-sm-5">
+                        <div class="field-grp">
+                            <input type="text" id="name" placeholder="Vorname">
+                            <label for="name" class="sr-only">Vorname</label>
+                            <span class="error-text">Es ist nicht eine gültige Vorname.</span>
+                        </div>
+                        <div class="field-grp">
+                            <input type="text" id="surname" placeholder="Nachname">
+                            <label for="surname" class="sr-only">Nachname</label>
+                            <span class="error-text">Es ist nicht eine gültige Nachname.</span>
+                        </div>
+                        <div class="field-grp">
+                            <input type="email" id="email" placeholder="E-Mail">
+                            <label for="email" class="sr-only">Vorname</label>
+                            <span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+                        </div>
+                    </fieldset>
+                    <fieldset class="col-xs-12 col-sm-7">
+                        <div class="field-grp">
+                            <input type="text" id="subject" placeholder="Betreff">
+                            <label for="subject" class="sr-only">Betreff</label>
+                            <span class="error-text">Es ist nicht eine gültige Betreff.</span>
+                        </div>
+                        <div class="field-grp">
+                            <textarea name="textarea" rows="50" cols="10" id="comment"
+                                      placeholder="Lhre nachricht an uns"></textarea>
+                            <label for="subject" class="sr-only">lhre nachricht an uns</label>
+                            <span class="error-text">Es ist nicht eine gültige lhre nachricht an uns.</span>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="switch-container container-fluid container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-8 col-md-4">
+                <a href="#" class="btn btn-introduction bk-blue text-center text-uppercase">Nachritch
+                    senden</a>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <ul class="list-menu link-reverse list-unstyled  col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-8 col-md-4">
+                <li><a href="#" class="">Zuruck zur spendenseite</a></li>
+            </ul>
+        </div>
+    </div>
+</main>
+@@include('./footer.html')

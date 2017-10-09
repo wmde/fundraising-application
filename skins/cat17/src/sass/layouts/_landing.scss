@@ -38,7 +38,11 @@ form {
 		}
 
 		.wrap-field {
-			border-bottom: 1px solid $gray-light;
+
+			//border-bottom: 1px solid $gray-light;
+			@include themify($themes) {
+				border-bottom: themed('border1pxGrayLight');
+			}
 			&:hover {
 				border-bottom: 1px solid $text-color;
 			}
@@ -47,7 +51,7 @@ form {
 			}
 
 			.border-bt {
-				border-bottom: 1px solid white;
+				border-bottom: 2px solid white;
 				display: block;
 				width: 40px;
 				//margin-bottom: -4px;
@@ -60,17 +64,30 @@ form {
 
 
 			&.selected {
-				border-bottom: 1px solid $brand-primary;
-				border-top: 1px solid $brand-primary;
+
+				@include themify($themes) {
+					border-bottom: themed('border1pxPrimary');
+					border-top: themed('border1pxPrimary');
+				}
+				//border-bottom: 1px solid $brand-primary;
+				//border-top: 1px solid $brand-primary;
 				.border-bt {
-					border: none;
+					//border: none;
+					@include themify($themes) {
+						border: themed('borderNone');
+					}
 				}
 				@include bkp(sm) {
-					border: none;
+					@include themify($themes) {
+						border: themed('borderNone');
+					}
 					&:after {
 						content: "";
 						width: 90%;
-						border-bottom: 1px solid $brand-primary;
+						@include themify($themes) {
+							border-bottom: themed('border1pxPrimary');
+						}
+					//	border-bottom: 1px solid $brand-primary;
 						height: 2px;
 						position: absolute;
 						right: -7px;
@@ -93,7 +110,10 @@ form {
 				.wrap-input:after {
 					border-bottom: none;
 					@include bkp(sm) {
-						border-bottom: 1px solid $gray-light;
+						//border-bottom: 1px solid $gray-light;
+						@include themify($themes) {
+							border-bottom: themed('border1pxGrayLight');
+						}
 					}
 				}
 			}
@@ -125,7 +145,11 @@ form {
 							width: 359px;
 							top: 0;
 							padding-left: 20px;
-							border-left: 1px solid $brand-primary;
+							@include themify($themes) {
+								border-left: themed('border1pxPrimary');
+							}
+
+							//border-left: 1px solid $brand-primary;
 							min-height: 205px;
 							padding-top: 0;
 							height: auto;
@@ -211,8 +235,14 @@ form {
 				}
 			}
 			input[type=number] {
-				background-color: $brand-footer;
-				border: 2px solid $brand-footer;
+			//	background-color: $brand-footer;
+		//		border: 2px solid $brand-footer;
+				@include themify($themes) {
+					border: themed('border2pxfieldNormal');
+					background-color: themed('fieldNormal');
+				}
+
+
                 //padding: 8px 20px 8px 4px;
                 padding: 7px 20px 8px 4px;
                 margin: 0;
@@ -220,7 +250,10 @@ form {
                 width: 58px;
                 text-align: right;
                 &:focus {
-                    border-bottom: 2px solid $brand-primary;
+					@include themify($themes) {
+						border-bottom: themed('border2pxPrimary');
+					}
+              //      border-bottom: 2px solid $brand-primary;
                     outline: none;
                 }
 			}
@@ -228,7 +261,10 @@ form {
                 height: 60px;
                 width: 60px;
                 position: relative;
-                border: 2px solid $gray-light;
+             //   border: 2px solid $gray-light;
+				@include themify($themes) {
+					border: themed('border2pxfieldNormal');
+				}
                 input {
                     height: 56px;
                     width: 56px;
@@ -240,9 +276,14 @@ form {
                 &.filled {
                     border: 2px solid $text-color;
                     background-color: $brand-primary;
+					@include themify($themes) {
+						background-color: themed('brandPrimary');
+					}
                     color: white;
                     input {
-                        background-color: $brand-primary;
+						@include themify($themes) {
+							background-color: themed('brandPrimary');
+						}
                         color: white;
                         border: 2px solid white;
                         &:focus {
@@ -262,7 +303,10 @@ form {
             }
             input[type=radio]:checked + label, label:hover{
                 border: 2px solid $text-color;
-                background-color: $brand-primary;
+				@include themify($themes) {
+					background-color: themed('brandPrimary');
+				}
+                //background-color: $brand-primary;
                 color: white;
                 position: relative;
                 &:before {
@@ -320,8 +364,8 @@ form {
 					max-width: 730px;
 				}
 				.wrap-field {
-					&:hover {
-						border-bottom: none ;
+					&:hover, &.opened {
+						border-bottom: 1px solid transparent ;
 					}
                     @include bkp(md) {
                         border-bottom: none;
@@ -329,6 +373,7 @@ form {
 					@include bkp(lg) {
 						padding-right: 15px;
 					}
+
 					&.updated, &.completed {
 						.wrap-input {
 							pointer-events: visible;
@@ -393,11 +438,24 @@ form {
 							margin-left: 0;
 						}
 						&:hover {
-							border-bottom: 1px solid $brand-primary;
+							//border-bottom: 1px solid $brand-primary;
+							@include themify($themes) {
+								border-bottom: themed('border1pxPrimary');
+							}
 							a {
-								color: $brand-primary;
+								@include themify($themes) {
+									color: themed('brandPrimary');
+								}
 							}
 						}
+						&.opened {
+							&:hover {
+								@include themify($themes) {
+									border-bottom: themed('borderNone');
+								}
+							}
+						}
+
                         @include bkp(md) {
                             border-bottom: 1px solid $gray-light;
                         }
@@ -429,7 +487,7 @@ form {
 }
 
 .other-info {
-	padding-left: 50px;
+	//padding-left: 50px;
 	&.other-info-lateral {
 		padding-left: 0;
 		padding-top: 20px;

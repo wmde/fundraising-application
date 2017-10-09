@@ -27,10 +27,15 @@
 			}
 			//border-bottom: 1px solid $brand-primary;
 			a {
-				color: $brand-primary;
+				//color: $brand-primary;
+				@include themify($themes) {
+					color: themed('brandPrimary');
+				}
 				display: block;
 				&:hover {
-					color: $brand-primary;
+					@include themify($themes) {
+						color: themed('brandPrimary');
+					}
 				}
 				@include bkp(md) {
 					font-size: 16px;
@@ -38,9 +43,15 @@
 			}
 		}
 		&.completed.enabled {
-			border-bottom: 1px solid $brand-primary;
+			//border-bottom: 1px solid $brand-primary;
+			@include themify($themes) {
+				border-bottom: themed('border1pxPrimary');
+			}
 			a {
-				color: $brand-primary;
+				//color: $brand-primary;
+				@include themify($themes) {
+					color: themed('brandPrimary');
+				}
 				@include bkp(sm) {
 					display: flex;
 					justify-content: space-between;
@@ -50,6 +61,7 @@
 					opacity: 0;
 					display: none;
 					@include bkp(sm) {
+						display: block;
 						opacity: 1;
 					}
 				}
@@ -88,9 +100,15 @@
 				}
 			}
 			&:hover, &:focus {
-				border-bottom: 1px solid $brand-primary;
+				//border-bottom: 1px solid $brand-primary;
+				@include themify($themes) {
+					border-bottom: themed('border1pxPrimary');
+				}
 				a {
-					color: $brand-primary;
+					@include themify($themes) {
+						color: themed('brandPrimary');
+					}
+					//color: $brand-primary;
 				}
 			}
 		}
@@ -205,7 +223,10 @@
 				border-bottom: 1px solid transparent;
 			}
 			&.enabled {
-				border-bottom: 1px solid $brand-primary;
+				//border-bottom: 1px solid $brand-primary;
+				@include themify($themes) {
+					border-bottom: themed('border1pxPrimary');
+				}
 			}
 		}
 	}

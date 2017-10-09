@@ -1,11 +1,10 @@
 .footer {
   	background-color: $brand-footer;
-	margin-top: 0;
+	margin-top: 40px;
 	padding: 70px 0 55px;
 	@include bkp(sm) {
 		margin-top: 100px;
 	}
-
 	.logo-footer {
 		span {
 			background: transparent url("../assets/images/logo-horizontal-wikimedia.svg") no-repeat left top;
@@ -25,30 +24,6 @@
 		}
 	}
 
-	.menu-footer {
-		li {
 
-
-			a {
-				display: block;
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				line-height: 57px;
-				border-bottom: 1px solid #808080;
-				margin-right: -15px;
-				&:hover, &:focus {
-					color: $brand-primary;
-					border-bottom: 1px solid $brand-primary;
-				}
-				i {
-					//padding-right: 22px;
-
-					&:hover, &:focus {
-						color: $brand-primary;
-					}
-				}
-			}
-		}
-	}
 }
+

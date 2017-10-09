@@ -1,0 +1,67 @@
+.list-menu {
+    li {
+        border-bottom: 1px solid #808080;
+        height: 57px;
+        padding-right: 30px;
+		font-weight: $font-main-light;
+        &:hover, &:focus {
+            @include themify($themes) {
+                a {
+                 //   color: themed('brandPrimary');
+                }
+                border-bottom: themed('border1pxPrimary');
+            }
+        }
+        a {
+            display: block;
+            position: relative;
+            top:50%;
+            transform: translateY(-50%);
+            &:after {
+                content: "\e315";
+                position: absolute;
+                right: -30px;
+                font-family: icomoon;
+                font-size: 20px;
+                top:50%;
+                transform: translateY(-50%);
+            }
+        }
+        &.facebook {
+            a:after {
+                content: "\e905";
+                font-size: 14px;
+            }
+        }
+        &.twitter {
+            a:after {
+                content: "\e90b";
+                font-size: 14px;
+            }
+        }
+    }
+    &.link-reverse {
+        li {
+            padding-left: 30px;
+            padding-right: 0;
+            a {
+                &:after {
+                    content: "";
+                }
+                &:before {
+                    content: "\e314";
+                    position: absolute;
+                    left: -30px;
+                    font-family: icomoon;
+                    font-size: 20px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                }
+            }
+        }
+       // margin-bottom: 60px;
+    }
+	&.link-tax li {
+		height: 110px;
+	}
+}

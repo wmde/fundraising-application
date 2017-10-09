@@ -17,14 +17,14 @@ $( function () {
       WMDE.Components.createRadioComponent( store, $( 'input[name="addressType"]' ), 'addressType' ),
       WMDE.Components.createRadioComponent( store, $( '.salutation-select' ), 'salutation' ),
       WMDE.Components.createSelectMenuComponent( store, $( '#personal-title' ), 'title' ),
-      WMDE.Components.createValidatingTextComponent( store, $( '.first-name' ), 'firstName' ),
+      WMDE.Components.createValidatingTextComponent( store, $( '#first-name' ), 'firstName' ),
       WMDE.Components.createValidatingTextComponent( store, $( '#surname' ), 'lastName' ),
       WMDE.Components.createValidatingTextComponent( store, $( '#company-name' ), 'companyName' ),
       WMDE.Components.createValidatingTextComponent( store, $( '.street' ), 'street' ),
-      WMDE.Components.createValidatingTextComponent( store, $( '#post-code' ), 'postcode' ),
-      WMDE.Components.createValidatingTextComponent( store, $( '#city' ), 'city' ),
+      WMDE.Components.createValidatingTextComponent( store, $( '.post-code' ), 'postcode' ),
+      WMDE.Components.createValidatingTextComponent( store, $( '.city' ), 'city' ),
       WMDE.Components.createSelectMenuComponent( store, $( '#country' ), 'country' ),
-      WMDE.Components.createTextComponent( store, $( '#email' ), 'email' ),
+      WMDE.Components.createTextComponent( store, $( '.email' ), 'email' ),
       WMDE.Components.createValidatingTextComponent( store, $( '#date-of-birth' ), 'dateOfBirth' ),
       WMDE.Components.createValidatingTextComponent( store, $( '#phone' ), 'phoneNumber' ),
       WMDE.Components.createRadioComponent( store, $( 'input[name="payment-info"]' ), 'paymentType' ),
@@ -40,7 +40,7 @@ $( function () {
         debitTypeElement: $( '.debit-type-select' )
       } ),
       WMDE.Components.createValidatingCheckboxComponent( store, $( '#confirm_sepa' ), 'confirmSepa' ),
-      WMDE.Components.createTextComponent( store, $( '#contact-person' ), 'contactPerson' )
+      WMDE.Components.createValidatingTextComponent( store, $( '#contact-person' ), 'contactPerson' )
     ],
     store,
     'membershipFormContent'
@@ -265,23 +265,27 @@ $( function () {
         stateKey: 'membershipInputValidation.firstName'
       },
       {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#last-name' ) ),
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#surname' ) ),
         stateKey: 'membershipInputValidation.lastName'
       },
       {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#street' ) ),
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#contact-person' ) ),
+        stateKey: 'membershipInputValidation.contactPerson'
+      },
+      {
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.street' ) ),
         stateKey: 'membershipInputValidation.street'
       },
       {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#post-code' ) ),
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.post-code' ) ),
         stateKey: 'membershipInputValidation.postcode'
       },
       {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#city' ) ),
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.city' ) ),
         stateKey: 'membershipInputValidation.city'
       },
       {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#email' ) ),
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.email' ) ),
         stateKey: 'membershipInputValidation.email'
       },
       {
@@ -401,9 +405,6 @@ $( function () {
     if (state.membershipFormContent.membershipType) {
       memberType.addClass('completed').removeClass('disabled invalid');
       donatorType.removeClass('disabled');
-    }
-    else {
-      memberType.addClass('disabled');
     }
 
     if (state.membershipFormContent.paymentIntervalInMonths >= 0) {
