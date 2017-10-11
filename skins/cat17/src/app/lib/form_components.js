@@ -103,7 +103,6 @@ var objectAssign = require( 'object-assign' ),
 		bicElement: null,
 		accountNumberElement: null,
 		bankCodeElement: null,
-		debitTypeElement: null,
 		bankNameFieldElement: null,
 		bankNameDisplayElement: null,
 		render: function ( formContent ) {
@@ -111,7 +110,6 @@ var objectAssign = require( 'object-assign' ),
 			this.bicElement.val( formContent.bic );
 			this.accountNumberElement.val( formContent.accountNumber );
 			this.bankCodeElement.val( formContent.bankCode );
-			this.debitTypeElement.val( [ formContent.debitType ] ); // set as array for radio buttons/dropdown field
 			this.bankNameFieldElement.val( formContent.bankName );
 			this.bankNameDisplayElement.text( formContent.bankName );
 		}
@@ -207,14 +205,12 @@ module.exports = {
 	},
 
 	createBankDataComponent: function ( store, bankDataElements ) {
-		// TODO check if all elements are passed in
 		var component = objectAssign( Object.create( BankDataComponent ), bankDataElements );
 		bankDataElements.ibanElement.on( 'change', createDefaultChangeHandler( store, 'iban' ) );
 		bankDataElements.bicElement.on( 'change', createDefaultChangeHandler( store, 'bic' ) );
 		bankDataElements.bicElement.on( 'change', createRegexValidator( store, 'bic' ) );
 		bankDataElements.accountNumberElement.on( 'change', createDefaultChangeHandler( store, 'accountNumber' ) );
 		bankDataElements.bankCodeElement.on( 'change', createDefaultChangeHandler( store, 'bankCode' ) );
-		bankDataElements.debitTypeElement.on( 'change', createDefaultChangeHandler( store, 'debitType' ) );
 		return component;
 	}
 

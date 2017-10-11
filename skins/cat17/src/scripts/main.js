@@ -13,7 +13,7 @@
 
 		containersManager()
 
-		//paginationManager();
+		openCommentItem();
 
 		// replace all form elements with modified default options
 		jcf.replaceAll();
@@ -23,25 +23,24 @@
 	};
 
 	$(document).ready(function () {
-		init();
+		 init();
 	});
 
 	$(window).resize(function () {
-		init();
+	 	init();
 	});
 
-
-
-	var paginationManager = function() {
-		var $element = $('.paginator');
-
-		if($element.length) {
-			if ($(window).width() < 992) {
-				$($element).prependTo("main");
-			} else {
-				$($element).insertAfter(".introduction");
-			}
-		}
+	var openCommentItem = function() {
+		var $element = $('.supporter-item.wrap-field.commented');
+        if ($element.length) {
+            $($element).on("click", function () {
+                $($element).removeClass("selected notselected");
+                $('.supporter-item.wrap-field .info-text').removeClass("opened");
+                $(this).toggleClass("selected");
+                $(this).children(".info-text").toggleClass("opened");
+                $(this).prevAll('.wrap-field:first').toggleClass("notselected");
+            });
+        };
 	};
 
 
@@ -83,8 +82,7 @@
 		if($element.length) {
 			var rt = ($(window).width() - ($element.offset().left + $element.outerWidth()));
 
-			if ($(window).width() < 660) {
-
+/*			if ($(window).width() < 660) {
 				$(".wrap-field").css({"margin-right": -rt, "margin-left": -rt});
 				$(".wrap-field  .wrap-input").css({"padding-right": rt, "padding-left": rt});
 				$(".wrap-field  .wrap-check").css({"padding-right": rt, "padding-left": rt + 34});
@@ -92,8 +90,6 @@
 				$(".wrap-field  .info-text-bottom").css({"padding-right": rt, "padding-left": rt});
 				$(".wrap-field .border-bt").css({"width": rt + 38});
 				$("#overview .wrap-field .border-bt").css({"width": rt});
-
-				//console.log(rt);
 			} else {
 				rt = 0;
 				$(".wrap-field").css({"margin-right": -rt, "margin-left": -rt});
@@ -103,7 +99,7 @@
 				$(".wrap-field  .info-text-bottom").css({"padding-right": rt, "padding-left": rt});
 				$(".wrap-field .border-bt").css({"width": rt + 34});
 				$("#overview .wrap-field .border-bt").css({"width": rt});
-			}
+			}*/
 
 			$(".show-info input[type=radio]").on("click", function () {
 

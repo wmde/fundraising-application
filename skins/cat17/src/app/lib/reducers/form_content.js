@@ -21,12 +21,11 @@ function clearFieldsIfAddressTypeChanges( newState, payload ) {
   switch ( payload.value ) {
     case 'person':
       newState.companyName = '';
+      newState.contactPerson = '';
       break;
     case 'firma':
       newState.salutation = '';
       newState.title = '';
-      newState.firstName = '';
-      newState.lastName = '';
       break;
     case 'anonym':
       newState.salutation = '';
@@ -39,6 +38,18 @@ function clearFieldsIfAddressTypeChanges( newState, payload ) {
       newState.city = '';
       newState.email = '';
       break;
+  }
+}
+
+function setPaymentType(newState, payload) {
+  if (typeof payload.value !== 'string') {
+    return;
+  }
+  if ( (payload.contentName === 'iban' || payload.contentName === 'bic') && trimValue(payload.value) ) {
+    newState.debitType = "sepa";
+  }
+  else if ( (payload.contentName !== 'accountNumber' || payload.contentName === 'bankCode') && trimValue(payload.value)) {
+    newState.debitType = "non-sepa";
   }
 }
 
@@ -93,6 +104,8 @@ module.exports = {
         } else {
           newState[ action.payload.contentName ] = action.payload.value;
         }
+
+        setPaymentType(newState, action.payload);
 
         newState = forcePersonalDataForDirectDebit( newState );
         newState = forceAddressTypeForActiveMembership( newState );

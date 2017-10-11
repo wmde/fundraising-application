@@ -4,7 +4,7 @@
 		a {
 			display: block;
 			text-align: center;
-			color: rgba(0, 0, 0, .5);
+			//color: rgba(0, 0, 0, .5);
 			padding: 0;
 			transition: all 200ms;
 			i {
@@ -82,6 +82,7 @@
 			&.amount {
 				a i {
 					opacity: 1;
+					display: block;
 				}
 			}
 
@@ -127,8 +128,8 @@
 				}
 			}
 		}
-		&.error, &.invalid {
-			border-bottom: 2px solid $brand-error;
+		&.error, &.invalid, &.invalid.enabled {
+			border-bottom: 1px solid $brand-error;
 			a {
 				color: $brand-error;
 				display: flex;
@@ -136,6 +137,7 @@
 				align-items: center;
 				i {
 					opacity: 1;
+                    display: block;
 					color: $brand-error;
 				}
 			}
@@ -295,15 +297,6 @@
 
 }
 
-#overview {
-	.border-bt {
-		bottom: -57px;
-		z-index: 9;
-		@include bkp(sm) {
-			display: none;
-		}
-	}
-}
 
 .info-text, .info-text-bottom {
 	margin-bottom: 0;
@@ -317,21 +310,10 @@
 			//	font-size: 12px;
 		}
 	}
-	&:after {
-		/*	content: '\e254';
-			font-family: 'icomoon';
-			position: absolute;
-			right: 15px;
-			top: 75px;
-			width: auto;
-			height: auto;*/
-	}
 	i {
 		display: block;
 		text-align: right;
-		//font-size: 16px;
 		float: right;
-
 		@include bkp(lg) {
 			display: none;
 		}
@@ -341,6 +323,173 @@
 
 .info-text-bottom {
 	&.opened, &.opened p {
-		border-top: 1px solid $gray-light;
+		//border-top: 1px solid $gray-light;
 	}
+}
+
+.wrap-overview {
+    @include bkp(lg) {
+        display: block;
+    }
+    #overview {
+        margin-bottom: 30px;
+        padding-top: 10px;
+        @include bkp(sm) {
+            padding-left: 35px;
+            margin-bottom: 20px;
+        }
+        @include bkp(lg) {
+            padding-left: 15px;
+            margin-bottom: 20px;
+        }
+        .overview {
+            float: none;
+            @include bkp(sm) {
+                max-width: 375px;
+            }
+            @include bkp(lg) {
+                max-width: 730px;
+            }
+            .wrap-field {
+                &:before, &:after {
+                    border-bottom: none;
+                }
+                &:hover, &.opened {
+                    border-bottom: none;
+                }
+                @include bkp(md) {
+                    border-bottom: none;
+
+                }
+                @include bkp(lg) {
+                    padding-right: 15px;
+                }
+
+                &.updated, &.completed {
+                    .wrap-input {
+                        pointer-events: visible;
+                        cursor: pointer;
+                        &:after {
+                            border-color: $gray-light;
+                        }
+                    }
+                    .overview-field {
+                        padding: 0 0 10px;
+                    }
+                    .overview-text {
+                        padding-top: 20px;
+                     ///  border-top: 1px solid $gray-lighter;
+                    }
+                    .info-text-bottom {
+                        display: block;
+                    }
+                }
+                &.error, &.invalid {
+                    .wrap-input {
+                        &:after {
+                            @include bkp(sm) {
+                                border-bottom: 1px solid $brand-error;
+                            }
+                        }
+                        &:hover:after {
+                         //  border-bottom: 1px solid $brand-error;
+                            @include themify($themes) {
+                               border-bottom: themed('border1pxError');
+                            }
+                        }
+                        a, a:hover, &:hover a {
+                           // color: $brand-error
+                            @include themify($themes) {
+                                color: themed('brandError');
+                            }
+                        }
+                        &:after {
+                            margin-left: 0;
+                            //border-color: $brand-error;
+                        }
+                        i {
+                            color: $brand-error;
+                        }
+                    }
+                    .info-detail {
+                        color: $brand-error;
+                    }
+                }
+                &.disabled {
+                    .info-text-bottom {
+                        display: none;
+                    }
+                }
+                .info-text-bottom {
+                    display: block;
+                    &.opened {
+                        padding-left: 0;
+                    }
+                    .info-detail {
+                        padding-right: 30px;
+                        @include bkp(lg) {
+                            padding-right: 0;
+                        }
+                    }
+                }
+                .wrap-input {
+                    padding: 20px 0;
+                    display: block;
+                    &:after {
+                        margin-left: 0;
+                        @include bkp(sm) {
+                            width: 100%;
+                        }
+                        @include bkp(md) {
+                            width: 100%;
+                        }
+                    }
+                    &:hover {
+                        //border-bottom: 1px solid $brand-primary;
+                        &:after {
+                            @include themify($themes) {
+                                border-bottom: themed('border1pxPrimary');
+                            }
+                        }
+                        a {
+                            @include themify($themes) {
+                                color: themed('brandPrimary');
+                            }
+                        }
+                    }
+                    &.opened {
+                        &:hover {
+                            @include themify($themes) {
+                                border-bottom: themed('borderNone');
+                            }
+                        }
+                    }
+
+                    @include bkp(md) {
+                       // border-bottom: 1px solid $gray-light;
+                        padding-bottom: 12px;
+                    }
+                    a {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: flex-end;
+                        span , i {
+                            display: block;
+                        }
+
+                    }
+                }
+            }
+
+        }
+
+
+    }
+    #other-info {
+        display: none;
+        @include bkp(sm) {
+            display: inline-block;
+        }
+    }
+
 }

@@ -26,9 +26,7 @@ var _ = require( 'underscore' ),
     confirmSepa: _.clone( defaultFields ),
     contactPerson: _.clone( defaultFields )
   },
-  optionalFields = [
-    'dateOfBirth', 'phoneNumber'
-  ],
+  optionalFields = [],
 
   setValidityOnSalutationChange = function ( state, action ) {
     if ( action.type !== 'CHANGE_CONTENT' ||

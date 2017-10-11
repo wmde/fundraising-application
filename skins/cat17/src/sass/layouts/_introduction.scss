@@ -1,5 +1,5 @@
-.introduction {
-    padding-top: 45px;
+.introduction, .content {
+	padding-top: 45px;
 	.strong {
 		color: $brand-primary;
 		text-transform: uppercase;
@@ -33,3 +33,7 @@
 		}
 	}
 }
+.introduction + .paginator + .content, .introduction + .content {
+	padding-top: 0;
+}
+

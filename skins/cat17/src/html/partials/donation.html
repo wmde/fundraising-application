@@ -66,7 +66,7 @@
 							  class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
 						<legend class="sr-only">Choose temporality of payment</legend>
 						<div class="wrap-field">
-							<span class="border-bt"></span>
+
 							<div class="wrap-input">
 								<input type="radio" name="intervalType" id="regular" value="1" class="hidden">
 								<input type="radio" name="intervalType" id="one-time" value="0">
@@ -78,7 +78,7 @@
 							</p>
 						</div>
 						<div class="wrap-field">
-							<span class="border-bt"></span>
+
 							<div class="wrap-input">
 								<input type="radio" name="periode" id="monthly" value="1">
 								<label for="monthly"><span>Monatlich</span><i class="icon-repeat_1"></i></label>
@@ -92,7 +92,7 @@
 							</p>
 						</div>
 						<div class="wrap-field">
-							<span class="border-bt"></span>
+
 							<div class="wrap-input">
 								<input type="radio" name="periode" id="quarterly" value="3">
 								<label for="quarterly"><span>Vierteljährlich</span><i
@@ -105,7 +105,7 @@
 							</p>
 						</div>
 						<div class="wrap-field">
-							<span class="border-bt"></span>
+
 							<div class="wrap-input">
 								<input type="radio" name="periode" id="biannual" value="6">
 								<label for="biannual"><span>Halbjährlich</span><i class="icon-repeat_6"></i></label>
@@ -118,7 +118,7 @@
 							</p>
 						</div>
 						<div class="wrap-field">
-							<span class="border-bt"></span>
+
 							<div class="wrap-input">
 								<input type="radio" name="periode" id="yearly" value="12">
 								<label for="yearly"><span>Jährlich</span><i class="icon-repeat_12"></i></label>
@@ -144,7 +144,7 @@
 						<legend class="sr-only">Wie möchten Sie Ihre Spende bezahlen?</legend>
 
 						<div class="wrap-field">
-							<span class="border-bt"></span>
+
 							<div class="wrap-input">
 								<input type="radio" name="payment-info" id="paypal" value="PPL">
 								<label for="paypal"><span>Paypal</span><i class="icon-paypal"></i></label>
@@ -154,7 +154,7 @@
 								weitergeleitet, wo Sie die Spende abschließen müssen.</p>
 						</div>
 						<div class="wrap-field">
-							<span class="border-bt"></span>
+
 							<div class="wrap-input">
 								<input type="radio" name="payment-info" id="credit-card" value="MCP">
 								<label for="credit-card"><span>Kreditkarte</span><i
@@ -168,7 +168,7 @@
 							</p>
 						</div>
 						<div class="wrap-field">
-							<span class="border-bt"></span>
+
 							<div class="wrap-input">
 								<input type="radio" name="payment-info" id="debit-card" value="BEZ">
 								<label for="debit-card"><span>Lastschrift</span><i class="icon-SEPA-2"></i></label>
@@ -202,7 +202,7 @@
 							</div>
 						</div>
 						<div class="wrap-field">
-							<span class="border-bt"></span>
+
 							<div class="wrap-input">
 								<input type="radio" name="payment-info" id="bank-transfer" value="UEB">
 								<label for="bank-transfer"><span>Überweisung</span><i
@@ -232,7 +232,7 @@
 						</legend>
 
 						<div class="wrap-field personal">
-							<span class="border-bt"></span>
+
 							<div class="wrap-input">
 								<input type="radio" name="addressType" id="personal" value="person">
 								<label for="personal"><span>Privat</span><i class="icon-account_circle"></i></label>
@@ -240,17 +240,17 @@
 							<div class="wrap-info">
 								<div class="info-text" data-info="personal">
 									<div class="wrap-select-50 clearfix">
-										<select class="jcf-hidden" id="treatment" name="treatment" placeholder="Anrede"
-												data-jcf='{"wrapNative": false }' class="salutation">
+										<select class="no-outline" id="treatment" name="treatment" placeholder="Anrede"
+												data-jcf='{"wrapNative": false,  "wrapNativeOnMobile": true  }' class="salutation">
 											<option class="hideme" value="anrede">Anrede</option>
 											<option value="familie">Familie</option>
 											<option value="herr">Herr</option>
 											<option value="frau">Frau</option>
 											<option value="anderes">Anderes</option>
 										</select>
-										<select  class="jcf-hidden" id="title" name="title"
+										<select class="no-outline" id="title" name="title"
 												data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true}' class="personal-title">
-											<option class="hideme" vaue="vtitle">Titel</option>
+											<option class="hideme" value="vtitle">Titel</option>
 											<option value="kein-title">Kein Titel</option>
 											<option value="dr">Dr.</option>
 											<option value="prof">Prof.</option>
@@ -315,7 +315,7 @@
 							</div>
 						</div>
 						<div class="wrap-field firma">
-							<span class="border-bt"></span>
+
 							<div class="wrap-input">
 								<input type="radio" name="addressType" id="company" value="firma">
 								<label for="company"><span>Firma</span><i class="icon-work"></i></label>
@@ -375,7 +375,7 @@
 
 
 						<div class="wrap-field anonym">
-							<span class="border-bt"></span>
+
 							<div class="wrap-input">
 								<input type="radio" name="addressType" id="anonymus" value="anonym">
 								<label for="anonymus"><span>Anonym</span><i class="icon-visibility_off"></i></label>

@@ -1,3 +1,6 @@
+html {
+    overflow-x: hidden;
+}
 body {
     font-weight: 400;
 	font-family: $font-main;
@@ -7,7 +10,7 @@ body {
 	@include bkp(sm) {
 		font-size: 14px;
 	}
-	@include bkp(lg) {
+	@include bkp(md) {
 		font-size: 12px;
 	}
 }

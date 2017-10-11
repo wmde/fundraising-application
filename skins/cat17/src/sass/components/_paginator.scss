@@ -1,0 +1,91 @@
+.paginator {
+	background-color: #ffffff;
+	margin-top: -1px;
+	position: fixed;
+	padding-right: 0;
+	padding-left: 0;
+	z-index: 8;
+
+	@include bkp(md) {
+		margin-top: 50px;
+		position: static;
+		padding-right: 15px;
+		padding-left: 15px;
+	}
+	&.paginator-top {
+        display: block;
+        height: 61px;
+		border-bottom: 1px solid $gray-light;
+		@include bkp(md) {
+			display: none;
+		}
+	}
+	&.paginator-sidebar {
+        position: fixed;
+        left: 0;
+        right: 0;
+        @include bkp(xsmax) {
+            .container {
+                .row {
+                    margin-left: 0;
+                    margin-right: 0;
+                }
+            }
+        }
+
+		@include bkp(md) {
+            position: static;
+            .pages-wrap {
+                width: 100%;
+                margin-left: 0;
+                border-bottom: 1px solid $gray-light;
+            }
+            .container {
+				position: fixed;
+                width: 292.99px;
+            }
+		}
+	}
+	.pages-wrap {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 20px 0 0;
+        @include bkp(sm) {
+            padding: 20px 15px 0 15px;
+
+        }
+		@include bkp(md) {
+            padding: 30px 0 0 0;
+		}
+	}
+	span.controls {
+		padding-bottom: 15px;
+		font-size: 22px;
+		a:hover {
+			color: $brand-primary;
+		}
+	}
+	li {
+        min-width: 45px;
+        text-align: center;
+		a, span {
+			display: block;
+			// border-bottom: 2px solid $brand-primary;
+			padding: 0 7px 15px;
+			margin-left: 5px;
+			margin-bottom: -2px;
+
+		}
+		&.selected span, a:hover {
+
+			border-bottom: 2px solid $brand-primary;
+			font-size: 24px;
+			font-weight: $font-main-semibold;
+			@include bkp(sm) {
+				font-size: 16px;
+			}
+
+		}
+	}
+}

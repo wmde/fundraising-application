@@ -8,6 +8,7 @@
 @import "common/mixins";
 @import "common/base";
 @import "components/menu";
+@import "components/paginator";
 @import "components/buttons";
 @import "components/forms";
 @import "components/state-overview";
@@ -17,3 +18,4 @@
 @import "layouts/landing";
 @import "layouts/membership";
 @import "layouts/pages";
+@import "layouts/borders-system";

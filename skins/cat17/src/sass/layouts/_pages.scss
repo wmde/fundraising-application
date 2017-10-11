@@ -167,7 +167,7 @@
 
 .comments-list {
 	.introduction {
-		padding-top: 85px;
+		padding-top: 80px;
 		@include bkp(md) {
 			padding-top: 45px;
 		}
@@ -177,7 +177,6 @@
 		span {
 			display: block;
 			margin-bottom: 10px;
-			font-size: 22px;
 			&:first-child {
 				font-weight: $font-main-semibold;
 			}
@@ -189,71 +188,27 @@
 			margin-bottom: 60px;
 		}
 	}
+}
 
-
-	.paginator {
-		background-color: #ffffff;
-		margin-top: -1px;
-		position: fixed;
-		padding-right: 0;
-		padding-left: 0;
-		z-index: 8;
-		border-bottom: 1px solid $gray-light;
+.supporters-list {
+	.introduction {
+		padding-top: 80px;
 		@include bkp(md) {
-			margin-top: 40px;
-			position: static;
-			padding-right: 15px;
-			padding-left: 15px;
+			padding-top: 45px;
 		}
-		&.paginator-top {
-			display: block;
-			@include bkp(md) {
-				display: none;
-			}
+	}
+	.wrap-items {
+		margin-top: 40px;
+		@include bkp(sm) {
+			margin-top: 50px;
 		}
-		&.paginator-sidebar {
-			display: none;
-			@include bkp(md) {
-				display: block;
-			}
+		@include bkp(md) {
+			margin-top: 60px;
 		}
-		.pages-wrap {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-
-			padding: 20px 0 0;
-			@include bkp(md) {
-				padding-top: 30px;
-			}
-		}
-		span.controls {
-			padding-bottom: 15px;
-			font-size: 22px;
-			a:hover {
-				color: $brand-primary;
-			}
-		}
-		li {
-			a, span {
-				display: block;
-				// border-bottom: 2px solid $brand-primary;
-				padding: 0 7px 15px;
-				margin-left: 5px;
-				margin-bottom: -2px;
-
-			}
-			&.selected span, a:hover {
-
-				border-bottom: 2px solid $brand-primary;
-				font-size: 24px;
-				font-weight: $font-main-semibold;
-				@include bkp(sm) {
-					font-size: 16px;
-				}
-
-			}
-		}
+	}
+	.list-menu {
+		margin-top: 40px;
 	}
 
 }
+

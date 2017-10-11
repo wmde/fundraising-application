@@ -4,7 +4,6 @@
     position: fixed;
     width: 100%;
     z-index: 9;
-
 	.wrap-header {
 		display: flex;
 		justify-content: space-between;
@@ -21,16 +20,10 @@
 	}
 
     .logo-main {
-      /*  display: inline-block;
-		padding: 0;
-        position: absolute;
-        top: 50%;
-        transform: translate(0, -50%);*/
 		img {
 			max-width: 95px;
 			@include bkp(md) {
 				max-width: 121px;
-
 			}
 		}
     }
@@ -113,7 +106,6 @@
 		margin-right: -20px;
 		@include bkp(xs) {
 			padding: 15px 20px;
-			//margin-right: -20px;
 		}
 		label {
 			display: flex;
@@ -180,6 +172,8 @@
 		li {
 			@include bkp(md) {
 				padding-left: 40px;
+				width: auto;
+				float: none;
 				&:first-child {
 					padding: 0;
 				}
@@ -188,27 +182,25 @@
 				color: $text-color;
 				border-bottom: 2px solid transparent;
 				@include bkp(md) {
-
 					padding: 0 5px 31px;
 				}
 				&:hover, &:focus {
 					margin: 0;
 					@include themify($themes) {
-						border-bottom: themed('border2pxPrimary');
+						border-bottom: themed('border1pxPrimary');
 					}
 				}
-				&.selected {
-					color: $brand-primary;
-					@include themify($themes) {
-						background-color: themed('border2pxPrimary');
-					}
+
+			}
+			&.selected a {
+
+				@include themify($themes) {
+                    color: themed('brandPrimary');
+					border-bottom: themed('border1pxPrimary');
 				}
 			}
 
-			@include bkp(md) {
-				width: auto;
-				float: none;
-			}
+
         }
 	}
 }

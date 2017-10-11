@@ -340,6 +340,11 @@ $( function () {
     return formContent.paymentType !== 'BEZ' || validity.bankData;
   }
 
+  function formDataIsValid() {
+    var validity = store.getState().validity;
+    return !hasInvalidFields() && validity.paymentData && addressIsValid() && bankDataIsValid();
+  }
+
   function personalDataPageIsValid() {
     var validity = store.getState().validity;
     return !hasInvalidFields() && paymentDataIsValid() && addressIsValid() && bankDataIsValid();
@@ -513,7 +518,7 @@ $( function () {
     }
 
 
-    if (state.validity.paymentData && state.validity.address && (state.donationFormContent.paymentType != 'BEZ' || state.validity.bankData) ) {
+    if (formDataIsValid()) {
       $('form input[type="submit"]').removeClass('btn-unactive');
     }
     else {
@@ -535,6 +540,15 @@ $( function () {
     }
   });
 
+  $('form').on('submit', function () {
+    triggerValidityCheckForPersonalDataPage();
+    handleGroupValidations();
+
+    if (formDataIsValid()) {
+      return true;
+    }
+    return false;
+  });
 
   // Set initial form values
   var initSetup = initData.data( 'initial-form-values' );

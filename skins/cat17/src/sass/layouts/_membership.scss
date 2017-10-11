@@ -1,6 +1,7 @@
 .membership {
 	.introduction {
 		p.h1 {
+            margin-bottom: 50px;
 			@include bkp(sm) {
 				width: 80%;
 			}
@@ -8,6 +9,11 @@
 		p.h1 + a {
 			margin-top: 40px;
 		}
+        .shadow-top {
+            margin-top: 50px;
+            padding-top: 30px;
+            box-shadow: 0 -4px 11px -7px rgba(0,0,0,0.65);
+        }
 		.resum h2 {
 			line-height: 1.4em;
 			padding-bottom: 10px;
@@ -38,6 +44,10 @@
 		}
 	}
 
+    #form-membership {
+
+    }
+
 	#payment-method {
 		min-height: 285px;
 		margin-bottom: 20px;
@@ -53,7 +63,7 @@
 				height: 10px;
 				position: absolute;
 				left: -30px;
-				top: 8px;
+				top: 25px;
 				margin-right: 1em;
 				vertical-align: top;
 				cursor: pointer;
@@ -67,16 +77,15 @@
 		.wrap-field {
 			border-bottom: none;
 			margin-bottom: 40px;
-			.border-bt {
-				z-index: 99;
-			}
 		}
 		.wrap-input {
-			border-bottom: 1px solid $gray-light;
+			//border-bottom: 1px solid $gray-light;
 		}
 		.info-text.opened {
 			border-left: none;
 			top: 20px;
+            padding-left: 35px;
+
 		}
 		.info-text.opened[data-info="aktive"] {
 			top: 122px;

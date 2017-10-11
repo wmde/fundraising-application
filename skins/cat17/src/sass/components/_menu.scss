@@ -1,15 +1,27 @@
 .list-menu {
     li {
-        border-bottom: 1px solid #808080;
+
         height: 57px;
         padding-right: 30px;
 		font-weight: $font-main-light;
+        position: relative;
+        &:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 800px;
+            border-bottom: 1px solid #808080;
+
+            @include bkp(sm) {
+                width: 100%;
+            }
+        }
         &:hover, &:focus {
-            @include themify($themes) {
-                a {
-                 //   color: themed('brandPrimary');
+            &:after {
+                @include themify($themes) {
+                    border-bottom: themed('border1pxPrimary');
                 }
-                border-bottom: themed('border1pxPrimary');
             }
         }
         a {

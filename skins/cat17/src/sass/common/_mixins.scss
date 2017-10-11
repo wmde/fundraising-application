@@ -3,8 +3,8 @@
 		@media (min-width: 374px) { @content; }
 	}
 
-	@else if $class == xsw {
-
+	@else if $class == xsmax {
+        @media (max-width: 677px) { @content; }
 	}
 
 	@else if $class == sm {
