@@ -800,11 +800,10 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testAllPaymentTypesAreOffered(): void {
-		$client = $this->createClient( [] );
+		$client = $this->createClient( [ 'skin' => [ 'default' => '10h16' ] ] );
 		$client->request(
 			'GET',
-			'/donation/new',
-			[ 'skin' => '10h16' ]
+			'/donation/new'
 		);
 		$crawler = $client->getCrawler();
 
@@ -816,11 +815,11 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testSofortPaymentTypeCanByDisabledViaQuery(): void {
-		$client = $this->createClient( [] );
+		$client = $this->createClient( [ 'skin' => [ 'default' => '10h16' ] ] );
 		$client->request(
 			'GET',
 			'/donation/new',
-			[ 'skin' => '10h16', 'pmt' => '0' ]
+			[ 'pmt' => '0' ]
 		);
 		$crawler = $client->getCrawler();
 
