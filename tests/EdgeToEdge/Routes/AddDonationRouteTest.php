@@ -799,4 +799,32 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertTrue( $cookie->isHttpOnly() );
 	}
 
+	public function testAllPaymentTypesAreOffered(): void {
+		$client = $this->createClient( [] );
+		$client->request(
+			'GET',
+			'/donation/new',
+			[ 'skin' => '10h16' ]
+		);
+		$crawler = $client->getCrawler();
+
+		$this->assertSame( 1, $crawler->filter( '#donation-payment input[name="zahlweise"][value="BEZ"]' )->count() );
+		$this->assertSame( 1, $crawler->filter( '#donation-payment input[name="zahlweise"][value="UEB"]' )->count() );
+		$this->assertSame( 1, $crawler->filter( '#donation-payment input[name="zahlweise"][value="MCP"]' )->count() );
+		$this->assertSame( 1, $crawler->filter( '#donation-payment input[name="zahlweise"][value="PPL"]' )->count() );
+		$this->assertSame( 1, $crawler->filter( '#donation-payment input[name="zahlweise"][value="SUB"]' )->count() );
+	}
+
+	public function testSofortPaymentTypeCanByDisabledViaQuery(): void {
+		$client = $this->createClient( [] );
+		$client->request(
+			'GET',
+			'/donation/new',
+			[ 'skin' => '10h16', 'pmt' => '0' ]
+		);
+		$crawler = $client->getCrawler();
+
+		$this->assertSame( 0, $crawler->filter( '#donation-payment input[name="zahlweise"][value="SUB"]' )->count() );
+	}
+
 }

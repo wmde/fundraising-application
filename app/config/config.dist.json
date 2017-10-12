@@ -176,7 +176,7 @@
 			"membership-enabled": false
 		},
 		"SUB": {
-			"donation-enabled": false,
+			"donation-enabled": true,
 			"membership-enabled": false
 		}
 	},
