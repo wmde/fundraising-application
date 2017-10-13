@@ -35,7 +35,7 @@ gulp.task('styles', function(){
       ]}
     ))
     .pipe(sourcemaps.write('.'))
-    .pipe(gulp.dest(dirs.src + '/css'))
+    .pipe(gulp.dest(dirs.dist + '/css'))
     .pipe(browserSync.reload({
       stream: true
     }))
@@ -47,7 +47,7 @@ gulp.task('htmlincludes', function() {
       prefix: '@@',
       basepath: './' + dirs.src + '/html/partials'
     }))
-    .pipe(gulp.dest('./' + dirs.src))
+    .pipe(gulp.dest('./' + dirs.dist))
     .pipe(browserSync.reload({
       stream: true
     }))
@@ -55,7 +55,7 @@ gulp.task('htmlincludes', function() {
 
 
 gulp.task('scripts', function(cb) {
-  exec('browserify src/app/main.js -s WMDE -o ' + dirs.src + '/build/wmde.js', function (err, stdout, stderr) {
+  exec('browserify src/app/main.js -s WMDE -o ' + dirs.dist + '/build/wmde.js', function (err, stdout, stderr) {
     console.log(stdout);
     console.log(stderr);
     cb(err);
@@ -127,6 +127,17 @@ gulp.task('copies', function() {
   .pipe(gulp.dest(dirs.dist + '/assets/pdf'));
   gulp.src(dirs.src + '/scripts/*.js')
     .pipe(gulp.dest(dirs.dist + '/scripts'));
+
+  gulp.src('node_modules/jcf/dist/css/theme-minimal/jcf.css')
+    .pipe(gulp.dest(dirs.dist + '/scripts/vendor/jcf'));
+  gulp.src('node_modules/jcf/dist/js/jcf.js')
+    .pipe(gulp.dest(dirs.dist + '/scripts/vendor/jcf'));
+  gulp.src('node_modules/jcf/dist/js/jcf.select.js')
+    .pipe(gulp.dest(dirs.dist + '/scripts/vendor/jcf'));
+  gulp.src('node_modules/jcf/dist/js/jcf.scrollable.js')
+    .pipe(gulp.dest(dirs.dist + '/scripts/vendor/jcf'));
+  gulp.src('node_modules/jquery/dist/jquery.js')
+    .pipe(gulp.dest(dirs.dist + '/scripts/vendor/jquery'));
 });
 
 gulp.task('useref', function(){
