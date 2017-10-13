@@ -123,6 +123,7 @@ use WMDE\Fundraising\Frontend\Presentation\DonationConfirmationPageSelector;
 use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
 use WMDE\Fundraising\Frontend\Presentation\GreetingGenerator;
 use WMDE\Fundraising\Frontend\Presentation\Honorifics;
+use WMDE\Fundraising\Frontend\Presentation\PaymentTypesSettings;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionJsonPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CancelDonationHtmlPresenter;
@@ -487,6 +488,10 @@ class FunFunFactory {
 		$pimple['skin-settings'] = function (): SkinSettings {
 			$config = $this->config['skin'];
 			return new SkinSettings( $config['options'], $config['default'], $config['cookie-lifetime'] );
+		};
+
+		$pimple['payment-types-settings'] = function (): PaymentTypesSettings {
+			return new PaymentTypesSettings( $this->config['payment-types'] );
 		};
 
 		return $pimple;
@@ -1034,7 +1039,7 @@ class FunFunFactory {
 		return new PaymentDataValidator(
 			$this->config['donation-minimum-amount'],
 			$this->config['donation-maximum-amount'],
-			$this->getEnabledDonationPaymentTypes()
+			$this->getPaymentTypesSettings()->getEnabledForDonation()
 		);
 	}
 
@@ -1073,7 +1078,7 @@ class FunFunFactory {
 				'Donation_Confirmation.html.twig',
 				[
 					'piwikGoals' => [ 3 ],
-					'paymentTypes' => $this->getEnabledMembershipApplicationPaymentTypes()
+					'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForMembershipApplication()
 				]
 			)
 		);
@@ -1221,26 +1226,14 @@ class FunFunFactory {
 		// TODO make the template name dependent on the 'form' value from the HTTP POST request
 		// (we need different form pages for A/B testing)
 		return $this->getLayoutTemplate( 'Donation_Form.html.twig', [
-			'paymentTypes' => $this->getEnabledDonationPaymentTypes()
+			'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForDonation()
 		] );
-	}
-
-	private function getEnabledDonationPaymentTypes(): array {
-		return array_keys( array_filter( $this->config['payment-types'], function ( $config ) {
-			return ( $config['donation-enabled'] === true );
-		} ) );
 	}
 
 	public function getMembershipApplicationFormTemplate(): TwigTemplate {
 		return $this->getLayoutTemplate( 'Membership_Application.html.twig', [
-			'paymentTypes' => $this->getEnabledMembershipApplicationPaymentTypes()
+			'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForMembershipApplication()
 		] );
-	}
-
-	private function getEnabledMembershipApplicationPaymentTypes(): array {
-		return array_keys( array_filter( $this->config['payment-types'], function ( $config ) {
-			return ( $config['membership-enabled'] === true );
-		} ) );
 	}
 
 	public function newHandleSofortPaymentNotificationUseCase( string $updateToken ): SofortPaymentNotificationUseCase {
@@ -1561,4 +1554,7 @@ class FunFunFactory {
 		return $this->pimple['skin-settings'];
 	}
 
+	public function getPaymentTypesSettings(): PaymentTypesSettings {
+		return $this->pimple['payment-types-settings'];
+	}
 }

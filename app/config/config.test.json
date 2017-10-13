@@ -103,7 +103,7 @@
 	},
 	"skin": {
 		"options": [
-			"test"
+			"test", "10h16"
 		],
 		"default": "test"
 	}
