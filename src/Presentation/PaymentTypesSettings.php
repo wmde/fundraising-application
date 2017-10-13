@@ -15,12 +15,12 @@ use InvalidArgumentException;
  *
  * [
  *   'BEZ' => [
- *     PaymentTypesSettings::PURPOSE_DONATION => true,
- *     PaymentTypesSettings::PURPOSE_MEMBERSHIP => true
+ *     PaymentTypesSettings::ENABLE_DONATIONS => true,
+ *     PaymentTypesSettings::ENABLE_MEMBERSHIP_APPLICATIONS => true
  *   ],
  *   'UEB' => [
- *     PaymentTypesSettings::PURPOSE_DONATION => true,
- *     PaymentTypesSettings::PURPOSE_MEMBERSHIP => false
+ *     PaymentTypesSettings::ENABLE_DONATIONS => true,
+ *     PaymentTypesSettings::ENABLE_MEMBERSHIP_APPLICATIONS => false
  *   ]
  * ]
  */
