@@ -8,6 +8,7 @@ use InvalidArgumentException;
 
 /**
  * Class PaymentTypesSettings
+ *
  * @package WMDE\Fundraising\Frontend\Presentation
  *
  * Takes a config like the following and provides read and write interface
@@ -25,8 +26,8 @@ use InvalidArgumentException;
  */
 class PaymentTypesSettings {
 
-	public const PURPOSE_DONATION = 'donation-enabled';
-	public const PURPOSE_MEMBERSHIP = 'membership-enabled';
+	public const ENABLE_DONATIONS = 'donation-enabled';
+	public const ENABLE_MEMBERSHIP_APPLICATIONS = 'membership-enabled';
 
 	private $settings = [];
 
@@ -38,34 +39,40 @@ class PaymentTypesSettings {
 	 * @return string[]
 	 */
 	public function getEnabledForDonation(): array {
-		return $this->getEnabledTypes( self::PURPOSE_DONATION );
+		return $this->getPaymentTypesWhereSettingIsTrue( self::ENABLE_DONATIONS );
 	}
 
 	/**
 	 * @return string[]
 	 */
 	public function getEnabledForMembershipApplication(): array {
-		return $this->getEnabledTypes( self::PURPOSE_MEMBERSHIP );
+		return $this->getPaymentTypesWhereSettingIsTrue( self::ENABLE_MEMBERSHIP_APPLICATIONS );
 	}
 
-	public function updateSetting( string $paymentType, string $purpose, bool $value ): void {
+	public function setSettingToFalse( string $paymentType, string $settingName ): void {
 		if ( !array_key_exists( $paymentType, $this->settings ) ) {
 			throw new InvalidArgumentException( "Can not update setting of unknown paymentType '$paymentType'." );
 		}
-		if ( !array_key_exists( $purpose, $this->settings[$paymentType] ) ) {
-			throw new InvalidArgumentException( "Can not update setting of unknown purpose '$purpose'." );
+		if ( !array_key_exists( $settingName, $this->settings[$paymentType] ) ) {
+			throw new InvalidArgumentException( "Can not update setting of unknown purpose '$settingName'." );
 		}
 
-		$this->settings[$paymentType][$purpose] = $value;
+		$this->settings[$paymentType][$settingName] = false;
 	}
 
 	/**
+	 * @param string $settingName
 	 * @return string[]
 	 */
-	private function getEnabledTypes( string $purpose ): array {
-		return array_keys( array_filter( $this->settings, function ( $config ) use ( $purpose ) {
-			return ( $config[$purpose] ?? false ) === true;
-		} ) );
+	private function getPaymentTypesWhereSettingIsTrue( string $settingName ): array {
+		return array_keys(
+			array_filter(
+				$this->settings,
+				function ( $config ) use ( $settingName ) {
+					return ( $config[$settingName] ?? false ) === true;
+				}
+			)
+		);
 	}
 }
 

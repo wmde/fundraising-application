@@ -26,7 +26,7 @@ class SofortToggleServiceProvider implements ServiceProviderInterface, BootableP
 	public function boot( Application $app ): void {
 		$app->before( function( Request $request ): void {
 			if ( $request->query->get( self::QUERY_PARAM_NAME ) === '0' ) {
-				$this->paymentTypesSettings->updateSetting( 'SUB', PaymentTypesSettings::PURPOSE_DONATION, false );
+				$this->paymentTypesSettings->setSettingToFalse( 'SUB', PaymentTypesSettings::ENABLE_DONATIONS );
 			}
 		}, Application::EARLY_EVENT );
 	}
