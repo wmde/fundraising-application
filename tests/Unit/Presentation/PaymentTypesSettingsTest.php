@@ -16,20 +16,20 @@ class PaymentTypesSettingsTest extends TestCase {
 	public function testEnabledForDonation(): void {
 		$settings = new PaymentTypesSettings( [
 			'a' => [
-				PaymentTypesSettings::PURPOSE_DONATION => true,
-				PaymentTypesSettings::PURPOSE_MEMBERSHIP => true
+				PaymentTypesSettings::ENABLE_DONATIONS => true,
+				PaymentTypesSettings::ENABLE_MEMBERSHIP_APPLICATIONS => true
 			],
 			'b' => [
-				PaymentTypesSettings::PURPOSE_DONATION => false,
-				PaymentTypesSettings::PURPOSE_MEMBERSHIP => true
+				PaymentTypesSettings::ENABLE_DONATIONS => false,
+				PaymentTypesSettings::ENABLE_MEMBERSHIP_APPLICATIONS => true
 			],
 			'c' => [
-				PaymentTypesSettings::PURPOSE_DONATION => true,
-				PaymentTypesSettings::PURPOSE_MEMBERSHIP => false
+				PaymentTypesSettings::ENABLE_DONATIONS => true,
+				PaymentTypesSettings::ENABLE_MEMBERSHIP_APPLICATIONS => false
 			],
 			'd' => [
-				PaymentTypesSettings::PURPOSE_DONATION => false,
-				PaymentTypesSettings::PURPOSE_MEMBERSHIP => false
+				PaymentTypesSettings::ENABLE_DONATIONS => false,
+				PaymentTypesSettings::ENABLE_MEMBERSHIP_APPLICATIONS => false
 			]
 		] );
 		$this->assertSame( [ 'a', 'c' ], $settings->getEnabledForDonation() );
@@ -38,16 +38,16 @@ class PaymentTypesSettingsTest extends TestCase {
 	public function testEnabledForMembershipApplication(): void {
 		$settings = new PaymentTypesSettings( [
 			'd' => [
-				PaymentTypesSettings::PURPOSE_DONATION => true,
-				PaymentTypesSettings::PURPOSE_MEMBERSHIP => true
+				PaymentTypesSettings::ENABLE_DONATIONS => true,
+				PaymentTypesSettings::ENABLE_MEMBERSHIP_APPLICATIONS => true
 			],
 			'e' => [
-				PaymentTypesSettings::PURPOSE_DONATION => true,
-				PaymentTypesSettings::PURPOSE_MEMBERSHIP => false
+				PaymentTypesSettings::ENABLE_DONATIONS => true,
+				PaymentTypesSettings::ENABLE_MEMBERSHIP_APPLICATIONS => false
 			],
 			'f' => [
-				PaymentTypesSettings::PURPOSE_DONATION => false,
-				PaymentTypesSettings::PURPOSE_MEMBERSHIP => true
+				PaymentTypesSettings::ENABLE_DONATIONS => false,
+				PaymentTypesSettings::ENABLE_MEMBERSHIP_APPLICATIONS => true
 			],
 		] );
 		$this->assertSame( [ 'd', 'f' ], $settings->getEnabledForMembershipApplication() );
@@ -56,12 +56,12 @@ class PaymentTypesSettingsTest extends TestCase {
 	public function testSettingsOnlyTrueWhenStriclySo(): void {
 		$settings = new PaymentTypesSettings( [
 			'a' => [
-				PaymentTypesSettings::PURPOSE_DONATION => 1,
-				PaymentTypesSettings::PURPOSE_MEMBERSHIP => 'yes'
+				PaymentTypesSettings::ENABLE_DONATIONS => 1,
+				PaymentTypesSettings::ENABLE_MEMBERSHIP_APPLICATIONS => 'yes'
 			],
 			'b' => [
-				PaymentTypesSettings::PURPOSE_DONATION => true,
-				PaymentTypesSettings::PURPOSE_MEMBERSHIP => true
+				PaymentTypesSettings::ENABLE_DONATIONS => true,
+				PaymentTypesSettings::ENABLE_MEMBERSHIP_APPLICATIONS => true
 			],
 		] );
 		$this->assertSame( [ 'b' ], $settings->getEnabledForDonation() );
@@ -71,27 +71,27 @@ class PaymentTypesSettingsTest extends TestCase {
 	public function testDisablePurposeForOneType(): void {
 		$settings = new PaymentTypesSettings( [
 			'BEZ' => [
-				PaymentTypesSettings::PURPOSE_DONATION => true,
-				PaymentTypesSettings::PURPOSE_MEMBERSHIP => true
+				PaymentTypesSettings::ENABLE_DONATIONS => true,
+				PaymentTypesSettings::ENABLE_MEMBERSHIP_APPLICATIONS => true
 			],
 			'UEB' => [
-				PaymentTypesSettings::PURPOSE_DONATION => true,
-				PaymentTypesSettings::PURPOSE_MEMBERSHIP => true
+				PaymentTypesSettings::ENABLE_DONATIONS => true,
+				PaymentTypesSettings::ENABLE_MEMBERSHIP_APPLICATIONS => true
 			],
 			'MCP' => [
-				PaymentTypesSettings::PURPOSE_DONATION => true,
-				PaymentTypesSettings::PURPOSE_MEMBERSHIP => true
+				PaymentTypesSettings::ENABLE_DONATIONS => true,
+				PaymentTypesSettings::ENABLE_MEMBERSHIP_APPLICATIONS => true
 			],
 			'PPL' => [
-				PaymentTypesSettings::PURPOSE_DONATION => true,
-				PaymentTypesSettings::PURPOSE_MEMBERSHIP => true
+				PaymentTypesSettings::ENABLE_DONATIONS => true,
+				PaymentTypesSettings::ENABLE_MEMBERSHIP_APPLICATIONS => true
 			],
 			'SUB' => [
-				PaymentTypesSettings::PURPOSE_DONATION => true,
-				PaymentTypesSettings::PURPOSE_MEMBERSHIP => true
+				PaymentTypesSettings::ENABLE_DONATIONS => true,
+				PaymentTypesSettings::ENABLE_MEMBERSHIP_APPLICATIONS => true
 			]
 		] );
-		$settings->updateSetting( 'SUB', PaymentTypesSettings::PURPOSE_DONATION, false );
+		$settings->setSettingToFalse( 'SUB', PaymentTypesSettings::ENABLE_DONATIONS );
 		$this->assertSame( [ 'BEZ', 'UEB', 'MCP', 'PPL' ], $settings->getEnabledForDonation() );
 	}
 
@@ -102,11 +102,11 @@ class PaymentTypesSettingsTest extends TestCase {
 	public function testUpdateSettingWithUnknownPaymentTypeThrowsException(): void {
 		$settings = new PaymentTypesSettings( [
 			'dolor' => [
-				PaymentTypesSettings::PURPOSE_DONATION => true,
-				PaymentTypesSettings::PURPOSE_MEMBERSHIP => true
+				PaymentTypesSettings::ENABLE_DONATIONS => true,
+				PaymentTypesSettings::ENABLE_MEMBERSHIP_APPLICATIONS => true
 			]
 		] );
-		$settings->updateSetting( 'IPSUM', PaymentTypesSettings::PURPOSE_DONATION, false );
+		$settings->setSettingToFalse( 'IPSUM', PaymentTypesSettings::ENABLE_DONATIONS );
 	}
 
 	/**
@@ -116,11 +116,11 @@ class PaymentTypesSettingsTest extends TestCase {
 	public function testUpdateSettingWithUnknownPurposeThrowsException(): void {
 		$settings = new PaymentTypesSettings( [
 			'dolor' => [
-				PaymentTypesSettings::PURPOSE_DONATION => true,
-				PaymentTypesSettings::PURPOSE_MEMBERSHIP => true
+				PaymentTypesSettings::ENABLE_DONATIONS => true,
+				PaymentTypesSettings::ENABLE_MEMBERSHIP_APPLICATIONS => true
 			]
 		] );
-		$settings->updateSetting( 'dolor', 'foo', false );
+		$settings->setSettingToFalse( 'dolor', 'foo' );
 	}
 
 	public function testFunkySettingsNotValidatedButHarmless(): void {
