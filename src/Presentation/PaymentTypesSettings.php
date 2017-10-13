@@ -61,7 +61,6 @@ class PaymentTypesSettings {
 	}
 
 	/**
-	 * @param string $settingName
 	 * @return string[]
 	 */
 	private function getPaymentTypesWhereSettingIsTrue( string $settingName ): array {
