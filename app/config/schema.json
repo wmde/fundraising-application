@@ -541,7 +541,7 @@
           "type": "string",
           "minLength": 1,
           "title": "Base URL",
-          "description": "Base URL for the MCP iframe. The fundraising application will add various parameters to the URL, some of them defined in this section.",
+          "description": "Base URL for the MCP checkout page. The fundraising application will add various parameters to the URL, some of them defined in this section.",
           "default": "https://credit-card.micropayment.de/creditcard/event/index.php?",
           "format": "url"
         },
@@ -556,7 +556,7 @@
           "type": "string",
           "minLength": 1,
           "title": "Background color",
-          "description": "Iframe background color. Hex value, without leading hash",
+          "description": "Checkout background color. Hex value, without leading hash",
           "default": "000000",
           "pattern": "^[0-9A-F]{6}$"
         },
