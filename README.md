@@ -4,6 +4,8 @@
 
 User facing application for the [Wikimedia Deutschland](https://wikimedia.de) fundraising.
 
+We moved the Donation Context into [it's own git repository](https://github.com/wmde/fundraising-donations).
+
 The easiest way to get a working installation of the application is to use [Vagrant](https://www.vagrantup.com/).
 Just get a clone of our git repository and run `vagrant up` in it. Then `vagrant ssh` into it and go to `/vagrant`, where you will be able to run the full test suite. (Excluding a handful of payment provider system tests).
 
