@@ -3,12 +3,12 @@
 	"version": "2.0.0-dev",
 	"description": "WMDE fundraising application (end user facing part)",
 	"scripts": {
-		"postinstall": "cd skins/10h16 && npm install",
-		"build-assets": "cd skins/10h16 && npm run build-assets",
-		"copy-assets": "mkdir -p web/skins/10h16/ && cp -r skins/10h16/web/* web/skins/10h16/",
-		"test": "cd skins/10h16 && npm run test",
-		"cs": "cd skins/10h16 && npm run cs",
-		"ci": "cd skins/10h16 && npm run ci"
+		"postinstall": "node npm_skins install",
+		"build-assets": "node npm_skins run build-assets",
+		"copy-assets": "find skins/ -maxdepth 2 -name 'web' -type d -exec sh -c 'dirname \"$1\" | xargs -I{} cp -r \"./{}/web/.\" \"./web/{}\"' -- {} \\;",
+		"test": "node npm_skins run test",
+		"cs": "node npm_skins run cs",
+		"ci": "node npm_skins run ci"
 	},
 	"repository": {
 		"type": "git",
