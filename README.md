@@ -37,11 +37,12 @@ System dependencies:
     * xml
 * Node.js and npm (only needed in development for compiling the JavaScript and running the JavaScript tests)
 
-Get a clone of our git repository and then run these commands in it:
+Get a clone of our git repository and then run these commands in it (the vagrant environment will do that for you):
 
 	composer install
 	npm install
-	npm run build-js
+	npm run build-assets
+	npm run copy-assets
 
 For the database connection you need to create the file `app/config/config.prod.json` and enter your database
 connection data. If you're using MySQL, [it's important](http://stackoverflow.com/questions/5391045/how-to-define-the-use-of-utf-8-in-doctrine-2-in-zend-framework-application-ini) to add the encoding to the `driverOptions` key.
@@ -134,13 +135,10 @@ For a full JS CI run
 
 	npm run ci
 
-If JavaScript files where changed, you will first need to run
+If JavaScript files where changed, you will need to (re)run
 
-    npm run build-js
-
-If you are working on the JavaScript files and need automatic recompilation when a files changes, then run
-
-    npm run watch-js
+	npm run build-assets
+	npm run copy-assets
 
 If you want to debug problems in the Redux data flow, set the following variable in the shell environment:
 
@@ -153,6 +151,9 @@ Actions and their resulting state will be logged.
 If skin assets where changed, you will need to run
 
     npm run build-assets
+    npm run copy-assets
+
+Also see [skins/README.md](skins/README.md)
 
 ## Deployment
 

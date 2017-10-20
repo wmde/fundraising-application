@@ -1,0 +1,72 @@
+{
+  "name": "wmde_fundraising_10h16",
+  "version": "2.0.0-dev",
+  "description": "WMDE fundraising application (end user facing part)",
+  "scripts": {
+    "build-assets": "browserify js/main.js -s WMDE -o web/_js/wmde.js",
+    "watch-js": "watchify js/main.js -v -s WMDE -o web/_js/wmde.js",
+    "test": "tape 'js/tests/**/*.js' | tap-min",
+    "cs": "jshint js && jscs js",
+    "ci": "npm run cs && npm run test && browserify js/main.js -s WMDE -o /dev/null"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wmde/FundraisingFrontend.git"
+  },
+  "keywords": [
+    "fundraising"
+  ],
+  "author": "",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/wmde/FundraisingFrontend/issues"
+  },
+  "homepage": "https://github.com/wmde/FundraisingFrontend#readme",
+  "devDependencies": {
+    "browserify": "^13.0.0",
+    "browserify-shim": "^3.8.12",
+    "deep-freeze": "0.0.1",
+    "envify": "^3.4.0",
+    "jquery": "^2.2.0",
+    "jscs": "^2.10.1",
+    "jshint": "^2.9.1",
+    "polyify": "0.0.4",
+    "sinon": "^1.17.3",
+    "tap-min": "^1.1.0",
+    "tape": "^4.4.0",
+    "watchify": "^3.7.0"
+  },
+  "dependencies": {
+    "object-assign": "^4.0.1",
+    "promise": "^7.1.1",
+    "redux": "^3.3.1",
+    "redux-promise": "^0.5.1",
+    "underscore": "^1.8.3",
+    "underscore.path": "^0.1.4"
+  },
+  "browserify": {
+    "transform": [
+      [
+        "polyify",
+        {
+          "browsers": "IE >= 8",
+          "include": [
+            "Object.getPrototypeOf",
+            "Object.keys",
+            "Array.prototype.every",
+            "Array.prototype.filter",
+            "Array.prototype.forEach",
+            "Array.prototype.indexOf",
+            "Array.prototype.map",
+            "Array.prototype.reduceRight"
+          ]
+        }
+      ],
+      "browserify-shim",
+      "envify"
+    ]
+  },
+  "browserify-shim": {
+    "jquery": "global:jQuery"
+  }
+}
