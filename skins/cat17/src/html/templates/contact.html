@@ -2,58 +2,58 @@
 @@include('./header.html')
 <main class="contact">
     <div class="container">
-        <div class="row">
+        <form id="contact-form" class="row">
             <div class="content col-xs-12 col-md-9">
                 <h2 class="h1">Kontakt</h2>
-                <form id="contact-form" class="row">
+                <div class="row">
                     <fieldset class="col-xs-12 col-sm-5">
                         <div class="field-grp">
-                            <input type="text" id="name" placeholder="Vorname">
+                            <input type="text" id="name" placeholder="Vorname" required>
                             <label for="name" class="sr-only">Vorname</label>
                             <span class="error-text">Es ist nicht eine gültige Vorname.</span>
                         </div>
                         <div class="field-grp">
-                            <input type="text" id="surname" placeholder="Nachname">
+                            <input type="text" id="surname" placeholder="Nachname" required>
                             <label for="surname" class="sr-only">Nachname</label>
                             <span class="error-text">Es ist nicht eine gültige Nachname.</span>
                         </div>
                         <div class="field-grp">
-                            <input type="email" id="email" placeholder="E-Mail">
+                            <input type="email" id="email" placeholder="E-Mail" required>
                             <label for="email" class="sr-only">Vorname</label>
                             <span class="error-text">Es ist nicht eine gültige E-Mail.</span>
                         </div>
                     </fieldset>
                     <fieldset class="col-xs-12 col-sm-7">
                         <div class="field-grp">
-                            <input type="text" id="subject" placeholder="Betreff">
+                            <input type="text" id="subject" placeholder="Betreff" required>
                             <label for="subject" class="sr-only">Betreff</label>
                             <span class="error-text">Es ist nicht eine gültige Betreff.</span>
                         </div>
                         <div class="field-grp">
                             <textarea name="textarea" rows="50" cols="10" id="comment"
-                                      placeholder="Lhre nachricht an uns"></textarea>
-                            <label for="subject" class="sr-only">lhre nachricht an uns</label>
+                                      placeholder="Ihre nachricht an uns"></textarea>
+                            <label for="subject" class="sr-only">Ihre nachricht an uns</label>
                             <span class="error-text">Es ist nicht eine gültige lhre nachricht an uns.</span>
                         </div>
                     </fieldset>
-                </form>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="switch-container container-fluid container">
-        <div class="row">
             <div class="col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-8 col-md-4">
-                <a href="#" class="btn btn-introduction bk-blue text-center text-uppercase">Nachritch
-                    senden</a>
+                <div class="wrap-submit btn">
+                    <input type="submit" value="Nachritch senden" class="btn btn-introduction bk-blue text-center text-uppercase">
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="container">
+        </form>
         <div class="row">
             <ul class="list-menu link-reverse list-unstyled  col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-8 col-md-4">
-                <li><a href="#" class="">Zuruck zur spendenseite</a></li>
+                <li><a href="index.html" class="">Zuruck zur spendenseite</a></li>
             </ul>
         </div>
     </div>
+
+
+
+
+
 </main>
 @@include('./footer.html')

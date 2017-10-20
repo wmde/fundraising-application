@@ -1,5 +1,4 @@
 
-
 .info-text, .wrap-check, .info-text-bottom{
     opacity: 0;
     //transition:  opacity 500ms ease-out, height 500ms ease-out;
@@ -15,6 +14,9 @@
 		top: 18px;
 		right: 10px;
 	}
+}
+.info-text.opened{
+	overflow: visible;
 }
 
 .info-text-bottom {
@@ -150,7 +152,7 @@ form {
 
 				}
             }
-            input[type=radio]:checked + label, label:hover{
+            input[type=radio]:checked + label {
                 border: 2px solid $text-color;
 				@include themify($themes) {
 					background-color: themed('brandPrimary');
@@ -177,14 +179,12 @@ form {
 			display: block;
 			border: none;
 			height: 12px;
-			box-shadow: 0 5px 9px -5px rgba(0,0,0,0.65);
+			box-shadow: 0 3px 9px -5px rgba(0,0,0,0.65);
 		}
 		@include bkp(md) {
 			box-shadow: none;
 		}
 	}
-
-
 }
 
 .other-info {
@@ -216,7 +216,7 @@ form {
 
 form#form-donation, form#form-membership {
 	@include bkp(sm) {
-		box-shadow: 0 -5px 9px -5px rgba(0,0,0,0.65);
+		box-shadow: 0 -3px 9px -5px rgba(0,0,0,0.65);
 	}
 	@include bkp(md) {
 		box-shadow: none;
@@ -225,7 +225,6 @@ form#form-donation, form#form-membership {
 
 .form-shadow-wrap {
 	margin-bottom: 60px;
-    padding-bottom: 40px;
 	@include bkp(md) {
         box-shadow: 1px 1px 6px 0px rgba(0,0,0,0.35);
         width: calc(66.6666666667% + 30px);

@@ -10,8 +10,8 @@ var formContentLib = require( './form_content' ),
     paymentIntervalInMonths: -1, // 1, 3, 6, 12
     debitType: 'sepa', // sepa and "non-sepa"
     addressType: '', // person, firma
-    salutation: '',
-    title: '',
+    salutation: 'anrede',
+    title: 'vtitle',
     firstName: '',
     lastName: '',
     companyName: '',

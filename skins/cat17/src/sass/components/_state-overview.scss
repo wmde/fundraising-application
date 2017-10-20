@@ -4,7 +4,7 @@
 		a {
 			display: block;
 			text-align: center;
-			//color: rgba(0, 0, 0, .5);
+			color: rgba(0, 0, 0, .5);
 			padding: 0;
 			transition: all 200ms;
 			i {
@@ -25,9 +25,7 @@
 			@include themify($themes) {
 				border-bottom: themed('border1pxPrimary');
 			}
-			//border-bottom: 1px solid $brand-primary;
 			a {
-				//color: $brand-primary;
 				@include themify($themes) {
 					color: themed('brandPrimary');
 				}
@@ -43,7 +41,6 @@
 			}
 		}
 		&.completed.enabled {
-			//border-bottom: 1px solid $brand-primary;
 			@include themify($themes) {
 				border-bottom: themed('border1pxPrimary');
 			}
@@ -101,7 +98,6 @@
 				}
 			}
 			&:hover, &:focus {
-				//border-bottom: 1px solid $brand-primary;
 				@include themify($themes) {
 					border-bottom: themed('border1pxPrimary');
 				}
@@ -109,13 +105,11 @@
 					@include themify($themes) {
 						color: themed('brandPrimary');
 					}
-					//color: $brand-primary;
 				}
 			}
 		}
 
 		&.disabled {
-			//border-bottom: 1px solid $white;
 			a {
 				display: block;
 				color: rgba(0, 0, 0, .5);
@@ -124,7 +118,6 @@
 				}
 				&:hover {
 					color: rgba(0, 0, 0, 1);
-					//font-size: 16px;
 				}
 			}
 		}
@@ -142,12 +135,6 @@
 				}
 			}
 		}
-		/*	&:hover, &:focus {
-				border-bottom: 1px solid $brand-primary;
-				a {
-					color: $brand-primary;
-				}
-			}*/
 		&.btn-steps {
 			@include bkp(sm) {
 				display: block;
@@ -211,21 +198,10 @@
 				padding: 15px 1px;
 				font-size: 14px;
 			}
-			a {
-				@include bkp(sm) {
-					/*	display: flex;
-						justify-content: space-between;
-						align-items: center;
-						i {
-							opacity: 1;
-						}*/
-				}
-			}
 			&.completed {
 				border-bottom: 1px solid transparent;
 			}
 			&.enabled {
-				//border-bottom: 1px solid $brand-primary;
 				@include themify($themes) {
 					border-bottom: themed('border1pxPrimary');
 				}
@@ -254,7 +230,7 @@
 .state-bar-lateral {
 	display: none;
 	opacity: 0;
-	transition: opacity 0.3s;
+	transition: opacity 0.15s;
 	pointer-events: none;
 	@include bkp(md) {
 		display: block;
@@ -305,10 +281,6 @@
 	}
 	@include bkp(lg) {
 		margin: 20px 0 15px;
-		//font-size: 12px;
-		p {
-			//	font-size: 12px;
-		}
 	}
 	i {
 		display: block;
@@ -318,12 +290,6 @@
 			display: none;
 		}
 
-	}
-}
-
-.info-text-bottom {
-	&.opened, &.opened p {
-		//border-top: 1px solid $gray-light;
 	}
 }
 
@@ -349,6 +315,53 @@
             }
             @include bkp(lg) {
                 max-width: 730px;
+            }
+            .wrap-field {
+                .wrap-input {
+                    padding: 20px 0;
+                    display: block;
+                    &:after {
+                        margin-left: 0;
+                        @include bkp(sm) {
+                            width: 100%;
+                        }
+                        @include bkp(md) {
+                            width: 100%;
+                        }
+                    }
+					@include bkp(md) {
+						&:hover {
+							&:after {
+								@include themify($themes) {
+									border-bottom: themed('border1pxPrimary');
+								}
+							}
+							a {
+								@include themify($themes) {
+									color: themed('brandPrimary');
+								}
+							}
+						}
+					}
+                    &.opened {
+                        &:hover {
+                            border-bottom: none;
+                        }
+                    }
+
+                    @include bkp(md) {
+                        padding-bottom: 12px;
+                    }
+                    a {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: flex-end;
+                        span , i {
+                            display: block;
+                        }
+
+                    }
+                }
             }
             .wrap-field {
                 &:before, &:after {
@@ -378,7 +391,6 @@
                     }
                     .overview-text {
                         padding-top: 20px;
-                     ///  border-top: 1px solid $gray-lighter;
                     }
                     .info-text-bottom {
                         display: block;
@@ -386,26 +398,17 @@
                 }
                 &.error, &.invalid {
                     .wrap-input {
-                        &:after {
-                            @include bkp(sm) {
-                                border-bottom: 1px solid $brand-error;
-                            }
-                        }
-                        &:hover:after {
-                         //  border-bottom: 1px solid $brand-error;
-                            @include themify($themes) {
-                               border-bottom: themed('border1pxError');
-                            }
-                        }
+
+
                         a, a:hover, &:hover a {
-                           // color: $brand-error
-                            @include themify($themes) {
-                                color: themed('brandError');
-                            }
+                            color: $brand-error;
                         }
                         &:after {
                             margin-left: 0;
-                            //border-color: $brand-error;
+                            border-color: $brand-error;
+                        }
+                        &:hover:after {
+                            border-color: $brand-error;
                         }
                         i {
                             color: $brand-error;
@@ -430,55 +433,19 @@
                         @include bkp(lg) {
                             padding-right: 0;
                         }
-                    }
-                }
-                .wrap-input {
-                    padding: 20px 0;
-                    display: block;
-                    &:after {
-                        margin-left: 0;
-                        @include bkp(sm) {
-                            width: 100%;
-                        }
-                        @include bkp(md) {
-                            width: 100%;
-                        }
-                    }
-                    &:hover {
-                        //border-bottom: 1px solid $brand-primary;
-                        &:after {
-                            @include themify($themes) {
-                                border-bottom: themed('border1pxPrimary');
-                            }
-                        }
-                        a {
-                            @include themify($themes) {
-                                color: themed('brandPrimary');
-                            }
-                        }
-                    }
-                    &.opened {
-                        &:hover {
-                            @include themify($themes) {
-                                border-bottom: themed('borderNone');
-                            }
-                        }
-                    }
+						.bank-info {
+							padding-bottom: 10px;
+							border-bottom: 1px solid $gray-light;
+							margin-bottom: 10px;
+							> strong:after {
+								content: ": ";
+							}
 
-                    @include bkp(md) {
-                       // border-bottom: 1px solid $gray-light;
-                        padding-bottom: 12px;
-                    }
-                    a {
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: flex-end;
-                        span , i {
-                            display: block;
-                        }
+						}
 
                     }
                 }
+
             }
 
         }

@@ -58,7 +58,8 @@
 				}
 			}
 			~ .menu {
-				transform: translateX(0);
+				//transform: translateX(0);
+				transform: translate(0, 0%);
 				padding: 0;
 				border-bottom: 1px solid $gray-light;
 				.list-inline li {
@@ -131,7 +132,8 @@
 		position: fixed;
 		top: 45px;
 		left: 0;
-		transform: translateX(calc(100% * -1));
+		//transform: translateX(calc(100% * -1));
+		transform: translate(0,-125%);
 		transition: all 0.3s;
 		background-color: white;
 		z-index: 9;

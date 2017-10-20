@@ -36,7 +36,7 @@ $( function () {
       //Company Data
       WMDE.Components.createValidatingTextComponent( store, $( '#company-name' ), 'companyName' ),
       WMDE.Components.createValidatingTextComponent( store, $( '#contact-person' ), 'contactPerson' ),
-      WMDE.Components.createTextComponent( store, $( '#email-company' ), 'email' ),
+      WMDE.Components.createValidatingTextComponent( store, $( '#email-company' ), 'email' ),
       WMDE.Components.createValidatingTextComponent( store, $( '#adress-company' ), 'street' ),
       WMDE.Components.createValidatingTextComponent( store, $( '#post-code-company' ), 'postcode' ),
       WMDE.Components.createValidatingTextComponent( store, $( '#city-company' ), 'city' ),
@@ -217,7 +217,7 @@ $( function () {
           {
             'PPL': 'Nach der Möglichkeit der Adressangabe werden Sie zu PayPal weitergeleitet, wo Sie die Spende abschließen müssen.',
             'MCP': 'Nach der Möglichkeit der Adressangabe werden Sie zu unserem Partner Micropayment weitergeleitet, wo Sie Ihre Kreditkarteninformationen eingeben können.',
-            'BEZ': 'TODO Some text for Lastschrift payment method',
+            'BEZ': 'Ich ermächtige die gemeinnützige Wikimedia Fördergesellschaft mbH (Gläubiger-ID: DE25ZZZ00000448435) Zahlungen von meinem Konto mittels Lastschrift einzuziehen. Zugleich weise ich mein Kreditinstitut an, die von der gemeinnützigen Wikimedia Fördergesellschaft mbH auf mein Konto gezogenen Lastschriften einzulösen. <br />Ich kann innerhalb von acht Wochen, beginnend mit dem Belastungsdatum, die Erstattung des belasteten Betrages verlangen. Es gelten dabei die mit meinem Kreditinstitut vereinbarten Bedingungen.',
             'UEB': 'IBAN 348720983472938<br />BIC 87668786<br />Ich ermächtige die gemeinnützige Wikimedia Fördergesellschaft mbH (Gläubiger-ID: DE25ZZZ00000448435) Zahlungen von meinem Konto mittels Lastschrift einzuziehen. Zugleich weise ich mein Kreditinstitut an, die von der gemeinnützigen Wikimedia Fördergesellschaft mbH auf mein Konto gezogenen Lastschriften einzulösen.<br />Ich kann innerhalb von acht Wochen, beginnend mit dem Belastungsdatum, die Erstattung des belasteten Betrages verlangen. Es gelten dabei die mit meinem Kreditinstitut vereinbarten Bedingungen.'
           },
           $('.address-icon'),
@@ -243,13 +243,18 @@ $( function () {
           },
           $('.member-type .text'),
           {
-            'sustaining': 'Fördermitgliedschaft',
-            'active': 'Aktive Mitgliedschaft'
+            'sustaining': 'Förder',
+            'active': 'Aktive'
           },
           $('.membership-type-icon'),
           {
             'sustaining': 'icon-favorite',
             'active': 'icon-flash_on'
+          },
+          $('.member-type .info-detail'),
+          {
+            'sustaining': 'Sie erhalten regelmäßige Informationen über die Arbeit des Vereins.',
+            'active': 'Sie bringen sich aktiv im Verein und haben ein Stimmrecht auf der Mitglieder- versammlung.'
           }
         ),
         stateKey: 'membershipFormContent'

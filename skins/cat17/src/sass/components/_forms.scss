@@ -1,4 +1,6 @@
-
+input {
+    -webkit-appearance: none;
+}
 input[type=number] {
 	-moz-appearance: textfield;
 }
@@ -16,6 +18,29 @@ input::-webkit-contacts-auto-fill-button {
 	right: 0;
 }
 
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+	transition: background-color 5000s ease-in-out 0s;
+	@include themify($themes) {
+		-webkit-box-shadow: themed('autocompleteColors');
+		border-bottom: themed('border2pxfieldSelected');
+	}
+
+}
+
+
+input[type=submit] {
+    margin-top: 40px;
+}
+
 input.novalid, input.invalid {
 	border-bottom: 2px solid $brand-error;
 	background-color: $brand-error-rgba;
@@ -31,8 +56,6 @@ input.novalid, input.invalid {
 				background-color: themed('fieldSelected');
 				border-bottom: themed('border2pxfieldSelected');
 			}
-		//	background-color: $bk-selected;
-	//		border-bottom: 2px solid $bk-selected;
 		}
 		&:after {
 			content: '\e876';
@@ -45,6 +68,7 @@ input.novalid, input.invalid {
 	}
 	&.invalid {
 		input[type="text"], input[type="email"] {
+
 			@include themify($themes) {
 				background-color: themed('brandErrorRgba');
 				border-bottom: themed('border2pxError');
@@ -54,14 +78,12 @@ input.novalid, input.invalid {
 					border-bottom: themed('border2pxError');
 				}
 			}
-		//	background-color: $brand-error-rgba;
-	//		border-bottom: 2px solid $brand-error;
 		}
 	}
 
 	input[type="text"], input[type="email"], textarea {
-
-		@include themify($themes) {
+        border-radius: 0;
+        @include themify($themes) {
 			background-color: themed('fieldNormal');
 			border-bottom: themed('border2pxfieldNormal');
 		}
@@ -97,6 +119,11 @@ input.novalid, input.invalid {
 	}
 }
 
+.error-text {
+    color: $brand-error;
+    padding-left: 16px;
+    margin-bottom: 30px;
+}
 
 label {
 	cursor: pointer;
@@ -223,9 +250,6 @@ p.legend {
 		width: 0;
 	}
 
-	&.jcf-focus, &.jcf-focus * {
-		// border-color: transparent!important;
-	}
 
 	&:after {
 		content:"";
@@ -237,7 +261,7 @@ p.legend {
 		top: 23px;
 		right: 13px;
 	}
-	&:hover {
+	&:hover, &:focus {
 		//border-bottom: 2px solid $brand-primary;
 		@include themify($themes) {
 			border-bottom: themed('border2pxPrimary');
@@ -259,9 +283,11 @@ p.legend {
 		&:active, &.jcf-focus {
 			@include themify($themes) {
 				background-color: themed('fieldNormal');
+				border: themed('border2pxPrimary')!important;
+				border-bottom: none !important;
 			}
 
-			//border: 2px solid $brand-primary !important;
+
 			&:after {
 				border-color: $brand-primary transparent transparent transparent !important;
 			}
@@ -287,8 +313,18 @@ p.legend {
 #form-donation .jcf-select.jcf-select-jcf-hidden.jcf-focus, #form-donation .jcf-select.jcf-select-jcf-hidden.jcf-focus * {
 	//border-color: transparent !important;
 }
-.jcf-unselectable.jcf-focus {
-	border-color: transparent !important;
+.jcf-unselectable.jcf-focus, .jcf-select.jcf-focus {
+	@include bkp(xsmax) {
+		@include themify($themes) {
+			border: themed('border2pxPrimary') !important;
+		}
+	}
+	@include bkp(sm) {
+		border-color: transparent !important;
+		@include themify($themes) {
+			border-bottom: themed('border2pxPrimary') !important;
+		}
+	}
 }
 
 #form-donation .jcf-select.jcf-select-jcf-hidden.jcf-drop-active.jcf-focus, #form-donation .jcf-select.jcf-select-jcf-hidden.jcf-drop-active.jcf-focus * {
@@ -354,8 +390,11 @@ p.legend {
 		}
 	}
 }
-
-
+select{
+	option.hideme {
+		display: none!important;
+	}
+}
 
 
 

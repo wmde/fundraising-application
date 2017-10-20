@@ -13,16 +13,12 @@
             width: 800px;
         }
         &:after {
-            @include themify($themes) {
-                border-bottom: themed('border1pxGrayLight');
-            }
+            border-bottom: 1px solid $gray-light;
         }
         &:before {
             top: 0;
             bottom: auto;
-            @include themify($themes) {
-                border-bottom: themed('border1pxTransparent');
-            }
+            border-bottom: 1px solid transparent;
         }
         &.selected {
             &:after, &:before {
@@ -37,16 +33,14 @@
     &.notselected {
         &:after, .wrap-input:after {
             @include bkp(xsmax) {
-                @include themify($themes) {
-                    border-bottom: themed('border1pxTransparent');
-                }
+                border-bottom: 1px solid transparent;
             }
         }
     }
     .wrap-input {
-        display: flex;
+  /*      display: flex;
         justify-content: space-between;
-        align-items: center;
+        align-items: center;*/
         position: relative;
         &:after {
             content: '';
@@ -55,18 +49,23 @@
             width: 800px;
             border-bottom: 1px solid $gray-light;
         }
-        &:hover {
-            &:after {
+        @include bkp(sm) {
+            &:hover:after {
                 border-bottom: 1px solid $text-color;
             }
         }
-
     }
     .info-text {
         @include bkp(md) {
             margin: 0;
         }
     }
+    @include bkp(sm) {
+        &:hover:after {
+            border-bottom: 1px solid $text-color;
+        }
+    }
+
 }
 
 /* other pages than donation form */
@@ -152,15 +151,13 @@ fieldset {
             position: static;
         }
         .wrap-input {
-
             &:after {
-                margin-left: 36px;
+                margin-left: 33px;
                 @include bkp(sm) {
                     width: 233px;
-                    margin-left: 34px;
                 }
                 @include bkp(md) {
-                    width: 250px;
+                    width: 253px;
                 }
             }
         }
@@ -168,7 +165,7 @@ fieldset {
             @include bkp(sm) {
                 .wrap-input {
                     &:after {
-                        width: 100%;
+                        width: 101%;
                         @include themify($themes) {
                             border-bottom: themed('border1pxPrimary');
                         }
@@ -229,9 +226,7 @@ fieldset {
                             &.invalid {
                                 .error-text {
                                     display: block;
-                                    color: $brand-error;
-                                    padding-left: 16px;
-                                    margin-bottom: 30px;
+
                                 }
                             }
                         }
@@ -246,8 +241,11 @@ fieldset {
 .wrap-input, .wrap-check {
     input {
         opacity: 0;
+        position: absolute;
     }
-    input:checked + label, &:hover label {
+    //, &:hover label
+    input:checked + label {
+
         &:after {
             content: '';
             background: $brand-primary;
@@ -276,8 +274,8 @@ fieldset {
     label {
         display: flex;
         justify-content: space-between;
-        width: 100%;
-        margin-left: 25px;
+        width: auto;
+        margin-left: 33px;
         margin-bottom: 0;
         position: relative;
         height: 64px;
@@ -312,7 +310,7 @@ fieldset {
     }
     label {
         margin-bottom: 50px;
-        margin-left: 20px;
+        margin-left: 30px;
         height: auto;
         &:before {
             border-radius: 0;

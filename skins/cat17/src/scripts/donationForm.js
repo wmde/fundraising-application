@@ -28,8 +28,8 @@ $( function () {
         debitTypeElement: $( '.debit-type-select' )
       } ),
       WMDE.Components.createRadioComponent( store, $( 'input[name="addressType"]' ), 'addressType' ),
-      WMDE.Components.createRadioComponent( store, $( '.salutation' ), 'salutation' ),
-      WMDE.Components.createSelectMenuComponent( store, $( '.personal-title' ), 'title' ),
+      WMDE.Components.createRadioComponent( store, $( '#treatment' ), 'salutation' ),
+      WMDE.Components.createSelectMenuComponent( store, $( '#title' ), 'title' ),
       WMDE.Components.createValidatingTextComponent( store, $( '#first-name' ), 'firstName' ),
       WMDE.Components.createValidatingTextComponent( store, $( '#last-name' ), 'lastName' ),
       WMDE.Components.createValidatingTextComponent( store, $( '#company-name' ), 'companyName' ),
@@ -41,13 +41,11 @@ $( function () {
       WMDE.Components.createValidatingTextComponent( store, $( '#city-company' ), 'city' ),
       WMDE.Components.createSelectMenuComponent( store, $( '#country' ), 'country' ),
       WMDE.Components.createSelectMenuComponent( store, $( '#country-company' ), 'country' ),
-      WMDE.Components.createTextComponent( store, $( '#email' ), 'email' ),
-      WMDE.Components.createTextComponent( store, $( '#email-company' ), 'email' ),
-      //WMDE.Components.createValidatingCheckboxComponent( store, $( '#confirm_sepa' ), 'confirmSepa' ),
-      //WMDE.Components.createValidatingCheckboxComponent( store, $( '#confirm_shortterm' ), 'confirmShortTerm' ),
+      WMDE.Components.createValidatingTextComponent( store, $( '#email' ), 'email' ),
+      WMDE.Components.createValidatingTextComponent( store, $( '#email-company' ), 'email' ),
       WMDE.Components.createCheckboxComponent( store, $( '#newsletter' ), 'confirmNewsletter' ),
       WMDE.Components.createCheckboxComponent( store, $( '#newsletter-company' ), 'confirmNewsletter' ),
-      WMDE.Components.createTextComponent( store, $( '#contact-person' ), 'contactPerson' )
+      WMDE.Components.createValidatingTextComponent( store, $( '#contact-person' ), 'contactPerson' )
     ],
     store,
     'donationFormContent'
@@ -228,7 +226,7 @@ $( function () {
           {
             'PPL': 'Nach der Möglichkeit der Adressangabe werden Sie zu PayPal weitergeleitet, wo Sie die Spende abschließen müssen.',
             'MCP': 'Nach der Möglichkeit der Adressangabe werden Sie zu unserem Partner Micropayment weitergeleitet, wo Sie Ihre Kreditkarteninformationen eingeben können.',
-            'BEZ': 'TODO Some text for Lastschrift payment method',
+            'BEZ': 'Ich ermächtige die gemeinnützige Wikimedia Fördergesellschaft mbH (Gläubiger-ID: DE25ZZZ00000448435) Zahlungen von meinem Konto mittels Lastschrift einzuziehen. Zugleich weise ich mein Kreditinstitut an, die von der gemeinnützigen Wikimedia Fördergesellschaft mbH auf mein Konto gezogenen Lastschriften einzulösen. <br />Ich kann innerhalb von acht Wochen, beginnend mit dem Belastungsdatum, die Erstattung des belasteten Betrages verlangen. Es gelten dabei die mit meinem Kreditinstitut vereinbarten Bedingungen.',
             'UEB': 'IBAN 348720983472938<br />BIC 87668786<br />Ich ermächtige die gemeinnützige Wikimedia Fördergesellschaft mbH (Gläubiger-ID: DE25ZZZ00000448435) Zahlungen von meinem Konto mittels Lastschrift einzuziehen. Zugleich weise ich mein Kreditinstitut an, die von der gemeinnützigen Wikimedia Fördergesellschaft mbH auf mein Konto gezogenen Lastschriften einzulösen.<br />Ich kann innerhalb von acht Wochen, beginnend mit dem Belastungsdatum, die Erstattung des belasteten Betrages verlangen. Es gelten dabei die mit meinem Kreditinstitut vereinbarten Bedingungen.'
           },
           $('.address-icon'),
@@ -287,6 +285,18 @@ $( function () {
         stateKey: 'donationInputValidation.street'
       },
       {
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $('#adress-company') ),
+        stateKey: 'donationInputValidation.street'
+      },
+      {
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#post-code' ) ),
+        stateKey: 'donationInputValidation.postcode'
+      },
+      {
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $('#post-code-company') ),
+        stateKey: 'donationInputValidation.postcode'
+      },
+      {
         viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#post-code' ) ),
         stateKey: 'donationInputValidation.postcode'
       },
@@ -295,7 +305,15 @@ $( function () {
         stateKey: 'donationInputValidation.city'
       },
       {
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#city-company' ) ),
+        stateKey: 'donationInputValidation.city'
+      },
+      {
         viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#email' ) ),
+        stateKey: 'donationInputValidation.email'
+      },
+      {
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#email-company' ) ),
         stateKey: 'donationInputValidation.email'
       },
       {
@@ -303,6 +321,11 @@ $( function () {
         stateKey: 'donationInputValidation.companyName'
       },
       {
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#contact-person' ) ),
+        stateKey: 'donationInputValidation.contactPerson'
+      },
+      {
+
         viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#iban' ) ),
         stateKey: 'donationInputValidation.iban'
       },

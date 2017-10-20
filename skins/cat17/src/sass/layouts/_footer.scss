@@ -23,7 +23,12 @@
 			}
 		}
 	}
-
-
 }
 
+#donation, #membership {
+    .footer {
+        @include bkp(xsmax) {
+            margin-top: 0;
+        }
+    }
+}

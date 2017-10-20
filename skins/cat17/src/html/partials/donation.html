@@ -240,17 +240,17 @@
 							<div class="wrap-info">
 								<div class="info-text" data-info="personal">
 									<div class="wrap-select-50 clearfix">
-										<select class="no-outline" id="treatment" name="treatment" placeholder="Anrede"
-												data-jcf='{"wrapNative": false,  "wrapNativeOnMobile": true  }' class="salutation">
-											<option class="hideme" value="anrede">Anrede</option>
+										<select class="no-outline salutation" id="treatment" name="treatment" placeholder="Anrede"
+												data-jcf='{"wrapNative": false,  "wrapNativeOnMobile": true  }'>
+											<option hidden class="hideme" value="anrede">Anrede</option>
 											<option value="familie">Familie</option>
 											<option value="herr">Herr</option>
 											<option value="frau">Frau</option>
 											<option value="anderes">Anderes</option>
 										</select>
-										<select class="no-outline" id="title" name="title"
-												data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true}' class="personal-title">
-											<option class="hideme" value="vtitle">Titel</option>
+										<select class="no-outline personal-title" id="title" name="title"
+												data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true}'>
+											<option hidden class="hideme" value="vtitle">Titel</option>
 											<option value="kein-title">Kein Titel</option>
 											<option value="dr">Dr.</option>
 											<option value="prof">Prof.</option>
@@ -274,8 +274,7 @@
 										<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 									</div>
 									<div class="field-grp">
-										<input type="text" id="street"
-											   placeholder="Straße und Hausnummer">
+										<input type="text" id="street" placeholder="Straße und Hausnummer">
 										<label for="street" class="sr-only">Straße und Hausnummer</label>
 										<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 									</div>
@@ -293,6 +292,13 @@
 									<select id="country" name="country"
 											data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true,  "maxVisibleItems": 6}'
 											class="no-outline country-select">
+										<option value="DE">Deutschland</option>
+										<option value="AT">Österreich</option>
+										<option value="CH">Schweiz</option>
+										<option value="BE">Belgien</option>
+										<option value="IT">Italien</option>
+										<option value="LI">Liechtenstein</option>
+										<option value="LU">Luxemburg</option>
 										<option value="DE">Deutschland</option>
 										<option value="AT">Österreich</option>
 										<option value="CH">Schweiz</option>

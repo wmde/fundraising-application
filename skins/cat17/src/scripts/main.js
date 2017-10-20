@@ -5,9 +5,12 @@
 
 		ContactInfo();
 
+		CommentForm();
+
 		formInfosManager();
 
 		stateBarMenu();
+
 
 		heightInfo();
 
@@ -15,7 +18,7 @@
 
 		openCommentItem();
 
-		// replace all form elements with modified default options
+		// replace select elements
 		jcf.replaceAll();
 
 		selectedSelect();
@@ -23,30 +26,31 @@
 	};
 
 	$(document).ready(function () {
-		 init();
+		init();
 	});
 
 	$(window).resize(function () {
-	 	init();
+		containersManager();
 	});
 
-	var openCommentItem = function() {
+
+	var openCommentItem = function () {
 		var $element = $('.supporter-item.wrap-field.commented');
-        if ($element.length) {
-            $($element).on("click", function () {
-                $($element).removeClass("selected notselected");
-                $('.supporter-item.wrap-field .info-text').removeClass("opened");
-                $(this).toggleClass("selected");
-                $(this).children(".info-text").toggleClass("opened");
-                $(this).prevAll('.wrap-field:first').toggleClass("notselected");
-            });
-        };
+		if ($element.length) {
+			$($element).on("click", function () {
+				$($element).removeClass("selected notselected");
+				$('.supporter-item.wrap-field .info-text').removeClass("opened");
+				$(this).toggleClass("selected");
+				$(this).children(".info-text").toggleClass("opened");
+				$(this).prevAll('.wrap-field:first').toggleClass("notselected");
+			});
+		}
+		;
 	};
 
-
-	var containersManager = function() {
+	var containersManager = function () {
 		var $element = $('.switch-container');
-		if($element.length) {
+		if ($element.length) {
 			if ($(window).width() < 660) {
 				$($element).addClass("container-fluid no-gutter");
 				$($element).removeClass("container");
@@ -58,78 +62,60 @@
 	};
 
 	var selectedSelect = function () {
-		$("select").change(function()  {
+		$("select").change(function () {
+			$(this).closest("span.jcf-select").addClass("selected-item");
 			$(this).next("span").addClass("selected-item");
 		});
+		$(".country-select").closest("span.jcf-select").addClass("selected-item");
 		$(".country-select").next("span").addClass("selected-item");
 	};
 
 	var heightInfo = function () {
-		$(".info-text").on("change", "input, select", function () {
-			var formHeight = $(this).closest(".info-text").outerHeight();
-			$(this).closest(".show-info").css("min-height", formHeight + "px");
-		})
-		/*$(".personal .wrap-input").on("change", "input", function() {
-		 var formHeight = $(this).next(".wrap-info .info-text.opened").outerHeight();
-		 $(this).closest(".show-info").css("min-height", formHeight + "px");
-		 })*/
 
+		$(".info-text").on("change", "input, select", function () {
+			$(this).closest("fieldset").css("min-height", 0);
+			var fieldsetHeight = $(this).closest("fieldset").height();
+			var formHeight = $(this).closest(".info-text").outerHeight();
+			if($(this).closest("fieldset").prop("id") == "payment-method") {
+				formHeight = formHeight + fieldsetHeight;
+			}
+			$(this).closest("fieldset").css("min-height", formHeight + "px");
+		});
 	};
 
 	var formInfosManager = function () {
-		//console.log("infos");
 		var $element = $("section.donation-amount");
-		if($element.length) {
-			var rt = ($(window).width() - ($element.offset().left + $element.outerWidth()));
-
-/*			if ($(window).width() < 660) {
-				$(".wrap-field").css({"margin-right": -rt, "margin-left": -rt});
-				$(".wrap-field  .wrap-input").css({"padding-right": rt, "padding-left": rt});
-				$(".wrap-field  .wrap-check").css({"padding-right": rt, "padding-left": rt + 34});
-				$(".wrap-field  .info-text").css({"padding-right": rt, "padding-left": rt + 36});
-				$(".wrap-field  .info-text-bottom").css({"padding-right": rt, "padding-left": rt});
-				$(".wrap-field .border-bt").css({"width": rt + 38});
-				$("#overview .wrap-field .border-bt").css({"width": rt});
-			} else {
-				rt = 0;
-				$(".wrap-field").css({"margin-right": -rt, "margin-left": -rt});
-				$(".wrap-field  .wrap-input").css({"padding-right": rt, "padding-left": rt});
-				$(".wrap-field  .wrap-check").css({"padding-right": rt, "padding-left": rt + 4});
-				$(".wrap-field  .info-text").css({"padding-right": rt, "padding-left": rt + 36});
-				$(".wrap-field  .info-text-bottom").css({"padding-right": rt, "padding-left": rt});
-				$(".wrap-field .border-bt").css({"width": rt + 34});
-				$("#overview .wrap-field .border-bt").css({"width": rt});
-			}*/
+		if ($element.length) {
 
 			$(".show-info input[type=radio]").on("click", function () {
-
 				var id = this.id
 				var fieldsetId = $(this).parents("fieldset").prop("id");
 
-				var bodyId = $("body").prop("id");
-
+				$('fieldset#' + fieldsetId).css("min-height", 0);
+				var fieldsetHeightBefore = $('fieldset#' + fieldsetId).height();
+				console.log("fieldsetHeightBefore " + fieldsetHeightBefore);
 				if (fieldsetId != 'type-membership') {
 					$('fieldset#' + fieldsetId + ' .wrap-field').removeClass("selected notselected");
 					$('fieldset#' + fieldsetId + ' .info-text').removeClass("opened");
 					$('[data-info="' + id + '"]').toggleClass("opened");
+					if ($('[data-info="' + id + '"]').hasClass("opened")) {
+						var formHeight = $('[data-info="' + id + '"]').outerHeight();
+						$(this).closest(".show-info").css("min-height", (formHeight - fieldsetHeightBefore) + "px");
+					};
 					$(this).parents(".wrap-field").toggleClass("selected");
 					$(this).parents(".selected").prevAll('.wrap-field:first').toggleClass("notselected");
 				}
-
 			});
 
 			if ($(window).width() < 1200) {
-				$("#overview").on("click", ".wrap-field.completed .wrap-input, .wrap-field.invalid .wrap-input", function (e) {
+				$("#overview").on("click", ".wrap-field.completed .wrap-input,  .wrap-field.invalid .wrap-input", function (e) {
 					e.preventDefault();
 					$(this).closest(".wrap-field").toggleClass("opened");
 					$(this).toggleClass("opened");
 					$(this).next(".info-text-bottom").toggleClass("opened");
 				});
-			} else {
-
 			}
 		}
-
 	};
 
 
@@ -151,8 +137,10 @@
 				offset = +380;
 			}
 			var elemBottom = elemTop + $(this).height() + offset;
+			//console.log("wTop " + windowScrollTopView + " wB " + windowBottomView  + " eTop" + elemTop);
 			return ((elemBottom <= windowBottomView) && (elemTop >= windowScrollTopView));
 		};
+
 
 		if ($('.state-bar').length == 0) return;
 		var fixBarTop = $('.state-bar').offset().top;
@@ -163,8 +151,6 @@
 
 		if ($(window).width() < 1023) {
 			$(window).scroll(function () {
-
-
 				var currentScroll = $(window).scrollTop();
 				if (currentScroll + 70 >= fixBarTop) {
 					$('.state-bar').addClass('active');
@@ -189,19 +175,32 @@
 		} else {
 			$(window).scroll(function () {
 				var currentScroll = $(window).scrollTop();
-				var initialTop = 200;
-				//console.log("wrap bar" + currentScroll);
+				if ($('body#donation').length) {
+					var initialTop = 200;
+				} else if ($('body#membership').length) {
+					var initialTop = 650;
+				}
+
+
 				if (currentScroll >= initialTop) {
 					$('.state-overview .wrap-bar').addClass('fixed');
 					//console.log("wrap bar" + currentScroll);
 				} else {
 					$('.state-overview .wrap-bar').removeClass('fixed');
 				}
-				if ($(".overview").isVisible('lateral') || $('#other-info').isVisible('lateral')) {
-					$(".state-bar-lateral").removeClass('active');
+
+
+				if (($('.state-bar-lateral .wrap-bar').outerHeight() + $('.state-bar-lateral .wrap-bar').offset().top ) > ( $('.form-shadow-wrap').offset().top + $('.form-shadow-wrap').outerHeight() + 150)) {
+					$('.state-bar-lateral').removeClass('active');
 				} else {
-					$(".state-bar-lateral").addClass('active');
+					$('.state-bar-lateral').addClass('active');
 				}
+
+				/*if ($(".overview").isVisible('lateral') || $('#other-info').isVisible('lateral')) {
+				 $(".state-bar-lateral").removeClass('active');
+				 } else {
+				 $(".state-bar-lateral").addClass('active');
+				 }*/
 			});
 		}
 
@@ -219,7 +218,7 @@
 				donatorElements.removeClass('enabled');
 				amountElements.removeClass('enabled');
 				paymentElemnts.removeClass('enabled');
-				ACTIVE_THRESHOLD = 0;
+				ACTIVE_THRESHOLD = 60;
 				if (currentScroll >= donationPaymentSection - ACTIVE_THRESHOLD) {
 					paymentElemnts.addClass('enabled');
 				}
@@ -232,9 +231,7 @@
 				else if (currentScroll >= memberTypeSection - ACTIVE_THRESHOLD) {
 					typeMemberElements.addClass('enabled');
 				}
-
 			});
-
 		} else {
 			$(window).scroll(function () {
 				var currentScroll = $(window).scrollTop();
@@ -259,12 +256,36 @@
 
 	};
 
+	var submitValidation = function () {
+		var isValid = true;
+		$('form').find('input, textarea').each(function () {
+			if ($(this).val() == "" || !this.checkValidity()) {
+				$(this).addClass('invalid');
+				$(this).parent().addClass('invalid');
+				isValid = false;
+			}
+			else {
+				$(this).removeClass('invalid');
+				$(this).parent().removeClass('invalid');
+			}
+		});
+		return isValid;
+	};
+
 	var ContactInfo = function () {
-		if ($(window).width() < 678) {
-			// $(".other-info-lateral").insertAfter($(".menu-main > ul"));
-		}
+		var form = $('#contact-form');
+		if (form.length == 0) return;
+		form.submit(submitValidation);
+		form.find('input[type="submit"]').click(submitValidation);
 
 	};
+
+	var CommentForm = function () {
+		var form = $('#comment-form');
+		if (form.length == 0) return;
+		form.submit(submitValidation);
+		form.find('input[type="submit"]').click(submitValidation);
+	}
 
 	var smoothScroll = function () {
 		$('a[href*="#"]')

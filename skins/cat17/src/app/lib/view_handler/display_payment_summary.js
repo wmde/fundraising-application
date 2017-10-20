@@ -27,6 +27,8 @@ var objectAssign = require( 'object-assign' ),
     memberShipType: null,
     memberShipTypeIconElement: null,
     memberShipTypeIcon: null,
+    memberShipTypeTextElement: null,
+    memberShipTypeText: null,
     update: function ( formContent ) {
       this.intervalElement.text( this.formatPaymentInterval( formContent.paymentIntervalInMonths ) );
       this.intervalTextElement.text( this.intervalText[formContent.paymentIntervalInMonths] );
@@ -54,7 +56,19 @@ var objectAssign = require( 'object-assign' ),
       this.setSummaryIcon(this.intervalIconElement, formContent.paymentIntervalInMonths, this.intervalIcons);
       this.setSummaryIcon(this.paymentIconsElement, formContent.paymentType, this.paymentIcons);
       this.periodicityTextElement.text( this.periodicityText[formContent.paymentIntervalInMonths] );
-      this.paymentElement.html(this.paymentText[formContent.paymentType]);
+
+      var paymentTextFormatted = this.paymentText[formContent.paymentType];
+      if (formContent.paymentType == "BEZ") {
+        if (formContent.accountNumber && formContent.bankCode) {
+          paymentTextFormatted = "<div class='bank-info'><strong>Kontonummer</strong>"+formContent.accountNumber+"<br />" +
+            "<strong>Bankleitzahl</strong>"+formContent.bankCode+"</div>" + paymentTextFormatted;
+        }
+        else if (formContent.iban && formContent.bic) {
+          paymentTextFormatted = "<div class='bank-info'><strong>IBAN</strong>"+formContent.iban+"<br />" +
+          "<strong>BIC</strong>"+formContent.bic+"</div>" + paymentTextFormatted;
+        }
+      }
+      this.paymentElement.html(paymentTextFormatted);
       this.setSummaryIcon(this.addressTypeIconElement, formContent.addressType, this.addressTypeIcon);
 
       if (formContent.addressType != "") {
@@ -79,7 +93,12 @@ var objectAssign = require( 'object-assign' ),
         });
 
         this.setSummaryIcon(this.memberShipTypeIconElement, formContent.membershipType, this.memberShipTypeIcon);
+
+        this.memberShipTypeTextElement.text(this.memberShipTypeText[formContent.membershipType]);
       }
+    },
+    capitalize: function (s) {
+      return s[0].toUpperCase() + s.slice(1);
     },
     formatPaymentInterval: function ( paymentIntervalInMonths ) {
       return this.intervalTranslations[ paymentIntervalInMonths ];
@@ -88,10 +107,28 @@ var objectAssign = require( 'object-assign' ),
       return paymentType=="" ? String("Zahlung noch nicht ausgewählt.") : this.paymentTypeTranslations[ paymentType ];
     },
     getAddressSummaryContent: function (formContent) {
-      if (formContent.addressType !== "anonym") {
-        return (formContent.street ? formContent.street + "<br />" : "") + (formContent.postcode && formContent.city ? formContent.postcode + " " + formContent.city + "<br />" : "")
-        + ( formContent.country ? this.countriesDictionary[formContent.country] + "<br />" : "") + formContent.email;
+      if (formContent.addressType === "person") {
+        return (
+          formContent.firstName && formContent.lastName ?
+            (formContent.salutation ? this.capitalize(formContent.salutation) : "") + " " +
+            (formContent.title ? this.capitalize(formContent.title) : "") + " " +
+            formContent.firstName + " " + formContent.lastName + "<br />"
+            : ""
+        ) +
+        (formContent.street ? formContent.street + "<br />" : "") +
+        (formContent.postcode && formContent.city ? formContent.postcode + " " + formContent.city + "<br />" : "") +
+        ( formContent.country ? this.countriesDictionary[formContent.country] + "<br />" : "") +
+        formContent.email;
       }
+      else if (formContent.addressType === 'firma') {
+        return (formContent.companyName ? formContent.companyName + "<br />" : "") +
+        (formContent.contactPerson ? formContent.contactPerson + "<br />" : "") +
+        (formContent.street ? formContent.street + "<br />" : "") +
+        (formContent.postcode && formContent.city ? formContent.postcode + " " + formContent.city + "<br />" : "") +
+        ( formContent.country ? this.countriesDictionary[formContent.country] + "<br />" : "") +
+        formContent.email;
+      }
+
       return "";
     },
     setSummaryIcon: function (elements, value, iconsDictionary) {
@@ -120,7 +157,7 @@ module.exports = {
                                                  addressTypeIconElement, addressTypeIcon, addressTypeElement, addressType,
                                                  addressTypeTextElement, intervalTextElement, intervalText,
                                                  memberShipTypeElement, memberShipType, memberShipTypeIconElement,
-                                                 memberShipTypeIcon) {
+                                                 memberShipTypeIcon, memberShipTypeTextElement, memberShipTypeText) {
     return objectAssign( Object.create( PaymentSummaryDisplayHandler ), {
       intervalElement: intervalElement,
       amountElement: amountElement,
@@ -146,7 +183,9 @@ module.exports = {
       memberShipTypeElement: memberShipTypeElement,
       memberShipType: memberShipType,
       memberShipTypeIconElement: memberShipTypeIconElement,
-      memberShipTypeIcon: memberShipTypeIcon
+      memberShipTypeIcon: memberShipTypeIcon,
+      memberShipTypeTextElement: memberShipTypeTextElement,
+      memberShipTypeText: memberShipTypeText
     } );
   }
 };

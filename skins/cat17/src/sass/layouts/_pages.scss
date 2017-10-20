@@ -1,3 +1,19 @@
+main.conclusion {
+
+	@include bkp(xsmax) {
+		padding-top: 25px;
+	}
+
+	.introduction {
+		padding-top: 0;
+		padding-bottom: 20px;
+	}
+	.switch-container {
+		margin-top: 20px;
+		margin-bottom: 30px;
+	}
+}
+
 .donation-conclusion {
 
 	p.h1 {
@@ -40,7 +56,7 @@
 	}
 
 	.cancel-block {
-		margin-top: 40px;
+		margin-top: 30px;
 		@include bkp(sm) {
 			margin-top: -120px;
 		}
@@ -70,14 +86,33 @@
 }
 
 .others {
-	.h2 {
-		font-size: 16px;
-		line-height: 26px;
+	p {
+		margin-bottom: 18px;
+		@include bkp(md) {
+			line-height: 20px;
+
+		}
+	}
+	.subtitle {
+		font-weight: 600;
+	}
+	.h2, h3 {
+		@include bkp(md) {
+			font-size: 16px;
+			line-height: 26px;
+		}
+	}
+	h2 + h3 {
+		@include bkp(md) {
+			margin-top: 15px;
+			margin-bottom: 35px;
+		}
 	}
 }
 
 .transfer-data-list {
-	margin-top: 30px;
+	margin-top: 15px;
+	margin-bottom: 0;
 	@include bkp(sm) {
 		width: 65%;
 	}
@@ -130,18 +165,31 @@
 		textarea {
 			height: 180px;
 		}
+        &.invalid {
+         .error-text {
+             display: block;
+         }
+        }
 	}
-
-	.btn-donation.btn-introduction {
-		max-width: 100%;
-		display: flex;
-		margin-top: 80px;
-		padding: 0;
-		height: 66px;
-		@include bkp(sm) {
-			height: 45px;
-		}
-	}
+    .wrap-submit {
+        margin-top: 40px;
+        @include bkp(sm) {
+            margin-top: 80px;
+        }
+    }
+    input[type="submit"] {
+        position: relative;
+        margin: 0 -300px;
+        width: 900px;
+        height: 66px;
+        @include bkp(sm) {
+            max-width: 100%;
+            display: flex;
+            margin:0 auto;
+            padding: 0;
+            height: 45px;
+        }
+    }
 	.list-menu {
 		margin-top: 30px;
 	}
@@ -165,6 +213,29 @@
 	}
 }
 
+.impressum {
+	h2 {
+		margin-bottom: 25px;
+	}
+}
+
+.tax-deduction {
+	.cancel-block {
+		padding-top: 45px,
+	}
+}
+
+.data-protection {
+
+	section  {
+		margin-bottom: 50px;
+	}
+	.back-block {
+		@include bkp(md) {
+			margin-top: -80px;
+		}
+	}
+}
 .comments-list {
 	.introduction {
 		padding-top: 80px;
@@ -205,6 +276,16 @@
 		@include bkp(md) {
 			margin-top: 60px;
 		}
+		.wrap-field {
+			.wrap-input {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				&:after {
+					left: 4px;
+				}
+			}
+		}
 	}
 	.list-menu {
 		margin-top: 40px;
@@ -212,3 +293,6 @@
 
 }
 
+.side a.btn {
+	margin-bottom: 30px;
+}

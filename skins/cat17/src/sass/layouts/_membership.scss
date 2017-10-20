@@ -12,16 +12,30 @@
         .shadow-top {
             margin-top: 50px;
             padding-top: 30px;
-            box-shadow: 0 -4px 11px -7px rgba(0,0,0,0.65);
+            @include bkp(sm) {
+                box-shadow: 0 -4px 11px -7px rgba(0, 0, 0, 0.65);
+            }
         }
 		.resum h2 {
 			line-height: 1.4em;
 			padding-bottom: 10px;
+            position: relative;
 			@include themify($themes) {
-				border-bottom: themed('border1pxPrimary');
+				//border-bottom: themed('border1pxPrimary');
 			}
+            @include bkp(xsmax) {
+                &:after {
+                    content: '';
+                    position: absolute;
+                    left: -200px;
+                    bottom: 0;
+                    width: 800px;
+                    border-bottom: 2px solid $brand-primary-membership;
+                }
+            }
 			@include bkp(sm) {
 				display: inline-block;
+                border-bottom: 2px solid $brand-primary-membership;
 			}
 		}
 		.list-membership {
@@ -75,8 +89,11 @@
 
 	#membership-type {
 		.wrap-field {
-			border-bottom: none;
+
 			margin-bottom: 40px;
+            &:after {
+                border-color: transparent;
+            }
 		}
 		.wrap-input {
 			//border-bottom: 1px solid $gray-light;
@@ -106,6 +123,17 @@
 			}
 		}
 	}
+
+		.state-bar.state-overview {
+			li.completed a i {
+				display: none;
+				opacity: 0;
+			}
+			li.completed.amount a i {
+				display: block;
+				opacity: 1;
+			}
+		}
 
 }
 
