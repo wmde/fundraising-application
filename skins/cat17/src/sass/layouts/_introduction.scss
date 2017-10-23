@@ -1,7 +1,9 @@
 .introduction, .content {
 	padding-top: 45px;
 	.strong {
-		color: $brand-primary;
+        @include themify($themes) {
+            color: themed('brandPrimary');
+        }
 		text-transform: uppercase;
 		> span {
 			text-transform: lowercase;

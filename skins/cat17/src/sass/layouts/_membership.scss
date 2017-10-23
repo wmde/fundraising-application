@@ -117,9 +117,19 @@
 
 	form .wrap-overview #overview .overview .wrap-field {
 		@include bkp(lg) {
-			min-height: 200px;
+			min-height: 250px;
 			&:last-child {
 				min-height: auto;
+			}
+		}
+		&.payment-method {
+			@include bkp(lg) {
+				.info-detail {
+					width: 460px;
+					.col-lg-6:last-child {
+						padding-left: 15px;
+					}
+				}
 			}
 		}
 	}
@@ -134,6 +144,38 @@
 				opacity: 1;
 			}
 		}
+
+	.state-overview li.completed {
+		&.amount a {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+		a {
+			display: block;
+			text-aling: center;
+		}
+	}
+	.state-overview.state-bar-lateral li.completed a {
+		@include bkp(sm) {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+	}
+
+	.wrap-overview #overview .overview .wrap-field.member-type {
+		@include bkp(lg) {
+			.wrap-input {
+				padding-top: 0;
+				margin-top: -3px;
+			}
+			&.completed {
+				padding-top: 20px;
+				margin-top: 0;
+			}
+		}
+	}
 
 }
 
@@ -177,7 +219,7 @@
 		//border-color: transparent !important;
 	}
 	.jcf-unselectable.jcf-focus {
-		border-color: transparent !important;
+		//border-color: transparent !important;
 	}
 
 	#form-donation .jcf-select.jcf-select-jcf-hidden.jcf-drop-active.jcf-focus, #form-donation .jcf-select.jcf-select-jcf-hidden.jcf-drop-active.jcf-focus * {
@@ -192,3 +234,4 @@
 	}
 
 }
+

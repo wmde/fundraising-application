@@ -59,13 +59,16 @@ var objectAssign = require( 'object-assign' ),
 
       var paymentTextFormatted = this.paymentText[formContent.paymentType];
       if (formContent.paymentType == "BEZ") {
+        paymentTextFormatted = '<div class="col-lg-6 no-gutter">' + paymentTextFormatted + "</div>";
+        paymentTextFormatted = paymentTextFormatted.replace('<br />', '</div><div class="col-lg-6 no-gutter">');
+
         if (formContent.accountNumber && formContent.bankCode) {
-          paymentTextFormatted = "<div class='bank-info'><strong>Kontonummer</strong>"+formContent.accountNumber+"<br />" +
-            "<strong>Bankleitzahl</strong>"+formContent.bankCode+"</div>" + paymentTextFormatted;
+          paymentTextFormatted = "<dl class='bank-info'><div><dt>Kontonummer</dt><dd>"+formContent.accountNumber+"</dd></div>" +
+            "<div><dt>Bankleitzahl</dt><dd>"+formContent.bankCode+"</dd></div></dl>" + paymentTextFormatted;
         }
         else if (formContent.iban && formContent.bic) {
-          paymentTextFormatted = "<div class='bank-info'><strong>IBAN</strong>"+formContent.iban+"<br />" +
-          "<strong>BIC</strong>"+formContent.bic+"</div>" + paymentTextFormatted;
+          paymentTextFormatted = "<dl class='bank-info'><div><dt>IBAN</dt><dd>"+formContent.iban+"</dd></div>" +
+          "<div><dt>BIC</dt><dd>"+formContent.bic+"</dd></div></dl>" + paymentTextFormatted;
         }
       }
       this.paymentElement.html(paymentTextFormatted);

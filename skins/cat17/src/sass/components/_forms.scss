@@ -41,10 +41,10 @@ input[type=submit] {
     margin-top: 40px;
 }
 
-input.novalid, input.invalid {
+/*input.novalid, input.invalid, textarea.invalid {
 	border-bottom: 2px solid $brand-error;
 	background-color: $brand-error-rgba;
-}
+}*/
 
 .field-grp {
 	margin-bottom: 0;
@@ -67,7 +67,7 @@ input.novalid, input.invalid {
 		}
 	}
 	&.invalid {
-		input[type="text"], input[type="email"] {
+		input[type="text"], input[type="email"], textarea {
 
 			@include themify($themes) {
 				background-color: themed('brandErrorRgba');

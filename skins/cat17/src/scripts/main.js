@@ -267,6 +267,8 @@
 			else {
 				$(this).removeClass('invalid');
 				$(this).parent().removeClass('invalid');
+        $(this).addClass('valid');
+        $(this).parent().addClass('valid');
 			}
 		});
 		return isValid;
@@ -278,6 +280,25 @@
 		form.submit(submitValidation);
 		form.find('input[type="submit"]').click(submitValidation);
 
+    form.find('input, textarea').keypress(function () {
+      $(this).data('data-entered', true);
+    });
+
+    form.find('input, textarea').blur(function () {
+      if (!$(this).data('data-entered')) return;
+
+      if ($(this).val() == "" || !this.checkValidity()) {
+        $(this).addClass('invalid');
+        $(this).parent().addClass('invalid');
+        isValid = false;
+      }
+      else {
+        $(this).removeClass('invalid');
+        $(this).parent().removeClass('invalid');
+        $(this).addClass('valid');
+        $(this).parent().addClass('valid');
+      }
+    });
 	};
 
 	var CommentForm = function () {
@@ -285,7 +306,27 @@
 		if (form.length == 0) return;
 		form.submit(submitValidation);
 		form.find('input[type="submit"]').click(submitValidation);
-	}
+
+    form.find('input, textarea').keypress(function () {
+      $(this).data('data-entered', true);
+    });
+
+    form.find('input, textarea').blur(function () {
+      if (!$(this).data('data-entered')) return;
+
+      if ($(this).val() == "" || !this.checkValidity()) {
+        $(this).addClass('invalid');
+        $(this).parent().addClass('invalid');
+        isValid = false;
+      }
+      else {
+        $(this).removeClass('invalid');
+        $(this).parent().removeClass('invalid');
+        $(this).addClass('valid');
+        $(this).parent().addClass('valid');
+      }
+    });
+	};
 
 	var smoothScroll = function () {
 		$('a[href*="#"]')
