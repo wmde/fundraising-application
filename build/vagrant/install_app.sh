@@ -9,7 +9,7 @@ ln -fs ../vendor/wmde/fundraising-frontend-content/resources web/resources
 
 npm install
 npm run build-assets
-npm run build-js
+npm run copy-assets
 
 mkdir -p var/cache
 mkdir -p var/log

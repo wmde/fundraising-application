@@ -3,7 +3,7 @@
 #
 # The variable "build_dir" contains the inventory-specific path where all the code is checked out and assembled.
 # That path could be deleted between deployments, but for performance reasons the code should stay in place.
-# "buil_dir" is passed in from deployment.yml
+# "build_dir" is passed in from deployment.yml
 #
 # All other variables come from the inventory file.
 
@@ -16,11 +16,11 @@
 - name: Install JavaScript dependencies
   npm: path={{ build_dir }}
 
-- name: Build assets
+- name: Build all skin assets
   command: npm run build-assets chdir={{ build_dir }}
 
-- name: Compile JavaScript
-  command: npm run build-js chdir={{ build_dir }}
+- name: Copy all skin assets to web-accessible folder
+  command: npm run copy-assets chdir={{ build_dir }}
 
 - name: Create tarball
   shell: tar -czf {{ build_dir }}.tar.gz --exclude=".git" --exclude=node_modules -C {{ build_dir }} . warn=no
