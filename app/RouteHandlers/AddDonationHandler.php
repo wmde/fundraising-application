@@ -142,6 +142,7 @@ class AddDonationHandler {
 		$donationRequest->setSource( $request->attributes->get( 'trackingSource' ) );
 		$donationRequest->setTotalImpressionCount( intval( $request->get( 'impCount', 0 ) ) );
 		$donationRequest->setSingleBannerImpressionCount( intval( $request->get( 'bImpCount', 0 ) ) );
+		$donationRequest->setOptsIntoDonationReceipt( $request->request->getBoolean( 'donationReceipt', true ) );
 
 		return $donationRequest;
 	}
