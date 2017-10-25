@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\MembershipApplication;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowMembershipConfirmationHandler;
@@ -27,6 +28,8 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	private const FIXED_TOKEN = 'fixed_token';
 	private const FIRST_PAYMENT_DATE = '2017-09-21';
+
+	private const APPLY_FOR_MEMBERSHIP_PATH = 'apply-for-membership';
 
 	public function testGivenGetRequestMembership_formIsShown(): void {
 		$client = $this->createClient();
@@ -446,4 +449,14 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		$this->assertTrue( $cookie->isSecure() );
 	}
 
+	public function testGivenDonationReceiptOptOutRequest_applicationHoldsThisValue(): void {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+			$parameters = $this->newValidHttpParameters();
+			$parameters['donationReceipt'] = '0';
+
+			$client->request( Request::METHOD_POST, self::APPLY_FOR_MEMBERSHIP_PATH, $parameters );
+
+			$this->assertFalse( $factory->getMembershipApplicationRepository()->getApplicationById( 1 )->getDonationReceipt() );
+		} );
+	}
 }

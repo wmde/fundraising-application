@@ -27,14 +27,15 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentDelayCalculator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedPaymentDelayCalculator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
+use PHPUnit\Framework\TestCase;
 
 /**
- * @covers WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipUseCase
+ * @covers \WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipUseCase
  *
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class ApplyForMembershipUseCaseTest extends \PHPUnit\Framework\TestCase {
+class ApplyForMembershipUseCaseTest extends TestCase {
 
 	const ID_OF_NON_EXISTING_APPLICATION = 1337;
 	const FIRST_APPLICATION_ID = 1;
@@ -153,6 +154,8 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit\Framework\TestCase {
 
 		$request->setTrackingInfo( $this->newTrackingInfo() );
 		$request->setPiwikTrackingString( 'foo/bar' );
+
+		$request->setOptsIntoDonationReceipt( true );
 
 		return $request->assertNoNullFields();
 	}
@@ -322,6 +325,15 @@ class ApplyForMembershipUseCaseTest extends \PHPUnit\Framework\TestCase {
 		/** @var PayPalPayment $payPalPayment */
 		$payPalPayment = $this->repository->getApplicationById( 1 )->getPayment()->getPaymentMethod();
 		$this->assertSame( self::FIRST_PAYMENT_DATE, $payPalPayment->getPayPalData()->getFirstPaymentDate() );
+	}
+
+	public function testGivenDonationReceiptOptOutRequest_applicationHoldsThisValue(): void {
+		$request = $this->newValidRequest();
+		$request->setOptsIntoDonationReceipt( false );
+		$this->newUseCase()->applyForMembership( $request );
+
+		$application = $this->repository->getApplicationById( self::FIRST_APPLICATION_ID );
+		$this->assertFalse( $application->getDonationReceipt() );
 	}
 
 }

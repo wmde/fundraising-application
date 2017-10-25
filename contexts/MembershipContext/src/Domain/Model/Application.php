@@ -6,7 +6,6 @@ namespace WMDE\Fundraising\Frontend\MembershipContext\Domain\Model;
 
 use RuntimeException;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
 
 /**
@@ -42,8 +41,9 @@ class Application {
 	private $isCancelled;
 	private $isConfirmed;
 	private $isDeleted;
+	private $donationReceipt;
 
-	public static function newApplication( string $type, Applicant $applicant, Payment $payment ): self {
+	public static function newApplication( string $type, Applicant $applicant, Payment $payment, ?bool $donationReceipt ): self {
 		return new self(
 			null,
 			$type,
@@ -52,12 +52,13 @@ class Application {
 			self::NO_MODERATION_NEEDED,
 			self::IS_CURRENT,
 			self::IS_PENDING,
-			self::IS_NOT_DELETED
+			self::IS_NOT_DELETED,
+			$donationReceipt
 		);
 	}
 
 	public function __construct( ?int $id, string $type, Applicant $applicant, Payment $payment,
-		bool $needsModeration, bool $isCancelled, bool $isConfirmed, bool $isDeleted ) {
+		bool $needsModeration, bool $isCancelled, bool $isConfirmed, bool $isDeleted, ?bool $donationReceipt ) {
 		$this->id = $id;
 		$this->type = $type;
 		$this->applicant = $applicant;
@@ -66,6 +67,7 @@ class Application {
 		$this->isCancelled = $isCancelled;
 		$this->isConfirmed = $isConfirmed;
 		$this->isDeleted = $isDeleted;
+		$this->donationReceipt = $donationReceipt;
 	}
 
 	public function getId(): ?int {
@@ -86,6 +88,10 @@ class Application {
 
 	public function getType(): string {
 		return $this->type;
+	}
+
+	public function getDonationReceipt(): ?bool {
+		return $this->donationReceipt;
 	}
 
 	/**

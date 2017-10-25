@@ -30,7 +30,8 @@ class MembershipApplicationBuilder {
 		return Application::newApplication(
 			$request->getMembershipType(),
 			$this->newApplicant( $request ),
-			$this->newPayment( $request )
+			$this->newPayment( $request ),
+			$request->getOptsIntoDonationReceipt()
 		);
 	}
 

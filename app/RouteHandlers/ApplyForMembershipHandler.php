@@ -94,6 +94,8 @@ class ApplyForMembershipHandler {
 
 		$request->setPiwikTrackingString( $httpRequest->attributes->get( 'trackingCode' ) );
 
+		$request->setOptsIntoDonationReceipt( $httpRequest->request->getBoolean( 'donationReceipt', true ) );
+
 		$bankData = new BankData();
 
 		$bankData->setBankName( $httpRequest->request->get( 'bank_name', '' ) );

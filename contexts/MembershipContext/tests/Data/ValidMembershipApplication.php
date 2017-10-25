@@ -63,12 +63,15 @@ class ValidMembershipApplication {
 	const TEMPLATE_NAME = 'Some_Membership_Form_Template.twig';
 	const FIRST_PAYMENT_DATE = '2021-02-01';
 
+	private const OPTS_INTO_DONATION_RECEIPT = true;
+
 	public static function newDomainEntity(): Application {
 		$self = ( new self() );
 		return Application::newApplication(
 			self::MEMBERSHIP_TYPE,
 			$self->newApplicant( $self->newPersonApplicantName() ),
-			$self->newPayment()
+			$self->newPayment(),
+			self::OPTS_INTO_DONATION_RECEIPT
 		);
 	}
 
@@ -83,7 +86,8 @@ class ValidMembershipApplication {
 		return Application::newApplication(
 			self::MEMBERSHIP_TYPE,
 			$self->newApplicant( $self->newCompanyApplicantName() ),
-			$self->newPaymentWithHighAmount( self::PAYMENT_PERIOD_IN_MONTHS, self::COMPANY_PAYMENT_AMOUNT_IN_EURO )
+			$self->newPaymentWithHighAmount( self::PAYMENT_PERIOD_IN_MONTHS, self::COMPANY_PAYMENT_AMOUNT_IN_EURO ),
+			self::OPTS_INTO_DONATION_RECEIPT
 		);
 	}
 
@@ -92,7 +96,8 @@ class ValidMembershipApplication {
 		return Application::newApplication(
 			self::MEMBERSHIP_TYPE,
 			$self->newApplicant( $self->newPersonApplicantName() ),
-			$self->newPaymentWithHighAmount( self::PAYMENT_PERIOD_IN_MONTHS, self::TOO_HIGH_QUARTERLY_PAYMENT_AMOUNT_IN_EURO )
+			$self->newPaymentWithHighAmount( self::PAYMENT_PERIOD_IN_MONTHS, self::TOO_HIGH_QUARTERLY_PAYMENT_AMOUNT_IN_EURO ),
+			self::OPTS_INTO_DONATION_RECEIPT
 		);
 	}
 
@@ -101,7 +106,8 @@ class ValidMembershipApplication {
 		return Application::newApplication(
 			self::MEMBERSHIP_TYPE,
 			$self->newApplicant( $self->newPersonApplicantName() ),
-			$self->newPaymentWithHighAmount( 12, self::TOO_HIGH_YEARLY_PAYMENT_AMOUNT_IN_EURO )
+			$self->newPaymentWithHighAmount( 12, self::TOO_HIGH_YEARLY_PAYMENT_AMOUNT_IN_EURO ),
+			self::OPTS_INTO_DONATION_RECEIPT
 		);
 	}
 
@@ -118,7 +124,8 @@ class ValidMembershipApplication {
 		$application = Application::newApplication(
 			self::MEMBERSHIP_TYPE,
 			$self->newApplicant( $self->newPersonApplicantName() ),
-			$self->newPayPalPayment( $payPalData )
+			$self->newPayPalPayment( $payPalData ),
+			self::OPTS_INTO_DONATION_RECEIPT
 		);
 		$application->confirm();
 
@@ -140,7 +147,8 @@ class ValidMembershipApplication {
 		return Application::newApplication(
 			self::MEMBERSHIP_TYPE,
 			$self->newApplicantWithEmailAddress( $self->newPersonApplicantName(), $emailAddress ),
-			$self->newPayment()
+			$self->newPayment(),
+			self::OPTS_INTO_DONATION_RECEIPT
 		);
 	}
 
@@ -159,7 +167,8 @@ class ValidMembershipApplication {
 		return Application::newApplication(
 			self::MEMBERSHIP_TYPE,
 			$self->newApplicant( $self->newPersonApplicantName() ),
-			$this->newPayPalPayment( $payPalData )
+			$this->newPayPalPayment( $payPalData ),
+			self::OPTS_INTO_DONATION_RECEIPT
 		);
 	}
 
@@ -245,6 +254,7 @@ class ValidMembershipApplication {
 		$application->setApplicantLastName( self::APPLICANT_LAST_NAME );
 		$application->setApplicantSalutation( self::APPLICANT_SALUTATION );
 		$application->setApplicantTitle( self::APPLICANT_TITLE );
+		$application->setDonationReceipt( self::OPTS_INTO_DONATION_RECEIPT );
 
 		return $application;
 	}
@@ -284,6 +294,7 @@ class ValidMembershipApplication {
 		$application->setApplicantTitle( '' );
 		$application->setApplicantSalutation( self::APPLICANT_SALUTATION_COMPANY );
 		$application->setPaymentAmount( self::COMPANY_PAYMENT_AMOUNT_IN_EURO );
+		$application->setDonationReceipt( self::OPTS_INTO_DONATION_RECEIPT );
 
 		return $application;
 	}

@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\MembershipContext\Tests\Integration\UseCases\HandleSubscriptionPaymentNotification;
 
-use Psr\Log\NullLogger;
 use WMDE\Fundraising\Frontend\DonationContext\Infrastructure\DonationEventLogger;
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidPayPalNotificationRequest;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
@@ -16,14 +15,16 @@ use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionPayme
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 /**
- * @covers WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionPaymentNotification\HandleSubscriptionPaymentNotificationUseCase
+ * @covers \WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionPaymentNotification\HandleSubscriptionPaymentNotificationUseCase
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class HandleSubscriptionPaymentNotificationUseCaseTest extends \PHPUnit\Framework\TestCase {
+class HandleSubscriptionPaymentNotificationUseCaseTest extends TestCase {
 
 	public function testWhenRepositoryThrowsException_requestIsNotHandled(): void {
 		$useCase = new HandleSubscriptionPaymentNotificationUseCase(
@@ -114,6 +115,7 @@ class HandleSubscriptionPaymentNotificationUseCaseTest extends \PHPUnit\Framewor
 		$this->assertEquals( $application->getApplicant(), $childApplication->getApplicant() );
 		$this->assertEquals( $application->getPayment()->getIntervalInMonths(), $childApplication->getPayment()->getIntervalInMonths() );
 		$this->assertTrue( $childApplication->isConfirmed() );
+		$this->assertTrue( $childApplication->getDonationReceipt() );
 	}
 
 	public function testGivenExistingTransactionId_requestIsNotHandled(): void {
@@ -143,13 +145,6 @@ class HandleSubscriptionPaymentNotificationUseCaseTest extends \PHPUnit\Framewor
 	 */
 	private function getMailer(): TemplateBasedMailer {
 		return $this->getMockBuilder( TemplateBasedMailer::class )->disableOriginalConstructor()->getMock();
-	}
-
-	/**
-	 * @return DonationEventLogger|\PHPUnit_Framework_MockObject_MockObject
-	 */
-	private function getEventLogger(): DonationEventLogger {
-		return $this->createMock( DonationEventLogger::class );
 	}
 
 	public function testGivenSubscriptionPaymentRequest_parentDataSetReferencesChildPaymentId(): void {
@@ -185,5 +180,4 @@ class HandleSubscriptionPaymentNotificationUseCaseTest extends \PHPUnit\Framewor
 			$storedpayment->getPayPalData()
 		);
 	}
-
 }
