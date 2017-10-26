@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "5427f0ac4fa38086beb04c341e1d83d0",
+    "content-hash": "a16d3c5929ddc4acc9757539861c8c28",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2810,16 +2810,16 @@
         },
         {
             "name": "wmde/fundraising-donations",
-            "version": "dev-master",
+            "version": "dev-donation-receipt",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations.git",
-                "reference": "f1cf2ef082b9264b5618af322736988f332f66de"
+                "reference": "89d28f452f53bebea5b386325011ba69aa681970"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/f1cf2ef082b9264b5618af322736988f332f66de",
-                "reference": "f1cf2ef082b9264b5618af322736988f332f66de",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/89d28f452f53bebea5b386325011ba69aa681970",
+                "reference": "89d28f452f53bebea5b386325011ba69aa681970",
                 "shasum": ""
             },
             "require": {
@@ -2865,10 +2865,10 @@
             ],
             "homepage": "https://github.com/wmde/FundraisingDonations",
             "support": {
-                "source": "https://github.com/wmde/fundraising-donations/tree/master",
+                "source": "https://github.com/wmde/fundraising-donations/tree/donation-receipt",
                 "issues": "https://github.com/wmde/fundraising-donations/issues"
             },
-            "time": "2017-10-05 12:59:52"
+            "time": "2017-10-24T14:52:44+00:00"
         },
         {
             "name": "wmde/fundraising-store",
@@ -3645,7 +3645,7 @@
                 }
             ],
             "description": "Validates @covers tags in PHPUnit tests",
-            "time": "2017-04-24 20:32:12"
+            "time": "2017-04-24T20:32:12+00:00"
         },
         {
             "name": "ocramius/package-versions",
@@ -6021,12 +6021,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content.git",
-                "reference": "f9bd01c329c4374c907de30fa5ac3750ea38c0ea"
+                "reference": "436850e7d6e94e892ec64bc91ca2a2e2a0009ed9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/f9bd01c329c4374c907de30fa5ac3750ea38c0ea",
-                "reference": "f9bd01c329c4374c907de30fa5ac3750ea38c0ea",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/436850e7d6e94e892ec64bc91ca2a2e2a0009ed9",
+                "reference": "436850e7d6e94e892ec64bc91ca2a2e2a0009ed9",
                 "shasum": ""
             },
             "require-dev": {
@@ -6058,7 +6058,7 @@
             "support": {
                 "source": "https://github.com/wmde/fundraising-frontend-content/tree/test"
             },
-            "time": "2017-10-02T11:09:56+00:00"
+            "time": "2017-10-24T15:13:14+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",

@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Silex\Application;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\Donation;
@@ -27,6 +28,8 @@ use WMDE\Fundraising\Frontend\PaymentContext\DataAccess\Sofort\Transfer\Response
 class AddDonationRouteTest extends WebRouteTestCase {
 
 	const SOME_TOKEN = 'SomeToken';
+
+	private const ADD_DONATION_PATH = '/donation/add';
 
 	public function testGivenValidRequest_donationGetsPersisted(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
@@ -159,6 +162,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertSame( 'en.wikipedia.org', $data['source'] );
 		$this->assertSame( 'N', $donation->getStatus() );
 		$this->assertTrue( $donation->getDonorOptsIntoNewsletter() );
+		$this->assertTrue( $donation->getDonationReceipt() );
 	}
 
 	public function testGivenValidRequest_confirmationPageContainsEnteredData(): void {
@@ -826,4 +830,14 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertSame( 0, $crawler->filter( '#donation-payment input[name="zahlweise"][value="SUB"]' )->count() );
 	}
 
+	public function testDonationReceiptOptOut_persistedInDonation(): void {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+			$parameters = $this->newValidFormInput();
+			$parameters['donationReceipt'] = '0';
+
+			$client->request( Request::METHOD_POST, self::ADD_DONATION_PATH, $parameters );
+
+			$this->assertFalse( $this->getDonationFromDatabase( $factory )->getDonationReceipt() );
+		} );
+	}
 }
