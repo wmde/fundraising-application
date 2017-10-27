@@ -56,4 +56,9 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase {
 		$this->assertTrue( $application->needsModeration() );
 	}
 
+	public function testDonationReceiptIsSetFromConstructor(): void {
+		$application = ValidMembershipApplication::newDomainEntity();
+		$this->assertTrue( $application->getDonationReceipt() );
+	}
+
 }

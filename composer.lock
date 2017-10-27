@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "5427f0ac4fa38086beb04c341e1d83d0",
+    "content-hash": "8c5be5cab7e948a9466d505e884bb3f4",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2810,16 +2810,16 @@
         },
         {
             "name": "wmde/fundraising-donations",
-            "version": "dev-donation-receipt",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations.git",
-                "reference": "89d28f452f53bebea5b386325011ba69aa681970"
+                "reference": "f32d5bb860217d5d31ba20dd2d94284ebf77c240"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/89d28f452f53bebea5b386325011ba69aa681970",
-                "reference": "89d28f452f53bebea5b386325011ba69aa681970",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/f32d5bb860217d5d31ba20dd2d94284ebf77c240",
+                "reference": "f32d5bb860217d5d31ba20dd2d94284ebf77c240",
                 "shasum": ""
             },
             "require": {
@@ -2830,7 +2830,7 @@
                 "psr/log": "~1.0",
                 "sofort/sofortlib-php": "^3.2",
                 "wmde/euro": "~1.0",
-                "wmde/fundraising-store": "~6.0"
+                "wmde/fundraising-store": "~7.0"
             },
             "require-dev": {
                 "codeception/specify": "~0.4.3",
@@ -2865,23 +2865,23 @@
             ],
             "homepage": "https://github.com/wmde/FundraisingDonations",
             "support": {
-                "source": "https://github.com/wmde/fundraising-donations/tree/donation-receipt",
+                "source": "https://github.com/wmde/fundraising-donations/tree/master",
                 "issues": "https://github.com/wmde/fundraising-donations/issues"
             },
-            "time": "2017-10-24T14:52:44+00:00"
+            "time": "2017-10-26T20:53:12+00:00"
         },
         {
             "name": "wmde/fundraising-store",
-            "version": "6.1.0",
+            "version": "7.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/FundraisingStore.git",
-                "reference": "259aca641737c169413518057a84dce7ebaea053"
+                "reference": "e778afba99e83eb4e08f2e7adb2d78463ac1c4b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/FundraisingStore/zipball/259aca641737c169413518057a84dce7ebaea053",
-                "reference": "259aca641737c169413518057a84dce7ebaea053",
+                "url": "https://api.github.com/repos/wmde/FundraisingStore/zipball/e778afba99e83eb4e08f2e7adb2d78463ac1c4b2",
+                "reference": "e778afba99e83eb4e08f2e7adb2d78463ac1c4b2",
                 "shasum": ""
             },
             "require": {
@@ -2901,7 +2901,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "6.1.x-dev"
+                    "dev-master": "7.0.x-dev"
                 }
             },
             "autoload": {
@@ -2914,7 +2914,7 @@
                 "GPL-2.0+"
             ],
             "description": "Persistence services around the fundraising database",
-            "time": "2017-08-17T15:36:57+00:00"
+            "time": "2017-10-26T15:26:01+00:00"
         }
     ],
     "packages-dev": [

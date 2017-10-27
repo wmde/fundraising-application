@@ -13,14 +13,15 @@ use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\Appl
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\MembershipApplicationBuilder;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
+use PHPUnit\Framework\TestCase;
 
 /**
- * @covers WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\MembershipApplicationBuilder
+ * @covers \WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\MembershipApplicationBuilder
  *
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class MembershipApplicationBuilderTest extends \PHPUnit\Framework\TestCase {
+class MembershipApplicationBuilderTest extends TestCase {
 
 	const COMPANY_NAME = 'Malenfant asteroid mining';
 	const OMIT_OPTIONAL_FIELDS = true;
@@ -37,6 +38,8 @@ class MembershipApplicationBuilderTest extends \PHPUnit\Framework\TestCase {
 			Euro::newFromInt( ValidMembershipApplication::PAYMENT_AMOUNT_IN_EURO ),
 			$application->getPayment()->getAmount()
 		);
+
+		$this->assertTrue( $application->getDonationReceipt() );
 	}
 
 	private function newCompanyMembershipRequest( bool $omitOptionalFields = false ): ApplyForMembershipRequest {
@@ -67,6 +70,7 @@ class MembershipApplicationBuilderTest extends \PHPUnit\Framework\TestCase {
 		);
 		$request->setTrackingInfo( $this->newTrackingInfo() );
 		$request->setPiwikTrackingString( 'foo/bar' );
+		$request->setOptsIntoDonationReceipt( true );
 
 		return $request->assertNoNullFields()->freeze();
 	}

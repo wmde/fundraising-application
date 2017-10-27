@@ -41,6 +41,8 @@ class ApplyForMembershipRequest {
 	private $trackingInfo;
 	private $piwikTrackingString;
 
+	private $optsIntoDonationReceipt = true;
+
 	public function getMembershipType(): string {
 		return $this->membershipType;
 	}
@@ -221,6 +223,15 @@ class ApplyForMembershipRequest {
 	public function setPaymentType( string $paymentType ): void {
 		$this->assertIsWritable();
 		$this->paymentType = $paymentType;
+	}
+
+	public function getOptsIntoDonationReceipt(): bool {
+		return $this->optsIntoDonationReceipt;
+	}
+
+	public function setOptsIntoDonationReceipt( bool $optIn ): void {
+		$this->assertIsWritable();
+		$this->optsIntoDonationReceipt = $optIn;
 	}
 
 }

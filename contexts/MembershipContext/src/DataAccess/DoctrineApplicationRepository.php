@@ -87,6 +87,7 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 
 		$this->setApplicantFields( $doctrineApplication, $application->getApplicant() );
 		$this->setPaymentFields( $doctrineApplication, $application->getPayment() );
+		$doctrineApplication->setDonationReceipt( $application->getDonationReceipt() );
 
 		$doctrineStatus = $this->getDoctrineStatus( $application );
 		$this->preserveDoctrineStatus( $doctrineApplication, $doctrineStatus );
@@ -247,7 +248,8 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 			$application->needsModeration(),
 			$application->isCancelled(),
 			!$application->isUnconfirmed(),
-			$application->isDeleted()
+			$application->isDeleted(),
+			$application->getDonationReceipt()
 		);
 	}
 

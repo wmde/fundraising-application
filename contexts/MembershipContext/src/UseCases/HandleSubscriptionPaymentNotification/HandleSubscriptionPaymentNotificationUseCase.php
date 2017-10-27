@@ -121,7 +121,8 @@ class HandleSubscriptionPaymentNotificationUseCase {
 				$application->getPayment()->getIntervalInMonths(),
 				$application->getPayment()->getAmount(),
 				new PayPalPayment( $this->newPayPalDataFromRequest( $request ) )
-			)
+			),
+			$application->getDonationReceipt()
 		);
 		$childApplication->confirm();
 
