@@ -22,9 +22,7 @@ Inside the root directory of the project, execute
     vagrant ssh
 
 Once you're ssh'd into the VM, you can find the application installed in `/vagrant`.
-At this point you will be able to run nearly all of the tests (those that you cannot run will be
-skipped automatically). To run the system tests and get the app to fully show in your browser,
-you will need to do additional configuration, as per the configuration section.
+At this point you will be able to run all tests and view the application at http://localhost:31337/
 
 ### Local Installation
 
