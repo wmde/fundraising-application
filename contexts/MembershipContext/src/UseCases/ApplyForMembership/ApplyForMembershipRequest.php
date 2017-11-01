@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership;
 
-use WMDE\Fundraising\Frontend\FreezableValueObject;
+use WMDE\FreezableValueObject\FreezableValueObject;
 use WMDE\Fundraising\Frontend\MembershipContext\Tracking\MembershipApplicationTrackingInfo;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 
