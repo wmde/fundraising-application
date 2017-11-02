@@ -1,0 +1,15 @@
+<div class="container">
+	<div class="row">
+		<div class="content col-xs-12 col-sm-10 col-md-8">
+			<p>
+				Bei der Verarbeitung Ihrer Anfrage ist ein Fehler aufgetreten.
+				Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut.
+			</p>
+			{% if message is defined %}
+				<p>
+					{$ message $}
+				</p>
+			{% endif %}
+		</div>
+	</div>
+</div>
