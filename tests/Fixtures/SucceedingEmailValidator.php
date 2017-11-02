@@ -5,8 +5,8 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
 use WMDE\Fundraising\Frontend\Infrastructure\NullDomainNameValidator;
-use WMDE\Fundraising\Frontend\Validation\EmailValidator;
-use WMDE\Fundraising\Frontend\Validation\ValidationResult;
+use WMDE\FunValidators\ValidationResult;
+use WMDE\FunValidators\Validators\EmailValidator;
 
 /**
  * @licence GNU GPL v2+
@@ -18,7 +18,7 @@ class SucceedingEmailValidator extends EmailValidator {
 		parent::__construct( new NullDomainNameValidator() );
 	}
 
-	public function validate( $emailAddress ): ValidationResult {	// @codingStandardsIgnoreLine
+	public function validate( string $emailAddress ): ValidationResult {	// @codingStandardsIgnoreLine
 		return new ValidationResult();
 	}
 

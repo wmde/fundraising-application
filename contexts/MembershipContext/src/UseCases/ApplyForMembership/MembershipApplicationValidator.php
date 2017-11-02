@@ -7,9 +7,9 @@ namespace WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembershi
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplicationValidationResult as Result;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
-use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
-use WMDE\Fundraising\Frontend\Validation\EmailValidator;
+use WMDE\FunValidators\ConstraintViolation;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator as FeeValidator;
+use WMDE\FunValidators\Validators\EmailValidator;
 
 /**
  * @license GNU GPL v2+

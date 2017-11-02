@@ -9,11 +9,11 @@ use WMDE\Fundraising\Frontend\Infrastructure\OperatorMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\EmailAddress;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
-use WMDE\Fundraising\Frontend\Validation\ValidationResult;
+use WMDE\FunValidators\ValidationResult;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 
 /**
- * @covers WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase
+ * @covers \WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase
  *
  * @license GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >

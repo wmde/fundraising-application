@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\MembershipContext\Tests\Unit\UseCases\ApplyF
 
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipPolicyValidator;
-use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
+use WMDE\FunValidators\Validators\TextPolicyValidator;
 
 class ApplyForMembershipPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 

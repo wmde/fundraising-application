@@ -6,6 +6,8 @@ namespace WMDE\Fundraising\Frontend\Validation;
 
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataConverter;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
+use WMDE\FunValidators\ConstraintViolation;
+use WMDE\FunValidators\ValidationResult;
 
 /**
  * @licence GNU GPL v2+
@@ -18,7 +20,7 @@ class KontoCheckIbanValidator implements IbanValidator {
 	private $bannedIbanNumbers = [];
 
 	/**
-	 * @param \WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataConverter $bankDataConverter
+	 * @param BankDataConverter $bankDataConverter
 	 * @param string[] $bannedIbans
 	 */
 	public function __construct( BankDataConverter $bankDataConverter, array $bannedIbans = [] ) {

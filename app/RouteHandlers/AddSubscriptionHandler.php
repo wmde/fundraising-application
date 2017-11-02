@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\AddSubscription\SubscriptionRequest;
-use WMDE\Fundraising\Frontend\Validation\ValidationResponse;
+use WMDE\FunValidators\ValidationResponse;
 
 /**
  * @license GNU GPL v2+

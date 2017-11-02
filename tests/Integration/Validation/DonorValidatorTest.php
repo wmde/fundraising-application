@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\DonationContext\Validation\DonorNameValidator;
 use WMDE\Fundraising\Frontend\DonationContext\Validation\DonorValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
-use WMDE\Fundraising\Frontend\Validation\EmailValidator;
+use WMDE\FunValidators\Validators\EmailValidator;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\DonationContext\Validation\DonorValidator

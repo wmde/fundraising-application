@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership;
 
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
-use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
+use WMDE\FunValidators\Validators\TextPolicyValidator;
 
 /**
  * @license GNU GPL v2+

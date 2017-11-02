@@ -10,10 +10,10 @@ use WMDE\FunValidators\DomainNameValidator;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class InternetDomainNameValidator implements DomainNameValidator {
+class NullDomainNameValidator implements DomainNameValidator {
 
 	public function isValid( string $domain ): bool {
-		return checkdnsrr( $domain, 'MX' ) || checkdnsrr( $domain, 'A' ) || checkdnsrr( $domain, 'SOA' );
+		return true;
 	}
 
 }

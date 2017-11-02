@@ -10,7 +10,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplic
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator
+ * @covers \WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator
  *
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
