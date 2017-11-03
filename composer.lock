@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "0b56fb8dace05ebfab754ad3af21468c",
+    "content-hash": "6ecb6e933e754d7a7245dfbd0541805e",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2796,6 +2796,49 @@
             "time": "2017-11-01T05:03:17+00:00"
         },
         {
+            "name": "wmde/fun-validators",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wmde/fun-validators.git",
+                "reference": "023d13495f271ab0cb2a774b4ac49dea3e881f44"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wmde/fun-validators/zipball/023d13495f271ab0cb2a774b4ac49dea3e881f44",
+                "reference": "023d13495f271ab0cb2a774b4ac49dea3e881f44",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "mediawiki/mediawiki-codesniffer": "~13.0",
+                "ockcyp/covers-validator": "~0.6",
+                "phpstan/phpstan": "~0.8.0",
+                "phpunit/phpunit": "~6.2",
+                "slevomat/coding-standard": "~4.0",
+                "squizlabs/php_codesniffer": "~3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "WMDE\\FunValidators\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "description": "General and shared validation services created as part of the WMDE fundraising software",
+            "time": "2017-11-01T06:53:15+00:00"
+        },
+        {
             "name": "wmde/fundraising-content-provider",
             "version": "v2.0.0",
             "source": {
@@ -2865,12 +2908,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations.git",
-                "reference": "f32d5bb860217d5d31ba20dd2d94284ebf77c240"
+                "reference": "d5b0f457145fcaf7c1a74e4aaa8ef9d9daeff2dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/f32d5bb860217d5d31ba20dd2d94284ebf77c240",
-                "reference": "f32d5bb860217d5d31ba20dd2d94284ebf77c240",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/d5b0f457145fcaf7c1a74e4aaa8ef9d9daeff2dc",
+                "reference": "d5b0f457145fcaf7c1a74e4aaa8ef9d9daeff2dc",
                 "shasum": ""
             },
             "require": {
@@ -2881,6 +2924,8 @@
                 "psr/log": "~1.0",
                 "sofort/sofortlib-php": "^3.2",
                 "wmde/euro": "~1.0",
+                "wmde/freezable-value-object": "~1.0",
+                "wmde/fun-validators": "@dev",
                 "wmde/fundraising-store": "~7.0"
             },
             "require-dev": {
@@ -2919,7 +2964,7 @@
                 "source": "https://github.com/wmde/fundraising-donations/tree/master",
                 "issues": "https://github.com/wmde/fundraising-donations/issues"
             },
-            "time": "2017-10-26T20:53:12+00:00"
+            "time": "2017-11-02T02:29:20+00:00"
         },
         {
             "name": "wmde/fundraising-store",
@@ -6178,6 +6223,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "wmde/fundraising-donations": 20,
+        "wmde/fun-validators": 20,
         "ockcyp/covers-validator": 20,
         "wmde/fundraising-frontend-content": 20
     },

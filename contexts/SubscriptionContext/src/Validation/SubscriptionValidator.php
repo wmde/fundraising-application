@@ -6,14 +6,14 @@ namespace WMDE\Fundraising\Frontend\SubscriptionContext\Validation;
 
 use WMDE\Fundraising\Entities\Subscription;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Domain\Repositories\SubscriptionRepositoryException;
-use WMDE\Fundraising\Frontend\Validation\AllowedValuesValidator;
-use WMDE\Fundraising\Frontend\Validation\CanValidateField;
-use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
-use WMDE\Fundraising\Frontend\Validation\EmailValidator;
 use WMDE\Fundraising\Frontend\Validation\FieldTextPolicyValidator;
-use WMDE\Fundraising\Frontend\Validation\RequiredFieldValidator;
-use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
-use WMDE\Fundraising\Frontend\Validation\ValidationResult;
+use WMDE\FunValidators\CanValidateField;
+use WMDE\FunValidators\ConstraintViolation;
+use WMDE\FunValidators\ValidationResult;
+use WMDE\FunValidators\Validators\AllowedValuesValidator;
+use WMDE\FunValidators\Validators\EmailValidator;
+use WMDE\FunValidators\Validators\RequiredFieldValidator;
+use WMDE\FunValidators\Validators\TextPolicyValidator;
 
 /**
  * @license GNU GPL v2+

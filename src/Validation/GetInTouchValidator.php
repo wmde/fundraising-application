@@ -5,6 +5,10 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Validation;
 
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
+use WMDE\FunValidators\CanValidateField;
+use WMDE\FunValidators\ValidationResult;
+use WMDE\FunValidators\Validators\EmailValidator;
+use WMDE\FunValidators\Validators\RequiredFieldValidator;
 
 /**
  * @license GNU GPL v2+

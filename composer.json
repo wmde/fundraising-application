@@ -24,6 +24,7 @@
 		"symfony/http-foundation": "^3.3",
 
 		"wmde/freezable-value-object": "~1.0",
+		"wmde/fun-validators": "@dev",
 		"jeroen/file-fetcher": "~4.0",
 		"jeroen/generic-decorator": "~0.1.1",
 		"psr/log": "~1.0",

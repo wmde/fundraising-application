@@ -13,14 +13,14 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingEmailValidator;
 use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
-use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
-use WMDE\Fundraising\Frontend\Validation\EmailValidator;
+use WMDE\FunValidators\ConstraintViolation;
+use WMDE\FunValidators\Validators\EmailValidator;
 use WMDE\Fundraising\Frontend\Validation\KontoCheckIbanValidator;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
-use WMDE\Fundraising\Frontend\Validation\ValidationResult;
+use WMDE\FunValidators\ValidationResult;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator
+ * @covers \WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator
  *
  * @license GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >

@@ -7,8 +7,8 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\Validation;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 use WMDE\Fundraising\Frontend\Infrastructure\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
-use WMDE\Fundraising\Frontend\Validation\EmailValidator;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
+use WMDE\FunValidators\Validators\EmailValidator;
 
 /**
  * @licence GNU GPL v2+

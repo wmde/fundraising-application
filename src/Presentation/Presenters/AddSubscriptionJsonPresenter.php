@@ -5,8 +5,8 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
 use Symfony\Component\Translation\TranslatorInterface;
-use WMDE\Fundraising\Frontend\Validation\ValidationResponse;
-use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
+use WMDE\FunValidators\ValidationResponse;
+use WMDE\FunValidators\ConstraintViolation;
 
 /**
  * @licence GNU GPL v2+

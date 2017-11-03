@@ -11,10 +11,10 @@ use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionDuplica
 use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionValidator;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Tests\Fixtures\InMemorySubscriptionRepository;
 use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
-use WMDE\Fundraising\Frontend\Validation\AllowedValuesValidator;
-use WMDE\Fundraising\Frontend\Validation\EmailValidator;
-use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
-use WMDE\Fundraising\Frontend\Validation\ValidationResult;
+use WMDE\FunValidators\ValidationResult;
+use WMDE\FunValidators\Validators\AllowedValuesValidator;
+use WMDE\FunValidators\Validators\EmailValidator;
+use WMDE\FunValidators\Validators\TextPolicyValidator;
 
 /**
  * @covers WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionValidator

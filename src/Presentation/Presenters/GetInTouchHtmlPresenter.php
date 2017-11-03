@@ -6,8 +6,8 @@ namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
 use Symfony\Component\Translation\TranslatorInterface;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
-use WMDE\Fundraising\Frontend\Validation\ValidationResponse;
-use WMDE\Fundraising\Frontend\Validation\ConstraintViolation;
+use WMDE\FunValidators\ValidationResponse;
+use WMDE\FunValidators\ConstraintViolation;
 
 /**
  * Render the contact form with errors

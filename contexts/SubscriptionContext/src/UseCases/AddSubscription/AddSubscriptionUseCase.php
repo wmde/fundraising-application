@@ -11,7 +11,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\EmailAddress;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Domain\Repositories\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Domain\Repositories\SubscriptionRepositoryException;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionValidator;
-use WMDE\Fundraising\Frontend\Validation\ValidationResponse;
+use WMDE\FunValidators\ValidationResponse;
 
 /**
  * @license GNU GPL v2+

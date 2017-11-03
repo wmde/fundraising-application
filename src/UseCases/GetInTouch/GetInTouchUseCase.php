@@ -7,8 +7,8 @@ namespace WMDE\Fundraising\Frontend\UseCases\GetInTouch;
 use WMDE\Fundraising\Frontend\Infrastructure\OperatorMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateMailerInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\EmailAddress;
-use WMDE\Fundraising\Frontend\Validation\ValidationResponse;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
+use WMDE\FunValidators\ValidationResponse;
 
 /**
  * @license GNU GPL v2+

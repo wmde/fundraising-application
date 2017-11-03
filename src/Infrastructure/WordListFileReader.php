@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Infrastructure;
 
 use FileFetcher\ErrorLoggingFileFetcher;
 use FileFetcher\FileFetchingException;
+use WMDE\FunValidators\StringList;
 
 class WordListFileReader implements StringList {
 

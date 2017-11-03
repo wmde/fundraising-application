@@ -153,16 +153,16 @@ use WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\ConfirmSubscription\C
 use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionDuplicateValidator;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionValidator;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
-use WMDE\Fundraising\Frontend\Validation\AllowedValuesValidator;
-use WMDE\Fundraising\Frontend\Validation\AmountPolicyValidator;
+use WMDE\FunValidators\Validators\AllowedValuesValidator;
+use WMDE\FunValidators\Validators\AmountPolicyValidator;
 use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
-use WMDE\Fundraising\Frontend\Validation\EmailValidator;
+use WMDE\FunValidators\Validators\EmailValidator;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\Fundraising\Frontend\Validation\KontoCheckIbanValidator;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
 use WMDE\Fundraising\Frontend\Validation\PaymentDataValidator;
 use WMDE\Fundraising\Frontend\Validation\TemplateNameValidator;
-use WMDE\Fundraising\Frontend\Validation\TextPolicyValidator;
+use WMDE\FunValidators\Validators\TextPolicyValidator;
 use WMDE\Fundraising\Store\Factory as StoreFactory;
 use WMDE\Fundraising\Store\Installer;
 
