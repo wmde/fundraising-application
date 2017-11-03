@@ -169,6 +169,16 @@ $( function () {
 				),
 				stateKey: 'donationFormContent'
 			},
+			// Show warning when street contains no house number
+			{
+				viewHandler: WMDE.View.createWarningBox(
+					$( '#street-warning-box' ),
+					function( fieldValue ) {
+						return fieldValue.trim() !== '' && fieldValue.match(/\d+/g) === null;
+					}
+				),
+				stateKey: 'donationFormContent.street'
+			},
 			{
 				viewHandler: WMDE.View.createPaymentSummaryDisplayHandler(
 					$( '.interval-text' ),
