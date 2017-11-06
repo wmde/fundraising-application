@@ -390,7 +390,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 			$donation = $this->getDonationFromDatabase( $factory );
 
-			$this->assertSame( 'Z', $donation->getStatus() );
+			$this->assertSame( 'X', $donation->getStatus() );
 			$this->assertRegExp( '/W-Q-[A-Z]{6}-[A-Z]/', $donation->getBankTransferCode() );
 
 			$this->assertTrue( $client->getResponse()->isRedirect( 'https://bankingpin.please' ) );
