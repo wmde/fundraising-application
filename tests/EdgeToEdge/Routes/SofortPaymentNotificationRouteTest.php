@@ -114,9 +114,10 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 			$this->assertSame( 'Ok', $client->getResponse()->getContent() );
 			$this->assertSame( Response::HTTP_OK, $client->getResponse()->getStatusCode() );
 
-			$donation = $factory->getDonationRepository()->getDonationById( $donation->getId() );
-
-			$this->assertEquals( new DateTime( self::VALID_TRANSACTION_TIME ), $donation->getPaymentMethod()->getConfirmedAt() );
+			$this->assertEquals(
+				new DateTime( self::VALID_TRANSACTION_TIME ),
+				$factory->getDonationRepository()->getDonationById( $donation->getId() )->getPaymentMethod()->getConfirmedAt()
+			);
 		} );
 	}
 
@@ -134,9 +135,10 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 				$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, self::VALID_TRANSACTION_TIME )
 			);
 
-			$donation = $factory->getDonationRepository()->getDonationById( $donation->getId() );
-
-			$this->assertEquals( Donation::STATUS_EXTERNAL_BOOKED, $donation->getStatus() );
+			$this->assertSame(
+				Donation::STATUS_EXTERNAL_BOOKED,
+				$factory->getDonationRepository()->getDonationById( $donation->getId() )->getStatus()
+			);
 		} );
 	}
 
