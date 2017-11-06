@@ -1,0 +1,34 @@
+.footer {
+  	background-color: $brand-footer;
+	margin-top: 40px;
+	padding: 70px 0 55px;
+	@include bkp(sm) {
+		margin-top: 100px;
+	}
+	.logo-footer {
+		span {
+			background: transparent url("../assets/images/logo-horizontal-wikimedia.svg") no-repeat left top;
+			background-size: contain;
+			height: 50px;
+			width: 100%;
+			display: block;
+			max-width: 205px;
+			display: block;
+			margin-bottom: 50px;
+			@include bkp(sm) {
+				background: transparent url("../assets/images/logo-vertical-wikimedia.svg") no-repeat left top;
+				background-size: contain;
+				height: 100px;
+				max-width: 134px;
+			}
+		}
+	}
+}
+
+#donation, #membership {
+    .footer {
+        @include bkp(xsmax) {
+            margin-top: 0;
+        }
+    }
+}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Wikimedia Deutchland - @@title</title>
+	<link rel="shortcut icon" href="{$ basepath $}/skins/cat17/assets/images/favicon.ico" />
+	<link rel="apple-touch-icon" href="{$ basepath $}/skins/cat17/assets/images/apple-touch-icon.png" />
+	<!--build:css css/styles.min.css-->
+	<link rel="stylesheet" href="{$ basepath $}/skins/cat17/scripts/vendor/jcf/jcf.css">
+	<link rel="stylesheet" href="{$ basepath $}/skins/cat17/css/main.css">
+	<link rel="stylesheet" href="{$ basepath $}/skins/cat17/css/print.css" media="print">
+	<!--endbuild-->
+</head>
+<body id="{% block page_identifier %}{% endblock%}" class="{% block page_theme %}theme-donation{% endblock %}">
+	<div class="{$ block('page_identifier') $} others">
+		{% include 'partials/' ~ header_template %}
+
+		<main>
+			{% block main %}
+				{$ main | raw $}
+			{% endblock %}
+		</main>
+
+		{% include 'partials/' ~ footer_template %}
+	</div>
+
+	<!--build:js js/main.min.js -->
+	<script type="text/javascript" src="{$ basepath $}/skins/cat17/scripts/vendor/jquery/jquery.js"></script>
+	<script type="text/javascript" src="{$ basepath $}/skins/cat17/scripts/vendor/jcf/jcf.js"></script>
+	<script type="text/javascript" src="{$ basepath $}/skins/cat17/scripts/vendor/jcf/jcf.select.js"></script>
+	<script type="text/javascript" src="{$ basepath $}/skins/cat17/scripts/vendor/jcf/jcf.scrollable.js"></script>
+	<script type="text/javascript" src="{$ basepath $}/skins/cat17/scripts/main.js"></script>
+	<!-- endbuild -->
+</body>
+</html>

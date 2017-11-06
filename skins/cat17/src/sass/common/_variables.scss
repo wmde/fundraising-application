@@ -1,0 +1,65 @@
+// grid
+
+$screen-xs: 356px;
+$screen-sm: 679px;
+$screen-md: 973px;
+$container-xs: 355px;
+$container-sm: 678px;
+$container-md: 972px;
+$container-lg: 972px;
+
+// Components
+$border-radius-base: 0;
+
+// Colors
+$brand-primary: #00adee;
+$brand-primary-dark: #0C69A3;
+$brand-primary-membership: #69c159;
+$brand-primary-membership-dark: #4E9242;
+
+/*$brand-primary: #000000;
+$brand-donation: #00adee;
+
+$brand-donation-dark: #0C69A3;
+$brand-primary-membership: #69c159;
+$brand-membership-dark: #4E9242;
+*/
+
+$brand-footer: #cfdbe2;
+$gray-light: #ddd;
+$brand-error: #812923;
+$brand-error-rgba: rgba(129, 41, 35, 0.2);
+
+$bk-selected: #ecf7fd;
+
+
+$gray-main: #9c9ea1;
+$blue-dark: #0C69A3;
+$gray-line: #808080;
+
+$text-color: #000000;
+$black: $text-color;
+$white: #fff;
+
+// selects
+
+$select-color: $text-color;
+$select-background: $brand-footer;
+$select-width: 100%;
+$select-height: 50px;
+
+
+// Typography
+$font-main: 'Open Sans', Helvetica, Arial, sans-serif;
+
+$font-family-sans-serif: $font-main;
+
+$font-main-light: 300;
+$font-main-regular: 400;
+$font-main-medium: 500;
+$font-main-semibold: 600;
+
+$font-size-base: 16px;
+$font-size-base-unitless: 16;
+
+// Buttons

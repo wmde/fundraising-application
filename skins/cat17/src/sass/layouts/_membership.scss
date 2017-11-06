@@ -1,0 +1,237 @@
+.membership {
+	.introduction {
+		p.h1 {
+            margin-bottom: 50px;
+			@include bkp(sm) {
+				width: 80%;
+			}
+		}
+		p.h1 + a {
+			margin-top: 40px;
+		}
+        .shadow-top {
+            margin-top: 50px;
+            padding-top: 30px;
+            @include bkp(sm) {
+                box-shadow: 0 -4px 11px -7px rgba(0, 0, 0, 0.65);
+            }
+        }
+		.resum h2 {
+			line-height: 1.4em;
+			padding-bottom: 10px;
+            position: relative;
+			@include themify($themes) {
+				//border-bottom: themed('border1pxPrimary');
+			}
+            @include bkp(xsmax) {
+                &:after {
+                    content: '';
+                    position: absolute;
+                    left: -200px;
+                    bottom: 0;
+                    width: 800px;
+                    border-bottom: 2px solid $brand-primary-membership;
+                }
+            }
+			@include bkp(sm) {
+				display: inline-block;
+                border-bottom: 2px solid $brand-primary-membership;
+			}
+		}
+		.list-membership {
+			margin-top: 30px;
+			li {
+				list-style-type: none;
+				margin-bottom: 25px;
+				@include bkp(xs) {
+					padding-left: 20px;
+					text-indent: -16px;
+					&:before {
+						content: '•';
+						margin-right: 10px;
+						@include themify($themes) {
+							color: themed('brandPrimary');
+						}
+					}
+				}
+			}
+		}
+	}
+
+    #form-membership {
+
+    }
+
+	#payment-method {
+		min-height: 285px;
+		margin-bottom: 20px;
+		input + label {
+			&:after {
+				content: '';
+				@include themify($themes) {
+					background-color: themed('brandPrimary');
+				}
+				border-radius: 100%;
+				border: none;
+				width: 10px;
+				height: 10px;
+				position: absolute;
+				left: -30px;
+				top: 25px;
+				margin-right: 1em;
+				vertical-align: top;
+				cursor: pointer;
+				text-align: center;
+				transition: all 250ms ease;
+			}
+		}
+	}
+
+	#membership-type {
+		.wrap-field {
+
+			margin-bottom: 40px;
+            &:after {
+                border-color: transparent;
+            }
+		}
+		.wrap-input {
+			//border-bottom: 1px solid $gray-light;
+		}
+		.info-text.opened {
+			border-left: none;
+			top: 20px;
+            padding-left: 35px;
+
+		}
+		.info-text.opened[data-info="aktive"] {
+			top: 122px;
+		}
+	}
+
+	#recurrence {
+		.more-info {
+			margin-top: 30px;
+		}
+	}
+
+	form .wrap-overview #overview .overview .wrap-field {
+		@include bkp(lg) {
+			min-height: 250px;
+			&:last-child {
+				min-height: auto;
+			}
+		}
+		&.payment-method {
+			@include bkp(lg) {
+				.info-detail {
+					width: 460px;
+					.col-lg-6:last-child {
+						padding-left: 15px;
+					}
+				}
+			}
+		}
+	}
+
+		.state-bar.state-overview {
+			li.completed a i {
+				display: none;
+				opacity: 0;
+			}
+			li.completed.amount a i {
+				display: block;
+				opacity: 1;
+			}
+		}
+
+	.state-overview li.completed {
+		&.amount a {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+		a {
+			display: block;
+			text-aling: center;
+		}
+	}
+	.state-overview.state-bar-lateral li.completed a {
+		@include bkp(sm) {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+	}
+
+	.wrap-overview #overview .overview .wrap-field.member-type {
+		@include bkp(lg) {
+			.wrap-input {
+				padding-top: 0;
+				margin-top: -3px;
+			}
+			&.completed {
+				padding-top: 20px;
+				margin-top: 0;
+			}
+		}
+	}
+
+}
+
+
+
+.membership {
+
+	.select, .jcf-select {
+
+		&:hover {
+			&:after {
+				border-color: $brand-primary-membership transparent transparent transparent;
+			}
+		}
+		&.jcf-drop-active {
+			&:hover {
+				&:after {
+					border-color: $brand-primary-membership transparent transparent transparent;
+				}
+			}
+			&:active, &.jcf-focus {
+
+				border: 2px solid $brand-primary-membership !important;
+				&:after {
+					border-color: $brand-primary-membership transparent transparent transparent !important;
+				}
+
+			}
+		}
+		&:active, &.active {
+			&:after {
+				border-color: $brand-primary-membership transparent transparent transparent;
+			}
+			@include bkp(sm) {
+				border-bottom: none;
+			}
+		}
+	}
+
+	#form-donation .jcf-select.jcf-select-jcf-hidden.jcf-focus, #form-donation .jcf-select.jcf-select-jcf-hidden.jcf-focus * {
+		//border-color: transparent !important;
+	}
+	.jcf-unselectable.jcf-focus {
+		//border-color: transparent !important;
+	}
+
+	#form-donation .jcf-select.jcf-select-jcf-hidden.jcf-drop-active.jcf-focus, #form-donation .jcf-select.jcf-select-jcf-hidden.jcf-drop-active.jcf-focus * {
+		border-color: $brand-primary-membership !important;
+	}
+
+	.jcf-select-drop .jcf-select-drop-content {
+		border-top: none !important;
+		li span {
+			border-bottom: 1px solid #C6DBC3 !important;
+		}
+	}
+
+}
+

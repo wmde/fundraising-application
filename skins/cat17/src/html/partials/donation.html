@@ -1,0 +1,414 @@
+<form id="form-donation" action="ACTION_URL">
+	<div class="container">
+		<section class="state-bar state-overview col-xs-12 ">
+			<div class="wrap-bar container ">
+				<ul class="">
+					<li class="amount">
+						<a href="#donation-amount">
+							<span class="text" data-display-error="false">Betrag</span>
+							<i class="periodicity-icon" data-display-error="false"></i>
+						</a>
+					</li>
+					<li class="payment-method">
+						<a href="#donation-payment">
+							<span class="text" data-display-error="false">Zahlart</span>
+							<i class="payment-icon" data-display-error="false"></i>
+						</a>
+					</li>
+					<li class="donator-type">
+						<a href="#donation-type">
+							<span class="text" data-display-error="false">Daten</span>
+							<i class="address-icon" data-display-error="false"></i>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</section>
+		<div class="row">
+
+			<div class="form-shadow-wrap col-xs-12 col-sm-8">
+				<section id="donation-amount" class="donation-amount clearfix">
+					<h2 class="">Spendentbetrag</h2>
+
+					<p class="legend">Wie viel Geld wollen Sie spenden und wie häufig?</p>
+					<fieldset
+							class="amount-qty padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
+						<legend class="sr-only">Wie viel Geld wollen Sie spenden und wie häufig?</legend>
+						<div>
+							<input type="radio" name="amount-grp" id="amount1" value="5">
+							<label for="amount1">5 €</label>
+							<input type="radio" name="amount-grp" id="amount2" value="15">
+							<label for="amount2">15 €</label>
+							<input type="radio" name="amount-grp" id="amount3" value="25">
+							<label for="amount3">25 €</label>
+							<input type="radio" name="amount-grp" id="amount4" value="50">
+							<label for="amount4">50 €</label>
+							<input type="radio" name="amount-grp" id="amount5" value="75">
+							<label for="amount5">75 €</label>
+							<input type="radio" name="amount-grp" id="amount6" value="100">
+							<label for="amount6">100 €</label>
+							<input type="radio" name="amount-grp" id="amount7" value="250">
+							<label for="amount7">250 €</label>
+
+
+							<div class="wrap-amount-typed">
+								<input type="number" name="amount-typed" id="amount-typed" min="1" step="1" onkeypress="return event.charCode >= 48 &amp;&amp; event.charCode <= 57">
+							</div>
+
+							<input type="hidden" name="amount-hidden" id="amount-hidden">
+
+							<!-- Todo: wikimedia-team add messages in deutch -->
+							<label for="amount-typed" class="sr-only">Give your desired amount</label>
+						</div>
+					</fieldset>
+
+					<fieldset id="recurrence"
+							  class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
+						<legend class="sr-only">Choose temporality of payment</legend>
+						<div class="wrap-field">
+
+							<div class="wrap-input">
+								<input type="radio" name="intervalType" id="regular" value="1" class="hidden">
+								<input type="radio" name="intervalType" id="one-time" value="0">
+								<label for="one-time"><span>Einmalig</span><i class="icon-unique"></i></label>
+							</div>
+
+							<p class="info-text" data-info="one-time">
+								Ihr Konto wird Einmal belastet.
+							</p>
+						</div>
+						<div class="wrap-field">
+
+							<div class="wrap-input">
+								<input type="radio" name="periode" id="monthly" value="1">
+								<label for="monthly"><span>Monatlich</span><i class="icon-repeat_1"></i></label>
+							</div>
+
+							<p class="info-text" data-info="monthly">
+								Ihr Konto wird jeden Monat belastet. Ihre monatliche Spende können Sie jederzeit
+								fristlos per E-Mail
+								an
+								spenden@wikimedia.de stornieren.
+							</p>
+						</div>
+						<div class="wrap-field">
+
+							<div class="wrap-input">
+								<input type="radio" name="periode" id="quarterly" value="3">
+								<label for="quarterly"><span>Vierteljährlich</span><i
+										class="icon-repeat_3"></i></label>
+							</div>
+							<p class="info-text" data-info="quarterly">
+								Ihr Konto wird alle drei Monate belastet. Ihre monatliche Spende können Sie jederzeit
+								fristlos per
+								E-Mail an spenden@wikimedia.de stornieren.
+							</p>
+						</div>
+						<div class="wrap-field">
+
+							<div class="wrap-input">
+								<input type="radio" name="periode" id="biannual" value="6">
+								<label for="biannual"><span>Halbjährlich</span><i class="icon-repeat_6"></i></label>
+							</div>
+							<p class="info-text" data-info="biannual">
+								Ihr Konto wird jeden Monat belastet. Ihre monatliche Spende können Sie jederzeit
+								fristlos per E-Mail
+								an
+								spenden@wikimedia.de stornieren.
+							</p>
+						</div>
+						<div class="wrap-field">
+
+							<div class="wrap-input">
+								<input type="radio" name="periode" id="yearly" value="12">
+								<label for="yearly"><span>Jährlich</span><i class="icon-repeat_12"></i></label>
+							</div>
+
+							<p class="info-text" data-info="yearly">
+								Ihr Konto wird jährlich belastet. Ihre jährliche Spende können Sie jederzeit fristlos
+								per E-Mail an
+								spenden@wikimedia.de stornieren.
+							</p>
+						</div>
+
+					</fieldset>
+				</section>
+
+				<section id="donation-payment" class="donation-payment-method clearfix">
+					<h2>Zahlart</h2>
+
+					<p class="legend">Wie möchten Sie Ihre Spende bezahlen?</p>
+
+					<fieldset id="payment-method"
+							  class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
+						<legend class="sr-only">Wie möchten Sie Ihre Spende bezahlen?</legend>
+
+						<div class="wrap-field">
+
+							<div class="wrap-input">
+								<input type="radio" name="payment-info" id="paypal" value="PPL">
+								<label for="paypal"><span>Paypal</span><i class="icon-paypal"></i></label>
+							</div>
+							<p class="info-text" data-info="paypal">Nach der Möglichkeit der Adressangabe werden Sie zu
+								PayPal
+								weitergeleitet, wo Sie die Spende abschließen müssen.</p>
+						</div>
+						<div class="wrap-field">
+
+							<div class="wrap-input">
+								<input type="radio" name="payment-info" id="credit-card" value="MCP">
+								<label for="credit-card"><span>Kreditkarte</span><i
+										class="icon-credit_card2"></i></label>
+							</div>
+							<p class="info-text" data-info="credit-card">
+								Nach der Möglichkeit der Adressangabe werden Sie zu unserem Partner Micropayment
+								weitergeleitet, wo
+								Sie
+								Ihre Kreditkarteninformationen eingeben können.
+							</p>
+						</div>
+						<div class="wrap-field">
+
+							<div class="wrap-input">
+								<input type="radio" name="payment-info" id="debit-card" value="BEZ">
+								<label for="debit-card"><span>Lastschrift</span><i class="icon-SEPA-2"></i></label>
+							</div>
+							<div class="info-text" data-info="debit-card">
+
+								<div class="field-grp">
+									<input type="text" id="iban" placeholder="IBAN">
+									<label for="iban" class="sr-only">IBAN</label>
+									<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+								</div>
+								<div class="field-grp">
+									<input type="text" id="bic" placeholder="BIC">
+									<label for="bic" class="sr-only">BIC</label>
+									<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+								</div>
+
+								<span class="oden">oden</span>
+
+								<div class="field-grp">
+									<input type="text" id="account-number" placeholder="Kontonummer">
+									<label for="account-number" class="sr-only">Kontonummer</label>
+									<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+								</div>
+								<div class="field-grp">
+									<input type="text" id="bank-code" placeholder="Bankleitzahl">
+									<label for="bank-code" class="sr-only">Bankleitzahl</label>
+									<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+								</div>
+
+							</div>
+						</div>
+						<div class="wrap-field">
+
+							<div class="wrap-input">
+								<input type="radio" name="payment-info" id="bank-transfer" value="UEB">
+								<label for="bank-transfer"><span>Überweisung</span><i
+										class="icon-ubeiwsung-1"></i></label>
+							</div>
+							<p class="info-text" data-info="bank-transfer">
+								On the conclusion of the donation process, you will be provided with the Wikimedia bank
+								data so you
+								can
+								transfer the money.
+							</p>
+						</div>
+
+					</fieldset>
+				</section>
+
+				<section id="donation-type" class="donation-daten clearfix">
+					<h2>Daten</h2>
+
+					<p class="legend">Wollen Sie als Privatperson oder als Firma spenden? Sie können auch ohne Angabe
+						Ihrer Adresse spenden.</p>
+
+					<fieldset id="type-donator"
+							  class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
+						<legend class="sr-only">Wollen Sie als Privatperson oder als Firma spenden? Sie können auch ohne
+							Angabe Ihrer Adresse spenden.
+						</legend>
+
+						<div class="wrap-field personal">
+
+							<div class="wrap-input">
+								<input type="radio" name="addressType" id="personal" value="person">
+								<label for="personal"><span>Privat</span><i class="icon-account_circle"></i></label>
+							</div>
+							<div class="wrap-info">
+								<div class="info-text" data-info="personal">
+									<div class="wrap-select-50 clearfix">
+										<select class="no-outline salutation" id="treatment" name="treatment" placeholder="Anrede"
+												data-jcf='{"wrapNative": false,  "wrapNativeOnMobile": true  }'>
+											<option hidden class="hideme" value="anrede">Anrede</option>
+											<option value="familie">Familie</option>
+											<option value="herr">Herr</option>
+											<option value="frau">Frau</option>
+											<option value="anderes">Anderes</option>
+										</select>
+										<select class="no-outline personal-title" id="title" name="title"
+												data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true}'>
+											<option hidden class="hideme" value="vtitle">Titel</option>
+											<option value="kein-title">Kein Titel</option>
+											<option value="dr">Dr.</option>
+											<option value="prof">Prof.</option>
+											<option value="prof-dr">Prof. Dr.</option>
+										</select>
+									</div>
+
+									<div class="field-grp valid">
+										<input type="text" id="first-name" placeholder="Vorname">
+										<label for="first-name" class="sr-only">Vorname</label>
+										<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+									</div>
+									<div class="field-grp">
+										<input type="text" id="last-name" placeholder="Name">
+										<label for="last-name" class="sr-only">Name</label>
+										<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+									</div>
+									<div class="field-grp">
+										<input type="email" id="email" placeholder="E-Mail">
+										<label for="email" class="sr-only">E-Mail</label>
+										<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+									</div>
+									<div class="field-grp">
+										<input type="text" id="street" placeholder="Straße und Hausnummer">
+										<label for="street" class="sr-only">Straße und Hausnummer</label>
+										<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+									</div>
+									<div class="field-grp">
+										<input type="text" id="post-code" placeholder="Postleitzahl">
+										<label for="post-code" class="sr-only">Postleitzahl</label>
+										<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+									</div>
+									<div class="field-grp">
+										<input type="text" id="city" placeholder="Stadt">
+										<label for="city" class="sr-only">City</label>
+										<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+									</div>
+
+									<select id="country" name="country"
+											data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true,  "maxVisibleItems": 6}'
+											class="no-outline country-select">
+										<option value="DE">Deutschland</option>
+										<option value="AT">Österreich</option>
+										<option value="CH">Schweiz</option>
+										<option value="BE">Belgien</option>
+										<option value="IT">Italien</option>
+										<option value="LI">Liechtenstein</option>
+										<option value="LU">Luxemburg</option>
+										<option value="DE">Deutschland</option>
+										<option value="AT">Österreich</option>
+										<option value="CH">Schweiz</option>
+										<option value="BE">Belgien</option>
+										<option value="IT">Italien</option>
+										<option value="LI">Liechtenstein</option>
+										<option value="LU">Luxemburg</option>
+									</select>
+								</div>
+								<div class="wrap-check">
+									<input type="checkbox" id="newsletter" data-jcf='{"wrapNative": true}' class="jcf">
+									<label class="news" for="newsletter">
+										Ja, ich bin damit einverstanden, dass Wikimedia mich per E-Mail kontaktiert,
+										wenn Wikipedia
+										meine Unterstützung benötigt.<br>
+										Die Einwilligung können Sie jederzeit per
+										E-Mail an spenden@wikimedia.de mit Wirkung für die Zukunft widerrufen.
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="wrap-field firma">
+
+							<div class="wrap-input">
+								<input type="radio" name="addressType" id="company" value="firma">
+								<label for="company"><span>Firma</span><i class="icon-work"></i></label>
+							</div>
+							<div class="wrap-info">
+								<div class="info-text" data-info="company">
+									<div class="field-grp ">
+										<input type="text" id="company-name" name="company-name" placeholder="Firmenname">
+										<label for="company-name" class="sr-only">Firmenname</label>
+									</div>
+								<div class="field-grp">
+									<input type="text" id="contact-person" name="contact-person" placeholder="Ansprechperson">
+									<label for="contact-person" class="sr-only">Ansprechperson</label>
+								</div>
+									<div class="field-grp">
+									<input type="email" id="email-company" name="email-company" placeholder="E-Mail">
+									<label for="email-company" class="sr-only">E-Mail</label>
+									</div>
+									<div class="field-grp">
+									<input type="text" id="adress-company" name="adress-company" placeholder="Straße und Hausnummer">
+									<label for="adress-company" class="sr-only">Straße und Hausnummer</label>
+									</div>
+									<div class="field-grp">
+									<input type="text" id="post-code-company" name="post-code-company" placeholder="Postleitzahl">
+									<label for="post-code" class="sr-only">Postleitzahl</label>
+									</div>
+									<div class="field-grp">
+									<input type="text" id="city-company" name="city-company" placeholder="Stadt">
+									<label for="city-company" class="sr-only">City</label>
+									</div>
+
+									<select id="country-company" name="country-company" title="Land"
+											data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true,  "maxVisibleItems": 6}'
+											class="no-outline country-select">
+										<option value="DE">Deutschland</option>
+										<option value="AT">Österreich</option>
+										<option value="CH">Schweiz</option>
+										<option value="BE">Belgien</option>
+										<option value="IT">Italien</option>
+										<option value="LI">Liechtenstein</option>
+										<option value="LU">Luxemburg</option>
+									</select>
+								</div>
+								<div class="wrap-check">
+									<input type="checkbox" id="newsletter-company">
+									<label class="news" for="newsletter-company">
+										Ja, ich bin damit einverstanden, dass Wikimedia mich per E-Mail kontaktiert,
+										wenn Wikipedia
+										meine Unterstützung benötigt.
+										Die Einwilligung können Sie jederzeit per
+										E-Mail an spenden@wikimedia.de mit Wirkung für die Zukunft widerrufen.
+									</label>
+								</div>
+							</div>
+
+						</div>
+
+
+						<div class="wrap-field anonym">
+
+							<div class="wrap-input">
+								<input type="radio" name="addressType" id="anonymus" value="anonym">
+								<label for="anonymus"><span>Anonym</span><i class="icon-visibility_off"></i></label>
+							</div>
+							<p class="info-text" data-info="anonymus">
+								Bitte beachten Sie, dass wir für eine spätere Zuordnung der Spende Ihren Namen und die
+								Zahlungsinformationen vom Dienstleister erhalten.
+							</p>
+						</div>
+
+					</fieldset>
+				</section>
+
+			</div>
+
+
+			@@include('./state-bar-lateral.html')
+
+		</div>
+	</div>
+	<hr id="form-end">
+
+	@@include('./overview.html')
+
+
+
+
+	<input type="submit" value="Spende abschließen" class="btn btn-donation btn-unactive visible-xs-block">
+</form>
+

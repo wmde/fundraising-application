@@ -1,0 +1,59 @@
+@@include('./head.html', {"title": "Comment", "id": "donation-comment", "themeclass": "donation", "classes": "donation-comment "})
+@@include('./header.html')
+<main class="comment">
+    <div class="container">
+        <div class="row">
+            <div class="content col-xs-12">
+                <h2 class="h1">Spendenkommentar</h2>
+                <form id="comment-form" class="row">
+                    <fieldset class="col-xs-12 col-sm-6">
+                        <legend class="legend">Erzahlen Sie uns, warum sie gespendt haben.</legend>
+                        <div class="field-grp">
+                            <!-- ToDo: wikimedia translate placeholder / label text / error text add the adequate -->
+                            <textarea name="textarea" rows="50" cols="10" id="comment" placeholder="Your comment"></textarea>
+                            <label for="comment" class="sr-only">Your comment</label>
+                        </div>
+                    </fieldset>
+                    <fieldset class="col-xs-12 col-sm-6">
+                        <legend class="legend">Veröffentlichungsoptionen</legend>
+                        <div class="row">
+                        <div class="field-grp col-xs-12 col-md-6">
+                            <select id="offentlich" name="offentlich"
+                                    data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true,  "maxVisibleItems": 6}'
+                                    class="no-outline offentlich">
+                                <option value="op1">Öffentlich</option>
+                                <option value="op2">Nicht öffentlich</option>
+                            </select>
+                        </div>
+                        <div class="field-grp col-xs-12 col-sm-6">
+                            <select id="personalized" name="personalized"
+                                    data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true,  "maxVisibleItems": 6}'
+                                    class="no-outline personalized">
+                                <option value="op1">Personalisiert</option>
+                                <option value="op2">Anonym</option>
+                            </select>
+                        </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="switch-container container-fluid container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-8 col-md-4">
+                <input type="submit" value="Kommenar veröffetlichen" class="btn btn-introduction bk-blue text-center text-uppercase">
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <ul class="list-menu link-reverse list-unstyled  col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-8 col-md-4">
+
+               <!-- ToDo: wikimedia-team : add link returning to the come from confirmation page -->
+                <li><a href="#" class="">Abbrechen</a></li>
+            </ul>
+        </div>
+    </div>
+</main>
+@@include('./footer.html')

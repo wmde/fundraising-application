@@ -1,4 +1,5 @@
 'use strict';
+
 var objectAssign = require( 'object-assign' ),
 	actions = require( './actions' ),
 
@@ -71,9 +72,11 @@ var objectAssign = require( 'object-assign' ),
 		render: function ( formContent ) {
 			this.hiddenElement.val( formContent.amount || '' );
 			if ( formContent.isCustomAmount ) {
+        this.inputElement.parent().addClass('filled');
 				this.selectElement.prop( 'checked', false );
 				this.inputElement.val( formContent.amount );
 			} else {
+        this.inputElement.parent().removeClass('filled');
 				this.selectElement.val( [ formContent.amount ] );
 				this.inputElement.val( '' );
 			}
@@ -84,6 +87,9 @@ var objectAssign = require( 'object-assign' ),
 		decisionElement: null,
 		paymentIntervalElement: null,
 		render: function ( formContent ) {
+      if (formContent.paymentIntervalInMonths < 0) {
+        return;
+      }
 			var intervalType = formContent.paymentIntervalInMonths > 0 ?
 				INTERVAL_TYPE_RECURRING :
 				INTERVAL_TYPE_ONE_OFF;
@@ -97,7 +103,6 @@ var objectAssign = require( 'object-assign' ),
 		bicElement: null,
 		accountNumberElement: null,
 		bankCodeElement: null,
-		debitTypeElement: null,
 		bankNameFieldElement: null,
 		bankNameDisplayElement: null,
 		render: function ( formContent ) {
@@ -105,7 +110,6 @@ var objectAssign = require( 'object-assign' ),
 			this.bicElement.val( formContent.bic );
 			this.accountNumberElement.val( formContent.accountNumber );
 			this.bankCodeElement.val( formContent.bankCode );
-			this.debitTypeElement.val( [ formContent.debitType ] ); // set as array for radio buttons/dropdown field
 			this.bankNameFieldElement.val( formContent.bankName );
 			this.bankNameDisplayElement.text( formContent.bankName );
 		}
@@ -132,7 +136,7 @@ module.exports = {
 			contentName: contentName,
 			onChange: createDefaultChangeHandler( store, contentName )
 		} );
-		element.on( 'selectmenuchange', component.onChange );
+		element.on( 'selectmenuchange, change', component.onChange );
 		return component;
 	},
 
@@ -201,14 +205,12 @@ module.exports = {
 	},
 
 	createBankDataComponent: function ( store, bankDataElements ) {
-		// TODO check if all elements are passed in
 		var component = objectAssign( Object.create( BankDataComponent ), bankDataElements );
 		bankDataElements.ibanElement.on( 'change', createDefaultChangeHandler( store, 'iban' ) );
 		bankDataElements.bicElement.on( 'change', createDefaultChangeHandler( store, 'bic' ) );
 		bankDataElements.bicElement.on( 'change', createRegexValidator( store, 'bic' ) );
 		bankDataElements.accountNumberElement.on( 'change', createDefaultChangeHandler( store, 'accountNumber' ) );
 		bankDataElements.bankCodeElement.on( 'change', createDefaultChangeHandler( store, 'bankCode' ) );
-		bankDataElements.debitTypeElement.on( 'change', createDefaultChangeHandler( store, 'debitType' ) );
 		return component;
 	}
 

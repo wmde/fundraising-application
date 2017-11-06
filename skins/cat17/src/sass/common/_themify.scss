@@ -1,0 +1,60 @@
+
+/*
+ * Theme definitions
+ */
+
+$themes: (
+		donation: (
+				brandPrimary: #00adee,
+				brandPrimaryDark: #0C69A3,
+				fieldSelected: #ecf7fd,
+				fieldNormal: #cfdbe2,
+				border1pxPrimary: 1px solid #00adee,
+				border2pxPrimary: 2px solid #00adee,
+				border2pxfieldSelected: 2px solid #ecf7fd,
+				border2pxError: 2px solid #812923,
+                border1pxError: 1px solid #812923,
+				border2pxfieldNormal: 2px solid #cfdbe2,
+				borderColorTrianglePrimary: #00adee transparent transparent transparent,
+				brandErrorRgba: rgba(129, 41, 35, 0.2),
+				autocompleteColors: 0 0 0px 1000px #ecf7fd inset,
+
+		),
+		membership: (
+				brandPrimary: #69c159,
+				brandPrimaryDark: #4E9242,
+				fieldSelected: #CDF1C7,
+				fieldNormal: #C6DBC3,
+				border1pxPrimary: 1px solid #69c159,
+				border2pxPrimary: 2px solid #69c159,
+				border2pxfieldSelected: 2px solid #CDF1C7,
+				border2pxError: 2px solid #812923,
+                border1pxError: 1px solid #812923,
+				border2pxfieldNormal: 2px solid #C6DBC3,
+				borderColorTrianglePrimary: #69c159 transparent transparent transparent,
+				brandErrorRgba: rgba(129, 41, 35, 0.2),
+				autocompleteColors: 0 0 0px 1000px #CDF1C7 inset,
+
+		),
+);
+
+/*
+ * Implementation of themes
+ */
+@mixin themify($themes) {
+	@each $theme, $map in $themes {
+		.theme-#{$theme} & {
+			$theme-map: () !global;
+			@each $key, $submap in $map {
+				$value: map-get(map-get($themes, $theme), '#{$key}');
+				$theme-map: map-merge($theme-map, ($key: $value)) !global;
+			}
+			@content;
+			$theme-map: null !global;
+		}
+	}
+}
+
+@function themed($key) {
+	@return map-get($theme-map, $key);
+}

@@ -1,0 +1,410 @@
+input {
+    -webkit-appearance: none;
+}
+input[type=number] {
+	-moz-appearance: textfield;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0; /* Removes leftover margin */
+}
+
+input::-webkit-contacts-auto-fill-button {
+	visibility: hidden;
+	display: none !important;
+	pointer-events: none;
+	position: absolute;
+	right: 0;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+	transition: background-color 5000s ease-in-out 0s;
+	@include themify($themes) {
+		-webkit-box-shadow: themed('autocompleteColors');
+		border-bottom: themed('border2pxfieldSelected');
+	}
+
+}
+
+
+input[type=submit] {
+    margin-top: 40px;
+}
+
+/*input.novalid, input.invalid, textarea.invalid {
+	border-bottom: 2px solid $brand-error;
+	background-color: $brand-error-rgba;
+}*/
+
+.field-grp {
+	margin-bottom: 0;
+	position: relative;
+
+	&.valid {
+		input[type="text"], input[type="email"] {
+			@include themify($themes) {
+				background-color: themed('fieldSelected');
+				border-bottom: themed('border2pxfieldSelected');
+			}
+		}
+		&:after {
+			content: '\e876';
+			position: absolute;
+			right: 12px;
+			top: 10px;
+			font-family: "icomoon";
+			font-size: 20px;
+		}
+	}
+	&.invalid {
+		input[type="text"], input[type="email"], textarea {
+
+			@include themify($themes) {
+				background-color: themed('brandErrorRgba');
+				border-bottom: themed('border2pxError');
+			}
+			&:hover {
+				@include themify($themes) {
+					border-bottom: themed('border2pxError');
+				}
+			}
+		}
+	}
+
+	input[type="text"], input[type="email"], textarea {
+        border-radius: 0;
+        @include themify($themes) {
+			background-color: themed('fieldNormal');
+			border-bottom: themed('border2pxfieldNormal');
+		}
+	//	background-color: $brand-footer;
+		//border-bottom: 2px solid $brand-footer;
+		width: 100%;
+		height: 48px;
+		padding: 13px 16px;
+		font-size: 16px;
+		font-weight: 300;
+		margin-bottom: 12px;
+		border: none;
+
+		@include bkp(sm) {
+			font-size: 14px;
+		}
+		@include bkp(lg) {
+			font-size: 12px;
+		}
+		&:hover {
+			//border-bottom: 2px solid $brand-primary;
+			@include themify($themes) {
+				border-bottom: themed('border2pxPrimary');
+			}
+		}
+		&:focus {
+			outline: none;
+			@include themify($themes) {
+				background-color: themed('fieldSelected');
+				border-bottom: themed('border2pxPrimary');
+			}
+		}
+	}
+}
+
+.error-text {
+    color: $brand-error;
+    padding-left: 16px;
+    margin-bottom: 30px;
+}
+
+label {
+	cursor: pointer;
+	font-size: 16px;
+	font-weight: 400;
+	@include bkp(sm) {
+		font-size: 14px;
+	}
+	@include bkp(lg) {
+		font-size: 12px;
+	}
+}
+
+.legend {
+	font-size: 16px;
+	margin-bottom: 15px;
+    @include bkp(md) {
+        width: 80%;
+    }
+}
+
+
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+	color: $text-color;
+}
+::-moz-placeholder { /* Firefox 19+ */
+	color:  $text-color;
+	opacity: 1;
+
+}
+:-ms-input-placeholder { /* IE 10+ */
+	color: $text-color;
+
+}
+:-moz-placeholder { /* Firefox 18- */
+	color: $text-color;
+
+}
+
+//select custom style
+
+
+
+
+
+.select-hidden {
+	display: none;
+	visibility: hidden;
+	padding-right: 10px;
+}
+
+p.legend {
+	//width: 70%;
+}
+.wrap-select-50 {
+	.jcf-select {
+		width: 48%;
+		float: left;
+		margin-right: 4%;
+		min-width: 116px;
+		&:last-child {
+			margin-right: 0;
+		}
+	}
+	.select-styled {
+		&:after {
+			right: 10px;
+		}
+	}
+}
+
+.jcf-list {
+	font-size: 16px;
+	@include bkp(md) {
+		font-size: 12px;
+	}
+}
+
+
+.select, .jcf-select {
+	cursor: pointer;
+	display: inline-block;
+	position: relative;
+	font-size: 16px;
+	color: $select-color;
+	width: $select-width;
+	height: $select-height;
+	padding: 13px 16px;
+	margin-bottom: 12px;
+	@include themify($themes) {
+		background-color: themed('fieldNormal');
+		border: themed('border2pxfieldNormal');
+	}
+	cursor: pointer;
+	font-weight: 300;
+	@include bkp(sm) {
+		font-size: 14px;
+	}
+	@include bkp(md) {
+		font-size: 12px;
+	}
+	&.selected-item {
+		@include themify($themes) {
+			background-color: themed('fieldSelected');
+			border: themed('border2pxfieldSelected');
+		}
+	}
+
+	.jcf-select-text {
+		margin: 0;
+		cursor: pointer;
+		font-size: 16px;
+		@include bkp(sm) {
+			font-size: 14px;
+		}
+		@include bkp(lg) {
+			font-size: 12px;
+		}
+	}
+
+	.jcf-select-opener {
+		background-color: $select-background;
+		width: 0;
+	}
+
+
+	&:after {
+		content:"";
+		width: 0;
+		height: 0;
+		border: 6px solid transparent;
+		border-color: $select-color transparent transparent transparent;
+		position: absolute;
+		top: 23px;
+		right: 13px;
+	}
+	&:hover, &:focus {
+		//border-bottom: 2px solid $brand-primary;
+		@include themify($themes) {
+			border-bottom: themed('border2pxPrimary');
+		}
+		cursor: pointer;
+		&:after {
+			border-color: $brand-primary transparent transparent transparent;
+		}
+	}
+	&.jcf-drop-active {
+		&:hover {
+			@include themify($themes) {
+				border-bottom: themed('border2pxPrimary');
+			}
+			&:after {
+				border-color: $brand-primary transparent transparent transparent;
+			}
+		}
+		&:active, &.jcf-focus {
+			@include themify($themes) {
+				background-color: themed('fieldNormal');
+				border: themed('border2pxPrimary')!important;
+				border-bottom: none !important;
+			}
+
+
+			&:after {
+				border-color: $brand-primary transparent transparent transparent !important;
+			}
+			@include bkp(sm) {
+				border-bottom: none !important;
+			}
+		}
+	}
+	&:active, &.active {
+		@include themify($themes) {
+			background-color: themed('fieldNormal');
+			border: themed('border2pxPrimary');
+		}
+
+		&:after {
+			border-color: $brand-primary transparent transparent transparent;
+		}
+		@include bkp(sm) {
+			border-bottom: none;
+		}
+	}
+}
+#form-donation .jcf-select.jcf-select-jcf-hidden.jcf-focus, #form-donation .jcf-select.jcf-select-jcf-hidden.jcf-focus * {
+	//border-color: transparent !important;
+}
+.jcf-unselectable.jcf-focus, .jcf-select.jcf-focus {
+	@include bkp(xsmax) {
+		@include themify($themes) {
+			border: themed('border2pxPrimary') !important;
+		}
+	}
+	@include bkp(sm) {
+		border-color: transparent !important;
+		@include themify($themes) {
+			border-bottom: themed('border2pxPrimary') !important;
+		}
+	}
+}
+
+#form-donation .jcf-select.jcf-select-jcf-hidden.jcf-drop-active.jcf-focus, #form-donation .jcf-select.jcf-select-jcf-hidden.jcf-drop-active.jcf-focus * {
+	border-color: $brand-primary !important;
+}
+
+.jcf-select-drop .jcf-select-drop-content {
+	border: none;
+	@include themify($themes) {
+		background-color: themed('fieldSelected');
+		border: themed('border2pxPrimary');
+	}
+	border-top: none !important;
+	li span {
+		margin: 0;
+		padding: 15px 13px 15px 16px;
+		font-weight: 300;
+		//font-size: 16px;
+		//border-bottom: 1px solid $gray-lighter;
+		@include themify($themes) {
+			background-color: themed('fieldSelected');
+		}
+		//background-color: $bk-selected;
+		cursor: pointer;
+		color: black;
+
+		&[rel="hide"] {
+			display: none;
+		}
+	}
+	.jcf-list-content {
+		.jcf-hover, .jcf-selected {
+			// background: none;
+			color: $text-color;
+			&:hover {
+				// background: $brand-primary-dark;
+				@include themify($themes) {
+					background-color: themed('brandPrimaryDark');
+				}
+				color: $white;
+			}
+		}
+	}
+	.jcf-option-hideme {
+		display: none;
+	}
+}
+.jcf-scrollbar-vertical {
+	//background-color: $brand-primary;
+	@include themify($themes) {
+		background-color: themed('brandPrimary');
+	}
+	.jcf-scrollbar-dec, .jcf-scrollbar-inc {
+		//	background-color: $brand-primary;
+		@include themify($themes) {
+			background-color: themed('brandPrimary');
+		}
+	}
+	.jcf-scrollbar-handle {
+		//	background-color: $brand-primary-dark;
+		@include themify($themes) {
+			background-color: themed('brandPrimaryDark');
+		}
+	}
+}
+select{
+	option.hideme {
+		display: none!important;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

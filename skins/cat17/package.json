@@ -1,0 +1,99 @@
+{
+  "name": "wmde_fundraising",
+  "version": "1.0.0",
+  "description": "WMDE fundraising application (end user facing part)",
+  "main": "index.js",
+  "directories": {
+    "lib": "src/app/lib",
+    "test": "src/app/tests"
+  },
+  "scripts": {
+    "build-js": "browserify src/app/main.js -s WMDE -o src/scripts/wmde.js",
+    "watch-js": "watchify src/app/main.js -v -s WMDE -o src/scripts/wmde.js",
+    "test": "echo 'todo: test' && exit 0",
+    "cs": "echo 'todo: cs' && exit 0",
+    "ci": "echo 'todo: ci' && exit 0",
+    "build-assets": "mkdir -p dist/build && mkdir -p web && gulp scripts-prod styles images copies && cp -R dist/* web"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wmde/FundraisingFrontend.git"
+  },
+  "keywords": [
+    "fundraising"
+  ],
+  "author": "",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/wmde/FundraisingFrontend/issues"
+  },
+  "homepage": "https://github.com/wmde/FundraisingFrontend#readme",
+  "devDependencies": {
+    "browser-sync": "^2.18.13",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^4.0.0",
+    "gulp-changed": "^3.1.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-cssnano": "^2.1.2",
+    "gulp-file-include": "^1.1.0",
+    "gulp-flatten": "^0.3.1",
+    "gulp-if": "^2.0.2",
+    "gulp-imagemin": "^3.3.0",
+    "gulp-inject": "^4.2.0",
+    "gulp-jshint": "^2.0.4",
+    "gulp-nunjucks-render": "^2.2.1",
+    "gulp-sass": "^3.1.0",
+    "gulp-sourcemaps": "^2.6.0",
+    "gulp-sync": "^0.1.4",
+    "gulp-uglify": "^3.0.0",
+    "gulp-useref": "^3.1.2",
+    "jshint": "^2.9.5",
+    "browserify": "^13.0.0",
+    "browserify-shim": "^3.8.12",
+    "deep-freeze": "0.0.1",
+    "envify": "^3.4.0",
+    "jscs": "^2.10.1",
+    "polyify": "0.0.4",
+    "sinon": "^1.17.3",
+    "tap-min": "^1.1.0",
+    "tape": "^4.4.0",
+    "watchify": "^3.7.0"
+  },
+  "dependencies": {
+    "bootstrap-sass": "^3.3.7",
+    "bootstrap-select": "^1.12.4",
+    "jcf": "^1.2.3",
+    "jquery": "^3.2.1",
+    "object-assign": "^4.0.1",
+    "promise": "^7.3.1",
+    "redux": "^3.7.2",
+    "redux-promise": "^0.5.3",
+    "underscore": "^1.8.3",
+    "underscore.path": "^0.1.4"
+  },
+  "browserify": {
+    "transform": [
+      [
+        "polyify",
+        {
+          "browsers": "IE >= 8",
+          "include": [
+            "Object.getPrototypeOf",
+            "Object.keys",
+            "Array.prototype.every",
+            "Array.prototype.filter",
+            "Array.prototype.forEach",
+            "Array.prototype.indexOf",
+            "Array.prototype.map",
+            "Array.prototype.reduceRight"
+          ]
+        }
+      ],
+      "browserify-shim",
+      "envify"
+    ]
+  },
+  "browserify-shim": {
+    "jquery": "global:jQuery"
+  }
+}
