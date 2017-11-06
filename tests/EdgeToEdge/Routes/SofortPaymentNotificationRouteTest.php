@@ -9,6 +9,7 @@ use Psr\Log\LogLevel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
+use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
@@ -116,6 +117,26 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 			$donation = $factory->getDonationRepository()->getDonationById( $donation->getId() );
 
 			$this->assertEquals( new DateTime( self::VALID_TRANSACTION_TIME ), $donation->getPaymentMethod()->getConfirmedAt() );
+		} );
+	}
+
+	public function testGivenValidRequest_donationStateIsChangedToBooked(): void {
+		$this->newEnvironment( function ( Client $client, FunFunFactory $factory ): void {
+			$donation = ValidDonation::newIncompleteSofortDonation();
+			$factory->getDonationRepository()->storeDonation( $donation );
+
+			$client->request(
+				Request::METHOD_POST,
+				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::VALID_TOKEN,
+				[],
+				[],
+				[],
+				$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, self::VALID_TRANSACTION_TIME )
+			);
+
+			$donation = $factory->getDonationRepository()->getDonationById( $donation->getId() );
+
+			$this->assertEquals( Donation::STATUS_EXTERNAL_BOOKED, $donation->getStatus() );
 		} );
 	}
 

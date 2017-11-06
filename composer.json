@@ -12,10 +12,11 @@
 		"twig/twig": "~1.23",
 		"pimple/pimple": "~3.0",
 
+		"wmde/email-address": "~1.0",
+		"wmde/euro": "~1.0",
 		"wmde/fundraising-store": "~7.0",
 		"wmde/fundraising-donations": "@dev",
 		"wmde/fundraising-content-provider": "^2.0",
-		"wmde/euro": "~1.0",
 
 		"symfony/twig-bridge": "^3.3",
 		"symfony/translation": "^3.3",

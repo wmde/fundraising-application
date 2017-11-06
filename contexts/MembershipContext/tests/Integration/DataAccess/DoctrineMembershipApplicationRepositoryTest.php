@@ -5,9 +5,9 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\MembershipContext\Tests\Integration\DataAccess;
 
 use Doctrine\ORM\EntityManager;
+use WMDE\EmailAddress\EmailAddress;
 use WMDE\Fundraising\Entities\MembershipApplication as DoctrineApplication;
 use WMDE\Fundraising\Frontend\MembershipContext\DataAccess\DoctrineApplicationRepository;
-use WMDE\Fundraising\Frontend\Infrastructure\EmailAddress;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\GetMembershipApplicationException;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\StoreMembershipApplicationException;
