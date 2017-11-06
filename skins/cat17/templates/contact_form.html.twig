@@ -1,0 +1,53 @@
+{% extends 'Base_Layout.html.twig' %}
+
+{% block page_identifier %}donation-contact{% endblock%}
+
+{% block main %}
+	<div class="container">
+		<form method="post" action="{$ basepath $}/contact/get-in-touch"  id="contact-form" class="row">
+			<div class="content col-xs-12 col-md-9">
+				<h2 class="h1">Kontakt</h2>
+				<div class="row">
+					<fieldset class="col-xs-12 col-sm-5">
+						<div class="field-grp">
+							<input type="text" id="name" name="firstname" placeholder="{$ 'contact_firstname'|trans $}">
+							<label for="name" class="sr-only">{$ 'contact_firstname'|trans $}</label>
+							<span class="error-text">Es ist nicht eine gültige Vorname.</span>
+						</div>
+						<div class="field-grp">
+							<input type="text" id="surname" name="lastname" placeholder="{$ 'contact_lastname'|trans $}">
+							<label for="surname" class="sr-only">{$ 'contact_lastname'|trans $}</label>
+							<span class="error-text">Es ist nicht eine gültige Nachname.</span>
+						</div>
+						<div class="field-grp">
+							<input type="email" id="email" name="email" placeholder="{$ 'contact_email'|trans $}">
+							<label for="email" class="sr-only">{$ 'contact_email'|trans $}</label>
+							<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+						</div>
+					</fieldset>
+					<fieldset class="col-xs-12 col-sm-7">
+						<div class="field-grp">
+							<input type="text" id="subject" name="subject" placeholder="{$ 'contact_subject'|trans $}">
+							<label for="subject" class="sr-only">{$ 'contact_subject'|trans $}</label>
+							<span class="error-text">Es ist nicht eine gültige Betreff.</span>
+						</div>
+						<div class="field-grp">
+							<textarea name="messageBody" rows="50" cols="10" id="comment" placeholder="{$ 'contact_body'|trans $}"></textarea>
+							<label for="subject" class="sr-only">{$ 'contact_body'|trans $}</label>
+							<span class="error-text">Es ist nicht eine gültige lhre nachricht an uns.</span>
+						</div>
+					</fieldset>
+				</div>
+			</div>
+			<div class="col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-8 col-md-4">
+				<div class="wrap-submit btn">
+					<input type="submit" value="{$ 'contact_submit'|trans $}" class="btn btn-introduction bk-blue text-center text-uppercase">
+				</div>
+			</div>
+		</form>
+
+		<div class="row">
+			{% include 'partials/back_link.html.twig' %}
+		</div>
+	</div>
+{% endblock %}
