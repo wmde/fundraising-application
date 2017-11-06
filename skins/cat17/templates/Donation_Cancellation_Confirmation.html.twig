@@ -1,0 +1,30 @@
+<div class="container">
+	<div class="row">
+		<div class="content col-xs-12 col-sm-10 col-md-8">
+			<h2 class="sr-only">Spende stornieren</h2>
+
+			<p class="h1">
+				{% if cancellationSuccessful %}
+					{$ 'donation-cancellation-header'|trans $}
+				{% else %}
+					{$ 'donation-cancellation-failed-header'|trans $}
+				{% endif %}
+			</p>
+			<p class="h2">
+				{% if cancellationSuccessful %}
+					{$ 'donation-cancellation-text'|trans( { '%donation.id%': donationId } )|raw $}
+				{% else %}
+					{$ 'donation-cancellation-failed-text'|trans( { '%donation.id%': donationId } )|raw $}
+				{% endif %}
+			</p>
+
+			{% if mailDeliveryFailed %}
+				<p class="h2">
+					{$ 'donation-cancellation-mail-delivery-failure'|trans|raw $}
+				</p>
+			{% endif %}
+		</div>
+
+		{% include 'partials/back_link.html.twig' %}
+	</div>
+</div>
