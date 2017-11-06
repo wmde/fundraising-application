@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\MembershipContext\Domain\Model;
 
-use WMDE\Fundraising\Frontend\Infrastructure\EmailAddress;
+use WMDE\EmailAddress\EmailAddress;
 
 /**
  * @licence GNU GPL v2+

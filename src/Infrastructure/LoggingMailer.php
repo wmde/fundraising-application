@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Infrastructure;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
+use WMDE\EmailAddress\EmailAddress;
 
 /**
  * @license GNU GPL v2+
