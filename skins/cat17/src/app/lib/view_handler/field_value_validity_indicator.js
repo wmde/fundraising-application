@@ -10,7 +10,7 @@ var objectAssign = require( 'object-assign' ),
 		element: {},
 
 		update: function ( validationState ) {
-			if ( validationState.isValid === true ) {
+			if ( validationState.isValid === true && this.element.val() !== "" ) {
 				this.element.addClass( 'valid' ).removeClass( 'invalid' )
 					.next( 'span' ).addClass( 'icon-ok' ).removeClass( 'icon-bug icon-placeholder' );
         this.element.parent().addClass('valid').removeClass('invalid');

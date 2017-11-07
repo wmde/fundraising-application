@@ -84,6 +84,11 @@ main {
     }
 }
 
+input[type="text"]::-ms-clear {
+	display: none;
+	width: 0;
+	height: 0;
+}
 
 .container {
 	max-width: 310px;

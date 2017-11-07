@@ -55,6 +55,10 @@ function setPaymentType(newState, payload) {
 
 function forcePersonalDataForDirectDebit( state ) {
   if ( state.paymentType === 'BEZ' && state.addressType === 'anonym' ) {
+    $('.wrap-field.anonym').removeClass('selected');
+    $('.anonym .info-text').removeClass('opened');
+    $('.wrap-field.personal').addClass('selected');
+    $('.personal .info-text').addClass('opened');
     return objectAssign( {}, state, { addressType: 'person' } );
   } else {
     return state;

@@ -20,7 +20,7 @@ var objectAssign = require( 'object-assign' ),
     addressTypeElement: null,
     addressType: null,
     addressTypeTextElement: null,
-    countriesDictionary: {'DE': 'Deutschland', 'AT': 'Österreich', 'CH': 'Schweiz', 'BE': 'Belgien', 'IT': 'Italien', 'LU': 'Luxemburg'},
+    countriesDictionary: {'DE': 'Deutschland', 'AT': 'Österreich', 'CH': 'Schweiz', 'BE': 'Belgien', 'IT': 'Italien', 'LU': 'Luxemburg', 'LI': 'Liechtenstein'},
     intervalTextElement: null,
     intervalText: null,
     memberShipTypeElement: null,
@@ -30,8 +30,8 @@ var objectAssign = require( 'object-assign' ),
     memberShipTypeTextElement: null,
     memberShipTypeText: null,
     update: function ( formContent ) {
-      this.intervalElement.text( this.formatPaymentInterval( formContent.paymentIntervalInMonths ) );
-      this.intervalTextElement.text( this.intervalText[formContent.paymentIntervalInMonths] );
+      this.intervalElement.html( this.formatPaymentInterval( formContent.paymentIntervalInMonths ) );
+      this.intervalTextElement.html( this.intervalText[formContent.paymentIntervalInMonths] );
 
       var amountFormat = this.numberFormatter.format(formContent.amount);
       this.amountElement.each(function () {
@@ -55,7 +55,7 @@ var objectAssign = require( 'object-assign' ),
 
       this.setSummaryIcon(this.intervalIconElement, formContent.paymentIntervalInMonths, this.intervalIcons);
       this.setSummaryIcon(this.paymentIconsElement, formContent.paymentType, this.paymentIcons);
-      this.periodicityTextElement.text( this.periodicityText[formContent.paymentIntervalInMonths] );
+      this.periodicityTextElement.html( this.periodicityText[formContent.paymentIntervalInMonths] );
 
       var paymentTextFormatted = this.paymentText[formContent.paymentType];
       if (formContent.paymentType == "BEZ") {
@@ -113,8 +113,10 @@ var objectAssign = require( 'object-assign' ),
       if (formContent.addressType === "person") {
         return (
           formContent.firstName && formContent.lastName ?
-            (formContent.salutation ? this.capitalize(formContent.salutation) : "") + " " +
-            (formContent.title ? this.capitalize(formContent.title) : "") + " " +
+            (formContent.salutation && formContent.title !== 'kein-title' && formContent.title !== 'vtitle' && formContent.salutation != 'anrede' ?
+              this.capitalize(formContent.salutation) : "") + " " +
+            (formContent.title && formContent.title !== 'kein-title' && formContent.title !== 'vtitle' ?
+              this.capitalize(formContent.title) : "") + " " +
             formContent.firstName + " " + formContent.lastName + "<br />"
             : ""
         ) +

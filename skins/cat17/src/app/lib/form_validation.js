@@ -92,7 +92,7 @@ var jQuery = require( 'jquery' ),
 				return { status: ValidationStates.INCOMPLETE };
 			}
 			postData = {
-				amount: formValues.amount,
+				amount: formValues.amount.replace( '.', ',' ),
 				paymentType: formValues.paymentType
 			};
 			return jQueryDeferredToPromise( this.sendFunction( this.validationUrl, postData, null, 'json' ) );

@@ -109,6 +109,7 @@
                         top: -10px;
                         padding-left: 25px;
                         border-left: 1px solid $brand-primary;
+
                     }
                 }
             }
@@ -182,6 +183,7 @@ fieldset {
             .info-text {
                 &.opened {
                     padding-left: 36px;
+
                 }
             }
 
@@ -198,13 +200,13 @@ fieldset {
                             @include themify($themes) {
                                 border-left: themed('border1pxPrimary');
                             }
-                            min-height: 205px;
+                            min-height: 191px;
                             padding-top: 0;
-                            height: auto;
                             height: 100%;
+
                         }
                         @include bkp(md) {
-                            right: -296px;
+                            right: -294px;
                             width: 290px;
 
                         }
@@ -237,6 +239,15 @@ fieldset {
 
     }
 }
+#payment-method .info-text.opened {
+    padding-top: 10px;
+    .field-grp.invalid ~ .error-text {
+        opacity: 1;
+    }
+    .error-text {
+        opacity: 0;
+    }
+}
 
 .wrap-input, .wrap-check {
     input {
@@ -244,9 +255,16 @@ fieldset {
         position: absolute;
     }
     //, &:hover label
-    input:checked + label {
 
-        &:after {
+    input:checked + label {
+		&:before {
+			box-shadow: inset 0 0 0 2px white;
+			@include themify($themes) {
+				background-color: themed('brandPrimary');
+			}
+		}
+
+       /* &:after {
             content: '';
             background: $brand-primary;
             @include themify($themes) {
@@ -269,11 +287,12 @@ fieldset {
         }
         &.news:after {
             border-radius: 0;
-        }
+        }*/
     }
     label {
         display: flex;
-        justify-content: space-between;
+        //justify-content: space-between; IE11 doesn't do well becuase consider pseudo-elements in the flow; added apan + i absolute
+		justify-content: flex-start;
         width: auto;
         margin-left: 33px;
         margin-bottom: 0;
@@ -282,7 +301,7 @@ fieldset {
         &:before {
             content: '';
             background: $white;
-            border-radius: 100%;
+            border-radius: 50%;
             border: 1px solid black;
             width: 16px;
             height: 16px;
@@ -295,6 +314,11 @@ fieldset {
             text-align: center;
             transition: all 250ms ease;
         }
+		span + i {
+			position: absolute;
+			right: 0;
+			top: 20px;
+		}
     }
     input label, &:hover label {
         align-items: center;

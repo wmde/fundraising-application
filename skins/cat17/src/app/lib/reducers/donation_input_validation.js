@@ -37,11 +37,13 @@ var _ = require( 'underscore' ),
   },
 
   clearBankDataValidityOnPaymentTypeChange = function ( state, action ) {
+
     if ( action.type !== 'CHANGE_CONTENT' ||
       action.payload.contentName !== 'paymentType' ||
       action.payload.value === 'BEZ' ) {
       return state;
     }
+
     return _.extend( {}, state, {
       iban: _.clone( defaultFields ),
       bic: _.clone( defaultFields ),
@@ -87,7 +89,7 @@ module.exports = function donationInputValidation( state, action ) {
   }
 
   state = clearAddressValidityOnAddressTypeChange( state, action );
-  state = clearBankDataValidityOnPaymentTypeChange( state, action );
+  //state = clearBankDataValidityOnPaymentTypeChange( state, action );
   state = setValidityOnSalutationChange( state, action );
 
   return inputValidationLib.inputValidation( state, action );

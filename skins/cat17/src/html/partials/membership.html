@@ -1,4 +1,4 @@
-<form id="form-membership" class="">
+<form id="form-membership" class="" novalidate="">
 	<div class="container">
 		<section class="state-bar state-overview col-xs-12 ">
 			<div class="wrap-bar container ">
@@ -89,21 +89,20 @@
 							<div class="wrap-info">
 								<div class="info-text" data-info="personal">
 									<div class="wrap-select-50 clearfix">
-										<select class="no-outline salutation" id="treatment" name="treatment" placeholder="Anrede"
+										<select class="no-outline salutation" id="treatment" name="treatment"
 												data-jcf='{"wrapNative": false,  "wrapNativeOnMobile": true  }'>
 											<option class="hideme" value="anrede">Anrede</option>
 											<option value="familie">Familie</option>
 											<option value="herr">Herr</option>
 											<option value="frau">Frau</option>
-											<option value="anderes">Anderes</option>
 										</select>
 										<select class="no-outline personal-title" id="title" name="title"
 												data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true}'>
 											<option class="hideme" value="vtitle">Titel</option>
 											<option value="kein-title">Kein Titel</option>
-											<option value="dr">Dr.</option>
-											<option value="prof">Prof.</option>
-											<option value="prof-dr">Prof. Dr.</option>
+											<option value="Dr.">Dr.</option>
+											<option value="Prof.">Prof.</option>
+											<option value="Prof. Dr.">Prof. Dr.</option>
 										</select>
 									</div>
 
@@ -174,26 +173,32 @@
 									<div class="field-grp ">
 										<input type="text" id="company-name" placeholder="Firmenname" name="company-name">
 										<label for="company-name" class="sr-only">Firmenname</label>
+										<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 									</div>
 									<div class="field-grp">
 										<input type="text" id="contact-person" class="name" name="contact-person" placeholder="Ansprechperson">
 										<label for="contact-person" class="sr-only">Ansprechperson</label>
+										<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 									</div>
 									<div class="field-grp">
 										<input type="email" id="email-company" name="email-company" class="email" placeholder="E-Mail">
 										<label for="email-company" class="sr-only">E-Mail</label>
+										<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 									</div>
 									<div class="field-grp">
 										<input type="text" id="adress-company" name="adress-company" class="street" placeholder="Straße und Hausnummer">
 										<label for="adress-company" class="sr-only">Straße und Hausnummer</label>
+										<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 									</div>
 									<div class="field-grp">
 										<input type="text" id="post-code-company" name="post-code-company" class="post-code" placeholder="Postleitzahl">
 										<label for="post-code" class="sr-only">Postleitzahl</label>
+										<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 									</div>
 									<div class="field-grp">
 										<input type="text" id="city-company" name="city-company" placeholder="Stadt" class="city">
 										<label for="city-company" class="sr-only">City</label>
+										<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 									</div>
 
 									<select id="country-company" name="country-company" title="Land"
@@ -232,28 +237,44 @@
 					<fieldset
 							class="amount-qty padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
 						<legend class="sr-only">Wie viel Geld wollen Sie spenden und wie häufig?</legend>
-						<div>
-							<input type="radio" name="amount-grp" id="amount1" value="5">
-							<label for="amount1">5 €</label>
-							<input type="radio" name="amount-grp" id="amount2" value="15">
-							<label for="amount2">15 €</label>
-							<input type="radio" name="amount-grp" id="amount3" value="25">
-							<label for="amount3">25 €</label>
-							<input type="radio" name="amount-grp" id="amount4" value="50">
-							<label for="amount4">50 €</label>
-							<input type="radio" name="amount-grp" id="amount5" value="75">
-							<label for="amount5">75 €</label>
-							<input type="radio" name="amount-grp" id="amount6" value="100">
-							<label for="amount6">100 €</label>
-							<input type="radio" name="amount-grp" id="amount7" value="250">
-							<label for="amount7">250 €</label>
-
-							<div class="wrap-amount-typed">
-								<input type="number" name="amount-typed" id="amount-typed">
+						<div class="wrap-amounts">
+							<div class="wrap-radio">
+								<input type="radio" name="amount-grp" id="amount1" value="5">
+								<label for="amount1">5 €</label>
+							</div>
+							<div class="wrap-radio">
+								<input type="radio" name="amount-grp" id="amount2" value="15">
+								<label for="amount2">15 €</label>
+							</div>
+							<div class="wrap-radio">
+								<input type="radio" name="amount-grp" id="amount3" value="25">
+								<label for="amount3"><span>25 €</span></label>
+							</div>
+							<div class="wrap-radio">
+								<input type="radio" name="amount-grp" id="amount4" value="50">
+								<label for="amount4">50 €</label>
+							</div>
+							<div class="wrap-radio">
+								<input type="radio" name="amount-grp" id="amount5" value="75">
+								<label for="amount5">75 €</label>
+							</div>
+							<div class="wrap-radio">
+								<input type="radio" name="amount-grp" id="amount6" value="100">
+								<label for="amount6">100 €</label>
+							</div>
+							<div class="wrap-radio">
+								<input type="radio" name="amount-grp" id="amount7" value="250">
+								<label for="amount7">250 €</label>
+							</div>
+							<div class="wrap-radio">
+								<input type="radio" name="amount-grp" id="amount8" value="300">
+								<label for="amount8">300 €</label>
 							</div>
 
+							<div class="wrap-amount-typed">
+								<input type="text" name="amount-typed" id="amount-typed">
+							</div>
 							<input type="hidden" name="amount-hidden" id="amount-hidden">
-
 							<!-- Todo: put messages in deutch -->
 							<label for="amount-typed" class="sr-only">Give your desired amount</label>
 						</div>
@@ -365,6 +386,8 @@
 									<input type="text" id="bank-code" placeholder="Bankleitzahl">
 									<label for="bank-code" class="sr-only">Bankleitzahl</label>
 								</div>
+                                <!-- ToDo: wikimedia-team, decide and translate to german -->
+                                <span class="error-text">Generic text of error.</span>
 
                                 <input type="hidden" name="bank_name" id="field-bank-name" value="">
 
@@ -385,8 +408,19 @@
 
 	@@include('./membership-overview.html')
 
+    <div class="fixed-button hidden-lg">
+        <div class="switch-container container-fluid container">
+            <div class="row">
+                <div class=" col-sm-5 col-sm-offset-7 col-md-4 col-md-offset-8 clearfix">
+                    <input type="submit" value="Jetzt Mitglied werden" class="btn btn-donation btn-unactive">
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <div id="submit-bottom">
+        <input type="submit" value="Jetzt Mitglied werden" class="btn btn-donation btn-unactive visible-xs-block">
+    </div>
 
-	<input type="submit" value="Spende abschließen" class="btn btn-donation btn-unactive visible-xs-block">
 </form>
 

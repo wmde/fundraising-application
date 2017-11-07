@@ -4,7 +4,6 @@
  * This number formatter class is a primitive subset of the intl library ( https://www.npmjs.com/package/intl ),
  * which is not available in all browsers and node versions.
  */
-
 var parseGermanFloat = function ( amountStr ) {
 		return parseFloat( String( amountStr ).replace( ',', '.' ) );
 	},
@@ -15,7 +14,11 @@ var parseGermanFloat = function ( amountStr ) {
       if (amount == 0) {
         return String("Betrag noch nicht ausgewählt.");
       }
-			return String( amount.toFixed( 0 ) ).replace( '.', ',' ) + String.fromCharCode( 160 ) + '€';
+
+      if (amount % 1 != 0) {
+        return String( (Math.round(amount * 100)/100).toFixed(2) ).replace( '.', '.' ) + String.fromCharCode( 160 ) + '€';
+      }
+			return String( Math.round(amount * 100) / 100 ).replace( '.', '.' ) + String.fromCharCode( 160 ) + '€';
 		},
 		parse: parseGermanFloat
 	},
@@ -43,3 +46,4 @@ module.exports = {
 		}
 	}
 };
+

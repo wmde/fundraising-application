@@ -33,7 +33,6 @@ select:-webkit-autofill:focus {
 		-webkit-box-shadow: themed('autocompleteColors');
 		border-bottom: themed('border2pxfieldSelected');
 	}
-
 }
 
 
@@ -41,10 +40,6 @@ input[type=submit] {
     margin-top: 40px;
 }
 
-/*input.novalid, input.invalid, textarea.invalid {
-	border-bottom: 2px solid $brand-error;
-	background-color: $brand-error-rgba;
-}*/
 
 .field-grp {
 	margin-bottom: 0;
@@ -125,7 +120,7 @@ input[type=submit] {
     margin-bottom: 30px;
 }
 
-label {
+label, input#amount-typed, .wrap-amount-typed:after{
 	cursor: pointer;
 	font-size: 16px;
 	font-weight: 400;
@@ -164,11 +159,7 @@ label {
 
 }
 
-//select custom style
-
-
-
-
+//select custom styles
 
 .select-hidden {
 	display: none;
@@ -286,8 +277,6 @@ p.legend {
 				border: themed('border2pxPrimary')!important;
 				border-bottom: none !important;
 			}
-
-
 			&:after {
 				border-color: $brand-primary transparent transparent transparent !important;
 			}
@@ -296,6 +285,16 @@ p.legend {
 			}
 		}
 	}
+	&.jcf-drop-active.jcf-drop-flipped {
+		&:active, &.jcf-focus {
+			@include themify($themes) {
+				background-color: themed('fieldNormal');
+				border: themed('border2pxPrimary')!important;
+				border-top: none !important;
+			}
+		}
+	}
+
 	&:active, &.active {
 		@include themify($themes) {
 			background-color: themed('fieldNormal');
@@ -331,6 +330,12 @@ p.legend {
 	border-color: $brand-primary !important;
 }
 
+.jcf-select-drop.jcf-drop-flipped .jcf-select-drop-content {
+	border-bottom: none !important;
+	@include themify($themes) {
+		border-top: themed('border2pxPrimary') !important;
+	}
+}
 .jcf-select-drop .jcf-select-drop-content {
 	border: none;
 	@include themify($themes) {

@@ -301,10 +301,11 @@
 	&.opened {
 		i {
 			display: block;
+			@include bkp(lg) {
+				display: none;
+			}
 		}
-		@include bkp(lg) {
-			display: none;
-		}
+
 	}
 
 }
@@ -457,7 +458,8 @@
 								text-transform: uppercase;
 							}
 							dt {
-								width: 40px;
+								min-width: 40px;
+								margin-right: 10px;
 								font-weight: 600;
 							}
 							strong:after {
@@ -471,9 +473,20 @@
     }
     #other-info {
         display: none;
-        @include bkp(sm) {
-            display: inline-block;
-        }
+		@include bkp(sm) {
+			display: inline-block;
+			margin-top: 210px;
+		}
+		@include bkp(md) {
+			display: inline-block;
+			margin-top: -120px;
+			input[type="submit"] {
+				margin-top: 80px;
+			}
+		}
+		@include bkp(lg) {
+			margin-top: 1px;
+		}
     }
 }
 
