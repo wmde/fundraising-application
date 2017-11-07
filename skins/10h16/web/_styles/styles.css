@@ -226,6 +226,13 @@ button.back-button { background: #e5e5e5; padding: 5px 15px !important; color: #
 }
 button.back-button:hover,
 button.back-button:active { background: #cccccc; }
+
+.warning-box {
+    margin-left: 180px;
+    margin-top: 10px;
+    display: none; /* initial state, element will be shown with JS */
+}
+
 /* ======================================================================================= */
 
 
