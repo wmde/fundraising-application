@@ -1,7 +1,6 @@
 'use strict';
 
 var objectAssign = require( 'object-assign' ),
-	_ = require( 'underscore' ),
 
 	WarningBox = {
 		issueBox: null,
@@ -16,6 +15,11 @@ var objectAssign = require( 'object-assign' ),
 		}
 	},
 
+	/**
+	 * @param {jQuery} issueBoxElement Element that should be shown/hidden
+	 * @param {function} shouldShowWarningFunction Function that returns true/false in reaction the the value that gets passed in
+	 * @returns {WarningBox}
+	 */
 	createHandler = function ( issueBoxElement, shouldShowWarningFunction ) {
 		return objectAssign(
 			Object.create( WarningBox ),
