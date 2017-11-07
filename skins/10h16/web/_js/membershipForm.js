@@ -148,6 +148,16 @@ $( function () {
 				viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '#address-type-2' ).parent(), 'sustaining' ),
 				stateKey: 'membershipFormContent.membershipType'
 			},
+			// Show warning when street contains no house number
+			{
+				viewHandler: WMDE.View.createWarningBox(
+					$( '#street-warning-box' ),
+					function( fieldValue ) {
+						return fieldValue.trim() !== '' && fieldValue.match(/\d+/g) === null;
+					}
+				),
+				stateKey: 'membershipFormContent.street'
+			},
 			{
 				viewHandler: WMDE.View.createFeeOptionSwitcher( [ $( '#amount-1' ), $( '#amount-2' ), $( '#amount-3' ), $( '#amount-4' ), $( '#amount-5' ), $( '#amount-6' ), $( '#amount-7' ) ], { person: 24, firma: 100 } ),
 				stateKey: 'membershipFormContent'
