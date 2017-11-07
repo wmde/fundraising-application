@@ -6115,17 +6115,60 @@
             "time": "2014-02-12T22:16:49+00:00"
         },
         {
+            "name": "wmde/email-address",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wmde/email-address.git",
+                "reference": "0c4d713efc98248053df5ea695e9ceb22797a2f6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wmde/email-address/zipball/0c4d713efc98248053df5ea695e9ceb22797a2f6",
+                "reference": "0c4d713efc98248053df5ea695e9ceb22797a2f6",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "mediawiki/mediawiki-codesniffer": "~13.0",
+                "ockcyp/covers-validator": "~0.6",
+                "phpstan/phpstan": "~0.8.0",
+                "phpunit/phpunit": "~6.2",
+                "slevomat/coding-standard": "~4.0",
+                "squizlabs/php_codesniffer": "~3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "WMDE\\EmailAddress\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "description": "Email Address value object written in PHP 7",
+            "time": "2017-11-02T05:24:33+00:00"
+        },
+        {
             "name": "wmde/fundraising-frontend-content",
             "version": "dev-test",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content.git",
-                "reference": "4ccf8afdb3631756e6ed740e0c698c3370b2df5d"
+                "reference": "c27ae71559fe0b058adff9b549249301d13824bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/4ccf8afdb3631756e6ed740e0c698c3370b2df5d",
-                "reference": "4ccf8afdb3631756e6ed740e0c698c3370b2df5d",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/c27ae71559fe0b058adff9b549249301d13824bf",
+                "reference": "c27ae71559fe0b058adff9b549249301d13824bf",
                 "shasum": ""
             },
             "require-dev": {
@@ -6140,7 +6183,8 @@
                 "test": [
                     "composer validate --no-interaction",
                     "@lint-json",
-                    "@lint-templates"
+                    "@lint-templates",
+                    "@lint-wordlists"
                 ],
                 "lint-json": [
                     "find i18n/ -type f -name \\*.json -exec echo \"{}\" \\; -exec vendor/bin/jsonlint {} \\;"
@@ -6148,6 +6192,9 @@
                 "lint-templates": [
                     "find i18n/*/web i18n/*/shared -type f -name '*.twig' | sed -E 's#/web/|/shared/# #' | sed 's|.twig||' | cut -d' ' -f1,2 | xargs -n 2 bash -c './vendor/bin/lint_content --web $0 $1'",
                     "find i18n/*/mail i18n/*/shared -type f -name '*.twig' | sed -E 's#/mail/|/shared/# #' | sed 's|.twig||' | cut -d' ' -f1,2 | xargs -n 2 bash -c './vendor/bin/lint_content $0 $1'"
+                ],
+                "lint-wordlists": [
+                    "if grep -oE '\\w+ {2,}\\w+' data/bad_words.txt data/white_words.txt; then echo 'Words must only be separated by 1 space'; false; fi"
                 ]
             },
             "license": [
@@ -6157,7 +6204,7 @@
             "support": {
                 "source": "https://github.com/wmde/fundraising-frontend-content/tree/test"
             },
-            "time": "2017-10-25T15:48:50+00:00"
+            "time": "2017-11-07T12:29:46+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",
