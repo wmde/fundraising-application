@@ -270,12 +270,6 @@ main.conclusion {
 	}
 }
 
-.tax-deduction {
-	.cancel-block {
-		padding-top: 45px,
-	}
-}
-
 .data-protection {
 
 	section  {
@@ -350,3 +344,5 @@ main.conclusion {
 .side a.btn {
 	margin-bottom: 30px;
 }
+
+@import "pages/donation_receipt";
