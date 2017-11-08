@@ -1,3 +1,5 @@
+{% import 'partials/Form_Utils.twig' as util %}
+
 {% extends 'Base_Layout.html.twig' %}
 
 {% block page_identifier %}donation-contact{% endblock%}
@@ -12,29 +14,29 @@
 						<div class="field-grp">
 							<input type="text" id="name" name="firstname" placeholder="{$ 'contact_firstname'|trans $}">
 							<label for="name" class="sr-only">{$ 'contact_firstname'|trans $}</label>
-							<span class="error-text">Es ist nicht eine gültige Vorname.</span>
+							{$ util.form_error('firstname', errors) $}
 						</div>
 						<div class="field-grp">
 							<input type="text" id="surname" name="lastname" placeholder="{$ 'contact_lastname'|trans $}">
 							<label for="surname" class="sr-only">{$ 'contact_lastname'|trans $}</label>
-							<span class="error-text">Es ist nicht eine gültige Nachname.</span>
+							{$ util.form_error('lastname', errors) $}
 						</div>
 						<div class="field-grp">
 							<input type="email" id="email" name="email" placeholder="{$ 'contact_email'|trans $}">
 							<label for="email" class="sr-only">{$ 'contact_email'|trans $}</label>
-							<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+							{$ util.form_error('email', errors) $}
 						</div>
 					</fieldset>
 					<fieldset class="col-xs-12 col-sm-7">
 						<div class="field-grp">
 							<input type="text" id="subject" name="subject" placeholder="{$ 'contact_subject'|trans $}">
 							<label for="subject" class="sr-only">{$ 'contact_subject'|trans $}</label>
-							<span class="error-text">Es ist nicht eine gültige Betreff.</span>
+							{$ util.form_error('subject', errors) $}
 						</div>
 						<div class="field-grp">
 							<textarea name="messageBody" rows="50" cols="10" id="comment" placeholder="{$ 'contact_body'|trans $}"></textarea>
 							<label for="subject" class="sr-only">{$ 'contact_body'|trans $}</label>
-							<span class="error-text">Es ist nicht eine gültige lhre nachricht an uns.</span>
+							{$ util.form_error('messageBody', errors) $}
 						</div>
 					</fieldset>
 				</div>

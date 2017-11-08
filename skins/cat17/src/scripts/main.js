@@ -294,33 +294,6 @@
         return isValid;
     };
 
-    var contactInfo = function () {
-        var form = $('#contact-form');
-        if (form.length == 0) return;
-        form.submit(submitValidation);
-        form.find('input[type="submit"]').click(submitValidation);
-
-        form.find('input, textarea').keypress(function () {
-            $(this).data('data-entered', true);
-        });
-
-        form.find('input, textarea').blur(function () {
-            if (!$(this).data('data-entered')) return;
-
-            if ($(this).val() == "" || !this.checkValidity()) {
-                $(this).addClass('invalid');
-                $(this).parent().addClass('invalid');
-                isValid = false;
-            }
-            else {
-                $(this).removeClass('invalid');
-                $(this).parent().removeClass('invalid');
-                $(this).addClass('valid');
-                $(this).parent().addClass('valid');
-            }
-        });
-    };
-
     var commentForm = function () {
         var form = $('#comment-form');
         if (form.length == 0) return;
