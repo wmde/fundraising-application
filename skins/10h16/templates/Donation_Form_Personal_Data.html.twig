@@ -365,6 +365,7 @@
                             <label for="street">Stra&szlig;e</label>
                             <input id="street" name="street" type="text" value="{$ street $}" data-pattern="^((?![M|m]uster).)+$" placeholder="z.B. Musterstra&szlig;e 123" class="required">
                             <span class="validation icon-placeholder"></span>
+                            <p id="street-warning-box" class="warning-box">{$ "form_street_number_warning" | trans $} </p>
                         </div>
 
                         <div class="input-container">

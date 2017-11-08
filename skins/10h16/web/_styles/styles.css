@@ -226,6 +226,30 @@ button.back-button { background: #e5e5e5; padding: 5px 15px !important; color: #
 }
 button.back-button:hover,
 button.back-button:active { background: #cccccc; }
+
+.warning-box {
+    margin-left: 180px;
+    margin-top: 10px;
+    background-color: #daeefb;
+    width: 350px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.warning-box:before {
+    content: "";
+    border-bottom: solid 10px #daeefb;
+    border-left: solid 10px transparent;
+    border-right: solid 10px transparent;
+    width: 0;
+    height: 0;
+    position:absolute;
+    display: block;
+    left: 45%;
+    top: 35px;
+    margin-left: 180px;
+}
+
 /* ======================================================================================= */
 
 
