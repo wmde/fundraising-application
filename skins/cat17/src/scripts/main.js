@@ -23,6 +23,7 @@
 
         selectedSelect();
 
+        // TODO Move this into view handler
         $("#amount-typed").on("focus", function() {
            $(this).closest(".wrap-amount-typed").addClass("focused");
 
@@ -49,7 +50,7 @@
                 $(this).toggleClass("selected");
                 $(this).children(".info-text").toggleClass("opened");
             });
-        };
+        }
     };
 
     var containersManager = function () {
@@ -65,6 +66,7 @@
         }
     };
 
+    // TODO Move into View Handler
     var selectedSelect = function () {
 
         if ($(window).width() < 1024) {
@@ -89,6 +91,7 @@
         });
     };
 
+	// TODO Move into View Handler
     var formInfosManager = function () {
 
         var $element = $("section.donation-amount");
@@ -219,7 +222,7 @@
             });
         }
 
-
+        // TODO Include this only on mebership pages
         if ($("body#membership").length) {
             var memberTypeSection = $("#membership-type").offset().top;
             $(window).scroll(function () {
@@ -248,6 +251,7 @@
                 }
             });
         } else {
+            // TODO include only on donation pages?
             $(window).scroll(function () {
                 var currentScroll = $(window).scrollTop();
                 var amountElements = $('.state-overview .amount');
@@ -271,6 +275,7 @@
 
     };
 
+    // TODO move into view handlers
     var submitValidation = function () {
         var isValid = true;
         $('form').find('input, textarea').each(function () {

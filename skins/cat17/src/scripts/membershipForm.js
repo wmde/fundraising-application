@@ -1,6 +1,7 @@
 $( function () {
   /** global: WMDE */
 
+  // TODO Only include this on membership page(s)
   if ($('body#membership').length == 0) {
     return;
   }
@@ -218,6 +219,7 @@ $( function () {
             'PPL': 'Nach der Möglichkeit der Adressangabe werden Sie zu PayPal weitergeleitet, wo Sie die Spende abschließen müssen.',
             'MCP': 'Nach der Möglichkeit der Adressangabe werden Sie zu unserem Partner Micropayment weitergeleitet, wo Sie Ihre Kreditkarteninformationen eingeben können.',
             'BEZ': 'Ich ermächtige die gemeinnützige Wikimedia Fördergesellschaft mbH (Gläubiger-ID: DE25ZZZ00000448435) Zahlungen von meinem Konto mittels Lastschrift einzuziehen. Zugleich weise ich mein Kreditinstitut an, die von der gemeinnützigen Wikimedia Fördergesellschaft mbH auf mein Konto gezogenen Lastschriften einzulösen. <br />Ich kann innerhalb von acht Wochen, beginnend mit dem Belastungsdatum, die Erstattung des belasteten Betrages verlangen. Es gelten dabei die mit meinem Kreditinstitut vereinbarten Bedingungen.',
+			  // @fixme: This is in English. Find out what this should be in German
             'UEB': 'On the conclusion of the donation process, you will be provided with the Wikimedia bank data so you can transfer the money.'
           },
           $('.address-icon'),
@@ -355,6 +357,7 @@ $( function () {
 
   function bankDataIsValid() {
     var state = store.getState();
+    // fixme move check to store/validator
     return state.membershipFormContent.paymentType !== 'BEZ' ||
     (
       state.membershipInputValidation.bic.dataEntered && state.membershipInputValidation.bic.isValid &&
@@ -412,7 +415,7 @@ $( function () {
 
     return invalidFields;
   }
-
+// fixme Move validation to store again, handle class changes in view handlers
   handleGroupValidations = function () {
     var state = store.getState();
 
@@ -506,6 +509,7 @@ $( function () {
   $('input').on('click, change', WMDE.StoreUpdates.makeEventHandlerWaitForAsyncFinish( handleGroupValidations, store ) );
   setInterval(handleGroupValidations, 1000);
 
+  // TODO move to view handler
   $('input[name="membership_type"]').on('click', function () {
     if ($(this).val() == 'active') {
       $('#company').parent().addClass('disabled');

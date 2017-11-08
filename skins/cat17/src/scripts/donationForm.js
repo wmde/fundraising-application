@@ -1,6 +1,7 @@
 $( function () {
   /** global: WMDE */
 
+  // TODO only include this file on donation page(s)
   if ($('body#donation').length == 0) {
     return;
   }
@@ -226,6 +227,7 @@ $( function () {
             'PPL': 'Nach der Möglichkeit der Adressangabe werden Sie zu PayPal weitergeleitet, wo Sie die Spende abschließen müssen.',
             'MCP': 'Nach der Möglichkeit der Adressangabe werden Sie zu unserem Partner Micropayment weitergeleitet, wo Sie Ihre Kreditkarteninformationen eingeben können.',
             'BEZ': 'Ich ermächtige die gemeinnützige Wikimedia Fördergesellschaft mbH (Gläubiger-ID: DE25ZZZ00000448435) Zahlungen von meinem Konto mittels Lastschrift einzuziehen. Zugleich weise ich mein Kreditinstitut an, die von der gemeinnützigen Wikimedia Fördergesellschaft mbH auf mein Konto gezogenen Lastschriften einzulösen. <br />Ich kann innerhalb von acht Wochen, beginnend mit dem Belastungsdatum, die Erstattung des belasteten Betrages verlangen. Es gelten dabei die mit meinem Kreditinstitut vereinbarten Bedingungen.',
+              // @fixme: This is in English. Find out what this should be in German
             'UEB': 'On the conclusion of the donation process, you will be provided with the Wikimedia bank data so you can transfer the money.'
           },
           $('.address-icon'),
@@ -354,6 +356,7 @@ $( function () {
     var validity = store.getState().validity,
       formContent = store.getState().donationFormContent;
     return formContent.addressType === 'anonym' || (
+		// @fixme: Move checking of salutation and title into reducer/store/validator
       validity.address && formContent.salutation != "person" &&
       formContent.salutation != "anrede" && formContent.title != "vtitle"
     );
@@ -361,6 +364,7 @@ $( function () {
 
   function bankDataIsValid() {
     var state = store.getState();
+	  // @fixme: Move special handling of BEZ into reducer/store/validator
     return state.donationFormContent.paymentType !== 'BEZ' ||
     (
     state.donationInputValidation.bic.dataEntered && state.donationInputValidation.bic.isValid &&
@@ -447,6 +451,10 @@ $( function () {
       _paq.push( eventData );
     }
   }
+
+// @fixme Compare how the old skin called the handleXXX functions and restore that state. Refactor handleGroupValidations
+// @fixme Move checks from handleGroupValidations into store validator
+// @fixme Restore Piwik triggers
 
   function handlePaymentDataSubmit() {
     if ( paymentDataIsValid() ) {
@@ -560,10 +568,12 @@ $( function () {
   };
 
   // connect DOM elements to actions
+  // fixme don't use interval, use form events instead? Discuss performance & other implications
   //$( '#continueFormSubmit1' ).click( WMDE.StoreUpdates.makeEventHandlerWaitForAsyncFinish( handlePaymentDataSubmit, store ) );
   $('input').on('click, change', WMDE.StoreUpdates.makeEventHandlerWaitForAsyncFinish( handleGroupValidations, store ) );
   setInterval(handleGroupValidations, 1000);
 
+  // fixme move to view handler
   $('input[name="payment-info"]').click(function () {
     if ($(this).val() == 'BEZ') {
       $('#anonymus').parent().addClass('disabled');
@@ -583,6 +593,7 @@ $( function () {
     return false;
   });
 
+  // TODO move to view handler
   $("#amount-typed").on('keypress', function (event) {
     var _element = $(this),
       keyCode = event.keyCode || event.which,

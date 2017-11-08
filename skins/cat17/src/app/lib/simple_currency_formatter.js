@@ -11,10 +11,12 @@ var parseGermanFloat = function ( amountStr ) {
 	GermanCurrencyFormatter = {
 		format: function ( amountStr ) {
 			var amount = this.parse( amountStr );
+		// @fixme The currency formatter should format currencies, not return error messages
       if (amount == 0) {
         return String("Betrag noch nicht ausgewählt.");
       }
 
+      // @fixme This is probably a workaround for amounts < 1. Check what this code does & how it interacts with AmountValidator.formValuesHaveEmptyRequiredFields
       if (amount % 1 != 0) {
         return String( (Math.round(amount * 100)/100).toFixed(2) ).replace( '.', '.' ) + String.fromCharCode( 160 ) + '€';
       }
@@ -26,6 +28,7 @@ var parseGermanFloat = function ( amountStr ) {
 	EnglishCurrencyFormatter = {
 		format: function ( amountStr ) {
 			var amount = this.parse( amountStr );
+		// @fixme The currency formatter should format currencies, not return error messages
       if (amount == 0) {
         return String("Amount not yet selected.");
       }

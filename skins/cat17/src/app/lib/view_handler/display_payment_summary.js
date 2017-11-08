@@ -34,6 +34,7 @@ var objectAssign = require( 'object-assign' ),
       this.intervalTextElement.html( this.intervalText[formContent.paymentIntervalInMonths] );
 
       var amountFormat = this.numberFormatter.format(formContent.amount);
+      // @fixme Don't use jQuery here. Instead, interact with the store values and the elements.
       this.amountElement.each(function () {
         if (formContent.amount > 0 || $(this).data('display-error') === undefined) {
           $(this).text(amountFormat);
@@ -44,6 +45,7 @@ var objectAssign = require( 'object-assign' ),
       });
 
       var paymentTypeText = this.formatPaymentType( formContent.paymentType );
+		// @fixme Don't use jQuery here. Instead, interact with the store values and the elements.
       this.paymentTypeElement.each(function () {
         if (formContent.paymentType !== "" || $(this).data('display-error') === undefined) {
           $(this).text(paymentTypeText);
@@ -78,6 +80,7 @@ var objectAssign = require( 'object-assign' ),
         this.addressTypeElement.text(this.addressType[formContent.addressType]);
       }
       else {
+		  // @fixme Don't use jQuery here. Instead, interact with the store values and the elements.
         this.addressTypeElement.each(function () {
           if ($(this).data('display-error') === undefined) {
             $(this).text("Daten noch nicht ausgewählt.");
@@ -89,6 +92,7 @@ var objectAssign = require( 'object-assign' ),
 
       if (this.memberShipTypeElement) {
         var textMemberShipType = this.memberShipType[formContent.membershipType];
+		  // @fixme Don't use jQuery here. Instead, interact with the store values and the elements.
         this.memberShipTypeElement.each(function () {
           if (formContent.membershipType) {
             $(this).text(textMemberShipType);
@@ -111,6 +115,7 @@ var objectAssign = require( 'object-assign' ),
     },
     getAddressSummaryContent: function (formContent) {
       if (formContent.addressType === "person") {
+		  // TODO Refactor into something more readable.
         return (
           formContent.firstName && formContent.lastName ?
             (formContent.salutation && formContent.title !== 'kein-title' && formContent.title !== 'vtitle' && formContent.salutation != 'anrede' ?
@@ -141,6 +146,7 @@ var objectAssign = require( 'object-assign' ),
       if (elements.length && elements.get(0).className.split(' ').length > 1) {
         elements.removeClass(elements.get(0).className.split(' ').pop());
       }
+		// @fixme Don't use jQuery here. Instead, interact with the store values and the elements.
       if (iconsDictionary[value] === undefined) {
         elements.each(function() {
           if ($(this).data('display-error') === undefined) {
