@@ -229,11 +229,13 @@ button.back-button:active { background: #cccccc; }
 
 .warning-box {
     margin-left: 180px;
-    margin-top: 10px;
+    margin-top: 15px;
     background-color: #daeefb;
     width: 350px;
     padding: 10px;
     box-sizing: border-box;
+    font-size: 80%;
+    position: relative;
 }
 
 .warning-box:before {
@@ -246,8 +248,7 @@ button.back-button:active { background: #cccccc; }
     position:absolute;
     display: block;
     left: 45%;
-    top: 35px;
-    margin-left: 180px;
+    top: -10px;
 }
 
 /* ======================================================================================= */
