@@ -102,6 +102,6 @@ module.exports = function membershipInputValidation( state, action ) {
   state = clearCompanyValidityOnActiveMembershipChange( state, action );
   state = clearOptionalFieldValidityOnEmptying( state, action );
   state = setValidityOnSalutationChange( state, action );
-  state = clearBankDataValidityOnPaymentTypeChange( state, action );
+  //state = clearBankDataValidityOnPaymentTypeChange( state, action );
   return inputValidationLib.inputValidation( state, action );
 };

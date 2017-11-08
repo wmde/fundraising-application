@@ -33,67 +33,71 @@
 		display: flex;
 		justify-content: flex-end;
 	}
-
 	input[type=checkbox] {
 		position: absolute;
 		left: -9999px;
-		&:checked {
-			+ .menu-toggler {
+	}
+	
+	@include bkp(smmax) {
+		input[type=checkbox] {
+			&:checked {
+				+ .menu-toggler {
 
-				@include themify($themes) {
-					background-color: themed('brandPrimary');
-				}
+					@include themify($themes) {
+						background-color: themed('brandPrimary');
+					}
 
-				.menu-toggler-line {
-					background-color: #fff;
-					&:nth-child(1) {
-						transform: translateY(7px) translateX(0) rotate(45deg) scale(1);
-					}
-					&:nth-child(2) {
-						opacity: 0;
-					}
-					&:nth-child(3) {
-						transform: translateY(-5px) translateX(0) rotate(-45deg) scale(1);
-					}
-				}
-			}
-			~ .menu {
-				//transform: translateX(0);
-				transform: translate(0, 0%);
-				padding: 0;
-				border-bottom: 1px solid $gray-light;
-				.list-inline li {
-					display: block;
-					border-bottom: 1px solid $gray-lighter;
-
-					a {
-						display: flex;
-						align-items: center;
-						justify-content: space-between;
-						padding: 10px 20px 10px 25px;
-						i {
-							display: inline-block;
+					.menu-toggler-line {
+						background-color: #fff;
+						&:nth-child(1) {
+							transform: translateY(7px) translateX(0) rotate(45deg) scale(1);
 						}
-
+						&:nth-child(2) {
+							opacity: 0;
+						}
+						&:nth-child(3) {
+							transform: translateY(-5px) translateX(0) rotate(-45deg) scale(1);
+						}
 					}
-					&:last-child {
-						border-bottom: none;
-						&:hover {
+				}
+				~ .menu {
+					//transform: translateX(0);
+					transform: translate(0, 0%);
+					padding: 0;
+					border-bottom: 1px solid $gray-light;
+					.list-inline li {
+						display: block;
+						border-bottom: 1px solid $gray-lighter;
+
+						a {
+							display: flex;
+							align-items: center;
+							justify-content: space-between;
+							padding: 10px 20px 10px 25px;
+							i {
+								display: inline-block;
+							}
+
+						}
+						&:last-child {
 							border-bottom: none;
-						}
-						.other-info {
-							margin: 0 0  20px;
-						}
-						@include bkp(sm) {
-							margin-left: 50%;
-						}
+							&:hover {
+								border-bottom: none;
+							}
+							.other-info {
+								margin: 0 0 20px;
+							}
+							@include bkp(sm) {
+								margin-left: 50%;
+							}
 
+						}
 					}
-				}
-				.other-info {
-					clear: both;
-					margin: 30px 0 20px;
-					padding-left: 25px;
+					.other-info {
+						clear: both;
+						margin: 30px 0 20px;
+						padding-left: 25px;
+					}
 				}
 			}
 		}

@@ -92,7 +92,8 @@ var jQuery = require( 'jquery' ),
 				return { status: ValidationStates.INCOMPLETE };
 			}
 			postData = {
-				amount: formValues.amount,
+				// @fixme don't do the replace here, instead why the value is stored as string with comma in the reducer
+				amount: formValues.amount.replace( '.', ',' ),
 				paymentType: formValues.paymentType
 			};
 			return jQueryDeferredToPromise( this.sendFunction( this.validationUrl, postData, null, 'json' ) );

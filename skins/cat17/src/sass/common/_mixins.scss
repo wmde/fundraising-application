@@ -7,6 +7,10 @@
         @media (max-width: 677px) { @content; }
 	}
 
+	@else if $class == smmax {
+		@media (max-width: 971px) { @content; }
+	}
+
 	@else if $class == sm {
 		@media (min-width: 678px) { @content; }
 	}

@@ -20,7 +20,7 @@ var objectAssign = require( 'object-assign' ),
     addressTypeElement: null,
     addressType: null,
     addressTypeTextElement: null,
-    countriesDictionary: {'DE': 'Deutschland', 'AT': 'Österreich', 'CH': 'Schweiz', 'BE': 'Belgien', 'IT': 'Italien', 'LU': 'Luxemburg'},
+    countriesDictionary: {'DE': 'Deutschland', 'AT': 'Österreich', 'CH': 'Schweiz', 'BE': 'Belgien', 'IT': 'Italien', 'LU': 'Luxemburg', 'LI': 'Liechtenstein'},
     intervalTextElement: null,
     intervalText: null,
     memberShipTypeElement: null,
@@ -30,10 +30,11 @@ var objectAssign = require( 'object-assign' ),
     memberShipTypeTextElement: null,
     memberShipTypeText: null,
     update: function ( formContent ) {
-      this.intervalElement.text( this.formatPaymentInterval( formContent.paymentIntervalInMonths ) );
-      this.intervalTextElement.text( this.intervalText[formContent.paymentIntervalInMonths] );
+      this.intervalElement.html( this.formatPaymentInterval( formContent.paymentIntervalInMonths ) );
+      this.intervalTextElement.html( this.intervalText[formContent.paymentIntervalInMonths] );
 
       var amountFormat = this.numberFormatter.format(formContent.amount);
+      // @fixme Don't use jQuery here. Instead, interact with the store values and the elements.
       this.amountElement.each(function () {
         if (formContent.amount > 0 || $(this).data('display-error') === undefined) {
           $(this).text(amountFormat);
@@ -44,6 +45,7 @@ var objectAssign = require( 'object-assign' ),
       });
 
       var paymentTypeText = this.formatPaymentType( formContent.paymentType );
+		// @fixme Don't use jQuery here. Instead, interact with the store values and the elements.
       this.paymentTypeElement.each(function () {
         if (formContent.paymentType !== "" || $(this).data('display-error') === undefined) {
           $(this).text(paymentTypeText);
@@ -55,7 +57,7 @@ var objectAssign = require( 'object-assign' ),
 
       this.setSummaryIcon(this.intervalIconElement, formContent.paymentIntervalInMonths, this.intervalIcons);
       this.setSummaryIcon(this.paymentIconsElement, formContent.paymentType, this.paymentIcons);
-      this.periodicityTextElement.text( this.periodicityText[formContent.paymentIntervalInMonths] );
+      this.periodicityTextElement.html( this.periodicityText[formContent.paymentIntervalInMonths] );
 
       var paymentTextFormatted = this.paymentText[formContent.paymentType];
       if (formContent.paymentType == "BEZ") {
@@ -78,6 +80,7 @@ var objectAssign = require( 'object-assign' ),
         this.addressTypeElement.text(this.addressType[formContent.addressType]);
       }
       else {
+		  // @fixme Don't use jQuery here. Instead, interact with the store values and the elements.
         this.addressTypeElement.each(function () {
           if ($(this).data('display-error') === undefined) {
             $(this).text("Daten noch nicht ausgewählt.");
@@ -89,6 +92,7 @@ var objectAssign = require( 'object-assign' ),
 
       if (this.memberShipTypeElement) {
         var textMemberShipType = this.memberShipType[formContent.membershipType];
+		  // @fixme Don't use jQuery here. Instead, interact with the store values and the elements.
         this.memberShipTypeElement.each(function () {
           if (formContent.membershipType) {
             $(this).text(textMemberShipType);
@@ -111,10 +115,13 @@ var objectAssign = require( 'object-assign' ),
     },
     getAddressSummaryContent: function (formContent) {
       if (formContent.addressType === "person") {
+		  // TODO Refactor into something more readable.
         return (
           formContent.firstName && formContent.lastName ?
-            (formContent.salutation ? this.capitalize(formContent.salutation) : "") + " " +
-            (formContent.title ? this.capitalize(formContent.title) : "") + " " +
+            (formContent.salutation && formContent.title !== 'kein-title' && formContent.title !== 'vtitle' && formContent.salutation != 'anrede' ?
+              this.capitalize(formContent.salutation) : "") + " " +
+            (formContent.title && formContent.title !== 'kein-title' && formContent.title !== 'vtitle' ?
+              this.capitalize(formContent.title) : "") + " " +
             formContent.firstName + " " + formContent.lastName + "<br />"
             : ""
         ) +
@@ -139,6 +146,7 @@ var objectAssign = require( 'object-assign' ),
       if (elements.length && elements.get(0).className.split(' ').length > 1) {
         elements.removeClass(elements.get(0).className.split(' ').pop());
       }
+		// @fixme Don't use jQuery here. Instead, interact with the store values and the elements.
       if (iconsDictionary[value] === undefined) {
         elements.each(function() {
           if ($(this).data('display-error') === undefined) {

@@ -1,6 +1,7 @@
 $( function () {
   /** global: WMDE */
 
+  // TODO Only include this on membership page(s)
   if ($('body#membership').length == 0) {
     return;
   }
@@ -207,18 +208,19 @@ $( function () {
           },
           $('.amount .info-detail'),
           {
-            '0': 'Ihr Konto wird Einmal belastet.',
-            '1': 'Ihr Konto wird jeden Monat belastet. Ihre monatliche Spende können Sie jederzeit fristlos per E-Mail an spenden@wikimedia.de stornieren.',
-            '3': 'Ihr Konto wird alle drei Monate belastet. Ihre monatliche Spende können Sie jederzeit fristlos per E-Mail an spenden@wikimedia.de stornieren.',
-            '6': 'Ihr Konto wird jeden Monat belastet. Ihre monatliche Spende können Sie jederzeit fristlos per E-Mail an spenden@wikimedia.de stornieren.',
-            '12': 'Ihr Konto wird jährlich belastet. Ihre jährliche Spende können Sie jederzeit fristlos per E-Mail an spenden@wikimedia.de stornieren.'
+            '0': 'Ihr Konto wird einmal belastet.',
+            '1': 'Ihr Konto wird jeden Monat belastet.<br />Ihre monatliche Spende können Sie jederzeit fristlos per E-Mail an spenden@wikimedia.de stornieren.',
+            '3': 'Ihr Konto wird alle drei Monate belastet.<br />Ihre vierteljahrliche Spende können Sie jederzeit fristlos per E-Mail an spenden@wikimedia.de stornieren.',
+            '6': 'Ihr Konto wird alle sechs Monate belastet.<br />Ihre halbjahrliche Spende können Sie jederzeit fristlos per E-Mail an spenden@wikimedia.de stornieren.',
+            '12': 'Ihr Konto wird jährlich belastet.<br />Ihre jährliche Spende können Sie jederzeit fristlos per E-Mail an spenden@wikimedia.de stornieren.'
           },
           $('.payment-method .info-detail'),
           {
             'PPL': 'Nach der Möglichkeit der Adressangabe werden Sie zu PayPal weitergeleitet, wo Sie die Spende abschließen müssen.',
             'MCP': 'Nach der Möglichkeit der Adressangabe werden Sie zu unserem Partner Micropayment weitergeleitet, wo Sie Ihre Kreditkarteninformationen eingeben können.',
             'BEZ': 'Ich ermächtige die gemeinnützige Wikimedia Fördergesellschaft mbH (Gläubiger-ID: DE25ZZZ00000448435) Zahlungen von meinem Konto mittels Lastschrift einzuziehen. Zugleich weise ich mein Kreditinstitut an, die von der gemeinnützigen Wikimedia Fördergesellschaft mbH auf mein Konto gezogenen Lastschriften einzulösen. <br />Ich kann innerhalb von acht Wochen, beginnend mit dem Belastungsdatum, die Erstattung des belasteten Betrages verlangen. Es gelten dabei die mit meinem Kreditinstitut vereinbarten Bedingungen.',
-            'UEB': 'IBAN 348720983472938<br />BIC 87668786<br />Ich ermächtige die gemeinnützige Wikimedia Fördergesellschaft mbH (Gläubiger-ID: DE25ZZZ00000448435) Zahlungen von meinem Konto mittels Lastschrift einzuziehen. Zugleich weise ich mein Kreditinstitut an, die von der gemeinnützigen Wikimedia Fördergesellschaft mbH auf mein Konto gezogenen Lastschriften einzulösen.<br />Ich kann innerhalb von acht Wochen, beginnend mit dem Belastungsdatum, die Erstattung des belasteten Betrages verlangen. Es gelten dabei die mit meinem Kreditinstitut vereinbarten Bedingungen.'
+			  // @fixme: This is in English. Find out what this should be in German
+            'UEB': 'On the conclusion of the donation process, you will be provided with the Wikimedia bank data so you can transfer the money.'
           },
           $('.address-icon'),
           {
@@ -355,6 +357,7 @@ $( function () {
 
   function bankDataIsValid() {
     var state = store.getState();
+    // fixme move check to store/validator
     return state.membershipFormContent.paymentType !== 'BEZ' ||
     (
       state.membershipInputValidation.bic.dataEntered && state.membershipInputValidation.bic.isValid &&
@@ -368,8 +371,11 @@ $( function () {
 
   function formDataIsValid() {
     var validity = store.getState().validity;
-    return !hasInvalidFields() && validity.paymentData && addressIsValid() && bankDataIsValid();
+    var state = store.getState();
+    //console.log(validity.paymentData + " " + addressIsValid() + " " + bankDataIsValid());
+    return validity.paymentData && state.membershipFormContent.membershipType && addressIsValid() && bankDataIsValid();
   }
+
 
   function triggerValidityCheckForPersonalDataPage() {
     var formContent = store.getState().membershipFormContent;
@@ -409,7 +415,7 @@ $( function () {
 
     return invalidFields;
   }
-
+// fixme Move validation to store again, handle class changes in view handlers
   handleGroupValidations = function () {
     var state = store.getState();
 
@@ -501,8 +507,9 @@ $( function () {
     }
   };
   $('input').on('click, change', WMDE.StoreUpdates.makeEventHandlerWaitForAsyncFinish( handleGroupValidations, store ) );
-  handleGroupValidations();
+  setInterval(handleGroupValidations, 1000);
 
+  // TODO move to view handler
   $('input[name="membership_type"]').on('click', function () {
     if ($(this).val() == 'active') {
       $('#company').parent().addClass('disabled');
@@ -524,6 +531,29 @@ $( function () {
       return true;
     }
     return false;
+  });
+
+  $("#amount-typed").on('keypress', function (event) {
+    var _element = $(this),
+      keyCode = event.keyCode || event.which,
+      keysAllowed = [44, 46, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 0, 8, 9, 13];
+
+    if ($.inArray(keyCode, keysAllowed) === -1 && event.ctrlKey === false) {
+      event.preventDefault();
+    }
+
+    if ((keyCode == 44 || keyCode == 46) && $('#amount-typed').val().indexOf('.') > 0) {
+      event.preventDefault();
+    }
+
+    if (keyCode == 44) {
+      setTimeout(
+        function () {
+          $('#amount-typed').val(
+            $('#amount-typed').val().replace(',','.')
+          );
+        }, 10);
+    }
   });
 
   // Initialize form pages

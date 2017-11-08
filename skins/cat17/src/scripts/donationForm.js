@@ -1,6 +1,7 @@
 $( function () {
   /** global: WMDE */
 
+  // TODO only include this file on donation page(s)
   if ($('body#donation').length == 0) {
     return;
   }
@@ -24,8 +25,7 @@ $( function () {
         accountNumberElement: $( '#account-number' ),
         bankCodeElement: $( '#bank-code' ),
         bankNameFieldElement: $( '#field-bank-name' ),
-        bankNameDisplayElement: $( '#bank-name' ),
-        debitTypeElement: $( '.debit-type-select' )
+        bankNameDisplayElement: $( '#bank-name' )
       } ),
       WMDE.Components.createRadioComponent( store, $( 'input[name="addressType"]' ), 'addressType' ),
       WMDE.Components.createRadioComponent( store, $( '#treatment' ), 'salutation' ),
@@ -102,7 +102,7 @@ $( function () {
         viewHandler: WMDE.View.createErrorBoxHandler( $( '#validation-errors' ), {
           amount: 'Betrag',
           paymentType: 'Zahlungsart',
-          salutation: 'Anrede',
+          salutation: 'Familie',
           title: 'Titel',
           firstName: 'Vorname',
           lastName: 'Nachname',
@@ -216,18 +216,19 @@ $( function () {
           },
           $('.amount .info-detail'),
           {
-            '0': 'Ihr Konto wird Einmal belastet.',
-            '1': 'Ihr Konto wird jeden Monat belastet. Ihre monatliche Spende können Sie jederzeit fristlos per E-Mail an spenden@wikimedia.de stornieren.',
-            '3': 'Ihr Konto wird alle drei Monate belastet. Ihre monatliche Spende können Sie jederzeit fristlos per E-Mail an spenden@wikimedia.de stornieren.',
-            '6': 'Ihr Konto wird jeden Monat belastet. Ihre monatliche Spende können Sie jederzeit fristlos per E-Mail an spenden@wikimedia.de stornieren.',
-            '12': 'Ihr Konto wird jährlich belastet. Ihre jährliche Spende können Sie jederzeit fristlos per E-Mail an spenden@wikimedia.de stornieren.'
+            '0': 'Ihr Konto wird einmal belastet.',
+            '1': 'Ihr Konto wird jeden Monat belastet.<br />Ihre monatliche Spende können Sie jederzeit fristlos per E-Mail an spenden@wikimedia.de stornieren.',
+            '3': 'Ihr Konto wird alle drei Monate belastet.<br />Ihre vierteljahrliche Spende können Sie jederzeit fristlos per E-Mail an spenden@wikimedia.de stornieren.',
+            '6': 'Ihr Konto wird alle sechs Monate belastet.<br />Ihre halbjahrliche Spende können Sie jederzeit fristlos per E-Mail an spenden@wikimedia.de stornieren.',
+            '12': 'Ihr Konto wird jährlich belastet.<br />Ihre jährliche Spende können Sie jederzeit fristlos per E-Mail an spenden@wikimedia.de stornieren.'
           },
           $('.payment-method .info-detail'),
           {
             'PPL': 'Nach der Möglichkeit der Adressangabe werden Sie zu PayPal weitergeleitet, wo Sie die Spende abschließen müssen.',
             'MCP': 'Nach der Möglichkeit der Adressangabe werden Sie zu unserem Partner Micropayment weitergeleitet, wo Sie Ihre Kreditkarteninformationen eingeben können.',
             'BEZ': 'Ich ermächtige die gemeinnützige Wikimedia Fördergesellschaft mbH (Gläubiger-ID: DE25ZZZ00000448435) Zahlungen von meinem Konto mittels Lastschrift einzuziehen. Zugleich weise ich mein Kreditinstitut an, die von der gemeinnützigen Wikimedia Fördergesellschaft mbH auf mein Konto gezogenen Lastschriften einzulösen. <br />Ich kann innerhalb von acht Wochen, beginnend mit dem Belastungsdatum, die Erstattung des belasteten Betrages verlangen. Es gelten dabei die mit meinem Kreditinstitut vereinbarten Bedingungen.',
-            'UEB': 'IBAN 348720983472938<br />BIC 87668786<br />Ich ermächtige die gemeinnützige Wikimedia Fördergesellschaft mbH (Gläubiger-ID: DE25ZZZ00000448435) Zahlungen von meinem Konto mittels Lastschrift einzuziehen. Zugleich weise ich mein Kreditinstitut an, die von der gemeinnützigen Wikimedia Fördergesellschaft mbH auf mein Konto gezogenen Lastschriften einzulösen.<br />Ich kann innerhalb von acht Wochen, beginnend mit dem Belastungsdatum, die Erstattung des belasteten Betrages verlangen. Es gelten dabei die mit meinem Kreditinstitut vereinbarten Bedingungen.'
+              // @fixme: This is in English. Find out what this should be in German
+            'UEB': 'On the conclusion of the donation process, you will be provided with the Wikimedia bank data so you can transfer the money.'
           },
           $('.address-icon'),
           {
@@ -354,18 +355,31 @@ $( function () {
   function addressIsValid() {
     var validity = store.getState().validity,
       formContent = store.getState().donationFormContent;
-    return formContent.addressType === 'anonym' || validity.address;
+    return formContent.addressType === 'anonym' || (
+		// @fixme: Move checking of salutation and title into reducer/store/validator
+      validity.address && formContent.salutation != "person" &&
+      formContent.salutation != "anrede" && formContent.title != "vtitle"
+    );
   }
 
   function bankDataIsValid() {
-    var validity = store.getState().validity,
-      formContent = store.getState().donationFormContent;
-    return formContent.paymentType !== 'BEZ' || validity.bankData;
+    var state = store.getState();
+	  // @fixme: Move special handling of BEZ into reducer/store/validator
+    return state.donationFormContent.paymentType !== 'BEZ' ||
+    (
+    state.donationInputValidation.bic.dataEntered && state.donationInputValidation.bic.isValid &&
+    state.donationInputValidation.iban.dataEntered && state.donationInputValidation.iban.isValid
+    ) ||
+    (
+    state.donationInputValidation.accountNumber.dataEntered && state.donationInputValidation.accountNumber.isValid &&
+    state.donationInputValidation.bankCode.dataEntered && state.donationInputValidation.bankCode.isValid
+    );
   }
 
   function formDataIsValid() {
     var validity = store.getState().validity;
-    return !hasInvalidFields() && validity.paymentData && addressIsValid() && bankDataIsValid();
+    //console.log(validity.paymentData + " " + addressIsValid() + " " + bankDataIsValid());
+    return validity.paymentData && addressIsValid() && bankDataIsValid();
   }
 
   function personalDataPageIsValid() {
@@ -437,6 +451,10 @@ $( function () {
       _paq.push( eventData );
     }
   }
+
+// @fixme Compare how the old skin called the handleXXX functions and restore that state. Refactor handleGroupValidations
+// @fixme Move checks from handleGroupValidations into store validator
+// @fixme Restore Piwik triggers
 
   function handlePaymentDataSubmit() {
     if ( paymentDataIsValid() ) {
@@ -550,10 +568,12 @@ $( function () {
   };
 
   // connect DOM elements to actions
+  // fixme don't use interval, use form events instead? Discuss performance & other implications
   //$( '#continueFormSubmit1' ).click( WMDE.StoreUpdates.makeEventHandlerWaitForAsyncFinish( handlePaymentDataSubmit, store ) );
   $('input').on('click, change', WMDE.StoreUpdates.makeEventHandlerWaitForAsyncFinish( handleGroupValidations, store ) );
-  handleGroupValidations();
+  setInterval(handleGroupValidations, 1000);
 
+  // fixme move to view handler
   $('input[name="payment-info"]').click(function () {
     if ($(this).val() == 'BEZ') {
       $('#anonymus').parent().addClass('disabled');
@@ -571,6 +591,30 @@ $( function () {
       return true;
     }
     return false;
+  });
+
+  // TODO move to view handler
+  $("#amount-typed").on('keypress', function (event) {
+    var _element = $(this),
+      keyCode = event.keyCode || event.which,
+      keysAllowed = [44, 46, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 0, 8, 9, 13];
+
+    if ($.inArray(keyCode, keysAllowed) === -1 && event.ctrlKey === false) {
+      event.preventDefault();
+    }
+
+    if ((keyCode == 44 || keyCode == 46) && $('#amount-typed').val().indexOf('.') > 0) {
+      event.preventDefault();
+    }
+
+    if (keyCode == 44) {
+      setTimeout(
+        function () {
+          $('#amount-typed').val(
+            $('#amount-typed').val().replace(',','.')
+          );
+        }, 10);
+    }
   });
 
   // Set initial form values

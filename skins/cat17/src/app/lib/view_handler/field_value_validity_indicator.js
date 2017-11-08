@@ -10,7 +10,9 @@ var objectAssign = require( 'object-assign' ),
 		element: {},
 
 		update: function ( validationState ) {
-			if ( validationState.isValid === true ) {
+			// @fixme look why the 2nd condition was added and fix it differently.
+			// @fixme Element values should come from the store, not from the elements themselves
+			if ( validationState.isValid === true && this.element.val() !== "" ) {
 				this.element.addClass( 'valid' ).removeClass( 'invalid' )
 					.next( 'span' ).addClass( 'icon-ok' ).removeClass( 'icon-bug icon-placeholder' );
         this.element.parent().addClass('valid').removeClass('invalid');

@@ -1,61 +1,91 @@
 .btn {
-   	width: 100%;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     @include themify($themes) {
         background-color: themed('brandPrimary');
     }
-		color: #fff;
-		margin:0 auto;
+    color: #fff;
+    margin: 0 auto;
     height: 66px;
-		pointer-events: auto;
-		&:hover, &:focus {
-			@include themify($themes) {
-				background-color: themed('brandPrimaryDark');
-			}
-			color: #fff;
-		}
-		&:active {
-			margin-left: auto;
-			margin-right: auto;
-			width: 90%;
-			@include bkp(xs) {
-			}
-		}
-		&.btn-unactive {
-			background-color: $gray-light;
-			color: #ffffff;
-			pointer-events: none;
-		}
-
-		@include bkp(xs) {
-			//max-width: 280px;
-		}
-		@include bkp(sm) {
-            height: 45px;
-		}
-
-        &.btn-donation {
-            @include bkp(sm) {
-                max-width: 226px;
-                float: right;
-            }
+    pointer-events: auto;
+    &:hover, &:focus {
+        @include themify($themes) {
+            background-color: themed('brandPrimaryDark');
         }
-	&.btn-membership {
-		height: 44px;
-		color: #fff;
-		&.btn-unactive {
-			background-color: $gray-light;
-			color: $text-color;
-		}
-	}
-	&.btn-donation.btn-introduction {
-		height: 44px;
-		@include bkp(md) {
-			display: none;
-		}
-	}
+        color: #fff;
+    }
+    &:active {
+        margin-left: auto;
+        margin-right: auto;
+        width: 90%;
+        @include bkp(xs) {
+        }
+    }
+    &.btn-unactive {
+        background-color: $gray-light;
+        color: #ffffff;
+        pointer-events: none;
+    }
 
+    @include bkp(xs) {
+        //max-width: 280px;
+    }
+    @include bkp(sm) {
+        height: 45px;
+    }
+
+    &.btn-donation {
+        @include bkp(sm) {
+            max-width: 226px;
+            float: right;
+        }
+    }
+    &.btn-membership {
+        height: 44px;
+        color: #fff;
+        &.btn-unactive {
+            background-color: $gray-light;
+            color: $text-color;
+        }
+    }
+    &.btn-donation.btn-introduction {
+        height: 44px;
+        @include bkp(md) {
+            display: none;
+        }
+    }
 }
 
+.state-bar-lateral .btn.btn-donation, .fixed-button .btn.btn-donation {
+    width: 100%;
+    max-width: none;
+    float: none;
+}
+
+.fixed-button {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0;
+    transition: opacity 200ms;
+    text-align: center;
+    &.active {
+        opacity: 1;
+        text-align: center;
+
+        input[type="submit"] {
+            text-align: center;
+            display: block;
+        }
+    }
+    @include bkp(sm) {
+        background-color: #ffffff;
+        border-top: 1px solid $gray-light;
+        input[type="submit"] {
+            margin: 10px 0;
+        }
+    }
+}
