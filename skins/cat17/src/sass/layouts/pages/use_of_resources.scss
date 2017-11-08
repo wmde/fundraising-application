@@ -5,5 +5,10 @@
 			width: auto;
 			margin-top: -6ex;
 		}
+		p:last-child a {
+			display: inline-block;
+			text-align: center;
+			width: 49%;
+		}
 	}
 }
