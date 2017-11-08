@@ -8,8 +8,7 @@ var objectAssign = require( 'object-assign' ),
 		update: function ( fieldValue ) {
 			if ( this.validationFunction( fieldValue ) ) {
 				this.issueBox.show();
-			}
-			else {
+			} else {
 				this.issueBox.hide();
 			}
 		}
