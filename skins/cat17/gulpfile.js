@@ -63,21 +63,6 @@ gulp.task( 'watch', ['browserSync'], function () {
 	gulp.watch( dirs.src + '/scripts/**/*.js', browserSync.reload );
 } );
 
-
-gulp.task( 'default', ['styles'] );
-
-/* todo copiar files jsf from node_modules to vendor */
-
-gulp.task( 'develop', gulpsync.sync( ['styles', 'scripts'] ) );
-
-/* productions tasks */
-
-
-// minimitzar js, css
-// concatenar css
-// minimitzar imatges
-
-
 gulp.task( 'images', function () {
 	return gulp.src( dirs.src + '/assets/images/**/*.{png,jpg,svg,ico}' )
 		.pipe( imagemin( [
@@ -110,6 +95,7 @@ gulp.task( 'copies', function () {
 		.pipe( gulp.dest( dirs.dist + '/scripts/vendor/jquery' ) );
 } );
 
+// @todo Concat, minify JS & CSS (see templates/Base_Layout.html.twig build:* comments)
 gulp.task( 'useref', function () {
 	return !gulp.src( '!' + dirs.src + '/*.html' )
 		.pipe( useref() )
@@ -118,5 +104,4 @@ gulp.task( 'useref', function () {
 		.pipe( gulp.dest( dirs.dist ) )
 } );
 
-/* tasca a cridar per posar tot el contingut a dist */
-gulp.task( 'prod', gulpsync.sync( ['scripts', 'styles', 'images', 'copies', 'useref'] ) );
+gulp.task( 'default', gulpsync.sync( [['scripts', 'styles', 'images'], 'copies'] ) );
