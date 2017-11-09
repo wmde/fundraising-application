@@ -1,7 +1,45 @@
 {% extends 'Base_Layout.html.twig' %}
 
-{% block page_identifier %}comments{% endblock %}
+{% block page_identifier %}comments-list{% endblock %}
+
+{% block scripts %}
+	<script type="text/javascript" src="{$ basepath $}/skins/cat17/scripts/donationComments.js"></script>
+{% endblock %}
 
 {% block main %}
-	@todo Comments here
+	<!-- nav content filled with paginator-sidebar via css / dont delete -->
+	<nav class="paginator paginator-top col-xs-12">
+	</nav>
+	<div class="container">
+		<div class="row">
+			<div class="introduction col-xs-12 col-sm-7 col-md-8 clearfix">
+				<h2>Spendenkommentare</h2>
+				<p class="subtitle">
+					Nachfolgend finden Sie eine Übersicht der letzten Spendenkommentare. Die neuesten Einträge sind auch
+					als <a href="{$ path( 'list-comments.rss', { piwik_campaign: 'Spendenseite', piwik_kwd: 'spendenliste' } ) $}" target="_top">RSS-Feed</a> verfügbar.</p>
+			</div>
+			<nav class="paginator paginator-sidebar col-md-4 clearfix">
+				<div class="container">
+					<div class="row">
+						<div class="pages-wrap col-xs-12 col-sm-5 col-sm-offset-7">
+                            <span class="controls prev"><a href="#"><i class="icon-keyboard_arrow_left"></i><span
+											class="sr-only">Previous page of comments</span></a></span>
+							<span class="page-indicator">Seite <span class="current-page">1</span> von <span class="num-pages">1</span> </span>
+							<span class="controls next"><a href="#"><span class="sr-only">Next page of comments</span><i
+											class="icon-keyboard_arrow_right"></i></a></span>
+						</div>
+					</div>
+
+				</div>
+			</nav>
+
+			<div class="content col-xs-12 col-sm-6 col-md-8 comment-container">
+				Spendenkommentare werden geladen ...
+			</div>
+
+		</div>
+		<div class="row">
+            {% include 'partials/back_link.html.twig' %}
+		</div>
+	</div>
 {% endblock %}
