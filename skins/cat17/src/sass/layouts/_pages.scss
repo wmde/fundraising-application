@@ -264,29 +264,6 @@ main.conclusion {
 	}
 }
 
-.impressum {
-	h2 {
-		margin-bottom: 25px;
-	}
-}
-
-.tax-deduction {
-	.cancel-block {
-		padding-top: 45px,
-	}
-}
-
-.data-protection {
-
-	section  {
-		margin-bottom: 50px;
-	}
-	.back-block {
-		@include bkp(md) {
-			margin-top: -80px;
-		}
-	}
-}
 .comments-list {
 	.introduction {
 		padding-top: 80px;
@@ -350,3 +327,7 @@ main.conclusion {
 .side a.btn {
 	margin-bottom: 30px;
 }
+
+@import "pages/donation_receipt";
+@import "pages/use_of_resources";
+@import "pages/privacy_protection";

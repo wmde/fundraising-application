@@ -1,0 +1,14 @@
+.page-use_of_resources {
+	.content {
+		img[src$='itz_logo_white.png'] {
+			float: right;
+			width: auto;
+			margin-top: -6ex;
+		}
+		p:last-child a {
+			display: inline-block;
+			text-align: center;
+			width: 49%;
+		}
+	}
+}
