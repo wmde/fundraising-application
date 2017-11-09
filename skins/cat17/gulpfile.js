@@ -13,7 +13,7 @@ var exec = require( 'child_process' ).exec;
 
 var dirs = {
 	src: 'src',
-	dist: 'dist'
+	dist: 'web'
 };
 
 /* development tasks */
