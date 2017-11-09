@@ -42,15 +42,7 @@ gulp.task( 'styles', function () {
 } );
 
 gulp.task( 'scripts', function ( cb ) {
-	exec( 'browserify src/app/main.js -s WMDE -o ' + dirs.dist + '/build/wmde.js', function ( err, stdout, stderr ) {
-		console.log( stdout );
-		console.log( stderr );
-		cb( err );
-	} );
-} );
-
-gulp.task( 'scripts-prod', function ( cb ) {
-	exec( 'browserify src/app/main.js -s WMDE -o ' + dirs.dist + '/build/wmde.js', function ( err, stdout, stderr ) {
+	exec( 'browserify ' + dirs.src + '/app/main.js -s WMDE -o ' + dirs.dist + '/build/wmde.js', function ( err, stdout, stderr ) {
 		console.log( stdout );
 		console.log( stderr );
 		cb( err );
@@ -127,4 +119,4 @@ gulp.task( 'useref', function () {
 } );
 
 /* tasca a cridar per posar tot el contingut a dist */
-gulp.task( 'prod', gulpsync.sync( ['scripts-prod', 'styles', 'images', 'copies', 'useref'] ) );
+gulp.task( 'prod', gulpsync.sync( ['scripts', 'styles', 'images', 'copies', 'useref'] ) );
