@@ -24,8 +24,8 @@
 	<link rel="stylesheet" href="{$ basepath $}/skins/cat17/css/print.css" media="print">
 	<!--endbuild-->
 </head>
-<body id="{% block page_identifier %}{% endblock%}" class="{% block page_theme %}theme-donation{% endblock %}">
-	<div class="{$ block('page_identifier') $} others">
+<body class="{% block page_theme %}theme-donation{% endblock %}">
+	<div class="page-{% block page_identifier %}uncustomized{% endblock %}">
 		{% include 'partials/' ~ header_template with { page_identifier: block('page_identifier') } only %}
 
 		<main>
