@@ -7,7 +7,6 @@ var cssNano = require( 'gulp-cssnano' );
 var useref = require( 'gulp-useref' );
 var uglify = require( 'gulp-uglify' );
 var gulpIf = require( 'gulp-if' );
-var fileinclude = require( 'gulp-file-include' );
 var imagemin = require( 'gulp-imagemin' );
 var gulpsync = require( 'gulp-sync' )( gulp );
 var exec = require( 'child_process' ).exec;
@@ -42,19 +41,6 @@ gulp.task( 'styles', function () {
 		} ) )
 } );
 
-gulp.task( 'htmlincludes', function () {
-	return gulp.src( './' + dirs.src + '/html/templates/*.html' )
-		.pipe( fileinclude( {
-			prefix: '@@',
-			basepath: './' + dirs.src + '/html/partials'
-		} ) )
-		.pipe( gulp.dest( './' + dirs.dist ) )
-		.pipe( browserSync.reload( {
-			stream: true
-		} ) )
-} );
-
-
 gulp.task( 'scripts', function ( cb ) {
 	exec( 'browserify src/app/main.js -s WMDE -o ' + dirs.dist + '/build/wmde.js', function ( err, stdout, stderr ) {
 		console.log( stdout );
@@ -82,8 +68,6 @@ gulp.task( 'browserSync', function () {
 gulp.task( 'watch', ['browserSync'], function () {
 	gulp.watch( dirs.src + '/sass/**/*.scss', ['styles'] );
 	gulp.watch( dirs.src + '/app/**/*.js', ['scripts', browserSync.reload] );
-	gulp.watch( dirs.src + '/html/partials/**/*.html', ['htmlincludes'] );
-	gulp.watch( dirs.src + '/html/templates/**/*.html', ['htmlincludes'] );
 	gulp.watch( dirs.src + '/scripts/**/*.js', browserSync.reload );
 } );
 
@@ -92,21 +76,14 @@ gulp.task( 'default', ['styles'] );
 
 /* todo copiar files jsf from node_modules to vendor */
 
-gulp.task( 'develop', gulpsync.sync( ['styles', 'scripts', 'htmlincludes'] ) );
+gulp.task( 'develop', gulpsync.sync( ['styles', 'scripts'] ) );
 
 /* productions tasks */
 
 
 // minimitzar js, css
 // concatenar css
-// copiar html
 // minimitzar imatges
-
-
-gulp.task( 'html', function () {
-	return gulp.src( dirs.src + '/*.html' )
-		.pipe( gulp.dest( dirs.dist ) );
-} );
 
 
 gulp.task( 'images', function () {
@@ -150,4 +127,4 @@ gulp.task( 'useref', function () {
 } );
 
 /* tasca a cridar per posar tot el contingut a dist */
-gulp.task( 'prod', gulpsync.sync( ['scripts-prod', 'styles', 'htmlincludes', 'html', 'images', 'copies', 'useref'] ) );
+gulp.task( 'prod', gulpsync.sync( ['scripts-prod', 'styles', 'images', 'copies', 'useref'] ) );
