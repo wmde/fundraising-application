@@ -1,5 +1,5 @@
 {
-  "name": "wmde_fundraising",
+  "name": "wmde_fundraising_cat17",
   "version": "1.0.0",
   "description": "WMDE fundraising application (end user facing part)",
   "main": "index.js",
