@@ -27,7 +27,7 @@
 </head>
 <body id="{% block page_identifier %}{% endblock%}" class="{% block page_theme %}theme-donation{% endblock %}">
 	<div class="{$ block('page_identifier') $} others">
-		{% include 'partials/' ~ header_template %}
+		{% include 'partials/' ~ header_template with { page_identifier: block('page_identifier') } only %}
 
 		<main>
 			{% block main %}
