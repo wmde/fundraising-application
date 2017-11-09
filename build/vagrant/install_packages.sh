@@ -4,7 +4,7 @@
 add-apt-repository ppa:ondrej/php -y
 
 # Add node.js repo
-curl -sL https://deb.nodesource.com/setup_6.x | bash -
+curl -sL https://deb.nodesource.com/setup_8.x | bash -
 
 apt-get update
 #apt-get upgrade -y
