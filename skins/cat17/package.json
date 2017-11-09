@@ -1,5 +1,5 @@
 {
-  "name": "wmde_fundraising",
+  "name": "wmde_fundraising_cat17",
   "version": "1.0.0",
   "description": "WMDE fundraising application (end user facing part)",
   "main": "index.js",
@@ -13,7 +13,7 @@
     "test": "echo 'todo: test' && exit 0",
     "cs": "echo 'todo: cs' && exit 0",
     "ci": "echo 'todo: ci' && exit 0",
-    "build-assets": "mkdir -p dist/build && mkdir -p web && gulp scripts-prod styles images copies && cp -R dist/* web"
+    "build-assets": "mkdir -p web/build && gulp"
   },
   "repository": {
     "type": "git",
