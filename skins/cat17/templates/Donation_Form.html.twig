@@ -32,7 +32,7 @@
 		</div>
 	</div>
 
-	<form id="form-donation" action="ACTION_URL" novalidate>
+	<form id="form-donation" action="{$ basepath $}/donation/add" method="post" novalidate>
 		<div class="container">
 			<section class="state-bar state-overview col-xs-12 ">
 				<div class="wrap-bar container ">
@@ -465,6 +465,7 @@
 {% endblock %}
 
 {% block scripts %}
+	<script type="text/javascript" src="{$ basepath|e('html_attr') $}{$ '/skins/cat17/build/wmde.js'|prefix_file $}"></script>
 	<script type="text/javascript" id="init-form" src="{$ basepath|e('html_attr') $}{$ '/skins/cat17/scripts/donationForm.js'|prefix_file $}"
 			data-initial-form-values="{% if initialFormValues %}{$ initialFormValues|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
 			data-violated-fields="{% if violatedFields %}{$ violatedFields|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
