@@ -1,13 +1,8 @@
 $( function () {
   /** global: WMDE */
 
-  // TODO Only include this on membership page(s)
-  if ($('body#membership').length == 0) {
-    return;
-  }
-
-  var initData = $( '#init-form.membership' ),
-    store = WMDE.Store.createMembershipStore(),
+  var initData = $( '#init-form' ),
+	store = WMDE.Store.createMembershipStore(),
     actions = WMDE.Actions;
 
   WMDE.StoreUpdates.connectComponentsToStore(
@@ -125,12 +120,31 @@ $( function () {
         stateKey: 'membershipInputValidation'
       },
 		// Show "needs to support recurring debiting" notice for payments types that provide that info (payment_type_*_recurrent_info)
+		// Set payment_type_*_recurrent_info trans in HTML
 		{
 			viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '#payment-method .info-text .info-recurrent' ), /^(1|3|6|12)/ ),
 			stateKey: 'membershipFormContent.paymentIntervalInMonths'
 		},
+		// todo use display_field_suboptions
       {
-        // @todo Use WMDE.View.SectionInfo.* instead
+        viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.person-name' ), 'person' ),
+        stateKey: 'membershipFormContent.addressType'
+      },
+      {
+        viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.company-name' ), 'firma' ),
+        stateKey: 'membershipFormContent.addressType'
+      },
+      {
+        viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '#address-type-2' ).parent(), 'sustaining' ),
+        stateKey: 'membershipFormContent.membershipType'
+      },
+		// todo verify FeeOptionSwitcher does its thing
+      {
+        viewHandler: WMDE.View.createFeeOptionSwitcher( [ $( '#amount-1' ), $( '#amount-2' ), $( '#amount-3' ), $( '#amount-4' ), $( '#amount-5' ), $( '#amount-6' ), $( '#amount-7' ) ], { person: 24, firma: 100 } ),
+        stateKey: 'membershipFormContent'
+      },
+      {
+		  // @todo Use WMDE.View.SectionInfo.* instead
         viewHandler: WMDE.View.createPaymentSummaryDisplayHandler(
 			$( '.frequency .text' ),
           $( '.amount .text'),
