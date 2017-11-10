@@ -163,7 +163,7 @@
                 var currentScroll = $(window).scrollTop();
                 if ($('.page-donation').length) {
                     var initialTop = 200;
-                } else if ($('body#membership').length) {
+                } else if ($('.page-membership').length) {
                     var initialTop = 650;
                 }
 
@@ -185,7 +185,7 @@
         }
 
         // TODO Include this only on mebership pages
-        if ($("body#membership").length) {
+        if ($(".page-membership").length) {
             var memberTypeSection = $("#membership-type").offset().top;
             $(window).scroll(function () {
                 var currentScroll = $(window).scrollTop();
