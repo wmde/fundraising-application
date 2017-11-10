@@ -3,8 +3,6 @@
     var init = function () {
         smoothScroll();
 
-        contactInfo();
-
         commentForm();
 
         formInfosManager();
@@ -13,7 +11,7 @@
 
         heightInfo();
 
-        containersManager()
+        containersManager();
 
         openCommentItem();
 
