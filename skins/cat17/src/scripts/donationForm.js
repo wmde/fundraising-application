@@ -480,16 +480,6 @@ $( function () {
     }
   }
 
-  $.urlParam = function(name){
-    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-    if (results==null){
-      return null;
-    }
-    else{
-      return decodeURI(results[1]) || 0;
-    }
-  };
-
   handleGroupValidations = function () {
     var state = store.getState();
 
@@ -614,21 +604,13 @@ $( function () {
 
   // Set initial form values
   var initSetup = initData.data( 'initial-form-values' );
-  var urlAmountHidden = $.urlParam('amount-hidden');
-  var urlAmountTyped = $.urlParam('amount-typed');
-  var urlIntervalType = $.urlParam('intervalType');
-  var urlIntervalMonths = $.urlParam('periode');
-  var urlPayment = $.urlParam('payment-info');
-  urlAmountHidden ? initSetup.amount = urlAmountHidden : 0;
-  urlAmountTyped && urlAmountHidden ? initSetup.isCustomAmount = true : 0;
-  urlIntervalType ? initSetup.paymentIntervalInMonths = urlIntervalType : 0;
-  urlIntervalMonths && urlIntervalType ? initSetup.paymentIntervalInMonths = urlIntervalMonths : 0;
-  urlPayment ? initSetup.paymentType = urlPayment : 0;
   store.dispatch( actions.newInitializeContentAction( initSetup ) );
 
   var $introBanner = $('.introduction.banner');
   var $introDefault = $('.introduction.default');
-  if (urlAmountHidden && urlIntervalType && urlPayment) {
+
+  // @todo Check if this are all conditions that would be considered "successful deeplink", warrant the special header
+  if (initSetup.amount && initSetup.paymentIntervalInMonths && initSetup.paymentType) {
     $introBanner.removeClass('hidden');
     $introDefault.addClass('hidden');
   }
