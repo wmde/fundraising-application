@@ -816,6 +816,10 @@ div.notice-window {
     margin-top: -80px;
 }
 
+.sandboxedcontent.donation_receipt a {
+    text-decoration: underline;
+}
+
 .sandboxedcontent.use_of_resources p a {
     width: 49%;
     display: inline-block;
