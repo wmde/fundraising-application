@@ -268,6 +268,24 @@ $( function () {
         ),
         stateKey: 'donationFormContent'
       },
+		{
+			viewHandler: WMDE.View.createSuboptionDisplayHandler(
+				$( '#recurrence' )
+			),
+			stateKey: 'donationFormContent.paymentIntervalInMonths'
+		},
+		{
+			viewHandler: WMDE.View.createSuboptionDisplayHandler(
+				$( '#donation-payment' )
+			),
+			stateKey: 'donationFormContent.paymentType'
+		},
+		{
+			viewHandler: WMDE.View.createSuboptionDisplayHandler(
+				$( '#type-donator' )
+			),
+			stateKey: 'donationFormContent.addressType'
+		},
       {
         viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#first-name' ) ),
         stateKey: 'donationInputValidation.firstName'
@@ -604,6 +622,8 @@ $( function () {
 
   // Set initial form values
   var initSetup = initData.data( 'initial-form-values' );
+  // backend delivers amount as a german-formatted "float" string
+  initSetup.amount = WMDE.CurrencyFormatter.createCurrencyFormatter( 'de' ).parse( initSetup.amount );
   store.dispatch( actions.newInitializeContentAction( initSetup ) );
 
   var $introBanner = $('.introduction.banner');

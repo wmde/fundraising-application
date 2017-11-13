@@ -20,6 +20,7 @@ module.exports = {
 		createFieldValueValidityIndicator: require( './lib/view_handler/field_value_validity_indicator' ).createFieldValueValidityIndicator,
 		createCountrySpecificAttributesHandler: require( './lib/view_handler/country_specific_attributes' ).createCountrySpecificAttributesHandler,
 		createRecurrentPaypalNoticeHandler: require( './lib/view_handler/recurrent_paypal_notice' ).createRecurrentPaypalNoticeHandler,
+		createSuboptionDisplayHandler: require( './lib/view_handler/display_field_suboptions' ).createSuboptionDisplayHandler,
 		Animator: require( './lib/view_handler/animator' )
 	},
 	Actions: require( './lib/actions' ),
