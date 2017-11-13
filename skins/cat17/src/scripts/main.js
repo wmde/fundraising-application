@@ -173,7 +173,7 @@
         } else {
             $(window).scroll(function () {
                 var currentScroll = $(window).scrollTop();
-                if ($('body#donation').length) {
+                if ($('.page-donation').length) {
                     var initialTop = 200;
                 } else if ($('body#membership').length) {
                     var initialTop = 650;
