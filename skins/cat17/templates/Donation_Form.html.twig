@@ -65,43 +65,12 @@
 						<h2 class="">Spendentbetrag</h2>
 
 						<p class="legend">Wie viel Geld wollen Sie spenden und wie häufig?</p>
+
 						<fieldset
 								class="amount-qty padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
 							<legend class="sr-only">Wie viel Geld wollen Sie spenden und wie häufig?</legend>
 							<div class="wrap-amounts">
-								<div class="wrap-radio">
-									<input type="radio" name="amount-grp" id="amount1" value="5">
-									<label for="amount1">5 €</label>
-								</div>
-								<div class="wrap-radio">
-									<input type="radio" name="amount-grp" id="amount2" value="15">
-									<label for="amount2">15 €</label>
-								</div>
-								<div class="wrap-radio">
-									<input type="radio" name="amount-grp" id="amount3" value="25">
-									<label for="amount3"><span>25 €</span></label>
-								</div>
-								<div class="wrap-radio">
-									<input type="radio" name="amount-grp" id="amount4" value="50">
-									<label for="amount4">50 €</label>
-								</div>
-								<div class="wrap-radio">
-									<input type="radio" name="amount-grp" id="amount5" value="75">
-									<label for="amount5">75 €</label>
-								</div>
-								<div class="wrap-radio">
-									<input type="radio" name="amount-grp" id="amount6" value="100">
-									<label for="amount6">100 €</label>
-								</div>
-								<div class="wrap-radio">
-									<input type="radio" name="amount-grp" id="amount7" value="250">
-									<label for="amount7">250 €</label>
-								</div>
-								<div class="wrap-radio">
-									<input type="radio" name="amount-grp" id="amount8" value="300">
-									<label for="amount8">300 €</label>
-								</div>
-
+								{% include 'partials/payment_preset_amounts.html.twig' with { 'presetAmounts': [ 5, 15, 25, 50, 75, 100, 250, 300 ] } %}
 
 								<div class="wrap-amount-typed">
 									<input type="text" name="amount-typed" id="amount-typed">
@@ -116,66 +85,8 @@
 								  class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
 							<!-- ToDo: wikimeida-team - translate text to deutsch -->
 							<legend class="sr-only">Choose temporality of payment</legend>
-							<div class="wrap-field">
 
-								<div class="wrap-input">
-									<input type="radio" name="intervalType" id="regular" value="1" class="hidden">
-									<input type="radio" name="intervalType" id="one-time" value="0">
-									<label for="one-time"><span>Einmalig</span><i class="icon-unique"></i></label>
-								</div>
-
-								<p class="info-text" data-info="one-time">
-									Ihr Konto wird einmal belastet.
-								</p>
-							</div>
-							<div class="wrap-field">
-
-								<div class="wrap-input">
-									<input type="radio" name="periode" id="monthly" value="1">
-									<label for="monthly"><span>Monatlich</span><i class="icon-repeat_1"></i></label>
-								</div>
-
-								<p class="info-text" data-info="monthly">
-									Ihr Konto wird jeden Monat belastet. Ihre monatliche Spende können Sie jederzeit
-									fristlos per E-Mail an spenden@wikimedia.de stornieren.
-								</p>
-							</div>
-							<div class="wrap-field">
-
-								<div class="wrap-input">
-									<input type="radio" name="periode" id="quarterly" value="3">
-									<label for="quarterly"><span>Vierteljährlich</span><i
-												class="icon-repeat_3"></i></label>
-								</div>
-								<p class="info-text" data-info="quarterly">
-									Ihr Konto wird alle drei Monate belastet. Ihre vierteljahrliche Spende können Sie jederzeit
-									fristlos per E-Mail an spenden@wikimedia.de stornieren.
-								</p>
-							</div>
-							<div class="wrap-field">
-
-								<div class="wrap-input">
-									<input type="radio" name="periode" id="biannual" value="6">
-									<label for="biannual"><span>Halbjährlich</span><i class="icon-repeat_6"></i></label>
-								</div>
-								<p class="info-text" data-info="biannual">
-									Ihr Konto wird alle sechs Monate belastet. Ihre halbjahrliche Spende können Sie jederzeit
-									fristlos per E-Mail an spenden@wikimedia.de stornieren.
-								</p>
-							</div>
-							<div class="wrap-field">
-
-								<div class="wrap-input">
-									<input type="radio" name="periode" id="yearly" value="12">
-									<label for="yearly"><span>Jährlich</span><i class="icon-repeat_12"></i></label>
-								</div>
-
-								<p class="info-text" data-info="yearly">
-									Ihr Konto wird jährlich belastet. Ihre jährliche Spende können Sie jederzeit fristlos
-									per E-Mail an spenden@wikimedia.de stornieren.
-								</p>
-							</div>
-
+							{% include 'partials/payment_intervals.html.twig' only %}
 						</fieldset>
 					</section>
 
@@ -188,76 +99,7 @@
 								  class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
 							<legend class="sr-only">Wie möchten Sie Ihre Spende bezahlen?</legend>
 
-							<div class="wrap-field">
-
-								<div class="wrap-input">
-									<input type="radio" name="payment-info" id="paypal" value="PPL">
-									<label for="paypal"><span>Paypal</span><i class="icon-paypal"></i></label>
-								</div>
-								<p class="info-text" data-info="paypal">Nach der Möglichkeit der Adressangabe werden Sie zu
-									PayPal
-									weitergeleitet, wo Sie die Spende abschließen müssen.</p>
-							</div>
-							<div class="wrap-field">
-
-								<div class="wrap-input">
-									<input type="radio" name="payment-info" id="credit-card" value="MCP">
-									<label for="credit-card"><span>Kreditkarte</span><i
-												class="icon-credit_card2"></i></label>
-								</div>
-								<p class="info-text" data-info="credit-card">
-									Nach der Möglichkeit der Adressangabe werden Sie zu unserem Partner Micropayment
-									weitergeleitet, wo
-									Sie
-									Ihre Kreditkarteninformationen eingeben können.
-								</p>
-							</div>
-							<div class="wrap-field">
-
-								<div class="wrap-input">
-									<input type="radio" name="payment-info" id="debit-card" value="BEZ">
-									<label for="debit-card"><span>Lastschrift</span><i class="icon-SEPA-2"></i></label>
-								</div>
-								<div class="info-text" data-info="debit-card">
-
-									<div class="field-grp">
-										<input type="text" id="iban" placeholder="IBAN">
-										<label for="iban" class="sr-only">IBAN</label>
-									</div>
-									<div class="field-grp">
-										<input type="text" id="bic" placeholder="BIC">
-										<label for="bic" class="sr-only">BIC</label>
-									</div>
-
-									<span class="oden">oden</span>
-
-									<div class="field-grp">
-										<input type="text" id="account-number" placeholder="Kontonummer">
-										<label for="account-number" class="sr-only">Kontonummer</label>
-									</div>
-									<div class="field-grp">
-										<input type="text" id="bank-code" placeholder="Bankleitzahl">
-										<label for="bank-code" class="sr-only">Bankleitzahl</label>
-									</div>
-									<!-- ToDo: wikimedia-team, decide and translate to german -->
-									<span class="error-text">Generic text of error.</span>
-								</div>
-							</div>
-							<div class="wrap-field">
-
-								<div class="wrap-input">
-									<input type="radio" name="payment-info" id="bank-transfer" value="UEB">
-									<label for="bank-transfer"><span>Überweisung</span><i
-												class="icon-ubeiwsung-1"></i></label>
-								</div>
-								<p class="info-text" data-info="bank-transfer">
-									On the conclusion of the donation process, you will be provided with the Wikimedia bank
-									data so you
-									can
-									transfer the money.
-								</p>
-							</div>
-
+							{% include 'partials/payment_types.html.twig' with { 'paymentTypes': paymentTypes } only %}
 						</fieldset>
 					</section>
 

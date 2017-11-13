@@ -11,8 +11,8 @@ $( function () {
 
   WMDE.StoreUpdates.connectComponentsToStore(
     [
-      WMDE.Components.createAmountComponent( store, $('#amount-typed'), $( 'input[name="amount-grp"]' ), $( '#amount-hidden' ) ),
-      WMDE.Components.createRadioComponent( store, $('input[name="payment-info"]'), 'paymentType' ),
+      WMDE.Components.createAmountComponent( store, $('#amount-typed'), $( 'input[name="betrag"]' ), $( '#amount-hidden' ) ),
+      WMDE.Components.createRadioComponent( store, $('input[name="zahlweise"]'), 'paymentType' ),
       WMDE.Components.createPaymentIntervalComponent( store, $('input[name="intervalType"]'), $('input[name="periode"]') ),
       WMDE.Components.createBankDataComponent( store, {
         ibanElement: $( '#iban' ),
