@@ -8,10 +8,13 @@
 	<div class="introduction container default">
 		<div class="row">
 			<div class="col-xs-12">
-				<!-- ToDo: wikimedia-team add h2 adequate title in deutch, this title is only visible to screenreaders and robots -->
-				<h2 class="sr-only">Donation wikimedia page</h2>
-				<p class="h1">Die Wikimedia Fördergesellschaft ist eine unabhängige gemeinnützige Organisation, die in Deutschland Spenden für <a class="link" href="https://de.wikipedia.org/wiki/Wikipedia:Hauptseite">Wikipedia</a> und die anderen Wikimedia-Projekte sammelt.</p>
-				<a href="#donation-amount" class="btn btn-donation btn-introduction bk-blue text-center text-uppercase">Jetzt spendenn</a>
+				<h2 class="sr-only">{$ 'donation_title' | trans $}</h2>
+				<p class="h1">
+					{$ 'wikimedia_tagline' | trans $}
+				</p>
+				<a href="#donation-amount" class="btn btn-donation btn-introduction bk-blue text-center text-uppercase">
+					{$ 'donation_banner_anchor' | trans $}
+				</a>
 			</div>
 		</div>
 	</div>
@@ -20,16 +23,20 @@
 		<div class="row">
 			<div class="col-xs-12 col-md-8">
 				<p class="h1">
-					Sie wollen
-					<span class="frequency"><span class="text strong"></span></span>
-					<span class="amount"><span class="text strong" data-display-error="false"></span></span> per
-					<span class="payment-method"><span class="text strong"></span></span>
-					spenden.
+					{$ 'donation_banner_deeplink_summary' | trans( {
+						'%frequency%': '<span class="frequency"><span class="text strong"></span></span>',
+						'%amount%': '<span class="amount"><span class="text strong" data-display-error="false"></span></span>',
+						'%payment_method%': '<span class="payment-method"><span class="text strong"></span></span>'
+					} ) | raw $}
 				</p>
-				<p class="subtitle">Die Wikimedia Fördergesellschaft ist eine unabhängige gemeinnützige Organisation, die in Deutschland Spenden für Wikipedia und die anderen Wikimedia-Projekte sammelt.</p>
+				<p class="subtitle">
+					{$ 'wikimedia_tagline' | trans $}
+				</p>
 			</div>
 			<div class="link-back col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-0 col-md-4">
-				<a href="{$ path( '/' ) $}" class="">Das stimmt nicht? Hier können<br> Sie Ihre Angaben ändern.</a>
+				<a href="#donation-amount">
+					{$ 'donation_banner_correction_anchor' | trans | raw $}
+				</a>
 			</div>
 		</div>
 	</div>
