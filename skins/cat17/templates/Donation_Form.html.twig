@@ -185,11 +185,7 @@
 									<div class="wrap-check">
 										<input type="checkbox" id="newsletter" data-jcf='{"wrapNative": true}' class="jcf">
 										<label class="news" for="newsletter">
-											Ja, ich bin damit einverstanden, dass Wikimedia mich per E-Mail kontaktiert,
-											wenn Wikipedia
-											meine Unterstützung benötigt.<br>
-											Die Einwilligung können Sie jederzeit per
-											E-Mail an spenden@wikimedia.de mit Wirkung für die Zukunft widerrufen.
+											{$ 'donation_sendinfo_label' | trans | raw $}
 										</label>
 									</div>
 								</div>
@@ -236,13 +232,9 @@
 										</select>
 									</div>
 									<div class="wrap-check">
-										<input type="checkbox" id="newsletter-company">
+										<input type="checkbox" id="newsletter-company" name="info" value="1">
 										<label class="news" for="newsletter-company">
-											Ja, ich bin damit einverstanden, dass Wikimedia mich per E-Mail kontaktiert,
-											wenn Wikipedia
-											meine Unterstützung benötigt.
-											Die Einwilligung können Sie jederzeit per
-											E-Mail an spenden@wikimedia.de mit Wirkung für die Zukunft widerrufen.
+											{$ 'donation_sendinfo_label' | trans | raw $}
 										</label>
 									</div>
 								</div>
