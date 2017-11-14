@@ -1,0 +1,57 @@
+<div class="container">
+    <div class="row">
+        <div class="content col-xs-12 col-md-8">
+
+            <p class="h1">
+                {$ "donation_confirmation_head" | trans $}<br />
+                {$ "donation_confirmation_head_summary" | trans( {
+                    '%formattedAmount%': formattedAmount,
+                    '%paymentType%': donation.paymentType|trans( {}, 'paymentTypes' ),
+                    '%status_description%': donation.status|trans( {}, 'paymentStatus' )
+                } ) | raw $}
+
+            <p class="h2">
+                {$ "donation_confirmation_subhead_donation_number" | trans( { '%donation.id%': donation.id } ) | raw $}<br />
+
+                {$ "donation_confirmation_subhead_external_payment"| trans( {
+                    '%formattedAmount%': formattedAmount,
+                    '%interval%': donation.interval|trans({}, 'paymentIntervals'),
+                    '%paymentType%': donation.paymentType|trans( {}, 'paymentTypes' ),
+                    '%status_description%': donation.status|trans( {}, 'paymentStatus' )
+                } ) | raw $}
+            </p>
+
+            {% if donation.optsIntoNewsletter %}
+                <p class="text-moved visible-sm-block visible-md-block visible-lg-block">
+                    {$ "donation_confirmation_opts_into_newsletter" | trans | raw $}
+                </p>
+            {% endif %}
+        </div>
+
+        {% if donation.optsIntoNewsletter %}
+            <div class="cancel-block col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-0 col-md-4">
+                <p class="text-moved hidden-sm hidden-md hidden-lg">{$ "donation_confirmation_opts_into_newsletter" | trans | raw $}</p>
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+<div class="switch-container container-fluid container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-8 col-md-4">
+            <a href="{$ basepath $}/apply-for-membership" class="btn btn-introduction bk-blue text-center text-uppercase">
+                {$ "donation_confirmation_apply_for_membership" | trans $}
+            </a>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <nav class="menu menu-footer col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-8 col-md-4">
+        <ul class="list-menu list-unstyled">
+            <li><a href="{$ basepath $}/comment/new"><span>{$ "add_donation_comment" | trans $}</span></a></li>
+            {% include 'partials/share_on_social_networks.html.twig' %}
+        </ul>
+        </nav>
+    </div>
+</div>
