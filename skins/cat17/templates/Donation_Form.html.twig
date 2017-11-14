@@ -101,7 +101,10 @@
 
 								<div class="wrap-input">
 									<input type="radio" name="addressType" id="personal" value="person">
-									<label for="personal"><span>Privat</span><i class="icon-account_circle"></i></label>
+									<label for="personal">
+										<span>{$ 'donation_addresstype_option_private' | trans $}</span>
+										<i class="icon-account_circle"></i>
+									</label>
 								</div>
 								<div class="wrap-info">
 									<div class="info-text" data-info="personal">
@@ -171,7 +174,10 @@
 							<div class="wrap-field firma">
 								<div class="wrap-input">
 									<input type="radio" name="addressType" id="company" value="firma">
-									<label for="company"><span>Firma</span><i class="icon-work"></i></label>
+									<label for="company">
+										<span>{$ 'donation_addresstype_option_company' | trans $}</span>
+										<i class="icon-work"></i>
+									</label>
 								</div>
 								<div class="wrap-info">
 									<div class="info-text" data-info="company">
@@ -216,22 +222,20 @@
 										</label>
 									</div>
 								</div>
-
 							</div>
-
 
 							<div class="wrap-field anonym">
-
 								<div class="wrap-input">
 									<input type="radio" name="addressType" id="anonymus" value="anonym">
-									<label for="anonymus"><span>Anonym</span><i class="icon-visibility_off"></i></label>
+									<label for="anonymus">
+										<span>{$ 'donation_addresstype_option_anonymous' | trans $}</span>
+										<i class="icon-visibility_off"></i>
+									</label>
 								</div>
 								<p class="info-text" data-info="anonymus">
-									Bitte beachten Sie, dass wir für eine spätere Zuordnung der Spende Ihren Namen und die
-									Zahlungsinformationen vom Dienstleister erhalten.
+									{$ 'donation_addresstype_option_anonymous_disclaimer' | trans $}
 								</p>
 							</div>
-
 						</fieldset>
 					</section>
 
