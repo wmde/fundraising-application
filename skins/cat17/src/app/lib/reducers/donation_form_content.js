@@ -27,7 +27,6 @@ var formContentLib = require( './form_content' ),
     confirmSepa: false,
     confirmShortTerm: false,
     confirmNewsletter: false,
-    contactPerson: '',
     activePresets: false
   };
 

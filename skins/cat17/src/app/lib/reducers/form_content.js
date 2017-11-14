@@ -21,7 +21,6 @@ function clearFieldsIfAddressTypeChanges( newState, payload ) {
   switch ( payload.value ) {
     case 'person':
       newState.companyName = '';
-      newState.contactPerson = '';
       break;
     case 'firma':
       newState.salutation = '';

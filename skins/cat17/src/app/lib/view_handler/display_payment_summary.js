@@ -126,7 +126,6 @@ var objectAssign = require( 'object-assign' ),
       }
       else if (formContent.addressType === 'firma') {
         return (formContent.companyName ? formContent.companyName + "<br />" : "") +
-        (formContent.contactPerson ? formContent.contactPerson + "<br />" : "") +
         (formContent.street ? formContent.street + "<br />" : "") +
         (formContent.postcode && formContent.city ? formContent.postcode + " " + formContent.city + "<br />" : "") +
         ( formContent.country ? this.countriesDictionary[formContent.country] + "<br />" : "") +

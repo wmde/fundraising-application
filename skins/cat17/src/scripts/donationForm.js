@@ -39,8 +39,7 @@ $( function () {
       WMDE.Components.createValidatingTextComponent( store, $( '#email' ), 'email' ),
       WMDE.Components.createValidatingTextComponent( store, $( '#email-company' ), 'email' ),
       WMDE.Components.createCheckboxComponent( store, $( '#newsletter' ), 'confirmNewsletter' ),
-      WMDE.Components.createCheckboxComponent( store, $( '#newsletter-company' ), 'confirmNewsletter' ),
-      WMDE.Components.createValidatingTextComponent( store, $( '#contact-person' ), 'contactPerson' )
+      WMDE.Components.createCheckboxComponent( store, $( '#newsletter-company' ), 'confirmNewsletter' )
     ],
     store,
     'donationFormContent'
@@ -335,10 +334,6 @@ $( function () {
         stateKey: 'donationInputValidation.companyName'
       },
       {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#contact-person' ) ),
-        stateKey: 'donationInputValidation.contactPerson'
-      },
-      {
 
         viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#iban' ) ),
         stateKey: 'donationInputValidation.iban'
@@ -418,7 +413,7 @@ $( function () {
       } else if ( formContent.addressType === 'firma' ) {
         store.dispatch( actions.newMarkEmptyFieldsInvalidAction(
           [ 'companyName', 'street', 'postcode', 'city', 'email' ],
-          [ 'firstName', 'lastName', 'contactPerson' ]
+          [ 'firstName', 'lastName' ]
         ) );
       }
     }
@@ -548,7 +543,6 @@ $( function () {
         ||
         state.donationFormContent.addressType == 'firma' &&
         (
-          (validators.contactPerson.dataEntered && !validators.contactPerson.isValid) ||
           (validators.companyName.dataEntered && !validators.companyName.isValid) ||
           (validators.firstName.dataEntered && !validators.firstName.isValid) ||
           (validators.email.dataEntered && !validators.email.isValid) ||
