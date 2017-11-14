@@ -1,5 +1,7 @@
 {% extends 'Base_Layout.html.twig' %}
 
+{% set COUNTRIES = [ 'DE', 'AT', 'CH', 'BE', 'IT', 'LI', 'LU' ] %}
+
 {% block page_identifier %}donation{% endblock %}
 
 {% block main %}
@@ -142,46 +144,42 @@
 										</div>
 
 										<div class="field-grp valid">
-											<input type="text" id="first-name" placeholder="Vorname">
-											<label for="first-name" class="sr-only">Vorname</label>
+											<input type="text" id="first-name" name="firstName" placeholder="{$ 'firstname_label' | trans $}">
+											<label for="first-name" class="sr-only">{$ 'firstname_label' | trans $}</label>
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
 										<div class="field-grp">
-											<input type="text" id="last-name" placeholder="Name">
-											<label for="last-name" class="sr-only">Name</label>
+											<input type="text" id="last-name" name="lastName" placeholder="{$ 'lastname_label' | trans $}">
+											<label for="last-name" class="sr-only">{$ 'lastname_label' | trans $}</label>
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
 										<div class="field-grp">
-											<input type="email" id="email" placeholder="E-Mail">
-											<label for="email" class="sr-only">E-Mail</label>
+											<input type="email" id="email" placeholder="{$ 'email_label' | trans $}">
+											<label for="email" class="sr-only">{$ 'email_label' | trans $}</label>
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
 										<div class="field-grp">
-											<input type="text" id="street" placeholder="Straße und Hausnummer">
-											<label for="street" class="sr-only">Straße und Hausnummer</label>
+											<input type="text" id="street" placeholder="{$ 'street_label' | trans $}">
+											<label for="street" class="sr-only">{$ 'street_label' | trans $}</label>
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
 										<div class="field-grp">
-											<input type="text" id="post-code" placeholder="Postleitzahl">
-											<label for="post-code" class="sr-only">Postleitzahl</label>
+											<input type="text" id="post-code" placeholder="{$ 'zip_label' | trans $}">
+											<label for="post-code" class="sr-only">{$ 'zip_label' | trans $}</label>
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
 										<div class="field-grp">
-											<input type="text" id="city" placeholder="Stadt">
-											<label for="city" class="sr-only">City</label>
+											<input type="text" id="city" placeholder="{$ 'city_label' | trans $}">
+											<label for="city" class="sr-only">{$ 'city_label' | trans $}</label>
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
 
-										<select id="country" name="country"
-												data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true, "flipDropToFit": true,  "maxVisibleItems": 6}'
-												class="no-outline country-select">
-											<option value="DE">Deutschland</option>
-											<option value="AT">Österreich</option>
-											<option value="CH">Schweiz</option>
-											<option value="BE">Belgien</option>
-											<option value="IT">Italien</option>
-											<option value="LI">Liechtenstein</option>
-											<option value="LU">Luxemburg</option>
+										<select id="country"
+											data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true, "flipDropToFit": true,  "maxVisibleItems": 6}'
+											class="no-outline country-select">
+											{% for countryCode in COUNTRIES %}
+												<option value="{$ countryCode $}">{$ ( 'country_option_' ~ countryCode ) | trans $}</option>
+											{% endfor %}
 										</select>
 									</div>
 									<div class="wrap-check">
@@ -204,8 +202,8 @@
 								<div class="wrap-info">
 									<div class="info-text" data-info="company">
 										<div class="field-grp ">
-											<input type="text" id="company-name" name="company-name" placeholder="Firmenname">
-											<label for="company-name" class="sr-only">Firmenname</label>
+											<input type="text" id="company-name" name="companyName" placeholder="{$ 'companyname_label' | trans $}">
+											<label for="company-name" class="sr-only">{$ 'companyname_label' | trans $}</label>
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
 										<div class="field-grp">
@@ -214,36 +212,32 @@
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
 										<div class="field-grp">
-											<input type="email" id="email-company" name="email-company" placeholder="E-Mail">
-											<label for="email-company" class="sr-only">E-Mail</label>
+											<input type="email" id="email-company" name="email" placeholder="{$ 'email_label' | trans $}">
+											<label for="email-company" class="sr-only">{$ 'email_label' | trans $}</label>
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
 										<div class="field-grp">
-											<input type="text" id="adress-company" name="adress-company" placeholder="Straße und Hausnummer">
-											<label for="adress-company" class="sr-only">Straße und Hausnummer</label>
+											<input type="text" id="adress-company" name="street" placeholder="{$ 'street_label' | trans $}">
+											<label for="adress-company" class="sr-only">{$ 'street_label' | trans $}</label>
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
 										<div class="field-grp">
-											<input type="text" id="post-code-company" name="post-code-company" placeholder="Postleitzahl">
-											<label for="post-code" class="sr-only">Postleitzahl</label>
+											<input type="text" id="post-code-company" name="postcode" placeholder="{$ 'zip_label' | trans $}">
+											<label for="post-code" class="sr-only">{$ 'zip_label' | trans $}</label>
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
 										<div class="field-grp">
-											<input type="text" id="city-company" name="city-company" placeholder="Stadt">
-											<label for="city-company" class="sr-only">City</label>
+											<input type="text" id="city-company" name="city" placeholder="{$ 'city_label' | trans $}">
+											<label for="city-company" class="sr-only">{$ 'city_label' | trans $}</label>
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
 
-										<select id="country-company" name="country-company" title="Land"
-												data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true,  "maxVisibleItems": 6}'
-												class="no-outline country-select">
-											<option value="DE">Deutschland</option>
-											<option value="AT">Österreich</option>
-											<option value="CH">Schweiz</option>
-											<option value="BE">Belgien</option>
-											<option value="IT">Italien</option>
-											<option value="LI">Liechtenstein</option>
-											<option value="LU">Luxemburg</option>
+										<select id="country-company" name="country"
+											data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true,  "maxVisibleItems": 6}'
+											class="no-outline country-select">
+											{% for countryCode in COUNTRIES %}
+												<option value="{$ countryCode $}">{$ ( 'country_option_' ~ countryCode ) | trans $}</option>
+											{% endfor %}
 										</select>
 									</div>
 									<div class="wrap-check">
