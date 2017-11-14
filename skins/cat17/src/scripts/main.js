@@ -68,7 +68,6 @@
     var selectedSelect = function () {
 
         if ($(window).width() < 1024) {
-            $('select#title').children('option.hideme').prop('disabled',true);
             $('select#salutation').children('option.hideme').prop('disabled',true);
          }
         $("select").change(function () {

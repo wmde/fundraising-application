@@ -104,9 +104,6 @@ var objectAssign = require( 'object-assign' ),
         this.memberShipTypeTextElement.text(this.memberShipTypeText[formContent.membershipType]);
       }
     },
-    capitalize: function (s) {
-      return s[0].toUpperCase() + s.slice(1);
-    },
     formatPaymentInterval: function ( paymentIntervalInMonths ) {
       return this.intervalTranslations[ paymentIntervalInMonths ];
     },
@@ -115,15 +112,12 @@ var objectAssign = require( 'object-assign' ),
     },
     getAddressSummaryContent: function (formContent) {
       if (formContent.addressType === "person") {
-		  // TODO Refactor into something more readable.
+          // TODO Escape HTML (T180215)
+          // TODO Reuse AddressDisplayHandler
         return (
           formContent.firstName && formContent.lastName ?
-            (formContent.salutation && formContent.title !== 'kein-title' && formContent.title !== 'vtitle' && formContent.salutation != '' ?
-              this.capitalize(formContent.salutation) : "") + " " +
-            (formContent.title && formContent.title !== 'kein-title' && formContent.title !== 'vtitle' ?
-              this.capitalize(formContent.title) : "") + " " +
-            formContent.firstName + " " + formContent.lastName + "<br />"
-            : ""
+            formContent.salutation + ' ' + formContent.title + ' ' + formContent.firstName + ' ' + formContent.lastName + "<br />"
+            : ''
         ) +
         (formContent.street ? formContent.street + "<br />" : "") +
         (formContent.postcode && formContent.city ? formContent.postcode + " " + formContent.city + "<br />" : "") +

@@ -371,8 +371,7 @@ $( function () {
     return formContent.addressType === 'anonym' || (
 		// @fixme: Move checking of salutation and title into reducer/store/validator
       validity.address &&
-      formContent.salutation != '' &&
-      formContent.title != "vtitle"
+      formContent.salutation != ''
     );
   }
 
