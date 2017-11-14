@@ -263,6 +263,9 @@
 			<input type="submit" value="Spende abschließen" class="btn btn-donation btn-unactive visible-xs-block">
 		</div>
 
+		<input type="hidden" name="impCount" value="{$ tracking.impressionCount $}">
+		<input type="hidden" name="bImpCount" value="{$ tracking.bannerImpressionCount $}">
+
 	</form>
 
 {% endblock %}
