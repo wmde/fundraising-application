@@ -23,7 +23,7 @@ $( function () {
         bankNameDisplayElement: $( '#bank-name' )
       } ),
       WMDE.Components.createRadioComponent( store, $( 'input[name="addressType"]' ), 'addressType' ),
-      WMDE.Components.createRadioComponent( store, $( '#treatment' ), 'salutation' ),
+      WMDE.Components.createSelectMenuComponent( store, $( 'select[name="salutation"]' ), 'salutation' ),
       WMDE.Components.createSelectMenuComponent( store, $( '#title' ), 'title' ),
       WMDE.Components.createValidatingTextComponent( store, $( '#first-name' ), 'firstName' ),
       WMDE.Components.createValidatingTextComponent( store, $( '#last-name' ), 'lastName' ),
@@ -97,7 +97,7 @@ $( function () {
         viewHandler: WMDE.View.createErrorBoxHandler( $( '#validation-errors' ), {
           amount: 'Betrag',
           paymentType: 'Zahlungsart',
-          salutation: 'Familie',
+          salutation: 'Anrede',
           title: 'Titel',
           firstName: 'Vorname',
           lastName: 'Nachname',
@@ -370,8 +370,9 @@ $( function () {
       formContent = store.getState().donationFormContent;
     return formContent.addressType === 'anonym' || (
 		// @fixme: Move checking of salutation and title into reducer/store/validator
-      validity.address && formContent.salutation != "person" &&
-      formContent.salutation != "anrede" && formContent.title != "vtitle"
+      validity.address &&
+      formContent.salutation != '' &&
+      formContent.title != "vtitle"
     );
   }
 

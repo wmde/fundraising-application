@@ -126,12 +126,11 @@
 								<div class="wrap-info">
 									<div class="info-text" data-info="personal">
 										<div class="wrap-select-50 clearfix">
-											<select class="no-outline salutation" id="treatment" name="treatment"
+											<select class="no-outline salutation" id="salutation" name="salutation"
 													data-jcf='{"wrapNative": false,  "wrapNativeOnMobile": true  }'>
-												<option hidden class="hideme" value="anrede">Anrede</option>
-												<option value="familie">Familie</option>
-												<option value="herr">Herr</option>
-												<option value="frau">Frau</option>
+												<option hidden class="hideme" value="">{$ 'salutation_label' | trans $}</option>
+												<option value="Herr">{$ 'salutation_option_mr' | trans $}</option>
+												<option value="Frau">{$ 'salutation_option_mrs' | trans $}</option>
 											</select>
 											<select class="no-outline personal-title" id="title" name="title"
 													data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true}'>

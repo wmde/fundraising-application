@@ -118,7 +118,7 @@ var objectAssign = require( 'object-assign' ),
 		  // TODO Refactor into something more readable.
         return (
           formContent.firstName && formContent.lastName ?
-            (formContent.salutation && formContent.title !== 'kein-title' && formContent.title !== 'vtitle' && formContent.salutation != 'anrede' ?
+            (formContent.salutation && formContent.title !== 'kein-title' && formContent.title !== 'vtitle' && formContent.salutation != '' ?
               this.capitalize(formContent.salutation) : "") + " " +
             (formContent.title && formContent.title !== 'kein-title' && formContent.title !== 'vtitle' ?
               this.capitalize(formContent.title) : "") + " " +

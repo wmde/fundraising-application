@@ -69,7 +69,7 @@
 
         if ($(window).width() < 1024) {
             $('select#title').children('option.hideme').prop('disabled',true);
-            $('select#treatment').children('option.hideme').prop('disabled',true);
+            $('select#salutation').children('option.hideme').prop('disabled',true);
          }
         $("select").change(function () {
             $(this).closest("span.jcf-select").addClass("selected-item");
