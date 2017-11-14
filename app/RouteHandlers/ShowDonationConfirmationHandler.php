@@ -40,7 +40,7 @@ class ShowDonationConfirmationHandler {
 
 		$selectedConfirmationPage = $this->ffFactory->getDonationConfirmationPageSelector()->selectPage();
 		$httpResponse = new Response(
-			$this->ffFactory->newDonationConfirmationPresenter()->present(
+			$this->ffFactory->newDonationConfirmationPresenter( $selectedConfirmationPage->getPageTitle() )->present(
 				$responseModel->getDonation(),
 				$responseModel->getUpdateToken(),
 				$selectedConfirmationPage,

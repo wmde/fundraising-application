@@ -40,7 +40,7 @@ class DonationConfirmationHtmlPresenterTest extends \PHPUnit\Framework\TestCase 
 
 	private function getExpectedRenderParams( string $mappedStatus ): array {
 		return [
-			'main_template' => '',
+			'template_name' => '',
 			'templateCampaign' => '',
 			'donation' => [
 				'id' => null,

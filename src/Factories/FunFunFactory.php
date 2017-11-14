@@ -1072,10 +1072,10 @@ class FunFunFactory {
 		return $this->pimple['token_generator'];
 	}
 
-	public function newDonationConfirmationPresenter(): DonationConfirmationHtmlPresenter {
+	public function newDonationConfirmationPresenter( string $templateName = 'Donation_Confirmation.html.twig' ): DonationConfirmationHtmlPresenter {
 		return new DonationConfirmationHtmlPresenter(
-			$this->getIncludeTemplate(
-				'Donation_Confirmation.html.twig',
+			$this->getLayoutTemplate(
+				$templateName,
 				[
 					'piwikGoals' => [ 3 ],
 					'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForMembershipApplication()
