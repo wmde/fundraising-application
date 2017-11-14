@@ -39,24 +39,7 @@
 			<section class="state-bar state-overview col-xs-12 ">
 				<div class="wrap-bar container ">
 					<ul class="">
-						<li class="amount">
-							<a href="#donation-amount">
-								<span class="text" data-display-error="false">Betrag</span>
-								<i class="periodicity-icon" data-display-error="false"></i>
-							</a>
-						</li>
-						<li class="payment-method">
-							<a href="#donation-payment">
-								<span class="text" data-display-error="false">Zahlart</span>
-								<i class="payment-icon" data-display-error="false"></i>
-							</a>
-						</li>
-						<li class="donator-type">
-							<a href="#donation-type">
-								<span class="text" data-display-error="false">Daten</span>
-								<i class="address-icon" data-display-error="false"></i>
-							</a>
-						</li>
+						{% include 'partials/donation/state_bar_sections.html.twig' only %}
 					</ul>
 				</div>
 			</section>
@@ -64,13 +47,13 @@
 
 				<div class="form-shadow-wrap col-xs-12 col-sm-8">
 					<section id="donation-amount" class="donation-amount clearfix">
-						<h2 class="">Spendentbetrag</h2>
+						<h2>{$ 'donation_section_amount_title' | trans $}</h2>
 
-						<p class="legend">Wie viel Geld wollen Sie spenden und wie häufig?</p>
+						<p class="legend">{$ 'donation_section_amount_legend' | trans $}</p>
 
 						<fieldset
-								class="amount-qty padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
-							<legend class="sr-only">Wie viel Geld wollen Sie spenden und wie häufig?</legend>
+							class="amount-qty padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
+							<legend class="sr-only">{$ 'donation_section_amount_legend' | trans $}</legend>
 							<div class="wrap-amounts">
 								{% include 'partials/payment_preset_amounts.html.twig' with { 'presetAmounts': [ 5, 15, 25, 50, 75, 100, 250, 300 ] } %}
 
@@ -93,31 +76,26 @@
 					</section>
 
 					<section id="donation-payment" class="donation-payment-method clearfix">
-						<h2>Zahlart</h2>
+						<h2>{$ 'donation_section_payment_title' | trans $}</h2>
 
-						<p class="legend">Wie möchten Sie Ihre Spende bezahlen?</p>
+						<p class="legend">{$ 'donation_section_payment_legend' | trans $}</p>
 
 						<fieldset id="payment-method"
-								  class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
-							<legend class="sr-only">Wie möchten Sie Ihre Spende bezahlen?</legend>
+							class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
+							<legend class="sr-only">{$ 'donation_section_payment_legend' | trans $}</legend>
 
 							{% include 'partials/payment_types.html.twig' with { 'paymentTypes': paymentTypes } only %}
 						</fieldset>
 					</section>
 
 					<section id="donation-type" class="donation-daten clearfix">
-						<h2>Daten</h2>
+						<h2>{$ 'donation_section_donor_title' | trans $}</h2>
 
-						<p class="legend">Wollen Sie als Privatperson oder als Firma spenden? Sie können auch ohne Angabe
-							Ihrer Adresse spenden.
-						</p>
+						<p class="legend">{$ 'donation_section_donor_legend' | trans $}</p>
 
 						<fieldset id="type-donator"
-								  class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
-							<legend class="sr-only">
-								Wollen Sie als Privatperson oder als Firma spenden? Sie können auch ohne
-								Angabe Ihrer Adresse spenden.
-							</legend>
+							class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
+							<legend class="sr-only">{$ 'donation_section_donor_legend' | trans $}</legend>
 
 							<div class="wrap-field personal">
 
