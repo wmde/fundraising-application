@@ -5,7 +5,7 @@ var objectAssign = require( 'object-assign' ),
 	DATA_DISPLAY_ERROR = 'display-error',
 	CLASS_ERROR_ICON = 'icon-error',
 	PaymentSummaryDisplayHandler = {
-		intervalElement: null,
+		intervalTextElement: null,
 		amountElement: null,
 		paymentTypeElement: null,
 		intervalTranslations: null,
@@ -24,16 +24,7 @@ var objectAssign = require( 'object-assign' ),
 		addressTypeElement: null,
 		addressType: null,
 		addressTypeTextElement: null,
-		countriesDictionary: {
-			'DE': 'Deutschland',
-			'AT': 'Österreich',
-			'CH': 'Schweiz',
-			'BE': 'Belgien',
-			'IT': 'Italien',
-			'LU': 'Luxemburg',
-			'LI': 'Liechtenstein'
-		},
-		intervalTextElement: null,
+		countryTranslations: null,
 		memberShipTypeElement: null,
 		memberShipType: null,
 		memberShipTypeIconElement: null,
@@ -41,8 +32,7 @@ var objectAssign = require( 'object-assign' ),
 		memberShipTypeTextElement: null,
 		memberShipTypeText: null,
 		update: function ( formContent ) {
-			this.intervalElement.html( this.formatPaymentInterval( formContent.paymentIntervalInMonths ) );
-			this.intervalTextElement.html( this.intervalTranslations[ formContent.paymentIntervalInMonths ] );
+			this.intervalTextElement.text( this.intervalTranslations[ formContent.paymentIntervalInMonths ] );
 
 			this.updateAmoutIndicators( formContent.amount );
 
@@ -114,9 +104,6 @@ var objectAssign = require( 'object-assign' ),
 				$guiElement.text( addressType === '' ? $guiElement.data( DATA_EMPTY_TEXT ) : self.addressType[ addressType ] );
 			} );
 		},
-		formatPaymentInterval: function ( paymentIntervalInMonths ) {
-			return this.intervalTranslations[paymentIntervalInMonths];
-		},
 		getAddressSummaryContent: function ( formContent ) {
 			if( formContent.addressType === "person" ) {
 				// TODO Escape HTML (T180215)
@@ -128,14 +115,14 @@ var objectAssign = require( 'object-assign' ),
 					) +
 					(formContent.street ? formContent.street + "<br />" : "") +
 					(formContent.postcode && formContent.city ? formContent.postcode + " " + formContent.city + "<br />" : "") +
-					( formContent.country ? this.countriesDictionary[formContent.country] + "<br />" : "") +
+					( formContent.country ? this.countryTranslations[ formContent.country ] + "<br />" : "") +
 					formContent.email;
 			}
 			else if( formContent.addressType === 'firma' ) {
 				return (formContent.companyName ? formContent.companyName + "<br />" : "") +
 					(formContent.street ? formContent.street + "<br />" : "") +
 					(formContent.postcode && formContent.city ? formContent.postcode + " " + formContent.city + "<br />" : "") +
-					( formContent.country ? this.countriesDictionary[formContent.country] + "<br />" : "") +
+					( formContent.country ? this.countryTranslations[ formContent.country ] + "<br />" : "") +
 					formContent.email;
 			}
 
@@ -166,16 +153,16 @@ var objectAssign = require( 'object-assign' ),
 	};
 
 module.exports = {
-	createPaymentSummaryDisplayHandler: function ( intervalElement, amountElement, paymentTypeElement,
+	createPaymentSummaryDisplayHandler: function ( intervalTextElement, amountElement, paymentTypeElement,
 		intervalTranslations, paymentTypeTranslations, numberFormatter,
 		intervalIconElement, intervalIcons, paymentIconsElement, paymentIcons,
 		periodicityTextElement, periodicityText, paymentElement, paymentText,
 		addressTypeIconElement, addressTypeIcon, addressTypeElement, addressType,
-		addressTypeTextElement, intervalTextElement,
+		addressTypeTextElement, countryTranslations,
 		memberShipTypeElement, memberShipType, memberShipTypeIconElement,
 		memberShipTypeIcon, memberShipTypeTextElement, memberShipTypeText ) {
 		return objectAssign( Object.create( PaymentSummaryDisplayHandler ), {
-			intervalElement: intervalElement,
+			intervalTextElement: intervalTextElement,
 			amountElement: amountElement,
 			paymentTypeElement: paymentTypeElement,
 			intervalTranslations: intervalTranslations,
@@ -194,7 +181,7 @@ module.exports = {
 			addressTypeElement: addressTypeElement,
 			addressType: addressType,
 			addressTypeTextElement: addressTypeTextElement,
-			intervalTextElement: intervalTextElement,
+			countryTranslations: countryTranslations,
 			memberShipTypeElement: memberShipTypeElement,
 			memberShipType: memberShipType,
 			memberShipTypeIconElement: memberShipTypeIconElement,

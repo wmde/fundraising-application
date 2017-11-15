@@ -173,16 +173,10 @@ $( function () {
       },
       {
         viewHandler: WMDE.View.createPaymentSummaryDisplayHandler(
-          $( '.interval-text' ),
+			$( '.frequency .text' ),
           $( '.amount .text'),
           $( '.payment-method .text'),
-          {
-            '0': 'einmalig',
-            '1': 'monatlich',
-            '3': 'quartalsweise',
-            '6': 'halbjährlich',
-            '12': 'jährlich'
-          },
+			WMDE.FormDataExtractor.mapFromLabeledRadios( $( '#recurrence .wrap-input' ) ),
           {
             'BEZ': 'Lastschrift',
             'UEB': 'Überweisung',
@@ -235,7 +229,7 @@ $( function () {
             'anonym': 'Anonymous'
           },
           $('.donator-type .info-detail'),
-          $('.frequency .text'),
+			WMDE.FormDataExtractor.mapFromSelectOptions( $( '#country' ) ),
           $('.member-type .text'),
           {
             'sustaining': 'Förder',
