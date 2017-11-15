@@ -177,13 +177,7 @@ $( function () {
           $( '.amount .text'),
           $( '.payment-method .text'),
 			WMDE.FormDataExtractor.mapFromLabeledRadios( $( '#recurrence .wrap-input' ) ),
-          {
-            'BEZ': 'Lastschrift',
-            'UEB': 'Überweisung',
-            'MCP': 'Kreditkarte',
-            'PPL': 'PayPal',
-            'SUB': 'Sofortüberweisung'
-          },
+			WMDE.FormDataExtractor.mapFromLabeledRadios( $( '#payment-method .wrap-input' ) ),
           WMDE.CurrencyFormatter.createCurrencyFormatter( 'de' ),
           $('.periodicity-icon'),
           {
