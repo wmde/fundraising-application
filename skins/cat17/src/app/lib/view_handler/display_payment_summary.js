@@ -1,6 +1,7 @@
 'use strict';
 
 var objectAssign = require( 'object-assign' ),
+	DATA_EMPTY_TEXT = 'empty-text',
 	PaymentSummaryDisplayHandler = {
 		intervalElement: null,
 		amountElement: null,
@@ -42,27 +43,9 @@ var objectAssign = require( 'object-assign' ),
 			this.intervalElement.html( this.formatPaymentInterval( formContent.paymentIntervalInMonths ) );
 			this.intervalTextElement.html( this.intervalText[formContent.paymentIntervalInMonths] );
 
-			var amountFormat = this.numberFormatter.format( formContent.amount );
-			// @fixme Don't use jQuery here. Instead, interact with the store values and the elements.
-			this.amountElement.each( function () {
-				if( formContent.amount > 0 || $( this ).data( 'display-error' ) === undefined ) {
-					$( this ).text( amountFormat );
-				}
-				else {
-					$( this ).text( 'Betrag' );
-				}
-			} );
+			this.updateAmoutIndicators( formContent.amount );
 
-			var paymentTypeText = this.formatPaymentType( formContent.paymentType );
-			// @fixme Don't use jQuery here. Instead, interact with the store values and the elements.
-			this.paymentTypeElement.each( function () {
-				if( formContent.paymentType !== "" || $( this ).data( 'display-error' ) === undefined ) {
-					$( this ).text( paymentTypeText );
-				}
-				else {
-					$( this ).text( 'Zahlart' );
-				}
-			} );
+			this.updatePaymentTypeIndicators( formContent.paymentType );
 
 			this.setSummaryIcon( this.intervalIconElement, formContent.paymentIntervalInMonths, this.intervalIcons );
 			this.setSummaryIcon( this.paymentIconsElement, formContent.paymentType, this.paymentIcons );
@@ -85,17 +68,7 @@ var objectAssign = require( 'object-assign' ),
 			this.paymentElement.html( paymentTextFormatted );
 			this.setSummaryIcon( this.addressTypeIconElement, formContent.addressType, this.addressTypeIcon );
 
-			if( formContent.addressType != "" ) {
-				this.addressTypeElement.text( this.addressType[formContent.addressType] );
-			}
-			else {
-				// @fixme Don't use jQuery here. Instead, interact with the store values and the elements.
-				this.addressTypeElement.each( function () {
-					if( $( this ).data( 'display-error' ) === undefined ) {
-						$( this ).text( "Daten noch nicht ausgewählt." );
-					}
-				} );
-			}
+			this.updateAddressTypeIndicators( formContent.addressType );
 
 			this.addressTypeTextElement.html( this.getAddressSummaryContent( formContent ) );
 
@@ -113,11 +86,35 @@ var objectAssign = require( 'object-assign' ),
 				this.memberShipTypeTextElement.text( this.memberShipTypeText[formContent.membershipType] );
 			}
 		},
+		updateAmoutIndicators: function ( amount ) {
+			var self = this,
+				$guiElement;
+
+			this.amountElement.each( function () {
+				$guiElement = $( this );
+				$guiElement.text( amount === 0 ? $guiElement.data( DATA_EMPTY_TEXT ) : self.numberFormatter.format( amount ) );
+			} );
+		},
+		updatePaymentTypeIndicators: function ( paymentType ) {
+			var self = this,
+				$guiElement;
+
+			this.paymentTypeElement.each( function () {
+				$guiElement = $( this );
+				$guiElement.text( paymentType === '' ? $guiElement.data( DATA_EMPTY_TEXT ) : self.paymentTypeTranslations[ paymentType ] );
+			} );
+		},
+		updateAddressTypeIndicators: function ( addressType ) {
+			var self = this,
+				$guiElement;
+
+			this.addressTypeElement.each( function () {
+				$guiElement = $( this );
+				$guiElement.text( addressType === '' ? $guiElement.data( DATA_EMPTY_TEXT ) : self.addressType[ addressType ] );
+			} );
+		},
 		formatPaymentInterval: function ( paymentIntervalInMonths ) {
 			return this.intervalTranslations[paymentIntervalInMonths];
-		},
-		formatPaymentType: function ( paymentType ) {
-			return paymentType == "" ? String( "Zahlung noch nicht ausgewählt." ) : this.paymentTypeTranslations[paymentType];
 		},
 		getAddressSummaryContent: function ( formContent ) {
 			if( formContent.addressType === "person" ) {
