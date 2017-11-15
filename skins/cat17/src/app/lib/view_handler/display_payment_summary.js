@@ -34,7 +34,6 @@ var objectAssign = require( 'object-assign' ),
 			'LI': 'Liechtenstein'
 		},
 		intervalTextElement: null,
-		intervalText: null,
 		memberShipTypeElement: null,
 		memberShipType: null,
 		memberShipTypeIconElement: null,
@@ -43,7 +42,7 @@ var objectAssign = require( 'object-assign' ),
 		memberShipTypeText: null,
 		update: function ( formContent ) {
 			this.intervalElement.html( this.formatPaymentInterval( formContent.paymentIntervalInMonths ) );
-			this.intervalTextElement.html( this.intervalText[formContent.paymentIntervalInMonths] );
+			this.intervalTextElement.html( this.intervalTranslations[ formContent.paymentIntervalInMonths ] );
 
 			this.updateAmoutIndicators( formContent.amount );
 
@@ -172,7 +171,7 @@ module.exports = {
 		intervalIconElement, intervalIcons, paymentIconsElement, paymentIcons,
 		periodicityTextElement, periodicityText, paymentElement, paymentText,
 		addressTypeIconElement, addressTypeIcon, addressTypeElement, addressType,
-		addressTypeTextElement, intervalTextElement, intervalText,
+		addressTypeTextElement, intervalTextElement,
 		memberShipTypeElement, memberShipType, memberShipTypeIconElement,
 		memberShipTypeIcon, memberShipTypeTextElement, memberShipTypeText ) {
 		return objectAssign( Object.create( PaymentSummaryDisplayHandler ), {
@@ -196,7 +195,6 @@ module.exports = {
 			addressType: addressType,
 			addressTypeTextElement: addressTypeTextElement,
 			intervalTextElement: intervalTextElement,
-			intervalText: intervalText,
 			memberShipTypeElement: memberShipTypeElement,
 			memberShipType: memberShipType,
 			memberShipTypeIconElement: memberShipTypeIconElement,

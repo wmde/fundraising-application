@@ -237,14 +237,7 @@ $( function () {
             'anonym': 'Anonymous'
           },
           $('.donator-type .info-detail'),
-          $('.frequency .text'),
-          {
-            '0': 'Einmalig',
-            '1': 'Monatlich',
-            '3': 'Vierteljährlich',
-            '6': 'Halbjährlich',
-            '12': 'Jährlich'
-          }
+          $('.frequency .text')
         ),
         stateKey: 'donationFormContent'
       },
