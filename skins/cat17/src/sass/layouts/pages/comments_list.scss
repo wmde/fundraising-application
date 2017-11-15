@@ -1,4 +1,9 @@
 .page-comments-list {
+
+	.rss-link {
+		color: #00adee;
+	}
+
 	.introduction {
 		padding-top: 80px;
 		@include bkp(md) {
