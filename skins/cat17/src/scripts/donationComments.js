@@ -8,18 +8,18 @@
  *
  * @constructor
  */
-var DonationComments = function ( container ) {
-	this.container = container;
+var DonationComments = function ( commentContainer, paginationContainer ) {
+	this.commentContainer = commentContainer;
+	this.paginationContainer = paginationContainer;
 };
 
 $.extend( DonationComments.prototype, {
 	init: function () {
-		var paginationContainer = this.container.parent().find( '.pagination' );
-		this.container.html( 'Spendenkommentare werden geladen ...' );
-		paginationContainer.find( '.first' ).bind( 'click', $.proxy( this.goToFirstPage, this ) );
-		paginationContainer.find( '.last' ).bind( 'click', $.proxy( this.goToLastPage, this ) );
-		paginationContainer.find( '.prev' ).bind( 'click', $.proxy( this.goToPrevPage, this ) );
-		paginationContainer.find( '.next' ).bind( 'click', $.proxy( this.goToNextPage, this ) );
+		this.commentContainer.html( 'Spendenkommentare werden geladen ...' );
+		this.paginationContainer.find( '.first' ).bind( 'click', $.proxy( this.goToFirstPage, this ) );
+		this.paginationContainer.find( '.last' ).bind( 'click', $.proxy( this.goToLastPage, this ) );
+		this.paginationContainer.find( '.prev' ).bind( 'click', $.proxy( this.goToPrevPage, this ) );
+		this.paginationContainer.find( '.next' ).bind( 'click', $.proxy( this.goToNextPage, this ) );
 		this.currentPage = 0;
 		this.itemsPerPage = 10;
 		this.numPages = 1;
@@ -32,35 +32,48 @@ $.extend( DonationComments.prototype, {
 			dataType: 'json',
 			success: function ( data ) {
 				self.numPages = Math.ceil( data.length / self.itemsPerPage );
-				self.container.html( self.renderHtml( data ) );
-				//self.updatePagination();
+				self.commentContainer.html( self.renderHtml( data ) );
+				self.updatePagination();
 			}
 		} );
 	},
 
 	renderHtml: function ( data ) {
-		var html = '',
-				currentPageHtml = '',
-				currentPage = 0,
+		var html = $('<div></div>'),
+				currentPage, pageContainer,
+				dataPages = this.paginateData( data ),
 				self = this;
 		if ( !data.length ) {
 			return '<div class="noDonationComments">Zur Zeit gibt es keine Spendenkommentare</div>';
 		}
-		$( data ).each( function ( index, item ) {
-			if ( index && index % self.itemsPerPage === 0 ) {
-				html += '<div class="wrap-items" id="dnp' + currentPage + '">' + currentPageHtml + '</div>';
-				currentPageHtml = '';
-				currentPage++;
-			}
-			currentPageHtml += '<article class="comment-item">' +
+		for ( currentPage = 0; currentPage < this.numPages; currentPage++ ) {
+			pageContainer = $( '<div class="wrap-items comment-page comment-page-' + currentPage + '"></div>' );
+			$.each( dataPages[currentPage], function( index, item ) {
+				pageContainer.append(
+					'<article class="comment-item">' +
 					'<span class="field-amount-name">' + item.betrag + ' &euro; von ' + item.spender + '</span>' +
 					'<span class="date-time">' + self._renderDate( item.datum ) + '</span>' +
-					'<p>' + item.kommentar + '</p></article>';
-		} );
-		if ( data.length % this.itemsPerPage ) {
-			html += '<div class="wrap-items" id="dnp' + currentPage + '">' + currentPageHtml + '</div>';
+					'<p>' + item.kommentar + '</p></article>'
+				);
+			} );
+			html.append( pageContainer );
 		}
 		return html;
+	},
+
+	paginateData: function ( data ) {
+		if ( !data.length ) {
+			return [];
+		}
+		var pages = [],
+			i = 0,
+			n = data.length;
+
+		while (i < n) {
+			pages.push( data.slice( i, i += this.itemsPerPage ) );
+		}
+
+		return pages;
 	},
 
 	goToFirstPage: function () {
@@ -88,27 +101,26 @@ $.extend( DonationComments.prototype, {
 	},
 
 	updatePagination: function () {
-		var paginationElement = $( '.pagination', this.container.parent() );
 		// Show current page
-		$( '.donationPage', this.container ).hide();
-		$( '#dnp' + this.currentPage ).show();
+		$( '.comment-page', this.commentContainer ).hide();
+		$( '.comment-page-' + this.currentPage ).show();
 
 		// Show page numbers
-		paginationElement.find( '.currentPage' ).text( this.currentPage + 1 );
-		paginationElement.find( '.numPages' ).text( this.numPages );
+		this.paginationContainer.find( '.current-page' ).text( this.currentPage + 1 );
+		this.paginationContainer.find( '.num-pages' ).text( this.numPages );
 
 		// set visibility of back and forward arrows depending on this.numPages and this.currentPage
-		paginationElement.find( '> span' ).hide();
+		this.paginationContainer.find( '> span' ).hide();
 		if ( this.numPages > 1 ) {
-			paginationElement.find( '.pages' ).show();
+			this.paginationContainer.find( '.pages' ).show();
 		}
 		if ( this.currentPage > 0 ) {
-			paginationElement.find( '.prev' ).show();
-			paginationElement.find( '.first' ).show();
+			this.paginationContainer.find( '.prev' ).show();
+			this.paginationContainer.find( '.first' ).show();
 		}
 		if ( this.currentPage < this.numPages - 1 ) {
-			paginationElement.find( '.next' ).show();
-			paginationElement.find( '.last' ).show();
+			this.paginationContainer.find( '.next' ).show();
+			this.paginationContainer.find( '.last' ).show();
 		}
 	},
 
@@ -136,6 +148,9 @@ $.extend( DonationComments.prototype, {
 }	);
 
 $( function () {
-	var comments = new DonationComments( $( '.comment-container' ) );
+	var comments = new DonationComments(
+		$( '.comment-commentContainer' ),
+		$( '.comment-paginationContainer')
+	);
 	comments.init();
 } );
