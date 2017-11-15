@@ -2,6 +2,8 @@
 
 var objectAssign = require( 'object-assign' ),
 	DATA_EMPTY_TEXT = 'empty-text',
+	DATA_DISPLAY_ERROR = 'display-error',
+	CLASS_ERROR_ICON = 'icon-error',
 	PaymentSummaryDisplayHandler = {
 		intervalElement: null,
 		amountElement: null,
@@ -141,20 +143,25 @@ var objectAssign = require( 'object-assign' ),
 			return "";
 		},
 		setSummaryIcon: function ( elements, value, iconsDictionary ) {
-			elements.removeClass( 'icon-error' );
+			var icon = iconsDictionary[ value ];
+
+			elements.removeClass( CLASS_ERROR_ICON );
+
+			// determine the (dynamic) class matching the previous value, remove it from all elements
 			if( elements.length && elements.get( 0 ).className.split( ' ' ).length > 1 ) {
 				elements.removeClass( elements.get( 0 ).className.split( ' ' ).pop() );
 			}
-			// @fixme Don't use jQuery here. Instead, interact with the store values and the elements.
-			if( iconsDictionary[value] === undefined ) {
-				elements.each( function () {
-					if( $( this ).data( 'display-error' ) === undefined ) {
-						$( this ).addClass( 'icon-error' );
-					}
-				} );
+
+			if( icon === undefined ) {
+				elements
+					// only configured icons are supposed to communicate validation problems
+					.filter( function () {
+						return $( this ).data( DATA_DISPLAY_ERROR ) === true;
+					} )
+					.addClass( CLASS_ERROR_ICON )
 			}
 			else {
-				elements.addClass( iconsDictionary[value] );
+				elements.addClass( icon );
 			}
 		}
 	};
