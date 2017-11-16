@@ -78,9 +78,7 @@
 
 				<div class="box-section approval">
 {% if showMembershipTypeOption == 'true' %}
-					<div class="icon-ok _icon-list-item clearfix">
-						Ich werde Mitglied des Wikimedia Deutschland e. V.
-					</div>
+					<div class="icon-ok _icon-list-item clearfix">{$ 'membership-form-pledge-header'|trans $}</div>
 
 					<div class="container">
 						<ul class="horizontal clearfix">
@@ -97,7 +95,7 @@
 						<input type="hidden" name="showMembershipTypeOption" value="true" />
 					</div>
 {% else %}
-					<span class="icon-ok _icon-list-item">Ich werde Fördermitglied des Wikimedia Deutschland e. V.</span>
+					<span class="icon-ok _icon-list-item">{$ 'membership-form-pledge-sustaining-member-header'|trans $}</span>
 					<input type="hidden" name="membership_type" value="sustaining" />
 					<input type="hidden" name="showMembershipTypeOption" value="false" />
 {% endif %}
