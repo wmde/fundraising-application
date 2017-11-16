@@ -1,21 +1,21 @@
 <div class="field-grp">
-	<input type="text" id="iban" placeholder="IBAN">
-	<label for="iban" class="sr-only">IBAN</label>
+	<input type="text" id="iban" placeholder="{$ 'iban' | trans | e( 'html_attr' ) $}">
+	<label for="iban" class="sr-only">{$ 'iban' | trans $}</label>
 </div>
 <div class="field-grp">
-	<input type="text" id="bic" placeholder="BIC">
-	<label for="bic" class="sr-only">BIC</label>
+	<input type="text" id="bic" placeholder="{$ 'bic' | trans | e( 'html_attr' ) $}">
+	<label for="bic" class="sr-only">{$ 'bic' | trans $}</label>
 </div>
 
-<span class="oden">oder</span>
+<span class="oden">{$ 'payment_type_BEZ_iban_decision' | trans $}</span>
 
 <div class="field-grp">
-	<input type="text" id="account-number" placeholder="Kontonummer">
-	<label for="account-number" class="sr-only">Kontonummer</label>
+	<input type="text" id="account-number" placeholder="{$ 'account_number' | trans | e( 'html_attr' ) $}">
+	<label for="account-number" class="sr-only">{$ 'account_number' | trans $}</label>
 </div>
 <div class="field-grp">
-	<input type="text" id="bank-code" placeholder="Bankleitzahl">
-	<label for="bank-code" class="sr-only">Bankleitzahl</label>
+	<input type="text" id="bank-code" placeholder="{$ 'bank_code' | trans | e( 'html_attr' ) $}">
+	<label for="bank-code" class="sr-only">{$ 'bank_code' | trans $}</label>
 </div>
 
 <!-- ToDo: wikimedia-team, decide and translate to german -->
