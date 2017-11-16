@@ -1,9 +1,15 @@
 'use strict';
 
 var objectAssign = require( 'object-assign' ),
-	DATA_EMPTY_TEXT = 'empty-text',
-	DATA_DISPLAY_ERROR = 'display-error',
-	CLASS_ERROR_ICON = 'icon-error',
+	DOM_SELECTORS = {
+		data: {
+			emtpyText: 'empty-text',
+			displayError: 'display-error'
+		},
+		classes: {
+			errorIcon: 'icon-error'
+		}
+	},
 	PaymentSummaryDisplayHandler = {
 		intervalTextElement: null,
 		amountElement: null,
@@ -83,7 +89,7 @@ var objectAssign = require( 'object-assign' ),
 
 			this.amountElement.each( function () {
 				$guiElement = $( this );
-				$guiElement.text( amount === 0 ? $guiElement.data( DATA_EMPTY_TEXT ) : self.numberFormatter.format( amount ) );
+				$guiElement.text( amount === 0 ? $guiElement.data( DOM_SELECTORS.data.emtpyText ) : self.numberFormatter.format( amount ) );
 			} );
 		},
 		updatePaymentTypeIndicators: function ( paymentType ) {
@@ -92,7 +98,7 @@ var objectAssign = require( 'object-assign' ),
 
 			this.paymentTypeElement.each( function () {
 				$guiElement = $( this );
-				$guiElement.text( paymentType === '' ? $guiElement.data( DATA_EMPTY_TEXT ) : self.paymentTypeTranslations[ paymentType ] );
+				$guiElement.text( paymentType === '' ? $guiElement.data( DOM_SELECTORS.data.emtpyText ) : self.paymentTypeTranslations[ paymentType ] );
 			} );
 		},
 		updateAddressTypeIndicators: function ( addressType ) {
@@ -101,7 +107,7 @@ var objectAssign = require( 'object-assign' ),
 
 			this.addressTypeElement.each( function () {
 				$guiElement = $( this );
-				$guiElement.text( addressType === '' ? $guiElement.data( DATA_EMPTY_TEXT ) : self.addressType[ addressType ] );
+				$guiElement.text( addressType === '' ? $guiElement.data( DOM_SELECTORS.data.emtpyText ) : self.addressType[ addressType ] );
 			} );
 		},
 		getAddressSummaryContent: function ( formContent ) {
@@ -131,7 +137,7 @@ var objectAssign = require( 'object-assign' ),
 		setSummaryIcon: function ( elements, value, iconsDictionary ) {
 			var icon = iconsDictionary[ value ];
 
-			elements.removeClass( CLASS_ERROR_ICON );
+			elements.removeClass( DOM_SELECTORS.classes.errorIcon );
 
 			// determine the (dynamic) class matching the previous value, remove it from all elements
 			if( elements.length && elements.get( 0 ).className.split( ' ' ).length > 1 ) {
@@ -142,9 +148,9 @@ var objectAssign = require( 'object-assign' ),
 				elements
 					// only configured icons are supposed to communicate validation problems
 					.filter( function () {
-						return $( this ).data( DATA_DISPLAY_ERROR ) === true;
+						return $( this ).data( DOM_SELECTORS.data.displayError ) === true;
 					} )
-					.addClass( CLASS_ERROR_ICON )
+					.addClass( DOM_SELECTORS.classes.errorIcon )
 			}
 			else {
 				elements.addClass( icon );
