@@ -31,10 +31,16 @@
             {% endif %}
 
         </div>
-        <div class="cancel-block col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-0 col-md-4">
+        <div class="action-block col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-0 col-md-4">
             <ul class="list-menu link-back list-unstyled">
                 <li><a href="#TODO" class="">Spende Ihr SEPA-Mandat können Sie hier einsehen</a></li>
-                <li><a href="{$ basepath $}/donation/cancel?sid={$ donation.id $}&amp;utoken={$ donation.updateToken $}" class="cancel-link">Spende stornieren</a></li>
+                <li class="cancel">
+                    <form action="{$ basepath $}/donation/cancel" method="post">
+                        <button type="submit" name="go_storno" class="btn-link">{$ 'cancel_donation' | trans $}</button>
+                        <input type="hidden" name="sid" value="{$ donation.id $}" />
+                        <input type="hidden" name="utoken" value="{$ donation.updateToken $}">
+                    </form>
+                </li>
             </ul>
             {% if donation.optsIntoNewsletter %}
                 <p class="text-moved hidden-sm hidden-md hidden-lg">
