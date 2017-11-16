@@ -38,7 +38,7 @@ class DonationConfirmationHtmlPresenter {
 												   SelectedConfirmationPage $selectedPage, PiwikEvents $piwikEvents ): array {
 
 		return [
-			'main_template' => $selectedPage->getPageTitle(),
+			'template_name' => $selectedPage->getPageTitle(),
 			'templateCampaign' => $selectedPage->getCampaignCode(),
 			'donation' => [
 				'id' => $donation->getId(),

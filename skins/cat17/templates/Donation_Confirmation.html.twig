@@ -1,0 +1,23 @@
+{% extends 'Base_Layout.html.twig' %}
+
+{% block page_identifier %}donation-confirmation{% endblock %}
+
+{% block main %}
+	{% set formattedAmount = donation.amount|localizedcurrency('EUR', 'de_DE') %}
+
+	{% if donation.paymentType == 'MCP' or donation.paymentType == 'PPL' or donation.paymentType == 'SUB' %}
+		{% include 'partials/donation_confirmation/external_payment.html.twig' %}
+	{% elseif donation.paymentType == 'BEZ' %}
+		{% include 'partials/donation_confirmation/direct_debit.html.twig' %}
+	{% elseif donation.paymentType == 'UEB' %}
+		{% include 'partials/donation_confirmation/bank_transfer.html.twig' %}
+	{% endif %}
+
+	<img src="https://de.wikipedia.org/wiki/Special:HideBanners?duration={$ donation.cookieDuration $}&reason=donate" width="0" height="0" border="0" />
+
+	{# TODO Hidden features that get shown by JavaScript links #}
+{% endblock %}
+
+{% block scripts %}
+	<script type="text/javascript" src="{$ basepath $}/skins/cat17/scripts/donation_confirmation.js"></script>
+{% endblock %}

@@ -14,7 +14,7 @@ main.conclusion {
 	}
 }
 
-.donation-conclusion, .membership-conclusion {
+.membership-conclusion {
 
 	p.h1 {
 		margin-bottom: 40px;
@@ -52,16 +52,25 @@ main.conclusion {
 		}
 		@include bkp(md) {
 			width: 85%;
+			margin-top: 0;
+			font-size: 16px;
+			line-height: 26px;
+		}
+		@include bkp(lg) {
+			width: 104%;
 		}
 	}
 
 	.cancel-block {
 		margin-top: 30px;
 		@include bkp(sm) {
-			margin-top: -120px;
+			margin-top: -170px;
 		}
 		@include bkp(md) {
-			margin-top: 64px;
+			margin-top: 45px;
+		}
+		@include bkp(lg) {
+			margin-top: 16px;
 		}
 	}
 	.footer {
@@ -74,47 +83,25 @@ main.conclusion {
 	.side {
 		margin-top: -150px;
 	}
+
+	.down {
+		@include bkp(sm) {
+			margin-top : 200px;
+		}
+		@include bkp(md) {
+			margin-top: 200px;
+		}
+		@include bkp(lg) {
+			margin-top: 0;
+		}
+	}
+	.link-back {
+		@include bkp(lg) {
+			margin-top: 40px;
+		}
+	}
 }
 
-.membership-conclusion {
-    .cancel-block {
-        @include bkp(sm) {
-            margin-top : -170px;
-        }
-        @include bkp(md) {
-            margin-top: 45px;
-        }
-        @include bkp(lg) {
-            margin-top: 16px;
-        }
-    }
-    .down {
-        @include bkp(sm) {
-            margin-top : 200px;
-        }
-        @include bkp(md) {
-            margin-top: 200px;
-        }
-        @include bkp(lg) {
-            margin-top: 0;
-        }
-    }
-    .text-moved {
-        @include bkp(md) {
-            margin-top: 0;
-            font-size: 16px;
-            line-height: 26px;
-        }
-        @include bkp(lg) {
-            width: 104%;
-        }
-    }
-    .link-back {
-        @include bkp(lg) {
-            margin-top: 40px;
-        }
-    }
-}
 .membership-cancel {
     .h2 {
         font-size: 16px;
@@ -281,3 +268,4 @@ main.conclusion {
 @import "pages/donation_receipt";
 @import "pages/use_of_resources";
 @import "pages/privacy_protection";
+@import "pages/donation_confirmation";

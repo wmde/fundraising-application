@@ -1,0 +1,67 @@
+.page-donation-confirmation {
+
+	p.h1 {
+		margin-bottom: 40px;
+	}
+	.list-unstyled {
+		clear: both;
+	}
+
+	.text-moved {
+		margin: 40px 0;
+		@include bkp(sm) {
+			margin: 80px 0 0;
+			width: 55%;
+		}
+		@include bkp(md) {
+			width: 85%;
+		}
+	}
+
+	.action-block {
+		margin-top: 30px;
+		@include bkp(sm) {
+			margin-top: -120px;
+		}
+		@include bkp(md) {
+			margin-top: 64px;
+		}
+
+		.cancel {
+			form {
+				margin: 0;
+				padding: 0;
+				height: 100%;
+				button {
+					@extend a;
+					padding: 0;
+					font-weight: 300;
+					height: 100%;
+					width: 100%;
+					position: relative;
+					text-align: left;
+					&:after {
+						content: "\e315";
+						position: absolute;
+						right: -30px;
+						font-family: icomoon;
+						font-size: 20px;
+						top: 50%;
+						transform: translateY(-50%);
+					}
+				}
+			}
+		}
+	}
+
+	.footer {
+		margin-top: 0;
+		@include bkp(sm) {
+			margin-top: 70px;
+		}
+	}
+
+	.side {
+		margin-top: -150px;
+	}
+}
