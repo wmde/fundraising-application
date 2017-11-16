@@ -195,13 +195,7 @@ $( function () {
             'UEB': 'icon-ubeiwsung-1'
           },
           $('.amount .info-detail'),
-          {
-            '0': 'Ihr Konto wird einmal belastet.',
-            '1': 'Ihr Konto wird jeden Monat belastet.<br />Ihre monatliche Spende können Sie jederzeit fristlos per E-Mail an spenden@wikimedia.de stornieren.',
-            '3': 'Ihr Konto wird alle drei Monate belastet.<br />Ihre vierteljahrliche Spende können Sie jederzeit fristlos per E-Mail an spenden@wikimedia.de stornieren.',
-            '6': 'Ihr Konto wird alle sechs Monate belastet.<br />Ihre halbjahrliche Spende können Sie jederzeit fristlos per E-Mail an spenden@wikimedia.de stornieren.',
-            '12': 'Ihr Konto wird jährlich belastet.<br />Ihre jährliche Spende können Sie jederzeit fristlos per E-Mail an spenden@wikimedia.de stornieren.'
-          },
+			WMDE.FormDataExtractor.mapFromRadioInfoTexts( $( '#recurrence .wrap-field' ) ),
           $('.payment-method .info-detail'),
           {
             'PPL': 'Nach der Möglichkeit der Adressangabe werden Sie zu PayPal weitergeleitet, wo Sie die Spende abschließen müssen.',

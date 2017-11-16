@@ -16,5 +16,13 @@ module.exports = {
 			map[ input.attr( 'value' ) ] = input.next( 'label' ).text();
 		} );
 		return map;
+	},
+	mapFromRadioInfoTexts: function( $container ) {
+		var map = {};
+		$( 'input:not(.hidden)', $container ).each( function( i, input ) {
+			input = $( input );
+			map[ input.attr( 'value' ) ] = input.parents( '.wrap-field' ).find( '.info-text' ).text().trim();
+		} );
+		return map;
 	}
 };
