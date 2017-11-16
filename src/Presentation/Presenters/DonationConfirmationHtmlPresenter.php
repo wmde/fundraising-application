@@ -157,6 +157,8 @@ class DonationConfirmationHtmlPresenter {
 				return 'status-pledge';
 			case Donation::STATUS_EXTERNAL_BOOKED:
 				return 'status-booked';
+			case Donation::STATUS_CANCELLED:
+				return 'status-canceled';
 			default:
 				return 'status-unknown';
 		}
