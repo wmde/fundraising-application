@@ -207,11 +207,7 @@ $( function () {
             'anonym': 'icon-visibility_off'
           },
           $('.donator-type .text'),
-          {
-            'person': 'Privat',
-            'firma': 'Firma',
-            'anonym': 'Anonymous'
-          },
+			WMDE.FormDataExtractor.mapFromLabeledRadios( $( '#type-donator .wrap-field' ) ),
           $('.donator-type .info-detail'),
 			WMDE.FormDataExtractor.mapFromSelectOptions( $( '#country' ) )
         ),
