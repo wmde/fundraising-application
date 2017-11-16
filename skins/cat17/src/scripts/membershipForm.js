@@ -197,13 +197,7 @@ $( function () {
           $('.amount .info-detail'),
 			WMDE.FormDataExtractor.mapFromRadioInfoTexts( $( '#recurrence .wrap-field' ) ),
           $('.payment-method .info-detail'),
-          {
-            'PPL': 'Nach der Möglichkeit der Adressangabe werden Sie zu PayPal weitergeleitet, wo Sie die Spende abschließen müssen.',
-            'MCP': 'Nach der Möglichkeit der Adressangabe werden Sie zu unserem Partner Micropayment weitergeleitet, wo Sie Ihre Kreditkarteninformationen eingeben können.',
-            'BEZ': 'Ich ermächtige die gemeinnützige Wikimedia Fördergesellschaft mbH (Gläubiger-ID: DE25ZZZ00000448435) Zahlungen von meinem Konto mittels Lastschrift einzuziehen. Zugleich weise ich mein Kreditinstitut an, die von der gemeinnützigen Wikimedia Fördergesellschaft mbH auf mein Konto gezogenen Lastschriften einzulösen. <br />Ich kann innerhalb von acht Wochen, beginnend mit dem Belastungsdatum, die Erstattung des belasteten Betrages verlangen. Es gelten dabei die mit meinem Kreditinstitut vereinbarten Bedingungen.',
-			  // @fixme: This is in English. Find out what this should be in German
-            'UEB': 'On the conclusion of the donation process, you will be provided with the Wikimedia bank data so you can transfer the money.'
-          },
+			WMDE.FormDataExtractor.mapFromRadioInfoTexts( $( '#payment-method .wrap-field' ) ),
           $('.address-icon'),
           {
             'person': 'icon-account_circle',

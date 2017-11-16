@@ -9,6 +9,10 @@ module.exports = {
 		} );
 		return map;
 	},
+	/**
+	 * Seemingly excess selectors to make sure
+	 * - to select correct inputs of mix of different radio buttons for payment interval (interval type vs period)
+	 */
 	mapFromLabeledRadios: function( $container ) {
 		var map = {};
 		$( 'input:not(.hidden)', $container ).each( function( i, input ) {
@@ -17,11 +21,16 @@ module.exports = {
 		} );
 		return map;
 	},
+	/**
+	 * Seemingly excess selectors to make sure
+	 * - not to select extra (hidden) form fields (cp. SuboptionDisplayHandler)
+	 * - to select correct inputs of mix of different radio buttons for payment interval (interval type vs period)
+	 */
 	mapFromRadioInfoTexts: function( $container ) {
 		var map = {};
-		$( 'input:not(.hidden)', $container ).each( function( i, input ) {
+		$( '.wrap-input input:not(.hidden)', $container ).each( function( i, input ) {
 			input = $( input );
-			map[ input.attr( 'value' ) ] = input.parents( '.wrap-field' ).find( '.info-text' ).text().trim();
+			map[ input.attr( 'value' ) ] = input.parents( '.wrap-field' ).data( 'info-text' );
 		} );
 		return map;
 	}
