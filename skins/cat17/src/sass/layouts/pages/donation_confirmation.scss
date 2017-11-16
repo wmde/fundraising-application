@@ -7,27 +7,6 @@
 		clear: both;
 	}
 
-	.btn-donation.btn-introduction {
-		margin: 20px 0;
-		widht: 100%;
-		max-width: 100%;
-		height: 66px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		padding: 0;
-		@include bkp(sm) {
-			height: 45px;
-		}
-		@include bkp(md) {
-			display: flex;
-			margin-top: -50px;
-			&.btn-side {
-				margin-top: 0;
-			}
-		}
-	}
-
 	.text-moved {
 		margin: 40px 0;
 		@include bkp(sm) {
