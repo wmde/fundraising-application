@@ -22,8 +22,7 @@ var _ = require( 'underscore' ),
     accountNumber: _.clone( defaultFields ),
     bankCode: _.clone( defaultFields ),
     confirmSepa: _.clone( defaultFields ),
-    confirmShortTerm: _.clone( defaultFields ),
-    contactPerson: _.clone( defaultFields )
+    confirmShortTerm: _.clone( defaultFields )
   },
 
   setValidityOnSalutationChange = function ( state, action ) {
@@ -63,8 +62,7 @@ var _ = require( 'underscore' ),
         return _.extend( {}, state, {
           salutation: _.clone( defaultFields ),
           firstName: _.clone( defaultFields ),
-          lastName: _.clone( defaultFields ),
-          contactPerson: _.clone( defaultFields )
+          lastName: _.clone( defaultFields )
         } );
       case 'anonym':
         return _.extend( {}, state, {

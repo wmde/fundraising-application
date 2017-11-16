@@ -173,23 +173,11 @@ $( function () {
       },
       {
         viewHandler: WMDE.View.createPaymentSummaryDisplayHandler(
-          $( '.interval-text' ),
+			$( '.frequency .text' ),
           $( '.amount .text'),
           $( '.payment-method .text'),
-          {
-            '0': 'einmalig',
-            '1': 'monatlich',
-            '3': 'quartalsweise',
-            '6': 'halbjährlich',
-            '12': 'jährlich'
-          },
-          {
-            'BEZ': 'Lastschrift',
-            'UEB': 'Überweisung',
-            'MCP': 'Kreditkarte',
-            'PPL': 'PayPal',
-            'SUB': 'Sofortüberweisung'
-          },
+			WMDE.FormDataExtractor.mapFromLabeledRadios( $( '#recurrence .wrap-input' ) ),
+			WMDE.FormDataExtractor.mapFromLabeledRadios( $( '#payment-method .wrap-input' ) ),
           WMDE.CurrencyFormatter.createCurrencyFormatter( 'de' ),
           $('.periodicity-icon'),
           {
@@ -207,21 +195,9 @@ $( function () {
             'UEB': 'icon-ubeiwsung-1'
           },
           $('.amount .info-detail'),
-          {
-            '0': 'Ihr Konto wird einmal belastet.',
-            '1': 'Ihr Konto wird jeden Monat belastet.<br />Ihre monatliche Spende können Sie jederzeit fristlos per E-Mail an spenden@wikimedia.de stornieren.',
-            '3': 'Ihr Konto wird alle drei Monate belastet.<br />Ihre vierteljahrliche Spende können Sie jederzeit fristlos per E-Mail an spenden@wikimedia.de stornieren.',
-            '6': 'Ihr Konto wird alle sechs Monate belastet.<br />Ihre halbjahrliche Spende können Sie jederzeit fristlos per E-Mail an spenden@wikimedia.de stornieren.',
-            '12': 'Ihr Konto wird jährlich belastet.<br />Ihre jährliche Spende können Sie jederzeit fristlos per E-Mail an spenden@wikimedia.de stornieren.'
-          },
+			WMDE.FormDataExtractor.mapFromRadioInfoTexts( $( '#recurrence .wrap-field' ) ),
           $('.payment-method .info-detail'),
-          {
-            'PPL': 'Nach der Möglichkeit der Adressangabe werden Sie zu PayPal weitergeleitet, wo Sie die Spende abschließen müssen.',
-            'MCP': 'Nach der Möglichkeit der Adressangabe werden Sie zu unserem Partner Micropayment weitergeleitet, wo Sie Ihre Kreditkarteninformationen eingeben können.',
-            'BEZ': 'Ich ermächtige die gemeinnützige Wikimedia Fördergesellschaft mbH (Gläubiger-ID: DE25ZZZ00000448435) Zahlungen von meinem Konto mittels Lastschrift einzuziehen. Zugleich weise ich mein Kreditinstitut an, die von der gemeinnützigen Wikimedia Fördergesellschaft mbH auf mein Konto gezogenen Lastschriften einzulösen. <br />Ich kann innerhalb von acht Wochen, beginnend mit dem Belastungsdatum, die Erstattung des belasteten Betrages verlangen. Es gelten dabei die mit meinem Kreditinstitut vereinbarten Bedingungen.',
-			  // @fixme: This is in English. Find out what this should be in German
-            'UEB': 'On the conclusion of the donation process, you will be provided with the Wikimedia bank data so you can transfer the money.'
-          },
+			WMDE.FormDataExtractor.mapFromRadioInfoTexts( $( '#payment-method .wrap-field' ) ),
           $('.address-icon'),
           {
             'person': 'icon-account_circle',
@@ -235,14 +211,7 @@ $( function () {
             'anonym': 'Anonymous'
           },
           $('.donator-type .info-detail'),
-          $('.frequency .text'),
-          {
-            '0': 'Einmalig',
-            '1': 'Monatlich',
-            '3': 'Vierteljährlich',
-            '6': 'Halbjährlich',
-            '12': 'Jährlich'
-          },
+			WMDE.FormDataExtractor.mapFromSelectOptions( $( '#country' ) ),
           $('.member-type .text'),
           {
             'sustaining': 'Förder',

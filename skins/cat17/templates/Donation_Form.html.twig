@@ -1,0 +1,290 @@
+{% extends 'Base_Layout.html.twig' %}
+
+{% set COUNTRIES = [ 'DE', 'AT', 'CH', 'BE', 'IT', 'LI', 'LU' ] %}
+
+{% block page_identifier %}donation{% endblock %}
+
+{% block main %}
+	<div class="introduction container default">
+		<div class="row">
+			<div class="col-xs-12">
+				<h2 class="sr-only">{$ 'donation_title' | trans $}</h2>
+				<p class="h1">
+					{$ 'wikimedia_tagline' | trans $}
+				</p>
+				<a href="#donation-amount" class="btn btn-donation btn-introduction bk-blue text-center text-uppercase">
+					{$ 'donation_banner_anchor' | trans $}
+				</a>
+			</div>
+		</div>
+	</div>
+
+	<div class="introduction banner container hidden">
+		<div class="row">
+			<div class="col-xs-12 col-md-8">
+				<p class="h1">
+					{$ 'donation_banner_deeplink_summary' | trans( {
+						'%frequency%': '<span class="frequency"><span class="text strong"></span></span>',
+						'%amount%': '<span class="amount"><span class="text strong"></span></span>',
+						'%payment_method%': '<span class="payment-method"><span class="text strong"></span></span>'
+					} ) | raw $}
+				</p>
+				<p class="subtitle">
+					{$ 'wikimedia_tagline' | trans $}
+				</p>
+			</div>
+			<div class="link-back col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-0 col-md-4">
+				<a href="#donation-amount">
+					{$ 'donation_banner_correction_anchor' | trans | raw $}
+				</a>
+			</div>
+		</div>
+	</div>
+
+	<form id="form-donation" action="{$ basepath $}/donation/add" method="post" novalidate>
+		<div class="container">
+			<section class="state-bar state-overview col-xs-12 ">
+				<div class="wrap-bar container ">
+					<ul class="">
+						{% include 'partials/donation/state_bar_sections.html.twig' only %}
+					</ul>
+				</div>
+			</section>
+			<div class="row">
+
+				<div class="form-shadow-wrap col-xs-12 col-sm-8">
+					<section id="donation-amount" class="donation-amount clearfix">
+						<h2>{$ 'donation_section_amount_title' | trans $}</h2>
+
+						<p class="legend">{$ 'donation_section_amount_legend' | trans $}</p>
+
+						<fieldset
+							class="amount-qty padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
+							<legend class="sr-only">{$ 'donation_section_amount_legend' | trans $}</legend>
+							<div class="wrap-amounts">
+								{% include 'partials/payment_preset_amounts.html.twig' with { 'presetAmounts': [ 5, 15, 25, 50, 75, 100, 250, 300 ] } %}
+
+								<div class="wrap-amount-typed">
+									<input type="text" id="amount-typed">
+								</div>
+								<input type="hidden" name="betrag" id="amount-hidden">
+								<label for="amount-typed" class="sr-only">{$ 'payment_amount_legend' | trans $}</label>
+							</div>
+						</fieldset>
+
+						<fieldset id="recurrence"
+							class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
+							<legend class="sr-only">{$ 'payment_interval_legend' | trans $}</legend>
+
+							{% include 'partials/payment_intervals.html.twig' only %}
+						</fieldset>
+					</section>
+
+					<section id="donation-payment" class="donation-payment-method clearfix">
+						<h2>{$ 'donation_section_payment_title' | trans $}</h2>
+
+						<p class="legend">{$ 'donation_section_payment_legend' | trans $}</p>
+
+						<fieldset id="payment-method"
+							class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
+							<legend class="sr-only">{$ 'donation_section_payment_legend' | trans $}</legend>
+
+							{% include 'partials/payment_types.html.twig' with { 'paymentTypes': paymentTypes } only %}
+						</fieldset>
+					</section>
+
+					<section id="donation-type" class="donation-daten clearfix">
+						<h2>{$ 'donation_section_donor_title' | trans $}</h2>
+
+						<p class="legend">{$ 'donation_section_donor_legend' | trans $}</p>
+
+						<fieldset id="type-donator"
+							class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
+							<legend class="sr-only">{$ 'donation_section_donor_legend' | trans $}</legend>
+
+							<div class="wrap-field personal">
+
+								<div class="wrap-input">
+									<input type="radio" name="addressType" id="personal" value="person">
+									<label for="personal">
+										<span>{$ 'donation_addresstype_option_private' | trans $}</span>
+										<i class="icon-account_circle"></i>
+									</label>
+								</div>
+								<div class="wrap-info">
+									<div class="info-text" data-info="personal">
+										<div class="wrap-select-50 clearfix">
+											<select class="no-outline salutation" id="salutation" name="salutation"
+													data-jcf='{"wrapNative": false,  "wrapNativeOnMobile": true  }'>
+												<option hidden class="hideme" value="">{$ 'salutation_label' | trans $}</option>
+												<option value="Herr">{$ 'salutation_option_mr' | trans $}</option>
+												<option value="Frau">{$ 'salutation_option_mrs' | trans $}</option>
+											</select>
+											<select class="no-outline personal-title" id="title" name="title"
+													data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true}'>
+												<option value="">{$ 'title_option_none' | trans $}</option>
+												<option value="Dr.">Dr.</option>
+												<option value="Prof.">Prof.</option>
+												<option value="Prof. Dr.">Prof. Dr.</option>
+											</select>
+										</div>
+
+										<div class="field-grp valid">
+											<input type="text" id="first-name" name="firstName" placeholder="{$ 'firstname_label' | trans $}">
+											<label for="first-name" class="sr-only">{$ 'firstname_label' | trans $}</label>
+											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+										</div>
+										<div class="field-grp">
+											<input type="text" id="last-name" name="lastName" placeholder="{$ 'lastname_label' | trans $}">
+											<label for="last-name" class="sr-only">{$ 'lastname_label' | trans $}</label>
+											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+										</div>
+										<div class="field-grp">
+											<input type="email" id="email" placeholder="{$ 'email_label' | trans $}">
+											<label for="email" class="sr-only">{$ 'email_label' | trans $}</label>
+											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+										</div>
+										<div class="field-grp">
+											<input type="text" id="street" placeholder="{$ 'street_label' | trans $}">
+											<label for="street" class="sr-only">{$ 'street_label' | trans $}</label>
+											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+										</div>
+										<div class="field-grp">
+											<input type="text" id="post-code" placeholder="{$ 'zip_label' | trans $}">
+											<label for="post-code" class="sr-only">{$ 'zip_label' | trans $}</label>
+											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+										</div>
+										<div class="field-grp">
+											<input type="text" id="city" placeholder="{$ 'city_label' | trans $}">
+											<label for="city" class="sr-only">{$ 'city_label' | trans $}</label>
+											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+										</div>
+
+										<select id="country"
+											data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true, "flipDropToFit": true,  "maxVisibleItems": 6}'
+											class="no-outline country-select">
+											{% for countryCode in COUNTRIES %}
+												<option value="{$ countryCode $}">{$ ( 'country_option_' ~ countryCode ) | trans $}</option>
+											{% endfor %}
+										</select>
+									</div>
+									<div class="wrap-check">
+										<input type="checkbox" id="newsletter" data-jcf='{"wrapNative": true}' class="jcf">
+										<label class="news" for="newsletter">
+											{$ 'donation_sendinfo_label' | trans | raw $}
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="wrap-field firma">
+								<div class="wrap-input">
+									<input type="radio" name="addressType" id="company" value="firma">
+									<label for="company">
+										<span>{$ 'donation_addresstype_option_company' | trans $}</span>
+										<i class="icon-work"></i>
+									</label>
+								</div>
+								<div class="wrap-info">
+									<div class="info-text" data-info="company">
+										<div class="field-grp ">
+											<input type="text" id="company-name" name="companyName" placeholder="{$ 'companyname_label' | trans $}">
+											<label for="company-name" class="sr-only">{$ 'companyname_label' | trans $}</label>
+											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+										</div>
+										<div class="field-grp">
+											<input type="email" id="email-company" name="email" placeholder="{$ 'email_label' | trans $}">
+											<label for="email-company" class="sr-only">{$ 'email_label' | trans $}</label>
+											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+										</div>
+										<div class="field-grp">
+											<input type="text" id="adress-company" name="street" placeholder="{$ 'street_label' | trans $}">
+											<label for="adress-company" class="sr-only">{$ 'street_label' | trans $}</label>
+											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+										</div>
+										<div class="field-grp">
+											<input type="text" id="post-code-company" name="postcode" placeholder="{$ 'zip_label' | trans $}">
+											<label for="post-code" class="sr-only">{$ 'zip_label' | trans $}</label>
+											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+										</div>
+										<div class="field-grp">
+											<input type="text" id="city-company" name="city" placeholder="{$ 'city_label' | trans $}">
+											<label for="city-company" class="sr-only">{$ 'city_label' | trans $}</label>
+											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+										</div>
+
+										<select id="country-company" name="country"
+											data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true,  "maxVisibleItems": 6}'
+											class="no-outline country-select">
+											{% for countryCode in COUNTRIES %}
+												<option value="{$ countryCode $}">{$ ( 'country_option_' ~ countryCode ) | trans $}</option>
+											{% endfor %}
+										</select>
+									</div>
+									<div class="wrap-check">
+										<input type="checkbox" id="newsletter-company" name="info" value="1">
+										<label class="news" for="newsletter-company">
+											{$ 'donation_sendinfo_label' | trans | raw $}
+										</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="wrap-field anonym">
+								<div class="wrap-input">
+									<input type="radio" name="addressType" id="anonymus" value="anonym">
+									<label for="anonymus">
+										<span>{$ 'donation_addresstype_option_anonymous' | trans $}</span>
+										<i class="icon-visibility_off"></i>
+									</label>
+								</div>
+								<p class="info-text" data-info="anonymus">
+									{$ 'donation_addresstype_option_anonymous_disclaimer' | trans $}
+								</p>
+							</div>
+						</fieldset>
+					</section>
+
+				</div>
+
+				{% include 'partials/donation/state_bar.html.twig' %}
+
+			</div>
+		</div>
+		<hr id="form-end">
+
+		{% include 'partials/donation/overview.html.twig' %}
+
+		<div class="fixed-button hidden-lg">
+			<div class="switch-container container-fluid container">
+				<div class="row">
+					<div class=" col-sm-5 col-sm-offset-7 col-md-4 col-md-offset-8 clearfix">
+						<input type="submit" value="Spende abschließen" class="btn btn-donation btn-unactive">
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="submit-bottom">
+			<input type="submit" value="Spende abschließen" class="btn btn-donation btn-unactive visible-xs-block">
+		</div>
+
+		<input type="hidden" name="impCount" value="{$ tracking.impressionCount $}">
+		<input type="hidden" name="bImpCount" value="{$ tracking.bannerImpressionCount $}">
+
+	</form>
+
+{% endblock %}
+
+{% block scripts %}
+	<script type="text/javascript" src="{$ basepath|e('html_attr') $}{$ '/skins/cat17/build/wmde.js'|prefix_file $}"></script>
+	<script type="text/javascript" id="init-form" src="{$ basepath|e('html_attr') $}{$ '/skins/cat17/scripts/donationForm.js'|prefix_file $}"
+			data-initial-form-values="{% if initialFormValues %}{$ initialFormValues|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
+			data-violated-fields="{% if violatedFields %}{$ violatedFields|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
+			data-initial-validation-result="{% if validationResult %}{$ validationResult|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
+			data-validate-amount-url="{$ basepath|e('html_attr') $}/validate-payment-data"
+			data-validate-address-url="{$ basepath|e('html_attr') $}/validate-address"
+			data-validate-email-address-url="{$ basepath|e('html_attr') $}/validate-email"
+			data-validate-iban-url="{$ basepath|e('html_attr') $}/check-iban"
+			data-generate-iban-url="{$ basepath|e('html_attr') $}/generate-iban"
+	></script>
+{% endblock %}

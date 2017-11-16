@@ -1,0 +1,56 @@
+<div class="container">
+	<div class="row wrap-overview">
+		<section id="overview" class="state-overview  col-sm-7  col-md-8 col-lg-12 clearfix">
+			<h2>{$ 'donation_section_overview_title' | trans $}</h2>
+			<div class="overview no-gutter">
+				<div class="wrap-field amount disabled col-lg-4">
+					<div class="wrap-input">
+						<a href="#donation-amount">
+							<span class="text" data-empty-text="{$ 'donation_section_amount_fallback' | trans | e( 'html_attr' ) $}"></span>
+							<i class="periodicity-icon" data-display-error="true"></i>
+						</a>
+					</div>
+					<div class="info-text-bottom">
+						<a href="#donation-amount"><i class="icon-mode_edit link"></i></a>
+						<div class="info-detail"></div>
+					</div>
+				</div>
+				<div class="wrap-field payment-method disabled col-lg-4">
+					<div class="wrap-input">
+						<a href="#donation-payment">
+							<span class="text" data-empty-text="{$ 'donation_section_payment_fallback' | trans | e( 'html_attr' ) $}"></span>
+							<i class="payment-icon" data-display-error="true"></i>
+						</a>
+					</div>
+					<div class="info-text-bottom">
+						<a href="#donation-payment"><i class="icon-mode_edit link"></i></a>
+						<div class="info-detail"></div>
+					</div>
+				</div>
+				<div class="wrap-field donator-type col-lg-4">
+					<div class="wrap-input">
+						<a href="#donation-type">
+							<span class="text" data-empty-text="{$ 'donation_section_donor_fallback' | trans | e( 'html_attr' ) $}"></span>
+							<i class="address-icon" data-display-error="true"></i>
+						</a>
+					</div>
+					<div class="info-text-bottom">
+						<a href="#donation-type"><i class="icon-mode_edit link"></i></a>
+						<div class="info-detail"></div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<div id="other-info" class="other-info col-sm-5 col-md-offset-8  col-md-4 col-lg-4 col-lg-offset-8 clearfix">
+			<div class="other-text  hidden-lg">
+				<span><i class="icon-lock"></i></span>
+				<span class="text">{$ 'notice_ssl_encrypted' | trans $}</span>
+			</div>
+			<div class="other-text  hidden-lg">
+				<span><i class="icon-phone"></i></span>
+				<span class="text">{$ 'wikimedia_hotline' | trans $}</span>
+			</div>
+			<input type="submit" value="Spende abschließen" class="btn btn-donation btn-unactive hidden-xs">
+		</div>
+	</div>
+</div>

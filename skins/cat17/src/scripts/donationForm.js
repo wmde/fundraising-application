@@ -1,11 +1,6 @@
 $( function () {
   /** global: WMDE */
 
-  // TODO only include this file on donation page(s)
-  if ($('body#donation').length == 0) {
-    return;
-  }
-
   var initData = $( '#init-form' ),
     store = WMDE.Store.createDonationStore( WMDE.createInitialStateFromViolatedFields(
         initData.data( 'violatedFields' ),
@@ -16,8 +11,8 @@ $( function () {
 
   WMDE.StoreUpdates.connectComponentsToStore(
     [
-      WMDE.Components.createAmountComponent( store, $('#amount-typed'), $( 'input[name="amount-grp"]' ), $( '#amount-hidden' ) ),
-      WMDE.Components.createRadioComponent( store, $('input[name="payment-info"]'), 'paymentType' ),
+      WMDE.Components.createAmountComponent( store, $('#amount-typed'), $( '.wrap-amounts input[type="radio"]' ), $( '#amount-hidden' ) ),
+      WMDE.Components.createRadioComponent( store, $('input[name="zahlweise"]'), 'paymentType' ),
       WMDE.Components.createPaymentIntervalComponent( store, $('input[name="intervalType"]'), $('input[name="periode"]') ),
       WMDE.Components.createBankDataComponent( store, {
         ibanElement: $( '#iban' ),
@@ -28,7 +23,7 @@ $( function () {
         bankNameDisplayElement: $( '#bank-name' )
       } ),
       WMDE.Components.createRadioComponent( store, $( 'input[name="addressType"]' ), 'addressType' ),
-      WMDE.Components.createRadioComponent( store, $( '#treatment' ), 'salutation' ),
+      WMDE.Components.createSelectMenuComponent( store, $( 'select[name="salutation"]' ), 'salutation' ),
       WMDE.Components.createSelectMenuComponent( store, $( '#title' ), 'title' ),
       WMDE.Components.createValidatingTextComponent( store, $( '#first-name' ), 'firstName' ),
       WMDE.Components.createValidatingTextComponent( store, $( '#last-name' ), 'lastName' ),
@@ -44,8 +39,7 @@ $( function () {
       WMDE.Components.createValidatingTextComponent( store, $( '#email' ), 'email' ),
       WMDE.Components.createValidatingTextComponent( store, $( '#email-company' ), 'email' ),
       WMDE.Components.createCheckboxComponent( store, $( '#newsletter' ), 'confirmNewsletter' ),
-      WMDE.Components.createCheckboxComponent( store, $( '#newsletter-company' ), 'confirmNewsletter' ),
-      WMDE.Components.createValidatingTextComponent( store, $( '#contact-person' ), 'contactPerson' )
+      WMDE.Components.createCheckboxComponent( store, $( '#newsletter-company' ), 'confirmNewsletter' )
     ],
     store,
     'donationFormContent'
@@ -102,7 +96,7 @@ $( function () {
         viewHandler: WMDE.View.createErrorBoxHandler( $( '#validation-errors' ), {
           amount: 'Betrag',
           paymentType: 'Zahlungsart',
-          salutation: 'Familie',
+          salutation: 'Anrede',
           title: 'Titel',
           firstName: 'Vorname',
           lastName: 'Nachname',
@@ -181,23 +175,11 @@ $( function () {
       },
       {
         viewHandler: WMDE.View.createPaymentSummaryDisplayHandler(
-          $( '.interval-text' ),
+			$( '.frequency .text' ),
           $( '.amount .text'),
           $( '.payment-method .text'),
-          {
-            '0': 'einmalig',
-            '1': 'monatlich',
-            '3': 'quartalsweise',
-            '6': 'halbjährlich',
-            '12': 'jährlich'
-          },
-          {
-            'BEZ': 'Lastschrift',
-            'UEB': 'Überweisung',
-            'MCP': 'Kreditkarte',
-            'PPL': 'PayPal',
-            'SUB': 'Sofortüberweisung'
-          },
+			WMDE.FormDataExtractor.mapFromLabeledRadios( $( '#recurrence .wrap-input' ) ),
+			WMDE.FormDataExtractor.mapFromLabeledRadios( $( '#payment-method .wrap-input' ) ),
           WMDE.CurrencyFormatter.createCurrencyFormatter( 'de' ),
           $('.periodicity-icon'),
           {
@@ -215,21 +197,9 @@ $( function () {
             'UEB': 'icon-ubeiwsung-1'
           },
           $('.amount .info-detail'),
-          {
-            '0': 'Ihr Konto wird einmal belastet.',
-            '1': 'Ihr Konto wird jeden Monat belastet.<br />Ihre monatliche Spende können Sie jederzeit fristlos per E-Mail an spenden@wikimedia.de stornieren.',
-            '3': 'Ihr Konto wird alle drei Monate belastet.<br />Ihre vierteljahrliche Spende können Sie jederzeit fristlos per E-Mail an spenden@wikimedia.de stornieren.',
-            '6': 'Ihr Konto wird alle sechs Monate belastet.<br />Ihre halbjahrliche Spende können Sie jederzeit fristlos per E-Mail an spenden@wikimedia.de stornieren.',
-            '12': 'Ihr Konto wird jährlich belastet.<br />Ihre jährliche Spende können Sie jederzeit fristlos per E-Mail an spenden@wikimedia.de stornieren.'
-          },
+			WMDE.FormDataExtractor.mapFromRadioInfoTexts( $( '#recurrence .wrap-field' ) ),
           $('.payment-method .info-detail'),
-          {
-            'PPL': 'Nach der Möglichkeit der Adressangabe werden Sie zu PayPal weitergeleitet, wo Sie die Spende abschließen müssen.',
-            'MCP': 'Nach der Möglichkeit der Adressangabe werden Sie zu unserem Partner Micropayment weitergeleitet, wo Sie Ihre Kreditkarteninformationen eingeben können.',
-            'BEZ': 'Ich ermächtige die gemeinnützige Wikimedia Fördergesellschaft mbH (Gläubiger-ID: DE25ZZZ00000448435) Zahlungen von meinem Konto mittels Lastschrift einzuziehen. Zugleich weise ich mein Kreditinstitut an, die von der gemeinnützigen Wikimedia Fördergesellschaft mbH auf mein Konto gezogenen Lastschriften einzulösen. <br />Ich kann innerhalb von acht Wochen, beginnend mit dem Belastungsdatum, die Erstattung des belasteten Betrages verlangen. Es gelten dabei die mit meinem Kreditinstitut vereinbarten Bedingungen.',
-              // @fixme: This is in English. Find out what this should be in German
-            'UEB': 'On the conclusion of the donation process, you will be provided with the Wikimedia bank data so you can transfer the money.'
-          },
+			WMDE.FormDataExtractor.mapFromRadioInfoTexts( $( '#payment-method .wrap-field' ) ),
           $('.address-icon'),
           {
             'person': 'icon-account_circle',
@@ -237,20 +207,9 @@ $( function () {
             'anonym': 'icon-visibility_off'
           },
           $('.donator-type .text'),
-          {
-            'person': 'Privat',
-            'firma': 'Firma',
-            'anonym': 'Anonymous'
-          },
+			WMDE.FormDataExtractor.mapFromLabeledRadios( $( '#type-donator .wrap-field' ) ),
           $('.donator-type .info-detail'),
-          $('.frequency .text'),
-          {
-            '0': 'Einmalig',
-            '1': 'Monatlich',
-            '3': 'Vierteljährlich',
-            '6': 'Halbjährlich',
-            '12': 'Jährlich'
-          }
+			WMDE.FormDataExtractor.mapFromSelectOptions( $( '#country' ) )
         ),
         stateKey: 'donationFormContent'
       },
@@ -273,6 +232,24 @@ $( function () {
         ),
         stateKey: 'donationFormContent'
       },
+		{
+			viewHandler: WMDE.View.createSuboptionDisplayHandler(
+				$( '#recurrence' )
+			),
+			stateKey: 'donationFormContent.paymentIntervalInMonths'
+		},
+		{
+			viewHandler: WMDE.View.createSuboptionDisplayHandler(
+				$( '#donation-payment' )
+			),
+			stateKey: 'donationFormContent.paymentType'
+		},
+		{
+			viewHandler: WMDE.View.createSuboptionDisplayHandler(
+				$( '#type-donator' )
+			),
+			stateKey: 'donationFormContent.addressType'
+		},
       {
         viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#first-name' ) ),
         stateKey: 'donationInputValidation.firstName'
@@ -322,10 +299,6 @@ $( function () {
         stateKey: 'donationInputValidation.companyName'
       },
       {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#contact-person' ) ),
-        stateKey: 'donationInputValidation.contactPerson'
-      },
-      {
 
         viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#iban' ) ),
         stateKey: 'donationInputValidation.iban'
@@ -357,8 +330,8 @@ $( function () {
       formContent = store.getState().donationFormContent;
     return formContent.addressType === 'anonym' || (
 		// @fixme: Move checking of salutation and title into reducer/store/validator
-      validity.address && formContent.salutation != "person" &&
-      formContent.salutation != "anrede" && formContent.title != "vtitle"
+      validity.address &&
+      formContent.salutation != ''
     );
   }
 
@@ -405,7 +378,7 @@ $( function () {
       } else if ( formContent.addressType === 'firma' ) {
         store.dispatch( actions.newMarkEmptyFieldsInvalidAction(
           [ 'companyName', 'street', 'postcode', 'city', 'email' ],
-          [ 'firstName', 'lastName', 'contactPerson' ]
+          [ 'firstName', 'lastName' ]
         ) );
       }
     }
@@ -485,16 +458,6 @@ $( function () {
     }
   }
 
-  $.urlParam = function(name){
-    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-    if (results==null){
-      return null;
-    }
-    else{
-      return decodeURI(results[1]) || 0;
-    }
-  };
-
   handleGroupValidations = function () {
     var state = store.getState();
 
@@ -545,7 +508,6 @@ $( function () {
         ||
         state.donationFormContent.addressType == 'firma' &&
         (
-          (validators.contactPerson.dataEntered && !validators.contactPerson.isValid) ||
           (validators.companyName.dataEntered && !validators.companyName.isValid) ||
           (validators.firstName.dataEntered && !validators.firstName.isValid) ||
           (validators.email.dataEntered && !validators.email.isValid) ||
@@ -619,21 +581,15 @@ $( function () {
 
   // Set initial form values
   var initSetup = initData.data( 'initial-form-values' );
-  var urlAmountHidden = $.urlParam('amount-hidden');
-  var urlAmountTyped = $.urlParam('amount-typed');
-  var urlIntervalType = $.urlParam('intervalType');
-  var urlIntervalMonths = $.urlParam('periode');
-  var urlPayment = $.urlParam('payment-info');
-  urlAmountHidden ? initSetup.amount = urlAmountHidden : 0;
-  urlAmountTyped && urlAmountHidden ? initSetup.isCustomAmount = true : 0;
-  urlIntervalType ? initSetup.paymentIntervalInMonths = urlIntervalType : 0;
-  urlIntervalMonths && urlIntervalType ? initSetup.paymentIntervalInMonths = urlIntervalMonths : 0;
-  urlPayment ? initSetup.paymentType = urlPayment : 0;
+  // backend delivers amount as a german-formatted "float" string
+  initSetup.amount = WMDE.CurrencyFormatter.createCurrencyFormatter( 'de' ).parse( initSetup.amount );
   store.dispatch( actions.newInitializeContentAction( initSetup ) );
 
   var $introBanner = $('.introduction.banner');
   var $introDefault = $('.introduction.default');
-  if (urlAmountHidden && urlIntervalType && urlPayment) {
+
+  // @todo Check if this are all conditions that would be considered "successful deeplink", warrant the special header
+  if (initSetup.amount && initSetup.paymentIntervalInMonths && initSetup.paymentType) {
     $introBanner.removeClass('hidden');
     $introDefault.addClass('hidden');
   }

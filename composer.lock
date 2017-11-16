@@ -6164,12 +6164,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content.git",
-                "reference": "b78a03a0dda00be926a2aaff264edae54133c981"
+                "reference": "f115613f061c99534016b23bf0b18e5088db349e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/b78a03a0dda00be926a2aaff264edae54133c981",
-                "reference": "b78a03a0dda00be926a2aaff264edae54133c981",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/f115613f061c99534016b23bf0b18e5088db349e",
+                "reference": "f115613f061c99534016b23bf0b18e5088db349e",
                 "shasum": ""
             },
             "require-dev": {
@@ -6205,7 +6205,7 @@
             "support": {
                 "source": "https://github.com/wmde/fundraising-frontend-content/tree/test"
             },
-            "time": "2017-11-08T20:33:07+00:00"
+            "time": "2017-11-16T16:38:01+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",

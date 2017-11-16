@@ -1,0 +1,20 @@
+<!-- end form-shadow-wrap -->
+<section id="sidebar" class="state-overview state-bar-lateral active col-xs-12 col-sm-4 clearfix">
+	<div class="wrap-bar">
+		<h2>{$ 'donation_section_overview_title' | trans $}</h2>
+		<ul class="list-unstyled">
+			{% include 'partials/donation/state_bar_sections.html.twig' only %}
+		</ul>
+		<input type="submit" value="Spende abschließen" class="btn btn-donation btn-unactive">
+		<div class="other-info other-info-lateral">
+			<div class="other-text">
+				<span><i class="icon-lock"></i></span>
+				<span class="text">{$ 'notice_ssl_encrypted' | trans $}</span>
+			</div>
+			<div class="other-text">
+				<span><i class="icon-phone"></i></span>
+				<span class="text">{$ 'wikimedia_hotline' | trans $}</span>
+			</div>
+		</div>
+	</div>
+</section>

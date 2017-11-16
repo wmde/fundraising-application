@@ -4,22 +4,20 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
+use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Infrastructure\AmountParser;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Infrastructure\AmountParser
+ * @covers \WMDE\Fundraising\Frontend\Infrastructure\AmountParser
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class AmountParserTest extends \PHPUnit\Framework\TestCase {
+class AmountParserTest extends TestCase {
 
 	/**
 	 * @dataProvider valueProvider
-	 * @param string $locale
-	 * @param float $expectedValue
-	 * @param string $inputValue
 	 */
 	public function testGivenFormattedString_setAmountFromStringParsesIntoFloat( string $locale, float $expectedValue, string $inputValue ): void {
 		$this->assertSame(
@@ -37,6 +35,7 @@ class AmountParserTest extends \PHPUnit\Framework\TestCase {
 			[ 'de_DE', 0.0, '0' ],
 			[ 'de_DE', 0.0, '' ],
 			[ 'de_DE', 0.0, 'abc' ],
+			[ 'de_DE', 0.0, '17.50' ], // no support for "number as string" when in German mode
 
 			[ 'en_US', 29.5, '29.50' ],
 			[ 'en_US', 0.1, '0.10' ],

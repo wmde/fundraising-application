@@ -14,8 +14,8 @@ var formContentLib = require( './form_content' ),
     bankCode: '',
     bankName: '',
     addressType: '', // person, firma and anonym
-    salutation: 'anrede',
-    title: 'vtitle',
+    salutation: '',
+    title: '',
     firstName: '',
     lastName: '',
     companyName: '',
@@ -27,7 +27,6 @@ var formContentLib = require( './form_content' ),
     confirmSepa: false,
     confirmShortTerm: false,
     confirmNewsletter: false,
-    contactPerson: '',
     activePresets: false
   };
 

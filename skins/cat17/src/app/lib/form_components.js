@@ -70,7 +70,15 @@ var objectAssign = require( 'object-assign' ),
 		selectElement: null,
 		hiddenElement: null,
 		render: function ( formContent ) {
-			this.hiddenElement.val( formContent.amount || '' );
+			// @todo mv into GermanCurrencyFormatter or similar
+			var germanFloatFromMixedAmountFormatter = function ( amount ) {
+				// @todo Make state always carry float (or money object), not sometimes string
+				amount = parseFloat( amount );
+				// @todo toFixed is a bad idea™ (https://stackoverflow.com/a/661757)
+				amount = amount.toFixed( 2 );
+				return amount.replace( '.', ',' );
+			};
+			this.hiddenElement.val( germanFloatFromMixedAmountFormatter( formContent.amount ) );
 			if ( formContent.isCustomAmount ) {
         this.inputElement.parent().addClass('filled');
 				this.selectElement.prop( 'checked', false );

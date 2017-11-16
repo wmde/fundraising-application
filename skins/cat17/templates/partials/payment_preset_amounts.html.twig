@@ -1,0 +1,8 @@
+{% spaceless %}
+{% for amount in presetAmounts %}
+	<div class="wrap-radio">
+		<input type="radio" id="amount{$ loop.index $}" value="{$ amount $}">
+		<label for="amount{$ loop.index $}">{$ amount $} €</label>
+	</div>
+{% endfor %}
+{% endspaceless %}

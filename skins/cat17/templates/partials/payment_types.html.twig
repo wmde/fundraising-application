@@ -1,0 +1,31 @@
+{# paramters:
+	paymentTypes
+	formId
+	checkedPaymentType (optional)
+#}
+{% set PAYMENT_TYPE_OPTIONS = {
+	'PPL': { 'id': 'paypal', 'icon': 'icon-paypal' },
+	'MCP': { 'id': 'credit-card', 'icon': 'icon-credit_card2' },
+	'BEZ': { 'id': 'debit-card', 'icon': 'icon-SEPA-2' },
+	'UEB': { 'id': 'bank-transfer', 'icon': 'icon-ubeiwsung-1' },
+	'SUB': { 'id': 'sofort', 'icon': 'icon-sofort' }
+} %}
+{% spaceless %}
+{% for paymentType in paymentTypes %}
+	<div class="wrap-field" data-info-text="{$ ( 'payment_type_' ~ paymentType ~ '_info' ) | trans | e( 'html_attr' ) $}">
+		<div class="wrap-input">
+			<input type="radio" name="zahlweise" id="{$ PAYMENT_TYPE_OPTIONS[paymentType].id $}" value="{$ paymentType $}">
+			<label for="{$ PAYMENT_TYPE_OPTIONS[paymentType].id $}">
+				<span>{$ paymentType|trans({}, 'paymentTypes') $}</span>
+				<i class="{$ PAYMENT_TYPE_OPTIONS[paymentType].icon $}"></i>
+			</label>
+		</div>
+		<div class="info-text" data-info="{$ PAYMENT_TYPE_OPTIONS[paymentType].id $}">
+			{% include [
+				'partials/payment_type_info/' ~ paymentType ~ '.html.twig',
+				'partials/payment_type_info/_default.html.twig'
+			] with { 'paymentType': paymentType } only %}
+		</div>
+	</div>
+{% endfor %}
+{% endspaceless %}

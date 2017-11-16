@@ -68,8 +68,7 @@
     var selectedSelect = function () {
 
         if ($(window).width() < 1024) {
-            $('select#title').children('option.hideme').prop('disabled',true);
-            $('select#treatment').children('option.hideme').prop('disabled',true);
+            $('select#salutation').children('option.hideme').prop('disabled',true);
          }
         $("select").change(function () {
             $(this).closest("span.jcf-select").addClass("selected-item");
@@ -94,30 +93,6 @@
 
         var $element = $("section.donation-amount");
         if ($element.length) {
-
-            $(".show-info input[type=radio]").on("click", function () {
-
-                var id = this.id
-                var fieldsetId = $(this).parents("fieldset").prop("id");
-
-                $('fieldset#' + fieldsetId).css("min-height", 0);
-
-                if (fieldsetId != 'type-membership') {
-                    $('fieldset#' + fieldsetId + ' .wrap-field').removeClass("selected notselected");
-                    $('fieldset#' + fieldsetId + ' .info-text').removeClass("opened");
-                    $('[data-info="' + id + '"]').toggleClass("opened");
-                    $(this).parents(".wrap-field").toggleClass("selected");
-                    $(this).parents(".selected").prevAll('.wrap-field:first').toggleClass("notselected");
-
-                    if ($('[data-info="' + id + '"]').hasClass("opened")) {
-                        var formHeight = $('[data-info="' + id + '"]').prop('scrollHeight');
-                        $(this).closest(".show-info").css("min-height", formHeight + "px");
-                    }
-                    ;
-
-                }
-            });
-
             if ($(window).width() < 1200) {
                 $("#overview").on("click", ".wrap-field.completed .wrap-input,  .wrap-field.invalid .wrap-input", function (e) {
                     e.preventDefault();
@@ -197,7 +172,7 @@
         } else {
             $(window).scroll(function () {
                 var currentScroll = $(window).scrollTop();
-                if ($('body#donation').length) {
+                if ($('.page-donation').length) {
                     var initialTop = 200;
                 } else if ($('body#membership').length) {
                     var initialTop = 650;
