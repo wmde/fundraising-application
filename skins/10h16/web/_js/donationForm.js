@@ -383,7 +383,7 @@ $( function () {
 		}
 	}
 
-	// connect DOM elements to actions
+	// connect DOM element events to actions
 
 	$( '#continueFormSubmit1' ).click( WMDE.StoreUpdates.makeEventHandlerWaitForAsyncFinish( handlePaymentDataSubmit, store ) );
 
@@ -404,6 +404,14 @@ $( function () {
 		} else {
 			triggerValidityCheckForSepaPage();
 			displayErrorBox();
+		}
+	} );
+
+
+	$( '#donForm1 .amount-input' ).keypress( function ( evt ) {
+		if( evt.which === 13 ) {
+			$( '#continueFormSubmit1' ).click();
+			evt.preventDefault();
 		}
 	} );
 
