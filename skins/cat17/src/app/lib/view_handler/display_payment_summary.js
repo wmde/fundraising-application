@@ -56,22 +56,18 @@ var objectAssign = require( 'object-assign' ),
 		memberShipTypeText: null,
 
 		update: function ( formContent ) {
-			this.intervalTextElement.text( this.intervalTranslations[ formContent.paymentIntervalInMonths ] );
-
 			this.updateAmoutIndicators( formContent.amount );
 
-			this.updatePaymentTypeIndicators( formContent.paymentType );
-
+			this.intervalTextElement.text( this.intervalTranslations[ formContent.paymentIntervalInMonths ] );
 			this.setSummaryIcon( this.intervalIconElement, formContent.paymentIntervalInMonths, this.intervalIcons );
-			this.setSummaryIcon( this.paymentIconsElement, formContent.paymentType, this.paymentIcons );
 			this.periodicityTextElement.html( this.periodicityText[formContent.paymentIntervalInMonths] );
 
+			this.updatePaymentTypeIndicators( formContent.paymentType );
+			this.setSummaryIcon( this.paymentIconsElement, formContent.paymentType, this.paymentIcons );
 			this.updatePaymentTypeSummary( formContent );
 
-			this.setSummaryIcon( this.addressTypeIconElement, formContent.addressType, this.addressTypeIcon );
-
 			this.updateAddressTypeIndicators( formContent.addressType );
-
+			this.setSummaryIcon( this.addressTypeIconElement, formContent.addressType, this.addressTypeIcon );
 			this.addressTypeTextElement.html( this.getAddressSummaryContent( formContent ) );
 
 			if( this.memberShipTypeElement ) {
