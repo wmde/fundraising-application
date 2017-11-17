@@ -12,32 +12,49 @@ var objectAssign = require( 'object-assign' ),
 		}
 	},
 	PaymentSummaryDisplayHandler = {
+
+		/**
+		 * Elements showing state to user
+		 */
 		intervalTextElement: null,
 		amountElement: null,
 		paymentTypeElement: null,
+		intervalIconElement: null,
+		paymentIconsElement: null,
+		periodicityTextElement: null,
+		paymentElement: null,
+		addressTypeIconElement: null,
+		addressTypeElement: null,
+		addressTypeTextElement: null,
+		memberShipTypeElement: null,
+		memberShipTypeIconElement: null,
+		memberShipTypeTextElement: null,
+
+		/**
+		 * Dependencies
+		 */
+		numberFormatter: null,
+
+		/**
+		 * Icons
+		 */
+		intervalIcons: null,
+		addressTypeIcon: null,
+		paymentIcons: null,
+		memberShipTypeIcon: null,
+
+		/**
+		 * Translations
+		 */
 		intervalTranslations: null,
 		paymentTypeTranslations: null,
-		numberFormatter: null,
-		intervalIconElement: null,
-		intervalIcons: null,
-		paymentIconsElement: null,
-		paymentIcons: null,
-		periodicityTextElement: null,
-		periodicityText: null,
-		paymentElement: null,
-		paymentText: null,
-		addressTypeIconElement: null,
-		addressTypeIcon: null,
-		addressTypeElement: null,
-		addressType: null,
-		addressTypeTextElement: null,
 		countryTranslations: null,
-		memberShipTypeElement: null,
+		addressType: null,
+		periodicityText: null,
+		paymentText: null,
 		memberShipType: null,
-		memberShipTypeIconElement: null,
-		memberShipTypeIcon: null,
-		memberShipTypeTextElement: null,
 		memberShipTypeText: null,
+
 		update: function ( formContent ) {
 			this.intervalTextElement.text( this.intervalTranslations[ formContent.paymentIntervalInMonths ] );
 
