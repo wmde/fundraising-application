@@ -12,63 +12,66 @@ var objectAssign = require( 'object-assign' ),
 		}
 	},
 	PaymentSummaryDisplayHandler = {
+
+		/**
+		 * Elements showing state to user
+		 */
 		intervalTextElement: null,
 		amountElement: null,
 		paymentTypeElement: null,
+		intervalIconElement: null,
+		paymentIconsElement: null,
+		periodicityTextElement: null,
+		paymentElement: null,
+		addressTypeIconElement: null,
+		addressTypeElement: null,
+		addressTypeTextElement: null,
+		memberShipTypeElement: null,
+		memberShipTypeIconElement: null,
+		memberShipTypeTextElement: null,
+
+		/**
+		 * Dependencies
+		 */
+		numberFormatter: null,
+
+		/**
+		 * Icons
+		 */
+		intervalIcons: null,
+		addressTypeIcon: null,
+		paymentIcons: null,
+		memberShipTypeIcon: null,
+
+		/**
+		 * Translations
+		 */
 		intervalTranslations: null,
 		paymentTypeTranslations: null,
-		numberFormatter: null,
-		intervalIconElement: null,
-		intervalIcons: null,
-		paymentIconsElement: null,
-		paymentIcons: null,
-		periodicityTextElement: null,
-		periodicityText: null,
-		paymentElement: null,
-		paymentText: null,
-		addressTypeIconElement: null,
-		addressTypeIcon: null,
-		addressTypeElement: null,
-		addressType: null,
-		addressTypeTextElement: null,
 		countryTranslations: null,
-		memberShipTypeElement: null,
+		addressType: null,
+		periodicityText: null,
+		paymentText: null,
 		memberShipType: null,
-		memberShipTypeIconElement: null,
-		memberShipTypeIcon: null,
-		memberShipTypeTextElement: null,
 		memberShipTypeText: null,
-		update: function ( formContent ) {
-			this.intervalTextElement.text( this.intervalTranslations[ formContent.paymentIntervalInMonths ] );
 
+		update: function ( formContent ) {
 			this.updateAmoutIndicators( formContent.amount );
 
-			this.updatePaymentTypeIndicators( formContent.paymentType );
-
+			this.intervalTextElement.text( this.intervalTranslations[ formContent.paymentIntervalInMonths ] );
 			this.setSummaryIcon( this.intervalIconElement, formContent.paymentIntervalInMonths, this.intervalIcons );
-			this.setSummaryIcon( this.paymentIconsElement, formContent.paymentType, this.paymentIcons );
-			this.periodicityTextElement.html( this.periodicityText[formContent.paymentIntervalInMonths] );
+			this.periodicityTextElement.text( this.periodicityText[ formContent.paymentIntervalInMonths ] );
 
+			this.updatePaymentTypeIndicators( formContent.paymentType );
+			this.setSummaryIcon( this.paymentIconsElement, formContent.paymentType, this.paymentIcons );
 			this.updatePaymentTypeSummary( formContent );
 
-			this.setSummaryIcon( this.addressTypeIconElement, formContent.addressType, this.addressTypeIcon );
-
 			this.updateAddressTypeIndicators( formContent.addressType );
-
+			this.setSummaryIcon( this.addressTypeIconElement, formContent.addressType, this.addressTypeIcon );
 			this.addressTypeTextElement.html( this.getAddressSummaryContent( formContent ) );
 
 			if( this.memberShipTypeElement ) {
-				var textMemberShipType = this.memberShipType[formContent.membershipType];
-				// @fixme Don't use jQuery here. Instead, interact with the store values and the elements.
-				this.memberShipTypeElement.each( function () {
-					if( formContent.membershipType ) {
-						$( this ).text( textMemberShipType );
-					}
-				} );
-
-				this.setSummaryIcon( this.memberShipTypeIconElement, formContent.membershipType, this.memberShipTypeIcon );
-
-				this.memberShipTypeTextElement.text( this.memberShipTypeText[formContent.membershipType] );
+				this.updateMembershipSummary( formContent );
 			}
 		},
 		updateAmoutIndicators: function ( amount ) {
@@ -114,6 +117,15 @@ var objectAssign = require( 'object-assign' ),
 					this.getBankAccountSummary( 'IBAN', state.iban, 'BIC', state.bic )
 				);
 			}
+		},
+		updateMembershipSummary: function ( state ) {
+			if( !state.membershipType ) {
+				return;
+			}
+
+			this.memberShipTypeElement.text( this.memberShipType[ state.membershipType ] );
+			this.setSummaryIcon( this.memberShipTypeIconElement, state.membershipType, this.memberShipTypeIcon );
+			this.memberShipTypeTextElement.text( this.memberShipTypeText[ state.membershipType ] );
 		},
 		getBankAccountSummary: function ( accountLabel, accountNumber, bankLabel, bankNumber ) {
 			return $( '<dl>' ).addClass( DOM_SELECTORS.classes.summaryBankInfo ).append(
