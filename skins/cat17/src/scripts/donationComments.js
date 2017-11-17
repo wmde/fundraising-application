@@ -13,9 +13,14 @@ var DonationComments = function ( commentContainer, paginationContainer ) {
 	this.paginationContainer = paginationContainer;
 };
 
+var DOM_SELECTORS = {
+	data: {
+		NO_COMMENTS: 'no-comments'
+	}
+};
+
 $.extend( DonationComments.prototype, {
 	init: function () {
-		this.commentContainer.html( 'Spendenkommentare werden geladen ...' );
 		this.paginationContainer.find( '.first' ).bind( 'click', $.proxy( this.goToFirstPage, this ) );
 		this.paginationContainer.find( '.last' ).bind( 'click', $.proxy( this.goToLastPage, this ) );
 		this.paginationContainer.find( '.prev' ).bind( 'click', $.proxy( this.goToPrevPage, this ) );
@@ -44,7 +49,7 @@ $.extend( DonationComments.prototype, {
 				dataPages = this.paginateData( data ),
 				self = this;
 		if ( !data.length ) {
-			return '<div class="noDonationComments">Zur Zeit gibt es keine Spendenkommentare</div>';
+			return '<div class="noDonationComments">' + this.commentContainer.data( DOM_SELECTORS.data.NO_COMMENTS) + '</div>';
 		}
 		for ( currentPage = 0; currentPage < this.numPages; currentPage++ ) {
 			pageContainer = $( '<div class="wrap-items comment-page comment-page-' + currentPage + '"></div>' );
