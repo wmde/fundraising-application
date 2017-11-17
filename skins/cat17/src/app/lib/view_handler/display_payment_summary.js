@@ -60,7 +60,7 @@ var objectAssign = require( 'object-assign' ),
 
 			this.intervalTextElement.text( this.intervalTranslations[ formContent.paymentIntervalInMonths ] );
 			this.setSummaryIcon( this.intervalIconElement, formContent.paymentIntervalInMonths, this.intervalIcons );
-			this.periodicityTextElement.html( this.periodicityText[formContent.paymentIntervalInMonths] );
+			this.periodicityTextElement.text( this.periodicityText[ formContent.paymentIntervalInMonths ] );
 
 			this.updatePaymentTypeIndicators( formContent.paymentType );
 			this.setSummaryIcon( this.paymentIconsElement, formContent.paymentType, this.paymentIcons );
