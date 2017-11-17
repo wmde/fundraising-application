@@ -8,12 +8,11 @@
     "test": "src/app/tests"
   },
   "scripts": {
-    "build-js": "browserify src/app/main.js -s WMDE -o src/scripts/wmde.js",
-    "watch-js": "watchify src/app/main.js -v -s WMDE -o src/scripts/wmde.js",
+    "watch": "gulp watch",
     "test": "echo 'todo: test' && exit 0",
     "cs": "echo 'todo: cs' && exit 0",
     "ci": "echo 'todo: ci' && exit 0",
-    "build-assets": "mkdir -p web/build && gulp"
+    "build-assets": "gulp"
   },
   "repository": {
     "type": "git",
