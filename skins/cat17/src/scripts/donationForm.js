@@ -135,10 +135,10 @@ $( function () {
         stateKey: 'donationFormContent.paymentType'
       },
       // Hide anonymous payment when doing direct debit
-      {
-        viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '.anonymous-payment-select, #tooltip-icon-addresstype' ), /^MCP|PPL|UEB|SUB/ ),
-        stateKey: 'donationFormContent.paymentType'
-      },
+		{
+			viewHandler: WMDE.View.createElementClassSwitcher( $( '#type-donator .wrap-field.anonym .wrap-input' ), /BEZ/, 'disabled' ),
+			stateKey: 'donationFormContent.paymentType'
+		},
       // Switch bank data input between IBAN/BIC and Account Number/Bank code
       {
         viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.slide-sepa' ), 'sepa' ),
@@ -534,16 +534,6 @@ $( function () {
   //$( '#continueFormSubmit1' ).click( WMDE.StoreUpdates.makeEventHandlerWaitForAsyncFinish( handlePaymentDataSubmit, store ) );
   $('input').on('click, change', WMDE.StoreUpdates.makeEventHandlerWaitForAsyncFinish( handleGroupValidations, store ) );
   setInterval(handleGroupValidations, 1000);
-
-  // fixme move to view handler
-  $('input[name="payment-info"]').click(function () {
-    if ($(this).val() == 'BEZ') {
-      $('#anonymus').parent().addClass('disabled');
-    }
-    else {
-      $('#anonymus').parent().removeClass('disabled');
-    }
-  });
 
   $('form').on('submit', function () {
     triggerValidityCheckForPersonalDataPage();
