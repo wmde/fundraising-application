@@ -10,6 +10,7 @@ var gulpIf = require( 'gulp-if' );
 var imagemin = require( 'gulp-imagemin' );
 var gulpsync = require( 'gulp-sync' )( gulp );
 var exec = require( 'child_process' ).exec;
+var fs = require( 'fs' );
 
 var dirs = {
 	src: 'src',
@@ -42,7 +43,11 @@ gulp.task( 'styles', function () {
 } );
 
 gulp.task( 'scripts', function ( cb ) {
-	exec( 'browserify ' + dirs.src + '/app/main.js -s WMDE -o ' + dirs.dist + '/build/wmde.js', function ( err, stdout, stderr ) {
+	var buildDir = dirs.dist + '/scripts';
+	if ( !fs.existsSync( buildDir ) ) {
+		fs.mkdirSync( buildDir );
+	}
+	exec( 'browserify ' + dirs.src + '/app/main.js -s WMDE -o ' + buildDir + '/wmde.js', function ( err, stdout, stderr ) {
 		console.log( stdout );
 		console.log( stderr );
 		cb( err );
@@ -60,7 +65,7 @@ gulp.task( 'browserSync', function () {
 gulp.task( 'watch', ['browserSync'], function () {
 	gulp.watch( dirs.src + '/sass/**/*.scss', ['styles'] );
 	gulp.watch( dirs.src + '/app/**/*.js', ['scripts', browserSync.reload] );
-	gulp.watch( dirs.src + '/scripts/**/*.js', browserSync.reload );
+	gulp.watch( dirs.src + '/scripts/**/*.js', ['copies', browserSync.reload] );
 } );
 
 gulp.task( 'images', function () {
