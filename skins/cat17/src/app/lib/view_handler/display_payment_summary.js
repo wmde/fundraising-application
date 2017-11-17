@@ -75,17 +75,7 @@ var objectAssign = require( 'object-assign' ),
 			this.addressTypeTextElement.html( this.getAddressSummaryContent( formContent ) );
 
 			if( this.memberShipTypeElement ) {
-				var textMemberShipType = this.memberShipType[formContent.membershipType];
-				// @fixme Don't use jQuery here. Instead, interact with the store values and the elements.
-				this.memberShipTypeElement.each( function () {
-					if( formContent.membershipType ) {
-						$( this ).text( textMemberShipType );
-					}
-				} );
-
-				this.setSummaryIcon( this.memberShipTypeIconElement, formContent.membershipType, this.memberShipTypeIcon );
-
-				this.memberShipTypeTextElement.text( this.memberShipTypeText[formContent.membershipType] );
+				this.updateMembershipSummary( formContent );
 			}
 		},
 		updateAmoutIndicators: function ( amount ) {
@@ -131,6 +121,15 @@ var objectAssign = require( 'object-assign' ),
 					this.getBankAccountSummary( 'IBAN', state.iban, 'BIC', state.bic )
 				);
 			}
+		},
+		updateMembershipSummary: function ( state ) {
+			if( !state.membershipType ) {
+				return;
+			}
+
+			this.memberShipTypeElement.text( this.memberShipType[ state.membershipType ] );
+			this.setSummaryIcon( this.memberShipTypeIconElement, state.membershipType, this.memberShipTypeIcon );
+			this.memberShipTypeTextElement.text( this.memberShipTypeText[ state.membershipType ] );
 		},
 		getBankAccountSummary: function ( accountLabel, accountNumber, bankLabel, bankNumber ) {
 			return $( '<dl>' ).addClass( DOM_SELECTORS.classes.summaryBankInfo ).append(
