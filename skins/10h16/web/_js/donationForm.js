@@ -2,10 +2,7 @@ $( function () {
 	/** global: WMDE */
 
 	var initData = $( '#init-form' ),
-		store = WMDE.Store.createDonationStore( WMDE.createInitialStateFromViolatedFields(
-			initData.data( 'violatedFields' ),
-			initData.data( 'initial-validation-result' ) )
-		),
+		store = WMDE.Store.createDonationStore(),
 		actions = WMDE.Actions
 		;
 
@@ -412,6 +409,12 @@ $( function () {
 
 	// Set initial form values
 	store.dispatch( actions.newInitializeContentAction( initData.data( 'initial-form-values' ) ) );
+
+	// Set initial validation state
+	store.dispatch( actions.newInitializeValidationStateAction(
+		initData.data( 'violatedFields' ),
+		initData.data( 'initial-validation-result' )
+	) );
 
 	// Initialize form pages
 	store.dispatch( actions.newAddPageAction( 'payment' ) );

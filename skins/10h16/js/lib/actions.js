@@ -47,6 +47,23 @@ module.exports = {
 		};
 	},
 
+	/**
+	 * Set initial form content
+	 *
+	 * @param {{Object}} violatedFields
+	 * @param {{Object}} initialValidationResult
+	 * @returns {{type: string, payload: *}}
+	 */
+	newInitializeValidationStateAction: function ( violatedFields, initialValidationResult ) {
+		return {
+			type: 'INITIALIZE_VALIDATION',
+			payload: {
+				violatedFields: violatedFields,
+				initialValidationResult: initialValidationResult
+			}
+		};
+	},
+
 	newChangeContentAction: function ( contentName, newValue ) {
 		return {
 			type: 'CHANGE_CONTENT',
