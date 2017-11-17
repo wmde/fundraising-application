@@ -7,7 +7,8 @@ var objectAssign = require( 'object-assign' ),
 			displayError: 'display-error'
 		},
 		classes: {
-			errorIcon: 'icon-error'
+			errorIcon: 'icon-error',
+			summaryBankInfo: 'bank-info'
 		}
 	},
 	PaymentSummaryDisplayHandler = {
@@ -48,21 +49,8 @@ var objectAssign = require( 'object-assign' ),
 			this.setSummaryIcon( this.paymentIconsElement, formContent.paymentType, this.paymentIcons );
 			this.periodicityTextElement.html( this.periodicityText[formContent.paymentIntervalInMonths] );
 
-			var paymentTextFormatted = this.paymentText[formContent.paymentType];
-			if( formContent.paymentType == "BEZ" ) {
-				paymentTextFormatted = '<div class="col-lg-6 no-gutter">' + paymentTextFormatted + "</div>";
-				paymentTextFormatted = paymentTextFormatted.replace( '<br />', '</div><div class="col-lg-6 no-gutter">' );
+			this.updatePaymentTypeSummary( formContent );
 
-				if( formContent.accountNumber && formContent.bankCode ) {
-					paymentTextFormatted = "<dl class='bank-info'><div><dt>Kontonummer</dt><dd>" + formContent.accountNumber + "</dd></div>" +
-						"<div><dt>Bankleitzahl</dt><dd>" + formContent.bankCode + "</dd></div></dl>" + paymentTextFormatted;
-				}
-				else if( formContent.iban && formContent.bic ) {
-					paymentTextFormatted = "<dl class='bank-info'><div><dt>IBAN</dt><dd>" + formContent.iban + "</dd></div>" +
-						"<div><dt>BIC</dt><dd>" + formContent.bic + "</dd></div></dl>" + paymentTextFormatted;
-				}
-			}
-			this.paymentElement.html( paymentTextFormatted );
 			this.setSummaryIcon( this.addressTypeIconElement, formContent.addressType, this.addressTypeIcon );
 
 			this.updateAddressTypeIndicators( formContent.addressType );
@@ -109,6 +97,31 @@ var objectAssign = require( 'object-assign' ),
 				$guiElement = $( this );
 				$guiElement.text( addressType === '' ? $guiElement.data( DOM_SELECTORS.data.emtpyText ) : self.addressType[ addressType ] );
 			} );
+		},
+		updatePaymentTypeSummary: function ( state ) {
+			this.paymentElement.text( this.paymentText[ state.paymentType ] );
+
+			if( state.paymentType !== 'BEZ' ) {
+				return;
+			}
+
+			if( state.accountNumber && state.bankCode ) {
+				this.paymentElement.prepend (
+					this.getBankAccountSummary( 'Kontonummer', state.accountNumber, 'Bankleitzahl', state.bankCode )
+				)
+			} else if( state.iban && state.bic ) {
+				this.paymentElement.prepend (
+					this.getBankAccountSummary( 'IBAN', state.iban, 'BIC', state.bic )
+				);
+			}
+		},
+		getBankAccountSummary: function ( accountLabel, accountNumber, bankLabel, bankNumber ) {
+			return $( '<dl>' ).addClass( DOM_SELECTORS.classes.summaryBankInfo ).append(
+				$('<dt>').text( accountLabel ),
+				$('<dd>').text( accountNumber ),
+				$('<dt>').text( bankLabel ),
+				$('<dd>').text( bankNumber )
+			);
 		},
 		getAddressSummaryContent: function ( formContent ) {
 			if( formContent.addressType === "person" ) {
