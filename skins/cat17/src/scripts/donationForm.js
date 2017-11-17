@@ -166,13 +166,11 @@ $( function () {
         viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.notice-anonymous' ), 'anonym' ),
         stateKey: 'donationFormContent.addressType'
       },
-      // Show "credit card required" notice for recurrent payments via Paypal
-      {
-        viewHandler: WMDE.View.createRecurrentPaypalNoticeHandler(
-          WMDE.View.Animator.createSlidingElementAnimator( $( '.notice-ppl-recurrent' ) )
-        ),
-        stateKey: 'donationFormContent'
-      },
+		// Show "needs to support recurring debiting" notice for payments types that provide that info (payment_type_*_recurrent_info)
+		{
+			viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '#payment-method .info-text .info-recurrent' ), /^(1|3|6|12)/ ),
+			stateKey: 'donationFormContent.paymentIntervalInMonths'
+		},
       {
         viewHandler: WMDE.View.createPaymentSummaryDisplayHandler(
 			$( '.frequency .text' ),
