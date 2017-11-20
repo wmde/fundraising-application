@@ -85,14 +85,6 @@ $( function () {
   WMDE.StoreUpdates.connectViewHandlersToStore(
     [
       {
-        viewHandler: WMDE.View.createFormPageVisibilityHandler( {
-          payment: $( "#paymentPage" ),
-          personalData: $( "#personalDataPage" ),
-          bankConfirmation: $( '#bankConfirmationPage' )
-        } ),
-        stateKey: 'formPagination'
-      },
-      {
         viewHandler: WMDE.View.createErrorBoxHandler( $( '#validation-errors' ), {
           amount: 'Betrag',
           paymentType: 'Zahlungsart',
@@ -115,57 +107,11 @@ $( function () {
         } ),
         stateKey: 'donationInputValidation'
       },
-      // show payment periods if interval payment is selected
-      {
-        viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.periode-2-list' ), /^(1|3|6|12)$/ ),
-        stateKey: 'donationFormContent.paymentIntervalInMonths'
-      },
-      // Show bank data input when doing direct debit
-      {
-        viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '#bank-data' ), 'BEZ' ),
-        stateKey: 'donationFormContent.paymentType'
-      },
-      // Show the right submit buttons on page 2, depending on payment type
-      {
-        viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '#finishFormSubmit2' ), /^MCP|PPL|UEB|SUB/ ),
-        stateKey: 'donationFormContent.paymentType'
-      },
-      {
-        viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '#continueFormSubmit2' ), 'BEZ' ),
-        stateKey: 'donationFormContent.paymentType'
-      },
-      // Hide anonymous payment when doing direct debit
+		// Hide anonymous payment when doing direct debit
 		{
 			viewHandler: WMDE.View.createElementClassSwitcher( $( '#type-donator .wrap-field.anonym .wrap-input' ), /BEZ/, 'disabled' ),
 			stateKey: 'donationFormContent.paymentType'
 		},
-      // Switch bank data input between IBAN/BIC and Account Number/Bank code
-      {
-        viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.slide-sepa' ), 'sepa' ),
-        stateKey: 'donationFormContent.debitType'
-      },
-      {
-        viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.slide-non-sepa' ), 'non-sepa' ),
-        stateKey: 'donationFormContent.debitType'
-      },
-      // Show only the right data fields for personal data
-      {
-        viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.personal-data-person' ), 'person' ),
-        stateKey: 'donationFormContent.addressType'
-      },
-      {
-        viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.personal-data-company' ), 'firma' ),
-        stateKey: 'donationFormContent.addressType'
-      },
-      {
-        viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.personal-data-full, #notice-unsubscribe' ), /firma|person/ ),
-        stateKey: 'donationFormContent.addressType'
-      },
-      // Show notice for anonymous donations
-      {
-        viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.notice-anonymous' ), 'anonym' ),
-        stateKey: 'donationFormContent.addressType'
-      },
 		// Show "needs to support recurring debiting" notice for payments types that provide that info (payment_type_*_recurrent_info)
 		{
 			viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '#payment-method .info-text .info-recurrent' ), /^(1|3|6|12)/ ),
@@ -208,25 +154,6 @@ $( function () {
 			WMDE.FormDataExtractor.mapFromLabeledRadios( $( '#type-donator .wrap-field' ) ),
           $('.donator-type .info-detail'),
 			WMDE.FormDataExtractor.mapFromSelectOptions( $( '#country' ) )
-        ),
-        stateKey: 'donationFormContent'
-      },
-      {
-        viewHandler: WMDE.View.createDisplayAddressHandler( {
-          fullName: $( '.confirm-name' ),
-          street: $( '.confirm-street' ),
-          postcode: $( '.confirm-postcode' ),
-          city: $( '.confirm-city' ),
-          country: $( '.confirm-country' ),
-          email: $( '.confirm-email' )
-        } ),
-        stateKey: 'donationFormContent'
-      },
-      {
-        viewHandler: WMDE.View.createBankDataDisplayHandler(
-          $( '.confirm-iban' ),
-          $( '.confirm-bic' ),
-          $( '.confirm-bank-name' )
         ),
         stateKey: 'donationFormContent'
       },
