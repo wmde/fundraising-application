@@ -45,7 +45,7 @@ function inputValidation( validationState, action ) {
 			_.each( validationState, function ( value, key ) {
 				newValidationState[ key ] = {
 					dataEntered: dataEnteredTransformer( validationState[ key ].dataEntered ),
-					isValid: _.has( action.payload.violatedFields, key ) ? true : validationState[ key ].isValid
+					isValid: _.has( action.payload.violatedFields, key ) ? false : validationState[ key ].isValid
 				};
 			} );
 			return newValidationState;
