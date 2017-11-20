@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationRequest;
+use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationValidationResult as Result;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
 use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
@@ -37,6 +38,7 @@ class DonationFormViolationPresenter {
 			[
 				'initialFormValues' => $this->getDonationFormArguments( $request ),
 				'violatedFields' => $this->getViolatedFields( $violations ),
+				'validationResult' => $this->getValidationResult( $violations ),
 				'tracking' => [
 					'impressionCount' => $trackingData->getTotalImpressionCount(),
 					'bannerImpressionCount' => $trackingData->getSingleBannerImpressionCount()
@@ -112,6 +114,42 @@ class DonationFormViolationPresenter {
 			'bic' => $bankData->getBic(),
 			'bankName' => $bankData->getBankName()
 		];
+	}
+
+	private function getValidationResult( array $violations ): array {
+		$fieldGroups = [
+			Result::SOURCE_PAYMENT_AMOUNT => 'paymentData',
+			Result::SOURCE_PAYMENT_TYPE => 'paymentData',
+
+			Result::SOURCE_BANK_ACCOUNT => 'bankData',
+			Result::SOURCE_BANK_CODE => 'bankData',
+			Result::SOURCE_IBAN => 'bankData',
+			Result::SOURCE_BIC => 'bankData',
+
+			Result::SOURCE_DONOR_EMAIL => 'address',
+			Result::SOURCE_DONOR_COMPANY => 'address',
+			Result::SOURCE_DONOR_FIRST_NAME => 'address',
+			Result::SOURCE_DONOR_LAST_NAME => 'address',
+			Result::SOURCE_DONOR_SALUTATION => 'address',
+			Result::SOURCE_DONOR_TITLE => 'address',
+			Result::SOURCE_DONOR_STREET_ADDRESS => 'address',
+			Result::SOURCE_DONOR_POSTAL_CODE => 'address',
+			Result::SOURCE_DONOR_CITY => 'address',
+			Result::SOURCE_DONOR_COUNTRY => 'address',
+
+		];
+		return array_reduce(
+			$violations,
+			function( $validationResult, ConstraintViolation $violation ) use ( $fieldGroups ) {
+				$validationResult[$fieldGroups[$violation->getSource()]] = false;
+				return $validationResult;
+			},
+			[
+				'paymentData' => true,
+				'bankData' => true,
+				'address' => true,
+			]
+		);
 	}
 
 }

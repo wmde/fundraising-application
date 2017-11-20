@@ -24,6 +24,5 @@ module.exports = {
 		Animator: require( './lib/view_handler/animator' )
 	},
 	Actions: require( './lib/actions' ),
-	CurrencyFormatter: require( './lib/simple_currency_formatter' ),
-	createInitialStateFromViolatedFields: require( './lib/validation_conversion' ).createInitialStateFromViolatedFields
+	CurrencyFormatter: require( './lib/simple_currency_formatter' )
 };

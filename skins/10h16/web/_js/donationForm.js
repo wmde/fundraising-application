@@ -2,10 +2,7 @@ $( function () {
 	/** global: WMDE */
 
 	var initData = $( '#init-form' ),
-		store = WMDE.Store.createDonationStore( WMDE.createInitialStateFromViolatedFields(
-			initData.data( 'violatedFields' ),
-			initData.data( 'initial-validation-result' ) )
-		),
+		store = WMDE.Store.createDonationStore(),
 		actions = WMDE.Actions
 		;
 
@@ -386,7 +383,7 @@ $( function () {
 		}
 	}
 
-	// connect DOM elements to actions
+	// connect DOM element events to actions
 
 	$( '#continueFormSubmit1' ).click( WMDE.StoreUpdates.makeEventHandlerWaitForAsyncFinish( handlePaymentDataSubmit, store ) );
 
@@ -410,8 +407,22 @@ $( function () {
 		}
 	} );
 
+
+	$( '#donForm1 .amount-input' ).keypress( function ( evt ) {
+		if( evt.which === 13 ) {
+			$( '#continueFormSubmit1' ).click();
+			evt.preventDefault();
+		}
+	} );
+
 	// Set initial form values
 	store.dispatch( actions.newInitializeContentAction( initData.data( 'initial-form-values' ) ) );
+
+	// Set initial validation state
+	store.dispatch( actions.newInitializeValidationStateAction(
+		initData.data( 'violatedFields' ),
+		initData.data( 'initial-validation-result' )
+	) );
 
 	// Initialize form pages
 	store.dispatch( actions.newAddPageAction( 'payment' ) );

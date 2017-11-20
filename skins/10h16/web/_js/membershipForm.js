@@ -2,9 +2,7 @@ $( function () {
 	/** global: WMDE */
 
 	var initData = $( '#init-form' ),
-		store = WMDE.Store.createMembershipStore(
-			WMDE.createInitialStateFromViolatedFields( initData.data( 'violatedFields' ), {} )
-		),
+		store = WMDE.Store.createMembershipStore(),
 		actions = WMDE.Actions;
 
 	WMDE.StoreUpdates.connectComponentsToStore(
@@ -370,5 +368,11 @@ $( function () {
 
 	// Set initial form values
 	store.dispatch( actions.newInitializeContentAction( initData.data( 'initial-form-values' ) ) );
+
+	// Set initial validation state
+	store.dispatch( actions.newInitializeValidationStateAction(
+		initData.data( 'violatedFields' ),
+		{} // membership form has no pages and does not get validation group information
+	) );
 
 } );
