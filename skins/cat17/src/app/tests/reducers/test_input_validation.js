@@ -183,14 +183,14 @@ test( 'If address data validation is successful, invalid fields remain invalid',
 test( 'If the validity is reset for some fields, their validity status becomes null', function ( t ) {
 	var stateBefore = {
 			postCode: { dataEntered: true, isValid: true },
-			confirmSepa: { dataEntered: true, isValid: false }
+			city: { dataEntered: true, isValid: false }
 		},
 		expectedState = {
 			postCode: { dataEntered: true, isValid: true },
-			confirmSepa: { dataEntered: false, isValid: null }
+			city: { dataEntered: false, isValid: null }
 		};
 
 	deepFreeze( stateBefore );
-	t.deepEqual( inputValidation( stateBefore, newResetFieldValidityAction( [ 'confirmSepa' ] ) ), expectedState );
+	t.deepEqual( inputValidation( stateBefore, newResetFieldValidityAction( [ 'city' ] ) ), expectedState );
 	t.end();
 } );

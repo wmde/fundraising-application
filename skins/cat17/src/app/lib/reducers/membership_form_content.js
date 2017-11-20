@@ -27,7 +27,6 @@ var formContentLib = require( './form_content' ),
     accountNumber: '',
     bankCode: '',
     bankname: '',
-    confirmSepa: false,
     confirmNewsletter: false,
     contactPerson: '',
     activePresets: false

@@ -23,7 +23,6 @@ var _ = require( 'underscore' ),
     bic: _.clone( defaultFields ),
     accountNumber: _.clone( defaultFields ),
     bankCode: _.clone( defaultFields ),
-    confirmSepa: _.clone( defaultFields ),
     contactPerson: _.clone( defaultFields )
   },
   optionalFields = [],
