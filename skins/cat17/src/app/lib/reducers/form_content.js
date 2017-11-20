@@ -54,11 +54,6 @@ function setPaymentType(newState, payload) {
 
 function forcePersonalDataForDirectDebit( state ) {
   if ( state.paymentType === 'BEZ' && state.addressType === 'anonym' ) {
-    // @fixme Move class changes into view handler. Reducers must not change the DOM!!!
-    $('.wrap-field.anonym').removeClass('selected');
-    $('.anonym .info-text').removeClass('opened');
-    $('.wrap-field.personal').addClass('selected');
-    $('.personal .info-text').addClass('opened');
     return objectAssign( {}, state, { addressType: 'person' } );
   } else {
     return state;
