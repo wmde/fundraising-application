@@ -25,7 +25,6 @@ var test = require( 'tape' ),
 			bicElement: createSpyingElement(),
 			accountNumberElement: createSpyingElement(),
 			bankCodeElement: createSpyingElement(),
-			debitTypeElement: createSpyingElement(),
 			bankNameFieldElement: createSpyingElement(),
 			bankNameDisplayElement: createSpyingElement()
 		};
@@ -261,7 +260,6 @@ test( 'Bank data component adds change handling function to its elements', funct
 	assertChangeHandlerWasSet( t, bankDataComponentConfig.bicElement, 2 );
 	assertChangeHandlerWasSet( t, bankDataComponentConfig.accountNumberElement );
 	assertChangeHandlerWasSet( t, bankDataComponentConfig.bankCodeElement );
-	assertChangeHandlerWasSet( t, bankDataComponentConfig.debitTypeElement );
 	// Bank data is a pure display field with no change handler
 	t.end();
 } );
@@ -286,7 +284,6 @@ test( 'Bank data component renders the store values in its elements', function (
 	t.equal( bankDataComponentConfig.bankCodeElement.val.args[ 0 ][ 0 ], '50010517', 'BIC value is set' );
 	t.equal( bankDataComponentConfig.bankNameDisplayElement.text.args[ 0 ][ 0 ], 'ING-DiBa', 'Bank name is displayed' );
 	t.equal( bankDataComponentConfig.bankNameFieldElement.val.args[ 0 ][ 0 ], 'ING-DiBa', 'Bank name is set in field' );
-	t.deepEqual( bankDataComponentConfig.debitTypeElement.val.args[ 0 ][ 0 ], [ 'non-sepa' ], 'Debit type is set' );
 
 	t.end();
 } );
