@@ -80,11 +80,11 @@ var objectAssign = require( 'object-assign' ),
 			};
 			this.hiddenElement.val( germanFloatFromMixedAmountFormatter( formContent.amount ) );
 			if ( formContent.isCustomAmount ) {
-        this.inputElement.parent().addClass('filled');
+				this.inputElement.parent().addClass( 'filled' );
 				this.selectElement.prop( 'checked', false );
 				this.inputElement.val( formContent.amount );
 			} else {
-        this.inputElement.parent().removeClass('filled');
+				this.inputElement.parent().removeClass( 'filled' );
 				this.selectElement.val( [ formContent.amount ] );
 				this.inputElement.val( '' );
 			}
