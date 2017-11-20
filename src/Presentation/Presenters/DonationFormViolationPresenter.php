@@ -138,14 +138,18 @@ class DonationFormViolationPresenter {
 			Result::SOURCE_DONOR_COUNTRY => 'address',
 
 		];
-		return array_reduce( $violations, function( $validationResult, ConstraintViolation $violation ) use ( $fieldGroups ) {
-			$validationResult[$fieldGroups[$violation->getSource()]] = false;
-			return $validationResult;
-		}, [
-			'paymentData' => true,
-			'bankData' => true,
-			'address' => true,
-		] );
+		return array_reduce(
+			$violations,
+			function( $validationResult, ConstraintViolation $violation ) use ( $fieldGroups ) {
+				$validationResult[$fieldGroups[$violation->getSource()]] = false;
+				return $validationResult;
+			},
+			[
+				'paymentData' => true,
+				'bankData' => true,
+				'address' => true,
+			]
+		);
 	}
 
 }
