@@ -100,13 +100,6 @@ $( function () {
   WMDE.StoreUpdates.connectViewHandlersToStore(
     [
       {
-        viewHandler: WMDE.View.createFormPageVisibilityHandler( {
-          personalData: $( "#personalDataPage" ),
-          bankConfirmation: $( '#bankConfirmationPage' )
-        } ),
-        stateKey: 'formPagination'
-      },
-      {
         viewHandler: WMDE.View.createErrorBoxHandler( $( '#validation-errors' ), {
           amount: 'Betrag',
           salutation: 'Anrede',
@@ -129,47 +122,11 @@ $( function () {
         } ),
         stateKey: 'membershipInputValidation'
       },
-      {
-        viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '#finishFormSubmit' ), /^PPL$|^$/ ),
-        stateKey: 'membershipFormContent.paymentType'
-      },
-      {
-        viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '#continueFormSubmit' ), 'BEZ' ),
-        stateKey: 'membershipFormContent.paymentType'
-      },
 		// Show "needs to support recurring debiting" notice for payments types that provide that info (payment_type_*_recurrent_info)
 		{
 			viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '#payment-method .info-text .info-recurrent' ), /^(1|3|6|12)/ ),
 			stateKey: 'membershipFormContent.paymentIntervalInMonths'
 		},
-      {
-        viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.fields-direct-debit' ), 'BEZ' ),
-        stateKey: 'membershipFormContent.paymentType'
-      },
-      {
-        viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.slide-sepa' ), 'sepa' ),
-        stateKey: 'membershipFormContent.debitType'
-      },
-      {
-        viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.slide-non-sepa' ), 'non-sepa' ),
-        stateKey: 'membershipFormContent.debitType'
-      },
-      {
-        viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.person-name' ), 'person' ),
-        stateKey: 'membershipFormContent.addressType'
-      },
-      {
-        viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.company-name' ), 'firma' ),
-        stateKey: 'membershipFormContent.addressType'
-      },
-      {
-        viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '#address-type-2' ).parent(), 'sustaining' ),
-        stateKey: 'membershipFormContent.membershipType'
-      },
-      {
-        viewHandler: WMDE.View.createFeeOptionSwitcher( [ $( '#amount-1' ), $( '#amount-2' ), $( '#amount-3' ), $( '#amount-4' ), $( '#amount-5' ), $( '#amount-6' ), $( '#amount-7' ) ], { person: 24, firma: 100 } ),
-        stateKey: 'membershipFormContent'
-      },
       {
         viewHandler: WMDE.View.createPaymentSummaryDisplayHandler(
 			$( '.frequency .text' ),
@@ -226,25 +183,6 @@ $( function () {
             'sustaining': 'Sie erhalten regelmäßige Informationen über die Arbeit des Vereins.',
             'active': 'Sie bringen sich aktiv im Verein und haben ein Stimmrecht auf der Mitglieder- versammlung.'
           }
-        ),
-        stateKey: 'membershipFormContent'
-      },
-      {
-        viewHandler: WMDE.View.createDisplayAddressHandler( {
-          fullName: $( '#membership-confirm-name' ),
-          street: $( '#membership-confirm-street' ),
-          postcode: $( '#membership-confirm-postcode' ),
-          city: $( '#membership-confirm-city' ),
-          country: $( '#membership-confirm-country' ),
-          email: $( '#membership-confirm-mail' )
-        } ),
-        stateKey: 'membershipFormContent'
-      },
-      {
-        viewHandler: WMDE.View.createBankDataDisplayHandler(
-          $( '#membership-confirm-iban' ),
-          $( '#membership-confirm-bic' ),
-          $( '#membership-confirm-bankname' )
         ),
         stateKey: 'membershipFormContent'
       },

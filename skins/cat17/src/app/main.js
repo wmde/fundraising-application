@@ -9,13 +9,10 @@ module.exports = {
 	Store: require( './lib/store' ),
 	StoreUpdates: require( './lib/store_update_handling' ),
 	View: {
-		createDisplayAddressHandler: require( './lib/view_handler/display_address' ).createDisplayAddressHandler,
-		createBankDataDisplayHandler: require( './lib/view_handler/display_bank_data' ).createBankDataDisplayHandler,
 		createSlidingVisibilitySwitcher: require( './lib/view_handler/element_visibility_switcher' ).createSlidingVisibilitySwitcher,
 		createSimpleVisibilitySwitcher: require( './lib/view_handler/element_visibility_switcher' ).createSimpleVisibilitySwitcher,
 		createElementClassSwitcher: require( './lib/view_handler/element_class_switcher' ).createElementClassSwitcher,
 		createErrorBoxHandler:  require( './lib/view_handler/error_box' ).createHandler,
-		createFormPageVisibilityHandler: require( './lib/view_handler/form_page_visibility' ).createHandler,
 		createPaymentSummaryDisplayHandler: require( './lib/view_handler/display_payment_summary' ).createPaymentSummaryDisplayHandler,
 		createFeeOptionSwitcher: require( './lib/view_handler/fee_option_switcher' ).createFeeOptionSwitcher,
 		createFieldValueValidityIndicator: require( './lib/view_handler/field_value_validity_indicator' ).createFieldValueValidityIndicator,
