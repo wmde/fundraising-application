@@ -210,13 +210,13 @@
                         <div id="non-sepa" class="slide-non-sepa">
                             <div class="input-container">
                                 <label for="account-number">Kontonummer</label>
-                                <input class="required bank-check" id="account-number" name="konto" type="tel" value="{$ konto $}" placeholder="Kontonummer" data-pattern="[0-9]{4,10}" title="Bis zu zehnstellige Kontonummer">
+                                <input class="required bank-check" id="account-number" name="konto" type="tel" value="{$ konto $}" placeholder="Kontonummer" data-pattern="^[0-9]{4,10}$" title="Bis zu zehnstellige Kontonummer">
                                 <span class="validation"></span>
                             </div>
 
                             <div class="input-container">
                                 <label for="bank-code">Bankleitzahl</label>
-                                <input class="required bank-check" id="bank-code" name="blz" type="tel" value="{$ blz $}" placeholder="Bankleitzahl" title="Achtstellige Bankleitzahl" data-pattern="[0-9]{8}">
+                                <input class="required bank-check" id="bank-code" name="blz" type="tel" value="{$ blz $}" placeholder="Bankleitzahl" title="Achtstellige Bankleitzahl" data-pattern="^[0-9]{8}$">
                                 <span class="validation"></span>
                             </div>
                         </div>
@@ -370,7 +370,7 @@
 
                         <div class="input-container">
                             <label for="post-code">PLZ &amp; Ort</label>
-                            <input id="post-code" name="postcode" type="text" value="{$ postcode $}"  placeholder="z.B. 10117" title="Fünfstellige Postleitzahl" class="required" data-pattern="[0-9]{4,5}">
+                            <input id="post-code" name="postcode" type="text" value="{$ postcode $}"  placeholder="z.B. 10117" title="Fünfstellige Postleitzahl" class="required" data-pattern="^[0-9]{4,5}$">
                             <span class="validation icon-placeholder"></span>
                             <input id="city" name="city" type="text" value="{$ city $}" data-pattern="^((?![M|m]uster).)+$" placeholder="z.B. Berlin" class="required">
                             <span class="validation icon-placeholder"></span>

@@ -175,7 +175,7 @@
 
 						<div class="input-container">
 							<label for="post-code">PLZ &amp; Ort</label>
-							<input id="post-code" name="postcode" type="text" value="{$ person.postcode $}" data-pattern="[0-9]{4,5}" title="Fünfstellige Postleitzahl" placeholder="z.B. 10117">
+							<input id="post-code" name="postcode" type="text" value="{$ person.postcode $}" data-pattern="^[0-9]{4,5}$" title="Fünfstellige Postleitzahl" placeholder="z.B. 10117">
 							<span class="validation icon-placeholder"></span>
 							<input id="city" name="ort" type="text" value="{$ person.city $}" data-pattern="^(?![M|m]uster).+$" placeholder="z.B. Berlin">
 							<span class="validation icon-placeholder"></span>
@@ -388,7 +388,7 @@
 						<div class="slide-non-sepa" id="non-sepa" style="opacity: 0; display: none;">
 							<div class="input-container">
 								<label for="account-number">Kontonummer</label>
-								<input type="text" title="Bis zu zehnstellige Kontonummer" data-pattern="[0-9]{4,10}"
+								<input type="text" title="Bis zu zehnstellige Kontonummer" data-pattern="^[0-9]{4,10}$"
 									   placeholder="Kontonummer" name="account_number"
 									   id="account-number" class="bank-check">
 								<span class="validation"></span>
@@ -396,7 +396,7 @@
 
 							<div class="input-container">
 								<label for="bank-code">Bankleitzahl</label>
-								<input type="text" data-pattern="[0-9]{8}" title="Achtstellige Bankleitzahl"
+								<input type="text" data-pattern="^[0-9]{8}$" title="Achtstellige Bankleitzahl"
 									   placeholder="Bankleitzahl" name="bank_code" id="bank-code"
 									   class="bank-check">
 								<span class="validation"></span>
