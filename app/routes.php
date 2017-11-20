@@ -83,22 +83,24 @@ $app->post(
 					return $app->json( [ 'status' => 'OK' ] );
 				}
 
-				$personalInfo = $this->getPersonalInfoFromRequest( $request );
-				$personalInfoValidator = $ffFactory->newPersonalInfoValidator();
+				$personalInfo = $this->getDonorFromRequest( $request );
+				$personalInfoValidator = $ffFactory->newDonorValidator();
 				$validationResult = $personalInfoValidator->validate( $personalInfo );
 
 				if ( $validationResult->isSuccessful() ) {
 					return $app->json( [ 'status' => 'OK' ] );
-				} else {
-					$errors = [];
-					foreach( $validationResult->getViolations() as $violation ) {
-						$errors[$violation->getSource()] = $ffFactory->getTranslator()->trans( $violation->getMessageIdentifier() );
-					}
-					return $app->json( [ 'status' => 'ERR', 'messages' => $errors ] );
 				}
+
+				$errors = [];
+
+				foreach( $validationResult->getViolations() as $violation ) {
+					$errors[$violation->getSource()] = $ffFactory->getTranslator()->trans( $violation->getMessageIdentifier() );
+				}
+
+				return $app->json( [ 'status' => 'ERR', 'messages' => $errors ] );
 			}
 
-			private function getPersonalInfoFromRequest( Request $request ): Donor {
+			private function getDonorFromRequest( Request $request ): Donor {
 				return new Donor(
 					$this->getNameFromRequest( $request ),
 					$this->getPhysicalAddressFromRequest( $request ),
