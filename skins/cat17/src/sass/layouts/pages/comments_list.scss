@@ -1,0 +1,29 @@
+.page-comments-list {
+
+	.subtitle a {
+		color: $brand-primary;
+	}
+
+	.introduction {
+		padding-top: 80px;
+		@include bkp(md) {
+			padding-top: 45px;
+		}
+	}
+	article {
+		margin: 40px 0 0;
+		span {
+			display: block;
+			margin-bottom: 10px;
+			&:first-child {
+				font-weight: $font-main-semibold;
+			}
+			&.date-time {
+				font-weight: $font-main-light;
+			}
+		}
+		&:last-child {
+			margin-bottom: 60px;
+		}
+	}
+}

@@ -201,31 +201,6 @@ main.conclusion {
 	}
 }
 
-.comments-list {
-	.introduction {
-		padding-top: 80px;
-		@include bkp(md) {
-			padding-top: 45px;
-		}
-	}
-	article {
-		margin: 40px 0 0;
-		span {
-			display: block;
-			margin-bottom: 10px;
-			&:first-child {
-				font-weight: $font-main-semibold;
-			}
-			&.date-time {
-				font-weight: $font-main-light;
-			}
-		}
-		&:last-child {
-			margin-bottom: 60px;
-		}
-	}
-}
-
 .supporters-list {
 	.introduction {
 		padding-top: 80px;
@@ -265,7 +240,8 @@ main.conclusion {
 	margin-bottom: 30px;
 }
 
-@import "pages/donation_receipt";
-@import "pages/use_of_resources";
-@import "pages/privacy_protection";
+@import "pages/comments_list";
 @import "pages/donation_confirmation";
+@import "pages/donation_receipt";
+@import "pages/privacy_protection";
+@import "pages/use_of_resources";
