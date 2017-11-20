@@ -191,12 +191,6 @@ var jQuery = require( 'jquery' ),
 		}
 	},
 
-	SepaConfirmationValidator = {
-		validate: function ( formValues ) {
-			return formValues.confirmSepa && formValues.confirmShortTerm !== false;
-		}
-	},
-
 	createAddressValidator = function ( validationUrl, requiredFields, sendFunction ) {
 		return objectAssign( Object.create( AddressValidator ), {
 			validationUrl: validationUrl,
@@ -247,9 +241,6 @@ module.exports = {
 	createAddressValidator: createAddressValidator,
 	createEmailAddressValidator: createEmailAddressValidator,
 	createBankDataValidator: createBankDataValidator,
-	createSepaConfirmationValidator: function () {
-		return Object.create( SepaConfirmationValidator );
-	},
 	DefaultRequiredFieldsForAddressType: DefaultRequiredFieldsForAddressType,
 	ValidationStates: ValidationStates
 };

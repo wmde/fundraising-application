@@ -24,8 +24,6 @@ var formContentLib = require( './form_content' ),
     city: '',
     country: 'DE',
     email: '',
-    confirmSepa: false,
-    confirmShortTerm: false,
     confirmNewsletter: false,
     activePresets: false
   };

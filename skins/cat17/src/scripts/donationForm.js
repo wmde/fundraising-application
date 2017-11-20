@@ -69,10 +69,6 @@ $( function () {
             initData.data( 'generate-iban-url' )
           ),
           initialValues
-        ),
-        WMDE.ValidationDispatchers.createSepaConfirmationValidationDispatcher(
-          WMDE.FormValidation.createSepaConfirmationValidator(),
-          initialValues
         )
       ];
     },
@@ -101,9 +97,7 @@ $( function () {
           iban: 'IBAN',
           bic: 'BIC',
           accountNumber: 'Kontonummer',
-          bankCode: 'Bankleitzahl',
-          confirmSepa: 'SEPA-Lastschrift',
-          confirmShortTerm: 'SEPA-Informationsfrist'
+          bankCode: 'Bankleitzahl'
         } ),
         stateKey: 'donationInputValidation'
       },
@@ -311,14 +305,6 @@ $( function () {
     if ( !bankDataIsValid() ) {
       store.dispatch( actions.newMarkEmptyFieldsInvalidAction(
         [ 'iban', 'bic' ]
-      ) );
-    }
-  }
-
-  function triggerValidityCheckForSepaPage() {
-    if ( !store.getState().validity.sepaConfirmation ) {
-      store.dispatch( actions.newMarkEmptyFieldsInvalidAction(
-        [ 'confirmSepa', 'confirmShortTerm' ]
       ) );
     }
   }

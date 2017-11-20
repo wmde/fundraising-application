@@ -137,18 +137,6 @@ module.exports = {
 
 	/**
 	 *
-	 * @param {Object|Promise} validationResult
-	 * @return {{type: string, payload: *}}
-	 */
-	newFinishSepaConfirmationValidationAction: function ( validationResult ) {
-		return {
-			type: 'FINISH_SEPA_CONFIRMATION_VALIDATION',
-			payload: validationResult
-		};
-	},
-
-	/**
-	 *
 	 * @param {Object} formData
 	 * @return {{type: string, payload: *}}
 	 */

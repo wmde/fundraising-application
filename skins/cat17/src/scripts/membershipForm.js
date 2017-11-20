@@ -52,9 +52,7 @@ $( function () {
         bankCodeElement: $( '#bank-code' ),
         bankNameFieldElement: $( '#field-bank-name' ),
         bankNameDisplayElement: $( '#bank-name' ),
-      } ),
-      WMDE.Components.createValidatingCheckboxComponent( store, $( '#confirm_sepa' ), 'confirmSepa' )
-
+      } )
     ],
     store,
     'membershipFormContent'
@@ -117,8 +115,7 @@ $( function () {
           iban: 'IBAN',
           bic: 'BIC',
           accountNumber: 'Kontonummer',
-          bankCode: 'Bankleitzahl',
-          confirmSepa: 'SEPA-Lastschrift'
+          bankCode: 'Bankleitzahl'
         } ),
         stateKey: 'membershipInputValidation'
       },

@@ -20,9 +20,7 @@ var _ = require( 'underscore' ),
     iban: _.clone( defaultFields ),
     bic: _.clone( defaultFields ),
     accountNumber: _.clone( defaultFields ),
-    bankCode: _.clone( defaultFields ),
-    confirmSepa: _.clone( defaultFields ),
-    confirmShortTerm: _.clone( defaultFields )
+    bankCode: _.clone( defaultFields )
   },
 
   setValidityOnSalutationChange = function ( state, action ) {
