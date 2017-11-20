@@ -108,14 +108,14 @@ var objectAssign = require( 'object-assign' ),
 				return;
 			}
 
-			if( state.accountNumber && state.bankCode ) {
-				this.paymentElement.prepend (
-					this.getBankAccountSummary( 'Kontonummer', state.accountNumber, 'Bankleitzahl', state.bankCode )
-				)
-			} else if( state.iban && state.bic ) {
+			if( state.iban && state.bic ) {
 				this.paymentElement.prepend (
 					this.getBankAccountSummary( 'IBAN', state.iban, 'BIC', state.bic )
 				);
+			} else if( state.accountNumber && state.bankCode ) {
+				this.paymentElement.prepend (
+					this.getBankAccountSummary( 'Kontonummer', state.accountNumber, 'Bankleitzahl', state.bankCode )
+				)
 			}
 		},
 		updateMembershipSummary: function ( state ) {
