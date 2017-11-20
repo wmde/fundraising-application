@@ -38,9 +38,6 @@ function validity( state, action ) {
 			if ( !_.isEmpty( action.payload.initialValidationResult ) ) {
 				newState = _.extendOwn( state, action.payload.initialValidationResult );
 			}
-			if ( action.payload.violatedFields.betrag || action.payload.violatedFields.zahlweise ) {
-				newState.paymentData = false;
-			}
 			return newState;
 		case 'FINISH_PAYMENT_DATA_VALIDATION':
 			return objectAssign( {}, state, { paymentData: convertExternalResult( action ) } );
