@@ -34,9 +34,9 @@ class ValidateAddressHandler {
 			return $this->newSuccessResponse();
 		}
 
-		$donor = $this->getDonorFromRequest( $request );
-		$donorValidator = $this->ffFactory->newDonorValidator();
-		$validationResult = $donorValidator->validate( $donor );
+		$validationResult =
+			$this->ffFactory->newDonorValidator()
+				->validate( $this->getDonorFromRequest( $request ) );
 
 		if ( $validationResult->isSuccessful() ) {
 			return $this->newSuccessResponse();
