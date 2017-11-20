@@ -1,3 +1,11 @@
 <p>
 	{$ ( 'payment_type_' ~ paymentType ~ '_info' ) | trans $}
 </p>
+
+{% set recurrent_trans_key = ( 'payment_type_' ~ paymentType ~ '_recurrent_info' ) %}
+{% set recurrent_info = recurrent_trans_key | trans %}
+{% if recurrent_info != recurrent_trans_key %}{# poor man's way to check for non-existing (optional) message #}
+	<p class="info-recurrent">
+		{$ recurrent_info $}
+	</p>
+{% endif %}
