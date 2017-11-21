@@ -955,7 +955,7 @@ class FunFunFactory {
 		);
 	}
 
-	public function newPersonalInfoValidator(): DonorValidator {
+	public function newDonorValidator(): DonorValidator {
 		return new DonorValidator(
 			new DonorNameValidator(),
 			new DonorAddressValidator(),

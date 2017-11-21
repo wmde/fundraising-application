@@ -23,6 +23,7 @@ use WMDE\Fundraising\Frontend\App\RouteHandlers\SofortNotificationHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\PayPalNotificationHandlerForMembershipFee;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\RouteRedirectionHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowDonationConfirmationHandler;
+use WMDE\Fundraising\Frontend\App\RouteHandlers\ValidateAddressHandler;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonorAddress;
@@ -74,64 +75,9 @@ $app->post(
 );
 
 $app->post(
-	'validate-address',
+	'validate-address', // Validates donor information. This route is named badly.
 	function( Request $request ) use ( $app, $ffFactory ) {
-		$routeHandler = new class() {
-
-			public function handle( FunFunFactory $ffFactory, Application $app, Request $request ) {
-				if ( $request->get( 'adressType', '' ) === 'anonym' ) {
-					return $app->json( [ 'status' => 'OK' ] );
-				}
-
-				$personalInfo = $this->getPersonalInfoFromRequest( $request );
-				$personalInfoValidator = $ffFactory->newPersonalInfoValidator();
-				$validationResult = $personalInfoValidator->validate( $personalInfo );
-
-				if ( $validationResult->isSuccessful() ) {
-					return $app->json( [ 'status' => 'OK' ] );
-				} else {
-					$errors = [];
-					foreach( $validationResult->getViolations() as $violation ) {
-						$errors[$violation->getSource()] = $ffFactory->getTranslator()->trans( $violation->getMessageIdentifier() );
-					}
-					return $app->json( [ 'status' => 'ERR', 'messages' => $errors ] );
-				}
-			}
-
-			private function getPersonalInfoFromRequest( Request $request ): Donor {
-				return new Donor(
-					$this->getNameFromRequest( $request ),
-					$this->getPhysicalAddressFromRequest( $request ),
-					$request->get( 'email', '' )
-				);
-			}
-
-			private function getPhysicalAddressFromRequest( Request $request ): DonorAddress {
-				$address = new DonorAddress();
-
-				$address->setStreetAddress( $request->get( 'street', '' ) );
-				$address->setPostalCode( $request->get( 'postcode', '' ) );
-				$address->setCity( $request->get( 'city', '' ) );
-				$address->setCountryCode( $request->get( 'country', '' ) );
-
-				return $address->freeze()->assertNoNullFields();
-			}
-
-			private function getNameFromRequest( Request $request ): DonorName {
-				$name = $request->get( 'addressType', '' ) === 'firma'
-					? DonorName::newCompanyName() : DonorName::newPrivatePersonName();
-
-				$name->setSalutation( $request->get( 'salutation', '' ) );
-				$name->setTitle( $request->get( 'title', '' ) );
-				$name->setCompanyName( $request->get( 'companyName', '' ) );
-				$name->setFirstName( $request->get( 'firstName', '' ) );
-				$name->setLastName( $request->get( 'lastName', '' ) );
-
-				return $name->freeze()->assertNoNullFields();
-			}
-		};
-
-		return $routeHandler->handle( $ffFactory, $app, $request );
+		return ( new ValidateAddressHandler( $ffFactory, $app ) )->handle( $request );
 	}
 );
 
