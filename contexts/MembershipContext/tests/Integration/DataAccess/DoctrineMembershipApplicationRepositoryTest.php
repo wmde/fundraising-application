@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationR
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\GetMembershipApplicationException;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\StoreMembershipApplicationException;
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplication;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
+use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\ThrowingEntityManager;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**

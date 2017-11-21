@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\SucceedingAuthori
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionPaymentNotification\HandleSubscriptionPaymentNotificationUseCase;
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
+use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\ThrowingEntityManager;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 

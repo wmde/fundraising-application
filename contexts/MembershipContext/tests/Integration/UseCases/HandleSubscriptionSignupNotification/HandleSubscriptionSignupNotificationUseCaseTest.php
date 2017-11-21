@@ -14,7 +14,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionSignu
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\Frontend\PaymentContext\Tests\Data\ValidSubscriptionSignupRequest;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingEntityManager;
+use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\ThrowingEntityManager;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionSignupNotification\HandleSubscriptionSignupNotificationUseCase
