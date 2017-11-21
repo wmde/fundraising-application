@@ -7,7 +7,7 @@
 	<label for="bic" class="sr-only">{$ 'bic' | trans $}</label>
 </div>
 
-<span class="oden">{$ 'payment_type_BEZ_iban_decision' | trans $}</span>
+<span class="iban-decision">{$ 'payment_type_BEZ_iban_decision' | trans $}</span>
 
 <div class="field-grp">
 	<input type="text" id="account-number" name="konto" placeholder="{$ 'account_number' | trans | e( 'html_attr' ) $}">
@@ -17,6 +17,9 @@
 	<input type="text" id="bank-code" name="blz" placeholder="{$ 'bank_code' | trans | e( 'html_attr' ) $}">
 	<label for="bank-code" class="sr-only">{$ 'bank_code' | trans $}</label>
 </div>
+
+<span id="bank-name"></span>
+<input type="hidden" name="bankname" id="field-bank-name" value="" />
 
 <!-- ToDo: wikimedia-team, decide and translate to german -->
 <span class="error-text">Generic text of error.</span>
