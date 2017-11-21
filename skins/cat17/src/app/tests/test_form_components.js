@@ -149,12 +149,22 @@ test( 'Rendering the amount component with custom amount clears selection and se
 		selectElement = createSpyingElement(),
 		hiddenElement = createSpyingElement(),
 		store = {},
-		component = formComponents.createAmountComponent( store, textElement, selectElement, hiddenElement );
+		parent = {
+			addClass: sinon.spy()
+		}
+	;
+
+	textElement.parent = function () {
+		return parent;
+	};
+
+	var component = formComponents.createAmountComponent( store, textElement, selectElement, hiddenElement );
 
 	component.render( { amount: '23,00', isCustomAmount: true } );
 
 	t.ok( textElement.val.calledOnce, 'value is set once' );
 	t.ok( textElement.val.calledWith( '23,00' ) );
+	t.ok( parent.addClass.withArgs( 'filled' ).calledOnce );
 	t.ok( selectElement.val.callCount === 0, 'select element value is not set' );
 	t.ok( selectElement.prop.calledOnce, 'property was set' );
 	t.ok( selectElement.prop.calledWith( 'checked', false ), 'check property was removed' );
@@ -166,15 +176,25 @@ test( 'Rendering the amount component with custom amount clears selection and se
 
 test( 'Rendering the amount component with non-custom amount sets the hidden field and clears the text field', function ( t ) {
 	var textElement = createSpyingElement(),
-			selectElement = createSpyingElement(),
-			hiddenElement = createSpyingElement(),
-			store = {},
-			component = formComponents.createAmountComponent( store, textElement, selectElement, hiddenElement );
+		selectElement = createSpyingElement(),
+		hiddenElement = createSpyingElement(),
+		store = {},
+		parent = {
+			removeClass: sinon.stub()
+		}
+	;
+
+	textElement.parent = function () {
+		return parent;
+	};
+
+	var component = formComponents.createAmountComponent( store, textElement, selectElement, hiddenElement );
 
 	component.render( { amount: '50,00', isCustomAmount: false } );
 
 	t.ok( textElement.val.calledOnce, 'value is cleared' );
 	t.ok( textElement.val.calledWith( '' ) );
+	t.ok( parent.removeClass.withArgs( 'filled' ).calledOnce );
 	t.ok( selectElement.val.calledOnce, 'select element value is set' );
 	t.ok( selectElement.val.calledWith( [ '50,00' ] ), 'select element value is set' ); // needs to be array for selects
 	t.ok( hiddenElement.val.calledOnce, 'hidden element value is set' );
