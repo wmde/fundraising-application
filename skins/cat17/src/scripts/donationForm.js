@@ -247,11 +247,7 @@ $( function () {
   function addressIsValid() {
     var validity = store.getState().validity,
       formContent = store.getState().donationFormContent;
-    return formContent.addressType === 'anonym' || (
-		// @fixme: Move checking of salutation and title into reducer/store/validator
-      validity.address &&
-      formContent.salutation != ''
-    );
+    return formContent.addressType === 'anonym' || validity.address;
   }
 
   function bankDataIsValid() {
@@ -270,7 +266,6 @@ $( function () {
 
   function formDataIsValid() {
     var validity = store.getState().validity;
-    //console.log(validity.paymentData + " " + addressIsValid() + " " + bankDataIsValid());
     return validity.paymentData && addressIsValid() && bankDataIsValid();
   }
 
