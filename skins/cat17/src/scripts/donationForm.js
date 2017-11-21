@@ -274,7 +274,7 @@ $( function () {
     return validity.paymentData && addressIsValid() && bankDataIsValid();
   }
 
-  function triggerValidityCheckForPersonalDataPage() {
+  function triggerValidityCheckForPersonalData() {
     var formContent = store.getState().donationFormContent;
 
     if ( !addressIsValid() ) {
@@ -383,7 +383,7 @@ $( function () {
   setInterval(handleGroupValidations, 1000);
 
   $('form').on('submit', function () {
-    triggerValidityCheckForPersonalDataPage();
+    triggerValidityCheckForPersonalData();
     handleGroupValidations();
 
     if (formDataIsValid()) {
@@ -429,16 +429,6 @@ $( function () {
   if (initSetup.amount && initSetup.paymentIntervalInMonths && initSetup.paymentType) {
     $introBanner.removeClass('hidden');
     $introDefault.addClass('hidden');
-  }
-
-  // Initialize form pages
-  store.dispatch( actions.newAddPageAction( 'payment' ) );
-  store.dispatch( actions.newAddPageAction( 'personalData' ) );
-  store.dispatch( actions.newAddPageAction( 'bankConfirmation' ) );
-
-  // switch to personal page if payment data is filled in
-  if ( paymentDataIsValid() ) {
-    store.dispatch( actions.newNextPageAction() );
   }
 
 } );
