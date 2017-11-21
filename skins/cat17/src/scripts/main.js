@@ -20,16 +20,6 @@
         jcf.replaceAll();
 
         selectedSelect();
-
-        // TODO Move this into view handler
-        $("#amount-typed").on("focus", function() {
-           $(this).closest(".wrap-amount-typed").addClass("focused");
-
-        });
-        $("#amount-typed").on("focusout", function() {
-            $(this).closest(".wrap-amount-typed").removeClass("focused");
-        });
-
     };
 
     $(document).ready(function () {

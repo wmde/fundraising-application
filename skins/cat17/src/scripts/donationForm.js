@@ -237,7 +237,11 @@ $( function () {
       {
         viewHandler: WMDE.View.createFieldValueValidityIndicator( $('#amount-typed') ),
         stateKey: 'donationInputValidation.amount'
-      }
+      },
+		{
+			viewHandler: WMDE.View.createCustomAmountField( $('#amount-typed') ),
+			stateKey: 'donationInputValidation.amount'
+		}
     ],
     store
   );
