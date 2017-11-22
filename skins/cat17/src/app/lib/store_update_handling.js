@@ -44,9 +44,12 @@ module.exports = {
 			// TODO check if state has changed before executing update actions
 
 			viewHandlers.forEach( function ( viewHandlerConfig ) {
-				viewHandlerConfig.viewHandler.update.call(
+				var pathNames = viewHandlerConfig.stateKey instanceof Array ?
+					viewHandlerConfig.stateKey :
+					[ viewHandlerConfig.stateKey ];
+				viewHandlerConfig.viewHandler.update.apply(
 					viewHandlerConfig.viewHandler,
-					_.path( state, viewHandlerConfig.stateKey )
+					pathNames.map( function ( path ) { return _.path( state, path ) })
 				);
 			} );
 		} );

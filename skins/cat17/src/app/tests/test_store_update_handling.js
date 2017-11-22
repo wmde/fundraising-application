@@ -131,6 +131,25 @@ test( 'connect view handlers to deeply nested store values', function ( t ) {
 	t.end();
 } );
 
+test( 'Connect view handlers to multiple deeply nested store values', function ( t ) {
+	var viewHandler = {
+			update: sinon.spy()
+		},
+		viewHandlerConfig = {
+			viewHandler: viewHandler,
+			stateKey: [ 'facts.cats.number', 'facts.cats.owners' ]
+		},
+		storeData = { facts: { cats: { number: 42, owners: 3 } } },
+		store = createFakeStore( storeData );
+
+	storeUpdateHandling.connectViewHandlersToStore( [ viewHandlerConfig ], store );
+	store.fakeUpdate();
+
+	t.ok( viewHandler.update.calledOnce, 'view handler update method is only called once' );
+	t.ok( viewHandler.update.calledWith( 42, 3 ), 'view handler get passed exactly the selected state parts' );
+	t.end();
+} );
+
 test( 'when not validating, makeEventHandlerWaitForAsyncFinish executes handler instantly ', function ( t ) {
 	var eventHandler = sinon.spy(),
 		storeData = { asynchronousRequests: { isValidating: false } },
