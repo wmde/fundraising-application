@@ -110,12 +110,13 @@ var objectAssign = require( 'object-assign' ),
 
 			if( state.iban && state.bic ) {
 				this.paymentElement.prepend (
-					this.getBankAccountSummary( 'IBAN', state.iban, 'BIC', state.bic )
+					$( '<dl>' ).addClass( DOM_SELECTORS.classes.summaryBankInfo ).append(
+						$('<dt>').text( 'IBAN' ),
+						$('<dd>').text( state.iban ),
+						$('<dt>').text( 'BIC' ),
+						$('<dd>').text( state.bic )
+					)
 				);
-			} else if( state.accountNumber && state.bankCode ) {
-				this.paymentElement.prepend (
-					this.getBankAccountSummary( 'Kontonummer', state.accountNumber, 'Bankleitzahl', state.bankCode )
-				)
 			}
 		},
 		updateMembershipSummary: function ( state ) {
@@ -126,14 +127,6 @@ var objectAssign = require( 'object-assign' ),
 			this.memberShipTypeElement.text( this.memberShipType[ state.membershipType ] );
 			this.setSummaryIcon( this.memberShipTypeIconElement, state.membershipType, this.memberShipTypeIcon );
 			this.memberShipTypeTextElement.text( this.memberShipTypeText[ state.membershipType ] );
-		},
-		getBankAccountSummary: function ( accountLabel, accountNumber, bankLabel, bankNumber ) {
-			return $( '<dl>' ).addClass( DOM_SELECTORS.classes.summaryBankInfo ).append(
-				$('<dt>').text( accountLabel ),
-				$('<dd>').text( accountNumber ),
-				$('<dt>').text( bankLabel ),
-				$('<dd>').text( bankNumber )
-			);
 		},
 		getAddressSummaryContent: function ( formContent ) {
 			if( formContent.addressType === "person" ) {
