@@ -2,17 +2,15 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
+namespace WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures;
 
-use WMDE\Fundraising\Frontend\DonationContext\Authorization\TokenGenerator;
+use WMDE\Fundraising\Frontend\MembershipContext\Authorization\MembershipTokenGenerator;
 
 /**
- * TODO: move into Donation BC
- *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class FixedTokenGenerator implements TokenGenerator {
+class FixedMembershipTokenGenerator implements MembershipTokenGenerator {
 
 	private $token;
 	private $expiry;

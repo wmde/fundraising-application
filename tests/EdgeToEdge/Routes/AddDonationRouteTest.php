@@ -537,7 +537,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequest_tokensAreReturned(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setTokenGenerator( new FixedTokenGenerator( self::SOME_TOKEN ) );
+			$factory->setDonationTokenGenerator( new FixedTokenGenerator( self::SOME_TOKEN ) );
 
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
 			$client->followRedirects( false );
@@ -556,7 +556,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequest_clientIsRedirected(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setTokenGenerator( new FixedTokenGenerator( self::SOME_TOKEN ) );
+			$factory->setDonationTokenGenerator( new FixedTokenGenerator( self::SOME_TOKEN ) );
 			$client->followRedirects( false );
 
 			$client->request(

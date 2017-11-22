@@ -12,9 +12,9 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplication;
+use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\FixedMembershipTokenGenerator;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 
 /**
  * @licence GNU GPL v2+
@@ -32,7 +32,7 @@ class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidSubscriptionSignupRequest_applicationIndicatesSuccess(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setTokenGenerator( new FixedTokenGenerator(
+			$factory->setMembershipTokenGenerator( new FixedMembershipTokenGenerator(
 				self::UPDATE_TOKEN,
 				\DateTime::createFromFormat( 'Y-m-d H:i:s', '2039-12-31 23:59:59' )
 			) );

@@ -5,12 +5,13 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\MembershipContext\Tests\Integration\UseCases\ApplyForMembership;
 
 use WMDE\EmailAddress\EmailAddress;
-use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
 use WMDE\Fundraising\Frontend\MembershipContext\Authorization\ApplicationTokenFetcher;
 use WMDE\Fundraising\Frontend\MembershipContext\Authorization\MembershipApplicationTokens;
+use WMDE\Fundraising\Frontend\MembershipContext\Authorization\MembershipTokenGenerator;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\FixedApplicationTokenFetcher;
+use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\FixedMembershipTokenGenerator;
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\InMemoryApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipContext\Tracking\ApplicationPiwikTracker;
 use WMDE\Fundraising\Frontend\MembershipContext\Tracking\ApplicationTracker;
@@ -25,7 +26,6 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentDelayCalculator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedPaymentDelayCalculator;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
 use PHPUnit\Framework\TestCase;
 
@@ -54,7 +54,7 @@ class ApplyForMembershipUseCaseTest extends TestCase {
 	private $mailer;
 
 	/**
-	 * @var TokenGenerator
+	 * @var MembershipTokenGenerator
 	 */
 	private $tokenGenerator;
 
@@ -79,7 +79,7 @@ class ApplyForMembershipUseCaseTest extends TestCase {
 	public function setUp(): void {
 		$this->repository = new InMemoryApplicationRepository();
 		$this->mailer = new TemplateBasedMailerSpy( $this );
-		$this->tokenGenerator = new FixedTokenGenerator( self::ACCESS_TOKEN );
+		$this->tokenGenerator = new FixedMembershipTokenGenerator( self::ACCESS_TOKEN );
 		$this->validator = $this->newSucceedingValidator();
 		$this->policyValidator = $this->newSucceedingPolicyValidator();
 		$this->tracker = $this->createMock( ApplicationTracker::class );

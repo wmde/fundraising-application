@@ -29,6 +29,8 @@ use WMDE\EmailAddress\EmailAddress;
 use WMDE\Fundraising\ContentProvider\ContentProvider;
 use WMDE\Fundraising\Frontend\DonationContext\Authorization\DonationAuthorizer;
 use WMDE\Fundraising\Frontend\DonationContext\Authorization\DonationTokenFetcher;
+use WMDE\Fundraising\Frontend\DonationContext\Authorization\RandomTokenGenerator;
+use WMDE\Fundraising\Frontend\DonationContext\Authorization\TokenGenerator;
 use WMDE\Fundraising\Frontend\DonationContext\DataAccess\DoctrineCommentFinder;
 use WMDE\Fundraising\Frontend\DonationContext\DataAccess\DoctrineDonationAuthorizer;
 use WMDE\Fundraising\Frontend\DonationContext\DataAccess\DoctrineDonationEventLogger;
@@ -74,15 +76,15 @@ use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\PiwikServerSideTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\ProfilerDataCollector;
 use WMDE\Fundraising\Frontend\Infrastructure\ProfilingDecoratorBuilder;
-use WMDE\Fundraising\Frontend\Infrastructure\RandomTokenGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\ServerSideTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateMailerInterface;
-use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\WordListFileReader;
 use WMDE\Fundraising\Frontend\MembershipContext\Authorization\ApplicationAuthorizer;
 use WMDE\Fundraising\Frontend\MembershipContext\Authorization\ApplicationTokenFetcher;
+use WMDE\Fundraising\Frontend\MembershipContext\Authorization\MembershipTokenGenerator;
+use WMDE\Fundraising\Frontend\MembershipContext\Authorization\RandomMembershipTokenGenerator;
 use WMDE\Fundraising\Frontend\MembershipContext\DataAccess\DoctrineApplicationAuthorizer;
 use WMDE\Fundraising\Frontend\MembershipContext\DataAccess\DoctrineApplicationPiwikTracker;
 use WMDE\Fundraising\Frontend\MembershipContext\DataAccess\DoctrineApplicationRepository;
@@ -424,8 +426,15 @@ class FunFunFactory {
 			);
 		};
 
-		$pimple['token_generator'] = function() {
+		$pimple['donation_token_generator'] = function() {
 			return new RandomTokenGenerator(
+				$this->config['token-length'],
+				new \DateInterval( $this->config['token-validity-timestamp'] )
+			);
+		};
+
+		$pimple['membership_token_generator'] = function() {
+			return new RandomMembershipTokenGenerator(
 				$this->config['token-length'],
 				new \DateInterval( $this->config['token-validity-timestamp'] )
 			);
@@ -1068,8 +1077,12 @@ class FunFunFactory {
 		);
 	}
 
-	public function getTokenGenerator(): TokenGenerator {
-		return $this->pimple['token_generator'];
+	public function getDonationTokenGenerator(): TokenGenerator {
+		return $this->pimple['donation_token_generator'];
+	}
+
+	public function getMembershipTokenGenerator(): MembershipTokenGenerator {
+		return $this->pimple['membership_token_generator'];
 	}
 
 	public function newDonationConfirmationPresenter( string $templateName = 'Donation_Confirmation.html.twig' ): DonationConfirmationHtmlPresenter {
@@ -1335,23 +1348,25 @@ class FunFunFactory {
 	}
 
 	private function newDoctrineDonationPrePersistSubscriber(): DoctrineDonationPrePersistSubscriber {
-		$tokenGenerator = $this->getTokenGenerator();
 		return new DoctrineDonationPrePersistSubscriber(
-			$tokenGenerator,
-			$tokenGenerator
+			$this->getDonationTokenGenerator(),
+			$this->getDonationTokenGenerator()
 		);
 	}
 
 	private function newDoctrineMembershipApplicationPrePersistSubscriber(): DoctrineMembershipApplicationPrePersistSubscriber {
-		$tokenGenerator = $this->getTokenGenerator();
 		return new DoctrineMembershipApplicationPrePersistSubscriber(
-			$tokenGenerator,
-			$tokenGenerator
+			$this->getMembershipTokenGenerator(),
+			$this->getMembershipTokenGenerator()
 		);
 	}
 
-	public function setTokenGenerator( TokenGenerator $tokenGenerator ): void {
-		$this->pimple['token_generator'] = $tokenGenerator;
+	public function setDonationTokenGenerator( TokenGenerator $tokenGenerator ): void {
+		$this->pimple['donation_token_generator'] = $tokenGenerator;
+	}
+
+	public function setMembershipTokenGenerator( MembershipTokenGenerator $tokenGenerator ): void {
+		$this->pimple['membership_token_generator'] = $tokenGenerator;
 	}
 
 	public function disableDoctrineSubscribers(): void {
