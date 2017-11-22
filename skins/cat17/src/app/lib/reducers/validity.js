@@ -5,7 +5,7 @@
  */
 
 var objectAssign = require( 'object-assign' ),
-
+	_ = require( 'underscore' ),
 	defaultState = {
 		paymentData: null,
 		address: null,
@@ -43,6 +43,11 @@ function validity( state, action ) {
 	}
 
 	switch ( action.type ) {
+		case 'INITIALIZE_VALIDATION':
+			if ( !_.isEmpty( action.payload.initialValidationResult ) ) {
+				newState = _.extendOwn( state, action.payload.initialValidationResult );
+			}
+			break;
 		case 'FINISH_PAYMENT_DATA_VALIDATION':
 			newState = { paymentData: convertExternalResult( action ) };
 			break;
