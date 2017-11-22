@@ -9,6 +9,13 @@ We moved the Donation Context into [it's own git repository](https://github.com/
 The easiest way to get a working installation of the application is to use [Vagrant](https://www.vagrantup.com/).
 Just get a clone of our git repository and run `vagrant up` in it. Then `vagrant ssh` into it and go to `/vagrant`, where you will be able to run the full test suite. (Excluding a handful of payment provider system tests).
 
+* [Installation](#installation)
+* [Configuration](#configuration)
+* [Running the application](#running-the-application)
+* [Running the tests](#running-the-tests)
+* [Skins](#skins)
+* [Deployment](#deployment)
+* [Project structure](#project-structure)
 
 ## Installation
 
@@ -89,7 +96,7 @@ The "add donation" form can then be found at http://localhost:8000/index.php
 
 ## Running the tests
 
-## Full CI run
+### Full CI run
 
     composer ci
 
@@ -101,7 +108,7 @@ For style checks only
 
 	composer cs ; npm run cs
     
-## PHP
+### PHP
 
 For tests only
 
@@ -115,7 +122,7 @@ For one context only
 
     vendor/bin/phpunit contexts/DonationContext/
 
-### phpstan
+#### phpstan
 
 Static code analysis can be performed via [phpstan](https://github.com/phpstan/phpstan/), either via
 
@@ -129,7 +136,7 @@ while dev-dependencies are present, or via
 in the absence of dev-dependencies (i.e. to simulate the vendor/ code on production).
 These tasks are also performed during the [travis](.travis.yml) runs.
 
-## JS
+### JS
 
 For a full JS CI run
 
@@ -146,14 +153,14 @@ If you want to debug problems in the Redux data flow, set the following variable
 
 Actions and their resulting state will be logged.
 
-## Editing skins
+## Skins
 
 If skin assets where changed, you will need to run
 
     npm run build-assets
     npm run copy-assets
 
-Also see [skins/README.md](skins/README.md)
+For more information on skins, including how to change which one is used, see [skins/README.md](skins/README.md).
 
 ## Deployment
 
