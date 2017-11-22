@@ -17,6 +17,36 @@ function createInvalidPayload() {
 	};
 }
 
+test( 'Construction with off-type state sets default state', function ( t ) {
+	t.deepEqual(
+		validity(
+			null,
+			{ type: 'something', payload: {} }
+		),
+		{
+			paymentData: null,
+			address: null,
+			bankData: null
+		}
+	);
+	t.end();
+} );
+
+test( 'Construction with incomplete state merges default state', function ( t ) {
+	t.deepEqual(
+		validity(
+			{ address: true },
+			{ type: 'something', payload: {} }
+		),
+		{
+			paymentData: null,
+			address: true,
+			bankData: null
+		}
+	);
+	t.end();
+} );
+
 test( 'FINISH_PAYMENT_DATA_VALIDATION sets paymentData validation state', function ( t ) {
 	var beforeState = { amount: null };
 
@@ -58,5 +88,15 @@ test( 'FINISH_BANK_DATA_VALIDATION without BIC does not set bank data validation
 		status: 'OK',
 		iban: 'AT022050302101023600'
 	} } ).bankData );
+	t.end();
+} );
+
+test( 'NOT_APPLICABLE payload sets validity null', function ( t ) {
+	t.ok(
+		validity(
+			{ paymentData: true, address: null, bankData: false },
+			{ type: 'FINISH_BANK_DATA_VALIDATION', payload: { status: 'NOT_APPLICABLE' } }
+		).bankData === null
+	);
 	t.end();
 } );
