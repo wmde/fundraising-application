@@ -247,11 +247,7 @@ $( function () {
   function addressIsValid() {
     var validity = store.getState().validity,
       formContent = store.getState().donationFormContent;
-    return formContent.addressType === 'anonym' || (
-		// @fixme: Move checking of salutation and title into reducer/store/validator
-      validity.address &&
-      formContent.salutation != ''
-    );
+    return formContent.addressType === 'anonym' || validity.address;
   }
 
   function bankDataIsValid() {
@@ -270,7 +266,6 @@ $( function () {
 
   function formDataIsValid() {
     var validity = store.getState().validity;
-    //console.log(validity.paymentData + " " + addressIsValid() + " " + bankDataIsValid());
     return validity.paymentData && addressIsValid() && bankDataIsValid();
   }
 
@@ -286,7 +281,7 @@ $( function () {
       } else if ( formContent.addressType === 'firma' ) {
         store.dispatch( actions.newMarkEmptyFieldsInvalidAction(
           [ 'companyName', 'street', 'postcode', 'city', 'email' ],
-          [ 'firstName', 'lastName' ]
+          [ 'salutation', 'firstName', 'lastName' ]
         ) );
       }
     }
@@ -342,7 +337,7 @@ $( function () {
       donatorType.addClass('completed').removeClass('disabled invalid');
       var validators = state.donationInputValidation;
       if (
-        state.donationFormContent.addressType == 'personal' &&
+        state.donationFormContent.addressType === 'personal' &&
         (
           (validators.email.dataEntered && !validators.email.isValid) ||
           (validators.city.dataEntered && !validators.city.isValid) ||
@@ -350,14 +345,12 @@ $( function () {
           (validators.lastName.dataEntered && !validators.lastName.isValid) ||
           (validators.street.dataEntered && !validators.street.isValid) ||
           (validators.postcode.dataEntered && !validators.postcode.isValid) ||
-          (validators.salutation.dataEntered && !validators.salutation.isValid) ||
-          (validators.firstName.dataEntered && !validators.firstName.isValid)
+          (validators.salutation.dataEntered && !validators.salutation.isValid)
         )
         ||
-        state.donationFormContent.addressType == 'firma' &&
+        state.donationFormContent.addressType === 'firma' &&
         (
           (validators.companyName.dataEntered && !validators.companyName.isValid) ||
-          (validators.firstName.dataEntered && !validators.firstName.isValid) ||
           (validators.email.dataEntered && !validators.email.isValid) ||
           (validators.city.dataEntered && !validators.city.isValid) ||
           (validators.street.dataEntered && !validators.street.isValid) ||

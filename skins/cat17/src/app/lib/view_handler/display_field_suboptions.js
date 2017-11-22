@@ -12,7 +12,7 @@ var objectAssign = require( 'object-assign' ),
 			this.fieldset.find( '.info-text' ).removeClass( 'opened' );
 
 			// fieldsets may contain fields of more than one name (cp. intervalType vs periode), avoid false matches (hidden)
-			var field = this.fieldset.find( '[value="' + value + '"]:not(.hidden)' );
+			var field = this.fieldset.find( '.wrap-input [value="' + value + '"]:not(.hidden)' );
 			var wrapper = field.parents( '.wrap-field' );
 			var infoText = wrapper.find( '.info-text' );
 

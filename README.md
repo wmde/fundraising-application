@@ -4,13 +4,19 @@
 
 User facing application for the [Wikimedia Deutschland](https://wikimedia.de) fundraising.
 
-We moved the Donation Context into [it's own git repository](https://github.com/wmde/fundraising-donations).
-
-The easiest way to get a working installation of the application is to use [Vagrant](https://www.vagrantup.com/).
-Just get a clone of our git repository and run `vagrant up` in it. Then `vagrant ssh` into it and go to `/vagrant`, where you will be able to run the full test suite. (Excluding a handful of payment provider system tests).
-
+* [Installation](#installation)
+* [Configuration](#configuration)
+* [Running the application](#running-the-application)
+* [Running the tests](#running-the-tests)
+* [Skins](#skins)
+* [Deployment](#deployment)
+* [Project structure](#project-structure)
 
 ## Installation
+
+The easiest way to get a working installation of the application is to use [Vagrant](https://www.vagrantup.com/).
+Just get a clone of our git repository and run `vagrant up` in it. Then `vagrant ssh` into it and go to `/vagrant`,
+where you will be able to run the full test suite. (Excluding a handful of payment provider system tests).
 
 ### Using Vagrant
 
@@ -89,7 +95,7 @@ The "add donation" form can then be found at http://localhost:8000/index.php
 
 ## Running the tests
 
-## Full CI run
+### Full CI run
 
     composer ci
 
@@ -101,7 +107,7 @@ For style checks only
 
 	composer cs ; npm run cs
     
-## PHP
+### PHP
 
 For tests only
 
@@ -115,7 +121,7 @@ For one context only
 
     vendor/bin/phpunit contexts/DonationContext/
 
-### phpstan
+#### phpstan
 
 Static code analysis can be performed via [phpstan](https://github.com/phpstan/phpstan/), either via
 
@@ -129,7 +135,7 @@ while dev-dependencies are present, or via
 in the absence of dev-dependencies (i.e. to simulate the vendor/ code on production).
 These tasks are also performed during the [travis](.travis.yml) runs.
 
-## JS
+### JS
 
 For a full JS CI run
 
@@ -146,14 +152,14 @@ If you want to debug problems in the Redux data flow, set the following variable
 
 Actions and their resulting state will be logged.
 
-## Editing skins
+## Skins
 
 If skin assets where changed, you will need to run
 
     npm run build-assets
     npm run copy-assets
 
-Also see [skins/README.md](skins/README.md)
+For more information on skins, including how to change which one is used, see [skins/README.md](skins/README.md).
 
 ## Deployment
 
@@ -170,6 +176,9 @@ When accessing the API via `web/index.dev.php`, profiling information will be ge
 This codebase follows a modified version of [The Clean Architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html),
 combined with a partial application of [Domain Driven Design](https://en.wikipedia.org/wiki/Domain-driven_design).
 The high level structure is represented by [this diagram](https://commons.wikimedia.org/wiki/File:Clean_Architecture_%2B_DDD,_full_application.svg).
+
+We moved the Donation Context into [it's own git repository](https://github.com/wmde/fundraising-donations) as first step
+into putting each Bounded Context into a dedicated git repository.
 
 ### Production code layout
 
@@ -222,10 +231,10 @@ persistence, you should use `TestEnvironment` defined in `tests/TestEnvironment.
 <table>
 	<tr>
 		<th></th>
-		<th>Database (in memory)</th>
-		<th>Top level factory</th>
+		<th>Network</th>
 		<th>Framework (Silex)</th>
-		<th>Network & Disk</th>
+		<th>Top level factory</th>
+		<th>Database and disk</th>
 	</tr>
 	<tr>
 		<th>Unit</th>
@@ -236,17 +245,17 @@ persistence, you should use `TestEnvironment` defined in `tests/TestEnvironment.
 	</tr>
 	<tr>
 		<th>Integration</th>
-		<td>If needed</td>
-		<td>Discouraged</td>
 		<td>No</td>
-		<td>Read only</td>
+		<td>No</td>
+		<td>Discouraged</td>
+		<td>Yes</td>
 	</tr>
 	<tr>
 		<th>EdgeToEdge</th>
+		<td>No</td>
 		<td>Yes</td>
 		<td>Yes</td>
 		<td>Yes</td>
-		<td>Read only</td>
 	</tr>
 	<tr>
 		<th>System</th>
