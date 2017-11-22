@@ -241,6 +241,10 @@ $( function () {
 		{
 			viewHandler: WMDE.View.createCustomAmountField( $('#amount-typed') ),
 			stateKey: 'donationInputValidation.amount'
+		},
+		{
+			viewHandler: WMDE.View.createShySubmitButtonHandler( $( 'form input[type="submit"]' ) ),
+			stateKey: 'validity'
 		}
     ],
     store
@@ -363,14 +367,6 @@ $( function () {
         donatorType.removeClass('completed').addClass('invalid');
         donatorType.find('.payment-icon').removeClass().addClass('payment-icon icon-error');
       }
-    }
-
-
-    if (formDataIsValid()) {
-      $('form input[type="submit"]').removeClass('btn-unactive');
-    }
-    else {
-      $('form input[type="submit"]').addClass('btn-unactive');
     }
   };
 

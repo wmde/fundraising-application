@@ -19,6 +19,7 @@ module.exports = {
 		createCountrySpecificAttributesHandler: require( './lib/view_handler/country_specific_attributes' ).createCountrySpecificAttributesHandler,
 		createSuboptionDisplayHandler: require( './lib/view_handler/display_field_suboptions' ).createSuboptionDisplayHandler,
 		createCustomAmountField: require( './lib/view_handler/custom_amount_field' ).createCustomAmountField,
+		createShySubmitButtonHandler: require( './lib/view_handler/shy_submit_button' ).createShySubmitButtonHandler,
 		Animator: require( './lib/view_handler/animator' )
 	},
 	Actions: require( './lib/actions' ),
