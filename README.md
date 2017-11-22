@@ -231,10 +231,10 @@ persistence, you should use `TestEnvironment` defined in `tests/TestEnvironment.
 <table>
 	<tr>
 		<th></th>
-		<th>Database (in memory)</th>
-		<th>Top level factory</th>
+		<th>Network</th>
 		<th>Framework (Silex)</th>
-		<th>Network & Disk</th>
+		<th>Top level factory</th>
+		<th>Database and disk</th>
 	</tr>
 	<tr>
 		<th>Unit</th>
@@ -245,17 +245,17 @@ persistence, you should use `TestEnvironment` defined in `tests/TestEnvironment.
 	</tr>
 	<tr>
 		<th>Integration</th>
-		<td>If needed</td>
-		<td>Discouraged</td>
 		<td>No</td>
-		<td>Read only</td>
+		<td>No</td>
+		<td>Discouraged</td>
+		<td>Yes</td>
 	</tr>
 	<tr>
 		<th>EdgeToEdge</th>
+		<td>No</td>
 		<td>Yes</td>
 		<td>Yes</td>
 		<td>Yes</td>
-		<td>Read only</td>
 	</tr>
 	<tr>
 		<th>System</th>
