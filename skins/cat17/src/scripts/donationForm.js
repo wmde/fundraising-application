@@ -269,18 +269,7 @@ $( function () {
     return validity.paymentData && addressIsValid() && bankDataIsValid();
   }
 
-  function personalDataPageIsValid() {
-    var validity = store.getState().validity;
-    return !hasInvalidFields() && paymentDataIsValid() && addressIsValid() && bankDataIsValid();
-  }
-
-  function triggerValidityCheckForPaymentPage() {
-    if ( !paymentDataIsValid() ) {
-      store.dispatch( actions.newMarkEmptyFieldsInvalidAction( [ 'amount' ] ) );
-    }
-  }
-
-  function triggerValidityCheckForPersonalDataPage() {
+  function triggerValidityCheckForPersonalData() {
     var formContent = store.getState().donationFormContent;
 
     if ( !addressIsValid() ) {
@@ -304,65 +293,13 @@ $( function () {
     }
   }
 
-  function hasInvalidFields() {
-    var invalidFields = false;
-    $.each( store.getState().donationInputValidation, function( key, value ) {
-      if ( value.isValid === false ) {
-        invalidFields = true;
-      }
-    } );
-
-    return invalidFields;
-  }
-
   function paymentDataIsValid() {
     var currentState = store.getState();
     return currentState.validity.paymentData;
   }
 
-  function displayErrorBox() {
-    $( '#validation-errors' ).show();
-    $( 'html, body' ).animate( { scrollTop: $( '#validation-errors' ).offset().top } );
-  }
-
-  function triggerPiwikEvent( eventData ) {
-    if ( typeof _paq !== 'undefined' ) {
-      _paq.push( eventData );
-    }
-  }
-
 // @fixme Compare how the old skin called the handleXXX functions and restore that state. Refactor handleGroupValidations
 // @fixme Move checks from handleGroupValidations into store validator
-// @fixme Restore Piwik triggers (maybe use StateBar[main.js] logic as events)
-
-  function handlePaymentDataSubmit() {
-    if ( paymentDataIsValid() ) {
-      store.dispatch( actions.newNextPageAction() );
-      triggerPiwikEvent( [ 'trackGoal', 2 ] );
-    } else {
-      triggerValidityCheckForPaymentPage();
-      displayErrorBox();
-    }
-  }
-
-  function handlePersonalDataSubmitForDirectDebit() {
-    if ( personalDataPageIsValid() ) {
-      store.dispatch( actions.newNextPageAction() );
-      triggerPiwikEvent( [ 'trackGoal', 4 ] );
-    } else {
-      triggerValidityCheckForPersonalDataPage();
-      displayErrorBox();
-    }
-  }
-
-  function handlePersonalDataSubmitForNonDirectDebit() {
-    if ( personalDataPageIsValid() ) {
-      $( '#donForm2' ).submit();
-    } else {
-      triggerValidityCheckForPersonalDataPage();
-      displayErrorBox();
-    }
-  }
 
   handleGroupValidations = function () {
     var state = store.getState();
@@ -435,12 +372,11 @@ $( function () {
 
   // connect DOM elements to actions
   // fixme don't use interval, use form events instead? Discuss performance & other implications
-  //$( '#continueFormSubmit1' ).click( WMDE.StoreUpdates.makeEventHandlerWaitForAsyncFinish( handlePaymentDataSubmit, store ) );
   $('input').on('click, change', WMDE.StoreUpdates.makeEventHandlerWaitForAsyncFinish( handleGroupValidations, store ) );
   setInterval(handleGroupValidations, 1000);
 
   $('form').on('submit', function () {
-    triggerValidityCheckForPersonalDataPage();
+    triggerValidityCheckForPersonalData();
     handleGroupValidations();
 
     if (formDataIsValid()) {
@@ -486,16 +422,6 @@ $( function () {
   if (initSetup.amount && initSetup.paymentIntervalInMonths && initSetup.paymentType) {
     $introBanner.removeClass('hidden');
     $introDefault.addClass('hidden');
-  }
-
-  // Initialize form pages
-  store.dispatch( actions.newAddPageAction( 'payment' ) );
-  store.dispatch( actions.newAddPageAction( 'personalData' ) );
-  store.dispatch( actions.newAddPageAction( 'bankConfirmation' ) );
-
-  // switch to personal page if payment data is filled in
-  if ( paymentDataIsValid() ) {
-    store.dispatch( actions.newNextPageAction() );
   }
 
 } );
