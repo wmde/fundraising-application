@@ -2,6 +2,7 @@
 
 var objectAssign = require( 'object-assign' ),
 	actions = require( './actions' ),
+	NumericInputHandler = require( './numeric_input_handler' ),
 
 	INTERVAL_TYPE_ONE_OFF = 0,
 	INTERVAL_TYPE_RECURRING = 1,
@@ -192,6 +193,7 @@ module.exports = {
 			selectElement: selectElement,
 			hiddenElement: hiddenElement
 		} );
+		NumericInputHandler.attach( inputElement );
 		inputElement.on( 'change', function ( evt ) {
 			store.dispatch( actions.newInputAmountAction( evt.target.value ) );
 		} );

@@ -237,7 +237,11 @@ $( function () {
       {
         viewHandler: WMDE.View.createFieldValueValidityIndicator( $('#amount-typed') ),
         stateKey: 'donationInputValidation.amount'
-      }
+      },
+		{
+			viewHandler: WMDE.View.createCustomAmountField( $('#amount-typed') ),
+			stateKey: 'donationInputValidation.amount'
+		}
     ],
     store
   );
@@ -383,30 +387,6 @@ $( function () {
       return true;
     }
     return false;
-  });
-
-  // TODO move to view handler
-  $("#amount-typed").on('keypress', function (event) {
-    var _element = $(this),
-      keyCode = event.keyCode || event.which,
-      keysAllowed = [44, 46, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 0, 8, 9, 13];
-
-    if ($.inArray(keyCode, keysAllowed) === -1 && event.ctrlKey === false) {
-      event.preventDefault();
-    }
-
-    if ((keyCode == 44 || keyCode == 46) && $('#amount-typed').val().indexOf('.') > 0) {
-      event.preventDefault();
-    }
-
-    if (keyCode == 44) {
-      setTimeout(
-        function () {
-          $('#amount-typed').val(
-            $('#amount-typed').val().replace(',','.')
-          );
-        }, 10);
-    }
   });
 
   // Set initial form values
