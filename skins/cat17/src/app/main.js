@@ -9,20 +9,23 @@ module.exports = {
 	Store: require( './lib/store' ),
 	StoreUpdates: require( './lib/store_update_handling' ),
 	StateAggregation: {
-		allValiditySectionsAreValid: require( './lib/state_aggregation/all_validation_sections_are_valid' )
+		allValiditySectionsAreValid: require( './lib/state_aggregation/all_validation_sections_are_valid' ),
+		amountAndFrequencyAreValid: require( './lib/state_aggregation/amount_and_frequency_are_valid' ),
+		donorTypeAndAddressAreValid: require( './lib/state_aggregation/donor_type_and_address_are_valid' ),
+		paymentAndBankDataAreValid: require( './lib/state_aggregation/payment_and_bank_data_are_valid.js' )
 	},
 	View: {
 		createSlidingVisibilitySwitcher: require( './lib/view_handler/element_visibility_switcher' ).createSlidingVisibilitySwitcher,
 		createSimpleVisibilitySwitcher: require( './lib/view_handler/element_visibility_switcher' ).createSimpleVisibilitySwitcher,
 		createElementClassSwitcher: require( './lib/view_handler/element_class_switcher' ).createElementClassSwitcher,
 		createErrorBoxHandler:  require( './lib/view_handler/error_box' ).createHandler,
-		createPaymentSummaryDisplayHandler: require( './lib/view_handler/display_payment_summary' ).createPaymentSummaryDisplayHandler,
 		createFeeOptionSwitcher: require( './lib/view_handler/fee_option_switcher' ).createFeeOptionSwitcher,
 		createFieldValueValidityIndicator: require( './lib/view_handler/field_value_validity_indicator' ).createFieldValueValidityIndicator,
 		createCountrySpecificAttributesHandler: require( './lib/view_handler/country_specific_attributes' ).createCountrySpecificAttributesHandler,
 		createSuboptionDisplayHandler: require( './lib/view_handler/display_field_suboptions' ).createSuboptionDisplayHandler,
 		createCustomAmountField: require( './lib/view_handler/custom_amount_field' ).createCustomAmountField,
 		createShySubmitButtonHandler: require( './lib/view_handler/shy_submit_button' ).createShySubmitButtonHandler,
+		SectionInfo: require( './lib/view_handler/section_info' ),
 		Animator: require( './lib/view_handler/animator' )
 	},
 	Actions: require( './lib/actions' ),
