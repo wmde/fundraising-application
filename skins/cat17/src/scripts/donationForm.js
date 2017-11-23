@@ -7,7 +7,8 @@ $( function () {
         initData.data( 'initial-validation-result' ) )
     ),
     actions = WMDE.Actions
-    ;
+		currencyFormatter = WMDE.CurrencyFormatter.createCurrencyFormatter( 'de' )
+	;
 
   WMDE.StoreUpdates.connectComponentsToStore(
     [
@@ -111,46 +112,6 @@ $( function () {
 			viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '#payment-method .info-text .info-recurrent' ), /^(1|3|6|12)/ ),
 			stateKey: 'donationFormContent.paymentIntervalInMonths'
 		},
-      {
-        viewHandler: WMDE.View.createPaymentSummaryDisplayHandler(
-			$( '.frequency .text' ),
-          $( '.amount .text'),
-          $( '.payment-method .text'),
-			WMDE.FormDataExtractor.mapFromLabeledRadios( $( '#recurrence .wrap-input' ) ),
-			WMDE.FormDataExtractor.mapFromLabeledRadios( $( '#payment-method .wrap-input' ) ),
-          WMDE.CurrencyFormatter.createCurrencyFormatter( 'de' ),
-          $('.periodicity-icon'),
-          {
-            '0': 'icon-unique',
-            '1': 'icon-repeat_1',
-            '3': 'icon-repeat_3',
-            '6': 'icon-repeat_6',
-            '12': 'icon-repeat_12'
-          },
-          $('.payment-icon'),
-          {
-            'PPL': 'icon-paypal',
-            'MCP': 'icon-credit_card2',
-            'BEZ': 'icon-SEPA-2',
-            'UEB': 'icon-ubeiwsung-1'
-          },
-          $('.amount .info-detail'),
-			WMDE.FormDataExtractor.mapFromRadioInfoTexts( $( '#recurrence .wrap-field' ) ),
-          $('.payment-method .info-detail'),
-			WMDE.FormDataExtractor.mapFromRadioInfoTexts( $( '#payment-method .wrap-field' ) ),
-          $('.address-icon'),
-          {
-            'person': 'icon-account_circle',
-            'firma': 'icon-work',
-            'anonym': 'icon-visibility_off'
-          },
-          $('.donator-type .text'),
-			WMDE.FormDataExtractor.mapFromLabeledRadios( $( '#type-donator .wrap-field' ) ),
-          $('.donator-type .info-detail'),
-			WMDE.FormDataExtractor.mapFromSelectOptions( $( '#country' ) )
-        ),
-        stateKey: 'donationFormContent'
-      },
 		{
 			viewHandler: WMDE.View.createSuboptionDisplayHandler(
 				$( '#recurrence' )
@@ -241,6 +202,89 @@ $( function () {
 		{
 			viewHandler: WMDE.View.createCustomAmountField( $('#amount-typed') ),
 			stateKey: 'donationInputValidation.amount'
+		},
+		{
+			viewHandler: WMDE.View.SectionInfo.createFrequencySectionInfo(
+				$( '.banner .frequency' ),
+				{
+					'0': 'icon-unique',
+					'1': 'icon-repeat_1',
+					'3': 'icon-repeat_3',
+					'6': 'icon-repeat_6',
+					'12': 'icon-repeat_12'
+				},
+				WMDE.FormDataExtractor.mapFromLabeledRadios( $( '#recurrence .wrap-input' ) ),
+				WMDE.FormDataExtractor.mapFromRadioInfoTexts( $( '#recurrence .wrap-field' ) )
+			),
+			stateKey: [
+				'donationFormContent.paymentIntervalInMonths'
+			]
+		},
+		{
+			viewHandler: WMDE.View.SectionInfo.createAmountFrequencySectionInfo(
+				$( '.amount' ),
+				{
+					'0': 'icon-unique',
+					'1': 'icon-repeat_1',
+					'3': 'icon-repeat_3',
+					'6': 'icon-repeat_6',
+					'12': 'icon-repeat_12'
+				},
+				WMDE.FormDataExtractor.mapFromLabeledRadios( $( '#recurrence .wrap-input' ) ),
+				WMDE.FormDataExtractor.mapFromRadioInfoTexts( $( '#recurrence .wrap-field' ) ),
+				currencyFormatter
+			),
+			stateKey: [
+				'donationFormContent.amount',
+				'donationFormContent.paymentIntervalInMonths',
+				'donationInputValidation.amount' // @todo should contain amount and interval. Add neutral state
+			]
+		},
+		{
+			viewHandler: WMDE.View.SectionInfo.createPaymentTypeSectionInfo(
+				$( '.payment-method' ),
+				{
+					'PPL': 'icon-paypal',
+					'MCP': 'icon-credit_card2',
+					'BEZ': 'icon-SEPA-2',
+					'UEB': 'icon-ubeiwsung-1',
+					'SUB': 'icon-TODO' // @todo Find icon for SUB
+				},
+				WMDE.FormDataExtractor.mapFromLabeledRadios( $( '#payment-method .wrap-input' ) ),
+				WMDE.FormDataExtractor.mapFromRadioInfoTexts( $( '#payment-method .wrap-field' ) )
+			),
+			stateKey: [
+				'donationFormContent.paymentType',
+				'donationFormContent.iban',
+				'donationFormContent.bic',
+				'validity.paymentData' // @todo should contain bankData validity if applicable, too. Add neutral state
+			]
+		},
+		{
+			viewHandler: WMDE.View.SectionInfo.createDonorTypeSectionInfo(
+				$( '.donator-type' ),
+				{
+					'person': 'icon-account_circle',
+					'firma': 'icon-work',
+					'anonym': 'icon-visibility_off'
+				},
+				WMDE.FormDataExtractor.mapFromLabeledRadios( $( '#type-donator .wrap-input' ) ),
+				WMDE.FormDataExtractor.mapFromSelectOptions( $( '#country' ) )
+			),
+			stateKey: [
+				'donationFormContent.addressType',
+				'donationFormContent.salutation',
+				'donationFormContent.title',
+				'donationFormContent.firstName',
+				'donationFormContent.lastName',
+				'donationFormContent.companyName',
+				'donationFormContent.street',
+				'donationFormContent.postcode',
+				'donationFormContent.city',
+				'donationFormContent.country',
+				'donationFormContent.email',
+				'validity.address' // @todo This currently does not know "dataEntered", i.e. can not show neutral state
+			]
 		}
     ],
     store
@@ -302,86 +346,10 @@ $( function () {
     return currentState.validity.paymentData;
   }
 
-// @fixme Compare how the old skin called the handleXXX functions and restore that state. Refactor handleGroupValidations
-// @fixme Move checks from handleGroupValidations into store validator
-
-  handleGroupValidations = function () {
-    var state = store.getState();
-
-    //1st Group Amount & Periodicity
-    var amount = $('.amount'),
-      paymentMethod = $('.payment-method'),
-      donatorType = $('.donator-type');
-
-    if (state.donationFormContent.paymentIntervalInMonths >= 0) {
-      amount.addClass('completed').removeClass('disabled invalid');
-      paymentMethod.removeClass('disabled');
-      if (state.donationInputValidation.amount.dataEntered && !state.donationInputValidation.amount.isValid) {
-        amount.removeClass('completed').addClass('invalid');
-        amount.find('.periodicity-icon').removeClass().addClass('periodicity-icon icon-error');
-      }
-    }
-    else {
-      paymentMethod.addClass('disabled');
-    }
-
-    if (state.donationFormContent.paymentType) {
-      paymentMethod.addClass('completed').removeClass('disabled invalid');
-      donatorType.removeClass('disabled');
-      if (state.donationInputValidation.paymentType.dataEntered && !state.donationInputValidation.paymentType.isValid) {
-        paymentMethod.removeClass('completed').addClass('invalid');
-        paymentMethod.find('.payment-icon').removeClass().addClass('payment-icon icon-error');
-      }
-    }
-    else {
-      donatorType.addClass('disabled');
-    }
-
-    if (state.donationFormContent.addressType) {
-      donatorType.addClass('completed').removeClass('disabled invalid');
-      var validators = state.donationInputValidation;
-      if (
-        state.donationFormContent.addressType === 'personal' &&
-        (
-          (validators.email.dataEntered && !validators.email.isValid) ||
-          (validators.city.dataEntered && !validators.city.isValid) ||
-          (validators.firstName.dataEntered && !validators.firstName.isValid) ||
-          (validators.lastName.dataEntered && !validators.lastName.isValid) ||
-          (validators.street.dataEntered && !validators.street.isValid) ||
-          (validators.postcode.dataEntered && !validators.postcode.isValid) ||
-          (validators.salutation.dataEntered && !validators.salutation.isValid)
-        )
-        ||
-        state.donationFormContent.addressType === 'firma' &&
-        (
-          (validators.companyName.dataEntered && !validators.companyName.isValid) ||
-          (validators.email.dataEntered && !validators.email.isValid) ||
-          (validators.city.dataEntered && !validators.city.isValid) ||
-          (validators.street.dataEntered && !validators.street.isValid) ||
-          (validators.postcode.dataEntered && !validators.postcode.isValid)
-        )){
-        donatorType.removeClass('completed').addClass('invalid');
-        donatorType.find('.payment-icon').removeClass().addClass('payment-icon icon-error');
-      }
-    }
-
-
-    if (formDataIsValid()) {
-      $('form input[type="submit"]').removeClass('btn-unactive');
-    }
-    else {
-      $('form input[type="submit"]').addClass('btn-unactive');
-    }
-  };
-
   // connect DOM elements to actions
-  // fixme don't use interval, use form events instead? Discuss performance & other implications
-  $('input').on('click, change', WMDE.StoreUpdates.makeEventHandlerWaitForAsyncFinish( handleGroupValidations, store ) );
-  setInterval(handleGroupValidations, 1000);
 
   $('form').on('submit', function () {
     triggerValidityCheckForPersonalData();
-    handleGroupValidations();
 
     if (formDataIsValid()) {
       return true;
@@ -392,7 +360,7 @@ $( function () {
   // Set initial form values
   var initSetup = initData.data( 'initial-form-values' );
   // backend delivers amount as a german-formatted "float" string
-  initSetup.amount = WMDE.CurrencyFormatter.createCurrencyFormatter( 'de' ).parse( initSetup.amount );
+  initSetup.amount = currencyFormatter.parse( initSetup.amount );
   store.dispatch( actions.newInitializeContentAction( initSetup ) );
 
   var $introBanner = $('.introduction.banner');
