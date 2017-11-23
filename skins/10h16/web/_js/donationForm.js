@@ -30,7 +30,7 @@ $( function () {
 			WMDE.Components.createValidatingTextComponent( store, $( '#post-code' ), 'postcode' ),
 			WMDE.Components.createValidatingTextComponent( store, $( '#city' ), 'city' ),
 			WMDE.Components.createSelectMenuComponent( store, $( '#country' ), 'country' ),
-			WMDE.Components.createTextComponent( store, $( '#email' ), 'email' ),
+			WMDE.Components.createValidatingTextComponent( store, $( '#email' ), 'email' ),
 			WMDE.Components.createValidatingCheckboxComponent( store, $( '#confirm_sepa' ), 'confirmSepa' ),
 			WMDE.Components.createValidatingCheckboxComponent( store, $( '#confirm_shortterm' ), 'confirmShortTerm' )
 		],
