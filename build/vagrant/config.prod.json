@@ -77,15 +77,15 @@
 		"return-url": "https://spenden.wikimedia.de/show-donation-confirmation",
 		"testmode": true
 	},
-    "skin": {
-        "options": [
-            "10h16", "cat17"
-        ],
-        "default": "10h16",
-        "cookie-lifetime": 2592000
-    },
-    "cookie": {
-        "secure": false,
-        "httpOnly": false
-    }
+	"skin": {
+		"options": [
+			"10h16", "cat17"
+		],
+		"default": "10h16",
+		"cookie-lifetime": 2592000
+	},
+	"cookie": {
+		"secure": false,
+		"httpOnly": false
+	}
 }
