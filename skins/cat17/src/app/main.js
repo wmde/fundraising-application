@@ -8,6 +8,9 @@ module.exports = {
 	Components: require( './lib/form_components' ),
 	Store: require( './lib/store' ),
 	StoreUpdates: require( './lib/store_update_handling' ),
+	StateAggregation: {
+		allValiditySectionsAreValid: require( './lib/state_aggregation/all_validation_sections_are_valid' )
+	},
 	View: {
 		createSlidingVisibilitySwitcher: require( './lib/view_handler/element_visibility_switcher' ).createSlidingVisibilitySwitcher,
 		createSimpleVisibilitySwitcher: require( './lib/view_handler/element_visibility_switcher' ).createSimpleVisibilitySwitcher,

@@ -244,7 +244,7 @@ $( function () {
 		},
 		{
 			viewHandler: WMDE.View.createShySubmitButtonHandler( $( 'form input[type="submit"]' ) ),
-			stateKey: 'validity'
+			stateKey: [ WMDE.StateAggregation.allValiditySectionsAreValid ]
 		}
     ],
     store
