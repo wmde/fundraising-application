@@ -11,6 +11,19 @@ var createValidationDispatcherCollection = require( './validation_dispatcher_col
 
 _.mixin( require( 'underscore.path' ) );
 
+function createStateAccessors( stateKey ) {
+	var accessors = stateKey instanceof Array ? stateKey : [ stateKey ];
+	return _.map( accessors, function ( accessor ) {
+		return typeof accessor === 'string' ? function ( state ) { return  _.path( state, accessor ); } : accessor;
+	} );
+}
+
+function getStateValues( state, accessors ) {
+	return _.map( accessors, function ( accessor ) {
+		return accessor( state );
+	} );
+}
+
 module.exports = {
 	/**
 	 *
@@ -39,14 +52,17 @@ module.exports = {
 		} );
 	},
 	connectViewHandlersToStore: function ( viewHandlers, store ) {
+		var viewHandlerAccessors = _.map( viewHandlers, function ( viewHandler ) {
+			return createStateAccessors( viewHandler.stateKey );
+		} );
 		store.subscribe( function () {
 			var state = store.getState();
 			// TODO check if state has changed before executing update actions
 
-			viewHandlers.forEach( function ( viewHandlerConfig ) {
-				viewHandlerConfig.viewHandler.update.call(
+			viewHandlers.forEach( function ( viewHandlerConfig, viewHandlerIndex ) {
+				viewHandlerConfig.viewHandler.update.apply(
 					viewHandlerConfig.viewHandler,
-					_.path( state, viewHandlerConfig.stateKey )
+					getStateValues( state, viewHandlerAccessors[ viewHandlerIndex ] )
 				);
 			} );
 		} );
