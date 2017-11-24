@@ -27,6 +27,5 @@ module.exports = {
 	},
 	Actions: require( './lib/actions' ),
 	CurrencyFormatter: require( './lib/simple_currency_formatter' ),
-	createInitialStateFromViolatedFields: require( './lib/validation_conversion' ).createInitialStateFromViolatedFields,
 	FormDataExtractor: require( './lib/form_data_extractor' )
 };
