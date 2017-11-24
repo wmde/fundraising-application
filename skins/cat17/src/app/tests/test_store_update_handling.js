@@ -131,6 +131,51 @@ test( 'connect view handlers to deeply nested store values', function ( t ) {
 	t.end();
 } );
 
+test( 'connect view handlers to multiple deeply nested store values', function ( t ) {
+	var viewHandler = {
+			update: sinon.spy()
+		},
+		viewHandlerConfig = {
+			viewHandler: viewHandler,
+			stateKey: [
+				'facts.cats.number',
+				'facts.cats.owners'
+				]
+		},
+		storeData = { facts: { cats: { number: 42, owners: 3 } } },
+		store = createFakeStore( storeData );
+
+	storeUpdateHandling.connectViewHandlersToStore( [ viewHandlerConfig ], store );
+	store.fakeUpdate();
+
+	t.ok( viewHandler.update.calledOnce, 'view handler update method is only called once' );
+	t.ok( viewHandler.update.calledWith( 42, 3 ), 'view handler get passed only selected state parts' );
+	t.end();
+} );
+
+test( 'connect view handlers to custom accessor function', function ( t ) {
+	var viewHandler = {
+			update: sinon.spy()
+		},
+		viewHandlerConfig = {
+			viewHandler: viewHandler,
+			stateKey: [
+				function ( state ) {
+					return state.facts.cats.number / state.facts.cats.owners;
+				}
+			]
+		},
+		storeData = { facts: { cats: { number: 42, owners: 3 } } },
+		store = createFakeStore( storeData );
+
+	storeUpdateHandling.connectViewHandlersToStore( [ viewHandlerConfig ], store );
+	store.fakeUpdate();
+
+	t.ok( viewHandler.update.calledOnce, 'view handler update method is only called once' );
+	t.ok( viewHandler.update.calledWith( 14 ), 'view handler get passed the calculated function result' );
+	t.end();
+} );
+
 test( 'when not validating, makeEventHandlerWaitForAsyncFinish executes handler instantly ', function ( t ) {
 	var eventHandler = sinon.spy(),
 		storeData = { asynchronousRequests: { isValidating: false } },
