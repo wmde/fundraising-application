@@ -55,7 +55,7 @@ class AddDonationHandler {
 	}
 
 	private function sendTrackingDataIfNeeded( Request $request, AddDonationResponse $responseModel ) {
-		if ( $request->get( 'mbt', '' ) !== '1' || $responseModel->getDonation()->getPaymentType() !== PaymentType::PAYPAL ) {
+		if ( $request->get( 'mbt', '' ) !== '1' || !$responseModel->getDonation()->hasExternalPayment() ) {
 			return;
 		}
 
