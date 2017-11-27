@@ -10,8 +10,8 @@ use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowDonationConfirmationHandler;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplication;
+use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\FixedMembershipTokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 
 /**
  * @licence GNU GPL v2+
@@ -22,7 +22,7 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 	const CORRECT_ACCESS_TOKEN = 'justSomeToken';
 
 	private function newStoredMembershipApplication( FunFunFactory $factory ): Application {
-		$factory->setTokenGenerator( new FixedTokenGenerator(
+		$factory->setMembershipTokenGenerator( new FixedMembershipTokenGenerator(
 			self::CORRECT_ACCESS_TOKEN
 		) );
 

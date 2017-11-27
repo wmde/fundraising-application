@@ -41,7 +41,7 @@ class DonationAcceptedRouteTest extends WebRouteTestCase {
 	}
 
 	private function storeDonation( FunFunFactory $factory ): int {
-		$factory->setTokenGenerator( new FixedTokenGenerator( self::CORRECT_UPDATE_TOKEN ) );
+		$factory->setDonationTokenGenerator( new FixedTokenGenerator( self::CORRECT_UPDATE_TOKEN ) );
 
 		$donation = ValidDonation::newDirectDebitDonation();
 		$factory->getDonationRepository()->storeDonation( $donation );

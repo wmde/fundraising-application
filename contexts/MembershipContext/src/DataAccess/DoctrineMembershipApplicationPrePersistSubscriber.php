@@ -8,7 +8,7 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
 use WMDE\Fundraising\Entities\MembershipApplication;
-use WMDE\Fundraising\Frontend\Infrastructure\TokenGenerator;
+use WMDE\Fundraising\Frontend\MembershipContext\Authorization\MembershipTokenGenerator;
 use WMDE\Fundraising\Store\MembershipApplicationData;
 
 /**
@@ -22,7 +22,7 @@ class DoctrineMembershipApplicationPrePersistSubscriber implements EventSubscrib
 	private $updateTokenGenerator;
 	private $accessTokenGenerator;
 
-	public function __construct( TokenGenerator $updateTokenGenerator, TokenGenerator $accessTokenGenerator ) {
+	public function __construct( MembershipTokenGenerator $updateTokenGenerator, MembershipTokenGenerator $accessTokenGenerator ) {
 		$this->updateTokenGenerator = $updateTokenGenerator;
 		$this->accessTokenGenerator = $accessTokenGenerator;
 	}

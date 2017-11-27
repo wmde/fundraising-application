@@ -11,11 +11,11 @@ use WMDE\Fundraising\Entities\MembershipApplication;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowMembershipConfirmationHandler;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplication;
+use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\FixedMembershipTokenGenerator;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentDelayCalculator;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedPaymentDelayCalculator;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 
 /**
  * @licence GNU GPL v2+
@@ -170,7 +170,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequest_confirmationPageContainsCancellationParameters(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setTokenGenerator( new FixedTokenGenerator( self::FIXED_TOKEN ) );
+			$factory->setMembershipTokenGenerator( new FixedMembershipTokenGenerator( self::FIXED_TOKEN ) );
 
 			$client->request(
 				'POST',

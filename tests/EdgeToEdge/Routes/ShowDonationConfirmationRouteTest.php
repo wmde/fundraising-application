@@ -144,7 +144,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	}
 
 	private function newStoredDonation( FunFunFactory $factory ): Donation {
-		$factory->setTokenGenerator( new FixedTokenGenerator(
+		$factory->setDonationTokenGenerator( new FixedTokenGenerator(
 			self::CORRECT_ACCESS_TOKEN
 		) );
 
@@ -156,7 +156,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	}
 
 	private function newBookedAnonymousPayPalDonation( FunFunFactory $factory ): Donation {
-		$factory->setTokenGenerator( new FixedTokenGenerator( self::CORRECT_ACCESS_TOKEN ) );
+		$factory->setDonationTokenGenerator( new FixedTokenGenerator( self::CORRECT_ACCESS_TOKEN ) );
 		$donation = ValidDonation::newBookedAnonymousPayPalDonation();
 		$factory->getDonationRepository()->storeDonation( $donation );
 

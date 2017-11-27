@@ -35,7 +35,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequest_applicationIndicatesSuccess(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setTokenGenerator( new FixedTokenGenerator(
+			$factory->setDonationTokenGenerator( new FixedTokenGenerator(
 				self::UPDATE_TOKEN,
 				\DateTime::createFromFormat( 'Y-m-d H:i:s', '2039-12-31 23:59:59' )
 			) );
