@@ -716,7 +716,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	public function testWhenMobileTrackingIsRequested_piwikTrackerIsNotCalledForNonPaypalPayment(): void {
+	public function testWhenMobileTrackingIsRequested_piwikTrackerIsNotCalledForNonExternalPayment(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setNullMessenger();
 			$client->followRedirects( false );
@@ -730,7 +730,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 				'POST',
 				'/donation/add',
 				array_merge(
-					$this->newValidCreditCardInput(),
+					$this->newValidBankTransferInput(),
 					['mbt' => '1']
 				)
 			);
