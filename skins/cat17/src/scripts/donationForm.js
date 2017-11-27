@@ -17,7 +17,7 @@ $( function () {
 		  WMDE.IntegerCurrency.createCurrencyFormatter( 'de' )
       ),
       WMDE.Components.createRadioComponent( store, $('input[name="zahlweise"]'), 'paymentType' ),
-      WMDE.Components.createPaymentIntervalComponent( store, $('input[name="intervalType"]'), $('input[name="periode"]') ),
+      WMDE.Components.createRadioComponent( store, $('input[name="periode"]' ), 'paymentIntervalInMonths' ),
       WMDE.Components.createBankDataComponent( store, {
         ibanElement: $( '#iban' ),
         bicElement: $( '#bic' ),
