@@ -18,6 +18,7 @@ var objectAssign = require( 'object-assign' ),
 
 		update: function ( state ) {
 			_.each( this.elements, function ( feeOption ) {
+				// TODO no need to parseFloat when fee is converted to integer
 				var shouldBeDisabled = this.minimumFee[ state.addressType ] > feePerMonth( state.paymentIntervalInMonths, parseFloat( feeOption.val() ) ) ;
 
 				if ( shouldBeDisabled ) {

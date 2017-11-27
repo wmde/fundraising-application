@@ -16,7 +16,14 @@ $( function () {
       WMDE.Components.createRadioComponent( store, $( 'input[name="membership_type"]' ), 'membershipType' ),
 
       //Amount and periodicity
-      WMDE.Components.createAmountComponent( store, $( '#amount-typed' ), $( 'input[name="amount-grp"]' ), $( '#amount-hidden' ) ),
+		WMDE.Components.createAmountComponent(
+			store,
+			$( '#amount-typed' ),
+			$( 'input[name="amount-grp"]' ),
+			$( '#amount-hidden'),
+			WMDE.IntegerCurrency.createCurrencyParser( 'de' ),
+			WMDE.IntegerCurrency.createCurrencyFormatter( 'de' )
+		),
       WMDE.Components.createRadioComponent( store, $( 'input[name="periode"]' ), 'paymentIntervalInMonths' ),
 
       //Personal data
@@ -130,7 +137,7 @@ $( function () {
           $( '.payment-method .text'),
 			WMDE.FormDataExtractor.mapFromLabeledRadios( $( '#recurrence .wrap-input' ) ),
 			WMDE.FormDataExtractor.mapFromLabeledRadios( $( '#payment-method .wrap-input' ) ),
-          WMDE.CurrencyFormatter.createCurrencyFormatter( 'de' ),
+          WMDE.IntegerCurrency.createCurrencyFormatter( 'de' ),
           $('.periodicity-icon'),
           {
             '0': 'icon-unique',
@@ -463,6 +470,7 @@ $( function () {
   store.dispatch( actions.newAddPageAction( 'bankConfirmation' ) );
 
   // Set initial form values
+    // TODO use IntegerCurrency to parse amount
   store.dispatch( actions.newInitializeContentAction( initData.data( 'initial-form-values' ) ) );
 
 	// Set initial validation state

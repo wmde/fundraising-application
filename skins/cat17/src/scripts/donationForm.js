@@ -3,13 +3,19 @@ $( function () {
 
   var initData = $( '#init-form' ),
     store = WMDE.Store.createDonationStore(),
-    actions = WMDE.Actions,
-		currencyFormatter = WMDE.CurrencyFormatter.createCurrencyFormatter( 'de' )
-	;
+    actions = WMDE.Actions
+    ;
 
   WMDE.StoreUpdates.connectComponentsToStore(
     [
-      WMDE.Components.createAmountComponent( store, $('#amount-typed'), $( '.wrap-amounts input[type="radio"]' ), $( '#amount-hidden' ) ),
+      WMDE.Components.createAmountComponent(
+          store,
+          $( '#amount-typed' ),
+          $( '.wrap-amounts input[type="radio"]' ),
+          $( '#amount-hidden'),
+          WMDE.IntegerCurrency.createCurrencyParser( 'de' ),
+		  WMDE.IntegerCurrency.createCurrencyFormatter( 'de' )
+      ),
       WMDE.Components.createRadioComponent( store, $('input[name="zahlweise"]'), 'paymentType' ),
       WMDE.Components.createPaymentIntervalComponent( store, $('input[name="intervalType"]'), $('input[name="periode"]') ),
       WMDE.Components.createBankDataComponent( store, {
@@ -47,7 +53,10 @@ $( function () {
     function ( initialValues ) {
       return [
         WMDE.ValidationDispatchers.createAmountValidationDispatcher(
-          WMDE.FormValidation.createAmountValidator( initData.data( 'validate-amount-url' ) ),
+          WMDE.FormValidation.createAmountValidator(
+              initData.data( 'validate-amount-url' ),
+              WMDE.IntegerCurrency.createCurrencyFormatter( 'de' )
+           ),
           initialValues
         ),
         WMDE.ValidationDispatchers.createAddressValidationDispatcher(
@@ -233,7 +242,7 @@ $( function () {
 				},
 				WMDE.FormDataExtractor.mapFromLabeledRadios( $( '#recurrence .wrap-input' ) ),
 				WMDE.FormDataExtractor.mapFromRadioInfoTexts( $( '#recurrence .wrap-field' ) ),
-				currencyFormatter
+				WMDE.IntegerCurrency.createCurrencyFormatter( 'de' )
 			),
 			stateKey: [
 				'donationFormContent.amount',
@@ -310,7 +319,7 @@ $( function () {
   // Set initial form values
   var initSetup = initData.data( 'initial-form-values' );
   // backend delivers amount as a german-formatted "float" string
-  initSetup.amount = currencyFormatter.parse( initSetup.amount );
+  initSetup.amount = WMDE.IntegerCurrency.createCurrencyParser( 'de' ).parse( initSetup.amount );
   store.dispatch( actions.newInitializeContentAction( initSetup ) );
 
 	// Set initial validation state

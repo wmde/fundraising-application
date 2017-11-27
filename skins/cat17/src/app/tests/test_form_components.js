@@ -148,6 +148,11 @@ test( 'Rendering the amount component with custom amount clears selection and se
 	var textElement = createSpyingElement(),
 		selectElement = createSpyingElement(),
 		hiddenElement = createSpyingElement(),
+		parser = sinon.stub().returnsArg(0),
+		dummyFormatter = { format: function ( v ) {
+			return "XX" + v + "YY";
+
+		} },
 		store = {},
 		parent = {
 			addClass: sinon.spy()
@@ -158,18 +163,19 @@ test( 'Rendering the amount component with custom amount clears selection and se
 		return parent;
 	};
 
-	var component = formComponents.createAmountComponent( store, textElement, selectElement, hiddenElement );
+	var component = formComponents.createAmountComponent( store, textElement, selectElement, hiddenElement, parser, dummyFormatter );
 
-	component.render( { amount: '23,00', isCustomAmount: true } );
+	component.render( { amount: 2300, isCustomAmount: true } );
 
 	t.ok( textElement.val.calledOnce, 'value is set once' );
-	t.ok( textElement.val.calledWith( '23,00' ) );
+
+	t.ok( textElement.val.calledWith( 'XX2300YY' ) );
 	t.ok( parent.addClass.withArgs( 'filled' ).calledOnce );
 	t.ok( selectElement.val.callCount === 0, 'select element value is not set' );
 	t.ok( selectElement.prop.calledOnce, 'property was set' );
 	t.ok( selectElement.prop.calledWith( 'checked', false ), 'check property was removed' );
 	t.ok( hiddenElement.val.calledOnce, 'hidden element value is set' );
-	t.ok( hiddenElement.val.calledWith( '23,00' ), 'hidden element value is set' );
+	t.ok( hiddenElement.val.calledWith( 'XX2300YY' ), 'hidden element value is set' );
 
 	t.end();
 } );
@@ -178,6 +184,11 @@ test( 'Rendering the amount component with non-custom amount sets the hidden fie
 	var textElement = createSpyingElement(),
 		selectElement = createSpyingElement(),
 		hiddenElement = createSpyingElement(),
+		parser = sinon.stub().returnsArg(0),
+		dummyFormatter = { format: function ( v ) {
+			return "XX" + v + "YY";
+
+		} },
 		store = {},
 		parent = {
 			removeClass: sinon.stub()
@@ -188,30 +199,34 @@ test( 'Rendering the amount component with non-custom amount sets the hidden fie
 		return parent;
 	};
 
-	var component = formComponents.createAmountComponent( store, textElement, selectElement, hiddenElement );
+	var component = formComponents.createAmountComponent( store, textElement, selectElement, hiddenElement, parser, dummyFormatter );
 
-	component.render( { amount: '50,00', isCustomAmount: false } );
+	component.render( { amount: 5000, isCustomAmount: false } );
 
 	t.ok( textElement.val.calledOnce, 'value is cleared' );
 	t.ok( textElement.val.calledWith( '' ) );
 	t.ok( parent.removeClass.withArgs( 'filled' ).calledOnce );
 	t.ok( selectElement.val.calledOnce, 'select element value is set' );
-	t.ok( selectElement.val.calledWith( [ '50,00' ] ), 'select element value is set' ); // needs to be array for selects
+	t.ok( selectElement.val.calledWith( [ '5000' ] ), 'select element value is set' ); // needs to be array for selects
 	t.ok( hiddenElement.val.calledOnce, 'hidden element value is set' );
-	t.ok( hiddenElement.val.calledWith( '50,00' ), 'hidden element value is set' );
+	t.ok( hiddenElement.val.calledWith( 'XX5000YY' ), 'hidden element value is set' );
 	t.end();
 } );
 
-test( 'Changing the amount selection dispatches select action', function ( t ) {
+test( 'Changing the amount selection dispatches select action with parsedContent', function ( t ) {
 	var textElement = createSpyingElement(),
 		selectElement = createSpyingElement(),
+		hiddenElement = createSpyingElement(),
+		dummyAmountParser = { parse: function( value ) {
+			return 'XX' + value + 'YY';
+		} },
 		store = {
 			dispatch: sinon.spy()
 		},
 		fakeEvent = { target: { value: '50,00' } },
-		expectedAction = { type: 'SELECT_AMOUNT', payload: { amount: '50,00' } };
+		expectedAction = { type: 'SELECT_AMOUNT', payload: { amount: 'XX50,00YY' } };
 
-	formComponents.createAmountComponent( store, textElement, selectElement );
+	formComponents.createAmountComponent( store, textElement, selectElement, hiddenElement, dummyAmountParser );
 
 	t.ok( selectElement.on.calledOnce, 'event handler is attached' );
 
@@ -223,21 +238,25 @@ test( 'Changing the amount selection dispatches select action', function ( t ) {
 	t.end();
 } );
 
-test( 'Changing the amount input dispatches select action', function ( t ) {
+test( 'Changing the amount input dispatches input action with parsed content', function ( t ) {
 	var textElement = createSpyingElement(),
 		selectElement = createSpyingElement(),
+		hiddenElement = createSpyingElement(),
+		dummyAmountParser = { parse: function( value ) {
+			return 'XX' + value + 'YY';
+		} },
 		store = {
 			dispatch: sinon.spy()
 		},
 		fakeEvent = { target: { value: '99,99' } },
-		expectedAction = { type: 'INPUT_AMOUNT', payload: { amount: '99,99' } };
+		expectedAction = { type: 'INPUT_AMOUNT', payload: { amount: 'XX99,99YY' } };
 
-	formComponents.createAmountComponent( store, textElement, selectElement );
+	formComponents.createAmountComponent( store, textElement, selectElement, hiddenElement, dummyAmountParser );
 
-	t.ok( textElement.on.calledOnce, 'event handler is attached' );
+	t.ok( textElement.on.withArgs( 'change' ).calledOnce, 'text input event handler is attached' );
 
 	// simulate event trigger by calling event handling function
-	textElement.on.args[ 0 ][ 1 ]( fakeEvent );
+	textElement.on.withArgs( 'change' ).args[ 0 ][ 1 ]( fakeEvent );
 
 	t.ok( store.dispatch.calledOnce, 'event handler triggers store update' );
 	t.deepEqual( store.dispatch.args[ 0 ][ 0 ], expectedAction, 'event handler generates the correct action' );

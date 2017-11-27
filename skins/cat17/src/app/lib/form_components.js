@@ -70,23 +70,16 @@ var objectAssign = require( 'object-assign' ),
 		inputElement: null,
 		selectElement: null,
 		hiddenElement: null,
+		numberFormatter: null,
 		render: function ( formContent ) {
-			// @todo mv into GermanCurrencyFormatter or similar
-			var germanFloatFromMixedAmountFormatter = function ( amount ) {
-				// @todo Make state always carry float (or money object), not sometimes string
-				amount = parseFloat( amount );
-				// @todo toFixed is a bad idea™ (https://stackoverflow.com/a/661757)
-				amount = amount.toFixed( 2 );
-				return amount.replace( '.', ',' );
-			};
-			this.hiddenElement.val( germanFloatFromMixedAmountFormatter( formContent.amount ) );
+			this.hiddenElement.val( this.numberFormatter.format( formContent.amount ) );
 			if ( formContent.isCustomAmount ) {
 				this.inputElement.parent().addClass( 'filled' );
 				this.selectElement.prop( 'checked', false );
-				this.inputElement.val( formContent.amount );
+				this.inputElement.val( this.numberFormatter.format( formContent.amount ) );
 			} else {
 				this.inputElement.parent().removeClass( 'filled' );
-				this.selectElement.val( [ formContent.amount ] );
+				this.selectElement.val( [ String( formContent.amount ) ] );
 				this.inputElement.val( '' );
 			}
 		}
@@ -187,18 +180,23 @@ module.exports = {
 		return component;
 	},
 
-	createAmountComponent: function ( store, inputElement, selectElement, hiddenElement ) {
+	createAmountComponent: function ( store, inputElement, selectElement, hiddenElement, numberParser, numberFormatter ) {
 		var component = objectAssign( Object.create( AmountComponent ), {
 			inputElement: inputElement,
 			selectElement: selectElement,
-			hiddenElement: hiddenElement
+			hiddenElement: hiddenElement,
+			numberFormatter: numberFormatter
 		} );
-		NumericInputHandler.attach( inputElement );
+		NumericInputHandler.createNumericInputHandler( inputElement, numberParser.delimiter );
 		inputElement.on( 'change', function ( evt ) {
-			store.dispatch( actions.newInputAmountAction( evt.target.value ) );
+			store.dispatch( actions.newInputAmountAction(
+				numberParser.parse( evt.target.value )
+			) );
 		} );
 		selectElement.on( 'change', function ( evt ) {
-			store.dispatch( actions.newSelectAmountAction( evt.target.value ) );
+			store.dispatch( actions.newSelectAmountAction(
+				numberParser.parse( evt.target.value )
+			) );
 		} );
 		return component;
 	},

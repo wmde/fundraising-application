@@ -1,7 +1,9 @@
 {% spaceless %}
 {% for amount in presetAmounts %}
 	<div class="wrap-radio">
-		<input type="radio" id="amount{$ loop.index $}" value="{$ amount $}">
+		{# Amount value needs to be multiplied with 100 because the JavaScript uses integer cent amounts #}
+		{# TODO use proper money objects for predefined amounts in templates #}
+		<input type="radio" id="amount{$ loop.index $}" value="{$ amount * 100 $}">
 		<label for="amount{$ loop.index $}">{$ amount $} €</label>
 	</div>
 {% endfor %}

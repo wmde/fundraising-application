@@ -29,6 +29,6 @@ module.exports = {
 		Animator: require( './lib/view_handler/animator' )
 	},
 	Actions: require( './lib/actions' ),
-	CurrencyFormatter: require( './lib/simple_currency_formatter' ),
-	FormDataExtractor: require( './lib/form_data_extractor' )
+	FormDataExtractor: require( './lib/form_data_extractor' ),
+	IntegerCurrency: require( './lib/integer_currency' )
 };

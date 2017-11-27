@@ -10,6 +10,7 @@ test( 'Amount validation sends values to server', function ( t ) {
 		postFunctionSpy = sinon.stub().returns( Promise.resolve( positiveResult ) ),
 		amountValidator = validation.createAmountValidator(
 			'http://spenden.wikimedia.org/validate-amount',
+			{ format: sinon.stub().returnsArg( 0 ) },
 			postFunctionSpy
 		),
 		callParameters, validationResult;
@@ -32,17 +33,17 @@ test( 'Amount validation sends nothing to server if any of the necessary values 
 		postFunctionSpy = sinon.spy(),
 		amountValidator = validation.createAmountValidator(
 			'http://spenden.wikimedia.org/validate-amount',
+			{ format: sinon.stub().returnsArg( 0 ) },
 			postFunctionSpy
 		),
 		validationResults = [];
 
 	// Test multiple empty values
 	validationResults.push( amountValidator.validate( { amount: 0, paymentType: 'BEZ', otherStuff: 'foo' } ) );
-	validationResults.push( amountValidator.validate( { amount: '0,00', paymentType: 'BEZ', otherStuff: 'foo' } ) );
 	validationResults.push( amountValidator.validate( { amount: 23, paymentType: null, otherStuff: 'foo' } ) );
 
 	t.notOk( postFunctionSpy.called, 'no data is sent ' );
-	t.deepEquals( [ incompleteResult, incompleteResult, incompleteResult ], validationResults, 'validation function returns incomplete result' );
+	t.deepEquals( [ incompleteResult, incompleteResult ], validationResults, 'validation function returns incomplete result' );
 	t.end();
 } );
 
