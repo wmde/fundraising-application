@@ -23,7 +23,7 @@ use WMDE\Fundraising\Frontend\App\RouteHandlers\SofortNotificationHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\PayPalNotificationHandlerForMembershipFee;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\RouteRedirectionHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowDonationConfirmationHandler;
-use WMDE\Fundraising\Frontend\App\RouteHandlers\ValidateAddressHandler;
+use WMDE\Fundraising\Frontend\App\RouteHandlers\ValidateDonorHandler;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonorAddress;
@@ -77,7 +77,7 @@ $app->post(
 $app->post(
 	'validate-address', // Validates donor information. This route is named badly.
 	function( Request $request ) use ( $app, $ffFactory ) {
-		return ( new ValidateAddressHandler( $ffFactory, $app ) )->handle( $request );
+		return ( new ValidateDonorHandler( $ffFactory, $app ) )->handle( $request );
 	}
 );
 

@@ -58,9 +58,7 @@ use WMDE\Fundraising\Frontend\DonationContext\UseCases\HandlePayPalPaymentNotifi
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\ListComments\ListCommentsUseCase;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\ShowDonationConfirmation\ShowDonationConfirmationUseCase;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\SofortPaymentNotification\SofortPaymentNotificationUseCase;
-use WMDE\Fundraising\Frontend\DonationContext\Validation\DonorAddressValidator;
-use WMDE\Fundraising\Frontend\DonationContext\Validation\DonorNameValidator;
-use WMDE\Fundraising\Frontend\DonationContext\Validation\DonorValidator;
+use WMDE\Fundraising\Frontend\DonationContext\UseCases\ValidateDonor\ValidateDonorUseCase;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder;
@@ -964,10 +962,8 @@ class FunFunFactory {
 		);
 	}
 
-	public function newDonorValidator(): DonorValidator {
-		return new DonorValidator(
-			new DonorNameValidator(),
-			new DonorAddressValidator(),
+	public function newValidateDonorUseCase(): ValidateDonorUseCase {
+		return new ValidateDonorUseCase(
 			$this->getEmailValidator()
 		);
 	}

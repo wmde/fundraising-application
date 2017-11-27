@@ -42,7 +42,7 @@ class ValidateAddressRouteTest extends WebRouteTestCase {
 		$expectedResponse = [
 			'status' => 'ERR',
 			'messages' => [
-				'company' => 'field_required'
+				'companyName' => 'missing'
 			]
 		];
 		$this->assertJsonSuccessResponse( $expectedResponse, $response );
