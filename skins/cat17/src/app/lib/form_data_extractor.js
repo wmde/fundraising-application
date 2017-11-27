@@ -1,19 +1,21 @@
 'use strict';
 
+var _ = require( 'underscore' );
+
 module.exports = {
 	mapFromSelectOptions: function( $select ) {
 		var map = {};
-		$( 'option', $select ).each( function( i, option ) {
+		_.each( $select.find( 'option' ).get(), function( option ) {
 			option = $( option );
-			map[ option.attr( 'value' ) ] = option.text();
+			map[ option.attr( 'value' ) ] = option.text().trim();
 		} );
 		return map;
 	},
-	mapFromLabeledRadios: function( $container ) {
+	mapFromRadioLabels: function( $container ) {
 		var map = {};
-		$( 'input', $container ).each( function( i, input ) {
+		_.each( $container.find( 'input[type="radio"]' ).get(), function( input ) {
 			input = $( input );
-			map[ input.attr( 'value' ) ] = input.next( 'label' ).text();
+			map[ input.attr( 'value' ) ] = input.next( 'label' ).text().trim();
 		} );
 		return map;
 	},
@@ -22,9 +24,9 @@ module.exports = {
 	 */
 	mapFromRadioInfoTexts: function( $container ) {
 		var map = {};
-		$( '.wrap-input input', $container ).each( function( i, input ) {
+		_.each( $container.find( '.wrap-input input[type="radio"]' ).get(), function( input ) {
 			input = $( input );
-			map[ input.attr( 'value' ) ] = input.parents( '.wrap-field' ).data( 'info-text' );
+			map[ input.attr( 'value' ) ] = input.parents( '.wrap-field' ).data( 'info-text' ).trim();
 		} );
 		return map;
 	}
