@@ -14,7 +14,7 @@ function newChangeContentAction( field, newValue ) {
 	};
 }
 
-test( 'If an optional field is emptied, its validity status is reset', function ( t ) {
+test( 'If an optional field content changes to empty, the validity status is reset', function ( t ) {
 	var stateBefore = {
 			phoneNumber: { dataEntered: true, isValid: true }
 		},
