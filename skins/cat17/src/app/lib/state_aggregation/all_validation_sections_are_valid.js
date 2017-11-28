@@ -1,6 +1,5 @@
-var _ = require( 'underscore' )
+'use strict';
 
 module.exports = function ( state ) {
-	'use strict';
-	return !_.contains( state.validity, false )
+	return ( state.validity.paymentData === true && state.validity.address === true && state.validity.bankData !== false );
 };

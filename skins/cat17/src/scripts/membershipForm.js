@@ -123,6 +123,7 @@ $( function () {
 			stateKey: 'membershipFormContent.paymentIntervalInMonths'
 		},
       {
+        // @todo Use WMDE.View.SectionInfo.* instead
         viewHandler: WMDE.View.createPaymentSummaryDisplayHandler(
 			$( '.frequency .text' ),
           $( '.amount .text'),
