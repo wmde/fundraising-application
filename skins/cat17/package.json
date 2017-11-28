@@ -9,9 +9,9 @@
   },
   "scripts": {
     "watch": "gulp watch",
-    "test": "echo 'todo: test' && exit 0",
+    "test": "tape 'src/app/tests/**/*.js' | tap-min",
     "cs": "echo 'todo: cs' && exit 0",
-    "ci": "echo 'todo: ci' && exit 0",
+    "ci": "npm run cs && npm run test && npm run build-assets",
     "build-assets": "gulp"
   },
   "repository": {
