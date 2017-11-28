@@ -14,32 +14,6 @@ function getInvalidKeys( state, initialState ) {
   return _.keys( _.omit( state, _.keys( initialState ) ) );
 }
 
-function clearFieldsIfAddressTypeChanges( newState, payload ) {
-  if ( payload.contentName !== 'addressType'  ) {
-    return;
-  }
-  switch ( payload.value ) {
-    case 'person':
-      newState.companyName = '';
-      break;
-    case 'firma':
-      newState.salutation = '';
-      newState.title = '';
-      break;
-    case 'anonym':
-      newState.salutation = '';
-      newState.title = '';
-      newState.companyName = '';
-      newState.firstName = '';
-      newState.lastName = '';
-      newState.street = '';
-      newState.postcode = '';
-      newState.city = '';
-      newState.email = '';
-      break;
-  }
-}
-
 function setPaymentType(newState, payload) {
   if (typeof payload.value !== 'string') {
     return;
@@ -96,7 +70,6 @@ module.exports = {
           throw new Error( 'Unsupported form content name: ' + action.payload.contentName );
         }
         newState = _.clone( state );
-        clearFieldsIfAddressTypeChanges( newState, action.payload );
 
         if ( _.isString( action.payload.value ) ) {
           newState[ action.payload.contentName ] = trimValue( action.payload.value );
