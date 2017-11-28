@@ -65,3 +65,11 @@
 		margin-top: -150px;
 	}
 }
+
+@media print {
+	.page-donation-confirmation {
+		.transfer-data-list dd {
+			font-family: monospace;
+		}
+	}
+}

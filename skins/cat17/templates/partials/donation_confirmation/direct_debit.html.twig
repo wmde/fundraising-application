@@ -31,7 +31,7 @@
             {% endif %}
 
         </div>
-        <div class="action-block col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-0 col-md-4">
+        <div class="action-block col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-0 col-md-4 hidden-print">
             <ul class="list-menu link-back list-unstyled">
                 <li><a href="#TODO" class="">Spende Ihr SEPA-Mandat können Sie hier einsehen</a></li>
                 <li class="cancel">
@@ -50,7 +50,7 @@
         </div>
     </div>
 </div>
-<div class="switch-container container-fluid container">
+<div class="switch-container container-fluid container hidden-print">
     <div class="row">
         <div class="col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-8 col-md-4">
             <a href="{$ basepath $}/apply-for-membership" class="btn btn-introduction bk-blue text-center text-uppercase">
@@ -59,12 +59,15 @@
         </div>
     </div>
 </div>
-<div class="container">
+<div class="container hidden-print">
     <div class="row">
         <nav class="menu menu-footer col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-8 col-md-4">
             <ul class="list-menu list-unstyled">
                 <li><a href="{$ basepath $}/comment/new"><span>{$ "add_donation_comment" | trans $}</span></a></li>
                 {% include 'partials/share_on_social_networks.html.twig' %}
+				{% include 'partials/donation_confirmation/link_print.html.twig' with {
+					'label': 'donation_confirmation_print_confirmation' | trans
+				} only %}
             </ul>
         </nav>
     </div>

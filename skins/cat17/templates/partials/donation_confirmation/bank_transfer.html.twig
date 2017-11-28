@@ -83,20 +83,23 @@
             {% endif %}
 
         </div>
-        <div class="side col-md-4 visible-md visible-lg">
+        <div class="side col-md-4 visible-md visible-lg hidden-print">
             <a href="{$ basepath $}/apply-for-membership" class="btn btn-introduction btn-side bk-blue text-center text-uppercase">
                 {$ "donation_confirmation_apply_for_membership" | trans $}
             </a>
             <nav class="menu menu-footer">
                 <ul class="list-menu list-unstyled">
                     {% include 'partials/share_on_social_networks.html.twig' %}
+					{% include 'partials/donation_confirmation/link_print.html.twig' with {
+						'label': 'donation_confirmation_print_summary' | trans
+					} only %}
                 </ul>
             </nav>
         </div>
     </div>
 </div>
 
-<div class="visible-xs visible-sm">
+<div class="visible-xs visible-sm hidden-print">
     <div class="switch-container container-fluid container">
         <div class="row">
             <div class="col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-8 col-md-4">
@@ -111,6 +114,9 @@
             <nav class="menu menu-footer col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-8 col-md-4">
                 <ul class="list-menu list-unstyled">
                     {% include 'partials/share_on_social_networks.html.twig' %}
+					{% include 'partials/donation_confirmation/link_print.html.twig' with {
+						'label': 'donation_confirmation_print_summary' | trans
+					} only %}
                 </ul>
             </nav>
         </div>

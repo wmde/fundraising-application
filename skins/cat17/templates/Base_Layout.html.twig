@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" class="client-nojs">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title>Spenden für Freies Wissen - Wikimedia Fördergesellschaft</title>
+
+	<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
 
 	<meta name="format-detection" content="telephone=no" />
 	<meta name="title" content="Spenden für Freies Wissen - Wikimedia Fördergesellschaft" />
@@ -21,7 +23,6 @@
 	<!--build:css css/styles.min.css-->
 	<link rel="stylesheet" href="{$ basepath $}/skins/cat17/scripts/vendor/jcf/jcf.css">
 	<link rel="stylesheet" href="{$ basepath $}/skins/cat17/css/main.css">
-	<link rel="stylesheet" href="{$ basepath $}/skins/cat17/css/print.css" media="print">
 	<!--endbuild-->
 </head>
 <body class="{% block page_theme %}theme-donation{% endblock %}">
