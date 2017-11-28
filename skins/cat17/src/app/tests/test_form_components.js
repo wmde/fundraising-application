@@ -213,7 +213,7 @@ test( 'Rendering the amount component with non-custom amount sets the hidden fie
 	t.end();
 } );
 
-test( 'Changing the amount selection dispatches select action with parsedContent', function ( t ) {
+test( 'Changing the amount selection dispatches select action with selected value', function ( t ) {
 	var textElement = createSpyingElement(),
 		selectElement = createSpyingElement(),
 		hiddenElement = createSpyingElement(),
@@ -223,8 +223,8 @@ test( 'Changing the amount selection dispatches select action with parsedContent
 		store = {
 			dispatch: sinon.spy()
 		},
-		fakeEvent = { target: { value: '50,00' } },
-		expectedAction = { type: 'SELECT_AMOUNT', payload: { amount: 'XX50,00YY' } };
+		fakeEvent = { target: { value: 5000 } },
+		expectedAction = { type: 'SELECT_AMOUNT', payload: { amount: 5000 } };
 
 	formComponents.createAmountComponent( store, textElement, selectElement, hiddenElement, dummyAmountParser );
 

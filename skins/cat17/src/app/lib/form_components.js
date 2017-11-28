@@ -194,9 +194,7 @@ module.exports = {
 			) );
 		} );
 		selectElement.on( 'change', function ( evt ) {
-			store.dispatch( actions.newSelectAmountAction(
-				numberParser.parse( evt.target.value )
-			) );
+			store.dispatch( actions.newSelectAmountAction( evt.target.value ) );
 		} );
 		return component;
 	},
