@@ -186,7 +186,7 @@
 			}
 			a {
 				color: $text-color;
-				border-bottom: 2px solid transparent;
+				border-bottom: 1px solid transparent;
 				@include bkp(md) {
 					padding: 0 5px 31px;
 				}
