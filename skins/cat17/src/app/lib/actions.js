@@ -95,15 +95,6 @@ module.exports = {
 		};
 	},
 
-	newResetFieldValidityAction: function ( affectedFields ) {
-		return {
-			type: 'RESET_FIELD_VALIDITY',
-			payload: {
-				affectedFields: affectedFields
-			}
-		};
-	},
-
 	/**
 	 *
 	 * @param {Object|Promise} validationResult
