@@ -2,7 +2,6 @@
 node_modules
 dist
 .sass-cache
-package-lock.json
 src/build/*
 src/css/main.css
 src/css/main.css.map
