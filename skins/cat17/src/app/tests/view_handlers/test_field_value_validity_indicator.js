@@ -1,6 +1,6 @@
 'use strict';
 
-var test = require( 'tape' ),
+var test = require( 'tape-catch' ),
 	sinon = require( 'sinon' ),
 	fieldValueValidityIndicator = require( '../../lib/view_handler/field_value_validity_indicator' ),
 	createValidityIndicator = fieldValueValidityIndicator.createFieldValueValidityIndicator;

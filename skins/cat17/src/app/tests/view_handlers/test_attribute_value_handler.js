@@ -1,6 +1,6 @@
 'use strict';
 
-var test = require( 'tape' ),
+var test = require( 'tape-catch' ),
 	sinon = require( 'sinon' ),
 	attributeValueHandler = require( '../../lib/view_handler/country_specific_attributes' ),
 	createAttributeValueHandler = attributeValueHandler.createCountrySpecificAttributesHandler,

@@ -1,6 +1,6 @@
 'use strict';
 
-var test = require( 'tape' ),
+var test = require( 'tape-catch' ),
 	sinon = require( 'sinon' ),
 	SuboptionDisplayHandler = require( '../../lib/view_handler/display_field_suboptions' )
 ;

@@ -1,6 +1,6 @@
 'use strict';
 
-var test = require( 'tape' ),
+var test = require( 'tape-catch' ),
 	sinon = require( 'sinon' ),
 	visibilitySwitching = require( '../../lib/view_handler/element_visibility_switcher' ),
 	createElementCustomVisibilityHandler = visibilitySwitching.createCustomVisibilitySwitcher,

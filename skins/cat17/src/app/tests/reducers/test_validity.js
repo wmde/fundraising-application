@@ -1,6 +1,6 @@
 'use strict';
 
-var test = require( 'tape' ),
+var test = require( 'tape-catch' ),
 	deepFreeze = require( 'deep-freeze' ),
 	validity = require( '../../lib/reducers/validity' );
 

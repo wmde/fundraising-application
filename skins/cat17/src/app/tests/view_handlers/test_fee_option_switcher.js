@@ -1,6 +1,6 @@
 'use strict';
 
-var test = require( 'tape' ),
+var test = require( 'tape-catch' ),
 	sinon = require( 'sinon' ),
 	feeOptionSwitcher = require( '../../lib/view_handler/fee_option_switcher' ),
 	createFeeOptionSwitcher = feeOptionSwitcher.createFeeOptionSwitcher;

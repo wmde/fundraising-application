@@ -1,6 +1,6 @@
 'use strict';
 
-var test = require( 'tape' ),
+var test = require( 'tape-catch' ),
 	actions = require( '../lib/actions' );
 
 test( 'newAddPageAction returns action object', function ( t ) {

@@ -1,6 +1,6 @@
 'use strict';
 
-var test = require( 'tape' ),
+var test = require( 'tape-catch' ),
 	sinon = require( 'sinon' ),
 	Actions = require( '../../lib/actions' ),
 	createAmountValidationDispatcher = require( '../../lib/validation_dispatchers/amount' ),
