@@ -14,16 +14,18 @@ function getInvalidKeys( state, initialState ) {
   return _.keys( _.omit( state, _.keys( initialState ) ) );
 }
 
-function setPaymentType(newState, payload) {
-  if (typeof payload.value !== 'string') {
-    return;
-  }
-  if ( (payload.contentName === 'iban' || payload.contentName === 'bic') && trimValue(payload.value) ) {
-    newState.debitType = "sepa";
-  }
-  else if ( (payload.contentName !== 'accountNumber' || payload.contentName === 'bankCode') && trimValue(payload.value)) {
-    newState.debitType = "non-sepa";
-  }
+function forceDebitTypeByBankData( state, payload ) {
+	if ( typeof payload.value !== 'string' ) {
+		return state;
+	}
+
+	if ( ( payload.contentName === 'iban' || payload.contentName === 'bic' ) && trimValue( payload.value ) ) {
+		return objectAssign( {}, state, { debitType: 'sepa' } );
+	} else if ( ( payload.contentName === 'accountNumber' || payload.contentName === 'bankCode' ) && trimValue( payload.value ) ) {
+		return objectAssign( {}, state, { debitType: 'non-sepa' } );
+	}
+
+	return state;
 }
 
 function forcePersonalDataForDirectDebit( state ) {
@@ -77,7 +79,7 @@ module.exports = {
           newState[ action.payload.contentName ] = action.payload.value;
         }
 
-        setPaymentType(newState, action.payload);
+        newState = forceDebitTypeByBankData( newState, action.payload );
 
         newState = forcePersonalDataForDirectDebit( newState );
         newState = forceAddressTypeForActiveMembership( newState );
