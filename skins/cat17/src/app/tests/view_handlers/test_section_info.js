@@ -1,6 +1,6 @@
 'use strict';
 
-var test = require( 'tape' ),
+var test = require( 'tape-catch' ),
 	sinon = require( 'sinon' ),
 	objectAssign = require( 'object-assign' ),
 	SectionInfo = require( '../../lib/view_handler/section_info' ),

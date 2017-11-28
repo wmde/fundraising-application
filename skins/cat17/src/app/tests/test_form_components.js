@@ -1,7 +1,7 @@
 
 'use strict';
 
-var test = require( 'tape' ),
+var test = require( 'tape-catch' ),
 	sinon = require( 'sinon' ),
 	formComponents = require( '../lib/form_components' ),
 	createSpyingElement = function () {

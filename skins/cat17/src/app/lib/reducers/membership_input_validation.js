@@ -25,7 +25,10 @@ var _ = require( 'underscore' ),
     bankCode: _.clone( defaultFields ),
     contactPerson: _.clone( defaultFields )
   },
-  optionalFields = [],
+  optionalFields = [
+		// todo Was removed by 3rd party but will have to be re-added to form
+		'dateOfBirth', 'phoneNumber'
+  ],
 
   setValidityOnSalutationChange = function ( state, action ) {
     if ( action.type !== 'CHANGE_CONTENT' ||

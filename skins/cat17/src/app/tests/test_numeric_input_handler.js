@@ -1,6 +1,6 @@
 'use strict';
 
-var test = require( 'tape' ),
+var test = require( 'tape-catch' ),
 	sinon = require( 'sinon' ),
 	NumericInputHandler = require( '../lib/numeric_input_handler' )
 ;

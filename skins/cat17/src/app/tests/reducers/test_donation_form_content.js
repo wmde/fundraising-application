@@ -1,6 +1,6 @@
 'use strict';
 
-var test = require( 'tape' ),
+var test = require( 'tape-catch' ),
 	deepFreeze = require( 'deep-freeze' ),
 	donationFormContent = require( '../../lib/reducers/donation_form_content' );
 

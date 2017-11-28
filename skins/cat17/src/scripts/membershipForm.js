@@ -221,10 +221,12 @@ $( function () {
         viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#company-name' ) ),
         stateKey: 'membershipInputValidation.companyName'
       },
+        // todo add to template again
       {
         viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#date-of-birth' ) ),
         stateKey: 'membershipInputValidation.dateOfBirth'
       },
+		// todo add to template again
       {
         viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#phone' ) ),
         stateKey: 'membershipInputValidation.phoneNumber'
