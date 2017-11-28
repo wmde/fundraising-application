@@ -11,7 +11,7 @@ test( 'Attaching adds listener on keypress', function ( t ) {
 		}
 	;
 
-	NumericInputHandler.attach( element );
+	NumericInputHandler.createNumericInputHandler( element );
 
 	t.ok( element.on.withArgs( 'keypress' ).calledOnce );
 	t.end();
@@ -30,6 +30,11 @@ test( 'Handler lets number presses pass', function ( t ) {
 			8: 56,
 			9: 57
 		},
+		element = {
+			on: sinon.stub(),
+			val: sinon.stub().returns('')
+		},
+		handler = NumericInputHandler.createNumericInputHandler( element ),
 		event, keyCode, number
 	;
 
@@ -41,11 +46,87 @@ test( 'Handler lets number presses pass', function ( t ) {
 			ctrlKey: false
 		};
 
-		NumericInputHandler.Handler.handle( event );
+		handler.handle( event );
 
 		t.ok( event.preventDefault.notCalled, 'not preventing default behavior' );
-		t.equal( event.keyCode, keyCode, 'keycode unmodified' );
 	}
 
 	t.end();
 } );
+
+test( 'Handler lets configured delimiter press pass', function ( t ) {
+	var element = {
+			on: sinon.stub(),
+			val: sinon.stub().returns('')
+		},
+		handler = NumericInputHandler.createNumericInputHandler( element, ',' ),
+		event = {
+			preventDefault: sinon.stub(),
+			keyCode: 188,
+			ctrlKey: false
+		};
+
+	handler.handle( event );
+
+	t.ok( event.preventDefault.notCalled, 'not preventing default behavior' );
+
+	t.end();
+} );
+
+test( 'Prevents invalid delimiter press', function ( t ) {
+	var element = {
+			on: sinon.stub(),
+			val: sinon.stub().returns('')
+		},
+		handler = NumericInputHandler.createNumericInputHandler( element, ',' ),
+		event = {
+			preventDefault: sinon.stub(),
+			keyCode: 190,
+			ctrlKey: false
+		};
+
+	handler.handle( event );
+
+	t.ok( event.preventDefault.calledOnce, 'preventing default behavior' );
+
+	t.end();
+} );
+
+test( 'Prevents multiple valid delimiter pressed', function ( t ) {
+	var element = {
+			on: sinon.stub(),
+			val: sinon.stub().returns('.')
+		},
+		handler = NumericInputHandler.createNumericInputHandler( element, '.' ),
+		event = {
+			preventDefault: sinon.stub(),
+			keyCode: 190,
+			ctrlKey: false
+		};
+
+	handler.handle( event );
+
+	t.ok( event.preventDefault.calledOnce, 'preventing default behavior' );
+
+	t.end();
+} );
+
+test( 'Prevents multiple valid delimiter pressed on number pad', function ( t ) {
+	var element = {
+			on: sinon.stub(),
+			val: sinon.stub().returns('.')
+		},
+		handler = NumericInputHandler.createNumericInputHandler( element, '.' ),
+		event = {
+			preventDefault: sinon.stub(),
+			keyCode: 110,
+			ctrlKey: false
+		};
+
+	handler.handle( event );
+
+	t.ok( event.preventDefault.calledOnce, 'preventing default behavior' );
+
+	t.end();
+} );
+

@@ -86,22 +86,20 @@ var jQuery = require( 'jquery' ),
 	AmountValidator = {
 		validationUrl: '',
 		sendFunction: null,
+		amountFormatter: null,
 		validate: function ( formValues ) {
 			var postData;
 			if ( this.formValuesHaveEmptyRequiredFields( formValues ) ) {
 				return { status: ValidationStates.INCOMPLETE };
 			}
 			postData = {
-				amount: formValues.amount,
+				amount: this.amountFormatter.format( formValues.amount ),
 				paymentType: formValues.paymentType
 			};
 			return jQueryDeferredToPromise( this.sendFunction( this.validationUrl, postData, null, 'json' ) );
 		},
 		formValuesHaveEmptyRequiredFields: function ( formValues ) {
-			// WARNING: As we don't have localized money values at the moment,
-			// this method will behave incorrectly for amounts between 0 and 1
-			var amountAsFloat = parseFloat( formValues.amount );
-			return amountAsFloat === 0 || isNaN( amountAsFloat ) || !formValues.paymentType;
+			return formValues.amount === 0 || !formValues.paymentType;
 		}
 	},
 
@@ -121,6 +119,7 @@ var jQuery = require( 'jquery' ),
 			return jQueryDeferredToPromise( this.sendFunction( this.validationUrl, postData, null, 'json' ) );
 		},
 		formValuesHaveEmptyRequiredFields: function ( formValues ) {
+			// TODO simplyfy when fee is an integer
 			// WARNING: As we don't have localized money values at the moment,
 			// this method will behave incorrectly for amounts between 0 and 1
 			var amountAsFloat = parseFloat( formValues.amount );
@@ -209,12 +208,14 @@ var jQuery = require( 'jquery' ),
 	/**
 	 *
 	 * @param {string} validationUrl
+	 * @param {object} amountFormatter Formatter object that supports the .format method
 	 * @param {Function} sendFunction jQuery.post function or equivalent
 	 * @return {AmountValidator}
 	 */
-	createAmountValidator = function ( validationUrl, sendFunction ) {
+	createAmountValidator = function ( validationUrl, amountFormatter, sendFunction ) {
 		return objectAssign( Object.create( AmountValidator ), {
 			validationUrl: validationUrl,
+			amountFormatter: amountFormatter,
 			sendFunction: sendFunction || jQuery.post
 		} );
 	},

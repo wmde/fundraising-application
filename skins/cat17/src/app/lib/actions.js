@@ -20,6 +20,11 @@ module.exports = {
 		};
 	},
 
+	/**
+	 *
+	 * @param {Number} amount Amount as Integer
+	 * @return {{type: string, payload: {amount: *}}}
+	 */
 	newSelectAmountAction: function ( amount ) {
 		return {
 			type: 'SELECT_AMOUNT',
@@ -27,6 +32,11 @@ module.exports = {
 		};
 	},
 
+	/**
+	 *
+	 * @param {Number} amount Amount as Integer
+	 * @return {{type: string, payload: {amount: *}}}
+	 */
 	newInputAmountAction: function ( amount ) {
 		return {
 			type: 'INPUT_AMOUNT',

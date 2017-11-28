@@ -24,10 +24,10 @@ test( 'SELECT_AMOUNT keeps amount if selected amount is null', function ( t ) {
 
 test( 'INPUT_AMOUNT sets amount and isCustomAount', function ( t ) {
 	var stateBefore = { amount: 5, isCustomAmount: false },
-		expectedState = { amount: '42.23', isCustomAmount: true };
+		expectedState = { amount: 4223, isCustomAmount: true };
 
 	deepFreeze( stateBefore );
-	t.deepEqual( formContent( stateBefore, { type: 'INPUT_AMOUNT', payload: { amount: '42.23' } } ), expectedState );
+	t.deepEqual( formContent( stateBefore, { type: 'INPUT_AMOUNT', payload: { amount: 4223 } } ), expectedState );
 	t.end();
 } );
 
@@ -157,9 +157,9 @@ test( 'When CHANGE_CONTENT is passed a value surrounded by whitespaces, the valu
 } );
 
 test( 'When CHANGE_CONTENT is passed a non-string value, the value is not trimmed', function ( t ) {
-	var stateBefore = { amount: 5.00 },
-		expectedState = { amount: 5.00 },
-		action = { type: 'CHANGE_CONTENT', payload: { value: 5.00, contentName: 'amount' } };
+	var stateBefore = { amount: 500 },
+		expectedState = { amount: 500 },
+		action = { type: 'CHANGE_CONTENT', payload: { value: 500, contentName: 'amount' } };
 
 	deepFreeze( stateBefore );
 	t.deepEqual( formContent( stateBefore, action ), expectedState );
