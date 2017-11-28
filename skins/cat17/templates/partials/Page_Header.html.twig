@@ -20,7 +20,7 @@
 					</div>
 					<nav class="menu menu-main">
 						<ul class="list-unstyled list-inline">
-							<li class="col-xs-12 col-sm-6 no-gutter{% if page_identifier == 'comments' %} selected{% endif %}">
+							<li class="col-xs-12 col-sm-6 no-gutter{% if page_identifier == 'comments-list' %} selected{% endif %}">
 								<a href="{$ path( 'list-comments.html' ) $}">
 									<span class="text">Spendenkommentare</span><i class="icon-keyboard_arrow_right"></i>
 								</a>
@@ -30,7 +30,6 @@
 									<span class="text">Unterstützerliste</span><i class="icon-keyboard_arrow_right"></i>
 								</a>
 							</li>
-
 							<li class="col-xs-12 col-sm-6 no-gutter{% if page_identifier == 'use_of_resources' %} selected{% endif %}">
 								<a href="{$ path( 'page', { pageName: 'Transparenz' } ) $}">
 									<span class="text">Mittelverwendung</span><i class="icon-keyboard_arrow_right"></i>
