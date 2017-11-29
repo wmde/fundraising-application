@@ -1,6 +1,6 @@
 'use strict';
 
-var test = require( 'tape-catch' ),
+var test = require( 'tape' ),
 	createCurrencyFormatter = require( '../lib/simple_currency_formatter' ).createCurrencyFormatter,
 	expectedFormattedAmountInGermanLocale = '23,00' + String.fromCharCode( 160 ) + '€',
 	expectedFormattedAmountInEnglishLocale = '€23.00'
