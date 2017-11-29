@@ -177,9 +177,14 @@ module.exports = {
 		} );
 		NumericInputHandler.createNumericInputHandler( inputElement, numberParser.getDecimalDelimiter() );
 		inputElement.on( 'change', function ( evt ) {
-			store.dispatch( actions.newInputAmountAction(
-				numberParser.parse( evt.target.value )
-			) );
+			var amount;
+			try {
+				amount = numberParser.parse( evt.target.value );
+			} catch ( e ) {
+				amount = 0;
+				inputElement.val( '0' );
+			}
+			store.dispatch( actions.newInputAmountAction( amount ) );
 		} );
 		selectElement.on( 'change', function ( evt ) {
 			store.dispatch( actions.newSelectAmountAction( evt.target.value ) );
