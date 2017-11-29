@@ -109,6 +109,7 @@ var objectAssign = require( 'object-assign' ),
 	},
 
 	AmountFrequencySectionInfo = objectAssign( Object.create( SectionInfo ), {
+		// todo Inject actual currency formatter (that knows how to format it depending on locale and incl currency symbol)
 		currencyFormatter: null,
 		update: function ( amount, paymentInterval, aggregateValidity ) {
 			if ( aggregateValidity.isValid === true ) {
@@ -125,7 +126,7 @@ var objectAssign = require( 'object-assign' ),
 				this.setText(
 					amount === 0 ?
 						this.text.data( DOM_SELECTORS.data.emtpyText ) :
-						this.currencyFormatter.format( amount )
+						this.currencyFormatter.format( amount ) + ' €'
 				);
 			}
 

@@ -15,7 +15,7 @@ var test = require( 'tape-catch' ),
 			data: sinon.stub()
 		};
 	},
-	formattedAmount = '23,00 EUR',
+	formattedAmount = '23,00',
 	currencyFormatter = {
 		format: sinon.stub().returns( formattedAmount )
 	}
@@ -69,7 +69,7 @@ test( 'Formatted amount is set in amount element', function ( t ) {
 	handler.update( 23.00, '0', { dataEntered: true, isValid: true } );
 
 	t.ok( text.text.calledOnce, 'Amount is set' );
-	t.equals( text.text.firstCall.args[ 0 ], formattedAmount, 'amount is set' );
+	t.equals( text.text.firstCall.args[ 0 ], formattedAmount + ' €', 'amount is set' );
 
 	t.end();
 } );
