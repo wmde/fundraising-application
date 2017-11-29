@@ -33,6 +33,9 @@ var objectAssign = require( 'object-assign' ),
 			}
 
 			return parts[0] * 100 + parts[1];
+		},
+		getDecimalDelimiter: function () {
+			return this.decimalDelimiter;
 		}
 	}
 ;

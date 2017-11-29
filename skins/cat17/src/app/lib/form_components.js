@@ -159,6 +159,15 @@ module.exports = {
 		return component;
 	},
 
+	/**
+	 * @param store
+	 * @param {jQuery} inputElement
+	 * @param {jQuery} selectElement
+	 * @param {jQuery} hiddenElement
+	 * @param {CurrencyParser} numberParser
+	 * @param {CurrencyFormatter} numberFormatter
+	 * @return {AmountComponent}
+	 */
 	createAmountComponent: function ( store, inputElement, selectElement, hiddenElement, numberParser, numberFormatter ) {
 		var component = objectAssign( Object.create( AmountComponent ), {
 			inputElement: inputElement,
@@ -166,7 +175,7 @@ module.exports = {
 			hiddenElement: hiddenElement,
 			numberFormatter: numberFormatter
 		} );
-		NumericInputHandler.createNumericInputHandler( inputElement, numberParser.delimiter );
+		NumericInputHandler.createNumericInputHandler( inputElement, numberParser.getDecimalDelimiter() );
 		inputElement.on( 'change', function ( evt ) {
 			store.dispatch( actions.newInputAmountAction(
 				numberParser.parse( evt.target.value )
