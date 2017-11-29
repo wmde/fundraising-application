@@ -17,7 +17,7 @@ $( function () {
 		  WMDE.IntegerCurrency.createCurrencyFormatter( 'de' )
       ),
       WMDE.Components.createRadioComponent( store, $('input[name="zahlweise"]'), 'paymentType' ),
-      WMDE.Components.createPaymentIntervalComponent( store, $('input[name="intervalType"]'), $('input[name="periode"]') ),
+      WMDE.Components.createRadioComponent( store, $('input[name="periode"]' ), 'paymentIntervalInMonths' ),
       WMDE.Components.createBankDataComponent( store, {
         ibanElement: $( '#iban' ),
         bicElement: $( '#bic' ),
@@ -223,7 +223,7 @@ $( function () {
 					'6': 'icon-repeat_6',
 					'12': 'icon-repeat_12'
 				},
-				WMDE.FormDataExtractor.mapFromLabeledRadios( $( '#recurrence .wrap-input' ) ),
+				WMDE.FormDataExtractor.mapFromRadioLabels( $( '#recurrence .wrap-input' ) ),
 				WMDE.FormDataExtractor.mapFromRadioInfoTexts( $( '#recurrence .wrap-field' ) )
 			),
 			stateKey: [
@@ -240,7 +240,7 @@ $( function () {
 					'6': 'icon-repeat_6',
 					'12': 'icon-repeat_12'
 				},
-				WMDE.FormDataExtractor.mapFromLabeledRadios( $( '#recurrence .wrap-input' ) ),
+				WMDE.FormDataExtractor.mapFromRadioLabels( $( '#recurrence .wrap-input' ) ),
 				WMDE.FormDataExtractor.mapFromRadioInfoTexts( $( '#recurrence .wrap-field' ) ),
 				WMDE.IntegerCurrency.createCurrencyFormatter( 'de' )
 			),
@@ -260,7 +260,7 @@ $( function () {
 					'UEB': 'icon-ubeiwsung-1',
 					'SUB': 'icon-TODO' // @todo Find icon for SUB
 				},
-				WMDE.FormDataExtractor.mapFromLabeledRadios( $( '#payment-method .wrap-input' ) ),
+				WMDE.FormDataExtractor.mapFromRadioLabels( $( '#payment-method .wrap-input' ) ),
 				WMDE.FormDataExtractor.mapFromRadioInfoTexts( $( '#payment-method .wrap-field' ) )
 			),
 			stateKey: [
@@ -278,7 +278,7 @@ $( function () {
 					'firma': 'icon-work',
 					'anonym': 'icon-visibility_off'
 				},
-				WMDE.FormDataExtractor.mapFromLabeledRadios( $( '#type-donator .wrap-input' ) ),
+				WMDE.FormDataExtractor.mapFromRadioLabels( $( '#type-donator .wrap-input' ) ),
 				WMDE.FormDataExtractor.mapFromSelectOptions( $( '#country' ) )
 			),
 			stateKey: [

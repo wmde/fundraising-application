@@ -135,8 +135,8 @@ $( function () {
 			$( '.frequency .text' ),
           $( '.amount .text'),
           $( '.payment-method .text'),
-			WMDE.FormDataExtractor.mapFromLabeledRadios( $( '#recurrence .wrap-input' ) ),
-			WMDE.FormDataExtractor.mapFromLabeledRadios( $( '#payment-method .wrap-input' ) ),
+			WMDE.FormDataExtractor.mapFromRadioLabels( $( '#recurrence .wrap-input' ) ),
+			WMDE.FormDataExtractor.mapFromRadioLabels( $( '#payment-method .wrap-input' ) ),
           WMDE.IntegerCurrency.createCurrencyFormatter( 'de' ),
           $('.periodicity-icon'),
           {

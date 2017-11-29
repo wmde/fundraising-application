@@ -263,32 +263,6 @@ test( 'Changing the amount input dispatches input action with parsed content', f
 	t.end();
 } );
 
-test( 'Setting interval to a year sets intervalType to recurring', function ( t ) {
-	var decisionElement = createSpyingElement(),
-		paymentIntervalInMonthsElement = createSpyingElement(),
-		store = {},
-		component = formComponents.createPaymentIntervalComponent( store, decisionElement, paymentIntervalInMonthsElement );
-
-	component.render( { paymentIntervalInMonths: 12 } );
-
-	t.ok( decisionElement.val.calledOnce, 'value is called once' );
-	t.ok( decisionElement.val.calledWith( [ formComponents.INTERVAL_TYPE_RECURRING ] ) );
-	t.end();
-} );
-
-test( 'Setting interval to zero sets intervalType to one-off', function ( t ) {
-	var decisionElement = createSpyingElement(),
-		paymentIntervalInMonthsElement = createSpyingElement(),
-		store = {},
-		component = formComponents.createPaymentIntervalComponent( store, decisionElement, paymentIntervalInMonthsElement );
-
-	component.render( { paymentIntervalInMonths: 0 } );
-
-	t.ok( decisionElement.val.calledOnce, 'value is called once' );
-	t.ok( decisionElement.val.calledWith( [ formComponents.INTERVAL_TYPE_ONE_OFF ] ) );
-	t.end();
-} );
-
 test( 'Bank data component adds change handling function to its elements', function ( t ) {
 	var bankDataComponentConfig = createBankDataConfig(),
 		store = {};
