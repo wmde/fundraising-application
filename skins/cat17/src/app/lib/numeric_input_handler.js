@@ -3,15 +3,15 @@
 var objectAssign = require( 'object-assign' ),
 	_ = require( 'underscore' ),
 	DELIMITER_KEYCODE_MAP = {
-		',': 188,
-		'.': 190
+		',': 44,
+		'.': 46
 	},
 	Handler = {
 		input: null,
 		delimiter: '.',
 		handle: function ( event ) {
 			var $element = this.input,
-				// @todo Revise keyCode
+				// @todo Revise keyCode when support for .key is more wide spread
 				// @see https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent
 				// @see https://stackoverflow.com/a/41656511
 				keyCode = event.keyCode || event.which,
@@ -19,9 +19,9 @@ var objectAssign = require( 'object-assign' ),
 					// numbers
 					48, 49, 50, 51, 52, 53, 54, 55, 56, 57,
 					// editing and navigation
-					0, 8, 9, 13, 37, 39, 46,
-					// Delimiters (regular & numpad)
-					DELIMITER_KEYCODE_MAP[ this.delimiter ], 110
+					0, 8, 9, 13, 37, 39,
+					// Delimiter
+					DELIMITER_KEYCODE_MAP[ this.delimiter ]
 				];
 
 			// @todo Shouldn't this test for `|| event.ctrlKey !== false` instead?
@@ -34,8 +34,7 @@ var objectAssign = require( 'object-assign' ),
 			}
 		},
 		keyCodeIsDelimiter: function ( keyCode ) {
-			return DELIMITER_KEYCODE_MAP[ this.delimiter] === keyCode  ||
-				keyCode === 110; // numpad
+			return DELIMITER_KEYCODE_MAP[ this.delimiter] === keyCode;
 		},
 		inputHasDelimiter: function () {
 			return this.input.val().indexOf( this.delimiter ) > -1;
