@@ -1,6 +1,8 @@
-
 @import "common/variables";
-@import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap.scss";
+
+@import "jcf/dist/css/theme-minimal/jcf";
+@import "bootstrap-sass/assets/stylesheets/bootstrap";
+
 @import "components/fonts";
 @import "components/font_opensans";
 @import "common/themify";
