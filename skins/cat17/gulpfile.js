@@ -25,7 +25,7 @@ gulp.task( 'styles', function () {
 		.pipe( sass( {
 			outputStyle: 'nested', // libsass doesn't support expanded yet
 			precision: 10,
-			includePaths: ['.']
+			includePaths: [ './node_modules' ]
 		} ) )
 		.pipe( autoprefixer( {
 			browsers: [
@@ -88,8 +88,6 @@ gulp.task( 'copies', function () {
 	gulp.src( dirs.src + '/scripts/*.js' )
 		.pipe( gulp.dest( dirs.dist + '/scripts' ) );
 
-	gulp.src( 'node_modules/jcf/dist/css/theme-minimal/jcf.css' )
-		.pipe( gulp.dest( dirs.dist + '/scripts/vendor/jcf' ) );
 	gulp.src( 'node_modules/jcf/dist/js/jcf.js' )
 		.pipe( gulp.dest( dirs.dist + '/scripts/vendor/jcf' ) );
 	gulp.src( 'node_modules/jcf/dist/js/jcf.select.js' )
