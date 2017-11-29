@@ -55,7 +55,7 @@ form {
 				display: flex;
 				justify-content: space-between;
 				flex-wrap: wrap;
-				@media (min-width: 374px) and (max-width: 677px) {
+				@media ( min-width: $screen-xs-min ) and ( max-width: $screen-xs-max ) {
 					margin: 0 -7px;
 				}
 			}
@@ -92,7 +92,7 @@ form {
 				align-items: center;
 				margin-bottom: 12px;
 
-				@media (min-width: 374px) and (max-width: 677px) {
+				@media ( min-width: $screen-xs-min ) and ( max-width: $screen-xs-max ) {
 					margin-right: 7px;
 					margin-left: 7px;
 				}
@@ -159,7 +159,7 @@ form {
                         outline: none;
                     }
                 }
-				@media (min-width: 374px) and (max-width: 677px) {
+				@media ( min-width: $screen-xs-min ) and ( max-width: $screen-xs-max ) {
 					margin-right: 7px;
 					margin-left: 7px;
 				}

@@ -1,30 +1,29 @@
-@mixin bkp($class) {
+@mixin bkp( $class ) {
 	@if $class == xs {
-		@media (min-width: 374px) { @content; }
+		@media ( min-width: $screen-xs-min ) { @content; }
 	}
 
 	@else if $class == xsmax {
-        @media (max-width: 677px) { @content; }
+        @media ( max-width: $screen-xs-max ) { @content; }
 	}
 
 	@else if $class == smmax {
-		@media (max-width: 971px) { @content; }
+		@media ( max-width: $screen-sm-max ) { @content; }
 	}
 
 	@else if $class == sm {
-		@media (min-width: 678px) { @content; }
+		@media ( min-width: $screen-sm-min ) { @content; }
 	}
 
 	@else if $class == md {
-		@media (min-width: 972px) { @content; }
+		@media ( min-width: $screen-md-min ) { @content; }
 	}
 
 	@else if $class == lg {
-		@media (min-width: 1200px) { @content; }
+		@media ( min-width: $screen-lg-min ) { @content; }
 	}
 
 	@else {
 		@warn "Breakpoint mixin supports: xs, sm, md, lg";
 	}
 }
-
