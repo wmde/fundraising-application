@@ -17,5 +17,10 @@ fs.readdirSync( skins ).forEach( function ( skin ) {
 		return;
 	}
 
-	cp.spawn( 'npm', commands, { env: process.env, cwd: skinPath, stdio: 'inherit' } );
+	cp.spawn( 'npm', commands, { env: process.env, cwd: skinPath, stdio: 'inherit' } )
+		.on( 'close', function( code ) {
+			if ( code !== 0 ) {
+				process.exitCode = code;
+			}
+		} );
 } );
