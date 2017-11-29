@@ -123,7 +123,7 @@ var objectAssign = require( 'object-assign' ),
 
 			if ( this.text ) {
 				this.setText(
-					amount == 0 ?
+					amount === 0 ?
 						this.text.data( DOM_SELECTORS.data.emtpyText ) :
 						this.currencyFormatter.format( amount )
 				);
