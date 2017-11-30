@@ -1,8 +1,11 @@
 // grid
-
 $screen-xs: 356px;
 $screen-sm: 678px;
 $screen-md: 972px;
+
+$container-sm: $screen-sm;
+$container-md: $screen-md;
+$container-lg: $screen-md;
 
 // Components
 $border-radius-base: 0;
