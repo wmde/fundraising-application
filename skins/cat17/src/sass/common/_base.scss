@@ -93,21 +93,16 @@ input[type="text"]::-ms-clear {
 .container {
 	max-width: 310px;
 	@include bkp(xs) {
-		//width: 355px; //325 + 30
-		max-width: 355px;
-
+		max-width: $screen-xs;
 	}
 	@include bkp(sm) {
-		//width: 648px;
-		max-width: 678px; //948+30
+		max-width: $screen-sm;
 	}
 	@include bkp(md) {
-		//width: 972px; //942+30
-		max-width: 972px;
+		max-width: $screen-md;
 	}
 	@include bkp(lg) {
-		//width: 1200px;
-		max-width: 972px;
+		max-width: $screen-md;
 	}
 }
 

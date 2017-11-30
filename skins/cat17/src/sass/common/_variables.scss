@@ -1,12 +1,11 @@
 // grid
-
 $screen-xs: 356px;
-$screen-sm: 679px;
-$screen-md: 973px;
-$container-xs: 355px;
-$container-sm: 678px;
-$container-md: 972px;
-$container-lg: 972px;
+$screen-sm: 678px;
+$screen-md: 972px;
+
+$container-sm: $screen-sm;
+$container-md: $screen-md;
+$container-lg: $screen-md;
 
 // Components
 $border-radius-base: 0;
@@ -16,14 +15,6 @@ $brand-primary: #00adee;
 $brand-primary-dark: #0C69A3;
 $brand-primary-membership: #69c159;
 $brand-primary-membership-dark: #4E9242;
-
-/*$brand-primary: #000000;
-$brand-donation: #00adee;
-
-$brand-donation-dark: #0C69A3;
-$brand-primary-membership: #69c159;
-$brand-membership-dark: #4E9242;
-*/
 
 $brand-footer: #cfdbe2;
 $gray-light: #ddd;
