@@ -295,7 +295,16 @@ $( function () {
 				'donationFormContent.email',
 				WMDE.StateAggregation.donorTypeAndAddressAreValid
 			]
-		}
+		},
+      {
+        viewHandler: WMDE.View.createWarningBoxHandler(
+          $( '#street, #adress-company' ).nextAll( '.warning-text' ),
+          function( fieldValue ) {
+            return fieldValue.trim() !== '' && fieldValue.match(/\d+/g) === null;
+          }
+        ),
+        stateKey: 'donationFormContent.street'
+      }
     ],
     store
   );
