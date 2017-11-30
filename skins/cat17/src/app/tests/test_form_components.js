@@ -320,3 +320,29 @@ test( 'Bank data component checks if all elements in the configuration are set',
 
 	t.end();
 } );
+
+test( 'makeTextComponentMoreSnappy calls onChange and validator handler on keypress event', function ( t ) {
+	t.plan(5);
+	var component = {
+			element: createSpyingElement(),
+			onChange: sinon.spy(),
+			validator: sinon.spy()
+		},
+		fakeEvent = { target: { value: 'Berlin' } };
+
+	formComponents.makeTextComponentMoreSnappy( component, 1 );
+
+	t.ok( component.element.on.withArgs( 'keypress' ).calledOnce, 'keypress event is attached' );
+
+	component.element.on.withArgs( 'keypress' ).args[ 0 ][ 1 ]( fakeEvent );
+
+	setTimeout( function () {
+		t.ok( component.onChange.calledOnce, 'change handler was called once' );
+		t.ok( component.onChange.calledWith( fakeEvent ), 'change handler was called with event' );
+
+		t.ok( component.validator.calledOnce, 'validator  was called once' );
+		t.ok( component.validator.calledWith( fakeEvent ), 'validator was called with event' );
+	}, 5 );
+
+} );
+

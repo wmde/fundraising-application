@@ -1,6 +1,7 @@
 'use strict';
 
 var objectAssign = require( 'object-assign' ),
+	_ = require( 'underscore' ),
 	actions = require( './actions' ),
 	NumericInputHandler = require( './numeric_input_handler' ),
 
@@ -200,6 +201,16 @@ module.exports = {
 		bankDataElements.accountNumberElement.on( 'change', createDefaultChangeHandler( store, 'accountNumber' ) );
 		bankDataElements.bankCodeElement.on( 'change', createDefaultChangeHandler( store, 'bankCode' ) );
 		return component;
+	},
+
+	makeTextComponentMoreSnappy: function( textComponent, debounceDelay ) {
+		textComponent.element.on( 'keypress', _.debounce( function ( evt ) {
+			textComponent.onChange( evt );
+			if ( textComponent.validator ) {
+				textComponent.validator( evt );
+			}
+		}, debounceDelay || 300 ) );
+		return textComponent;
 	}
 
 };
