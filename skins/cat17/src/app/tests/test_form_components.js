@@ -28,6 +28,12 @@ var test = require( 'tape-catch' ),
 			bankNameFieldElement: createSpyingElement(),
 			bankNameDisplayElement: createSpyingElement()
 		};
+	},
+	createAmountParser = function () {
+		return {
+			parse: sinon.stub().returnsArg( 0 ),
+			getDecimalDelimiter: sinon.stub().returns( ',' )
+		}
 	}
 
 	;
@@ -148,7 +154,7 @@ test( 'Rendering the amount component with custom amount clears selection and se
 	var textElement = createSpyingElement(),
 		selectElement = createSpyingElement(),
 		hiddenElement = createSpyingElement(),
-		parser = sinon.stub().returnsArg(0),
+		parser = createAmountParser(),
 		dummyFormatter = { format: function ( v ) {
 			return "XX" + v + "YY";
 
@@ -184,7 +190,7 @@ test( 'Rendering the amount component with non-custom amount sets the hidden fie
 	var textElement = createSpyingElement(),
 		selectElement = createSpyingElement(),
 		hiddenElement = createSpyingElement(),
-		parser = sinon.stub().returnsArg(0),
+		parser = createAmountParser(),
 		dummyFormatter = { format: function ( v ) {
 			return "XX" + v + "YY";
 
@@ -217,12 +223,10 @@ test( 'Changing the amount selection dispatches select action with selected valu
 	var textElement = createSpyingElement(),
 		selectElement = createSpyingElement(),
 		hiddenElement = createSpyingElement(),
-		dummyAmountParser = { parse: function( value ) {
-			return 'XX' + value + 'YY';
-		} },
 		store = {
 			dispatch: sinon.spy()
 		},
+		dummyAmountParser = createAmountParser(),
 		fakeEvent = { target: { value: 5000 } },
 		expectedAction = { type: 'SELECT_AMOUNT', payload: { amount: 5000 } };
 
@@ -235,6 +239,7 @@ test( 'Changing the amount selection dispatches select action with selected valu
 
 	t.ok( store.dispatch.calledOnce, 'event handler triggers store update' );
 	t.deepEqual( store.dispatch.args[ 0 ][ 0 ], expectedAction, 'event handler generates the correct action' );
+	t.ok( dummyAmountParser.parse.notCalled, 'amount parser is not called as the amount is passed on 1:1' );
 	t.end();
 } );
 
@@ -242,14 +247,12 @@ test( 'Changing the amount input dispatches input action with parsed content', f
 	var textElement = createSpyingElement(),
 		selectElement = createSpyingElement(),
 		hiddenElement = createSpyingElement(),
-		dummyAmountParser = { parse: function( value ) {
-			return 'XX' + value + 'YY';
-		} },
+		dummyAmountParser = createAmountParser(),
 		store = {
 			dispatch: sinon.spy()
 		},
 		fakeEvent = { target: { value: '99,99' } },
-		expectedAction = { type: 'INPUT_AMOUNT', payload: { amount: 'XX99,99YY' } };
+		expectedAction = { type: 'INPUT_AMOUNT', payload: { amount: '99,99' } };
 
 	formComponents.createAmountComponent( store, textElement, selectElement, hiddenElement, dummyAmountParser );
 
@@ -260,6 +263,7 @@ test( 'Changing the amount input dispatches input action with parsed content', f
 
 	t.ok( store.dispatch.calledOnce, 'event handler triggers store update' );
 	t.deepEqual( store.dispatch.args[ 0 ][ 0 ], expectedAction, 'event handler generates the correct action' );
+	t.ok( dummyAmountParser.parse.calledWith( '99,99' ), 'parser us called with amount' );
 	t.end();
 } );
 
