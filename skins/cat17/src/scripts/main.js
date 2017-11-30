@@ -191,12 +191,12 @@
             $(window).scroll(function () {
                 var currentScroll = $(window).scrollTop();
                 var typeMemberElements = $('.state-overview .member-type');
-                var donatorElements = $('.state-overview .donator-type');
+                var donorElements = $('.state-overview .donor-type');
                 var amountElements = $('.state-overview .amount');
                 var paymentElemnts = $('.state-overview .payment-method');
 
                 typeMemberElements.removeClass('enabled');
-                donatorElements.removeClass('enabled');
+                donorElements.removeClass('enabled');
                 amountElements.removeClass('enabled');
                 paymentElemnts.removeClass('enabled');
                 ACTIVE_THRESHOLD = 60;
@@ -207,7 +207,7 @@
                     amountElements.addClass('enabled');
                 }
                 else if (currentScroll >= donationTypeSection - ACTIVE_THRESHOLD) {
-                    donatorElements.addClass('enabled');
+                    donorElements.addClass('enabled');
                 }
                 else if (currentScroll >= memberTypeSection - ACTIVE_THRESHOLD) {
                     typeMemberElements.addClass('enabled');
@@ -219,13 +219,13 @@
                 var currentScroll = $(window).scrollTop();
                 var amountElements = $('.state-overview .amount');
                 var paymentElemnts = $('.state-overview .payment-method');
-                var donatorElements = $('.state-overview .donator-type');
+                var donorElements = $('.state-overview .donor-type');
 
                 amountElements.removeClass('enabled');
                 paymentElemnts.removeClass('enabled');
-                donatorElements.removeClass('enabled');
+                donorElements.removeClass('enabled');
                 if (currentScroll >= donationTypeSection - ACTIVE_THRESHOLD) {
-                    donatorElements.addClass('enabled');
+                    donorElements.addClass('enabled');
                 }
                 else if (currentScroll >= donationPaymentSection - ACTIVE_THRESHOLD) {
                     paymentElemnts.addClass('enabled');

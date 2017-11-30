@@ -110,7 +110,7 @@ $( function () {
       },
 		// Hide anonymous payment when doing direct debit
 		{
-			viewHandler: WMDE.View.createElementClassSwitcher( $( '#type-donator .wrap-field.anonym .wrap-input' ), /BEZ/, 'disabled' ),
+			viewHandler: WMDE.View.createElementClassSwitcher( $( '#type-donor .wrap-field.anonym .wrap-input' ), /BEZ/, 'disabled' ),
 			stateKey: 'donationFormContent.paymentType'
 		},
 		// Show "needs to support recurring debiting" notice for payments types that provide that info (payment_type_*_recurrent_info)
@@ -132,7 +132,7 @@ $( function () {
 		},
 		{
 			viewHandler: WMDE.View.createSuboptionDisplayHandler(
-				$( '#type-donator' )
+				$( '#type-donor' )
 			),
 			stateKey: 'donationFormContent.addressType'
 		},
@@ -272,13 +272,13 @@ $( function () {
 		},
 		{
 			viewHandler: WMDE.View.SectionInfo.createDonorTypeSectionInfo(
-				$( '.donator-type' ),
+				$( '.donor-type' ),
 				{
 					'person': 'icon-account_circle',
 					'firma': 'icon-work',
 					'anonym': 'icon-visibility_off'
 				},
-				WMDE.FormDataExtractor.mapFromRadioLabels( $( '#type-donator .wrap-input' ) ),
+				WMDE.FormDataExtractor.mapFromRadioLabels( $( '#type-donor .wrap-input' ) ),
 				WMDE.FormDataExtractor.mapFromSelectOptions( $( '#country' ) )
 			),
 			stateKey: [
