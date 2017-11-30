@@ -25,7 +25,8 @@ var formContentLib = require( './form_content' ),
     country: 'DE',
     email: '',
     confirmNewsletter: false,
-    activePresets: false
+    activePresets: false,
+		donationReceipt: false
   };
 
 module.exports = function donationFormContent( state, action ) {
@@ -45,4 +46,3 @@ module.exports = function donationFormContent( state, action ) {
       return formContentLib.formContent( state, action );
   }
 };
-

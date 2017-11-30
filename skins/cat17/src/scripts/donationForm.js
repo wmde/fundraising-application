@@ -43,7 +43,9 @@ $( function () {
 		WMDE.Components.createValidatingTextComponent( store, $( '#email' ), 'email' ),
 		WMDE.Components.createValidatingTextComponent( store, $( '#email-company' ), 'email' ),
 		WMDE.Components.createCheckboxComponent( store, $( '#newsletter' ), 'confirmNewsletter' ),
-		WMDE.Components.createCheckboxComponent( store, $( '#newsletter-company' ), 'confirmNewsletter' )
+		WMDE.Components.createCheckboxComponent( store, $( '#newsletter-company' ), 'confirmNewsletter' ),
+		WMDE.Components.createCheckboxComponent( store, $( '#donation-receipt' ), 'donationReceipt' ),
+		WMDE.Components.createCheckboxComponent( store, $( '#donation-receipt-company' ), 'donationReceipt' )
     ],
     store,
     'donationFormContent'

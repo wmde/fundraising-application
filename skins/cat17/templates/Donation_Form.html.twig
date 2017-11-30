@@ -170,10 +170,18 @@
 										</select>
 									</div>
 									<div class="wrap-check">
-										<input type="checkbox" id="newsletter" data-jcf='{"wrapNative": true}' class="jcf">
-										<label class="news" for="newsletter">
-											{$ 'donation_sendinfo_label' | trans | raw $}
-										</label>
+										<div>
+											<input type="checkbox" id="newsletter" data-jcf='{"wrapNative": true}' class="jcf">
+											<label class="news" for="newsletter">
+												{$ 'donation_sendinfo_label' | trans | raw $}
+											</label>
+										</div>
+										<div>
+											<input type="checkbox" id="donation-receipt" data-jcf='{"wrapNative": true}' class="jcf">
+											<label for="donation-receipt">
+												{$ 'donation-no-donation-receipt' | trans $}
+											</label>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -223,10 +231,18 @@
 										</select>
 									</div>
 									<div class="wrap-check">
-										<input type="checkbox" id="newsletter-company" name="info" value="1">
-										<label class="news" for="newsletter-company">
-											{$ 'donation_sendinfo_label' | trans | raw $}
-										</label>
+										<div>
+											<input type="checkbox" id="newsletter-company" name="info" value="1">
+											<label class="news" for="newsletter-company">
+												{$ 'donation_sendinfo_label' | trans | raw $}
+											</label>
+										</div>
+										<div>
+											<input type="checkbox" id="donation-receipt-company" name="donationReceipt" value="0" data-jcf='{"wrapNative": true}' class="jcf">
+											<label for="donation-receipt-company">
+												{$ 'donation-no-donation-receipt' | trans $}
+											</label>
+										</div>
 									</div>
 								</div>
 							</div>
