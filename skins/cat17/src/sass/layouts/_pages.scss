@@ -1,3 +1,4 @@
+// todo Does not match our templates - rm once all 3rd party "html/" is ported, incorporated this one way or another
 main.conclusion {
 
 	@include bkp(xsmax) {
@@ -41,23 +42,6 @@ main.conclusion {
 			&.btn-side {
 				margin-top: 0;
 			}
-		}
-	}
-
-	.text-moved {
-		margin: 40px 0;
-		@include bkp(sm) {
-			margin: 80px 0 0;
-			width: 55%;
-		}
-		@include bkp(md) {
-			width: 85%;
-			margin-top: 0;
-			font-size: 16px;
-			line-height: 26px;
-		}
-		@include bkp(lg) {
-			width: 104%;
 		}
 	}
 

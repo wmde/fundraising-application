@@ -24,16 +24,21 @@
                 } ) | raw $}
             </p>
 
+            <p class="visible-print">
+                {$ 'donation_confirmation_debit_briefing' | trans $}
+            </p>
+
             {% if donation.optsIntoNewsletter %}
-                <p class="text-moved visible-sm-block visible-md-block visible-lg-block">
+                <p>
                     {$ "donation_confirmation_opts_into_newsletter" | trans | raw $}
                 </p>
             {% endif %}
-
         </div>
         <div class="action-block col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-0 col-md-4 hidden-print">
             <ul class="list-menu link-back list-unstyled">
-                <li><a href="#TODO" class="">Spende Ihr SEPA-Mandat können Sie hier einsehen</a></li>
+				{% include 'partials/donation_confirmation/link_print.html.twig' with {
+					'label': 'donation_confirmation_print_confirmation_debit' | trans
+				} only %}
                 <li class="cancel">
                     <form action="{$ basepath $}/donation/cancel" method="post">
                         <button type="submit" name="go_storno" class="btn-link">{$ 'cancel_donation' | trans $}</button>
@@ -42,11 +47,6 @@
                     </form>
                 </li>
             </ul>
-            {% if donation.optsIntoNewsletter %}
-                <p class="text-moved hidden-sm hidden-md hidden-lg">
-                    {$ "donation_confirmation_opts_into_newsletter" | trans | raw $}
-                </p>
-            {% endif %}
         </div>
     </div>
 </div>
@@ -65,9 +65,6 @@
             <ul class="list-menu list-unstyled">
                 <li><a href="{$ basepath $}/comment/new"><span>{$ "add_donation_comment" | trans $}</span></a></li>
                 {% include 'partials/share_on_social_networks.html.twig' %}
-				{% include 'partials/donation_confirmation/link_print.html.twig' with {
-					'label': 'donation_confirmation_print_confirmation' | trans
-				} only %}
             </ul>
         </nav>
     </div>

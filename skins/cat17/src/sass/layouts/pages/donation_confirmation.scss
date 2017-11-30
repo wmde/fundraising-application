@@ -1,28 +1,16 @@
 .page-donation-confirmation {
 
-	p.h1 {
+	p.h1,
+	p.h2 {
 		margin-bottom: 40px;
 	}
+
 	.list-unstyled {
 		clear: both;
 	}
 
-	.text-moved {
-		margin: 40px 0;
-		@include bkp(sm) {
-			margin: 80px 0 0;
-			width: 55%;
-		}
-		@include bkp(md) {
-			width: 85%;
-		}
-	}
-
 	.action-block {
 		margin-top: 30px;
-		@include bkp(sm) {
-			margin-top: -120px;
-		}
 		@include bkp(md) {
 			margin-top: 64px;
 		}
@@ -63,6 +51,16 @@
 
 	.side {
 		margin-top: -150px;
+	}
+
+	.switch-container {
+		margin-top: 20px;
+		margin-bottom: 30px;
+	}
+
+	.introduction {
+		padding-top: 0;
+		padding-bottom: 20px;
 	}
 }
 
