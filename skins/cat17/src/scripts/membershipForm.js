@@ -163,13 +163,13 @@ $( function () {
             'firma': 'icon-work',
             'anonym': 'icon-visibility_off'
           },
-          $('.donator-type .text'),
+          $('.donor-type .text'),
           {
             'person': 'Privat',
             'firma': 'Firma',
             'anonym': 'Anonymous'
           },
-          $('.donator-type .info-detail'),
+          $('.donor-type .info-detail'),
 			WMDE.FormDataExtractor.mapFromSelectOptions( $( '#country' ) ),
           $('.member-type .text'),
           {
@@ -334,11 +334,11 @@ $( function () {
     var memberType = $('.member-type'),
       amount = $('.amount'),
       paymentMethod = $('.payment-method'),
-      donatorType = $('.donator-type');
+      donorType = $('.donor-type');
 
     if (state.membershipFormContent.membershipType) {
       memberType.addClass('completed').removeClass('disabled invalid');
-      donatorType.removeClass('disabled');
+      donorType.removeClass('disabled');
     }
 
     if (state.membershipFormContent.paymentIntervalInMonths >= 0) {
@@ -375,11 +375,11 @@ $( function () {
       }
     }
     else {
-      donatorType.addClass('disabled');
+      donorType.addClass('disabled');
     }
 
     if (state.membershipFormContent.addressType) {
-      donatorType.addClass('completed').removeClass('disabled invalid');
+      donorType.addClass('completed').removeClass('disabled invalid');
       var validators = state.membershipInputValidation;
       if (
         state.membershipFormContent.addressType == 'person' &&
@@ -404,8 +404,8 @@ $( function () {
         (validators.street.dataEntered && !validators.street.isValid) ||
         (validators.postcode.dataEntered && !validators.postcode.isValid)
         )){
-        donatorType.addClass('invalid');
-        donatorType.find('.payment-icon').removeClass().addClass('payment-icon icon-error');
+        donorType.addClass('invalid');
+        donorType.find('.payment-icon').removeClass().addClass('payment-icon icon-error');
       }
     }
 
