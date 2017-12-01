@@ -68,6 +68,10 @@ var objectAssign = require( 'object-assign' ),
 				return;
 			}
 
+			if ( text === undefined ) {
+				text = this.text.data( DOM_SELECTORS.data.emtpyText );
+			}
+
 			this.text.text( text );
 		},
 		setLongText: function ( longText ) {

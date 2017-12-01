@@ -177,6 +177,27 @@ test( 'Payment type is set in respective elements', function ( t ) {
 	t.end();
 } );
 
+test( 'Fallback text is used when value does not correspond to text map', function ( t ) {
+	var container = createElement(),
+		text = createElement(),
+		handler = objectAssign( Object.create( SectionInfo.SectionInfo ), {
+			container: container,
+
+			text: text,
+
+			valueTextMap: { 'BEZ': 'Lastschrift', 'PPL': 'Paypal' }
+		} );
+
+	text.data.withArgs( 'empty-text' ).returns( 'Bitcoin' );
+
+	handler.update( 'BTC' );
+
+	t.ok( text.data.withArgs( 'empty-text' ).calledOnce, 'Fetches default text' );
+	t.ok( text.text.withArgs( 'Bitcoin' ).calledOnce, 'Payment type is set' );
+
+	t.end();
+} );
+
 test( 'Missing features are gently skipped', function ( t ) {
 	var container = createElement(),
 		handler = objectAssign( Object.create( SectionInfo.PaymentTypeSectionInfo ), {
