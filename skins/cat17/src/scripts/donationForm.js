@@ -339,10 +339,10 @@ $( function () {
 
 	// Non-state-changing event behavior
 
-	var scroller = WMDE.AnimatedScroller.createAnimatedScroller( $( '.wrap-header, .state-bar' ) );
-	WMDE.AnimatedScroller.addScrollToLinkAnchors( $('a[href*="#"]'), scroller);
-	WMDE.AnimatedScroller.scrollOnSuboptionChange( $( 'input[name="addressType"]' ), $('#type-donor'), scroller );
-	WMDE.AnimatedScroller.scrollOnSuboptionChange( $( 'input[name="paymentType"]' ), $( '#donation-payment' ), scroller );
+	var scroller = WMDE.Scrolling.createAnimatedScroller( $( '.wrap-header, .state-bar' ) );
+	WMDE.Scrolling.addScrollToLinkAnchors( $('a[href*="#"]'), scroller);
+	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="addressType"]' ), $('#type-donor'), scroller );
+	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="paymentType"]' ), $( '#donation-payment' ), scroller );
 
 
 } );

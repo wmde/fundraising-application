@@ -31,5 +31,5 @@ module.exports = {
 	Actions: require( './lib/actions' ),
 	FormDataExtractor: require( './lib/form_data_extractor' ),
 	IntegerCurrency: require( './lib/integer_currency' ),
-	AnimatedScroller: require( './lib/animated_scroller' )
+	Scrolling: require( './lib/scrolling' )
 };
