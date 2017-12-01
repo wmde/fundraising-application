@@ -1,5 +1,7 @@
 {% extends 'Base_Layout.html.twig' %}
 
+{% set COUNTRIES = [ 'DE', 'AT', 'CH', 'BE', 'IT', 'LI', 'LU' ] %}
+
 {% block page_identifier %}membership{% endblock %}
 {% block page_theme %}membership{% endblock %}
 
@@ -8,16 +10,14 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-12">
-					<!-- ToDo: wikimedia-team add h2 adequate title in deutch, this title is only visible to screenreaders and robots -->
-					<h2 class="sr-only">Membership page</h2>
+					<h2 class="sr-only">{$ 'membership_title' | trans $}</h2>
 
-					<p class="h1">Unterstützen Sie Freies Wissen nachhaltig. Werden Sie Mitglied für Freies Wissen!</p>
+					<p class="h1">{$ 'membership_intro' | trans $}</p>
 
 					<div class="row">
 						<div class="col-xs-12 col-sm-5 col-sm-offset-7 col-md-4 col-md-offset-8">
 							<a href="#membership-type"
-							   class="btn btn-membership btn-introduction bk-blue text-center text-uppercase">Jetzt Mitglied
-								werden</a>
+							   class="btn btn-membership btn-introduction bk-blue text-center text-uppercase">{$ 'membership_submit' | trans $}</a>
 						</div>
 					</div>
 				</div>
@@ -28,19 +28,13 @@
 			<div class="container">
 				<div class="row">
 					<div class="resum col-xs-12 col-md-8">
-						<h2>Vorteile einer <a class="link" href="#">Mitgliedschaft</a></h2>
+						<h2>{$ 'membership_benefit_list_title' | trans $}</h2>
 						<ul class="list-membership">
-							<li class="col-xs-12 col-sm-6">Langfristig und nachhaltig Wikipedia unterstützen.</li>
-							<li class="col-xs-12 col-sm-6">Ihr Beitrag ist steuerlich absetzbar. Eine
-								Zuwendungsbescheinigung
-								wird
-								Ihnen automatisch zugesendet.
-							</li>
-							<li class="col-xs-12 col-sm-6">Kostenfrei an Veranstaltungen rund um Wikipedia und Freies Wissen
-								teilnehmen.
-							</li>
-							<li class="col-xs-12 col-sm-6">Aktiv Freies Wissen verbreiten.</li>
-							<li class="col-xs-12 col-sm-6">Jederzeit formlos per E-Mail kündbar.</li>
+							<li class="col-xs-12 col-sm-6">{$ 'membership_benefit_list_1' | trans $}</li>
+							<li class="col-xs-12 col-sm-6">{$ 'membership_benefit_list_2' | trans $}</li>
+							<li class="col-xs-12 col-sm-6">{$ 'membership_benefit_list_3' | trans $}</li>
+							<li class="col-xs-12 col-sm-6">{$ 'membership_benefit_list_4' | trans $}</li>
+							<li class="col-xs-12 col-sm-6">{$ 'membership_benefit_list_5' | trans $}</li>
 						</ul>
 					</div>
 				</div>
@@ -62,32 +56,35 @@
 				<div class="form-shadow-wrap col-xs-12 col-sm-8 col-md-8">
 
 					<section id="membership-type" class="donation-amount clearfix">
-						<h2 class="">Mitgliedschaftsart</h2>
+						<h2 class="">{$ 'membership_section_membership_type_title' | trans $}</h2>
 
 						<fieldset id="type-membership"
-								  class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
-							<legend class="sr-only">Choose type of membership</legend>
+								class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
+							<legend class="sr-only">{$ 'membership_section_membership_type_legend' | trans $}</legend>
 							<div class="wrap-field">
-
 								<div class="wrap-input">
 									<input type="radio" name="membership_type" id="support" value="sustaining">
-									<label for="support"><span data-short-name="Förder">Fördermitgliedschaft</span><i class="icon-favorite"></i></label>
+									<label for="support">
+										<span data-short-name="Förder">{$ 'membership_membershiptype_option_sustaining' | trans $}</span>
+										<i class="icon-favorite"></i>
+									</label>
 								</div>
 
 								<p class="info-text opened" data-info="support">
-									Sie erhalten regelmäßige Informationen über die Arbeit des Vereins.
+									{$ 'membership_membershiptype_option_sustaining_legend' | trans $}
 								</p>
 							</div>
 							<div class="wrap-field">
-
 								<div class="wrap-input">
 									<input type="radio" name="membership_type" id="aktive" value="active">
-									<label for="aktive"><span data-short-name="Aktive">Aktive Mitgliedschaft</span><i class="icon-flash_on"></i></label>
+									<label for="aktive">
+										<span data-short-name="Aktive">{$ 'membership_membershiptype_option_active' | trans $}</span>
+										<i class="icon-flash_on"></i>
+									</label>
 								</div>
 
 								<p class="info-text opened" data-info="aktive">
-									Sie bringen sich aktiv im Verein und haben ein Stimmrecht auf der Mitglieder-
-									versammlung.
+									{$ 'membership_membershiptype_option_active_legend' | trans $}
 								</p>
 							</div>
 
@@ -95,37 +92,37 @@
 					</section>
 
 					<section id="donation-type" class="donation-daten clearfix">
-						<h2>Daten </h2>
+						<h2>{$ 'membership_section_donor_title' | trans $}</h2>
 
-						<p class="legend">Privatpersonen können Fördermitglied oder aktives Mitglied werden. Firmen dürfen
-							nur Fördermitgliedschaften beantragen.</p>
+						<p class="legend">{$ 'membership_section_donor_legend' | trans $}</p>
 
 						<fieldset id="type-donor"
 								  class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
-							<legend class="sr-only">Wollen Sie als Privatperson oder als Firma spenden? Sie können auch ohne
-								Angabe Ihrer Adresse spenden.
-							</legend>
+							<legend class="sr-only">{$ 'membership_section_donor_legend' | trans $}</legend>
 
 							<div class="wrap-field personal">
 
 								<div class="wrap-input">
 									<input type="radio" name="addressType" id="personal" value="person">
-									<label for="personal"><span>Privat</span><i class="icon-account_circle"></i></label>
+									<label for="personal">
+										<span>{$ 'membership_addresstype_option_private' | trans $}</span>
+										<i class="icon-account_circle"></i>
+									</label>
 								</div>
 								<div class="wrap-info">
 									<div class="info-text" data-info="personal">
 										<div class="wrap-select-50 clearfix">
 											<select class="no-outline salutation" id="treatment" name="treatment"
 													data-jcf='{"wrapNative": false,  "wrapNativeOnMobile": true  }'>
-												<option class="hideme" value="anrede">Anrede</option>
+												<option class="hideme" value="anrede">{$ 'salutation_label' | trans $}</option>
 												<option value="familie">Familie</option>
-												<option value="herr">Herr</option>
-												<option value="frau">Frau</option>
+												<option value="herr">{$ 'salutation_option_mr' | trans $}</option>
+												<option value="frau">{$ 'salutation_option_mrs' | trans $}</option>
 											</select>
 											<select class="no-outline personal-title" id="title" name="title"
 													data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true}'>
-												<option class="hideme" value="vtitle">Titel</option>
-												<option value="kein-title">Kein Titel</option>
+												<option class="hideme" value="vtitle">{$ 'title_label' | trans $}</option>
+												<option value="kein-title">{$ 'title_option_none' | trans $}</option>
 												<option value="Dr.">Dr.</option>
 												<option value="Prof.">Prof.</option>
 												<option value="Prof. Dr.">Prof. Dr.</option>
@@ -133,57 +130,49 @@
 										</div>
 
 										<div class="field-grp">
-											<input type="text" id="first-name" class="first-name" placeholder="Vorname">
-											<label for="first-name" class="sr-only">Vorname</label>
+											<input type="text" id="first-name" class="first-name" placeholder="{$ 'firstname_label' | trans | e( 'html_attr' ) $}">
+											<label for="first-name" class="sr-only">{$ 'firstname_label' | trans $}</label>
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
 										<div class="field-grp">
-											<input type="text" id="surname" class="name" placeholder="Name">
-											<label for="surname" class="sr-only">Name</label>
+											<input type="text" id="surname" class="name" placeholder="{$ 'lastname_label' | trans | e( 'html_attr' ) $}">
+											<label for="surname" class="sr-only">{$ 'lastname_label' | trans $}</label>
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
 										<div class="field-grp">
-											<input type="email" id="email" class="email" placeholder="E-Mail">
-											<label for="email" class="sr-only">E-Mail</label>
+											<input type="email" id="email" class="email" placeholder="{$ 'email_label' | trans | e( 'html_attr' ) $}">
+											<label for="email" class="sr-only">{$ 'email_label' | trans $}</label>
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
 										<div class="field-grp">
 											<input type="text" id="street" class="street"
-												   placeholder="Straße und Hausnummer">
-											<label for="street" class="sr-only">Straße und Hausnummer</label>
+												   placeholder="{$ 'street_label' | trans | e( 'html_attr' ) $}">
+											<label for="street" class="sr-only">{$ 'street_label' | trans $}</label>
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
 										<div class="field-grp">
-											<input type="text" id="post-code" class="post-code" placeholder="Postleitzahl">
-											<label for="post-code" class="sr-only">Postleitzahl</label>
+											<input type="text" id="post-code" class="post-code" placeholder="{$ 'zip_label' | trans | e( 'html_attr' ) $}">
+											<label for="post-code" class="sr-only">{$ 'zip_label' | trans $}</label>
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
 										<div class="field-grp">
-											<input type="text" id="city" placeholder="Stadt" class="city">
-											<label for="city" class="sr-only">City</label>
+											<input type="text" id="city" placeholder="{$ 'city_label' | trans | e( 'html_attr' ) $}" class="city">
+											<label for="city" class="sr-only">{$ 'city_label' | trans | e( 'html_attr' ) $}</label>
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
 
 										<select id="country" name="country"
-												data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true,  "maxVisibleItems": 6}'
+												data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true, "maxVisibleItems": 6}'
 												class="no-outline country-select">
-											<option value="DE">Deutschland</option>
-											<option value="AT">Österreich</option>
-											<option value="CH">Schweiz</option>
-											<option value="BE">Belgien</option>
-											<option value="IT">Italien</option>
-											<option value="LI">Liechtenstein</option>
-											<option value="LU">Luxemburg</option>
+											{% for countryCode in COUNTRIES %}
+												<option value="{$ countryCode $}">{$ ( 'country_option_' ~ countryCode ) | trans $}</option>
+											{% endfor %}
 										</select>
 									</div>
 									<div class="wrap-check">
 										<input type="checkbox" id="newsletter" data-jcf='{"wrapNative": true}' class="jcf">
 										<label class="news" for="newsletter">
-											Ja, ich bin damit einverstanden, dass Wikimedia mich per E-Mail kontaktiert,
-											wenn Wikipedia
-											meine Unterstützung benötigt.<br>
-											Die Einwilligung können Sie jederzeit per
-											E-Mail an spenden@wikimedia.de mit Wirkung für die Zukunft widerrufen.
+											{$ 'membership_sendinfo_label' | trans $}
 										</label>
 									</div>
 								</div>
@@ -192,13 +181,16 @@
 
 								<div class="wrap-input">
 									<input type="radio" name="addressType" id="company" value="firma">
-									<label for="company"><span>Firma</span><i class="icon-work"></i></label>
+									<label for="company">
+										<span>{$ 'membership_addresstype_option_company' | trans $}</span>
+										<i class="icon-work"></i>
+									</label>
 								</div>
 								<div class="wrap-info">
 									<div class="info-text" data-info="company">
 										<div class="field-grp ">
-											<input type="text" id="company-name" placeholder="Firmenname" name="company-name">
-											<label for="company-name" class="sr-only">Firmenname</label>
+											<input type="text" id="company-name" placeholder="{$ 'companyname_label' | trans | e( 'html_attr' ) $}" name="company-name">
+											<label for="company-name" class="sr-only">{$ 'companyname_label' | trans $}</label>
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
 										<div class="field-grp">
@@ -207,46 +199,38 @@
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
 										<div class="field-grp">
-											<input type="email" id="email-company" name="email-company" class="email" placeholder="E-Mail">
-											<label for="email-company" class="sr-only">E-Mail</label>
+											<input type="email" id="email-company" name="email-company" class="email" placeholder="{$ 'email_label' | trans | e( 'html_attr' ) $}">
+											<label for="email-company" class="sr-only">{$ 'email_label' | trans $}</label>
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
 										<div class="field-grp">
-											<input type="text" id="adress-company" name="adress-company" class="street" placeholder="Straße und Hausnummer">
-											<label for="adress-company" class="sr-only">Straße und Hausnummer</label>
+											<input type="text" id="adress-company" name="adress-company" class="street" placeholder="{$ 'street_label' | trans | e( 'html_attr' ) $}">
+											<label for="adress-company" class="sr-only">{$ 'street_label' | trans $}</label>
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
 										<div class="field-grp">
-											<input type="text" id="post-code-company" name="post-code-company" class="post-code" placeholder="Postleitzahl">
-											<label for="post-code" class="sr-only">Postleitzahl</label>
+											<input type="text" id="post-code-company" name="post-code-company" class="post-code" placeholder="{$ 'zip_label' | trans | e( 'html_attr' ) $}">
+											<label for="post-code" class="sr-only">{$ 'zip_label' | trans $}</label>
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
 										<div class="field-grp">
-											<input type="text" id="city-company" name="city-company" placeholder="Stadt" class="city">
-											<label for="city-company" class="sr-only">City</label>
+											<input type="text" id="city-company" name="city-company" placeholder="{$ 'city_label' | trans | e( 'html_attr' ) $}" class="city">
+											<label for="city-company" class="sr-only">{$ 'city_label' | trans $}</label>
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
 
 										<select id="country-company" name="country-company" title="Land"
-												data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true,  "maxVisibleItems": 6}'
+												data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true, "maxVisibleItems": 6}'
 												class="no-outline country-select">
-											<option value="DE">Deutschland</option>
-											<option value="AT">Österreich</option>
-											<option value="CH">Schweiz</option>
-											<option value="BE">Belgien</option>
-											<option value="IT">Italien</option>
-											<option value="LI">Liechtenstein</option>
-											<option value="LU">Luxemburg</option>
+											{% for countryCode in COUNTRIES %}
+												<option value="{$ countryCode $}">{$ ( 'country_option_' ~ countryCode ) | trans $}</option>
+											{% endfor %}
 										</select>
 									</div>
 									<div class="wrap-check">
 										<input type="checkbox" id="newsletter-company">
 										<label class="news" for="newsletter-company">
-											Ja, ich bin damit einverstanden, dass Wikimedia mich per E-Mail kontaktiert,
-											wenn Wikipedia
-											meine Unterstützung benötigt.
-											Die Einwilligung können Sie jederzeit per
-											E-Mail an spenden@wikimedia.de mit Wirkung für die Zukunft widerrufen.
+											{$ 'membership_sendinfo_label' | trans $}
 										</label>
 									</div>
 								</div>
@@ -257,45 +241,15 @@
 					</section>
 
 					<section id="donation-amount" class="donation-amount clearfix">
-						<h2 class="">Mitgliedsbeitrag</h2>
+						<h2>{$ 'membership_section_amount_title' | trans $}</h2>
 
-						<p class="legend">Wie hoch soll der Beitrag sein und wie häufig soll dieser abgebucht werden.</p>
+						<p class="legend">{$ 'membership_section_amount_legend' | trans $}</p>
+
 						<fieldset
 								class="amount-qty padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
-							<legend class="sr-only">Wie viel Geld wollen Sie spenden und wie häufig?</legend>
+							<legend class="sr-only">{$ 'membership_section_amount_legend' | trans $}</legend>
 							<div class="wrap-amounts">
-								<div class="wrap-radio">
-									<input type="radio" name="amount-grp" id="amount1" value="5">
-									<label for="amount1">5 €</label>
-								</div>
-								<div class="wrap-radio">
-									<input type="radio" name="amount-grp" id="amount2" value="15">
-									<label for="amount2">15 €</label>
-								</div>
-								<div class="wrap-radio">
-									<input type="radio" name="amount-grp" id="amount3" value="25">
-									<label for="amount3"><span>25 €</span></label>
-								</div>
-								<div class="wrap-radio">
-									<input type="radio" name="amount-grp" id="amount4" value="50">
-									<label for="amount4">50 €</label>
-								</div>
-								<div class="wrap-radio">
-									<input type="radio" name="amount-grp" id="amount5" value="75">
-									<label for="amount5">75 €</label>
-								</div>
-								<div class="wrap-radio">
-									<input type="radio" name="amount-grp" id="amount6" value="100">
-									<label for="amount6">100 €</label>
-								</div>
-								<div class="wrap-radio">
-									<input type="radio" name="amount-grp" id="amount7" value="250">
-									<label for="amount7">250 €</label>
-								</div>
-								<div class="wrap-radio">
-									<input type="radio" name="amount-grp" id="amount8" value="300">
-									<label for="amount8">300 €</label>
-								</div>
+								{% include 'partials/payment_preset_amounts.html.twig' with { 'presetAmounts': [ 5, 15, 25, 50, 75, 100, 250, 300 ] } %}
 
 								<div class="wrap-amount-typed">
 									<input type="text" name="amount-typed" id="amount-typed">
@@ -308,118 +262,25 @@
 
 						<fieldset id="recurrence"
 								  class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
-							<legend class="sr-only">Choose temporality of payment</legend>
-							<div class="wrap-field">
+							<legend class="sr-only">{$ 'membership_section_interval_legend' | trans $}</legend>
 
-
-								<div class="wrap-input">
-									<input type="radio" name="periode" id="monthly" value="1">
-									<label for="monthly"><span>Monatlich</span><i class="icon-repeat_1"></i></label>
-								</div>
-
-								<p class="info-text" data-info="monthly">
-									Ihr Konto wird jeden Monat belastet. Ihre monatliche Spende können Sie jederzeit
-									fristlos per E-Mail
-									an
-									spenden@wikimedia.de stornieren.
-								</p>
-							</div>
-							<div class="wrap-field">
-
-
-								<div class="wrap-input">
-									<input type="radio" name="periode" id="quarterly" value="3">
-									<label for="quarterly"><span>Vierteljährlich</span><i
-												class="icon-repeat_3"></i></label>
-								</div>
-								<p class="info-text" data-info="quarterly">
-									Ihr Konto wird alle drei Monate belastet. Ihre monatliche Spende können Sie jederzeit
-									fristlos per
-									E-Mail an spenden@wikimedia.de stornieren.
-								</p>
-							</div>
-							<div class="wrap-field">
-
-
-								<div class="wrap-input">
-									<input type="radio" name="periode" id="biannual" value="6">
-									<label for="biannual"><span>Halbjährlich</span><i class="icon-repeat_6"></i></label>
-								</div>
-								<p class="info-text" data-info="biannual">
-									Ihr Konto wird jeden Monat belastet. Ihre monatliche Spende können Sie jederzeit
-									fristlos per E-Mail
-									an
-									spenden@wikimedia.de stornieren.
-								</p>
-							</div>
-							<div class="wrap-field">
-
-
-								<div class="wrap-input">
-									<input type="radio" name="periode" id="yearly" value="12">
-									<label for="yearly"><span>Jährlich</span><i class="icon-repeat_12"></i></label>
-								</div>
-
-								<p class="info-text" data-info="yearly">
-									Ihr Konto wird jährlich belastet. Ihre jährliche Spende können Sie jederzeit fristlos
-									per E-Mail an
-									spenden@wikimedia.de stornieren.
-								</p>
-							</div>
+							{% include 'partials/membership/payment_intervals.html.twig' only %}
 
 							<div class="more-info">
-								<p>Der Mindestbetrag für natürliche Personen beträgt 24 Euro, für juristische Personen 100 Euro
-									im Jahr.</p>
-
-								<p>Für Personen mit eingeschränkter finanzieller Leistungskraft kann der Beitrag auf Antrag auf
-									12 Euro ermäßigt werden.</p>
+								<p>{$ 'membership_section_amount_minimum_info' | trans $}</p>
+								<p>{$ 'membership_section_amount_reduction_info' | trans $}</p>
 							</div>
-
 						</fieldset>
-
 					</section>
 
 					<section id="donation-payment" class="donation-payment-method clearfix">
-						<h2>Zahlung</h2>
+						<h2>{$ 'membership_section_payment_title' | trans $}</h2>
 
 						<fieldset id="payment-method"
-								  class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
-							<legend class="sr-only">Wie möchten Sie Ihre Spende bezahlen?</legend>
+								class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
+							<legend class="sr-only">{$ 'membership_section_payment_legend' | trans $}</legend>
 
-							<div class="wrap-field selected">
-								<div class="wrap-input">
-									<input type="radio" name="payment-info" checked="checked" id="debit-card" value="BEZ">
-									<label for="debit-card"><span>Lastschrift</span><i class="icon-SEPA-2"></i></label>
-								</div>
-								<div class="info-text opened" data-info="debit-card">
-
-									<div class="field-grp">
-										<input type="text" id="iban" placeholder="IBAN">
-										<label for="iban" class="sr-only">IBAN</label>
-									</div>
-									<div class="field-grp">
-										<input type="text" id="bic" placeholder="BIC">
-										<label for="bic" class="sr-only">BIC</label>
-									</div>
-
-									<span class="oden">oden</span>
-
-									<div class="field-grp">
-										<input type="text" id="account-number" placeholder="Kontonummer">
-										<label for="account-number" class="sr-only">Kontonummer</label>
-									</div>
-									<div class="field-grp">
-										<input type="text" id="bank-code" placeholder="Bankleitzahl">
-										<label for="bank-code" class="sr-only">Bankleitzahl</label>
-									</div>
-									<!-- ToDo: wikimedia-team, decide and translate to german -->
-									<span class="error-text">Generic text of error.</span>
-
-									<input type="hidden" name="bank_name" id="field-bank-name" value="">
-
-								</div>
-							</div>
-
+							{% include 'partials/payment_types.html.twig' with { 'paymentTypes': paymentTypes } only %}
 						</fieldset>
 					</section>
 
@@ -437,21 +298,20 @@
 			<div class="switch-container container-fluid container">
 				<div class="row">
 					<div class=" col-sm-5 col-sm-offset-7 col-md-4 col-md-offset-8 clearfix">
-						<input type="submit" value="Jetzt Mitglied werden" class="btn btn-donation btn-unactive">
+						<input type="submit" value="{$ 'membership_submit' | trans | e( 'html_attr' ) $}" class="btn btn-donation btn-unactive">
 					</div>
 				</div>
 			</div>
 		</div>
 
 		<div id="submit-bottom">
-			<input type="submit" value="Jetzt Mitglied werden" class="btn btn-donation btn-unactive visible-xs-block">
+			<input type="submit" value="{$ 'membership_submit' | trans | e( 'html_attr' ) $}" class="btn btn-donation btn-unactive visible-xs-block">
 		</div>
-
 	</form>
 {% endblock %}
 
 {% block scripts %}
-	<script type="text/javascript" src="{$ basepath|e('html_attr') $}{$ '/skins/cat17/build/wmde.js'|prefix_file $}"></script>
+	<script type="text/javascript" src="{$ basepath|e('html_attr') $}{$ '/skins/cat17/scripts/wmde.js'|prefix_file $}"></script>
 	<script id="init-form" src="{$ basepath|e('html_attr') $}{$ '/skins/cat17/scripts/membershipForm.js'|prefix_file $}"
 		data-initial-form-values="{% if initialFormValues %}{$ initialFormValues|merge({'paymentType': initialPaymentType})|json_encode|e('html_attr') $}{% else %}{$ {'paymentType': initialPaymentType}|json_encode|e('html_attr') $}{% endif %}"
 		data-violated-fields="{% if violatedFields %}{$ violatedFields|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
