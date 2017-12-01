@@ -36,7 +36,6 @@ $( function () {
 
       //Company Data
       WMDE.Components.createValidatingTextComponent( store, $( '#company-name' ), 'companyName' ),
-      WMDE.Components.createValidatingTextComponent( store, $( '#contact-person' ), 'contactPerson' ),
       WMDE.Components.createValidatingTextComponent( store, $( '#email-company' ), 'email' ),
       WMDE.Components.createValidatingTextComponent( store, $( '#adress-company' ), 'street' ),
       WMDE.Components.createValidatingTextComponent( store, $( '#post-code-company' ), 'postcode' ),
@@ -236,10 +235,6 @@ $( function () {
         stateKey: 'membershipInputValidation.lastName'
       },
       {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#contact-person' ) ),
-        stateKey: 'membershipInputValidation.contactPerson'
-      },
-      {
         viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.street' ) ),
         stateKey: 'membershipInputValidation.street'
       },
@@ -434,7 +429,6 @@ $( function () {
         ||
         state.membershipFormContent.addressType == 'firma' &&
         (
-        (validators.contactPerson.dataEntered && !validators.contactPerson.isValid) ||
         (validators.companyName.dataEntered && !validators.companyName.isValid) ||
         (validators.firstName.dataEntered && !validators.firstName.isValid) ||
         (validators.email.dataEntered && !validators.email.isValid) ||

@@ -28,7 +28,6 @@ var formContentLib = require( './form_content' ),
     bankCode: '',
     bankname: '',
     confirmNewsletter: false,
-    contactPerson: '',
     activePresets: false,
 	donationReceipt: false
   };

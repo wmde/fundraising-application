@@ -22,8 +22,7 @@ var _ = require( 'underscore' ),
     iban: _.clone( defaultFields ),
     bic: _.clone( defaultFields ),
     accountNumber: _.clone( defaultFields ),
-    bankCode: _.clone( defaultFields ),
-    contactPerson: _.clone( defaultFields )
+    bankCode: _.clone( defaultFields )
   },
   optionalFields = [
 		// todo Was removed by 3rd party but will have to be re-added to form
@@ -65,8 +64,7 @@ var _ = require( 'underscore' ),
         return _.extend( {}, state, {
           salutation: _.clone( defaultFields ),
           firstName: _.clone( defaultFields ),
-          lastName: _.clone( defaultFields ),
-          contactPerson: _.clone( defaultFields )
+          lastName: _.clone( defaultFields )
         } );
       default:
         // just a guard against field value changes, should not happen normally
