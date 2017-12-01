@@ -2,6 +2,7 @@
 
 {% set COUNTRIES = [ 'DE', 'AT', 'CH', 'BE', 'IT', 'LI', 'LU' ] %}
 {% set PAYMENT_INTERVALS = [ 1, 3, 6, 12 ] %}
+{% set initialPaymentType = paymentTypes|length == 1 ? paymentTypes|first : '' %}
 
 {% block page_identifier %}membership{% endblock %}
 {% block page_theme %}membership{% endblock %}
