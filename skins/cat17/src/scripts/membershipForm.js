@@ -467,9 +467,13 @@ $( function () {
     return false;
   });
 
-  // Set initial form values
-    // TODO use IntegerCurrency to parse amount
-  store.dispatch( actions.newInitializeContentAction( initData.data( 'initial-form-values' ) ) );
+	// Set initial form values
+	var initSetup = initData.data( 'initial-form-values' );
+	if ( typeof initSetup.amount === 'string' ) {
+		// backend delivers amount as a german-formatted "float" string
+		initSetup.amount = WMDE.IntegerCurrency.createCurrencyParser( 'de' ).parse( initSetup.amount );
+	}
+	store.dispatch( actions.newInitializeContentAction( initSetup ) );
 
 	// Set initial validation state
 	store.dispatch( actions.newInitializeValidationStateAction(
