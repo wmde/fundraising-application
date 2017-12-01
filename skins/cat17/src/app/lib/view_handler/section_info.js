@@ -46,13 +46,30 @@ var objectAssign = require( 'object-assign' ),
 		valueTextMap: {},
 		valueLongTextMap: {},
 
-		update: function ( value ) {
-			this.defaultBehavior( value );
+		update: function ( value, validity ) {
+			this.defaultBehavior( value, validity );
 		},
-		defaultBehavior: function ( value ) {
+		/**
+		 *
+		 * @param {*} value
+		 * @param {validation_result} validity
+		 */
+		defaultBehavior: function ( value, validity ) {
 			this.setIcon( this.getValueIcon( value ) );
 			this.setText( this.getValueText( value ) );
 			this.setLongText( this.getValueLongText( value ) );
+
+			if ( validity ) {
+				if ( validity.dataEntered === false ) {
+					this.setSectionStatus( SECTION_STATUS.disabled );
+				} else {
+					if ( validity.isValid === true ) {
+						this.setSectionStatus( SECTION_STATUS.complete );
+					} else {
+						this.setSectionStatus( SECTION_STATUS.invalid );
+					}
+				}
+			}
 		},
 		getValueIcon: function ( value ) {
 			return this.valueIconMap[ value ];

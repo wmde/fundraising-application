@@ -12,7 +12,13 @@ module.exports = {
 		allValiditySectionsAreValid: require( './lib/state_aggregation/all_validation_sections_are_valid' ),
 		amountAndFrequencyAreValid: require( './lib/state_aggregation/amount_and_frequency_are_valid' ),
 		donorTypeAndAddressAreValid: require( './lib/state_aggregation/donor_type_and_address_are_valid' ),
-		paymentAndBankDataAreValid: require( './lib/state_aggregation/payment_and_bank_data_are_valid.js' )
+		paymentAndBankDataAreValid: require( './lib/state_aggregation/payment_and_bank_data_are_valid.js' ),
+		Membership: {
+			allValiditySectionsAreValid: require( './lib/state_aggregation/membership/all_validation_sections_are_valid' ),
+			amountAndFrequencyAreValid: require( './lib/state_aggregation/membership/amount_and_frequency_are_valid' ),
+			donorTypeAndAddressAreValid: require( './lib/state_aggregation/membership/donor_type_and_address_are_valid' ),
+			paymentAndBankDataAreValid: require( './lib/state_aggregation/membership/payment_and_bank_data_are_valid.js' )
+		}
 	},
 	View: {
 		createSlidingVisibilitySwitcher: require( './lib/view_handler/element_visibility_switcher' ).createSlidingVisibilitySwitcher,

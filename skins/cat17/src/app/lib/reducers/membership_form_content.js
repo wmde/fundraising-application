@@ -3,9 +3,9 @@
 var formContentLib = require( './form_content' ),
   objectAssign = require( 'object-assign' ),
   initialState = {
-    membershipType: '', // sustaining, active
+    membershipType: null, // sustaining, active
     amount: 0,
-    paymentType: 'BEZ',
+    paymentType: null,
     isCustomAmount: false,
     paymentIntervalInMonths: -1, // 1, 3, 6, 12
     debitType: 'sepa', // sepa and "non-sepa"

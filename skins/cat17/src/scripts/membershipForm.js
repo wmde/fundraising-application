@@ -155,48 +155,26 @@ $( function () {
 
 		{
 			viewHandler: WMDE.View.createShySubmitButtonHandler( $( 'form input[type="submit"]' ) ),
-			stateKey: [ WMDE.StateAggregation.allValiditySectionsAreValid ]
+			stateKey: [ WMDE.StateAggregation.Membership.allValiditySectionsAreValid ]
 		},
 		{
-			viewHandler: WMDE.View.SectionInfo.createAmountFrequencySectionInfo(
-				$( '.amount' ),
+			viewHandler: WMDE.View.SectionInfo.createMembershipTypeSectionInfo(
+				$( '.member-type' ),
 				{
-					'0': 'icon-unique',
-					'1': 'icon-repeat_1',
-					'3': 'icon-repeat_3',
-					'6': 'icon-repeat_6',
-					'12': 'icon-repeat_12'
+					'sustaining': 'icon-favorite',
+					'active': 'icon-flash_on'
 				},
-				WMDE.FormDataExtractor.mapFromRadioLabels( $( '#recurrence .wrap-input' ) ),
-				WMDE.FormDataExtractor.mapFromRadioInfoTexts( $( '#recurrence .wrap-field' ) ),
-				WMDE.IntegerCurrency.createCurrencyFormatter( 'de' )
+				WMDE.FormDataExtractor.mapFromRadioLabels( $( '#type-membership .wrap-input' ) ),
+				{ 'sustaining': '', 'active': '' }
 			),
 			stateKey: [
-				'membershipFormContent.amount',
-				'membershipFormContent.paymentIntervalInMonths',
-				//WMDE.StateAggregation.amountAndFrequencyAreValid
-				function () { return { isValid: false, dataEntered: false } }
-			]
-		},
-		{
-			viewHandler: WMDE.View.SectionInfo.createPaymentTypeSectionInfo(
-				$( '.payment-method' ),
-				{
-					'PPL': 'icon-paypal',
-					'MCP': 'icon-credit_card2',
-					'BEZ': 'icon-SEPA-2',
-					'UEB': 'icon-ubeiwsung-1',
-					'SUB': 'icon-TODO' // @todo Find icon for SUB
-				},
-				WMDE.FormDataExtractor.mapFromRadioLabels( $( '#payment-method .wrap-input' ) ),
-				WMDE.FormDataExtractor.mapFromRadioInfoTexts( $( '#payment-method .wrap-field' ) )
-			),
-			stateKey: [
-				'membershipFormContent.paymentType',
-				'membershipFormContent.iban',
-				'membershipFormContent.bic',
-				//WMDE.StateAggregation.paymentAndBankDataAreValid
-				function () { return { isValid: false, dataEntered: false } }
+				'membershipFormContent.membershipType',
+				function ( store ) {
+					return {
+						isValid: store.membershipFormContent.membershipType !== null,
+						dataEntered: store.membershipFormContent.membershipType !== null
+					}
+				}
 			]
 		},
 		{
@@ -222,22 +200,47 @@ $( function () {
 				'membershipFormContent.city',
 				'membershipFormContent.country',
 				'membershipFormContent.email',
-				//WMDE.StateAggregation.donorTypeAndAddressAreValid
-				function () { return { isValid: false, dataEntered: false } }
+				WMDE.StateAggregation.Membership.donorTypeAndAddressAreValid
 			]
 		},
 		{
-			viewHandler: WMDE.View.SectionInfo.createMembershipTypeSectionInfo(
-				$( '.member-type' ),
+			viewHandler: WMDE.View.SectionInfo.createAmountFrequencySectionInfo(
+				$( '.amount' ),
 				{
-					'sustaining': 'icon-favorite',
-					'active': 'icon-flash_on'
+					'0': 'icon-unique',
+					'1': 'icon-repeat_1',
+					'3': 'icon-repeat_3',
+					'6': 'icon-repeat_6',
+					'12': 'icon-repeat_12'
 				},
-				WMDE.FormDataExtractor.mapFromRadioLabels( $( '#type-membership .wrap-input' ) ),
-				{ 'sustaining': '', 'active': '' }
+				WMDE.FormDataExtractor.mapFromRadioLabels( $( '#recurrence .wrap-input' ) ),
+				WMDE.FormDataExtractor.mapFromRadioInfoTexts( $( '#recurrence .wrap-field' ) ),
+				WMDE.IntegerCurrency.createCurrencyFormatter( 'de' )
 			),
 			stateKey: [
-				'membershipFormContent.membershipType'
+				'membershipFormContent.amount',
+				'membershipFormContent.paymentIntervalInMonths',
+				WMDE.StateAggregation.Membership.amountAndFrequencyAreValid
+			]
+		},
+		{
+			viewHandler: WMDE.View.SectionInfo.createPaymentTypeSectionInfo(
+				$( '.payment-method' ),
+				{
+					'PPL': 'icon-paypal',
+					'MCP': 'icon-credit_card2',
+					'BEZ': 'icon-SEPA-2',
+					'UEB': 'icon-ubeiwsung-1',
+					'SUB': 'icon-TODO' // @todo Find icon for SUB
+				},
+				WMDE.FormDataExtractor.mapFromRadioLabels( $( '#payment-method .wrap-input' ) ),
+				WMDE.FormDataExtractor.mapFromRadioInfoTexts( $( '#payment-method .wrap-field' ) )
+			),
+			stateKey: [
+				'membershipFormContent.paymentType',
+				'membershipFormContent.iban',
+				'membershipFormContent.bic',
+				WMDE.StateAggregation.Membership.paymentAndBankDataAreValid
 			]
 		},
       {
@@ -296,132 +299,9 @@ $( function () {
     store
   );
 
-  // Validity checks for different form parts
-
-  function displayErrorBox() {
-    $( '#validation-errors' ).show();
-    $( 'html, body' ).animate( { scrollTop: $( '#validation-errors' ).offset().top } );
-  }
-
-  function addressIsValid() {
-    return store.getState().validity.address;
-  }
-
-  function bankDataIsValid() {
-    var state = store.getState();
-    // fixme move check to store/validator
-    return state.membershipFormContent.paymentType !== 'BEZ' ||
-    (
-      state.membershipInputValidation.bic.dataEntered && state.membershipInputValidation.bic.isValid &&
-      state.membershipInputValidation.iban.dataEntered && state.membershipInputValidation.iban.isValid
-    ) ||
-    (
-      state.membershipInputValidation.accountNumber.dataEntered && state.membershipInputValidation.accountNumber.isValid &&
-      state.membershipInputValidation.bankCode.dataEntered && state.membershipInputValidation.bankCode.isValid
-    );
-  }
-
-  function formDataIsValid() {
-    var validity = store.getState().validity;
-    var state = store.getState();
-    //console.log(validity.paymentData + " " + addressIsValid() + " " + bankDataIsValid());
-    return validity.paymentData && state.membershipFormContent.membershipType && addressIsValid() && bankDataIsValid();
-  }
-
-// fixme Move validation to store again, handle class changes in view handlers
-  handleGroupValidations = function () {
-    var state = store.getState();
-
-    //1st Group Amount & Periodicity
-    var memberType = $('.member-type'),
-      amount = $('.amount'),
-      paymentMethod = $('.payment-method'),
-      donorType = $('.donor-type');
-
-    if (state.membershipFormContent.membershipType) {
-      memberType.addClass('completed').removeClass('disabled invalid');
-      donorType.removeClass('disabled');
-    }
-
-    if (state.membershipFormContent.paymentIntervalInMonths >= 0) {
-      amount.addClass('completed').removeClass('disabled invalid');
-      paymentMethod.removeClass('disabled');
-      if (state.membershipInputValidation.amount.dataEntered && !state.membershipInputValidation.amount.isValid) {
-        amount.removeClass('completed').addClass('invalid');
-        amount.find('.periodicity-icon').removeClass().addClass('periodicity-icon icon-error');
-      }
-    }
-    else {
-      paymentMethod.addClass('disabled');
-    }
-
-    if (state.membershipFormContent.paymentType) {
-      paymentMethod.addClass('completed').removeClass('disabled invalid');
-      if (
-        (
-        state.membershipFormContent.debitType == 'sepa' &&
-        state.membershipInputValidation.iban.dataEntered && !state.membershipInputValidation.iban.isValid ||
-        state.membershipInputValidation.bic.dataEntered && !state.membershipInputValidation.bic.isValid
-        )
-        ||
-        (state.membershipFormContent.debitType == 'non-sepa' &&
-        state.membershipInputValidation.bankCode.dataEntered && !state.membershipInputValidation.bankCode.isValid ||
-        state.membershipInputValidation.accountNumber.dataEntered && !state.membershipInputValidation.accountNumber.isValid
-        )
-      ){
-        paymentMethod.addClass('invalid');
-        paymentMethod.find('.payment-icon').removeClass().addClass('payment-icon icon-error');
-      }
-      else {
-        paymentMethod.removeClass('invalid');
-      }
-    }
-    else {
-      donorType.addClass('disabled');
-    }
-
-    if (state.membershipFormContent.addressType) {
-      donorType.addClass('completed').removeClass('disabled invalid');
-      var validators = state.membershipInputValidation;
-      if (
-        state.membershipFormContent.addressType == 'person' &&
-        (
-        (validators.email.dataEntered && !validators.email.isValid) ||
-		(validators.dateOfBirth.dataEntered && !validators.dateOfBirth.isValid) ||
-        (validators.city.dataEntered && !validators.city.isValid) ||
-        (validators.firstName.dataEntered && !validators.firstName.isValid) ||
-        (validators.lastName.dataEntered && !validators.lastName.isValid) ||
-        (validators.street.dataEntered && !validators.street.isValid) ||
-        (validators.postcode.dataEntered && !validators.postcode.isValid) ||
-        (validators.salutation.dataEntered && !validators.salutation.isValid) ||
-        (validators.firstName.dataEntered && !validators.firstName.isValid)
-        )
-        ||
-        state.membershipFormContent.addressType == 'firma' &&
-        (
-        (validators.companyName.dataEntered && !validators.companyName.isValid) ||
-        (validators.firstName.dataEntered && !validators.firstName.isValid) ||
-        (validators.email.dataEntered && !validators.email.isValid) ||
-        (validators.city.dataEntered && !validators.city.isValid) ||
-        (validators.street.dataEntered && !validators.street.isValid) ||
-        (validators.postcode.dataEntered && !validators.postcode.isValid)
-        )){
-        donorType.addClass('invalid');
-        donorType.find('.payment-icon').removeClass().addClass('payment-icon icon-error');
-      }
-    }
-  };
-  $('input').on('click, change', WMDE.StoreUpdates.makeEventHandlerWaitForAsyncFinish( handleGroupValidations, store ) );
-  setInterval(handleGroupValidations, 1000);
-
-  $('form').on('submit', function () {
-    handleGroupValidations();
-
-    if (formDataIsValid()) {
-      return true;
-    }
-    return false;
-  });
+	$( 'form' ).on( 'submit', function () {
+		return WMDE.StateAggregation.Membership.allValiditySectionsAreValid( store.getState() );
+	} );
 
 	// Set initial form values
 	var initSetup = initData.data( 'initial-form-values' );
