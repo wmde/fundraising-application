@@ -1,15 +1,21 @@
 <div class="container">
 	<div class="row">
 		<div class="content col-xs-12 col-sm-10 col-md-8">
+			<h1>{$ 'error_page_header' | trans $}</h1>
+
 			<p>
-				Bei der Verarbeitung Ihrer Anfrage ist ein Fehler aufgetreten.
-				Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut.
+				{$ 'error_page' | trans $}
 			</p>
+
 			{% if message is defined %}
 				<p>
 					{$ message $}
 				</p>
 			{% endif %}
+
+			<p>
+				<a href="{$ path( '/' ) $}">{$ 'error_pages_return_to_donation' | trans $}</a>
+			</p>
 		</div>
 	</div>
 </div>

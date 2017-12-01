@@ -1,5 +1,13 @@
 {% extends 'Base_Layout.html.twig' %}
 
 {% block main %}
-    {$ message|default( 'page_not_found' )|trans()|raw $}
+    <h1>{$ 'error_page_header' | trans $}</h1>
+
+    <p>
+        {$ message|default( 'page_not_found' )|trans $}
+    </p>
+
+    <p>
+        <a href="{$ path( '/' ) $}">{$ 'error_pages_return_to_donation' | trans $}</a>
+    </p>
 {% endblock %}
