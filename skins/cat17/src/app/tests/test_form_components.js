@@ -321,7 +321,7 @@ test( 'Bank data component checks if all elements in the configuration are set',
 	t.end();
 } );
 
-test( 'makeTextComponentMoreSnappy calls onChange and validator handler on keypress event', function ( t ) {
+test( 'addEagerChangeBehavior calls onChange and validator handler on keypress event', function ( t ) {
 	var component = {
 			element: createSpyingElement(),
 			onChange: sinon.spy(),
@@ -332,7 +332,7 @@ test( 'makeTextComponentMoreSnappy calls onChange and validator handler on keypr
 		},
 		fakeEvent = { target: { value: 'Berlin' } };
 
-	formComponents.makeTextComponentMoreSnappy( component, synchronousDebounce );
+	formComponents.addEagerChangeBehavior( component, synchronousDebounce );
 
 	t.ok( component.element.on.withArgs( 'keypress' ).calledOnce, 'keypress event is attached' );
 

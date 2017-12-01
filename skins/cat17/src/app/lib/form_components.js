@@ -214,7 +214,7 @@ module.exports = {
 		return component;
 	},
 
-	makeTextComponentMoreSnappy: function( textComponent, debouncingFunction ) {
+	addEagerChangeBehavior: function( textComponent, debouncingFunction ) {
 		debouncingFunction = debouncingFunction || defaultDebounce;
 		textComponent.element.on( 'keypress', debouncingFunction( function ( evt ) {
 			textComponent.onChange( evt );
