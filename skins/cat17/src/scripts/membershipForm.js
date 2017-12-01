@@ -14,12 +14,12 @@ $( function () {
 		WMDE.Components.createAmountComponent(
 			store,
 			$( '#amount-typed' ),
-			$( 'input[name="amount-grp"]' ),
+			$( '.wrap-amounts input[type="radio"]' ),
 			$( '#amount-hidden'),
 			WMDE.IntegerCurrency.createCurrencyParser( 'de' ),
 			WMDE.IntegerCurrency.createCurrencyFormatter( 'de' )
 		),
-      WMDE.Components.createRadioComponent( store, $( 'input[name="periode"]' ), 'paymentIntervalInMonths' ),
+      WMDE.Components.createRadioComponent( store, $( '#recurrence .wrap-input input' ), 'paymentIntervalInMonths' ),
 
       //Personal data
       WMDE.Components.createRadioComponent( store, $( 'input[name="addressType"]' ), 'addressType' ),
@@ -44,7 +44,7 @@ $( function () {
       WMDE.Components.createSelectMenuComponent( store, $( '#country-company' ), 'country' ),
 
       //Payment Data
-      WMDE.Components.createRadioComponent( store, $( 'input[name="payment-info"]' ), 'paymentType' ),
+      WMDE.Components.createRadioComponent( store, $('input[name="zahlweise"]'), 'paymentType' ),
       WMDE.Components.createBankDataComponent( store, {
         ibanElement: $( '#iban' ),
         bicElement: $( '#bic' ),
@@ -82,10 +82,6 @@ $( function () {
             initData.data( 'generate-iban-url' )
           ),
           initialValues
-        ),
-        WMDE.ValidationDispatchers.createSepaConfirmationValidationDispatcher(
-          WMDE.FormValidation.createSepaConfirmationValidator(),
-          initialValues
         )
       ];
     },
@@ -119,90 +115,118 @@ $( function () {
         } ),
         stateKey: 'membershipInputValidation'
       },
-		// Show "needs to support recurring debiting" notice for payments types that provide that info (payment_type_*_recurrent_info)
-		// Set payment_type_*_recurrent_info trans in HTML
 		{
 			viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '#payment-method .info-text .info-recurrent' ), /^(1|3|6|12)/ ),
 			stateKey: 'membershipFormContent.paymentIntervalInMonths'
 		},
-		// todo use display_field_suboptions
-      {
-        viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.person-name' ), 'person' ),
-        stateKey: 'membershipFormContent.addressType'
-      },
-      {
-        viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.company-name' ), 'firma' ),
-        stateKey: 'membershipFormContent.addressType'
-      },
-      {
-        viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '#address-type-2' ).parent(), 'sustaining' ),
-        stateKey: 'membershipFormContent.membershipType'
-      },
+		{
+			viewHandler: WMDE.View.createSuboptionDisplayHandler(
+				$( '#type-donor' )
+			),
+			stateKey: 'membershipFormContent.addressType'
+		},
+		{
+			viewHandler: WMDE.View.createSuboptionDisplayHandler(
+				$( '#recurrence' )
+			),
+			stateKey: 'membershipFormContent.paymentIntervalInMonths'
+		},
+		{
+			viewHandler: WMDE.View.createSuboptionDisplayHandler(
+				$( '#payment-method' )
+			),
+			stateKey: 'membershipFormContent.paymentType'
+		},
+
 		// todo verify FeeOptionSwitcher does its thing
       {
         viewHandler: WMDE.View.createFeeOptionSwitcher( [ $( '#amount-1' ), $( '#amount-2' ), $( '#amount-3' ), $( '#amount-4' ), $( '#amount-5' ), $( '#amount-6' ), $( '#amount-7' ) ], { person: 24, firma: 100 } ),
         stateKey: 'membershipFormContent'
       },
-      {
-		  // @todo Use WMDE.View.SectionInfo.* instead
-        viewHandler: WMDE.View.createPaymentSummaryDisplayHandler(
-			$( '.frequency .text' ),
-          $( '.amount .text'),
-          $( '.payment-method .text'),
-			WMDE.FormDataExtractor.mapFromRadioLabels( $( '#recurrence .wrap-input' ) ),
-			WMDE.FormDataExtractor.mapFromRadioLabels( $( '#payment-method .wrap-input' ) ),
-          WMDE.IntegerCurrency.createCurrencyFormatter( 'de' ),
-          $('.periodicity-icon'),
-          {
-            '0': 'icon-unique',
-            '1': 'icon-repeat_1',
-            '3': 'icon-repeat_3',
-            '6': 'icon-repeat_6',
-            '12': 'icon-repeat_12'
-          },
-          $('.payment-icon'),
-          {
-            'PPL': 'icon-paypal',
-            'MCP': 'icon-credit_card2',
-            'BEZ': 'icon-SEPA-2',
-            'UEB': 'icon-ubeiwsung-1'
-          },
-          $('.amount .info-detail'),
-			WMDE.FormDataExtractor.mapFromRadioInfoTexts( $( '#recurrence .wrap-field' ) ),
-          $('.payment-method .info-detail'),
-			WMDE.FormDataExtractor.mapFromRadioInfoTexts( $( '#payment-method .wrap-field' ) ),
-          $('.address-icon'),
-          {
-            'person': 'icon-account_circle',
-            'firma': 'icon-work',
-            'anonym': 'icon-visibility_off'
-          },
-          $('.donor-type .text'),
-          {
-            'person': 'Privat',
-            'firma': 'Firma',
-            'anonym': 'Anonymous'
-          },
-          $('.donor-type .info-detail'),
-			WMDE.FormDataExtractor.mapFromSelectOptions( $( '#country' ) ),
-          $('.member-type .text'),
-          {
-            'sustaining': 'Förder',
-            'active': 'Aktive'
-          },
-          $('.membership-type-icon'),
-          {
-            'sustaining': 'icon-favorite',
-            'active': 'icon-flash_on'
-          },
-          $('.member-type .info-detail'),
-          {
-            'sustaining': 'Sie erhalten regelmäßige Informationen über die Arbeit des Vereins.',
-            'active': 'Sie bringen sich aktiv im Verein und haben ein Stimmrecht auf der Mitglieder- versammlung.'
-          }
-        ),
-        stateKey: 'membershipFormContent'
-      },
+
+		{
+			viewHandler: WMDE.View.SectionInfo.createAmountFrequencySectionInfo(
+				$( '.amount' ),
+				{
+					'0': 'icon-unique',
+					'1': 'icon-repeat_1',
+					'3': 'icon-repeat_3',
+					'6': 'icon-repeat_6',
+					'12': 'icon-repeat_12'
+				},
+				WMDE.FormDataExtractor.mapFromRadioLabels( $( '#recurrence .wrap-input' ) ),
+				WMDE.FormDataExtractor.mapFromRadioInfoTexts( $( '#recurrence .wrap-field' ) ),
+				WMDE.IntegerCurrency.createCurrencyFormatter( 'de' )
+			),
+			stateKey: [
+				'membershipFormContent.amount',
+				'membershipFormContent.paymentIntervalInMonths',
+				//WMDE.StateAggregation.amountAndFrequencyAreValid
+				function () { return { isValid: false, dataEntered: false } }
+			]
+		},
+		{
+			viewHandler: WMDE.View.SectionInfo.createPaymentTypeSectionInfo(
+				$( '.payment-method' ),
+				{
+					'PPL': 'icon-paypal',
+					'MCP': 'icon-credit_card2',
+					'BEZ': 'icon-SEPA-2',
+					'UEB': 'icon-ubeiwsung-1',
+					'SUB': 'icon-TODO' // @todo Find icon for SUB
+				},
+				WMDE.FormDataExtractor.mapFromRadioLabels( $( '#payment-method .wrap-input' ) ),
+				WMDE.FormDataExtractor.mapFromRadioInfoTexts( $( '#payment-method .wrap-field' ) )
+			),
+			stateKey: [
+				'membershipFormContent.paymentType',
+				'membershipFormContent.iban',
+				'membershipFormContent.bic',
+				//WMDE.StateAggregation.paymentAndBankDataAreValid
+				function () { return { isValid: false, dataEntered: false } }
+			]
+		},
+		{
+			viewHandler: WMDE.View.SectionInfo.createDonorTypeSectionInfo(
+				$( '.donor-type' ),
+				{
+					'person': 'icon-account_circle',
+					'firma': 'icon-work',
+					'anonym': 'icon-visibility_off'
+				},
+				WMDE.FormDataExtractor.mapFromRadioLabels( $( '#type-donor .wrap-input' ) ),
+				WMDE.FormDataExtractor.mapFromSelectOptions( $( '#country' ) )
+			),
+			stateKey: [
+				'membershipFormContent.addressType',
+				'membershipFormContent.salutation',
+				'membershipFormContent.title',
+				'membershipFormContent.firstName',
+				'membershipFormContent.lastName',
+				'membershipFormContent.companyName',
+				'membershipFormContent.street',
+				'membershipFormContent.postcode',
+				'membershipFormContent.city',
+				'membershipFormContent.country',
+				'membershipFormContent.email',
+				//WMDE.StateAggregation.donorTypeAndAddressAreValid
+				function () { return { isValid: false, dataEntered: false } }
+			]
+		},
+		{
+			viewHandler: WMDE.View.SectionInfo.createMembershipTypeSectionInfo(
+				$( '.member-type' ),
+				{
+					'sustaining': 'icon-favorite',
+					'active': 'icon-flash_on'
+				},
+				WMDE.FormDataExtractor.mapFromRadioLabels( $( '#type-membership .wrap-input' ) ),
+				{ 'sustaining': '', 'active': '' }
+			),
+			stateKey: [
+				'membershipFormContent.membershipType'
+			]
+		},
       {
         viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#first-name' ) ),
         stateKey: 'membershipInputValidation.firstName'
@@ -262,7 +286,7 @@ $( function () {
         stateKey: 'membershipInputValidation.bankCode'
       },
       {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.amount-input' ) ),
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#amount-typed' ) ),
         stateKey: 'membershipInputValidation.amount'
       }
     ],
