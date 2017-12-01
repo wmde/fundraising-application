@@ -112,7 +112,6 @@ $( function () {
           country: 'Land',
           email: 'E-Mail',
           dateOfBirth: 'Geburtsdatum',
-          phone: 'Telefonnummer',
           iban: 'IBAN',
           bic: 'BIC',
           accountNumber: 'Kontonummer',
@@ -268,11 +267,6 @@ $( function () {
       {
         viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#date-of-birth' ) ),
         stateKey: 'membershipInputValidation.dateOfBirth'
-      },
-		// todo add to template again
-      {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#phone' ) ),
-        stateKey: 'membershipInputValidation.phoneNumber'
       },
       {
         viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#iban' ) ),

@@ -18,15 +18,13 @@ var _ = require( 'underscore' ),
     city: _.clone( defaultFields ),
     email: _.clone( defaultFields ),
     dateOfBirth: _.clone( defaultFields ),
-    phoneNumber: _.clone( defaultFields ),
     iban: _.clone( defaultFields ),
     bic: _.clone( defaultFields ),
     accountNumber: _.clone( defaultFields ),
     bankCode: _.clone( defaultFields )
   },
   optionalFields = [
-		// todo Was removed by 3rd party but will have to be re-added to form
-		'dateOfBirth', 'phoneNumber'
+		'dateOfBirth'
   ],
 
   setValidityOnSalutationChange = function ( state, action ) {

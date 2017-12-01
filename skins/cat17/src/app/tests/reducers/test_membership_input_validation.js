@@ -16,14 +16,14 @@ function newChangeContentAction( field, newValue ) {
 
 test( 'If an optional field content changes to empty, the validity status is reset', function ( t ) {
 	var stateBefore = {
-			phoneNumber: { dataEntered: true, isValid: true }
+			dateOfBirth: { dataEntered: true, isValid: true }
 		},
 		expectedState = {
-			phoneNumber: { dataEntered: false, isValid: null }
+			dateOfBirth: { dataEntered: false, isValid: null }
 		};
 
 	deepFreeze( stateBefore );
-	t.deepEqual( membershipInputValidation( stateBefore, newChangeContentAction( 'phoneNumber', '' ) ), expectedState );
+	t.deepEqual( membershipInputValidation( stateBefore, newChangeContentAction( 'dateOfBirth', '' ) ), expectedState );
 	t.end();
 } );
 
