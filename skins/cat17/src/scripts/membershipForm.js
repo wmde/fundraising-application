@@ -505,10 +505,6 @@ $( function () {
     }
   });
 
-  // Initialize form pages
-  store.dispatch( actions.newAddPageAction( 'personalData' ) );
-  store.dispatch( actions.newAddPageAction( 'bankConfirmation' ) );
-
   // Set initial form values
     // TODO use IntegerCurrency to parse amount
   store.dispatch( actions.newInitializeContentAction( initData.data( 'initial-form-values' ) ) );
