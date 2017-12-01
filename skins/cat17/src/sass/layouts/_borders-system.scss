@@ -211,9 +211,8 @@ fieldset {
 
                         }
                         + .wrap-check {
-                            /*
                             display: flex;
-                            */
+                            flex-direction: column;
                             opacity: 1;
                             height: auto;
                             margin-top: 0;
@@ -292,13 +291,10 @@ fieldset {
         }*/
     }
     label {
-        display: flex;
-        //justify-content: space-between; IE11 doesn't do well becuase consider pseudo-elements in the flow; added apan + i absolute
-		justify-content: flex-start;
-        /*
+        display: block;
         width: auto;
-        max-width: 100%;
-        */
+        max-width: none;
+
         margin-left: 33px;
         margin-bottom: 0;
         position: relative;
