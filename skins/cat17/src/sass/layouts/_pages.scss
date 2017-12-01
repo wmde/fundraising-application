@@ -224,6 +224,21 @@ main.conclusion {
 	margin-bottom: 30px;
 }
 
+.content-page {
+	.itz-logo {
+
+		padding-top: 20px;
+
+		@include bkp(md) {
+			padding-top: 70px;
+		}
+
+		img {
+			width: 200px;
+		}
+	}
+}
+
 @import "pages/comments_list";
 @import "pages/donation_confirmation";
 @import "pages/donation_receipt";

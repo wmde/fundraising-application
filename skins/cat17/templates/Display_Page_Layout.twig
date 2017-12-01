@@ -3,12 +3,18 @@
 {% block page_identifier %}{$ page_id $}{% endblock %}
 
 {% block main %}
-	<div class="container">
+	<div class="container content-page">
 		<div class="row">
 			<div class="content col-xs-12 col-sm-10 col-md-8">
 				<h2>{$ page_id|trans({}, 'pageTitles') $}</h2>
 
 				{$ web_content("pages/#{page_id}") $}
+			</div>
+
+			<div class="itz-logo col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-0 col-md-4 hidden-print">
+				<a href="{$ 'content_pages_itz_link' | trans | e ( 'html_attr' ) $}" target="_blank" title="{$ 'content_pages_itz_title' | trans | e ( 'html_attr' ) $}">
+					<img src="{$ 'content_pages_itz_logo' | trans | e ( 'html_attr' ) $}" alt="{$ 'content_pages_itz_title' | trans | e ( 'html_attr' ) $}">
+				</a>
 			</div>
 
 			{% include 'partials/back_link.html.twig' %}
