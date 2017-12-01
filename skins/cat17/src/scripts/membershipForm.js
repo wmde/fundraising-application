@@ -154,6 +154,10 @@ $( function () {
       },
 
 		{
+			viewHandler: WMDE.View.createShySubmitButtonHandler( $( 'form input[type="submit"]' ) ),
+			stateKey: [ WMDE.StateAggregation.allValiditySectionsAreValid ]
+		},
+		{
 			viewHandler: WMDE.View.SectionInfo.createAmountFrequencySectionInfo(
 				$( '.amount' ),
 				{
@@ -444,14 +448,6 @@ $( function () {
         donorType.addClass('invalid');
         donorType.find('.payment-icon').removeClass().addClass('payment-icon icon-error');
       }
-    }
-
-
-    if (formDataIsValid()) {
-      $('form input[type="submit"]').removeClass('btn-unactive');
-    }
-    else {
-      $('form input[type="submit"]').addClass('btn-unactive');
     }
   };
   $('input').on('click, change', WMDE.StoreUpdates.makeEventHandlerWaitForAsyncFinish( handleGroupValidations, store ) );
