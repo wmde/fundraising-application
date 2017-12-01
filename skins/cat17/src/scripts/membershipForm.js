@@ -22,7 +22,7 @@ $( function () {
       WMDE.Components.createRadioComponent( store, $( '#recurrence .wrap-input input' ), 'paymentIntervalInMonths' ),
 
       //Personal data
-      WMDE.Components.createRadioComponent( store, $( 'input[name="addressType"]' ), 'addressType' ),
+      WMDE.Components.createRadioComponent( store, $( 'input[name="adresstyp"]' ), 'addressType' ),
       //Personal Data
       WMDE.Components.createSelectMenuComponent( store, $( '#treatment' ), 'salutation' ),
       WMDE.Components.createSelectMenuComponent( store, $( '#title' ), 'title' ),
@@ -43,7 +43,7 @@ $( function () {
       WMDE.Components.createSelectMenuComponent( store, $( '#country-company' ), 'country' ),
 
       //Payment Data
-      WMDE.Components.createRadioComponent( store, $('input[name="zahlweise"]'), 'paymentType' ),
+      WMDE.Components.createRadioComponent( store, $('input[name="payment_type"]'), 'paymentType' ),
       WMDE.Components.createBankDataComponent( store, {
         ibanElement: $( '#iban' ),
         bicElement: $( '#bic' ),
@@ -51,7 +51,11 @@ $( function () {
         bankCodeElement: $( '#bank-code' ),
         bankNameFieldElement: $( '#field-bank-name' ),
         bankNameDisplayElement: $( '#bank-name' ),
-      } )
+      } ),
+
+		// fill hidden form fields with values to match backend
+		WMDE.Components.createTextComponent( store, $( 'input[name="account_number"]' ), 'accountNumber' ),
+		WMDE.Components.createTextComponent( store, $( 'input[name="bank_code"]' ), 'bankCode' )
     ],
     store,
     'membershipFormContent'

@@ -1,6 +1,7 @@
 {% extends 'Base_Layout.html.twig' %}
 
 {% set COUNTRIES = [ 'DE', 'AT', 'CH', 'BE', 'IT', 'LI', 'LU' ] %}
+{% set PAYMENT_INTERVALS = [ 1, 3, 6, 12 ] %}
 
 {% block page_identifier %}membership{% endblock %}
 {% block page_theme %}membership{% endblock %}
@@ -42,7 +43,7 @@
 		</div>
 	</div>
 
-	<form id="form-membership" action="{$ basepath $}/apply-for-membership" method="post" class="" novalidate="">
+	<form id="form-membership" action="{$ basepath $}/apply-for-membership" method="post" novalidate="">
 		<div class="container">
 			<section class="state-bar state-overview col-xs-12 ">
 				<div class="wrap-bar container ">
@@ -103,7 +104,7 @@
 							<div class="wrap-field personal">
 
 								<div class="wrap-input">
-									<input type="radio" name="addressType" id="personal" value="person">
+									<input type="radio" name="adresstyp" id="personal" value="person">
 									<label for="personal">
 										<span>{$ 'membership_addresstype_option_private' | trans $}</span>
 										<i class="icon-account_circle"></i>
@@ -112,14 +113,14 @@
 								<div class="wrap-info">
 									<div class="info-text" data-info="personal">
 										<div class="wrap-select-50 clearfix">
-											<select class="no-outline salutation" id="treatment" name="treatment"
+											<select class="no-outline salutation" id="treatment" name="anrede"
 													data-jcf='{"wrapNative": false,  "wrapNativeOnMobile": true  }'>
 												<option class="hideme" value="anrede">{$ 'salutation_label' | trans $}</option>
 												<option value="familie">Familie</option>
-												<option value="herr">{$ 'salutation_option_mr' | trans $}</option>
-												<option value="frau">{$ 'salutation_option_mrs' | trans $}</option>
+												<option value="Herr">{$ 'salutation_option_mr' | trans $}</option>
+												<option value="Frau">{$ 'salutation_option_mrs' | trans $}</option>
 											</select>
-											<select class="no-outline personal-title" id="title" name="title"
+											<select class="no-outline personal-title" id="title" name="titel"
 													data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true}'>
 												<option class="hideme" value="vtitle">{$ 'title_label' | trans $}</option>
 												<option value="kein-title">{$ 'title_option_none' | trans $}</option>
@@ -130,12 +131,12 @@
 										</div>
 
 										<div class="field-grp">
-											<input type="text" id="first-name" class="first-name" placeholder="{$ 'firstname_label' | trans | e( 'html_attr' ) $}">
+											<input type="text" id="first-name" name="vorname" class="first-name" placeholder="{$ 'firstname_label' | trans | e( 'html_attr' ) $}">
 											<label for="first-name" class="sr-only">{$ 'firstname_label' | trans $}</label>
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
 										<div class="field-grp">
-											<input type="text" id="surname" class="name" placeholder="{$ 'lastname_label' | trans | e( 'html_attr' ) $}">
+											<input type="text" id="surname" name="nachname" class="name" placeholder="{$ 'lastname_label' | trans | e( 'html_attr' ) $}">
 											<label for="surname" class="sr-only">{$ 'lastname_label' | trans $}</label>
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
@@ -160,8 +161,7 @@
 											<label for="city" class="sr-only">{$ 'city_label' | trans | e( 'html_attr' ) $}</label>
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
-
-										<select id="country" name="country"
+										<select id="country"
 												data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true, "maxVisibleItems": 6}'
 												class="no-outline country-select">
 											{% for countryCode in COUNTRIES %}
@@ -174,7 +174,7 @@
 							<div class="wrap-field firma">
 
 								<div class="wrap-input">
-									<input type="radio" name="addressType" id="company" value="firma">
+									<input type="radio" name="adresstyp" id="company" value="firma">
 									<label for="company">
 										<span>{$ 'membership_addresstype_option_company' | trans $}</span>
 										<i class="icon-work"></i>
@@ -183,32 +183,31 @@
 								<div class="wrap-info">
 									<div class="info-text" data-info="company">
 										<div class="field-grp ">
-											<input type="text" id="company-name" placeholder="{$ 'companyname_label' | trans | e( 'html_attr' ) $}" name="company-name">
+											<input type="text" id="company-name" name="firma" placeholder="{$ 'companyname_label' | trans | e( 'html_attr' ) $}" name="company-name">
 											<label for="company-name" class="sr-only">{$ 'companyname_label' | trans $}</label>
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
 										<div class="field-grp">
-											<input type="email" id="email-company" name="email-company" class="email" placeholder="{$ 'email_label' | trans | e( 'html_attr' ) $}">
+											<input type="email" id="email-company" name="email" class="email" placeholder="{$ 'email_label' | trans | e( 'html_attr' ) $}">
 											<label for="email-company" class="sr-only">{$ 'email_label' | trans $}</label>
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
 										<div class="field-grp">
-											<input type="text" id="adress-company" name="adress-company" class="street" placeholder="{$ 'street_label' | trans | e( 'html_attr' ) $}">
+											<input type="text" id="adress-company" name="strasse" class="street" placeholder="{$ 'street_label' | trans | e( 'html_attr' ) $}">
 											<label for="adress-company" class="sr-only">{$ 'street_label' | trans $}</label>
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
 										<div class="field-grp">
-											<input type="text" id="post-code-company" name="post-code-company" class="post-code" placeholder="{$ 'zip_label' | trans | e( 'html_attr' ) $}">
+											<input type="text" id="post-code-company" name="postcode" class="post-code" placeholder="{$ 'zip_label' | trans | e( 'html_attr' ) $}">
 											<label for="post-code" class="sr-only">{$ 'zip_label' | trans $}</label>
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
 										<div class="field-grp">
-											<input type="text" id="city-company" name="city-company" placeholder="{$ 'city_label' | trans | e( 'html_attr' ) $}" class="city">
+											<input type="text" id="city-company" name="ort" placeholder="{$ 'city_label' | trans | e( 'html_attr' ) $}" class="city">
 											<label for="city-company" class="sr-only">{$ 'city_label' | trans $}</label>
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
-
-										<select id="country-company" name="country-company" title="Land"
+										<select id="country-company" name="country" title="Land"
 												data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true, "maxVisibleItems": 6}'
 												class="no-outline country-select">
 											{% for countryCode in COUNTRIES %}
@@ -235,9 +234,9 @@
 								{% include 'partials/payment_preset_amounts.html.twig' with { 'presetAmounts': [ 5, 15, 25, 50, 75, 100, 250, 300 ] } %}
 
 								<div class="wrap-amount-typed">
-									<input type="text" name="amount-typed" id="amount-typed">
+									<input type="text" id="amount-typed">
 								</div>
-								<input type="hidden" name="amount-hidden" id="amount-hidden">
+								<input type="hidden" name="membership_fee" id="amount-hidden">
 								<!-- Todo: put messages in deutch -->
 								<label for="amount-typed" class="sr-only">Give your desired amount</label>
 							</div>
@@ -247,7 +246,7 @@
 								  class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
 							<legend class="sr-only">{$ 'membership_section_interval_legend' | trans $}</legend>
 
-							{% include 'partials/membership/payment_intervals.html.twig' only %}
+							{% include 'partials/payment_intervals.html.twig' with { 'intervals': PAYMENT_INTERVALS, 'fieldName': 'membership_fee_interval' } only %}
 
 							<div class="more-info">
 								<p>{$ 'membership_section_amount_minimum_info' | trans $}</p>
@@ -263,7 +262,11 @@
 								class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
 							<legend class="sr-only">{$ 'membership_section_payment_legend' | trans $}</legend>
 
-							{% include 'partials/payment_types.html.twig' with { 'paymentTypes': paymentTypes } only %}
+							{% include 'partials/payment_types.html.twig' with { 'paymentTypes': paymentTypes, 'fieldName': 'payment_type' } only %}
+
+							{# Hidden fields, filled from store - bridge backend field names not compatible with reusable frontend components #}
+							<input name="account_number" type="hidden">
+							<input name="bank_code" type="hidden">
 						</fieldset>
 					</section>
 
@@ -276,6 +279,9 @@
 		<hr id="form-end">
 
 		{% include 'partials/membership/overview.html.twig' %}
+
+		<input type="hidden" name="templateCampaign" value="{$ templateCampaign $}">
+		<input type="hidden" name="templateName" value="{$ templateName $}">
 
 		<div class="fixed-button hidden-lg">
 			<div class="switch-container container-fluid container">
