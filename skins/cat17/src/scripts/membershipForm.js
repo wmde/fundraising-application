@@ -53,6 +53,8 @@ $( function () {
         bankNameDisplayElement: $( '#bank-name' ),
       } ),
 
+		WMDE.Components.createTextComponent( store, $( '#date-of-birth' ), 'dateOfBirth' ),
+
 		// fill hidden form fields with values to match backend
 		WMDE.Components.createTextComponent( store, $( 'input[name="account_number"]' ), 'accountNumber' ),
 		WMDE.Components.createTextComponent( store, $( 'input[name="bank_code"]' ), 'bankCode' )
@@ -258,7 +260,6 @@ $( function () {
         viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#company-name' ) ),
         stateKey: 'membershipInputValidation.companyName'
       },
-        // todo add to template again
       {
         viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#date-of-birth' ) ),
         stateKey: 'membershipInputValidation.dateOfBirth'
@@ -422,6 +423,7 @@ $( function () {
         state.membershipFormContent.addressType == 'person' &&
         (
         (validators.email.dataEntered && !validators.email.isValid) ||
+		(validators.dateOfBirth.dataEntered && !validators.dateOfBirth.isValid) ||
         (validators.city.dataEntered && !validators.city.isValid) ||
         (validators.firstName.dataEntered && !validators.firstName.isValid) ||
         (validators.lastName.dataEntered && !validators.lastName.isValid) ||
