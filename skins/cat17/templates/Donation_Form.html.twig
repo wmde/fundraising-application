@@ -162,7 +162,7 @@
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
 
-										<select id="country"
+										<select id="country" title="{$ 'country_label' | trans | e( 'html_attr' ) $}"
 											data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true, "flipDropToFit": true,  "maxVisibleItems": 6}'
 											class="no-outline country-select">
 											{% for countryCode in COUNTRIES %}
@@ -223,7 +223,7 @@
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
 
-										<select id="country-company" name="country"
+										<select id="country-company" name="country" title="{$ 'country_label' | trans | e( 'html_attr' ) $}"
 											data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true,  "maxVisibleItems": 6}'
 											class="no-outline country-select">
 											{% for countryCode in COUNTRIES %}

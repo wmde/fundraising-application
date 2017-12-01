@@ -161,7 +161,7 @@
 											<label for="city" class="sr-only">{$ 'city_label' | trans | e( 'html_attr' ) $}</label>
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
-										<select id="country"
+										<select id="country" title="{$ 'country_label' | trans | e( 'html_attr' ) $}"
 												data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true, "maxVisibleItems": 6}'
 												class="no-outline country-select">
 											{% for countryCode in COUNTRIES %}
@@ -207,7 +207,7 @@
 											<label for="city-company" class="sr-only">{$ 'city_label' | trans $}</label>
 											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
 										</div>
-										<select id="country-company" name="country" title="Land"
+										<select id="country-company" name="country" title="{$ 'country_label' | trans | e( 'html_attr' ) $}"
 												data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true, "maxVisibleItems": 6}'
 												class="no-outline country-select">
 											{% for countryCode in COUNTRIES %}
