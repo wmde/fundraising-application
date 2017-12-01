@@ -5,6 +5,17 @@ var objectAssign = require( 'object-assign' ),
 	actions = require( './actions' ),
 	NumericInputHandler = require( './numeric_input_handler' ),
 
+	/**
+	 * Wrapper around underscore debounce function with a delay of 300 milliseconds
+	 *
+	 * @param {function} f
+	 * @param {Number} milliseconds
+	 * @return {Function}
+	 */
+	defaultDebounce = function ( f, milliseconds ) {
+		return _.debounce( f, milliseconds || 300 );
+	},
+
 	createDefaultChangeHandler = function ( store, contentName ) {
 		return function ( evt ) {
 			store.dispatch( actions.newChangeContentAction( contentName, evt.target.value ) );
@@ -203,14 +214,14 @@ module.exports = {
 		return component;
 	},
 
-	makeTextComponentMoreSnappy: function( textComponent, debounceDelay ) {
-		textComponent.element.on( 'keypress', _.debounce( function ( evt ) {
+	makeTextComponentMoreSnappy: function( textComponent, debouncingFunction ) {
+		debouncingFunction = debouncingFunction || defaultDebounce;
+		textComponent.element.on( 'keypress', debouncingFunction( function ( evt ) {
 			textComponent.onChange( evt );
 			if ( textComponent.validator ) {
 				textComponent.validator( evt );
 			}
-		}, debounceDelay || 300 ) );
+		} ) );
 		return textComponent;
 	}
-
 };
