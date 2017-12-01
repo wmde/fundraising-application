@@ -375,7 +375,6 @@ section.container { overflow: hidden; }
 #logo-geotrust{ width:120px; display: block; float: left; }
 #logo-owasp{ width:54px; display: inline; }
 .logo-creditcards { background: transparent url(../_assets/img/creditcards.png) no-repeat center center; width: 99px; height: 21px; display: block; }
-.logo-itz-white { background: transparent url(../_assets/img/itz_logo_white.png) no-repeat center center; width: 103px; height: 38px; display: block; }
 .logo-ssl-grey { background: transparent url(../_assets/img/ssl_logo_grey.png) no-repeat center center; width: 62px; height: 28px; display: block; margin-top: 15px; }
 .logo-ssl-white { background: transparent url(../_assets/img/ssl_logo_white.png) no-repeat center center; width: 62px; height: 28px; display: block; margin-top: 15px; }
 
@@ -803,17 +802,13 @@ div.notice-window {
     position: relative;
 }
 
-/**
- * Reposition the content image of two content pages for design purposes
- */
-.sandboxedcontent.use_of_resources img[src$='itz_logo_white.png'],
-.sandboxedcontent.donation_receipt img[src$='itz_logo_white.png'] {
-    float: right;
+.rtcol .itz-logo {
+    margin-top: -17px;
+    margin-bottom: 20px;
 }
 
-#wlightbox .sandboxedcontent.use_of_resources img[src$='itz_logo_white.png'],
-#wlightbox .sandboxedcontent.donation_receipt img[src$='itz_logo_white.png'] {
-    margin-top: -80px;
+.rtcol .itz-logo img {
+    width: 200px;
 }
 
 .sandboxedcontent.donation_receipt a {
