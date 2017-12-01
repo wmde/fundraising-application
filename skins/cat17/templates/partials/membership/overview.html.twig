@@ -7,12 +7,12 @@
 					<span class="border-bt"></span>
 					<div class="wrap-input">
 						<a href="#membership-type">
-							<span class="text">Mitgliedschaft noch nicht ausgewählt</span>
-							<i class="membership-type-icon"></i>
+							<span class="text" data-empty-text="{$ 'membership_section_membership_type_fallback' | trans | e( 'html_attr' ) $}"></span>
+							<i class="membership-type-icon" data-display-error="true"></i>
 						</a>
 					</div>
 					<div class="info-text-bottom">
-						<a href="#donation-type"><i class="icon-mode_edit link"></i></a>
+						<a href="#membership-type"><i class="icon-mode_edit link"></i></a>
 						<div class="info-detail"></div>
 					</div>
 				</div>
@@ -20,8 +20,8 @@
 					<span class="border-bt"></span>
 					<div class="wrap-input">
 						<a href="#donation-type">
-							<span class="text">Daten noch nicht ausgewählt</span>
-							<i class="address-icon"></i>
+							<span class="text" data-empty-text="{$ 'membership_section_donor_fallback' | trans | e( 'html_attr' ) $}"></span>
+							<i class="address-icon" data-display-error="true"></i>
 						</a>
 					</div>
 					<div class="info-text-bottom">
@@ -34,8 +34,8 @@
 					<span class="border-bt"></span>
 					<div class="wrap-input">
 						<a href="#donation-amount">
-							<span class="text">Betrag noch nicht ausgewählt.</span>
-							<i class="periodicity-icon icon-mode_edit"></i>
+							<span class="text" data-empty-text="{$ 'membership_section_amount_fallback' | trans | e( 'html_attr' ) $}"></span>
+							<i class="periodicity-icon icon-mode_edit" data-display-error="true"></i>
 						</a>
 					</div>
 					<div class="info-text-bottom">
@@ -48,8 +48,8 @@
 					<span class="border-bt"></span>
 					<div class="wrap-input">
 						<a href="#donation-payment">
-							<span class="text">Zahlart noch nicht ausgewählt</span>
-							<i class="payment-icon"></i>
+							<span class="text" data-empty-text="{$ 'membership_section_payment_fallback' | trans | e( 'html_attr' ) $}"></span>
+							<i class="payment-icon" data-display-error="true"></i>
 						</a>
 					</div>
 					<div class="info-text-bottom">
@@ -62,11 +62,11 @@
 		<div id="other-info" class="other-info col-sm-5 col-sm-offset-7 col-md-4 col-md-offset-8 col-lg-4 col-lg-offset-8 clearfix">
 			<div class="other-text  hidden-lg">
 				<span><i class="icon-lock"></i></span>
-				<span class="text">SSL-Verschlüsselte Daten.</span>
+				<span class="text">{$ 'notice_ssl_encrypted' | trans $}</span>
 			</div>
 			<div class="other-text  hidden-lg">
 				<span><i class="icon-phone"></i></span>
-				<span class="text">030 / 21 91 58 26 - 0.</span>
+				<span class="text">{$ 'wikimedia_hotline' | trans $}</span>
 			</div>
 			<input type="submit" value="Jetzt Mitglied werden" class="btn btn-donation btn-unactive hidden-xs">
 		</div>

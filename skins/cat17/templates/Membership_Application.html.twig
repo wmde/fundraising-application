@@ -53,30 +53,7 @@
 			<section class="state-bar state-overview col-xs-12 ">
 				<div class="wrap-bar container ">
 					<ul class="">
-						<li class="member-type">
-							<a href="#membership-type">
-								<span class="text" data-display-error="false">Mitgliedschaft</span>
-								<i class="address-icon" data-display-error="false"></i>
-							</a>
-						</li>
-						<li class="donor-type">
-							<a href="#donation-type">
-								<span class="text" data-display-error="false">Daten</span>
-								<i class="address-icon" data-display-error="false"></i>
-							</a>
-						</li>
-						<li class="amount">
-							<a href="#donation-amount">
-								<span class="text" data-display-error="false">Betrag</span>
-								<i class="periodicity-icon" data-display-error="false"></i>
-							</a>
-						</li>
-						<li class="payment-method">
-							<a href="#donation-payment">
-								<span class="text" data-display-error="false">Zahlung</span>
-								<i class="payment-icon" data-display-error="false"></i>
-							</a>
-						</li>
+						{% include 'partials/membership/state_bar_sections.html.twig' only %}
 					</ul>
 				</div>
 			</section>
