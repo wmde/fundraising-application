@@ -328,45 +328,6 @@ $( function () {
     return validity.paymentData && state.membershipFormContent.membershipType && addressIsValid() && bankDataIsValid();
   }
 
-
-  function triggerValidityCheckForPersonalDataPage() {
-    var formContent = store.getState().membershipFormContent;
-
-    if ( !addressIsValid() ) {
-      if ( formContent.addressType === 'person' ) {
-        store.dispatch( actions.newMarkEmptyFieldsInvalidAction(
-          [ 'salutation', 'firstName', 'lastName', 'street', 'postcode', 'city', 'email' ],
-          [ 'companyName' ]
-        ) );
-      } else if ( formContent.addressType === 'firma' ) {
-        store.dispatch( actions.newMarkEmptyFieldsInvalidAction(
-          [ 'companyName', 'street', 'postcode', 'city', 'email' ],
-          [ 'firstName', 'lastName', 'salutation' ]
-        ) );
-      }
-    }
-
-    if ( !bankDataIsValid() ) {
-      store.dispatch( actions.newMarkEmptyFieldsInvalidAction(
-        [ 'iban', 'bic' ]
-      ) );
-    }
-
-    if ( !store.getState().validity.amount ) {
-      store.dispatch( actions.newMarkEmptyFieldsInvalidAction( [ 'amount' ] ) );
-    }
-  }
-
-  function hasInvalidFields() {
-    var invalidFields = false;
-    $.each( store.getState().membershipInputValidation, function( key, value ) {
-      if ( value.isValid === false ) {
-        invalidFields = true;
-      }
-    } );
-
-    return invalidFields;
-  }
 // fixme Move validation to store again, handle class changes in view handlers
   handleGroupValidations = function () {
     var state = store.getState();
@@ -454,7 +415,6 @@ $( function () {
   setInterval(handleGroupValidations, 1000);
 
   $('form').on('submit', function () {
-    triggerValidityCheckForPersonalDataPage();
     handleGroupValidations();
 
     if (formDataIsValid()) {
