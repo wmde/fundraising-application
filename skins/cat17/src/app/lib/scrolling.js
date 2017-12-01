@@ -1,22 +1,30 @@
 'use strict';
 
 var objectAssign = require( 'object-assign' ),
+	_ = require( 'underscore' ),
+
+	calculateElementOffset = function ( $element, $fixedHeaderElements ) {
+		var offset = 0,
+			matchedElemPadding = $element.css( 'padding-top' ).match( /^(\d+)px$/ );
+		_.each( $fixedHeaderElements.get(), function ( elm ) {
+			var $elm = $( elm );
+			if ( $elm.is( ':visible' ) ) {
+				offset += $elm.height();
+			}
+		} );
+
+		if ( matchedElemPadding ) {
+			offset -= parseInt( matchedElemPadding[ 1 ] );
+		}
+
+		return $element.offset().top - offset;
+	},
+
 	AnimatedScroller = {
 		fixedHeaderElements: null,
 		scrollTo: function( $element ) {
-			var offset = 0,
-				matchedElemPadding = $element.css( 'padding-top' ).match( /^(\d+)px$/ );
-			this.fixedHeaderElements.each( function ( idx, elm ) {
-				var $elm = $( elm );
-				if ( $elm.is(':visible' ) ) {
-					offset += $elm.height();
-				}
-			} );
-			if ( matchedElemPadding ) {
-				offset -= parseInt( matchedElemPadding[1] );
-			}
 			$( 'html, body' ).stop( true ).animate( {
-				scrollTop: $element.offset().top - offset
+				scrollTop: calculateElementOffset( $element, this.fixedHeaderElements )
 			}, 1000, function () {
 				// Callback after animation
 				// Must change focus!
@@ -31,6 +39,7 @@ var objectAssign = require( 'object-assign' ),
 
 		}
 	},
+
 	LinkScroller = {
 		scroller: null,
 		linkIsInsideCompletedSummaryOnSmallScreen: function( link ) {
@@ -47,14 +56,13 @@ var objectAssign = require( 'object-assign' ),
 				return;
 			}
 			var target = $( evt.currentTarget.hash );
-			target = target.length ? target : $( '[name=' + evt.currentTarget.hash.slice(1) + ']' );
-			// Does a scroll target exist?
-			if ( target.length ) {
-				// Only prevent default if animation is actually gonna happen
+			target = target.length ? target : $( '[name=' + evt.currentTarget.hash.slice( 1 ) + ']' );
+			if ( target.length > 0 ) {
 				this.scroller.scrollTo( target );
 			}
 		}
-	};
+	}
+	;
 
 module.exports ={
 	createAnimatedScroller: function ( fixedHeaderElements ) {
@@ -74,5 +82,7 @@ module.exports ={
 			.not('[href="#0"]')
 			.not('.state-overview .wrap-field.completed .wrap-input')
 			.click( linkScroller.scrollToTarget.bind( linkScroller ) );
-	}
+	},
+	// exposed for testing
+	calculateElementOffset: calculateElementOffset
 };
