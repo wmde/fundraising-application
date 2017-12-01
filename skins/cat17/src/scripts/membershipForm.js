@@ -120,6 +120,11 @@ $( function () {
         } ),
         stateKey: 'membershipInputValidation'
       },
+		// Active membership is not an option for companies
+		{
+			viewHandler: WMDE.View.createElementClassSwitcher( $('#company').parent(), /active/, 'disabled' ),
+			stateKey: 'membershipFormContent.membershipType'
+		},
 		{
 			viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '#payment-method .info-text .info-recurrent' ), /^(1|3|6|12)/ ),
 			stateKey: 'membershipFormContent.paymentIntervalInMonths'
@@ -457,20 +462,6 @@ $( function () {
   };
   $('input').on('click, change', WMDE.StoreUpdates.makeEventHandlerWaitForAsyncFinish( handleGroupValidations, store ) );
   setInterval(handleGroupValidations, 1000);
-
-  // TODO move to view handler
-  $('input[name="membership_type"]').on('click', function () {
-    if ($(this).val() == 'active') {
-      $('#company').parent().addClass('disabled');
-      $('.wrap-field.firma').removeClass('selected');
-      $('.wrap-field.firma .wrap-info .info-text').removeClass('opened');
-      $('.wrap-field.personal').addClass('selected');
-      $('.wrap-field.personal .wrap-info .info-text').addClass('opened');
-    }
-    else {
-      $('#company').parent().removeClass('disabled');
-    }
-  });
 
   $('form').on('submit', function () {
     triggerValidityCheckForPersonalDataPage();
