@@ -297,11 +297,9 @@ $( function () {
 			]
 		},
       {
-        viewHandler: WMDE.View.createWarningBoxHandler(
+        viewHandler: WMDE.View.createSimpleVisibilitySwitcher(
           $( '#street, #adress-company' ).nextAll( '.warning-text' ),
-          function( fieldValue ) {
-            return fieldValue.trim() !== '' && fieldValue.match(/\d+/g) === null;
-          }
+          /^\D+$/
         ),
         stateKey: 'donationFormContent.street'
       }
