@@ -9,7 +9,7 @@ var objectAssign = require( 'object-assign' ),
 	},
 	DOM_SELECTORS = {
 		data: {
-			emtpyText: 'empty-text',
+			emptyText: 'empty-text',
 			displayError: 'display-error'
 		},
 		classes: {
@@ -86,7 +86,7 @@ var objectAssign = require( 'object-assign' ),
 			}
 
 			if ( text === undefined ) {
-				text = this.text.data( DOM_SELECTORS.data.emtpyText );
+				text = this.text.data( DOM_SELECTORS.data.emptyText );
 			}
 
 			this.text.text( text );
@@ -146,7 +146,7 @@ var objectAssign = require( 'object-assign' ),
 			if ( this.text ) {
 				this.setText(
 					amount === 0 ?
-						this.text.data( DOM_SELECTORS.data.emtpyText ) :
+						this.text.data( DOM_SELECTORS.data.emptyText ) :
 						this.currencyFormatter.format( amount ) + ' €'
 				);
 			}
@@ -170,7 +170,7 @@ var objectAssign = require( 'object-assign' ),
 			if ( this.text ) {
 				this.setText(
 					!aggregateValidity.dataEntered ?
-						this.text.data( DOM_SELECTORS.data.emtpyText ) :
+						this.text.data( DOM_SELECTORS.data.emptyText ) :
 						this.getValueText( paymentType )
 				);
 			}
@@ -206,7 +206,7 @@ var objectAssign = require( 'object-assign' ),
 			if ( this.text ) {
 				this.setText(
 					!aggregateValidity.dataEntered ?
-						this.text.data( DOM_SELECTORS.data.emtpyText ) :
+						this.text.data( DOM_SELECTORS.data.emptyText ) :
 						this.getValueText( addressType )
 				);
 			}
