@@ -1,34 +1,38 @@
-<section>
-	<div class="container clearfix">
-		<div class="ltcol">
-			&nbsp;
-		</div>
+{% extends 'Base_Layout.html.twig' %}
 
-		<div class="ctcol">
-			<div class="box partial rounded no-margin">
-				<div class="box-header container clearfix">
-					<span class="icon-bug">Fehler</span>
-				</div>
+{% block main %}
+	<section>
+		<div class="container clearfix">
+			<div class="ltcol">
+				&nbsp;
+			</div>
 
-				<div class="box-section box-footer">
-					<div class="container clearfix">
-						<p>
-							{$ message|trans()|raw $}
-						</p>
+			<div class="ctcol">
+				<div class="box partial rounded no-margin">
+					<div class="box-header container clearfix">
+						<span class="icon-bug">Fehler</span>
+					</div>
+
+					<div class="box-section box-footer">
+						<div class="container clearfix">
+							<p>
+								{$ message| trans | raw $}
+							</p>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
 
-		<div class="rtcol">
-			<div class="icon-hand-right _icon-list-item last">
-				<p>
-					<strong>Spenden</strong>
-				</p>
-				<p>
-					<a href="{$ path( '/' ) $}" target="_blank">Zurück</a> zur Spendenseite
-				</p>
+			<div class="rtcol">
+				<div class="icon-hand-right _icon-list-item last">
+					<p>
+						<strong>Spenden</strong>
+					</p>
+					<p>
+						<a href="{$ path( '/' ) $}" target="_blank">Zurück</a> zur Spendenseite
+					</p>
+				</div>
 			</div>
 		</div>
-	</div>
 </section>
+{% endblock %}
