@@ -865,7 +865,7 @@ class FunFunFactory {
 	}
 
 	public function newInternalErrorHtmlPresenter(): InternalErrorHtmlPresenter {
-		return new InternalErrorHtmlPresenter( $this->getIncludeTemplate( 'Error_Page.html.twig' ) );
+		return new InternalErrorHtmlPresenter( $this->getLayoutTemplate( 'Error_Page.html.twig' ) );
 	}
 
 	public function newAccessDeniedHtmlPresenter(): InternalErrorHtmlPresenter {
@@ -1399,8 +1399,8 @@ class FunFunFactory {
 	}
 
 	public function newSystemMessageResponse( string $message ): string {
-		$test = $this->getIncludeTemplate( 'System_Message.html.twig' );
-		return $test->render( [ 'message' => $message ] );
+		return $this->getLayoutTemplate( 'System_Message.html.twig' )
+			->render( [ 'message' => $message ] );
 	}
 
 	public function getMembershipApplicationTimeframeLimit(): string {

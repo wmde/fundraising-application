@@ -1,10 +1,20 @@
 {% extends 'Base_Layout.html.twig' %}
 
+{% block page_identifier %}access-denied{% endblock %}
+
 {% block main %}
     <div class="container">
         <div class="row">
             <div class="content col-xs-12 col-sm-10 col-md-8">
-                {$ message|default( 'access_denied' )|trans() $}
+                <h1>{$ 'access_denied_header' | trans $}</h1>
+
+                <p>
+                    {$ message | default( 'access_denied' ) | trans $}
+                </p>
+
+                <p>
+                    <a href="{$ path( '/' ) $}">{$ 'error_pages_return_to_donation' | trans $}</a>
+                </p>
             </div>
         </div>
     </div>

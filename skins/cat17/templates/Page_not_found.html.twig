@@ -1,10 +1,20 @@
 {% extends 'Base_Layout.html.twig' %}
 
+{% block page_identifier %}not-found{% endblock %}
+
 {% block main %}
 	<div class="container">
 		<div class="row">
 			<div class="content col-xs-12 col-sm-10 col-md-8">
-				{$ message|default( 'page_not_found' )|trans()|raw $}
+				<h1>{$ 'page_not_found_header' | trans $}</h1>
+
+				<p>
+					{$ message | default( 'page_not_found' ) | trans $}
+				</p>
+
+				<p>
+					<a href="{$ path( '/' ) $}">{$ 'error_pages_return_to_donation' | trans $}</a>
+				</p>
 			</div>
 		</div>
 	</div>
