@@ -65,26 +65,6 @@
 	#payment-method {
 		min-height: 285px;
 		margin-bottom: 20px;
-		input + label {
-			&:after {
-				content: '';
-				@include themify($themes) {
-					background-color: themed('brandPrimary');
-				}
-				border-radius: 100%;
-				border: none;
-				width: 10px;
-				height: 10px;
-				position: absolute;
-				left: -30px;
-				top: 25px;
-				margin-right: 1em;
-				vertical-align: top;
-				cursor: pointer;
-				text-align: center;
-				transition: all 250ms ease;
-			}
-		}
 	}
 
 	#membership-type {

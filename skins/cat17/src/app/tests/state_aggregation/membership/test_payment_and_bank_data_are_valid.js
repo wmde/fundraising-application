@@ -8,7 +8,7 @@ test( 'No payment type and no bank data given is not validated and has no data e
 	t.deepEqual(
 		paymentAndBankDataAreValid( {
 			membershipFormContent: {
-				paymentType: '',
+				paymentType: null,
 				iban: '',
 				bic: '',
 				accountNumber: '',

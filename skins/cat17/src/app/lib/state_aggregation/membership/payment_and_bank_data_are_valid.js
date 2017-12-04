@@ -9,11 +9,11 @@ module.exports = function ( state ) {
 		respectiveValidators = _.pick( state.membershipInputValidation, [ 'iban', 'bic', 'accountNumber', 'bankCode' ] )
 	;
 
-	result.dataEntered = state.membershipFormContent.paymentType !== '' || _.contains( _.pluck( respectiveValidators, 'dataEntered' ), true );
+	result.dataEntered = state.membershipFormContent.paymentType !== null || _.contains( _.pluck( respectiveValidators, 'dataEntered' ), true );
 
 	if ( _.contains( _.pluck( respectiveValidators, 'isValid' ), false ) || state.validity.bankData === false ) {
 		result.isValid = false;
-	} else if ( state.membershipFormContent.paymentType === '' ) {
+	} else if ( state.membershipFormContent.paymentType === null ) {
 		result.isValid = null;
 	} else {
 		result.isValid = true;
