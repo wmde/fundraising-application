@@ -51,25 +51,6 @@ var _ = require( 'underscore' ),
     } );
   },
 
-  clearAddressValidityOnAddressTypeChange = function ( state, action ) {
-    if ( action.type !== 'CHANGE_CONTENT' || action.payload.contentName !== 'addressType' ) {
-      return state;
-    }
-    switch ( action.payload.value ) {
-      case 'person':
-        return _.extend( {}, state, { companyName: _.clone( defaultFields ) } );
-      case 'firma':
-        return _.extend( {}, state, {
-          salutation: _.clone( defaultFields ),
-          firstName: _.clone( defaultFields ),
-          lastName: _.clone( defaultFields )
-        } );
-      default:
-        // just a guard against field value changes, should not happen normally
-        throw new Error( 'invalid address type:' + action.payload.value );
-    }
-  },
-
   clearCompanyValidityOnActiveMembershipChange = function ( state, action ) {
     if ( action.type !== 'CHANGE_CONTENT' ||
       action.payload.contentName !== 'membershipType' ||
@@ -96,7 +77,6 @@ module.exports = function membershipInputValidation( state, action ) {
   if ( typeof state === 'undefined' ) {
     state = initialState;
   }
-  state = clearAddressValidityOnAddressTypeChange( state, action );
   state = clearCompanyValidityOnActiveMembershipChange( state, action );
   state = clearOptionalFieldValidityOnEmptying( state, action );
   state = setValidityOnSalutationChange( state, action );
