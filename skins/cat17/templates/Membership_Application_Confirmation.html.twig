@@ -1,0 +1,82 @@
+{% extends 'Base_Layout.html.twig' %}
+
+{% block page_identifier %}membership-confirmation{% endblock %}
+{% block page_theme %}membership{% endblock %}
+
+{% block main %}
+	{% set formattedAmount = membershipApplication.membershipFee | localizedcurrency( 'EUR', 'de_DE' ) %}
+
+	<div class="container">
+		<div class="row">
+			<div class="content col-xs-12 col-md-8">
+				<h2 class="sr-only">{$ 'membership_confirmation_head' | trans $}</h2>
+
+				<p class="h1">
+					{$ 'membership_confirmation_intro' | trans ( {
+						'%membershipType%': '<span class="text-uppercase field-type strong">' ~ membershipApplication.membershipType | trans( {}, 'membershipTypes' ) ~ '</span>'
+					} ) | raw $}
+				</p>
+
+				<p class="h1">
+					{$ 'membership_confirmation_summary' | trans ( {
+						'%formattedAmount%': '<span class="text-uppercase field-type strong">' ~ formattedAmount ~ '</span>',
+						'%frequency%': '<span class="field-periodicity strong">' ~ membershipApplication.paymentIntervalInMonths | trans( {}, 'paymentIntervals' ) ~ '</span>',
+						'%paymentType%': '<span class="field-type strong">' ~ membershipApplication.paymentType | trans( {}, 'paymentTypes' ) ~ '</span>'
+					} ) | raw $}
+				</p>
+
+				<p class="text-moved visible-sm-block visible-md-block visible-lg-block">
+					{$ 'membership_confirmation_welcome' | trans $}
+				</p>
+
+				{% if membershipApplication.paymentType == 'BEZ' %}
+					<div class="visible-print">
+						{$ web_content('membership/application/paymenttype_directdebit_mandate') $}
+
+						{$ web_content('membership/application/paymenttype_directdebit_affirmation') $}
+					</div>
+				{% endif %}
+			</div>
+
+			<div class="cancel-block col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-0 col-md-4 hidden-print">
+				<ul class="list-menu link-back list-unstyled">
+					<li class="print hidden-no-js">
+						<a href="javascript:window.print();">
+							{% if membershipApplication.paymentType == 'BEZ' %}
+								{$ 'membership_confirmation_print_confirmation_debit' | trans $}
+							{% else %}
+								{$ 'membership_confirmation_print_confirmation' | trans $}
+							{% endif %}
+						</a>
+					</li>
+					<div class="down hidden-xs">
+						<li><a href="{$ basepath $}/cancel-membership-application?id={$ membershipApplication.id $}&updateToken={$ membershipApplication.updateToken $}">{$ 'membership_confirmation_goto_cancel' | trans $}</a></li>
+						<li><a href="https://www.wikimedia.de/" target="_blank">{$ 'membership_confirmation_goto_wikimedia' | trans $}</a></li>
+					</div>
+				</ul>
+				<div class="text-moved hidden-sm hidden-md hidden-lg">
+					<p>{$ 'membership_confirmation_welcome' | trans $}</p>
+				</div>
+
+				<div class="hidden-sm hidden-md hidden-lg">
+					<ul class="list-menu link-back list-unstyled">
+						<div class="down">
+							<li><a href="{$ basepath $}/cancel-membership-application?id={$ membershipApplication.id $}&updateToken={$ membershipApplication.updateToken $}">{$ 'membership_confirmation_goto_cancel' | trans $}</a></li>
+							<li><a href="https://www.wikimedia.de/" target="_blank">{$ 'membership_confirmation_goto_wikimedia' | trans $}</a></li>
+						</div>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="back-block col-xs-12 col-sm-5 col-sm-offset-7 col-md-4 col-md-offset-8 hidden-print">
+				<ul class="list-menu link-reverse link-back list-unstyled">
+					<li><a href="https://de.wikipedia.org">{$ 'membership_confirmation_goto_wikipedia' | trans $}</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
