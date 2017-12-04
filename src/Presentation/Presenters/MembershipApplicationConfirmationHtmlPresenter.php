@@ -50,6 +50,7 @@ class MembershipApplicationConfirmationHtmlPresenter {
 	private function getApplicationArguments( Application $membershipApplication, string $updateToken ): array {
 		return [
 			'id' => $membershipApplication->getId(),
+			'membershipType' => $membershipApplication->getType(),
 			'paymentType' => $membershipApplication->getPayment()->getPaymentMethod()->getType(),
 			'status' => $this->mapStatus( $membershipApplication->isConfirmed() ),
 			'membershipFee' => $membershipApplication->getPayment()->getAmount()->getEuroString(),
