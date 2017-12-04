@@ -1,8 +1,20 @@
 'use strict';
 
 var objectAssign = require( 'object-assign' ),
+	_ = require( 'underscore' ),
 	actions = require( './actions' ),
 	NumericInputHandler = require( './numeric_input_handler' ),
+
+	/**
+	 * Wrapper around underscore debounce function with a delay of 300 milliseconds
+	 *
+	 * @param {function} f
+	 * @param {Number} milliseconds
+	 * @return {Function}
+	 */
+	defaultDebounce = function ( f, milliseconds ) {
+		return _.debounce( f, milliseconds || 300 );
+	},
 
 	createDefaultChangeHandler = function ( store, contentName ) {
 		return function ( evt ) {
@@ -200,6 +212,16 @@ module.exports = {
 		bankDataElements.accountNumberElement.on( 'change', createDefaultChangeHandler( store, 'accountNumber' ) );
 		bankDataElements.bankCodeElement.on( 'change', createDefaultChangeHandler( store, 'bankCode' ) );
 		return component;
-	}
+	},
 
+	addEagerChangeBehavior: function( textComponent, debouncingFunction ) {
+		debouncingFunction = debouncingFunction || defaultDebounce;
+		textComponent.element.on( 'keypress', debouncingFunction( function ( evt ) {
+			textComponent.onChange( evt );
+			if ( textComponent.validator ) {
+				textComponent.validator( evt );
+			}
+		} ) );
+		return textComponent;
+	}
 };
