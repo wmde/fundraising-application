@@ -11,7 +11,7 @@ var formContentLib = require( './form_content' ),
     debitType: 'sepa', // sepa and "non-sepa"
     addressType: '', // person, firma
     salutation: 'anrede',
-    title: 'vtitle',
+    title: '',
     firstName: '',
     lastName: '',
     companyName: '',
