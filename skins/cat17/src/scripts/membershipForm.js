@@ -146,13 +146,25 @@ $( function () {
 			),
 			stateKey: 'membershipFormContent.paymentType'
 		},
-
-		// todo verify FeeOptionSwitcher does its thing
-      {
-        viewHandler: WMDE.View.createFeeOptionSwitcher( [ $( '#amount-1' ), $( '#amount-2' ), $( '#amount-3' ), $( '#amount-4' ), $( '#amount-5' ), $( '#amount-6' ), $( '#amount-7' ) ], { person: 24, firma: 100 } ),
-        stateKey: 'membershipFormContent'
-      },
-
+		{
+			viewHandler: WMDE.View.createFeeOptionSwitcher(
+				[
+					$( '#amount1' ),
+					$( '#amount2' ),
+					$( '#amount3' ),
+					$( '#amount4' ),
+					$( '#amount5' ),
+					$( '#amount6' ),
+					$( '#amount7' ),
+					$( '#amount8' )
+				],
+				{ // minimum annual amount in cents
+					person: 2400,
+					firma: 10000
+				}
+			),
+			stateKey: 'membershipFormContent'
+		},
 		{
 			viewHandler: WMDE.View.createShySubmitButtonHandler( $( 'form input[type="submit"]' ) ),
 			stateKey: [ WMDE.StateAggregation.Membership.allValiditySectionsAreValid ]

@@ -17,15 +17,23 @@ var objectAssign = require( 'object-assign' ),
 		elements: [],
 
 		update: function ( state ) {
-			_.each( this.elements, function ( feeOption ) {
-				// TODO no need to parseFloat when fee is converted to integer
-				var shouldBeDisabled = this.minimumFee[ state.addressType ] > feePerMonth( state.paymentIntervalInMonths, parseFloat( feeOption.val() ) ) ;
 
+			if ( state.addressType === '' ) {
+				return;
+			}
+			if ( state.paymentIntervalInMonths === -1 ) {
+				return;
+			}
+
+			_.each( this.elements, function ( feeOption ) {
+				var shouldBeDisabled = this.minimumFee[ state.addressType ] > feePerMonth( state.paymentIntervalInMonths, feeOption.val() ) ;
 				if ( shouldBeDisabled ) {
 					feeOption.prop( 'checked', false );
 					feeOption.prop( 'disabled', true );
+					feeOption.parent().addClass( 'disabled' );
 				} else {
 					feeOption.prop( 'disabled', false );
+					feeOption.parent().removeClass( 'disabled' );
 				}
 			}, this );
 		}
