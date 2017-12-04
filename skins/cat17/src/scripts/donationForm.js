@@ -295,7 +295,14 @@ $( function () {
 				'donationFormContent.email',
 				WMDE.StateAggregation.donorTypeAndAddressAreValid
 			]
-		}
+		},
+      {
+        viewHandler: WMDE.View.createSimpleVisibilitySwitcher(
+          $( '#street, #adress-company' ).nextAll( '.warning-text' ),
+          /^\D+$/
+        ),
+        stateKey: 'donationFormContent.street'
+      }
     ],
     store
   );

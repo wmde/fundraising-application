@@ -115,9 +115,15 @@ input[type=submit] {
 }
 
 .error-text {
-    color: $brand-error;
-    padding-left: 16px;
-    margin-bottom: 30px;
+	color: $brand-error;
+	padding-left: 16px;
+	margin-bottom: 30px;
+}
+
+.warning-text {
+	color: $brand-warning;
+	padding-left: 16px;
+	margin-bottom: 30px;
 }
 
 label, input#amount-typed, .wrap-amount-typed:after{
