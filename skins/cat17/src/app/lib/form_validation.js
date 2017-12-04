@@ -105,6 +105,7 @@ var jQuery = require( 'jquery' ),
 
 	FeeValidator = {
 		validationUrl: '',
+		feeFormatter: null,
 		sendFunction: null,
 		validate: function ( formValues ) {
 			var postData;
@@ -112,18 +113,14 @@ var jQuery = require( 'jquery' ),
 				return { status: ValidationStates.INCOMPLETE };
 			}
 			postData = {
-				amount: formValues.amount,
+				amount: this.feeFormatter.format( formValues.amount ),
 				paymentIntervalInMonths: formValues.paymentIntervalInMonths,
 				addressType: formValues.addressType
 			};
 			return jQueryDeferredToPromise( this.sendFunction( this.validationUrl, postData, null, 'json' ) );
 		},
 		formValuesHaveEmptyRequiredFields: function ( formValues ) {
-			// TODO simplyfy when fee is an integer
-			// WARNING: As we don't have localized money values at the moment,
-			// this method will behave incorrectly for amounts between 0 and 1
-			var amountAsFloat = parseFloat( formValues.amount );
-			return amountAsFloat === 0 || isNaN( amountAsFloat ) || !formValues.addressType || !formValues.paymentIntervalInMonths;
+			return formValues.amount === 0 || !formValues.addressType || !formValues.paymentIntervalInMonths;
 		}
 	},
 
@@ -220,9 +217,17 @@ var jQuery = require( 'jquery' ),
 		} );
 	},
 
-	createFeeValidator = function ( validationUrl, sendFunction ) {
+	/**
+	 *
+	 * @param {string} validationUrl
+	 * @param {object} feeFormatter Formatter object that supports the .format method
+	 * @param {Function} sendFunction jQuery.post function or equivalent
+	 * @return {*}
+	 */
+	createFeeValidator = function ( validationUrl, feeFormatter, sendFunction ) {
 		return objectAssign( Object.create( FeeValidator ), {
 			validationUrl: validationUrl,
+			feeFormatter: feeFormatter,
 			sendFunction: sendFunction || jQuery.post
 		} );
 	},

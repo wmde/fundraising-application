@@ -66,10 +66,13 @@ $( function () {
   WMDE.StoreUpdates.connectValidatorsToStore(
     function ( initialValues ) {
       return [
-        WMDE.ValidationDispatchers.createFeeValidationDispatcher(
-          WMDE.FormValidation.createFeeValidator( initData.data( 'validate-fee-url' ) ),
-          initialValues
-        ),
+				WMDE.ValidationDispatchers.createFeeValidationDispatcher(
+					WMDE.FormValidation.createFeeValidator(
+						initData.data( 'validate-fee-url' ),
+						WMDE.IntegerCurrency.createCurrencyFormatter( 'de' )
+					),
+					initialValues
+				),
         WMDE.ValidationDispatchers.createAddressValidationDispatcher(
           WMDE.FormValidation.createAddressValidator(
             initData.data( 'validate-address-url' ),
