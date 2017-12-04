@@ -94,13 +94,13 @@
 					</section>
 
 					<section id="donation-type" class="donation-daten clearfix">
-						<h2>{$ 'membership_section_donor_title' | trans $}</h2>
+						<h2>{$ 'membership_section_applicant_title' | trans $}</h2>
 
-						<p class="legend">{$ 'membership_section_donor_legend' | trans $}</p>
+						<p class="legend">{$ 'membership_section_applicant_legend' | trans $}</p>
 
 						<fieldset id="type-donor"
 								  class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
-							<legend class="sr-only">{$ 'membership_section_donor_legend' | trans $}</legend>
+							<legend class="sr-only">{$ 'membership_section_applicant_legend' | trans $}</legend>
 
 							<div class="wrap-field personal">
 
@@ -227,13 +227,13 @@
 					</section>
 
 					<section id="donation-amount" class="donation-amount clearfix">
-						<h2>{$ 'membership_section_amount_title' | trans $}</h2>
+						<h2>{$ 'membership_section_fee_title' | trans $}</h2>
 
-						<p class="legend">{$ 'membership_section_amount_legend' | trans $}</p>
+						<p class="legend">{$ 'membership_section_fee_legend' | trans $}</p>
 
 						<fieldset
 								class="amount-qty padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
-							<legend class="sr-only">{$ 'membership_section_amount_legend' | trans $}</legend>
+							<legend class="sr-only">{$ 'membership_section_fee_legend' | trans $}</legend>
 							<div class="wrap-amounts">
 								{% include 'partials/payment_preset_amounts.html.twig' with { 'presetAmounts': [ 5, 15, 25, 50, 75, 100, 250, 300 ] } %}
 
@@ -253,8 +253,8 @@
 							{% include 'partials/payment_intervals.html.twig' with { 'intervals': PAYMENT_INTERVALS, 'fieldName': 'membership_fee_interval' } only %}
 
 							<div class="more-info">
-								<p>{$ 'membership_section_amount_minimum_info' | trans $}</p>
-								<p>{$ 'membership_section_amount_reduction_info' | trans $}</p>
+								<p>{$ 'membership_section_fee_minimum_info' | trans $}</p>
+								<p>{$ 'membership_section_fee_reduction_info' | trans $}</p>
 							</div>
 						</fieldset>
 					</section>
