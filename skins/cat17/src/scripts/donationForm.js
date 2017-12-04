@@ -328,7 +328,6 @@ $( function () {
 		initData.data( 'initial-validation-result' )
 	) );
 
-
 	var $introBanner = $('.introduction.banner');
   var $introDefault = $('.introduction.default');
 
@@ -337,5 +336,14 @@ $( function () {
     $introBanner.removeClass('hidden');
     $introDefault.addClass('hidden');
   }
+
+	// Non-state-changing event behavior
+
+	var scroller = WMDE.Scrolling.createAnimatedScroller( $( '.wrap-header, .state-bar' ) );
+	WMDE.Scrolling.addScrollToLinkAnchors( $( 'a[href*="#"]' ), scroller);
+	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="periode"]' ), $( '#recurrence' ), scroller );
+	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="addressType"]' ), $( '#type-donor' ), scroller );
+	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="paymentType"]' ), $( '#donation-payment' ), scroller );
+
 
 } );
