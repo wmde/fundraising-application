@@ -1,7 +1,6 @@
 {# paramters:
-	paymentTypes
-	formId
-	checkedPaymentType (optional)
+	paymentTypes List of payment types to actually show
+	fieldName Name of the form fields used to submit the selected payment type
 #}
 {% set PAYMENT_TYPE_OPTIONS = {
 	'PPL': { 'id': 'paypal', 'icon': 'icon-paypal' },
@@ -14,7 +13,7 @@
 {% for paymentType in paymentTypes %}
 	<div class="wrap-field" data-info-text="{$ ( 'payment_type_' ~ paymentType ~ '_info' ) | trans | e( 'html_attr' ) $}">
 		<div class="wrap-input">
-			<input type="radio" name="zahlweise" id="{$ PAYMENT_TYPE_OPTIONS[paymentType].id $}" value="{$ paymentType $}">
+			<input type="radio" name="{$ fieldName $}" id="{$ PAYMENT_TYPE_OPTIONS[paymentType].id $}" value="{$ paymentType $}">
 			<label for="{$ PAYMENT_TYPE_OPTIONS[paymentType].id $}">
 				<span>{$ paymentType|trans({}, 'paymentTypes') $}</span>
 				<i class="{$ PAYMENT_TYPE_OPTIONS[paymentType].icon $}"></i>

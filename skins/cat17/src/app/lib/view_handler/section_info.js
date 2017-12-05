@@ -9,7 +9,7 @@ var objectAssign = require( 'object-assign' ),
 	},
 	DOM_SELECTORS = {
 		data: {
-			emtpyText: 'empty-text',
+			emptyText: 'empty-text',
 			displayError: 'display-error'
 		},
 		classes: {
@@ -46,13 +46,30 @@ var objectAssign = require( 'object-assign' ),
 		valueTextMap: {},
 		valueLongTextMap: {},
 
-		update: function ( value ) {
-			this.defaultBehavior( value );
+		update: function ( value, validity ) {
+			this.defaultBehavior( value, validity );
 		},
-		defaultBehavior: function ( value ) {
+		/**
+		 *
+		 * @param {*} value
+		 * @param {validation_result} validity
+		 */
+		defaultBehavior: function ( value, validity ) {
 			this.setIcon( this.getValueIcon( value ) );
 			this.setText( this.getValueText( value ) );
 			this.setLongText( this.getValueLongText( value ) );
+
+			if ( validity ) {
+				if ( validity.dataEntered === false ) {
+					this.setSectionStatus( SECTION_STATUS.disabled );
+				} else {
+					if ( validity.isValid === true ) {
+						this.setSectionStatus( SECTION_STATUS.complete );
+					} else {
+						this.setSectionStatus( SECTION_STATUS.invalid );
+					}
+				}
+			}
 		},
 		getValueIcon: function ( value ) {
 			return this.valueIconMap[ value ];
@@ -66,6 +83,10 @@ var objectAssign = require( 'object-assign' ),
 		setText: function ( text ) {
 			if ( !this.text ) {
 				return;
+			}
+
+			if ( text === undefined ) {
+				text = this.text.data( DOM_SELECTORS.data.emptyText );
 			}
 
 			this.text.text( text );
@@ -125,7 +146,7 @@ var objectAssign = require( 'object-assign' ),
 			if ( this.text ) {
 				this.setText(
 					amount === 0 ?
-						this.text.data( DOM_SELECTORS.data.emtpyText ) :
+						this.text.data( DOM_SELECTORS.data.emptyText ) :
 						this.currencyFormatter.format( amount ) + ' €'
 				);
 			}
@@ -149,7 +170,7 @@ var objectAssign = require( 'object-assign' ),
 			if ( this.text ) {
 				this.setText(
 					!aggregateValidity.dataEntered ?
-						this.text.data( DOM_SELECTORS.data.emtpyText ) :
+						this.text.data( DOM_SELECTORS.data.emptyText ) :
 						this.getValueText( paymentType )
 				);
 			}
@@ -185,7 +206,7 @@ var objectAssign = require( 'object-assign' ),
 			if ( this.text ) {
 				this.setText(
 					!aggregateValidity.dataEntered ?
-						this.text.data( DOM_SELECTORS.data.emtpyText ) :
+						this.text.data( DOM_SELECTORS.data.emptyText ) :
 						this.getValueText( addressType )
 				);
 			}

@@ -1,0 +1,316 @@
+{% extends 'Base_Layout.html.twig' %}
+
+{% set COUNTRIES = [ 'DE', 'AT', 'CH', 'BE', 'IT', 'LI', 'LU' ] %}
+{% set PAYMENT_INTERVALS = [ 1, 3, 6, 12 ] %}
+{% set initialPaymentType = paymentTypes|length == 1 ? paymentTypes|first : '' %}
+
+{% block page_identifier %}membership{% endblock %}
+{% block page_theme %}membership{% endblock %}
+
+{% block main %}
+	<div class="introduction">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12">
+					<h2 class="sr-only">{$ 'membership_title' | trans $}</h2>
+
+					<p class="h1">{$ 'membership_intro' | trans $}</p>
+
+					<div class="row">
+						<div class="col-xs-12 col-sm-5 col-sm-offset-7 col-md-4 col-md-offset-8">
+							<a href="#membership-type"
+							   class="btn btn-membership btn-introduction bk-blue text-center text-uppercase">{$ 'membership_submit' | trans $}</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="shadow-top container-fluid">
+			<div class="container">
+				<div class="row">
+					<div class="resum col-xs-12 col-md-8">
+						<h2>{$ 'membership_benefit_list_title' | trans $}</h2>
+						<ul class="list-membership">
+							<li class="col-xs-12 col-sm-6">{$ 'membership_benefit_list_1' | trans $}</li>
+							<li class="col-xs-12 col-sm-6">{$ 'membership_benefit_list_2' | trans $}</li>
+							<li class="col-xs-12 col-sm-6">{$ 'membership_benefit_list_3' | trans $}</li>
+							<li class="col-xs-12 col-sm-6">{$ 'membership_benefit_list_4' | trans $}</li>
+							<li class="col-xs-12 col-sm-6">{$ 'membership_benefit_list_5' | trans $}</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<form id="form-membership" action="{$ basepath $}/apply-for-membership" method="post" novalidate="">
+		<div class="container">
+			<section class="state-bar state-overview col-xs-12 ">
+				<div class="wrap-bar container ">
+					<ul class="">
+						{% include 'partials/membership/state_bar_sections.html.twig' only %}
+					</ul>
+				</div>
+			</section>
+			<div class="row">
+
+				<div class="form-shadow-wrap col-xs-12 col-sm-8 col-md-8">
+
+					<section id="membership-type" class="donation-amount clearfix">
+						<h2 class="">{$ 'membership_section_membership_type_title' | trans $}</h2>
+
+						<fieldset id="type-membership"
+								class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
+							<legend class="sr-only">{$ 'membership_section_membership_type_legend' | trans $}</legend>
+							<div class="wrap-field">
+								<div class="wrap-input">
+									<input type="radio" name="membership_type" id="support" value="sustaining">
+									<label for="support">
+										<span data-short-name="Förder">{$ 'membership_membershiptype_option_sustaining' | trans $}</span>
+										<i class="icon-favorite"></i>
+									</label>
+								</div>
+
+								<p class="info-text opened" data-info="support">
+									{$ 'membership_membershiptype_option_sustaining_legend' | trans $}
+								</p>
+							</div>
+							<div class="wrap-field">
+								<div class="wrap-input">
+									<input type="radio" name="membership_type" id="aktive" value="active">
+									<label for="aktive">
+										<span data-short-name="Aktive">{$ 'membership_membershiptype_option_active' | trans $}</span>
+										<i class="icon-flash_on"></i>
+									</label>
+								</div>
+
+								<p class="info-text opened" data-info="aktive">
+									{$ 'membership_membershiptype_option_active_legend' | trans $}
+								</p>
+							</div>
+
+						</fieldset>
+					</section>
+
+					<section id="donation-type" class="donation-daten clearfix">
+						<h2>{$ 'membership_section_applicant_title' | trans $}</h2>
+
+						<p class="legend">{$ 'membership_section_applicant_legend' | trans $}</p>
+
+						<fieldset id="type-donor"
+								  class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
+							<legend class="sr-only">{$ 'membership_section_applicant_legend' | trans $}</legend>
+
+							<div class="wrap-field personal">
+
+								<div class="wrap-input">
+									<input type="radio" name="adresstyp" id="personal" value="person">
+									<label for="personal">
+										<span>{$ 'membership_addresstype_option_private' | trans $}</span>
+										<i class="icon-account_circle"></i>
+									</label>
+								</div>
+								<div class="wrap-info">
+									<div class="info-text" data-info="personal">
+										<div class="wrap-select-50 clearfix">
+											<select class="no-outline salutation" id="treatment" name="anrede"
+													data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true }'>
+												<option hidden class="hideme" value="">{$ 'salutation_label' | trans $}</option>
+												<option value="Herr">{$ 'salutation_option_mr' | trans $}</option>
+												<option value="Frau">{$ 'salutation_option_mrs' | trans $}</option>
+											</select>
+											<select class="no-outline personal-title" id="title" name="titel"
+													data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true}'>
+												<option value="">{$ 'title_option_none' | trans $}</option>
+												<option value="Dr.">Dr.</option>
+												<option value="Prof.">Prof.</option>
+												<option value="Prof. Dr.">Prof. Dr.</option>
+											</select>
+										</div>
+
+										<div class="field-grp">
+											<input type="text" id="first-name" name="vorname" class="first-name" placeholder="{$ 'firstname_label' | trans | e( 'html_attr' ) $}">
+											<label for="first-name" class="sr-only">{$ 'firstname_label' | trans $}</label>
+											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+										</div>
+										<div class="field-grp">
+											<input type="text" id="surname" name="nachname" class="name" placeholder="{$ 'lastname_label' | trans | e( 'html_attr' ) $}">
+											<label for="surname" class="sr-only">{$ 'lastname_label' | trans $}</label>
+											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+										</div>
+										<div class="field-grp">
+											<input type="email" id="email" class="email" placeholder="{$ 'email_label' | trans | e( 'html_attr' ) $}">
+											<label for="email" class="sr-only">{$ 'email_label' | trans $}</label>
+											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+										</div>
+										<div class="field-grp">
+											<input type="text" id="street" class="street"
+												   placeholder="{$ 'street_label' | trans | e( 'html_attr' ) $}">
+											<label for="street" class="sr-only">{$ 'street_label' | trans $}</label>
+											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+										</div>
+										<div class="field-grp">
+											<input type="text" id="post-code" class="post-code" placeholder="{$ 'zip_label' | trans | e( 'html_attr' ) $}">
+											<label for="post-code" class="sr-only">{$ 'zip_label' | trans $}</label>
+											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+										</div>
+										<div class="field-grp">
+											<input type="text" id="city" placeholder="{$ 'city_label' | trans | e( 'html_attr' ) $}" class="city">
+											<label for="city" class="sr-only">{$ 'city_label' | trans $}</label>
+											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+										</div>
+										<div class="field-grp">
+											<input id="date-of-birth" name="dob" type="text" value="" title="DD.MM.YYYY" placeholder="{$ 'membership_dob_label' | trans | e( 'html_attr' ) $}" optional="optional" data-pattern="^[0-3]?[0-9]\.[01]?[0-9]\.[0-9]{2,4}$">
+											<label for="city" class="sr-only">{$ 'membership_dob_label' | trans $}</label>
+											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+										</div>
+										<select id="country" title="{$ 'country_label' | trans | e( 'html_attr' ) $}"
+												data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true, "maxVisibleItems": 6}'
+												class="no-outline country-select">
+											{% for countryCode in COUNTRIES %}
+												<option value="{$ countryCode $}">{$ ( 'country_option_' ~ countryCode ) | trans $}</option>
+											{% endfor %}
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="wrap-field firma">
+
+								<div class="wrap-input">
+									<input type="radio" name="adresstyp" id="company" value="firma">
+									<label for="company">
+										<span>{$ 'membership_addresstype_option_company' | trans $}</span>
+										<i class="icon-work"></i>
+									</label>
+								</div>
+								<div class="wrap-info">
+									<div class="info-text" data-info="company">
+										<div class="field-grp ">
+											<input type="text" id="company-name" name="firma" placeholder="{$ 'companyname_label' | trans | e( 'html_attr' ) $}" name="company-name">
+											<label for="company-name" class="sr-only">{$ 'companyname_label' | trans $}</label>
+											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+										</div>
+										<div class="field-grp">
+											<input type="email" id="email-company" name="email" class="email" placeholder="{$ 'email_label' | trans | e( 'html_attr' ) $}">
+											<label for="email-company" class="sr-only">{$ 'email_label' | trans $}</label>
+											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+										</div>
+										<div class="field-grp">
+											<input type="text" id="adress-company" name="strasse" class="street" placeholder="{$ 'street_label' | trans | e( 'html_attr' ) $}">
+											<label for="adress-company" class="sr-only">{$ 'street_label' | trans $}</label>
+											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+										</div>
+										<div class="field-grp">
+											<input type="text" id="post-code-company" name="postcode" class="post-code" placeholder="{$ 'zip_label' | trans | e( 'html_attr' ) $}">
+											<label for="post-code" class="sr-only">{$ 'zip_label' | trans $}</label>
+											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+										</div>
+										<div class="field-grp">
+											<input type="text" id="city-company" name="ort" placeholder="{$ 'city_label' | trans | e( 'html_attr' ) $}" class="city">
+											<label for="city-company" class="sr-only">{$ 'city_label' | trans $}</label>
+											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+										</div>
+										<select id="country-company" name="country" title="{$ 'country_label' | trans | e( 'html_attr' ) $}"
+												data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true, "maxVisibleItems": 6}'
+												class="no-outline country-select">
+											{% for countryCode in COUNTRIES %}
+												<option value="{$ countryCode $}">{$ ( 'country_option_' ~ countryCode ) | trans $}</option>
+											{% endfor %}
+										</select>
+									</div>
+								</div>
+
+							</div>
+
+						</fieldset>
+					</section>
+
+					<section id="donation-amount" class="donation-amount clearfix">
+						<h2>{$ 'membership_section_fee_title' | trans $}</h2>
+
+						<p class="legend">{$ 'membership_section_fee_legend' | trans $}</p>
+
+						<fieldset
+								class="amount-qty padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
+							<legend class="sr-only">{$ 'membership_section_fee_legend' | trans $}</legend>
+							<div class="wrap-amounts">
+								{% include 'partials/payment_preset_amounts.html.twig' with { 'presetAmounts': [ 5, 15, 25, 50, 75, 100, 250, 300 ] } %}
+
+								<div class="wrap-amount-typed">
+									<input type="text" id="amount-typed">
+								</div>
+								<input type="hidden" name="membership_fee" id="amount-hidden">
+								<!-- Todo: put messages in deutch -->
+								<label for="amount-typed" class="sr-only">Give your desired amount</label>
+							</div>
+						</fieldset>
+
+						<fieldset id="recurrence"
+								  class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
+							<legend class="sr-only">{$ 'membership_section_interval_legend' | trans $}</legend>
+
+							{% include 'partials/payment_intervals.html.twig' with { 'intervals': PAYMENT_INTERVALS, 'fieldName': 'membership_fee_interval' } only %}
+
+							<div class="more-info">
+								<p>{$ 'membership_section_fee_minimum_info' | trans $}</p>
+								<p>{$ 'membership_section_fee_reduction_info' | trans $}</p>
+							</div>
+						</fieldset>
+					</section>
+
+					<section id="donation-payment" class="donation-payment-method clearfix">
+						<h2>{$ 'membership_section_payment_title' | trans $}</h2>
+
+						<fieldset id="payment-method"
+								class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
+							<legend class="sr-only">{$ 'membership_section_payment_legend' | trans $}</legend>
+
+							{% include 'partials/payment_types.html.twig' with { 'paymentTypes': paymentTypes, 'fieldName': 'payment_type' } only %}
+
+							{# Hidden fields, filled from store - bridge backend field names not compatible with reusable frontend components #}
+							<input name="account_number" type="hidden">
+							<input name="bank_code" type="hidden">
+						</fieldset>
+					</section>
+
+				</div>
+
+				{% include 'partials/membership/state-bar.html.twig' %}
+
+			</div>
+		</div>
+		<hr id="form-end">
+
+		{% include 'partials/membership/overview.html.twig' %}
+
+		<input type="hidden" name="templateCampaign" value="{$ templateCampaign $}">
+		<input type="hidden" name="templateName" value="{$ templateName $}">
+
+		<div class="fixed-button hidden-lg">
+			<div class="switch-container container-fluid container">
+				<div class="row">
+					<div class=" col-sm-5 col-sm-offset-7 col-md-4 col-md-offset-8 clearfix">
+						<input type="submit" value="{$ 'membership_submit' | trans | e( 'html_attr' ) $}" class="btn btn-donation btn-unactive">
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="submit-bottom">
+			<input type="submit" value="{$ 'membership_submit' | trans | e( 'html_attr' ) $}" class="btn btn-donation btn-unactive visible-xs-block">
+		</div>
+	</form>
+{% endblock %}
+
+{% block scripts %}
+	<script type="text/javascript" src="{$ basepath|e('html_attr') $}{$ '/skins/cat17/scripts/wmde.js'|prefix_file $}"></script>
+	<script id="init-form" src="{$ basepath|e('html_attr') $}{$ '/skins/cat17/scripts/membershipForm.js'|prefix_file $}"
+		data-initial-form-values="{% if initialFormValues %}{$ initialFormValues|merge({'paymentType': initialPaymentType})|json_encode|e('html_attr') $}{% else %}{$ {'paymentType': initialPaymentType}|json_encode|e('html_attr') $}{% endif %}"
+		data-violated-fields="{% if violatedFields %}{$ violatedFields|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
+		data-validate-fee-url="{$ basepath|e('html_attr') $}/validate-fee"
+		data-validate-address-url="{$ basepath|e('html_attr') $}/validate-address"
+		data-validate-email-address-url="{$ basepath|e('html_attr') $}/validate-email"
+		data-validate-iban-url="{$ basepath $}/check-iban"
+		data-generate-iban-url="{$ basepath $}/generate-iban"></script>
+{% endblock %}

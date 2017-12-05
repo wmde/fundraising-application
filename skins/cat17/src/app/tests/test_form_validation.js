@@ -52,6 +52,7 @@ test( 'Fee validation sends values to server', function ( t ) {
 		postFunctionSpy = sinon.stub().returns( Promise.resolve( positiveResult ) ),
 		feeValidator = validation.createFeeValidator(
 			'http://spenden.wikimedia.org/validate-fee',
+			{ format: sinon.stub().returnsArg( 0 ) },
 			postFunctionSpy
 		),
 		formData = {
@@ -80,6 +81,7 @@ test( 'Fee validation sends nothing to server if necessary values are not set', 
 		postFunctionSpy = sinon.spy(),
 		feeValidator = validation.createFeeValidator(
 			'http://spenden.wikimedia.org/validate-fee',
+			{ format: sinon.stub().returnsArg( 0 ) },
 			postFunctionSpy
 		),
 		formDataEmptyAmount = {

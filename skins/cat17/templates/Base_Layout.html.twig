@@ -22,7 +22,7 @@
 	<link rel="apple-touch-icon" href="{$ basepath $}/skins/cat17/assets/images/apple-touch-icon.png" />
 	<link rel="stylesheet" href="{$ basepath $}/skins/cat17/css/main.css">
 </head>
-<body class="{% block page_theme %}theme-donation{% endblock %}">
+<body class="theme-{% block page_theme %}donation{% endblock %}">
 	<div class="page-{% block page_identifier %}uncustomized{% endblock %}">
 		{% include 'partials/' ~ header_template with { page_identifier: block('page_identifier') } only %}
 

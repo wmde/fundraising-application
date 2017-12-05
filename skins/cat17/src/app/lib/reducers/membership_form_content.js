@@ -3,15 +3,15 @@
 var formContentLib = require( './form_content' ),
   objectAssign = require( 'object-assign' ),
   initialState = {
-    membershipType: '', // sustaining, active
+    membershipType: null, // sustaining, active
     amount: 0,
-    paymentType: 'BEZ',
+    paymentType: null,
     isCustomAmount: false,
     paymentIntervalInMonths: -1, // 1, 3, 6, 12
     debitType: 'sepa', // sepa and "non-sepa"
     addressType: '', // person, firma
-    salutation: 'anrede',
-    title: 'vtitle',
+    salutation: '',
+    title: '',
     firstName: '',
     lastName: '',
     companyName: '',
@@ -21,14 +21,11 @@ var formContentLib = require( './form_content' ),
     country: 'DE',
     email: '',
     dateOfBirth: '',
-    phoneNumber: '',
     iban: '',
     bic: '',
     accountNumber: '',
     bankCode: '',
     bankname: '',
-    confirmNewsletter: false,
-    contactPerson: '',
     activePresets: false,
 	donationReceipt: false
   };
