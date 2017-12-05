@@ -10,6 +10,11 @@
 {% set initialPaymentType = paymentTypes|length == 1 ? paymentTypes|first : '' %}
 {% set initialFormValues = initialFormValues | merge( { 'paymentType': initialPaymentType } ) %}
 
+{% set showMembershipTypeOption = showMembershipTypeOption is defined ? showMembershipTypeOption : 'true' %}
+{% if showMembershipTypeOption != 'true' %}
+	{% set initialFormValues = initialFormValues | merge( { 'membershipType': 'sustaining' } ) %}
+{% endif %}
+
 {% block page_identifier %}membership{% endblock %}
 {% block page_theme %}membership{% endblock %}
 
@@ -41,7 +46,9 @@
 							<li class="col-xs-12 col-sm-6">{$ 'membership_benefit_list_1' | trans $}</li>
 							<li class="col-xs-12 col-sm-6">{$ 'membership_benefit_list_2' | trans $}</li>
 							<li class="col-xs-12 col-sm-6">{$ 'membership_benefit_list_3' | trans $}</li>
-							<li class="col-xs-12 col-sm-6">{$ 'membership_benefit_list_4' | trans $}</li>
+							{% if showMembershipTypeOption == 'true' %}
+								<li class="col-xs-12 col-sm-6">{$ 'membership_benefit_list_4' | trans $}</li>
+							{% endif %}
 							<li class="col-xs-12 col-sm-6">{$ 'membership_benefit_list_5' | trans $}</li>
 						</ul>
 					</div>
@@ -63,7 +70,7 @@
 
 				<div class="form-shadow-wrap col-xs-12 col-sm-8 col-md-8">
 
-					<section id="membership-type" class="donation-amount clearfix">
+					<section id="membership-type" class="donation-amount clearfix"{% if showMembershipTypeOption != 'true' %} style="display:none"{% endif %}>
 						<h2 class="">{$ 'membership_section_membership_type_title' | trans $}</h2>
 
 						<fieldset id="type-membership"
@@ -98,6 +105,12 @@
 
 						</fieldset>
 					</section>
+
+					{% if showMembershipTypeOption == 'true' %}
+						<input type="hidden" name="showMembershipTypeOption" value="true" />
+					{% else %}
+						<input type="hidden" name="showMembershipTypeOption" value="false" />
+					{% endif %}
 
 					<section id="donation-type" class="donation-daten clearfix">
 						<h2>{$ 'membership_section_applicant_title' | trans $}</h2>
