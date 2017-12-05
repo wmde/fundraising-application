@@ -26,6 +26,28 @@ test( 'Amount, and interval type given is valid and has data entered', function 
 	t.end();
 } );
 
+test( 'Amount, and interval type given have valid client values but server-side has declared them invalid', function ( t ) {
+	t.deepEqual(
+		amountAndFrequencyAreValid( {
+			membershipFormContent: {
+				paymentIntervalInMonths: 1,
+				amount: 2
+			},
+			membershipInputValidation: {
+				amount: {
+					dataEntered: true,
+					isValid: false
+				}
+			}
+		} ),
+		{
+			dataEntered: true,
+			isValid: false
+		}
+	);
+	t.end();
+} );
+
 test( 'All but amount selected is invalid but has data entered', function ( t ) {
 	t.deepEqual(
 		amountAndFrequencyAreValid( {
