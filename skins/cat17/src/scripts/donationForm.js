@@ -337,14 +337,13 @@ $( function () {
 		initData.data( 'initial-validation-result' )
 	) );
 
+	// Show summary banner if donor shows the form with valid payment data
 	var $introBanner = $('.introduction.banner');
-  var $introDefault = $('.introduction.default');
-
-  // @todo Check if this are all conditions that would be considered "successful deeplink", warrant the special header
-  if (initSetup.amount && initSetup.paymentIntervalInMonths && initSetup.paymentType) {
-    $introBanner.removeClass('hidden');
-    $introDefault.addClass('hidden');
-  }
+	var $introDefault = $('.introduction.default');
+	if ( store.getState().validity.paymentData ) {
+		$introBanner.removeClass('hidden');
+		$introDefault.addClass('hidden');
+	}
 
 	// Non-state-changing event behavior
 
