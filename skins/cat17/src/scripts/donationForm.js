@@ -341,8 +341,14 @@ $( function () {
 	var $introBanner = $('.introduction.banner');
 	var $introDefault = $('.introduction.default');
 	if ( store.getState().validity.paymentData ) {
-		$introBanner.removeClass('hidden');
-		$introDefault.addClass('hidden');
+		$introBanner.removeClass( 'hidden' );
+		$introDefault.addClass( 'hidden' );
+		// TODO as pseudocode, maybe wrap this in a module
+		// var firstRequiredElement = WMDE.createRequiredElementFinder( $(select 1st elem), $(select 2nd elem) ).getElement()
+		// var offset = firstRequiredElement().offset().top + menu bar + $introBanner().offset.top() // Don't count bar on mobile, as it'S overlapped by banner
+		// $(window).scrollTop(offset) // don't use scroller, we don't want animation
+		// $(window).once('scroll', newUserHasInteractedAction );
+		// $(window).once('focus', newUserHasInteractedAction );
 	}
 
 	// Non-state-changing event behavior
@@ -352,6 +358,7 @@ $( function () {
 	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="periode"]' ), $( '#recurrence' ), scroller );
 	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="addressType"]' ), $( '#type-donor' ), scroller );
 	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="paymentType"]' ), $( '#donation-payment' ), scroller );
+
 
 
 } );
