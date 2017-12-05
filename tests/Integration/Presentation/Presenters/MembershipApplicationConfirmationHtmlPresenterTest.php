@@ -52,6 +52,7 @@ class MembershipApplicationConfirmationHtmlPresenterTest extends \PHPUnit\Framew
 		return [
 			'membershipApplication' => [
 				'id' => null,
+				'membershipType' => 'sustaining',
 				'paymentType' => 'PPL',
 				'status' => $mappedStatus,
 				'membershipFee' => '10.00',
