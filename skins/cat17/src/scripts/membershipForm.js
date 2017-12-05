@@ -50,14 +50,17 @@ $( function () {
         accountNumberElement: $( '#account-number' ),
         bankCodeElement: $( '#bank-code' ),
         bankNameFieldElement: $( '#field-bank-name' ),
-        bankNameDisplayElement: $( '#bank-name' ),
+        bankNameDisplayElement: $( '#bank-name' )
       } ),
 
 		WMDE.Components.createTextComponent( store, $( '#date-of-birth' ), 'dateOfBirth' ),
 
 		// fill hidden form fields with values to match backend
 		WMDE.Components.createTextComponent( store, $( 'input[name="account_number"]' ), 'accountNumber' ),
-		WMDE.Components.createTextComponent( store, $( 'input[name="bank_code"]' ), 'bankCode' )
+		WMDE.Components.createTextComponent( store, $( 'input[name="bank_code"]' ), 'bankCode' ),
+
+		WMDE.Components.createCheckboxComponent( store, $( '#donation-receipt' ), 'donationReceipt' ),
+		WMDE.Components.createCheckboxComponent( store, $( '#donation-receipt-company' ), 'donationReceipt' )
     ],
     store,
     'membershipFormContent'

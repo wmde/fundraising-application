@@ -173,6 +173,14 @@
 											{% endfor %}
 										</select>
 									</div>
+									<div class="wrap-check">
+										<div>
+											<input type="checkbox" id="donation-receipt" data-jcf='{"wrapNative": true}' class="jcf">
+											<label for="donation-receipt">
+												{$ 'membership-no-donation-receipt' | trans $}
+											</label>
+										</div>
+									</div>
 								</div>
 							</div>
 							<div class="wrap-field firma">
@@ -218,6 +226,14 @@
 												<option value="{$ countryCode $}">{$ ( 'country_option_' ~ countryCode ) | trans $}</option>
 											{% endfor %}
 										</select>
+									</div>
+									<div class="wrap-check">
+										<div>
+											<input type="checkbox" id="donation-receipt-company" name="donationReceipt" value="0" data-jcf='{"wrapNative": true}' class="jcf">
+											<label for="donation-receipt-company">
+												{$ 'membership-no-donation-receipt' | trans $}
+											</label>
+										</div>
 									</div>
 								</div>
 
