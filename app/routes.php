@@ -41,6 +41,7 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\PaymentContext\UseCases\GenerateIban\GenerateIbanRequest;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\ContentNotFoundException;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageNotFoundException;
+use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolationListMapper;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
@@ -279,6 +280,24 @@ $app->post(
 			'status' => 'ERR',
 			'message' => $ffFactory->getTranslator()->trans( $response->getErrorMessage() ),
 		] );
+	}
+);
+
+$app->get(
+	'add-comment',
+	function( Request $request ) use ( $app, $ffFactory ) {
+		$template = $ffFactory->getLayoutTemplate(
+			'Donation_Comment.html.twig'
+		);
+
+		return new Response(
+			$template->render(
+				[
+					'id' => (int)$request->query->get( 'id', '' ),
+					'updateToken' => $request->query->get( 'updateToken', '' ),
+				]
+			)
+		);
 	}
 );
 

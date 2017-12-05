@@ -15,17 +15,10 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class AddCommentRouteTest extends WebRouteTestCase {
+class AddCommentPostRouteTest extends WebRouteTestCase {
 
 	const CORRECT_UPDATE_TOKEN = 'b5b249c8beefb986faf8d186a3f16e86ef509ab2';
 	const NON_EXISTING_DONATION_ID = 25502;
-
-	public function testGivenGetRequest_resultHasMethodNotAllowedStatus(): void {
-		$this->assertGetRequestCausesMethodNotAllowedResponse(
-			'add-comment',
-			[]
-		);
-	}
 
 	public function testGivenRequestWithoutParameters_resultIsError(): void {
 		$client = $this->createClient();
