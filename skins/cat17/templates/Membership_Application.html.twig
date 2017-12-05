@@ -2,7 +2,13 @@
 
 {% set COUNTRIES = [ 'DE', 'AT', 'CH', 'BE', 'IT', 'LI', 'LU' ] %}
 {% set PAYMENT_INTERVALS = [ 1, 3, 6, 12 ] %}
+
+{% if initialFormValues is not defined or initialFormValues is null %}
+	{% set initialFormValues = {} %}
+{% endif %}
+
 {% set initialPaymentType = paymentTypes|length == 1 ? paymentTypes|first : '' %}
+{% set initialFormValues = initialFormValues | merge( { 'paymentType': initialPaymentType } ) %}
 
 {% block page_identifier %}membership{% endblock %}
 {% block page_theme %}membership{% endblock %}
@@ -306,7 +312,7 @@
 {% block scripts %}
 	<script type="text/javascript" src="{$ basepath|e('html_attr') $}{$ '/skins/cat17/scripts/wmde.js'|prefix_file $}"></script>
 	<script id="init-form" src="{$ basepath|e('html_attr') $}{$ '/skins/cat17/scripts/membershipForm.js'|prefix_file $}"
-		data-initial-form-values="{% if initialFormValues %}{$ initialFormValues|merge({'paymentType': initialPaymentType})|json_encode|e('html_attr') $}{% else %}{$ {'paymentType': initialPaymentType}|json_encode|e('html_attr') $}{% endif %}"
+		data-initial-form-values="{$ initialFormValues | json_encode | e( 'html_attr' ) $}"
 		data-violated-fields="{% if violatedFields %}{$ violatedFields|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
 		data-validate-fee-url="{$ basepath|e('html_attr') $}/validate-fee"
 		data-validate-address-url="{$ basepath|e('html_attr') $}/validate-address"
