@@ -29,7 +29,8 @@ var formContentLib = require( './form_content' ),
     bankname: '',
     confirmNewsletter: false,
     contactPerson: '',
-    activePresets: false
+    activePresets: false,
+	donationReceipt: false
   };
 
 module.exports = function membershipFormContent( state, action ) {
