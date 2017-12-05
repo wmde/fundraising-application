@@ -73,3 +73,11 @@ test( 'newInitializeContentAction returns action object', function ( t ) {
 	t.end();
 } );
 
+test( 'newUserInteractedAction returns action object', function ( t ) {
+	var expectedAction = {
+		type: 'USER_INTERACTION'
+	};
+	t.deepEqual( actions.newUserInteractedAction(), expectedAction );
+	t.end();
+} );
+

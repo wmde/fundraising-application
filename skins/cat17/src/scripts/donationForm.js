@@ -347,8 +347,9 @@ $( function () {
 		// var firstRequiredElement = WMDE.createRequiredElementFinder( $(select 1st elem), $(select 2nd elem) ).getElement()
 		// var offset = firstRequiredElement().offset().top + menu bar + $introBanner().offset.top() // Don't count bar on mobile, as it'S overlapped by banner
 		// $(window).scrollTop(offset) // don't use scroller, we don't want animation
-		// $(window).once('scroll', newUserHasInteractedAction );
-		// $(window).once('focus', newUserHasInteractedAction );
+
+		$(window).one('focus', function() { store.dispatch( actions.newUserInteractedAction() ); } );
+		$(window).one('scroll', function() { store.dispatch( actions.newUserInteractedAction() ); } );
 	}
 
 	// Non-state-changing event behavior

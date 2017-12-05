@@ -6,6 +6,7 @@ var Redux = require( 'redux' ),
 	validity = require( './reducers/validity' ),
 	donationInputValidation = require( './reducers/donation_input_validation' ),
 	membershipInputValidation = require( './reducers/membership_input_validation' ),
+	userInteractionCount = require( './reducers/user_interaction_count' ),
 	asynchronousRequests = require( './reducers/async_requests' ),
 	middlewares = [ reduxPromise ];
 
@@ -45,6 +46,7 @@ module.exports = {
 			donationFormContent: donationFormContent,
 			validity: validity,
 			donationInputValidation: donationInputValidation,
+			userInteractionCount: userInteractionCount,
 			asynchronousRequests: asynchronousRequests
 		} ), initialState, Redux.applyMiddleware.apply( this, middlewares ) );
 	},
