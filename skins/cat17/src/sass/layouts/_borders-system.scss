@@ -291,7 +291,7 @@ fieldset {
         }*/
     }
     label {
-        display: block;
+        display: flex;
         width: auto;
         max-width: none;
 
@@ -337,6 +337,7 @@ fieldset {
         margin-bottom: 20px;
         margin-left: 30px;
         height: auto;
+        display: block;
         &:before {
             border-radius: 0;
             top: 5px;
