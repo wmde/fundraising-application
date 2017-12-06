@@ -340,13 +340,19 @@ $( function () {
 	// Show summary banner if donor shows the form with valid payment data
 	var $introBanner = $('.introduction.banner');
 	var $introDefault = $('.introduction.default');
-	if ( store.getState().validity.paymentData ) {
+	var currentState = store.getState();
+	if ( currentState.validity.paymentData ) {
 		$introBanner.removeClass( 'hidden' );
 		$introDefault.addClass( 'hidden' );
-		// TODO as pseudocode, maybe wrap this in a module
-		// var firstRequiredElement = WMDE.createRequiredElementFinder( $(select 1st elem), $(select 2nd elem) ).getElement()
-		// var offset = firstRequiredElement().offset().top + menu bar + $introBanner().offset.top() // Don't count bar on mobile, as it'S overlapped by banner
-		// $(window).scrollTop(offset) // don't use scroller, we don't want animation
+
+		// Scroll to next required position, without animation
+		$(window).scrollTop(
+			WMDE.Scrolling.createRequiredElementOffsetCalculator(
+				$('.introduction.banner, .wrap-header'),
+				$( '#payment-method' ),
+				$( '#donation-type' )
+			).getRequiredElementOffset( currentState.donationFormContent )
+		);
 
 		$(window).one('focus', function() { store.dispatch( actions.newUserInteractedAction() ); } );
 		$(window).one('scroll', function() { store.dispatch( actions.newUserInteractedAction() ); } );

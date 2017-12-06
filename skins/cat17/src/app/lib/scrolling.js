@@ -20,6 +20,16 @@ var objectAssign = require( 'object-assign' ),
 		return $element.offset().top - offset;
 	},
 
+	RequiredElementOffsetCalculator = {
+		bankDataElement: null,
+		personalDataElement: null,
+		fixedHeaderElements: null,
+		getRequiredElementOffset: function ( formData ) {
+			var requiredElement = formData.paymentType === 'BEZ' ? this.bankDataElement : this.personalDataElement;
+			return calculateElementOffset( requiredElement, this.fixedHeaderElements );
+		}
+	},
+
 	AnimatedScroller = {
 		fixedHeaderElements: null,
 		scrollTo: function( $element ) {
@@ -82,6 +92,13 @@ module.exports ={
 			.not('[href="#0"]')
 			.not('.state-overview .wrap-field.completed .wrap-input')
 			.click( linkScroller.scrollToTarget.bind( linkScroller ) );
+	},
+	createRequiredElementOffsetCalculator: function ( fixedHeaderElements, bankDataElement, personalDataElement ) {
+		return objectAssign( Object.create( RequiredElementOffsetCalculator ), {
+			bankDataElement: bankDataElement,
+			personalDataElement: personalDataElement,
+			fixedHeaderElements: fixedHeaderElements
+		})
 	},
 	// exposed for testing
 	calculateElementOffset: calculateElementOffset
