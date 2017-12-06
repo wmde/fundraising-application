@@ -324,18 +324,19 @@ $( function () {
 		initData.data( 'initial-validation-result' )
 	) );
 
-	var $introBanner = $('.introduction.banner');
-  var $introDefault = $('.introduction.default');
-
-  // @todo Check if this are all conditions that would be considered "successful deeplink", warrant the special header
-  if (initSetup.amount && initSetup.paymentIntervalInMonths && initSetup.paymentType) {
-    $introBanner.removeClass('hidden');
-    $introDefault.addClass('hidden');
-  }
-
 	// Non-state-changing event behavior
 
 	var scroller = WMDE.Scrolling.createAnimatedScroller( $( '.wrap-header, .state-bar' ) );
+
+	// Scroll to first required element that needs to be filled
+	var currentState = store.getState();
+	if ( currentState.validity.paymentData ) {
+		var nextRequired = currentState.donationFormContent.paymentType === 'BEZ' ? $( '#payment-method' ) : $( '#donation-type' );
+		scroller.scrollTo( nextRequired );
+	}
+
+	// Add scroll behaviors to links/input elements
+
 	WMDE.Scrolling.addScrollToLinkAnchors( $( 'a[href*="#"]' ), scroller);
 	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="periode"]' ), $( '#recurrence' ), scroller );
 	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="addressType"]' ), $( '#type-donor' ), scroller );
