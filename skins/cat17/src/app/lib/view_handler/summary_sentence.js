@@ -5,18 +5,46 @@ var objectAssign = require( 'object-assign' ),
 	SummarySentence = {
 		defaultSentence: null,
 		summarySentence: null,
-		update: function ( paymentDataIsValid, userHasInteracted ) {
-			// if !paymentDataIsValid { return}
-			// if userHasInteracted {
-			// 		if (this.previousValue != userHasInteracted) {
-			//          this.clonedSummarySentence.fadeOut()
-			//		}
-			//      return;
-			// }
-			// clone summarySentence, add .cloned class to it
+		userHasInteracted: false,
+		initialized: false,
+		update: function ( paymentDataIsValid, userInteractionCount ) {
+			if ( !paymentDataIsValid ) {
+				return;
+			}
 
-			// TODO CSS changes:
-			// make sure z-index of .cloned is higher than regular summary elements so it effectively hides them
+			if ( userInteractionCount > 0 ) {
+				this.hideSummarySentenceContainerOnFirstUserInteraction();
+
+				return;
+			}
+
+			this.initialize();
+		},
+		initialize: function () {
+			if ( this.initialized ) {
+				return;
+			}
+
+			this.defaultSentence.addClass( 'hidden' );
+			this.summarySentence.removeClass( 'hidden' );
+			this.showSummarySentenceInFixedContainer();
+
+			this.initialized = true;
+		},
+		showSummarySentenceInFixedContainer: function() {
+			if ( typeof this.clonedSummarySentence !== 'undefined' ) {
+				return;
+			}
+			this.clonedSummarySentence = $( '<div class="summary-container"></div>' );
+			this.summarySentence.clone().removeClass( 'banner' ).appendTo( this.clonedSummarySentence );
+			this.clonedSummarySentence.prependTo( this.summarySentence.parent() );
+		},
+		hideSummarySentenceContainerOnFirstUserInteraction: function( userInteractionCount ) {
+			if ( this.userHasInteracted ) {
+				return;
+			}
+			this.clonedSummarySentence.fadeOut();
+			this.userHasInteracted = true;
 		}
 	};
 
@@ -30,8 +58,7 @@ module.exports = {
 	createSummarySentence: function ( defaultSentence, summarySentence ) {
 		return objectAssign( Object.create( SummarySentence ), {
 			defaultSentence: defaultSentence,
-			summarySentence: summarySentence,
-			regularSummary: regularSummary
+			summarySentence: summarySentence
 		} );
 	}
 };

@@ -298,6 +298,13 @@ $( function () {
 				WMDE.StateAggregation.donorTypeAndAddressAreValid
 			]
 		},
+		{
+			viewHandler: WMDE.View.createSummarySentence( $('.introduction.default'), $('.introduction.banner') ),
+			stateKey: [
+				'validity.paymentData',
+				'userInteractionCount.count'
+			]
+		},
       {
         viewHandler: WMDE.View.createSimpleVisibilitySwitcher(
           $( '#street, #adress-company' ).nextAll( '.warning-text' ),
@@ -337,13 +344,9 @@ $( function () {
 		initData.data( 'initial-validation-result' )
 	) );
 
-	// Show summary banner if donor shows the form with valid payment data
-	var $introBanner = $('.introduction.banner');
-	var $introDefault = $('.introduction.default');
+	// Scroll to the right position if donor shows the form with valid payment data
 	var currentState = store.getState();
 	if ( currentState.validity.paymentData ) {
-		$introBanner.removeClass( 'hidden' );
-		$introDefault.addClass( 'hidden' );
 
 		// Scroll to next required position, without animation
 		$(window).scrollTop(
@@ -354,8 +357,8 @@ $( function () {
 			).getRequiredElementOffset( currentState.donationFormContent )
 		);
 
-		$(window).one('focus', function() { store.dispatch( actions.newUserInteractedAction() ); } );
-		$(window).one('scroll', function() { store.dispatch( actions.newUserInteractedAction() ); } );
+		$( 'input' ).one( 'focus', function() { store.dispatch( actions.newUserInteractedAction() ); } );
+		$( '.introduction a' ).one( 'click', function() { store.dispatch( actions.newUserInteractedAction() ); } );
 	}
 
 	// Non-state-changing event behavior

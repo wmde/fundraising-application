@@ -39,3 +39,11 @@
 	padding-top: 0;
 }
 
+.summary-container {
+	position: fixed;
+	width: 100%;
+	background: $white;
+	z-index: 10;
+	border-bottom: solid 1px $gray-light;
+}
+
