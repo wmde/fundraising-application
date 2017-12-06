@@ -1,5 +1,5 @@
 var _ = require( 'underscore' ),
-	validationResult = require( './validation_result' )
+	validationResult = require( './../validation_result' )
 ;
 
 module.exports = function ( state ) {
@@ -24,7 +24,7 @@ module.exports = function ( state ) {
 		} else {
 			result.isValid = true;
 		}
-	} else { // anonym
+	} else if ( state.donationFormContent.addressType === 'anonym' ) {
 		result.dataEntered = true;
 		result.isValid = true;
 	}

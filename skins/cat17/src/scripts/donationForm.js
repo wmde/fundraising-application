@@ -213,7 +213,7 @@ $( function () {
 		},
 		{
 			viewHandler: WMDE.View.createShySubmitButtonHandler( $( 'form input[type="submit"]' ) ),
-			stateKey: [ WMDE.StateAggregation.allValiditySectionsAreValid ]
+			stateKey: [ WMDE.StateAggregation.Donation.allValiditySectionsAreValid ]
 		},
 		{
 			viewHandler: WMDE.View.SectionInfo.createFrequencySectionInfo(
@@ -249,7 +249,7 @@ $( function () {
 			stateKey: [
 				'donationFormContent.amount',
 				'donationFormContent.paymentIntervalInMonths',
-				WMDE.StateAggregation.amountAndFrequencyAreValid
+				WMDE.StateAggregation.Donation.amountAndFrequencyAreValid
 			]
 		},
 		{
@@ -269,7 +269,7 @@ $( function () {
 				'donationFormContent.paymentType',
 				'donationFormContent.iban',
 				'donationFormContent.bic',
-				WMDE.StateAggregation.paymentAndBankDataAreValid
+				WMDE.StateAggregation.Donation.paymentAndBankDataAreValid
 			]
 		},
 		{
@@ -295,7 +295,7 @@ $( function () {
 				'donationFormContent.city',
 				'donationFormContent.country',
 				'donationFormContent.email',
-				WMDE.StateAggregation.donorTypeAndAddressAreValid
+				WMDE.StateAggregation.Donation.donorTypeAndAddressAreValid
 			]
 		},
       {
@@ -313,9 +313,9 @@ $( function () {
 
 	function formDataIsValid() {
 		var state = store.getState();
-		return WMDE.StateAggregation.amountAndFrequencyAreValid( state ).isValid === true &&
-			WMDE.StateAggregation.paymentAndBankDataAreValid( state ).isValid === true &&
-			WMDE.StateAggregation.donorTypeAndAddressAreValid( state ).isValid === true
+		return WMDE.StateAggregation.Donation.amountAndFrequencyAreValid( state ).isValid === true &&
+			WMDE.StateAggregation.Donation.paymentAndBankDataAreValid( state ).isValid === true &&
+			WMDE.StateAggregation.Donation.donorTypeAndAddressAreValid( state ).isValid === true
 		;
 	}
 
