@@ -49,8 +49,11 @@ form {
 	}
 
 	section.donation-amount {
+		fieldset:not( :first-of-type ) {
+			margin-top: 25px;
+		}
+
 		.amount-qty {
-			margin-bottom: 25px;
 			div {
 				display: flex;
 				justify-content: space-between;
