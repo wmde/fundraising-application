@@ -247,6 +247,18 @@
 
 						<p class="legend">{$ 'membership_section_fee_legend' | trans $}</p>
 
+						<fieldset id="recurrence"
+								  class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
+							<legend class="sr-only">{$ 'membership_section_interval_legend' | trans $}</legend>
+
+							{% include 'partials/payment_intervals.html.twig' with { 'intervals': PAYMENT_INTERVALS, 'fieldName': 'membership_fee_interval' } only %}
+
+							<div class="more-info">
+								<p>{$ 'membership_section_fee_minimum_info' | trans $}</p>
+								<p>{$ 'membership_section_fee_reduction_info' | trans $}</p>
+							</div>
+						</fieldset>
+
 						<fieldset
 								class="amount-qty padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
 							<legend class="sr-only">{$ 'membership_section_fee_legend' | trans $}</legend>
@@ -259,18 +271,6 @@
 								<input type="hidden" name="membership_fee" id="amount-hidden">
 								<!-- Todo: put messages in deutch -->
 								<label for="amount-typed" class="sr-only">Give your desired amount</label>
-							</div>
-						</fieldset>
-
-						<fieldset id="recurrence"
-								  class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
-							<legend class="sr-only">{$ 'membership_section_interval_legend' | trans $}</legend>
-
-							{% include 'partials/payment_intervals.html.twig' with { 'intervals': PAYMENT_INTERVALS, 'fieldName': 'membership_fee_interval' } only %}
-
-							<div class="more-info">
-								<p>{$ 'membership_section_fee_minimum_info' | trans $}</p>
-								<p>{$ 'membership_section_fee_reduction_info' | trans $}</p>
 							</div>
 						</fieldset>
 					</section>
