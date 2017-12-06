@@ -163,10 +163,6 @@ $( function () {
         stateKey: 'donationInputValidation.postcode'
       },
       {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#post-code' ) ),
-        stateKey: 'donationInputValidation.postcode'
-      },
-      {
         viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#city' ) ),
         stateKey: 'donationInputValidation.city'
       },
