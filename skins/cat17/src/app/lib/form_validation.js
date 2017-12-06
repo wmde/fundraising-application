@@ -93,13 +93,14 @@ var jQuery = require( 'jquery' ),
 				return { status: ValidationStates.INCOMPLETE };
 			}
 			postData = {
-				amount: this.amountFormatter.format( formValues.amount ),
-				paymentType: formValues.paymentType
+				//amount: this.amountFormatter.format( formValues.amount ),
+				//paymentType: formValues.paymentType
+				amount: formValues.amount
 			};
 			return jQueryDeferredToPromise( this.sendFunction( this.validationUrl, postData, null, 'json' ) );
 		},
 		formValuesHaveEmptyRequiredFields: function ( formValues ) {
-			return formValues.amount === 0 || !formValues.paymentType;
+			return formValues.amount === 0;
 		}
 	},
 
