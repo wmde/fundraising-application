@@ -14,6 +14,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\Validator\Constraints\Collection;
+use Symfony\Component\Validator\Validation;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\AddDonationHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\AddSubscriptionHandler;
@@ -74,6 +77,38 @@ $app->post(
 	'validate-address', // Validates donor information. This route is named badly.
 	function( Request $request ) use ( $app, $ffFactory ) {
 		return ( new ValidateDonorHandler( $ffFactory, $app ) )->handle( $request );
+	}
+);
+
+$app->post(
+	'validate-donation-amount',
+	function( Request $httpRequest ) use ( $app, $ffFactory ) {
+
+		$constraint = new Collection( [
+			'allowExtraFields' => false,
+			'fields' => [
+				'amount' => $ffFactory->newDonationAmountConstraint()
+			]
+		] );
+
+
+		$violations = Validation::createValidator()->validate( $httpRequest->request->all(), $constraint );
+
+		if ( $violations->count() ) {
+			$propertyAccessor = PropertyAccess::createPropertyAccessor();
+
+			$errors = array();
+			foreach ($violations as $violation) {
+				/** @var \Symfony\Component\Validator\ConstraintViolationInterface $violation */
+				$entryErrors = (array) $propertyAccessor->getValue( $errors, $violation->getPropertyPath() );
+				$entryErrors[] = $violation->getMessage();
+				$propertyAccessor->setValue( $errors, $violation->getPropertyPath(), $entryErrors );
+			}
+
+			return $app->json( [ 'status' => 'ERR', 'messages' => $errors ] );
+		}
+
+		return $app->json( [ 'status' => 'OK' ] );
 	}
 );
 

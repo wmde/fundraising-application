@@ -36,7 +36,9 @@
 		"league/json-guard": "^0.3.2",
 		"piwik/piwik-php-tracker": "^1.0",
 		"guzzlehttp/guzzle": "^6.0",
-		"sofort/sofortlib-php": "^3.2"
+		"sofort/sofortlib-php": "^3.2",
+		"symfony/validator": "^4.0",
+		"symfony/property-access": "^4.0"
 	},
 	"repositories": [
 		{
