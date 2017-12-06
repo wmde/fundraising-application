@@ -15,6 +15,10 @@ test( 'No payment type and no bank data given is not validated and has no data e
 				bankCode: ''
 			},
 			donationInputValidation: {
+				paymentType: {
+					dataEntered: false,
+					isValid: null
+				},
 				iban: {
 					dataEntered: false,
 					isValid: null
@@ -55,6 +59,10 @@ test( 'BEZ payment type and sane bank data given is valid and has data entered',
 				bankCode: '50010517'
 			},
 			donationInputValidation: {
+				paymentType: {
+					dataEntered: true,
+					isValid: true
+				},
 				iban: {
 					dataEntered: true,
 					isValid: true
@@ -95,6 +103,10 @@ test( 'BEZ payment type and wrong bank data given is invalid but has data entere
 				bankCode: ''
 			},
 			donationInputValidation: {
+				paymentType: {
+					dataEntered: true,
+					isValid: true
+				},
 				iban: {
 					dataEntered: true,
 					isValid: false
@@ -135,6 +147,10 @@ test( 'SUB payment type and no bank data given is valid and has data entered', f
 				bankCode: ''
 			},
 			donationInputValidation: {
+				paymentType: {
+					dataEntered: true,
+					isValid: true
+				},
 				iban: {
 					dataEntered: false,
 					isValid: null

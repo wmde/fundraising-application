@@ -9,6 +9,12 @@ test( 'Valid all over means valid', function ( t ) {
 		donationFormContent: {
 			paymentType: 'BEZ'
 		},
+		donationInputValidation: {
+			paymentType: {
+				isValid: true,
+				dataEntered: true
+			}
+		},
 		validity: {
 			paymentData: true,
 			address: true,
@@ -24,6 +30,12 @@ test( 'Bank data validity ignored when not paying via debit', function ( t ) {
 		donationFormContent: {
 			paymentType: 'PPL'
 		},
+		donationInputValidation: {
+			paymentType: {
+				isValid: true,
+				dataEntered: true
+			}
+		},
 		validity: {
 			paymentData: true,
 			address: true,
@@ -36,7 +48,13 @@ test( 'Bank data validity ignored when not paying via debit', function ( t ) {
 test( 'No validity means invalid', function ( t ) {
 	t.notOk( allSectionsAreValid( {
 		donationFormContent: {
-			paymentType: 'BEZ'
+			paymentType: ''
+		},
+		donationInputValidation: {
+			paymentType: {
+				isValid: false,
+				dataEntered: false
+			}
 		},
 		validity: {
 			paymentData: false,
@@ -52,8 +70,34 @@ test( 'Faulty payment data means invalid', function ( t ) {
 		donationFormContent: {
 			paymentType: 'BEZ'
 		},
+		donationInputValidation: {
+			paymentType: {
+				isValid: true,
+				dataEntered: true
+			}
+		},
 		validity: {
 			paymentData: false,
+			address: true,
+			bankData: true
+		}
+	} ) );
+	t.end();
+} );
+
+test( 'Faulty payment type data means invalid', function ( t ) {
+	t.notOk( allSectionsAreValid( {
+		donationFormContent: {
+			paymentType: ''
+		},
+		donationInputValidation: {
+			paymentType: {
+				isValid: false,
+				dataEntered: true
+			}
+		},
+		validity: {
+			paymentData: true,
 			address: true,
 			bankData: true
 		}
@@ -65,6 +109,12 @@ test( 'Faulty address data means invalid', function ( t ) {
 	t.notOk( allSectionsAreValid( {
 		donationFormContent: {
 			paymentType: 'BEZ'
+		},
+		donationInputValidation: {
+			paymentType: {
+				isValid: true,
+				dataEntered: true
+			}
 		},
 		validity: {
 			paymentData: true,

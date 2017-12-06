@@ -9,18 +9,17 @@ test( 'Amount validation sends values to server', function ( t ) {
 	var positiveResult = { status: 'OK' },
 		postFunctionSpy = sinon.stub().returns( Promise.resolve( positiveResult ) ),
 		amountValidator = validation.createAmountValidator(
-			'http://spenden.wikimedia.org/validate-amount',
-			{ format: sinon.stub().returnsArg( 0 ) },
+			'http://spenden.wikimedia.org/validate-donation-amount',
 			postFunctionSpy
 		),
 		callParameters, validationResult;
 
-	validationResult = amountValidator.validate( { amount: 23, paymentType: 'BEZ', otherStuff: 'foo' } );
+	validationResult = amountValidator.validate( { amount: 23, otherStuff: 'foo' } );
 
 	t.ok( postFunctionSpy.calledOnce, 'data is sent once' );
 	callParameters = postFunctionSpy.getCall( 0 ).args;
-	t.equal( callParameters[ 0 ], 'http://spenden.wikimedia.org/validate-amount', 'validation calls configured URL' );
-	t.deepEqual( callParameters[ 1 ], { amount: 23, paymentType: 'BEZ' }, 'validation sends only necessary data' );
+	t.equal( callParameters[ 0 ], 'http://spenden.wikimedia.org/validate-donation-amount', 'validation calls configured URL' );
+	t.deepEqual( callParameters[ 1 ], { amount: 23 }, 'validation sends only necessary data' );
 	t.equal( callParameters[ 3 ], 'json', 'validation expects JSON data' );
 	validationResult.then( function ( resultData ) {
 		t.deepEqual( resultData, positiveResult, 'validation function returns promise result' );
@@ -32,18 +31,16 @@ test( 'Amount validation sends nothing to server if any of the necessary values 
 	var incompleteResult = { status: 'INCOMPLETE' },
 		postFunctionSpy = sinon.spy(),
 		amountValidator = validation.createAmountValidator(
-			'http://spenden.wikimedia.org/validate-amount',
-			{ format: sinon.stub().returnsArg( 0 ) },
+			'http://spenden.wikimedia.org/validate-donation-amount',
 			postFunctionSpy
 		),
 		validationResults = [];
 
 	// Test multiple empty values
-	validationResults.push( amountValidator.validate( { amount: 0, paymentType: 'BEZ', otherStuff: 'foo' } ) );
-	validationResults.push( amountValidator.validate( { amount: 23, paymentType: null, otherStuff: 'foo' } ) );
+	validationResults.push( amountValidator.validate( { amount: 0, otherStuff: 'foo' } ) );
 
 	t.notOk( postFunctionSpy.called, 'no data is sent ' );
-	t.deepEquals( [ incompleteResult, incompleteResult ], validationResults, 'validation function returns incomplete result' );
+	t.deepEquals( [ incompleteResult ], validationResults, 'validation function returns incomplete result' );
 	t.end();
 } );
 

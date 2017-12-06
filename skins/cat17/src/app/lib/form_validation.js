@@ -86,20 +86,18 @@ var jQuery = require( 'jquery' ),
 	AmountValidator = {
 		validationUrl: '',
 		sendFunction: null,
-		amountFormatter: null,
 		validate: function ( formValues ) {
 			var postData;
 			if ( this.formValuesHaveEmptyRequiredFields( formValues ) ) {
 				return { status: ValidationStates.INCOMPLETE };
 			}
 			postData = {
-				amount: this.amountFormatter.format( formValues.amount ),
-				paymentType: formValues.paymentType
+				amount: formValues.amount
 			};
 			return jQueryDeferredToPromise( this.sendFunction( this.validationUrl, postData, null, 'json' ) );
 		},
 		formValuesHaveEmptyRequiredFields: function ( formValues ) {
-			return formValues.amount === 0 || !formValues.paymentType;
+			return formValues.amount === 0;
 		}
 	},
 
@@ -209,10 +207,9 @@ var jQuery = require( 'jquery' ),
 	 * @param {Function} sendFunction jQuery.post function or equivalent
 	 * @return {AmountValidator}
 	 */
-	createAmountValidator = function ( validationUrl, amountFormatter, sendFunction ) {
+	createAmountValidator = function ( validationUrl, sendFunction ) {
 		return objectAssign( Object.create( AmountValidator ), {
 			validationUrl: validationUrl,
-			amountFormatter: amountFormatter,
 			sendFunction: sendFunction || jQuery.post
 		} );
 	},

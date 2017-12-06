@@ -56,8 +56,7 @@ $( function () {
       return [
         WMDE.ValidationDispatchers.createAmountValidationDispatcher(
           WMDE.FormValidation.createAmountValidator(
-              initData.data( 'validate-amount-url' ),
-              WMDE.IntegerCurrency.createCurrencyFormatter( 'de' )
+              initData.data( 'validate-amount-url' )
            ),
           initialValues
         ),
@@ -309,26 +308,18 @@ $( function () {
     store
   );
 
-  // Validity checks for different form parts
-
-	function formDataIsValid() {
-		var state = store.getState();
-		return WMDE.StateAggregation.Donation.amountAndFrequencyAreValid( state ).isValid === true &&
-			WMDE.StateAggregation.Donation.paymentAndBankDataAreValid( state ).isValid === true &&
-			WMDE.StateAggregation.Donation.donorTypeAndAddressAreValid( state ).isValid === true
-		;
-	}
-
-	// connect DOM elements to actions
-
 	$('form').on( 'submit', function () {
-		return formDataIsValid();
+		return WMDE.StateAggregation.Donation.allValiditySectionsAreValid( store.getState() );
 	} );
 
   // Set initial form values
   var initSetup = initData.data( 'initial-form-values' );
   // backend delivers amount as a german-formatted "float" string
   initSetup.amount = WMDE.IntegerCurrency.createCurrencyParser( 'de' ).parse( initSetup.amount );
+	// this or touch INITIALIZE_VALIDATION again (values identical to default dontation_form_content flagged as changed)
+	if ( typeof initSetup.paymentType === 'string' && initSetup.paymentType === '' ) {
+		delete initSetup.paymentType;
+	}
   store.dispatch( actions.newInitializeContentAction( initSetup ) );
 
 	// Set initial validation state
