@@ -136,31 +136,11 @@ form {
                 height: 60px;
                 width: 100%;
                 position: relative;
-
-				@include themify($themes) {
-					border: themed('border2pxfieldNormal');
-                    background-color: themed('fieldNormal');
-				}
-                &.focused {
-                    @include themify($themes) {
-                          border-bottom: themed('border2pxPrimary');
-                      }
-                    &.filled {
-                        border-bottom: 2px solid #000000;
-                    }
-                }
                 input {
                     height: 56px;
                     width: 100%;
 					padding-right: 25px;
                     text-align: right;
-                    @include themify($themes) {
-                        border: themed('border2pxfieldNormal');
-                        background-color: themed('fieldNormal');
-                    }
-                    &:focus {
-                        outline: none;
-                    }
                 }
 				@media ( min-width: $screen-xs-min ) and ( max-width: $screen-xs-max ) {
 					margin-right: 7px;
@@ -187,12 +167,13 @@ form {
                     }
                 }
 				&:after {
-					content: "€";
+					content: attr( data-currency );
+					font-family: $font-main;
+					font-size: 12px;
 					position: absolute;
 					right: 10px;
                     top: 50%;
                     transform: translateY(-50%);
-
 				}
             }
 			input#amount-typed:invalid {
