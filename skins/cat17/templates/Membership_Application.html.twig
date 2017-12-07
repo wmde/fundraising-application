@@ -151,38 +151,38 @@
 										<div class="field-grp">
 											<input type="text" id="first-name" name="vorname" class="first-name" placeholder="{$ 'firstname_label' | trans | e( 'html_attr' ) $}">
 											<label for="first-name" class="sr-only">{$ 'firstname_label' | trans $}</label>
-											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+											<span class="error-text">{$ 'form_firstname_error' | trans $}</span>
 										</div>
 										<div class="field-grp">
 											<input type="text" id="surname" name="nachname" class="name" placeholder="{$ 'lastname_label' | trans | e( 'html_attr' ) $}">
 											<label for="surname" class="sr-only">{$ 'lastname_label' | trans $}</label>
-											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+											<span class="error-text">{$ 'form_lastname_error' | trans $}</span>
 										</div>
 										<div class="field-grp">
 											<input type="email" id="email" class="email" placeholder="{$ 'email_label' | trans | e( 'html_attr' ) $}">
 											<label for="email" class="sr-only">{$ 'email_label' | trans $}</label>
-											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+											<span class="error-text">{$ 'form_email_error' | trans $}</span>
 										</div>
 										<div class="field-grp">
 											<input type="text" id="street" class="street"
 												   placeholder="{$ 'street_label' | trans | e( 'html_attr' ) $}">
 											<label for="street" class="sr-only">{$ 'street_label' | trans $}</label>
-											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+											<span class="error-text">{$ 'form_street_error' | trans $}</span>
 										</div>
 										<div class="field-grp">
 											<input type="text" id="post-code" class="post-code" placeholder="{$ 'zip_label' | trans | e( 'html_attr' ) $}">
 											<label for="post-code" class="sr-only">{$ 'zip_label' | trans $}</label>
-											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+											<span class="error-text">{$ 'form_zip_error' | trans $}</span>
 										</div>
 										<div class="field-grp">
 											<input type="text" id="city" placeholder="{$ 'city_label' | trans | e( 'html_attr' ) $}" class="city">
 											<label for="city" class="sr-only">{$ 'city_label' | trans $}</label>
-											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+											<span class="error-text">{$ 'form_city_error' | trans $}</span>
 										</div>
 										<div class="field-grp">
 											<input id="date-of-birth" name="dob" type="text" value="" title="DD.MM.YYYY" placeholder="{$ 'membership_dob_label' | trans | e( 'html_attr' ) $}" data-pattern="^[0-3]?[0-9]\.[01]?[0-9]\.[0-9]{2,4}$">
 											<label for="city" class="sr-only">{$ 'membership_dob_label' | trans $}</label>
-											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+											<span class="error-text">{$ 'form_dob_error' | trans $}</span>
 										</div>
 										<select id="country" title="{$ 'country_label' | trans | e( 'html_attr' ) $}"
 												data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true, "maxVisibleItems": 6}'
@@ -216,27 +216,27 @@
 										<div class="field-grp ">
 											<input type="text" id="company-name" name="firma" placeholder="{$ 'companyname_label' | trans | e( 'html_attr' ) $}">
 											<label for="company-name" class="sr-only">{$ 'companyname_label' | trans $}</label>
-											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+											<span class="error-text">{$ 'form_companyname_error' | trans $}</span>
 										</div>
 										<div class="field-grp">
 											<input type="email" id="email-company" name="email" class="email" placeholder="{$ 'email_label' | trans | e( 'html_attr' ) $}">
 											<label for="email-company" class="sr-only">{$ 'email_label' | trans $}</label>
-											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+											<span class="error-text">{$ 'form_email_error' | trans $}</span>
 										</div>
 										<div class="field-grp">
 											<input type="text" id="adress-company" name="strasse" class="street" placeholder="{$ 'street_label' | trans | e( 'html_attr' ) $}">
 											<label for="adress-company" class="sr-only">{$ 'street_label' | trans $}</label>
-											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+											<span class="error-text">{$ 'form_street_error' | trans $}</span>
 										</div>
 										<div class="field-grp">
 											<input type="text" id="post-code-company" name="postcode" class="post-code" placeholder="{$ 'zip_label' | trans | e( 'html_attr' ) $}">
 											<label for="post-code" class="sr-only">{$ 'zip_label' | trans $}</label>
-											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+											<span class="error-text">{$ 'form_zip_error' | trans $}</span>
 										</div>
 										<div class="field-grp">
 											<input type="text" id="city-company" name="ort" placeholder="{$ 'city_label' | trans | e( 'html_attr' ) $}" class="city">
 											<label for="city-company" class="sr-only">{$ 'city_label' | trans $}</label>
-											<span class="error-text">Es ist nicht eine gültige E-Mail.</span>
+											<span class="error-text">{$ 'form_city_error' | trans $}</span>
 										</div>
 										<select id="country-company" name="country" title="{$ 'country_label' | trans | e( 'html_attr' ) $}"
 												data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true, "maxVisibleItems": 6}'
@@ -288,8 +288,7 @@
 									<input type="text" id="amount-typed">
 								</div>
 								<input type="hidden" name="membership_fee" id="amount-hidden">
-								<!-- Todo: put messages in deutch -->
-								<label for="amount-typed" class="sr-only">Give your desired amount</label>
+								<label for="amount-typed" class="sr-only">{$ 'payment_amount_legend' | trans $}</label>
 							</div>
 						</fieldset>
 					</section>
