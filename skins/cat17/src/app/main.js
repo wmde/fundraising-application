@@ -33,6 +33,7 @@ module.exports = {
 		createSuboptionDisplayHandler: require( './lib/view_handler/display_field_suboptions' ).createSuboptionDisplayHandler,
 		createCustomAmountField: require( './lib/view_handler/custom_amount_field' ).createCustomAmountField,
 		createShySubmitButtonHandler: require( './lib/view_handler/shy_submit_button' ).createShySubmitButtonHandler,
+		createSummarySentence: require( './lib/view_handler/summary_sentence' ).createSummarySentence,
 		SectionInfo: require( './lib/view_handler/section_info' ),
 		Animator: require( './lib/view_handler/animator' )
 	},

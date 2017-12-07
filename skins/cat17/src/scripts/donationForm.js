@@ -294,6 +294,13 @@ $( function () {
 				WMDE.StateAggregation.Donation.donorTypeAndAddressAreValid
 			]
 		},
+		{
+			viewHandler: WMDE.View.createSummarySentence( $('.introduction.default'), $('.introduction.banner') ),
+			stateKey: [
+				'validity.paymentData',
+				'userInteractionCount.count'
+			]
+		},
       {
         viewHandler: WMDE.View.createSimpleVisibilitySwitcher(
           $( '#street, #adress-company' ).nextAll( '.warning-text' ),
@@ -333,14 +340,22 @@ $( function () {
 		initData.data( 'initial-validation-result' )
 	) );
 
-	var $introBanner = $('.introduction.banner');
-  var $introDefault = $('.introduction.default');
+	// Scroll to the right position if donor shows the form with valid payment data
+	var currentState = store.getState();
+	if ( currentState.validity.paymentData ) {
 
-  // @todo Check if this are all conditions that would be considered "successful deeplink", warrant the special header
-  if (initSetup.amount && initSetup.paymentIntervalInMonths && initSetup.paymentType) {
-    $introBanner.removeClass('hidden');
-    $introDefault.addClass('hidden');
-  }
+		// Scroll to next required position, without animation
+		$(window).scrollTop(
+			WMDE.Scrolling.createRequiredElementOffsetCalculator(
+				$('.introduction.banner, .wrap-header'),
+				$( '#payment-method' ),
+				$( '#donation-type' )
+			).getRequiredElementOffset( currentState.donationFormContent )
+		);
+
+		$( 'input' ).one( 'focus', function() { store.dispatch( actions.newUserInteractedAction() ); } );
+		$( '.introduction a' ).one( 'click', function() { store.dispatch( actions.newUserInteractedAction() ); } );
+	}
 
 	// Non-state-changing event behavior
 
@@ -349,6 +364,7 @@ $( function () {
 	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="periode"]' ), $( '#recurrence' ), scroller );
 	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="addressType"]' ), $( '#type-donor' ), scroller );
 	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="paymentType"]' ), $( '#donation-payment' ), scroller );
+
 
 
 } );

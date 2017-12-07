@@ -199,6 +199,16 @@ module.exports = {
 			type: 'BEGIN_BANK_DATA_VALIDATION',
 			payload: formData
 		};
+	},
+
+	/**
+	 *
+	 * @return {{type: string}}
+	 */
+	newUserInteractedAction: function () {
+		return {
+			type: 'USER_INTERACTION'
+		}
 	}
 
 };
