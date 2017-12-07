@@ -339,7 +339,7 @@
 {% endblock %}
 
 {% block scripts %}
-	<script type="text/javascript" src="{$ basepath|e('html_attr') $}{$ '/skins/cat17/scripts/wmde.js'|prefix_file $}"></script>
+	<script src="{$ basepath|e('html_attr') $}{$ '/skins/cat17/scripts/wmde.js'|prefix_file $}"></script>
 	<script id="init-form" src="{$ basepath|e('html_attr') $}{$ '/skins/cat17/scripts/membershipForm.js'|prefix_file $}"
 		data-initial-form-values="{$ initialFormValues | json_encode | e( 'html_attr' ) $}"
 		data-violated-fields="{% if violatedFields %}{$ violatedFields|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
