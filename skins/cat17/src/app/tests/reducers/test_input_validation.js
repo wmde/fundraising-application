@@ -133,22 +133,24 @@ test( 'If bank data validation fails, all fields retrieve invalid status', funct
 	t.end();
 } );
 
-test( 'If address data validation is successful, all fields retrieve valid status', function ( t ) {
+test( 'If address data validation is successful, related fields retrieve valid status', function ( t ) {
 	var stateBefore = {
 			firstName: { dataEntered: true, isValid: null },
 			lastName: { dataEntered: true, isValid: null },
 			street: { dataEntered: true, isValid: null },
 			city: { dataEntered: true, isValid: null },
-			postCode: { dataEntered: true, isValid: null },
-			email: { dataEntered: true, isValid: null }
+			postcode: { dataEntered: true, isValid: null },
+			email: { dataEntered: true, isValid: null },
+			iAmUnrelated: { dataEntered: true, isValid: null }
 		},
 		expectedState = {
 			firstName: { dataEntered: true, isValid: true },
 			lastName: { dataEntered: true, isValid: true },
 			street: { dataEntered: true, isValid: true },
 			city: { dataEntered: true, isValid: true },
-			postCode: { dataEntered: true, isValid: true },
-			email: { dataEntered: true, isValid: true }
+			postcode: { dataEntered: true, isValid: true },
+			email: { dataEntered: true, isValid: true },
+			iAmUnrelated: { dataEntered: true, isValid: null }
 		};
 
 	deepFreeze( stateBefore );
@@ -156,14 +158,16 @@ test( 'If address data validation is successful, all fields retrieve valid statu
 	t.end();
 } );
 
-test( 'If address data validation is successful, invalid fields remain invalid', function ( t ) {
+test( 'If address data validation is successful, related invalid fields remain invalid', function ( t ) {
 	var stateBefore = {
-			postCode: { dataEntered: true, isValid: false },
-			city: { dataEntered: true, isValid: true }
+			postcode: { dataEntered: true, isValid: false },
+			city: { dataEntered: true, isValid: true },
+			iAmUnrelated: { dataEntered: true, isValid: null }
 		},
 		expectedState = {
-			postCode: { dataEntered: true, isValid: false },
-			city: { dataEntered: true, isValid: true }
+			postcode: { dataEntered: true, isValid: false },
+			city: { dataEntered: true, isValid: true },
+			iAmUnrelated: { dataEntered: true, isValid: null }
 		};
 
 	deepFreeze( stateBefore );
