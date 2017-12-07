@@ -682,10 +682,6 @@ class FunFunFactory {
 		return $this->getVarPath() . '/log';
 	}
 
-	public function getTemplatePath(): string {
-		return __DIR__ . '/../../app/fundraising-frontend-content/templates';
-	}
-
 	public function newAddSubscriptionUseCase(): AddSubscriptionUseCase {
 		return new AddSubscriptionUseCase(
 			$this->getSubscriptionRepository(),

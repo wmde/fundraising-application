@@ -168,8 +168,10 @@ see [the deployment documentation](deployment/README.md).
 
 ## Profiling
 
-When accessing the API via `web/index.dev.php`, profiling information will be generated and in
-`app/cache/profiler`. You can access the profiler UI via `index.dev.php/_profiler`.
+This is not working at the moment.
+
+(When accessing the API via `web/index.dev.php`, profiling information will be generated and in
+`app/cache/profiler`. You can access the profiler UI via `index.dev.php/_profiler`.)
 
 ## Project structure
 

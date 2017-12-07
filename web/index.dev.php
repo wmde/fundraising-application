@@ -81,41 +81,6 @@ $app['dbs'] = function ( $app ) {
 	return [ 'default' => $app['db'] ];
 };
 
-$app->register(
-	new Silex\Provider\WebProfilerServiceProvider(),
-	[
-		'profiler.cache_dir' => $ffFactory->getCachePath() . '/profiler',
-		'profiler.mount_prefix' => '/_profiler',
-	]
-);
-
-$ffFactory->setProfiler( $app['stopwatch'] );
-
-$app->register( new Sorien\Provider\DoctrineProfilerServiceProvider() );
-
-$app['data_collectors'] = array_merge(
-	$app['data_collectors'],
-	[
-		'fundraising' => function () use ( $ffFactory ) {
-			return $ffFactory->getProfilerDataCollector();
-		}
-	]
-);
-
-$app['data_collector.templates'] = array_merge(
-	[ [ 'fundraising', '@FunProfiler/Profiler' ] ],
-	$app['data_collector.templates']
-);
-
-$app['twig.loader.filesystem'] = $app->extend(
-	'twig.loader.filesystem',
-	function ( $loader ) use ( $ffFactory ) {
-		/** @var \Twig_Loader_Filesystem $loader */
-		$loader->addPath( $ffFactory->getTemplatePath(), 'FunProfiler' );
-		return $loader;
-	}
-);
-
 $ffFactory->setSkinTwigEnvironment( $app['twig'] );
 
 $ffFactory->setUrlGenerator( new UrlGenerator( $app['twig']->getExtension( RoutingExtension::class ) ) );
