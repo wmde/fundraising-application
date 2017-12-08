@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Validation;
 use WMDE\Euro\Euro;
@@ -43,6 +42,7 @@ use WMDE\Fundraising\Frontend\PaymentContext\UseCases\GenerateIban\GenerateIbanR
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\ContentNotFoundException;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageNotFoundException;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
+use WMDE\Fundraising\Frontend\Validation\ConstraintViolationListMapper;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
 
 $app->post(
@@ -91,21 +91,11 @@ $app->post(
 			]
 		] );
 
-
 		$violations = Validation::createValidator()->validate( $httpRequest->request->all(), $constraint );
 
 		if ( $violations->count() ) {
-			$propertyAccessor = PropertyAccess::createPropertyAccessor();
-
-			$errors = array();
-			foreach ($violations as $violation) {
-				/** @var \Symfony\Component\Validator\ConstraintViolationInterface $violation */
-				$entryErrors = (array) $propertyAccessor->getValue( $errors, $violation->getPropertyPath() );
-				$entryErrors[] = $violation->getMessage();
-				$propertyAccessor->setValue( $errors, $violation->getPropertyPath(), $entryErrors );
-			}
-
-			return $app->json( [ 'status' => 'ERR', 'messages' => $errors ] );
+			$mapper = new ConstraintViolationListMapper();
+			return $app->json( [ 'status' => 'ERR', 'messages' => $mapper->map( $violations ) ] );
 		}
 
 		return $app->json( [ 'status' => 'OK' ] );
