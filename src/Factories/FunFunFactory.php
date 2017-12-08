@@ -30,6 +30,7 @@ use Twig_Environment;
 use Twig_Extensions_Extension_Intl;
 use Twig_SimpleFunction;
 use WMDE\EmailAddress\EmailAddress;
+use WMDE\Euro\Euro;
 use WMDE\Fundraising\ContentProvider\ContentProvider;
 use WMDE\Fundraising\Frontend\DonationContext\Authorization\DonationAuthorizer;
 use WMDE\Fundraising\Frontend\DonationContext\Authorization\DonationTokenFetcher;
@@ -1577,8 +1578,8 @@ class FunFunFactory {
 		return new RequiredConstraint( [
 			new TypeConstraint( [ 'type' => 'digit' ] ),
 			new RangeConstraint( [
-				'min' => $this->config['donation-minimum-amount'] * 100,
-				'max' => $this->config['donation-maximum-amount'] * 100
+				'min' => Euro::newFromInt( $this->config['donation-minimum-amount'] )->getEuroCents(),
+				'max' => Euro::newFromInt( $this->config['donation-maximum-amount'] )->getEuroCents()
 			] )
 		] );
 	}
