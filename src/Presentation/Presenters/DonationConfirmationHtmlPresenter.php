@@ -5,11 +5,11 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
-use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\Infrastructure\PiwikEvents;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankTransferPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
+use WMDE\Fundraising\Frontend\Presentation\DonationMembershipApplicationAdapter;
 use WMDE\Fundraising\Frontend\Presentation\SelectedConfirmationPage;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
@@ -22,9 +22,11 @@ use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 class DonationConfirmationHtmlPresenter {
 
 	private $template;
+	private $donationMembershipApplicationAdapter;
 
 	public function __construct( TwigTemplate $template ) {
 		$this->template = $template;
+		$this->donationMembershipApplicationAdapter = new DonationMembershipApplicationAdapter();
 	}
 
 	public function present( Donation $donation, string $updateToken, SelectedConfirmationPage $selectedPage,
@@ -56,7 +58,7 @@ class DonationConfirmationHtmlPresenter {
 			],
 			'person' => $this->getPersonArguments( $donation ),
 			'bankData' => $this->getBankDataArguments( $donation->getPaymentMethod() ),
-			'initialFormValues' => $this->getInitialMembershipFormValues( $donation ),
+			'initialFormValues' => $this->donationMembershipApplicationAdapter->getInitialMembershipFormValues( $donation ),
 			'piwikEvents' => $piwikEvents->getEvents()
 		];
 	}
@@ -96,47 +98,6 @@ class DonationConfirmationHtmlPresenter {
 		}
 
 		return [];
-	}
-
-	private function getInitialMembershipFormValues( Donation $donation ): array {
-		return array_merge(
-			$this->getMembershipFormPersonValues( $donation->getDonor() ),
-			$this->getMembershipFormBankDataValues( $donation->getPaymentMethod() )
-		);
-	}
-
-	private function getMembershipFormPersonValues( Donor $donor = null ): array {
-		if ( $donor === null ) {
-			return [];
-		}
-
-		return [
-			'addressType' => $donor->getName()->getPersonType(),
-			'salutation' => $donor->getName()->getSalutation(),
-			'title' => $donor->getName()->getTitle(),
-			'firstName' => $donor->getName()->getFirstName(),
-			'lastName' => $donor->getName()->getLastName(),
-			'companyName' => $donor->getName()->getCompanyName(),
-			'street' => $donor->getPhysicalAddress()->getStreetAddress(),
-			'postcode' => $donor->getPhysicalAddress()->getPostalCode(),
-			'city' => $donor->getPhysicalAddress()->getCity(),
-			'country' => $donor->getPhysicalAddress()->getCountryCode(),
-			'email' => $donor->getEmailAddress(),
-		];
-	}
-
-	private function getMembershipFormBankDataValues( PaymentMethod $paymentMethod ): array {
-		if ( !$paymentMethod instanceof DirectDebitPayment ) {
-			return [];
-		}
-
-		return [
-			'iban' => $paymentMethod->getBankData()->getIban()->toString(),
-			'bic' => $paymentMethod->getBankData()->getBic(),
-			'accountNumber' => $paymentMethod->getBankData()->getAccount(),
-			'bankCode' => $paymentMethod->getBankData()->getBankCode(),
-			'bankname' => $paymentMethod->getBankData()->getBankName(),
-		];
 	}
 
 	/**
