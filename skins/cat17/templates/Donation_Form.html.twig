@@ -20,28 +20,6 @@
 		</div>
 	</div>
 
-	<div class="introduction banner container hidden">
-		<div class="row">
-			<div class="col-xs-12 col-md-8">
-				<p class="h1">
-					{$ 'donation_banner_deeplink_summary' | trans( {
-						'%frequency%': '<span class="frequency"><span class="text strong"></span></span>',
-						'%amount%': '<span class="amount"><span class="text strong"></span></span>',
-						'%payment_method%': '<span class="payment-method"><span class="text strong"></span></span>'
-					} ) | raw $}
-				</p>
-				<p class="subtitle">
-					{$ 'wikimedia_tagline' | trans $}
-				</p>
-			</div>
-			<div class="link-back col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-0 col-md-4">
-				<a href="#donation-amount">
-					{$ 'donation_banner_correction_anchor' | trans | raw $}
-				</a>
-			</div>
-		</div>
-	</div>
-
 	<form id="form-donation" action="{$ basepath $}/donation/add" method="post" novalidate>
 		<div class="container">
 			<section class="state-bar state-overview col-xs-12 ">
@@ -52,8 +30,17 @@
 				</div>
 			</section>
 			<div class="row">
-
 				<div class="form-shadow-wrap col-xs-12 col-sm-8">
+					<section class="introduction-banner hidden">
+						<p>
+							{$ 'donation_banner_deeplink_summary' | trans( {
+							'%frequency%': '<span class="frequency"><span class="text"></span></span>',
+							'%amount%': '<span class="amount"><span class="text"></span></span>',
+							'%payment_method%': '<span class="payment-method"><span class="text"></span></span>'
+							} ) | raw $}
+							<a href="#donation-amount">{$ 'donation_banner_correction_anchor' | trans | raw $}</a>
+						</p>
+					</section>
 					<section id="donation-amount" class="donation-amount clearfix">
 						<h2>{$ 'donation_section_amount_title' | trans $}</h2>
 

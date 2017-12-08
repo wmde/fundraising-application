@@ -22,9 +22,14 @@ var objectAssign = require( 'object-assign' ),
 
 	AnimatedScroller = {
 		fixedHeaderElements: null,
-		scrollTo: function( $element ) {
+		scrollTo: function( $element, options ) {
+			var topOffset = calculateElementOffset( $element, this.fixedHeaderElements );
+			if ( options && options.additionalOffset ) {
+				topOffset += options.additionalOffset;
+			}
+
 			$( 'html, body' ).stop( true ).animate( {
-				scrollTop: calculateElementOffset( $element, this.fixedHeaderElements )
+				scrollTop: topOffset
 			}, 1000, function () {
 				// Callback after animation
 				// Must change focus!

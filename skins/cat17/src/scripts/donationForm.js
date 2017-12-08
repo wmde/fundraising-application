@@ -332,7 +332,11 @@ $( function () {
 	var currentState = store.getState();
 	if ( currentState.validity.paymentData ) {
 		var nextRequired = currentState.donationFormContent.paymentType === 'BEZ' ? $( '#payment-method' ) : $( '#donation-type' );
-		scroller.scrollTo( nextRequired );
+		var $introBanner = $('.introduction-banner');
+		$introBanner.insertBefore( nextRequired ).removeClass( 'hidden' );
+		// 24px = 1 em padding of intro-banner that is removed automatically by scroller, plus .5em whitespace above
+		var scrollOptions = { additionalOffset: -24 };
+		scroller.scrollTo( $introBanner, scrollOptions );
 	}
 
 	// Add scroll behaviors to links/input elements
