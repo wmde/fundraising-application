@@ -34,9 +34,6 @@ main.conclusion {
             }
 		}
 	}
-	.supporters-list p {
-		margin-bottom: 0;
-	}
 	.subtitle {
 		font-weight: 600;
 	}
@@ -96,41 +93,6 @@ main.conclusion {
 	}
 }
 
-.supporters-list {
-	.introduction {
-		padding-top: 80px;
-		@include bkp(md) {
-			padding-top: 45px;
-		}
-	}
-	.wrap-items {
-		margin-top: 40px;
-		@include bkp(sm) {
-			margin-top: 50px;
-		}
-		@include bkp(md) {
-			margin-top: 60px;
-		}
-		.wrap-field {
-			.wrap-input {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				&:after {
-					left: 4px;
-				}
-			}
-		}
-	}
-	.list-menu {
-		margin-top: 40px;
-	}
-	p {
-		margin-bottom: 0;
-	}
-
-}
-
 .side a.btn {
 	margin-bottom: 30px;
 }
@@ -158,4 +120,5 @@ main.conclusion {
 @import "pages/membership_confirmation";
 @import "pages/membership_cancel";
 @import "pages/privacy_protection";
+@import "pages/supporters";
 @import "pages/use_of_resources";
