@@ -12,7 +12,7 @@ class ValidateAmountRouteTest extends WebRouteTestCase {
 	private const PATH = '/validate-donation-amount';
 
 	/**
-	 * @dataProvider getPassingTestData
+	 * @dataProvider validHttpParametersProvider
 	 */
 	public function testGivenValidParameters_successResponseIsReturned( array $parameters ): void {
 		$client = $this->createClient();
@@ -20,14 +20,12 @@ class ValidateAmountRouteTest extends WebRouteTestCase {
 		$this->assertJsonSuccessResponse( [ 'status' => 'OK' ], $client->getResponse() );
 	}
 
-	public function getPassingTestData(): array {
-		return [
-			[ [ 'amount' => '1234' ] ],
-		];
+	public function validHttpParametersProvider(): iterable {
+		yield [ [ 'amount' => '1234' ] ];
 	}
 
 	/**
-	 * @dataProvider getFailingTestData
+	 * @dataProvider invalidTestDataProvider
 	 */
 	public function testGivenInvalidParameters_matchingFailureResponseIsReturned( array $parameters, array $violations ): void {
 		$client = $this->createClient();
@@ -36,17 +34,15 @@ class ValidateAmountRouteTest extends WebRouteTestCase {
 		$this->assertEquals( $violations, $this->getJsonFromResponse( $client->getResponse() )['messages'] );
 	}
 
-	public function getFailingTestData(): array {
-		return [
-			[ [ 'amount' => '' ], [ 'amount' => [ 'This value should be of type digit.', 'This value should be a valid number.' ] ] ],
-			[ [ 'amount' => 'fff' ], [ 'amount' => [ 'This value should be of type digit.', 'This value should be a valid number.' ] ] ],
-			[ [ 'amount' => '12.34' ], [ 'amount' => [ 'This value should be of type digit.', 'This value should be 100 or more.' ] ] ],
-			[ [ 'amount' => '1233.99' ], [ 'amount' => [ 'This value should be of type digit.' ] ] ],
-			[ [ 'amount' => '12,34' ], [ 'amount' => [ 'This value should be of type digit.', 'This value should be a valid number.' ] ] ],
-			[ [ 'amount' => '12' ], [ 'amount' => [ 'This value should be 100 or more.' ] ] ],
-			[ [ 'amount' => '12879342897234879234' ], [ 'amount' => [ 'This value should be 10000000 or less.' ] ] ],
-			[ [ 'amount' => '1234', 'something' => 'more' ], [ 'something' => [ 'This field was not expected.' ] ] ],
-			[ [ 'no context' => 'indeed' ], [ 'amount' => [ 'This field is missing.' ], 'no context' => [ 'This field was not expected.' ] ] ]
-		];
+	public function invalidTestDataProvider(): iterable {
+		yield [ [ 'amount' => '' ], [ 'amount' => [ 'This value should be of type digit.', 'This value should be a valid number.' ] ] ];
+		yield [ [ 'amount' => 'fff' ], [ 'amount' => [ 'This value should be of type digit.', 'This value should be a valid number.' ] ] ];
+		yield [ [ 'amount' => '12.34' ], [ 'amount' => [ 'This value should be of type digit.', 'This value should be 100 or more.' ] ] ];
+		yield [ [ 'amount' => '1233.99' ], [ 'amount' => [ 'This value should be of type digit.' ] ] ];
+		yield [ [ 'amount' => '12,34' ], [ 'amount' => [ 'This value should be of type digit.', 'This value should be a valid number.' ] ] ];
+		yield [ [ 'amount' => '12' ], [ 'amount' => [ 'This value should be 100 or more.' ] ] ];
+		yield [ [ 'amount' => '12879342897234879234' ], [ 'amount' => [ 'This value should be 10000000 or less.' ] ] ];
+		yield [ [ 'amount' => '1234', 'something' => 'more' ], [ 'something' => [ 'This field was not expected.' ] ] ];
+		yield [ [ 'no context' => 'indeed' ], [ 'amount' => [ 'This field is missing.' ], 'no context' => [ 'This field was not expected.' ] ] ];
 	}
 }
