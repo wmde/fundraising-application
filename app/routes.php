@@ -93,7 +93,7 @@ $app->post(
 
 		$violations = Validation::createValidator()->validate( $httpRequest->request->all(), $constraint );
 
-		if ( $violations->count() ) {
+		if ( $violations->count() > 0 ) {
 			$mapper = new ConstraintViolationListMapper();
 			return $app->json( [ 'status' => 'ERR', 'messages' => $mapper->map( $violations ) ] );
 		}

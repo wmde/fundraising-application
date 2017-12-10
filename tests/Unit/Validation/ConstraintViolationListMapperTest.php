@@ -22,6 +22,12 @@ class ConstraintViolationListMapperTest extends TestCase {
 		$violationThree = new ConstraintViolation( 'oops', null, [], null, '[ipsum]', 9000 );
 		$violations = new ConstraintViolationList( [ $violationOne, $violationTwo, $violationThree ] );
 
-		$this->assertEquals( [ 'lorem' => [ 'not good', 'neither' ], 'ipsum' => [ 'oops' ] ], $mapper->map( $violations ) );
+		$this->assertEquals(
+			[
+				'lorem' => [ 'not good', 'neither' ],
+				'ipsum' => [ 'oops' ]
+			],
+			$mapper->map( $violations )
+		);
 	}
 }

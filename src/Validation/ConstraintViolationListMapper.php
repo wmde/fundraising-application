@@ -9,10 +9,7 @@ use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 /**
- * Map a list of ConstraintViolations into an array of messages grouped by the property causing them
- *
- * Class ConstraintViolationListMapper
- * @package WMDE\Fundraising\Frontend\Validation
+ * Maps a list of ConstraintViolations into an array of messages grouped by the property causing them
  */
 class ConstraintViolationListMapper {
 
