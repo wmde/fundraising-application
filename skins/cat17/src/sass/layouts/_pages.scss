@@ -91,17 +91,6 @@ main.conclusion {
 	}
 }
 
-.donation-cancel {
-	.introduction {
-		margin-bottom: 60px;
-		@include bkp(sm) {
-			margin-bottom: 25vh;
-		}
-	}
-}
-
-@import "pages/contact";
-
 .donation-comment {
 	form {
 		margin-top: 25px;
@@ -168,9 +157,11 @@ main.conclusion {
 	}
 }
 
+@import "pages/contact";
 @import "pages/comments_list";
 @import "pages/donation_confirmation";
 @import "pages/donation_receipt";
+@import "pages/donation_cancel";
+@import "pages/membership_confirmation";
 @import "pages/privacy_protection";
 @import "pages/use_of_resources";
-@import "pages/membership_confirmation";

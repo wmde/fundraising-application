@@ -1,30 +1,42 @@
-<div class="container">
-	<div class="row">
-		<div class="content col-xs-12 col-sm-10 col-md-8">
-			<h2 class="sr-only">Spende stornieren</h2>
+{% extends 'Base_Layout.html.twig' %}
 
-			<p class="h1">
-				{% if cancellationSuccessful %}
-					{$ 'donation-cancellation-header'|trans $}
-				{% else %}
-					{$ 'donation-cancellation-failed-header'|trans $}
-				{% endif %}
-			</p>
-			<p class="h2">
-				{% if cancellationSuccessful %}
-					{$ 'donation-cancellation-text'|trans( { '%donation.id%': donationId } )|raw $}
-				{% else %}
-					{$ 'donation-cancellation-failed-text'|trans( { '%donation.id%': donationId } )|raw $}
-				{% endif %}
-			</p>
+{% block page_identifier %}donation-cancel{% endblock %}
 
-			{% if mailDeliveryFailed %}
-				<p class="h2">
-					{$ 'donation-cancellation-mail-delivery-failure'|trans|raw $}
+{% block main %}
+	<div class="container">
+		<div class="row">
+			<div class="content col-xs-12 col-sm-10 col-md-8">
+				<h2 class="sr-only">Spende stornieren</h2>
+
+				<p class="h1">
+					{% if cancellationSuccessful %}
+						{$ 'donation_cancellation_header' | trans $}
+					{% else %}
+						{$ 'donation_cancellation_failed_header' | trans $}
+					{% endif %}
 				</p>
-			{% endif %}
-		</div>
+				<p class="h2">
+					{% if cancellationSuccessful %}
+						{$ 'donation_cancellation_text' | trans( {
+							'%donation.id%': '<span class="strong field">' ~ donationId ~ '</span>' ,
+							'%mailto_link%': 'spenden@wikimedia.de?subject=Online-Spende%20' ~ donationId
+						} ) | raw $}
+					{% else %}
+						{$ 'donation_cancellation_failed_text' | trans( {
+							'%donation.id%': '<span class="strong field">' ~ donationId ~ '</span>',
+							'%mailto_link%': 'spenden@wikimedia.de?subject=Online-Spende%20' ~ donationId,
+						} ) | raw $}
+					{% endif %}
+				</p>
 
-		{% include 'partials/back_link.html.twig' %}
+				{% if mailDeliveryFailed %}
+					<p class="h2">
+						{$ 'donation_cancellation_mail_delivery_failure' | trans | raw $}
+					</p>
+				{% endif %}
+			</div>
+
+			{% include 'partials/back_link.html.twig' %}
+		</div>
 	</div>
-</div>
+{% endblock %}

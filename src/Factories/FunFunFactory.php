@@ -1098,7 +1098,7 @@ class FunFunFactory {
 
 	public function newCancelDonationHtmlPresenter(): CancelDonationHtmlPresenter {
 		return new CancelDonationHtmlPresenter(
-			$this->getIncludeTemplate( 'Donation_Cancellation_Confirmation.html.twig' )
+			$this->getLayoutTemplate( 'Donation_Cancellation_Confirmation.html.twig' )
 		);
 	}
 
