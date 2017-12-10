@@ -21,7 +21,7 @@
 							<legend class="legend">Veröffentlichungsoptionen</legend>
 							<div class="row">
 								<div class="field-grp col-xs-12 col-md-6">
-									<select id="offentlich" name="offentlich"
+									<select id="offentlich" name="public"
 											data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true,  "maxVisibleItems": 6}'
 											class="no-outline offentlich">
 										<option value="op1">Öffentlich</option>
@@ -51,7 +51,8 @@
 			<div class="container">
 				<div class="row">
 					<ul class="list-menu link-reverse list-unstyled  col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-8 col-md-4">
-						<li><a href="{$ basepath $}/show-donation-confirmation?id={$ id $}&accessToken={$ accessToken $}" class="">Abbrechen</a></li>
+						<!-- TODO: are these arguments escaped? -->
+						<li><a href="{$ basepath $}/show-donation-confirmation?id={$ donationId $}&accessToken={$ accessToken $}" class="">Abbrechen</a></li>
 					</ul>
 				</div>
 			</div>

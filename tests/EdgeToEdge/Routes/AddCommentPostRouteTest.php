@@ -43,10 +43,10 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 				'POST',
 				'add-comment',
 				[
-					'kommentar' => 'Your programmers deserve a raise',
+					'comment' => 'Your programmers deserve a raise',
 					'public' => '1',
-					'eintrag' => 'Uncle Bob',
-					'sid' => (string)$donation->getId(),
+					'displayName' => 'Uncle Bob',
+					'donationId' => (string)$donation->getId(),
 				]
 			);
 
@@ -75,12 +75,12 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 				'POST',
 				'add-comment',
 				[
-					'kommentar' => 'Your programmers deserve a raise',
+					'comment' => 'Your programmers deserve a raise',
 					'public' => '1',
-					'eintrag' => 'Uncle Bob',
-					'sid' => (string)$donation->getId(),
+					'displayName' => 'Uncle Bob',
+					'donationId' => (string)$donation->getId(),
 					'token' => '1276888%2459b42194b31d0265df452735f6438a234bae2af7',
-					'utoken' => self::CORRECT_UPDATE_TOKEN,
+					'updateToken' => self::CORRECT_UPDATE_TOKEN,
 				]
 			);
 
@@ -96,12 +96,12 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 				'POST',
 				'add-comment',
 				[
-					'kommentar' => 'Your programmers deserve a raise',
+					'comment' => 'Your programmers deserve a raise',
 					'public' => '1',
-					'eintrag' => 'Uncle Bob',
-					'sid' => self::NON_EXISTING_DONATION_ID,
+					'displayName' => 'Uncle Bob',
+					'donationId' => self::NON_EXISTING_DONATION_ID,
 					'token' => '1276888%2459b42194b31d0265df452735f6438a234bae2af7',
-					'utoken' => self::CORRECT_UPDATE_TOKEN,
+					'updateToken' => self::CORRECT_UPDATE_TOKEN,
 				]
 			);
 
@@ -117,12 +117,12 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 				'POST',
 				'add-comment',
 				[
-					'kommentar' => 'Your programmers deserve a raise',
+					'comment' => 'Your programmers deserve a raise',
 					'public' => '1',
-					'eintrag' => 'Uncle Bob',
-					'sid' => (string)$donation->getId(),
+					'displayName' => 'Uncle Bob',
+					'donationId' => (string)$donation->getId(),
 					'token' => '1276888%2459b42194b31d0265df452735f6438a234bae2af7',
-					'utoken' => 'Not the correct token',
+					'updateToken' => 'Not the correct token',
 				]
 			);
 

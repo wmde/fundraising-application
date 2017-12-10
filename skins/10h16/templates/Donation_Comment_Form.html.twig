@@ -15,16 +15,16 @@
 
 <form name="commentForm" class="ajax-form" id="feedback" action="#" method="post" style="line-height: 1.6em;">
   <div class="input-container clearfix">
-    <textarea id="feedback-message" name="kommentar" class="f-left" style="width: 360px; height: 255px;"></textarea>
+    <textarea id="feedback-message" name="comment" class="f-left" style="width: 360px; height: 255px;"></textarea>
     <div class="container f-left no-margin" style="width: 300px;">
       <ul>
         <li class="first">
-          <input type="radio" id="feedback-author-type-1" name="eintrag" value="Anonym" title="Anonym" checked>
+          <input type="radio" id="feedback-author-type-1" name="displayName" value="Anonym" title="Anonym" checked>
           <label for="feedback-author-type-1">Anonym</label>
         </li>
 	{% if person.fullName %}
         <li class="last">
-          <input type="radio" id="feedback-author-type-3" name="eintrag" value="{$ person.fullName $}" title="{$ person.fullName $}">
+          <input type="radio" id="feedback-author-type-3" name="displayName" value="{$ person.fullName $}" title="{$ person.fullName $}">
           <label for="feedback-author-type-3">{$ person.fullName $}</label>
         </li>
 	{% endif %}
@@ -41,8 +41,8 @@
         </li>
       </ul>
       <hr/>
-      <input type="hidden" name="utoken" value="{$ donation.updateToken $}" />
-      <input type="hidden" name="sid" value="{$ donation.id $}" />
+      <input type="hidden" name="updateToken" value="{$ donation.updateToken $}" />
+      <input type="hidden" name="donationId" value="{$ donation.id $}" />
       <button id="publishComment" type="submit">Abschicken<span class="icon-arrow-right"></span></button>
     </div>
   </div>
