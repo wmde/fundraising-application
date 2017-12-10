@@ -1,3 +1,6 @@
+{% extends 'Base_Layout.html.twig' %}
+
+{% block main %}
 <section>
 	<div class="container clearfix">
 		<div class="ltcol">
@@ -9,9 +12,9 @@
 				<div class="box-header container clearfix">
 					<span class="icon-bug">
 						{% if cancellationSuccessful %}
-							{$ 'donation-cancellation-header'|trans({}) $}
+							{$ 'donation_cancellation_header'|trans({}) $}
 						{% else %}
-							{$ 'donation-cancellation-failed-header'|trans({}) $}
+							{$ 'donation_cancellation_failed_header'|trans({}) $}
 						{% endif %}
 					</span>
 				</div>
@@ -20,14 +23,20 @@
 					<div class="container clearfix">
 						<p>
 							{% if cancellationSuccessful %}
-								{$ 'donation-cancellation-text'|trans( { '%donation.id%': donationId } )|raw $}
+								{$ 'donation_cancellation_text' | trans( {
+									'%donation.id%': donationId,
+									'%mailto_link%': 'spenden@wikimedia.de?subject=Online-Spende%20%' ~ donation.id
+								} ) | raw $}
 							{% else %}
-								{$ 'donation-cancellation-failed-text'|trans( { '%donation.id%': donationId } )|raw $}
+								{$ 'donation_cancellation_failed_text' | trans( {
+									'%donation.id%': donationId ,
+									'%mailto_link%': 'spenden@wikimedia.de?subject=Online-Spende%20%' ~ donation.id
+								} ) | raw $}
 							{% endif %}
 						</p>
 						<p>
 							{% if mailDeliveryFailed %}
-								{$ 'donation-cancellation-mail-delivery-failure'|trans|raw $}
+								{$ 'donation_cancellation_mail_delivery_failure'|trans|raw $}
 							{% endif %}
 						</p>
 					</div>
@@ -47,3 +56,4 @@
 		</div>
 	</div>
 </section>
+{% endblock %}
