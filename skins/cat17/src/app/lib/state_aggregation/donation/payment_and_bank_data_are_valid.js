@@ -6,14 +6,14 @@ var _ = require( 'underscore' ),
 
 module.exports = function ( state ) {
 	var result = _.clone( validationResult ),
-		respectiveValidators = _.pick( state.donationInputValidation, [ 'iban', 'bic', 'accountNumber', 'bankCode' ] )
+		respectiveValidators = _.pick( state.donationInputValidation, [ 'paymentType', 'iban', 'bic', 'accountNumber', 'bankCode' ] )
 	;
 
-	result.dataEntered = state.donationFormContent.paymentType !== '' || _.contains( _.pluck( respectiveValidators, 'dataEntered' ), true );
+	result.dataEntered = _.contains( _.pluck( respectiveValidators, 'dataEntered' ), true );
 
 	if ( _.contains( _.pluck( respectiveValidators, 'isValid' ), false ) || state.validity.bankData === false ) {
 		result.isValid = false;
-	} else if ( state.donationFormContent.paymentType === '' ) {
+	} else if ( state.donationInputValidation.paymentType.isValid === null ) {
 		result.isValid = null;
 	} else {
 		result.isValid = true;

@@ -17,7 +17,7 @@ var objectAssign = require( 'object-assign' ),
 	 * @return {ValidationDispatcher}
 	 */
 	createAmountValidationDispatcher = function ( validator,  initialValues ) {
-		var fieldNames = [ 'amount', 'paymentType' ];
+		var fieldNames = [ 'amount' ];
 
 		return objectAssign( Object.create( ValidationDispatcher ), {
 			validationFunction: validator.validate.bind( validator ),
@@ -29,4 +29,3 @@ var objectAssign = require( 'object-assign' ),
 	};
 
 module.exports = createAmountValidationDispatcher;
-

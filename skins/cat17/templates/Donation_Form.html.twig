@@ -300,7 +300,7 @@
 			data-initial-form-values="{% if initialFormValues %}{$ initialFormValues|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
 			data-violated-fields="{% if violatedFields %}{$ violatedFields|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
 			data-initial-validation-result="{% if validationResult %}{$ validationResult|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
-			data-validate-amount-url="{$ basepath|e('html_attr') $}/validate-payment-data"
+			data-validate-amount-url="{$ basepath | e( 'html_attr' ) $}/validate-donation-amount"
 			data-validate-address-url="{$ basepath|e('html_attr') $}/validate-address"
 			data-validate-email-address-url="{$ basepath|e('html_attr') $}/validate-email"
 			data-validate-iban-url="{$ basepath|e('html_attr') $}/check-iban"

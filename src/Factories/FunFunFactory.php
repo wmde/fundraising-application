@@ -21,11 +21,16 @@ use Swift_MailTransport;
 use Swift_NullTransport;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\Validator\Constraint as ValidatorConstraint;
+use Symfony\Component\Validator\Constraints\Range as RangeConstraint;
+use Symfony\Component\Validator\Constraints\Type as TypeConstraint;
+use Symfony\Component\Validator\Constraints\Required as RequiredConstraint;
 use TNvpServiceDispatcher;
 use Twig_Environment;
 use Twig_Extensions_Extension_Intl;
 use Twig_SimpleFunction;
 use WMDE\EmailAddress\EmailAddress;
+use WMDE\Euro\Euro;
 use WMDE\Fundraising\ContentProvider\ContentProvider;
 use WMDE\Fundraising\Frontend\DonationContext\Authorization\DonationAuthorizer;
 use WMDE\Fundraising\Frontend\DonationContext\Authorization\DonationTokenFetcher;
@@ -1563,5 +1568,15 @@ class FunFunFactory {
 
 	public function getPaymentTypesSettings(): PaymentTypesSettings {
 		return $this->pimple['payment-types-settings'];
+	}
+
+	public function newDonationAmountConstraint(): ValidatorConstraint {
+		return new RequiredConstraint( [
+			new TypeConstraint( [ 'type' => 'digit' ] ),
+			new RangeConstraint( [
+				'min' => Euro::newFromInt( $this->config['donation-minimum-amount'] )->getEuroCents(),
+				'max' => Euro::newFromInt( $this->config['donation-maximum-amount'] )->getEuroCents()
+			] )
+		] );
 	}
 }

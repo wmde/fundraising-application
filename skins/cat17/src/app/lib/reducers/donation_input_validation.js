@@ -31,7 +31,28 @@ var _ = require( 'underscore' ),
     return _.extend( {}, state, {
       salutation: { dataEntered: true, isValid: true }
     } );
-  };
+  },
+
+	setValidityOfPaymentType = function ( state, action ) {
+		if ( action.type === 'CHANGE_CONTENT' && action.payload.contentName === 'paymentType' ) {
+			return _.extend( {}, state, {
+				paymentType: {
+					dataEntered: action.payload.value !== '',
+					isValid: action.payload.value !== ''
+				}
+			} );
+		}
+		if ( action.type === 'INITIALIZE_CONTENT' && typeof action.payload.paymentType !== 'undefined' ) {
+			return _.extend( {}, state, {
+				paymentType: {
+					dataEntered: action.payload.paymentType !== '',
+					isValid: action.payload.paymentType !== ''
+				}
+			} );
+		}
+		return state;
+	}
+;
 
 module.exports = function donationInputValidation( state, action ) {
   if ( typeof state === 'undefined' ) {
@@ -39,6 +60,7 @@ module.exports = function donationInputValidation( state, action ) {
   }
 
   state = setValidityOnSalutationChange( state, action );
+	state = setValidityOfPaymentType( state, action );
 
   return inputValidationLib.inputValidation( state, action );
 };

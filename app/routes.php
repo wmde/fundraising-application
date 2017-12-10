@@ -14,6 +14,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\Validator\Constraints\Collection;
+use Symfony\Component\Validator\Validation;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\AddDonationHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\AddSubscriptionHandler;
@@ -40,6 +42,7 @@ use WMDE\Fundraising\Frontend\PaymentContext\UseCases\GenerateIban\GenerateIbanR
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\ContentNotFoundException;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageNotFoundException;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
+use WMDE\Fundraising\Frontend\Validation\ConstraintViolationListMapper;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
 
 $app->post(
@@ -74,6 +77,28 @@ $app->post(
 	'validate-address', // Validates donor information. This route is named badly.
 	function( Request $request ) use ( $app, $ffFactory ) {
 		return ( new ValidateDonorHandler( $ffFactory, $app ) )->handle( $request );
+	}
+);
+
+$app->post(
+	'validate-donation-amount',
+	function( Request $httpRequest ) use ( $app, $ffFactory ) {
+
+		$constraint = new Collection( [
+			'allowExtraFields' => false,
+			'fields' => [
+				'amount' => $ffFactory->newDonationAmountConstraint()
+			]
+		] );
+
+		$violations = Validation::createValidator()->validate( $httpRequest->request->all(), $constraint );
+
+		if ( $violations->count() > 0 ) {
+			$mapper = new ConstraintViolationListMapper();
+			return $app->json( [ 'status' => 'ERR', 'messages' => $mapper->map( $violations ) ] );
+		}
+
+		return $app->json( [ 'status' => 'OK' ] );
 	}
 );
 

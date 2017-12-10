@@ -74,10 +74,8 @@ function inputValidation( validationState, action ) {
         return newValidationState;
       } else if ( action.payload.status === ValidationStates.OK ) {
         newValidationState.amount =  { dataEntered: true, isValid: true };
-        newValidationState.paymentType = { dataEntered: true, isValid: true };
       } else {
         newValidationState.amount = { dataEntered: true, isValid: !action.payload.messages.amount };
-        newValidationState.paymentType = { dataEntered: true, isValid: !action.payload.messages.paymentType };
       }
       return newValidationState;
     case 'FINISH_BANK_DATA_VALIDATION':
@@ -106,15 +104,32 @@ function inputValidation( validationState, action ) {
       if ( action.payload.status === ValidationStates.INCOMPLETE ) {
         return newValidationState;
       }
-      _.forEach( newValidationState, function ( value, key ) {
-        if ( newValidationState[ key ].dataEntered === true ) {
-          newValidationState[ key ] = {
-            dataEntered: true,
-            isValid: newValidationState[ key ].isValid !== false && !( _.has( action.payload.messages, key ) )
-          };
-        }
-      } );
-      return newValidationState;
+
+		// todo Clean way to transport validator groups (those that belong to a respective group [e.g. address]) from
+		// concrete validators (e.g. donation_input_validation) to this generic validation mechanism.
+		var addressFieldValidatorNames = [
+			'addressType',
+			'salutation', 'title', 'firstName', 'lastName',
+			'companyName',
+			'street', 'postcode', 'city', 'country',
+			'email'
+		];
+
+		_.forEach( addressFieldValidatorNames, function ( name ) {
+			if ( !_.has( newValidationState, name ) ) {
+				// this would mean the list of validators in (donation|membership)_input_validation was changed w/o update here
+				return;
+			}
+
+			if ( newValidationState[ name ].dataEntered === true ) {
+				newValidationState[ name ] = {
+					dataEntered: true,
+					isValid: newValidationState[ name ].isValid !== false && !( _.has( action.payload.messages, name ) )
+				};
+			}
+		} );
+
+		return newValidationState;
     default:
       return validationState;
   }
