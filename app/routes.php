@@ -294,6 +294,7 @@ $app->get(
 			$template->render(
 				[
 					'id' => (int)$request->query->get( 'id', '' ),
+					'accessToken' => $request->query->get( 'accessToken', '' ),
 					'updateToken' => $request->query->get( 'updateToken', '' ),
 				]
 			)
