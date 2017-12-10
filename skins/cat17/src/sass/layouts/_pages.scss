@@ -15,13 +15,6 @@ main.conclusion {
 	}
 }
 
-.membership-cancel {
-    .h2 {
-        font-size: 16px;
-        line-height: 26px;
-    }
-}
-
 .introduction p {
 	@include bkp(sm) {
 		width: 75%;
@@ -163,5 +156,6 @@ main.conclusion {
 @import "pages/donation_receipt";
 @import "pages/donation_cancel";
 @import "pages/membership_confirmation";
+@import "pages/membership_cancel";
 @import "pages/privacy_protection";
 @import "pages/use_of_resources";

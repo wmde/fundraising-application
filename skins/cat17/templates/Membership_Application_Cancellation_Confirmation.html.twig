@@ -1,0 +1,46 @@
+{% extends 'Base_Layout.html.twig' %}
+
+{% block page_theme %}membership{% endblock %}
+
+{% block page_identifier %}membership-cancel{% endblock %}
+
+{% block main %}
+	<div class="container">
+		<div class="row">
+			<div class="content col-xs-12 col-sm-10 col-md-8">
+				{# TODO Find a different title for screen readers #}
+				<h2 class="sr-only">{$ 'membership_cancellation_header' | trans({}) $}</h2>
+				<p class="h1">
+                    {% if cancellationSuccessful %}
+						{$ 'membership_cancellation_header'|trans({}) $}
+                    {% else %}
+						{$ 'membership_cancellation_failed_header'|trans({}) $}
+                    {% endif %}
+				</p>
+
+				{% if cancellationSuccessful %}
+					<p class="h2">
+						{$ 'membership_cancellation_text' | trans( { '%membership.id%': '<span class="strong field">' ~ membershipId ~ '</span>' } ) | raw $}
+					</p>
+					<p class="h2">
+						{$ 'membership_cancellation_text2' | trans( { '%mailto_link%': 'mitglieder@wikimedia.de?subject=Mitgliedschaft%20' ~ membershipId } ) | raw $}
+					</p>
+				{% else %}
+					<p class="h2">
+						{$ 'membership_cancellation_failed_text' | trans( {
+							'%membership.id%': '<span class="strong field">' ~ membershipId ~ '</span>',
+							'%mailto_link%': 'mitglieder@wikimedia.de?subject=Mitgliedschaft%20' ~ membershipId
+						} ) | raw $}
+					</p>
+				{% endif %}
+
+			</div>
+			<div class="back-block col-xs-12 col-sm-5 col-sm-offset-7 col-md-4 col-md-offset-8">
+				<ul class="list-menu link-reverse link-back list-unstyled">
+					<li><a href="{$ path( '/' ) $}" class="">Zurück zur Spendenseite</a></li>
+					<li><a href="{$ basepath $}/apply-for-membership">Zurück zum Mitgliedschaftsformular</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+{% endblock %}
