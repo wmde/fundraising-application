@@ -294,8 +294,14 @@ $app->get(
 			$template->render(
 				[
 					'donationId' => (int)$request->query->get( 'donationId', '' ),
-					'accessToken' => $request->query->get( 'accessToken', '' ),
 					'updateToken' => $request->query->get( 'updateToken', '' ),
+					'cancelUrl' => $app['url_generator']->generate(
+						'show-donation-confirmation',
+						[
+							'id' => (int)$request->query->get( 'donationId', '' ),
+							'accessToken' => $request->query->get( 'accessToken', '' )
+						]
+					)
 				]
 			)
 		);
