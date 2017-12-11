@@ -1,9 +1,20 @@
 
-function getfirstTwoDigitsOfNumber( num ) {
-	while ( num >= 100 ) {
-		num /= 10;
+function getFirstTwoDigitsOfNumberString( num ) {
+	switch ( num.length ) {
+		case 1:
+			return num + '0';
+		case 2:
+			return num;
+		default:
+			return num.substr( 0, 2 );
 	}
-	return Math.floor( num );
+}
+
+function stringToNumber ( s ) {
+	if ( s.match( /[^-0-9]/ ) ) {
+		return Number.NaN;
+	}
+	return parseInt( s, 10 );
 }
 
 var objectAssign = require( 'object-assign' ),
@@ -24,19 +35,14 @@ var objectAssign = require( 'object-assign' ),
 	CurrencyParser = {
 		decimalDelimiter: '.',
 		parse: function ( value ) {
-			var parts = value.split( this.decimalDelimiter ).map(
-				function ( p ) {
-					if ( p.match( /[^-0-9]/ ) ) {
-						return Number.NaN;
-					}
-					return parseInt( p, 10 );
-				}
-			);
-			if ( parts.length < 2 ) {
-				parts[1] = 0;
+			var strParts = value.split( this.decimalDelimiter ), parts;
+			if ( strParts.length < 2 ) {
+				strParts[1] = '00';
 			}
 
-			parts[1] = getfirstTwoDigitsOfNumber( parts[1] );
+			strParts[1] = getFirstTwoDigitsOfNumberString( strParts[1] );
+
+			parts = strParts.map( stringToNumber );
 
 			if ( isNaN( parts[0] ) || isNaN( parts[1] ) || parts.length > 2 ) {
 				throw new Error( 'Invalid number' );
