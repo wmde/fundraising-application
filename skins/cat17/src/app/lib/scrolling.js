@@ -107,7 +107,7 @@ module.exports ={
 	},
 	scrollOnSuboptionChange: function( $suboptionInput, $suboptionContainer, scroller ) {
 		$suboptionInput.on( 'change', function ( evt ) {
-			var wrapper = $suboptionContainer.find( '.wrap-field input[value=' + evt.target.value + ']' ).parents( '.wrap-field' );
+			var wrapper = $suboptionContainer.find( '.wrap-field input[value=' + evt.target.value + ']' ).parents( '.wrap-field' ).find( '.info-text' );
 			if (wrapper.length) {
 				scroller.scrollTo( wrapper, { elementStart: ElementStart.ELEMENT } );
 			}
