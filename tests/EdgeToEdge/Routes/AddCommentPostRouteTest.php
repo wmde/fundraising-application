@@ -79,7 +79,6 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 					'public' => '1',
 					'displayName' => 'Uncle Bob',
 					'donationId' => (string)$donation->getId(),
-					'token' => '1276888%2459b42194b31d0265df452735f6438a234bae2af7',
 					'updateToken' => self::CORRECT_UPDATE_TOKEN,
 				]
 			);
@@ -100,7 +99,6 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 					'public' => '1',
 					'displayName' => 'Uncle Bob',
 					'donationId' => self::NON_EXISTING_DONATION_ID,
-					'token' => '1276888%2459b42194b31d0265df452735f6438a234bae2af7',
 					'updateToken' => self::CORRECT_UPDATE_TOKEN,
 				]
 			);
@@ -121,7 +119,6 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 					'public' => '1',
 					'displayName' => 'Uncle Bob',
 					'donationId' => (string)$donation->getId(),
-					'token' => '1276888%2459b42194b31d0265df452735f6438a234bae2af7',
 					'updateToken' => 'Not the correct token',
 				]
 			);
