@@ -1310,7 +1310,7 @@ class FunFunFactory {
 
 	public function newCancelMembershipApplicationHtmlPresenter(): CancelMembershipApplicationHtmlPresenter {
 		return new CancelMembershipApplicationHtmlPresenter(
-			$this->getIncludeTemplate( 'Membership_Application_Cancellation_Confirmation.html.twig' )
+			$this->getLayoutTemplate( 'Membership_Application_Cancellation_Confirmation.html.twig' )
 		);
 	}
 
