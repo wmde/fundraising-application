@@ -281,6 +281,37 @@
                 $(this).parent().addClass('valid');
             }
         });
+
+		form.bind( 'submit', function ( event ) {
+		    console.log('SUCH SUBMIT');
+			event.preventDefault();
+
+			$.ajax( '../add-comment', {
+				data: $( this ).serialize(),
+				dataType: 'json',
+				type: 'POST',
+				error: function ( e ){
+					var $feedback = $( '#comment-form' );
+					$feedback.find( '.message' ).remove();
+					$feedback.append(
+						$( '<div />' )
+							.addClass( 'message' )
+							.addClass( 'error' )
+							.text( 'Die Nachricht konnte auf Grund eines Fehlers nicht verschickt werden.' )
+					);
+				},
+				success: function( response ) {
+					var $feedback = $( '#comment-form' );
+					$feedback.find( '.message' ).remove();
+					$feedback.append(
+						$( '<div />' )
+							.addClass( 'message' )
+							.addClass( response.status === 'ERR' ? 'error' : 'success' )
+							.text( response.message || 'Vielen Dank! Die Nachricht wurde verschickt!' )
+					);
+				}
+			});
+		});
     };
 
 })(jQuery);

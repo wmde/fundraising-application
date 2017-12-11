@@ -4,7 +4,7 @@
 
 {% block main %}
 	<main class="comment">
-		<form id="comment-form" class="row">
+		<form id="comment-form" action="#" method="post" class="row">
 			<div class="container">
 				<div class="row">
 					<div class="content col-xs-12">
@@ -12,8 +12,9 @@
 						<fieldset class="col-xs-12 col-sm-6">
 							<legend class="legend">Erzahlen Sie uns, warum sie gespendt haben.</legend>
 							<div class="field-grp">
-								<!-- ToDo: wikimedia translate placeholder / label text / error text add the adequate -->
-								<textarea name="textarea" rows="50" cols="10" id="comment" placeholder="Your comment"></textarea>
+								<!-- ToDo: wikimedia translate label text / error text add the adequate -->
+								{# TODO: i18n placeholder #}
+								<textarea name="comment" rows="50" cols="10" id="comment" placeholder="Your comment"></textarea>
 								<label for="comment" class="sr-only">Your comment</label>
 							</div>
 						</fieldset>
@@ -29,6 +30,7 @@
 									</select>
 								</div>
 								<div class="field-grp col-xs-12 col-sm-6">
+									{# TODO: full name option #}
 									<select id="personalized" name="personalized"
 											data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true,  "maxVisibleItems": 6}'
 											class="no-outline personalized">
