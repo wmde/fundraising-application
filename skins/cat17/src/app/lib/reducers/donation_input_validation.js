@@ -61,6 +61,7 @@ module.exports = function donationInputValidation( state, action ) {
 
   state = setValidityOnSalutationChange( state, action );
 	state = setValidityOfPaymentType( state, action );
+	// TODO: setValidityOfPaymentInterval
 
   return inputValidationLib.inputValidation( state, action );
 };

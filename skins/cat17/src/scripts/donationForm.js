@@ -330,7 +330,8 @@ $( function () {
 
 	// Scroll to first required element that needs to be filled
 	var currentState = store.getState();
-	if ( currentState.validity.paymentData ) {
+	if ( WMDE.StateAggregation.Donation.formIsPrefilled( currentState ).dataEntered ) {
+		// We can assume the validity of amount and interval here, so next section is either payment method or personal data
 		var nextRequired = currentState.donationFormContent.paymentType === 'BEZ' ? $( '#payment-method' ) : $( '#donation-type' );
 		var $introBanner = $('.introduction-banner');
 		$introBanner.insertBefore( nextRequired ).removeClass( 'hidden' );
