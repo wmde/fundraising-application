@@ -116,14 +116,14 @@ input[type=submit] {
 
 .error-text {
 	color: $brand-error;
-	padding-left: 16px;
-	margin-bottom: 30px;
+	margin-bottom: 2em;
+	display: inline-block;
 }
 
 .warning-text {
 	color: $brand-warning;
-	padding-left: 16px;
-	margin-bottom: 30px;
+	margin-bottom: 2em;
+	display: inline-block;
 }
 
 label, input#amount-typed, .wrap-amount-typed:after{
