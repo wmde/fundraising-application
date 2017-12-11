@@ -1,13 +1,9 @@
 
 function getfirstTwoDigitsOfNumber( num ) {
-	if ( num < 100 ) {
-		return num;
-	}
-	while ( num > 99 ) {
+	while ( num >= 100 ) {
 		num /= 10;
 	}
 	return Math.floor( num );
-
 }
 
 var objectAssign = require( 'object-assign' ),
