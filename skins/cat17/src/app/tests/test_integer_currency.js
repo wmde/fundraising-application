@@ -31,6 +31,10 @@ test( 'German locale - parsing valid strings', function ( t ) {
 		[ '13,37', 1337 ],
 		[ '13,37', 1337 ],
 		[ '13,3373', 1333 ], // long decimal values should be truncated
+		[ '1,989', 198 ],
+		[ '1,991', 199 ],
+		[ '1,999', 199 ],
+		[ '17,995', 1799 ],
 		[ '12', 1200 ]
 	];
 	inputsAndExpectedOutputs.map( function ( io ) {
