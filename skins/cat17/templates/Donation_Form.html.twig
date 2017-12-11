@@ -32,14 +32,12 @@
 			<div class="row">
 				<div class="form-shadow-wrap col-xs-12 col-sm-8">
 					<section class="introduction-banner hidden">
-						<p>
 							{$ 'donation_banner_deeplink_summary' | trans( {
 							'%frequency%': '<span class="frequency"><span class="text"></span></span>',
 							'%amount%': '<span class="amount"><span class="text"></span></span>',
 							'%payment_method%': '<span class="payment-method"><span class="text"></span></span>'
 							} ) | raw $}
-							<a href="#donation-amount">{$ 'donation_banner_correction_anchor' | trans | raw $}</a>
-						</p>
+							<a href="#donation-amount">{$ 'donation_banner_correction_anchor' | trans $}</a>
 					</section>
 					<section id="donation-amount" class="donation-amount clearfix">
 						<h2>{$ 'donation_section_amount_title' | trans $}</h2>
