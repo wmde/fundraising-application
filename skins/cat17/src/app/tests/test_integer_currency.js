@@ -29,6 +29,8 @@ test( 'German locale - parsing valid strings', function ( t ) {
 		[ '1,00', 100 ],
 		[ '10,00', 1000 ],
 		[ '13,37', 1337 ],
+		[ '13,37', 1337 ],
+		[ '13,3373', 1333 ], // long decimal values should be truncated
 		[ '12', 1200 ]
 	];
 	inputsAndExpectedOutputs.map( function ( io ) {
@@ -46,8 +48,7 @@ test( 'German locale - parsing invalid strings', function ( t ) {
 		'1,*',
 		'CAFFE',
 		'1.2',
-		'1,2,3',
-		'13,33337'
+		'1,2,3'
 	];
 	inputs.map( function ( invalidInput ) {
 		t.throws( function() { parser.parse( invalidInput ); },
@@ -81,6 +82,7 @@ test( 'English locale - parsing valid strings', function ( t ) {
 		[ '1.00', 100 ],
 		[ '10.00', 1000 ],
 		[ '13.37', 1337 ],
+		[ '13.337', 1333 ],
 		[ '12', 1200 ]
 	];
 	inputsAndExpectedOutputs.map( function ( io ) {
@@ -98,8 +100,7 @@ test( 'English locale - parsing invalid strings', function ( t ) {
 		'1.*',
 		'CAFFE',
 		'1,2',
-		'1.2.3',
-		'13.33337'
+		'1.2.3'
 	];
 	inputs.map( function ( invalidInput ) {
 		t.throws( function() { parser.parse( invalidInput ); },

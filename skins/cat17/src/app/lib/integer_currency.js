@@ -1,4 +1,15 @@
 
+function getfirstTwoDigitsOfNumber( num ) {
+	if ( num < 100 ) {
+		return num;
+	}
+	while ( num > 99 ) {
+		num /= 10;
+	}
+	return Math.floor( num );
+
+}
+
 var objectAssign = require( 'object-assign' ),
 	CurrencyFormatter = {
 		decimalDelimiter: '.',
@@ -28,7 +39,10 @@ var objectAssign = require( 'object-assign' ),
 			if ( parts.length < 2 ) {
 				parts[1] = 0;
 			}
-			if ( isNaN( parts[0] ) || isNaN( parts[1] ) || parts.length > 2 || parts[1] > 100 ) {
+
+			parts[1] = getfirstTwoDigitsOfNumber( parts[1] );
+
+			if ( isNaN( parts[0] ) || isNaN( parts[1] ) || parts.length > 2 ) {
 				throw new Error( 'Invalid number' );
 			}
 
