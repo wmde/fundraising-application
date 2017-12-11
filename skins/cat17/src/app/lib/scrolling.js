@@ -3,33 +3,65 @@
 var objectAssign = require( 'object-assign' ),
 	_ = require( 'underscore' ),
 
-	calculateElementOffset = function ( $element, $fixedHeaderElements ) {
-		var offset = 0,
-			matchedElemPadding = $element.css( 'padding-top' ).match( /^(\d+)px$/ );
-		_.each( $fixedHeaderElements.get(), function ( elm ) {
-			var $elm = $( elm );
+	ElementStart = {
+		MARGIN: 'MARGIN',
+		ELEMENT: 'ELEMENT',
+		PADDDING: 'PADDING'
+	},
+
+	calculateFixedHeaderElementHeight = function ( $fixedHeaderElements ) {
+		return _.reduce( $fixedHeaderElements.get(), function ( offset, element ) {
+			var $elm = $( element );
 			if ( $elm.is( ':visible' ) ) {
 				offset += $elm.height();
 			}
-		} );
+			return offset;
+		}, 0 );
+	},
 
-		if ( matchedElemPadding ) {
-			offset -= parseInt( matchedElemPadding[ 1 ] );
+	calculateElementPadding = function ( $element ) {
+		var matchedElemPadding = $element.css( 'padding-top' ).match( /^(\d+)px$/ );
+
+		if ( !matchedElemPadding ) {
+			return 0;
 		}
+		return parseInt( matchedElemPadding[ 1 ] );
+	},
 
-		return $element.offset().top - offset;
+	calculateElementMargin = function ( $element ) {
+		var matchedElemPadding = $element.css( 'margin-top' ).match( /^(\d+)px$/ );
+
+		if ( !matchedElemPadding ) {
+			return 0;
+		}
+		return parseInt( matchedElemPadding[ 1 ] );
+	},
+
+	/**
+	 *
+	 * @param {jQuery} $element Element whose offset will be taken
+	 * @param {[jQuery]} $fixedHeaderElements Elements whose height will be subtracted from the offset
+	 * @param {Object} options
+	 * @param {string} options.elementStart
+	 * @return {number}
+	 */
+	calculateElementOffset = function ( $element, $fixedHeaderElements, options ) {
+		options = _.extend( { elementStart: ElementStart.ELEMENT }, options );
+		var offset = $element.offset().top - calculateFixedHeaderElementHeight( $fixedHeaderElements );
+		switch ( options.elementStart ) {
+			case ElementStart.PADDDING:
+				return offset + calculateElementPadding( $element );
+			case ElementStart.MARGIN:
+				return offset - calculateElementMargin( $element);
+		}
+		return offset;
 	},
 
 	AnimatedScroller = {
 		fixedHeaderElements: null,
 		scrollTo: function( $element, options ) {
-			var topOffset = calculateElementOffset( $element, this.fixedHeaderElements );
-			if ( options && options.additionalOffset ) {
-				topOffset += options.additionalOffset;
-			}
-
 			$( 'html, body' ).stop( true ).animate( {
-				scrollTop: topOffset
+				scrollTop: calculateElementOffset( $element, this.fixedHeaderElements, options )
 			}, 1000, function () {
 				// Callback after animation
 				// Must change focus!
@@ -63,7 +95,7 @@ var objectAssign = require( 'object-assign' ),
 			var target = $( evt.currentTarget.hash );
 			target = target.length ? target : $( '[name=' + evt.currentTarget.hash.slice( 1 ) + ']' );
 			if ( target.length > 0 ) {
-				this.scroller.scrollTo( target );
+				this.scroller.scrollTo( target, { elementStart: ElementStart.PADDDING } );
 			}
 		}
 	}
@@ -77,7 +109,7 @@ module.exports ={
 		$suboptionInput.on( 'change', function ( evt ) {
 			var wrapper = $suboptionContainer.find( '.wrap-field input[value=' + evt.target.value + ']' ).parents( '.wrap-field' );
 			if (wrapper.length) {
-				scroller.scrollTo( wrapper );
+				scroller.scrollTo( wrapper, { elementStart: ElementStart.ELEMENT } );
 			}
 		} )
 	},
@@ -88,6 +120,7 @@ module.exports ={
 			.not('.state-overview .wrap-field.completed .wrap-input')
 			.click( linkScroller.scrollToTarget.bind( linkScroller ) );
 	},
+	ElementStart: ElementStart,
 	// exposed for testing
 	calculateElementOffset: calculateElementOffset
 };
