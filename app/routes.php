@@ -44,6 +44,8 @@ use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageNotFoundException;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolationListMapper;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
+use WMDE\Fundraising\Frontend\DonationContext\UseCases\ShowDonationConfirmation\ShowDonationConfirmationRequest;
+use WMDE\Fundraising\Frontend\Presentation\DonationMembershipApplicationAdapter;
 
 $app->post(
 	'validate-email',
@@ -379,6 +381,19 @@ $app->get(
 
 		if ( $request->query->get('type' ) === 'sustaining' ) {
 			$params['showMembershipTypeOption'] = false ;
+		}
+
+		try {
+			$useCase = $ffFactory->newShowDonationConfirmationUseCase( $request->query->get( 'donationAccessToken', '' ) );
+			$responseModel = $useCase->showConfirmation( new ShowDonationConfirmationRequest(
+				$request->query->getInt( 'donationId' )
+			) );
+
+			if ( $responseModel->accessIsPermitted() ) {
+				$adapter = new DonationMembershipApplicationAdapter();
+				$params['initialFormValues'] = $adapter->getInitialMembershipFormValues( $responseModel->getDonation() );
+			}
+		} catch ( Exception $e ) {
 		}
 
 		return $ffFactory->getMembershipApplicationFormTemplate()->render( $params );
