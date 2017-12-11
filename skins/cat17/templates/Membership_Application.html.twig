@@ -62,7 +62,7 @@
 			<section class="state-bar state-overview col-xs-12 ">
 				<div class="wrap-bar container ">
 					<ul class="">
-						{% include 'partials/membership/state_bar_sections.html.twig' only %}
+						{% include 'partials/membership/state_bar_sections.html.twig' with { 'membership_type_empty_text': 'membership_section_membership_type_anchor_short' | trans } only %}
 					</ul>
 				</div>
 			</section>
@@ -92,7 +92,7 @@
 							<div class="wrap-field">
 								<div class="wrap-input">
 									<input type="radio" name="membership_type" id="aktive" value="active">
-									<label for="aktive"  data-short-text="{$ 'membership_membershiptype_option_active_short' | trans $}">
+									<label for="aktive" data-short-text="{$ 'membership_membershiptype_option_active_short' | trans $}">
 										<span>{$ 'membership_membershiptype_option_active' | trans $}</span>
 										<i class="icon-flash_on"></i>
 									</label>
