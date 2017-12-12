@@ -9,9 +9,10 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationConfirmationHtmlPr
 use WMDE\Fundraising\Frontend\Presentation\SelectedConfirmationPage;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidDonation;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeUrlGenerator;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Presentation\Presenters\DonationConfirmationHtmlPresenter
+ * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\DonationConfirmationHtmlPresenter
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
@@ -21,30 +22,35 @@ class DonationConfirmationHtmlPresenterTest extends \PHPUnit\Framework\TestCase 
 	private const STATUS_BOOKED = 'status-booked';
 	private const STATUS_UNCONFIRMED = 'status-unconfirmed';
 
+	private const UPDATE_TOKEN = 'update_token';
+	private const DONATION_ID = 42;
+
 	public function testWhenPresenterRenders_itPassedParamsToTemplate(): void {
-		$twig = $this->getMockBuilder( TwigTemplate::class )->disableOriginalConstructor()->getMock();
-		$pageSelector = $this->getMockBuilder( SelectedConfirmationPage::class )->disableOriginalConstructor()->getMock();
+		$expectedParameters = $this->getExpectedRenderParams();
+		$expectedParameters['donation']['status'] = self::STATUS_BOOKED;
 
-		$twig->expects( $this->once() )
-			->method( 'render' )
-			->with( $this->getExpectedRenderParams( self::STATUS_BOOKED ) );
+		$presenter = new DonationConfirmationHtmlPresenter(
+			$this->newTwigTemplateMock( $expectedParameters ),
+			new FakeUrlGenerator()
+		);
 
-		$presenter = new DonationConfirmationHtmlPresenter( $twig );
+		$donation = ValidDonation::newBookedAnonymousPayPalDonation();
+		$donation->assignId( self::DONATION_ID );
+
 		$presenter->present(
-			ValidDonation::newBookedAnonymousPayPalDonation(),
-			'update_token',
-			$pageSelector,
+			$donation,
+			self::UPDATE_TOKEN,
+			$this->newSelectedConfirmationPage(),
 			$this->newPiwikEvents()
 		);
 	}
 
-	private function getExpectedRenderParams( string $mappedStatus ): array {
+	private function getExpectedRenderParams(): array {
 		return [
 			'template_name' => '',
 			'templateCampaign' => '',
 			'donation' => [
-				'id' => null,
-				'status' => $mappedStatus,
+				'id' => self::DONATION_ID,
 				'amount' => 13.37,
 				'interval' => 3,
 				'paymentType' => 'PPL',
@@ -52,39 +58,54 @@ class DonationConfirmationHtmlPresenterTest extends \PHPUnit\Framework\TestCase 
 				'bankTransferCode' => '',
 				'creationDate' => ( new \DateTime() )->format( 'd.m.Y' ),
 				'cookieDuration' => '15552000',
-				'updateToken' => 'update_token'
+				'updateToken' => self::UPDATE_TOKEN
 			],
-			'person' => [ ],
-			'bankData' => [ ],
-			'initialFormValues' => [ ],
+			'person' => [],
+			'bankData' => [],
+			'initialFormValues' => [],
 			'piwikEvents' => [
 				[ 'setCustomVariable', 1, 'Payment', 'some value', PiwikEvents::SCOPE_VISIT ],
 				[ 'trackGoal', 4095 ]
-			]
+			],
+			'commentUrl' => 'https://such.a.url/add-comment?id=42&updateToken=update_token'
 		];
+	}
+
+	private function newTwigTemplateMock( array $expectedParameters ): TwigTemplate {
+		$twig = $this->createMock( TwigTemplate::class );
+		$twig->expects( $this->once() )
+			->method( 'render' )
+			->with( $expectedParameters );
+		return $twig;
+	}
+
+	private function newSelectedConfirmationPage(): SelectedConfirmationPage {
+		return $this->createMock( SelectedConfirmationPage::class );
 	}
 
 	private function newPiwikEvents(): PiwikEvents {
 		$piwikEvents = new PiwikEvents();
 		$piwikEvents->triggerSetCustomVariable( 1, 'some value', PiwikEvents::SCOPE_VISIT );
 		$piwikEvents->triggerTrackGoal( 4095 );
-
 		return $piwikEvents;
 	}
 
 	public function testWhenPresenterPresents_itPassesMappedStatus(): void {
-		$twig = $this->getMockBuilder( TwigTemplate::class )->disableOriginalConstructor()->getMock();
-		$pageSelector = $this->getMockBuilder( SelectedConfirmationPage::class )->disableOriginalConstructor()->getMock();
+		$expectedParameters = $this->getExpectedRenderParams();
+		$expectedParameters['donation']['status'] = self::STATUS_UNCONFIRMED;
 
-		$twig->expects( $this->once() )
-			->method( 'render' )
-			->with( $this->getExpectedRenderParams( self::STATUS_UNCONFIRMED ) );
+		$presenter = new DonationConfirmationHtmlPresenter(
+			$this->newTwigTemplateMock( $expectedParameters ),
+			new FakeUrlGenerator()
+		);
 
-		$presenter = new DonationConfirmationHtmlPresenter( $twig );
+		$donation = ValidDonation::newIncompleteAnonymousPayPalDonation();
+		$donation->assignId( self::DONATION_ID );
+
 		$presenter->present(
-			ValidDonation::newIncompleteAnonymousPayPalDonation(),
-			'update_token',
-			$pageSelector,
+			$donation,
+			self::UPDATE_TOKEN,
+			$this->newSelectedConfirmationPage(),
 			$this->newPiwikEvents()
 		);
 	}

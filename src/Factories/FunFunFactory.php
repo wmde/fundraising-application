@@ -1090,7 +1090,8 @@ class FunFunFactory {
 					'piwikGoals' => [ 3 ],
 					'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForMembershipApplication()
 				]
-			)
+			),
+			$this->getUrlGenerator()
 		);
 	}
 
