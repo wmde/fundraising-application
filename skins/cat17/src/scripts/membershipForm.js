@@ -346,7 +346,15 @@ $( function () {
       {
         viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#amount-typed' ) ),
         stateKey: 'membershipInputValidation.amount'
-      }
+      },
+		// Show house number warning
+		{
+			viewHandler: WMDE.View.createSimpleVisibilitySwitcher(
+				$( '#street, #adress-company' ).nextAll( '.warning-text' ),
+				/^\D+$/
+			),
+			stateKey: 'membershipFormContent.street'
+		}
     ],
     store
   );
