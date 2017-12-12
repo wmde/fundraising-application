@@ -294,10 +294,10 @@
 }
 
 .info-text-bottom {
-	i {
+	i, .info-detail, a {
 		display: none;
-
 	}
+
 	&.opened {
 		i {
 			display: block;
@@ -305,7 +305,13 @@
 				display: none;
 			}
 		}
-
+		/* Prevent detail elements from overlapping submit button */
+		.info-detail {
+			display: block;
+		}
+		a {
+			display: inline;
+		}
 	}
 
 }
