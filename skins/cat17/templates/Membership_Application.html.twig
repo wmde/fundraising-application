@@ -149,33 +149,33 @@
 										</div>
 
 										<div class="field-grp">
-											<input type="text" id="first-name" name="vorname" class="first-name" placeholder="{$ 'firstname_label' | trans | e( 'html_attr' ) $}">
+											<input type="text" id="first-name" name="vorname" class="first-name" placeholder="{$ 'firstname_label' | trans | e( 'html_attr' ) $}" data-pattern="^.+$">
 											<label for="first-name" class="sr-only">{$ 'firstname_label' | trans $}</label>
 											<span class="error-text">{$ 'form_firstname_error' | trans $}</span>
 										</div>
 										<div class="field-grp">
-											<input type="text" id="surname" name="nachname" class="name" placeholder="{$ 'lastname_label' | trans | e( 'html_attr' ) $}">
+											<input type="text" id="surname" name="nachname" class="name" placeholder="{$ 'lastname_label' | trans | e( 'html_attr' ) $}" data-pattern="^.+$">
 											<label for="surname" class="sr-only">{$ 'lastname_label' | trans $}</label>
 											<span class="error-text">{$ 'form_lastname_error' | trans $}</span>
 										</div>
 										<div class="field-grp">
-											<input type="email" id="email" class="email" placeholder="{$ 'email_label' | trans | e( 'html_attr' ) $}">
+											<input type="email" id="email" class="email" placeholder="{$ 'email_label' | trans | e( 'html_attr' ) $}" data-pattern="^[^@]+@.+$">
 											<label for="email" class="sr-only">{$ 'email_label' | trans $}</label>
 											<span class="error-text">{$ 'form_email_error' | trans $}</span>
 										</div>
 										<div class="field-grp">
 											<input type="text" id="street" class="street"
-												   placeholder="{$ 'street_label' | trans | e( 'html_attr' ) $}">
+												   placeholder="{$ 'street_label' | trans | e( 'html_attr' ) $}" data-pattern="^.+$">
 											<label for="street" class="sr-only">{$ 'street_label' | trans $}</label>
 											<span class="error-text">{$ 'form_street_error' | trans $}</span>
 										</div>
 										<div class="field-grp">
-											<input type="text" id="post-code" class="post-code" placeholder="{$ 'zip_label' | trans | e( 'html_attr' ) $}">
+											<input type="text" id="post-code" class="post-code" placeholder="{$ 'zip_label' | trans | e( 'html_attr' ) $}" data-pattern="^[0-9]{4,5}$">
 											<label for="post-code" class="sr-only">{$ 'zip_label' | trans $}</label>
 											<span class="error-text">{$ 'form_zip_error' | trans $}</span>
 										</div>
 										<div class="field-grp">
-											<input type="text" id="city" placeholder="{$ 'city_label' | trans | e( 'html_attr' ) $}" class="city">
+											<input type="text" id="city" placeholder="{$ 'city_label' | trans | e( 'html_attr' ) $}" class="city" data-pattern="^.+$">
 											<label for="city" class="sr-only">{$ 'city_label' | trans $}</label>
 											<span class="error-text">{$ 'form_city_error' | trans $}</span>
 										</div>
@@ -214,27 +214,27 @@
 								<div class="wrap-info">
 									<div class="info-text" data-info="company">
 										<div class="field-grp ">
-											<input type="text" id="company-name" name="firma" placeholder="{$ 'companyname_label' | trans | e( 'html_attr' ) $}">
+											<input type="text" id="company-name" name="firma" placeholder="{$ 'companyname_label' | trans | e( 'html_attr' ) $}" data-pattern="^.+$">
 											<label for="company-name" class="sr-only">{$ 'companyname_label' | trans $}</label>
 											<span class="error-text">{$ 'form_companyname_error' | trans $}</span>
 										</div>
 										<div class="field-grp">
-											<input type="email" id="email-company" name="email" class="email" placeholder="{$ 'email_label' | trans | e( 'html_attr' ) $}">
+											<input type="email" id="email-company" name="email" class="email" placeholder="{$ 'email_label' | trans | e( 'html_attr' ) $}" data-pattern="^[^@]+@.+$">
 											<label for="email-company" class="sr-only">{$ 'email_label' | trans $}</label>
 											<span class="error-text">{$ 'form_email_error' | trans $}</span>
 										</div>
 										<div class="field-grp">
-											<input type="text" id="adress-company" name="strasse" class="street" placeholder="{$ 'street_label' | trans | e( 'html_attr' ) $}">
+											<input type="text" id="adress-company" name="strasse" class="street" placeholder="{$ 'street_label' | trans | e( 'html_attr' ) $}" data-pattern="^.+$">
 											<label for="adress-company" class="sr-only">{$ 'street_label' | trans $}</label>
 											<span class="error-text">{$ 'form_street_error' | trans $}</span>
 										</div>
 										<div class="field-grp">
-											<input type="text" id="post-code-company" name="postcode" class="post-code" placeholder="{$ 'zip_label' | trans | e( 'html_attr' ) $}">
+											<input type="text" id="post-code-company" name="postcode" class="post-code" placeholder="{$ 'zip_label' | trans | e( 'html_attr' ) $}" data-pattern="^[0-9]{4,5}$">
 											<label for="post-code" class="sr-only">{$ 'zip_label' | trans $}</label>
 											<span class="error-text">{$ 'form_zip_error' | trans $}</span>
 										</div>
 										<div class="field-grp">
-											<input type="text" id="city-company" name="ort" placeholder="{$ 'city_label' | trans | e( 'html_attr' ) $}" class="city">
+											<input type="text" id="city-company" name="ort" placeholder="{$ 'city_label' | trans | e( 'html_attr' ) $}" class="city" data-pattern="^.+$">
 											<label for="city-company" class="sr-only">{$ 'city_label' | trans $}</label>
 											<span class="error-text">{$ 'form_city_error' | trans $}</span>
 										</div>
