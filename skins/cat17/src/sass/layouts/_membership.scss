@@ -40,6 +40,9 @@
 		}
 		.list-membership {
 			margin-top: 30px;
+			@include bkp(sm) {
+				column-count: 2;
+			}
 			li {
 				list-style-type: none;
 				margin-bottom: 25px;
