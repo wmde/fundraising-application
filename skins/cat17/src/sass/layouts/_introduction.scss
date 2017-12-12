@@ -47,10 +47,15 @@
 	top: 1.5em;
 	line-height: 1.4em;
 	margin-top: 1em;
-}
 
-.introduction-banner a {
-	color: $brand-primary;
-	display: inline-block;
-	margin-left: 1em;
+	a {
+		color: $brand-primary;
+		display: inline-block;
+		margin-left: 1em;
+	}
+
+	/* Avoid line breaks between amount and euro sign */
+	.amount {
+		white-space: nowrap;
+	}
 }
