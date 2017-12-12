@@ -62,7 +62,7 @@
 			<section class="state-bar state-overview col-xs-12 ">
 				<div class="wrap-bar container ">
 					<ul class="">
-						{% include 'partials/membership/state_bar_sections.html.twig' only %}
+						{% include 'partials/membership/state_bar_sections.html.twig' with { 'membership_type_empty_text': 'membership_section_membership_type_anchor_short' | trans } only %}
 					</ul>
 				</div>
 			</section>
@@ -79,8 +79,8 @@
 							<div class="wrap-field">
 								<div class="wrap-input">
 									<input type="radio" name="membership_type" id="support" value="sustaining">
-									<label for="support">
-										<span data-short-name="Förder">{$ 'membership_membershiptype_option_sustaining' | trans $}</span>
+									<label for="support" data-short-text="{$ 'membership_membershiptype_option_sustaining_short' | trans $}">
+										<span>{$ 'membership_membershiptype_option_sustaining' | trans $}</span>
 										<i class="icon-favorite"></i>
 									</label>
 								</div>
@@ -92,8 +92,8 @@
 							<div class="wrap-field">
 								<div class="wrap-input">
 									<input type="radio" name="membership_type" id="aktive" value="active">
-									<label for="aktive">
-										<span data-short-name="Aktive">{$ 'membership_membershiptype_option_active' | trans $}</span>
+									<label for="aktive" data-short-text="{$ 'membership_membershiptype_option_active_short' | trans $}">
+										<span>{$ 'membership_membershiptype_option_active' | trans $}</span>
 										<i class="icon-flash_on"></i>
 									</label>
 								</div>
@@ -125,7 +125,7 @@
 
 								<div class="wrap-input">
 									<input type="radio" name="adresstyp" id="personal" value="person">
-									<label for="personal">
+									<label for="personal" data-short-text="{$ 'membership_addresstype_option_private_short' | trans $}">
 										<span>{$ 'membership_addresstype_option_private' | trans $}</span>
 										<i class="icon-account_circle"></i>
 									</label>
@@ -206,7 +206,7 @@
 
 								<div class="wrap-input">
 									<input type="radio" name="adresstyp" id="company" value="firma">
-									<label for="company">
+									<label for="company" data-short-text="{$ 'membership_addresstype_option_company_short' | trans $}">
 										<span>{$ 'membership_addresstype_option_company' | trans $}</span>
 										<i class="icon-work"></i>
 									</label>

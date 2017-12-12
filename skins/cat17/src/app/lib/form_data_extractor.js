@@ -19,6 +19,14 @@ module.exports = {
 		} );
 		return map;
 	},
+	mapFromRadioLabelsShort: function( $container ) {
+		var map = {};
+		_.each( $container.find( 'input[type="radio"]' ).get(), function( input ) {
+			input = $( input );
+			map[ input.attr( 'value' ) ] = input.next( 'label' ).data( 'short-text' ).trim();
+		} );
+		return map;
+	},
 	/**
 	 * Seemingly excess selectors to make sure not to select extra (hidden) form fields (cp. SuboptionDisplayHandler)
 	 */

@@ -84,6 +84,47 @@ test( 'Map can be built from radio button labels', function ( t ) {
 	t.end();
 } );
 
+test( 'Map can be built from radio button label\'s data attributes', function ( t ) {
+	var createLabel = function ( labelText ) {
+			return {
+				data: sinon.stub().withArgs( 'short-text' ).returns( labelText )
+			}
+		},
+		createElement = function ( labelText ) {
+			return {
+				attr: sinon.stub(),
+				next: sinon.stub().withArgs( 'label' ).returns( createLabel( labelText ) )
+			}
+		},
+		radioOne = createElement( 'alpha' ),
+		radioTwo = createElement( 'beta' ),
+		radios = {
+			get: sinon.stub()
+		},
+		container = {
+			find: sinon.stub()
+		}
+	;
+
+	radios.get.returns( [ radioOne, radioTwo ] );
+	container.find.withArgs( 'input[type="radio"]' ).returns( radios );
+
+	radioOne.attr.withArgs( 'value' ).returns( 'a' );
+	radioTwo.attr.withArgs( 'value' ).returns( 'b' );
+
+	global.$ = sinon.stub();
+	global.$.returnsArg( 0 ); // pretend to extend the DOM element given to jQuery. We don't but have all methods stubbed
+
+	t.deepEqual(
+		extractor.mapFromRadioLabelsShort( container ),
+		{ 'a': 'alpha', 'b': 'beta' }
+	);
+
+	delete global.$;
+
+	t.end();
+} );
+
 test( 'Map can be built from radio button info texts', function ( t ) {
 	var createLabel = function ( infoText ) {
 			return {

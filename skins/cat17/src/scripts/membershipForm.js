@@ -177,7 +177,7 @@ $( function () {
 		},
 		{
 			viewHandler: WMDE.View.SectionInfo.createMembershipTypeSectionInfo(
-				$( '.member-type' ),
+				$( '.state-bar-lateral .member-type, .state-bar-detailed .member-type' ),
 				{
 					'sustaining': 'icon-favorite',
 					'active': 'icon-flash_on'
@@ -187,23 +187,57 @@ $( function () {
 			),
 			stateKey: [
 				'membershipFormContent.membershipType',
-				function ( store ) {
-					return {
-						isValid: store.membershipFormContent.membershipType !== null,
-						dataEntered: store.membershipFormContent.membershipType !== null
-					}
-				}
+				WMDE.StateAggregation.Membership.membershipTypeIsValid
+			]
+		},
+		{
+			viewHandler: WMDE.View.SectionInfo.createMembershipTypeSectionInfo(
+				$( '.state-bar .member-type' ),
+				{
+					'sustaining': 'icon-favorite',
+					'active': 'icon-flash_on'
+				},
+				WMDE.FormDataExtractor.mapFromRadioLabelsShort( $( '#type-membership .wrap-input' ) ),
+				{ 'sustaining': '', 'active': '' }
+			),
+			stateKey: [
+				'membershipFormContent.membershipType',
+				WMDE.StateAggregation.Membership.membershipTypeIsValid
 			]
 		},
 		{
 			viewHandler: WMDE.View.SectionInfo.createDonorTypeSectionInfo(
-				$( '.donor-type' ),
+				$( '.state-bar-lateral .donor-type, .state-bar-detailed .donor-type' ),
 				{
 					'person': 'icon-account_circle',
-					'firma': 'icon-work',
-					'anonym': 'icon-visibility_off'
+					'firma': 'icon-work'
 				},
 				WMDE.FormDataExtractor.mapFromRadioLabels( $( '#type-donor .wrap-input' ) ),
+				WMDE.FormDataExtractor.mapFromSelectOptions( $( '#country' ) )
+			),
+			stateKey: [
+				'membershipFormContent.addressType',
+				'membershipFormContent.salutation',
+				'membershipFormContent.title',
+				'membershipFormContent.firstName',
+				'membershipFormContent.lastName',
+				'membershipFormContent.companyName',
+				'membershipFormContent.street',
+				'membershipFormContent.postcode',
+				'membershipFormContent.city',
+				'membershipFormContent.country',
+				'membershipFormContent.email',
+				WMDE.StateAggregation.Membership.donorTypeAndAddressAreValid
+			]
+		},
+		{
+			viewHandler: WMDE.View.SectionInfo.createDonorTypeSectionInfo(
+				$( '.state-bar .donor-type' ),
+				{
+					'person': 'icon-account_circle',
+					'firma': 'icon-work'
+				},
+				WMDE.FormDataExtractor.mapFromRadioLabelsShort( $( '#type-donor .wrap-input' ) ),
 				WMDE.FormDataExtractor.mapFromSelectOptions( $( '#country' ) )
 			),
 			stateKey: [

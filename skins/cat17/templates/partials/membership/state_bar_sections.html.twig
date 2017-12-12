@@ -1,6 +1,6 @@
 <li class="member-type">
 	<a href="#membership-type">
-		<span class="text" data-empty-text="{$ 'membership_section_membership_type_anchor' | trans | e( 'html_attr' ) $}"></span>
+		<span class="text" data-empty-text="{$ membership_type_empty_text | default( 'membership_section_membership_type_anchor' | trans ) | e( 'html_attr' ) $}"></span>
 		<i class="membership-type-icon"></i>
 	</a>
 </li>
