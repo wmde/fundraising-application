@@ -1,0 +1,67 @@
+.page-supporters {
+	table.donors {
+
+		margin-top: 40px;
+		@include bkp(sm) {
+			margin-top: 50px;
+		}
+		@include bkp(md) {
+			margin-top: 60px;
+		}
+
+		thead {
+			display: none;
+		}
+
+		tr td:nth-of-type( 1 ),
+		tr td:nth-of-type( 2 ) {
+			border-bottom: 1px solid $gray-light;
+		}
+
+		tr:last-child td:nth-of-type( 1 ),
+		tr:last-child td:nth-of-type( 2 ) {
+			border-bottom: 0 none;
+		}
+
+		// name
+		tr td:nth-of-type( 1 ) {
+			height: 75px;
+			width: 170px;
+			padding-right: 15px;
+		}
+
+		// amount
+		tr td:nth-of-type( 2 ) {
+			white-space: nowrap;
+			padding-right: 15px;
+		}
+
+		// comment
+		tr td:nth-of-type( 3 ) {
+			display: none;
+		}
+
+		// hover effect
+		tr:hover td:nth-of-type( 1 ) {
+			font-size: 16px;
+			font-weight: $font-main-semibold;
+		}
+
+		tr:hover td:nth-of-type( 1 ),
+		tr:hover td:nth-of-type( 2 ) {
+			border-bottom: 1px solid $brand-primary;
+		}
+
+		tr:hover td:nth-of-type( 3 ) {
+			display: inline-block;
+			height: 75px;
+			overflow: visible;
+		}
+
+		tr:hover td:nth-of-type( 3 ) p {
+			padding-left: 15px;
+			min-height: 75px;
+			border-left: 1px solid $brand-primary;
+		}
+	}
+}
