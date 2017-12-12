@@ -39,3 +39,18 @@
 	padding-top: 0;
 }
 
+.introduction-banner {
+	border: 1px solid $brand-primary;
+	padding: 1em 1em 1em 2em;
+	font-size: 16px;
+	position: relative;
+	top: 1.5em;
+	line-height: 1.4em;
+	margin-top: 1em;
+}
+
+.introduction-banner a {
+	color: $brand-primary;
+	display: inline-block;
+	margin-left: 1em;
+}

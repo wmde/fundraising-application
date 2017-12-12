@@ -71,7 +71,7 @@ test( 'calculateElementOffset subtracts the height of visible header elements', 
 	t.end();
 } );
 
-test( 'calculateElementOffset add the padding of the element to the offset', function ( t ) {
+test( 'calculateElementOffset can add the padding of the element to the offset', function ( t ) {
 	var element = {
 			css: sinon.stub(),
 			offset: sinon.stub()
@@ -90,7 +90,8 @@ test( 'calculateElementOffset add the padding of the element to the offset', fun
 	global.$ = sinon.stub();
 	global.$.returnsArg( 0 ); // pretend to extend the DOM element given to jQuery. We don't but have all methods stubbed
 
-	t.equal( scrolling.calculateElementOffset( element, headerElements ), 2001 );
+	t.equal( scrolling.calculateElementOffset( element, headerElements, { elementStart: scrolling.ElementStart.PADDDING } ), 2001 );
+	t.equal( scrolling.calculateElementOffset( element, headerElements, { elementStart: scrolling.ElementStart.ELEMENT } ), 2000 );
 
 	delete global.$;
 
@@ -116,7 +117,60 @@ test( 'calculateElementOffset ignores element padding not given in pixels', func
 	global.$ = sinon.stub();
 	global.$.returnsArg( 0 ); // pretend to extend the DOM element given to jQuery. We don't but have all methods stubbed
 
-	t.equal( scrolling.calculateElementOffset( element, headerElements ), 2000 );
+	t.equal( scrolling.calculateElementOffset( element, headerElements, { elementStart: scrolling.ElementStart.PADDDING } ), 2000 );
+
+	delete global.$;
+
+	t.end();
+} );
+
+test( 'calculateElementOffset can subtract the margin of the element from the offset', function ( t ) {
+	var element = {
+			css: sinon.stub(),
+			offset: sinon.stub()
+		},
+		headerElements = {
+			get: sinon.stub()
+		}
+	;
+
+	headerElements.get.returns( [] );
+
+	element.css.withArgs( 'margin-top' ).returns( '1px' );
+	element.offset.returns( { top: 2000 } );
+
+
+	global.$ = sinon.stub();
+	global.$.returnsArg( 0 ); // pretend to extend the DOM element given to jQuery. We don't but have all methods stubbed
+
+	t.equal( scrolling.calculateElementOffset( element, headerElements, { elementStart: scrolling.ElementStart.MARGIN } ), 1999 );
+	t.equal( scrolling.calculateElementOffset( element, headerElements, { elementStart: scrolling.ElementStart.ELEMENT } ), 2000 );
+
+	delete global.$;
+
+	t.end();
+} );
+
+test( 'calculateElementOffset ignores element margin not given in pixels', function ( t ) {
+	var element = {
+			css: sinon.stub(),
+			offset: sinon.stub()
+		},
+		headerElements = {
+			get: sinon.stub()
+		}
+	;
+
+	headerElements.get.returns( [] );
+
+	element.css.withArgs( 'margin-top' ).returns( '1em' );
+	element.offset.returns( { top: 2000 } );
+
+
+	global.$ = sinon.stub();
+	global.$.returnsArg( 0 ); // pretend to extend the DOM element given to jQuery. We don't but have all methods stubbed
+
+	t.equal( scrolling.calculateElementOffset( element, headerElements, { elementStart: scrolling.ElementStart.MARGIN } ), 2000 );
 
 	delete global.$;
 
