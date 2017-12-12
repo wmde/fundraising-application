@@ -293,6 +293,7 @@ $( function () {
 				WMDE.StateAggregation.Donation.donorTypeAndAddressAreValid
 			]
 		},
+		// Show house number warning
       {
         viewHandler: WMDE.View.createSimpleVisibilitySwitcher(
           $( '#street, #adress-company' ).nextAll( '.warning-text' ),
