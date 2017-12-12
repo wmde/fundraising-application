@@ -1,13 +1,8 @@
 
 .info-text, .wrap-check, .info-text-bottom{
-    opacity: 0;
-    //transition:  opacity 500ms ease-out, height 500ms ease-out;
-    height: 0;
-    overflow: hidden;
-    display: block;
+    display: none;
 	&.opened {
-        opacity: 1;
-        height: auto;
+        display:block;
 	}
 	.icon-done {
 		position: absolute;
@@ -15,15 +10,10 @@
 		right: 10px;
 	}
 }
-.info-text.opened{
-	overflow: visible;
-	height: auto;
-}
 
 .info-text-bottom {
 	@include bkp(lg) {
-		opacity:1;
-		height: auto;
+		display: block;
 	}
 
 }

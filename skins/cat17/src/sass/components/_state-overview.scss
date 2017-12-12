@@ -408,9 +408,6 @@
                     .overview-text {
                         padding-top: 20px;
                     }
-                    .info-text-bottom {
-                        display: block;
-                    }
                 }
                 &.error, &.invalid {
                     .wrap-input {
@@ -439,8 +436,6 @@
                     }
                 }
                 .info-text-bottom {
-                    display: block;
-					overflow: visible;
                     &.opened {
                         padding-left: 0;
                     }
