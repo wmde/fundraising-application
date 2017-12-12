@@ -72,6 +72,7 @@
     opacity: 0;
     transition: opacity 200ms;
     text-align: center;
+
     &.active {
         opacity: 1;
         text-align: center;
@@ -81,9 +82,15 @@
             display: block;
         }
     }
+
+    input[type="submit"] {
+        margin-top: 0;
+    }
+
     @include bkp(sm) {
         background-color: #ffffff;
         border-top: 1px solid $gray-light;
+
         input[type="submit"] {
             margin: 10px 0;
         }
