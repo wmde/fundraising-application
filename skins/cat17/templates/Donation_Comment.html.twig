@@ -4,6 +4,9 @@
 
 {% block main %}
 	<form id="comment-form" action="#" method="post" class="row">
+		<input type="hidden" name="donationId" value="{$ donationId $}" />
+		<input type="hidden" name="updateToken" value="{$ updateToken $}" />
+
 		<div class="container">
 			<div class="row">
 				<div class="content col-xs-12">
@@ -24,17 +27,17 @@
 								<select id="offentlich" name="public"
 										data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true,  "maxVisibleItems": 6}'
 										class="no-outline offentlich">
-									<option value="op1">Öffentlich</option>
-									<option value="op2">Nicht öffentlich</option>
+									<option value="1">Öffentlich</option>
+									<option value="0">Nicht öffentlich</option>
 								</select>
 							</div>
 							<div class="field-grp col-xs-12 col-sm-6">
 								{# TODO: full name option #}
-								<select id="personalized" name="personalized"
+								<select id="personalized" name="displayName"
 										data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true,  "maxVisibleItems": 6}'
 										class="no-outline personalized">
-									<option value="op1">Personalisiert</option>
-									<option value="op2">Anonym</option>
+									<option value="TODO">Personalisiert</option>
+									<option value="Anonym">Anonym</option>
 								</select>
 							</div>
 						</div>
@@ -42,6 +45,7 @@
 				</div>
 			</div>
 		</div>
+
 		<div class="switch-container container-fluid container">
 			<div class="row">
 				<div class="col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-8 col-md-4">
@@ -49,6 +53,7 @@
 				</div>
 			</div>
 		</div>
+
 		<div class="container">
 			<div class="row">
 				<ul class="list-menu link-reverse list-unstyled  col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-8 col-md-4">
