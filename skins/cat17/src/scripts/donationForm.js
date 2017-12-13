@@ -251,11 +251,11 @@ $( function () {
 			viewHandler: WMDE.View.SectionInfo.createPaymentTypeSectionInfo(
 				$( '.payment-method' ),
 				{
-					'PPL': 'icon-paypal',
-					'MCP': 'icon-credit_card2',
-					'BEZ': 'icon-SEPA-2',
-					'UEB': 'icon-ubeiwsung-1',
-					'SUB': 'icon-TODO' // @todo Find icon for SUB
+					'PPL': 'icon-payment-paypal',
+					'MCP': 'icon-payment-credit_card',
+					'BEZ': 'icon-payment-debit',
+					'UEB': 'icon-payment-transfer',
+					'SUB': 'icon-payment-sofort'
 				},
 				WMDE.FormDataExtractor.mapFromRadioLabels( $( '#payment-method .wrap-input' ) ),
 				WMDE.FormDataExtractor.mapFromRadioInfoTexts( $( '#payment-method .wrap-field' ) )

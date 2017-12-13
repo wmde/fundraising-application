@@ -30,10 +30,10 @@
             top:50%;
             transform: translateY(-50%);
             &:after {
-                content: "\e315";
+                content: $icon-keyboard_arrow_right;
                 position: absolute;
                 right: -30px;
-                font-family: icomoon;
+                font-family: 'icomoonwikimedia';
                 font-size: 20px;
                 top:50%;
                 transform: translateY(-50%);
@@ -41,13 +41,13 @@
         }
         &.facebook {
             a:after {
-                content: "\e905";
+                content: $icon-facebook;
                 font-size: 14px;
             }
         }
         &.twitter {
             a:after {
-                content: "\e90b";
+                content: $icon-twitter;
                 font-size: 14px;
             }
         }
@@ -61,10 +61,10 @@
                     content: "";
                 }
                 &:before {
-                    content: "\e314";
+                    content: $icon-keyboard_arrow_left;
                     position: absolute;
                     left: -30px;
-                    font-family: icomoon;
+                    font-family: 'icomoonwikimedia';
                     font-size: 20px;
                     top: 50%;
                     transform: translateY(-50%);

@@ -3,7 +3,9 @@
 @import "jcf/dist/css/theme-minimal/jcf";
 @import "bootstrap-sass/assets/stylesheets/bootstrap";
 
-@import "components/fonts";
+$icomoon-font-path: "../assets/fonts/wikimedia";
+@import "components/fonts/icomoonwikimedia/style";
+
 @import "components/font_opensans";
 @import "common/themify";
 @import "common/mixins";

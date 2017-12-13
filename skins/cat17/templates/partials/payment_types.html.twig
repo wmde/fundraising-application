@@ -3,11 +3,11 @@
 	fieldName Name of the form fields used to submit the selected payment type
 #}
 {% set PAYMENT_TYPE_OPTIONS = {
-	'PPL': { 'id': 'paypal', 'icon': 'icon-paypal' },
-	'MCP': { 'id': 'credit-card', 'icon': 'icon-credit_card2' },
-	'BEZ': { 'id': 'debit-card', 'icon': 'icon-SEPA-2' },
-	'UEB': { 'id': 'bank-transfer', 'icon': 'icon-ubeiwsung-1' },
-	'SUB': { 'id': 'sofort', 'icon': 'icon-sofort' }
+	'PPL': { 'id': 'paypal', 'icon': 'icon-payment-paypal' },
+	'MCP': { 'id': 'credit-card', 'icon': 'icon-payment-credit_card' },
+	'BEZ': { 'id': 'debit-card', 'icon': 'icon-payment-debit' },
+	'UEB': { 'id': 'bank-transfer', 'icon': 'icon-payment-transfer' },
+	'SUB': { 'id': 'sofort', 'icon': 'icon-payment-sofort' }
 } %}
 {% spaceless %}
 {% for paymentType in paymentTypes %}

@@ -53,11 +53,11 @@ input[type=submit] {
 			}
 		}
 		&:after {
-			content: '\e876';
+			content: $icon-done;
 			position: absolute;
 			right: 12px;
 			top: 10px;
-			font-family: "icomoon";
+			font-family: 'icomoonwikimedia';
 			font-size: 20px;
 		}
 	}
