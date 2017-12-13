@@ -272,7 +272,6 @@
             if ($(this).val() == "" || !this.checkValidity()) {
                 $(this).addClass('invalid');
                 $(this).parent().addClass('invalid');
-                isValid = false;
             }
             else {
                 $(this).removeClass('invalid');
