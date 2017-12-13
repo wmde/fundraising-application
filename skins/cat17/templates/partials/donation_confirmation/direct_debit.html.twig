@@ -44,6 +44,10 @@
                     {$ "donation_confirmation_opts_into_newsletter" | trans | raw $}
                 </p>
             {% endif %}
+
+            {% include 'partials/membership/benefit_list.html.twig' with {
+                'showActiveMembershipBenefits': true
+            } %}
         </div>
         <div class="action-block col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-0 col-md-4 hidden-print">
             <ul class="list-menu link-back list-unstyled">

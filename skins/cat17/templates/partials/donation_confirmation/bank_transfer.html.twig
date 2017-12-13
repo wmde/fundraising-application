@@ -91,6 +91,9 @@
                 <p>{$ "donation_confirmation_opts_into_newsletter" | trans | raw $}</p>
             {% endif %}
 
+			{% include 'partials/membership/benefit_list.html.twig' with {
+				'showActiveMembershipBenefits': true
+			} only %}
         </div>
         <div class="side col-md-4 visible-md visible-lg hidden-print">
             <a href="{$ basepath $}/apply-for-membership" class="btn btn-introduction btn-side bk-blue text-center text-uppercase">
