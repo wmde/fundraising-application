@@ -241,7 +241,7 @@
     var submitValidation = function () {
         var isValid = true;
         $('form').find('input, textarea').each(function () {
-            if ($(this).val() == "" || !this.checkValidity()) {
+            if ($(this).val() === "" || !this.checkValidity()) {
                 $(this).addClass('invalid');
                 $(this).parent().addClass('invalid');
                 isValid = false;
@@ -258,7 +258,7 @@
 
     var commentForm = function () {
         var form = $('#comment-form');
-        if (form.length == 0) return;
+        if (form.length === 0) return;
         form.submit(submitValidation);
         form.find('input[type="submit"]').click(submitValidation);
 
@@ -269,7 +269,7 @@
         form.find('input, textarea').blur(function () {
             if (!$(this).data('data-entered')) return;
 
-            if ($(this).val() == "" || !this.checkValidity()) {
+            if ($(this).val() === "" || !this.checkValidity()) {
                 $(this).addClass('invalid');
                 $(this).parent().addClass('invalid');
             }
