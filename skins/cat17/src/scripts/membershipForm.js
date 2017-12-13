@@ -28,7 +28,7 @@ $( function () {
       WMDE.Components.createSelectMenuComponent( store, $( '#title' ), 'title' ),
       WMDE.Components.createValidatingTextComponent( store, $( '#first-name' ), 'firstName' ),
       WMDE.Components.createValidatingTextComponent( store, $( '#surname' ), 'lastName' ),
-      WMDE.Components.createTextComponent( store, $( '#email' ), 'email' ),
+      WMDE.Components.createValidatingTextComponent( store, $( '#email' ), 'email' ),
       WMDE.Components.createValidatingTextComponent( store, $( '#street' ), 'street' ),
       WMDE.Components.createValidatingTextComponent( store, $( '#post-code' ), 'postcode' ),
       WMDE.Components.createValidatingTextComponent( store, $( '#city' ), 'city' ),
