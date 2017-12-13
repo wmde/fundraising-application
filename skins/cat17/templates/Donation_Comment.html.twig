@@ -10,34 +10,32 @@
 		<div class="container">
 			<div class="row">
 				<div class="content col-xs-12">
-					<h2 class="h1">Spendenkommentar</h2>
+					<h2 class="h1">{$ 'donation_comment_header' | trans $}</h2>
 					<fieldset class="col-xs-12 col-sm-6">
-						<legend class="legend">Erzahlen Sie uns, warum sie gespendt haben.</legend>
+						<legend class="legend">{$ 'donation_comment_legend' | trans $}</legend>
 						<div class="field-grp">
 							<!-- ToDo: wikimedia translate label text / error text add the adequate -->
-							{# TODO: i18n placeholder #}
-							<textarea name="comment" rows="50" cols="10" id="comment" placeholder="Your comment"></textarea>
-							<label for="comment" class="sr-only">Your comment</label>
+							<textarea name="comment" rows="50" cols="10" id="comment" placeholder="{$ 'donation_comment_placeholder' | trans $}"></textarea>
+							<label for="comment" class="sr-only">{$ 'donation_comment_placeholder' | trans $}</label>
 						</div>
 					</fieldset>
 					<fieldset class="col-xs-12 col-sm-6">
-						<legend class="legend">Veröffentlichungsoptionen</legend>
+						<legend class="legend">{$ 'donation_comment_options' | trans $}</legend>
 						<div class="row">
 							<div class="field-grp col-xs-12 col-md-6">
 								<select id="public" name="public"
 										data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true,  "maxVisibleItems": 6}'
 										class="no-outline offentlich">
-									<option value="1">Öffentlich</option>
-									<option value="0">Nicht öffentlich</option>
+									<option value="1">{$ 'donation_comment_public' | trans $}</option>
+									<option value="0">{$ 'donation_comment_private' | trans $}</option>
 								</select>
 							</div>
 							<div class="field-grp col-xs-12 col-sm-6">
-								{# TODO: full name option #}
 								<select id="displayName" name="displayName"
 										data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true,  "maxVisibleItems": 6}'
 										class="no-outline personalized">
-									<option value="Anonym">Anonym</option>
-									<option value="TODO">Personalisiert</option>
+									<option value="Anonym">{$ 'donation_comment_anonymous' | trans $}</option>
+									<option value="TODO">{$ 'donation_comment_using_name' | trans $}</option>
 								</select>
 							</div>
 						</div>
@@ -49,7 +47,7 @@
 		<div class="switch-container container-fluid container">
 			<div class="row">
 				<div class="col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-8 col-md-4">
-					<input type="submit" value="Kommenar veröffetlichen" class="btn btn-introduction bk-blue text-center text-uppercase">
+					<input type="submit" value="{$ 'donation_comment_submit' | trans $}" class="btn btn-introduction bk-blue text-center text-uppercase">
 				</div>
 			</div>
 		</div>
@@ -57,7 +55,7 @@
 		<div class="container">
 			<div class="row">
 				<ul class="list-menu link-reverse list-unstyled  col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-8 col-md-4">
-					<li><a href="{$ cancelUrl $}" class="">Abbrechen</a></li>
+					<li><a href="{$ cancelUrl $}" class="">{$ 'donation_comment_cancel' | trans $}</a></li>
 				</ul>
 			</div>
 		</div>
