@@ -306,7 +306,7 @@ $app->get(
 			)
 		);
 	}
-);
+)->bind( 'AddCommentPage' );
 
 $app->post(
 	'contact/get-in-touch',

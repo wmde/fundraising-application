@@ -1,4 +1,9 @@
 js:
-	rm -rf var/cache/ ; npm run build-assets ; npm run copy-assets
+	npm run build-assets ; npm run copy-assets
 
-.PHONY: js
+clear:
+	rm -rf var/cache/
+
+ui: clear js
+
+.PHONY: js clear ui

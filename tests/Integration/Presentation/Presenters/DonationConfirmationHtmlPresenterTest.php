@@ -23,6 +23,7 @@ class DonationConfirmationHtmlPresenterTest extends \PHPUnit\Framework\TestCase 
 	private const STATUS_UNCONFIRMED = 'status-unconfirmed';
 
 	private const UPDATE_TOKEN = 'update_token';
+	private const ACCESS_TOKEN = 'access_token';
 	private const DONATION_ID = 42;
 
 	public function testWhenPresenterRenders_itPassedParamsToTemplate(): void {
@@ -40,6 +41,7 @@ class DonationConfirmationHtmlPresenterTest extends \PHPUnit\Framework\TestCase 
 		$presenter->present(
 			$donation,
 			self::UPDATE_TOKEN,
+			self::ACCESS_TOKEN,
 			$this->newSelectedConfirmationPage(),
 			$this->newPiwikEvents()
 		);
@@ -67,7 +69,7 @@ class DonationConfirmationHtmlPresenterTest extends \PHPUnit\Framework\TestCase 
 				[ 'setCustomVariable', 1, 'Payment', 'some value', PiwikEvents::SCOPE_VISIT ],
 				[ 'trackGoal', 4095 ]
 			],
-			'commentUrl' => 'https://such.a.url/add-comment?id=42&updateToken=update_token'
+			'commentUrl' => 'https://such.a.url/AddCommentPage?donationId=42&updateToken=update_token&accessToken=access_token'
 		];
 	}
 
@@ -105,6 +107,7 @@ class DonationConfirmationHtmlPresenterTest extends \PHPUnit\Framework\TestCase 
 		$presenter->present(
 			$donation,
 			self::UPDATE_TOKEN,
+			self::ACCESS_TOKEN,
 			$this->newSelectedConfirmationPage(),
 			$this->newPiwikEvents()
 		);
