@@ -206,6 +206,11 @@
 					border-bottom: themed('border1pxPrimary');
 				}
 			}
+			&.error, &.invalid, &.invalid.enabled {
+				a i {
+					display: none;
+				}
+			}
 		}
 	}
 	.wrap-bar {
