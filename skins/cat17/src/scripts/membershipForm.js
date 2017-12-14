@@ -21,26 +21,26 @@ $( function () {
 		),
       WMDE.Components.createRadioComponent( store, $( '#recurrence .wrap-input input' ), 'paymentIntervalInMonths' ),
 
-      //Personal data
       WMDE.Components.createRadioComponent( store, $( 'input[name="adresstyp"]' ), 'addressType' ),
-      //Personal Data
-      WMDE.Components.createSelectMenuComponent( store, $( '#treatment' ), 'salutation' ),
-      WMDE.Components.createSelectMenuComponent( store, $( '#title' ), 'title' ),
-      WMDE.Components.createValidatingTextComponent( store, $( '#first-name' ), 'firstName' ),
-      WMDE.Components.createValidatingTextComponent( store, $( '#surname' ), 'lastName' ),
-      WMDE.Components.createValidatingTextComponent( store, $( '#email' ), 'email' ),
-      WMDE.Components.createValidatingTextComponent( store, $( '#street' ), 'street' ),
-      WMDE.Components.createValidatingTextComponent( store, $( '#post-code' ), 'postcode' ),
-      WMDE.Components.createValidatingTextComponent( store, $( '#city' ), 'city' ),
-      WMDE.Components.createSelectMenuComponent( store, $( '#country' ), 'country' ),
 
-      //Company Data
-      WMDE.Components.createValidatingTextComponent( store, $( '#company-name' ), 'companyName' ),
-      WMDE.Components.createValidatingTextComponent( store, $( '#email-company' ), 'email' ),
-      WMDE.Components.createValidatingTextComponent( store, $( '#adress-company' ), 'street' ),
-      WMDE.Components.createValidatingTextComponent( store, $( '#post-code-company' ), 'postcode' ),
-      WMDE.Components.createValidatingTextComponent( store, $( '#city-company' ), 'city' ),
-      WMDE.Components.createSelectMenuComponent( store, $( '#country-company' ), 'country' ),
+		//Personal Data
+		WMDE.Components.createSelectMenuComponent( store, $( '#treatment' ), 'salutation' ),
+		WMDE.Components.createSelectMenuComponent( store, $( '#title' ), 'title' ),
+		WMDE.Components.addEagerChangeBehavior( WMDE.Components.createValidatingTextComponent( store, $( '#first-name' ), 'firstName' ) ),
+		WMDE.Components.addEagerChangeBehavior( WMDE.Components.createValidatingTextComponent( store, $( '#surname' ), 'lastName' ) ),
+		WMDE.Components.createValidatingTextComponent( store, $( '#email' ), 'email' ),
+		WMDE.Components.addEagerChangeBehavior( WMDE.Components.createValidatingTextComponent( store, $( '#street' ), 'street' ) ),
+		WMDE.Components.createValidatingTextComponent( store, $( '#post-code' ), 'postcode' ),
+		WMDE.Components.addEagerChangeBehavior( WMDE.Components.createValidatingTextComponent( store, $( '#city' ), 'city' ) ),
+		WMDE.Components.createSelectMenuComponent( store, $( '#country' ), 'country' ),
+
+		//Company Data
+		WMDE.Components.addEagerChangeBehavior( WMDE.Components.createValidatingTextComponent( store, $( '#company-name' ), 'companyName' ) ),
+		WMDE.Components.createValidatingTextComponent( store, $( '#email-company' ), 'email' ),
+		WMDE.Components.addEagerChangeBehavior( WMDE.Components.createValidatingTextComponent( store, $( '#adress-company' ), 'street' ) ),
+		WMDE.Components.createValidatingTextComponent( store, $( '#post-code-company' ), 'postcode' ),
+		WMDE.Components.addEagerChangeBehavior( WMDE.Components.createValidatingTextComponent( store, $( '#city-company' ), 'city' ) ),
+		WMDE.Components.createSelectMenuComponent( store, $( '#country-company' ), 'country' ),
 
       //Payment Data
       WMDE.Components.createRadioComponent( store, $('input[name="payment_type"]'), 'paymentType' ),
