@@ -17,7 +17,9 @@ var objectAssign = require( 'object-assign' ),
 			summaryBankInfo: 'bank-info',
 			sectionInvalid: 'invalid',
 			sectionComplete: 'completed',
-			sectionDisabled: 'disabled'
+			sectionDisabled: 'disabled',
+			hasLongtext: 'has-longtext',
+			opened: 'opened'
 		}
 	},
 
@@ -91,12 +93,28 @@ var objectAssign = require( 'object-assign' ),
 
 			this.text.text( text );
 		},
+		/**
+		 * Fill the longText element with text. Make sure to call setLongTextIndication if you run your own implementation.
+		 * @param {string} longText
+		 */
 		setLongText: function ( longText ) {
 			if ( !this.longText ) {
 				return;
 			}
 
 			this.longText.text( longText );
+
+			this.setLongTextIndication( longText !== '' );
+		},
+		/**
+		 * Indicate that a relevant text is part of this widget (i.e. it's not empty)
+		 * @param {boolean} hasLongText
+		 */
+		setLongTextIndication: function ( hasLongText ) {
+			this.container.toggleClass( DOM_SELECTORS.classes.hasLongtext, hasLongText );
+			// collapse possibly opened longtext (see formInfosManager)
+			this.container.removeClass( DOM_SELECTORS.classes.opened );
+			this.container.find( '.' + DOM_SELECTORS.classes.opened ).removeClass( DOM_SELECTORS.classes.opened );
 		},
 		setIcon: function ( icon ) {
 			if ( !this.icon ) {
@@ -175,10 +193,15 @@ var objectAssign = require( 'object-assign' ),
 				);
 			}
 
+			if ( paymentType !== 'BEZ' ) {
+				this.setLongText( '' );
+				return;
+			}
+
 			this.setLongText( this.getValueLongText( paymentType ) );
 
-			if ( this.longText && paymentType === 'BEZ' && iban && bic ) {
-				this.longText.prepend ( // intentionally html. Escaping performed through .text() calls on user-input vars
+			if ( this.longText && iban && bic ) {
+				this.longText.prepend( // intentionally html. Escaping performed through .text() calls on user-input vars
 					$( '<dl>' ).addClass( DOM_SELECTORS.classes.summaryBankInfo ).append(
 						$('<dt>').text( 'IBAN' ),
 						$('<dd>').text( iban ),
@@ -238,6 +261,8 @@ var objectAssign = require( 'object-assign' ),
 			}
 
 			this.longText.html( longtext );
+			// we worked around setLongText so have to clean up manually
+			this.setLongTextIndication( true );
 		}
 	} ),
 
@@ -259,7 +284,7 @@ var objectAssign = require( 'object-assign' ),
 				container: widgetNode,
 
 				// calculate and cache elements
-				icon: widgetNode.find( 'i' ),
+				icon: widgetNode.find( 'i:not(".link")' ),
 				text: widgetNode.find( '.text' ),
 				longText: widgetNode.find( '.info-detail' ),
 

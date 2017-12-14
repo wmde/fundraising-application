@@ -79,17 +79,16 @@
 
 	// TODO Move into View Handler
     var formInfosManager = function () {
-
         var $element = $("section.donation-amount");
         if ($element.length) {
-            if ($(window).width() < 1200) {
-                $("#overview").on("click", ".wrap-field.completed .wrap-input,  .wrap-field.invalid .wrap-input", function (e) {
-                    e.preventDefault();
-                    $(this).closest(".wrap-field").toggleClass("opened");
-                    $(this).toggleClass("opened");
-                    $(this).next(".info-text-bottom").toggleClass("opened");
-                });
-            }
+			if ( $( window ).width() < 1200 ) {
+				$( '#overview' ).on( 'click', '.wrap-field.has-longtext.completed .wrap-input, .wrap-field.has-longtext.invalid .wrap-input', function (e) {
+					e.preventDefault();
+					$( this ).closest( '.wrap-field' ).toggleClass( 'opened' );
+					$( this ).toggleClass( 'opened' );
+					$( this ).next( '.info-text-bottom' ).toggleClass( 'opened' );
+				} );
+			}
         }
     };
 
