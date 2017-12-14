@@ -2,6 +2,8 @@
 
 	function updateElementValidationState() {
 		if ($(this).val() === "" || !this.checkValidity()) {
+			$(this).removeClass('valid');
+			$(this).parent().removeClass('valid');
 			$(this).addClass('invalid');
 			$(this).parent().addClass('invalid');
 		}
