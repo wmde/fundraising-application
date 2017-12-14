@@ -41,7 +41,7 @@
 				</div>
 			</nav>
 
-			<div class="content col-xs-12 col-sm-6 col-md-8 comment-commentContainer" data-no-comments="{$ 'donation_comments_none_found' | trans $}">
+			<div class="content col-xs-12 col-sm-6 col-md-8 comment-commentContainer" data-no-comments="{$ 'donation_comments_none_found' | trans | e( 'html_attr' ) $}">
 				{$ "donation_comments_loading" | trans $}
 			</div>
 
