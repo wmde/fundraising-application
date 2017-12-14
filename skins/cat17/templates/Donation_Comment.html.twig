@@ -2,6 +2,10 @@
 
 {% block page_identifier %}donation-comment{% endblock %}
 
+{% block scripts %}
+	<script src="{$ basepath $}/skins/cat17/scripts/donationCommentForm.js"></script>
+{% endblock %}
+
 {% block main %}
 	<form id="comment-form" action="#" method="post" class="row">
 		<input type="hidden" name="donationId" value="{$ donationId $}" />
