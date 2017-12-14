@@ -183,7 +183,7 @@ $( function () {
 					'active': 'icon-flash_on'
 				},
 				WMDE.FormDataExtractor.mapFromRadioLabels( $( '#type-membership .wrap-input' ) ),
-				{ 'sustaining': '', 'active': '' }
+				WMDE.FormDataExtractor.mapFromRadioInfoTexts( $( '#type-membership .wrap-field' ) )
 			),
 			stateKey: [
 				'membershipFormContent.membershipType',
