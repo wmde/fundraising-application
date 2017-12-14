@@ -15,16 +15,15 @@
 		}
 	}
 
-	function submitValidation() {
-		var isValid = true;
-		$('form').find('input, textarea').each(function () {
-			updateElementValidationState.apply( this );
+	function elementIsInvalid() {
+		return $(this).val() === "" || !this.checkValidity();
+	}
 
-			if ($(this).val() === "" || !this.checkValidity()) {
-				isValid = false;
-			}
-		});
-		return isValid;
+	function submitValidation() {
+		var inputElements = $('form').find('input, textarea');
+		inputElements.each(updateElementValidationState);
+
+		return inputElements.filter(elementIsInvalid).length === 0;
 	}
 
 	function setupFormValidation( form ) {
