@@ -18,7 +18,6 @@
 					<fieldset class="col-xs-12 col-sm-6">
 						<legend class="legend">{$ 'donation_comment_legend' | trans $}</legend>
 						<div class="field-grp">
-							<!-- ToDo: wikimedia translate label text / error text add the adequate -->
 							<textarea name="comment" rows="50" cols="10" id="comment" placeholder="{$ 'donation_comment_placeholder' | trans $}"></textarea>
 							<label for="comment" class="sr-only">{$ 'donation_comment_placeholder' | trans $}</label>
 						</div>
@@ -39,7 +38,7 @@
 										data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true,  "maxVisibleItems": 6}'
 										class="no-outline personalized">
 									<option value="Anonym">{$ 'donation_comment_anonymous' | trans $}</option>
-									<option value="TODO">{$ 'donation_comment_using_name' | trans $}</option>
+									{#<option value="TODO">{$ 'donation_comment_using_name' | trans $}</option>#}
 								</select>
 							</div>
 						</div>

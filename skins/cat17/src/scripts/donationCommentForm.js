@@ -78,9 +78,9 @@
 	function onSubmitSuccess( message ) {
 		submitButton.after(
 			$( '<div />' )
-				.addClass( 'message' )
-				.addClass( 'success' )
-				.text( message || 'Vielen Dank! Die Nachricht wurde verschickt!' )
+				.addClass( 'message' ) // TODO: proper positioning
+				.addClass( 'success' ) // TODO: create class
+				.text( message || 'Vielen Dank! Die Nachricht wurde verschickt!' ) // TODO: is this default needed?
 		);
 
 		$( '#cancel-link' ).text( 'Zurück zur Spendenbestätigung' ); // TODO: i18n
@@ -91,8 +91,8 @@
 		submitButton.after(
 			$( '<div />' )
 				.addClass( 'message' )
-				.addClass( 'error' )
-				.text( message || 'Die Nachricht konnte auf Grund eines Fehlers nicht verschickt werden.' )
+				.addClass( 'error' ) // TODO: create class
+				.text( message || 'Die Nachricht konnte auf Grund eines Fehlers nicht verschickt werden.' ) // TODO: is this default needed?
 		);
 	}
 
