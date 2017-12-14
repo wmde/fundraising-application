@@ -41,7 +41,6 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\PaymentContext\UseCases\GenerateIban\GenerateIbanRequest;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\ContentNotFoundException;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageNotFoundException;
-use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolationListMapper;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
