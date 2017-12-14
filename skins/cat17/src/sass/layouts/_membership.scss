@@ -182,12 +182,16 @@
 				left: -200px;
 				bottom: 0;
 				width: 800px;
-				border-bottom: 2px solid $brand-primary-membership;
+				@include themify($themes) {
+					border-bottom: themed('border2pxPrimary');
+				}
 			}
 		}
 		@include bkp(sm) {
 			display: inline-block;
-			border-bottom: 2px solid $brand-primary-membership;
+			@include themify($themes) {
+				border-bottom: themed('border2pxPrimary');
+			}
 		}
 	}
 
@@ -213,3 +217,4 @@
 		}
 	}
 }
+

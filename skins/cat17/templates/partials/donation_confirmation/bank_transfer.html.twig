@@ -90,15 +90,8 @@
             {% if donation.optsIntoNewsletter %}
                 <p>{$ "donation_confirmation_opts_into_newsletter" | trans | raw $}</p>
             {% endif %}
-
-			{% include 'partials/membership/benefit_list.html.twig' with {
-				'showActiveMembershipBenefits': true
-			} only %}
         </div>
         <div class="side col-md-4 visible-md visible-lg hidden-print">
-            <a href="{$ basepath $}/apply-for-membership" class="btn btn-introduction btn-side bk-blue text-center text-uppercase">
-                {$ "donation_confirmation_apply_for_membership" | trans $}
-            </a>
             <nav class="menu menu-footer">
                 <ul class="list-menu list-unstyled">
                     {% include 'partials/share_on_social_networks.html.twig' %}
@@ -120,15 +113,6 @@
             </nav>
         </div>
     </div>
-    <div class="switch-container container-fluid container">
-        <div class="row">
-            <div class="col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-8 col-md-4">
-                <a href="{$ basepath $}/apply-for-membership" class="btn btn-introduction bk-blue text-center text-uppercase">
-                    {$ "donation_confirmation_apply_for_membership" | trans $}
-                </a>
-            </div>
-        </div>
-    </div>
     <div class="container">
         <div class="row">
             <nav class="menu menu-footer col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-8 col-md-4">
@@ -136,6 +120,26 @@
                     {% include 'partials/share_on_social_networks.html.twig' %}
                 </ul>
             </nav>
+        </div>
+    </div>
+</div>
+
+<div class="container hidden-print">
+    <div class="row">
+        <div class="content col-xs-12 col-md-8">
+			{% include 'partials/membership/benefit_list.html.twig' with {
+				'showActiveMembershipBenefits': true
+			} only %}
+        </div>
+    </div>
+</div>
+
+<div class="switch-container container-fluid container hidden-print">
+    <div class="row">
+        <div class="col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-8 col-md-4">
+            <a href="{$ basepath $}/apply-for-membership" class="btn btn-introduction bk-blue text-center text-uppercase">
+                {$ "donation_confirmation_apply_for_membership" | trans $}
+            </a>
         </div>
     </div>
 </div>
