@@ -1,5 +1,37 @@
 (function ($) {
 
+	var form = $('#comment-form');
+
+	var inputElements = form.find('input, textarea');
+	var submitButton = form.find('input[type="submit"]');
+
+	setupForm();
+
+	function setupForm() {
+		setupFormValidation();
+		form.bind( 'submit', handleFormSubmission );
+	}
+
+	function setupFormValidation() {
+		form.submit(onFormSubmit);
+		submitButton.click(onFormSubmit);
+
+		inputElements.keypress(function () {
+			$(this).data('data-entered', true);
+		});
+
+		inputElements.blur(function () {
+			if ($(this).data('data-entered')) {
+				updateElementValidationState.apply( this );
+			}
+		});
+	}
+
+	function onFormSubmit() {
+		inputElements.each(updateElementValidationState);
+		return inputElements.filter(elementIsInvalid).length === 0;
+	}
+
 	function updateElementValidationState() {
 		if ($(this).val() === "" || !this.checkValidity()) {
 			$(this).removeClass('valid');
@@ -17,29 +49,6 @@
 
 	function elementIsInvalid() {
 		return $(this).val() === "" || !this.checkValidity();
-	}
-
-	function submitValidation() {
-		var inputElements = $('form').find('input, textarea');
-		inputElements.each(updateElementValidationState);
-
-		return inputElements.filter(elementIsInvalid).length === 0;
-	}
-
-	function setupFormValidation( form ) {
-		var submitButton = form.find('input[type="submit"]');
-		form.submit(submitValidation);
-		submitButton.click(submitValidation);
-
-		form.find('input, textarea').keypress(function () {
-			$(this).data('data-entered', true);
-		});
-
-		form.find('input, textarea').blur(function () {
-			if ($(this).data('data-entered')) {
-				updateElementValidationState.apply( this );
-			}
-		});
 	}
 
 	function handleFormSubmission( event ) {
@@ -72,14 +81,5 @@
 			}
 		});
 	}
-
-	$(document).ready(function () {
-		var form = $('#comment-form');
-		if (form.length === 0) return;
-
-		setupFormValidation( form );
-
-		form.bind( 'submit', handleFormSubmission );
-	});
 
 })(jQuery);
