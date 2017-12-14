@@ -264,7 +264,7 @@ var objectAssign = require( 'object-assign' ),
 				container: widgetNode,
 
 				// calculate and cache elements
-				icon: widgetNode.find( 'i' ),
+				icon: widgetNode.find( 'i:not(".link")' ),
 				text: widgetNode.find( '.text' ),
 				longText: widgetNode.find( '.info-detail' ),
 

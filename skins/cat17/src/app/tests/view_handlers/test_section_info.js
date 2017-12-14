@@ -288,7 +288,7 @@ test( 'Instance correctly detects and applies sub-elements', function ( t ) {
 		longText = createElement()
 	;
 
-	container.find.withArgs( 'i' ).returns( icon );
+	container.find.withArgs( 'i:not(".link")' ).returns( icon );
 	container.find.withArgs( '.text' ).returns( text );
 	container.find.withArgs( '.info-detail' ).returns( longText );
 
@@ -299,7 +299,7 @@ test( 'Instance correctly detects and applies sub-elements', function ( t ) {
 	t.deepEquals( handler.text, text );
 	t.deepEquals( handler.longText, longText );
 
-	t.ok( container.find.withArgs( 'i' ).calledOnce );
+	t.ok( container.find.withArgs( 'i:not(".link")' ).calledOnce );
 	t.ok( container.find.withArgs( '.text' ).calledOnce );
 	t.ok( container.find.withArgs( '.info-detail' ).calledOnce );
 
