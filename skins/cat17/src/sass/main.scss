@@ -3,8 +3,9 @@
 @import "jcf/dist/css/theme-minimal/jcf";
 @import "bootstrap-sass/assets/stylesheets/bootstrap";
 
-@import "components/fonts";
-@import "components/font_opensans";
+@import "components/fonts/icomoonwikimedia/style";
+@import "components/fonts/opensans/style";
+
 @import "common/themify";
 @import "common/mixins";
 @import "common/base";

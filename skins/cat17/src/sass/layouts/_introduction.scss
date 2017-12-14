@@ -23,8 +23,8 @@
 			border-bottom: 1px solid $gray-light;
 			padding: 10px 0;
 			&:after {
-				content: '\e315';
-				font-family: 'icomoon';
+				content: $icon-keyboard_arrow_right;
+				font-family: 'icomoonwikimedia';
 				position: absolute;
 				right: 15px;
 				top: 29%;

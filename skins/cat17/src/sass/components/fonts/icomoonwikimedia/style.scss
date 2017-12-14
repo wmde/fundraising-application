@@ -1,0 +1,189 @@
+@import "variables";
+
+@font-face {
+  font-family: 'icomoonwikimedia';
+  src:  url('#{$icomoon-font-path}/icomoonwikimedia.eot?6detnk');
+  src:  url('#{$icomoon-font-path}/icomoonwikimedia.eot?6detnk#iefix') format('embedded-opentype'),
+    url('#{$icomoon-font-path}/icomoonwikimedia.ttf?6detnk') format('truetype'),
+    url('#{$icomoon-font-path}/icomoonwikimedia.woff?6detnk') format('woff'),
+    url('#{$icomoon-font-path}/icomoonwikimedia.svg?6detnk#icomoonwikimedia') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoonwikimedia' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  // custom base size
+  font-size: 24px;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-payment-sofort {
+  &:before {
+    content: $icon-payment-sofort;
+  }
+}
+.icon-error {
+  &:before {
+    content: $icon-error;
+  }
+}
+.icon-repeat_one {
+  &:before {
+    content: $icon-repeat_one;
+  }
+}
+.icon-comment {
+  &:before {
+    content: $icon-comment;
+  }
+}
+.icon-phone {
+  &:before {
+    content: $icon-phone;
+  }
+}
+.icon-mode_edit {
+  &:before {
+    content: $icon-mode_edit;
+  }
+}
+.icon-keyboard_arrow_down {
+  &:before {
+    content: $icon-keyboard_arrow_down;
+  }
+}
+.icon-keyboard_arrow_left {
+  &:before {
+    content: $icon-keyboard_arrow_left;
+  }
+}
+.icon-keyboard_arrow_right {
+  &:before {
+    content: $icon-keyboard_arrow_right;
+  }
+}
+.icon-keyboard_arrow_up {
+  &:before {
+    content: $icon-keyboard_arrow_up;
+  }
+}
+.icon-flash_on {
+  &:before {
+    content: $icon-flash_on;
+  }
+}
+.icon-close {
+  &:before {
+    content: $icon-close;
+  }
+}
+.icon-menu {
+  &:before {
+    content: $icon-menu;
+  }
+}
+.icon-account_circle {
+  &:before {
+    content: $icon-account_circle;
+  }
+}
+.icon-done {
+  &:before {
+    content: $icon-done;
+  }
+}
+.icon-favorite {
+  &:before {
+    content: $icon-favorite;
+  }
+}
+.icon-lock {
+  &:before {
+    content: $icon-lock;
+  }
+}
+.icon-visibility {
+  &:before {
+    content: $icon-visibility;
+  }
+}
+.icon-visibility_off {
+  &:before {
+    content: $icon-visibility_off;
+  }
+}
+.icon-work {
+  &:before {
+    content: $icon-work;
+  }
+}
+.icon-payment-credit_card {
+  &:before {
+    content: $icon-payment-credit_card;
+    // custom size compensation
+    font-size: 15px;
+  }
+}
+.icon-payment-debit {
+  &:before {
+    content: $icon-payment-debit;
+  }
+}
+.icon-payment-transfer {
+  &:before {
+    content: $icon-payment-transfer;
+  }
+}
+.icon-facebook {
+  &:before {
+    content: $icon-facebook;
+  }
+}
+.icon-payment-paypal {
+  &:before {
+    content: $icon-payment-paypal;
+    // custom size compensation
+    font-size: 18px;
+  }
+}
+.icon-repeat_1 {
+  &:before {
+    content: $icon-repeat_1;
+  }
+}
+.icon-repeat_3 {
+  &:before {
+    content: $icon-repeat_3;
+  }
+}
+.icon-repeat_6 {
+  &:before {
+    content: $icon-repeat_6;
+  }
+}
+.icon-repeat_12 {
+  &:before {
+    content: $icon-repeat_12;
+  }
+}
+.icon-twitter {
+  &:before {
+    content: $icon-twitter;
+  }
+}
+.icon-unique {
+  &:before {
+    content: $icon-unique;
+  }
+}
+
