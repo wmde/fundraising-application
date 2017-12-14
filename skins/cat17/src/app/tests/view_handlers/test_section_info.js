@@ -10,11 +10,17 @@ var test = require( 'tape-catch' ),
 			find: sinon.stub(),
 			text: sinon.stub(),
 			html: sinon.stub(),
-			removeClass: sinon.stub(),
 			addClass: sinon.stub(),
+			removeClass: sinon.stub(),
+			toggleClass: sinon.stub(),
 			data: sinon.stub(),
 			prepend: sinon.stub()
 		};
+	},
+	createContainerElement = function () {
+		var node = createElement();
+		node.find.withArgs( '.opened' ).returns( createElement() );
+		return node;
 	},
 	formattedAmount = '23,00',
 	currencyFormatter = {
@@ -23,7 +29,7 @@ var test = require( 'tape-catch' ),
 ;
 
 test( 'The amount is passed to the currency formatter', function ( t ) {
-	var container = createElement(),
+	var container = createContainerElement(),
 		icon = createElement(),
 		text = createElement(),
 		longText = createElement(),
@@ -49,7 +55,7 @@ test( 'The amount is passed to the currency formatter', function ( t ) {
 } );
 
 test( 'Formatted amount is set in amount element', function ( t ) {
-	var container = createElement(),
+	var container = createContainerElement(),
 		icon = createElement(),
 		text = createElement(),
 		longText = createElement(),
@@ -76,7 +82,7 @@ test( 'Formatted amount is set in amount element', function ( t ) {
 } );
 
 test( 'Icon is set according to value', function ( t ) {
-	var container = createElement(),
+	var container = createContainerElement(),
 		icon = createElement(),
 		text = createElement(),
 		longText = createElement(),
@@ -104,7 +110,7 @@ test( 'Icon is set according to value', function ( t ) {
 } );
 
 test( 'Icon is set to error if value out of bounds and error desired', function ( t ) {
-	var container = createElement(),
+	var container = createContainerElement(),
 		icon = createElement(),
 		handler = objectAssign( Object.create( SectionInfo.AmountFrequencySectionInfo ), {
 			container: container,
@@ -128,7 +134,7 @@ test( 'Icon is set to error if value out of bounds and error desired', function 
 } );
 
 test( 'Icon is reset if value out of bounds and error not desired', function ( t ) {
-	var container = createElement(),
+	var container = createContainerElement(),
 		icon = createElement(),
 		handler = objectAssign( Object.create( SectionInfo.AmountFrequencySectionInfo ), {
 			container: container,
@@ -152,7 +158,7 @@ test( 'Icon is reset if value out of bounds and error not desired', function ( t
 } );
 
 test( 'Payment type PPL info is set in respective elements', function ( t ) {
-	var container = createElement(),
+	var container = createContainerElement(),
 		icon = createElement(),
 		text = createElement(),
 		longText = createElement(),
@@ -180,7 +186,7 @@ test( 'Payment type PPL info is set in respective elements', function ( t ) {
 } );
 
 test( 'Payment type BEZ info is set in respective elements', function ( t ) {
-	var container = createElement(),
+	var container = createContainerElement(),
 		icon = createElement(),
 		text = createElement(),
 		longText = createElement(),
@@ -240,7 +246,7 @@ test( 'Payment type BEZ info is set in respective elements', function ( t ) {
 } );
 
 test( 'Fallback text is used when value does not correspond to text map', function ( t ) {
-	var container = createElement(),
+	var container = createContainerElement(),
 		text = createElement(),
 		handler = objectAssign( Object.create( SectionInfo.SectionInfo ), {
 			container: container,
@@ -261,7 +267,7 @@ test( 'Fallback text is used when value does not correspond to text map', functi
 } );
 
 test( 'Missing features are gently skipped', function ( t ) {
-	var container = createElement(),
+	var container = createContainerElement(),
 		handler = objectAssign( Object.create( SectionInfo.PaymentTypeSectionInfo ), {
 			container: container,
 
@@ -282,7 +288,7 @@ test( 'Missing features are gently skipped', function ( t ) {
 } );
 
 test( 'Instance correctly detects and applies sub-elements', function ( t ) {
-	var container = createElement(),
+	var container = createContainerElement(),
 		icon = createElement(),
 		text = createElement(),
 		longText = createElement()
@@ -307,7 +313,7 @@ test( 'Instance correctly detects and applies sub-elements', function ( t ) {
 } );
 
 test( 'Instance is created with properties applied', function ( t ) {
-	var container = createElement(),
+	var container = createContainerElement(),
 		iconMap = { 'a': 1 },
 		textMap = { 'a': 2 },
 		longTextMap = { 'a': 3 },
@@ -350,5 +356,68 @@ test( 'Proxy forwards calls and arguments', function ( t ) {
 	t.deepEquals( proxy.widgets[ 1 ].update.firstCall.args, [ 'a', 'b', 'c' ] );
 
 	delete global.$;
+	t.end();
+} );
+
+test( 'Existing longtext is indicated', function ( t ) {
+	var container = createContainerElement(),
+		icon = createElement(),
+		text = createElement(),
+		longText = createElement(),
+		handler = objectAssign( Object.create( SectionInfo.PaymentTypeSectionInfo ), {
+			container: container,
+
+			icon: icon,
+			text: text,
+			longText: longText,
+
+			valueLongTextMap: { 'BEZ': 'Will be deducted', 'PPL': '' }
+		} );
+
+	handler.update( 'BEZ', '', '', { dataEntered: true, isValid: true } );
+
+	t.ok( container.toggleClass.withArgs( 'has-longtext', true ).calledOnce );
+
+	t.end();
+} );
+
+test( 'Missing longtext is indicated', function ( t ) {
+	var container = createContainerElement(),
+		icon = createElement(),
+		text = createElement(),
+		longText = createElement(),
+		handler = objectAssign( Object.create( SectionInfo.PaymentTypeSectionInfo ), {
+			container: container,
+
+			icon: icon,
+			text: text,
+			longText: longText,
+
+			valueLongTextMap: { 'BEZ': 'Will be deducted', 'PPL': '' }
+		} );
+
+	handler.update( 'PPL', '', '', { dataEntered: true, isValid: true } );
+
+	t.ok( container.toggleClass.withArgs( 'has-longtext', false ).calledOnce );
+
+	t.end();
+} );
+
+test( 'Opened longtext are shut', function ( t ) {
+	var container = createContainerElement(),
+		longText = createElement(),
+		handler = objectAssign( Object.create( SectionInfo.PaymentTypeSectionInfo ), {
+			container: container,
+
+			longText: longText,
+
+			valueLongTextMap: { 'BEZ': 'Will be deducted', 'PPL': 'Somesome' }
+		} );
+
+	handler.update( 'PPL', '', '', { dataEntered: true, isValid: true } );
+
+	t.ok( container.removeClass.withArgs( 'opened' ).calledOnce );
+	t.ok( container.find.withArgs( '.opened' ).calledOnce );
+
 	t.end();
 } );

@@ -81,13 +81,15 @@ var objectAssign = require( 'object-assign' ),
 		scroller: null,
 		linkIsInsideCompletedSummaryOnSmallScreen: function( link ) {
 			// only the completed fields at the bottom summary are inside a .wrap-field.completed
-			return $( window ).width() < 1200 && $( link ).closest( '.wrap-field.completed .wrap-input' ).length > 0;
+			return $( window ).width() < 1200 && $( link ).closest( '.wrap-field.has-longtext.completed .wrap-input' ).length > 0;
 		},
 		scrollToTarget: function( evt ) {
 			evt.preventDefault();
+
 			if ( this.linkIsInsideCompletedSummaryOnSmallScreen( evt.currentTarget ) ) {
 				return;
 			}
+
 			var target = $( evt.currentTarget.hash );
 			target = target.length ? target : $( '[name=' + evt.currentTarget.hash.slice( 1 ) + ']' );
 			if ( target.length > 0 ) {
@@ -95,7 +97,7 @@ var objectAssign = require( 'object-assign' ),
 			}
 		}
 	}
-	;
+;
 
 module.exports ={
 	createAnimatedScroller: function ( fixedHeaderElements ) {
