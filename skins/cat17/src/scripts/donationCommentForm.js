@@ -54,32 +54,46 @@
 	function handleFormSubmission( event ) {
 		event.preventDefault();
 
+		submitButton.attr( 'disabled', 'disabled' );
+		form.find( '.message' ).remove();
+
 		$.ajax( '../add-comment', {
 			data: $( this ).serialize(),
 			dataType: 'json',
 			type: 'POST',
 			success: function( response ) {
-				// TODO: fix feedback display
-				var $feedback = $( '#comment-form' );
-				$feedback.find( '.message' ).remove();
-				$feedback.append(
-					$( '<div />' )
-						.addClass( 'message' )
-						.addClass( response.status === 'ERR' ? 'error' : 'success' )
-						.text( response.message || 'Vielen Dank! Die Nachricht wurde verschickt!' )
-				);
+				if ( response.status === 'success' ) {
+					onSubmitSuccess( response.message );
+				}
+				else {
+					onSubmitFailure( response.message );
+				}
 			},
-			error: function ( e ){
-				var $feedback = $( '#comment-form' );
-				$feedback.find( '.message' ).remove();
-				$feedback.append(
-					$( '<div />' )
-						.addClass( 'message' )
-						.addClass( 'error' )
-						.text( 'Die Nachricht konnte auf Grund eines Fehlers nicht verschickt werden.' )
-				);
+			error: function ( e ) {
+				onSubmitFailure();
 			}
 		});
+	}
+
+	function onSubmitSuccess( message ) {
+		submitButton.after(
+			$( '<div />' )
+				.addClass( 'message' )
+				.addClass( 'success' )
+				.text( message || 'Vielen Dank! Die Nachricht wurde verschickt!' )
+		);
+
+		$( '#cancel-link' ).text( 'Zurück zur Spendenbestätigung' ); // TODO: i18n
+	}
+
+	function onSubmitFailure( message ) {
+		submitButton.removeAttr( 'disabled' );
+		submitButton.after(
+			$( '<div />' )
+				.addClass( 'message' )
+				.addClass( 'error' )
+				.text( message || 'Die Nachricht konnte auf Grund eines Fehlers nicht verschickt werden.' )
+		);
 	}
 
 })(jQuery);
