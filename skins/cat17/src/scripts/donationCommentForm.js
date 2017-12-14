@@ -57,7 +57,7 @@
 		submitButton.attr( 'disabled', 'disabled' );
 		form.find( '.message' ).remove();
 
-		$.ajax( '../add-comment', {
+		$.ajax( form.attr( 'action' ), {
 			data: $( this ).serialize(),
 			dataType: 'json',
 			type: 'POST',

@@ -280,7 +280,7 @@ $app->post(
 			'message' => $ffFactory->getTranslator()->trans( $response->getErrorMessage() ),
 		] );
 	}
-);
+)->bind( 'PostComment' );
 
 $app->get(
 	'add-comment',
