@@ -12,7 +12,8 @@ var test = require( 'tape-catch' ),
 			html: sinon.stub(),
 			removeClass: sinon.stub(),
 			addClass: sinon.stub(),
-			data: sinon.stub()
+			data: sinon.stub(),
+			prepend: sinon.stub()
 		};
 	},
 	formattedAmount = '23,00',
@@ -150,7 +151,35 @@ test( 'Icon is reset if value out of bounds and error not desired', function ( t
 	t.end();
 } );
 
-test( 'Payment type is set in respective elements', function ( t ) {
+test( 'Payment type PPL info is set in respective elements', function ( t ) {
+	var container = createElement(),
+		icon = createElement(),
+		text = createElement(),
+		longText = createElement(),
+		handler = objectAssign( Object.create( SectionInfo.PaymentTypeSectionInfo ), {
+			container: container,
+
+			icon: icon,
+			text: text,
+			longText: longText,
+
+			valueIconMap: { 'BEZ': 'icon-BEZ', 'PPL': 'icon-PPL' },
+			valueTextMap: { 'BEZ': 'Lastschrift', 'PPL': 'Paypal' },
+			valueLongTextMap: { 'BEZ': 'Will be deducted', 'PPL': 'I am of no importance' }
+		} );
+
+	handler.update( 'PPL', '', '', { dataEntered: true, isValid: true } );
+
+	t.ok( container.addClass.withArgs( 'completed' ).calledOnce );
+	t.ok( icon.addClass.withArgs( 'icon-PPL' ).calledOnce );
+	t.ok( text.text.withArgs( 'Paypal' ).calledOnce, 'Payment type is set' );
+	t.ok( longText.text.withArgs( '' ).calledOnce, 'Long text is reset' );
+	t.ok( longText.prepend.notCalled, 'Long text is not changed by prepend' );
+
+	t.end();
+} );
+
+test( 'Payment type BEZ info is set in respective elements', function ( t ) {
 	var container = createElement(),
 		icon = createElement(),
 		text = createElement(),
@@ -167,12 +196,45 @@ test( 'Payment type is set in respective elements', function ( t ) {
 			valueLongTextMap: { 'BEZ': 'Will be deducted', 'PPL': 'Forward to PPL' }
 		} );
 
-	handler.update( 'PPL', '', '', { dataEntered: true, isValid: true } );
+	/**
+	 * $ is used as HTML generator - for this test we let it become a super-charged string object with access to
+	 * - the original construction parameter (HTML) via .toString()
+	 * - the methods called on the wanna-be node via the properties
+	 */
+	global.$ = function ( arg0 ) {
+		arg0 = objectAssign( arg0, {
+			addClass: sinon.stub().returnsThis(),
+			text: sinon.stub().returnsThis(),
+			append: sinon.stub().returnsThis()
+		} );
+		return arg0;
+	};
+
+	handler.update( 'BEZ', '4711', '8888', { dataEntered: true, isValid: true } );
 
 	t.ok( container.addClass.withArgs( 'completed' ).calledOnce );
-	t.ok( icon.addClass.withArgs( 'icon-PPL' ).calledOnce );
-	t.ok( text.text.withArgs( 'Paypal' ).calledOnce, 'Payment type is set' );
-	t.ok( longText.text.withArgs( 'Forward to PPL' ).calledOnce, 'Long text is set' );
+	t.ok( icon.addClass.withArgs( 'icon-BEZ' ).calledOnce );
+	t.ok( text.text.withArgs( 'Lastschrift' ).calledOnce, 'Payment type is set' );
+	t.ok( longText.text.withArgs( 'Will be deducted' ).calledOnce, 'Long text is set' );
+	t.ok( longText.prepend.calledOnce, 'Bank data is prepended' );
+
+	t.equals( longText.prepend.args[0].toString(), '<dl>', 'Bank data is a list' );
+	t.ok( longText.prepend.args[0][0].addClass.withArgs( 'bank-info' ).calledOnce );
+	t.ok( longText.prepend.args[0][0].append.calledOnce, 'Bank data put before text' );
+
+	t.equals( longText.prepend.args[0][0].append.args[0][0].toString(), '<dt>', 'Bank data IBAN title set' );
+	t.ok( longText.prepend.args[0][0].append.args[0][0].text.withArgs( 'IBAN' ).calledOnce, 'Bank data IBAN set' );
+
+	t.equals( longText.prepend.args[0][0].append.args[0][1].toString(), '<dd>', 'Bank data IBAN set' );
+	t.ok( longText.prepend.args[0][0].append.args[0][1].text.withArgs( '4711' ).calledOnce, 'Bank data IBAN set' );
+
+	t.equals( longText.prepend.args[0][0].append.args[0][2].toString(), '<dt>', 'Bank data BIC title set' );
+	t.ok( longText.prepend.args[0][0].append.args[0][2].text.withArgs( 'BIC' ).calledOnce, 'Bank data IBAN set' );
+
+	t.equals( longText.prepend.args[0][0].append.args[0][3].toString(), '<dd>', 'Bank data BIC set' );
+	t.ok( longText.prepend.args[0][0].append.args[0][3].text.withArgs( '8888' ).calledOnce, 'Bank data IBAN set' );
+
+	delete global.$;
 
 	t.end();
 } );

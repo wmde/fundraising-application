@@ -175,10 +175,15 @@ var objectAssign = require( 'object-assign' ),
 				);
 			}
 
+			if ( paymentType !== 'BEZ' ) {
+				this.setLongText( '' );
+				return;
+			}
+
 			this.setLongText( this.getValueLongText( paymentType ) );
 
-			if ( this.longText && paymentType === 'BEZ' && iban && bic ) {
-				this.longText.prepend ( // intentionally html. Escaping performed through .text() calls on user-input vars
+			if ( this.longText && iban && bic ) {
+				this.longText.prepend( // intentionally html. Escaping performed through .text() calls on user-input vars
 					$( '<dl>' ).addClass( DOM_SELECTORS.classes.summaryBankInfo ).append(
 						$('<dt>').text( 'IBAN' ),
 						$('<dd>').text( iban ),
