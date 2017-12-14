@@ -8,7 +8,6 @@
 			padding: 0;
 			transition: all 200ms;
 			i {
-				opacity: 0;
 				display: none;
 			}
 			&:hover {
@@ -55,11 +54,9 @@
 					align-items: center;
 				}
 				i {
-					opacity: 0;
 					display: none;
 					@include bkp(sm) {
 						display: block;
-						opacity: 1;
 					}
 				}
 			}
@@ -73,12 +70,10 @@
 				align-items: center;
 				i {
 					display: block;
-					opacity: 1;
 				}
 			}
 			&.amount {
 				a i {
-					opacity: 1;
 					display: block;
 				}
 			}
@@ -114,7 +109,7 @@
 				display: block;
 				color: rgba(0, 0, 0, .5);
 				i {
-					opacity: 0;
+					display: none;
 				}
 				&:hover {
 					color: rgba(0, 0, 0, 1);
@@ -129,7 +124,6 @@
 				justify-content: space-between;
 				align-items: center;
 				i {
-					opacity: 1;
                     display: block;
 					color: $brand-error;
 				}
