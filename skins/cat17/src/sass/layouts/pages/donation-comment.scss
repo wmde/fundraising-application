@@ -9,3 +9,15 @@
     height: 180px;
   }
 }
+
+.success-message {
+  color: $brand-primary;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+.error-message {
+  color: $brand-error;
+  margin-left: 10px;
+  margin-top: 10px;
+}
