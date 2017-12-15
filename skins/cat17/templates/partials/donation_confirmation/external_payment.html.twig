@@ -5,6 +5,7 @@
             <p class="h1">
                 {$ 'donation_confirmation_head' | trans $}
                 <br />
+                {# not using transchoice as this would make editing the message in content's json very unfriendly to users #}
                 {% if donation.interval == 0 %}
                     {$ 'donation_confirmation_head_summary_once' | trans( {
                         '%formattedAmount%': '<span class="strong">' ~ formattedAmount ~ '</span>',
