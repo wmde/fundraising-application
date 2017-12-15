@@ -365,11 +365,14 @@ $( function () {
 
 	// Set initial form values
 	var initSetup = initData.data( 'initial-form-values' );
-	if ( typeof initSetup.amount === 'string' ) {
-		// backend delivers amount as a german-formatted "float" string
-		initSetup.amount = WMDE.IntegerCurrency.createCurrencyParser( 'de' ).parse( initSetup.amount );
-	}
-	store.dispatch( actions.newInitializeContentAction( initSetup ) );
+	$.each( initSetup, function ( key, value ) {
+		if ( key === 'amount' && typeof value === 'string' ) {
+			// backend delivers amount as a german-formatted "float" string
+			value = WMDE.IntegerCurrency.createCurrencyParser( 'de' ).parse( value );
+		}
+
+		store.dispatch( actions.newChangeContentAction( key, value ) );
+	} );
 
 	// Set initial validation state
 	store.dispatch( actions.newInitializeValidationStateAction(

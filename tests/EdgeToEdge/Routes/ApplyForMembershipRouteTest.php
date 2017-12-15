@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\MembershipApplication;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowMembershipConfirmationHandler;
+use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\FixedMembershipTokenGenerator;
@@ -16,6 +17,7 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentDelayCalculator;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedPaymentDelayCalculator;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 
 /**
  * @licence GNU GPL v2+
@@ -59,6 +61,43 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			1,
 			$crawler->filter( 'input[name="showMembershipTypeOption"][type="hidden"][value="false"]' )
 		);
+	}
+
+	public function testGivenRequestWithDonationIdAndCorrespondingAccessCode_successResponseWithInitialFormValuesIsReturned(): void {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+			$factory->setDonationTokenGenerator( new FixedTokenGenerator( '4711abc' ) );
+			$factory->getDonationRepository()->storeDonation( ValidDonation::newDirectDebitDonation() );
+
+			$httpParameters = [
+				'donationId' => 1,
+				'donationAccessToken' => '4711abc'
+			];
+
+			$client->request( Request::METHOD_GET, self::APPLY_FOR_MEMBERSHIP_PATH, $httpParameters );
+
+			$this->assertInitialFormValues(
+				[
+					'addressType' => 'person',
+					'salutation' => 'nyan',
+					'title' => 'nyan',
+					'firstName' => 'Jeroen',
+					'lastName' => 'De Dauw',
+					'companyName' => '',
+					'street' => 'Nyan Street',
+					'postcode' => '1234',
+					'city' => 'Berlin',
+					'country' => 'DE',
+					'email' => 'foo@bar.baz',
+					'iban' => 'DE12500105170648489890',
+					'bic' => 'INGDDEFFXXX',
+					'accountNumber' => '0648489890',
+					'bankCode' => '50010517',
+					'bankname' => 'ING-DiBa',
+					'paymentType' => 'BEZ'
+				],
+				$client
+			);
+		} );
 	}
 
 	private function newValidHttpParameters(): array {

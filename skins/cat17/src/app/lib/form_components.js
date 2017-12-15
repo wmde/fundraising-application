@@ -50,6 +50,19 @@ var objectAssign = require( 'object-assign' ),
 		}
 	},
 
+	SelectComponent = {
+		element: null,
+		contentName: '',
+		onChange: null,
+		render: function ( formContent ) {
+			if ( this.element.val() === formContent[ this.contentName ] ) {
+				return;
+			}
+
+			this.element.val( [ formContent[ this.contentName ] ] ).change();
+		}
+	},
+
 	CheckboxComponent = {
 		element: null,
 		contentName: '',
@@ -124,7 +137,7 @@ module.exports = {
 	},
 
 	createSelectMenuComponent: function ( store, element, contentName ) {
-		var component = objectAssign( Object.create( RadioComponent ), {
+		var component = objectAssign( Object.create( SelectComponent ), {
 			element: element,
 			contentName: contentName,
 			onChange: createDefaultChangeHandler( store, contentName )
