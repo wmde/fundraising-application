@@ -55,11 +55,18 @@ var objectAssign = require( 'object-assign' ),
 		contentName: '',
 		onChange: null,
 		render: function ( formContent ) {
-			if ( this.element.val() === formContent[ this.contentName ] ) {
+
+			if ( this.element.val() === formContent[ this.contentName ]  || this.elementAndContentAreEmpty( formContent ) ) {
 				return;
 			}
 
-			this.element.val( [ formContent[ this.contentName ] ] ).change();
+			this.element.val( [ formContent[ this.contentName ] ] );
+			this.element.change();
+		},
+		elementAndContentAreEmpty: function( formContent ) {
+			// calling this.element.val( '' ) leads to this.element.val() === null in some cases,
+			// so we need to compare different types
+			return this.element.val() === null && formContent[ this.contentName ] === '';
 		}
 	},
 
@@ -236,5 +243,7 @@ module.exports = {
 			}
 		} ) );
 		return textComponent;
-	}
+	},
+
+	SelectComponent: SelectComponent
 };

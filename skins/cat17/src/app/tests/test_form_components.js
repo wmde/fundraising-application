@@ -4,6 +4,7 @@
 var test = require( 'tape-catch' ),
 	sinon = require( 'sinon' ),
 	formComponents = require( '../lib/form_components' ),
+	objectAssign = require( 'object-assign' ),
 	createSpyingElement = function () {
 		return {
 			on: sinon.spy(),
@@ -346,3 +347,43 @@ test( 'addEagerChangeBehavior calls onChange and validator handler on keypress e
 	t.end();
 } );
 
+test( 'SelectComponent renders when value changed', function ( t ) {
+	var element = {
+			val: sinon.stub(),
+			change: sinon.stub()
+		},
+		component = objectAssign( Object.create( formComponents.SelectComponent ), {
+			element: element,
+			contentName: 'somesome'
+		} );
+
+	element.val.withArgs().returns( '6' ); // .val() is both the getter and setter method
+
+	component.render( { somesome: '5' } );
+
+	t.equals( element.val.callCount, 3 );
+	t.deepEquals( element.val.thirdCall.args[ 0 ], [ '5' ], 'value gets set' );
+	t.ok( element.change.calledOnce );
+
+	t.end();
+} );
+
+test( 'SelectComponent treats null like empty string in update check', function ( t ) {
+	var element = {
+			val: sinon.stub(),
+			change: sinon.stub()
+		},
+		component = objectAssign( Object.create( formComponents.SelectComponent ), {
+			element: element,
+			contentName: 'lorem'
+		} );
+
+	element.val.withArgs().returns( null ); // .val() is both the getter and setter method
+
+	component.render( { lorem: '' } );
+
+	t.equals( element.val.callCount, 2 );
+	t.ok( element.change.notCalled );
+
+	t.end();
+} );
