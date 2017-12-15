@@ -25,8 +25,9 @@
             <p class="h2">
                 {$ "donation_confirmation_subhead_donation_number" | trans( {
                     '%donation.id%': '<span class="strong">' ~ donation.id ~ '</span>'
-                } ) | raw $}<br />
-
+                } ) | raw $}
+            </p>
+            <p class="h2">
                 {$ "donation_confirmation_subhead_direct_debit"| trans( {
                     '%formattedAmount%': '<span class="strong field-amount">' ~ formattedAmount  ~ '</span>',
                     '%interval%': '<span class="strong">' ~ donation.interval|trans({}, 'paymentIntervals') ~ '</span>',
@@ -61,16 +62,6 @@
         </div>
     </div>
 </div>
-<div class="container hidden-print">
-    <div class="row">
-        <nav class="menu menu-footer col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-8 col-md-4">
-            <ul class="list-menu list-unstyled">
-                <li><a href="{$ commentUrl $}"><span>{$ "add_donation_comment" | trans $}</span></a></li>
-                {% include 'partials/share_on_social_networks.html.twig' %}
-            </ul>
-        </nav>
-    </div>
-</div>
 
 <div class="container hidden-print">
     <div class="row">
@@ -79,15 +70,21 @@
 				'showActiveMembershipBenefits': true
 			} only %}
         </div>
-    </div>
-</div>
-
-<div class="switch-container container-fluid container hidden-print">
-    <div class="row">
-        <div class="col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-8 col-md-4">
+        <div class="action-block col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-0 col-md-4">
             <a href="{$ basepath $}/apply-for-membership?donationId={$ donation.id $}&amp;donationAccessToken={$ donation.accessToken $}&amp;type=sustaining" class="btn btn-introduction bk-blue text-center text-uppercase">
                 {$ "donation_confirmation_apply_for_membership" | trans $}
             </a>
         </div>
+    </div>
+</div>
+
+<div class="container hidden-print">
+    <div class="row">
+        <nav class="content menu menu-footer col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-8 col-md-4">
+            <ul class="list-menu list-unstyled">
+                <li><a href="{$ commentUrl $}"><span>{$ "add_donation_comment" | trans $}</span></a></li>
+				{% include 'partials/share_on_social_networks.html.twig' %}
+            </ul>
+        </nav>
     </div>
 </div>
