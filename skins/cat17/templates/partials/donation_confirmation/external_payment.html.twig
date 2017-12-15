@@ -3,26 +3,30 @@
         <div class="content col-xs-12 col-md-8">
 
             <p class="h1">
-                {$ "donation_confirmation_head" | trans $}<br />
-                {$ "donation_confirmation_head_summary" | trans( {
-                    '%formattedAmount%': '<span class="text-uppercase">' ~ formattedAmount ~ '</span>',
-                    '%interval%': '<span class="text-uppercase">' ~ donation.interval|trans({}, 'paymentIntervals') ~ '</span>',
-                    '%paymentType%': '<span class="text-uppercase">' ~ donation.paymentType|trans( {}, 'paymentTypes' ) ~ '</span>',
-                    '%status_description%': donation.status|trans( {}, 'paymentStatus' )
-                } ) | raw $}
+                {$ 'donation_confirmation_head' | trans $}
+                <br />
+                {# not using transchoice as this would make editing the message in content's json very unfriendly to users #}
+                {% if donation.interval == 0 %}
+                    {$ 'donation_confirmation_head_summary_once' | trans( {
+                        '%formattedAmount%': '<span class="strong">' ~ formattedAmount ~ '</span>',
+                        '%paymentType%': '<span class="strong">' ~ donation.paymentType | trans( {}, 'paymentTypes' ) ~ '</span>',
+                        '%interval%': '<span class="strong">' ~ donation.interval | trans( {}, 'paymentIntervals' ) ~ '</span>',
+                        '%status_description%': donation.status|trans( {}, 'paymentStatus' )
+                    } ) | raw $}
+                {% else %}
+                    {$ 'donation_confirmation_head_summary_recurring' | trans( {
+                        '%formattedAmount%': '<span class="strong">' ~ formattedAmount ~ '</span>',
+                        '%paymentType%': '<span class="strong">' ~ donation.paymentType | trans( {}, 'paymentTypes' ) ~ '</span>',
+                        '%interval%': '<span class="strong">' ~ donation.interval | trans( {}, 'paymentIntervals' ) ~ '</span>',
+                        '%status_description%': donation.status | trans( {}, 'paymentStatus' )
+                    } ) | raw $}
+                {% endif %}
             </p>
 
             <p class="h2">
                 {$ "donation_confirmation_subhead_donation_number" | trans( {
                     '%donation.id%': '<span class="strong">' ~ donation.id ~ '</span>'
                 } ) | raw $}<br />
-
-                {$ "donation_confirmation_subhead_external_payment"| trans( {
-                    '%formattedAmount%': '<span class="strong field-amount">' ~ formattedAmount  ~ '</span>',
-                    '%interval%': '<span class="strong">' ~ donation.interval|trans({}, 'paymentIntervals') ~ '</span>',
-                    '%paymentType%': '<span class="strong">' ~ donation.paymentType|trans( {}, 'paymentTypes' ) ~ '</span>',
-                    '%status_description%': donation.status|trans( {}, 'paymentStatus' )
-                } ) | raw $}
             </p>
 
             {% if donation.optsIntoNewsletter %}
@@ -40,22 +44,29 @@
         </div>
     </div>
 </div>
-<div class="switch-container container-fluid container hidden-print">
+
+<div class="container hidden-print">
     <div class="row">
-        <div class="col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-8 col-md-4">
-            <a href="{$ basepath $}/apply-for-membership" class="btn btn-introduction bk-blue text-center text-uppercase">
+        <div class="content col-xs-12 col-md-8">
+            {% include 'partials/membership/benefit_list.html.twig' with {
+                'showActiveMembershipBenefits': true
+            } only %}
+        </div>
+        <div class="action-block col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-0 col-md-4">
+            <a href="{$ basepath $}/apply-for-membership?donationId={$ donation.id $}&amp;donationAccessToken={$ donation.accessToken $}&amp;type=sustaining" class="btn btn-introduction bk-blue text-center text-uppercase">
                 {$ "donation_confirmation_apply_for_membership" | trans $}
             </a>
         </div>
     </div>
 </div>
+
 <div class="container hidden-print">
     <div class="row">
-        <nav class="menu menu-footer col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-8 col-md-4">
-        <ul class="list-menu list-unstyled">
-            <li><a href="{$ commentUrl $}"><span>{$ "add_donation_comment" | trans $}</span></a></li>
-            {% include 'partials/share_on_social_networks.html.twig' %}
-        </ul>
+        <nav class="content menu menu-footer col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-8 col-md-4">
+            <ul class="list-menu list-unstyled">
+                <li><a href="{$ commentUrl $}"><span>{$ "add_donation_comment" | trans $}</span></a></li>
+				{% include 'partials/share_on_social_networks.html.twig' %}
+            </ul>
         </nav>
     </div>
 </div>

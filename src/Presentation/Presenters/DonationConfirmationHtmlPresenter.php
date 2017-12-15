@@ -57,7 +57,8 @@ class DonationConfirmationHtmlPresenter {
 				'creationDate' => ( new \DateTime() )->format( 'd.m.Y' ),
 				// TODO: set cookie duration for "hide banner cookie"
 				'cookieDuration' => '15552000', // 180 days
-				'updateToken' => $updateToken
+				'updateToken' => $updateToken,
+				'accessToken' => $accessToken
 			],
 			'person' => $this->getPersonArguments( $donation ),
 			'bankData' => $this->getBankDataArguments( $donation->getPaymentMethod() ),

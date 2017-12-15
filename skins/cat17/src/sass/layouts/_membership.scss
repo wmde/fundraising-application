@@ -16,49 +16,6 @@
                 box-shadow: 0 -4px 11px -7px rgba(0, 0, 0, 0.65);
             }
         }
-		.resum h2 {
-			line-height: 1.4em;
-			padding-bottom: 10px;
-            position: relative;
-			@include themify($themes) {
-				//border-bottom: themed('border1pxPrimary');
-			}
-            @include bkp(xsmax) {
-                &:after {
-                    content: '';
-                    position: absolute;
-                    left: -200px;
-                    bottom: 0;
-                    width: 800px;
-                    border-bottom: 2px solid $brand-primary-membership;
-                }
-            }
-			@include bkp(sm) {
-				display: inline-block;
-                border-bottom: 2px solid $brand-primary-membership;
-			}
-		}
-		.list-membership {
-			margin-top: 30px;
-			@include bkp(sm) {
-				column-count: 2;
-			}
-			li {
-				list-style-type: none;
-				margin-bottom: 25px;
-				@include bkp(xs) {
-					padding-left: 20px;
-					text-indent: -16px;
-					&:before {
-						content: '•';
-						margin-right: 10px;
-						@include themify($themes) {
-							color: themed('brandPrimary');
-						}
-					}
-				}
-			}
-		}
 	}
 
     #form-membership {
@@ -211,5 +168,53 @@
 		}
 	}
 
+}
+
+.membership-benefits {
+	h2 {
+		line-height: 1.4em;
+		padding-bottom: 10px;
+		position: relative;
+		@include bkp(xsmax) {
+			&:after {
+				content: '';
+				position: absolute;
+				left: -200px;
+				bottom: 0;
+				width: 800px;
+				@include themify($themes) {
+					border-bottom: themed('border2pxPrimary');
+				}
+			}
+		}
+		@include bkp(sm) {
+			display: inline-block;
+			@include themify($themes) {
+				border-bottom: themed('border2pxPrimary');
+			}
+		}
+	}
+
+	.list-membership {
+		margin-top: 30px;
+		@include bkp(sm) {
+			column-count: 2;
+		}
+		li {
+			list-style-type: none;
+			margin-bottom: 25px;
+			@include bkp(xs) {
+				padding-left: 20px;
+				text-indent: -16px;
+				&:before {
+					content: '•';
+					margin-right: 10px;
+					@include themify($themes) {
+						color: themed('brandPrimary');
+					}
+				}
+			}
+		}
+	}
 }
 

@@ -40,18 +40,10 @@
 		<div class="shadow-top container-fluid">
 			<div class="container">
 				<div class="row">
-					<div class="resum col-xs-12 col-md-8">
-						<h2>{$ 'membership_benefit_list_title' | trans $}</h2>
-						<ul class="list-membership">
-							<li>{$ 'membership_benefit_list_1' | trans $}</li>
-							<li>{$ 'membership_benefit_list_2' | trans $}</li>
-							<li>{$ 'membership_benefit_list_3' | trans $}</li>
-							{% if showMembershipTypeOption == 'true' %}
-								<li>{$ 'membership_benefit_list_4' | trans $}</li>
-							{% endif %}
-							<li>{$ 'membership_benefit_list_5' | trans $}</li>
-							<li>{$ 'membership_benefit_list_6' | trans $}</li>
-						</ul>
+					<div class="col-xs-12 col-md-8">
+						{% include 'partials/membership/benefit_list.html.twig' with {
+							'showActiveMembershipBenefits': showMembershipTypeOption == 'true'
+						} only %}
 					</div>
 				</div>
 			</div>
