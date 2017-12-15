@@ -62,7 +62,7 @@
 			dataType: 'json',
 			type: 'POST',
 			success: function( response ) {
-				if ( response.status === 'success' ) {
+				if ( response.status === 'OK' ) {
 					onSubmitSuccess( response.message );
 				}
 				else {
