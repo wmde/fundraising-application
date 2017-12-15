@@ -178,4 +178,62 @@ test( 'calculateElementOffset ignores element margin not given in pixels', funct
 } );
 
 
+test( 'findElementWithLowestOffset returns no elements if no elements are given', function ( t ) {
+
+	t.equal( scrolling.findElementWithLowestOffset( [] ), null );
+
+	t.end();
+} );
+
+test( 'findElementWithLowestOffset returns no elements if jquery objects conation no DOM nodes ', function ( t ) {
+
+	var firstElement = {
+			length: 0
+		},
+		secondElement = {
+			length: 0
+		};
+
+	t.equal( scrolling.findElementWithLowestOffset( [ firstElement, secondElement ] ), null );
+
+	t.end();
+} );
+
+test( 'findElementWithLowestOffset first non empty element with an offset ', function ( t ) {
+
+	var firstElement = {
+			length: 0
+		},
+		secondElement = {
+			length: 1,
+			offset: sinon.stub()
+		};
+
+	secondElement.offset.returns( { top: 400 } );
+
+	t.equal( scrolling.findElementWithLowestOffset( [ firstElement, secondElement ] ), secondElement );
+
+	t.end();
+} );
+
+test( 'findElementWithLowestOffset will return the element with the lowest offset ', function ( t ) {
+
+	var firstElement = {
+			length: 1,
+			offset: sinon.stub()
+		},
+		secondElement = {
+			length: 1,
+			offset: sinon.stub()
+		};
+
+	firstElement.offset.returns( { top: 400 } );
+	secondElement.offset.returns( { top: 200 } );
+
+	t.equal( scrolling.findElementWithLowestOffset( [ firstElement, secondElement ] ), secondElement );
+	t.equal( scrolling.findElementWithLowestOffset( [ secondElement, firstElement ] ), secondElement );
+
+	t.end();
+} );
+
 

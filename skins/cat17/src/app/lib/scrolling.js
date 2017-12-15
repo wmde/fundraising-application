@@ -37,6 +37,21 @@ var objectAssign = require( 'object-assign' ),
 		return parseInt( matchedElemPadding[ 1 ] );
 	},
 
+	findElementWithLowestOffset = function ( elements ) {
+		return _.reduce( elements, function ( acc, element ) {
+			if ( element.length < 1 ) {
+				return acc;
+			}
+			if ( acc === null ) {
+				return element;
+			}
+			if ( acc.offset().top > element.offset().top ) {
+				return element;
+			}
+			return acc;
+		}, null );
+	},
+
 	/**
 	 *
 	 * @param {jQuery} $element Element whose offset will be taken
@@ -105,9 +120,11 @@ module.exports ={
 	},
 	scrollOnSuboptionChange: function( $suboptionInput, $suboptionContainer, scroller ) {
 		$suboptionInput.on( 'change', function ( evt ) {
-			var wrapper = $suboptionContainer.find( '.wrap-field input[value=' + evt.target.value + ']' ).parents( '.wrap-field' ).find( '.info-text' );
-			if (wrapper.length) {
-				scroller.scrollTo( wrapper, { elementStart: ElementStart.ELEMENT } );
+			var inputWrapper = $suboptionContainer.find( '.wrap-field input[value=' + evt.target.value + ']' ).parents( '.wrap-field' ),
+				infoText = inputWrapper.find( '.info-text' ),
+				scrollTarget = findElementWithLowestOffset( [ inputWrapper, infoText ] );
+			if ( scrollTarget !== null ) {
+				scroller.scrollTo( scrollTarget, { elementStart: ElementStart.ELEMENT } );
 			}
 		} )
 	},
@@ -126,5 +143,6 @@ module.exports ={
 	},
 	ElementStart: ElementStart,
 	// exposed for testing
-	calculateElementOffset: calculateElementOffset
+	calculateElementOffset: calculateElementOffset,
+	findElementWithLowestOffset: findElementWithLowestOffset
 };
