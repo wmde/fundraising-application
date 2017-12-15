@@ -22,10 +22,3 @@
 @import "layouts/membership";
 @import "layouts/pages";
 @import "layouts/borders-system";
-
-// @fixme Remove when all pages set the correct page_identifier (see Base_Layout.html.twig)
-.page-uncustomized .header h1::after {
-	content: '@todo';
-	color: fuchsia;
-	font-size: 20px;
-}
