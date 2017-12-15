@@ -10,10 +10,17 @@ var test = require( 'tape-catch' ),
 			find: sinon.stub(),
 			text: sinon.stub(),
 			html: sinon.stub(),
-			removeClass: sinon.stub(),
 			addClass: sinon.stub(),
-			data: sinon.stub()
+			removeClass: sinon.stub(),
+			toggleClass: sinon.stub(),
+			data: sinon.stub(),
+			prepend: sinon.stub()
 		};
+	},
+	createContainerElement = function () {
+		var node = createElement();
+		node.find.withArgs( '.opened' ).returns( createElement() );
+		return node;
 	},
 	formattedAmount = '23,00',
 	currencyFormatter = {
@@ -22,7 +29,7 @@ var test = require( 'tape-catch' ),
 ;
 
 test( 'The amount is passed to the currency formatter', function ( t ) {
-	var container = createElement(),
+	var container = createContainerElement(),
 		icon = createElement(),
 		text = createElement(),
 		longText = createElement(),
@@ -48,7 +55,7 @@ test( 'The amount is passed to the currency formatter', function ( t ) {
 } );
 
 test( 'Formatted amount is set in amount element', function ( t ) {
-	var container = createElement(),
+	var container = createContainerElement(),
 		icon = createElement(),
 		text = createElement(),
 		longText = createElement(),
@@ -75,7 +82,7 @@ test( 'Formatted amount is set in amount element', function ( t ) {
 } );
 
 test( 'Icon is set according to value', function ( t ) {
-	var container = createElement(),
+	var container = createContainerElement(),
 		icon = createElement(),
 		text = createElement(),
 		longText = createElement(),
@@ -103,7 +110,7 @@ test( 'Icon is set according to value', function ( t ) {
 } );
 
 test( 'Icon is set to error if value out of bounds and error desired', function ( t ) {
-	var container = createElement(),
+	var container = createContainerElement(),
 		icon = createElement(),
 		handler = objectAssign( Object.create( SectionInfo.AmountFrequencySectionInfo ), {
 			container: container,
@@ -127,7 +134,7 @@ test( 'Icon is set to error if value out of bounds and error desired', function 
 } );
 
 test( 'Icon is reset if value out of bounds and error not desired', function ( t ) {
-	var container = createElement(),
+	var container = createContainerElement(),
 		icon = createElement(),
 		handler = objectAssign( Object.create( SectionInfo.AmountFrequencySectionInfo ), {
 			container: container,
@@ -150,8 +157,36 @@ test( 'Icon is reset if value out of bounds and error not desired', function ( t
 	t.end();
 } );
 
-test( 'Payment type is set in respective elements', function ( t ) {
-	var container = createElement(),
+test( 'Payment type PPL info is set in respective elements', function ( t ) {
+	var container = createContainerElement(),
+		icon = createElement(),
+		text = createElement(),
+		longText = createElement(),
+		handler = objectAssign( Object.create( SectionInfo.PaymentTypeSectionInfo ), {
+			container: container,
+
+			icon: icon,
+			text: text,
+			longText: longText,
+
+			valueIconMap: { 'BEZ': 'icon-BEZ', 'PPL': 'icon-PPL' },
+			valueTextMap: { 'BEZ': 'Lastschrift', 'PPL': 'Paypal' },
+			valueLongTextMap: { 'BEZ': 'Will be deducted', 'PPL': 'I am of no importance' }
+		} );
+
+	handler.update( 'PPL', '', '', { dataEntered: true, isValid: true } );
+
+	t.ok( container.addClass.withArgs( 'completed' ).calledOnce );
+	t.ok( icon.addClass.withArgs( 'icon-PPL' ).calledOnce );
+	t.ok( text.text.withArgs( 'Paypal' ).calledOnce, 'Payment type is set' );
+	t.ok( longText.text.withArgs( '' ).calledOnce, 'Long text is reset' );
+	t.ok( longText.prepend.notCalled, 'Long text is not changed by prepend' );
+
+	t.end();
+} );
+
+test( 'Payment type BEZ info is set in respective elements', function ( t ) {
+	var container = createContainerElement(),
 		icon = createElement(),
 		text = createElement(),
 		longText = createElement(),
@@ -167,18 +202,51 @@ test( 'Payment type is set in respective elements', function ( t ) {
 			valueLongTextMap: { 'BEZ': 'Will be deducted', 'PPL': 'Forward to PPL' }
 		} );
 
-	handler.update( 'PPL', '', '', { dataEntered: true, isValid: true } );
+	/**
+	 * $ is used as HTML generator - for this test we let it become a super-charged string object with access to
+	 * - the original construction parameter (HTML) via .toString()
+	 * - the methods called on the wanna-be node via the properties
+	 */
+	global.$ = function ( arg0 ) {
+		arg0 = objectAssign( arg0, {
+			addClass: sinon.stub().returnsThis(),
+			text: sinon.stub().returnsThis(),
+			append: sinon.stub().returnsThis()
+		} );
+		return arg0;
+	};
+
+	handler.update( 'BEZ', '4711', '8888', { dataEntered: true, isValid: true } );
 
 	t.ok( container.addClass.withArgs( 'completed' ).calledOnce );
-	t.ok( icon.addClass.withArgs( 'icon-PPL' ).calledOnce );
-	t.ok( text.text.withArgs( 'Paypal' ).calledOnce, 'Payment type is set' );
-	t.ok( longText.text.withArgs( 'Forward to PPL' ).calledOnce, 'Long text is set' );
+	t.ok( icon.addClass.withArgs( 'icon-BEZ' ).calledOnce );
+	t.ok( text.text.withArgs( 'Lastschrift' ).calledOnce, 'Payment type is set' );
+	t.ok( longText.text.withArgs( 'Will be deducted' ).calledOnce, 'Long text is set' );
+	t.ok( longText.prepend.calledOnce, 'Bank data is prepended' );
+
+	t.equals( longText.prepend.args[0].toString(), '<dl>', 'Bank data is a list' );
+	t.ok( longText.prepend.args[0][0].addClass.withArgs( 'bank-info' ).calledOnce );
+	t.ok( longText.prepend.args[0][0].append.calledOnce, 'Bank data put before text' );
+
+	t.equals( longText.prepend.args[0][0].append.args[0][0].toString(), '<dt>', 'Bank data IBAN title set' );
+	t.ok( longText.prepend.args[0][0].append.args[0][0].text.withArgs( 'IBAN' ).calledOnce, 'Bank data IBAN set' );
+
+	t.equals( longText.prepend.args[0][0].append.args[0][1].toString(), '<dd>', 'Bank data IBAN set' );
+	t.ok( longText.prepend.args[0][0].append.args[0][1].text.withArgs( '4711' ).calledOnce, 'Bank data IBAN set' );
+
+	t.equals( longText.prepend.args[0][0].append.args[0][2].toString(), '<dt>', 'Bank data BIC title set' );
+	t.ok( longText.prepend.args[0][0].append.args[0][2].text.withArgs( 'BIC' ).calledOnce, 'Bank data IBAN set' );
+
+	t.equals( longText.prepend.args[0][0].append.args[0][3].toString(), '<dd>', 'Bank data BIC set' );
+	t.ok( longText.prepend.args[0][0].append.args[0][3].text.withArgs( '8888' ).calledOnce, 'Bank data IBAN set' );
+
+	delete global.$;
 
 	t.end();
 } );
 
 test( 'Fallback text is used when value does not correspond to text map', function ( t ) {
-	var container = createElement(),
+	var container = createContainerElement(),
 		text = createElement(),
 		handler = objectAssign( Object.create( SectionInfo.SectionInfo ), {
 			container: container,
@@ -199,7 +267,7 @@ test( 'Fallback text is used when value does not correspond to text map', functi
 } );
 
 test( 'Missing features are gently skipped', function ( t ) {
-	var container = createElement(),
+	var container = createContainerElement(),
 		handler = objectAssign( Object.create( SectionInfo.PaymentTypeSectionInfo ), {
 			container: container,
 
@@ -220,13 +288,13 @@ test( 'Missing features are gently skipped', function ( t ) {
 } );
 
 test( 'Instance correctly detects and applies sub-elements', function ( t ) {
-	var container = createElement(),
+	var container = createContainerElement(),
 		icon = createElement(),
 		text = createElement(),
 		longText = createElement()
 	;
 
-	container.find.withArgs( 'i' ).returns( icon );
+	container.find.withArgs( 'i:not(".link")' ).returns( icon );
 	container.find.withArgs( '.text' ).returns( text );
 	container.find.withArgs( '.info-detail' ).returns( longText );
 
@@ -237,7 +305,7 @@ test( 'Instance correctly detects and applies sub-elements', function ( t ) {
 	t.deepEquals( handler.text, text );
 	t.deepEquals( handler.longText, longText );
 
-	t.ok( container.find.withArgs( 'i' ).calledOnce );
+	t.ok( container.find.withArgs( 'i:not(".link")' ).calledOnce );
 	t.ok( container.find.withArgs( '.text' ).calledOnce );
 	t.ok( container.find.withArgs( '.info-detail' ).calledOnce );
 
@@ -245,7 +313,7 @@ test( 'Instance correctly detects and applies sub-elements', function ( t ) {
 } );
 
 test( 'Instance is created with properties applied', function ( t ) {
-	var container = createElement(),
+	var container = createContainerElement(),
 		iconMap = { 'a': 1 },
 		textMap = { 'a': 2 },
 		longTextMap = { 'a': 3 },
@@ -288,5 +356,68 @@ test( 'Proxy forwards calls and arguments', function ( t ) {
 	t.deepEquals( proxy.widgets[ 1 ].update.firstCall.args, [ 'a', 'b', 'c' ] );
 
 	delete global.$;
+	t.end();
+} );
+
+test( 'Existing longtext is indicated', function ( t ) {
+	var container = createContainerElement(),
+		icon = createElement(),
+		text = createElement(),
+		longText = createElement(),
+		handler = objectAssign( Object.create( SectionInfo.PaymentTypeSectionInfo ), {
+			container: container,
+
+			icon: icon,
+			text: text,
+			longText: longText,
+
+			valueLongTextMap: { 'BEZ': 'Will be deducted', 'PPL': '' }
+		} );
+
+	handler.update( 'BEZ', '', '', { dataEntered: true, isValid: true } );
+
+	t.ok( container.toggleClass.withArgs( 'has-longtext', true ).calledOnce );
+
+	t.end();
+} );
+
+test( 'Missing longtext is indicated', function ( t ) {
+	var container = createContainerElement(),
+		icon = createElement(),
+		text = createElement(),
+		longText = createElement(),
+		handler = objectAssign( Object.create( SectionInfo.PaymentTypeSectionInfo ), {
+			container: container,
+
+			icon: icon,
+			text: text,
+			longText: longText,
+
+			valueLongTextMap: { 'BEZ': 'Will be deducted', 'PPL': '' }
+		} );
+
+	handler.update( 'PPL', '', '', { dataEntered: true, isValid: true } );
+
+	t.ok( container.toggleClass.withArgs( 'has-longtext', false ).calledOnce );
+
+	t.end();
+} );
+
+test( 'Opened longtext are shut', function ( t ) {
+	var container = createContainerElement(),
+		longText = createElement(),
+		handler = objectAssign( Object.create( SectionInfo.PaymentTypeSectionInfo ), {
+			container: container,
+
+			longText: longText,
+
+			valueLongTextMap: { 'BEZ': 'Will be deducted', 'PPL': 'Somesome' }
+		} );
+
+	handler.update( 'PPL', '', '', { dataEntered: true, isValid: true } );
+
+	t.ok( container.removeClass.withArgs( 'opened' ).calledOnce );
+	t.ok( container.find.withArgs( '.opened' ).calledOnce );
+
 	t.end();
 } );

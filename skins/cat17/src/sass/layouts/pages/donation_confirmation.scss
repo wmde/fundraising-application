@@ -29,10 +29,10 @@
 					position: relative;
 					text-align: left;
 					&:after {
-						content: "\e315";
+						content: $icon-keyboard_arrow_right;
 						position: absolute;
 						right: -30px;
-						font-family: icomoon;
+						font-family: 'icomoonwikimedia';
 						font-size: 20px;
 						top: 50%;
 						transform: translateY(-50%);

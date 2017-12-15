@@ -16,6 +16,12 @@ var DonationComments = function ( commentContainer, paginationContainer ) {
 var DOM_SELECTORS = {
 	data: {
 		NO_COMMENTS: 'no-comments'
+	},
+	classes: {
+		NO_COMMENTS: 'noDonationComments',
+		COMMENT_ITEM: 'comment-item',
+		COMMENT_AMOUNT_NAME: 'field-amount-name',
+		COMMENT_DATE: 'date-time'
 	}
 };
 
@@ -37,28 +43,37 @@ $.extend( DonationComments.prototype, {
 			dataType: 'json',
 			success: function ( data ) {
 				self.numPages = Math.ceil( data.length / self.itemsPerPage );
-				self.commentContainer.html( self.renderHtml( data ) );
+				self.commentContainer.html( self.getHtml( data ) );
 				self.updatePagination();
 			}
 		} );
 	},
 
-	renderHtml: function ( data ) {
+	getHtml: function ( data ) {
 		var html = $('<div></div>'),
 				currentPage, pageContainer,
 				dataPages = this.paginateData( data ),
 				self = this;
 		if ( !data.length ) {
-			return '<div class="noDonationComments">' + this.commentContainer.data( DOM_SELECTORS.data.NO_COMMENTS) + '</div>';
+			return html
+				.addClass( DOM_SELECTORS.classes.NO_COMMENTS )
+				.text( this.commentContainer.data( DOM_SELECTORS.data.NO_COMMENTS ) );
 		}
 		for ( currentPage = 0; currentPage < this.numPages; currentPage++ ) {
-			pageContainer = $( '<div class="wrap-items comment-page comment-page-' + currentPage + '"></div>' );
+			pageContainer = $( '<div></div>' )
+				.addClass( 'wrap-items comment-page comment-page-' + currentPage );
 			$.each( dataPages[currentPage], function( index, item ) {
 				pageContainer.append(
-					'<article class="comment-item">' +
-					'<span class="field-amount-name">' + item.betrag + ' &euro; von ' + item.spender + '</span>' +
-					'<span class="date-time">' + self._renderDate( item.datum ) + '</span>' +
-					'<p>' + item.kommentar + '</p></article>'
+					$( '<article></article>' ).addClass( DOM_SELECTORS.classes.COMMENT_ITEM ).append(
+						$( '<span></span>' )
+							.addClass( DOM_SELECTORS.classes.COMMENT_AMOUNT_NAME )
+							.text( item.betrag + ' € von ' + item.spender ),
+						$( '<span></span>' )
+							.addClass( DOM_SELECTORS.classes.COMMENT_DATE )
+							.text( self._renderDate( item.datum ) ),
+						$( '<p></p>' )
+							.text( item.kommentar )
+					)
 				);
 			} );
 			html.append( pageContainer );
@@ -155,7 +170,7 @@ $.extend( DonationComments.prototype, {
 $( function () {
 	var comments = new DonationComments(
 		$( '.comment-commentContainer' ),
-		$( '.comment-paginationContainer')
+		$( '.comment-paginationContainer' )
 	);
 	comments.init();
 } );

@@ -21,26 +21,26 @@ $( function () {
 		),
       WMDE.Components.createRadioComponent( store, $( '#recurrence .wrap-input input' ), 'paymentIntervalInMonths' ),
 
-      //Personal data
       WMDE.Components.createRadioComponent( store, $( 'input[name="adresstyp"]' ), 'addressType' ),
-      //Personal Data
-      WMDE.Components.createSelectMenuComponent( store, $( '#treatment' ), 'salutation' ),
-      WMDE.Components.createSelectMenuComponent( store, $( '#title' ), 'title' ),
-      WMDE.Components.createValidatingTextComponent( store, $( '#first-name' ), 'firstName' ),
-      WMDE.Components.createValidatingTextComponent( store, $( '#surname' ), 'lastName' ),
-      WMDE.Components.createTextComponent( store, $( '#email' ), 'email' ),
-      WMDE.Components.createValidatingTextComponent( store, $( '#street' ), 'street' ),
-      WMDE.Components.createValidatingTextComponent( store, $( '#post-code' ), 'postcode' ),
-      WMDE.Components.createValidatingTextComponent( store, $( '#city' ), 'city' ),
-      WMDE.Components.createSelectMenuComponent( store, $( '#country' ), 'country' ),
 
-      //Company Data
-      WMDE.Components.createValidatingTextComponent( store, $( '#company-name' ), 'companyName' ),
-      WMDE.Components.createValidatingTextComponent( store, $( '#email-company' ), 'email' ),
-      WMDE.Components.createValidatingTextComponent( store, $( '#adress-company' ), 'street' ),
-      WMDE.Components.createValidatingTextComponent( store, $( '#post-code-company' ), 'postcode' ),
-      WMDE.Components.createValidatingTextComponent( store, $( '#city-company' ), 'city' ),
-      WMDE.Components.createSelectMenuComponent( store, $( '#country-company' ), 'country' ),
+		//Personal Data
+		WMDE.Components.createSelectMenuComponent( store, $( '#treatment' ), 'salutation' ),
+		WMDE.Components.createSelectMenuComponent( store, $( '#title' ), 'title' ),
+		WMDE.Components.addEagerChangeBehavior( WMDE.Components.createValidatingTextComponent( store, $( '#first-name' ), 'firstName' ) ),
+		WMDE.Components.addEagerChangeBehavior( WMDE.Components.createValidatingTextComponent( store, $( '#surname' ), 'lastName' ) ),
+		WMDE.Components.createValidatingTextComponent( store, $( '#email' ), 'email' ),
+		WMDE.Components.addEagerChangeBehavior( WMDE.Components.createValidatingTextComponent( store, $( '#street' ), 'street' ) ),
+		WMDE.Components.createValidatingTextComponent( store, $( '#post-code' ), 'postcode' ),
+		WMDE.Components.addEagerChangeBehavior( WMDE.Components.createValidatingTextComponent( store, $( '#city' ), 'city' ) ),
+		WMDE.Components.createSelectMenuComponent( store, $( '#country' ), 'country' ),
+
+		//Company Data
+		WMDE.Components.addEagerChangeBehavior( WMDE.Components.createValidatingTextComponent( store, $( '#company-name' ), 'companyName' ) ),
+		WMDE.Components.createValidatingTextComponent( store, $( '#email-company' ), 'email' ),
+		WMDE.Components.addEagerChangeBehavior( WMDE.Components.createValidatingTextComponent( store, $( '#adress-company' ), 'street' ) ),
+		WMDE.Components.createValidatingTextComponent( store, $( '#post-code-company' ), 'postcode' ),
+		WMDE.Components.addEagerChangeBehavior( WMDE.Components.createValidatingTextComponent( store, $( '#city-company' ), 'city' ) ),
+		WMDE.Components.createSelectMenuComponent( store, $( '#country-company' ), 'country' ),
 
       //Payment Data
       WMDE.Components.createRadioComponent( store, $('input[name="payment_type"]'), 'paymentType' ),
@@ -183,7 +183,7 @@ $( function () {
 					'active': 'icon-flash_on'
 				},
 				WMDE.FormDataExtractor.mapFromRadioLabels( $( '#type-membership .wrap-input' ) ),
-				{ 'sustaining': '', 'active': '' }
+				WMDE.FormDataExtractor.mapFromRadioInfoTexts( $( '#type-membership .wrap-field' ) )
 			),
 			stateKey: [
 				'membershipFormContent.membershipType',
@@ -279,11 +279,11 @@ $( function () {
 			viewHandler: WMDE.View.SectionInfo.createPaymentTypeSectionInfo(
 				$( '.payment-method' ),
 				{
-					'PPL': 'icon-paypal',
-					'MCP': 'icon-credit_card2',
-					'BEZ': 'icon-SEPA-2',
-					'UEB': 'icon-ubeiwsung-1',
-					'SUB': 'icon-TODO' // @todo Find icon for SUB
+					'PPL': 'icon-payment-paypal',
+					'MCP': 'icon-payment-credit_card',
+					'BEZ': 'icon-payment-debit',
+					'UEB': 'icon-payment-transfer',
+					'SUB': 'icon-payment-sofort'
 				},
 				WMDE.FormDataExtractor.mapFromRadioLabels( $( '#payment-method .wrap-input' ) ),
 				WMDE.FormDataExtractor.mapFromRadioInfoTexts( $( '#payment-method .wrap-field' ) )
@@ -384,7 +384,7 @@ $( function () {
 
 	// TODO Test if the scrolling behaviors still work, the following lines were just copy-pasted from donation
 	var scroller = WMDE.Scrolling.createAnimatedScroller( $( '.wrap-header, .state-bar' ) );
-	WMDE.Scrolling.addScrollToLinkAnchors( $( 'a[href*="#"]' ), scroller);
+	WMDE.Scrolling.addScrollToLinkAnchors( $( 'a[href^="#"]' ), scroller);
 	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="periode"]' ), $( '#recurrence' ), scroller );
 	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="addressType"]' ), $( '#type-donor' ), scroller );
 	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="paymentType"]' ), $( '#donation-payment' ), scroller );

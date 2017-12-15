@@ -2,8 +2,6 @@
 
     var init = function () {
 
-        commentForm();
-
         formInfosManager();
 
         stateBarMenu();
@@ -79,17 +77,16 @@
 
 	// TODO Move into View Handler
     var formInfosManager = function () {
-
         var $element = $("section.donation-amount");
         if ($element.length) {
-            if ($(window).width() < 1200) {
-                $("#overview").on("click", ".wrap-field.completed .wrap-input,  .wrap-field.invalid .wrap-input", function (e) {
-                    e.preventDefault();
-                    $(this).closest(".wrap-field").toggleClass("opened");
-                    $(this).toggleClass("opened");
-                    $(this).next(".info-text-bottom").toggleClass("opened");
-                });
-            }
+			if ( $( window ).width() < 1200 ) {
+				$( '#overview' ).on( 'click', '.wrap-field.has-longtext.completed .wrap-input, .wrap-field.has-longtext.invalid .wrap-input', function (e) {
+					e.preventDefault();
+					$( this ).closest( '.wrap-field' ).toggleClass( 'opened' );
+					$( this ).toggleClass( 'opened' );
+					$( this ).next( '.info-text-bottom' ).toggleClass( 'opened' );
+				} );
+			}
         }
     };
 
@@ -235,52 +232,6 @@
             });
         }
 
-    };
-
-    // TODO move into view handlers
-    var submitValidation = function () {
-        var isValid = true;
-        $('form').find('input, textarea').each(function () {
-            if ($(this).val() == "" || !this.checkValidity()) {
-                $(this).addClass('invalid');
-                $(this).parent().addClass('invalid');
-                isValid = false;
-            }
-            else {
-                $(this).removeClass('invalid');
-                $(this).parent().removeClass('invalid');
-                $(this).addClass('valid');
-                $(this).parent().addClass('valid');
-            }
-        });
-        return isValid;
-    };
-
-    var commentForm = function () {
-        var form = $('#comment-form');
-        if (form.length == 0) return;
-        form.submit(submitValidation);
-        form.find('input[type="submit"]').click(submitValidation);
-
-        form.find('input, textarea').keypress(function () {
-            $(this).data('data-entered', true);
-        });
-
-        form.find('input, textarea').blur(function () {
-            if (!$(this).data('data-entered')) return;
-
-            if ($(this).val() == "" || !this.checkValidity()) {
-                $(this).addClass('invalid');
-                $(this).parent().addClass('invalid');
-                isValid = false;
-            }
-            else {
-                $(this).removeClass('invalid');
-                $(this).parent().removeClass('invalid');
-                $(this).addClass('valid');
-                $(this).parent().addClass('valid');
-            }
-        });
     };
 
 })(jQuery);

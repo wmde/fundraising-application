@@ -23,8 +23,8 @@
 			border-bottom: 1px solid $gray-light;
 			padding: 10px 0;
 			&:after {
-				content: '\e315';
-				font-family: 'icomoon';
+				content: $icon-keyboard_arrow_right;
+				font-family: 'icomoonwikimedia';
 				position: absolute;
 				right: 15px;
 				top: 29%;
@@ -43,14 +43,17 @@
 	border: 1px solid $brand-primary;
 	padding: 1em 1em 1em 2em;
 	font-size: 16px;
-	position: relative;
-	top: 1.5em;
 	line-height: 1.4em;
-	margin-top: 1em;
-}
+	margin: 1em 0;
 
-.introduction-banner a {
-	color: $brand-primary;
-	display: inline-block;
-	margin-left: 1em;
+	a {
+		color: $brand-primary;
+		display: inline-block;
+		margin-left: 1em;
+	}
+
+	/* Avoid line breaks between amount and euro sign */
+	.amount {
+		white-space: nowrap;
+	}
 }

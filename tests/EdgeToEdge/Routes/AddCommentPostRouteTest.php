@@ -15,17 +15,10 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class AddCommentRouteTest extends WebRouteTestCase {
+class AddCommentPostRouteTest extends WebRouteTestCase {
 
 	const CORRECT_UPDATE_TOKEN = 'b5b249c8beefb986faf8d186a3f16e86ef509ab2';
 	const NON_EXISTING_DONATION_ID = 25502;
-
-	public function testGivenGetRequest_resultHasMethodNotAllowedStatus(): void {
-		$this->assertGetRequestCausesMethodNotAllowedResponse(
-			'add-comment',
-			[]
-		);
-	}
 
 	public function testGivenRequestWithoutParameters_resultIsError(): void {
 		$client = $this->createClient();
@@ -50,10 +43,10 @@ class AddCommentRouteTest extends WebRouteTestCase {
 				'POST',
 				'add-comment',
 				[
-					'kommentar' => 'Your programmers deserve a raise',
+					'comment' => 'Your programmers deserve a raise',
 					'public' => '1',
-					'eintrag' => 'Uncle Bob',
-					'sid' => (string)$donation->getId(),
+					'displayName' => 'Uncle Bob',
+					'donationId' => (string)$donation->getId(),
 				]
 			);
 
@@ -82,12 +75,11 @@ class AddCommentRouteTest extends WebRouteTestCase {
 				'POST',
 				'add-comment',
 				[
-					'kommentar' => 'Your programmers deserve a raise',
+					'comment' => 'Your programmers deserve a raise',
 					'public' => '1',
-					'eintrag' => 'Uncle Bob',
-					'sid' => (string)$donation->getId(),
-					'token' => '1276888%2459b42194b31d0265df452735f6438a234bae2af7',
-					'utoken' => self::CORRECT_UPDATE_TOKEN,
+					'displayName' => 'Uncle Bob',
+					'donationId' => (string)$donation->getId(),
+					'updateToken' => self::CORRECT_UPDATE_TOKEN,
 				]
 			);
 
@@ -103,12 +95,11 @@ class AddCommentRouteTest extends WebRouteTestCase {
 				'POST',
 				'add-comment',
 				[
-					'kommentar' => 'Your programmers deserve a raise',
+					'comment' => 'Your programmers deserve a raise',
 					'public' => '1',
-					'eintrag' => 'Uncle Bob',
-					'sid' => self::NON_EXISTING_DONATION_ID,
-					'token' => '1276888%2459b42194b31d0265df452735f6438a234bae2af7',
-					'utoken' => self::CORRECT_UPDATE_TOKEN,
+					'displayName' => 'Uncle Bob',
+					'donationId' => self::NON_EXISTING_DONATION_ID,
+					'updateToken' => self::CORRECT_UPDATE_TOKEN,
 				]
 			);
 
@@ -124,12 +115,11 @@ class AddCommentRouteTest extends WebRouteTestCase {
 				'POST',
 				'add-comment',
 				[
-					'kommentar' => 'Your programmers deserve a raise',
+					'comment' => 'Your programmers deserve a raise',
 					'public' => '1',
-					'eintrag' => 'Uncle Bob',
-					'sid' => (string)$donation->getId(),
-					'token' => '1276888%2459b42194b31d0265df452735f6438a234bae2af7',
-					'utoken' => 'Not the correct token',
+					'displayName' => 'Uncle Bob',
+					'donationId' => (string)$donation->getId(),
+					'updateToken' => 'Not the correct token',
 				]
 			);
 

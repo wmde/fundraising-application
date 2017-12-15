@@ -43,6 +43,7 @@ class ShowDonationConfirmationHandler {
 			$this->ffFactory->newDonationConfirmationPresenter( $selectedConfirmationPage->getPageTitle() )->present(
 				$responseModel->getDonation(),
 				$responseModel->getUpdateToken(),
+				$request->get( 'accessToken', '' ),
 				$selectedConfirmationPage,
 				PiwikVariableCollector::newForDonation( $sessionTrackingData, $responseModel->getDonation() )
 			)
