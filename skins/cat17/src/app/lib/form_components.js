@@ -60,7 +60,8 @@ var objectAssign = require( 'object-assign' ),
 				return;
 			}
 
-			this.element.val( [ formContent[ this.contentName ] ] ).change();
+			this.element.val( [ formContent[ this.contentName ] ] );
+			this.element.change();
 		},
 		elementAndContentAreEmpty: function( formContent ) {
 			// calling this.element.val( '' ) leads to this.element.val() === null in some cases,
@@ -242,5 +243,7 @@ module.exports = {
 			}
 		} ) );
 		return textComponent;
-	}
+	},
+
+	SelectComponent: SelectComponent
 };
