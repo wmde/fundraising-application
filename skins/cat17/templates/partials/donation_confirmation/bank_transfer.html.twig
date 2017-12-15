@@ -84,7 +84,7 @@
                 <p>{$ "donation_confirmation_standing_order"| trans $}</p>
             {% endif %}
 
-            {% if donation.person and donation.person.email %}
+            {% if person and person.email %}
                 <p>{$ "donation_confirmation_check_email" | trans $}</p>
             {% endif %}
 
