@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block main %}
-	<form id="comment-form" action="{$ path( 'PostComment' ) $}" method="post" class="row">
+	<form id="comment-form" action="{$ path( 'PostComment' ) $}" method="post">
 		<input type="hidden" name="donationId" value="{$ donationId $}" />
 		<input type="hidden" name="updateToken" value="{$ updateToken $}" />
 

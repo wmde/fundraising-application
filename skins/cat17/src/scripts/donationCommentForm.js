@@ -78,8 +78,8 @@
 	function onSubmitSuccess( message ) {
 		submitButton.after(
 			$( '<div />' )
-				.addClass( 'message' ) // TODO: proper positioning
-				.addClass( 'success' ) // TODO: create class
+				.addClass( 'message' )
+				.addClass( 'success-message' )
 				.text( message || 'Vielen Dank! Die Nachricht wurde verschickt!' ) // TODO: is this default needed?
 		);
 
@@ -91,7 +91,7 @@
 		submitButton.after(
 			$( '<div />' )
 				.addClass( 'message' )
-				.addClass( 'error' ) // TODO: create class
+				.addClass( 'error-message' )
 				.text( message || 'Die Nachricht konnte auf Grund eines Fehlers nicht verschickt werden.' ) // TODO: is this default needed?
 		);
 	}
