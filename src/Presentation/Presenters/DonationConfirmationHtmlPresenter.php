@@ -57,20 +57,13 @@ class DonationConfirmationHtmlPresenter {
 				'creationDate' => ( new \DateTime() )->format( 'd.m.Y' ),
 				// TODO: set cookie duration for "hide banner cookie"
 				'cookieDuration' => '15552000', // 180 days
-				'updateToken' => $updateToken
+				'updateToken' => $updateToken,
+				'accessToken' => $accessToken
 			],
 			'person' => $this->getPersonArguments( $donation ),
 			'bankData' => $this->getBankDataArguments( $donation->getPaymentMethod() ),
 			'initialFormValues' => $this->donationMembershipApplicationAdapter->getInitialMembershipFormValues( $donation ),
 			'piwikEvents' => $piwikEvents->getEvents(),
-			'commentUrl' => $this->urlGenerator->generateUrl(
-				'AddCommentPage',
-				[
-					'donationId' => $donation->getId(),
-					'updateToken' => $updateToken,
-					'accessToken' =>$accessToken
-				]
-			)
 		];
 	}
 
