@@ -60,7 +60,8 @@ class DonationConfirmationHtmlPresenterTest extends \PHPUnit\Framework\TestCase 
 				'bankTransferCode' => '',
 				'creationDate' => ( new \DateTime() )->format( 'd.m.Y' ),
 				'cookieDuration' => '15552000',
-				'updateToken' => self::UPDATE_TOKEN
+				'updateToken' => self::UPDATE_TOKEN,
+				'accessToken' => self::ACCESS_TOKEN
 			],
 			'person' => [],
 			'bankData' => [],
