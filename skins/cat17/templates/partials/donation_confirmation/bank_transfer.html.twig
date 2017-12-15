@@ -95,6 +95,20 @@
     </div>
 </div>
 
+<div class="visible-xs visible-sm hidden-print">
+    <div class="container">
+        <div class="row">
+            <nav class="menu menu-footer col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-8 col-md-4">
+                <ul class="list-menu list-unstyled">
+					{% include 'partials/donation_confirmation/link_print.html.twig' with {
+						'label': 'donation_confirmation_print_summary' | trans
+					} only %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
 <div class="container hidden-print">
     <div class="row">
         <div class="content col-xs-12 col-md-8">
