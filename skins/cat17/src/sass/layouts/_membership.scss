@@ -104,20 +104,6 @@
 		}
 	}
 
-	.wrap-overview #overview .overview .wrap-field.member-type {
-		@include bkp(lg) {
-			.wrap-input {
-				padding-top: 0;
-				margin-top: -3px;
-			}
-			&.completed {
-				padding-top: 20px;
-				margin-top: 0;
-			}
-		}
-	}
-
-
 	.select, .jcf-select {
 
 		&:hover {
