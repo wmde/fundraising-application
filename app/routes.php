@@ -251,13 +251,13 @@ $app->post(
 	'add-comment',
 	function( Request $request ) use ( $app, $ffFactory ) {
 		$addCommentRequest = new AddCommentRequest();
-		$addCommentRequest->setCommentText( trim( $request->request->get( 'kommentar', '' ) ) );
+		$addCommentRequest->setCommentText( trim( $request->request->get( 'comment', '' ) ) );
 		$addCommentRequest->setIsPublic( $request->request->get( 'public', '0' ) === '1' );
-		$addCommentRequest->setAuthorDisplayName( trim( $request->request->get( 'eintrag', '' ) ) );
-		$addCommentRequest->setDonationId( (int)$request->request->get( 'sid', '' ) );
+		$addCommentRequest->setAuthorDisplayName( trim( $request->request->get( 'displayName', '' ) ) );
+		$addCommentRequest->setDonationId( (int)$request->request->get( 'donationId', '' ) );
 		$addCommentRequest->freeze()->assertNoNullFields();
 
-		$updateToken = $request->request->get( 'utoken', '' );
+		$updateToken = $request->request->get( 'updateToken', '' );
 
 		if ( $updateToken === '' ) {
 			return $app->json( [
@@ -280,7 +280,32 @@ $app->post(
 			'message' => $ffFactory->getTranslator()->trans( $response->getErrorMessage() ),
 		] );
 	}
-);
+)->bind( 'PostComment' );
+
+$app->get(
+	'add-comment',
+	function( Request $request ) use ( $app, $ffFactory ) {
+		$template = $ffFactory->getLayoutTemplate(
+			'Donation_Comment.html.twig'
+		);
+
+		return new Response(
+			$template->render(
+				[
+					'donationId' => (int)$request->query->get( 'donationId', '' ),
+					'updateToken' => $request->query->get( 'updateToken', '' ),
+					'cancelUrl' => $app['url_generator']->generate(
+						'show-donation-confirmation',
+						[
+							'id' => (int)$request->query->get( 'donationId', '' ),
+							'accessToken' => $request->query->get( 'accessToken', '' )
+						]
+					)
+				]
+			)
+		);
+	}
+)->bind( 'AddCommentPage' );
 
 $app->post(
 	'contact/get-in-touch',

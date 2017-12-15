@@ -2,8 +2,6 @@
 
     var init = function () {
 
-        commentForm();
-
         formInfosManager();
 
         stateBarMenu();
@@ -234,52 +232,6 @@
             });
         }
 
-    };
-
-    // TODO move into view handlers
-    var submitValidation = function () {
-        var isValid = true;
-        $('form').find('input, textarea').each(function () {
-            if ($(this).val() == "" || !this.checkValidity()) {
-                $(this).addClass('invalid');
-                $(this).parent().addClass('invalid');
-                isValid = false;
-            }
-            else {
-                $(this).removeClass('invalid');
-                $(this).parent().removeClass('invalid');
-                $(this).addClass('valid');
-                $(this).parent().addClass('valid');
-            }
-        });
-        return isValid;
-    };
-
-    var commentForm = function () {
-        var form = $('#comment-form');
-        if (form.length == 0) return;
-        form.submit(submitValidation);
-        form.find('input[type="submit"]').click(submitValidation);
-
-        form.find('input, textarea').keypress(function () {
-            $(this).data('data-entered', true);
-        });
-
-        form.find('input, textarea').blur(function () {
-            if (!$(this).data('data-entered')) return;
-
-            if ($(this).val() == "" || !this.checkValidity()) {
-                $(this).addClass('invalid');
-                $(this).parent().addClass('invalid');
-                isValid = false;
-            }
-            else {
-                $(this).removeClass('invalid');
-                $(this).parent().removeClass('invalid');
-                $(this).addClass('valid');
-                $(this).parent().addClass('valid');
-            }
-        });
     };
 
 })(jQuery);

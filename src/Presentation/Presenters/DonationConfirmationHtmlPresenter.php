@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\Infrastructure\PiwikEvents;
+use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankTransferPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
@@ -22,19 +23,21 @@ use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 class DonationConfirmationHtmlPresenter {
 
 	private $template;
+	private $urlGenerator;
 
-	public function __construct( TwigTemplate $template ) {
+	public function __construct( TwigTemplate $template, UrlGenerator $urlGenerator ) {
 		$this->template = $template;
+		$this->urlGenerator = $urlGenerator;
 	}
 
-	public function present( Donation $donation, string $updateToken, SelectedConfirmationPage $selectedPage,
-							 PiwikEvents $piwikEvents ): string {
+	public function present( Donation $donation, string $updateToken, string $accessToken,
+							 SelectedConfirmationPage $selectedPage, PiwikEvents $piwikEvents ): string {
 		return $this->template->render(
-			$this->getConfirmationPageArguments( $donation, $updateToken, $selectedPage, $piwikEvents )
+			$this->getConfirmationPageArguments( $donation, $updateToken, $accessToken, $selectedPage, $piwikEvents )
 		);
 	}
 
-	private function getConfirmationPageArguments( Donation $donation, string $updateToken,
+	private function getConfirmationPageArguments( Donation $donation, string $updateToken, string $accessToken,
 												   SelectedConfirmationPage $selectedPage, PiwikEvents $piwikEvents ): array {
 
 		return [
@@ -57,7 +60,15 @@ class DonationConfirmationHtmlPresenter {
 			'person' => $this->getPersonArguments( $donation ),
 			'bankData' => $this->getBankDataArguments( $donation->getPaymentMethod() ),
 			'initialFormValues' => $this->getInitialMembershipFormValues( $donation ),
-			'piwikEvents' => $piwikEvents->getEvents()
+			'piwikEvents' => $piwikEvents->getEvents(),
+			'commentUrl' => $this->urlGenerator->generateUrl(
+				'AddCommentPage',
+				[
+					'donationId' => $donation->getId(),
+					'updateToken' => $updateToken,
+					'accessToken' =>$accessToken
+				]
+			)
 		];
 	}
 
