@@ -131,3 +131,51 @@ test( 'Other locales than German and english throw and error', function ( t ) {
 	t.throws( function () { IntegerCurrency.createCurrencyParser( 'fr' ); }, 'Unsupported locale' );
 	t.end();
 } );
+
+test( 'German locale without decimals - valid strings', function ( t ) {
+	var parser = IntegerCurrency.createCurrencyParser( 'de', false );
+	var inputsAndExpectedOutputs = [
+		[ '0,00', 0 ],
+		[ '0,01', 0 ],
+		[ '0,99', 0 ],
+		[ '1,00', 100 ],
+		[ '10,00', 1000 ],
+		[ '13,37', 1300 ],
+
+		// long decimal values should be truncated
+		[ '13,3373', 1300 ],
+		[ '1,989', 100 ],
+		[ '1,991', 100 ],
+		[ '1,999', 100 ],
+		[ '17,995', 1700 ],
+
+		// Values with less than 2 decimal points should be valid
+		[ '12', 1200 ],
+		[ '12,9', 1200 ]
+	];
+	inputsAndExpectedOutputs.map( function ( io ) {
+		t.equal( parser.parse( io[0] ), io[1] );
+	});
+	t.end();
+} );
+
+
+test( 'German locale without decimals - parsing invalid strings', function ( t ) {
+	var parser = IntegerCurrency.createCurrencyParser( 'de', false );
+	var inputs = [
+		'',
+		',01',
+		'A,1',
+		'CAFFE',
+		'1.2',
+		'1,2,3'
+		// '1,*' could be a candidate but we ignore digits so allowing it also make sense
+	];
+	inputs.map( function ( invalidInput ) {
+		t.throws(
+			function() { parser.parse( invalidInput ); },
+			'"' + invalidInput + '" should throw exception'
+		);
+	});
+	t.end();
+} );

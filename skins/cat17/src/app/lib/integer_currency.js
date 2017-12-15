@@ -34,13 +34,15 @@ var objectAssign = require( 'object-assign' ),
 	},
 	CurrencyParser = {
 		decimalDelimiter: '.',
+		allowDecimals: true,
 		parse: function ( value ) {
 			var strParts = value.split( this.decimalDelimiter ), parts;
-			if ( strParts.length < 2 ) {
-				strParts[1] = '00';
-			}
 
-			strParts[1] = getFirstTwoDigitsOfNumberString( strParts[1] );
+			if ( strParts.length < 2 || this.allowDecimals === false ) {
+				strParts[1] = '00';
+			} else {
+				strParts[1] = getFirstTwoDigitsOfNumberString( strParts[1] );
+			}
 
 			parts = strParts.map( stringToNumber );
 
@@ -56,24 +58,30 @@ var objectAssign = require( 'object-assign' ),
 	}
 ;
 
-
 module.exports = {
 	createCurrencyFormatter: function ( locale ) {
 		switch ( locale ) {
 			case 'de':
-				return objectAssign( Object.create( CurrencyFormatter ), { decimalDelimiter: ',' } );
+				return objectAssign( Object.create( CurrencyFormatter ), {
+					decimalDelimiter: ','
+				} );
 			case 'en':
 				return Object.create( CurrencyFormatter );
 			default:
 				throw new Error( 'Unsupported locale: ' + locale );
 		}
 	},
-	createCurrencyParser: function ( locale ) {
+	createCurrencyParser: function ( locale, allowDecimals ) {
 		switch ( locale ) {
 			case 'de':
-				return objectAssign( Object.create( CurrencyParser ), { decimalDelimiter: ',' } );
+				return objectAssign( Object.create( CurrencyParser ), {
+					decimalDelimiter: ',',
+					allowDecimals: typeof allowDecimals === 'boolean' ? allowDecimals : true
+				} );
 			case 'en':
-				return Object.create( CurrencyParser );
+				return objectAssign( Object.create( CurrencyParser ), {
+					allowDecimals: typeof allowDecimals === 'boolean' ? allowDecimals : true
+				} );
 			default:
 				throw new Error( 'Unsupported locale: ' + locale );
 		}

@@ -16,7 +16,7 @@ $( function () {
 			$( '#amount-typed' ),
 			$( '.wrap-amounts input[type="radio"]' ),
 			$( '#amount-hidden'),
-			WMDE.IntegerCurrency.createCurrencyParser( 'de' ),
+			WMDE.IntegerCurrency.createCurrencyParser( 'de', false ),
 			WMDE.IntegerCurrency.createCurrencyFormatter( 'de' )
 		),
       WMDE.Components.createRadioComponent( store, $( '#recurrence .wrap-input input' ), 'paymentIntervalInMonths' ),
