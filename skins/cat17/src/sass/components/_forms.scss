@@ -47,6 +47,7 @@ input[type=submit] {
 
 	&.valid {
 		input[type="text"], input[type="email"] {
+			padding-right: 35px; /* make room for checkmark icon */
 			@include themify($themes) {
 				background-color: themed('fieldSelected');
 				border-bottom: themed('border2pxfieldSelected');
