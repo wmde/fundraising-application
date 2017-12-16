@@ -3,14 +3,12 @@ var sass = require( 'gulp-sass' );
 var sourcemaps = require( 'gulp-sourcemaps' );
 var autoprefixer = require( 'gulp-autoprefixer' );
 var browserSync = require( 'browser-sync' ).create();
-var cssNano = require( 'gulp-cssnano' );
-var useref = require( 'gulp-useref' );
 var uglify = require( 'gulp-uglify' );
-var gulpIf = require( 'gulp-if' );
 var imagemin = require( 'gulp-imagemin' );
 var gulpsync = require( 'gulp-sync' )( gulp );
 var exec = require( 'child_process' ).exec;
 var fs = require( 'fs' );
+var concat = require( 'gulp-concat' );
 
 var dirs = {
 	src: 'src',
@@ -88,23 +86,17 @@ gulp.task( 'copies', function () {
 	gulp.src( dirs.src + '/scripts/*.js' )
 		.pipe( gulp.dest( dirs.dist + '/scripts' ) );
 
-	gulp.src( 'node_modules/jcf/dist/js/jcf.js' )
-		.pipe( gulp.dest( dirs.dist + '/scripts/vendor/jcf' ) );
-	gulp.src( 'node_modules/jcf/dist/js/jcf.select.js' )
-		.pipe( gulp.dest( dirs.dist + '/scripts/vendor/jcf' ) );
-	gulp.src( 'node_modules/jcf/dist/js/jcf.scrollable.js' )
-		.pipe( gulp.dest( dirs.dist + '/scripts/vendor/jcf' ) );
-	gulp.src( 'node_modules/jquery/dist/jquery.js' )
-		.pipe( gulp.dest( dirs.dist + '/scripts/vendor/jquery' ) );
-} );
-
-// @todo Concat, minify JS & CSS (see templates/Base_Layout.html.twig build:* comments)
-gulp.task( 'useref', function () {
-	return !gulp.src( '!' + dirs.src + '/*.html' )
-		.pipe( useref() )
-		.pipe( gulpIf( '*.js', uglify() ) )
-		.pipe( gulpIf( '*.css', cssNano() ) )
-		.pipe( gulp.dest( dirs.dist ) )
+	gulp.src(
+		[
+			'node_modules/jquery/dist/jquery.js',
+			'node_modules/jcf/dist/js/jcf.js',
+			'node_modules/jcf/dist/js/jcf.select.js',
+			'node_modules/jcf/dist/js/jcf.scrollable.js'
+		]
+		)
+		.pipe( concat( { path: 'vendor.js', stat: { mode: 0666 } } ) )
+		.pipe( uglify() )
+		.pipe( gulp.dest( dirs.dist + '/scripts' ) );
 } );
 
 gulp.task( 'default', gulpsync.sync( [['scripts', 'styles', 'images'], 'copies'] ) );
