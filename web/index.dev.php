@@ -18,7 +18,7 @@ use Monolog\Handler\BufferHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Symfony\Bridge\Twig\Extension\RoutingExtension;
-use WMDE\Fundraising\Frontend\App\UrlGenerator;
+use WMDE\Fundraising\Frontend\App\UrlGeneratorAdapter;
 
 /**
  * @var \WMDE\Fundraising\Frontend\Factories\FunFunFactory $ffFactory
@@ -83,6 +83,6 @@ $app['dbs'] = function ( $app ) {
 
 $ffFactory->setSkinTwigEnvironment( $app['twig'] );
 
-$ffFactory->setUrlGenerator( new UrlGenerator( $app['twig']->getExtension( RoutingExtension::class ) ) );
+$ffFactory->setUrlGenerator( new UrlGeneratorAdapter( $app['url_generator'] ) );
 
 $app->run();
