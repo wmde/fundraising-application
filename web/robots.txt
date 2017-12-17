@@ -1,2 +1,5 @@
 User-agent: *
 Disallow: /list-comments.*
+Disallow: /spenden/list.*
+Disallow: /spenden/rss.*
+Disallow: /spenden/json.*
