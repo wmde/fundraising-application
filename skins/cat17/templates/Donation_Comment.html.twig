@@ -58,7 +58,12 @@
 		<div class="container">
 			<div class="row">
 				<ul class="list-menu link-reverse list-unstyled  col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-8 col-md-4">
-					<li><a href="{$ cancelUrl $}" class="" id="cancel-link">{$ 'donation_comment_cancel' | trans $}</a></li>
+					<li>
+						<a href="{$ path( 'show-donation-confirmation', { id: id, accessToken: accessToken } ) $}"
+						   class="" id="cancel-link">
+							{$ 'donation_comment_cancel' | trans $}
+						</a>
+					</li>
 				</ul>
 			</div>
 		</div>
