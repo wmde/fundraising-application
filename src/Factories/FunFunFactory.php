@@ -625,26 +625,6 @@ class FunFunFactory {
 		);
 	}
 
-	/**
-	 * Get a layouted template that includes another template
-	 *
-	 * @deprecated Change the template to use extend and block and call getLayoutTemplate instead.
-	 *
-	 * @param string $templateName Template to include
-	 * @return TwigTemplate
-	 */
-	private function getIncludeTemplate( string $templateName, array $context = [] ): TwigTemplate {
-		return new TwigTemplate(
-			$this->getSkinTwig(),
-			'Include_in_Layout.twig',
-			array_merge(
-				$this->getDefaultTwigVariables(),
-				[ 'main_template' => $templateName ],
-				$context
-			)
-		);
-	}
-
 	private function getDefaultTwigVariables(): array {
 		return [
 			'honorifics' => $this->getHonorifics()->getList(),
