@@ -13,7 +13,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Twig_Environment;
 use Twig_Error;
-use WMDE\Fundraising\Frontend\App\UrlGenerator;
+use WMDE\Fundraising\Frontend\App\UrlGeneratorAdapter;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
 use WMDE\Fundraising\Frontend\App\MailTemplates;
@@ -58,7 +58,7 @@ class RenderMailTemplatesCommand extends Command {
 
 		$app->flush();
 
-		$ffFactory->setUrlGenerator( new UrlGenerator( $app['twig']->getExtension( RoutingExtension::class ) ) );
+		$ffFactory->setUrlGenerator( new UrlGeneratorAdapter( $app['twig']->getExtension( RoutingExtension::class ) ) );
 
 		$mailTemplates = new MailTemplates( $ffFactory );
 		$testData = $mailTemplates->get();
