@@ -109,6 +109,7 @@ use WMDE\Fundraising\Frontend\PaymentContext\DataAccess\McpCreditCardService;
 use WMDE\Fundraising\Frontend\PaymentContext\DataAccess\Sofort\Transfer\Client as SofortClient;
 use WMDE\Fundraising\Frontend\PaymentContext\DataAccess\UniqueTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataConverter;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataValidator;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\DefaultPaymentDelayCalculator;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentDelayCalculator;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\CreditCard as CreditCardUrlGenerator;
@@ -160,7 +161,6 @@ use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionValidat
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
 use WMDE\FunValidators\Validators\AllowedValuesValidator;
 use WMDE\FunValidators\Validators\AmountPolicyValidator;
-use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
 use WMDE\FunValidators\Validators\EmailValidator;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\Fundraising\Frontend\Validation\KontoCheckIbanValidator;
