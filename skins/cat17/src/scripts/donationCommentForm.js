@@ -55,6 +55,8 @@
 		event.preventDefault();
 
 		submitButton.attr( 'disabled', 'disabled' );
+		submitButton.addClass( 'btn-unactive' );
+
 		form.find( '.message' ).remove();
 
 		$.ajax( form.attr( 'action' ), {
@@ -88,6 +90,8 @@
 
 	function onSubmitFailure( message ) {
 		submitButton.removeAttr( 'disabled' );
+		submitButton.removeClass( 'btn-unactive' );
+
 		submitButton.after(
 			$( '<div />' )
 				.addClass( 'message' )
