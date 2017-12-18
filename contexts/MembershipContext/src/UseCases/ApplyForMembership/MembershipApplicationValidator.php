@@ -5,8 +5,8 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership;
 
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplicationValidationResult as Result;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataValidator;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
-use WMDE\Fundraising\Frontend\Validation\BankDataValidator;
 use WMDE\FunValidators\ConstraintViolation;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator as FeeValidator;
 use WMDE\FunValidators\Validators\EmailValidator;
