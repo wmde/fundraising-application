@@ -180,21 +180,29 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testGivenUnsupportedPaymentStatus_applicationReturnsOK(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+	/**
+	 * @dataProvider unsupportedPaymentStatusProvider
+	 */
+	public function testGivenUnsupportedPaymentStatus_applicationReturnsOK( array $params ): void {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) use ( $params ): void {
 			$factory->setPayPalPaymentNotificationVerifier(
-				$this->newNonNetworkUsingNotificationVerifier( $this->newPendingPaymentParams() )
+				$this->newNonNetworkUsingNotificationVerifier( $params )
 			);
 
 			$client->request(
 				'POST',
 				'/handle-paypal-payment-notification',
-				$this->newPendingPaymentParams()
+				$params
 			);
 
 			$this->assertSame( '', $client->getResponse()->getContent() );
 			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
 		} );
+	}
+
+	public function unsupportedPaymentStatusProvider(): \Iterator {
+		yield [ $this->newPendingPaymentParams() ];
+		yield [ $this->newCancelPaymentParams() ];
 	}
 
 	public function testGivenUnsupportedPaymentStatus_requestDataIsLogged(): void {
@@ -213,7 +221,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			);
 
 			$this->assertSame(
-				[ 'Unhandled PayPal instant payment notification' ],
+				[ 'PayPal request not handled' ],
 				$logger->getLogCalls()->getMessages()
 			);
 
@@ -338,6 +346,31 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		];
 	}
 
+	private function newCancelPaymentParams(): array {
+		return [
+			'receiver_email' => self::EMAIL_ADDRESS,
+			'payment_status' => 'Cancel',
+			'payer_id' => 'LPLWNMTBWMFAY',
+			'subscr_id' => '8RHHUM3W3PRH7QY6B59',
+			'payer_status' => 'verified',
+			'address_status' => 'confirmed',
+			'mc_gross' => '-1.23',
+			'mc_currency' => 'EUR',
+			'mc_fee' => '0.23',
+			'settle_amount' => '-2.34',
+			'first_name' => 'Generous',
+			'last_name' => 'Donor',
+			'address_name' => 'Generous Donor',
+			'item_name' => self::ITEM_NAME,
+			'item_number' => 1,
+			'custom' => '{"id": "1", "utoken": "my_secret_token"}',
+			'txn_id' => '61E67681CH3238416',
+			'payment_type' => 'instant',
+			'txn_type' => 'express_checkout',
+			'payment_date' => '20:12:59 Jan 13, 2009 PST',
+		];
+	}
+
 	public function testGivenNegativeTransactionFee_exceptionIsThrown(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setPayPalPaymentNotificationVerifier( $this->newSucceedingNotificationVerifier() );
@@ -352,7 +385,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			);
 
 			$this->assertSame(
-				[ 'Unhandled PayPal instant payment notification' ],
+				[ 'PayPal request not handled' ],
 				$logger->getLogCalls()->getMessages()
 			);
 		} );

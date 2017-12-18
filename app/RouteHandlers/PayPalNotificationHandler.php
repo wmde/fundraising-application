@@ -20,6 +20,8 @@ use WMDE\Fundraising\Frontend\PaymentContext\RequestModel\PayPalPaymentNotificat
  */
 class PayPalNotificationHandler {
 
+	private const MSG_NOT_HANDLED = 'PayPal request not handled';
+
 	private $ffFactory;
 
 	public function __construct( FunFunFactory $ffFactory ) {
@@ -38,6 +40,11 @@ class PayPalNotificationHandler {
 			return $this->createErrorResponse( $e );
 		}
 
+		if ( !$this->requestIsForPaymentCompletion( $post ) ) {
+			$this->ffFactory->getPaypalLogger()->log( LogLevel::INFO, self::MSG_NOT_HANDLED, [ 'post_vars' => $post->all() ] );
+			return new Response( '', Response::HTTP_OK );
+		}
+
 		$useCase = $this->ffFactory->newHandlePayPalPaymentCompletionNotificationUseCase( $this->getUpdateToken( $post ) );
 
 		$response = $useCase->handleNotification( $this->newUseCaseRequestFromPost( $post ) );
@@ -53,6 +60,25 @@ class PayPalNotificationHandler {
 	private function getValueFromCustomVars( string $customVars, string $key ): string {
 		$vars = json_decode( $customVars, true );
 		return !empty( $vars[$key] ) ? $vars[$key] : '';
+	}
+
+	private function requestIsForPaymentCompletion( ParameterBag $post ): bool {
+		return $this->isSuccessfulPaymentNotification( $post ) || (
+				$this->isForRecurringPayment( $post ) &&
+				!$this->isRecurringPaymentCompletion( $post )
+			);
+	}
+
+	private function isSuccessfulPaymentNotification( ParameterBag $post ): bool {
+		return $post->get( 'payment_status', '' ) === 'Completed' || $post->get( 'payment_status' ) === 'Processed';
+	}
+
+	private function isRecurringPaymentCompletion( ParameterBag $post ): bool {
+		return $post->get( 'txn_type', '' ) === 'subscr_payment';
+	}
+
+	private function isForRecurringPayment( ParameterBag $post  ): bool {
+		return strpos( $post->get( 'txn_type', '' ), 'subscr_' ) === 0;
 	}
 
 	private function newUseCaseRequestFromPost( ParameterBag $postRequest ): PayPalPaymentNotificationRequest {
@@ -100,7 +126,7 @@ class PayPalNotificationHandler {
 		}
 
 		$context = $response->getContext();
-		$message = $context['message'] ?? 'Paypal request not handled';
+		$message = $context['message'] ?? self::MSG_NOT_HANDLED;
 		$logLevel = $response->hasErrors() ? LogLevel::ERROR : LogLevel::INFO;
 		unset( $context['message'] );
 		$context['post_vars'] = $request->request->all();
