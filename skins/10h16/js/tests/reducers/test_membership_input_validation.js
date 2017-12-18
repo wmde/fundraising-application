@@ -39,3 +39,33 @@ test( 'If a non-optional field is emptied, its validity status remains unchanged
 	t.deepEqual( membershipInputValidation( stateBefore, newChangeContentAction( 'street', '' ) ), expectedState );
 	t.end();
 } );
+
+test( 'Maintaining sustaining membership type, company name validity remains unchanged', function ( t ) {
+	t.deepEqual(
+		membershipInputValidation(
+			{
+				companyName: { dataEntered: true, isValid: true }
+			},
+			newChangeContentAction( 'membershipType', 'sustaining' )
+		),
+		{
+			companyName: { dataEntered: true, isValid: true }
+		}
+	);
+	t.end();
+} );
+
+test( 'Switching to non-sustaining membership type, company name validity is reset', function ( t ) {
+	t.deepEqual(
+		membershipInputValidation(
+			{
+				companyName: { dataEntered: true, isValid: true }
+			},
+			newChangeContentAction( 'membershipType', 'somethingelse' )
+		),
+		{
+			companyName: { dataEntered: false, isValid: null }
+		}
+	);
+	t.end();
+} );
