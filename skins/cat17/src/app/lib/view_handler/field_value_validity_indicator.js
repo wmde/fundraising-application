@@ -12,15 +12,15 @@ var objectAssign = require( 'object-assign' ),
 		update: function ( validationState ) {
 			if ( validationState.isValid === true ) {
 				this.element.addClass( 'valid' ).removeClass( 'invalid' )
-					.next( 'span' ).addClass( 'icon-ok' ).removeClass( 'icon-bug icon-placeholder' );
+					.next( 'span' ).addClass( 'icon-ok' ).removeClass( 'icon-placeholder' );
 				this.element.parent().addClass( 'valid' ).removeClass( 'invalid' );
 			} else if( validationState.isValid === false ) {
 				this.element.addClass( 'invalid' ).removeClass( 'valid' )
-					.next( 'span' ).addClass( 'icon-bug' ).removeClass( 'icon-ok icon-placeholder' );
+					.next( 'span' ).removeClass( 'icon-ok icon-placeholder' );
 				this.element.parent().addClass( 'invalid' ).removeClass( 'valid' );
 			} else if( validationState.isValid === null ) {
 				this.element.removeClass( 'valid invalid' )
-					.next( 'span' ).addClass( 'icon-placeholder' ).removeClass( 'icon-ok icon-bug' );
+					.next( 'span' ).addClass( 'icon-placeholder' ).removeClass( 'icon-ok' );
 				this.element.parent().removeClass( 'invalid valid' );
 			}
 		}
