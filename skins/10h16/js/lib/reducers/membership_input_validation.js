@@ -75,7 +75,7 @@ var _ = require( 'underscore' ),
 	clearCompanyValidityOnActiveMembershipChange = function ( state, action ) {
 		if ( action.type !== 'CHANGE_CONTENT' ||
 			action.payload.contentName !== 'membershipType' ||
-				action.value === 'sustaining'
+			action.payload.value === 'sustaining'
 		) {
 			return state;
 		}
