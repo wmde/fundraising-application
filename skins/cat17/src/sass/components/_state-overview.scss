@@ -304,10 +304,23 @@
 				display: none;
 			}
 		}
-
 	}
-
 }
+
+/**
+ * always expand payment type legal text
+ */
+.state-overview {
+	.payment-method.has-longtext {
+		.info-text-bottom {
+			@extend .opened;
+			@include bkp(lg) {
+				margin-top: 0;
+			}
+		}
+	}
+}
+
 .wrap-overview {
     @include bkp(lg) {
         display: block;
@@ -450,10 +463,10 @@
 							dt, dd {
 								display: inline-block;
 								text-transform: uppercase;
+								margin-right: 10px;
 							}
 							dt {
 								min-width: 40px;
-								margin-right: 10px;
 								font-weight: 600;
 							}
 							strong:after {
