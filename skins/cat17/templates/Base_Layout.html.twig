@@ -37,6 +37,18 @@
 
 	<script src="{$ basepath $}{$ '/skins/cat17/scripts/vendor.js' | prefix_file $}"></script>
 	<script src="{$ basepath $}{$ '/skins/cat17/scripts/main.js' | prefix_file $}"></script>
-	{% block scripts %}{% endblock %}
+
+    {% block scripts %}{% endblock %}
+
+    {% include 'partials/piwik.html.twig' %}
+
+    {% if piwikGoals | default( [] ) %}
+		<script>
+			{% for goal in piwikGoals %}
+			_paq.push( [ 'trackGoal', '{$ goal $}' ] );
+			{% endfor %}
+		</script>
+    {% endif %}
+
 </body>
 </html>
