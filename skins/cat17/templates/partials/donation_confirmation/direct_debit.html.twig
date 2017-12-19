@@ -37,9 +37,53 @@
                 } ) | raw $}
             </p>
 
-            <p class="visible-print">
-                {$ 'donation_confirmation_debit_briefing' | trans $}
-            </p>
+            <div class="visible-print">
+                <h3>{$ 'donation_confirmation_debit_mandate_title' | trans $}</h3>
+
+                <p>
+                    {$ web_content( 'address_of_suborganization' ) | nl2br $}
+                </p>
+
+                <p>{$ 'donation_confirmation_debit_deductible_benefit' | trans $}</p>
+
+                <div class="row">
+                    <div class="col-xs-6">
+                        {% if person %}
+                            <p>
+                                {$ person.salutation $} {$ person.fullName $}<br/>
+                                {$ person.streetAddress $}<br/>
+                                {$ person.postalCode $} {$ person.city $}<br/>
+                                {$ person.email $}
+                            </p>
+                        {% else %}
+                            <p>
+                                {$ 'donation_addresstype_option_anonymous' | trans $}
+                            </p>
+                        {% endif %}
+                    </div>
+                    <div class="col-xs-6">
+                        <p>
+                            <strong>{$ 'iban' | trans $}</strong> {$ bankData.iban $}<br/>
+                            <strong>{$ 'bic' | trans $}</strong> {$ bankData.bic $}<br/>
+                            <strong>{$ 'bank_name' | trans $}</strong> {$ bankData.bankname $}
+                        </p>
+                    </div>
+                </div>
+
+                <p>
+                    {$ 'donation_confirmation_debit_briefing' | trans $}
+                </p>
+
+                <p>
+                    {$ 'donation-confirm-sepa-shortterm' | trans $}
+                </p>
+
+                <p style="text-align: right">
+                    {$ 'donation_confirmation_debit_mandate_date' | trans( {
+                        '%formattedDate%': 'now' | date( 'd.m.Y' )
+                    } ) $}
+                </p>
+            </div>
 
             {% if donation.optsIntoNewsletter %}
                 <p>
