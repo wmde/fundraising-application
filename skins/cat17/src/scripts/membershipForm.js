@@ -104,27 +104,6 @@ $( function () {
   // Connect view handlers to changes in specific parts in the global state, designated by 'stateKey'
   WMDE.StoreUpdates.connectViewHandlersToStore(
     [
-      {
-        viewHandler: WMDE.View.createErrorBoxHandler( $( '#validation-errors' ), {
-          amount: 'Betrag',
-          salutation: 'Anrede',
-          title: 'Titel',
-          firstName: 'Vorname',
-          lastName: 'Nachname',
-          companyName: 'Firma',
-          street: 'Straße',
-          postcode: 'PLZ',
-          city: 'Ort',
-          country: 'Land',
-          email: 'E-Mail',
-          dateOfBirth: 'Geburtsdatum',
-          iban: 'IBAN',
-          bic: 'BIC',
-          accountNumber: 'Kontonummer',
-          bankCode: 'Bankleitzahl'
-        } ),
-        stateKey: 'membershipInputValidation'
-      },
 		// Active membership is not an option for companies
 		{
 			viewHandler: WMDE.View.createElementClassSwitcher( $('#company').parent(), /active/, 'disabled' ),
