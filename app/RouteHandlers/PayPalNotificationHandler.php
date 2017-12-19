@@ -38,7 +38,7 @@ class PayPalNotificationHandler {
 			return $this->createErrorResponse( $e );
 		}
 
-		$useCase = $this->ffFactory->newHandlePayPalPaymentNotificationUseCase( $this->getUpdateToken( $post ) );
+		$useCase = $this->ffFactory->newHandlePayPalPaymentCompletionNotificationUseCase( $this->getUpdateToken( $post ) );
 
 		$response = $useCase->handleNotification( $this->newUseCaseRequestFromPost( $post ) );
 		$this->logResponseIfNeeded( $response, $request );

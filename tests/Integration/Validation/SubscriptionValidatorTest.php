@@ -10,19 +10,19 @@ use WMDE\Fundraising\Frontend\Infrastructure\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionDuplicateValidator;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionValidator;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Tests\Fixtures\InMemorySubscriptionRepository;
-use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
+use WMDE\FunValidators\ConstraintViolation;
 use WMDE\FunValidators\ValidationResult;
 use WMDE\FunValidators\Validators\AllowedValuesValidator;
 use WMDE\FunValidators\Validators\EmailValidator;
 use WMDE\FunValidators\Validators\TextPolicyValidator;
 
 /**
- * @covers WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionValidator
+ * @covers \WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionValidator
  *
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class SubscriptionValidatorTest extends ValidatorTestCase {
+class SubscriptionValidatorTest extends \PHPUnit\Framework\TestCase {
 
 	private function getMockTextPolicyValidator(): TextPolicyValidator {
 		$mock = $this->createMock( TextPolicyValidator::class );
@@ -64,6 +64,23 @@ class SubscriptionValidatorTest extends ValidatorTestCase {
 		$subscription->setAddress( $this->createAddress( 'Herr', 'Nyan', 'Cat' ) );
 		$subscription->setEmail( 'this is not a mail addess' );
 		$this->assertConstraintWasViolated( $subscriptionValidator->validate( $subscription ), 'email' );
+	}
+
+	private function assertConstraintWasViolated( ValidationResult $result, string $fieldName ): void {
+		$this->assertContainsOnlyInstancesOf( ConstraintViolation::class, $result->getViolations() );
+		$this->assertTrue( $result->hasViolations() );
+
+		$violated = false;
+		foreach ( $result->getViolations() as $violation ) {
+			if ( $violation->getSource() === $fieldName ) {
+				$violated = true;
+			}
+		}
+
+		$this->assertTrue(
+			$violated,
+			'Failed asserting that constraint for field "' . $fieldName . '"" was violated.'
+		);
 	}
 
 	public function testGivenBadWords_subscriptionIsStillValid(): void {
