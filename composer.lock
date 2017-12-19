@@ -3276,12 +3276,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations.git",
-                "reference": "671f3e70a5424a89c596951c0aaf4d6be484d76c"
+                "reference": "9fae93c26006c6f831c5e9188011b31b9f29512a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/671f3e70a5424a89c596951c0aaf4d6be484d76c",
-                "reference": "671f3e70a5424a89c596951c0aaf4d6be484d76c",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/9fae93c26006c6f831c5e9188011b31b9f29512a",
+                "reference": "9fae93c26006c6f831c5e9188011b31b9f29512a",
                 "shasum": ""
             },
             "require": {
@@ -3333,7 +3333,7 @@
                 "source": "https://github.com/wmde/fundraising-donations/tree/master",
                 "issues": "https://github.com/wmde/fundraising-donations/issues"
             },
-            "time": "2017-12-18T15:16:10+00:00"
+            "time": "2017-12-19T11:45:45+00:00"
         },
         {
             "name": "wmde/fundraising-store",
@@ -6443,12 +6443,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content.git",
-                "reference": "0ceb9821ff2ef64333a3502b5e2cecd23738c615"
+                "reference": "67b74545d85a2029b6c8d47afc6280c845295635"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/0ceb9821ff2ef64333a3502b5e2cecd23738c615",
-                "reference": "0ceb9821ff2ef64333a3502b5e2cecd23738c615",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/67b74545d85a2029b6c8d47afc6280c845295635",
+                "reference": "67b74545d85a2029b6c8d47afc6280c845295635",
                 "shasum": ""
             },
             "require-dev": {
@@ -6484,7 +6484,7 @@
             "support": {
                 "source": "https://github.com/wmde/fundraising-frontend-content/tree/test"
             },
-            "time": "2017-12-18T09:44:31+00:00"
+            "time": "2017-12-19T09:02:50+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",
