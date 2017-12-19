@@ -6,15 +6,16 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\Validation;
 
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 use WMDE\Fundraising\Frontend\Infrastructure\NullDomainNameValidator;
-use WMDE\Fundraising\Frontend\Tests\Unit\Validation\ValidatorTestCase;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
+use WMDE\FunValidators\ConstraintViolation;
+use WMDE\FunValidators\ValidationResult;
 use WMDE\FunValidators\Validators\EmailValidator;
 
 /**
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class GetInTouchValidatorTest extends ValidatorTestCase {
+class GetInTouchValidatorTest extends \PHPUnit\Framework\TestCase {
 
 	public function testNameFieldsAreOptional(): void {
 		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
@@ -41,6 +42,23 @@ class GetInTouchValidatorTest extends ValidatorTestCase {
 		);
 		$this->assertFalse( $validator->validate( $request )->isSuccessful() );
 		$this->assertConstraintWasViolated( $validator->validate( $request ), 'email' );
+	}
+
+	private function assertConstraintWasViolated( ValidationResult $result, string $fieldName ): void {
+		$this->assertContainsOnlyInstancesOf( ConstraintViolation::class, $result->getViolations() );
+		$this->assertTrue( $result->hasViolations() );
+
+		$violated = false;
+		foreach ( $result->getViolations() as $violation ) {
+			if ( $violation->getSource() === $fieldName ) {
+				$violated = true;
+			}
+		}
+
+		$this->assertTrue(
+			$violated,
+			'Failed asserting that constraint for field "' . $fieldName . '"" was violated.'
+		);
 	}
 
 	public function testSubjectIsValidated(): void {

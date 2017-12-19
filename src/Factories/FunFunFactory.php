@@ -59,7 +59,7 @@ use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\InitialDonati
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\ReferrerGeneralizer;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\CancelDonation\CancelDonationUseCase;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\CreditCardPaymentNotification\CreditCardNotificationUseCase;
-use WMDE\Fundraising\Frontend\DonationContext\UseCases\HandlePayPalPaymentNotification\HandlePayPalPaymentNotificationUseCase;
+use WMDE\Fundraising\Frontend\DonationContext\UseCases\HandlePayPalPaymentNotification\HandlePayPalPaymentCompletionNotificationUseCase;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\ListComments\ListCommentsUseCase;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\ShowDonationConfirmation\ShowDonationConfirmationUseCase;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\SofortPaymentNotification\SofortPaymentNotificationUseCase;
@@ -1235,8 +1235,8 @@ class FunFunFactory {
 		);
 	}
 
-	public function newHandlePayPalPaymentNotificationUseCase( string $updateToken ): HandlePayPalPaymentNotificationUseCase {
-		return new HandlePayPalPaymentNotificationUseCase(
+	public function newHandlePayPalPaymentCompletionNotificationUseCase( string $updateToken ): HandlePayPalPaymentCompletionNotificationUseCase {
+		return new HandlePayPalPaymentCompletionNotificationUseCase(
 			$this->getDonationRepository(),
 			$this->newDonationAuthorizer( $updateToken ),
 			$this->newDonationConfirmationMailer(),
