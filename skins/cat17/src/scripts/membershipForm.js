@@ -296,55 +296,55 @@ $( function () {
 			]
 		},
       {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#first-name' ) ),
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-firstname' ) ),
         stateKey: 'membershipInputValidation.firstName'
       },
       {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#surname' ) ),
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-lastname' ) ),
         stateKey: 'membershipInputValidation.lastName'
       },
+		{
+			viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-company' ) ),
+			stateKey: 'membershipInputValidation.companyName'
+		},
       {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.street' ) ),
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-street' ) ),
         stateKey: 'membershipInputValidation.street'
       },
       {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.post-code' ) ),
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-postcode' ) ),
         stateKey: 'membershipInputValidation.postcode'
       },
       {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.city' ) ),
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-city' ) ),
         stateKey: 'membershipInputValidation.city'
       },
       {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.email' ) ),
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-email' ) ),
         stateKey: 'membershipInputValidation.email'
       },
       {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#company-name' ) ),
-        stateKey: 'membershipInputValidation.companyName'
-      },
-      {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#date-of-birth' ) ),
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-dob' ) ),
         stateKey: 'membershipInputValidation.dateOfBirth'
       },
       {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#iban' ) ),
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-iban' ) ),
         stateKey: 'membershipInputValidation.iban'
       },
       {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#bic' ) ),
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-bic' ) ),
         stateKey: 'membershipInputValidation.bic'
       },
       {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#account-number' ) ),
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-accountnumber' ) ),
         stateKey: 'membershipInputValidation.accountNumber'
       },
       {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#bank-code' ) ),
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-bankcode' ) ),
         stateKey: 'membershipInputValidation.bankCode'
       },
       {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#amount-typed' ) ),
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.wrap-amounts' ) ),
         stateKey: 'membershipInputValidation.amount'
       },
 		// Show house number warning
