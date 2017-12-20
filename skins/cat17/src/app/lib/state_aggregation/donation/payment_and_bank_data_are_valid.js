@@ -11,14 +11,25 @@ module.exports = function ( state ) {
 
 	result.dataEntered = _.contains( _.pluck( respectiveValidators, 'dataEntered' ), true );
 
-	if ( respectiveValidators.paymentType.isValid && state.donationFormContent.paymentType !== 'BEZ' ) {
+	if (
+		state.donationInputValidation.paymentType.isValid === true &&
+		(
+			state.donationFormContent.paymentType !== 'BEZ' || state.validity.bankData === true
+		)
+	) {
 		result.isValid = true;
-	} else if ( _.contains( _.pluck( respectiveValidators, 'isValid' ), false ) || state.validity.bankData === false ) {
-		result.isValid = false;
-	} else if ( state.donationInputValidation.paymentType.isValid === null ) {
+	}
+	else if (
+		state.donationInputValidation.paymentType.isValid === null ||
+		(
+			state.donationInputValidation.paymentType.isValid === true &&
+			!_.contains( _.pluck( respectiveValidators, 'isValid' ), false )
+		)
+	) {
 		result.isValid = null;
-	} else {
-		result.isValid = true;
+	}
+	else {
+		result.isValid = false;
 	}
 
 	return result;
