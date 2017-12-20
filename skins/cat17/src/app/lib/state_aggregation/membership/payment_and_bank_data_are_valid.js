@@ -11,12 +11,25 @@ module.exports = function ( state ) {
 
 	result.dataEntered = state.membershipFormContent.paymentType !== null || _.contains( _.pluck( respectiveValidators, 'dataEntered' ), true );
 
-	if ( _.contains( _.pluck( respectiveValidators, 'isValid' ), false ) || state.validity.bankData === false ) {
-		result.isValid = false;
-	} else if ( state.membershipFormContent.paymentType === null ) {
-		result.isValid = null;
-	} else {
+	if (
+		state.membershipFormContent.paymentType !== null &&
+		(
+			state.membershipFormContent.paymentType !== 'BEZ' || state.validity.bankData === true
+		)
+	) {
 		result.isValid = true;
+	}
+	else if (
+		state.membershipFormContent.paymentType === null ||
+		(
+			state.membershipFormContent.paymentType !== null &&
+			!_.contains( _.pluck( respectiveValidators, 'isValid' ), false )
+		)
+	) {
+		result.isValid = null;
+	}
+	else {
+		result.isValid = false;
 	}
 
 	return result;
