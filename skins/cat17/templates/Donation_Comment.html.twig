@@ -34,11 +34,11 @@
 								</select>
 							</div>
 							<div class="field-grp col-xs-12 col-sm-6">
-								<select id="displayName" name="displayName"
+								<select id="isAnonymous" name="isAnonymous"
 										data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true,  "maxVisibleItems": 6}'
 										class="no-outline personalized">
-									<option value="Anonym">{$ 'donation_comment_anonymous' | trans $}</option>
-									{#<option value="TODO">{$ 'donation_comment_using_name' | trans $}</option>#}
+									<option value="1">{$ 'donation_comment_anonymous' | trans $}</option>
+									<option value="0">{$ 'donation_comment_using_name' | trans $}</option>
 								</select>
 							</div>
 						</div>

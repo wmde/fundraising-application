@@ -45,7 +45,7 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 				[
 					'comment' => 'Your programmers deserve a raise',
 					'public' => '1',
-					'displayName' => 'Uncle Bob',
+					'isAnonymous' => '0',
 					'donationId' => (string)$donation->getId(),
 				]
 			);
@@ -77,7 +77,7 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 				[
 					'comment' => 'Your programmers deserve a raise',
 					'public' => '1',
-					'displayName' => 'Uncle Bob',
+					'isAnonymous' => '0',
 					'donationId' => (string)$donation->getId(),
 					'updateToken' => self::CORRECT_UPDATE_TOKEN,
 				]
@@ -97,7 +97,7 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 				[
 					'comment' => 'Your programmers deserve a raise',
 					'public' => '1',
-					'displayName' => 'Uncle Bob',
+					'isAnonymous' => '0',
 					'donationId' => self::NON_EXISTING_DONATION_ID,
 					'updateToken' => self::CORRECT_UPDATE_TOKEN,
 				]
@@ -117,7 +117,7 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 				[
 					'comment' => 'Your programmers deserve a raise',
 					'public' => '1',
-					'displayName' => 'Uncle Bob',
+					'isAnonymous' => '0',
 					'donationId' => (string)$donation->getId(),
 					'updateToken' => 'Not the correct token',
 				]

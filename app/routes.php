@@ -255,8 +255,15 @@ $app->post(
 		$addCommentRequest = new AddCommentRequest();
 		$addCommentRequest->setCommentText( trim( $request->request->get( 'comment', '' ) ) );
 		$addCommentRequest->setIsPublic( $request->request->get( 'public', '0' ) === '1' );
-		$addCommentRequest->setAuthorDisplayName( trim( $request->request->get( 'displayName', '' ) ) );
 		$addCommentRequest->setDonationId( (int)$request->request->get( 'donationId', '' ) );
+
+		if ( $request->request->get( 'isAnonymous', '0' ) === '1' ) {
+			$addCommentRequest->setIsAnonymous();
+		}
+		else {
+			$addCommentRequest->setIsNamed();
+		}
+
 		$addCommentRequest->freeze()->assertNoNullFields();
 
 		$updateToken = $request->request->get( 'updateToken', '' );
