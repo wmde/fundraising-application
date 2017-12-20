@@ -24,10 +24,18 @@ var objectAssign = require( 'object-assign' ),
 
 	createRegexValidator = function ( store, contentName ) {
 		return function ( evt ) {
+			var optionalAttribute = evt.target.getAttribute( 'data-optional' ),
+				fieldIsOptional;
+			if ( optionalAttribute === null || typeof optionalAttribute === 'undefined' ) {
+				fieldIsOptional = false;
+			} else {
+				fieldIsOptional = JSON.parse( optionalAttribute );
+			}
 			store.dispatch( actions.newValidateInputAction(
 				contentName,
 				evt.target.value,
-				evt.target.getAttribute( 'data-pattern' )
+				evt.target.getAttribute( 'data-pattern' ),
+				fieldIsOptional
 			) );
 		};
 	},
