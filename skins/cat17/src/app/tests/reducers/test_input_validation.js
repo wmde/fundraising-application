@@ -4,13 +4,14 @@ var test = require( 'tape-catch' ),
 	deepFreeze = require( 'deep-freeze' ),
 	inputValidation = require( '../../lib/reducers/input_validation' ).inputValidation;
 
-function newAction( value ) {
+function newAction( value, optionalField ) {
 	return {
 		type: 'VALIDATE_INPUT',
 		payload: {
 			contentName: 'testField',
 			value: value,
-			pattern: '^[a-z0-9]+$'
+			pattern: '^[a-z0-9]+$',
+			optionalField: optionalField || false
 		}
 	};
 }
@@ -64,6 +65,15 @@ test( 'If valid data was changed to invalid data, validation returns invalid sta
 
 	deepFreeze( stateBefore );
 	t.deepEqual( inputValidation( stateBefore, newAction( '' ) ), expectedState );
+	t.end();
+} );
+
+test( 'If valid data was changed to empty data on optional field, validation returns empty state', function ( t ) {
+	var stateBefore = { testField: { dataEntered: true, isValid: true } },
+		expectedState = { testField: { dataEntered: false, isValid: null } };
+
+	deepFreeze( stateBefore );
+	t.deepEqual( inputValidation( stateBefore, newAction( '', true ) ), expectedState );
 	t.end();
 } );
 

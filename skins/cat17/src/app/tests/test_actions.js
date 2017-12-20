@@ -73,3 +73,31 @@ test( 'newInitializeContentAction returns action object', function ( t ) {
 	t.end();
 } );
 
+
+test( 'newValidateInputAction returns action object', function ( t ) {
+	var expectedAction = {
+		type: 'VALIDATE_INPUT',
+		payload: {
+			contentName: 'email',
+			value: 'test@example.com',
+			pattern: '^[^@]+@[^@]+$',
+			optionalField: false
+		}
+	};
+	t.deepEqual( actions.newValidateInputAction( 'email', 'test@example.com', '^[^@]+@[^@]+$' ), expectedAction );
+	t.end();
+} );
+
+test( 'newValidateInputAction can make validation optional', function ( t ) {
+	var expectedAction = {
+		type: 'VALIDATE_INPUT',
+		payload: {
+			contentName: 'email',
+			value: 'test@example.com',
+			pattern: '^[^@]+@[^@]+$',
+			optionalField: true
+		}
+	};
+	t.deepEqual( actions.newValidateInputAction( 'email', 'test@example.com', '^[^@]+@[^@]+$', true ), expectedAction );
+	t.end();
+} );
