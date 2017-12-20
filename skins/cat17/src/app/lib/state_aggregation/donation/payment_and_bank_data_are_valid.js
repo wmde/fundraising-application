@@ -11,7 +11,9 @@ module.exports = function ( state ) {
 
 	result.dataEntered = _.contains( _.pluck( respectiveValidators, 'dataEntered' ), true );
 
-	if ( _.contains( _.pluck( respectiveValidators, 'isValid' ), false ) || state.validity.bankData === false ) {
+	if ( respectiveValidators.paymentType.isValid && state.donationFormContent.paymentType !== 'BEZ' ) {
+		result.isValid = true;
+	} else if ( _.contains( _.pluck( respectiveValidators, 'isValid' ), false ) || state.validity.bankData === false ) {
 		result.isValid = false;
 	} else if ( state.donationInputValidation.paymentType.isValid === null ) {
 		result.isValid = null;
