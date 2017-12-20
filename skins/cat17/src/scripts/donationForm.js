@@ -117,68 +117,51 @@ $( function () {
 			stateKey: 'donationFormContent.addressType'
 		},
       {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#first-name' ) ),
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-firstname' ) ),
         stateKey: 'donationInputValidation.firstName'
       },
       {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#last-name' ) ),
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-lastname' ) ),
         stateKey: 'donationInputValidation.lastName'
       },
+		{
+			viewHandler: WMDE.View.createFieldValueValidityIndicator( $('.field-company') ),
+			stateKey: 'donationInputValidation.companyName'
+		},
       {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#street' ) ),
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-street' ) ),
         stateKey: 'donationInputValidation.street'
       },
       {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $('#adress-company') ),
-        stateKey: 'donationInputValidation.street'
-      },
-      {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#post-code' ) ),
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-postcode' ) ),
         stateKey: 'donationInputValidation.postcode'
       },
       {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $('#post-code-company') ),
-        stateKey: 'donationInputValidation.postcode'
-      },
-      {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#city' ) ),
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-city' ) ),
         stateKey: 'donationInputValidation.city'
       },
       {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#city-company' ) ),
-        stateKey: 'donationInputValidation.city'
-      },
-      {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#email' ) ),
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-email' ) ),
         stateKey: 'donationInputValidation.email'
       },
       {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#email-company' ) ),
-        stateKey: 'donationInputValidation.email'
-      },
-      {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#company-name' ) ),
-        stateKey: 'donationInputValidation.companyName'
-      },
-      {
-
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#iban' ) ),
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-iban' ) ),
         stateKey: 'donationInputValidation.iban'
       },
       {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#bic' ) ),
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-bic' ) ),
         stateKey: 'donationInputValidation.bic'
       },
       {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#account-number' ) ),
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-accountnumber' ) ),
         stateKey: 'donationInputValidation.accountNumber'
       },
       {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '#bank-code' ) ),
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-bankcode' ) ),
         stateKey: 'donationInputValidation.bankCode'
       },
       {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $('#amount-typed') ),
+        viewHandler: WMDE.View.createFieldValueValidityIndicator( $('.wrap-amounts') ),
         stateKey: 'donationInputValidation.amount'
       },
 		{

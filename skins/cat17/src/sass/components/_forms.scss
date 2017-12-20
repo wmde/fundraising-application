@@ -45,6 +45,10 @@ input[type=submit] {
 	margin-bottom: 0;
 	position: relative;
 
+	.error-text {
+		display: none;
+	}
+
 	&.valid {
 		input[type="text"], input[type="email"] {
 			padding-right: 35px; /* make room for checkmark icon */
@@ -63,6 +67,11 @@ input[type=submit] {
 		}
 	}
 	&.invalid {
+		.error-text {
+			display: block;
+
+		}
+
 		input[type="text"], input[type="email"], textarea {
 
 			@include themify($themes) {
@@ -136,6 +145,18 @@ label, input#amount-typed, .wrap-amount-typed:after{
 	}
 	@include bkp(lg) {
 		font-size: 12px;
+	}
+}
+
+.wrap-amounts {
+	.error-text {
+		margin-top: 10px;
+		display: none;
+	}
+	&.invalid {
+		.error-text {
+			display: block;
+		}
 	}
 }
 

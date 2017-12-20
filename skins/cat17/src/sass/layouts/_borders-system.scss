@@ -222,17 +222,6 @@ fieldset {
                             display: inline-block;
                             margin-bottom: 12px;
                         }
-                        .field-grp {
-                            .error-text {
-                                display: none;
-                            }
-                            &.invalid {
-                                .error-text {
-                                    display: block;
-
-                                }
-                            }
-                        }
                     }
                 }
             }
