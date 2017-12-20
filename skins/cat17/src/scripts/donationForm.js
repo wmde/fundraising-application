@@ -88,27 +88,6 @@ $( function () {
   // Connect view handlers to changes in specific parts in the global state, designated by 'stateKey'
   WMDE.StoreUpdates.connectViewHandlersToStore(
     [
-      {
-        viewHandler: WMDE.View.createErrorBoxHandler( $( '#validation-errors' ), {
-          amount: 'Betrag',
-          paymentType: 'Zahlungsart',
-          salutation: 'Anrede',
-          title: 'Titel',
-          firstName: 'Vorname',
-          lastName: 'Nachname',
-          companyName: 'Firma',
-          street: 'Straße',
-          postcode: 'PLZ',
-          city: 'Ort',
-          country: 'Land',
-          email: 'E-Mail',
-          iban: 'IBAN',
-          bic: 'BIC',
-          accountNumber: 'Kontonummer',
-          bankCode: 'Bankleitzahl'
-        } ),
-        stateKey: 'donationInputValidation'
-      },
 		// Hide anonymous payment when doing direct debit
 		{
 			viewHandler: WMDE.View.createElementClassSwitcher( $( '#type-donor .wrap-field.anonym .wrap-input' ), /BEZ/, 'disabled' ),
