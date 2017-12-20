@@ -7,7 +7,7 @@ var objectAssign = require( 'object-assign' ),
 	 * @class
 	 */
 	FieldValueValidityIndicator = {
-		element: {},
+		element: null,
 
 		update: function ( validationState ) {
 			if ( validationState.isValid === true ) {
@@ -22,7 +22,7 @@ var objectAssign = require( 'object-assign' ),
 
 module.exports = {
 	/**
-	 * @param {jQuery} element
+	 * @param {jQuery} element Multiple elements inside jQuery will be treated by implicit iteration
 	 * @return {FieldValueValidityIndicator}
 	 */
 	createFieldValueValidityIndicator: function ( element ) {
