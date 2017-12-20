@@ -298,6 +298,10 @@ $( function () {
 		var nextRequired = currentState.donationFormContent.paymentType === 'BEZ' ? $( '#payment-method' ) : $( '#donation-type .legend:first' );
 		var $introBanner = $('.introduction-banner');
 		$introBanner.insertBefore( nextRequired ).removeClass( 'hidden' );
+
+		// The fixed horizontal state bar is hidden initially and only shown when scrolling, which leads to wrong offset.
+		// Thus, we have to make it visible for offset calculation.
+		$( '.state-bar' ).addClass( 'active' );
 		scroller.scrollTo( $introBanner, { elementStart: WMDE.Scrolling.ElementStart.MARGIN } );
 	}
 

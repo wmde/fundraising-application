@@ -127,14 +127,6 @@
                 if (currentScroll + 70 >= fixBarTop) {
                     $('.state-bar').addClass('active');
                     $('.fixed-button').addClass('active');
-                    $('.menu-main').addClass('under-bar');
-
-                    if ($('.footer').isVisible('top')) {
-                        $('.menu-main').removeClass('under-bar');
-                    } else {
-                        $(".state-bar").addClass('active');
-                        $('.menu-main').addClass('under-bar');
-                    }
 
                     if ($('#submit-bottom').isVisible('button')) {
                         $('.fixed-button').removeClass('active');
@@ -144,7 +136,6 @@
 
                 } else {
                     $('.state-bar').removeClass('active');
-                    $('.menu-main').removeClass('under-bar');
                 }
                 if (currentScroll >= donationSection - ACTIVE_THRESHOLD) {
                     $('.state-overview .amount').addClass('enabled');
