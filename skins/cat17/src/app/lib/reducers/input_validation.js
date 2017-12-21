@@ -13,13 +13,17 @@ function inputIsValid( value, pattern ) {
 
 function inputValidation( validationState, action ) {
   var newValidationState = objectAssign( {}, validationState ),
-      bankDataIsValid, dataEnteredTransformer;
+      bankDataIsValid;
 
 	switch ( action.type ) {
 		case 'INITIALIZE_VALIDATION':
 			_.each( validationState, function ( value, key ) {
-				console.log( "hskey", key, action.payload.violatedFields, _.has( action.payload.violatedFields, key ))
-				if ( _.has( action.payload.violatedFields, key ) ) {
+				if ( _.has( action.payload.initialValues, key ) ) {
+					newValidationState[ key ] = {
+						dataEntered: true,
+						isValid: !_.has( action.payload.violatedFields, key )
+					}
+				} else if ( _.has( action.payload.violatedFields, key ) ) {
 					newValidationState[ key ] = {
 						dataEntered: true,
 						isValid: false
