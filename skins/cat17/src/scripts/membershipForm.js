@@ -348,19 +348,19 @@ $( function () {
 
 	// Set initial form values
 	var initSetup = initData.data( 'initial-form-values' );
-	$.each( initSetup, function ( key, value ) {
-		if ( key === 'amount' && typeof value === 'string' ) {
-			// backend delivers amount as a german-formatted "float" string
-			value = WMDE.IntegerCurrency.createCurrencyParser( 'de' ).parse( value );
-		}
-
-		store.dispatch( actions.newChangeContentAction( key, value ) );
-	} );
+	if ( typeof initSetup.amount === 'string' ) {
+		initSetup.amount = WMDE.IntegerCurrency.createCurrencyParser( 'de' ).parse( initSetup.amount );
+	}
+	store.dispatch( actions.newInitializeContentAction( initSetup ) );
 
 	// Set initial validation state
+	if ( initSetup.value === 0 ) {
+		delete initSetup.value;
+	}
 	store.dispatch( actions.newInitializeValidationStateAction(
 		initData.data( 'violatedFields' ),
-		{} // membership form has no pages and does not get validation group information
+		initSetup,
+		initData.data( 'initial-validation-result' )
 	) );
 
 	// Non-state-changing event behavior
