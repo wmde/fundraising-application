@@ -75,10 +75,13 @@ var objectAssign = require( 'object-assign' ),
 	AnimatedScroller = {
 		fixedHeaderElements: null,
 		scrollTo: function( $element, options ) {
+			var self = this;
+			this.fixedHeaderElements.addClass( 'scrolling' );
 			$( 'html, body' ).stop( true ).animate( {
 				scrollTop: calculateElementOffset( $element, this.fixedHeaderElements, options )
 			}, 1000, function () {
 				// Callback after animation
+				self.fixedHeaderElements.removeClass( 'scrolling' );
 				// Must change focus!
 				$element.focus();
 				if ($element.is( ':focus' ) ) { // Checking if the target was focused

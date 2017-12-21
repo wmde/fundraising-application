@@ -162,7 +162,7 @@
 		margin: 0 auto;
 		padding: 0;
 	}
-	&.active {
+	&.active, &.scrolling {
 		opacity: 1;
 		height: auto;
 		position: fixed;
