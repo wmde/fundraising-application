@@ -70,15 +70,17 @@ module.exports = {
 	/**
 	 * Set initial form content
 	 *
-	 * @param {{Object}} violatedFields
-	 * @param {{Object}} initialValidationResult
+	 * @param {{Object}} violatedFields Error messages for each violated field
+	 * @param {{Object}} initialValues Initial values for fields
+	 * @param {{Object}} initialValidationResult validation values for address, paymentData and bankData
 	 * @returns {{type: string, payload: *}}
 	 */
-	newInitializeValidationStateAction: function ( violatedFields, initialValidationResult ) {
+	newInitializeValidationStateAction: function ( violatedFields, initialValues, initialValidationResult ) {
 		return {
 			type: 'INITIALIZE_VALIDATION',
 			payload: {
 				violatedFields: violatedFields,
+				initialValues: initialValues,
 				initialValidationResult: initialValidationResult
 			}
 		};
