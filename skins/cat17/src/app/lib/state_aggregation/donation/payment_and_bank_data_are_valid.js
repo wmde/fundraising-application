@@ -1,7 +1,21 @@
 'use strict';
 
 var _ = require( 'underscore' ),
-	validationResult = require( './../validation_result' )
+	validationResult = require( './../validation_result' ),
+	PAYMENT_TYPE_DEBIT_VALUE = 'BEZ',
+	hasValidDirectDebitPayment = function ( state ) {
+		return (
+			state.donationFormContent.paymentType === PAYMENT_TYPE_DEBIT_VALUE &&
+			state.donationInputValidation.paymentType.isValid === true &&
+			state.validity.bankData === true
+		);
+	},
+	hasOtherValidPayment = function ( state ) {
+		return (
+			state.donationFormContent.paymentType !== PAYMENT_TYPE_DEBIT_VALUE &&
+			state.donationInputValidation.paymentType.isValid === true
+		);
+	}
 ;
 
 module.exports = function ( state ) {
@@ -11,14 +25,14 @@ module.exports = function ( state ) {
 
 	result.dataEntered = _.contains( _.pluck( respectiveValidators, 'dataEntered' ), true );
 
-	if ( respectiveValidators.paymentType.isValid && state.donationFormContent.paymentType !== 'BEZ' ) {
+	if ( hasValidDirectDebitPayment( state ) || hasOtherValidPayment( state ) ) {
 		result.isValid = true;
-	} else if ( _.contains( _.pluck( respectiveValidators, 'isValid' ), false ) || state.validity.bankData === false ) {
-		result.isValid = false;
-	} else if ( state.donationInputValidation.paymentType.isValid === null ) {
+	}
+	else if ( !_.contains( _.pluck( respectiveValidators, 'isValid' ), false ) ) {
 		result.isValid = null;
-	} else {
-		result.isValid = true;
+	}
+	else {
+		result.isValid = false;
 	}
 
 	return result;

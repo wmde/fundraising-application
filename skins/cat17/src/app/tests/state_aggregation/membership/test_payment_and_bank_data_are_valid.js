@@ -163,3 +163,43 @@ test( 'PPL payment type and no bank data given is valid and has data entered', f
 	);
 	t.end();
 } );
+
+test( 'PPL payment type and wrong bank data given is valid and has data entered', function ( t ) {
+	t.deepEqual(
+		paymentAndBankDataAreValid( {
+			membershipFormContent: {
+				paymentType: 'PPL',
+				iban: 'DE1250010517',
+				bic: '',
+				accountNumber: '',
+				bankCode: ''
+			},
+			membershipInputValidation: {
+				iban: {
+					dataEntered: true,
+					isValid: false
+				},
+				bic: {
+					dataEntered: false,
+					isValid: null
+				},
+				accountNumber: {
+					dataEntered: false,
+					isValid: null
+				},
+				bankCode: {
+					dataEntered: false,
+					isValid: null
+				}
+			},
+			validity: {
+				bankData: false
+			}
+		} ),
+		{
+			dataEntered: true,
+			isValid: true
+		}
+	);
+	t.end();
+} );
