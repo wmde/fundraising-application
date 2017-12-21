@@ -179,3 +179,48 @@ test( 'SUB payment type and no bank data given is valid and has data entered', f
 	);
 	t.end();
 } );
+
+test( 'SUB payment type and invalid bank data given is valid and has data entered', function ( t ) {
+	t.deepEqual(
+		paymentAndBankDataAreValid( {
+			donationFormContent: {
+				paymentType: 'SUB',
+				iban: '7777',
+				bic: 'foo',
+				accountNumber: '',
+				bankCode: ''
+			},
+			donationInputValidation: {
+				paymentType: {
+					dataEntered: true,
+					isValid: true
+				},
+				iban: {
+					dataEntered: true,
+					isValid: false
+				},
+				bic: {
+					dataEntered: true,
+					isValid: null
+				},
+				accountNumber: {
+					dataEntered: false,
+					isValid: null
+				},
+				bankCode: {
+					dataEntered: false,
+					isValid: null
+				}
+			},
+			validity: {
+				bankData: null
+			}
+		} ),
+		{
+			dataEntered: true,
+			isValid: true
+		}
+	);
+	t.end();
+} );
+
