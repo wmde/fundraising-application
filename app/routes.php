@@ -424,6 +424,7 @@ $app->get(
 			if ( $responseModel->accessIsPermitted() ) {
 				$adapter = new DonationMembershipApplicationAdapter();
 				$params['initialFormValues'] = $adapter->getInitialMembershipFormValues( $responseModel->getDonation() );
+				$params['initialValidationResult'] = $adapter->getInitialValidationState( $responseModel->getDonation() );
 			}
 		} catch ( Exception $e ) {
 		}

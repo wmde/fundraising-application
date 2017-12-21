@@ -340,6 +340,7 @@
 	<script id="init-form" src="{$ basepath|e('html_attr') $}{$ '/skins/cat17/scripts/membershipForm.js'|prefix_file $}"
 		data-initial-form-values="{$ initialFormValues | json_encode | e( 'html_attr' ) $}"
 		data-violated-fields="{% if violatedFields %}{$ violatedFields|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
+		data-initial-validation-result="{% if initialValidationResult %}{$ initialValidationResult|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
 		data-validate-fee-url="{$ basepath|e('html_attr') $}/validate-fee"
 		data-validate-address-url="{$ basepath|e('html_attr') $}/validate-address"
 		data-validate-email-address-url="{$ basepath|e('html_attr') $}/validate-email"

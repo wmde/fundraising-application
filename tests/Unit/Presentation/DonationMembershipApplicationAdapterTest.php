@@ -12,6 +12,7 @@ use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonorAddress;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonorName;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankTransferPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\SofortPayment;
@@ -177,5 +178,57 @@ class DonationMembershipApplicationAdapterTest extends TestCase {
 		$bankData->setIban( new Iban( 'DE49123455679923567800' ) );
 		$bankData->setBic( 'COBADE4711' );
 		return new DirectDebitPayment( $bankData );
+	}
+
+	private function getBankTransferPayment(): BankTransferPayment {
+		return new BankTransferPayment( 'WQXXXX' );
+	}
+
+	public function testDefaultValidationStateIsEmpty(): void {
+
+		$payment = new DonationPayment( Euro::newFromCents( 45000 ), 1, $this->getBankTransferPayment() );
+		$donation = new Donation( null, Donation::STATUS_NEW, null, $payment, false, new DonationTrackingInfo, null );
+		$adapter = new DonationMembershipApplicationAdapter();
+
+		$this->assertEquals( [], $adapter->getInitialValidationState( $donation ) );
+	}
+
+	public function testDonationWitDonorReturnsValidationStateForPersonalData(): void {
+		$donor = $this->getPrivateDonor(
+			'Herr', 'Dr.', 'Max', 'Mustermann', 'Demostr. 42',
+			'08771', 'Bärlin', 'DE', 'demo@cat.goat'
+		);
+		$payment = new DonationPayment( Euro::newFromCents( 45000 ), 1, $this->getBankTransferPayment() );
+		$donation = new Donation( null, Donation::STATUS_NEW, $donor, $payment, false, new DonationTrackingInfo, null );
+
+		$adapter = new DonationMembershipApplicationAdapter();
+
+		$this->assertEquals(
+			['address' => true],
+			$adapter->getInitialValidationState( $donation )
+		);
+	}
+
+	public function testDonationWithDirectDebitAndIbanHasValidBankData(): void {
+
+		$payment = new DonationPayment( Euro::newFromCents( 45000 ), 1, $this->getDirectDebitPayment() );
+		$donation = new Donation( null, Donation::STATUS_NEW, null, $payment, false, new DonationTrackingInfo, null );
+		$adapter = new DonationMembershipApplicationAdapter();
+
+		$this->assertEquals(
+			['bankData' => true],
+			$adapter->getInitialValidationState( $donation )
+		);
+	}
+
+	public function testDonationWithDirectDebitAndMissingIbanHasNoValidBankData(): void {
+		$bankData = new BankData();
+		$bankData->setIban( new Iban( '' ) );
+		$paymentMethod = new DirectDebitPayment( $bankData );
+		$payment = new DonationPayment( Euro::newFromCents( 45000 ), 1, $paymentMethod );
+		$donation = new Donation( null, Donation::STATUS_NEW, null, $payment, false, new DonationTrackingInfo, null );
+		$adapter = new DonationMembershipApplicationAdapter();
+
+		$this->assertEquals( [], $adapter->getInitialValidationState( $donation ) );
 	}
 }
