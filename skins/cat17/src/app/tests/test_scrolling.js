@@ -1,6 +1,6 @@
 'use strict';
 
-var test = require( 'tape' ),
+var test = require( 'tape-catch' ),
 	sinon = require( 'sinon' ),
 	scrolling = require( '../lib/scrolling' )
 ;
@@ -236,4 +236,172 @@ test( 'findElementWithLowestOffset will return the element with the lowest offse
 	t.end();
 } );
 
+test( 'AnimatedScroller only allows one scrolling at a time', function ( t ) {
+	var element = {
+			offset: sinon.stub()
+		},
+		headerElements = {
+			get: sinon.stub(),
+			addClass: sinon.stub()
+		},
+		scroller = scrolling.createAnimatedScroller( headerElements ),
+		body = {
+			stop: sinon.stub().returnsThis(),
+			animate: sinon.stub()
+		}
+	;
 
+	element.offset.returns( { top: 400 } );
+
+	global.$ = sinon.stub();
+	global.$.withArgs( 'html, body' ).returns( body );
+
+	scroller.scrollTo( element );
+
+	t.ok( body.stop.withArgs( true ).calledOnce );
+
+	delete global.$;
+
+	t.end();
+} );
+
+test( 'AnimatedScroller brings us to the right spot on the page', function ( t ) {
+	var element = {
+			offset: sinon.stub()
+		},
+		headerElements = {
+			get: sinon.stub(),
+			addClass: sinon.stub(),
+			removeClass: sinon.stub()
+		},
+		scroller = scrolling.createAnimatedScroller( headerElements ),
+		body = {
+			stop: sinon.stub().returnsThis(),
+			animate: sinon.stub()
+		}
+	;
+
+	element.offset.returns( { top: 400 } );
+
+	global.$ = sinon.stub();
+	global.$.withArgs( 'html, body' ).returns( body );
+
+	scroller.scrollTo( element );
+
+	t.ok( body.animate.calledOnce );
+	t.deepEquals( body.animate.args[0][0], { scrollTop: 400 } );
+
+	delete global.$;
+
+	t.end();
+} );
+
+test( 'AnimatedScroller scrolls in hard-coded time', function ( t ) {
+	var element = {
+			offset: sinon.stub()
+		},
+		headerElements = {
+			get: sinon.stub(),
+			addClass: sinon.stub(),
+			removeClass: sinon.stub()
+		},
+		scroller = scrolling.createAnimatedScroller( headerElements ),
+		body = {
+			stop: sinon.stub().returnsThis(),
+			animate: sinon.stub()
+		}
+	;
+
+	element.offset.returns( { top: 400 } );
+
+	global.$ = sinon.stub();
+	global.$.withArgs( 'html, body' ).returns( body );
+
+	scroller.scrollTo( element );
+
+	t.ok( body.animate.calledOnce );
+	t.equals( body.animate.args[0][1], 1000 );
+
+	delete global.$;
+
+	t.end();
+} );
+
+test( 'AnimatedScroller treats element once scroll position reached', function ( t ) {
+	var element = {
+			offset: sinon.stub(),
+			focus: sinon.stub(),
+			is: sinon.stub(),
+			attr: sinon.stub()
+		},
+		headerElements = {
+			get: sinon.stub(),
+			addClass: sinon.stub(),
+			removeClass: sinon.stub()
+		},
+		scroller = scrolling.createAnimatedScroller( headerElements ),
+		body = {
+			stop: sinon.stub().returnsThis(),
+			animate: sinon.stub()
+		}
+	;
+
+	element.offset.returns( { top: 400 } );
+	element.is.withArgs( ':focus' ).returns( false );
+
+	global.$ = sinon.stub();
+	global.$.withArgs( 'html, body' ).returns( body );
+
+	scroller.scrollTo( element );
+
+	t.ok( body.animate.calledOnce );
+	t.equals( typeof body.animate.args[0][2], 'function' );
+
+	body.animate.args[0][2]();
+
+	t.ok( element.attr.withArgs( 'tabindex', '-1' ).calledOnce );
+	t.ok( element.focus.calledTwice );
+
+	delete global.$;
+
+	t.end();
+} );
+
+test( 'AnimatedScroller ensures header elements can anticipate scrolling', function ( t ) {
+	var element = {
+			offset: sinon.stub(),
+			focus: sinon.stub(),
+			is: sinon.stub(),
+			attr: sinon.stub()
+		},
+		headerElements = {
+			get: sinon.stub(),
+			addClass: sinon.stub(),
+			removeClass: sinon.stub()
+		},
+		scroller = scrolling.createAnimatedScroller( headerElements ),
+		body = {
+			stop: sinon.stub().returnsThis(),
+			animate: sinon.stub()
+		}
+	;
+
+	element.offset.returns( { top: 400 } );
+
+	global.$ = sinon.stub();
+	global.$.withArgs( 'html, body' ).returns( body );
+
+	scroller.scrollTo( element );
+
+	t.ok( headerElements.addClass.withArgs( 'scrolling' ).calledOnce );
+	t.ok( body.animate.calledOnce );
+	t.equals( typeof body.animate.args[0][2], 'function' );
+
+	body.animate.args[0][2]();
+
+	t.ok( headerElements.removeClass.withArgs( 'scrolling' ).calledOnce );
+
+	delete global.$;
+
+	t.end();
+} );
