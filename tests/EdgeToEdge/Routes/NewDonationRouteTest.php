@@ -22,12 +22,12 @@ class NewDonationRouteTest extends WebRouteTestCase {
 		);
 
 		$this->assertContains(
-			'Payment data: ' . $expected[ 'validity' ],
+			'Payment data: ' . $expected['validity'],
 			$client->getResponse()->getContent()
 		);
 
 		$this->assertContains(
-			'Amount: ' . $expected[ 'formattedAmount' ] . "\n",
+			'Amount: ' . $expected['formattedAmount'] . "\n",
 			$client->getResponse()->getContent()
 		);
 	}
@@ -54,6 +54,17 @@ class NewDonationRouteTest extends WebRouteTestCase {
 				[
 					'validity' => 'valid',
 					'formattedAmount' => '123,45'
+				]
+			],
+			[
+				[
+					'amountGiven' => '8.70',
+					'zahlweise' => 'BEZ',
+					'periode' => '0'
+				],
+				[
+					'validity' => 'valid',
+					'formattedAmount' => '8,70'
 				]
 			],
 			[
