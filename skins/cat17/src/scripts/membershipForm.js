@@ -354,8 +354,8 @@ $( function () {
 	store.dispatch( actions.newInitializeContentAction( initSetup ) );
 
 	// Set initial validation state
-	if ( initSetup.value === 0 ) {
-		delete initSetup.value;
+	if ( initSetup.amount === 0 ) {
+		delete initSetup.amount;
 	}
 	store.dispatch( actions.newInitializeValidationStateAction(
 		initData.data( 'violatedFields' ),
