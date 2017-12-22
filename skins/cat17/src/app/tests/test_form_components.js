@@ -78,11 +78,12 @@ test( 'Change handler of components dispatches validation action to store', func
 		store = {
 			dispatch: sinon.spy()
 		},
-		fakeEvent = { target: { value: 'current value', getAttribute: sinon.stub() } },
+		fakeEvent = { target: { value: 'current value', getAttribute: sinon.stub(), hasAttribute: sinon.stub() } },
 		expectedAction = { type: 'VALIDATE_INPUT', payload: { contentName: 'city', value: 'current value', pattern: '^.+$', optionalField: false } },
 		component = formComponents.createValidatingTextComponent( store, element, 'city' );
 
 	fakeEvent.target.getAttribute.withArgs( 'data-pattern' ).returns( '^.+$' );
+	fakeEvent.target.hasAttribute.withArgs( 'data-optional' ).returns( false );
 	component.validator( fakeEvent );
 
 	t.ok( store.dispatch.calledWith( expectedAction ), 'action contains event value and element pattern' );
@@ -90,16 +91,17 @@ test( 'Change handler of components dispatches validation action to store', func
 	t.end();
 } );
 
-test( 'Change handler of components passes optional attribute when dispacthing validation action to store', function ( t ) {
+test( 'Change handler of component passes optional attribute when dispatching validation action to store', function ( t ) {
 	var element = createSpyingElement(),
 		store = {
 			dispatch: sinon.spy()
 		},
-		fakeEvent = { target: { value: 'current value', getAttribute: sinon.stub() } },
+		fakeEvent = { target: { value: 'current value', getAttribute: sinon.stub(), hasAttribute: sinon.stub() } },
 		expectedAction = { type: 'VALIDATE_INPUT', payload: { contentName: 'city', value: 'current value', pattern: '^.+$', optionalField: true } },
 		component = formComponents.createValidatingTextComponent( store, element, 'city' );
 
 	fakeEvent.target.getAttribute.withArgs( 'data-pattern' ).returns( '^.+$' );
+	fakeEvent.target.hasAttribute.withArgs( 'data-optional' ).returns( true );
 	fakeEvent.target.getAttribute.withArgs( 'data-optional' ).returns( 'true' );
 	component.validator( fakeEvent );
 
