@@ -10,8 +10,12 @@ namespace WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories;
  */
 class GetMembershipApplicationException extends \RuntimeException {
 
-	public function __construct( \Exception $previous = null ) {
-		parent::__construct( 'Could not get membership application', 0, $previous );
+	public function __construct( string $message = null, \Exception $previous = null ) {
+		parent::__construct(
+			$message ?? 'Could not get membership application',
+			0,
+			$previous
+		);
 	}
 
 }

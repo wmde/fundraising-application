@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 use DateTime;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Applicant;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
-use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowMembershipApplicationConfirmation\ShowMembershipAppConfirmationResponse;
+use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationResponse;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
@@ -27,7 +27,7 @@ class MembershipApplicationConfirmationHtmlPresenter {
 		$this->template = $template;
 	}
 
-	public function present( ShowMembershipAppConfirmationResponse $response ): string {
+	public function present( ShowApplicationConfirmationResponse $response ): string {
 		return $this->template->render(
 			$this->getConfirmationPageArguments(
 				$response->getApplication(),

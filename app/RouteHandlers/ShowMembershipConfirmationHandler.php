@@ -4,12 +4,11 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\App\RouteHandlers;
 
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\App\AccessDeniedException;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowMembershipApplicationConfirmation\ShowMembershipAppConfirmationRequest;
+use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowApplicationConfirmation\ShowAppConfirmationRequest;
 
 /**
  * @license GNU GPL v2+
@@ -29,7 +28,7 @@ class ShowMembershipConfirmationHandler {
 	public function handle( Request $request ): Response {
 		$useCase = $this->ffFactory->newMembershipApplicationConfirmationUseCase( $request->get( 'accessToken', '' ) );
 
-		$responseModel = $useCase->showConfirmation( new ShowMembershipAppConfirmationRequest(
+		$responseModel = $useCase->showConfirmation( new ShowAppConfirmationRequest(
 			(int)$request->get( 'id', '' )
 		) );
 

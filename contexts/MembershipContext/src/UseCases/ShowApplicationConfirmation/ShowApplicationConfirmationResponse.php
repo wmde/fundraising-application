@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowMembershipApplicationConfirmation;
+namespace WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowApplicationConfirmation;
 
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
 
@@ -10,7 +10,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
  * @license GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class ShowMembershipAppConfirmationResponse {
+class ShowApplicationConfirmationResponse {
 
 	private $membershipApplication;
 	private $updateToken;
@@ -30,8 +30,6 @@ class ShowMembershipAppConfirmationResponse {
 
 	/**
 	 * Returns the MembershipApplication when @see accessIsPermitted returns true, or null otherwise.
-	 *
-	 * @return Application|null
 	 */
 	public function getApplication(): ?Application {
 		return $this->membershipApplication;

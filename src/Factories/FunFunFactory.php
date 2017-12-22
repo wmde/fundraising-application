@@ -23,8 +23,8 @@ use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraint as ValidatorConstraint;
 use Symfony\Component\Validator\Constraints\Range as RangeConstraint;
-use Symfony\Component\Validator\Constraints\Type as TypeConstraint;
 use Symfony\Component\Validator\Constraints\Required as RequiredConstraint;
+use Symfony\Component\Validator\Constraints\Type as TypeConstraint;
 use TNvpServiceDispatcher;
 use Twig_Environment;
 use Twig_Extensions_Extension_Intl;
@@ -104,13 +104,14 @@ use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\Memb
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\CancelMembershipApplication\CancelMembershipApplicationUseCase;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionPaymentNotification\HandleSubscriptionPaymentNotificationUseCase;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionSignupNotification\HandleSubscriptionSignupNotificationUseCase;
-use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowMembershipApplicationConfirmation\ShowMembershipApplicationConfirmationUseCase;
+use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationUseCase;
 use WMDE\Fundraising\Frontend\PaymentContext\DataAccess\McpCreditCardService;
 use WMDE\Fundraising\Frontend\PaymentContext\DataAccess\Sofort\Transfer\Client as SofortClient;
 use WMDE\Fundraising\Frontend\PaymentContext\DataAccess\UniqueTransferCodeGenerator;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataConverter;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataValidator;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\DefaultPaymentDelayCalculator;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentDataValidator;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentDelayCalculator;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\CreditCard as CreditCardUrlGenerator;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\CreditCardConfig;
@@ -159,17 +160,16 @@ use WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\ConfirmSubscription\C
 use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionDuplicateValidator;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionValidator;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
-use WMDE\FunValidators\Validators\AllowedValuesValidator;
-use WMDE\FunValidators\Validators\AmountPolicyValidator;
-use WMDE\FunValidators\Validators\EmailValidator;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\Fundraising\Frontend\Validation\KontoCheckIbanValidator;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
 use WMDE\Fundraising\Frontend\Validation\TemplateNameValidator;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentDataValidator;
-use WMDE\FunValidators\Validators\TextPolicyValidator;
 use WMDE\Fundraising\Store\Factory as StoreFactory;
 use WMDE\Fundraising\Store\Installer;
+use WMDE\FunValidators\Validators\AllowedValuesValidator;
+use WMDE\FunValidators\Validators\AmountPolicyValidator;
+use WMDE\FunValidators\Validators\EmailValidator;
+use WMDE\FunValidators\Validators\TextPolicyValidator;
 
 /**
  * @licence GNU GPL v2+
@@ -1182,9 +1182,10 @@ class FunFunFactory {
 		);
 	}
 
-	public function newMembershipApplicationConfirmationUseCase( string $accessToken ): ShowMembershipApplicationConfirmationUseCase {
-		return new ShowMembershipApplicationConfirmationUseCase(
-			$this->newMembershipApplicationAuthorizer( null, $accessToken ), $this->getMembershipApplicationRepository(),
+	public function newMembershipApplicationConfirmationUseCase( string $accessToken ): ShowApplicationConfirmationUseCase {
+		return new ShowApplicationConfirmationUseCase(
+			$this->newMembershipApplicationAuthorizer( null, $accessToken ),
+			$this->getMembershipApplicationRepository(),
 			$this->newMembershipApplicationTokenFetcher()
 		);
 	}

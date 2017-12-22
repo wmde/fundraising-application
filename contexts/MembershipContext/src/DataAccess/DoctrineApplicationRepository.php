@@ -15,6 +15,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\ApplicantName;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Payment;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\PhoneNumber;
+use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationPurgedException;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\GetMembershipApplicationException;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\StoreMembershipApplicationException;
@@ -210,14 +211,19 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 			$application = $this->getDoctrineApplicationById( $id );
 		}
 		catch ( ORMException $ex ) {
-			throw new GetMembershipApplicationException( $ex );
+			throw new GetMembershipApplicationException( null, $ex );
 		}
 
 		if ( $application === null ) {
 			return null;
 		}
 
-		return $this->newApplicationDomainEntity( $application );
+		// TODO
+//		if ( $application->getBackup() === null ) {
+			return $this->newApplicationDomainEntity( $application );
+//		}
+
+		//throw new ApplicationPurgedException();
 	}
 
 	/**
