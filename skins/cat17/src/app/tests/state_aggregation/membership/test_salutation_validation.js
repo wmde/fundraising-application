@@ -1,6 +1,6 @@
 'use strict';
 
-var test = require( 'tape' ),
+var test = require( 'tape-catch' ),
 	salutationIsValid = require( '../../../lib/state_aggregation/membership/salutation_is_valid' )
 ;
 

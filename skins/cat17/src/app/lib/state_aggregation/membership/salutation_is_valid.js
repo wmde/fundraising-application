@@ -1,24 +1,24 @@
 'use strict';
 
-var _ = require( 'underscore' ),
-	validationResult = require( './../validation_result' );
+var validationResult = require( './../validation_result' );
 
 function namesAreFilled( state ) {
 	return state.membershipFormContent.firstName !== '' && state.membershipFormContent.lastName !== '';
 }
 
 function addressRequiresSalutation( state ) {
-	return state.membershipFormContent.addressType === 'person'
+	return state.membershipFormContent.addressType === 'person';
 }
 
 module.exports = function ( state ) {
+	var result = validationResult.newUndefinedResult();
 	if ( state.membershipFormContent.salutation !== '' ) {
-		validationResult.dataEntered = true;
-		validationResult.isValid = true;
+		result.dataEntered = true;
+		result.isValid = true;
 	} else if ( addressRequiresSalutation( state ) && namesAreFilled( state ) ) {
-		validationResult.dataEntered = true;
-		validationResult.isValid = false;
+		result.dataEntered = true;
+		result.isValid = false;
 	}
 
-	return validationResult
+	return result;
 };

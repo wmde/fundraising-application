@@ -3,7 +3,7 @@ var _ = require( 'underscore' ),
 ;
 
 module.exports = function ( state ) {
-	var result = _.clone( validationResult ),
+	var result = validationResult.newUndefinedResult(),
 		fieldSets = {
 			'person': [ 'salutation', 'firstName', 'lastName', 'street', 'postcode', 'city', 'email' ],
 			'firma': [ 'companyName', 'street', 'postcode', 'city', 'email' ]

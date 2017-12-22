@@ -1,6 +1,10 @@
 'use strict';
 
 module.exports = {
-	dataEntered: false,
-	isValid: null
+	newUndefinedResult: function () {
+		return {
+			dataEntered: false,
+			isValid: null
+		}
+	}
 };
