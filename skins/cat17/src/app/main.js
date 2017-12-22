@@ -22,7 +22,8 @@ module.exports = {
 			membershipTypeIsValid: require( './lib/state_aggregation/membership/membership_type_is_valid' ),
 			amountAndFrequencyAreValid: require( './lib/state_aggregation/membership/amount_and_frequency_are_valid' ),
 			donorTypeAndAddressAreValid: require( './lib/state_aggregation/membership/donor_type_and_address_are_valid' ),
-			paymentAndBankDataAreValid: require( './lib/state_aggregation/membership/payment_and_bank_data_are_valid' )
+			paymentAndBankDataAreValid: require( './lib/state_aggregation/membership/payment_and_bank_data_are_valid' ),
+			salutationIsValid: require( './lib/state_aggregation/membership/salutation_is_valid' )
 		}
 	},
 	View: {

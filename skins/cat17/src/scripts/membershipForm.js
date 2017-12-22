@@ -274,6 +274,10 @@ $( function () {
 				WMDE.StateAggregation.Membership.paymentAndBankDataAreValid
 			]
 		},
+		{
+			viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-salutation' ) ),
+			stateKey: [ WMDE.StateAggregation.Membership.salutationIsValid ]
+		},
       {
         viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-firstname' ) ),
         stateKey: 'membershipInputValidation.firstName'
