@@ -124,6 +124,32 @@ input[type=submit] {
 	}
 }
 
+.field-salutation.valid:after {
+	display:none;
+}
+
+.field-salutation.invalid {
+	.jcf-select-salutation {
+		@include themify($themes) {
+			background-color: themed('brandErrorRgba');
+			border-top: themed('brandErrorRgba');
+			border-left: themed('brandErrorRgba');
+			border-right: themed('brandErrorRgba');
+			border-bottom: themed('border2pxError');
+		}
+		&:hover {
+			@include themify($themes) {
+				border-bottom: themed('border2pxError');
+			}
+		}
+		&:after, &:hover:after {
+			@include themify($themes) {
+				border-color: themed('borderColorTriangleError');
+			}
+		}
+	}
+}
+
 .error-text {
 	color: $brand-error;
 	margin-bottom: 2em;
@@ -214,6 +240,7 @@ p.legend {
 		}
 	}
 }
+
 
 .jcf-list {
 	font-size: 16px;

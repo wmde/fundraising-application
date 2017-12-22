@@ -125,20 +125,23 @@
 								</div>
 								<div class="wrap-info">
 									<div class="info-text" data-info="personal">
-										<div class="wrap-select-50 clearfix">
-											<select class="no-outline salutation" id="treatment" name="anrede"
-													data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true }'>
-												<option hidden class="hideme" value="">{$ 'salutation_label' | trans $}</option>
-												<option value="Herr">{$ 'salutation_option_mr' | trans $}</option>
-												<option value="Frau">{$ 'salutation_option_mrs' | trans $}</option>
-											</select>
-											<select class="no-outline personal-title" id="title" name="titel"
-													data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true}'>
-												<option value="">{$ 'title_option_none' | trans $}</option>
-												<option value="Dr.">Dr.</option>
-												<option value="Prof.">Prof.</option>
-												<option value="Prof. Dr.">Prof. Dr.</option>
-											</select>
+										<div class="field-grp field-salutation">
+											<div class="wrap-select-50 clearfix">
+												<select class="no-outline salutation" id="treatment" name="anrede"
+														data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true }'>
+													<option hidden class="hideme" value="">{$ 'salutation_label' | trans $}</option>
+													<option value="Herr">{$ 'salutation_option_mr' | trans $}</option>
+													<option value="Frau">{$ 'salutation_option_mrs' | trans $}</option>
+												</select>
+												<select class="no-outline personal-title" id="title" name="titel"
+														data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true}'>
+													<option value="">{$ 'title_option_none' | trans $}</option>
+													<option value="Dr.">Dr.</option>
+													<option value="Prof.">Prof.</option>
+													<option value="Prof. Dr.">Prof. Dr.</option>
+												</select>
+											</div>
+											<span class="error-text">{$ 'form_salutation_error' | trans $}</span>
 										</div>
 
 										<div class="field-grp field-firstname">

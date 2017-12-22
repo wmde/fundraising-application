@@ -29,8 +29,8 @@ $( function () {
 		WMDE.Components.createRadioComponent( store, $( 'input[name="addressType"]' ), 'addressType' ),
 		WMDE.Components.createSelectMenuComponent( store, $( 'select[name="salutation"]' ), 'salutation' ),
 		WMDE.Components.createSelectMenuComponent( store, $( '#title' ), 'title' ),
-		WMDE.Components.addEagerChangeBehavior( WMDE.Components.createValidatingTextComponent( store, $( '#first-name' ), 'firstName' ) ),
-		WMDE.Components.addEagerChangeBehavior( WMDE.Components.createValidatingTextComponent( store, $( '#last-name' ), 'lastName' ) ),
+		WMDE.Components.createValidatingTextComponent( store, $( '#first-name' ), 'firstName' ),
+		WMDE.Components.createValidatingTextComponent( store, $( '#last-name' ), 'lastName' ),
 		WMDE.Components.addEagerChangeBehavior( WMDE.Components.createValidatingTextComponent( store, $( '#company-name' ), 'companyName' ) ),
 		WMDE.Components.createValidatingTextComponent( store, $( '#street' ), 'street' ),
 		WMDE.Components.createValidatingTextComponent( store, $( '#adress-company' ), 'street' ),
@@ -115,6 +115,10 @@ $( function () {
 				$( '#type-donor' )
 			),
 			stateKey: 'donationFormContent.addressType'
+		},
+		{
+			viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-salutation' ) ),
+			stateKey: [ WMDE.StateAggregation.Donation.salutationIsValid ]
 		},
       {
         viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-firstname' ) ),

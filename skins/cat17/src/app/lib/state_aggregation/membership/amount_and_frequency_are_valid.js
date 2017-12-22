@@ -1,11 +1,10 @@
 'use strict';
 
-var _ = require( 'underscore' ),
-	validationResult = require( './../validation_result' )
+var validationResult = require( './../validation_result' )
 ;
 
 module.exports = function ( state ) {
-	var result = _.clone( validationResult );
+	var result = validationResult.newUndefinedResult();
 	result.dataEntered = state.membershipFormContent.paymentIntervalInMonths > 0 || state.membershipFormContent.amount !== 0;
 
 	if ( state.membershipFormContent.paymentIntervalInMonths > 0 && state.membershipFormContent.amount !== 0 && state.membershipInputValidation.amount.isValid ) {

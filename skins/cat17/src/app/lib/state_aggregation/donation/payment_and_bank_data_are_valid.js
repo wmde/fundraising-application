@@ -19,7 +19,7 @@ var _ = require( 'underscore' ),
 ;
 
 module.exports = function ( state ) {
-	var result = _.clone( validationResult ),
+	var result = validationResult.newUndefinedResult(),
 		respectiveValidators = _.pick( state.donationInputValidation, [ 'paymentType', 'iban', 'bic', 'accountNumber', 'bankCode' ] )
 	;
 

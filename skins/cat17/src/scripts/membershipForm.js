@@ -26,10 +26,10 @@ $( function () {
 		//Personal Data
 		WMDE.Components.createSelectMenuComponent( store, $( '#treatment' ), 'salutation' ),
 		WMDE.Components.createSelectMenuComponent( store, $( '#title' ), 'title' ),
-		WMDE.Components.addEagerChangeBehavior( WMDE.Components.createValidatingTextComponent( store, $( '#first-name' ), 'firstName' ) ),
-		WMDE.Components.addEagerChangeBehavior( WMDE.Components.createValidatingTextComponent( store, $( '#surname' ), 'lastName' ) ),
+		WMDE.Components.createValidatingTextComponent( store, $( '#first-name' ), 'firstName' ),
+		WMDE.Components.createValidatingTextComponent( store, $( '#surname' ), 'lastName' ),
 		WMDE.Components.createValidatingTextComponent( store, $( '#email' ), 'email' ),
-		WMDE.Components.addEagerChangeBehavior( WMDE.Components.createValidatingTextComponent( store, $( '#street' ), 'street' ) ),
+		WMDE.Components.createValidatingTextComponent( store, $( '#street' ), 'street' ),
 		WMDE.Components.createValidatingTextComponent( store, $( '#post-code' ), 'postcode' ),
 		WMDE.Components.addEagerChangeBehavior( WMDE.Components.createValidatingTextComponent( store, $( '#city' ), 'city' ) ),
 		WMDE.Components.createSelectMenuComponent( store, $( '#country' ), 'country' ),
@@ -37,7 +37,7 @@ $( function () {
 		//Company Data
 		WMDE.Components.addEagerChangeBehavior( WMDE.Components.createValidatingTextComponent( store, $( '#company-name' ), 'companyName' ) ),
 		WMDE.Components.createValidatingTextComponent( store, $( '#email-company' ), 'email' ),
-		WMDE.Components.addEagerChangeBehavior( WMDE.Components.createValidatingTextComponent( store, $( '#adress-company' ), 'street' ) ),
+		WMDE.Components.createValidatingTextComponent( store, $( '#adress-company' ), 'street' ),
 		WMDE.Components.createValidatingTextComponent( store, $( '#post-code-company' ), 'postcode' ),
 		WMDE.Components.addEagerChangeBehavior( WMDE.Components.createValidatingTextComponent( store, $( '#city-company' ), 'city' ) ),
 		WMDE.Components.createSelectMenuComponent( store, $( '#country-company' ), 'country' ),
@@ -273,6 +273,10 @@ $( function () {
 				'membershipFormContent.bic',
 				WMDE.StateAggregation.Membership.paymentAndBankDataAreValid
 			]
+		},
+		{
+			viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-salutation' ) ),
+			stateKey: [ WMDE.StateAggregation.Membership.salutationIsValid ]
 		},
       {
         viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-firstname' ) ),
