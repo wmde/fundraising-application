@@ -116,6 +116,10 @@ $( function () {
 			),
 			stateKey: 'donationFormContent.addressType'
 		},
+		{
+			viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-salutation' ) ),
+			stateKey: [ WMDE.StateAggregation.Donation.salutationIsValid ]
+		},
       {
         viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-firstname' ) ),
         stateKey: 'donationInputValidation.firstName'

@@ -14,7 +14,8 @@ module.exports = {
 			amountAndFrequencyAreValid: require( './lib/state_aggregation/donation/amount_and_frequency_are_valid' ),
 			donorTypeAndAddressAreValid: require( './lib/state_aggregation/donation/donor_type_and_address_are_valid' ),
 			paymentAndBankDataAreValid: require( './lib/state_aggregation/donation/payment_and_bank_data_are_valid' ),
-			formIsPrefilled: require( './lib/state_aggregation/donation/form_is_prefilled' )
+			formIsPrefilled: require( './lib/state_aggregation/donation/form_is_prefilled' ),
+			salutationIsValid: require( './lib/state_aggregation/donation/salutation_is_valid' )
 		},
 		Membership: {
 			allValiditySectionsAreValid: require( './lib/state_aggregation/membership/all_validation_sections_are_valid' ),
