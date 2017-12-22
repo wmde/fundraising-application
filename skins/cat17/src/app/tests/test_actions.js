@@ -73,3 +73,20 @@ test( 'newInitializeContentAction returns action object', function ( t ) {
 	t.end();
 } );
 
+test( 'newInitializeValidationAction returns action object', function ( t ) {
+	var expectedAction = {
+		type: 'INITIALIZE_VALIDATION',
+		payload: {
+			violatedFields: { email: 'Not a valid email address'},
+			initialValues: { email: 'foo' },
+			initialValidationResult: { 'address': false }
+		}
+	};
+	t.deepEqual( actions.newInitializeValidationStateAction(
+		{ email: 'Not a valid email address'},
+		{ email: 'foo' },
+		{ 'address': false }
+	), expectedAction );
+	t.end();
+} );
+

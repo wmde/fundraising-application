@@ -8,6 +8,7 @@ use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
 
 class DonationMembershipApplicationAdapter {
 
@@ -50,5 +51,21 @@ class DonationMembershipApplicationAdapter {
 			'bankCode' => $paymentMethod->getBankData()->getBankCode(),
 			'bankname' => $paymentMethod->getBankData()->getBankName(),
 		];
+	}
+
+	public function getInitialValidationState( Donation $donation ): array {
+		$validationState = [];
+		if ( $donation->getDonor() !== null ) {
+			$validationState['address'] = true;
+		}
+		if ( $donation->getPaymentType() !== PaymentType::DIRECT_DEBIT ) {
+			return $validationState;
+		}
+		/** @var DirectDebitPayment $paymentMethod */
+		$paymentMethod = $donation->getPayment()->getPaymentMethod();
+		if ( $paymentMethod->getBankData()->hasIban() ) {
+			$validationState['bankData'] = true;
+		}
+		return $validationState;
 	}
 }
