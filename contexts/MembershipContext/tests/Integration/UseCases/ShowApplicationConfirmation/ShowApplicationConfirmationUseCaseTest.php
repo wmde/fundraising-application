@@ -6,6 +6,8 @@ namespace WMDE\Fundraising\Frontend\MembershipContext\Tests\Integration\UseCases
 
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\MembershipContext\Authorization\ApplicationAuthorizer;
+use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
+use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\FakeApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\FixedApplicationTokenFetcher;
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\SucceedingAuthorizer;
@@ -50,6 +52,7 @@ class ShowApplicationConfirmationUseCaseTest extends TestCase {
 		$response = $this->newUseCase()->showConfirmation( $request );
 
 		$this->assertFalse( $response->accessIsPermitted() );
+		$this->assertNull( $response->getApplication() );
 	}
 
 	private function newUseCase(): ShowApplicationConfirmationUseCase {
@@ -58,6 +61,24 @@ class ShowApplicationConfirmationUseCaseTest extends TestCase {
 			$this->repository,
 			$this->tokenFetcher
 		);
+	}
+
+	public function testHappyPath_successResponseWithApplicationIsReturned() {
+		$this->repository->storeApplication( $this->newApplication() );
+
+		$request = new ShowAppConfirmationRequest( self::APPLICATION_ID );
+		$response = $this->newUseCase()->showConfirmation( $request );
+
+		$this->assertTrue( $response->accessIsPermitted() );
+		$this->assertSame( self::APPLICATION_ID, $response->getApplication()->getId() );
+	}
+
+	private function newApplication(): Application {
+		$application = ValidMembershipApplication::newDomainEntity();
+
+		$application->assignId( self::APPLICATION_ID );
+
+		return $application;
 	}
 
 }
