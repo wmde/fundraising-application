@@ -218,12 +218,11 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 			return null;
 		}
 
-		// TODO
-//		if ( $application->getBackup() === null ) {
+		if ( $application->getBackup() === null ) {
 			return $this->newApplicationDomainEntity( $application );
-//		}
+		}
 
-		//throw new ApplicationPurgedException();
+		throw new ApplicationPurgedException();
 	}
 
 	/**
