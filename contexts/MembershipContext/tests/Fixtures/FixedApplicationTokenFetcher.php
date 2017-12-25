@@ -14,6 +14,18 @@ use WMDE\Fundraising\Frontend\MembershipContext\Authorization\MembershipApplicat
  */
 class FixedApplicationTokenFetcher implements ApplicationTokenFetcher {
 
+	public const ACCESS_TOKEN = 'testAccessToken';
+	public const UPDATE_TOKEN = 'testUpdateToken';
+
+	public static function newWithDefaultTokens(): self {
+		return new self(
+			new MembershipApplicationTokens(
+				self::ACCESS_TOKEN,
+				self::UPDATE_TOKEN
+			)
+		);
+	}
+
 	private $tokens;
 
 	public function __construct( MembershipApplicationTokens $tokens ) {
