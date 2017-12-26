@@ -25,6 +25,11 @@ class ShowApplicationConfirmationUseCaseTest extends TestCase {
 	private const APPLICATION_ID = 42;
 
 	/**
+	 * @var FakeShowApplicationConfirmationPresenter
+	 */
+	private $presenter;
+
+	/**
 	 * @var ApplicationAuthorizer
 	 */
 	private $authorizer;
@@ -40,6 +45,7 @@ class ShowApplicationConfirmationUseCaseTest extends TestCase {
 	private $tokenFetcher;
 
 	public function setUp() {
+		$this->presenter = new FakeShowApplicationConfirmationPresenter();
 		$this->authorizer = new SucceedingAuthorizer();
 		$this->repository = new FakeApplicationRepository();
 		$this->tokenFetcher = FixedApplicationTokenFetcher::newWithDefaultTokens();
@@ -49,14 +55,15 @@ class ShowApplicationConfirmationUseCaseTest extends TestCase {
 		$this->repository->throwOnRead();
 
 		$request = new ShowAppConfirmationRequest( self::APPLICATION_ID );
-		$response = $this->newUseCase()->showConfirmation( $request );
+		$this->newUseCase()->showConfirmation( $request );
 
-		$this->assertFalse( $response->accessIsPermitted() );
-		$this->assertNull( $response->getApplication() );
+		$this->assertFalse( $this->presenter->getResponseModel()->accessIsPermitted() );
+		$this->assertNull( $this->presenter->getResponseModel()->getApplication() );
 	}
 
 	private function newUseCase(): ShowApplicationConfirmationUseCase {
 		return new ShowApplicationConfirmationUseCase(
+			$this->presenter,
 			$this->authorizer,
 			$this->repository,
 			$this->tokenFetcher
@@ -67,10 +74,10 @@ class ShowApplicationConfirmationUseCaseTest extends TestCase {
 		$this->repository->storeApplication( $this->newApplication() );
 
 		$request = new ShowAppConfirmationRequest( self::APPLICATION_ID );
-		$response = $this->newUseCase()->showConfirmation( $request );
+		$this->newUseCase()->showConfirmation( $request );
 
-		$this->assertTrue( $response->accessIsPermitted() );
-		$this->assertSame( self::APPLICATION_ID, $response->getApplication()->getId() );
+		$this->assertTrue( $this->presenter->getResponseModel()->accessIsPermitted() );
+		$this->assertSame( self::APPLICATION_ID, $this->presenter->getResponseModel()->getApplication()->getId() );
 	}
 
 	private function newApplication(): Application {

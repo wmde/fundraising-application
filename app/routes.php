@@ -436,12 +436,16 @@ $app->get(
 $app->get(
 	'show-membership-confirmation',
 	function( Request $request ) use ( $ffFactory ) {
-		$confirmationRequest = new ShowAppConfirmationRequest( (int)$request->query->get( 'id', 0 ) );
+		$presenter = $ffFactory->newMembershipApplicationConfirmationHtmlPresenter();
 
-		return $ffFactory->newMembershipApplicationConfirmationHtmlPresenter()->present(
-			$ffFactory->newMembershipApplicationConfirmationUseCase( $request->query->get( 'accessToken', '' ) )
-				->showConfirmation( $confirmationRequest )
+		$useCase = $ffFactory->newMembershipApplicationConfirmationUseCase(
+			$presenter,
+			$request->query->get( 'accessToken', '' )
 		);
+
+		$useCase->showConfirmation( new ShowAppConfirmationRequest( (int)$request->query->get( 'id', 0 ) ) );
+
+		return $presenter->getHtml();
 	}
 )->bind( 'show-membership-confirmation' );
 

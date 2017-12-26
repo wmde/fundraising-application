@@ -16,36 +16,45 @@ use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\GetMembershi
  */
 class ShowApplicationConfirmationUseCase {
 
+	private $presenter;
 	private $authorizer;
 	private $repository;
 	private $tokenFetcher;
 
-	public function __construct( ApplicationAuthorizer $authorizer, ApplicationRepository $repository,
-								 ApplicationTokenFetcher $tokenFetcher ) {
+	public function __construct( ShowApplicationConfirmationPresenter $presenter, ApplicationAuthorizer $authorizer,
+		ApplicationRepository $repository, ApplicationTokenFetcher $tokenFetcher ) {
+		$this->presenter = $presenter;
 		$this->authorizer = $authorizer;
 		$this->repository = $repository;
 		$this->tokenFetcher = $tokenFetcher;
 	}
 
-	public function showConfirmation( ShowAppConfirmationRequest $request ): ShowApplicationConfirmationResponse {
+	public function showConfirmation( ShowAppConfirmationRequest $request ): void {
 		if ( !$this->authorizer->canAccessApplication( $request->getApplicationId() ) ) {
-			return ShowApplicationConfirmationResponse::newNotAllowedResponse();
+			// TODO: show access error
+			$this->presenter->presentResponseModel( ShowApplicationConfirmationResponse::newNotAllowedResponse() );
+			return;
 		}
 
 		try {
 			$application = $this->repository->getApplicationById( $request->getApplicationId() );
 		}
 		catch ( ApplicationPurgedException $ex ) {
-			// TODO: success response without the Application
-			return ShowApplicationConfirmationResponse::newNotAllowedResponse();
+			// TODO: show application was purged
+			$this->presenter->presentResponseModel( ShowApplicationConfirmationResponse::newNotAllowedResponse() );
+			return;
 		}
 		catch ( GetMembershipApplicationException $ex ) {
-			return ShowApplicationConfirmationResponse::newNotAllowedResponse();
+			// TODO: show technical error
+			$this->presenter->presentResponseModel( ShowApplicationConfirmationResponse::newNotAllowedResponse() );
+			return;
 		}
 
-		return ShowApplicationConfirmationResponse::newValidResponse(
-			$application, // TODO: use DTO instead of Entity (currently violates the architecture)
-			$this->tokenFetcher->getTokens( $request->getApplicationId() )->getUpdateToken()
+		$this->presenter->presentResponseModel(
+			ShowApplicationConfirmationResponse::newValidResponse(
+				$application, // TODO: use DTO instead of Entity (currently violates the architecture)
+				$this->tokenFetcher->getTokens( $request->getApplicationId() )->getUpdateToken()
+			)
 		);
 	}
 

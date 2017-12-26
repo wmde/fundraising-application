@@ -104,6 +104,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\Memb
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\CancelMembershipApplication\CancelMembershipApplicationUseCase;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionPaymentNotification\HandleSubscriptionPaymentNotificationUseCase;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionSignupNotification\HandleSubscriptionSignupNotificationUseCase;
+use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationPresenter;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationUseCase;
 use WMDE\Fundraising\Frontend\PaymentContext\DataAccess\McpCreditCardService;
 use WMDE\Fundraising\Frontend\PaymentContext\DataAccess\Sofort\Transfer\Client as SofortClient;
@@ -1182,8 +1183,9 @@ class FunFunFactory {
 		);
 	}
 
-	public function newMembershipApplicationConfirmationUseCase( string $accessToken ): ShowApplicationConfirmationUseCase {
+	public function newMembershipApplicationConfirmationUseCase( ShowApplicationConfirmationPresenter $presenter, string $accessToken ): ShowApplicationConfirmationUseCase {
 		return new ShowApplicationConfirmationUseCase(
+			$presenter,
 			$this->newMembershipApplicationAuthorizer( null, $accessToken ),
 			$this->getMembershipApplicationRepository(),
 			$this->newMembershipApplicationTokenFetcher()
