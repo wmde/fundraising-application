@@ -10,6 +10,7 @@ namespace WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowApplicationCo
  */
 interface ShowApplicationConfirmationPresenter {
 
+	// TODO: replace w/ presentConfirmation, presentApplicationWasPurged, presentAccessDenied, etc
 	public function presentResponseModel( ShowApplicationConfirmationResponse $response ): void;
 
 }
