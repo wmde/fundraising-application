@@ -68,8 +68,8 @@ test( 'Unknown initial values are ignored', function ( t ) {
 	deepFreeze( stateBefore );
 	t.deepEqual(
 		inputValidation( stateBefore, newInitializeValidationAction(
-			{ unrelated: "Not enough sprockets" },
-			{ unrelated: '1', superfluous: "Floo" }
+			{ unrelated: 'Not enough sprockets' },
+			{ unrelated: '1', superfluous: 'Floo' }
 		) ),
 		expectedState
 	);

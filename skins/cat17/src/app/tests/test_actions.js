@@ -107,13 +107,13 @@ test( 'newInitializeValidationAction returns action object', function ( t ) {
 		payload: {
 			violatedFields: { email: 'Not a valid email address' },
 			initialValues: { email: 'foo' },
-			initialValidationResult: { 'address': false }
+			initialValidationResult: { address: false }
 		}
 	};
 	t.deepEqual( actions.newInitializeValidationStateAction(
 		{ email: 'Not a valid email address' },
 		{ email: 'foo' },
-		{ 'address': false }
+		{ address: false }
 	), expectedAction );
 	t.end();
 } );

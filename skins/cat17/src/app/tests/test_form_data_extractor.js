@@ -35,7 +35,7 @@ test( 'Map can be built from select options', function ( t ) {
 
 	t.deepEqual(
 		extractor.mapFromSelectOptions( container ),
-		{ 'onekey': 'hello', 'anotherkey': 'world' }
+		{ onekey: 'hello', anotherkey: 'world' }
 	);
 
 	delete global.$;
@@ -76,7 +76,7 @@ test( 'Map can be built from radio button labels', function ( t ) {
 
 	t.deepEqual(
 		extractor.mapFromRadioLabels( container ),
-		{ 'a': 'alpha', 'b': 'beta' }
+		{ a: 'alpha', b: 'beta' }
 	);
 
 	delete global.$;
@@ -117,7 +117,7 @@ test( 'Map can be built from radio button label\'s data attributes', function ( 
 
 	t.deepEqual(
 		extractor.mapFromRadioLabelsShort( container ),
-		{ 'a': 'alpha', 'b': 'beta' }
+		{ a: 'alpha', b: 'beta' }
 	);
 
 	delete global.$;
@@ -160,7 +160,7 @@ test( 'Map can be built from radio button info texts', function ( t ) {
 
 	t.deepEqual(
 		extractor.mapFromRadioInfoTexts( container ),
-		{ 'uno': 'my longer text', 'dos': 'to someone', 'tres': 'who reads it' }
+		{ uno: 'my longer text', dos: 'to someone', tres: 'who reads it' }
 	);
 
 	delete global.$;

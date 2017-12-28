@@ -194,7 +194,7 @@ test( 'Rendering the amount component with custom amount clears selection and se
 		parser = createAmountParser(),
 		dummyFormatter = {
 			format: function ( v ) {
-				return "XX" + v + "YY";
+				return 'XX' + v + 'YY';
 
 			}
 		},
@@ -232,7 +232,7 @@ test( 'Rendering the amount component with non-custom amount sets the hidden fie
 		parser = createAmountParser(),
 		dummyFormatter = {
 			format: function ( v ) {
-				return "XX" + v + "YY";
+				return 'XX' + v + 'YY';
 
 			}
 		},

@@ -40,9 +40,9 @@ test( 'The amount is passed to the currency formatter', function ( t ) {
 			text: text,
 			longText: longText,
 
-			valueIconMap: { '0': 'icon-0', '1': 'icon-1' },
-			valueTextMap: { '0': 'lorem', '1': 'ipsum' },
-			valueLongTextMap: { '0': 'lorem lorem', '1': 'ipsum ipsum' },
+			valueIconMap: { 0: 'icon-0', 1: 'icon-1' },
+			valueTextMap: { 0: 'lorem', 1: 'ipsum' },
+			valueLongTextMap: { 0: 'lorem lorem', 1: 'ipsum ipsum' },
 
 			currencyFormatter: currencyFormatter
 		} );
@@ -66,9 +66,9 @@ test( 'Formatted amount is set in amount element', function ( t ) {
 			text: text,
 			longText: longText,
 
-			valueIconMap: { '0': 'icon-0', '1': 'icon-1' },
-			valueTextMap: { '0': 'lorem', '1': 'ipsum' },
-			valueLongTextMap: { '0': 'lorem lorem', '1': 'ipsum ipsum' },
+			valueIconMap: { 0: 'icon-0', 1: 'icon-1' },
+			valueTextMap: { 0: 'lorem', 1: 'ipsum' },
+			valueLongTextMap: { 0: 'lorem lorem', 1: 'ipsum ipsum' },
 
 			currencyFormatter: currencyFormatter
 		} );
@@ -93,9 +93,9 @@ test( 'Icon is set according to value', function ( t ) {
 			text: text,
 			longText: longText,
 
-			valueIconMap: { '0': 'icon-0', '1': 'icon-1' },
-			valueTextMap: { '0': 'lorem', '1': 'ipsum' },
-			valueLongTextMap: { '0': 'lorem lorem', '1': 'ipsum ipsum' },
+			valueIconMap: { 0: 'icon-0', 1: 'icon-1' },
+			valueTextMap: { 0: 'lorem', 1: 'ipsum' },
+			valueLongTextMap: { 0: 'lorem lorem', 1: 'ipsum ipsum' },
 
 			currencyFormatter: currencyFormatter
 		} );
@@ -117,7 +117,7 @@ test( 'Icon is set to error if value out of bounds and error desired', function 
 
 			icon: icon,
 
-			valueIconMap: { '0': 'icon-0', '1': 'icon-1' },
+			valueIconMap: { 0: 'icon-0', 1: 'icon-1' },
 
 			currencyFormatter: currencyFormatter
 		} );
@@ -141,7 +141,7 @@ test( 'Icon is reset if value out of bounds and error not desired', function ( t
 
 			icon: icon,
 
-			valueIconMap: { '0': 'icon-0', '1': 'icon-1' },
+			valueIconMap: { 0: 'icon-0', 1: 'icon-1' },
 
 			currencyFormatter: currencyFormatter
 		} );
@@ -169,9 +169,9 @@ test( 'Payment type PPL info is set in respective elements', function ( t ) {
 			text: text,
 			longText: longText,
 
-			valueIconMap: { 'BEZ': 'icon-BEZ', 'PPL': 'icon-PPL' },
-			valueTextMap: { 'BEZ': 'Lastschrift', 'PPL': 'Paypal' },
-			valueLongTextMap: { 'BEZ': 'Will be deducted', 'PPL': 'I am of no importance' }
+			valueIconMap: { BEZ: 'icon-BEZ', PPL: 'icon-PPL' },
+			valueTextMap: { BEZ: 'Lastschrift', PPL: 'Paypal' },
+			valueLongTextMap: { BEZ: 'Will be deducted', PPL: 'I am of no importance' }
 		} );
 
 	handler.update( 'PPL', '', '', { dataEntered: true, isValid: true } );
@@ -197,9 +197,9 @@ test( 'Payment type BEZ info is set in respective elements', function ( t ) {
 			text: text,
 			longText: longText,
 
-			valueIconMap: { 'BEZ': 'icon-BEZ', 'PPL': 'icon-PPL' },
-			valueTextMap: { 'BEZ': 'Lastschrift', 'PPL': 'Paypal' },
-			valueLongTextMap: { 'BEZ': 'Will be deducted', 'PPL': 'Forward to PPL' }
+			valueIconMap: { BEZ: 'icon-BEZ', PPL: 'icon-PPL' },
+			valueTextMap: { BEZ: 'Lastschrift', PPL: 'Paypal' },
+			valueLongTextMap: { BEZ: 'Will be deducted', PPL: 'Forward to PPL' }
 		} );
 
 	/**
@@ -253,7 +253,7 @@ test( 'Fallback text is used when value does not correspond to text map', functi
 
 			text: text,
 
-			valueTextMap: { 'BEZ': 'Lastschrift', 'PPL': 'Paypal' }
+			valueTextMap: { BEZ: 'Lastschrift', PPL: 'Paypal' }
 		} );
 
 	text.data.withArgs( 'empty-text' ).returns( 'Bitcoin' );
@@ -275,9 +275,9 @@ test( 'Missing features are gently skipped', function ( t ) {
 			text: null,
 			longText: null,
 
-			valueIconMap: { 'BEZ': 'icon-BEZ', 'PPL': 'icon-PPL' },
-			valueTextMap: { 'BEZ': 'Lastschrift', 'PPL': 'Paypal' },
-			valueLongTextMap: { 'BEZ': 'Will be deducted', 'PPL': 'Forward to PPL' }
+			valueIconMap: { BEZ: 'icon-BEZ', PPL: 'icon-PPL' },
+			valueTextMap: { BEZ: 'Lastschrift', PPL: 'Paypal' },
+			valueLongTextMap: { BEZ: 'Will be deducted', PPL: 'Forward to PPL' }
 		} );
 
 	handler.update( 'BEZ', '', '', { dataEntered: false, isValid: null } );
@@ -314,10 +314,10 @@ test( 'Instance correctly detects and applies sub-elements', function ( t ) {
 
 test( 'Instance is created with properties applied', function ( t ) {
 	var container = createContainerElement(),
-		iconMap = { 'a': 1 },
-		textMap = { 'a': 2 },
-		longTextMap = { 'a': 3 },
-		additionalProperties = { 'alpha': 'gamma' }
+		iconMap = { a: 1 },
+		textMap = { a: 2 },
+		longTextMap = { a: 3 },
+		additionalProperties = { alpha: 'gamma' }
 	;
 
 	var handler = SectionInfo.createInstance( {}, container, iconMap, textMap, longTextMap, additionalProperties );
@@ -371,7 +371,7 @@ test( 'Existing longtext is indicated', function ( t ) {
 			text: text,
 			longText: longText,
 
-			valueLongTextMap: { 'BEZ': 'Will be deducted', 'PPL': '' }
+			valueLongTextMap: { BEZ: 'Will be deducted', PPL: '' }
 		} );
 
 	handler.update( 'BEZ', '', '', { dataEntered: true, isValid: true } );
@@ -393,7 +393,7 @@ test( 'Missing longtext is indicated', function ( t ) {
 			text: text,
 			longText: longText,
 
-			valueLongTextMap: { 'BEZ': 'Will be deducted', 'PPL': '' }
+			valueLongTextMap: { BEZ: 'Will be deducted', PPL: '' }
 		} );
 
 	handler.update( 'PPL', '', '', { dataEntered: true, isValid: true } );
@@ -411,7 +411,7 @@ test( 'Opened longtext are shut', function ( t ) {
 
 			longText: longText,
 
-			valueLongTextMap: { 'BEZ': 'Will be deducted', 'PPL': 'Somesome' }
+			valueLongTextMap: { BEZ: 'Will be deducted', PPL: 'Somesome' }
 		} );
 
 	handler.update( 'PPL', '', '', { dataEntered: true, isValid: true } );
