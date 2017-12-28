@@ -207,7 +207,7 @@ test( 'Payment type BEZ info is set in respective elements', function ( t ) {
 	 * - the original construction parameter (HTML) via .toString()
 	 * - the methods called on the wanna-be node via the properties
 	 */
-	global.$ = function ( arg0 ) {
+	global.jQuery = function ( arg0 ) {
 		arg0 = objectAssign( arg0, {
 			addClass: sinon.stub().returnsThis(),
 			text: sinon.stub().returnsThis(),
@@ -240,7 +240,7 @@ test( 'Payment type BEZ info is set in respective elements', function ( t ) {
 	t.equals( longText.prepend.args[ 0 ][ 0 ].append.args[ 0 ][ 3 ].toString(), '<dd>', 'Bank data BIC set' );
 	t.ok( longText.prepend.args[ 0 ][ 0 ].append.args[ 0 ][ 3 ].text.withArgs( '8888' ).calledOnce, 'Bank data IBAN set' );
 
-	delete global.$;
+	delete global.jQuery;
 
 	t.end();
 } );
@@ -344,8 +344,8 @@ test( 'Proxy forwards calls and arguments', function ( t ) {
 		proxy
 	;
 
-	global.$ = sinon.stub();
-	global.$.returnsArg( 0 ); // pretend to extend the DOM element given to jQuery. We don't but have all methods stubbed
+	global.jQuery = sinon.stub();
+	global.jQuery.returnsArg( 0 ); // pretend to extend the DOM element given to jQuery. We don't but have all methods stubbed
 
 	proxy = SectionInfo.createProxy( fakeType, containers, {}, {}, {}, {} );
 
@@ -356,7 +356,7 @@ test( 'Proxy forwards calls and arguments', function ( t ) {
 	t.deepEquals( proxy.widgets[ 0 ].update.firstCall.args, [ 'a', 'b', 'c' ] );
 	t.deepEquals( proxy.widgets[ 1 ].update.firstCall.args, [ 'a', 'b', 'c' ] );
 
-	delete global.$;
+	delete global.jQuery;
 	t.end();
 } );
 

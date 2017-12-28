@@ -11,7 +11,7 @@ var objectAssign = require( 'object-assign' ),
 
 	calculateFixedHeaderElementHeight = function ( $fixedHeaderElements ) {
 		return _.reduce( $fixedHeaderElements.get(), function ( offset, element ) {
-			var $elm = $( element );
+			var $elm = jQuery( element );
 			if ( $elm.is( ':visible' ) ) {
 				offset += $elm.height();
 			}
@@ -77,7 +77,7 @@ var objectAssign = require( 'object-assign' ),
 		scrollTo: function ( $element, options ) {
 			var self = this;
 			this.fixedHeaderElements.addClass( 'scrolling' );
-			$( 'html, body' ).stop( true ).animate( {
+			jQuery( 'html, body' ).stop( true ).animate( {
 				scrollTop: calculateElementOffset( $element, this.fixedHeaderElements, options )
 			}, 1000, function () {
 				// Callback after animation
@@ -99,7 +99,7 @@ var objectAssign = require( 'object-assign' ),
 		scroller: null,
 		linkIsInsideCompletedSummaryOnSmallScreen: function ( link ) {
 			// only the completed fields at the bottom summary are inside a .wrap-field.completed
-			return $( window ).width() < 1200 && $( link ).closest( '.wrap-field.has-longtext.completed .wrap-input' ).length > 0;
+			return jQuery( window ).width() < 1200 && jQuery( link ).closest( '.wrap-field.has-longtext.completed .wrap-input' ).length > 0;
 		},
 		scrollToTarget: function ( evt ) {
 			var target;
@@ -110,8 +110,8 @@ var objectAssign = require( 'object-assign' ),
 				return;
 			}
 
-			target = $( evt.currentTarget.hash );
-			target = target.length ? target : $( '[name=' + evt.currentTarget.hash.slice( 1 ) + ']' );
+			target = jQuery( evt.currentTarget.hash );
+			target = target.length ? target : jQuery( '[name=' + evt.currentTarget.hash.slice( 1 ) + ']' );
 			if ( target.length > 0 ) {
 				this.scroller.scrollTo( target, { elementStart: ElementStart.PADDDING } );
 			}

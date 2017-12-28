@@ -201,11 +201,11 @@ var objectAssign = require( 'object-assign' ),
 
 			if ( this.longText && iban && bic ) {
 				this.longText.prepend( // intentionally html. Escaping performed through .text() calls on user-input vars
-					$( '<dl>' ).addClass( DOM_SELECTORS.classes.summaryBankInfo ).append(
-						$( '<dt>' ).text( 'IBAN' ),
-						$( '<dd>' ).text( iban ),
-						$( '<dt>' ).text( 'BIC' ),
-						$( '<dd>' ).text( bic )
+					jQuery( '<dl>' ).addClass( DOM_SELECTORS.classes.summaryBankInfo ).append(
+						jQuery( '<dt>' ).text( 'IBAN' ),
+						jQuery( '<dd>' ).text( iban ),
+						jQuery( '<dt>' ).text( 'BIC' ),
+						jQuery( '<dd>' ).text( bic )
 					)
 				);
 			}
@@ -241,24 +241,24 @@ var objectAssign = require( 'object-assign' ),
 				return;
 			}
 
-			longtext = $( wrapperTag );
+			longtext = jQuery( wrapperTag );
 			// TODO Reuse AddressDisplayHandler maybe?
 			if ( addressType === 'person' && firstName !== '' && lastName !== '' ) {
-				longtext.append( $( wrapperTag ).text( salutation + ' ' + title + ' ' + firstName + ' ' + lastName ), '<br>' );
+				longtext.append( jQuery( wrapperTag ).text( salutation + ' ' + title + ' ' + firstName + ' ' + lastName ), '<br>' );
 			} else if ( addressType === 'firma' && companyName !== '' ) {
-				longtext.append( $( wrapperTag ).text( companyName ), '<br>' );
+				longtext.append( jQuery( wrapperTag ).text( companyName ), '<br>' );
 			}
 			if ( street !== '' ) {
-				longtext.append( $( wrapperTag ).text( street ), '<br>' );
+				longtext.append( jQuery( wrapperTag ).text( street ), '<br>' );
 			}
 			if ( postcode !== '' && city !== '' ) {
-				longtext.append( $( wrapperTag ).text( postcode + ' ' + city ), '<br>' );
+				longtext.append( jQuery( wrapperTag ).text( postcode + ' ' + city ), '<br>' );
 			}
 			if ( country !== '' ) {
-				longtext.append( $( wrapperTag ).text( this.countryNames[ country ] ), '<br>' );
+				longtext.append( jQuery( wrapperTag ).text( this.countryNames[ country ] ), '<br>' );
 			}
 			if ( email !== '' ) {
-				longtext.append( $( wrapperTag ).text( email ), '<br>' );
+				longtext.append( jQuery( wrapperTag ).text( email ), '<br>' );
 			}
 
 			this.longText.html( longtext );
@@ -313,7 +313,7 @@ var objectAssign = require( 'object-assign' ),
 	createProxy = function ( type, containers, valueIconMap, valueTextMap, valueLongTextMap, additionalDependencies ) {
 		var widgets = [];
 		_.each( containers.get(), function ( container ) {
-			widgets.push( createInstance( type, $( container ), valueIconMap, valueTextMap, valueLongTextMap, additionalDependencies ) );
+			widgets.push( createInstance( type, jQuery( container ), valueIconMap, valueTextMap, valueLongTextMap, additionalDependencies ) );
 		} );
 
 		return objectAssign( {

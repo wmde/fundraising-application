@@ -6,7 +6,7 @@ module.exports = {
 	mapFromSelectOptions: function ( $select ) {
 		var map = {};
 		_.each( $select.find( 'option' ).get(), function ( option ) {
-			option = $( option );
+			option = jQuery( option );
 			map[ option.attr( 'value' ) ] = option.text().trim();
 		} );
 		return map;
@@ -14,7 +14,7 @@ module.exports = {
 	mapFromRadioLabels: function ( $container ) {
 		var map = {};
 		_.each( $container.find( 'input[type="radio"]' ).get(), function ( input ) {
-			input = $( input );
+			input = jQuery( input );
 			map[ input.attr( 'value' ) ] = input.next( 'label' ).text().trim();
 		} );
 		return map;
@@ -22,7 +22,7 @@ module.exports = {
 	mapFromRadioLabelsShort: function ( $container ) {
 		var map = {};
 		_.each( $container.find( 'input[type="radio"]' ).get(), function ( input ) {
-			input = $( input );
+			input = jQuery( input );
 			map[ input.attr( 'value' ) ] = input.next( 'label' ).data( 'short-text' ).trim();
 		} );
 		return map;
@@ -33,7 +33,7 @@ module.exports = {
 	mapFromRadioInfoTexts: function ( $container ) {
 		var map = {};
 		_.each( $container.find( '.wrap-input input[type="radio"]' ).get(), function ( input ) {
-			input = $( input );
+			input = jQuery( input );
 			map[ input.attr( 'value' ) ] = input.parents( '.wrap-field' ).data( 'info-text' ).trim();
 		} );
 		return map;
