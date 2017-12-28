@@ -3,7 +3,7 @@
 var objectAssign = require( 'object-assign' ),
 	CustomAmountField = {
 		field: null,
-		update: function ( amount ) {
+		update: function () {
 		}
 	};
 

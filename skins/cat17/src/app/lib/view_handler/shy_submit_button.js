@@ -4,7 +4,6 @@
  * @todo For semantic DOM and intuitive behavior consider using disabled attribute and corresponding CSS
  */
 var objectAssign = require( 'object-assign' ),
-	_ = require( 'underscore' ),
 	ShySubmitButton = {
 		buttons: null,
 		update: function ( allSectionsAreValid ) {

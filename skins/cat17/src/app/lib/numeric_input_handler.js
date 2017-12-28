@@ -10,8 +10,7 @@ var objectAssign = require( 'object-assign' ),
 		input: null,
 		delimiter: '.',
 		handle: function ( event ) {
-			var $element = this.input,
-				// @todo Revise keyCode when support for .key is more wide spread
+			var // @todo Revise keyCode when support for .key is more wide spread
 				// @see https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent
 				// @see https://stackoverflow.com/a/41656511
 				keyCode = event.keyCode || event.which,

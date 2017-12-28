@@ -319,7 +319,7 @@ test( 'Instance is created with properties applied', function ( t ) {
 		textMap = { a: 2 },
 		longTextMap = { a: 3 },
 		additionalProperties = { alpha: 'gamma' },
-		handler = SectionInfo.createInstance( {}, container, iconMap, textMap, longTextMap, additionalProperties );
+		handler = SectionInfo.createInstance( {}, container, iconMap, textMap, longTextMap, additionalProperties )
 	;
 
 	t.deepEquals( handler.valueIconMap, iconMap );
