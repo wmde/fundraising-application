@@ -30,7 +30,7 @@ function formPagination( paginationState, action ) {
 			}
 			return newPaginationState;
 		case 'NEXT_PAGE':
-			if ( currentPageIsLastPage( newPaginationState )  ) {
+			if ( currentPageIsLastPage( newPaginationState ) ) {
 				newPaginationState.currentPage += 1;
 			}
 			return newPaginationState;

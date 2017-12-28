@@ -15,11 +15,13 @@ test( 'INITIALIZE_CONTENT changes multiple fields', function ( t ) {
 } );
 
 test( 'INITIALIZE_CONTENT throws an error if a field name is not allowed', function ( t ) {
-	var action = { type: 'INITIALIZE_CONTENT', payload: {
-		amount: '25,00',
-		paymentType: 'BEZ',
-		unknownField: 'supercalifragilistic'
-	} };
+	var action = {
+		type: 'INITIALIZE_CONTENT', payload: {
+			amount: '25,00',
+			paymentType: 'BEZ',
+			unknownField: 'supercalifragilistic'
+		}
+	};
 
 	t.throws( function () {
 		donationFormContent( {}, action );

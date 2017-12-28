@@ -224,21 +224,21 @@ test( 'Payment type BEZ info is set in respective elements', function ( t ) {
 	t.ok( longText.text.withArgs( 'Will be deducted' ).calledOnce, 'Long text is set' );
 	t.ok( longText.prepend.calledOnce, 'Bank data is prepended' );
 
-	t.equals( longText.prepend.args[0].toString(), '<dl>', 'Bank data is a list' );
-	t.ok( longText.prepend.args[0][0].addClass.withArgs( 'bank-info' ).calledOnce );
-	t.ok( longText.prepend.args[0][0].append.calledOnce, 'Bank data put before text' );
+	t.equals( longText.prepend.args[ 0 ].toString(), '<dl>', 'Bank data is a list' );
+	t.ok( longText.prepend.args[ 0 ][ 0 ].addClass.withArgs( 'bank-info' ).calledOnce );
+	t.ok( longText.prepend.args[ 0 ][ 0 ].append.calledOnce, 'Bank data put before text' );
 
-	t.equals( longText.prepend.args[0][0].append.args[0][0].toString(), '<dt>', 'Bank data IBAN title set' );
-	t.ok( longText.prepend.args[0][0].append.args[0][0].text.withArgs( 'IBAN' ).calledOnce, 'Bank data IBAN set' );
+	t.equals( longText.prepend.args[ 0 ][ 0 ].append.args[ 0 ][ 0 ].toString(), '<dt>', 'Bank data IBAN title set' );
+	t.ok( longText.prepend.args[ 0 ][ 0 ].append.args[ 0 ][ 0 ].text.withArgs( 'IBAN' ).calledOnce, 'Bank data IBAN set' );
 
-	t.equals( longText.prepend.args[0][0].append.args[0][1].toString(), '<dd>', 'Bank data IBAN set' );
-	t.ok( longText.prepend.args[0][0].append.args[0][1].text.withArgs( '4711' ).calledOnce, 'Bank data IBAN set' );
+	t.equals( longText.prepend.args[ 0 ][ 0 ].append.args[ 0 ][ 1 ].toString(), '<dd>', 'Bank data IBAN set' );
+	t.ok( longText.prepend.args[ 0 ][ 0 ].append.args[ 0 ][ 1 ].text.withArgs( '4711' ).calledOnce, 'Bank data IBAN set' );
 
-	t.equals( longText.prepend.args[0][0].append.args[0][2].toString(), '<dt>', 'Bank data BIC title set' );
-	t.ok( longText.prepend.args[0][0].append.args[0][2].text.withArgs( 'BIC' ).calledOnce, 'Bank data IBAN set' );
+	t.equals( longText.prepend.args[ 0 ][ 0 ].append.args[ 0 ][ 2 ].toString(), '<dt>', 'Bank data BIC title set' );
+	t.ok( longText.prepend.args[ 0 ][ 0 ].append.args[ 0 ][ 2 ].text.withArgs( 'BIC' ).calledOnce, 'Bank data IBAN set' );
 
-	t.equals( longText.prepend.args[0][0].append.args[0][3].toString(), '<dd>', 'Bank data BIC set' );
-	t.ok( longText.prepend.args[0][0].append.args[0][3].text.withArgs( '8888' ).calledOnce, 'Bank data IBAN set' );
+	t.equals( longText.prepend.args[ 0 ][ 0 ].append.args[ 0 ][ 3 ].toString(), '<dd>', 'Bank data BIC set' );
+	t.ok( longText.prepend.args[ 0 ][ 0 ].append.args[ 0 ][ 3 ].text.withArgs( '8888' ).calledOnce, 'Bank data IBAN set' );
 
 	delete global.$;
 
@@ -348,7 +348,7 @@ test( 'Proxy forwards calls and arguments', function ( t ) {
 
 	var proxy = SectionInfo.createProxy( fakeType, containers, {}, {}, {}, {} );
 
-	proxy.update(  'a', 'b', 'c' );
+	proxy.update( 'a', 'b', 'c' );
 
 	t.ok( proxy.widgets instanceof Array );
 	t.equals( proxy.widgets.length, 2 );

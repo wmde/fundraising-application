@@ -4,7 +4,12 @@ var test = require( 'tape-catch' ),
 	sinon = require( 'sinon' ),
 	Actions = require( '../../lib/actions' ),
 	createFeeValidationDispatcher = require( '../../lib/validation_dispatchers/fee' ),
-	testData = { amount: '2.00', paymentIntervalInMonths: 3, addressType: 'privat', ignoredData: 'this won\'t be validated' };
+	testData = {
+		amount: '2.00',
+		paymentIntervalInMonths: 3,
+		addressType: 'privat',
+		ignoredData: 'this won\'t be validated'
+	};
 
 test( 'FeeValidationDispatcher calls validator', function ( t ) {
 	var successResult = { status: 'OK' },

@@ -33,10 +33,10 @@ var test = require( 'tape-catch' ),
 		return {
 			parse: sinon.stub().returnsArg( 0 ),
 			getDecimalDelimiter: sinon.stub().returns( ',' )
-		}
+		};
 	}
 
-	;
+;
 
 test( 'Components add change handling function to their elements', function ( t ) {
 	var element = createSpyingElement(),
@@ -192,10 +192,12 @@ test( 'Rendering the amount component with custom amount clears selection and se
 		selectElement = createSpyingElement(),
 		hiddenElement = createSpyingElement(),
 		parser = createAmountParser(),
-		dummyFormatter = { format: function ( v ) {
-			return "XX" + v + "YY";
+		dummyFormatter = {
+			format: function ( v ) {
+				return "XX" + v + "YY";
 
-		} },
+			}
+		},
 		store = {},
 		parent = {
 			addClass: sinon.spy()
@@ -228,10 +230,12 @@ test( 'Rendering the amount component with non-custom amount sets the hidden fie
 		selectElement = createSpyingElement(),
 		hiddenElement = createSpyingElement(),
 		parser = createAmountParser(),
-		dummyFormatter = { format: function ( v ) {
-			return "XX" + v + "YY";
+		dummyFormatter = {
+			format: function ( v ) {
+				return "XX" + v + "YY";
 
-		} },
+			}
+		},
 		store = {},
 		parent = {
 			removeClass: sinon.stub()

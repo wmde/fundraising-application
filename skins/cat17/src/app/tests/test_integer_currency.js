@@ -15,8 +15,8 @@ test( 'German locale - formatting an integer', function ( t ) {
 		[ 1337, '13,37' ]
 	];
 	inputsAndExpectedOutputs.map( function ( io ) {
-		t.equal( formatter.format( io[0] ), io[1] );
-	});
+		t.equal( formatter.format( io[ 0 ] ), io[ 1 ] );
+	} );
 	t.end();
 } );
 
@@ -42,8 +42,8 @@ test( 'German locale - parsing valid strings', function ( t ) {
 		[ '12,9', 1290 ]
 	];
 	inputsAndExpectedOutputs.map( function ( io ) {
-		t.equal( parser.parse( io[0] ), io[1] );
-	});
+		t.equal( parser.parse( io[ 0 ] ), io[ 1 ] );
+	} );
 	t.end();
 } );
 
@@ -59,9 +59,11 @@ test( 'German locale - parsing invalid strings', function ( t ) {
 		'1,2,3'
 	];
 	inputs.map( function ( invalidInput ) {
-		t.throws( function() { parser.parse( invalidInput ); },
+		t.throws( function () {
+				parser.parse( invalidInput );
+			},
 			'"' + invalidInput + '" should throw exception' );
-	});
+	} );
 	t.end();
 } );
 
@@ -76,8 +78,8 @@ test( 'English locale - formatting an integer ', function ( t ) {
 		[ 1337, '13.37' ]
 	];
 	inputsAndExpectedOutputs.map( function ( io ) {
-		t.equal( formatter.format( io[0] ), io[1] );
-	});
+		t.equal( formatter.format( io[ 0 ] ), io[ 1 ] );
+	} );
 	t.end();
 } );
 
@@ -103,8 +105,8 @@ test( 'English locale - parsing valid strings', function ( t ) {
 		[ '12.9', 1290 ]
 	];
 	inputsAndExpectedOutputs.map( function ( io ) {
-		t.equal( parser.parse( io[0] ), io[1] );
-	});
+		t.equal( parser.parse( io[ 0 ] ), io[ 1 ] );
+	} );
 	t.end();
 } );
 
@@ -120,15 +122,21 @@ test( 'English locale - parsing invalid strings', function ( t ) {
 		'1.2.3'
 	];
 	inputs.map( function ( invalidInput ) {
-		t.throws( function() { parser.parse( invalidInput ); },
+		t.throws( function () {
+				parser.parse( invalidInput );
+			},
 			'"' + invalidInput + '" should throw exception' );
-	});
+	} );
 	t.end();
 } );
 
 test( 'Other locales than German and english throw and error', function ( t ) {
-	t.throws( function () { IntegerCurrency.createCurrencyFormatter( 'fr' ); }, 'Unsupported locale' );
-	t.throws( function () { IntegerCurrency.createCurrencyParser( 'fr' ); }, 'Unsupported locale' );
+	t.throws( function () {
+		IntegerCurrency.createCurrencyFormatter( 'fr' );
+	}, 'Unsupported locale' );
+	t.throws( function () {
+		IntegerCurrency.createCurrencyParser( 'fr' );
+	}, 'Unsupported locale' );
 	t.end();
 } );
 
@@ -154,11 +162,10 @@ test( 'German locale without decimals - valid strings', function ( t ) {
 		[ '12,9', 1200 ]
 	];
 	inputsAndExpectedOutputs.map( function ( io ) {
-		t.equal( parser.parse( io[0] ), io[1] );
-	});
+		t.equal( parser.parse( io[ 0 ] ), io[ 1 ] );
+	} );
 	t.end();
 } );
-
 
 test( 'German locale without decimals - parsing invalid strings', function ( t ) {
 	var parser = IntegerCurrency.createCurrencyParser( 'de', false );
@@ -173,9 +180,11 @@ test( 'German locale without decimals - parsing invalid strings', function ( t )
 	];
 	inputs.map( function ( invalidInput ) {
 		t.throws(
-			function() { parser.parse( invalidInput ); },
+			function () {
+				parser.parse( invalidInput );
+			},
 			'"' + invalidInput + '" should throw exception'
 		);
-	});
+	} );
 	t.end();
 } );

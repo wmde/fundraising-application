@@ -12,9 +12,9 @@ var objectAssign = require( 'object-assign' ),
 		update: function ( validationState ) {
 			if ( validationState.isValid === true ) {
 				this.element.addClass( 'valid' ).removeClass( 'invalid' );
-			} else if( validationState.isValid === false ) {
+			} else if ( validationState.isValid === false ) {
 				this.element.addClass( 'invalid' ).removeClass( 'valid' );
-			} else if( validationState.isValid === null ) {
+			} else if ( validationState.isValid === null ) {
 				this.element.removeClass( 'valid invalid' );
 			}
 		}

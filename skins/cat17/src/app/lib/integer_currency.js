@@ -1,4 +1,3 @@
-
 function getFirstTwoDigitsOfNumberString( num ) {
 	switch ( num.length ) {
 		case 1:
@@ -10,7 +9,7 @@ function getFirstTwoDigitsOfNumberString( num ) {
 	}
 }
 
-function stringToNumber ( s ) {
+function stringToNumber( s ) {
 	if ( s.match( /[^-0-9]/ ) ) {
 		return Number.NaN;
 	}
@@ -36,21 +35,22 @@ var objectAssign = require( 'object-assign' ),
 		decimalDelimiter: '.',
 		allowDecimals: true,
 		parse: function ( value ) {
-			var strParts = value.split( this.decimalDelimiter ), parts;
+			var strParts = value.split( this.decimalDelimiter ),
+				parts;
 
 			if ( strParts.length < 2 || this.allowDecimals === false ) {
-				strParts[1] = '00';
+				strParts[ 1 ] = '00';
 			} else {
-				strParts[1] = getFirstTwoDigitsOfNumberString( strParts[1] );
+				strParts[ 1 ] = getFirstTwoDigitsOfNumberString( strParts[ 1 ] );
 			}
 
 			parts = strParts.map( stringToNumber );
 
-			if ( isNaN( parts[0] ) || isNaN( parts[1] ) || parts.length > 2 ) {
+			if ( isNaN( parts[ 0 ] ) || isNaN( parts[ 1 ] ) || parts.length > 2 ) {
 				throw new Error( 'Invalid number' );
 			}
 
-			return parts[0] * 100 + parts[1];
+			return parts[ 0 ] * 100 + parts[ 1 ];
 		},
 		getDecimalDelimiter: function () {
 			return this.decimalDelimiter;

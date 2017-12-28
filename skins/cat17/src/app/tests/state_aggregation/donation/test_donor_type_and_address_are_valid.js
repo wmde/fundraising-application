@@ -118,7 +118,6 @@ test( 'Anonym address type makes makes address validity irrelevant', function ( 
 	t.end();
 } );
 
-
 test( 'All private person information given is valid and has data entered', function ( t ) {
 	t.deepEqual(
 		donorTypeAndAddressAreValid( {
@@ -171,7 +170,6 @@ test( 'All private person information given is valid and has data entered', func
 	t.end();
 } );
 
-
 test( 'All company information given is valid and has data entered', function ( t ) {
 	t.deepEqual(
 		donorTypeAndAddressAreValid( {
@@ -213,7 +211,6 @@ test( 'All company information given is valid and has data entered', function ( 
 	);
 	t.end();
 } );
-
 
 test( 'Bad email makes aggregation invalid but has data entered', function ( t ) {
 	t.deepEqual(

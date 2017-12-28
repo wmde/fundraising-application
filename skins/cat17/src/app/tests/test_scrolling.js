@@ -30,13 +30,12 @@ test( 'calculateElementOffset returns the offset of the element', function ( t )
 	t.end();
 } );
 
-
 test( 'calculateElementOffset subtracts the height of visible header elements', function ( t ) {
 	var createElement = function () {
 			return {
 				is: sinon.stub(),
 				height: sinon.stub()
-			}
+			};
 		},
 		firstHeaderElement = createElement(),
 		secondHeaderElement = createElement(),
@@ -64,7 +63,7 @@ test( 'calculateElementOffset subtracts the height of visible header elements', 
 	global.$ = sinon.stub();
 	global.$.returnsArg( 0 ); // pretend to extend the DOM element given to jQuery. We don't but have all methods stubbed
 
-	t.equal( scrolling.calculateElementOffset( element, headerElements ), 1920	);
+	t.equal( scrolling.calculateElementOffset( element, headerElements ), 1920 );
 
 	delete global.$;
 
@@ -85,7 +84,6 @@ test( 'calculateElementOffset can add the padding of the element to the offset',
 
 	element.css.withArgs( 'padding-top' ).returns( '1px' );
 	element.offset.returns( { top: 2000 } );
-
 
 	global.$ = sinon.stub();
 	global.$.returnsArg( 0 ); // pretend to extend the DOM element given to jQuery. We don't but have all methods stubbed
@@ -113,7 +111,6 @@ test( 'calculateElementOffset ignores element padding not given in pixels', func
 	element.css.withArgs( 'padding-top' ).returns( '1em' );
 	element.offset.returns( { top: 2000 } );
 
-
 	global.$ = sinon.stub();
 	global.$.returnsArg( 0 ); // pretend to extend the DOM element given to jQuery. We don't but have all methods stubbed
 
@@ -138,7 +135,6 @@ test( 'calculateElementOffset can subtract the margin of the element from the of
 
 	element.css.withArgs( 'margin-top' ).returns( '1px' );
 	element.offset.returns( { top: 2000 } );
-
 
 	global.$ = sinon.stub();
 	global.$.returnsArg( 0 ); // pretend to extend the DOM element given to jQuery. We don't but have all methods stubbed
@@ -166,7 +162,6 @@ test( 'calculateElementOffset ignores element margin not given in pixels', funct
 	element.css.withArgs( 'margin-top' ).returns( '1em' );
 	element.offset.returns( { top: 2000 } );
 
-
 	global.$ = sinon.stub();
 	global.$.returnsArg( 0 ); // pretend to extend the DOM element given to jQuery. We don't but have all methods stubbed
 
@@ -177,9 +172,7 @@ test( 'calculateElementOffset ignores element margin not given in pixels', funct
 	t.end();
 } );
 
-
 test( 'findElementWithLowestOffset returns no elements if no elements are given', function ( t ) {
-
 	t.equal( scrolling.findElementWithLowestOffset( [] ), null );
 
 	t.end();
@@ -289,7 +282,7 @@ test( 'AnimatedScroller brings us to the right spot on the page', function ( t )
 	scroller.scrollTo( element );
 
 	t.ok( body.animate.calledOnce );
-	t.deepEquals( body.animate.args[0][0], { scrollTop: 400 } );
+	t.deepEquals( body.animate.args[ 0 ][ 0 ], { scrollTop: 400 } );
 
 	delete global.$;
 
@@ -320,7 +313,7 @@ test( 'AnimatedScroller scrolls in hard-coded time', function ( t ) {
 	scroller.scrollTo( element );
 
 	t.ok( body.animate.calledOnce );
-	t.equals( body.animate.args[0][1], 1000 );
+	t.equals( body.animate.args[ 0 ][ 1 ], 1000 );
 
 	delete global.$;
 
@@ -355,9 +348,9 @@ test( 'AnimatedScroller treats element once scroll position reached', function (
 	scroller.scrollTo( element );
 
 	t.ok( body.animate.calledOnce );
-	t.equals( typeof body.animate.args[0][2], 'function' );
+	t.equals( typeof body.animate.args[ 0 ][ 2 ], 'function' );
 
-	body.animate.args[0][2]();
+	body.animate.args[ 0 ][ 2 ]();
 
 	t.ok( element.attr.withArgs( 'tabindex', '-1' ).calledOnce );
 	t.ok( element.focus.calledTwice );
@@ -395,9 +388,9 @@ test( 'AnimatedScroller ensures header elements can anticipate scrolling', funct
 
 	t.ok( headerElements.addClass.withArgs( 'scrolling' ).calledOnce );
 	t.ok( body.animate.calledOnce );
-	t.equals( typeof body.animate.args[0][2], 'function' );
+	t.equals( typeof body.animate.args[ 0 ][ 2 ], 'function' );
 
-	body.animate.args[0][2]();
+	body.animate.args[ 0 ][ 2 ]();
 
 	t.ok( headerElements.removeClass.withArgs( 'scrolling' ).calledOnce );
 

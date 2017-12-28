@@ -32,13 +32,15 @@ test( 'Handler lets number presses pass', function ( t ) {
 		},
 		element = {
 			on: sinon.stub(),
-			val: sinon.stub().returns('')
+			val: sinon.stub().returns( '' )
 		},
 		handler = NumericInputHandler.createNumericInputHandler( element ),
-		event, keyCode, number
+		event,
+		keyCode,
+		number
 	;
 
-	for (number in numberKeys) {
+	for ( number in numberKeys ) {
 		keyCode = numberKeys[ number ];
 		event = {
 			preventDefault: sinon.stub(),
@@ -57,7 +59,7 @@ test( 'Handler lets number presses pass', function ( t ) {
 test( 'Handler lets configured delimiter press pass', function ( t ) {
 	var element = {
 			on: sinon.stub(),
-			val: sinon.stub().returns('')
+			val: sinon.stub().returns( '' )
 		},
 		handler = NumericInputHandler.createNumericInputHandler( element, ',' ),
 		event = {
@@ -76,7 +78,7 @@ test( 'Handler lets configured delimiter press pass', function ( t ) {
 test( 'Prevents invalid delimiter press', function ( t ) {
 	var element = {
 			on: sinon.stub(),
-			val: sinon.stub().returns('')
+			val: sinon.stub().returns( '' )
 		},
 		handler = NumericInputHandler.createNumericInputHandler( element, ',' ),
 		event = {
@@ -95,7 +97,7 @@ test( 'Prevents invalid delimiter press', function ( t ) {
 test( 'Prevents multiple valid delimiter pressed', function ( t ) {
 	var element = {
 			on: sinon.stub(),
-			val: sinon.stub().returns('.')
+			val: sinon.stub().returns( '.' )
 		},
 		handler = NumericInputHandler.createNumericInputHandler( element, '.' ),
 		event = {

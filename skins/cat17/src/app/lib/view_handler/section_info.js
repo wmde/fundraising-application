@@ -130,8 +130,7 @@ var objectAssign = require( 'object-assign' ),
 				if ( this.icon.data( DOM_SELECTORS.data.displayError ) === true ) {
 					this.icon.addClass( DOM_SELECTORS.classes.errorIcon );
 				}
-			}
-			else {
+			} else {
 				this.icon.addClass( icon );
 			}
 		},
@@ -174,7 +173,7 @@ var objectAssign = require( 'object-assign' ),
 	} ),
 
 	PaymentTypeSectionInfo = objectAssign( Object.create( SectionInfo ), {
-		update: function( paymentType, iban, bic, aggregateValidity ) {
+		update: function ( paymentType, iban, bic, aggregateValidity ) {
 			if ( aggregateValidity.isValid === true ) {
 				this.setSectionStatus( SECTION_STATUS.complete );
 			} else if ( aggregateValidity.isValid === false ) {
@@ -203,10 +202,10 @@ var objectAssign = require( 'object-assign' ),
 			if ( this.longText && iban && bic ) {
 				this.longText.prepend( // intentionally html. Escaping performed through .text() calls on user-input vars
 					$( '<dl>' ).addClass( DOM_SELECTORS.classes.summaryBankInfo ).append(
-						$('<dt>').text( 'IBAN' ),
-						$('<dd>').text( iban ),
-						$('<dt>').text( 'BIC' ),
-						$('<dd>').text( bic )
+						$( '<dt>' ).text( 'IBAN' ),
+						$( '<dd>' ).text( iban ),
+						$( '<dt>' ).text( 'BIC' ),
+						$( '<dd>' ).text( bic )
 					)
 				);
 			}
@@ -215,7 +214,7 @@ var objectAssign = require( 'object-assign' ),
 
 	DonorTypeSectionInfo = objectAssign( Object.create( SectionInfo ), {
 		countryNames: null,
-		update: function( addressType, salutation, title, firstName, lastName, companyName, street, postcode, city, country, email, aggregateValidity ) {
+		update: function ( addressType, salutation, title, firstName, lastName, companyName, street, postcode, city, country, email, aggregateValidity ) {
 			if ( aggregateValidity.isValid === true ) {
 				this.setSectionStatus( SECTION_STATUS.complete );
 			} else if ( aggregateValidity.isValid === false ) {
@@ -243,8 +242,7 @@ var objectAssign = require( 'object-assign' ),
 			// TODO Reuse AddressDisplayHandler maybe?
 			if ( addressType === 'person' && firstName !== '' && lastName !== '' ) {
 				longtext.append( $( wrapperTag ).text( salutation + ' ' + title + ' ' + firstName + ' ' + lastName ), '<br>' );
-			}
-			else if ( addressType === 'firma' && companyName !== '' ) {
+			} else if ( addressType === 'firma' && companyName !== '' ) {
 				longtext.append( $( wrapperTag ).text( companyName ), '<br>' );
 			}
 			if ( street !== '' ) {
@@ -310,8 +308,8 @@ var objectAssign = require( 'object-assign' ),
 	 * @return {SectionInfo} or a child
 	 */
 	createProxy = function ( type, containers, valueIconMap, valueTextMap, valueLongTextMap, additionalDependencies ) {
- 		var widgets = [];
-		_.each( containers.get(), function( container ) {
+		var widgets = [];
+		_.each( containers.get(), function ( container ) {
 			widgets.push( createInstance( type, $( container ), valueIconMap, valueTextMap, valueLongTextMap, additionalDependencies ) );
 		} );
 

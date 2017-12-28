@@ -19,7 +19,7 @@ test( 'AmountValidationDispatcher calls validator', function ( t ) {
 	dispatcher.dispatchIfChanged( testData, testStore );
 
 	t.ok( validator.validate.calledOnce, 'validation function is called once' );
-	t.ok( validator.validate.calledWith( { amount: '2.00' }  ), 'validation function is called with selected fields' );
+	t.ok( validator.validate.calledWith( { amount: '2.00' } ), 'validation function is called with selected fields' );
 	t.end();
 } );
 

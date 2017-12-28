@@ -1,0 +1,9 @@
+{
+    "preset": "wikimedia",
+    "jsDoc": {
+        "checkAnnotations": {
+            "preset": "jsdoc3"
+        }
+    },
+    "maxErrors": null
+}

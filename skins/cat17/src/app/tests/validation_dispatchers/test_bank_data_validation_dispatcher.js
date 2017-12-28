@@ -4,7 +4,7 @@ var test = require( 'tape-catch' ),
 	sinon = require( 'sinon' ),
 	Actions = require( '../../lib/actions' ),
 	createBankDataValidationDispatcher = require( '../../lib/validation_dispatchers/bankdata' ),
-	testData =  { iban: 'DE12500105170648489890', ignoredData: 'this won\'t be validated' };
+	testData = { iban: 'DE12500105170648489890', ignoredData: 'this won\'t be validated' };
 
 test( 'BankDataValidationDispatcher calls validator', function ( t ) {
 	var successResult = { status: 'OK' },
@@ -19,7 +19,7 @@ test( 'BankDataValidationDispatcher calls validator', function ( t ) {
 	dispatcher.dispatchIfChanged( testData, testStore );
 
 	t.ok( validator.validate.calledOnce, 'validation function is called once' );
-	t.ok( validator.validate.calledWith( { iban: 'DE12500105170648489890' }  ), 'validation function is called with selected fields' );
+	t.ok( validator.validate.calledWith( { iban: 'DE12500105170648489890' } ), 'validation function is called with selected fields' );
 	t.end();
 } );
 

@@ -13,8 +13,12 @@ module.exports = {
 		return elementVisibilitySwitcher.createCustomVisibilitySwitcher(
 			showOnValue,
 			{
-				showElement: function() { element.addClass( className ); },
-				hideElement: function() { element.removeClass( className ); }
+				showElement: function () {
+					element.addClass( className );
+				},
+				hideElement: function () {
+					element.removeClass( className );
+				}
 			}
 		);
 	}

@@ -5,6 +5,6 @@ module.exports = {
 		return {
 			dataEntered: false,
 			isValid: null
-		}
+		};
 	}
 };

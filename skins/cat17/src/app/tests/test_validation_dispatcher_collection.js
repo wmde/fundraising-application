@@ -6,8 +6,8 @@ var test = require( 'tape-catch' ),
 
 test( 'ValidationDispatcherCollection listens to store updates', function ( t ) {
 	var storeSpy = {
-			subscribe: sinon.spy()
-		};
+		subscribe: sinon.spy()
+	};
 
 	createValidationDispatcherCollection( storeSpy, [], 'dummy' );
 

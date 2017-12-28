@@ -61,14 +61,14 @@ var objectAssign = require( 'object-assign' ),
 		onChange: null,
 		render: function ( formContent ) {
 
-			if ( this.element.val() === formContent[ this.contentName ]  || this.elementAndContentAreEmpty( formContent ) ) {
+			if ( this.element.val() === formContent[ this.contentName ] || this.elementAndContentAreEmpty( formContent ) ) {
 				return;
 			}
 
 			this.element.val( [ formContent[ this.contentName ] ] );
 			this.element.change();
 		},
-		elementAndContentAreEmpty: function( formContent ) {
+		elementAndContentAreEmpty: function ( formContent ) {
 			// calling this.element.val( '' ) leads to this.element.val() === null in some cases,
 			// so we need to compare different types
 			return this.element.val() === null && formContent[ this.contentName ] === '';
@@ -239,7 +239,7 @@ module.exports = {
 		return component;
 	},
 
-	addEagerChangeBehavior: function( textComponent, debouncingFunction ) {
+	addEagerChangeBehavior: function ( textComponent, debouncingFunction ) {
 		debouncingFunction = debouncingFunction || defaultDebounce;
 		textComponent.element.on( 'keypress', debouncingFunction( function ( evt ) {
 			textComponent.onChange( evt );

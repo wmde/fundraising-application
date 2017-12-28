@@ -115,4 +115,3 @@ test( 'Active membership for company donors is invalid', function ( t ) {
 	} ) );
 	t.end();
 } );
-

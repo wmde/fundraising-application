@@ -16,7 +16,7 @@ var objectAssign = require( 'object-assign' ),
 	 * @param {Object} initialValues Initial form state. Only the keys and values from fieldNames will be used
 	 * @return {ValidationDispatcher}
 	 */
-	createBankDataValidationDispatcher = function ( validator,  initialValues ) {
+	createBankDataValidationDispatcher = function ( validator, initialValues ) {
 		var fieldNames = [ 'iban', 'bic', 'accountNumber', 'bankCode', 'debitType', 'paymentType' ];
 
 		return objectAssign( Object.create( ValidationDispatcher ), {

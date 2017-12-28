@@ -12,7 +12,8 @@ test( 'Amount validation sends values to server', function ( t ) {
 			'http://spenden.wikimedia.org/validate-donation-amount',
 			postFunctionSpy
 		),
-		callParameters, validationResult;
+		callParameters,
+		validationResult;
 
 	validationResult = amountValidator.validate( { amount: 23, otherStuff: 'foo' } );
 
@@ -58,14 +59,19 @@ test( 'Fee validation sends values to server', function ( t ) {
 			paymentIntervalInMonths: 1,
 			otherStuff: 'foo'
 		},
-		callParameters, validationResult;
+		callParameters,
+		validationResult;
 
 	validationResult = feeValidator.validate( formData );
 
 	t.ok( postFunctionSpy.calledOnce, 'data is sent once' );
 	callParameters = postFunctionSpy.getCall( 0 ).args;
 	t.equal( callParameters[ 0 ], 'http://spenden.wikimedia.org/validate-fee', 'validation calls configured URL' );
-	t.deepEqual( callParameters[ 1 ], { amount: 23, addressType: 'privat', paymentIntervalInMonths: 1 }, 'validation sends only necessary data' );
+	t.deepEqual( callParameters[ 1 ], {
+		amount: 23,
+		addressType: 'privat',
+		paymentIntervalInMonths: 1
+	}, 'validation sends only necessary data' );
 	t.equal( callParameters[ 3 ], 'json', 'validation expects JSON data' );
 	validationResult.then( function ( resultData ) {
 		t.deepEqual( resultData, positiveResult, 'validation function returns promise result' );
@@ -114,7 +120,8 @@ test( 'Email validation sends values to server', function ( t ) {
 			'http://spenden.wikimedia.org/validate-email',
 			postFunctionSpy
 		),
-		callParameters, validationResult;
+		callParameters,
+		validationResult;
 
 	validationResult = emailValidator.validate( { email: 'test@example.com', otherStuff: 'foo' } );
 
@@ -180,7 +187,8 @@ test( 'Given a private adddress, address validation sends values to server', fun
 			city: 'Cypress Creek',
 			email: 'hank@globex.com'
 		},
-		callParameters, validationResult;
+		callParameters,
+		validationResult;
 
 	validationResult = addressValidator.validate( formData );
 
@@ -230,7 +238,8 @@ test( 'Given sepa debit type, bank data validation sends IBAN to server', functi
 			'http://spenden.wikimedia.org/generate-iban',
 			postFunctionSpy
 		),
-		callParameters, validationResult;
+		callParameters,
+		validationResult;
 
 	validationResult = bankDataValidator.validate( {
 		iban: 'DE12500105170648489890',
@@ -261,7 +270,8 @@ test( 'Given non-sepa debit type, bank data validation sends account number and 
 			'http://spenden.wikimedia.org/generate-iban',
 			postFunctionSpy
 		),
-		callParameters, validationResult;
+		callParameters,
+		validationResult;
 
 	validationResult = bankDataValidator.validate( {
 		iban: 'DE12500105170648489890',
@@ -276,7 +286,10 @@ test( 'Given non-sepa debit type, bank data validation sends account number and 
 	t.ok( postFunctionSpy.calledOnce, 'data is sent once' );
 	callParameters = postFunctionSpy.getCall( 0 ).args;
 	t.equal( callParameters[ 0 ], 'http://spenden.wikimedia.org/generate-iban', 'validation calls URL for SEPA' );
-	t.deepEqual( callParameters[ 1 ], { accountNumber: '0648489890', bankCode: '50010517' }, 'validation sends only necessary data' );
+	t.deepEqual( callParameters[ 1 ], {
+		accountNumber: '0648489890',
+		bankCode: '50010517'
+	}, 'validation sends only necessary data' );
 	t.equal( callParameters[ 3 ], 'json', 'validation expects JSON data' );
 	validationResult.then( function ( resultData ) {
 		t.deepEqual( resultData, positiveResult, 'validation function returns promise result' );
@@ -308,5 +321,3 @@ test( 'Given a non-debit payment type, bank data validation is not applicable', 
 	t.deepEqual( validationResult, expectedValidationResult, 'validation result ' );
 	t.end();
 } );
-
-

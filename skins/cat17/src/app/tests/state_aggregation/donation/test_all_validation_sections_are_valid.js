@@ -24,7 +24,6 @@ test( 'Valid all over means valid', function ( t ) {
 	t.end();
 } );
 
-
 test( 'Bank data validity ignored when not paying via debit', function ( t ) {
 	t.ok( allSectionsAreValid( {
 		donationFormContent: {

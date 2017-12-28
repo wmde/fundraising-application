@@ -10,7 +10,7 @@ test( 'Map can be built from select options', function ( t ) {
 			return {
 				attr: sinon.stub(),
 				text: sinon.stub()
-			}
+			};
 		},
 		optionOne = createOption(),
 		optionTwo = createOption(),
@@ -47,13 +47,13 @@ test( 'Map can be built from radio button labels', function ( t ) {
 	var createLabel = function ( labelText ) {
 			return {
 				text: sinon.stub().returns( labelText )
-			}
+			};
 		},
 		createElement = function ( labelText ) {
 			return {
 				attr: sinon.stub(),
 				next: sinon.stub().withArgs( 'label' ).returns( createLabel( labelText ) )
-			}
+			};
 		},
 		radioOne = createElement( 'alpha' ),
 		radioTwo = createElement( 'beta' ),
@@ -88,13 +88,13 @@ test( 'Map can be built from radio button label\'s data attributes', function ( 
 	var createLabel = function ( labelText ) {
 			return {
 				data: sinon.stub().withArgs( 'short-text' ).returns( labelText )
-			}
+			};
 		},
 		createElement = function ( labelText ) {
 			return {
 				attr: sinon.stub(),
 				next: sinon.stub().withArgs( 'label' ).returns( createLabel( labelText ) )
-			}
+			};
 		},
 		radioOne = createElement( 'alpha' ),
 		radioTwo = createElement( 'beta' ),
@@ -128,14 +128,14 @@ test( 'Map can be built from radio button label\'s data attributes', function ( 
 test( 'Map can be built from radio button info texts', function ( t ) {
 	var createLabel = function ( infoText ) {
 			return {
-				data: sinon.stub().withArgs( 'info-text' ) .returns( infoText )
-			}
+				data: sinon.stub().withArgs( 'info-text' ).returns( infoText )
+			};
 		},
 		createElement = function ( infoText ) {
 			return {
 				attr: sinon.stub(),
 				parents: sinon.stub().withArgs( '.wrap-field' ).returns( createLabel( infoText ) )
-			}
+			};
 		},
 		radioOne = createElement( 'my longer text' ),
 		radioTwo = createElement( 'to someone' ),

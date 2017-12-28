@@ -8,7 +8,8 @@ module.exports = function ( state ) {
 			'person': [ 'salutation', 'firstName', 'lastName', 'street', 'postcode', 'city', 'email' ],
 			'firma': [ 'companyName', 'street', 'postcode', 'city', 'email' ]
 		},
-		respectiveValidators, validity
+		respectiveValidators,
+		validity
 	;
 
 	if ( state.membershipFormContent.addressType === 'person' || state.membershipFormContent.addressType === 'firma' ) {

@@ -19,7 +19,7 @@ test( 'EmailValidationDispatcher calls validator', function ( t ) {
 	dispatcher.dispatchIfChanged( testData, testStore );
 
 	t.ok( validator.validate.calledOnce, 'validation function is called once' );
-	t.ok( validator.validate.calledWith( { email: 'gandalf@example.com' }  ), 'validation function is called with selected fields' );
+	t.ok( validator.validate.calledWith( { email: 'gandalf@example.com' } ), 'validation function is called with selected fields' );
 	t.end();
 } );
 

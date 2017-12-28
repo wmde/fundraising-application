@@ -236,7 +236,7 @@ var jQuery = require( 'jquery' ),
 			sendFunction: sendFunction || jQuery.get
 		} );
 	}
-	;
+;
 
 module.exports = {
 	createAmountValidator: createAmountValidator,

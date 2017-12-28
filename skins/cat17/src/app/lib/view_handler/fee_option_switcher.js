@@ -26,7 +26,7 @@ var objectAssign = require( 'object-assign' ),
 			}
 
 			_.each( this.elements, function ( feeOption ) {
-				var shouldBeDisabled = this.minimumFee[ state.addressType ] > feePerMonth( state.paymentIntervalInMonths, feeOption.val() ) ;
+				var shouldBeDisabled = this.minimumFee[ state.addressType ] > feePerMonth( state.paymentIntervalInMonths, feeOption.val() );
 				if ( shouldBeDisabled ) {
 					feeOption.prop( 'checked', false );
 					feeOption.prop( 'disabled', true );

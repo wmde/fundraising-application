@@ -31,7 +31,7 @@ var objectAssign = require( 'object-assign' ),
 		}
 	};
 
-function createRegexIfNeeded( showOnValue  ) {
+function createRegexIfNeeded( showOnValue ) {
 	if ( !( showOnValue instanceof RegExp ) ) {
 		showOnValue = new RegExp( '^' + showOnValue + '$' );
 	}
