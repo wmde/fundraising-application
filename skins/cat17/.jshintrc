@@ -1,0 +1,27 @@
+{
+    // Enforcing
+    "bitwise": true,
+    "eqeqeq": true,
+    "freeze": true,
+    "futurehostile": true,
+    "latedef": "nofunc",
+    "noarg": true,
+    "nonew": true,
+    "strict": false,
+    "undef": true,
+    "unused": true,
+
+    // Relaxing
+    "laxbreak": true,
+    "multistr": true,
+
+    // Environment
+    "browser": true,
+    "node": true,
+    "devel": false,
+
+    "globals": {
+        "require": true,
+        "jQuery": true
+    }
+}
