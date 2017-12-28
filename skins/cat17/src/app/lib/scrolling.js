@@ -61,8 +61,8 @@ var objectAssign = require( 'object-assign' ),
 	 * @return {number}
 	 */
 	calculateElementOffset = function ( $element, $fixedHeaderElements, options ) {
-		options = _.extend( { elementStart: ElementStart.ELEMENT }, options );
 		var offset = $element.offset().top - calculateFixedHeaderElementHeight( $fixedHeaderElements );
+		options = _.extend( { elementStart: ElementStart.ELEMENT }, options );
 		switch ( options.elementStart ) {
 			case ElementStart.PADDDING:
 				return offset + calculateElementPadding( $element );
@@ -102,13 +102,15 @@ var objectAssign = require( 'object-assign' ),
 			return $( window ).width() < 1200 && $( link ).closest( '.wrap-field.has-longtext.completed .wrap-input' ).length > 0;
 		},
 		scrollToTarget: function ( evt ) {
+			var target;
+
 			evt.preventDefault();
 
 			if ( this.linkIsInsideCompletedSummaryOnSmallScreen( evt.currentTarget ) ) {
 				return;
 			}
 
-			var target = $( evt.currentTarget.hash );
+			target = $( evt.currentTarget.hash );
 			target = target.length ? target : $( '[name=' + evt.currentTarget.hash.slice( 1 ) + ']' );
 			if ( target.length > 0 ) {
 				this.scroller.scrollTo( target, { elementStart: ElementStart.PADDDING } );

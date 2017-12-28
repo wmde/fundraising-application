@@ -201,15 +201,15 @@ test( 'Rendering the amount component with custom amount clears selection and se
 		store = {},
 		parent = {
 			addClass: sinon.spy()
-		}
+		},
+		component
 	;
 
 	textElement.parent = function () {
 		return parent;
 	};
 
-	var component = formComponents.createAmountComponent( store, textElement, selectElement, hiddenElement, parser, dummyFormatter );
-
+	component = formComponents.createAmountComponent( store, textElement, selectElement, hiddenElement, parser, dummyFormatter );
 	component.render( { amount: 2300, isCustomAmount: true } );
 
 	t.ok( textElement.val.calledOnce, 'value is set once' );
@@ -239,14 +239,15 @@ test( 'Rendering the amount component with non-custom amount sets the hidden fie
 		store = {},
 		parent = {
 			removeClass: sinon.stub()
-		}
+		},
+		component
 	;
 
 	textElement.parent = function () {
 		return parent;
 	};
 
-	var component = formComponents.createAmountComponent( store, textElement, selectElement, hiddenElement, parser, dummyFormatter );
+	component = formComponents.createAmountComponent( store, textElement, selectElement, hiddenElement, parser, dummyFormatter );
 
 	component.render( { amount: 5000, isCustomAmount: false } );
 

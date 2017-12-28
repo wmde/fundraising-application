@@ -1,22 +1,22 @@
-function getFirstTwoDigitsOfNumberString( num ) {
-	switch ( num.length ) {
-		case 1:
-			return num + '0';
-		case 2:
-			return num;
-		default:
-			return num.substr( 0, 2 );
-	}
-}
-
-function stringToNumber( s ) {
-	if ( s.match( /[^-0-9]/ ) ) {
-		return Number.NaN;
-	}
-	return parseInt( s, 10 );
-}
+'use strict';
 
 var objectAssign = require( 'object-assign' ),
+	getFirstTwoDigitsOfNumberString = function ( num ) {
+		switch ( num.length ) {
+			case 1:
+				return num + '0';
+			case 2:
+				return num;
+			default:
+				return num.substr( 0, 2 );
+		}
+	},
+	stringToNumber = function ( s ) {
+		if ( s.match( /[^-0-9]/ ) ) {
+			return Number.NaN;
+		}
+		return parseInt( s, 10 );
+	},
 	CurrencyFormatter = {
 		decimalDelimiter: '.',
 		/**

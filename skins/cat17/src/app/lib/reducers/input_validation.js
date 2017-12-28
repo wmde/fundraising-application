@@ -13,7 +13,17 @@ function inputIsValid( value, pattern ) {
 
 function inputValidation( validationState, action ) {
 	var newValidationState = objectAssign( {}, validationState ),
-		bankDataIsValid;
+		bankDataIsValid,
+		// todo Clean way to transport validator groups (those that belong to a respective group [e.g. address]) from
+		// concrete validators (e.g. donation_input_validation) to this generic validation mechanism.
+		ADDRESS_FIELD_VALIDATOR_NAMES = [
+			'addressType',
+			'salutation', 'title', 'firstName', 'lastName',
+			'companyName',
+			'street', 'postcode', 'city', 'country',
+			'email'
+		]
+	;
 
 	switch ( action.type ) {
 		case 'INITIALIZE_VALIDATION':
@@ -94,17 +104,7 @@ function inputValidation( validationState, action ) {
 				return newValidationState;
 			}
 
-			// todo Clean way to transport validator groups (those that belong to a respective group [e.g. address]) from
-			// concrete validators (e.g. donation_input_validation) to this generic validation mechanism.
-			var addressFieldValidatorNames = [
-				'addressType',
-				'salutation', 'title', 'firstName', 'lastName',
-				'companyName',
-				'street', 'postcode', 'city', 'country',
-				'email'
-			];
-
-			_.forEach( addressFieldValidatorNames, function ( name ) {
+			_.forEach( ADDRESS_FIELD_VALIDATOR_NAMES, function ( name ) {
 				if ( !_.has( newValidationState, name ) ) {
 					// this would mean the list of validators in (donation|membership)_input_validation was changed w/o update here
 					return;

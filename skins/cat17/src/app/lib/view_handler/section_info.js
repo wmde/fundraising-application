@@ -215,6 +215,10 @@ var objectAssign = require( 'object-assign' ),
 	DonorTypeSectionInfo = objectAssign( Object.create( SectionInfo ), {
 		countryNames: null,
 		update: function ( addressType, salutation, title, firstName, lastName, companyName, street, postcode, city, country, email, aggregateValidity ) {
+			var wrapperTag = '<span>',
+				longtext
+			;
+
 			if ( aggregateValidity.isValid === true ) {
 				this.setSectionStatus( SECTION_STATUS.complete );
 			} else if ( aggregateValidity.isValid === false ) {
@@ -237,8 +241,7 @@ var objectAssign = require( 'object-assign' ),
 				return;
 			}
 
-			var wrapperTag = '<span>';
-			var longtext = $( wrapperTag );
+			longtext = $( wrapperTag );
 			// TODO Reuse AddressDisplayHandler maybe?
 			if ( addressType === 'person' && firstName !== '' && lastName !== '' ) {
 				longtext.append( $( wrapperTag ).text( salutation + ' ' + title + ' ' + firstName + ' ' + lastName ), '<br>' );

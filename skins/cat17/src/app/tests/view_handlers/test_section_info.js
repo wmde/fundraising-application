@@ -291,14 +291,15 @@ test( 'Instance correctly detects and applies sub-elements', function ( t ) {
 	var container = createContainerElement(),
 		icon = createElement(),
 		text = createElement(),
-		longText = createElement()
+		longText = createElement(),
+		handler
 	;
 
 	container.find.withArgs( 'i:not(".link")' ).returns( icon );
 	container.find.withArgs( '.text' ).returns( text );
 	container.find.withArgs( '.info-detail' ).returns( longText );
 
-	var handler = SectionInfo.createInstance( {}, container );
+	handler = SectionInfo.createInstance( {}, container );
 
 	t.deepEquals( handler.container, container );
 	t.deepEquals( handler.icon, icon );
@@ -317,10 +318,9 @@ test( 'Instance is created with properties applied', function ( t ) {
 		iconMap = { a: 1 },
 		textMap = { a: 2 },
 		longTextMap = { a: 3 },
-		additionalProperties = { alpha: 'gamma' }
+		additionalProperties = { alpha: 'gamma' },
+		handler = SectionInfo.createInstance( {}, container, iconMap, textMap, longTextMap, additionalProperties );
 	;
-
-	var handler = SectionInfo.createInstance( {}, container, iconMap, textMap, longTextMap, additionalProperties );
 
 	t.deepEquals( handler.valueIconMap, iconMap );
 	t.deepEquals( handler.valueTextMap, textMap );
@@ -340,13 +340,14 @@ test( 'Proxy forwards calls and arguments', function ( t ) {
 		// IRL a jQuery object that matched multiple DOM nodes
 		containers = {
 			get: sinon.stub().returns( [ widgetOneDom, widgetTwoDom ] )
-		}
+		},
+		proxy
 	;
 
 	global.$ = sinon.stub();
 	global.$.returnsArg( 0 ); // pretend to extend the DOM element given to jQuery. We don't but have all methods stubbed
 
-	var proxy = SectionInfo.createProxy( fakeType, containers, {}, {}, {}, {} );
+	proxy = SectionInfo.createProxy( fakeType, containers, {}, {}, {}, {} );
 
 	proxy.update( 'a', 'b', 'c' );
 

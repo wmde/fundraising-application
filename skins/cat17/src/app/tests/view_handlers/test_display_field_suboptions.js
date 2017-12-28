@@ -26,14 +26,15 @@ test( 'Current field is selected and infotext opened, others unselected and not 
 		fieldset = {
 			find: sinon.stub(),
 			css: sinon.spy()
-		}
+		},
+		handler
 	;
 
 	fieldset.find.withArgs( '.wrap-field' ).returns( allWrappers );
 	fieldset.find.withArgs( '.info-text' ).returns( allInfoTexts );
 	fieldset.find.withArgs( '.wrap-input [value="PPL"]:not(.hidden)' ).returns( activeField );
 
-	var handler = SuboptionDisplayHandler.createSuboptionDisplayHandler( fieldset );
+	handler = SuboptionDisplayHandler.createSuboptionDisplayHandler( fieldset );
 	handler.update( 'PPL' );
 
 	t.ok( allWrappers.removeClass.withArgs( 'selected notselected' ).calledOnce, 'all wappers unstyled' );
