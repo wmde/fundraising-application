@@ -73,7 +73,6 @@ test( 'newInitializeContentAction returns action object', function ( t ) {
 	t.end();
 } );
 
-
 test( 'newValidateInputAction returns action object', function ( t ) {
 	var expectedAction = {
 		type: 'VALIDATE_INPUT',
@@ -99,5 +98,22 @@ test( 'newValidateInputAction can make validation optional', function ( t ) {
 		}
 	};
 	t.deepEqual( actions.newValidateInputAction( 'email', 'test@example.com', '^[^@]+@[^@]+$', true ), expectedAction );
+	t.end();
+} );
+
+test( 'newInitializeValidationAction returns action object', function ( t ) {
+	var expectedAction = {
+		type: 'INITIALIZE_VALIDATION',
+		payload: {
+			violatedFields: { email: 'Not a valid email address'},
+			initialValues: { email: 'foo' },
+			initialValidationResult: { 'address': false }
+		}
+	};
+	t.deepEqual( actions.newInitializeValidationStateAction(
+		{ email: 'Not a valid email address'},
+		{ email: 'foo' },
+		{ 'address': false }
+	), expectedAction );
 	t.end();
 } );

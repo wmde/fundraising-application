@@ -279,15 +279,19 @@ $( function () {
   var initSetup = initData.data( 'initial-form-values' );
   // backend delivers amount as a german-formatted "float" string
   initSetup.amount = WMDE.IntegerCurrency.createCurrencyParser( 'de' ).parse( initSetup.amount );
-	// this or touch INITIALIZE_VALIDATION again (values identical to default dontation_form_content flagged as changed)
+	// this or touch INITIALIZE_VALIDATION again (values identical to default donation_form_content flagged as changed)
 	if ( typeof initSetup.paymentType === 'string' && initSetup.paymentType === '' ) {
 		delete initSetup.paymentType;
+	}
+	if ( initSetup.amount === 0 ) {
+		delete  initSetup.amount;
 	}
   store.dispatch( actions.newInitializeContentAction( initSetup ) );
 
 	// Set initial validation state
 	store.dispatch( actions.newInitializeValidationStateAction(
 		initData.data( 'violatedFields' ),
+		initSetup,
 		initData.data( 'initial-validation-result' )
 	) );
 
