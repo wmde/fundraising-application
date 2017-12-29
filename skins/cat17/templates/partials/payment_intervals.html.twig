@@ -21,7 +21,7 @@
 		</div>
 
 		<p class="info-text" data-info="{$ PAYMENT_INTERVAL_OPTIONS[interval].id $}">
-			{$ ( 'payment_interval_' ~ interval ~ '_info' ) | trans $}
+			{$ ( context ~ '_payment_interval_' ~ interval ~ '_info' ) | trans $}
 		</p>
 	</div>
 {% endfor %}
