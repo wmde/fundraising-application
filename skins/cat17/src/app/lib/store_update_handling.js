@@ -14,7 +14,9 @@ _.mixin( require( 'underscore.path' ) );
 function createStateAccessors( stateKey ) {
 	var accessors = stateKey instanceof Array ? stateKey : [ stateKey ];
 	return _.map( accessors, function ( accessor ) {
-		return typeof accessor === 'string' ? function ( state ) { return  _.path( state, accessor ); } : accessor;
+		return typeof accessor === 'string' ? function ( state ) {
+			return _.path( state, accessor );
+		} : accessor;
 	} );
 }
 

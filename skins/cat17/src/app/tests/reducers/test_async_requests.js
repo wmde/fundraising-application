@@ -34,7 +34,8 @@ test( 'FINISH_XXX_VALIDATION actions decrease counter and change isValidating ',
 		expectedStateAfterSecondAction = { isValidating: false, runningValidations: 0 },
 		beginAction = { type: 'BEGIN_PAYMENT_DATA_VALIDATION', payload: { amount: '25,00', paymentType: 'BEZ' } },
 		finishAction = { type: 'FINISH_PAYMENT_DATA_VALIDATION', payload: { status: 'OK' } },
-		stateBefore, stateAfterOneFinishAction;
+		stateBefore,
+		stateAfterOneFinishAction;
 
 	stateBefore = asyncRequests( asyncRequests( initialState, beginAction ), beginAction );
 	deepFreeze( stateBefore );
@@ -54,7 +55,7 @@ test( 'Additional FINISH_XXX_VALIDATION actions do not modify state', function (
 
 	deepFreeze( initialState );
 
-	t.equal( asyncRequests( initialState, action ), initialState  );
+	t.equal( asyncRequests( initialState, action ), initialState );
 
 	t.end();
 

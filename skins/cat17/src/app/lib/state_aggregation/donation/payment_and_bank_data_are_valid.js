@@ -27,11 +27,9 @@ module.exports = function ( state ) {
 
 	if ( hasValidDirectDebitPayment( state ) || hasOtherValidPayment( state ) ) {
 		result.isValid = true;
-	}
-	else if ( !_.contains( _.pluck( respectiveValidators, 'isValid' ), false ) ) {
+	} else if ( !_.contains( _.pluck( respectiveValidators, 'isValid' ), false ) ) {
 		result.isValid = null;
-	}
-	else {
+	} else {
 		result.isValid = false;
 	}
 

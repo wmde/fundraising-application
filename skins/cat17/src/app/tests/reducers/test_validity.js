@@ -52,7 +52,10 @@ test( 'FINISH_PAYMENT_DATA_VALIDATION sets paymentData validation state', functi
 
 	deepFreeze( beforeState );
 	t.ok( validity( beforeState, { type: 'FINISH_PAYMENT_DATA_VALIDATION', payload: createValidPayload() } ).paymentData );
-	t.notOk( validity( beforeState, { type: 'FINISH_PAYMENT_DATA_VALIDATION', payload: createInvalidPayload } ).paymentData );
+	t.notOk( validity( beforeState, {
+		type: 'FINISH_PAYMENT_DATA_VALIDATION',
+		payload: createInvalidPayload
+	} ).paymentData );
 	t.end();
 } );
 
@@ -69,13 +72,15 @@ test( 'FINISH_BANK_DATA_VALIDATION with BIC sets bank data validation state to v
 	var beforeState = { bankData: null };
 
 	deepFreeze( beforeState );
-	t.ok( validity( beforeState, { type: 'FINISH_BANK_DATA_VALIDATION', payload: {
-		status: 'OK',
-		iban: 'DE12500105170648489890',
-		bic: 'INGDDEFFXXX',
-		bankCode: '50010517',
-		account: '064847930'
-	} } ).bankData );
+	t.ok( validity( beforeState, {
+		type: 'FINISH_BANK_DATA_VALIDATION', payload: {
+			status: 'OK',
+			iban: 'DE12500105170648489890',
+			bic: 'INGDDEFFXXX',
+			bankCode: '50010517',
+			account: '064847930'
+		}
+	} ).bankData );
 	t.notOk( validity( beforeState, { type: 'FINISH_BANK_DATA_VALIDATION', payload: createInvalidPayload } ).bankData );
 	t.end();
 } );
@@ -84,10 +89,12 @@ test( 'FINISH_BANK_DATA_VALIDATION without BIC does not set bank data validation
 	var beforeState = { bankData: null };
 
 	deepFreeze( beforeState );
-	t.ok( validity( beforeState, { type: 'FINISH_BANK_DATA_VALIDATION', payload: {
-		status: 'OK',
-		iban: 'AT022050302101023600'
-	} } ).bankData );
+	t.ok( validity( beforeState, {
+		type: 'FINISH_BANK_DATA_VALIDATION', payload: {
+			status: 'OK',
+			iban: 'AT022050302101023600'
+		}
+	} ).bankData );
 	t.end();
 } );
 

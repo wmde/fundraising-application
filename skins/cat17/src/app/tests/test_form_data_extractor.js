@@ -10,7 +10,7 @@ test( 'Map can be built from select options', function ( t ) {
 			return {
 				attr: sinon.stub(),
 				text: sinon.stub()
-			}
+			};
 		},
 		optionOne = createOption(),
 		optionTwo = createOption(),
@@ -30,15 +30,15 @@ test( 'Map can be built from select options', function ( t ) {
 	optionTwo.attr.withArgs( 'value' ).returns( 'anotherkey' );
 	optionTwo.text.returns( 'world' );
 
-	global.$ = sinon.stub();
-	global.$.returnsArg( 0 ); // pretend to extend the DOM element given to jQuery. We don't but have all methods stubbed
+	global.jQuery = sinon.stub();
+	global.jQuery.returnsArg( 0 ); // pretend to extend the DOM element given to jQuery. We don't but have all methods stubbed
 
 	t.deepEqual(
 		extractor.mapFromSelectOptions( container ),
-		{ 'onekey': 'hello', 'anotherkey': 'world' }
+		{ onekey: 'hello', anotherkey: 'world' }
 	);
 
-	delete global.$;
+	delete global.jQuery;
 
 	t.end();
 } );
@@ -47,13 +47,13 @@ test( 'Map can be built from radio button labels', function ( t ) {
 	var createLabel = function ( labelText ) {
 			return {
 				text: sinon.stub().returns( labelText )
-			}
+			};
 		},
 		createElement = function ( labelText ) {
 			return {
 				attr: sinon.stub(),
 				next: sinon.stub().withArgs( 'label' ).returns( createLabel( labelText ) )
-			}
+			};
 		},
 		radioOne = createElement( 'alpha' ),
 		radioTwo = createElement( 'beta' ),
@@ -71,15 +71,15 @@ test( 'Map can be built from radio button labels', function ( t ) {
 	radioOne.attr.withArgs( 'value' ).returns( 'a' );
 	radioTwo.attr.withArgs( 'value' ).returns( 'b' );
 
-	global.$ = sinon.stub();
-	global.$.returnsArg( 0 ); // pretend to extend the DOM element given to jQuery. We don't but have all methods stubbed
+	global.jQuery = sinon.stub();
+	global.jQuery.returnsArg( 0 ); // pretend to extend the DOM element given to jQuery. We don't but have all methods stubbed
 
 	t.deepEqual(
 		extractor.mapFromRadioLabels( container ),
-		{ 'a': 'alpha', 'b': 'beta' }
+		{ a: 'alpha', b: 'beta' }
 	);
 
-	delete global.$;
+	delete global.jQuery;
 
 	t.end();
 } );
@@ -88,13 +88,13 @@ test( 'Map can be built from radio button label\'s data attributes', function ( 
 	var createLabel = function ( labelText ) {
 			return {
 				data: sinon.stub().withArgs( 'short-text' ).returns( labelText )
-			}
+			};
 		},
 		createElement = function ( labelText ) {
 			return {
 				attr: sinon.stub(),
 				next: sinon.stub().withArgs( 'label' ).returns( createLabel( labelText ) )
-			}
+			};
 		},
 		radioOne = createElement( 'alpha' ),
 		radioTwo = createElement( 'beta' ),
@@ -112,15 +112,15 @@ test( 'Map can be built from radio button label\'s data attributes', function ( 
 	radioOne.attr.withArgs( 'value' ).returns( 'a' );
 	radioTwo.attr.withArgs( 'value' ).returns( 'b' );
 
-	global.$ = sinon.stub();
-	global.$.returnsArg( 0 ); // pretend to extend the DOM element given to jQuery. We don't but have all methods stubbed
+	global.jQuery = sinon.stub();
+	global.jQuery.returnsArg( 0 ); // pretend to extend the DOM element given to jQuery. We don't but have all methods stubbed
 
 	t.deepEqual(
 		extractor.mapFromRadioLabelsShort( container ),
-		{ 'a': 'alpha', 'b': 'beta' }
+		{ a: 'alpha', b: 'beta' }
 	);
 
-	delete global.$;
+	delete global.jQuery;
 
 	t.end();
 } );
@@ -128,14 +128,14 @@ test( 'Map can be built from radio button label\'s data attributes', function ( 
 test( 'Map can be built from radio button info texts', function ( t ) {
 	var createLabel = function ( infoText ) {
 			return {
-				data: sinon.stub().withArgs( 'info-text' ) .returns( infoText )
-			}
+				data: sinon.stub().withArgs( 'info-text' ).returns( infoText )
+			};
 		},
 		createElement = function ( infoText ) {
 			return {
 				attr: sinon.stub(),
 				parents: sinon.stub().withArgs( '.wrap-field' ).returns( createLabel( infoText ) )
-			}
+			};
 		},
 		radioOne = createElement( 'my longer text' ),
 		radioTwo = createElement( 'to someone' ),
@@ -155,15 +155,15 @@ test( 'Map can be built from radio button info texts', function ( t ) {
 	radioTwo.attr.withArgs( 'value' ).returns( 'dos' );
 	radioThree.attr.withArgs( 'value' ).returns( 'tres' );
 
-	global.$ = sinon.stub();
-	global.$.returnsArg( 0 ); // pretend to extend the DOM element given to jQuery. We don't but have all methods stubbed
+	global.jQuery = sinon.stub();
+	global.jQuery.returnsArg( 0 ); // pretend to extend the DOM element given to jQuery. We don't but have all methods stubbed
 
 	t.deepEqual(
 		extractor.mapFromRadioInfoTexts( container ),
-		{ 'uno': 'my longer text', 'dos': 'to someone', 'tres': 'who reads it' }
+		{ uno: 'my longer text', dos: 'to someone', tres: 'who reads it' }
 	);
 
-	delete global.$;
+	delete global.jQuery;
 
 	t.end();
 } );

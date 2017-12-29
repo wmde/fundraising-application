@@ -16,7 +16,7 @@ var objectAssign = require( 'object-assign' ),
 	 * @param {Object} initialValues Initial form state. Only the keys and values from fieldNames will be used
 	 * @return {ValidationDispatcher}
 	 */
-	createAddressValidationDispatcher = function ( validator,  initialValues ) {
+	createAddressValidationDispatcher = function ( validator, initialValues ) {
 		var fieldNames = [
 			'addressType',
 			'salutation',

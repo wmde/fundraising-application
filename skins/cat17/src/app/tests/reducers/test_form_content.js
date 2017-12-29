@@ -111,14 +111,16 @@ test( 'FINISH_BANK_DATA_VALIDATION sets bank data when status is OK', function (
 			bankCode: '50010517',
 			bankName: 'ING-DiBa'
 		},
-		action = { type: 'FINISH_BANK_DATA_VALIDATION', payload: {
-			status: 'OK',
-			iban: 'DE12500105170648489890',
-			bic: 'INGDDEFFXXX',
-			account: '0648489890',
-			bankCode: '50010517',
-			bankName: 'ING-DiBa'
-		} };
+		action = {
+			type: 'FINISH_BANK_DATA_VALIDATION', payload: {
+				status: 'OK',
+				iban: 'DE12500105170648489890',
+				bic: 'INGDDEFFXXX',
+				account: '0648489890',
+				bankCode: '50010517',
+				bankName: 'ING-DiBa'
+			}
+		};
 
 	deepFreeze( stateBefore );
 	t.deepEqual( formContent( stateBefore, action ), expectedState );
@@ -127,10 +129,12 @@ test( 'FINISH_BANK_DATA_VALIDATION sets bank data when status is OK', function (
 
 test( 'FINISH_BANK_DATA_VALIDATION does not modify state data when status is not OK', function ( t ) {
 	var stateBefore = { iban: '', bic: '', accountNumber: '', bankCode: '', bankName: '' },
-		action = { type: 'FINISH_BANK_DATA_VALIDATION', payload: {
-			status: 'ERR',
-			message: 'Invalid BIC'
-		} };
+		action = {
+			type: 'FINISH_BANK_DATA_VALIDATION', payload: {
+				status: 'ERR',
+				message: 'Invalid BIC'
+			}
+		};
 
 	deepFreeze( stateBefore );
 	t.equal( formContent( stateBefore, action ), stateBefore );
@@ -139,10 +143,12 @@ test( 'FINISH_BANK_DATA_VALIDATION does not modify state data when status is not
 
 test( 'FINISH_BANK_DATA_VALIDATION does not clear BIC when it is not passed in validation response', function ( t ) {
 	var stateBefore = { iban: 'AT022050302101023600', bic: 'SPIHAT22XXX', accountNumber: '', bankCode: '', bankName: '' },
-		action = { type: 'FINISH_BANK_DATA_VALIDATION', payload: {
-			status: 'OK',
-			iban: 'AT022050302101023600'
-		} };
+		action = {
+			type: 'FINISH_BANK_DATA_VALIDATION', payload: {
+				status: 'OK',
+				iban: 'AT022050302101023600'
+			}
+		};
 
 	deepFreeze( stateBefore );
 	t.deepEqual( formContent( stateBefore, action ), stateBefore );

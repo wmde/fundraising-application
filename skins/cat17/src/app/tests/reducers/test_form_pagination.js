@@ -48,7 +48,8 @@ test( 'When there are no pages, current page is initialized with negativeValue',
 } );
 
 test( 'When first page is added, current page is set to first page and does not change afterwards', function ( t ) {
-	var firstPageState, secondPageState;
+	var firstPageState,
+		secondPageState;
 
 	firstPageState = formPagination( undefined, { type: 'ADD_PAGE', payload: { name: 'foo' } } );
 	deepFreeze( firstPageState );
@@ -58,7 +59,8 @@ test( 'When first page is added, current page is set to first page and does not 
 } );
 
 test( 'ADD_PAGE adds page names', function ( t ) {
-	var firstPageState, secondPageState;
+	var firstPageState,
+		secondPageState;
 
 	firstPageState = formPagination( undefined, { type: 'ADD_PAGE', payload: { name: 'foo' } } );
 	deepFreeze( firstPageState );

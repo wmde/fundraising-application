@@ -9,7 +9,7 @@ function createParentElement() {
 	return {
 		addClass: sinon.stub(),
 		removeClass: sinon.stub()
-	}
+	};
 }
 
 function createTestElement( value, parentElement ) {
@@ -35,7 +35,7 @@ test( 'When value is below threshold, element gets enabled', function ( t ) {
 	handler.update( state );
 
 	t.ok( element.prop.withArgs( 'disabled', false ).called, 'element was enabled' );
-	t.ok( parentElement.removeClass.withArgs( 'disabled' ).calledOnce  );
+	t.ok( parentElement.removeClass.withArgs( 'disabled' ).calledOnce );
 	t.end();
 } );
 
@@ -47,7 +47,7 @@ test( 'When value is above threshold, element gets disabled', function ( t ) {
 	handler.update( state );
 
 	t.ok( element.prop.withArgs( 'disabled', true ).called, 'element was not disabled' );
-	t.ok( parentElement.addClass.withArgs( 'disabled' ).calledOnce  );
+	t.ok( parentElement.addClass.withArgs( 'disabled' ).calledOnce );
 	t.end();
 } );
 
@@ -59,6 +59,6 @@ test( 'When value equals threshold, element gets enabled', function ( t ) {
 	handler.update( state );
 
 	t.ok( element.prop.withArgs( 'disabled', false ).called, 'element was enabled' );
-	t.ok( parentElement.removeClass.withArgs( 'disabled' ).calledOnce  );
+	t.ok( parentElement.removeClass.withArgs( 'disabled' ).calledOnce );
 	t.end();
 } );

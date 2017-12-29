@@ -1,7 +1,6 @@
 'use strict';
 
-var jQuery = require( 'jquery' ),
-	objectAssign = require( 'object-assign' ),
+var objectAssign = require( 'object-assign' ),
 	Promise = require( 'promise' ),
 	_ = require( 'underscore' ),
 
@@ -236,7 +235,7 @@ var jQuery = require( 'jquery' ),
 			sendFunction: sendFunction || jQuery.get
 		} );
 	}
-	;
+;
 
 module.exports = {
 	createAmountValidator: createAmountValidator,

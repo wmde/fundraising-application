@@ -8,13 +8,14 @@ var objectAssign = require( 'object-assign' ),
 	SuboptionDisplayHandler = {
 		fieldset: null,
 		update: function ( value ) {
+			// fieldsets may contain fields of more than one name (cp. intervalType vs periode), avoid false matches (hidden)
+			var field = this.fieldset.find( '.wrap-input [value="' + value + '"]:not(.hidden)' ),
+				wrapper = field.parents( '.wrap-field' ),
+				infoText = wrapper.find( '.info-text' )
+			;
+
 			this.fieldset.find( '.wrap-field' ).removeClass( 'selected notselected' );
 			this.fieldset.find( '.info-text' ).removeClass( 'opened' );
-
-			// fieldsets may contain fields of more than one name (cp. intervalType vs periode), avoid false matches (hidden)
-			var field = this.fieldset.find( '.wrap-input [value="' + value + '"]:not(.hidden)' );
-			var wrapper = field.parents( '.wrap-field' );
-			var infoText = wrapper.find( '.info-text' );
 
 			wrapper.addClass( 'selected' );
 			infoText.addClass( 'opened' );

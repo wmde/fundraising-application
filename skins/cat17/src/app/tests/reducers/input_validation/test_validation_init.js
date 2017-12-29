@@ -11,7 +11,7 @@ function newInitializeValidationAction( violatedFields, initialValues ) {
 			violatedFields: violatedFields,
 			initialValues: initialValues
 		}
-	}
+	};
 }
 
 test( 'Given violated fields, their validation state should change', function ( t ) {
@@ -49,7 +49,7 @@ test( 'Given initial values, their state should change, based on violated fields
 		inputValidation( stateBefore, newInitializeValidationAction(
 			{ email: 'Wrong animal provider' },
 			{ lastName: 'McGoatface', email: 'maaah@yougoatmail.com' }
-			) ),
+		) ),
 		expectedState
 	);
 	t.end();
@@ -68,9 +68,9 @@ test( 'Unknown initial values are ignored', function ( t ) {
 	deepFreeze( stateBefore );
 	t.deepEqual(
 		inputValidation( stateBefore, newInitializeValidationAction(
-			{ unrelated: "Not enough sprockets"},
-			{ unrelated: '1', superfluous: "Floo" }
-			) ),
+			{ unrelated: 'Not enough sprockets' },
+			{ unrelated: '1', superfluous: 'Floo' }
+		) ),
 		expectedState
 	);
 	t.end();

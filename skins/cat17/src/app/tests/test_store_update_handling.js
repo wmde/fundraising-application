@@ -3,7 +3,7 @@
 var test = require( 'tape-catch' ),
 	sinon = require( 'sinon' ),
 	storeUpdateHandling = require( '../lib/store_update_handling' )
-	;
+;
 
 function createFakeStore( storeData ) {
 	var unsubscribe = sinon.spy();
@@ -140,7 +140,7 @@ test( 'connect view handlers to multiple deeply nested store values', function (
 			stateKey: [
 				'facts.cats.number',
 				'facts.cats.owners'
-				]
+			]
 		},
 		storeData = { facts: { cats: { number: 42, owners: 3 } } },
 		store = createFakeStore( storeData );

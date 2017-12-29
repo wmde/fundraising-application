@@ -92,7 +92,6 @@ test( 'Payment interval not selected results in invalid but with data entered', 
 	t.end();
 } );
 
-
 test( 'No data selected is not validated and has no data entered', function ( t ) {
 	t.deepEqual(
 		amountAndFrequencyAreValid( {

@@ -223,4 +223,3 @@ test( 'SUB payment type and invalid bank data given is valid and has data entere
 	);
 	t.end();
 } );
-

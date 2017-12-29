@@ -11,7 +11,7 @@ var objectAssign = require( 'object-assign' ),
 
 	calculateFixedHeaderElementHeight = function ( $fixedHeaderElements ) {
 		return _.reduce( $fixedHeaderElements.get(), function ( offset, element ) {
-			var $elm = $( element );
+			var $elm = jQuery( element );
 			if ( $elm.is( ':visible' ) ) {
 				offset += $elm.height();
 			}
@@ -61,30 +61,30 @@ var objectAssign = require( 'object-assign' ),
 	 * @return {number}
 	 */
 	calculateElementOffset = function ( $element, $fixedHeaderElements, options ) {
-		options = _.extend( { elementStart: ElementStart.ELEMENT }, options );
 		var offset = $element.offset().top - calculateFixedHeaderElementHeight( $fixedHeaderElements );
+		options = _.extend( { elementStart: ElementStart.ELEMENT }, options );
 		switch ( options.elementStart ) {
 			case ElementStart.PADDDING:
 				return offset + calculateElementPadding( $element );
 			case ElementStart.MARGIN:
-				return offset - calculateElementMargin( $element);
+				return offset - calculateElementMargin( $element );
 		}
 		return offset;
 	},
 
 	AnimatedScroller = {
 		fixedHeaderElements: null,
-		scrollTo: function( $element, options ) {
+		scrollTo: function ( $element, options ) {
 			var self = this;
 			this.fixedHeaderElements.addClass( 'scrolling' );
-			$( 'html, body' ).stop( true ).animate( {
+			jQuery( 'html, body' ).stop( true ).animate( {
 				scrollTop: calculateElementOffset( $element, this.fixedHeaderElements, options )
 			}, 1000, function () {
 				// Callback after animation
 				self.fixedHeaderElements.removeClass( 'scrolling' );
 				// Must change focus!
 				$element.focus();
-				if ($element.is( ':focus' ) ) { // Checking if the target was focused
+				if ( $element.is( ':focus' ) ) { // Checking if the target was focused
 					return false;
 				} else {
 					$element.attr( 'tabindex', '-1' ); // Adding tabindex for elements not focusable
@@ -97,19 +97,21 @@ var objectAssign = require( 'object-assign' ),
 
 	LinkScroller = {
 		scroller: null,
-		linkIsInsideCompletedSummaryOnSmallScreen: function( link ) {
+		linkIsInsideCompletedSummaryOnSmallScreen: function ( link ) {
 			// only the completed fields at the bottom summary are inside a .wrap-field.completed
-			return $( window ).width() < 1200 && $( link ).closest( '.wrap-field.has-longtext.completed .wrap-input' ).length > 0;
+			return jQuery( window ).width() < 1200 && jQuery( link ).closest( '.wrap-field.has-longtext.completed .wrap-input' ).length > 0;
 		},
-		scrollToTarget: function( evt ) {
+		scrollToTarget: function ( evt ) {
+			var target;
+
 			evt.preventDefault();
 
 			if ( this.linkIsInsideCompletedSummaryOnSmallScreen( evt.currentTarget ) ) {
 				return;
 			}
 
-			var target = $( evt.currentTarget.hash );
-			target = target.length ? target : $( '[name=' + evt.currentTarget.hash.slice( 1 ) + ']' );
+			target = jQuery( evt.currentTarget.hash );
+			target = target.length ? target : jQuery( '[name=' + evt.currentTarget.hash.slice( 1 ) + ']' );
 			if ( target.length > 0 ) {
 				this.scroller.scrollTo( target, { elementStart: ElementStart.PADDDING } );
 			}
@@ -117,11 +119,11 @@ var objectAssign = require( 'object-assign' ),
 	}
 ;
 
-module.exports ={
+module.exports = {
 	createAnimatedScroller: function ( fixedHeaderElements ) {
 		return objectAssign( Object.create( AnimatedScroller ), { fixedHeaderElements: fixedHeaderElements } );
 	},
-	scrollOnSuboptionChange: function( $suboptionInput, $suboptionContainer, scroller ) {
+	scrollOnSuboptionChange: function ( $suboptionInput, $suboptionContainer, scroller ) {
 		$suboptionInput.on( 'change', function ( evt ) {
 			var inputWrapper = $suboptionContainer.find( '.wrap-field input[value=' + evt.target.value + ']' ).parents( '.wrap-field' ),
 				infoText = inputWrapper.find( '.info-text' ),
@@ -129,7 +131,7 @@ module.exports ={
 			if ( scrollTarget !== null ) {
 				scroller.scrollTo( scrollTarget, { elementStart: ElementStart.ELEMENT } );
 			}
-		} )
+		} );
 	},
 	/**
 	 * Ensure smooth scroll to the given anchor links. Make sure to only pass links on the same page that can be scrolled to.
@@ -137,11 +139,11 @@ module.exports ={
 	 * @param {jQuery} $links
 	 * @param {object} scroller
 	 */
-	addScrollToLinkAnchors: function( $links, scroller ) {
+	addScrollToLinkAnchors: function ( $links, scroller ) {
 		var linkScroller = objectAssign( Object.create( LinkScroller ), { scroller: scroller } );
-		$links.not('[href="#"]')
-			.not('[href="#0"]')
-			.not('.state-overview .wrap-field.completed .wrap-input')
+		$links.not( '[href="#"]' )
+			.not( '[href="#0"]' )
+			.not( '.state-overview .wrap-field.completed .wrap-input' )
 			.click( linkScroller.scrollToTarget.bind( linkScroller ) );
 	},
 	ElementStart: ElementStart,

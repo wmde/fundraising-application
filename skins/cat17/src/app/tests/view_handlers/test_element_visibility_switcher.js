@@ -6,7 +6,7 @@ var test = require( 'tape-catch' ),
 	createElementCustomVisibilityHandler = visibilitySwitching.createCustomVisibilitySwitcher,
 	createElementSlideAnimationHandler = visibilitySwitching.createSlidingVisibilitySwitcher,
 	createElementVisibilityHandler = visibilitySwitching.createSimpleVisibilitySwitcher
-	;
+;
 
 function createTestAnimator() {
 	return {

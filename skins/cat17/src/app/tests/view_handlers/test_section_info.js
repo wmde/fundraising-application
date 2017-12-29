@@ -40,9 +40,9 @@ test( 'The amount is passed to the currency formatter', function ( t ) {
 			text: text,
 			longText: longText,
 
-			valueIconMap: { '0': 'icon-0', '1': 'icon-1' },
-			valueTextMap: { '0': 'lorem', '1': 'ipsum' },
-			valueLongTextMap: { '0': 'lorem lorem', '1': 'ipsum ipsum' },
+			valueIconMap: { 0: 'icon-0', 1: 'icon-1' },
+			valueTextMap: { 0: 'lorem', 1: 'ipsum' },
+			valueLongTextMap: { 0: 'lorem lorem', 1: 'ipsum ipsum' },
 
 			currencyFormatter: currencyFormatter
 		} );
@@ -66,9 +66,9 @@ test( 'Formatted amount is set in amount element', function ( t ) {
 			text: text,
 			longText: longText,
 
-			valueIconMap: { '0': 'icon-0', '1': 'icon-1' },
-			valueTextMap: { '0': 'lorem', '1': 'ipsum' },
-			valueLongTextMap: { '0': 'lorem lorem', '1': 'ipsum ipsum' },
+			valueIconMap: { 0: 'icon-0', 1: 'icon-1' },
+			valueTextMap: { 0: 'lorem', 1: 'ipsum' },
+			valueLongTextMap: { 0: 'lorem lorem', 1: 'ipsum ipsum' },
 
 			currencyFormatter: currencyFormatter
 		} );
@@ -93,9 +93,9 @@ test( 'Icon is set according to value', function ( t ) {
 			text: text,
 			longText: longText,
 
-			valueIconMap: { '0': 'icon-0', '1': 'icon-1' },
-			valueTextMap: { '0': 'lorem', '1': 'ipsum' },
-			valueLongTextMap: { '0': 'lorem lorem', '1': 'ipsum ipsum' },
+			valueIconMap: { 0: 'icon-0', 1: 'icon-1' },
+			valueTextMap: { 0: 'lorem', 1: 'ipsum' },
+			valueLongTextMap: { 0: 'lorem lorem', 1: 'ipsum ipsum' },
 
 			currencyFormatter: currencyFormatter
 		} );
@@ -117,7 +117,7 @@ test( 'Icon is set to error if value out of bounds and error desired', function 
 
 			icon: icon,
 
-			valueIconMap: { '0': 'icon-0', '1': 'icon-1' },
+			valueIconMap: { 0: 'icon-0', 1: 'icon-1' },
 
 			currencyFormatter: currencyFormatter
 		} );
@@ -141,7 +141,7 @@ test( 'Icon is reset if value out of bounds and error not desired', function ( t
 
 			icon: icon,
 
-			valueIconMap: { '0': 'icon-0', '1': 'icon-1' },
+			valueIconMap: { 0: 'icon-0', 1: 'icon-1' },
 
 			currencyFormatter: currencyFormatter
 		} );
@@ -169,9 +169,9 @@ test( 'Payment type PPL info is set in respective elements', function ( t ) {
 			text: text,
 			longText: longText,
 
-			valueIconMap: { 'BEZ': 'icon-BEZ', 'PPL': 'icon-PPL' },
-			valueTextMap: { 'BEZ': 'Lastschrift', 'PPL': 'Paypal' },
-			valueLongTextMap: { 'BEZ': 'Will be deducted', 'PPL': 'I am of no importance' }
+			valueIconMap: { BEZ: 'icon-BEZ', PPL: 'icon-PPL' },
+			valueTextMap: { BEZ: 'Lastschrift', PPL: 'Paypal' },
+			valueLongTextMap: { BEZ: 'Will be deducted', PPL: 'I am of no importance' }
 		} );
 
 	handler.update( 'PPL', '', '', { dataEntered: true, isValid: true } );
@@ -197,9 +197,9 @@ test( 'Payment type BEZ info is set in respective elements', function ( t ) {
 			text: text,
 			longText: longText,
 
-			valueIconMap: { 'BEZ': 'icon-BEZ', 'PPL': 'icon-PPL' },
-			valueTextMap: { 'BEZ': 'Lastschrift', 'PPL': 'Paypal' },
-			valueLongTextMap: { 'BEZ': 'Will be deducted', 'PPL': 'Forward to PPL' }
+			valueIconMap: { BEZ: 'icon-BEZ', PPL: 'icon-PPL' },
+			valueTextMap: { BEZ: 'Lastschrift', PPL: 'Paypal' },
+			valueLongTextMap: { BEZ: 'Will be deducted', PPL: 'Forward to PPL' }
 		} );
 
 	/**
@@ -207,7 +207,7 @@ test( 'Payment type BEZ info is set in respective elements', function ( t ) {
 	 * - the original construction parameter (HTML) via .toString()
 	 * - the methods called on the wanna-be node via the properties
 	 */
-	global.$ = function ( arg0 ) {
+	global.jQuery = function ( arg0 ) {
 		arg0 = objectAssign( arg0, {
 			addClass: sinon.stub().returnsThis(),
 			text: sinon.stub().returnsThis(),
@@ -224,23 +224,23 @@ test( 'Payment type BEZ info is set in respective elements', function ( t ) {
 	t.ok( longText.text.withArgs( 'Will be deducted' ).calledOnce, 'Long text is set' );
 	t.ok( longText.prepend.calledOnce, 'Bank data is prepended' );
 
-	t.equals( longText.prepend.args[0].toString(), '<dl>', 'Bank data is a list' );
-	t.ok( longText.prepend.args[0][0].addClass.withArgs( 'bank-info' ).calledOnce );
-	t.ok( longText.prepend.args[0][0].append.calledOnce, 'Bank data put before text' );
+	t.equals( longText.prepend.args[ 0 ].toString(), '<dl>', 'Bank data is a list' );
+	t.ok( longText.prepend.args[ 0 ][ 0 ].addClass.withArgs( 'bank-info' ).calledOnce );
+	t.ok( longText.prepend.args[ 0 ][ 0 ].append.calledOnce, 'Bank data put before text' );
 
-	t.equals( longText.prepend.args[0][0].append.args[0][0].toString(), '<dt>', 'Bank data IBAN title set' );
-	t.ok( longText.prepend.args[0][0].append.args[0][0].text.withArgs( 'IBAN' ).calledOnce, 'Bank data IBAN set' );
+	t.equals( longText.prepend.args[ 0 ][ 0 ].append.args[ 0 ][ 0 ].toString(), '<dt>', 'Bank data IBAN title set' );
+	t.ok( longText.prepend.args[ 0 ][ 0 ].append.args[ 0 ][ 0 ].text.withArgs( 'IBAN' ).calledOnce, 'Bank data IBAN set' );
 
-	t.equals( longText.prepend.args[0][0].append.args[0][1].toString(), '<dd>', 'Bank data IBAN set' );
-	t.ok( longText.prepend.args[0][0].append.args[0][1].text.withArgs( '4711' ).calledOnce, 'Bank data IBAN set' );
+	t.equals( longText.prepend.args[ 0 ][ 0 ].append.args[ 0 ][ 1 ].toString(), '<dd>', 'Bank data IBAN set' );
+	t.ok( longText.prepend.args[ 0 ][ 0 ].append.args[ 0 ][ 1 ].text.withArgs( '4711' ).calledOnce, 'Bank data IBAN set' );
 
-	t.equals( longText.prepend.args[0][0].append.args[0][2].toString(), '<dt>', 'Bank data BIC title set' );
-	t.ok( longText.prepend.args[0][0].append.args[0][2].text.withArgs( 'BIC' ).calledOnce, 'Bank data IBAN set' );
+	t.equals( longText.prepend.args[ 0 ][ 0 ].append.args[ 0 ][ 2 ].toString(), '<dt>', 'Bank data BIC title set' );
+	t.ok( longText.prepend.args[ 0 ][ 0 ].append.args[ 0 ][ 2 ].text.withArgs( 'BIC' ).calledOnce, 'Bank data IBAN set' );
 
-	t.equals( longText.prepend.args[0][0].append.args[0][3].toString(), '<dd>', 'Bank data BIC set' );
-	t.ok( longText.prepend.args[0][0].append.args[0][3].text.withArgs( '8888' ).calledOnce, 'Bank data IBAN set' );
+	t.equals( longText.prepend.args[ 0 ][ 0 ].append.args[ 0 ][ 3 ].toString(), '<dd>', 'Bank data BIC set' );
+	t.ok( longText.prepend.args[ 0 ][ 0 ].append.args[ 0 ][ 3 ].text.withArgs( '8888' ).calledOnce, 'Bank data IBAN set' );
 
-	delete global.$;
+	delete global.jQuery;
 
 	t.end();
 } );
@@ -253,7 +253,7 @@ test( 'Fallback text is used when value does not correspond to text map', functi
 
 			text: text,
 
-			valueTextMap: { 'BEZ': 'Lastschrift', 'PPL': 'Paypal' }
+			valueTextMap: { BEZ: 'Lastschrift', PPL: 'Paypal' }
 		} );
 
 	text.data.withArgs( 'empty-text' ).returns( 'Bitcoin' );
@@ -275,9 +275,9 @@ test( 'Missing features are gently skipped', function ( t ) {
 			text: null,
 			longText: null,
 
-			valueIconMap: { 'BEZ': 'icon-BEZ', 'PPL': 'icon-PPL' },
-			valueTextMap: { 'BEZ': 'Lastschrift', 'PPL': 'Paypal' },
-			valueLongTextMap: { 'BEZ': 'Will be deducted', 'PPL': 'Forward to PPL' }
+			valueIconMap: { BEZ: 'icon-BEZ', PPL: 'icon-PPL' },
+			valueTextMap: { BEZ: 'Lastschrift', PPL: 'Paypal' },
+			valueLongTextMap: { BEZ: 'Will be deducted', PPL: 'Forward to PPL' }
 		} );
 
 	handler.update( 'BEZ', '', '', { dataEntered: false, isValid: null } );
@@ -291,14 +291,15 @@ test( 'Instance correctly detects and applies sub-elements', function ( t ) {
 	var container = createContainerElement(),
 		icon = createElement(),
 		text = createElement(),
-		longText = createElement()
+		longText = createElement(),
+		handler
 	;
 
 	container.find.withArgs( 'i:not(".link")' ).returns( icon );
 	container.find.withArgs( '.text' ).returns( text );
 	container.find.withArgs( '.info-detail' ).returns( longText );
 
-	var handler = SectionInfo.createInstance( {}, container );
+	handler = SectionInfo.createInstance( {}, container );
 
 	t.deepEquals( handler.container, container );
 	t.deepEquals( handler.icon, icon );
@@ -314,13 +315,12 @@ test( 'Instance correctly detects and applies sub-elements', function ( t ) {
 
 test( 'Instance is created with properties applied', function ( t ) {
 	var container = createContainerElement(),
-		iconMap = { 'a': 1 },
-		textMap = { 'a': 2 },
-		longTextMap = { 'a': 3 },
-		additionalProperties = { 'alpha': 'gamma' }
+		iconMap = { a: 1 },
+		textMap = { a: 2 },
+		longTextMap = { a: 3 },
+		additionalProperties = { alpha: 'gamma' },
+		handler = SectionInfo.createInstance( {}, container, iconMap, textMap, longTextMap, additionalProperties )
 	;
-
-	var handler = SectionInfo.createInstance( {}, container, iconMap, textMap, longTextMap, additionalProperties );
 
 	t.deepEquals( handler.valueIconMap, iconMap );
 	t.deepEquals( handler.valueTextMap, textMap );
@@ -340,22 +340,23 @@ test( 'Proxy forwards calls and arguments', function ( t ) {
 		// IRL a jQuery object that matched multiple DOM nodes
 		containers = {
 			get: sinon.stub().returns( [ widgetOneDom, widgetTwoDom ] )
-		}
+		},
+		proxy
 	;
 
-	global.$ = sinon.stub();
-	global.$.returnsArg( 0 ); // pretend to extend the DOM element given to jQuery. We don't but have all methods stubbed
+	global.jQuery = sinon.stub();
+	global.jQuery.returnsArg( 0 ); // pretend to extend the DOM element given to jQuery. We don't but have all methods stubbed
 
-	var proxy = SectionInfo.createProxy( fakeType, containers, {}, {}, {}, {} );
+	proxy = SectionInfo.createProxy( fakeType, containers, {}, {}, {}, {} );
 
-	proxy.update(  'a', 'b', 'c' );
+	proxy.update( 'a', 'b', 'c' );
 
 	t.ok( proxy.widgets instanceof Array );
 	t.equals( proxy.widgets.length, 2 );
 	t.deepEquals( proxy.widgets[ 0 ].update.firstCall.args, [ 'a', 'b', 'c' ] );
 	t.deepEquals( proxy.widgets[ 1 ].update.firstCall.args, [ 'a', 'b', 'c' ] );
 
-	delete global.$;
+	delete global.jQuery;
 	t.end();
 } );
 
@@ -371,7 +372,7 @@ test( 'Existing longtext is indicated', function ( t ) {
 			text: text,
 			longText: longText,
 
-			valueLongTextMap: { 'BEZ': 'Will be deducted', 'PPL': '' }
+			valueLongTextMap: { BEZ: 'Will be deducted', PPL: '' }
 		} );
 
 	handler.update( 'BEZ', '', '', { dataEntered: true, isValid: true } );
@@ -393,7 +394,7 @@ test( 'Missing longtext is indicated', function ( t ) {
 			text: text,
 			longText: longText,
 
-			valueLongTextMap: { 'BEZ': 'Will be deducted', 'PPL': '' }
+			valueLongTextMap: { BEZ: 'Will be deducted', PPL: '' }
 		} );
 
 	handler.update( 'PPL', '', '', { dataEntered: true, isValid: true } );
@@ -411,7 +412,7 @@ test( 'Opened longtext are shut', function ( t ) {
 
 			longText: longText,
 
-			valueLongTextMap: { 'BEZ': 'Will be deducted', 'PPL': 'Somesome' }
+			valueLongTextMap: { BEZ: 'Will be deducted', PPL: 'Somesome' }
 		} );
 
 	handler.update( 'PPL', '', '', { dataEntered: true, isValid: true } );

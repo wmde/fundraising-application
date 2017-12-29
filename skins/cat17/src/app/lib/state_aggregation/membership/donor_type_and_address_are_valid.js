@@ -5,10 +5,11 @@ var _ = require( 'underscore' ),
 module.exports = function ( state ) {
 	var result = validationResult.newUndefinedResult(),
 		fieldSets = {
-			'person': [ 'salutation', 'firstName', 'lastName', 'street', 'postcode', 'city', 'email' ],
-			'firma': [ 'companyName', 'street', 'postcode', 'city', 'email' ]
+			person: [ 'salutation', 'firstName', 'lastName', 'street', 'postcode', 'city', 'email' ],
+			firma: [ 'companyName', 'street', 'postcode', 'city', 'email' ]
 		},
-		respectiveValidators, validity
+		respectiveValidators,
+		validity
 	;
 
 	if ( state.membershipFormContent.addressType === 'person' || state.membershipFormContent.addressType === 'firma' ) {

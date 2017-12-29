@@ -10,7 +10,7 @@
   "scripts": {
     "watch": "gulp watch",
     "test": "tape 'src/app/tests/**/*.js' | tap-min",
-    "cs": "echo 'todo: cs' && exit 0",
+    "cs": "jshint src/app && jscs src/app",
     "ci": "npm run cs && npm run test && npm run build-assets",
     "build-assets": "gulp"
   },
