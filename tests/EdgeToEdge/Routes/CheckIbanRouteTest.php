@@ -4,10 +4,11 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Presentation\Presenters\IbanPresenter
+ * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\IbanPresenter
  *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
@@ -15,6 +16,8 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
  * @requires extension konto_check
  */
 class CheckIbanRouteTest extends WebRouteTestCase {
+
+	private const PATH = '/check-iban';
 
 	public function testGivenInvalidBankAccountData_failureResponseIsReturned(): void {
 		$client = $this->createClient();
@@ -89,6 +92,31 @@ class CheckIbanRouteTest extends WebRouteTestCase {
 			[
 				'status' => 'OK',
 				'iban' => 'AT022050302101023600',
+			],
+			$client->getResponse()
+		);
+	}
+
+	public function testGivenIbanWithFunkyCharacters_onlyAlnumConsidered(): void {
+		$client = $this->createClient();
+
+		$client->request(
+			Request::METHOD_GET,
+			self::PATH,
+			[
+				// would be encoded as ?iban=DE%E2%80%AA1250010517064%E2%80%AC8489890 in a true HTTP request
+				'iban' => "DE\xe2\x80\xaa1250010517064\xe2\x80\xac8489890",
+			]
+		);
+
+		$this->assertJsonSuccessResponse(
+			[
+				'status' => 'OK',
+				'bic' => 'INGDDEFFXXX',
+				'iban' => 'DE12500105170648489890',
+				'account' => '0648489890',
+				'bankCode' => '50010517',
+				'bankName' => 'ING-DiBa'
 			],
 			$client->getResponse()
 		);
