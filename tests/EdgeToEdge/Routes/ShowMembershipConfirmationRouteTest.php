@@ -21,7 +21,7 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 
 	private const PATH = '/show-membership-confirmation';
-	const CORRECT_ACCESS_TOKEN = 'justSomeToken';
+	private const CORRECT_ACCESS_TOKEN = 'justSomeToken';
 	private const WRONG_ACCESS_TOKEN = 'foobar';
 
 	private function newStoredMembershipApplication( FunFunFactory $factory ): Application {
@@ -43,14 +43,10 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 			$client->getCookieJar()->set(
 				new Cookie( ShowDonationConfirmationHandler::SUBMISSION_COOKIE_NAME, 'some value' )
 			);
-			$client->request(
-				'GET',
-				'show-membership-confirmation',
-				[
-					'id' => $donation->getId(),
-					'accessToken' => self::CORRECT_ACCESS_TOKEN
-				]
-			);
+			$client->request( Request::METHOD_GET, self::PATH, [
+				'id' => $donation->getId(),
+				'accessToken' => self::CORRECT_ACCESS_TOKEN
+			] );
 
 			$this->assertSame(
 				'some value',
