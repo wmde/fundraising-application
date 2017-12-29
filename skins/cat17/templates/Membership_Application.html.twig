@@ -268,7 +268,7 @@
 								  class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
 							<legend class="sr-only">{$ 'membership_section_interval_legend' | trans $}</legend>
 
-							{% include 'partials/payment_intervals.html.twig' with { 'intervals': PAYMENT_INTERVALS, 'fieldName': 'membership_fee_interval' } only %}
+							{% include 'partials/payment_intervals.html.twig' with { 'context': 'membership', 'intervals': PAYMENT_INTERVALS, 'fieldName': 'membership_fee_interval' } only %}
 
 							<div class="more-info">
 								<p>{$ 'membership_section_fee_minimum_info' | trans $}</p>
