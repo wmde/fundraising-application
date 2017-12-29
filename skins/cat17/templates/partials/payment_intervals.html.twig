@@ -1,6 +1,7 @@
-{# paramters:
+{# parameters:
 	intervals List of interval types to actually show
 	fieldName Name of the form fields used to submit the selected interval
+	context The context by which this partial was included (can be either `membership` or `donation`)
 #}
 {% set PAYMENT_INTERVAL_OPTIONS = {
 	0:  { 'id': 'one-time', 'icon': 'icon-unique' },
