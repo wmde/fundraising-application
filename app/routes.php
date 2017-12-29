@@ -437,9 +437,9 @@ $app->get(
 $app->get(
 	'show-membership-confirmation',
 	function( Request $request ) use ( $ffFactory ) {
-		$confirmationRequest = new ShowMembershipAppConfirmationRequest( (int)$request->query->get( 'id', 0 ) );
+		$confirmationRequest = new ShowMembershipAppConfirmationRequest( $request->query->getInt( 'id' ) );
 
-		$response = $ffFactory->newMembershipApplicationConfirmationUseCase( $request->query->get( 'accessToken', '' ) )
+		$response = $ffFactory->newMembershipApplicationConfirmationUseCase( $request->query->getAlnum( 'accessToken' ) )
 			->showConfirmation( $confirmationRequest );
 
 		if ( !$response->accessIsPermitted() ) {
