@@ -17,6 +17,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Validation;
 use WMDE\Euro\Euro;
+use WMDE\Fundraising\Frontend\App\AccessDeniedException;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\AddDonationHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\AddSubscriptionHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\ApplyForMembershipHandler;
@@ -438,10 +439,14 @@ $app->get(
 	function( Request $request ) use ( $ffFactory ) {
 		$confirmationRequest = new ShowMembershipAppConfirmationRequest( (int)$request->query->get( 'id', 0 ) );
 
-		return $ffFactory->newMembershipApplicationConfirmationHtmlPresenter()->present(
-			$ffFactory->newMembershipApplicationConfirmationUseCase( $request->query->get( 'accessToken', '' ) )
-				->showConfirmation( $confirmationRequest )
-		);
+		$response = $ffFactory->newMembershipApplicationConfirmationUseCase( $request->query->get( 'accessToken', '' ) )
+			->showConfirmation( $confirmationRequest );
+
+		if ( !$response->accessIsPermitted() ) {
+			throw new AccessDeniedException( 'access_denied_membership_confirmation' );
+		}
+
+		return $ffFactory->newMembershipApplicationConfirmationHtmlPresenter()->present( $response );
 	}
 )->bind( 'show-membership-confirmation' );
 
