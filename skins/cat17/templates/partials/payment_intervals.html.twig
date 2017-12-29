@@ -12,7 +12,7 @@
 } %}
 {% spaceless %}
 {% for interval in intervals %}
-	<div class="wrap-field" data-info-text="{$ ( 'payment_interval_' ~ interval ~ '_info' ) | trans | e( 'html_attr' ) $}">
+	<div class="wrap-field" data-info-text="{$ ( context ~ '_payment_interval_' ~ interval ~ '_info' ) | trans | e( 'html_attr' ) $}">
 		<div class="wrap-input">
 			<input type="radio" name="{$ fieldName $}" id="{$ PAYMENT_INTERVAL_OPTIONS[interval].id $}" value="{$ interval $}">
 			<label for="{$ PAYMENT_INTERVAL_OPTIONS[interval].id $}">
