@@ -84,13 +84,14 @@ module.exports = {
 		};
 	},
 
-	newValidateInputAction: function ( contentName, newValue, pattern ) {
+	newValidateInputAction: function ( contentName, newValue, pattern, optionalField ) {
 		return {
 			type: 'VALIDATE_INPUT',
 			payload: {
 				contentName: contentName,
 				value: newValue,
-				pattern: pattern
+				pattern: pattern,
+				optionalField: optionalField || false
 			}
 		};
 	},

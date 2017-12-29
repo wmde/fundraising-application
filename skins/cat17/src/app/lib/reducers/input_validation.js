@@ -49,16 +49,23 @@ function inputValidation( validationState, action ) {
 				};
 			} );
 			return newValidationState;
-    case 'VALIDATE_INPUT':
-      if ( validationState[ action.payload.contentName ].dataEntered === false && action.payload.value === '' ) {
-        return validationState;
-      }
+	case 'VALIDATE_INPUT':
+		if ( action.payload.value === '' && action.payload.optionalField === true ) {
+			newValidationState[ action.payload.contentName ] = {
+				dataEntered: false,
+				isValid: null
+			};
+			return newValidationState;
+		}
+		if ( validationState[ action.payload.contentName ].dataEntered === false && action.payload.value === '' ) {
+			return validationState;
+		}
 
-      newValidationState[ action.payload.contentName ] = {
-        dataEntered: true,
-        isValid: inputIsValid( action.payload.value, action.payload.pattern )
-      };
-      return newValidationState;
+		newValidationState[ action.payload.contentName ] = {
+			dataEntered: true,
+			isValid: inputIsValid( action.payload.value, action.payload.pattern )
+		};
+		return newValidationState;
     case 'MARK_EMPTY_FIELD_INVALID':
       _.each( action.payload.requiredFields, function ( key ) {
         if ( newValidationState[ key ].isValid === null ) {
