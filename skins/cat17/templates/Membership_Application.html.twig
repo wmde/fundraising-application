@@ -108,11 +108,15 @@
 					<section id="donation-type" class="donation-daten clearfix">
 						<h2>{$ 'membership_section_applicant_title' | trans $}</h2>
 
-						<p class="legend">{$ 'membership_section_applicant_legend' | trans $}</p>
+						{% if showMembershipTypeOption == 'true' %}
+							<p class="legend">{$ 'membership_section_applicant_legend' | trans $}</p>
+						{% endif %}
 
 						<fieldset id="type-donor"
 								  class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
-							<legend class="sr-only">{$ 'membership_section_applicant_legend' | trans $}</legend>
+							{% if showMembershipTypeOption == 'true' %}
+								<legend class="sr-only">{$ 'membership_section_applicant_legend' | trans $}</legend>
+							{% endif %}
 
 							<div class="wrap-field personal">
 
