@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
 use DateTime;
+use WMDE\Fundraising\Frontend\App\AccessDeniedException;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Applicant;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationResponse;
@@ -25,6 +26,11 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 	private $template;
 	private $html = '';
 
+	/**
+	 * @var \Exception|null
+	 */
+	private $exception = null;
+
 	public function __construct( TwigTemplate $template ) {
 		$this->template = $template;
 	}
@@ -39,6 +45,10 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 	}
 
 	public function getHtml(): string {
+		if ( $this->exception !== null ) {
+			throw $this->exception;
+		}
+
 		return $this->html;
 	}
 
@@ -114,7 +124,7 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 	}
 
 	public function presentAccessViolation(): void {
-		$this->html = 'ACCESS VIOLATION'; // TODO
+		$this->exception = new AccessDeniedException( 'access_denied_membership_confirmation' );
 	}
 
 }
