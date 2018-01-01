@@ -16,6 +16,7 @@ class FakeShowApplicationConfirmationPresenter implements ShowApplicationConfirm
 	private $responseModel;
 	private $purgedResponseWasShown = false;
 	private $accessViolationWasShown = false;
+	private $shownTechnicalError = '';
 
 	public function presentResponseModel( ShowApplicationConfirmationResponse $response ): void {
 		if ( $this->responseModel !== null ) {
@@ -43,6 +44,14 @@ class FakeShowApplicationConfirmationPresenter implements ShowApplicationConfirm
 
 	public function accessViolationWasShown(): bool {
 		return $this->accessViolationWasShown;
+	}
+
+	public function presentTechnicalError( string $error ): void {
+		$this->shownTechnicalError = $error;
+	}
+
+	public function getShownTechnicalError(): string {
+		return $this->shownTechnicalError;
 	}
 
 }

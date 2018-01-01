@@ -62,15 +62,6 @@ class ShowApplicationConfirmationUseCaseTest extends TestCase {
 		return $application;
 	}
 
-	public function testRepositoryThrowsException_failureResponseIsReturned() {
-		$this->repository->throwOnRead();
-
-		$this->invokeUseCaseWithCorrectRequestModel();
-
-		$this->assertFalse( $this->presenter->getResponseModel()->accessIsPermitted() );
-		$this->assertNull( $this->presenter->getResponseModel()->getApplication() );
-	}
-
 	private function invokeUseCaseWithCorrectRequestModel() {
 		$request = new ShowAppConfirmationRequest( self::APPLICATION_ID );
 		$this->newUseCase()->showConfirmation( $request );
@@ -92,7 +83,7 @@ class ShowApplicationConfirmationUseCaseTest extends TestCase {
 		$this->assertSame( self::APPLICATION_ID, $this->presenter->getResponseModel()->getApplication()->getId() );
 	}
 
-	public function testWhenRepositoryThrowsPurgedException_purgedResponseIsShown() {
+	public function testWhenRepositoryThrowsPurgedException_purgedMessageIsPresented() {
 		$this->repository->throwPurgedOnRead();
 
 		$this->invokeUseCaseWithCorrectRequestModel();
@@ -100,12 +91,20 @@ class ShowApplicationConfirmationUseCaseTest extends TestCase {
 		$this->assertTrue( $this->presenter->purgedResponseWasShown() );
 	}
 
-	public function testWhenAuthorizerReturnsFalse_accessViolationResponseIsShown() {
+	public function testWhenAuthorizerReturnsFalse_accessViolationIsPresented() {
 		$this->authorizer = new FailingAuthorizer();
 
 		$this->invokeUseCaseWithCorrectRequestModel();
 
 		$this->assertTrue( $this->presenter->accessViolationWasShown() );
+	}
+
+	public function testWhenRepositoryThrowsException_technicalErrorIsPresented() {
+		$this->repository->throwOnRead();
+
+		$this->invokeUseCaseWithCorrectRequestModel();
+
+		$this->assertSame( 'A database error occurred', $this->presenter->getShownTechnicalError() );
 	}
 
 }

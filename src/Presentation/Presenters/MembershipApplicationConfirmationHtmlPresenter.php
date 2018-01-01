@@ -127,4 +127,8 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 		$this->exception = new AccessDeniedException( 'access_denied_membership_confirmation' );
 	}
 
+	public function presentTechnicalError( string $message ): void {
+		$this->html = $message; // TODO
+	}
+
 }

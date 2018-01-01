@@ -43,8 +43,7 @@ class ShowApplicationConfirmationUseCase {
 			return;
 		}
 		catch ( GetMembershipApplicationException $ex ) {
-			// TODO: show technical error
-			$this->presenter->presentResponseModel( ShowApplicationConfirmationResponse::newNotAllowedResponse() );
+			$this->presenter->presentTechnicalError( 'A database error occurred' );
 			return;
 		}
 
