@@ -8,7 +8,6 @@ use DateTime;
 use WMDE\Fundraising\Frontend\App\AccessDeniedException;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Applicant;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
-use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationResponse;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationPresenter;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
@@ -35,15 +34,19 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 		$this->template = $template;
 	}
 
-	public function presentResponseModel( ShowApplicationConfirmationResponse $response ): void {
+	public function presentConfirmation( Application $application, string $updateToken ): void {
 		$this->html = $this->template->render(
 			$this->getConfirmationPageArguments(
-				$response->getApplication(),
-				$response->getUpdateToken()
+				$application,
+				$updateToken
 			)
 		);
 	}
 
+	/**
+	 * @return string
+	 * @throws \Exception
+	 */
 	public function getHtml(): string {
 		if ( $this->exception !== null ) {
 			throw $this->exception;

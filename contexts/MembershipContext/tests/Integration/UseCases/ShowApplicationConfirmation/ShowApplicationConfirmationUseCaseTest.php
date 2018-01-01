@@ -79,8 +79,15 @@ class ShowApplicationConfirmationUseCaseTest extends TestCase {
 	public function testHappyPath_successResponseWithApplicationIsReturned() {
 		$this->invokeUseCaseWithCorrectRequestModel();
 
-		$this->assertTrue( $this->presenter->getResponseModel()->accessIsPermitted() );
-		$this->assertSame( self::APPLICATION_ID, $this->presenter->getResponseModel()->getApplication()->getId() );
+		$this->assertSame(
+			self::APPLICATION_ID,
+			$this->presenter->getShownApplication()->getId()
+		);
+
+		$this->assertSame(
+			FixedApplicationTokenFetcher::UPDATE_TOKEN,
+			$this->presenter->getShownUpdateToken()
+		);
 	}
 
 	public function testWhenRepositoryThrowsPurgedException_purgedMessageIsPresented() {

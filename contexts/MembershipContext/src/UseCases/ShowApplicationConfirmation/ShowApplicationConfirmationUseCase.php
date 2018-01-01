@@ -47,11 +47,9 @@ class ShowApplicationConfirmationUseCase {
 			return;
 		}
 
-		$this->presenter->presentResponseModel(
-			ShowApplicationConfirmationResponse::newValidResponse(
-				$application, // TODO: use DTO instead of Entity (currently violates the architecture)
-				$this->tokenFetcher->getTokens( $request->getApplicationId() )->getUpdateToken()
-			)
+		$this->presenter->presentConfirmation(
+			$application, // TODO: use DTO instead of Entity (currently violates the architecture)
+			$this->tokenFetcher->getTokens( $request->getApplicationId() )->getUpdateToken()
 		);
 	}
 

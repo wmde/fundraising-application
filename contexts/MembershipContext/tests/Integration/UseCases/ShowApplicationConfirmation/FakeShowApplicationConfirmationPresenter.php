@@ -4,8 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\MembershipContext\Tests\Integration\UseCases\ShowApplicationConfirmation;
 
+use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationPresenter;
-use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationResponse;
 
 /**
  * @license GNU GPL v2+
@@ -13,21 +13,27 @@ use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowApplicationConfirma
  */
 class FakeShowApplicationConfirmationPresenter implements ShowApplicationConfirmationPresenter {
 
-	private $responseModel;
+	private $application;
+	private $updateToken;
 	private $purgedResponseWasShown = false;
 	private $accessViolationWasShown = false;
-	private $shownTechnicalError = '';
+	private $shownTechnicalError;
 
-	public function presentResponseModel( ShowApplicationConfirmationResponse $response ): void {
-		if ( $this->responseModel !== null ) {
+	public function presentConfirmation( Application $application, string $updateToken ): void {
+		if ( $this->application !== null ) {
 			throw new \RuntimeException( 'Presenter should only be invoked once' );
 		}
 
-		$this->responseModel = $response;
+		$this->application = $application;
+		$this->updateToken = $updateToken;
 	}
 
-	public function getResponseModel(): ?ShowApplicationConfirmationResponse {
-		return $this->responseModel;
+	public function getShownApplication(): Application {
+		return $this->application;
+	}
+
+	public function getShownUpdateToken(): string {
+		return $this->updateToken;
 	}
 
 	public function presentApplicationWasPurged(): void {
