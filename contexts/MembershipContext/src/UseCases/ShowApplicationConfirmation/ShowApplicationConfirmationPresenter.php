@@ -15,4 +15,6 @@ interface ShowApplicationConfirmationPresenter {
 
 	public function presentApplicationWasPurged(): void;
 
+	public function presentAccessViolation(): void;
+
 }

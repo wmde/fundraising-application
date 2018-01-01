@@ -31,8 +31,7 @@ class ShowApplicationConfirmationUseCase {
 
 	public function showConfirmation( ShowAppConfirmationRequest $request ): void {
 		if ( !$this->authorizer->canAccessApplication( $request->getApplicationId() ) ) {
-			// TODO: show access error
-			$this->presenter->presentResponseModel( ShowApplicationConfirmationResponse::newNotAllowedResponse() );
+			$this->presenter->presentAccessViolation();
 			return;
 		}
 

@@ -113,4 +113,8 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 		$this->html = 'Membership application was purged'; // TODO
 	}
 
+	public function presentAccessViolation(): void {
+		$this->html = 'ACCESS VIOLATION'; // TODO
+	}
+
 }

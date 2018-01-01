@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\MembershipContext\Authorization\ApplicationAuthorizer;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplication;
+use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\FailingAuthorizer;
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\FakeApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\FixedApplicationTokenFetcher;
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\SucceedingAuthorizer;
@@ -49,16 +50,30 @@ class ShowApplicationConfirmationUseCaseTest extends TestCase {
 		$this->authorizer = new SucceedingAuthorizer();
 		$this->repository = new FakeApplicationRepository();
 		$this->tokenFetcher = FixedApplicationTokenFetcher::newWithDefaultTokens();
+
+		$this->repository->storeApplication( $this->newApplication() );
 	}
 
-	public function testWhenExceptionIsThrown_failureResponseIsReturned() {
+	private function newApplication(): Application {
+		$application = ValidMembershipApplication::newDomainEntity();
+
+		$application->assignId( self::APPLICATION_ID );
+
+		return $application;
+	}
+
+	public function testRepositoryThrowsException_failureResponseIsReturned() {
 		$this->repository->throwOnRead();
 
-		$request = new ShowAppConfirmationRequest( self::APPLICATION_ID );
-		$this->newUseCase()->showConfirmation( $request );
+		$this->invokeUseCaseWithCorrectRequestModel();
 
 		$this->assertFalse( $this->presenter->getResponseModel()->accessIsPermitted() );
 		$this->assertNull( $this->presenter->getResponseModel()->getApplication() );
+	}
+
+	private function invokeUseCaseWithCorrectRequestModel() {
+		$request = new ShowAppConfirmationRequest( self::APPLICATION_ID );
+		$this->newUseCase()->showConfirmation( $request );
 	}
 
 	private function newUseCase(): ShowApplicationConfirmationUseCase {
@@ -71,30 +86,26 @@ class ShowApplicationConfirmationUseCaseTest extends TestCase {
 	}
 
 	public function testHappyPath_successResponseWithApplicationIsReturned() {
-		$this->repository->storeApplication( $this->newApplication() );
-
-		$request = new ShowAppConfirmationRequest( self::APPLICATION_ID );
-		$this->newUseCase()->showConfirmation( $request );
+		$this->invokeUseCaseWithCorrectRequestModel();
 
 		$this->assertTrue( $this->presenter->getResponseModel()->accessIsPermitted() );
 		$this->assertSame( self::APPLICATION_ID, $this->presenter->getResponseModel()->getApplication()->getId() );
 	}
 
-	private function newApplication(): Application {
-		$application = ValidMembershipApplication::newDomainEntity();
-
-		$application->assignId( self::APPLICATION_ID );
-
-		return $application;
-	}
-
-	public function testWhenApplicationWasPurged_purgedResponseIsShown() {
+	public function testWhenRepositoryThrowsPurgedException_purgedResponseIsShown() {
 		$this->repository->throwPurgedOnRead();
 
-		$request = new ShowAppConfirmationRequest( self::APPLICATION_ID );
-		$this->newUseCase()->showConfirmation( $request );
+		$this->invokeUseCaseWithCorrectRequestModel();
 
 		$this->assertTrue( $this->presenter->purgedResponseWasShown() );
+	}
+
+	public function testWhenAuthorizerReturnsFalse_accessViolationResponseIsShown() {
+		$this->authorizer = new FailingAuthorizer();
+
+		$this->invokeUseCaseWithCorrectRequestModel();
+
+		$this->assertTrue( $this->presenter->accessViolationWasShown() );
 	}
 
 }

@@ -15,6 +15,7 @@ class FakeShowApplicationConfirmationPresenter implements ShowApplicationConfirm
 
 	private $responseModel;
 	private $purgedResponseWasShown = false;
+	private $accessViolationWasShown = false;
 
 	public function presentResponseModel( ShowApplicationConfirmationResponse $response ): void {
 		if ( $this->responseModel !== null ) {
@@ -34,6 +35,14 @@ class FakeShowApplicationConfirmationPresenter implements ShowApplicationConfirm
 
 	public function purgedResponseWasShown(): bool {
 		return $this->purgedResponseWasShown;
+	}
+
+	public function presentAccessViolation(): void {
+		$this->accessViolationWasShown = true;
+	}
+
+	public function accessViolationWasShown(): bool {
+		return $this->accessViolationWasShown;
 	}
 
 }
