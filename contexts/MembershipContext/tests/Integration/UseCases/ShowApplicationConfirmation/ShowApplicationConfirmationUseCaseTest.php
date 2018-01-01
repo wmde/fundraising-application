@@ -88,4 +88,13 @@ class ShowApplicationConfirmationUseCaseTest extends TestCase {
 		return $application;
 	}
 
+	public function testWhenApplicationWasPurged_purgedResponseIsShown() {
+		$this->repository->throwPurgedOnRead();
+
+		$request = new ShowAppConfirmationRequest( self::APPLICATION_ID );
+		$this->newUseCase()->showConfirmation( $request );
+
+		$this->assertTrue( $this->presenter->purgedResponseWasShown() );
+	}
+
 }

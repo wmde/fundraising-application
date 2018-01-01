@@ -40,8 +40,7 @@ class ShowApplicationConfirmationUseCase {
 			$application = $this->repository->getApplicationById( $request->getApplicationId() );
 		}
 		catch ( ApplicationPurgedException $ex ) {
-			// TODO: show application was purged
-			$this->presenter->presentResponseModel( ShowApplicationConfirmationResponse::newNotAllowedResponse() );
+			$this->presenter->presentApplicationWasPurged();
 			return;
 		}
 		catch ( GetMembershipApplicationException $ex ) {

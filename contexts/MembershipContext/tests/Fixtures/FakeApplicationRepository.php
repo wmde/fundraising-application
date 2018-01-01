@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures;
 
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
+use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationPurgedException;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\GetMembershipApplicationException;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\StoreMembershipApplicationException;
@@ -19,6 +20,7 @@ class FakeApplicationRepository implements ApplicationRepository {
 	private $applications = [];
 	private $throwOnRead = false;
 	private $throwOnWrite = false;
+	private $throwPurgedOnRead = false;
 
 	public function __construct( Application ...$applications ) {
 		foreach ( $applications as $application ) {
@@ -34,6 +36,10 @@ class FakeApplicationRepository implements ApplicationRepository {
 		$this->throwOnWrite = true;
 	}
 
+	public function throwPurgedOnRead(): void {
+		$this->throwPurgedOnRead = true;
+	}
+
 	public function storeApplication( Application $application ): void {
 		if ( $this->throwOnWrite ) {
 			throw new StoreMembershipApplicationException();
@@ -46,6 +52,10 @@ class FakeApplicationRepository implements ApplicationRepository {
 	}
 
 	public function getApplicationById( int $id ): ?Application {
+		if ( $this->throwPurgedOnRead ) {
+			throw new ApplicationPurgedException();
+		}
+
 		if ( $this->throwOnRead ) {
 			throw new GetMembershipApplicationException();
 		}

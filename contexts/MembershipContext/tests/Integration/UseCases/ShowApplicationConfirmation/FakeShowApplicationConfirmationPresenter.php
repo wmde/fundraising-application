@@ -14,6 +14,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowApplicationConfirma
 class FakeShowApplicationConfirmationPresenter implements ShowApplicationConfirmationPresenter {
 
 	private $responseModel;
+	private $purgedResponseWasShown = false;
 
 	public function presentResponseModel( ShowApplicationConfirmationResponse $response ): void {
 		if ( $this->responseModel !== null ) {
@@ -23,8 +24,16 @@ class FakeShowApplicationConfirmationPresenter implements ShowApplicationConfirm
 		$this->responseModel = $response;
 	}
 
-	public function getResponseModel(): ShowApplicationConfirmationResponse {
+	public function getResponseModel(): ?ShowApplicationConfirmationResponse {
 		return $this->responseModel;
+	}
+
+	public function presentApplicationWasPurged(): void {
+		$this->purgedResponseWasShown = true;
+	}
+
+	public function purgedResponseWasShown(): bool {
+		return $this->purgedResponseWasShown;
 	}
 
 }
