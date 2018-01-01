@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Symfony\Component\BrowserKit\Client;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowDonationConfirmationHandler;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
@@ -19,7 +20,9 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
  */
 class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 
-	const CORRECT_ACCESS_TOKEN = 'justSomeToken';
+	private const PATH = '/show-membership-confirmation';
+	private const CORRECT_ACCESS_TOKEN = 'justSomeToken';
+	private const WRONG_ACCESS_TOKEN = 'foobar';
 
 	private function newStoredMembershipApplication( FunFunFactory $factory ): Application {
 		$factory->setMembershipTokenGenerator( new FixedMembershipTokenGenerator(
@@ -41,8 +44,8 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 				new Cookie( ShowDonationConfirmationHandler::SUBMISSION_COOKIE_NAME, 'some value' )
 			);
 			$client->request(
-				'GET',
-				'show-membership-confirmation',
+				Request::METHOD_GET,
+				self::PATH,
 				[
 					'id' => $donation->getId(),
 					'accessToken' => self::CORRECT_ACCESS_TOKEN
@@ -53,6 +56,23 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 				'some value',
 				$client->getCookieJar()->get( ShowDonationConfirmationHandler::SUBMISSION_COOKIE_NAME )->getValue()
 			);
+		} );
+	}
+
+	public function testCallWithWrongAccessToken_deniedPageIsShown(): void {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+			$donation = $this->newStoredMembershipApplication( $factory );
+
+			$client->request(
+				Request::METHOD_GET,
+				self::PATH, [
+					'id' => $donation->getId(),
+					'accessToken' => self::WRONG_ACCESS_TOKEN
+				]
+			);
+
+			$this->assertContains( 'access_denied_membership_confirmation', $client->getResponse()->getContent() );
+			$this->assertSame( 403, $client->getResponse()->getStatusCode() );
 		} );
 	}
 
