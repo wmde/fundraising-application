@@ -63,10 +63,14 @@ class PayPalNotificationHandler {
 	}
 
 	private function requestIsForPaymentCompletion( ParameterBag $post ): bool {
-		return $this->isSuccessfulPaymentNotification( $post ) || (
-				$this->isForRecurringPayment( $post ) &&
-				!$this->isRecurringPaymentCompletion( $post )
-			);
+		if ( !$this->isSuccessfulPaymentNotification( $post ) ) {
+			return false;
+		}
+		if ( $this->isForRecurringPayment( $post ) && !$this->isRecurringPaymentCompletion( $post ) ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	private function isSuccessfulPaymentNotification( ParameterBag $post ): bool {

@@ -285,7 +285,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
 
 			$this->assertSame(
-				[ 'Unhandled PayPal subscription notification' ],
+				[ 'PayPal request not handled' ],
 				$logger->getLogCalls()->getMessages()
 			);
 
