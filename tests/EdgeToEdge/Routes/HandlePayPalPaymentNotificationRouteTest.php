@@ -26,13 +26,13 @@ use WMDE\PsrLogTestDoubles\LoggerSpy;
  */
 class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 
-	const BASE_URL = 'https://that.paymentprovider.com/';
-	const EMAIL_ADDRESS = 'foerderpp@wikimedia.de';
-	const ITEM_NAME = 'My preciousss';
-	const UPDATE_TOKEN = 'my_secret_token';
-	const DONATION_ID = 1;
-	const VALID_VERIFICATION_RESPONSE = 'VERIFIED';
-	const FAILING_VERIFICATION_RESPONSE = 'FAIL';
+	private const BASE_URL = 'https://that.paymentprovider.com/';
+	private const EMAIL_ADDRESS = 'foerderpp@wikimedia.de';
+	private const ITEM_NAME = 'My preciousss';
+	private const UPDATE_TOKEN = 'my_secret_token';
+	private const DONATION_ID = 1;
+	private const VALID_VERIFICATION_RESPONSE = 'VERIFIED';
+	private const FAILING_VERIFICATION_RESPONSE = 'FAIL';
 	private const PATH = '/handle-paypal-payment-notification';
 
 	public function testGivenValidRequest_applicationIndicatesSuccess(): void {
