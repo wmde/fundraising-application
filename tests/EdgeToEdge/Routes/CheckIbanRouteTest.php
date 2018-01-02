@@ -23,8 +23,8 @@ class CheckIbanRouteTest extends WebRouteTestCase {
 		$client = $this->createClient();
 
 		$client->request(
-			'GET',
-			'/check-iban',
+			Request::METHOD_GET,
+			self::PATH,
 			[
 				'iban' => 'not a valid IBAN!',
 			]
@@ -40,8 +40,8 @@ class CheckIbanRouteTest extends WebRouteTestCase {
 		$client = $this->createClient();
 
 		$client->request(
-			'GET',
-			'/check-iban',
+			Request::METHOD_GET,
+			self::PATH,
 			[
 				'iban' => 'wait, this is my own IBAN!',
 			]
@@ -57,8 +57,8 @@ class CheckIbanRouteTest extends WebRouteTestCase {
 		$client = $this->createClient();
 
 		$client->request(
-			'GET',
-			'/check-iban',
+			Request::METHOD_GET,
+			self::PATH,
 			[
 				'iban' => 'DE76200505501015754243',
 			]
@@ -81,8 +81,8 @@ class CheckIbanRouteTest extends WebRouteTestCase {
 		$client = $this->createClient();
 
 		$client->request(
-			'GET',
-			'/check-iban',
+			Request::METHOD_GET,
+			self::PATH,
 			[
 				'iban' => 'AT022050302101023600',
 			]
