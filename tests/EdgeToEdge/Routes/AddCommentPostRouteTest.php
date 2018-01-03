@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
@@ -19,6 +20,7 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 
 	const CORRECT_UPDATE_TOKEN = 'b5b249c8beefb986faf8d186a3f16e86ef509ab2';
 	const NON_EXISTING_DONATION_ID = 25502;
+	private const PATH = '/add-comment';
 
 	public function testGivenRequestWithoutParameters_resultIsError(): void {
 		$client = $this->createClient();
@@ -124,6 +126,29 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 			);
 
 			$this->assertErrorJsonResponse( $client->getResponse() );
+		} );
+	}
+
+	public function testGivenRequestWithEmoticons_resultIsError(): void {
+		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ): void {
+			$donation = $this->getNewlyStoredDonation( $factory );
+
+			$client->request(
+				Request::METHOD_POST,
+				self::PATH,
+				[
+					'comment' => 'Gotta make dat 💲',
+					'public' => '1',
+					'isAnonymous' => '0',
+					'donationId' => (string)$donation->getId(),
+					'updateToken' => self::CORRECT_UPDATE_TOKEN,
+				]
+			);
+
+			$response = $client->getResponse();
+
+			$this->assertErrorJsonResponse( $response );
+			$this->assertSame( 'comment_failure_text_invalid_chars', $this->getJsonFromResponse( $response )['message'] );
 		} );
 	}
 
