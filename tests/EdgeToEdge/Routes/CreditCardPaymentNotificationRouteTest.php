@@ -21,7 +21,6 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 
 	const FUNCTION = 'billing';
 	const DONATION_ID = 1;
-	const AMOUNT = ValidDonation::DONATION_AMOUNT;
 	const TRANSACTION_ID = 'customer.prefix-ID2tbnag4a9u';
 	const CUSTOMER_ID = 'e20fb9d5281c1bca1901c19f6e46213191bb4c17';
 	const SESSION_ID = 'CC13064b2620f4028b7d340e3449676213336a4d';
