@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
@@ -32,12 +33,14 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 	private const CURRENCY_CODE = 'EUR';
 	private const STATUS = 'processed';
 
+	private const PATH = '/handle-creditcard-payment-notification';
+
 	public function testGivenInvalidRequest_applicationIndicatesError(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setCreditCardService( new FakeCreditCardService() );
 			$client->request(
-				'GET',
-				'/handle-creditcard-payment-notification',
+				Request::METHOD_GET,
+				self::PATH,
 				[]
 			);
 
@@ -59,8 +62,8 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 			$factory->getDonationRepository()->storeDonation( ValidDonation::newIncompleteCreditCardDonation() );
 
 			$client->request(
-				'GET',
-				'/handle-creditcard-payment-notification',
+				Request::METHOD_GET,
+				self::PATH,
 				$this->newRequest()
 			);
 
