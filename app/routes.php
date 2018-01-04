@@ -32,8 +32,8 @@ use WMDE\Fundraising\Frontend\DonationContext\UseCases\CancelDonation\CancelDona
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\CreditCardPaymentNotification\CreditCardNotificationResponse;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\CreditCardPaymentNotification\CreditCardPaymentHandlerException;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\CreditCardPaymentNotification\CreditCardPaymentNotificationRequest;
+use WMDE\Fundraising\Frontend\DonationContext\UseCases\GetDonation\GetDonationRequest;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\ListComments\CommentListingRequest;
-use WMDE\Fundraising\Frontend\DonationContext\UseCases\ShowDonationConfirmation\ShowDonationConfirmationRequest;
 use WMDE\Fundraising\Frontend\Infrastructure\AmountParser;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\CancelMembershipApplication\CancellationRequest;
@@ -416,8 +416,8 @@ $app->get(
 		}
 
 		try {
-			$useCase = $ffFactory->newShowDonationConfirmationUseCase( $request->query->get( 'donationAccessToken', '' ) );
-			$responseModel = $useCase->showConfirmation( new ShowDonationConfirmationRequest(
+			$useCase = $ffFactory->newGetDonationUseCase( $request->query->get( 'donationAccessToken', '' ) );
+			$responseModel = $useCase->showConfirmation( new GetDonationRequest(
 				$request->query->getInt( 'donationId' )
 			) );
 
