@@ -19,18 +19,18 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
  */
 class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 
-	const FUNCTION = 'billing';
-	const DONATION_ID = 1;
-	const TRANSACTION_ID = 'customer.prefix-ID2tbnag4a9u';
-	const CUSTOMER_ID = 'e20fb9d5281c1bca1901c19f6e46213191bb4c17';
-	const SESSION_ID = 'CC13064b2620f4028b7d340e3449676213336a4d';
-	const AUTH_ID = 'd1d6fae40cf96af52477a9e521558ab7';
-	const ACCESS_TOKEN = 'my_secret_access_token';
-	const UPDATE_TOKEN = 'my_secret_update_token';
-	const TITLE = 'Your generous donation';
-	const COUNTRY_CODE = 'DE';
-	const CURRENCY_CODE = 'EUR';
-	const STATUS = 'processed';
+	private const FUNCTION = 'billing';
+	private const DONATION_ID = 1;
+	private const TRANSACTION_ID = 'customer.prefix-ID2tbnag4a9u';
+	private const CUSTOMER_ID = 'e20fb9d5281c1bca1901c19f6e46213191bb4c17';
+	private const SESSION_ID = 'CC13064b2620f4028b7d340e3449676213336a4d';
+	private const AUTH_ID = 'd1d6fae40cf96af52477a9e521558ab7';
+	private const ACCESS_TOKEN = 'my_secret_access_token';
+	private const UPDATE_TOKEN = 'my_secret_update_token';
+	private const TITLE = 'Your generous donation';
+	private const COUNTRY_CODE = 'DE';
+	private const CURRENCY_CODE = 'EUR';
+	private const STATUS = 'processed';
 
 	public function testGivenInvalidRequest_applicationIndicatesError(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
