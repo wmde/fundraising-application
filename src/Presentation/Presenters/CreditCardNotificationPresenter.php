@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\CreditCardPaymentNotification\CreditCardNotificationResponse;
-use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
 /**
  * @licence GNU GPL v2+
@@ -13,19 +12,45 @@ use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
  */
 class CreditCardNotificationPresenter {
 
-	private $template;
+	private const VALUE_ASSIGNMENT = '=';
+	private const ARG_SEPARATOR = "\n";
 
-	public function __construct( TwigTemplate $template ) {
-		$this->template = $template;
+	private $returnUrl;
+
+	public function __construct( string $returnUrl ) {
+		$this->returnUrl = $returnUrl;
 	}
 
 	public function present( CreditCardNotificationResponse $response ): string {
-		return $this->template->render( [
-			'donationId' => $response->getDonationId(),
-			'accessToken' => $response->getAccessToken(),
-			'successful' => $response->isSuccessful(),
-			'errorMessage' => $response->getErrorMessage()
-		] );
+		if ( $response->isSuccessful() ) {
+			$result = [
+				'status' => 'ok',
+				'url' => $this->returnUrl . '?' . http_build_query( [
+					'id' => $response->getDonationId(),
+					'accessToken' => $response->getAccessToken()
+				] ),
+				'target' => '_top',
+				'forward' => '1',
+			];
+		} else {
+			$result = [
+				'status' => 'error',
+				'msg' => $response->getErrorMessage()
+			];
+		}
+
+		return $this->render( $result );
 	}
 
+	/**
+	 * Response format expected by 3rd party
+	 *
+	 * @see https://www.micropayment.de/help/documentation/
+	 */
+	private function render( array $result ): string {
+		array_walk( $result, function( & $value, $key ) {
+			$value = $key . self::VALUE_ASSIGNMENT . $value;
+		} );
+		return implode( self::ARG_SEPARATOR, $result ) . self::ARG_SEPARATOR;
+	}
 }

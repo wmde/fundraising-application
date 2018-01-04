@@ -1320,11 +1320,7 @@ class FunFunFactory {
 
 	public function newCreditCardNotificationPresenter(): CreditCardNotificationPresenter {
 		return new CreditCardNotificationPresenter(
-			new TwigTemplate(
-				$this->getSkinTwig(),
-				'Credit_Card_Payment_Notification.txt.twig',
-				[ 'returnUrl' => $this->config['creditcard']['return-url'] ]
-			)
+			$this->config['creditcard']['return-url']
 		);
 	}
 
