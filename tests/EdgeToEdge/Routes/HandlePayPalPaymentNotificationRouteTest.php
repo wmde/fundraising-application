@@ -8,6 +8,7 @@ use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Stream;
 use Symfony\Component\HttpKernel\Client;
+use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
@@ -25,13 +26,14 @@ use WMDE\PsrLogTestDoubles\LoggerSpy;
  */
 class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 
-	const BASE_URL = 'https://that.paymentprovider.com/';
-	const EMAIL_ADDRESS = 'foerderpp@wikimedia.de';
-	const ITEM_NAME = 'My preciousss';
-	const UPDATE_TOKEN = 'my_secret_token';
-	const DONATION_ID = 1;
-	const VALID_VERIFICATION_RESPONSE = 'VERIFIED';
-	const FAILING_VERIFICATION_RESPONSE = 'FAIL';
+	private const BASE_URL = 'https://that.paymentprovider.com/';
+	private const EMAIL_ADDRESS = 'foerderpp@wikimedia.de';
+	private const ITEM_NAME = 'My preciousss';
+	private const UPDATE_TOKEN = 'my_secret_token';
+	private const DONATION_ID = 1;
+	private const VALID_VERIFICATION_RESPONSE = 'VERIFIED';
+	private const FAILING_VERIFICATION_RESPONSE = 'FAIL';
+	private const PATH = '/handle-paypal-payment-notification';
 
 	public function testGivenValidRequest_applicationIndicatesSuccess(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
@@ -47,8 +49,8 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			);
 
 			$client->request(
-				'POST',
-				'/handle-paypal-payment-notification',
+				Request::METHOD_POST,
+				self::PATH,
 				$this->newHttpParamsForPayment()
 			);
 
@@ -167,8 +169,8 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			);
 
 			$client->request(
-				'POST',
-				'/handle-paypal-payment-notification',
+				Request::METHOD_POST,
+				self::PATH,
 				[
 					'receiver_email' => 'mr.robot@evilcorp.com',
 					'payment_status' => 'Completed'
@@ -190,8 +192,8 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			);
 
 			$client->request(
-				'POST',
-				'/handle-paypal-payment-notification',
+				Request::METHOD_POST,
+				self::PATH,
 				$params
 			);
 
@@ -215,8 +217,8 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			$factory->setPaypalLogger( $logger );
 
 			$client->request(
-				'POST',
-				'/handle-paypal-payment-notification',
+				Request::METHOD_POST,
+				self::PATH,
 				$this->newPendingPaymentParams()
 			);
 
@@ -239,8 +241,8 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			);
 
 			$client->request(
-				'POST',
-				'/handle-paypal-payment-notification',
+				Request::METHOD_POST,
+				self::PATH,
 				$this->newHttpParamsForPayment()
 			);
 
@@ -258,8 +260,8 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			$requestData = $this->newHttpParamsForPayment();
 			$requestData['mc_currency'] = 'DOGE';
 			$client->request(
-				'POST',
-				'/handle-paypal-payment-notification',
+				Request::METHOD_POST,
+				self::PATH,
 				$requestData
 			);
 
@@ -277,15 +279,15 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			$factory->setPaypalLogger( $logger );
 
 			$client->request(
-				'POST',
-				'/handle-paypal-payment-notification',
+				Request::METHOD_POST,
+				self::PATH,
 				$this->newSubscriptionModificationParams()
 			);
 
 			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
 
 			$this->assertSame(
-				[ 'Unhandled PayPal subscription notification' ],
+				[ 'PayPal request not handled' ],
 				$logger->getLogCalls()->getMessages()
 			);
 
@@ -379,8 +381,8 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			$factory->setPaypalLogger( $logger );
 
 			$client->request(
-				'POST',
-				'/handle-paypal-payment-notification',
+				Request::METHOD_POST,
+				self::PATH,
 				$this->newValidRequestParametersWithNegativeTransactionFee()
 			);
 
