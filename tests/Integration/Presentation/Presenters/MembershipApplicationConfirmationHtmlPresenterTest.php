@@ -5,12 +5,11 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Integration\Presentation\Presenters;
 
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplication;
-use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowMembershipApplicationConfirmation\ShowMembershipAppConfirmationResponse;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfirmationHtmlPresenter
+ * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfirmationHtmlPresenter
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
@@ -33,11 +32,9 @@ class MembershipApplicationConfirmationHtmlPresenterTest extends \PHPUnit\Framew
 		}
 
 		$presenter = new MembershipApplicationConfirmationHtmlPresenter( $twig );
-		$presenter->present(
-			ShowMembershipAppConfirmationResponse::newValidResponse(
-				$membershipApplication,
-				'update_token'
-			)
+		$presenter->presentConfirmation(
+			$membershipApplication,
+			'update_token'
 		);
 	}
 

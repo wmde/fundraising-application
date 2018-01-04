@@ -5,9 +5,10 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
 use DateTime;
+use WMDE\Fundraising\Frontend\App\AccessDeniedException;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Applicant;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
-use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowMembershipApplicationConfirmation\ShowMembershipAppConfirmationResponse;
+use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationPresenter;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
@@ -19,21 +20,39 @@ use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class MembershipApplicationConfirmationHtmlPresenter {
+class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationConfirmationPresenter {
 
 	private $template;
+	private $html = '';
+
+	/**
+	 * @var \Exception|null
+	 */
+	private $exception = null;
 
 	public function __construct( TwigTemplate $template ) {
 		$this->template = $template;
 	}
 
-	public function present( ShowMembershipAppConfirmationResponse $response ): string {
-		return $this->template->render(
+	public function presentConfirmation( Application $application, string $updateToken ): void {
+		$this->html = $this->template->render(
 			$this->getConfirmationPageArguments(
-				$response->getApplication(),
-				$response->getUpdateToken()
+				$application,
+				$updateToken
 			)
 		);
+	}
+
+	/**
+	 * @return string
+	 * @throws \Exception
+	 */
+	public function getHtml(): string {
+		if ( $this->exception !== null ) {
+			throw $this->exception;
+		}
+
+		return $this->html;
 	}
 
 	private function getConfirmationPageArguments( Application $membershipApplication, string $updateToken ): array {
@@ -101,6 +120,18 @@ class MembershipApplicationConfirmationHtmlPresenter {
 	 */
 	private function mapStatus( bool $isConfirmed ): string {
 		return $isConfirmed ? 'status-booked' : 'status-unconfirmed';
+	}
+
+	public function presentApplicationWasPurged(): void {
+		$this->html = 'Membership application was purged'; // TODO
+	}
+
+	public function presentAccessViolation(): void {
+		$this->exception = new AccessDeniedException( 'access_denied_membership_confirmation' );
+	}
+
+	public function presentTechnicalError( string $message ): void {
+		$this->html = $message; // TODO
 	}
 
 }

@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManager;
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Fundraising\Entities\MembershipApplication as DoctrineApplication;
 use WMDE\Fundraising\Frontend\MembershipContext\DataAccess\DoctrineApplicationRepository;
+use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationPurgedException;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\GetMembershipApplicationException;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\StoreMembershipApplicationException;
@@ -238,6 +239,20 @@ class DoctrineMembershipApplicationRepositoryTest extends \PHPUnit\Framework\Tes
 		$expectedDoctrineEntity->setId( self::MEMBERSHIP_APPLICATION_ID );
 
 		$this->assertDoctrineEntityIsInDatabase( $expectedDoctrineEntity );
+	}
+
+	public function testReadingPurgedApplication_purgedExceptionIsThrown(): void {
+		$this->storeDoctrineApplication( $this->newPurgedApplication() );
+
+		$this->expectException( ApplicationPurgedException::class );
+
+		$this->newRepository()->getApplicationById( self::MEMBERSHIP_APPLICATION_ID );
+	}
+
+	private function newPurgedApplication(): DoctrineApplication {
+		$application = ValidMembershipApplication::newDoctrineEntity();
+		$application->setBackup( new \DateTime() );
+		return $application;
 	}
 
 }

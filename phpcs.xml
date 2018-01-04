@@ -150,6 +150,7 @@
 				@slowThreshold,
 				@noinspection
 			"/>
+            <property name="enableVoidTypeHint" value="false" />
         </properties>
     </rule>
 

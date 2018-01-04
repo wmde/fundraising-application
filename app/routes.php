@@ -33,19 +33,19 @@ use WMDE\Fundraising\Frontend\DonationContext\UseCases\CreditCardPaymentNotifica
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\CreditCardPaymentNotification\CreditCardPaymentHandlerException;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\CreditCardPaymentNotification\CreditCardPaymentNotificationRequest;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\ListComments\CommentListingRequest;
+use WMDE\Fundraising\Frontend\DonationContext\UseCases\ShowDonationConfirmation\ShowDonationConfirmationRequest;
 use WMDE\Fundraising\Frontend\Infrastructure\AmountParser;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\CancelMembershipApplication\CancellationRequest;
-use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowMembershipApplicationConfirmation\ShowMembershipAppConfirmationRequest;
+use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowApplicationConfirmation\ShowAppConfirmationRequest;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\PaymentContext\UseCases\GenerateIban\GenerateIbanRequest;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\ContentNotFoundException;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageNotFoundException;
+use WMDE\Fundraising\Frontend\Presentation\DonationMembershipApplicationAdapter;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolationListMapper;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator;
-use WMDE\Fundraising\Frontend\DonationContext\UseCases\ShowDonationConfirmation\ShowDonationConfirmationRequest;
-use WMDE\Fundraising\Frontend\Presentation\DonationMembershipApplicationAdapter;
 
 $app->post(
 	'validate-email',
@@ -436,12 +436,16 @@ $app->get(
 $app->get(
 	'show-membership-confirmation',
 	function( Request $request ) use ( $ffFactory ) {
-		$confirmationRequest = new ShowMembershipAppConfirmationRequest( (int)$request->query->get( 'id', 0 ) );
+		$presenter = $ffFactory->newMembershipApplicationConfirmationHtmlPresenter();
 
-		return $ffFactory->newMembershipApplicationConfirmationHtmlPresenter()->present(
-			$ffFactory->newMembershipApplicationConfirmationUseCase( $request->query->get( 'accessToken', '' ) )
-				->showConfirmation( $confirmationRequest )
+		$useCase = $ffFactory->newMembershipApplicationConfirmationUseCase(
+			$presenter,
+			$request->query->get( 'accessToken', '' )
 		);
+
+		$useCase->showConfirmation( new ShowAppConfirmationRequest( (int)$request->query->get( 'id', 0 ) ) );
+
+		return $presenter->getHtml();
 	}
 )->bind( 'show-membership-confirmation' );
 
