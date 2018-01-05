@@ -26,8 +26,8 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 		$client = $this->createClient();
 
 		$client->request(
-			'POST',
-			'add-comment',
+			Request::METHOD_POST,
+			self::PATH,
 			[]
 		);
 
@@ -42,8 +42,8 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 			$donation = $this->getNewlyStoredDonation( $factory );
 
 			$client->request(
-				'POST',
-				'add-comment',
+				Request::METHOD_POST,
+				self::PATH,
 				[
 					'comment' => 'Your programmers deserve a raise',
 					'public' => '1',
@@ -74,8 +74,8 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 			$donation = $this->getNewlyStoredDonation( $factory );
 
 			$client->request(
-				'POST',
-				'add-comment',
+				Request::METHOD_POST,
+				self::PATH,
 				[
 					'comment' => 'Your programmers deserve a raise',
 					'public' => '1',
@@ -94,8 +94,8 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 			$this->getNewlyStoredDonation( $factory );
 
 			$client->request(
-				'POST',
-				'add-comment',
+				Request::METHOD_POST,
+				self::PATH,
 				[
 					'comment' => 'Your programmers deserve a raise',
 					'public' => '1',
@@ -114,8 +114,8 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 			$donation = $this->getNewlyStoredDonation( $factory );
 
 			$client->request(
-				'POST',
-				'add-comment',
+				Request::METHOD_POST,
+				self::PATH,
 				[
 					'comment' => 'Your programmers deserve a raise',
 					'public' => '1',
