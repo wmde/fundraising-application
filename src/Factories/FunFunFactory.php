@@ -59,9 +59,9 @@ use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\InitialDonati
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\ReferrerGeneralizer;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\CancelDonation\CancelDonationUseCase;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\CreditCardPaymentNotification\CreditCardNotificationUseCase;
+use WMDE\Fundraising\Frontend\DonationContext\UseCases\GetDonation\GetDonationUseCase;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\HandlePayPalPaymentNotification\HandlePayPalPaymentCompletionNotificationUseCase;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\ListComments\ListCommentsUseCase;
-use WMDE\Fundraising\Frontend\DonationContext\UseCases\ShowDonationConfirmation\ShowDonationConfirmationUseCase;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\SofortPaymentNotification\SofortPaymentNotificationUseCase;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\ValidateDonor\ValidateDonorUseCase;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
@@ -1192,8 +1192,8 @@ class FunFunFactory {
 		);
 	}
 
-	public function newShowDonationConfirmationUseCase( string $accessToken ): ShowDonationConfirmationUseCase {
-		return new ShowDonationConfirmationUseCase(
+	public function newGetDonationUseCase( string $accessToken ): GetDonationUseCase {
+		return new GetDonationUseCase(
 			$this->newDonationAuthorizer( null, $accessToken ),
 			$this->newDonationTokenFetcher(),
 			$this->getDonationRepository()

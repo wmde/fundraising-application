@@ -3276,12 +3276,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations.git",
-                "reference": "1fe504656af13a445eb8de60db99a7d1b860df01"
+                "reference": "3c272f94b2b1284177ddd5278cff43e9cda63e7d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/1fe504656af13a445eb8de60db99a7d1b860df01",
-                "reference": "1fe504656af13a445eb8de60db99a7d1b860df01",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/3c272f94b2b1284177ddd5278cff43e9cda63e7d",
+                "reference": "3c272f94b2b1284177ddd5278cff43e9cda63e7d",
                 "shasum": ""
             },
             "require": {
@@ -3333,7 +3333,7 @@
                 "source": "https://github.com/wmde/fundraising-donations/tree/master",
                 "issues": "https://github.com/wmde/fundraising-donations/issues"
             },
-            "time": "2017-12-19T12:50:19+00:00"
+            "time": "2018-01-04T09:20:51+00:00"
         },
         {
             "name": "wmde/fundraising-store",

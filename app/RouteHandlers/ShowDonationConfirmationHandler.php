@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\App\AccessDeniedException;
-use WMDE\Fundraising\Frontend\DonationContext\UseCases\ShowDonationConfirmation\ShowDonationConfirmationRequest;
+use WMDE\Fundraising\Frontend\DonationContext\UseCases\GetDonation\GetDonationRequest;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\PiwikVariableCollector;
 
@@ -28,9 +28,9 @@ class ShowDonationConfirmationHandler {
 	}
 
 	public function handle( Request $request, array $sessionTrackingData ): Response {
-		$useCase = $this->ffFactory->newShowDonationConfirmationUseCase( $request->get( 'accessToken', '' ) );
+		$useCase = $this->ffFactory->newGetDonationUseCase( $request->get( 'accessToken', '' ) );
 
-		$responseModel = $useCase->showConfirmation( new ShowDonationConfirmationRequest(
+		$responseModel = $useCase->showConfirmation( new GetDonationRequest(
 			(int)$request->get( 'id', '' )
 		) );
 
