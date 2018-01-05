@@ -242,23 +242,24 @@ var objectAssign = require( 'object-assign' ),
 			}
 
 			longtext = jQuery( wrapperTag );
-			// TODO Reuse AddressDisplayHandler maybe?
-			if ( addressType === 'person' && firstName !== '' && lastName !== '' ) {
-				longtext.append( jQuery( wrapperTag ).text( salutation + ' ' + title + ' ' + firstName + ' ' + lastName ), '<br>' );
-			} else if ( addressType === 'firma' && companyName !== '' ) {
-				longtext.append( jQuery( wrapperTag ).text( companyName ), '<br>' );
-			}
-			if ( street !== '' ) {
-				longtext.append( jQuery( wrapperTag ).text( street ), '<br>' );
-			}
-			if ( postcode !== '' && city !== '' ) {
-				longtext.append( jQuery( wrapperTag ).text( postcode + ' ' + city ), '<br>' );
-			}
-			if ( country !== '' ) {
-				longtext.append( jQuery( wrapperTag ).text( this.countryNames[ country ] ), '<br>' );
-			}
-			if ( email !== '' ) {
-				longtext.append( jQuery( wrapperTag ).text( email ), '<br>' );
+			if ( addressType === 'person' || addressType === 'firma' ) {
+				if ( addressType === 'person' && firstName !== '' && lastName !== '' ) {
+					longtext.append( jQuery( wrapperTag ).text( salutation + ' ' + title + ' ' + firstName + ' ' + lastName ), '<br>' );
+				} else if ( addressType === 'firma' && companyName !== '' ) {
+					longtext.append( jQuery( wrapperTag ).text( companyName ), '<br>' );
+				}
+				if ( street !== '' ) {
+					longtext.append( jQuery( wrapperTag ).text( street ), '<br>' );
+				}
+				if ( postcode !== '' && city !== '' ) {
+					longtext.append( jQuery( wrapperTag ).text( postcode + ' ' + city ), '<br>' );
+				}
+				if ( country !== '' ) {
+					longtext.append( jQuery( wrapperTag ).text( this.countryNames[ country ] ), '<br>' );
+				}
+				if ( email !== '' ) {
+					longtext.append( jQuery( wrapperTag ).text( email ), '<br>' );
+				}
 			}
 
 			this.longText.html( longtext );

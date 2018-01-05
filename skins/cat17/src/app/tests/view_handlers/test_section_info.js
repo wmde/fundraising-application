@@ -14,7 +14,8 @@ var test = require( 'tape-catch' ),
 			removeClass: sinon.stub(),
 			toggleClass: sinon.stub(),
 			data: sinon.stub(),
-			prepend: sinon.stub()
+			prepend: sinon.stub(),
+			append: sinon.stub()
 		};
 	},
 	createContainerElement = function () {
@@ -527,6 +528,41 @@ test( 'Donor type info for company indicated correctly', function ( t ) {
 	t.equals( longText.html.args[ 0 ][ 0 ].append.args[ 2 ][ 0 ].text.args[ 0 ][ 0 ].toString(), '12331 Wien', 'address set' );
 	t.equals( longText.html.args[ 0 ][ 0 ].append.args[ 3 ][ 0 ].text.args[ 0 ][ 0 ].toString(), 'Österreich', 'country translated and set' );
 	t.equals( longText.html.args[ 0 ][ 0 ].append.args[ 4 ][ 0 ].text.args[ 0 ][ 0 ].toString(), 'us@acme.com', 'email set' );
+
+	delete global.jQuery;
+
+	t.end();
+} );
+
+test( 'Donor type info for anonymous indicated correctly', function ( t ) {
+	var container = createContainerElement(),
+		icon = createElement(),
+		text = createElement(),
+		longText = createElement(),
+		handler = objectAssign( Object.create( SectionInfo.DonorTypeSectionInfo ), {
+			container: container,
+
+			icon: icon,
+			text: text,
+			longText: longText,
+
+			valueIconMap: { person: 'icon-person', firma: 'icon-firma', anonym: 'icon-anonym' },
+			valueTextMap: { person: 'Privatperson', firma: 'Firma', anonym: 'anonym' },
+
+			countryNames: { DE: 'Deutschland', AT: 'Österreich' }
+		} );
+
+	global.jQuery = jQueryPseudoHtmlGenerator;
+
+	handler.update( 'anonym', 'some', 'state', 'irrelevant', 'for', 'an', 'anonymous', 'record', 'left', 'DE', 'nospam@me.info', { dataEntered: true, isValid: true } );
+
+	t.ok( container.addClass.withArgs( 'completed' ).calledOnce, 'data entered reflected in style' );
+	t.ok( icon.addClass.withArgs( 'icon-anonym' ).calledOnce, 'icon set per address type' );
+	t.ok( text.text.withArgs( 'anonym' ).calledOnce, 'address type text is set' );
+	// @todo this should be really empty
+	t.equals( longText.html.args[ 0 ][ 0 ].toString(), '<span>', 'long text filled with custom mark-up' );
+	t.ok( longText.html.args[ 0 ][ 0 ].append.notCalled );
+	t.ok( longText.append.notCalled );
 
 	delete global.jQuery;
 
