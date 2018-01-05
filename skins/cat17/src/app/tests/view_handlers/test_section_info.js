@@ -25,6 +25,18 @@ var test = require( 'tape-catch' ),
 	formattedAmount = '23,00',
 	currencyFormatter = {
 		format: sinon.stub().returns( formattedAmount )
+	},
+	/**
+	 * jQuery is used as HTML generator - for this test we let it become a super-charged string object with access to
+	 * - the original construction parameter (HTML) via .toString()
+	 * - the methods called on the wanna-be node via the properties
+	 */
+	jQueryPseudoHtmlGenerator = function ( arg0 ) {
+		return objectAssign( arg0, {
+			addClass: sinon.stub().returnsThis(),
+			text: sinon.stub().returnsThis(),
+			append: sinon.stub().returnsThis()
+		} );
 	}
 ;
 
@@ -202,19 +214,7 @@ test( 'Payment type BEZ info is set in respective elements', function ( t ) {
 			valueLongTextMap: { BEZ: 'Will be deducted', PPL: 'Forward to PPL' }
 		} );
 
-	/**
-	 * $ is used as HTML generator - for this test we let it become a super-charged string object with access to
-	 * - the original construction parameter (HTML) via .toString()
-	 * - the methods called on the wanna-be node via the properties
-	 */
-	global.jQuery = function ( arg0 ) {
-		arg0 = objectAssign( arg0, {
-			addClass: sinon.stub().returnsThis(),
-			text: sinon.stub().returnsThis(),
-			append: sinon.stub().returnsThis()
-		} );
-		return arg0;
-	};
+	global.jQuery = jQueryPseudoHtmlGenerator;
 
 	handler.update( 'BEZ', '4711', '8888', { dataEntered: true, isValid: true } );
 
@@ -419,6 +419,116 @@ test( 'Opened longtext are shut', function ( t ) {
 
 	t.ok( container.removeClass.withArgs( 'opened' ).calledOnce );
 	t.ok( container.find.withArgs( '.opened' ).calledOnce );
+
+	t.end();
+} );
+
+test( 'Donor type info without entered data indicated correctly', function ( t ) {
+	var container = createContainerElement(),
+		icon = createElement(),
+		text = createElement(),
+		longText = createElement(),
+		handler = objectAssign( Object.create( SectionInfo.DonorTypeSectionInfo ), {
+			container: container,
+
+			icon: icon,
+			text: text,
+			longText: longText,
+
+			valueIconMap: { person: 'icon-person', firma: 'icon-firma', anonym: 'icon-anonym' },
+			valueTextMap: { person: 'Privatperson', firma: 'Firma', anonym: 'anonym' },
+
+			countryNames: { DE: 'Deutschland', AT: 'Österreich' }
+		} );
+
+	global.jQuery = jQueryPseudoHtmlGenerator;
+
+	text.data.withArgs( 'empty-text' ).returns( 'nothing entered so far' );
+
+	handler.update( 'person', '', '', '', '', '', '', '', '', 'DE', '', { dataEntered: false, isValid: null } );
+
+	t.ok( container.addClass.withArgs( 'disabled' ).calledOnce, 'no data entered reflected in style' );
+	// @todo this should be the "empty" icon
+	t.ok( icon.addClass.withArgs( 'icon-person' ).calledOnce, 'icon set per address type' );
+	t.ok( text.text.withArgs( 'nothing entered so far' ).calledOnce, 'fallback address type text is set' );
+	// @todo this should be really empty
+	t.equals( longText.html.args[ 0 ][ 0 ].toString(), '<span>', 'long text filled with custom mark-up' );
+
+	delete global.jQuery;
+
+	t.end();
+} );
+
+test( 'Donor type info for private person indicated correctly', function ( t ) {
+	var container = createContainerElement(),
+		icon = createElement(),
+		text = createElement(),
+		longText = createElement(),
+		handler = objectAssign( Object.create( SectionInfo.DonorTypeSectionInfo ), {
+			container: container,
+
+			icon: icon,
+			text: text,
+			longText: longText,
+
+			valueIconMap: { person: 'icon-person', firma: 'icon-firma', anonym: 'icon-anonym' },
+			valueTextMap: { person: 'Privatperson', firma: 'Firma', anonym: 'anonym' },
+
+			countryNames: { DE: 'Deutschland', AT: 'Österreich' }
+		} );
+
+	global.jQuery = jQueryPseudoHtmlGenerator;
+
+	handler.update( 'person', 'Herr', 'Dr.', 'test', 'user', '', 'demostr 4', '10112', 'Bärlin', 'DE', 'me@you.com', { dataEntered: true, isValid: true } );
+
+	t.ok( container.addClass.withArgs( 'completed' ).calledOnce, 'data entered reflected in style' );
+	t.ok( icon.addClass.withArgs( 'icon-person' ).calledOnce, 'icon set per address type' );
+	t.ok( text.text.withArgs( 'Privatperson' ).calledOnce, 'address type text is set' );
+	t.equals( longText.html.args[ 0 ][ 0 ].toString(), '<span>', 'long text filled with custom mark-up' );
+	t.equals( longText.html.args[ 0 ][ 0 ].append.args[ 0 ][ 0 ].text.args[ 0 ][ 0 ].toString(), 'Herr Dr. test user', 'name set' );
+	t.equals( longText.html.args[ 0 ][ 0 ].append.args[ 1 ][ 0 ].text.args[ 0 ][ 0 ].toString(), 'demostr 4', 'street set' );
+	t.equals( longText.html.args[ 0 ][ 0 ].append.args[ 2 ][ 0 ].text.args[ 0 ][ 0 ].toString(), '10112 Bärlin', 'address set' );
+	t.equals( longText.html.args[ 0 ][ 0 ].append.args[ 3 ][ 0 ].text.args[ 0 ][ 0 ].toString(), 'Deutschland', 'country translated and set' );
+	t.equals( longText.html.args[ 0 ][ 0 ].append.args[ 4 ][ 0 ].text.args[ 0 ][ 0 ].toString(), 'me@you.com', 'email set' );
+
+	delete global.jQuery;
+
+	t.end();
+} );
+
+test( 'Donor type info for company indicated correctly', function ( t ) {
+	var container = createContainerElement(),
+		icon = createElement(),
+		text = createElement(),
+		longText = createElement(),
+		handler = objectAssign( Object.create( SectionInfo.DonorTypeSectionInfo ), {
+			container: container,
+
+			icon: icon,
+			text: text,
+			longText: longText,
+
+			valueIconMap: { person: 'icon-person', firma: 'icon-firma', anonym: 'icon-anonym' },
+			valueTextMap: { person: 'Privatperson', firma: 'Firma', anonym: 'anonym' },
+
+			countryNames: { DE: 'Deutschland', AT: 'Österreich' }
+		} );
+
+	global.jQuery = jQueryPseudoHtmlGenerator;
+
+	handler.update( 'firma', 'Frau', 'Prof.', 'state left', 'from private', 'ACME INC', 'acmestr 133b', '12331', 'Wien', 'AT', 'us@acme.com', { dataEntered: true, isValid: true } );
+
+	t.ok( container.addClass.withArgs( 'completed' ).calledOnce, 'data entered reflected in style' );
+	t.ok( icon.addClass.withArgs( 'icon-firma' ).calledOnce, 'icon set per address type' );
+	t.ok( text.text.withArgs( 'Firma' ).calledOnce, 'address type text is set' );
+	t.equals( longText.html.args[ 0 ][ 0 ].toString(), '<span>', 'long text filled with custom mark-up' );
+	t.equals( longText.html.args[ 0 ][ 0 ].append.args[ 0 ][ 0 ].text.args[ 0 ][ 0 ].toString(), 'ACME INC', 'name set' );
+	t.equals( longText.html.args[ 0 ][ 0 ].append.args[ 1 ][ 0 ].text.args[ 0 ][ 0 ].toString(), 'acmestr 133b', 'street set' );
+	t.equals( longText.html.args[ 0 ][ 0 ].append.args[ 2 ][ 0 ].text.args[ 0 ][ 0 ].toString(), '12331 Wien', 'address set' );
+	t.equals( longText.html.args[ 0 ][ 0 ].append.args[ 3 ][ 0 ].text.args[ 0 ][ 0 ].toString(), 'Österreich', 'country translated and set' );
+	t.equals( longText.html.args[ 0 ][ 0 ].append.args[ 4 ][ 0 ].text.args[ 0 ][ 0 ].toString(), 'us@acme.com', 'email set' );
+
+	delete global.jQuery;
 
 	t.end();
 } );
