@@ -18,8 +18,8 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
  */
 class AddCommentPostRouteTest extends WebRouteTestCase {
 
-	const CORRECT_UPDATE_TOKEN = 'b5b249c8beefb986faf8d186a3f16e86ef509ab2';
-	const NON_EXISTING_DONATION_ID = 25502;
+	private const CORRECT_UPDATE_TOKEN = 'b5b249c8beefb986faf8d186a3f16e86ef509ab2';
+	private const NON_EXISTING_DONATION_ID = 25502;
 	private const PATH = '/add-comment';
 
 	public function testGivenRequestWithoutParameters_resultIsError(): void {
