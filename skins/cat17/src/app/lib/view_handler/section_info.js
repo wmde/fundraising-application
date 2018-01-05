@@ -216,7 +216,7 @@ var objectAssign = require( 'object-assign' ),
 		countryNames: null,
 		update: function ( addressType, salutation, title, firstName, lastName, companyName, street, postcode, city, country, email, aggregateValidity ) {
 			var wrapperTag = '<span>',
-				longtext
+				newLongText
 			;
 
 			if ( aggregateValidity.isValid === true ) {
@@ -241,28 +241,29 @@ var objectAssign = require( 'object-assign' ),
 				return;
 			}
 
-			longtext = jQuery( wrapperTag );
+			newLongText = jQuery( wrapperTag );
 			if ( addressType === 'person' || addressType === 'firma' ) {
 				if ( addressType === 'person' && firstName !== '' && lastName !== '' ) {
-					longtext.append( jQuery( wrapperTag ).text( salutation + ' ' + title + ' ' + firstName + ' ' + lastName ), '<br>' );
+					newLongText.append( jQuery( wrapperTag ).text( salutation + ' ' + title + ' ' + firstName + ' ' + lastName ), '<br>' );
 				} else if ( addressType === 'firma' && companyName !== '' ) {
-					longtext.append( jQuery( wrapperTag ).text( companyName ), '<br>' );
+					newLongText.append( jQuery( wrapperTag ).text( companyName ), '<br>' );
 				}
+
 				if ( street !== '' ) {
-					longtext.append( jQuery( wrapperTag ).text( street ), '<br>' );
+					newLongText.append( jQuery( wrapperTag ).text( street ), '<br>' );
 				}
 				if ( postcode !== '' && city !== '' ) {
-					longtext.append( jQuery( wrapperTag ).text( postcode + ' ' + city ), '<br>' );
+					newLongText.append( jQuery( wrapperTag ).text( postcode + ' ' + city ), '<br>' );
 				}
 				if ( country !== '' ) {
-					longtext.append( jQuery( wrapperTag ).text( this.countryNames[ country ] ), '<br>' );
+					newLongText.append( jQuery( wrapperTag ).text( this.countryNames[ country ] ), '<br>' );
 				}
 				if ( email !== '' ) {
-					longtext.append( jQuery( wrapperTag ).text( email ), '<br>' );
+					newLongText.append( jQuery( wrapperTag ).text( email ), '<br>' );
 				}
 			}
 
-			this.longText.html( longtext );
+			this.longText.html( newLongText );
 			// we worked around setLongText so have to clean up manually
 			this.setLongTextIndication( true );
 		}
