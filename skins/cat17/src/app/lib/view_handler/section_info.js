@@ -227,7 +227,11 @@ var objectAssign = require( 'object-assign' ),
 				this.setSectionStatus( SECTION_STATUS.disabled );
 			}
 
-			this.setIcon( this.getValueIcon( addressType ) );
+			if ( aggregateValidity.dataEntered ) {
+				this.setIcon( this.getValueIcon( addressType ) );
+			} else {
+				this.setIcon( undefined );
+			}
 
 			if ( this.text ) {
 				this.setText(

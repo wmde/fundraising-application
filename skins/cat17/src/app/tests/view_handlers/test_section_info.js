@@ -444,13 +444,13 @@ test( 'Donor type info without entered data indicated correctly', function ( t )
 
 	global.jQuery = jQueryPseudoHtmlGenerator;
 
+	icon.data.withArgs( 'display-error' ).returns( true );
 	text.data.withArgs( 'empty-text' ).returns( 'nothing entered so far' );
 
 	handler.update( 'person', '', '', '', '', '', '', '', '', 'DE', '', { dataEntered: false, isValid: null } );
 
 	t.ok( container.addClass.withArgs( 'disabled' ).calledOnce, 'no data entered reflected in style' );
-	// @todo this should be the "empty" icon
-	t.ok( icon.addClass.withArgs( 'icon-person' ).calledOnce, 'icon set per address type' );
+	t.ok( icon.addClass.withArgs( 'icon-error' ).calledOnce, 'icon set per address type' );
 	t.ok( text.text.withArgs( 'nothing entered so far' ).calledOnce, 'fallback address type text is set' );
 	t.equals( longText.html.args[ 0 ][ 0 ].toString(), '<span>', 'long text filled with custom mark-up' );
 
