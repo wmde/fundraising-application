@@ -146,7 +146,7 @@ abstract class WebRouteTestCase extends TestCase {
 	protected function assertErrorJsonResponse( Response $response ): void {
 		$responseData = $this->getJsonFromResponse( $response );
 		$this->assertArrayHasKey( 'status', $responseData );
-		$this->assertEquals( $responseData['status'], 'ERR' );
+		$this->assertSame( 'ERR', $responseData['status'] );
 		$this->assertThat(
 			$responseData,
 			$this->logicalOr(
@@ -164,7 +164,7 @@ abstract class WebRouteTestCase extends TestCase {
 	protected function assertSuccessJsonResponse( Response $response ): void {
 		$responseData = $this->getJsonFromResponse( $response );
 		$this->assertArrayHasKey( 'status', $responseData );
-		$this->assertEquals( $responseData['status'], 'OK' );
+		$this->assertSame( 'OK', $responseData['status'] );
 		$this->assertArrayHasKey( 'message', $responseData );
 	}
 
