@@ -15,8 +15,6 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
 /**
- * Render the confirmation pages for membership applications
- *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
