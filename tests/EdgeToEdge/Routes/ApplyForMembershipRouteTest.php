@@ -8,7 +8,7 @@ use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\MembershipApplication;
-use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowMembershipConfirmationHandler;
+use WMDE\Fundraising\Frontend\App\RouteHandlers\ApplyForMembershipHandler;
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplication;
@@ -482,7 +482,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 		$cookieJar = $client->getCookieJar();
 		$cookieJar->updateFromResponse( $client->getInternalResponse() );
-		$cookie = $cookieJar->get( ShowMembershipConfirmationHandler::SUBMISSION_COOKIE_NAME );
+		$cookie = $cookieJar->get( ApplyForMembershipHandler::SUBMISSION_COOKIE_NAME );
 
 		$this->assertTrue( $cookie->isHttpOnly() );
 		$this->assertTrue( $cookie->isSecure() );
