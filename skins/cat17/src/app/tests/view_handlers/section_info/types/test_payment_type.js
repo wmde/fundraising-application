@@ -8,6 +8,14 @@ var test = require( 'tape-catch' ),
 	PaymentType = require( '../../../../lib/view_handler/section_info/types/payment_type' )
 ;
 
+test.Test.prototype.assertNthBankDataElementIsTag = function ( node, nthChild, tag, msg ) {
+	this.equals( node.append.args[ 0 ][ nthChild ].toString(), tag, msg );
+};
+
+test.Test.prototype.assertNthBankDataElementHasText = function ( node, nthChild, text, msg ) {
+	this.ok( node.append.args[ 0 ][ nthChild ].text.withArgs( text ).calledOnce, msg );
+};
+
 test( 'Payment type PPL info is set in respective elements', function ( t ) {
 	var container = createContainerElement(),
 		icon = jQueryElementStub(),
@@ -51,7 +59,9 @@ test( 'Payment type BEZ info is set in respective elements', function ( t ) {
 			valueIconMap: { BEZ: 'icon-BEZ', PPL: 'icon-PPL' },
 			valueTextMap: { BEZ: 'Lastschrift', PPL: 'Paypal' },
 			valueLongTextMap: { BEZ: 'Will be deducted', PPL: 'Forward to PPL' }
-		} );
+		} ),
+		bankData
+	;
 
 	global.jQuery = jQueryPseudoHtmlGenerator;
 
@@ -63,21 +73,23 @@ test( 'Payment type BEZ info is set in respective elements', function ( t ) {
 	t.ok( longText.text.withArgs( 'Will be deducted' ).calledOnce, 'Long text is set' );
 	t.ok( longText.prepend.calledOnce, 'Bank data is prepended' );
 
-	t.equals( longText.prepend.args[ 0 ].toString(), '<dl>', 'Bank data is a list' );
-	t.ok( longText.prepend.args[ 0 ][ 0 ].addClass.withArgs( 'bank-info' ).calledOnce );
-	t.ok( longText.prepend.args[ 0 ][ 0 ].append.calledOnce, 'Bank data put before text' );
+	bankData = longText.prepend.args[ 0 ][ 0 ];
 
-	t.equals( longText.prepend.args[ 0 ][ 0 ].append.args[ 0 ][ 0 ].toString(), '<dt>', 'Bank data IBAN title set' );
-	t.ok( longText.prepend.args[ 0 ][ 0 ].append.args[ 0 ][ 0 ].text.withArgs( 'IBAN' ).calledOnce, 'Bank data IBAN set' );
+	t.equals( bankData.toString(), '<dl>', 'Bank data is a list' );
+	t.ok( bankData.addClass.withArgs( 'bank-info' ).calledOnce );
+	t.ok( bankData.append.calledOnce, 'Bank data put before text' );
 
-	t.equals( longText.prepend.args[ 0 ][ 0 ].append.args[ 0 ][ 1 ].toString(), '<dd>', 'Bank data IBAN set' );
-	t.ok( longText.prepend.args[ 0 ][ 0 ].append.args[ 0 ][ 1 ].text.withArgs( '4711' ).calledOnce, 'Bank data IBAN set' );
+	t.assertNthBankDataElementIsTag( bankData, 0, '<dt>', 'Bank data IBAN title set' );
+	t.assertNthBankDataElementHasText( bankData, 0, 'IBAN', 'Bank data IBAN title set' );
 
-	t.equals( longText.prepend.args[ 0 ][ 0 ].append.args[ 0 ][ 2 ].toString(), '<dt>', 'Bank data BIC title set' );
-	t.ok( longText.prepend.args[ 0 ][ 0 ].append.args[ 0 ][ 2 ].text.withArgs( 'BIC' ).calledOnce, 'Bank data IBAN set' );
+	t.assertNthBankDataElementIsTag( bankData, 1, '<dd>', 'Bank data IBAN set' );
+	t.assertNthBankDataElementHasText( bankData, 1, '4711', 'Bank data IBAN set' );
 
-	t.equals( longText.prepend.args[ 0 ][ 0 ].append.args[ 0 ][ 3 ].toString(), '<dd>', 'Bank data BIC set' );
-	t.ok( longText.prepend.args[ 0 ][ 0 ].append.args[ 0 ][ 3 ].text.withArgs( '8888' ).calledOnce, 'Bank data IBAN set' );
+	t.assertNthBankDataElementIsTag( bankData, 2, '<dt>', 'Bank data BIC title set'  );
+	t.assertNthBankDataElementHasText( bankData, 2, 'BIC', 'Bank data BIC title set' );
+
+	t.assertNthBankDataElementIsTag( bankData, 3, '<dd>', 'Bank data BIC set'  );
+	t.assertNthBankDataElementHasText( bankData, 3, '8888', 'Bank data BIC set' );
 
 	delete global.jQuery;
 

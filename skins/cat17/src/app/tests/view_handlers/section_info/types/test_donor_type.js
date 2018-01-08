@@ -8,6 +8,10 @@ var test = require( 'tape-catch' ),
 	DonorType = require( '../../../../lib/view_handler/section_info/types/donor_type' )
 ;
 
+test.Test.prototype.assertNthAppendedTextEquals = function ( node, nthCall, value, msg ) {
+	this.equals( node.html.args[ 0 ][ 0 ].append.args[ nthCall ][ 0 ].text.args[ 0 ][ 0 ].toString(), value, msg );
+};
+
 test( 'Donor type info without entered data indicated correctly', function ( t ) {
 	var container = createContainerElement(),
 		icon = jQueryElementStub(),
@@ -69,11 +73,11 @@ test( 'Donor type info for private person indicated correctly', function ( t ) {
 	t.ok( icon.addClass.withArgs( 'icon-person' ).calledOnce, 'icon set per address type' );
 	t.ok( text.text.withArgs( 'Privatperson' ).calledOnce, 'address type text is set' );
 	t.equals( longText.html.args[ 0 ][ 0 ].toString(), '<span>', 'long text filled with custom mark-up' );
-	t.equals( longText.html.args[ 0 ][ 0 ].append.args[ 0 ][ 0 ].text.args[ 0 ][ 0 ].toString(), 'Herr Dr. test user', 'name set' );
-	t.equals( longText.html.args[ 0 ][ 0 ].append.args[ 1 ][ 0 ].text.args[ 0 ][ 0 ].toString(), 'demostr 4', 'street set' );
-	t.equals( longText.html.args[ 0 ][ 0 ].append.args[ 2 ][ 0 ].text.args[ 0 ][ 0 ].toString(), '10112 Bärlin', 'address set' );
-	t.equals( longText.html.args[ 0 ][ 0 ].append.args[ 3 ][ 0 ].text.args[ 0 ][ 0 ].toString(), 'Deutschland', 'country translated and set' );
-	t.equals( longText.html.args[ 0 ][ 0 ].append.args[ 4 ][ 0 ].text.args[ 0 ][ 0 ].toString(), 'me@you.com', 'email set' );
+	t.assertNthAppendedTextEquals( longText, 0, 'Herr Dr. test user', 'name set' );
+	t.assertNthAppendedTextEquals( longText, 1, 'demostr 4', 'street set' );
+	t.assertNthAppendedTextEquals( longText, 2, '10112 Bärlin', 'address set' );
+	t.assertNthAppendedTextEquals( longText, 3, 'Deutschland', 'country translated and set' );
+	t.assertNthAppendedTextEquals( longText, 4, 'me@you.com', 'email set' );
 
 	delete global.jQuery;
 
@@ -106,11 +110,11 @@ test( 'Donor type info for company indicated correctly', function ( t ) {
 	t.ok( icon.addClass.withArgs( 'icon-firma' ).calledOnce, 'icon set per address type' );
 	t.ok( text.text.withArgs( 'Firma' ).calledOnce, 'address type text is set' );
 	t.equals( longText.html.args[ 0 ][ 0 ].toString(), '<span>', 'long text filled with custom mark-up' );
-	t.equals( longText.html.args[ 0 ][ 0 ].append.args[ 0 ][ 0 ].text.args[ 0 ][ 0 ].toString(), 'ACME INC', 'name set' );
-	t.equals( longText.html.args[ 0 ][ 0 ].append.args[ 1 ][ 0 ].text.args[ 0 ][ 0 ].toString(), 'acmestr 133b', 'street set' );
-	t.equals( longText.html.args[ 0 ][ 0 ].append.args[ 2 ][ 0 ].text.args[ 0 ][ 0 ].toString(), '12331 Wien', 'address set' );
-	t.equals( longText.html.args[ 0 ][ 0 ].append.args[ 3 ][ 0 ].text.args[ 0 ][ 0 ].toString(), 'Österreich', 'country translated and set' );
-	t.equals( longText.html.args[ 0 ][ 0 ].append.args[ 4 ][ 0 ].text.args[ 0 ][ 0 ].toString(), 'us@acme.com', 'email set' );
+	t.assertNthAppendedTextEquals( longText, 0, 'ACME INC', 'name set' );
+	t.assertNthAppendedTextEquals( longText, 1, 'acmestr 133b', 'street set' );
+	t.assertNthAppendedTextEquals( longText, 2, '12331 Wien', 'address set' );
+	t.assertNthAppendedTextEquals( longText, 3, 'Österreich', 'country translated and set' );
+	t.assertNthAppendedTextEquals( longText, 4, 'us@acme.com', 'email set' );
 
 	delete global.jQuery;
 
