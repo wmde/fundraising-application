@@ -179,3 +179,22 @@ test( 'Invalid data entered reflected in style', function ( t ) {
 
 	t.end();
 } );
+
+/**
+ * This unintuitive state seems to be a possible outcome of
+ * lib/state_aggregation/donation/amount_and_frequency_are_valid.js
+ */
+test( 'Incomplete validity correctly reflected in style', function ( t ) {
+	var container = createContainerElement(),
+		handler = objectAssign( Object.create( AmountFrequency ), {
+			container: container,
+
+			currencyFormatter: currencyFormatter
+		} );
+
+	handler.update( null, null, { dataEntered: true, isValid: null } );
+
+	t.ok( container.addClass.withArgs( 'disabled' ).calledOnce );
+
+	t.end();
+} );

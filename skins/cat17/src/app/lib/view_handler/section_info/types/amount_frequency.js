@@ -8,13 +8,7 @@ module.exports = objectAssign( Object.create( Base ), {
 	// todo Inject actual currency formatter (that knows how to format it depending on locale and incl currency symbol)
 	currencyFormatter: null,
 	update: function ( amount, paymentInterval, aggregateValidity ) {
-		if ( aggregateValidity.isValid === true ) {
-			this.setSectionStatus( Base.SECTION_STATUS.complete );
-		} else if ( aggregateValidity.isValid === false ) {
-			this.setSectionStatus( Base.SECTION_STATUS.invalid );
-		} else {
-			this.setSectionStatus( Base.SECTION_STATUS.disabled );
-		}
+		this.setSectionStatusFromValidity( aggregateValidity );
 
 		this.setIcon( this.getValueIcon( paymentInterval ) );
 

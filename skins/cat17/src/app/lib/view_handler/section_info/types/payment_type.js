@@ -6,13 +6,7 @@ var objectAssign = require( 'object-assign' ),
 
 module.exports = objectAssign( Object.create( Base ), {
 	update: function ( paymentType, iban, bic, aggregateValidity ) {
-		if ( aggregateValidity.isValid === true ) {
-			this.setSectionStatus( Base.SECTION_STATUS.complete );
-		} else if ( aggregateValidity.isValid === false ) {
-			this.setSectionStatus( Base.SECTION_STATUS.invalid );
-		} else {
-			this.setSectionStatus( Base.SECTION_STATUS.disabled );
-		}
+		this.setSectionStatusFromValidity( aggregateValidity );
 
 		this.setIcon( this.getValueIcon( paymentType ) );
 

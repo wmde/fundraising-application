@@ -45,17 +45,7 @@ module.exports = {
 		this.setText( this.getValueText( value ) );
 		this.setLongText( this.getValueLongText( value ) );
 
-		if ( validity ) {
-			if ( validity.dataEntered === false ) {
-				this.setSectionStatus( SECTION_STATUS.disabled );
-			} else {
-				if ( validity.isValid === true ) {
-					this.setSectionStatus( SECTION_STATUS.complete );
-				} else {
-					this.setSectionStatus( SECTION_STATUS.invalid );
-				}
-			}
-		}
+		this.setSectionStatusFromValidity( validity );
 	},
 	getValueIcon: function ( value ) {
 		return this.valueIconMap[ value ];
@@ -126,6 +116,19 @@ module.exports = {
 			this.container.addClass( DOM_SELECTORS.classes.sectionComplete );
 		} else {
 			this.container.addClass( DOM_SELECTORS.classes.sectionDisabled );
+		}
+	},
+	setSectionStatusFromValidity: function ( validity ) {
+		if ( !validity ) {
+			return;
+		}
+
+		if ( validity.isValid === true ) {
+			this.setSectionStatus( SECTION_STATUS.complete );
+		} else if ( validity.dataEntered === true && validity.isValid === false ) {
+			this.setSectionStatus( SECTION_STATUS.invalid );
+		} else {
+			this.setSectionStatus( SECTION_STATUS.disabled );
 		}
 	}
 };

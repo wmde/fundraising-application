@@ -66,3 +66,20 @@ test( 'Invalid data entered reflected in style', function ( t ) {
 
 	t.end();
 } );
+
+/**
+ * This unintuitive state seems to be a possible outcome of
+ * lib/state_aggregation/membership/membership_type_is_valid.js
+ */
+test( 'Incomplete validity correctly reflected in style', function ( t ) {
+	var container = createContainerElement(),
+		handler = objectAssign( Object.create( Base ), {
+			container: container
+		} );
+
+	handler.update( 'whatever', { dataEntered: false, isValid: false } );
+
+	t.ok( container.addClass.withArgs( 'disabled' ).calledOnce );
+
+	t.end();
+} );

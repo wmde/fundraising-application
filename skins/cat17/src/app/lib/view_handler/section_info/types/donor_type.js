@@ -11,13 +11,7 @@ module.exports = objectAssign( Object.create( Base ), {
 			newLongText
 		;
 
-		if ( aggregateValidity.isValid === true ) {
-			this.setSectionStatus( Base.SECTION_STATUS.complete );
-		} else if ( aggregateValidity.isValid === false ) {
-			this.setSectionStatus( Base.SECTION_STATUS.invalid );
-		} else {
-			this.setSectionStatus( Base.SECTION_STATUS.disabled );
-		}
+		this.setSectionStatusFromValidity( aggregateValidity );
 
 		if ( aggregateValidity.dataEntered ) {
 			this.setIcon( this.getValueIcon( addressType ) );
