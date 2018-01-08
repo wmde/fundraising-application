@@ -27,3 +27,42 @@ test( 'Fallback text is used when value does not correspond to text map', functi
 
 	t.end();
 } );
+
+test( 'No data entered reflected in style', function ( t ) {
+	var container = createContainerElement(),
+		handler = objectAssign( Object.create( Base ), {
+			container: container
+		} );
+
+	handler.update( 'whatever', { dataEntered: false, isValid: null } );
+
+	t.ok( container.addClass.withArgs( 'disabled' ).calledOnce );
+
+	t.end();
+} );
+
+test( 'Valid data entered reflected in style', function ( t ) {
+	var container = createContainerElement(),
+		handler = objectAssign( Object.create( Base ), {
+			container: container
+		} );
+
+	handler.update( 'whatever', { dataEntered: true, isValid: true } );
+
+	t.ok( container.addClass.withArgs( 'completed' ).calledOnce );
+
+	t.end();
+} );
+
+test( 'Invalid data entered reflected in style', function ( t ) {
+	var container = createContainerElement(),
+		handler = objectAssign( Object.create( Base ), {
+			container: container
+		} );
+
+	handler.update( 'whatever', { dataEntered: true, isValid: false } );
+
+	t.ok( container.addClass.withArgs( 'invalid' ).calledOnce );
+
+	t.end();
+} );
