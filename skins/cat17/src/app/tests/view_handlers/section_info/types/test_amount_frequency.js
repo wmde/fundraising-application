@@ -144,7 +144,9 @@ test( 'Icon is reset if value out of bounds and error not desired', function ( t
 test( 'No data entered reflected in style', function ( t ) {
 	var container = createContainerElement(),
 		handler = objectAssign( Object.create( AmountFrequency ), {
-			container: container
+			container: container,
+
+			currencyFormatter: currencyFormatter
 		} );
 
 	handler.update( null, null, { dataEntered: false, isValid: null } );
@@ -157,7 +159,9 @@ test( 'No data entered reflected in style', function ( t ) {
 test( 'Valid data entered reflected in style', function ( t ) {
 	var container = createContainerElement(),
 		handler = objectAssign( Object.create( AmountFrequency ), {
-			container: container
+			container: container,
+
+			currencyFormatter: currencyFormatter
 		} );
 
 	handler.update( null, null, { dataEntered: true, isValid: true } );
@@ -170,7 +174,9 @@ test( 'Valid data entered reflected in style', function ( t ) {
 test( 'Invalid data entered reflected in style', function ( t ) {
 	var container = createContainerElement(),
 		handler = objectAssign( Object.create( AmountFrequency ), {
-			container: container
+			container: container,
+
+			currencyFormatter: currencyFormatter
 		} );
 
 	handler.update( null, null, { dataEntered: true, isValid: false } );
