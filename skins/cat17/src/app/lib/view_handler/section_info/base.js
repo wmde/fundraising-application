@@ -50,6 +50,13 @@ module.exports = {
 	getValueText: function ( value ) {
 		return this.valueTextMap[ value ];
 	},
+	getFallbackText: function () {
+		if ( !this.text ) {
+			return '';
+		}
+
+		return this.text.data( DOM_SELECTORS.data.emptyText );
+	},
 	getValueLongText: function ( value ) {
 		return this.valueLongTextMap[ value ];
 	},
@@ -59,7 +66,7 @@ module.exports = {
 		}
 
 		if ( text === undefined ) {
-			text = this.text.data( DOM_SELECTORS.data.emptyText );
+			text = this.getFallbackText();
 		}
 
 		this.text.text( text );

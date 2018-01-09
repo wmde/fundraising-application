@@ -9,14 +9,7 @@ module.exports = objectAssign( Object.create( Base ), {
 		this.setSectionStatusFromValidity( aggregateValidity );
 
 		this.setIcon( this.getValueIcon( paymentType ) );
-
-		if ( this.text ) {
-			this.setText(
-				!aggregateValidity.dataEntered ?
-					this.text.data( Base.DOM_SELECTORS.data.emptyText ) :
-					this.getValueText( paymentType )
-			);
-		}
+		this.setText( this.getValueText( paymentType, aggregateValidity ) );
 
 		if ( paymentType !== 'BEZ' ) {
 			this.setLongText( '' );
@@ -35,5 +28,12 @@ module.exports = objectAssign( Object.create( Base ), {
 				)
 			);
 		}
+	},
+	getValueText: function ( paymentType, aggregateValidity ) {
+		if ( !aggregateValidity.dataEntered ) {
+			return this.getFallbackText();
+		}
+
+		return Base.getValueText.call( this, paymentType );
 	}
 } );

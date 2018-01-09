@@ -19,13 +19,7 @@ module.exports = objectAssign( Object.create( Base ), {
 			this.setIcon( undefined );
 		}
 
-		if ( this.text ) {
-			this.setText(
-				!aggregateValidity.dataEntered ?
-					this.text.data( Base.DOM_SELECTORS.data.emptyText ) :
-					this.getValueText( addressType )
-			);
-		}
+		this.setText( this.getValueText( addressType, aggregateValidity ) );
 
 		if ( !this.longText ) {
 			return;
@@ -56,5 +50,12 @@ module.exports = objectAssign( Object.create( Base ), {
 		this.longText.html( newLongText );
 		// we worked around setLongText so have to clean up manually
 		this.setLongTextIndication( true );
+	},
+	getValueText: function ( addressType, aggregateValidity ) {
+		if ( !aggregateValidity.dataEntered ) {
+			return this.getFallbackText();
+		}
+
+		return Base.getValueText.call( this, addressType );
 	}
 } );

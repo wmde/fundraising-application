@@ -11,15 +11,14 @@ module.exports = objectAssign( Object.create( Base ), {
 		this.setSectionStatusFromValidity( aggregateValidity );
 
 		this.setIcon( this.getValueIcon( paymentInterval ) );
-
-		if ( this.text ) {
-			this.setText(
-				amount === 0 ?
-					this.text.data( Base.DOM_SELECTORS.data.emptyText ) :
-					this.currencyFormatter.format( amount ) + ' €'
-			);
+		this.setText( this.getValueText( amount ) );
+		this.setLongText( this.getValueLongText( paymentInterval ) );
+	},
+	getValueText: function ( amount ) {
+		if ( amount === 0 ) {
+			return this.getFallbackText();
 		}
 
-		this.setLongText( this.getValueLongText( paymentInterval ) );
+		return this.currencyFormatter.format( amount ) + ' €';
 	}
 } );
