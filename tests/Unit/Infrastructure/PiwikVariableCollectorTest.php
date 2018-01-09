@@ -10,7 +10,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\PiwikEvents;
 use WMDE\Fundraising\Frontend\Infrastructure\PiwikVariableCollector;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Infrastructure\PiwikVariableCollector
+ * @covers \WMDE\Fundraising\Frontend\Infrastructure\PiwikVariableCollector
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
@@ -86,7 +86,7 @@ class PiwikVariableCollectorTest extends \PHPUnit\Framework\TestCase {
 		$amount = Euro::newFromString( $amount );
 
 		$donationMock = $this->getMockBuilder( Donation::class )->disableOriginalConstructor()->getMock();
-		$donationMock->method( 'getPaymentType' )->willReturn( $paymentType );
+		$donationMock->method( 'getPaymentMethodId' )->willReturn( $paymentType );
 		$donationMock->method( 'getPaymentIntervalInMonths' )->willReturn( $paymentInterval );
 		$donationMock->method( 'getAmount' )->willReturn( $amount );
 		return $donationMock;

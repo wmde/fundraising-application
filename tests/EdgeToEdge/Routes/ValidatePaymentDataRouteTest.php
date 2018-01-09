@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethods;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
 /**
@@ -19,7 +19,7 @@ class ValidatePaymentDataRouteTest extends WebRouteTestCase {
 		$client->request(
 			'POST',
 			'/validate-payment-data',
-			[ 'amount' => '23', 'paymentType' => PaymentType::BANK_TRANSFER ]
+			[ 'amount' => '23', 'paymentType' => PaymentMethods::BANK_TRANSFER ]
 		);
 
 		$this->assertJsonSuccessResponse(
@@ -34,7 +34,7 @@ class ValidatePaymentDataRouteTest extends WebRouteTestCase {
 		$client->request(
 			'POST',
 			'/validate-payment-data',
-			[ 'amount' => '-1', 'paymentType' => PaymentType::BANK_TRANSFER ]
+			[ 'amount' => '-1', 'paymentType' => PaymentMethods::BANK_TRANSFER ]
 		);
 
 		$this->assertErrorJsonResponse( $client->getResponse() );

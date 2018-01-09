@@ -50,7 +50,7 @@ class DonationConfirmationHtmlPresenter {
 				'status' => $this->mapStatus( $donation->getStatus() ),
 				'amount' => $donation->getAmount()->getEuroFloat(),
 				'interval' => $donation->getPaymentIntervalInMonths(),
-				'paymentType' => $donation->getPaymentType(),
+				'paymentType' => $donation->getPaymentMethodId(),
 				'optsIntoNewsletter' => $donation->getOptsIntoNewsletter(),
 				'bankTransferCode' => $this->getBankTransferCode( $donation->getPaymentMethod() ),
 				// TODO: use locale to determine the date format

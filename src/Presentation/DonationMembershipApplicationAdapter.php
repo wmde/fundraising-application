@@ -8,7 +8,7 @@ use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donor;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethods;
 
 class DonationMembershipApplicationAdapter {
 
@@ -58,7 +58,7 @@ class DonationMembershipApplicationAdapter {
 		if ( $donation->getDonor() !== null ) {
 			$validationState['address'] = true;
 		}
-		if ( $donation->getPaymentType() !== PaymentType::DIRECT_DEBIT ) {
+		if ( $donation->getPaymentMethodId() !== PaymentMethods::DIRECT_DEBIT ) {
 			return $validationState;
 		}
 		/** @var DirectDebitPayment $paymentMethod */
