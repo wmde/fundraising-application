@@ -120,8 +120,8 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 		return $isConfirmed ? 'status-booked' : 'status-unconfirmed';
 	}
 
-	public function presentApplicationWasPurged(): void {
-		$this->html = 'Membership application was purged'; // TODO
+	public function presentApplicationWasAnonymized(): void {
+		$this->html = 'Membership application was anonymized'; // TODO
 	}
 
 	public function presentAccessViolation(): void {

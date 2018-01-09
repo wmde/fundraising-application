@@ -90,12 +90,12 @@ class ShowApplicationConfirmationUseCaseTest extends TestCase {
 		);
 	}
 
-	public function testWhenRepositoryThrowsPurgedException_purgedMessageIsPresented() {
-		$this->repository->throwPurgedOnRead();
+	public function testWhenRepositoryThrowsAnonymizedException_anonymizedMessageIsPresented() {
+		$this->repository->throwAnonymizedOnRead();
 
 		$this->invokeUseCaseWithCorrectRequestModel();
 
-		$this->assertTrue( $this->presenter->purgedResponseWasShown() );
+		$this->assertTrue( $this->presenter->anonymizedResponseWasShown() );
 	}
 
 	public function testWhenAuthorizerReturnsFalse_accessViolationIsPresented() {

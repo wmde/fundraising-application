@@ -15,7 +15,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\ApplicantName;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Payment;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\PhoneNumber;
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationPurgedException;
+use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationAnonymizedException;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\GetMembershipApplicationException;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\StoreMembershipApplicationException;
@@ -222,7 +222,7 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 			return $this->newApplicationDomainEntity( $application );
 		}
 
-		throw new ApplicationPurgedException();
+		throw new ApplicationAnonymizedException();
 	}
 
 	/**

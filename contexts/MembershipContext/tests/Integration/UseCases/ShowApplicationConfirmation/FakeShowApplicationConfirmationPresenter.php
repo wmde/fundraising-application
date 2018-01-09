@@ -15,7 +15,7 @@ class FakeShowApplicationConfirmationPresenter implements ShowApplicationConfirm
 
 	private $application;
 	private $updateToken;
-	private $purgedResponseWasShown = false;
+	private $anonymizedResponseWasShown = false;
 	private $accessViolationWasShown = false;
 	private $shownTechnicalError;
 
@@ -36,12 +36,12 @@ class FakeShowApplicationConfirmationPresenter implements ShowApplicationConfirm
 		return $this->updateToken;
 	}
 
-	public function presentApplicationWasPurged(): void {
-		$this->purgedResponseWasShown = true;
+	public function presentApplicationWasAnonymized(): void {
+		$this->anonymizedResponseWasShown = true;
 	}
 
-	public function purgedResponseWasShown(): bool {
-		return $this->purgedResponseWasShown;
+	public function anonymizedResponseWasShown(): bool {
+		return $this->anonymizedResponseWasShown;
 	}
 
 	public function presentAccessViolation(): void {

@@ -14,7 +14,7 @@ interface ShowApplicationConfirmationPresenter {
 
 	public function presentConfirmation( Application $application, string $updateToken ): void;
 
-	public function presentApplicationWasPurged(): void;
+	public function presentApplicationWasAnonymized(): void;
 
 	public function presentAccessViolation(): void;
 
