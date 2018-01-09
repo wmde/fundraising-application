@@ -47,6 +47,19 @@ module.exports = {
 	getValueIcon: function ( value ) {
 		return this.valueIconMap[ value ];
 	},
+	getFallbackIcon: function () {
+		if ( !this.icon ) {
+			return null;
+		}
+
+		// only configured icon are supposed to communicate validation problems
+		// @todo Consider always applying the class and decide not to have UI effects in CSS
+		if ( this.icon.data( DOM_SELECTORS.data.displayError ) !== true ) {
+			return null;
+		}
+
+		return DOM_SELECTORS.classes.errorIcon;
+	},
 	getValueText: function ( value ) {
 		return this.valueTextMap[ value ];
 	},
@@ -103,12 +116,10 @@ module.exports = {
 		this.icon.removeClass( _.values( this.valueIconMap ).join( ' ' ) );
 
 		if ( icon === undefined ) {
-			// only configured icon are supposed to communicate validation problems
-			// @todo Consider always applying the class and decide not to have UI effects in CSS
-			if ( this.icon.data( DOM_SELECTORS.data.displayError ) === true ) {
-				this.icon.addClass( DOM_SELECTORS.classes.errorIcon );
-			}
-		} else {
+			icon = this.getFallbackIcon();
+		}
+
+		if ( typeof icon === 'string' ) {
 			this.icon.addClass( icon );
 		}
 	},

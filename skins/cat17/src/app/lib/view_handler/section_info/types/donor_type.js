@@ -13,12 +13,7 @@ module.exports = objectAssign( Object.create( Base ), {
 
 		this.setSectionStatusFromValidity( aggregateValidity );
 
-		if ( aggregateValidity.dataEntered ) {
-			this.setIcon( this.getValueIcon( addressType ) );
-		} else {
-			this.setIcon( undefined );
-		}
-
+		this.setIcon( this.getValueIcon( addressType, aggregateValidity ) );
 		this.setText( this.getValueText( addressType, aggregateValidity ) );
 
 		if ( !this.longText ) {
@@ -57,5 +52,12 @@ module.exports = objectAssign( Object.create( Base ), {
 		}
 
 		return Base.getValueText.call( this, addressType );
+	},
+	getValueIcon: function ( addressType, aggregateValidity ) {
+		if ( !aggregateValidity.dataEntered ) {
+			return this.getFallbackIcon();
+		}
+
+		return Base.getValueIcon.call( this, addressType );
 	}
 } );
