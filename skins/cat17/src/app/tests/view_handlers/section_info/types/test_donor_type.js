@@ -139,18 +139,13 @@ test( 'Donor type info for anonymous indicated correctly', function ( t ) {
 			countryNames: { DE: 'Deutschland', AT: 'Österreich' }
 		} );
 
-	global.jQuery = jQueryPseudoHtmlGenerator;
-
 	handler.update( 'anonym', 'some', 'state', 'irrelevant', 'for', 'an', 'anonymous', 'record', 'left', 'DE', 'nospam@me.info', { dataEntered: true, isValid: true } );
 
 	t.ok( container.addClass.withArgs( 'completed' ).calledOnce, 'data entered reflected in style' );
 	t.ok( icon.addClass.withArgs( 'icon-anonym' ).calledOnce, 'icon set per address type' );
 	t.ok( text.text.withArgs( 'anonym' ).calledOnce, 'address type text is set' );
-	t.equals( longText.html.args[ 0 ][ 0 ].toString(), '<span>', 'long text filled with custom mark-up' );
-	t.ok( longText.html.args[ 0 ][ 0 ].append.notCalled );
+	t.ok( longText.html.withArgs( '' ).calledOnce, 'long text reset' );
 	t.ok( longText.append.notCalled );
-
-	delete global.jQuery;
 
 	t.end();
 } );
@@ -161,7 +156,7 @@ test( 'No data entered reflected in style', function ( t ) {
 			container: container
 		} );
 
-	handler.update( 'person', '', '', '', '', '', '', '', '', 'DE', '', { dataEntered: false, isValid: null } );
+	handler.update( '', '', '', '', '', '', '', '', '', 'DE', '', { dataEntered: false, isValid: null } );
 
 	t.ok( container.addClass.withArgs( 'disabled' ).calledOnce );
 
@@ -174,7 +169,7 @@ test( 'Valid data entered reflected in style', function ( t ) {
 			container: container
 		} );
 
-	handler.update( 'person', 'Herr', 'Dr.', 'test', 'user', '', 'demostr 4', '10112', 'Bärlin', 'DE', 'me@you.com', { dataEntered: true, isValid: true } );
+	handler.update( '', 'Herr', 'Dr.', 'test', 'user', '', 'demostr 4', '10112', 'Bärlin', 'DE', 'me@you.com', { dataEntered: true, isValid: true } );
 
 	t.ok( container.addClass.withArgs( 'completed' ).calledOnce );
 
@@ -187,7 +182,7 @@ test( 'Invalid data entered reflected in style', function ( t ) {
 			container: container
 		} );
 
-	handler.update( 'person', 'Herr', 'Dr.', 'test', 'user', '', 'demostr 4', '10112', 'Bärlin', 'DE', 'me@', { dataEntered: true, isValid: false } );
+	handler.update( '', 'Herr', 'Dr.', 'test', 'user', '', 'demostr 4', '10112', 'Bärlin', 'DE', 'me@', { dataEntered: true, isValid: false } );
 
 	t.ok( container.addClass.withArgs( 'invalid' ).calledOnce );
 

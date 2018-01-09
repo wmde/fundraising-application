@@ -84,16 +84,21 @@ module.exports = {
 
 		this.text.text( text );
 	},
-	/**
-	 * Fill the longText element with text. Make sure to call setLongTextIndication if you run your own implementation.
-	 * @param {string} longText
-	 */
 	setLongText: function ( longText ) {
 		if ( !this.longText ) {
 			return;
 		}
 
 		this.longText.text( longText );
+
+		this.setLongTextIndication( longText !== '' );
+	},
+	setLongTextHtml: function ( longText ) {
+		if ( !this.longText ) {
+			return;
+		}
+
+		this.longText.html( longText );
 
 		this.setLongTextIndication( longText !== '' );
 	},

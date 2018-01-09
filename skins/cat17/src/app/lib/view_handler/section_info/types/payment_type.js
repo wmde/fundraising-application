@@ -10,24 +10,7 @@ module.exports = objectAssign( Object.create( Base ), {
 
 		this.setIcon( this.getValueIcon( paymentType ) );
 		this.setText( this.getValueText( paymentType, aggregateValidity ) );
-
-		if ( paymentType !== 'BEZ' ) {
-			this.setLongText( '' );
-			return;
-		}
-
-		this.setLongText( this.getValueLongText( paymentType ) );
-
-		if ( this.longText && iban && bic ) {
-			this.longText.prepend( // intentionally html. Escaping performed through .text() calls on user-input vars
-				jQuery( '<dl>' ).addClass( Base.DOM_SELECTORS.classes.summaryBankInfo ).append(
-					jQuery( '<dt>' ).text( 'IBAN' ),
-					jQuery( '<dd>' ).text( iban ),
-					jQuery( '<dt>' ).text( 'BIC' ),
-					jQuery( '<dd>' ).text( bic )
-				)
-			);
-		}
+		this.setLongTextHtml( this.getValueLongText( paymentType, iban, bic ) );
 	},
 	getValueText: function ( paymentType, aggregateValidity ) {
 		if ( !aggregateValidity.dataEntered ) {
@@ -35,5 +18,35 @@ module.exports = objectAssign( Object.create( Base ), {
 		}
 
 		return Base.getValueText.call( this, paymentType );
+	},
+	getValueLongText: function ( paymentType, iban, bic ) {
+		var wrapperTag = '<div>',
+			longText = ''
+		;
+
+		if ( paymentType !== 'BEZ' ) {
+			return longText;
+		}
+
+		longText = jQuery( wrapperTag );
+
+		if ( iban !== '' && bic !== '' ) {
+			longText.append(
+				jQuery( '<dl>' )
+					.addClass( Base.DOM_SELECTORS.classes.summaryBankInfo )
+					.append(
+						jQuery( '<dt>' ).text( 'IBAN' ),
+						jQuery( '<dd>' ).text( iban ),
+						jQuery( '<dt>' ).text( 'BIC' ),
+						jQuery( '<dd>' ).text( bic )
+					)
+			);
+		}
+
+		longText.append(
+			jQuery( wrapperTag ).text( Base.getValueLongText.call( this, paymentType ) )
+		);
+
+		return longText;
 	}
 } );
