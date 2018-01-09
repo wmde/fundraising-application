@@ -24,7 +24,7 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethods;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
 use WMDE\Fundraising\Store\MembershipApplicationData;
 
@@ -120,7 +120,7 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 		$application->setPaymentAmount( (int)$payment->getAmount()->getEuroFloat() );
 		$paymentMethod = $payment->getPaymentMethod();
 
-		$application->setPaymentType( $paymentMethod->getType() );
+		$application->setPaymentType( $paymentMethod->getId() );
 		if ( $paymentMethod instanceof DirectDebitPayment ) {
 			$this->setBankDataFields( $application, $paymentMethod->getBankData() );
 		} elseif ( $paymentMethod instanceof PayPalPayment && $paymentMethod->getPayPalData() != new PayPalData() ) {
@@ -189,7 +189,7 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 	}
 
 	private function isDirectDebitPayment( Application $application ): bool {
-		return $application->getPayment()->getPaymentMethod()->getType() === PaymentType::DIRECT_DEBIT;
+		return $application->getPayment()->getPaymentMethod()->getId() === PaymentMethods::DIRECT_DEBIT;
 	}
 
 	private function preserveDoctrineStatus( DoctrineApplication $doctrineApplication, int $doctrineStatus ): void {
@@ -286,11 +286,11 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 	}
 
 	private function newPaymentMethod( DoctrineApplication $application ): PaymentMethod {
-		if ( $application->getPaymentType() === PaymentType::DIRECT_DEBIT ) {
+		if ( $application->getPaymentType() === PaymentMethods::DIRECT_DEBIT ) {
 			return new DirectDebitPayment( $this->newBankData( $application ) );
 		}
 
-		if ( $application->getPaymentType() === PaymentType::PAYPAL ) {
+		if ( $application->getPaymentType() === PaymentMethods::PAYPAL ) {
 			return new PayPalPayment( $this->newPayPalData( $application ) );
 		}
 

@@ -174,7 +174,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'donation.status: ' . self::MAPPED_STATUS, $responseContent );
 		$this->assertContains( 'donation.amount: ' . $donation->getAmount()->getEuroString(), $responseContent );
 		$this->assertContains( 'donation.interval: ' . $donation->getPaymentIntervalInMonths(), $responseContent );
-		$this->assertContains( 'donation.paymentType: ' . $donation->getPaymentType(), $responseContent );
+		$this->assertContains( 'donation.paymentType: ' . $donation->getPaymentMethodId(), $responseContent );
 		$this->assertContains( 'donation.optsIntoNewsletter: ' . $donation->getOptsIntoNewsletter(), $responseContent );
 		$this->assertContains( 'donation.updateToken: ' . self::CORRECT_ACCESS_TOKEN, $responseContent );
 

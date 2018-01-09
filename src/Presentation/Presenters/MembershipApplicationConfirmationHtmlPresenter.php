@@ -68,7 +68,7 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 		return [
 			'id' => $membershipApplication->getId(),
 			'membershipType' => $membershipApplication->getType(),
-			'paymentType' => $membershipApplication->getPayment()->getPaymentMethod()->getType(),
+			'paymentType' => $membershipApplication->getPayment()->getPaymentMethod()->getId(),
 			'status' => $this->mapStatus( $membershipApplication->isConfirmed() ),
 			'membershipFee' => $membershipApplication->getPayment()->getAmount()->getEuroString(),
 			'paymentIntervalInMonths' => $membershipApplication->getPayment()->getIntervalInMonths(),

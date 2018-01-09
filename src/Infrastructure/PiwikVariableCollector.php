@@ -19,7 +19,7 @@ class PiwikVariableCollector {
 		if ( isset( $sessionTrackingData['paymentType'] ) ) {
 			$piwikEvents->triggerSetCustomVariable(
 				PiwikEvents::CUSTOM_VARIABLE_PAYMENT_TYPE,
-				$sessionTrackingData['paymentType'] . '/' . $donation->getPaymentType(),
+				$sessionTrackingData['paymentType'] . '/' . $donation->getPaymentMethodId(),
 				PiwikEvents::SCOPE_VISIT
 			);
 		}

@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\Appl
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipResponse;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethods;
 
 /**
  * @license GNU GPL v2+
@@ -130,8 +130,8 @@ class ApplyForMembershipHandler {
 	}
 
 	private function newHttpResponse( ApplyForMembershipResponse $responseModel ): Response {
-		switch( $responseModel->getMembershipApplication()->getPayment()->getPaymentMethod()->getType() ) {
-			case PaymentType::DIRECT_DEBIT:
+		switch( $responseModel->getMembershipApplication()->getPayment()->getPaymentMethod()->getId() ) {
+			case PaymentMethods::DIRECT_DEBIT:
 				$httpResponse = $this->app->redirect(
 					$this->app['url_generator']->generate(
 						'show-membership-confirmation',
@@ -144,7 +144,7 @@ class ApplyForMembershipHandler {
 				);
 
 				break;
-			case PaymentType::PAYPAL:
+			case PaymentMethods::PAYPAL:
 				$httpResponse = $this->app->redirect(
 					$this->ffFactory->newPayPalUrlGeneratorForMembershipApplications()->generateUrl(
 						$responseModel->getMembershipApplication()->getId(),

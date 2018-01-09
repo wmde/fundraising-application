@@ -10,7 +10,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipContext\Tracking\ApplicationPiwikTracker;
 use WMDE\Fundraising\Frontend\MembershipContext\Tracking\ApplicationTracker;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethods;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentDelayCalculator;
 
 /**
@@ -98,7 +98,7 @@ class ApplyForMembershipUseCase {
 				'membershipType' => $application->getType(),
 				'membershipFee' => $application->getPayment()->getAmount()->getEuroString(),
 				'paymentIntervalInMonths' => $application->getPayment()->getIntervalInMonths(),
-				'paymentType' => $application->getPayment()->getPaymentMethod()->getType(),
+				'paymentType' => $application->getPayment()->getPaymentMethod()->getId(),
 				'salutation' => $application->getApplicant()->getName()->getSalutation(),
 				'title' => $application->getApplicant()->getName()->getTitle(),
 				'lastName' => $application->getApplicant()->getName()->getLastName()
@@ -107,6 +107,6 @@ class ApplyForMembershipUseCase {
 	}
 
 	public function isAutoConfirmed( Application $application ): bool {
-		return $application->getPayment()->getPaymentMethod()->getType() === PaymentType::DIRECT_DEBIT;
+		return $application->getPayment()->getPaymentMethod()->getId() === PaymentMethods::DIRECT_DEBIT;
 	}
 }

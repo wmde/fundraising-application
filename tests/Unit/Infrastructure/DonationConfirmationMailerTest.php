@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\DonationContext\Infrastructure\DonationConfirmationMailer;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethods;
 use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
 
@@ -59,7 +59,7 @@ class DonationConfirmationMailerTest extends \PHPUnit\Framework\TestCase {
 					'amount' => ValidDonation::DONATION_AMOUNT,
 					'interval' => ValidDonation::PAYMENT_INTERVAL_IN_MONTHS,
 					'needsModeration' => false,
-					'paymentType' => PaymentType::BANK_TRANSFER,
+					'paymentType' => PaymentMethods::BANK_TRANSFER,
 					'bankTransferCode' => ValidDonation::PAYMENT_BANK_TRANSFER_CODE
 				]
 			],

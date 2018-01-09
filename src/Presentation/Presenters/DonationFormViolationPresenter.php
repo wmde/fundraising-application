@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationValidationResult as Result;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentType;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethods;
 use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\FunValidators\ConstraintViolation;
@@ -105,7 +105,7 @@ class DonationFormViolationPresenter {
 	}
 
 	private function getBankData( AddDonationRequest $request ): array {
-		if ( $request->getPaymentType() !== PaymentType::DIRECT_DEBIT ) {
+		if ( $request->getPaymentType() !== PaymentMethods::DIRECT_DEBIT ) {
 			return [];
 		}
 		$bankData = $request->getBankData();
