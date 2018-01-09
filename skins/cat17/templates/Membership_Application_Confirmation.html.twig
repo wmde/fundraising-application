@@ -25,7 +25,7 @@
 					} ) | raw $}
 				</p>
 
-				<p class="text-moved visible-sm-block visible-md-block visible-lg-block">
+				<p class="text-moved visible-sm-block visible-md-block visible-lg-block hidden-print">
 					{$ 'membership_confirmation_welcome' | trans $}
 				</p>
 
@@ -34,6 +34,12 @@
 						{$ web_content('membership/application/paymenttype_directdebit_mandate') $}
 
 						{$ web_content('membership/application/paymenttype_directdebit_affirmation') $}
+
+						<p style="text-align: right">
+							{$ 'membership_confirmation_debit_mandate_date' | trans( {
+							'%formattedDate%': 'now' | date( 'd.m.Y' )
+							} ) $}
+						</p>
 					</div>
 				{% endif %}
 			</div>

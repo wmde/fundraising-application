@@ -78,3 +78,17 @@
 		}
 	}
 }
+
+@media print {
+	.page-membership-confirmation {
+		p.h1, p.h2 {
+			font-size: $font-size-base;
+			margin-top: 0;
+			margin-bottom: 11px;
+		}
+
+		.transfer-data-list dd {
+			font-family: monospace;
+		}
+	}
+}
