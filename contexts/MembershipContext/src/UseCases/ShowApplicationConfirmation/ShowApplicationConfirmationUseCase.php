@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowApplicationCo
 
 use WMDE\Fundraising\Frontend\MembershipContext\Authorization\ApplicationAuthorizer;
 use WMDE\Fundraising\Frontend\MembershipContext\Authorization\ApplicationTokenFetcher;
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationPurgedException;
+use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationAnonymizedException;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\GetMembershipApplicationException;
 
@@ -38,8 +38,8 @@ class ShowApplicationConfirmationUseCase {
 		try {
 			$application = $this->repository->getApplicationById( $request->getApplicationId() );
 		}
-		catch ( ApplicationPurgedException $ex ) {
-			$this->presenter->presentApplicationWasPurged();
+		catch ( ApplicationAnonymizedException $ex ) {
+			$this->presenter->presentApplicationWasAnonymized();
 			return;
 		}
 		catch ( GetMembershipApplicationException $ex ) {
