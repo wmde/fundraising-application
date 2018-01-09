@@ -33,19 +33,16 @@ module.exports = {
 	valueTextMap: {},
 	valueLongTextMap: {},
 
-	update: function ( value, validity ) {
-		this.defaultBehavior( value, validity );
-	},
 	/**
 	 * @param {*} value
 	 * @param {validation_result} validity
 	 */
-	defaultBehavior: function ( value, validity ) {
+	update: function ( value, validity ) {
+		this.setSectionStatusFromValidity( validity );
+
 		this.setIcon( this.getValueIcon( value ) );
 		this.setText( this.getValueText( value ) );
 		this.setLongText( this.getValueLongText( value ) );
-
-		this.setSectionStatusFromValidity( validity );
 	},
 	getValueIcon: function ( value ) {
 		return this.valueIconMap[ value ];
