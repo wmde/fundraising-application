@@ -7,14 +7,14 @@
 	Sie zahlen per {$ donation.paymentType|trans({}, 'paymentTypes') $}
 {% endif %}
 
-{% if person %}
+{% if address %}
 	<p>
-		{$ person.salutation $} <span id="confirm-name">{$ person.fullName $}</span>
+		{$ address.salutation $} <span id="confirm-name">{$ address.fullName $}</span>
 	</p>
 	<p class="no-margin">
-		<span id="confirm-street">{$ person.streetAddress $}</span><br/>
-		<span id="confirm-postcode">{$ person.postalCode $}</span> <span id="confirm-city">{$ person.city $}</span><br/>
-		<span id="confirm-mail">{$ person.email $}</span>
+		<span id="confirm-street">{$ address.streetAddress $}</span><br/>
+		<span id="confirm-postcode">{$ address.postalCode $}</span> <span id="confirm-city">{$ address.city $}</span><br/>
+		<span id="confirm-mail">{$ address.email $}</span>
 	</p>
 {% else %}
 	<p>

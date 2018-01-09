@@ -2,8 +2,8 @@
 {% set formSlideOpen = true %}
 {% set initialPaymentType = paymentTypes|length == 1 ? paymentTypes|first : '' %}
 {% set trackOutgoingLinks = true %}
-{% if person.salutation and person.lastName %}
-	{% set membershipAppeal = "#{person.salutation} #{person.lastName}, werden Sie ab 2018 Fördermitglied!" %}
+{% if address.salutation and address.lastName %}
+	{% set membershipAppeal = "#{address.salutation} #{address.lastName}, werden Sie ab 2018 Fördermitglied!" %}
 {% else %}
 	{% set membershipAppeal = 'Werden Sie ab 2018 Fördermitglied!' %}
 {% endif %}
@@ -11,7 +11,7 @@
 {% include 'Validation_Errors.html.twig' %}
 
 <div id="personalDataPage">
-	{% include 'Membership_Application_Form.html.twig' %}
+	{% include 'Membership_Application_Form.html.twig' with { person: address } %}
 </div>
 
 <div id="bankConfirmationPage">

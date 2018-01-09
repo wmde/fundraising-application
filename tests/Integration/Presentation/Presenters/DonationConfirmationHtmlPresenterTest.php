@@ -63,7 +63,7 @@ class DonationConfirmationHtmlPresenterTest extends \PHPUnit\Framework\TestCase 
 				'updateToken' => self::UPDATE_TOKEN,
 				'accessToken' => self::ACCESS_TOKEN
 			],
-			'person' => [],
+			'address' => [],
 			'bankData' => [],
 			'initialFormValues' => [],
 			'piwikEvents' => [

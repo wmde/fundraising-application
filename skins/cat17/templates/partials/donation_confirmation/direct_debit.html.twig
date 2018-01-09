@@ -46,12 +46,12 @@
 
                 <div class="row">
                     <div class="col-xs-6">
-                        {% if person %}
+                        {% if address %}
                             <p>
-                                {$ person.salutation $} {$ person.fullName $}<br/>
-                                {$ person.streetAddress $}<br/>
-                                {$ person.postalCode $} {$ person.city $}<br/>
-                                {$ person.email $}
+                                {$ address.salutation $} {$ address.fullName $}<br/>
+                                {$ address.streetAddress $}<br/>
+                                {$ address.postalCode $} {$ address.city $}<br/>
+                                {$ address.email $}
                             </p>
                         {% else %}
                             <p>

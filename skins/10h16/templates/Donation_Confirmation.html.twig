@@ -101,14 +101,14 @@
 
 					<div class="container clearfix">
 						<div class="address f-left">
-						{% if person %}
+						{% if address %}
 							<p>
-								<span class="confirm-name">{$ person.salutation $} {$ person.fullName $}</span>
+								<span class="confirm-name">{$ address.salutation $} {$ address.fullName $}</span>
 							</p>
 							<p class="no-margin">
-								<span class="confirm-street">{$ person.streetAddress $}</span><br/>
-								<span class="confirm-postcode">{$ person.postalCode $}</span> <span class="confirm-city">{$ person.city $}</span><br/>
-								<span class="confirm-email">{$ person.email $}</span>
+								<span class="confirm-street">{$ address.streetAddress $}</span><br/>
+								<span class="confirm-postcode">{$ address.postalCode $}</span> <span class="confirm-city">{$ address.city $}</span><br/>
+								<span class="confirm-email">{$ address.email $}</span>
 							</p>
 						{% else %}
 							<p>
