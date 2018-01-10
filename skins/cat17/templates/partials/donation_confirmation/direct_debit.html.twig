@@ -63,7 +63,9 @@
                         <p>
                             <strong>{$ 'iban' | trans $}</strong> {$ bankData.iban $}<br/>
                             <strong>{$ 'bic' | trans $}</strong> {$ bankData.bic $}<br/>
-                            <strong>{$ 'bank_name' | trans $}</strong> {$ bankData.bankname $}
+                            {% if bankData.bankname %}
+                                <strong>{$ 'bank_name' | trans $}</strong> {$ bankData.bankname $}
+                            {% endif %}
                         </p>
                     </div>
                 </div>
