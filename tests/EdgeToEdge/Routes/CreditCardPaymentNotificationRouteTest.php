@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Frontend\DonationContext\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
@@ -19,31 +20,32 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
  */
 class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 
-	const FUNCTION = 'billing';
-	const DONATION_ID = 1;
-	const AMOUNT = ValidDonation::DONATION_AMOUNT;
-	const TRANSACTION_ID = 'customer.prefix-ID2tbnag4a9u';
-	const CUSTOMER_ID = 'e20fb9d5281c1bca1901c19f6e46213191bb4c17';
-	const SESSION_ID = 'CC13064b2620f4028b7d340e3449676213336a4d';
-	const AUTH_ID = 'd1d6fae40cf96af52477a9e521558ab7';
-	const ACCESS_TOKEN = 'my_secret_access_token';
-	const UPDATE_TOKEN = 'my_secret_update_token';
-	const TITLE = 'Your generous donation';
-	const COUNTRY_CODE = 'DE';
-	const CURRENCY_CODE = 'EUR';
-	const STATUS = 'processed';
+	private const FUNCTION = 'billing';
+	private const DONATION_ID = 1;
+	private const TRANSACTION_ID = 'customer.prefix-ID2tbnag4a9u';
+	private const CUSTOMER_ID = 'e20fb9d5281c1bca1901c19f6e46213191bb4c17';
+	private const SESSION_ID = 'CC13064b2620f4028b7d340e3449676213336a4d';
+	private const AUTH_ID = 'd1d6fae40cf96af52477a9e521558ab7';
+	private const ACCESS_TOKEN = 'my_secret_access_token';
+	private const UPDATE_TOKEN = 'my_secret_update_token';
+	private const TITLE = 'Your generous donation';
+	private const COUNTRY_CODE = 'DE';
+	private const CURRENCY_CODE = 'EUR';
+	private const STATUS = 'processed';
+
+	private const PATH = '/handle-creditcard-payment-notification';
 
 	public function testGivenInvalidRequest_applicationIndicatesError(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setCreditCardService( new FakeCreditCardService() );
 			$client->request(
-				'GET',
-				'/handle-creditcard-payment-notification',
+				Request::METHOD_GET,
+				self::PATH,
 				[]
 			);
 
 			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
-			$this->assertContains( 'status=error', $client->getResponse()->getContent() );
+			$this->assertContains( "status=error\n", $client->getResponse()->getContent() );
 			$this->assertContains( 'msg=', $client->getResponse()->getContent() );
 		} );
 	}
@@ -60,15 +62,15 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 			$factory->getDonationRepository()->storeDonation( ValidDonation::newIncompleteCreditCardDonation() );
 
 			$client->request(
-				'GET',
-				'/handle-creditcard-payment-notification',
+				Request::METHOD_GET,
+				self::PATH,
 				$this->newRequest()
 			);
 
 			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
-			$this->assertContains( 'status=ok', $client->getResponse()->getContent() );
+			$this->assertContains( "status=ok\n", $client->getResponse()->getContent() );
 			$this->assertContains(
-				'url=http://my.donation.app/show-donation-confirmation?id=1&accessToken=my_secret_access_token',
+				"url=http://my.donation.app/show-donation-confirmation?id=1&accessToken=my_secret_access_token\n",
 				$client->getResponse()->getContent()
 			);
 			$this->assertCreditCardDataGotPersisted( $factory->getDonationRepository(), $this->newRequest() );
