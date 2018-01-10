@@ -149,3 +149,77 @@ test( 'Donor type info for anonymous indicated correctly', function ( t ) {
 
 	t.end();
 } );
+
+test( 'Icon is correctly determined from value', function ( t ) {
+	var container = createContainerElement(),
+		icon = jQueryElementStub(),
+		handler = objectAssign( Object.create( DonorType ), {
+			container: container,
+
+			icon: icon,
+
+			valueIconMap: { 0: 'icon-0', 1: 'icon-1' }
+		} );
+
+	t.equals( handler.getValueIcon( 1, { dataEntered: true, isValid: true } ), 'icon-1' );
+
+	t.end();
+} );
+
+test( 'Icon is error if can not be determined from value and error display set', function ( t ) {
+	var container = createContainerElement(),
+		icon = jQueryElementStub(),
+		handler = objectAssign( Object.create( DonorType ), {
+			container: container,
+
+			icon: icon,
+
+			valueIconMap: { 0: 'icon-0', 1: 'icon-1' }
+		} );
+
+	icon.data.withArgs( 'display-error' ).returns( true );
+
+	t.equals( handler.getValueIcon( 'outOfBounds', { dataEntered: true, isValid: true } ), 'icon-error' );
+
+	t.end();
+} );
+
+test( 'Icon is null if can not be determined from value and no error display', function ( t ) {
+	var container = createContainerElement(),
+		icon = jQueryElementStub(),
+		handler = objectAssign( Object.create( DonorType ), {
+			container: container,
+
+			icon: icon,
+
+			valueIconMap: { 0: 'icon-0', 1: 'icon-1' }
+		} );
+
+	icon.data.withArgs( 'display-error' ).returns( false );
+
+	t.equals( handler.getValueIcon( 'outOfBounds', { dataEntered: true, isValid: false } ), null );
+
+	t.end();
+} );
+
+/**
+ * This unintuitive state (dataEntered false despite value given) seems to be a possible outcome of
+ * lib/state_aggregation/membership/donor_type_and_address_are_valid.js
+ */
+test( 'Icon is null if not dataEntered', function ( t ) {
+	var container = createContainerElement(),
+		icon = jQueryElementStub(),
+		handler = objectAssign( Object.create( DonorType ), {
+			container: container,
+
+			icon: icon,
+
+			valueIconMap: { 0: 'icon-0', 1: 'icon-1' }
+		} );
+
+	icon.data.withArgs( 'display-error' ).returns( false );
+
+	t.equals( handler.getValueIcon( 0, { dataEntered: false, isValid: null } ), null );
+
+	t.end();
+} );

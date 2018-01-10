@@ -105,3 +105,113 @@ test( 'Incomplete amount_and_frequency validity correctly reflected in style', f
 
 	t.end();
 } );
+
+test( 'Icon is correctly determined from value', function ( t ) {
+	var container = createContainerElement(),
+		icon = jQueryElementStub(),
+		handler = objectAssign( Object.create( Base ), {
+			container: container,
+
+			icon: icon,
+
+			valueIconMap: { 0: 'icon-0', 1: 'icon-1' }
+		} );
+
+	t.equals( handler.getValueIcon( 1 ), 'icon-1' );
+
+	t.end();
+} );
+
+test( 'Icon is null if can not be determined from value and no error display', function ( t ) {
+	var container = createContainerElement(),
+		icon = jQueryElementStub(),
+		handler = objectAssign( Object.create( Base ), {
+			container: container,
+
+			icon: icon,
+
+			valueIconMap: { 0: 'icon-0', 1: 'icon-1' }
+		} );
+
+	t.equals( handler.getValueIcon( 4 ), null );
+
+	t.end();
+} );
+
+test( 'Icon is error if can not be determined from value and error display set', function ( t ) {
+	var container = createContainerElement(),
+		icon = jQueryElementStub(),
+		handler = objectAssign( Object.create( Base ), {
+			container: container,
+
+			icon: icon,
+
+			valueIconMap: { 0: 'icon-0', 1: 'icon-1' }
+		} );
+
+	icon.data.withArgs( 'display-error' ).returns( true );
+
+	t.equals( handler.getValueIcon( 5 ), 'icon-error' );
+
+	t.end();
+} );
+
+test( 'Icon class set according to value', function ( t ) {
+	var container = createContainerElement(),
+		icon = jQueryElementStub(),
+		handler = objectAssign( Object.create( Base ), {
+			container: container,
+
+			icon: icon,
+
+			valueIconMap: { 0: 'icon-0', 1: 'icon-1' }
+		} );
+
+	handler.setIcon( 'icon-1' );
+
+	t.ok( icon.removeClass.withArgs( 'icon-error' ).calledOnce );
+	t.ok( icon.removeClass.withArgs( 'icon-0 icon-1' ).calledOnce );
+	t.ok( icon.addClass.withArgs( 'icon-1' ).calledOnce );
+
+	t.end();
+} );
+
+test( 'Icon error set correctly', function ( t ) {
+	var container = createContainerElement(),
+		icon = jQueryElementStub(),
+		handler = objectAssign( Object.create( Base ), {
+			container: container,
+
+			icon: icon,
+
+			valueIconMap: { 0: 'icon-0', 1: 'icon-1' }
+		} );
+
+	handler.setIcon( 'icon-error' );
+
+	t.ok( icon.removeClass.withArgs( 'icon-error' ).calledOnce );
+	t.ok( icon.removeClass.withArgs( 'icon-0 icon-1' ).calledOnce );
+	t.ok( icon.addClass.withArgs( 'icon-error' ).calledOnce );
+
+	t.end();
+} );
+
+test( 'Icon class reset if no class name passed', function ( t ) {
+	var container = createContainerElement(),
+		icon = jQueryElementStub(),
+		handler = objectAssign( Object.create( Base ), {
+			container: container,
+
+			icon: icon,
+
+			valueIconMap: { 0: 'icon-0', 1: 'icon-1' }
+		} );
+
+	handler.setIcon( null );
+
+	t.ok( icon.removeClass.withArgs( 'icon-error' ).calledOnce );
+	t.ok( icon.removeClass.withArgs( 'icon-0 icon-1' ).calledOnce );
+	t.ok( icon.addClass.notCalled );
+
+	t.end();
+} );

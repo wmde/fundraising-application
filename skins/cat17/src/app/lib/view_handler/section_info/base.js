@@ -45,7 +45,7 @@ module.exports = {
 		this.setLongText( this.getValueLongText( value ) );
 	},
 	getValueIcon: function ( value ) {
-		return this.valueIconMap[ value ];
+		return this.valueIconMap[ value ] || this.getFallbackIcon();
 	},
 	getFallbackIcon: function () {
 		if ( !this.icon ) {
@@ -119,10 +119,6 @@ module.exports = {
 
 		this.icon.removeClass( DOM_SELECTORS.classes.errorIcon );
 		this.icon.removeClass( _.values( this.valueIconMap ).join( ' ' ) );
-
-		if ( icon === undefined ) {
-			icon = this.getFallbackIcon();
-		}
 
 		if ( typeof icon === 'string' ) {
 			this.icon.addClass( icon );
