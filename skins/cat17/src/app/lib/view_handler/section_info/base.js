@@ -61,11 +61,11 @@ module.exports = {
 		return DOM_SELECTORS.classes.errorIcon;
 	},
 	getValueText: function ( value ) {
-		return this.valueTextMap[ value ];
+		return this.valueTextMap[ value ] || this.getFallbackText();
 	},
 	getFallbackText: function () {
 		if ( !this.text ) {
-			return '';
+			return null;
 		}
 
 		return this.text.data( DOM_SELECTORS.data.emptyText );
@@ -76,10 +76,6 @@ module.exports = {
 	setText: function ( text ) {
 		if ( !this.text ) {
 			return;
-		}
-
-		if ( text === undefined ) {
-			text = this.getFallbackText();
 		}
 
 		this.text.text( text );
