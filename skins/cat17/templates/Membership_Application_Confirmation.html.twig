@@ -33,6 +33,32 @@
 					<div class="visible-print">
 						{$ web_content('membership/application/paymenttype_directdebit_mandate') $}
 
+						<h3>{$ 'membership_confirmation_debit_mandate_title' | trans $}</h3>
+
+						<p>
+							{$ web_content( 'address_of_suborganization' ) | nl2br $}
+						</p>
+
+						<div class="row">
+							<div class="col-xs-6">
+								<p>
+									{$ address.salutation $} {$ address.fullName $}<br/>
+									{$ address.streetAddress $}<br/>
+									{$ address.postalCode $} {$ address.city $}<br/>
+									{$ address.email $}
+								</p>
+							</div>
+							<div class="col-xs-6">
+								<p>
+									<strong>{$ 'iban' | trans $}</strong> {$ bankData.iban $}<br/>
+									<strong>{$ 'bic' | trans $}</strong> {$ bankData.bic $}<br/>
+									{% if bankData.bankName %}
+										<strong>{$ 'bank_name' | trans $}</strong> {$ bankData.bankName $}
+									{% endif %}
+								</p>
+							</div>
+						</div>
+
 						{$ web_content('membership/application/paymenttype_directdebit_affirmation') $}
 
 						<p style="text-align: right">
