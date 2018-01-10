@@ -48,9 +48,15 @@ class CreditCardNotificationPresenter {
 	 * @see https://www.micropayment.de/help/documentation/
 	 */
 	private function render( array $result ): string {
-		array_walk( $result, function( & $value, $key ) {
-			$value = $key . self::VALUE_ASSIGNMENT . $value;
-		} );
-		return implode( self::ARG_SEPARATOR, $result ) . self::ARG_SEPARATOR;
+		return implode(
+			'',
+			array_map(
+				function( $key, $value ): string {
+					return $key . self::VALUE_ASSIGNMENT . $value . self::ARG_SEPARATOR;
+				},
+				array_keys( $result ),
+				array_values( $result )
+			)
+		);
 	}
 }
