@@ -34,8 +34,9 @@ test( 'No data entered reflected in style', function ( t ) {
 			container: container
 		} );
 
-	handler.update( 'whatever', { dataEntered: false, isValid: null } );
+	handler.setSectionStatusFromValidity( { dataEntered: false, isValid: null } );
 
+	t.ok( container.removeClass.withArgs( 'completed disabled invalid' ).calledOnce );
 	t.ok( container.addClass.withArgs( 'disabled' ).calledOnce );
 
 	t.end();
@@ -47,8 +48,9 @@ test( 'Valid data entered reflected in style', function ( t ) {
 			container: container
 		} );
 
-	handler.update( 'whatever', { dataEntered: true, isValid: true } );
+	handler.setSectionStatusFromValidity( { dataEntered: true, isValid: true } );
 
+	t.ok( container.removeClass.withArgs( 'completed disabled invalid' ).calledOnce );
 	t.ok( container.addClass.withArgs( 'completed' ).calledOnce );
 
 	t.end();
@@ -60,8 +62,9 @@ test( 'Invalid data entered reflected in style', function ( t ) {
 			container: container
 		} );
 
-	handler.update( 'whatever', { dataEntered: true, isValid: false } );
+	handler.setSectionStatusFromValidity( { dataEntered: true, isValid: false } );
 
+	t.ok( container.removeClass.withArgs( 'completed disabled invalid' ).calledOnce );
 	t.ok( container.addClass.withArgs( 'invalid' ).calledOnce );
 
 	t.end();
@@ -71,14 +74,33 @@ test( 'Invalid data entered reflected in style', function ( t ) {
  * This unintuitive state seems to be a possible outcome of
  * lib/state_aggregation/membership/membership_type_is_valid.js
  */
-test( 'Incomplete validity correctly reflected in style', function ( t ) {
+test( 'Incomplete membership_type validity correctly reflected in style', function ( t ) {
 	var container = createContainerElement(),
 		handler = objectAssign( Object.create( Base ), {
 			container: container
 		} );
 
-	handler.update( 'whatever', { dataEntered: false, isValid: false } );
+	handler.setSectionStatusFromValidity( { dataEntered: false, isValid: false } );
 
+	t.ok( container.removeClass.withArgs( 'completed disabled invalid' ).calledOnce );
+	t.ok( container.addClass.withArgs( 'disabled' ).calledOnce );
+
+	t.end();
+} );
+
+/**
+ * This unintuitive state seems to be a possible outcome of
+ * lib/state_aggregation/donation/amount_and_frequency_are_valid.js
+ */
+test( 'Incomplete amount_and_frequency validity correctly reflected in style', function ( t ) {
+	var container = createContainerElement(),
+		handler = objectAssign( Object.create( Base ), {
+			container: container
+		} );
+
+	handler.setSectionStatusFromValidity( { dataEntered: true, isValid: null } );
+
+	t.ok( container.removeClass.withArgs( 'completed disabled invalid' ).calledOnce );
 	t.ok( container.addClass.withArgs( 'disabled' ).calledOnce );
 
 	t.end();
