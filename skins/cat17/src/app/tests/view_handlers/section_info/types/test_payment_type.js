@@ -38,6 +38,7 @@ test( 'Payment type PPL info is set in respective elements', function ( t ) {
 	t.ok( container.addClass.withArgs( 'completed' ).calledOnce );
 	t.ok( icon.addClass.withArgs( 'icon-PPL' ).calledOnce );
 	t.ok( text.text.withArgs( 'Paypal' ).calledOnce, 'Payment type is set' );
+	t.ok( longText.html.calledOnce );
 	t.ok( longText.html.withArgs( '' ).calledOnce, 'Long text is reset' );
 
 	t.end();
@@ -72,6 +73,7 @@ test( 'Payment type BEZ info is set in respective elements', function ( t ) {
 	t.ok( icon.addClass.withArgs( 'icon-BEZ' ).calledOnce );
 	t.ok( text.text.withArgs( 'Lastschrift' ).calledOnce, 'Payment type is set' );
 
+	t.ok( longText.html.calledOnce );
 	longTextWrapper = longText.html.args[ 0 ][ 0 ];
 
 	t.equals( longTextWrapper.toString(), '<div>' );

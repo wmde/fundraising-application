@@ -80,21 +80,18 @@ module.exports = {
 
 		this.text.text( text );
 	},
-	setLongText: function ( longText ) {
+	/**
+	 * @param {string|jQuery} longText The value to set
+	 * @param {object} config Config object to chose the method used to update the element, e.g. { updateMethod: 'html' }
+	 */
+	setLongText: function ( longText, config ) {
 		if ( !this.longText ) {
 			return;
 		}
 
-		this.longText.text( longText );
+		config = _.extend( { updateMethod: 'text' }, config );
 
-		this.setLongTextIndication( longText !== '' );
-	},
-	setLongTextHtml: function ( longText ) {
-		if ( !this.longText ) {
-			return;
-		}
-
-		this.longText.html( longText );
+		this.longText[ config.updateMethod ]( longText );
 
 		this.setLongTextIndication( longText !== '' );
 	},

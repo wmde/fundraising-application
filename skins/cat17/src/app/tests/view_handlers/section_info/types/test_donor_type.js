@@ -40,6 +40,7 @@ test( 'Donor type info without entered data indicated correctly', function ( t )
 	t.ok( container.addClass.withArgs( 'disabled' ).calledOnce, 'no data entered reflected in style' );
 	t.ok( icon.addClass.withArgs( 'icon-error' ).calledOnce, 'icon set per address type' );
 	t.ok( text.text.withArgs( 'nothing entered so far' ).calledOnce, 'fallback address type text is set' );
+	t.ok( longText.html.calledOnce );
 	t.equals( longText.html.args[ 0 ][ 0 ].toString(), '<span>', 'long text filled with custom mark-up' );
 
 	delete global.jQuery;
@@ -72,6 +73,7 @@ test( 'Donor type info for private person indicated correctly', function ( t ) {
 	t.ok( container.addClass.withArgs( 'completed' ).calledOnce, 'data entered reflected in style' );
 	t.ok( icon.addClass.withArgs( 'icon-person' ).calledOnce, 'icon set per address type' );
 	t.ok( text.text.withArgs( 'Privatperson' ).calledOnce, 'address type text is set' );
+	t.ok( longText.html.calledOnce );
 	t.equals( longText.html.args[ 0 ][ 0 ].toString(), '<span>', 'long text filled with custom mark-up' );
 	t.assertNthAppendedTextEquals( longText, 0, 'Herr Dr. test user', 'name set' );
 	t.assertNthAppendedTextEquals( longText, 1, 'demostr 4', 'street set' );
@@ -109,6 +111,7 @@ test( 'Donor type info for company indicated correctly', function ( t ) {
 	t.ok( container.addClass.withArgs( 'completed' ).calledOnce, 'data entered reflected in style' );
 	t.ok( icon.addClass.withArgs( 'icon-firma' ).calledOnce, 'icon set per address type' );
 	t.ok( text.text.withArgs( 'Firma' ).calledOnce, 'address type text is set' );
+	t.ok( longText.html.calledOnce );
 	t.equals( longText.html.args[ 0 ][ 0 ].toString(), '<span>', 'long text filled with custom mark-up' );
 	t.assertNthAppendedTextEquals( longText, 0, 'ACME INC', 'name set' );
 	t.assertNthAppendedTextEquals( longText, 1, 'acmestr 133b', 'street set' );
@@ -144,6 +147,7 @@ test( 'Donor type info for anonymous indicated correctly', function ( t ) {
 	t.ok( container.addClass.withArgs( 'completed' ).calledOnce, 'data entered reflected in style' );
 	t.ok( icon.addClass.withArgs( 'icon-anonym' ).calledOnce, 'icon set per address type' );
 	t.ok( text.text.withArgs( 'anonym' ).calledOnce, 'address type text is set' );
+	t.ok( longText.html.calledOnce );
 	t.ok( longText.html.withArgs( '' ).calledOnce, 'long text reset' );
 	t.ok( longText.append.notCalled );
 

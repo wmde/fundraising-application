@@ -10,7 +10,10 @@ module.exports = objectAssign( Object.create( Base ), {
 
 		this.setIcon( this.getValueIcon( paymentType ) );
 		this.setText( this.getValueText( paymentType, aggregateValidity ) );
-		this.setLongTextHtml( this.getValueLongText( paymentType, iban, bic ) );
+		this.setLongText(
+			this.getValueLongText( paymentType, iban, bic ),
+			{ updateMethod: 'html' }
+		);
 	},
 	getValueText: function ( paymentType, aggregateValidity ) {
 		if ( !aggregateValidity.dataEntered ) {

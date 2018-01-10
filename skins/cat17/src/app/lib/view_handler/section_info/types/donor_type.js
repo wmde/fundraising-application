@@ -11,7 +11,10 @@ module.exports = objectAssign( Object.create( Base ), {
 
 		this.setIcon( this.getValueIcon( addressType, aggregateValidity ) );
 		this.setText( this.getValueText( addressType, aggregateValidity ) );
-		this.setLongTextHtml( this.getValueLongText( addressType, salutation, title, firstName, lastName, companyName, street, postcode, city, country, email ) );
+		this.setLongText(
+			this.getValueLongText( addressType, salutation, title, firstName, lastName, companyName, street, postcode, city, country, email ),
+			{ updateMethod: 'html' }
+		);
 	},
 	getValueText: function ( addressType, aggregateValidity ) {
 		if ( !aggregateValidity.dataEntered ) {
