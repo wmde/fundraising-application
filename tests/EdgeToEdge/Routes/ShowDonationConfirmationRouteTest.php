@@ -178,14 +178,14 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'donation.optsIntoNewsletter: ' . $donation->getOptsIntoNewsletter(), $responseContent );
 		$this->assertContains( 'donation.updateToken: ' . self::CORRECT_ACCESS_TOKEN, $responseContent );
 
-		$this->assertContains( 'person.salutation: ' . $personName->getSalutation(), $responseContent );
-		$this->assertContains( 'person.fullName: ' . $personName->getFullName(), $responseContent );
-		$this->assertContains( 'person.firstName: ' . $personName->getFirstName(), $responseContent );
-		$this->assertContains( 'person.lastName: ' . $personName->getLastName(), $responseContent );
-		$this->assertContains( 'person.streetAddress: ' . $physicalAddress->getStreetAddress(), $responseContent );
-		$this->assertContains( 'person.postalCode: ' . $physicalAddress->getPostalCode(), $responseContent );
-		$this->assertContains( 'person.city: ' . $physicalAddress->getCity(), $responseContent );
-		$this->assertContains( 'person.email: ' . $donor->getEmailAddress(), $responseContent );
+		$this->assertContains( 'address.salutation: ' . $personName->getSalutation(), $responseContent );
+		$this->assertContains( 'address.fullName: ' . $personName->getFullName(), $responseContent );
+		$this->assertContains( 'address.firstName: ' . $personName->getFirstName(), $responseContent );
+		$this->assertContains( 'address.lastName: ' . $personName->getLastName(), $responseContent );
+		$this->assertContains( 'address.streetAddress: ' . $physicalAddress->getStreetAddress(), $responseContent );
+		$this->assertContains( 'address.postalCode: ' . $physicalAddress->getPostalCode(), $responseContent );
+		$this->assertContains( 'address.city: ' . $physicalAddress->getCity(), $responseContent );
+		$this->assertContains( 'address.email: ' . $donor->getEmailAddress(), $responseContent );
 
 		$this->assertContains( 'bankData.iban: ' . $paymentMethod->getBankData()->getIban()->toString(), $responseContent );
 		$this->assertContains( 'bankData.bic: ' . $paymentMethod->getBankData()->getBic(), $responseContent );

@@ -56,7 +56,7 @@ class MembershipApplicationConfirmationHtmlPresenterTest extends \PHPUnit\Framew
 				'paymentIntervalInMonths' => 3,
 				'updateToken' => 'update_token'
 			],
-			'person' => [
+			'address' => [
 				'salutation' => 'Herr',
 				'title' => '',
 				'fullName' => 'Potato The Great',

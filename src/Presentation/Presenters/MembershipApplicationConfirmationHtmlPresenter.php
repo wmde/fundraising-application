@@ -56,7 +56,7 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 	private function getConfirmationPageArguments( Application $membershipApplication, string $updateToken ): array {
 		return [
 			'membershipApplication' => $this->getApplicationArguments( $membershipApplication, $updateToken ),
-			'person' => $this->getPersonArguments( $membershipApplication->getApplicant() ),
+			'address' => $this->getAddressArguments( $membershipApplication->getApplicant() ),
 			'bankData' => $this->getBankDataArguments( $membershipApplication->getPayment()->getPaymentMethod() ),
 			'payPalData' => $this->getPayPalDataArguments(
 				$membershipApplication->getPayment()->getPaymentMethod()
@@ -76,7 +76,7 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 		];
 	}
 
-	private function getPersonArguments( Applicant $applicant ): array {
+	private function getAddressArguments( Applicant $applicant ): array {
 		return [
 			'salutation' => $applicant->getName()->getSalutation(),
 			'title' => $applicant->getName()->getTitle(),

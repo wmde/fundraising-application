@@ -60,7 +60,7 @@ class DonationConfirmationHtmlPresenter {
 				'updateToken' => $updateToken,
 				'accessToken' => $accessToken
 			],
-			'person' => $this->getPersonArguments( $donation ),
+			'address' => $this->getAddressArguments( $donation ),
 			'bankData' => $this->getBankDataArguments( $donation->getPaymentMethod() ),
 			'initialFormValues' => $this->donationMembershipApplicationAdapter->getInitialMembershipFormValues( $donation ),
 			'piwikEvents' => $piwikEvents->getEvents(),
@@ -75,7 +75,7 @@ class DonationConfirmationHtmlPresenter {
 		];
 	}
 
-	private function getPersonArguments( Donation $donation ): array {
+	private function getAddressArguments( Donation $donation ): array {
 		if ( $donation->getDonor() !== null ) {
 			return [
 				'salutation' => $donation->getDonor()->getName()->getSalutation(),
