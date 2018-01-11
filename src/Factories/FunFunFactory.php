@@ -81,7 +81,8 @@ use WMDE\Fundraising\Frontend\Infrastructure\ProfilerDataCollector;
 use WMDE\Fundraising\Frontend\Infrastructure\ProfilingDecoratorBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\ServerSideTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
-use WMDE\Fundraising\Frontend\Infrastructure\TemplateMailerInterface;
+use WMDE\Fundraising\Frontend\MembershipContext\Infrastructure\TemplateMailerInterface;
+use WMDE\Fundraising\Frontend\DonationContext\Infrastructure\TemplateMailerInterface as DonationTemplateMailerInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\WordListFileReader;
 use WMDE\Fundraising\Frontend\MembershipContext\Authorization\ApplicationAuthorizer;
@@ -715,7 +716,7 @@ class FunFunFactory {
 	 * So much decoration going on that explicitly hinting what we return (Robustness principle) would be confusing
 	 * (you'd expect a TemplateBasedMailer, not a LoggingMailer), so we hint the interface instead.
 	 */
-	private function newTemplateMailer( Messenger $messenger, TwigTemplate $template, string $messageKey ): TemplateMailerInterface {
+	private function newTemplateMailer( Messenger $messenger, TwigTemplate $template, string $messageKey ): LoggingMailer {
 		$mailer = new TemplateBasedMailer(
 			$messenger,
 			$template,
@@ -904,7 +905,7 @@ class FunFunFactory {
 		);
 	}
 
-	private function newCancelDonationMailer(): TemplateMailerInterface {
+	private function newCancelDonationMailer(): DonationTemplateMailerInterface {
 		return $this->newTemplateMailer(
 			$this->getSuborganizationMessenger(),
 			new TwigTemplate(

@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\UseCases\GetInTouch;
 
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Fundraising\Frontend\Infrastructure\OperatorMailer;
-use WMDE\Fundraising\Frontend\Infrastructure\TemplateMailerInterface;
+use WMDE\Fundraising\Frontend\MembershipContext\Infrastructure\TemplateMailerInterface;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\FunValidators\ValidationResponse;
 

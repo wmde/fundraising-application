@@ -6,12 +6,14 @@ namespace WMDE\Fundraising\Frontend\Infrastructure;
 
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
+use WMDE\Fundraising\Frontend\MembershipContext\Infrastructure\TemplateMailerInterface;
+use WMDE\Fundraising\Frontend\DonationContext\Infrastructure\TemplateMailerInterface as DonationTemplateMailerInterface;
 
 /**
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class TemplateBasedMailer implements TemplateMailerInterface {
+class TemplateBasedMailer implements TemplateMailerInterface, DonationTemplateMailerInterface {
 
 	private $messenger;
 	private $template;

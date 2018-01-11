@@ -407,20 +407,20 @@
         },
         {
             "name": "doctrine/inflector",
-            "version": "v1.2.0",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/inflector.git",
-                "reference": "e11d84c6e018beedd929cff5220969a3c6d1d462"
+                "reference": "5527a48b7313d15261292c149e55e26eae771b0a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/inflector/zipball/e11d84c6e018beedd929cff5220969a3c6d1d462",
-                "reference": "e11d84c6e018beedd929cff5220969a3c6d1d462",
+                "url": "https://api.github.com/repos/doctrine/inflector/zipball/5527a48b7313d15261292c149e55e26eae771b0a",
+                "reference": "5527a48b7313d15261292c149e55e26eae771b0a",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.0"
+                "php": "^7.1"
             },
             "require-dev": {
                 "phpunit/phpunit": "^6.2"
@@ -428,7 +428,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.2.x-dev"
+                    "dev-master": "1.3.x-dev"
                 }
             },
             "autoload": {
@@ -470,7 +470,7 @@
                 "singularize",
                 "string"
             ],
-            "time": "2017-07-22T12:18:28+00:00"
+            "time": "2018-01-09T20:05:19+00:00"
         },
         {
             "name": "doctrine/instantiator",
@@ -1878,16 +1878,16 @@
         },
         {
             "name": "sofort/sofortlib-php",
-            "version": "3.3.0",
+            "version": "3.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sofort/sofortlib-php.git",
-                "reference": "f001db0b15fe48ff1ba9673f3b4e6babf687385b"
+                "reference": "8d900301d5c47c73ffac26e0081efc6e67cea286"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sofort/sofortlib-php/zipball/f001db0b15fe48ff1ba9673f3b4e6babf687385b",
-                "reference": "f001db0b15fe48ff1ba9673f3b4e6babf687385b",
+                "url": "https://api.github.com/repos/sofort/sofortlib-php/zipball/8d900301d5c47c73ffac26e0081efc6e67cea286",
+                "reference": "8d900301d5c47c73ffac26e0081efc6e67cea286",
                 "shasum": ""
             },
             "require": {
@@ -1916,7 +1916,7 @@
                 }
             ],
             "description": "SOFORT API wrapper for PHP",
-            "time": "2017-07-03T13:37:20+00:00"
+            "time": "2018-01-10T12:37:43+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -3282,12 +3282,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations.git",
-                "reference": "2ac09a1a02dec039b084f0540af4dc065f805626"
+                "reference": "63be9c2fd6388ed1bbcc2340a1a60d59f0dffe70"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/2ac09a1a02dec039b084f0540af4dc065f805626",
-                "reference": "2ac09a1a02dec039b084f0540af4dc065f805626",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/63be9c2fd6388ed1bbcc2340a1a60d59f0dffe70",
+                "reference": "63be9c2fd6388ed1bbcc2340a1a60d59f0dffe70",
                 "shasum": ""
             },
             "require": {
@@ -3326,7 +3326,6 @@
                 "psr-4": {
                     "WMDE\\Fundraising\\Frontend\\DonationContext\\": "src/",
                     "WMDE\\Fundraising\\Frontend\\PaymentContext\\": "contexts/PaymentContext/src/",
-                    "WMDE\\Fundraising\\Frontend\\": "todo/",
                     "WMDE\\Fundraising\\Frontend\\DonationContext\\Tests\\": "tests/",
                     "WMDE\\Fundraising\\Frontend\\PaymentContext\\Tests\\": "contexts/PaymentContext/tests/"
                 }
@@ -3339,7 +3338,7 @@
                 "source": "https://github.com/wmde/fundraising-donations/tree/master",
                 "issues": "https://github.com/wmde/fundraising-donations/issues"
             },
-            "time": "2018-01-08T10:30:00+00:00"
+            "time": "2018-01-09T11:22:36+00:00"
         },
         {
             "name": "wmde/fundraising-store",
@@ -6327,43 +6326,34 @@
         },
         {
             "name": "whatthejeff/nyancat-phpunit-resultprinter",
-            "version": "v1.2.0",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/whatthejeff/nyancat-phpunit-resultprinter.git",
-                "reference": "ccfa266c1991bcde1cf590b3de808b3465ca9b1d"
+                "reference": "824efd0a570ce3a58424f130ab95e43068be11ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/whatthejeff/nyancat-phpunit-resultprinter/zipball/ccfa266c1991bcde1cf590b3de808b3465ca9b1d",
-                "reference": "ccfa266c1991bcde1cf590b3de808b3465ca9b1d",
+                "url": "https://api.github.com/repos/whatthejeff/nyancat-phpunit-resultprinter/zipball/824efd0a570ce3a58424f130ab95e43068be11ad",
+                "reference": "824efd0a570ce3a58424f130ab95e43068be11ad",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3",
-                "whatthejeff/nyancat-scoreboard": "~1.1"
+                "php": "^5.3.3 || ^7",
+                "whatthejeff/nyancat-scoreboard": "^1.1"
             },
             "require-dev": {
-                "pear-pear/pear": "1.9.4",
-                "phpunit/php-code-coverage": "1.3.*@dev",
-                "phpunit/php-file-iterator": ">=1.3.1@dev",
-                "phpunit/php-text-template": ">=1.1.1@dev",
-                "phpunit/php-timer": ">=1.1.0@dev",
-                "phpunit/phpunit": "3.8.*@dev",
-                "phpunit/phpunit-mock-objects": "1.3.*@dev",
-                "sebastian/diff": ">=1.0.0@dev",
-                "sebastian/exporter": ">=1.0.0@dev",
-                "sebastian/version": ">=1.0.0@dev"
+                "phpunit/phpunit": "^4.8 || ^5"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.2.x-dev"
+                    "dev-master": "1.3-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "NyanCat": "src/"
+                "psr-4": {
+                    "NyanCat\\": "src/NyanCat"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -6373,7 +6363,8 @@
             "authors": [
                 {
                     "name": "Jeff Welch",
-                    "email": "whatthejeff@gmail.com"
+                    "email": "whatthejeff@gmail.com",
+                    "homepage": "http://whatthejeff.com"
                 }
             ],
             "description": "Nyan Cat result printer for PHPUnit",
@@ -6385,7 +6376,7 @@
                 "rainbow",
                 "tests"
             ],
-            "time": "2013-10-30T06:26:11+00:00"
+            "time": "2018-01-10T05:25:16+00:00"
         },
         {
             "name": "whatthejeff/nyancat-scoreboard",

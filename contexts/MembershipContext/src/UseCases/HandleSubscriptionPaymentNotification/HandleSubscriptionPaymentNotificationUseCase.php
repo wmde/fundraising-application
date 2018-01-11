@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptio
 
 use Psr\Log\LoggerInterface;
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\Frontend\Infrastructure\TemplateMailerInterface;
+use WMDE\Fundraising\Frontend\MembershipContext\Infrastructure\TemplateMailerInterface;
 use WMDE\Fundraising\Frontend\MembershipContext\Authorization\ApplicationAuthorizer;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Payment;

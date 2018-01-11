@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionSignupNotification;
 
 use Psr\Log\LoggerInterface;
-use WMDE\Fundraising\Frontend\Infrastructure\TemplateMailerInterface;
+use WMDE\Fundraising\Frontend\MembershipContext\Infrastructure\TemplateMailerInterface;
 use WMDE\Fundraising\Frontend\MembershipContext\Authorization\ApplicationAuthorizer;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationRepository;
