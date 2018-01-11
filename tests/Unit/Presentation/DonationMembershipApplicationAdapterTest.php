@@ -65,7 +65,7 @@ class DonationMembershipApplicationAdapterTest extends TestCase {
 		$this->assertEquals(
 			[
 				'addressType' => 'firma',
-				'salutation' => 'Firma',
+				'salutation' => '',
 				'title' => '',
 				'firstName' => '',
 				'lastName' => '',

@@ -25,7 +25,7 @@ class DonationMembershipApplicationAdapter {
 
 		return [
 			'addressType' => $donor->getName()->getPersonType(),
-			'salutation' => $donor->getName()->getSalutation(),
+			'salutation' => $donor->getName()->isPrivatePerson() ? $donor->getName()->getSalutation() : '',
 			'title' => $donor->getName()->getTitle(),
 			'firstName' => $donor->getName()->getFirstName(),
 			'lastName' => $donor->getName()->getLastName(),
