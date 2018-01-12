@@ -23,8 +23,6 @@ use WMDE\Fundraising\ContentProvider\ContentProvider;
  */
 class TwigEnvironmentConfiguratorTest extends TestCase {
 
-	private const LOCALE = 'de_DE';
-
 	public function testTwigInstanceUsesDollarPlaceholdersForVariables(): void {
 		$factory = TestEnvironment::newInstance( [
 			'twig' => [
