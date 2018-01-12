@@ -15,7 +15,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\AmountParser;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethods;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
 
 /**
  * @license GNU GPL v2+
@@ -68,8 +68,8 @@ class AddDonationHandler {
 
 	private function newHttpResponse( AddDonationResponse $responseModel ): Response {
 		switch( $responseModel->getDonation()->getPaymentMethodId() ) {
-			case PaymentMethods::DIRECT_DEBIT:
-			case PaymentMethods::BANK_TRANSFER:
+			case PaymentMethod::DIRECT_DEBIT:
+			case PaymentMethod::BANK_TRANSFER:
 				return $this->app->redirect(
 					$this->app['url_generator']->generate(
 						'show-donation-confirmation',
@@ -81,7 +81,7 @@ class AddDonationHandler {
 					Response::HTTP_SEE_OTHER
 				);
 				break;
-			case PaymentMethods::PAYPAL:
+			case PaymentMethod::PAYPAL:
 				return $this->app->redirect(
 					$this->ffFactory->newPayPalUrlGeneratorForDonations()->generateUrl(
 						$responseModel->getDonation()->getId(),
@@ -92,7 +92,7 @@ class AddDonationHandler {
 					)
 				);
 				break;
-			case PaymentMethods::SOFORT:
+			case PaymentMethod::SOFORT:
 				return $this->app->redirect(
 					$this->ffFactory->newSofortUrlGeneratorForDonations()->generateUrl(
 						$responseModel->getDonation()->getId(),
@@ -103,7 +103,7 @@ class AddDonationHandler {
 					)
 				);
 				break;
-			case PaymentMethods::CREDIT_CARD:
+			case PaymentMethod::CREDIT_CARD:
 				return $this->app->redirect(
 					$this->ffFactory->newCreditCardPaymentUrlGenerator()->buildUrl( $responseModel )
 				);
@@ -133,7 +133,7 @@ class AddDonationHandler {
 		$donationRequest->setDonorCountryCode( $request->get( 'country', '' ) );
 		$donationRequest->setDonorEmailAddress( $request->get( 'email', '' ) );
 
-		if ( $request->get( 'zahlweise', '' ) === PaymentMethods::DIRECT_DEBIT ) {
+		if ( $request->get( 'zahlweise', '' ) === PaymentMethod::DIRECT_DEBIT ) {
 			$donationRequest->setBankData( $this->getBankDataFromRequest( $request ) );
 		}
 

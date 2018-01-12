@@ -24,7 +24,6 @@ use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethods;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
 use WMDE\Fundraising\Store\MembershipApplicationData;
 
@@ -189,7 +188,7 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 	}
 
 	private function isDirectDebitPayment( Application $application ): bool {
-		return $application->getPayment()->getPaymentMethod()->getId() === PaymentMethods::DIRECT_DEBIT;
+		return $application->getPayment()->getPaymentMethod()->getId() === PaymentMethod::DIRECT_DEBIT;
 	}
 
 	private function preserveDoctrineStatus( DoctrineApplication $doctrineApplication, int $doctrineStatus ): void {
@@ -286,11 +285,11 @@ class DoctrineApplicationRepository implements ApplicationRepository {
 	}
 
 	private function newPaymentMethod( DoctrineApplication $application ): PaymentMethod {
-		if ( $application->getPaymentType() === PaymentMethods::DIRECT_DEBIT ) {
+		if ( $application->getPaymentType() === PaymentMethod::DIRECT_DEBIT ) {
 			return new DirectDebitPayment( $this->newBankData( $application ) );
 		}
 
-		if ( $application->getPaymentType() === PaymentMethods::PAYPAL ) {
+		if ( $application->getPaymentType() === PaymentMethod::PAYPAL ) {
 			return new PayPalPayment( $this->newPayPalData( $application ) );
 		}
 

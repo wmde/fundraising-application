@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembershi
 
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplicationValidationResult as Result;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataValidator;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethods;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
 use WMDE\FunValidators\ConstraintViolation;
 use WMDE\Fundraising\Frontend\Validation\MembershipFeeValidator as FeeValidator;
 use WMDE\FunValidators\Validators\EmailValidator;
@@ -63,7 +63,7 @@ class MembershipApplicationValidator {
 		$this->validateApplicantContactInfo();
 		$this->validateApplicantDateOfBirth();
 		$this->validateApplicantAddress();
-		if ( $applicationRequest->getPaymentType() === PaymentMethods::DIRECT_DEBIT ) {
+		if ( $applicationRequest->getPaymentType() === PaymentMethod::DIRECT_DEBIT ) {
 			$this->validateBankData();
 		}
 

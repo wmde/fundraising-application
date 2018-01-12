@@ -14,7 +14,6 @@ use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Payment;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\PhoneNumber;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethods;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalData;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
 
@@ -88,11 +87,11 @@ class MembershipApplicationBuilder {
 	}
 
 	private function newPaymentMethod( ApplyForMembershipRequest $request ): PaymentMethod {
-		if ( $request->getPaymentType() === PaymentMethods::DIRECT_DEBIT ) {
+		if ( $request->getPaymentType() === PaymentMethod::DIRECT_DEBIT ) {
 			return new DirectDebitPayment( $request->getBankData() );
 		}
 
-		if ( $request->getPaymentType() === PaymentMethods::PAYPAL ) {
+		if ( $request->getPaymentType() === PaymentMethod::PAYPAL ) {
 			return new PayPalPayment( new PayPalData() );
 		}
 

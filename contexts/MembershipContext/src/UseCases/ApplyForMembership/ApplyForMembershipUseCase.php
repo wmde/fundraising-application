@@ -10,7 +10,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipContext\Tracking\ApplicationPiwikTracker;
 use WMDE\Fundraising\Frontend\MembershipContext\Tracking\ApplicationTracker;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethods;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentDelayCalculator;
 
 /**
@@ -107,6 +107,6 @@ class ApplyForMembershipUseCase {
 	}
 
 	public function isAutoConfirmed( Application $application ): bool {
-		return $application->getPayment()->getPaymentMethod()->getId() === PaymentMethods::DIRECT_DEBIT;
+		return $application->getPayment()->getPaymentMethod()->getId() === PaymentMethod::DIRECT_DEBIT;
 	}
 }
