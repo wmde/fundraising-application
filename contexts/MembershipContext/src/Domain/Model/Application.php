@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\MembershipContext\Domain\Model;
 
 use RuntimeException;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethods;
+use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
 use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
 
 /**
@@ -143,7 +143,7 @@ class Application {
 	}
 
 	public function hasExternalPayment(): bool {
-		return $this->getPayment()->getPaymentMethod()->getId() === PaymentMethods::PAYPAL;
+		return $this->getPayment()->getPaymentMethod()->getId() === PaymentMethod::PAYPAL;
 	}
 
 	private function statusAllowsForBooking(): bool {
