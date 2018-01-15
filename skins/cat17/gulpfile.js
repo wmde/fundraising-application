@@ -12,6 +12,7 @@ var source = require( 'vinyl-source-stream' );
 var buffer = require( 'vinyl-buffer' );
 var log = require( 'gulplog' );
 var environments = require( 'gulp-environments' );
+var cleanCSS = require('gulp-clean-css');
 
 var dirs = {
 	src: 'src',
@@ -36,6 +37,7 @@ gulp.task( 'styles', function () {
 				'iOS >= 7'
 			]
 		} ) )
+		.pipe( environments.production( cleanCSS( { compatibility: 'ie8' } ) ) )
 		.pipe( sourcemaps.write( '.' ) )
 		.pipe( gulp.dest( dirs.dist + '/css' ) )
 		.pipe( browserSync.reload( {
