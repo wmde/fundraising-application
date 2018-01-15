@@ -48,6 +48,7 @@
     "gulp-sourcemaps": "^2.6.0",
     "gulp-sync": "^0.1.4",
     "gulp-uglify": "^3.0.0",
+    "gulplog": "^1.0.0",
     "jscs": "^2.10.1",
     "jshint": "^2.9.5",
     "polyify": "0.0.4",
@@ -55,6 +56,8 @@
     "tap-min": "^1.1.0",
     "tape": "^4.8.0",
     "tape-catch": "^1.0.6",
+    "vinyl-buffer": "^1.0.1",
+    "vinyl-source-stream": "^2.0.0",
     "watchify": "^3.7.0"
   },
   "dependencies": {

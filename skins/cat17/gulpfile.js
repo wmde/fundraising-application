@@ -1,14 +1,16 @@
 var gulp = require( 'gulp' );
 var sass = require( 'gulp-sass' );
+var browserify = require( 'browserify' );
 var sourcemaps = require( 'gulp-sourcemaps' );
 var autoprefixer = require( 'gulp-autoprefixer' );
 var browserSync = require( 'browser-sync' ).create();
 var uglify = require( 'gulp-uglify' );
 var imagemin = require( 'gulp-imagemin' );
 var gulpsync = require( 'gulp-sync' )( gulp );
-var exec = require( 'child_process' ).exec;
-var fs = require( 'fs' );
 var concat = require( 'gulp-concat' );
+var source = require( 'vinyl-source-stream' );
+var buffer = require( 'vinyl-buffer' );
+var log = require( 'gulplog' );
 
 var dirs = {
 	src: 'src',
@@ -42,14 +44,22 @@ gulp.task( 'styles', function () {
 
 gulp.task( 'scripts', function ( cb ) {
 	var buildDir = dirs.dist + '/scripts';
-	if ( !fs.existsSync( buildDir ) ) {
-		fs.mkdirSync( buildDir );
-	}
-	exec( 'browserify ' + dirs.src + '/app/main.js -s WMDE -o ' + buildDir + '/wmde.js', function ( err, stdout, stderr ) {
-		console.log( stdout );
-		console.log( stderr );
-		cb( err );
-	} );
+	var b = browserify( {
+		entries: dirs.src + '/app/main.js',
+		standalone: 'WMDE',
+		debug: true
+	});
+
+	return b.bundle()
+		.pipe( source( 'wmde.js' ) )
+		.pipe( buffer() )
+		.pipe( sourcemaps.init( { loadMaps: true } ) )
+		// Add transformation tasks to the pipeline here.
+			.pipe( uglify() )
+			.on( 'error', log.error )
+		.pipe( sourcemaps.write( './' ) )
+		.pipe( gulp.dest( buildDir  ) );
+
 } );
 
 gulp.task( 'browserSync', function () {
