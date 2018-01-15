@@ -11,6 +11,7 @@ var concat = require( 'gulp-concat' );
 var source = require( 'vinyl-source-stream' );
 var buffer = require( 'vinyl-buffer' );
 var log = require( 'gulplog' );
+var environments = require( 'gulp-environments' );
 
 var dirs = {
 	src: 'src',
@@ -46,6 +47,7 @@ gulp.task( 'scripts', function ( cb ) {
 	var buildDir = dirs.dist + '/scripts';
 	var b = browserify( {
 		entries: dirs.src + '/app/main.js',
+		transform: [ 'envify' ],
 		standalone: 'WMDE',
 		debug: true
 	});
@@ -55,7 +57,7 @@ gulp.task( 'scripts', function ( cb ) {
 		.pipe( buffer() )
 		.pipe( sourcemaps.init( { loadMaps: true } ) )
 		// Add transformation tasks to the pipeline here.
-			.pipe( uglify() )
+			.pipe( environments.production( uglify() ) )
 			.on( 'error', log.error )
 		.pipe( sourcemaps.write( './' ) )
 		.pipe( gulp.dest( buildDir  ) );
@@ -78,11 +80,11 @@ gulp.task( 'watch', ['browserSync'], function () {
 
 gulp.task( 'images', function () {
 	return gulp.src( dirs.src + '/assets/images/**/*.{png,jpg,svg,ico}' )
-		.pipe( imagemin( [
+		.pipe( environments.production( imagemin( [
 			imagemin.jpegtran( {progressive: true} ),
 			imagemin.gifsicle( {interlaced: true} ),
 			imagemin.svgo( {plugins: [{removeUnknownsAndDefaults: false}, {cleanupIDs: false}]} )
-		] ) )
+		] ) ) )
 		.pipe( gulp.dest( dirs.dist + '/assets/images' ) )
 } );
 
@@ -105,7 +107,7 @@ gulp.task( 'copies', function () {
 		]
 		)
 		.pipe( concat( { path: 'vendor.js', stat: { mode: 0666 } } ) )
-		.pipe( uglify() )
+		.pipe( environments.production( uglify() ) )
 		.pipe( gulp.dest( dirs.dist + '/scripts' ) );
 } );
 
