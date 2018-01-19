@@ -1,0 +1,10 @@
+{% if page_works_without_js is not defined or page_works_without_js == false %}
+	<noscript class="nojs-fallback">
+		<main>
+			<div class="content container">
+				<h2>{$ 'no_javascript_title' | trans $}</h2>
+				{$ web_content( 'pages/no_javascript' ) $}
+			</div>
+		</main>
+	</noscript>
+{% endif %}

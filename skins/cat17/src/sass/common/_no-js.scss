@@ -2,3 +2,24 @@
 .client-nojs .hidden-no-js {
 	display: none !important;
 }
+
+.client-nojs {
+	// IE can not use <noscript> tag to identify CSS rules
+	.nojs-fallback {
+		position: fixed;
+		// navigation (.header) is in foreground
+		z-index: 8;
+		background-color: #FFFFFF;
+
+		width: 100%;
+		height: 100%;
+		left: 0;
+		top: 0;
+
+		.content {
+			a {
+				text-decoration: underline;
+			}
+		}
+	}
+}

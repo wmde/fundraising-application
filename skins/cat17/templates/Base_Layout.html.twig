@@ -35,6 +35,8 @@
 		{% include 'partials/' ~ footer_template %}
 	</div>
 
+	{% include 'partials/no_javascript.html.twig' %}
+
 	<script src="{$ basepath $}{$ '/skins/cat17/scripts/vendor.js' | prefix_file $}"></script>
 	<script src="{$ basepath $}{$ '/skins/cat17/scripts/main.js' | prefix_file $}"></script>
 
