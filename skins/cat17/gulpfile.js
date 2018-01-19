@@ -1,14 +1,18 @@
 var gulp = require( 'gulp' );
 var sass = require( 'gulp-sass' );
+var browserify = require( 'browserify' );
 var sourcemaps = require( 'gulp-sourcemaps' );
 var autoprefixer = require( 'gulp-autoprefixer' );
 var browserSync = require( 'browser-sync' ).create();
 var uglify = require( 'gulp-uglify' );
 var imagemin = require( 'gulp-imagemin' );
 var gulpsync = require( 'gulp-sync' )( gulp );
-var exec = require( 'child_process' ).exec;
-var fs = require( 'fs' );
 var concat = require( 'gulp-concat' );
+var source = require( 'vinyl-source-stream' );
+var buffer = require( 'vinyl-buffer' );
+var log = require( 'gulplog' );
+var environments = require( 'gulp-environments' );
+var cleanCSS = require('gulp-clean-css');
 
 var dirs = {
 	src: 'src',
@@ -33,6 +37,7 @@ gulp.task( 'styles', function () {
 				'iOS >= 7'
 			]
 		} ) )
+		.pipe( environments.production( cleanCSS( { compatibility: 'ie8' } ) ) )
 		.pipe( sourcemaps.write( '.' ) )
 		.pipe( gulp.dest( dirs.dist + '/css' ) )
 		.pipe( browserSync.reload( {
@@ -42,14 +47,23 @@ gulp.task( 'styles', function () {
 
 gulp.task( 'scripts', function ( cb ) {
 	var buildDir = dirs.dist + '/scripts';
-	if ( !fs.existsSync( buildDir ) ) {
-		fs.mkdirSync( buildDir );
-	}
-	exec( 'browserify ' + dirs.src + '/app/main.js -s WMDE -o ' + buildDir + '/wmde.js', function ( err, stdout, stderr ) {
-		console.log( stdout );
-		console.log( stderr );
-		cb( err );
-	} );
+	var b = browserify( {
+		entries: dirs.src + '/app/main.js',
+		transform: [ 'envify' ],
+		standalone: 'WMDE',
+		debug: true
+	});
+
+	return b.bundle()
+		.pipe( source( 'wmde.js' ) )
+		.pipe( buffer() )
+		.pipe( sourcemaps.init( { loadMaps: true } ) )
+		// Add transformation tasks to the pipeline here.
+			.pipe( environments.production( uglify() ) )
+			.on( 'error', log.error )
+		.pipe( sourcemaps.write( './' ) )
+		.pipe( gulp.dest( buildDir  ) );
+
 } );
 
 gulp.task( 'browserSync', function () {
@@ -68,11 +82,11 @@ gulp.task( 'watch', ['browserSync'], function () {
 
 gulp.task( 'images', function () {
 	return gulp.src( dirs.src + '/assets/images/**/*.{png,jpg,svg,ico}' )
-		.pipe( imagemin( [
+		.pipe( environments.production( imagemin( [
 			imagemin.jpegtran( {progressive: true} ),
 			imagemin.gifsicle( {interlaced: true} ),
 			imagemin.svgo( {plugins: [{removeUnknownsAndDefaults: false}, {cleanupIDs: false}]} )
-		] ) )
+		] ) ) )
 		.pipe( gulp.dest( dirs.dist + '/assets/images' ) )
 } );
 
@@ -95,7 +109,7 @@ gulp.task( 'copies', function () {
 		]
 		)
 		.pipe( concat( { path: 'vendor.js', stat: { mode: 0666 } } ) )
-		.pipe( uglify() )
+		.pipe( environments.production( uglify() ) )
 		.pipe( gulp.dest( dirs.dist + '/scripts' ) );
 } );
 
