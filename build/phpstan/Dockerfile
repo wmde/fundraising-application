@@ -1,7 +1,7 @@
 # phpstan in docker
 # used as sanity check of code when installed via "composer install --no-dev" (so on prod) w/o other dev tools to check
 
-FROM phpstan/phpstan:0.8
+FROM docker.io/composer:1.6
 
 RUN \
 	# for intl
@@ -35,3 +35,6 @@ RUN \
 	docker-php-ext-configure /tmp/konto_check-$KONTOCHECK_VERSION/php && \
 	docker-php-ext-install /tmp/konto_check-$KONTOCHECK_VERSION/php && \
 	docker-php-source delete
+
+RUN composer global require phpstan/phpstan ^0.9
+ENTRYPOINT [ "/tmp/vendor/bin/phpstan" ]
