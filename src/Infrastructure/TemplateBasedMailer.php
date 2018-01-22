@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Infrastructure;
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\Frontend\MembershipContext\Infrastructure\TemplateMailerInterface;
-use WMDE\Fundraising\Frontend\DonationContext\Infrastructure\TemplateMailerInterface as DonationTemplateMailerInterface;
+use WMDE\Fundraising\DonationContext\Infrastructure\TemplateMailerInterface as DonationTemplateMailerInterface;
 
 /**
  * @licence GNU GPL v2+

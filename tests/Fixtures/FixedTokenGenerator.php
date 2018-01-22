@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
-use WMDE\Fundraising\Frontend\DonationContext\Authorization\TokenGenerator;
+use WMDE\Fundraising\DonationContext\Authorization\TokenGenerator;
 
 /**
  * TODO: move into Donation BC

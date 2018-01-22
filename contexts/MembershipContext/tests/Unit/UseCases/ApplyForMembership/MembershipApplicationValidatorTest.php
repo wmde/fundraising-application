@@ -9,9 +9,9 @@ use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplic
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplicationValidationResult as Result;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipRequest;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\MembershipApplicationValidator;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataValidator;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
+use WMDE\Fundraising\PaymentContext\Domain\BankDataValidator;
+use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
+use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingEmailValidator;
 use WMDE\FunValidators\ConstraintViolation;
 use WMDE\FunValidators\Validators\EmailValidator;

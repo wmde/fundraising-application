@@ -2,18 +2,18 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\PaymentContext\Tests\Unit\Domain;
+namespace WMDE\Fundraising\PaymentContext\Tests\Unit\Domain;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataConverter;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataLibraryInitializationException;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
+use WMDE\Fundraising\PaymentContext\Domain\BankDataConverter;
+use WMDE\Fundraising\PaymentContext\Domain\BankDataLibraryInitializationException;
+use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
+use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataConverter
+ * @covers \WMDE\Fundraising\PaymentContext\Domain\BankDataConverter
  *
  * @licence GNU GPL v2+
  * @author Christoph Fischer <christoph.fischer@wikimedia.de >

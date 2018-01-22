@@ -11,8 +11,8 @@ use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifierException;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionSignupNotification\SubscriptionSignupRequest;
-use WMDE\Fundraising\Frontend\PaymentContext\ResponseModel\PaypalNotificationResponse;
-use WMDE\Fundraising\Frontend\PaymentContext\RequestModel\PayPalPaymentNotificationRequest;
+use WMDE\Fundraising\PaymentContext\ResponseModel\PaypalNotificationResponse;
+use WMDE\Fundraising\PaymentContext\RequestModel\PayPalPaymentNotificationRequest;
 
 /**
  * @license GNU GPL v2+

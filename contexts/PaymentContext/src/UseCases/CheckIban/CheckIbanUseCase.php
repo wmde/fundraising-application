@@ -2,11 +2,11 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\PaymentContext\UseCases\CheckIban;
+namespace WMDE\Fundraising\PaymentContext\UseCases\CheckIban;
 
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataConverter;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
-use WMDE\Fundraising\Frontend\PaymentContext\ResponseModel\IbanResponse;
+use WMDE\Fundraising\PaymentContext\Domain\BankDataConverter;
+use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
+use WMDE\Fundraising\PaymentContext\ResponseModel\IbanResponse;
 use WMDE\Fundraising\Frontend\Validation\KontoCheckIbanValidator;
 
 /**

@@ -2,13 +2,13 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\PaymentContext\DataAccess;
+namespace WMDE\Fundraising\PaymentContext\DataAccess;
 
 use IMcpCreditcardService_v1_5;
 use TNvpServiceDispatcher;
-use WMDE\Fundraising\Frontend\PaymentContext\Infrastructure\CreditCardExpiry;
-use WMDE\Fundraising\Frontend\PaymentContext\Infrastructure\CreditCardExpiryFetchingException;
-use WMDE\Fundraising\Frontend\PaymentContext\Infrastructure\CreditCardService;
+use WMDE\Fundraising\PaymentContext\Infrastructure\CreditCardExpiry;
+use WMDE\Fundraising\PaymentContext\Infrastructure\CreditCardExpiryFetchingException;
+use WMDE\Fundraising\PaymentContext\Infrastructure\CreditCardService;
 
 /**
  * @licence GNU GPL v2+

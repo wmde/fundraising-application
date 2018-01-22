@@ -11,10 +11,10 @@ use Psr\Log\LogLevel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-use WMDE\Fundraising\Frontend\DonationContext\UseCases\SofortPaymentNotification\SofortPaymentNotificationUseCase;
+use WMDE\Fundraising\DonationContext\UseCases\SofortPaymentNotification\SofortPaymentNotificationUseCase;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\PaymentContext\RequestModel\SofortNotificationRequest;
-use WMDE\Fundraising\Frontend\PaymentContext\ResponseModel\SofortNotificationResponse;
+use WMDE\Fundraising\PaymentContext\RequestModel\SofortNotificationRequest;
+use WMDE\Fundraising\PaymentContext\ResponseModel\SofortNotificationResponse;
 
 class SofortNotificationHandler {
 

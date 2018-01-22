@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembershi
 
 use WMDE\FreezableValueObject\FreezableValueObject;
 use WMDE\Fundraising\Frontend\MembershipContext\Tracking\MembershipApplicationTrackingInfo;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
+use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
 
 /**
  * @license GNU GPL v2+

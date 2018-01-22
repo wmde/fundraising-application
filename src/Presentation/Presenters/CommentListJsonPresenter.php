@@ -4,8 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
-use WMDE\Fundraising\Frontend\DonationContext\Domain\Repositories\CommentWithAmount;
-use WMDE\Fundraising\Frontend\DonationContext\UseCases\ListComments\CommentList;
+use WMDE\Fundraising\DonationContext\Domain\Repositories\CommentWithAmount;
+use WMDE\Fundraising\DonationContext\UseCases\ListComments\CommentList;
 
 /**
  * @licence GNU GPL v2+
