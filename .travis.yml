@@ -19,7 +19,7 @@ matrix:
 #  - env: DB=sqlite; TYPE=coverage
 
 before_install:
-#  - docker build -t wmde/fundraising-frontend-phpstan build/phpstan
+  - docker build -t wmde/fundraising-frontend-phpstan build/phpstan
 
 install:
   - travis_retry composer install
@@ -34,8 +34,8 @@ before_script:
 script:
   - composer ci
   - travis_retry vendor/bin/phpunit tests/System/
-#  - composer install --no-dev -q
-#  - docker run -v $PWD:/app --rm wmde/fundraising-frontend-phpstan analyse -c phpstan.neon --level 1 --no-progress cli/ contexts/ src/
+  - composer install --no-dev -q
+  - docker run -v $PWD:/app --rm wmde/fundraising-frontend-phpstan analyse -c phpstan.neon --level 1 --no-progress cli/ contexts/ src/
 
 after_success:
   - if [ "$TYPE" == "coverage" ]; then bash build/travis/uploadCoverage.sh; fi

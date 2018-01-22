@@ -43,7 +43,12 @@ class MailTemplatesTest extends \PHPUnit\Framework\TestCase {
 	private function newFactory(): FunFunFactory {
 		$ffFactory = TestEnvironment::newInstance( $this->getConfig() )->getFactory();
 
-		$ffFactory->setContentProvider( $this->newContentKeyReturningContentProvider() );
+		$contentProvider = $this->getMockBuilder( ContentProvider::class )
+			->disableOriginalConstructor()
+			->getMock();
+		$contentProvider->method( 'getMail' )->willReturnArgument( 0 );
+
+		$ffFactory->setContentProvider( $contentProvider );
 
 		$app = require __DIR__ . '/../../app/bootstrap.php';
 		$app->flush();
@@ -57,16 +62,6 @@ class MailTemplatesTest extends \PHPUnit\Framework\TestCase {
 				'strict-variables' => true
 			]
 		];
-	}
-
-	private function newContentKeyReturningContentProvider(): ContentProvider {
-		return new class() extends ContentProvider {
-			public function __construct() {
-			}
-			public function getMail( string $contentKey, array $context = [] ): string {
-				return $contentKey;
-			}
-		};
 	}
 
 	private function getTestData(): array {
