@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Infrastructure;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use WMDE\EmailAddress\EmailAddress;
-use WMDE\Fundraising\Frontend\MembershipContext\Infrastructure\TemplateMailerInterface;
+use WMDE\Fundraising\MembershipContext\Infrastructure\TemplateMailerInterface;
 use WMDE\Fundraising\DonationContext\Infrastructure\TemplateMailerInterface as DonationTemplateMailerInterface;
 
 /**

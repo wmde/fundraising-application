@@ -2,15 +2,15 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\MembershipContext\Tests\Unit\Domain\Model;
+namespace WMDE\Fundraising\MembershipContext\Tests\Unit\Domain\Model;
 
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Payment;
+use WMDE\Fundraising\MembershipContext\Domain\Model\Payment;
 use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\PaymentContext\Domain\Model\DirectDebitPayment;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Payment
+ * @covers \WMDE\Fundraising\MembershipContext\Domain\Model\Payment
  *
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >

@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\MembershipContext\Domain\Model;
+namespace WMDE\Fundraising\MembershipContext\Domain\Model;
 
 use RuntimeException;
 use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;

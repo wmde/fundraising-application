@@ -2,9 +2,9 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowApplicationConfirmation;
+namespace WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation;
 
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
+use WMDE\Fundraising\MembershipContext\Domain\Model\Application;
 
 /**
  * @license GNU GPL v2+

@@ -2,17 +2,17 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\MembershipContext\Tests\Data;
+namespace WMDE\Fundraising\MembershipContext\Tests\Data;
 
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Entities\MembershipApplication as DoctrineMembershipApplication;
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Applicant;
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\ApplicantAddress;
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\ApplicantName;
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Payment;
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\PhoneNumber;
+use WMDE\Fundraising\MembershipContext\Domain\Model\Applicant;
+use WMDE\Fundraising\MembershipContext\Domain\Model\ApplicantAddress;
+use WMDE\Fundraising\MembershipContext\Domain\Model\ApplicantName;
+use WMDE\Fundraising\MembershipContext\Domain\Model\Application;
+use WMDE\Fundraising\MembershipContext\Domain\Model\Payment;
+use WMDE\Fundraising\MembershipContext\Domain\Model\PhoneNumber;
 use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\PaymentContext\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;

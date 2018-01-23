@@ -2,11 +2,11 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures;
+namespace WMDE\Fundraising\MembershipContext\Tests\Fixtures;
 
-use WMDE\Fundraising\Frontend\MembershipContext\Authorization\ApplicationTokenFetcher;
-use WMDE\Fundraising\Frontend\MembershipContext\Authorization\ApplicationTokenFetchingException;
-use WMDE\Fundraising\Frontend\MembershipContext\Authorization\MembershipApplicationTokens;
+use WMDE\Fundraising\MembershipContext\Authorization\ApplicationTokenFetcher;
+use WMDE\Fundraising\MembershipContext\Authorization\ApplicationTokenFetchingException;
+use WMDE\Fundraising\MembershipContext\Authorization\MembershipApplicationTokens;
 
 /**
  * @licence GNU GPL v2+

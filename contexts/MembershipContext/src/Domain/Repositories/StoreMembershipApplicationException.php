@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories;
+namespace WMDE\Fundraising\MembershipContext\Domain\Repositories;
 
 /**
  * @license GNU GPL v2+

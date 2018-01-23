@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\MembershipContext\Tracking;
+namespace WMDE\Fundraising\MembershipContext\Tracking;
 
 /**
  * Services implementing this interface store the Piwik tracking data associated with a membership application.

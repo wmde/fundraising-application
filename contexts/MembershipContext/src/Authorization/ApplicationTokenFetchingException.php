@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\MembershipContext\Authorization;
+namespace WMDE\Fundraising\MembershipContext\Authorization;
 
 /**
  * @license GNU GPL v2+

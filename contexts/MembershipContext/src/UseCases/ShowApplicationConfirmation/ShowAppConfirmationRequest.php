@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowApplicationConfirmation;
+namespace WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation;
 
 /**
  * @licence GNU GPL v2+

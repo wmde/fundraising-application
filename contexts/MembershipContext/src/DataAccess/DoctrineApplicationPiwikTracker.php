@@ -2,13 +2,13 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\MembershipContext\DataAccess;
+namespace WMDE\Fundraising\MembershipContext\DataAccess;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use WMDE\Fundraising\Entities\MembershipApplication;
-use WMDE\Fundraising\Frontend\MembershipContext\Tracking\ApplicationPiwikTracker;
-use WMDE\Fundraising\Frontend\MembershipContext\Tracking\ApplicationPiwikTrackingException;
+use WMDE\Fundraising\MembershipContext\Tracking\ApplicationPiwikTracker;
+use WMDE\Fundraising\MembershipContext\Tracking\ApplicationPiwikTrackingException;
 
 /**
  * @licence GNU GPL v2+
