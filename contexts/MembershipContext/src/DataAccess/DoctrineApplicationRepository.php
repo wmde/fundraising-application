@@ -19,12 +19,12 @@ use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationA
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\GetMembershipApplicationException;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\StoreMembershipApplicationException;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalData;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
+use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
+use WMDE\Fundraising\PaymentContext\Domain\Model\DirectDebitPayment;
+use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
+use WMDE\Fundraising\PaymentContext\Domain\Model\PayPalData;
+use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
+use WMDE\Fundraising\PaymentContext\Domain\Model\PayPalPayment;
 use WMDE\Fundraising\Store\MembershipApplicationData;
 
 /**

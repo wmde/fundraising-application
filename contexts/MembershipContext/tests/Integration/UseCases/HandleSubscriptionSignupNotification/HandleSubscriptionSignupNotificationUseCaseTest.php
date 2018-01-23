@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\FakeApplicationRe
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\SucceedingAuthorizer;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionSignupNotification\HandleSubscriptionSignupNotificationUseCase;
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplication;
-use WMDE\Fundraising\Frontend\PaymentContext\Tests\Data\ValidSubscriptionSignupRequest;
+use WMDE\Fundraising\PaymentContext\Tests\Data\ValidSubscriptionSignupRequest;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\ThrowingEntityManager;
 

@@ -11,9 +11,9 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\MembershipContext\Tracking\MembershipApplicationTrackingInfo;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipRequest;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipResponse;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
+use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
+use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
+use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
 
 /**
  * @license GNU GPL v2+

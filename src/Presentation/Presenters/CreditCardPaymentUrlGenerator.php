@@ -5,8 +5,8 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
 use Symfony\Component\Translation\TranslatorInterface;
-use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationResponse;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentUrlGenerator\CreditCard;
+use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationResponse;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\CreditCard;
 
 /**
  * @licence GNU GPL v2+

@@ -13,10 +13,10 @@ use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Payment;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\GetMembershipApplicationException;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\StoreMembershipApplicationException;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalData;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
-use WMDE\Fundraising\Frontend\PaymentContext\RequestModel\PayPalPaymentNotificationRequest;
-use WMDE\Fundraising\Frontend\PaymentContext\ResponseModel\PaypalNotificationResponse;
+use WMDE\Fundraising\PaymentContext\Domain\Model\PayPalData;
+use WMDE\Fundraising\PaymentContext\Domain\Model\PayPalPayment;
+use WMDE\Fundraising\PaymentContext\RequestModel\PayPalPaymentNotificationRequest;
+use WMDE\Fundraising\PaymentContext\ResponseModel\PaypalNotificationResponse;
 
 /**
  * @license GNU GPL v2+
@@ -68,7 +68,7 @@ class HandleSubscriptionPaymentNotificationUseCase {
 
 		$childApplication = $this->createChildApplication( $application, $request );
 
-		/** @var \WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment $payment */
+		/** @var \WMDE\Fundraising\PaymentContext\Domain\Model\PayPalPayment $payment */
 		$payment = $application->getPayment()->getPaymentMethod();
 		$payment->getPayPalData()->addChildPayment( $request->getTransactionId(), $childApplication->getId() );
 

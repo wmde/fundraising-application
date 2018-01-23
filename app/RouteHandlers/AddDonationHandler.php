@@ -8,14 +8,14 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonationTrackingInfo;
-use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationRequest;
-use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationResponse;
+use WMDE\Fundraising\DonationContext\Domain\Model\DonationTrackingInfo;
+use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationRequest;
+use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationResponse;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\AmountParser;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
+use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
+use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
+use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
 
 /**
  * @license GNU GPL v2+

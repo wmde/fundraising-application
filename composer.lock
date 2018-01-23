@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a38b61a6adf2a06ff014cb02acc82193",
+    "content-hash": "7cc0649ffcfb91391875171527551666",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1433,16 +1433,16 @@
         },
         {
             "name": "pimple/pimple",
-            "version": "v3.2.2",
+            "version": "v3.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/silexphp/Pimple.git",
-                "reference": "4d45fb62d96418396ec58ba76e6f065bca16e10a"
+                "reference": "9e403941ef9d65d20cba7d54e29fe906db42cf32"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silexphp/Pimple/zipball/4d45fb62d96418396ec58ba76e6f065bca16e10a",
-                "reference": "4d45fb62d96418396ec58ba76e6f065bca16e10a",
+                "url": "https://api.github.com/repos/silexphp/Pimple/zipball/9e403941ef9d65d20cba7d54e29fe906db42cf32",
+                "reference": "9e403941ef9d65d20cba7d54e29fe906db42cf32",
                 "shasum": ""
             },
             "require": {
@@ -1479,7 +1479,7 @@
                 "container",
                 "dependency injection"
             ],
-            "time": "2017-07-23T07:32:15+00:00"
+            "time": "2018-01-21T07:42:36+00:00"
         },
         {
             "name": "piwik/piwik-php-tracker",
@@ -1789,16 +1789,16 @@
         },
         {
             "name": "silex/silex",
-            "version": "v2.2.1",
+            "version": "v2.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/silexphp/Silex.git",
-                "reference": "a70863fdfe716b026dbc14280c49f209561ad6a6"
+                "reference": "3fe50331f194c83ded2f824c47c1c24c20877a8c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silexphp/Silex/zipball/a70863fdfe716b026dbc14280c49f209561ad6a6",
-                "reference": "a70863fdfe716b026dbc14280c49f209561ad6a6",
+                "url": "https://api.github.com/repos/silexphp/Silex/zipball/3fe50331f194c83ded2f824c47c1c24c20877a8c",
+                "reference": "3fe50331f194c83ded2f824c47c1c24c20877a8c",
                 "shasum": ""
             },
             "require": {
@@ -1874,7 +1874,7 @@
             "keywords": [
                 "microframework"
             ],
-            "time": "2017-12-14T19:22:47+00:00"
+            "time": "2018-01-12T07:16:03+00:00"
         },
         {
             "name": "sofort/sofortlib-php",
@@ -3278,16 +3278,16 @@
         },
         {
             "name": "wmde/fundraising-donations",
-            "version": "dev-master",
+            "version": "dev-nsupdate",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations.git",
-                "reference": "cbaf2a2d2754f70402fbc63f253df73b0221e35d"
+                "reference": "9c1fe8576dd38264f019a4337876fdd903217632"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/cbaf2a2d2754f70402fbc63f253df73b0221e35d",
-                "reference": "cbaf2a2d2754f70402fbc63f253df73b0221e35d",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/9c1fe8576dd38264f019a4337876fdd903217632",
+                "reference": "9c1fe8576dd38264f019a4337876fdd903217632",
                 "shasum": ""
             },
             "require": {
@@ -3324,10 +3324,10 @@
             },
             "autoload": {
                 "psr-4": {
-                    "WMDE\\Fundraising\\Frontend\\DonationContext\\": "src/",
-                    "WMDE\\Fundraising\\Frontend\\PaymentContext\\": "contexts/PaymentContext/src/",
-                    "WMDE\\Fundraising\\Frontend\\DonationContext\\Tests\\": "tests/",
-                    "WMDE\\Fundraising\\Frontend\\PaymentContext\\Tests\\": "contexts/PaymentContext/tests/"
+                    "WMDE\\Fundraising\\DonationContext\\": "src/",
+                    "WMDE\\Fundraising\\DonationContext\\Tests\\": "tests/",
+                    "WMDE\\Fundraising\\PaymentContext\\": "contexts/PaymentContext/src/",
+                    "WMDE\\Fundraising\\PaymentContext\\Tests\\": "contexts/PaymentContext/tests/"
                 }
             },
             "license": [
@@ -3335,10 +3335,10 @@
             ],
             "homepage": "https://github.com/wmde/FundraisingDonations",
             "support": {
-                "source": "https://github.com/wmde/fundraising-donations/tree/master",
+                "source": "https://github.com/wmde/fundraising-donations/tree/nsupdate",
                 "issues": "https://github.com/wmde/fundraising-donations/issues"
             },
-            "time": "2018-01-12T07:37:28+00:00"
+            "time": "2018-01-22T18:27:09+00:00"
         },
         {
             "name": "wmde/fundraising-store",
@@ -3430,16 +3430,16 @@
         },
         {
             "name": "jean85/pretty-package-versions",
-            "version": "1.0.3",
+            "version": "1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Jean85/pretty-package-versions.git",
-                "reference": "3c8487fdd6c750ff3f10c32ddfdd2a7803c1d461"
+                "reference": "d457344b6a035ef99236bdda4729ad7eeb233f54"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Jean85/pretty-package-versions/zipball/3c8487fdd6c750ff3f10c32ddfdd2a7803c1d461",
-                "reference": "3c8487fdd6c750ff3f10c32ddfdd2a7803c1d461",
+                "url": "https://api.github.com/repos/Jean85/pretty-package-versions/zipball/d457344b6a035ef99236bdda4729ad7eeb233f54",
+                "reference": "d457344b6a035ef99236bdda4729ad7eeb233f54",
                 "shasum": ""
             },
             "require": {
@@ -3450,6 +3450,11 @@
                 "phpunit/phpunit": "^6.0"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "Jean85\\": "src/"
@@ -3467,9 +3472,12 @@
             ],
             "description": "A wrapper for ocramius/pretty-package-versions to get pretty versions strings",
             "keywords": [
-                "package versions"
+                "composer",
+                "package",
+                "release",
+                "versions"
             ],
-            "time": "2017-11-30T22:02:29+00:00"
+            "time": "2018-01-21T13:54:22+00:00"
         },
         {
             "name": "mikey179/vfsStream",
@@ -5031,16 +5039,16 @@
         },
         {
             "name": "sebastian/comparator",
-            "version": "2.1.1",
+            "version": "2.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/comparator.git",
-                "reference": "b11c729f95109b56a0fe9650c6a63a0fcd8c439f"
+                "reference": "11c07feade1d65453e06df3b3b90171d6d982087"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/b11c729f95109b56a0fe9650c6a63a0fcd8c439f",
-                "reference": "b11c729f95109b56a0fe9650c6a63a0fcd8c439f",
+                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/11c07feade1d65453e06df3b3b90171d6d982087",
+                "reference": "11c07feade1d65453e06df3b3b90171d6d982087",
                 "shasum": ""
             },
             "require": {
@@ -5091,7 +5099,7 @@
                 "compare",
                 "equality"
             ],
-            "time": "2017-12-22T14:50:35+00:00"
+            "time": "2018-01-12T06:34:42+00:00"
         },
         {
             "name": "sebastian/diff",
@@ -5991,25 +5999,25 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v3.4.3",
+            "version": "v4.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
-                "reference": "613e26310776f49a1773b6737c6bd554b8bc8c6f"
+                "reference": "8b08180f2b7ccb41062366b9ad91fbc4f1af8601"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/613e26310776f49a1773b6737c6bd554b8bc8c6f",
-                "reference": "613e26310776f49a1773b6737c6bd554b8bc8c6f",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/8b08180f2b7ccb41062366b9ad91fbc4f1af8601",
+                "reference": "8b08180f2b7ccb41062366b9ad91fbc4f1af8601",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.5.9|>=7.0.8"
+                "php": "^7.1.3"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.4-dev"
+                    "dev-master": "4.0-dev"
                 }
             },
             "autoload": {
@@ -6036,7 +6044,7 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
-            "time": "2018-01-03T07:37:34+00:00"
+            "time": "2018-01-03T07:38:00+00:00"
         },
         {
             "name": "symfony/polyfill-php72",
@@ -6486,12 +6494,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content.git",
-                "reference": "58b5bd0a795aefce3d04c69c8af2fca389c27fcd"
+                "reference": "7f8a5740729dc88c4aba00296e97cd66b7007f0f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/58b5bd0a795aefce3d04c69c8af2fca389c27fcd",
-                "reference": "58b5bd0a795aefce3d04c69c8af2fca389c27fcd",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/7f8a5740729dc88c4aba00296e97cd66b7007f0f",
+                "reference": "7f8a5740729dc88c4aba00296e97cd66b7007f0f",
                 "shasum": ""
             },
             "require-dev": {
@@ -6527,7 +6535,7 @@
             "support": {
                 "source": "https://github.com/wmde/fundraising-frontend-content/tree/test"
             },
-            "time": "2018-01-17T12:39:36+00:00"
+            "time": "2018-01-19T13:09:03+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",

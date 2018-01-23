@@ -4,12 +4,12 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
-use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
+use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Infrastructure\PiwikEvents;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankTransferPayment;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
+use WMDE\Fundraising\PaymentContext\Domain\Model\BankTransferPayment;
+use WMDE\Fundraising\PaymentContext\Domain\Model\DirectDebitPayment;
+use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
 use WMDE\Fundraising\Frontend\Presentation\DonationMembershipApplicationAdapter;
 use WMDE\Fundraising\Frontend\Presentation\SelectedConfirmationPage;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;

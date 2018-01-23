@@ -9,9 +9,9 @@ use WMDE\Fundraising\Frontend\App\AccessDeniedException;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Applicant;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationPresenter;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
+use WMDE\Fundraising\PaymentContext\Domain\Model\DirectDebitPayment;
+use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
+use WMDE\Fundraising\PaymentContext\Domain\Model\PayPalPayment;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
 /**

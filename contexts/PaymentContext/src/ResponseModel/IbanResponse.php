@@ -2,9 +2,9 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\PaymentContext\ResponseModel;
+namespace WMDE\Fundraising\PaymentContext\ResponseModel;
 
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
+use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
 
 /**
  * @licence GNU GPL v2+

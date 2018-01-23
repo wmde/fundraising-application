@@ -4,10 +4,10 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Presentation;
 
-use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donation;
-use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donor;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
+use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
+use WMDE\Fundraising\DonationContext\Domain\Model\Donor;
+use WMDE\Fundraising\PaymentContext\Domain\Model\DirectDebitPayment;
+use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
 
 class DonationMembershipApplicationAdapter {
 

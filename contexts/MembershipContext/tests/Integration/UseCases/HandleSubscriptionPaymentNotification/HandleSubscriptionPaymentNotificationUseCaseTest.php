@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\MembershipContext\Tests\Integration\UseCases\HandleSubscriptionPaymentNotification;
 
-use WMDE\Fundraising\Frontend\DonationContext\Tests\Data\ValidPayPalNotificationRequest;
+use WMDE\Fundraising\DonationContext\Tests\Data\ValidPayPalNotificationRequest;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\MembershipContext\DataAccess\DoctrineApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\FailingAuthorizer;
@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\FakeApplicationRe
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\SucceedingAuthorizer;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionPaymentNotification\HandleSubscriptionPaymentNotificationUseCase;
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplication;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
+use WMDE\Fundraising\PaymentContext\Domain\Model\PayPalPayment;
 use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\ThrowingEntityManager;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -103,11 +103,11 @@ class HandleSubscriptionPaymentNotificationUseCaseTest extends TestCase {
 		$this->assertFalse( $response->hasErrors() );
 
 		$application = $fakeRepository->getApplicationById( $application->getId() );
-		/** @var \WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment $payment */
+		/** @var \WMDE\Fundraising\PaymentContext\Domain\Model\PayPalPayment $payment */
 		$payment = $application->getPayment()->getPaymentMethod();
 		$childApplication = $fakeRepository->getApplicationById( $payment->getPayPalData()->getChildPaymentEntityId( ValidPayPalNotificationRequest::TRANSACTION_ID ) );
 		$this->assertNotNull( $childApplication );
-		/** @var \WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment $childPayment */
+		/** @var \WMDE\Fundraising\PaymentContext\Domain\Model\PayPalPayment $childPayment */
 		$childPayment = $childApplication->getPayment()->getPaymentMethod();
 		$this->assertEquals( ValidPayPalNotificationRequest::TRANSACTION_ID, $childPayment->getPayPalData()->getPaymentId() );
 		$this->assertEquals( $application->getPayment()->getAmount(), $childApplication->getPayment()->getAmount() );

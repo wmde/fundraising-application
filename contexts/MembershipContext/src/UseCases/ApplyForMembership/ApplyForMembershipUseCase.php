@@ -10,8 +10,8 @@ use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipContext\Tracking\ApplicationPiwikTracker;
 use WMDE\Fundraising\Frontend\MembershipContext\Tracking\ApplicationTracker;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\PaymentDelayCalculator;
+use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentDelayCalculator;
 
 /**
  * @license GNU GPL v2+

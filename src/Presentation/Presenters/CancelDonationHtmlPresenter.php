@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
-use WMDE\Fundraising\Frontend\DonationContext\UseCases\CancelDonation\CancelDonationResponse;
+use WMDE\Fundraising\DonationContext\UseCases\CancelDonation\CancelDonationResponse;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
 /**

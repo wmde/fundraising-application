@@ -2,19 +2,19 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\PaymentContext\Tests\Integration\UseCases\GenerateIban;
+namespace WMDE\Fundraising\PaymentContext\Tests\Integration\UseCases\GenerateIban;
 
 use PHPUnit\Framework\TestCase;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\BankDataConverter;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
-use WMDE\Fundraising\Frontend\PaymentContext\ResponseModel\IbanResponse;
-use WMDE\Fundraising\Frontend\PaymentContext\UseCases\GenerateIban\GenerateIbanRequest;
-use WMDE\Fundraising\Frontend\PaymentContext\UseCases\GenerateIban\GenerateIbanUseCase;
+use WMDE\Fundraising\PaymentContext\Domain\BankDataConverter;
+use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
+use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
+use WMDE\Fundraising\PaymentContext\ResponseModel\IbanResponse;
+use WMDE\Fundraising\PaymentContext\UseCases\GenerateIban\GenerateIbanRequest;
+use WMDE\Fundraising\PaymentContext\UseCases\GenerateIban\GenerateIbanUseCase;
 use WMDE\Fundraising\Frontend\Validation\KontoCheckIbanValidator;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\PaymentContext\UseCases\GenerateIban\GenerateIbanUseCase
+ * @covers \WMDE\Fundraising\PaymentContext\UseCases\GenerateIban\GenerateIbanUseCase
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen <kai.nissen@wikimedia.de>

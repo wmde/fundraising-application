@@ -11,9 +11,9 @@ use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\GetMembershipApplicationException;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\StoreMembershipApplicationException;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalData;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PayPalPayment;
-use WMDE\Fundraising\Frontend\PaymentContext\ResponseModel\PaypalNotificationResponse;
+use WMDE\Fundraising\PaymentContext\Domain\Model\PayPalData;
+use WMDE\Fundraising\PaymentContext\Domain\Model\PayPalPayment;
+use WMDE\Fundraising\PaymentContext\ResponseModel\PaypalNotificationResponse;
 
 /**
  * @license GNU GPL v2+

@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\System;
 
 use IMcpCreditcardService_v1_5;
 use TNvpServiceDispatcher;
-use WMDE\Fundraising\Frontend\PaymentContext\DataAccess\McpCreditCardService;
+use WMDE\Fundraising\PaymentContext\DataAccess\McpCreditCardService;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**

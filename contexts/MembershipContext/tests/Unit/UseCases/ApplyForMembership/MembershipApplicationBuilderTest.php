@@ -11,8 +11,8 @@ use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplic
 use WMDE\Fundraising\Frontend\MembershipContext\Tracking\MembershipApplicationTrackingInfo;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipRequest;
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\MembershipApplicationBuilder;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\Iban;
+use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
+use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 use PHPUnit\Framework\TestCase;
 
 /**

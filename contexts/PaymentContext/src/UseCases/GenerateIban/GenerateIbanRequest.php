@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\PaymentContext\UseCases\GenerateIban;
+namespace WMDE\Fundraising\PaymentContext\UseCases\GenerateIban;
 
 /**
  * @licence GNU GPL v2+

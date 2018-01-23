@@ -6,8 +6,8 @@ namespace WMDE\Fundraising\Frontend\MembershipContext\Tests\Unit\Domain\Model;
 
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Payment;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\BankData;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\DirectDebitPayment;
+use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
+use WMDE\Fundraising\PaymentContext\Domain\Model\DirectDebitPayment;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Payment

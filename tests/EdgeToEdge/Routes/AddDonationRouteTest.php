@@ -15,8 +15,8 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
-use WMDE\Fundraising\Frontend\PaymentContext\DataAccess\Sofort\Transfer\Client as SofortClient;
-use WMDE\Fundraising\Frontend\PaymentContext\DataAccess\Sofort\Transfer\Response as SofortResponse;
+use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Client as SofortClient;
+use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Response as SofortResponse;
 
 /**
  * @licence GNU GPL v2+

@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\PaymentContext\Tests\Data;
+namespace WMDE\Fundraising\PaymentContext\Tests\Data;
 
 use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionSignupNotification\SubscriptionSignupRequest;
 

@@ -4,10 +4,10 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
-use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonationTrackingInfo;
-use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationRequest;
-use WMDE\Fundraising\Frontend\DonationContext\UseCases\AddDonation\AddDonationValidationResult as Result;
-use WMDE\Fundraising\Frontend\PaymentContext\Domain\Model\PaymentMethod;
+use WMDE\Fundraising\DonationContext\Domain\Model\DonationTrackingInfo;
+use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationRequest;
+use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationValidationResult as Result;
+use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
 use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\FunValidators\ConstraintViolation;

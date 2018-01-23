@@ -7,10 +7,10 @@ namespace WMDE\Fundraising\Frontend\App\RouteHandlers;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\Donor;
-use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonorAddress;
-use WMDE\Fundraising\Frontend\DonationContext\Domain\Model\DonorName;
-use WMDE\Fundraising\Frontend\DonationContext\UseCases\ValidateDonor\ValidateDonorRequest;
+use WMDE\Fundraising\DonationContext\Domain\Model\Donor;
+use WMDE\Fundraising\DonationContext\Domain\Model\DonorAddress;
+use WMDE\Fundraising\DonationContext\Domain\Model\DonorName;
+use WMDE\Fundraising\DonationContext\UseCases\ValidateDonor\ValidateDonorRequest;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\FunValidators\ConstraintViolation;
 
