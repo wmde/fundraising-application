@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7cc0649ffcfb91391875171527551666",
+    "content-hash": "daf3beb69ccb069dd84235b8ef6cd41c",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1920,16 +1920,16 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v5.4.8",
+            "version": "v5.4.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "9a06dc570a0367850280eefd3f1dc2da45aef517"
+                "reference": "7ffc1ea296ed14bf8260b6ef11b80208dbadba91"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/9a06dc570a0367850280eefd3f1dc2da45aef517",
-                "reference": "9a06dc570a0367850280eefd3f1dc2da45aef517",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/7ffc1ea296ed14bf8260b6ef11b80208dbadba91",
+                "reference": "7ffc1ea296ed14bf8260b6ef11b80208dbadba91",
                 "shasum": ""
             },
             "require": {
@@ -1964,13 +1964,13 @@
                 }
             ],
             "description": "Swiftmailer, free feature-rich PHP mailer",
-            "homepage": "http://swiftmailer.org",
+            "homepage": "https://swiftmailer.symfony.com",
             "keywords": [
                 "email",
                 "mail",
                 "mailer"
             ],
-            "time": "2017-05-01T15:54:03+00:00"
+            "time": "2018-01-23T07:37:21+00:00"
         },
         {
             "name": "symfony/console",
@@ -3171,7 +3171,7 @@
         },
         {
             "name": "wmde/fun-validators",
-            "version": "dev-master",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fun-validators.git",
@@ -3278,16 +3278,16 @@
         },
         {
             "name": "wmde/fundraising-donations",
-            "version": "dev-nsupdate",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations.git",
-                "reference": "9c1fe8576dd38264f019a4337876fdd903217632"
+                "reference": "8aebd1c6a11bb35ab07a6fbf33603ae1bf9bf912"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/9c1fe8576dd38264f019a4337876fdd903217632",
-                "reference": "9c1fe8576dd38264f019a4337876fdd903217632",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/8aebd1c6a11bb35ab07a6fbf33603ae1bf9bf912",
+                "reference": "8aebd1c6a11bb35ab07a6fbf33603ae1bf9bf912",
                 "shasum": ""
             },
             "require": {
@@ -3335,10 +3335,10 @@
             ],
             "homepage": "https://github.com/wmde/FundraisingDonations",
             "support": {
-                "source": "https://github.com/wmde/fundraising-donations/tree/nsupdate",
+                "source": "https://github.com/wmde/fundraising-donations/tree/master",
                 "issues": "https://github.com/wmde/fundraising-donations/issues"
             },
-            "time": "2018-01-22T18:27:09+00:00"
+            "time": "2018-01-23T15:09:22+00:00"
         },
         {
             "name": "wmde/fundraising-store",
@@ -6601,7 +6601,6 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "wmde/fundraising-donations": 20,
-        "wmde/fun-validators": 20,
         "ockcyp/covers-validator": 20,
         "wmde/fundraising-frontend-content": 20
     },
