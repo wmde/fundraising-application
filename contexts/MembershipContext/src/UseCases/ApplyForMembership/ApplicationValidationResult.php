@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership;
+namespace WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership;
 
 /**
  * @license GNU GPL v2+

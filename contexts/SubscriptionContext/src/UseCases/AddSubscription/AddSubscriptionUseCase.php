@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\AddSubscription
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Fundraising\Entities\Address;
 use WMDE\Fundraising\Entities\Subscription;
-use WMDE\Fundraising\Frontend\MembershipContext\Infrastructure\TemplateMailerInterface;
+use WMDE\Fundraising\MembershipContext\Infrastructure\TemplateMailerInterface;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Domain\Repositories\SubscriptionRepository;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Domain\Repositories\SubscriptionRepositoryException;
 use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionValidator;

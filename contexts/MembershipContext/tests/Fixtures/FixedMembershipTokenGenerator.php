@@ -2,9 +2,9 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures;
+namespace WMDE\Fundraising\MembershipContext\Tests\Fixtures;
 
-use WMDE\Fundraising\Frontend\MembershipContext\Authorization\MembershipTokenGenerator;
+use WMDE\Fundraising\MembershipContext\Authorization\MembershipTokenGenerator;
 
 /**
  * @licence GNU GPL v2+

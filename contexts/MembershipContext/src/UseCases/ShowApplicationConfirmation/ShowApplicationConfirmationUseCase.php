@@ -2,13 +2,13 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\MembershipContext\UseCases\ShowApplicationConfirmation;
+namespace WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation;
 
-use WMDE\Fundraising\Frontend\MembershipContext\Authorization\ApplicationAuthorizer;
-use WMDE\Fundraising\Frontend\MembershipContext\Authorization\ApplicationTokenFetcher;
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationAnonymizedException;
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationRepository;
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\GetMembershipApplicationException;
+use WMDE\Fundraising\MembershipContext\Authorization\ApplicationAuthorizer;
+use WMDE\Fundraising\MembershipContext\Authorization\ApplicationTokenFetcher;
+use WMDE\Fundraising\MembershipContext\Domain\Repositories\ApplicationAnonymizedException;
+use WMDE\Fundraising\MembershipContext\Domain\Repositories\ApplicationRepository;
+use WMDE\Fundraising\MembershipContext\Domain\Repositories\GetMembershipApplicationException;
 
 /**
  * @license GNU GPL v2+

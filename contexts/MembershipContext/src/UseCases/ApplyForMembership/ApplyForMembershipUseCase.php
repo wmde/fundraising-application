@@ -2,14 +2,14 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership;
+namespace WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership;
 
-use WMDE\Fundraising\Frontend\MembershipContext\Infrastructure\TemplateMailerInterface;
-use WMDE\Fundraising\Frontend\MembershipContext\Authorization\ApplicationTokenFetcher;
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationRepository;
-use WMDE\Fundraising\Frontend\MembershipContext\Tracking\ApplicationPiwikTracker;
-use WMDE\Fundraising\Frontend\MembershipContext\Tracking\ApplicationTracker;
+use WMDE\Fundraising\MembershipContext\Infrastructure\TemplateMailerInterface;
+use WMDE\Fundraising\MembershipContext\Authorization\ApplicationTokenFetcher;
+use WMDE\Fundraising\MembershipContext\Domain\Model\Application;
+use WMDE\Fundraising\MembershipContext\Domain\Repositories\ApplicationRepository;
+use WMDE\Fundraising\MembershipContext\Tracking\ApplicationPiwikTracker;
+use WMDE\Fundraising\MembershipContext\Tracking\ApplicationTracker;
 use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentDelayCalculator;
 

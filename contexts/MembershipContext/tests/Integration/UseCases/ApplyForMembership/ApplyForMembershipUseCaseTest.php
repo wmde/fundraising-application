@@ -2,25 +2,25 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\MembershipContext\Tests\Integration\UseCases\ApplyForMembership;
+namespace WMDE\Fundraising\MembershipContext\Tests\Integration\UseCases\ApplyForMembership;
 
 use WMDE\EmailAddress\EmailAddress;
-use WMDE\Fundraising\Frontend\MembershipContext\Authorization\ApplicationTokenFetcher;
-use WMDE\Fundraising\Frontend\MembershipContext\Authorization\MembershipApplicationTokens;
-use WMDE\Fundraising\Frontend\MembershipContext\Authorization\MembershipTokenGenerator;
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationRepository;
-use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplication;
-use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\FixedApplicationTokenFetcher;
-use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\FixedMembershipTokenGenerator;
-use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\InMemoryApplicationRepository;
-use WMDE\Fundraising\Frontend\MembershipContext\Tracking\ApplicationPiwikTracker;
-use WMDE\Fundraising\Frontend\MembershipContext\Tracking\ApplicationTracker;
-use WMDE\Fundraising\Frontend\MembershipContext\Tracking\MembershipApplicationTrackingInfo;
-use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplicationValidationResult;
-use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipPolicyValidator;
-use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipRequest;
-use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipUseCase;
-use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\MembershipApplicationValidator;
+use WMDE\Fundraising\MembershipContext\Authorization\ApplicationTokenFetcher;
+use WMDE\Fundraising\MembershipContext\Authorization\MembershipApplicationTokens;
+use WMDE\Fundraising\MembershipContext\Authorization\MembershipTokenGenerator;
+use WMDE\Fundraising\MembershipContext\Domain\Repositories\ApplicationRepository;
+use WMDE\Fundraising\MembershipContext\Tests\Data\ValidMembershipApplication;
+use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FixedApplicationTokenFetcher;
+use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FixedMembershipTokenGenerator;
+use WMDE\Fundraising\MembershipContext\Tests\Fixtures\InMemoryApplicationRepository;
+use WMDE\Fundraising\MembershipContext\Tracking\ApplicationPiwikTracker;
+use WMDE\Fundraising\MembershipContext\Tracking\ApplicationTracker;
+use WMDE\Fundraising\MembershipContext\Tracking\MembershipApplicationTrackingInfo;
+use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplicationValidationResult;
+use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipPolicyValidator;
+use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipRequest;
+use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipUseCase;
+use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\MembershipApplicationValidator;
 use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\PaymentContext\Domain\Model\PayPalPayment;
@@ -30,7 +30,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipUseCase
+ * @covers \WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipUseCase
  *
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >

@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures;
+namespace WMDE\Fundraising\MembershipContext\Tests\Fixtures;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;

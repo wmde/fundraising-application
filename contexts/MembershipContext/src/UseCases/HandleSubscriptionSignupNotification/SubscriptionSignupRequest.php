@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionSignupNotification;
+namespace WMDE\Fundraising\MembershipContext\UseCases\HandleSubscriptionSignupNotification;
 
 /**
  * @license GNU GPL v2+

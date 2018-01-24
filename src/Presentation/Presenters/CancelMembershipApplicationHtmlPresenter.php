@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
-use WMDE\Fundraising\Frontend\MembershipContext\UseCases\CancelMembershipApplication\CancellationResponse;
+use WMDE\Fundraising\MembershipContext\UseCases\CancelMembershipApplication\CancellationResponse;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
 /**

@@ -2,21 +2,21 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\MembershipContext\Tests\Unit\UseCases\ApplyForMembership;
+namespace WMDE\Fundraising\MembershipContext\Tests\Unit\UseCases\ApplyForMembership;
 
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\ApplicantAddress;
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\ApplicantName;
-use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplication;
-use WMDE\Fundraising\Frontend\MembershipContext\Tracking\MembershipApplicationTrackingInfo;
-use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipRequest;
-use WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\MembershipApplicationBuilder;
+use WMDE\Fundraising\MembershipContext\Domain\Model\ApplicantAddress;
+use WMDE\Fundraising\MembershipContext\Domain\Model\ApplicantName;
+use WMDE\Fundraising\MembershipContext\Tests\Data\ValidMembershipApplication;
+use WMDE\Fundraising\MembershipContext\Tracking\MembershipApplicationTrackingInfo;
+use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipRequest;
+use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\MembershipApplicationBuilder;
 use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\MembershipContext\UseCases\ApplyForMembership\MembershipApplicationBuilder
+ * @covers \WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\MembershipApplicationBuilder
  *
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >

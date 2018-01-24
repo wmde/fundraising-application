@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\MembershipContext\UseCases\CancelMembershipApplication;
+namespace WMDE\Fundraising\MembershipContext\UseCases\CancelMembershipApplication;
 
 /**
  * @license GNU GPL v2+

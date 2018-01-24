@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
 use PHPUnit\Framework\TestCase;
 use WMDE\EmailAddress\EmailAddress;
-use WMDE\Fundraising\Frontend\MembershipContext\Infrastructure\TemplateMailerInterface;
+use WMDE\Fundraising\MembershipContext\Infrastructure\TemplateMailerInterface;
 
 /**
  * @licence GNU GPL v2+

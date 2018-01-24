@@ -2,14 +2,14 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\MembershipContext\DataAccess;
+namespace WMDE\Fundraising\MembershipContext\DataAccess;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use WMDE\Fundraising\Entities\MembershipApplication;
-use WMDE\Fundraising\Frontend\MembershipContext\Tracking\ApplicationTracker;
-use WMDE\Fundraising\Frontend\MembershipContext\Tracking\ApplicationTrackingException;
-use WMDE\Fundraising\Frontend\MembershipContext\Tracking\MembershipApplicationTrackingInfo;
+use WMDE\Fundraising\MembershipContext\Tracking\ApplicationTracker;
+use WMDE\Fundraising\MembershipContext\Tracking\ApplicationTrackingException;
+use WMDE\Fundraising\MembershipContext\Tracking\MembershipApplicationTrackingInfo;
 
 /**
  * @licence GNU GPL v2+

@@ -2,9 +2,9 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories;
+namespace WMDE\Fundraising\MembershipContext\Domain\Repositories;
 
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
+use WMDE\Fundraising\MembershipContext\Domain\Model\Application;
 
 /**
  * @license GNU GPL v2+

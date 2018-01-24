@@ -2,19 +2,19 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\MembershipContext\Tests\Integration\DataAccess;
+namespace WMDE\Fundraising\MembershipContext\Tests\Integration\DataAccess;
 
 use Codeception\Specify;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use WMDE\Fundraising\Entities\MembershipApplication;
-use WMDE\Fundraising\Frontend\MembershipContext\Authorization\ApplicationAuthorizer;
-use WMDE\Fundraising\Frontend\MembershipContext\DataAccess\DoctrineApplicationAuthorizer;
+use WMDE\Fundraising\MembershipContext\Authorization\ApplicationAuthorizer;
+use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 use WMDE\Fundraising\Store\MembershipApplicationData;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\MembershipContext\DataAccess\DoctrineApplicationAuthorizer
+ * @covers \WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationAuthorizer
  *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >

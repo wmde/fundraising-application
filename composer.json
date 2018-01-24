@@ -101,7 +101,7 @@
 			"WMDE\\Fundraising\\Frontend\\": "src/",
 			"WMDE\\Fundraising\\Frontend\\App\\": "app/",
 			"WMDE\\Fundraising\\Frontend\\Cli\\": "cli/",
-			"WMDE\\Fundraising\\Frontend\\MembershipContext\\": "contexts/MembershipContext/src/",
+			"WMDE\\Fundraising\\MembershipContext\\": "contexts/MembershipContext/src/",
 			"WMDE\\Fundraising\\PaymentContext\\": "contexts/PaymentContext/src/",
 			"WMDE\\Fundraising\\Frontend\\SubscriptionContext\\": "contexts/SubscriptionContext/src/"
 		}
@@ -109,7 +109,7 @@
 	"autoload-dev": {
 		"psr-4": {
 			"WMDE\\Fundraising\\Frontend\\Tests\\": "tests/",
-			"WMDE\\Fundraising\\Frontend\\MembershipContext\\Tests\\": "contexts/MembershipContext/tests/",
+			"WMDE\\Fundraising\\MembershipContext\\Tests\\": "contexts/MembershipContext/tests/",
 			"WMDE\\Fundraising\\PaymentContext\\Tests\\": "contexts/PaymentContext/tests/",
 			"WMDE\\Fundraising\\Frontend\\SubscriptionContext\\Tests\\": "contexts/SubscriptionContext/tests/"
 		}

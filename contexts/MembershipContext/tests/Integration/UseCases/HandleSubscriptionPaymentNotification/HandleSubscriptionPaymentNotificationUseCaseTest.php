@@ -2,23 +2,23 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\MembershipContext\Tests\Integration\UseCases\HandleSubscriptionPaymentNotification;
+namespace WMDE\Fundraising\MembershipContext\Tests\Integration\UseCases\HandleSubscriptionPaymentNotification;
 
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidPayPalNotificationRequest;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
-use WMDE\Fundraising\Frontend\MembershipContext\DataAccess\DoctrineApplicationRepository;
-use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\FailingAuthorizer;
-use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\FakeApplicationRepository;
-use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\SucceedingAuthorizer;
-use WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionPaymentNotification\HandleSubscriptionPaymentNotificationUseCase;
-use WMDE\Fundraising\Frontend\MembershipContext\Tests\Data\ValidMembershipApplication;
+use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationRepository;
+use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FailingAuthorizer;
+use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FakeApplicationRepository;
+use WMDE\Fundraising\MembershipContext\Tests\Fixtures\SucceedingAuthorizer;
+use WMDE\Fundraising\MembershipContext\UseCases\HandleSubscriptionPaymentNotification\HandleSubscriptionPaymentNotificationUseCase;
+use WMDE\Fundraising\MembershipContext\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\PaymentContext\Domain\Model\PayPalPayment;
-use WMDE\Fundraising\Frontend\MembershipContext\Tests\Fixtures\ThrowingEntityManager;
+use WMDE\Fundraising\MembershipContext\Tests\Fixtures\ThrowingEntityManager;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\MembershipContext\UseCases\HandleSubscriptionPaymentNotification\HandleSubscriptionPaymentNotificationUseCase
+ * @covers \WMDE\Fundraising\MembershipContext\UseCases\HandleSubscriptionPaymentNotification\HandleSubscriptionPaymentNotificationUseCase
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >

@@ -2,23 +2,23 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\MembershipContext\DataAccess;
+namespace WMDE\Fundraising\MembershipContext\DataAccess;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Entities\MembershipApplication as DoctrineApplication;
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Applicant;
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\ApplicantAddress;
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\ApplicantName;
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Application;
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\Payment;
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Model\PhoneNumber;
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationAnonymizedException;
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\ApplicationRepository;
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\GetMembershipApplicationException;
-use WMDE\Fundraising\Frontend\MembershipContext\Domain\Repositories\StoreMembershipApplicationException;
+use WMDE\Fundraising\MembershipContext\Domain\Model\Applicant;
+use WMDE\Fundraising\MembershipContext\Domain\Model\ApplicantAddress;
+use WMDE\Fundraising\MembershipContext\Domain\Model\ApplicantName;
+use WMDE\Fundraising\MembershipContext\Domain\Model\Application;
+use WMDE\Fundraising\MembershipContext\Domain\Model\Payment;
+use WMDE\Fundraising\MembershipContext\Domain\Model\PhoneNumber;
+use WMDE\Fundraising\MembershipContext\Domain\Repositories\ApplicationAnonymizedException;
+use WMDE\Fundraising\MembershipContext\Domain\Repositories\ApplicationRepository;
+use WMDE\Fundraising\MembershipContext\Domain\Repositories\GetMembershipApplicationException;
+use WMDE\Fundraising\MembershipContext\Domain\Repositories\StoreMembershipApplicationException;
 use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\PaymentContext\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;

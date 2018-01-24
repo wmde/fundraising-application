@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\MembershipContext\Infrastructure;
+namespace WMDE\Fundraising\MembershipContext\Infrastructure;
 
 use WMDE\EmailAddress\EmailAddress;
 
