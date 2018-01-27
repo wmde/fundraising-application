@@ -109,7 +109,7 @@ use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\Show
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationUseCase;
 use WMDE\Fundraising\PaymentContext\DataAccess\McpCreditCardService;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Client as SofortClient;
-use WMDE\Fundraising\PaymentContext\DataAccess\UniqueTransferCodeGenerator;
+use WMDE\Fundraising\DonationContext\DataAccess\UniqueTransferCodeGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataConverter;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataValidator;
 use WMDE\Fundraising\PaymentContext\Domain\DefaultPaymentDelayCalculator;
