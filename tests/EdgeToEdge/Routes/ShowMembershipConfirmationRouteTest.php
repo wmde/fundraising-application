@@ -67,7 +67,8 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 
 			$client->request(
 				Request::METHOD_GET,
-				self::PATH, [
+				self::PATH,
+				[
 					'id' => $membershipApplication->getId(),
 					'accessToken' => self::WRONG_ACCESS_TOKEN
 				]
@@ -104,4 +105,5 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 			$this->assertSame( 403, $client->getResponse()->getStatusCode() );
 		} );
 	}
+
 }
