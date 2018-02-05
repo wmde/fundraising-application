@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use DateTime;
 use Symfony\Component\BrowserKit\Client;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,6 +14,7 @@ use WMDE\Fundraising\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\MembershipContext\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FixedMembershipTokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
+use WMDE\Fundraising\Entities\MembershipApplication as DoctrineApplication;
 
 /**
  * @licence GNU GPL v2+
@@ -76,4 +78,30 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
+	public function testCallOnAnonymizedRecord_deniedPageIsShown(): void {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+			$factory->setMembershipTokenGenerator( new FixedMembershipTokenGenerator(
+				self::CORRECT_ACCESS_TOKEN
+			) );
+
+			// @todo Get anonymized membership application from (context's) test data
+			$doctrineApplication = new DoctrineApplication();
+			$doctrineApplication->setBackup( new DateTime( '-1 day' ) );
+
+			$factory->getEntityManager()->persist( $doctrineApplication );
+			$factory->getEntityManager()->flush();
+
+			$client->request(
+				Request::METHOD_GET,
+				self::PATH,
+				[
+					'id' => $doctrineApplication->getId(),
+					'accessToken' => self::CORRECT_ACCESS_TOKEN
+				]
+			);
+
+			$this->assertContains( 'access_denied_membership_confirmation', $client->getResponse()->getContent() );
+			$this->assertSame( 403, $client->getResponse()->getStatusCode() );
+		} );
+	}
 }
