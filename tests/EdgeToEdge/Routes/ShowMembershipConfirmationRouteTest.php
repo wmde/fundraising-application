@@ -38,7 +38,7 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 
 	public function testWhenDonationTimestampCookieIsSet_itIsNotOverwritten(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$donation = $this->newStoredMembershipApplication( $factory );
+			$membershipApplication = $this->newStoredMembershipApplication( $factory );
 
 			$client->getCookieJar()->set(
 				new Cookie( ShowDonationConfirmationHandler::SUBMISSION_COOKIE_NAME, 'some value' )
@@ -47,7 +47,7 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 				Request::METHOD_GET,
 				self::PATH,
 				[
-					'id' => $donation->getId(),
+					'id' => $membershipApplication->getId(),
 					'accessToken' => self::CORRECT_ACCESS_TOKEN
 				]
 			);
@@ -61,12 +61,12 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 
 	public function testCallWithWrongAccessToken_deniedPageIsShown(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$donation = $this->newStoredMembershipApplication( $factory );
+			$membershipApplication = $this->newStoredMembershipApplication( $factory );
 
 			$client->request(
 				Request::METHOD_GET,
 				self::PATH, [
-					'id' => $donation->getId(),
+					'id' => $membershipApplication->getId(),
 					'accessToken' => self::WRONG_ACCESS_TOKEN
 				]
 			);
