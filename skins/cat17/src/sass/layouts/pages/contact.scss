@@ -1,41 +1,43 @@
 
 .page-contact {
-	form {
-		margin-top: 50px;
-	}
-	.field-grp {
-		#subject {
-			@include bkp(sm) {
-				max-width: 227px;
+	main {
+		form {
+			margin-top: 50px;
+		}
+		.field-grp {
+			#subject {
+				@include bkp(sm) {
+					max-width: 227px;
+				}
+			}
+			textarea {
+				height: 180px;
+			}
+			.error-text {
+				display: block;
 			}
 		}
-		textarea {
-			height: 180px;
+		.wrap-submit {
+			margin-top: 40px;
+			@include bkp(sm) {
+				margin-top: 80px;
+			}
 		}
-		.error-text {
-			display: block;
+		input[type="submit"] {
+			position: relative;
+			margin: 0 -300px;
+			width: 900px;
+			height: 66px;
+			@include bkp(sm) {
+				max-width: 100%;
+				display: flex;
+				margin: 0 auto;
+				padding: 0;
+				height: 45px;
+			}
 		}
-	}
-	.wrap-submit {
-		margin-top: 40px;
-		@include bkp(sm) {
-			margin-top: 80px;
+		.list-menu {
+			margin-top: 30px;
 		}
-	}
-	input[type="submit"] {
-		position: relative;
-		margin: 0 -300px;
-		width: 900px;
-		height: 66px;
-		@include bkp(sm) {
-			max-width: 100%;
-			display: flex;
-			margin: 0 auto;
-			padding: 0;
-			height: 45px;
-		}
-	}
-	.list-menu {
-		margin-top: 30px;
 	}
 }
