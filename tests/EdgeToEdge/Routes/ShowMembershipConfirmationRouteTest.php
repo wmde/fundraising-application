@@ -25,6 +25,7 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 	private const PATH = '/show-membership-confirmation';
 	private const CORRECT_ACCESS_TOKEN = 'justSomeToken';
 	private const WRONG_ACCESS_TOKEN = 'foobar';
+	private const UNKNOWN_APPLICATION_ID = 9998;
 
 	private function newStoredMembershipApplication( FunFunFactory $factory ): Application {
 		$factory->setMembershipTokenGenerator( new FixedMembershipTokenGenerator(
@@ -74,8 +75,7 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 				]
 			);
 
-			$this->assertContains( 'access_denied_membership_confirmation', $client->getResponse()->getContent() );
-			$this->assertSame( 403, $client->getResponse()->getStatusCode() );
+			$this->assertAccessIsDenied( $client );
 		} );
 	}
 
@@ -101,9 +101,28 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 				]
 			);
 
-			$this->assertContains( 'access_denied_membership_confirmation', $client->getResponse()->getContent() );
-			$this->assertSame( 403, $client->getResponse()->getStatusCode() );
+			$this->assertAccessIsDenied( $client );
 		} );
+	}
+
+	public function testCallOnUnknownApplicationId_deniedPageIsShown(): void {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+			$client->request(
+				Request::METHOD_GET,
+				self::PATH,
+				[
+					'id' => self::UNKNOWN_APPLICATION_ID,
+					'accessToken' => self::WRONG_ACCESS_TOKEN
+				]
+			);
+
+			$this->assertAccessIsDenied( $client );
+		} );
+	}
+
+	private function assertAccessIsDenied( Client $client ): void {
+		$this->assertContains( 'access_denied_membership_confirmation', $client->getResponse()->getContent() );
+		$this->assertTrue( $client->getResponse()->isForbidden() );
 	}
 
 }
