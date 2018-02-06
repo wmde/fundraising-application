@@ -3345,12 +3345,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships.git",
-                "reference": "f4c787960835105fd86804bcd1f4cb9168b6d97f"
+                "reference": "8b0bf709ae3d238249d69a82b913e2d95f6903df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/f4c787960835105fd86804bcd1f4cb9168b6d97f",
-                "reference": "f4c787960835105fd86804bcd1f4cb9168b6d97f",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/8b0bf709ae3d238249d69a82b913e2d95f6903df",
+                "reference": "8b0bf709ae3d238249d69a82b913e2d95f6903df",
                 "shasum": ""
             },
             "require": {
@@ -3399,7 +3399,7 @@
             "support": {
                 "source": "https://github.com/wmde/fundraising-memberships/tree/master"
             },
-            "time": "2018-02-05T17:32:00+00:00"
+            "time": "2018-02-06T16:28:51+00:00"
         },
         {
             "name": "wmde/fundraising-payments",

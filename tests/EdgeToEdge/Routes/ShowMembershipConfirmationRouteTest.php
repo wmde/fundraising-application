@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
-use DateTime;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\BrowserKit\Client;
 use Symfony\Component\BrowserKit\Cookie;
@@ -16,7 +15,6 @@ use WMDE\Fundraising\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\MembershipContext\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FixedMembershipTokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
-use WMDE\Fundraising\Entities\MembershipApplication as DoctrineApplication;
 
 /**
  * @licence GNU GPL v2+
@@ -87,9 +85,7 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 				self::CORRECT_ACCESS_TOKEN
 			) );
 
-			// @todo Get anonymized membership application from (context's) test data
-			$doctrineApplication = new DoctrineApplication();
-			$doctrineApplication->setBackup( new DateTime( '-1 day' ) );
+			$doctrineApplication = ValidMembershipApplication::newAnonymizedDoctrineEntity();
 
 			$factory->getEntityManager()->persist( $doctrineApplication );
 			$factory->getEntityManager()->flush();
