@@ -1168,6 +1168,10 @@ class FunFunFactory {
 		);
 	}
 
+	public function setMembershipApplicationRepository( ApplicationRepository $applicationRepository ): void {
+		$this->pimple['membership_application_repository'] = $applicationRepository;
+	}
+
 	public function getMembershipApplicationRepository(): ApplicationRepository {
 		return $this->pimple['membership_application_repository'];
 	}

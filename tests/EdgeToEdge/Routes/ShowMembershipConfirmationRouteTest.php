@@ -5,11 +5,13 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use DateTime;
+use Doctrine\ORM\ORMException;
 use Symfony\Component\BrowserKit\Client;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowDonationConfirmationHandler;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationRepository;
 use WMDE\Fundraising\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\MembershipContext\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FixedMembershipTokenGenerator;
@@ -118,6 +120,42 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 
 			$this->assertAccessIsDenied( $client );
 		} );
+	}
+
+	public function testOnDatabaseError_errorPageIsShown(): void {
+		$membershipApplication = ValidMembershipApplication::newDomainEntity();
+
+		$client = $this->createClient( [], function ( FunFunFactory $factory ) use ( $membershipApplication ): void {
+
+			$factory->setMembershipTokenGenerator( new FixedMembershipTokenGenerator(
+				self::CORRECT_ACCESS_TOKEN
+			) );
+
+			$applicationRepository = $this->getMockBuilder( DoctrineApplicationRepository::class )
+				->setConstructorArgs( [$factory->getEntityManager()] )
+				->setMethods( ['getDoctrineApplicationById'] )
+				->getMock();
+
+			$applicationRepository->method( 'getDoctrineApplicationById' )
+				->willThrowException( new ORMException() );
+
+			$applicationRepository->storeApplication( $membershipApplication );
+
+			$factory->setMembershipApplicationRepository( $applicationRepository );
+
+		}, self::DISABLE_DEBUG );
+
+		$client->request(
+			Request::METHOD_GET,
+			self::PATH,
+			[
+				'id' => $membershipApplication->getId(),
+				'accessToken' => self::CORRECT_ACCESS_TOKEN
+			]
+		);
+
+		$this->assertContains( 'Internal Error: A database error occurred', $client->getResponse()->getContent() );
+		$this->assertTrue( $client->getResponse()->isServerError() );
 	}
 
 	private function assertAccessIsDenied( Client $client ): void {

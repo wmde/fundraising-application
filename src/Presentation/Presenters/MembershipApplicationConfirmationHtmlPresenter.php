@@ -129,7 +129,7 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 	}
 
 	public function presentTechnicalError( string $message ): void {
-		$this->html = $message; // TODO
+		$this->exception = new \RuntimeException( $message );
 	}
 
 }
