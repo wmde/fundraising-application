@@ -8,7 +8,7 @@ use Doctrine\ORM\ORMException;
 use Symfony\Component\BrowserKit\Client;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Request;
-use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowDonationConfirmationHandler;
+use WMDE\Fundraising\Frontend\App\RouteHandlers\ApplyForMembershipHandler;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationRepository;
 use WMDE\Fundraising\MembershipContext\Domain\Model\Application;
@@ -39,12 +39,12 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 		return $membershipApplication;
 	}
 
-	public function testWhenDonationTimestampCookieIsSet_itIsNotOverwritten(): void {
+	public function testWhenMembershipApplicationTimestampCookiePreexists_itIsNotOverwritten(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$membershipApplication = $this->newStoredMembershipApplication( $factory );
 
 			$client->getCookieJar()->set(
-				new Cookie( ShowDonationConfirmationHandler::SUBMISSION_COOKIE_NAME, 'some value' )
+				new Cookie( ApplyForMembershipHandler::SUBMISSION_COOKIE_NAME, 'some value' )
 			);
 			$client->request(
 				Request::METHOD_GET,
@@ -57,7 +57,7 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 
 			$this->assertSame(
 				'some value',
-				$client->getCookieJar()->get( ShowDonationConfirmationHandler::SUBMISSION_COOKIE_NAME )->getValue()
+				$client->getCookieJar()->get( ApplyForMembershipHandler::SUBMISSION_COOKIE_NAME )->getValue()
 			);
 		} );
 	}

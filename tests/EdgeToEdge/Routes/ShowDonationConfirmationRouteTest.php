@@ -274,7 +274,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	public function testWhenDonationTimestampCookieIsSet_itIsNotOverwritten(): void {
+	public function testWhenDonationTimestampCookiePreexists_itIsNotOverwritten(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$donation = $this->newStoredDonation( $factory );
 
