@@ -3171,16 +3171,16 @@
         },
         {
             "name": "wmde/fun-validators",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fun-validators.git",
-                "reference": "a1d9891cde4b7a9896370158d427478fb709568c"
+                "reference": "29fd4b73077dcf721ba4e6d37017965eb3bdca5c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fun-validators/zipball/a1d9891cde4b7a9896370158d427478fb709568c",
-                "reference": "a1d9891cde4b7a9896370158d427478fb709568c",
+                "url": "https://api.github.com/repos/wmde/fun-validators/zipball/29fd4b73077dcf721ba4e6d37017965eb3bdca5c",
+                "reference": "29fd4b73077dcf721ba4e6d37017965eb3bdca5c",
                 "shasum": ""
             },
             "require": {
@@ -3207,10 +3207,10 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "description": "General and shared validation services created as part of the WMDE fundraising software",
-            "time": "2017-11-03T03:15:57+00:00"
+            "time": "2018-02-09T11:36:56+00:00"
         },
         {
             "name": "wmde/fundraising-content-provider",
