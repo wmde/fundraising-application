@@ -110,7 +110,7 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 				self::PATH,
 				[
 					'id' => self::UNKNOWN_APPLICATION_ID,
-					'accessToken' => self::WRONG_ACCESS_TOKEN
+					'accessToken' => self::CORRECT_ACCESS_TOKEN
 				]
 			);
 
