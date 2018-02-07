@@ -75,7 +75,7 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 				]
 			);
 
-			$this->assertAccessIsDenied( $client );
+			$this->assertAccessIsDenied( 'access_denied_membership_confirmation', $client );
 		} );
 	}
 
@@ -99,7 +99,7 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 				]
 			);
 
-			$this->assertAccessIsDenied( $client );
+			$this->assertAccessIsDenied( 'access_denied_membership_confirmation_anonymized', $client );
 		} );
 	}
 
@@ -114,7 +114,7 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 				]
 			);
 
-			$this->assertAccessIsDenied( $client );
+			$this->assertAccessIsDenied( 'access_denied_membership_confirmation', $client );
 		} );
 	}
 
@@ -154,8 +154,8 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 		$this->assertTrue( $client->getResponse()->isServerError() );
 	}
 
-	private function assertAccessIsDenied( Client $client ): void {
-		$this->assertContains( 'access_denied_membership_confirmation', $client->getResponse()->getContent() );
+	private function assertAccessIsDenied( string $expectedMessage, Client $client ): void {
+		$this->assertContains( $expectedMessage, $client->getResponse()->getContent() );
 		$this->assertTrue( $client->getResponse()->isForbidden() );
 	}
 

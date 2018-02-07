@@ -1,5 +1,5 @@
 {% extends 'Base_Layout.html.twig' %}
 
 {% block main %}
-    {$ message|default( 'access_denied' )|trans() $}
+    {$ message | default( 'access_denied' ) | trans | raw $}
 {% endblock %}
