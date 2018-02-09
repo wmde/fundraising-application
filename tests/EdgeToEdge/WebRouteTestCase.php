@@ -102,9 +102,10 @@ abstract class WebRouteTestCase extends TestCase {
 		// @codingStandardsIgnoreEnd
 		$app = require __DIR__ . ' /../../app/bootstrap.php';
 
+		$app['session.test'] = true;
+
 		if ( $debug ) {
 			$app['debug'] = true;
-			$app['session.test'] = true;
 			unset( $app['exception_handler'] );
 		}
 
