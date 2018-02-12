@@ -3036,16 +3036,16 @@
         },
         {
             "name": "wmde/email-address",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/email-address.git",
-                "reference": "0c4d713efc98248053df5ea695e9ceb22797a2f6"
+                "reference": "2a92cc86b9b338c08aa115cfe7624bfb7846d613"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/email-address/zipball/0c4d713efc98248053df5ea695e9ceb22797a2f6",
-                "reference": "0c4d713efc98248053df5ea695e9ceb22797a2f6",
+                "url": "https://api.github.com/repos/wmde/email-address/zipball/2a92cc86b9b338c08aa115cfe7624bfb7846d613",
+                "reference": "2a92cc86b9b338c08aa115cfe7624bfb7846d613",
                 "shasum": ""
             },
             "require": {
@@ -3072,10 +3072,10 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "description": "Email Address value object written in PHP 7",
-            "time": "2017-11-02T05:24:33+00:00"
+            "time": "2018-02-07T16:29:45+00:00"
         },
         {
             "name": "wmde/euro",
@@ -3171,16 +3171,16 @@
         },
         {
             "name": "wmde/fun-validators",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fun-validators.git",
-                "reference": "a1d9891cde4b7a9896370158d427478fb709568c"
+                "reference": "29fd4b73077dcf721ba4e6d37017965eb3bdca5c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fun-validators/zipball/a1d9891cde4b7a9896370158d427478fb709568c",
-                "reference": "a1d9891cde4b7a9896370158d427478fb709568c",
+                "url": "https://api.github.com/repos/wmde/fun-validators/zipball/29fd4b73077dcf721ba4e6d37017965eb3bdca5c",
+                "reference": "29fd4b73077dcf721ba4e6d37017965eb3bdca5c",
                 "shasum": ""
             },
             "require": {
@@ -3207,10 +3207,10 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "description": "General and shared validation services created as part of the WMDE fundraising software",
-            "time": "2017-11-03T03:15:57+00:00"
+            "time": "2018-02-09T11:36:56+00:00"
         },
         {
             "name": "wmde/fundraising-content-provider",
