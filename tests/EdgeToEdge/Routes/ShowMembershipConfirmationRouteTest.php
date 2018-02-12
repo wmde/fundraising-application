@@ -4,16 +4,16 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
-use Doctrine\ORM\ORMException;
 use Symfony\Component\BrowserKit\Client;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\ApplyForMembershipHandler;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationRepository;
 use WMDE\Fundraising\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\MembershipContext\Tests\Data\ValidMembershipApplication;
+use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FakeApplicationRepository;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FixedMembershipTokenGenerator;
+use WMDE\Fundraising\MembershipContext\Tests\Fixtures\SucceedingAuthorizer;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
 /**
@@ -122,23 +122,11 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 		$membershipApplication = ValidMembershipApplication::newDomainEntity();
 
 		$client = $this->createClient( [], function ( FunFunFactory $factory ) use ( $membershipApplication ): void {
+			$factory->setMembershipApplicationAuthorizerClass( SucceedingAuthorizer::class );
 
-			$factory->setMembershipTokenGenerator( new FixedMembershipTokenGenerator(
-				self::CORRECT_ACCESS_TOKEN
-			) );
-
-			$applicationRepository = $this->getMockBuilder( DoctrineApplicationRepository::class )
-				->setConstructorArgs( [$factory->getEntityManager()] )
-				->setMethods( ['getDoctrineApplicationById'] )
-				->getMock();
-
-			$applicationRepository->method( 'getDoctrineApplicationById' )
-				->willThrowException( new ORMException() );
-
-			$applicationRepository->storeApplication( $membershipApplication );
-
+			$applicationRepository = new FakeApplicationRepository( $membershipApplication );
+			$applicationRepository->throwOnRead();
 			$factory->setMembershipApplicationRepository( $applicationRepository );
-
 		}, self::DISABLE_DEBUG );
 
 		$client->request(

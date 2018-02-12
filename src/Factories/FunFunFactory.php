@@ -90,7 +90,6 @@ use WMDE\Fundraising\MembershipContext\Authorization\ApplicationAuthorizer;
 use WMDE\Fundraising\MembershipContext\Authorization\ApplicationTokenFetcher;
 use WMDE\Fundraising\MembershipContext\Authorization\MembershipTokenGenerator;
 use WMDE\Fundraising\MembershipContext\Authorization\RandomMembershipTokenGenerator;
-use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationAuthorizer;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationPiwikTracker;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationRepository;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationTokenFetcher;
@@ -1166,11 +1165,9 @@ class FunFunFactory implements ServiceProviderInterface {
 	private function newMembershipApplicationAuthorizer(
 		string $updateToken = null, string $accessToken = null ): ApplicationAuthorizer {
 
-		return new DoctrineApplicationAuthorizer(
-			$this->getEntityManager(),
-			$updateToken,
-			$accessToken
-		);
+		$this->pimple['fundraising.membership.application.authorizer.update_token'] = $updateToken;
+		$this->pimple['fundraising.membership.application.authorizer.access_token'] = $accessToken;
+		return $this->pimple['fundraising.membership.application.authorizer'];
 	}
 
 	public function setMembershipApplicationRepository( ApplicationRepository $applicationRepository ): void {
@@ -1179,6 +1176,10 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	public function getMembershipApplicationRepository(): ApplicationRepository {
 		return $this->pimple['membership_application_repository'];
+	}
+
+	public function setMembershipApplicationAuthorizerClass( string $class ): void {
+		$this->pimple['fundraising.membership.application.authorizer.class'] = $class;
 	}
 
 	private function newCancelMembershipApplicationMailer(): TemplateMailerInterface {
