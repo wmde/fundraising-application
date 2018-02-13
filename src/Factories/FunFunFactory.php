@@ -89,7 +89,6 @@ use WMDE\Fundraising\Frontend\Infrastructure\WordListFileReader;
 use WMDE\Fundraising\MembershipContext\Authorization\ApplicationAuthorizer;
 use WMDE\Fundraising\MembershipContext\Authorization\ApplicationTokenFetcher;
 use WMDE\Fundraising\MembershipContext\Authorization\MembershipTokenGenerator;
-use WMDE\Fundraising\MembershipContext\Authorization\RandomMembershipTokenGenerator;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationPiwikTracker;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationRepository;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationTokenFetcher;
@@ -200,7 +199,16 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	private function newPimple(): Container {
 		$container = new Container();
-		$container->register( new MembershipContextFactory( [] ) );
+		$container->register(
+			new MembershipContextFactory(
+				[
+					// Explicitly passing redundantly - repeated use could be a case for config parameters
+					// http://symfony.com/doc/current/service_container/parameters.html#parameters-in-configuration-files
+					'token-length' => $this->config['token-length'],
+					'token-validity-timestamp' => $this->config['token-validity-timestamp']
+				]
+			)
+		);
 		$this->register( $container );
 		return $container;
 	}
@@ -439,13 +447,6 @@ class FunFunFactory implements ServiceProviderInterface {
 
 		$container['donation_token_generator'] = function() {
 			return new RandomTokenGenerator(
-				$this->config['token-length'],
-				new \DateInterval( $this->config['token-validity-timestamp'] )
-			);
-		};
-
-		$container['membership_token_generator'] = function() {
-			return new RandomMembershipTokenGenerator(
 				$this->config['token-length'],
 				new \DateInterval( $this->config['token-validity-timestamp'] )
 			);
@@ -1065,7 +1066,7 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function getMembershipTokenGenerator(): MembershipTokenGenerator {
-		return $this->pimple['membership_token_generator'];
+		return $this->pimple['fundraising.membership.application.token_generator'];
 	}
 
 	public function newDonationConfirmationPresenter( string $templateName = 'Donation_Confirmation.html.twig' ): DonationConfirmationHtmlPresenter {
@@ -1354,7 +1355,7 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function setMembershipTokenGenerator( MembershipTokenGenerator $tokenGenerator ): void {
-		$this->pimple['membership_token_generator'] = $tokenGenerator;
+		$this->pimple['fundraising.membership.application.token_generator'] = $tokenGenerator;
 	}
 
 	public function disableDoctrineSubscribers(): void {
