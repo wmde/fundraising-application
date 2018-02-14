@@ -3345,12 +3345,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships.git",
-                "reference": "f4c787960835105fd86804bcd1f4cb9168b6d97f"
+                "reference": "ddc247252c6aab896ed091d371a36d46038a9b14"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/f4c787960835105fd86804bcd1f4cb9168b6d97f",
-                "reference": "f4c787960835105fd86804bcd1f4cb9168b6d97f",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/ddc247252c6aab896ed091d371a36d46038a9b14",
+                "reference": "ddc247252c6aab896ed091d371a36d46038a9b14",
                 "shasum": ""
             },
             "require": {
@@ -3369,7 +3369,7 @@
                 "codeception/specify": "~0.4.3",
                 "mediawiki/mediawiki-codesniffer": "~13.0",
                 "ockcyp/covers-validator": "~0.6",
-                "phpstan/phpstan": "~0.8.0",
+                "phpstan/phpstan": "~0.9",
                 "phpunit/phpunit": "~6.5",
                 "slevomat/coding-standard": "~4.0",
                 "squizlabs/php_codesniffer": "~3.0"
@@ -3399,7 +3399,7 @@
             "support": {
                 "source": "https://github.com/wmde/fundraising-memberships/tree/master"
             },
-            "time": "2018-02-05T17:32:00+00:00"
+            "time": "2018-02-13T11:17:26+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
@@ -6617,12 +6617,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content.git",
-                "reference": "72d6dbe39df1b2b16dccca6f3640abd4aee7adaf"
+                "reference": "031f4353c7859f93a9b79de5235adcd85b977458"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/72d6dbe39df1b2b16dccca6f3640abd4aee7adaf",
-                "reference": "72d6dbe39df1b2b16dccca6f3640abd4aee7adaf",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/031f4353c7859f93a9b79de5235adcd85b977458",
+                "reference": "031f4353c7859f93a9b79de5235adcd85b977458",
                 "shasum": ""
             },
             "require-dev": {
@@ -6658,7 +6658,7 @@
             "support": {
                 "source": "https://github.com/wmde/fundraising-frontend-content/tree/test"
             },
-            "time": "2018-01-30T17:04:04+00:00"
+            "time": "2018-02-13T10:54:42+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",

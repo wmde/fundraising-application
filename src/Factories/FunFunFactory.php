@@ -15,6 +15,7 @@ use FileFetcher\SimpleFileFetcher;
 use GuzzleHttp\Client;
 use NumberFormatter;
 use Pimple\Container;
+use Pimple\ServiceProviderInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Swift_MailTransport;
@@ -88,8 +89,6 @@ use WMDE\Fundraising\Frontend\Infrastructure\WordListFileReader;
 use WMDE\Fundraising\MembershipContext\Authorization\ApplicationAuthorizer;
 use WMDE\Fundraising\MembershipContext\Authorization\ApplicationTokenFetcher;
 use WMDE\Fundraising\MembershipContext\Authorization\MembershipTokenGenerator;
-use WMDE\Fundraising\MembershipContext\Authorization\RandomMembershipTokenGenerator;
-use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationAuthorizer;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationPiwikTracker;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationRepository;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationTokenFetcher;
@@ -97,6 +96,7 @@ use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationTracker;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipApplicationPrePersistSubscriber;
 use WMDE\Fundraising\MembershipContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\MembershipContext\Infrastructure\LoggingApplicationRepository;
+use WMDE\Fundraising\MembershipContext\MembershipContextFactory;
 use WMDE\Fundraising\MembershipContext\Tracking\ApplicationPiwikTracker;
 use WMDE\Fundraising\MembershipContext\Tracking\ApplicationTracker;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipPolicyValidator;
@@ -176,7 +176,7 @@ use WMDE\FunValidators\Validators\TextPolicyValidator;
 /**
  * @licence GNU GPL v2+
  */
-class FunFunFactory {
+class FunFunFactory implements ServiceProviderInterface {
 
 	private $config;
 
@@ -198,29 +198,43 @@ class FunFunFactory {
 	}
 
 	private function newPimple(): Container {
-		$pimple = new Container();
+		$container = new Container();
+		$container->register(
+			new MembershipContextFactory(
+				[
+					// Explicitly passing redundantly - repeated use could be a case for config parameters
+					// http://symfony.com/doc/current/service_container/parameters.html#parameters-in-configuration-files
+					'token-length' => $this->config['token-length'],
+					'token-validity-timestamp' => $this->config['token-validity-timestamp']
+				]
+			)
+		);
+		$this->register( $container );
+		return $container;
+	}
 
-		$pimple['logger'] = function() {
+	public function register( Container $container ): void {
+		$container['logger'] = function() {
 			return new NullLogger();
 		};
 
-		$pimple['paypal_logger'] = function() {
+		$container['paypal_logger'] = function() {
 			return new NullLogger();
 		};
 
-		$pimple['sofort_logger'] = function() {
+		$container['sofort_logger'] = function() {
 			return new NullLogger();
 		};
 
-		$pimple['profiler_data_collector'] = function() {
+		$container['profiler_data_collector'] = function() {
 			return new ProfilerDataCollector();
 		};
 
-		$pimple['dbal_connection'] = function() {
+		$container['dbal_connection'] = function() {
 			return DriverManager::getConnection( $this->config['db'] );
 		};
 
-		$pimple['entity_manager'] = function() {
+		$container['entity_manager'] = function() {
 			$entityManager = ( new StoreFactory( $this->getConnection(), $this->getVarPath() . '/doctrine_proxies' ) )
 				->getEntityManager();
 			if ( $this->addDoctrineSubscribers ) {
@@ -231,28 +245,28 @@ class FunFunFactory {
 			return $entityManager;
 		};
 
-		$pimple['subscription_repository'] = function() {
+		$container['subscription_repository'] = function() {
 			return new LoggingSubscriptionRepository(
 				new DoctrineSubscriptionRepository( $this->getEntityManager() ),
 				$this->getLogger()
 			);
 		};
 
-		$pimple['donation_repository'] = function() {
+		$container['donation_repository'] = function() {
 			return new LoggingDonationRepository(
 				new DoctrineDonationRepository( $this->getEntityManager() ),
 				$this->getLogger()
 			);
 		};
 
-		$pimple['membership_application_repository'] = function() {
+		$container['membership_application_repository'] = function() {
 			return new LoggingApplicationRepository(
 				new DoctrineApplicationRepository( $this->getEntityManager() ),
 				$this->getLogger()
 			);
 		};
 
-		$pimple['comment_repository'] = function() {
+		$container['comment_repository'] = function() {
 			$finder = new LoggingCommentFinder(
 				new DoctrineCommentFinder( $this->getEntityManager() ),
 				$this->getLogger()
@@ -261,11 +275,11 @@ class FunFunFactory {
 			return $this->addProfilingDecorator( $finder, 'CommentFinder' );
 		};
 
-		$pimple['mail_validator'] = function() {
+		$container['mail_validator'] = function() {
 			return new EmailValidator( new InternetDomainNameValidator() );
 		};
 
-		$pimple['subscription_validator'] = function() {
+		$container['subscription_validator'] = function() {
 			return new SubscriptionValidator(
 				$this->getEmailValidator(),
 				$this->newTextPolicyValidator( 'fields' ),
@@ -274,19 +288,19 @@ class FunFunFactory {
 			);
 		};
 
-		$pimple['template_name_validator'] = function() {
+		$container['template_name_validator'] = function() {
 			return new TemplateNameValidator( $this->getSkinTwig() );
 		};
 
-		$pimple['contact_validator'] = function() {
+		$container['contact_validator'] = function() {
 			return new GetInTouchValidator( $this->getEmailValidator() );
 		};
 
-		$pimple['greeting_generator'] = function() {
+		$container['greeting_generator'] = function() {
 			return new GreetingGenerator();
 		};
 
-		$pimple['translator'] = function() {
+		$container['translator'] = function() {
 			$translationFactory = new TranslationFactory();
 			$loaders = [
 				'json' => $translationFactory->newJsonLoader()
@@ -302,7 +316,7 @@ class FunFunFactory {
 		};
 
 		// In the future, this could be locale-specific or filled from a DB table
-		$pimple['honorifics'] = function() {
+		$container['honorifics'] = function() {
 			return new Honorifics( [
 				'' => 'Kein Titel',
 				'Dr.' => 'Dr.',
@@ -311,7 +325,7 @@ class FunFunFactory {
 			] );
 		};
 
-		$pimple['twig'] = function() {
+		$container['twig'] = function() {
 			$config = $this->config['twig'];
 			$config['loaders']['filesystem']['template-dir'] = 'skins/' . $this->getSkinSettings()->getSkin() . '/templates';
 
@@ -344,7 +358,7 @@ class FunFunFactory {
 			return $configurator->getEnvironment( $this->pimple['skin_twig_environment'], $loaders, $extensions, $filters, $functions );
 		};
 
-		$pimple['mailer_twig'] = function() {
+		$container['mailer_twig'] = function() {
 			$twigFactory = $this->newTwigFactory( $this->config['mailer-twig'] );
 			$configurator = $twigFactory->newTwigEnvironmentConfigurator();
 
@@ -378,7 +392,7 @@ class FunFunFactory {
 			return $configurator->getEnvironment( $twigEnvironment, $loaders, $extensions, $filters, $functions );
 		};
 
-		$pimple['messenger_suborganization'] = function() {
+		$container['messenger_suborganization'] = function() {
 			return new Messenger(
 				new Swift_MailTransport(),
 				$this->getSubOrganizationEmailAddress(),
@@ -386,7 +400,7 @@ class FunFunFactory {
 			);
 		};
 
-		$pimple['messenger_organization'] = function() {
+		$container['messenger_organization'] = function() {
 			return new Messenger(
 				new Swift_MailTransport(),
 				$this->getOrganizationEmailAddress(),
@@ -394,11 +408,11 @@ class FunFunFactory {
 			);
 		};
 
-		$pimple['confirmation-page-selector'] = function() {
+		$container['confirmation-page-selector'] = function() {
 			return new DonationConfirmationPageSelector( $this->config['confirmation-pages'] );
 		};
 
-		$pimple['paypal-payment-notification-verifier'] = function() {
+		$container['paypal-payment-notification-verifier'] = function() {
 			return new LoggingPaymentNotificationVerifier(
 				new PayPalPaymentNotificationVerifier(
 					new Client(),
@@ -409,7 +423,7 @@ class FunFunFactory {
 			);
 		};
 
-		$pimple['paypal-membership-fee-notification-verifier'] = function() {
+		$container['paypal-membership-fee-notification-verifier'] = function() {
 			return new LoggingPaymentNotificationVerifier(
 				new PayPalPaymentNotificationVerifier(
 					new Client(),
@@ -420,7 +434,7 @@ class FunFunFactory {
 			);
 		};
 
-		$pimple['credit-card-api-service'] = function() {
+		$container['credit-card-api-service'] = function() {
 			return new McpCreditCardService(
 				new TNvpServiceDispatcher(
 					'IMcpCreditcardService_v1_5',
@@ -431,44 +445,37 @@ class FunFunFactory {
 			);
 		};
 
-		$pimple['donation_token_generator'] = function() {
+		$container['donation_token_generator'] = function() {
 			return new RandomTokenGenerator(
 				$this->config['token-length'],
 				new \DateInterval( $this->config['token-validity-timestamp'] )
 			);
 		};
 
-		$pimple['membership_token_generator'] = function() {
-			return new RandomMembershipTokenGenerator(
-				$this->config['token-length'],
-				new \DateInterval( $this->config['token-validity-timestamp'] )
-			);
-		};
-
-		$pimple['page_cache'] = function() {
+		$container['page_cache'] = function() {
 			return new VoidCache();
 		};
 
-		$pimple['rendered_page_cache'] = function() {
+		$container['rendered_page_cache'] = function() {
 			return new VoidCache();
 		};
 
-		$pimple['page_view_tracker'] = function () {
+		$container['page_view_tracker'] = function () {
 			return new PageViewTracker( $this->newServerSideTracker(), $this->config['piwik']['siteUrlBase'] );
 		};
 
-		$pimple['cachebusting_fileprefixer'] = function () {
+		$container['cachebusting_fileprefixer'] = function () {
 			return new FilePrefixer( $this->getFilePrefix() );
 		};
 
-		$pimple['content_page_selector'] = function () {
+		$container['content_page_selector'] = function () {
 			$json = (new SimpleFileFetcher())->fetchFile( $this->getI18nDirectory() . '/data/pages.json' );
 			$config = json_decode( $json, true ) ?? [];
 
 			return new PageSelector( $config );
 		};
 
-		$pimple['content_provider'] = function () {
+		$container['content_provider'] = function () {
 			return new ContentProvider( [
 				'content_path' => $this->getI18nDirectory(),
 				'cache' => $this->config['twig']['enable-cache'] ? $this->getCachePath() . '/content' : false,
@@ -478,16 +485,16 @@ class FunFunFactory {
 			] );
 		};
 
-		$pimple['payment-delay-calculator'] = function() {
+		$container['payment-delay-calculator'] = function() {
 			return new DefaultPaymentDelayCalculator( $this->getPaymentDelayInDays() );
 		};
 
-		$pimple['sofort-client'] = function () {
+		$container['sofort-client'] = function () {
 			$config = $this->config['sofort'];
 			return new SofortClient( $config['config-key'] );
 		};
 
-		$pimple['cookie-builder'] = function (): CookieBuilder {
+		$container['cookie-builder'] = function (): CookieBuilder {
 			return new CookieBuilder(
 				$this->config['cookie']['expiration'],
 				$this->config['cookie']['path'],
@@ -499,16 +506,14 @@ class FunFunFactory {
 			);
 		};
 
-		$pimple['skin-settings'] = function (): SkinSettings {
+		$container['skin-settings'] = function (): SkinSettings {
 			$config = $this->config['skin'];
 			return new SkinSettings( $config['options'], $config['default'], $config['cookie-lifetime'] );
 		};
 
-		$pimple['payment-types-settings'] = function (): PaymentTypesSettings {
+		$container['payment-types-settings'] = function (): PaymentTypesSettings {
 			return new PaymentTypesSettings( $this->config['payment-types'] );
 		};
-
-		return $pimple;
 	}
 
 	public function getConnection(): Connection {
@@ -1061,7 +1066,7 @@ class FunFunFactory {
 	}
 
 	public function getMembershipTokenGenerator(): MembershipTokenGenerator {
-		return $this->pimple['membership_token_generator'];
+		return $this->pimple['fundraising.membership.application.token_generator'];
 	}
 
 	public function newDonationConfirmationPresenter( string $templateName = 'Donation_Confirmation.html.twig' ): DonationConfirmationHtmlPresenter {
@@ -1161,15 +1166,21 @@ class FunFunFactory {
 	private function newMembershipApplicationAuthorizer(
 		string $updateToken = null, string $accessToken = null ): ApplicationAuthorizer {
 
-		return new DoctrineApplicationAuthorizer(
-			$this->getEntityManager(),
-			$updateToken,
-			$accessToken
-		);
+		$this->pimple['fundraising.membership.application.authorizer.update_token'] = $updateToken;
+		$this->pimple['fundraising.membership.application.authorizer.access_token'] = $accessToken;
+		return $this->pimple['fundraising.membership.application.authorizer'];
+	}
+
+	public function setMembershipApplicationRepository( ApplicationRepository $applicationRepository ): void {
+		$this->pimple['membership_application_repository'] = $applicationRepository;
 	}
 
 	public function getMembershipApplicationRepository(): ApplicationRepository {
 		return $this->pimple['membership_application_repository'];
+	}
+
+	public function setMembershipApplicationAuthorizerClass( string $class ): void {
+		$this->pimple['fundraising.membership.application.authorizer.class'] = $class;
 	}
 
 	private function newCancelMembershipApplicationMailer(): TemplateMailerInterface {
@@ -1344,7 +1355,7 @@ class FunFunFactory {
 	}
 
 	public function setMembershipTokenGenerator( MembershipTokenGenerator $tokenGenerator ): void {
-		$this->pimple['membership_token_generator'] = $tokenGenerator;
+		$this->pimple['fundraising.membership.application.token_generator'] = $tokenGenerator;
 	}
 
 	public function disableDoctrineSubscribers(): void {

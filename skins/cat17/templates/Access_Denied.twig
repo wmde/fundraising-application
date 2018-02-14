@@ -9,7 +9,7 @@
                 <h1>{$ 'access_denied_header' | trans $}</h1>
 
                 <p>
-                    {$ message | default( 'access_denied' ) | trans $}
+                    {$ message | default( 'access_denied' ) | trans | raw $}
                 </p>
 
                 <p>

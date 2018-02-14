@@ -121,7 +121,7 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 	}
 
 	public function presentApplicationWasAnonymized(): void {
-		$this->html = 'Membership application was anonymized'; // TODO
+		$this->exception = new AccessDeniedException( 'access_denied_membership_confirmation_anonymized' );
 	}
 
 	public function presentAccessViolation(): void {
@@ -129,7 +129,7 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 	}
 
 	public function presentTechnicalError( string $message ): void {
-		$this->html = $message; // TODO
+		$this->exception = new \RuntimeException( $message );
 	}
 
 }
