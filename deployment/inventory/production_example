@@ -42,8 +42,5 @@ build_dir = /tmp/fundraising-deploy-production
 # Branch name from which to check out
 build_branch = master
 
-# Set to "no" if you want to install the development environment
-composer_no_dev = yes
-
 # vi: ft=dosini
 

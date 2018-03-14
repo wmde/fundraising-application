@@ -11,16 +11,38 @@
   git: repo=https://github.com/wmde/FundraisingFrontend.git dest={{ build_dir }} version={{ build_branch }} force=yes
 
 - name: Install PHP dependencies
-  composer: command=install working_dir={{ build_dir }} no_dev={{ composer_no_dev }} optimize_autoloader=yes
+  docker_container:
+    name: composer
+    image: composer
+    detach: no
+    cleanup: yes
+    user: "{{ ansible_user_uid }}:{{ ansible_user_gid }}"
+    command: install --no-dev --ignore-platform-reqs --prefer-dist --optimize-autoloader
+    volumes:
+      - "{{ ansible_user_dir }}/.composer:/tmp"
+      - "{{ build_dir }}:/app"
 
-- name: Install JavaScript dependencies
-  npm: path={{ build_dir }}
+- name: Compile the assets inside a Docker image
+  docker_image:
+    name: fundraising_frontend_node_build
+    dockerfile: "{{ build_dir }}/deployment/build-frontend-assets/Dockerfile"
+    path: "{{ build_dir }}"
+    buildargs:
+      ASSET_USER: "{{ ansible_user_uid }}"
+      ASSET_GROUP: "{{ ansible_user_gid }}"
 
-- name: Build all skin assets
-  command: npm run build-assets chdir={{ build_dir }}
-
-- name: Copy all skin assets to web-accessible folder
-  command: npm run copy-assets chdir={{ build_dir }}
+- name: Copy compiled Javascript to web folder
+  docker_container:
+    name: npm_build
+    image: fundraising_frontend_node_build
+    detach: no
+    working_dir: /app
+    user: "{{ ansible_user_uid }}:{{ ansible_user_gid }}"
+    command: "npm run copy-assets"
+    env:
+      NO_UPDATE_NOTIFIER: 1
+    volumes:
+      - "{{ build_dir }}/web:/app/web"
 
 - name: Create tarball
   shell: tar -czf {{ build_dir }}.tar.gz --exclude=".git" --exclude=node_modules -C {{ build_dir }} . warn=no
