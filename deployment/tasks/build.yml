@@ -22,19 +22,46 @@
       - "{{ ansible_user_dir }}/.composer:/tmp"
       - "{{ build_dir }}:/app"
 
-- name: Compile the assets inside a Docker image
-  docker_image:
-    name: fundraising_frontend_node_build
-    dockerfile: "{{ build_dir }}/deployment/build-frontend-assets/Dockerfile"
-    path: "{{ build_dir }}"
-    buildargs:
-      ASSET_USER: "{{ ansible_user_uid }}"
-      ASSET_GROUP: "{{ ansible_user_gid }}"
+- name: Create fake home for npm install as non-root
+  file:
+    path: "{{ build_dir }}/var/npmbuild/home"
+    state: directory
+
+- name: Create passwd file for npm install as non-root
+  copy:
+    dest: "{{ build_dir }}/var/npmbuild/passwd"
+    content: "node:x:{{ ansible_user_uid }}:{{ ansible_user_gid }}::/var/nodehome:/bin/bash"
+
+- name: Install npm packages
+  docker_container:
+    name: npm_install
+    image: "node:8"
+    detach: no
+    working_dir: /app
+    user: "{{ ansible_user_uid }}:{{ ansible_user_gid }}"
+    command: "npm install"
+    volumes:
+      - "{{ build_dir }}:/app:delegated"
+      - "{{ build_dir }}/var/npmbuild/passwd:/etc/passwd"
+      - "{{ build_dir }}/var/npmbuild/home:/var/nodehome"
 
 - name: Copy compiled Javascript to web folder
   docker_container:
     name: npm_build
-    image: fundraising_frontend_node_build
+    image: "node:8"
+    detach: no
+    working_dir: /app
+    user: "{{ ansible_user_uid }}:{{ ansible_user_gid }}"
+    command: "npm run build-assets"
+    env:
+      NO_UPDATE_NOTIFIER: 1
+    volumes:
+      - "{{ build_dir }}:/app"
+
+- name: Copy compiled Javascript to web folder
+  docker_container:
+    name: npm_build
+    image: "node:8"
     detach: no
     working_dir: /app
     user: "{{ ansible_user_uid }}:{{ ansible_user_gid }}"
@@ -42,7 +69,7 @@
     env:
       NO_UPDATE_NOTIFIER: 1
     volumes:
-      - "{{ build_dir }}/web:/app/web"
+      - "{{ build_dir }}:/app"
 
 - name: Create tarball
   shell: tar -czf {{ build_dir }}.tar.gz --exclude=".git" --exclude=node_modules -C {{ build_dir }} . warn=no
