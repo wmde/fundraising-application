@@ -11,65 +11,35 @@
   git: repo=https://github.com/wmde/FundraisingFrontend.git dest={{ build_dir }} version={{ build_branch }} force=yes
 
 - name: Install PHP dependencies
-  docker_container:
-    name: composer
-    image: composer
-    detach: no
-    cleanup: yes
-    user: "{{ ansible_user_uid }}:{{ ansible_user_gid }}"
-    command: install --no-dev --ignore-platform-reqs --prefer-dist --optimize-autoloader
-    volumes:
-      - "{{ ansible_user_dir }}/.composer:/tmp"
-      - "{{ build_dir }}:/app"
+  make:
+    chdir: "{{ build_dir }}"
+    target: install-php
+    params:
+      COMPOSER_FLAGS: "--no-dev --prefer-dist --optimize-autoloader --no-progress --no-interaction"
+      DOCKER_FLAGS: ""
+      BUILD_DIR: "{{ build_dir }}"
 
 - name: Create fake home for npm install as non-root
   file:
-    path: "{{ build_dir }}/var/npmbuild/home"
+    path: "{{ build_dir }}/var/npmbuild"
     state: directory
 
-- name: Create passwd file for npm install as non-root
-  copy:
-    dest: "{{ build_dir }}/var/npmbuild/passwd"
-    content: "node:x:{{ ansible_user_uid }}:{{ ansible_user_gid }}::/var/nodehome:/bin/bash"
-
 - name: Install npm packages
-  docker_container:
-    name: npm_install
-    image: "node:8"
-    detach: no
-    working_dir: /app
-    user: "{{ ansible_user_uid }}:{{ ansible_user_gid }}"
-    command: "npm install"
-    volumes:
-      - "{{ build_dir }}:/app:delegated"
-      - "{{ build_dir }}/var/npmbuild/passwd:/etc/passwd"
-      - "{{ build_dir }}/var/npmbuild/home:/var/nodehome"
+  make:
+    chdir: "{{ build_dir }}"
+    target: install-js
+    params:
+      TMPDIR: "{{ build_dir }}/var/npmbuild"
+      DOCKER_FLAGS: ""
+      BUILD_DIR: "{{ build_dir }}"
 
-- name: Copy compiled Javascript to web folder
-  docker_container:
-    name: npm_build
-    image: "node:8"
-    detach: no
-    working_dir: /app
-    user: "{{ ansible_user_uid }}:{{ ansible_user_gid }}"
-    command: "npm run build-assets"
-    env:
-      NO_UPDATE_NOTIFIER: 1
-    volumes:
-      - "{{ build_dir }}:/app"
-
-- name: Copy compiled Javascript to web folder
-  docker_container:
-    name: npm_build
-    image: "node:8"
-    detach: no
-    working_dir: /app
-    user: "{{ ansible_user_uid }}:{{ ansible_user_gid }}"
-    command: "npm run copy-assets"
-    env:
-      NO_UPDATE_NOTIFIER: 1
-    volumes:
-      - "{{ build_dir }}:/app"
+- name: Compile & copy Javascript to web folder
+  make:
+    chdir: "{{ build_dir }}"
+    target: js
+    params:
+      BUILD_DIR: "{{ build_dir }}"
+      DOCKER_FLAGS: ""
 
 - name: Create tarball
   shell: tar -czf {{ build_dir }}.tar.gz --exclude=".git" --exclude=node_modules -C {{ build_dir }} . warn=no
