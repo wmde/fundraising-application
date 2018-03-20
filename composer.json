@@ -139,6 +139,9 @@
 			"@validate-app-config",
 			"@stan"
 		],
+		"fix": [
+			"vendor/bin/phpcbf"
+		],
 		"phpcs": [
 			"vendor/bin/phpcs"
 		],
