@@ -1,7 +1,7 @@
 .page-membership {
 	.introduction {
 		p.h1 {
-            margin-bottom: 50px;
+			margin-bottom: 50px;
 			@include bkp(sm) {
 				width: 80%;
 			}
@@ -9,18 +9,14 @@
 		p.h1 + a {
 			margin-top: 40px;
 		}
-        .shadow-top {
-            margin-top: 50px;
-            padding-top: 30px;
-            @include bkp(sm) {
-                box-shadow: 0 -4px 11px -7px rgba(0, 0, 0, 0.65);
-            }
-        }
+		.shadow-top {
+			margin-top: 50px;
+			padding-top: 30px;
+			@include bkp(sm) {
+				box-shadow: 0 -4px 11px -7px rgba(0, 0, 0, 0.65);
+			}
+		}
 	}
-
-    #form-membership {
-
-    }
 
 	#payment-method {
 		min-height: 285px;
@@ -31,9 +27,9 @@
 		.wrap-field {
 
 			margin-bottom: 40px;
-            &:after {
-                border-color: transparent;
-            }
+			&:after {
+				border-color: transparent;
+			}
 		}
 		.wrap-input {
 			//border-bottom: 1px solid $gray-light;
@@ -41,7 +37,7 @@
 		.info-text.opened {
 			border-left: none;
 			top: 20px;
-            padding-left: 35px;
+			padding-left: 35px;
 
 		}
 		.info-text.opened[data-info="aktive"] {
@@ -93,7 +89,7 @@
 		}
 		a {
 			display: block;
-			text-aling: center;
+			text-align: center;
 		}
 	}
 	.state-overview.state-bar-lateral li.completed a {
@@ -203,4 +199,14 @@
 		}
 	}
 }
+.external-link {
+  margin-top: 90px;
+	@include themify($themes) {
+		border-bottom: themed('border1pxSecondary');
+	}
+	i {
+		float: right;
+	}
 
+
+}
