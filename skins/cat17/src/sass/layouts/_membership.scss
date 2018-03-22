@@ -204,11 +204,12 @@
 	@include themify($themes) {
 		border-bottom: themed('border1pxSecondary');
 	}
+}
 .side {
 	diplsay: inline;
 	}
 .right {
 	float: right;
-	}
-
 }
+
+
