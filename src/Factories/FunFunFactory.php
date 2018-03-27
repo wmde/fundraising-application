@@ -82,6 +82,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\ProfilerDataCollector;
 use WMDE\Fundraising\Frontend\Infrastructure\ProfilingDecoratorBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\ServerSideTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Validation\IsCustomAmountValidator;
 use WMDE\Fundraising\MembershipContext\Infrastructure\TemplateMailerInterface;
 use WMDE\Fundraising\DonationContext\Infrastructure\TemplateMailerInterface as DonationTemplateMailerInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
@@ -1225,7 +1226,11 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function newDonationFormPresenter(): DonationFormPresenter {
-		return new DonationFormPresenter( $this->getDonationFormTemplate(), $this->newAmountFormatter() );
+		return new DonationFormPresenter(
+			$this->getDonationFormTemplate(),
+			$this->newAmountFormatter(),
+			$this->newIsCustomDonationAmountValidator()
+		);
 	}
 
 	private function getDonationFormTemplate(): TwigTemplate {
@@ -1570,5 +1575,9 @@ class FunFunFactory implements ServiceProviderInterface {
 				'max' => Euro::newFromInt( $this->config['donation-maximum-amount'] )->getEuroCents()
 			] )
 		] );
+	}
+
+	public function newIsCustomDonationAmountValidator(): IsCustomAmountValidator {
+		return new IsCustomAmountValidator( $this->config['preset-amounts']['donation'] );
 	}
 }

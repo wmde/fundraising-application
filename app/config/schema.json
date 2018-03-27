@@ -864,6 +864,20 @@
         "default",
         "cookie-lifetime"
       ]
+    },
+    "preset-amounts": {
+      "type": "object",
+      "title": "Preset transaction amounts configuration",
+      "properties": {
+        "donations": {
+          "type": "array",
+          "title": "List of possible amounts in cents",
+          "description": "A subset of skins present in /skins",
+          "items": {
+            "type": "integer"
+          }
+        }
+      }
     }
   },
   "additionalProperties": false,
