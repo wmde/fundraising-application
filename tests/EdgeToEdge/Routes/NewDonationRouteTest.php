@@ -30,6 +30,11 @@ class NewDonationRouteTest extends WebRouteTestCase {
 			'Amount: ' . $expected['formattedAmount'] . "\n",
 			$client->getResponse()->getContent()
 		);
+
+		$this->assertContains(
+			'isCustomAmount: ' . ( $expected['isCustomAmount'] ? "1" : "" ) . "\n",
+			$client->getResponse()->getContent()
+		);
 	}
 
 	public function paymentInputProvider(): array {
@@ -42,7 +47,8 @@ class NewDonationRouteTest extends WebRouteTestCase {
 				],
 				[
 					'validity' => 'valid',
-					'formattedAmount' => '100,00'
+					'formattedAmount' => '100,00',
+					'isCustomAmount' => false
 				]
 			],
 			[
@@ -53,7 +59,8 @@ class NewDonationRouteTest extends WebRouteTestCase {
 				],
 				[
 					'validity' => 'valid',
-					'formattedAmount' => '123,45'
+					'formattedAmount' => '123,45',
+					'isCustomAmount' => true
 				]
 			],
 			[
@@ -64,7 +71,8 @@ class NewDonationRouteTest extends WebRouteTestCase {
 				],
 				[
 					'validity' => 'valid',
-					'formattedAmount' => '8,70'
+					'formattedAmount' => '8,70',
+					'isCustomAmount' => true
 				]
 			],
 			[
@@ -75,7 +83,8 @@ class NewDonationRouteTest extends WebRouteTestCase {
 				],
 				[
 					'validity' => 'invalid',
-					'formattedAmount' => '0,00'
+					'formattedAmount' => '0,00',
+					'isCustomAmount' => false
 				]
 			],
 			[
@@ -86,7 +95,8 @@ class NewDonationRouteTest extends WebRouteTestCase {
 				],
 				[
 					'validity' => 'invalid',
-					'formattedAmount' => '100,00'
+					'formattedAmount' => '100,00',
+					'isCustomAmount' => false
 				]
 			]
 		];
