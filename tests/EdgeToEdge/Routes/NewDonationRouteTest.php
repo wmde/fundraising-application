@@ -32,7 +32,7 @@ class NewDonationRouteTest extends WebRouteTestCase {
 		);
 
 		$this->assertContains(
-			'isCustomAmount: ' . ( $expected['isCustomAmount'] ? "1" : "" ) . "\n",
+			'isCustomAmount: ' . ( $expected['isCustomAmount'] ? '1' : '' ) . "\n",
 			$client->getResponse()->getContent()
 		);
 	}
