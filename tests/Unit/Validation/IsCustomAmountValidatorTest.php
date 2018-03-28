@@ -11,19 +11,19 @@ use PHPUnit\Framework\TestCase;
 class IsCustomAmountValidatorTest extends TestCase {
 
 	public function testValidate() {
-		$validator = new IsCustomAmountValidator( [ 500, 1500, 2500, 5000, 7500, 10000, 25000, 30000 ] );
+		$validator = new IsCustomAmountValidator( [ Euro::newFromCents( 500 ), Euro::newFromCents( 1500 ), Euro::newFromCents( 2500 ) ] );
 		$amount = Euro::newFromCents( 500 );
 		$this->assertFalse( $validator->validate( $amount ) );
 	}
 
 	public function testValidateWithZero() {
-		$validator = new IsCustomAmountValidator( [ 500, 1500, 2500, 5000, 7500, 10000, 25000, 30000 ] );
+		$validator = new IsCustomAmountValidator( [ Euro::newFromCents( 500 ), Euro::newFromCents( 1500 ), Euro::newFromCents( 2500 ) ] );
 		$amount = Euro::newFromCents( 0 );
 		$this->assertFalse( $validator->validate( $amount ) );
 	}
 
 	public function testValidateWithRandomCommaAmount_returnsTrue() {
-		$validator = new IsCustomAmountValidator( [ 500, 1500, 2500, 5000, 7500, 10000, 25000, 30000 ] );
+		$validator = new IsCustomAmountValidator( [ Euro::newFromCents( 500 ), Euro::newFromCents( 1500 ), Euro::newFromCents( 2500 ) ] );
 		$amount = Euro::newFromCents( 4711 );
 		$this->assertTrue( $validator->validate( $amount ) );
 	}

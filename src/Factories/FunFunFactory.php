@@ -1569,7 +1569,9 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function getPresetAmountsSettings(): array {
-		return $this->config['preset-amounts']['donation'];
+		return array_map( function ( int $amount ) {
+			return Euro::newFromCents( $amount );
+		}, $this->config['preset-amounts']['donation'] );
 	}
 
 	public function newDonationAmountConstraint(): ValidatorConstraint {

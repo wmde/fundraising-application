@@ -1,0 +1,8 @@
+{% for amount in presetAmounts if amount.getEuroCents() != 30000 %}
+    <li>
+        <input type="radio" class="amount-select" id="form{$ formId $}-amount-{$ loop.index $}" name="betrag_auswahl" value="{$ amount.getEuroFloat() | number_format( 2, ',', '' ) $}" title="{$ amount.getEuroFloat() | number_format( 0 ) $}&euro;">
+        <label for="form{$ formId $}-amount-{$ loop.index $}">
+            {$ amount.getEuroFloat() | number_format( 0 ) $}&euro;
+        </label>
+    </li>
+{% endfor %}

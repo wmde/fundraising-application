@@ -10,7 +10,7 @@ class IsCustomAmountValidator {
 	private $validAmounts;
 	/**
 	 * IsCustomAmountValidator constructor.
-	 * @param int[] $validAmounts
+	 * @param Euro[] $validAmounts
 	 */
 	public function __construct( array $validAmounts ) {
 		$this->validAmounts = $validAmounts;
@@ -20,6 +20,6 @@ class IsCustomAmountValidator {
 		if ( $amount->getEuroCents() === 0 ) {
 			return false;
 		}
-		return !in_array( $amount->getEuroCents(), $this->validAmounts );
+		return !in_array( $amount, $this->validAmounts );
 	}
 }
