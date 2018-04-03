@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 class NewDonationRouteTest extends WebRouteTestCase {
 
 	/** @dataProvider paymentInputProvider */
-	public function testGivenPaymentInput_paymentDataIsInitiallyValidated( array $validPaymentInput, string $expectedValidity ): void {
+	public function testGivenPaymentInput_paymentDataIsInitiallyValidated( array $validPaymentInput, array $expected ): void {
 		$client = $this->createClient();
 		$client->request(
 			'POST',
@@ -22,7 +22,17 @@ class NewDonationRouteTest extends WebRouteTestCase {
 		);
 
 		$this->assertContains(
-			'Payment data: ' . $expectedValidity,
+			'Payment data: ' . $expected['validity'],
+			$client->getResponse()->getContent()
+		);
+
+		$this->assertContains(
+			'Amount: ' . $expected['formattedAmount'] . "\n",
+			$client->getResponse()->getContent()
+		);
+
+		$this->assertContains(
+			'isCustomAmount: ' . ( $expected['isCustomAmount'] ? '1' : '' ) . "\n",
 			$client->getResponse()->getContent()
 		);
 	}
@@ -35,7 +45,11 @@ class NewDonationRouteTest extends WebRouteTestCase {
 					'zahlweise' => 'BEZ',
 					'periode' => '0'
 				],
-				'valid'
+				[
+					'validity' => 'valid',
+					'formattedAmount' => '100,00',
+					'isCustomAmount' => false
+				]
 			],
 			[
 				[
@@ -43,7 +57,23 @@ class NewDonationRouteTest extends WebRouteTestCase {
 					'zahlweise' => 'PPL',
 					'periode' => 6
 				],
-				'valid'
+				[
+					'validity' => 'valid',
+					'formattedAmount' => '123,45',
+					'isCustomAmount' => true
+				]
+			],
+			[
+				[
+					'amountGiven' => '8.70',
+					'zahlweise' => 'BEZ',
+					'periode' => '0'
+				],
+				[
+					'validity' => 'valid',
+					'formattedAmount' => '8,70',
+					'isCustomAmount' => true
+				]
 			],
 			[
 				[
@@ -51,7 +81,11 @@ class NewDonationRouteTest extends WebRouteTestCase {
 					'zahlweise' => 'PPL',
 					'periode' => 6
 				],
-				'invalid'
+				[
+					'validity' => 'invalid',
+					'formattedAmount' => '0,00',
+					'isCustomAmount' => false
+				]
 			],
 			[
 				[
@@ -59,7 +93,11 @@ class NewDonationRouteTest extends WebRouteTestCase {
 					'zahlweise' => 'BTC',
 					'periode' => 6
 				],
-				'invalid'
+				[
+					'validity' => 'invalid',
+					'formattedAmount' => '100,00',
+					'isCustomAmount' => false
+				]
 			]
 		];
 	}

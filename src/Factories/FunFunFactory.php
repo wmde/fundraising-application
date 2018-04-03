@@ -82,6 +82,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\ProfilerDataCollector;
 use WMDE\Fundraising\Frontend\Infrastructure\ProfilingDecoratorBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\ServerSideTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Validation\IsCustomAmountValidator;
 use WMDE\Fundraising\MembershipContext\Infrastructure\TemplateMailerInterface;
 use WMDE\Fundraising\DonationContext\Infrastructure\TemplateMailerInterface as DonationTemplateMailerInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
@@ -1225,14 +1226,19 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function newDonationFormPresenter(): DonationFormPresenter {
-		return new DonationFormPresenter( $this->getDonationFormTemplate(), $this->newAmountFormatter() );
+		return new DonationFormPresenter(
+			$this->getDonationFormTemplate(),
+			$this->newAmountFormatter(),
+			$this->newIsCustomDonationAmountValidator()
+		);
 	}
 
 	private function getDonationFormTemplate(): TwigTemplate {
 		// TODO make the template name dependent on the 'form' value from the HTTP POST request
 		// (we need different form pages for A/B testing)
 		return $this->getLayoutTemplate( 'Donation_Form.html.twig', [
-			'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForDonation()
+			'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForDonation(),
+			'presetAmounts' => $this->getPresetAmountsSettings()
 		] );
 	}
 
@@ -1562,6 +1568,15 @@ class FunFunFactory implements ServiceProviderInterface {
 		return $this->pimple['payment-types-settings'];
 	}
 
+	/**
+	 * @return Euro[]
+	 */
+	public function getPresetAmountsSettings(): array {
+		return array_map( function ( int $amount ) {
+			return Euro::newFromCents( $amount );
+		}, $this->config['preset-amounts']['donations'] );
+	}
+
 	public function newDonationAmountConstraint(): ValidatorConstraint {
 		return new RequiredConstraint( [
 			new TypeConstraint( [ 'type' => 'digit' ] ),
@@ -1570,5 +1585,9 @@ class FunFunFactory implements ServiceProviderInterface {
 				'max' => Euro::newFromInt( $this->config['donation-maximum-amount'] )->getEuroCents()
 			] )
 		] );
+	}
+
+	public function newIsCustomDonationAmountValidator(): IsCustomAmountValidator {
+		return new IsCustomAmountValidator( $this->getPresetAmountsSettings() );
 	}
 }
