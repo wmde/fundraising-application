@@ -871,13 +871,15 @@
       "properties": {
         "donations": {
           "type": "array",
-          "title": "List of possible amounts in cents",
-          "description": "A subset of skins present in /skins",
+          "title": "List of possible donation amounts in cents",
+          "description": "These amounts will be selectable by the user. Any amount that's not in this list is considered a 'custom amount'.",
           "items": {
             "type": "integer"
           }
         }
-      }
+      },
+      "additionalProperties": false,
+      "required": [ "donations" ]
     }
   },
   "additionalProperties": false,
@@ -906,6 +908,7 @@
     "translation",
     "payment-types",
     "cookie",
-    "skin"
+    "skin",
+    "preset-amounts"
   ]
 }
