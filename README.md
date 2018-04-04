@@ -179,8 +179,11 @@ This codebase follows a modified version of [The Clean Architecture](https://8th
 combined with a partial application of [Domain Driven Design](https://en.wikipedia.org/wiki/Domain-driven_design).
 The high level structure is represented by [this diagram](https://commons.wikimedia.org/wiki/File:Clean_Architecture_%2B_DDD,_full_application.svg).
 
-We moved the Donation Context into [it's own git repository](https://github.com/wmde/fundraising-donations) as first step
-into putting each Bounded Context into a dedicated git repository.
+We moved the Bounded Contexts into their own repositories:
+
+* [Donation Context](https://github.com/wmde/fundraising-donations)
+* [Membership Context](https://github.com/wmde/fundraising-memberships)
+* [Payment Context](https://github.com/wmde/fundraising-payments)
 
 ### Production code layout
 
