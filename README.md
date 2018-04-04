@@ -49,19 +49,21 @@ with the following content
     }
 
 
-## Development
+## Docker development environment
 
 System dependencies:
 
-* docker & docker-compose
-* Node.js and npm (only needed in development for compiling the JavaScript and running the JavaScript tests)
+* Docker & docker-compose
 
 Get a clone of our git repository and then run these commands in it:
-
 
 ### Install PHP dependencies
 
     docker run -it --rm --user $(id -u):$(id -g) -v "$PWD":/app -v ~/.composer:/composer -w /app composer composer install --ignore-platform-reqs
+    
+### Copy the example configuration
+
+    cp build/app/config.prod.json app/config
 
 ### (Re-)Create Database
 
@@ -72,7 +74,7 @@ Get a clone of our git repository and then run these commands in it:
 
     make npm-install
     docker run -it --rm --user $(id -u):$(id -g) -v "$PWD":/data digitallyseamless/nodejs-bower-grunt npm run build-assets
-    docker run -it --rm --user $(id -u):$(id -g) -v "$PWD":/data digitallyseamless/nodejs-bower-grunt npm run build-js
+    docker run -it --rm --user $(id -u):$(id -g) -v "$PWD":/data digitallyseamless/nodejs-bower-grunt npm run copy-assets
 
 ### Running the application
 
