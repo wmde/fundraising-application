@@ -61,7 +61,7 @@ Get a clone of our git repository and then run these commands in it:
 
 ### Install PHP dependencies
 
-    docker run -it --rm --user $(id -u):$(id -g) -v "$PWD":/app -v ~/.composer:/composer -w /app composer composer install
+    docker run -it --rm --user $(id -u):$(id -g) -v "$PWD":/app -v ~/.composer:/composer -w /app composer composer install --ignore-platform-reqs
 
 ### (Re-)Create Database
 
