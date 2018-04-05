@@ -1568,10 +1568,13 @@ class FunFunFactory implements ServiceProviderInterface {
 		return $this->pimple['payment-types-settings'];
 	}
 
+	/**
+	 * @return Euro[]
+	 */
 	public function getPresetAmountsSettings(): array {
 		return array_map( function ( int $amount ) {
 			return Euro::newFromCents( $amount );
-		}, $this->config['preset-amounts']['donation'] );
+		}, $this->config['preset-amounts']['donations'] );
 	}
 
 	public function newDonationAmountConstraint(): ValidatorConstraint {
