@@ -47,7 +47,7 @@
 					</div>
 					<div class="col-xs-12 col-md-4">
 						<div class="external-link">
-							<a href="{$ membership_link_to_wmde_url $}" target="_blank">
+							<a href="{$ 'membership_link_to_wmde_url' | trans | e( 'html_attr' ) $}" target="_blank">
 								{$ 'membership_link_to_wmde' | trans $}
 								<div class="right"><i class="icon-new-tab"></i></div>
 							</a>
