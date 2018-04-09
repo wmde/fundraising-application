@@ -1,0 +1,22 @@
+[class^="icon-"], [class*=" icon-"] {
+  font-size: 24px;
+}
+.icon-payment-credit_card {
+  &:before {
+    // custom size compensation
+    font-size: 15px;
+  }
+}
+.icon-payment-paypal {
+  &:before {
+    // custom size compensation
+    font-size: 18px;
+  }
+}
+.icon-new-tab {
+  &:before {
+    // custom size compensation
+    font-size: 18px;
+  }
+}
+
