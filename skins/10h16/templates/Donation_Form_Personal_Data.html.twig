@@ -13,16 +13,17 @@
                             {% include 'payment_preset_amounts.html.twig' with { 'presetAmounts': presetAmounts, 'formId': 2 } only %}
 
                             <li class="amount-custom last no-margin">
-                                <div class="container" style="width: 100px;">
+                                <div class="container" style="width: 155px;">
                                     <input id="form2-amount-8" class="amount-input" name="amountCustom" type="text" value="" title="Betrag zwischen 1 und 99999,99 Euro; Komma als Dezimaltrenner">
                                     <label class="right top" for="form2-amount-8">&euro;</label>
                                 </div>
                             </li>
                             <input type="hidden" class="amount-hidden" name="betrag" value="" />
                         </ul>
-
-
-                        <ul class="f-left periode-list no-margin">
+                    </div>
+                    <div>
+                        <hr>
+                        <ul class="periode-list horizontal">
                             <li class="first">
                                 <input type="radio" id="form2-periode-1" name="intervalType" class="interval-type-select one-off" value="0" title="einmalig" >
                                 <label for="form2-periode-1">einmalig</label>

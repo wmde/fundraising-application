@@ -55,7 +55,7 @@ ul li { margin-bottom: 15px; }
 ul.horizontal li { display: inline-block; margin-right: 20px; margin-bottom: 0; }
 ul.horizontal li label { width: auto !important; }
 
-hr { color: #DDD; background: #DDD; border: none; height:1pt; margin: 25px 0; }
+hr { color: #DDD; background: #DDD; border: none; height: 1px; margin: 25px 0; }
 
 /* Tools */
 .hidden { display:block !important; border:0 !important; margin:0 !important; padding:0 !important; font-size:0 !important; line-height:0 !important; width:0 !important; height:0 !important; overflow:hidden !important; }
@@ -507,10 +507,9 @@ main { padding-top: 40px; padding-bottom: 100px; background: #f6f6f6; display: b
 #donation-amount .box-footer .right { right: 15px; }
 #donation-amount .box-footer .slide-toggle { color: #a5da9b; }
 #donation-amount .box-header { background: #daeefb; padding: 15px 15px; }
-#donation-amount .amount-list { width: 390px; border-right: 1px solid #FFF; margin-right: 30px; padding-top: 10px; }
+#donation-amount .amount-list { margin-right: 30px; padding-top: 10px; }
 #donation-amount .change-amount { background: #daeefb; padding-top: 25px; }
 #donation-amount .change-amount hr { background: #FFF; color: #FFF; }
-#donation-amount .periode-list { padding-top: 10px; }
 
 #personal-data .box-header { background: #64aadb; }
 #personal-data label { width: 175px; }
