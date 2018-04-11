@@ -50,7 +50,7 @@
 							<div class="wrap-amounts">
 								{% include 'partials/payment_preset_amounts.html.twig' with { 'presetAmounts': presetAmounts } %}
 
-								<div class="wrap-amount-typed field-grp" data-currency="€">
+								<div class="{% if initialFormValues.isCustomAmount %} filled {% endif %} wrap-amount-typed field-grp" data-currency="€">
 									<input type="text" id="amount-typed">
 								</div>
 								<span class="error-text">{$ 'form_amount_error' | trans $}</span>

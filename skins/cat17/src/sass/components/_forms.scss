@@ -183,6 +183,9 @@ label, input#amount-typed, .wrap-amount-typed:after{
 		.error-text {
 			display: block;
 		}
+		input#amount-typed {
+			background-color: red;
+		}
 	}
 }
 
