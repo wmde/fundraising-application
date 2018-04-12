@@ -1,5 +1,4 @@
-
-.info-text, .wrap-check, .info-text-bottom{
+.info-text, .wrap-check, .info-text-bottom {
     display: none;
 	&.opened {
         display:block;
@@ -15,178 +14,9 @@
 	@include bkp(lg) {
 		display: block;
 	}
-
 }
 
 form {
-	@include bkp(sm) {
-		margin-top: 60px;
-	}
-
-	section {
-		padding-top: 40px;
-
-		h2 {
-			margin-bottom: 25px;
-		}
-
-
-		#type-donor {
-			.info-text.opened {
-				height: auto;
-			}
-		}
-	}
-
-	section.donation-amount {
-		fieldset:not( :first-of-type ) {
-			margin-top: 25px;
-		}
-
-		.amount-qty {
-			div {
-				display: flex;
-				justify-content: space-between;
-				flex-wrap: wrap;
-				@media ( min-width: $screen-xs-min ) and ( max-width: $screen-xs-max ) {
-					margin: 0 -7px;
-				}
-			}
-			input[type=radio] {
-				position: absolute;
-				left: -99999px;
-				& + label {
-					//transition: all 500ms;
-				}
-
-				+ label:before {
-					//transtion: background 500ms;
-				}
-			}
-
-			label, input#amount-typed {
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				width: 100%;
-				height: 100%;
-				margin-bottom: 0;
-				//border: 2px solid $gray-light;
-			}
-
-			.wrap-radio {
-				position: relative;
-				width: 60px;
-				height: 60px;
-				max-width: 60px;
-
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				margin-bottom: 12px;
-
-				@media ( min-width: $screen-xs-min ) and ( max-width: $screen-xs-max ) {
-					margin-right: 7px;
-					margin-left: 7px;
-				}
-			}
-
-
-			.wrap-radio input[type=radio] + label:before {
-				content: "";
-				position: absolute;
-				top: 0;
-				left: 0;
-				bottom: 0;
-				right: 0;
-				border: 2px solid $gray-light;
-				z-index: -1;
-				background-color: transparent;
-				transition: background-color  500ms;
-			}
-			.wrap-radio input[type=radio] + label {
-				background-color: transparent;
-				transition: background-color  500ms;
-			}
-			.wrap-radio input[type=radio] + label:hover,
-			.wrap-radio input[type=radio]:checked + label{
-				color: white;
-					&:before {
-						@include themify($themes) {
-							background-color: themed('brandPrimary');
-						}
-						border: 2px solid $text-color;
-						background-color: $brand-primary;
-						box-shadow: inset 0 0 0 2px white;
-						color: white;
-					}
-			}
-
-            .wrap-amount-typed {
-                height: 60px;
-                width: 100%;
-                position: relative;
-                input {
-                    height: 56px;
-                    width: 100%;
-					padding-right: 25px;
-                    text-align: right;
-                }
-				@media ( min-width: $screen-xs-min ) and ( max-width: $screen-xs-max ) {
-					margin-right: 7px;
-					margin-left: 7px;
-				}
-                &.filled {
-                    border: 2px solid $text-color;
-                    background-color: $brand-primary;
-					@include themify($themes) {
-						background-color: themed('brandPrimary');
-					}
-                    color: white;
-                    input {
-						padding-right: 25px;
-						@include themify($themes) {
-							background-color: themed('brandPrimary');
-						}
-                        color: white;
-                       	border: 2px solid white;
-                        &:focus {
-                            border-bottom: 2px solid white;
-                            outline: none;
-                        }
-                    }
-                }
-				&:after {
-					content: attr( data-currency );
-					font-family: $font-main;
-					font-size: 12px;
-					position: absolute;
-					right: 10px;
-                    top: 50%;
-                    transform: translateY(-50%);
-				}
-            }
-			input#amount-typed:invalid {
-				box-shadow: none;
-				outline: none;
-			}
-
-
-            input[type=radio]:checked + label {
-                color: white;
-                position: relative;
-                &:before {
-                    content: "";
-                    position: absolute;
-                    left: 0;
-                    right: 0;
-                    top: 0;
-                    bottom: 0;
-                }
-            }
-		}
-
-	}
 	hr {
 		display: none;
 		@include bkp(sm) {
@@ -198,6 +28,151 @@ form {
 		@include bkp(md) {
 			box-shadow: none;
 		}
+	}
+	@include bkp(sm) {
+		margin-top: 60px;
+	}
+	section {
+		padding-top: 40px;
+		h2 {
+			margin-bottom: 25px;
+		}
+	}
+}
+
+.donation-data {
+	.info-text.opened {
+		height: auto;
+	}
+}
+
+.donation-amount {
+	fieldset:not( :first-of-type ) {
+		margin-top: 25px;
+	}
+	.amount-qty {
+		div {
+			display: flex;
+			justify-content: space-between;
+			flex-wrap: wrap;
+			@media (min-width: $screen-xs-min) and (max-width: $screen-xs-max) {
+				margin: 0 -7px;
+			}
+		}
+		input[type=radio] {
+			position: absolute;
+			left: -99999px;
+		}
+		label, .wrap-amount-typed input {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: 100%;
+			height: 100%;
+			margin-bottom: 0;
+		}
+		.wrap-radio {
+			position: relative;
+			width: 60px;
+			height: 60px;
+			max-width: 60px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			margin-bottom: 12px;
+			@media (min-width: $screen-xs-min) and (max-width: $screen-xs-max) {
+				margin-right: 7px;
+				margin-left: 7px;
+			}
+			input[type=radio] {
+				& + label {
+					background-color: transparent;
+					transition: background-color 500ms;
+					&:before {
+						content: "";
+						position: absolute;
+						top: 0;
+						left: 0;
+						bottom: 0;
+						right: 0;
+						border: 2px solid $gray-light;
+						z-index: -1;
+						background-color: transparent;
+						transition: background-color 500ms;
+					}
+				}
+				& + label:hover,
+				&:checked + label {
+					color: white;
+					&:before {
+						@include themify($themes) {
+							background-color: themed('brandPrimary');
+						}
+						border: 2px solid $text-color;
+						background-color: $brand-primary;
+						box-shadow: inset 0 0 0 2px white;
+						color: white;
+					}
+				}
+			}
+		}
+		input[type=radio]:checked + label {
+			color: white;
+			position: relative;
+			&:before {
+				content: "";
+				position: absolute;
+				left: 0;
+				right: 0;
+				top: 0;
+				bottom: 0;
+			}
+		}
+	}
+}
+
+.wrap-amount-typed {
+	height: 60px;
+	width: 100%;
+	position: relative;
+	input {
+		height: 56px;
+		width: 100%;
+		padding-right: 25px;
+		text-align: right;
+	}
+	@media ( min-width: $screen-xs-min ) and ( max-width: $screen-xs-max ) {
+		margin-right: 7px;
+		margin-left: 7px;
+	}
+	&.filled {
+		border: 2px solid $text-color;
+		background-color: $brand-primary;
+		@include themify($themes) {
+			background-color: themed('brandPrimary');
+		}
+		color: white;
+		input {
+			padding-right: 25px;
+			@include themify($themes) {
+				background-color: themed('brandPrimary');
+			}
+			color: white;
+			border: 2px solid white;
+			&:focus {
+				border-bottom: 2px solid white;
+				outline: none;
+			}
+		}
+	}
+	&:after {
+		content: attr( data-currency );
+		font-family: $font-main;
+		font-size: 12px;
+		position: absolute;
+		right: 10px;
+		top: 50%;
+		transform: translateY(-50%);
 	}
 }
 
@@ -216,7 +191,6 @@ form {
 		line-height: 24px;
 		padding-left: 15px;
 	}
-
 	i {
 		font-size: 14px;
 	}
@@ -224,10 +198,9 @@ form {
 		margin-top: 40px;
 		max-width: 100%;
 	}
-
 }
 
-form#form-donation, form#form-membership {
+.main-form {
 	@include bkp(sm) {
 		box-shadow: 0 -3px 9px -5px rgba(0,0,0,0.65);
 	}
@@ -239,7 +212,7 @@ form#form-donation, form#form-membership {
 .form-shadow-wrap {
 	margin-bottom: 60px;
 	@include bkp(md) {
-        box-shadow: 1px 1px 6px 0px rgba(0,0,0,0.35);
+        box-shadow: 1px 1px 6px 0 rgba(0,0,0,0.35);
         width: calc(66.6666666667% + 30px);
         margin-left: -30px;
         margin-bottom: 30px;
@@ -247,26 +220,11 @@ form#form-donation, form#form-membership {
             padding-left: 30px;
         }
 	}
-	@include bkp(md) {
-
-	}
-
 }
+
 .shadow-wrap {
-	box-shadow: 1px 1px 8px 0px rgba(0,0,0,0.65);
+	box-shadow: 1px 1px 8px 0 rgba(0,0,0,0.65);
 	@include bkp(md) {
 		box-shadow: none;
-	}
-}
-
-.donation {
-	form {
-		section {
-			&#donation-type {
-				@include bkp(md) {
-					padding-bottom: 30px;
-				}
-			}
-		}
 	}
 }

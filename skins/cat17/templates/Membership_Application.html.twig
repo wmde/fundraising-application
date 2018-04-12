@@ -58,7 +58,7 @@
 		</div>
 	</div>
 
-	<form id="form-membership" action="{$ basepath $}/apply-for-membership" method="post" novalidate="">
+	<form id="form-membership" class="main-form" action="{$ basepath $}/apply-for-membership" method="post" novalidate="">
 		<div class="container">
 			<section class="state-bar state-overview col-xs-12 ">
 				<div class="wrap-bar container ">
@@ -71,7 +71,7 @@
 
 				<div class="form-shadow-wrap col-xs-12 col-sm-8 col-md-8">
 
-					<section id="membership-type" class="donation-amount clearfix"{% if showMembershipTypeOption != 'true' %} style="display:none"{% endif %}>
+					<section id="membership-type" class="donation-amount clearfix wrap-membership-type"{% if showMembershipTypeOption != 'true' %} style="display:none"{% endif %}>
 						<h2 class="">{$ 'membership_section_membership_type_title' | trans $}</h2>
 
 						<fieldset id="type-membership"
@@ -113,7 +113,7 @@
 						<input type="hidden" name="showMembershipTypeOption" value="false" />
 					{% endif %}
 
-					<section id="donation-type" class="donation-daten clearfix">
+					<section id="donation-type" class="donation-data clearfix">
 						<h2>{$ 'membership_section_applicant_title' | trans $}</h2>
 
 						{% if showMembershipTypeOption == 'true' %}
@@ -277,7 +277,7 @@
 						<p class="legend">{$ 'membership_section_fee_legend' | trans $}</p>
 
 						<fieldset id="recurrence"
-								  class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
+								  class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left wrap-recurrence">
 							<legend class="sr-only">{$ 'membership_section_interval_legend' | trans $}</legend>
 
 							{% include 'partials/payment_intervals.html.twig' with { 'context': 'membership', 'intervals': PAYMENT_INTERVALS, 'fieldName': 'membership_fee_interval' } only %}
@@ -307,7 +307,7 @@
 						<h2>{$ 'membership_section_payment_title' | trans $}</h2>
 
 						<fieldset id="payment-method"
-								class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
+								class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left wrap-payment">
 							<legend class="sr-only">{$ 'membership_section_payment_legend' | trans $}</legend>
 
 							{% include 'partials/payment_types.html.twig' with { 'paymentTypes': paymentTypes, 'fieldName': 'payment_type' } only %}

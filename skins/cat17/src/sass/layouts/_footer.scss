@@ -13,7 +13,6 @@
 			width: 100%;
 			display: block;
 			max-width: 205px;
-			display: block;
 			margin-bottom: 50px;
 			@include bkp(sm) {
 				background: transparent url("#{$image-path}/logo-vertical-wikimedia.svg") no-repeat left top;
@@ -23,12 +22,4 @@
 			}
 		}
 	}
-}
-
-#donation, #membership {
-    .footer {
-        @include bkp(xsmax) {
-            margin-top: 0;
-        }
-    }
 }

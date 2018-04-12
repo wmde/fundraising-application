@@ -18,14 +18,13 @@
 		}
 	}
 
-	#payment-method {
+	.wrap-payment {
 		min-height: 285px;
 		margin-bottom: 20px;
 	}
 
-	#membership-type {
+	.wrap-membership-type {
 		.wrap-field {
-
 			margin-bottom: 40px;
 			&:after {
 				border-color: transparent;
@@ -45,13 +44,13 @@
 		}
 	}
 
-	#recurrence {
+	.wrap-recurrence {
 		.more-info {
 			margin-top: 30px;
 		}
 	}
 
-	form .wrap-overview #overview .overview .wrap-field {
+	.wrap-overview .wrap-field {
 		@include bkp(lg) {
 			min-height: 250px;
 			&:last-child {
@@ -130,13 +129,6 @@
 				border-bottom: none;
 			}
 		}
-	}
-
-	#form-donation .jcf-select.jcf-select-jcf-hidden.jcf-focus, #form-donation .jcf-select.jcf-select-jcf-hidden.jcf-focus * {
-		//border-color: transparent !important;
-	}
-	.jcf-unselectable.jcf-focus {
-		//border-color: transparent !important;
 	}
 
 	#form-donation .jcf-select.jcf-select-jcf-hidden.jcf-drop-active.jcf-focus, #form-donation .jcf-select.jcf-select-jcf-hidden.jcf-drop-active.jcf-focus * {
