@@ -292,7 +292,7 @@
 								class="amount-qty padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
 							<legend class="sr-only">{$ 'membership_section_fee_legend' | trans $}</legend>
 							<div class="wrap-amounts">
-								{% include 'partials/payment_preset_amounts.html.twig' with { 'presetAmounts': [ 5, 15, 25, 50, 75, 100, 250, 300 ] } %}
+								{% include 'partials/payment_preset_amounts.html.twig' with { 'presetAmounts': presetAmounts } %}
 
 								<div class="wrap-amount-typed field-grp" data-currency="€">
 									<input type="text" id="amount-typed">
