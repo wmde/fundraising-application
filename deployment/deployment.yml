@@ -3,7 +3,7 @@
   hosts: local
   connection: local
   tasks:
-    - include: tasks/build.yml
+    - include_tasks: tasks/build.yml
       vars:
         build_dir: "/tmp/fundraising-build-{{ hostvars[inventory_hostname]['inventory_file'] | basename }}"
 
@@ -19,7 +19,7 @@
       register: release_timestamp
       delegate_to: 127.0.0.1
 
-    - include: tasks/deploy_to_server.yml
+    - include_tasks: tasks/deploy_to_server.yml
       vars:
         release_name: "{{ release_prefix }}{{ release_timestamp.stdout }}"
         local_archive: "/tmp/fundraising-build-{{ hostvars[inventory_hostname]['inventory_file'] | basename }}.tar.gz"
