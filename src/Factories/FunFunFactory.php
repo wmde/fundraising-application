@@ -1244,6 +1244,7 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	public function getMembershipApplicationFormTemplate(): TwigTemplate {
 		return $this->getLayoutTemplate( 'Membership_Application.html.twig', [
+			'presetAmounts' => $this->getPresetAmountsSettings(),
 			'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForMembershipApplication()
 		] );
 	}
