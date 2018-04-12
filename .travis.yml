@@ -9,9 +9,6 @@ matrix:
   fast_finish: true
   include:
   - php: 7.2
-    env: DB=sqlite
-  - php: 7.1
-    env: DB=mysql
     # Disabled since we hit the 50 minute timeout
 #  - php: 7.1
 #    env: DB=sqlite; TYPE=coverage
@@ -22,19 +19,18 @@ before_install:
   - docker build -t wmde/fundraising-frontend-phpstan build/phpstan
 
 install:
-  - travis_retry composer install
-  - make npm-install
+  - travis_retry make install-php
+  - make install-js
 
 before_script:
   - if [ "$MCP_ACCESS_KEY" != "" ] && [ "$MCP_PROJECT_ID" != "" ]; then bash build/travis/createLocalTestConfig.sh > app/config/config.test.local.json; fi
   - if [ ! -f "app/config/config.prod.json" ]; then echo "{}" > app/config/config.prod.json; fi
 
 script:
-  - composer validate --no-interaction
   - make setup
   - make ci
-  - composer install --no-dev -q
-  - docker run -v $PWD:/app --rm wmde/fundraising-frontend-phpstan analyse -c phpstan.neon --level 1 --no-progress cli/ contexts/ src/
+  - make install-php COMPOSER_FLAGS="--no-dev -q" # Remove dev dependencies to make sure PHPStan creates errors if prod code depends on dev classes
+  - docker run -v $PWD:/app --rm wmde/fundraising-frontend-phpstan analyse -c phpstan.neon --level 1 --no-progress cli/ contexts/ src/ # Can't use "make stan" because stan was removed
 
 after_success:
   - if [ "$TYPE" == "coverage" ]; then bash build/travis/uploadCoverage.sh; fi
