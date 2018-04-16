@@ -148,7 +148,8 @@
 				@expectedExceptionMessage,
 				@dataProvider,
 				@slowThreshold,
-				@noinspection
+				@noinspection,
+				@SuppressWarnings
 			"/>
             <property name="enableVoidTypeHint" value="false" />
         </properties>

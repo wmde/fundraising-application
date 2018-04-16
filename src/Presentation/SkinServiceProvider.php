@@ -27,6 +27,9 @@ class SkinServiceProvider implements ServiceProviderInterface, BootableProviderI
 	/**
 	 * Ideally, SkinSettings would be registered to app as a service here - but $pimple['twig'] in FunFunFactory needs it
 	 * and does not have access to app
+	 *
+	 * @param Container $app
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function register( Container $app ): void {
 	}

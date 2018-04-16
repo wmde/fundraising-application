@@ -22,6 +22,9 @@ class ProfilerDataCollector extends DataCollector {
 		$this->data['calls'] = [];
 	}
 
+	/**
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 */
 	public function collect( Request $request, Response $response, \Exception $exception = null ): void {
 	}
 

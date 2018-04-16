@@ -24,8 +24,6 @@
 
     <rule ref="rulesets/unusedcode.xml" />
 
-    <exclude-pattern>*Validator</exclude-pattern>
-    <exclude-pattern>*Factory.php</exclude-pattern>
-    <exclude-pattern>ConfigReader.php</exclude-pattern>
-    <exclude-pattern>ListCommentsUseCase.php</exclude-pattern>
+    <exclude-pattern>FunFunFactory.php</exclude-pattern>
+
 </ruleset>
