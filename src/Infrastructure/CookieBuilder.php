@@ -30,6 +30,9 @@ class CookieBuilder {
 		$this->sameSite = $sameSite;
 	}
 
+	/**
+	 * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+	 */
 	public function newCookie( string $name, string $value, ?int $expire = null, ?string $path = null, ?string $domain = null,
 								?bool $raw = false, ?string $sameSite = null ): Cookie {
 		return new Cookie(

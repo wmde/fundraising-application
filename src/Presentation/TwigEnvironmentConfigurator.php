@@ -42,10 +42,9 @@ class TwigEnvironmentConfigurator {
 			$twig->setCache( $this->cachePath );
 		}
 
+		$twig->disableStrictVariables();
 		if ( isset( $this->config['strict-variables'] ) && $this->config['strict-variables'] === true ) {
 			$twig->enableStrictVariables();
-		} else {
-			$twig->disableStrictVariables();
 		}
 
 		$twig->setLexer( new Twig_Lexer( $twig, [

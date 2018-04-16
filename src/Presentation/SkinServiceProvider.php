@@ -34,6 +34,10 @@ class SkinServiceProvider implements ServiceProviderInterface, BootableProviderI
 	public function register( Container $app ): void {
 	}
 
+	/**
+	 * @param Application $app
+	 * @SuppressWarnings(PHPMD.ElseExpression)
+	 */
 	public function boot( Application $app ): void {
 		$app->before( function( Request $request ): void {
 			$skinFromCookie = $this->getSkinFromCookie( $request );
