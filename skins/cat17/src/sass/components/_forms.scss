@@ -162,7 +162,7 @@ input[type=submit] {
 	display: inline-block;
 }
 
-label, input#amount-typed, .wrap-amount-typed:after{
+label, .wrap-amount-typed input, .wrap-amount-typed:after{
 	cursor: pointer;
 	font-size: 16px;
 	font-weight: 400;
@@ -183,8 +183,12 @@ label, input#amount-typed, .wrap-amount-typed:after{
 		.error-text {
 			display: block;
 		}
-		input#amount-typed {
-			background-color: red;
+		.wrap-amount-typed {
+			&.filled {
+				input {
+					background-color: red;
+				}
+			}
 		}
 	}
 }
@@ -367,9 +371,6 @@ p.legend {
 		}
 	}
 }
-#form-donation .jcf-select.jcf-select-jcf-hidden.jcf-focus, #form-donation .jcf-select.jcf-select-jcf-hidden.jcf-focus * {
-	//border-color: transparent !important;
-}
 .jcf-unselectable.jcf-focus, .jcf-select.jcf-focus {
 	@include bkp(xsmax) {
 		@include themify($themes) {
@@ -384,7 +385,7 @@ p.legend {
 	}
 }
 
-#form-donation .jcf-select.jcf-select-jcf-hidden.jcf-drop-active.jcf-focus, #form-donation .jcf-select.jcf-select-jcf-hidden.jcf-drop-active.jcf-focus * {
+.page-donation .jcf-select.jcf-select-jcf-hidden.jcf-drop-active.jcf-focus, .page-donation .jcf-select.jcf-select-jcf-hidden.jcf-drop-active.jcf-focus * {
 	border-color: $brand-primary !important;
 }
 

@@ -20,7 +20,7 @@
 		</div>
 	</div>
 
-	<form id="form-donation" action="{$ basepath $}/donation/add" method="post" novalidate>
+	<form id="form-donation" class="main-form" action="{$ basepath $}/donation/add" method="post" novalidate>
 		<div class="container">
 			<section class="state-bar state-overview col-xs-12 ">
 				<div class="wrap-bar container ">
@@ -61,7 +61,7 @@
 						</fieldset>
 
 						<fieldset id="recurrence"
-							class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
+							class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left wrap-recurrence">
 							<legend class="sr-only">{$ 'payment_interval_legend' | trans $}</legend>
 
 							{% include 'partials/payment_intervals.html.twig' with { 'context': 'donation', 'intervals': PAYMENT_INTERVALS, 'fieldName': 'periode' } only %}
@@ -74,14 +74,14 @@
 						<p class="legend">{$ 'donation_section_payment_legend' | trans $}</p>
 
 						<fieldset id="payment-method"
-							class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
+							class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left wrap-payment">
 							<legend class="sr-only">{$ 'donation_section_payment_legend' | trans $}</legend>
 
 							{% include 'partials/payment_types.html.twig' with { 'paymentTypes': paymentTypes, 'fieldName': 'zahlweise' } only %}
 						</fieldset>
 					</section>
 
-					<section id="donation-type" class="donation-daten clearfix">
+					<section id="donation-type" class="donation-data clearfix">
 						<h2>{$ 'donation_section_donor_title' | trans $}</h2>
 
 						<p class="legend">{$ 'donation_section_donor_legend' | trans $}</p>

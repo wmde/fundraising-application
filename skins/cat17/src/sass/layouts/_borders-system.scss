@@ -229,7 +229,7 @@ fieldset {
 
     }
 }
-#payment-method .info-text.opened {
+.wrap-payment .info-text.opened {
     padding-top: 10px;
     .field-grp.invalid ~ .error-text {
         opacity: 1;
@@ -253,31 +253,6 @@ fieldset {
 				background-color: themed('brandPrimary');
 			}
 		}
-
-       /* &:after {
-            content: '';
-            background: $brand-primary;
-            @include themify($themes) {
-                background-color: themed('brandPrimary');
-                border-bottom: themed('border2pxPrimary');
-            }
-            border-radius: 100%;
-            border: none;
-            width: 10px;
-            height: 10px;
-            position: absolute;
-            left: -30px;
-            top: 25px;
-            margin-right: 1em;
-            vertical-align: top;
-            cursor: pointer;
-            text-align: center;
-            transition: all 250ms ease;
-
-        }
-        &.news:after {
-            border-radius: 0;
-        }*/
     }
     label {
         display: flex;

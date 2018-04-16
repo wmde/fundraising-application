@@ -5,7 +5,7 @@
 			margin-top: 50px;
 		}
 		.field-grp {
-			#subject {
+			.contact-subject {
 				@include bkp(sm) {
 					max-width: 227px;
 				}
