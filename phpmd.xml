@@ -17,6 +17,22 @@
 
     <rule ref="rulesets/design.xml" />
 
+    <rule ref="rulesets/cleancode.xml">
+            <exclude name="StaticAccess"/>
+    </rule>
+    <rule ref="rulesets/cleancode.xml/StaticAccess" >
+        <properties>
+            <property name="exceptions">
+                <value>
+                    \DateTime,
+                    \Swift_Message,
+                    \WMDE\FunValidators\ValidationResponse,
+                    \Symfony\Component\PropertyAccess\PropertyAccess,
+                </value>
+            </property>
+        </properties>
+    </rule>
+
     <rule ref="rulesets/naming.xml">
         <exclude name="ShortVariable" />
         <exclude name="LongVariable" />
@@ -24,8 +40,6 @@
 
     <rule ref="rulesets/unusedcode.xml" />
 
-    <exclude-pattern>*Validator</exclude-pattern>
-    <exclude-pattern>*Factory.php</exclude-pattern>
-    <exclude-pattern>ConfigReader.php</exclude-pattern>
-    <exclude-pattern>ListCommentsUseCase.php</exclude-pattern>
+    <exclude-pattern>FunFunFactory.php</exclude-pattern>
+
 </ruleset>

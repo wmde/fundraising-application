@@ -12,6 +12,9 @@ use WMDE\FunValidators\DomainNameValidator;
  */
 class NullDomainNameValidator implements DomainNameValidator {
 
+	/**
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 */
 	public function isValid( string $domain ): bool {
 		return true;
 	}

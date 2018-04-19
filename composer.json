@@ -135,6 +135,7 @@
 		"ci": [
 			"@test",
 			"@cs",
+			"@phpmd",
 			"npm run ci",
 			"@validate-app-config",
 			"@stan"

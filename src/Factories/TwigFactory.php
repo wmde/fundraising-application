@@ -41,17 +41,15 @@ class TwigFactory {
 	 * @return array
 	 */
 	private function getTemplateDir( array $config ): array {
+		$appRoot = realpath( __DIR__ . '/../..' ) . '/';
 		if ( is_string( $config['template-dir'] ) ) {
-			$templateDir = [ $config['template-dir'] ];
+			return $this->convertToAbsolute( $appRoot, $templateDir = [ $config['template-dir'] ] );
 		}
 		elseif ( is_array( $config['template-dir'] ) ) {
-			$templateDir = $config['template-dir'];
+			return $this->convertToAbsolute( $appRoot, $templateDir = $config['template-dir'] );
 		}
-		else {
-			throw new RuntimeException( 'wrong template directory type' );
-		}
-		$appRoot = realpath( __DIR__ . '/../..' ) . '/';
-		return $this->convertToAbsolute( $appRoot, $templateDir );
+
+		throw new RuntimeException( 'wrong template directory type' );
 	}
 
 	private function convertToAbsolute( string $root, array $dirs ): array {

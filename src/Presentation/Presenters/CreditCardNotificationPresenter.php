@@ -22,24 +22,22 @@ class CreditCardNotificationPresenter {
 	}
 
 	public function present( CreditCardNotificationResponse $response ): string {
-		if ( $response->isSuccessful() ) {
-			$result = [
-				'status' => 'ok',
-				'url' => $this->returnUrl . '?' . http_build_query( [
+		if ( !$response->isSuccessful() ) {
+			return $this->render( [
+				'status' => 'error',
+				'msg' => $response->getErrorMessage()
+			] );
+		}
+
+		return $this->render( [
+			'status' => 'ok',
+			'url' => $this->returnUrl . '?' . http_build_query( [
 					'id' => $response->getDonationId(),
 					'accessToken' => $response->getAccessToken()
 				] ),
-				'target' => '_top',
-				'forward' => '1',
-			];
-		} else {
-			$result = [
-				'status' => 'error',
-				'msg' => $response->getErrorMessage()
-			];
-		}
-
-		return $this->render( $result );
+			'target' => '_top',
+			'forward' => '1',
+		] );
 	}
 
 	/**
