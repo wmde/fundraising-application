@@ -7,6 +7,8 @@ namespace WMDE\Fundraising\PaymentContext\ResponseModel;
 use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
 
 /**
+ * TODO: move to PaymentContext
+ *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */

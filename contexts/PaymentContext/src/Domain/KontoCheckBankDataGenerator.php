@@ -12,7 +12,7 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
  * @licence GNU GPL v2+
  * @author Christoph Fischer < christoph.fischer@wikimedia.de >
  */
-class BankDataConverter {
+class KontoCheckBankDataGenerator implements BankDataGenerator {
 
 	private $ibanValidator;
 

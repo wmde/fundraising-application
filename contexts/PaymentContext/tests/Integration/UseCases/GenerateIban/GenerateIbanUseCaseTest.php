@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\PaymentContext\Tests\Integration\UseCases\GenerateIban;
 
 use PHPUnit\Framework\TestCase;
-use WMDE\Fundraising\PaymentContext\Domain\BankDataConverter;
+use WMDE\Fundraising\PaymentContext\Domain\KontoCheckBankDataGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\KontoCheckIbanValidator;
 use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
@@ -62,7 +62,7 @@ class GenerateIbanUseCaseTest extends TestCase {
 		$ibanValidator = new KontoCheckIbanValidator( 'res/blz.lut2f', [ 'DE33100205000001194700' ] );
 
 		return new GenerateIbanUseCase(
-			new BankDataConverter( 'res/blz.lut2f', $ibanValidator ),
+			new KontoCheckBankDataGenerator( 'res/blz.lut2f', $ibanValidator ),
 			$ibanValidator
 		);
 	}

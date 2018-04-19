@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\PaymentContext\Tests\Unit;
 
-use WMDE\Fundraising\PaymentContext\Domain\BankDataConverter;
+use WMDE\Fundraising\PaymentContext\Domain\KontoCheckBankDataGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\KontoCheckIbanValidator;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 

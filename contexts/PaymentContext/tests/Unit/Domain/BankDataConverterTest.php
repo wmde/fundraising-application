@@ -7,14 +7,15 @@ namespace WMDE\Fundraising\PaymentContext\Tests\Unit\Domain;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
-use WMDE\Fundraising\PaymentContext\Domain\BankDataConverter;
+use WMDE\Fundraising\PaymentContext\Domain\BankDataGenerator;
+use WMDE\Fundraising\PaymentContext\Domain\KontoCheckBankDataGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataLibraryInitializationException;
 use WMDE\Fundraising\PaymentContext\Domain\KontoCheckIbanValidator;
 use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 
 /**
- * @covers \WMDE\Fundraising\PaymentContext\Domain\BankDataConverter
+ * @covers \WMDE\Fundraising\PaymentContext\Domain\KontoCheckBankDataGenerator
  *
  * @licence GNU GPL v2+
  * @author Christoph Fischer <christoph.fischer@wikimedia.de >
@@ -24,7 +25,7 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 class BankDataConverterTest extends TestCase {
 
 	public function testWhenUsingConfigLutPath_constructorCreatesConverter(): void {
-		$this->assertInstanceOf( BankDataConverter::class, $this->newBankDataConverter() );
+		$this->assertInstanceOf( KontoCheckBankDataGenerator::class, $this->newBankDataConverter() );
 	}
 
 	public function testGivenNotExistingBankDataFile_constructorThrowsException(): void {
@@ -124,8 +125,8 @@ class BankDataConverterTest extends TestCase {
 		);
 	}
 
-	private function newBankDataConverter( string $filePath = 'res/blz.lut2f' ): BankDataConverter {
-		return new BankDataConverter( $filePath, new KontoCheckIbanValidator( $filePath ) );
+	private function newBankDataConverter( string $filePath = 'res/blz.lut2f' ): BankDataGenerator {
+		return new KontoCheckBankDataGenerator( $filePath, new KontoCheckIbanValidator( $filePath ) );
 	}
 
 }
