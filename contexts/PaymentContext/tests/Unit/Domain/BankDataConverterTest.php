@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\KontoCheckBankDataGenerator;
-use WMDE\Fundraising\PaymentContext\Domain\BankDataLibraryInitializationException;
+use WMDE\Fundraising\PaymentContext\Domain\KontoCheckLibraryInitializationException;
 use WMDE\Fundraising\PaymentContext\Domain\KontoCheckIbanValidator;
 use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
@@ -29,7 +29,7 @@ class BankDataConverterTest extends TestCase {
 	}
 
 	public function testGivenNotExistingBankDataFile_constructorThrowsException(): void {
-		$this->expectException( BankDataLibraryInitializationException::class );
+		$this->expectException( KontoCheckLibraryInitializationException::class );
 		$this->newBankDataConverter( '/foo/bar/awesome.data' );
 	}
 

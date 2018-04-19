@@ -19,13 +19,14 @@ class KontoCheckBankDataGenerator implements BankDataGenerator {
 	/**
 	 * @param string $lutPath
 	 * @param IbanValidator $ibanValidator
-	 * @throws BankDataLibraryInitializationException
+	 *
+	 * @throws KontoCheckLibraryInitializationException
 	 */
 	public function __construct( string $lutPath, IbanValidator $ibanValidator ) {
 		$this->ibanValidator = $ibanValidator;
 
 		if ( lut_init( $lutPath ) !== 1 ) {
-			throw new BankDataLibraryInitializationException( $lutPath );
+			throw new KontoCheckLibraryInitializationException( $lutPath );
 		}
 	}
 
