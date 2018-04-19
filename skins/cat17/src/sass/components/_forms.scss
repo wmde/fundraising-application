@@ -1,5 +1,5 @@
 input {
-    -webkit-appearance: none;
+	-webkit-appearance: none;
 }
 input[type=number] {
 	-moz-appearance: textfield;
@@ -186,8 +186,17 @@ label, .wrap-amount-typed input, .wrap-amount-typed:after{
 		.wrap-amount-typed {
 			&.filled {
 				input {
-					background-color: red;
+					color: $brand-error;
+					background-color: $brand-error-light;
+					@include themify($themes) {
+						border-top: themed('brandErrorRgba');
+						border-left: themed('brandErrorRgba');
+						border-right: themed('brandErrorRgba');
+						border-bottom: themed('border2pxError');
+					}
 				}
+				color: $brand-error;
+				border: none;
 			}
 		}
 	}
@@ -196,9 +205,9 @@ label, .wrap-amount-typed input, .wrap-amount-typed:after{
 .legend {
 	font-size: 16px;
 	margin-bottom: 15px;
-    @include bkp(md) {
-        width: 80%;
-    }
+	@include bkp(md) {
+		width: 80%;
+	}
 }
 
 
