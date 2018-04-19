@@ -15,15 +15,17 @@ use WMDE\FunValidators\ValidationResult;
  */
 class KontoCheckIbanValidator implements IbanValidator {
 
-	private $bankDataConverter;
 	private $bannedIbanNumbers = [];
 
 	/**
-	 * @param BankDataConverter $bankDataConverter
+	 * @param string $lutPath
 	 * @param string[] $bannedIbans
 	 */
-	public function __construct( BankDataConverter $bankDataConverter, array $bannedIbans = [] ) {
-		$this->bankDataConverter = $bankDataConverter;
+	public function __construct( string $lutPath, array $bannedIbans = [] ) {
+		if ( lut_init( $lutPath ) !== 1 ) {
+			throw new BankDataLibraryInitializationException( $lutPath );
+		}
+
 		$this->bannedIbanNumbers = $bannedIbans;
 	}
 
@@ -32,7 +34,7 @@ class KontoCheckIbanValidator implements IbanValidator {
 			return new ValidationResult( new ConstraintViolation( $value, 'iban_blocked', $fieldName ) );
 		}
 
-		if ( !$this->bankDataConverter->validateIban( $value ) ) {
+		if ( iban_check( $value->toString() ) <= 0 ) {
 			return new ValidationResult( new ConstraintViolation( $value, 'iban_invalid', $fieldName ) );
 		}
 

@@ -1464,7 +1464,7 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	private function newIbanValidator(): KontoCheckIbanValidator {
-		return new KontoCheckIbanValidator( $this->newBankDataConverter(), $this->config['banned-ibans'] );
+		return new KontoCheckIbanValidator( $this->config['bank-data-file'], $this->config['banned-ibans'] );
 	}
 
 	public function setFilePrefixer( FilePrefixer $prefixer ): void {

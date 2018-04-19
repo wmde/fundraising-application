@@ -20,7 +20,7 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 class KontoCheckIbanValidatorTest extends \PHPUnit\Framework\TestCase {
 
 	private function newValidator( array $bannedIbans = [] ): KontoCheckIbanValidator {
-		return new KontoCheckIbanValidator( new BankDataConverter( 'res/blz.lut2f' ), $bannedIbans );
+		return new KontoCheckIbanValidator( 'res/blz.lut2f', $bannedIbans );
 	}
 
 	public function validIbanProvider(): array {

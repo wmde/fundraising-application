@@ -62,7 +62,7 @@ class GenerateIbanUseCaseTest extends TestCase {
 		$bankDataConverter = new BankDataConverter( 'res/blz.lut2f' );
 		return new GenerateIbanUseCase(
 			$bankDataConverter,
-			new KontoCheckIbanValidator( $bankDataConverter, [ 'DE33100205000001194700' ] )
+			new KontoCheckIbanValidator( 'res/blz.lut2f', [ 'DE33100205000001194700' ] )
 		);
 	}
 }
