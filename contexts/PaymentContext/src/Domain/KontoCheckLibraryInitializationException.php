@@ -5,6 +5,8 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\PaymentContext\Domain;
 
 /**
+ * TODO: move to own KontoCheck library?
+ *
  * @licence GNU GPL v2+
  * @author Leszek Manicki <leszek.manicki@wikimedia.de>
  */
