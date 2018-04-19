@@ -751,7 +751,7 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function newBankDataConverter(): BankDataConverter {
-		return new BankDataConverter( $this->config['bank-data-file'] );
+		return new BankDataConverter( $this->config['bank-data-file'], $this->newIbanValidator() );
 	}
 
 	public function setSubscriptionValidator( SubscriptionValidator $subscriptionValidator ): void {

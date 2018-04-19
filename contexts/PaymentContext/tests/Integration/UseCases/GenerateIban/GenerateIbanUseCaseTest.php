@@ -59,10 +59,11 @@ class GenerateIbanUseCaseTest extends TestCase {
 	}
 
 	private function newGenerateIbanUseCase(): GenerateIbanUseCase {
-		$bankDataConverter = new BankDataConverter( 'res/blz.lut2f' );
+		$ibanValidator = new KontoCheckIbanValidator( 'res/blz.lut2f', [ 'DE33100205000001194700' ] );
+
 		return new GenerateIbanUseCase(
-			$bankDataConverter,
-			new KontoCheckIbanValidator( 'res/blz.lut2f', [ 'DE33100205000001194700' ] )
+			new BankDataConverter( 'res/blz.lut2f', $ibanValidator ),
+			$ibanValidator
 		);
 	}
 }

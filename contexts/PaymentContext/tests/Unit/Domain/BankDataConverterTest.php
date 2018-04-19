@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataConverter;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataLibraryInitializationException;
+use WMDE\Fundraising\PaymentContext\Domain\KontoCheckIbanValidator;
 use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 
@@ -51,15 +52,6 @@ class BankDataConverterTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider ibanTestProvider
-	 */
-	public function testWhenGivenInvalidIban_validateIbanReturnsFalse( string $ibanToTest ): void {
-		$bankConverter = $this->newBankDataConverter();
-
-		$this->assertFalse( $bankConverter->validateIban( new Iban( $ibanToTest ) ) );
-	}
-
 	public function testWhenGivenValidIban_converterReturnsBankData(): void {
 		$bankConverter = $this->newBankDataConverter();
 
@@ -92,13 +84,6 @@ class BankDataConverterTest extends TestCase {
 			$bankData,
 			$bankConverter->getBankDataFromIban( new Iban( 'BE68844010370034' ) )
 		);
-	}
-
-	public function testWhenGivenValidIban_validateIbanReturnsTrue(): void {
-		$bankConverter = $this->newBankDataConverter();
-
-		$this->assertTrue( $bankConverter->validateIban( new Iban( 'DE12500105170648489890' ) ) );
-		$this->assertTrue( $bankConverter->validateIban( new Iban( 'BE68844010370034' ) ) );
 	}
 
 	/**
@@ -140,7 +125,7 @@ class BankDataConverterTest extends TestCase {
 	}
 
 	private function newBankDataConverter( string $filePath = 'res/blz.lut2f' ): BankDataConverter {
-		return new BankDataConverter( $filePath );
+		return new BankDataConverter( $filePath, new KontoCheckIbanValidator( $filePath ) );
 	}
 
 }
