@@ -5,9 +5,9 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\PaymentContext\UseCases\CheckIban;
 
 use WMDE\Fundraising\PaymentContext\Domain\BankDataConverter;
+use WMDE\Fundraising\PaymentContext\Domain\KontoCheckIbanValidator;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\PaymentContext\ResponseModel\IbanResponse;
-use WMDE\Fundraising\Frontend\Validation\KontoCheckIbanValidator;
 
 /**
  * @licence GNU GPL v2+

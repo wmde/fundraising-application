@@ -6,12 +6,12 @@ namespace WMDE\Fundraising\PaymentContext\Tests\Integration\UseCases\GenerateIba
 
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataConverter;
+use WMDE\Fundraising\PaymentContext\Domain\KontoCheckIbanValidator;
 use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\PaymentContext\ResponseModel\IbanResponse;
 use WMDE\Fundraising\PaymentContext\UseCases\GenerateIban\GenerateIbanRequest;
 use WMDE\Fundraising\PaymentContext\UseCases\GenerateIban\GenerateIbanUseCase;
-use WMDE\Fundraising\Frontend\Validation\KontoCheckIbanValidator;
 
 /**
  * @covers \WMDE\Fundraising\PaymentContext\UseCases\GenerateIban\GenerateIbanUseCase

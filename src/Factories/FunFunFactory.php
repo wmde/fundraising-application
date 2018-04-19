@@ -115,6 +115,7 @@ use WMDE\Fundraising\DonationContext\DataAccess\UniqueTransferCodeGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataConverter;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataValidator;
 use WMDE\Fundraising\PaymentContext\Domain\DefaultPaymentDelayCalculator;
+use WMDE\Fundraising\PaymentContext\Domain\KontoCheckIbanValidator;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentDataValidator;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentDelayCalculator;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\CreditCard as CreditCardUrlGenerator;
@@ -165,7 +166,6 @@ use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionDuplica
 use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionValidator;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
-use WMDE\Fundraising\Frontend\Validation\KontoCheckIbanValidator;
 use WMDE\Fundraising\Frontend\Validation\TemplateNameValidator;
 use WMDE\Fundraising\Store\Factory as StoreFactory;
 use WMDE\Fundraising\Store\Installer;

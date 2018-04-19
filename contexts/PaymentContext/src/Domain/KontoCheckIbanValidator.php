@@ -2,10 +2,8 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Validation;
+namespace WMDE\Fundraising\PaymentContext\Domain;
 
-use WMDE\Fundraising\PaymentContext\Domain\BankDataConverter;
-use WMDE\Fundraising\PaymentContext\Domain\IbanValidator;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 use WMDE\FunValidators\ConstraintViolation;
 use WMDE\FunValidators\ValidationResult;
