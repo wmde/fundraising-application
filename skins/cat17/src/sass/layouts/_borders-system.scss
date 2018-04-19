@@ -1,5 +1,3 @@
-
-/* all pages (donation form and others) */
 .wrap-field {
     position: relative;
     @include bkp(xsmax) {
@@ -38,9 +36,6 @@
         }
     }
     .wrap-input {
-  /*      display: flex;
-        justify-content: space-between;
-        align-items: center;*/
         position: relative;
         &:after {
             content: '';
@@ -68,7 +63,6 @@
 
 }
 
-/* other pages than donation form */
 .wrap-items {
     .wrap-field {
         @include bkp(md) {
@@ -146,90 +140,105 @@
 }
 
 /* only for donation form */
-fieldset {
-    .wrap-field {
-        @include bkp(sm) {
-            position: static;
-        }
-        .wrap-input {
-            &:after {
-                margin-left: 33px;
-                @include bkp(sm) {
-                    width: 233px;
-                }
-                @include bkp(md) {
-                    width: 253px;
-                }
-            }
-        }
-        &.selected {
+.wrap-field {
+    @include bkp(sm) {
+        position: static;
+    }
+    .wrap-input {
+        &:after {
+            margin-left: 33px;
             @include bkp(sm) {
-                .wrap-input {
-                    &:after {
-                        width: 101%;
-                        @include themify($themes) {
-                            border-bottom: themed('border1pxPrimary');
-                        }
-                    }
-                }
+                width: 233px;
             }
             @include bkp(md) {
-                .wrap-input {
-                    &:after {
-                        width: 99%;
+                width: 253px;
+            }
+        }
+    }
+    &.selected {
+        @include bkp(sm) {
+            .wrap-input {
+                &:after {
+                    width: 101%;
+                    @include themify($themes) {
+                        border-bottom: themed('border1pxPrimary');
                     }
                 }
             }
-            .info-text {
-                &.opened {
-                    padding-left: 36px;
-
+        }
+        @include bkp(md) {
+            .wrap-input {
+                &:after {
+                    width: 99%;
                 }
             }
+        }
+        .info-text {
+            &.opened {
+                padding-left: 36px;
 
+            }
+        }
+
+        .wrap-input {
+            + .info-text, + .wrap-info > .info-text {
+                margin: 0;
+                &.opened {
+                    @include bkp(sm) {
+                        position: absolute;
+                        right: -358px;
+                        width: 340px;
+                        top: 0;
+                        padding-left: 20px;
+                        @include themify($themes) {
+                            border-left: themed('border1pxPrimary');
+                        }
+                        min-height: 191px;
+                        padding-top: 0;
+                        height: 100%;
+
+                    }
+                    @include bkp(md) {
+                        right: -294px;
+                        width: 290px;
+
+                    }
+                    + .wrap-check {
+                        display: flex;
+                        flex-direction: column;
+                        opacity: 1;
+                        height: auto;
+                        margin-top: 0;
+                        padding: 11px 0 14px 4px;
+                    }
+                    .iban-decision {
+                        display: inline-block;
+                        margin-bottom: 12px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.page-donation {
+    .wrap-field {
+        &.selected {
             .wrap-input {
                 + .info-text, + .wrap-info > .info-text {
-                    margin: 0;
                     &.opened {
                         @include bkp(sm) {
-                            position: absolute;
-                            right: -358px;
-                            width: 340px;
-                            top: 0;
-                            padding-left: 20px;
-                            @include themify($themes) {
-                                border-left: themed('border1pxPrimary');
-                            }
-                            min-height: 191px;
-                            padding-top: 0;
-                            height: 100%;
-
-                        }
-                        @include bkp(md) {
-                            right: -294px;
-                            width: 290px;
-
-                        }
-                        + .wrap-check {
-                            display: flex;
-                            flex-direction: column;
-                            opacity: 1;
                             height: auto;
-                            margin-top: 0;
-                            padding: 11px 0 14px 4px;
-                        }
-                        .iban-decision {
-                            display: inline-block;
-                            margin-bottom: 12px;
                         }
                     }
                 }
             }
         }
-
     }
 }
-.wrap-payment .info-text.opened {
+
+
+.wrap-payment.show-info .info-text.opened {
     padding-top: 10px;
     .field-grp.invalid ~ .error-text {
         opacity: 1;
@@ -244,8 +253,6 @@ fieldset {
         opacity: 0;
         position: absolute;
     }
-    //, &:hover label
-
     input:checked + label {
 		&:before {
 			box-shadow: inset 0 0 0 2px white;

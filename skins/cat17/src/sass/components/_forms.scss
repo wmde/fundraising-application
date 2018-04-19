@@ -92,8 +92,6 @@ input[type=submit] {
 			background-color: themed('fieldNormal');
 			border-bottom: themed('border2pxfieldNormal');
 		}
-	//	background-color: $brand-footer;
-		//border-bottom: 2px solid $brand-footer;
 		width: 100%;
 		height: 48px;
 		padding: 13px 16px;
@@ -109,7 +107,6 @@ input[type=submit] {
 			font-size: 12px;
 		}
 		&:hover {
-			//border-bottom: 2px solid $brand-primary;
 			@include themify($themes) {
 				border-bottom: themed('border2pxPrimary');
 			}
@@ -162,7 +159,7 @@ input[type=submit] {
 	display: inline-block;
 }
 
-label, .wrap-amount-typed input, .wrap-amount-typed:after{
+label, .wrap-amount-typed.field-grp input, .wrap-amount-typed.field-grp:after{
 	cursor: pointer;
 	font-size: 16px;
 	font-weight: 400;
@@ -183,7 +180,7 @@ label, .wrap-amount-typed input, .wrap-amount-typed:after{
 		.error-text {
 			display: block;
 		}
-		.wrap-amount-typed {
+		.wrap-amount-typed.field-grp {
 			&.filled {
 				input {
 					color: $brand-error;

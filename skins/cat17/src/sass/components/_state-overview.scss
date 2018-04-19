@@ -325,7 +325,7 @@
     @include bkp(lg) {
         display: block;
     }
-    #overview {
+    .state-overview {
         margin-bottom: 30px;
         padding-top: 10px;
         @include bkp(sm) {
@@ -478,7 +478,7 @@
             }
         }
     }
-    #other-info {
+    .other-info {
         display: none;
 		@include bkp(sm) {
 			display: inline-block;
