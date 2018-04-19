@@ -131,7 +131,7 @@ form {
 	}
 }
 
-.wrap-amount-typed {
+.wrap-amount-typed.field-grp {
 	height: 60px;
 	width: 100%;
 	position: relative;
@@ -159,7 +159,7 @@ form {
 			}
 			color: white;
 			border: 2px solid white;
-			&:focus {
+			&:focus, &:hover {
 				border-bottom: 2px solid white;
 				outline: none;
 			}
