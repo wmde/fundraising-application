@@ -4,12 +4,14 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\PaymentContext\UseCases\CheckIban;
 
-use WMDE\Fundraising\PaymentContext\Domain\BankDataConverter;
+use WMDE\Fundraising\PaymentContext\Domain\BankDataGenerator;
+use WMDE\Fundraising\PaymentContext\Domain\IbanValidator;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\PaymentContext\ResponseModel\IbanResponse;
-use WMDE\Fundraising\Frontend\Validation\KontoCheckIbanValidator;
 
 /**
+ * TODO: move to PaymentContext
+ *
  * @licence GNU GPL v2+
  * @author Kai Nissen <kai.nissen@wikimedia.de>
  */
@@ -18,7 +20,7 @@ class CheckIbanUseCase {
 	private $bankDataConverter;
 	private $ibanValidator;
 
-	public function __construct( BankDataConverter $bankDataConverter, KontoCheckIbanValidator $ibanValidator ) {
+	public function __construct( BankDataGenerator $bankDataConverter, IbanValidator $ibanValidator ) {
 		$this->bankDataConverter = $bankDataConverter;
 		$this->ibanValidator = $ibanValidator;
 	}

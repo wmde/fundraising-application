@@ -9,21 +9,26 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 
 /**
+ * TODO: move to own KontoCheck library?
+ *
  * @licence GNU GPL v2+
  * @author Christoph Fischer < christoph.fischer@wikimedia.de >
  */
-class BankDataConverter {
+class KontoCheckBankDataGenerator implements BankDataGenerator {
 
-	private $lutPath;
+	private $ibanValidator;
 
 	/**
 	 * @param string $lutPath
-	 * @throws BankDataLibraryInitializationException
+	 * @param IbanValidator $ibanValidator
+	 *
+	 * @throws KontoCheckLibraryInitializationException
 	 */
-	public function __construct( string $lutPath ) {
-		$this->lutPath = $lutPath;
-		if ( lut_init( $this->lutPath ) !== 1 ) {
-			throw new BankDataLibraryInitializationException( $this->lutPath );
+	public function __construct( string $lutPath, IbanValidator $ibanValidator ) {
+		$this->ibanValidator = $ibanValidator;
+
+		if ( lut_init( $lutPath ) !== 1 ) {
+			throw new KontoCheckLibraryInitializationException( $lutPath );
 		}
 	}
 
@@ -58,7 +63,7 @@ class BankDataConverter {
 	 * @throws \InvalidArgumentException
 	 */
 	public function getBankDataFromIban( Iban $iban ): BankData {
-		if ( !$this->validateIban( $iban ) ) {
+		if ( $this->ibanValidator->validate( $iban )->hasViolations() ) {
 			throw new \InvalidArgumentException( 'Provided IBAN should be valid' );
 		}
 
@@ -87,7 +92,4 @@ class BankDataConverter {
 		return utf8_encode( lut_name( $bankCode ) );
 	}
 
-	public function validateIban( Iban $iban ): bool {
-		return iban_check( $iban->toString() ) > 0;
-	}
 }

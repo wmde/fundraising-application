@@ -2,30 +2,32 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Validation;
+namespace WMDE\Fundraising\PaymentContext\Domain;
 
-use WMDE\Fundraising\PaymentContext\Domain\BankDataConverter;
-use WMDE\Fundraising\PaymentContext\Domain\IbanValidator;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 use WMDE\FunValidators\ConstraintViolation;
 use WMDE\FunValidators\ValidationResult;
 
 /**
+ * TODO: move to own KontoCheck library?
+ *
  * @licence GNU GPL v2+
  * @author Leszek Manicki <leszek.manicki@wikimedia.de>
  * @author Kai Nissen <leszek.manicki@wikimedia.de>
  */
 class KontoCheckIbanValidator implements IbanValidator {
 
-	private $bankDataConverter;
 	private $bannedIbanNumbers = [];
 
 	/**
-	 * @param BankDataConverter $bankDataConverter
+	 * @param string $lutPath
 	 * @param string[] $bannedIbans
 	 */
-	public function __construct( BankDataConverter $bankDataConverter, array $bannedIbans = [] ) {
-		$this->bankDataConverter = $bankDataConverter;
+	public function __construct( string $lutPath, array $bannedIbans = [] ) {
+		if ( lut_init( $lutPath ) !== 1 ) {
+			throw new KontoCheckLibraryInitializationException( $lutPath );
+		}
+
 		$this->bannedIbanNumbers = $bannedIbans;
 	}
 
@@ -34,7 +36,7 @@ class KontoCheckIbanValidator implements IbanValidator {
 			return new ValidationResult( new ConstraintViolation( $value, 'iban_blocked', $fieldName ) );
 		}
 
-		if ( !$this->bankDataConverter->validateIban( $value ) ) {
+		if ( iban_check( $value->toString() ) <= 0 ) {
 			return new ValidationResult( new ConstraintViolation( $value, 'iban_invalid', $fieldName ) );
 		}
 

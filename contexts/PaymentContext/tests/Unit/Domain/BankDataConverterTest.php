@@ -7,13 +7,15 @@ namespace WMDE\Fundraising\PaymentContext\Tests\Unit\Domain;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
-use WMDE\Fundraising\PaymentContext\Domain\BankDataConverter;
-use WMDE\Fundraising\PaymentContext\Domain\BankDataLibraryInitializationException;
+use WMDE\Fundraising\PaymentContext\Domain\BankDataGenerator;
+use WMDE\Fundraising\PaymentContext\Domain\KontoCheckBankDataGenerator;
+use WMDE\Fundraising\PaymentContext\Domain\KontoCheckLibraryInitializationException;
+use WMDE\Fundraising\PaymentContext\Domain\KontoCheckIbanValidator;
 use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 
 /**
- * @covers \WMDE\Fundraising\PaymentContext\Domain\BankDataConverter
+ * @covers \WMDE\Fundraising\PaymentContext\Domain\KontoCheckBankDataGenerator
  *
  * @licence GNU GPL v2+
  * @author Christoph Fischer <christoph.fischer@wikimedia.de >
@@ -23,11 +25,11 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 class BankDataConverterTest extends TestCase {
 
 	public function testWhenUsingConfigLutPath_constructorCreatesConverter(): void {
-		$this->assertInstanceOf( BankDataConverter::class, $this->newBankDataConverter() );
+		$this->assertInstanceOf( KontoCheckBankDataGenerator::class, $this->newBankDataConverter() );
 	}
 
 	public function testGivenNotExistingBankDataFile_constructorThrowsException(): void {
-		$this->expectException( BankDataLibraryInitializationException::class );
+		$this->expectException( KontoCheckLibraryInitializationException::class );
 		$this->newBankDataConverter( '/foo/bar/awesome.data' );
 	}
 
@@ -49,15 +51,6 @@ class BankDataConverterTest extends TestCase {
 			[ 'DE1048489892' ],
 			[ 'BE125005170648489890' ],
 		];
-	}
-
-	/**
-	 * @dataProvider ibanTestProvider
-	 */
-	public function testWhenGivenInvalidIban_validateIbanReturnsFalse( string $ibanToTest ): void {
-		$bankConverter = $this->newBankDataConverter();
-
-		$this->assertFalse( $bankConverter->validateIban( new Iban( $ibanToTest ) ) );
 	}
 
 	public function testWhenGivenValidIban_converterReturnsBankData(): void {
@@ -92,13 +85,6 @@ class BankDataConverterTest extends TestCase {
 			$bankData,
 			$bankConverter->getBankDataFromIban( new Iban( 'BE68844010370034' ) )
 		);
-	}
-
-	public function testWhenGivenValidIban_validateIbanReturnsTrue(): void {
-		$bankConverter = $this->newBankDataConverter();
-
-		$this->assertTrue( $bankConverter->validateIban( new Iban( 'DE12500105170648489890' ) ) );
-		$this->assertTrue( $bankConverter->validateIban( new Iban( 'BE68844010370034' ) ) );
 	}
 
 	/**
@@ -139,8 +125,8 @@ class BankDataConverterTest extends TestCase {
 		);
 	}
 
-	private function newBankDataConverter( string $filePath = 'res/blz.lut2f' ): BankDataConverter {
-		return new BankDataConverter( $filePath );
+	private function newBankDataConverter( string $filePath = 'res/blz.lut2f' ): BankDataGenerator {
+		return new KontoCheckBankDataGenerator( $filePath, new KontoCheckIbanValidator( $filePath ) );
 	}
 
 }

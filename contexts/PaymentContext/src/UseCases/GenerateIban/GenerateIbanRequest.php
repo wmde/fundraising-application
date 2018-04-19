@@ -5,6 +5,8 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\PaymentContext\UseCases\GenerateIban;
 
 /**
+ * TODO: move to PaymentContext
+ *
  * @licence GNU GPL v2+
  * @author Kai Nissen <kai.nissen@wikimedia.de>
  */

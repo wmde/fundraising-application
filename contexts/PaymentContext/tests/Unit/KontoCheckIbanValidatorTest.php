@@ -2,14 +2,14 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\Validation;
+namespace WMDE\Fundraising\PaymentContext\Tests\Unit;
 
-use WMDE\Fundraising\PaymentContext\Domain\BankDataConverter;
+use WMDE\Fundraising\PaymentContext\Domain\KontoCheckBankDataGenerator;
+use WMDE\Fundraising\PaymentContext\Domain\KontoCheckIbanValidator;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
-use WMDE\Fundraising\Frontend\Validation\KontoCheckIbanValidator;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Validation\KontoCheckIbanValidator
+ * @covers \WMDE\Fundraising\PaymentContext\Domain\KontoCheckIbanValidator
  * Valid IBAN number examples taken from http://www.iban-rechner.eu/ibancalculator/iban.html#examples.
  *
  * @licence GNU GPL v2+
@@ -20,7 +20,7 @@ use WMDE\Fundraising\Frontend\Validation\KontoCheckIbanValidator;
 class KontoCheckIbanValidatorTest extends \PHPUnit\Framework\TestCase {
 
 	private function newValidator( array $bannedIbans = [] ): KontoCheckIbanValidator {
-		return new KontoCheckIbanValidator( new BankDataConverter( 'res/blz.lut2f' ), $bannedIbans );
+		return new KontoCheckIbanValidator( 'res/blz.lut2f', $bannedIbans );
 	}
 
 	public function validIbanProvider(): array {

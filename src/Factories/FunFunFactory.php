@@ -43,6 +43,7 @@ use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationEventLogger;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationPrePersistSubscriber;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationRepository;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationTokenFetcher;
+use WMDE\Fundraising\DonationContext\DataAccess\UniqueTransferCodeGenerator;
 use WMDE\Fundraising\DonationContext\Domain\Repositories\CommentFinder;
 use WMDE\Fundraising\DonationContext\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\DonationContext\DonationAcceptedEventHandler;
@@ -51,6 +52,7 @@ use WMDE\Fundraising\DonationContext\Infrastructure\DonationConfirmationMailer;
 use WMDE\Fundraising\DonationContext\Infrastructure\DonationEventLogger;
 use WMDE\Fundraising\DonationContext\Infrastructure\LoggingCommentFinder;
 use WMDE\Fundraising\DonationContext\Infrastructure\LoggingDonationRepository;
+use WMDE\Fundraising\DonationContext\Infrastructure\TemplateMailerInterface as DonationTemplateMailerInterface;
 use WMDE\Fundraising\DonationContext\UseCases\AddComment\AddCommentUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\AddComment\AddCommentValidator;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationPolicyValidator;
@@ -82,52 +84,8 @@ use WMDE\Fundraising\Frontend\Infrastructure\ProfilerDataCollector;
 use WMDE\Fundraising\Frontend\Infrastructure\ProfilingDecoratorBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\ServerSideTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
-use WMDE\Fundraising\Frontend\Validation\IsCustomAmountValidator;
-use WMDE\Fundraising\MembershipContext\Infrastructure\TemplateMailerInterface;
-use WMDE\Fundraising\DonationContext\Infrastructure\TemplateMailerInterface as DonationTemplateMailerInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\WordListFileReader;
-use WMDE\Fundraising\MembershipContext\Authorization\ApplicationAuthorizer;
-use WMDE\Fundraising\MembershipContext\Authorization\ApplicationTokenFetcher;
-use WMDE\Fundraising\MembershipContext\Authorization\MembershipTokenGenerator;
-use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationPiwikTracker;
-use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationRepository;
-use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationTokenFetcher;
-use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationTracker;
-use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipApplicationPrePersistSubscriber;
-use WMDE\Fundraising\MembershipContext\Domain\Repositories\ApplicationRepository;
-use WMDE\Fundraising\MembershipContext\Infrastructure\LoggingApplicationRepository;
-use WMDE\Fundraising\MembershipContext\MembershipContextFactory;
-use WMDE\Fundraising\MembershipContext\Tracking\ApplicationPiwikTracker;
-use WMDE\Fundraising\MembershipContext\Tracking\ApplicationTracker;
-use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipPolicyValidator;
-use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipUseCase;
-use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\MembershipApplicationValidator;
-use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\MembershipFeeValidator;
-use WMDE\Fundraising\MembershipContext\UseCases\CancelMembershipApplication\CancelMembershipApplicationUseCase;
-use WMDE\Fundraising\MembershipContext\UseCases\HandleSubscriptionPaymentNotification\HandleSubscriptionPaymentNotificationUseCase;
-use WMDE\Fundraising\MembershipContext\UseCases\HandleSubscriptionSignupNotification\HandleSubscriptionSignupNotificationUseCase;
-use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationPresenter;
-use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationUseCase;
-use WMDE\Fundraising\PaymentContext\DataAccess\McpCreditCardService;
-use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Client as SofortClient;
-use WMDE\Fundraising\DonationContext\DataAccess\UniqueTransferCodeGenerator;
-use WMDE\Fundraising\PaymentContext\Domain\BankDataConverter;
-use WMDE\Fundraising\PaymentContext\Domain\BankDataValidator;
-use WMDE\Fundraising\PaymentContext\Domain\DefaultPaymentDelayCalculator;
-use WMDE\Fundraising\PaymentContext\Domain\PaymentDataValidator;
-use WMDE\Fundraising\PaymentContext\Domain\PaymentDelayCalculator;
-use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\CreditCard as CreditCardUrlGenerator;
-use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\CreditCardConfig;
-use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\PayPal as PayPalUrlGenerator;
-use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\PayPalConfig;
-use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\Sofort as SofortUrlGenerator;
-use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\SofortConfig;
-use WMDE\Fundraising\PaymentContext\Domain\SimpleTransferCodeGenerator;
-use WMDE\Fundraising\PaymentContext\Domain\TransferCodeGenerator;
-use WMDE\Fundraising\PaymentContext\Infrastructure\CreditCardService;
-use WMDE\Fundraising\PaymentContext\UseCases\CheckIban\CheckIbanUseCase;
-use WMDE\Fundraising\PaymentContext\UseCases\GenerateIban\GenerateIbanUseCase;
 use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector;
 use WMDE\Fundraising\Frontend\Presentation\DonationConfirmationPageSelector;
@@ -165,8 +123,51 @@ use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionDuplica
 use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionValidator;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
-use WMDE\Fundraising\Frontend\Validation\KontoCheckIbanValidator;
+use WMDE\Fundraising\Frontend\Validation\IsCustomAmountValidator;
 use WMDE\Fundraising\Frontend\Validation\TemplateNameValidator;
+use WMDE\Fundraising\MembershipContext\Authorization\ApplicationAuthorizer;
+use WMDE\Fundraising\MembershipContext\Authorization\ApplicationTokenFetcher;
+use WMDE\Fundraising\MembershipContext\Authorization\MembershipTokenGenerator;
+use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationPiwikTracker;
+use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationRepository;
+use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationTokenFetcher;
+use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationTracker;
+use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipApplicationPrePersistSubscriber;
+use WMDE\Fundraising\MembershipContext\Domain\Repositories\ApplicationRepository;
+use WMDE\Fundraising\MembershipContext\Infrastructure\LoggingApplicationRepository;
+use WMDE\Fundraising\MembershipContext\Infrastructure\TemplateMailerInterface;
+use WMDE\Fundraising\MembershipContext\MembershipContextFactory;
+use WMDE\Fundraising\MembershipContext\Tracking\ApplicationPiwikTracker;
+use WMDE\Fundraising\MembershipContext\Tracking\ApplicationTracker;
+use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipPolicyValidator;
+use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipUseCase;
+use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\MembershipApplicationValidator;
+use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\MembershipFeeValidator;
+use WMDE\Fundraising\MembershipContext\UseCases\CancelMembershipApplication\CancelMembershipApplicationUseCase;
+use WMDE\Fundraising\MembershipContext\UseCases\HandleSubscriptionPaymentNotification\HandleSubscriptionPaymentNotificationUseCase;
+use WMDE\Fundraising\MembershipContext\UseCases\HandleSubscriptionSignupNotification\HandleSubscriptionSignupNotificationUseCase;
+use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationPresenter;
+use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationUseCase;
+use WMDE\Fundraising\PaymentContext\DataAccess\McpCreditCardService;
+use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Client as SofortClient;
+use WMDE\Fundraising\PaymentContext\Domain\BankDataGenerator;
+use WMDE\Fundraising\PaymentContext\Domain\BankDataValidator;
+use WMDE\Fundraising\PaymentContext\Domain\DefaultPaymentDelayCalculator;
+use WMDE\Fundraising\PaymentContext\Domain\KontoCheckBankDataGenerator;
+use WMDE\Fundraising\PaymentContext\Domain\KontoCheckIbanValidator;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentDataValidator;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentDelayCalculator;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\CreditCard as CreditCardUrlGenerator;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\CreditCardConfig;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\PayPal as PayPalUrlGenerator;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\PayPalConfig;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\Sofort as SofortUrlGenerator;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\SofortConfig;
+use WMDE\Fundraising\PaymentContext\Domain\SimpleTransferCodeGenerator;
+use WMDE\Fundraising\PaymentContext\Domain\TransferCodeGenerator;
+use WMDE\Fundraising\PaymentContext\Infrastructure\CreditCardService;
+use WMDE\Fundraising\PaymentContext\UseCases\CheckIban\CheckIbanUseCase;
+use WMDE\Fundraising\PaymentContext\UseCases\GenerateIban\GenerateIbanUseCase;
 use WMDE\Fundraising\Store\Factory as StoreFactory;
 use WMDE\Fundraising\Store\Installer;
 use WMDE\FunValidators\Validators\AllowedValuesValidator;
@@ -750,8 +751,8 @@ class FunFunFactory implements ServiceProviderInterface {
 		return new IbanPresenter();
 	}
 
-	public function newBankDataConverter(): BankDataConverter {
-		return new BankDataConverter( $this->config['bank-data-file'] );
+	public function newBankDataConverter(): BankDataGenerator {
+		return new KontoCheckBankDataGenerator( $this->config['bank-data-file'], $this->newIbanValidator() );
 	}
 
 	public function setSubscriptionValidator( SubscriptionValidator $subscriptionValidator ): void {
@@ -1464,7 +1465,7 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	private function newIbanValidator(): KontoCheckIbanValidator {
-		return new KontoCheckIbanValidator( $this->newBankDataConverter(), $this->config['banned-ibans'] );
+		return new KontoCheckIbanValidator( $this->config['bank-data-file'], $this->config['banned-ibans'] );
 	}
 
 	public function setFilePrefixer( FilePrefixer $prefixer ): void {
