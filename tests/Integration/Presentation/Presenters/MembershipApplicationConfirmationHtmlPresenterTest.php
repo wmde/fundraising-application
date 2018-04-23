@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\Presentation\Presenters;
 use WMDE\Fundraising\MembershipContext\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
+use WMDE\Fundraising\PaymentContext\Domain\BankDataGenerator;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfirmationHtmlPresenter
@@ -26,12 +27,15 @@ class MembershipApplicationConfirmationHtmlPresenterTest extends \PHPUnit\Framew
 			->method( 'render' )
 			->with( $this->getExpectedRenderParams( $expectedMappedStatus ) );
 
+		$bankDataGeneratorStub = $this->getMockBuilder( BankDataGenerator::class )->getMock();
+		$bankDataGeneratorStub->expects( $this->never() )->method( 'getBankDataFromIban' );
+
 		$membershipApplication = ValidMembershipApplication::newDomainEntityUsingPayPal();
 		if ( $isConfirmed === true ) {
 			$membershipApplication->confirm();
 		}
 
-		$presenter = new MembershipApplicationConfirmationHtmlPresenter( $twig );
+		$presenter = new MembershipApplicationConfirmationHtmlPresenter( $twig, $bankDataGeneratorStub );
 		$presenter->presentConfirmation(
 			$membershipApplication,
 			'update_token'
