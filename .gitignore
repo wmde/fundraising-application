@@ -24,3 +24,5 @@ web/skins
 
 deployment/deployment.retry
 deployment/inventory
+
+tmp/
