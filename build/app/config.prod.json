@@ -1,0 +1,126 @@
+{
+  "db": {
+    "driver": "pdo_mysql",
+    "user": "fundraising",
+    "password": "INSECURE PASSWORD",
+    "dbname": "fundraising",
+    "host": "database",
+    "port": 3306
+  },
+  "twig": {
+    "enable-cache": false,
+    "loaders": {
+      "filesystem": {
+        "template-dir": []
+      }
+    }
+  },
+  "mailer-twig": {
+    "enable-cache": false,
+    "loaders": {
+      "filesystem": {
+        "template-dir": "app/mail_templates"
+      }
+    }
+  },
+  "text-policies": {
+    "fields": {
+      "whitewords": "vendor/wmde/fundraising-frontend-content/data/white_words.txt",
+      "badwords": "vendor/wmde/fundraising-frontend-content/data/bad_words.txt"
+    },
+    "comment": {
+      "whitewords": "vendor/wmde/fundraising-frontend-content/data/white_words.txt",
+      "badwords": "vendor/wmde/fundraising-frontend-content/data/bad_words.txt"
+    }
+  },
+  "i18n-base-path": "vendor/wmde/fundraising-frontend-content/i18n",
+  "contact-info": {
+    "organization": {
+      "email": "fake-address@example.com",
+      "name": "Webmaster"
+    },
+    "suborganization": {
+      "email": "fake-address@example.com",
+      "name": "Webmaster"
+    }
+  },
+  "purging-secret": "purgeme",
+  "paypal-donation": {
+    "base-url": "https://www.sandbox.paypal.com/cgi-bin/webscr?",
+    "account-address": "PAYPAL_USERNAME_IS_MISSING",
+    "notify-url": "http://localhost:8082/handle-paypal-payment-notification",
+    "return-url": "http://localhost:8082/show-donation-confirmation",
+    "cancel-url": "http://localhost:8082/",
+    "item-name": "Test-Spende bei Wikimedia"
+  },
+  "paypal-membership": {
+    "base-url": "https://www.sandbox.paypal.com/cgi-bin/webscr?",
+    "account-address": "PAYPAL_USERNAME_IS_MISSING",
+    "notify-url": "http://localhost:8082/handle-paypal-membership-fee-notification",
+    "return-url": "http://localhost:8082/show-membership-confirmation",
+    "cancel-url": "http://localhost:8082/",
+    "item-name": "Test-Mitgliedschaft bei Wikimedia",
+    "delay-in-days": 90
+  },
+  "creditcard": {
+    "base-url": "https://credit-card.micropayment.de/creditcard/event/index.php?",
+    "access-key": "ACCESS_KEY_IS_MISSING",
+    "project-id": "PROJECT_ID_IS_MISSING",
+    "background-color": "EBEBEB",
+    "logo": "wikimedia_black",
+    "theme": "wiki",
+    "return-url": "http://localhost:8082/show-donation-confirmation",
+    "testmode": true
+  },
+  "sofort": {
+    "config-key": "CONFIG_KEY_IS_MISSING",
+    "return-url": "http://localhost:8082/show-donation-confirmation",
+    "cancel-url": "http://localhost:8082/",
+    "notification-url": "https://test-spenden-2.wikimedia.de/sofort-payment-notification"
+  },
+  "translation": {
+    "message-dir": "/messages",
+    "files": {
+      "membershipTypes": "membershipTypes.json",
+      "messages": "messages.json",
+      "pageTitles": "pageTitles.json",
+      "paymentIntervals": "paymentIntervals.json",
+      "paymentStatus": "paymentStatus.json",
+      "paymentTypes": "paymentTypes.json",
+      "validations": "validations.json"
+    }
+  },
+  "payment-types": {
+    "BEZ": {
+      "donation-enabled": true,
+      "membership-enabled": true
+    },
+    "UEB": {
+      "donation-enabled": true,
+      "membership-enabled": false
+    },
+    "MCP": {
+      "donation-enabled": true,
+      "membership-enabled": false
+    },
+    "PPL": {
+      "donation-enabled": true,
+      "membership-enabled": false
+    },
+    "SUB": {
+      "donation-enabled": true,
+      "membership-enabled": false
+    }
+  },
+  "skin": {
+    "options": [
+      "10h16", "cat17"
+    ],
+    "default": "cat17",
+    "cookie-lifetime": 2592000
+  },
+  "cookie": {
+    "secure": false,
+    "httpOnly": false
+  }
+}

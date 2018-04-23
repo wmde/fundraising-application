@@ -19,13 +19,10 @@ class KontoCheckIbanValidator implements IbanValidator {
 
 	private $bannedIbanNumbers = [];
 
-	/**
-	 * @param string $lutPath
-	 * @param string[] $bannedIbans
-	 */
-	public function __construct( string $lutPath, array $bannedIbans = [] ) {
-		if ( lut_init( $lutPath ) !== 1 ) {
-			throw new KontoCheckLibraryInitializationException( $lutPath );
+	public function __construct( array $bannedIbans = [] ) {
+		$initializationResult = lut_init();
+		if ( $initializationResult !== OK ) {
+			throw new KontoCheckLibraryInitializationException( null, $initializationResult );
 		}
 
 		$this->bannedIbanNumbers = $bannedIbans;

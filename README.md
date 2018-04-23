@@ -4,6 +4,9 @@
 
 User facing application for the [Wikimedia Deutschland](https://wikimedia.de) fundraising.
 
+The easiest way to get a working installation of the application is to use [docker-compose](https://docs.docker.com/compose/).
+Just get a clone of our git repository and run the commands shown in the Development section.
+
 * [Installation](#installation)
 * [Configuration](#configuration)
 * [Running the application](#running-the-application)
@@ -12,139 +15,122 @@ User facing application for the [Wikimedia Deutschland](https://wikimedia.de) fu
 * [Deployment](#deployment)
 * [Project structure](#project-structure)
 
-## Installation
-
-The easiest way to get a working installation of the application is to use [Vagrant](https://www.vagrantup.com/).
-Just get a clone of our git repository and run `vagrant up` in it. Then `vagrant ssh` into it and go to `/vagrant`,
-where you will be able to run the full test suite. (Excluding a handful of payment provider system tests).
-
-### Using Vagrant
-
-Get a copy of the code and make sure you have [Vagrant](https://www.vagrantup.com/) installed.
-
-Inside the root directory of the project, execute
-
-    vagrant up
-    vagrant ssh
-
-Once you're ssh'd into the VM, you can find the application installed in `/vagrant`.
-At this point you will be able to run all tests and view the application at http://localhost:31337/
-
-### Local Installation
-
-System dependencies:
-
-* PHP >= 7.1 with the following extensions:
-    * curl
-    * intl
-    * [kontocheck](http://kontocheck.sourceforge.net/) (only needed when you want to use or test direct debit)
-    * mbstring
-    * sqlite3
-    * xml
-* Node.js and npm (only needed in development for compiling the JavaScript and running the JavaScript tests)
-
-Get a clone of our git repository and then run these commands in it (the vagrant environment will do that for you):
-
-	composer install
-	npm install
-	npm run build-assets
-	npm run copy-assets
-
-For the database connection you need to create the file `app/config/config.prod.json` and enter your database
-connection data. If you're using MySQL, [it's important](http://stackoverflow.com/questions/5391045/how-to-define-the-use-of-utf-8-in-doctrine-2-in-zend-framework-application-ini) to add the encoding to the `driverOptions` key.
-
-	"db": {
-		"driver": "pdo_mysql",
-		"user": "donations_user",
-		"password": "s00pa_s33cr1t",
-		"dbname": "all_donations",
-		"host": "localhost",
-		"charset": "utf8",
-		"driverOptions": {
-			"1002": "SET NAMES utf8"
-		}
- 	}
 
 ## Configuration
 
 For a fully working instance with all payment types and working templates you need to fill out the following
 configuration data:
 
-	 - `bank-data-file`
-	 - `operator-email`
-	 - `operator-displayname-organization`
-	 - `operator-displayname-suborganization`
-	 - `paypal-donation`
-	 - `paypal-membership`
-	 - `creditcard`
+    "operator-email"
+    "operator-displayname-organization"
+    "operator-displayname-suborganization"
+    "paypal-donation"
+    "paypal-membership"
+    "creditcard"
+
+### Content
 
 The application needs a copy of the content repository at https://github.com/wmde/fundraising-frontend-content to work properly. 
-On development machines, the content repository is in the composer dev-dependencies. If you put the content repository in another place, you need to configure the `i18n-base-path` to point to it.
+In development the content repository is a composer dev-dependency. If you *want* to put the content repository in another place, you need to configure the `i18n-base-path` to point to it.
 The following example shows the configuration when the content repository is at the same level as the application directory:
 
     "i18n-base-path": "../fundraising-frontend-content/i18n"
 
-## Running the application
+### SQLite instead of real MYSQL for tests
 
-For development
+To speed up the tests when running them locally, add the file `app/config/config.test.local.json`
+with the following content
 
-	cd web
-	php -S 0:8000
+    {
+    	"db": {
+    		"driver": "pdo_sqlite",
+    		"memory": true
+    	}
+    }
 
-The "add donation" form can then be found at http://localhost:8000/index.php
+
+## Docker development environment
+
+System dependencies:
+
+* Docker & docker-compose
+
+Get a clone of our git repository and then run these commands in it:
+
+### Install PHP dependencies
+
+    make install-php
+        
+### Copy the example configuration
+
+    cp build/app/config.prod.json app/config
+
+### (Re-)Create Database
+
+    docker-compose run --rm app ./vendor/bin/doctrine orm:schema-tool:create
+    docker-compose run --rm app ./vendor/bin/doctrine orm:generate-proxies var/doctrine_proxies
+
+### Build Assets & Javascript
+
+    make install-js
+    make js
+    
+### Running the application
+
+    docker-compose up
+
+The application can now be reached at http://localhost:8082/index.php, debug info will be shown in your CLI.
 
 ## Running the tests
 
 ### Full CI run
 
-    composer ci
+    make ci
 
-For tests only
+### For tests only
 
-    composer test ; npm run test
+    make test
+    docker run -it --rm --user $(id -u):$(id -g) -v "$PWD":/data digitallyseamless/nodejs-bower-grunt npm run test
 
-For style checks only
+### For style checks only
 
-	composer cs ; npm run cs
-    
-### PHP
-
-For tests only
-
-    composer test
-    
-For x (unit/integration/edgetoedge) tests only
-
-    vendor/bin/phpunit --testsuite=x
+    make cs
+    docker run -it --rm --user $(id -u):$(id -g) -v "$PWD":/data digitallyseamless/nodejs-bower-grunt npm run cs
 
 For one context only
 
     vendor/bin/phpunit contexts/DonationContext/
 
-#### phpstan
+### phpstan
 
-Static code analysis can be performed via [phpstan](https://github.com/phpstan/phpstan/), either via
+Static code analysis is performed via [phpstan](https://github.com/phpstan/phpstan/) during runs of `make ci`.
 
-    composer stan
-    
-while dev-dependencies are present, or via
+In the absence of dev-dependencies (i.e. to simulate the vendor/ code on production) it can be done via
 
     docker build -t wmde/fundraising-frontend-phpstan build/phpstan
     docker run -v $PWD:/app --rm wmde/fundraising-frontend-phpstan analyse -c phpstan.neon --level 1 --no-progress cli/ contexts/ src/
 
-in the absence of dev-dependencies (i.e. to simulate the vendor/ code on production).
 These tasks are also performed during the [travis](.travis.yml) runs.
 
 ### JS
+## Emails
+
+All emails sent by the application can be inspected via [mailhog](https://github.com/mailhog/MailHog)
+at [http://localhost:8025/](http://localhost:8025/)
+
+## JS
 
 For a full JS CI run
 
-	npm run ci
+	docker run -it --rm --user $(id -u):$(id -g) -v "$PWD":/data digitallyseamless/nodejs-bower-grunt npm run ci
 
 If JavaScript files where changed, you will need to (re)run
 
-	npm run build-assets
-	npm run copy-assets
+    docker run -it --rm --user $(id -u):$(id -g) -v "$PWD":/data digitallyseamless/nodejs-bower-grunt npm run build-js
+
+If you are working on the JavaScript files and need automatic recompilation when a files changes, then run
+
+    docker run -it --rm --user $(id -u):$(id -g) -v "$PWD":/data digitallyseamless/nodejs-bower-grunt npm run watch-js
 
 If you want to debug problems in the Redux data flow, set the following variable in the shell environment:
 
@@ -156,10 +142,7 @@ Actions and their resulting state will be logged.
 
 If skin assets where changed, you will need to run
 
-    npm run build-assets
-    npm run copy-assets
-
-For more information on skins, including how to change which one is used, see [skins/README.md](skins/README.md).
+    docker run -it --rm --user $(id -u):$(id -g) -v "$PWD":/data digitallyseamless/nodejs-bower-grunt npm run build-assets
 
 ## Deployment
 

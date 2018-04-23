@@ -1,13 +1,17 @@
 {
 	"db": {
-		"driver": "",
-		"user": "",
-		"password": "",
-		"dbname": "",
-		"host": ""
+		"driver": "pdo_mysql",
+		"user": "fundraising",
+		"password": "INSECURE PASSWORD",
+		"dbname": "fundraising",
+		"host": "database",
+		"port": 3306,
+		"charset": "utf8",
+		"driverOptions": {
+			"1002": "SET NAMES utf8"
+		}
 	},
 	"enable-dev-entry-point": false,
-	"bank-data-file": "",
 	"banned-ibans": [],
 	"web-basepath": "",
 	"twig": {

@@ -1,9 +1,4 @@
 {
-	"db": {
-		"driver": "pdo_sqlite",
-		"memory": true
-	},
-	"bank-data-file": "res/blz.lut2f",
 	"banned-ibans": [
 		"wait, this is my own IBAN!"
 	],

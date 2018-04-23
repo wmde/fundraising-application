@@ -55,13 +55,6 @@
       "description": "If the dev entry point should be enabled",
       "default": false
     },
-    "bank-data-file": {
-      "type": "string",
-      "minLength": 1,
-      "title": "Bank data file",
-      "description": "Absolute or relative path to the file (including the file name). Needed for the kontocheck extension. Example: res/blz.lut2f",
-      "default": ""
-    },
     "banned-ibans": {
       "type": "array",
       "title": "List of banned IBANs",
@@ -885,7 +878,6 @@
   "additionalProperties": false,
   "required": [
     "db",
-    "bank-data-file",
     "web-basepath",
     "twig",
     "default-layout-templates",

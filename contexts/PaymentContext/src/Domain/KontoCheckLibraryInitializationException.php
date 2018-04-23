@@ -12,22 +12,12 @@ namespace WMDE\Fundraising\PaymentContext\Domain;
  */
 class KontoCheckLibraryInitializationException extends \RuntimeException {
 
-	/**
-	 * @var string
-	 */
-	private $bankDataFile;
-
-	public function __construct( string $bankDataFile, ?string $message = null, \Exception $previous = null ) {
-		$this->bankDataFile = $bankDataFile;
+	public function __construct( ?string $message = null, int $code = null, \Exception $previous = null ) {
 		parent::__construct(
-			$message !== null ?: 'Could not initialize library with bank data file: ' . $bankDataFile,
+			$message !== null ?: 'Could not initialize library with bank data file.' .
+				( $code !== null ? ' Reason: ' . kto_check_retval2txt( $code ) : '' ),
 			0,
 			$previous
 		);
 	}
-
-	public function getBankDataFile(): string {
-		return $this->bankDataFile;
-	}
-
 }

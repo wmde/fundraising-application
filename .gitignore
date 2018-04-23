@@ -24,6 +24,3 @@ web/skins
 
 deployment/deployment.retry
 deployment/inventory
-
-.vagrant/
-ubuntu-xenial-16.04-cloudimg-console.log

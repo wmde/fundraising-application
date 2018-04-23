@@ -1,17 +1,21 @@
-# phpstan in docker
-# used as sanity check of code when installed via "composer install --no-dev" (so on prod) w/o other dev tools to check
+FROM php:7.2-fpm
 
-FROM docker.io/composer:1.6
+RUN mkdir -p /usr/share/nginx/www/spenden.wikimedia.de/current/var/cache \
+    && mkdir -p /usr/share/nginx/www/spenden.wikimedia.de/current/var/doctrine_proxies \
+    && mkdir -p /usr/share/nginx/www/spenden.wikimedia.de/current/var/log \
+    && chown -R www-data:www-data /usr/share/nginx/www/spenden.wikimedia.de/current/var
 
-RUN \
-	# for intl
-	apk add --no-cache --virtual .persistent-deps icu-dev && \
-	# for curl
-	apk add --no-cache --virtual .persistent-deps curl-dev && \
-	# for xml
-	apk add --no-cache --virtual .persistent-deps libxml2-dev && \
-	docker-php-ext-configure intl --enable-intl && \
-	docker-php-ext-install intl curl xml pdo_mysql mbstring
+RUN apt-get update \
+    # for intl
+    && apt-get install -y libicu-dev \
+    # for curl
+    && apt-get install -y libcurl3-dev \
+    # for xml
+    && apt-get install -y libxml2-dev \
+    # for konto_check
+    && apt-get install -y unzip patch libz-dev \
+    #&& docker-php-ext-install -j$(nproc) pdo_sqlite \
+    && docker-php-ext-install -j$(nproc) intl curl xml pdo_mysql mbstring
 
 ENV KONTOCHECK_VERSION 5.8
 
@@ -34,5 +38,7 @@ RUN \
 	docker-php-ext-install /tmp/konto_check-$KONTOCHECK_VERSION/php && \
 	docker-php-source delete
 
-RUN composer global require phpstan/phpstan ^0.9
-ENTRYPOINT [ "/tmp/vendor/bin/phpstan" ]
+RUN apt-get install -y ssmtp \
+    && echo "mailhub=mailhog:1025" >> /etc/ssmtp/ssmtp.conf
+
+COPY ./mailhog.ini /usr/local/etc/php/conf.d/mailhog.ini
