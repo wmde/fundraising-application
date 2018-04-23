@@ -59,8 +59,8 @@ Get a clone of our git repository and then run these commands in it:
 
 ### Install PHP dependencies
 
-    docker run -it --rm --user $(id -u):$(id -g) -v "$PWD":/app -v ~/.composer:/composer -w /app composer composer install --ignore-platform-reqs
-    
+    make install-php
+        
 ### Copy the example configuration
 
     cp build/app/config.prod.json app/config
@@ -72,15 +72,14 @@ Get a clone of our git repository and then run these commands in it:
 
 ### Build Assets & Javascript
 
-    make npm-install
-    docker run -it --rm --user $(id -u):$(id -g) -v "$PWD":/data digitallyseamless/nodejs-bower-grunt npm run build-assets
-    docker run -it --rm --user $(id -u):$(id -g) -v "$PWD":/data digitallyseamless/nodejs-bower-grunt npm run copy-assets
-
+    make install-js
+    make js
+    
 ### Running the application
 
     docker-compose up
 
-The application can now be reached at http://localhost:8000/index.php, debug info will be shown in your CLI.
+The application can now be reached at http://localhost:8082/index.php, debug info will be shown in your CLI.
 
 ## Running the tests
 

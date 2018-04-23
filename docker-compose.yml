@@ -37,6 +37,8 @@ services:
       - MYSQL_DATABASE=fundraising
     expose:
       - "3306"
+    volumes:
+      - db-storage:/var/lib/mysql
 
   mailhog:
     image: mailhog/mailhog
@@ -47,6 +49,7 @@ services:
 
 volumes:
   var-data:
+  db-storage:
 
 # This is a PoC
 # Many files are shameless copies of other files from this repo / infrastructure
