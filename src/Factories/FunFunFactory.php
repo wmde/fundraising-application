@@ -1320,7 +1320,8 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	public function newMembershipApplicationConfirmationHtmlPresenter(): MembershipApplicationConfirmationHtmlPresenter {
 		return new MembershipApplicationConfirmationHtmlPresenter(
-			$this->getLayoutTemplate( 'Membership_Application_Confirmation.html.twig' )
+			$this->getLayoutTemplate( 'Membership_Application_Confirmation.html.twig' ),
+			$this->newBankDataConverter()
 		);
 	}
 

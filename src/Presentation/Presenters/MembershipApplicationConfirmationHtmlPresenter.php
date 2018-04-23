@@ -9,6 +9,7 @@ use WMDE\Fundraising\Frontend\App\AccessDeniedException;
 use WMDE\Fundraising\MembershipContext\Domain\Model\Applicant;
 use WMDE\Fundraising\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationPresenter;
+use WMDE\Fundraising\PaymentContext\Domain\BankDataGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
 use WMDE\Fundraising\PaymentContext\Domain\Model\PayPalPayment;
@@ -21,6 +22,7 @@ use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationConfirmationPresenter {
 
 	private $template;
+	private $bankDataGenerator;
 	private $html = '';
 
 	/**
@@ -28,8 +30,9 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 	 */
 	private $exception = null;
 
-	public function __construct( TwigTemplate $template ) {
+	public function __construct( TwigTemplate $template, BankDataGenerator $bankDataGenerator ) {
 		$this->template = $template;
+		$this->bankDataGenerator = $bankDataGenerator;
 	}
 
 	public function presentConfirmation( Application $application, string $updateToken ): void {
@@ -90,10 +93,12 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 
 	private function getBankDataArguments( PaymentMethod $payment ): array {
 		if ( $payment instanceof DirectDebitPayment ) {
+			// Generating bank name and BIC from IBAN because not all data is stored in $payment.bankData
+			$bankData = $this->bankDataGenerator->getBankDataFromIban( $payment->getBankData()->getIban() );
 			return [
-				'iban' => $payment->getBankData()->getIban()->toString(),
-				'bic' => $payment->getBankData()->getBic(),
-				'bankName' => $payment->getBankData()->getBankName(),
+				'iban' => $bankData->getIban()->toString(),
+				'bic' => $bankData->getBic(),
+				'bankName' => $bankData->getBankName(),
 			];
 		}
 
