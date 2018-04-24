@@ -794,16 +794,16 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "6.3.2",
+            "version": "6.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "68d0ea14d5a3f42a20e87632a5f84931e2709c90"
+                "reference": "407b0cb880ace85c9b63c5f9551db498cb2d50ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/68d0ea14d5a3f42a20e87632a5f84931e2709c90",
-                "reference": "68d0ea14d5a3f42a20e87632a5f84931e2709c90",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/407b0cb880ace85c9b63c5f9551db498cb2d50ba",
+                "reference": "407b0cb880ace85c9b63c5f9551db498cb2d50ba",
                 "shasum": ""
             },
             "require": {
@@ -813,7 +813,7 @@
             },
             "require-dev": {
                 "ext-curl": "*",
-                "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.4",
+                "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.4 || ^7.0",
                 "psr/log": "^1.0"
             },
             "suggest": {
@@ -855,7 +855,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2018-03-26T16:33:04+00:00"
+            "time": "2018-04-22T15:46:56+00:00"
         },
         {
             "name": "guzzlehttp/promises",
@@ -3414,12 +3414,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-payments.git",
-                "reference": "d68816376b06c540857054108b075978d4f40623"
+                "reference": "af1be9c8c82f800101f71d1e05bd68422a0e5779"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/d68816376b06c540857054108b075978d4f40623",
-                "reference": "d68816376b06c540857054108b075978d4f40623",
+                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/af1be9c8c82f800101f71d1e05bd68422a0e5779",
+                "reference": "af1be9c8c82f800101f71d1e05bd68422a0e5779",
                 "shasum": ""
             },
             "require": {
@@ -3460,7 +3460,7 @@
             "support": {
                 "source": "https://github.com/wmde/fundraising-payments/tree/master"
             },
-            "time": "2018-01-26T14:28:12+00:00"
+            "time": "2018-04-24T03:18:55+00:00"
         },
         {
             "name": "wmde/fundraising-store",
@@ -4213,12 +4213,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/oradwell/covers-validator.git",
-                "reference": "0585181d58c0a3af9b5c6b327b4e3a8e7d3eebc9"
+                "reference": "225818a6b009f24ceeb2a4697d1ddbb657565bf3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oradwell/covers-validator/zipball/0585181d58c0a3af9b5c6b327b4e3a8e7d3eebc9",
-                "reference": "0585181d58c0a3af9b5c6b327b4e3a8e7d3eebc9",
+                "url": "https://api.github.com/repos/oradwell/covers-validator/zipball/225818a6b009f24ceeb2a4697d1ddbb657565bf3",
+                "reference": "225818a6b009f24ceeb2a4697d1ddbb657565bf3",
                 "shasum": ""
             },
             "require": {
@@ -4251,7 +4251,7 @@
                 }
             ],
             "description": "Validates @covers tags in PHPUnit tests",
-            "time": "2018-04-03T23:27:20+00:00"
+            "time": "2018-04-23T19:21:30+00:00"
         },
         {
             "name": "ocramius/package-versions",
@@ -6703,12 +6703,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content.git",
-                "reference": "ce4555e4b8784eec39e54885e5e53e3e695df0b8"
+                "reference": "29096677a9c023ad8e76dd71399e6ba98812176c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/ce4555e4b8784eec39e54885e5e53e3e695df0b8",
-                "reference": "ce4555e4b8784eec39e54885e5e53e3e695df0b8",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/29096677a9c023ad8e76dd71399e6ba98812176c",
+                "reference": "29096677a9c023ad8e76dd71399e6ba98812176c",
                 "shasum": ""
             },
             "require-dev": {
@@ -6742,9 +6742,9 @@
             ],
             "description": "i18n for FundraisingFrontend",
             "support": {
-                "source": "https://github.com/wmde/fundraising-frontend-content/tree/production"
+                "source": "https://github.com/wmde/fundraising-frontend-content/tree/test"
             },
-            "time": "2018-04-12T12:24:50+00:00"
+            "time": "2018-04-23T12:08:52+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",
