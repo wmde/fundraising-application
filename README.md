@@ -4,9 +4,6 @@
 
 User facing application for the [Wikimedia Deutschland](https://wikimedia.de) fundraising.
 
-The easiest way to get a working installation of the application is to use [docker-compose](https://docs.docker.com/compose/).
-Just get a clone of our git repository and run the commands shown in the Development section.
-
 * [Installation](#installation)
 * [Configuration](#configuration)
 * [Running the application](#running-the-application)
@@ -16,7 +13,48 @@ Just get a clone of our git repository and run the commands shown in the Develop
 * [Project structure](#project-structure)
 
 
+## Installation
+
+For development you need to have Docker and [Docker-compose](https://docs.docker.com/compose/) installed.
+Local PHP and Composer are not needed.
+
+    sudo apt-get install docker docker-compose
+
+Get a clone of our git repository and then run these commands in it:
+
+Install PHP dependencies
+
+    make install-php
+        
+Copy the example configuration
+
+    cp build/app/config.prod.json app/config
+
+(Re-)Create Database
+
+    docker-compose run --rm app ./vendor/bin/doctrine orm:schema-tool:create
+    docker-compose run --rm app ./vendor/bin/doctrine orm:generate-proxies var/doctrine_proxies
+
+Build Assets & Javascript
+
+    make install-js
+    make js
+
 ## Configuration
+
+### Test configuration
+
+To speed up the tests when running them locally, use SQLite instead of the default MySQL. This can be done by
+adding the file `app/config/config.test.local.json` with the following content:
+
+    {
+    	"db": {
+    		"driver": "pdo_sqlite",
+    		"memory": true
+    	}
+    }
+    
+### Payments
 
 For a fully working instance with all payment types and working templates you need to fill out the following
 configuration data:
@@ -36,46 +74,7 @@ The following example shows the configuration when the content repository is at 
 
     "i18n-base-path": "../fundraising-frontend-content/i18n"
 
-### SQLite instead of real MYSQL for tests
-
-To speed up the tests when running them locally, add the file `app/config/config.test.local.json`
-with the following content
-
-    {
-    	"db": {
-    		"driver": "pdo_sqlite",
-    		"memory": true
-    	}
-    }
-
-
-## Docker development environment
-
-System dependencies:
-
-* Docker & docker-compose
-
-Get a clone of our git repository and then run these commands in it:
-
-### Install PHP dependencies
-
-    make install-php
-        
-### Copy the example configuration
-
-    cp build/app/config.prod.json app/config
-
-### (Re-)Create Database
-
-    docker-compose run --rm app ./vendor/bin/doctrine orm:schema-tool:create
-    docker-compose run --rm app ./vendor/bin/doctrine orm:generate-proxies var/doctrine_proxies
-
-### Build Assets & Javascript
-
-    make install-js
-    make js
-    
-### Running the application
+## Running the application
 
     docker-compose up
 
