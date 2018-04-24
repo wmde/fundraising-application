@@ -22,7 +22,7 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
  *
  * @requires extension konto_check
  */
-class BankDataConverterTest extends TestCase {
+class KontoCheckBankDataGeneratorTest extends TestCase {
 
 	public function testWhenUsingConfigLutPath_constructorCreatesConverter(): void {
 		$this->assertInstanceOf( KontoCheckBankDataGenerator::class, $this->newBankDataConverter() );
