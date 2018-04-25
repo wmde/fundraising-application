@@ -4,6 +4,8 @@
 
 User facing application for the [Wikimedia Deutschland](https://wikimedia.de) fundraising.
 
+<!-- toc -->
+
 * [Installation](#installation)
 * [Running the application](#running-the-application)
 * [Configuration](#configuration)
@@ -16,6 +18,8 @@ User facing application for the [Wikimedia Deutschland](https://wikimedia.de) fu
 * [Profiling](#profiling)
 * [Project structure](#project-structure)
 * [See also](#see-also)
+
+<!-- tocstop -->
 
 ## Installation
 
