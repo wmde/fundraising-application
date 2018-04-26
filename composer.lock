@@ -3414,12 +3414,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-payments.git",
-                "reference": "af1be9c8c82f800101f71d1e05bd68422a0e5779"
+                "reference": "fd4572d9a78cc684907e705948a871baf6f9447f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/af1be9c8c82f800101f71d1e05bd68422a0e5779",
-                "reference": "af1be9c8c82f800101f71d1e05bd68422a0e5779",
+                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/fd4572d9a78cc684907e705948a871baf6f9447f",
+                "reference": "fd4572d9a78cc684907e705948a871baf6f9447f",
                 "shasum": ""
             },
             "require": {
@@ -3431,9 +3431,9 @@
             },
             "require-dev": {
                 "mediawiki/mediawiki-codesniffer": "~13.0",
-                "ockcyp/covers-validator": "~0.6",
+                "ockcyp/covers-validator": "~0.7.1",
                 "phpstan/phpstan": "~0.8.0",
-                "phpunit/phpunit": "~6.2",
+                "phpunit/phpunit": "~7.1",
                 "slevomat/coding-standard": "~4.0",
                 "squizlabs/php_codesniffer": "~3.0"
             },
@@ -3460,7 +3460,7 @@
             "support": {
                 "source": "https://github.com/wmde/fundraising-payments/tree/master"
             },
-            "time": "2018-04-24T03:18:55+00:00"
+            "time": "2018-04-26T09:51:02+00:00"
         },
         {
             "name": "wmde/fundraising-store",
