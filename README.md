@@ -158,13 +158,19 @@ If skin assets where changed, you will need to run
 
 ## Updating the dependencies
 
-To update the PHP dependencies, run
+To update all the PHP dependencies, run
 
-    docker run --rm -it -v $(pwd):/app -v ~/.composer:/composer -u $(id -u):$(id -g) composer update --ignore-platform-reqs
+    make update-php
 
-To update the dependencies of a skin edit its package.json file and run
+For updating an individual package, use the command line
 
-    make install-js 
+    docker run --rm -it -v $(pwd):/app -v ~/.composer:/composer -u $(id -u):$(id -g) composer update --ignore-platform-reqs PACKAGE_NAME
+
+and replace the `PACKAGE_NAME` placeholder with the name of your package.
+
+To update the skins, run
+
+    make update-js 
 
 ## Deployment
 
