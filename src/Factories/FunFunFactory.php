@@ -153,6 +153,7 @@ use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Client as SofortC
 use WMDE\Fundraising\PaymentContext\Domain\BankDataGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataValidator;
 use WMDE\Fundraising\PaymentContext\Domain\DefaultPaymentDelayCalculator;
+use WMDE\Fundraising\PaymentContext\Domain\IbanBlocklist;
 use WMDE\Fundraising\PaymentContext\Domain\KontoCheckBankDataGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\KontoCheckIbanValidator;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentDataValidator;
@@ -740,11 +741,15 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function newCheckIbanUseCase(): CheckIbanUseCase {
-		return new CheckIbanUseCase( $this->newBankDataConverter(), $this->newIbanValidator() );
+		return new CheckIbanUseCase(
+			$this->newBankDataConverter(),
+			$this->newIbanValidator(),
+			$this->newIbanBlockList()
+		);
 	}
 
 	public function newGenerateIbanUseCase(): GenerateIbanUseCase {
-		return new GenerateIbanUseCase( $this->newBankDataConverter(), $this->newIbanValidator() );
+		return new GenerateIbanUseCase( $this->newBankDataConverter(), $this->newIbanBlockList() );
 	}
 
 	public function newIbanPresenter(): IbanPresenter {
@@ -1466,7 +1471,11 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	private function newIbanValidator(): KontoCheckIbanValidator {
-		return new KontoCheckIbanValidator( $this->config['banned-ibans'] );
+		return new KontoCheckIbanValidator();
+	}
+
+	private function newIbanBlockList(): IbanBlocklist {
+		return new IbanBlocklist( $this->config['banned-ibans'] );
 	}
 
 	public function setFilePrefixer( FilePrefixer $prefixer ): void {

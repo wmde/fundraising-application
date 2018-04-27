@@ -19,8 +19,8 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
  */
 class KontoCheckIbanValidatorTest extends \PHPUnit\Framework\TestCase {
 
-	private function newValidator( array $bannedIbans = [] ): KontoCheckIbanValidator {
-		return new KontoCheckIbanValidator( $bannedIbans );
+	private function newValidator(): KontoCheckIbanValidator {
+		return new KontoCheckIbanValidator();
 	}
 
 	public function validIbanProvider(): array {
@@ -79,10 +79,4 @@ class KontoCheckIbanValidatorTest extends \PHPUnit\Framework\TestCase {
 		$validator = $this->newValidator();
 		$this->assertFalse( $validator->validate( new Iban( $iban ) )->isSuccessful() );
 	}
-
-	public function testGivenBannedIban_validateReturnsFalse(): void {
-		$validator = $this->newValidator( [ 'DE33100205000001194700' ] );
-		$this->assertFalse( $validator->validate( new Iban( 'DE33100205000001194700' ) )->isSuccessful() );
-	}
-
 }

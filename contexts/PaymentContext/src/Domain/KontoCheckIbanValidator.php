@@ -17,31 +17,18 @@ use WMDE\FunValidators\ValidationResult;
  */
 class KontoCheckIbanValidator implements IbanValidator {
 
-	private $bannedIbanNumbers = [];
-
-	public function __construct( array $bannedIbans = [] ) {
+	public function __construct() {
 		$initializationResult = lut_init();
 		if ( $initializationResult !== OK ) {
 			throw new KontoCheckLibraryInitializationException( null, $initializationResult );
 		}
-
-		$this->bannedIbanNumbers = $bannedIbans;
 	}
 
 	public function validate( Iban $value, string $fieldName = '' ): ValidationResult {
-		if ( $this->isIbanBlocked( $value ) ) {
-			return new ValidationResult( new ConstraintViolation( $value, 'iban_blocked', $fieldName ) );
-		}
-
 		if ( iban_check( $value->toString() ) <= 0 ) {
 			return new ValidationResult( new ConstraintViolation( $value, 'iban_invalid', $fieldName ) );
 		}
 
 		return new ValidationResult();
 	}
-
-	public function isIbanBlocked( Iban $iban ): bool {
-		return in_array( $iban->toString(), $this->bannedIbanNumbers );
-	}
-
 }
