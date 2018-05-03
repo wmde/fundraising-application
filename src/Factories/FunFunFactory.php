@@ -1244,13 +1244,13 @@ class FunFunFactory implements ServiceProviderInterface {
 		// (we need different form pages for A/B testing)
 		return $this->getLayoutTemplate( 'Donation_Form.html.twig', [
 			'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForDonation(),
-			'presetAmounts' => $this->getPresetAmountsSettings()
+			'presetAmounts' => $this->getPresetAmountsSettings( 'donations' )
 		] );
 	}
 
 	public function getMembershipApplicationFormTemplate(): TwigTemplate {
 		return $this->getLayoutTemplate( 'Membership_Application.html.twig', [
-			'presetAmounts' => $this->getPresetAmountsSettings(),
+			'presetAmounts' => $this->getPresetAmountsSettings( 'membership' ),
 			'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForMembershipApplication()
 		] );
 	}
@@ -1583,10 +1583,10 @@ class FunFunFactory implements ServiceProviderInterface {
 	/**
 	 * @return Euro[]
 	 */
-	public function getPresetAmountsSettings(): array {
+	public function getPresetAmountsSettings( string $presetType ): array {
 		return array_map( function ( int $amount ) {
 			return Euro::newFromCents( $amount );
-		}, $this->config['preset-amounts']['donations'] );
+		}, $this->config['preset-amounts'][$presetType] );
 	}
 
 	public function newDonationAmountConstraint(): ValidatorConstraint {
@@ -1600,6 +1600,6 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function newIsCustomDonationAmountValidator(): IsCustomAmountValidator {
-		return new IsCustomAmountValidator( $this->getPresetAmountsSettings() );
+		return new IsCustomAmountValidator( $this->getPresetAmountsSettings( 'donations' ) );
 	}
 }
