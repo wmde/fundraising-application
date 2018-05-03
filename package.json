@@ -8,7 +8,8 @@
 		"copy-assets": "find skins/ -maxdepth 2 -name 'web' -type d -exec sh -c 'dirname \"$1\" | xargs -I{} cp -r \"./{}/web/.\" \"./web/{}\"' -- {} \\;",
 		"test": "node npm_skins run test",
 		"cs": "node npm_skins run cs",
-		"ci": "node npm_skins run ci"
+		"ci": "node npm_skins run ci",
+		"toc": "markdown-toc --maxdepth 2 --bullets '*' -i README.md"
 	},
 	"repository": {
 		"type": "git",
@@ -23,6 +24,8 @@
 		"url": "https://github.com/wmde/FundraisingFrontend/issues"
 	},
 	"homepage": "https://github.com/wmde/FundraisingFrontend#readme",
-	"devDependencies": {},
+	"devDependencies": {
+		"markdown-toc": "^1.2.0"
+	},
 	"dependencies": {}
 }

@@ -4,41 +4,46 @@
 
 User facing application for the [Wikimedia Deutschland](https://wikimedia.de) fundraising.
 
-* [Installation](#installation)
-* [Configuration](#configuration)
-* [Running the application](#running-the-application)
-* [Running the tests](#running-the-tests)
-* [Skins](#skins)
-* [Deployment](#deployment)
-* [Project structure](#project-structure)
+<!-- toc -->
 
+* [Installation](#installation)
+* [Running the application](#running-the-application)
+* [Configuration](#configuration)
+* [Running the tests](#running-the-tests)
+* [Emails](#emails)
+* [Frontend development](#frontend-development)
+* [Skins](#skins)
+* [Updating the dependencies](#updating-the-dependencies)
+* [Deployment](#deployment)
+* [Profiling](#profiling)
+* [Project structure](#project-structure)
+* [See also](#see-also)
+
+<!-- tocstop -->
 
 ## Installation
 
-For development you need to have Docker and [Docker-compose](https://docs.docker.com/compose/) installed.
+For development you need to have Docker and [docker-compose](https://docs.docker.com/compose/) installed.
 Local PHP and Composer are not needed.
 
     sudo apt-get install docker docker-compose
 
-Get a clone of our git repository and then run these commands in it:
+Get a clone of our git repository and then run:
 
-Install PHP dependencies
+    make setup
 
-    make install-php
-        
-Copy the example configuration
+This will
+ 
+- Install PHP and Node.js dependencies with composer and npm
+- Copy a basic configuration file. See section [Configuration](#configuration) for more details on the configuration.
+- (Re-)Create the database structure and generate the Doctrine Proxy classes
+- Build the assets & JavaScript
 
-    cp build/app/config.prod.json app/config
+## Running the application
 
-(Re-)Create Database
+    docker-compose up
 
-    docker-compose run --rm app ./vendor/bin/doctrine orm:schema-tool:create
-    docker-compose run --rm app ./vendor/bin/doctrine orm:generate-proxies var/doctrine_proxies
-
-Build Assets & Javascript
-
-    make install-js
-    make js
+The application can now be reached at http://localhost:8082/index.php, debug info will be shown in your CLI.
 
 ## Configuration
 
@@ -47,13 +52,15 @@ Build Assets & Javascript
 To speed up the tests when running them locally, use SQLite instead of the default MySQL. This can be done by
 adding the file `app/config/config.test.local.json` with the following content:
 
-    {
-    	"db": {
-    		"driver": "pdo_sqlite",
-    		"memory": true
-    	}
+```json
+{
+    "db": {
+        "driver": "pdo_sqlite",
+        "memory": true
     }
-    
+}
+```
+
 ### Payments
 
 For a fully working instance with all payment types and working templates you need to fill out the following
@@ -74,12 +81,6 @@ The following example shows the configuration when the content repository is at 
 
     "i18n-base-path": "../fundraising-frontend-content/i18n"
 
-## Running the application
-
-    docker-compose up
-
-The application can now be reached at http://localhost:8082/index.php, debug info will be shown in your CLI.
-
 ## Running the tests
 
 ### Full CI run
@@ -89,16 +90,16 @@ The application can now be reached at http://localhost:8082/index.php, debug inf
 ### For tests only
 
     make test
-    docker run -it --rm --user $(id -u):$(id -g) -v "$PWD":/data digitallyseamless/nodejs-bower-grunt npm run test
+    docker run -it --rm --user $(id -u):$(id -g) -v $(pwd):/app -w /app node:8 npm run test
 
 ### For style checks only
 
     make cs
-    docker run -it --rm --user $(id -u):$(id -g) -v "$PWD":/data digitallyseamless/nodejs-bower-grunt npm run cs
+    docker run -it --rm --user $(id -u):$(id -g) -v $(pwd):/app -w /app node:8 npm run cs
 
 For one context only
 
-    vendor/bin/phpunit contexts/DonationContext/
+    make phpunit TEST_DIR=contexts/PaymentContext
 
 ### phpstan
 
@@ -111,37 +112,65 @@ In the absence of dev-dependencies (i.e. to simulate the vendor/ code on product
 
 These tasks are also performed during the [travis](.travis.yml) runs.
 
-### JS
 ## Emails
 
 All emails sent by the application can be inspected via [mailhog](https://github.com/mailhog/MailHog)
 at [http://localhost:8025/](http://localhost:8025/)
 
-## JS
+## Frontend development
 
 For a full JS CI run
 
-	docker run -it --rm --user $(id -u):$(id -g) -v "$PWD":/data digitallyseamless/nodejs-bower-grunt npm run ci
+    make ci
 
 If JavaScript files where changed, you will need to (re)run
 
-    docker run -it --rm --user $(id -u):$(id -g) -v "$PWD":/data digitallyseamless/nodejs-bower-grunt npm run build-js
+    make js
 
-If you are working on the JavaScript files and need automatic recompilation when a files changes, then run
+If you want to debug problems in the Redux data flow, use the command
 
-    docker run -it --rm --user $(id -u):$(id -g) -v "$PWD":/data digitallyseamless/nodejs-bower-grunt npm run watch-js
-
-If you want to debug problems in the Redux data flow, set the following variable in the shell environment:
-
-    export REDUX_LOG=on
+    make js REDUX_LOG=on
 
 Actions and their resulting state will be logged.
+    
+### Automatic recompilation of assets during development
+
+If you are working on the JavaScript files and need automatic recompilation when a files changes, 
+you can run the following Docker commands 
+
+Run the Docker command corresponding to the skin:
+
+    docker run --rm -it -u $(id -u):$(id -g) -v $(pwd):/app -v $(pwd)/web/skins/cat17:/app/skins/cat17/web -w /app/skins/cat17 -e NO_UPDATE_NOTIFIER=1 node:8 npm run watch
+    docker run --rm -it -u $(id -u):$(id -g) -v $(pwd):/app -v $(pwd)/web/skins/10h16:/app/skins/10h16/web -w /app/skins/10h16 -e NO_UPDATE_NOTIFIER=1 node:8 npm run watch 
+
+If you want to debug problems in the Redux data flow add the parameter `-e REDUX_LOG=on` to the command line above
+
+Actions and their resulting state will be logged.
+
+Until [issue T192906](https://phabricator.wikimedia.org/T192906) is fixed, the commands `make js` and `make ui` will 
+issue (harmless) error messages as long as the symlinks are in place. 
 
 ## Skins
 
 If skin assets where changed, you will need to run
 
-    docker run -it --rm --user $(id -u):$(id -g) -v "$PWD":/data digitallyseamless/nodejs-bower-grunt npm run build-assets
+    make ui
+
+## Updating the dependencies
+
+To update all the PHP dependencies, run
+
+    make update-php
+
+For updating an individual package, use the command line
+
+    docker run --rm -it -v $(pwd):/app -v ~/.composer:/composer -u $(id -u):$(id -g) composer update --ignore-platform-reqs PACKAGE_NAME
+
+and replace the `PACKAGE_NAME` placeholder with the name of your package.
+
+To update the skins, run
+
+    make update-js 
 
 ## Deployment
 
@@ -256,6 +285,7 @@ persistence, you should use `TestEnvironment` defined in `tests/TestEnvironment.
 ### Other directories
 
 * `deployment/`: Ansible scripts and configuration for deploying the application
+* `build/`: Configuration and Dockerfiles for the development environment and Travis CI
 
 ## See also
 
