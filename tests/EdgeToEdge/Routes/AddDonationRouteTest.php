@@ -663,7 +663,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 			$client->request(
 				'GET',
-				'/',
+				'/donation/new',
 				[
 					'betrag' => '5.00',
 					'zahlweise' => 'BEZ',

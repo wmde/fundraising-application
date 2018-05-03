@@ -122,13 +122,11 @@ class NewDonationRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'Banner Impression Count: 3', $response );
 	}
 
-	// The following tests use the default route (which gets redirected to donation/new) to establish
-
 	public function testWhenTrackableInputDataIsSubmitted_theyAreStoredInSession(): void {
 		$this->createAppEnvironment( [], function ( Client $client, FunFunFactory $factory, Application $app ): void {
 			$client->request(
 				'GET',
-				'/',
+				'/donation/new',
 				[
 					'betrag' => '5,00',
 					'periode' => 3,
@@ -148,7 +146,7 @@ class NewDonationRouteTest extends WebRouteTestCase {
 
 			$client->request(
 				'GET',
-				'/',
+				'/donation/new',
 				[
 					'betrag' => '5,00',
 					'periode' => 3,
@@ -174,7 +172,7 @@ class NewDonationRouteTest extends WebRouteTestCase {
 
 			$client->request(
 				'GET',
-				'/',
+				'/donation/new',
 				[
 					'betrag' => '5,00',
 					'zahlweise' => 'BEZ'
@@ -192,7 +190,7 @@ class NewDonationRouteTest extends WebRouteTestCase {
 		$client = $this->createClient( [ 'skin' => [ 'default' => '10h16' ] ] );
 		$client->request(
 			'GET',
-			'/'
+			'/donation/new'
 		);
 		$crawler = $client->getCrawler();
 
@@ -207,7 +205,7 @@ class NewDonationRouteTest extends WebRouteTestCase {
 		$client = $this->createClient( [ 'skin' => [ 'default' => '10h16' ] ] );
 		$client->request(
 			'GET',
-			'/',
+			'/donation/new',
 			[ 'pmt' => '0' ]
 		);
 		$crawler = $client->getCrawler();
