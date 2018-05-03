@@ -12,11 +12,13 @@ use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowDonationConfirmationHandler;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Client as SofortClient;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Response as SofortResponse;
+use WMDE\FunValidators\Validators\EmailValidator;
 
 /**
  * @licence GNU GPL v2+
@@ -305,6 +307,58 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			'city' => 'Einort',
 			'country' => 'DE',
 			'email' => 'karla@kennichnich.de',
+		];
+	}
+
+	public function testGivenNonGermanDonor_donationGetsPersisted(): void {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
+
+			$client->followRedirects( false );
+
+			$client->request(
+				'POST',
+				'/donation/add',
+				$this->newFrenchDonorFormInput()
+			);
+
+			$donation = $this->getDonationFromDatabase( $factory );
+
+			$data = $donation->getDecodedData();
+			$this->assertSame( 'Claire', $data['vorname'] );
+			$this->assertSame( 'Jennesaispas', $data['nachname'] );
+			$this->assertSame( 'Claire Jennesaispas', $donation->getDonorFullName() );
+			$this->assertSame( 'Ruelle Argile 12', $data['strasse'] );
+			$this->assertSame( '12345', $data['plz'] );
+			$this->assertSame( 'Unlieu', $data['ort'] );
+			$this->assertSame( 'Unlieu', $donation->getDonorCity() );
+			$this->assertSame( 'FR', $data['country'] );
+			$this->assertSame( 'claire@jennesaispas.fr', $data['email'] );
+			$this->assertSame( 'claire@jennesaispas.fr', $donation->getDonorEmail() );
+			$this->assertSame( 'FR7630066100410001057380116', $data['iban'] );
+			$this->assertSame( '', $data['bic'] );
+			$this->assertSame( '', $data['konto'] );
+			$this->assertSame( '', $data['blz'] );
+			$this->assertSame( '', $data['bankname'] );
+		} );
+	}
+
+	private function newFrenchDonorFormInput(): array {
+		return [
+			'betrag' => '5,51',
+			'zahlweise' => 'BEZ',
+			'periode' => 0,
+			'iban' => 'FR7630066100410001057380116',
+			'addressType' => 'person',
+			'salutation' => 'Frau',
+			'title' => '',
+			'firstName' => 'Claire',
+			'lastName' => 'Jennesaispas',
+			'street' => 'Ruelle Argile 12',
+			'postcode' => '12345',
+			'city' => 'Unlieu',
+			'country' => 'FR',
+			'email' => 'claire@jennesaispas.fr',
 		];
 	}
 
@@ -755,31 +809,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			);
 
 			$this->assertIsExpectedDonation( $this->getDonationFromDatabase( $factory ) );
-		} );
-	}
-
-	public function testGivenSufficientForeignBankData_donationGetsPersisted(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$formInput = $this->newValidFormInput();
-			$formInput['iban'] = 'AT022050302101023600';
-			$formInput['bic'] = 'SPIHAT22XXX';
-			$formInput['konto'] = '';
-			$formInput['blz'] = '';
-			$formInput['bankname'] = '';
-			$client->request(
-				'POST',
-				'/donation/add',
-				$formInput
-			);
-
-			$donation = $this->getDonationFromDatabase( $factory );
-			$data = $donation->getDecodedData();
-
-			$this->assertSame( 'AT022050302101023600', $data['iban'] );
-			$this->assertSame( 'SPIHAT22XXX', $data['bic'] );
-			$this->assertSame( '', $data['konto'] );
-			$this->assertSame( '', $data['blz'] );
-			$this->assertSame( '', $data['bankname'] );
 		} );
 	}
 
