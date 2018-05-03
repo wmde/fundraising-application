@@ -271,7 +271,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	public function testGivenComplementableBankData_donationStillGetsPersisted(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 
-			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
 			$client->followRedirects( false );
 
 			$client->request(
@@ -593,7 +592,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setDonationTokenGenerator( new FixedTokenGenerator( self::SOME_TOKEN ) );
 
-			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
 			$client->followRedirects( false );
 
 			$client->request(
