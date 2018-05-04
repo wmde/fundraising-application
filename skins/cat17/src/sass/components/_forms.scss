@@ -58,7 +58,7 @@ input[type=submit] {
 			}
 		}
 		&:after {
-			content: $icon-done;
+			content: unicode($icon-done);
 			position: absolute;
 			right: 12px;
 			top: 10px;
