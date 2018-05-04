@@ -3414,12 +3414,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-payments.git",
-                "reference": "fd4572d9a78cc684907e705948a871baf6f9447f"
+                "reference": "f728bf6a489ceb7c3ada4921c375dc5d5b1dae6e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/fd4572d9a78cc684907e705948a871baf6f9447f",
-                "reference": "fd4572d9a78cc684907e705948a871baf6f9447f",
+                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/f728bf6a489ceb7c3ada4921c375dc5d5b1dae6e",
+                "reference": "f728bf6a489ceb7c3ada4921c375dc5d5b1dae6e",
                 "shasum": ""
             },
             "require": {
@@ -3460,7 +3460,7 @@
             "support": {
                 "source": "https://github.com/wmde/fundraising-payments/tree/master"
             },
-            "time": "2018-04-26T09:51:02+00:00"
+            "time": "2018-05-04T13:13:37+00:00"
         },
         {
             "name": "wmde/fundraising-store",
