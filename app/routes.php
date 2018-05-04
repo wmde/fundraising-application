@@ -371,7 +371,18 @@ $app->post(
 );
 
 // Show a donation form with pre-filled payment values, e.g. when coming from a banner
-$app->get( 'donation/new', function ( Request $request ) use ( $ffFactory ) {
+$app->get( 'donation/new', function ( Application $app, Request $request ) use ( $ffFactory ) {
+	$app['session']->set( 'piwikTracking', array_filter(
+			[
+				'paymentType' => $request->get( 'zahlweise', '' ),
+				'paymentAmount' => $request->get( 'betrag', '' ),
+				'paymentInterval' => $request->get( 'periode', '' )
+			],
+			function ( string $value ) {
+				return $value !== '' && strlen( $value ) < 20;
+			} )
+	);
+
 	try {
 		$amount = Euro::newFromFloat( ( new AmountParser( 'en_EN' ) )->parseAsFloat(
 			$request->get( 'betrag_auswahl', $request->get( 'amountGiven', '' ) ) )
@@ -539,17 +550,6 @@ $app->post(
 );
 
 $app->get( '/', function ( Application $app, Request $request ) {
-	$app['session']->set( 'piwikTracking', array_filter(
-			[
-				'paymentType' => $request->get( 'zahlweise', '' ),
-				'paymentAmount' => $request->get( 'betrag', '' ),
-				'paymentInterval' => $request->get( 'periode', '' )
-			],
-			function ( string $value ) {
-				return $value !== '' && strlen( $value ) < 20;
-			} )
-	);
-
 	return $app->handle(
 		Request::create(
 			'/donation/new',
