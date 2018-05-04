@@ -62,7 +62,9 @@
                     <div class="col-xs-6">
                         <p>
                             <strong>{$ 'iban' | trans $}</strong> {$ bankData.iban $}<br/>
-                            <strong>{$ 'bic' | trans $}</strong> {$ bankData.bic $}<br/>
+                            {%  if bankData.bic %}
+                                <strong>{$ 'bic' | trans $}</strong> {$ bankData.bic $}<br/>
+                            {% endif %}
                             {% if bankData.bankname %}
                                 <strong>{$ 'bank_name' | trans $}</strong> {$ bankData.bankname $}
                             {% endif %}
