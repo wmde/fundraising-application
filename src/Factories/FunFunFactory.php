@@ -330,7 +330,7 @@ class FunFunFactory implements ServiceProviderInterface {
 
 		$container['twig'] = function() {
 			$config = $this->config['twig'];
-			$config['loaders']['filesystem']['template-dir'] = 'skins/' . $this->getSkinSettings()->getSkin() . '/templates';
+			$config['loaders']['filesystem']['template-dir'] = $this->getSkinDirectory();
 
 			$twigFactory = $this->newTwigFactory( $config );
 			$configurator = $twigFactory->newTwigEnvironmentConfigurator();
@@ -1601,5 +1601,13 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	public function newIsCustomDonationAmountValidator(): IsCustomAmountValidator {
 		return new IsCustomAmountValidator( $this->getPresetAmountsSettings( 'donations' ) );
+	}
+
+	public function getSkinDirectory(): string {
+		return 'skins/' . $this->getSkinSettings()->getSkin() . '/templates';
+	}
+
+	public function getAbsoluteSkinDirectory(): string {
+		return $this->getAbsolutePath( $this->getSkinDirectory() );
 	}
 }

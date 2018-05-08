@@ -12,7 +12,6 @@ declare( strict_types = 1 );
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Validation;
@@ -41,8 +40,6 @@ use WMDE\Fundraising\MembershipContext\UseCases\CancelMembershipApplication\Canc
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowAppConfirmationRequest;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\PaymentContext\UseCases\GenerateIban\GenerateIbanRequest;
-use WMDE\Fundraising\Frontend\Presentation\ContentPage\ContentNotFoundException;
-use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageNotFoundException;
 use WMDE\Fundraising\Frontend\Presentation\DonationMembershipApplicationAdapter;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolationListMapper;
@@ -184,26 +181,9 @@ $app->get(
 
 $app->get(
 	'page/{pageName}',
-	function( $pageName ) use ( $ffFactory ) {
-		$pageSelector = $ffFactory->getContentPagePageSelector();
-
-		try {
-			$pageId = $pageSelector->getPageId( $pageName );
-		} catch ( PageNotFoundException $exception ) {
-			throw new NotFoundHttpException( "Page page name '$pageName' not found." );
-		}
-
-		try {
-			return $ffFactory->getLayoutTemplate( 'Display_Page_Layout.twig' )->render( [
-				'page_id' => $pageId
-			] );
-		} catch ( Twig_Error_Runtime $exception ) {
-			if ($exception->getPrevious() instanceof ContentNotFoundException) {
-				throw new NotFoundHttpException( "Content for page id '$pageId' not found." );
-			}
-
-			throw $exception;
-		}
+	function( Application $app, $pageName ) use ( $ffFactory ) {
+		return ( new \WMDE\Fundraising\Frontend\App\RouteHandlers\PageDisplayHandler( $ffFactory, $app ) )
+			->handle( $pageName );
 	}
 )
 ->bind( 'page' );
