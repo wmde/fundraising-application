@@ -1,68 +1,123 @@
 .page-supporters {
+	.content-page {
+		max-width: 100%;
+	}
 	table.donors {
 
-		margin-top: 40px;
+		margin: 40px auto 0;
 		@include bkp(sm) {
-			margin-top: 50px;
+			margin: 50px 0 0 0;
 		}
 		@include bkp(md) {
-			margin-top: 60px;
+			margin: 60px 0 0 0;
 		}
 
 		thead {
 			display: none;
 		}
 
-		tr td:nth-of-type( 1 ),
-		tr td:nth-of-type( 2 ) {
-			border-bottom: 1px solid $gray-light;
+		tbody {
+			display: block;
 		}
 
-		tr:last-child td:nth-of-type( 1 ),
-		tr:last-child td:nth-of-type( 2 ) {
-			border-bottom: 0 none;
-		}
+		tr {
+			display: block;
+			@include bkp(sm) {
+				display: table-row;
+			}
+			&:before {
+				content: unicode($icon-comment);
+				opacity: 0;
+				display: table-cell;
+				font-family: 'icomoonwikimedia';
+				min-height: 75px;
+				line-height: 75px;
+				width: 25px;
+				padding-right: 10px;
+				font-size: 20px;
+			}
+			&.commented {
+				cursor: pointer;
+				&:before {
+					opacity: 1;
+				}
 
-		// name
-		tr td:nth-of-type( 1 ) {
-			height: 75px;
-			width: 170px;
-			padding-right: 15px;
-			hyphens: auto;
-		}
+				&.active {
+					&:before {
+						min-height: 80px;
+						line-height: 80px;
+					}
+					td {
+						&:nth-of-type( 1 ) {
+							font-size: 16px;
+							font-weight: $font-main-semibold;
+						}
 
-		// amount
-		tr td:nth-of-type( 2 ) {
-			white-space: nowrap;
-			padding-right: 15px;
-		}
+						@include bkp(smmax) {
+							&:nth-of-type( 1 ),
+							&:nth-of-type( 2 ) {
+								border-bottom: 1px solid $brand-primary;
+							}
+						}
 
-		// comment
-		tr td:nth-of-type( 3 ) {
-			display: none;
-		}
+						&:nth-of-type( 3 ) {
+							display: inline-block;
+							min-height: 75px;
+							overflow: visible;
+						}
 
-		// hover effect
-		tr:hover td:nth-of-type( 1 ) {
-			font-size: 16px;
-			font-weight: $font-main-semibold;
-		}
+						&:nth-of-type( 3 ) {
+							p {
+								padding: 15px 40px 25px 40px;
+								min-height: 90px;
+								margin: 0;
+								@include bkp(sm) {
+									padding: 0 0 0 15px;
+									border-left: 1px solid $brand-primary;
+								}
+							}
+						}
+					}
+				}
+			}
+			td {
+				// name
+				&:nth-of-type( 1 ) {
+					height: 75px;
+					width: 175px;
+					padding: 10px 15px 10px 10px;
+					hyphens: auto;
+				}
 
-		tr:hover td:nth-of-type( 1 ),
-		tr:hover td:nth-of-type( 2 ) {
-			border-bottom: 1px solid $brand-primary;
-		}
+				// amount
+				&:nth-of-type( 2 ) {
+					white-space: nowrap;
+					padding-right: 15px;
+					text-align: right;
+				}
 
-		tr:hover td:nth-of-type( 3 ) {
-			display: inline-block;
-			height: 75px;
-			overflow: visible;
-		}
+				&:nth-of-type( 3 ) {
+					display: none;
+					width: 330px;
+					@include bkp(sm) {
+						width: auto;
+					}
+				}
 
-		tr:hover td:nth-of-type( 3 ) p {
-			padding-left: 15px;
-			min-height: 75px;
-			border-left: 1px solid $brand-primary;
+				&:nth-of-type( 1 ),
+				&:nth-of-type( 2 ) {
+					border-bottom: 1px solid $gray-light;
+				}
+			}
+
+			&:last-child {
+				td {
+					&:nth-of-type( 1 ),
+					&:nth-of-type( 2 ) {
+						border-bottom: 0 none;
+					}
+				}
+			}
 		}
 	}
 }
