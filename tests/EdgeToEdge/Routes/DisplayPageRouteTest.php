@@ -22,8 +22,8 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 		$this->createEnvironment(
 			[],
 			function ( Client $client, FunFunFactory $factory ): void {
-				$factory->setContentPagePageSelector( $this->getMockPageSelector( 'test' ) );
-				$factory->setContentProvider( $this->getVfsContentProvider( [ 'test.twig' => '' ] ) );
+				$factory->setContentPagePageSelector( $this->newMockPageSelector( 'test' ) );
+				$factory->setContentProvider( $this->newVfsContentProvider( [ 'test.twig' => '' ] ) );
 
 				$crawler = $client->request( 'GET', '/page/test' );
 
@@ -35,7 +35,7 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 	public function testWhenPageDoesNotExist_missingResponseIsReturnedAndHasHeaderAndFooter(): void {
 		$client = $this->createClient( [],
 			function ( FunFunFactory $factory ): void {
-				$factory->setContentPagePageSelector( $this->getNotFoundPageSelector( 'kittens' ) );
+				$factory->setContentPagePageSelector( $this->newNotFoundPageSelector( 'kittens' ) );
 			}
 		);
 		$client->request( 'GET', '/page/kittens' );
@@ -70,9 +70,9 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 		$this->createEnvironment(
 			[],
 			function ( Client $client, FunFunFactory $factory ): void {
-				$factory->setContentPagePageSelector( $this->getMockPageSelector( 'unicorns' ) );
+				$factory->setContentPagePageSelector( $this->newMockPageSelector( 'unicorns' ) );
 				$factory->setContentProvider(
-					$this->getVfsContentProvider(
+					$this->newVfsContentProvider(
 						[ 'unicorns.twig' => '<p>Rosa plüsch einhorns tanzen auf Regenbogen</p>' ]
 					)
 				);
@@ -96,7 +96,7 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 		$this->assert404( $client->getResponse() );
 	}
 
-	private function getMockPageSelector( string $pageId ): PageSelector {
+	private function newMockPageSelector( string $pageId ): PageSelector {
 		$pageSelector = $this->createMock( PageSelector::class );
 		$pageSelector
 			->method( 'getPageId' )
@@ -106,7 +106,7 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 		return $pageSelector;
 	}
 
-	private function getNotFoundPageSelector( string $pageId ): PageSelector {
+	private function newNotFoundPageSelector( string $pageId ): PageSelector {
 		$pageSelector = $this->createMock( PageSelector::class );
 		$pageSelector
 			->method( 'getPageId' )
@@ -115,7 +115,7 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 		return $pageSelector;
 	}
 
-	private function getVfsContentProvider( array $pages ): ContentProvider {
+	private function newVfsContentProvider( array $pages ): ContentProvider {
 		$content = vfsStream::setup( 'content', null,
 			[
 				'web' => [ 'pages' => $pages ],
