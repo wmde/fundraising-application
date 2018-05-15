@@ -953,6 +953,7 @@ class FunFunFactory implements ServiceProviderInterface {
 		return new AddDonationValidator(
 			$this->newPaymentDataValidator(),
 			$this->newBankDataValidator(),
+			$this->newIbanBlockList(),
 			$this->getEmailValidator()
 		);
 	}
@@ -1131,6 +1132,7 @@ class FunFunFactory implements ServiceProviderInterface {
 		return new MembershipApplicationValidator(
 			new MembershipFeeValidator(),
 			$this->newBankDataValidator(),
+			$this->newIbanBlockList(),
 			$this->getEmailValidator()
 		);
 	}
