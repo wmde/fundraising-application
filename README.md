@@ -11,6 +11,7 @@ User facing application for the [Wikimedia Deutschland](https://wikimedia.de) fu
 * [Configuration](#configuration)
 * [Running the tests](#running-the-tests)
 * [Emails](#emails)
+* [Accessing the database](#accessing-the-database)
 * [Frontend development](#frontend-development)
 * [Skins](#skins)
 * [Updating the dependencies](#updating-the-dependencies)
@@ -116,6 +117,34 @@ These tasks are also performed during the [travis](.travis.yml) runs.
 
 All emails sent by the application can be inspected via [mailhog](https://github.com/mailhog/MailHog)
 at [http://localhost:8025/](http://localhost:8025/)
+
+## Accessing the database
+
+### Accessing the database from a Docker image
+
+The database container of the Docker development environment is not exposed to the outside. If you want to connect to 
+the default fundraising frontend database using the MySQL command line client, run the following command: 
+
+    docker run -it --link spenden2_database_1:mysql --net fundraising_network --rm mysql:5.6 \
+        sh -c 'exec mysql -h database -P 3306 -u fundraising -p"INSECURE PASSWORD" fundraising'
+
+### Accessing the database from your host machine
+
+If you want to expose the port of the database on your guest host (localhost), for example for using a GUI client, 
+you need to create an "override" file for `docker-compose.yml`. Example file, called `docker-compose.db.yml`:
+
+```yaml 
+version: '3.5'
+
+services:
+    database:
+        ports:
+            - "3306:3306"
+``` 
+
+You then start the environment with the following command:
+
+    docker-compose -f docker-compose.yml -f docker-compose.db.yml up
 
 ## Frontend development
 
