@@ -3290,12 +3290,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations.git",
-                "reference": "6e9a7d07bbb4a191d3bb0e9f952fb76092556427"
+                "reference": "c608be9b3e7bdc403fb85091c6217d04edbed659"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/6e9a7d07bbb4a191d3bb0e9f952fb76092556427",
-                "reference": "6e9a7d07bbb4a191d3bb0e9f952fb76092556427",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/c608be9b3e7bdc403fb85091c6217d04edbed659",
+                "reference": "c608be9b3e7bdc403fb85091c6217d04edbed659",
                 "shasum": ""
             },
             "require": {
@@ -3345,7 +3345,7 @@
                 "source": "https://github.com/wmde/fundraising-donations/tree/master",
                 "issues": "https://github.com/wmde/fundraising-donations/issues"
             },
-            "time": "2018-05-09T14:14:15+00:00"
+            "time": "2018-05-16T09:46:30+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
@@ -3353,12 +3353,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships.git",
-                "reference": "1a824b3f97c245118820c87f1587de99b34dd038"
+                "reference": "decd8e654e2686fc0c3e9ff5ea5d13de8bb8fc3a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/1a824b3f97c245118820c87f1587de99b34dd038",
-                "reference": "1a824b3f97c245118820c87f1587de99b34dd038",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/decd8e654e2686fc0c3e9ff5ea5d13de8bb8fc3a",
+                "reference": "decd8e654e2686fc0c3e9ff5ea5d13de8bb8fc3a",
                 "shasum": ""
             },
             "require": {
@@ -3407,7 +3407,7 @@
             "support": {
                 "source": "https://github.com/wmde/fundraising-memberships/tree/master"
             },
-            "time": "2018-05-08T10:21:11+00:00"
+            "time": "2018-05-16T10:59:55+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
@@ -6704,12 +6704,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content.git",
-                "reference": "5c53457ae4fec9c73179f50ee3ca9f48c2306ebb"
+                "reference": "0a8707a993d0b49aa5654a6146a09d2917420e48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/5c53457ae4fec9c73179f50ee3ca9f48c2306ebb",
-                "reference": "5c53457ae4fec9c73179f50ee3ca9f48c2306ebb",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/0a8707a993d0b49aa5654a6146a09d2917420e48",
+                "reference": "0a8707a993d0b49aa5654a6146a09d2917420e48",
                 "shasum": ""
             },
             "require-dev": {
@@ -6745,7 +6745,7 @@
             "support": {
                 "source": "https://github.com/wmde/fundraising-frontend-content/tree/test"
             },
-            "time": "2018-05-14T11:14:19+00:00"
+            "time": "2018-05-16T09:13:48+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",

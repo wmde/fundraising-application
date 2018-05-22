@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationValidationResult as Result;
+use WMDE\Fundraising\PaymentContext\Domain\BankDataValidationResult;
 use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
 use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
@@ -121,10 +122,10 @@ class DonationFormViolationPresenter {
 			Result::SOURCE_PAYMENT_AMOUNT => 'paymentData',
 			Result::SOURCE_PAYMENT_TYPE => 'paymentData',
 
-			Result::SOURCE_BANK_ACCOUNT => 'bankData',
-			Result::SOURCE_BANK_CODE => 'bankData',
-			Result::SOURCE_IBAN => 'bankData',
-			Result::SOURCE_BIC => 'bankData',
+			BankDataValidationResult::SOURCE_BANK_ACCOUNT => 'bankData',
+			BankDataValidationResult::SOURCE_BANK_CODE => 'bankData',
+			BankDataValidationResult::SOURCE_IBAN => 'bankData',
+			BankDataValidationResult::SOURCE_BIC => 'bankData',
 
 			Result::SOURCE_DONOR_EMAIL => 'address',
 			Result::SOURCE_DONOR_COMPANY => 'address',
