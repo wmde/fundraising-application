@@ -18,7 +18,7 @@
 		"wmde/fundraising-donations": "@dev",
 		"wmde/fundraising-memberships": "@dev",
 		"wmde/fundraising-payments": "@dev",
-		"wmde/fundraising-content-provider": "^2.0",
+		"wmde/fundraising-content-provider": "dev-gdpr_compliance",
 
 		"symfony/twig-bridge": "^3.3",
 		"symfony/translation": "^3.3",
