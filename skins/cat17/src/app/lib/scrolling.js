@@ -87,7 +87,6 @@ var objectAssign = require( 'object-assign' ),
 				if ( $element.is( ':focus' ) ) { // Checking if the target was focused
 					return false;
 				} else {
-					$element.attr( 'tabindex', '-1' ); // Adding tabindex for elements not focusable
 					$element.focus(); // Set focus again
 				}
 			} );
