@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "5ace7663316746be65eda73ac5257d70",
+    "content-hash": "d76514146d6b14a17a915392538cbc84",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -3222,16 +3222,16 @@
         },
         {
             "name": "wmde/fundraising-content-provider",
-            "version": "v2.0.0",
+            "version": "dev-gdpr_compliance",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-content-provider.git",
-                "reference": "1e0b6a5a231256760f187fa7c7b6d41a27089d81"
+                "reference": "f1e4ebefc485c5c09bd03318c3c2a596ed9bc70b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-content-provider/zipball/1e0b6a5a231256760f187fa7c7b6d41a27089d81",
-                "reference": "1e0b6a5a231256760f187fa7c7b6d41a27089d81",
+                "url": "https://api.github.com/repos/wmde/fundraising-content-provider/zipball/f1e4ebefc485c5c09bd03318c3c2a596ed9bc70b",
+                "reference": "f1e4ebefc485c5c09bd03318c3c2a596ed9bc70b",
                 "shasum": ""
             },
             "require": {
@@ -3280,9 +3280,9 @@
             ],
             "description": "WMDE fundraising application content provider and filter",
             "support": {
-                "source": "https://github.com/wmde/fundraising-content-provider/tree/v2.0.0"
+                "source": "https://github.com/wmde/fundraising-content-provider/tree/gdpr_compliance"
             },
-            "time": "2017-04-28T12:49:42+00:00"
+            "time": "2018-05-24T12:51:19+00:00"
         },
         {
             "name": "wmde/fundraising-donations",
@@ -6813,6 +6813,7 @@
         "wmde/fundraising-donations": 20,
         "wmde/fundraising-memberships": 20,
         "wmde/fundraising-payments": 20,
+        "wmde/fundraising-content-provider": 20,
         "ockcyp/covers-validator": 20,
         "wmde/fundraising-frontend-content": 20
     },
