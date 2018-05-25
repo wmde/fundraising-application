@@ -1,7 +1,7 @@
 {% spaceless %}
 {% for amount in presetAmounts %}
 	<div class="wrap-radio">
-		<input type="radio" id="amount{$ loop.index $}" value="{$ amount.euroCents $}">
+		<input type="radio" id="amount{$ loop.index $}" name="amount-grp" value="{$ amount.euroCents $}">
 		<label for="amount{$ loop.index $}">
 			<span>{$ amount.euroFloat | number_format( 0 ) $} €</span>
 		</label>
