@@ -352,7 +352,6 @@ test( 'AnimatedScroller treats element once scroll position reached', function (
 
 	body.animate.args[ 0 ][ 2 ]();
 
-	t.ok( element.attr.withArgs( 'tabindex', '-1' ).calledOnce );
 	t.ok( element.focus.calledTwice );
 
 	delete global.jQuery;

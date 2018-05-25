@@ -52,6 +52,12 @@ var objectAssign = require( 'object-assign' ),
 		onChange: null,
 		render: function ( formContent ) {
 			this.element.val( [ formContent[ this.contentName ] ] ); // Needs to be an array
+			this.element.on( 'focus', function () {
+				jQuery( this ).addClass( 'focused' );
+			} );
+			this.element.on( 'focusout', function () {
+				jQuery( '.focused' ).removeClass( 'focused' );
+			} );
 		}
 	},
 
@@ -81,6 +87,12 @@ var objectAssign = require( 'object-assign' ),
 		onChange: null,
 		render: function ( formContent ) {
 			this.element.prop( 'checked', !!formContent[ this.contentName ] ); // !! converts to boolean
+			this.element.on( 'focus', function () {
+				jQuery( this ).parent().find( 'label' ).addClass( 'focused' );
+			} );
+			this.element.on( 'focusout', function () {
+				jQuery( '.focused' ).removeClass( 'focused' );
+			} );
 		}
 	},
 

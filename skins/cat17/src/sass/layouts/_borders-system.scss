@@ -250,16 +250,30 @@
 
 .wrap-input, .wrap-check {
     input {
-        opacity: 0;
+        opacity: 0.01;
         position: absolute;
     }
+    input[type=checkbox] + label {
+            &.focused {
+                border: 1px dotted $brand-primary;
+            }
+            padding: 5px;
+
+    }
+    input[type=radio].focused + label {
+            &:before {
+                outline: 1px dotted $gray-darker;
+            }
+    }
+
     input:checked + label {
-		&:before {
-			box-shadow: inset 0 0 0 2px white;
-			@include themify($themes) {
-				background-color: themed('brandPrimary');
-			}
-		}
+        &:before {
+            box-shadow: inset 0 0 0 2px white;
+            @include themify($themes) {
+                background-color: themed('brandPrimary');
+            }
+        }
+
     }
     label {
         display: flex;
@@ -286,11 +300,11 @@
             text-align: center;
             transition: all 250ms ease;
         }
-		span + i {
-			position: absolute;
-			right: 0;
-			top: 20px;
-		}
+        span + i {
+            position: absolute;
+            right: 0;
+            top: 20px;
+        }
     }
     input label, &:hover label {
         align-items: center;
