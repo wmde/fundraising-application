@@ -15,21 +15,19 @@ class OperatorMailer {
 
 	private $messenger;
 	private $template;
-	private $subject;
 
-	public function __construct( Messenger $messenger, TwigTemplate $template, string $mailSubject ) {
+	public function __construct( Messenger $messenger, TwigTemplate $template ) {
 		$this->messenger = $messenger;
 		$this->template = $template;
-		$this->subject = $mailSubject;
 	}
 
 	/**
 	 * @throws \RuntimeException
 	 */
-	public function sendMailToOperator( EmailAddress $replyToAddress, array $templateArguments = [] ): void {
+	public function sendMailToOperator( EmailAddress $replyToAddress, string $subject, array $templateArguments = [] ): void {
 		$this->messenger->sendMessageToOperator(
 			new Message(
-				$this->subject,
+				$subject,
 				$this->template->render( $templateArguments )
 			),
 			$replyToAddress

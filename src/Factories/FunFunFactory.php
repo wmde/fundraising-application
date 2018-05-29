@@ -783,8 +783,7 @@ class FunFunFactory implements ServiceProviderInterface {
 	private function newContactOperatorMailer(): OperatorMailer {
 		return new OperatorMailer(
 			$this->getSuborganizationMessenger(),
-			new TwigTemplate( $this->getMailerTwig(), 'Contact_Forward_to_Operator.txt.twig' ),
-			$this->getTranslator()->trans( 'mail_subject_getintouch_forward' )
+			new TwigTemplate( $this->getMailerTwig(), 'Contact_Forward_to_Operator.txt.twig' )
 		);
 	}
 

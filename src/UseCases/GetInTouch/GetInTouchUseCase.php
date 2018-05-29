@@ -47,6 +47,7 @@ class GetInTouchUseCase {
 	private function sendContactRequestToOperator( GetInTouchRequest $request ): void {
 		$this->operatorMailer->sendMailToOperator(
 			new EmailAddress( $request->getEmailAddress() ),
+			$request->getSubject(),
 			$this->getTemplateParams( $request )
 		);
 	}
