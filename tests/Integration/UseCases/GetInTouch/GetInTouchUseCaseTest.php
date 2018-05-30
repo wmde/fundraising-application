@@ -53,6 +53,7 @@ class GetInTouchUseCaseTest extends \PHPUnit\Framework\TestCase {
 			->method( 'sendMailToOperator' )
 			->with(
 				$this->equalTo( new EmailAddress( self::INQUIRER_EMAIL_ADDRESS ) ),
+				$this->equalTo( self::INQUIRY_SUBJECT ),
 				$this->equalTo( [
 					'firstName' => self::INQUIRER_FIRST_NAME,
 					'lastName' => self::INQUIRER_LAST_NAME,
