@@ -130,17 +130,14 @@ $.extend( DonationComments.prototype, {
 		this.paginationContainer.find( '.num-pages' ).text( this.numPages );
 
 		// set visibility of back and forward arrows depending on this.numPages and this.currentPage
-		this.paginationContainer.find( '> span' ).hide();
-		if ( this.numPages > 1 ) {
-			this.paginationContainer.find( '.pages' ).show();
-		}
+		this.paginationContainer.find( '.controls' ).addClass( 'inactive' );
 		if ( this.currentPage > 0 ) {
-			this.paginationContainer.find( '.prev' ).show();
-			this.paginationContainer.find( '.first' ).show();
+			this.paginationContainer.find( '.prev' ).removeClass( 'inactive' );
+			this.paginationContainer.find( '.first' ).removeClass( 'inactive' );
 		}
 		if ( this.currentPage < this.numPages - 1 ) {
-			this.paginationContainer.find( '.next' ).show();
-			this.paginationContainer.find( '.last' ).show();
+			this.paginationContainer.find( '.next' ).removeClass( 'inactive' );
+			this.paginationContainer.find( '.last' ).removeClass( 'inactive' );
 		}
 	},
 
