@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "5ace7663316746be65eda73ac5257d70",
+    "content-hash": "cbe9d48992cfc5d7a4072480e7bd5acb",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -3568,6 +3568,62 @@
             ],
             "description": "Persistence services around the fundraising database",
             "time": "2017-12-05T13:26:10+00:00"
+        },
+        {
+            "name": "wmde/fundraising-subscriptions",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wmde/fundraising-subscriptions.git",
+                "reference": "c908552229f1a60b298b4b36f617edc4445ff5af"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wmde/fundraising-subscriptions/zipball/c908552229f1a60b298b4b36f617edc4445ff5af",
+                "reference": "c908552229f1a60b298b4b36f617edc4445ff5af",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/orm": "~2.5",
+                "php": ">=7.2",
+                "psr/log": "~1.0",
+                "wmde/email-address": "~1.0",
+                "wmde/fun-validators": "~1.0",
+                "wmde/fundraising-store": "~7.0"
+            },
+            "require-dev": {
+                "mediawiki/mediawiki-codesniffer": "~18.0",
+                "ockcyp/covers-validator": "~0.7.1",
+                "phpstan/phpstan": "~0.9.2",
+                "phpunit/phpunit": "~7.1",
+                "slevomat/coding-standard": "~4.5",
+                "squizlabs/php_codesniffer": "~3.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "WMDE\\Fundraising\\SubscriptionContext\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "WMDE\\Fundraising\\SubscriptionContext\\Tests\\": "tests/"
+                }
+            },
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Bounded Context for fundraising subcriptions",
+            "support": {
+                "source": "https://github.com/wmde/fundraising-subscriptions/tree/master",
+                "issues": "https://github.com/wmde/fundraising-subscriptions/issues"
+            },
+            "time": "2018-06-04T14:54:47+00:00"
         }
     ],
     "packages-dev": [
@@ -6886,6 +6942,7 @@
         "wmde/fundraising-donations": 20,
         "wmde/fundraising-memberships": 20,
         "wmde/fundraising-payments": 20,
+        "wmde/fundraising-subscriptions": 20,
         "ockcyp/covers-validator": 20,
         "wmde/fundraising-frontend-content": 20
     },

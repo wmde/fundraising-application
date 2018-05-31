@@ -195,6 +195,7 @@ We moved the Bounded Contexts into their own repositories:
 * [Donation Context](https://github.com/wmde/fundraising-donations)
 * [Membership Context](https://github.com/wmde/fundraising-memberships)
 * [Payment Context](https://github.com/wmde/fundraising-payments)
+* [Subscription Context](https://github.com/wmde/fundraising-subscriptions)
 
 ### Production code layout
 
@@ -207,6 +208,7 @@ We moved the Bounded Contexts into their own repositories:
 	* `UseCases/`: one directory per use case
 	* `DataAccess/`: implementations of services that binds to database, network, etc
 	* `Infrastructure/`: implementations of services binding to cross cutting concerns, ie logging
+* `contexts/$ContextName`: Concrete implementations of interfaces from the context.
 * `web/`: web accessible code
 	* `index.php`: production entry point
 * `app/`: contains configuration and all framework (Silex) dependent code
@@ -227,8 +229,7 @@ We moved the Bounded Contexts into their own repositories:
 ### Test code layout
 
 The test directory structure (and namespace structure) mirrors the production code. Tests for code
-in `src/` can be found in `tests/`. Tests for code in `contexts/$ContextName/src/` can be found in
-`contexts/$ContextName/tests/`.
+in `src/` can be found in `tests/`.
 
 Tests are categorized by their type. To run only tests of a given type, you can use one of the
 testsuites defined in `phpunit.xml.dist`.
