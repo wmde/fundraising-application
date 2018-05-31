@@ -66,6 +66,11 @@
 			color: $brand-primary;
 		}
 	}
+	span.controls.inactive {
+		a, a:hover {
+			color: #dddddd;
+		}
+	}
 	li {
         min-width: 45px;
         text-align: center;
