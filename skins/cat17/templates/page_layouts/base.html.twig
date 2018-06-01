@@ -9,6 +9,8 @@
 				<h2>{$ page_id|trans({}, 'pageTitles') $}</h2>
 
 				{$ web_content("pages/#{page_id}") $}
+                {% block additional_content %}
+                {% endblock %}
 			</div>
 
 			<div class="itz-logo col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-0 col-md-4 hidden-print">

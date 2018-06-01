@@ -905,6 +905,27 @@ body.page-supporters section .box-header span:before {
     list-style: disc inside;
 }
 
+#wlightbox-datenschutz .opted-out,
+.sandboxedcontent.privacy_protection .opted-out {
+    display: none;
+    font-weight: bold;
+}
+
+#wlightbox-datenschutz ol,
+.sandboxedcontent.privacy_protection ol {
+    list-style: decimal;
+    padding-left: 10px;
+}
+
+#wlightbox-datenschutz > ol,
+.sandboxedcontent.privacy_protection > ol {
+    list-style: upper-roman;
+}
+
+.privacy_wrapper .wrap-field {
+    padding: 0 0 20px;
+}
+
 /**
  * bank detail banner
  */
