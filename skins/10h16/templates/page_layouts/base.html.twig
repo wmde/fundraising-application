@@ -18,6 +18,8 @@
 					<div class="box-section box-footer">
 						<div class="container clearfix sandboxedcontent {$ page_id $}">
 							{$ web_content("pages/#{page_id}") $}
+							{% block additional_content %}
+							{% endblock %}
 						</div>
 					</div>
 				</div>
@@ -30,7 +32,7 @@
 					</a>
 				</div>
 
-                {% if page_id == 'supporters' %}
+					{% if page_id == 'supporters' %}
 					<div class="icon-ok-sign _icon-list-item last">
 						<p>
 							<strong>Spenden auch Sie!</strong>
@@ -40,7 +42,7 @@
 							Unterstützen Sie die Wikipedia und Freies Wissen mit Ihrer <a target="_blank" href="{$ path( '/', { piwik_campaign: 'spenden_wikimedia_benefactors', piwik_kwd: 'benefactors' } ) $}">Spende</a>.
 						</p>
 					</div>
-                {% else %}
+					{% else %}
 					<div class="icon-hand-right _icon-list-item last">
 						<p>
 							<strong>Spenden</strong>
@@ -49,7 +51,7 @@
 							<a href="{$ path( '/' ) $}" target="_blank">Zurück</a> zur Spendenseite
 						</p>
 					</div>
-                {% endif %}
+				{% endif %}
 			</div>
 		</div>
 	</section>

@@ -3,5 +3,73 @@
 		ul {
 			margin-left: 1.5em;
 		}
+		& > ol {
+			padding-left: 10px;
+			list-style-type: upper-roman;
+		}
+	}
+	.privacy {
+		&_explanation {
+			flex: 1 1 50%;
+			@include bkp(smmax) {
+				flex: 1 1 100%;
+			}
+			padding-left: 10px;
+			.opted-out {
+				display: none;
+				font-weight: bold;
+			}
+		}
+		&_selection {
+			display: flex;
+			flex-wrap: wrap;
+			&_box {
+				flex: 1 1 50%;
+				border-right: 1px solid $brand-primary;
+				@include bkp(smmax) {
+					flex: 1 1 100%;
+					border-right: none;
+				}
+			}
+		}
+		&_wrapper {
+			border: 2px solid $panel-inner-border;
+			padding: 20px;
+			margin: 10px -15px;
+			.wrap-field {
+				display: flex;
+				@include bkp(smmax) {
+					border-bottom: none;
+					min-height: 75px;
+					&:after, &:before {
+						border-bottom: none;
+					}
+				}
+				.wrap-input {
+					padding-right: 5px;
+					&:after {
+						margin-left: 33px;
+						@include bkp(smmax) {
+							border-bottom: none;
+						}
+					}
+				}
+				&.selected {
+					@include bkp(smmax) {
+						&:after, &:before {
+							border-bottom: none;
+						}
+					}
+					.wrap-input {
+						&:after {
+							width: 269px;
+							@include bkp(smmax) {
+								border-bottom: none;
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 }
