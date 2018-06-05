@@ -18,6 +18,7 @@
 		"wmde/fundraising-donations": "@dev",
 		"wmde/fundraising-memberships": "@dev",
 		"wmde/fundraising-payments": "@dev",
+		"wmde/fundraising-subscriptions": "@dev",
 		"wmde/fundraising-content-provider": "^2.0",
 
 		"symfony/twig-bridge": "^3.3",
@@ -77,6 +78,10 @@
 		},
 		{
 			"type": "vcs",
+			"url": "https://github.com/wmde/fundraising-subscriptions"
+		},
+		{
+			"type": "vcs",
 			"url": "https://github.com/wmde/fundraising-frontend-content"
 		},
 		{
@@ -110,15 +115,14 @@
 			"WMDE\\Fundraising\\Frontend\\": "src/",
 			"WMDE\\Fundraising\\Frontend\\App\\": "app/",
 			"WMDE\\Fundraising\\Frontend\\Cli\\": "cli/",
-			"WMDE\\Fundraising\\PaymentContext\\": "contexts/PaymentContext/src/",
-			"WMDE\\Fundraising\\Frontend\\SubscriptionContext\\": "contexts/SubscriptionContext/src/"
+			"WMDE\\Fundraising\\PaymentContext\\": "contexts/PaymentContext/src/"
 		}
 	},
 	"autoload-dev": {
 		"psr-4": {
 			"WMDE\\Fundraising\\Frontend\\Tests\\": "tests/",
 			"WMDE\\Fundraising\\PaymentContext\\Tests\\": "contexts/PaymentContext/tests/",
-			"WMDE\\Fundraising\\Frontend\\SubscriptionContext\\Tests\\": "contexts/SubscriptionContext/tests/"
+			"WMDE\\Fundraising\\SubscriptionContext\\Tests\\": "vendor/wmde/fundraising-subscriptions/tests/"
 		}
 	},
 	"config": {

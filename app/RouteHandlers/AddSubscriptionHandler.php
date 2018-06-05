@@ -8,7 +8,7 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\AddSubscription\SubscriptionRequest;
+use WMDE\Fundraising\SubscriptionContext\UseCases\AddSubscription\SubscriptionRequest;
 use WMDE\FunValidators\ValidationResponse;
 
 /**

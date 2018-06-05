@@ -114,13 +114,14 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipFormViolationPre
 use WMDE\Fundraising\Frontend\Presentation\Presenters\PageNotFoundPresenter;
 use WMDE\Fundraising\Frontend\Presentation\SkinSettings;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
-use WMDE\Fundraising\Frontend\SubscriptionContext\DataAccess\DoctrineSubscriptionRepository;
-use WMDE\Fundraising\Frontend\SubscriptionContext\Domain\Repositories\SubscriptionRepository;
-use WMDE\Fundraising\Frontend\SubscriptionContext\Infrastructure\LoggingSubscriptionRepository;
-use WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\AddSubscription\AddSubscriptionUseCase;
-use WMDE\Fundraising\Frontend\SubscriptionContext\UseCases\ConfirmSubscription\ConfirmSubscriptionUseCase;
-use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionDuplicateValidator;
-use WMDE\Fundraising\Frontend\SubscriptionContext\Validation\SubscriptionValidator;
+use WMDE\Fundraising\SubscriptionContext\DataAccess\DoctrineSubscriptionRepository;
+use WMDE\Fundraising\SubscriptionContext\Domain\Repositories\SubscriptionRepository;
+use WMDE\Fundraising\SubscriptionContext\Infrastructure\LoggingSubscriptionRepository;
+use WMDE\Fundraising\SubscriptionContext\UseCases\AddSubscription\AddSubscriptionUseCase;
+use WMDE\Fundraising\SubscriptionContext\UseCases\ConfirmSubscription\ConfirmSubscriptionUseCase;
+use WMDE\Fundraising\SubscriptionContext\Validation\SubscriptionDuplicateValidator;
+use WMDE\Fundraising\SubscriptionContext\Validation\SubscriptionValidator;
+use WMDE\Fundraising\SubscriptionContext\Infrastructure\TemplateMailerInterface as SubscriptionTemplateMailerInterface;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\Fundraising\Frontend\Validation\IsCustomAmountValidator;
@@ -692,7 +693,7 @@ class FunFunFactory implements ServiceProviderInterface {
 		);
 	}
 
-	private function newAddSubscriptionMailer(): TemplateMailerInterface {
+	private function newAddSubscriptionMailer(): SubscriptionTemplateMailerInterface {
 		return $this->newTemplateMailer(
 			$this->getSuborganizationMessenger(),
 			new TwigTemplate(
@@ -706,7 +707,7 @@ class FunFunFactory implements ServiceProviderInterface {
 		);
 	}
 
-	private function newConfirmSubscriptionMailer(): TemplateMailerInterface {
+	private function newConfirmSubscriptionMailer(): SubscriptionTemplateMailerInterface {
 		return $this->newTemplateMailer(
 			$this->getSuborganizationMessenger(),
 			new TwigTemplate(

@@ -8,12 +8,14 @@ use WMDE\EmailAddress\EmailAddress;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\MembershipContext\Infrastructure\TemplateMailerInterface;
 use WMDE\Fundraising\DonationContext\Infrastructure\TemplateMailerInterface as DonationTemplateMailerInterface;
+use WMDE\Fundraising\SubscriptionContext\Infrastructure\TemplateMailerInterface as SubscriptionTemplateMailerInterface;
 
 /**
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class TemplateBasedMailer implements TemplateMailerInterface, DonationTemplateMailerInterface {
+class TemplateBasedMailer implements TemplateMailerInterface, DonationTemplateMailerInterface,
+	SubscriptionTemplateMailerInterface {
 
 	private $messenger;
 	private $template;
