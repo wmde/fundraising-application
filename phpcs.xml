@@ -7,7 +7,6 @@
 
     <file>src/</file>
     <file>tests/</file>
-    <file>contexts/</file>
     <file>cli/</file>
 
     <arg name="extensions" value="php"/>

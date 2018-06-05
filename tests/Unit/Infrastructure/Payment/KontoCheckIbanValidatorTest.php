@@ -2,22 +2,23 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\PaymentContext\Tests\Unit;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Payment;
 
-use WMDE\Fundraising\PaymentContext\Domain\KontoCheckBankDataGenerator;
-use WMDE\Fundraising\PaymentContext\Domain\KontoCheckIbanValidator;
+use PHPUnit\Framework\TestCase;
+use WMDE\Fundraising\Frontend\Infrastructure\Payment\KontoCheckIbanValidator;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 
 /**
- * @covers \WMDE\Fundraising\PaymentContext\Domain\KontoCheckIbanValidator
  * Valid IBAN number examples taken from http://www.iban-rechner.eu/ibancalculator/iban.html#examples.
+ *
+ * @covers \WMDE\Fundraising\Frontend\Infrastructure\Payment\KontoCheckIbanValidator
  *
  * @licence GNU GPL v2+
  * @author Leszek Manicki <leszek.manicki@wikimedia.de>
  *
  * @requires extension konto_check
  */
-class KontoCheckIbanValidatorTest extends \PHPUnit\Framework\TestCase {
+class KontoCheckIbanValidatorTest extends TestCase {
 
 	private function newValidator(): KontoCheckIbanValidator {
 		return new KontoCheckIbanValidator();

@@ -2,9 +2,11 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\PaymentContext\Domain;
+namespace WMDE\Fundraising\Frontend\Infrastructure\Payment;
 
 use RuntimeException;
+use WMDE\Fundraising\PaymentContext\Domain\BankDataGenerator;
+use WMDE\Fundraising\PaymentContext\Domain\IbanValidator;
 use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 

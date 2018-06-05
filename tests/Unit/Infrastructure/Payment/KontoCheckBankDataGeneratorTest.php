@@ -2,20 +2,19 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\PaymentContext\Tests\Unit\Domain;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Payment;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataGenerator;
-use WMDE\Fundraising\PaymentContext\Domain\KontoCheckBankDataGenerator;
-use WMDE\Fundraising\PaymentContext\Domain\KontoCheckLibraryInitializationException;
-use WMDE\Fundraising\PaymentContext\Domain\KontoCheckIbanValidator;
+use WMDE\Fundraising\Frontend\Infrastructure\Payment\KontoCheckBankDataGenerator;
+use WMDE\Fundraising\Frontend\Infrastructure\Payment\KontoCheckIbanValidator;
 use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 
 /**
- * @covers \WMDE\Fundraising\PaymentContext\Domain\KontoCheckBankDataGenerator
+ * @covers \WMDE\Fundraising\Frontend\Infrastructure\Payment\KontoCheckBankDataGenerator
  *
  * @licence GNU GPL v2+
  * @author Christoph Fischer <christoph.fischer@wikimedia.de >

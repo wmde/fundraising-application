@@ -1,6 +1,0 @@
-parameters:
-  excludes_analyse:
-    - */contexts/DonationContext/tests/*
-    - */contexts/MembershipContext/tests/*
-    - */contexts/PaymentContext/tests/*
-    - */contexts/SubscriptionContext/tests/*
