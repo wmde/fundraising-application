@@ -89,16 +89,6 @@ $(function() {
 			}
           }
 	  );
-
-      // adjust position, margins & dimension
-      $('.ui-selectmenu').each(function () {
-        var newWidth = $(this).width() * 2 - $(this).outerWidth();
-        $(this).width(newWidth);
-      });
-      $('.ui-selectmenu-menu').each(function () {
-        var $dropDown = $(this).find('.ui-selectmenu-menu-dropdown');
-        $dropDown.width($dropDown.width() - 2);
-      });
     }
 
     /* iOS fix - label onclick, see http://stackoverflow.com/questions/7358781/tapping-on-label-in-mobile-safari */

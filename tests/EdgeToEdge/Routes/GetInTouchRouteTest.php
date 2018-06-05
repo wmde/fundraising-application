@@ -30,6 +30,7 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 				'lastname' => 'Guy',
 				'email' => 'curious.guy@gmail.com',
 				'subject' => 'What is it you are doing?!',
+				'category' => 'Other',
 				'messageBody' => 'Just tell me'
 			]
 		);
@@ -112,6 +113,7 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 				'lastname' => 'Guy',
 				'email' => 'someother@alltheguys.com',
 				'subject' => 'Give me an error page',
+				'category' => 'Other',
 				'messageBody' => 'Let me see if I can raise an exception'
 			]
 		);
