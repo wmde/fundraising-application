@@ -2,7 +2,9 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Infrastructure;
+namespace WMDE\Fundraising\Frontend\Infrastructure\Payment;
+
+use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifierException;
 
 /**
  * @license GNU GPL v2+

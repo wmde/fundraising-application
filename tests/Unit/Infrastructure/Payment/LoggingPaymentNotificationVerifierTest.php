@@ -2,16 +2,16 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Payment;
 
 use Psr\Log\LogLevel;
-use WMDE\Fundraising\Frontend\Infrastructure\LoggingPaymentNotificationVerifier;
-use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifier;
-use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifierException;
+use WMDE\Fundraising\Frontend\Infrastructure\Payment\LoggingPaymentNotificationVerifier;
+use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifier;
+use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifierException;
 use WMDE\PsrLogTestDoubles\LoggerSpy;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Infrastructure\LoggingPaymentNotificationVerifier
+ * @covers \WMDE\Fundraising\Frontend\Infrastructure\Payment\LoggingPaymentNotificationVerifier
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >

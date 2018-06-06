@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifierException;
+use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifierException;
 use WMDE\Fundraising\MembershipContext\UseCases\HandleSubscriptionSignupNotification\SubscriptionSignupRequest;
 use WMDE\Fundraising\PaymentContext\ResponseModel\PaypalNotificationResponse;
 use WMDE\Fundraising\PaymentContext\RequestModel\PayPalPaymentNotificationRequest;

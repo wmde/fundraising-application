@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\PaymentContext\Domain;
+namespace WMDE\Fundraising\Frontend\Infrastructure\Payment;
 
 /**
  * TODO: move to own KontoCheck library?

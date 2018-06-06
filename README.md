@@ -208,7 +208,6 @@ We moved the Bounded Contexts into their own repositories:
 	* `UseCases/`: one directory per use case
 	* `DataAccess/`: implementations of services that binds to database, network, etc
 	* `Infrastructure/`: implementations of services binding to cross cutting concerns, ie logging
-* `contexts/$ContextName`: Concrete implementations of interfaces from the context.
 * `web/`: web accessible code
 	* `index.php`: production entry point
 * `app/`: contains configuration and all framework (Silex) dependent code

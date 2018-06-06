@@ -5,8 +5,8 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\System;
 
 use GuzzleHttp\Client;
-use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifier;
-use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifierException;
+use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifier;
+use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifierException;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**

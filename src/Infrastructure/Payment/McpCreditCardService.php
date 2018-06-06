@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\PaymentContext\DataAccess;
+namespace WMDE\Fundraising\Frontend\Infrastructure\Payment;
 
 use IMcpCreditcardService_v1_5;
 use TNvpServiceDispatcher;

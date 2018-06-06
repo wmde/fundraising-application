@@ -2,16 +2,16 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Payment;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Stream;
-use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifier;
-use WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifierException;
+use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifier;
+use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifierException;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Infrastructure\PayPalPaymentNotificationVerifier
+ * @covers \WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifier
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
@@ -36,20 +36,20 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase 
 	}
 
 	public function testReceiverAddressNotGiven_verifierThrowsException(): void {
-		$this->expectException( PayPalPaymentNotificationVerifierException::class );
+		$this->expectException( \WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifierException::class );
 
 		$this->newVerifier( new Client() )->verify( [] );
 	}
 
 	public function testPaymentStatusNotGiven_verifierThrowsException(): void {
-		$this->expectException( PayPalPaymentNotificationVerifierException::class );
+		$this->expectException( \WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifierException::class );
 		$this->newVerifier( new Client() )->verify( [
 			'receiver_email' => self::VALID_ACCOUNT_EMAIL
 		] );
 	}
 
 	public function testPaymentStatusNotConfirmable_verifierThrowsException(): void {
-		$this->expectException( PayPalPaymentNotificationVerifierException::class );
+		$this->expectException( \WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifierException::class );
 		$this->newVerifier( new Client() )->verify( [
 			'receiver_email' => self::VALID_ACCOUNT_EMAIL,
 			'payment_status' => self::INVALID_PAYMENT_STATUS,
@@ -59,13 +59,13 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase 
 	public function testReassuringReceivedDataSucceeds_verifierDoesNotThrowException(): void {
 		try {
 			$this->newVerifier( $this->newSucceedingClient() )->verify( $this->newRequest() );
-		} catch ( PayPalPaymentNotificationVerifierException $e ) {
+		} catch ( \WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifierException $e ) {
 			$this->fail( 'There should be no exception with valid data and succeeding client.' );
 		}
 	}
 
 	public function testReassuringReceivedDataFails_verifierThrowsException(): void {
-		$this->expectException( PayPalPaymentNotificationVerifierException::class );
+		$this->expectException( \WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifierException::class );
 		$verifier = $this->newVerifier( $this->newFailingClient() );
 		$verifier->verify( $this->newRequest() );
 	}
@@ -82,7 +82,7 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase 
 			];
 			$this->newVerifier( $this->newSucceedingClientExpectingParams( $expectedParams ) )
 				->verify( $this->newFailedRecurringPaymentRequest() );
-		} catch ( PayPalPaymentNotificationVerifierException $e ) {
+		} catch ( \WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifierException $e ) {
 			$this->fail( 'Currency in different field should be ok for non-payment-complete recurring notices.' );
 		}
 	}

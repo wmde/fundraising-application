@@ -59,7 +59,7 @@ fix-cs:
 	docker-compose run --rm --no-deps app ./vendor/bin/phpcbf
 
 stan:
-	docker-compose run --rm --no-deps app php -d memory_limit=-1 vendor/bin/phpstan analyse --level=1 --no-progress cli/ contexts/ src/ tests/
+	docker-compose run --rm --no-deps app php -d memory_limit=-1 vendor/bin/phpstan analyse --level=1 --no-progress cli/ src/ tests/
 
 validate-app-config:
 	docker-compose run --rm --no-deps app ./console validate-config app/config/config.dist.json app/config/config.test.json
