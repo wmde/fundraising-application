@@ -25,6 +25,7 @@ class GetInTouchValidatorTest extends \PHPUnit\Framework\TestCase {
 			'',
 			'kh@meyer.net',
 			'Hello there!',
+			'Change of address',
 			'I just wanted to say "Hi".'
 		);
 		$this->assertTrue( $validator->validate( $request )->isSuccessful() );
@@ -38,6 +39,7 @@ class GetInTouchValidatorTest extends \PHPUnit\Framework\TestCase {
 			'',
 			'kh@meyer',
 			'Hello there!',
+			'Change of address',
 			'I just wanted to say "Hi".'
 		);
 		$this->assertFalse( $validator->validate( $request )->isSuccessful() );
@@ -69,6 +71,7 @@ class GetInTouchValidatorTest extends \PHPUnit\Framework\TestCase {
 			'',
 			'kh@net.meyer',
 			'',
+			'Change of address',
 			'I just wanted to say "Hi".'
 		);
 		$this->assertFalse( $validator->validate( $request )->isSuccessful() );
@@ -83,6 +86,7 @@ class GetInTouchValidatorTest extends \PHPUnit\Framework\TestCase {
 			'',
 			'kh@net.meyer',
 			'Hello there!',
+			'Change of address',
 			''
 		);
 		$this->assertFalse( $validator->validate( $request )->isSuccessful() );

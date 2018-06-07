@@ -24,6 +24,7 @@ class GetInTouchUseCaseTest extends \PHPUnit\Framework\TestCase {
 	const INQUIRER_LAST_NAME = 'Guy';
 	const INQUIRER_EMAIL_ADDRESS = 'curious.guy@alltheguys.com';
 	const INQUIRY_SUBJECT = 'Please let me know';
+	const INQUIRY_CATEGORY = 'Other';
 	const INQUIRY_MESSAGE = 'What is it you do?';
 
 	private $validator;
@@ -59,6 +60,7 @@ class GetInTouchUseCaseTest extends \PHPUnit\Framework\TestCase {
 					'lastName' => self::INQUIRER_LAST_NAME,
 					'emailAddress' => self::INQUIRER_EMAIL_ADDRESS,
 					'subject' => self::INQUIRY_SUBJECT,
+					'category' => self::INQUIRY_CATEGORY,
 					'message' => self::INQUIRY_MESSAGE
 				] )
 			);
@@ -84,6 +86,7 @@ class GetInTouchUseCaseTest extends \PHPUnit\Framework\TestCase {
 			self::INQUIRER_LAST_NAME,
 			self::INQUIRER_EMAIL_ADDRESS,
 			self::INQUIRY_SUBJECT,
+			self::INQUIRY_CATEGORY,
 			self::INQUIRY_MESSAGE
 		);
 	}

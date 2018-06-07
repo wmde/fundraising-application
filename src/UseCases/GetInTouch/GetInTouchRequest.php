@@ -14,14 +14,16 @@ class GetInTouchRequest {
 	private $lastName;
 	private $emailAddress;
 	private $subject;
+	private $category;
 	private $messageBody;
 
 	public function __construct( string $firstName, string $lastName, string $emailAddress,
-								 string $subject, string $messageBody ) {
+								 string $subject, string $category, string $messageBody ) {
 		$this->firstName = $firstName;
 		$this->lastName = $lastName;
 		$this->emailAddress = $emailAddress;
 		$this->subject = $subject;
+		$this->category = $category;
 		$this->messageBody = $messageBody;
 	}
 
@@ -39,6 +41,10 @@ class GetInTouchRequest {
 
 	public function getSubject(): string {
 		return $this->subject;
+	}
+
+	public function getCategory(): string {
+		return $this->category;
 	}
 
 	public function getMessageBody(): string {

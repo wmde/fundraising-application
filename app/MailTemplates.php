@@ -36,6 +36,7 @@ class MailTemplates {
 					'lastName' => 'Doe',
 					'emailAddress' => 'j.doe808@example.com',
 					'subject' => 'Missing Link',
+					'category' => 'Other',
 					'message' => 'Please advise',
 				],
 			],

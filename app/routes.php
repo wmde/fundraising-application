@@ -304,6 +304,7 @@ $app->post(
 			$request->get( 'lastname', '' ),
 			$request->get( 'email', '' ),
 			$request->get( 'subject', '' ),
+			$request->get( 'category', '' ),
 			$request->get( 'messageBody', '' )
 		);
 

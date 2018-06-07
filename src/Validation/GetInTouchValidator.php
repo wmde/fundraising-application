@@ -28,6 +28,7 @@ class GetInTouchValidator {
 
 		return new ValidationResult( ...array_filter( [
 			$this->getFieldViolation( $requiredFieldValidator->validate( $instance->getSubject() ), 'subject' ),
+			$this->getFieldViolation( $requiredFieldValidator->validate( $instance->getCategory() ), 'category' ),
 			$this->getFieldViolation( $requiredFieldValidator->validate( $instance->getMessageBody() ), 'messageBody' ),
 			$this->getFieldViolation( $requiredFieldValidator->validate( $instance->getEmailAddress() ), 'email' ),
 			$this->getFieldViolation( $this->mailValidator->validate( $instance->getEmailAddress() ), 'email' )

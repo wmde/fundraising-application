@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "cbe9d48992cfc5d7a4072480e7bd5acb",
@@ -6833,12 +6833,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content.git",
-                "reference": "c7a03ae28c1baec3c8031d4bc43196343d467ec2"
+                "reference": "9d6a14739fc9cd265d9684b1b1e1cecc538f8575"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/c7a03ae28c1baec3c8031d4bc43196343d467ec2",
-                "reference": "c7a03ae28c1baec3c8031d4bc43196343d467ec2",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/9d6a14739fc9cd265d9684b1b1e1cecc538f8575",
+                "reference": "9d6a14739fc9cd265d9684b1b1e1cecc538f8575",
                 "shasum": ""
             },
             "require-dev": {
@@ -6874,7 +6874,7 @@
             "support": {
                 "source": "https://github.com/wmde/fundraising-frontend-content/tree/test"
             },
-            "time": "2018-06-01T15:05:45+00:00"
+            "time": "2018-06-05T13:44:21+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",

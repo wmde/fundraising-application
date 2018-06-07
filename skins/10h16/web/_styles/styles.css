@@ -633,6 +633,10 @@ section[id$="-sepa-confirmation"] .step-list li.last { background: #7bc46d; }
 #contact-form textarea { width: 350px; height: 200px; }
 #contact-form #first-name { width: 169px; }
 #contact-form #last-name { width: 169px; }
+#contact-form .category .ui-selectmenu-button {
+    box-sizing: border-box;
+    width: 350px !important; /* jQuery selectmenu sets the wrong width on the element, so we have to override that */
+}
 
 #subscription-form .box-header { background: #84c5f1; }
 #subscription-form .box-header span[class^="icon-"] { padding-left: 30px; display: inline-block; }

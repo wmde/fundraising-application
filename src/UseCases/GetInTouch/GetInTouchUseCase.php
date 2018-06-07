@@ -64,6 +64,7 @@ class GetInTouchUseCase {
 			'lastName' => $request->getLastName(),
 			'emailAddress' => $request->getEmailAddress(),
 			'subject' => $request->getSubject(),
+			'category' => $request->getCategory(),
 			'message' => $request->getMessageBody()
 		];
 	}
