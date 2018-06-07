@@ -19,36 +19,36 @@ use WMDE\Fundraising\ContentProvider\ContentProvider;
 class DisplayPageRouteTest extends WebRouteTestCase {
 
 	public function testWhenPageHasCustomTemplate_customTemplateIsRendered(): void {
-		$this->createEnvironment(
-			[],
-			function ( Client $client, FunFunFactory $factory ): void {
-				$factory->setContentPagePageSelector( $this->newMockPageSelector( 'test' ) );
-				$factory->setContentProvider( $this->newVfsContentProvider( [ 'test.twig' => '' ] ) );
-
-				$crawler = $client->request( 'GET', '/page/test' );
-
-				$this->assertCount( 1, $crawler->filter( '.test-block' ) );
-			}
+		$client = $this->createClient( [ 'skin' => [ 'default' => 'cat17' ] ] );
+		//Requesting page_layouts/supporters.html.twig from cat17 skin
+		$client->request(
+			'GET',
+			'/page/Unterstützerliste'
 		);
+		$content = $client->getResponse()->getContent();
+
+		//Checking if supporters.js is added by the custom page layout
+		$this->assertContains( '/skins/cat17/scripts/supporters.js', $content );
 	}
 
 	public function testWhenPageDoesNotExist_missingResponseIsReturnedAndHasHeaderAndFooter(): void {
-		$client = $this->createClient( [],
+		$client = $this->createClient(
+			[ 'skin' => [ 'default' => 'cat17' ] ],
 			function ( FunFunFactory $factory ): void {
 				$factory->setContentPagePageSelector( $this->newNotFoundPageSelector( 'kittens' ) );
 			}
 		);
 		$client->request( 'GET', '/page/kittens' );
-		$content = $client->getResponse()->getContent();
+		$crawler = $client->getCrawler();
 
-		$this->assertContains( 'page_not_found', $content );
-		$this->assertContains( 'page header', $content );
-		$this->assertContains( 'page footer', $content );
+		$this->assertSame( 1, $crawler->filter( '.page-not-found' )->count() );
+		$this->assertSame( 1, $crawler->filter( 'header' )->count() );
+		$this->assertSame( 1, $crawler->filter( 'footer' )->count() );
 	}
 
 	public function testWhenPageDoesNotExist_noUnescapedPageNameIsShown(): void {
 		$client = $this->createClient(
-			[],
+			[ 'skin' => [ 'default' => 'cat17' ] ],
 			function ( FunFunFactory $factory ): void {
 				$pageSelector = $this->createMock( PageSelector::class );
 				$pageSelector
@@ -68,7 +68,7 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 
 	public function testWhenRequestedContentPageExists_itGetsEmbeddedAndHasHeaderAndFooter(): void {
 		$this->createEnvironment(
-			[],
+			[ 'skin' => [ 'default' => 'cat17' ] ],
 			function ( Client $client, FunFunFactory $factory ): void {
 				$factory->setContentPagePageSelector( $this->newMockPageSelector( 'unicorns' ) );
 				$factory->setContentProvider(
@@ -79,18 +79,19 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 
 				$crawler = $client->request( 'GET', '/page/unicorns' );
 
-				$this->assertCount( 1, $crawler->filter( 'body.page-unicorns' ) );
-				$this->assertCount( 1, $crawler->filter( 'header:contains("page header")' ) );
-				$this->assertCount( 1, $crawler->filter( 'main#main p:contains("Rosa plüsch einhorns tanzen auf Regenbogen")' ) );
-				$this->assertCount( 1, $crawler->filter( 'main#main div.sandboxedcontent.unicorns' ) );
-				$this->assertCount( 1, $crawler->filter( 'footer:contains("page footer")' ) );
-				$this->assertCount( 1, $crawler->filter( 'div#notice-wrapper:contains("Y u no JavaScript!")' ) );
+				$this->assertCount( 1, $crawler->filter( 'body .page-unicorns' ) );
+				$this->assertCount( 1, $crawler->filter( 'header > .container' ) );
+				$this->assertCount(
+					1,
+					$crawler->filter( 'main .content p:contains("Rosa plüsch einhorns tanzen auf Regenbogen")' )
+				);
+				$this->assertCount( 1, $crawler->filter( 'footer > .container' ) );
 			}
 		);
 	}
 
 	public function testWhenPageNameContainsSlash_404isReturned(): void {
-		$client = $this->createClient( [], null, self::DISABLE_DEBUG );
+		$client = $this->createClient( [ 'skin' => [ 'default' => 'cat17' ] ], null, self::DISABLE_DEBUG );
 		$client->request( 'GET', '/page/unicorns/of-doom' );
 
 		$this->assert404( $client->getResponse() );
@@ -116,7 +117,9 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 	}
 
 	private function newVfsContentProvider( array $pages ): ContentProvider {
-		$content = vfsStream::setup( 'content', null,
+		$content = vfsStream::setup(
+			'content',
+			null,
 			[
 				'web' => [ 'pages' => $pages ],
 				'mail' => [],

@@ -98,7 +98,7 @@
 	},
 	"skin": {
 		"options": [
-			"test", "10h16"
+			"test", "10h16", "cat17"
 		],
 		"default": "test"
 	}
