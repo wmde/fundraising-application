@@ -2,16 +2,14 @@ $( function() {
 	var isTracked = true;
 	var trackingUrl = document.getElementById( 'privacy_opt_out' ).dataset.tracking_url;
 
-	$( '.privacy_wrapper' ).insertAfter( '.content > ol' );
-
 	$( '#tracking-opt-in' )
 		.click( function() {
-			piwikAjaxOptOutTrack();
+			enableTracking();
 		} );
 
 	$( '#tracking-opt-out' )
 		.click( function() {
-			piwikAjaxOptOutUntrack();
+			disableTracking();
 		} );
 
 	/**
@@ -27,7 +25,7 @@ $( function() {
 		}
 	} );
 
-	function piwikAjaxOptOutTrack() {
+	function enableTracking() {
 		$.ajax( {
 			url: trackingUrl + "index.php?module=API&method=AjaxOptOut.doTrack&format=json",
 			jsonp: "callback",
@@ -39,7 +37,7 @@ $( function() {
 		} );
 	}
 
-	function piwikAjaxOptOutUntrack() {
+	function disableTracking() {
 		$.ajax( {
 			url: trackingUrl + "index.php?module=API&method=AjaxOptOut.doIgnore&format=json",
 			jsonp: "callback",
