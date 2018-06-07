@@ -11,10 +11,11 @@
 	.privacy {
 		&_explanation {
 			flex: 1 1 50%;
+			padding-left: 10px;
 			@include bkp(smmax) {
 				flex: 1 1 100%;
+				padding: 10px 0 0 0;
 			}
-			padding-left: 10px;
 			.opted-out {
 				display: none;
 				font-weight: bold;
@@ -40,18 +41,9 @@
 				display: flex;
 				@include bkp(smmax) {
 					border-bottom: none;
-					min-height: 75px;
+					min-height: 50px;
 					&:after, &:before {
 						border-bottom: none;
-					}
-				}
-				.wrap-input {
-					padding-right: 5px;
-					&:after {
-						margin-left: 33px;
-						@include bkp(smmax) {
-							border-bottom: none;
-						}
 					}
 				}
 				&.selected {
@@ -67,6 +59,26 @@
 								border-bottom: none;
 							}
 						}
+					}
+				}
+			}
+			.wrap-input {
+				padding-right: 5px;
+				label {
+					&:before {
+						top: 25px;
+					}
+					@include bkp(smmax) {
+						height: 45px;
+						&:before {
+							top: 15px;
+						}
+					}
+				}
+				&:after {
+					margin-left: 33px;
+					@include bkp(smmax) {
+						border-bottom: none;
 					}
 				}
 			}
