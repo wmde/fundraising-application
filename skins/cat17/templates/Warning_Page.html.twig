@@ -1,0 +1,20 @@
+	<div class="container">
+		<div class="row">
+			<div class="content col-xs-12 col-sm-10 col-md-8">
+				{$ 'error_page_header' | trans $}
+    			{% if message is defined %}
+					<p>
+						{$ message | raw $}
+					</p>
+    			{% else %}
+					<p>
+						{$ 'subscription_warning' | trans $}
+					</p>
+    			{% endif %}
+				{$ 'donation_title' | trans $}
+				<p>
+					<a href="{$ path( '/' ) $}" target="_blank">{$ 'back_to_donation' | trans $}</a>
+				</p>
+			</div>
+		</div>
+	</div>

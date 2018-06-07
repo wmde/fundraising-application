@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "cbe9d48992cfc5d7a4072480e7bd5acb",
@@ -1292,16 +1292,16 @@
         },
         {
             "name": "paragonie/random_compat",
-            "version": "v2.0.12",
+            "version": "v2.0.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/random_compat.git",
-                "reference": "258c89a6b97de7dfaf5b8c7607d0478e236b04fb"
+                "reference": "f6ce7dd93628088e1017fb5dd73b0b9fec7df9e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/258c89a6b97de7dfaf5b8c7607d0478e236b04fb",
-                "reference": "258c89a6b97de7dfaf5b8c7607d0478e236b04fb",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/f6ce7dd93628088e1017fb5dd73b0b9fec7df9e5",
+                "reference": "f6ce7dd93628088e1017fb5dd73b0b9fec7df9e5",
                 "shasum": ""
             },
             "require": {
@@ -1333,10 +1333,11 @@
             "description": "PHP 5.x polyfill for random_bytes() and random_int() from PHP 7",
             "keywords": [
                 "csprng",
+                "polyfill",
                 "pseudorandom",
                 "random"
             ],
-            "time": "2018-04-04T21:24:14+00:00"
+            "time": "2018-06-06T17:40:22+00:00"
         },
         {
             "name": "phpunit/php-text-template",
@@ -6833,12 +6834,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content.git",
-                "reference": "2f1750a576feefdc64e62864a573ef7d974a9595"
+                "reference": "a45ca9af15e7bbaabafe5f04b6a9a79f6a3d8a2b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/2f1750a576feefdc64e62864a573ef7d974a9595",
-                "reference": "2f1750a576feefdc64e62864a573ef7d974a9595",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/a45ca9af15e7bbaabafe5f04b6a9a79f6a3d8a2b",
+                "reference": "a45ca9af15e7bbaabafe5f04b6a9a79f6a3d8a2b",
                 "shasum": ""
             },
             "require-dev": {
@@ -6874,7 +6875,7 @@
             "support": {
                 "source": "https://github.com/wmde/fundraising-frontend-content/tree/test"
             },
-            "time": "2018-06-07T10:23:22+00:00"
+            "time": "2018-06-08T13:58:41+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",

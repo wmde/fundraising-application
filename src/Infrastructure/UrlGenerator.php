@@ -10,6 +10,8 @@ namespace WMDE\Fundraising\Frontend\Infrastructure;
  */
 interface UrlGenerator {
 
-	public function generateUrl( string $name, array $parameters = [] ): string;
+	public function generateAbsoluteUrl( string $name, array $parameters = [] ): string;
+
+	public function generateRelativeUrl( string $name, array $parameters = [] ): string;
 
 }

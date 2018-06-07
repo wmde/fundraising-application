@@ -12,7 +12,11 @@ use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
  */
 class FakeUrlGenerator implements UrlGenerator {
 
-	public function generateUrl( string $name, array $parameters = [] ): string {
+	public function generateRelativeUrl( string $name, array $parameters = [] ): string {
+		return '/such.a.url/' . $name . '?' . http_build_query( $parameters );
+	}
+
+	public function generateAbsoluteUrl( string $name, array $parameters = [] ): string {
 		return 'https://such.a.url/' . $name . '?' . http_build_query( $parameters );
 	}
 

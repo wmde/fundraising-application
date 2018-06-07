@@ -14,8 +14,20 @@ class UrlGeneratorAdapter implements UrlGenerator {
 		$this->urlGenerator = $urlGenerator;
 	}
 
-	public function generateUrl( string $name, array $parameters = [] ): string {
-		return $this->urlGenerator->generate( $name, $parameters );
+	public function generateAbsoluteUrl( string $name, array $parameters = [] ): string {
+		return $this->urlGenerator->generate(
+			$name,
+			$parameters,
+			UrlGeneratorInterface::ABSOLUTE_URL
+		);
+	}
+
+	public function generateRelativeUrl( string $name, array $parameters = [] ): string {
+		return $this->urlGenerator->generate(
+			$name,
+			$parameters,
+			UrlGeneratorInterface::ABSOLUTE_PATH
+		);
 	}
 
 }
