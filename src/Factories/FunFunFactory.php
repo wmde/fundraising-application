@@ -11,6 +11,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use FileFetcher\ErrorLoggingFileFetcher;
+use FileFetcher\FileFetchingException;
 use FileFetcher\SimpleFileFetcher;
 use GuzzleHttp\Client;
 use NumberFormatter;
@@ -20,6 +21,7 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Swift_MailTransport;
 use Swift_NullTransport;
+use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraint as ValidatorConstraint;
@@ -598,7 +600,24 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function newGetInTouchHtmlPresenter(): GetInTouchHtmlPresenter {
-		return new GetInTouchHtmlPresenter( $this->getLayoutTemplate( 'contact_form.html.twig' ), $this->getTranslator() );
+		return new GetInTouchHtmlPresenter(
+			$this->getLayoutTemplate( 'contact_form.html.twig' ),
+			$this->getTranslator(),
+			$this->getGetInTouchCategories()
+		);
+	}
+
+	public function getGetInTouchCategories(): array {
+		try {
+			$json = ( new SimpleFileFetcher() )->fetchFile( $this->getI18nDirectory() . '/data/contact_categories.json' );
+			if ( $json === '' ) {
+				throw new RuntimeException();
+			}
+			return json_decode( $json, true );
+		}
+		catch( FileFetchingException $e ) {
+			throw new RuntimeException();
+		}
 	}
 
 	public function setSkinTwigEnvironment( Twig_Environment $twig ): void {

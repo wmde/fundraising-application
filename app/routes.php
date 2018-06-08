@@ -320,7 +320,7 @@ $app->post(
 $app->get(
 	'contact/get-in-touch',
 	function() use ( $app, $ffFactory ) {
-		return $ffFactory->getLayoutTemplate( 'contact_form.html.twig' )->render( [ ] );
+		return $ffFactory->getLayoutTemplate( 'contact_form.html.twig' )->render( [ 'contact_categories' => $ffFactory->getGetInTouchCategories() ] );
 	}
 )->bind('contact');
 

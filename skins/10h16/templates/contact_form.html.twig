@@ -42,13 +42,9 @@
                   <label for="category">Thema</label>
                   <select id="category" name="category" class="category">
                     <option value="" data-behavior="placeholder">{$ 'contact_topic_title' | trans $}</option>
-                    <option {% if category == 'contact_topic_1' | trans %}selected{% endif %}>{$ 'contact_topic_1' | trans $}</option>
-                    <option {% if category == 'contact_topic_2' | trans %}selected{% endif %}>{$ 'contact_topic_2' | trans $}</option>
-                    <option {% if category == 'contact_topic_3' | trans %}selected{% endif %}>{$ 'contact_topic_3' | trans $}</option>
-                    <option {% if category == 'contact_topic_4' | trans %}selected{% endif %}>{$ 'contact_topic_4' | trans $}</option>
-                    <option {% if category == 'contact_topic_5' | trans %}selected{% endif %}>{$ 'contact_topic_5' | trans $}</option>
-                    <option {% if category == 'contact_topic_6' | trans %}selected{% endif %}>{$ 'contact_topic_6' | trans $}</option>
-                    <option {% if category == 'contact_topic_7' | trans %}selected{% endif %}>{$ 'contact_topic_7' | trans $}</option>
+                      {% for cat in contact_categories %}
+                        <option {% if category == cat | trans %}selected{% endif %}>{$ cat | trans $}</option>
+                      {% endfor %}
                   </select>
                   {$ util.form_error('subject', errors) $}
                 </div>

@@ -19,10 +19,12 @@ class GetInTouchHtmlPresenter {
 
 	private $template;
 	private $translator;
+	private $categories;
 
-	public function __construct( TwigTemplate $template, TranslatorInterface $translator ) {
+	public function __construct( TwigTemplate $template, TranslatorInterface $translator, array $categories ) {
 		$this->template = $template;
 		$this->translator = $translator;
+		$this->categories = $categories;
 	}
 
 	public function present( ValidationResponse $response, array $formData ): string {
@@ -32,7 +34,7 @@ class GetInTouchHtmlPresenter {
 			$errors[$constraintViolation->getSource()] = $this->translator->trans( $constraintViolation->getMessageIdentifier() );
 		}
 
-		return $this->template->render( array_merge( $formData, [ 'errors' => $errors ] ) );
+		return $this->template->render( array_merge( $formData, [ 'errors' => $errors ], [ 'contact_categories' => $this->categories ] ) );
 	}
 
 }
