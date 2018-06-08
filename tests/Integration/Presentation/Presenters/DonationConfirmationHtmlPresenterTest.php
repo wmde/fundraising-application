@@ -70,7 +70,7 @@ class DonationConfirmationHtmlPresenterTest extends \PHPUnit\Framework\TestCase 
 				[ 'setCustomVariable', 1, 'Payment', 'some value', PiwikEvents::SCOPE_VISIT ],
 				[ 'trackGoal', 4095 ]
 			],
-			'commentUrl' => 'https://such.a.url/AddCommentPage?donationId=42&updateToken=update_token&accessToken=access_token'
+			'commentUrl' => '/such.a.url/AddCommentPage?donationId=42&updateToken=update_token&accessToken=access_token'
 		];
 	}
 

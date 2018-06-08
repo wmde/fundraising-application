@@ -386,7 +386,7 @@ class FunFunFactory implements ServiceProviderInterface {
 				new Twig_SimpleFunction(
 					'url',
 					function( string $name, array $parameters = [] ): string {
-						return $this->getUrlGenerator()->generateUrl( $name, $parameters );
+						return $this->getUrlGenerator()->generateAbsoluteUrl( $name, $parameters );
 					}
 				)
 			];

@@ -18,8 +18,7 @@
               </p>
               {% else %}
               <p>
-                Bei der Verarbeitung Ihrer Anfrage ist ein Fehler aufgetreten.
-                Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut.
+                {$ 'subscription_warning' | trans $}
               </p>
               {% endif %}
             </div>
@@ -31,11 +30,9 @@
 
       <div class="rtcol">
         <div class="icon-hand-right _icon-list-item last">
+          <h2>{$ 'donation_title' | trans $}</h2>
           <p>
-            <strong>Spenden</strong>
-          </p>
-          <p>
-            <a href="{$ path( '/' ) $}" target="_blank">Zurück</a> zur Spendenseite
+            <a href="{$ path( '/' ) $}" target="_blank">{$ 'back_to_donation' | trans $}</a>
           </p>
         </div>
       </div>
