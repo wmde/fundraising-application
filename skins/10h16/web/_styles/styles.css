@@ -162,10 +162,10 @@ input[type=text].valid + .validation,
 input[type=tel].valid ~ .validation-explanation,
 input[type=text].valid ~ .validation-explanation { color:  #a5da9b; }
 
-::-webkit-input-placeholder { color: #b2b2b2; }
-::-moz-placeholder { color: #b2b2b2; }
-:-ms-input-placeholder { color: #b2b2b2; }
-input:-moz-placeholder { color: #b2b2b2; }
+::-webkit-input-placeholder { color: #b2b2b2;  opacity: 1; }
+::-moz-placeholder { color: #b2b2b2; opacity: 1; }
+:-ms-input-placeholder { color: #b2b2b2;  opacity: 1; }
+input:-moz-placeholder { color: #b2b2b2; opacity: 1; }
 
 /*textarea + label,
 input[type=text] ~ label { color: #CCC; position: absolute; top: 6px; left: 11px; display: block; font-size: 12px; letter-spacing: 1px; }
