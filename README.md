@@ -123,9 +123,16 @@ at [http://localhost:8025/](http://localhost:8025/)
 ### Accessing the database from a Docker image
 
 The database container of the Docker development environment is not exposed to the outside. If you want to connect to 
-the default fundraising frontend database using the MySQL command line client, run the following command: 
+the default fundraising frontend database using the MySQL command line client, you need first to find out the Docker 
+network name where the database is running in. With the command
 
-    docker run -it --link spenden2_database_1:mysql --net fundraising_network --rm mysql:5.6 \
+    docker network ls
+
+you can list all networks. There will be one network name ending in `fundraising_proxy` (the prefix is probably the 
+directory name where you checked out this repository). Copy the full network name and use it instead of the 
+placeholder `__NETWORK_NAME__` in the following command to run the MySQL command line client:  
+
+    docker run -it --link spenden2_database_1:mysql --net __NETWORK_NAME__ --rm mysql:5.6 \
         sh -c 'exec mysql -h database -P 3306 -u fundraising -p"INSECURE PASSWORD" fundraising'
 
 ### Accessing the database from your host machine
@@ -134,7 +141,7 @@ If you want to expose the port of the database on your guest host (localhost), f
 you need to create an "override" file for `docker-compose.yml`. Example file, called `docker-compose.db.yml`:
 
 ```yaml 
-version: '3.5'
+version: '3'
 
 services:
     database:

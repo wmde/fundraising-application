@@ -1,4 +1,4 @@
-version: '3.5'
+version: '3'
 
 services:
   proxy:
@@ -56,4 +56,6 @@ volumes:
 
 networks:
   frontend-proxy:
-    name: fundraising_network
+    # uncomment this as soon as we can use version 3.5 (Docker 17.12.0+) on Travis CI,
+    # to make linking easier with a defined name instead of using the directory name this repo is living in
+    # name: fundraising_network
