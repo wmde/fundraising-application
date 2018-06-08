@@ -926,6 +926,12 @@ body.page-supporters section .box-header span:before {
     list-style: upper-roman;
 }
 
+.privacy_wrapper {
+    border: 2px solid #bac0cf;
+    padding: 10px;
+    margin: 10px 0;
+}
+
 .privacy_wrapper .wrap-field {
     padding: 0 0 20px;
 }

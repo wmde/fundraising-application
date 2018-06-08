@@ -7,10 +7,9 @@
 		<div class="row">
 			<div class="content col-xs-12 col-sm-10 col-md-8">
 				<h2>{$ page_id|trans({}, 'pageTitles') $}</h2>
-
-				{$ web_content("pages/#{page_id}") $}
-                {% block additional_content %}
-                {% endblock %}
+				{% block main_content %}
+					{$ web_content("pages/#{page_id}") $}
+				{% endblock %}
 			</div>
 
 			<div class="itz-logo col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-0 col-md-4 hidden-print">

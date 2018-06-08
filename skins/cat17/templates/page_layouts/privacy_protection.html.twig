@@ -5,33 +5,36 @@
 	<script id="privacy_opt_out" data-tracking_url="{$ piwik.baseUrl $}" src="{$ basepath $}/skins/cat17/scripts/privacy_protection.js"></script>
 {% endblock %}
 
-{% block additional_content %}
-	<div class="privacy_wrapper">
-		<h2>Datenerhebung</h2>
-		<p class="legend">
-			Sie können sich hier entscheiden, ob in Ihrem Browser ein eindeutiger Webanalyse-Cookie abgelegt werden darf,
-			um dem Betreiber der Website die Erfassung und Analyse verschiedener statistischer Daten zu ermöglichen.
-		</p>
-		<div class="privacy_selection">
-			<div class="privacy_selection_box">
-				<div class="wrap-field choice-in">
-					<div class="wrap-input">
-						<input name="matomo_choice" id="tracking-opt-in" value="0" type="radio">
-						<label for="tracking-opt-in"><span>Ja, meine Daten dürfen erfasst werden</span></label>
+{% block main_content %}
+	{# Writing opt-out wrapper into variable before injecting it into content page via string replace #}
+	{% set matomo_opt_out %}
+		<div class="privacy_wrapper">
+			<h2>Datenerhebung</h2>
+			<p class="legend">
+				{$ 'privacy_optout_description' | trans $}
+			</p>
+			<div class="privacy_selection">
+				<div class="privacy_selection_box">
+					<div class="wrap-field choice-in">
+						<div class="wrap-input">
+							<input name="matomo_choice" id="tracking-opt-in" value="0" type="radio">
+							<label for="tracking-opt-in"><span>{$ 'privacy_optout_tracking_permit' | trans $}</span></label>
+						</div>
+					</div>
+					<div class="wrap-field choice-out">
+						<div class="wrap-input">
+							<input name="matomo_choice" id="tracking-opt-out" value="1" type="radio">
+							<label for="tracking-opt-out"><span>{$ 'privacy_optout_tracking_deny' | trans $}</span></label>
+						</div>
 					</div>
 				</div>
-				<div class="wrap-field choice-out">
-					<div class="wrap-input">
-						<input name="matomo_choice" id="tracking-opt-out" value="1" type="radio">
-						<label for="tracking-opt-out"><span>Nein, meine Daten dürfen nicht erfasst werden</span></label>
-					</div>
+				<div class="privacy_explanation">
+					<p>
+						{$ 'privacy_optout_tracking_state' | trans | raw $}
+					</p>
 				</div>
-			</div>
-			<div class="privacy_explanation">
-				<p>
-					Der Besuch dieser Website wird aktuell <span class="opted-out">nicht</span> von der Matomo-Webanalyse erfasst
-				</p>
 			</div>
 		</div>
-	</div>
+	{% endset %}
+	{$ web_content("pages/#{page_id}") | replace({'<!-- placeholder_matomo -->': matomo_opt_out}) | raw $}
 {% endblock %}

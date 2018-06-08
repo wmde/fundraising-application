@@ -1,6 +1,36 @@
 {% extends 'page_layouts/base.html.twig' %}
 {% set page_works_without_js = false %}
 
-{% block additional_content %}
-    {% include 'privacy_protection.html.twig' %}
+{% block main_content %}
+	{# Writing opt-out wrapper into variable before injecting it into content page via string replace #}
+	{% set matomo_opt_out %}
+        <div class="privacy_wrapper">
+            <h2>Datenerhebung</h2>
+            <p class="legend">
+                {$ 'privacy_optout_description' | trans $}
+            </p>
+            <div class="privacy_selection">
+                <div class="privacy_selection_box">
+                    <div class="wrap-field choice-in">
+                        <div class="wrap-input">
+                            <input name="matomo_choice" id="tracking-opt-in" value="0" type="radio">
+                            <label for="tracking-opt-in"><span>{$ 'privacy_optout_tracking_permit' | trans $}</span></label>
+                        </div>
+                    </div>
+                    <div class="wrap-field choice-out">
+                        <div class="wrap-input">
+                            <input name="matomo_choice" id="tracking-opt-out" value="1" type="radio">
+                            <label for="tracking-opt-out"><span>{$ 'privacy_optout_tracking_deny' | trans $}</span></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="privacy_explanation">
+                    <p>
+                        {$ 'privacy_optout_tracking_state' | trans | raw $}
+                    </p>
+                </div>
+            </div>
+        </div>
+	{% endset %}
+    {$ web_content("pages/#{page_id}") | replace({'<!-- placeholder_matomo -->': matomo_opt_out}) | raw $}
 {% endblock %}
