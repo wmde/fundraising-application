@@ -20,8 +20,8 @@ class InternalErrorHtmlPresenter {
 		$this->template = $template;
 	}
 
-	public function present( \Exception $exception ): string {
-		return $this->template->render( [ 'message' => $exception->getMessage() ] );
+	public function present(): string {
+		return $this->template->render( [] );
 	}
 
 }
