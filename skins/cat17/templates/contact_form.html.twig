@@ -29,15 +29,11 @@
 						<select class="no-outline category" id="category" name="category"
 								data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true}'>
 							<option value="">{$ 'contact_topic_title' | trans $}</option>
-							<option {% if category == 'contact_topic_1' | trans %}selected{% endif %}>{$ 'contact_topic_1' | trans $}</option>
-							<option {% if category == 'contact_topic_2' | trans %}selected{% endif %}>{$ 'contact_topic_2' | trans $}</option>
-							<option {% if category == 'contact_topic_3' | trans %}selected{% endif %}>{$ 'contact_topic_3' | trans $}</option>
-							<option {% if category == 'contact_topic_4' | trans %}selected{% endif %}>{$ 'contact_topic_4' | trans $}</option>
-							<option {% if category == 'contact_topic_5' | trans %}selected{% endif %}>{$ 'contact_topic_5' | trans $}</option>
-							<option {% if category == 'contact_topic_6' | trans %}selected{% endif %}>{$ 'contact_topic_6' | trans $}</option>
-							<option {% if category == 'contact_topic_7' | trans %}selected{% endif %}>{$ 'contact_topic_7' | trans $}</option>
+							{% for cat in contact_categories %}
+								<option {% if category == cat | trans %}selected{% endif %}>{$ cat | trans $}</option>
+							{% endfor %}
 						</select>
-                        {$ util.form_error('category', errors) $}
+						{$ util.form_error('category', errors) $}
 					</fieldset>
 					<fieldset class="col-xs-12 col-sm-7">
 						<div class="field-grp">
