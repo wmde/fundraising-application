@@ -23,7 +23,6 @@ services:
     volumes:
       - .:/usr/share/nginx/www/spenden.wikimedia.de/current
       - var-data:/usr/share/nginx/www/spenden.wikimedia.de/current/var
-      - /home/tieu/projects/FundraisingStore:/home/tieu/projects/FundraisingFrontend/vendor/wmde/FundraisingStore
     working_dir: /usr/share/nginx/www/spenden.wikimedia.de/current
     links:
       - database
