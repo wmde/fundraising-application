@@ -1,0 +1,59 @@
+# Configuration file for defining A/B test campaigns
+#
+# Example
+# skins:
+#    description: Test different skins
+#    reference: "https://phabricator.wikimedia.org/T123"
+#    start: "2017-10-01"
+#    end: "2019-12-31"
+#    groups:
+#        - "10h16"
+#        - cat17
+#    default_group: cat17
+#
+# Start each campaign with a unique key, that is "campaign name". Then add the following keys:
+# description: (optional) What this campaign is about
+# reference: (optional) URL where you can read more about it, e.g. Phabricator ticket. You need to enclose the URL in quotes
+# start: Start date, in either YYYY-MM-DD or YYYY-MM-DD HH:MM:SS format. If no time is specified, it will be 0:00:00. Timezone is set in app config.
+# end: (Optional) End date, in either YYYY-MM-DD or YYYY-MM-DD HH:MM:SS format. If no time is specified, it will be 23:59:59 of that day. Timezone is set in app config.
+# active: Date-independent toggle for test
+# groups: List of group names
+# default_group: used group when campaign is not active. Must be listed in groups.
+# url_key: URL parameter key used for assigning groups to people
+
+confirmation_pages:
+  description: Test different confirmation page templates
+  reference: "https://phabricator.wikimedia.org/T196337"
+  start: "2016-10-01"
+  end: "2018-12-31"
+  active: true
+  groups:
+    - expanded_membership_form
+    - collapsed_membership_form
+  default_group: expanded_membership_form
+  url_key: cp
+
+
+# TODO: Uncomment the following 2 config entries & add code to support them
+
+#skins:
+#  description: Test different skins
+#  reference: https://phabricator.wikimedia.org/T196335
+#  start: 2017-10-01
+#  end: 2019-12-31
+#  groups: [ "10h16", cat17 ]
+#  default_group: cat17
+#  url_key: skin
+
+#payment_types:
+#  description: Test sofort payment
+#  reference: https://phabricator.wikimedia.org/T192635
+#  start: 2018-01-01
+#  end: 2018-12-31
+#  active: false
+#  groups:
+#    - default_payments
+#    - with_sofort
+#  default_group: default_payments
+#  url_key: pmt
+
