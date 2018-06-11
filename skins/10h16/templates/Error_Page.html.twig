@@ -10,14 +10,13 @@
 				<div class="ctcol">
 					<div class="box partial rounded no-margin">
 						<div class="box-header container clearfix">
-							<span class="icon-bug f-left">Fehler</span>
+							<span class="icon-bug f-left">{$ 'error_page_header' | trans $}</span>
 						</div>
 
 						<div class="box-section box-footer">
 							<div class="container clearfix">
 								<p>
-									Bei der Verarbeitung Ihrer Anfrage ist ein Fehler aufgetreten.
-									Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut.
+									{$ 'error_page' | trans $}
 								</p>
 								{% if message is defined %}
 								<p>

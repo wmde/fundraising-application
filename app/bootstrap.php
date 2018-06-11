@@ -118,7 +118,7 @@ $app->error( function ( \Exception $e, Request $request, $code ) use ( $ffFactor
 	}
 
 	return new Response(
-		$ffFactory->newInternalErrorHtmlPresenter()->present( $e ),
+		$ffFactory->newInternalErrorHtmlPresenter()->present(),
 		$code
 	);
 } );
