@@ -8,6 +8,8 @@ DOCKER_FLAGS  := --interactive --tty
 TEST_DIR :=
 REDUX_LOG :=
 
+.DEFAULT_GOAL := ci
+
 install-js:
 	-mkdir -p $(TMPDIR)/home
 	-echo "node:x:$(current_user):$(current_group)::/var/nodehome:/bin/bash" > $(TMPDIR)/passwd
