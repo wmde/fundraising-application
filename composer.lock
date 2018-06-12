@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ee1b45632e0823edb7eee0eeed2bc198",
+    "content-hash": "8b86b464ee9658a3faad0dc96f47bb7f",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1389,6 +1389,52 @@
             "time": "2017-11-09T03:20:23+00:00"
         },
         {
+            "name": "psr/cache",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/cache.git",
+                "reference": "d11b50ad223250cf17b86e38383413f5a6764bf8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/cache/zipball/d11b50ad223250cf17b86e38383413f5a6764bf8",
+                "reference": "d11b50ad223250cf17b86e38383413f5a6764bf8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Cache\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for caching libraries",
+            "keywords": [
+                "cache",
+                "psr",
+                "psr-6"
+            ],
+            "time": "2016-08-06T20:24:11+00:00"
+        },
+        {
             "name": "psr/container",
             "version": "1.0.0",
             "source": {
@@ -1533,6 +1579,54 @@
                 "psr-3"
             ],
             "time": "2016-10-10T12:19:37+00:00"
+        },
+        {
+            "name": "remotelyliving/doorkeeper",
+            "version": "1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/remotelyliving/doorkeeper.git",
+                "reference": "aaaf7f9111c389acfdc59f9467be6f0afd378f20"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/remotelyliving/doorkeeper/zipball/aaaf7f9111c389acfdc59f9467be6f0afd378f20",
+                "reference": "aaaf7f9111c389acfdc59f9467be6f0afd378f20",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0.0",
+                "psr/cache": "^1.0",
+                "psr/http-message": "^1.0",
+                "psr/log": "^1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.1",
+                "satooshi/php-coveralls": "^1.0",
+                "squizlabs/php_codesniffer": "^2.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "RemotelyLiving\\Doorkeeper\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christian Thomas",
+                    "email": "christian.h.thomas@me.com"
+                }
+            ],
+            "description": "A Feature Toggle",
+            "keywords": [
+                "Doorkeeper",
+                "feature flag"
+            ],
+            "time": "2018-01-18T00:09:39+00:00"
         },
         {
             "name": "silex/silex",
@@ -6851,7 +6945,7 @@
             "version": "dev-test",
             "source": {
                 "type": "git",
-                "url": "https://github.com/wmde/fundraising-frontend-content.git",
+                "url": "https://github.com/wmde/fundraising-frontend-content",
                 "reference": "9fa8762b6849cdfadc2aaa7b020faa8989a58a3e"
             },
             "dist": {
