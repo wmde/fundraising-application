@@ -611,12 +611,12 @@ class FunFunFactory implements ServiceProviderInterface {
 		try {
 			$json = ( new SimpleFileFetcher() )->fetchFile( $this->getI18nDirectory() . '/data/contact_categories.json' );
 			if ( $json === '' ) {
-				throw new RuntimeException();
+				throw new RuntimeException( 'error_no_topics_defined' );
 			}
 			return json_decode( $json, true );
 		}
 		catch( FileFetchingException $e ) {
-			throw new RuntimeException();
+			throw new RuntimeException( 'error_no_topics_defined' );
 		}
 	}
 
