@@ -30,7 +30,6 @@
 		"wmde/freezable-value-object": "~1.0",
 		"wmde/fun-validators": "~1.0",
 		"jeroen/file-fetcher": "~4.0",
-		"jeroen/generic-decorator": "~0.1.1",
 		"psr/log": "~1.0",
 		"monolog/monolog": "~1.17",
 		"swiftmailer/swiftmailer": "~5.4",
@@ -92,7 +91,7 @@
 	"require-dev": {
 		"ext-pdo_sqlite": "*",
 
-		"phpunit/phpunit": "~6.0",
+		"phpunit/phpunit": "~7.0",
 		"codeception/specify": "~0.4.3",
 		"whatthejeff/nyancat-phpunit-resultprinter": "~1.2",
 		"ockcyp/covers-validator": "@dev",

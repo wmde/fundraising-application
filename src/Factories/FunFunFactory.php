@@ -273,12 +273,10 @@ class FunFunFactory implements ServiceProviderInterface {
 		};
 
 		$container['comment_repository'] = function() {
-			$finder = new LoggingCommentFinder(
+			return new LoggingCommentFinder(
 				new DoctrineCommentFinder( $this->getEntityManager() ),
 				$this->getLogger()
 			);
-
-			return $this->addProfilingDecorator( $finder, 'CommentFinder' );
 		};
 
 		$container['mail_validator'] = function() {
@@ -741,7 +739,7 @@ class FunFunFactory implements ServiceProviderInterface {
 	/**
 	 * Create a new TemplateMailer instance
 	 *
-	 * So much decoration going on that explicitly hinting what we return (Robustness principle) would be confusing
+	 * There is decoration going on, so explicitly hinting what we return (Robustness principle) would be confusing
 	 * (you'd expect a TemplateBasedMailer, not a LoggingMailer), so we hint the interface instead.
 	 */
 	private function newTemplateMailer( Messenger $messenger, TwigTemplate $template, string $messageKey ): LoggingMailer {
@@ -751,9 +749,7 @@ class FunFunFactory implements ServiceProviderInterface {
 			$this->getTranslator()->trans( $messageKey )
 		);
 
-		$mailer = new LoggingMailer( $mailer, $this->getLogger() );
-
-		return $this->addProfilingDecorator( $mailer, 'Mailer' );
+		return new LoggingMailer( $mailer, $this->getLogger() );
 	}
 
 	public function getGreetingGenerator(): GreetingGenerator {
@@ -1455,16 +1451,6 @@ class FunFunFactory implements ServiceProviderInterface {
 		$this->pimple['rendered_page_cache'] = function() {
 			return new FilesystemCache( $this->getCachePath() . '/pages/rendered' );
 		};
-	}
-
-	private function addProfilingDecorator( $objectToDecorate, string $profilingLabel ) {	// @codingStandardsIgnoreLine
-		if ( $this->profiler === null ) {
-			return $objectToDecorate;
-		}
-
-		$builder = new ProfilingDecoratorBuilder( $this->profiler, $this->getProfilerDataCollector() );
-
-		return $builder->decorate( $objectToDecorate, $profilingLabel );
 	}
 
 	public function setProfiler( Stopwatch $profiler ): void {
