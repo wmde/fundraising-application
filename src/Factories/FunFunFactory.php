@@ -81,6 +81,8 @@ use WMDE\Fundraising\Frontend\Infrastructure\CampaignBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\CampaignConfiguration;
 use WMDE\Fundraising\Frontend\Infrastructure\CampaignFeatureBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder;
+use WMDE\Fundraising\Frontend\Infrastructure\DoorkeeperFeatureToggle;
+use WMDE\Fundraising\Frontend\Infrastructure\FeatureToggle;
 use WMDE\Fundraising\Frontend\Infrastructure\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\LoggingMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\LoggingPaymentNotificationVerifier;
@@ -524,7 +526,7 @@ class FunFunFactory implements ServiceProviderInterface {
 		};
 
 		$container['choice_factory'] = function (): ChoiceFactory {
-			return new ChoiceFactory( $this->getDoorkeeper() );
+			return new ChoiceFactory( $this->getFeatureToggle() );
 		};
 
 		$container['campaign_config'] = function (): array {
@@ -545,8 +547,8 @@ class FunFunFactory implements ServiceProviderInterface {
 			return [];
 		};
 
-		$container['doorkeeper'] = function (): Doorkeeper {
-			return new Doorkeeper( $this->newCampaignFeatures() );
+		$container['feature_toggle'] = function (): FeatureToggle {
+			return new DoorkeeperFeatureToggle( new Doorkeeper( $this->newCampaignFeatures() ) );
 		};
 	}
 
@@ -1640,9 +1642,6 @@ class FunFunFactory implements ServiceProviderInterface {
 		return $this->getAbsolutePath( $this->getSkinDirectory() );
 	}
 
-	/**
-	 * @return Campaign[]
-	 */
 	private function getCampaigns(): array {
 		$builder = new CampaignBuilder( new \DateTimeZone( $this->config['campaign-timezone'] ) );
 		return $builder->getCampaigns( $this->getCampaignConfig() );
@@ -1658,15 +1657,15 @@ class FunFunFactory implements ServiceProviderInterface {
 		return $factory->getFeatures();
 	}
 
-	private function getDoorkeeper(): Doorkeeper {
-		return $this->pimple['doorkeeper'];
+	private function getFeatureToggle(): FeatureToggle {
+		return $this->pimple['feature_toggle'];
+	}
+
+	public function setFeatureToggle( FeatureToggle $featureToggle ): void {
+		$this->pimple['feature_toggle'] = $featureToggle;
 	}
 
 	private function getChoiceFactory(): ChoiceFactory {
 		return $this->pimple['choice_factory'];
-	}
-
-	public function setCampaignConfiguration( array $campaigns ) {
-		$this->pimple['campaign_config'] = $campaigns;
 	}
 }

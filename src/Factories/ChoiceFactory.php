@@ -4,8 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Factories;
 
-use RemotelyLiving\Doorkeeper\Doorkeeper;
 use Twig_Environment;
+use WMDE\Fundraising\Frontend\Infrastructure\FeatureToggle;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
 /**
@@ -20,10 +20,10 @@ use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
  */
 class ChoiceFactory {
 
-	private $doorkeeper;
+	private $featureToggle;
 
-	public function __construct( Doorkeeper $doorkeeper ) {
-		$this->doorkeeper = $doorkeeper;
+	public function __construct( FeatureToggle $featureToggle ) {
+		$this->featureToggle = $featureToggle;
 	}
 
 	/**
@@ -42,13 +42,13 @@ class ChoiceFactory {
 	 * @return TwigTemplate
 	 */
 	public function getConfirmationPageTemplate( Twig_Environment $twig, array $context ): TwigTemplate {
-		if ( $this->doorkeeper->grantsAccessTo( 'campaigns.confirmation_pages.collapsed_membership_form' ) ) {
+		if ( $this->featureToggle->featureIsActive( 'campaigns.confirmation_pages.collapsed_membership_form' ) ) {
 			return new TwigTemplate( $twig, 'Donation_Confirmation.html.twig', array_merge( [
 					'templateCampaign' => 'confirmation_pages',
 					'templateName' => 'collapsed_membership_form'
 				], $context )
 			);
-		} elseif ( $this->doorkeeper->grantsAccessTo( 'campaigns.confirmation_pages.expanded_membership_form' ) ) {
+		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.confirmation_pages.expanded_membership_form' ) ) {
 			return new TwigTemplate( $twig, 'Donation_Confirmation.html.twig', array_merge( [
 					'templateCampaign' => 'confirmation_pages',
 					'templateName' => 'expanded_membership_form'

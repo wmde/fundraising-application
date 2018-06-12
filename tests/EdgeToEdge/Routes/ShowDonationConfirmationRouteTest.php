@@ -9,6 +9,8 @@ use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowDonationConfirmationHandler;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\FeatureToggle;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedFeatureToggle;
 use WMDE\Fundraising\PaymentContext\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
@@ -25,45 +27,45 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 	private const ACCESS_DENIED_TEXT = 'access_denied_donation_confirmation';
 
-	private const CAMPAIGN_GROUP_1 = 'expanded_membership_form';
-	private const CAMPAIGN_GROUP_2 = 'collapsed_membership_form';
-
 	public function testGivenValidRequest_confirmationPageContainsDonationData(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setCampaignConfiguration( $this->newCampaignConfiguration( self::CAMPAIGN_GROUP_1 ) );
+			$factory->setFeatureToggle( $this->newDefaultFeatureToggle() );
 
 			$donation = $this->newStoredDonation( $factory );
 
 			$responseContent = $this->retrieveDonationConfirmation( $client, $donation->getId() );
 
 			$this->assertDonationDataInResponse( $donation, $responseContent );
-			$this->assertContains( 'Template Name: ' . self::CAMPAIGN_GROUP_1, $responseContent );
+			$this->assertContains( 'Template Name: expanded_membership_form', $responseContent );
+			$this->assertContains( 'Template Campaign: confirmation_pages', $responseContent );
 		} );
 	}
 
 	public function testGivenValidPostRequest_confirmationPageContainsDonationData(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setCampaignConfiguration( $this->newCampaignConfiguration( self::CAMPAIGN_GROUP_1 ) );
+			$factory->setFeatureToggle( $this->newDefaultFeatureToggle() );
 
 			$donation = $this->newStoredDonation( $factory );
 
 			$responseContent = $this->retrieveDonationConfirmation( $client, $donation->getId() );
 
 			$this->assertDonationDataInResponse( $donation, $responseContent );
-			$this->assertContains( 'Template Name: ' . self::CAMPAIGN_GROUP_1, $responseContent );
+			$this->assertContains( 'Template Name: expanded_membership_form', $responseContent );
+			$this->assertContains( 'Template Campaign: confirmation_pages', $responseContent );
 		} );
 	}
 
 	public function testGivenValidPostRequest_embeddedMembershipFormContainsDonationData(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setCampaignConfiguration( $this->newCampaignConfiguration( self::CAMPAIGN_GROUP_1 ) );
+			$factory->setFeatureToggle( $this->newDefaultFeatureToggle() );
 
 			$donation = $this->newStoredDonation( $factory );
 
 			$responseContent = $this->retrieveDonationConfirmation( $client, $donation->getId() );
 
 			$this->assertEmbeddedMembershipFormIsPrefilled( $donation, $responseContent );
-			$this->assertContains( 'Template Name: ' . self::CAMPAIGN_GROUP_1, $responseContent );
+			$this->assertContains( 'Template Name: expanded_membership_form', $responseContent );
+			$this->assertContains( 'Template Campaign: confirmation_pages', $responseContent );
 		} );
 	}
 
@@ -93,13 +95,13 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 	public function testGivenAlternativeConfirmationPageCampaign_alternativeContentIsDisplayed(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setCampaignConfiguration( $this->newCampaignConfiguration( self::CAMPAIGN_GROUP_2 ) );
+			$factory->setFeatureToggle( $this->newAlternativeFeatureToggle() );
 
 			$donation = $this->newStoredDonation( $factory );
 
 			$responseContent = $this->retrieveDonationConfirmation( $client, $donation->getId() );
 
-			$this->assertContains( 'Template Name: ' . self::CAMPAIGN_GROUP_2, $responseContent );
+			$this->assertContains( 'Template Name: collapsed_membership_form', $responseContent );
 			$this->assertContains( 'Template Campaign: confirmation_pages', $responseContent );
 		} );
 	}
@@ -250,16 +252,18 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function newCampaignConfiguration( string $defaultGroup ): array {
-		return [
-			'confirmation_pages' => [
-				'start' => '2018-01-01',
-				'end' => '3000-12-31',
-				'active' => false,
-				'groups' => [ self::CAMPAIGN_GROUP_1, self::CAMPAIGN_GROUP_2 ],
-				'default_group' => $defaultGroup
-			]
-		];
+	private function newDefaultFeatureToggle(): FeatureToggle {
+		return new FixedFeatureToggle( [
+			'campaigns.confirmation_pages.expanded_membership_form' => true,
+			'campaigns.confirmation_pages.collapsed_membership_form' => false,
+		] );
+	}
+
+	private function newAlternativeFeatureToggle(): FeatureToggle {
+		return new FixedFeatureToggle( [
+			'campaigns.confirmation_pages.expanded_membership_form' => false,
+			'campaigns.confirmation_pages.collapsed_membership_form' => true,
+		] );
 	}
 
 }
