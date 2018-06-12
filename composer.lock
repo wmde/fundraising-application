@@ -3767,16 +3767,16 @@
         },
         {
             "name": "myclabs/deep-copy",
-            "version": "1.8.0",
+            "version": "1.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/myclabs/DeepCopy.git",
-                "reference": "478465659fd987669df0bd8a9bf22a8710e5f1b6"
+                "reference": "3e01bdad3e18354c3dce54466b7fbe33a9f9f7f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/478465659fd987669df0bd8a9bf22a8710e5f1b6",
-                "reference": "478465659fd987669df0bd8a9bf22a8710e5f1b6",
+                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/3e01bdad3e18354c3dce54466b7fbe33a9f9f7f8",
+                "reference": "3e01bdad3e18354c3dce54466b7fbe33a9f9f7f8",
                 "shasum": ""
             },
             "require": {
@@ -3811,7 +3811,7 @@
                 "object",
                 "object graph"
             ],
-            "time": "2018-05-29T17:25:09+00:00"
+            "time": "2018-06-11T23:09:50+00:00"
         },
         {
             "name": "nette/bootstrap",
@@ -6834,12 +6834,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content.git",
-                "reference": "3c0eb5e64221815f90bb27173afd10a32e1e2752"
+                "reference": "9fa8762b6849cdfadc2aaa7b020faa8989a58a3e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/3c0eb5e64221815f90bb27173afd10a32e1e2752",
-                "reference": "3c0eb5e64221815f90bb27173afd10a32e1e2752",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/9fa8762b6849cdfadc2aaa7b020faa8989a58a3e",
+                "reference": "9fa8762b6849cdfadc2aaa7b020faa8989a58a3e",
                 "shasum": ""
             },
             "require-dev": {
@@ -6875,7 +6875,7 @@
             "support": {
                 "source": "https://github.com/wmde/fundraising-frontend-content/tree/test"
             },
-            "time": "2018-06-11T12:31:08+00:00"
+            "time": "2018-06-11T16:59:18+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",
