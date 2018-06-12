@@ -10,7 +10,6 @@ use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowDonationConfirmationHandler;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\PaymentContext\Domain\Model\DirectDebitPayment;
-use WMDE\Fundraising\Frontend\Presentation\DonationConfirmationPageSelector;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
@@ -21,53 +20,50 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
  */
 class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
-	const CORRECT_ACCESS_TOKEN = 'KindlyAllowMeAccess';
-	const MAPPED_STATUS = 'status-new';
+	private const CORRECT_ACCESS_TOKEN = 'KindlyAllowMeAccess';
+	private const MAPPED_STATUS = 'status-new';
 
-	const ACCESS_DENIED_TEXT = 'access_denied_donation_confirmation';
+	private const ACCESS_DENIED_TEXT = 'access_denied_donation_confirmation';
+
+	private const CAMPAIGN_GROUP_1 = 'expanded_membership_form';
+	private const CAMPAIGN_GROUP_2 = 'collapsed_membership_form';
 
 	public function testGivenValidRequest_confirmationPageContainsDonationData(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setDonationConfirmationPageSelector(
-				new DonationConfirmationPageSelector( $this->newEmptyConfirmationPageConfig() )
-			);
+			$factory->setCampaignConfiguration( $this->newCampaignConfiguration( self::CAMPAIGN_GROUP_1 ) );
 
 			$donation = $this->newStoredDonation( $factory );
 
 			$responseContent = $this->retrieveDonationConfirmation( $client, $donation->getId() );
 
 			$this->assertDonationDataInResponse( $donation, $responseContent );
-			$this->assertContains( 'Template Name: DonationConfirmation.twig', $responseContent );
+			$this->assertContains( 'Template Name: ' . self::CAMPAIGN_GROUP_1, $responseContent );
 		} );
 	}
 
 	public function testGivenValidPostRequest_confirmationPageContainsDonationData(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setDonationConfirmationPageSelector(
-				new DonationConfirmationPageSelector( $this->newEmptyConfirmationPageConfig() )
-			);
+			$factory->setCampaignConfiguration( $this->newCampaignConfiguration( self::CAMPAIGN_GROUP_1 ) );
 
 			$donation = $this->newStoredDonation( $factory );
 
 			$responseContent = $this->retrieveDonationConfirmation( $client, $donation->getId() );
 
 			$this->assertDonationDataInResponse( $donation, $responseContent );
-			$this->assertContains( 'Template Name: DonationConfirmation.twig', $responseContent );
+			$this->assertContains( 'Template Name: ' . self::CAMPAIGN_GROUP_1, $responseContent );
 		} );
 	}
 
 	public function testGivenValidPostRequest_embeddedMembershipFormContainsDonationData(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setDonationConfirmationPageSelector(
-				new DonationConfirmationPageSelector( $this->newEmptyConfirmationPageConfig() )
-			);
+			$factory->setCampaignConfiguration( $this->newCampaignConfiguration( self::CAMPAIGN_GROUP_1 ) );
 
 			$donation = $this->newStoredDonation( $factory );
 
 			$responseContent = $this->retrieveDonationConfirmation( $client, $donation->getId() );
 
 			$this->assertEmbeddedMembershipFormIsPrefilled( $donation, $responseContent );
-			$this->assertContains( 'Template Name: DonationConfirmation.twig', $responseContent );
+			$this->assertContains( 'Template Name: ' . self::CAMPAIGN_GROUP_1, $responseContent );
 		} );
 	}
 
@@ -95,18 +91,16 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'initialFormValues.bankname: ' . $bankData->getBankName(), $responseContent );
 	}
 
-	public function testGivenAlternativeConfirmationPageConfig_alternativeContentIsDisplayed(): void {
+	public function testGivenAlternativeConfirmationPageCampaign_alternativeContentIsDisplayed(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setDonationConfirmationPageSelector(
-				new DonationConfirmationPageSelector( $this->newConfirmationPageConfig() )
-			);
+			$factory->setCampaignConfiguration( $this->newCampaignConfiguration( self::CAMPAIGN_GROUP_2 ) );
+
 			$donation = $this->newStoredDonation( $factory );
 
 			$responseContent = $this->retrieveDonationConfirmation( $client, $donation->getId() );
 
-			$this->assertContains( 'Alternative content', $responseContent );
-			$this->assertContains( 'Template Name: DonationConfirmationAlternative.twig', $responseContent );
-			$this->assertContains( 'Template Campaign: example', $responseContent );
+			$this->assertContains( 'Template Name: ' . self::CAMPAIGN_GROUP_2, $responseContent );
+			$this->assertContains( 'Template Campaign: confirmation_pages', $responseContent );
 		} );
 	}
 
@@ -194,9 +188,6 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 	public function testGivenWrongToken_accessIsDenied(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setDonationConfirmationPageSelector(
-				new DonationConfirmationPageSelector( $this->newEmptyConfirmationPageConfig() )
-			);
 			$donation = $this->newStoredDonation( $factory );
 
 			$client->request(
@@ -221,10 +212,6 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 	public function testGivenWrongId_accessIsDenied(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setDonationConfirmationPageSelector(
-				new DonationConfirmationPageSelector( $this->newEmptyConfirmationPageConfig() )
-			);
-
 			$donation = $this->newStoredDonation( $factory );
 
 			$responseContent = $this->retrieveDonationConfirmation( $client, $donation->getId() + 1 );
@@ -234,44 +221,10 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenNoDonation_accessIsDenied(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setDonationConfirmationPageSelector(
-				new DonationConfirmationPageSelector( $this->newEmptyConfirmationPageConfig() )
-			);
+		$client = $this->createClient( [] );
+		$responseContent = $this->retrieveDonationConfirmation( $client, 1 );
 
-			$responseContent = $this->retrieveDonationConfirmation( $client, 1 );
-			$this->assertContains( self::ACCESS_DENIED_TEXT, $responseContent );
-		} );
-	}
-
-	private function newConfirmationPageConfig(): array {
-		return [
-			'default' => 'DonationConfirmation.twig',
-			'campaigns' => [
-				[
-					'code' => 'example',
-					'active' => true,
-					'startDate' => '1970-01-01 00:00:00',
-					'endDate' => '2038-12-31 23:59:59',
-					'templates' => [ 'DonationConfirmationAlternative.twig' ]
-				]
-			]
-		];
-	}
-
-	private function newEmptyConfirmationPageConfig(): array {
-		return [
-			'default' => 'DonationConfirmation.twig',
-			'campaigns' => [
-				[
-					'code' => 'example',
-					'active' => false,
-					'startDate' => '1970-01-01 00:00:00',
-					'endDate' => '1970-12-31 23:59:59',
-					'templates' => []
-				]
-			]
-		];
+		$this->assertContains( self::ACCESS_DENIED_TEXT, $responseContent );
 	}
 
 	public function testWhenDonationTimestampCookiePreexists_itIsNotOverwritten(): void {
@@ -295,6 +248,18 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 				$client->getCookieJar()->get( ShowDonationConfirmationHandler::SUBMISSION_COOKIE_NAME )->getValue()
 			);
 		} );
+	}
+
+	private function newCampaignConfiguration( string $defaultGroup ): array {
+		return [
+			'confirmation_pages' => [
+				'start' => '2018-01-01',
+				'end' => '3000-12-31',
+				'active' => false,
+				'groups' => [ self::CAMPAIGN_GROUP_1, self::CAMPAIGN_GROUP_2 ],
+				'default_group' => $defaultGroup
+			]
+		];
 	}
 
 }

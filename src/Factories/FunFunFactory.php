@@ -19,8 +19,12 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use RemotelyLiving\Doorkeeper\Doorkeeper;
+use RemotelyLiving\Doorkeeper\Features\Set;
 use Swift_MailTransport;
 use Swift_NullTransport;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -28,6 +32,7 @@ use Symfony\Component\Validator\Constraint as ValidatorConstraint;
 use Symfony\Component\Validator\Constraints\Range as RangeConstraint;
 use Symfony\Component\Validator\Constraints\Required as RequiredConstraint;
 use Symfony\Component\Validator\Constraints\Type as TypeConstraint;
+use Symfony\Component\Yaml\Yaml;
 use TNvpServiceDispatcher;
 use Twig_Environment;
 use Twig_Extensions_Extension_Intl;
@@ -71,6 +76,10 @@ use WMDE\Fundraising\DonationContext\UseCases\SofortPaymentNotification\SofortPa
 use WMDE\Fundraising\DonationContext\UseCases\ValidateDonor\ValidateDonorUseCase;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
+use WMDE\Fundraising\Frontend\Infrastructure\Campaign;
+use WMDE\Fundraising\Frontend\Infrastructure\CampaignBuilder;
+use WMDE\Fundraising\Frontend\Infrastructure\CampaignConfiguration;
+use WMDE\Fundraising\Frontend\Infrastructure\CampaignFeatureBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\LoggingMailer;
@@ -93,7 +102,6 @@ use WMDE\Fundraising\Frontend\Infrastructure\Payment\KontoCheckIbanValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\McpCreditCardService;
 use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector;
-use WMDE\Fundraising\Frontend\Presentation\DonationConfirmationPageSelector;
 use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
 use WMDE\Fundraising\Frontend\Presentation\GreetingGenerator;
 use WMDE\Fundraising\Frontend\Presentation\Honorifics;
@@ -412,10 +420,6 @@ class FunFunFactory implements ServiceProviderInterface {
 			);
 		};
 
-		$container['confirmation-page-selector'] = function() {
-			return new DonationConfirmationPageSelector( $this->config['confirmation-pages'] );
-		};
-
 		$container['paypal-payment-notification-verifier'] = function() {
 			return new LoggingPaymentNotificationVerifier(
 				new PayPalPaymentNotificationVerifier(
@@ -517,6 +521,32 @@ class FunFunFactory implements ServiceProviderInterface {
 
 		$container['payment-types-settings'] = function (): PaymentTypesSettings {
 			return new PaymentTypesSettings( $this->config['payment-types'] );
+		};
+
+		$container['choice_factory'] = function (): ChoiceFactory {
+			return new ChoiceFactory( $this->getDoorkeeper() );
+		};
+
+		$container['campaign_config'] = function (): array {
+			// TODO move to CampaignFactory?
+			$configFetcher = new SimpleFileFetcher();
+			$configs = [ Yaml::parse( $configFetcher->fetchFile( $this->getAbsolutePath( 'app/config/campaigns.yml' ) ) ) ];
+
+			$localConfig = $this->getAbsolutePath( 'app/config/campaigns.local.yml' );
+			if ( file_exists( $localConfig ) ) {
+				$configs[] = Yaml::parse( $configFetcher->fetchFile( $localConfig ) );
+			}
+			$processor = new Processor();
+			try {
+				return $processor->processConfiguration( new CampaignConfiguration(), $configs );
+			} catch( InvalidConfigurationException $e ) {
+				$this->getLogger()->error( 'Error while loading campaign configuration: ' . $e->getMessage(), [ 'exception' => $e ] );
+			}
+			return [];
+		};
+
+		$container['doorkeeper'] = function (): Doorkeeper {
+			return new Doorkeeper( $this->newCampaignFeatures() );
 		};
 	}
 
@@ -1092,10 +1122,10 @@ class FunFunFactory implements ServiceProviderInterface {
 		return $this->pimple['fundraising.membership.application.token_generator'];
 	}
 
-	public function newDonationConfirmationPresenter( string $templateName = 'Donation_Confirmation.html.twig' ): DonationConfirmationHtmlPresenter {
+	public function newDonationConfirmationPresenter(): DonationConfirmationHtmlPresenter {
 		return new DonationConfirmationHtmlPresenter(
-			$this->getLayoutTemplate(
-				$templateName,
+			$this->getChoiceFactory()->getConfirmationPageTemplate(
+				$this->getSkinTwig(),
 				[
 					'piwikGoals' => [ 3 ],
 					'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForMembershipApplication()
@@ -1234,14 +1264,6 @@ class FunFunFactory implements ServiceProviderInterface {
 			$this->newDonationTokenFetcher(),
 			$this->getDonationRepository()
 		);
-	}
-
-	public function setDonationConfirmationPageSelector( DonationConfirmationPageSelector $selector ): void {
-		$this->pimple['confirmation-page-selector'] = $selector;
-	}
-
-	public function getDonationConfirmationPageSelector(): DonationConfirmationPageSelector {
-		return $this->pimple['confirmation-page-selector'];
 	}
 
 	public function newDonationFormViolationPresenter(): DonationFormViolationPresenter {
@@ -1616,5 +1638,35 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	public function getAbsoluteSkinDirectory(): string {
 		return $this->getAbsolutePath( $this->getSkinDirectory() );
+	}
+
+	/**
+	 * @return Campaign[]
+	 */
+	private function getCampaigns(): array {
+		$builder = new CampaignBuilder( new \DateTimeZone( $this->config['campaign-timezone'] ) );
+		return $builder->getCampaigns( $this->getCampaignConfig() );
+	}
+
+	private function getCampaignConfig(): array {
+		return $this->pimple['campaign_config'];
+	}
+
+	private function newCampaignFeatures(): Set {
+		// TODO Cache features so we don't have to parse the campaign config on every request
+		$factory = new CampaignFeatureBuilder( ...$this->getCampaigns() );
+		return $factory->getFeatures();
+	}
+
+	private function getDoorkeeper(): Doorkeeper {
+		return $this->pimple['doorkeeper'];
+	}
+
+	private function getChoiceFactory(): ChoiceFactory {
+		return $this->pimple['choice_factory'];
+	}
+
+	public function setCampaignConfiguration( array $campaigns ) {
+		$this->pimple['campaign_config'] = $campaigns;
 	}
 }

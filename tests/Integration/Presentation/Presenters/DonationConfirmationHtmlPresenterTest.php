@@ -42,15 +42,12 @@ class DonationConfirmationHtmlPresenterTest extends \PHPUnit\Framework\TestCase 
 			$donation,
 			self::UPDATE_TOKEN,
 			self::ACCESS_TOKEN,
-			$this->newSelectedConfirmationPage(),
 			$this->newPiwikEvents()
 		);
 	}
 
 	private function getExpectedRenderParams(): array {
 		return [
-			'template_name' => '',
-			'templateCampaign' => '',
 			'donation' => [
 				'id' => self::DONATION_ID,
 				'amount' => 13.37,
@@ -82,10 +79,6 @@ class DonationConfirmationHtmlPresenterTest extends \PHPUnit\Framework\TestCase 
 		return $twig;
 	}
 
-	private function newSelectedConfirmationPage(): SelectedConfirmationPage {
-		return $this->createMock( SelectedConfirmationPage::class );
-	}
-
 	private function newPiwikEvents(): PiwikEvents {
 		$piwikEvents = new PiwikEvents();
 		$piwikEvents->triggerSetCustomVariable( 1, 'some value', PiwikEvents::SCOPE_VISIT );
@@ -109,7 +102,6 @@ class DonationConfirmationHtmlPresenterTest extends \PHPUnit\Framework\TestCase 
 			$donation,
 			self::UPDATE_TOKEN,
 			self::ACCESS_TOKEN,
-			$this->newSelectedConfirmationPage(),
 			$this->newPiwikEvents()
 		);
 	}

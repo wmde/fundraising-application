@@ -33,18 +33,16 @@ class DonationConfirmationHtmlPresenter {
 	}
 
 	public function present( Donation $donation, string $updateToken, string $accessToken,
-							 SelectedConfirmationPage $selectedPage, PiwikEvents $piwikEvents ): string {
+							 PiwikEvents $piwikEvents ): string {
 		return $this->template->render(
-			$this->getConfirmationPageArguments( $donation, $updateToken, $accessToken, $selectedPage, $piwikEvents )
+			$this->getConfirmationPageArguments( $donation, $updateToken, $accessToken, $piwikEvents )
 		);
 	}
 
 	private function getConfirmationPageArguments( Donation $donation, string $updateToken, string $accessToken,
-												   SelectedConfirmationPage $selectedPage, PiwikEvents $piwikEvents ): array {
+												   PiwikEvents $piwikEvents ): array {
 
 		return [
-			'template_name' => $selectedPage->getPageTitle(),
-			'templateCampaign' => $selectedPage->getCampaignCode(),
 			'donation' => [
 				'id' => $donation->getId(),
 				'status' => $this->mapStatus( $donation->getStatus() ),
