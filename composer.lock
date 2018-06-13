@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e7a4c40eded4854ff88334bf5ded2e1e",
+    "content-hash": "329626b3d248c090d416ab5ecd7bb55c",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -3025,7 +3025,7 @@
             "version": "v2.1.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/wmde/fundraising-content-provider.git",
+                "url": "https://github.com/wmde/fundraising-content-provider",
                 "reference": "218c29539662e795393a21769288bb5c446b802e"
             },
             "dist": {
@@ -3089,13 +3089,13 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/wmde/fundraising-donations.git",
-                "reference": "c608be9b3e7bdc403fb85091c6217d04edbed659"
+                "url": "https://github.com/wmde/fundraising-donations",
+                "reference": "2d538237620862bb030b546c67cc2efabf938caf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/c608be9b3e7bdc403fb85091c6217d04edbed659",
-                "reference": "c608be9b3e7bdc403fb85091c6217d04edbed659",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/2d538237620862bb030b546c67cc2efabf938caf",
+                "reference": "2d538237620862bb030b546c67cc2efabf938caf",
                 "shasum": ""
             },
             "require": {
@@ -3141,24 +3141,20 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/FundraisingDonations",
-            "support": {
-                "source": "https://github.com/wmde/fundraising-donations/tree/master",
-                "issues": "https://github.com/wmde/fundraising-donations/issues"
-            },
-            "time": "2018-05-16T09:46:30+00:00"
+            "time": "2018-06-13T14:43:04+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/wmde/fundraising-memberships.git",
-                "reference": "decd8e654e2686fc0c3e9ff5ea5d13de8bb8fc3a"
+                "url": "https://github.com/wmde/fundraising-memberships",
+                "reference": "66f956b996dad6f464a004b6c65f8749976c8fea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/decd8e654e2686fc0c3e9ff5ea5d13de8bb8fc3a",
-                "reference": "decd8e654e2686fc0c3e9ff5ea5d13de8bb8fc3a",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/66f956b996dad6f464a004b6c65f8749976c8fea",
+                "reference": "66f956b996dad6f464a004b6c65f8749976c8fea",
                 "shasum": ""
             },
             "require": {
@@ -3204,17 +3200,14 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "support": {
-                "source": "https://github.com/wmde/fundraising-memberships/tree/master"
-            },
-            "time": "2018-05-16T10:59:55+00:00"
+            "time": "2018-06-13T14:55:16+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/wmde/fundraising-payments.git",
+                "url": "https://github.com/wmde/fundraising-payments",
                 "reference": "3858f4c329cd54fcf4d3656ce2ec4337f84fd2ab"
             },
             "dist": {
@@ -3314,7 +3307,7 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/wmde/fundraising-subscriptions.git",
+                "url": "https://github.com/wmde/fundraising-subscriptions",
                 "reference": "c908552229f1a60b298b4b36f617edc4445ff5af"
             },
             "dist": {
@@ -3409,16 +3402,16 @@
         },
         {
             "name": "jean85/pretty-package-versions",
-            "version": "1.1",
+            "version": "1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Jean85/pretty-package-versions.git",
-                "reference": "d457344b6a035ef99236bdda4729ad7eeb233f54"
+                "reference": "75c7effcf3f77501d0e0caa75111aff4daa0dd48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Jean85/pretty-package-versions/zipball/d457344b6a035ef99236bdda4729ad7eeb233f54",
-                "reference": "d457344b6a035ef99236bdda4729ad7eeb233f54",
+                "url": "https://api.github.com/repos/Jean85/pretty-package-versions/zipball/75c7effcf3f77501d0e0caa75111aff4daa0dd48",
+                "reference": "75c7effcf3f77501d0e0caa75111aff4daa0dd48",
                 "shasum": ""
             },
             "require": {
@@ -3449,14 +3442,14 @@
                     "email": "alessandro.lai85@gmail.com"
                 }
             ],
-            "description": "A wrapper for ocramius/pretty-package-versions to get pretty versions strings",
+            "description": "A wrapper for ocramius/package-versions to get pretty versions strings",
             "keywords": [
                 "composer",
                 "package",
                 "release",
                 "versions"
             ],
-            "time": "2018-01-21T13:54:22+00:00"
+            "time": "2018-06-13T13:22:40+00:00"
         },
         {
             "name": "mikey179/vfsStream",
