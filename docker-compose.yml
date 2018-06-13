@@ -39,6 +39,9 @@ services:
       - "3306"
     volumes:
       - db-storage:/var/lib/mysql
+    networks:
+      - default
+      - frontend-proxy
 
   mailhog:
     image: mailhog/mailhog
@@ -51,12 +54,8 @@ volumes:
   var-data:
   db-storage:
 
-# This is a PoC
-# Many files are shameless copies of other files from this repo / infrastructure
-# Has to be consolidated before actual use to mitigate unmaintainable duplication
-
-# view in browser via
-# http://localhost:8080/
-
-# run tests via
-# $ docker-compose run --rm --no-deps app vendor/bin/phpunit
+networks:
+  frontend-proxy:
+    # uncomment this as soon as we can use version 3.5 (Docker 17.12.0+) on Travis CI,
+    # to make linking easier with a defined name instead of using the directory name this repo is living in
+    # name: fundraising_network
