@@ -88,6 +88,11 @@ The following example shows the configuration when the content repository is at 
 
     make ci
 
+If you want to run all the CI tasks in parallel, without ticking progress bars from commands that support it, run the following command instead:
+
+    make -j --output-sync ci DOCKER_FLAGS="" 
+
+
 ### For tests only
 
     make test

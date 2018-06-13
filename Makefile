@@ -7,6 +7,7 @@ NPM_FLAGS     := --prefer-offline
 DOCKER_FLAGS  := --interactive --tty
 TEST_DIR :=
 REDUX_LOG :=
+UNIQUE_APP_CONTAINER := $(shell uuidgen)-app
 
 .DEFAULT_GOAL := ci
 
@@ -46,28 +47,28 @@ setup-db:
 	docker-compose run --rm app ./vendor/bin/doctrine orm:generate-proxies var/doctrine_proxies
 
 covers:
-	docker-compose run --rm --no-deps app ./vendor/bin/covers-validator
+	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./vendor/bin/covers-validator
 
 phpunit:
-	docker-compose run --rm app ./vendor/bin/phpunit $(TEST_DIR)
+	docker-compose run --rm --name $(UNIQUE_APP_CONTAINER)-$@ app ./vendor/bin/phpunit $(TEST_DIR)
 
 phpunit-system:
-	docker-compose run --rm app ./vendor/bin/phpunit tests/System/
+	docker-compose run --rm --name $(UNIQUE_APP_CONTAINER)-$@ app ./vendor/bin/phpunit tests/System/
 
 cs:
-	docker-compose run --rm --no-deps app ./vendor/bin/phpcs
+	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./vendor/bin/phpcs
 
 fix-cs:
-	docker-compose run --rm --no-deps app ./vendor/bin/phpcbf
+	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./vendor/bin/phpcbf
 
 stan:
-	docker-compose run --rm --no-deps app php -d memory_limit=-1 vendor/bin/phpstan analyse --level=1 --no-progress cli/ src/ tests/
+	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app php -d memory_limit=-1 vendor/bin/phpstan analyse --level=1 --no-progress cli/ src/ tests/
 
 validate-app-config:
-	docker-compose run --rm --no-deps app ./console validate-config app/config/config.dist.json app/config/config.test.json
+	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./console validate-config app/config/config.dist.json app/config/config.test.json
 
 phpmd:
-	docker-compose run --rm --no-deps app ./vendor/bin/phpmd src/ text phpmd.xml
+	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./vendor/bin/phpmd src/ text phpmd.xml
 
 npm-ci:
 	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR):/code -w /code -e NO_UPDATE_NOTIFIER=1 node:8 npm run ci
