@@ -65,27 +65,33 @@
 		},
 		{
 			"type": "vcs",
-			"url": "https://github.com/wmde/fundraising-donations"
+			"url": "https://github.com/wmde/fundraising-donations",
+			"no-api": true
 		},
 		{
 			"type": "vcs",
-			"url": "https://github.com/wmde/fundraising-memberships"
+			"url": "https://github.com/wmde/fundraising-memberships",
+			"no-api": true
 		},
 		{
 			"type": "vcs",
-			"url": "https://github.com/wmde/fundraising-payments"
+			"url": "https://github.com/wmde/fundraising-payments",
+			"no-api": true
 		},
 		{
 			"type": "vcs",
-			"url": "https://github.com/wmde/fundraising-subscriptions"
+			"url": "https://github.com/wmde/fundraising-subscriptions",
+			"no-api": true
 		},
 		{
 			"type": "vcs",
-			"url": "https://github.com/wmde/fundraising-frontend-content"
+			"url": "https://github.com/wmde/fundraising-frontend-content",
+			"no-api": true
 		},
 		{
 			"type": "vcs",
-			"url": "https://github.com/wmde/fundraising-content-provider"
+			"url": "https://github.com/wmde/fundraising-content-provider",
+			"no-api": true
 		}
 	],
 	"require-dev": {
