@@ -123,7 +123,39 @@ These tasks are also performed during the [travis](.travis.yml) runs.
 All emails sent by the application can be inspected via [mailhog](https://github.com/mailhog/MailHog)
 at [http://localhost:8025/](http://localhost:8025/)
 
-## Accessing the database
+## Database
+
+### Database migrations
+
+Out of the box, the database should be in a usable state for local development. For production changes to the database,
+doctrine migration scripts may be used. Migration scripts are stored in the *migrations* directory of
+the [FundraisingStore repository](https://github.com/wmde/FundraisingStore/tree/master/migrations).
+
+The scripts from the FundraisingStore repository can be executed through FundraisingFrontend by running these commands:
+
+To execute a specific script, run the following command and add the version number of the migration script you want to use.
+As an example, executing `migrations/Version20180612000000.php` would look like this:
+
+```
+make migration-execute MIGRATION_VERSION=20180612000000
+```
+
+You can also revert a script (if implemented) through an equivalent `migration-revert` command:
+
+```
+make migration-revert MIGRATION_VERSION=20180612000000
+```
+
+Note that Doctrine creates its own `doctrine_migration_versions` table where it stores the status of individual migrations.
+If you run into issues and want to reset the state of a migrations, it's best to check that table directly or use the `versions`
+command from doctrine-migrations which supports `--add` and `--delete` paramters:
+
+```
+vendor/wmde/fundraising-store/vendor/doctrine/migrations/bin/doctrine-migrations migrations:version
+```
+
+All of the previous make commands are only available in a dockerized environment.
+If you intend to use these commands on servers, you can check the `Makefile` for the underlying commands.
 
 ### Accessing the database from a Docker image
 
@@ -157,6 +189,8 @@ services:
 You then start the environment with the following command:
 
     docker-compose -f docker-compose.yml -f docker-compose.db.yml up
+
+You will be prompted for a password which you can grab from `config/config.prod.json`.
 
 ## Frontend development
 
