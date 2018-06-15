@@ -41,6 +41,7 @@
 		"symfony/validator": "^4.0",
 		"symfony/property-access": "^4.0",
 		"symfony/config": "^4.1",
+		"symfony/filesystem": "^4.1",
 		"symfony/yaml": "^4.1",
 		"remotelyliving/doorkeeper": "^1.4"
 	},

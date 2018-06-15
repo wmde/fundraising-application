@@ -26,6 +26,7 @@ use Swift_NullTransport;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Console\Exception\RuntimeException;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraint as ValidatorConstraint;
@@ -79,6 +80,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\Campaign;
 use WMDE\Fundraising\Frontend\Infrastructure\CampaignBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\CampaignConfiguration;
+use WMDE\Fundraising\Frontend\Infrastructure\CampaignConfigurationLoader;
 use WMDE\Fundraising\Frontend\Infrastructure\CampaignFeatureBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\DoorkeeperFeatureToggle;
@@ -530,21 +532,11 @@ class FunFunFactory implements ServiceProviderInterface {
 		};
 
 		$container['campaign_config'] = function (): array {
-			// TODO move to CampaignFactory?
-			$configFetcher = new SimpleFileFetcher();
-			$configs = [ Yaml::parse( $configFetcher->fetchFile( $this->getAbsolutePath( 'app/config/campaigns.yml' ) ) ) ];
-
-			$localConfig = $this->getAbsolutePath( 'app/config/campaigns.local.yml' );
-			if ( file_exists( $localConfig ) ) {
-				$configs[] = Yaml::parse( $configFetcher->fetchFile( $localConfig ) );
-			}
-			$processor = new Processor();
-			try {
-				return $processor->processConfiguration( new CampaignConfiguration(), $configs );
-			} catch( InvalidConfigurationException $e ) {
-				$this->getLogger()->error( 'Error while loading campaign configuration: ' . $e->getMessage(), [ 'exception' => $e ] );
-			}
-			return [];
+			$loader = new CampaignConfigurationLoader( new Filesystem(), new SimpleFileFetcher() );
+			return $loader->loadCampaignConfiguration(
+				$this->getAbsolutePath( 'app/config/campaigns.yml' ),
+				$this->getAbsolutePath( 'app/config/campaigns.local.yml' )
+			);
 		};
 
 		$container['feature_toggle'] = function (): FeatureToggle {
