@@ -625,11 +625,27 @@
         "cancel-url"
       ]
     },
-    "campaign-timezone": {
-      "type": "string",
-      "title": "Timezone of the campaign start and end dates",
-      "description": "Will be used to convert the start and and dates to server time",
-      "minLength": 4
+    "campaigns": {
+      "type": "object",
+      "properties": {
+        "timezone": {
+          "type": "string",
+          "title": "Timezone of the campaign start and end dates",
+          "description": "Will be used to convert the start and and dates to server time",
+          "minLength": 4
+        },
+        "configurations": {
+          "type": "array",
+          "title": "Names of YAML campaign configuration files",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": [ "timezone", "configurations" ]
     },
     "piwik": {
       "type": "object",
@@ -845,7 +861,7 @@
     "paypal-membership",
     "creditcard",
     "sofort",
-    "campaign-timezone",
+    "campaigns",
     "piwik",
     "translation",
     "payment-types",

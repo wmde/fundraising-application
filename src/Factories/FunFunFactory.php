@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Factories;
 
 use Doctrine\Common\Cache\Cache;
+use Doctrine\Common\Cache\CacheProvider;
 use Doctrine\Common\Cache\FilesystemCache;
 use Doctrine\Common\Cache\VoidCache;
 use Doctrine\DBAL\Connection;
@@ -23,8 +24,6 @@ use RemotelyLiving\Doorkeeper\Doorkeeper;
 use RemotelyLiving\Doorkeeper\Features\Set;
 use Swift_MailTransport;
 use Swift_NullTransport;
-use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Stopwatch\Stopwatch;
@@ -33,7 +32,6 @@ use Symfony\Component\Validator\Constraint as ValidatorConstraint;
 use Symfony\Component\Validator\Constraints\Range as RangeConstraint;
 use Symfony\Component\Validator\Constraints\Required as RequiredConstraint;
 use Symfony\Component\Validator\Constraints\Type as TypeConstraint;
-use Symfony\Component\Yaml\Yaml;
 use TNvpServiceDispatcher;
 use Twig_Environment;
 use Twig_Extensions_Extension_Intl;
@@ -79,7 +77,6 @@ use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\Campaign;
 use WMDE\Fundraising\Frontend\Infrastructure\CampaignBuilder;
-use WMDE\Fundraising\Frontend\Infrastructure\CampaignConfiguration;
 use WMDE\Fundraising\Frontend\Infrastructure\CampaignConfigurationLoader;
 use WMDE\Fundraising\Frontend\Infrastructure\CampaignFeatureBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder;
@@ -96,7 +93,6 @@ use WMDE\Fundraising\Frontend\Infrastructure\Payment\PaymentNotificationVerifier
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\PiwikServerSideTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\ProfilerDataCollector;
-use WMDE\Fundraising\Frontend\Infrastructure\ProfilingDecoratorBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\ServerSideTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
@@ -472,6 +468,10 @@ class FunFunFactory implements ServiceProviderInterface {
 			return new VoidCache();
 		};
 
+		$container['campaign_cache'] = function() {
+			return new VoidCache();
+		};
+
 		$container['page_view_tracker'] = function () {
 			return new PageViewTracker( $this->newServerSideTracker(), $this->config['piwik']['siteUrlBase'] );
 		};
@@ -531,12 +531,8 @@ class FunFunFactory implements ServiceProviderInterface {
 			return new ChoiceFactory( $this->getFeatureToggle() );
 		};
 
-		$container['campaign_config'] = function (): array {
-			$loader = new CampaignConfigurationLoader( new Filesystem(), new SimpleFileFetcher() );
-			return $loader->loadCampaignConfiguration(
-				$this->getAbsolutePath( 'app/config/campaigns.yml' ),
-				$this->getAbsolutePath( 'app/config/campaigns.local.yml' )
-			);
+		$container['campaign_config_loader'] = function (): CampaignConfigurationLoader {
+			return new CampaignConfigurationLoader( new Filesystem(), new SimpleFileFetcher(), $this->getCampaignCache() );
 		};
 
 		$container['feature_toggle'] = function (): FeatureToggle {
@@ -854,7 +850,12 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	public function newAuthorizedCachePurger(): AuthorizedCachePurger {
 		return new AuthorizedCachePurger(
-			new AllOfTheCachePurger( $this->getSkinTwig(), $this->getPageCache(), $this->getRenderedPageCache() ),
+			new AllOfTheCachePurger(
+				$this->getSkinTwig(),
+				$this->getPageCache(),
+				$this->getRenderedPageCache(),
+				$this->getCampaignCache()
+			),
 			$this->config['purging-secret']
 		);
 	}
@@ -1120,10 +1121,13 @@ class FunFunFactory implements ServiceProviderInterface {
 		return new DonationConfirmationHtmlPresenter(
 			$this->getChoiceFactory()->getConfirmationPageTemplate(
 				$this->getSkinTwig(),
-				[
-					'piwikGoals' => [ 3 ],
-					'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForMembershipApplication()
-				]
+				array_merge(
+					$this->getDefaultTwigVariables(),
+					[
+						'piwikGoals' => [ 3 ],
+						'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForMembershipApplication()
+					]
+				)
 			),
 			$this->getUrlGenerator()
 		);
@@ -1459,13 +1463,21 @@ class FunFunFactory implements ServiceProviderInterface {
 		return $this->pimple['rendered_page_cache'];
 	}
 
-	public function enablePageCache(): void {
+	private function getCampaignCache(): CacheProvider {
+		return $this->pimple['campaign_cache'];
+	}
+
+	public function enableCaching(): void {
 		$this->pimple['page_cache'] = function() {
 			return new FilesystemCache( $this->getCachePath() . '/pages/raw' );
 		};
 
 		$this->pimple['rendered_page_cache'] = function() {
 			return new FilesystemCache( $this->getCachePath() . '/pages/rendered' );
+		};
+
+		$this->pimple['campaign_cache'] = function() {
+			return new FilesystemCache( $this->getCachePath() . '/campaigns' );
 		};
 	}
 
@@ -1634,13 +1646,23 @@ class FunFunFactory implements ServiceProviderInterface {
 		return $this->getAbsolutePath( $this->getSkinDirectory() );
 	}
 
+	/**
+	 * @return Campaign[]
+	 */
 	private function getCampaigns(): array {
-		$builder = new CampaignBuilder( new \DateTimeZone( $this->config['campaign-timezone'] ) );
-		return $builder->getCampaigns( $this->getCampaignConfig() );
+		$builder = new CampaignBuilder( new \DateTimeZone( $this->config['campaigns']['timezone'] ) );
+		$configFiles = array_map(
+			function ( string $campaignConfigFile ) {
+				return $this->getAbsolutePath( 'app/config/' . $campaignConfigFile );
+			},
+			$this->config['campaigns']['configurations']
+		);
+		$loader = $this->getCampaignConfigurationLoader();
+		return $builder->getCampaigns( $loader->loadCampaignConfiguration( ...$configFiles ) );
 	}
 
-	private function getCampaignConfig(): array {
-		return $this->pimple['campaign_config'];
+	private function getCampaignConfigurationLoader(): CampaignConfigurationLoader {
+		return $this->pimple['campaign_config_loader'];
 	}
 
 	private function newCampaignFeatures(): Set {

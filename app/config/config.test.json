@@ -87,5 +87,11 @@
 			"test", "10h16", "cat17"
 		],
 		"default": "test"
+	},
+	"campaigns": {
+		"configurations": [
+			"campaigns.yml",
+			"campaigns.test.yml"
+		]
 	}
 }

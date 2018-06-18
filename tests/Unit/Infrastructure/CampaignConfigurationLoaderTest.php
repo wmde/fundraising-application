@@ -4,8 +4,11 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
+use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\Common\Cache\VoidCache;
 use FileFetcher\InMemoryFileFetcher;
 use FileFetcher\StubFileFetcher;
+use FileFetcher\ThrowingFileFetcher;
 use PHPUnit\Framework\TestCase;
 
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
@@ -38,7 +41,7 @@ CFG;
 		$filesystem = $this->createMock( Filesystem::class );
 		$filesystem->method( 'exists' )->willReturn( true );
 		$fileFetcher = new StubFileFetcher( self::VALID_CONFIGURATION );
-		$loader = new CampaignConfigurationLoader( $filesystem, $fileFetcher );
+		$loader = new CampaignConfigurationLoader( $filesystem, $fileFetcher, new VoidCache() );
 
 		$this->assertArrayHasKey( 'campaign1', $loader->loadCampaignConfiguration( 'campaigns.yml' ) );
 	}
@@ -50,7 +53,7 @@ CFG;
 			'campaigns.yml' => self::VALID_CONFIGURATION,
 			'override.yml' => self::OVERRIDE_CONFIGURATION
 		] );
-		$loader = new CampaignConfigurationLoader( $filesystem, $fileFetcher );
+		$loader = new CampaignConfigurationLoader( $filesystem, $fileFetcher, new VoidCache() );
 
 		$config = $loader->loadCampaignConfiguration( 'campaigns.yml', 'override.yml' );
 		$this->assertArrayHasKey( 'campaign1', $config );
@@ -61,7 +64,7 @@ CFG;
 		$filesystem = $this->createMock( Filesystem::class );
 		$filesystem->method( 'exists' )->willReturn( false );
 		$fileFetcher = new StubFileFetcher( self::VALID_CONFIGURATION );
-		$loader = new CampaignConfigurationLoader( $filesystem, $fileFetcher );
+		$loader = new CampaignConfigurationLoader( $filesystem, $fileFetcher, new VoidCache() );
 
 		$this->expectExceptionMessageRegExp( '/No campaign configuration files found/' );
 		$loader->loadCampaignConfiguration( 'campaigns.yml' );
@@ -71,7 +74,7 @@ CFG;
 		$filesystem = $this->createMock( Filesystem::class );
 		$filesystem->method( 'exists' )->willReturn( true );
 		$fileFetcher = new StubFileFetcher( ' """ ' );
-		$loader = new CampaignConfigurationLoader( $filesystem, $fileFetcher );
+		$loader = new CampaignConfigurationLoader( $filesystem, $fileFetcher, new VoidCache() );
 
 		$this->expectException( ParseException::class );
 		$loader->loadCampaignConfiguration( 'campaigns.yml' );
@@ -81,10 +84,32 @@ CFG;
 		$filesystem = $this->createMock( Filesystem::class );
 		$filesystem->method( 'exists' )->willReturn( true );
 		$fileFetcher = new StubFileFetcher( 'campaign: true' );
-		$loader = new CampaignConfigurationLoader( $filesystem, $fileFetcher );
+		$loader = new CampaignConfigurationLoader( $filesystem, $fileFetcher, new VoidCache() );
 
 		$this->expectException( InvalidConfigurationException::class );
 		$loader->loadCampaignConfiguration( 'campaigns.yml' );
+	}
+
+	public function testCategoriesAreAlreadyCached_nothingIsProcessed() {
+		$campaignConfig = [
+			'campaign1' => [
+				'start' => '2018-10-01',
+				'end' => '2018-12-31',
+				'active' => false,
+				'url_key' => 'c1',
+				'groups' => [ 'a', 'b' ],
+				'default_group' => 'a'
+			]
+		];
+		$filesystem = $this->createMock( Filesystem::class );
+		$filesystem->method( 'exists' )->willReturn( false );
+		$fileFetcher = new ThrowingFileFetcher();
+		$cache = new ArrayCache();
+		$cacheKey = md5( 'campaigns.yml' ); // TODO find better way to hide this implementation detail
+		$cache->save( $cacheKey, $campaignConfig );
+		$loader = new CampaignConfigurationLoader( $filesystem, $fileFetcher, $cache );
+
+		$this->assertEquals( $campaignConfig, $loader->loadCampaignConfiguration( 'campaigns.yml' ) );
 	}
 
 }

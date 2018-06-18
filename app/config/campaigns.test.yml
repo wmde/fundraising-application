@@ -1,0 +1,6 @@
+# This file is used during unit tests and overrides campaign configurations
+#
+# Set all campaigns to inactive to force the tests using the default code paths
+
+confirmation_pages:
+  active: false

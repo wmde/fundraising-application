@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Infrastructure\Cache;
 
 use Doctrine\Common\Cache\Cache;
+use Doctrine\Common\Cache\CacheProvider;
 use Doctrine\Common\Cache\FlushableCache;
 
 /**
@@ -16,11 +17,14 @@ class AllOfTheCachePurger implements CachePurger {
 	private $twigEnvironment;
 	private $rawPageCache;
 	private $renderedPageCache;
+	private $campaignCache;
 
-	public function __construct( \Twig_Environment $twigEnvironment, Cache $rawPageCache, Cache $renderedPageCache ) {
+	public function __construct( \Twig_Environment $twigEnvironment, Cache $rawPageCache, Cache $renderedPageCache,
+								 CacheProvider $campaignCache ) {
 		$this->twigEnvironment = $twigEnvironment;
 		$this->rawPageCache = $rawPageCache;
 		$this->renderedPageCache = $renderedPageCache;
+		$this->campaignCache = $campaignCache;
 	}
 
 	/**
@@ -36,6 +40,10 @@ class AllOfTheCachePurger implements CachePurger {
 
 		if ( $this->renderedPageCache instanceof FlushableCache ) {
 			$this->renderedPageCache->flushAll();
+		}
+
+		if ( $this->campaignCache instanceof FlushableCache ) {
+			$this->campaignCache->flushAll();
 		}
 	}
 

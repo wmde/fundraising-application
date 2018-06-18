@@ -133,7 +133,6 @@
 		"cancel-url": "",
 		"notification-url": ""
 	},
-	"campaign-timezone": "Europe/Berlin",
 	"piwik": {
 		"baseUrl": "//tracking.wikimedia.de/",
 		"siteId": 1,
@@ -185,6 +184,10 @@
 		"httpOnly": true,
 		"raw": false,
 		"sameSite": null
+	},
+	"campaigns": {
+		"timezone":  "Europe/Berlin",
+		"configurations": [ "campaigns.yml" ]
 	},
 	"skin": {
 		"options": [
