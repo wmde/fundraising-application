@@ -37,6 +37,10 @@ js:
 
 clear:
 	rm -rf var/cache/
+	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app rm -rf var/cache/
+
+# n alias to avoid frequent typo
+clean: clear
 
 ui: clear js
 
@@ -78,4 +82,4 @@ ci: covers phpunit cs npm-ci validate-app-config stan
 
 setup: install-php install-js default-config ui setup-db
 
-.PHONY: ci clear covers cs install-php install-js js npm-ci npm-install phpmd phpunit phpunit-system setup stan test ui validate-app-config
+.PHONY: ci clean clear covers cs install-php install-js js npm-ci npm-install phpmd phpunit phpunit-system setup stan test ui validate-app-config
