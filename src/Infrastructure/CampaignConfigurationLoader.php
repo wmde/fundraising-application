@@ -16,7 +16,7 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * @license GNU GPL v2+
  */
-class CampaignConfigurationLoader {
+class CampaignConfigurationLoader implements CampaignConfigurationLoaderInterface {
 
 	private $filesystem;
 	private $fileFetcher;

@@ -90,43 +90,33 @@ private function newPresenter(): Presenter {
 
 ## 4. Add unit tests to the route tests that are affected
 
-Edit the appropriate files in `tests/EdgeToEdge/Routes`. Use `FunFunFactory::setFeatureToggle` to replace the 
-campaign-based feature toggle with a deterministic FixedFeatureToggle to test all the code paths inside the `ChoiceFactory`.
+### Testing Routes in Edge-to-Edge tests
 
-```php
+Edge-To-Edge test should load the original configuration files, but with deactivated campaigns (so your tests don't become date-dependent).
+For ensuring an always deactivated campaigns, put an an override entry like this for every campaign into the file `app/config/campaigns.test.yml`:
 
-public function testDefaultHeader() {
-	$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-		$factory->setFeatureToggle( $this->newDefaultFeatureToggle() );
+```yaml
+header_template:
+	active: false
+```
 
-		$crawler = $client->request( 'GET', 'some-route-name' );
+The settings in `app/config/campaigns.test.yml` will be merged with teh settings in `app/config/campaigns.yml`.
 
-		this->assertCount( 1, $crawler->filter( 'head.boring-default' ) )
-	} );
-}
+Deactivating the campaigns also ensures that you always test the default path. 
+If you want to test other groups in the campaign, you need to explicitly set a different default group by overriding 
+the campaign loader:
 
+```yaml
 public function testFancyHeader() {
 	$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-		$factory->setFeatureToggle( $this->newAlternativeFeatureToggle() );
+		$factory->setCampaignConfigurationLoader( new OverridingCampaignConfigurationLoader(
+			$factory->getCampaignConfigurationLoader(),
+			[ 'confirmation_pages' => [ 'default_group' => 'fancy_header' ] ]
+		) );
 
 		$crawler = $client->request( 'GET', 'some-route-name' );
 
 		this->assertCount( 1, $crawler->filter( 'head.fancy-schmancy' ) )
 	} );
 }
-
-private function newDefaultFeatureToggle(): FeatureToggle {
-		return new FixedFeatureToggle( [
-			'campaigns.header_template.default_header' => true,
-			'campaigns.header_template.fancy_header' => false,
-		] );
-	}
-
-private function newAlternativeFeatureToggle(): FeatureToggle {
-	return new FixedFeatureToggle( [
-			'campaigns.header_template.default_header' => false,
-        	'campaigns.header_template.fancy_header' => true,
-	] );
-}
-
-``` 
+```

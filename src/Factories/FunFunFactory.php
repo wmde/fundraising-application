@@ -78,6 +78,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\Campaign;
 use WMDE\Fundraising\Frontend\Infrastructure\CampaignBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\CampaignConfigurationLoader;
+use WMDE\Fundraising\Frontend\Infrastructure\CampaignConfigurationLoaderInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\CampaignFeatureBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\DoorkeeperFeatureToggle;
@@ -201,6 +202,8 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	private $addDoctrineSubscribers = true;
 
+	private $sharedObjects;
+
 	/**
 	 * @var Stopwatch|null
 	 */
@@ -209,6 +212,7 @@ class FunFunFactory implements ServiceProviderInterface {
 	public function __construct( array $config ) {
 		$this->config = $config;
 		$this->pimple = $this->newPimple();
+		$this->sharedObjects = [];
 	}
 
 	private function newPimple(): Container {
@@ -526,18 +530,13 @@ class FunFunFactory implements ServiceProviderInterface {
 		$container['payment-types-settings'] = function (): PaymentTypesSettings {
 			return new PaymentTypesSettings( $this->config['payment-types'] );
 		};
+	}
 
-		$container['choice_factory'] = function (): ChoiceFactory {
-			return new ChoiceFactory( $this->getFeatureToggle() );
-		};
-
-		$container['campaign_config_loader'] = function (): CampaignConfigurationLoader {
-			return new CampaignConfigurationLoader( new Filesystem(), new SimpleFileFetcher(), $this->getCampaignCache() );
-		};
-
-		$container['feature_toggle'] = function (): FeatureToggle {
-			return new DoorkeeperFeatureToggle( new Doorkeeper( $this->newCampaignFeatures() ) );
-		};
+	private function createSharedObject( string $id, callable $constructionFunction ) { // @codingStandardsIgnoreLine
+		if ( !isset( $this->sharedObjects[$id] ) ) {
+			$this->sharedObjects[$id] = $constructionFunction();
+		}
+		return $this->sharedObjects[$id];
 	}
 
 	public function getConnection(): Connection {
@@ -1661,8 +1660,14 @@ class FunFunFactory implements ServiceProviderInterface {
 		return $builder->getCampaigns( $loader->loadCampaignConfiguration( ...$configFiles ) );
 	}
 
-	private function getCampaignConfigurationLoader(): CampaignConfigurationLoader {
-		return $this->pimple['campaign_config_loader'];
+	public function getCampaignConfigurationLoader(): CampaignConfigurationLoaderInterface {
+		return $this->createSharedObject( CampaignConfigurationLoaderInterface::class, function (): CampaignConfigurationLoader {
+			return new CampaignConfigurationLoader( new Filesystem(), new SimpleFileFetcher(), $this->getCampaignCache() );
+		} );
+	}
+
+	public function setCampaignConfigurationLoader( CampaignConfigurationLoaderInterface $loader ): void {
+		$this->sharedObjects[CampaignConfigurationLoaderInterface::class] = $loader;
 	}
 
 	private function newCampaignFeatures(): Set {
@@ -1672,14 +1677,14 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	private function getFeatureToggle(): FeatureToggle {
-		return $this->pimple['feature_toggle'];
-	}
-
-	public function setFeatureToggle( FeatureToggle $featureToggle ): void {
-		$this->pimple['feature_toggle'] = $featureToggle;
+		return $this->createSharedObject( FeatureToggle::class, function (): FeatureToggle {
+			return new DoorkeeperFeatureToggle( new Doorkeeper( $this->newCampaignFeatures() ) );
+		} );
 	}
 
 	private function getChoiceFactory(): ChoiceFactory {
-		return $this->pimple['choice_factory'];
+		return $this->createSharedObject( ChoiceFactory::class, function (): ChoiceFactory {
+			return new ChoiceFactory( $this->getFeatureToggle() );
+		} );
 	}
 }

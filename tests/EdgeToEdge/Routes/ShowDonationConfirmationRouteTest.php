@@ -9,8 +9,7 @@ use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowDonationConfirmationHandler;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\FeatureToggle;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedFeatureToggle;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\OverridingCampaignConfigurationLoader;
 use WMDE\Fundraising\PaymentContext\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
@@ -29,7 +28,6 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequest_confirmationPageContainsDonationData(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setFeatureToggle( $this->newDefaultFeatureToggle() );
 
 			$donation = $this->newStoredDonation( $factory );
 
@@ -43,7 +41,6 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidPostRequest_confirmationPageContainsDonationData(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setFeatureToggle( $this->newDefaultFeatureToggle() );
 
 			$donation = $this->newStoredDonation( $factory );
 
@@ -57,7 +54,6 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidPostRequest_embeddedMembershipFormContainsDonationData(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setFeatureToggle( $this->newDefaultFeatureToggle() );
 
 			$donation = $this->newStoredDonation( $factory );
 
@@ -95,7 +91,10 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 	public function testGivenAlternativeConfirmationPageCampaign_alternativeContentIsDisplayed(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setFeatureToggle( $this->newAlternativeFeatureToggle() );
+			$factory->setCampaignConfigurationLoader( new OverridingCampaignConfigurationLoader(
+				$factory->getCampaignConfigurationLoader(),
+				[ 'confirmation_pages' => [ 'default_group' => 'collapsed_membership_form' ] ]
+			) );
 
 			$donation = $this->newStoredDonation( $factory );
 
@@ -250,20 +249,6 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 				$client->getCookieJar()->get( ShowDonationConfirmationHandler::SUBMISSION_COOKIE_NAME )->getValue()
 			);
 		} );
-	}
-
-	private function newDefaultFeatureToggle(): FeatureToggle {
-		return new FixedFeatureToggle( [
-			'campaigns.confirmation_pages.expanded_membership_form' => true,
-			'campaigns.confirmation_pages.collapsed_membership_form' => false,
-		] );
-	}
-
-	private function newAlternativeFeatureToggle(): FeatureToggle {
-		return new FixedFeatureToggle( [
-			'campaigns.confirmation_pages.expanded_membership_form' => false,
-			'campaigns.confirmation_pages.collapsed_membership_form' => true,
-		] );
 	}
 
 }
