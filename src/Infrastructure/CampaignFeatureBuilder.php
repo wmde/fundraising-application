@@ -45,7 +45,7 @@ class CampaignFeatureBuilder {
 
 	private function addDefaultCampaignFeatures( Campaign $campaign, Set $featureSet ) {
 		foreach ( $campaign->getGroups() as $group ) {
-			$feature = new Feature( $this->getFeatureName( $group ), $group === $campaign->getDefaultGroup() );
+			$feature = new Feature( $this->getFeatureName( $group ), $group->isDefaultGroup() );
 			$featureSet->pushFeature( $feature );
 		}
 	}

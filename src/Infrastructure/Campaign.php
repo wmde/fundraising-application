@@ -16,7 +16,6 @@ class Campaign {
 	private $startTimestamp;
 	private $endTimestamp;
 	private $groups;
-	private $defaultGroup;
 	private $urlKey;
 
 	public const ACTIVE = true;
@@ -45,11 +44,6 @@ class Campaign {
 
 	public function getName(): string {
 		return $this->name;
-	}
-
-	public function getDefaultGroup(): string {
-		// todo
-		throw new \RuntimeException( 'Not implemented yet, might be refactored out');
 	}
 
 	/**
