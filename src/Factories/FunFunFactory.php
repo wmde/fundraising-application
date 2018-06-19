@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Factories;
 
 use Doctrine\Common\Cache\Cache;
+use Doctrine\Common\Cache\CacheProvider;
 use Doctrine\Common\Cache\FilesystemCache;
 use Doctrine\Common\Cache\VoidCache;
 use Doctrine\DBAL\Connection;
@@ -19,9 +20,12 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use RemotelyLiving\Doorkeeper\Doorkeeper;
+use RemotelyLiving\Doorkeeper\Features\Set;
 use Swift_MailTransport;
 use Swift_NullTransport;
 use Symfony\Component\Console\Exception\RuntimeException;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraint as ValidatorConstraint;
@@ -71,7 +75,14 @@ use WMDE\Fundraising\DonationContext\UseCases\SofortPaymentNotification\SofortPa
 use WMDE\Fundraising\DonationContext\UseCases\ValidateDonor\ValidateDonorUseCase;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
+use WMDE\Fundraising\Frontend\Infrastructure\Campaign;
+use WMDE\Fundraising\Frontend\Infrastructure\CampaignBuilder;
+use WMDE\Fundraising\Frontend\Infrastructure\CampaignConfigurationLoader;
+use WMDE\Fundraising\Frontend\Infrastructure\CampaignConfigurationLoaderInterface;
+use WMDE\Fundraising\Frontend\Infrastructure\CampaignFeatureBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder;
+use WMDE\Fundraising\Frontend\Infrastructure\DoorkeeperFeatureToggle;
+use WMDE\Fundraising\Frontend\Infrastructure\FeatureToggle;
 use WMDE\Fundraising\Frontend\Infrastructure\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\LoggingMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\LoggingPaymentNotificationVerifier;
@@ -83,7 +94,6 @@ use WMDE\Fundraising\Frontend\Infrastructure\Payment\PaymentNotificationVerifier
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\PiwikServerSideTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\ProfilerDataCollector;
-use WMDE\Fundraising\Frontend\Infrastructure\ProfilingDecoratorBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\ServerSideTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
@@ -93,7 +103,6 @@ use WMDE\Fundraising\Frontend\Infrastructure\Payment\KontoCheckIbanValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\McpCreditCardService;
 use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector;
-use WMDE\Fundraising\Frontend\Presentation\DonationConfirmationPageSelector;
 use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
 use WMDE\Fundraising\Frontend\Presentation\GreetingGenerator;
 use WMDE\Fundraising\Frontend\Presentation\Honorifics;
@@ -193,6 +202,8 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	private $addDoctrineSubscribers = true;
 
+	private $sharedObjects;
+
 	/**
 	 * @var Stopwatch|null
 	 */
@@ -201,6 +212,7 @@ class FunFunFactory implements ServiceProviderInterface {
 	public function __construct( array $config ) {
 		$this->config = $config;
 		$this->pimple = $this->newPimple();
+		$this->sharedObjects = [];
 	}
 
 	private function newPimple(): Container {
@@ -412,10 +424,6 @@ class FunFunFactory implements ServiceProviderInterface {
 			);
 		};
 
-		$container['confirmation-page-selector'] = function() {
-			return new DonationConfirmationPageSelector( $this->config['confirmation-pages'] );
-		};
-
 		$container['paypal-payment-notification-verifier'] = function() {
 			return new LoggingPaymentNotificationVerifier(
 				new PayPalPaymentNotificationVerifier(
@@ -461,6 +469,10 @@ class FunFunFactory implements ServiceProviderInterface {
 		};
 
 		$container['rendered_page_cache'] = function() {
+			return new VoidCache();
+		};
+
+		$container['campaign_cache'] = function() {
 			return new VoidCache();
 		};
 
@@ -518,6 +530,13 @@ class FunFunFactory implements ServiceProviderInterface {
 		$container['payment-types-settings'] = function (): PaymentTypesSettings {
 			return new PaymentTypesSettings( $this->config['payment-types'] );
 		};
+	}
+
+	private function createSharedObject( string $id, callable $constructionFunction ) { // @codingStandardsIgnoreLine
+		if ( !isset( $this->sharedObjects[$id] ) ) {
+			$this->sharedObjects[$id] = $constructionFunction();
+		}
+		return $this->sharedObjects[$id];
 	}
 
 	public function getConnection(): Connection {
@@ -830,7 +849,12 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	public function newAuthorizedCachePurger(): AuthorizedCachePurger {
 		return new AuthorizedCachePurger(
-			new AllOfTheCachePurger( $this->getSkinTwig(), $this->getPageCache(), $this->getRenderedPageCache() ),
+			new AllOfTheCachePurger(
+				$this->getSkinTwig(),
+				$this->getPageCache(),
+				$this->getRenderedPageCache(),
+				$this->getCampaignCache()
+			),
 			$this->config['purging-secret']
 		);
 	}
@@ -1092,14 +1116,17 @@ class FunFunFactory implements ServiceProviderInterface {
 		return $this->pimple['fundraising.membership.application.token_generator'];
 	}
 
-	public function newDonationConfirmationPresenter( string $templateName = 'Donation_Confirmation.html.twig' ): DonationConfirmationHtmlPresenter {
+	public function newDonationConfirmationPresenter(): DonationConfirmationHtmlPresenter {
 		return new DonationConfirmationHtmlPresenter(
-			$this->getLayoutTemplate(
-				$templateName,
-				[
-					'piwikGoals' => [ 3 ],
-					'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForMembershipApplication()
-				]
+			$this->getChoiceFactory()->getConfirmationPageTemplate(
+				$this->getSkinTwig(),
+				array_merge(
+					$this->getDefaultTwigVariables(),
+					[
+						'piwikGoals' => [ 3 ],
+						'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForMembershipApplication()
+					]
+				)
 			),
 			$this->getUrlGenerator()
 		);
@@ -1234,14 +1261,6 @@ class FunFunFactory implements ServiceProviderInterface {
 			$this->newDonationTokenFetcher(),
 			$this->getDonationRepository()
 		);
-	}
-
-	public function setDonationConfirmationPageSelector( DonationConfirmationPageSelector $selector ): void {
-		$this->pimple['confirmation-page-selector'] = $selector;
-	}
-
-	public function getDonationConfirmationPageSelector(): DonationConfirmationPageSelector {
-		return $this->pimple['confirmation-page-selector'];
 	}
 
 	public function newDonationFormViolationPresenter(): DonationFormViolationPresenter {
@@ -1443,13 +1462,21 @@ class FunFunFactory implements ServiceProviderInterface {
 		return $this->pimple['rendered_page_cache'];
 	}
 
-	public function enablePageCache(): void {
+	private function getCampaignCache(): CacheProvider {
+		return $this->pimple['campaign_cache'];
+	}
+
+	public function enableCaching(): void {
 		$this->pimple['page_cache'] = function() {
 			return new FilesystemCache( $this->getCachePath() . '/pages/raw' );
 		};
 
 		$this->pimple['rendered_page_cache'] = function() {
 			return new FilesystemCache( $this->getCachePath() . '/pages/rendered' );
+		};
+
+		$this->pimple['campaign_cache'] = function() {
+			return new FilesystemCache( $this->getCachePath() . '/campaigns' );
 		};
 	}
 
@@ -1616,5 +1643,48 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	public function getAbsoluteSkinDirectory(): string {
 		return $this->getAbsolutePath( $this->getSkinDirectory() );
+	}
+
+	/**
+	 * @return Campaign[]
+	 */
+	private function getCampaigns(): array {
+		$builder = new CampaignBuilder( new \DateTimeZone( $this->config['campaigns']['timezone'] ) );
+		$configFiles = array_map(
+			function ( string $campaignConfigFile ) {
+				return $this->getAbsolutePath( 'app/config/' . $campaignConfigFile );
+			},
+			$this->config['campaigns']['configurations']
+		);
+		$loader = $this->getCampaignConfigurationLoader();
+		return $builder->getCampaigns( $loader->loadCampaignConfiguration( ...$configFiles ) );
+	}
+
+	public function getCampaignConfigurationLoader(): CampaignConfigurationLoaderInterface {
+		return $this->createSharedObject( CampaignConfigurationLoaderInterface::class, function (): CampaignConfigurationLoader {
+			return new CampaignConfigurationLoader( new Filesystem(), new SimpleFileFetcher(), $this->getCampaignCache() );
+		} );
+	}
+
+	public function setCampaignConfigurationLoader( CampaignConfigurationLoaderInterface $loader ): void {
+		$this->sharedObjects[CampaignConfigurationLoaderInterface::class] = $loader;
+	}
+
+	private function newCampaignFeatures(): Set {
+		// TODO Cache features so we don't have to parse the campaign config on every request
+		$factory = new CampaignFeatureBuilder( ...$this->getCampaigns() );
+		return $factory->getFeatures();
+	}
+
+	private function getFeatureToggle(): FeatureToggle {
+		return $this->createSharedObject( FeatureToggle::class, function (): FeatureToggle {
+			return new DoorkeeperFeatureToggle( new Doorkeeper( $this->newCampaignFeatures() ) );
+		} );
+	}
+
+	private function getChoiceFactory(): ChoiceFactory {
+		return $this->createSharedObject( ChoiceFactory::class, function (): ChoiceFactory {
+			return new ChoiceFactory( $this->getFeatureToggle() );
+		} );
 	}
 }

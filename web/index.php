@@ -29,7 +29,7 @@ $ffFactory = call_user_func( function() {
 	return new FunFunFactory( $configReader->getConfig() );
 } );
 
-$ffFactory->enablePageCache();
+$ffFactory->enableCaching();
 
 $ffFactory->setLogger( call_user_func( function() use ( $ffFactory ) {
 	$logger = new Logger( 'index_php' );

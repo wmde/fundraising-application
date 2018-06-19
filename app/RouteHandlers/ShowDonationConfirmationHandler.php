@@ -38,13 +38,11 @@ class ShowDonationConfirmationHandler {
 			throw new AccessDeniedException( 'access_denied_donation_confirmation' );
 		}
 
-		$selectedConfirmationPage = $this->ffFactory->getDonationConfirmationPageSelector()->selectPage();
 		$httpResponse = new Response(
-			$this->ffFactory->newDonationConfirmationPresenter( $selectedConfirmationPage->getPageTitle() )->present(
+			$this->ffFactory->newDonationConfirmationPresenter()->present(
 				$responseModel->getDonation(),
 				$responseModel->getUpdateToken(),
 				$request->get( 'accessToken', '' ),
-				$selectedConfirmationPage,
 				PiwikVariableCollector::newForDonation( $sessionTrackingData, $responseModel->getDonation() )
 			)
 		);

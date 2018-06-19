@@ -1,0 +1,7 @@
+# Move unused entries from campaigns.yml here
+
+example:
+  description: Example campaign that was never run
+  start: 2015-10-01
+  end: 2015-12-31
+  groups: [ ex1, ex2 ]

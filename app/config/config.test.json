@@ -58,20 +58,6 @@
 		"cancel-url": "http://my.donation.app/",
 		"notification-url": "http://my.donation.app/sofort-payment-notification"
 	},
-	"confirmation-pages": {
-		"default": "DonationConfirmation.twig",
-		"campaigns": [
-			{
-				"code": "testCampaign",
-				"active": false,
-				"startDate": "1970-01-01 00:00:00",
-				"endDate": "1970-12-31 23:59:59",
-				"templates": [
-					"DonationConfirmationAlternative.twig"
-				]
-			}
-		]
-	},
 	"piwik": {
 		"baseUrl": "//tracking.wikimedia.de/",
 		"siteId": 1234,
@@ -101,5 +87,11 @@
 			"test", "10h16", "cat17"
 		],
 		"default": "test"
+	},
+	"campaigns": {
+		"configurations": [
+			"campaigns.yml",
+			"campaigns.test.yml"
+		]
 	}
 }

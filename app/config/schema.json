@@ -625,69 +625,27 @@
         "cancel-url"
       ]
     },
-    "confirmation-pages": {
+    "campaigns": {
       "type": "object",
-      "title": "Confirmation page template selection configuration",
       "properties": {
-        "default": {
+        "timezone": {
           "type": "string",
-          "minLength": 1,
-          "title": "Default confirmation page",
-          "description": "Default confirmation page template name",
-          "default": "Donation_Confirmation.html.twig"
+          "title": "Timezone of the campaign start and end dates",
+          "description": "Will be used to convert the start and and dates to server time",
+          "minLength": 4
         },
-        "campaigns": {
+        "configurations": {
           "type": "array",
-          "title": "Campaign data with different confirmation pages",
-          "additionalItems": {
-            "type": "object",
-            "title": "Campaign data",
-            "properties": {
-              "code": {
-                "type": "string",
-                "minLength": 1,
-                "title": "Campaign name",
-                "description": "Campaign name, will be used in URL parameters"
-              },
-              "active": {
-                "type": "boolean",
-                "title": "Active Flag",
-                "description": "Set to true if campaign is active"
-              },
-              "startDate": {
-                "type": "string",
-                "minLength": 1,
-                "title": "Start date",
-                "description": "Defined as YYYY-MM-DD HH:MM:SS"
-              },
-              "endDate": {
-                "type": "string",
-                "minLength": 1,
-                "title": "End date",
-                "description": "Defined as YYYY-MM-DD HH:MM:SS"
-              },
-              "templates": {
-                "type": "array",
-                "title": "Template names",
-                "description": "Names of templates for the confirmation page, for A/B testing. One template will be randomly selected.",
-                "items": {}
-              }
-            },
-            "required": [
-              "code",
-              "active",
-              "startDate",
-              "endDate",
-              "templates"
-            ]
+          "title": "Names of YAML campaign configuration files",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
           }
         }
       },
       "additionalProperties": false,
-      "required": [
-        "default",
-        "campaigns"
-      ]
+      "required": [ "timezone", "configurations" ]
     },
     "piwik": {
       "type": "object",
@@ -903,7 +861,7 @@
     "paypal-membership",
     "creditcard",
     "sofort",
-    "confirmation-pages",
+    "campaigns",
     "piwik",
     "translation",
     "payment-types",
