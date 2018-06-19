@@ -1704,9 +1704,15 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function getSelectedGroups(): array {
-		return $this->createSharedObject( 'selectedGroups', function (): array {
-			return $this->getGroupSelector()->selectGroups();
-		} );
+		// when in the web environment, selected groups will be set by GroupSelectionServiceProvider during request processing
+		// other environments (testing/cli) may set this during setup
+		if ( !isset( $this->sharedObjects['selectedGroups'] ) ) {
+			throw new \LogicException( 'Groups were not selected yet, you must not initialize A/B tested classes before the app processes the request.' );
+		}
+		return $this->sharedObjects['selectedGroups'];
 	}
 
+	public function setSelectedGroups( array $selectedGroups ): void {
+		$this->sharedObjects['selectedGroups'] = $selectedGroups;
+	}
 }
