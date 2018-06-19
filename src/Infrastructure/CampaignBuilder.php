@@ -23,15 +23,18 @@ class CampaignBuilder {
 	public function getCampaigns( array $campaignConfig ): array {
 		$campaigns = [];
 		foreach( $campaignConfig as $name => $config ) {
-			$campaigns[] = new Campaign(
+			$campaign = new Campaign(
 				$name,
 				$config['url_key'],
 				$this->newDate( $config['start'] ),
 				$this->newDate( $config['end'] ),
-				$config['active'],
-				$config['default_group'],
-				$config['groups']
+				$config['active']
 			);
+			foreach ( $config['groups'] as $groupName ) {
+				$campaign->addGroup( new Group( $groupName, $campaign, $groupName === $config['default_group'] ) );
+			}
+
+			$campaigns[] = $campaign;
 		}
 		return $campaigns;
 	}

@@ -22,15 +22,13 @@ class Campaign {
 	public const ACTIVE = true;
 	public const INACTIVE = false;
 
-	public function __construct( string $name, string $urlKey, \DateTime $startTimestamp, \DateTime $endTimestamp, bool $isActive,
-			string $defaultGroup, array $groups ) {
+	public function __construct( string $name, string $urlKey, \DateTime $startTimestamp, \DateTime $endTimestamp, bool $isActive ) {
 		$this->name = $name;
 		$this->urlKey = $urlKey;
 		$this->active = $isActive;
 		$this->startTimestamp = $startTimestamp;
 		$this->endTimestamp = $endTimestamp;
-		$this->defaultGroup = $defaultGroup;
-		$this->groups = $groups;
+		$this->groups = [];
 	}
 
 	public function isActive(): bool {
@@ -50,11 +48,12 @@ class Campaign {
 	}
 
 	public function getDefaultGroup(): string {
-		return $this->defaultGroup;
+		// todo
+		throw new \RuntimeException( 'Not implemented yet, might be refactored out');
 	}
 
 	/**
-	 * @return string[]
+	 * @return Group[]
 	 */
 	public function getGroups(): array {
 		return $this->groups;
@@ -63,5 +62,24 @@ class Campaign {
 	public function getUrlKey(): string {
 		return $this->urlKey;
 	}
+
+	public function getGroupByIndex( int $index ): ?Group {
+		return  $this->getGroups()[ $index ] ?? null;
+	}
+
+	public function getIndexByGroup( Group $group ): int {
+		$index = array_search($group, $this->getGroups(), true );
+		if ( $index === false ) {
+			throw new OutOfBoundsException();
+		}
+		return $index;
+
+	}
+
+	public function addGroup( Group $group ): self {
+		$this->groups[] = $group;
+		return $this;
+	}
+
 
 }

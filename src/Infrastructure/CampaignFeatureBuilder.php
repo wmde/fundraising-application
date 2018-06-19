@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\Infrastructure;
 use RemotelyLiving\Doorkeeper\Features\Feature;
 use RemotelyLiving\Doorkeeper\Features\Set;
 use RemotelyLiving\Doorkeeper\Rules\Percentage;
+use RemotelyLiving\Doorkeeper\Rules\StringHash;
 use RemotelyLiving\Doorkeeper\Rules\TimeAfter;
 use RemotelyLiving\Doorkeeper\Rules\TimeBefore;
 
@@ -37,30 +38,34 @@ class CampaignFeatureBuilder {
 
 	private function addActiveCampaignFeatures( Campaign $campaign, Set $featureSet ) {
 		foreach ( $campaign->getGroups() as $group ) {
-			$feature = new Feature( $this->getFeatureName( $campaign, $group ), true, $this->getRules( $campaign, $group ) );
+			$feature = new Feature( $this->getFeatureName( $group ), true, $this->getRules( $group ) );
 			$featureSet->pushFeature( $feature );
 		}
 	}
 
 	private function addDefaultCampaignFeatures( Campaign $campaign, Set $featureSet ) {
 		foreach ( $campaign->getGroups() as $group ) {
-			$feature = new Feature( $this->getFeatureName( $campaign, $group ), $group === $campaign->getDefaultGroup() );
+			$feature = new Feature( $this->getFeatureName( $group ), $group === $campaign->getDefaultGroup() );
 			$featureSet->pushFeature( $feature );
 		}
 	}
 
-	private function getFeatureName( Campaign $campaign, string $group ): string {
-		return 'campaigns' . '.' . $campaign->getName() . '.' . $group;
+	private function getFeatureName( Group $group ): string {
+		return 'campaigns' . '.' . $group->getCampaign()->getName() . '.' . $group->getName();
 	}
 
-	private function getRules( Campaign $campaign, string $group ): array {
-		if ( $group === $campaign->getDefaultGroup() ) {
+	private function getRules( Group $group ): array {
+		if ( $group->isDefaultGroup() ) {
 			return [];
 		}
+		$campaign = $group->getCampaign();
+		$dateRangeMatch = new TimeAfter( $campaign->getStartTimestamp()->format( 'Y-m-d H:i:s' ) );
+		$dateRangeMatch->addPrerequisite( new TimeBefore( $campaign->getEndTimestamp()->format( 'Y-m-d H:i:s' ) ) );
+		$groupNameMatch = new StringHash( $group->getName()  );
+		$groupNameMatch->addPrerequisite( $dateRangeMatch );
+
 		return [
-			new TimeAfter( $campaign->getStartTimestamp()->format( 'Y-m-d H:i:s' ) ),
-			new TimeBefore( $campaign->getEndTimestamp()->format( 'Y-m-d H:i:s' ) ),
-			new Percentage( (int) round( 100 / count( $campaign->getGroups() ) ) )
+			$groupNameMatch
 		];
 	}
 

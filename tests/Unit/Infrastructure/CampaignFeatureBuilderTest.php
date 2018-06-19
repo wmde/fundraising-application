@@ -10,6 +10,7 @@ use RemotelyLiving\Doorkeeper\Rules\TimeAfter;
 use RemotelyLiving\Doorkeeper\Rules\TimeBefore;
 use WMDE\Fundraising\Frontend\Infrastructure\Campaign;
 use WMDE\Fundraising\Frontend\Infrastructure\CampaignFeatureBuilder;
+use WMDE\Fundraising\Frontend\Infrastructure\Group;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\CampaignFeatureBuilder
@@ -75,15 +76,18 @@ class CampaignFeatureBuilderTest extends TestCase {
 	}
 
 	public function testWhenCampaignWithFourGroupsIsActive_AllFeaturesExceptTheDefaultHavePercentagesBasedOnNumberOfGroups() {
-		$factory = new CampaignFeatureBuilder( new Campaign(
+		$campaign = new Campaign(
 			'test',
-			't',
-			new \DateTime( '2000-01-01' ),
-			new \DateTime( '2099-01-01' ),
-			Campaign::ACTIVE,
-			'group1',
-			[ 'group1', 'group2', 'group3', 'group4' ]
-		) );
+			't1',
+			new \DateTime(),
+			new \DateTime(),
+			Campaign::INACTIVE
+		);
+		$campaign->addGroup( new Group( 'group1', $campaign, Group::DEFAULT ) )
+			->addGroup( new Group( 'group2', $campaign, Group::DEFAULT ) )
+			->addGroup( new Group( 'group3', $campaign, Group::DEFAULT ) )
+			->addGroup( new Group( 'group4', $campaign, Group::DEFAULT ) );
+		$factory = new CampaignFeatureBuilder( $campaign );
 		$expectedRule = new Percentage( 25 );
 
 		$features = $factory->getFeatures();
@@ -95,27 +99,29 @@ class CampaignFeatureBuilderTest extends TestCase {
 	}
 
 	private function newInactiveCampaign(): Campaign {
-		return new Campaign(
-			'test_inactive',
-			't',
-			new \DateTime( '2000-01-01' ),
-			new \DateTime( '2099-01-01' ),
-			Campaign::INACTIVE,
-			'group1',
-			[ 'group1', 'group2' ]
+		$campaign = new Campaign(
+			'test',
+			't1',
+			new \DateTime(),
+			new \DateTime(),
+			Campaign::INACTIVE
 		);
+		$campaign->addGroup( new Group( 'group1', $campaign, Group::DEFAULT ) )
+			->addGroup( new Group( 'group2', $campaign, Group::DEFAULT ) );
+		return $campaign;
 	}
 
 	private function newActiveCampaign(): Campaign {
-		return new Campaign(
-			'test_active',
-			't',
-			new \DateTime( '2000-01-01' ),
-			new \DateTime( '2099-01-01' ),
-			Campaign::ACTIVE,
-			'group1',
-			[ 'group1', 'group2' ]
+		$campaign = new Campaign(
+			'test',
+			't1',
+			new \DateTime(),
+			new \DateTime(),
+			Campaign::ACTIVE
 		);
+		$campaign->addGroup( new Group( 'group1', $campaign, Group::DEFAULT ) )
+			->addGroup( new Group( 'group2', $campaign, Group::DEFAULT ) );
+		return $campaign;
 	}
 
 

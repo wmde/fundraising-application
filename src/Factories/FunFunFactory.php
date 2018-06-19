@@ -22,6 +22,7 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use RemotelyLiving\Doorkeeper\Doorkeeper;
 use RemotelyLiving\Doorkeeper\Features\Set;
+use RemotelyLiving\Doorkeeper\Requestor;
 use Swift_MailTransport;
 use Swift_NullTransport;
 use Symfony\Component\Console\Exception\RuntimeException;
@@ -77,12 +78,14 @@ use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\Campaign;
 use WMDE\Fundraising\Frontend\Infrastructure\CampaignBuilder;
+use WMDE\Fundraising\Frontend\Infrastructure\CampaignCollection;
 use WMDE\Fundraising\Frontend\Infrastructure\CampaignConfigurationLoader;
 use WMDE\Fundraising\Frontend\Infrastructure\CampaignConfigurationLoaderInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\CampaignFeatureBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\DoorkeeperFeatureToggle;
 use WMDE\Fundraising\Frontend\Infrastructure\FeatureToggle;
+use WMDE\Fundraising\Frontend\Infrastructure\GroupSelector;
 use WMDE\Fundraising\Frontend\Infrastructure\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\LoggingMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\LoggingPaymentNotificationVerifier;
@@ -1678,7 +1681,13 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	private function getFeatureToggle(): FeatureToggle {
 		return $this->createSharedObject( FeatureToggle::class, function (): FeatureToggle {
-			return new DoorkeeperFeatureToggle( new Doorkeeper( $this->newCampaignFeatures() ) );
+			$doorkeeper = new Doorkeeper( $this->newCampaignFeatures() );
+			$requestor = new Requestor();
+			foreach ( $this->getSelectedGroups() as $group ) {
+				$requestor = $requestor->withStringHash( $group->getName() );
+			}
+			$doorkeeper->setRequestor( $requestor );
+			return new DoorkeeperFeatureToggle( $doorkeeper );
 		} );
 	}
 
@@ -1687,4 +1696,17 @@ class FunFunFactory implements ServiceProviderInterface {
 			return new ChoiceFactory( $this->getFeatureToggle() );
 		} );
 	}
+
+	public function getGroupSelector(): GroupSelector {
+		return $this->createSharedObject( GroupSelector::class, function (): GroupSelector {
+			return new GroupSelector( new CampaignCollection( ...$this->getCampaigns() ) );
+		} );
+	}
+
+	public function getSelectedGroups(): array {
+		return $this->createSharedObject( 'selectedGroups', function (): array {
+			return $this->getGroupSelector()->selectGroups();
+		} );
+	}
+
 }
