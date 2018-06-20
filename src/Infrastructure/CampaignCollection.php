@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: tozh
- * Date: 19.06.18
- * Time: 14:11
- */
 
 namespace WMDE\Fundraising\Frontend\Infrastructure;
 
@@ -27,10 +21,6 @@ class CampaignCollection {
 			$campaigns []= $campaign;
 		}
 		return [ $groups, $campaigns ];
-	}
-
-	public function hasUrlParameters( string $urlKey, int $urlValue, $campaign ): bool {
-
 	}
 
 }

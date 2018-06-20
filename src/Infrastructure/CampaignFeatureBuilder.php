@@ -45,7 +45,7 @@ class CampaignFeatureBuilder {
 
 	private function addDefaultCampaignFeatures( Campaign $campaign, Set $featureSet ) {
 		foreach ( $campaign->getGroups() as $group ) {
-			$feature = new Feature( $this->getFeatureName( $group ), $group === $campaign->getDefaultGroup() );
+			$feature = new Feature( $this->getFeatureName( $group ), $group->isDefaultGroup() );
 			$featureSet->pushFeature( $feature );
 		}
 	}
@@ -61,7 +61,7 @@ class CampaignFeatureBuilder {
 		$campaign = $group->getCampaign();
 		$dateRangeMatch = new TimeAfter( $campaign->getStartTimestamp()->format( 'Y-m-d H:i:s' ) );
 		$dateRangeMatch->addPrerequisite( new TimeBefore( $campaign->getEndTimestamp()->format( 'Y-m-d H:i:s' ) ) );
-		$groupNameMatch = new StringHash( $group->getName()  );
+		$groupNameMatch = new StringHash( $group->getId()  );
 		$groupNameMatch->addPrerequisite( $dateRangeMatch );
 
 		return [
