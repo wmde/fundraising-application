@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Factories;
 
 use Twig_Environment;
-use WMDE\Fundraising\Frontend\Infrastructure\FeatureToggle;
+use WMDE\Fundraising\Frontend\Infrastructure\BucketTesting\FeatureToggle;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
 /**
@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
  *
  * TODO:
  * Write static analyzer that compares calls to `grantsAccessTo` with the campaign configuration to make sure that
- * no mismatch occurs between configuration and code. Also make sure that grantsAccessTo with the default group is
+ * no mismatch occurs between configuration and code. Also make sure that grantsAccessTo with the default bucket is
  * always called last.
  *
  * @license GNU GPL v2+

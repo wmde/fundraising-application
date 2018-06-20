@@ -5,16 +5,16 @@ Edit the file `app/config/campaigns.yml` and add a new entry. If you're unsure a
 next year. If you want to start with a deactivated campaign, but want to test it in your local environment, copy the 
 campaign definition to the file `app/config/campaigns.local.yml` and use different settings for `start`, `end` and `active`.
 
-The campaign name must be unique inside the campaigns configuration, the group names may overlap between campaigns, 
-but that does not mean the user will be placed in the same group for two different campaign.
+The campaign name must be unique inside the campaigns configuration, the bucket names may overlap between campaigns, 
+but that does not mean the user will be placed in the same bucket for two different campaign.
 
 Please check that:
 * The campaign name is unique in the campaign file.
 * The url key is set and is unique in the campaign file.
 * The start and end dates must be quoted and in the format `YYYY-MM-DD` or `YYYY-MM-DD H:i:s`. All dates are considered to be in the Europe/Berlin timezone.
 * The end date must be after the start date.
-* The `default_group` must be part of the `groups` definition.
-* Group names beginning with digits (e.g. `10h16`) must be quoted, both for `groups` and `default_group`.
+* The `default_bucket` must be part of the `buckets` definition.
+* Bucket names beginning with digits (e.g. `10h16`) must be quoted, both for `buckets` and `default_bucket`.
 
 ### Example Campaign:
 
@@ -26,16 +26,16 @@ header_template:
   start: "2018-10-01"
   end: "2018-12-31"
   active: true
-  groups:
+  buckets:
     - default_header
     - fancy_header
-  default_group: default_header
+  default_bucket: default_header
 ``` 
 
 ## 2. Create a factory method for the campaign
 
 Edit the file `src/Factories/ChoiceFactory.php` and add a factory method. Inside the method you must call `$this->featureToggle->isFeatureActive`
-for each group in the campaign. The parameter for `isFeatureActive` must follow the pattern `campaigns.<CAMPAIGN_NAME>.<GROUP_NAME>`.
+for each bucket in the campaign. The parameter for `isFeatureActive` must follow the pattern `campaigns.<CAMPAIGN_NAME>.<GROUP_NAME>`.
 
 The factory method should get all its dependencies via parameter. It must have a defined return type. You may return 
 
@@ -44,10 +44,10 @@ The factory method should get all its dependencies via parameter. It must have a
 * scalar values (use with caution, returning a class is preferable almost always)   
 
 Please check that:
-* `isFeatureActive` is called for *every* group of the campaign.
-* The feature for the default group is checked *last*, because the default group is always active, regardless of campaign state.
-* Throw `UnknownChoiceDefinition` with a proper error message after checking all groups. This is an additional safeguard 
-against changed or misspelled campaign and group names. It is a case of "this should never happen" if the campaign 
+* `isFeatureActive` is called for *every* bucket of the campaign.
+* The feature for the default bucket is checked *last*, because the default bucket is always active, regardless of campaign state.
+* Throw `UnknownChoiceDefinition` with a proper error message after checking all buckets. This is an additional safeguard 
+against changed or misspelled campaign and bucket names. It is a case of "this should never happen" if the campaign 
 file is validated by the CI.
 
 ### Example implementation - parameterized instance
@@ -103,7 +103,7 @@ header_template:
 The settings in `app/config/campaigns.test.yml` will be merged with teh settings in `app/config/campaigns.yml`.
 
 Deactivating the campaigns also ensures that you always test the default path. 
-If you want to test other groups in the campaign, you need to explicitly set a different default group by overriding 
+If you want to test other buckets in the campaign, you need to explicitly set a different default bucket by overriding 
 the campaign loader:
 
 ```yaml
@@ -111,7 +111,7 @@ public function testFancyHeader() {
 	$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 		$factory->setCampaignConfigurationLoader( new OverridingCampaignConfigurationLoader(
 			$factory->getCampaignConfigurationLoader(),
-			[ 'confirmation_pages' => [ 'default_group' => 'fancy_header' ] ]
+			[ 'confirmation_pages' => [ 'default_bucket' => 'fancy_header' ] ]
 		) );
 
 		$crawler = $client->request( 'GET', 'some-route-name' );

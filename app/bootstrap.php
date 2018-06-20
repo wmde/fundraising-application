@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use WMDE\Fundraising\Frontend\App\AccessDeniedException;
-use WMDE\Fundraising\Frontend\Infrastructure\Group;
+use WMDE\Fundraising\Frontend\Infrastructure\BucketTesting\BucketSelectionServiceProvider;
 use WMDE\Fundraising\Frontend\Infrastructure\TrackingDataSelector;
 use WMDE\Fundraising\Frontend\Presentation\SkinServiceProvider;
 use WMDE\Fundraising\Frontend\Presentation\SofortToggleServiceProvider;
@@ -27,6 +27,7 @@ $app = new Application();
 $app->register( new SessionServiceProvider() );
 $app->register( new RoutingServiceProvider() );
 $app->register( new TwigServiceProvider() );
+$app->register( new BucketSelectionServiceProvider( $ffFactory ) );
 $app->register( new SkinServiceProvider( $ffFactory->getSkinSettings(), $ffFactory->getCookieBuilder() ) );
 $app->register( new SofortToggleServiceProvider( $ffFactory->getPaymentTypesSettings() ) );
 
@@ -62,12 +63,7 @@ $app->before( function( Request $request ) {
 	}
 }, Application::EARLY_EVENT );
 
-$app->before( function( Request $request ) use ( $ffFactory ) {
-	parse_str( $request->cookies->get('spenden_ttg', '' ), $cookieValues );
-	$ffFactory->getGroupSelector()->setUrlParameters( $request->query->all() )->setCookie( $cookieValues );
-}, Application::EARLY_EVENT );
-
-$app->after( function( Request $request, Response $response, Application $app ) use ( $ffFactory ) {
+$app->after( function( Request $request, Response $response, Application $app ) {
 	if( $response instanceof JsonResponse ) {
 		$response->setEncodingOptions( JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
 	}
@@ -80,12 +76,6 @@ $app->after( function( Request $request, Response $response, Application $app ) 
 			$request->get( 'piwik_campaign' ) . '/' . $request->get( 'piwik_kwd' )
 		) );
 	}
-	//TODO why is cookie not overriten by url parameters
-	$response->headers->setCookie( new \Symfony\Component\HttpFoundation\Cookie(
-		'spenden_ttg',
-		http_build_query( array_merge( ...array_map( function( Group $group) { return $group->getUrlParameter(); }, $ffFactory->getSelectedGroups() ) )) )
-	);
-
 
 	return $response;
 } );

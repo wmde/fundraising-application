@@ -1,14 +1,8 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: tozh
- * Date: 19.06.18
- * Time: 12:04
- */
 
-namespace WMDE\Fundraising\Frontend\Infrastructure;
+namespace WMDE\Fundraising\Frontend\Infrastructure\BucketTesting;
 
-class GroupSelector {
+class BucketSelector {
 
 	private $campaigns;
  	private $cookie;
@@ -41,17 +35,17 @@ class GroupSelector {
 	}
 
 	/**
-	 * @return Group[]
+	 * @return Bucket[]
 	 */
-	public function selectGroups(): array {
+	public function selectBuckets(): array {
 		$possibleKeys = array_merge( $this->cookie, $this->urlParameters );
-		[ $groups, $missingCampaigns ] = $this->campaigns->splitGroupsFromCampaigns( $possibleKeys );
+		[ $buckets, $missingCampaigns ] = $this->campaigns->splitBucketsFromCampaigns( $possibleKeys );
 
 		foreach($missingCampaigns as $campaign) {
-				$groups []= $campaign->getGroups()[ array_rand( $campaign->getGroups() ) ];
+				$buckets []= $campaign->getBuckets()[ array_rand( $campaign->getBuckets() ) ];
 
 		}
-		return $groups;
+		return $buckets;
 	}
 
 }

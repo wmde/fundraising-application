@@ -76,16 +76,16 @@ use WMDE\Fundraising\DonationContext\UseCases\SofortPaymentNotification\SofortPa
 use WMDE\Fundraising\DonationContext\UseCases\ValidateDonor\ValidateDonorUseCase;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
-use WMDE\Fundraising\Frontend\Infrastructure\Campaign;
-use WMDE\Fundraising\Frontend\Infrastructure\CampaignBuilder;
-use WMDE\Fundraising\Frontend\Infrastructure\CampaignCollection;
-use WMDE\Fundraising\Frontend\Infrastructure\CampaignConfigurationLoader;
-use WMDE\Fundraising\Frontend\Infrastructure\CampaignConfigurationLoaderInterface;
-use WMDE\Fundraising\Frontend\Infrastructure\CampaignFeatureBuilder;
+use WMDE\Fundraising\Frontend\Infrastructure\BucketTesting\Campaign;
+use WMDE\Fundraising\Frontend\Infrastructure\BucketTesting\CampaignBuilder;
+use WMDE\Fundraising\Frontend\Infrastructure\BucketTesting\CampaignCollection;
+use WMDE\Fundraising\Frontend\Infrastructure\BucketTesting\CampaignConfigurationLoader;
+use WMDE\Fundraising\Frontend\Infrastructure\BucketTesting\CampaignConfigurationLoaderInterface;
+use WMDE\Fundraising\Frontend\Infrastructure\BucketTesting\CampaignFeatureBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder;
-use WMDE\Fundraising\Frontend\Infrastructure\DoorkeeperFeatureToggle;
-use WMDE\Fundraising\Frontend\Infrastructure\FeatureToggle;
-use WMDE\Fundraising\Frontend\Infrastructure\GroupSelector;
+use WMDE\Fundraising\Frontend\Infrastructure\BucketTesting\DoorkeeperFeatureToggle;
+use WMDE\Fundraising\Frontend\Infrastructure\BucketTesting\FeatureToggle;
+use WMDE\Fundraising\Frontend\Infrastructure\BucketTesting\BucketSelector;
 use WMDE\Fundraising\Frontend\Infrastructure\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\LoggingMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\LoggingPaymentNotificationVerifier;
@@ -1683,8 +1683,8 @@ class FunFunFactory implements ServiceProviderInterface {
 		return $this->createSharedObject( FeatureToggle::class, function (): FeatureToggle {
 			$doorkeeper = new Doorkeeper( $this->newCampaignFeatures() );
 			$requestor = new Requestor();
-			foreach ( $this->getSelectedGroups() as $group ) {
-				$requestor = $requestor->withStringHash( $group->getName() );
+			foreach ( $this->getSelectedBuckets() as $bucket ) {
+				$requestor = $requestor->withStringHash( $bucket->getId() );
 			}
 			$doorkeeper->setRequestor( $requestor );
 			return new DoorkeeperFeatureToggle( $doorkeeper );
@@ -1697,16 +1697,22 @@ class FunFunFactory implements ServiceProviderInterface {
 		} );
 	}
 
-	public function getGroupSelector(): GroupSelector {
-		return $this->createSharedObject( GroupSelector::class, function (): GroupSelector {
-			return new GroupSelector( new CampaignCollection( ...$this->getCampaigns() ) );
+	public function getBucketSelector(): BucketSelector {
+		return $this->createSharedObject( BucketSelector::class, function (): BucketSelector {
+			return new BucketSelector( new CampaignCollection( ...$this->getCampaigns() ) );
 		} );
 	}
 
-	public function getSelectedGroups(): array {
-		return $this->createSharedObject( 'selectedGroups', function (): array {
-			return $this->getGroupSelector()->selectGroups();
-		} );
+	public function getSelectedBuckets(): array {
+		// when in the web environment, selected buckets will be set by BucketSelectionServiceProvider during request processing
+		// other environments (testing/cli) may set this during setup
+		if ( !isset( $this->sharedObjects['selectedBuckets'] ) ) {
+			throw new \LogicException( 'Buckets were not selected yet, you must not initialize A/B tested classes before the app processes the request.' );
+		}
+		return $this->sharedObjects['selectedBuckets'];
 	}
 
+	public function setSelectedBuckets( array $selectedBuckets ): void {
+		$this->sharedObjects['selectedBuckets'] = $selectedBuckets;
+	}
 }

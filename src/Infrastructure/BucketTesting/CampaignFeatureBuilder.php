@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Infrastructure;
+namespace WMDE\Fundraising\Frontend\Infrastructure\BucketTesting;
 
 use RemotelyLiving\Doorkeeper\Features\Feature;
 use RemotelyLiving\Doorkeeper\Features\Set;
@@ -37,35 +37,35 @@ class CampaignFeatureBuilder {
 	}
 
 	private function addActiveCampaignFeatures( Campaign $campaign, Set $featureSet ) {
-		foreach ( $campaign->getGroups() as $group ) {
-			$feature = new Feature( $this->getFeatureName( $group ), true, $this->getRules( $group ) );
+		foreach ( $campaign->getBuckets() as $bucket ) {
+			$feature = new Feature( $this->getFeatureName( $bucket ), true, $this->getRules( $bucket ) );
 			$featureSet->pushFeature( $feature );
 		}
 	}
 
 	private function addDefaultCampaignFeatures( Campaign $campaign, Set $featureSet ) {
-		foreach ( $campaign->getGroups() as $group ) {
-			$feature = new Feature( $this->getFeatureName( $group ), $group === $campaign->getDefaultGroup() );
+		foreach ( $campaign->getBuckets() as $bucket ) {
+			$feature = new Feature( $this->getFeatureName( $bucket ), $bucket->isDefaultBucket() );
 			$featureSet->pushFeature( $feature );
 		}
 	}
 
-	private function getFeatureName( Group $group ): string {
-		return 'campaigns' . '.' . $group->getCampaign()->getName() . '.' . $group->getName();
+	private function getFeatureName( Bucket $bucket ): string {
+		return 'campaigns' . '.' . $bucket->getCampaign()->getName() . '.' . $bucket->getName();
 	}
 
-	private function getRules( Group $group ): array {
-		if ( $group->isDefaultGroup() ) {
+	private function getRules( Bucket $bucket ): array {
+		if ( $bucket->isDefaultBucket() ) {
 			return [];
 		}
-		$campaign = $group->getCampaign();
+		$campaign = $bucket->getCampaign();
 		$dateRangeMatch = new TimeAfter( $campaign->getStartTimestamp()->format( 'Y-m-d H:i:s' ) );
 		$dateRangeMatch->addPrerequisite( new TimeBefore( $campaign->getEndTimestamp()->format( 'Y-m-d H:i:s' ) ) );
-		$groupNameMatch = new StringHash( $group->getName()  );
-		$groupNameMatch->addPrerequisite( $dateRangeMatch );
+		$bucketNameMatch = new StringHash( $bucket->getId()  );
+		$bucketNameMatch->addPrerequisite( $dateRangeMatch );
 
 		return [
-			$groupNameMatch
+			$bucketNameMatch
 		];
 	}
 

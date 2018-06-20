@@ -32,6 +32,9 @@ class TestEnvironment {
 		$instance->factory->setNullMessenger();
 		$instance->factory->setSkinTwigEnvironment( new \Twig_Environment() );
 		$instance->factory->setUrlGenerator( new FakeUrlGenerator() );
+		// No A/B testing buckets are selected -> only default buckets are active.
+		// A/B testing different code paths can done through changing default buckets
+		$instance->factory->setSelectedBuckets( [] );
 
 		// disabling translations in tests (will result in returned keys we can more easily test for)
 		$instance->factory->setTranslator( new Translator( 'zz_ZZ' ) );

@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Infrastructure;
+namespace WMDE\Fundraising\Frontend\Infrastructure\BucketTesting;
 
 use Doctrine\Common\Cache\CacheProvider;
 use FileFetcher\FileFetcher;

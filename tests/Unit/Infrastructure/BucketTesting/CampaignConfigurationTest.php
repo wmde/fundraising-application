@@ -7,38 +7,36 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 use Matthias\SymfonyConfigTest\PhpUnit\ConfigurationTestCaseTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
-
-use WMDE\Fundraising\Frontend\Infrastructure\CampaignConfiguration;
+use WMDE\Fundraising\Frontend\Infrastructure\BucketTesting\CampaignConfiguration;
 
 class CampaignConfigurationTest extends TestCase {
 
 	use ConfigurationTestCaseTrait;
 
-	protected function getConfiguration(): ConfigurationInterface {
-		return new CampaignConfiguration();
-	}
-
 	public function testGivenValidConfigurationEntries_ValidationPasses() {
-		$this->assertConfigurationIsValid( [ [
-				'minimal_campaign' => [
-					'start' => '2018-10-31',
-					'end' => '2018-12-31',
-					'active' => true,
-					'groups' => [ 'group1', 'group2' ],
-					'default_group' => 'group2',
-					'url_key' => 'mc'
-				],
-				'full_campaign' => [
-					'description' => 'This is just a test of a campaign configuration with all possible values set',
-					'reference' => 'https://example.com/',
-					'start' => '2018-10-31',
-					'end' => '2018-12-31',
-					'active' => true,
-					'groups' => [ 'group1', 'group2' ],
-					'default_group' => 'group2',
-					'url_key' => 'fc'
-				]
-		] ] );
+		$this->assertConfigurationIsValid(
+			[
+				[
+					'minimal_campaign' => [
+						'start' => '2018-10-31',
+						'end' => '2018-12-31',
+						'active' => true,
+						'buckets' => [ 'bucket1', 'bucket2' ],
+						'default_bucket' => 'bucket2',
+						'url_key' => 'mc'
+					],
+					'full_campaign' => [
+						'description' => 'This is just a test of a campaign configuration with all possible values set',
+						'reference' => 'https://example.com/',
+						'start' => '2018-10-31',
+						'end' => '2018-12-31',
+						'active' => true,
+						'buckets' => [ 'bucket1', 'bucket2' ],
+						'default_bucket' => 'bucket2',
+						'url_key' => 'fc'
+					]
+				] ]
+		);
 	}
 
 	/**
@@ -54,8 +52,8 @@ class CampaignConfigurationTest extends TestCase {
 				'missing_start' => [
 					'end' => '2018-12-31',
 					'active' => true,
-					'groups' => [ 'group1', 'group2' ],
-					'default_group' => 'group2'
+					'buckets' => [ 'bucket1', 'bucket2' ],
+					'default_bucket' => 'bucket2'
 				]
 			],
 			'start'
@@ -65,8 +63,8 @@ class CampaignConfigurationTest extends TestCase {
 				'missing_end' => [
 					'start' => '2018-12-31',
 					'active' => true,
-					'groups' => [ 'group1', 'group2' ],
-					'default_group' => 'group2'
+					'buckets' => [ 'bucket1', 'bucket2' ],
+					'default_bucket' => 'bucket2'
 				]
 			],
 			'end'
@@ -76,33 +74,33 @@ class CampaignConfigurationTest extends TestCase {
 				'missing_active' => [
 					'start' => '2011-12-31',
 					'end' => '2018-12-31',
-					'groups' => [ 'group1', 'group2' ],
-					'default_group' => 'group2'
+					'buckets' => [ 'bucket1', 'bucket2' ],
+					'default_bucket' => 'bucket2'
 				]
 			],
 			'active'
 		];
 		yield [
 			[
-				'missing_groups' => [
+				'missing_buckets' => [
 					'start' => '2018-10-31',
 					'end' => '2018-12-31',
 					'active' => true,
-					'default_group' => 'group2'
+					'default_bucket' => 'bucket2'
 				]
 			],
-			'groups'
+			'buckets'
 		];
 		yield [
 			[
-				'missing_default_group' => [
+				'missing_default_bucket' => [
 					'start' => '2018-10-31',
 					'end' => '2018-12-31',
 					'active' => true,
-					'groups' => [ 'group1', 'group2' ],
+					'buckets' => [ 'bucket1', 'bucket2' ],
 				]
 			],
-			'default_group'
+			'default_bucket'
 		];
 		yield [
 			[
@@ -110,8 +108,8 @@ class CampaignConfigurationTest extends TestCase {
 					'start' => '2018-10-31',
 					'end' => '2018-12-31',
 					'active' => true,
-					'groups' => [ 'group1', 'group2' ],
-					'default_group' => 'group2'
+					'buckets' => [ 'bucket1', 'bucket2' ],
+					'default_bucket' => 'bucket2'
 				]
 			],
 			'url_key'
@@ -126,16 +124,16 @@ class CampaignConfigurationTest extends TestCase {
 						'start' => '2018-10-31',
 						'end' => '2018-12-31',
 						'active' => true,
-						'groups' => [ 'group1', 'group2' ],
-						'default_group' => 'group2',
+						'buckets' => [ 'bucket1', 'bucket2' ],
+						'default_bucket' => 'bucket2',
 						'url_key' => 'fc'
 					],
 					'second_campaign' => [
 						'start' => '2019-01-01',
 						'end' => '2019-12-31',
 						'active' => false,
-						'groups' => [ 'group1', 'group2' ],
-						'default_group' => 'group2',
+						'buckets' => [ 'bucket1', 'bucket2' ],
+						'default_bucket' => 'bucket2',
 						'url_key' => 'sc'
 					],
 				],
@@ -144,16 +142,16 @@ class CampaignConfigurationTest extends TestCase {
 						'start' => '2018-10-31',
 						'end' => '2018-12-31',
 						'active' => false,
-						'groups' => [ 'group3' ],
-						'default_group' => 'group3',
+						'buckets' => [ 'bucket3' ],
+						'default_bucket' => 'bucket3',
 						'url_key' => 'fc'
 					],
 					'third_campaign' => [
 						'start' => '2020-10-31',
 						'end' => '2020-12-31',
 						'active' => false,
-						'groups' => [ 'default', 'fancy' ],
-						'default_group' => 'default',
+						'buckets' => [ 'default', 'fancy' ],
+						'default_bucket' => 'default',
 						'url_key' => 'tc'
 					]
 				],
@@ -169,28 +167,32 @@ class CampaignConfigurationTest extends TestCase {
 					'start' => '2018-10-31',
 					'end' => '2018-12-31',
 					'active' => false,
-					'groups' => [ 'group1', 'group2', 'group3' ],
-					'default_group' => 'group3',
+					'buckets' => [ 'bucket1', 'bucket2', 'bucket3' ],
+					'default_bucket' => 'bucket3',
 					'url_key' => 'fc'
 				],
 				'second_campaign' => [
 					'start' => '2019-01-01',
 					'end' => '2019-12-31',
 					'active' => false,
-					'groups' => [ 'group1', 'group2' ],
-					'default_group' => 'group2',
+					'buckets' => [ 'bucket1', 'bucket2' ],
+					'default_bucket' => 'bucket2',
 					'url_key' => 'sc'
 				],
 				'third_campaign' => [
 					'start' => '2020-10-31',
 					'end' => '2020-12-31',
 					'active' => true,
-					'groups' => [ 'default', 'fancy' ],
-					'default_group' => 'default',
+					'buckets' => [ 'default', 'fancy' ],
+					'default_bucket' => 'default',
 					'url_key' => 'tc'
 				]
 			]
-			);
+		);
+	}
+
+	protected function getConfiguration(): ConfigurationInterface {
+		return new CampaignConfiguration();
 	}
 
 }

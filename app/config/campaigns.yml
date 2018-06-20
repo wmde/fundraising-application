@@ -6,10 +6,10 @@
 #    reference: "https://phabricator.wikimedia.org/T123"
 #    start: "2017-10-01"
 #    end: "2019-12-31"
-#    groups:
+#    buckets:
 #        - "10h16"
 #        - cat17
-#    default_group: cat17
+#    default_bucket: cat17
 #
 # Start each campaign with a unique key, that is "campaign name". Then add the following keys:
 # description: (optional) What this campaign is about
@@ -17,9 +17,9 @@
 # start: Start date, in either YYYY-MM-DD or YYYY-MM-DD HH:MM:SS format. If no time is specified, it will be 0:00:00. Timezone is set in app config.
 # end: (Optional) End date, in either YYYY-MM-DD or YYYY-MM-DD HH:MM:SS format. If no time is specified, it will be 23:59:59 of that day. Timezone is set in app config.
 # active: Date-independent toggle for test
-# groups: List of group names
-# default_group: used group when campaign is not active. Must be listed in groups.
-# url_key: URL parameter key used for assigning groups to people
+# buckets: List of bucket names
+# default_bucket: used bucket when campaign is not active. Must be listed in buckets.
+# url_key: URL parameter key used for assigning buckets to people
 
 confirmation_pages:
   description: Test different confirmation page templates
@@ -27,10 +27,10 @@ confirmation_pages:
   start: "2016-10-01"
   end: "2018-12-31"
   active: true
-  groups:
+  buckets:
     - expanded_membership_form
     - collapsed_membership_form
-  default_group: expanded_membership_form
+  default_bucket: expanded_membership_form
   url_key: cp
 
 
@@ -41,8 +41,8 @@ confirmation_pages:
 #  reference: https://phabricator.wikimedia.org/T196335
 #  start: 2017-10-01
 #  end: 2019-12-31
-#  groups: [ "10h16", cat17 ]
-#  default_group: cat17
+#  buckets: [ "10h16", cat17 ]
+#  default_bucket: cat17
 #  url_key: skin
 
 #payment_types:
@@ -51,9 +51,9 @@ confirmation_pages:
 #  start: 2018-01-01
 #  end: 2018-12-31
 #  active: false
-#  groups:
+#  buckets:
 #    - default_payments
 #    - with_sofort
-#  default_group: default_payments
+#  default_bucket: default_payments
 #  url_key: pmt
 
