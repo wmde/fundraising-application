@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Infrastructure;
 
+use OutOfBoundsException;
+
 /**
  * Value object for defining campaigns
  *
@@ -58,16 +60,15 @@ class Campaign {
 	}
 
 	public function getGroupByIndex( int $index ): ?Group {
-		return  $this->getGroups()[ $index ] ?? null;
+		return $this->getGroups()[$index] ?? null;
 	}
 
 	public function getIndexByGroup( Group $group ): int {
-		$index = array_search($group, $this->getGroups(), true );
+		$index = array_search( $group, $this->getGroups(), true );
 		if ( $index === false ) {
 			throw new OutOfBoundsException();
 		}
 		return $index;
-
 	}
 
 	public function addGroup( Group $group ): self {
