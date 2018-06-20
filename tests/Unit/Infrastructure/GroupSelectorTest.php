@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: tozh
- * Date: 19.06.18
- * Time: 12:11
- */
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 

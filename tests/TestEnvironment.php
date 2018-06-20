@@ -32,6 +32,9 @@ class TestEnvironment {
 		$instance->factory->setNullMessenger();
 		$instance->factory->setSkinTwigEnvironment( new \Twig_Environment() );
 		$instance->factory->setUrlGenerator( new FakeUrlGenerator() );
+		// No A/B testing groups are selected -> only default groups are active.
+		// A/B testing different code paths can done through changing default groups
+		$instance->factory->setSelectedGroups( [] );
 
 		// disabling translations in tests (will result in returned keys we can more easily test for)
 		$instance->factory->setTranslator( new Translator( 'zz_ZZ' ) );

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: tozh
- * Date: 19.06.18
- * Time: 14:20
- */
 
 namespace WMDE\Fundraising\Frontend\Infrastructure;
 
@@ -23,6 +17,10 @@ class Group {
 
 	public function getName(): string {
 		return $this->name;
+	}
+
+	public function getId(): string {
+		return $this->getCampaign()->getName() . '.' . $this->getName();
 	}
 
 	public function getCampaign(): Campaign {
