@@ -50,6 +50,12 @@ services:
     expose:
       - "1025"
 
+  start_dependencies:
+    image: dadarek/wait-for-dependencies
+    depends_on:
+      - database
+    command: database:3306
+
 volumes:
   var-data:
   db-storage:
