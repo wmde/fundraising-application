@@ -11,6 +11,7 @@ use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageNotFoundException;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\ContentProvider\ContentProvider;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\OverridingCampaignConfigurationLoader;
 
 /**
  * @licence GNU GPL v2+
@@ -19,7 +20,12 @@ use WMDE\Fundraising\ContentProvider\ContentProvider;
 class DisplayPageRouteTest extends WebRouteTestCase {
 
 	public function testWhenPageHasCustomTemplate_customTemplateIsRendered(): void {
-		$client = $this->createClient( [ 'skin' => [ 'default' => 'cat17' ] ] );
+		$client = $this->createClient(
+			[],
+			function ( FunFunFactory $factory ): void {
+				$this->setDefaultSkin( $factory, 'cat17' );
+			}
+		);
 		//Requesting page_layouts/supporters.html.twig from cat17 skin
 		$client->request(
 			'GET',
@@ -33,9 +39,9 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 
 	public function testWhenPageDoesNotExist_missingResponseIsReturnedAndHasHeaderAndFooter(): void {
 		$client = $this->createClient(
-			[ 'skin' => [ 'default' => 'cat17' ] ],
+			[],
 			function ( FunFunFactory $factory ): void {
-				$factory->setContentPagePageSelector( $this->newNotFoundPageSelector( 'kittens' ) );
+				$this->setDefaultSkin( $factory, 'cat17' );
 			}
 		);
 		$client->request( 'GET', '/page/kittens' );
@@ -48,8 +54,9 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 
 	public function testWhenPageDoesNotExist_noUnescapedPageNameIsShown(): void {
 		$client = $this->createClient(
-			[ 'skin' => [ 'default' => 'cat17' ] ],
+			[],
 			function ( FunFunFactory $factory ): void {
+				$this->setDefaultSkin( $factory, 'cat17' );
 				$pageSelector = $this->createMock( PageSelector::class );
 				$pageSelector
 					->method( 'getPageId' )
@@ -68,8 +75,10 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 
 	public function testWhenRequestedContentPageExists_itGetsEmbeddedAndHasHeaderAndFooter(): void {
 		$this->createEnvironment(
-			[ 'skin' => [ 'default' => 'cat17' ] ],
+			[],
 			function ( Client $client, FunFunFactory $factory ): void {
+				$this->setDefaultSkin( $factory, 'cat17' );
+
 				$factory->setContentPagePageSelector( $this->newMockPageSelector( 'unicorns' ) );
 				$factory->setContentProvider(
 					$this->newVfsContentProvider(
@@ -91,7 +100,13 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenPageNameContainsSlash_404isReturned(): void {
-		$client = $this->createClient( [ 'skin' => [ 'default' => 'cat17' ] ], null, self::DISABLE_DEBUG );
+		$client = $this->createClient(
+			[],
+			function ( FunFunFactory $factory ): void {
+				$this->setDefaultSkin( $factory, 'cat17' );
+			},
+			self::DISABLE_DEBUG
+		);
 		$client->request( 'GET', '/page/unicorns/of-doom' );
 
 		$this->assert404( $client->getResponse() );
@@ -128,5 +143,14 @@ class DisplayPageRouteTest extends WebRouteTestCase {
 		);
 		$provider = new ContentProvider( [ 'content_path' => $content->url() ] );
 		return $provider;
+	}
+
+	private function setDefaultSkin( FunFunFactory $factory, string $skinName ): void {
+		$factory->setCampaignConfigurationLoader(
+			new OverridingCampaignConfigurationLoader(
+				$factory->getCampaignConfigurationLoader(),
+				[ 'skins' => [ 'default_bucket' => $skinName ] ]
+			)
+		);
 	}
 }

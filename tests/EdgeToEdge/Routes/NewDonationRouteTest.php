@@ -9,6 +9,7 @@ use Symfony\Component\HttpKernel\Client;
 
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\OverridingCampaignConfigurationLoader;
 
 /**
  * @licence GNU GPL v2+
@@ -187,7 +188,12 @@ class NewDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testAllPaymentTypesAreOffered(): void {
-		$client = $this->createClient( [ 'skin' => [ 'default' => '10h16' ] ] );
+		$client = $this->createClient(
+			[],
+			function ( FunFunFactory $factory ): void {
+				$this->setDefaultSkin( $factory, '10h16' );
+			}
+		);
 		$client->request(
 			'GET',
 			'/donation/new'
@@ -202,7 +208,12 @@ class NewDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testSofortPaymentTypeCanByDisabledViaQuery(): void {
-		$client = $this->createClient( [ 'skin' => [ 'default' => '10h16' ] ] );
+		$client = $this->createClient(
+			[],
+			function ( FunFunFactory $factory ): void {
+				$this->setDefaultSkin( $factory, '10h16' );
+			}
+		);
 		$client->request(
 			'GET',
 			'/donation/new',
@@ -213,5 +224,12 @@ class NewDonationRouteTest extends WebRouteTestCase {
 		$this->assertSame( 0, $crawler->filter( '#donation-payment input[name="zahlweise"][value="SUB"]' )->count() );
 	}
 
-
+	private function setDefaultSkin( FunFunFactory $factory, string $skinName ): void {
+		$factory->setCampaignConfigurationLoader(
+			new OverridingCampaignConfigurationLoader(
+				$factory->getCampaignConfigurationLoader(),
+				[ 'skins' => [ 'default_bucket' => $skinName ] ]
+			)
+		);
+	}
 }

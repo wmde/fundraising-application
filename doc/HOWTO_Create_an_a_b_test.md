@@ -100,7 +100,7 @@ header_template:
 	active: false
 ```
 
-The settings in `app/config/campaigns.test.yml` will be merged with teh settings in `app/config/campaigns.yml`.
+The settings in `app/config/campaigns.test.yml` will be merged with the settings in `app/config/campaigns.yml`.
 
 Deactivating the campaigns also ensures that you always test the default path. 
 If you want to test other buckets in the campaign, you need to explicitly set a different default bucket by overriding 
