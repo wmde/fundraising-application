@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Infrastructure\BucketTesting;
+namespace WMDE\Fundraising\Frontend\BucketTesting;
 
 use DateTime;
 use DateTimeZone;

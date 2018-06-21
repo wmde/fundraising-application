@@ -2,12 +2,12 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting;
 
 use Matthias\SymfonyConfigTest\PhpUnit\ConfigurationTestCaseTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
-use WMDE\Fundraising\Frontend\Infrastructure\BucketTesting\CampaignConfiguration;
+use WMDE\Fundraising\Frontend\BucketTesting\CampaignConfiguration;
 
 class CampaignConfigurationTest extends TestCase {
 

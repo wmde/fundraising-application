@@ -2,11 +2,11 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\BucketTesting;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting;
 
-use WMDE\Fundraising\Frontend\Infrastructure\BucketTesting\Campaign; 
 use PHPUnit\Framework\TestCase;
-use WMDE\Fundraising\Frontend\Infrastructure\BucketTesting\Bucket;
+use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
+use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 
 class CampaignTest extends TestCase {
 

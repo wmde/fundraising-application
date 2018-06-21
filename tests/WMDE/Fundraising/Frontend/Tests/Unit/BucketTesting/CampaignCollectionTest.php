@@ -1,12 +1,18 @@
 <?php
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
+declare(strict_types = 1);
+
+namespace WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting;
 
 use PHPUnit\Framework\TestCase;
-use WMDE\Fundraising\Frontend\Infrastructure\BucketTesting\Bucket;
-use WMDE\Fundraising\Frontend\Infrastructure\BucketTesting\Campaign;
-use WMDE\Fundraising\Frontend\Infrastructure\BucketTesting\CampaignCollection;
+use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
+use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
+use WMDE\Fundraising\Frontend\BucketTesting\CampaignCollection;
 
+/**
+ * Class CampaignCollectionTest
+ * @covers WMDE\Fundraising\Frontend\BucketTesting\CampaignCollection
+ */
 class CampaignCollectionTest extends TestCase {
 
 	public function testGivenValidUrlAndValue_itReturnsBucket() {

@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use WMDE\Fundraising\Frontend\App\AccessDeniedException;
-use WMDE\Fundraising\Frontend\Infrastructure\BucketTesting\BucketSelectionServiceProvider;
+use WMDE\Fundraising\Frontend\BucketTesting\BucketSelectionServiceProvider;
 use WMDE\Fundraising\Frontend\Infrastructure\TrackingDataSelector;
 use WMDE\Fundraising\Frontend\Presentation\SkinServiceProvider;
 use WMDE\Fundraising\Frontend\Presentation\SofortToggleServiceProvider;

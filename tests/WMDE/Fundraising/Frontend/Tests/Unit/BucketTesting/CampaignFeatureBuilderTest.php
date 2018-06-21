@@ -2,18 +2,18 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\BucketTesting;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting;
 
 use PHPUnit\Framework\TestCase;
 use RemotelyLiving\Doorkeeper\Rules\StringHash;
 use RemotelyLiving\Doorkeeper\Rules\TimeAfter;
 use RemotelyLiving\Doorkeeper\Rules\TimeBefore;
-use WMDE\Fundraising\Frontend\Infrastructure\BucketTesting\Bucket;
-use WMDE\Fundraising\Frontend\Infrastructure\BucketTesting\Campaign;
-use WMDE\Fundraising\Frontend\Infrastructure\BucketTesting\CampaignFeatureBuilder;
+use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
+use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
+use WMDE\Fundraising\Frontend\BucketTesting\CampaignFeatureBuilder;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\BucketTesting\CampaignFeatureBuilder
+ * @covers \WMDE\Fundraising\Frontend\BucketTesting\CampaignFeatureBuilder
  */
 class CampaignFeatureBuilderTest extends TestCase {
 

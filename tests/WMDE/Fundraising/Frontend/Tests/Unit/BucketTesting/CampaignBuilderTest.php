@@ -2,15 +2,15 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting;
 
 use PHPUnit\Framework\TestCase;
-use WMDE\Fundraising\Frontend\Infrastructure\BucketTesting\Bucket;
-use WMDE\Fundraising\Frontend\Infrastructure\BucketTesting\Campaign;
-use WMDE\Fundraising\Frontend\Infrastructure\BucketTesting\CampaignBuilder;
+use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
+use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
+use WMDE\Fundraising\Frontend\BucketTesting\CampaignBuilder;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\BucketTesting\CampaignBuilder
+ * @covers \WMDE\Fundraising\Frontend\BucketTesting\CampaignBuilder
  */
 class CampaignBuilderTest extends TestCase {
 

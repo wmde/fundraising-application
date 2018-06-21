@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Infrastructure\BucketTesting;
+namespace WMDE\Fundraising\Frontend\BucketTesting;
 
 use RemotelyLiving\Doorkeeper\Features\Feature;
 use RemotelyLiving\Doorkeeper\Features\Set;
@@ -61,7 +61,7 @@ class CampaignFeatureBuilder {
 		$campaign = $bucket->getCampaign();
 		$dateRangeMatch = new TimeAfter( $campaign->getStartTimestamp()->format( 'Y-m-d H:i:s' ) );
 		$dateRangeMatch->addPrerequisite( new TimeBefore( $campaign->getEndTimestamp()->format( 'Y-m-d H:i:s' ) ) );
-		$bucketNameMatch = new StringHash( $bucket->getId()  );
+		$bucketNameMatch = new StringHash( $bucket->getId() );
 		$bucketNameMatch->addPrerequisite( $dateRangeMatch );
 
 		return [

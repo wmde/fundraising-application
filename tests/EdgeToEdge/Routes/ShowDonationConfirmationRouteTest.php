@@ -93,7 +93,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setCampaignConfigurationLoader( new OverridingCampaignConfigurationLoader(
 				$factory->getCampaignConfigurationLoader(),
-				[ 'confirmation_pages' => [ 'default_group' => 'collapsed_membership_form' ] ]
+				[ 'confirmation_pages' => [ 'default_bucket' => 'collapsed_membership_form' ] ]
 			) );
 
 			$donation = $this->newStoredDonation( $factory );

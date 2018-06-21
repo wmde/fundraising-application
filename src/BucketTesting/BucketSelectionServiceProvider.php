@@ -3,7 +3,7 @@
 declare( strict_types = 1 );
 
 
-namespace WMDE\Fundraising\Frontend\Infrastructure\BucketTesting;
+namespace WMDE\Fundraising\Frontend\BucketTesting;
 
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
@@ -16,7 +16,6 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 class BucketSelectionServiceProvider  implements ServiceProviderInterface, BootableProviderInterface {
 
 	private const COOKIE_NAME = 'spenden_ttg';
-	private const COOKIE_LIFETIME_IN_SECONDS = 60 * 60 * 24 * 90; // 90 days
 
 	private $factory;
 
@@ -37,23 +36,20 @@ class BucketSelectionServiceProvider  implements ServiceProviderInterface, Boota
 		$app->before( function( Request $request ): void {
 			parse_str( $request->cookies->get( 'spenden_ttg', '' ), $cookieValues );
 			$selector = $this->factory->getBucketSelector();
-			$selector
-				->setUrlParameters( $request->query->all() )
-				->setCookie( $cookieValues );
-			$this->factory->setSelectedBuckets( $selector->selectBuckets() );
+			$this->factory->setSelectedBuckets( $selector->selectBuckets( $request->query->all(), $cookieValues ) );
 		}, Application::EARLY_EVENT );
 
-		$app->after( function ( Request $request, Response $response) use ($app)  {
+		$app->after( function ( Request $request, Response $response ) use ( $app )  {
 			$response->headers->setCookie(
 				$this->factory->getCookieBuilder()->newCookie(
 					self::COOKIE_NAME,
 					http_build_query(
 						array_merge( ...array_map(
-							function( Bucket $bucket ) { return $bucket->getParameters(); },
+							function( Bucket $bucket ) { return $bucket->getParameters();
+				   },
 							$this->factory->getSelectedBuckets()
 						) )
-					),
-					time() + self::COOKIE_LIFETIME_IN_SECONDS
+					)
 				)
 			);
 		} );

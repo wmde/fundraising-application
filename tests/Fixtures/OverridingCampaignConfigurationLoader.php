@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
-use WMDE\Fundraising\Frontend\Infrastructure\BucketTesting\CampaignConfigurationLoaderInterface;
+use WMDE\Fundraising\Frontend\BucketTesting\CampaignConfigurationLoaderInterface;
 
 /**
  * @license GNU GPL v2+

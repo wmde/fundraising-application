@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Factories;
 
 use Twig_Environment;
-use WMDE\Fundraising\Frontend\Infrastructure\BucketTesting\FeatureToggle;
+use WMDE\Fundraising\Frontend\BucketTesting\FeatureToggle;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
 /**

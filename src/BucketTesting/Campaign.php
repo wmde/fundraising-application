@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Infrastructure\BucketTesting;
+namespace WMDE\Fundraising\Frontend\BucketTesting;
 
 /**
  * Value object for defining campaigns
@@ -58,11 +58,11 @@ class Campaign {
 	}
 
 	public function getBucketByIndex( int $index ): ?Bucket {
-		return  $this->getBuckets()[ $index ] ?? null;
+		return $this->getBuckets()[$index] ?? null;
 	}
 
 	public function getIndexByBucket( Bucket $bucket ): int {
-		$index = array_search($bucket, $this->getBuckets(), true );
+		$index = array_search( $bucket, $this->getBuckets(), true );
 		if ( $index === false ) {
 			throw new \OutOfBoundsException();
 		}

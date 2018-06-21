@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting;
 
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\VoidCache;
@@ -13,10 +13,10 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Exception\ParseException;
-use WMDE\Fundraising\Frontend\Infrastructure\BucketTesting\CampaignConfigurationLoader;
+use WMDE\Fundraising\Frontend\BucketTesting\CampaignConfigurationLoader;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\BucketTesting\CampaignConfigurationLoader
+ * @covers \WMDE\Fundraising\Frontend\BucketTesting\CampaignConfigurationLoader
  */
 class CampaignConfigurationLoaderTest extends TestCase {
 

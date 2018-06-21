@@ -1,6 +1,8 @@
 <?php
 
-namespace WMDE\Fundraising\Frontend\Infrastructure\BucketTesting;
+declare(strict_types = 1);
+
+namespace WMDE\Fundraising\Frontend\BucketTesting;
 
 class Bucket {
 	private $name;
