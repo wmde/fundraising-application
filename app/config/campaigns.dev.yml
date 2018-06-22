@@ -1,0 +1,6 @@
+# This file is used on test server
+#
+# Set all campaigns to inactive to force the test server to use the default code paths
+
+confirmation_pages:
+  active: false
