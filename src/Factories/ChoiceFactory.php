@@ -58,4 +58,19 @@ class ChoiceFactory {
 		throw new UnknownChoiceDefinition( 'Confirmation Page Template configuration failure.' );
 	}
 
+
+	public function getSkinTemplateDirectory(): string {
+		if ( $this->featureToggle->featureIsActive( 'campaigns.skins.cat17' ) ) {
+			return $this->getSkinDirectory( 'cat17' );
+		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.skins.10h16' ) ) {
+			return $this->getSkinDirectory( '10h16' );
+		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.skins.test' ) ) {
+			return $this->getSkinDirectory( 'test' );
+		}
+		throw new UnknownChoiceDefinition( 'Skin selection configuration failure.' );
+	}
+
+	private function getSkinDirectory( string $skin ): string {
+		return 'skins/' . $skin . '/templates';
+	}
 }

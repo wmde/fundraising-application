@@ -130,7 +130,6 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\InternalErrorHtmlPresenter
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipFormViolationPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\PageNotFoundPresenter;
-use WMDE\Fundraising\Frontend\Presentation\SkinSettings;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\SubscriptionContext\DataAccess\DoctrineSubscriptionRepository;
 use WMDE\Fundraising\SubscriptionContext\Domain\Repositories\SubscriptionRepository;
@@ -524,11 +523,6 @@ class FunFunFactory implements ServiceProviderInterface {
 				$this->config['cookie']['raw'],
 				$this->config['cookie']['sameSite']
 			);
-		};
-
-		$container['skin-settings'] = function (): SkinSettings {
-			$config = $this->config['skin'];
-			return new SkinSettings( $config['options'], $config['default'], $config['cookie-lifetime'] );
 		};
 
 		$container['payment-types-settings'] = function (): PaymentTypesSettings {
@@ -1610,10 +1604,6 @@ class FunFunFactory implements ServiceProviderInterface {
 		return $this->pimple['cookie-builder'];
 	}
 
-	public function getSkinSettings(): SkinSettings {
-		return $this->pimple['skin-settings'];
-	}
-
 	public function getPaymentTypesSettings(): PaymentTypesSettings {
 		return $this->pimple['payment-types-settings'];
 	}
@@ -1642,7 +1632,7 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function getSkinDirectory(): string {
-		return 'skins/' . $this->getSkinSettings()->getSkin() . '/templates';
+		return $this->getChoiceFactory()->getSkinTemplateDirectory();
 	}
 
 	public function getAbsoluteSkinDirectory(): string {

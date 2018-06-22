@@ -34,22 +34,25 @@ confirmation_pages:
   url_key: cp
 
 
-# TODO: Uncomment the following 2 config entries & add code to support them
+skins:
+  description: Test different skins
+  reference: https://phabricator.wikimedia.org/T196335
+  start: "2017-10-01"
+  end: "2099-12-31"
+  buckets:
+    - "cat17"
+    - "10h16"
+  default_bucket: "cat17"
+  url_key: skin
+  active: false
 
-#skins:
-#  description: Test different skins
-#  reference: https://phabricator.wikimedia.org/T196335
-#  start: 2017-10-01
-#  end: 2019-12-31
-#  buckets: [ "10h16", cat17 ]
-#  default_bucket: cat17
-#  url_key: skin
+# TODO: Uncomment the following config entries & add code to support them
 
 #payment_types:
 #  description: Test sofort payment
 #  reference: https://phabricator.wikimedia.org/T192635
-#  start: 2018-01-01
-#  end: 2018-12-31
+#  start: "2018-01-01"
+#  end: "2018-12-31"
 #  active: false
 #  buckets:
 #    - default_payments

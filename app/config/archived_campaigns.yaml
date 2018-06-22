@@ -1,7 +1,13 @@
 # Move unused entries from campaigns.yml here
 
 example:
-  description: Example campaign that was never run
-  start: 2015-10-01
-  end: 2015-12-31
-  buckets: [ ex1, ex2 ]
+  description: Example campaign which was never run
+  reference: https://phabricator.wikimedia.org/T123456789
+  start: "2000-01-01"
+  end: "2099-12-31"
+  buckets:
+    - "test_bucket_01"
+    - "test_bucket_02"
+  default_bucket: "test_bucket_01"
+  url_key: sample_url_key
+  active: false
