@@ -74,6 +74,7 @@ use WMDE\Fundraising\DonationContext\UseCases\HandlePayPalPaymentNotification\Ha
 use WMDE\Fundraising\DonationContext\UseCases\ListComments\ListCommentsUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\SofortPaymentNotification\SofortPaymentNotificationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\ValidateDonor\ValidateDonorUseCase;
+use WMDE\Fundraising\Frontend\BucketTesting\RandomBucketSelection;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
@@ -1699,7 +1700,7 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	public function getBucketSelector(): BucketSelector {
 		return $this->createSharedObject( BucketSelector::class, function (): BucketSelector {
-			return new BucketSelector( new CampaignCollection( ...$this->getCampaigns() ) );
+			return new BucketSelector( new CampaignCollection( ...$this->getCampaigns() ), new RandomBucketSelection() );
 		} );
 	}
 

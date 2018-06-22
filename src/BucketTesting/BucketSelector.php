@@ -7,16 +7,13 @@ namespace WMDE\Fundraising\Frontend\BucketTesting;
 class BucketSelector {
 
 	private $campaigns;
+	private $selectionStrategy;
 
-	public function __construct( CampaignCollection $campaigns ) {
+	public function __construct( CampaignCollection $campaigns, BucketSelectionStrategy $selectionStrategy ) {
 		$this->campaigns = $campaigns;
+		$this->selectionStrategy = $selectionStrategy;
 	}
 
-	/**
-	 * @param array $params
-	 *
-	 * @return array
-	 */
 	private function sanitizeParameters( array $params ): array {
 		$sanitized = [];
 		foreach ( $params as $key => $value ) {
@@ -27,20 +24,15 @@ class BucketSelector {
 		return $sanitized;
 	}
 
-	/**
-	 * @param array $cookie
-	 * @param array $urlParameters
-	 *
-	 * @return array
-	 */
 	public function selectBuckets( array $cookie = [], array $urlParameters = [] ): array {
 		$urlParameters = $this->sanitizeParameters( $urlParameters );
 		$cookie = $this->sanitizeParameters( $cookie );
 		$possibleKeys = array_merge( $cookie, $urlParameters );
+
 		[ $buckets, $missingCampaigns ] = $this->campaigns->splitBucketsFromCampaigns( $possibleKeys );
 
 		foreach( $missingCampaigns as $campaign ) {
-			$buckets[] = $campaign->getBuckets()[ array_rand( $campaign->getBuckets() ) ];
+			$buckets[] = $this->selectionStrategy->selectBucketFromCampaign( $campaign );
 		}
 		return $buckets;
 	}
