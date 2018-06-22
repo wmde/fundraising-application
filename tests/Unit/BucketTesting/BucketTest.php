@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace WMDE\Fundraising\Frontend\Tests\WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting;
 
 use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 use PHPUnit\Framework\TestCase;

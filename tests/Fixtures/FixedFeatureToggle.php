@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
-use WMDE\Fundraising\Frontend\Infrastructure\FeatureToggle;
+use WMDE\Fundraising\Frontend\BucketTesting\FeatureToggle;
 
 class FixedFeatureToggle implements FeatureToggle {
 

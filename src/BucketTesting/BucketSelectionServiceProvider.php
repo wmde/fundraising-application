@@ -39,7 +39,7 @@ class BucketSelectionServiceProvider  implements ServiceProviderInterface, Boota
 			$this->factory->setSelectedBuckets( $selector->selectBuckets( $cookieValues, $request->query->all() ) );
 		}, Application::EARLY_EVENT );
 
-		$app->after( function ( Request $request, Response $response ) use ( $app )  {
+		$app->after( function ( Request $request, Response $response ) { // @codingStandardsIgnoreLine
 			$response->headers->setCookie(
 				$this->factory->getCookieBuilder()->newCookie(
 					self::COOKIE_NAME,
