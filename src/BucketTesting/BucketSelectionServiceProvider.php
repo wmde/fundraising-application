@@ -43,16 +43,35 @@ class BucketSelectionServiceProvider  implements ServiceProviderInterface, Boota
 			$response->headers->setCookie(
 				$this->factory->getCookieBuilder()->newCookie(
 					self::COOKIE_NAME,
-					http_build_query(
-						array_merge( ...array_map(
-							function( Bucket $bucket ) { return $bucket->getParameters();
-				   },
-							$this->factory->getSelectedBuckets()
-						) )
-					)
+					$this->getCookieValue(),
+					$this->getCookieLifetime()
 				)
 			);
 		} );
+	}
+
+	private function getCookieValue(): string {
+		return http_build_query(
+			// each Bucket returns one [ key => value ], they all need to be merged into one array
+			array_merge( ...$this->getParameterArrayFromSelectedBuckets() )
+		);
+	}
+
+	private function getParameterArrayFromSelectedBuckets(): array {
+		return array_map(
+			function( Bucket $bucket ) {
+				return $bucket->getParameters();
+			},
+			$this->factory->getSelectedBuckets()
+		);
+	}
+
+	private function getCookieLifetime(): ?int {
+		$mostDistantCampaign = $this->factory->getCampaignCollection()->getMostDistantCampaign();
+		if ( is_null( $mostDistantCampaign ) ) {
+			return null;
+		}
+		return $mostDistantCampaign->getEndTimestamp()->getTimestamp();
 	}
 
 }

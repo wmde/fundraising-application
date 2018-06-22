@@ -1690,7 +1690,7 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	public function getBucketSelector(): BucketSelector {
 		return $this->createSharedObject( BucketSelector::class, function (): BucketSelector {
-			return new BucketSelector( new CampaignCollection( ...$this->getCampaigns() ), new RandomBucketSelection() );
+			return new BucketSelector( $this->getCampaignCollection(), new RandomBucketSelection() );
 		} );
 	}
 
@@ -1705,5 +1705,9 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	public function setSelectedBuckets( array $selectedBuckets ): void {
 		$this->sharedObjects['selectedBuckets'] = $selectedBuckets;
+	}
+
+	public function getCampaignCollection(): CampaignCollection {
+		return new CampaignCollection( ...$this->getCampaigns() );
 	}
 }
