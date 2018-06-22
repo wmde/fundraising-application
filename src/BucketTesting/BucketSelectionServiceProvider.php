@@ -36,7 +36,7 @@ class BucketSelectionServiceProvider  implements ServiceProviderInterface, Boota
 		$app->before( function( Request $request ): void {
 			parse_str( $request->cookies->get( 'spenden_ttg', '' ), $cookieValues );
 			$selector = $this->factory->getBucketSelector();
-			$this->factory->setSelectedBuckets( $selector->selectBuckets( $request->query->all(), $cookieValues ) );
+			$this->factory->setSelectedBuckets( $selector->selectBuckets( $cookieValues, $request->query->all() ) );
 		}, Application::EARLY_EVENT );
 
 		$app->after( function ( Request $request, Response $response ) use ( $app )  {
