@@ -207,23 +207,6 @@ class NewDonationRouteTest extends WebRouteTestCase {
 		$this->assertSame( 1, $crawler->filter( '#donation-payment input[name="zahlweise"][value="SUB"]' )->count() );
 	}
 
-	public function testSofortPaymentTypeCanByDisabledViaQuery(): void {
-		$client = $this->createClient(
-			[],
-			function ( FunFunFactory $factory ): void {
-				$this->setDefaultSkin( $factory, '10h16' );
-			}
-		);
-		$client->request(
-			'GET',
-			'/donation/new',
-			[ 'pmt' => '0' ]
-		);
-		$crawler = $client->getCrawler();
-
-		$this->assertSame( 0, $crawler->filter( '#donation-payment input[name="zahlweise"][value="SUB"]' )->count() );
-	}
-
 	private function setDefaultSkin( FunFunFactory $factory, string $skinName ): void {
 		$factory->setCampaignConfigurationLoader(
 			new OverridingCampaignConfigurationLoader(
