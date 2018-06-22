@@ -102,6 +102,12 @@ main.conclusion {
 	}
 }
 
+.content {
+	a {
+		text-decoration: underline;
+	}
+}
+
 @import "pages/contact";
 @import "pages/comments_list";
 @import "pages/donation_confirmation";
