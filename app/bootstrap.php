@@ -28,7 +28,6 @@ $app->register( new SessionServiceProvider() );
 $app->register( new RoutingServiceProvider() );
 $app->register( new TwigServiceProvider() );
 $app->register( new BucketSelectionServiceProvider( $ffFactory ) );
-$app->register( new SkinServiceProvider( $ffFactory->getSkinSettings(), $ffFactory->getCookieBuilder() ) );
 $app->register( new SofortToggleServiceProvider( $ffFactory->getPaymentTypesSettings() ) );
 
 $app->before(

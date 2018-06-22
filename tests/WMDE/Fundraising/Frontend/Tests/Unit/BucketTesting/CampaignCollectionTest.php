@@ -11,7 +11,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\CampaignCollection;
 
 /**
  * Class CampaignCollectionTest
- * @covers WMDE\Fundraising\Frontend\BucketTesting\CampaignCollection
+ * @covers \WMDE\Fundraising\Frontend\BucketTesting\CampaignCollection
  */
 class CampaignCollectionTest extends TestCase {
 

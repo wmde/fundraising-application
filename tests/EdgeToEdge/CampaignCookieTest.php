@@ -4,6 +4,9 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 
+use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\OverridingCampaignConfigurationLoader;
+
 /**
  * Class CampaignCookieTest
  * @package WMDE\Fundraising\Frontend\Tests\EdgeToEdge
@@ -19,10 +22,18 @@ class CampaignCookieTest extends WebRouteTestCase {
 	}
 
 	public function testWhenUserVisitsThePageWithUrlParams_cookieIsChanged(): void {
-		$client = $this->createClient();
+		$client = $this->createClient(
+			[],
+			function ( FunFunFactory $factory ): void {
+				$factory->setCampaignConfigurationLoader( new OverridingCampaignConfigurationLoader(
+					$factory->getCampaignConfigurationLoader(),
+					[ 'skins' => [ 'active' => true ] ]
+				) );
+			}
+		);
 		$client->request( 'get', '/', [] );
-		$client->request( 'get', '/', [ 'cp' => 1 ] );
-		$this->assertSame( 'cp=1', $client->getCookieJar()->get( self::COOKIE_NAME )->getValue() );
+		$client->request( 'get', '/', [ 'skin' => 1 ] );
+		$this->assertContains( 'skin=1', $client->getCookieJar()->get( self::COOKIE_NAME )->getValue() );
 	}
 
 }
