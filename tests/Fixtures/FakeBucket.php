@@ -15,8 +15,8 @@ class FakeBucket {
 	public static function createBucket(
 		string $bucketName = 'test',
 		bool $isDefault = true,
-		$campaignName = 'test_campaign',
-		$campaignUrlKey = 'test_url_key'
+		string $campaignName = 'test_campaign',
+		string $campaignUrlKey = 'test_url_key'
 	): Bucket {
 		$campaign = new Campaign(
 			$campaignName,
