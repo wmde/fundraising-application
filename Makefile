@@ -8,6 +8,7 @@ DOCKER_FLAGS  := --interactive --tty
 TEST_DIR :=
 REDUX_LOG :=
 UNIQUE_APP_CONTAINER := $(shell uuidgen)-app
+MIGRATION_VERSION :=
 
 .DEFAULT_GOAL := ci
 
@@ -77,6 +78,15 @@ phpmd:
 
 npm-ci:
 	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR):/code -w /code -e NO_UPDATE_NOTIFIER=1 node:8 npm run ci
+
+migration-execute:
+	docker-compose run --rm --no-deps app vendor/doctrine/migrations/bin/doctrine-migrations migrations:execute $(MIGRATION_VERSION) --up --configuration=vendor/wmde/fundraising-store/migrations.yml
+
+migration-revert:
+	docker-compose run --rm --no-deps app vendor/doctrine/migrations/bin/doctrine-migrations migrations:execute $(MIGRATION_VERSION) --down --configuration=vendor/wmde/fundraising-store/migrations.yml
+
+migration-status:
+	docker-compose run --rm --no-deps app vendor/doctrine/migrations/bin/doctrine-migrations migrations:status --configuration=vendor/wmde/fundraising-store/migrations.yml
 
 ci: covers phpunit cs npm-ci validate-app-config stan
 
