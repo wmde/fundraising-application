@@ -45,18 +45,3 @@ skins:
   default_bucket: "cat17"
   url_key: skin
   active: false
-
-# TODO: Uncomment the following config entries & add code to support them
-
-#payment_types:
-#  description: Test sofort payment
-#  reference: https://phabricator.wikimedia.org/T192635
-#  start: "2018-01-01"
-#  end: "2018-12-31"
-#  active: false
-#  buckets:
-#    - default_payments
-#    - with_sofort
-#  default_bucket: default_payments
-#  url_key: pmt
-
