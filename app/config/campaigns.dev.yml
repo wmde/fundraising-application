@@ -1,0 +1,14 @@
+# This file is used on test server
+#
+# Set all campaigns to inactive to force the test server to use the default code paths
+
+confirmation_pages:
+  active: false
+
+
+skins:
+  active: false
+  buckets:
+    - "cat17"
+    - "10h16"
+  default_bucket: "cat17"

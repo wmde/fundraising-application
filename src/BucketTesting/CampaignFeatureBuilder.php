@@ -2,11 +2,12 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Infrastructure;
+namespace WMDE\Fundraising\Frontend\BucketTesting;
 
 use RemotelyLiving\Doorkeeper\Features\Feature;
 use RemotelyLiving\Doorkeeper\Features\Set;
 use RemotelyLiving\Doorkeeper\Rules\Percentage;
+use RemotelyLiving\Doorkeeper\Rules\StringHash;
 use RemotelyLiving\Doorkeeper\Rules\TimeAfter;
 use RemotelyLiving\Doorkeeper\Rules\TimeBefore;
 
@@ -36,31 +37,35 @@ class CampaignFeatureBuilder {
 	}
 
 	private function addActiveCampaignFeatures( Campaign $campaign, Set $featureSet ) {
-		foreach ( $campaign->getGroups() as $group ) {
-			$feature = new Feature( $this->getFeatureName( $campaign, $group ), true, $this->getRules( $campaign, $group ) );
+		foreach ( $campaign->getBuckets() as $bucket ) {
+			$feature = new Feature( $this->getFeatureName( $bucket ), true, $this->getRules( $bucket ) );
 			$featureSet->pushFeature( $feature );
 		}
 	}
 
 	private function addDefaultCampaignFeatures( Campaign $campaign, Set $featureSet ) {
-		foreach ( $campaign->getGroups() as $group ) {
-			$feature = new Feature( $this->getFeatureName( $campaign, $group ), $group === $campaign->getDefaultGroup() );
+		foreach ( $campaign->getBuckets() as $bucket ) {
+			$feature = new Feature( $this->getFeatureName( $bucket ), $bucket->isDefaultBucket() );
 			$featureSet->pushFeature( $feature );
 		}
 	}
 
-	private function getFeatureName( Campaign $campaign, string $group ): string {
-		return 'campaigns' . '.' . $campaign->getName() . '.' . $group;
+	private function getFeatureName( Bucket $bucket ): string {
+		return 'campaigns' . '.' . $bucket->getCampaign()->getName() . '.' . $bucket->getName();
 	}
 
-	private function getRules( Campaign $campaign, string $group ): array {
-		if ( $group === $campaign->getDefaultGroup() ) {
+	private function getRules( Bucket $bucket ): array {
+		if ( $bucket->isDefaultBucket() ) {
 			return [];
 		}
+		$campaign = $bucket->getCampaign();
+		$dateRangeMatch = new TimeAfter( $campaign->getStartTimestamp()->format( 'Y-m-d H:i:s' ) );
+		$dateRangeMatch->addPrerequisite( new TimeBefore( $campaign->getEndTimestamp()->format( 'Y-m-d H:i:s' ) ) );
+		$bucketNameMatch = new StringHash( $bucket->getId() );
+		$bucketNameMatch->addPrerequisite( $dateRangeMatch );
+
 		return [
-			new TimeAfter( $campaign->getStartTimestamp()->format( 'Y-m-d H:i:s' ) ),
-			new TimeBefore( $campaign->getEndTimestamp()->format( 'Y-m-d H:i:s' ) ),
-			new Percentage( (int) round( 100 / count( $campaign->getGroups() ) ) )
+			$bucketNameMatch
 		];
 	}
 

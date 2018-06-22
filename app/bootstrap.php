@@ -17,17 +17,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use WMDE\Fundraising\Frontend\App\AccessDeniedException;
+use WMDE\Fundraising\Frontend\BucketTesting\BucketSelectionServiceProvider;
 use WMDE\Fundraising\Frontend\Infrastructure\TrackingDataSelector;
-use WMDE\Fundraising\Frontend\Presentation\SkinServiceProvider;
-use WMDE\Fundraising\Frontend\Presentation\SofortToggleServiceProvider;
 
 $app = new Application();
 
 $app->register( new SessionServiceProvider() );
 $app->register( new RoutingServiceProvider() );
 $app->register( new TwigServiceProvider() );
-$app->register( new SkinServiceProvider( $ffFactory->getSkinSettings(), $ffFactory->getCookieBuilder() ) );
-$app->register( new SofortToggleServiceProvider( $ffFactory->getPaymentTypesSettings() ) );
+$app->register( new BucketSelectionServiceProvider( $ffFactory ) );
 
 $app->before(
 	function ( Request $request, Application $app ) {

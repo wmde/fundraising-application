@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Infrastructure;
+namespace WMDE\Fundraising\Frontend\BucketTesting;
 
 use DateTime;
 use DateTimeZone;
@@ -23,15 +23,18 @@ class CampaignBuilder {
 	public function getCampaigns( array $campaignConfig ): array {
 		$campaigns = [];
 		foreach( $campaignConfig as $name => $config ) {
-			$campaigns[] = new Campaign(
+			$campaign = new Campaign(
 				$name,
 				$config['url_key'],
 				$this->newDate( $config['start'] ),
 				$this->newDate( $config['end'] ),
-				$config['active'],
-				$config['default_group'],
-				$config['groups']
+				$config['active']
 			);
+			foreach ( $config['buckets'] as $bucketName ) {
+				$campaign->addBucket( new Bucket( $bucketName, $campaign, $bucketName === $config['default_bucket'] ) );
+			}
+
+			$campaigns[] = $campaign;
 		}
 		return $campaigns;
 	}

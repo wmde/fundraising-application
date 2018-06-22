@@ -22,6 +22,7 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use RemotelyLiving\Doorkeeper\Doorkeeper;
 use RemotelyLiving\Doorkeeper\Features\Set;
+use RemotelyLiving\Doorkeeper\Requestor;
 use Swift_MailTransport;
 use Swift_NullTransport;
 use Symfony\Component\Console\Exception\RuntimeException;
@@ -73,16 +74,19 @@ use WMDE\Fundraising\DonationContext\UseCases\HandlePayPalPaymentNotification\Ha
 use WMDE\Fundraising\DonationContext\UseCases\ListComments\ListCommentsUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\SofortPaymentNotification\SofortPaymentNotificationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\ValidateDonor\ValidateDonorUseCase;
+use WMDE\Fundraising\Frontend\BucketTesting\RandomBucketSelection;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
-use WMDE\Fundraising\Frontend\Infrastructure\Campaign;
-use WMDE\Fundraising\Frontend\Infrastructure\CampaignBuilder;
-use WMDE\Fundraising\Frontend\Infrastructure\CampaignConfigurationLoader;
-use WMDE\Fundraising\Frontend\Infrastructure\CampaignConfigurationLoaderInterface;
-use WMDE\Fundraising\Frontend\Infrastructure\CampaignFeatureBuilder;
+use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
+use WMDE\Fundraising\Frontend\BucketTesting\CampaignBuilder;
+use WMDE\Fundraising\Frontend\BucketTesting\CampaignCollection;
+use WMDE\Fundraising\Frontend\BucketTesting\CampaignConfigurationLoader;
+use WMDE\Fundraising\Frontend\BucketTesting\CampaignConfigurationLoaderInterface;
+use WMDE\Fundraising\Frontend\BucketTesting\CampaignFeatureBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder;
-use WMDE\Fundraising\Frontend\Infrastructure\DoorkeeperFeatureToggle;
-use WMDE\Fundraising\Frontend\Infrastructure\FeatureToggle;
+use WMDE\Fundraising\Frontend\BucketTesting\DoorkeeperFeatureToggle;
+use WMDE\Fundraising\Frontend\BucketTesting\FeatureToggle;
+use WMDE\Fundraising\Frontend\BucketTesting\BucketSelector;
 use WMDE\Fundraising\Frontend\Infrastructure\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\LoggingMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\LoggingPaymentNotificationVerifier;
@@ -126,7 +130,6 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\InternalErrorHtmlPresenter
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipFormViolationPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\PageNotFoundPresenter;
-use WMDE\Fundraising\Frontend\Presentation\SkinSettings;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\SubscriptionContext\DataAccess\DoctrineSubscriptionRepository;
 use WMDE\Fundraising\SubscriptionContext\Domain\Repositories\SubscriptionRepository;
@@ -520,11 +523,6 @@ class FunFunFactory implements ServiceProviderInterface {
 				$this->config['cookie']['raw'],
 				$this->config['cookie']['sameSite']
 			);
-		};
-
-		$container['skin-settings'] = function (): SkinSettings {
-			$config = $this->config['skin'];
-			return new SkinSettings( $config['options'], $config['default'], $config['cookie-lifetime'] );
 		};
 
 		$container['payment-types-settings'] = function (): PaymentTypesSettings {
@@ -1606,10 +1604,6 @@ class FunFunFactory implements ServiceProviderInterface {
 		return $this->pimple['cookie-builder'];
 	}
 
-	public function getSkinSettings(): SkinSettings {
-		return $this->pimple['skin-settings'];
-	}
-
 	public function getPaymentTypesSettings(): PaymentTypesSettings {
 		return $this->pimple['payment-types-settings'];
 	}
@@ -1638,7 +1632,7 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function getSkinDirectory(): string {
-		return 'skins/' . $this->getSkinSettings()->getSkin() . '/templates';
+		return $this->getChoiceFactory()->getSkinTemplateDirectory();
 	}
 
 	public function getAbsoluteSkinDirectory(): string {
@@ -1678,7 +1672,13 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	private function getFeatureToggle(): FeatureToggle {
 		return $this->createSharedObject( FeatureToggle::class, function (): FeatureToggle {
-			return new DoorkeeperFeatureToggle( new Doorkeeper( $this->newCampaignFeatures() ) );
+			$doorkeeper = new Doorkeeper( $this->newCampaignFeatures() );
+			$requestor = new Requestor();
+			foreach ( $this->getSelectedBuckets() as $bucket ) {
+				$requestor = $requestor->withStringHash( $bucket->getId() );
+			}
+			$doorkeeper->setRequestor( $requestor );
+			return new DoorkeeperFeatureToggle( $doorkeeper );
 		} );
 	}
 
@@ -1686,5 +1686,28 @@ class FunFunFactory implements ServiceProviderInterface {
 		return $this->createSharedObject( ChoiceFactory::class, function (): ChoiceFactory {
 			return new ChoiceFactory( $this->getFeatureToggle() );
 		} );
+	}
+
+	public function getBucketSelector(): BucketSelector {
+		return $this->createSharedObject( BucketSelector::class, function (): BucketSelector {
+			return new BucketSelector( $this->getCampaignCollection(), new RandomBucketSelection() );
+		} );
+	}
+
+	public function getSelectedBuckets(): array {
+		// when in the web environment, selected buckets will be set by BucketSelectionServiceProvider during request processing
+		// other environments (testing/cli) may set this during setup
+		if ( !isset( $this->sharedObjects['selectedBuckets'] ) ) {
+			throw new \LogicException( 'Buckets were not selected yet, you must not initialize A/B tested classes before the app processes the request.' );
+		}
+		return $this->sharedObjects['selectedBuckets'];
+	}
+
+	public function setSelectedBuckets( array $selectedBuckets ): void {
+		$this->sharedObjects['selectedBuckets'] = $selectedBuckets;
+	}
+
+	public function getCampaignCollection(): CampaignCollection {
+		return new CampaignCollection( ...$this->getCampaigns() );
 	}
 }

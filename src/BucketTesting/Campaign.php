@@ -2,12 +2,12 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Infrastructure;
+namespace WMDE\Fundraising\Frontend\BucketTesting;
 
 /**
  * Value object for defining campaigns
  *
- * @licence GNU GPL v2+
+ * @license GNU GPL v2+
  */
 class Campaign {
 
@@ -15,22 +15,19 @@ class Campaign {
 	private $active;
 	private $startTimestamp;
 	private $endTimestamp;
-	private $groups;
-	private $defaultGroup;
+	private $buckets;
 	private $urlKey;
 
 	public const ACTIVE = true;
 	public const INACTIVE = false;
 
-	public function __construct( string $name, string $urlKey, \DateTime $startTimestamp, \DateTime $endTimestamp, bool $isActive,
-			string $defaultGroup, array $groups ) {
+	public function __construct( string $name, string $urlKey, \DateTime $startTimestamp, \DateTime $endTimestamp, bool $isActive ) {
 		$this->name = $name;
 		$this->urlKey = $urlKey;
 		$this->active = $isActive;
 		$this->startTimestamp = $startTimestamp;
 		$this->endTimestamp = $endTimestamp;
-		$this->defaultGroup = $defaultGroup;
-		$this->groups = $groups;
+		$this->buckets = [];
 	}
 
 	public function isActive(): bool {
@@ -49,19 +46,34 @@ class Campaign {
 		return $this->name;
 	}
 
-	public function getDefaultGroup(): string {
-		return $this->defaultGroup;
-	}
-
 	/**
-	 * @return string[]
+	 * @return Bucket[]
 	 */
-	public function getGroups(): array {
-		return $this->groups;
+	public function getBuckets(): array {
+		return $this->buckets;
 	}
 
 	public function getUrlKey(): string {
 		return $this->urlKey;
 	}
+
+	public function getBucketByIndex( int $index ): ?Bucket {
+		return $this->getBuckets()[$index] ?? null;
+	}
+
+	public function getIndexByBucket( Bucket $bucket ): int {
+		$index = array_search( $bucket, $this->getBuckets(), true );
+		if ( $index === false ) {
+			throw new \OutOfBoundsException();
+		}
+		return $index;
+
+	}
+
+	public function addBucket( Bucket $bucket ): self {
+		$this->buckets[] = $bucket;
+		return $this;
+	}
+
 
 }

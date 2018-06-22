@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Factories;
 
 use Twig_Environment;
-use WMDE\Fundraising\Frontend\Infrastructure\FeatureToggle;
+use WMDE\Fundraising\Frontend\BucketTesting\FeatureToggle;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
 /**
@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
  *
  * TODO:
  * Write static analyzer that compares calls to `grantsAccessTo` with the campaign configuration to make sure that
- * no mismatch occurs between configuration and code. Also make sure that grantsAccessTo with the default group is
+ * no mismatch occurs between configuration and code. Also make sure that grantsAccessTo with the default bucket is
  * always called last.
  *
  * @license GNU GPL v2+
@@ -58,4 +58,19 @@ class ChoiceFactory {
 		throw new UnknownChoiceDefinition( 'Confirmation Page Template configuration failure.' );
 	}
 
+
+	public function getSkinTemplateDirectory(): string {
+		if ( $this->featureToggle->featureIsActive( 'campaigns.skins.cat17' ) ) {
+			return $this->getSkinDirectory( 'cat17' );
+		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.skins.10h16' ) ) {
+			return $this->getSkinDirectory( '10h16' );
+		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.skins.test' ) ) {
+			return $this->getSkinDirectory( 'test' );
+		}
+		throw new UnknownChoiceDefinition( 'Skin selection configuration failure.' );
+	}
+
+	private function getSkinDirectory( string $skin ): string {
+		return 'skins/' . $skin . '/templates';
+	}
 }

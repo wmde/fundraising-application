@@ -49,17 +49,6 @@ class PaymentTypesSettings {
 		return $this->getPaymentTypesWhereSettingIsTrue( self::ENABLE_MEMBERSHIP_APPLICATIONS );
 	}
 
-	public function setSettingToFalse( string $paymentType, string $settingName ): void {
-		if ( !array_key_exists( $paymentType, $this->settings ) ) {
-			throw new InvalidArgumentException( "Can not update setting of unknown paymentType '$paymentType'." );
-		}
-		if ( !array_key_exists( $settingName, $this->settings[$paymentType] ) ) {
-			throw new InvalidArgumentException( "Can not update setting of unknown purpose '$settingName'." );
-		}
-
-		$this->settings[$paymentType][$settingName] = false;
-	}
-
 	/**
 	 * @return string[]
 	 */

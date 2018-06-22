@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Infrastructure;
+namespace WMDE\Fundraising\Frontend\BucketTesting;
 
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -37,17 +37,17 @@ class CampaignConfiguration implements ConfigurationInterface {
 					->booleanNode( 'active' )
 						->isRequired()
 					->end()
-					->arrayNode( 'groups' )
-						->info( 'Name of the groups the user is put in' )
+					->arrayNode( 'buckets' )
+						->info( 'Name of the buckets the user is put in' )
 						->scalarPrototype()->end()
 						->isRequired()
 					->end()
-					->scalarNode( 'default_group' )
-						->info( 'Group to use when campaign is not active' )
+					->scalarNode( 'default_bucket' )
+						->info( 'Bucket to use when campaign is not active' )
 						->isRequired()
 					->end()
 					->scalarNode( 'url_key' )
-						->info( 'URL parameter key used for assigning groups to people' )
+						->info( 'URL parameter key used for assigning buckets to people' )
 						->isRequired()
 					->end()
 				->end()

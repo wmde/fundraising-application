@@ -11,7 +11,7 @@ use RuntimeException;
 use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Infrastructure\ConfigReader
+ * @covers \WMDE\Fundraising\Frontend\Infrastructure\ConfigReader
  *
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
