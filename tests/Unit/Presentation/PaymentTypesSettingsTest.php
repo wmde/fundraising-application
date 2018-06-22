@@ -68,61 +68,6 @@ class PaymentTypesSettingsTest extends TestCase {
 		$this->assertSame( [ 'b' ], $settings->getEnabledForMembershipApplication() );
 	}
 
-	public function testDisablePurposeForOneType(): void {
-		$settings = new PaymentTypesSettings( [
-			'BEZ' => [
-				PaymentTypesSettings::ENABLE_DONATIONS => true,
-				PaymentTypesSettings::ENABLE_MEMBERSHIP_APPLICATIONS => true
-			],
-			'UEB' => [
-				PaymentTypesSettings::ENABLE_DONATIONS => true,
-				PaymentTypesSettings::ENABLE_MEMBERSHIP_APPLICATIONS => true
-			],
-			'MCP' => [
-				PaymentTypesSettings::ENABLE_DONATIONS => true,
-				PaymentTypesSettings::ENABLE_MEMBERSHIP_APPLICATIONS => true
-			],
-			'PPL' => [
-				PaymentTypesSettings::ENABLE_DONATIONS => true,
-				PaymentTypesSettings::ENABLE_MEMBERSHIP_APPLICATIONS => true
-			],
-			'SUB' => [
-				PaymentTypesSettings::ENABLE_DONATIONS => true,
-				PaymentTypesSettings::ENABLE_MEMBERSHIP_APPLICATIONS => true
-			]
-		] );
-		$settings->setSettingToFalse( 'SUB', PaymentTypesSettings::ENABLE_DONATIONS );
-		$this->assertSame( [ 'BEZ', 'UEB', 'MCP', 'PPL' ], $settings->getEnabledForDonation() );
-	}
-
-	/**
-	 * @expectedException InvalidArgumentException
-	 * @expectedExceptionMessage Can not update setting of unknown paymentType 'IPSUM'.
-	 */
-	public function testUpdateSettingWithUnknownPaymentTypeThrowsException(): void {
-		$settings = new PaymentTypesSettings( [
-			'dolor' => [
-				PaymentTypesSettings::ENABLE_DONATIONS => true,
-				PaymentTypesSettings::ENABLE_MEMBERSHIP_APPLICATIONS => true
-			]
-		] );
-		$settings->setSettingToFalse( 'IPSUM', PaymentTypesSettings::ENABLE_DONATIONS );
-	}
-
-	/**
-	 * @expectedException InvalidArgumentException
-	 * @expectedExceptionMessage Can not update setting of unknown purpose 'foo'.
-	 */
-	public function testUpdateSettingWithUnknownPurposeThrowsException(): void {
-		$settings = new PaymentTypesSettings( [
-			'dolor' => [
-				PaymentTypesSettings::ENABLE_DONATIONS => true,
-				PaymentTypesSettings::ENABLE_MEMBERSHIP_APPLICATIONS => true
-			]
-		] );
-		$settings->setSettingToFalse( 'dolor', 'foo' );
-	}
-
 	public function testFunkySettingsNotValidatedButHarmless(): void {
 		$settings = new PaymentTypesSettings( [
 			'ff' => [
