@@ -17,6 +17,7 @@ class Campaign {
 	private $endTimestamp;
 	private $buckets;
 	private $urlKey;
+	private $defaultBucketIndex;
 
 	public const ACTIVE = true;
 	public const INACTIVE = false;
@@ -28,6 +29,7 @@ class Campaign {
 		$this->startTimestamp = $startTimestamp;
 		$this->endTimestamp = $endTimestamp;
 		$this->buckets = [];
+		$this->defaultBucketIndex = -1;
 	}
 
 	public function isActive(): bool {
@@ -67,12 +69,26 @@ class Campaign {
 			throw new \OutOfBoundsException();
 		}
 		return $index;
-
 	}
 
 	public function addBucket( Bucket $bucket ): self {
 		$this->buckets[] = $bucket;
+		if ( $bucket->isDefaultBucket() ) {
+			$this->defaultBucketIndex = count( $this->buckets ) - 1;
+		}
 		return $this;
+	}
+
+	public function isExpired( \DateTime $now ): bool {
+		return $this->startTimestamp > $now || $this->endTimestamp < $now;
+	}
+
+	public function getDefaultBucket(): Bucket {
+		$bucket = $this->getBucketByIndex( $this->defaultBucketIndex );
+		if ( is_null( $bucket ) ) {
+			throw new \LogicException( 'No default bucket was added to this campaign' );
+		}
+		return $bucket;
 	}
 
 

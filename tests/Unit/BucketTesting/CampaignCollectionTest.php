@@ -50,31 +50,15 @@ class CampaignCollectionTest extends TestCase {
 			->addBucket( $this->alternativeBucketOfSecondCampaign );
 	}
 
-
-	public function testGivenValidUrlAndValue_splittingReturnsBucket() {
+	public function testGivenCampaigns_itCanIterateOverThem() {
 		$collection = new CampaignCollection( $this->firstCampaign, $this->secondCampaign );
+		$iterator = $collection->getIterator();
 
-		$this->assertEquals(
-			[ [ $this->defaultBucketOfFirstCampaign ], [ $this->secondCampaign ] ],
-			$collection->splitBucketsFromCampaigns( [ 't1' => 0 ] )
-		);
-		$this->assertEquals(
-			[ [ $this->defaultBucketOfFirstCampaign, $this->alternativeBucketOfSecondCampaign ], [] ],
-			$collection->splitBucketsFromCampaigns( [ 't1' => 0, 't2' => 1 ] )
-		);
-	}
-
-	public function testGivenInvalidUrlValue_splittingReturnsCampaigns() {
-		$collection = new CampaignCollection( $this->firstCampaign, $this->secondCampaign );
-
-		$this->assertEquals(
-			[ [], [ $this->firstCampaign, $this->secondCampaign ] ],
-			$collection->splitBucketsFromCampaigns( [ 't21' => 0 ] )
-		);
-		$this->assertEquals(
-			[ [], [ $this->firstCampaign, $this->secondCampaign ] ],
-			$collection->splitBucketsFromCampaigns( [ 't21' => 0, 't2' => 99 ] )
-		);
+		$this->assertSame( $this->firstCampaign, $iterator->current() );
+		$iterator->next();
+		$this->assertSame( $this->secondCampaign, $iterator->current() );
+		$iterator->next();
+		$this->assertFalse( $iterator->valid() );
 	}
 
 	public function testGivenActiveCampaigns_itCanSelectTheOneWithTheMostDistantEndDate() {
@@ -96,7 +80,7 @@ class CampaignCollectionTest extends TestCase {
 		$this->assertSame( $this->firstCampaign, $collection->getMostDistantCampaign() );
 	}
 
-	public function testGivenOnlyInactiveCampaigs_itWillSelectNone() {
+	public function testGivenOnlyInactiveCampaigs_itWillSelectNoneAsMostDistant() {
 		$inactiveFirstCampaign = new Campaign(
 			$this->firstCampaign->getName(),
 			$this->firstCampaign->getUrlKey(),
@@ -109,7 +93,7 @@ class CampaignCollectionTest extends TestCase {
 		$this->assertNull( $collection->getMostDistantCampaign() );
 	}
 
-	public function testGivenOnlyCampaigsInThePast_itWillSelectNone() {
+	public function testGivenOnlyCampaigsInThePast_itWillSelectNoneAsMostDistant() {
 		$pastFirstCampaign = new Campaign(
 			$this->firstCampaign->getName(),
 			$this->firstCampaign->getUrlKey(),

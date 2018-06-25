@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting;
 
 use PHPUnit\Framework\TestCase;
+use RemotelyLiving\Doorkeeper\Features\Feature;
 use RemotelyLiving\Doorkeeper\Rules\StringHash;
 use RemotelyLiving\Doorkeeper\Rules\TimeAfter;
 use RemotelyLiving\Doorkeeper\Rules\TimeBefore;
@@ -80,39 +81,34 @@ class CampaignFeatureBuilderTest extends TestCase {
 		$this->assertTrue( $features->getFeatureByName( 'campaigns.test_active.bucket2' )->isEnabled() );
 	}
 
+	public function testWhenCampaignWithTwoBucketsIsActive_AllHaveStringHashRulesBasedOnBucketName() {
+		$factory = new CampaignFeatureBuilder( $this->newActiveCampaign() );
+
+		$features = $factory->getFeatures();
+
+		$this->assertStringHashRule( $features->getFeatureByName( 'campaigns.test_active.bucket1' ), 'test_active.bucket1' );
+		$this->assertStringHashRule( $features->getFeatureByName( 'campaigns.test_active.bucket2' ), 'test_active.bucket2' );
+	}
+
+	private function assertStringHashRule( Feature $feature, string $expectedStringHashValue ) {
+		$rules = $feature->getRules();
+		$this->assertCount( 1, $rules, 'Feature should have only one rule' );
+		$this->assertInstanceOf( StringHash::class, $rules[0], 'Rule must be StringHash' );
+		$this->assertEquals( $expectedStringHashValue, $rules[0]->getValue() );
+	}
+
 	public function testWhenCampaignIsActive_AllFeaturesExceptTheDefaultHaveDatePreconditions() {
 		$factory = new CampaignFeatureBuilder( $this->newActiveCampaign() );
 
 		$features = $factory->getFeatures();
 		$rules = $features->getFeatureByName( 'campaigns.test_active.bucket2' )->getRules();
 
-		$this->assertCount(
-			0,
-			$features->getFeatureByName( 'campaigns.test_active.bucket1' )->getRules(),
-			'Default bucket feature should have no rules'
-		);
 		$timeAfter = $rules[0]->getPrerequisites()[0]->getValue();
 		$timeBefore = $rules[0]->getPrerequisites()[0]->getPrerequisites()[0]->getValue();
 		$this->assertEquals( '2000-01-01 00:00:00', $timeAfter );
 		$this->assertEquals( '2099-01-01 00:00:00', $timeBefore );
 		$this->assertInstanceOf( TimeAfter::class, $rules[0]->getPrerequisites()[0] );
 		$this->assertInstanceOf( TimeBefore::class, $rules[0]->getPrerequisites()[0]->getPrerequisites()[0] );
-	}
-
-	public function testWhenCampaignWithTwoBucketsIsActive_AllFeaturesExceptTheDefaultHaveStringHashRulesBasedOnBucketName() {
-		$factory = new CampaignFeatureBuilder( $this->newActiveCampaign() );
-
-		$features = $factory->getFeatures();
-		$rules = $features->getFeatureByName( 'campaigns.test_active.bucket2' )->getRules();
-
-		$this->assertCount(
-			0,
-			$features->getFeatureByName( 'campaigns.test_active.bucket1' )->getRules(),
-			'Default bucket feature should have no rules'
-		);
-		$hash = $rules[0]->getValue();
-		$this->assertEquals( 'test_active.bucket2', $hash );
-		$this->assertInstanceOf( StringHash::class, $rules[0] );
 	}
 
 }

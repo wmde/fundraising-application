@@ -18,8 +18,8 @@ class BucketSelectionSpy implements BucketSelectionStrategy {
 		$this->bucketSelections = [];
 	}
 
-	public function selectBucketFromCampaign( Campaign $campaign ): Bucket {
-		$bucket = $this->bucketSelector->selectBucketFromCampaign( $campaign );
+	public function selectBucketForCampaign( Campaign $campaign ): Bucket {
+		$bucket = $this->bucketSelector->selectBucketForCampaign( $campaign );
 		$this->bucketSelections[] = $bucket;
 		return $bucket;
 	}

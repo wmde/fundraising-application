@@ -53,4 +53,40 @@ class CampaignTest extends TestCase {
 
 		$this->assertNull( $campaign->getBucketByIndex( 0 ) );
 	}
+
+	public function testGivenDefaultBucket_campaignCanReturnIt() {
+		$campaign = new Campaign( 'test', 't', new \DateTime(), new \DateTime(), true );
+		$firstBucket = new Bucket( 'default', $campaign, Bucket::DEFAULT );
+		$secondBucket = new Bucket( 'variant_1', $campaign, Bucket::NON_DEFAULT );
+
+		$campaign->addBucket( $firstBucket )->addBucket( $secondBucket );
+
+		$this->assertSame( $firstBucket, $campaign->getDefaultBucket() );
+	}
+
+	public function testGivenCampaignWithNoBuckets_getDefaultBucketWillThrowException() {
+		$campaign = new Campaign( 'test', 't', new \DateTime(), new \DateTime(), true );
+
+		$this->expectException( \LogicException::class );
+		$campaign->getDefaultBucket();
+	}
+
+	public function testGivenCampaignWithNoDefaultBuckets_getDefaultBucketWillThrowException() {
+		$campaign = new Campaign( 'test', 't', new \DateTime(), new \DateTime(), true );
+		$firstBucket = new Bucket( 'default', $campaign, Bucket::NON_DEFAULT );
+		$secondBucket = new Bucket( 'variant_1', $campaign, Bucket::NON_DEFAULT );
+
+		$campaign->addBucket( $firstBucket )->addBucket( $secondBucket );
+
+		$this->expectException( \LogicException::class );
+		$campaign->getDefaultBucket();
+	}
+
+	public function testGivenCampaignwithDateRange_itCanBeCheckedForExpiration() {
+		$campaign = new Campaign( 'test', 't', new \DateTime( '2018-10-01' ), new \DateTime( '2018-12-31' ), true );
+
+		$this->assertTrue( $campaign->isExpired( new \DateTime( '2018-09-09' ) ), 'Campaign is expired before start date' );
+		$this->assertTrue( $campaign->isExpired( new \DateTime( '2025-02-25' ) ), 'Campaign is expired after end date' );
+		$this->assertFalse( $campaign->isExpired( new \DateTime( '2018-10-02' ) ), 'Campaign is not expired inside date range' );
+	}
 }

@@ -5,10 +5,6 @@
 confirmation_pages:
   active: false
 
-
 skins:
-  active: false
-  buckets:
-    - "cat17"
-    - "10h16"
-  default_bucket: "cat17"
+  end: "2020-10-10"
+  active: true
