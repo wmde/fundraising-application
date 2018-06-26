@@ -5,7 +5,8 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Cli;
 
 use Symfony\Component\Console\Application;
-use WMDE\Fundraising\Frontend\Cli\ConfigValidation\ValidateConfigCommand;
+use WMDE\Fundraising\Frontend\Cli\ApplicationConfigValidation\ValidateApplicationConfigCommand;
+use WMDE\Fundraising\Frontend\Cli\CampaignConfigValidation\ValidateCampaignConfigCommand;
 
 /**
  * @license GNU GPL v2+
@@ -29,7 +30,8 @@ class FundraisingCli {
 		$this->app->setVersion( '2.0' );
 	}
 	private function registerCommands(): void {
-		$this->app->add( new ValidateConfigCommand() );
+		$this->app->add( new ValidateApplicationConfigCommand() );
+		$this->app->add( new ValidateCampaignConfigCommand() );
 		$this->app->add( new RenderMailTemplatesCommand() );
 	}
 	public function run(): void {

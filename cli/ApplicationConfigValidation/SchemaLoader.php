@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Cli\ConfigValidation;
+namespace WMDE\Fundraising\Frontend\Cli\ApplicationConfigValidation;
 
 use FileFetcher\FileFetcher;
 use FileFetcher\FileFetchingException;

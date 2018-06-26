@@ -11,7 +11,7 @@ use Twig_LoaderInterface;
 use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
 use WMDE\Fundraising\Frontend\Presentation\TwigEnvironmentConfigurator;
 use PHPUnit\Framework\TestCase;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeBucket;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\CampaignFixture;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 use WMDE\Fundraising\ContentProvider\ContentException;
 use WMDE\Fundraising\ContentProvider\ContentProvider;
@@ -34,7 +34,7 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 				]
 			]
 		] )->getFactory();
-		$factory->setSelectedBuckets( [ FakeBucket::createBucket() ] );
+		$factory->setSelectedBuckets( [ CampaignFixture::createBucket() ] );
 
 		$this->assertSame(
 			'Meeow!',
@@ -84,7 +84,7 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 			],
 			'web-basepath' => ''
 		] )->getFactory();
-		$factory->setSelectedBuckets( [ FakeBucket::createBucket() ] );
+		$factory->setSelectedBuckets( [ CampaignFixture::createBucket() ] );
 
 		$this->assertSame(
 			'<style src="/someFile.css">',
@@ -103,7 +103,7 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 			],
 			'web-basepath' => '/mydevsubdir'
 		] )->getFactory();
-		$factory->setSelectedBuckets( [ FakeBucket::createBucket() ] );
+		$factory->setSelectedBuckets( [ CampaignFixture::createBucket() ] );
 
 		$this->assertSame(
 			'<style src="/mydevsubdir/someFile.css">',
@@ -121,7 +121,7 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 				]
 			]
 		] )->getFactory();
-		$factory->setSelectedBuckets( [ FakeBucket::createBucket() ] );
+		$factory->setSelectedBuckets( [ CampaignFixture::createBucket() ] );
 
 		$prefixer = new FilePrefixer( 'mylittleprefix' );
 		$factory->setFilePrefixer( $prefixer );
@@ -144,7 +144,7 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 				]
 			]
 		] )->getFactory();
-		$factory->setSelectedBuckets( [ FakeBucket::createBucket() ] );
+		$factory->setSelectedBuckets( [ CampaignFixture::createBucket() ] );
 
 		$provider = $this->createMock( ContentProvider::class );
 		$provider->method( 'getWeb' )
@@ -171,7 +171,7 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 				]
 			]
 		] )->getFactory();
-		$factory->setSelectedBuckets( [ FakeBucket::createBucket() ] );
+		$factory->setSelectedBuckets( [ CampaignFixture::createBucket() ] );
 
 		$provider = $this->createMock( ContentProvider::class );
 		$provider->method( 'getMail' )
@@ -197,7 +197,7 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 				]
 			]
 		] )->getFactory();
-		$factory->setSelectedBuckets( [ FakeBucket::createBucket() ] );
+		$factory->setSelectedBuckets( [ CampaignFixture::createBucket() ] );
 
 		$provider = $this->createMock( ContentProvider::class );
 		$provider->method( 'getWeb' )
