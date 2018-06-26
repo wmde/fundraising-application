@@ -4,14 +4,16 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\BucketTesting;
 
+use LogicException;
+
 class BucketSelector {
 
 	private $campaigns;
-	private $selectionStrategy;
+	private $fallbackSelectionStrategy;
 
-	public function __construct( CampaignCollection $campaigns, BucketSelectionStrategy $selectionStrategy ) {
+	public function __construct( CampaignCollection $campaigns, BucketSelectionStrategy $fallbackSelectionStrategy ) {
 		$this->campaigns = $campaigns;
-		$this->selectionStrategy = $selectionStrategy;
+		$this->fallbackSelectionStrategy = $fallbackSelectionStrategy;
 	}
 
 	private function sanitizeParameters( array $params ): array {
@@ -27,14 +29,28 @@ class BucketSelector {
 	public function selectBuckets( array $cookie = [], array $urlParameters = [] ): array {
 		$urlParameters = $this->sanitizeParameters( $urlParameters );
 		$cookie = $this->sanitizeParameters( $cookie );
-		$possibleKeys = array_merge( $cookie, $urlParameters );
+		$possibleParameters = array_merge( $cookie, $urlParameters );
 
-		[ $buckets, $missingCampaigns ] = $this->campaigns->splitBucketsFromCampaigns( $possibleKeys );
+		$selectionStrategies = [
+			new InactiveCampaignBucketSelection(),
+			new ParameterBucketSelection( $possibleParameters ),
+			$this->fallbackSelectionStrategy
+		];
 
-		foreach( $missingCampaigns as $campaign ) {
-			$buckets[] = $this->selectionStrategy->selectBucketFromCampaign( $campaign );
+		$buckets = [];
+		foreach( $this->campaigns as $campaign ) {
+			$buckets[] = $this->selectBucketWithStrategies( $selectionStrategies, $campaign );
 		}
 		return $buckets;
+	}
+
+	private function selectBucketWithStrategies( array $selectionStrategies, Campaign $campaign ): Bucket {
+		foreach( $selectionStrategies as $strategy ) {
+			if ( $bucket = $strategy->selectBucketForCampaign( $campaign ) ) {
+				return $bucket;
+			}
+		}
+		throw new LogicException( 'Fallback bucket selection class must always return a bucket.' );
 	}
 
 }

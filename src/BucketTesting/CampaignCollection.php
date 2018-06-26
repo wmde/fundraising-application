@@ -4,31 +4,14 @@ declare(strict_types = 1);
 
 namespace WMDE\Fundraising\Frontend\BucketTesting;
 
-class CampaignCollection {
+use ArrayIterator;
+use IteratorAggregate;
+
+class CampaignCollection implements IteratorAggregate {
 	private $campaigns;
 
 	public function __construct( Campaign ...$campaigns ) {
 		$this->campaigns = $campaigns;
-	}
-
-	/**
-	 * Use urlKey => BucketIndex values to select matching buckets from campaigns.
-	 * Also return all campaigns that were not matched.
-	 *
-	 * @return array [ Bucket[], Campaign[] ]
-	 */
-	public function splitBucketsFromCampaigns( array $params ): array {
-		$buckets = [];
-		$campaigns = [];
-		foreach ( $this->campaigns as $campaign ) {
-			$urlKey = $campaign->getUrlKey();
-			if ( isset( $params[$urlKey] ) && $bucket = $campaign->getBucketByIndex( $params[$urlKey] ) ) {
-				$buckets[]= $bucket;
-				continue;
-			}
-			$campaigns[]= $campaign;
-		}
-		return [ $buckets, $campaigns ];
 	}
 
 	/**
@@ -47,5 +30,10 @@ class CampaignCollection {
 			return $mostDistant->getEndTimestamp() > $current->getEndTimestamp() ? $mostDistant : $current;
 		}, null );
 	}
+
+	public function getIterator(): ArrayIterator {
+		return new ArrayIterator( $this->campaigns );
+	}
+
 
 }

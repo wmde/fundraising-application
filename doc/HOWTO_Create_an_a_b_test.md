@@ -45,19 +45,20 @@ The factory method should get all its dependencies via parameter. It must have a
 
 Please check that:
 * `isFeatureActive` is called for *every* bucket of the campaign.
-* The feature for the default bucket is checked *last*, because the default bucket is always active, regardless of campaign state.
 * Throw `UnknownChoiceDefinition` with a proper error message after checking all buckets. This is an additional safeguard 
 against changed or misspelled campaign and bucket names. It is a case of "this should never happen" if the campaign 
 file is validated by the CI.
+
+If you want to have optimum performance, check the default bucket *first*, then check all the other buckets.
 
 ### Example implementation - parameterized instance
 
 ```php
 public function getHeaderTemplate( Twig_Environment $twig ): TwigTemplate {
-	if ( $this->featureToggle->isFeatureActive( 'campaigns.header_template.fancy_header' ) {
-		return new TwigTemplate( $twig, 'Fancy_Header.html.twig' );
-	} elseif ( $this->featureToggle->isFeatureActive( 'campaigns.header_template.default_header' ) {
+	if ( $this->featureToggle->isFeatureActive( 'campaigns.header_template.default_header' ) {
 		return new TwigTemplate( $twig, 'Header.html.twig' );
+	} elseif ( $this->featureToggle->isFeatureActive( 'campaigns.header_template.fancy_header' ) {
+		return new TwigTemplate( $twig, 'Fancy_Header.html.twig' );
 	}
 	throw new UnknownChoiceDefinition( 'Failed to determine header template' );
 }
@@ -67,10 +68,10 @@ public function getHeaderTemplate( Twig_Environment $twig ): TwigTemplate {
 
 ```php
 public function getHeaderTemplate( Twig_Environment $twig ): HeaderTemplateInterface {
-	if ( $this->featureToggle->isFeatureActive( 'campaigns.header_template.fancy_header' ) {
-		return new FancyHeaderTemplate( $twig );
-	} elseif ( $this->featureToggle->isFeatureActive( 'campaigns.header_template.default_header' ) {
+	if ( $this->featureToggle->isFeatureActive( 'campaigns.header_template.default_header' ) {
 		return new HeaderTemplate( $twig );
+	} elseif ( $this->featureToggle->isFeatureActive( 'campaigns.header_template.fancy_header' ) {
+		return new FancyHeaderTemplate( $twig );
 	}
 	throw new UnknownChoiceDefinition( 'Failed to determine header template' );
 }
@@ -100,11 +101,13 @@ header_template:
 	active: false
 ```
 
-The settings in `app/config/campaigns.test.yml` will be merged with the settings in `app/config/campaigns.yml`.
+The settings in `app/config/campaigns.test.yml` will be merged with the settings in `app/config/campaigns.yml`.   
+Please note that additional buckets you provide will be *merged* with the existing buckets. If you need to change the 
+order of the buckets or remove buckets, use the callback parameter of `OverridingCampaignConfigurationLoader`.
 
-Deactivating the campaigns also ensures that you always test the default path. 
+Deactivating the campaigns ensures that you always test the default path. 
 If you want to test other buckets in the campaign, you need to explicitly set a different default bucket by overriding 
-the campaign loader:
+the campaign loader with an `OverridingCampaignConfigurationLoader` like this:
 
 ```yaml
 public function testFancyHeader() {

@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\BucketTesting;
 use RemotelyLiving\Doorkeeper\Features\Feature;
 use RemotelyLiving\Doorkeeper\Features\Set;
 use RemotelyLiving\Doorkeeper\Rules\Percentage;
+use RemotelyLiving\Doorkeeper\Rules\RuleInterface;
 use RemotelyLiving\Doorkeeper\Rules\StringHash;
 use RemotelyLiving\Doorkeeper\Rules\TimeAfter;
 use RemotelyLiving\Doorkeeper\Rules\TimeBefore;
@@ -55,18 +56,19 @@ class CampaignFeatureBuilder {
 	}
 
 	private function getRules( Bucket $bucket ): array {
-		if ( $bucket->isDefaultBucket() ) {
-			return [];
+		$bucketNameMatch = new StringHash( $bucket->getId() );
+
+		if ( !$bucket->isDefaultBucket() ) {
+			$this->addDateRangePrerequisite( $bucketNameMatch, $bucket->getCampaign() );
 		}
-		$campaign = $bucket->getCampaign();
+
+		return [ $bucketNameMatch ];
+	}
+
+	private function addDateRangePrerequisite( RuleInterface $rule, Campaign $campaign ): void {
 		$dateRangeMatch = new TimeAfter( $campaign->getStartTimestamp()->format( 'Y-m-d H:i:s' ) );
 		$dateRangeMatch->addPrerequisite( new TimeBefore( $campaign->getEndTimestamp()->format( 'Y-m-d H:i:s' ) ) );
-		$bucketNameMatch = new StringHash( $bucket->getId() );
-		$bucketNameMatch->addPrerequisite( $dateRangeMatch );
-
-		return [
-			$bucketNameMatch
-		];
+		$rule->addPrerequisite( $dateRangeMatch );
 	}
 
 }
