@@ -5,22 +5,11 @@
 			margin-top: 50px;
 		}
 		.field-grp {
-			.contact-subject {
-				@include bkp(sm) {
-					max-width: 227px;
-				}
-			}
 			textarea {
 				height: 180px;
 			}
 			.error-text {
 				display: block;
-			}
-		}
-		.wrap-submit {
-			margin-top: 40px;
-			@include bkp(sm) {
-				margin-top: 80px;
 			}
 		}
 		input[type="submit"] {
@@ -35,6 +24,19 @@
 				padding: 0;
 				height: 45px;
 			}
+			@include bkp(xs) {
+				max-width: 100%;
+				display: flex;
+				margin: 0 auto;
+				padding: 0;
+				height: 45px;
+			}
+		}
+		.wrap-submit {
+			margin-top: 70px;
+			width: 90%;
+			display: flex;
+			justify-content: center;
 		}
 		.list-menu {
 			margin-top: 30px;
