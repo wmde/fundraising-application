@@ -14,8 +14,9 @@ When our system places a visitor in a bucket, it must store that assignment pers
 
 ## Decision
 * Create campaign configuration which describes the experiments in a human-readable format (YAML) with bucket names, start and end dates and contextual information.
+	* For better performance, the configuration is validated in CI, at runtime it's assumed to be correct.
 	* Create CLI-based campaign validator for logical and technical errors.
-	* Create CLI-based validator which checks verifies that each campaign has the necesseray code logic implemented and ensure that past campaigns have had their code properly pruned to prevent dead code from accumulating
+	* Create CLI-based validator which verifies that each campaign has the necessary code logic implemented and ensures that removed campaigns have had their code properly pruned to prevent dead code from accumulating
 * Add code that translates the configuration into feature toggles. Use [Doorkeeper](https://github.com/remotelyliving/doorkeeper) as a feature toggle library. We [evaluated different feature toggle libraries](https://gist.github.com/gbirke/ab53316c69341718a9dd5cb79ed32642) and chose Doorkeeper because
 	* It has the most modern code (PHP 7), 100% test coverage and the code looks most SOLID of the considered options.
 	* It already implements toggle conditions we need (check date range, check user bucket).
