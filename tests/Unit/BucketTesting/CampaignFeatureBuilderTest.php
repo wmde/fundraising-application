@@ -86,8 +86,8 @@ class CampaignFeatureBuilderTest extends TestCase {
 
 		$features = $factory->getFeatures();
 
-		$this->assertStringHashRule( $features->getFeatureByName( 'campaigns.test_active.bucket1' ), 'test_active.bucket1' );
-		$this->assertStringHashRule( $features->getFeatureByName( 'campaigns.test_active.bucket2' ), 'test_active.bucket2' );
+		$this->assertStringHashRule( $features->getFeatureByName( 'campaigns.test_active.bucket1' ), 'campaigns.test_active.bucket1' );
+		$this->assertStringHashRule( $features->getFeatureByName( 'campaigns.test_active.bucket2' ), 'campaigns.test_active.bucket2' );
 	}
 
 	private function assertStringHashRule( Feature $feature, string $expectedStringHashValue ) {

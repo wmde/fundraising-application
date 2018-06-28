@@ -10,8 +10,8 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
-use WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignValidator;
-use WMDE\Fundraising\Frontend\BucketTesting\Validation\LoggingCampaignConfigurationLoader;
+use WMDE\Fundraising\Frontend\BucketTesting\CampaignCollection;
+use WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignUtilizationValidator;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\ValidationErrorLogger;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
@@ -19,17 +19,20 @@ use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
 /**
  * @license GNU GPL v2+
  */
-class ValidateCampaignConfigCommand extends Command {
+class ValidateCampaignCodeUtilizationCommand extends Command {
 
-	const NAME = 'app:validate:campaigns';
+	const NAME = 'app:validate:campaigns:utilization';
 	const ERROR_RETURN_CODE = 1;
 	const OK_RETURN_CODE = 0;
 
+	/** @see \WMDE\Fundraising\Frontend\Factories\ChoiceFactory */
+	const CHOICE_FACTORY_LOCATION = 'src/Factories/ChoiceFactory.php';
+
 	protected function configure(): void {
 		$this->setName( self::NAME )
-			->setDescription( 'Validate campaign configuration files' )
+			->setDescription( 'Validate campaign configuration utilization in source code' )
 			->setHelp(
-				'This command validates the Campaign configuration files for errors after they have been merged'
+				'This command validates that all campaign configurations are related to a specific entry point in the code'
 			)
 			->setDefinition(
 				new InputDefinition(
@@ -46,28 +49,22 @@ class ValidateCampaignConfigCommand extends Command {
 	}
 
 	protected function execute( InputInterface $input, OutputInterface $output ): int {
-		$environment = $input->getArgument( 'environment' );
 		$errorLogger = new ValidationErrorLogger();
-		$factory = $this->getFactory( $environment );
-		$factory->setCampaignConfigurationLoader(
-			new LoggingCampaignConfigurationLoader(
-				$factory->getCampaignConfigurationLoader(), $errorLogger
-			)
+		$validator = new CampaignUtilizationValidator(
+			$this->getCampaigns( $input->getArgument( 'environment' ) ),
+			[ 'campaigns.skins.test' ],
+			self::CHOICE_FACTORY_LOCATION,
+			$errorLogger
 		);
 
-		$campaignCollection = $factory->getCampaignCollection();
-		if ( $errorLogger->hasErrors() === false ) {
-			$validator = new CampaignValidator( $campaignCollection, $errorLogger );
-
-			if ( $validator->isPassing() ) {
-				return self::OK_RETURN_CODE;
-			}
+		if ( $validator->isPassing() ) {
+			return self::OK_RETURN_CODE;
 		}
 
 		foreach ( $errorLogger->getErrors() as $error ) {
 			$output->writeln( $error );
 		}
-		$output->writeln( 'Campaign YAML validation failed.' );
+		$output->writeln( 'Campaign utilization validation failed.' );
 		return self::ERROR_RETURN_CODE;
 	}
 
@@ -84,4 +81,10 @@ class ValidateCampaignConfigCommand extends Command {
 
 		return new FunFunFactory( $configReader->getConfig() );
 	}
+
+	private function getCampaigns( string $environment ): CampaignCollection {
+		$factory = $this->getFactory( $environment );
+		return $factory->getCampaignCollection();
+	}
+
 }
