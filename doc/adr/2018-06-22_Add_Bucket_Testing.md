@@ -13,7 +13,7 @@ From a developer perspective, the new implementation of bucket testing must not 
 When our system places a visitor in a bucket, it must store that assignment persistently in the database. When querying the database, we must be able to link the record to donations/memberships if needed. No need to build an analysis software yet: The FUN team will provide the results of each bucket testing campaign as raw/aggregated data obtained though querying the database.
 
 ## Decision
-* Create campaign configuration which describes the experiments in a human-readable (YAML) with bucket names, start and end dates and contextual information.
+* Create campaign configuration which describes the experiments in a human-readable format (YAML) with bucket names, start and end dates and contextual information.
 	* Create CLI-based campaign validator for logical and technical errors.
 	* Create CLI-based validator which checks verifies that each campaign has the necesseray code logic implemented and ensure that past campaigns have had their code properly pruned to prevent dead code from accumulating
 * Add code that translates the configuration into feature toggles. Use [Doorkeeper](https://github.com/remotelyliving/doorkeeper) as a feature toggle library. We [evaluated different feature toggle libraries](https://gist.github.com/gbirke/ab53316c69341718a9dd5cb79ed32642) and chose Doorkeeper because
@@ -21,7 +21,7 @@ When our system places a visitor in a bucket, it must store that assignment pers
 	* It already implements toggle conditions we need (check date range, check user bucket).
 * All branching based on feature toggles *must* take place at creation time, i.e. in the central factory that creates the use cases and their dependencies. We created the `ChoiceFactory` for that purpose.
 
-Removing the old code that stores the result of old A/B tests (but was not used in the last 2 campaigns and stores empty default values) is not as part of the acceptance criteria.
+Removing the old code that stores the result of old A/B tests (but was not used in the 2016 and 2017 campaigns and stores empty default values) is not as part of the acceptance criteria.
 
 ## Consequences
 
@@ -32,4 +32,4 @@ The fundraising team can now experiment with all parts of the application. Examp
 * trying out different functionality on the client-side Javascript
 * add and remove functionality like payment types or user flow
 
-In the future, the Doorkeeper library will help us to always be ready deploy the current master to production by being able to turn features on and off based on environment.
+In the future, the Doorkeeper library will help us to always be ready deploy the current master to production by being able to turn features on and off based on the environment.
