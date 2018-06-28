@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Cli\ConfigValidation;
+namespace WMDE\Fundraising\Frontend\Cli\ApplicationConfigValidation;
 
 use FileFetcher\SimpleFileFetcher;
 use League\JsonGuard\Validator as JSONSchemaValidator;
@@ -19,9 +19,9 @@ use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
-class ValidateConfigCommand extends Command {
+class ValidateApplicationConfigCommand extends Command {
 
-	const NAME = 'validate-config';
+	const NAME = 'app:validate:config';
 	const DEFAULT_SCHEMA = __DIR__ . '/../../app/config/schema.json';
 	const ERROR_RETURN_CODE = 1;
 	const OK_RETURN_CODE = 0;

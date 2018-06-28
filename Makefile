@@ -71,7 +71,10 @@ stan:
 	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app php -d memory_limit=-1 vendor/bin/phpstan analyse --level=1 --no-progress cli/ src/ tests/
 
 validate-app-config:
-	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./console validate-config app/config/config.dist.json app/config/config.test.json
+	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./console app:validate:config app/config/config.dist.json app/config/config.test.json
+
+validate-campaign-config:
+	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./console app:validate:campaigns
 
 phpmd:
 	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./vendor/bin/phpmd src/ text phpmd.xml
@@ -88,8 +91,8 @@ migration-revert:
 migration-status:
 	docker-compose run --rm --no-deps app vendor/doctrine/migrations/bin/doctrine-migrations migrations:status --configuration=vendor/wmde/fundraising-store/migrations.yml
 
-ci: covers phpunit cs npm-ci validate-app-config stan
+ci: covers phpunit cs npm-ci validate-app-config validate-campaign-config stan
 
 setup: install-php install-js default-config ui setup-db
 
-.PHONY: ci clean clear covers cs install-php install-js js npm-ci npm-install phpmd phpunit phpunit-system setup stan test ui validate-app-config
+.PHONY: ci clean clear covers cs install-php install-js js npm-ci npm-install phpmd phpunit phpunit-system setup stan test ui validate-app-config validate-campaign-config
