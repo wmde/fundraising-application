@@ -76,6 +76,9 @@ validate-app-config:
 validate-campaign-config:
 	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./console app:validate:campaigns
 
+validate-campaign-utilization:
+	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./console app:validate:campaigns:utilization
+
 phpmd:
 	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./vendor/bin/phpmd src/ text phpmd.xml
 

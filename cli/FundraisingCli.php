@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Cli;
 
 use Symfony\Component\Console\Application;
 use WMDE\Fundraising\Frontend\Cli\ApplicationConfigValidation\ValidateApplicationConfigCommand;
+use WMDE\Fundraising\Frontend\Cli\CampaignConfigValidation\ValidateCampaignCodeUtilizationCommand;
 use WMDE\Fundraising\Frontend\Cli\CampaignConfigValidation\ValidateCampaignConfigCommand;
 
 /**
@@ -32,6 +33,7 @@ class FundraisingCli {
 	private function registerCommands(): void {
 		$this->app->add( new ValidateApplicationConfigCommand() );
 		$this->app->add( new ValidateCampaignConfigCommand() );
+		$this->app->add( new ValidateCampaignCodeUtilizationCommand() );
 		$this->app->add( new RenderMailTemplatesCommand() );
 	}
 	public function run(): void {

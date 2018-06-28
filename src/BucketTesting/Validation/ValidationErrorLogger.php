@@ -22,6 +22,6 @@ class ValidationErrorLogger {
 	}
 
 	public function hasErrors(): bool {
-		return empty( $this->getErrors() );
+		return !empty( $this->getErrors() );
 	}
 }
