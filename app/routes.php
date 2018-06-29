@@ -16,6 +16,8 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Validation;
 use WMDE\Euro\Euro;
+use WMDE\Fundraising\Frontend\App\Controllers\ValidateDonorController;
+use WMDE\Fundraising\Frontend\App\Controllers\ValidationController;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\AddDonationHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\AddSubscriptionHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\ApplyForMembershipHandler;
@@ -24,7 +26,6 @@ use WMDE\Fundraising\Frontend\App\RouteHandlers\PayPalNotificationHandlerForMemb
 use WMDE\Fundraising\Frontend\App\RouteHandlers\RouteRedirectionHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowDonationConfirmationHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\SofortNotificationHandler;
-use WMDE\Fundraising\Frontend\App\RouteHandlers\ValidateDonorHandler;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\DonationContext\UseCases\AddComment\AddCommentRequest;
 use WMDE\Fundraising\DonationContext\UseCases\CancelDonation\CancelDonationRequest;
@@ -45,38 +46,16 @@ use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolationListMapper;
 
 $app->post(
-	'validate-email',
-	function( Request $request ) use ( $app, $ffFactory ) {
-		$validationResult = $ffFactory->getEmailValidator()->validate( $request->request->get( 'email', '' ) );
-		return $app->json( [ 'status' => $validationResult->isSuccessful() ? 'OK' : 'ERR' ] );
-	}
+	'validate-email', ValidationController::class . '::validateEmail'
 );
 
 $app->post(
-	'validate-payment-data',
-	function( Request $request ) use ( $app, $ffFactory ) {
-
-		$amount = (float) $ffFactory->newDecimalNumberFormatter()->parse( $request->get( 'amount', '0' ) );
-		$validator = $ffFactory->newPaymentDataValidator();
-		$validationResult = $validator->validate( $amount, (string) $request->get( 'paymentType', '' ) );
-
-		if ( $validationResult->isSuccessful() ) {
-			return $app->json( [ 'status' => 'OK' ] );
-		} else {
-			$errors = [];
-			foreach( $validationResult->getViolations() as $violation ) {
-				$errors[ $violation->getSource() ] = $ffFactory->getTranslator()->trans( $violation->getMessageIdentifier() );
-			}
-			return $app->json( [ 'status' => 'ERR', 'messages' => $errors ] );
-		}
-	}
+	'validate-payment-data', ValidationController::class . '::validateDonationPayment'
 );
 
 $app->post(
 	'validate-address', // Validates donor information. This route is named badly.
-	function( Request $request ) use ( $app, $ffFactory ) {
-		return ( new ValidateDonorHandler( $ffFactory, $app ) )->handle( $request );
-	}
+	ValidateDonorController::class . '::validate'
 );
 
 $app->post(
