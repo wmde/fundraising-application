@@ -23,10 +23,10 @@
       failed_when: decode_json_config.stdout != "0"
 
     - name: Validate config file against schema
-      command: ./console app:validate:config
+      command: ./console app:validate:config app/config/config.dist.json app/config/config.prod.json chdir={{ app_dir }}/{{ release_name }}
 
     - name: Validate campaign YAML files
-      command: ./console app:validate:campaigns
+      command: ./console app:validate:campaigns chdir={{ app_dir }}/{{ release_name }}
 
     - name: Create var dir
       file: path={{ app_dir }}/{{ release_name }}/var owner={{app_owner}} group={{app_group}} state=directory
