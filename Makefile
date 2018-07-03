@@ -9,6 +9,7 @@ TEST_DIR :=
 REDUX_LOG :=
 UNIQUE_APP_CONTAINER := $(shell uuidgen)-app
 MIGRATION_VERSION :=
+ENVIRONMENT := test
 
 .DEFAULT_GOAL := ci
 
@@ -74,10 +75,10 @@ validate-app-config:
 	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./console app:validate:config app/config/config.dist.json app/config/config.test.json
 
 validate-campaign-config:
-	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./console app:validate:campaigns
+	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./console app:validate:campaigns $(ENVIRONMENT)
 
 validate-campaign-utilization:
-	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./console app:validate:campaigns:utilization
+	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./console app:validate:campaigns:utilization $(ENVIRONMENT)
 
 phpmd:
 	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./vendor/bin/phpmd src/ text phpmd.xml
