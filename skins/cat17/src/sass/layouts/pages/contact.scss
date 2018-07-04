@@ -33,13 +33,32 @@
 			}
 		}
 		.wrap-submit {
-			margin-top: 70px;
 			width: 90%;
 			display: flex;
 			justify-content: center;
+			@include bkp(sm) {
+				margin-top: 70px;
+			}
 		}
 		.list-menu {
 			margin-top: 30px;
+		}
+	}
+	@include bkp(smmax) {
+		.content {
+			.link-back {
+				a {
+					margin-left: 0;
+				}
+			}
+		}
+
+		.list-menu {
+			li {
+				&::after {
+					width: 100%;
+				}
+			}
 		}
 	}
 }
