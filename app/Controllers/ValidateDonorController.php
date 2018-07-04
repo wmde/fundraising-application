@@ -2,11 +2,13 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\App\RouteHandlers;
+namespace WMDE\Fundraising\Frontend\App\Controllers;
 
 use Silex\Application;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\TranslatorInterface;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donor;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonorAddress;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonorName;
@@ -18,26 +20,18 @@ use WMDE\FunValidators\ConstraintViolation;
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class ValidateDonorHandler {
+class ValidateDonorController {
 
-	private $ffFactory;
-	private $app;
-
-	public function __construct( FunFunFactory $ffFactory, Application $app ) {
-		$this->ffFactory = $ffFactory;
-		$this->app = $app;
-	}
-
-	public function handle( Request $request ): Response {
+	public function validate( Request $request, FunFunFactory $ffFactory ): Response {
 		$validationResult =
-			$this->ffFactory->newValidateDonorUseCase()
+			$ffFactory->newValidateDonorUseCase()
 				->validateDonor( $this->newRequestModel( $request ) );
 
 		if ( $validationResult->isSuccessful() ) {
 			return $this->newSuccessResponse();
 		}
 
-		return $this->newErrorResponse( ...$validationResult->getViolations() );
+		return $this->newErrorResponse( $ffFactory->getTranslator(), ...$validationResult->getViolations() );
 	}
 
 	private function newRequestModel( Request $request ): ValidateDonorRequest {
@@ -56,17 +50,17 @@ class ValidateDonorHandler {
 	}
 
 	private function newSuccessResponse(): Response {
-		return $this->app->json( [ 'status' => 'OK' ] );
+		return new JsonResponse( [ 'status' => 'OK' ] );
 	}
 
-	private function newErrorResponse( ConstraintViolation ...$violations ) {
+	private function newErrorResponse( TranslatorInterface $translator, ConstraintViolation ...$violations ): Response {
 		$errors = [];
 
 		foreach( $violations as $violation ) {
-			$errors[$violation->getSource()] = $this->ffFactory->getTranslator()->trans( $violation->getMessageIdentifier() );
+			$errors[$violation->getSource()] = $translator->trans( $violation->getMessageIdentifier() );
 		}
 
-		return $this->app->json( [ 'status' => 'ERR', 'messages' => $errors ] );
+		return new JsonResponse( [ 'status' => 'ERR', 'messages' => $errors ] );
 	}
 
 }
