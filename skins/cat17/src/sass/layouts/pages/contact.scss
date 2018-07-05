@@ -46,6 +46,8 @@
 	}
 	@include bkp(smmax) {
 		.content {
+			padding-top: 24px; /* Add a bit more space to the submit button container so that it's visually separated from form fields but not too much */
+
 			.link-back {
 				a {
 					margin-left: 0;
