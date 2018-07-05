@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Cli\ApplicationConfigValidation;
 
 use FileFetcher\SimpleFileFetcher;
-use League\JsonGuard\Validator as JSONSchemaValidator;
+use JsonSchema\Validator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -58,19 +58,15 @@ class ValidateApplicationConfigCommand extends Command {
 		}
 
 		$schema = ( new SchemaLoader( new SimpleFileFetcher() ) )->loadSchema( $input->getOption( 'schema' ) );
+		$validator = new Validator();
 
-		$validator = new JSONSchemaValidator(
-			$configObject,
-			$schema
-		);
-
-		if ( $validator->passes() ) {
+		$validator->validate( $configObject, $schema );
+		if ( $validator->isValid() ) {
 			return self::OK_RETURN_CODE;
 		}
 
-		$renderer = new ValidationErrorRenderer( $schema );
-		foreach ( $validator->errors() as $error ) {
-			$output->writeln( $renderer->render( $error ) );
+		foreach ( $validator->getErrors() as $error ) {
+			$output->writeln( ValidationErrorRenderer::render( $error ) );
 		}
 
 		return self::ERROR_RETURN_CODE;
