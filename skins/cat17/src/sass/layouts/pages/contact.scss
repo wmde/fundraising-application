@@ -5,22 +5,11 @@
 			margin-top: 50px;
 		}
 		.field-grp {
-			.contact-subject {
-				@include bkp(sm) {
-					max-width: 227px;
-				}
-			}
 			textarea {
 				height: 180px;
 			}
 			.error-text {
 				display: block;
-			}
-		}
-		.wrap-submit {
-			margin-top: 40px;
-			@include bkp(sm) {
-				margin-top: 80px;
 			}
 		}
 		input[type="submit"] {
@@ -35,9 +24,43 @@
 				padding: 0;
 				height: 45px;
 			}
+			@include bkp(xs) {
+				max-width: 100%;
+				display: flex;
+				margin: 0 auto;
+				padding: 0;
+				height: 45px;
+			}
+		}
+		.wrap-submit {
+			width: 90%;
+			display: flex;
+			justify-content: center;
+			@include bkp(sm) {
+				margin-top: 70px;
+			}
 		}
 		.list-menu {
 			margin-top: 30px;
+		}
+	}
+	@include bkp(smmax) {
+		.content {
+			padding-top: 24px; /* Add a bit more space to the submit button container so that it's visually separated from form fields but not too much */
+
+			.link-back {
+				a {
+					margin-left: 0;
+				}
+			}
+		}
+
+		.list-menu {
+			li {
+				&::after {
+					width: 100%;
+				}
+			}
 		}
 	}
 }

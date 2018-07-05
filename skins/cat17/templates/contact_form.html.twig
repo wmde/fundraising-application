@@ -7,25 +7,36 @@
 {% block main %}
 	<div class="container">
 		<form method="post" action="{$ basepath $}/contact/get-in-touch"  id="contact-form" class="row">
-			<div class="content col-xs-12 col-md-9">
+			<div class="content col-xs-12 col-sm-6 col-md-8">
 				<h2 class="h1">Kontakt</h2>
 				<div class="row">
-					<fieldset class="col-xs-12 col-sm-5">
+					<fieldset class="col-xs-12 col-md-6">
 						<div class="field-grp">
 							<input type="text" id="name" name="firstname" placeholder="{$ 'contact_firstname'|trans $}">
 							<label for="name" class="sr-only">{$ 'contact_firstname'|trans $}</label>
 							{$ util.form_error('firstname', errors) $}
 						</div>
+					</fieldset>
+					<fieldset class="col-xs-12 col-md-6">
 						<div class="field-grp">
 							<input type="text" id="surname" name="lastname" placeholder="{$ 'contact_lastname'|trans $}">
 							<label for="surname" class="sr-only">{$ 'contact_lastname'|trans $}</label>
 							{$ util.form_error('lastname', errors) $}
 						</div>
+					</fieldset>
+				</div>
+				<div class="row">
+					<fieldset class="col-xs-12 col-md-6">
 						<div class="field-grp">
 							<input type="email" id="email" name="email" placeholder="{$ 'contact_email'|trans $}">
 							<label for="email" class="sr-only">{$ 'contact_email'|trans $}</label>
 							{$ util.form_error('email', errors) $}
 						</div>
+						{$ util.form_error('category', errors) $}
+					</fieldset>
+				</div>
+				<div class="row">
+					<fieldset class="col-xs-12 col-md-6">
 						<select class="no-outline category" id="category" name="category"
 								data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true}'>
 							<option hidden class="hideme" value="">{$ 'contact_topic_title' | trans $}</option>
@@ -33,31 +44,34 @@
 								<option {% if category == cat | trans %}selected{% endif %}>{$ cat | trans $}</option>
 							{% endfor %}
 						</select>
-						{$ util.form_error('category', errors) $}
 					</fieldset>
-					<fieldset class="col-xs-12 col-sm-7">
+					<fieldset class="col-xs-12 col-md-6">
 						<div class="field-grp">
 							<input type="text" class="contact-subject" id="subject" name="subject" placeholder="{$ 'contact_subject'|trans $}">
 							<label for="subject" class="sr-only">{$ 'contact_subject'|trans $}</label>
 							{$ util.form_error('subject', errors) $}
 						</div>
-						<div class="field-grp">
-							<textarea name="messageBody" rows="50" cols="10" id="comment" placeholder="{$ 'contact_body'|trans $}"></textarea>
-							<label for="subject" class="sr-only">{$ 'contact_body'|trans $}</label>
-							{$ util.form_error('messageBody', errors) $}
-						</div>
 					</fieldset>
 				</div>
+				<div class="row">
+					<div class="field-grp col-xs-12 col-sm-12">
+						<textarea name="messageBody" rows="50" cols="10" id="comment" placeholder="{$ 'contact_body'|trans $}"></textarea>
+						<label for="subject" class="sr-only">{$ 'contact_body'|trans $}</label>
+						{$ util.form_error('messageBody', errors) $}
+					</div>
+				</div>
 			</div>
-			<div class="col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-8 col-md-4">
-				<div class="wrap-submit btn">
-					<input type="submit" value="{$ 'contact_submit'|trans $}" class="btn btn-introduction bk-blue text-center text-uppercase">
+			<div class="content col-xs-12 col-sm-6 col-md-4">
+				<div class="row align-items-end">
+					<div class="wrap-submit btn">
+						<input type="submit" value="{$ 'contact_submit'|trans $}" class="btn btn-introduction bk-blue text-center text-uppercase">
+					</div>
+				</div>
+				<div class="row align-items-end">
+                    {% include 'partials/back_link.html.twig' %}
 				</div>
 			</div>
 		</form>
-
-		<div class="row">
-			{% include 'partials/back_link.html.twig' %}
-		</div>
+	</div>
 	</div>
 {% endblock %}

@@ -1,78 +1,79 @@
 .list-menu {
-    li {
-
-        height: 57px;
-        padding-right: 30px;
+	li {
+		height: 57px;
+		padding-right: 30px;
 		font-weight: $font-main-light;
-        position: relative;
-        &:after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 800px;
-            border-bottom: 1px solid #808080;
-
-            @include bkp(sm) {
-                width: 100%;
-            }
-        }
-        &:hover, &:focus {
-            &:after {
-                @include themify($themes) {
-                    border-bottom: themed('border1pxPrimary');
-                }
-            }
-        }
-        a {
-            display: block;
-            position: relative;
-            top:50%;
-            transform: translateY(-50%);
-            &:after {
-                content: $icon-keyboard_arrow_right;
-                position: absolute;
-                right: -30px;
-                font-family: 'icomoonwikimedia';
-                font-size: 20px;
-                top:50%;
-                transform: translateY(-50%);
-            }
-        }
-        &.facebook {
-            a:after {
-                content: $icon-facebook;
-                font-size: 14px;
-            }
-        }
-        &.twitter {
-            a:after {
-                content: $icon-twitter;
-                font-size: 14px;
-            }
-        }
-    }
-    &.link-reverse {
-        li {
-            padding-left: 30px;
-            padding-right: 0;
-            a {
-                &:after {
-                    content: "";
-                }
-                &:before {
-                    content: $icon-keyboard_arrow_left;
-                    position: absolute;
-                    left: -30px;
-                    font-family: 'icomoonwikimedia';
-                    font-size: 20px;
-                    top: 50%;
-                    transform: translateY(-50%);
-                }
-            }
-        }
-       // margin-bottom: 60px;
-    }
+		position: relative;
+		&:after {
+			content: '';
+			position: absolute;
+			left: 0;
+			bottom: 0;
+			width: 800px;
+			border-bottom: 1px solid #808080;
+			@include bkp(sm) {
+				width: 800px;
+			}
+			@include bkp(xs) {
+				width: 320px;
+			}
+		}
+		&:hover, &:focus {
+			&:after {
+				@include themify($themes) {
+					border-bottom: themed('border1pxPrimary');
+				}
+			}
+		}
+		a {
+			display: block;
+			position: relative;
+			top:50%;
+			transform: translateY(-50%);
+			&:after {
+				content: $icon-keyboard_arrow_right;
+				position: absolute;
+				right: -30px;
+				font-family: 'icomoonwikimedia';
+				font-size: 20px;
+				top:50%;
+				transform: translateY(-50%);
+			}
+		}
+		&.facebook {
+			a:after {
+				content: $icon-facebook;
+				font-size: 14px;
+			}
+		}
+		&.twitter {
+			a:after {
+				content: $icon-twitter;
+				font-size: 14px;
+			}
+		}
+	}
+	&.link-reverse {
+		li {
+			padding-left: 30px;
+			padding-right: 0;
+			a {
+				&:after {
+					content: "";
+				}
+				&:before {
+					content: $icon-keyboard_arrow_left;
+					position: absolute;
+					left: -30px;
+					font-family: 'icomoonwikimedia';
+					font-size: 20px;
+					top: 50%;
+					transform: translateY(-50%);
+				}
+			}
+		}
+	   // margin-bottom: 60px;
+	}
 	&.link-tax li {
 		height: 110px;
 	}

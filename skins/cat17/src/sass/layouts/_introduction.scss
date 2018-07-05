@@ -11,17 +11,11 @@
 	}
 	.link-back {
 		margin-top: 22px;
-
-		@include bkp(md) {
-			padding-left: 30px;
-		}
-		@include bkp(lg) {
-			padding-left: 52px;
-		}
 		a {
 			display: block;
-			border-bottom: 1px solid $gray-light;
 			padding: 10px 0;
+			text-decoration: none;
+			margin-left: 3em;
 			&:after {
 				content: $icon-keyboard_arrow_right;
 				font-family: 'icomoonwikimedia';
