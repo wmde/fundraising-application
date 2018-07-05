@@ -22,7 +22,7 @@ class Bucket {
 	}
 
 	public function getId(): string {
-		return $this->getCampaign()->getName() . '.' . $this->getName();
+		return 'campaigns.' . $this->getCampaign()->getName() . '.' . $this->getName();
 	}
 
 	public function getCampaign(): Campaign {

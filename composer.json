@@ -44,7 +44,8 @@
 		"symfony/filesystem": "^4.1",
 		"symfony/yaml": "^4.1",
 		"remotelyliving/doorkeeper": "^1.4",
-		"doctrine/migrations": "~1.8"
+		"doctrine/migrations": "~1.8",
+		"nikic/php-parser": "~4.0"
 	},
 	"repositories": [
 		{
@@ -118,7 +119,7 @@
 		"sorien/silex-dbal-profiler": "~2.0",
 		"wmde/fundraising-frontend-content": "dev-test",
 		"symfony/css-selector": "^3.2",
-		"phpstan/phpstan": "^0.9",
+		"phpstan/phpstan": "^0.10",
 		"matthiasnoback/symfony-config-test": "^4.0"
 	},
 	"autoload": {

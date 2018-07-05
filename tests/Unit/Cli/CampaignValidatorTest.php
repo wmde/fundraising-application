@@ -4,21 +4,16 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Cli;
 
-use FileFetcher\FileFetchingException;
-use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-use Symfony\Component\Yaml\Exception\ParseException;
 use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignCollection;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignValidator;
-use WMDE\Fundraising\Frontend\BucketTesting\Validation\LoggingCampaignConfigurationLoader;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule\MinBucketCountRule;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\ValidationErrorLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule\DefaultBucketRule;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule\StartAndEndTimeRule;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule\UniqueBucketRule;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\CampaignFixture;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingCampaignConfigurationLoader;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignValidator
