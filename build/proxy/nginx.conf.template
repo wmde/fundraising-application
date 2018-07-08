@@ -36,7 +36,7 @@ server {
             fastcgi_param  PATH_INFO       $fastcgi_path_info;
             fastcgi_param  REQUEST_URI     $saved_uri;
             fastcgi_param  PATH_TRANSLATED $document_root$fastcgi_script_name;
-            fastcgi_pass   app:9000;
+            fastcgi_pass   ${PHP_FPM_HOST}:9000;
         }
 
 		location = /status {

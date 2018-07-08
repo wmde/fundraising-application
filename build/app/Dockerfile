@@ -1,4 +1,4 @@
-FROM php:7.2-fpm
+FROM php:7.2-fpm as app
 
 RUN mkdir -p /usr/share/nginx/www/spenden.wikimedia.de/current/var/cache \
     && mkdir -p /usr/share/nginx/www/spenden.wikimedia.de/current/var/doctrine_proxies \
@@ -42,3 +42,12 @@ RUN apt-get install -y ssmtp \
     && echo "mailhub=mailhog:1025" >> /etc/ssmtp/ssmtp.conf
 
 COPY ./mailhog.ini /usr/local/etc/php/conf.d/mailhog.ini
+
+# xDebug-enabled debug container configuration below
+
+FROM app as app_debug
+
+RUN pecl install xdebug-2.6.0 \
+    && docker-php-ext-enable xdebug \
+    && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini
