@@ -24,6 +24,10 @@ module.exports = {
 			donorTypeAndAddressAreValid: require( './lib/state_aggregation/membership/donor_type_and_address_are_valid' ),
 			paymentAndBankDataAreValid: require( './lib/state_aggregation/membership/payment_and_bank_data_are_valid' ),
 			salutationIsValid: require( './lib/state_aggregation/membership/salutation_is_valid' )
+		},
+		DonorUpdate: {
+			donorTypeAndAddressAreValid: require( './lib/state_aggregation/donorUpdate/donor_type_and_address_are_valid' ),
+			salutationIsValid: require( './lib/state_aggregation/donorUpdate/salutation_is_valid' )
 		}
 	},
 	View: {

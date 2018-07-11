@@ -129,9 +129,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			'bic' => ValidMembershipApplication::PAYMENT_BIC,
 			'account_number' => ValidMembershipApplication::PAYMENT_BANK_ACCOUNT,
 			'bank_code' => ValidMembershipApplication::PAYMENT_BANK_CODE,
-
-			'templateCampaign' => ValidMembershipApplication::TEMPLATE_CAMPAIGN,
-			'templateName' => ValidMembershipApplication::TEMPLATE_NAME,
 		];
 	}
 
@@ -353,9 +350,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			'payment_type' => (string)ValidMembershipApplication::PAYMENT_TYPE_PAYPAL,
 			'membership_fee_interval' => (string)ValidMembershipApplication::PAYMENT_PERIOD_IN_MONTHS,
 			'membership_fee' => (string)ValidMembershipApplication::PAYMENT_AMOUNT_IN_EURO, // TODO: change to localized
-
-			'templateCampaign' => ValidMembershipApplication::TEMPLATE_CAMPAIGN,
-			'templateName' => ValidMembershipApplication::TEMPLATE_NAME,
 		];
 	}
 

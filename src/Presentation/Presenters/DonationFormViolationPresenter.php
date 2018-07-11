@@ -127,6 +127,7 @@ class DonationFormViolationPresenter {
 			BankDataValidationResult::SOURCE_IBAN => 'bankData',
 			BankDataValidationResult::SOURCE_BIC => 'bankData',
 
+			Result::SOURCE_DONOR_ADDRESS_TYPE => 'address',
 			Result::SOURCE_DONOR_EMAIL => 'address',
 			Result::SOURCE_DONOR_COMPANY => 'address',
 			Result::SOURCE_DONOR_FIRST_NAME => 'address',

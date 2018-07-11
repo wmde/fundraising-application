@@ -2,9 +2,9 @@
 #
 # Set all campaigns to inactive to force the test server to use the default code paths
 
-confirmation_pages:
-  active: false
-
 skins:
   end: "2020-10-10"
+  active: true
+
+donation_address:
   active: true

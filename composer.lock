@@ -2067,21 +2067,22 @@
         },
         {
             "name": "ramsey/uuid",
-            "version": "3.7.3",
+            "version": "3.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ramsey/uuid.git",
-                "reference": "44abcdad877d9a46685a3a4d221e3b2c4b87cb76"
+                "reference": "d09ea80159c1929d75b3f9c60504d613aeb4a1e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ramsey/uuid/zipball/44abcdad877d9a46685a3a4d221e3b2c4b87cb76",
-                "reference": "44abcdad877d9a46685a3a4d221e3b2c4b87cb76",
+                "url": "https://api.github.com/repos/ramsey/uuid/zipball/d09ea80159c1929d75b3f9c60504d613aeb4a1e3",
+                "reference": "d09ea80159c1929d75b3f9c60504d613aeb4a1e3",
                 "shasum": ""
             },
             "require": {
-                "paragonie/random_compat": "^1.0|^2.0",
-                "php": "^5.4 || ^7.0"
+                "paragonie/random_compat": "^1.0|^2.0|9.99.99",
+                "php": "^5.4 || ^7.0",
+                "symfony/polyfill-ctype": "^1.8"
             },
             "replace": {
                 "rhumsaa/uuid": "self.version"
@@ -2089,16 +2090,17 @@
             "require-dev": {
                 "codeception/aspect-mock": "^1.0 | ~2.0.0",
                 "doctrine/annotations": "~1.2.0",
-                "goaop/framework": "1.0.0-alpha.2 | ^1.0 | ^2.1",
+                "goaop/framework": "1.0.0-alpha.2 | ^1.0 | ~2.1.0",
                 "ircmaxell/random-lib": "^1.1",
                 "jakub-onderka/php-parallel-lint": "^0.9.0",
                 "mockery/mockery": "^0.9.9",
                 "moontoast/math": "^1.1",
                 "php-mock/php-mock-phpunit": "^0.3|^1.1",
-                "phpunit/phpunit": "^4.7|^5.0",
+                "phpunit/phpunit": "^4.7|^5.0|^6.5",
                 "squizlabs/php_codesniffer": "^2.3"
             },
             "suggest": {
+                "ext-ctype": "Provides support for PHP Ctype functions",
                 "ext-libsodium": "Provides the PECL libsodium extension for use with the SodiumRandomGenerator",
                 "ext-uuid": "Provides the PECL UUID extension for use with the PeclUuidTimeGenerator and PeclUuidRandomGenerator",
                 "ircmaxell/random-lib": "Provides RandomLib for use with the RandomLibAdapter",
@@ -2143,7 +2145,7 @@
                 "identifier",
                 "uuid"
             ],
-            "time": "2018-01-20T00:28:24+00:00"
+            "time": "2018-07-19T23:38:55+00:00"
         },
         {
             "name": "remotelyliving/doorkeeper",
@@ -3921,18 +3923,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "ba391fd3bb3d9530f33ae8ca51f5a5d95c8be5b3"
+                "reference": "3adbacc355ebf952a2b474ca53e6312f7a81f0a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/ba391fd3bb3d9530f33ae8ca51f5a5d95c8be5b3",
-                "reference": "ba391fd3bb3d9530f33ae8ca51f5a5d95c8be5b3",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/3adbacc355ebf952a2b474ca53e6312f7a81f0a7",
+                "reference": "3adbacc355ebf952a2b474ca53e6312f7a81f0a7",
                 "shasum": ""
             },
             "require": {
                 "doctrine/orm": "~2.5",
                 "ext-curl": "*",
-                "php": ">=7.1",
+                "php": ">=7.2",
                 "pimple/pimple": "~3.0",
                 "psr/log": "~1.0",
                 "wmde/email-address": "~1.0",
@@ -3947,9 +3949,9 @@
                 "ext-pdo_sqlite": "*",
                 "mikey179/vfsstream": "~1.6",
                 "ockcyp/covers-validator": "@dev",
-                "phpmd/phpmd": "~2.3",
-                "phpstan/phpstan": "^0.7.0",
-                "phpunit/phpunit": "~6.0",
+                "phpmd/phpmd": "~2.6",
+                "phpstan/phpstan": "^0.10",
+                "phpunit/phpunit": "~7.0",
                 "slevomat/coding-standard": "^2.3",
                 "squizlabs/php_codesniffer": "~2.8",
                 "whatthejeff/nyancat-phpunit-resultprinter": "~1.2",
@@ -3972,7 +3974,7 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/FundraisingDonations",
-            "time": "2018-07-17T15:30:20+00:00"
+            "time": "2018-07-20T16:08:00+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
@@ -7572,12 +7574,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "f6e8f166e18a46032f07ca0e35574677c029e700"
+                "reference": "82de0382f0ddfa50036d51ea08fb7e6ac7365219"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/f6e8f166e18a46032f07ca0e35574677c029e700",
-                "reference": "f6e8f166e18a46032f07ca0e35574677c029e700",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/82de0382f0ddfa50036d51ea08fb7e6ac7365219",
+                "reference": "82de0382f0ddfa50036d51ea08fb7e6ac7365219",
                 "shasum": ""
             },
             "require-dev": {
@@ -7610,7 +7612,7 @@
                 "GPL-2.0+"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2018-07-17T10:41:47+00:00"
+            "time": "2018-07-20T15:21:47+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",
