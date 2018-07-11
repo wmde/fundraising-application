@@ -53,6 +53,7 @@ use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationTokenFetcher;
 use WMDE\Fundraising\DonationContext\DataAccess\UniqueTransferCodeGenerator;
 use WMDE\Fundraising\DonationContext\Domain\Repositories\CommentFinder;
 use WMDE\Fundraising\DonationContext\Domain\Repositories\DonationRepository;
+use WMDE\Fundraising\DonationContext\Domain\Validation\DonorValidator;
 use WMDE\Fundraising\DonationContext\DonationAcceptedEventHandler;
 use WMDE\Fundraising\DonationContext\Infrastructure\BestEffortDonationEventLogger;
 use WMDE\Fundraising\DonationContext\Infrastructure\DonationConfirmationMailer;
@@ -73,6 +74,8 @@ use WMDE\Fundraising\DonationContext\UseCases\GetDonation\GetDonationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\HandlePayPalPaymentNotification\HandlePayPalPaymentCompletionNotificationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\ListComments\ListCommentsUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\SofortPaymentNotification\SofortPaymentNotificationUseCase;
+use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorUseCase;
+use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorValidator;
 use WMDE\Fundraising\DonationContext\UseCases\ValidateDonor\ValidateDonorUseCase;
 use WMDE\Fundraising\Frontend\BucketTesting\RandomBucketSelection;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
@@ -130,6 +133,7 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\InternalErrorHtmlPresenter
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipFormViolationPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\PageNotFoundPresenter;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\DonorUpdateHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\SubscriptionContext\DataAccess\DoctrineSubscriptionRepository;
 use WMDE\Fundraising\SubscriptionContext\Domain\Repositories\SubscriptionRepository;
@@ -1001,6 +1005,19 @@ class FunFunFactory implements ServiceProviderInterface {
 		);
 	}
 
+	public function newUpdateDonorUseCase( string $updateToken, string $accessToken ): UpdateDonorUseCase {
+		return new UpdateDonorUseCase(
+			$this->newDonationAuthorizer( $updateToken, $accessToken ),
+			$this->newUpdateDonorValidator(),
+			$this->getDonationRepository(),
+			$this->newDonationConfirmationMailer()
+		);
+	}
+
+	private function newUpdateDonorValidator(): UpdateDonorValidator {
+		return new UpdateDonorValidator( new DonorValidator( $this->getEmailValidator() ) );
+	}
+
 	private function newDonationConfirmationMailer(): DonationConfirmationMailer {
 		return new DonationConfirmationMailer(
 			$this->newTemplateMailer(
@@ -1121,10 +1138,19 @@ class FunFunFactory implements ServiceProviderInterface {
 				array_merge(
 					$this->getDefaultTwigVariables(),
 					[
-						'piwikGoals' => [ 3 ],
 						'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForMembershipApplication()
 					]
 				)
+			),
+			$this->getUrlGenerator()
+		);
+	}
+
+	public function newDonorUpdatePresenter(): DonorUpdateHtmlPresenter {
+		return new DonorUpdateHtmlPresenter(
+			new TwigTemplate(
+				$this->getSkinTwig(), 'Donation_Confirmation_FeatureToggle_Address.html.twig',
+				$this->getDefaultTwigVariables()
 			),
 			$this->getUrlGenerator()
 		);

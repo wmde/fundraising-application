@@ -2,11 +2,11 @@
 #
 # Set all campaigns to inactive to force the tests using the default code paths
 
-confirmation_pages:
-  active: false
-
 skins:
   active: false
   buckets:
      - "test"
   default_bucket: "test"
+
+donation_address:
+  active: true

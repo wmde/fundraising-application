@@ -11,6 +11,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Validation;
 use WMDE\Euro\Euro;
+use WMDE\Fundraising\Frontend\App\Controllers\UpdateDonorController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidateDonorController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidationController;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\AddDonationHandler;
@@ -327,6 +328,10 @@ class Routes {
 				return ( new AddDonationHandler( $ffFactory, $app ) )
 					->handle( $request );
 			}
+		);
+
+		$app->post(
+			'donation/update', UpdateDonorController::class . '::updateDonor'
 		);
 
 // Show a donation form with pre-filled payment values, e.g. when coming from a banner

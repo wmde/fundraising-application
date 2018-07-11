@@ -34,8 +34,6 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 			$responseContent = $this->retrieveDonationConfirmation( $client, $donation->getId() );
 
 			$this->assertDonationDataInResponse( $donation, $responseContent );
-			$this->assertContains( 'Template Name: expanded_membership_form', $responseContent );
-			$this->assertContains( 'Template Campaign: confirmation_pages', $responseContent );
 		} );
 	}
 
@@ -47,8 +45,6 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 			$responseContent = $this->retrieveDonationConfirmation( $client, $donation->getId() );
 
 			$this->assertDonationDataInResponse( $donation, $responseContent );
-			$this->assertContains( 'Template Name: expanded_membership_form', $responseContent );
-			$this->assertContains( 'Template Campaign: confirmation_pages', $responseContent );
 		} );
 	}
 
@@ -60,8 +56,6 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 			$responseContent = $this->retrieveDonationConfirmation( $client, $donation->getId() );
 
 			$this->assertEmbeddedMembershipFormIsPrefilled( $donation, $responseContent );
-			$this->assertContains( 'Template Name: expanded_membership_form', $responseContent );
-			$this->assertContains( 'Template Campaign: confirmation_pages', $responseContent );
 		} );
 	}
 
@@ -87,22 +81,6 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		$this->assertContains( 'initialFormValues.accountNumber: ' . $bankData->getAccount(), $responseContent );
 		$this->assertContains( 'initialFormValues.bankCode: ' . $bankData->getBankCode(), $responseContent );
 		$this->assertContains( 'initialFormValues.bankname: ' . $bankData->getBankName(), $responseContent );
-	}
-
-	public function testGivenAlternativeConfirmationPageCampaign_alternativeContentIsDisplayed(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setCampaignConfigurationLoader( new OverridingCampaignConfigurationLoader(
-				$factory->getCampaignConfigurationLoader(),
-				[ 'confirmation_pages' => [ 'default_bucket' => 'collapsed_membership_form' ] ]
-			) );
-
-			$donation = $this->newStoredDonation( $factory );
-
-			$responseContent = $this->retrieveDonationConfirmation( $client, $donation->getId() );
-
-			$this->assertContains( 'Template Name: collapsed_membership_form', $responseContent );
-			$this->assertContains( 'Template Campaign: confirmation_pages', $responseContent );
-		} );
 	}
 
 	public function testGivenAnonymousDonation_confirmationPageReflectsThat(): void {

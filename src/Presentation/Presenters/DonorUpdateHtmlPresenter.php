@@ -5,18 +5,18 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
-use WMDE\Fundraising\Frontend\Infrastructure\PiwikEvents;
+use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorResponse;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
-use WMDE\Fundraising\Frontend\Presentation\DonationMembershipApplicationAdapter;
 use WMDE\Fundraising\Frontend\Presentation\DonorDataFormatter;
+use WMDE\Fundraising\Frontend\Presentation\DonationMembershipApplicationAdapter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
 /**
- * Render the confirmation pages for donations
+ * Render the confirmation pages for donations with additional form to enter / update donation data
  *
- * @licence GNU GPL v2+
+ * @license GNU GPL v2+
  */
-class DonationConfirmationHtmlPresenter {
+class DonorUpdateHtmlPresenter {
 
 	private $template;
 	private $donationMembershipApplicationAdapter;
@@ -30,15 +30,21 @@ class DonationConfirmationHtmlPresenter {
 		$this->donorDataFormatter = new DonorDataFormatter();
 	}
 
-	public function present( Donation $donation, string $updateToken, string $accessToken, PiwikEvents $piwikEvents ): string {
+	public function present( UpdateDonorResponse $updateDonorResponse, Donation $donation, string $updateToken, string $accessToken ): string {
 		return $this->template->render(
-			$this->getConfirmationPageArguments( $donation, $updateToken, $accessToken, $piwikEvents )
+			array_merge(
+				$this->getConfirmationPageArguments( $updateDonorResponse, $donation, $updateToken, $accessToken ),
+				[
+					'updateData' => [
+						'isSuccessful' => $updateDonorResponse->isSuccessful(),
+						'message' => !empty( $updateDonorResponse->getSuccessMessage() ) ?
+							$updateDonorResponse->getSuccessMessage() : $updateDonorResponse->getErrorMessage()
+					] ]
+			)
 		);
 	}
 
-	private function getConfirmationPageArguments( Donation $donation, string $updateToken, string $accessToken,
-		PiwikEvents $piwikEvents ): array {
-
+	private function getConfirmationPageArguments( UpdateDonorResponse $updateDonorResponse, Donation $donation, string $updateToken, string $accessToken ): array {
 		return [
 			'donation' => [
 				'id' => $donation->getId(),
@@ -47,7 +53,9 @@ class DonationConfirmationHtmlPresenter {
 				'interval' => $donation->getPaymentIntervalInMonths(),
 				'paymentType' => $donation->getPaymentMethodId(),
 				'optsIntoNewsletter' => $donation->getOptsIntoNewsletter(),
-				'bankTransferCode' => $this->donorDataFormatter->getBankTransferCode( $donation->getPaymentMethod() ),
+				'bankTransferCode' => $this->donorDataFormatter->getBankTransferCode(
+					$donation->getPaymentMethod()
+				),
 				'creationDate' => $this->donorDataFormatter->getDonationDate(),
 				'cookieDuration' => $this->donorDataFormatter->getHideBannerCookieDuration(),
 				'updateToken' => $updateToken,
@@ -55,11 +63,7 @@ class DonationConfirmationHtmlPresenter {
 			],
 			'address' => $this->donorDataFormatter->getAddressArguments( $donation ),
 			'bankData' => $this->donorDataFormatter->getBankDataArguments( $donation->getPaymentMethod() ),
-			// TODO Remove this together with 10h16 skin. cat17 does not display confirmation and membership form on the same page.
-			'initialFormValues' => $this->donationMembershipApplicationAdapter->getInitialMembershipFormValues(
-				$donation
-			),
-			'piwikEvents' => $piwikEvents->getEvents(),
+			'piwikEvents' => [],
 			'commentUrl' => $this->urlGenerator->generateRelativeUrl(
 				'AddCommentPage',
 				[
