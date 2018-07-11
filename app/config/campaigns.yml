@@ -21,22 +21,22 @@
 # default_bucket: used bucket when campaign is not active. Must be listed in buckets.
 # url_key: URL parameter key used for assigning buckets to people
 
-confirmation_pages:
-  description: Test different confirmation page templates
-  reference: "https://phabricator.wikimedia.org/T196337"
-  start: "2016-10-01"
+donation_address:
+  description: Test address form being required immediately against only being presented optionally on the confirmation page
+  reference: "https://phabricator.wikimedia.org/T196885"
+  start: "2018-07-01"
   end: "2018-12-31"
   active: true
   buckets:
-    - expanded_membership_form
-    - collapsed_membership_form
-  default_bucket: expanded_membership_form
-  url_key: cp
+    - required
+    - optional
+  default_bucket: required
+  url_key: da
 
 
 skins:
   description: Test different skins
-  reference: https://phabricator.wikimedia.org/T196335
+  reference: "https://phabricator.wikimedia.org/T196335"
   start: "2017-10-01"
   end: "2099-12-31"
   buckets:

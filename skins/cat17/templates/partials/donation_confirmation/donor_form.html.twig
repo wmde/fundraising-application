@@ -1,0 +1,188 @@
+{% set COUNTRIES = [ 'DE', 'AT', 'CH', 'BE', 'IT', 'LI', 'LU' ] %}
+{% set PAYMENT_INTERVALS = [ 0, 1, 3, 6, 12 ] %}
+
+
+<div class="introduction container default">
+	<div class="row">
+		<div class="col-xs-12">
+			<h2 class="sr-only">{$ 'donation_title' | trans $}</h2>
+			<p class="h1">
+				{$ 'wikimedia_tagline' | trans $}
+			</p>
+			<a href="#donation-amount" class="btn btn-donation btn-introduction bk-blue text-center text-uppercase">
+				{$ 'donation_banner_anchor' | trans $}
+			</a>
+		</div>
+	</div>
+</div>
+
+<form id="form-donation" class="main-form" action="{$ basepath $}/donation/update" method="post" novalidate>
+	<div class="container">
+		<div class="row">
+			<div class="form-shadow-wrap col-xs-12 col-sm-12">
+				<section id="donation-type" class="donation-data clearfix">
+					<h2>{$ 'donation_section_donor_title' | trans $}</h2>
+
+					<p class="legend">{$ 'donation_section_donor_legend' | trans $}</p>
+
+					<fieldset id="type-donor"
+							  class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
+						<legend class="sr-only">{$ 'donation_section_donor_legend' | trans $}</legend>
+
+						<div class="wrap-field personal">
+
+							<div class="wrap-input">
+								<input type="radio" name="addressType" id="personal" value="person">
+								<label for="personal">
+									<span>{$ 'donation_addresstype_option_private' | trans $}</span>
+									<i class="icon-account_circle"></i>
+								</label>
+							</div>
+							<div class="wrap-info">
+								<div class="info-text" data-info="personal">
+									<div class="field-grp field-salutation">
+										<div class="wrap-select-50 clearfix ">
+											<select class="no-outline salutation" id="salutation" name="salutation"
+													data-jcf='{"wrapNative": false,  "wrapNativeOnMobile": true  }'>
+												<option hidden class="hideme" value="">{$ 'salutation_label' | trans $}</option>
+												<option value="Herr">{$ 'salutation_option_mr' | trans $}</option>
+												<option value="Frau">{$ 'salutation_option_mrs' | trans $}</option>
+											</select>
+											<select class="no-outline personal-title" id="title" name="title"
+													data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true}'>
+												<option value="">{$ 'title_option_none' | trans $}</option>
+												<option value="Dr.">Dr.</option>
+												<option value="Prof.">Prof.</option>
+												<option value="Prof. Dr.">Prof. Dr.</option>
+											</select>
+										</div>
+										<span class="error-text">{$ 'form_salutation_error' | trans $}</span>
+									</div>
+
+									<div class="field-grp field-firstname">
+										<input type="text" id="first-name" name="firstName" placeholder="{$ 'firstname_label' | trans $}" data-pattern="^.+$">
+										<label for="first-name" class="sr-only">{$ 'firstname_label' | trans $}</label>
+										<span class="error-text">{$ 'form_firstname_error' | trans $}</span>
+									</div>
+									<div class="field-grp field-lastname">
+										<input type="text" id="last-name" name="lastName" placeholder="{$ 'lastname_label' | trans $}" data-pattern="^.+$">
+										<label for="last-name" class="sr-only">{$ 'lastname_label' | trans $}</label>
+										<span class="error-text">{$ 'form_lastname_error' | trans $}</span>
+									</div>
+									<div class="field-grp field-email">
+										<input type="email" id="email" placeholder="{$ 'email_label' | trans $}" data-pattern="^[^@]+@.+$">
+										<label for="email" class="sr-only">{$ 'email_label' | trans $}</label>
+										<span class="error-text">{$ 'form_email_error' | trans $}</span>
+									</div>
+									<div class="field-grp field-street">
+										<input type="text" id="street" placeholder="{$ 'street_label' | trans $}" data-pattern="^.+$">
+										<label for="street" class="sr-only">{$ 'street_label' | trans $}</label>
+										<span class="error-text">{$ 'form_street_error' | trans $}</span>
+										<span class="warning-text">{$ "form_street_number_warning" | trans $}</span>
+									</div>
+									<div class="field-grp field-postcode">
+										<input type="text" id="post-code" placeholder="{$ 'zip_label' | trans $}" data-pattern="^[0-9]{4,5}$">
+										<label for="post-code" class="sr-only">{$ 'zip_label' | trans $}</label>
+										<span class="error-text">{$ 'form_zip_error' | trans $}</span>
+									</div>
+									<div class="field-grp field-city">
+										<input type="text" id="city" placeholder="{$ 'city_label' | trans $}" data-pattern="^.+$">
+										<label for="city" class="sr-only">{$ 'city_label' | trans $}</label>
+										<span class="error-text">{$ 'form_city_error' | trans $}</span>
+									</div>
+
+									<select id="country" title="{$ 'country_label' | trans | e( 'html_attr' ) $}"
+											data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true, "flipDropToFit": true,  "maxVisibleItems": 6}'
+											class="no-outline country-select">
+										{% for countryCode in COUNTRIES %}
+											<option value="{$ countryCode $}">{$ ( 'country_option_' ~ countryCode ) | trans $}</option>
+										{% endfor %}
+									</select>
+								</div>
+								<div class="wrap-check">
+									<div>
+										<input type="checkbox" id="newsletter" data-jcf='{"wrapNative": true}' class="jcf">
+										<label class="news" for="newsletter">
+											{$ 'donation_sendinfo_label' | trans | raw $}
+										</label>
+									</div>
+									<div>
+										<input type="checkbox" id="donation-receipt" data-jcf='{"wrapNative": true}' class="jcf">
+										<label for="donation-receipt">
+											{$ 'donation-no-donation-receipt' | trans $}
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="wrap-field firma">
+							<div class="wrap-input">
+								<input type="radio" name="addressType" id="company" value="firma">
+								<label for="company">
+									<span>{$ 'donation_addresstype_option_company' | trans $}</span>
+									<i class="icon-work"></i>
+								</label>
+							</div>
+							<div class="wrap-info">
+								<div class="info-text" data-info="company">
+									<div class="field-grp field-company">
+										<input type="text" id="company-name" name="companyName" placeholder="{$ 'companyname_label' | trans $}" data-pattern="^.+$">
+										<label for="company-name" class="sr-only">{$ 'companyname_label' | trans $}</label>
+										<span class="error-text">{$ 'form_companyname_error' | trans $}</span>
+									</div>
+									<div class="field-grp field-email">
+										<input type="email" id="email-company" name="email" placeholder="{$ 'email_label' | trans $}" data-pattern="^[^@]+@.+$">
+										<label for="email-company" class="sr-only">{$ 'email_label' | trans $}</label>
+										<span class="error-text">{$ 'form_email_error' | trans $}</span>
+									</div>
+									<div class="field-grp field-street">
+										<input type="text" id="adress-company" name="street" placeholder="{$ 'street_label' | trans $}" data-pattern="^.+$">
+										<label for="adress-company" class="sr-only">{$ 'street_label' | trans $}</label>
+										<span class="error-text">{$ 'form_street_error' | trans $}</span>
+										<span class="warning-text">{$ "form_street_number_warning" | trans $}</span>
+									</div>
+									<div class="field-grp field-postcode">
+										<input type="text" id="post-code-company" name="postcode" placeholder="{$ 'zip_label' | trans $}" data-pattern="^[0-9]{4,5}$">
+										<label for="post-code" class="sr-only">{$ 'zip_label' | trans $}</label>
+										<span class="error-text">{$ 'form_zip_error' | trans $}</span>
+									</div>
+									<div class="field-grp field-city">
+										<input type="text" id="city-company" name="city" placeholder="{$ 'city_label' | trans $}" data-pattern="^.+$">
+										<label for="city-company" class="sr-only">{$ 'city_label' | trans $}</label>
+										<span class="error-text">{$ 'form_city_error' | trans $}</span>
+									</div>
+
+									<select id="country-company" name="country" title="{$ 'country_label' | trans | e( 'html_attr' ) $}"
+											data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true,  "maxVisibleItems": 6}'
+											class="no-outline country-select">
+										{% for countryCode in COUNTRIES %}
+											<option value="{$ countryCode $}">{$ ( 'country_option_' ~ countryCode ) | trans $}</option>
+										{% endfor %}
+									</select>
+								</div>
+								<div class="wrap-check">
+									<div>
+										<input type="checkbox" id="newsletter-company" name="info" value="1">
+										<label class="news" for="newsletter-company">
+											{$ 'donation_sendinfo_label' | trans | raw $}
+										</label>
+									</div>
+									<div>
+										<input type="checkbox" id="donation-receipt-company" name="donationReceipt" value="0" data-jcf='{"wrapNative": true}' class="jcf">
+										<label for="donation-receipt-company">
+											{$ 'donation-no-donation-receipt' | trans $}
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</fieldset>
+				</section>
+
+			</div>
+			<div class="action-block visible-md visible-lg col-md-offset-0 col-md-4 hidden-print">
+				<input type="submit" value="Spende abschließen" class="btn btn-donation btn-unactive">
+			</div>
+		</div>
+	</div>
+</form>

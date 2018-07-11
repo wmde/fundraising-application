@@ -62,6 +62,7 @@ module.exports = {
 			// TODO check if state has changed before executing update actions
 
 			viewHandlers.forEach( function ( viewHandlerConfig, viewHandlerIndex ) {
+				console.log(viewHandlerConfig, viewHandlerIndex);
 				viewHandlerConfig.viewHandler.update.apply(
 					viewHandlerConfig.viewHandler,
 					getStateValues( state, viewHandlerAccessors[ viewHandlerIndex ] )

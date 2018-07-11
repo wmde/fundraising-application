@@ -16,6 +16,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Validation;
 use WMDE\Euro\Euro;
+use WMDE\Fundraising\Frontend\App\Controllers\UpdateDonorController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidateDonorController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidationController;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\AddDonationHandler;
@@ -370,6 +371,10 @@ $app->get( 'donation/new', function ( Application $app, Request $request ) use (
 		)
 	);
 } )->method( 'POST|GET' );
+
+$app->post(
+	'donation/update', UpdateDonorController::class . '::updateDonor'
+);
 
 $app->post(
 	'apply-for-membership',
