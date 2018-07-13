@@ -63,6 +63,7 @@ class GetInTouchUseCase {
 			'firstName' => $request->getFirstName(),
 			'lastName' => $request->getLastName(),
 			'emailAddress' => $request->getEmailAddress(),
+			'donationNumber' => $request->getDonationNumber(),
 			'subject' => $request->getSubject(),
 			'category' => $request->getCategory(),
 			'message' => $request->getMessageBody()

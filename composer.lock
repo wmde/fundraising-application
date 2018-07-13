@@ -3568,16 +3568,16 @@
         },
         {
             "name": "wmde/fun-validators",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fun-validators.git",
-                "reference": "29fd4b73077dcf721ba4e6d37017965eb3bdca5c"
+                "reference": "6e1da9e625ad96f2ae455f3fbdb0bd818ec0e5f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fun-validators/zipball/29fd4b73077dcf721ba4e6d37017965eb3bdca5c",
-                "reference": "29fd4b73077dcf721ba4e6d37017965eb3bdca5c",
+                "url": "https://api.github.com/repos/wmde/fun-validators/zipball/6e1da9e625ad96f2ae455f3fbdb0bd818ec0e5f4",
+                "reference": "6e1da9e625ad96f2ae455f3fbdb0bd818ec0e5f4",
                 "shasum": ""
             },
             "require": {
@@ -3607,7 +3607,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "General and shared validation services created as part of the WMDE fundraising software",
-            "time": "2018-02-09T11:36:56+00:00"
+            "time": "2018-07-17T11:11:13+00:00"
         },
         {
             "name": "wmde/fundraising-content-provider",
@@ -7329,12 +7329,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "e27b2afd3a7632debe88b9ca9997a68ce0e7fc58"
+                "reference": "f6e8f166e18a46032f07ca0e35574677c029e700"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/e27b2afd3a7632debe88b9ca9997a68ce0e7fc58",
-                "reference": "e27b2afd3a7632debe88b9ca9997a68ce0e7fc58",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/f6e8f166e18a46032f07ca0e35574677c029e700",
+                "reference": "f6e8f166e18a46032f07ca0e35574677c029e700",
                 "shasum": ""
             },
             "require-dev": {
@@ -7367,7 +7367,7 @@
                 "GPL-2.0+"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2018-06-22T09:03:02+00:00"
+            "time": "2018-07-17T10:41:47+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",

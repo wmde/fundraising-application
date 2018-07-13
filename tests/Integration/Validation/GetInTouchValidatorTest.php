@@ -24,6 +24,7 @@ class GetInTouchValidatorTest extends \PHPUnit\Framework\TestCase {
 			'',
 			'',
 			'kh@meyer.net',
+			'123456',
 			'Hello there!',
 			'Change of address',
 			'I just wanted to say "Hi".'
@@ -38,6 +39,7 @@ class GetInTouchValidatorTest extends \PHPUnit\Framework\TestCase {
 			'',
 			'',
 			'kh@meyer',
+			'123456',
 			'Hello there!',
 			'Change of address',
 			'I just wanted to say "Hi".'
@@ -70,6 +72,7 @@ class GetInTouchValidatorTest extends \PHPUnit\Framework\TestCase {
 			'',
 			'',
 			'kh@net.meyer',
+			'1234567',
 			'',
 			'Change of address',
 			'I just wanted to say "Hi".'
@@ -85,6 +88,7 @@ class GetInTouchValidatorTest extends \PHPUnit\Framework\TestCase {
 			'',
 			'',
 			'kh@net.meyer',
+			'123456',
 			'Hello there!',
 			'Change of address',
 			''

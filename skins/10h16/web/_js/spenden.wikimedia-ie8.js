@@ -43,7 +43,7 @@ $(function() {
 
 			$(this).blur();
 		}
-	)
+	);
 
 	$(':radio, :checkbox, select, button, input:button').hover(
 		function(){

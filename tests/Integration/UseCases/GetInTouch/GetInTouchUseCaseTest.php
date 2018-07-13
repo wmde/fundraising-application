@@ -23,6 +23,7 @@ class GetInTouchUseCaseTest extends \PHPUnit\Framework\TestCase {
 	const INQUIRER_FIRST_NAME = 'Curious';
 	const INQUIRER_LAST_NAME = 'Guy';
 	const INQUIRER_EMAIL_ADDRESS = 'curious.guy@alltheguys.com';
+	const INQUIRER_DONATION_NUMBER = '123456';
 	const INQUIRY_SUBJECT = 'Please let me know';
 	const INQUIRY_CATEGORY = 'Other';
 	const INQUIRY_MESSAGE = 'What is it you do?';
@@ -59,6 +60,7 @@ class GetInTouchUseCaseTest extends \PHPUnit\Framework\TestCase {
 					'firstName' => self::INQUIRER_FIRST_NAME,
 					'lastName' => self::INQUIRER_LAST_NAME,
 					'emailAddress' => self::INQUIRER_EMAIL_ADDRESS,
+					'donationNumber' => self::INQUIRER_DONATION_NUMBER,
 					'subject' => self::INQUIRY_SUBJECT,
 					'category' => self::INQUIRY_CATEGORY,
 					'message' => self::INQUIRY_MESSAGE
@@ -85,6 +87,7 @@ class GetInTouchUseCaseTest extends \PHPUnit\Framework\TestCase {
 			self::INQUIRER_FIRST_NAME,
 			self::INQUIRER_LAST_NAME,
 			self::INQUIRER_EMAIL_ADDRESS,
+			self::INQUIRER_DONATION_NUMBER,
 			self::INQUIRY_SUBJECT,
 			self::INQUIRY_CATEGORY,
 			self::INQUIRY_MESSAGE
