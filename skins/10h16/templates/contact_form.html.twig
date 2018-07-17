@@ -38,6 +38,12 @@
                   {$ util.form_error('email', errors) $}
                 </div>
 
+                <div class="input-container">
+                  <label for="donationNumber">Referenz</label>
+                  <input id="donationNumber" name="donationNumber" type="text" value="" autocomplete="off" placeholder="Spenden- oder Adressnummer" class="required">
+                  <span class="validation icon-placeholder"></span>
+                </div>
+
                 <div class="input-container category">
                   <label for="category">Thema</label>
                   <select id="category" name="category" class="category">

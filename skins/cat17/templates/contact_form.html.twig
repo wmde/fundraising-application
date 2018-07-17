@@ -32,7 +32,13 @@
 							<label for="email" class="sr-only">{$ 'contact_email'|trans $}</label>
 							{$ util.form_error('email', errors) $}
 						</div>
-						{$ util.form_error('category', errors) $}
+					</fieldset>
+					<fieldset class="col-xs-12 col-md-6">
+						<div class="field-grp">
+							<input type="text" id="donationNumber" name="donationNumber" placeholder="{$ 'contact_donation_number' | trans $}">
+							<label for="donationNumber" class="sr-only">{$ 'contact_donation_number' | trans $}</label>
+							{$ util.form_error('donationNumber', errors) $}
+						</div>
 					</fieldset>
 				</div>
 				<div class="row">
@@ -44,6 +50,7 @@
 								<option {% if category == cat | trans %}selected{% endif %}>{$ cat | trans $}</option>
 							{% endfor %}
 						</select>
+						{$ util.form_error('category', errors) $}
 					</fieldset>
 					<fieldset class="col-xs-12 col-md-6">
 						<div class="field-grp">
