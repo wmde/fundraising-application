@@ -1,9 +1,13 @@
-# Add [Bucket Testing](https://en.wikipedia.org/wiki/A/B_testing) to all parts of the application
+# 002 - Add [Bucket Testing](https://en.wikipedia.org/wiki/A/B_testing) to all parts of the application
+
+Date: 2018-06-22
 
 ## Status
+
 Accepted
 
 ## Context
+
 From time to time the Fundraising team wants to try out changes in the fundraising frontend to see if they improve the amount of donors, the donation sum, the membership application rate and so on.
 
 In the past, the developers implemented those experiments in an ad-hoc fashion, with different places in the code implementing the branching, and with different places in the code and database to store the outcomes.
@@ -13,6 +17,7 @@ From a developer perspective, the new implementation of bucket testing must not 
 When our system places a visitor in a bucket, it must store that assignment persistently in the database. When querying the database, we must be able to link the record to donations/memberships if needed. No need to build an analysis software yet: The FUN team will provide the results of each bucket testing campaign as raw/aggregated data obtained though querying the database.
 
 ## Decision
+
 * Create campaign configuration which describes the experiments in a human-readable format (YAML) with bucket names, start and end dates and contextual information.
 	* For better performance, the configuration is validated in CI, at runtime it's assumed to be correct.
 	* Create CLI-based campaign validator for logical and technical errors.
