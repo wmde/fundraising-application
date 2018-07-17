@@ -28,10 +28,10 @@
   },
   "homepage": "https://github.com/wmde/FundraisingFrontend#readme",
   "devDependencies": {
-    "browser-sync": "^2.24.4",
+    "browser-sync": "^2.24.5",
     "browserify": "^13.0.0",
     "browserify-shim": "^3.8.12",
-    "cross-env": "^5.1.5",
+    "cross-env": "^5.2.0",
     "deep-freeze": "0.0.1",
     "envify": "^3.4.0",
     "gulp": "^3.9.1",
@@ -57,7 +57,7 @@
     "polyify": "0.0.4",
     "sinon": "^1.17.3",
     "tap-min": "^1.1.0",
-    "tape": "^4.9.0",
+    "tape": "^4.9.1",
     "tape-catch": "^1.0.6",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0",
@@ -72,7 +72,7 @@
     "promise": "^7.3.1",
     "redux": "^3.7.2",
     "redux-promise": "^0.5.3",
-    "underscore": "^1.9.0",
+    "underscore": "^1.9.1",
     "underscore.path": "^0.1.4"
   },
   "browserify": {

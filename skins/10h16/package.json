@@ -33,7 +33,7 @@
     "polyify": "0.0.4",
     "sinon": "^1.17.3",
     "tap-min": "^1.1.0",
-    "tape": "^4.9.0",
+    "tape": "^4.9.1",
     "watchify": "^3.11.0"
   },
   "dependencies": {
@@ -41,7 +41,7 @@
     "promise": "^7.1.1",
     "redux": "^3.3.1",
     "redux-promise": "^0.5.1",
-    "underscore": "^1.9.0",
+    "underscore": "^1.9.1",
     "underscore.path": "^0.1.4"
   },
   "browserify": {
