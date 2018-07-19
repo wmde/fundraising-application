@@ -12,6 +12,15 @@ MIGRATION_VERSION :=
 
 .DEFAULT_GOAL := ci
 
+up_app: down_app
+	docker-compose -f docker-compose.yml up -d
+
+up_debug: down_app
+	docker-compose -f docker-compose.yml -f docker-compose.debug.yml up -d
+
+down_app:
+	docker-compose -f docker-compose.yml -f docker-compose.debug.yml down > /dev/null 2>&1
+
 install-js:
 	-mkdir -p $(TMPDIR)/home
 	-echo "node:x:$(current_user):$(current_group)::/var/nodehome:/bin/bash" > $(TMPDIR)/passwd
