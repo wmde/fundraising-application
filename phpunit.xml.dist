@@ -23,10 +23,10 @@
         </testsuite>
     </testsuites>
     <filter>
-        <whitelist addUncoveredFilesFromWhitelist="true">
+        <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">src</directory>
             <directory suffix=".php">app</directory>
-            <directory suffix=".php">vendor/wmde</directory>
+
         </whitelist>
     </filter>
 </phpunit>

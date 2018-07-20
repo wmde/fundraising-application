@@ -77,10 +77,7 @@ $ffFactory->setSofortLogger( call_user_func( function() use ( $ffFactory ) {
 	return $logger;
 } ) );
 
-/**
- * @var \Silex\Application $app
- */
-$app = require __DIR__ . '/../app/bootstrap.php';
+$app = \WMDE\Fundraising\Frontend\App\Bootstrap::initializeApplication( $ffFactory );
 
 $ffFactory->setSkinTwigEnvironment( $app['twig'] );
 

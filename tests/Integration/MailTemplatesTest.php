@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Integration;
 
 use WMDE\Fundraising\ContentProvider\ContentProvider;
+use WMDE\Fundraising\Frontend\App\Bootstrap;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 use WMDE\Fundraising\Frontend\App\MailTemplates;
@@ -50,7 +51,7 @@ class MailTemplatesTest extends \PHPUnit\Framework\TestCase {
 
 		$ffFactory->setContentProvider( $contentProvider );
 
-		$app = require __DIR__ . '/../../app/bootstrap.php';
+		$app = Bootstrap::initializeApplication( $ffFactory );
 		$app->flush();
 
 		return $ffFactory;
