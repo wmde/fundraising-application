@@ -63,10 +63,7 @@ $ffFactory->setLogger( call_user_func( function() use ( $ffFactory ) {
 	return $logger;
 } ) );
 
-/**
- * @var \Silex\Application $app
- */
-$app = require __DIR__ . '/../app/bootstrap.php';
+$app = \WMDE\Fundraising\Frontend\App\Bootstrap::initializeApplication( $ffFactory );
 $app['track_all_the_memory'] = $ffFactory;
 
 $app->register( new Silex\Provider\HttpFragmentServiceProvider() );

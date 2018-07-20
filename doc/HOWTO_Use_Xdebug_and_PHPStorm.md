@@ -1,4 +1,4 @@
-# How to use XDebug in the Docker environment with PHPStorm 
+# How to use XDebug in the Docker environment with PHPStorm
 
 ## Install the required PHPStorm Plugins
 In the "Plugins" section of the PHPStorm preferences make sure that you have installed the following Plugins:
@@ -29,7 +29,9 @@ You need to add the server name you configured in `PHP_IDE_CONFIG` the NGinX con
 Enter `spenden.wikimedia.de` as the server name, `8082` as the port and check the "Use Path mappings" box. Map your local path to `/usr/share/nginx/www/spenden.wikimedia.de/current/`
 
 ## Add PHPUnit configuration
-In the PHPStorm preferences, go to "Languages & Frameworks -> PHP -> Server". Click the plus sign in the upper left corner to create a new PHPUnit configuration. Choose "PHPUnit by remote interpreter". After you created it, make sure that the path mapping is correct, check "Use Composer autoloader" and check if the "Path to script" points to the path-mapped autoloader file.
+In the PHPStorm preferences, go to "Languages & Frameworks -> PHP -> Testing Framework". Click the plus sign in the upper left corner to create a new PHPUnit configuration. Choose "PHPUnit by remote interpreter". After you created it, make sure that the path mapping is correct, check "Use Composer autoloader" and check if the "Path to script" points to the path-mapped autoloader file.
+
+Also check the "Default configuration file" and use the path `/usr/share/nginx/www/spenden.wikimedia.de/current/phpunit.xml.dist`
 
 ![PHPUnit configuration](images/phpunit_config.png)
 

@@ -8,6 +8,7 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use WMDE\Fundraising\Frontend\App\Bootstrap;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 use PHPUnit\Framework\TestCase;
@@ -100,7 +101,7 @@ abstract class WebRouteTestCase extends TestCase {
 	// @codingStandardsIgnoreStart
 	private function createApplication( FunFunFactory $ffFactory, bool $debug ): Application {
 		// @codingStandardsIgnoreEnd
-		$app = require __DIR__ . ' /../../app/bootstrap.php';
+		$app = Bootstrap::initializeApplication( $ffFactory );
 
 		$app['session.test'] = true;
 
