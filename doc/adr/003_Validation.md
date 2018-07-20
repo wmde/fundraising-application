@@ -38,3 +38,7 @@ Validation error names are language-independent unique strings in `snake_case`. 
 We did not manage to introduce a consistent interface for validators and validation results. We took some inspiration from the `ConstraintViolation` classes of Symfony Validation and created the [FunValidators repository](https://github.com/wmde/fun-validators/) that contains some abstracted, low-level validators and the `ValidationResult` class for collecting constraint violations.
 
 Sometimes our validators return booleans or fieldname => error pairs instead of subclassing `ValidationResult`. This was the result of the approach "what would be the simplest solution that works?"
+
+We implemented some "Business Rules" as Validators, some others are checks in use case classes. 
+
+See also: [ADR 004 - Client-Side Validation](004_Client_Side_Validation.md)
