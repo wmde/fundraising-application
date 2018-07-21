@@ -1,8 +1,8 @@
 <template>
     <div :class="[ 'field-grp', 'field-' + name, invalid ? 'invalid' : '' ]">
         <slot></slot>
-        <label :for="name" class="sr-only">{{ label }}</label>
-        <span class="error-text">{{ errorMessage }}</span>
+        <label :for="name" class="sr-only">{{ $t( label ) }}</label>
+        <span class="error-text">{{ $t( errorMessage ) }}</span>
     </div>
 </template>
 
@@ -12,7 +12,7 @@
         props: {
             name: String,
             label: String,
-            'error-message': String,
+            errorMessage: String,
             invalid: { type: Boolean, default: false }
         }
 	}

@@ -4,20 +4,20 @@
             <div class="row">
                 <div class="form-shadow-wrap col-xs-12 col-sm-12">
                     <section id="donation-type" class="donation-data clearfix">
-                        <h2>{$ 'donation_section_donor_title' | trans $}</h2>
+                        <h2>{{ $t( 'donation_section_donor_title' ) }}</h2>
 
-                        <p class="legend">{$ 'donation_section_donor_legend' | trans $}</p>
+                        <p class="legend"> {{ $t('donation_section_donor_legend') }}</p>
 
                         <fieldset id="type-donor"
                                   class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
-                            <legend class="sr-only">{$ 'donation_section_donor_legend' | trans $}</legend>
+                            <legend class="sr-only">{{ $t('donation_section_donor_legend') }}</legend>
 
-                            <div class="wrap-field personal">
+                            <div class="wrap-field">
 
                                 <div class="wrap-input">
                                     <input type="radio" name="addressType" id="personal" value="person" v-model="addressType">
                                     <label for="personal">
-                                        <span>{$ 'donation_addresstype_option_private' | trans $}</span>
+                                        <span>{{ $t('donation_addresstype_option_private') }}</span>
                                         <i class="icon-account_circle"></i>
                                     </label>
                                 </div>
@@ -27,44 +27,44 @@
                                             <div class="wrap-select-50 clearfix ">
                                                 <select class="no-outline salutation" id="salutation" name="salutation"
                                                         data-jcf='{"wrapNative": false,  "wrapNativeOnMobile": true  }'>
-                                                    <option hidden class="hideme" value="">{$ 'salutation_label' | trans $}</option>
-                                                    <option value="Herr">{$ 'salutation_option_mr' | trans $}</option>
-                                                    <option value="Frau">{$ 'salutation_option_mrs' | trans $}</option>
+                                                    <option hidden class="hideme" value="">{{ $t('salutation_label') }}</option>
+                                                    <option value="Herr">{{ $t('salutation_option_mr') }}</option>
+                                                    <option value="Frau">{{ $t('salutation_option_mrs') }}</option>
                                                 </select>
                                                 <select class="no-outline personal-title" id="title" name="title"
                                                         data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true}'>
-                                                    <option value="">{$ 'title_option_none' | trans $}</option>
+                                                    <option value="">{{ $t('title_option_none') }}</option>
                                                     <option value="Dr.">Dr.</option>
                                                     <option value="Prof.">Prof.</option>
                                                     <option value="Prof. Dr.">Prof. Dr.</option>
                                                 </select>
                                             </div>
-                                            <span class="error-text">{$ 'form_salutation_error' | trans $}</span>
+                                            <span class="error-text">{{ $t('form_salutation_error') }}</span>
                                         </div>
 
                                         <field-wrapper name="first-name" label="firstname_label" error-message="form_firstname_error">
-                                            <input type="text" id="first-name" name="firstName" placeholder="{$ 'firstname_label' | trans $}" data-pattern="^.+$">
+                                            <input type="text" id="first-name" name="firstName" :placeholder="$t('firstname_label')" data-pattern="^.+$">
                                         </field-wrapper>
 
                                         <field-wrapper name="last-name" label="lastname_label" error-message="form_lastname_error">
-                                            <input type="text" id="last-name" name="lastName" placeholder="{$ 'lastname_label' | trans $}" data-pattern="^.+$">
+                                            <input type="text" id="last-name" name="lastName" :placeholder="$t('lastname_label')" data-pattern="^.+$">
                                         </field-wrapper>
 
                                         <field-wrapper name="email" label="email_label" error-message="form_email_error">
-                                            <input type="email" id="email" placeholder="{$ 'email_label' | trans $}" data-pattern="^[^@]+@.+$">
+                                            <input type="email" id="email" :placeholder="$t('email_label')" data-pattern="^[^@]+@.+$">
                                         </field-wrapper>
 
                                         <field-wrapper name="street" label="street_label" error-message="form_street_error">
-                                            <input type="text" id="street" placeholder="{$ 'street_label' | trans $}" data-pattern="^.+$">
-                                            <span class="warning-text">{$ "form_street_number_warning" | trans $}</span>
+                                            <input type="text" id="street" :placeholder="$t('street_label')" data-pattern="^.+$">
+                                            <span class="warning-text">{{ $t( 'form_street_number_warning' ) }}</span>
                                         </field-wrapper>
 
                                         <field-wrapper name="post-code" label="zip_label" error-message="form_zip_error">
-                                            <input type="text" id="post-code" placeholder="{$ 'zip_label' | trans $}" data-pattern="^[0-9]{4,5}$">
+                                            <input type="text" id="post-code" :placeholder="$t('zip_label')" data-pattern="^[0-9]{4,5}$">
                                         </field-wrapper>
 
                                         <field-wrapper name="city" label="city_label" error-message="form_city_error">
-                                            <input type="text" id="city" placeholder="{$ 'city_label' | trans $}" data-pattern="^.+$">
+                                            <input type="text" id="city" :placeholder="$t('city_label')" data-pattern="^.+$">
                                         </field-wrapper>
 
                                         <!-- TODO use vue-native select field -->
@@ -80,24 +80,22 @@
                                     <div class="wrap-check">
                                         <div>
                                             <input type="checkbox" id="newsletter" data-jcf='{"wrapNative": true}' class="jcf">
-                                            <label class="news" for="newsletter">
-                                                {$ 'donation_sendinfo_label' | trans | raw $}
-                                            </label>
+                                            <label class="news" for="newsletter" v-html="$t( 'donation_sendinfo_label' )"></label>
                                         </div>
                                         <div>
                                             <input type="checkbox" id="donation-receipt" data-jcf='{"wrapNative": true}' class="jcf">
                                             <label for="donation-receipt">
-                                                {$ 'donation-no-donation-receipt' | trans $}
+                                                {{ $t('donation-no-donation-receipt') }}
                                             </label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="wrap-field firma">
+                            <div class="wrap-field">
                                 <div class="wrap-input">
                                     <input type="radio" name="addressType" id="company" value="firma" v-model="addressType">
                                     <label for="company">
-                                        <span>{$ 'donation_addresstype_option_company' | trans $}</span>
+                                        <span>{{ $t('donation_addresstype_option_company') }}</span>
                                         <i class="icon-work"></i>
                                     </label>
                                 </div>
@@ -105,24 +103,24 @@
                                     <div :class="[ 'info-text', addressType == 'firma' ? 'opened' : '' ]">
 
                                         <field-wrapper name="company-name" label="companyname_label" error-message="form_companyname_error">
-                                            <input type="text" id="company-name" name="companyName" placeholder="{$ 'companyname_label' | trans $}" data-pattern="^.+$">
+                                            <input type="text" id="company-name" name="companyName" :placeholder="$t('companyname_label')" data-pattern="^.+$">
                                         </field-wrapper>
 
                                         <field-wrapper name="email-company" label="email_label" error-message="form_email_error">
-                                            <input type="email" id="email-company" placeholder="{$ 'email_label' | trans $}" data-pattern="^[^@]+@.+$">
+                                            <input type="email" id="email-company" :placeholder="$t('email_label')" data-pattern="^[^@]+@.+$">
                                         </field-wrapper>
 
                                         <field-wrapper name="street-company" label="street_label" error-message="form_street_error">
-                                            <input type="text" id="street-company" placeholder="{$ 'street_label' | trans $}" data-pattern="^.+$">
-                                            <span class="warning-text">{$ "form_street_number_warning" | trans $}</span>
+                                            <input type="text" id="street-company" :placeholder="$t('street_label')" data-pattern="^.+$">
+                                            <span class="warning-text">{{ $t( 'form_street_number_warning' ) }}</span>
                                         </field-wrapper>
 
                                         <field-wrapper name="post-code-company" label="zip_label" error-message="form_zip_error">
-                                            <input type="text" id="post-code-company" placeholder="{$ 'zip_label' | trans $}" data-pattern="^[0-9]{4,5}$">
+                                            <input type="text" id="post-code-company" :placeholder="$t('zip_label')" data-pattern="^[0-9]{4,5}$">
                                         </field-wrapper>
 
                                         <field-wrapper name="city-company" label="city_label" error-message="form_city_error">
-                                            <input type="text" id="city-company" placeholder="{$ 'city_label' | trans $}" data-pattern="^.+$">
+                                            <input type="text" id="city-company" :placeholder="$t('city_label')" data-pattern="^.+$">
                                         </field-wrapper>
 
                                         <!-- TODO use vue-native select field -->
@@ -137,14 +135,13 @@
                                     <div class="wrap-check">
                                         <div>
                                             <input type="checkbox" id="newsletter-company" name="info" value="1">
-                                            <label class="news" for="newsletter-company">
-                                                {$ 'donation_sendinfo_label' | trans | raw $}
+                                            <label class="news" for="newsletter-company" v-html="$t( 'donation_sendinfo_label' )">
                                             </label>
                                         </div>
                                         <div>
                                             <input type="checkbox" id="donation-receipt-company" name="donationReceipt" value="0" data-jcf='{"wrapNative": true}' class="jcf">
                                             <label for="donation-receipt-company">
-                                                {$ 'donation-no-donation-receipt' | trans $}
+                                                {{ $t('donation-no-donation-receipt') }}
                                             </label>
                                         </div>
                                     </div>
