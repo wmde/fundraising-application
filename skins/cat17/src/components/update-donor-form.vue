@@ -9,10 +9,10 @@
                         <p class="legend"> {{ $t('donation_section_donor_legend') }}</p>
 
                         <fieldset id="type-donor"
-                                  class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
+                                  class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left" ref="donorFieldset">
                             <legend class="sr-only">{{ $t('donation_section_donor_legend') }}</legend>
 
-                            <div class="wrap-field">
+                            <div :class="[ 'wrap-field', addressType == 'person' ? 'selected' : '' ]">
 
                                 <div class="wrap-input">
                                     <input type="radio" name="addressType" id="personal" value="person" v-model="addressType">
@@ -22,7 +22,7 @@
                                     </label>
                                 </div>
                                 <div class="wrap-info">
-                                    <div :class="[ 'info-text', addressType == 'person' ? 'opened' : '' ]">
+                                    <div :class="[ 'info-text', addressType == 'person' ? 'opened' : '' ]" ref="person">
                                         <div class="field-grp field-salutation">
                                             <div class="wrap-select-50 clearfix ">
                                                 <select class="no-outline salutation" id="salutation" name="salutation"
@@ -91,7 +91,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="wrap-field">
+
+                            <div :class="[ 'wrap-field', addressType == 'firma' ? 'selected' : '' ]">
                                 <div class="wrap-input">
                                     <input type="radio" name="addressType" id="company" value="firma" v-model="addressType">
                                     <label for="company">
@@ -100,7 +101,7 @@
                                     </label>
                                 </div>
                                 <div class="wrap-info">
-                                    <div :class="[ 'info-text', addressType == 'firma' ? 'opened' : '' ]">
+                                    <div :class="[ 'info-text', addressType == 'firma' ? 'opened' : '' ]" ref="firma">
 
                                         <field-wrapper name="company-name" label="companyname_label" error-message="form_companyname_error">
                                             <input type="text" id="company-name" name="companyName" :placeholder="$t('companyname_label')" data-pattern="^.+$">
@@ -173,8 +174,14 @@
 			return {
 				addressType: null
             }
+        },
+        watch:{
+			'addressType': function (val ) {
+				this.$nextTick( function () {
+					this.$refs.donorFieldset.style.minHeight = this.$refs[val].scrollHeight + 'px';
+				});
+            }
         }
-        // TODO: create method for changing address type change, set CSS min-height of fieldset to scrollheight of info-text
 	}
 </script>
 
