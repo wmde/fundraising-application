@@ -28,10 +28,12 @@
   },
   "homepage": "https://github.com/wmde/FundraisingFrontend#readme",
   "devDependencies": {
+    "babel-core": "^6.26.3",
     "browser-sync": "^2.24.5",
     "browserify": "^13.0.0",
     "browserify-shim": "^3.8.12",
     "cross-env": "^5.2.0",
+    "css-loader": "^1.0.0",
     "deep-freeze": "0.0.1",
     "envify": "^3.4.0",
     "gulp": "^3.9.1",
@@ -61,7 +63,11 @@
     "tape-catch": "^1.0.6",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0",
-    "watchify": "^3.11.0"
+    "vue-loader": "^15.2.6",
+    "vue-template-compiler": "^2.5.16",
+    "watchify": "^3.11.0",
+    "webpack": "^4.16.1",
+    "webpack-command": "^0.4.1"
   },
   "dependencies": {
     "bootstrap-sass": "^3.3.7",
@@ -73,7 +79,9 @@
     "redux": "^3.7.2",
     "redux-promise": "^0.5.3",
     "underscore": "^1.9.1",
-    "underscore.path": "^0.1.4"
+    "underscore.path": "^0.1.4",
+    "vue": "^2.5.16",
+    "vuex": "^3.0.1"
   },
   "browserify": {
     "transform": [
