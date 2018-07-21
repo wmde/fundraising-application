@@ -1,7 +1,6 @@
 import Vue from 'vue'
 
-import FieldWrapper from './components/field-wrapper';
-
+import UpdateDonorForm from './components/update-donor-form';
 
 
 const app = new Vue({
@@ -12,9 +11,9 @@ const app = new Vue({
 	},
 	*/
 	components: {
-		FieldWrapper
+		UpdateDonorForm
 	},
-	template: '<field-wrapper name="ergo" label="foo" errorMessage="I am wrong">test</field-wrapper>'
+	template: '<update-donor-form />'
 
 });
 

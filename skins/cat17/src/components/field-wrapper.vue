@@ -12,7 +12,7 @@
         props: {
             name: String,
             label: String,
-            errorMessage: String,
+            'error-message': String,
             invalid: { type: Boolean, default: false }
         }
 	}
