@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 
 import UpdateDonorForm from './components/update-donor-form';
+import store from './updateDonationStore';
 
 // It's ok for now to use the dev dependency, but in prod we need to be able to auto-update
 // In the future, we might split message files to get smaller sizes
@@ -9,11 +10,11 @@ import messages from '../../../vendor/wmde/fundraising-frontend-content/i18n/de_
 
 Vue.use(VueI18n);
 
-
 const app = new Vue({
 	components: {
 		UpdateDonorForm
 	},
+	store,
 	template: '<update-donor-form />',
 	i18n: {
 		locale: 'de',

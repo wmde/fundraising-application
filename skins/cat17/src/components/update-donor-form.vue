@@ -43,28 +43,28 @@
                                         </div>
 
                                         <field-wrapper name="first-name" label="firstname_label" error-message="form_firstname_error">
-                                            <input type="text" id="first-name" name="firstName" :placeholder="$t('firstname_label')" data-pattern="^.+$">
+                                            <input type="text" id="first-name" name="firstName" :placeholder="$t('firstname_label')" v-model="firstName" data-pattern="^.+$">
                                         </field-wrapper>
 
                                         <field-wrapper name="last-name" label="lastname_label" error-message="form_lastname_error">
-                                            <input type="text" id="last-name" name="lastName" :placeholder="$t('lastname_label')" data-pattern="^.+$">
+                                            <input type="text" id="last-name" name="lastName" :placeholder="$t('lastname_label')" v-model="lastName" data-pattern="^.+$">
                                         </field-wrapper>
 
                                         <field-wrapper name="email" label="email_label" error-message="form_email_error">
-                                            <input type="email" id="email" :placeholder="$t('email_label')" data-pattern="^[^@]+@.+$">
+                                            <input type="email" id="email" :placeholder="$t('email_label')" v-model="email" data-pattern="^[^@]+@.+$">
                                         </field-wrapper>
 
                                         <field-wrapper name="street" label="street_label" error-message="form_street_error">
-                                            <input type="text" id="street" :placeholder="$t('street_label')" data-pattern="^.+$">
+                                            <input type="text" id="street" :placeholder="$t('street_label')" v-model="street" data-pattern="^.+$">
                                             <span class="warning-text">{{ $t( 'form_street_number_warning' ) }}</span>
                                         </field-wrapper>
 
                                         <field-wrapper name="post-code" label="zip_label" error-message="form_zip_error">
-                                            <input type="text" id="post-code" :placeholder="$t('zip_label')" data-pattern="^[0-9]{4,5}$">
+                                            <input type="text" id="post-code" :placeholder="$t('zip_label')" v-model="postcode" data-pattern="^[0-9]{4,5}$">
                                         </field-wrapper>
 
                                         <field-wrapper name="city" label="city_label" error-message="form_city_error">
-                                            <input type="text" id="city" :placeholder="$t('city_label')" data-pattern="^.+$">
+                                            <input type="text" id="city" :placeholder="$t('city_label')"  v-model="city" data-pattern="^.+$">
                                         </field-wrapper>
 
                                         <!-- TODO use vue-native select field -->
@@ -104,24 +104,24 @@
                                     <div :class="[ 'info-text', addressType == 'firma' ? 'opened' : '' ]" ref="firma">
 
                                         <field-wrapper name="company-name" label="companyname_label" error-message="form_companyname_error">
-                                            <input type="text" id="company-name" name="companyName" :placeholder="$t('companyname_label')" data-pattern="^.+$">
+                                            <input type="text" id="company-name" name="companyName" :placeholder="$t('companyname_label')"  v-model="companyName" data-pattern="^.+$">
                                         </field-wrapper>
 
                                         <field-wrapper name="email-company" label="email_label" error-message="form_email_error">
-                                            <input type="email" id="email-company" :placeholder="$t('email_label')" data-pattern="^[^@]+@.+$">
+                                            <input type="email" id="email-company" :placeholder="$t('email_label')" v-model="email" data-pattern="^[^@]+@.+$">
                                         </field-wrapper>
 
                                         <field-wrapper name="street-company" label="street_label" error-message="form_street_error">
-                                            <input type="text" id="street-company" :placeholder="$t('street_label')" data-pattern="^.+$">
+                                            <input type="text" id="street-company" :placeholder="$t('street_label')" v-model="street" data-pattern="^.+$">
                                             <span class="warning-text">{{ $t( 'form_street_number_warning' ) }}</span>
                                         </field-wrapper>
 
                                         <field-wrapper name="post-code-company" label="zip_label" error-message="form_zip_error">
-                                            <input type="text" id="post-code-company" :placeholder="$t('zip_label')" data-pattern="^[0-9]{4,5}$">
+                                            <input type="text" id="post-code-company" :placeholder="$t('zip_label')" v-model="postcode" data-pattern="^[0-9]{4,5}$">
                                         </field-wrapper>
 
                                         <field-wrapper name="city-company" label="city_label" error-message="form_city_error">
-                                            <input type="text" id="city-company" :placeholder="$t('city_label')" data-pattern="^.+$">
+                                            <input type="text" id="city-company" :placeholder="$t('city_label')" v-model="city" data-pattern="^.+$">
                                         </field-wrapper>
 
                                         <!-- TODO use vue-native select field -->
@@ -164,16 +164,27 @@
 
 <script>
 	import FieldWrapper from './field-wrapper';
+	import { mapFields } from 'vuex-map-fields';
 
 	export default {
 		name: "update-donor-form",
         components: {
 			FieldWrapper
         },
-        data: () => {
-			return {
-				addressType: null
-            }
+        computed: {
+            ...mapFields([
+            	'formData.addressType',
+                'formData.firstName',
+				'formData.lastName',
+                'formData.salutation',
+                'formData.title',
+                'formData.companyName',
+                'formData.street',
+                'formData.postcode',
+                'formData.city',
+                'formData.countryCode',
+                'formData.email'
+            ])
         },
         watch:{
 			'addressType': function (val ) {
