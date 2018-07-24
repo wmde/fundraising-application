@@ -7,7 +7,7 @@
 	Sie zahlen per {$ donation.paymentType|trans({}, 'paymentTypes') $}
 {% endif %}
 
-{% if address %}
+{% if address and address.isAnonymous == false %}
 	<p>
 		{$ address.salutation $} <span id="confirm-name">{$ address.fullName $}</span>
 	</p>

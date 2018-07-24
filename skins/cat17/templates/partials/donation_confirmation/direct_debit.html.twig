@@ -1,6 +1,6 @@
 <div class="container">
     <div class="row">
-        <div class="content col-xs-12 col-md-8">
+        <div class="content highlighted col-xs-12 col-md-8">
 
             <p class="h1">
                 {$ 'donation_confirmation_head' | trans $}
@@ -88,6 +88,7 @@
                     {$ "donation_confirmation_opts_into_newsletter" | trans | raw $}
                 </p>
             {% endif %}
+			{% include 'partials/donation_confirmation/donor_donation_receipt.html.twig' %}
         </div>
         <div class="action-block col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-0 col-md-4 hidden-print">
             <ul class="list-menu link-back list-unstyled">
@@ -101,6 +102,7 @@
                         <input type="hidden" name="utoken" value="{$ donation.updateToken $}">
                     </form>
                 </li>
+				{% include 'partials/share_on_social_networks.html.twig' %}
             </ul>
         </div>
     </div>

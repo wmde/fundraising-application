@@ -1,0 +1,20 @@
+<div class="receipt-info">
+	{% if address.isAnonymous == false %}
+		<span class="receipt-confirmation">
+			{$ 'donor_change_success_text' | trans $}
+			{% if donation.optsIntoDonationReceipt == true and donation.amount >= 5 %}
+				 {$ 'donor_change_confirm_receipt_opt_in' | trans $}
+			{% endif %}
+		</span>
+		<span class="caption">
+			{% include 'partials/donation_confirmation/donor_address.twig' %}
+		</span>
+	{% elseif featureToggle.donorUpdateEnabled == true %}
+		<div class="hidden-print">
+			<a id="receipt-button" href="#" class="btn bk-blue">
+				{$ 'donor_change_button_text' | trans $}
+			</a>
+			<p class="caption">{$ 'donor_change_button_tax_info' | trans $}</p>
+		</div>
+	{% endif %}
+</div>

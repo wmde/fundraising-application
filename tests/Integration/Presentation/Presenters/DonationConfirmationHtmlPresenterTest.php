@@ -54,13 +54,16 @@ class DonationConfirmationHtmlPresenterTest extends \PHPUnit\Framework\TestCase 
 				'interval' => 3,
 				'paymentType' => 'PPL',
 				'optsIntoNewsletter' => false,
+				'optsIntoDonationReceipt' => null,
 				'bankTransferCode' => '',
 				'creationDate' => ( new \DateTime() )->format( 'd.m.Y' ),
 				'cookieDuration' => '15552000',
 				'updateToken' => self::UPDATE_TOKEN,
 				'accessToken' => self::ACCESS_TOKEN
 			],
-			'address' => [],
+			'address' => [
+				'isAnonymous' => true
+			],
 			'bankData' => [],
 			'initialFormValues' => [],
 			'piwikEvents' => [

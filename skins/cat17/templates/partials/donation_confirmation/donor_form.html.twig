@@ -1,28 +1,13 @@
 {% set COUNTRIES = [ 'DE', 'AT', 'CH', 'BE', 'IT', 'LI', 'LU' ] %}
-{% set PAYMENT_INTERVALS = [ 0, 1, 3, 6, 12 ] %}
 
-<div class="introduction container default">
-	<div class="row">
-		<div class="col-xs-12">
-			<h2 class="sr-only">{$ 'donation_title' | trans $}</h2>
-			<p class="h1">
-				{$ 'wikimedia_tagline' | trans $}
-			</p>
-			<a href="#donation-amount" class="btn btn-donation btn-introduction bk-blue text-center text-uppercase">
-				{$ 'donation_banner_anchor' | trans $}
-			</a>
-		</div>
-	</div>
-</div>
-
-<form id="form-donation" class="main-form" action="{$ basepath $}/donation/update?accessToken={$ donation.accessToken $}" method="post" novalidate>
+<form id="form-donation" class="main-form hidden-print" action="{$ basepath $}/donation/update?accessToken={$ donation.accessToken $}" method="post" novalidate>
 	<input type="hidden" name="updateToken" value="{$ donation.updateToken $}" />
 	<input type="hidden" name="donation_id" value="{$ donation.id $}" />
 	<div class="container">
 		<div class="row">
-			<div class="form-shadow-wrap col-xs-12 col-sm-12">
+			<div class="col-xs-12 col-sm-8">
 				<section id="donation-type" class="donation-data clearfix">
-					<h2>{$ 'donation_section_donor_title' | trans $}</h2>
+					<h2>{$ 'donor_change_address_form_headline' | trans $}</h2>
 
 					<p class="legend">{$ 'donation_section_donor_legend' | trans $}</p>
 
@@ -181,8 +166,8 @@
 				</section>
 
 			</div>
-			<div class="action-block visible-md visible-lg col-md-offset-0 col-md-4 hidden-print">
-				<input type="submit" value="Spende abschließen" class="btn btn-donation btn-unactive">
+			<div class="action-block col-md-offset-0 col-md-4 hidden-print">
+				<input type="submit" value="{$ 'donor_change_address_form_contact_button' | trans $}" class="btn btn-donation btn-unactive">
 			</div>
 		</div>
 	</div>
