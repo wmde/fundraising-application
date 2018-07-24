@@ -1,5 +1,13 @@
 # How to use XDebug in the Docker environment with PHPStorm
 
+To know more about how the setup works without PHPStorm, see the [setup instructions from the playground](https://github.com/gbirke/php-xdebug-phpstorm-playground/blob/master/docs/SETUP.md)
+
+## Create .env file
+
+Find out the IP address of your computer and put in in the file `.env`, at the same level of `docker-compose.yml`, with the following contents:
+
+    LOCAL_IP=<YOUR_IP_ADDRESS>
+
 ## Install the required PHPStorm Plugins
 In the "Plugins" section of the PHPStorm preferences make sure that you have installed the following Plugins:
 * Docker Integration
