@@ -6,10 +6,9 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpKernel\Client;
-use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowDonationConfirmationHandler;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\OverridingCampaignConfigurationLoader;
 use WMDE\Fundraising\PaymentContext\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
@@ -211,7 +210,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 			$donation = $this->newStoredDonation( $factory );
 
 			$client->getCookieJar()->set(
-				new Cookie( ShowDonationConfirmationHandler::SUBMISSION_COOKIE_NAME, 'some value' )
+				new Cookie( ShowDonationConfirmationController::SUBMISSION_COOKIE_NAME, 'some value' )
 			);
 			$client->request(
 				'GET',
@@ -224,7 +223,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 			$this->assertSame(
 				'some value',
-				$client->getCookieJar()->get( ShowDonationConfirmationHandler::SUBMISSION_COOKIE_NAME )->getValue()
+				$client->getCookieJar()->get( ShowDonationConfirmationController::SUBMISSION_COOKIE_NAME )->getValue()
 			);
 		} );
 	}

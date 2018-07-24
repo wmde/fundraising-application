@@ -46,6 +46,7 @@ class DonationConfirmationHtmlPresenter {
 				'amount' => $donation->getAmount()->getEuroFloat(),
 				'interval' => $donation->getPaymentIntervalInMonths(),
 				'paymentType' => $donation->getPaymentMethodId(),
+				'optsIntoDonationReceipt' => $donation->getOptsIntoDonationReceipt(),
 				'optsIntoNewsletter' => $donation->getOptsIntoNewsletter(),
 				'bankTransferCode' => $this->donorDataFormatter->getBankTransferCode( $donation->getPaymentMethod() ),
 				'creationDate' => $this->donorDataFormatter->getDonationDate(),

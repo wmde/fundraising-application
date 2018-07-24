@@ -33,18 +33,19 @@ class DonorUpdateHtmlPresenter {
 	public function present( UpdateDonorResponse $updateDonorResponse, Donation $donation, string $updateToken, string $accessToken ): string {
 		return $this->template->render(
 			array_merge(
-				$this->getConfirmationPageArguments( $updateDonorResponse, $donation, $updateToken, $accessToken ),
+				$this->getConfirmationPageArguments( $donation, $updateToken, $accessToken ),
 				[
 					'updateData' => [
 						'isSuccessful' => $updateDonorResponse->isSuccessful(),
 						'message' => !empty( $updateDonorResponse->getSuccessMessage() ) ?
 							$updateDonorResponse->getSuccessMessage() : $updateDonorResponse->getErrorMessage()
-					] ]
+					]
+				]
 			)
 		);
 	}
 
-	private function getConfirmationPageArguments( UpdateDonorResponse $updateDonorResponse, Donation $donation, string $updateToken, string $accessToken ): array {
+	private function getConfirmationPageArguments( Donation $donation, string $updateToken, string $accessToken ): array {
 		return [
 			'donation' => [
 				'id' => $donation->getId(),
@@ -52,6 +53,7 @@ class DonorUpdateHtmlPresenter {
 				'amount' => $donation->getAmount()->getEuroFloat(),
 				'interval' => $donation->getPaymentIntervalInMonths(),
 				'paymentType' => $donation->getPaymentMethodId(),
+				'optsIntoDonationReceipt' => $donation->getOptsIntoDonationReceipt(),
 				'optsIntoNewsletter' => $donation->getOptsIntoNewsletter(),
 				'bankTransferCode' => $this->donorDataFormatter->getBankTransferCode(
 					$donation->getPaymentMethod()

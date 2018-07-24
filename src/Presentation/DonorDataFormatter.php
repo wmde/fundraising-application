@@ -25,11 +25,13 @@ class DonorDataFormatter {
 				'streetAddress' => $donation->getDonor()->getPhysicalAddress()->getStreetAddress(),
 				'postalCode' => $donation->getDonor()->getPhysicalAddress()->getPostalCode(),
 				'city' => $donation->getDonor()->getPhysicalAddress()->getCity(),
-				'email' => $donation->getDonor()->getEmailAddress(),
+				'email' => $donation->getDonor()->getEmailAddress()
 			];
 		}
 
-		return [];
+		return [
+			'isAnonymous' => true
+		];
 	}
 
 	public function getBankTransferCode( PaymentMethod $paymentMethod ): string {

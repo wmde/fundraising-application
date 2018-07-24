@@ -32,7 +32,7 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 			function ( Client $client, FunFunFactory $factory ): void {
 				$this->setDefaultSkin( $factory, 'cat17' );
 				$donation = $this->newStoredDonation( $factory );
-				$crawler = $this->performRequest(
+				$this->performRequest(
 					$client,
 					$this->newPrivateDonorData(),
 					$donation->getId(),
@@ -40,10 +40,12 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 					self::CORRECT_UPDATE_TOKEN
 				);
 				$response = $client->getResponse();
-				$this->assertTrue( $response->isSuccessful() );
+				$this->assertTrue( $response->isRedirect( $this->newValidSuccessRedirectUrl( $donation ) ) );
+
+				$crawler = $client->followRedirect();
 				$this->assertContains(
 					'Hans Wurst, Teststraße 123, 12345 Mönchengladbach',
-					$crawler->filter( '.messages-address' )->html()
+					$crawler->filter( '.receipt-info .caption' )->html()
 				);
 			}
 		);
@@ -55,7 +57,7 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 			function ( Client $client, FunFunFactory $factory ): void {
 				$this->setDefaultSkin( $factory, 'cat17' );
 				$donation = $this->newStoredDonation( $factory );
-				$crawler = $this->performRequest(
+				$this->performRequest(
 					$client,
 					$this->newCompanyDonorData(),
 					$donation->getId(),
@@ -63,10 +65,12 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 					self::CORRECT_UPDATE_TOKEN
 				);
 				$response = $client->getResponse();
-				$this->assertTrue( $response->isSuccessful() );
+				$this->assertTrue( $response->isRedirect( $this->newValidSuccessRedirectUrl( $donation ) ) );
+
+				$crawler = $client->followRedirect();
 				$this->assertContains(
 					'Wikimedia Deutschland Money Makers GmbH, Teststraße 123, 12345 Mönchengladbach',
-					$crawler->filter( '.messages-address' )->html()
+					$crawler->filter( '.receipt-info .caption' )->html()
 				);
 			}
 		);
@@ -156,7 +160,7 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 				$this->assertTrue( $response->isSuccessful() );
 				$this->assertContains(
 					'donor_change_failure_validation_error',
-					$crawler->filter( '.messages-donor' )->html()
+					$crawler->filter( '.messages .h3' )->html()
 				);
 			}
 		);
@@ -253,6 +257,14 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 				$factory->getCampaignConfigurationLoader(),
 				[ 'skins' => [ 'default_bucket' => $skinName ] ]
 			)
+		);
+	}
+
+	private function newValidSuccessRedirectUrl( Donation $donation ): string {
+		return sprintf(
+			'/show-donation-confirmation?id=%s&accessToken=%s',
+			$donation->getId(),
+			self::CORRECT_UPDATE_TOKEN
 		);
 	}
 }

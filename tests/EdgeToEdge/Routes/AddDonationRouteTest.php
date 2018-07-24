@@ -4,13 +4,12 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
-use Silex\Application;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\Donation;
-use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowDonationConfirmationHandler;
+use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
@@ -786,7 +785,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 			$cookieJar = $client->getCookieJar();
 			$cookieJar->updateFromResponse( $client->getInternalResponse() );
-			$cookie = $cookieJar->get( ShowDonationConfirmationHandler::SUBMISSION_COOKIE_NAME );
+			$cookie = $cookieJar->get( ShowDonationConfirmationController::SUBMISSION_COOKIE_NAME );
 			$this->assertTrue( $cookie->isSecure() );
 			$this->assertTrue( $cookie->isHttpOnly() );
 		} );

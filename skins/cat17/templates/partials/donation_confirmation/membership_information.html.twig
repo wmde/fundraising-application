@@ -1,10 +1,14 @@
 <div class="container hidden-print">
 	<div class="row">
-		<div class="content col-xs-12 col-md-8">
-			<a href="#" class="btn btn-introduction bk-blue">
+		<div class="col-xs-12 col-md-8">
+			<a id="membership-info-button" href="#" class="btn bk-blue">
 				{$ 'donor_change_membership_information' | trans $}
 			</a>
-			<p>{$ 'donor_change_suggest_membership' | trans $}</p>
+			<p class="caption">{$ 'donor_change_suggest_membership' | trans $}</p>
 		</div>
 	</div>
+</div>
+
+<div class="membership-benefits-box">
+	{% include 'partials/donation_confirmation/membership_advantages.html.twig' %}
 </div>

@@ -1,12 +1,12 @@
 <div class="container hidden-print">
 	<div class="row">
-		<div class="content col-xs-12 col-md-8">
+		<div class="content col-xs-12 col-md-8 content col-xs-12 col-md-8">
 			{% include 'partials/membership/benefit_list.html.twig' with {
 				'showActiveMembershipBenefits': true
 			} only %}
 		</div>
 		<div class="action-block col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-0 col-md-4">
-			<a href="{$ basepath $}/apply-for-membership?donationId={$ donation.id $}&amp;donationAccessToken={$ donation.accessToken $}&amp;type=sustaining" class="btn btn-introduction bk-blue text-center text-uppercase">
+			<a id="membership-advantages-button" href="{$ basepath $}/apply-for-membership?donationId={$ donation.id $}&amp;donationAccessToken={$ donation.accessToken $}&amp;type=sustaining" class="btn btn-introduction bk-blue text-center text-uppercase">
 				{$ "donation_confirmation_apply_for_membership" | trans $}
 			</a>
 		</div>

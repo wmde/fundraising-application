@@ -5,8 +5,15 @@
 		margin-bottom: 40px;
 	}
 
-	.list-unstyled {
-		clear: both;
+	.list {
+		&-unstyled {
+			clear: both;
+		}
+		@include bkp(smmax) {
+			&-menu {
+				margin: 0 0 50px;
+			}
+		}
 	}
 
 	.action-block {
@@ -61,6 +68,79 @@
 	.introduction {
 		padding-top: 0;
 		padding-bottom: 20px;
+		@include bkp(xsmax) {
+			.h2 {
+				padding: 0 10px;
+				margin: 0 auto;
+				max-width: 350px;
+			}
+		}
+	}
+
+	.highlighted {
+		border: 1px solid $brand-primary;
+		padding-top: 0;
+		margin-top: 45px;
+
+		@media print {
+			border: none;
+		}
+	}
+
+	.receipt {
+		&-info {
+			padding: 0 0 10px;
+			.btn {
+				text-decoration: none;
+			}
+		}
+		&-confirmation {
+			font-size: 19px;
+			display: block;
+		}
+	}
+
+	.caption {
+		color: rgba(0,0,0,.5);
+		width: 80%;
+		font-size: 12px;
+		line-height: 17px;
+		margin-top: 5px;
+	}
+
+	.main-form {
+		display: none;
+		> .container {
+			position: relative;
+		}
+		.action-block {
+			height: 100%;
+			position: absolute;
+			right: 0;
+			bottom: 0;
+			@include bkp(xsmax) {
+				position: relative;
+				float: left;
+				width: 100%;
+			}
+		}
+		.btn-donation {
+			position: absolute;
+			right: 0;
+			bottom: 10px;
+		}
+	}
+
+	.donation-data {
+		padding: 0;
+	}
+
+	.show-info {
+		padding-bottom: 100px;
+	}
+
+	.membership-benefits-box {
+		display: none;
 	}
 }
 

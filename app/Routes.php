@@ -14,13 +14,13 @@ use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\App\Controllers\UpdateDonorController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidateDonorController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidationController;
+use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\AddDonationHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\AddSubscriptionHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\ApplyForMembershipHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\PayPalNotificationHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\PayPalNotificationHandlerForMembershipFee;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\RouteRedirectionHandler;
-use WMDE\Fundraising\Frontend\App\RouteHandlers\ShowDonationConfirmationHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\SofortNotificationHandler;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\DonationContext\UseCases\AddComment\AddCommentRequest;
@@ -440,14 +440,8 @@ $app->post(
 
 		$app->match(
 			'show-donation-confirmation',
-			function( Application $app, Request $request ) use ( $ffFactory ) {
-				return ( new ShowDonationConfirmationHandler( $ffFactory ) )->handle(
-					$request,
-					$app['session']->get( 'piwikTracking', [] )
-				);
-			}
-		)->bind( 'show-donation-confirmation' )
-			->method( 'GET|POST' );
+			ShowDonationConfirmationController::class . '::show'
+		)->bind( 'show-donation-confirmation' )->method( 'GET|POST' );
 
 		$app->post(
 			'handle-paypal-payment-notification',

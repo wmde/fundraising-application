@@ -2,9 +2,9 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\App\RouteHandlers;
+namespace WMDE\Fundraising\Frontend\App\Controllers;
 
-use Symfony\Component\HttpFoundation\Cookie;
+use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\App\AccessDeniedException;
@@ -16,19 +16,13 @@ use WMDE\Fundraising\Frontend\Infrastructure\PiwikVariableCollector;
  * @license GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class ShowDonationConfirmationHandler {
+class ShowDonationConfirmationController {
 
 	const SUBMISSION_COOKIE_NAME = 'donation_timestamp';
 	const TIMESTAMP_FORMAT = 'Y-m-d H:i:s';
 
-	private $ffFactory;
-
-	public function __construct( FunFunFactory $ffFactory ) {
-		$this->ffFactory = $ffFactory;
-	}
-
-	public function handle( Request $request, array $sessionTrackingData ): Response {
-		$useCase = $this->ffFactory->newGetDonationUseCase( $request->get( 'accessToken', '' ) );
+	public function show( Request $request, FunFunFactory $ffFactory, Application $application ): Response {
+		$useCase = $ffFactory->newGetDonationUseCase( $request->get( 'accessToken', '' ) );
 
 		$responseModel = $useCase->showConfirmation( new GetDonationRequest(
 			(int)$request->get( 'id', '' )
@@ -39,16 +33,16 @@ class ShowDonationConfirmationHandler {
 		}
 
 		$httpResponse = new Response(
-			$this->ffFactory->newDonationConfirmationPresenter()->present(
+			$ffFactory->newDonationConfirmationPresenter()->present(
 				$responseModel->getDonation(),
 				$responseModel->getUpdateToken(),
 				$request->get( 'accessToken', '' ),
-				PiwikVariableCollector::newForDonation( $sessionTrackingData, $responseModel->getDonation() )
+				PiwikVariableCollector::newForDonation( $application['session']->get( 'piwikTracking', [] ), $responseModel->getDonation() )
 			)
 		);
 
 		if ( !$request->cookies->get( self::SUBMISSION_COOKIE_NAME ) ) {
-			$cookie = $this->ffFactory->getCookieBuilder();
+			$cookie = $ffFactory->getCookieBuilder();
 			$httpResponse->headers->setCookie(
 				$cookie->newCookie( self::SUBMISSION_COOKIE_NAME, date( self::TIMESTAMP_FORMAT ) )
 			);

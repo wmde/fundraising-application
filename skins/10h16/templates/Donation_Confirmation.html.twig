@@ -101,7 +101,7 @@
 
 					<div class="container clearfix">
 						<div class="address f-left">
-						{% if address %}
+						{% if address and not address.isAnonymous %}
 							<p>
 								<span class="confirm-name">{$ address.salutation $} {$ address.fullName $}</span>
 							</p>
