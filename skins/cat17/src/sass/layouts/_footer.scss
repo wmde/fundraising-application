@@ -14,12 +14,27 @@
 			display: block;
 			max-width: 205px;
 			margin-bottom: 50px;
+			margin-top: 18px;
 			@include bkp(sm) {
 				background: transparent url("#{$image-path}/logo-vertical-wikimedia.svg") no-repeat left top;
 				background-size: contain;
 				height: 100px;
 				max-width: 134px;
 			}
+		}
+	}
+	.bank-data-footer {
+		p {
+			&:first-child {
+				margin-top: 18px;
+			}
+			font-weight: 300;
+		}
+		.bank-data-content {
+			margin-left: 3px;
+		}
+		@include bkp(xs) {
+			margin-bottom: 20px;
 		}
 	}
 }
