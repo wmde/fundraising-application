@@ -171,9 +171,6 @@
 		background-color: white;
 		z-index: 8;
 
-		@include bkp(sm) {
-			height: 60px;
-		}
 		li {
 			display: inline-block;
 			//width: 31.33%;
