@@ -11,6 +11,24 @@
 			.error-text {
 				display: block;
 			}
+			input, textarea {
+				@include themify($themes) {
+					background-color: themed('fieldNormal');
+					border-bottom: themed('border2pxfieldNormal');
+				}
+				&.filled {
+					@include themify($themes) {
+						background-color: themed('fieldSelected');
+						border-bottom: themed('border2pxfieldSelected');
+					}
+					&:hover {
+						@include themify($themes) {
+							border-bottom: themed('border2pxPrimary');
+						}
+
+					}
+				}
+			}
 		}
 		input[type="submit"] {
 			position: relative;
