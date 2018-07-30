@@ -7,7 +7,8 @@
 			</a>
 			<div class="bank-data-footer col-xs-12 col-sm-5 col-md-5">
 				<div class="bank-data-content">
-					<p>{$ 'iban' |trans $}: {$ 'operator_account_iban' | trans $}</p>
+					<p>{$ 'account_owner' | trans $}: {$ 'operator_account_owner_value' | trans $}</p>
+					<p>{$ 'iban' | trans $}:<span class="spacer"></span>{% include 'partials/iban_format.html.twig' only %}</p>
 					<p>{$ 'bic' | trans $}: {$ 'operator_account_bic' | trans $}</p>
 					<p>{$ 'bank' | trans $}</p>
 					<p>{$ 'account_number' | trans $}: {$ 'operator_account_number' | trans $}</p>
@@ -23,12 +24,12 @@
 					</li>
 					<li>
 						<a href="{$ path( 'page', { pageName: 'Impressum' } ) $}">
-							<span>{$ 'imprint'|trans( {}, 'pageTitles' ) $}</span>
+							<span>{$ 'imprint'| trans( {}, 'pageTitles' ) $}</span>
 						</a>
 					</li>
 					<li>
 						<a href="{$ path( 'page', { pageName: 'Datenschutz' } ) $}">
-							<span>{$ 'privacy_protection'|trans( {}, 'pageTitles' ) $}</span>
+							<span>{$ 'privacy_protection'| trans( {}, 'pageTitles' ) $}</span>
 						</a>
 					</li>
 				</ul>

@@ -1,0 +1,2 @@
+{% set iban = 'operator_account_iban' | trans | split(' ')  %}
+{$ iban |join('<span class="spacer"></span>') | raw $}

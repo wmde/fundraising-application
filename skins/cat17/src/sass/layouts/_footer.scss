@@ -20,6 +20,10 @@
 				background-size: contain;
 				height: 100px;
 				max-width: 134px;
+				margin-bottom: 20px;
+			}
+			@include bkp(xs) {
+				margin-bottom: 20px;
 			}
 		}
 	}
@@ -28,7 +32,11 @@
 			&:first-child {
 				margin-top: 18px;
 			}
+			.spacer {
+				margin-left: 3px;
+			}
 			font-weight: 300;
+			margin-bottom: 3px;
 		}
 		.bank-data-content {
 			margin-left: 3px;
