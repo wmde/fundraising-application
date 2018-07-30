@@ -40,7 +40,7 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 					self::CORRECT_UPDATE_TOKEN
 				);
 				$response = $client->getResponse();
-				$this->assertTrue( $response->isRedirect( $this->newValidSuccessRedirectUrl( $donation ) ) );
+				$this->assertTrue( $response->isRedirect( $this->newValidSuccessRedirectUrl( $donation, $factory ) ) );
 
 				$crawler = $client->followRedirect();
 				$this->assertContains(
@@ -65,7 +65,7 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 					self::CORRECT_UPDATE_TOKEN
 				);
 				$response = $client->getResponse();
-				$this->assertTrue( $response->isRedirect( $this->newValidSuccessRedirectUrl( $donation ) ) );
+				$this->assertTrue( $response->isRedirect( $this->newValidSuccessRedirectUrl( $donation, $factory ) ) );
 
 				$crawler = $client->followRedirect();
 				$this->assertContains(
@@ -260,11 +260,13 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	private function newValidSuccessRedirectUrl( Donation $donation ): string {
-		return sprintf(
-			'/show-donation-confirmation?id=%s&accessToken=%s',
-			$donation->getId(),
-			self::CORRECT_UPDATE_TOKEN
+	private function newValidSuccessRedirectUrl( Donation $donation, FunFunFactory $ffFactory ): string {
+		return $ffFactory->getUrlGenerator()->generateAbsoluteUrl(
+			'show-donation-confirmation',
+			[
+				'id' => $donation->getId(),
+				'accessToken' => self::CORRECT_UPDATE_TOKEN
+			]
 		);
 	}
 }

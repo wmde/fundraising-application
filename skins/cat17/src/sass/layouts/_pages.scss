@@ -52,8 +52,7 @@ main.conclusion {
 }
 
 .transfer-data-list {
-	margin-top: 15px;
-	margin-bottom: 0;
+	margin-bottom: 30px;
 	@include bkp(sm) {
 		width: 65%;
 	}

@@ -441,7 +441,8 @@ $app->post(
 		$app->match(
 			'show-donation-confirmation',
 			ShowDonationConfirmationController::class . '::show'
-		)->bind( 'show-donation-confirmation' )->method( 'GET|POST' );
+		)->bind( 'show-donation-confirmation' )
+			->method( 'GET|POST' );
 
 		$app->post(
 			'handle-paypal-payment-notification',

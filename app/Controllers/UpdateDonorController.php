@@ -27,10 +27,12 @@ class UpdateDonorController {
 		}
 		if ( $responseModel->isSuccessful() ) {
 			return new RedirectResponse(
-				sprintf(
-					'/show-donation-confirmation?id=%s&accessToken=%s',
-					$responseModel->getDonation()->getId(),
-					$accessToken
+				$ffFactory->getUrlGenerator()->generateAbsoluteUrl(
+					'show-donation-confirmation',
+					[
+						'id' => $responseModel->getDonation()->getId(),
+						'accessToken' => $accessToken
+					]
 				)
 			);
 		}

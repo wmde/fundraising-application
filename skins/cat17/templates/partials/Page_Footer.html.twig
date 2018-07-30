@@ -2,11 +2,19 @@
 	<div class="container">
 		<div class="row">
 
-			<a class="logo-footer col-xs-12 col-sm-7 col-md-8" href="{$ path( '/' ) $}">
+			<a class="logo-footer col-xs-12 col-sm-3 col-md-3" href="{$ path( '/' ) $}">
 				<span class="img-bk"></span>
 			</a>
-
-			<nav class="menu menu-footer col-xs-12 col-sm-5 col-md-4">
+			<div class="bank-data-footer col-xs-12 col-sm-5 col-md-5">
+				<div class="bank-data-content">
+					<p>{$ 'iban' |trans $}: {$ 'operator_account_iban' | trans $}</p>
+					<p>{$ 'bic' | trans $}: {$ 'operator_account_bic' | trans $}</p>
+					<p>{$ 'bank' | trans $}</p>
+					<p>{$ 'account_number' | trans $}: {$ 'operator_account_number' | trans $}</p>
+					<p>{$ 'blz' | trans $}: {$ 'operator_account_blz' | trans $}</p>
+				</div>
+			</div>
+			<nav class="menu menu-footer col-xs-12 col-sm-4 col-md-4">
 				<ul class="list-menu list-unstyled">
 					<li>
 						<a href="{$ path( 'contact' ) $}">
