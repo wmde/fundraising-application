@@ -21,21 +21,15 @@ class ChoiceFactory {
 		$this->featureToggle = $featureToggle;
 	}
 
-	public function getConfirmationPageTemplate( Twig_Environment $twig, array $context ): TwigTemplate {
+	public function isDonationAddressOptional(): bool {
+		/** The "optional address" feature is only implemented for cat17 */
 		if (
 			$this->featureToggle->featureIsActive( 'campaigns.donation_address.required' ) ||
 			$this->getSkinTemplateDirectory() !== $this->getSkinDirectory( 'cat17' )
 		) {
-			/** The "optional address" feature is only implemented for cat17 */
-			return new TwigTemplate( $twig, 'Donation_Confirmation.html.twig', array_merge( [
-					'templateName' => 'collapsed_membership_form'
-				], $context )
-			);
+			return false;
 		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.donation_address.optional' ) ) {
-			return new TwigTemplate( $twig, 'Donation_Confirmation_FeatureToggle_Address.html.twig', array_merge( [
-					'templateName' => 'expanded_membership_form'
-				], $context )
-			);
+			return true;
 		}
 		throw new UnknownChoiceDefinition( 'Confirmation Page Template configuration failure.' );
 	}

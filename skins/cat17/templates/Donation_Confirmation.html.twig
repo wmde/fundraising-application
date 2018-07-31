@@ -13,10 +13,31 @@
 		{% include 'partials/donation_confirmation/bank_transfer.html.twig' %}
 	{% endif %}
 
-	{% include 'partials/donation_confirmation/membership_advantages.html.twig' %}
-	{% include 'partials/donation_confirmation/social_share.html.twig' %}
+	{% if featureToggle.donorUpdateEnabled and not updateData.isSuccessful %}
+		{% include 'partials/donation_confirmation/donor_form.html.twig' %}
+	{% endif %}
+
+	{% include 'partials/donation_confirmation/membership_information.html.twig' %}
+
+	{% if updateData.message and not updateData.isSuccessful%}
+		<div class="container hidden-print messages">
+			<p class="h3">
+				{$ updateData.message | trans $}
+			</p>
+		</div>
+	{% endif %}
 
 	<img src="https://de.wikipedia.org/wiki/Special:HideBanners?duration={$ donation.cookieDuration $}&reason=donate" width="0" height="0" border="0" />
 
-	{# TODO Hidden features that get shown by JavaScript links #}
+{% endblock %}
+
+{% block scripts %}
+	<script src="{$ basepath|e('html_attr') $}{$ '/skins/cat17/scripts/wmde.js'|prefix_file $}"></script>
+	<script id="init-form" src="{$ basepath|e('html_attr') $}{$ '/skins/cat17/scripts/donorUpdateForm.js'|prefix_file $}"
+			data-initial-form-values="{% if initialFormValues %}{$ initialFormValues|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
+			data-violated-fields="{% if violatedFields %}{$ violatedFields|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
+			data-initial-validation-result="{% if validationResult %}{$ validationResult|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
+			data-validate-address-url="{$ basepath|e('html_attr') $}/validate-address"
+			data-validate-email-address-url="{$ basepath|e('html_attr') $}/validate-email"
+	></script>
 {% endblock %}

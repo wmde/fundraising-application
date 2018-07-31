@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\App\Controllers;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorRequest;
@@ -21,11 +22,27 @@ class UpdateDonorController {
 		$responseModel = $ffFactory
 			->newUpdateDonorUseCase( $updateToken, $accessToken )
 			->updateDonor( $this->newRequestModel( $request ) );
-		if ($responseModel->getDonation() === null) {
+		if ( $responseModel->getDonation() === null ) {
 			throw new AccessDeniedException();
 		}
+		if ( $responseModel->isSuccessful() ) {
+			return new RedirectResponse(
+				$ffFactory->getUrlGenerator()->generateAbsoluteUrl(
+					'show-donation-confirmation',
+					[
+						'id' => $responseModel->getDonation()->getId(),
+						'accessToken' => $accessToken
+					]
+				)
+			);
+		}
 		return new Response(
-			$ffFactory->newDonorUpdatePresenter()->present( $responseModel, $responseModel->getDonation(), $updateToken, $accessToken )
+			$ffFactory->newDonorUpdatePresenter()->present(
+				$responseModel,
+				$responseModel->getDonation(),
+				$updateToken,
+				$accessToken
+			)
 		);
 	}
 

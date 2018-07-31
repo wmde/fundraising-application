@@ -11,6 +11,7 @@ use WMDE\Euro\Euro;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationResponse;
+use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\AmountParser;
 use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
@@ -186,13 +187,13 @@ class AddDonationHandler {
 	}
 
 	private function isSubmissionAllowed( Request $request ) {
-		$lastSubmission = $request->cookies->get( ShowDonationConfirmationHandler::SUBMISSION_COOKIE_NAME, '' );
+		$lastSubmission = $request->cookies->get( ShowDonationConfirmationController::SUBMISSION_COOKIE_NAME, '' );
 		if ( $lastSubmission === '' ) {
 			return true;
 		}
 
 		$minNextTimestamp =
-			\DateTime::createFromFormat( ShowDonationConfirmationHandler::TIMESTAMP_FORMAT, $lastSubmission )
+			\DateTime::createFromFormat( ShowDonationConfirmationController::TIMESTAMP_FORMAT, $lastSubmission )
 			->add( new \DateInterval( $this->ffFactory->getDonationTimeframeLimit() ) );
 
 		if ( $minNextTimestamp > new \DateTime() ) {

@@ -150,4 +150,13 @@ $( function() {
 		initSetup,
 		initData.data( 'initial-validation-result' )
 	) );
+
+	$( '#receipt-button' ).on( 'click', function() {
+		$('#personal').click();
+		var form = $( '.main-form' );
+		form.show();
+		$('html, body').animate({
+			scrollTop: form.offset().top - $('.header').height()
+		}, 1000);
+	} );
 } );

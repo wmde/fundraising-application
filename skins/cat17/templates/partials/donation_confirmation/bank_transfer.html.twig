@@ -1,10 +1,7 @@
 <div class="container">
     <div class="row">
-        <div class="content col-xs-12 col-md-8">
-
+        <div class="content highlighted col-xs-12 col-md-8">
             <p class="h1">
-                {$ 'donation_confirmation_head' | trans $}
-                <br />
                 {$ "donation_confirmation_head_summary_bank_transfer" | trans( {
                     '%formattedAmount%': '<span class="strong">' ~ formattedAmount ~ '</span>',
                     '%interval%': '<span class="strong">' ~ donation.interval | trans({}, 'paymentIntervals') ~ '</span>',
@@ -12,34 +9,19 @@
                     '%status_description%': donation.status|trans( {}, 'paymentStatus' )
                 } ) | raw $}
             </p>
-
             <p class="h2">
                 {$ "donation_confirmation_subhead_donation_number" | trans( {
-                    '%donation.id%': '<span class="strong">' ~ donation.id ~ '</span>'
+                '%donation.id%': '<span class="strong">' ~ donation.id ~ '</span>'
                 } ) | raw $}
             </p>
             <p class="h2">
                 {$ "donation_confirmation_subhead_bank_transfer"| trans( {
-                    '%formattedAmount%': '<span class="strong field-amount">' ~ formattedAmount  ~ '</span>',
-                    '%interval%': '<span class="strong">' ~ donation.interval|trans({}, 'paymentIntervals') ~ '</span>',
-                    '%paymentType%': '<span class="strong">' ~ donation.paymentType|trans( {}, 'paymentTypes' ) ~ '</span>',
-                    '%status_description%': donation.status|trans( {}, 'paymentStatus' )
+                '%formattedAmount%': '<span class="strong field-amount">' ~ formattedAmount  ~ '</span>',
+                '%interval%': '<span class="strong">' ~ donation.interval|trans({}, 'paymentIntervals') ~ '</span>',
+                '%paymentType%': '<span class="strong">' ~ donation.paymentType|trans( {}, 'paymentTypes' ) ~ '</span>',
+                '%status_description%': donation.status|trans( {}, 'paymentStatus' )
                 } ) | raw $}
             </p>
-        </div>
-		<div class="action-block visible-md visible-lg col-md-offset-0 col-md-4 hidden-print">
-			<ul class="list-menu link-back list-unstyled">
-				{% include 'partials/donation_confirmation/link_print.html.twig' with {
-					'label': 'donation_confirmation_print_summary' | trans
-				} only %}
-			</ul>
-		</div>
-    </div>
-</div>
-
-<div class="switch-container container-fluid">
-    <div class="row">
-        <div class="introduction col-xs-12 col-md-8">
             <dl class="transfer-data-list">
                 <div class="wrap-def">
                     <div class="container">
@@ -72,9 +54,21 @@
                     </div>
                 </div>
             </dl>
-        </div>
-    </div>
 
+            <p class="h2">
+                {$ 'donation_confirmation_head' | trans $}
+            </p>
+			{% include 'partials/donation_confirmation/donor_donation_receipt.html.twig' %}
+        </div>
+		<div class="action-block visible-md visible-lg col-md-offset-0 col-md-4 hidden-print">
+			<ul class="list-menu link-back list-unstyled">
+				{% include 'partials/donation_confirmation/link_print.html.twig' with {
+					'label': 'donation_confirmation_print_summary' | trans
+				} only %}
+				{% include 'partials/share_on_social_networks.html.twig' %}
+			</ul>
+		</div>
+    </div>
 </div>
 
 <div class="container">
@@ -98,11 +92,12 @@
 <div class="visible-xs visible-sm hidden-print">
     <div class="container">
         <div class="row">
-            <nav class="menu menu-footer col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-8 col-md-4">
+            <nav class="menu menu-footer col-xs-12 col-sm-6 col-md-offset-8 col-md-4">
                 <ul class="list-menu list-unstyled">
 					{% include 'partials/donation_confirmation/link_print.html.twig' with {
 						'label': 'donation_confirmation_print_summary' | trans
 					} only %}
+					{% include 'partials/share_on_social_networks.html.twig' %}
                 </ul>
             </nav>
         </div>

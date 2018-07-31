@@ -52,8 +52,7 @@ main.conclusion {
 }
 
 .transfer-data-list {
-	margin-top: 15px;
-	margin-bottom: 0;
+	margin-bottom: 30px;
 	@include bkp(sm) {
 		width: 65%;
 	}
@@ -66,10 +65,7 @@ main.conclusion {
 	.wrap-def {
 		padding: 6px 0;
 		@include bkp(sm) {
-			padding: 6px 30px;
-		}
-		&:nth-child(odd) {
-			background-color: $gray-light;
+			padding: 2px 0;
 		}
 		.container {
 			@include bkp(sm) {
