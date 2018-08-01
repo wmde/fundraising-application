@@ -9,11 +9,9 @@ matrix:
   fast_finish: true
   include:
   - php: 7.2
-    # Disabled since we hit the 50 minute timeout
-#  - php: 7.1
-#    env: DB=sqlite; TYPE=coverage
-#  allow_failures: # We allow this one to fail so fast_finish causes the build to not wait for it
-#  - env: DB=sqlite; TYPE=coverage
+    env: TYPE=coverage
+  # More PHP instances with different environment variables may be added here
+  # This may be useful if a additional PHP versions or DBMS (SQLite, ...) should be tested by Travis
 
 before_install:
   - docker build -t wmde/fundraising-frontend-phpstan build/phpstan
@@ -29,7 +27,7 @@ before_script:
 script:
   - make setup
   - make clear
-  - make ci
+  - make ci-with-coverage
   - make install-php COMPOSER_FLAGS="--no-dev -q" # Remove dev dependencies to make sure PHPStan creates errors if prod code depends on dev classes
   - docker run -v $PWD:/app --rm wmde/fundraising-frontend-phpstan analyse --level 1 --no-progress cli/ src/ # Can't use "make stan" because stan was removed
 

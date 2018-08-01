@@ -67,6 +67,9 @@ covers:
 phpunit:
 	docker-compose run --rm --name $(UNIQUE_APP_CONTAINER)-$@ app ./vendor/bin/phpunit $(TEST_DIR)
 
+phpunit-with-coverage:
+	docker-compose -f docker-compose.yml -f docker-compose.debug.yml run --rm --name $(UNIQUE_APP_CONTAINER)-$@ app_debug ./vendor/bin/phpunit --configuration=phpunit.xml.dist --coverage-clover coverage.clover
+
 phpunit-system:
 	docker-compose run --rm --name $(UNIQUE_APP_CONTAINER)-$@ app ./vendor/bin/phpunit tests/System/
 
@@ -105,6 +108,8 @@ migration-status:
 
 ci: covers phpunit cs npm-ci validate-app-config validate-campaign-config stan
 
+ci-with-coverage: covers phpunit-with-coverage cs npm-ci validate-app-config validate-campaign-config stan
+
 setup: install-php install-js default-config ui setup-db
 
-.PHONY: ci clean clear covers cs install-php install-js js npm-ci npm-install phpmd phpunit phpunit-system setup stan test ui validate-app-config validate-campaign-config
+.PHONY: ci ci-with-coverage clean clear covers cs install-php install-js js npm-ci npm-install phpmd phpunit phpunit-system setup stan test ui validate-app-config validate-campaign-config

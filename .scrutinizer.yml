@@ -16,5 +16,17 @@ filter:
     excluded_paths:
         - 'vendor/*'
         - 'web/skins/*'
-        - 'skins/10h16/web/_js/lib/*'
+        - 'skins/10h16/*'
         - 'node_modules/*'
+
+build:
+    nodes:
+        analysis:
+            tests:
+                override:
+                - php-scrutinizer-run
+    tests:
+        override:
+        - true
+
+
