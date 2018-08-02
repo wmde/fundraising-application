@@ -14,10 +14,12 @@ tools:
 
 filter:
     excluded_paths:
-        - 'vendor/*'
         - 'web/skins/*'
         - 'skins/10h16/*'
         - 'node_modules/*'
+        - 'tests/*'
+    dependency_paths:
+        - 'vendor/'
 
 build:
     nodes:
