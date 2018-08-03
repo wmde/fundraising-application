@@ -1550,7 +1550,7 @@ class FunFunFactory implements ServiceProviderInterface {
 		if ( !file_exists( $prefixContentFile ) ) {
 			return '';
 		}
-		return $prefix = preg_replace( '/[^0-9a-f]/', '', file_get_contents( $prefixContentFile ) );
+		return preg_replace( '/[^0-9a-f]/', '', file_get_contents( $prefixContentFile ) );
 	}
 
 	public function newDonationAcceptedEventHandler( string $updateToken ): DonationAcceptedEventHandler {

@@ -80,10 +80,14 @@ class RenderMailTemplatesCommand extends Command {
 	private function getDefaultConfig(): array {
 		$prodConfigPath = __DIR__ . '/../app/config/config.prod.json';
 
+		$configPaths = [ __DIR__ . '/../app/config/config.dist.json' ];
+		if ( is_readable( $prodConfigPath ) ) {
+			$configPaths[] = $prodConfigPath;
+		}
+
 		$configReader = new ConfigReader(
 			new SimpleFileFetcher(),
-			__DIR__ . '/../app/config/config.dist.json',
-			is_readable( $prodConfigPath ) ? $prodConfigPath : null
+			...$configPaths
 		);
 
 		return $configReader->getConfig();

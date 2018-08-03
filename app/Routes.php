@@ -43,13 +43,15 @@ use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolationListMapper;
 
 class Routes {
-	public static function initializeRoutes( Application $app, FunFunFactory $ffFactory): Application {
+	public static function initializeRoutes( Application $app, FunFunFactory $ffFactory ): Application {
 		$app->post(
-			'validate-email', ValidationController::class . '::validateEmail'
+			'validate-email',
+			ValidationController::class . '::validateEmail'
 		);
 
 		$app->post(
-			'validate-payment-data', ValidationController::class . '::validateDonationPayment'
+			'validate-payment-data',
+			ValidationController::class . '::validateDonationPayment'
 		);
 
 		$app->post(
@@ -59,14 +61,16 @@ class Routes {
 
 		$app->post(
 			'validate-donation-amount',
-			function( Request $httpRequest ) use ( $app, $ffFactory ) {
+			function ( Request $httpRequest ) use ( $app, $ffFactory ) {
 
-				$constraint = new Collection( [
-					'allowExtraFields' => false,
-					'fields' => [
-						'amount' => $ffFactory->newDonationAmountConstraint()
+				$constraint = new Collection(
+					[
+						'allowExtraFields' => false,
+						'fields' => [
+							'amount' => $ffFactory->newDonationAmountConstraint()
+						]
 					]
-				] );
+				);
 
 				$violations = Validation::createValidator()->validate( $httpRequest->request->all(), $constraint );
 
@@ -81,11 +85,11 @@ class Routes {
 
 		$app->post(
 			'validate-fee',
-			function( Request $httpRequest ) use ( $app, $ffFactory ) {
+			function ( Request $httpRequest ) use ( $app ) {
 				$validator = new MembershipFeeValidator();
 				$result = $validator->validate(
 					str_replace( ',', '.', $httpRequest->request->get( 'amount', '' ) ),
-					(int) $httpRequest->request->get( 'paymentIntervalInMonths', '0' ),
+					(int)$httpRequest->request->get( 'paymentIntervalInMonths', '0' ),
 					$httpRequest->request->get( 'addressType', '' )
 				);
 
@@ -100,7 +104,7 @@ class Routes {
 
 		$app->get(
 			'list-comments.json',
-			function( Request $request ) use ( $app, $ffFactory ) {
+			function ( Request $request ) use ( $app, $ffFactory ) {
 				$response = $app->json(
 					$ffFactory->newCommentListJsonPresenter()->present(
 						$ffFactory->newListCommentsUseCase()->listComments(
@@ -122,7 +126,7 @@ class Routes {
 
 		$app->get(
 			'list-comments.rss',
-			function() use ( $app, $ffFactory ) {
+			function () use ( $ffFactory ) {
 				$rss = $ffFactory->newCommentListRssPresenter()->present(
 					$ffFactory->newListCommentsUseCase()->listComments(
 						new CommentListingRequest( 100, CommentListingRequest::FIRST_PAGE )
@@ -142,7 +146,7 @@ class Routes {
 
 		$app->get(
 			'list-comments.html',
-			function( Request $request ) use ( $app, $ffFactory ) {
+			function ( Request $request ) use ( $ffFactory ) {
 				return new Response(
 					$ffFactory->newCommentListHtmlPresenter()->present(
 						$ffFactory->newListCommentsUseCase()->listComments(
@@ -159,17 +163,17 @@ class Routes {
 
 		$app->get(
 			'page/{pageName}',
-			function( Application $app, $pageName ) use ( $ffFactory ) {
+			function ( Application $app, $pageName ) use ( $ffFactory ) {
 				return ( new \WMDE\Fundraising\Frontend\App\RouteHandlers\PageDisplayHandler( $ffFactory, $app ) )
 					->handle( $pageName );
 			}
 		)
 			->bind( 'page' );
 
-// Form for this is provided by route page/Subscription_Form
+		// Form for this is provided by route page/Subscription_Form
 		$app->match(
 			'contact/subscribe',
-			function( Application $app, Request $request ) use ( $ffFactory ) {
+			function ( Application $app, Request $request ) use ( $ffFactory ) {
 				return ( new AddSubscriptionHandler( $ffFactory, $app ) )
 					->handle( $request );
 			}
@@ -177,17 +181,20 @@ class Routes {
 			->method( 'GET|POST' )
 			->bind( 'subscribe' );
 
-		$app->get( 'contact/confirm-subscription/{confirmationCode}', function ( $confirmationCode ) use ( $ffFactory ) {
-			$useCase = $ffFactory->newConfirmSubscriptionUseCase();
-			$response = $useCase->confirmSubscription( $confirmationCode );
-			return $ffFactory->newConfirmSubscriptionHtmlPresenter()->present( $response );
-		} )
+		$app->get(
+			'contact/confirm-subscription/{confirmationCode}',
+			function ( $confirmationCode ) use ( $ffFactory ) {
+				$useCase = $ffFactory->newConfirmSubscriptionUseCase();
+				$response = $useCase->confirmSubscription( $confirmationCode );
+				return $ffFactory->newConfirmSubscriptionHtmlPresenter()->present( $response );
+			}
+		)
 			->assert( 'confirmationCode', '^[0-9a-f]+$' )
 			->bind( 'confirm-subscription' );
 
 		$app->get(
 			'check-iban',
-			function( Request $request ) use ( $app, $ffFactory ) {
+			function ( Request $request ) use ( $app, $ffFactory ) {
 				$useCase = $ffFactory->newCheckIbanUseCase();
 				$checkIbanResponse = $useCase->checkIban( new Iban( $request->query->get( 'iban', '' ) ) );
 				return $app->json( $ffFactory->newIbanPresenter()->present( $checkIbanResponse ) );
@@ -196,7 +203,7 @@ class Routes {
 
 		$app->get(
 			'generate-iban',
-			function( Request $request ) use ( $app, $ffFactory ) {
+			function ( Request $request ) use ( $app, $ffFactory ) {
 				$generateIbanRequest = new GenerateIbanRequest(
 					$request->query->get( 'accountNumber', '' ),
 					$request->query->get( 'bankCode', '' )
@@ -209,7 +216,7 @@ class Routes {
 
 		$app->post(
 			'add-comment',
-			function( Request $request ) use ( $app, $ffFactory ) {
+			function ( Request $request ) use ( $app, $ffFactory ) {
 				$addCommentRequest = new AddCommentRequest();
 				$addCommentRequest->setCommentText( trim( $request->request->get( 'comment', '' ) ) );
 				$addCommentRequest->setIsPublic( $request->request->get( 'public', '0' ) === '1' );
@@ -217,8 +224,7 @@ class Routes {
 
 				if ( $request->request->get( 'isAnonymous', '0' ) === '1' ) {
 					$addCommentRequest->setIsAnonymous();
-				}
-				else {
+				} else {
 					$addCommentRequest->setIsNamed();
 				}
 
@@ -227,31 +233,37 @@ class Routes {
 				$updateToken = $request->request->get( 'updateToken', '' );
 
 				if ( $updateToken === '' ) {
-					return $app->json( [
-						'status' => 'ERR',
-						'message' => $ffFactory->getTranslator()->trans( 'comment_failure_access_denied' ),
-					] );
+					return $app->json(
+						[
+							'status' => 'ERR',
+							'message' => $ffFactory->getTranslator()->trans( 'comment_failure_access_denied' ),
+						]
+					);
 				}
 
 				$response = $ffFactory->newAddCommentUseCase( $updateToken )->addComment( $addCommentRequest );
 
 				if ( $response->isSuccessful() ) {
-					return $app->json( [
-						'status' => 'OK',
-						'message' => $ffFactory->getTranslator()->trans( $response->getSuccessMessage() ),
-					] );
+					return $app->json(
+						[
+							'status' => 'OK',
+							'message' => $ffFactory->getTranslator()->trans( $response->getSuccessMessage() ),
+						]
+					);
 				}
 
-				return $app->json( [
-					'status' => 'ERR',
-					'message' => $ffFactory->getTranslator()->trans( $response->getErrorMessage() ),
-				] );
+				return $app->json(
+					[
+						'status' => 'ERR',
+						'message' => $ffFactory->getTranslator()->trans( $response->getErrorMessage() ),
+					]
+				);
 			}
 		)->bind( 'PostComment' );
 
 		$app->get(
 			'add-comment',
-			function( Request $request ) use ( $app, $ffFactory ) {
+			function ( Request $request ) use ( $app, $ffFactory ) {
 				$template = $ffFactory->getLayoutTemplate(
 					'Donation_Comment.html.twig'
 				);
@@ -276,12 +288,12 @@ class Routes {
 
 		$app->post(
 			'contact/get-in-touch',
-			function( Request $request ) use ( $app, $ffFactory ) {
+			function ( Request $request ) use ( $app, $ffFactory ) {
 				$contactFormRequest = new GetInTouchRequest(
 					$request->get( 'firstname', '' ),
 					$request->get( 'lastname', '' ),
 					$request->get( 'email', '' ),
-					$request->get( 'donationNumber', ''),
+					$request->get( 'donationNumber', '' ),
 					$request->get( 'subject', '' ),
 					$request->get( 'category', '' ),
 					$request->get( 'messageBody', '' )
@@ -289,23 +301,30 @@ class Routes {
 
 				$contactFormResponse = $ffFactory->newGetInTouchUseCase()->processContactRequest( $contactFormRequest );
 				if ( $contactFormResponse->isSuccessful() ) {
-					return $app->redirect( $app['url_generator']->generate( 'page', [ 'pageName' => 'Kontakt_Bestaetigung' ] ) );
+					return $app->redirect(
+						$app['url_generator']->generate( 'page', [ 'pageName' => 'Kontakt_Bestaetigung' ] )
+					);
 				}
 
-				return $ffFactory->newGetInTouchHtmlPresenter()->present( $contactFormResponse, $request->request->all() );
+				return $ffFactory->newGetInTouchHtmlPresenter()->present(
+					$contactFormResponse,
+					$request->request->all()
+				);
 			}
 		);
 
 		$app->get(
 			'contact/get-in-touch',
-			function() use ( $app, $ffFactory ) {
-				return $ffFactory->getLayoutTemplate( 'contact_form.html.twig' )->render( [ 'contact_categories' => $ffFactory->getGetInTouchCategories() ] );
+			function () use ( $ffFactory ) {
+				return $ffFactory->getLayoutTemplate( 'contact_form.html.twig' )->render(
+					[ 'contact_categories' => $ffFactory->getGetInTouchCategories() ]
+				);
 			}
-		)->bind('contact');
+		)->bind( 'contact' );
 
 		$app->post(
 			'donation/cancel',
-			function( Request $request ) use ( $app, $ffFactory ) {
+			function ( Request $request ) use ( $ffFactory ) {
 				$cancellationRequest = new CancelDonationRequest(
 					(int)$request->request->get( 'sid', '' )
 				);
@@ -324,84 +343,100 @@ class Routes {
 
 		$app->post(
 			'donation/add',
-			function( Application $app, Request $request ) use ( $ffFactory ) {
+			function ( Application $app, Request $request ) use ( $ffFactory ) {
 				return ( new AddDonationHandler( $ffFactory, $app ) )
 					->handle( $request );
 			}
 		);
 
 		$app->post(
-			'donation/update', UpdateDonorController::class . '::updateDonor'
+			'donation/update',
+			UpdateDonorController::class . '::updateDonor'
 		);
 
-// Show a donation form with pre-filled payment values, e.g. when coming from a banner
-		$app->get( 'donation/new', function ( Application $app, Request $request ) use ( $ffFactory ) {
-			$app['session']->set( 'piwikTracking', array_filter(
-					[
-						'paymentType' => $request->get( 'zahlweise', '' ),
-						'paymentAmount' => $request->get( 'betrag', '' ),
-						'paymentInterval' => $request->get( 'periode', '' )
-					],
-					function ( string $value ) {
-						return $value !== '' && strlen( $value ) < 20;
-					} )
-			);
-
-			try {
-				$amount = Euro::newFromFloat( ( new AmountParser( 'en_EN' ) )->parseAsFloat(
-					$request->get( 'betrag_auswahl', $request->get( 'amountGiven', '' ) ) )
+		// Show a donation form with pre-filled payment values, e.g. when coming from a banner
+		$app->get(
+			'donation/new',
+			function ( Application $app, Request $request ) use ( $ffFactory ) {
+				$app['session']->set(
+					'piwikTracking',
+					array_filter(
+						[
+							'paymentType' => $request->get( 'zahlweise', '' ),
+							'paymentAmount' => $request->get( 'betrag', '' ),
+							'paymentInterval' => $request->get( 'periode', '' )
+						],
+						function ( string $value ) {
+							return $value !== '' && strlen( $value ) < 20;
+						}
+					)
 				);
-			} catch ( \InvalidArgumentException $ex ) {
-				$amount = Euro::newFromCents( 0 );
-			}
-			$validationResult = $ffFactory->newPaymentDataValidator()->validate( $amount, (string) $request->get( 'zahlweise', '' ) );
 
-			$trackingInfo = new DonationTrackingInfo();
-			$trackingInfo->setTotalImpressionCount( intval( $request->get( 'impCount' ) ) );
-			$trackingInfo->setSingleBannerImpressionCount( intval( $request->get( 'bImpCount' ) ) );
-
-			// TODO: don't we want to use newDonationFormViolationPresenter when !$validationResult->isSuccessful()?
-
-			return new Response(
-				$ffFactory->newDonationFormPresenter()->present(
+				try {
+					$amount = Euro::newFromFloat(
+						( new AmountParser( 'en_EN' ) )->parseAsFloat(
+							$request->get( 'betrag_auswahl', $request->get( 'amountGiven', '' ) )
+						)
+					);
+				}
+				catch ( \InvalidArgumentException $ex ) {
+					$amount = Euro::newFromCents( 0 );
+				}
+				$validationResult = $ffFactory->newPaymentDataValidator()->validate(
 					$amount,
-					$request->get( 'zahlweise', '' ),
-					intval( $request->get( 'periode', 0 ) ),
-					$validationResult->isSuccessful(),
-					$trackingInfo,
-					$request->get( 'addressType', 'person' )
-				)
-			);
-		} )->method( 'POST|GET' );
+					(string)$request->get( 'zahlweise', '' )
+				);
 
-$app->post(
-	'apply-for-membership',
-	function( Application $app, Request $httpRequest ) use ( $ffFactory ) {
-		return ( new ApplyForMembershipHandler( $ffFactory, $app ) )->handle( $httpRequest );
-	}
-);
+				$trackingInfo = new DonationTrackingInfo();
+				$trackingInfo->setTotalImpressionCount( intval( $request->get( 'impCount' ) ) );
+				$trackingInfo->setSingleBannerImpressionCount( intval( $request->get( 'bImpCount' ) ) );
+
+				// TODO: don't we want to use newDonationFormViolationPresenter when !$validationResult->isSuccessful()?
+
+				return new Response(
+					$ffFactory->newDonationFormPresenter()->present(
+						$amount,
+						$request->get( 'zahlweise', '' ),
+						intval( $request->get( 'periode', 0 ) ),
+						$validationResult->isSuccessful(),
+						$trackingInfo,
+						$request->get( 'addressType', 'person' )
+					)
+				);
+			}
+		)->method( 'POST|GET' );
+
+		$app->post(
+			'apply-for-membership',
+			function ( Application $app, Request $httpRequest ) use ( $ffFactory ) {
+				return ( new ApplyForMembershipHandler( $ffFactory, $app ) )->handle( $httpRequest );
+			}
+		);
 
 		$app->get(
 			'apply-for-membership',
-			function( Request $request ) use ( $ffFactory ) {
+			function ( Request $request ) use ( $ffFactory ) {
 				$params = [];
 
-				if ( $request->query->get('type' ) === 'sustaining' ) {
-					$params['showMembershipTypeOption'] = false ;
+				if ( $request->query->get( 'type' ) === 'sustaining' ) {
+					$params['showMembershipTypeOption'] = false;
 				}
 
-				try {
-					$useCase = $ffFactory->newGetDonationUseCase( $request->query->get( 'donationAccessToken', '' ) );
-					$responseModel = $useCase->showConfirmation( new GetDonationRequest(
+				$useCase = $ffFactory->newGetDonationUseCase( $request->query->get( 'donationAccessToken', '' ) );
+				$responseModel = $useCase->showConfirmation(
+					new GetDonationRequest(
 						$request->query->getInt( 'donationId' )
-					) );
+					)
+				);
 
-					if ( $responseModel->accessIsPermitted() ) {
-						$adapter = new DonationMembershipApplicationAdapter();
-						$params['initialFormValues'] = $adapter->getInitialMembershipFormValues( $responseModel->getDonation() );
-						$params['initialValidationResult'] = $adapter->getInitialValidationState( $responseModel->getDonation() );
-					}
-				} catch ( \Exception $e ) {
+				if ( $responseModel->accessIsPermitted() ) {
+					$adapter = new DonationMembershipApplicationAdapter();
+					$params['initialFormValues'] = $adapter->getInitialMembershipFormValues(
+						$responseModel->getDonation()
+					);
+					$params['initialValidationResult'] = $adapter->getInitialValidationState(
+						$responseModel->getDonation()
+					);
 				}
 
 				return $ffFactory->getMembershipApplicationFormTemplate()->render( $params );
@@ -410,7 +445,7 @@ $app->post(
 
 		$app->get(
 			'show-membership-confirmation',
-			function( Request $request ) use ( $ffFactory ) {
+			function ( Request $request ) use ( $ffFactory ) {
 				$presenter = $ffFactory->newMembershipApplicationConfirmationHtmlPresenter();
 
 				$useCase = $ffFactory->newMembershipApplicationConfirmationUseCase(
@@ -426,7 +461,7 @@ $app->post(
 
 		$app->get(
 			'cancel-membership-application',
-			function( Request $request ) use ( $ffFactory ) {
+			function ( Request $request ) use ( $ffFactory ) {
 				$cancellationRequest = new CancellationRequest(
 					(int)$request->query->get( 'id', '' )
 				);
@@ -470,7 +505,7 @@ $app->post(
 								->setAmount( Euro::newFromCents( (int)$request->query->get( 'amount' ) ) )
 								->setCustomerId( $request->query->get( 'customerId', '' ) )
 								->setSessionId( $request->query->get( 'sessionId', '' ) )
-								->setAuthId( $request->query->get(  'auth', '' ) )
+								->setAuthId( $request->query->get( 'auth', '' ) )
 								->setTitle( $request->query->get( 'title', '' ) )
 								->setCountry( $request->query->get( 'country', '' ) )
 								->setCurrency( $request->query->get( 'currency', '' ) )
@@ -480,7 +515,8 @@ $app->post(
 						(int)$request->query->get( 'donation_id', '' ),
 						$request->query->get( 'token', '' )
 					);
-				} catch ( CreditCardPaymentHandlerException $e ) {
+				}
+				catch ( CreditCardPaymentHandlerException $e ) {
 					$response = CreditCardNotificationResponse::newFailureResponse( $e->getMessage() );
 				}
 
@@ -490,9 +526,11 @@ $app->post(
 
 		$app->get(
 			'donation-accepted',
-			function( Request $request ) use ( $app, $ffFactory ) {
+			function ( Request $request ) use ( $app, $ffFactory ) {
 
-				$eventHandler = $ffFactory->newDonationAcceptedEventHandler( $request->query->get( 'update_token', '' ) );
+				$eventHandler = $ffFactory->newDonationAcceptedEventHandler(
+					$request->query->get( 'update_token', '' )
+				);
 				$result = $eventHandler->onDonationAccepted( (int)$request->query->get( 'donation_id', '' ) );
 
 				return $app->json(
@@ -508,22 +546,25 @@ $app->post(
 			}
 		);
 
-		$app->get( '/', function ( Application $app, Request $request ) {
-			return $app->handle(
-				Request::create(
-					'/donation/new',
-					'GET',
-					$request->query->all(),
-					$request->cookies->all(),
-					[],
-					$request->server->all()
-				),
-				HttpKernelInterface::SUB_REQUEST
-			);
-		} )->bind( '/' );
+		$app->get(
+			'/',
+			function ( Application $app, Request $request ) {
+				return $app->handle(
+					Request::create(
+						'/donation/new',
+						'GET',
+						$request->query->all(),
+						$request->cookies->all(),
+						[],
+						$request->server->all()
+					),
+					HttpKernelInterface::SUB_REQUEST
+				);
+			}
+		)->bind( '/' );
 
-// TODO Figure out how to rewrite with Nginx
-// See https://serverfault.com/questions/805881/nginx-populate-request-uri-with-rewritten-url
+		// TODO Figure out how to rewrite with Nginx
+		// See https://serverfault.com/questions/805881/nginx-populate-request-uri-with-rewritten-url
 		$app->post(
 			'/spenden/paypal_handler.php',
 			function ( Request $request ) use ( $ffFactory ) {
@@ -531,45 +572,64 @@ $app->post(
 			}
 		);
 
-// redirect display page requests from old URLs
-		$app->get( '/spenden/{page}', function( Application $app, Request $request, string $page ) {
-			// Poor man's rewrite until someone has figured out how to do this with Nginx without breaking REQUEST_URI
-			// See https://serverfault.com/questions/805881/nginx-populate-request-uri-with-rewritten-url
-			switch ( $page ) {
-				case 'Mitgliedschaft':
-					return ( new RouteRedirectionHandler( $app, $request->getQueryString() ) )->handle( '/page/Membership_Application' );
-				default:
-					return ( new RouteRedirectionHandler( $app, $request->getQueryString() ) )->handle( '/page/' . $page );
+		// redirect display page requests from old URLs
+		$app->get(
+			'/spenden/{page}',
+			function ( Application $app, Request $request, string $page ) {
+				// Poor man's rewrite until someone has figured out how to do this with Nginx without breaking REQUEST_URI
+				// See https://serverfault.com/questions/805881/nginx-populate-request-uri-with-rewritten-url
+				switch ( $page ) {
+					case 'Mitgliedschaft':
+						return ( new RouteRedirectionHandler( $app, $request->getQueryString() ) )->handle(
+							'/page/Membership_Application'
+						);
+					default:
+						return ( new RouteRedirectionHandler( $app, $request->getQueryString() ) )->handle(
+							'/page/' . $page
+						);
+				}
 			}
-		} )->assert( 'page', '[a-zA-Z_\-\s\x7f-\xff]+' );
+		)->assert( 'page', '[a-zA-Z_\-\s\x7f-\xff]+' );
 
-// redirect different formats of comment lists
-		$app->get( '/spenden/{outputFormat}.php', function( Application $app, Request $request, string $outputFormat ) {
-			return ( new RouteRedirectionHandler( $app, $request->getQueryString() ) )->handle(
-				'/list-comments.' . ( $outputFormat === 'list' ? 'html' : $outputFormat )
-			);
-		} )->assert( 'outputFormat', 'list|rss|json' );
+		// redirect different formats of comment lists
+		$app->get(
+			'/spenden/{outputFormat}.php',
+			function ( Application $app, Request $request, string $outputFormat ) {
+				return ( new RouteRedirectionHandler( $app, $request->getQueryString() ) )->handle(
+					'/list-comments.' . ( $outputFormat === 'list' ? 'html' : $outputFormat )
+				);
+			}
+		)->assert( 'outputFormat', 'list|rss|json' );
 
-// redirect all other calls to default route
-		$app->get( '/spenden{page}', function( Application $app, Request $request ) {
-			return ( new RouteRedirectionHandler( $app, $request->getQueryString() ) )->handle( '/' );
-		} )->assert( 'page', '/?([a-z]+\.php)?' );
+		// redirect all other calls to default route
+		$app->get(
+			'/spenden{page}',
+			function ( Application $app, Request $request ) {
+				return ( new RouteRedirectionHandler( $app, $request->getQueryString() ) )->handle( '/' );
+			}
+		)->assert( 'page', '/?([a-z]+\.php)?' );
 
-		$app->get( '/purge-cache', function( Request $request ) use ( $ffFactory ) {
-			$response = $ffFactory->newAuthorizedCachePurger()->purgeCache( $request->query->get( 'secret', '' ) );
+		$app->get(
+			'/purge-cache',
+			function ( Request $request ) use ( $ffFactory ) {
+				$response = $ffFactory->newAuthorizedCachePurger()->purgeCache( $request->query->get( 'secret', '' ) );
 
-			return new Response(
-				[
-					AuthorizedCachePurger::RESULT_SUCCESS => 'SUCCESS',
-					AuthorizedCachePurger::RESULT_ERROR => 'ERROR',
-					AuthorizedCachePurger::RESULT_ACCESS_DENIED=> 'ACCESS DENIED'
-				][$response]
-			);
-		} );
+				return new Response(
+					[
+						AuthorizedCachePurger::RESULT_SUCCESS => 'SUCCESS',
+						AuthorizedCachePurger::RESULT_ERROR => 'ERROR',
+						AuthorizedCachePurger::RESULT_ACCESS_DENIED => 'ACCESS DENIED'
+					][$response]
+				);
+			}
+		);
 
-		$app->get( 'status', function() {
-			return 'Status: OK (Online)';
-		} );
+		$app->get(
+			'status',
+			function () {
+				return 'Status: OK (Online)';
+			}
+		);
 
 		return $app;
 	}

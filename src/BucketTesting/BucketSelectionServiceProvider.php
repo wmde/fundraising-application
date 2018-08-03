@@ -2,7 +2,6 @@
 
 declare( strict_types = 1 );
 
-
 namespace WMDE\Fundraising\Frontend\BucketTesting;
 
 use Pimple\Container;

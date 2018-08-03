@@ -26,7 +26,7 @@ class PageDisplayHandler {
 		$this->app = $app;
 	}
 
-	function handle( $pageName ) {
+	public function handle( $pageName ) {
 		$pageSelector = $this->ffFactory->getContentPagePageSelector();
 
 		try {

@@ -4,7 +4,7 @@ tools:
     external_code_coverage:
         timeout: 3600
     php_code_sniffer: true
-    php_cpd: true
+    php_cpd: false # PHP Copy/Paste Detector and PHP Code Similarity Analyzer cannot both be used simultaneously
     php_cs_fixer: true
     php_loc: true
     php_mess_detector: true
@@ -27,8 +27,7 @@ build:
             tests:
                 override:
                 - php-scrutinizer-run
+                - phpcs-run
     tests:
         override:
-        - true
-
-
+        - true # Disable unit tests because they are handled by Travis
