@@ -22,6 +22,7 @@
     <rule ref="Generic.CodeAnalysis">
         <exclude name="Generic.CodeAnalysis.EmptyStatement" />
         <exclude name="Generic.CodeAnalysis.UnusedFunctionParameter" />
+        <exclude name="Generic.CodeAnalysis.AssignmentInCondition.Found" />
     </rule>
     <rule ref="Generic.ControlStructures" />
 
@@ -171,6 +172,7 @@
             <property name="requiredSpacesBeforeClose" value="1" />
         </properties>
         <exclude name="PEAR.Functions.FunctionCallSignature.Indent" />
+        <exclude name="PEAR.Functions.FunctionCallSignature.OpeningIndent" />
         <exclude name="PEAR.Functions.FunctionCallSignature.ContentAfterOpenBracket" />
         <exclude name="PEAR.Functions.FunctionCallSignature.CloseBracketLine" />
     </rule>

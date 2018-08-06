@@ -25,11 +25,15 @@ use WMDE\Fundraising\Frontend\App\UrlGeneratorAdapter;
  */
 $ffFactory = call_user_func( function() {
 	$prodConfigPath = __DIR__ . '/../app/config/config.prod.json';
+	$configPaths = [ __DIR__ . '/../app/config/config.dist.json' ];
+
+	if ( is_readable( $prodConfigPath ) ) {
+		$configPaths[] = $prodConfigPath;
+	}
 
 	$configReader = new \WMDE\Fundraising\Frontend\Infrastructure\ConfigReader(
 		new \FileFetcher\SimpleFileFetcher(),
-		__DIR__ . '/../app/config/config.dist.json',
-		is_readable( $prodConfigPath ) ? $prodConfigPath : null
+		...$configPaths
 	);
 
 	$config = $configReader->getConfig();

@@ -15,7 +15,9 @@ use WMDE\Fundraising\SubscriptionContext\Infrastructure\TemplateMailerInterface 
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class LoggingMailer implements TemplateMailerInterface, DonationTemplateMailerInterface,
+class LoggingMailer implements
+	TemplateMailerInterface,
+	DonationTemplateMailerInterface,
 	SubscriptionTemplateMailerInterface {
 
 	const CONTEXT_EXCEPTION_KEY = 'exception';

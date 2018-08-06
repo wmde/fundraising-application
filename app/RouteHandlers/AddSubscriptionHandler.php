@@ -33,7 +33,7 @@ class AddSubscriptionHandler {
 		if ( $request->query->has( 'callback' ) ) {
 			return $this->handleJSONP( $request, $responseModel );
 		} elseif ( $this->app['request_stack.is_json'] ) {
-			return $this->handleJSON( $request, $responseModel );
+			return $this->handleJSON( $responseModel );
 		} else {
 			return $this->handleHTML( $request, $responseModel );
 		}
@@ -92,7 +92,7 @@ class AddSubscriptionHandler {
 		);
 	}
 
-	private function handleJSON( Request $request, ValidationResponse $responseModel ): Response {
+	private function handleJSON( ValidationResponse $responseModel ): Response {
 		return $this->app->json( $this->ffFactory->newAddSubscriptionJsonPresenter()->present( $responseModel ) );
 	}
 

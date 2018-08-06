@@ -28,7 +28,7 @@ class FundraisingFactoryServiceProvider implements ServiceProviderInterface {
 	}
 
 	public function register( Container $pimple ) {
-		$pimple['fundraising_factory'] = function ( Container $c ) {
+		$pimple['fundraising_factory'] = function () {
 			return $this->fffactory;
 		};
 		$pimple->extend( 'argument_value_resolvers', function ( array $resolvers, Container $c ) {

@@ -88,8 +88,7 @@ class PayPalPaymentNotificationVerifier implements PaymentNotificationVerifier {
 			return array_key_exists( 'currency_code', $request ) &&
 				in_array( $request['currency_code'], self::ALLOWED_CURRENCY_CODES );
 		}
-		return
-			array_key_exists( 'mc_currency', $request ) &&
+		return array_key_exists( 'mc_currency', $request ) &&
 			in_array( $request['mc_currency'], self::ALLOWED_CURRENCY_CODES );
 	}
 
