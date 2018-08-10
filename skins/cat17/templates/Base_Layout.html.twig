@@ -24,7 +24,9 @@
 </head>
 <body class="theme-{% block page_theme %}donation{% endblock %}">
 	<div class="page-{% block page_identifier %}uncustomized{% endblock %}">
-		{% include 'partials/' ~ header_template with { page_identifier: block('page_identifier') } only %}
+		{% block header %}
+			{% include 'partials/Page_Header.html.twig' %}
+		{% endblock %}
 
 		<main{% if page_works_without_js is not defined or page_works_without_js == false %} class="hidden-no-js"{% endif %}>
 			{% block main %}
@@ -43,7 +45,9 @@
 			</noscript>
 		{% endif %}
 
-		{% include 'partials/' ~ footer_template %}
+		{% block footer %}
+			{% include 'partials/Page_Footer.html.twig' %}
+		{% endblock %}
 	</div>
 
 	<script src="{$ basepath $}{$ '/skins/cat17/scripts/vendor.js' | prefix_file $}"></script>

@@ -28,11 +28,6 @@
 		}
 	},
 	"i18n-base-path": "",
-	"default-layout-templates": {
-		"header": "Page_Header.html.twig",
-		"footer": "Page_Footer.html.twig",
-		"no-js-notice": "JavaScript_Notice.txt.twig"
-	},
 	"contact-info": {
 		"organization": {
 			"email": "",
