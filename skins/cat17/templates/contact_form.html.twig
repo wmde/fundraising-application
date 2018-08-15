@@ -12,14 +12,14 @@
 				<div class="row">
 					<fieldset class="col-xs-12 col-md-6">
 						<div class="field-grp">
-							<input type="text" id="name" name="firstname" placeholder="{$ 'contact_firstname'|trans $}">
+							<input type="text" id="name" name="firstname" value="{$ firstname $}" placeholder="{$ 'contact_firstname'|trans $}">
 							<label for="name" class="sr-only">{$ 'contact_firstname'|trans $}</label>
 							{$ util.form_error('firstname', errors) $}
 						</div>
 					</fieldset>
 					<fieldset class="col-xs-12 col-md-6">
 						<div class="field-grp">
-							<input type="text" id="surname" name="lastname" placeholder="{$ 'contact_lastname'|trans $}">
+							<input type="text" id="surname" name="lastname" value="{$ lastname $}" placeholder="{$ 'contact_lastname'|trans $}">
 							<label for="surname" class="sr-only">{$ 'contact_lastname'|trans $}</label>
 							{$ util.form_error('lastname', errors) $}
 						</div>
@@ -28,14 +28,14 @@
 				<div class="row">
 					<fieldset class="col-xs-12 col-md-6">
 						<div class="field-grp">
-							<input type="email" id="email" name="email" placeholder="{$ 'contact_email'|trans $}">
+							<input type="email" id="email" name="email" value="{$ email $}" placeholder="{$ 'contact_email'|trans $}">
 							<label for="email" class="sr-only">{$ 'contact_email'|trans $}</label>
 							{$ util.form_error('email', errors) $}
 						</div>
 					</fieldset>
 					<fieldset class="col-xs-12 col-md-6">
 						<div class="field-grp">
-							<input type="text" id="donationNumber" name="donationNumber" placeholder="{$ 'contact_donation_number' | trans $}">
+							<input type="text" id="donationNumber" name="donationNumber" value="{$ donationNumber $}" placeholder="{$ 'contact_donation_number' | trans $}">
 							<label for="donationNumber" class="sr-only">{$ 'contact_donation_number' | trans $}</label>
 							{$ util.form_error('donationNumber', errors) $}
 						</div>
@@ -54,7 +54,7 @@
 					</fieldset>
 					<fieldset class="col-xs-12 col-md-6">
 						<div class="field-grp">
-							<input type="text" class="contact-subject" id="subject" name="subject" placeholder="{$ 'contact_subject'|trans $}">
+							<input type="text" class="contact-subject" id="subject" name="subject" value="{$ subject $}" placeholder="{$ 'contact_subject'|trans $}">
 							<label for="subject" class="sr-only">{$ 'contact_subject'|trans $}</label>
 							{$ util.form_error('subject', errors) $}
 						</div>
@@ -62,7 +62,7 @@
 				</div>
 				<div class="row">
 					<div class="field-grp col-xs-12 col-sm-12">
-						<textarea name="messageBody" rows="50" cols="10" id="comment" placeholder="{$ 'contact_body'|trans $}"></textarea>
+						<textarea name="messageBody" rows="50" cols="10" id="comment" placeholder="{$ 'contact_body'|trans $}">{$ messageBody $}</textarea>
 						<label for="subject" class="sr-only">{$ 'contact_body'|trans $}</label>
 						{$ util.form_error('messageBody', errors) $}
 					</div>
