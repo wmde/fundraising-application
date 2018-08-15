@@ -161,36 +161,6 @@
         "loaders"
       ]
     },
-    "default-layout-templates": {
-      "type": "object",
-      "title": "Layout templates",
-      "description": "Template names for defining parts of the site.",
-      "properties": {
-        "header": {
-          "type": "string",
-          "minLength": 1,
-          "default": "10hoch16/Seitenkopf"
-        },
-        "footer": {
-          "type": "string",
-          "minLength": 1,
-          "default": "10hoch16/Seitenfuß"
-        },
-        "no-js-notice": {
-          "type": "string",
-          "minLength": 1,
-          "title": "JavaScript notice",
-          "description": "The notice that appears when the user has turned off JavaScript",
-          "default": "JavaScript_Notice"
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "header",
-        "footer",
-        "no-js-notice"
-      ]
-    },
     "i18n-base-path": {
       "type": "string",
       "title": "Base path for i18n files",
@@ -811,7 +781,6 @@
     "db",
     "web-basepath",
     "twig",
-    "default-layout-templates",
     "contact-info",
     "text-policies",
     "subscription-interval",

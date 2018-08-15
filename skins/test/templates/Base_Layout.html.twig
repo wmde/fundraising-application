@@ -2,9 +2,9 @@
 <body class="{% block page_identifier %}{% endblock%}">
     <header id="header">
         <div class="container clearfix">
-            {% block header %}
-                {% include [ header_template, 'Template_Missing.twig' ] with { missing_template: 'header' } %}
-            {% endblock %}
+			{% block header %}
+				{% include 'Page_Header.html.twig' %}
+			{% endblock %}
         </div>
     </header>
     
@@ -17,22 +17,26 @@
             {% endblock %}
         </div>
     </main>
-    
+
+    {% if page_works_without_js is not defined or page_works_without_js == false %}
+        <noscript class="no-js-fallback">
+            <main>
+                <div class="content container">
+                    <h2>{$ 'no_javascript_title' | trans $}</h2>
+                    {$ web_content( 'pages/no_javascript' ) $}
+                </div>
+            </main>
+        </noscript>
+    {% endif %}
+
     <!-- Footer -->
     <footer id="footer">
         <div class="container">
-            {% block footer %}
-                {% include [ footer_template, 'Template_Missing.twig' ] with { missing_template: 'footer' } %}
-            {% endblock %}
+			{% block footer %}
+				{% include 'Page_Footer.html.twig' %}
+			{% endblock %}
         </div>
     </footer>
-    
-    <!-- notice for clients without javascript -->
-    <div id="notice-wrapper">
-        <div class="notice-window">
-            {% include [ no_js_notice_template, 'Template_Missing.twig' ] with { missing_template: 'no JS notice' } %}
-        </div>
-    </div>
     
     {% include 'Piwik.twig' %}
 
