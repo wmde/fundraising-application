@@ -4,15 +4,15 @@
 
 {% block main %}
 	{% set formattedAmount = donation.amount|localizedcurrency('EUR', 'de_DE') %}
-
-	{% if donation.paymentType == 'MCP' or donation.paymentType == 'PPL' or donation.paymentType == 'SUB' %}
-		{% include 'partials/donation_confirmation/external_payment.html.twig' %}
-	{% elseif donation.paymentType == 'BEZ' %}
-		{% include 'partials/donation_confirmation/direct_debit.html.twig' %}
-	{% elseif donation.paymentType == 'UEB' %}
-		{% include 'partials/donation_confirmation/bank_transfer.html.twig' %}
-	{% endif %}
-
+	<div{% if global.session.get('address_changed') %} class="address-change"{% endif %}>
+		{% if donation.paymentType == 'MCP' or donation.paymentType == 'PPL' or donation.paymentType == 'SUB' %}
+			{% include 'partials/donation_confirmation/external_payment.html.twig' %}
+		{% elseif donation.paymentType == 'BEZ' %}
+			{% include 'partials/donation_confirmation/direct_debit.html.twig' %}
+		{% elseif donation.paymentType == 'UEB' %}
+			{% include 'partials/donation_confirmation/bank_transfer.html.twig' %}
+		{% endif %}
+	</div>
 	{% if featureToggle.donorUpdateEnabled and not updateData.isSuccessful %}
 		{% include 'partials/donation_confirmation/donor_form.html.twig' %}
 	{% endif %}
