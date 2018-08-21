@@ -20,7 +20,6 @@ class WebRouteTestSetupTest extends WebRouteTestCase {
 		);
 
 		$this->assertContains( 'spenden', $tableNames );
-		$this->assertContains( 'users', $tableNames );
 	}
 
 	private function removeDatabaseNames( string ...$tableNames ): array {
