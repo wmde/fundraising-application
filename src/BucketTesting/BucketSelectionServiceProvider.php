@@ -33,7 +33,7 @@ class BucketSelectionServiceProvider  implements ServiceProviderInterface, Boota
 
 	public function boot( Application $app ) {
 		$app->before( function( Request $request ): void {
-			parse_str( $request->cookies->get( 'spenden_ttg', '' ), $cookieValues );
+			parse_str( $request->cookies->get( self::COOKIE_NAME, '' ), $cookieValues );
 			$selector = $this->factory->getBucketSelector();
 			$this->factory->setSelectedBuckets( $selector->selectBuckets( $cookieValues, $request->query->all() ) );
 		}, Application::EARLY_EVENT );

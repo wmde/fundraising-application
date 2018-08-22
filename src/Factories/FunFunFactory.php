@@ -77,7 +77,9 @@ use WMDE\Fundraising\DonationContext\UseCases\SofortPaymentNotification\SofortPa
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorValidator;
 use WMDE\Fundraising\DonationContext\UseCases\ValidateDonor\ValidateDonorUseCase;
+use WMDE\Fundraising\Frontend\BucketTesting\BucketLogWriter;
 use WMDE\Fundraising\Frontend\BucketTesting\RandomBucketSelection;
+use WMDE\Fundraising\Frontend\BucketTesting\StreamBucketLogWriter;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
@@ -1716,6 +1718,10 @@ class FunFunFactory implements ServiceProviderInterface {
 		return $this->createSharedObject( BucketSelector::class, function (): BucketSelector {
 			return new BucketSelector( $this->getCampaignCollection(), new RandomBucketSelection() );
 		} );
+	}
+
+	public function getBucketLogger(): BucketLogWriter {
+		return new StreamBucketLogWriter( fopen( $this->getLoggingPath() . '/buckets.log', 'a' ) );
 	}
 
 	public function getSelectedBuckets(): array {
