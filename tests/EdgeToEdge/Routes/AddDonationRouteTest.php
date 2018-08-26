@@ -10,10 +10,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
+use WMDE\Fundraising\Frontend\BucketTesting\Logging\BucketLogger;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketLoggerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Client as SofortClient;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Response as SofortResponse;
@@ -800,6 +802,23 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$client->request( Request::METHOD_POST, self::ADD_DONATION_PATH, $parameters );
 
 			$this->assertFalse( $this->getDonationFromDatabase( $factory )->getDonationReceipt() );
+		} );
+	}
+
+	public function testGivenValidRequest_bucketsAreLogged(): void {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
+			$bucketLogger = new BucketLoggerSpy();
+			$factory->setBucketLogger( $bucketLogger );
+			$client->followRedirects( false );
+
+			$client->request(
+				'POST',
+				'/donation/add',
+				$this->newValidFormInput()
+			);
+
+			$this->assertSame( 1, $bucketLogger->getEventCount() );
 		} );
 	}
 }

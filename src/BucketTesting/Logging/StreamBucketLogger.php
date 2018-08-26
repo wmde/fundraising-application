@@ -2,11 +2,12 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\BucketTesting;
+namespace WMDE\Fundraising\Frontend\BucketTesting\Logging;
 
 use DateTime;
+use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 
-class StreamBucketLogWriter implements BucketLogWriter {
+class StreamBucketLogger implements BucketLogger {
 
 	private $stream;
 	private $dateFormat = DateTime::RFC3339_EXTENDED;
@@ -23,10 +24,14 @@ class StreamBucketLogWriter implements BucketLogWriter {
 			'date' => date( $this->dateFormat ),
 			'eventName' => $eventName,
 			'metadata' => $eventMetadata,
-			'buckets' => array_reduce( $buckets, function ( array $bucketMap, Bucket $bucket ) {
-				$bucketMap[$bucket->getCampaign()->getName()] = $bucket->getName();
-				return $bucketMap;
-			}, [] )
+			'buckets' => array_reduce(
+				$buckets,
+				function ( array $bucketMap, Bucket $bucket ) {
+					$bucketMap[$bucket->getCampaign()->getName()] = $bucket->getName();
+					return $bucketMap;
+				},
+				[]
+			)
 		]));
 	}
 

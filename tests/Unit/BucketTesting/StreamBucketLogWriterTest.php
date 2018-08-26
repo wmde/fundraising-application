@@ -7,13 +7,13 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
-use WMDE\Fundraising\Frontend\BucketTesting\StreamBucketLogWriter;
+use WMDE\Fundraising\Frontend\BucketTesting\StreamBucketLogger;
 
 class StreamBucketLogWriterTest extends TestCase {
 
 	public function testLogWriterAddsDate() {
 		$logfile = fopen( 'php://memory', 'a+' );
-		$logWriter = new StreamBucketLogWriter( $logfile );
+		$logWriter = new StreamBucketLogger( $logfile );
 		$logWriter->setDateFormat( 'Y-m-d H:i' ); // Ignore seconds to avoid Heisentests
 
 		$logWriter->writeEvent( 'testLogged', [], ...[] );
@@ -23,7 +23,7 @@ class StreamBucketLogWriterTest extends TestCase {
 
 	public function testGivenEventName_itIsLogged() {
 		$logfile = fopen( 'php://memory', 'a+' );
-		$logWriter = new StreamBucketLogWriter( $logfile );
+		$logWriter = new StreamBucketLogger( $logfile );
 
 		$logWriter->writeEvent( 'testLogged', [], ...[] );
 
@@ -32,7 +32,7 @@ class StreamBucketLogWriterTest extends TestCase {
 
 	public function testGivenEventMetadata_itIsLogged() {
 		$logfile = fopen( 'php://memory', 'a+' );
-		$logWriter = new StreamBucketLogWriter( $logfile );
+		$logWriter = new StreamBucketLogger( $logfile );
 
 		$logWriter->writeEvent( 'donationCreated', [ 'id' => 1, 'name' => 'Kari Nordmann' ], ...[] );
 
@@ -41,7 +41,7 @@ class StreamBucketLogWriterTest extends TestCase {
 
 	public function testGivenBuckets_theyAreOutputWithTheirCampaigns() {
 		$logfile = fopen( 'php://memory', 'a+' );
-		$logWriter = new StreamBucketLogWriter( $logfile );
+		$logWriter = new StreamBucketLogger( $logfile );
 		$campaign1 = new Campaign( 'test1', 't1', new \DateTime(), (new \DateTime())->modify( '+1 month' ), true );
 		$firstCampaignBucket = new Bucket( 'first', $campaign1, true );
 		$campaign1->addBucket( $firstCampaignBucket );
