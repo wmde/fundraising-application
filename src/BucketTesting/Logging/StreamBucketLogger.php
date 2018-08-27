@@ -19,11 +19,11 @@ class StreamBucketLogger implements BucketLogger {
 		$this->stream = $stream;
 	}
 
-	public function writeEvent( string $eventName, array $eventMetadata, Bucket ...$buckets ) {
+	public function writeEvent( LoggingEvent $event, Bucket ...$buckets ) {
 		fwrite( $this->stream, json_encode( [
 			'date' => date( $this->dateFormat ),
-			'eventName' => $eventName,
-			'metadata' => $eventMetadata,
+			'eventName' => $event->getName(),
+			'metadata' => $event->getMetaData(),
 			'buckets' => array_reduce(
 				$buckets,
 				function ( array $bucketMap, Bucket $bucket ) {

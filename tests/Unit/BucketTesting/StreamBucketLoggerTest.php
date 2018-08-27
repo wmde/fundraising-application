@@ -7,16 +7,20 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
-use WMDE\Fundraising\Frontend\BucketTesting\StreamBucketLogger;
+use WMDE\Fundraising\Frontend\BucketTesting\Logging\StreamBucketLogger;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeBucketLoggingEvent;
 
-class StreamBucketLogWriterTest extends TestCase {
+/**
+ * @covers \WMDE\Fundraising\Frontend\BucketTesting\Logging\StreamBucketLogger
+ */
+class StreamBucketLoggerTest extends TestCase {
 
 	public function testLogWriterAddsDate() {
 		$logfile = fopen( 'php://memory', 'a+' );
 		$logWriter = new StreamBucketLogger( $logfile );
 		$logWriter->setDateFormat( 'Y-m-d H:i' ); // Ignore seconds to avoid Heisentests
 
-		$logWriter->writeEvent( 'testLogged', [], ...[] );
+		$logWriter->writeEvent( new FakeBucketLoggingEvent(), ...[] );
 
 		$this->assertLogValue( date( 'Y-m-d H:i' ), 'date', $logfile );
 	}
@@ -25,18 +29,18 @@ class StreamBucketLogWriterTest extends TestCase {
 		$logfile = fopen( 'php://memory', 'a+' );
 		$logWriter = new StreamBucketLogger( $logfile );
 
-		$logWriter->writeEvent( 'testLogged', [], ...[] );
+		$logWriter->writeEvent( new FakeBucketLoggingEvent(), ...[] );
 
-		$this->assertLogValue( 'testLogged', 'eventName', $logfile );
+		$this->assertLogValue( 'testEventLogged', 'eventName', $logfile );
 	}
 
 	public function testGivenEventMetadata_itIsLogged() {
 		$logfile = fopen( 'php://memory', 'a+' );
 		$logWriter = new StreamBucketLogger( $logfile );
 
-		$logWriter->writeEvent( 'donationCreated', [ 'id' => 1, 'name' => 'Kari Nordmann' ], ...[] );
+		$logWriter->writeEvent( new FakeBucketLoggingEvent(), ...[] );
 
-		$this->assertLogValue( [ 'id' => 1, 'name' => 'Kari Nordmann' ], 'metadata', $logfile );
+		$this->assertLogValue( (object) [ 'id' => 123, 'some_fact' => 'water_is_wet' ], 'metadata', $logfile );
 	}
 
 	public function testGivenBuckets_theyAreOutputWithTheirCampaigns() {
@@ -49,9 +53,9 @@ class StreamBucketLogWriterTest extends TestCase {
 		$secondCampaignBucket = new Bucket( 'second', $campaign2, true );
 		$campaign2->addBucket( $secondCampaignBucket );
 
-		$logWriter->writeEvent( 'donationCreated', [ 'id' => 1, 'name' => 'Kari Nordmann' ], $firstCampaignBucket, $secondCampaignBucket );
+		$logWriter->writeEvent( new FakeBucketLoggingEvent(), $firstCampaignBucket, $secondCampaignBucket );
 
-		$this->assertLogValue( [ 'test1' => 'first', 'test2' => 'second' ], 'buckets', $logfile );
+		$this->assertLogValue( (object) [ 'test1' => 'first', 'test2' => 'second' ], 'buckets', $logfile );
 	}
 
 	/**
@@ -63,10 +67,10 @@ class StreamBucketLogWriterTest extends TestCase {
 		rewind( $logfile );
 		$logContents = fgets( $logfile );
 		$this->assertNotFalse( $logContents, 'Log should contain something' );
-		$event = json_decode( $logContents, true );
-		$this->assertTrue( is_array( $event ) );
-		$this->assertArrayHasKey( $key, $event );
-		$this->assertSame( $expectedValue, $event[$key] );
+		$event = json_decode( $logContents, false );
+		$this->assertTrue( is_object( $event ), 'Logs should be encoded as object' );
+		$this->assertObjectHasAttribute( $key, $event, 'Event should have property' );
+		$this->assertEquals( $expectedValue, $event->{$key} );
 	}
 
 	// TODO testGivenMultipleWritesEachOneIsLoggedAsOneJsonLine

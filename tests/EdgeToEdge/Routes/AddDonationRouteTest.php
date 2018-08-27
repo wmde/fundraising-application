@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
-use WMDE\Fundraising\Frontend\BucketTesting\Logging\BucketLogger;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;

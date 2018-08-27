@@ -12,6 +12,7 @@ use WMDE\Fundraising\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationResponse;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
+use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\DonationCreated;
 use WMDE\Fundraising\Frontend\App\Controllers\UpdateDonorController;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\AmountParser;
@@ -227,10 +228,7 @@ class AddDonationHandler {
 
 	private function logSelectedBuckets( AddDonationResponse $responseModel ): void {
 		$this->ffFactory->getBucketLogger()->writeEvent(
-			'donationCreated',
-			[
-				'id' => $responseModel->getDonation()->getId()
-			],
+			new DonationCreated( $responseModel->getDonation()->getId() ),
 			...$this->ffFactory->getSelectedBuckets()
 		);
 	}
