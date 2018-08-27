@@ -99,6 +99,20 @@
 		}
 	}
 
+	.address-change {
+		.highlighted {
+			&.content {
+				border: none;
+				margin: 0;
+			}
+		}
+		.receipt-info {
+			border: 1px solid $brand-primary;
+			margin: 30px -20px 0;
+			padding: 10px 20px;
+		}
+	}
+
 	.caption {
 		color: rgba(0,0,0,.5);
 		width: 80%;
@@ -116,45 +130,6 @@
 			max-width: 100%;
 			margin: 0;
 		}
-	}
-
-	.donation-data {
-		padding: 0;
-	}
-
-	.show-info {
-		padding-bottom: 100px;
-	}
-
-	.highlighted {
-		border: 1px solid $brand-primary;
-		padding-top: 0;
-		margin-top: 45px;
-
-		@media print {
-			border: none;
-		}
-	}
-
-	.receipt {
-		&-info {
-			padding: 0 0 10px;
-			.btn {
-				text-decoration: none;
-			}
-		}
-		&-confirmation {
-			font-size: 19px;
-			display: block;
-		}
-	}
-
-	.caption {
-		color: rgba(0,0,0,.5);
-		width: 80%;
-		font-size: 12px;
-		line-height: 17px;
-		margin-top: 5px;
 	}
 
 	.donation-data {

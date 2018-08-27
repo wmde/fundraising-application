@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\App\Controllers;
 
+use Silex\Application;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +17,9 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
  */
 class UpdateDonorController {
 
-	public function updateDonor( Request $request, FunFunFactory $ffFactory ): Response {
+	public const ADDRESS_CHANGE_SESSION_KEY = 'address_changed';
+
+	public function updateDonor( Request $request, FunFunFactory $ffFactory, Application $app ): Response {
 		$updateToken = $request->request->get( 'updateToken', '' );
 		$accessToken = $request->query->get( 'accessToken', '' );
 		$responseModel = $ffFactory
@@ -26,6 +29,10 @@ class UpdateDonorController {
 			throw new AccessDeniedException();
 		}
 		if ( $responseModel->isSuccessful() ) {
+			$app['session']->set(
+				self::ADDRESS_CHANGE_SESSION_KEY,
+				true
+			);
 			return new RedirectResponse(
 				$ffFactory->getUrlGenerator()->generateAbsoluteUrl(
 					'show-donation-confirmation',

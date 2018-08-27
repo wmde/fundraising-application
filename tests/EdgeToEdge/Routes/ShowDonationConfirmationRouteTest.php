@@ -4,11 +4,15 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use Silex\Application;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
+use WMDE\Fundraising\Frontend\App\Controllers\UpdateDonorController;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\OverridingCampaignConfigurationLoader;
 use WMDE\Fundraising\PaymentContext\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
@@ -228,4 +232,57 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
+	public function testWhenAddressIsUpdated_addressConfirmationIsHighlighted(): void {
+		$this->createAppEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory, Application $app ): void {
+				$this->setDefaultSkin( $factory, 'cat17' );
+				$app['session']->set(
+					UpdateDonorController::ADDRESS_CHANGE_SESSION_KEY,
+					true
+				);
+				$donation = $this->newStoredDonation( $factory );
+				$crawler = $this->requestDonationConfirmation( $client, $donation );
+
+				$this->assertSame( 1, $crawler->filter( '.address-change' )->count() );
+			}
+		);
+	}
+
+	public function testWhenAddressIsNotUpdated_addressHighlightIsNotShown(): void {
+		$this->createAppEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory, Application $app ): void {
+				$this->setDefaultSkin( $factory, 'cat17' );
+				$app['session']->set(
+					UpdateDonorController::ADDRESS_CHANGE_SESSION_KEY,
+					false
+				);
+				$donation = $this->newStoredDonation( $factory );
+				$crawler = $this->requestDonationConfirmation( $client, $donation );
+
+				$this->assertSame( 0, $crawler->filter( '.address-change' )->count() );
+			}
+		);
+	}
+
+	private function requestDonationConfirmation( Client $client, Donation $donation ): Crawler {
+		return $client->request(
+			'GET',
+			'show-donation-confirmation',
+			[
+				'id' => $donation->getId(),
+				'accessToken' => self::CORRECT_ACCESS_TOKEN
+			]
+		);
+	}
+
+	private function setDefaultSkin( FunFunFactory $factory, string $skinName ): void {
+		$factory->setCampaignConfigurationLoader(
+			new OverridingCampaignConfigurationLoader(
+				$factory->getCampaignConfigurationLoader(),
+				[ 'skins' => [ 'default_bucket' => $skinName ] ]
+			)
+		);
+	}
 }

@@ -12,6 +12,7 @@ use WMDE\Fundraising\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationResponse;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
+use WMDE\Fundraising\Frontend\App\Controllers\UpdateDonorController;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\AmountParser;
 use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
@@ -51,6 +52,7 @@ class AddDonationHandler {
 		}
 
 		$this->sendTrackingDataIfNeeded( $request, $responseModel );
+		$this->resetSessionState();
 
 		return $this->newHttpResponse( $responseModel );
 	}
@@ -220,5 +222,15 @@ class AddDonationHandler {
 	 */
 	private function filterAutofillCommas( string $value ): string {
 		return trim( preg_replace( ['/,/', '/\s{2,}/'], [' ', ' '], $value ) );
+	}
+
+	/**
+	 * Reset session data to prevent old donations from changing the application output due to old data leaking into the new session
+	 */
+	private function resetSessionState(): void {
+		$this->app['session']->set(
+			UpdateDonorController::ADDRESS_CHANGE_SESSION_KEY,
+			false
+		);
 	}
 }
