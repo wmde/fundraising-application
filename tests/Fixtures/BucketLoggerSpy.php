@@ -21,4 +21,8 @@ class BucketLoggerSpy implements BucketLogger {
 	public function getEventCount(): int {
 		return count( $this->events );
 	}
+
+	public function getFirstEvent(): LoggingEvent {
+		return $this->events[0]['event'];
+	}
 }
