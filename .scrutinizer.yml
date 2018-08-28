@@ -22,6 +22,9 @@ filter:
         - 'vendor/'
 
 build:
+    environment:
+        node: v6.2.0
+        php: 7.2.0
     nodes:
         analysis:
             tests:
