@@ -73,5 +73,41 @@ class StreamBucketLoggerTest extends TestCase {
 		$this->assertEquals( $expectedValue, $event->{$key} );
 	}
 
-	// TODO testGivenMultipleWritesEachOneIsLoggedAsOneJsonLine
+	public function testGivenMultipleEvents_eachOneIsLoggedAsOneLine() {
+		$logfile = fopen( 'php://memory', 'a+' );
+		$logWriter = new StreamBucketLogger( $logfile );
+
+		$logWriter->writeEvent( new FakeBucketLoggingEvent(), ...[] );
+		$logWriter->writeEvent( new FakeBucketLoggingEvent(), ...[] );
+		$logWriter->writeEvent( new FakeBucketLoggingEvent(), ...[] );
+
+		$logContents = stream_get_contents( $logfile, -1, 0 );
+		$this->assertSame( 3, substr_count( $logContents, "\n" ), 'Log should contain a newline for each event' );
+	}
+
+	public function testGivenEventWithNewlineInMetadata_newlineIsEscaped() {
+		$logfile = fopen( 'php://memory', 'a+' );
+		$logWriter = new StreamBucketLogger( $logfile );
+
+		$logWriter->writeEvent( new FakeBucketLoggingEvent( ['text' => "line1\nline2"] ), ...[] );
+
+		$logContents = stream_get_contents( $logfile, -1, 0 );
+		$this->assertSame( 1, substr_count( $logContents, "\n" ), 'Log should contain only one newline' );
+	}
+
+	public function testGivenMultipleEvents_eachOneIsLoggedAsValidJsonObject() {
+		$logfile = fopen( 'php://memory', 'a+' );
+		$logWriter = new StreamBucketLogger( $logfile );
+
+		$logWriter->writeEvent( new FakeBucketLoggingEvent(), ...[] );
+		$logWriter->writeEvent( new FakeBucketLoggingEvent(), ...[] );
+		$logWriter->writeEvent( new FakeBucketLoggingEvent(), ...[] );
+
+		$logContentLines = explode( "\n", trim( stream_get_contents( $logfile, -1, 0 ) ) );
+		foreach( $logContentLines as $line ) {
+			$logData = json_decode( $line, false );
+			$this->assertSame( JSON_ERROR_NONE, json_last_error(), 'JSON should be valid' );
+			$this->assertInternalType( 'object', $logData );
+		}
+	}
 }

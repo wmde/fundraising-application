@@ -20,19 +20,22 @@ class StreamBucketLogger implements BucketLogger {
 	}
 
 	public function writeEvent( LoggingEvent $event, Bucket ...$buckets ) {
-		fwrite( $this->stream, json_encode( [
-			'date' => date( $this->dateFormat ),
-			'eventName' => $event->getName(),
-			'metadata' => $event->getMetaData(),
-			'buckets' => array_reduce(
-				$buckets,
-				function ( array $bucketMap, Bucket $bucket ) {
-					$bucketMap[$bucket->getCampaign()->getName()] = $bucket->getName();
-					return $bucketMap;
-				},
-				[]
-			)
-		]));
+		fwrite(
+			$this->stream,
+			json_encode( [
+				'date' => date( $this->dateFormat ),
+				'eventName' => $event->getName(),
+				'metadata' => $event->getMetaData(),
+				'buckets' => array_reduce(
+					$buckets,
+					function ( array $bucketMap, Bucket $bucket ) {
+						$bucketMap[$bucket->getCampaign()->getName()] = $bucket->getName();
+						return $bucketMap;
+					},
+					[]
+				)
+			] ) . "\n"
+		);
 	}
 
 	public function setDateFormat( string $dateFormat ): void {
