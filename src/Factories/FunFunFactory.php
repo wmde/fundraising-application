@@ -1723,7 +1723,7 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	public function getBucketLogger(): BucketLogger {
 		if ( !isset( $this->sharedObjects['bucketLogger'] ) ) {
-			$logfileName = $this->getLoggingPath() . '/buckets.log';
+			$logfileName = $this->getVarPath() . '/buckets.log';
 			$logStream = fopen( $logfileName, 'a' );
 			if ( $logStream === false ) {
 				$this->getLogger()->error( 'Could not open bucket log file ' . $logfileName );
