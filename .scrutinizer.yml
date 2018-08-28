@@ -18,6 +18,7 @@ filter:
         - 'skins/10h16/*'
         - 'node_modules/*'
         - 'tests/*'
+        - 'src/Factories/FunFunFactory.php'
     dependency_paths:
         - 'vendor/'
 
