@@ -32,6 +32,10 @@ class FeatureToggleParser {
 		return $featureToggleChecks;
 	}
 
+	/**
+	 * @param string $choiceFactoryLocation
+	 * @return MethodCall[]
+	 */
 	private static function parseMethodCalls( string $choiceFactoryLocation ): array {
 		$parser = ( new ParserFactory() )->create( ParserFactory::PREFER_PHP7 );
 		$nodeFinder = new NodeFinder();
