@@ -84,7 +84,7 @@ class StreamBucketLoggerTest extends TestCase {
 	 * @param mixed $expectedValue
 	 * @param string $key
 	 */
-	private function assertLogValue( $expectedValue, $key ) {
+	private function assertLogValue( $expectedValue, string $key ) {
 		rewind( $this->logfile );
 		$logContents = fgets( $this->logfile );
 		$this->assertNotFalse( $logContents, 'Log should contain something' );
