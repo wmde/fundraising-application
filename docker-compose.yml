@@ -1,4 +1,4 @@
-version: '3.2'
+version: '3.4'
 
 services:
   proxy:
@@ -20,6 +20,7 @@ services:
   app:
     build:
       context: ./build/app
+      target: app
     expose:
       - "9000"
     volumes:

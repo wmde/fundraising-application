@@ -79,6 +79,7 @@ use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorValidator;
 use WMDE\Fundraising\DonationContext\UseCases\ValidateDonor\ValidateDonorUseCase;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\BucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\NullBucketLogger;
+use WMDE\Fundraising\Frontend\BucketTesting\Logging\PhpTimeTeller;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\StreamBucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\RandomBucketSelection;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
@@ -1729,7 +1730,7 @@ class FunFunFactory implements ServiceProviderInterface {
 				$this->getLogger()->error( 'Could not open bucket log file ' . $logfileName );
 				return new NullBucketLogger();
 			}
-			$this->sharedObjects['bucketLogger'] = new StreamBucketLogger( $logStream );
+			$this->sharedObjects['bucketLogger'] = new StreamBucketLogger( $logStream, new PhpTimeTeller() );
 		}
 		return $this->sharedObjects['bucketLogger'];
 	}
