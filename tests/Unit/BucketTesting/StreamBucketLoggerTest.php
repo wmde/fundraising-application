@@ -11,6 +11,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\Logging\PhpTimeTeller;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\StreamBucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\TimeTeller;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeBucketLoggingEvent;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\StubTimeTeller;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\BucketTesting\Logging\StreamBucketLogger
@@ -27,12 +28,13 @@ class StreamBucketLoggerTest extends TestCase {
 	}
 
 	public function testLogWriterAddsDate() {
+		$stubTimeValue = 'Such a time';
 		$logfile = fopen( 'php://memory', 'a+' );
-		$logWriter = new StreamBucketLogger( $logfile, new PhpTimeTeller( 'Y-m-d H:i' ) );
+		$logWriter = new StreamBucketLogger( $logfile, new StubTimeTeller( $stubTimeValue ) );
 
 		$logWriter->writeEvent( new FakeBucketLoggingEvent(), ...[] );
 
-		$this->assertLogValue( date( 'Y-m-d H:i' ), 'date', $logfile );
+		$this->assertLogValue( $stubTimeValue, 'date', $logfile );
 	}
 
 	public function testGivenEventName_itIsLogged() {
