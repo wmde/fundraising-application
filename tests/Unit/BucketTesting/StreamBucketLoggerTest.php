@@ -101,21 +101,23 @@ class StreamBucketLoggerTest extends TestCase {
 		$logWriter->writeEvent( new FakeBucketLoggingEvent(), ...[] );
 		$logWriter->writeEvent( new FakeBucketLoggingEvent(), ...[] );
 
-		$logContents = stream_get_contents( $this->logfile, -1, 0 );
 		$this->assertSame(
 			3,
-			substr_count( $logContents, "\n" ),
+			substr_count( $this->getLogFileContents(), "\n" ),
 			'Log should contain a newline for each event'
 		);
+	}
+
+	private function getLogFileContents(): string {
+		return stream_get_contents( $this->logfile, -1, 0 );
 	}
 
 	public function testGivenEventWithNewlineInMetadata_newlineIsEscaped() {
 		$this->newBucketLogger()->writeEvent( new FakeBucketLoggingEvent( ['text' => "line1\nline2"] ), ...[] );
 
-		$logContents = stream_get_contents( $this->logfile, -1, 0 );
 		$this->assertSame(
 			1,
-			substr_count( $logContents, "\n" ),
+			substr_count( $this->getLogFileContents(), "\n" ),
 			'Log should contain only one newline'
 		);
 	}
@@ -127,7 +129,7 @@ class StreamBucketLoggerTest extends TestCase {
 		$logWriter->writeEvent( new FakeBucketLoggingEvent(), ...[] );
 		$logWriter->writeEvent( new FakeBucketLoggingEvent(), ...[] );
 
-		$logContentLines = explode( "\n", trim( stream_get_contents( $this->logfile, -1, 0 ) ) );
+		$logContentLines = explode( "\n", trim( $this->getLogFileContents() ) );
 		foreach( $logContentLines as $line ) {
 			$logData = json_decode( $line, false );
 			$this->assertSame( JSON_ERROR_NONE, json_last_error(), 'JSON should be valid' );
