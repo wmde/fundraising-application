@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\TimeTeller;
 
-class StubTimeTeller implements TimeTeller  {
+class StubTimeTeller implements TimeTeller {
 
 	private $stubValue;
 

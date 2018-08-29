@@ -19,7 +19,11 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\StubTimeTeller;
  */
 class StreamBucketLoggerTest extends TestCase {
 
+	/**
+	 * @var resource
+	 */
 	private $logfile;
+
 	/**
 	 * @var TimeTeller
 	 */
