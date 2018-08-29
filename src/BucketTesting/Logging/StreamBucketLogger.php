@@ -10,20 +10,22 @@ use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 class StreamBucketLogger implements BucketLogger {
 
 	private $stream;
-	private $dateFormat = DateTime::RFC3339_EXTENDED;
+	private $timeTeller;
 
 	/**
 	 * @param resource $stream
+	 * @param TimeTeller $timeTeller
 	 */
-	public function __construct( $stream ) {
+	public function __construct( $stream, TimeTeller $timeTeller ) {
 		$this->stream = $stream;
+		$this->timeTeller = $timeTeller;
 	}
 
 	public function writeEvent( LoggingEvent $event, Bucket ...$buckets ) {
 		fwrite(
 			$this->stream,
 			json_encode( [
-				'date' => date( $this->dateFormat ),
+				'date' => $this->timeTeller->getTime(),
 				'eventName' => $event->getName(),
 				'metadata' => $event->getMetaData(),
 				'buckets' => array_reduce(
@@ -36,10 +38,6 @@ class StreamBucketLogger implements BucketLogger {
 				)
 			] ) . "\n"
 		);
-	}
-
-	public function setDateFormat( string $dateFormat ): void {
-		$this->dateFormat = $dateFormat;
 	}
 
 }

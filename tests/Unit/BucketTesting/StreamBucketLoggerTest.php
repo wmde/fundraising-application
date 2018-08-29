@@ -7,7 +7,9 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
+use WMDE\Fundraising\Frontend\BucketTesting\Logging\PhpTimeTeller;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\StreamBucketLogger;
+use WMDE\Fundraising\Frontend\BucketTesting\Logging\TimeTeller;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeBucketLoggingEvent;
 
 /**
@@ -15,10 +17,18 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeBucketLoggingEvent;
  */
 class StreamBucketLoggerTest extends TestCase {
 
+	/**
+	 * @var TimeTeller
+	 */
+	private $timeTeller;
+
+	public function setUp() {
+		$this->timeTeller = new PhpTimeTeller();
+	}
+
 	public function testLogWriterAddsDate() {
 		$logfile = fopen( 'php://memory', 'a+' );
-		$logWriter = new StreamBucketLogger( $logfile );
-		$logWriter->setDateFormat( 'Y-m-d H:i' ); // Ignore seconds to avoid Heisentests
+		$logWriter = new StreamBucketLogger( $logfile, new PhpTimeTeller( 'Y-m-d H:i' ) );
 
 		$logWriter->writeEvent( new FakeBucketLoggingEvent(), ...[] );
 
@@ -27,7 +37,7 @@ class StreamBucketLoggerTest extends TestCase {
 
 	public function testGivenEventName_itIsLogged() {
 		$logfile = fopen( 'php://memory', 'a+' );
-		$logWriter = new StreamBucketLogger( $logfile );
+		$logWriter = new StreamBucketLogger( $logfile, $this->timeTeller );
 
 		$logWriter->writeEvent( new FakeBucketLoggingEvent(), ...[] );
 
@@ -36,7 +46,7 @@ class StreamBucketLoggerTest extends TestCase {
 
 	public function testGivenEventMetadata_itIsLogged() {
 		$logfile = fopen( 'php://memory', 'a+' );
-		$logWriter = new StreamBucketLogger( $logfile );
+		$logWriter = new StreamBucketLogger( $logfile, $this->timeTeller );
 
 		$logWriter->writeEvent( new FakeBucketLoggingEvent(), ...[] );
 
@@ -45,7 +55,7 @@ class StreamBucketLoggerTest extends TestCase {
 
 	public function testGivenBuckets_theyAreOutputWithTheirCampaigns() {
 		$logfile = fopen( 'php://memory', 'a+' );
-		$logWriter = new StreamBucketLogger( $logfile );
+		$logWriter = new StreamBucketLogger( $logfile, $this->timeTeller );
 		$campaign1 = new Campaign( 'test1', 't1', new \DateTime(), (new \DateTime())->modify( '+1 month' ), true );
 		$firstCampaignBucket = new Bucket( 'first', $campaign1, true );
 		$campaign1->addBucket( $firstCampaignBucket );
@@ -75,7 +85,7 @@ class StreamBucketLoggerTest extends TestCase {
 
 	public function testGivenMultipleEvents_eachOneIsLoggedAsOneLine() {
 		$logfile = fopen( 'php://memory', 'a+' );
-		$logWriter = new StreamBucketLogger( $logfile );
+		$logWriter = new StreamBucketLogger( $logfile, $this->timeTeller );
 
 		$logWriter->writeEvent( new FakeBucketLoggingEvent(), ...[] );
 		$logWriter->writeEvent( new FakeBucketLoggingEvent(), ...[] );
@@ -87,7 +97,7 @@ class StreamBucketLoggerTest extends TestCase {
 
 	public function testGivenEventWithNewlineInMetadata_newlineIsEscaped() {
 		$logfile = fopen( 'php://memory', 'a+' );
-		$logWriter = new StreamBucketLogger( $logfile );
+		$logWriter = new StreamBucketLogger( $logfile, $this->timeTeller );
 
 		$logWriter->writeEvent( new FakeBucketLoggingEvent( ['text' => "line1\nline2"] ), ...[] );
 
@@ -97,7 +107,7 @@ class StreamBucketLoggerTest extends TestCase {
 
 	public function testGivenMultipleEvents_eachOneIsLoggedAsValidJsonObject() {
 		$logfile = fopen( 'php://memory', 'a+' );
-		$logWriter = new StreamBucketLogger( $logfile );
+		$logWriter = new StreamBucketLogger( $logfile, $this->timeTeller );
 
 		$logWriter->writeEvent( new FakeBucketLoggingEvent(), ...[] );
 		$logWriter->writeEvent( new FakeBucketLoggingEvent(), ...[] );
