@@ -77,6 +77,10 @@ use WMDE\Fundraising\DonationContext\UseCases\SofortPaymentNotification\SofortPa
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorValidator;
 use WMDE\Fundraising\DonationContext\UseCases\ValidateDonor\ValidateDonorUseCase;
+use WMDE\Fundraising\Frontend\BucketTesting\Logging\BucketLogger;
+use WMDE\Fundraising\Frontend\BucketTesting\Logging\NullBucketLogger;
+use WMDE\Fundraising\Frontend\BucketTesting\Logging\PhpTimeTeller;
+use WMDE\Fundraising\Frontend\BucketTesting\Logging\StreamBucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\RandomBucketSelection;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
@@ -1716,6 +1720,24 @@ class FunFunFactory implements ServiceProviderInterface {
 		return $this->createSharedObject( BucketSelector::class, function (): BucketSelector {
 			return new BucketSelector( $this->getCampaignCollection(), new RandomBucketSelection() );
 		} );
+	}
+
+	public function getBucketLogger(): BucketLogger {
+		if ( !isset( $this->sharedObjects['bucketLogger'] ) ) {
+			$logfileName = $this->getVarPath() . '/buckets.log';
+			$logStream = fopen( $logfileName, 'a' );
+			if ( $logStream === false ) {
+				$this->getLogger()->error( 'Could not open bucket log file ' . $logfileName );
+				return new NullBucketLogger();
+			}
+			$this->sharedObjects['bucketLogger'] = new StreamBucketLogger( $logStream, new PhpTimeTeller() );
+		}
+		return $this->sharedObjects['bucketLogger'];
+	}
+
+
+	public function setBucketLogger( BucketLogger $logger ): void {
+		$this->sharedObjects['bucketLogger'] = $logger;
 	}
 
 	public function getSelectedBuckets(): array {

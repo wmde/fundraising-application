@@ -10,7 +10,9 @@ use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\MembershipApplication;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\ApplyForMembershipHandler;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
+use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\MembershipApplicationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketLoggerSpy;
 use WMDE\Fundraising\MembershipContext\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FixedMembershipTokenGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\Model\PayPalData;
@@ -21,8 +23,6 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 
 /**
  * @licence GNU GPL v2+
- * @author Jeroen De Dauw < jeroendedauw@gmail.com >
- * @author Kai Nissen < kai.nissen@wikimedia.de >
  *
  * @requires extension konto_check
  */
@@ -490,6 +490,23 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			$client->request( Request::METHOD_POST, self::APPLY_FOR_MEMBERSHIP_PATH, $parameters );
 
 			$this->assertFalse( $factory->getMembershipApplicationRepository()->getApplicationById( 1 )->getDonationReceipt() );
+		} );
+	}
+
+	public function testGivenValidRequest_bucketsAreLogged(): void {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+			$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
+			$bucketLogger = new BucketLoggerSpy();
+			$factory->setBucketLogger( $bucketLogger );
+
+			$client->request(
+				'POST',
+				'apply-for-membership',
+				$this->newValidHttpParameters()
+			);
+
+			$this->assertSame( 1, $bucketLogger->getEventCount() );
+			$this->assertInstanceOf( MembershipApplicationCreated::class, $bucketLogger->getFirstEvent() );
 		} );
 	}
 }

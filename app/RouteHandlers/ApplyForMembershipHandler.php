@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\App\RouteHandlers;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\MembershipApplicationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\MembershipContext\Tracking\MembershipApplicationTrackingInfo;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipRequest;
@@ -40,25 +41,26 @@ class ApplyForMembershipHandler {
 		$applyForMembershipRequest = $this->createMembershipRequest( $request );
 		$responseModel = $this->ffFactory->newApplyForMembershipUseCase()->applyForMembership( $applyForMembershipRequest );
 
-		if ( $responseModel->isSuccessful() ) {
-			$httpResponse = $this->newHttpResponse( $responseModel );
-
-			$cookie = $this->ffFactory->getCookieBuilder();
-			$httpResponse->headers->setCookie(
-				$cookie->newCookie(
-					self::SUBMISSION_COOKIE_NAME,
-					date( self::TIMESTAMP_FORMAT )
+		if ( !$responseModel->isSuccessful() ) {
+			return new Response(
+				$this->ffFactory->newMembershipFormViolationPresenter()->present(
+					$applyForMembershipRequest,
+					$request->request->get( 'showMembershipTypeOption' ) === 'true'
 				)
 			);
-			return $httpResponse;
 		}
 
-		return new Response(
-			$this->ffFactory->newMembershipFormViolationPresenter()->present(
-				$applyForMembershipRequest,
-				$request->request->get( 'showMembershipTypeOption' ) === 'true'
+		$httpResponse = $this->newHttpResponse( $responseModel );
+
+		$cookie = $this->ffFactory->getCookieBuilder();
+		$httpResponse->headers->setCookie(
+			$cookie->newCookie(
+				self::SUBMISSION_COOKIE_NAME,
+				date( self::TIMESTAMP_FORMAT )
 			)
 		);
+		$this->logSelectedBuckets( $responseModel );
+		return $httpResponse;
 	}
 
 	private function createMembershipRequest( Request $httpRequest ): ApplyForMembershipRequest {
@@ -170,5 +172,12 @@ class ApplyForMembershipHandler {
 	 */
 	private function filterAutofillCommas( string $value ): string {
 		return trim( preg_replace( ['/,/', '/\s{2,}/'], [' ', ' '], $value ) );
+	}
+
+	private function logSelectedBuckets( ApplyForMembershipResponse $responseModel ) {
+		$this->ffFactory->getBucketLogger()->writeEvent(
+			new MembershipApplicationCreated( $responseModel->getMembershipApplication()->getId() ),
+			...$this->ffFactory->getSelectedBuckets()
+		);
 	}
 }
