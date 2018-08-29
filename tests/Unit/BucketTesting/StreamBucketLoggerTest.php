@@ -68,9 +68,16 @@ class StreamBucketLoggerTest extends TestCase {
 		$secondCampaignBucket = new Bucket( 'second', $campaign2, true );
 		$campaign2->addBucket( $secondCampaignBucket );
 
-		$this->newBucketLogger()->writeEvent( new FakeBucketLoggingEvent(), $firstCampaignBucket, $secondCampaignBucket );
+		$this->newBucketLogger()->writeEvent(
+			new FakeBucketLoggingEvent(),
+			$firstCampaignBucket,
+			$secondCampaignBucket
+		);
 
-		$this->assertLogValue( (object) [ 'test1' => 'first', 'test2' => 'second' ], 'buckets' );
+		$this->assertLogValue(
+			(object) [ 'test1' => 'first', 'test2' => 'second' ],
+			'buckets'
+		);
 	}
 
 	/**
@@ -95,14 +102,22 @@ class StreamBucketLoggerTest extends TestCase {
 		$logWriter->writeEvent( new FakeBucketLoggingEvent(), ...[] );
 
 		$logContents = stream_get_contents( $this->logfile, -1, 0 );
-		$this->assertSame( 3, substr_count( $logContents, "\n" ), 'Log should contain a newline for each event' );
+		$this->assertSame(
+			3,
+			substr_count( $logContents, "\n" ),
+			'Log should contain a newline for each event'
+		);
 	}
 
 	public function testGivenEventWithNewlineInMetadata_newlineIsEscaped() {
 		$this->newBucketLogger()->writeEvent( new FakeBucketLoggingEvent( ['text' => "line1\nline2"] ), ...[] );
 
 		$logContents = stream_get_contents( $this->logfile, -1, 0 );
-		$this->assertSame( 1, substr_count( $logContents, "\n" ), 'Log should contain only one newline' );
+		$this->assertSame(
+			1,
+			substr_count( $logContents, "\n" ),
+			'Log should contain only one newline'
+		);
 	}
 
 	public function testGivenMultipleEvents_eachOneIsLoggedAsValidJsonObject() {
