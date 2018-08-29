@@ -28,15 +28,19 @@ class StreamBucketLogger implements BucketLogger {
 				'date' => $this->timeTeller->getTime(),
 				'eventName' => $event->getName(),
 				'metadata' => $event->getMetaData(),
-				'buckets' => array_reduce(
-					$buckets,
-					function ( array $bucketMap, Bucket $bucket ) {
-						$bucketMap[$bucket->getCampaign()->getName()] = $bucket->getName();
-						return $bucketMap;
-					},
-					[]
-				)
+				'buckets' => $this->getBucketMap( $buckets )
 			] ) . "\n"
+		);
+	}
+
+	private function getBucketMap( array $buckets ): array {
+		return array_reduce(
+			$buckets,
+			function ( array $bucketMap, Bucket $bucket ) {
+				$bucketMap[$bucket->getCampaign()->getName()] = $bucket->getName();
+				return $bucketMap;
+			},
+			[]
 		);
 	}
 
