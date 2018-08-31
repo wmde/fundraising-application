@@ -25,8 +25,8 @@ donation_address:
   description: Test address form being required immediately against only being presented optionally on the confirmation page
   reference: "https://phabricator.wikimedia.org/T196885"
   start: "2018-07-01"
-  end: "2018-12-31"
-  active: false
+  end: "2019-01-31"
+  active: true
   buckets:
     - required
     - optional
