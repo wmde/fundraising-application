@@ -2,6 +2,8 @@
 
 declare( strict_types = 1 );
 
+stream_wrapper_unregister('phar');
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use Monolog\Formatter\JsonFormatter;
