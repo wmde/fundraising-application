@@ -10,3 +10,7 @@ skins:
 
 donation_address:
   active: true
+
+usability:
+  active: true
+  start: "2018-09-01"

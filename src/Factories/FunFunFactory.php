@@ -1306,7 +1306,8 @@ class FunFunFactory implements ServiceProviderInterface {
 		// (we need different form pages for A/B testing)
 		return $this->getLayoutTemplate( 'Donation_Form.html.twig', [
 			'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForDonation(),
-			'presetAmounts' => $this->getPresetAmountsSettings( 'donations' )
+			'presetAmounts' => $this->getPresetAmountsSettings( 'donations' ),
+			'featureToggle' => ['usabilityEnabled' =>(int)$this->getChoiceFactory()->isUsabilityImproved()]
 		] );
 	}
 
