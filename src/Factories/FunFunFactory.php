@@ -79,6 +79,7 @@ use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorValidator;
 use WMDE\Fundraising\DonationContext\UseCases\ValidateDonor\ValidateDonorUseCase;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\BucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\PhpTimeTeller;
+use WMDE\Fundraising\Frontend\BucketTesting\Logging\BestEffortBucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\StreamBucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\RandomBucketSelection;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
@@ -93,8 +94,6 @@ use WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder;
 use WMDE\Fundraising\Frontend\BucketTesting\DoorkeeperFeatureToggle;
 use WMDE\Fundraising\Frontend\BucketTesting\FeatureToggle;
 use WMDE\Fundraising\Frontend\BucketTesting\BucketSelector;
-use WMDE\Fundraising\Frontend\Infrastructure\ErrorLoggingStreamOpener;
-use WMDE\Fundraising\Frontend\Infrastructure\FileStreamOpener;
 use WMDE\Fundraising\Frontend\Infrastructure\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\LoggingMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\LoggingPaymentNotificationVerifier;
@@ -1730,11 +1729,9 @@ class FunFunFactory implements ServiceProviderInterface {
 	public function getBucketLogger(): BucketLogger {
 		return $this->createSharedObject( 'bucketLogger', function () {
 			$logfileName = $this->getSharedResourcesPath() . '/buckets.log';
-			$streamOpener = new ErrorLoggingStreamOpener( new FileStreamOpener(), $this->getLogger() );
-			return new StreamBucketLogger(
-				$streamOpener->openStream( $logfileName, 'a' ),
-				new PhpTimeTeller()
-			);
+			return new BestEffortBucketLogger(
+				new StreamBucketLogger( $logfileName, new PhpTimeTeller() ),
+				$this->getLogger() );
 		} );
 	}
 

@@ -4,10 +4,12 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting;
 
+use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\BucketLogger;
+use WMDE\Fundraising\Frontend\BucketTesting\Logging\LoggingError;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\PhpTimeTeller;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\StreamBucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\TimeTeller;
@@ -19,10 +21,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\StubTimeTeller;
  */
 class StreamBucketLoggerTest extends TestCase {
 
-	/**
-	 * @var resource
-	 */
-	private $logfile;
+	private $logUrl;
 
 	/**
 	 * @var TimeTeller
@@ -30,19 +29,20 @@ class StreamBucketLoggerTest extends TestCase {
 	private $timeTeller;
 
 	public function setUp() {
-		$this->logfile = fopen( 'php://memory', 'a+' );
+		vfsStream::setup( 'logs' );
+		$this->logUrl = vfsStream::url( 'logs/buckets.log' );
 		$this->timeTeller = new PhpTimeTeller();
 	}
 
 	public function testLogWriterAddsDate() {
 		$stubTimeValue = 'Such a time';
 
-		$logWriter = new StreamBucketLogger(
-			$this->logfile,
+		$logger = new StreamBucketLogger(
+			$this->logUrl,
 			new StubTimeTeller( $stubTimeValue )
 		);
 
-		$logWriter->writeEvent( new FakeBucketLoggingEvent(), ...[] );
+		$logger->writeEvent( new FakeBucketLoggingEvent(), ...[] );
 
 		$this->assertLogValue( $stubTimeValue, 'date' );
 	}
@@ -54,7 +54,7 @@ class StreamBucketLoggerTest extends TestCase {
 	}
 
 	private function newBucketLogger(): BucketLogger {
-		return new StreamBucketLogger( $this->logfile, $this->timeTeller );
+		return new StreamBucketLogger( $this->logUrl, $this->timeTeller );
 	}
 
 	public function testGivenEventMetadata_itIsLogged() {
@@ -89,8 +89,8 @@ class StreamBucketLoggerTest extends TestCase {
 	 * @param string $key
 	 */
 	private function assertLogValue( $expectedValue, string $key ) {
-		rewind( $this->logfile );
-		$logContents = fgets( $this->logfile );
+		$logfile = fopen( $this->logUrl, 'r' );
+		$logContents = fgets( $logfile );
 		$this->assertNotFalse( $logContents, 'Log should contain something' );
 		$event = json_decode( $logContents, false );
 		$this->assertTrue( is_object( $event ), 'Logs should be encoded as object' );
@@ -113,7 +113,7 @@ class StreamBucketLoggerTest extends TestCase {
 	}
 
 	private function getLogFileContents(): string {
-		return stream_get_contents( $this->logfile, -1, 0 );
+		return file_get_contents( $this->logUrl );
 	}
 
 	public function testGivenEventWithNewlineInMetadata_newlineIsEscaped() {
@@ -139,5 +139,24 @@ class StreamBucketLoggerTest extends TestCase {
 			$this->assertSame( JSON_ERROR_NONE, json_last_error(), 'JSON should be valid' );
 			$this->assertInternalType( 'object', $logData );
 		}
+	}
+
+	public function testWhenOpeningTheUrlFails_anExceptionIsThrown() {
+		$logger = new StreamBucketLogger(
+			vfsStream::url( 'does/not/exist.log' ),
+			$this->timeTeller
+		);
+
+		$this->expectException( LoggingError::class );
+		$logger->writeEvent( new FakeBucketLoggingEvent(), ...[] );
+	}
+
+	public function testWhenTargetPathDoesNotExist_itIsCreated() {
+		$url = vfsStream::url( 'logs/down/deep/bucket.log' );
+		$logger = new StreamBucketLogger( $url, $this->timeTeller );
+
+		$logger->writeEvent( new FakeBucketLoggingEvent(), ...[] );
+
+		$this->assertFileExists( $url );
 	}
 }
