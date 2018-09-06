@@ -1302,12 +1302,10 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	private function getDonationFormTemplate(): TwigTemplate {
-		// TODO make the template name dependent on the 'form' value from the HTTP POST request
-		// (we need different form pages for A/B testing)
 		return $this->getLayoutTemplate( 'Donation_Form.html.twig', [
 			'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForDonation(),
 			'presetAmounts' => $this->getPresetAmountsSettings( 'donations' ),
-			'featureToggle' => ['usabilityEnabled' =>(int)$this->getChoiceFactory()->isUsabilityImproved()]
+			'featureToggle' => ['usabilityEnabled' => (int) $this->getChoiceFactory()->isUsabilityImproved()]
 		] );
 	}
 
