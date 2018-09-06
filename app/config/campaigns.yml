@@ -20,6 +20,17 @@
 # buckets: List of bucket names
 # default_bucket: used bucket when campaign is not active. Must be listed in buckets.
 # url_key: URL parameter key used for assigning buckets to people
+usability:
+  description: Change the user experience on the donation page by removing immediate scrolling, some subheaders and moving newsletter opt-in
+  reference: "https://phabricator.wikimedia.org/T202855"
+  start: "2018-09-10"
+  end: "2019-01-31"
+  active: false
+  buckets:
+    - old
+    - improved
+  default_bucket: old
+  url_key: us
 
 donation_address:
   description: Test address form being required immediately against only being presented optionally on the confirmation page

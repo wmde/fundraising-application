@@ -4,9 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Factories;
 
-use Twig_Environment;
 use WMDE\Fundraising\Frontend\BucketTesting\FeatureToggle;
-use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
 /**
  * Factory for generating classes whose implementations differ due to A/B testing.
@@ -32,6 +30,19 @@ class ChoiceFactory {
 			return true;
 		}
 		throw new UnknownChoiceDefinition( 'Confirmation Page Template configuration failure.' );
+	}
+
+	public function isUsabilityImproved(): bool {
+		/** The "improved usability" feature is only implemented for cat17 */
+		if (
+			$this->featureToggle->featureIsActive( 'campaigns.usability.old' ) ||
+			$this->getSkinTemplateDirectory() !== $this->getSkinDirectory( 'cat17' )
+		) {
+			return false;
+		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.usability.improved' ) ) {
+			return true;
+		}
+		throw new UnknownChoiceDefinition( 'Donation form usability configuration failure.' );
 	}
 
 
