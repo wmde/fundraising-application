@@ -11,16 +11,16 @@ use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
  */
 class JsonBucketLogger implements BucketLogger {
 
-	private $url;
+	private $logWriter;
 	private $timeTeller;
 
-	public function __construct( string $url, TimeTeller $timeTeller ) {
-		$this->url = $url;
+	public function __construct( LogWriter $logWriter, TimeTeller $timeTeller ) {
+		$this->logWriter = $logWriter;
 		$this->timeTeller = $timeTeller;
 	}
 
 	public function writeEvent( LoggingEvent $event, Bucket ...$buckets ): void {
-		( new StreamLogWriter( $this->url ) )->write( json_encode( $this->formatData( $event, ...$buckets ) ) );
+		$this->logWriter->write( json_encode( $this->formatData( $event, ...$buckets ) ) );
 	}
 
 	private function formatData( LoggingEvent $event, Bucket ...$buckets ): array {

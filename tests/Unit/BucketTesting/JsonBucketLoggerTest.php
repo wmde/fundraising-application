@@ -4,16 +4,14 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting;
 
-use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\BucketLogger;
-use WMDE\Fundraising\Frontend\BucketTesting\Logging\LoggingError;
-use WMDE\Fundraising\Frontend\BucketTesting\Logging\PhpTimeTeller;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\JsonBucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\TimeTeller;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeBucketLoggingEvent;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\LogWriterSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\StubTimeTeller;
 
 /**
@@ -21,7 +19,12 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\StubTimeTeller;
  */
 class JsonBucketLoggerTest extends TestCase {
 
-	private $logUrl;
+	private const STUB_TIME_VALUE = 'Such a time';
+
+	/**
+	 * @var LogWriterSpy
+	 */
+	private $logWriter;
 
 	/**
 	 * @var TimeTeller
@@ -29,22 +32,14 @@ class JsonBucketLoggerTest extends TestCase {
 	private $timeTeller;
 
 	public function setUp() {
-		vfsStream::setup( 'logs' );
-		$this->logUrl = vfsStream::url( 'logs/buckets.log' );
-		$this->timeTeller = new PhpTimeTeller();
+		$this->logWriter = new LogWriterSpy();
+		$this->timeTeller = new StubTimeTeller( self::STUB_TIME_VALUE );
 	}
 
 	public function testLogWriterAddsDate() {
-		$stubTimeValue = 'Such a time';
+		$this->newBucketLogger()->writeEvent( new FakeBucketLoggingEvent(), ...[] );
 
-		$logger = new JsonBucketLogger(
-			$this->logUrl,
-			new StubTimeTeller( $stubTimeValue )
-		);
-
-		$logger->writeEvent( new FakeBucketLoggingEvent(), ...[] );
-
-		$this->assertLogValue( $stubTimeValue, 'date' );
+		$this->assertLogValue( self::STUB_TIME_VALUE, 'date' );
 	}
 
 	public function testGivenEventName_itIsLogged() {
@@ -54,7 +49,7 @@ class JsonBucketLoggerTest extends TestCase {
 	}
 
 	private function newBucketLogger(): BucketLogger {
-		return new JsonBucketLogger( $this->logUrl, $this->timeTeller );
+		return new JsonBucketLogger( $this->logWriter, $this->timeTeller );
 	}
 
 	public function testGivenEventMetadata_itIsLogged() {
@@ -64,18 +59,10 @@ class JsonBucketLoggerTest extends TestCase {
 	}
 
 	public function testGivenBuckets_theyAreOutputWithTheirCampaigns() {
-
-		$campaign1 = new Campaign( 'test1', 't1', new \DateTime(), (new \DateTime())->modify( '+1 month' ), true );
-		$firstCampaignBucket = new Bucket( 'first', $campaign1, true );
-		$campaign1->addBucket( $firstCampaignBucket );
-		$campaign2 = new Campaign( 'test2', 't2', new \DateTime(), (new \DateTime())->modify( '+1 month' ), true );
-		$secondCampaignBucket = new Bucket( 'second', $campaign2, true );
-		$campaign2->addBucket( $secondCampaignBucket );
-
 		$this->newBucketLogger()->writeEvent(
 			new FakeBucketLoggingEvent(),
-			$firstCampaignBucket,
-			$secondCampaignBucket
+			$this->newBucket( 'first', 'test1' ),
+			$this->newBucket( 'second', 'test2' )
 		);
 
 		$this->assertLogValue(
@@ -84,15 +71,30 @@ class JsonBucketLoggerTest extends TestCase {
 		);
 	}
 
+	private function newBucket( string $bucketName, string $campaignName ): Bucket {
+		return new Bucket(
+			$bucketName,
+			new Campaign(
+				$campaignName,
+				$bucketName . $campaignName,
+				new \DateTime(),
+				( new \DateTime() )->modify( '+1 month' ),
+				true
+			),
+			true
+		);
+	}
+
 	/**
 	 * @param mixed $expectedValue
 	 * @param string $key
 	 */
 	private function assertLogValue( $expectedValue, string $key ) {
-		$logfile = fopen( $this->logUrl, 'r' );
-		$logContents = fgets( $logfile );
-		$this->assertNotFalse( $logContents, 'Log should contain something' );
-		$event = json_decode( $logContents, false );
+		$logCalls = $this->logWriter->getWriteCalls();
+
+		$this->assertNotEmpty( $logCalls, 'Log should contain something' );
+
+		$event = json_decode( $logCalls[0], false );
 		$this->assertTrue( is_object( $event ), 'Logs should be encoded as object' );
 		$this->assertObjectHasAttribute( $key, $event, 'Event should have property' );
 		$this->assertEquals( $expectedValue, $event->{$key} );
@@ -105,24 +107,20 @@ class JsonBucketLoggerTest extends TestCase {
 		$logWriter->writeEvent( new FakeBucketLoggingEvent(), ...[] );
 		$logWriter->writeEvent( new FakeBucketLoggingEvent(), ...[] );
 
-		$this->assertSame(
+		$this->assertCount(
 			3,
-			substr_count( $this->getLogFileContents(), "\n" ),
-			'Log should contain a newline for each event'
+			$this->logWriter->getWriteCalls(),
+			'Log should contain an entry for each event'
 		);
 	}
 
-	private function getLogFileContents(): string {
-		return file_get_contents( $this->logUrl );
-	}
-
 	public function testGivenEventWithNewlineInMetadata_newlineIsEscaped() {
-		$this->newBucketLogger()->writeEvent( new FakeBucketLoggingEvent( ['text' => "line1\nline2"] ), ...[] );
+		$this->newBucketLogger()->writeEvent( new FakeBucketLoggingEvent( [ 'text' => "line1\nline2" ] ), ...[] );
 
 		$this->assertSame(
-			1,
-			substr_count( $this->getLogFileContents(), "\n" ),
-			'Log should contain only one newline'
+			0,
+			substr_count( $this->logWriter->getWriteCalls()[0], "\n" ),
+			'Logger should escape newlines'
 		);
 	}
 
@@ -133,8 +131,7 @@ class JsonBucketLoggerTest extends TestCase {
 		$logWriter->writeEvent( new FakeBucketLoggingEvent(), ...[] );
 		$logWriter->writeEvent( new FakeBucketLoggingEvent(), ...[] );
 
-		$logContentLines = explode( "\n", trim( $this->getLogFileContents() ) );
-		foreach( $logContentLines as $line ) {
+		foreach( $this->logWriter->getWriteCalls() as $line ) {
 			$logData = json_decode( $line, false );
 			$this->assertSame( JSON_ERROR_NONE, json_last_error(), 'JSON should be valid' );
 			$this->assertInternalType( 'object', $logData );
