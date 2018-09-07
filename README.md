@@ -261,11 +261,11 @@ This is not working at the moment.
 
 ## Project structure
 
-This codebase follows a modified version of [The Clean Architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html),
-combined with a partial application of [Domain Driven Design](https://en.wikipedia.org/wiki/Domain-driven_design).
-The high level structure is represented by [this diagram](https://commons.wikimedia.org/wiki/File:Clean_Architecture_%2B_DDD,_full_application.svg).
+This app and its used Bounded Contexts follow the architecture rules outlined in [Clean Architecture + Bounded Contexts](https://www.entropywins.wtf/blog/2018/08/14/clean-architecture-bounded-contexts/).
 
-We moved the Bounded Contexts into their own repositories:
+![Architecture diagram](https://user-images.githubusercontent.com/146040/44942179-6bd68080-adac-11e8-9506-179a9470113b.png)
+
+Used Bounded Contexts:
 
 * [Donation Context](https://github.com/wmde/fundraising-donations)
 * [Membership Context](https://github.com/wmde/fundraising-memberships)

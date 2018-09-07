@@ -3,6 +3,10 @@
 	&.opened {
         display:block;
 	}
+	&.field-grp {
+		display: flex;
+		margin-left: 3px;
+	}
 	.icon-done {
 		position: absolute;
 		top: 18px;
