@@ -49,4 +49,10 @@ class StreamLogWriter implements LogWriter {
 		}
 	}
 
+	public function __destruct() {
+		if ( is_resource( $this->stream ) ) {
+			@fclose( $this->stream );
+		}
+	}
+
 }
