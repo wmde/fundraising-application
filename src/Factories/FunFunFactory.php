@@ -80,7 +80,7 @@ use WMDE\Fundraising\DonationContext\UseCases\ValidateDonor\ValidateDonorUseCase
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\BucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\PhpTimeTeller;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\BestEffortBucketLogger;
-use WMDE\Fundraising\Frontend\BucketTesting\Logging\StreamBucketLogger;
+use WMDE\Fundraising\Frontend\BucketTesting\Logging\JsonBucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\RandomBucketSelection;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
@@ -1729,7 +1729,7 @@ class FunFunFactory implements ServiceProviderInterface {
 		return $this->createSharedObject( 'bucketLogger', function () {
 			$logfileName = $this->getSharedResourcesPath() . '/buckets.log';
 			return new BestEffortBucketLogger(
-				new StreamBucketLogger( $logfileName, new PhpTimeTeller() ),
+				new JsonBucketLogger( $logfileName, new PhpTimeTeller() ),
 				$this->getLogger() );
 		} );
 	}

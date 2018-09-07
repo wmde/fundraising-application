@@ -6,7 +6,10 @@ namespace WMDE\Fundraising\Frontend\BucketTesting\Logging;
 
 use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 
-class StreamBucketLogger implements BucketLogger {
+/**
+ * Logs the event info, the bucket data and the time as a JSON-encoded string
+ */
+class JsonBucketLogger implements BucketLogger {
 
 	private $url;
 	private $timeTeller;

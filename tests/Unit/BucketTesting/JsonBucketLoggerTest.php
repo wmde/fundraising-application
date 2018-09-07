@@ -11,15 +11,15 @@ use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\BucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\LoggingError;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\PhpTimeTeller;
-use WMDE\Fundraising\Frontend\BucketTesting\Logging\StreamBucketLogger;
+use WMDE\Fundraising\Frontend\BucketTesting\Logging\JsonBucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\TimeTeller;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeBucketLoggingEvent;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\StubTimeTeller;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\BucketTesting\Logging\StreamBucketLogger
+ * @covers \WMDE\Fundraising\Frontend\BucketTesting\Logging\JsonBucketLogger
  */
-class StreamBucketLoggerTest extends TestCase {
+class JsonBucketLoggerTest extends TestCase {
 
 	private $logUrl;
 
@@ -37,7 +37,7 @@ class StreamBucketLoggerTest extends TestCase {
 	public function testLogWriterAddsDate() {
 		$stubTimeValue = 'Such a time';
 
-		$logger = new StreamBucketLogger(
+		$logger = new JsonBucketLogger(
 			$this->logUrl,
 			new StubTimeTeller( $stubTimeValue )
 		);
@@ -54,7 +54,7 @@ class StreamBucketLoggerTest extends TestCase {
 	}
 
 	private function newBucketLogger(): BucketLogger {
-		return new StreamBucketLogger( $this->logUrl, $this->timeTeller );
+		return new JsonBucketLogger( $this->logUrl, $this->timeTeller );
 	}
 
 	public function testGivenEventMetadata_itIsLogged() {
