@@ -166,11 +166,23 @@ network name where the database is running in. With the command
     docker network ls
 
 you can list all networks. There will be one network name ending in `fundraising_proxy` (the prefix is probably the 
-directory name where you checked out this repository). Copy the full network name and use it instead of the 
-placeholder `__NETWORK_NAME__` in the following command to run the MySQL command line client:  
+directory name where you checked out this repository).
 
-    docker run -it --link spenden2_database_1:mysql --net __NETWORK_NAME__ --rm mysql:5.6 \
+Next up is finding out the full name of the database container with the command
+
+    docker ps
+
+The database container will be the one ending in `_database_1`. The prefix is probably the directory name where you checked out this repository.
+
+Copy the full network name and container name and use them instead of the placeholders `__CONTAINER_NAME__` and 
+`__NETWORK_NAME__` in the following command to run the MySQL command line client:  
+
+    docker run -it --link __CONTAINER_NAME__:mysql --net __NETWORK_NAME__ --rm mysql:5.6 \
         sh -c 'exec mysql -h database -P 3306 -u fundraising -p"INSECURE PASSWORD" fundraising'
+
+To use PHPMyAdmin, use the following command to run it on port 8089:
+
+	docker run -it --link __CONTAINER_NAME__:db --net __NETWORK_NAME__ -p 8099:80 phpmyadmin/phpmyadmin
 
 ### Accessing the database from your host machine
 
