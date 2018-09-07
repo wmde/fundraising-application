@@ -141,22 +141,4 @@ class StreamBucketLoggerTest extends TestCase {
 		}
 	}
 
-	public function testWhenOpeningTheUrlFails_anExceptionIsThrown() {
-		$logger = new StreamBucketLogger(
-			vfsStream::url( 'does/not/exist.log' ),
-			$this->timeTeller
-		);
-
-		$this->expectException( LoggingError::class );
-		$logger->writeEvent( new FakeBucketLoggingEvent(), ...[] );
-	}
-
-	public function testWhenTargetPathDoesNotExist_itIsCreated() {
-		$url = vfsStream::url( 'logs/down/deep/bucket.log' );
-		$logger = new StreamBucketLogger( $url, $this->timeTeller );
-
-		$logger->writeEvent( new FakeBucketLoggingEvent(), ...[] );
-
-		$this->assertFileExists( $url );
-	}
 }
