@@ -78,9 +78,10 @@ use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorValidator;
 use WMDE\Fundraising\DonationContext\UseCases\ValidateDonor\ValidateDonorUseCase;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\BucketLogger;
-use WMDE\Fundraising\Frontend\BucketTesting\Logging\NullBucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\PhpTimeTeller;
-use WMDE\Fundraising\Frontend\BucketTesting\Logging\StreamBucketLogger;
+use WMDE\Fundraising\Frontend\BucketTesting\Logging\BestEffortBucketLogger;
+use WMDE\Fundraising\Frontend\BucketTesting\Logging\JsonBucketLogger;
+use WMDE\Fundraising\Frontend\BucketTesting\Logging\StreamLogWriter;
 use WMDE\Fundraising\Frontend\BucketTesting\RandomBucketSelection;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
@@ -715,6 +716,10 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	public function getLoggingPath(): string {
 		return $this->getVarPath() . '/log';
+	}
+
+	private function getSharedResourcesPath(): string {
+		return $this->getVarPath() . '/shared';
 	}
 
 	public function newAddSubscriptionUseCase(): AddSubscriptionUseCase {
@@ -1722,18 +1727,16 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function getBucketLogger(): BucketLogger {
-		if ( !isset( $this->sharedObjects['bucketLogger'] ) ) {
-			$logfileName = $this->getVarPath() . '/buckets.log';
-			$logStream = fopen( $logfileName, 'a' );
-			if ( $logStream === false ) {
-				$this->getLogger()->error( 'Could not open bucket log file ' . $logfileName );
-				return new NullBucketLogger();
-			}
-			$this->sharedObjects['bucketLogger'] = new StreamBucketLogger( $logStream, new PhpTimeTeller() );
-		}
-		return $this->sharedObjects['bucketLogger'];
+		return $this->createSharedObject( 'bucketLogger', function () {
+			return new BestEffortBucketLogger(
+				new JsonBucketLogger(
+					new StreamLogWriter( $this->getSharedResourcesPath() . '/buckets.log' ),
+					new PhpTimeTeller()
+				),
+				$this->getLogger()
+			);
+		} );
 	}
-
 
 	public function setBucketLogger( BucketLogger $logger ): void {
 		$this->sharedObjects['bucketLogger'] = $logger;

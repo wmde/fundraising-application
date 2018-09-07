@@ -19,6 +19,9 @@ php_version = "7.1"
 # Logs directory ( shared by all releases )
 logs_dir = logs
 
+# Shared assets directory for all releases
+shared_dir = shared
+
 # Name of current release (docroot in the NGINX config)
 current_dir = html
 

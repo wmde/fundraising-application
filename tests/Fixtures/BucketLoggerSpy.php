@@ -11,7 +11,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\Logging\LoggingEvent;
 class BucketLoggerSpy implements BucketLogger {
 	private $events = [];
 
-	public function writeEvent( LoggingEvent $event, Bucket ...$buckets ) {
+	public function writeEvent( LoggingEvent $event, Bucket ...$buckets ): void {
 		$this->events[] = [
 			'event' => $event,
 			'buckets' => $buckets

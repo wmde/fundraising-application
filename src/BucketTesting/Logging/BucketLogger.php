@@ -7,5 +7,5 @@ namespace WMDE\Fundraising\Frontend\BucketTesting\Logging;
 use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 
 interface BucketLogger {
-	public function writeEvent( LoggingEvent $event, Bucket ...$buckets );
+	public function writeEvent( LoggingEvent $event, Bucket ...$buckets ): void;
 }

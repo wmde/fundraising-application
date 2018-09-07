@@ -43,6 +43,9 @@
     - name: Create symlink to log dir
       file: src={{ app_dir }}/{{ logs_dir }} dest={{ app_dir }}/{{ release_name }}/var/log state=link
 
+    - name: Create symlink to shared dir
+      file: src={{ app_dir }}/{{ shared_dir }} dest={{ app_dir }}/{{ release_name }}/var/shared state=link
+
     - name: Create var/doctrine_proxies dir
       file: path={{ app_dir }}/{{ release_name }}/var/doctrine_proxies owner={{app_owner}} group={{app_group}} state=directory mode=775
 

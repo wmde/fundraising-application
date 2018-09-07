@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\BucketTesting\Logging;
 use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 
 class NullBucketLogger implements BucketLogger {
-	public function writeEvent( LoggingEvent $event, Bucket ...$buckets ) {
+	public function writeEvent( LoggingEvent $event, Bucket ...$buckets ): void {
 		// do nothing
 	}
 }
