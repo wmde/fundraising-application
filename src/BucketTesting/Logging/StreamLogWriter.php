@@ -4,6 +4,9 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\BucketTesting\Logging;
 
+/**
+ * Writes the log entry to a stream after appending a newline to the end of the entry
+ */
 class StreamLogWriter implements LogWriter {
 
 	private $url;
