@@ -6,44 +6,21 @@ namespace WMDE\Fundraising\Frontend\BucketTesting\Logging;
 
 use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 
-class StreamBucketLogger implements BucketLogger {
+/**
+ * Logs the event info, the bucket data and the time as a JSON-encoded string
+ */
+class JsonBucketLogger implements BucketLogger {
 
-	private $url;
-	private $stream;
+	private $logWriter;
 	private $timeTeller;
 
-	public function __construct( string $url, TimeTeller $timeTeller ) {
-		$this->url = $url;
+	public function __construct( LogWriter $logWriter, TimeTeller $timeTeller ) {
+		$this->logWriter = $logWriter;
 		$this->timeTeller = $timeTeller;
 	}
 
 	public function writeEvent( LoggingEvent $event, Bucket ...$buckets ): void {
-		$this->openStreamIfNeeded();
-		fwrite(
-			$this->stream,
-			json_encode( $this->formatData( $event, ...$buckets ) ) . "\n"
-		);
-	}
-
-	private function openStreamIfNeeded() {
-		if ( $this->stream !== null ) {
-			return;
-		}
-		$this->createPathIfNeeded();
-		$this->stream = @fopen( $this->url, 'a' );
-		if ( $this->stream === false ) {
-			throw new LoggingError( 'Could not open ' . $this->url );
-		}
-	}
-
-	private function createPathIfNeeded() {
-		$path = dirname( $this->url );
-		if ( file_exists( $path ) ) {
-			return;
-		}
-		if ( !mkdir( $path, 0777, true ) ) {
-			throw new LoggingError( 'Could not create directory ' . $path );
-		}
+		$this->logWriter->write( json_encode( $this->formatData( $event, ...$buckets ) ) );
 	}
 
 	private function formatData( LoggingEvent $event, Bucket ...$buckets ): array {
