@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\BucketTesting\Logging;
 
 /**
- * Writes the log entry to a stream after appending a newline to the end of the entry
+ * Writes log entries to a file stream, one per line
  */
 class StreamLogWriter implements LogWriter {
 
