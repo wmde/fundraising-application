@@ -37,13 +37,13 @@ class JsonBucketLoggerTest extends TestCase {
 	}
 
 	public function testLogWriterAddsDate() {
-		$this->newBucketLogger()->writeEvent( new FakeBucketLoggingEvent(), ...[] );
+		$this->newBucketLogger()->writeEvent( new FakeBucketLoggingEvent() );
 
 		$this->assertLogValue( self::STUB_TIME_VALUE, 'date' );
 	}
 
 	public function testGivenEventName_itIsLogged() {
-		$this->newBucketLogger()->writeEvent( new FakeBucketLoggingEvent(), ...[] );
+		$this->newBucketLogger()->writeEvent( new FakeBucketLoggingEvent() );
 
 		$this->assertLogValue( 'testEventLogged', 'eventName' );
 	}
@@ -53,7 +53,7 @@ class JsonBucketLoggerTest extends TestCase {
 	}
 
 	public function testGivenEventMetadata_itIsLogged() {
-		$this->newBucketLogger()->writeEvent( new FakeBucketLoggingEvent(), ...[] );
+		$this->newBucketLogger()->writeEvent( new FakeBucketLoggingEvent() );
 
 		$this->assertLogValue( (object) [ 'id' => 123, 'some_fact' => 'water_is_wet' ], 'metadata' );
 	}
@@ -103,9 +103,9 @@ class JsonBucketLoggerTest extends TestCase {
 	public function testGivenMultipleEvents_eachOneIsLoggedAsOneLine() {
 		$logWriter = $this->newBucketLogger();
 
-		$logWriter->writeEvent( new FakeBucketLoggingEvent(), ...[] );
-		$logWriter->writeEvent( new FakeBucketLoggingEvent(), ...[] );
-		$logWriter->writeEvent( new FakeBucketLoggingEvent(), ...[] );
+		$logWriter->writeEvent( new FakeBucketLoggingEvent() );
+		$logWriter->writeEvent( new FakeBucketLoggingEvent() );
+		$logWriter->writeEvent( new FakeBucketLoggingEvent() );
 
 		$this->assertCount(
 			3,
@@ -127,9 +127,9 @@ class JsonBucketLoggerTest extends TestCase {
 	public function testGivenMultipleEvents_eachOneIsLoggedAsValidJsonObject() {
 		$logWriter = $this->newBucketLogger();
 
-		$logWriter->writeEvent( new FakeBucketLoggingEvent(), ...[] );
-		$logWriter->writeEvent( new FakeBucketLoggingEvent(), ...[] );
-		$logWriter->writeEvent( new FakeBucketLoggingEvent(), ...[] );
+		$logWriter->writeEvent( new FakeBucketLoggingEvent() );
+		$logWriter->writeEvent( new FakeBucketLoggingEvent() );
+		$logWriter->writeEvent( new FakeBucketLoggingEvent() );
 
 		foreach( $this->logWriter->getWriteCalls() as $line ) {
 			$logData = json_decode( $line, false );

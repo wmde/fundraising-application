@@ -16,6 +16,10 @@ class StreamLogWriter implements LogWriter {
 		$this->url = $url;
 	}
 
+	/**
+	 * @param string $logEntry
+	 * @throws LoggingError
+	 */
 	public function write( string $logEntry ) {
 		$this->openStreamIfNeeded();
 		fwrite(
