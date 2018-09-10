@@ -11,7 +11,7 @@ User facing application for the [Wikimedia Deutschland](https://wikimedia.de) fu
 * [Configuration](#configuration)
 * [Running the tests](#running-the-tests)
 * [Emails](#emails)
-* [Accessing the database](#accessing-the-database)
+* [Database](#database)
 * [Frontend development](#frontend-development)
 * [Skins](#skins)
 * [Updating the dependencies](#updating-the-dependencies)
@@ -24,10 +24,7 @@ User facing application for the [Wikimedia Deutschland](https://wikimedia.de) fu
 
 ## Installation
 
-For development you need to have Docker and [docker-compose](https://docs.docker.com/compose/) installed.
-Local PHP and Composer are not needed.
-
-    sudo apt-get install docker docker-compose
+For development you need to have Docker and docker-compose installed. You need at least Docker Version >= 17.09.0 and docker-compose version >= 1.17.0. If your OS does not come with the right version, please use the official installation instructions for [Docker](https://docs.docker.com/install/) and [docker-compose](https://docs.docker.com/compose/install/). You don't need to install other dependencies (PHP, Node.js, MySQL) on your machine.
 
 Get a clone of our git repository and then run:
 
@@ -35,7 +32,7 @@ Get a clone of our git repository and then run:
 
 This will
  
-- Install PHP and Node.js dependencies with composer and npm
+- Install PHP and Node.js dependencies
 - Copy a basic configuration file. See section [Configuration](#configuration) for more details on the configuration.
 - (Re-)Create the database structure and generate the Doctrine Proxy classes
 - Build the assets & JavaScript
@@ -131,7 +128,7 @@ Out of the box, the database should be in a usable state for local development. 
 doctrine migration scripts may be used. Migration scripts are stored in the *migrations* directory of
 the [FundraisingStore repository](https://github.com/wmde/FundraisingStore/tree/master/migrations).
 
-The scripts from the FundraisingStore repository can be executed through FundraisingFrontend by running these commands:
+The scripts from the FundraisingStore repository can be executed through FundraisingFrontend by running `make migration` commands.
 
 To execute a specific script, run the following command and add the version number of the migration script you want to use.
 As an example, executing `migrations/Version20180612000000.php` would look like this:
@@ -147,7 +144,7 @@ make migration-revert MIGRATION_VERSION=20180612000000
 ```
 
 Note that Doctrine creates its own `doctrine_migration_versions` table where it stores the status of individual migrations.
-If you run into issues and want to reset the state of a migrations, it's best to check that table directly or use the `versions`
+If you run into issues and want to reset the state of a migrations it's best to check that table directly or use the `versions`
 command from doctrine-migrations which supports `--add` and `--delete` paramters:
 
 ```
