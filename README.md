@@ -180,7 +180,7 @@ Copy the full network name and container name and use them instead of the placeh
     docker run -it --link __CONTAINER_NAME__:mysql --net __NETWORK_NAME__ --rm mysql:5.6 \
         sh -c 'exec mysql -h database -P 3306 -u fundraising -p"INSECURE PASSWORD" fundraising'
 
-To use PHPMyAdmin, use the following command to run it on port 8089:
+To use PHPMyAdmin, use the following command to run it on port 8099:
 
 	docker run -it --link __CONTAINER_NAME__:db --net __NETWORK_NAME__ -p 8099:80 phpmyadmin/phpmyadmin
 
