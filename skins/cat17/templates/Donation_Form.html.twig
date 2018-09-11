@@ -245,19 +245,19 @@
 												<label for="email-company" class="sr-only">{$ 'email_label' | trans $}</label>
 												<span class="error-text">{$ 'form_email_error' | trans $}</span>
 											</div>
-										<div class="field-grp wrap-check">
-											<input type="checkbox" id="newsletter" data-jcf='{"wrapNative": true}' class="jcf">
-											<label class="news" for="newsletter">
-												{$ 'donation_sendinfo_label' | trans | raw $}
-											</label>
-										</div>
+											<div class="field-grp wrap-check">
+												<input type="checkbox" id="newsletter-company" name="info" value="1">
+												<label class="news" for="newsletter-company">
+													{$ 'donation_sendinfo_label' | trans | raw $}
+												</label>
+											</div>
 										{% endif %}
 									</div>
 									<div class="wrap-check">
 										{% if not featureToggle.usabilityEnabled %}
 											<div>
-												<input type="checkbox" id="newsletter" data-jcf='{"wrapNative": true}' class="jcf">
-												<label class="news" for="newsletter">
+												<input type="checkbox" id="newsletter-company" name="info" value="1">
+												<label class="news" for="newsletter-company">
 													{$ 'donation_sendinfo_label' | trans | raw $}
 												</label>
 											</div>
