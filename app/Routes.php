@@ -375,7 +375,7 @@ class Routes {
 				try {
 					$amount = Euro::newFromFloat(
 						( new AmountParser( 'en_EN' ) )->parseAsFloat(
-							$request->get( 'betrag_auswahl', $request->get( 'amountGiven', '' ) )
+							$request->get( 'betrag_auswahl', $request->get( 'betrag',  $request->get( 'amountGiven', '' ) ) )
 						)
 					);
 				}
