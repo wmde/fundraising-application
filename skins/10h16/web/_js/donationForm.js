@@ -159,13 +159,6 @@ $( function () {
 				viewHandler: WMDE.View.createSlidingVisibilitySwitcher( $( '.notice-anonymous' ), 'anonym' ),
 				stateKey: 'donationFormContent.addressType'
 			},
-			// Show "credit card required" notice for recurrent payments via Paypal
-			{
-				viewHandler: WMDE.View.createRecurrentPaypalNoticeHandler(
-					WMDE.View.Animator.createSlidingElementAnimator( $( '.notice-ppl-recurrent' ) )
-				),
-				stateKey: 'donationFormContent'
-			},
 			// Show warning when street contains no house number
 			{
 				viewHandler: WMDE.View.createWarningBox(
