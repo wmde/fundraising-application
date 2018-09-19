@@ -93,11 +93,6 @@ $( function () {
 			viewHandler: WMDE.View.createElementClassSwitcher( $( '#type-donor .wrap-field.anonym .wrap-input' ), /BEZ/, 'disabled' ),
 			stateKey: 'donationFormContent.paymentType'
 		},
-		// Show "needs to support recurring debiting" notice for payments types that provide that info (payment_type_*_recurrent_info)
-		{
-			viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '#payment-method .info-text .info-recurrent' ), /^(1|3|6|12)/ ),
-			stateKey: 'donationFormContent.paymentIntervalInMonths'
-		},
 		{
 			viewHandler: WMDE.View.createSuboptionDisplayHandler(
 				$( '#recurrence' )

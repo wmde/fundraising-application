@@ -110,10 +110,6 @@ $( function () {
 			stateKey: 'membershipFormContent.membershipType'
 		},
 		{
-			viewHandler: WMDE.View.createSimpleVisibilitySwitcher( $( '#payment-method .info-text .info-recurrent' ), /^(1|3|6|12)/ ),
-			stateKey: 'membershipFormContent.paymentIntervalInMonths'
-		},
-		{
 			viewHandler: WMDE.View.createSuboptionDisplayHandler(
 				$( '#type-donor' )
 			),
