@@ -33,9 +33,11 @@ use WMDE\Fundraising\DonationContext\UseCases\ListComments\CommentListingRequest
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\AmountParser;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
-use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\MembershipFeeValidator;
 use WMDE\Fundraising\MembershipContext\UseCases\CancelMembershipApplication\CancellationRequest;
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowAppConfirmationRequest;
+use WMDE\Fundraising\MembershipContext\UseCases\ValidateMembershipFee\ValidateFeeRequest;
+use WMDE\Fundraising\MembershipContext\UseCases\ValidateMembershipFee\ValidateFeeResult;
+use WMDE\Fundraising\MembershipContext\UseCases\ValidateMembershipFee\ValidateMembershipFeeUseCase;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\PaymentContext\UseCases\GenerateIban\GenerateIbanRequest;
 use WMDE\Fundraising\Frontend\Presentation\DonationMembershipApplicationAdapter;
@@ -86,19 +88,27 @@ class Routes {
 		$app->post(
 			'validate-fee',
 			function ( Request $httpRequest ) use ( $app ) {
-				$validator = new MembershipFeeValidator();
-				$result = $validator->validate(
-					str_replace( ',', '.', $httpRequest->request->get( 'amount', '' ) ),
-					(int)$httpRequest->request->get( 'paymentIntervalInMonths', '0' ),
-					$httpRequest->request->get( 'addressType', '' )
-				);
+				$request = ValidateFeeRequest::newInstance()
+					->withFee( str_replace( ',', '.', $httpRequest->request->get( 'amount', '' ) ) )
+					->withInterval( (int)$httpRequest->request->get( 'paymentIntervalInMonths', '0' ) )
+					->withApplicantType( $httpRequest->request->get( 'addressType', '' ) );
 
-				if ( $result->isSuccessful() ) {
+				$response = ( new ValidateMembershipFeeUseCase() )->validate( $request );
+
+
+				if ( $response->isSuccessful() ) {
 					return $app->json( [ 'status' => 'OK' ] );
-				} else {
-					$errors = $result->getViolations();
-					return $app->json( [ 'status' => 'ERR', 'messages' => $errors ] );
 				}
+
+				return $app->json( [
+					'status' => 'ERR',
+					'messages' => [
+						'amount' => [
+							ValidateFeeResult::ERROR_TOO_LOW => 'too-low',
+							ValidateFeeResult::ERROR_NOT_MONEY => 'not-money',
+						][$response->getErrorCode()]
+					]
+				] );
 			}
 		);
 

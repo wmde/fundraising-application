@@ -140,6 +140,7 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipFormViolationPre
 use WMDE\Fundraising\Frontend\Presentation\Presenters\PageNotFoundPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonorUpdateHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
+use WMDE\Fundraising\MembershipContext\UseCases\ValidateMembershipFee\ValidateMembershipFeeUseCase;
 use WMDE\Fundraising\SubscriptionContext\DataAccess\DoctrineSubscriptionRepository;
 use WMDE\Fundraising\SubscriptionContext\Domain\Repositories\SubscriptionRepository;
 use WMDE\Fundraising\SubscriptionContext\Infrastructure\LoggingSubscriptionRepository;
@@ -169,7 +170,6 @@ use WMDE\Fundraising\MembershipContext\Tracking\ApplicationTracker;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipPolicyValidator;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipUseCase;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\MembershipApplicationValidator;
-use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\MembershipFeeValidator;
 use WMDE\Fundraising\MembershipContext\UseCases\CancelMembershipApplication\CancelMembershipApplicationUseCase;
 use WMDE\Fundraising\MembershipContext\UseCases\HandleSubscriptionPaymentNotification\HandleSubscriptionPaymentNotificationUseCase;
 use WMDE\Fundraising\MembershipContext\UseCases\HandleSubscriptionSignupNotification\HandleSubscriptionSignupNotificationUseCase;
@@ -1203,7 +1203,7 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	private function newMembershipApplicationValidator(): MembershipApplicationValidator {
 		return new MembershipApplicationValidator(
-			new MembershipFeeValidator(),
+			new ValidateMembershipFeeUseCase(),
 			$this->newBankDataValidator(),
 			$this->newIbanBlockList(),
 			$this->getEmailValidator()
