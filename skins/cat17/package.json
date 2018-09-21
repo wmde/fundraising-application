@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/wmde/FundraisingFrontend#readme",
   "devDependencies": {
-    "browser-sync": "^2.24.5",
+    "browser-sync": "^2.24.7",
     "browserify": "^13.0.0",
     "browserify-shim": "^3.8.12",
     "cross-env": "^5.2.0",
@@ -65,7 +65,7 @@
   },
   "dependencies": {
     "bootstrap-sass": "^3.3.7",
-    "bootstrap-select": "^1.13.1",
+    "bootstrap-select": "^1.13.2",
     "jcf": "^1.2.3",
     "jquery": "^3.3.1",
     "object-assign": "^4.0.1",
