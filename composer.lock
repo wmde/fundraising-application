@@ -3987,12 +3987,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "9776f59fe1c66b0c585ab7f709cbd188edb23e82"
+                "reference": "89844cbcef2444467285f2151381d0481ad4cdec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/9776f59fe1c66b0c585ab7f709cbd188edb23e82",
-                "reference": "9776f59fe1c66b0c585ab7f709cbd188edb23e82",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/89844cbcef2444467285f2151381d0481ad4cdec",
+                "reference": "89844cbcef2444467285f2151381d0481ad4cdec",
                 "shasum": ""
             },
             "require": {
@@ -4039,7 +4039,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "time": "2018-09-01T04:14:19+00:00"
+            "time": "2018-09-21T22:14:52+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
@@ -6657,6 +6657,7 @@
             ],
             "description": "A WebProfiler for Silex",
             "homepage": "http://silex.sensiolabs.org/",
+            "abandoned": true,
             "time": "2018-04-04T11:41:51+00:00"
         },
         {

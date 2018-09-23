@@ -50,4 +50,24 @@ class ValidateFeeRouteTest extends WebRouteTestCase {
 		];
 	}
 
+	public function testInvalidFee_failureResponseIsReturned(): void {
+		$client = $this->createClient();
+
+		$client->request(
+			'POST',
+			'/validate-fee',
+			[ 'amount' => 'such', 'paymentIntervalInMonths' => '6', 'addressType' => 'person' ]
+		);
+
+		$this->assertSame(
+			[
+				'status' => 'ERR',
+				'messages' => [
+					'amount' => 'not-money'
+				]
+			],
+			json_decode( $client->getResponse()->getContent(), true )
+		);
+	}
+
 }
