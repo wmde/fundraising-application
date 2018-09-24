@@ -24,17 +24,10 @@ class ValidateFeeController {
 
 	public function validateFee(): Response {
 		try {
-			$fee = Euro::newFromString(
-				str_replace( ',', '.', $this->httpRequest->request->get( 'amount', '' ) )
-			);
+			$fee = $this->euroFromRequest();
 		}
 		catch ( InvalidArgumentException $ex ) {
-			return $this->app->json( [
-				'status' => 'ERR',
-				'messages' => [
-					'amount' => 'not-money'
-				]
-			] );
+			return $this->newJsonErrorResponse( 'not-money' );
 		}
 
 		$request = ValidateFeeRequest::newInstance()
@@ -44,15 +37,27 @@ class ValidateFeeController {
 
 		$response = ( new ValidateMembershipFeeUseCase() )->validate( $request );
 
-
 		if ( $response->isSuccessful() ) {
 			return $this->app->json( [ 'status' => 'OK' ] );
 		}
 
+		return $this->newJsonErrorResponse( 'too-low' );
+	}
+
+	/**
+	 * @throws InvalidArgumentException
+	 */
+	private function euroFromRequest(): Euro {
+		return Euro::newFromString(
+			str_replace( ',', '.', $this->httpRequest->request->get( 'amount', '' ) )
+		);
+	}
+
+	private function newJsonErrorResponse( string $errorCode ): Response {
 		return $this->app->json( [
 			'status' => 'ERR',
 			'messages' => [
-				'amount' => 'too-low'
+				'amount' => $errorCode
 			]
 		] );
 	}
