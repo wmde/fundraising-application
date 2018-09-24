@@ -9,12 +9,3 @@ export default {
 	name: 'question'
 }
 </script>
-
-<style scoped>
-#question {
-	padding-top: 1em;
-}
-a {
-	color: #00adee;
-}
-</style>

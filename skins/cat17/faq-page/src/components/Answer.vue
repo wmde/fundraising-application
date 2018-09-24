@@ -17,14 +17,3 @@ export default {
 	name: 'answer'
 }
 </script>
-<style scoped>
-#answer {
-	padding: 1em 0;
-	border-bottom: 2px solid #ddd;
-}
-#answer a {
-	color: #00adee;
-	margin-left: 5px;
-}
-
-</style>
