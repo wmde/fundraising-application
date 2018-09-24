@@ -58,32 +58,7 @@ export default {
 	}
 }
 </script>
-
-<style scoped>
-#faq a {
-	color: #00adee;
-}
-.wrapper {
-	width: 100%;
-}
-.form-shadow-wrap {
-	margin-top: 20px;
-	margin-left: 0px;
-	padding: 1em 20px 3em 45px;
-	width: 100%;
-}
-.sidebar {
-	padding-left: 40px;
-}
-.sidebar h5 {
-	margin-top: 50px;
-}
-
-.sidebar ul {
-	list-style: none;
-}
-
-footer {
-	margin-top: 50px;
-}
+<style lang="scss">
+  @import '../../src/sass/layouts/pages/faq.scss'
 </style>
+
