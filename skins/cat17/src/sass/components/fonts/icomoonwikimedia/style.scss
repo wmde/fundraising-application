@@ -1,191 +1,199 @@
 @import "variables";
 
 @font-face {
-  font-family: 'icomoonwikimedia';
-  src:  url('#{$icomoon-font-path}/icomoonwikimedia.eot?wt37rg');
-  src:  url('#{$icomoon-font-path}/icomoonwikimedia.eot?wt37rg#iefix') format('embedded-opentype'),
-  url('#{$icomoon-font-path}/icomoonwikimedia.ttf?wt37rg') format('truetype'),
-  url('#{$icomoon-font-path}/icomoonwikimedia.woff?wt37rg') format('woff'),
-  url('#{$icomoon-font-path}/icomoonwikimedia.svg?wt37rg#icomoonwikimedia') format('svg');
+  font-family: '#{$icomoon-font-family}';
+  src:  url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?5ky9b3');
+  src:  url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?5ky9b3#iefix') format('embedded-opentype'),
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.ttf?5ky9b3') format('truetype'),
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.woff?5ky9b3') format('woff'),
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.svg?5ky9b3##{$icomoon-font-family}') format('svg');
   font-weight: normal;
   font-style: normal;
 }
 
 [class^="icon-"], [class*=" icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'icomoonwikimedia' !important;
+  font-family: '#{$icomoon-font-family}' !important;
   speak: none;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
   text-transform: none;
   line-height: 1;
+
   /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-@function unicode($str) {
-  @return unquote("\"") + $str + unquote("\"");
-}
-
 .icon-error {
   &:before {
-    content: unicode($icon-error);
+    content: $icon-error; 
   }
 }
 .icon-repeat_one {
   &:before {
-    content: unicode($icon-repeat_one);
+    content: $icon-repeat_one; 
   }
 }
 .icon-comment {
   &:before {
-    content: unicode($icon-comment);
+    content: $icon-comment; 
   }
 }
 .icon-phone {
   &:before {
-    content: unicode($icon-phone);
+    content: $icon-phone; 
   }
 }
 .icon-mode_edit {
   &:before {
-    content: unicode($icon-mode_edit);
+    content: $icon-mode_edit; 
   }
 }
 .icon-keyboard_arrow_down {
   &:before {
-    content: unicode($icon-keyboard_arrow_down);
+    content: $icon-keyboard_arrow_down; 
   }
 }
 .icon-keyboard_arrow_left {
   &:before {
-    content: unicode($icon-keyboard_arrow_left);
+    content: $icon-keyboard_arrow_left; 
   }
 }
 .icon-keyboard_arrow_right {
   &:before {
-    content: unicode($icon-keyboard_arrow_right);
+    content: $icon-keyboard_arrow_right; 
   }
 }
 .icon-keyboard_arrow_up {
   &:before {
-    content: unicode($icon-keyboard_arrow_up);
+    content: $icon-keyboard_arrow_up; 
   }
 }
 .icon-flash_on {
   &:before {
-    content: unicode($icon-flash_on);
+    content: $icon-flash_on; 
   }
 }
 .icon-close {
   &:before {
-    content: unicode($icon-close);
+    content: $icon-close; 
   }
 }
 .icon-menu {
   &:before {
-    content: unicode($icon-menu);
+    content: $icon-menu; 
   }
 }
 .icon-account_circle {
   &:before {
-    content: unicode($icon-account_circle);
+    content: $icon-account_circle; 
   }
 }
 .icon-done {
   &:before {
-    content: unicode($icon-done);
+    content: $icon-done; 
   }
 }
 .icon-favorite {
   &:before {
-    content: unicode($icon-favorite);
+    content: $icon-favorite; 
   }
 }
 .icon-lock {
   &:before {
-    content: unicode($icon-lock);
+    content: $icon-lock; 
   }
 }
 .icon-visibility {
   &:before {
-    content: unicode($icon-visibility);
+    content: $icon-visibility; 
   }
 }
 .icon-visibility_off {
   &:before {
-    content: unicode($icon-visibility_off);
+    content: $icon-visibility_off; 
   }
 }
 .icon-work {
   &:before {
-    content: unicode($icon-work);
+    content: $icon-work; 
   }
 }
 .icon-payment-sofort {
   &:before {
-    content: unicode($icon-payment-sofort);
-  }
-}
-.icon-payment-credit_card {
-  &:before {
-    content: unicode($icon-payment-credit_card);
-  }
-}
-.icon-payment-debit {
-  &:before {
-    content: unicode($icon-payment-debit);
-  }
-}
-.icon-payment-transfer {
-  &:before {
-    content: unicode($icon-payment-transfer);
-  }
-}
-.icon-facebook {
-  &:before {
-    content: unicode($icon-facebook);
-  }
-}
-.icon-payment-paypal {
-  &:before {
-    content: unicode($icon-payment-paypal);
-  }
-}
-.icon-repeat_1 {
-  &:before {
-    content: unicode($icon-repeat_1);
-  }
-}
-.icon-repeat_3 {
-  &:before {
-    content: unicode($icon-repeat_3);
-  }
-}
-.icon-repeat_6 {
-  &:before {
-    content: unicode($icon-repeat_6);
-  }
-}
-.icon-repeat_12 {
-  &:before {
-    content: unicode($icon-repeat_12);
-  }
-}
-.icon-twitter {
-  &:before {
-    content: unicode($icon-twitter);
-  }
-}
-.icon-unique {
-  &:before {
-    content: unicode($icon-unique);
+    content: $icon-payment-sofort; 
   }
 }
 .icon-new-tab {
   &:before {
-    content: unicode($icon-new-tab);
+    content: $icon-new-tab; 
   }
 }
+.icon-payment-credit_card {
+  &:before {
+    content: $icon-payment-credit_card; 
+  }
+}
+.icon-payment-debit {
+  &:before {
+    content: $icon-payment-debit; 
+  }
+}
+.icon-payment-transfer {
+  &:before {
+    content: $icon-payment-transfer; 
+  }
+}
+.icon-facebook {
+  &:before {
+    content: $icon-facebook; 
+  }
+}
+.icon-payment-paypal {
+  &:before {
+    content: $icon-payment-paypal; 
+  }
+}
+.icon-repeat_1 {
+  &:before {
+    content: $icon-repeat_1; 
+  }
+}
+.icon-repeat_3 {
+  &:before {
+    content: $icon-repeat_3; 
+  }
+}
+.icon-repeat_6 {
+  &:before {
+    content: $icon-repeat_6; 
+  }
+}
+.icon-repeat_12 {
+  &:before {
+    content: $icon-repeat_12; 
+  }
+}
+.icon-twitter {
+  &:before {
+    content: $icon-twitter; 
+  }
+}
+.icon-unique {
+  &:before {
+    content: $icon-unique; 
+  }
+}
+.icon-envelop {
+  &:before {
+    content: $icon-envelop; 
+  }
+}
+.icon-search {
+  &:before {
+    content: $icon-search; 
+  }
+}
+
