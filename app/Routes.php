@@ -88,8 +88,8 @@ class Routes {
 
 		$app->post(
 			'validate-fee',
-			function ( Request $httpRequest ) use ( $app ) {
-				return ( new ValidateFeeController( $app, $httpRequest ) )->validateFee();
+			function ( Request $httpRequest ) {
+				return ( new ValidateFeeController($httpRequest ) )->validateFee();
 			}
 		);
 

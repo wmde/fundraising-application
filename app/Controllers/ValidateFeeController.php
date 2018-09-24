@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\App\Controllers;
 
 use InvalidArgumentException;
-use Silex\Application;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Euro\Euro;
@@ -14,11 +14,9 @@ use WMDE\Fundraising\MembershipContext\UseCases\ValidateMembershipFee\ValidateMe
 
 class ValidateFeeController {
 
-	private $app;
 	private $httpRequest;
 
-	public function __construct( Application $app, Request $httpRequest ) {
-		$this->app = $app;
+	public function __construct( Request $httpRequest ) {
 		$this->httpRequest = $httpRequest;
 	}
 
@@ -38,7 +36,7 @@ class ValidateFeeController {
 		$response = ( new ValidateMembershipFeeUseCase() )->validate( $request );
 
 		if ( $response->isSuccessful() ) {
-			return $this->app->json( [ 'status' => 'OK' ] );
+			return new JsonResponse( [ 'status' => 'OK' ] );
 		}
 
 		return $this->newJsonErrorResponse( 'too-low' );
@@ -54,7 +52,7 @@ class ValidateFeeController {
 	}
 
 	private function newJsonErrorResponse( string $errorCode ): Response {
-		return $this->app->json( [
+		return new JsonResponse( [
 			'status' => 'ERR',
 			'messages' => [
 				'amount' => $errorCode
