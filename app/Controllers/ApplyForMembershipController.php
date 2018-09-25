@@ -2,9 +2,9 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\App\RouteHandlers;
+namespace WMDE\Fundraising\Frontend\App\Controllers;
 
-use Silex\Application;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Euro\Euro;
@@ -19,22 +19,17 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
 
 /**
  * @license GNU GPL v2+
- * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class ApplyForMembershipHandler {
+class ApplyForMembershipController {
 
 	public const SUBMISSION_COOKIE_NAME = 'memapp_timestamp';
 	public const TIMESTAMP_FORMAT = 'Y-m-d H:i:s';
 
+	/** @var FunFunFactory */
 	private $ffFactory;
-	private $app;
 
-	public function __construct( FunFunFactory $ffFactory, Application $app ) {
+	public function applyForMembership( FunFunFactory $ffFactory, Request $httpRequest ): Response {
 		$this->ffFactory = $ffFactory;
-		$this->app = $app;
-	}
-
-	public function handle( Request $httpRequest ): Response {
 		if ( !$this->isSubmissionAllowed( $httpRequest ) ) {
 			return new Response( $this->ffFactory->newSystemMessageResponse( 'membership_application_rejected_limit' ) );
 		}
@@ -58,7 +53,7 @@ class ApplyForMembershipHandler {
 	/**
 	 * @throws \InvalidArgumentException
 	 */
-	private function callUseCase( Request $httpRequest ) {
+	private function callUseCase( Request $httpRequest ): ApplyForMembershipResponse {
 		$applyForMembershipRequest = $this->createMembershipRequest( $httpRequest );
 
 		$this->addFeeToRequestModel( $applyForMembershipRequest, $httpRequest );
@@ -179,20 +174,19 @@ class ApplyForMembershipHandler {
 	}
 
 	private function newDirectDebitResponse( ApplyForMembershipResponse $responseModel ): Response {
-		return $this->app->redirect(
-			$this->app['url_generator']->generate(
+		return new RedirectResponse(
+			$this->ffFactory->getUrlGenerator()->generateAbsoluteUrl(
 				'show-membership-confirmation',
 				[
 					'id' => $responseModel->getMembershipApplication()->getId(),
 					'accessToken' => $responseModel->getAccessToken()
 				]
-			),
-			Response::HTTP_SEE_OTHER
+			)
 		);
 	}
 
 	private function newPayPalResponse( ApplyForMembershipResponse $responseModel ): Response {
-		return $this->app->redirect(
+		return new RedirectResponse(
 			$this->ffFactory->newPayPalUrlGeneratorForMembershipApplications()->generateUrl(
 				$responseModel->getMembershipApplication()->getId(),
 				$responseModel->getMembershipApplication()->getPayment()->getAmount(),
