@@ -69,7 +69,6 @@
     "gulplog": "^1.0.0",
     "jscs": "^2.10.1",
     "jshint": "^2.9.6",
-    "polyify": "0.0.4",
     "sinon": "^1.17.3",
     "tap-min": "^1.1.0",
     "tape": "^4.9.1",
@@ -99,22 +98,8 @@
       "vue": "vue/dist/vue.common.js"
     },
     "transform": [
-      [
-        "vueify",
-        {
-          "browsers": "IE >= 8",
-          "include": [
-            "Object.getPrototypeOf",
-            "Object.keys",
-            "Array.prototype.every",
-            "Array.prototype.filter",
-            "Array.prototype.forEach",
-            "Array.prototype.indexOf",
-            "Array.prototype.map",
-            "Array.prototype.reduceRight"
-          ]
-        }
-      ],
+      "vueify",
+      "babelify",
       "browserify-shim",
       "envify"
     ]
