@@ -10,19 +10,19 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\MembershipContext\UseCases\ValidateMembershipFee\ValidateFeeRequest;
+use WMDE\Fundraising\MembershipContext\UseCases\ValidateMembershipFee\ValidateFeeResult;
 use WMDE\Fundraising\MembershipContext\UseCases\ValidateMembershipFee\ValidateMembershipFeeUseCase;
 
 class ValidateFeeController {
 
-	private $httpRequest;
+	private const ERROR_RESPONSE_MAP = [
+		ValidateFeeResult::ERROR_TOO_LOW => 'too-low',
+		'not-money' => 'not-money'
+	];
 
-	public function __construct( Request $httpRequest ) {
-		$this->httpRequest = $httpRequest;
-	}
-
-	public function validateFee(): Response {
+	public function validateFee( Request $httpRequest ): Response {
 		try {
-			$fee = $this->euroFromRequest();
+			$fee = $this->euroFromRequest( $httpRequest );
 		}
 		catch ( InvalidArgumentException $ex ) {
 			return $this->newJsonErrorResponse( 'not-money' );
@@ -30,8 +30,8 @@ class ValidateFeeController {
 
 		$request = ValidateFeeRequest::newInstance()
 			->withFee( $fee )
-			->withInterval( (int)$this->httpRequest->request->get( 'paymentIntervalInMonths', '0' ) )
-			->withApplicantType( $this->httpRequest->request->get( 'addressType', '' ) );
+			->withInterval( (int)$httpRequest->request->get( 'paymentIntervalInMonths', '0' ) )
+			->withApplicantType( $httpRequest->request->get( 'addressType', '' ) );
 
 		$response = ( new ValidateMembershipFeeUseCase() )->validate( $request );
 
@@ -39,23 +39,26 @@ class ValidateFeeController {
 			return new JsonResponse( [ 'status' => 'OK' ] );
 		}
 
-		return $this->newJsonErrorResponse( 'too-low' );
+		return $this->newJsonErrorResponse( $response->getErrorCode() );
 	}
 
 	/**
 	 * @throws InvalidArgumentException
 	 */
-	private function euroFromRequest(): Euro {
+	private function euroFromRequest( Request $httpRequest ): Euro {
 		return Euro::newFromString(
-			str_replace( ',', '.', $this->httpRequest->request->get( 'amount', '' ) )
+			str_replace( ',', '.', $httpRequest->request->get( 'amount', '' ) )
 		);
 	}
 
 	private function newJsonErrorResponse( string $errorCode ): Response {
+		if ( empty( self::ERROR_RESPONSE_MAP[$errorCode] ) ) {
+			throw new \OutOfBoundsException( 'Validation error code not found' );
+		}
 		return new JsonResponse( [
 			'status' => 'ERR',
 			'messages' => [
-				'amount' => $errorCode
+				'amount' => self::ERROR_RESPONSE_MAP[$errorCode]
 			]
 		] );
 	}
