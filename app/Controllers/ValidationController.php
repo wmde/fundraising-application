@@ -35,6 +35,6 @@ class ValidationController {
 			$errors[$violation->getSource()] = $ffFactory->getTranslator()->trans( $violation->getMessageIdentifier() );
 		}
 		return new JsonResponse( [ 'status' => 'ERR', 'messages' => $errors ] );
-
 	}
+
 }

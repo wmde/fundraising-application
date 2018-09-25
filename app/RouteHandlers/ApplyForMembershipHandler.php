@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\App\RouteHandlers;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\MembershipApplicationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\MembershipContext\Tracking\MembershipApplicationTrackingInfo;
@@ -33,34 +34,38 @@ class ApplyForMembershipHandler {
 		$this->app = $app;
 	}
 
-	public function handle( Request $request ): Response {
-		if ( !$this->isSubmissionAllowed( $request ) ) {
+	public function handle( Request $httpRequest ): Response {
+		if ( !$this->isSubmissionAllowed( $httpRequest ) ) {
 			return new Response( $this->ffFactory->newSystemMessageResponse( 'membership_application_rejected_limit' ) );
 		}
 
-		$applyForMembershipRequest = $this->createMembershipRequest( $request );
-		$responseModel = $this->ffFactory->newApplyForMembershipUseCase()->applyForMembership( $applyForMembershipRequest );
-
-		if ( !$responseModel->isSuccessful() ) {
-			return new Response(
-				$this->ffFactory->newMembershipFormViolationPresenter()->present(
-					$applyForMembershipRequest,
-					$request->request->get( 'showMembershipTypeOption' ) === 'true'
-				)
-			);
+		try {
+			$responseModel = $this->callUseCase( $httpRequest );
+		}
+		catch ( \InvalidArgumentException $ex ) {
+			return $this->newFailureResponse( $httpRequest );
 		}
 
-		$httpResponse = $this->newHttpResponse( $responseModel );
+		if ( !$responseModel->isSuccessful() ) {
+			return $this->newFailureResponse( $httpRequest );
+		}
 
-		$cookie = $this->ffFactory->getCookieBuilder();
-		$httpResponse->headers->setCookie(
-			$cookie->newCookie(
-				self::SUBMISSION_COOKIE_NAME,
-				date( self::TIMESTAMP_FORMAT )
-			)
-		);
 		$this->logSelectedBuckets( $responseModel );
-		return $httpResponse;
+
+		return $this->newHttpResponse( $responseModel );
+	}
+
+	/**
+	 * @throws \InvalidArgumentException
+	 */
+	private function callUseCase( Request $httpRequest ) {
+		$applyForMembershipRequest = $this->createMembershipRequest( $httpRequest );
+
+		$this->addFeeToRequestModel( $applyForMembershipRequest, $httpRequest );
+
+		$applyForMembershipRequest->assertNoNullFields()->freeze();
+
+		return $this->ffFactory->newApplyForMembershipUseCase()->applyForMembership( $applyForMembershipRequest );
 	}
 
 	private function createMembershipRequest( Request $httpRequest ): ApplyForMembershipRequest {
@@ -89,8 +94,6 @@ class ApplyForMembershipHandler {
 
 		$request->setPaymentType( $httpRequest->request->get( 'payment_type', '' ) );
 		$request->setPaymentIntervalInMonths( (int)$httpRequest->request->get( 'membership_fee_interval', 0 ) );
-		// TODO: German format expected here, amount should be converted based on user's locale
-		$request->setPaymentAmountInEuros( str_replace( ',', '.', $httpRequest->request->get( 'membership_fee', '' ) ) );
 
 		$request->setTrackingInfo( new MembershipApplicationTrackingInfo(
 			$httpRequest->request->get( 'templateCampaign', '' ),
@@ -101,6 +104,12 @@ class ApplyForMembershipHandler {
 
 		$request->setOptsIntoDonationReceipt( $httpRequest->request->getBoolean( 'donationReceipt', true ) );
 
+		$request->setBankData( $this->createBakData( $httpRequest ) );
+
+		return $request;
+	}
+
+	private function createBakData( Request $httpRequest ): BankData {
 		$bankData = new BankData();
 
 		$bankData->setBankName( $httpRequest->request->get( 'bank_name', '' ) );
@@ -110,10 +119,31 @@ class ApplyForMembershipHandler {
 		$bankData->setBankCode( $httpRequest->request->get( 'bank_code', '' ) );
 
 		$bankData->assertNoNullFields()->freeze();
-		$request->setBankData( $bankData );
-		$request->assertNoNullFields()->freeze();
 
-		return $request;
+		return $bankData;
+	}
+
+	private function newFailureResponse( Request $httpRequest ) {
+		return new Response(
+			$this->ffFactory->newMembershipFormViolationPresenter()->present(
+				$this->createMembershipRequest( $httpRequest ),
+				$httpRequest->request->get( 'showMembershipTypeOption' ) === 'true'
+			)
+		);
+	}
+
+	/**
+	 * @throws \InvalidArgumentException
+	 */
+	private function addFeeToRequestModel( ApplyForMembershipRequest $requestModel, Request $httpRequest ) {
+		// TODO: German format expected here, amount should be converted based on user's locale
+		$requestModel->setPaymentAmountInEuros( Euro::newFromString(
+			str_replace(
+				',',
+				'.',
+				$httpRequest->request->get( 'membership_fee', '' )
+			)
+		) );
 	}
 
 	private function isSubmissionAllowed( Request $request ) {
@@ -134,33 +164,53 @@ class ApplyForMembershipHandler {
 	private function newHttpResponse( ApplyForMembershipResponse $responseModel ): Response {
 		switch( $responseModel->getMembershipApplication()->getPayment()->getPaymentMethod()->getId() ) {
 			case PaymentMethod::DIRECT_DEBIT:
-				$httpResponse = $this->app->redirect(
-					$this->app['url_generator']->generate(
-						'show-membership-confirmation',
-						[
-							'id' => $responseModel->getMembershipApplication()->getId(),
-							'accessToken' => $responseModel->getAccessToken()
-						]
-					),
-					Response::HTTP_SEE_OTHER
-				);
-
+				$httpResponse = $this->newDirectDebitResponse( $responseModel );
 				break;
 			case PaymentMethod::PAYPAL:
-				$httpResponse = $this->app->redirect(
-					$this->ffFactory->newPayPalUrlGeneratorForMembershipApplications()->generateUrl(
-						$responseModel->getMembershipApplication()->getId(),
-						$responseModel->getMembershipApplication()->getPayment()->getAmount(),
-						$responseModel->getMembershipApplication()->getPayment()->getIntervalInMonths(),
-						$responseModel->getUpdateToken(),
-						$responseModel->getAccessToken()
-					)
-				);
+				$httpResponse = $this->newPayPalResponse( $responseModel );
 				break;
 			default:
 				throw new \LogicException( 'This code should not be reached' );
 		}
+
+		$this->addCookie( $httpResponse );
+
 		return $httpResponse;
+	}
+
+	private function newDirectDebitResponse( ApplyForMembershipResponse $responseModel ): Response {
+		return $this->app->redirect(
+			$this->app['url_generator']->generate(
+				'show-membership-confirmation',
+				[
+					'id' => $responseModel->getMembershipApplication()->getId(),
+					'accessToken' => $responseModel->getAccessToken()
+				]
+			),
+			Response::HTTP_SEE_OTHER
+		);
+	}
+
+	private function newPayPalResponse( ApplyForMembershipResponse $responseModel ): Response {
+		return $this->app->redirect(
+			$this->ffFactory->newPayPalUrlGeneratorForMembershipApplications()->generateUrl(
+				$responseModel->getMembershipApplication()->getId(),
+				$responseModel->getMembershipApplication()->getPayment()->getAmount(),
+				$responseModel->getMembershipApplication()->getPayment()->getIntervalInMonths(),
+				$responseModel->getUpdateToken(),
+				$responseModel->getAccessToken()
+			)
+		);
+	}
+
+	private function addCookie( Response $httpResponse ) {
+		$httpResponse->headers->setCookie(
+			$this->ffFactory->getCookieBuilder()->newCookie(
+				self::SUBMISSION_COOKIE_NAME,
+				date( self::TIMESTAMP_FORMAT )
+			)
+		);
+
 	}
 
 	/**

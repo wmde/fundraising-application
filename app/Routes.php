@@ -11,17 +11,6 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Validation;
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\Frontend\App\Controllers\UpdateDonorController;
-use WMDE\Fundraising\Frontend\App\Controllers\ValidateDonorController;
-use WMDE\Fundraising\Frontend\App\Controllers\ValidationController;
-use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
-use WMDE\Fundraising\Frontend\App\RouteHandlers\AddDonationHandler;
-use WMDE\Fundraising\Frontend\App\RouteHandlers\AddSubscriptionHandler;
-use WMDE\Fundraising\Frontend\App\RouteHandlers\ApplyForMembershipHandler;
-use WMDE\Fundraising\Frontend\App\RouteHandlers\PayPalNotificationHandler;
-use WMDE\Fundraising\Frontend\App\RouteHandlers\PayPalNotificationHandlerForMembershipFee;
-use WMDE\Fundraising\Frontend\App\RouteHandlers\RouteRedirectionHandler;
-use WMDE\Fundraising\Frontend\App\RouteHandlers\SofortNotificationHandler;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\DonationContext\UseCases\AddComment\AddCommentRequest;
 use WMDE\Fundraising\DonationContext\UseCases\CancelDonation\CancelDonationRequest;
@@ -30,17 +19,28 @@ use WMDE\Fundraising\DonationContext\UseCases\CreditCardPaymentNotification\Cred
 use WMDE\Fundraising\DonationContext\UseCases\CreditCardPaymentNotification\CreditCardPaymentNotificationRequest;
 use WMDE\Fundraising\DonationContext\UseCases\GetDonation\GetDonationRequest;
 use WMDE\Fundraising\DonationContext\UseCases\ListComments\CommentListingRequest;
+use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
+use WMDE\Fundraising\Frontend\App\Controllers\UpdateDonorController;
+use WMDE\Fundraising\Frontend\App\Controllers\ValidateDonorController;
+use WMDE\Fundraising\Frontend\App\Controllers\ValidateFeeController;
+use WMDE\Fundraising\Frontend\App\Controllers\ValidationController;
+use WMDE\Fundraising\Frontend\App\RouteHandlers\AddDonationHandler;
+use WMDE\Fundraising\Frontend\App\RouteHandlers\AddSubscriptionHandler;
+use WMDE\Fundraising\Frontend\App\RouteHandlers\ApplyForMembershipHandler;
+use WMDE\Fundraising\Frontend\App\RouteHandlers\PayPalNotificationHandler;
+use WMDE\Fundraising\Frontend\App\RouteHandlers\PayPalNotificationHandlerForMembershipFee;
+use WMDE\Fundraising\Frontend\App\RouteHandlers\RouteRedirectionHandler;
+use WMDE\Fundraising\Frontend\App\RouteHandlers\SofortNotificationHandler;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\AmountParser;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
-use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\MembershipFeeValidator;
+use WMDE\Fundraising\Frontend\Presentation\DonationMembershipApplicationAdapter;
+use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
+use WMDE\Fundraising\Frontend\Validation\ConstraintViolationListMapper;
 use WMDE\Fundraising\MembershipContext\UseCases\CancelMembershipApplication\CancellationRequest;
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowAppConfirmationRequest;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\PaymentContext\UseCases\GenerateIban\GenerateIbanRequest;
-use WMDE\Fundraising\Frontend\Presentation\DonationMembershipApplicationAdapter;
-use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
-use WMDE\Fundraising\Frontend\Validation\ConstraintViolationListMapper;
 
 class Routes {
 	public static function initializeRoutes( Application $app, FunFunFactory $ffFactory ): Application {
@@ -85,20 +85,8 @@ class Routes {
 
 		$app->post(
 			'validate-fee',
-			function ( Request $httpRequest ) use ( $app ) {
-				$validator = new MembershipFeeValidator();
-				$result = $validator->validate(
-					str_replace( ',', '.', $httpRequest->request->get( 'amount', '' ) ),
-					(int)$httpRequest->request->get( 'paymentIntervalInMonths', '0' ),
-					$httpRequest->request->get( 'addressType', '' )
-				);
-
-				if ( $result->isSuccessful() ) {
-					return $app->json( [ 'status' => 'OK' ] );
-				} else {
-					$errors = $result->getViolations();
-					return $app->json( [ 'status' => 'ERR', 'messages' => $errors ] );
-				}
+			function ( Request $httpRequest ) {
+				return ( new ValidateFeeController($httpRequest ) )->validateFee();
 			}
 		);
 
