@@ -19,6 +19,7 @@ use WMDE\Fundraising\DonationContext\UseCases\CreditCardPaymentNotification\Cred
 use WMDE\Fundraising\DonationContext\UseCases\CreditCardPaymentNotification\CreditCardPaymentNotificationRequest;
 use WMDE\Fundraising\DonationContext\UseCases\GetDonation\GetDonationRequest;
 use WMDE\Fundraising\DonationContext\UseCases\ListComments\CommentListingRequest;
+use WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
 use WMDE\Fundraising\Frontend\App\Controllers\UpdateDonorController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidateDonorController;
@@ -26,7 +27,6 @@ use WMDE\Fundraising\Frontend\App\Controllers\ValidateFeeController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidationController;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\AddDonationHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\AddSubscriptionHandler;
-use WMDE\Fundraising\Frontend\App\RouteHandlers\ApplyForMembershipHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\PayPalNotificationHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\PayPalNotificationHandlerForMembershipFee;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\RouteRedirectionHandler;
@@ -85,9 +85,7 @@ class Routes {
 
 		$app->post(
 			'validate-fee',
-			function ( Request $httpRequest ) {
-				return ( new ValidateFeeController($httpRequest ) )->validateFee();
-			}
+			ValidateFeeController::class . '::validateFee'
 		);
 
 		$app->get(
@@ -396,9 +394,7 @@ class Routes {
 
 		$app->post(
 			'apply-for-membership',
-			function ( Application $app, Request $httpRequest ) use ( $ffFactory ) {
-				return ( new ApplyForMembershipHandler( $ffFactory, $app ) )->handle( $httpRequest );
-			}
+			ApplyForMembershipController::class . '::applyForMembership'
 		);
 
 		$app->get(

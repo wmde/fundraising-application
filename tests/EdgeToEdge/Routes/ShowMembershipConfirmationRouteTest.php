@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 use Symfony\Component\BrowserKit\Client;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Request;
-use WMDE\Fundraising\Frontend\App\RouteHandlers\ApplyForMembershipHandler;
+use WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\MembershipContext\Tests\Data\ValidMembershipApplication;
@@ -18,7 +18,6 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
 /**
  * @licence GNU GPL v2+
- * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 
@@ -44,7 +43,7 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 			$membershipApplication = $this->newStoredMembershipApplication( $factory );
 
 			$client->getCookieJar()->set(
-				new Cookie( ApplyForMembershipHandler::SUBMISSION_COOKIE_NAME, 'some value' )
+				new Cookie( ApplyForMembershipController::SUBMISSION_COOKIE_NAME, 'some value' )
 			);
 			$client->request(
 				Request::METHOD_GET,
@@ -57,7 +56,7 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 
 			$this->assertSame(
 				'some value',
-				$client->getCookieJar()->get( ApplyForMembershipHandler::SUBMISSION_COOKIE_NAME )->getValue()
+				$client->getCookieJar()->get( ApplyForMembershipController::SUBMISSION_COOKIE_NAME )->getValue()
 			);
 		} );
 	}
