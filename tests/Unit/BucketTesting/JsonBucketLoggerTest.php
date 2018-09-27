@@ -5,21 +5,21 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting;
 
 use PHPUnit\Framework\TestCase;
+use WMDE\Clock\Clock;
+use WMDE\Clock\StubClock;
 use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\BucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\JsonBucketLogger;
-use WMDE\Fundraising\Frontend\BucketTesting\Logging\TimeTeller;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeBucketLoggingEvent;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\LogWriterSpy;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\StubTimeTeller;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\BucketTesting\Logging\JsonBucketLogger
  */
 class JsonBucketLoggerTest extends TestCase {
 
-	private const STUB_TIME_VALUE = 'Such a time';
+	private const STUB_TIME_VALUE = '2018-01-01T00:00:42.000+00:00';
 
 	/**
 	 * @var LogWriterSpy
@@ -27,13 +27,13 @@ class JsonBucketLoggerTest extends TestCase {
 	private $logWriter;
 
 	/**
-	 * @var TimeTeller
+	 * @var Clock
 	 */
-	private $timeTeller;
+	private $clock;
 
 	public function setUp() {
 		$this->logWriter = new LogWriterSpy();
-		$this->timeTeller = new StubTimeTeller( self::STUB_TIME_VALUE );
+		$this->clock = new StubClock( new \DateTimeImmutable( self::STUB_TIME_VALUE ) );
 	}
 
 	public function testLogWriterAddsDate() {
@@ -49,7 +49,7 @@ class JsonBucketLoggerTest extends TestCase {
 	}
 
 	private function newBucketLogger(): BucketLogger {
-		return new JsonBucketLogger( $this->logWriter, $this->timeTeller );
+		return new JsonBucketLogger( $this->logWriter, $this->clock );
 	}
 
 	public function testGivenEventMetadata_itIsLogged() {

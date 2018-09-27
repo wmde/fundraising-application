@@ -37,6 +37,7 @@ use TNvpServiceDispatcher;
 use Twig_Environment;
 use Twig_Extensions_Extension_Intl;
 use Twig_SimpleFunction;
+use WMDE\Clock\SystemClock;
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\ContentProvider\ContentProvider;
@@ -78,7 +79,6 @@ use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorValidator;
 use WMDE\Fundraising\DonationContext\UseCases\ValidateDonor\ValidateDonorUseCase;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\BucketLogger;
-use WMDE\Fundraising\Frontend\BucketTesting\Logging\PhpTimeTeller;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\BestEffortBucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\JsonBucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\StreamLogWriter;
@@ -1731,7 +1731,7 @@ class FunFunFactory implements ServiceProviderInterface {
 			return new BestEffortBucketLogger(
 				new JsonBucketLogger(
 					new StreamLogWriter( $this->getSharedResourcesPath() . '/buckets.log' ),
-					new PhpTimeTeller()
+					new SystemClock()
 				),
 				$this->getLogger()
 			);
