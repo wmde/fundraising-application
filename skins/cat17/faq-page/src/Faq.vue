@@ -1,7 +1,7 @@
 <template>
  <div id="faq" class="container">
  	<h2>Häufige Fragen</h2>
- 	<h5>Antworten zu ihren Fragen zum Spendenprozess, Wikimedia und Wikipedia</h5>
+ 	<h5>Antworten zu Ihren Fragen zum Spendenprozess, Wikimedia und Wikipedia</h5>
  	<div class="row">
  	<div class="col-xs-12 col-sm-9">
 	  	<search-bar></search-bar>
@@ -16,11 +16,11 @@
 			</div>
 		</div>
 		<footer>
-			<h5>Sie konnten keine Antwort finden? Fragen sie uns direkt!</h5>
+			<h5>Sie konnten keine Antwort finden? Fragen Sie uns direkt!</h5>
 			<p>
-				Am effizientesten ist das <a>Frage stellen via Kontaktformular.</a> Wir antworten dann per eMail.<br>
+				Am effizientesten ist das <a>Fragestellen über das Kontaktformular.</a> Wir antworten dann per E-Mail.<br>
 				Sie können auch:<br>
-				eine e-Mail an <a>spenden@wikimedia.de</a> senden oder<br>
+				eine E-Mail an <a>spenden@wikimedia.de</a> senden oder<br>
 				unser Spendentelefon anrufen: 030/123456789
 			</p>
 		</footer>
@@ -29,15 +29,15 @@
 		<h5>Fragen und Antworten zu...</h5>
 		<ul>
 			<li><a>Spendenbescheinigung</a></li>
-			<li><a>Spendenbanern auf Wikipedia</a></li>
-			<li><a>Wikimedia Organisation</a></li>
-			<li><a>Wikimedia Projekte</a></li>
+			<li><a>Spendenbannern auf Wikipedia</a></li>
+			<li><a>Wikimedia-Organisation</a></li>
+			<li><a>Wikimedia-Projekte</a></li>
 			<li><a>Spendenverwendung</a></li>
 		</ul>
 		<h5>Keine Antwort gefunden?</h5>
 		<ul>
 			<li>Frage stellen via Kontaktformular</li>
-			<li>weitere <a>Kontaktmöglichkeiten</a></li>
+			<li>Weitere <a>Kontaktmöglichkeiten</a></li>
 		</ul>
 	</div>
 	</div>
