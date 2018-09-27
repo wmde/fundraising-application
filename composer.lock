@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dd74b3278eda5ab5e3a48acb60216b80",
+    "content-hash": "fbbd27d575992b141a0e406682302d5b",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -4480,16 +4480,16 @@
         },
         {
             "name": "jeroen/nyancat-phpunit-resultprinter",
-            "version": "v2.1.0",
+            "version": "v2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JeroenDeDauw/nyancat-phpunit-resultprinter.git",
-                "reference": "bb77158989b4173180be011ce91b198eb306e586"
+                "reference": "f9a70b2a229b41851a5bb2f081a8f68a9eab1fbe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JeroenDeDauw/nyancat-phpunit-resultprinter/zipball/bb77158989b4173180be011ce91b198eb306e586",
-                "reference": "bb77158989b4173180be011ce91b198eb306e586",
+                "url": "https://api.github.com/repos/JeroenDeDauw/nyancat-phpunit-resultprinter/zipball/f9a70b2a229b41851a5bb2f081a8f68a9eab1fbe",
+                "reference": "f9a70b2a229b41851a5bb2f081a8f68a9eab1fbe",
                 "shasum": ""
             },
             "require": {
@@ -4533,7 +4533,7 @@
                 "rainbow",
                 "tests"
             ],
-            "time": "2018-08-13T17:45:01+00:00"
+            "time": "2018-09-27T04:06:30+00:00"
         },
         {
             "name": "matthiasnoback/symfony-config-test",
@@ -5163,16 +5163,16 @@
         },
         {
             "name": "ockcyp/covers-validator",
-            "version": "dev-master",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oradwell/covers-validator.git",
-                "reference": "f05c7f6cc9fcb927cb24a0368dff2e30f9f90828"
+                "reference": "c60c27d63358830ebb2c36c0c94ca167b88db25e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oradwell/covers-validator/zipball/f05c7f6cc9fcb927cb24a0368dff2e30f9f90828",
-                "reference": "f05c7f6cc9fcb927cb24a0368dff2e30f9f90828",
+                "url": "https://api.github.com/repos/oradwell/covers-validator/zipball/c60c27d63358830ebb2c36c0c94ca167b88db25e",
+                "reference": "c60c27d63358830ebb2c36c0c94ca167b88db25e",
                 "shasum": ""
             },
             "require": {
@@ -5205,7 +5205,7 @@
                 }
             ],
             "description": "Validates @covers tags in PHPUnit tests",
-            "time": "2018-05-08T23:15:57+00:00"
+            "time": "2018-05-08T22:49:33+00:00"
         },
         {
             "name": "pdepend/pdepend",
@@ -7709,7 +7709,6 @@
         "wmde/fundraising-memberships": 20,
         "wmde/fundraising-payments": 20,
         "wmde/fundraising-subscriptions": 20,
-        "ockcyp/covers-validator": 20,
         "wmde/fundraising-frontend-content": 20
     },
     "prefer-stable": false,
