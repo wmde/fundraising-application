@@ -107,8 +107,8 @@
 
 		"phpunit/phpunit": "~7.0",
 		"codeception/specify": "~1.1",
-		"whatthejeff/nyancat-phpunit-resultprinter": "~1.2",
-		"ockcyp/covers-validator": "@dev",
+		"jeroen/nyancat-phpunit-resultprinter": "~2.2",
+		"ockcyp/covers-validator": "~1.0",
 		"mikey179/vfsStream": "~1.6",
 		"wmde/psr-log-test-doubles": "~2.1",
 
