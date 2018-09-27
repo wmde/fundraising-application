@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\BucketTesting\Logging;
 
+use DateTime;
+use WMDE\Clock\Clock;
 use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 
 /**
@@ -12,11 +14,11 @@ use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 class JsonBucketLogger implements BucketLogger {
 
 	private $logWriter;
-	private $timeTeller;
+	private $clock;
 
-	public function __construct( LogWriter $logWriter, TimeTeller $timeTeller ) {
+	public function __construct( LogWriter $logWriter, Clock $clock ) {
 		$this->logWriter = $logWriter;
-		$this->timeTeller = $timeTeller;
+		$this->clock = $clock;
 	}
 
 	public function writeEvent( LoggingEvent $event, Bucket ...$buckets ): void {
@@ -25,7 +27,7 @@ class JsonBucketLogger implements BucketLogger {
 
 	private function formatData( LoggingEvent $event, Bucket ...$buckets ): array {
 		return [
-			'date' => $this->timeTeller->getTime(),
+			'date' => $this->clock->now()->format( DateTime::RFC3339_EXTENDED ),
 			'eventName' => $event->getName(),
 			'metadata' => $event->getMetaData(),
 			'buckets' => $this->getBucketMap( $buckets )

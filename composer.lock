@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "524b37c03c024a9aaf511ad650a18885",
+    "content-hash": "dd74b3278eda5ab5e3a48acb60216b80",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -3679,6 +3679,49 @@
             "time": "2018-07-13T07:12:17+00:00"
         },
         {
+            "name": "wmde/clock",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wmde/Clock.git",
+                "reference": "86b71d5ee3d0ce4f563058f38ac1f4a362d2babe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wmde/Clock/zipball/86b71d5ee3d0ce4f563058f38ac1f4a362d2babe",
+                "reference": "86b71d5ee3d0ce4f563058f38ac1f4a362d2babe",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "mediawiki/mediawiki-codesniffer": "~18.0",
+                "ockcyp/covers-validator": "~1.0",
+                "phpstan/phpstan": "~0.9.2",
+                "phpunit/phpunit": "~7.1",
+                "slevomat/coding-standard": "~4.5",
+                "squizlabs/php_codesniffer": "~3.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "WMDE\\Clock\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Simple interface to get the current time without binding to global system resources",
+            "time": "2018-09-26T02:09:37+00:00"
+        },
+        {
             "name": "wmde/email-address",
             "version": "1.0.1",
             "source": {
@@ -6662,16 +6705,16 @@
         },
         {
             "name": "slevomat/coding-standard",
-            "version": "4.8.0",
+            "version": "4.8.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/slevomat/coding-standard.git",
-                "reference": "7b33fb140a8ee1502754c4c8dc44c3082746f30c"
+                "reference": "32e1ca205fc34920f323582ed29c0602e3897ae3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/7b33fb140a8ee1502754c4c8dc44c3082746f30c",
-                "reference": "7b33fb140a8ee1502754c4c8dc44c3082746f30c",
+                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/32e1ca205fc34920f323582ed29c0602e3897ae3",
+                "reference": "32e1ca205fc34920f323582ed29c0602e3897ae3",
                 "shasum": ""
             },
             "require": {
@@ -6697,7 +6740,7 @@
                 "MIT"
             ],
             "description": "Slevomat Coding Standard for PHP_CodeSniffer complements Consistence Coding Standard by providing sniffs with additional checks.",
-            "time": "2018-09-19T22:49:38+00:00"
+            "time": "2018-09-25T21:21:11+00:00"
         },
         {
             "name": "sorien/silex-dbal-profiler",
@@ -6749,16 +6792,16 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.3.1",
+            "version": "3.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "628a481780561150481a9ec74709092b9759b3ec"
+                "reference": "6ad28354c04b364c3c71a34e4a18b629cc3b231e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/628a481780561150481a9ec74709092b9759b3ec",
-                "reference": "628a481780561150481a9ec74709092b9759b3ec",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/6ad28354c04b364c3c71a34e4a18b629cc3b231e",
+                "reference": "6ad28354c04b364c3c71a34e4a18b629cc3b231e",
                 "shasum": ""
             },
             "require": {
@@ -6796,7 +6839,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2018-07-26T23:47:18+00:00"
+            "time": "2018-09-23T23:08:17+00:00"
         },
         {
             "name": "symfony/browser-kit",
