@@ -1,5 +1,8 @@
 <template>
  <div id="faq" class="container">
+ 	<div v-if="!isPreview" class="inline space-above">
+ 		<a @click="populatePageWithPreviewContent(); isPreview=true;">{{ preview.message }}</a>
+ 	</div>
  	<h2>Häufige Fragen</h2>
  	<h5>Antworten zu Ihren Fragen zum Spendenprozess, Wikimedia und Wikipedia</h5>
  	<div class="row">
@@ -7,9 +10,9 @@
 	  	<search-bar></search-bar>
 		<div class="form-shadow-wrap">
 			<ul>
-				<li v-for="c in content" class="underlined">
-					<question :content="c.question"></question>
-					<answer :content="c.answer"></answer>
+				<li v-for="content in page.content" v-bind:class="[ isPreview ? 'preview' : 'topic', 'underlined' ]">
+					<question :content="content.question"></question>
+					<answer :content="content.answer"></answer>
 				</li>
 			</ul>
 		</div>
@@ -26,11 +29,9 @@
 	<div class="sidebar col-xs-12 col-sm-3">
 		<h5>Fragen und Antworten zu...</h5>
 		<ul>
-			<li><a>Spendenbescheinigung</a></li>
-			<li><a>Spendenbannern auf Wikipedia</a></li>
-			<li><a>Wikimedia-Organisation</a></li>
-			<li><a>Wikimedia-Projekte</a></li>
-			<li><a>Spendenverwendung</a></li>
+			<li v-for="topic in topics">
+				<a @click="populatePageByTopic( topic ); isPreview = false;">{{ topic.name }}</a>
+			</li>
 		</ul>
 		<h5>Keine Antwort gefunden?</h5>
 		<ul>
@@ -56,35 +57,120 @@ export default {
 	},
 	data() {
 		return {
-			content: [
+			isPreview: true,
+			backToPreviewMessage: 'Zurück zur Übersicht',
+			page: {},
+			preview: {
+				name: 'preview',
+				message: '<  Zurück zur Übersicht',
+				content: [
+					{
+						question: 'Is Vue.js hard to use?',
+						answer: 'Not if you know javascript! Lorem ipsum dolor sit amet, consectetur adipiscing elit, ' +
+						'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ' +
+						'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris ' +
+						'nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in ' +
+						'reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ' +
+						'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+					},
+					{
+						question: 'Is JavaScript hard to use?',
+						answer: 'Not if you know another programming language! Lorem ipsum dolor sit amet, consectetur adipiscing elit, ' +
+						'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ' +
+						'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris ' +
+						'nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in ' +
+						'reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ' +
+						'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+					},
+					{ 	question: 'Is programming hard to learn?',
+						answer: 'Not really! Lorem ipsum dolor sit amet, consectetur adipiscing elit, ' +
+						'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ' +
+						'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris ' +
+						'nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in ' +
+						'reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ' +
+						'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+					}
+				]
+			},
+			topics: [
 				{
-					question: 'Is Vue.js hard to use?',
-					answer: 'Not if you know javascript! Lorem ipsum dolor sit amet, consectetur adipiscing elit, ' +
-					'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ' +
-					'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris ' +
-					'nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in ' +
-					'reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ' +
-					'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+					name: 'Spendenbescheinigung',
+					content: [
+						{
+							question: 'Spendenbescheinigung Question',
+							answer: 'Spendenbescheinigung Answer'
+						},
+						{
+							question: 'Spendenbescheinigung Question 2',
+							answer: 'Spendenbescheinigung Answer 2'
+						}
+					]
 				},
 				{
-					question: 'Is JavaScript hard to use?',
-					answer: 'Not if you know another programming language! Lorem ipsum dolor sit amet, consectetur adipiscing elit, ' +
-					'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ' +
-					'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris ' +
-					'nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in ' +
-					'reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ' +
-					'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+					name: 'Spendenbannern auf Wikipedia',
+					content: [
+						{
+							question: 'Spendenbannern auf Wikipedia Question',
+							answer: 'Spendenbannern auf Wikipedia Answer'
+						},
+						{
+							question: 'Spendenbannern auf Wikipedia Question 2',
+							answer: 'Spendenbannern auf Wikipedia Answer 2'
+						}
+					]
 				},
-				{ 	question: 'Is programming hard to learn?',
-					answer: 'Not really! Lorem ipsum dolor sit amet, consectetur adipiscing elit, ' +
-					'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ' +
-					'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris ' +
-					'nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in ' +
-					'reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ' +
-					'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+				{
+					name: 'Wikimedia-Organisation',
+					content: [
+						{
+							question: 'Wikimedia-Organisation Question',
+							answer: 'Wikimedia-Organisation Answer'
+						},
+						{
+							question: 'Wikimedia-Organisation Question 2',
+							answer: 'Wikimedia-Organisation Answer 2'
+						}
+					]
+				},
+				{
+					name: 'Wikimedia-Projekte',
+					content: [
+						{
+							question: 'Wikimedia-Projekte Question',
+							answer: 'Wikimedia-Projekte Answer'
+						},
+						{
+							question: 'Wikimedia-Projekte Question 2',
+							answer: 'Wikimedia-Projekte Answer 2'
+						}
+					]
+				},
+				{
+					name: 'Spendenverwendung',
+					content: [
+						{
+							question: 'Spendenverwendung Question',
+							answer: 'Spendenverwendung Answer'
+						},
+						{
+							question: 'Spendenverwendung Question 2',
+							answer: 'Spendenverwendung Answer 2'
+						}
+					]
 				}
 			]
 		};
+	},
+	mounted: function () {
+		this.populatePageWithPreviewContent();
+	},
+	methods: {
+		populatePageByTopic: function ( topic ) {
+			this.page = topic;
+		},
+		populatePageWithPreviewContent: function () {
+			this.page = this.preview;
+		}
 	}
 }
 </script>

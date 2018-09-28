@@ -5,25 +5,11 @@
 	ul {
 		list-style: none;
 	}
-	.form-shadow-wrap {
-		margin-top: 20px;
-		margin-left: 0px;
-		padding: 1em 20px 3em 45px;
-		width: 100%;
-	}
-	.sidebar {
-		padding-left: 40px;
-		h5 {
-			margin-top: 50px;
-		}
+	i {
+		font-size: 22px;
 	}
 	footer {
 		margin-top: 50px;
-	}
-	form.inline {
-		display: flex;
-		flex-direction: row;
-		margin-top: 0px;
 	}
 	input[type=text] {
 		padding: 5px;
@@ -42,11 +28,31 @@
 	input[type=text], button {
 		display: inline-block;
 	}
+	.form-shadow-wrap {
+		margin-top: 20px;
+		margin-left: 0px;
+		padding: 1em 20px 3em 45px;
+		width: 100%;
+	}
+	.sidebar {
+		padding-left: 40px;
+		h5 {
+			margin-top: 50px;
+		}
+	}
+	.inline {
+		display: flex;
+		flex-direction: row;
+		margin-top: 0px;
+	}
 	.space-left {
 		margin-left: 5px;
 	}
 	.space-around {
 		padding: 1em 0;
+	}
+	.space-above {
+		padding-top: 1em;
 	}
 	.underlined {
 		border-bottom: 2px solid #ddd;
@@ -54,7 +60,5 @@
 	li.underlined:last-child {
 		border-bottom: none;
 	}
-	.space-above {
-		padding-top: 1em;
-	}
+
 }
