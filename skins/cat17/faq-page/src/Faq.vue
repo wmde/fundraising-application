@@ -7,12 +7,12 @@
 	  	<search-bar></search-bar>
 		<div class="wrapper">
 			<div class="form-shadow-wrap">
-				<question></question>
-				<answer></answer>
-				<question></question>
-				<answer></answer>
-				<question></question>
-				<answer></answer>
+				<ol>
+					<li v-for="c in content">
+						<question :content="c.question"></question>
+						<answer :content="c.answer"></answer>
+					</li>
+				</ol>
 			</div>
 		</div>
 		<footer>
@@ -55,6 +55,38 @@ export default {
 		SearchBar,
 		Question,
 		Answer
+	},
+	data() {
+		return {
+			content: [
+				{
+					question: 'Is Vue.js hard to use?',
+					answer: 'Not if you know javascript! Lorem ipsum dolor sit amet, consectetur adipiscing elit, ' +
+					'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ' +
+					'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris ' +
+					'nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in ' +
+					'reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ' +
+					'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+				},
+				{
+					question: 'Is JavaScript hard to use?',
+					answer: 'Not if you know another programming language! Lorem ipsum dolor sit amet, consectetur adipiscing elit, ' +
+					'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ' +
+					'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris ' +
+					'nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in ' +
+					'reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ' +
+					'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+				},
+				{ 	question: 'Is programming hard to learn?',
+					answer: 'Not really! Lorem ipsum dolor sit amet, consectetur adipiscing elit, ' +
+					'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ' +
+					'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris ' +
+					'nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in ' +
+					'reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ' +
+					'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+				}
+			]
+		};
 	}
 }
 </script>
