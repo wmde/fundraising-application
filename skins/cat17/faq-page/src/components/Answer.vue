@@ -1,5 +1,5 @@
 <template>
-  <div id="answer" class="underlined space-around">
+  <div id="answer" class="space-around">
   	<p>
 	{{ content }}
 		<a class="space-left" href="">some long german word here...</a>

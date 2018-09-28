@@ -2,8 +2,8 @@
 	a {
 		color: #00adee;
 	}
-	.wrapper {
-		width: 100%;
+	ul {
+		list-style: none;
 	}
 	.form-shadow-wrap {
 		margin-top: 20px;
@@ -15,9 +15,6 @@
 		padding-left: 40px;
 		h5 {
 			margin-top: 50px;
-		}
-		ul {
-			list-style: none;
 		}
 	}
 	footer {
@@ -53,9 +50,9 @@
 	}
 	.underlined {
 		border-bottom: 2px solid #ddd;
-		&:last-child {
-			border-bottom: none;
-		}
+	}
+	li.underlined:last-child {
+		border-bottom: none;
 	}
 	.space-above {
 		padding-top: 1em;

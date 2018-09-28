@@ -5,15 +5,13 @@
  	<div class="row">
  	<div class="col-xs-12 col-sm-9">
 	  	<search-bar></search-bar>
-		<div class="wrapper">
-			<div class="form-shadow-wrap">
-				<ol>
-					<li v-for="c in content">
-						<question :content="c.question"></question>
-						<answer :content="c.answer"></answer>
-					</li>
-				</ol>
-			</div>
+		<div class="form-shadow-wrap">
+			<ul>
+				<li v-for="c in content" class="underlined">
+					<question :content="c.question"></question>
+					<answer :content="c.answer"></answer>
+				</li>
+			</ul>
 		</div>
 		<footer>
 			<h5>Sie konnten keine Antwort finden? Fragen Sie uns direkt!</h5>
