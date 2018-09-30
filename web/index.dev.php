@@ -12,28 +12,25 @@ ini_set( 'display_errors', '1' );
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use FileFetcher\SimpleFileFetcher;
 use Monolog\Formatter\JsonFormatter;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\BufferHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
-use Symfony\Bridge\Twig\Extension\RoutingExtension;
 use WMDE\Fundraising\Frontend\App\UrlGeneratorAdapter;
+use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
+use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
 
 /**
  * @var \WMDE\Fundraising\Frontend\Factories\FunFunFactory $ffFactory
  */
 $ffFactory = call_user_func( function() {
-	$prodConfigPath = __DIR__ . '/../app/config/config.prod.json';
-	$configPaths = [ __DIR__ . '/../app/config/config.dist.json' ];
+	$environment = getenv( 'APP_ENV' ) ?: 'dev';
 
-	if ( is_readable( $prodConfigPath ) ) {
-		$configPaths[] = $prodConfigPath;
-	}
-
-	$configReader = new \WMDE\Fundraising\Frontend\Infrastructure\ConfigReader(
-		new \FileFetcher\SimpleFileFetcher(),
-		...$configPaths
+	$configReader = new ConfigReader(
+		new SimpleFileFetcher(),
+		...EnvironmentBootstrapper::getConfigurationPathsForEnvironment( $environment, __DIR__ . '/../app/config' )
 	);
 
 	$config = $configReader->getConfig();

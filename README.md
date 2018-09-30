@@ -45,7 +45,16 @@ The application can now be reached at http://localhost:8082/index.php, debug inf
 
 ## Configuration
 
-### Test configuration
+The web and CLI entry points of the application check for the `APP_ENV` environment variable. 
+If it not set, the application assumes the value `development`. Each environment must have a corresponding configuration
+file in `app/config`, following the name pattern of `config.ENVIRONMENTNAME.json`.
+
+You can add local modifications by adding a file that follows the name pattern of `config.ENVIRONMENTNAME.test.json`.
+
+The application merges the values from the configuration files with the default values from the file 
+`app/config/config.dist.json`.
+
+### Create local test configuration to speed up tests
 
 To speed up the tests when running them locally, use SQLite instead of the default MySQL. This can be done by
 adding the file `app/config/config.test.local.json` with the following content:
@@ -302,7 +311,7 @@ Used Bounded Contexts:
 		* `config.dist.json`: default configuration
 		* `config.test.json`: configuration used by integration and system tests (gets merged into default config)
 		* `config.test.local.json`:  instance specific (gitignored) test config (gets merged into config.test.json)
-		* `config.prod.json`: instance specific (gitignored) production configuration (gets merged into default config)
+		* `config.development.json`: instance specific (gitignored) production configuration (gets merged into default config)
 	* `js/lib`: Javascript modules, will be compiled into one file for the frontend.
 	* `js/test`: Unit tests for the JavaScript modules
 * `var/`: Ephemeral application data

@@ -17,6 +17,7 @@ use WMDE\Fundraising\Frontend\App\UrlGeneratorAdapter;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
 use WMDE\Fundraising\Frontend\App\MailTemplates;
+use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
 
 /**
  * A command to check and dump mail templates
@@ -27,7 +28,6 @@ use WMDE\Fundraising\Frontend\App\MailTemplates;
  * - then diffing the resulting folders
  *
  * @license GNU GPL v2+
- * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
 class RenderMailTemplatesCommand extends Command {
 
@@ -78,16 +78,10 @@ class RenderMailTemplatesCommand extends Command {
 	}
 
 	private function getDefaultConfig(): array {
-		$prodConfigPath = __DIR__ . '/../app/config/config.prod.json';
-
-		$configPaths = [ __DIR__ . '/../app/config/config.dist.json' ];
-		if ( is_readable( $prodConfigPath ) ) {
-			$configPaths[] = $prodConfigPath;
-		}
-
+		$environment = getenv( 'APP_ENV' ) ?: 'dev';
 		$configReader = new ConfigReader(
 			new SimpleFileFetcher(),
-			...$configPaths
+			...EnvironmentBootstrapper::getConfigurationPathsForEnvironment( $environment, __DIR__ . '/../app/config' )
 		);
 
 		return $configReader->getConfig();
