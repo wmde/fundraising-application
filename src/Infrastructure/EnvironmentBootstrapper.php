@@ -4,7 +4,20 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Infrastructure;
 
+use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\DevelopmentEnvironmentSetup;
+use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\EnvironmentSetup;
+use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\EnvironmentSetupException;
+use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\ProductionEnvironmentSetup;
+use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\TestEnvironmentSetup;
+
 class EnvironmentBootstrapper {
+
+	private const ENVIRONMENT_SETUP_MAP = [
+		'dev' => DevelopmentEnvironmentSetup::class,
+		'test' => TestEnvironmentSetup::class,
+		'prod' => ProductionEnvironmentSetup::class
+	];
+
 	public static function getConfigurationPathsForEnvironment( string $environmentName, string $configPath ): array {
 		$paths = self::removeNonexistentOptionalPaths( ...[
 			$configPath . '/config.dist.json',
@@ -31,5 +44,13 @@ class EnvironmentBootstrapper {
 			},
 			$paths
 		);
+	}
+
+	public static function getEnvironmentSetupInstance( string $environmentName ): EnvironmentSetup {
+		if ( !isset( self::ENVIRONMENT_SETUP_MAP[$environmentName] ) ) {
+			throw new EnvironmentSetupException( $environmentName );
+		}
+		$class = self::ENVIRONMENT_SETUP_MAP[$environmentName];
+		return new $class;
 	}
 }

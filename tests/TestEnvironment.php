@@ -8,6 +8,7 @@ use FileFetcher\SimpleFileFetcher;
 use Symfony\Component\Translation\Translator;
 use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeUrlGenerator;
 
 /**
@@ -29,12 +30,8 @@ class TestEnvironment {
 
 		$installer->install();
 
-		$instance->factory->setNullMessenger();
-		$instance->factory->setSkinTwigEnvironment( new \Twig_Environment() );
-		$instance->factory->setUrlGenerator( new FakeUrlGenerator() );
-
-		// disabling translations in tests (will result in returned keys we can more easily test for)
-		$instance->factory->setTranslator( new Translator( 'zz_ZZ' ) );
+		$environmentSetup = EnvironmentBootstrapper::getEnvironmentSetupInstance( 'test' );
+		$environmentSetup->setEnvironmentDependentInstances( $instance->factory );
 
 		return $instance;
 	}
@@ -55,18 +52,10 @@ class TestEnvironment {
 	}
 
 	private function getConfigFromFiles(): array {
-		$readerArguments = [
+		$configReader = new ConfigReader(
 			new SimpleFileFetcher(),
-			__DIR__ . '/../app/config/config.dist.json',
-			__DIR__ . '/../app/config/config.test.json',
-		];
-
-		if ( is_readable( __DIR__ . '/../app/config/config.test.local.json' ) ) {
-			$readerArguments[] = __DIR__ . '/../app/config/config.test.local.json';
-		}
-
-		/** @noinspection PhpParamsInspection */
-		$configReader = new ConfigReader( ...$readerArguments );
+			...EnvironmentBootstrapper::getConfigurationPathsForEnvironment( 'test', __DIR__ . '/../app/config' )
+		);
 
 		return $configReader->getConfig();
 	}

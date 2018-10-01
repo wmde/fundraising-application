@@ -6,8 +6,15 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
+use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\DevelopmentEnvironmentSetup;
+use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\EnvironmentSetupException;
+use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\ProductionEnvironmentSetup;
+use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\TestEnvironmentSetup;
 use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
 
+/**
+ * @covers \WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper
+ */
 class EnvironmentBootstrapperTest extends TestCase {
 	private const CONFIGDIR = 'config';
 
@@ -42,4 +49,14 @@ class EnvironmentBootstrapperTest extends TestCase {
 		EnvironmentBootstrapper::getConfigurationPathsForEnvironment( 'dev', $path->url() );
 	}
 
+	public function testGivenEnvironmentName_environmentSetupClassIsReturned() {
+		$this->assertInstanceOf( DevelopmentEnvironmentSetup::class, EnvironmentBootstrapper::getEnvironmentSetupInstance( 'dev' ) );
+		$this->assertInstanceOf( TestEnvironmentSetup::class, EnvironmentBootstrapper::getEnvironmentSetupInstance( 'test' ) );
+		$this->assertInstanceOf( ProductionEnvironmentSetup::class, EnvironmentBootstrapper::getEnvironmentSetupInstance( 'prod' ) );
+	}
+
+	public function testGivenUnknownEnvironmentName_exceptionIsThrown() {
+		$this->expectException( EnvironmentSetupException::class );
+		EnvironmentBootstrapper::getEnvironmentSetupInstance( 'unfriendly' );
+	}
 }
