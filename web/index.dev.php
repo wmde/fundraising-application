@@ -38,7 +38,7 @@ $ffFactory = call_user_func( function() {
 	$factory = new FunFunFactory( $configReader->getConfig() );
 
 	$environmentSetup = EnvironmentBootstrapper::getEnvironmentSetupInstance( $environmentName );
-	$environmentSetup->setEnvironmentDependentInstances( $factory );
+	$environmentSetup->setEnvironmentDependentInstances( $factory, $config );
 
 	return $factory;
 } );

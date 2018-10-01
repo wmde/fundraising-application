@@ -774,6 +774,32 @@
       },
       "additionalProperties": false,
       "required": [ "donations", "membership" ]
+    },
+    "logging": {
+      "type": "object",
+      "title": "Logging configuration",
+      "properties": {
+        "method": {
+          "type": "string",
+          "title": "Type of logging",
+          "enum": [ "error_log", "file", "gelf" ],
+          "default": "error_log"
+        },
+        "url": {
+          "type": "string",
+          "title": "Relative file URL or Graylog GELF endpoint",
+          "description": "File name for the 'file' logging type. Or host URL for Graylog GELF endpoint. Graylog URL *MUST* contain a host and a port, but not a protocol",
+          "format": "url"
+        },
+        "level": {
+          "type": "string",
+          "title": "One of the error level constants",
+          "enum": [ "DEBUG", "INFO", "NOTICE", "WARNING", "ERROR", "CRITICAL", "ALERT", "EMERGENCY" ],
+          "default": "DEBUG"
+        }
+      },
+      "additionalProperties": false,
+      "required": [ "method", "level" ]
     }
   },
   "additionalProperties": false,
@@ -800,6 +826,7 @@
     "translation",
     "payment-types",
     "cookie",
-    "preset-amounts"
+    "preset-amounts",
+    "logging"
   ]
 }

@@ -31,7 +31,7 @@ class TestEnvironment {
 		$installer->install();
 
 		$environmentSetup = EnvironmentBootstrapper::getEnvironmentSetupInstance( 'test' );
-		$environmentSetup->setEnvironmentDependentInstances( $instance->factory );
+		$environmentSetup->setEnvironmentDependentInstances( $instance->factory, $config );
 
 		return $instance;
 	}

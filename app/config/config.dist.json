@@ -183,5 +183,9 @@
 	"campaigns": {
 		"timezone":  "Europe/Berlin",
 		"configurations": [ "campaigns.yml" ]
+	},
+	"logging": {
+		"method": "error_log",
+		"level": "DEBUG"
 	}
 }

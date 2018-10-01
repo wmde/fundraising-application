@@ -4,28 +4,27 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Factories\EnvironmentSetup;
 
-use Monolog\Formatter\JsonFormatter;
 use Monolog\Handler\ErrorLogHandler;
-use Monolog\Handler\NullHandler;
-use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Factories\LoggerFactory;
 
-class DevelopmentEnvironmentSetup  implements EnvironmentSetup {
+class DevelopmentEnvironmentSetup implements EnvironmentSetup {
 
 	private $logHandler;
 
-	public function setEnvironmentDependentInstances( FunFunFactory $factory ) {
+	public function setEnvironmentDependentInstances( FunFunFactory $factory, array $configuration ) {
 		$this->logHandler = new ErrorLogHandler();
-		$this->setApplicationLogger( $factory );
+		$this->setApplicationLogger( $factory, $configuration['logging'] );
 		$this->setPaypalLogger( $factory );
 		$this->setSofortLogger( $factory );
 	}
 
-	private function setApplicationLogger( FunFunFactory $factory ) {
-		$logger = new Logger( 'index_php' );
-		$logger->pushHandler( $this->logHandler );
-		$factory->setLogger( $logger );
+	private function setApplicationLogger( FunFunFactory $factory, array $loggingConfig ) {
+		$factory->setLogger(
+			( new LoggerFactory( $loggingConfig ) )
+				->getLogger()
+		);
 	}
 
 	private function setPaypalLogger( FunFunFactory $factory ) {

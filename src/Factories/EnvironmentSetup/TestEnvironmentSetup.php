@@ -8,9 +8,9 @@ use Symfony\Component\Translation\Translator;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeUrlGenerator;
 
-class TestEnvironmentSetup  implements EnvironmentSetup {
+class TestEnvironmentSetup implements EnvironmentSetup {
 
-	public function setEnvironmentDependentInstances( FunFunFactory $factory ) {
+	public function setEnvironmentDependentInstances( FunFunFactory $factory, array $configuration ) {
 		$factory->setNullMessenger();
 		$factory->setSkinTwigEnvironment( new \Twig_Environment() );
 		$factory->setUrlGenerator( new FakeUrlGenerator() );

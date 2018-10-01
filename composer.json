@@ -47,7 +47,8 @@
 		"symfony/yaml": "^4.1",
 		"remotelyliving/doorkeeper": "^1.4",
 		"doctrine/migrations": "~1.8",
-		"nikic/php-parser": "~4.0"
+		"nikic/php-parser": "~4.0",
+		"graylog2/gelf-php": "~1.5"
 	},
 	"repositories": [
 		{

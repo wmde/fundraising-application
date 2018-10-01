@@ -5,45 +5,30 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Factories\EnvironmentSetup;
 
 use Monolog\Formatter\JsonFormatter;
-use Monolog\Formatter\LineFormatter;
-use Monolog\Handler\FingersCrossedHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Factories\LoggerFactory;
 
 class ProductionEnvironmentSetup implements EnvironmentSetup {
 
-	public function setEnvironmentDependentInstances( FunFunFactory $factory ) {
-		$this->initializeLoggers( $factory );
+	public function setEnvironmentDependentInstances( FunFunFactory $factory, array $configuration ) {
+		$this->initializeLoggers( $factory, $configuration['logging'] );
 
 		$factory->enableCaching();
 	}
 
-	private function initializeLoggers( FunFunFactory $factory ) {
-		$this->setApplicationLogger( $factory );
+	private function initializeLoggers( FunFunFactory $factory, array $loggingConfig ) {
+		$this->setApplicationLogger( $factory, $loggingConfig );
 		$this->setPaypalLogger( $factory );
 		$this->setSofortLogger( $factory );
 	}
 
-	private function setApplicationLogger( FunFunFactory $factory ) {
-		$logger = new Logger( 'index_php' );
-
-		$streamHandler = new StreamHandler(
-			$factory->getLoggingPath() . '/error-debug.log'
+	private function setApplicationLogger( FunFunFactory $factory, array $loggingConfig ) {
+		$factory->setLogger(
+			( new LoggerFactory( $loggingConfig ) )
+				->getLogger()
 		);
-
-		$fingersCrossedHandler = new FingersCrossedHandler( $streamHandler );
-		$streamHandler->setFormatter( new LineFormatter( LineFormatter::SIMPLE_FORMAT ) );
-		$logger->pushHandler( $fingersCrossedHandler );
-
-		$errorHandler = new StreamHandler(
-			$factory->getLoggingPath() . '/error.log',
-			Logger::ERROR
-		);
-		$errorHandler->setFormatter( new JsonFormatter() );
-		$logger->pushHandler( $errorHandler );
-
-		$factory->setLogger( $logger );
 	}
 
 	private function setPaypalLogger( FunFunFactory $factory ) {

@@ -22,10 +22,11 @@ $ffFactory = call_user_func( function() {
 		...EnvironmentBootstrapper::getConfigurationPathsForEnvironment( $environmentName, __DIR__ . '/../app/config' )
 	);
 
-	$factory = new FunFunFactory( $configReader->getConfig() );
+	$config = $configReader->getConfig();
+	$factory = new FunFunFactory( $config );
 
 	$environmentSetup = EnvironmentBootstrapper::getEnvironmentSetupInstance( $environmentName );
-	$environmentSetup->setEnvironmentDependentInstances( $factory );
+	$environmentSetup->setEnvironmentDependentInstances( $factory, $config );
 
 	return $factory;
 } );
