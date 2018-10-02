@@ -2,7 +2,7 @@
   <div id="answer" class="space-around">
   	<p>
 	{{ content }}
-		<a class="space-left" href="">some long german word here...</a>
+	<span v-if="isPreview" class="link">some long german word here...</span>
 	</p>
 	
   </div>
@@ -12,6 +12,6 @@
 
 export default {
 	name: 'answer',
-	props: ['content']
+	props: ['content', 'isPreview']
 }
 </script>

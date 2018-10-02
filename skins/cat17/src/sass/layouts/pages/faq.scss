@@ -5,8 +5,9 @@
 	ul {
 		list-style: none;
 	}
-	i {
-		font-size: 22px;
+	[class^="icon-"], [class*=" icon-"] {
+		font-size: 18px;
+		line-height: 2;
 	}
 	footer {
 		margin-top: 50px;
@@ -27,6 +28,22 @@
 	}
 	input[type=text], button {
 		display: inline-block;
+	}
+	.link {
+		color: #00adee;
+	}
+	.preview {
+		.title {
+			color: #00adee;
+			font-size: 22px;
+		}
+	}
+	.topic {
+		.title {
+			color: initial;
+			font-weight: bold;
+			font-size: 16px;
+		}
 	}
 	.form-shadow-wrap {
 		margin-top: 20px;
@@ -53,6 +70,9 @@
 	}
 	.space-above {
 		padding-top: 1em;
+	}
+	.space-below {
+		padding-bottom: 2em;
 	}
 	.underlined {
 		border-bottom: 2px solid #ddd;
