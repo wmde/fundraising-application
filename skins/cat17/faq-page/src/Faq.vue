@@ -9,10 +9,11 @@
  	<div class="col-xs-12 col-sm-9">
 	  	<search-bar></search-bar>
 		<div class="form-shadow-wrap">
+			<h2 v-if="!isPreview" class="title space-below underlined"> {{ page.name }}</h2>
 			<ul>
 				<li v-for="content in page.content" v-bind:class="[ isPreview ? 'preview' : 'topic', 'underlined' ]">
 					<question :content="content.question"></question>
-					<answer :content="content.answer"></answer>
+					<answer :content="content.answer" :isPreview="isPreview"></answer>
 				</li>
 			</ul>
 		</div>
@@ -35,7 +36,7 @@
 		</ul>
 		<h5>Keine Antwort gefunden?</h5>
 		<ul>
-			<li>Frage stellen via Kontaktformular</li>
+			<li><a href="/contact/get-in-touch">Frage stellen via Kontaktformular</a></li>
 			<li>Weitere <a>Kontaktmöglichkeiten</a></li>
 		</ul>
 	</div>
@@ -98,11 +99,21 @@ export default {
 					content: [
 						{
 							question: 'Spendenbescheinigung Question',
-							answer: 'Spendenbescheinigung Answer'
+							answer: 'Spendenbescheinigung Answer ' +
+							'Lorem ipsum dolor sit amet, consectetur adipiscing elit, ' +
+							'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ' +
+							'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris ' +
+							'nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in ' +
+							'reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. '
 						},
 						{
 							question: 'Spendenbescheinigung Question 2',
-							answer: 'Spendenbescheinigung Answer 2'
+							answer: 'Spendenbescheinigung Answer 2 ' +
+							'Lorem ipsum dolor sit amet, consectetur adipiscing elit, ' +
+							'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ' +
+							'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris ' +
+							'nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in ' +
+							'reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. '
 						}
 					]
 				},
@@ -111,11 +122,21 @@ export default {
 					content: [
 						{
 							question: 'Spendenbannern auf Wikipedia Question',
-							answer: 'Spendenbannern auf Wikipedia Answer'
+							answer: 'Spendenbannern auf Wikipedia Answer ' +
+							'Lorem ipsum dolor sit amet, consectetur adipiscing elit, ' +
+							'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ' +
+							'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris ' +
+							'nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in ' +
+							'reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. '
 						},
 						{
 							question: 'Spendenbannern auf Wikipedia Question 2',
-							answer: 'Spendenbannern auf Wikipedia Answer 2'
+							answer: 'Spendenbannern auf Wikipedia Answer 2 ' +
+							'Lorem ipsum dolor sit amet, consectetur adipiscing elit, ' +
+							'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ' +
+							'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris ' +
+							'nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in ' +
+							'reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. '
 						}
 					]
 				},
@@ -124,11 +145,21 @@ export default {
 					content: [
 						{
 							question: 'Wikimedia-Organisation Question',
-							answer: 'Wikimedia-Organisation Answer'
+							answer: 'Wikimedia-Organisation Answer ' +
+							'Lorem ipsum dolor sit amet, consectetur adipiscing elit, ' +
+							'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ' +
+							'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris ' +
+							'nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in ' +
+							'reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. '
 						},
 						{
 							question: 'Wikimedia-Organisation Question 2',
-							answer: 'Wikimedia-Organisation Answer 2'
+							answer: 'Wikimedia-Organisation Answer 2 ' +
+							'Lorem ipsum dolor sit amet, consectetur adipiscing elit, ' +
+							'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ' +
+							'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris ' +
+							'nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in ' +
+							'reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. '
 						}
 					]
 				},
@@ -137,11 +168,21 @@ export default {
 					content: [
 						{
 							question: 'Wikimedia-Projekte Question',
-							answer: 'Wikimedia-Projekte Answer'
+							answer: 'Wikimedia-Projekte Answer ' +
+							'Lorem ipsum dolor sit amet, consectetur adipiscing elit, ' +
+							'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ' +
+							'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris ' +
+							'nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in ' +
+							'reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. '
 						},
 						{
 							question: 'Wikimedia-Projekte Question 2',
-							answer: 'Wikimedia-Projekte Answer 2'
+							answer: 'Wikimedia-Projekte Answer 2 ' +
+							'Lorem ipsum dolor sit amet, consectetur adipiscing elit, ' +
+							'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ' +
+							'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris ' +
+							'nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in ' +
+							'reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. '
 						}
 					]
 				},
@@ -150,11 +191,21 @@ export default {
 					content: [
 						{
 							question: 'Spendenverwendung Question',
-							answer: 'Spendenverwendung Answer'
+							answer: 'Spendenverwendung Answer ' +
+							'Lorem ipsum dolor sit amet, consectetur adipiscing elit, ' +
+							'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ' +
+							'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris ' +
+							'nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in ' +
+							'reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. '
 						},
 						{
 							question: 'Spendenverwendung Question 2',
-							answer: 'Spendenverwendung Answer 2'
+							answer: 'Spendenverwendung Answer 2 ' +
+							'Lorem ipsum dolor sit amet, consectetur adipiscing elit, ' +
+							'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ' +
+							'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris ' +
+							'nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in ' +
+							'reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. '
 						}
 					]
 				}

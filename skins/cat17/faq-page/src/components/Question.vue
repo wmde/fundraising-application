@@ -1,6 +1,6 @@
 <template>
 <div id="question" class="space-above">
-	<a href=""><h4>{{ content }}</h4></a>
+	<p class="title">{{ content }}</p>
 </div>
 </template>
 
