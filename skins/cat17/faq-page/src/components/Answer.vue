@@ -1,10 +1,7 @@
 <template>
-  <div id="answer" class="underlined space-around">
+  <div id="answer" class="space-around">
   	<p>
-		Depends!!! Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-		Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-		Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-		Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+	{{ content }}
 		<a class="space-left" href="">some long german word here...</a>
 	</p>
 	
@@ -14,6 +11,7 @@
 <script>
 
 export default {
-	name: 'answer'
+	name: 'answer',
+	props: ['content']
 }
 </script>
