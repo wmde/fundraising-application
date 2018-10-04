@@ -134,15 +134,12 @@ var objectAssign = require( 'object-assign' ),
 	BankDataComponent = {
 		ibanElement: null,
 		bicElement: null,
-		accountNumberElement: null,
 		bankCodeElement: null,
 		bankNameFieldElement: null,
 		bankNameDisplayElement: null,
 		render: function ( formContent ) {
 			this.ibanElement.val( formContent.iban );
 			this.bicElement.val( formContent.bic );
-			this.accountNumberElement.val( formContent.accountNumber );
-			this.bankCodeElement.val( formContent.bankCode );
 			this.bankNameFieldElement.val( formContent.bankName );
 			this.bankNameDisplayElement.text( formContent.bankName );
 		}
@@ -244,10 +241,9 @@ module.exports = {
 	createBankDataComponent: function ( store, bankDataElements ) {
 		var component = objectAssign( Object.create( BankDataComponent ), bankDataElements );
 		bankDataElements.ibanElement.on( 'change', createDefaultChangeHandler( store, 'iban' ) );
+		bankDataElements.ibanElement.on( 'keydown', createDefaultChangeHandler( store, 'iban' ) ); // TODO change to custom handler
 		bankDataElements.bicElement.on( 'change', createDefaultChangeHandler( store, 'bic' ) );
 		bankDataElements.bicElement.on( 'change', createRegexValidator( store, 'bic' ) );
-		bankDataElements.accountNumberElement.on( 'change', createDefaultChangeHandler( store, 'accountNumber' ) );
-		bankDataElements.bankCodeElement.on( 'change', createDefaultChangeHandler( store, 'bankCode' ) );
 		return component;
 	},
 

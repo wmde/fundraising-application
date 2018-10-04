@@ -16,16 +16,8 @@ $( function () {
           WMDE.IntegerCurrency.createCurrencyParser( 'de' ),
 		  WMDE.IntegerCurrency.createCurrencyFormatter( 'de' )
       ),
-      WMDE.Components.createRadioComponent( store, $('input[name="zahlweise"]'), 'paymentType' ),
-      WMDE.Components.createRadioComponent( store, $('input[name="periode"]' ), 'paymentIntervalInMonths' ),
-      WMDE.Components.createBankDataComponent( store, {
-        ibanElement: $( '#iban' ),
-        bicElement: $( '#bic' ),
-        accountNumberElement: $( '#account-number' ),
-        bankCodeElement: $( '#bank-code' ),
-        bankNameFieldElement: $( '#field-bank-name' ),
-        bankNameDisplayElement: $( '#bank-name' )
-      } ),
+		WMDE.Components.createRadioComponent( store, $('input[name="zahlweise"]'), 'paymentType' ),
+		WMDE.Components.createRadioComponent( store, $('input[name="periode"]' ), 'paymentIntervalInMonths' ),
 		WMDE.Components.createRadioComponent( store, $( 'input[name="addressType"]' ), 'addressType' ),
 		WMDE.Components.createSelectMenuComponent( store, $( 'select[name="salutation"]' ), 'salutation' ),
 		WMDE.Components.createSelectMenuComponent( store, $( '#title' ), 'title' ),
@@ -69,13 +61,6 @@ $( function () {
         ),
         WMDE.ValidationDispatchers.createEmailValidationDispatcher(
           WMDE.FormValidation.createEmailAddressValidator( initData.data( 'validate-email-address-url' ) ),
-          initialValues
-        ),
-        WMDE.ValidationDispatchers.createBankDataValidationDispatcher(
-          WMDE.FormValidation.createBankDataValidator(
-            initData.data( 'validate-iban-url' ),
-            initData.data( 'generate-iban-url' )
-          ),
           initialValues
         )
       ];
@@ -142,22 +127,6 @@ $( function () {
       {
         viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-email' ) ),
         stateKey: 'donationInputValidation.email'
-      },
-      {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-iban' ) ),
-        stateKey: 'donationInputValidation.iban'
-      },
-      {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-bic' ) ),
-        stateKey: 'donationInputValidation.bic'
-      },
-      {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-accountnumber' ) ),
-        stateKey: 'donationInputValidation.accountNumber'
-      },
-      {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-bankcode' ) ),
-        stateKey: 'donationInputValidation.bankCode'
       },
       {
         viewHandler: WMDE.View.createFieldValueValidityIndicator( $('.wrap-amounts') ),
@@ -312,5 +281,7 @@ $( function () {
 	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="periode"]' ), $( '#recurrence' ), scroller );
 	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="addressType"]' ), $( '#type-donor' ), scroller );
 	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="zahlweise"]' ), $( '#donation-payment' ), scroller );
+
+	new WMDE.Vue( WMDE.VueConfig );
 
 } );
