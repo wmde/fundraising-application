@@ -43,7 +43,7 @@ class ApplyForMembershipController {
 		}
 
 		if ( !$responseModel->isSuccessful() ) {
-			$this->logValidationErrors( $responseModel->getValidationResult() );
+			$this->logValidationErrors( $responseModel->getValidationResult(), $httpRequest );
 			return $this->newFailureResponse( $httpRequest );
 		}
 
@@ -227,15 +227,16 @@ class ApplyForMembershipController {
 		);
 	}
 
-	private function logValidationErrors( ApplicationValidationResult $validationResult ): void {
+	private function logValidationErrors( ApplicationValidationResult $validationResult, Request $httpRequest ): void {
 		$formattedConstraintViolations = [];
 		foreach ( $validationResult->getViolations() as $constraintViolationSource => $constraintViolation ) {
-			$formattedConstraintViolations[] = sprintf(
-				'Validation field "%s" of value "%s"',
+			$formattedConstraintViolations['validation_errors'][] = sprintf(
+				'Validation for field "%s" failed: "%s"',
 				$this->ffFactory->getTranslator()->trans( $constraintViolationSource ),
 				$this->ffFactory->getTranslator()->trans( $constraintViolation )
 			);
 		}
+		$formattedConstraintViolations['request_data'] = $httpRequest->request->all();
 		$this->ffFactory->getLogger()->warning(
 			'Unexpected server-side form validation errors.',
 			$formattedConstraintViolations

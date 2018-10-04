@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use Monolog\Handler\TestHandler;
+use Monolog\Logger;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -546,6 +548,25 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$response = $client->getResponse()->getContent();
 
 		$this->assertContains( 'Amount: 0,00', $response );
+	}
+
+	public function testGivenInvalidRequest_errorsAreLogged(): void {
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$testHandler = new TestHandler();
+				$factory->setLogger( new Logger( 'TestLogger', [ $testHandler ] ) );
+				$client->request(
+					'POST',
+					'/donation/add',
+					$this->newInvalidFormInput()
+				);
+				$this->assertTrue( $testHandler->hasWarningRecords() );
+				foreach ( $testHandler->getRecords() as $record ) {
+					$this->assertEquals( 'Unexpected server-side form validation errors.', $record['message'] );
+				}
+			}
+		);
 	}
 
 	private function newInvalidFormInput(): array {

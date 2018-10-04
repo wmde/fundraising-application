@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use Monolog\Handler\TestHandler;
+use Monolog\Logger;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Client;
@@ -119,6 +121,38 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			'email' => ValidMembershipApplication::APPLICANT_EMAIL_ADDRESS,
 			'phone' => ValidMembershipApplication::APPLICANT_PHONE_NUMBER,
 			'dob' => ValidMembershipApplication::APPLICANT_DATE_OF_BIRTH,
+
+			'payment_type' => (string)ValidMembershipApplication::PAYMENT_TYPE_DIRECT_DEBIT,
+			'membership_fee_interval' => (string)ValidMembershipApplication::PAYMENT_PERIOD_IN_MONTHS,
+			'membership_fee' => (string)ValidMembershipApplication::PAYMENT_AMOUNT_IN_EURO, // TODO: change to localized
+
+			'bank_name' => ValidMembershipApplication::PAYMENT_BANK_NAME,
+			'iban' => ValidMembershipApplication::PAYMENT_IBAN,
+			'bic' => ValidMembershipApplication::PAYMENT_BIC,
+			'account_number' => ValidMembershipApplication::PAYMENT_BANK_ACCOUNT,
+			'bank_code' => ValidMembershipApplication::PAYMENT_BANK_CODE,
+		];
+	}
+
+	private function newInvalidValidHttpParameters(): array {
+		return [
+			'membership_type' => ValidMembershipApplication::MEMBERSHIP_TYPE,
+
+			'adresstyp' => 'person',
+			'anrede' => ValidMembershipApplication::APPLICANT_SALUTATION,
+			'titel' => ValidMembershipApplication::APPLICANT_TITLE,
+			'vorname' => ValidMembershipApplication::APPLICANT_FIRST_NAME,
+			'nachname' => ValidMembershipApplication::APPLICANT_LAST_NAME,
+			'firma' => '',
+
+			'strasse' => ValidMembershipApplication::APPLICANT_STREET_ADDRESS,
+			'postcode' => ValidMembershipApplication::APPLICANT_POSTAL_CODE,
+			'ort' => ValidMembershipApplication::APPLICANT_CITY,
+			'country' => ValidMembershipApplication::APPLICANT_COUNTRY_CODE,
+
+			'email' => 'DEFINITELY_NOT_AN_EMAIL',
+			'phone' => ValidMembershipApplication::APPLICANT_PHONE_NUMBER,
+			'dob' => 'BLAHBLAH',
 
 			'payment_type' => (string)ValidMembershipApplication::PAYMENT_TYPE_DIRECT_DEBIT,
 			'membership_fee_interval' => (string)ValidMembershipApplication::PAYMENT_PERIOD_IN_MONTHS,
@@ -508,5 +542,24 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			$this->assertSame( 1, $bucketLogger->getEventCount() );
 			$this->assertInstanceOf( MembershipApplicationCreated::class, $bucketLogger->getFirstEvent() );
 		} );
+	}
+
+	public function testGivenInvalidRequest_errorsAreLogged(): void {
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$testHandler = new TestHandler();
+				$factory->setLogger( new Logger( 'TestLogger', [ $testHandler ] ) );
+				$client->request(
+					'POST',
+					'apply-for-membership',
+					$this->newInvalidValidHttpParameters()
+				);
+				$this->assertTrue( $testHandler->hasWarningRecords() );
+				foreach ( $testHandler->getRecords() as $record ) {
+					$this->assertEquals( 'Unexpected server-side form validation errors.', $record['message'] );
+				}
+			}
+		);
 	}
 }
