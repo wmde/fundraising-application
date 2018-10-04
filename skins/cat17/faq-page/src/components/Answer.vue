@@ -2,7 +2,8 @@
   <div id="answer" class="space-around">
   	<p>
 	{{ content }}
-	<span v-if="isPreview" class="link">some long german word here...</span>
+	<span v-show="!collapsed">The rest of the text appears here! Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span>
+	<span v-if="isPreview" @click="collapsed = !collapsed;" class="link">{{ toggleMessage }}</span>
 	</p>
 	
   </div>
@@ -12,6 +13,16 @@
 
 export default {
 	name: 'answer',
+	data() {
+		return {
+			collapsed: true
+		}
+	},
+	computed: {
+		toggleMessage: function() {
+			return this.collapsed ? 'Expand' : 'Collapse'
+		}
+	},
 	props: ['content', 'isPreview']
 }
 </script>
