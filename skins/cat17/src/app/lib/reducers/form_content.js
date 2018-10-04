@@ -23,6 +23,7 @@ function forceDebitTypeByBankData( state, payload ) {
 		return state;
 	}
 
+	//TODO check if the IBAN is DE IBAN / INTERNATIONAL IBAN / KTN FOR VALIDATION
 	if ( ( payload.contentName === 'iban' || payload.contentName === 'bic' ) && trimValue( payload.value ) ) {
 		return objectAssign( {}, state, { debitType: 'sepa' } );
 	} else if ( ( payload.contentName === 'accountNumber' || payload.contentName === 'bankCode' ) && trimValue( payload.value ) ) {
