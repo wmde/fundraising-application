@@ -19,6 +19,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\AmountParser;
 use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
+use WMDE\FunValidators\ConstraintViolation;
 
 /**
  * @license GNU GPL v2+
@@ -44,9 +45,11 @@ class AddDonationHandler {
 		$responseModel = $this->ffFactory->newAddDonationUseCase()->addDonation( $addDonationRequest );
 
 		if ( !$responseModel->isSuccessful() ) {
+			$this->logValidationErrors( $responseModel->getValidationErrors() );
 			return new Response(
 				$this->ffFactory->newDonationFormViolationPresenter()->present(
-					$responseModel->getValidationErrors(), $addDonationRequest,
+					$responseModel->getValidationErrors(),
+					$addDonationRequest,
 					$this->newTrackingInfoFromRequest( $request )
 				)
 			);
@@ -240,6 +243,24 @@ class AddDonationHandler {
 		$this->app['session']->set(
 			UpdateDonorController::ADDRESS_CHANGE_SESSION_KEY,
 			false
+		);
+	}
+
+	/**
+	 * @param ConstraintViolation[] $constraintViolations
+	 */
+	private function logValidationErrors( $constraintViolations ): void {
+		$formattedConstraintViolations = [];
+		foreach ($constraintViolations as $constraintViolation) {
+			$formattedConstraintViolations[] = sprintf ( 'Validation field "%s" of value "%s" failed with: %s',
+				$constraintViolation->getSource(),
+				$constraintViolation->getValue(),
+				$this->ffFactory->getTranslator()->trans( $constraintViolation->getMessageIdentifier() )
+			);
+		}
+		$this->ffFactory->getLogger()->warning(
+			'Unexpected server-side form validation errors.',
+			$formattedConstraintViolations
 		);
 	}
 }
