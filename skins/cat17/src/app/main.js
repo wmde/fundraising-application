@@ -46,5 +46,11 @@ module.exports = {
 	Actions: require( './lib/actions' ),
 	FormDataExtractor: require( './lib/form_data_extractor' ),
 	IntegerCurrency: require( './lib/integer_currency' ),
-	Scrolling: require( './lib/scrolling' )
+	Scrolling: require( './lib/scrolling' ),
+	Vue: require('vue'),
+	BankData: require('./components/BankData.vue'),
+	VueConfig: {
+		el: '#bank-name',
+		render: (h) => h( require('./components/BankData.vue').default )
+	}
 };
