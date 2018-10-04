@@ -47,8 +47,6 @@ $( function () {
       WMDE.Components.createBankDataComponent( store, {
         ibanElement: $( '#iban' ),
         bicElement: $( '#bic' ),
-        accountNumberElement: $( '#account-number' ),
-        bankCodeElement: $( '#bank-code' ),
         bankNameFieldElement: $( '#field-bank-name' ),
         bankNameDisplayElement: $( '#bank-name' )
       } ),
