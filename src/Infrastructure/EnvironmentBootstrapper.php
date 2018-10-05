@@ -15,6 +15,8 @@ class EnvironmentBootstrapper {
 	private const ENVIRONMENT_SETUP_MAP = [
 		'dev' => DevelopmentEnvironmentSetup::class,
 		'test' => TestEnvironmentSetup::class,
+		// User Acceptance Testing should be as close to production as possible
+		'uat' => ProductionEnvironmentSetup::class,
 		'prod' => ProductionEnvironmentSetup::class
 	];
 

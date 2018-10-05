@@ -4,7 +4,7 @@ spenden.wikimedia.de ansible_user=deploy
 
 
 [webservers:vars]
-# Environment to be run on the server. Valid names are 'dev' and 'prod'
+# Environment to be run on the server. Valid names are 'dev', 'uat' and 'prod'
 environment_name = "prod"
 
 # Base path where the code should be deployed. All following paths are relative to this. No slash at the end!

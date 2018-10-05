@@ -115,7 +115,14 @@ If you run a single docker container, you can pass the variable with the `-e` fl
 
     docker run -e APP_ENV=prod php some_script.php
 
-*Note:** PHPUnit tests are always run in the `test` environment configuration, regardless of `APP_ENV`.  
+Valid environment names are 
+
+* `dev` - development environment, mostly for local development
+* `test` - unit testing environment
+* `uat` - user acceptance testing
+* `prod` - production
+
+*Note:** PHPUnit tests are always run in the `test` environment configuration, regardless of `APP_ENV`!
 
 ## Running the tests
 
