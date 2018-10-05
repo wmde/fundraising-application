@@ -9,7 +9,7 @@
 				<h1>{$ 'page_not_found_header' | trans $}</h1>
 
 				<p>
-					{$ message | default( 'page_not_found' ) | trans $}
+					{$ message | default( 'page_not_found' ) | trans | raw $}
 				</p>
 
 				<p>

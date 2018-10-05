@@ -82,7 +82,7 @@
 			$( '<div />' )
 				.addClass( 'message' )
 				.addClass( 'success-message' )
-				.text( message || 'Vielen Dank! Die Nachricht wurde verschickt!' ) // TODO: is this default needed?
+				.html( message || 'Vielen Dank! Die Nachricht wurde verschickt!' ) // TODO: is this default needed?
 		);
 
 		$( '#cancel-link' ).text( 'Zurück zur Spendenbestätigung' ); // TODO: i18n
