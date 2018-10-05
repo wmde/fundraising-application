@@ -2,7 +2,7 @@ $( function () {
   /** global: WMDE */
 
   var initData = $( '#init-form' ),
-    store = WMDE.Store.createDonationStore(),
+    store = WMDE.donationStore = WMDE.Store.createDonationStore(),
     actions = WMDE.Actions
     ;
 
@@ -281,7 +281,5 @@ $( function () {
 	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="periode"]' ), $( '#recurrence' ), scroller );
 	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="addressType"]' ), $( '#type-donor' ), scroller );
 	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="zahlweise"]' ), $( '#donation-payment' ), scroller );
-
-	new WMDE.Vue( WMDE.VueConfig );
 
 } );
