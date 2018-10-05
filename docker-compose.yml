@@ -27,6 +27,8 @@ services:
       - .:/usr/share/nginx/www/spenden.wikimedia.de/current
       - var-data:/usr/share/nginx/www/spenden.wikimedia.de/current/var
     working_dir: /usr/share/nginx/www/spenden.wikimedia.de/current
+    environment:
+      - APP_ENV
     links:
       - database
       - mailhog

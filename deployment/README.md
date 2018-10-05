@@ -19,6 +19,10 @@ To deploy, run the following command:
 To deploy a different branch than `master`, run the following command:
 
     ansible-playbook -i inventory/test --extra-vars 'build_branch=test' deployment.yml
+    
+To deploy with a different environment (`dev` instead of `prod`), run the following command:
+
+    ansible-playbook -i inventory/test --extra-vars 'environment_name=dev' deployment.yml
 
 ## Rolling back deployments and understanding atomic deploys
 Each deployment is "atomic", that means that while the deployment script is still running, the web server delivers the old version of the application. The last step of the deployment script is activating the new version.
@@ -70,7 +74,9 @@ Log in to the server and create the directory **`/usr/share/nginx/www/DOMAIN_NAM
 ### Create inventory files on the deployment machine
 Inventory files contain server/environment specific information.
 
-Duplicate the example file `deployment/inventory/production_example` and set server names and file paths (as determined by the server setup). You need three files, one for test, one for staging and one for production.
+Duplicate the example file `deployment/inventory/production_example` and set server names and file paths (as determined by the server setup). You need a separate file for each domain you want to deploy to, e.g. test and production.
+
+If you want to bring the testing server more in line with the development environment, set the `environment_name` value to `dev`.
 
 For security reasons the contents of the `inventory` directory are not in the Git repository, except for the example. **Do not check in your inventory files.**
 
@@ -79,6 +85,8 @@ For security reasons the contents of the `inventory` directory are not in the Gi
 Log in to the deployment machine and in the configuration directory, create a new directory for the domain name.
 
 In the new directory create the file `config.prod.json` with all the necessary application data. You need to configure the credentials for the database, MCP and Paypal. You don't need to change values that are similar to values in `app/config/config.dist.json`.
+
+If you want to bring the testing server more in line with the development environment, name the file `config.dev.json`.
 
 The configurations are kept in a local Git repository, so you should commit and push your changes.  
 

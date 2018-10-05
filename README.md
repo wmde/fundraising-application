@@ -47,9 +47,10 @@ The application can now be reached at http://localhost:8082/index.php, debug inf
 
 The web and CLI entry points of the application check for the `APP_ENV` environment variable. 
 If it not set, the application assumes the value `development`. Each environment must have a corresponding configuration
-file in `app/config`, following the name pattern of `config.ENVIRONMENTNAME.json`.
+file in `app/config`, following the name pattern of `config.ENVIRONMENTNAME.json`. See the section "Running in different 
+environments" below to see how to set `APP_ENV`.
 
-You can add local modifications by adding a file that follows the name pattern of `config.ENVIRONMENTNAME.test.json`.
+You can add local modifications by adding a file that follows the name pattern of `config.ENVIRONMENTNAME.local.json`.
 
 The application merges the values from the configuration files with the default values from the file 
 `app/config/config.dist.json`.
@@ -87,6 +88,34 @@ In development the content repository is a composer dev-dependency. If you *want
 The following example shows the configuration when the content repository is at the same level as the application directory:
 
     "i18n-base-path": "../fundraising-frontend-content/i18n"
+
+### A/B test campaigns.
+
+For more information om how to set up the campaigns see "[How to Create an A/B Test](docs/HOWTO_Create_an_a_b_test.md).
+
+The campaign definitions are in the `app/config` directory. You can tell the application which files to use by editing 
+the `campaigns` value in `app/config/config.ENVIRONMENTNAME.json`. The campaign configuration files will be merged on 
+top of each other. 
+
+### Running in different environments
+By default, the configuration environment is `dev` and the configuration file is `config.dev.json`. If you want to 
+change that, you have to pass the environment variable to `make`, `docker` and `docker-compose` commands. 
+
+    make ci APP_ENV=prod
+
+For `docker-compose` you can either put create a file called `.env` in the application directory and, with the contents of
+
+    APP_ENV=prod     
+
+Alternatively, or if you want to override the defaults in the `.env` file, you set the variable in your shell like this:
+
+    export APP_ENV=prod
+
+If you run a single docker container, you can pass the variable with the `-e` flag:
+
+    docker run -e APP_ENV=prod php some_script.php
+
+*Note:** PHPUnit tests are always run in the `test` environment configuration, regardless of `APP_ENV`.  
 
 ## Running the tests
 
