@@ -282,4 +282,30 @@ $( function () {
 	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="addressType"]' ), $( '#type-donor' ), scroller );
 	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="zahlweise"]' ), $( '#donation-payment' ), scroller );
 
+	function mapStateToProps( state ) {
+		return {
+			formContent: state.donationFormContent
+		}
+	}
+
+	function mapActionToProps( dispatch ) {
+		return {
+			// TODO create appropriate actions, if needed
+			justAnExample() {
+				dispatch( actions.newChangeContentAction( 'firstName', 'Otto' ) )
+			}
+
+		}
+	}
+
+		/** global: WMDE */
+
+	WMDE.Vue.use(WMDE.VueRedux.reduxStorePlugin);
+
+		new WMDE.Vue({
+			// FIXME Import and create store directly when we no longer use the global variable anywhere else
+			store: store,
+			render: (h) => h( WMDE.VueRedux.connect( mapStateToProps, mapActionToProps )( WMDE.BankDataFoo ) )
+	}).$mount('#bank-name');
+
 } );
