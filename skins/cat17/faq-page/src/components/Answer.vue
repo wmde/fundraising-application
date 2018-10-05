@@ -2,7 +2,14 @@
   <div id="answer" class="space-around">
   	<p>
 	{{ content }}
-	<span v-if="isPreview" class="link">some long german word here...</span>
+	<!-- data-content-piece attribute should be adjusted based on how we compute the message for Expand/Collapse-->
+	<span v-if="isPreview" class="link"
+		data-content-target="/page/Häufige Fragen" 
+		data-track-content 
+		data-content-name="Toggle expand/collapse" 
+		data-content-piece="Toggle expand/collapse">
+	some long german word here...
+	</span>
 	</p>
 	
   </div>

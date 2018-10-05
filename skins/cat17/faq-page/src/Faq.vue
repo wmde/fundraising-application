@@ -1,7 +1,13 @@
 <template>
  <div id="faq" class="container">
  	<div v-if="!isPreview" class="inline space-above">
- 		<a @click="populatePageWithPreviewContent(); isPreview=true;">{{ preview.message }}</a>
+ 		<a @click="populatePageWithPreviewContent(); isPreview=true;"
+	 		data-content-target="/page/Häufige Fragen" 
+			data-track-content 
+			data-content-name="Back to overview" 
+			data-content-piece="Back to overview">
+ 		{{ preview.message }}
+		</a>
  	</div>
  	<h2>Häufige Fragen</h2>
  	<h5>Antworten zu Ihren Fragen zum Spendenprozess, Wikimedia und Wikipedia</h5>
@@ -31,7 +37,13 @@
 		<h5>Fragen und Antworten zu...</h5>
 		<ul>
 			<li v-for="topic in topics">
-				<a @click="populatePageByTopic( topic ); isPreview = false;">{{ topic.name }}</a>
+				<a @click="populatePageByTopic( topic ); isPreview = false;"
+					data-content-target="/page/Häufige Fragen" 
+					data-track-content 
+					data-content-name="Topic" 
+					data-content-piece="topic.name">
+				{{ topic.name }}
+				</a>
 			</li>
 		</ul>
 		<h5>Keine Antwort gefunden?</h5>
@@ -59,7 +71,6 @@ export default {
 	data() {
 		return {
 			isPreview: true,
-			backToPreviewMessage: 'Zurück zur Übersicht',
 			page: {},
 			preview: {
 				name: 'preview',
@@ -225,7 +236,7 @@ export default {
 	}
 }
 </script>
+
 <style lang="scss">
   @import '../../src/sass/layouts/pages/faq.scss'
 </style>
-
