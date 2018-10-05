@@ -26,7 +26,7 @@ class PageDisplayHandler {
 		$this->app = $app;
 	}
 
-	public function handle( $pageName ) {
+	public function handle( string $pageName ): string {
 		$pageSelector = $this->ffFactory->getContentPagePageSelector();
 
 		try {
@@ -65,6 +65,6 @@ class PageDisplayHandler {
 			$template = $pageTemplate;
 		}
 
-		return $this->ffFactory->getLayoutTemplate($template, $context);
+		return $this->ffFactory->getLayoutTemplate( $template, $context );
 	}
 }

@@ -26,7 +26,7 @@ class RouteRedirectionHandler {
 	}
 
 	private function getQueryString(): string {
-		if ( empty ( $this->queryString ) ) {
+		if ( empty( $this->queryString ) ) {
 			return '';
 		}
 
