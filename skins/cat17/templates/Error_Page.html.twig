@@ -7,7 +7,7 @@
 				<h1>{$ 'error_page_header' | trans $}</h1>
 
 				<p>
-					{$ 'error_page' | trans $}
+					{$ 'error_page' | trans | raw $}
 				</p>
 
 				{% if message is defined %}
