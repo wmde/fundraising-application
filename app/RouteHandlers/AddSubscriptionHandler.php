@@ -31,11 +31,11 @@ class AddSubscriptionHandler {
 		$responseModel = $useCase->addSubscription( $this->createSubscriptionRequest( $request ) );
 
 		if ( $request->query->has( 'callback' ) ) {
-			return $this->handleJSONP( $request, $responseModel );
+			return $this->handleJsonp( $request, $responseModel );
 		} elseif ( $this->app['request_stack.is_json'] ) {
-			return $this->handleJSON( $responseModel );
+			return $this->handleJson( $responseModel );
 		} else {
-			return $this->handleHTML( $request, $responseModel );
+			return $this->handleHtml( $request, $responseModel );
 		}
 	}
 
@@ -73,9 +73,9 @@ class AddSubscriptionHandler {
 		$subscriptionRequest->setTrackingString( $request->attributes->get( 'trackingCode', '' ) );
 	}
 
-	private function handleHTML( Request $request, ValidationResponse $responseModel ): Response {
+	private function handleHtml( Request $request, ValidationResponse $responseModel ): Response {
 		// "normal" request to get the form on first go
-		if ( $request->isMethod(Request::METHOD_GET) ) {
+		if ( $request->isMethod( Request::METHOD_GET ) ) {
 			return new Response(
 				$this->ffFactory->getLayoutTemplate( 'Subscription_Form.html.twig' )->render( [] )
 			);
@@ -92,11 +92,11 @@ class AddSubscriptionHandler {
 		);
 	}
 
-	private function handleJSON( ValidationResponse $responseModel ): Response {
+	private function handleJson( ValidationResponse $responseModel ): Response {
 		return $this->app->json( $this->ffFactory->newAddSubscriptionJsonPresenter()->present( $responseModel ) );
 	}
 
-	private function handleJSONP( Request $request, ValidationResponse $responseModel ): Response {
+	private function handleJsonp( Request $request, ValidationResponse $responseModel ): Response {
 		return $this->app->json( $this->ffFactory->newAddSubscriptionJsonPresenter()->present( $responseModel ) )
 			->setCallback( $request->query->get( 'callback' ) );
 	}

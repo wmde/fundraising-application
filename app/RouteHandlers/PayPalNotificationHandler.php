@@ -81,7 +81,7 @@ class PayPalNotificationHandler {
 		return $post->get( 'txn_type', '' ) === 'subscr_payment';
 	}
 
-	private function isForRecurringPayment( ParameterBag $post  ): bool {
+	private function isForRecurringPayment( ParameterBag $post ): bool {
 		return strpos( $post->get( 'txn_type', '' ), 'subscr_' ) === 0;
 	}
 

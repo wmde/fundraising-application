@@ -22,7 +22,7 @@ class PayPalNotificationHandlerForMembershipFee {
 
 	const TYPE_SUBSCRIPTION_SIGNUP = 'subscr_signup';
 	const TYPE_SUBSCRIPTION_PAYMENT = 'subscr_payment';
-	
+
 	private $ffFactory;
 
 	public function __construct( FunFunFactory $ffFactory ) {
