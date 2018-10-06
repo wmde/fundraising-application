@@ -8,8 +8,8 @@ var objectAssign = require( 'object-assign' ),
 	/**
 	 * Wrapper around underscore debounce function with a delay of 300 milliseconds
 	 *
-	 * @param {function} f
-	 * @param {Number} milliseconds
+	 * @param {Function} f
+	 * @param {number} milliseconds
 	 * @return {Function}
 	 */
 	defaultDebounce = function ( f, milliseconds ) {
@@ -209,7 +209,7 @@ module.exports = {
 	},
 
 	/**
-	 * @param store
+	 * @param {Object} store Store instance
 	 * @param {jQuery} inputElement
 	 * @param {jQuery} selectElement
 	 * @param {jQuery} hiddenElement

@@ -13,7 +13,7 @@ module.exports = function ( state ) {
 	;
 
 	if ( state.donationFormContent.addressType === 'person' || state.donationFormContent.addressType === 'firma' ) {
-		respectiveValidators = _.pick( state.donationInputValidation, fieldSets [ state.donationFormContent.addressType ] );
+		respectiveValidators = _.pick( state.donationInputValidation, fieldSets[ state.donationFormContent.addressType ] );
 
 		result.dataEntered = _.contains( _.pluck( respectiveValidators, 'dataEntered' ), true );
 

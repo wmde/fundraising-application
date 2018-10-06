@@ -20,7 +20,7 @@ var objectAssign = require( 'object-assign' ),
 	CurrencyFormatter = {
 		decimalDelimiter: '.',
 		/**
-		 * @param {Number} value
+		 * @param {number} value
 		 * @return {string}
 		 */
 		format: function ( value ) {

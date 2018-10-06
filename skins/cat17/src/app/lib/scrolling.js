@@ -137,7 +137,7 @@ module.exports = {
 	 * Ensure smooth scroll to the given anchor links. Make sure to only pass links on the same page that can be scrolled to.
 	 *
 	 * @param {jQuery} $links
-	 * @param {object} scroller
+	 * @param {Object} scroller
 	 */
 	addScrollToLinkAnchors: function ( $links, scroller ) {
 		var linkScroller = objectAssign( Object.create( LinkScroller ), { scroller: scroller } );

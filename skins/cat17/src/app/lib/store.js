@@ -10,8 +10,12 @@ var Redux = require( 'redux' ),
 	asynchronousRequests = require( './reducers/async_requests' ),
 	middlewares = [ reduxPromise ];
 
-/* jshint ignore:start */ // Ignore console.log calls
-/** @see http://redux.js.org/docs/api/applyMiddleware.html */
+/* eslint-disable no-console */ // Ignore console.log calls
+/**
+ * @param {Object} store
+ * @see http://redux.js.org/docs/api/applyMiddleware.html
+ * @return {Object}
+ * */
 function logger( store ) {
 	var getState = store.getState;
 
@@ -36,7 +40,7 @@ function logger( store ) {
 if ( process.env.REDUX_LOG === 'on' ) {
 	middlewares.push( logger );
 }
-/* jshint ignore:end */
+/* eslint-enable no-console */
 // Different stores for different pages, does not violate Redux pattern
 module.exports = {
 	createDonationStore: function ( initialState ) {

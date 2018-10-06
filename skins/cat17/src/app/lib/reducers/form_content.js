@@ -8,10 +8,14 @@ var objectAssign = require( 'object-assign' ),
  *
  * @param {Object} state
  * @param {Object} initialState
- * @returns {Array}
+ * @return {Array}
  */
 function getInvalidKeys( state, initialState ) {
 	return _.keys( _.omit( state, _.keys( initialState ) ) );
+}
+
+function trimValue( value ) {
+	return value.replace( /^\s+|\s+$/gm, '' );
 }
 
 function forceDebitTypeByBankData( state, payload ) {
@@ -42,10 +46,6 @@ function forceAddressTypeForActiveMembership( state ) {
 	} else {
 		return state;
 	}
-}
-
-function trimValue( value ) {
-	return value.replace( /^\s+|\s+$/gm, '' );
 }
 
 module.exports = {

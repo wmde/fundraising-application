@@ -29,6 +29,8 @@ module.exports = {
 	},
 	/**
 	 * Seemingly excess selectors to make sure not to select extra (hidden) form fields (cp. SuboptionDisplayHandler)
+	 * @param {jQuery} $container
+	 * @return {[string]}
 	 */
 	mapFromRadioInfoTexts: function ( $container ) {
 		var map = {};
