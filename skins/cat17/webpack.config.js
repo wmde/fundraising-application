@@ -1,9 +1,11 @@
 const path = require( 'path' );
+const glob = require( 'glob' );
 const { getIfUtils, removeEmpty } = require( 'webpack-config-utils' );
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 const CleanWebpackPlugin = require( 'clean-webpack-plugin' );
 const ConcatPlugin = require( 'webpack-concat-plugin' );
 const CopyWebpackPlugin = require( 'copy-webpack-plugin' );
+const ImageminPlugin = require( 'imagemin-webpack-plugin' ).default;
 
 // TODO
 // - Copy fonts, pdfs etc
@@ -52,7 +54,18 @@ module.exports = mode => {
 			} ),
 			new CopyWebpackPlugin( [
 				{ from: 'src/scripts/*.js', to: 'scripts/', flatten: true  } // TODO transform with uglify
-			] )
+			] ),
+			new ImageminPlugin( {
+				externalImages: {
+					//context: 'src',
+					sources: glob.sync('src/assets/images/*'),
+					destination: 'web/assets/images',
+					fileName: '[name].[ext]',
+					jpegtran: { progressive: true },
+					gifsicle: { interlaced: true },
+					svgo: { plugins: [ { removeUnknownsAndDefaults: false }, { cleanupIDs: false } ] }
+				}
+			} )
 		],
 		module: {
 			rules: [
