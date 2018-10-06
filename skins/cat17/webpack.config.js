@@ -1,8 +1,12 @@
 const path = require( 'path' );
-const merge = require( 'webpack-merge' )
+const merge = require( 'webpack-merge' );
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 // TODO
 // - Generate styles
+//   - Fix font paths
+//   - Minify in prod
 // - Concatenate script assets
 // - Copy fonts, pdfs etc
 // - use environment configurations (dev, prod)
@@ -12,22 +16,32 @@ const merge = require( 'webpack-merge' )
 // - delete gulpfile & browserify
 // - Add dev server & integrate HMR into rest of application
 
+const OUTPUT_PATH = path.resolve( __dirname, 'web' );
+
 const commonConfig = merge( [
 	{
 		entry: {
 			'scripts/wmde': './src/app/main.js',
-			'styles/main': './src/sass/main.scss'
+			'css/main': './src/sass/main.scss'
 		},
 		output: {
 			filename: '[name].js',
-			path: path.resolve( __dirname, 'web' )
+			path: OUTPUT_PATH
 		},
+		plugins: [
+			new CleanWebpackPlugin( OUTPUT_PATH, { exclude:  ['.gitkeep'], verbose: true }),
+			new MiniCssExtractPlugin({
+				filename: "[name].css"
+			})
+		],
 		module: {
 			rules: [
 				{
 					test: /\.scss$/,
 					use: [
-						{ loader: "style-loader" },
+						{
+							loader: MiniCssExtractPlugin.loader
+						},
 						{ loader:  "css-loader" }, // translates CSS into CommonJS
 						{
 							// Loader for webpack to process CSS with PostCSS
