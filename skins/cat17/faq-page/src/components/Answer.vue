@@ -20,13 +20,13 @@ export default {
 	data() {
 		return {
 			collapsed: true
-		}
+		};
 	},
 	computed: {
-		toggleMessage: function() {
-			return this.collapsed ? 'Expand' : 'Collapse'
+		toggleMessage() {
+			return this.collapsed ? 'Expand' : 'Collapse';
 		}
 	},
-	props: ['content', 'isPreview']
-}
+	props: [ 'content', 'isPreview' ]
+};
 </script>

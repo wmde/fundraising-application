@@ -57,9 +57,9 @@
 </template>
 
 <script>
-import SearchBar from './components/SearchBar.vue'
-import Question from './components/Question.vue'
-import Answer from './components/Answer.vue'
+import SearchBar from './components/SearchBar.vue';
+import Question from './components/Question.vue';
+import Answer from './components/Answer.vue';
 
 export default {
 	name: 'faq',
@@ -234,7 +234,7 @@ export default {
 			this.page = this.preview;
 		}
 	}
-}
+};
 </script>
 
 <style lang="scss">
