@@ -1,7 +1,7 @@
 const path = require( 'path' );
-const merge = require( 'webpack-merge' );
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { getIfUtils } = require( 'webpack-config-utils' );
+const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
+const CleanWebpackPlugin = require( 'clean-webpack-plugin' );
 
 // TODO
 // - Generate styles
@@ -17,8 +17,11 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 const OUTPUT_PATH = path.resolve( __dirname, 'web' );
 
-const commonConfig = merge( [
-	{
+module.exports = mode => {
+	const { ifProduction } = getIfUtils( mode )
+
+	return 	{
+		mode: ifProduction( 'production', 'development' ),
 		entry: {
 			'scripts/wmde': './src/app/main.js',
 			'css/main': './src/sass/main.scss'
@@ -80,28 +83,7 @@ const commonConfig = merge( [
 					}]
 				}
 			]
-		}
+		},
+		devtool: ifProduction( 'source-map', 'eval' )
 	}
-] );
-
-const productionConfig = merge( [
-	{
-		devtool: 'source-map'
-	}
-] );
-
-const developmentConfig = merge( [
-	{
-		devtool: 'eval'
-	}
-] );
-
-module.exports = mode => {
-	mode = mode || 'development';
-
-	if (mode === "production") {
-		return merge( commonConfig, productionConfig, { mode } );
-	}
-
-	return merge( commonConfig, developmentConfig, { mode } );
 };
