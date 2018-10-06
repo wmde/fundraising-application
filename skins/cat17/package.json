@@ -15,7 +15,10 @@
     "test": "tape 'src/app/tests/**/*.js' | tap-min",
     "cs": "jshint src/app && jscs src/app",
     "ci": "npm run cs && npm run test && npm run build-assets",
-    "build-assets": "cross-env NODE_ENV=production gulp && npm run build-faq",
+    "build-assets": "npm-run-all --parallel webpack-build-assets build-css build-faq",
+    "build-sass": "node-sass --output-style compressed -o web/css --include-path node_modules src/sass/main.scss",
+    "optimize-css": "postcss -r web/css",
+    "build-css": "npm run build-sass && npm run optimize-css",
     "webpack-build-assets": "webpack --env production"
   },
   "repository": {
@@ -32,6 +35,7 @@
   },
   "homepage": "https://github.com/wmde/FundraisingFrontend#readme",
   "devDependencies": {
+    "@csstools/postcss-sass": "^3.0.0",
     "autoprefixer": "^9.1.5",
     "babel-core": "^6.0.0",
     "babel-plugin-transform-runtime": "^6.0.0",
@@ -79,8 +83,10 @@
     "jshint": "^2.9.6",
     "mini-css-extract-plugin": "^0.4.3",
     "node-sass": "^4.9.3",
+    "npm-run-all": "^4.1.3",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "postcss-clean": "^1.1.0",
+    "postcss-cli": "^6.0.0",
     "postcss-loader": "^3.0.0",
     "sass-loader": "^7.1.0",
     "sinon": "^1.17.3",
