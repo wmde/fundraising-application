@@ -5,12 +5,11 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 // TODO
 // - Generate styles
-//   - Fix font paths
 //   - Minify in prod
 // - Concatenate script assets
 // - Copy fonts, pdfs etc
 // - use environment configurations (dev, prod)
-// - minify images
+// - minify images (and make font regex matcher more specific to put the logo SVGs into images folder)
 // - build faq (+ vue)
 // - replace npm build scripts
 // - delete gulpfile & browserify
@@ -40,7 +39,11 @@ const commonConfig = merge( [
 					test: /\.scss$/,
 					use: [
 						{
-							loader: MiniCssExtractPlugin.loader
+							// Extract CSS modules into files
+							loader: MiniCssExtractPlugin.loader,
+							options: {
+								publicPath: '../'
+							}
 						},
 						{ loader:  "css-loader" }, // translates CSS into CommonJS
 						{
@@ -49,7 +52,7 @@ const commonConfig = merge( [
 							options: {
 								plugins: function () {
 									return [
-										require('autoprefixer')
+										require( 'autoprefixer' )
 									];
 								}
 							}
