@@ -63,6 +63,14 @@ module.exports = mode => {
 				}
 			} )
 		],
-		devtool: ifProduction( 'source-map', 'eval' )
+		devtool: ifProduction( 'source-map', 'eval' ),
+		stats: {
+			all: false,
+			modules: true,
+			maxModules: 0,
+			errors: true,
+			warnings: true,
+			warningsFilter: [/font/]
+		}
 	}
 };
