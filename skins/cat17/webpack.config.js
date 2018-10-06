@@ -2,11 +2,11 @@ const path = require( 'path' );
 const { getIfUtils, removeEmpty } = require( 'webpack-config-utils' );
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 const CleanWebpackPlugin = require( 'clean-webpack-plugin' );
+const ConcatPlugin = require( 'webpack-concat-plugin' );
+const CopyWebpackPlugin = require( 'copy-webpack-plugin' );
 
 // TODO
-// - Concatenate script assets
 // - Copy fonts, pdfs etc
-// - use environment configurations (dev, prod)
 // - minify images (and make font regex matcher more specific to put the logo SVGs into images folder)
 // - build faq (+ vue, with extra CSS file)
 // - replace npm build scripts
@@ -16,7 +16,7 @@ const CleanWebpackPlugin = require( 'clean-webpack-plugin' );
 const OUTPUT_PATH = path.resolve( __dirname, 'web' );
 
 module.exports = mode => {
-	const { ifProduction } = getIfUtils( mode )
+	const { ifProduction } = getIfUtils( mode );
 
 	return 	{
 		mode: ifProduction( 'production', 'development' ),
@@ -26,13 +26,33 @@ module.exports = mode => {
 		},
 		output: {
 			filename: '[name].js',
-			path: OUTPUT_PATH
+			path: OUTPUT_PATH,
+			library: 'WMDE'
 		},
 		plugins: [
-			new CleanWebpackPlugin( OUTPUT_PATH, { exclude:  ['.gitkeep'], verbose: true }),
+			new CleanWebpackPlugin( OUTPUT_PATH, { exclude:  ['.gitkeep'], verbose: true } ),
 			new MiniCssExtractPlugin({
 				filename: "[name].css"
-			})
+			}),
+			new ConcatPlugin( {
+				uglify: true,
+				sourceMap: true,
+				name: 'vendor',
+				outputPath: 'scripts',
+				fileName: 'vendor.js',
+				filesToConcat: [
+					'jquery/dist/jquery.js',
+					'jcf/dist/js/jcf.js',
+					'jcf/dist/js/jcf.select.js',
+					'jcf/dist/js/jcf.scrollable.js'
+				],
+				attributes: {
+					async: true
+				}
+			} ),
+			new CopyWebpackPlugin( [
+				{ from: 'src/scripts/*.js', to: 'scripts/', flatten: true  } // TODO transform with uglify
+			] )
 		],
 		module: {
 			rules: [
