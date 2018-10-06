@@ -8,8 +8,7 @@ const ImageminPlugin = require( 'imagemin-webpack-plugin' ).default;
 
 // TODO
 // - build faq (+ vue, with extra CSS file)
-// - delete gulpfile & browserify
-// - Add dev server & integrate HMR into rest of application
+// - Add watch task to npm
 
 const OUTPUT_PATH = path.resolve( __dirname, 'web' );
 
