@@ -1,16 +1,14 @@
 const path = require( 'path' );
-const { getIfUtils } = require( 'webpack-config-utils' );
+const { getIfUtils, removeEmpty } = require( 'webpack-config-utils' );
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 const CleanWebpackPlugin = require( 'clean-webpack-plugin' );
 
 // TODO
-// - Generate styles
-//   - Minify in prod
 // - Concatenate script assets
 // - Copy fonts, pdfs etc
 // - use environment configurations (dev, prod)
 // - minify images (and make font regex matcher more specific to put the logo SVGs into images folder)
-// - build faq (+ vue)
+// - build faq (+ vue, with extra CSS file)
 // - replace npm build scripts
 // - delete gulpfile & browserify
 // - Add dev server & integrate HMR into rest of application
@@ -54,9 +52,14 @@ module.exports = mode => {
 							loader: 'postcss-loader',
 							options: {
 								plugins: function () {
-									return [
-										require( 'autoprefixer' )
-									];
+									return removeEmpty( [
+										require( 'autoprefixer' ),
+										ifProduction(
+											require( 'postcss-clean' )( {
+												compatibility: 'ie10'
+											} )
+										)
+									] );
 								}
 							}
 						},
