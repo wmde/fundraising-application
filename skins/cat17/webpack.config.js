@@ -15,7 +15,7 @@ const OUTPUT_PATH = path.resolve( __dirname, 'web' );
 module.exports = mode => {
 	const { ifProduction } = getIfUtils( mode );
 
-	return 	{
+	return {
 		mode: ifProduction( 'production', 'development' ),
 		entry: {
 			'scripts/wmde': './src/app/main.js'
@@ -31,8 +31,8 @@ module.exports = mode => {
 				verbose: true
 			} ),
 			new ConcatPlugin( {
-				uglify: true,
-				sourceMap: true,
+				uglify: ifProduction( true, false ),
+				sourceMap: ifProduction( true, false ),
 				name: 'vendor',
 				outputPath: 'scripts',
 				fileName: 'vendor.js',
@@ -51,6 +51,7 @@ module.exports = mode => {
 				{ from: 'assets/fonts/**/*', context: 'src'  }
 			], { debug: false } ),
 			new ImageminPlugin( {
+				cacheFolder: path.resolve('./.image-cache'),
 				externalImages: {
 					//context: 'src',
 					sources: glob.sync('src/assets/images/*'),
