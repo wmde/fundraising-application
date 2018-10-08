@@ -644,6 +644,19 @@ class FunFunFactory implements ServiceProviderInterface {
 		}
 	}
 
+	public function getFaqContent(): string {
+		try {
+			$json = ( new SimpleFileFetcher() )->fetchFile( $this->getI18nDirectory() . '/data/faq.json' );
+			if ( $json === '' ) {
+				throw new RuntimeException( 'no_questions_defined' );
+			}
+			return $json;
+		}
+		catch( FileFetchingException $e ) {
+			throw new RuntimeException( 'no_questions_defined' );
+		}
+	}
+
 	public function setSkinTwigEnvironment( Twig_Environment $twig ): void {
 		$this->pimple['skin_twig_environment'] = $twig;
 	}
