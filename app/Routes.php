@@ -308,6 +308,15 @@ class Routes {
 			}
 		)->bind( 'contact' );
 
+		$app->get(
+			'faq',
+			function () use ( $ffFactory ) {
+				return $ffFactory->getLayoutTemplate( 'faq.html.twig' )->render(
+					[ 'faq_content' => $ffFactory->getFAQContent() ]
+				);
+			}
+		)->bind( 'faq' );
+
 		$app->post(
 			'donation/cancel',
 			function ( Request $request ) use ( $ffFactory ) {

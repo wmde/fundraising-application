@@ -3,9 +3,12 @@
 {% block page_identifier %}faq{% endblock%}
 
 {% block main %}
-	<div id="faq"></div>
+	<div id="faq" data-content="{$ faq_content $}"></div>
 {% endblock %}
 
 {% block scripts %}
+	<script type="text/javascript">
+		var faqContent = JSON.parse( document.getElementById( "faq" ).getAttribute( "data-content" ) );
+	</script>
 	<script src="{$ basepath $}{$ '/skins/cat17/scripts/faq.js' | prefix_file $}"></script>
 {% endblock %}
