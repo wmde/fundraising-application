@@ -1,7 +1,6 @@
 const path = require( 'path' );
 const glob = require( 'glob' );
 const { getIfUtils } = require( 'webpack-config-utils' );
-const CleanWebpackPlugin = require( 'clean-webpack-plugin' );
 const ConcatPlugin = require( 'webpack-concat-plugin' );
 const CopyWebpackPlugin = require( 'copy-webpack-plugin' );
 const ImageminPlugin = require( 'imagemin-webpack-plugin' ).default;
@@ -26,10 +25,6 @@ module.exports = mode => {
 			library: 'WMDE'
 		},
 		plugins: [
-			new CleanWebpackPlugin( OUTPUT_PATH, {
-				exclude:  [ '.gitkeep', 'css' ],
-				verbose: true
-			} ),
 			new ConcatPlugin( {
 				uglify: ifProduction( true, false ),
 				sourceMap: ifProduction( true, false ),
