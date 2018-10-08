@@ -28,14 +28,12 @@ class DevelopmentEnvironmentSetup implements EnvironmentSetup {
 	}
 
 	private function setPaypalLogger( FunFunFactory $factory ) {
-		$logger = new Logger( 'paypal' );
-		$logger->pushHandler( $this->logHandler );
+		$logger = new Logger( 'paypal', [ $this->logHandler ] );
 		$factory->setPaypalLogger( $logger );
 	}
 
 	private function setSofortLogger( FunFunFactory $factory ) {
-		$logger = new Logger( 'sofort' );
-		$logger->pushHandler( $this->logHandler );
+		$logger = new Logger( 'sofort', [ $this->logHandler ] );
 		$factory->setSofortLogger( $logger );
 	}
 

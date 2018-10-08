@@ -23,13 +23,12 @@ class LoggerFactory {
 
 	private $config;
 
-	public function __construct( array $config = null ) {
+	public function __construct( array $config ) {
 		$this->config = $config;
 	}
 
 	public function getLogger(): Logger {
-		$logger = new Logger( 'application' );
-		$logger->pushHandler( $this->newHandler() );
+		$logger = new Logger( 'application', [ $this->newHandler() ] );
 		return $logger;
 	}
 
