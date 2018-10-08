@@ -1,24 +1,32 @@
 <template>
   <div id="answer" class="space-around">
-  	<p>
+  <p>
 	{{ content }}
-	<!-- data-content-piece attribute should be adjusted based on how we compute the message for Expand/Collapse-->
-	<span v-if="isPreview" class="link"
+	<span v-show="!collapsed">The rest of the text appears here! Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span>
+	<span v-if="isPreview" @click="collapsed = !collapsed;" class="link"
 		data-content-target="/page/Häufige Fragen" 
 		data-track-content 
 		data-content-name="Toggle expand/collapse" 
 		data-content-piece="Toggle expand/collapse">
-	some long german word here...
+	{{ toggleMessage }}
 	</span>
 	</p>
-	
   </div>
 </template>
 
 <script>
-
 export default {
 	name: 'answer',
+	data() {
+		return {
+			collapsed: true
+		}
+	},
+	computed: {
+		toggleMessage: function() {
+			return this.collapsed ? 'Expand' : 'Collapse'
+		}
+	},
 	props: ['content', 'isPreview']
 }
 </script>
