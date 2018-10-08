@@ -82,7 +82,7 @@ module.exports = {
 	},
 	/**
 	 * @param {string|jQuery} longText The value to set
-	 * @param {object} config Config object to chose the method used to update the element, e.g. { updateMethod: 'html' }
+	 * @param {Object} config Config object to chose the method used to update the element, e.g. { updateMethod: 'html' }
 	 */
 	setLongText: function ( longText, config ) {
 		if ( !this.longText ) {
@@ -141,4 +141,3 @@ module.exports = {
 		}
 	}
 };
-

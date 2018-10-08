@@ -21,10 +21,11 @@ var objectAssign = require( 'object-assign' ),
 	},
 
 	/**
-	 *
+	 * @constructor
 	 * @param {Object} store Redux store
 	 * @param {ValidationDispatcher[]} dispatchers
 	 * @param {string} formContentName Field name for the store to access form contents, e.g. 'donationFormContent' or 'membershipFormContent'
+	 * @return {ValidationDispatcherCollection}
 	 */
 	createValidationDispatcherCollection = function ( store, dispatchers, formContentName ) {
 		var collection = objectAssign( Object.create( ValidationDispatcherCollection ), {

@@ -28,8 +28,8 @@ var objectAssign = require( 'object-assign' ),
 	 *
 	 * When IE support is finally ditched and we use jQuery >= 3.0, this wrapper method must be removed.
 	 *
-	 * @param jQueryDeferredObject
-	 * @returns {Promise}
+	 * @param {jQueryDeferredObject} jQueryDeferredObject
+	 * @return {Promise}
 	 */
 	jQueryDeferredToPromise = function ( jQueryDeferredObject ) {
 		return new Promise( function ( resolve, reject ) {
@@ -140,6 +140,8 @@ var objectAssign = require( 'object-assign' ),
 		},
 		/**
 		 * @private
+		 * @param {Object} formValues
+		 * @return {Promise}
 		 */
 		validateSepa: function ( formValues ) {
 			if ( formValues.iban === '' ) {
@@ -155,6 +157,8 @@ var objectAssign = require( 'object-assign' ),
 		},
 		/**
 		 * @private
+		 * @param {Object} formValues
+		 * @return {Promise}
 		 */
 		validateNonSepa: function ( formValues ) {
 			if ( formValues.accountNumber === '' || formValues.bankCode === '' ) {
@@ -171,6 +175,9 @@ var objectAssign = require( 'object-assign' ),
 		},
 		/**
 		 * @private
+		 * @param {string} apiUrl
+		 * @param {Object} urlArguments
+		 * @return {Promise}
 		 */
 		getValidationResultFromApi: function ( apiUrl, urlArguments ) {
 			return jQueryDeferredToPromise(
@@ -202,7 +209,6 @@ var objectAssign = require( 'object-assign' ),
 	/**
 	 *
 	 * @param {string} validationUrl
-	 * @param {object} amountFormatter Formatter object that supports the .format method
 	 * @param {Function} sendFunction jQuery.post function or equivalent
 	 * @return {AmountValidator}
 	 */
@@ -216,7 +222,7 @@ var objectAssign = require( 'object-assign' ),
 	/**
 	 *
 	 * @param {string} validationUrl
-	 * @param {object} feeFormatter Formatter object that supports the .format method
+	 * @param {Object} feeFormatter Formatter object that supports the .format method
 	 * @param {Function} sendFunction jQuery.post function or equivalent
 	 * @return {*}
 	 */

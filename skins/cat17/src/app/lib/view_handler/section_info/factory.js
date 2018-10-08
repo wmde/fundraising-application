@@ -7,10 +7,10 @@ var objectAssign = require( 'object-assign' ),
 	 *
 	 * @param {string} type
 	 * @param {jQuery} widgetNode A HTML node representing a widget
-	 * @param {object} valueIconMap Mapping of value to icon
-	 * @param {object} valueTextMap Mapping of value to text
-	 * @param {object} valueLongTextMap Mapping of value to longText
-	 * @param {object} additionalDependencies Additional properties that will be merged into the instance of type
+	 * @param {Object} valueIconMap Mapping of value to icon
+	 * @param {Object} valueTextMap Mapping of value to text
+	 * @param {Object} valueLongTextMap Mapping of value to longText
+	 * @param {Object} additionalDependencies Additional properties that will be merged into the instance of type
 	 * @return {SectionInfo} or a child
 	 */
 	createInstance = function ( type, widgetNode, valueIconMap, valueTextMap, valueLongTextMap, additionalDependencies ) {
@@ -37,12 +37,12 @@ var objectAssign = require( 'object-assign' ),
 	 *
 	 * We still use jQuery as the selector engine for sub-elements. Possible todo
 	 *
-	 * @param type
+	 * @param {string} type
 	 * @param {jQuery} containers A list of HTML node representing a widget (matched by the same selector)
-	 * @param {object} valueIconMap Mapping of value to icon
-	 * @param {object} valueTextMap Mapping of value to text
-	 * @param {object} valueLongTextMap Mapping of value to longText
-	 * @param {object} additionalDependencies Additional properties that will be merged into the instance of type
+	 * @param {Object} valueIconMap Mapping of value to icon
+	 * @param {Object} valueTextMap Mapping of value to text
+	 * @param {Object} valueLongTextMap Mapping of value to longText
+	 * @param {Object} additionalDependencies Additional properties that will be merged into the instance of type
 	 * @return {SectionInfo} or a child
 	 */
 	createProxy = function ( type, containers, valueIconMap, valueTextMap, valueLongTextMap, additionalDependencies ) {

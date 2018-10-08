@@ -56,10 +56,13 @@ $font-main-semibold: 600;
 $font-size-base: 16px;
 $font-size-base-unitless: 16;
 
-// Buttons
+// Paths
 
 $asset-path: "../assets";
 $font-path: "#{$asset-path}/fonts";
 $icomoon-font-path: "#{$font-path}/wikimedia";
 $opensans-font-path: "#{$font-path}/opensans";
 $image-path: "#{$asset-path}/images";
+
+// Bootstrap icon font override
+$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";

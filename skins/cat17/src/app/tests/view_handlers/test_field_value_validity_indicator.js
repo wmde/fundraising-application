@@ -57,4 +57,3 @@ test( 'When validation state has invalid status, it is indicated', function ( t 
 	t.ok( inputContainer.removeClassSpy.withArgs( 'valid' ).calledOnce, 'input field set to not valid' );
 	t.end();
 } );
-

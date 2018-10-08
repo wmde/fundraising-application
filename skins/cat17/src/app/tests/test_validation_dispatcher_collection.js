@@ -32,4 +32,3 @@ test( 'ValidationDispatcherCollection update method calls dispatchers', function
 	t.ok( validatorSpy.dispatchIfChanged.calledWith( formContent, storeSpy ), 'dispatchers are called' );
 	t.end();
 } );
-

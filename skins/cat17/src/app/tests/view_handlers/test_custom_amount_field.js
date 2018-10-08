@@ -7,8 +7,8 @@ var test = require( 'tape-catch' ),
 
 test( 'Creation appends special focus events', function ( t ) {
 	var element = {
-			on: sinon.stub()
-		}
+		on: sinon.stub()
+	}
 	;
 
 	amountField.createCustomAmountField( element );

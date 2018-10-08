@@ -13,7 +13,7 @@ module.exports = function ( state ) {
 	;
 
 	if ( state.membershipFormContent.addressType === 'person' || state.membershipFormContent.addressType === 'firma' ) {
-		respectiveValidators = _.pick( state.membershipInputValidation, fieldSets [ state.membershipFormContent.addressType ] );
+		respectiveValidators = _.pick( state.membershipInputValidation, fieldSets[ state.membershipFormContent.addressType ] );
 
 		result.dataEntered = _.contains( _.pluck( respectiveValidators, 'dataEntered' ), true );
 

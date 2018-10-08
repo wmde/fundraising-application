@@ -7,8 +7,8 @@ var test = require( 'tape-catch' ),
 
 test( 'Attaching adds listener on keypress', function ( t ) {
 	var element = {
-			on: sinon.stub()
-		}
+		on: sinon.stub()
+	}
 	;
 
 	NumericInputHandler.createNumericInputHandler( element );
@@ -112,4 +112,3 @@ test( 'Prevents multiple valid delimiter pressed', function ( t ) {
 
 	t.end();
 } );
-

@@ -26,7 +26,7 @@ var _ = require( 'underscore' ),
 		 *
 		 * @param {Object} formValues
 		 * @param {Store} store
-		 * @returns {*} Action object or null
+		 * @return {*} Action object or null
 		 */
 		dispatchIfChanged: function ( formValues, store ) {
 			var selectedValues = _.pick( formValues, this.fields ),

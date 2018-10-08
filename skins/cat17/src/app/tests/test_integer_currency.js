@@ -63,9 +63,9 @@ test( 'German locale - parsing invalid strings', function ( t ) {
 	;
 	inputs.map( function ( invalidInput ) {
 		t.throws( function () {
-				parser.parse( invalidInput );
-			},
-			'"' + invalidInput + '" should throw exception' );
+			parser.parse( invalidInput );
+		},
+		'"' + invalidInput + '" should throw exception' );
 	} );
 	t.end();
 } );
@@ -129,9 +129,9 @@ test( 'English locale - parsing invalid strings', function ( t ) {
 	;
 	inputs.map( function ( invalidInput ) {
 		t.throws( function () {
-				parser.parse( invalidInput );
-			},
-			'"' + invalidInput + '" should throw exception' );
+			parser.parse( invalidInput );
+		},
+		'"' + invalidInput + '" should throw exception' );
 	} );
 	t.end();
 } );

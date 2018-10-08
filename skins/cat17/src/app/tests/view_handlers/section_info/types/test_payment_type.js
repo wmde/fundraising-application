@@ -91,10 +91,10 @@ test( 'Payment type BEZ info is set in respective elements', function ( t ) {
 	t.assertNthBankDataElementIsTag( bankData, 1, '<dd>', 'Bank data IBAN set' );
 	t.assertNthBankDataElementHasText( bankData, 1, '4711', 'Bank data IBAN set' );
 
-	t.assertNthBankDataElementIsTag( bankData, 2, '<dt>', 'Bank data BIC title set'  );
+	t.assertNthBankDataElementIsTag( bankData, 2, '<dt>', 'Bank data BIC title set' );
 	t.assertNthBankDataElementHasText( bankData, 2, 'BIC', 'Bank data BIC title set' );
 
-	t.assertNthBankDataElementIsTag( bankData, 3, '<dd>', 'Bank data BIC set'  );
+	t.assertNthBankDataElementIsTag( bankData, 3, '<dd>', 'Bank data BIC set' );
 	t.assertNthBankDataElementHasText( bankData, 3, '8888', 'Bank data BIC set' );
 
 	t.equals( paymentTypeInfo.toString(), '<div>', 'text itself wrapped in another block-level element' );

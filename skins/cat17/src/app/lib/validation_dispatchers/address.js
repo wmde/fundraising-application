@@ -41,4 +41,3 @@ var objectAssign = require( 'object-assign' ),
 	};
 
 module.exports = createAddressValidationDispatcher;
-

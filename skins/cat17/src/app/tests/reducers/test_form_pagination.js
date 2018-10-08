@@ -69,4 +69,3 @@ test( 'ADD_PAGE adds page names', function ( t ) {
 	t.deepEqual( secondPageState.pages, [ 'foo', 'bar' ] );
 	t.end();
 } );
-
