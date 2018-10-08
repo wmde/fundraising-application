@@ -68,7 +68,7 @@ class ApplyForMembershipController {
 
 		$request->setMembershipType( $httpRequest->request->get( 'membership_type', '' ) );
 
-		if ( $httpRequest->request->get( 'adresstyp', '' )  === 'firma' ) {
+		if ( $httpRequest->request->get( 'adresstyp', '' ) === 'firma' ) {
 			$request->markApplicantAsCompany();
 		}
 
@@ -118,7 +118,7 @@ class ApplyForMembershipController {
 		return $bankData;
 	}
 
-	private function newFailureResponse( Request $httpRequest ) {
+	private function newFailureResponse( Request $httpRequest ): Response {
 		return new Response(
 			$this->ffFactory->newMembershipFormViolationPresenter()->present(
 				$this->createMembershipRequest( $httpRequest ),
@@ -141,7 +141,7 @@ class ApplyForMembershipController {
 		) );
 	}
 
-	private function isSubmissionAllowed( Request $request ) {
+	private function isSubmissionAllowed( Request $request ): bool {
 		$lastSubmission = $request->cookies->get( self::SUBMISSION_COOKIE_NAME, '' );
 		if ( $lastSubmission === '' ) {
 			return true;

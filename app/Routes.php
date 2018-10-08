@@ -27,6 +27,7 @@ use WMDE\Fundraising\Frontend\App\Controllers\ValidateFeeController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidationController;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\AddDonationHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\AddSubscriptionHandler;
+use WMDE\Fundraising\Frontend\App\RouteHandlers\PageDisplayHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\PayPalNotificationHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\PayPalNotificationHandlerForMembershipFee;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\RouteRedirectionHandler;
@@ -150,8 +151,7 @@ class Routes {
 		$app->get(
 			'page/{pageName}',
 			function ( Application $app, $pageName ) use ( $ffFactory ) {
-				return ( new \WMDE\Fundraising\Frontend\App\RouteHandlers\PageDisplayHandler( $ffFactory, $app ) )
-					->handle( $pageName );
+				return ( new PageDisplayHandler( $ffFactory, $app ) )->handle( $pageName );
 			}
 		)
 			->bind( 'page' );

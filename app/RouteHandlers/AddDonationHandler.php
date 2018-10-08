@@ -190,7 +190,7 @@ class AddDonationHandler {
 
 	}
 
-	private function isSubmissionAllowed( Request $request ) {
+	private function isSubmissionAllowed( Request $request ): bool {
 		$lastSubmission = $request->cookies->get( ShowDonationConfirmationController::SUBMISSION_COOKIE_NAME, '' );
 		if ( $lastSubmission === '' ) {
 			return true;

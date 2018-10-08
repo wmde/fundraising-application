@@ -3,6 +3,7 @@
 	var _paq = _paq || [];
 	_paq.push( [ 'trackPageView' ] );
 	_paq.push( [ 'enableLinkTracking' ] );
+	_paq.push( [ 'trackVisibleContentImpressions' ] );
 
     {% for piwikEvent in piwikEvents %}
 	_paq.push( {$ piwikEvent | json_encode( constant( 'JSON_UNESCAPED_SLASHES' ) ) | raw $} );
