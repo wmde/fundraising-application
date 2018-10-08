@@ -8,23 +8,30 @@ use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\DevelopmentEnvironmentS
 use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\EnvironmentSetup;
 use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\EnvironmentSetupException;
 use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\ProductionEnvironmentSetup;
-use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\TestEnvironmentSetup;
 
 class EnvironmentBootstrapper {
 
-	private const ENVIRONMENT_SETUP_MAP = [
+	private const DEFAULT_ENVIRONMENT_SETUP_MAP = [
 		'dev' => DevelopmentEnvironmentSetup::class,
-		'test' => TestEnvironmentSetup::class,
 		// User Acceptance Testing should be as close to production as possible
 		'uat' => ProductionEnvironmentSetup::class,
 		'prod' => ProductionEnvironmentSetup::class
 	];
 
-	public static function getConfigurationPathsForEnvironment( string $environmentName, string $configPath ): array {
+	private $environmentName;
+
+	private $environmentMap;
+
+	public function __construct( string $environmentName, array $environmentMap = [] ) {
+		$this->environmentName = $environmentName;
+		$this->environmentMap = array_merge( self::DEFAULT_ENVIRONMENT_SETUP_MAP, $environmentMap );
+	}
+
+	public function getConfigurationPathsForEnvironment( string $configPath ): array {
 		$paths = self::removeNonexistentOptionalPaths( ...[
 			$configPath . '/config.dist.json',
-			$configPath . '/config.' . $environmentName . '.json',
-			$configPath . '/config.' . $environmentName . '.local.json',
+			$configPath . '/config.' . $this->environmentName . '.json',
+			$configPath . '/config.' . $this->environmentName . '.local.json',
 		] );
 		self::checkIfPathsExist( ...$paths );
 		return $paths;
@@ -48,11 +55,11 @@ class EnvironmentBootstrapper {
 		);
 	}
 
-	public static function getEnvironmentSetupInstance( string $environmentName ): EnvironmentSetup {
-		if ( !isset( self::ENVIRONMENT_SETUP_MAP[$environmentName] ) ) {
-			throw new EnvironmentSetupException( $environmentName );
+	public function getEnvironmentSetupInstance(): EnvironmentSetup {
+		if ( !isset( $this->environmentMap[$this->environmentName] ) ) {
+			throw new EnvironmentSetupException( $this->environmentName );
 		}
-		$class = self::ENVIRONMENT_SETUP_MAP[$environmentName];
+		$class = $this->environmentMap[$this->environmentName];
 		return new $class;
 	}
 }

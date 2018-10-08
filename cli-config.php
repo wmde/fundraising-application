@@ -14,10 +14,10 @@ use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
  */
 
 
-$environment = getenv( 'APP_ENV' ) ?: 'dev';
+$bootstrapper = new EnvironmentBootstrapper( getenv( 'APP_ENV' ) ?: 'dev' );
 $configReader = new ConfigReader(
 	new \FileFetcher\SimpleFileFetcher(),
-	...EnvironmentBootstrapper::getConfigurationPathsForEnvironment( $environment, __DIR__ . '/app/config' )
+	...$bootstrapper->getConfigurationPathsForEnvironment( __DIR__ . '/app/config' )
 );
 
 $factory = new Factory( DriverManager::getConnection( $configReader->getConfig()['db'] ) );

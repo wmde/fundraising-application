@@ -7,10 +7,12 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\DevelopmentEnvironmentSetup;
+use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\EnvironmentSetup;
 use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\EnvironmentSetupException;
 use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\ProductionEnvironmentSetup;
 use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\TestEnvironmentSetup;
 use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeEnvironmentSetup;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper
@@ -24,12 +26,13 @@ class EnvironmentBootstrapperTest extends TestCase {
 			'config.dist.json' => '{}'
 		] );
 
+		$bootstrapper = new EnvironmentBootstrapper( 'dev' );
 		$this->assertSame(
 			[
 				vfsStream::url( self::CONFIGDIR . '/config.dist.json' ),
 				vfsStream::url( self::CONFIGDIR . '/config.dev.json' )
 			],
-			EnvironmentBootstrapper::getConfigurationPathsForEnvironment( 'dev', $path->url() )
+			$bootstrapper->getConfigurationPathsForEnvironment( $path->url() )
 		);
 	}
 
@@ -38,7 +41,7 @@ class EnvironmentBootstrapperTest extends TestCase {
 			'config.dev.json' => '{}'
 		] );
 		$this->expectExceptionMessageRegExp( '/dist/' );
-		EnvironmentBootstrapper::getConfigurationPathsForEnvironment( 'dev', $path->url() );
+		( new EnvironmentBootstrapper( 'dev' ) )->getConfigurationPathsForEnvironment( $path->url() );
 	}
 
 	public function testGivenMissingEnvironmentFile_exceptionIsThrown() {
@@ -46,17 +49,48 @@ class EnvironmentBootstrapperTest extends TestCase {
 			'config.dist.json' => '{}'
 		] );
 		$this->expectExceptionMessageRegExp( '/dev/' );
-		EnvironmentBootstrapper::getConfigurationPathsForEnvironment( 'dev', $path->url() );
+		( new EnvironmentBootstrapper( 'dev' ) )->getConfigurationPathsForEnvironment( $path->url() );
 	}
 
-	public function testGivenEnvironmentName_environmentSetupClassIsReturned() {
-		$this->assertInstanceOf( DevelopmentEnvironmentSetup::class, EnvironmentBootstrapper::getEnvironmentSetupInstance( 'dev' ) );
-		$this->assertInstanceOf( TestEnvironmentSetup::class, EnvironmentBootstrapper::getEnvironmentSetupInstance( 'test' ) );
-		$this->assertInstanceOf( ProductionEnvironmentSetup::class, EnvironmentBootstrapper::getEnvironmentSetupInstance( 'prod' ) );
+	public function testGivenDefaultEnvironmentName_environmentSetupClassIsReturned() {
+		$this->assertInstanceOf(
+			DevelopmentEnvironmentSetup::class,
+			( new EnvironmentBootstrapper( 'dev' ) )->getEnvironmentSetupInstance()
+		);
+		$this->assertInstanceOf(
+			ProductionEnvironmentSetup::class,
+			( new EnvironmentBootstrapper( 'uat' ) )->getEnvironmentSetupInstance()
+		);
+		$this->assertInstanceOf(
+			ProductionEnvironmentSetup::class,
+			( new EnvironmentBootstrapper( 'prod' ) )->getEnvironmentSetupInstance()
+		);
+	}
+
+	public function testGivenCustomEnvironmentNameAndMap_environmentSetupClassIsReturned() {
+		$bootstrapper = new EnvironmentBootstrapper(
+			'unusual',
+			[ 'unusual' => FakeEnvironmentSetup::class ]
+		);
+		$this->assertInstanceOf(
+			FakeEnvironmentSetup::class,
+			$bootstrapper->getEnvironmentSetupInstance()
+		);
+	}
+
+	public function testGivenCustomEnvironmentdMap_defaultEnvironmentSetupClassIsOverwritten() {
+		$bootstrapper = new EnvironmentBootstrapper(
+			'dev',
+			[ 'dev' => FakeEnvironmentSetup::class ]
+		);
+		$this->assertInstanceOf(
+			FakeEnvironmentSetup::class,
+			$bootstrapper->getEnvironmentSetupInstance()
+		);
 	}
 
 	public function testGivenUnknownEnvironmentName_exceptionIsThrown() {
 		$this->expectException( EnvironmentSetupException::class );
-		EnvironmentBootstrapper::getEnvironmentSetupInstance( 'unfriendly' );
+		( new EnvironmentBootstrapper( 'unfriendly' ) )->getEnvironmentSetupInstance();
 	}
 }

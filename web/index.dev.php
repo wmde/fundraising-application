@@ -22,11 +22,11 @@ use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
  * @var \WMDE\Fundraising\Frontend\Factories\FunFunFactory $ffFactory
  */
 $ffFactory = call_user_func( function() {
-	$environmentName = getenv( 'APP_ENV' ) ?: 'dev';
+	$bootstrapper = new EnvironmentBootstrapper( getenv( 'APP_ENV' ) ?: 'dev' );
 
 	$configReader = new ConfigReader(
 		new SimpleFileFetcher(),
-		...EnvironmentBootstrapper::getConfigurationPathsForEnvironment( $environmentName, __DIR__ . '/../app/config' )
+		...$bootstrapper->getConfigurationPathsForEnvironment( __DIR__ . '/../app/config' )
 	);
 
 	$config = $configReader->getConfig();
@@ -37,8 +37,8 @@ $ffFactory = call_user_func( function() {
 
 	$factory = new FunFunFactory( $configReader->getConfig() );
 
-	$environmentSetup = EnvironmentBootstrapper::getEnvironmentSetupInstance( $environmentName );
-	$environmentSetup->setEnvironmentDependentInstances( $factory, $config );
+	$bootstrapper->getEnvironmentSetupInstance()
+		->setEnvironmentDependentInstances( $factory, $config );
 
 	return $factory;
 } );
