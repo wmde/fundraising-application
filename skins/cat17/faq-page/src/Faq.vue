@@ -41,7 +41,7 @@
 					data-content-target="/page/Häufige Fragen" 
 					data-track-content 
 					data-content-name="Topic" 
-					data-content-piece="topic.name">
+					:data-content-piece="topic.name">
 				{{ topic.name }}
 				</a>
 			</li>
