@@ -13,6 +13,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Twig_Environment;
 use Twig_Error;
+use WMDE\Fundraising\Frontend\App\Bootstrap;
 use WMDE\Fundraising\Frontend\App\UrlGeneratorAdapter;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
@@ -54,11 +55,12 @@ class RenderMailTemplatesCommand extends Command {
 
 		$ffFactory = new FunFunFactory( $config );
 
-		$app = require __DIR__ . '/../app/bootstrap.php';
+		require __DIR__ . '/../app/Bootstrap.php';
 
+		$app = Bootstrap::initializeApplication($ffFactory);
 		$app->flush();
-
-		$ffFactory->setUrlGenerator( new UrlGeneratorAdapter( $app['twig']->getExtension( RoutingExtension::class ) ) );
+		
+		$ffFactory->setUrlGenerator( new UrlGeneratorAdapter( $app['url_generator'] ) );
 
 		$mailTemplates = new MailTemplates( $ffFactory );
 		$testData = $mailTemplates->get();
