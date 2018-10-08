@@ -6,37 +6,37 @@
 			data-track-content 
 			data-content-name="Back to overview" 
 			data-content-piece="Back to overview">
- 		{{ preview.message }}
+		{{ messages.back_link }}
 		</a>
  	</div>
- 	<h2>Häufige Fragen</h2>
- 	<h5>Antworten zu Ihren Fragen zum Spendenprozess, Wikimedia und Wikipedia</h5>
+ 	<h2>{{ messages.page_title }}</h2>
+ 	<h5>{{ messages.page_subtitle }}</h5>
  	<div class="row">
  	<div class="col-xs-12 col-sm-9">
-	  	<search-bar></search-bar>
+	  	<search-bar :messageSearch="messages.search"></search-bar>
 		<div class="form-shadow-wrap">
-			<h2 v-if="!isPreview" class="title space-below underlined"> {{ page.name }}</h2>
+			<h2 v-if="!isPreview" class="title space-below underlined">{{ topicTitle }}</h2>
 			<ul>
-				<li v-for="content in page.content" v-bind:class="[ isPreview ? 'preview' : 'topic', 'underlined' ]">
+				<li v-for="content in page" v-bind:class="[ isPreview ? 'preview' : 'topic', 'underlined' ]">
 					<question :content="content.question"></question>
-					<answer :content="content.answer" :isPreview="isPreview"></answer>
+					<answer :hiddenContent="content.hidden_text" :visibleContent="content.visible_text" :messages="messages" :isPreview="isPreview"></answer>
 				</li>
 			</ul>
 		</div>
 		<footer>
-			<h5>Sie konnten keine Antwort finden? Fragen Sie uns direkt!</h5>
+			<h5>{{ messages.no_answer_found }}</h5>
 			<p>
-				Am effizientesten ist das <a>Fragestellen über das Kontaktformular.</a> Wir antworten dann per E-Mail.<br>
-				Sie können auch:<br>
-				eine E-Mail an <a>spenden@wikimedia.de</a> senden oder<br>
-				unser Spendentelefon anrufen: 030/123456789
+				{{ messages.contact_way }} <a href="/contact/get-in-touch">{{ messages.contact_link }}</a> {{ messages.reply_by_email }}<br>
+				{{ messages.you_can_too }}<br>
+				{{ messages.send_email}} <a :href="'mailto:' + messages.email_address">{{ messages.email_address }}</a> {{ messages.or }}<br>
+				{{ messages.call_phone }} {{ messages.phone }}
 			</p>
 		</footer>
 	</div>
 	<div class="sidebar col-xs-12 col-sm-3">
-		<h5>Fragen und Antworten zu...</h5>
+		<h5>{{ messages.about }}</h5>
 		<ul>
-			<li v-for="topic in topics">
+			<li v-for="topic in content.topics">
 				<a @click="populatePageByTopic( topic ); isPreview = false;"
 					data-content-target="/page/Häufige Fragen" 
 					data-track-content 
@@ -46,10 +46,10 @@
 				</a>
 			</li>
 		</ul>
-		<h5>Keine Antwort gefunden?</h5>
+		<h5>{{ messages.no_answer }}</h5>
 		<ul>
-			<li><a href="/contact/get-in-touch">Frage stellen via Kontaktformular</a></li>
-			<li>Weitere <a>Kontaktmöglichkeiten</a></li>
+			<li><a href="/contact/get-in-touch">{{ messages.contact_link }}</a></li>
+			<li>{{ messages.further }} <a href="/contact/get-in-touch">{{ messages.contact_options }}</a></li>
 		</ul>
 	</div>
 	</div>
@@ -71,8 +71,10 @@ export default {
 	data() {
 		return {
 			isPreview: true,
-			page: {},
-			content: faqContent
+			topicTitle: '',
+			content: faqContent,
+			messages: faqMessages,
+			page: []
 		};
 	},
 	mounted: function () {
@@ -80,10 +82,14 @@ export default {
 	},
 	methods: {
 		populatePageByTopic: function ( topic ) {
-			this.page = topic;
+			this.page = this.content.questions.filter( ( question ) => question.topic.split().indexOf( topic.id ) !== -1 );
+			this.setTopicTitle( topic.name );
 		},
 		populatePageWithPreviewContent: function () {
-			this.page = this.preview;
+			this.page = this.content.questions.filter( ( question ) => question.topic.split().indexOf( "1" ) !== -1 );
+		},
+		setTopicTitle: function ( name ) {
+			this.topicTitle = name;
 		}
 	}
 };
