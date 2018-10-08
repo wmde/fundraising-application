@@ -312,7 +312,10 @@ class Routes {
 			'faq',
 			function () use ( $ffFactory ) {
 				return $ffFactory->getLayoutTemplate( 'faq.html.twig' )->render(
-					[ 'faq_content' => $ffFactory->getFAQContent() ]
+					[
+						'faq_content' => $ffFactory->getFaqContent(),
+						'faq_messages' => $ffFactory->getFaqMessages()
+					]
 				);
 			}
 		)->bind( 'faq' );

@@ -1,8 +1,8 @@
 <template>
   <div id="answer" class="space-around">
   <p>
-	{{ content }}
-	<span v-show="!collapsed">The rest of the text appears here! Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span>
+	{{ visibleContent }}
+	<span v-show="!collapsed || !isPreview">{{ hiddenContent }}</span>
 	<span v-if="isPreview" @click="collapsed = !collapsed;" class="link"
 		data-content-target="/page/Häufige Fragen" 
 		data-track-content 
@@ -24,9 +24,9 @@ export default {
 	},
 	computed: {
 		toggleMessage: function() {
-			return this.collapsed ? 'Expand' : 'Collapse'
+			return this.collapsed ? this.messages.expand : this.messages.collapse;
 		}
 	},
-	props: ['content', 'isPreview']
+	props: ['hiddenContent', 'visibleContent', 'messages', 'isPreview']
 }
 </script>

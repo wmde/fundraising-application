@@ -637,6 +637,7 @@ class FunFunFactory implements ServiceProviderInterface {
 			if ( $json === '' ) {
 				throw new RuntimeException( 'error_no_topics_defined' );
 			}
+
 			return json_decode( $json, true );
 		}
 		catch( FileFetchingException $e ) {
@@ -647,7 +648,22 @@ class FunFunFactory implements ServiceProviderInterface {
 	public function getFaqContent(): string {
 		try {
 			$json = ( new SimpleFileFetcher() )->fetchFile( $this->getI18nDirectory() . '/data/faq.json' );
-			if ( $json === '' ) {
+			json_decode( $json );
+			if ( $json === '' || json_last_error() !== JSON_ERROR_NONE ) {
+				throw new RuntimeException( 'no_questions_defined' );
+			}
+			return $json;
+		}
+		catch( FileFetchingException $e ) {
+			throw new RuntimeException( 'no_questions_defined' );
+		}
+	}
+
+	public function getFaqMessages(): string {
+		try {
+			$json = ( new SimpleFileFetcher() )->fetchFile( $this->getI18nDirectory() . '/messages/faqMessages.json' );
+			json_decode( $json );
+			if ( $json === '' || json_last_error() !== JSON_ERROR_NONE ) {
 				throw new RuntimeException( 'no_questions_defined' );
 			}
 			return $json;
