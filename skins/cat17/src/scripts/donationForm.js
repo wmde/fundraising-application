@@ -284,17 +284,23 @@ $( function () {
 
 	function mapStateToProps( state ) {
 		return {
-			formContent: state.donationFormContent
+
 		}
 	}
 
 	function mapActionToProps( dispatch ) {
 		return {
-			changeIBAN ( iban ) {
+			changeIban ( iban ) {
 				dispatch( WMDE.Actions.newChangeContentAction( 'iban', iban ) );
 			},
-			changeBIC( bic ) {
+			changeBic( bic ) {
 				dispatch( WMDE.Actions.newChangeContentAction( 'bic', bic ) );
+			},
+			changeBankDataValidity( validity ) {
+				dispatch( WMDE.Actions.newFinishBankDataValidationAction( validity ) );
+			},
+			validateBankData( iban, bic ) {
+				return Promise.resolve( { status: 'OK', iban, bic } );
 			}
 		}
 
