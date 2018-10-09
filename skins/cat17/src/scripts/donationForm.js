@@ -290,12 +290,14 @@ $( function () {
 
 	function mapActionToProps( dispatch ) {
 		return {
-			// TODO create appropriate actions, if needed
-			justAnExample() {
-				dispatch( actions.newChangeContentAction( 'firstName', 'Otto' ) )
+			changeIBAN ( iban ) {
+				dispatch( WMDE.Actions.newChangeContentAction( 'iban', iban ) );
+			},
+			changeBIC( bic ) {
+				dispatch( WMDE.Actions.newChangeContentAction( 'bic', bic ) );
 			}
-
 		}
+
 	}
 
 		/** global: WMDE */
@@ -306,6 +308,6 @@ $( function () {
 			// FIXME Import and create store directly when we no longer use the global variable anywhere else
 			store: store,
 			render: (h) => h( WMDE.VueRedux.connect( mapStateToProps, mapActionToProps )( WMDE.BankData ) )
-	}).$mount('#bank-name');
+	}).$mount('#bankdata-app');
 
 } );
