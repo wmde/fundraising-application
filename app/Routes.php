@@ -19,13 +19,13 @@ use WMDE\Fundraising\DonationContext\UseCases\CreditCardPaymentNotification\Cred
 use WMDE\Fundraising\DonationContext\UseCases\CreditCardPaymentNotification\CreditCardPaymentNotificationRequest;
 use WMDE\Fundraising\DonationContext\UseCases\GetDonation\GetDonationRequest;
 use WMDE\Fundraising\DonationContext\UseCases\ListComments\CommentListingRequest;
+use WMDE\Fundraising\Frontend\App\Controllers\AddDonationController;
 use WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
 use WMDE\Fundraising\Frontend\App\Controllers\UpdateDonorController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidateDonorController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidateFeeController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidationController;
-use WMDE\Fundraising\Frontend\App\RouteHandlers\AddDonationHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\AddSubscriptionHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\PageDisplayHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\PayPalNotificationHandler;
@@ -329,10 +329,7 @@ class Routes {
 
 		$app->post(
 			'donation/add',
-			function ( Application $app, Request $request ) use ( $ffFactory ) {
-				return ( new AddDonationHandler( $ffFactory, $app ) )
-					->handle( $request );
-			}
+			AddDonationController::class . '::handle'
 		);
 
 		$app->post(

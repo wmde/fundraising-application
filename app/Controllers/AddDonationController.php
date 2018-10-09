@@ -2,40 +2,35 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\App\RouteHandlers;
+namespace WMDE\Fundraising\Frontend\App\Controllers;
 
 use Silex\Application;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationResponse;
-use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\DonationCreated;
-use WMDE\Fundraising\Frontend\App\Controllers\UpdateDonorController;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\AmountParser;
 use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
+use WMDE\FunValidators\ConstraintViolation;
 
 /**
  * @license GNU GPL v2+
- * @author Kai Nissen < kai.nissen@wikimedia.de >
- * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class AddDonationHandler {
+class AddDonationController {
 
-	private $ffFactory;
 	private $app;
+	private $ffFactory;
 
-	public function __construct( FunFunFactory $ffFactory, Application $app ) {
-		$this->ffFactory = $ffFactory;
+	public function handle( FunFunFactory $ffFactory, Request $request, Application $app ): Response {
 		$this->app = $app;
-	}
-
-	public function handle( Request $request ): Response {
+		$this->ffFactory = $ffFactory;
 		if ( !$this->isSubmissionAllowed( $request ) ) {
 			return new Response( $this->ffFactory->newSystemMessageResponse( 'donation_rejected_limit' ) );
 		}
@@ -44,9 +39,11 @@ class AddDonationHandler {
 		$responseModel = $this->ffFactory->newAddDonationUseCase()->addDonation( $addDonationRequest );
 
 		if ( !$responseModel->isSuccessful() ) {
+			$this->logValidationErrors( $responseModel->getValidationErrors() );
 			return new Response(
 				$this->ffFactory->newDonationFormViolationPresenter()->present(
-					$responseModel->getValidationErrors(), $addDonationRequest,
+					$responseModel->getValidationErrors(),
+					$addDonationRequest,
 					$this->newTrackingInfoFromRequest( $request )
 				)
 			);
@@ -75,19 +72,18 @@ class AddDonationHandler {
 		switch( $responseModel->getDonation()->getPaymentMethodId() ) {
 			case PaymentMethod::DIRECT_DEBIT:
 			case PaymentMethod::BANK_TRANSFER:
-				return $this->app->redirect(
-					$this->app['url_generator']->generate(
+				return new RedirectResponse(
+					$this->ffFactory->getUrlGenerator()->generateAbsoluteUrl(
 						'show-donation-confirmation',
 						[
 							'id' => $responseModel->getDonation()->getId(),
 							'accessToken' => $responseModel->getAccessToken()
 						]
-					),
-					Response::HTTP_SEE_OTHER
+					)
 				);
 				break;
 			case PaymentMethod::PAYPAL:
-				return $this->app->redirect(
+				return new RedirectResponse(
 					$this->ffFactory->newPayPalUrlGeneratorForDonations()->generateUrl(
 						$responseModel->getDonation()->getId(),
 						$responseModel->getDonation()->getAmount(),
@@ -98,7 +94,7 @@ class AddDonationHandler {
 				);
 				break;
 			case PaymentMethod::SOFORT:
-				return $this->app->redirect(
+				return new RedirectResponse(
 					$this->ffFactory->newSofortUrlGeneratorForDonations()->generateUrl(
 						$responseModel->getDonation()->getId(),
 						$responseModel->getDonation()->getPayment()->getPaymentMethod()->getBankTransferCode(),
@@ -109,7 +105,7 @@ class AddDonationHandler {
 				);
 				break;
 			case PaymentMethod::CREDIT_CARD:
-				return $this->app->redirect(
+				return new RedirectResponse(
 					$this->ffFactory->newCreditCardPaymentUrlGenerator()->buildUrl( $responseModel )
 				);
 				break;
@@ -240,6 +236,25 @@ class AddDonationHandler {
 		$this->app['session']->set(
 			UpdateDonorController::ADDRESS_CHANGE_SESSION_KEY,
 			false
+		);
+	}
+
+	/**
+	 * @param ConstraintViolation[] $constraintViolations
+	 */
+	private function logValidationErrors( array $constraintViolations ): void {
+		$formattedConstraintViolations = [];
+		foreach ( $constraintViolations as $constraintViolation ) {
+			$formattedConstraintViolations['validation_errors'][] = sprintf(
+				'Validation field "%s" with value "%s" failed with: %s',
+				$constraintViolation->getSource(),
+				$constraintViolation->getValue(),
+				$this->ffFactory->getTranslator()->trans( $constraintViolation->getMessageIdentifier() )
+			);
+		}
+		$this->ffFactory->getLogger()->warning(
+			'Unexpected server-side form validation errors.',
+			$formattedConstraintViolations
 		);
 	}
 }

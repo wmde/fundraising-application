@@ -11,6 +11,7 @@ use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\MembershipApplicationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\MembershipContext\Tracking\MembershipApplicationTrackingInfo;
+use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplicationValidationResult;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipRequest;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipResponse;
 use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
@@ -42,6 +43,7 @@ class ApplyForMembershipController {
 		}
 
 		if ( !$responseModel->isSuccessful() ) {
+			$this->logValidationErrors( $responseModel->getValidationResult(), $httpRequest );
 			return $this->newFailureResponse( $httpRequest );
 		}
 
@@ -222,6 +224,22 @@ class ApplyForMembershipController {
 		$this->ffFactory->getBucketLogger()->writeEvent(
 			new MembershipApplicationCreated( $responseModel->getMembershipApplication()->getId() ),
 			...$this->ffFactory->getSelectedBuckets()
+		);
+	}
+
+	private function logValidationErrors( ApplicationValidationResult $validationResult, Request $httpRequest ): void {
+		$formattedConstraintViolations = [];
+		foreach ( $validationResult->getViolations() as $constraintViolationSource => $constraintViolation ) {
+			$formattedConstraintViolations['validation_errors'][] = sprintf(
+				'Validation for field "%s" failed: "%s"',
+				$this->ffFactory->getTranslator()->trans( $constraintViolationSource ),
+				$this->ffFactory->getTranslator()->trans( $constraintViolation )
+			);
+		}
+		$formattedConstraintViolations['request_data'] = $httpRequest->request->all();
+		$this->ffFactory->getLogger()->warning(
+			'Unexpected server-side form validation errors.',
+			$formattedConstraintViolations
 		);
 	}
 }
