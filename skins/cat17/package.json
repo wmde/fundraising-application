@@ -95,7 +95,8 @@
     "redux-vue": "^0.7.0",
     "underscore": "^1.9.1",
     "underscore.path": "^0.1.4",
-    "vue": "^2.5.17"
+    "vue": "^2.5.17",
+    "vue-loader": "^15.4.2"
   },
   "browserify": {
     "browser": {

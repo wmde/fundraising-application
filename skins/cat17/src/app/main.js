@@ -47,7 +47,7 @@ module.exports = {
 	FormDataExtractor: require( './lib/form_data_extractor' ),
 	IntegerCurrency: require( './lib/integer_currency' ),
 	Scrolling: require( './lib/scrolling' ),
-	BankDataFoo: require('./components/BankData.vue'),
-	Vue: require('vue'),
+	BankData: require('./components/BankData.vue').default,
+	Vue: require('vue').default,
 	VueRedux: require('redux-vue')
 };
