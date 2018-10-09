@@ -4,6 +4,7 @@ const { getIfUtils } = require( 'webpack-config-utils' );
 const ConcatPlugin = require( 'webpack-concat-plugin' );
 const CopyWebpackPlugin = require( 'copy-webpack-plugin' );
 const ImageminPlugin = require( 'imagemin-webpack-plugin' ).default;
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 // TODO
 // - build faq (+ vue, with extra CSS file)
@@ -58,8 +59,17 @@ module.exports = mode => {
 					gifsicle: { interlaced: true },
 					svgo: { plugins: [ { removeUnknownsAndDefaults: false }, { cleanupIDs: false } ] }
 				}
-			} )
+			} ),
+			new VueLoaderPlugin()
 		],
+		module: {
+			rules: [
+				{
+					test: /\.vue$/,
+					loader: 'vue-loader'
+				}
+			]
+		},
 		devtool: ifProduction( 'source-map', 'eval' ),
 		stats: ifProduction(
 			{

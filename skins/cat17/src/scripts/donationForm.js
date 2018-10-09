@@ -305,7 +305,7 @@ $( function () {
 		new WMDE.Vue({
 			// FIXME Import and create store directly when we no longer use the global variable anywhere else
 			store: store,
-			render: (h) => h( WMDE.VueRedux.connect( mapStateToProps, mapActionToProps )( WMDE.BankDataFoo ) )
+			render: (h) => h( WMDE.VueRedux.connect( mapStateToProps, mapActionToProps )( WMDE.BankData ) )
 	}).$mount('#bank-name');
 
 } );
