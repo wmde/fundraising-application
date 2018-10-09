@@ -1,11 +1,11 @@
 <template>
 	<div>
 		<div v-bind:class="classesIBAN">
-			<input type="text" id="iban" name="iban" :placeholder="labels.iban" v-model="iban">
+			<input type="text" id="iban" name="iban" :placeholder="labels.iban" v-model="iban" v-on:input="handleIbanChange">
 			<label for="iban">{{ labels.iban }}</label>
 		</div>
 		<div v-bind:class="classesBIC">
-			<input type="text" id="bic" name="bic" :placeholder="labels.bic" v-model="bic" :disabled="writableBIC">
+			<input type="text" id="bic" name="bic" :placeholder="labels.bic" v-model="bic" :disabled="writableBIC" v-on:input="handleBicChange">
 			<label for="bic">{{ labels.bic }}</label>
 		</div>
 
@@ -19,7 +19,12 @@
 <script>
 	export default {
 		name: 'bank-data',
-		props: ['formContent'],
+		props: {
+			changeIban: 'Function',
+			changeBic: 'Function',
+			changeBankDataValidity: 'Function',
+			validateBankData: 'Function'
+		},
 		data: function() {
 			let iban = '',
 				bic = '',
@@ -50,6 +55,27 @@
 			}
 		},
 		methods: {
+			handleIbanChange( evt ) {
+				this.changeIban( evt.target.value );
+				this.validate();
+			},
+			handleBicChange( evt ) {
+				//this.changeBic( evt.target.value );
+				this.validate();
+			},
+
+			validate() {
+				if( this.iban === '' || this.bic === '' ) {
+					return this.changeBankDataValidity( { status: 'INCOMPLETE', iban: this.iban, bic: this.bic } ) ;
+				}
+				return this.validateBankData( this.iban, this.bic )
+					.then( this.changeBankDataValidity )
+					.catch( () => {
+						this.errorText = 'An error has occurred. Please reload the page and try again.'; // TODO translate
+						this.hasError = true;
+					} );
+			},
+
 			isFieldEmpty: function () {
 				return this.iban === '';
 			},
