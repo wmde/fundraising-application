@@ -76,9 +76,7 @@ test( 'FINISH_BANK_DATA_VALIDATION with BIC sets bank data validation state to v
 		type: 'FINISH_BANK_DATA_VALIDATION', payload: {
 			status: 'OK',
 			iban: 'DE12500105170648489890',
-			bic: 'INGDDEFFXXX',
-			bankCode: '50010517',
-			account: '064847930'
+			bic: 'INGDDEFFXXX'
 		}
 	} ).bankData );
 	t.notOk( validity( beforeState, { type: 'FINISH_BANK_DATA_VALIDATION', payload: createInvalidPayload } ).bankData );

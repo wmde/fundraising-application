@@ -103,12 +103,10 @@ test( 'When CHANGE_CONTENT is passed a non-string value, the value is not trimme
 } );
 
 test( 'FINISH_BANK_DATA_VALIDATION sets bank data when status is OK', function ( t ) {
-	var stateBefore = { iban: '', bic: '', accountNumber: '', bankCode: '', bankName: '' },
+	var stateBefore = { iban: '', bic: '', bankName: '' },
 		expectedState = {
 			iban: 'DE12500105170648489890',
 			bic: 'INGDDEFFXXX',
-			accountNumber: '0648489890',
-			bankCode: '50010517',
 			bankName: 'ING-DiBa'
 		},
 		action = {
@@ -116,8 +114,6 @@ test( 'FINISH_BANK_DATA_VALIDATION sets bank data when status is OK', function (
 				status: 'OK',
 				iban: 'DE12500105170648489890',
 				bic: 'INGDDEFFXXX',
-				account: '0648489890',
-				bankCode: '50010517',
 				bankName: 'ING-DiBa'
 			}
 		};
@@ -128,7 +124,7 @@ test( 'FINISH_BANK_DATA_VALIDATION sets bank data when status is OK', function (
 } );
 
 test( 'FINISH_BANK_DATA_VALIDATION does not modify state data when status is not OK', function ( t ) {
-	var stateBefore = { iban: '', bic: '', accountNumber: '', bankCode: '', bankName: '' },
+	var stateBefore = { iban: '', bic: '', bankName: '' },
 		action = {
 			type: 'FINISH_BANK_DATA_VALIDATION', payload: {
 				status: 'ERR',
@@ -142,7 +138,7 @@ test( 'FINISH_BANK_DATA_VALIDATION does not modify state data when status is not
 } );
 
 test( 'FINISH_BANK_DATA_VALIDATION does not clear BIC when it is not passed in validation response', function ( t ) {
-	var stateBefore = { iban: 'AT022050302101023600', bic: 'SPIHAT22XXX', accountNumber: '', bankCode: '', bankName: '' },
+	var stateBefore = { iban: 'AT022050302101023600', bic: 'SPIHAT22XXX', bankName: '' },
 		action = {
 			type: 'FINISH_BANK_DATA_VALIDATION', payload: {
 				status: 'OK',

@@ -80,6 +80,7 @@ module.exports = {
 					return state;
 				}
 				return objectAssign( {}, state, {
+					iban: action.payload.iban || '',
 					bic: action.payload.bic || state.bic || '',
 					bankName: action.payload.bankName || ''
 				} );

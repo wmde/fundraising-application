@@ -241,15 +241,7 @@ test( 'Given sepa debit type, bank data validation sends IBAN to server', functi
 		callParameters,
 		validationResult;
 
-	validationResult = bankDataValidator.validate( {
-		iban: 'DE12500105170648489890',
-		bic: 'INGDDEFFXXX',
-		accountNumber: '0648489890',
-		bankCode: '50010517',
-		bankName: 'ING-DiBa',
-		debitType: 'sepa',
-		paymentType: 'BEZ'
-	} );
+	validationResult = bankDataValidator.validateIban( 'DE12500105170648489890' );
 
 	t.ok( postFunctionSpy.calledOnce, 'data is sent once' );
 	callParameters = postFunctionSpy.getCall( 0 ).args;
@@ -273,15 +265,7 @@ test( 'Given non-sepa debit type, bank data validation sends account number and 
 		callParameters,
 		validationResult;
 
-	validationResult = bankDataValidator.validate( {
-		iban: 'DE12500105170648489890',
-		bic: 'INGDDEFFXXX',
-		accountNumber: '0648489890',
-		bankCode: '50010517',
-		bankName: 'ING-DiBa',
-		debitType: 'non-sepa',
-		paymentType: 'BEZ'
-	} );
+	validationResult = bankDataValidator.validateClassicAccountNumber( '0648489890', '50010517' );
 
 	t.ok( postFunctionSpy.calledOnce, 'data is sent once' );
 	callParameters = postFunctionSpy.getCall( 0 ).args;
@@ -294,30 +278,5 @@ test( 'Given non-sepa debit type, bank data validation sends account number and 
 	validationResult.then( function ( resultData ) {
 		t.deepEqual( resultData, positiveResult, 'validation function returns promise result' );
 	} );
-	t.end();
-} );
-
-test( 'Given a non-debit payment type, bank data validation is not applicable', function ( t ) {
-	var postFunctionSpy = sinon.spy(),
-		bankDataValidator = validation.createBankDataValidator(
-			'http://spenden.wikimedia.org/check-iban',
-			'http://spenden.wikimedia.org/generate-iban',
-			postFunctionSpy
-		),
-		expectedValidationResult = { status: 'NOT_APPLICABLE' },
-		validationResult;
-
-	validationResult = bankDataValidator.validate( {
-		iban: 'DE12500105170648489890',
-		bic: 'INGDDEFFXXX',
-		accountNumber: '0648489890',
-		bankCode: '50010517',
-		bankName: 'ING-DiBa',
-		debitType: 'non-sepa',
-		paymentType: 'PPL'
-	} );
-
-	t.equal( postFunctionSpy.callCount, 0, 'data is not sent' );
-	t.deepEqual( validationResult, expectedValidationResult, 'validation result ' );
 	t.end();
 } );
