@@ -68,12 +68,11 @@ export default {
 		Question,
 		Answer
 	},
+	props: [ 'messages', 'content' ],
 	data() {
 		return {
 			isPreview: true,
 			topicTitle: '',
-			content: faqContent,
-			messages: faqMessages,
 			page: []
 		};
 	},
