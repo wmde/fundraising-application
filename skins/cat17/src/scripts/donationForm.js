@@ -284,7 +284,9 @@ $( function () {
 
 	function mapStateToProps( state ) {
 		return {
-
+			iban: state.donationFormContent.iban,
+			bic: state.donationFormContent.bic,
+			isValid: state.validity.bankData !== false
 		}
 	}
 
@@ -299,8 +301,15 @@ $( function () {
 			changeBankDataValidity( validity ) {
 				dispatch( WMDE.Actions.newFinishBankDataValidationAction( validity ) );
 			},
-			validateBankData( iban, bic ) {
-				return Promise.resolve( { status: 'OK', iban, bic } );
+			validateBankData( iban, bic, isIBAN ) {
+				var bankDataValidator = WMDE.FormValidation.createBankDataValidator(
+					initData.data( 'validate-iban-url' ),
+					initData.data( 'generate-iban-url' )
+				);
+				if (isIBAN) {
+					return bankDataValidator.validateIban( iban );
+				}
+				return bankDataValidator.validateClassicAccountNumber( iban, bic );
 			}
 		}
 
