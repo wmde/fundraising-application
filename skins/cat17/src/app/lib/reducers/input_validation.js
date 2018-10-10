@@ -86,12 +86,6 @@ function inputValidation( validationState, action ) {
 			if ( action.payload.bic || !bankDataIsValid ) {
 				newValidationState.bic = { dataEntered: true, isValid: bankDataIsValid };
 			}
-			if ( action.payload.account || !bankDataIsValid ) {
-				newValidationState.accountNumber = { dataEntered: true, isValid: bankDataIsValid };
-			}
-			if ( action.payload.bankCode || !bankDataIsValid ) {
-				newValidationState.bankCode = { dataEntered: true, isValid: bankDataIsValid };
-			}
 			return newValidationState;
 		case 'FINISH_EMAIL_ADDRESS_VALIDATION':
 			if ( action.payload.status === ValidationStates.INCOMPLETE ) {

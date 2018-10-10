@@ -9,8 +9,6 @@ var formContentLib = require( './form_content' ),
 		paymentIntervalInMonths: -1, // 0, 1, 3, 6 or 12, 0 = non-recurring payment
 		iban: '',
 		bic: '',
-		accountNumber: '',
-		bankCode: '',
 		bankName: '',
 		addressType: '', // person, firma and anonym
 		salutation: '',
