@@ -11,8 +11,6 @@ test( 'No payment type and no bank data given is not validated and has no data e
 				paymentType: null,
 				iban: '',
 				bic: '',
-				accountNumber: '',
-				bankCode: ''
 			},
 			membershipInputValidation: {
 				iban: {
@@ -20,14 +18,6 @@ test( 'No payment type and no bank data given is not validated and has no data e
 					isValid: null
 				},
 				bic: {
-					dataEntered: false,
-					isValid: null
-				},
-				accountNumber: {
-					dataEntered: false,
-					isValid: null
-				},
-				bankCode: {
 					dataEntered: false,
 					isValid: null
 				}
@@ -51,8 +41,6 @@ test( 'BEZ payment type and sane bank data given is valid and has data entered',
 				paymentType: 'BEZ',
 				iban: 'DE12500105170648489890',
 				bic: 'INGDDEFFXXX',
-				accountNumber: '0648489890',
-				bankCode: '50010517'
 			},
 			membershipInputValidation: {
 				iban: {
@@ -60,14 +48,6 @@ test( 'BEZ payment type and sane bank data given is valid and has data entered',
 					isValid: true
 				},
 				bic: {
-					dataEntered: true,
-					isValid: true
-				},
-				accountNumber: {
-					dataEntered: true,
-					isValid: true
-				},
-				bankCode: {
 					dataEntered: true,
 					isValid: true
 				}
@@ -91,8 +71,6 @@ test( 'BEZ payment type and wrong bank data given is invalid but has data entere
 				paymentType: 'BEZ',
 				iban: 'DE1250010517',
 				bic: '',
-				accountNumber: '',
-				bankCode: ''
 			},
 			membershipInputValidation: {
 				iban: {
@@ -100,14 +78,6 @@ test( 'BEZ payment type and wrong bank data given is invalid but has data entere
 					isValid: false
 				},
 				bic: {
-					dataEntered: false,
-					isValid: null
-				},
-				accountNumber: {
-					dataEntered: false,
-					isValid: null
-				},
-				bankCode: {
 					dataEntered: false,
 					isValid: null
 				}
@@ -131,8 +101,6 @@ test( 'PPL payment type and no bank data given is valid and has data entered', f
 				paymentType: 'PPL',
 				iban: '',
 				bic: '',
-				accountNumber: '',
-				bankCode: ''
 			},
 			membershipInputValidation: {
 				iban: {
@@ -140,14 +108,6 @@ test( 'PPL payment type and no bank data given is valid and has data entered', f
 					isValid: null
 				},
 				bic: {
-					dataEntered: false,
-					isValid: null
-				},
-				accountNumber: {
-					dataEntered: false,
-					isValid: null
-				},
-				bankCode: {
 					dataEntered: false,
 					isValid: null
 				}
@@ -170,9 +130,7 @@ test( 'PPL payment type and wrong bank data given is valid and has data entered'
 			membershipFormContent: {
 				paymentType: 'PPL',
 				iban: 'DE1250010517',
-				bic: '',
-				accountNumber: '',
-				bankCode: ''
+				bic: ''
 			},
 			membershipInputValidation: {
 				iban: {
@@ -180,14 +138,6 @@ test( 'PPL payment type and wrong bank data given is valid and has data entered'
 					isValid: false
 				},
 				bic: {
-					dataEntered: false,
-					isValid: null
-				},
-				accountNumber: {
-					dataEntered: false,
-					isValid: null
-				},
-				bankCode: {
 					dataEntered: false,
 					isValid: null
 				}
