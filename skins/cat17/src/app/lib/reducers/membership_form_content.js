@@ -22,8 +22,6 @@ var formContentLib = require( './form_content' ),
 		dateOfBirth: '',
 		iban: '',
 		bic: '',
-		accountNumber: '',
-		bankCode: '',
 		bankname: '',
 		activePresets: false,
 		donationReceipt: false
