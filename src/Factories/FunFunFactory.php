@@ -78,30 +78,34 @@ use WMDE\Fundraising\DonationContext\UseCases\SofortPaymentNotification\SofortPa
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorValidator;
 use WMDE\Fundraising\DonationContext\UseCases\ValidateDonor\ValidateDonorUseCase;
-use WMDE\Fundraising\Frontend\BucketTesting\Logging\BucketLogger;
-use WMDE\Fundraising\Frontend\BucketTesting\Logging\BestEffortBucketLogger;
-use WMDE\Fundraising\Frontend\BucketTesting\Logging\JsonBucketLogger;
-use WMDE\Fundraising\Frontend\BucketTesting\Logging\StreamLogWriter;
-use WMDE\Fundraising\Frontend\BucketTesting\RandomBucketSelection;
-use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
-use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
+use WMDE\Fundraising\Frontend\BucketTesting\BucketSelector;
 use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignBuilder;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignCollection;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignConfigurationLoader;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignConfigurationLoaderInterface;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignFeatureBuilder;
-use WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder;
 use WMDE\Fundraising\Frontend\BucketTesting\DoorkeeperFeatureToggle;
 use WMDE\Fundraising\Frontend\BucketTesting\FeatureToggle;
-use WMDE\Fundraising\Frontend\BucketTesting\BucketSelector;
+use WMDE\Fundraising\Frontend\BucketTesting\Logging\BestEffortBucketLogger;
+use WMDE\Fundraising\Frontend\BucketTesting\Logging\BucketLogger;
+use WMDE\Fundraising\Frontend\BucketTesting\Logging\JsonBucketLogger;
+use WMDE\Fundraising\Frontend\BucketTesting\Logging\StreamLogWriter;
+use WMDE\Fundraising\Frontend\BucketTesting\RandomBucketSelection;
+use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
+use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
+use WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\InternetDomainNameValidator;
+use WMDE\Fundraising\Frontend\Infrastructure\JsonStringReader;
 use WMDE\Fundraising\Frontend\Infrastructure\LoggingMailer;
-use WMDE\Fundraising\Frontend\Infrastructure\Payment\LoggingPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\MailTemplateFilenameTraversable;
 use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 use WMDE\Fundraising\Frontend\Infrastructure\OperatorMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
+use WMDE\Fundraising\Frontend\Infrastructure\Payment\KontoCheckBankDataGenerator;
+use WMDE\Fundraising\Frontend\Infrastructure\Payment\KontoCheckIbanValidator;
+use WMDE\Fundraising\Frontend\Infrastructure\Payment\LoggingPaymentNotificationVerifier;
+use WMDE\Fundraising\Frontend\Infrastructure\Payment\McpCreditCardService;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\PaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\PiwikServerSideTracker;
@@ -110,9 +114,6 @@ use WMDE\Fundraising\Frontend\Infrastructure\ServerSideTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\WordListFileReader;
-use WMDE\Fundraising\Frontend\Infrastructure\Payment\KontoCheckBankDataGenerator;
-use WMDE\Fundraising\Frontend\Infrastructure\Payment\KontoCheckIbanValidator;
-use WMDE\Fundraising\Frontend\Infrastructure\Payment\McpCreditCardService;
 use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector;
 use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
@@ -132,19 +133,18 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\CreditCardPaymentUrlGenera
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormViolationPresenter;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\DonorUpdateHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\GetInTouchHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\IbanPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\InternalErrorHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipFormViolationPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\PageNotFoundPresenter;
-use WMDE\Fundraising\Frontend\Presentation\Presenters\DonorUpdateHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\Fundraising\Frontend\Validation\IsCustomAmountValidator;
 use WMDE\Fundraising\Frontend\Validation\TemplateNameValidator;
-use WMDE\Fundraising\MembershipContext\UseCases\ValidateMembershipFee\ValidateMembershipFeeUseCase;
 use WMDE\Fundraising\MembershipContext\Authorization\ApplicationAuthorizer;
 use WMDE\Fundraising\MembershipContext\Authorization\ApplicationTokenFetcher;
 use WMDE\Fundraising\MembershipContext\Authorization\MembershipTokenGenerator;
@@ -167,6 +167,7 @@ use WMDE\Fundraising\MembershipContext\UseCases\HandleSubscriptionPaymentNotific
 use WMDE\Fundraising\MembershipContext\UseCases\HandleSubscriptionSignupNotification\HandleSubscriptionSignupNotificationUseCase;
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationPresenter;
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationUseCase;
+use WMDE\Fundraising\MembershipContext\UseCases\ValidateMembershipFee\ValidateMembershipFeeUseCase;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Client as SofortClient;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataValidator;
@@ -190,11 +191,11 @@ use WMDE\Fundraising\Store\Installer;
 use WMDE\Fundraising\SubscriptionContext\DataAccess\DoctrineSubscriptionRepository;
 use WMDE\Fundraising\SubscriptionContext\Domain\Repositories\SubscriptionRepository;
 use WMDE\Fundraising\SubscriptionContext\Infrastructure\LoggingSubscriptionRepository;
+use WMDE\Fundraising\SubscriptionContext\Infrastructure\TemplateMailerInterface as SubscriptionTemplateMailerInterface;
 use WMDE\Fundraising\SubscriptionContext\UseCases\AddSubscription\AddSubscriptionUseCase;
 use WMDE\Fundraising\SubscriptionContext\UseCases\ConfirmSubscription\ConfirmSubscriptionUseCase;
 use WMDE\Fundraising\SubscriptionContext\Validation\SubscriptionDuplicateValidator;
 use WMDE\Fundraising\SubscriptionContext\Validation\SubscriptionValidator;
-use WMDE\Fundraising\SubscriptionContext\Infrastructure\TemplateMailerInterface as SubscriptionTemplateMailerInterface;
 use WMDE\FunValidators\Validators\AllowedValuesValidator;
 use WMDE\FunValidators\Validators\AmountPolicyValidator;
 use WMDE\FunValidators\Validators\EmailValidator;
@@ -646,31 +647,19 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function getFaqContent(): string {
-		try {
-			$json = ( new SimpleFileFetcher() )->fetchFile( $this->getI18nDirectory() . '/data/faq.json' );
-			json_decode( $json );
-			if ( $json === '' || json_last_error() !== JSON_ERROR_NONE ) {
-				throw new RuntimeException( 'no_questions_defined' );
-			}
-			return $json;
-		}
-		catch( FileFetchingException $e ) {
-			throw new RuntimeException( 'no_questions_defined' );
-		}
+		return ( new JsonStringReader(
+			$this->getI18nDirectory() . '/data/faq.json',
+			new SimpleFileFetcher()
+		)
+		)->readAndValidateJson();
 	}
 
 	public function getFaqMessages(): string {
-		try {
-			$json = ( new SimpleFileFetcher() )->fetchFile( $this->getI18nDirectory() . '/messages/faqMessages.json' );
-			json_decode( $json );
-			if ( $json === '' || json_last_error() !== JSON_ERROR_NONE ) {
-				throw new RuntimeException( 'no_questions_defined' );
-			}
-			return $json;
-		}
-		catch( FileFetchingException $e ) {
-			throw new RuntimeException( 'no_questions_defined' );
-		}
+		return ( new JsonStringReader(
+			$this->getI18nDirectory() . '/messages/faqMessages.json',
+			new SimpleFileFetcher()
+		)
+		)->readAndValidateJson();
 	}
 
 	public function setSkinTwigEnvironment( Twig_Environment $twig ): void {
