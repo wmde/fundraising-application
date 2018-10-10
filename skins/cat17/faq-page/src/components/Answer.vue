@@ -1,5 +1,5 @@
 <template>
-  <div id="answer" class="space-around">
+  <div id="answer">
   <p>
 	{{ content }}
 	<span v-show="!collapsed">The rest of the text appears here! Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span>
