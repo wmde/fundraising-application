@@ -5,10 +5,11 @@ TMPDIR        := $(BUILD_DIR)/tmp
 COMPOSER_FLAGS :=
 NPM_FLAGS     := --prefer-offline
 DOCKER_FLAGS  := --interactive --tty
-TEST_DIR :=
-REDUX_LOG :=
+TEST_DIR      :=
+REDUX_LOG     :=
 UNIQUE_APP_CONTAINER := $(shell uuidgen)-app
 MIGRATION_VERSION :=
+APP_ENV       := dev
 
 .DEFAULT_GOAL := ci
 
@@ -39,7 +40,7 @@ update-php:
 	docker run --rm $(DOCKER_FLAGS) --volume $(BUILD_DIR):/app -w /app --volume ~/.composer:/composer --user $(current_user):$(current_group) composer update --ignore-platform-reqs $(COMPOSER_FLAGS)
 
 default-config:
-	cp build/app/config.prod.json app/config
+	cp build/app/config.dev.json app/config
 
 js:
 	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR):/data:delegated -w /data -e NO_UPDATE_NOTIFIER=1 -e REDUX_LOG=$(REDUX_LOG) node:8 npm run build-assets
@@ -86,7 +87,7 @@ validate-app-config:
 	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./console app:validate:config app/config/config.dist.json app/config/config.test.json
 
 validate-campaign-config:
-	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./console app:validate:campaigns
+	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./console app:validate:campaigns $(APP_ENV)
 
 validate-campaign-utilization:
 	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./console app:validate:campaigns:utilization

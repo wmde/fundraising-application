@@ -5,19 +5,19 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests;
 
 use FileFetcher\SimpleFileFetcher;
-use Symfony\Component\Translation\Translator;
+
 use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeUrlGenerator;
+use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
 
 /**
  * @licence GNU GPL v2+
- * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class TestEnvironment {
 
 	public static function newInstance( array $config = [] ): self {
-		$instance = new self( $config );
+		$bootstrapper = new EnvironmentBootstrapper( 'test', [ 'test' => TestEnvironmentSetup::class ] );
+		$instance = new self( $config, $bootstrapper );
 
 		$installer = $instance->factory->newInstaller();
 
@@ -29,12 +29,8 @@ class TestEnvironment {
 
 		$installer->install();
 
-		$instance->factory->setNullMessenger();
-		$instance->factory->setSkinTwigEnvironment( new \Twig_Environment() );
-		$instance->factory->setUrlGenerator( new FakeUrlGenerator() );
-
-		// disabling translations in tests (will result in returned keys we can more easily test for)
-		$instance->factory->setTranslator( new Translator( 'zz_ZZ' ) );
+		$bootstrapper->getEnvironmentSetupInstance()
+			->setEnvironmentDependentInstances( $instance->factory, $config );
 
 		return $instance;
 	}
@@ -49,24 +45,16 @@ class TestEnvironment {
 	 */
 	private $factory;
 
-	private function __construct( array $config ) {
-		$this->config = array_replace_recursive( $this->getConfigFromFiles(), $config );
+	private function __construct( array $config, EnvironmentBootstrapper $bootstrapper ) {
+		$this->config = array_replace_recursive( $this->getConfigFromFiles( $bootstrapper ), $config );
 		$this->factory = new FunFunFactory( $this->config );
 	}
 
-	private function getConfigFromFiles(): array {
-		$readerArguments = [
+	private function getConfigFromFiles( EnvironmentBootstrapper $bootstrapper ): array {
+		$configReader = new ConfigReader(
 			new SimpleFileFetcher(),
-			__DIR__ . '/../app/config/config.dist.json',
-			__DIR__ . '/../app/config/config.test.json',
-		];
-
-		if ( is_readable( __DIR__ . '/../app/config/config.test.local.json' ) ) {
-			$readerArguments[] = __DIR__ . '/../app/config/config.test.local.json';
-		}
-
-		/** @noinspection PhpParamsInspection */
-		$configReader = new ConfigReader( ...$readerArguments );
+			...$bootstrapper->getConfigurationPathsForEnvironment( __DIR__ . '/../app/config' )
+		);
 
 		return $configReader->getConfig();
 	}

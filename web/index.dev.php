@@ -12,28 +12,21 @@ ini_set( 'display_errors', '1' );
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use Monolog\Formatter\JsonFormatter;
-use Monolog\Formatter\LineFormatter;
-use Monolog\Handler\BufferHandler;
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
-use Symfony\Bridge\Twig\Extension\RoutingExtension;
+use FileFetcher\SimpleFileFetcher;
 use WMDE\Fundraising\Frontend\App\UrlGeneratorAdapter;
+use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
+use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
 
 /**
  * @var \WMDE\Fundraising\Frontend\Factories\FunFunFactory $ffFactory
  */
 $ffFactory = call_user_func( function() {
-	$prodConfigPath = __DIR__ . '/../app/config/config.prod.json';
-	$configPaths = [ __DIR__ . '/../app/config/config.dist.json' ];
+	$bootstrapper = new EnvironmentBootstrapper( getenv( 'APP_ENV' ) ?: 'dev' );
 
-	if ( is_readable( $prodConfigPath ) ) {
-		$configPaths[] = $prodConfigPath;
-	}
-
-	$configReader = new \WMDE\Fundraising\Frontend\Infrastructure\ConfigReader(
-		new \FileFetcher\SimpleFileFetcher(),
-		...$configPaths
+	$configReader = new ConfigReader(
+		new SimpleFileFetcher(),
+		...$bootstrapper->getConfigurationPathsForEnvironment( __DIR__ . '/../app/config' )
 	);
 
 	$config = $configReader->getConfig();
@@ -42,30 +35,13 @@ $ffFactory = call_user_func( function() {
 		die( 'Dev entry point not available! Set enable-dev-entry-point to true to enable.' );
 	}
 
-	return new \WMDE\Fundraising\Frontend\Factories\FunFunFactory( $config );
+	$factory = new FunFunFactory( $configReader->getConfig() );
+
+	$bootstrapper->getEnvironmentSetupInstance()
+		->setEnvironmentDependentInstances( $factory, $config );
+
+	return $factory;
 } );
-
-$ffFactory->setLogger( call_user_func( function() use ( $ffFactory ) {
-	$logger = new Logger( 'index_dev_php' );
-
-	$streamHandler = new StreamHandler(
-		$ffFactory->getLoggingPath() . '/' . ( new \DateTime() )->format( 'Y-m-d\TH:i:s\Z' ) . '.log'
-	);
-
-	$bufferHandler = new BufferHandler( $streamHandler, 500, Logger::DEBUG, true, true );
-	$streamHandler->setFormatter( new LineFormatter( "%message% - %context%\n" ) );
-	$logger->pushHandler( $bufferHandler );
-
-	$errorHandler = new StreamHandler(
-		$ffFactory->getLoggingPath() . '/error.log',
-		Logger::ERROR
-	);
-
-	$errorHandler->setFormatter( new JsonFormatter() );
-	$logger->pushHandler( $errorHandler );
-
-	return $logger;
-} ) );
 
 $app = \WMDE\Fundraising\Frontend\App\Bootstrap::initializeApplication( $ffFactory );
 $app['track_all_the_memory'] = $ffFactory;
