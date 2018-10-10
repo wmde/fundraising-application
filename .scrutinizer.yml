@@ -19,6 +19,8 @@ filter:
         - 'node_modules/*'
         - 'tests/*'
         - 'src/Factories/FunFunFactory.php'
+        - 'app/Bootstrap.php'
+        - 'app/Routes.php'
     dependency_paths:
         - 'vendor/'
 
