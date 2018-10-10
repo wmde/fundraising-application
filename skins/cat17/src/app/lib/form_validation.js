@@ -125,51 +125,29 @@ var objectAssign = require( 'object-assign' ),
 		validationUrlForSepa: '',
 		validationUrlForNonSepa: '',
 		sendFunction: null,
-		validate: function ( formValues ) {
-			if ( formValues.paymentType && formValues.paymentType !== 'BEZ' ) {
-				return {
-					status: ValidationStates.NOT_APPLICABLE
-				};
-			}
-
-			if ( formValues.debitType === 'sepa' ) {
-				return this.validateSepa( formValues );
-			}
-
-			return this.validateNonSepa( formValues );
-		},
 		/**
-		 * @private
-		 * @param {Object} formValues
+		 * @param {string} iban
 		 * @return {Promise}
 		 */
-		validateSepa: function ( formValues ) {
-			if ( formValues.iban === '' ) {
-				return { status: ValidationStates.INCOMPLETE };
-			}
-
+		validateIban: function ( iban ) {
 			return this.getValidationResultFromApi(
 				this.validationUrlForSepa,
 				{
-					iban: formValues.iban
+					iban
 				}
 			);
 		},
 		/**
-		 * @private
-		 * @param {Object} formValues
+		 * @param {string} accountNumber
+		 * @param {string} bankCode
 		 * @return {Promise}
 		 */
-		validateNonSepa: function ( formValues ) {
-			if ( formValues.accountNumber === '' || formValues.bankCode === '' ) {
-				return { status: ValidationStates.INCOMPLETE };
-			}
-
+		validateClassicAccountNumber: function ( accountNumber, bankCode ) {
 			return this.getValidationResultFromApi(
 				this.validationUrlForNonSepa,
 				{
-					accountNumber: formValues.accountNumber,
-					bankCode: formValues.bankCode
+					accountNumber,
+					bankCode
 				}
 			);
 		},
