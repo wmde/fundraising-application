@@ -88,6 +88,8 @@
 
     - name: Create Doctrine proxy classes
       command: vendor/bin/doctrine orm:generate-proxies var/doctrine_proxies chdir={{ app_dir }}/{{ release_name }}
+      environment:
+        APP_ENV: "{{ environment_name }}"
 
     - name: Symlink the release
       file:
