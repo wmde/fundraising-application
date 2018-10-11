@@ -46,6 +46,9 @@ js:
 	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR):/data:delegated -w /data -e NO_UPDATE_NOTIFIER=1 -e REDUX_LOG=$(REDUX_LOG) node:8 npm run build-assets
 	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR):/data:delegated -w /data -e NO_UPDATE_NOTIFIER=1 node:8 npm run copy-assets
 
+watch-js:
+	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR):/data:delegated -w /data/skins/cat17 -e NO_UPDATE_NOTIFIER=1 -e REDUX_LOG=$(REDUX_LOG) node:8 npm run watch
+
 clear:
 	rm -rf var/cache/
 	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app rm -rf var/cache/
