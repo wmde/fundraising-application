@@ -9,10 +9,12 @@ const ImageminPlugin = require( 'imagemin-webpack-plugin' ).default;
 // - build faq (+ vue, with extra CSS file)
 // - Add watch task to npm
 
-const OUTPUT_PATH = path.resolve( __dirname, 'web' );
-
 module.exports = mode => {
 	const { ifProduction } = getIfUtils( mode );
+	const OUTPUT_PATH = ifProduction(
+		path.resolve( __dirname, 'web' ),
+		path.resolve( __dirname, '../../web/skins/cat17' )
+	);
 
 	return {
 		mode: ifProduction( 'production', 'development' ),
@@ -59,13 +61,21 @@ module.exports = mode => {
 			} )
 		],
 		devtool: ifProduction( 'source-map', 'eval' ),
-		stats: {
-			all: false,
-			modules: true,
-			maxModules: 0,
-			errors: true,
-			warnings: true,
-			warningsFilter: [/font/]
+		stats: ifProduction(
+			{
+				all: false,
+				modules: true,
+				maxModules: 0,
+				errors: true,
+				warnings: true,
+				warningsFilter: [/font/]
+			},
+			'normal'
+		),
+		resolve: {
+			alias: {
+				'vue$': 'vue/dist/vue.esm.js'
+			}
 		}
 	}
 };

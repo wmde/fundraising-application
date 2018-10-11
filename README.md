@@ -207,7 +207,7 @@ For a full JS CI run
 
     make ci
 
-If JavaScript files where changed, you will need to (re)run
+If JavaScript or CSS files where changed, you will need to (re)run
 
     make js
 
@@ -219,20 +219,17 @@ Actions and their resulting state will be logged.
     
 ### Automatic recompilation of assets during development
 
-If you are working on the JavaScript files and need automatic recompilation when a files changes, 
-you can run the following Docker commands 
+If you are working on the JavaScript files of the cat17 skin and need automatic recompilation when a files changes, run the command
 
-Run the Docker command corresponding to the skin:
+    make watch-js  
 
-    docker run --rm -it -u $(id -u):$(id -g) -v $(pwd):/app -v $(pwd)/web/skins/cat17:/app/skins/cat17/web -w /app/skins/cat17 -e NO_UPDATE_NOTIFIER=1 node:8 npm run watch
+To debug problems in the Redux data flow, add the parameter `REDUX_LOG=on` to the command line above
+
+To do the same for the 10h16 skin, run the following Docker command corresponding to the skin:
+
     docker run --rm -it -u $(id -u):$(id -g) -v $(pwd):/app -v $(pwd)/web/skins/10h16:/app/skins/10h16/web -w /app/skins/10h16 -e NO_UPDATE_NOTIFIER=1 node:8 npm run watch 
 
-If you want to debug problems in the Redux data flow add the parameter `-e REDUX_LOG=on` to the command line above
-
-Actions and their resulting state will be logged.
-
-Until [issue T192906](https://phabricator.wikimedia.org/T192906) is fixed, the commands `make js` and `make ui` will 
-issue (harmless) error messages as long as the symlinks are in place. 
+If you want to debug problems in the Redux data flow, add the parameter `-e REDUX_LOG=on` to the command line above
 
 ## Skins
 

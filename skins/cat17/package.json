@@ -9,7 +9,7 @@
   },
   "scripts": {
     "clean": "rimraf web/scripts web/css web/assets",
-    "watch": "echo 'Watching is currently not supported' && exit 1",
+    "watch": "npm-run-all watch-faq webpack-watch-assets",
     "watch-faq": "watchify -vd -p browserify-hmr -e faq-page/src/main.js -o ../../web/skins/cat17/scripts/faq.js",
     "build-faq": "mkdirp web/scripts && cross-env NODE_ENV=production browserify -g envify -p [ vueify/plugins/extract-css -o web/css/faq.css ] -e faq-page/src/main.js | uglifyjs -c warnings=false -m > web/scripts/faq.js",
     "test": "tape 'src/app/tests/**/*.js' | tap-min",
@@ -19,7 +19,8 @@
     "build-sass": "node-sass --output-style compressed -o web/css --include-path node_modules src/sass/main.scss",
     "optimize-css": "postcss -r web/css",
     "build-css": "npm run build-sass && npm run optimize-css",
-    "webpack-build-assets": "webpack --env production"
+    "webpack-build-assets": "webpack --env production",
+    "webpack-watch-assets": "webpack --watch --env development"
   },
   "repository": {
     "type": "git",
