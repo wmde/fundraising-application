@@ -59,7 +59,7 @@ class RenderMailTemplatesCommand extends Command {
 
 		$app = Bootstrap::initializeApplication( $ffFactory );
 		$app->flush();
-		
+
 		$ffFactory->setUrlGenerator( new UrlGeneratorAdapter( $app['url_generator'] ) );
 
 		$mailTemplates = new MailTemplates( $ffFactory );
