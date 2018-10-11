@@ -1,4 +1,3 @@
-
 Sehr geehrte Frau 姜,
 
 donation_confirmation/intro
@@ -9,8 +8,7 @@ donation_confirmation/support
 
 donation_confirmation/greetings
 
-name_head_of_suborganization
-title_head_of_suborganization
+name_head_of_suborganization, title_head_of_suborganization
 
 ---------------------------------------------------------------------------
 wikimedia_vision

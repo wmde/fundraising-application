@@ -57,7 +57,7 @@ class RenderMailTemplatesCommand extends Command {
 
 		require __DIR__ . '/../app/Bootstrap.php';
 
-		$app = Bootstrap::initializeApplication($ffFactory);
+		$app = Bootstrap::initializeApplication( $ffFactory );
 		$app->flush();
 		
 		$ffFactory->setUrlGenerator( new UrlGeneratorAdapter( $app['url_generator'] ) );
