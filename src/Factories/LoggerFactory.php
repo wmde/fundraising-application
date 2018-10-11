@@ -33,7 +33,7 @@ class LoggerFactory {
 	}
 
 	private function newHandler(): HandlerInterface {
-		switch ( $this->config['type'] ) {
+		switch ( $this->config['method'] ?? '' ) {
 			case self::TYPE_ERROR_LOG:
 				return new ErrorLogHandler( ErrorLogHandler::OPERATING_SYSTEM, $this->config['level'] );
 			case self::TYPE_FILE:
@@ -47,7 +47,7 @@ class LoggerFactory {
 					$this->config['level']
 				);
 			default:
-				throw new \InvalidArgumentException( 'Unknown logger type - ' . $this->config['type'] );
+				throw new \InvalidArgumentException( 'Unknown logging method - ' . $this->config['method'] );
 		}
 	}
 

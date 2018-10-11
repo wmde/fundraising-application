@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 class LoggerFactoryTest extends TestCase {
 	public function testGivenErrorHandlerConfiguration_itReturnsErrorLoggingHandler() {
 		$factory = new LoggerFactory( [
-			'type' => 'error_log',
+			'method' => 'error_log',
 			'level' => 'WARNING'
 		]);
 		$logger = $factory->getLogger();
@@ -28,7 +28,7 @@ class LoggerFactoryTest extends TestCase {
 	public function testGivenFileConfiguration_itReturnsStreamHandler() {
 		vfsStream::setup( 'logs' );
 		$factory = new LoggerFactory( [
-			'type' => 'file',
+			'method' => 'file',
 			'url' => vfsStream::url( 'logs/error.log' ),
 			'level' => 'ERROR'
 		]);
@@ -42,7 +42,7 @@ class LoggerFactoryTest extends TestCase {
 
 	public function testGivenGraylogConfiguration_itReturnsStreamHandler() {
 		$factory = new LoggerFactory( [
-			'type' => 'gelf',
+			'method' => 'gelf',
 			'url' => 'example.com:12201',
 			'level' => 'NOTICE'
 		]);
@@ -55,7 +55,7 @@ class LoggerFactoryTest extends TestCase {
 
 	public function testGivenUnknownLogType_exeptionIsThrown() {
 		$factory = new LoggerFactory( [
-			'type' => 'syslog'
+			'method' => 'syslog'
 		]);
 		$this->expectException( \InvalidArgumentException::class );
 		$factory->getLogger();
