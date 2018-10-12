@@ -1,11 +1,11 @@
 <template>
 	<div>
 		<div v-bind:class="classesIBAN">
-			<input type="text" id="iban" name="iban" :placeholder="labels.iban" v-model="iban" v-on:input="handleIbanChange" v-on:blur="validate">
+			<input type="text" id="iban" name="iban" :placeholder="labels.iban" v-bind:value="ibanValue" v-on:input="handleIbanChange" v-on:blur="validate">
 			<label for="iban">{{ labels.iban }}</label>
 		</div>
 		<div v-bind:class="classesBIC">
-			<input type="text" id="bic" name="bic" :placeholder="labels.bic" v-model="bic" :disabled="writableBIC" v-on:input="handleBicChange" v-on:blur="validate">
+			<input type="text" id="bic" name="bic" :placeholder="labels.bic" v-bind:value="bicValue" :disabled="writableBIC" v-on:input="handleBicChange" v-on:blur="validate">
 			<label for="bic">{{ labels.bic }}</label>
 		</div>
 
@@ -31,6 +31,8 @@
 		data: function () {
 			// TODO Translate these strings
 			return {
+				ibanValue: '',
+				bicValue: '',
 				bankName: '',
 				errorText: 'Placeholder error text',
 				hasError: false,
@@ -38,18 +40,36 @@
 				bicFilled: false
 			};
 		},
+		watch: {
+			iban( v ) {
+				if ( this.looksLikeIban() ) {
+					this.ibanValue = v;
+				}
+			},
+			bic( v ) {
+				if ( this.looksLikeIban() ) {
+					this.bicValue = v;
+				}
+			}
+		},
 		methods: {
 			handleIbanChange( evt ) {
-				this.changeIban( evt.target.value );
+				this.ibanValue = evt.target.value;
+				if ( this.looksLikeIban() ) {
+					this.changeIban( evt.target.value );
+				}
 			},
 			handleBicChange( evt ) {
-				this.changeBic( evt.target.value );
+				this.bicValue = evt.target.value;
+				if ( this.looksLikeIban() ) {
+					this.changeBic( evt.target.value );
+				}
 			},
 			validate() {
-				if ( this.iban === '' || ( this.bic === '' && !this.looksLikeIban() ) ) {
-					return this.changeBankDataValidity( { status: 'INCOMPLETE', iban: this.iban, bic: this.bic } );
+				if ( this.ibanValue === '' || ( this.bicValue === '' && !this.looksLikeIban() ) ) {
+					return this.changeBankDataValidity( { status: 'INCOMPLETE', iban: this.ibanValue, bic: this.bicValue } );
 				}
-				return this.validateBankData( this.iban, this.bic, this.looksLikeIban() )
+				return this.validateBankData( this.ibanValue, this.bicValue, this.looksLikeIban() )
 					.then( this.changeBankDataValidity )
 					.catch( () => {
 						this.errorText = 'An error has occurred. Please reload the page and try again.'; // TODO translate
@@ -57,16 +77,16 @@
 					} );
 			},
 			isIbanEmpty: function () {
-				return this.iban === '';
+				return this.ibanValue === '';
 			},
 			isBicEmpty: function () {
-				return this.bic === '';
+				return this.bicValue === '';
 			},
 			looksLikeIban: function () {
-				return /^[A-Z]+([0-9]+)?$/.test( this.iban );
+				return /^[A-Z]+([0-9]+)?$/.test( this.ibanValue );
 			},
 			looksLikeBankAccountNumber: function () {
-				return /^\d+$/.test( this.iban );
+				return /^\d+$/.test( this.ibanValue );
 			}
 		},
 		computed: {
@@ -89,7 +109,7 @@
 				};
 			},
 			writableBIC() {
-				return /^(DE).*$/.test( this.iban );
+				return /^(DE).*$/.test( this.ibanValue );
 			},
 			classesIBAN() {
 				return {
