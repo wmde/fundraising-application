@@ -3,7 +3,11 @@
   "plugins": [
     "html"
   ],
-  "parserOptions": { "ecmaVersion": 6,
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "ecmaFeatures": {
+      "spread": true
+    },
     "sourceType": "module"
   },
   "env": {
@@ -13,6 +17,8 @@
     "es6": true
   },
   "rules": {
+    "arrow-parens": [ "error", "as-needed" ],
+    "one-var": [ "error", { "var": "always", "let": "never", "const": "never" } ],
     "semi-style": 0,
     "max-len": [ "warn", 185 ]
   }

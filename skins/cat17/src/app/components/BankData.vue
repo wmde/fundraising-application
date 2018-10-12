@@ -20,13 +20,13 @@
 	export default {
 		name: 'bank-data',
 		props: {
-			changeIban: 'Function',
-			changeBic: 'Function',
-			changeBankDataValidity: 'Function',
-			validateBankData: 'Function',
-			iban: 'String',
-			bic: 'String',
-			isValid: 'Boolean'
+			changeIban: Function,
+			changeBic: Function,
+			changeBankDataValidity: Function,
+			validateBankData: Function,
+			iban: String,
+			bic: String,
+			isValid: Boolean
 		},
 		data: function () {
 			// TODO Translate these strings
@@ -42,12 +42,12 @@
 		},
 		watch: {
 			iban( v ) {
-				if ( this.looksLikeIban() ) {
+				if ( this.looksLikeIban( v ) ) {
 					this.ibanValue = v;
 				}
 			},
 			bic( v ) {
-				if ( this.looksLikeIban() ) {
+				if ( this.looksLikeIban( this.ibanValue ) ) {
 					this.bicValue = v;
 				}
 			}
@@ -55,21 +55,21 @@
 		methods: {
 			handleIbanChange( evt ) {
 				this.ibanValue = evt.target.value;
-				if ( this.looksLikeIban() ) {
+				if ( this.looksLikeIban( this.ibanValue ) ) {
 					this.changeIban( evt.target.value );
 				}
 			},
 			handleBicChange( evt ) {
 				this.bicValue = evt.target.value;
-				if ( this.looksLikeIban() ) {
+				if ( this.looksLikeIban( this.ibanValue ) ) {
 					this.changeBic( evt.target.value );
 				}
 			},
 			validate() {
-				if ( this.ibanValue === '' || ( this.bicValue === '' && !this.looksLikeIban() ) ) {
+				if ( this.ibanValue === '' || ( this.bicValue === '' && !this.looksLikeIban( this.ibanValue ) ) ) {
 					return this.changeBankDataValidity( { status: 'INCOMPLETE', iban: this.ibanValue, bic: this.bicValue } );
 				}
-				return this.validateBankData( this.ibanValue, this.bicValue, this.looksLikeIban() )
+				return this.validateBankData( this.ibanValue, this.bicValue, this.looksLikeIban( this.ibanValue ) )
 					.then( this.changeBankDataValidity )
 					.catch( () => {
 						this.errorText = 'An error has occurred. Please reload the page and try again.'; // TODO translate
@@ -82,8 +82,8 @@
 			isBicEmpty: function () {
 				return this.bicValue === '';
 			},
-			looksLikeIban: function () {
-				return /^[A-Z]+([0-9]+)?$/.test( this.ibanValue );
+			looksLikeIban: function ( ibanValue ) {
+				return /^[A-Z]+([0-9]+)?$/.test( ibanValue );
 			},
 			looksLikeBankAccountNumber: function () {
 				return /^\d+$/.test( this.ibanValue );
