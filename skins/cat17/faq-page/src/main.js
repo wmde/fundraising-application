@@ -6,5 +6,5 @@ var Vue = require( 'vue' ),
 
 new Vue( { // eslint-disable-line no-new
 	el: '#faq',
-	render: ( h ) => h( Faq )
+	render: h => h( Faq )
 } );
