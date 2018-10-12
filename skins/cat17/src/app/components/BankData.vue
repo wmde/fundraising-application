@@ -28,15 +28,15 @@
 			bic: 'String',
 			isValid: 'Boolean'
 		},
-		data: function() {
-			//TODO Translate these strings
+		data: function () {
+			// TODO Translate these strings
 			return {
 				bankName: '',
 				errorText: 'Placeholder error text',
 				hasError: false,
 				isValidBic: true,
-				bicFilled: false,
-			}
+				bicFilled: false
+			};
 		},
 		methods: {
 			handleIbanChange( evt ) {
@@ -46,8 +46,8 @@
 				this.changeBic( evt.target.value );
 			},
 			validate() {
-				if( this.iban === '' || (this.bic === '' && !this.looksLikeIban() ) ) {
-					return this.changeBankDataValidity( { status: 'INCOMPLETE', iban: this.iban, bic: this.bic } ) ;
+				if ( this.iban === '' || ( this.bic === '' && !this.looksLikeIban() ) ) {
+					return this.changeBankDataValidity( { status: 'INCOMPLETE', iban: this.iban, bic: this.bic } );
 				}
 				return this.validateBankData( this.iban, this.bic, this.looksLikeIban() )
 					.then( this.changeBankDataValidity )
@@ -73,19 +73,19 @@
 			labels() {
 				if ( this.looksLikeIban() ) {
 					return {
-						'iban': 'IBAN',
-						'bic': 'BIC'
+						iban: 'IBAN',
+						bic: 'BIC'
 					};
 				}
 				if ( this.looksLikeBankAccountNumber() ) {
 					return {
-						'iban': 'Kontonummer',
-						'bic': 'Bankleitzahl'
+						iban: 'Kontonummer',
+						bic: 'Bankleitzahl'
 					};
 				}
 				return {
-					'iban': 'IBAN / Kontonummer',
-					'bic': 'BIC / Bankleitzahl'
+					iban: 'IBAN / Kontonummer',
+					bic: 'BIC / Bankleitzahl'
 				};
 			},
 			writableBIC() {
@@ -96,20 +96,19 @@
 					'field-grp': true,
 					'field-iba': true,
 					'field-labeled': true,
-					'invalid': !this.isValid,
-					'valid': this.isValid && !this.isIbanEmpty()
-				}
+					invalid: !this.isValid,
+					valid: this.isValid && !this.isIbanEmpty()
+				};
 			},
 			classesBIC() {
 				return {
 					'field-grp': true,
 					'field-iba': true,
 					'field-labeled': true,
-					'invalid': !this.isValid && !this.isBicEmpty(),
-					'valid': this.isValid && !this.isBicEmpty()
-				}
+					invalid: !this.isValid && !this.isBicEmpty(),
+					valid: this.isValid && !this.isBicEmpty()
+				};
 			}
-		},
-	}
-
+		}
+	};
 </script>
