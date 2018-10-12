@@ -27,6 +27,6 @@ export default {
 			return this.collapsed ? this.messages.expand : this.messages.collapse;
 		}
 	},
-	props: ['hiddenContent', 'visibleContent', 'messages', 'isPreview']
+	props: [ 'hiddenContent', 'visibleContent', 'messages', 'isPreview' ]
 };
 </script>
