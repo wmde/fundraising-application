@@ -10,7 +10,7 @@ test( 'No payment type and no bank data given is not validated and has no data e
 			donationFormContent: {
 				paymentType: '',
 				iban: '',
-				bic: '',
+				bic: ''
 			},
 			donationInputValidation: {
 				paymentType: {
@@ -44,7 +44,7 @@ test( 'BEZ payment type and sane bank data given is valid and has data entered',
 			donationFormContent: {
 				paymentType: 'BEZ',
 				iban: 'DE12500105170648489890',
-				bic: 'INGDDEFFXXX',
+				bic: 'INGDDEFFXXX'
 			},
 			donationInputValidation: {
 				paymentType: {
@@ -78,7 +78,7 @@ test( 'BEZ payment type and wrong bank data given is invalid but has data entere
 			donationFormContent: {
 				paymentType: 'BEZ',
 				iban: 'DE1250010517',
-				bic: '',
+				bic: ''
 			},
 			donationInputValidation: {
 				paymentType: {
@@ -112,7 +112,7 @@ test( 'SUB payment type and no bank data given is valid and has data entered', f
 			donationFormContent: {
 				paymentType: 'SUB',
 				iban: '',
-				bic: '',
+				bic: ''
 			},
 			donationInputValidation: {
 				paymentType: {
@@ -146,7 +146,7 @@ test( 'SUB payment type and invalid bank data given is valid and has data entere
 			donationFormContent: {
 				paymentType: 'SUB',
 				iban: '7777',
-				bic: 'foo',
+				bic: 'foo'
 			},
 			donationInputValidation: {
 				paymentType: {

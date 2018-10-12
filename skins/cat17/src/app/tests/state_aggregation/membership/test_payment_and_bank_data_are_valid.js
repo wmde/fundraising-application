@@ -10,7 +10,7 @@ test( 'No payment type and no bank data given is not validated and has no data e
 			membershipFormContent: {
 				paymentType: null,
 				iban: '',
-				bic: '',
+				bic: ''
 			},
 			membershipInputValidation: {
 				iban: {
@@ -40,7 +40,7 @@ test( 'BEZ payment type and sane bank data given is valid and has data entered',
 			membershipFormContent: {
 				paymentType: 'BEZ',
 				iban: 'DE12500105170648489890',
-				bic: 'INGDDEFFXXX',
+				bic: 'INGDDEFFXXX'
 			},
 			membershipInputValidation: {
 				iban: {
@@ -70,7 +70,7 @@ test( 'BEZ payment type and wrong bank data given is invalid but has data entere
 			membershipFormContent: {
 				paymentType: 'BEZ',
 				iban: 'DE1250010517',
-				bic: '',
+				bic: ''
 			},
 			membershipInputValidation: {
 				iban: {
@@ -100,7 +100,7 @@ test( 'PPL payment type and no bank data given is valid and has data entered', f
 			membershipFormContent: {
 				paymentType: 'PPL',
 				iban: '',
-				bic: '',
+				bic: ''
 			},
 			membershipInputValidation: {
 				iban: {

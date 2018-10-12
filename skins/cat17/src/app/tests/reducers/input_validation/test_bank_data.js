@@ -16,11 +16,11 @@ function newBankDataValidationAction( payload ) {
 test( 'If bank data validation is successful, all fields in payload have valid status', function ( t ) {
 	var stateBefore = {
 			iban: { dataEntered: false, isValid: null },
-			bic: { dataEntered: false, isValid: null },
+			bic: { dataEntered: false, isValid: null }
 		},
 		expectedState = {
 			iban: { dataEntered: true, isValid: true },
-			bic: { dataEntered: true, isValid: true },
+			bic: { dataEntered: true, isValid: true }
 		};
 
 	deepFreeze( stateBefore );
@@ -35,11 +35,11 @@ test( 'If bank data validation is successful, all fields in payload have valid s
 test( 'If bank data validation is successful, only fields in payload change status', function ( t ) {
 	var stateBefore = {
 			iban: { dataEntered: false, isValid: null },
-			bic: { dataEntered: false, isValid: null },
+			bic: { dataEntered: false, isValid: null }
 		},
 		expectedState = {
 			iban: { dataEntered: true, isValid: true },
-			bic: { dataEntered: false, isValid: null },
+			bic: { dataEntered: false, isValid: null }
 		};
 
 	deepFreeze( stateBefore );
@@ -53,11 +53,11 @@ test( 'If bank data validation is successful, only fields in payload change stat
 test( 'If bank data validation fails, all fields retrieve invalid status', function ( t ) {
 	var stateBefore = {
 			iban: { dataEntered: false, isValid: null },
-			bic: { dataEntered: false, isValid: null },
+			bic: { dataEntered: false, isValid: null }
 		},
 		expectedState = {
 			iban: { dataEntered: true, isValid: false },
-			bic: { dataEntered: true, isValid: false },
+			bic: { dataEntered: true, isValid: false }
 		};
 
 	deepFreeze( stateBefore );
