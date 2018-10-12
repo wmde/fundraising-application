@@ -28,6 +28,6 @@ class DevelopmentEnvironmentSetupTest extends TestCase {
 		$factory->expects( $this->never() )->method( $this->logicalNot( $this->matchesRegularExpression( $methodNameMatcher ) ) );
 
 		$setup = new DevelopmentEnvironmentSetup();
-		$setup->setEnvironmentDependentInstances( $factory, [ 'logging' => [ 'type' => 'error_log', 'level' => 0 ] ] );
+		$setup->setEnvironmentDependentInstances( $factory, [ 'logging' => [ 'method' => 'error_log', 'level' => 0 ] ] );
 	}
 }
