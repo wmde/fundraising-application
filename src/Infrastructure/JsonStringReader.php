@@ -12,7 +12,7 @@ class JsonStringReader {
 	private $fileFetcher;
 	private $json;
 
-	public function __construct( string $file , FileFetcher $fileFetcher ) {
+	public function __construct( string $file, FileFetcher $fileFetcher ) {
 		$this->file = $file;
 		$this->fileFetcher = $fileFetcher;
 	}
