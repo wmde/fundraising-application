@@ -30,6 +30,17 @@
 			position: relative;
 			top:50%;
 			transform: translateY(-50%);
+			&:after {
+				@media (max-width: 677px) {
+					content: $icon-keyboard_arrow_right;
+				}
+				position: absolute;
+				right: -30px;
+				font-family: 'icomoonwikimedia';
+				font-size: 20px;
+				top: 50%;
+				transform: translateY(-50%);
+			}
 		}
 		&.facebook {
 			a:after {
