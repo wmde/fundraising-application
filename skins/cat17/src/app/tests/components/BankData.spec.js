@@ -49,9 +49,9 @@ test( 'Given non-German IBAN value and BIC, BankData.vue calls changeBIC if IBAN
 	} );
 
 	const ibanInput = wrapper.find( '#iban' );
+	const bicInput = wrapper.find( '#bic' );
 	ibanInput.setValue( 'AT123' );
 	ibanInput.trigger( 'input' );
-	const bicInput = wrapper.find( '#bic' );
 	bicInput.setValue( '98765' );
 	bicInput.trigger( 'input' );
 
@@ -80,8 +80,8 @@ test( 'Given IBAN value changes in IBAN and BIC property, BankData.vue renders t
 	const wrapper = shallowMount( BankData, {
 		propsData: initialProperties
 	} );
-	const bicInput = wrapper.find( '#bic' );
 	const ibanInput = wrapper.find( '#iban' );
+	const bicInput = wrapper.find( '#bic' );
 
 	t.equal( ibanInput.element.value, '' );
 	t.equal( bicInput.element.value, '' );
@@ -102,8 +102,8 @@ test( 'Given classic account value, BankData.vue does not render changes to IBAN
 	const wrapper = shallowMount( BankData, {
 		propsData: initialProperties
 	} );
-	const bicInput = wrapper.find( '#bic' );
 	const ibanInput = wrapper.find( '#iban' );
+	const bicInput = wrapper.find( '#bic' );
 
 	t.equal( ibanInput.element.value, '' );
 	t.equal( bicInput.element.value, '' );
@@ -116,4 +116,93 @@ test( 'Given classic account value, BankData.vue does not render changes to IBAN
 
 	t.equal( ibanInput.element.value, '' );
 	t.equal( bicInput.element.value, '' );
+} );
+
+test( 'Given empty IBAN value on IBAN blur, validation is not triggered and validity is incomplete', t => {
+	t.plan( 1 );
+	const wrapper = shallowMount( BankData, {
+		propsData: newTestProperties( {
+			validateBankData: function () { return Promise.fail(); },
+			changeBankDataValidity: function ( validity ) {
+				t.equal( validity.status, 'INCOMPLETE' );
+			}
+		} )
+	} );
+
+	const ibanInput = wrapper.find( '#iban' );
+	ibanInput.trigger( 'blur' );
+} );
+
+test( 'Given filled IBAN value on IBAN blur, validation is triggered and validity is set to validation result', t => {
+	t.plan( 1 );
+	const validationResult = {
+		state: 'OK',
+		iban: 'DE12500105170648489890',
+		bic: 'INGDDEFFXXX'
+	};
+	const wrapper = shallowMount( BankData, {
+		propsData: newTestProperties( {
+			validateBankData: function () { return Promise.resolve( validationResult ); },
+			changeBankDataValidity: function ( validity ) {
+				t.deepEqual( validity, validationResult );
+			}
+		} )
+	} );
+
+	const ibanInput = wrapper.find( '#iban' );
+	ibanInput.setValue( 'DE12500105170648489890' );
+	ibanInput.trigger( 'input' );
+	ibanInput.trigger( 'blur' );
+} );
+
+test( 'Given filled classic values on blur, validation is triggered and validity is set to validation result', t => {
+	t.plan( 1 );
+	const validationResult = {
+		state: 'OK',
+		iban: 'DE12500105170648489890',
+		bic: 'INGDDEFFXXX'
+	};
+	const wrapper = shallowMount( BankData, {
+		propsData: newTestProperties( {
+			validateBankData: function () { return Promise.resolve( validationResult ); },
+			changeBankDataValidity: function ( validity ) {
+				t.deepEqual( validity, validationResult );
+			}
+		} )
+	} );
+
+	const ibanInput = wrapper.find( '#iban' );
+	const bicInput = wrapper.find( '#bic' );
+
+	ibanInput.setValue( '0648489890' );
+	ibanInput.trigger( 'input' );
+	bicInput.setValue( '50010517' );
+	bicInput.trigger( 'input' );
+
+	ibanInput.trigger( 'blur' );
+} );
+
+test( 'Given filled only one of the classic values on blur, validation is validation is not triggered and validity is incomplete', t => {
+	t.plan( 2 );
+	const wrapper = shallowMount( BankData, {
+		propsData: newTestProperties( {
+			validateBankData: function () { return Promise.fail(); },
+			changeBankDataValidity: function ( validity ) {
+				t.deepEqual( validity.status, 'INCOMPLETE' );
+			}
+		} )
+	} );
+
+	const ibanInput = wrapper.find( '#iban' );
+	const bicInput = wrapper.find( '#bic' );
+
+	ibanInput.setValue( '0648489890' );
+	ibanInput.trigger( 'input' );
+	ibanInput.trigger( 'blur' );
+
+	ibanInput.setValue( '' );
+	ibanInput.trigger( 'input' );
+	bicInput.setValue( '50010517' );
+	bicInput.trigger( 'input' );
+	bicInput.trigger( 'blur' );
 } );
