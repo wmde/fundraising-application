@@ -300,7 +300,7 @@ $( function () {
 		// We can assume the validity of amount and interval here, so next section is either payment method or personal data
 		var nextRequired = currentState.donationFormContent.paymentType === 'BEZ' ? $( '#payment-method' ) : $( '#donation-type .legend:first' ),
 			$introBanner = $('.introduction-banner'),
-			animationTime = initData.data( 'feature-toggle-usability' ) ? 1 : 1000;
+			animationTime = 1;
 		$introBanner.insertBefore( nextRequired ).removeClass( 'hidden' );
 
 		scroller.scrollTo( $introBanner, { elementStart: WMDE.Scrolling.ElementStart.MARGIN }, animationTime );
