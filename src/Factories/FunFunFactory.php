@@ -1327,8 +1327,7 @@ class FunFunFactory implements ServiceProviderInterface {
 	private function getDonationFormTemplate(): TwigTemplate {
 		return $this->getLayoutTemplate( 'Donation_Form.html.twig', [
 			'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForDonation(),
-			'presetAmounts' => $this->getPresetAmountsSettings( 'donations' ),
-			'featureToggle' => ['usabilityEnabled' => (int) $this->getChoiceFactory()->isUsabilityImproved()]
+			'presetAmounts' => $this->getPresetAmountsSettings( 'donations' )
 		] );
 	}
 

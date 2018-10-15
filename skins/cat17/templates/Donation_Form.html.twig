@@ -42,8 +42,6 @@
 					<section id="donation-amount" class="donation-amount clearfix">
 						<h2>{$ 'donation_section_amount_title' | trans $}</h2>
 
-						<p class="legend {% if featureToggle.usabilityEnabled %} hidden {% endif %}">{$ 'donation_section_amount_legend' | trans $}</p>
-
 						<fieldset
 							class="amount-qty padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
 							<legend class="sr-only">{$ 'donation_section_amount_legend' | trans $}</legend>
@@ -71,8 +69,6 @@
 					<section id="donation-payment" class="donation-payment-method clearfix">
 						<h2>{$ 'donation_section_payment_title' | trans $}</h2>
 
-						<p class="legend {% if featureToggle.usabilityEnabled %} hidden {% endif %}">{$ 'donation_section_payment_legend' | trans $}</p>
-
 						<fieldset id="payment-method"
 							class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left wrap-payment">
 							<legend class="sr-only">{$ 'donation_section_payment_legend' | trans $}</legend>
@@ -83,8 +79,6 @@
 
 					<section id="donation-type" class="donation-data clearfix">
 						<h2>{$ 'donation_section_donor_title' | trans $}</h2>
-
-						<p class="legend {% if featureToggle.usabilityEnabled %} hidden {% endif %}">{$ 'donation_section_donor_legend' | trans $}</p>
 
 						<fieldset id="type-donor"
 							class="show-info padding-right-4 col-xs-12 col-sm-8 col-sm-offset-right-4 col-md-6 col-md-offset-right-7 no-gutter-left">
@@ -130,13 +124,6 @@
 											<label for="last-name" class="sr-only">{$ 'lastname_label' | trans $}</label>
 											<span class="error-text">{$ 'form_lastname_error' | trans $}</span>
 										</div>
-										{% if not featureToggle.usabilityEnabled %}
-										<div class="field-grp field-email">
-											<input type="email" id="email" placeholder="{$ 'email_label' | trans $}" data-pattern="^[^@]+@.+$">
-											<label for="email" class="sr-only">{$ 'email_label' | trans $}</label>
-											<span class="error-text">{$ 'form_email_error' | trans $}</span>
-										</div>
-										{% endif %}
 										<div class="field-grp field-street">
 											<input type="text" id="street" placeholder="{$ 'street_label' | trans $}" data-pattern="^.+$">
 											<label for="street" class="sr-only">{$ 'street_label' | trans $}</label>
@@ -161,7 +148,6 @@
 												<option value="{$ countryCode $}">{$ ( 'country_option_' ~ countryCode ) | trans $}</option>
 											{% endfor %}
 										</select>
-										{% if featureToggle.usabilityEnabled %}
 											<div class="field-grp field-email">
 												<input type="email" id="email" placeholder="{$ 'email_label' | trans $}" data-pattern="^[^@]+@.+$">
 												<label for="email" class="sr-only">{$ 'email_label' | trans $}</label>
@@ -173,17 +159,8 @@
 													{$ 'donation_sendinfo_label' | trans | raw $}
 												</label>
 											</div>
-										{% endif %}
 									</div>
 									<div class="wrap-check">
-										{% if not featureToggle.usabilityEnabled %}
-										<div>
-											<input type="checkbox" id="newsletter" data-jcf='{"wrapNative": true}' class="jcf">
-											<label class="news" for="newsletter">
-												{$ 'donation_sendinfo_label' | trans | raw $}
-											</label>
-										</div>
-										{% endif %}
 										<div>
 											<input type="checkbox" id="donation-receipt" data-jcf='{"wrapNative": true}' class="jcf">
 											<label for="donation-receipt">
@@ -208,13 +185,6 @@
 											<label for="company-name" class="sr-only">{$ 'companyname_label' | trans $}</label>
 											<span class="error-text">{$ 'form_companyname_error' | trans $}</span>
 										</div>
-										{% if not featureToggle.usabilityEnabled %}
-										<div class="field-grp field-email">
-											<input type="email" id="email-company" name="email" placeholder="{$ 'email_label' | trans $}" data-pattern="^[^@]+@.+$">
-											<label for="email-company" class="sr-only">{$ 'email_label' | trans $}</label>
-											<span class="error-text">{$ 'form_email_error' | trans $}</span>
-										</div>
-										{% endif %}
 										<div class="field-grp field-street">
 											<input type="text" id="adress-company" name="street" placeholder="{$ 'street_label' | trans $}" data-pattern="^.+$">
 											<label for="adress-company" class="sr-only">{$ 'street_label' | trans $}</label>
@@ -239,7 +209,6 @@
 												<option value="{$ countryCode $}">{$ ( 'country_option_' ~ countryCode ) | trans $}</option>
 											{% endfor %}
 										</select>
-										{% if featureToggle.usabilityEnabled %}
 											<div class="field-grp field-email">
 												<input type="email" id="email-company" name="email" placeholder="{$ 'email_label' | trans $}" data-pattern="^[^@]+@.+$">
 												<label for="email-company" class="sr-only">{$ 'email_label' | trans $}</label>
@@ -251,17 +220,8 @@
 													{$ 'donation_sendinfo_label' | trans | raw $}
 												</label>
 											</div>
-										{% endif %}
 									</div>
 									<div class="wrap-check">
-										{% if not featureToggle.usabilityEnabled %}
-											<div>
-												<input type="checkbox" id="newsletter-company" name="info" value="1">
-												<label class="news" for="newsletter-company">
-													{$ 'donation_sendinfo_label' | trans | raw $}
-												</label>
-											</div>
-										{% endif %}
 										<div>
 											<input type="checkbox" id="donation-receipt-company" name="donationReceipt" value="0" data-jcf='{"wrapNative": true}' class="jcf">
 											<label for="donation-receipt-company">
@@ -329,6 +289,5 @@
 			data-validate-email-address-url="{$ basepath|e('html_attr') $}/validate-email"
 			data-validate-iban-url="{$ basepath|e('html_attr') $}/check-iban"
 			data-generate-iban-url="{$ basepath|e('html_attr') $}/generate-iban"
-			data-feature-toggle-usability="{$ featureToggle.usabilityEnabled $}"
 	></script>
 {% endblock %}
