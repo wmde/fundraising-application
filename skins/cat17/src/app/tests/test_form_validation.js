@@ -7,71 +7,69 @@ var test = require( 'tape-catch' ),
 	validation = require( '../lib/form_validation' );
 
 test( 'Fee validation sends values to server', function ( t ) {
-	var positiveResult = { status: 'OK' },
-		postFunctionSpy = sinon.stub().returns( Promise.resolve( positiveResult ) ),
-		feeValidator = validation.createFeeValidator(
+	const positiveResult = { status: 'OK' };
+	const postFunctionSpy = sinon.stub().returns( Promise.resolve( positiveResult ) );
+	const feeValidator = validation.createFeeValidator(
 			'http://spenden.wikimedia.org/validate-fee',
 			{ format: sinon.stub().returnsArg( 0 ) },
-			postFunctionSpy
-		),
-		formData = {
+			{ postData: postFunctionSpy }
+		);
+	const formData = {
 			amount: 23,
 			addressType: 'privat',
 			paymentIntervalInMonths: 1,
 			otherStuff: 'foo'
-		},
-		callParameters,
-		validationResult;
+		};
 
-	validationResult = feeValidator.validate( formData );
+	return feeValidator.validate( formData )
+		.then( function ( validationResult ) {
+			const callParameters = postFunctionSpy.getCall( 0 ).args;
+			t.ok( postFunctionSpy.calledOnce, 'data is sent once' );
+			t.equal( callParameters[ 0 ], 'http://spenden.wikimedia.org/validate-fee', 'validation calls configured URL' );
+			t.deepEqual( callParameters[ 1 ], {
+				amount: 23,
+				addressType: 'privat',
+				paymentIntervalInMonths: 1
+			}, 'validation sends only necessary data' );
+			t.deepEqual( validationResult, positiveResult, 'validation function returns promise result' );
+			t.end();
+		} )
 
-	t.ok( postFunctionSpy.calledOnce, 'data is sent once' );
-	callParameters = postFunctionSpy.getCall( 0 ).args;
-	t.equal( callParameters[ 0 ], 'http://spenden.wikimedia.org/validate-fee', 'validation calls configured URL' );
-	t.deepEqual( callParameters[ 1 ], {
-		amount: 23,
-		addressType: 'privat',
-		paymentIntervalInMonths: 1
-	}, 'validation sends only necessary data' );
-	t.equal( callParameters[ 3 ], 'json', 'validation expects JSON data' );
-	validationResult.then( function ( resultData ) {
-		t.deepEqual( resultData, positiveResult, 'validation function returns promise result' );
-	} );
-	t.end();
 } );
 
 test( 'Fee validation sends nothing to server if necessary values are not set', function ( t ) {
-	var incompleteResult = { status: 'INCOMPLETE' },
-		postFunctionSpy = sinon.spy(),
-		feeValidator = validation.createFeeValidator(
+	const incompleteResult = { status: 'INCOMPLETE' };
+	const postFunctionSpy = sinon.spy();
+	const feeValidator = validation.createFeeValidator(
 			'http://spenden.wikimedia.org/validate-fee',
 			{ format: sinon.stub().returnsArg( 0 ) },
-			postFunctionSpy
-		),
-		formDataEmptyAmount = {
+			{ postData: postFunctionSpy }
+		);
+	const formDataEmptyAmount = {
 			amount: 0,
 			addressType: 'privat',
 			paymentIntervalInMonths: 1
-		},
-		formDataEmptyAddressType = {
+		};
+	const formDataEmptyAddressType = {
 			amount: 23,
 			addressType: null,
 			paymentIntervalInMonths: 1
-		},
-		formDataEmptyPaymentInterval = {
+		};
+	const formDataEmptyPaymentInterval = {
 			amount: 23,
 			addressType: 'privat',
 			paymentIntervalInMonths: null
-		},
-		validationResults = [];
+		};
 
-	validationResults.push( feeValidator.validate( formDataEmptyAmount ) );
-	validationResults.push( feeValidator.validate( formDataEmptyAddressType ) );
-	validationResults.push( feeValidator.validate( formDataEmptyPaymentInterval ) );
-
-	t.notOk( postFunctionSpy.called, 'no data is sent ' );
-	t.deepEquals( [ incompleteResult, incompleteResult, incompleteResult ], validationResults, 'validation function returns incomplete result' );
-	t.end();
+	return Promise.all( [
+		feeValidator.validate( formDataEmptyAmount ),
+		feeValidator.validate( formDataEmptyAddressType ),
+		feeValidator.validate( formDataEmptyPaymentInterval )
+	] ).then( function ( validationResults ) {
+		t.notOk( postFunctionSpy.called, 'no data is sent ' );
+		t.deepEquals( [ incompleteResult, incompleteResult, incompleteResult ], validationResults, 'validation function returns incomplete result' );
+		t.end();
+	} )
 } );
 
 test( 'Email validation sends values to server', function ( t ) {

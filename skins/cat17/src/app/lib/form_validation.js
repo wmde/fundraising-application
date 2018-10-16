@@ -81,18 +81,18 @@ var objectAssign = require( 'object-assign' ),
 	FeeValidator = {
 		validationUrl: '',
 		feeFormatter: null,
-		sendFunction: null,
+		transport: null,
 		validate: function ( formValues ) {
 			var postData;
 			if ( this.formValuesHaveEmptyRequiredFields( formValues ) ) {
-				return { status: ValidationStates.INCOMPLETE };
+				return Promise.resolve( { status: ValidationStates.INCOMPLETE } );
 			}
 			postData = {
 				amount: this.feeFormatter.format( formValues.amount ),
 				paymentIntervalInMonths: formValues.paymentIntervalInMonths,
 				addressType: formValues.addressType
 			};
-			return jQueryDeferredToPromise( this.sendFunction( this.validationUrl, postData, null, 'json' ) );
+			return this.transport.postData( this.validationUrl, postData );
 		},
 		formValuesHaveEmptyRequiredFields: function ( formValues ) {
 			return formValues.amount === 0 || !formValues.addressType || !formValues.paymentIntervalInMonths;
@@ -182,11 +182,11 @@ var objectAssign = require( 'object-assign' ),
 	 * @param {Function} sendFunction jQuery.post function or equivalent
 	 * @return {*}
 	 */
-	createFeeValidator = function ( validationUrl, feeFormatter, sendFunction ) {
+	createFeeValidator = function ( validationUrl, feeFormatter, transport ) {
 		return objectAssign( Object.create( FeeValidator ), {
 			validationUrl: validationUrl,
 			feeFormatter: feeFormatter,
-			sendFunction: sendFunction || jQuery.post
+			transport: transport || new JQueryTransport()
 		} );
 	},
 
