@@ -1,6 +1,8 @@
 export const ValidationStates = {
 	OK: 'OK',
-		ERR: 'ERR',
+	ERR: 'ERR',
 	INCOMPLETE: 'INCOMPLETE',
 	NOT_APPLICABLE: 'NOT_APPLICABLE'
 };
+
+export default ValidationStates;

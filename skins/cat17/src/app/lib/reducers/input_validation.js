@@ -74,7 +74,11 @@ function inputValidation( validationState, action ) {
 			} else if ( action.payload.status === ValidationStates.OK ) {
 				newValidationState.amount = { dataEntered: true, isValid: true };
 			} else {
-				newValidationState.amount = { dataEntered: true, isValid: !action.payload.messages.amount };
+				newValidationState.amount = {
+					dataEntered: true,
+					isValid: ( action.payload.messages && !action.payload.messages.amount )
+				};
+				// TODO handle payload.messages.transportError
 			}
 			return newValidationState;
 		case 'FINISH_BANK_DATA_VALIDATION':

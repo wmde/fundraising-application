@@ -86,6 +86,9 @@ module.exports = mode => {
 			alias: {
 				'vue$': 'vue/dist/vue.esm.js'
 			}
+		},
+		externals: {
+			jquery: 'jQuery'
 		}
 	}
 };
