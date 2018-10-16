@@ -4,6 +4,7 @@ var objectAssign = require( 'object-assign' ),
 	Promise = require( 'promise' ),
 	_ = require( 'underscore' ),
 	ValidationStates = require( './validation_states' ).ValidationStates,
+	JQueryTransport = require( './jquery_transport' ).default,
 
 	isEmptyString = function ( value ) {
 		return value === '';
@@ -78,17 +79,30 @@ var objectAssign = require( 'object-assign' ),
 
 	AmountValidator = {
 		validationUrl: '',
-		sendFunction: null,
+		transport: null,
+		/**
+		 * @param {object} formValues
+		 * @return {Promise}
+		 */
 		validate: function ( formValues ) {
-			var postData;
+
 			if ( this.formValuesHaveEmptyRequiredFields( formValues ) ) {
-				return { status: ValidationStates.INCOMPLETE };
+				return Promise.resolve( { status: ValidationStates.INCOMPLETE } );
 			}
-			postData = {
-				amount: formValues.amount
-			};
-			return jQueryDeferredToPromise( this.sendFunction( this.validationUrl, postData, null, 'json' ) );
+			return this.transport.postData(
+				this.validationUrl,
+				{
+					amount: formValues.amount
+				}
+			).catch( function ( reason ) {
+				return Promise.resolve( { status: ValidationStates.ERR, messages: { transportError: reason } } );
+			});
 		},
+		/**
+		 * @param {object} formValues
+		 * @return {boolean}
+		 * @private
+		 */
 		formValuesHaveEmptyRequiredFields: function ( formValues ) {
 			return formValues.amount === 0;
 		}
@@ -181,13 +195,13 @@ var objectAssign = require( 'object-assign' ),
 	/**
 	 *
 	 * @param {string} validationUrl
-	 * @param {Function} sendFunction jQuery.post function or equivalent
+	 * @param {Transport} transport
 	 * @return {AmountValidator}
 	 */
-	createAmountValidator = function ( validationUrl, sendFunction ) {
+	createAmountValidator = function ( validationUrl, transport ) {
 		return objectAssign( Object.create( AmountValidator ), {
 			validationUrl: validationUrl,
-			sendFunction: sendFunction || jQuery.post
+			transport: transport || new JQueryTransport()
 		} );
 	},
 
