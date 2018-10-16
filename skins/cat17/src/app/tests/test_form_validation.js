@@ -38,7 +38,7 @@ test( 'Fee validation sends values to server', function ( t ) {
 } );
 
 test( 'Fee validation sends nothing to server if necessary values are not set', function ( t ) {
-	const incompleteResult = { status: 'INCOMPLETE' };
+	const incompleteResult = { status: ValidationStates.INCOMPLETE };
 	const postFunctionSpy = sinon.spy();
 	const feeValidator = validation.createFeeValidator(
 		'http://spenden.wikimedia.org/validate-fee',
@@ -73,7 +73,7 @@ test( 'Fee validation sends nothing to server if necessary values are not set', 
 } );
 
 test( 'Email validation sends values to server', function ( t ) {
-	const positiveResult = { status: 'OK' };
+	const positiveResult = { status: ValidationStates.OK };
 	const postFunctionSpy = sinon.stub().returns( Promise.resolve( positiveResult ) );
 	const emailValidator = validation.createEmailAddressValidator(
 		'http://spenden.wikimedia.org/validate-email',
@@ -91,7 +91,7 @@ test( 'Email validation sends values to server', function ( t ) {
 } );
 
 test( 'Email validation sends nothing to server if email address is not set', function ( t ) {
-	const incompleteResult = { status: 'INCOMPLETE' };
+	const incompleteResult = { status: ValidationStates.INCOMPLETE };
 	const postFunctionSpy = sinon.spy();
 	const emailValidator = validation.createEmailAddressValidator(
 		'http://spenden.wikimedia.org/validate-amount',
@@ -189,53 +189,46 @@ test( 'Given an incomplete private adddress, address validation sends no values 
 		} );
 } );
 
-test( 'Given sepa debit type, bank data validation sends IBAN to server', function ( t ) {
-	var positiveResult = { status: 'OK' }, // all other fields are not relevenat to the test
-		postFunctionSpy = sinon.stub().returns( Promise.resolve( positiveResult ) ),
+test( 'Bank data validator sends IBAN to server', function ( t ) {
+	var positiveResult = { status: ValidationStates.OK },
+		transportFunctionSpy = sinon.stub().returns( Promise.resolve( positiveResult ) ),
 		bankDataValidator = validation.createBankDataValidator(
 			'http://spenden.wikimedia.org/check-iban',
 			'http://spenden.wikimedia.org/generate-iban',
-			postFunctionSpy
-		),
-		callParameters,
-		validationResult;
+			{ getData: transportFunctionSpy }
+		);
 
-	validationResult = bankDataValidator.validateIban( 'DE12500105170648489890' );
+	return bankDataValidator.validateSepaBankData( 'DE12500105170648489890' )
+		.then( function ( validationResult ) {
+			const callParameters = transportFunctionSpy.getCall( 0 ).args;
+			t.ok( transportFunctionSpy.calledOnce, 'data is sent once' );
+			t.equal( callParameters[ 0 ], 'http://spenden.wikimedia.org/check-iban', 'validation calls URL for SEPA' );
+			t.deepEqual( callParameters[ 1 ], { iban: 'DE12500105170648489890' }, 'validation sends only necessary data' );
+			t.deepEqual( validationResult, positiveResult, 'validation function returns promise result' );
+			t.end();
+		} );
 
-	t.ok( postFunctionSpy.calledOnce, 'data is sent once' );
-	callParameters = postFunctionSpy.getCall( 0 ).args;
-	t.equal( callParameters[ 0 ], 'http://spenden.wikimedia.org/check-iban', 'validation calls URL for SEPA' );
-	t.deepEqual( callParameters[ 1 ], { iban: 'DE12500105170648489890' }, 'validation sends only necessary data' );
-	t.equal( callParameters[ 3 ], 'json', 'validation expects JSON data' );
-	validationResult.then( function ( resultData ) {
-		t.deepEqual( resultData, positiveResult, 'validation function returns promise result' );
-	} );
-	t.end();
 } );
 
-test( 'Given non-sepa debit type, bank data validation sends account number and bank code to server', function ( t ) {
+test( 'bank data validator sends account number and bank code to server', function ( t ) {
 	var positiveResult = { status: 'OK' }, // all other fields are not relevenat to the test
-		postFunctionSpy = sinon.stub().returns( Promise.resolve( positiveResult ) ),
+		transportFunctionSpy = sinon.stub().returns( Promise.resolve( positiveResult ) ),
 		bankDataValidator = validation.createBankDataValidator(
 			'http://spenden.wikimedia.org/check-iban',
 			'http://spenden.wikimedia.org/generate-iban',
-			postFunctionSpy
-		),
-		callParameters,
-		validationResult;
+			{ getData: transportFunctionSpy }
+		);
 
-	validationResult = bankDataValidator.validateClassicAccountNumber( '0648489890', '50010517' );
-
-	t.ok( postFunctionSpy.calledOnce, 'data is sent once' );
-	callParameters = postFunctionSpy.getCall( 0 ).args;
-	t.equal( callParameters[ 0 ], 'http://spenden.wikimedia.org/generate-iban', 'validation calls URL for SEPA' );
-	t.deepEqual( callParameters[ 1 ], {
-		accountNumber: '0648489890',
-		bankCode: '50010517'
-	}, 'validation sends only necessary data' );
-	t.equal( callParameters[ 3 ], 'json', 'validation expects JSON data' );
-	validationResult.then( function ( resultData ) {
-		t.deepEqual( resultData, positiveResult, 'validation function returns promise result' );
-	} );
-	t.end();
+	return bankDataValidator.validateClassicBankData( '0648489890', '50010517' )
+		.then( function ( validationResult ) {
+			const callParameters = transportFunctionSpy.getCall( 0 ).args;
+			t.ok( transportFunctionSpy.calledOnce, 'data is sent once' );
+			t.equal( callParameters[ 0 ], 'http://spenden.wikimedia.org/generate-iban', 'validation calls URL for SEPA' );
+			t.deepEqual( callParameters[ 1 ], {
+				accountNumber: '0648489890',
+				bankCode: '50010517'
+			}, 'validation sends only necessary data' );
+			t.deepEqual( validationResult, positiveResult, 'validation function returns promise result' );
+			t.end();
+		} );
 } );
