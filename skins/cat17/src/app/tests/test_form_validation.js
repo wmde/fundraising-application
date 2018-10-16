@@ -3,14 +3,15 @@
 var test = require( 'tape-catch' ),
 	sinon = require( 'sinon' ),
 	Promise = require( 'promise' ),
+	ValidationStates = require( '../lib/validation_states' ).ValidationStates,
 	validation = require( '../lib/form_validation' );
 
 test( 'Amount validation sends values to server', function ( t ) {
-	var positiveResult = { status: 'OK' },
+	var positiveResult = { status: ValidationStates.OK },
 		postFunctionSpy = sinon.stub().returns( Promise.resolve( positiveResult ) ),
 		amountValidator = validation.createAmountValidator(
 			'http://spenden.wikimedia.org/validate-donation-amount',
-			postFunctionSpy
+			{ postData: postFunctionSpy }
 		),
 		callParameters,
 		validationResult;
@@ -21,28 +22,43 @@ test( 'Amount validation sends values to server', function ( t ) {
 	callParameters = postFunctionSpy.getCall( 0 ).args;
 	t.equal( callParameters[ 0 ], 'http://spenden.wikimedia.org/validate-donation-amount', 'validation calls configured URL' );
 	t.deepEqual( callParameters[ 1 ], { amount: 23 }, 'validation sends only necessary data' );
-	t.equal( callParameters[ 3 ], 'json', 'validation expects JSON data' );
-	validationResult.then( function ( resultData ) {
-		t.deepEqual( resultData, positiveResult, 'validation function returns promise result' );
+	return validationResult.then( function ( resultData ) {
+		t.deepEqual( resultData, positiveResult, 'validation function returns promised result' );
+		t.end();
 	} );
-	t.end();
 } );
 
+test( 'Amount validation converts transport errors to invalid result', function ( t ) {
+	var negativeResult = { status: ValidationStates.ERR, messages: { transportError: 'Internal Server Error' } },
+		postFunctionSpy = sinon.stub().returns( Promise.reject( 'Internal Server Error' ) ),
+		amountValidator = validation.createAmountValidator(
+			'http://spenden.wikimedia.org/validate-donation-amount',
+			{ postData: postFunctionSpy }
+		),
+		validationResult = amountValidator.validate( { amount: 23, otherStuff: 'foo' } );
+
+	t.ok( postFunctionSpy.calledOnce, 'data is sent once' );
+	return validationResult.then( function ( resultData ) {
+		t.deepEqual( resultData, negativeResult, 'validation function returns error result' );
+		t.end();
+	} );
+} );
+
+
 test( 'Amount validation sends nothing to server if any of the necessary values are not set', function ( t ) {
-	var incompleteResult = { status: 'INCOMPLETE' },
+	var incompleteResult = { status: ValidationStates.INCOMPLETE },
 		postFunctionSpy = sinon.spy(),
 		amountValidator = validation.createAmountValidator(
 			'http://spenden.wikimedia.org/validate-donation-amount',
-			postFunctionSpy
-		),
-		validationResults = [];
+			{ postData: postFunctionSpy }
+		);
 
-	// Test multiple empty values
-	validationResults.push( amountValidator.validate( { amount: 0, otherStuff: 'foo' } ) );
-
-	t.notOk( postFunctionSpy.called, 'no data is sent ' );
-	t.deepEquals( [ incompleteResult ], validationResults, 'validation function returns incomplete result' );
-	t.end();
+	return amountValidator.validate( { amount: 0, otherStuff: 'foo' } )
+		.then( function ( result ) {
+				t.notOk( postFunctionSpy.called, 'no data is sent ' );
+				t.deepEquals( incompleteResult, result, 'validation function returns incomplete result' );
+				t.end();
+			} );
 } );
 
 test( 'Fee validation sends values to server', function ( t ) {
