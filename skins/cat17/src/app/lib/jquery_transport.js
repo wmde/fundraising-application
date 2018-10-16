@@ -21,7 +21,7 @@ function jQueryDeferredToPromise( jQueryDeferredObject ) {
 import jQuery from 'jquery';
 
 /**
- * @implements Transport
+ * @implements {Transport}
  */
 export default class JQueryTransport {
 

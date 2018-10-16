@@ -3,63 +3,8 @@
 var test = require( 'tape-catch' ),
 	sinon = require( 'sinon' ),
 	Promise = require( 'promise' ),
-	ValidationStates = require( '../lib/validation_states' ).ValidationStates,
+	ValidationStates = require( '../lib/validation/validation_states' ).ValidationStates,
 	validation = require( '../lib/form_validation' );
-
-test( 'Amount validation sends values to server', function ( t ) {
-	var positiveResult = { status: ValidationStates.OK },
-		postFunctionSpy = sinon.stub().returns( Promise.resolve( positiveResult ) ),
-		amountValidator = validation.createAmountValidator(
-			'http://spenden.wikimedia.org/validate-donation-amount',
-			{ postData: postFunctionSpy }
-		),
-		callParameters,
-		validationResult;
-
-	validationResult = amountValidator.validate( { amount: 23, otherStuff: 'foo' } );
-
-	t.ok( postFunctionSpy.calledOnce, 'data is sent once' );
-	callParameters = postFunctionSpy.getCall( 0 ).args;
-	t.equal( callParameters[ 0 ], 'http://spenden.wikimedia.org/validate-donation-amount', 'validation calls configured URL' );
-	t.deepEqual( callParameters[ 1 ], { amount: 23 }, 'validation sends only necessary data' );
-	return validationResult.then( function ( resultData ) {
-		t.deepEqual( resultData, positiveResult, 'validation function returns promised result' );
-		t.end();
-	} );
-} );
-
-test( 'Amount validation converts transport errors to invalid result', function ( t ) {
-	var negativeResult = { status: ValidationStates.ERR, messages: { transportError: 'Internal Server Error' } },
-		postFunctionSpy = sinon.stub().returns( Promise.reject( 'Internal Server Error' ) ),
-		amountValidator = validation.createAmountValidator(
-			'http://spenden.wikimedia.org/validate-donation-amount',
-			{ postData: postFunctionSpy }
-		),
-		validationResult = amountValidator.validate( { amount: 23, otherStuff: 'foo' } );
-
-	t.ok( postFunctionSpy.calledOnce, 'data is sent once' );
-	return validationResult.then( function ( resultData ) {
-		t.deepEqual( resultData, negativeResult, 'validation function returns error result' );
-		t.end();
-	} );
-} );
-
-
-test( 'Amount validation sends nothing to server if any of the necessary values are not set', function ( t ) {
-	var incompleteResult = { status: ValidationStates.INCOMPLETE },
-		postFunctionSpy = sinon.spy(),
-		amountValidator = validation.createAmountValidator(
-			'http://spenden.wikimedia.org/validate-donation-amount',
-			{ postData: postFunctionSpy }
-		);
-
-	return amountValidator.validate( { amount: 0, otherStuff: 'foo' } )
-		.then( function ( result ) {
-				t.notOk( postFunctionSpy.called, 'no data is sent ' );
-				t.deepEquals( incompleteResult, result, 'validation function returns incomplete result' );
-				t.end();
-			} );
-} );
 
 test( 'Fee validation sends values to server', function ( t ) {
 	var positiveResult = { status: 'OK' },
@@ -169,81 +114,85 @@ test( 'Email validation sends nothing to server if email address is not set', fu
 } );
 
 test( 'Address validation is valid for anonymous address', function ( t ) {
-	var positiveResult = { status: 'OK' },
-		postFunctionSpy = sinon.spy(),
-		addressValidator = validation.createAddressValidator(
-			'http://spenden.wikimedia.org/validate-address',
-			validation.DefaultRequiredFieldsForAddressType,
-			postFunctionSpy
-		),
-		validationResult;
+	const positiveResult = { status: ValidationStates.OK };
 
-	validationResult = addressValidator.validate( { addressType: 'anonym', otherStuff: 'foo' } );
+	const postFunctionSpy = sinon.spy();
 
-	t.ok( !postFunctionSpy.called, 'post function is not called' );
-	t.deepEqual( validationResult, positiveResult, 'validation function returns result' );
-	t.end();
+	const addressValidator = validation.createAddressValidator(
+		'http://spenden.wikimedia.org/validate-address',
+		validation.DefaultRequiredFieldsForAddressType,
+		{ postData: postFunctionSpy }
+	);
+
+	return addressValidator.validate( { addressType: 'anonym', otherStuff: 'foo' } )
+		.then( function ( validationResult ) {
+			t.ok( !postFunctionSpy.called, 'post function is not called' );
+			t.deepEqual( validationResult, positiveResult, 'validation function returns result' );
+			t.end();
+		} );
 } );
 
 test( 'Given a private adddress, address validation sends values to server', function ( t ) {
-	var positiveResult = { status: 'OK' },
-		postFunctionSpy = sinon.stub().returns( Promise.resolve( positiveResult ) ),
-		addressValidator = validation.createAddressValidator(
-			'http://spenden.wikimedia.org/validate-address',
-			validation.DefaultRequiredFieldsForAddressType,
-			postFunctionSpy
-		),
-		formData = {
-			addressType: 'person',
-			title: 'Dr.',
-			firstName: 'Hank',
-			lastName: 'Scorpio',
-			street: 'Hammock District',
-			postCode: '12345',
-			city: 'Cypress Creek',
-			email: 'hank@globex.com'
-		},
-		callParameters,
-		validationResult;
+	const positiveResult = { status: ValidationStates.OK };
 
-	validationResult = addressValidator.validate( formData );
+	const postFunctionSpy = sinon.stub().returns( Promise.resolve( positiveResult ) );
 
-	t.ok( postFunctionSpy.calledOnce, 'data is sent once' );
-	callParameters = postFunctionSpy.getCall( 0 ).args;
-	t.equal( callParameters[ 0 ], 'http://spenden.wikimedia.org/validate-address', 'validation calls configured URL' );
-	t.deepEqual( callParameters[ 1 ], formData, 'validation sends all data' );
-	t.equal( callParameters[ 3 ], 'json', 'validation expects JSON data' );
-	validationResult.then( function ( resultData ) {
-		t.deepEqual( resultData, positiveResult, 'validation function returns promise result' );
-	} );
-	t.end();
+	const addressValidator = validation.createAddressValidator(
+		'http://spenden.wikimedia.org/validate-address',
+		validation.DefaultRequiredFieldsForAddressType,
+		{ postData: postFunctionSpy }
+	);
+
+	const formData = {
+		addressType: 'person',
+		title: 'Dr.',
+		firstName: 'Hank',
+		lastName: 'Scorpio',
+		street: 'Hammock District',
+		postCode: '12345',
+		city: 'Cypress Creek',
+		email: 'hank@globex.com'
+	};
+
+	return addressValidator.validate( formData )
+		.then( function ( validationResult ) {
+			const callParameters = postFunctionSpy.getCall( 0 ).args;
+			t.ok( postFunctionSpy.calledOnce, 'data is sent once' );
+			t.equal( callParameters[ 0 ], 'http://spenden.wikimedia.org/validate-address', 'validation calls configured URL' );
+			t.deepEqual( callParameters[ 1 ], formData, 'validation sends all data' );
+			t.deepEqual( validationResult, positiveResult, 'validation function returns promise result' );
+			t.end();
+		} );
 } );
 
 test( 'Given an incomplete private adddress, address validation sends no values to server', function ( t ) {
-	var negativeResult = { status: 'INCOMPLETE' },
-		postFunctionSpy = sinon.spy(),
-		addressValidator = validation.createAddressValidator(
-			'http://spenden.wikimedia.org/validate-address',
-			validation.DefaultRequiredFieldsForAddressType,
-			postFunctionSpy
-		),
-		formData = {
-			addressType: 'person',
-			title: 'Dr.',
-			firstName: '',
-			lastName: 'Scorpio',
-			street: 'Hammock District',
-			postCode: '12345',
-			city: '',
-			email: ''
-		},
-		validationResult;
+	const negativeResult = { status: ValidationStates.INCOMPLETE };
 
-	validationResult = addressValidator.validate( formData );
+	const postFunctionSpy = sinon.spy();
 
-	t.ok( !postFunctionSpy.called, 'post function is not called' );
-	t.deepEqual( validationResult, negativeResult, 'validation function returns expected status' );
-	t.end();
+	const addressValidator = validation.createAddressValidator(
+		'http://spenden.wikimedia.org/validate-address',
+		validation.DefaultRequiredFieldsForAddressType,
+		{ postData: postFunctionSpy }
+	);
+
+	const formData = {
+		addressType: 'person',
+		title: 'Dr.',
+		firstName: '',
+		lastName: 'Scorpio',
+		street: 'Hammock District',
+		postCode: '12345',
+		city: '',
+		email: ''
+	};
+
+	return addressValidator.validate( formData )
+		.then( function ( validationResult ) {
+			t.ok( !postFunctionSpy.called, 'post function is not called' );
+			t.deepEqual( validationResult, negativeResult, 'validation function returns expected status' );
+			t.end();
+		} );
 } );
 
 test( 'Given sepa debit type, bank data validation sends IBAN to server', function ( t ) {
