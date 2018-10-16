@@ -35,12 +35,12 @@ donation_address:
 
 skins:
   description: Test different skins
-  reference: "https://phabricator.wikimedia.org/T196335"
-  start: "2017-10-01"
-  end: "2099-12-31"
+  reference: "https://phabricator.wikimedia.org/T206994"
+  start: "2018-10-31 14:00:00"
+  end: "2018-11-09 14:00:00"
   buckets:
     - "cat17"
     - "10h16"
   default_bucket: "cat17"
   url_key: skin
-  active: false
+  active: true
