@@ -65,16 +65,12 @@ var objectAssign = require( 'object-assign' ),
 
 	EmailAddressValidator = {
 		validationUrl: '',
-		sendFunction: null,
+		transport: null,
 		validate: function ( formValues ) {
-			var postData;
 			if ( !formValues.email ) {
-				return { status: ValidationStates.INCOMPLETE };
+				return Promise.resolve( { status: ValidationStates.INCOMPLETE } );
 			}
-			postData = {
-				email: formValues.email
-			};
-			return jQueryDeferredToPromise( this.sendFunction( this.validationUrl, postData, null, 'json' ) );
+			return this.transport.postData( this.validationUrl, { email: formValues.email } );
 		}
 	},
 
@@ -155,10 +151,10 @@ var objectAssign = require( 'object-assign' ),
 		} );
 	},
 
-	createEmailAddressValidator = function ( validationUrl, sendFunction ) {
+	createEmailAddressValidator = function ( validationUrl, transport ) {
 		return objectAssign( Object.create( EmailAddressValidator ), {
 			validationUrl: validationUrl,
-			sendFunction: sendFunction || jQuery.post
+			transport: transport || new JQueryTransport()
 		} );
 	},
 
@@ -179,7 +175,7 @@ var objectAssign = require( 'object-assign' ),
 	 *
 	 * @param {string} validationUrl
 	 * @param {Object} feeFormatter Formatter object that supports the .format method
-	 * @param {Function} sendFunction jQuery.post function or equivalent
+	 * @param {Object} transport jQuery.post function or equivalent
 	 * @return {*}
 	 */
 	createFeeValidator = function ( validationUrl, feeFormatter, transport ) {
