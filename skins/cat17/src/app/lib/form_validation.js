@@ -6,6 +6,7 @@ var objectAssign = require( 'object-assign' ),
 	ValidationStates = require( './validation/validation_states' ).ValidationStates,
 	JQueryTransport = require( './jquery_transport' ).default,
 	AmountValidator = require( './validation/amount_validator' ).default,
+	BankDataValidator = require( './validation/bank_data_validator' ).default,
 
 	isEmptyString = function ( value ) {
 		return value === '';
@@ -15,24 +16,6 @@ var objectAssign = require( 'object-assign' ),
 		person: [ 'salutation', 'firstName', 'lastName', 'street', 'postcode', 'city', 'email' ],
 		firma: [ 'companyName', 'street', 'postcode', 'city', 'email' ],
 		anonym: []
-	},
-
-	/**
-	 * This function avoids an endless loop on failure.
-	 * The jQuery fail function returns the xhrObject, which is itself a Promise,
-	 * which will then be called by the Redux promise_middleware again and again.
-	 *
-	 * When IE support is finally ditched and we use jQuery >= 3.0, this wrapper method must be removed.
-	 *
-	 * @param {jQueryDeferredObject} jQueryDeferredObject
-	 * @return {Promise}
-	 */
-	jQueryDeferredToPromise = function ( jQueryDeferredObject ) {
-		return new Promise( function ( resolve, reject ) {
-			jQueryDeferredObject.then( resolve, function ( xhrObject, statusCode, statusMessage ) {
-				reject( statusMessage );
-			} );
-		} );
 	},
 
 	AddressValidator = {
@@ -95,54 +78,6 @@ var objectAssign = require( 'object-assign' ),
 		}
 	},
 
-	BankDataValidator = {
-		validationUrlForSepa: '',
-		validationUrlForNonSepa: '',
-		sendFunction: null,
-		/**
-		 * @param {string} iban
-		 * @return {Promise}
-		 */
-		validateIban: function ( iban ) {
-			return this.getValidationResultFromApi(
-				this.validationUrlForSepa,
-				{
-					iban
-				}
-			);
-		},
-		/**
-		 * @param {string} accountNumber
-		 * @param {string} bankCode
-		 * @return {Promise}
-		 */
-		validateClassicAccountNumber: function ( accountNumber, bankCode ) {
-			return this.getValidationResultFromApi(
-				this.validationUrlForNonSepa,
-				{
-					accountNumber,
-					bankCode
-				}
-			);
-		},
-		/**
-		 * @private
-		 * @param {string} apiUrl
-		 * @param {Object} urlArguments
-		 * @return {Promise}
-		 */
-		getValidationResultFromApi: function ( apiUrl, urlArguments ) {
-			return jQueryDeferredToPromise(
-				this.sendFunction(
-					apiUrl,
-					urlArguments,
-					null,
-					'json'
-				)
-			);
-		}
-	},
-
 	createAddressValidator = function ( validationUrl, requiredFields, transport ) {
 		return objectAssign( Object.create( AddressValidator ), {
 			validationUrl: validationUrl,
@@ -151,6 +86,12 @@ var objectAssign = require( 'object-assign' ),
 		} );
 	},
 
+	/**
+	 *
+	 * @param {string} validationUrl
+	 * @param {Transport} transport
+	 * @return {EmailAddressValidator}
+	 */
 	createEmailAddressValidator = function ( validationUrl, transport ) {
 		return objectAssign( Object.create( EmailAddressValidator ), {
 			validationUrl: validationUrl,
@@ -175,8 +116,8 @@ var objectAssign = require( 'object-assign' ),
 	 *
 	 * @param {string} validationUrl
 	 * @param {Object} feeFormatter Formatter object that supports the .format method
-	 * @param {Object} transport jQuery.post function or equivalent
-	 * @return {*}
+	 * @param {Object} transport
+	 * @return {FeeValidator}
 	 */
 	createFeeValidator = function ( validationUrl, feeFormatter, transport ) {
 		return objectAssign( Object.create( FeeValidator ), {
@@ -186,12 +127,15 @@ var objectAssign = require( 'object-assign' ),
 		} );
 	},
 
-	createBankDataValidator = function ( validationUrlForSepa, validationUrlForNonSepa, sendFunction ) {
-		return objectAssign( Object.create( BankDataValidator ), {
-			validationUrlForSepa: validationUrlForSepa,
-			validationUrlForNonSepa: validationUrlForNonSepa,
-			sendFunction: sendFunction || jQuery.get
-		} );
+	/**
+	 *
+	 * @param {string} validationUrlForSepaBankData
+	 * @param {string} validationUrlForClassicBankData
+	 * @param {Transport} transport
+	 * @return {BankDataValidator}
+	 */
+	createBankDataValidator = function ( validationUrlForSepaBankData, validationUrlForClassicBankData, transport ) {
+		return new BankDataValidator( validationUrlForSepaBankData, validationUrlForClassicBankData, transport );
 	}
 ;
 
