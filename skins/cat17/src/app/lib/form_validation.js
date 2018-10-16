@@ -3,13 +3,7 @@
 var objectAssign = require( 'object-assign' ),
 	Promise = require( 'promise' ),
 	_ = require( 'underscore' ),
-
-	ValidationStates = {
-		OK: 'OK',
-		ERR: 'ERR',
-		INCOMPLETE: 'INCOMPLETE',
-		NOT_APPLICABLE: 'NOT_APPLICABLE'
-	},
+	ValidationStates = require( './validation_states' ).ValidationStates,
 
 	isEmptyString = function ( value ) {
 		return value === '';
