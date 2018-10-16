@@ -3,8 +3,9 @@
 var objectAssign = require( 'object-assign' ),
 	Promise = require( 'promise' ),
 	_ = require( 'underscore' ),
-	ValidationStates = require( './validation_states' ).ValidationStates,
+	ValidationStates = require( './validation/validation_states' ).ValidationStates,
 	JQueryTransport = require( './jquery_transport' ).default,
+	AmountValidator = require( './validation/amount_validator' ).default,
 
 	isEmptyString = function ( value ) {
 		return value === '';
@@ -36,19 +37,19 @@ var objectAssign = require( 'object-assign' ),
 
 	AddressValidator = {
 		validationUrl: '',
-		sendFunction: null,
+		transport: null,
 		requiredFields: {},
 		validate: function ( formValues ) {
 			var requiredFields = this.getRequiredFieldsForAddressType( formValues.addressType );
 			if ( this.formValuesHaveEmptyRequiredFields( formValues, requiredFields ) ) {
-				return { status: ValidationStates.INCOMPLETE };
+				return Promise.resolve( { status: ValidationStates.INCOMPLETE } );
 			}
 			// Don't send anything to server if there are no fields to validate
 			if ( requiredFields.length === 0 ) {
-				return { status: ValidationStates.OK };
+				return Promise.resolve( { status: ValidationStates.OK } );
 			}
 
-			return jQueryDeferredToPromise( this.sendFunction( this.validationUrl, formValues, null, 'json' ) );
+			return this.transport.postData( this.validationUrl, formValues );
 		},
 		formValuesHaveEmptyRequiredFields: function ( formValues, requiredFields ) {
 			var objectWithOnlyTheRequiredFields = _.pick( formValues, requiredFields );
@@ -74,37 +75,6 @@ var objectAssign = require( 'object-assign' ),
 				email: formValues.email
 			};
 			return jQueryDeferredToPromise( this.sendFunction( this.validationUrl, postData, null, 'json' ) );
-		}
-	},
-
-	AmountValidator = {
-		validationUrl: '',
-		transport: null,
-		/**
-		 * @param {object} formValues
-		 * @return {Promise}
-		 */
-		validate: function ( formValues ) {
-
-			if ( this.formValuesHaveEmptyRequiredFields( formValues ) ) {
-				return Promise.resolve( { status: ValidationStates.INCOMPLETE } );
-			}
-			return this.transport.postData(
-				this.validationUrl,
-				{
-					amount: formValues.amount
-				}
-			).catch( function ( reason ) {
-				return Promise.resolve( { status: ValidationStates.ERR, messages: { transportError: reason } } );
-			});
-		},
-		/**
-		 * @param {object} formValues
-		 * @return {boolean}
-		 * @private
-		 */
-		formValuesHaveEmptyRequiredFields: function ( formValues ) {
-			return formValues.amount === 0;
 		}
 	},
 
@@ -177,11 +147,11 @@ var objectAssign = require( 'object-assign' ),
 		}
 	},
 
-	createAddressValidator = function ( validationUrl, requiredFields, sendFunction ) {
+	createAddressValidator = function ( validationUrl, requiredFields, transport ) {
 		return objectAssign( Object.create( AddressValidator ), {
 			validationUrl: validationUrl,
 			requiredFields: requiredFields,
-			sendFunction: sendFunction || jQuery.post
+			transport: transport || new JQueryTransport()
 		} );
 	},
 
@@ -199,10 +169,10 @@ var objectAssign = require( 'object-assign' ),
 	 * @return {AmountValidator}
 	 */
 	createAmountValidator = function ( validationUrl, transport ) {
-		return objectAssign( Object.create( AmountValidator ), {
-			validationUrl: validationUrl,
-			transport: transport || new JQueryTransport()
-		} );
+		return new AmountValidator(
+			validationUrl,
+			transport || new JQueryTransport()
+		);
 	},
 
 	/**
