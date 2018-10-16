@@ -12,7 +12,6 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use FileFetcher\ErrorLoggingFileFetcher;
-use FileFetcher\FileFetchingException;
 use FileFetcher\SimpleFileFetcher;
 use GuzzleHttp\Client;
 use NumberFormatter;
@@ -25,7 +24,6 @@ use RemotelyLiving\Doorkeeper\Features\Set;
 use RemotelyLiving\Doorkeeper\Requestor;
 use Swift_MailTransport;
 use Swift_NullTransport;
-use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -633,33 +631,25 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function getGetInTouchCategories(): array {
-		try {
-			$json = ( new SimpleFileFetcher() )->fetchFile( $this->getI18nDirectory() . '/data/contact_categories.json' );
-			if ( $json === '' ) {
-				throw new RuntimeException( 'error_no_topics_defined' );
-			}
-
-			return json_decode( $json, true );
-		}
-		catch( FileFetchingException $e ) {
-			throw new RuntimeException( 'error_no_topics_defined' );
-		}
+		$json = ( new JsonStringReader(
+			$this->getI18nDirectory() . '/data/contact_categories.json',
+			new SimpleFileFetcher()
+		) )->readAndValidateJson();
+		return json_decode( $json, true );
 	}
 
 	public function getFaqContent(): string {
 		return ( new JsonStringReader(
 			$this->getI18nDirectory() . '/data/faq.json',
 			new SimpleFileFetcher()
-		)
-		)->readAndValidateJson();
+		) )->readAndValidateJson();
 	}
 
 	public function getFaqMessages(): string {
 		return ( new JsonStringReader(
 			$this->getI18nDirectory() . '/messages/faqMessages.json',
 			new SimpleFileFetcher()
-		)
-		)->readAndValidateJson();
+		) )->readAndValidateJson();
 	}
 
 	public function setSkinTwigEnvironment( Twig_Environment $twig ): void {
