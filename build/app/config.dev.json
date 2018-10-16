@@ -124,5 +124,8 @@
   "cookie": {
     "secure": false,
     "httpOnly": false
+  },
+  "campaigns": {
+    "configurations": [ "campaigns.yml", "campaigns.dev.yml" ]
   }
 }
