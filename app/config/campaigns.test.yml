@@ -4,6 +4,7 @@
 
 skins:
   active: false
+  start: "2018-10-10"
   buckets:
      - "test"
   default_bucket: "test"

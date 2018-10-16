@@ -3,8 +3,8 @@
 # Set all campaigns to inactive to force the test server to use the default code paths
 
 skins:
-  end: "2020-10-10"
   active: true
+  start: "2018-10-10"
 
 donation_address:
   active: true
