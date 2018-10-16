@@ -282,47 +282,41 @@ $( function () {
 	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="addressType"]' ), $( '#type-donor' ), scroller );
 	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="zahlweise"]' ), $( '#donation-payment' ), scroller );
 
+	var bankDataValidator = WMDE.FormValidation.createBankDataValidator(
+		initData.data( 'validate-iban-url' ),
+		initData.data( 'generate-iban-url' )
+	);
+
 	function mapStateToProps( state ) {
 		return {
 			iban: state.donationFormContent.iban,
 			bic: state.donationFormContent.bic,
-			isValid: state.validity.bankData !== false
+			isValid: state.validity.bankData !== false,
+
+			// The validator does not come from the store and should be passed
+			// in as a prop the initialization code,
+			// see https://github.com/nadimtuhin/redux-vue/issues/6
+			bankDataValidator: bankDataValidator
 		}
 	}
 
 	function mapActionToProps( dispatch ) {
 		return {
-			changeIban ( iban ) {
-				dispatch( WMDE.Actions.newChangeContentAction( 'iban', iban ) );
-			},
-			changeBic( bic ) {
-				dispatch( WMDE.Actions.newChangeContentAction( 'bic', bic ) );
-			},
 			changeBankDataValidity( validity ) {
 				dispatch( WMDE.Actions.newFinishBankDataValidationAction( validity ) );
-			},
-			validateBankData( iban, bic, isIBAN ) {
-				var bankDataValidator = WMDE.FormValidation.createBankDataValidator(
-					initData.data( 'validate-iban-url' ),
-					initData.data( 'generate-iban-url' )
-				);
-				if (isIBAN) {
-					return bankDataValidator.validateIban( iban );
-				}
-				return bankDataValidator.validateClassicAccountNumber( iban, bic );
 			}
 		}
-
 	}
-
-		/** global: WMDE */
 
 	WMDE.Vue.use(WMDE.VueRedux.reduxStorePlugin);
 
-		new WMDE.Vue({
-			// FIXME Import and create store directly when we no longer use the global variable anywhere else
-			store: store,
-			render: (h) => h( WMDE.VueRedux.connect( mapStateToProps, mapActionToProps )( WMDE.BankData ) )
-	}).$mount('#bankdata-app');
+	var ConnectedBankData = WMDE.VueRedux.connect( mapStateToProps, mapActionToProps )( WMDE.BankData );
+
+	new WMDE.Vue( {
+		// FIXME Import and create store directly when we no longer use the global variable anywhere else
+		store: store,
+		render: (h) => h( ConnectedBankData )
+
+	} ).$mount( '#bankdata-app' );
 
 } );

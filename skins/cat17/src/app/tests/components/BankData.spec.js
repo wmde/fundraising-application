@@ -5,9 +5,10 @@ import BankData from '../../components/BankData.vue';
 function newTestProperties( overrides ) {
 	return Object.assign(
 		{
-			changeIban: function () {},
-			changeBic: function () {},
-			validateBankData: function () { return Promise.resolve(); },
+			bankDataValidator: {
+				validateClassicBankData: function () { },
+				validateSepaBankData: function () { }
+			},
 			changeBankDataValidity: function () {},
 			iban: '',
 			bic: '',
@@ -21,41 +22,6 @@ test( 'BankData.vue renders', t => {
 	t.plan( 1 );
 	const wrapper = shallowMount( BankData );
 	t.equal( typeof wrapper, 'object' );
-} );
-
-test( 'Given IBAN value, BankData.vue calls changeIban if value looks like IBAN', t => {
-	t.plan( 1 );
-	let testIban = '';
-	const wrapper = shallowMount( BankData, {
-		propsData: newTestProperties( {
-			changeIban: function ( iban ) { testIban = iban; }
-		} )
-	} );
-
-	const ibanInput = wrapper.find( '#iban' );
-	ibanInput.setValue( 'DE123' );
-	ibanInput.trigger( 'input' );
-
-	t.equal( testIban, 'DE123' );
-} );
-
-test( 'Given non-German IBAN value and BIC, BankData.vue calls changeBIC if IBAN value looks like IBAN', t => {
-	t.plan( 1 );
-	let testBIC = '';
-	const wrapper = shallowMount( BankData, {
-		propsData: newTestProperties( {
-			changeBic: function ( bic ) { testBIC = bic; }
-		} )
-	} );
-
-	const ibanInput = wrapper.find( '#iban' );
-	const bicInput = wrapper.find( '#bic' );
-	ibanInput.setValue( 'AT123' );
-	ibanInput.trigger( 'input' );
-	bicInput.setValue( '98765' );
-	bicInput.trigger( 'input' );
-
-	t.equal( testBIC, '98765' );
 } );
 
 test( 'Given German IBAN value, BIC-field becomes disabled', t => {
@@ -87,17 +53,16 @@ test( 'Given IBAN value changes in IBAN and BIC property, BankData.vue renders t
 	t.equal( bicInput.element.value, '' );
 
 	wrapper.setProps( {
-		...initialProperties,
-		bic: '98765',
-		iban: 'DE123'
+		iban: 'DE123',
+		bic: '98765'
 	} );
 
 	t.equal( ibanInput.element.value, 'DE123' );
 	t.equal( bicInput.element.value, '98765' );
 } );
 
-test( 'Given classic account value, BankData.vue does not render changes to IBAN and BIC field values', t => {
-	t.plan( 4 );
+test( 'Given classic account value, BankData.vue does only render changes to IBAN and BIC field values if they are empty', t => {
+	t.plan( 6 );
 	const initialProperties = newTestProperties( {} );
 	const wrapper = shallowMount( BankData, {
 		propsData: initialProperties
@@ -109,40 +74,61 @@ test( 'Given classic account value, BankData.vue does not render changes to IBAN
 	t.equal( bicInput.element.value, '' );
 
 	wrapper.setProps( {
-		...initialProperties,
-		bic: '98765',
-		iban: '123'
+		iban: '123',
+		bic: '98765'
 	} );
 
-	t.equal( ibanInput.element.value, '' );
-	t.equal( bicInput.element.value, '' );
+	t.equal( ibanInput.element.value, '123' );
+	t.equal( bicInput.element.value, '98765' );
+
+	wrapper.setProps( {
+		iban: '777',
+		bic: '888'
+	} );
+
+	t.equal( ibanInput.element.value, '123' );
+	t.equal( bicInput.element.value, '98765' );
 } );
 
-test( 'Given empty IBAN value on IBAN blur, validation is not triggered and validity is incomplete', t => {
-	t.plan( 1 );
+test( 'Given empty IBAN value on IBAN blur, validation is not triggered and no result is set', t => {
 	const wrapper = shallowMount( BankData, {
 		propsData: newTestProperties( {
-			validateBankData: function () { return Promise.fail(); },
-			changeBankDataValidity: function ( validity ) {
-				t.equal( validity.status, 'INCOMPLETE' );
+			bankDataValidator: {
+				validateSepaBankData() {
+					t.fail();
+				},
+				validateClassicBankData() {
+					t.fail();
+				}
+			},
+			changeBankDataValidity() {
+				t.fail();
 			}
 		} )
 	} );
 
 	const ibanInput = wrapper.find( '#iban' );
 	ibanInput.trigger( 'blur' );
+	t.end();
 } );
 
-test( 'Given filled IBAN value on IBAN blur, validation is triggered and validity is set to validation result', t => {
-	t.plan( 1 );
+test( 'Given filled IBAN value on IBAN blur, SEPA validation is triggered and validity is set to validation result', t => {
+	t.plan( 2 );
 	const validationResult = {
 		state: 'OK',
 		iban: 'DE12500105170648489890',
 		bic: 'INGDDEFFXXX'
 	};
+	const fakeBankDataValidator = {
+		validateClassicBankData: function () { },
+		validateSepaBankData: function ( v ) {
+			t.equals( v, 'DE12500105170648489890' );
+			return validationResult;
+		}
+	};
 	const wrapper = shallowMount( BankData, {
 		propsData: newTestProperties( {
-			validateBankData: function () { return Promise.resolve( validationResult ); },
+			bankDataValidator: fakeBankDataValidator,
 			changeBankDataValidity: function ( validity ) {
 				t.deepEqual( validity, validationResult );
 			}
@@ -155,16 +141,24 @@ test( 'Given filled IBAN value on IBAN blur, validation is triggered and validit
 	ibanInput.trigger( 'blur' );
 } );
 
-test( 'Given filled classic values on blur, validation is triggered and validity is set to validation result', t => {
-	t.plan( 1 );
+test( 'Given filled classic values on blur, classic validation is triggered and validity is set to validation result', t => {
+	t.plan( 3 );
 	const validationResult = {
 		state: 'OK',
 		iban: 'DE12500105170648489890',
 		bic: 'INGDDEFFXXX'
 	};
+	const fakeBankDataValidator = {
+		validateClassicBankData: function ( accountNumber, bankNumber ) {
+			t.equals( accountNumber, '0648489890' );
+			t.equals( bankNumber, '50010517' );
+			return validationResult;
+		},
+		validateSepaBankData: function () { t.fail(); }
+	};
 	const wrapper = shallowMount( BankData, {
 		propsData: newTestProperties( {
-			validateBankData: function () { return Promise.resolve( validationResult ); },
+			bankDataValidator: fakeBankDataValidator,
 			changeBankDataValidity: function ( validity ) {
 				t.deepEqual( validity, validationResult );
 			}
@@ -182,27 +176,6 @@ test( 'Given filled classic values on blur, validation is triggered and validity
 	ibanInput.trigger( 'blur' );
 } );
 
-test( 'Given filled only one of the classic values on blur, validation is validation is not triggered and validity is incomplete', t => {
-	t.plan( 2 );
-	const wrapper = shallowMount( BankData, {
-		propsData: newTestProperties( {
-			validateBankData: function () { return Promise.fail(); },
-			changeBankDataValidity: function ( validity ) {
-				t.deepEqual( validity.status, 'INCOMPLETE' );
-			}
-		} )
-	} );
+// TODO test validity classes
 
-	const ibanInput = wrapper.find( '#iban' );
-	const bicInput = wrapper.find( '#bic' );
-
-	ibanInput.setValue( '0648489890' );
-	ibanInput.trigger( 'input' );
-	ibanInput.trigger( 'blur' );
-
-	ibanInput.setValue( '' );
-	ibanInput.trigger( 'input' );
-	bicInput.setValue( '50010517' );
-	bicInput.trigger( 'input' );
-	bicInput.trigger( 'blur' );
-} );
+// TODO test labels when we have an i18n solution

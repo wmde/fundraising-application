@@ -135,7 +135,7 @@ var objectAssign = require( 'object-assign' ),
 	 * @return {BankDataValidator}
 	 */
 	createBankDataValidator = function ( validationUrlForSepaBankData, validationUrlForClassicBankData, transport ) {
-		return new BankDataValidator( validationUrlForSepaBankData, validationUrlForClassicBankData, transport );
+		return new BankDataValidator( validationUrlForSepaBankData, validationUrlForClassicBankData, transport || new JQueryTransport() );
 	}
 ;
 

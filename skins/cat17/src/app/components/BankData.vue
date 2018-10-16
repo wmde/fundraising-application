@@ -20,10 +20,8 @@
 	export default {
 		name: 'bank-data',
 		props: {
-			changeIban: Function,
-			changeBic: Function,
 			changeBankDataValidity: Function,
-			validateBankData: Function,
+			bankDataValidator: Object,
 			iban: String,
 			bic: String,
 			isValid: Boolean
@@ -35,19 +33,17 @@
 				bicValue: '',
 				bankName: '',
 				errorText: 'Placeholder error text',
-				hasError: false,
-				isValidBic: true,
-				bicFilled: false
+				hasError: false
 			};
 		},
 		watch: {
 			iban( v ) {
-				if ( this.looksLikeIban( v ) ) {
+				if ( this.isIbanEmpty() || this.looksLikeIban() ) {
 					this.ibanValue = v;
 				}
 			},
 			bic( v ) {
-				if ( this.looksLikeIban( this.ibanValue ) ) {
+				if ( this.isBicEmpty() || this.looksLikeIban() ) {
 					this.bicValue = v;
 				}
 			}
@@ -55,26 +51,19 @@
 		methods: {
 			handleIbanChange( evt ) {
 				this.ibanValue = evt.target.value;
-				if ( this.looksLikeIban( this.ibanValue ) ) {
-					this.changeIban( evt.target.value );
-				}
 			},
 			handleBicChange( evt ) {
 				this.bicValue = evt.target.value;
-				if ( this.looksLikeIban( this.ibanValue ) ) {
-					this.changeBic( evt.target.value );
-				}
 			},
 			validate() {
-				if ( this.ibanValue === '' || ( this.bicValue === '' && !this.looksLikeIban( this.ibanValue ) ) ) {
-					return this.changeBankDataValidity( { status: 'INCOMPLETE', iban: this.ibanValue, bic: this.bicValue } );
+				if ( this.isIbanEmpty() ) {
+					return;
 				}
-				return this.validateBankData( this.ibanValue, this.bicValue, this.looksLikeIban( this.ibanValue ) )
-					.then( this.changeBankDataValidity )
-					.catch( () => {
-						this.errorText = 'An error has occurred. Please reload the page and try again.'; // TODO translate
-						this.hasError = true;
-					} );
+				if ( this.looksLikeIban( this.ibanValue ) ) {
+					this.changeBankDataValidity( this.bankDataValidator.validateSepaBankData( this.ibanValue ) );
+					return;
+				}
+				this.changeBankDataValidity( this.bankDataValidator.validateClassicBankData( this.ibanValue, this.bicValue ) );
 			},
 			isIbanEmpty: function () {
 				return this.ibanValue === '';
@@ -82,8 +71,8 @@
 			isBicEmpty: function () {
 				return this.bicValue === '';
 			},
-			looksLikeIban: function ( ibanValue ) {
-				return /^[A-Z]+([0-9]+)?$/.test( ibanValue );
+			looksLikeIban: function () {
+				return /^[A-Z]+([0-9]+)?$/.test( this.ibanValue );
 			},
 			looksLikeBankAccountNumber: function () {
 				return /^\d+$/.test( this.ibanValue );
@@ -91,6 +80,7 @@
 		},
 		computed: {
 			labels() {
+				// TODO Translate these strings
 				if ( this.looksLikeIban() ) {
 					return {
 						iban: 'IBAN',
@@ -114,7 +104,7 @@
 			classesIBAN() {
 				return {
 					'field-grp': true,
-					'field-iba': true,
+					'field-iban': true,
 					'field-labeled': true,
 					invalid: !this.isValid,
 					valid: this.isValid && !this.isIbanEmpty()
@@ -123,7 +113,7 @@
 			classesBIC() {
 				return {
 					'field-grp': true,
-					'field-iba': true,
+					'field-bic': true,
 					'field-labeled': true,
 					invalid: !this.isValid && !this.isBicEmpty(),
 					valid: this.isValid && !this.isBicEmpty()
