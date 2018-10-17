@@ -1623,16 +1623,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v4.0.4",
+            "version": "v4.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "fa6ee28600d21d49b2b4e1006b48426cec8e579c"
+                "reference": "d0230c5c77a7e3cfa69446febf340978540958c0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/fa6ee28600d21d49b2b4e1006b48426cec8e579c",
-                "reference": "fa6ee28600d21d49b2b4e1006b48426cec8e579c",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/d0230c5c77a7e3cfa69446febf340978540958c0",
+                "reference": "d0230c5c77a7e3cfa69446febf340978540958c0",
                 "shasum": ""
             },
             "require": {
@@ -1648,7 +1648,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.0-dev"
+                    "dev-master": "4.1-dev"
                 }
             },
             "autoload": {
@@ -1670,7 +1670,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2018-09-18T07:03:24+00:00"
+            "time": "2018-10-10T09:24:14+00:00"
         },
         {
             "name": "ocramius/package-versions",
@@ -1888,16 +1888,16 @@
         },
         {
             "name": "piwik/piwik-php-tracker",
-            "version": "1.4.0",
+            "version": "1.4.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/piwik/piwik-php-tracker.git",
-                "reference": "f9a0168c87f01f2d5de95029a1ba0d1fd6c3d5ab"
+                "url": "https://github.com/matomo-org/matomo-php-tracker.git",
+                "reference": "3b31a6366fdf1f39520d7cbf858967f309d89275"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/piwik/piwik-php-tracker/zipball/f9a0168c87f01f2d5de95029a1ba0d1fd6c3d5ab",
-                "reference": "f9a0168c87f01f2d5de95029a1ba0d1fd6c3d5ab",
+                "url": "https://api.github.com/repos/matomo-org/matomo-php-tracker/zipball/3b31a6366fdf1f39520d7cbf858967f309d89275",
+                "reference": "3b31a6366fdf1f39520d7cbf858967f309d89275",
                 "shasum": ""
             },
             "type": "library",
@@ -1924,7 +1924,7 @@
                 "piwik",
                 "tracker"
             ],
-            "time": "2017-11-09T03:20:23+00:00"
+            "time": "2018-10-12T00:37:52+00:00"
         },
         {
             "name": "psr/cache",
@@ -5803,16 +5803,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "6.0.8",
+            "version": "6.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "848f78b3309780fef7ec8c4666b7ab4e6b09b22f"
+                "reference": "0685fb6a43aed1b2e09804d1aaf17144c82861f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/848f78b3309780fef7ec8c4666b7ab4e6b09b22f",
-                "reference": "848f78b3309780fef7ec8c4666b7ab4e6b09b22f",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/0685fb6a43aed1b2e09804d1aaf17144c82861f8",
+                "reference": "0685fb6a43aed1b2e09804d1aaf17144c82861f8",
                 "shasum": ""
             },
             "require": {
@@ -5836,7 +5836,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "6.0-dev"
+                    "dev-master": "6.1-dev"
                 }
             },
             "autoload": {
@@ -5862,7 +5862,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2018-10-04T03:41:23+00:00"
+            "time": "2018-10-16T05:37:37+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -7658,12 +7658,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "fba6c88d51a6c15c5b273907869b41d9a046748e"
+                "reference": "eb19e17a5696944f9680ad9b5e8702a29a51d07d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/fba6c88d51a6c15c5b273907869b41d9a046748e",
-                "reference": "fba6c88d51a6c15c5b273907869b41d9a046748e",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/eb19e17a5696944f9680ad9b5e8702a29a51d07d",
+                "reference": "eb19e17a5696944f9680ad9b5e8702a29a51d07d",
                 "shasum": ""
             },
             "require-dev": {
@@ -7696,7 +7696,7 @@
                 "GPL-2.0+"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2018-10-09T16:42:45+00:00"
+            "time": "2018-10-10T14:55:09+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",
