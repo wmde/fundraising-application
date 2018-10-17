@@ -29,11 +29,11 @@ test( 'Given German IBAN value, BIC-field becomes disabled', t => {
 	const wrapper = shallowMount( BankData, {
 		propsData: newTestProperties()
 	} );
-	const bicInput = wrapper.find( '#bic' );
+	const bicInput = wrapper.find( '#bank-id' );
 
 	t.notOk( bicInput.attributes().disabled, '"disabled" attribute should be false' );
 
-	const ibanInput = wrapper.find( '#iban' );
+	const ibanInput = wrapper.find( '#account-id' );
 	ibanInput.setValue( 'DE123' );
 	ibanInput.trigger( 'input' );
 
@@ -46,8 +46,8 @@ test( 'Given IBAN value changes in IBAN and BIC property, BankData.vue renders t
 	const wrapper = shallowMount( BankData, {
 		propsData: initialProperties
 	} );
-	const ibanInput = wrapper.find( '#iban' );
-	const bicInput = wrapper.find( '#bic' );
+	const ibanInput = wrapper.find( '#account-id' );
+	const bicInput = wrapper.find( '#bank-id' );
 
 	t.equal( ibanInput.element.value, '' );
 	t.equal( bicInput.element.value, '' );
@@ -67,8 +67,8 @@ test( 'Given classic account value, BankData.vue does only render changes to IBA
 	const wrapper = shallowMount( BankData, {
 		propsData: initialProperties
 	} );
-	const ibanInput = wrapper.find( '#iban' );
-	const bicInput = wrapper.find( '#bic' );
+	const ibanInput = wrapper.find( '#account-id' );
+	const bicInput = wrapper.find( '#bank-id' );
 
 	t.equal( ibanInput.element.value, '' );
 	t.equal( bicInput.element.value, '' );
@@ -107,7 +107,7 @@ test( 'Given empty IBAN value on IBAN blur, validation is not triggered and no r
 		} )
 	} );
 
-	const ibanInput = wrapper.find( '#iban' );
+	const ibanInput = wrapper.find( '#account-id' );
 	ibanInput.trigger( 'blur' );
 	t.end();
 } );
@@ -135,7 +135,7 @@ test( 'Given filled IBAN value on IBAN blur, SEPA validation is triggered and va
 		} )
 	} );
 
-	const ibanInput = wrapper.find( '#iban' );
+	const ibanInput = wrapper.find( '#account-id' );
 	ibanInput.setValue( 'DE12500105170648489890' );
 	ibanInput.trigger( 'input' );
 	ibanInput.trigger( 'blur' );
@@ -165,8 +165,8 @@ test( 'Given filled classic values on blur, classic validation is triggered and 
 		} )
 	} );
 
-	const ibanInput = wrapper.find( '#iban' );
-	const bicInput = wrapper.find( '#bic' );
+	const ibanInput = wrapper.find( '#account-id' );
+	const bicInput = wrapper.find( '#bank-id' );
 
 	ibanInput.setValue( '0648489890' );
 	ibanInput.trigger( 'input' );
