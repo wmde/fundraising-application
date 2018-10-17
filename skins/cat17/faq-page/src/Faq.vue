@@ -81,11 +81,11 @@ export default {
 	},
 	methods: {
 		populatePageByTopic: function ( topic ) {
-			this.page = this.content.questions.filter( ( question ) => question.topic.split( ',' ).indexOf( topic.id ) !== -1 );
+			this.page = this.content.questions.filter( question => question.topic.split( ',' ).indexOf( topic.id ) !== -1 );
 			this.setTopicTitle( topic.name );
 		},
 		populatePageWithPreviewContent: function () {
-			this.page = this.content.questions.filter( ( question ) => question.topic.split( ',' ).indexOf( '1' ) !== -1 );
+			this.page = this.content.questions.filter( question => question.topic.split( ',' ).indexOf( '1' ) !== -1 );
 		},
 		setTopicTitle: function ( name ) {
 			this.topicTitle = name;
