@@ -1,16 +1,19 @@
 <template>
 	<div>
 		<div v-bind:class="classesIBAN">
-			<input type="text" id="iban" name="iban" :placeholder="labels.iban" v-bind:value="ibanValue" v-on:input="handleIbanChange" v-on:blur="validate">
-			<label for="iban">{{ labels.iban }}</label>
+			<input type="text" id="account-id" :placeholder="labels.iban" v-model="accountId" v-on:blur="validate">
+			<label for="account-id">{{ labels.iban }}</label>
 		</div>
 		<div v-bind:class="classesBIC">
-			<input type="text" id="bic" name="bic" :placeholder="labels.bic" v-bind:value="bicValue" :disabled="writableBIC" v-on:input="handleBicChange" v-on:blur="validate">
-			<label for="bic">{{ labels.bic }}</label>
+			<input type="text" id="bank-id" :placeholder="labels.bic" :disabled="writableBIC" v-model="bankId" v-on:blur="validate">
+			<label for="bank-id">{{ labels.bic }}</label>
 		</div>
 
 		<span id="bank-name">{{ bankName }}</span>
+		<!-- Form field values that will be sent to the server -->
 		<input type="hidden" name="bankname" id="field-bank-name" :value="bankName" />
+		<input type="hidden" name="iban" :value="iban" />
+		<input type="hidden" name="bic" :value="bic" />
 
 		<span class="error-text" v-show="hasError">{{ errorText }}</span>
 	</div>
@@ -29,8 +32,8 @@
 		data: function () {
 			// TODO Translate these strings
 			return {
-				ibanValue: '',
-				bicValue: '',
+				accountId: '',
+				bankId: '',
 				bankName: '',
 				errorText: 'Placeholder error text',
 				hasError: false
@@ -38,44 +41,38 @@
 		},
 		watch: {
 			iban( v ) {
-				if ( this.isIbanEmpty() || this.looksLikeIban() ) {
-					this.ibanValue = v;
+				if ( this.isAccountIdEmpty() || this.looksLikeIban() ) {
+					this.accountId = v;
 				}
 			},
 			bic( v ) {
-				if ( this.isBicEmpty() || this.looksLikeIban() ) {
-					this.bicValue = v;
+				if ( this.isBankIdEmpty() || this.looksLikeIban() ) {
+					this.bankId = v;
 				}
 			}
 		},
 		methods: {
-			handleIbanChange( evt ) {
-				this.ibanValue = evt.target.value;
-			},
-			handleBicChange( evt ) {
-				this.bicValue = evt.target.value;
-			},
 			validate() {
-				if ( this.isIbanEmpty() ) {
+				if ( this.isAccountIdEmpty() ) {
 					return;
 				}
-				if ( this.looksLikeIban( this.ibanValue ) ) {
-					this.changeBankDataValidity( this.bankDataValidator.validateSepaBankData( this.ibanValue ) );
+				if ( this.looksLikeIban( this.accountId ) ) {
+					this.changeBankDataValidity( this.bankDataValidator.validateSepaBankData( this.accountId ) );
 					return;
 				}
-				this.changeBankDataValidity( this.bankDataValidator.validateClassicBankData( this.ibanValue, this.bicValue ) );
+				this.changeBankDataValidity( this.bankDataValidator.validateClassicBankData( this.accountId, this.bankId ) );
 			},
-			isIbanEmpty: function () {
-				return this.ibanValue === '';
+			isAccountIdEmpty: function () {
+				return this.accountId === '';
 			},
-			isBicEmpty: function () {
-				return this.bicValue === '';
+			isBankIdEmpty: function () {
+				return this.bankId === '';
 			},
 			looksLikeIban: function () {
-				return /^[A-Z]+([0-9]+)?$/.test( this.ibanValue );
+				return /^[A-Z]+([0-9]+)?$/.test( this.accountId );
 			},
 			looksLikeBankAccountNumber: function () {
-				return /^\d+$/.test( this.ibanValue );
+				return /^\d+$/.test( this.accountId );
 			}
 		},
 		computed: {
@@ -99,7 +96,7 @@
 				};
 			},
 			writableBIC() {
-				return /^(DE).*$/.test( this.ibanValue );
+				return /^(DE).*$/.test( this.accountId );
 			},
 			classesIBAN() {
 				return {
@@ -107,7 +104,7 @@
 					'field-iban': true,
 					'field-labeled': true,
 					invalid: !this.isValid,
-					valid: this.isValid && !this.isIbanEmpty()
+					valid: this.isValid && !this.isAccountIdEmpty()
 				};
 			},
 			classesBIC() {
@@ -115,8 +112,8 @@
 					'field-grp': true,
 					'field-bic': true,
 					'field-labeled': true,
-					invalid: !this.isValid && !this.isBicEmpty(),
-					valid: this.isValid && !this.isBicEmpty()
+					invalid: !this.isValid && !this.isBankIdEmpty(),
+					valid: this.isValid && !this.isBankIdEmpty()
 				};
 			}
 		}
