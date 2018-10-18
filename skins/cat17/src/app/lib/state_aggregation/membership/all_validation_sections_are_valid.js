@@ -10,7 +10,7 @@ module.exports = function ( state ) {
 		state.validity.address === true &&
 		(
 			( state.membershipFormContent.paymentType === 'BEZ' && state.validity.bankData === true ) ||
-			( state.membershipFormContent.paymentType !== 'BEZ' && state.validity.bankData !== false )
+			( state.membershipFormContent.paymentType !== 'BEZ' )
 		)
 	);
 };
