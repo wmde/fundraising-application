@@ -296,7 +296,8 @@ $( function () {
 			// The validator does not come from the store and should be passed
 			// in as a prop the initialization code,
 			// see https://github.com/nadimtuhin/redux-vue/issues/6
-			bankDataValidator: bankDataValidator
+			bankDataValidator: bankDataValidator,
+			messages: initData.data( 'messages' )
 		}
 	}
 
@@ -309,6 +310,7 @@ $( function () {
 	}
 
 	WMDE.Vue.use(WMDE.VueRedux.reduxStorePlugin);
+	WMDE.Vue.use(WMDE.VueTranslate);
 
 	var ConnectedBankData = WMDE.VueRedux.connect( mapStateToProps, mapActionToProps )( WMDE.BankData );
 
