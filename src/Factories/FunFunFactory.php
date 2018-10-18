@@ -652,6 +652,13 @@ class FunFunFactory implements ServiceProviderInterface {
 		) )->readAndValidateJson();
 	}
 
+	public function getMessages(): string {
+		return ( new JsonStringReader(
+			$this->getI18nDirectory() . '/messages/messages.json',
+			new SimpleFileFetcher()
+		) )->readAndValidateJson();
+	}
+
 	public function setSkinTwigEnvironment( Twig_Environment $twig ): void {
 		$this->pimple['skin_twig_environment'] = $twig;
 	}
@@ -1317,7 +1324,8 @@ class FunFunFactory implements ServiceProviderInterface {
 	private function getDonationFormTemplate(): TwigTemplate {
 		return $this->getLayoutTemplate( 'Donation_Form.html.twig', [
 			'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForDonation(),
-			'presetAmounts' => $this->getPresetAmountsSettings( 'donations' )
+			'presetAmounts' => $this->getPresetAmountsSettings( 'donations' ),
+			'messages' => $this->getMessages()
 		] );
 	}
 
