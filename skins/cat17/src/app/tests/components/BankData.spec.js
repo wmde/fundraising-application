@@ -18,27 +18,33 @@ function newTestProperties( overrides ) {
 	);
 }
 
+/* Basic sanity test */
+
 test( 'BankData.vue renders', t => {
 	t.plan( 1 );
 	const wrapper = shallowMount( BankData );
 	t.equal( typeof wrapper, 'object' );
 } );
 
+/*  Reaction to input */
+
 test( 'Given German IBAN value, BIC-field becomes disabled', t => {
 	t.plan( 2 );
 	const wrapper = shallowMount( BankData, {
 		propsData: newTestProperties()
 	} );
-	const bicInput = wrapper.find( '#bank-id' );
+	const bankIdInput = wrapper.find( '#bank-id' );
 
-	t.notOk( bicInput.attributes().disabled, '"disabled" attribute should be false' );
+	t.notOk( bankIdInput.attributes().disabled, '"disabled" attribute should be false' );
 
-	const ibanInput = wrapper.find( '#account-id' );
-	ibanInput.setValue( 'DE123' );
-	ibanInput.trigger( 'input' );
+	const accountIdInput = wrapper.find( '#account-id' );
+	accountIdInput.setValue( 'DE123' );
+	accountIdInput.trigger( 'input' );
 
-	t.ok( bicInput.attributes().disabled, '"disabled" attribute should have a truthy value' );
+	t.ok( bankIdInput.attributes().disabled, '"disabled" attribute should have a truthy value' );
 } );
+
+/* Reaction to iban/bic property changes */
 
 test( 'Given IBAN value changes in IBAN and BIC property, BankData.vue renders them to field values', t => {
 	t.plan( 4 );
@@ -46,19 +52,19 @@ test( 'Given IBAN value changes in IBAN and BIC property, BankData.vue renders t
 	const wrapper = shallowMount( BankData, {
 		propsData: initialProperties
 	} );
-	const ibanInput = wrapper.find( '#account-id' );
-	const bicInput = wrapper.find( '#bank-id' );
+	const accountIdInput = wrapper.find( '#account-id' );
+	const bankIdInput = wrapper.find( '#bank-id' );
 
-	t.equal( ibanInput.element.value, '' );
-	t.equal( bicInput.element.value, '' );
+	t.equal( accountIdInput.element.value, '' );
+	t.equal( bankIdInput.element.value, '' );
 
 	wrapper.setProps( {
 		iban: 'DE123',
 		bic: '98765'
 	} );
 
-	t.equal( ibanInput.element.value, 'DE123' );
-	t.equal( bicInput.element.value, '98765' );
+	t.equal( accountIdInput.element.value, 'DE123' );
+	t.equal( bankIdInput.element.value, '98765' );
 } );
 
 test( 'Given classic account value, BankData.vue does only render changes to IBAN and BIC field values if they are empty', t => {
@@ -67,28 +73,30 @@ test( 'Given classic account value, BankData.vue does only render changes to IBA
 	const wrapper = shallowMount( BankData, {
 		propsData: initialProperties
 	} );
-	const ibanInput = wrapper.find( '#account-id' );
-	const bicInput = wrapper.find( '#bank-id' );
+	const accountIdInput = wrapper.find( '#account-id' );
+	const bankIdInput = wrapper.find( '#bank-id' );
 
-	t.equal( ibanInput.element.value, '' );
-	t.equal( bicInput.element.value, '' );
+	t.equal( accountIdInput.element.value, '' );
+	t.equal( bankIdInput.element.value, '' );
 
 	wrapper.setProps( {
 		iban: '123',
 		bic: '98765'
 	} );
 
-	t.equal( ibanInput.element.value, '123' );
-	t.equal( bicInput.element.value, '98765' );
+	t.equal( accountIdInput.element.value, '123' );
+	t.equal( bankIdInput.element.value, '98765' );
 
 	wrapper.setProps( {
 		iban: '777',
 		bic: '888'
 	} );
 
-	t.equal( ibanInput.element.value, '123' );
-	t.equal( bicInput.element.value, '98765' );
+	t.equal( accountIdInput.element.value, '123' );
+	t.equal( bankIdInput.element.value, '98765' );
 } );
+
+/* When does validation happen */
 
 test( 'Given empty IBAN value on IBAN blur, validation is not triggered and no result is set', t => {
 	const wrapper = shallowMount( BankData, {
@@ -107,8 +115,8 @@ test( 'Given empty IBAN value on IBAN blur, validation is not triggered and no r
 		} )
 	} );
 
-	const ibanInput = wrapper.find( '#account-id' );
-	ibanInput.trigger( 'blur' );
+	const accountIdInput = wrapper.find( '#account-id' );
+	accountIdInput.trigger( 'blur' );
 	t.end();
 } );
 
@@ -135,10 +143,10 @@ test( 'Given filled IBAN value on IBAN blur, SEPA validation is triggered and va
 		} )
 	} );
 
-	const ibanInput = wrapper.find( '#account-id' );
-	ibanInput.setValue( 'DE12500105170648489890' );
-	ibanInput.trigger( 'input' );
-	ibanInput.trigger( 'blur' );
+	const accountIdInput = wrapper.find( '#account-id' );
+	accountIdInput.setValue( 'DE12500105170648489890' );
+	accountIdInput.trigger( 'input' );
+	accountIdInput.trigger( 'blur' );
 } );
 
 test( 'Given filled classic values on blur, classic validation is triggered and validity is set to validation result', t => {
@@ -165,17 +173,170 @@ test( 'Given filled classic values on blur, classic validation is triggered and 
 		} )
 	} );
 
-	const ibanInput = wrapper.find( '#account-id' );
-	const bicInput = wrapper.find( '#bank-id' );
+	const accountIdInput = wrapper.find( '#account-id' );
+	const bankIdInput = wrapper.find( '#bank-id' );
 
-	ibanInput.setValue( '0648489890' );
-	ibanInput.trigger( 'input' );
-	bicInput.setValue( '50010517' );
-	bicInput.trigger( 'input' );
+	accountIdInput.setValue( '0648489890' );
+	accountIdInput.trigger( 'input' );
+	bankIdInput.setValue( '50010517' );
+	bankIdInput.trigger( 'input' );
 
-	ibanInput.trigger( 'blur' );
+	accountIdInput.trigger( 'blur' );
 } );
 
-// TODO test validity classes
+/* Setting of "valid" CSS class */
 
-// TODO test labels when we have an i18n solution
+test( 'Given empty fields, they are not marked as valid ', t => {
+	t.plan( 2 );
+
+	const wrapper = shallowMount( BankData, {
+		propsData: newTestProperties()
+	} );
+
+	const accountIdContainer = wrapper.find( '.field-account-id' );
+	const bankIdContainer = wrapper.find( '.field-bank-id' );
+
+	t.equal( accountIdContainer.classes().indexOf( 'valid' ), -1, 'empty account id field should not be valid' );
+	t.equal( bankIdContainer.classes().indexOf( 'valid' ), -1, 'empty bank id field should not be valid' );
+} );
+
+function fillField( wrapper, name, value ) {
+	const field = wrapper.find( name );
+	field.setValue( value );
+	field.trigger( 'input' );
+	field.trigger( 'blur' );
+}
+
+test( 'Given filled fields, they are marked as valid ', t => {
+	// Note: the class name "valid" is an unfortunate term, there for historical reasons.
+	// The more appropriate name should be "filled".
+	// The CSS highlighting that "valid" does, is overridden by the "invalid" class,
+	// so in the final markup an element can have both "valid" and "invalid" classes.
+
+	t.plan( 2 );
+
+	const wrapper = shallowMount( BankData, {
+		propsData: newTestProperties()
+	} );
+	// we have to use an Austrian IBAn since a German one locks the BIC field for input
+	fillField( wrapper, '#account-id', 'AT022050302101023600' );
+	fillField( wrapper, '#bank-id', 'RLNWATW1647' );
+
+	const accountIdContainer = wrapper.find( '.field-account-id' );
+	const bankIdContainer = wrapper.find( '.field-bank-id' );
+
+	t.notEqual( accountIdContainer.classes().indexOf( 'valid' ), -1, 'filled account id field should be valid' );
+	t.notEqual( bankIdContainer.classes().indexOf( 'valid' ), -1, 'filled bank id field should be valid' );
+} );
+
+/* Setting of "invalid" CSS class */
+
+test( 'Given account id is filled with IBAN and validity is true, invalid class is not set', t => {
+	t.plan( 2 );
+
+	const wrapper = shallowMount( BankData, {
+		propsData: newTestProperties()
+	} );
+
+	fillField( wrapper, '#account-id', 'DE12500105170648489890' );
+	wrapper.setProps( { isValid: true } );
+
+	const accountIdContainer = wrapper.find( '.field-account-id' );
+	const bankIdContainer = wrapper.find( '.field-bank-id' );
+
+	t.equal( accountIdContainer.classes().indexOf( 'invalid' ), -1, 'filled account id field should not be invalid' );
+	t.equal( bankIdContainer.classes().indexOf( 'invalid' ), -1, 'filled bank id field should not be invalid' );
+} );
+
+test( 'Given account id is filled with IBAN and validity is false, invalid class is set for IBAN field', t => {
+	t.plan( 2 );
+
+	const wrapper = shallowMount( BankData, {
+		propsData: newTestProperties()
+	} );
+
+	fillField( wrapper, '#account-id', 'DE12500105170648489890' );
+	wrapper.setProps( { isValid: false } );
+
+	const accountIdContainer = wrapper.find( '.field-account-id' );
+	const bankIdContainer = wrapper.find( '.field-bank-id' );
+
+	t.notEqual( accountIdContainer.classes().indexOf( 'invalid' ), -1, 'filled account id field should not be invalid' );
+	t.equal( bankIdContainer.classes().indexOf( 'invalid' ), -1, 'filled bank id field should not be invalid' );
+} );
+
+test( 'Given account and bank id are filled with classic data and validity is true, invalid class is not set', t => {
+	t.plan( 2 );
+
+	const wrapper = shallowMount( BankData, {
+		propsData: newTestProperties()
+	} );
+
+	fillField( wrapper, '#account-id', '0648489890' );
+	fillField( wrapper, '#bank-id', '50010517' );
+	wrapper.setProps( { isValid: true } );
+
+	const accountIdContainer = wrapper.find( '.field-account-id' );
+	const bankIdContainer = wrapper.find( '.field-bank-id' );
+
+	t.equal( accountIdContainer.classes().indexOf( 'invalid' ), -1, 'filled account id field should not be invalid' );
+	t.equal( bankIdContainer.classes().indexOf( 'invalid' ), -1, 'filled bank id field should not be invalid' );
+
+} );
+
+test( 'Given account and bank id are filled with classic data and validity is false, invalid class is set on both fields', t => {
+	t.plan( 2 );
+
+	const wrapper = shallowMount( BankData, {
+		propsData: newTestProperties()
+	} );
+
+	fillField( wrapper, '#account-id', '0648489890' );
+	fillField( wrapper, '#bank-id', '50010517' );
+	wrapper.setProps( { isValid: false } );
+
+	const accountIdContainer = wrapper.find( '.field-account-id' );
+	const bankIdContainer = wrapper.find( '.field-bank-id' );
+
+	t.notEqual( accountIdContainer.classes().indexOf( 'invalid' ), -1, 'filled account id field should not be invalid' );
+	t.notEqual( bankIdContainer.classes().indexOf( 'invalid' ), -1, 'filled bank id field should not be invalid' );
+
+} );
+
+test( 'Given only account id was filled with classic data and validity is undetermined, invalid class is not set', t => {
+	t.plan( 2 );
+
+	const wrapper = shallowMount( BankData, {
+		propsData: newTestProperties()
+	} );
+
+	fillField( wrapper, '#account-id', '0648489890' );
+	wrapper.setProps( { isValid: null } );
+
+	const accountIdContainer = wrapper.find( '.field-account-id' );
+	const bankIdContainer = wrapper.find( '.field-bank-id' );
+
+	t.equal( accountIdContainer.classes().indexOf( 'invalid' ), -1, 'filled account id field should not be invalid' );
+	t.equal( bankIdContainer.classes().indexOf( 'invalid' ), -1, 'unfilled bank id field should not be invalid' );
+
+} );
+
+test( 'Given only bank id was filled with classic data and validity is undetermind, invalid class is not set', t => {
+	t.plan( 2 );
+
+	const wrapper = shallowMount( BankData, {
+		propsData: newTestProperties()
+	} );
+
+	fillField( wrapper, '#bank-id', '50010517' );
+	wrapper.setProps( { isValid: null } );
+
+	const accountIdContainer = wrapper.find( '.field-account-id' );
+	const bankIdContainer = wrapper.find( '.field-bank-id' );
+
+	t.equal( accountIdContainer.classes().indexOf( 'invalid' ), -1, 'unfilled account id field should not be invalid' );
+	t.equal( bankIdContainer.classes().indexOf( 'invalid' ), -1, 'filled bank id field should not be invalid' );
+
+} );
+
+// TODO test label change (show different labels for empty/iban/classic) when we have an i18n solution

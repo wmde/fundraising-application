@@ -1,11 +1,11 @@
 <template>
 	<div>
-		<div v-bind:class="classesIBAN">
-			<input type="text" id="account-id" :placeholder="labels.iban" v-model="accountId" v-on:blur="validate">
+		<div class="field-grp field-account-id field-labeled" v-bind:class="classesIBAN">
+			<input type="text" id="account-id" :placeholder="labels.iban" v-model.trim="accountId" v-on:blur="validate">
 			<label for="account-id">{{ labels.iban }}</label>
 		</div>
-		<div v-bind:class="classesBIC">
-			<input type="text" id="bank-id" :placeholder="labels.bic" :disabled="writableBIC" v-model="bankId" v-on:blur="validate">
+		<div class="field-grp field-bank-id field-labeled" v-bind:class="classesBIC">
+			<input type="text" id="bank-id" :placeholder="labels.bic" :disabled="writableBIC" v-model.trim="bankId" v-on:blur="validate">
 			<label for="bank-id">{{ labels.bic }}</label>
 		</div>
 
@@ -51,6 +51,12 @@
 				}
 			}
 		},
+		created() {
+			// The "watch" method only catches changes, if the component is initialized with iban/bic props,
+			// we also want to catch them
+			this.accountId = this.$props.iban;
+			this.bankId = this.$props.bic;
+		},
 		methods: {
 			validate() {
 				if ( this.isAccountIdEmpty() ) {
@@ -69,10 +75,13 @@
 				return this.bankId === '';
 			},
 			looksLikeIban: function () {
-				return /^[A-Z]+([0-9]+)?$/.test( this.accountId );
+				return /^[A-Z]{2}([0-9]+)?$/.test( this.accountId );
 			},
 			looksLikeBankAccountNumber: function () {
 				return /^\d+$/.test( this.accountId );
+			},
+			looksLikeGermanIban() {
+				return /^DE+([0-9]+)?$/.test( this.accountId );
 			}
 		},
 		computed: {
@@ -100,20 +109,14 @@
 			},
 			classesIBAN() {
 				return {
-					'field-grp': true,
-					'field-iban': true,
-					'field-labeled': true,
-					invalid: !this.isValid,
-					valid: this.isValid && !this.isAccountIdEmpty()
+					invalid: this.isValid === false,
+					valid: !this.isAccountIdEmpty()
 				};
 			},
 			classesBIC() {
 				return {
-					'field-grp': true,
-					'field-bic': true,
-					'field-labeled': true,
-					invalid: !this.isValid && !this.isBankIdEmpty(),
-					valid: this.isValid && !this.isBankIdEmpty()
+					invalid: this.isValid === false && !this.looksLikeGermanIban(),
+					valid: !this.isBankIdEmpty()
 				};
 			}
 		}
