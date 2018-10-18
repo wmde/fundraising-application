@@ -82,7 +82,7 @@ function inputValidation( validationState, action ) {
 			}
 			return newValidationState;
 		case 'FINISH_BANK_DATA_VALIDATION':
-			if ( action.payload.status === ValidationStates.INCOMPLETE || action.payload.status === ValidationStates.NOT_APPLICABLE ) {
+			if ( action.payload.status === ValidationStates.INCOMPLETE ) {
 				return newValidationState;
 			}
 			bankDataIsValid = action.payload.status !== ValidationStates.ERR;
