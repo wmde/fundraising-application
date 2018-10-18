@@ -27,7 +27,8 @@
 			bankDataValidator: Object,
 			iban: String,
 			bic: String,
-			isValid: Boolean
+			isValid: Boolean,
+			messages: String
 		},
 		data: function () {
 			// TODO Translate these strings
@@ -38,6 +39,12 @@
 				errorText: 'Placeholder error text',
 				hasError: false
 			};
+		},
+		mounted() {
+			this.$translate.setLang('de_DE');
+		},
+		locales: {
+			'de_DE': this.messages
 		},
 		watch: {
 			iban( v ) {
@@ -89,19 +96,19 @@
 				// TODO Translate these strings
 				if ( this.looksLikeIban() ) {
 					return {
-						iban: 'IBAN',
-						bic: 'BIC'
+						iban: t( this.messages.iban ),
+						bic: t( this.messages.bic )
 					};
 				}
 				if ( this.looksLikeBankAccountNumber() ) {
 					return {
-						iban: 'Kontonummer',
-						bic: 'Bankleitzahl'
+						iban: t( this.messages.account_number ),
+						bic: t( this.messages.bank_code )
 					};
 				}
 				return {
-					iban: 'IBAN / Kontonummer',
-					bic: 'BIC / Bankleitzahl'
+					iban: t( this.messages.iban ) + '/' + t( this.messages.account_number ),
+					bic: t( this.messages.bic ) + '/' + t( this.messages.bank_code )
 				};
 			},
 			writableBIC() {
