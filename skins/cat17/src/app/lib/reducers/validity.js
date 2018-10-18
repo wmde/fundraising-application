@@ -6,6 +6,7 @@
 
 var objectAssign = require( 'object-assign' ),
 	_ = require( 'underscore' ),
+	ValidationStates = require( '../validation/validation_states' ).default,
 	defaultState = {
 		paymentData: null,
 		address: null,
@@ -21,11 +22,11 @@ var objectAssign = require( 'object-assign' ),
  * @return {boolean|null}
  */
 function convertExternalResult( action ) {
-	if ( action.payload.status === 'NOT_APPLICABLE' ) {
+	if ( action.payload.status === ValidationStates.INCOMPLETE ) {
 		return null;
 	}
 
-	return !action.error && action.payload.status === 'OK';
+	return !action.error && action.payload.status === ValidationStates.OK;
 }
 
 /**
