@@ -1,7 +1,11 @@
 # This file is used during unit tests and overrides campaign configurations
 #
-# Set all campaigns to inactive to force the tests using the default code paths
+# All campaigns *MUST* be inactive to force the tests using the default code paths
+# Unit tests that test campaign features might override the campaign state
 
+
+# Until https://phabricator.wikimedia.org/T163452 is resolved,
+# we must force the unit tests to use the `test` skin.
 skins:
   active: false
   start: "2018-10-10"
@@ -10,4 +14,4 @@ skins:
   default_bucket: "test"
 
 donation_address:
-  active: true
+  active: false
