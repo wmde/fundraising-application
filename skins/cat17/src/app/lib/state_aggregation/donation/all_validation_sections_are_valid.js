@@ -7,7 +7,7 @@ module.exports = function ( state ) {
 		state.validity.address === true &&
 		(
 			( state.donationFormContent.paymentType === 'BEZ' && state.validity.bankData === true ) ||
-			( state.donationFormContent.paymentType !== 'BEZ' && state.validity.bankData !== false )
+			( state.donationFormContent.paymentType !== 'BEZ' )
 		)
 	);
 };
