@@ -1,12 +1,12 @@
 <template>
 	<div>
 		<div class="field-grp field-account-id field-labeled" v-bind:class="classesIBAN">
-			<input type="text" id="account-id" :placeholder="labels.iban" v-model.trim="accountId" v-on:blur="validate">
-			<label for="account-id">{{ labels.iban }}</label>
+			<input type="text" id="account-id" :placeholder="t( labels.iban )" v-model.trim="accountId" v-on:blur="validate">
+			<label for="account-id">{{ t( labels.iban ) }}</label>
 		</div>
 		<div class="field-grp field-bank-id field-labeled" v-bind:class="classesBIC">
-			<input type="text" id="bank-id" :placeholder="labels.bic" :disabled="writableBIC" v-model.trim="bankId" v-on:blur="validate">
-			<label for="bank-id">{{ labels.bic }}</label>
+			<input type="text" id="bank-id" :placeholder="t( labels.bic )" :disabled="writableBIC" v-model.trim="bankId" v-on:blur="validate">
+			<label for="bank-id">{{ t( labels.bic ) }}</label>
 		</div>
 
 		<span id="bank-name">{{ bankName }}</span>
@@ -83,25 +83,25 @@
 			looksLikeGermanIban() {
 				return /^DE+([0-9]+)?$/.test( this.accountId );
 			}
-		}
+		},
 		computed: {
 			labels() {
 				// TODO Translate these strings
 				if ( this.looksLikeIban() ) {
 					return {
-						iban: this.t( 'iban' ),
-						bic: this.t( 'bic' )
+						iban: 'iban',
+						bic: 'bic'
 					};
 				}
 				if ( this.looksLikeBankAccountNumber() ) {
 					return {
-						iban: this.t( 'account_number' ),
-						bic: this.t( 'bank_code' )
+						iban: 'account_number',
+						bic: 'bank_code'
 					};
 				}
 				return {
-					iban: this.t( 'iban' ) + ' / ' + this.t( 'account_number' ),
-					bic: this.t( 'bic' ) + ' / ' + this.t( 'bank_code' )
+					iban: 'iban_or_account_number',
+					bic: 'bic_or_bank_code'
 				};
 			},
 			writableBIC() {

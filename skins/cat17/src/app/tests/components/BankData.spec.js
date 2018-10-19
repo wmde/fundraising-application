@@ -18,11 +18,19 @@ function newTestProperties( overrides ) {
 	);
 }
 
+/* Vue component dependencies */
+const mocks = {
+	// Dummy translation function
+	t( text ) {
+		return text;
+	}
+};
+
 /* Basic sanity test */
 
 test( 'BankData.vue renders', t => {
 	t.plan( 1 );
-	const wrapper = shallowMount( BankData );
+	const wrapper = shallowMount( BankData, { mocks } );
 	t.equal( typeof wrapper, 'object' );
 } );
 
@@ -31,6 +39,7 @@ test( 'BankData.vue renders', t => {
 test( 'Given German IBAN value, BIC-field becomes disabled', t => {
 	t.plan( 2 );
 	const wrapper = shallowMount( BankData, {
+		mocks,
 		propsData: newTestProperties()
 	} );
 	const bankIdInput = wrapper.find( '#bank-id' );
@@ -50,6 +59,7 @@ test( 'Given IBAN value changes in IBAN and BIC property, BankData.vue renders t
 	t.plan( 4 );
 	const initialProperties = newTestProperties( {} );
 	const wrapper = shallowMount( BankData, {
+		mocks,
 		propsData: initialProperties
 	} );
 	const accountIdInput = wrapper.find( '#account-id' );
@@ -71,6 +81,7 @@ test( 'Given classic account value, BankData.vue does only render changes to IBA
 	t.plan( 6 );
 	const initialProperties = newTestProperties( {} );
 	const wrapper = shallowMount( BankData, {
+		mocks,
 		propsData: initialProperties
 	} );
 	const accountIdInput = wrapper.find( '#account-id' );
@@ -100,6 +111,7 @@ test( 'Given classic account value, BankData.vue does only render changes to IBA
 
 test( 'Given empty IBAN value on IBAN blur, validation is not triggered and no result is set', t => {
 	const wrapper = shallowMount( BankData, {
+		mocks,
 		propsData: newTestProperties( {
 			bankDataValidator: {
 				validateSepaBankData() {
@@ -135,6 +147,7 @@ test( 'Given filled IBAN value on IBAN blur, SEPA validation is triggered and va
 		}
 	};
 	const wrapper = shallowMount( BankData, {
+		mocks,
 		propsData: newTestProperties( {
 			bankDataValidator: fakeBankDataValidator,
 			changeBankDataValidity: function ( validity ) {
@@ -165,6 +178,7 @@ test( 'Given filled classic values on blur, classic validation is triggered and 
 		validateSepaBankData: function () { t.fail(); }
 	};
 	const wrapper = shallowMount( BankData, {
+		mocks,
 		propsData: newTestProperties( {
 			bankDataValidator: fakeBankDataValidator,
 			changeBankDataValidity: function ( validity ) {
@@ -190,6 +204,7 @@ test( 'Given empty fields, they are not marked as valid ', t => {
 	t.plan( 2 );
 
 	const wrapper = shallowMount( BankData, {
+		mocks,
 		propsData: newTestProperties()
 	} );
 
@@ -216,6 +231,7 @@ test( 'Given filled fields, they are marked as valid ', t => {
 	t.plan( 2 );
 
 	const wrapper = shallowMount( BankData, {
+		mocks,
 		propsData: newTestProperties()
 	} );
 	// we have to use an Austrian IBAn since a German one locks the BIC field for input
@@ -235,6 +251,7 @@ test( 'Given account id is filled with IBAN and validity is true, invalid class 
 	t.plan( 2 );
 
 	const wrapper = shallowMount( BankData, {
+		mocks,
 		propsData: newTestProperties()
 	} );
 
@@ -246,12 +263,14 @@ test( 'Given account id is filled with IBAN and validity is true, invalid class 
 
 	t.equal( accountIdContainer.classes().indexOf( 'invalid' ), -1, 'filled account id field should not be invalid' );
 	t.equal( bankIdContainer.classes().indexOf( 'invalid' ), -1, 'filled bank id field should not be invalid' );
+
 } );
 
 test( 'Given account id is filled with IBAN and validity is false, invalid class is set for IBAN field', t => {
 	t.plan( 2 );
 
 	const wrapper = shallowMount( BankData, {
+		mocks,
 		propsData: newTestProperties()
 	} );
 
@@ -269,6 +288,7 @@ test( 'Given account and bank id are filled with classic data and validity is tr
 	t.plan( 2 );
 
 	const wrapper = shallowMount( BankData, {
+		mocks,
 		propsData: newTestProperties()
 	} );
 
@@ -288,6 +308,7 @@ test( 'Given account and bank id are filled with classic data and validity is fa
 	t.plan( 2 );
 
 	const wrapper = shallowMount( BankData, {
+		mocks,
 		propsData: newTestProperties()
 	} );
 
@@ -307,6 +328,7 @@ test( 'Given only account id was filled with classic data and validity is undete
 	t.plan( 2 );
 
 	const wrapper = shallowMount( BankData, {
+		mocks,
 		propsData: newTestProperties()
 	} );
 
@@ -325,6 +347,7 @@ test( 'Given only bank id was filled with classic data and validity is undetermi
 	t.plan( 2 );
 
 	const wrapper = shallowMount( BankData, {
+		mocks,
 		propsData: newTestProperties()
 	} );
 
@@ -339,4 +362,25 @@ test( 'Given only bank id was filled with classic data and validity is undetermi
 
 } );
 
-// TODO test label change (show different labels for empty/iban/classic) when we have an i18n solution
+/* Label change for different values in account id and bank id */
+
+test( 'Given no input, BankData shows labels for undetermined value', t => {
+	t.plan( 2 ); // TODO change to 4 when https://github.com/wmde/FundraisingFrontend/pull/1371 has been merged
+	const wrapper = shallowMount( BankData, {
+		mocks,
+		propsData: newTestProperties( {} )
+	} );
+
+	const accountIdInput = wrapper.find( '#account-id' );
+	const bankIdInput = wrapper.find( '#bank-id' );
+	// TODO also check the labels when https://github.com/wmde/FundraisingFrontend/pull/1371 has been merged
+	// const accountIdLabel = wrapper.find( '.account-id label');
+
+	t.equal( accountIdInput.element.attributes.placeholder.value, 'iban_or_account_number' );
+	t.equal( bankIdInput.element.attributes.placeholder.value, 'bic_or_bank_code' );
+} );
+
+// TODO test( 'Given account id input that looks like an IBAN, BankData shows labels for SEPA', t => {
+// TODO test( 'Given account id input that looks like an account number, BankData shows labels for classic bank data', t => {
+
+
