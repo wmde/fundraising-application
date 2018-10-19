@@ -365,7 +365,7 @@ test( 'Given only bank id was filled with classic data and validity is undetermi
 /* Label change for different values in account id and bank id */
 
 test( 'Given no input, BankData shows labels for undetermined value', t => {
-	t.plan( 2 ); // TODO change to 4 when https://github.com/wmde/FundraisingFrontend/pull/1371 has been merged
+	t.plan( 4 );
 	const wrapper = shallowMount( BankData, {
 		mocks,
 		propsData: newTestProperties( {} )
@@ -373,14 +373,55 @@ test( 'Given no input, BankData shows labels for undetermined value', t => {
 
 	const accountIdInput = wrapper.find( '#account-id' );
 	const bankIdInput = wrapper.find( '#bank-id' );
-	// TODO also check the labels when https://github.com/wmde/FundraisingFrontend/pull/1371 has been merged
-	// const accountIdLabel = wrapper.find( '.account-id label');
+	const accountIdLabel = wrapper.find( '.field-account-id label' );
+	const bankIdLabel = wrapper.find( '.field-bank-id label' );
 
 	t.equal( accountIdInput.element.attributes.placeholder.value, 'iban_or_account_number' );
 	t.equal( bankIdInput.element.attributes.placeholder.value, 'bic_or_bank_code' );
+	t.equal( accountIdLabel.text(), 'iban_or_account_number' );
+	t.equal( bankIdLabel.text(), 'bic_or_bank_code' );
 } );
 
-// TODO test( 'Given account id input that looks like an IBAN, BankData shows labels for SEPA', t => {
-// TODO test( 'Given account id input that looks like an account number, BankData shows labels for classic bank data', t => {
+test( 'Given account id input that looks like an IBAN, BankData shows labels for SEPA', t => {
+	t.plan( 4 );
+	const wrapper = shallowMount( BankData, {
+		mocks,
+		propsData: newTestProperties( {} )
+	} );
 
+	const ibanInput = wrapper.find( '#account-id' );
+	ibanInput.setValue( 'DE12345' );
+	ibanInput.trigger( 'input' );
 
+	const accountIdInput = wrapper.find( '#account-id' );
+	const bankIdInput = wrapper.find( '#bank-id' );
+	const accountIdLabel = wrapper.find( '.field-account-id label' );
+	const bankIdLabel = wrapper.find( '.field-bank-id label' );
+
+	t.equal( accountIdInput.element.attributes.placeholder.value, 'iban' );
+	t.equal( bankIdInput.element.attributes.placeholder.value, 'bic' );
+	t.equal( accountIdLabel.text(), 'iban' );
+	t.equal( bankIdLabel.text(), 'bic' );
+} );
+
+test( 'Given account id input that looks like an account number, BankData shows labels for classic bank data', t => {
+	t.plan( 4 );
+	const wrapper = shallowMount( BankData, {
+		mocks,
+		propsData: newTestProperties( {} )
+	} );
+
+	const ibanInput = wrapper.find( '#account-id' );
+	ibanInput.setValue( '12345' );
+	ibanInput.trigger( 'input' );
+
+	const accountIdInput = wrapper.find( '#account-id' );
+	const bankIdInput = wrapper.find( '#bank-id' );
+	const accountIdLabel = wrapper.find( '.field-account-id label' );
+	const bankIdLabel = wrapper.find( '.field-bank-id label' );
+
+	t.equal( accountIdInput.element.attributes.placeholder.value, 'account_number' );
+	t.equal( bankIdInput.element.attributes.placeholder.value, 'bank_code' );
+	t.equal( accountIdLabel.text(), 'account_number' );
+	t.equal( bankIdLabel.text(), 'bank_code' );
+} );

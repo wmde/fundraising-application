@@ -296,6 +296,7 @@ $( function () {
 			// The validator does not come from the store and should be passed
 			// in as a prop the initialization code,
 			// see https://github.com/nadimtuhin/redux-vue/issues/6
+			// and https://phabricator.wikimedia.org/T207493
 			bankDataValidator: bankDataValidator
 		}
 	}
@@ -323,7 +324,6 @@ $( function () {
 		render: (h) => h( ConnectedBankData ),
 		created() {
 			this.$translate.setLang('de_DE');
-			console.log("main created")
 		}
 
 	} ).$mount( '#bankdata-app' );
