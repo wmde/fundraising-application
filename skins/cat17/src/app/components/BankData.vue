@@ -9,7 +9,7 @@
 			<label for="bank-id">{{ t( labels.bic ) }}</label>
 		</div>
 
-		<span id="bank-name">{{ bankName }}</span>
+		<span class="bank-name">{{ bankName }}</span>
 		<!-- Form field values that will be sent to the server -->
 		<input type="hidden" name="bankname" id="field-bank-name" :value="bankName" />
 		<input type="hidden" name="iban" :value="iban" />
@@ -27,6 +27,7 @@
 			bankDataValidator: Object,
 			iban: String,
 			bic: String,
+			bankName: String,
 			isValid: Boolean
 		},
 		data: function () {
@@ -34,7 +35,6 @@
 			return {
 				accountId: '',
 				bankId: '',
-				bankName: '',
 				errorText: 'Placeholder error text',
 				hasError: false
 			};
