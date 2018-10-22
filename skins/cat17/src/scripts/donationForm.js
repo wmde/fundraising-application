@@ -291,6 +291,7 @@ $( function () {
 		return {
 			iban: state.donationFormContent.iban,
 			bic: state.donationFormContent.bic,
+			bankName: state.donationFormContent.bankName,
 			isValid: state.validity.bankData !== false,
 
 			// The validator does not come from the store and should be passed

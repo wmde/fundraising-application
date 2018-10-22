@@ -53,14 +53,13 @@ test( 'Given German IBAN value, BIC-field becomes disabled', t => {
 	t.ok( bankIdInput.attributes().disabled, '"disabled" attribute should have a truthy value' );
 } );
 
-/* Reaction to iban/bic property changes */
+/* Reaction property changes */
 
 test( 'Given IBAN value changes in IBAN and BIC property, BankData.vue renders them to field values', t => {
 	t.plan( 4 );
-	const initialProperties = newTestProperties( {} );
 	const wrapper = shallowMount( BankData, {
 		mocks,
-		propsData: initialProperties
+		propsData: newTestProperties( {} )
 	} );
 	const accountIdInput = wrapper.find( '#account-id' );
 	const bankIdInput = wrapper.find( '#bank-id' );
@@ -79,10 +78,9 @@ test( 'Given IBAN value changes in IBAN and BIC property, BankData.vue renders t
 
 test( 'Given classic account value, BankData.vue does only render changes to IBAN and BIC field values if they are empty', t => {
 	t.plan( 6 );
-	const initialProperties = newTestProperties( {} );
 	const wrapper = shallowMount( BankData, {
 		mocks,
-		propsData: initialProperties
+		propsData: newTestProperties( {} )
 	} );
 	const accountIdInput = wrapper.find( '#account-id' );
 	const bankIdInput = wrapper.find( '#bank-id' );
@@ -106,6 +104,24 @@ test( 'Given classic account value, BankData.vue does only render changes to IBA
 	t.equal( accountIdInput.element.value, '123' );
 	t.equal( bankIdInput.element.value, '98765' );
 } );
+
+test( 'Given bankName property changes, BankData.vue renders it', t => {
+	t.plan( 2 );
+	const wrapper = shallowMount( BankData, {
+		mocks,
+		propsData: newTestProperties( {} )
+	} );
+	const bankName = wrapper.find( '.bank-name' );
+
+	t.equal( bankName.text(), '' );
+
+	wrapper.setProps( {
+		bankName: 'Gringotts'
+	} );
+
+	t.equal( bankName.text(), 'Gringotts' );
+} );
+
 
 /* When does validation happen */
 
