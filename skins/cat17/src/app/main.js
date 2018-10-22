@@ -49,5 +49,6 @@ module.exports = {
 	Scrolling: require( './lib/scrolling' ),
 	BankData: require( './components/BankData.vue' ).default,
 	Vue: require( 'vue' ).default,
+	VueTranslate: require( 'vue-translate-plugin' ),
 	VueRedux: require( 'redux-vue' )
 };

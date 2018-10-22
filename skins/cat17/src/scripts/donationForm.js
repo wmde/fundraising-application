@@ -296,6 +296,7 @@ $( function () {
 			// The validator does not come from the store and should be passed
 			// in as a prop the initialization code,
 			// see https://github.com/nadimtuhin/redux-vue/issues/6
+			// and https://phabricator.wikimedia.org/T207493
 			bankDataValidator: bankDataValidator
 		}
 	}
@@ -309,13 +310,21 @@ $( function () {
 	}
 
 	WMDE.Vue.use(WMDE.VueRedux.reduxStorePlugin);
+	WMDE.Vue.use(WMDE.VueTranslate);
+
+	WMDE.Vue.locales( {
+		'de_DE': JSON.parse( initData.data( 'messages' ) )
+	} );
 
 	var ConnectedBankData = WMDE.VueRedux.connect( mapStateToProps, mapActionToProps )( WMDE.BankData );
 
 	new WMDE.Vue( {
 		// FIXME Import and create store directly when we no longer use the global variable anywhere else
 		store: store,
-		render: (h) => h( ConnectedBankData )
+		render: (h) => h( ConnectedBankData ),
+		created() {
+			this.$translate.setLang('de_DE');
+		}
 
 	} ).$mount( '#bankdata-app' );
 
