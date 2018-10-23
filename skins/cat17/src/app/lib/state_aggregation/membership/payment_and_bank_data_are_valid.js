@@ -2,17 +2,18 @@
 
 var _ = require( 'underscore' ),
 	validationResult = require( './../validation_result' ),
+	Validity = require( '../../validation/validation_states' ).Validity,
 	PAYMENT_TYPE_DEBIT_VALUE = 'BEZ',
 	hasValidDirectDebitPayment = function ( state ) {
 		return (
 			state.membershipFormContent.paymentType === PAYMENT_TYPE_DEBIT_VALUE &&
-			state.validity.bankData === true
+			state.validity.bankData === Validity.VALID
 		);
 	},
 	hasOtherValidPayment = function ( state ) {
 		return (
 			state.membershipFormContent.paymentType !== PAYMENT_TYPE_DEBIT_VALUE &&
-			state.membershipFormContent.paymentType !== null
+			state.membershipFormContent.paymentType !== Validity.INCOMPLETE
 		);
 	}
 ;
@@ -26,10 +27,10 @@ module.exports = function ( state ) {
 
 	if ( hasValidDirectDebitPayment( state ) || hasOtherValidPayment( state ) ) {
 		result.isValid = true;
-	} else if ( !_.contains( _.pluck( respectiveValidators, 'isValid' ), false ) ) {
-		result.isValid = null;
+	} else if ( !_.contains( _.pluck( respectiveValidators, 'isValid' ), Validity.INVALID ) ) {
+		result.isValid = Validity.INCOMPLETE;
 	} else {
-		result.isValid = false;
+		result.isValid = Validity.INVALID;
 	}
 
 	return result;

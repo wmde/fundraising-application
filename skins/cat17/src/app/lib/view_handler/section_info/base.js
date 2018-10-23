@@ -2,7 +2,8 @@
 
 var _ = require( 'underscore' ),
 	SECTION_STATUS = require( './section_status' ),
-	DOM_SELECTORS = require( './dom_selectors' )
+	DOM_SELECTORS = require( './dom_selectors' ),
+	Validity = require( '../../validation/validation_states' ).Validity
 ;
 
 /**
@@ -132,9 +133,9 @@ module.exports = {
 			return;
 		}
 
-		if ( validity.isValid === true ) {
+		if ( validity.isValid === Validity.VALID ) {
 			this.setSectionStatus( SECTION_STATUS.complete );
-		} else if ( validity.dataEntered === true && validity.isValid === false ) {
+		} else if ( validity.dataEntered === true && validity.isValid === Validity.INVALID ) {
 			this.setSectionStatus( SECTION_STATUS.invalid );
 		} else {
 			this.setSectionStatus( SECTION_STATUS.disabled );

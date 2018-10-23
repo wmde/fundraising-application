@@ -2,7 +2,7 @@
 
 var test = require( 'tape-catch' ),
 	deepFreeze = require( 'deep-freeze' ),
-	ValidationStates = require( '../../lib/validation/validation_states' ).default,
+	{ ValidationStates, Validity } = require( '../../lib/validation/validation_states' ),
 	validity = require( '../../lib/reducers/validity' );
 
 function createValidPayload() {
@@ -76,7 +76,7 @@ test( 'FINISH_ADDRESS_VALIDATION sets amount validation state', function ( t ) {
 	deepFreeze( beforeState );
 	t.ok( validity( beforeState, { type: 'FINISH_ADDRESS_VALIDATION', payload: createValidPayload() } ).address );
 	t.notOk( validity( beforeState, { type: 'FINISH_ADDRESS_VALIDATION', payload: createInvalidPayload } ).address );
-	t.ok( validity( beforeState, { type: 'FINISH_ADDRESS_VALIDATION', payload: createIncompletePayload() } ).address === null );
+	t.ok( validity( beforeState, { type: 'FINISH_ADDRESS_VALIDATION', payload: createIncompletePayload() } ).address === Validity.INCOMPLETE );
 	t.end();
 } );
 
@@ -92,7 +92,7 @@ test( 'FINISH_BANK_DATA_VALIDATION with BIC sets bank data validation state to v
 		}
 	} ).bankData );
 	t.notOk( validity( beforeState, { type: 'FINISH_BANK_DATA_VALIDATION', payload: createInvalidPayload } ).bankData );
-	t.ok( validity( beforeState, { type: 'FINISH_BANK_DATA_VALIDATION', payload: createIncompletePayload() } ).bankData === null );
+	t.ok( validity( beforeState, { type: 'FINISH_BANK_DATA_VALIDATION', payload: createIncompletePayload() } ).bankData === Validity.INCOMPLETE );
 	t.end();
 } );
 

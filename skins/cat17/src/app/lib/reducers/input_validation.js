@@ -2,13 +2,13 @@
 
 var _ = require( 'underscore' ),
 	objectAssign = require( 'object-assign' ),
-	ValidationStates = require( '../form_validation' ).ValidationStates;
+	{ ValidationStates, Validity } = require( '../validation/validation_states' );
 
 function inputIsValid( value, pattern ) {
 	if ( pattern === null ) {
-		return value !== '';
+		return value !== '' ? Validity.VALID : Validity.INVALID;
 	}
-	return new RegExp( pattern ).test( value );
+	return new RegExp( pattern ).test( value ) ? Validity.VALID : Validity.INVALID;
 }
 
 function inputValidation( validationState, action ) {
@@ -31,12 +31,12 @@ function inputValidation( validationState, action ) {
 				if ( _.has( action.payload.initialValues, key ) ) {
 					newValidationState[ key ] = {
 						dataEntered: true,
-						isValid: !_.has( action.payload.violatedFields, key )
+						isValid: _.has( action.payload.violatedFields, key ) ? Validity.INVALID : Validity.VALID
 					};
 				} else if ( _.has( action.payload.violatedFields, key ) ) {
 					newValidationState[ key ] = {
 						dataEntered: true,
-						isValid: false
+						isValid: Validity.INVALID
 					};
 				}
 			} );
@@ -45,7 +45,7 @@ function inputValidation( validationState, action ) {
 			if ( action.payload.value === '' && action.payload.optionalField === true ) {
 				newValidationState[ action.payload.contentName ] = {
 					dataEntered: false,
-					isValid: null
+					isValid: Validity.INCOMPLETE
 				};
 				return newValidationState;
 			}
@@ -60,23 +60,23 @@ function inputValidation( validationState, action ) {
 			return newValidationState;
 		case 'MARK_EMPTY_FIELD_INVALID':
 			_.each( action.payload.requiredFields, function ( key ) {
-				if ( newValidationState[ key ].isValid === null ) {
-					newValidationState[ key ].isValid = false;
+				if ( newValidationState[ key ].isValid === Validity.INCOMPLETE ) {
+					newValidationState[ key ].isValid = Validity.INVALID;
 				}
 			} );
 			_.each( action.payload.neutralFields, function ( key ) {
-				newValidationState[ key ].isValid = null;
+				newValidationState[ key ].isValid = Validity.INCOMPLETE;
 			} );
 			return newValidationState;
 		case 'FINISH_PAYMENT_DATA_VALIDATION':
 			if ( action.payload.status === ValidationStates.INCOMPLETE ) {
 				return newValidationState;
 			} else if ( action.payload.status === ValidationStates.OK ) {
-				newValidationState.amount = { dataEntered: true, isValid: true };
+				newValidationState.amount = { dataEntered: true, isValid: Validity.VALID };
 			} else {
 				newValidationState.amount = {
 					dataEntered: true,
-					isValid: ( action.payload.messages && !action.payload.messages.amount )
+					isValid: ( action.payload.messages && !action.payload.messages.amount ) ? Validity.VALID : Validity.INVALID
 				};
 				// TODO handle payload.messages.transportError
 			}
@@ -85,7 +85,7 @@ function inputValidation( validationState, action ) {
 			if ( action.payload.status === ValidationStates.INCOMPLETE ) {
 				return newValidationState;
 			}
-			bankDataIsValid = action.payload.status !== ValidationStates.ERR;
+			bankDataIsValid = action.payload.status === ValidationStates.ERR ? Validity.INVALID : Validity.VALID;
 			newValidationState.iban = { dataEntered: true, isValid: bankDataIsValid };
 			if ( action.payload.bic || !bankDataIsValid ) {
 				newValidationState.bic = { dataEntered: true, isValid: bankDataIsValid };
@@ -111,7 +111,8 @@ function inputValidation( validationState, action ) {
 				if ( newValidationState[ name ].dataEntered === true ) {
 					newValidationState[ name ] = {
 						dataEntered: true,
-						isValid: newValidationState[ name ].isValid !== false && !( _.has( action.payload.messages, name ) )
+						isValid: newValidationState[ name ].isValid !== false && !( _.has( action.payload.messages, name ) ) ?
+							Validity.VALID : Validity.INVALID
 					};
 				}
 			} );
