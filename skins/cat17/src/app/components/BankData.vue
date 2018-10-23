@@ -15,11 +15,13 @@
 		<input type="hidden" name="iban" :value="iban" />
 		<input type="hidden" name="bic" :value="bic" />
 
-		<span class="error-text" v-show="hasError">{{ errorText }}</span>
+		<span class="error-text" v-show="hasError">{{ t( 'form_bankdata_error' ) }}</span>
 	</div>
 </template>
 
 <script>
+	import { Validity } from '../lib/validation/validation_states';
+
 	export default {
 		name: 'bank-data',
 		props: {
@@ -31,12 +33,9 @@
 			isValid: Boolean
 		},
 		data: function () {
-			// TODO Translate these strings
 			return {
 				accountId: '',
-				bankId: '',
-				errorText: 'Placeholder error text',
-				hasError: false
+				bankId: ''
 			};
 		},
 		watch: {
@@ -86,7 +85,6 @@
 		},
 		computed: {
 			labels() {
-				// TODO Translate these strings
 				if ( this.looksLikeIban() ) {
 					return {
 						iban: 'iban',
@@ -109,15 +107,18 @@
 			},
 			classesIBAN() {
 				return {
-					invalid: this.isValid === false,
+					invalid: this.hasError,
 					valid: !this.isAccountIdEmpty()
 				};
 			},
 			classesBIC() {
 				return {
-					invalid: this.isValid === false && !this.looksLikeGermanIban(),
+					invalid: this.hasError && !this.looksLikeGermanIban(),
 					valid: !this.isBankIdEmpty()
 				};
+			},
+			hasError() {
+				return this.isValid === Validity.INVALID;
 			}
 		}
 	};

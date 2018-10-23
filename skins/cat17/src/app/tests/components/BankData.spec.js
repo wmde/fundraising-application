@@ -122,6 +122,22 @@ test( 'Given bankName property changes, BankData.vue renders it', t => {
 	t.equal( bankName.text(), 'Gringotts' );
 } );
 
+test( 'Given isValid property changes, BankData.vue shows an error message if needed', t => {
+	t.plan( 2 );
+	const wrapper = shallowMount( BankData, {
+		mocks,
+		propsData: newTestProperties( {} )
+	} );
+	const errorContainer = wrapper.find( '.error-text' );
+
+	t.notOk( errorContainer.isVisible() );
+
+	wrapper.setProps( {
+		isValid: false
+	} );
+
+	t.ok( errorContainer.isVisible() );
+} );
 
 /* When does validation happen */
 
