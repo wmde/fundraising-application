@@ -1,7 +1,8 @@
 'use strict';
 
 var test = require( 'tape-catch' ),
-	allSectionsAreValid = require( '../../../lib/state_aggregation/donation/all_validation_sections_are_valid.js' )
+	allSectionsAreValid = require( '../../../lib/state_aggregation/donation/all_validation_sections_are_valid.js' ),
+	Validity = require( '../../../lib/validation/validation_states' ).Validity
 ;
 
 test( 'Valid all over means valid', function ( t ) {
@@ -11,14 +12,14 @@ test( 'Valid all over means valid', function ( t ) {
 		},
 		donationInputValidation: {
 			paymentType: {
-				isValid: true,
+				isValid: Validity.VALID,
 				dataEntered: true
 			}
 		},
 		validity: {
-			paymentData: true,
-			address: true,
-			bankData: true
+			paymentData: Validity.VALID,
+			address: Validity.VALID,
+			bankData: Validity.VALID
 		}
 	} ) );
 	t.end();
@@ -31,14 +32,14 @@ test( 'Bank data validity ignored when not paying via debit', function ( t ) {
 		},
 		donationInputValidation: {
 			paymentType: {
-				isValid: true,
+				isValid: Validity.VALID,
 				dataEntered: true
 			}
 		},
 		validity: {
-			paymentData: true,
-			address: true,
-			bankData: null
+			paymentData: Validity.VALID,
+			address: Validity.VALID,
+			bankData: Validity.INCOMPLETE
 		}
 	} ) );
 	t.end();
@@ -51,14 +52,14 @@ test( 'No validity means invalid', function ( t ) {
 		},
 		donationInputValidation: {
 			paymentType: {
-				isValid: false,
+				isValid: Validity.INVALID,
 				dataEntered: false
 			}
 		},
 		validity: {
-			paymentData: false,
-			address: false,
-			bankData: false
+			paymentData: Validity.INVALID,
+			address: Validity.INVALID,
+			bankData: Validity.INVALID
 		}
 	} ) );
 	t.end();
@@ -71,14 +72,14 @@ test( 'Faulty payment data means invalid', function ( t ) {
 		},
 		donationInputValidation: {
 			paymentType: {
-				isValid: true,
+				isValid: Validity.VALID,
 				dataEntered: true
 			}
 		},
 		validity: {
-			paymentData: false,
-			address: true,
-			bankData: true
+			paymentData: Validity.INVALID,
+			address: Validity.VALID,
+			bankData: Validity.VALID
 		}
 	} ) );
 	t.end();
@@ -91,14 +92,14 @@ test( 'Faulty payment type data means invalid', function ( t ) {
 		},
 		donationInputValidation: {
 			paymentType: {
-				isValid: false,
+				isValid: Validity.INVALID,
 				dataEntered: true
 			}
 		},
 		validity: {
-			paymentData: true,
-			address: true,
-			bankData: true
+			paymentData: Validity.VALID,
+			address: Validity.VALID,
+			bankData: Validity.VALID
 		}
 	} ) );
 	t.end();
@@ -111,14 +112,14 @@ test( 'Faulty address data means invalid', function ( t ) {
 		},
 		donationInputValidation: {
 			paymentType: {
-				isValid: true,
+				isValid: Validity.VALID,
 				dataEntered: true
 			}
 		},
 		validity: {
-			paymentData: true,
-			address: false,
-			bankData: true
+			paymentData: Validity.VALID,
+			address: Validity.INVALID,
+			bankData: Validity.VALID
 		}
 	} ) );
 	t.end();

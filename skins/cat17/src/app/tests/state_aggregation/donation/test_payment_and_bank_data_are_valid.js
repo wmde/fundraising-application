@@ -1,7 +1,8 @@
 'use strict';
 
 var test = require( 'tape-catch' ),
-	paymentAndBankDataAreValid = require( '../../../lib/state_aggregation/donation/payment_and_bank_data_are_valid' )
+	paymentAndBankDataAreValid = require( '../../../lib/state_aggregation/donation/payment_and_bank_data_are_valid' ),
+	Validity = require( '../../../lib/validation/validation_states' ).Validity
 ;
 
 test( 'No payment type and no bank data given is not validated and has no data entered', function ( t ) {
@@ -15,15 +16,15 @@ test( 'No payment type and no bank data given is not validated and has no data e
 			donationInputValidation: {
 				paymentType: {
 					dataEntered: false,
-					isValid: null
+					isValid: Validity.INCOMPLETE
 				},
 				iban: {
 					dataEntered: false,
-					isValid: null
+					isValid: Validity.INCOMPLETE
 				},
 				bic: {
 					dataEntered: false,
-					isValid: null
+					isValid: Validity.INCOMPLETE
 				}
 			},
 			validity: {
@@ -32,7 +33,7 @@ test( 'No payment type and no bank data given is not validated and has no data e
 		} ),
 		{
 			dataEntered: false,
-			isValid: null
+			isValid: Validity.INCOMPLETE
 		}
 	);
 	t.end();
@@ -49,24 +50,24 @@ test( 'BEZ payment type and sane bank data given is valid and has data entered',
 			donationInputValidation: {
 				paymentType: {
 					dataEntered: true,
-					isValid: true
+					isValid: Validity.VALID
 				},
 				iban: {
 					dataEntered: true,
-					isValid: true
+					isValid: Validity.VALID
 				},
 				bic: {
 					dataEntered: true,
-					isValid: true
+					isValid: Validity.VALID
 				}
 			},
 			validity: {
-				bankData: true
+				bankData: Validity.VALID
 			}
 		} ),
 		{
 			dataEntered: true,
-			isValid: true
+			isValid: Validity.VALID
 		}
 	);
 	t.end();
@@ -83,24 +84,24 @@ test( 'BEZ payment type and wrong bank data given is invalid but has data entere
 			donationInputValidation: {
 				paymentType: {
 					dataEntered: true,
-					isValid: true
+					isValid: Validity.VALID
 				},
 				iban: {
 					dataEntered: true,
-					isValid: false
+					isValid: Validity.INVALID
 				},
 				bic: {
 					dataEntered: false,
-					isValid: null
+					isValid: Validity.INCOMPLETE
 				}
 			},
 			validity: {
-				bankData: false
+				bankData: Validity.INVALID
 			}
 		} ),
 		{
 			dataEntered: true,
-			isValid: false
+			isValid: Validity.INVALID
 		}
 	);
 	t.end();
@@ -117,24 +118,24 @@ test( 'SUB payment type and no bank data given is valid and has data entered', f
 			donationInputValidation: {
 				paymentType: {
 					dataEntered: true,
-					isValid: true
+					isValid: Validity.VALID
 				},
 				iban: {
 					dataEntered: false,
-					isValid: null
+					isValid: Validity.INCOMPLETE
 				},
 				bic: {
 					dataEntered: false,
-					isValid: null
+					isValid: Validity.INCOMPLETE
 				}
 			},
 			validity: {
-				bankData: null
+				bankData: Validity.INCOMPLETE
 			}
 		} ),
 		{
 			dataEntered: true,
-			isValid: true
+			isValid: Validity.VALID
 		}
 	);
 	t.end();
@@ -151,24 +152,24 @@ test( 'SUB payment type and invalid bank data given is valid and has data entere
 			donationInputValidation: {
 				paymentType: {
 					dataEntered: true,
-					isValid: true
+					isValid: Validity.VALID
 				},
 				iban: {
 					dataEntered: true,
-					isValid: false
+					isValid: Validity.INVALID
 				},
 				bic: {
 					dataEntered: true,
-					isValid: null
+					isValid: Validity.INCOMPLETE
 				}
 			},
 			validity: {
-				bankData: null
+				bankData: Validity.INCOMPLETE
 			}
 		} ),
 		{
 			dataEntered: true,
-			isValid: true
+			isValid: Validity.VALID
 		}
 	);
 	t.end();

@@ -1,12 +1,8 @@
 'use strict';
 
-/**
- * @todo Consider constants for validity instead of boolean|null - motivate strict checking, improve readability
- */
-
 var objectAssign = require( 'object-assign' ),
 	_ = require( 'underscore' ),
-	ValidationStates = require( '../validation/validation_states' ).default,
+	{ ValidationStates, Validity } = require( '../validation/validation_states' ),
 	defaultState = {
 		paymentData: null,
 		address: null,
@@ -19,14 +15,14 @@ var objectAssign = require( 'object-assign' ),
  * This should be used for server validation results that have a 'status' field.
  *
  * @param {Object} action Redux standard action
- * @return {boolean|null}
+ * @return {Validity.VALID|Validity.INVALID|Validity.INCOMPLETE}
  */
 function convertExternalResult( action ) {
 	if ( action.payload.status === ValidationStates.INCOMPLETE ) {
-		return null;
+		return Validity.INCOMPLETE;
 	}
 
-	return !action.error && action.payload.status === ValidationStates.OK;
+	return ( !action.error && action.payload.status === ValidationStates.OK ) ? Validity.VALID : Validity.INVALID;
 }
 
 /**
