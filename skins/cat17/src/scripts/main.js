@@ -69,9 +69,8 @@
 
         $(".info-text").on("change", "input, select", function () {
             $(this).closest("fieldset").css("min-height", 0);
-            var fieldsetHeight = $(this).closest("fieldset").height();
             var formHeight = $(this).closest(".info-text").prop('scrollHeight');
-            $(this).closest("fieldset").css("min-height", formHeight + "px");
+            $(this).closest("fieldset").css("min-height", Math.max( formHeight, 285) + "px");
         });
     };
 
