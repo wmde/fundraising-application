@@ -20,7 +20,7 @@ var _ = require( 'underscore' ),
 
 module.exports = function ( state ) {
 	var result = validationResult.newUndefinedResult(),
-		respectiveValidators = _.pick( state.membershipInputValidation, [ 'iban', 'bic', 'accountNumber', 'bankCode' ] )
+		respectiveValidators = _.pick( state.membershipInputValidation, [ 'iban', 'bic' ] )
 	;
 
 	result.dataEntered = state.membershipFormContent.paymentType !== null || _.contains( _.pluck( respectiveValidators, 'dataEntered' ), true );
