@@ -1,18 +1,21 @@
 'use strict';
 
-var validationResult = require( './../validation_result' )
+var validationResult = require( './../validation_result' ),
+	Validity = require( '../../validation/validation_states' ).Validity
 ;
 
 module.exports = function ( state ) {
 	var result = validationResult.newUndefinedResult();
 	result.dataEntered = state.membershipFormContent.paymentIntervalInMonths > 0 || state.membershipFormContent.amount !== 0;
 
-	if ( state.membershipFormContent.paymentIntervalInMonths > 0 && state.membershipFormContent.amount !== 0 && state.membershipInputValidation.amount.isValid ) {
-		result.isValid = true;
-	} else if ( state.membershipInputValidation.amount.isValid === null ) {
-		result.isValid = null;
+	if ( state.membershipFormContent.paymentIntervalInMonths > 0 &&
+		state.membershipFormContent.amount !== 0 &&
+		state.membershipInputValidation.amount.isValid === Validity.VALID ) {
+		result.isValid = Validity.VALID;
+	} else if ( state.membershipInputValidation.amount.isValid === Validity.INCOMPLETE ) {
+		result.isValid = Validity.INCOMPLETE;
 	} else {
-		result.isValid = false;
+		result.isValid = Validity.INVALID;
 	}
 	return result;
 };

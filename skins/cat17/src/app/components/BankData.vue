@@ -1,0 +1,125 @@
+<template>
+	<div>
+		<div class="field-grp field-account-id field-labeled" v-bind:class="classesIBAN">
+			<input type="text" id="account-id" :placeholder="t( labels.iban )" v-model.trim="accountId" v-on:blur="validate">
+			<label for="account-id">{{ t( labels.iban ) }}</label>
+		</div>
+		<div class="field-grp field-bank-id field-labeled" v-bind:class="classesBIC">
+			<input type="text" id="bank-id" :placeholder="t( labels.bic )" :disabled="writableBIC" v-model.trim="bankId" v-on:blur="validate">
+			<label for="bank-id">{{ t( labels.bic ) }}</label>
+		</div>
+
+		<span class="bank-name">{{ bankName }}</span>
+		<!-- Form field values that will be sent to the server -->
+		<input type="hidden" name="bankname" id="field-bank-name" :value="bankName" />
+		<input type="hidden" name="iban" :value="iban" />
+		<input type="hidden" name="bic" :value="bic" />
+
+		<span class="error-text" v-show="hasError">{{ t( 'form_bankdata_error' ) }}</span>
+	</div>
+</template>
+
+<script>
+	import { Validity } from '../lib/validation/validation_states';
+
+	export default {
+		name: 'bank-data',
+		props: {
+			changeBankDataValidity: Function,
+			bankDataValidator: Object,
+			iban: String,
+			bic: String,
+			bankName: String,
+			isValid: Boolean
+		},
+		data: function () {
+			return {
+				accountId: '',
+				bankId: ''
+			};
+		},
+		watch: {
+			iban( v ) {
+				if ( this.isAccountIdEmpty() || this.looksLikeIban() ) {
+					this.accountId = v;
+				}
+			},
+			bic( v ) {
+				if ( this.isBankIdEmpty() || this.looksLikeIban() ) {
+					this.bankId = v;
+				}
+			}
+		},
+		created() {
+			// The "watch" method only catches changes, if the component is initialized with iban/bic props,
+			// we also want to catch them
+			this.accountId = this.$props.iban;
+			this.bankId = this.$props.bic;
+		},
+		methods: {
+			validate() {
+				if ( this.isAccountIdEmpty() ) {
+					return;
+				}
+				if ( this.looksLikeIban( this.accountId ) ) {
+					this.changeBankDataValidity( this.bankDataValidator.validateSepaBankData( this.accountId ) );
+					return;
+				}
+				this.changeBankDataValidity( this.bankDataValidator.validateClassicBankData( this.accountId, this.bankId ) );
+			},
+			isAccountIdEmpty: function () {
+				return this.accountId === '';
+			},
+			isBankIdEmpty: function () {
+				return this.bankId === '';
+			},
+			looksLikeIban: function () {
+				return /^[A-Z]{2}([0-9]+)?$/.test( this.accountId );
+			},
+			looksLikeBankAccountNumber: function () {
+				return /^\d+$/.test( this.accountId );
+			},
+			looksLikeGermanIban() {
+				return /^DE+([0-9]+)?$/.test( this.accountId );
+			}
+		},
+		computed: {
+			labels() {
+				if ( this.looksLikeIban() ) {
+					return {
+						iban: 'iban',
+						bic: 'bic'
+					};
+				}
+				if ( this.looksLikeBankAccountNumber() ) {
+					return {
+						iban: 'account_number',
+						bic: 'bank_code'
+					};
+				}
+				return {
+					iban: 'iban_or_account_number',
+					bic: 'bic_or_bank_code'
+				};
+			},
+			writableBIC() {
+				return /^(DE).*$/.test( this.accountId );
+			},
+			classesIBAN() {
+				return {
+					invalid: this.hasError,
+					valid: !this.isAccountIdEmpty()
+				};
+			},
+			classesBIC() {
+				return {
+					invalid: this.hasError && !this.looksLikeGermanIban(),
+					valid: !this.isBankIdEmpty()
+				};
+			},
+			hasError() {
+				return this.isValid === Validity.INVALID;
+			}
+		}
+	};
+</script>

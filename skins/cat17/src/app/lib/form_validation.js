@@ -3,13 +3,10 @@
 var objectAssign = require( 'object-assign' ),
 	Promise = require( 'promise' ),
 	_ = require( 'underscore' ),
-
-	ValidationStates = {
-		OK: 'OK',
-		ERR: 'ERR',
-		INCOMPLETE: 'INCOMPLETE',
-		NOT_APPLICABLE: 'NOT_APPLICABLE'
-	},
+	ValidationStates = require( './validation/validation_states' ).ValidationStates,
+	JQueryTransport = require( './jquery_transport' ).default,
+	AmountValidator = require( './validation/amount_validator' ).default,
+	BankDataValidator = require( './validation/bank_data_validator' ).default,
 
 	isEmptyString = function ( value ) {
 		return value === '';
@@ -21,39 +18,21 @@ var objectAssign = require( 'object-assign' ),
 		anonym: []
 	},
 
-	/**
-	 * This function avoids an endless loop on failure.
-	 * The jQuery fail function returns the xhrObject, which is itself a Promise,
-	 * which will then be called by the Redux promise_middleware again and again.
-	 *
-	 * When IE support is finally ditched and we use jQuery >= 3.0, this wrapper method must be removed.
-	 *
-	 * @param {jQueryDeferredObject} jQueryDeferredObject
-	 * @return {Promise}
-	 */
-	jQueryDeferredToPromise = function ( jQueryDeferredObject ) {
-		return new Promise( function ( resolve, reject ) {
-			jQueryDeferredObject.then( resolve, function ( xhrObject, statusCode, statusMessage ) {
-				reject( statusMessage );
-			} );
-		} );
-	},
-
 	AddressValidator = {
 		validationUrl: '',
-		sendFunction: null,
+		transport: null,
 		requiredFields: {},
 		validate: function ( formValues ) {
 			var requiredFields = this.getRequiredFieldsForAddressType( formValues.addressType );
 			if ( this.formValuesHaveEmptyRequiredFields( formValues, requiredFields ) ) {
-				return { status: ValidationStates.INCOMPLETE };
+				return Promise.resolve( { status: ValidationStates.INCOMPLETE } );
 			}
 			// Don't send anything to server if there are no fields to validate
 			if ( requiredFields.length === 0 ) {
-				return { status: ValidationStates.OK };
+				return Promise.resolve( { status: ValidationStates.OK } );
 			}
 
-			return jQueryDeferredToPromise( this.sendFunction( this.validationUrl, formValues, null, 'json' ) );
+			return this.transport.postData( this.validationUrl, formValues );
 		},
 		formValuesHaveEmptyRequiredFields: function ( formValues, requiredFields ) {
 			var objectWithOnlyTheRequiredFields = _.pick( formValues, requiredFields );
@@ -69,177 +48,94 @@ var objectAssign = require( 'object-assign' ),
 
 	EmailAddressValidator = {
 		validationUrl: '',
-		sendFunction: null,
+		transport: null,
 		validate: function ( formValues ) {
-			var postData;
 			if ( !formValues.email ) {
-				return { status: ValidationStates.INCOMPLETE };
+				return Promise.resolve( { status: ValidationStates.INCOMPLETE } );
 			}
-			postData = {
-				email: formValues.email
-			};
-			return jQueryDeferredToPromise( this.sendFunction( this.validationUrl, postData, null, 'json' ) );
-		}
-	},
-
-	AmountValidator = {
-		validationUrl: '',
-		sendFunction: null,
-		validate: function ( formValues ) {
-			var postData;
-			if ( this.formValuesHaveEmptyRequiredFields( formValues ) ) {
-				return { status: ValidationStates.INCOMPLETE };
-			}
-			postData = {
-				amount: formValues.amount
-			};
-			return jQueryDeferredToPromise( this.sendFunction( this.validationUrl, postData, null, 'json' ) );
-		},
-		formValuesHaveEmptyRequiredFields: function ( formValues ) {
-			return formValues.amount === 0;
+			return this.transport.postData( this.validationUrl, { email: formValues.email } );
 		}
 	},
 
 	FeeValidator = {
 		validationUrl: '',
 		feeFormatter: null,
-		sendFunction: null,
+		transport: null,
 		validate: function ( formValues ) {
 			var postData;
 			if ( this.formValuesHaveEmptyRequiredFields( formValues ) ) {
-				return { status: ValidationStates.INCOMPLETE };
+				return Promise.resolve( { status: ValidationStates.INCOMPLETE } );
 			}
 			postData = {
 				amount: this.feeFormatter.format( formValues.amount ),
 				paymentIntervalInMonths: formValues.paymentIntervalInMonths,
 				addressType: formValues.addressType
 			};
-			return jQueryDeferredToPromise( this.sendFunction( this.validationUrl, postData, null, 'json' ) );
+			return this.transport.postData( this.validationUrl, postData );
 		},
 		formValuesHaveEmptyRequiredFields: function ( formValues ) {
 			return formValues.amount === 0 || !formValues.addressType || !formValues.paymentIntervalInMonths;
 		}
 	},
 
-	BankDataValidator = {
-		validationUrlForSepa: '',
-		validationUrlForNonSepa: '',
-		sendFunction: null,
-		validate: function ( formValues ) {
-			if ( formValues.paymentType && formValues.paymentType !== 'BEZ' ) {
-				return {
-					status: ValidationStates.NOT_APPLICABLE
-				};
-			}
-
-			if ( formValues.debitType === 'sepa' ) {
-				return this.validateSepa( formValues );
-			}
-
-			return this.validateNonSepa( formValues );
-		},
-		/**
-		 * @private
-		 * @param {Object} formValues
-		 * @return {Promise}
-		 */
-		validateSepa: function ( formValues ) {
-			if ( formValues.iban === '' ) {
-				return { status: ValidationStates.INCOMPLETE };
-			}
-
-			return this.getValidationResultFromApi(
-				this.validationUrlForSepa,
-				{
-					iban: formValues.iban
-				}
-			);
-		},
-		/**
-		 * @private
-		 * @param {Object} formValues
-		 * @return {Promise}
-		 */
-		validateNonSepa: function ( formValues ) {
-			if ( formValues.accountNumber === '' || formValues.bankCode === '' ) {
-				return { status: ValidationStates.INCOMPLETE };
-			}
-
-			return this.getValidationResultFromApi(
-				this.validationUrlForNonSepa,
-				{
-					accountNumber: formValues.accountNumber,
-					bankCode: formValues.bankCode
-				}
-			);
-		},
-		/**
-		 * @private
-		 * @param {string} apiUrl
-		 * @param {Object} urlArguments
-		 * @return {Promise}
-		 */
-		getValidationResultFromApi: function ( apiUrl, urlArguments ) {
-			return jQueryDeferredToPromise(
-				this.sendFunction(
-					apiUrl,
-					urlArguments,
-					null,
-					'json'
-				)
-			);
-		}
-	},
-
-	createAddressValidator = function ( validationUrl, requiredFields, sendFunction ) {
+	createAddressValidator = function ( validationUrl, requiredFields, transport ) {
 		return objectAssign( Object.create( AddressValidator ), {
 			validationUrl: validationUrl,
 			requiredFields: requiredFields,
-			sendFunction: sendFunction || jQuery.post
-		} );
-	},
-
-	createEmailAddressValidator = function ( validationUrl, sendFunction ) {
-		return objectAssign( Object.create( EmailAddressValidator ), {
-			validationUrl: validationUrl,
-			sendFunction: sendFunction || jQuery.post
+			transport: transport || new JQueryTransport()
 		} );
 	},
 
 	/**
 	 *
 	 * @param {string} validationUrl
-	 * @param {Function} sendFunction jQuery.post function or equivalent
+	 * @param {Transport} transport
+	 * @return {EmailAddressValidator}
+	 */
+	createEmailAddressValidator = function ( validationUrl, transport ) {
+		return objectAssign( Object.create( EmailAddressValidator ), {
+			validationUrl: validationUrl,
+			transport: transport || new JQueryTransport()
+		} );
+	},
+
+	/**
+	 *
+	 * @param {string} validationUrl
+	 * @param {Transport} transport
 	 * @return {AmountValidator}
 	 */
-	createAmountValidator = function ( validationUrl, sendFunction ) {
-		return objectAssign( Object.create( AmountValidator ), {
-			validationUrl: validationUrl,
-			sendFunction: sendFunction || jQuery.post
-		} );
+	createAmountValidator = function ( validationUrl, transport ) {
+		return new AmountValidator(
+			validationUrl,
+			transport || new JQueryTransport()
+		);
 	},
 
 	/**
 	 *
 	 * @param {string} validationUrl
 	 * @param {Object} feeFormatter Formatter object that supports the .format method
-	 * @param {Function} sendFunction jQuery.post function or equivalent
-	 * @return {*}
+	 * @param {Object} transport
+	 * @return {FeeValidator}
 	 */
-	createFeeValidator = function ( validationUrl, feeFormatter, sendFunction ) {
+	createFeeValidator = function ( validationUrl, feeFormatter, transport ) {
 		return objectAssign( Object.create( FeeValidator ), {
 			validationUrl: validationUrl,
 			feeFormatter: feeFormatter,
-			sendFunction: sendFunction || jQuery.post
+			transport: transport || new JQueryTransport()
 		} );
 	},
 
-	createBankDataValidator = function ( validationUrlForSepa, validationUrlForNonSepa, sendFunction ) {
-		return objectAssign( Object.create( BankDataValidator ), {
-			validationUrlForSepa: validationUrlForSepa,
-			validationUrlForNonSepa: validationUrlForNonSepa,
-			sendFunction: sendFunction || jQuery.get
-		} );
+	/**
+	 *
+	 * @param {string} validationUrlForSepaBankData
+	 * @param {string} validationUrlForClassicBankData
+	 * @param {Transport} transport
+	 * @return {BankDataValidator}
+	 */
+	createBankDataValidator = function ( validationUrlForSepaBankData, validationUrlForClassicBankData, transport ) {
+		return new BankDataValidator( validationUrlForSepaBankData, validationUrlForClassicBankData, transport || new JQueryTransport() );
 	}
 ;
 

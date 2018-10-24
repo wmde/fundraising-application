@@ -16,24 +16,18 @@ function newBankDataValidationAction( payload ) {
 test( 'If bank data validation is successful, all fields in payload have valid status', function ( t ) {
 	var stateBefore = {
 			iban: { dataEntered: false, isValid: null },
-			bic: { dataEntered: false, isValid: null },
-			accountNumber: { dataEntered: false, isValid: null },
-			bankCode: { dataEntered: false, isValid: null }
+			bic: { dataEntered: false, isValid: null }
 		},
 		expectedState = {
 			iban: { dataEntered: true, isValid: true },
-			bic: { dataEntered: true, isValid: true },
-			accountNumber: { dataEntered: true, isValid: true },
-			bankCode: { dataEntered: true, isValid: true }
+			bic: { dataEntered: true, isValid: true }
 		};
 
 	deepFreeze( stateBefore );
 	t.deepEqual( inputValidation( stateBefore, newBankDataValidationAction( {
 		status: 'OK',
 		iban: 'DE12500105170648489890',
-		bic: 'INGDDEFFXXX',
-		bankCode: '50010517',
-		account: '064847930'
+		bic: 'INGDDEFFXXX'
 	} ) ), expectedState );
 	t.end();
 } );
@@ -41,15 +35,11 @@ test( 'If bank data validation is successful, all fields in payload have valid s
 test( 'If bank data validation is successful, only fields in payload change status', function ( t ) {
 	var stateBefore = {
 			iban: { dataEntered: false, isValid: null },
-			bic: { dataEntered: false, isValid: null },
-			accountNumber: { dataEntered: false, isValid: null },
-			bankCode: { dataEntered: false, isValid: null }
+			bic: { dataEntered: false, isValid: null }
 		},
 		expectedState = {
 			iban: { dataEntered: true, isValid: true },
-			bic: { dataEntered: false, isValid: null },
-			accountNumber: { dataEntered: false, isValid: null },
-			bankCode: { dataEntered: false, isValid: null }
+			bic: { dataEntered: false, isValid: null }
 		};
 
 	deepFreeze( stateBefore );
@@ -63,15 +53,11 @@ test( 'If bank data validation is successful, only fields in payload change stat
 test( 'If bank data validation fails, all fields retrieve invalid status', function ( t ) {
 	var stateBefore = {
 			iban: { dataEntered: false, isValid: null },
-			bic: { dataEntered: false, isValid: null },
-			accountNumber: { dataEntered: false, isValid: null },
-			bankCode: { dataEntered: false, isValid: null }
+			bic: { dataEntered: false, isValid: null }
 		},
 		expectedState = {
 			iban: { dataEntered: true, isValid: false },
-			bic: { dataEntered: true, isValid: false },
-			accountNumber: { dataEntered: true, isValid: false },
-			bankCode: { dataEntered: true, isValid: false }
+			bic: { dataEntered: true, isValid: false }
 		};
 
 	deepFreeze( stateBefore );

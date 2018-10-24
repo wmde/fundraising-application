@@ -19,9 +19,7 @@ var _ = require( 'underscore' ),
 		email: _.clone( defaultFields ),
 		dateOfBirth: _.clone( defaultFields ),
 		iban: _.clone( defaultFields ),
-		bic: _.clone( defaultFields ),
-		accountNumber: _.clone( defaultFields ),
-		bankCode: _.clone( defaultFields )
+		bic: _.clone( defaultFields )
 	},
 	optionalFields = [
 		'dateOfBirth'

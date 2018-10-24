@@ -8,7 +8,6 @@ var formContentLib = require( './form_content' ),
 		paymentType: null,
 		isCustomAmount: false,
 		paymentIntervalInMonths: -1, // 1, 3, 6, 12
-		debitType: 'sepa', // sepa and "non-sepa"
 		addressType: '', // person, firma
 		salutation: '',
 		title: '',
@@ -23,8 +22,6 @@ var formContentLib = require( './form_content' ),
 		dateOfBirth: '',
 		iban: '',
 		bic: '',
-		accountNumber: '',
-		bankCode: '',
 		bankname: '',
 		activePresets: false,
 		donationReceipt: false

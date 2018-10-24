@@ -18,9 +18,7 @@ var _ = require( 'underscore' ),
 		city: _.clone( defaultFields ),
 		email: _.clone( defaultFields ),
 		iban: _.clone( defaultFields ),
-		bic: _.clone( defaultFields ),
-		accountNumber: _.clone( defaultFields ),
-		bankCode: _.clone( defaultFields )
+		bic: _.clone( defaultFields )
 	},
 
 	setValidityOnSalutationChange = function ( state, action ) {

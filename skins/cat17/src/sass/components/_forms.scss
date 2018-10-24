@@ -41,82 +41,89 @@ input[type=submit] {
 }
 
 
-.field-grp {
-	margin-bottom: 0;
-	position: relative;
+.field {
+	&-grp {
+		margin-bottom: 0;
+		position: relative;
 
-	.error-text {
-		display: none;
-	}
+		.error-text {
+			display: none;
+		}
 
-	&.valid {
-		input[type="text"], input[type="email"] {
-			padding-right: 35px; /* make room for checkmark icon */
-			@include themify($themes) {
-				background-color: themed('fieldSelected');
-				border-bottom: themed('border2pxfieldSelected');
+		&.valid {
+			input[type="text"], input[type="email"] {
+				padding-right: 35px; /* make room for checkmark icon */
+				@include themify($themes) {
+					background-color: themed('fieldSelected');
+					border-bottom: themed('border2pxfieldSelected');
+				}
+			}
+			&:after {
+				content: unicode($icon-done);
+				position: absolute;
+				right: 12px;
+				top: 10px;
+				font-family: 'icomoonwikimedia';
+				font-size: 20px;
 			}
 		}
-		&:after {
-			content: unicode($icon-done);
-			position: absolute;
-			right: 12px;
-			top: 10px;
-			font-family: 'icomoonwikimedia';
-			font-size: 20px;
-		}
-	}
-	&.invalid {
-		.error-text {
-			display: block;
+		&.invalid {
+			.error-text {
+				display: block;
 
+			}
+
+			input[type="text"], input[type="email"], textarea {
+
+				@include themify($themes) {
+					background-color: themed('brandErrorRgba');
+					border-bottom: themed('border2pxError');
+				}
+				&:hover {
+					@include themify($themes) {
+						border-bottom: themed('border2pxError');
+					}
+				}
+			}
 		}
 
 		input[type="text"], input[type="email"], textarea {
-
+			border-radius: 0;
 			@include themify($themes) {
-				background-color: themed('brandErrorRgba');
-				border-bottom: themed('border2pxError');
+				background-color: themed('fieldNormal');
+				border-bottom: themed('border2pxfieldNormal');
+			}
+			width: 100%;
+			height: 48px;
+			padding: 13px 16px;
+			font-size: 16px;
+			font-weight: 300;
+			margin-bottom: 12px;
+			border: none;
+
+			@include bkp(sm) {
+				font-size: 14px;
+			}
+			@include bkp(lg) {
+				font-size: 12px;
 			}
 			&:hover {
 				@include themify($themes) {
-					border-bottom: themed('border2pxError');
+					border-bottom: themed('border2pxPrimary');
+				}
+			}
+			&:focus {
+				outline: none;
+				@include themify($themes) {
+					background-color: themed('fieldSelected');
+					border-bottom: themed('border2pxPrimary');
 				}
 			}
 		}
 	}
-
-	input[type="text"], input[type="email"], textarea {
-        border-radius: 0;
-        @include themify($themes) {
-			background-color: themed('fieldNormal');
-			border-bottom: themed('border2pxfieldNormal');
-		}
-		width: 100%;
-		height: 48px;
-		padding: 13px 16px;
-		font-size: 16px;
-		font-weight: 300;
-		margin-bottom: 12px;
-		border: none;
-
-		@include bkp(sm) {
-			font-size: 14px;
-		}
-		@include bkp(lg) {
-			font-size: 12px;
-		}
-		&:hover {
-			@include themify($themes) {
-				border-bottom: themed('border2pxPrimary');
-			}
-		}
-		&:focus {
-			outline: none;
-			@include themify($themes) {
-				background-color: themed('fieldSelected');
-				border-bottom: themed('border2pxPrimary');
-			}
+	&-labeled {
+		input[type="text"] {
+			margin-bottom: 0;
 		}
 	}
 }

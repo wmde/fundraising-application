@@ -1,13 +1,15 @@
 'use strict';
 
+var Validity = require( '../../validation/validation_states' ).Validity;
+
 module.exports = function ( state ) {
 	return (
-		state.validity.paymentData === true &&
-		state.donationInputValidation.paymentType.isValid === true &&
-		state.validity.address === true &&
+		state.validity.paymentData === Validity.VALID &&
+		state.donationInputValidation.paymentType.isValid === Validity.VALID &&
+		state.validity.address === Validity.VALID &&
 		(
-			( state.donationFormContent.paymentType === 'BEZ' && state.validity.bankData === true ) ||
-			( state.donationFormContent.paymentType !== 'BEZ' && state.validity.bankData !== false )
+			( state.donationFormContent.paymentType === 'BEZ' && state.validity.bankData === Validity.VALID ) ||
+			( state.donationFormContent.paymentType !== 'BEZ' )
 		)
 	);
 };

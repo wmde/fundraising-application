@@ -1,7 +1,8 @@
 'use strict';
 
 var test = require( 'tape-catch' ),
-	paymentAndBankDataAreValid = require( '../../../lib/state_aggregation/donation/payment_and_bank_data_are_valid' )
+	paymentAndBankDataAreValid = require( '../../../lib/state_aggregation/donation/payment_and_bank_data_are_valid' ),
+	Validity = require( '../../../lib/validation/validation_states' ).Validity
 ;
 
 test( 'No payment type and no bank data given is not validated and has no data entered', function ( t ) {
@@ -10,30 +11,20 @@ test( 'No payment type and no bank data given is not validated and has no data e
 			donationFormContent: {
 				paymentType: '',
 				iban: '',
-				bic: '',
-				accountNumber: '',
-				bankCode: ''
+				bic: ''
 			},
 			donationInputValidation: {
 				paymentType: {
 					dataEntered: false,
-					isValid: null
+					isValid: Validity.INCOMPLETE
 				},
 				iban: {
 					dataEntered: false,
-					isValid: null
+					isValid: Validity.INCOMPLETE
 				},
 				bic: {
 					dataEntered: false,
-					isValid: null
-				},
-				accountNumber: {
-					dataEntered: false,
-					isValid: null
-				},
-				bankCode: {
-					dataEntered: false,
-					isValid: null
+					isValid: Validity.INCOMPLETE
 				}
 			},
 			validity: {
@@ -42,7 +33,7 @@ test( 'No payment type and no bank data given is not validated and has no data e
 		} ),
 		{
 			dataEntered: false,
-			isValid: null
+			isValid: Validity.INCOMPLETE
 		}
 	);
 	t.end();
@@ -54,39 +45,29 @@ test( 'BEZ payment type and sane bank data given is valid and has data entered',
 			donationFormContent: {
 				paymentType: 'BEZ',
 				iban: 'DE12500105170648489890',
-				bic: 'INGDDEFFXXX',
-				accountNumber: '0648489890',
-				bankCode: '50010517'
+				bic: 'INGDDEFFXXX'
 			},
 			donationInputValidation: {
 				paymentType: {
 					dataEntered: true,
-					isValid: true
+					isValid: Validity.VALID
 				},
 				iban: {
 					dataEntered: true,
-					isValid: true
+					isValid: Validity.VALID
 				},
 				bic: {
 					dataEntered: true,
-					isValid: true
-				},
-				accountNumber: {
-					dataEntered: true,
-					isValid: true
-				},
-				bankCode: {
-					dataEntered: true,
-					isValid: true
+					isValid: Validity.VALID
 				}
 			},
 			validity: {
-				bankData: true
+				bankData: Validity.VALID
 			}
 		} ),
 		{
 			dataEntered: true,
-			isValid: true
+			isValid: Validity.VALID
 		}
 	);
 	t.end();
@@ -98,39 +79,29 @@ test( 'BEZ payment type and wrong bank data given is invalid but has data entere
 			donationFormContent: {
 				paymentType: 'BEZ',
 				iban: 'DE1250010517',
-				bic: '',
-				accountNumber: '',
-				bankCode: ''
+				bic: ''
 			},
 			donationInputValidation: {
 				paymentType: {
 					dataEntered: true,
-					isValid: true
+					isValid: Validity.VALID
 				},
 				iban: {
 					dataEntered: true,
-					isValid: false
+					isValid: Validity.INVALID
 				},
 				bic: {
 					dataEntered: false,
-					isValid: null
-				},
-				accountNumber: {
-					dataEntered: false,
-					isValid: null
-				},
-				bankCode: {
-					dataEntered: false,
-					isValid: null
+					isValid: Validity.INCOMPLETE
 				}
 			},
 			validity: {
-				bankData: false
+				bankData: Validity.INVALID
 			}
 		} ),
 		{
 			dataEntered: true,
-			isValid: false
+			isValid: Validity.INVALID
 		}
 	);
 	t.end();
@@ -142,39 +113,29 @@ test( 'SUB payment type and no bank data given is valid and has data entered', f
 			donationFormContent: {
 				paymentType: 'SUB',
 				iban: '',
-				bic: '',
-				accountNumber: '',
-				bankCode: ''
+				bic: ''
 			},
 			donationInputValidation: {
 				paymentType: {
 					dataEntered: true,
-					isValid: true
+					isValid: Validity.VALID
 				},
 				iban: {
 					dataEntered: false,
-					isValid: null
+					isValid: Validity.INCOMPLETE
 				},
 				bic: {
 					dataEntered: false,
-					isValid: null
-				},
-				accountNumber: {
-					dataEntered: false,
-					isValid: null
-				},
-				bankCode: {
-					dataEntered: false,
-					isValid: null
+					isValid: Validity.INCOMPLETE
 				}
 			},
 			validity: {
-				bankData: null
+				bankData: Validity.INCOMPLETE
 			}
 		} ),
 		{
 			dataEntered: true,
-			isValid: true
+			isValid: Validity.VALID
 		}
 	);
 	t.end();
@@ -186,39 +147,29 @@ test( 'SUB payment type and invalid bank data given is valid and has data entere
 			donationFormContent: {
 				paymentType: 'SUB',
 				iban: '7777',
-				bic: 'foo',
-				accountNumber: '',
-				bankCode: ''
+				bic: 'foo'
 			},
 			donationInputValidation: {
 				paymentType: {
 					dataEntered: true,
-					isValid: true
+					isValid: Validity.VALID
 				},
 				iban: {
 					dataEntered: true,
-					isValid: false
+					isValid: Validity.INVALID
 				},
 				bic: {
 					dataEntered: true,
-					isValid: null
-				},
-				accountNumber: {
-					dataEntered: false,
-					isValid: null
-				},
-				bankCode: {
-					dataEntered: false,
-					isValid: null
+					isValid: Validity.INCOMPLETE
 				}
 			},
 			validity: {
-				bankData: null
+				bankData: Validity.INCOMPLETE
 			}
 		} ),
 		{
 			dataEntered: true,
-			isValid: true
+			isValid: Validity.VALID
 		}
 	);
 	t.end();

@@ -46,5 +46,9 @@ module.exports = {
 	Actions: require( './lib/actions' ),
 	FormDataExtractor: require( './lib/form_data_extractor' ),
 	IntegerCurrency: require( './lib/integer_currency' ),
-	Scrolling: require( './lib/scrolling' )
+	Scrolling: require( './lib/scrolling' ),
+	BankData: require( './components/BankData.vue' ).default,
+	Vue: require( 'vue' ).default,
+	VueTranslate: require( 'vue-translate-plugin' ),
+	VueRedux: require( 'redux-vue' )
 };

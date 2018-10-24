@@ -2,7 +2,7 @@ $( function () {
   /** global: WMDE */
 
   var initData = $( '#init-form' ),
-    store = WMDE.Store.createDonationStore(),
+    store = WMDE.donationStore = WMDE.Store.createDonationStore(),
     actions = WMDE.Actions
     ;
 
@@ -16,16 +16,8 @@ $( function () {
           WMDE.IntegerCurrency.createCurrencyParser( 'de' ),
 		  WMDE.IntegerCurrency.createCurrencyFormatter( 'de' )
       ),
-      WMDE.Components.createRadioComponent( store, $('input[name="zahlweise"]'), 'paymentType' ),
-      WMDE.Components.createRadioComponent( store, $('input[name="periode"]' ), 'paymentIntervalInMonths' ),
-      WMDE.Components.createBankDataComponent( store, {
-        ibanElement: $( '#iban' ),
-        bicElement: $( '#bic' ),
-        accountNumberElement: $( '#account-number' ),
-        bankCodeElement: $( '#bank-code' ),
-        bankNameFieldElement: $( '#field-bank-name' ),
-        bankNameDisplayElement: $( '#bank-name' )
-      } ),
+		WMDE.Components.createRadioComponent( store, $('input[name="zahlweise"]'), 'paymentType' ),
+		WMDE.Components.createRadioComponent( store, $('input[name="periode"]' ), 'paymentIntervalInMonths' ),
 		WMDE.Components.createRadioComponent( store, $( 'input[name="addressType"]' ), 'addressType' ),
 		WMDE.Components.createSelectMenuComponent( store, $( 'select[name="salutation"]' ), 'salutation' ),
 		WMDE.Components.createSelectMenuComponent( store, $( '#title' ), 'title' ),
@@ -69,13 +61,6 @@ $( function () {
         ),
         WMDE.ValidationDispatchers.createEmailValidationDispatcher(
           WMDE.FormValidation.createEmailAddressValidator( initData.data( 'validate-email-address-url' ) ),
-          initialValues
-        ),
-        WMDE.ValidationDispatchers.createBankDataValidationDispatcher(
-          WMDE.FormValidation.createBankDataValidator(
-            initData.data( 'validate-iban-url' ),
-            initData.data( 'generate-iban-url' )
-          ),
           initialValues
         )
       ];
@@ -142,22 +127,6 @@ $( function () {
       {
         viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-email' ) ),
         stateKey: 'donationInputValidation.email'
-      },
-      {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-iban' ) ),
-        stateKey: 'donationInputValidation.iban'
-      },
-      {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-bic' ) ),
-        stateKey: 'donationInputValidation.bic'
-      },
-      {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-accountnumber' ) ),
-        stateKey: 'donationInputValidation.accountNumber'
-      },
-      {
-        viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-bankcode' ) ),
-        stateKey: 'donationInputValidation.bankCode'
       },
       {
         viewHandler: WMDE.View.createFieldValueValidityIndicator( $('.wrap-amounts') ),
@@ -312,5 +281,52 @@ $( function () {
 	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="periode"]' ), $( '#recurrence' ), scroller );
 	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="addressType"]' ), $( '#type-donor' ), scroller );
 	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="zahlweise"]' ), $( '#donation-payment' ), scroller );
+
+	var bankDataValidator = WMDE.FormValidation.createBankDataValidator(
+		initData.data( 'validate-iban-url' ),
+		initData.data( 'generate-iban-url' )
+	);
+
+	function mapStateToProps( state ) {
+		return {
+			iban: state.donationFormContent.iban,
+			bic: state.donationFormContent.bic,
+			bankName: state.donationFormContent.bankName,
+			isValid: state.validity.bankData !== false,
+
+			// The validator does not come from the store and should be passed
+			// in as a prop the initialization code,
+			// see https://github.com/nadimtuhin/redux-vue/issues/6
+			// and https://phabricator.wikimedia.org/T207493
+			bankDataValidator: bankDataValidator
+		}
+	}
+
+	function mapActionToProps( dispatch ) {
+		return {
+			changeBankDataValidity( validity ) {
+				dispatch( WMDE.Actions.newFinishBankDataValidationAction( validity ) );
+			}
+		}
+	}
+
+	WMDE.Vue.use(WMDE.VueRedux.reduxStorePlugin);
+	WMDE.Vue.use(WMDE.VueTranslate);
+
+	WMDE.Vue.locales( {
+		'de_DE': JSON.parse( initData.data( 'messages' ) )
+	} );
+
+	var ConnectedBankData = WMDE.VueRedux.connect( mapStateToProps, mapActionToProps )( WMDE.BankData );
+
+	new WMDE.Vue( {
+		// FIXME Import and create store directly when we no longer use the global variable anywhere else
+		store: store,
+		render: (h) => h( ConnectedBankData ),
+		created() {
+			this.$translate.setLang('de_DE');
+		}
+
+	} ).$mount( '#bankdata-app' );
 
 } );

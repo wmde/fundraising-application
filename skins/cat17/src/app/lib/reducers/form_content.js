@@ -18,20 +18,6 @@ function trimValue( value ) {
 	return value.replace( /^\s+|\s+$/gm, '' );
 }
 
-function forceDebitTypeByBankData( state, payload ) {
-	if ( typeof payload.value !== 'string' ) {
-		return state;
-	}
-
-	if ( ( payload.contentName === 'iban' || payload.contentName === 'bic' ) && trimValue( payload.value ) ) {
-		return objectAssign( {}, state, { debitType: 'sepa' } );
-	} else if ( ( payload.contentName === 'accountNumber' || payload.contentName === 'bankCode' ) && trimValue( payload.value ) ) {
-		return objectAssign( {}, state, { debitType: 'non-sepa' } );
-	}
-
-	return state;
-}
-
 function forcePersonalDataForDirectDebit( state ) {
 	if ( state.paymentType === 'BEZ' && state.addressType === 'anonym' ) {
 		return objectAssign( {}, state, { addressType: 'person' } );
@@ -80,20 +66,22 @@ module.exports = {
 					newState[ action.payload.contentName ] = action.payload.value;
 				}
 
-				newState = forceDebitTypeByBankData( newState, action.payload );
-
 				newState = forcePersonalDataForDirectDebit( newState );
 				newState = forceAddressTypeForActiveMembership( newState );
 				return newState;
 			case 'FINISH_BANK_DATA_VALIDATION':
 				if ( action.payload.status !== 'OK' ) {
+					if ( /^(DE).*$/.test( state.iban ) ) {
+						return objectAssign( {}, state, {
+							bic: '',
+							bankName: ''
+						} );
+					}
 					return state;
 				}
 				return objectAssign( {}, state, {
 					iban: action.payload.iban || '',
 					bic: action.payload.bic || state.bic || '',
-					accountNumber: action.payload.account || '',
-					bankCode: action.payload.bankCode || '',
 					bankName: action.payload.bankName || ''
 				} );
 			default:
