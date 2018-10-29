@@ -1,0 +1,10 @@
+{% extends 'page_layouts/base.html.twig' %}
+{% set page_works_without_js = false %}
+
+{% block main_content %}
+    <div id="resources" data-content="{$ use_of_resources_content $}"></div>
+{% endblock %}
+
+{% block scripts %}
+	<script src="{$ basepath $}/skins/cat17/scripts/useOfResources.js"></script>
+{% endblock %}
