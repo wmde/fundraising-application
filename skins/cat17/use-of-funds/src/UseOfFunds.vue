@@ -8,6 +8,7 @@
 
 export default {
 	name: 'app',
+	props: [ 'content' ],
 	data() {
 		return {
 			message: 'New & shiny Application Of Funds page'
