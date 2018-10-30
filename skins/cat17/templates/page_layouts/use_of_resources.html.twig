@@ -1,7 +1,8 @@
 {% extends 'page_layouts/base.html.twig' %}
 {% set page_works_without_js = false %}
+{% block page_identifier %}use-of-funds{% endblock%}
 
-{% block main_content %}
+{% block main %}
     <div id="funds" data-content="{$ use_of_funds_content $}"></div>
 {% endblock %}
 
