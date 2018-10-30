@@ -51,13 +51,41 @@ $(function() {
     }
 
 
-    /* tooltip */
-    function initToolTip() {
-      /* tooltip */
-      $('.tooltip').tooltip({position: {my: "right-15 center", at: "left center"}});
-      $('.tooltip').click(function (e) {
-        e.preventDefault();
-      });
+	/* tooltip */
+	function initToolTip() {
+		var tooltipElements = $( '.tooltip' ),
+			tooltipTrackTimeout,
+
+			trackHoverAfterDelay = function ( e ) {
+				var tooltipTrackDelaySeconds = 1,
+					toolTipEventTarget = $( e.target ).closest( '.tooltip' );
+				if ( toolTipEventTarget.length < 1 ) {
+					return;
+				}
+				tooltipTrackTimeout = window.setTimeout(
+					function () {
+						_paq.push( [ 'trackContentInteractionNode', toolTipEventTarget.get(0), 'hover' ] );
+					},
+					tooltipTrackDelaySeconds * 1000
+				);
+			},
+
+			cancelHoverTracking = function() {
+				window.clearTimeout( tooltipTrackTimeout );
+			};
+
+		tooltipElements.tooltip( {
+			position: {
+				my: "right-15 center",
+				at: "left center"
+			}
+		} );
+
+		tooltipElements.click( function ( e ) {
+			e.preventDefault();
+		} );
+
+		tooltipElements.hover( trackHoverAfterDelay, cancelHoverTracking );
     }
 
     /* styled select boxes */
