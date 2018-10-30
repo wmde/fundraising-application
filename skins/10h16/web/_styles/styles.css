@@ -345,6 +345,10 @@ button.back-button:active { background: #cccccc; }
 	font-size: 0.8em;
 }
 
+a.tooltip {
+	text-decoration: none;
+}
+
 /* ======================================================================================= */
 
 
