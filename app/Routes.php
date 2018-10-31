@@ -325,7 +325,8 @@ class Routes {
 			function () use ( $ffFactory ) {
 				return $ffFactory->getLayoutTemplate( 'page_layouts/use_of_resources.html.twig' )->render(
 					[
-						'use_of_funds_content' => $ffFactory->getApplicationOfFundsContent()
+						'use_of_funds_content' => $ffFactory->getApplicationOfFundsContent(),
+						'use_of_funds_messages' => $ffFactory->getApplicationOfFundsMessages()
 					]
 				);
 			}

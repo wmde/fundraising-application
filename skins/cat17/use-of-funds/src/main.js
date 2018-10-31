@@ -11,6 +11,7 @@ new Vue( { // eslint-disable-line no-new
 		UseOfFunds,
 		{
 			props: {
+				messages: JSON.parse( fundsDataElement.getAttribute( 'data-messages' ) ),
 				content: JSON.parse( fundsDataElement.getAttribute( 'data-content' ) )
 			}
 		}

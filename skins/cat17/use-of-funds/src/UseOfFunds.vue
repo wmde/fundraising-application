@@ -39,16 +39,9 @@ export default {
 	components: {
 		FundSection
 	},
-	props: [ 'content' ],
+	props: [ 'messages', 'content' ],
 	data() {
 		return {
-			messages: {
-				"year_plan": "Jahresplan",
-				"back_to_donation": "Zurück zum Spendenformular",
-				"content_pages_itz_link": "https://wikimedia.de/wiki/Transparenz",
-				"content_pages_itz_logo": "../../../../vendor/wmde/fundraising-frontend-content/resources/de_DE/logo_itz.svg",
-				"content_pages_itz_title": "Initiative Transparente Zivilgesellschaft"
-			},
 			title: '',
 			overallAmount: '',
 			funds: {}
