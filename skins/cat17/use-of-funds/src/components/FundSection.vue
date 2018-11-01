@@ -11,17 +11,17 @@
 
 <script>
 	export default {
-		name: "fund-section",
+		name: 'fund-section',
 		props: [ 'title', 'amount', 'description', 'width' ],
 		data() {
 			return {
 				isOpen: false
-			}
+			};
 		},
 		methods: {
-			toggle: function() {
+			toggle: function () {
 				this.isOpen = !this.isOpen;
 			}
 		}
-	}
+	};
 </script>

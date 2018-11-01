@@ -7,7 +7,7 @@ var Vue = require( 'vue' ),
 
 new Vue( { // eslint-disable-line no-new
 	el: '#funds',
-	render: ( h ) => h(
+	render: h => h(
 		UseOfFunds,
 		{
 			props: {

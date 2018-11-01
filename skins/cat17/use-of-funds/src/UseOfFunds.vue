@@ -45,7 +45,7 @@ export default {
 			title: '',
 			overallAmount: '',
 			funds: {}
-		}
+		};
 	},
 	methods: {
 		populatePageByOrg: function ( org ) {
@@ -58,14 +58,14 @@ export default {
 			this.overallAmount = overallAmount;
 		},
 		calculateProgressBarWidth: function ( amount ) {
-			let castedOverAllAmount = Number( this.overallAmount.replace(/ /g, '') ),
-				castedAmountNumber = Number( amount.replace(/ /g, '') ),
-				barWidthPercentage = castedAmountNumber / castedOverAllAmount * 100;
+			let castedOverAllAmount = Number( this.overallAmount.replace( / /g, '' ) );
+			let castedAmountNumber = Number( amount.replace( / /g, '' ) );
+			let barWidthPercentage = castedAmountNumber / castedOverAllAmount * 100;
 			return barWidthPercentage.toString() + '%';
 		}
 	},
-	mounted: function() {
+	mounted: function () {
 		this.populatePageByOrg( this.content.organizations.wmde );
 	}
-}
+};
 </script>
