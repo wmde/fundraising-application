@@ -88,8 +88,10 @@
     "webpack-config-utils": "^2.3.1"
   },
   "dependencies": {
+    "babel-loader": "^7.1.5",
     "bootstrap-sass": "^3.3.7",
     "bootstrap-select": "^1.13.3",
+    "es6-promise-promise": "^1.0.0",
     "jcf": "^1.2.3",
     "jquery": "^3.3.1",
     "object-assign": "^4.0.1",
