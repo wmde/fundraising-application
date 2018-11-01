@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const path = require( 'path' );
 const glob = require( 'glob' );
 const { getIfUtils } = require( 'webpack-config-utils' );
@@ -60,13 +61,24 @@ module.exports = mode => {
 					svgo: { plugins: [ { removeUnknownsAndDefaults: false }, { cleanupIDs: false } ] }
 				}
 			} ),
-			new VueLoaderPlugin()
+			new VueLoaderPlugin(),
+			new webpack.ProvidePlugin( {
+				Promise: ['es6-promise', 'Promise']
+			} )
 		],
 		module: {
 			rules: [
 				{
 					test: /\.vue$/,
 					loader: 'vue-loader'
+				},
+				{
+					test: /\.(js|jsx|mjs)$/,
+					loader: 'babel-loader',
+					options: {
+						babelrc: true
+					},
+					exclude: /node_modules/
 				}
 			]
 		},
