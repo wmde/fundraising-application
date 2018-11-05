@@ -41,6 +41,20 @@
 	.list-menu {
 		li {
 			padding-right: 0;
+			&.itz-logo-item {
+				margin: 25px 0 15px;
+				&:after, &:hover:after {
+					border-bottom: none;
+				}
+
+				@media (max-width: 677px) {
+					a {
+						&:after {
+							content: "";
+						}
+					}
+				}
+			}
 		}
 		@include bkp( xsmax ) {
 			margin-top: 3em;

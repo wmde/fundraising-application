@@ -17,7 +17,7 @@
 			<div class="sidebar col-xs-12 col-sm-4 col-md-4">
 				<ul class="list-menu list-unstyled">
 					<li><a href="/" class="clickable">{{ messages.back_to_donation }}</a></li>
-					<li>
+					<li class="itz-logo-item">
 						<a :href="messages.content_pages_itz_link" target="_blank" :title="messages.content_pages_itz_title">
 							<img :src="messages.content_pages_itz_logo" :alt="messages.content_pages_itz_title">
 						</a>
