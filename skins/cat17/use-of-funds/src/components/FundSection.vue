@@ -1,5 +1,5 @@
 <template>
-	<div id="fund-section">
+	<div class="fund-section">
 		<p class="section-title">{{ title }}</p>
 		<div class="inline border-bottom clickable" @click="toggle()">
 			<div class="money-progress" :style="{ width: width }">{{ amount.replace(/ /g, '.') }}€</div>

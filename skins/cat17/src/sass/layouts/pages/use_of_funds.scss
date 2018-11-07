@@ -60,10 +60,15 @@
 			margin-top: 3em;
 		}
 	}
-	.org-title {
-		font-size: 16px;
-		font-weight: bold;
-		margin-top: 20px;
+	.org {
+		&-title {
+			font-size: 16px;
+			font-weight: bold;
+			margin-top: 20px;
+		}
+		&-section {
+			margin: 0 0 70px;
+		}
 	}
 	.clickable {
 		cursor: pointer;
