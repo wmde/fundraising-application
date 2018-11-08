@@ -3,9 +3,9 @@
 {% set initialPaymentType = paymentTypes|length == 1 ? paymentTypes|first : '' %}
 {% set trackOutgoingLinks = true %}
 {% if address.salutation and address.lastName %}
-	{% set membershipAppeal = "#{address.salutation} #{address.lastName}, werden Sie ab 2018 Fördermitglied!" %}
+	{% set membershipAppeal = "#{address.salutation} #{address.lastName}, werden Sie ab 2019 Fördermitglied!" %}
 {% else %}
-	{% set membershipAppeal = 'Werden Sie ab 2018 Fördermitglied!' %}
+	{% set membershipAppeal = 'Werden Sie ab 2019 Fördermitglied!' %}
 {% endif %}
 
 {% include 'Validation_Errors.html.twig' %}
