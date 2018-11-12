@@ -171,6 +171,7 @@ use WMDE\Fundraising\PaymentContext\Domain\BankDataGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataValidator;
 use WMDE\Fundraising\PaymentContext\Domain\DefaultPaymentDelayCalculator;
 use WMDE\Fundraising\PaymentContext\Domain\IbanBlocklist;
+use WMDE\Fundraising\PaymentContext\Domain\LessSimpleTransferCodeGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentDataValidator;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentDelayCalculator;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\CreditCard as CreditCardUrlGenerator;
@@ -179,7 +180,6 @@ use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\PayPal as PayPalU
 use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\PayPalConfig;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\Sofort as SofortUrlGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\SofortConfig;
-use WMDE\Fundraising\PaymentContext\Domain\SimpleTransferCodeGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\PaymentContext\Infrastructure\CreditCardService;
 use WMDE\Fundraising\PaymentContext\UseCases\CheckIban\CheckIbanUseCase;
@@ -1006,7 +1006,7 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	private function newBankTransferCodeGenerator(): TransferCodeGenerator {
 		return new UniqueTransferCodeGenerator(
-			new SimpleTransferCodeGenerator(),
+			LessSimpleTransferCodeGenerator::newRandomGenerator(),
 			$this->getEntityManager()
 		);
 	}
