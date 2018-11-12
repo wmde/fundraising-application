@@ -4027,12 +4027,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "50dfdae1250277bb5e869c4789eed48a2e0831bb"
+                "reference": "dc3be6a55261ca70a229e5b4e8142269bddb74fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/50dfdae1250277bb5e869c4789eed48a2e0831bb",
-                "reference": "50dfdae1250277bb5e869c4789eed48a2e0831bb",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/dc3be6a55261ca70a229e5b4e8142269bddb74fb",
+                "reference": "dc3be6a55261ca70a229e5b4e8142269bddb74fb",
                 "shasum": ""
             },
             "require": {
@@ -4078,7 +4078,7 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/FundraisingDonations",
-            "time": "2018-09-01T04:14:05+00:00"
+            "time": "2018-11-12T15:13:57+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
