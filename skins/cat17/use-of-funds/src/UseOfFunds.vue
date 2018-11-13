@@ -2,6 +2,10 @@
 	<div id="app" class="container">
 		<div class="row">
 			<div class="col-xs-12 col-sm-8 col-md-8">
+				<div>
+					<h1>{{ messages.use_of_funds_header }}</h1>
+					<p>{{ messages.use_of_funds_description }}</p>
+				</div>
 				<organization-section v-for="org in content.organizations"
 							  :title="org.title"
 							  :overallAmount="org.overallAmount"
