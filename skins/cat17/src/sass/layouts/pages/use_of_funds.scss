@@ -1,0 +1,76 @@
+.page-use-of-funds {
+	.inline {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		align-items: center;
+	}
+	i {
+		font-size: 24px;
+	}
+	.section-title {
+		font-size: 16px;
+		margin-bottom: 1em;
+		margin-top: 2em;
+	}
+	.subtitle {
+		font-size: 12px;
+		margin-bottom: 1em;
+		margin-top: 1em;
+	}
+	.money-progress {
+		border: 1px solid $brand-primary;
+		background: $brand-primary;
+		height: 3.5em;
+		padding: 1em;
+		font-size: 16px;
+	}
+	.border {
+		border: 1px solid $brand-primary;
+		border-top: none;
+		width: 100%;
+		padding: 1em;
+	}
+	.border-bottom {
+		border-bottom: 1px solid $brand-primary;
+	}
+	.description {
+		font-size: 12px;
+	}
+	.list-menu {
+		li {
+			padding-right: 0;
+			&.itz-logo-item {
+				margin: 25px 0 15px;
+				&:after, &:hover:after {
+					border-bottom: none;
+				}
+
+				@media (max-width: 677px) {
+					a {
+						&:after {
+							content: "";
+						}
+					}
+				}
+			}
+		}
+		@include bkp( xsmax ) {
+			margin-top: 3em;
+		}
+	}
+	.org {
+		&-title {
+			font-size: 16px;
+			font-weight: bold;
+			margin-top: 20px;
+		}
+		&-section {
+			margin: 0 0 70px;
+		}
+	}
+	.clickable {
+		cursor: pointer;
+	}
+}

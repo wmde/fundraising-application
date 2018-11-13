@@ -1,0 +1,11 @@
+{% extends 'page_layouts/base.html.twig' %}
+{% set page_works_without_js = false %}
+{% block page_identifier %}use-of-funds{% endblock%}
+
+{% block main %}
+    <div id="funds" data-content="{$ use_of_funds_content $}" data-messages="{$ use_of_funds_messages $}"></div>
+{% endblock %}
+
+{% block scripts %}
+	<script src="{$ basepath $}/skins/cat17/scripts/useOfFunds.js"></script>
+{% endblock %}

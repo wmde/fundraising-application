@@ -320,6 +320,18 @@ class Routes {
 			}
 		)->bind( 'faq' );
 
+		$app->get(
+			'use-of-funds',
+			function () use ( $ffFactory ) {
+				return $ffFactory->getLayoutTemplate( 'page_layouts/use_of_resources.html.twig' )->render(
+					[
+						'use_of_funds_content' => $ffFactory->getApplicationOfFundsContent(),
+						'use_of_funds_messages' => $ffFactory->getApplicationOfFundsMessages()
+					]
+				);
+			}
+		)->bind( 'use-of-funds' );
+
 		$app->post(
 			'donation/cancel',
 			function ( Request $request ) use ( $ffFactory ) {
