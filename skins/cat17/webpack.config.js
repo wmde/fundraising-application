@@ -1,10 +1,8 @@
 const webpack = require('webpack');
 const path = require( 'path' );
-const glob = require( 'glob' );
 const { getIfUtils } = require( 'webpack-config-utils' );
 const ConcatPlugin = require( 'webpack-concat-plugin' );
 const CopyWebpackPlugin = require( 'copy-webpack-plugin' );
-const ImageminPlugin = require( 'imagemin-webpack-plugin' ).default;
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 // TODO
@@ -47,20 +45,9 @@ module.exports = mode => {
 			} ),
 			new CopyWebpackPlugin( [
 				{ from: 'src/scripts/*.js', to: 'scripts/', flatten: true  }, // TODO transform with uglify
-				{ from: 'assets/fonts/**/*', context: 'src'  }
+				{ from: 'assets/fonts/**/*', context: 'src'  },
+				{ from: 'assets/images/*', context: 'src' }
 			], { debug: false } ),
-			new ImageminPlugin( {
-				cacheFolder: path.resolve('./.image-cache'),
-				externalImages: {
-					//context: 'src',
-					sources: glob.sync('src/assets/images/*'),
-					destination: 'web/assets/images',
-					fileName: '[name].[ext]',
-					jpegtran: { progressive: true },
-					gifsicle: { interlaced: true },
-					svgo: { plugins: [ { removeUnknownsAndDefaults: false }, { cleanupIDs: false } ] }
-				}
-			} ),
 			new VueLoaderPlugin(),
 			new webpack.ProvidePlugin( {
 				Promise: ['es6-promise', 'Promise']
