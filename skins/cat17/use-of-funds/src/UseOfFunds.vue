@@ -21,8 +21,11 @@
 							<img :src="messages.content_pages_itz_logo" :alt="messages.content_pages_itz_title">
 						</a>
 					</li>
-					<li v-for="org in content.organizations">
-						<a :href="org.url">{{ messages.year_plan }} {{ org.title }}</a>
+					<li>
+						<a :href="content.organizations.wmde.url">{{ messages.year_plan_wmde }} {{ content.organizations.wmde.title }}</a>
+					</li>
+					<li>
+						<a :href="content.organizations.wmf.url">{{ messages.year_plan_wmf }} {{ content.organizations.wmf.title }}</a>
 					</li>
 				</ul>
 			</div>

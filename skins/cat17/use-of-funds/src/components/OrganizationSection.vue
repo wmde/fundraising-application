@@ -2,7 +2,7 @@
 	<div class="org-section">
 		<p class="org-title">
 			{{ title }}<br>
-			{{ overallAmount.replace(/ /g, '.') }}€
+			{{ overallAmount.replace(/ /g, '.') }} €
 		</p>
 		<p class="subtitle">{{ description }}</p>
 		<fund-section v-for="fund in funds"
