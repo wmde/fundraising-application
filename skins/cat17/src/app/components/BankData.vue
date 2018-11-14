@@ -74,13 +74,13 @@
 				return this.bankId === '';
 			},
 			looksLikeIban: function () {
-				return /^[A-Z]{2}([0-9]+)?$/.test( this.accountId );
+				return /^[A-Z]{2}([0-9\s]+)?$/.test( this.accountId );
 			},
 			looksLikeBankAccountNumber: function () {
 				return /^\d+$/.test( this.accountId );
 			},
 			looksLikeGermanIban() {
-				return /^DE+([0-9]+)?$/.test( this.accountId );
+				return /^DE+([0-9\s]+)?$/.test( this.accountId );
 			}
 		},
 		computed: {
