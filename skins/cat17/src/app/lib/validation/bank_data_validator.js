@@ -13,6 +13,7 @@ export class BankDataValidator {
 	 * @return {Promise}
 	 */
 	validateSepaBankData( iban ) {
+		iban = iban.replace( /\s/g, '' );
 		if ( iban === '' ) {
 			return Promise.resolve( { status: ValidationStates.INCOMPLETE } );
 		}
@@ -30,6 +31,8 @@ export class BankDataValidator {
 	 * @return {Promise}
 	 */
 	validateClassicBankData( accountNumber, bankCode ) {
+		accountNumber = accountNumber.replace( /\s/g, '' );
+		bankCode = bankCode.replace( /\s/g, '' );
 		if ( accountNumber === '' || bankCode === '' ) {
 			return Promise.resolve( { status: ValidationStates.INCOMPLETE } );
 		}
