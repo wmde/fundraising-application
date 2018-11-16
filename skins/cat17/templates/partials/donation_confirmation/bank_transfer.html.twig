@@ -9,30 +9,22 @@
                     '%status_description%': donation.status|trans( {}, 'paymentStatus' )
                 } ) | raw $}
             </p>
-            <p class="h2">
-                {$ "donation_confirmation_subhead_donation_number" | trans( {
-                '%donation.id%': '<span class="strong">' ~ donation.id ~ '</span>'
-                } ) | raw $}
-            </p>
-            <p class="h2">
+            <p>
                 {$ "donation_confirmation_subhead_bank_transfer"| trans( {
                 '%formattedAmount%': '<span class="strong field-amount">' ~ formattedAmount  ~ '</span>',
                 '%interval%': '<span class="strong">' ~ donation.interval|trans({}, 'paymentIntervals') ~ '</span>',
                 '%paymentType%': '<span class="strong">' ~ donation.paymentType|trans( {}, 'paymentTypes' ) ~ '</span>',
                 '%status_description%': donation.status|trans( {}, 'paymentStatus' )
                 } ) | raw $}
+                {% if donation.interval > 0 %}
+                    {$ "donation_confirmation_standing_order"| trans $}
+                {% endif %}
             </p>
             <dl class="transfer-data-list">
                 <div class="wrap-def">
                     <div class="container">
                         <dt>{$ "account_owner" | trans $}</dt>
                         <dd>{$ "operator_account_owner_value" | trans $}</dd>
-                    </div>
-                </div>
-                <div class="wrap-def">
-                    <div class="container">
-                        <dt>{$ "amount"| trans $}</dt>
-                        <dd class="field-amount">{$ formattedAmount $}</dd>
                     </div>
                 </div>
                 <div class="wrap-def">
@@ -49,16 +41,29 @@
                 </div>
                 <div class="wrap-def">
                     <div class="container">
+                        <dt>{$ "amount"| trans $}</dt>
+                        <dd class="field-amount">{$ formattedAmount $}</dd>
+                    </div>
+                </div>
+                <div class="wrap-def">
+                    <div class="container">
                         <dt>{$ "transfer_code"| trans $}</dt>
                         <dd>{$ donation.bankTransferCode $}</dd>
                     </div>
                 </div>
             </dl>
 
-            <p class="h2">
-                {$ 'donation_confirmation_head' | trans $}
-            </p>
-			{% include 'partials/donation_confirmation/donor_donation_receipt.html.twig' %}
+             <p>
+                 {$ "donation_confirmation_reference_reminder" | trans( {
+                 '%bankTransferCode%': '<b>' ~ donation.bankTransferCode ~ '</b>'
+                 } ) | raw $}
+             </p>
+
+            {% include 'partials/donation_confirmation/donor_donation_receipt.html.twig' %}
+
+            {% if donation.optsIntoNewsletter %}
+                <p>{$ "donation_confirmation_opts_into_newsletter" | trans | raw $}</p>
+            {% endif %}
         </div>
 		<div class="action-block visible-md visible-lg col-md-offset-0 col-md-4 hidden-print">
 			<ul class="list-menu link-back list-unstyled">
@@ -74,16 +79,8 @@
 <div class="container">
     <div class="row">
         <div class="introduction col-xs-12 col-md-8">
-            {% if donation.interval > 0 %}
-                <p>{$ "donation_confirmation_standing_order"| trans $}</p>
-            {% endif %}
-
             {% if person and person.email %}
                 <p>{$ "donation_confirmation_check_email" | trans $}</p>
-            {% endif %}
-
-            {% if donation.optsIntoNewsletter %}
-                <p>{$ "donation_confirmation_opts_into_newsletter" | trans | raw $}</p>
             {% endif %}
         </div>
     </div>
