@@ -21,17 +21,22 @@ function trimValue( value ) {
 function forcePersonalDataForDirectDebit( state ) {
 	if ( state.paymentType === 'BEZ' && state.addressType === 'anonym' ) {
 		return objectAssign( {}, state, { addressType: 'person' } );
-	} else {
-		return state;
 	}
+	return state;
 }
 
 function forceAddressTypeForActiveMembership( state ) {
 	if ( state.membershipType === 'active' ) {
 		return objectAssign( {}, state, { addressType: 'person' } );
-	} else {
-		return state;
 	}
+	return state;
+}
+
+function forceOneTimePaymentForSofort( state ) {
+	if ( state.paymentType === 'SUB' && state.paymentIntervalInMonths > 0 ) {
+		return objectAssign( {}, state, { paymentIntervalInMonths: 0 } );
+	}
+	return state;
 }
 
 module.exports = {
@@ -68,6 +73,7 @@ module.exports = {
 
 				newState = forcePersonalDataForDirectDebit( newState );
 				newState = forceAddressTypeForActiveMembership( newState );
+				newState = forceOneTimePaymentForSofort( newState );
 				return newState;
 			case 'FINISH_BANK_DATA_VALIDATION':
 				if ( action.payload.status !== 'OK' ) {

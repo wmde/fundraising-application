@@ -78,6 +78,15 @@ $( function () {
 			viewHandler: WMDE.View.createElementClassSwitcher( $( '#type-donor .wrap-field.anonym .wrap-input' ), /BEZ/, 'disabled' ),
 			stateKey: 'donationFormContent.paymentType'
 		},
+		// Disable recurring intervals when Sofort is selected
+		{
+			viewHandler: WMDE.View.createElementClassSwitcher( $( '#recurrence .wrap-field.recurring .wrap-input' ), /SUB/, 'disabled' ),
+			stateKey: 'donationFormContent.paymentType'
+		},
+		{
+			viewHandler: WMDE.View.createElementClassSwitcher( $( '#payment-method .wrap-field.sofort .wrap-input' ), /[^0]+/, 'disabled' ),
+			stateKey: 'donationFormContent.paymentIntervalInMonths'
+		},
 		{
 			viewHandler: WMDE.View.createSuboptionDisplayHandler(
 				$( '#recurrence' )

@@ -11,7 +11,7 @@
 } %}
 {% spaceless %}
 {% for paymentType in paymentTypes %}
-	<div class="wrap-field" data-info-text="{$ ( 'payment_type_' ~ paymentType ~ '_info' ) | trans | e( 'html_attr' ) $}">
+	<div class="wrap-field {$ PAYMENT_TYPE_OPTIONS[paymentType].id $}" data-info-text="{$ ( 'payment_type_' ~ paymentType ~ '_info' ) | trans | e( 'html_attr' ) $}">
 		<div class="wrap-input">
 			<input type="radio" name="{$ fieldName $}" id="{$ PAYMENT_TYPE_OPTIONS[paymentType].id $}" value="{$ paymentType $}">
 			<label for="{$ PAYMENT_TYPE_OPTIONS[paymentType].id $}">
