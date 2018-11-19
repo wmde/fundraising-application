@@ -9,6 +9,7 @@
 skins:
   active: false
   start: "2018-10-10"
+  end: "2099-12-31"
   buckets:
      - "test"
   default_bucket: "test"
