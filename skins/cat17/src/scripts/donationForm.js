@@ -242,7 +242,8 @@ $( function () {
     store
   );
 	function forceValidateBankData() {
-		if ( store.getState().validity.bankData === WMDE.Validity.INCOMPLETE ) {
+		var state = store.getState();
+		if ( state.donationFormContent.paymentType === 'BEZ' && state.validity.bankData === WMDE.Validity.INCOMPLETE ) {
 			store.dispatch(WMDE.Actions.newFinishBankDataValidationAction( { status: WMDE.ValidationStates.ERR } ) );
 		}
 		return WMDE.Promise.resolve();
