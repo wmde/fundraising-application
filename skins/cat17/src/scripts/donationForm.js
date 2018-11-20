@@ -231,13 +231,31 @@ $( function () {
 			]
 		},
 		// Show house number warning
-      {
-        viewHandler: WMDE.View.createSimpleVisibilitySwitcher(
-          $( '#street, #adress-company' ).nextAll( '.warning-text' ),
-          /^\D+$/
-        ),
-        stateKey: 'donationFormContent.street'
-      }
+		{
+			viewHandler: WMDE.View.createSimpleVisibilitySwitcher(
+				$( '#street, #adress-company' ).nextAll( '.warning-text' ),
+				/^\D+$/
+			),
+			stateKey: 'donationFormContent.street'
+		},
+		// Adjust height of address form field set
+		{
+			viewHandler: new WMDE.View.HeightAdjuster( $( '#type-donor' )  ),
+			stateKey: [
+				'donationFormContent.addressType',
+				'donationFormContent.salutation',
+				'donationFormContent.title',
+				'donationFormContent.firstName',
+				'donationFormContent.lastName',
+				'donationFormContent.companyName',
+				'donationFormContent.street',
+				'donationFormContent.postcode',
+				'donationFormContent.city',
+				'donationFormContent.country',
+				'donationFormContent.email',
+				WMDE.StateAggregation.Donation.donorTypeAndAddressAreValid
+			]
+		}
     ],
     store
   );

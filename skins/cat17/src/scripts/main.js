@@ -6,8 +6,6 @@
 
         stateBarMenu();
 
-        heightInfo();
-
         containersManager();
 
         openCommentItem();
@@ -65,16 +63,7 @@
         $(".country-select").next("span").addClass("selected-item");
     };
 
-    var heightInfo = function () {
-
-        $(".info-text").on("change", "input, select", function () {
-            $(this).closest("fieldset").css("min-height", 0);
-            var formHeight = $(this).closest(".info-text").prop('scrollHeight');
-            $(this).closest("fieldset").css("min-height", Math.max( formHeight, 285) + "px");
-        });
-    };
-
-	// TODO Move into View Handler
+	// TODO Move code to View Handler
     var formInfosManager = function () {
         var $element = $("section.donation-amount");
         if ($element.length) {
