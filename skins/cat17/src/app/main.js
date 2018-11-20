@@ -11,6 +11,7 @@ module.exports = {
 	StateAggregation: {
 		Donation: {
 			allValiditySectionsAreValid: require( './lib/state_aggregation/donation/all_validation_sections_are_valid' ),
+			someValiditySectionsAreIncomplete: require( './lib/state_aggregation/donation/some_validation_sections_are_incomplete' ),
 			amountAndFrequencyAreValid: require( './lib/state_aggregation/donation/amount_and_frequency_are_valid' ),
 			donorTypeAndAddressAreValid: require( './lib/state_aggregation/donation/donor_type_and_address_are_valid' ),
 			paymentAndBankDataAreValid: require( './lib/state_aggregation/donation/payment_and_bank_data_are_valid' ),
@@ -50,5 +51,9 @@ module.exports = {
 	BankData: require( './components/BankData.vue' ).default,
 	Vue: require( 'vue' ).default,
 	VueTranslate: require( 'vue-translate-plugin' ),
-	VueRedux: require( 'redux-vue' )
+	VueRedux: require( 'redux-vue' ),
+	JQueryTransport: require( './lib/jquery_transport' ).default,
+	Validity: require( './lib/validation/validation_states' ).Validity,
+	ValidationStates: require( './lib/validation/validation_states' ).ValidationStates,
+	Promise: Promise
 };
