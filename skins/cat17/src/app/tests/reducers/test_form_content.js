@@ -82,6 +82,22 @@ test( 'When CHANGE_CONTENT sets membership type to active, address type is switc
 	t.end();
 } );
 
+test( 'When CHANGE_CONTENT sets payment type to sofort and payment interval is at least monthly, interval is set to once', function ( t ) {
+	var stateBefore = {
+			paymentType: 'BEZ',
+			paymentIntervalInMonths: 1
+		},
+		expectedState = {
+			paymentType: 'SUB',
+			paymentIntervalInMonths: 0
+		},
+		action = { type: 'CHANGE_CONTENT', payload: { value: 'SUB', contentName: 'paymentType' } };
+
+	deepFreeze( stateBefore );
+	t.deepEqual( formContent( stateBefore, action ), expectedState );
+	t.end();
+} );
+
 test( 'When CHANGE_CONTENT is passed a value surrounded by whitespaces, the value is trimmed', function ( t ) {
 	var stateBefore = { name: '  Jack L. Hide   ' },
 		expectedState = { name: 'Jack L. Hide' },
