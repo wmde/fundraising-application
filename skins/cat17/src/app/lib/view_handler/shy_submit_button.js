@@ -7,7 +7,7 @@ var objectAssign = require( 'object-assign' ),
 	ShySubmitButton = {
 		buttons: null,
 		update: function ( allSectionsAreValid ) {
-			this.buttons.toggleClass( 'btn-unactive', !allSectionsAreValid );
+			this.buttons.toggleClass( '', !allSectionsAreValid );
 		}
 	};
 
