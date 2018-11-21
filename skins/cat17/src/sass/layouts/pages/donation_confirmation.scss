@@ -83,22 +83,6 @@
 		}
 	}
 
-	.receipt {
-		&-info {
-			padding: 0 0 10px;
-			.btn {
-				text-decoration: none;
-				&:focus {
-					background-color: $brand-primary;
-				}
-			}
-		}
-		&-confirmation {
-			font-size: 19px;
-			display: block;
-		}
-	}
-
 	.address-change {
 		.highlighted {
 			&.content {

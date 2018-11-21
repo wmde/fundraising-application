@@ -45,7 +45,7 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 				$crawler = $client->followRedirect();
 				$this->assertContains(
 					'Hans Wurst, Teststraße 123, 12345 Mönchengladbach',
-					$crawler->filter( '.receipt-info .caption' )->html()
+					$crawler->filter( '.receipt-info' )->html()
 				);
 			}
 		);
@@ -70,7 +70,7 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 				$crawler = $client->followRedirect();
 				$this->assertContains(
 					'Wikimedia Deutschland Money Makers GmbH, Teststraße 123, 12345 Mönchengladbach',
-					$crawler->filter( '.receipt-info .caption' )->html()
+					$crawler->filter( '.receipt-info' )->html()
 				);
 			}
 		);
