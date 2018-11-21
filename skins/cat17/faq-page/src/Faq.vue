@@ -9,11 +9,11 @@
 		{{ messages.back_link }}
 		</a>
  	</div>
- 	<h2>{{ messages.page_title }}</h2>
- 	<h5>{{ messages.page_subtitle }}</h5>
+ 	<h2 class="align-left">{{ messages.page_title }}</h2>
+ 	<h5 class="align-left">{{ messages.page_subtitle }}</h5>
  	<div class="row">
  	<div class="col-xs-12 col-sm-9">
-	  	<search-bar :messageSearch="messages.search"></search-bar>
+	  	<search-bar :messageSearch="messages.search" class="align-left"></search-bar>
 		<div class="form-shadow-wrap">
 			<h2 v-if="!isPreview" class="title space-below underlined">{{ topicTitle }}</h2>
 			<ul>

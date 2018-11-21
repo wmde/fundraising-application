@@ -48,21 +48,24 @@
 		}
 	}
 	.form-shadow-wrap {
-		margin-top: 20px;
+		margin-top: 60px;
 		margin-left: 0px;
-		padding: 1em 20px 3em 45px;
+		padding: 60px 20px 3em 45px;
 		width: 100%;
 	}
 	.sidebar {
 		padding-left: 40px;
 		h5 {
-			margin-top: 50px;
+			margin-top: 210px;
 		}
 	}
 	.inline {
 		display: flex;
 		flex-direction: row;
 		margin-top: 0px;
+	}
+	.align-left {
+		padding-left: 45px;
 	}
 	.space-left {
 		margin-left: 5px;
