@@ -9,11 +9,11 @@
 		{{ messages.back_link }}
 		</a>
  	</div>
- 	<h2 class="align-left">{{ messages.page_title }}</h2>
- 	<h5 class="align-left">{{ messages.page_subtitle }}</h5>
+ 	<h2>{{ messages.page_title }}</h2>
+ 	<h5>{{ messages.page_subtitle }}</h5>
  	<div class="row">
- 	<div class="col-xs-12 col-sm-9">
-	  	<search-bar :messageSearch="messages.search" class="align-left"></search-bar>
+ 	<div class="col-xs-12 col-sm-8">
+	  	<search-bar :messageSearch="messages.search"></search-bar>
 		<div class="form-shadow-wrap">
 			<h2 v-if="!isPreview" class="title space-below underlined">{{ topicTitle }}</h2>
 			<ul>
@@ -33,10 +33,10 @@
 			</p>
 		</footer>
 	</div>
-	<div class="sidebar col-xs-12 col-sm-3">
+	<div class="sidebar col-xs-12 col-sm-4">
 		<h5>{{ messages.about }}</h5>
 		<ul>
-			<li v-for="topic in content.topics">
+			<li v-bind:class="[ 'link', 'underlined' ]" v-for="topic in content.topics">
 				<a @click="populatePageByTopic( topic ); isPreview = false;"
 					data-content-target="/page/Häufige Fragen" 
 					data-track-content 
@@ -46,8 +46,8 @@
 				</a>
 			</li>
 		</ul>
-		<h5>{{ messages.no_answer }}</h5>
-		<ul>
+		<h5 class="second-menu">{{ messages.no_answer }}</h5>
+		<ul class="second-menu">
 			<li><a href="/contact/get-in-touch">{{ messages.contact_link }}</a></li>
 			<li>{{ messages.further }} <a href="/contact/get-in-touch">{{ messages.contact_options }}</a></li>
 		</ul>

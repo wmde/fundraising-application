@@ -16,7 +16,7 @@
 	input[type=text] {
 		padding: 5px;
 		border: none;
-		width: 625px;
+		width: 90%;
 		height: 40px;
 		background-color: #cfdbe2;
 		font-size: 17px;
@@ -49,23 +49,24 @@
 	}
 	.form-shadow-wrap {
 		margin-top: 60px;
-		margin-left: 0px;
-		padding: 60px 20px 3em 45px;
+		margin-left: -30px;
+		padding: 60px 20px 3em 30px;
 		width: 100%;
 	}
 	.sidebar {
 		padding-left: 40px;
 		h5 {
-			margin-top: 210px;
+			margin-top: 200px;
+			&.second-menu {
+				margin-top: 40px;
+				margin-bottom: 15px;
+			}
 		}
 	}
 	.inline {
 		display: flex;
 		flex-direction: row;
 		margin-top: 0px;
-	}
-	.align-left {
-		padding-left: 45px;
 	}
 	.space-left {
 		margin-left: 5px;
@@ -79,10 +80,46 @@
 	.space-below {
 		padding-bottom: 1em;
 	}
+	.sidebar {
+		display: flex;
+		flex-direction: column;
+		flex-wrap: nowrap;
+		justify-content: space-between;
+		.link {
+			a {
+				color: #7f7f7f;
+				font-size: 12px;
+			}
+			&:hover {
+				a {
+					color: #000;
+					font-size: 16px;
+				}
+			}
+		}
+		li {
+			padding: 10px 0;
+			&.underlined {
+				border-bottom: 1px solid #ddd;
+				&:hover {
+					border-bottom: 1px solid #000;
+				}
+			}
+		}
+	}
+	.second-menu li {
+		padding: 0;
+		line-height: 24px;
+	}
+	.active {
+		color: #42bbee;
+		font-size: 16px;
+		border-bottom: 1px solid #42bbee;
+	}
 	.underlined {
 		border-bottom: 2px solid #ddd;
 	}
-	li.underlined:last-child {
+	.form-shadow-wrap li.underlined:last-child {
 		border-bottom: none;
 	}
 
