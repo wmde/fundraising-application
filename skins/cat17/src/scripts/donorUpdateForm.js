@@ -95,6 +95,7 @@ $( function() {
 				viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-email' ) ),
 				stateKey: 'donationInputValidation.email'
 			},
+			// TODO Remove this button and implement submission logic check
 			{
 				viewHandler: WMDE.View.createShySubmitButtonHandler( $( 'form input[type="submit"]' ) ),
 				stateKey: 'validity.address'
@@ -131,13 +132,32 @@ $( function() {
 					/^\D+$/
 				),
 				stateKey: 'donorUpdateFormContent.street'
+			},
+			// Adjust height of address form field set
+			{
+				viewHandler: new WMDE.View.HeightAdjuster( $( '#type-donor' )  ),
+				stateKey: [
+					'donorUpdateFormContent.addressType',
+					'donorUpdateFormContent.salutation',
+					'donorUpdateFormContent.title',
+					'donorUpdateFormContent.firstName',
+					'donorUpdateFormContent.lastName',
+					'donorUpdateFormContent.companyName',
+					'donorUpdateFormContent.street',
+					'donorUpdateFormContent.postcode',
+					'donorUpdateFormContent.city',
+					'donorUpdateFormContent.country',
+					'donorUpdateFormContent.email',
+					WMDE.StateAggregation.DonorUpdate.donorTypeAndAddressAreValid
+				]
 			}
 		],
 		store
 	);
 
+	// TODO Force-check address fields, see donationForm for reference
 	$( 'form' ).on( 'submit', function() {
-		return true; //TODO checking all sections does not make sense here, check address validation
+		return true;
 	} );
 
 	// Set initial form values
