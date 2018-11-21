@@ -285,7 +285,7 @@ $( function () {
 		}
 		else if ( WMDE.StateAggregation.Donation.someValiditySectionsAreIncomplete( store.getState() ) ) {
 			WMDE.Promise.all( [ forceValidateBankData(), forceValidateAddressData() ] ).then( function() {
-				scroller.scrollTo( $( $( '.field-grp.invalid' ).get( 0 ) ), {elementStart: WMDE.Scrolling.ElementStart.MARGIN}, animationTime );
+				scroller.scrollTo( $( $( '.info-text.opened .field-grp.invalid' ).get( 0 ) ), {elementStart: WMDE.Scrolling.ElementStart.MARGIN}, animationTime );
 			});
 		}
 		return false;
