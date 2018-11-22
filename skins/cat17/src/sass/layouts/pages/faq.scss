@@ -1,4 +1,25 @@
 .page-faq main {
+	.primary-color {
+		color: #ddd;
+	}
+	.border-primary {
+		border-bottom: 1px solid #ddd;
+		&:hover {
+			border-color: #000;
+		}
+	}
+	.title-primary-color {
+		color: inherit;
+	}
+	.secondary-color {
+		color: #00adee;
+	}
+	.border-secondary {
+		border-bottom: 1px solid #00adee;
+	}
+	#question i {
+		font-size: 24px;
+	}
 	a {
 		color: #00adee;
 		cursor: pointer;
@@ -50,7 +71,7 @@
 	.form-shadow-wrap {
 		margin-top: 60px;
 		margin-left: -30px;
-		padding: 60px 20px 3em 30px;
+		padding: 40px 20px 3em 30px;
 		width: 100%;
 	}
 	.sidebar {
@@ -66,7 +87,24 @@
 	.inline {
 		display: flex;
 		flex-direction: row;
+		flex-wrap: wrap;
 		margin-top: 0px;
+	}
+	.inline-icon {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+		justify-content: space-between;
+		align-items: center;
+	}
+	.clickable {
+		cursor: pointer;
+	}
+	.open {
+		border: 1px solid #00adee;
+		border-top: none;
+		width: 100%;
+		padding: 1em;
 	}
 	.space-left {
 		margin-left: 5px;
@@ -118,9 +156,6 @@
 	}
 	.underlined {
 		border-bottom: 2px solid #ddd;
-	}
-	.form-shadow-wrap li.underlined:last-child {
-		border-bottom: none;
 	}
 
 }

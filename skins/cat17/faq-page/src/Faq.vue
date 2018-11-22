@@ -15,11 +15,10 @@
  	<div class="col-xs-12 col-sm-8">
 	  	<search-bar :messageSearch="messages.search"></search-bar>
 		<div class="form-shadow-wrap">
-			<h2 v-if="!isPreview" class="title space-below underlined">{{ topicTitle }}</h2>
+			<h2 v-if="!isPreview" class="title">{{ topicTitle }}</h2>
 			<ul>
-				<li v-for="content in page" v-bind:class="[ isPreview ? 'preview' : 'topic', 'underlined' ]">
-					<question :content="content.question"></question>
-					<answer :hiddenContent="content.hidden_text" :visibleContent="content.visible_text" :messages="messages" :isPreview="isPreview"></answer>
+				<li v-for="content in page" v-bind:class="[ isPreview ? 'preview' : 'topic' ]">
+					<question :content="content"></question>
 				</li>
 			</ul>
 		</div>
@@ -36,9 +35,10 @@
 	<div class="sidebar col-xs-12 col-sm-4">
 		<h5>{{ messages.about }}</h5>
 		<ul>
-			<li v-bind:class="[ 'link', 'underlined' ]" v-for="topic in content.topics">
-				<a @click="populatePageByTopic( topic ); isPreview = false;"
-					data-content-target="/page/Häufige Fragen" 
+			<li @click="populatePageByTopic( topic ); isPreview = false;"
+				v-bind:class="[ 'link', 'underlined' ]" v-for="topic in content.topics">
+				<a
+					data-content-target="/page/Häufige Fragen"
 					data-track-content 
 					data-content-name="Topic" 
 					:data-content-piece="topic.name">
@@ -59,14 +59,11 @@
 <script>
 import SearchBar from './components/SearchBar.vue';
 import Question from './components/Question.vue';
-import Answer from './components/Answer.vue';
-
 export default {
 	name: 'faq',
 	components: {
 		SearchBar,
-		Question,
-		Answer
+		Question
 	},
 	props: [ 'messages', 'content' ],
 	data() {
