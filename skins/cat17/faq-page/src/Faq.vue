@@ -17,8 +17,11 @@
 		<div class="form-shadow-wrap">
 			<h2 v-if="!isPreview" class="title">{{ topicTitle }}</h2>
 			<ul>
-				<li v-for="content in page" v-bind:class="[ isPreview ? 'preview' : 'topic' ]">
-					<question :content="content"></question>
+				<li v-for="(content, index) in page" v-bind:class="[ isPreview ? 'preview' : 'topic' ]">
+					<question v-on:question-opened="setOpenQuestionId( $event )"
+							  :content="content"
+							  :idx="index"
+							  :visible="openQuestionId"></question>
 				</li>
 			</ul>
 		</div>
@@ -70,7 +73,8 @@ export default {
 		return {
 			isPreview: true,
 			topicTitle: '',
-			page: []
+			page: [],
+			openQuestionId: ''
 		};
 	},
 	mounted: function () {
@@ -80,12 +84,17 @@ export default {
 		populatePageByTopic: function ( topic ) {
 			this.page = this.content.questions.filter( question => question.topic.split( ',' ).indexOf( topic.id ) !== -1 );
 			this.setTopicTitle( topic.name );
+			this.setOpenQuestionId( '' );
 		},
 		populatePageWithPreviewContent: function () {
+			this.setOpenQuestionId( '' );
 			this.page = this.content.questions.filter( question => question.topic.split( ',' ).indexOf( '1' ) !== -1 );
 		},
 		setTopicTitle: function ( name ) {
 			this.topicTitle = name;
+		},
+		setOpenQuestionId: function ( id ) {
+			this.openQuestionId = id;
 		}
 	}
 };
