@@ -128,9 +128,44 @@
 	}
 
 	.membership-benefits-box {
+		h2 {
+			border-bottom: solid 2px $brand-primary-membership;
+			display: inline-block;
+
+			/* Counteract styles from _layouts/memberships */
+			@include bkp(xsmax) {
+				&::after {
+					border-bottom: none;
+				}
+			}
+		}
+
 		.content {
 			padding-top: 0;
 		}
+
+		.call-to-action-box {
+			background: $brand-primary-membership;
+			color: $white;
+			border-radius: 5px;
+			padding: 15px;
+		}
+
+		.highlighted {
+			border: solid 1px $brand-primary-membership;
+		}
+
+		.list-membership {
+			li::before {
+				color: $brand-primary-membership;
+			}
+		}
+
+		.btn {
+			background: $brand-primary-membership;
+			margin-bottom: 25px;
+		}
+
 		@include bkp(md) {
 			.action-block {
 				margin: 0;
