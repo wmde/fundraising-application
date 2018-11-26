@@ -3,7 +3,9 @@ $( function () {
 
   var initData = $( '#init-form' ),
     store = WMDE.donationStore = WMDE.Store.createDonationStore(),
-    actions = WMDE.Actions
+    actions = WMDE.Actions,
+	scroller = WMDE.Scrolling.createAnimatedScroller( $( '.wrap-header, .state-bar' ) ),
+	animationTime = 1
     ;
 
   WMDE.StoreUpdates.connectComponentsToStore(
@@ -146,10 +148,6 @@ $( function () {
 			stateKey: 'donationInputValidation.amount'
 		},
 		{
-			viewHandler: WMDE.View.createShySubmitButtonHandler( $( 'form input[type="submit"]' ) ),
-			stateKey: [ WMDE.StateAggregation.Donation.allValiditySectionsAreValid ]
-		},
-		{
 			viewHandler: WMDE.View.SectionInfo.createFrequencySectionInfo(
 				$( '.banner .frequency' ),
 				{
@@ -233,19 +231,64 @@ $( function () {
 			]
 		},
 		// Show house number warning
-      {
-        viewHandler: WMDE.View.createSimpleVisibilitySwitcher(
-          $( '#street, #adress-company' ).nextAll( '.warning-text' ),
-          /^\D+$/
-        ),
-        stateKey: 'donationFormContent.street'
-      }
+		{
+			viewHandler: WMDE.View.createSimpleVisibilitySwitcher(
+				$( '#street, #adress-company' ).nextAll( '.warning-text' ),
+				/^\D+$/
+			),
+			stateKey: 'donationFormContent.street'
+		},
+		// Adjust height of address form field set
+		{
+			viewHandler: new WMDE.View.HeightAdjuster( $( '#type-donor' )  ),
+			stateKey: [
+				'donationFormContent.addressType',
+				'donationFormContent.salutation',
+				'donationFormContent.title',
+				'donationFormContent.firstName',
+				'donationFormContent.lastName',
+				'donationFormContent.companyName',
+				'donationFormContent.street',
+				'donationFormContent.postcode',
+				'donationFormContent.city',
+				'donationFormContent.country',
+				'donationFormContent.email',
+				WMDE.StateAggregation.Donation.donorTypeAndAddressAreValid
+			]
+		}
     ],
     store
   );
+	function forceValidateBankData() {
+		var state = store.getState();
+		if ( state.donationFormContent.paymentType === 'BEZ' && state.validity.bankData === WMDE.Validity.INCOMPLETE ) {
+			store.dispatch(WMDE.Actions.newFinishBankDataValidationAction( { status: WMDE.ValidationStates.ERR } ) );
+		}
+		return WMDE.Promise.resolve();
+	}
 
-	$('form').on( 'submit', function () {
-		return WMDE.StateAggregation.Donation.allValiditySectionsAreValid( store.getState() );
+	function forceValidateAddressData() {
+		var transport = new WMDE.JQueryTransport();
+		if ( store.getState().validity.address === WMDE.Validity.INCOMPLETE ) {
+			return transport.postData( initData.data( 'validate-address-url' ), store.getState().donationFormContent ).then(
+				function( resp ) {
+					store.dispatch( WMDE.Actions.newFinishAddressValidationAction( resp ) );
+					store.dispatch( WMDE.Actions.newMarkEmptyFieldsInvalidAction( Object.keys( resp.messages ) ) );
+				}
+			);
+		}
+		return WMDE.Promise.resolve();
+	}
+	$( '.btn-donation' ).on( 'click', function () {
+		if ( WMDE.StateAggregation.Donation.allValiditySectionsAreValid( store.getState() ) ) {
+			$( 'form' ).submit();
+		}
+		else if ( WMDE.StateAggregation.Donation.someValiditySectionsAreIncomplete( store.getState() ) ) {
+			WMDE.Promise.all( [ forceValidateBankData(), forceValidateAddressData() ] ).then( function() {
+				scroller.scrollTo( $( $( '.info-text.opened .field-grp.invalid' ).get( 0 ) ), {elementStart: WMDE.Scrolling.ElementStart.MARGIN}, animationTime );
+			});
+		}
+		return false;
 	} );
 
   // Set initial form values
@@ -270,15 +313,12 @@ $( function () {
 
 	// Non-state-changing event behavior
 
-	var scroller = WMDE.Scrolling.createAnimatedScroller( $( '.wrap-header, .state-bar' ) );
-
 	// Scroll to first required element that needs to be filled
 	var currentState = store.getState();
 	if ( WMDE.StateAggregation.Donation.formIsPrefilled( currentState ).dataEntered ) {
 		// We can assume the validity of amount and interval here, so next section is either payment method or personal data
 		var nextRequired = currentState.donationFormContent.paymentType === 'BEZ' ? $( '#payment-method' ) : $( '#donation-type .legend:first' ),
-			$introBanner = $('.introduction-banner'),
-			animationTime = 1;
+			$introBanner = $('.introduction-banner');
 		$introBanner.insertBefore( nextRequired ).removeClass( 'hidden' );
 
 		scroller.scrollTo( $introBanner, { elementStart: WMDE.Scrolling.ElementStart.MARGIN }, animationTime );

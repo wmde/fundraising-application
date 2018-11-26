@@ -304,6 +304,24 @@ $( function () {
 				/^\D+$/
 			),
 			stateKey: 'membershipFormContent.street'
+		},
+		// Adjust height of address form field set
+		{
+			viewHandler: new WMDE.View.HeightAdjuster( $( '#type-donor' )  ),
+			stateKey: [
+				'membershipFormContent.addressType',
+				'membershipFormContent.salutation',
+				'membershipFormContent.title',
+				'membershipFormContent.firstName',
+				'membershipFormContent.lastName',
+				'membershipFormContent.companyName',
+				'membershipFormContent.street',
+				'membershipFormContent.postcode',
+				'membershipFormContent.city',
+				'membershipFormContent.country',
+				'membershipFormContent.email',
+				WMDE.StateAggregation.Membership.donorTypeAndAddressAreValid
+			]
 		}
     ],
     store

@@ -17,7 +17,6 @@ var objectAssign = require( 'object-assign' ),
 		firma: [ 'companyName', 'street', 'postcode', 'city', 'email' ],
 		anonym: []
 	},
-
 	AddressValidator = {
 		validationUrl: '',
 		transport: null,

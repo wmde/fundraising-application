@@ -11,6 +11,7 @@ module.exports = {
 	StateAggregation: {
 		Donation: {
 			allValiditySectionsAreValid: require( './lib/state_aggregation/donation/all_validation_sections_are_valid' ),
+			someValiditySectionsAreIncomplete: require( './lib/state_aggregation/donation/some_validation_sections_are_incomplete' ),
 			amountAndFrequencyAreValid: require( './lib/state_aggregation/donation/amount_and_frequency_are_valid' ),
 			donorTypeAndAddressAreValid: require( './lib/state_aggregation/donation/donor_type_and_address_are_valid' ),
 			paymentAndBankDataAreValid: require( './lib/state_aggregation/donation/payment_and_bank_data_are_valid' ),
@@ -41,7 +42,8 @@ module.exports = {
 		createCustomAmountField: require( './lib/view_handler/custom_amount_field' ).createCustomAmountField,
 		createShySubmitButtonHandler: require( './lib/view_handler/shy_submit_button' ).createShySubmitButtonHandler,
 		SectionInfo: require( './lib/view_handler/section_info/main' ),
-		Animator: require( './lib/view_handler/animator' )
+		Animator: require( './lib/view_handler/animator' ),
+		HeightAdjuster: require( './lib/view_handler/height_adjuster' ).HeightAdjuster
 	},
 	Actions: require( './lib/actions' ),
 	FormDataExtractor: require( './lib/form_data_extractor' ),
@@ -50,5 +52,9 @@ module.exports = {
 	BankData: require( './components/BankData.vue' ).default,
 	Vue: require( 'vue' ).default,
 	VueTranslate: require( 'vue-translate-plugin' ),
-	VueRedux: require( 'redux-vue' )
+	VueRedux: require( 'redux-vue' ),
+	JQueryTransport: require( './lib/jquery_transport' ).default,
+	Validity: require( './lib/validation/validation_states' ).Validity,
+	ValidationStates: require( './lib/validation/validation_states' ).ValidationStates,
+	Promise: Promise
 };
