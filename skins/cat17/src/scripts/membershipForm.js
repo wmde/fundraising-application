@@ -375,7 +375,7 @@ $( function () {
 	}
 	function mapActionToProps( dispatch ) {
 		return {
-			changeBankDataValidity( validity ) {
+			changeBankDataValidity: function ( validity ) {
 				dispatch( WMDE.Actions.newFinishBankDataValidationAction( validity ) );
 			}
 		}
@@ -389,8 +389,10 @@ $( function () {
 	new WMDE.Vue( {
 		// FIXME Import and create store directly when we no longer use the global variable anywhere else
 		store: store,
-		render: (h) => h( ConnectedBankData ),
-		created() {
+		render: function( h ) {
+			return h( ConnectedBankData )
+		},
+		created: function() {
 			this.$translate.setLang('de_DE');
 		}
 	} ).$mount( '#bankdata-app' );
