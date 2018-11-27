@@ -1,7 +1,7 @@
 <template>
  <div id="faq" class="container">
- 	<div v-if="!isPreview" class="inline space-above">
- 		<a @click="populatePageWithPreviewContent(); isPreview=true;"
+	 <div v-if="!isOverview" class="inline space-above">
+		 <a @click="populatePageWithPreviewContent(); isOverview=true;"
 	 		data-content-target="/page/Häufige Fragen" 
 			data-track-content 
 			data-content-name="Back to overview" 
@@ -15,15 +15,13 @@
  	<div class="col-xs-12 col-sm-8">
 	  	<search-bar :messageSearch="messages.search"></search-bar>
 		<div class="form-shadow-wrap">
-			<h2 v-if="!isPreview" class="title">{{ topicTitle }}</h2>
-			<ul>
-				<li v-for="(content, index) in page" v-bind:class="[ isPreview ? 'preview' : 'topic' ]">
-					<question v-on:question-opened="setOpenQuestionId( $event )"
-							  :content="content"
-							  :idx="index"
-							  :visible="openQuestionId"></question>
-				</li>
-			</ul>
+			<h2 v-if="!isOverview" class="title">{{ topicTitle }}</h2>
+			<question v-for="(content, index) in page" v-bind:class="[ isOverview ? 'preview' : 'topic' ]"
+					  v-on:question-opened="setOpenQuestionId( $event )"
+					  :content="content"
+					  :key="index"
+					  :visible-question-id="openQuestionId">
+			</question>
 		</div>
 		<footer>
 			<h5>{{ messages.no_answer_found }}</h5>
@@ -38,7 +36,7 @@
 	<div class="sidebar col-xs-12 col-sm-4">
 		<h5>{{ messages.about }}</h5>
 		<ul>
-			<li @click="populatePageByTopic( topic ); isPreview = false;"
+			<li @click="populatePageByTopic( topic ); isOverview = false;"
 				v-bind:class="[ 'link', 'underlined' ]" v-for="topic in content.topics">
 				<a
 					data-content-target="/page/Häufige Fragen"
@@ -62,6 +60,7 @@
 <script>
 import SearchBar from './components/SearchBar.vue';
 import Question from './components/Question.vue';
+
 export default {
 	name: 'faq',
 	components: {
@@ -71,7 +70,7 @@ export default {
 	props: [ 'messages', 'content' ],
 	data() {
 		return {
-			isPreview: true,
+			isOverview: true,
 			topicTitle: '',
 			page: [],
 			openQuestionId: ''
