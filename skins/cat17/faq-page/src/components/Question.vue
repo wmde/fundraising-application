@@ -12,7 +12,7 @@
 			   data-content-piece="Toggle expand/collapse">
 			</i>
 		</div>
-		<div v-show="isOpen"  v-html="content.visible_text"></div>
+		<div v-show="isOpen"  v-html="content.visible_text" class="space-below"></div>
 	</div>
 </div>
 </template>

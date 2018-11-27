@@ -1,21 +1,11 @@
 <template>
  <div id="faq" class="container">
-	 <div v-if="!isOverview" class="inline space-above">
-		 <a @click="populatePageWithPreviewContent(); isOverview=true;"
-	 		data-content-target="/page/Häufige Fragen" 
-			data-track-content 
-			data-content-name="Back to overview" 
-			data-content-piece="Back to overview">
-		{{ messages.back_link }}
-		</a>
- 	</div>
  	<h2>{{ messages.page_title }}</h2>
  	<h5>{{ messages.page_subtitle }}</h5>
  	<div class="row">
  	<div class="col-xs-12 col-sm-8">
-	  	<search-bar :messageSearch="messages.search"></search-bar>
 		<div class="form-shadow-wrap">
-			<h2 v-if="!isOverview" class="title">{{ topicTitle }}</h2>
+			<h2 class="title">{{ topicTitle }}</h2>
 			<question v-for="(content, index) in page" v-bind:class="[ isOverview ? 'preview' : 'topic' ]"
 					  v-on:question-opened="setOpenQuestionId( $event )"
 					  :content="content"
@@ -88,6 +78,7 @@ export default {
 		populatePageWithPreviewContent: function () {
 			this.setOpenQuestionId( '' );
 			this.page = this.content.questions.filter( question => question.topic.split( ',' ).indexOf( '1' ) !== -1 );
+			this.setTopicTitle( this.content.topics[ 0 ].name );
 		},
 		setTopicTitle: function ( name ) {
 			this.topicTitle = name;
