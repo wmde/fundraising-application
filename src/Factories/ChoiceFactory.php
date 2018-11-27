@@ -43,6 +43,15 @@ class ChoiceFactory {
 		throw new UnknownChoiceDefinition( 'Skin selection configuration failure.' );
 	}
 
+	public function getMembershipCallToActionTemplate(): string {
+		if ( $this->featureToggle->featureIsActive( 'campaigns.membership_call_to_action.regular' ) ) {
+			return 'partials/donation_confirmation/feature_toggle/call_to_action_regular.html.twig';
+		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.membership_call_to_action.video' ) ) {
+			return 'partials/donation_confirmation/feature_toggle/call_to_action_video.html.twig';
+		}
+		throw new UnknownChoiceDefinition( 'Membership Call to Action Template configuration failure.' );
+	}
+
 	private function getSkinDirectory( string $skin ): string {
 		return 'skins/' . $skin . '/templates';
 	}

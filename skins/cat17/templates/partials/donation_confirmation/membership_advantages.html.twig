@@ -7,9 +7,7 @@
 			<p>{$ 'membership_call_to_action_line_2' | trans $}</p>
 
 			<div class="call-to-action-box">
-				<p>{$ 'membership_call_to_action_box' | trans( { '%name%': address.fullName } ) $}</p>
-
-				<!-- TODO Vimeo video -->
+				{% include featureToggle.callToActionTemplate %}
 			</div>
 
 			{% include 'partials/membership/benefit_list.html.twig' with {
