@@ -49,7 +49,6 @@
 		<h5>{{ messages.no_answer }}</h5>
 		<ul>
 			<li><a href="/contact/get-in-touch">{{ messages.contact_link }}</a></li>
-			<li>{{ messages.further }} <a href="/contact/get-in-touch">{{ messages.contact_options }}</a></li>
 		</ul>
 	</div>
 	</div>
