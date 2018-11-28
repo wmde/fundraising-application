@@ -1,27 +1,17 @@
 <template>
  <div id="faq" class="container">
- 	<div v-if="!isPreview" class="inline space-above">
- 		<a @click="populatePageWithPreviewContent(); isPreview=true;"
-	 		data-content-target="/page/Häufige Fragen" 
-			data-track-content 
-			data-content-name="Back to overview" 
-			data-content-piece="Back to overview">
-		{{ messages.back_link }}
-		</a>
- 	</div>
  	<h2>{{ messages.page_title }}</h2>
  	<h5>{{ messages.page_subtitle }}</h5>
  	<div class="row">
- 	<div class="col-xs-12 col-sm-9">
-	  	<search-bar :messageSearch="messages.search"></search-bar>
+ 	<div class="col-xs-12 col-sm-8">
 		<div class="form-shadow-wrap">
-			<h2 v-if="!isPreview" class="title space-below underlined">{{ topicTitle }}</h2>
-			<ul>
-				<li v-for="content in page" v-bind:class="[ isPreview ? 'preview' : 'topic', 'underlined' ]">
-					<question :content="content.question"></question>
-					<answer :hiddenContent="content.hidden_text" :visibleContent="content.visible_text" :messages="messages" :isPreview="isPreview"></answer>
-				</li>
-			</ul>
+			<h2 class="title">{{ topicTitle }}</h2>
+			<question v-for="(content, index) in page" v-bind:class="[ isOverview ? 'preview' : 'topic' ]"
+					  v-on:question-opened="setOpenQuestionId( $event )"
+					  :content="content"
+					  :key="index"
+					  :visible-question-id="openQuestionId">
+			</question>
 		</div>
 		<footer>
 			<h5>{{ messages.no_answer_found }}</h5>
@@ -33,12 +23,13 @@
 			</p>
 		</footer>
 	</div>
-	<div class="sidebar col-xs-12 col-sm-3">
+	<div class="sidebar col-xs-12 col-sm-4">
 		<h5>{{ messages.about }}</h5>
 		<ul>
-			<li v-for="topic in content.topics">
-				<a @click="populatePageByTopic( topic ); isPreview = false;"
-					data-content-target="/page/Häufige Fragen" 
+			<li @click="populatePageByTopic( topic ); isOverview = false;"
+				v-bind:class="[ 'link', 'underlined' ]" v-for="topic in content.topics">
+				<a
+					data-content-target="/page/Häufige Fragen"
 					data-track-content 
 					data-content-name="Topic" 
 					:data-content-piece="topic.name">
@@ -46,8 +37,8 @@
 				</a>
 			</li>
 		</ul>
-		<h5>{{ messages.no_answer }}</h5>
-		<ul>
+		<h5 class="second-menu">{{ messages.no_answer }}</h5>
+		<ul class="second-menu">
 			<li><a href="/contact/get-in-touch">{{ messages.contact_link }}</a></li>
 		</ul>
 	</div>
@@ -58,21 +49,20 @@
 <script>
 import SearchBar from './components/SearchBar.vue';
 import Question from './components/Question.vue';
-import Answer from './components/Answer.vue';
 
 export default {
 	name: 'faq',
 	components: {
 		SearchBar,
-		Question,
-		Answer
+		Question
 	},
 	props: [ 'messages', 'content' ],
 	data() {
 		return {
-			isPreview: true,
+			isOverview: true,
 			topicTitle: '',
-			page: []
+			page: [],
+			openQuestionId: ''
 		};
 	},
 	mounted: function () {
@@ -82,12 +72,18 @@ export default {
 		populatePageByTopic: function ( topic ) {
 			this.page = this.content.questions.filter( question => question.topic.split( ',' ).indexOf( topic.id ) !== -1 );
 			this.setTopicTitle( topic.name );
+			this.setOpenQuestionId( '' );
 		},
 		populatePageWithPreviewContent: function () {
+			this.setOpenQuestionId( '' );
 			this.page = this.content.questions.filter( question => question.topic.split( ',' ).indexOf( '1' ) !== -1 );
+			this.setTopicTitle( this.content.topics[ 0 ].name );
 		},
 		setTopicTitle: function ( name ) {
 			this.topicTitle = name;
+		},
+		setOpenQuestionId: function ( id ) {
+			this.openQuestionId = id;
 		}
 	}
 };
