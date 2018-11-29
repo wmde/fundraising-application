@@ -2,10 +2,10 @@
 <div id="question" class="space-above">
 	<div v-bind:class="[ isOpen ? 'border-secondary' : 'border-primary' ]">
 		<div class="inline-icon clickable" @click="toggle()"
-			 data-content-target="/page/Häufige Fragen"
-			 data-track-content
-			 data-content-name="Toggle expand/collapse"
-			 data-content-piece="Toggle expand/collapse">
+			 :data-content-target="!isOpen ? '/page/Häufige Fragen' : ''"
+			 :data-track-content="!isOpen"
+			 :data-content-name="!isOpen ? 'Expand' : ''"
+			 :data-content-piece="!isOpen ? content.question : ''">
 			<h5 v-bind:class="[ isOpen ? 'secondary-color' : 'title-primary-color' ]">
 				{{ content.question }}
 			</h5>
