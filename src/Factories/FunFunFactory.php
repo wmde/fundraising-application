@@ -1174,7 +1174,10 @@ class FunFunFactory implements ServiceProviderInterface {
 					$this->getDefaultTwigVariables(),
 					[
 						'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForMembershipApplication(),
-						'featureToggle' => ['donorUpdateEnabled' => $this->getChoiceFactory()->isDonationAddressOptional()]
+						'featureToggle' => [
+							'donorUpdateEnabled' => $this->getChoiceFactory()->isDonationAddressOptional(),
+							'callToActionTemplate' => $this->getChoiceFactory()->getMembershipCallToActionTemplate()
+						],
 					]
 				)
 			),
@@ -1186,7 +1189,12 @@ class FunFunFactory implements ServiceProviderInterface {
 		return new DonorUpdateHtmlPresenter(
 			new TwigTemplate(
 				$this->getSkinTwig(), 'Donation_Confirmation.html.twig',
-				$this->getDefaultTwigVariables()
+				array_merge(
+					$this->getDefaultTwigVariables(),
+					[
+						'featureToggle' => [ 'callToActionTemplate' => $this->getChoiceFactory()->getMembershipCallToActionTemplate() ]
+					]
+				)
 			),
 			$this->getUrlGenerator()
 		);
