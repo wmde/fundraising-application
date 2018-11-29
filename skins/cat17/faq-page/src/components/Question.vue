@@ -1,15 +1,15 @@
 <template>
 <div id="question" class="space-above">
 	<div v-bind:class="[ isOpen ? 'border-secondary' : 'border-primary' ]">
-		<div class="inline-icon clickable" @click="toggle()">
+		<div class="inline-icon clickable" @click="toggle()"
+			 data-content-target="/page/Häufige Fragen"
+			 data-track-content
+			 data-content-name="Toggle expand/collapse"
+			 data-content-piece="Toggle expand/collapse">
 			<h5 v-bind:class="[ isOpen ? 'secondary-color' : 'title-primary-color' ]">
 				{{ content.question }}
 			</h5>
-			<i v-bind:class="[ isOpen ? 'icon-keyboard_arrow_up secondary-color' : 'icon-keyboard_arrow_down primary-color' ]"
-			   data-content-target="/page/Häufige Fragen"
-			   data-track-content
-			   data-content-name="Toggle expand/collapse"
-			   data-content-piece="Toggle expand/collapse">
+			<i v-bind:class="[ isOpen ? 'icon-keyboard_arrow_up secondary-color' : 'icon-keyboard_arrow_down primary-color' ]">
 			</i>
 		</div>
 		<div v-show="isOpen"  v-html="content.visible_text" class="space-below"></div>
