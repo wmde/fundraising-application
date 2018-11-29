@@ -17,7 +17,7 @@
 	.border-secondary {
 		border-bottom: 1px solid #00adee;
 	}
-	#question i {
+	.question i {
 		font-size: 24px;
 	}
 	a {
@@ -88,35 +88,31 @@
 		display: flex;
 		flex-direction: row;
 		flex-wrap: wrap;
-		margin-top: 0px;
-	}
-	.inline-icon {
-		display: flex;
-		flex-direction: row;
-		flex-wrap: nowrap;
-		justify-content: space-between;
-		align-items: center;
+		margin-top: 0;
+		&-icon {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: nowrap;
+			justify-content: space-between;
+			align-items: center;
+		}
 	}
 	.clickable {
 		cursor: pointer;
 	}
-	.open {
-		border: 1px solid #00adee;
-		border-top: none;
-		width: 100%;
-		padding: 1em;
-	}
-	.space-left {
-		margin-left: 5px;
-	}
-	.space-around {
-		padding: 1em 0;
-	}
-	.space-above {
-		padding-top: 1em;
-	}
-	.space-below {
-		padding-bottom: 1em;
+	.space {
+		&-left {
+			margin-left: 5px;
+		}
+		&-around {
+			padding: 1em 0;
+		}
+		&-above {
+			padding-top: 1em;
+		}
+		&-below {
+			padding-bottom: 1em;
+		}
 	}
 	.sidebar {
 		display: flex;

@@ -1,5 +1,5 @@
 <template>
-<div id="question" class="space-above">
+<div class="question space-above">
 	<div v-bind:class="[ isOpen ? 'border-secondary' : 'border-primary' ]">
 		<div class="inline-icon clickable" @click="toggle()">
 			<h5 v-bind:class="[ isOpen ? 'secondary-color' : 'title-primary-color' ]">
