@@ -283,8 +283,14 @@ $( function () {
 	}
 
 	function triggerValidityCheckForPaymentPage() {
-		if ( !paymentDataIsValid() ) {
-			store.dispatch( actions.newMarkEmptyFieldsInvalidAction( [ 'amount' ] ) );
+		if ( !amountIsValid() && !paymentTypeIsValid() ) {
+			store.dispatch( actions.newMarkEmptyFieldsInvalidAction( [ 'amount', 'paymentType' ] ) );
+		}
+		else if ( !amountIsValid() ) {
+			store.dispatch( actions.newMarkEmptyFieldsInvalidAction( [ 'amount'] ) );
+		}
+		else if ( !paymentTypeIsValid() ) {
+			store.dispatch( actions.newMarkEmptyFieldsInvalidAction( [ 'paymentType' ] ))
 		}
 	}
 
@@ -333,7 +339,17 @@ $( function () {
 
 	function paymentDataIsValid() {
 		var currentState = store.getState();
-		return currentState.validity.paymentData;
+		return amountIsValid() && paymentTypeIsValid() && currentState.validity.paymentData;
+	}
+
+	function amountIsValid() {
+		var currentState = store.getState();
+		return Number( currentState.donationFormContent.amount.replace(/,/g, '.') ) > 0;
+	}
+
+	function paymentTypeIsValid() {
+		var currentState = store.getState();
+		return currentState.donationFormContent.paymentType;
 	}
 
 	function displayErrorBox() {

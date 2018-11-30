@@ -88,6 +88,7 @@ $( function () {
 			{
 				viewHandler: WMDE.View.createErrorBoxHandler( $( '#validation-errors' ), {
 					amount: 'Betrag',
+					paymentType: 'Zahlungsweise',
 					salutation: 'Anrede',
 					title: 'Titel',
 					firstName: 'Vorname',

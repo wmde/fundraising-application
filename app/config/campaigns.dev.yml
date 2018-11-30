@@ -8,3 +8,6 @@ skins:
 
 donation_address:
   active: true
+
+membership_call_to_action:
+  active: true

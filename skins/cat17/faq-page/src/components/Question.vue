@@ -1,7 +1,7 @@
 <template>
-<div id="question" class="space-above">
+<div class="question space-above">
 	<div v-bind:class="[ isOpen ? 'border-secondary' : 'border-primary' ]">
-		<div class="inline-icon clickable" @click="toggle()"
+		<div class="inline-icon" @click="toggle()"
 			 :data-content-target="!isOpen ? '/page/Häufige Fragen' : ''"
 			 :data-track-content="!isOpen"
 			 :data-content-name="!isOpen ? 'Expand' : ''"

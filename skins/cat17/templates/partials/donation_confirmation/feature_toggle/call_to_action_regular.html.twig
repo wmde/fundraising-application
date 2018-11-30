@@ -1,0 +1,7 @@
+<p>
+    {% if address.fullName %}
+        {$ 'membership_call_to_action_box' | trans( { '%name%': address.fullName } ) $}
+    {% else %}
+        {$ 'membership_call_to_action_box_anonymous' | trans $}
+    {% endif %}
+</p>

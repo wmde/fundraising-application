@@ -44,3 +44,15 @@ skins:
   default_bucket: "cat17"
   url_key: skin
   active: true
+
+membership_call_to_action:
+  description: Display different content for membership call to action on donation confirmation page
+  reference: "https://phabricator.wikimedia.org/T210083"
+  start: "2018-11-29 19:00:00"
+  end: "2018-12-31 23:59:59"
+  buckets:
+  - "regular"
+  - "video"
+  default_bucket: "regular"
+  url_key: mbcat
+  active: true
