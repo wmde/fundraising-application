@@ -1,4 +1,4 @@
-// grid
+// Grid
 $screen-xs: 356px;
 $screen-sm: 678px;
 $screen-md: 972px;
@@ -18,9 +18,10 @@ $brand-primary-membership-dark: #4E9242;
 
 $brand-footer: #cfdbe2;
 $gray-light: #ddd;
+$gray-dark: #7f7f7f;
 $brand-error: #812923;
 $brand-error-light: #e6d4d3;
-// same color as $brand-error but with opacity applied
+// Same color as $brand-error but with opacity applied
 $brand-error-rgba: rgba(129, 41, 35, 0.2);
 $brand-warning: #000000;
 
@@ -29,13 +30,14 @@ $bk-selected: #ecf7fd;
 
 $gray-main: #9c9ea1;
 $blue-dark: #0C69A3;
+$blue-light: #42bbee;
 $gray-line: #808080;
 
 $text-color: #000000;
 $black: $text-color;
 $white: #fff;
 
-// selects
+// Selects
 
 $select-color: $text-color;
 $select-background: $brand-footer;

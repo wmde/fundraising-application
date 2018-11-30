@@ -1,27 +1,27 @@
 .page-faq main {
 	.primary-color {
-		color: #7f7f7f;
+		color: $gray-dark;
 	}
 	.border-primary {
-		border-bottom: 1px solid #ddd;
+		border-bottom: 1px solid $gray-light;
 		&:hover {
-			border-color: #000;
+			border-color: $text-color;
 		}
 	}
 	.title-primary-color {
 		color: inherit;
 	}
 	.secondary-color {
-		color: #00adee;
+		color: $brand-primary;
 	}
 	.border-secondary {
-		border-bottom: 1px solid #00adee;
+		border-bottom: 1px solid $brand-primary;
 	}
 	.question i {
 		font-size: 24px;
 	}
 	a {
-		color: #00adee;
+		color: $brand-primary;
 		cursor: pointer;
 	}
 	ul {
@@ -39,25 +39,25 @@
 		border: none;
 		width: 90%;
 		height: 40px;
-		background-color: #cfdbe2;
+		background-color: $brand-footer;
 		font-size: 17px;
 	}
 	button {
 		background-color: white;
 		height: 40px;
-		border: 1px solid #ddd;
+		border: 1px solid $gray-light;
 		border-left: 0px;
 	}
 	input[type=text], button {
 		display: inline-block;
 	}
 	.link {
-		color: #00adee;
+		color: $brand-primary;
 		cursor: pointer;
 	}
 	.preview {
 		.title {
-			color: #00adee;
+			color: $brand-primary;
 			font-size: 22px;
 		}
 	}
@@ -75,7 +75,31 @@
 		width: 100%;
 	}
 	.sidebar {
-		padding-left: 40px;
+		display: flex;
+		flex-direction: column;
+		flex-wrap: nowrap;
+		justify-content: space-between;
+		.link {
+			a {
+				color: $gray-dark;
+				font-size: 12px;
+			}
+			&:hover {
+				a {
+					color: $text-color;
+					font-size: 16px;
+				}
+			}
+		}
+		li {
+			padding: 10px 0;
+			&.underlined {
+				border-bottom: 1px solid $gray-light;
+				&:hover {
+					border-bottom: 1px solid $text-color;
+				}
+			}
+		}
 		h5 {
 			margin-top: 130px;
 			&.second-menu {
@@ -95,10 +119,8 @@
 			flex-wrap: nowrap;
 			justify-content: space-between;
 			align-items: center;
+			cursor: pointer;
 		}
-	}
-	.clickable {
-		cursor: pointer;
 	}
 	.space {
 		&-left {
@@ -114,44 +136,17 @@
 			padding-bottom: 1em;
 		}
 	}
-	.sidebar {
-		display: flex;
-		flex-direction: column;
-		flex-wrap: nowrap;
-		justify-content: space-between;
-		.link {
-			a {
-				color: #7f7f7f;
-				font-size: 12px;
-			}
-			&:hover {
-				a {
-					color: #000;
-					font-size: 16px;
-				}
-			}
-		}
-		li {
-			padding: 10px 0;
-			&.underlined {
-				border-bottom: 1px solid #ddd;
-				&:hover {
-					border-bottom: 1px solid #000;
-				}
-			}
-		}
-	}
 	.second-menu li {
 		padding: 0;
 		line-height: 24px;
 	}
 	.active {
-		color: #42bbee;
+		color: $blue-light;
 		font-size: 16px;
-		border-bottom: 1px solid #42bbee;
+		border-bottom: 1px solid $blue-light;
 	}
 	.underlined {
-		border-bottom: 2px solid #ddd;
+		border-bottom: 2px solid $gray-light;
 	}
 
 }

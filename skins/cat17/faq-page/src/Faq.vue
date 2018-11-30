@@ -88,7 +88,3 @@ export default {
 	}
 };
 </script>
-
-<style lang="scss">
-  @import '../../src/sass/layouts/pages/faq.scss'
-</style>
