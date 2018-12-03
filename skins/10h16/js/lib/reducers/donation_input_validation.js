@@ -24,7 +24,22 @@ var _ = require( 'underscore' ),
 		confirmSepa: _.clone( defaultFields ),
 		confirmShortTerm: _.clone( defaultFields )
 	},
-
+	setValidityOfPaymentData = function ( state, action ) {
+		if ( action.type === 'SELECT_AMOUNT' ) {
+			return _.extend( {}, state, {
+				amount: { dataEntered: true, isValid: true }
+			} );
+		} else if ( action.type === 'INPUT_AMOUNT' ) {
+			return _.extend( {}, state, {
+				amount: { dataEntered: true, isValid: null }
+			} );
+		} else if ( action.type === 'CHANGE_CONTENT' && action.payload.contentName === 'paymentType' ) {
+			return _.extend( {}, state, {
+				amount: { dataEntered: true, isValid: true }
+			} );
+		}
+		return state;
+	},
 	setValidityOnSalutationChange = function ( state, action ) {
 		if ( action.type !== 'CHANGE_CONTENT' ||
 			action.payload.contentName !== 'salutation' ) {
@@ -87,5 +102,6 @@ module.exports = function donationInputValidation( state, action ) {
 	state = clearAddressValidityOnAddressTypeChange( state, action );
 	state = clearBankDataValidityOnPaymentTypeChange( state, action );
 	state = setValidityOnSalutationChange( state, action );
+	state = setValidityOfPaymentData( state, action );
 	return inputValidationLib.inputValidation( state, action );
 };
