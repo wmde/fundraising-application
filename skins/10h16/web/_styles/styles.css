@@ -446,7 +446,7 @@ ul.horizontal.share { height: 0px; margin-top: -4px; }
 ul.horizontal.share li { margin: 0 0 0 8px; font-size: 1.4em; }
 ul.horizontal.share li a { color: #e1f3de; }
 
-ul.amount-list li { margin-bottom: 15px; width: 70px; }
+ul.amount-list li { margin-bottom: 15px; width: 100px; }
 ul.amount-list li.amount-custom { width: 80px; }
 ul.amount-list li.amount-custom input[type="text"] { width: 100% !important; }
 ul.amount-list li.amount-custom input[type="text"] + label { position: absolute; padding: 9px 10px; }
