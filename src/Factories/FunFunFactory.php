@@ -1344,11 +1344,24 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	private function getDonationFormTemplate(): TwigTemplate {
-		return $this->getLayoutTemplate( 'Donation_Form.html.twig', [
-			'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForDonation(),
-			'presetAmounts' => $this->getPresetAmountsSettings( 'donations' ),
-			'messages' => $this->getMessages()
-		] );
+		if ($this->getSkinDirectory() === 'skins/10h16/templates')  {
+			return $this->getLayoutTemplate(
+				'Donation_Form.html.twig',
+				[
+					'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForDonation(),
+					'presetAmounts' => $this->getPresetAmountsSettings( $this->getChoiceFactory()->getAmountType() ),
+					'messages' => $this->getMessages()
+				]
+			);
+		}
+		return $this->getLayoutTemplate(
+			'Donation_Form.html.twig',
+			[
+				'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForDonation(),
+				'presetAmounts' => $this->getPresetAmountsSettings( 'donations' ),
+				'messages' => $this->getMessages()
+			]
+		);
 	}
 
 	public function getMembershipApplicationFormTemplate(): TwigTemplate {
