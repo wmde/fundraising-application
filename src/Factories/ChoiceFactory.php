@@ -52,6 +52,21 @@ class ChoiceFactory {
 		throw new UnknownChoiceDefinition( 'Membership Call to Action Template configuration failure.' );
 	}
 
+	public function getAmountType(): string {
+		if ( $this->featureToggle->featureIsActive( 'campaigns.amount_options.5to300' ) ) {
+			return '5to300';
+		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.amount_options.5to100' ) ) {
+			return '5to100';
+		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.amount_options.15to250' ) ) {
+			return '15to250';
+		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.amount_options.30to250' ) ) {
+			return '30to250';
+		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.amount_options.50to500' ) ) {
+			return '50to500';
+		}
+		throw new UnknownChoiceDefinition( 'Amount option selection configuration failure.' );
+	}
+
 	private function getSkinDirectory( string $skin ): string {
 		return 'skins/' . $skin . '/templates';
 	}
