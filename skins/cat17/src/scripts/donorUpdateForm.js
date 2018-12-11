@@ -3,7 +3,9 @@ $( function() {
 
 	var initData = $( '#init-form' ),
 		store = WMDE.Store.createDonorUpdateStore(),
-		actions = WMDE.Actions
+		actions = WMDE.Actions,
+		scroller = WMDE.Scrolling.createAnimatedScroller( $( '.wrap-header, .state-bar' ) ),
+		animationTime = 1
 	;
 
 	WMDE.StoreUpdates.connectComponentsToStore(
@@ -95,11 +97,6 @@ $( function() {
 				viewHandler: WMDE.View.createFieldValueValidityIndicator( $( '.field-email' ) ),
 				stateKey: 'donationInputValidation.email'
 			},
-			// TODO Remove this button and implement submission logic check
-			{
-				viewHandler: WMDE.View.createShySubmitButtonHandler( $( 'form input[type="submit"]' ) ),
-				stateKey: 'validity.address'
-			},
 			{
 				viewHandler: WMDE.View.SectionInfo.createDonorTypeSectionInfo(
 					$( '.donor-type' ),
@@ -155,9 +152,28 @@ $( function() {
 		store
 	);
 
-	// TODO Force-check address fields, see donationForm for reference
-	$( 'form' ).on( 'submit', function() {
-		return true;
+	function forceValidateAddressData() {
+		var transport = new WMDE.JQueryTransport();
+		if ( store.getState().validity.address === WMDE.Validity.INCOMPLETE ) {
+			return transport.postData( initData.data( 'validate-address-url' ), store.getState().donorUpdateFormContent ).then(
+				function( resp ) {
+					store.dispatch( WMDE.Actions.newFinishAddressValidationAction( resp ) );
+					store.dispatch( WMDE.Actions.newMarkEmptyFieldsInvalidAction( Object.keys( resp.messages ) ) );
+				}
+			);
+		}
+		return WMDE.Promise.resolve();
+	}
+	$( '.btn-donation' ).on( 'click', function () {
+		if ( WMDE.StateAggregation.DonorUpdate.allValiditySectionsAreValid( store.getState() ) ) {
+			$( 'form' ).submit();
+		}
+		else if ( WMDE.StateAggregation.DonorUpdate.someValiditySectionsAreIncomplete( store.getState() ) ) {
+			WMDE.Promise.all( [ forceValidateAddressData() ] ).then( function() {
+				scroller.scrollTo( $( $( '.info-text.opened .field-grp.invalid' ).get( 0 ) ), { elementStart: WMDE.Scrolling.ElementStart.MARGIN }, animationTime );
+			});
+		}
+		return false;
 	} );
 
 	// Set initial form values
