@@ -56,3 +56,18 @@ membership_call_to_action:
   default_bucket: "regular"
   url_key: mbcat
   active: true
+
+amount_options:
+  description: Test different amount options
+  reference: "https://phabricator.wikimedia.org/T211545"
+  start: "2018-12-13 00:00:00"
+  end: "2018-12-25 23:59:59"
+  buckets:
+  - "5to300"
+  - "5to100"
+  - "15to250"
+  - "30to250"
+  - "50to500"
+  default_bucket: "5to300"
+  url_key: amtopt
+  active: true
