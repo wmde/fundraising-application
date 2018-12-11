@@ -8,6 +8,7 @@ skins:
 
 donation_address:
   active: true
+  start: "2018-12-11"
 
 membership_call_to_action:
   active: true
