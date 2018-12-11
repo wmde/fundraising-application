@@ -1349,7 +1349,7 @@ class FunFunFactory implements ServiceProviderInterface {
 				'Donation_Form.html.twig',
 				[
 					'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForDonation(),
-					'presetAmounts' => $this->getPresetAmountsSettings( $this->getChoiceFactory()->getAmountType() ),
+					'presetAmounts' => $this->getChoiceFactory()->getAmountOption(),
 					'messages' => $this->getMessages()
 				]
 			);

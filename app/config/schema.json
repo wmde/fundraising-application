@@ -770,46 +770,6 @@
           "items": {
             "type": "integer"
           }
-        },
-        "5to300": {
-          "type": "array",
-          "title": "List of possible membership amounts in cents",
-          "description": "These amounts will be selectable by the user. Any amount that's not in this list is considered a 'custom amount'.",
-          "items": {
-            "type": "integer"
-          }
-        },
-        "5to100": {
-          "type": "array",
-          "title": "List of possible membership amounts in cents",
-          "description": "These amounts will be selectable by the user. Any amount that's not in this list is considered a 'custom amount'.",
-          "items": {
-            "type": "integer"
-          }
-        },
-        "15to250": {
-          "type": "array",
-          "title": "List of possible membership amounts in cents",
-          "description": "These amounts will be selectable by the user. Any amount that's not in this list is considered a 'custom amount'.",
-          "items": {
-            "type": "integer"
-          }
-        },
-        "30to250": {
-          "type": "array",
-          "title": "List of possible membership amounts in cents",
-          "description": "These amounts will be selectable by the user. Any amount that's not in this list is considered a 'custom amount'.",
-          "items": {
-            "type": "integer"
-          }
-        },
-        "50to500": {
-          "type": "array",
-          "title": "List of possible membership amounts in cents",
-          "description": "These amounts will be selectable by the user. Any amount that's not in this list is considered a 'custom amount'.",
-          "items": {
-            "type": "integer"
-          }
         }
       },
       "additionalProperties": false,
