@@ -27,6 +27,8 @@ module.exports = {
 			salutationIsValid: require( './lib/state_aggregation/membership/salutation_is_valid' )
 		},
 		DonorUpdate: {
+			allValiditySectionsAreValid: require( './lib/state_aggregation/donorUpdate/all_validation_sections_are_valid' ),
+			someValiditySectionsAreIncomplete: require( './lib/state_aggregation/donorUpdate/some_validation_sections_are_incomplete' ),
 			donorTypeAndAddressAreValid: require( './lib/state_aggregation/donorUpdate/donor_type_and_address_are_valid' ),
 			salutationIsValid: require( './lib/state_aggregation/donorUpdate/salutation_is_valid' )
 		}
