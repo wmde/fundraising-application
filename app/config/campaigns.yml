@@ -58,11 +58,12 @@ membership_call_to_action:
   active: true
 
 amount_options:
-  description: Test different amount options
+  description: Test different amount options. First two options are the same because we want to avoid having 0 as a possible value of the URL parameter.
   reference: "https://phabricator.wikimedia.org/T211545"
   start: "2018-12-12 00:00:00"
   end: "2018-12-25 23:59:59"
   buckets:
+  - "5to300_0"
   - "5to300"
   - "5to100"
   - "15to250"
