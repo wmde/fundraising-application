@@ -54,7 +54,9 @@ class ChoiceFactory {
 	}
 
 	public function getAmountOption(): array {
-		if ( $this->featureToggle->featureIsActive( 'campaigns.amount_options.5to300' ) ) {
+		if ( $this->featureToggle->featureIsActive( 'campaigns.amount_options.5to300_0' ) ) {
+			return $this->getAmountOptionInEuros( [ 500, 1500, 2500, 5000, 7500, 10000, 25000, 30000 ] );
+		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.amount_options.5to300' ) ) {
 			return $this->getAmountOptionInEuros( [ 500, 1500, 2500, 5000, 7500, 10000, 25000, 30000 ] );
 		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.amount_options.5to100' ) ) {
 			return $this->getAmountOptionInEuros( [ 500, 1000, 1500, 2000, 3000, 5000, 7500, 10000 ] );
