@@ -10,6 +10,7 @@ matrix:
   include:
   - php: 7.2
     env: TYPE=coverage
+  - php: 7.3
   # More PHP instances with different environment variables may be added here
   # This may be useful if a additional PHP versions or DBMS (SQLite, ...) should be tested by Travis
 
