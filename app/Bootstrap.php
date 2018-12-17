@@ -104,12 +104,21 @@ class Bootstrap {
 				throw $e;
 			}
 
-			$ffFactory->getLogger()->error( $e->getMessage(), [
-				'code' => $e->getCode(),
-				'file' => $e->getFile(),
-				'line' => $e->getLine(),
-				'stack_trace' => $e->getTraceAsString()
-			] );
+			$ffFactory->getLogger()->error(
+				$e->getMessage(),
+				[
+					'code' => $e->getCode(),
+					'file' => $e->getFile(),
+					'line' => $e->getLine(),
+					'stack_trace' => $e->getTraceAsString(),
+					'referrer' => $request->headers->get( 'referer' ),
+					'uri' => $request->getRequestUri(),
+					'languages' => $request->getLanguages(),
+					'charsets' => $request->getCharsets(),
+					'content_types' => $request->getAcceptableContentTypes(),
+					'method' => $request->getMethod()
+				]
+			);
 
 			if ( $app['request_stack.is_json'] ) {
 				return $app->json( [
