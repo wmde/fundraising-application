@@ -59,7 +59,7 @@ input[type=submit] {
 				}
 			}
 			&:after {
-				content: unicode($icon-done);
+				content: $icon-done;
 				position: absolute;
 				right: 12px;
 				top: 10px;

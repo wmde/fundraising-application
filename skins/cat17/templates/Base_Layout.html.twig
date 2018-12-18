@@ -20,7 +20,7 @@
 
 	<link rel="shortcut icon" href="{$ basepath $}/skins/cat17/assets/images/favicon.ico" />
 	<link rel="apple-touch-icon" href="{$ basepath $}/skins/cat17/assets/images/apple-touch-icon.png" />
-	<link rel="stylesheet" href="{$ basepath $}{$ '/skins/cat17/css/main.css' | prefix_file $}">
+	<link rel="stylesheet" href="{$ basepath $}{$ main_css | default( '/skins/cat17/css/main.css' ) | prefix_file $}">
 </head>
 <body class="theme-{% block page_theme %}donation{% endblock %}">
 	<div class="page-{% block page_identifier %}uncustomized{% endblock %}">

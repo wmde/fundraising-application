@@ -713,6 +713,7 @@ class FunFunFactory implements ServiceProviderInterface {
 			'honorifics' => $this->getHonorifics()->getList(),
 			'piwik' => $this->config['piwik'],
 			'locale' => $this->config['locale'],
+			'main_css' => $this->getChoiceFactory()->getMainCss()
 		];
 	}
 

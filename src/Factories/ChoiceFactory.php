@@ -70,6 +70,15 @@ class ChoiceFactory {
 		throw new UnknownChoiceDefinition( 'Amount option selection configuration failure.' );
 	}
 
+	public function getMainCss(): string {
+		if ( $this->featureToggle->featureIsActive( 'campaigns.donation_form_design.design_change' ) ) {
+			return '/skins/cat17/css/variant.css';
+		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.donation_form_design.default' ) ) {
+			return '/skins/cat17/css/main.css';
+		}
+		throw new UnknownChoiceDefinition( 'Design selection failure.' );
+	}
+
 	private function getSkinDirectory( string $skin ): string {
 		return 'skins/' . $skin . '/templates';
 	}
