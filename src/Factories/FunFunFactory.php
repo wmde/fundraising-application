@@ -709,11 +709,34 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	private function getDefaultTwigVariables(): array {
+		$urlGenerator = $this->getUrlGenerator();
 		return [
 			'honorifics' => $this->getHonorifics()->getList(),
 			'piwik' => $this->config['piwik'],
 			'locale' => $this->config['locale'],
-			'main_css' => $this->getChoiceFactory()->getMainCss()
+			'main_css' => $this->getChoiceFactory()->getMainCss(),
+			'main_menu' => [
+				[
+					'url' => $urlGenerator->generateRelativeUrl( 'list-comments.html' ),
+					'id' => 'comments-list',
+					'label' => 'menu_item_donation_comments'
+				],
+				[
+					'url' => $urlGenerator->generateRelativeUrl( 'faq' ),
+					'id' => 'faq',
+					'label' => 'menu_item_faq'
+				],
+				[
+					'url' => $urlGenerator->generateRelativeUrl( 'use-of-funds' ),
+					'id' => 'use_of_resources',
+					'label' => 'menu_item_use_of_resources'
+				],
+				[
+					'url' => $urlGenerator->generateRelativeUrl( 'page', ['pageName' => 'Spendenquittung'] ),
+					'id' => 'donation_receipt',
+					'label' => 'menu_item_donation_receipt'
+				],
+			]
 		];
 	}
 
