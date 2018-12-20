@@ -1,0 +1,28 @@
+﻿/* CSS variances for A/B tests */
+
+@import "main";
+
+
+.field {
+  &-grp {
+
+    &.valid {
+
+      &:after {
+        content: $icon-done;
+      }
+
+    }
+
+  }
+}
+
+.h1 {
+  font-size: 16px;
+}
+
+.donation-amount h2,
+.donation-payment-method h2,
+.donation-data h2 {
+  display: none;
+}

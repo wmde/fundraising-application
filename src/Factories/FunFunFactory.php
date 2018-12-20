@@ -713,6 +713,8 @@ class FunFunFactory implements ServiceProviderInterface {
 			'honorifics' => $this->getHonorifics()->getList(),
 			'piwik' => $this->config['piwik'],
 			'locale' => $this->config['locale'],
+			'main_css' => $this->getChoiceFactory()->getMainCss(),
+			'main_menu' => $this->getChoiceFactory()->getMainMenuItems( $this->getUrlGenerator() )
 		];
 	}
 
@@ -1359,7 +1361,10 @@ class FunFunFactory implements ServiceProviderInterface {
 			[
 				'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForDonation(),
 				'presetAmounts' => $this->getPresetAmountsSettings( 'donations' ),
-				'messages' => $this->getMessages()
+				'messages' => $this->getMessages(),
+				'featureToggle' => [
+					'formScrolling' => $this->getChoiceFactory()->isFormScrollingActive()
+				]
 			]
 		);
 	}

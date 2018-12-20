@@ -411,7 +411,9 @@ class Routes {
 					)
 				);
 			}
-		)->method( 'POST|GET' );
+		)
+			->method( 'POST|GET' )
+			->bind( 'show-donation-form' );
 
 		$app->post(
 			'apply-for-membership',
