@@ -709,7 +709,6 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	private function getDefaultTwigVariables(): array {
-		$urlGenerator = $this->getUrlGenerator();
 		return [
 			'honorifics' => $this->getHonorifics()->getList(),
 			'piwik' => $this->config['piwik'],
@@ -1362,7 +1361,10 @@ class FunFunFactory implements ServiceProviderInterface {
 			[
 				'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForDonation(),
 				'presetAmounts' => $this->getPresetAmountsSettings( 'donations' ),
-				'messages' => $this->getMessages()
+				'messages' => $this->getMessages(),
+				'featureToggle' => [
+					'formScrolling' => $this->getChoiceFactory()->isFormScrollingActive()
+				]
 			]
 		);
 	}

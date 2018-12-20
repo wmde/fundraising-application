@@ -131,6 +131,15 @@ class ChoiceFactory {
 		throw new UnknownChoiceDefinition( 'Design selection failure.' );
 	}
 
+	public function isFormScrollingActive(): bool {
+		if ( $this->featureToggle->featureIsActive( 'campaigns.donation_form_design.design_change' ) ) {
+			return false;
+		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.donation_form_design.default' ) ) {
+			return true;
+		}
+		throw new UnknownChoiceDefinition( 'Design selection failure.' );
+	}
+
 	private function getSkinDirectory( string $skin ): string {
 		return 'skins/' . $skin . '/templates';
 	}

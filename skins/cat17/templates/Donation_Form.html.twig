@@ -20,7 +20,8 @@
 		</div>
 	</div>
 
-	<form id="form-donation" class="main-form" action="{$ basepath $}/donation/add" method="post" novalidate>
+	<form id="form-donation" class="main-form" action="{$ basepath $}/donation/add" method="post" novalidate
+		  data-feature-toggle-scroll-form="{$ featureToggle.formScrolling | json_encode $}">
 		<div class="container">
 			<section class="state-bar state-overview col-xs-12 ">
 				<div class="wrap-bar container ">
