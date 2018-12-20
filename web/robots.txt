@@ -3,3 +3,22 @@ Disallow: /list-comments.*
 Disallow: /spenden/list.*
 Disallow: /spenden/rss.*
 Disallow: /spenden/json.*
+
+Disallow: /donation/add
+Disallow: /donation/cancel
+Disallow: /donation/update
+Disallow: /validate-email
+Disallow: /validate-payment-data
+Disallow: /validate-address
+Disallow: /validate-donation-amount
+Disallow: /validate-fee
+Disallow: /check-iban
+Disallow: /generate-iban
+Disallow: /add-comment
+Disallow: /show-membership-confirmation
+Disallow: /show-donation-confirmation
+Disallow: /cancel-membership-application
+Disallow: /sofort-payment-notification
+Disallow: /handle-paypal-payment-notification
+Disallow: /handle-paypal-membership-fee-payments
+Disallow: /handle-creditcard-payment-notification
