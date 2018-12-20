@@ -13,8 +13,8 @@ class InactiveCampaignBucketSelection implements BucketSelectionStrategy {
 
 	private $now;
 
-	public function __construct( ?DateTime $now = null ) {
-		$this->now = $now ?: new DateTime();
+	public function __construct( DateTime $now ) {
+		$this->now = $now;
 	}
 
 	public function selectBucketForCampaign( Campaign $campaign ): ?Bucket {
