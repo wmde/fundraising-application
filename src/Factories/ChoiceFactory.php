@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Factories;
 
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\BucketTesting\FeatureToggle;
+use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 
 /**
  * Factory for generating classes whose implementations differ due to A/B testing.
@@ -75,6 +76,57 @@ class ChoiceFactory {
 			return '/skins/cat17/css/variant.css';
 		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.donation_form_design.default' ) ) {
 			return '/skins/cat17/css/main.css';
+		}
+		throw new UnknownChoiceDefinition( 'Design selection failure.' );
+	}
+
+	public function getMainMenuItems( UrlGenerator $urlGenerator ): array {
+		if ( $this->featureToggle->featureIsActive( 'campaigns.donation_form_design.design_change' ) ) {
+			return [
+				[
+					'url' => $urlGenerator->generateRelativeUrl( 'list-comments.html' ),
+					'id' => 'comments-list',
+					'label' => 'menu_item_donation_comments'
+				],
+				[
+					'url' => $urlGenerator->generateRelativeUrl( 'faq' ),
+					'id' => 'faq',
+					'label' => 'menu_item_faq'
+				],
+				[
+					'url' => $urlGenerator->generateRelativeUrl( 'use-of-funds' ),
+					'id' => 'use_of_resources',
+					'label' => 'menu_item_use_of_resources'
+				],
+				[
+					'url' => $urlGenerator->generateRelativeUrl( 'show-donation-form' ),
+					'id' => 'donation',
+					'label' => 'menu_item_donate'
+				],
+			];
+		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.donation_form_design.default' ) ) {
+			return [
+				[
+					'url' => $urlGenerator->generateRelativeUrl( 'list-comments.html' ),
+					'id' => 'comments-list',
+					'label' => 'menu_item_donation_comments'
+				],
+				[
+					'url' => $urlGenerator->generateRelativeUrl( 'faq' ),
+					'id' => 'faq',
+					'label' => 'menu_item_faq'
+				],
+				[
+					'url' => $urlGenerator->generateRelativeUrl( 'use-of-funds' ),
+					'id' => 'use_of_resources',
+					'label' => 'menu_item_use_of_resources'
+				],
+				[
+					'url' => $urlGenerator->generateRelativeUrl( 'page', ['pageName' => 'Spendenquittung'] ),
+					'id' => 'donation_receipt',
+					'label' => 'menu_item_donation_receipt'
+				],
+			];
 		}
 		throw new UnknownChoiceDefinition( 'Design selection failure.' );
 	}
