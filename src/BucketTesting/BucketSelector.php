@@ -32,7 +32,7 @@ class BucketSelector {
 		$possibleParameters = array_merge( $cookie, $urlParameters );
 
 		$selectionStrategies = [
-			new InactiveCampaignBucketSelection( new \DateTime() ),
+			new InactiveCampaignBucketSelection( new CampaignDate() ),
 			new ParameterBucketSelection( $possibleParameters ),
 			$this->fallbackSelectionStrategy
 		];

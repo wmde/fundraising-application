@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignBuilder;
+use WMDE\Fundraising\Frontend\BucketTesting\CampaignDate;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\BucketTesting\CampaignBuilder
@@ -18,8 +19,8 @@ class CampaignBuilderTest extends TestCase {
 		$firstExpectedCampaign = new Campaign(
 			'first',
 			'f',
-			new \DateTime( '2018-10-10', new \DateTimeZone( 'UTC' ) ),
-			new \DateTime( '2018-12-12', new \DateTimeZone( 'UTC' ) ),
+			new CampaignDate( '2018-10-10', new \DateTimeZone( 'UTC' ) ),
+			new CampaignDate( '2018-12-12', new \DateTimeZone( 'UTC' ) ),
 			true
 		);
 		$firstExpectedCampaign
@@ -28,8 +29,8 @@ class CampaignBuilderTest extends TestCase {
 		$secondExpectedCampaign = new Campaign(
 			'second',
 			's',
-			new \DateTime( '2019-01-01', new \DateTimeZone( 'UTC' ) ),
-			new \DateTime( '2025-12-31', new \DateTimeZone( 'UTC' ) ),
+			new CampaignDate( '2019-01-01', new \DateTimeZone( 'UTC' ) ),
+			new CampaignDate( '2025-12-31', new \DateTimeZone( 'UTC' ) ),
 			false
 		);
 		$secondExpectedCampaign
@@ -66,8 +67,8 @@ class CampaignBuilderTest extends TestCase {
 		$firstExpectedCampaign = new Campaign(
 			'first',
 			'f',
-			new \DateTime( '2018-10-10 2:00:00', new \DateTimeZone( 'UTC' ) ),
-			new \DateTime( '2018-12-12 2:00:00', new \DateTimeZone( 'UTC' ) ),
+			new CampaignDate( '2018-10-10 2:00:00', new \DateTimeZone( 'UTC' ) ),
+			new CampaignDate( '2018-12-12 2:00:00', new \DateTimeZone( 'UTC' ) ),
 			true
 		);
 		$firstExpectedCampaign
@@ -76,8 +77,8 @@ class CampaignBuilderTest extends TestCase {
 		$secondExpectedCampaign = new Campaign(
 			'second',
 			's',
-			new \DateTime( '2019-01-01 2:00:00', new \DateTimeZone( 'UTC' ) ),
-			new \DateTime( '2025-12-31 2:00:00', new \DateTimeZone( 'UTC' ) ),
+			new CampaignDate( '2019-01-01 2:00:00', new \DateTimeZone( 'UTC' ) ),
+			new CampaignDate( '2025-12-31 2:00:00', new \DateTimeZone( 'UTC' ) ),
 			false
 		);
 		$secondExpectedCampaign

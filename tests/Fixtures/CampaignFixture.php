@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
 use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
+use WMDE\Fundraising\Frontend\BucketTesting\CampaignDate;
 
 /**
  * @license GNU GPL v2+
@@ -35,8 +36,8 @@ class CampaignFixture {
 		return new Campaign(
 			$campaignName,
 			$campaignUrlKey,
-			new \DateTime( $startTime ),
-			new \DateTime( $endTime ),
+			new CampaignDate( $startTime ),
+			new CampaignDate( $endTime ),
 			$isActive
 		);
 	}

@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Cli;
 use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignCollection;
+use WMDE\Fundraising\Frontend\BucketTesting\CampaignDate;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignValidator;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule\MinBucketCountRule;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\ValidationErrorLogger;
@@ -45,8 +46,8 @@ class CampaignValidatorTest extends \PHPUnit\Framework\TestCase {
 		$campaign = new Campaign(
 			'test_campaign',
 			'test_campaign',
-			new \DateTime( '2099-01-01' ),
-			new \DateTime( '2099-01-01' ),
+			new CampaignDate( '2099-01-01' ),
+			new CampaignDate( '2099-01-01' ),
 			Campaign::ACTIVE
 		);
 		$rule = new StartAndEndTimeRule();

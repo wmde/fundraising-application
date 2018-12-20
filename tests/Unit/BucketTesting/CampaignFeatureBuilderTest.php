@@ -11,6 +11,7 @@ use RemotelyLiving\Doorkeeper\Rules\TimeAfter;
 use RemotelyLiving\Doorkeeper\Rules\TimeBefore;
 use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
+use WMDE\Fundraising\Frontend\BucketTesting\CampaignDate;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignFeatureBuilder;
 
 /**
@@ -39,8 +40,8 @@ class CampaignFeatureBuilderTest extends TestCase {
 		$campaign = new Campaign(
 			'test_inactive',
 			't1',
-			new \DateTime(),
-			new \DateTime(),
+			new CampaignDate(),
+			new CampaignDate(),
 			Campaign::INACTIVE
 		);
 		$campaign->addBucket( new Bucket( 'bucket1', $campaign, Bucket::DEFAULT ) )
@@ -49,8 +50,8 @@ class CampaignFeatureBuilderTest extends TestCase {
 	}
 
 	private function newActiveCampaign(): Campaign {
-		$start = new \DateTime( '2000-01-01' );
-		$end = new \DateTime( '2099-01-01' );
+		$start = new CampaignDate( '2000-01-01' );
+		$end = new CampaignDate( '2099-01-01' );
 		$campaign = new Campaign(
 			'test_active',
 			't1',

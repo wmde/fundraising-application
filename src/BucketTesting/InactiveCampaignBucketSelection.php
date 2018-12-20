@@ -4,8 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\BucketTesting;
 
-use DateTime;
-
 /**
  * @license GNU GPL v2+
  */
@@ -13,7 +11,7 @@ class InactiveCampaignBucketSelection implements BucketSelectionStrategy {
 
 	private $now;
 
-	public function __construct( DateTime $now ) {
+	public function __construct( CampaignDate $now ) {
 		$this->now = $now;
 	}
 
