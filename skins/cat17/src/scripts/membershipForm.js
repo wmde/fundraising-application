@@ -136,10 +136,6 @@ $( function () {
 			stateKey: 'membershipFormContent'
 		},
 		{
-			viewHandler: WMDE.View.createShySubmitButtonHandler( $( 'form input[type="submit"]' ) ),
-			stateKey: [ WMDE.StateAggregation.Membership.allValiditySectionsAreValid ]
-		},
-		{
 			viewHandler: WMDE.View.SectionInfo.createMembershipTypeSectionInfo(
 				$( '.state-bar-lateral .member-type, .state-bar-detailed .member-type' ),
 				{
@@ -325,22 +321,35 @@ $( function () {
 				WMDE.StateAggregation.Membership.donorTypeAndAddressAreValid
 			]
 		}
+		// TODO add createFieldValueValidityIndicator calls for section validity
     ],
     store
   );
 
 	function forceValidateBankData() {
 		var state = store.getState();
-		if ( state.membershipFormContent.paymentType === 'BEZ' && state.validity.bankData === WMDE.Validity.INCOMPLETE ) {
-			store.dispatch(WMDE.Actions.newFinishBankDataValidationAction( { status: WMDE.ValidationStates.ERR } ) );
+		if ( !WMDE.StateAggregation.Membership.paymentAndBankDataAreValid( state ) ) {
+			store.dispatch( WMDE.Actions.newFinishBankDataValidationAction( { status: WMDE.ValidationStates.ERR } ) );
+		}
+		if ( state.membershipFormContent.paymentType === 'BEZ' ) {
+			store.dispatch( WMDE.Actions.newMarkEmptyFieldsInvalidAction( [ 'iban' ] ) );
 		}
 		return WMDE.Promise.resolve();
 	}
 
 	function forceValidateAddressData() {
+		var state = store.getState();
+
+		// Don't send network request when no address type is selected (different from donation form)
+		if ( state.membershipFormContent.addressType !== 'person' && state.membershipFormContent.addressType !== 'firma' ) {
+			store.dispatch( WMDE.Actions.newFinishAddressValidationAction( { status: WMDE.ValidationStates.ERR } ) );
+			return WMDE.Promise.resolve();
+		}
+
+		// show individual fields as invalid
 		var transport = new WMDE.JQueryTransport();
-		if ( store.getState().validity.address === WMDE.Validity.INCOMPLETE ) {
-			return transport.postData( initData.data( 'validate-address-url' ), store.getState().membershipFormContent ).then(
+		if ( state.validity.address === WMDE.Validity.INCOMPLETE ) {
+			return transport.postData( initData.data( 'validate-address-url' ), state.membershipFormContent ).then(
 				function( resp ) {
 					store.dispatch( WMDE.Actions.newFinishAddressValidationAction( resp ) );
 					store.dispatch( WMDE.Actions.newMarkEmptyFieldsInvalidAction( Object.keys( resp.messages ) ) );
@@ -349,13 +358,27 @@ $( function () {
 		}
 		return WMDE.Promise.resolve();
 	}
+
+	function forceValidateFeeData() {
+		if ( WMDE.StateAggregation.Membership.amountAndFrequencyAreValid( store.getState() ) !== WMDE.Validity.VALID ) {
+			store.dispatch( WMDE.Actions.newFinishPaymentDataValidationAction( { status: WMDE.ValidationStates.ERR } ) );
+		}
+		return WMDE.Promise.resolve();
+	}
+
 	$( '.btn-donation' ).on( 'click', function () {
 		if ( WMDE.StateAggregation.Membership.allValiditySectionsAreValid( store.getState() ) ) {
 			$( 'form' ).submit();
 		}
 		else if ( WMDE.StateAggregation.Membership.someValiditySectionsAreIncomplete( store.getState() ) ) {
-			WMDE.Promise.all( [ forceValidateBankData(), forceValidateAddressData() ] ).then( function() {
-				scroller.scrollTo( $( $( '.info-text.opened .field-grp.invalid' ).get( 0 ) ), { elementStart: WMDE.Scrolling.ElementStart.MARGIN }, animationTime );
+			WMDE.Promise.all( [
+				forceValidateBankData(),
+				forceValidateAddressData(),
+				forceValidateFeeData()
+			] ).then( function() {
+				console.log("invalid stuff", store.getState().validity, store.getState().membershipInputValidation );
+				// TODO: Scroll to first invalid error-container or invalid field group, remove console.log
+				//scroller.scrollTo( $( $( '.info-text.opened .field-grp.invalid' ).get( 0 ) ), { elementStart: WMDE.Scrolling.ElementStart.MARGIN }, animationTime );
 			});
 		}
 		return false;
