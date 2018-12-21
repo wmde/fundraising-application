@@ -3,6 +3,8 @@ $( function () {
 
   var initData = $( '#init-form' ),
 	store = WMDE.membershipStore = WMDE.Store.createMembershipStore(),
+	scroller = WMDE.Scrolling.createAnimatedScroller( $( '.wrap-header, .state-bar' ) ),
+	animationTime = 1,
     actions = WMDE.Actions;
 
   WMDE.StoreUpdates.connectComponentsToStore(
@@ -327,8 +329,36 @@ $( function () {
     store
   );
 
-	$( 'form' ).on( 'submit', function () {
-		return WMDE.StateAggregation.Membership.allValiditySectionsAreValid( store.getState() );
+	function forceValidateBankData() {
+		var state = store.getState();
+		if ( state.membershipFormContent.paymentType === 'BEZ' && state.validity.bankData === WMDE.Validity.INCOMPLETE ) {
+			store.dispatch(WMDE.Actions.newFinishBankDataValidationAction( { status: WMDE.ValidationStates.ERR } ) );
+		}
+		return WMDE.Promise.resolve();
+	}
+
+	function forceValidateAddressData() {
+		var transport = new WMDE.JQueryTransport();
+		if ( store.getState().validity.address === WMDE.Validity.INCOMPLETE ) {
+			return transport.postData( initData.data( 'validate-address-url' ), store.getState().membershipFormContent ).then(
+				function( resp ) {
+					store.dispatch( WMDE.Actions.newFinishAddressValidationAction( resp ) );
+					store.dispatch( WMDE.Actions.newMarkEmptyFieldsInvalidAction( Object.keys( resp.messages ) ) );
+				}
+			);
+		}
+		return WMDE.Promise.resolve();
+	}
+	$( '.btn-donation' ).on( 'click', function () {
+		if ( WMDE.StateAggregation.Membership.allValiditySectionsAreValid( store.getState() ) ) {
+			$( 'form' ).submit();
+		}
+		else if ( WMDE.StateAggregation.Membership.someValiditySectionsAreIncomplete( store.getState() ) ) {
+			WMDE.Promise.all( [ forceValidateBankData(), forceValidateAddressData() ] ).then( function() {
+				scroller.scrollTo( $( $( '.info-text.opened .field-grp.invalid' ).get( 0 ) ), { elementStart: WMDE.Scrolling.ElementStart.MARGIN }, animationTime );
+			});
+		}
+		return false;
 	} );
 
 	// Set initial form values
@@ -350,7 +380,6 @@ $( function () {
 
 	// Non-state-changing event behavior
 
-	var scroller = WMDE.Scrolling.createAnimatedScroller( $( '.wrap-header, .state-bar' ) );
 	WMDE.Scrolling.addScrollToLinkAnchors( $( 'a[href^="#"]' ), scroller);
 	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="membership_fee_interval"]' ), $( '#recurrence' ), scroller );
 	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="adresstyp"]' ), $( '#type-donor' ), scroller );
