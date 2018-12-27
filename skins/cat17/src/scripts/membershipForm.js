@@ -320,15 +320,35 @@ $( function () {
 				'membershipFormContent.email',
 				WMDE.StateAggregation.Membership.donorTypeAndAddressAreValid
 			]
-		}
-		// TODO add createFieldValueValidityIndicator calls for section validity
+		},
+		{
+			viewHandler: WMDE.View.createElementClassSwitcher(
+				$( '.wrap-membership-type .error-container' ),
+				/^(|null)$/,
+				'invalid'
+			),
+			stateKey: 'membershipFormContent.membershipType'
+		},
+		{
+			viewHandler: WMDE.View.createErrorStateClassHandler( $( '.donation-data .error-container' ) ),
+			stateKey: 'validity.address'
+		},
+		{
+			// can't use .donation-amount selector because that selector is used for lots of amount-unrelated css styling
+			viewHandler: WMDE.View.createErrorStateClassHandler( $( '#donation-amount .error-container' ) ),
+			stateKey: 'validity.paymentData'
+		},
+		{
+			viewHandler: WMDE.View.createErrorStateClassHandler( $( '.donation-payment-method .error-container' ) ),
+			stateKey: 'validity.bankData'
+		},
     ],
     store
   );
 
 	function forceValidateBankData() {
 		var state = store.getState();
-		if ( !WMDE.StateAggregation.Membership.paymentAndBankDataAreValid( state ) ) {
+		if ( WMDE.StateAggregation.Membership.paymentAndBankDataAreValid( state ).isValid !== WMDE.Validity.VALID ) {
 			store.dispatch( WMDE.Actions.newFinishBankDataValidationAction( { status: WMDE.ValidationStates.ERR } ) );
 		}
 		if ( state.membershipFormContent.paymentType === 'BEZ' ) {

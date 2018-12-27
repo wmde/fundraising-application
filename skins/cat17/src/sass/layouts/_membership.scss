@@ -142,10 +142,12 @@
 		}
 	}
 
-	.error-column {
-		display:flex;
-		align-items: center;
-		height: 64px;
+	.error-container {
+		display: none;
+	}
+
+	.error-container.invalid {
+		display: block;
 	}
 
 }
