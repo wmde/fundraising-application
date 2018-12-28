@@ -380,7 +380,7 @@ $( function () {
 	}
 
 	function forceValidateFeeData() {
-		if ( WMDE.StateAggregation.Membership.amountAndFrequencyAreValid( store.getState() ) !== WMDE.Validity.VALID ) {
+		if ( WMDE.StateAggregation.Membership.amountAndFrequencyAreValid( store.getState() ).isValid !== WMDE.Validity.VALID ) {
 			store.dispatch( WMDE.Actions.newFinishPaymentDataValidationAction( { status: WMDE.ValidationStates.ERR } ) );
 		}
 		return WMDE.Promise.resolve();
