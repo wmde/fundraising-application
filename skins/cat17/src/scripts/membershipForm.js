@@ -397,8 +397,7 @@ $( function () {
 				forceValidateFeeData()
 			] ).then( function() {
 				console.log("invalid stuff", store.getState().validity, store.getState().membershipInputValidation );
-				// TODO: Scroll to first invalid error-container or invalid field group, remove console.log
-				//scroller.scrollTo( $( $( '.info-text.opened .field-grp.invalid' ).get( 0 ) ), { elementStart: WMDE.Scrolling.ElementStart.MARGIN }, animationTime );
+				scroller.scrollTo( $( $( '.error-container.invalid' ).get( 0 ) ), { elementStart: WMDE.Scrolling.ElementStart.MARGIN }, animationTime );
 			});
 		}
 		return false;
