@@ -38,6 +38,10 @@
 		.info-text.opened[data-info="aktive"] {
 			top: 122px;
 		}
+
+		.error-text {
+			margin-bottom: 0;
+		}
 	}
 
 	.wrap-recurrence {
@@ -136,6 +140,14 @@
 		li span {
 			border-bottom: 1px solid #C6DBC3 !important;
 		}
+	}
+
+	.error-container {
+		display: none;
+	}
+
+	.error-container.invalid {
+		display: block;
 	}
 
 }

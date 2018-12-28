@@ -20,6 +20,7 @@ module.exports = {
 		},
 		Membership: {
 			allValiditySectionsAreValid: require( './lib/state_aggregation/membership/all_validation_sections_are_valid' ),
+			someValiditySectionsAreIncomplete: require( './lib/state_aggregation/membership/some_validation_sections_are_incomplete' ),
 			membershipTypeIsValid: require( './lib/state_aggregation/membership/membership_type_is_valid' ),
 			amountAndFrequencyAreValid: require( './lib/state_aggregation/membership/amount_and_frequency_are_valid' ),
 			donorTypeAndAddressAreValid: require( './lib/state_aggregation/membership/donor_type_and_address_are_valid' ),
@@ -37,6 +38,7 @@ module.exports = {
 		createSlidingVisibilitySwitcher: require( './lib/view_handler/element_visibility_switcher' ).createSlidingVisibilitySwitcher,
 		createSimpleVisibilitySwitcher: require( './lib/view_handler/element_visibility_switcher' ).createSimpleVisibilitySwitcher,
 		createElementClassSwitcher: require( './lib/view_handler/element_class_switcher' ).createElementClassSwitcher,
+		createErrorStateClassHandler: require( './lib/view_handler/error_state_class' ).createErrorStateClassHandler,
 		createFeeOptionSwitcher: require( './lib/view_handler/fee_option_switcher' ).createFeeOptionSwitcher,
 		createFieldValueValidityIndicator: require( './lib/view_handler/field_value_validity_indicator' ).createFieldValueValidityIndicator,
 		createCountrySpecificAttributesHandler: require( './lib/view_handler/country_specific_attributes' ).createCountrySpecificAttributesHandler,

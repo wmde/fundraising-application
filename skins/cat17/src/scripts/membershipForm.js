@@ -3,6 +3,8 @@ $( function () {
 
   var initData = $( '#init-form' ),
 	store = WMDE.membershipStore = WMDE.Store.createMembershipStore(),
+	scroller = WMDE.Scrolling.createAnimatedScroller( $( '.wrap-header, .state-bar' ) ),
+	animationTime = 1,
     actions = WMDE.Actions;
 
   WMDE.StoreUpdates.connectComponentsToStore(
@@ -132,10 +134,6 @@ $( function () {
 				}
 			),
 			stateKey: 'membershipFormContent'
-		},
-		{
-			viewHandler: WMDE.View.createShySubmitButtonHandler( $( 'form input[type="submit"]' ) ),
-			stateKey: [ WMDE.StateAggregation.Membership.allValiditySectionsAreValid ]
 		},
 		{
 			viewHandler: WMDE.View.SectionInfo.createMembershipTypeSectionInfo(
@@ -322,13 +320,87 @@ $( function () {
 				'membershipFormContent.email',
 				WMDE.StateAggregation.Membership.donorTypeAndAddressAreValid
 			]
-		}
+		},
+		{
+			viewHandler: WMDE.View.createElementClassSwitcher(
+				$( '.wrap-membership-type .error-container' ),
+				/^(|null)$/,
+				'invalid'
+			),
+			stateKey: 'membershipFormContent.membershipType'
+		},
+		{
+			viewHandler: WMDE.View.createErrorStateClassHandler( $( '.donation-data .error-container' ) ),
+			stateKey: 'validity.address'
+		},
+		{
+			// can't use .donation-amount selector because that selector is used for lots of amount-unrelated css styling
+			viewHandler: WMDE.View.createErrorStateClassHandler( $( '#donation-amount .error-container' ) ),
+			stateKey: 'validity.paymentData'
+		},
+		{
+			viewHandler: WMDE.View.createErrorStateClassHandler( $( '.donation-payment-method .error-container' ) ),
+			stateKey: 'validity.bankData'
+		},
     ],
     store
   );
 
-	$( 'form' ).on( 'submit', function () {
-		return WMDE.StateAggregation.Membership.allValiditySectionsAreValid( store.getState() );
+	function forceValidateBankData() {
+		var state = store.getState();
+		if ( WMDE.StateAggregation.Membership.paymentAndBankDataAreValid( state ).isValid !== WMDE.Validity.VALID ) {
+			store.dispatch( WMDE.Actions.newFinishBankDataValidationAction( { status: WMDE.ValidationStates.ERR } ) );
+		}
+		if ( state.membershipFormContent.paymentType === 'BEZ' ) {
+			store.dispatch( WMDE.Actions.newMarkEmptyFieldsInvalidAction( [ 'iban' ] ) );
+		}
+		return WMDE.Promise.resolve();
+	}
+
+	function forceValidateAddressData() {
+		var state = store.getState();
+
+		// Don't send network request when no address type is selected (different from donation form)
+		if ( state.membershipFormContent.addressType !== 'person' && state.membershipFormContent.addressType !== 'firma' ) {
+			store.dispatch( WMDE.Actions.newFinishAddressValidationAction( { status: WMDE.ValidationStates.ERR } ) );
+			return WMDE.Promise.resolve();
+		}
+
+		// show individual fields as invalid
+		var transport = new WMDE.JQueryTransport();
+		if ( state.validity.address === WMDE.Validity.INCOMPLETE ) {
+			return transport.postData( initData.data( 'validate-address-url' ), state.membershipFormContent ).then(
+				function( resp ) {
+					store.dispatch( WMDE.Actions.newFinishAddressValidationAction( resp ) );
+					store.dispatch( WMDE.Actions.newMarkEmptyFieldsInvalidAction( Object.keys( resp.messages ) ) );
+				}
+			);
+		}
+		return WMDE.Promise.resolve();
+	}
+
+	function forceValidateFeeData() {
+		if ( WMDE.StateAggregation.Membership.amountAndFrequencyAreValid( store.getState() ) !== WMDE.Validity.VALID ) {
+			store.dispatch( WMDE.Actions.newFinishPaymentDataValidationAction( { status: WMDE.ValidationStates.ERR } ) );
+		}
+		return WMDE.Promise.resolve();
+	}
+
+	$( '.btn-donation' ).on( 'click', function () {
+		if ( WMDE.StateAggregation.Membership.allValiditySectionsAreValid( store.getState() ) ) {
+			$( 'form' ).submit();
+		}
+		else if ( WMDE.StateAggregation.Membership.someValiditySectionsAreIncomplete( store.getState() ) ) {
+			WMDE.Promise.all( [
+				forceValidateBankData(),
+				forceValidateAddressData(),
+				forceValidateFeeData()
+			] ).then( function() {
+				console.log("invalid stuff", store.getState().validity, store.getState().membershipInputValidation );
+				scroller.scrollTo( $( $( '.error-container.invalid' ).get( 0 ) ), { elementStart: WMDE.Scrolling.ElementStart.MARGIN }, animationTime );
+			});
+		}
+		return false;
 	} );
 
 	// Set initial form values
@@ -350,7 +422,6 @@ $( function () {
 
 	// Non-state-changing event behavior
 
-	var scroller = WMDE.Scrolling.createAnimatedScroller( $( '.wrap-header, .state-bar' ) );
 	WMDE.Scrolling.addScrollToLinkAnchors( $( 'a[href^="#"]' ), scroller);
 	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="membership_fee_interval"]' ), $( '#recurrence' ), scroller );
 	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="adresstyp"]' ), $( '#type-donor' ), scroller );

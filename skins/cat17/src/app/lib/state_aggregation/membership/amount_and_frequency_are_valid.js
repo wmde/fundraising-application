@@ -1,21 +1,34 @@
 'use strict';
 
-var validationResult = require( './../validation_result' ),
-	Validity = require( '../../validation/validation_states' ).Validity
-;
+var Validity = require( '../../validation/validation_states' ).Validity;
 
-module.exports = function ( state ) {
-	var result = validationResult.newUndefinedResult();
-	result.dataEntered = state.membershipFormContent.paymentIntervalInMonths > 0 || state.membershipFormContent.amount !== 0;
+/**
+ * @param {Object} state
+ * @return {boolean}
+ */
+function getDataEntered( state ) {
+	return state.membershipFormContent.paymentIntervalInMonths > 0 || state.membershipFormContent.amount !== 0;
+}
 
+/**
+ * @param {Object} state
+ * @return {?boolean}
+ */
+function getValidity( state ) {
 	if ( state.membershipFormContent.paymentIntervalInMonths > 0 &&
 		state.membershipFormContent.amount !== 0 &&
 		state.membershipInputValidation.amount.isValid === Validity.VALID ) {
-		result.isValid = Validity.VALID;
+		return Validity.VALID;
 	} else if ( state.membershipInputValidation.amount.isValid === Validity.INCOMPLETE ) {
-		result.isValid = Validity.INCOMPLETE;
+		return Validity.INCOMPLETE;
 	} else {
-		result.isValid = Validity.INVALID;
+		return Validity.INVALID;
 	}
-	return result;
+}
+
+module.exports = function ( state ) {
+	return {
+		dataEntered: getDataEntered( state ),
+		isValid: getValidity( state )
+	};
 };

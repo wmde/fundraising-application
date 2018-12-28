@@ -16,3 +16,6 @@ skins:
 
 donation_address:
   active: false
+
+donation_form_design:
+  active: false
