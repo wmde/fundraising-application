@@ -327,12 +327,10 @@ $( function () {
 	// Add scroll behaviors to links/input elements
 
 	WMDE.Scrolling.addScrollToLinkAnchors( $( 'a[href^="#"]' ), scroller);
-	var featureToggleScrollingForm = $('#form-donation').data( 'feature-toggle-scroll-form' );
-	if ( featureToggleScrollingForm ) {
-		WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="periode"]' ), $( '#recurrence' ), scroller );
-		WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="addressType"]' ), $( '#type-donor' ), scroller );
-		WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="zahlweise"]' ), $( '#donation-payment' ), scroller );
-	}
+
+	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="periode"]' ), $( '#recurrence' ), scroller );
+	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="addressType"]' ), $( '#type-donor' ), scroller );
+	WMDE.Scrolling.scrollOnSuboptionChange( $( 'input[name="zahlweise"]' ), $( '#donation-payment' ), scroller );
 
 	var bankDataValidator = WMDE.FormValidation.createBankDataValidator(
 		initData.data( 'validate-iban-url' ),
