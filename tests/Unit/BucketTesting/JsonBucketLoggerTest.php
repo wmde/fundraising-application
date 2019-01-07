@@ -9,6 +9,7 @@ use WMDE\Clock\Clock;
 use WMDE\Clock\StubClock;
 use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
+use WMDE\Fundraising\Frontend\BucketTesting\CampaignDate;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\BucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\JsonBucketLogger;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeBucketLoggingEvent;
@@ -77,8 +78,8 @@ class JsonBucketLoggerTest extends TestCase {
 			new Campaign(
 				$campaignName,
 				$bucketName . $campaignName,
-				new \DateTime(),
-				( new \DateTime() )->modify( '+1 month' ),
+				new CampaignDate(),
+				( new CampaignDate() )->modify( '+1 month' ),
 				true
 			),
 			true

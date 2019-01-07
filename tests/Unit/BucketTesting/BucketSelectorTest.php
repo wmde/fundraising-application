@@ -9,6 +9,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\BucketSelector;
 use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignCollection;
+use WMDE\Fundraising\Frontend\BucketTesting\CampaignDate;
 use WMDE\Fundraising\Frontend\BucketTesting\RandomBucketSelection;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketSelectionSpy;
 
@@ -30,8 +31,8 @@ class BucketSelectorTest extends TestCase {
 		$this->campaign = new Campaign(
 			'test1',
 			't1',
-			( new \DateTime() )->sub( new \DateInterval( 'P1M' ) ),
-			( new \DateTime() )->add( new \DateInterval( 'P1M' ) ),
+			( new CampaignDate() )->sub( new \DateInterval( 'P1M' ) ),
+			( new CampaignDate() )->add( new \DateInterval( 'P1M' ) ),
 			Campaign::ACTIVE
 		);
 		$this->defaultBucket = new Bucket( 'a', $this->campaign, Bucket::DEFAULT );
@@ -53,8 +54,8 @@ class BucketSelectorTest extends TestCase {
 		$campaign = new Campaign(
 			'test1',
 			't1',
-			new \DateTime(),
-			new \DateTime(),
+			new CampaignDate(),
+			new CampaignDate(),
 			Campaign::INACTIVE
 		);
 		$defaultBucket = new Bucket( 'a', $campaign, Bucket::DEFAULT );
@@ -81,8 +82,8 @@ class BucketSelectorTest extends TestCase {
 		$campaign = new Campaign(
 			'test1',
 			't1',
-			( new \DateTime() )->sub( new \DateInterval( 'P1M' ) ),
-			( new \DateTime() )->sub( new \DateInterval( 'P1D' ) ),
+			( new CampaignDate() )->sub( new \DateInterval( 'P1M' ) ),
+			( new CampaignDate() )->sub( new \DateInterval( 'P1D' ) ),
 			Campaign::ACTIVE
 		);
 		$defaultBucket = new Bucket( 'a', $campaign, Bucket::DEFAULT );

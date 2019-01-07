@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignCollection;
+use WMDE\Fundraising\Frontend\BucketTesting\CampaignDate;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\BucketTesting\CampaignCollection
@@ -26,8 +27,8 @@ class CampaignCollectionTest extends TestCase {
 		$this->firstCampaign = new Campaign(
 			'test_something',
 			't1',
-			new \DateTime(),
-			( new \DateTime() )->add( new \DateInterval( 'P3M' ) ),
+			new CampaignDate(),
+			( new CampaignDate() )->add( new \DateInterval( 'P3M' ) ),
 			Campaign::ACTIVE
 		);
 		$this->defaultBucketOfFirstCampaign = new Bucket( 'a', $this->firstCampaign, Bucket::DEFAULT );
@@ -39,8 +40,8 @@ class CampaignCollectionTest extends TestCase {
 		$this->secondCampaign = new Campaign(
 			'five_year_plan',
 			't2',
-			new \DateTime(),
-			( new \DateTime() )->add( new \DateInterval( 'P5Y' ) ),
+			new CampaignDate(),
+			( new CampaignDate() )->add( new \DateInterval( 'P5Y' ) ),
 			Campaign::ACTIVE
 		);
 		$this->defaultBucketOfSecondCampaign = new Bucket( 'a', $this->secondCampaign, Bucket::DEFAULT );
@@ -97,15 +98,15 @@ class CampaignCollectionTest extends TestCase {
 		$pastFirstCampaign = new Campaign(
 			$this->firstCampaign->getName(),
 			$this->firstCampaign->getUrlKey(),
-			( new \DateTime() )->sub( new \DateInterval( 'P15M' ) ),
-			( new \DateTime() )->sub( new \DateInterval( 'P12M' ) ),
+			( new CampaignDate() )->sub( new \DateInterval( 'P15M' ) ),
+			( new CampaignDate() )->sub( new \DateInterval( 'P12M' ) ),
 			Campaign::ACTIVE
 		);
 		$pastSecondCampaign = new Campaign(
 			$this->secondCampaign->getName(),
 			$this->secondCampaign->getUrlKey(),
-			( new \DateTime() )->sub( new \DateInterval( 'P5M' ) ),
-			( new \DateTime() )->sub( new \DateInterval( 'P2M' ) ),
+			( new CampaignDate() )->sub( new \DateInterval( 'P5M' ) ),
+			( new CampaignDate() )->sub( new \DateInterval( 'P2M' ) ),
 			Campaign::ACTIVE
 		);
 

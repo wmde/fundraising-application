@@ -26,8 +26,8 @@ class CampaignBuilder {
 			$campaign = new Campaign(
 				$name,
 				$config['url_key'],
-				$this->newDate( $config['start'] ),
-				$this->newDate( $config['end'] ),
+				CampaignDate::createFromString( $config['start'], $this->timezone ),
+				CampaignDate::createFromString( $config['end'], $this->timezone ),
 				$config['active']
 			);
 			foreach ( $config['buckets'] as $bucketName ) {
@@ -37,11 +37,5 @@ class CampaignBuilder {
 			$campaigns[] = $campaign;
 		}
 		return $campaigns;
-	}
-
-	private function newDate( string $time ): DateTime {
-		$date = new \DateTime( $time, $this->timezone );
-		$date->setTimezone( $this->utc );
-		return $date;
 	}
 }

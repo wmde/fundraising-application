@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting;
 use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
+use WMDE\Fundraising\Frontend\BucketTesting\CampaignDate;
 
 class BucketTest extends TestCase {
 
@@ -14,8 +15,8 @@ class BucketTest extends TestCase {
 		return new Campaign(
 			'test1',
 			't1',
-			new \DateTime(),
-			new \DateTime(),
+			new CampaignDate(),
+			new CampaignDate(),
 			Campaign::ACTIVE
 		);
 	}

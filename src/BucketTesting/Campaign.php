@@ -22,7 +22,7 @@ class Campaign {
 	public const ACTIVE = true;
 	public const INACTIVE = false;
 
-	public function __construct( string $name, string $urlKey, \DateTime $startTimestamp, \DateTime $endTimestamp, bool $isActive ) {
+	public function __construct( string $name, string $urlKey, CampaignDate $startTimestamp, CampaignDate $endTimestamp, bool $isActive ) {
 		$this->name = $name;
 		$this->urlKey = $urlKey;
 		$this->active = $isActive;
@@ -36,11 +36,11 @@ class Campaign {
 		return $this->active;
 	}
 
-	public function getStartTimestamp(): \DateTime {
+	public function getStartTimestamp(): CampaignDate {
 		return $this->startTimestamp;
 	}
 
-	public function getEndTimestamp(): \DateTime {
+	public function getEndTimestamp(): CampaignDate {
 		return $this->endTimestamp;
 	}
 
@@ -79,7 +79,7 @@ class Campaign {
 		return $this;
 	}
 
-	public function isExpired( \DateTime $now ): bool {
+	public function isExpired( CampaignDate $now ): bool {
 		return $this->startTimestamp > $now || $this->endTimestamp < $now;
 	}
 
