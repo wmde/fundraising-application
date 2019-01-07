@@ -1,0 +1,14 @@
+{% extends 'Base_Layout.html.twig' %}
+
+{% block main %}
+	<div>
+		<p>
+			Diese Seite steht im Moment nicht zur Verfügung.
+			Wenn Sie eine Frage haben, nutzen Sie bitte unser <a href="{$ path( 'contact' ) $}">Kontaktformular</a>.
+		</p>
+
+		<p class="icon-hand-right">
+			<a href="{$ path( '/' ) $}">{$ 'back_to_donation' | trans $}</a>
+		</p>
+	</div>
+{% endblock %}
