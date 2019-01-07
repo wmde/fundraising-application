@@ -4,7 +4,7 @@
     <h1>{$ 'error_page_header' | trans $}</h1>
 
     <p>
-        {$ message|default( 'page_not_found' )|trans $}
+        {$ message|default( 'page_not_found' )|trans()|raw $}
     </p>
 
     <p>
