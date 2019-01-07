@@ -16,7 +16,3 @@ membership_call_to_action:
 amount_options:
   active: true
   start: "2018-12-01"
-
-donation_form_design:
-  start: "2018-12-18"
-  active: true

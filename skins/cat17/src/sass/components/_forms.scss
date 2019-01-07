@@ -58,6 +58,14 @@ input[type=submit] {
 					border-bottom: themed('border2pxfieldSelected');
 				}
 			}
+			&:after {
+				content: $icon-done;
+				position: absolute;
+				right: 12px;
+				top: 10px;
+				font-family: 'icomoonwikimedia';
+				font-size: 20px;
+			}
 		}
 		&.invalid {
 			.error-text {
