@@ -38,6 +38,8 @@ use Twig_SimpleFunction;
 use WMDE\Clock\SystemClock;
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Euro\Euro;
+use WMDE\Fundraising\AddressChange\Domain\AddressChangeRepository;
+use WMDE\Fundraising\AddressChange\DataAccess\DoctrineAddressChangeRepository;
 use WMDE\Fundraising\ContentProvider\ContentProvider;
 use WMDE\Fundraising\DonationContext\Authorization\DonationAuthorizer;
 use WMDE\Fundraising\DonationContext\Authorization\DonationTokenFetcher;
@@ -1123,6 +1125,10 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	public function getDonationRepository(): DonationRepository {
 		return $this->pimple['donation_repository'];
+	}
+
+	public function getAddressChangeRepository(): AddressChangeRepository {
+		return new DoctrineAddressChangeRepository( $this->getEntityManager() );
 	}
 
 	public function newPaymentDataValidator(): PaymentDataValidator {

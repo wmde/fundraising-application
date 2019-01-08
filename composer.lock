@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a16dbdeecbf3a2f85d28e80599d72be7",
+    "content-hash": "935c0e8a3c26ec23d2891b092aed5a33",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -748,12 +748,12 @@
             "version": "v2.6.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/doctrine/doctrine2.git",
+                "url": "https://github.com/doctrine/orm.git",
                 "reference": "434820973cadf2da2d66e7184be370084cc32ca8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/434820973cadf2da2d66e7184be370084cc32ca8",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/434820973cadf2da2d66e7184be370084cc32ca8",
                 "reference": "434820973cadf2da2d66e7184be370084cc32ca8",
                 "shasum": ""
             },
@@ -4018,6 +4018,71 @@
             ],
             "description": "General and shared validation services created as part of the WMDE fundraising software",
             "time": "2018-07-17T11:11:13+00:00"
+        },
+        {
+            "name": "wmde/fundraising-address-change",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wmde/fundraising-address-change",
+                "reference": "45999b2ca8c98abb80e3f3c171becf02ed22b76a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wmde/fundraising-address-change/zipball/45999b2ca8c98abb80e3f3c171becf02ed22b76a",
+                "reference": "45999b2ca8c98abb80e3f3c171becf02ed22b76a",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/dbal": "^2.5",
+                "doctrine/orm": "^2.5",
+                "php": ">=7.1",
+                "ramsey/uuid": "^3.7"
+            },
+            "require-dev": {
+                "ockcyp/covers-validator": "~0.6.1",
+                "phpmd/phpmd": "~2.6",
+                "phpstan/phpstan": "^0.10",
+                "phpunit/phpunit": "~6.2",
+                "slevomat/coding-standard": "^4.6",
+                "squizlabs/php_codesniffer": "~3.0"
+            },
+            "bin": [
+                "cli-config.php"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "8.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "WMDE\\Fundraising\\AddressChange\\": "src/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "composer validate --no-interaction",
+                    "vendor/bin/phpunit",
+                    "vendor/bin/covers-validator"
+                ],
+                "cs": [
+                    "@phpcs"
+                ],
+                "ci": [
+                    "@test",
+                    "@cs"
+                ],
+                "phpcs": [
+                    "vendor/bin/phpcs"
+                ]
+            },
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Address change use case for fundraising application",
+            "time": "2019-01-08T15:35:59+00:00"
         },
         {
             "name": "wmde/fundraising-content-provider",
@@ -7827,6 +7892,7 @@
         "wmde/fundraising-memberships": 20,
         "wmde/fundraising-payments": 20,
         "wmde/fundraising-subscriptions": 20,
+        "wmde/fundraising-address-change": 20,
         "wmde/fundraising-frontend-content": 20
     },
     "prefer-stable": false,

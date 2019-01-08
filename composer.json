@@ -22,6 +22,7 @@
 		"wmde/fundraising-payments": "@dev",
 		"wmde/fundraising-subscriptions": "@dev",
 		"wmde/fundraising-content-provider": "^2.0",
+		"wmde/fundraising-address-change": "@dev",
 
 		"symfony/twig-bridge": "^3.3",
 		"symfony/translation": "^3.3",
@@ -100,6 +101,11 @@
 		{
 			"type": "vcs",
 			"url": "https://github.com/wmde/fundraising-content-provider",
+			"no-api": true
+		},
+		{
+			"type": "vcs",
+			"url": "https://github.com/wmde/fundraising-address-change",
 			"no-api": true
 		}
 	],
