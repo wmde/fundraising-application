@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\BucketTesting;
 
-use DateTimeInterface;
 use DateTimeZone;
 
 /**
@@ -27,6 +26,6 @@ class CampaignDate extends \DateTimeImmutable {
 		}
 		$instance = new \DateTime( $time, $timezone );
 		$instance->setTimezone( new DateTimeZone( self::TIMEZONE ) );
-		return new self( $instance->format( DateTimeInterface::ISO8601 ) );
+		return new self( $instance->format( \DateTime::ISO8601 ) );
 	}
 }
