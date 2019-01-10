@@ -20,17 +20,18 @@
 </template>
 
 <script lang="ts">
+    import Vue from "vue";
 	import Name from '../app/components/Name.vue';
 	import Email from '../app/components/Email.vue';
 	import Postal from '../app/components/Postal.vue';
 
-	export default {
+    export default Vue.extend ({
 		name: 'addressForm',
 		components: {
 			Name,
 			Email,
 			Postal
 		},
-		props: [ 'addressType' ]
-	};
+		props: ['addressType']
+	});
 </script>
