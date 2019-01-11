@@ -8,5 +8,6 @@
 {% endblock %}
 
 {% block scripts %}
-	<script src="{$ basepath $}/skins/cat17/scripts/addressForm.js"></script>
+	<script src="{$ basepath $}{$ '/skins/cat17/scripts/address-change/js/app.js' | prefix_file $}"></script>
+	<script src="{$ basepath $}{$ '/skins/cat17/scripts/address-change/js/chunk-vendors.js' | prefix_file $}"></script>
 {% endblock %}
