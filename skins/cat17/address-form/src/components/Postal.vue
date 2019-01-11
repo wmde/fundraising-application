@@ -1,4 +1,5 @@
 <template>
+<div>
 	<div class="field-grp field-street">
 		<input type="text" id="street" placeholder="{$ 'street_label' | trans $}" data-pattern="^.+$">
 		<label for="street" class="sr-only">{$ 'street_label' | trans $}</label>
@@ -22,6 +23,7 @@
 		<option value="{$ countryCode $}">{$ ( 'country_option_' ~ countryCode ) | trans $}</option>
 		{% endfor %}
 	</select>
+</div>
 </template>
 
 <script lang="ts">

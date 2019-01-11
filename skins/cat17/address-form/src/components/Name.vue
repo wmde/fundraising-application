@@ -1,4 +1,5 @@
 <template>
+<div>
 	<div class="field-grp field-firstname">
 		<input type="text" id="first-name" name="firstName" placeholder="{$ 'firstname_label' | trans $}" data-pattern="^.+$">
 		<label for="first-name" class="sr-only">{$ 'firstname_label' | trans $}</label>
@@ -9,6 +10,7 @@
 		<label for="last-name" class="sr-only">{$ 'lastname_label' | trans $}</label>
 		<span class="error-text">{$ 'form_lastname_error' | trans $}</span>
 	</div>
+</div>
 </template>
 
 <script lang="ts">

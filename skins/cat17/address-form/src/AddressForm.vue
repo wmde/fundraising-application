@@ -1,5 +1,5 @@
 <template>
-	<span>Hello World!</span>
+<div>
 	<select class="no-outline salutation" id="salutation" name="salutation"
 			data-jcf='{"wrapNative": false,  "wrapNativeOnMobile": true  }'>
 		<option hidden class="hideme" value="">{$ 'salutation_label' | trans $}</option>
@@ -17,13 +17,14 @@
 	<name></name>
 	<postal></postal>
 	<email></email>
+</div>
 </template>
 
 <script lang="ts">
-    import Vue from "vue";
-	import Name from '../app/components/Name.vue';
-	import Email from '../app/components/Email.vue';
-	import Postal from '../app/components/Postal.vue';
+  	import Vue from 'vue';
+	import Name from './components/Name.vue';
+	import Email from './components/Email.vue';
+	import Postal from './components/Postal.vue';
 
     export default Vue.extend ({
 		name: 'addressForm',
