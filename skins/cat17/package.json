@@ -83,6 +83,7 @@
     "tape-catch": "^1.0.6",
     "uglify-js": "^2.5.0",
     "uglifyjs-webpack-plugin": "^2.0.1",
+    "vue-loader": "^15.5.1",
     "vueify": "^9.0.0",
     "watchify": "^3.11.0",
     "webpack": "^4.20.2",
@@ -108,7 +109,7 @@
     "underscore": "^1.9.1",
     "underscore.path": "^0.1.4",
     "vue": "^2.5.17",
-    "vue-loader": "^15.5.1",
+    "vue-template-compiler": "^2.5.22",
     "vue-translate-plugin": "^1.2.0"
   },
   "browserify": {

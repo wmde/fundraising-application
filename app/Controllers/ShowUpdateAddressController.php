@@ -25,7 +25,8 @@ class ShowUpdateAddressController {
 			$ffFactory->getLayoutTemplate( 'Update_Address.html.twig' )->render(
 				[
 					'addressToken' => $addressToken,
-					'isCompany' => $addressChange->isCompanyAddress()
+					'isCompany' => $addressChange->isCompanyAddress(),
+					'messages' => $ffFactory->getMessages()
 				]
 			)
 		);
