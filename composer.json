@@ -16,7 +16,6 @@
 		"wmde/email-address": "~1.0",
 		"wmde/euro": "~1.0",
 		"wmde/clock": "~1.0",
-		"wmde/fundraising-store": "~9.0.0",
 		"wmde/fundraising-donations": "@dev",
 		"wmde/fundraising-memberships": "@dev",
 		"wmde/fundraising-payments": "@dev",
@@ -75,6 +74,11 @@
 		},
 		{
 			"type": "vcs",
+			"url": "https://github.com/wmde/FundraisingStore",
+			"no-api": true
+		},
+		{
+			"type": "vcs",
 			"url": "https://github.com/wmde/fundraising-donations",
 			"no-api": true
 		},
@@ -128,7 +132,7 @@
 		"sorien/silex-dbal-profiler": "~2.0",
 		"wmde/fundraising-frontend-content": "dev-test",
 		"symfony/css-selector": "^3.2",
-		"phpstan/phpstan": "^0.10",
+		"phpstan/phpstan": "^0.11",
 		"matthiasnoback/symfony-config-test": "^4.0"
 	},
 	"autoload": {
