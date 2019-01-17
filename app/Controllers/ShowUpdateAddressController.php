@@ -17,15 +17,15 @@ class ShowUpdateAddressController {
 
 	public function showForm( string $addressToken, FunFunFactory $ffFactory ): Response {
 		$addressChangeRepository = $ffFactory->getAddressChangeRepository();
-		$address = $addressChangeRepository->getAddressChangeByUuid( $addressToken );
-		if ( $address === null ) {
+		$addressChange = $addressChangeRepository->getAddressChangeByUuid( $addressToken );
+		if ( $addressChange === null ) {
 			throw new AccessDeniedException();
 		}
 		return new Response (
 			$ffFactory->getLayoutTemplate( 'Update_Address.html.twig' )->render(
 				[
 					'addressToken' => $addressToken,
-					'isCompany' => $address->getAddress()->isCompanyAddress()
+					'isCompany' => $addressChange->isCompanyAddress()
 				]
 			)
 		);

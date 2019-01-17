@@ -11,6 +11,8 @@ use Doctrine\Common\Cache\VoidCache;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping\Driver\XmlDriver;
+use Doctrine\ORM\Tools\Setup;
 use FileFetcher\ErrorLoggingFileFetcher;
 use FileFetcher\SimpleFileFetcher;
 use GuzzleHttp\Client;
@@ -272,6 +274,17 @@ class FunFunFactory implements ServiceProviderInterface {
 				$entityManager->getEventManager()->addEventSubscriber( $this->newDoctrineDonationPrePersistSubscriber() );
 				$entityManager->getEventManager()->addEventSubscriber( $this->newDoctrineMembershipApplicationPrePersistSubscriber() );
 			}
+
+			return $entityManager;
+		};
+
+		$container['entity_manager_xml_mapped'] = function() {
+			$config = Setup::createConfiguration();
+
+			$driver = new XmlDriver( __DIR__ . '/../../vendor/wmde/fundraising-address-change/config/DoctrineClassMapping' );
+			$config->setMetadataDriverImpl( $driver );
+
+			$entityManager = EntityManager::create( $this->getConnection(), $config );
 
 			return $entityManager;
 		};
@@ -553,6 +566,10 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	public function getEntityManager(): EntityManager {
 		return $this->pimple['entity_manager'];
+	}
+
+	public function getXmlEntityManager(): EntityManager {
+		return $this->pimple['entity_manager_xml_mapped'];
 	}
 
 	private function newDonationEventLogger(): DonationEventLogger {
@@ -1128,7 +1145,7 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function getAddressChangeRepository(): AddressChangeRepository {
-		return new DoctrineAddressChangeRepository( $this->getEntityManager() );
+		return new DoctrineAddressChangeRepository( $this->getXmlEntityManager() );
 	}
 
 	public function newPaymentDataValidator(): PaymentDataValidator {
