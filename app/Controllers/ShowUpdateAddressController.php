@@ -21,7 +21,7 @@ class ShowUpdateAddressController {
 		if ( $addressChange === null ) {
 			throw new AccessDeniedException();
 		}
-		return new Response (
+		return new Response(
 			$ffFactory->getLayoutTemplate( 'Update_Address.html.twig' )->render(
 				[
 					'addressToken' => $addressToken,
