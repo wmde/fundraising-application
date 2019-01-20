@@ -12,7 +12,7 @@
         <div class="field-grp field-city col-xs-12 col-md-6">
             <label for="city">{{ messages.city_label }}</label>
             <input type="text" id="city" :placeholder="messages.city_label" data-pattern="^.+$">
-            <span class="error-text">{{ form_city_error }}</span>
+            <span class="error-text">{{ messages.form_city_error }}</span>
         </div>
         <div class="field-grp field-postcode col-xs-12 col-md-6">
             <label for="post-code">{{ messages.zip_label }}</label>
