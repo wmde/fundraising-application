@@ -8,6 +8,12 @@
 {% endblock %}
 
 {% block scripts %}
-	<script src="{$ basepath $}{$ '/skins/cat17/scripts/address-change/js/app.js' | prefix_file $}"></script>
+	<script src="{$ basepath $}{$ '/skins/cat17/scripts/address-change/js/app.js' | prefix_file $}"
+            id="address-form"
+            data-validate-address-url="{$ basepath|e('html_attr') $}/validate-address"
+            data-initial-form-values="{% if initialFormValues %}{$ initialFormValues|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
+			data-violated-fields="{% if violatedFields %}{$ violatedFields|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
+			data-initial-validation-result="{% if validationResult %}{$ validationResult|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
+    ></script>
 	<script src="{$ basepath $}{$ '/skins/cat17/scripts/address-change/js/chunk-vendors.js' | prefix_file $}"></script>
 {% endblock %}
