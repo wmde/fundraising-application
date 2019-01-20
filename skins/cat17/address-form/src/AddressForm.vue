@@ -25,14 +25,14 @@
                             <option value="Prof. Dr.">Prof. Dr.</option>
                         </select>
                     </div>
-                    <span class="error-text"> {{ messages.form_salutation_error }}</span>
+                    <span v-if="salutation.isValid" content-name="salutation" class="error-text"> {{ messages.form_salutation_error }}</span>
                 </div>
                 <name :is-company="isCompany" :messages="messages"></name>
                 <postal :messages="messages" :countries="countries"></postal>
             </div>
         </div>
         <div class="col-xs-12 col-md-3 submit">
-            <input type="submit" value="Kontaktdaten ändern" class="btn btn-address-change">
+            <input type="submit" value="Kontaktdaten ändern" class="btn btn-address-change" @click="validate()">
             <span class="info-text">Im folgenden Schritt können Sie die Daten noch einmal prüfen.</span>
         </div>
  	</div>
@@ -54,11 +54,22 @@
             addressToken: String,
             isCompany: Boolean,
             messages: Object,
+            initAddressForm: Object,
             countries: {
                 type: Array,
                 default: function() {
                     return [ 'DE', 'AT', 'CH', 'BE', 'IT', 'LI', 'LU' ];
                 }
+            }
+        },
+        computed: {
+            salutaion() {
+                return this.$store.getters.validity('salutation');
+            }
+        },
+        methods: {
+            validate() {
+                this.$store.dispatch( 'validate', payload, this.initAddressForm );
             }
         }
 	} );
