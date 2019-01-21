@@ -22,6 +22,7 @@ use WMDE\Fundraising\DonationContext\UseCases\ListComments\CommentListingRequest
 use WMDE\Fundraising\Frontend\App\Controllers\AddDonationController;
 use WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
+use WMDE\Fundraising\Frontend\App\Controllers\ShowUpdateAddressController;
 use WMDE\Fundraising\Frontend\App\Controllers\UpdateDonorController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidateDonorController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidateFeeController;
@@ -319,6 +320,12 @@ class Routes {
 				);
 			}
 		)->bind( 'faq' );
+
+		$app->get(
+			'update-address/{addressToken}',
+			ShowUpdateAddressController::class . '::showForm'
+
+		)->bind( 'update-address' );
 
 		$app->get(
 			'use-of-funds',

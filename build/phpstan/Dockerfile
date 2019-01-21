@@ -34,5 +34,5 @@ RUN \
 	docker-php-ext-install /tmp/konto_check-$KONTOCHECK_VERSION/php && \
 	docker-php-source delete
 
-RUN composer global require phpstan/phpstan ^0.9
+RUN composer global require phpstan/phpstan ^0.11
 ENTRYPOINT [ "/tmp/vendor/bin/phpstan" ]
