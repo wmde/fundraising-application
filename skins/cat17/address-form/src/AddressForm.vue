@@ -1,7 +1,6 @@
 <template>
 <div id="addressForm" class="container">
-    <!--will remove the hardcoded text when composer update is fixed-->
- 	<h2>Anschrift ändern {{ messages.address_form_title }}</h2>
+ 	<h2>{{ messages.address_form_title }}</h2>
  	<h5>Die bisherigen Daten sind schon eingetragen, bitte passen Sie diese an. {{ messages.address_form_subtitle }}</h5>
  	<div class="row">
         <div class="col-xs-12 col-md-9">
@@ -16,8 +15,7 @@
                         </select>
                     </div>
                     <div class="align-block">
-                        <!--will remove the hardcoded text when composer update is fixed-->
-                        <label for="title">Akademischer Titel {{ messages.academic_title_label }}</label>
+                        <label for="title">{{ messages.academic_title_label }}</label>
                         <select class="personal-title col-xs-12 col-md-6" id="title" name="title" data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true}'>
                             <option value="">{{ messages.title_option_none }}</option>
                             <option value="Dr.">Dr.</option>
@@ -49,7 +47,24 @@
 		components: {
 			Name,
 			Postal
-		},
+        },
+        data: {
+            payload: {
+                validateAddressURL: this.initAddressForm.validateAddressURL,
+                formData: [
+                    {
+                        name: 'salutation',
+                        value: '',
+                        optionalField: false
+                    },
+                    {
+                        name: 'title',
+                        value: 'Kein Titel',
+                        optionalField: true
+                    }
+                ]
+            }
+        },
 		props: {
             addressToken: String,
             isCompany: Boolean,
@@ -63,13 +78,13 @@
             }
         },
         computed: {
-            salutaion() {
+            salutation() {
                 return this.$store.getters.validity('salutation');
             }
         },
         methods: {
             validate() {
-                this.$store.dispatch( 'validate', payload, this.initAddressForm );
+                this.$store.dispatch( 'storeAddressFields', this.payload );
             }
         }
 	} );
