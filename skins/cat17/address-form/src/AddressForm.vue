@@ -55,11 +55,13 @@
                     {
                         name: 'salutation',
                         value: '',
+                        pattern: '',
                         optionalField: false
                     },
                     {
                         name: 'title',
                         value: 'Kein Titel',
+                        pattern: '',
                         optionalField: true
                     }
                 ]
@@ -78,7 +80,7 @@
             }
         },
         computed: {
-            salutation() {
+            salutation(): boolean {
                 return this.$store.getters.validity('salutation');
             }
         },

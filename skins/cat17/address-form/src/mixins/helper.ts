@@ -1,13 +1,10 @@
-import Vue from "vue";
-import { Validity } from '../../../src/app/lib/validation/validation_states';
+import { Validity } from '../lib/validation_states';
 
-Vue.mixin({
-    methods: {
-        inputIsValid: (value, pattern ) => {
-            if (pattern === null) {
-                return value !== '' ? Validity.VALID : Validity.INVALID;
-            }
-            return new RegExp(pattern).test(value) ? Validity.VALID : Validity.INVALID;
+export const Helper = {
+    inputIsValid: (value: string, pattern: string ) => {
+        if (pattern === null) {
+            return value !== '' ? Validity.VALID : Validity.INVALID;
         }
+        return new RegExp(pattern).test(value) ? Validity.VALID : Validity.INVALID;
     }
-})
+}
