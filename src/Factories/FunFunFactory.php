@@ -56,7 +56,7 @@ use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationTokenFetcher;
 use WMDE\Fundraising\DonationContext\DataAccess\UniqueTransferCodeGenerator;
 use WMDE\Fundraising\DonationContext\Domain\Repositories\CommentFinder;
 use WMDE\Fundraising\DonationContext\Domain\Repositories\DonationRepository;
-use WMDE\Fundraising\DonationContext\Domain\Validation\DonorValidator;
+use WMDE\Fundraising\DonationContext\Domain\Validation\DonorAddressValidator;
 use WMDE\Fundraising\DonationContext\DonationAcceptedEventHandler;
 use WMDE\Fundraising\DonationContext\Infrastructure\BestEffortDonationEventLogger;
 use WMDE\Fundraising\DonationContext\Infrastructure\DonationConfirmationMailer;
@@ -79,7 +79,7 @@ use WMDE\Fundraising\DonationContext\UseCases\ListComments\ListCommentsUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\SofortPaymentNotification\SofortPaymentNotificationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorValidator;
-use WMDE\Fundraising\DonationContext\UseCases\ValidateDonor\ValidateDonorUseCase;
+use WMDE\Fundraising\DonationContext\UseCases\ValidateDonor\ValidateDonorAddressUseCase;
 use WMDE\Fundraising\Frontend\BucketTesting\BucketSelector;
 use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignBuilder;
@@ -1053,10 +1053,8 @@ class FunFunFactory implements ServiceProviderInterface {
 		);
 	}
 
-	public function newValidateDonorUseCase(): ValidateDonorUseCase {
-		return new ValidateDonorUseCase(
-			$this->getEmailValidator()
-		);
+	public function newValidateDonorUseCase(): ValidateDonorAddressUseCase {
+		return new ValidateDonorAddressUseCase();
 	}
 
 	public function newUpdateDonorUseCase( string $updateToken, string $accessToken ): UpdateDonorUseCase {
@@ -1069,7 +1067,7 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	private function newUpdateDonorValidator(): UpdateDonorValidator {
-		return new UpdateDonorValidator( new DonorValidator( $this->getEmailValidator() ) );
+		return new UpdateDonorValidator( new DonorAddressValidator() );
 	}
 
 	private function newDonationConfirmationMailer(): DonationConfirmationMailer {

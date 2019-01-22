@@ -4023,26 +4023,26 @@
         },
         {
             "name": "wmde/fun-validators",
-            "version": "1.1.0",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fun-validators.git",
-                "reference": "6e1da9e625ad96f2ae455f3fbdb0bd818ec0e5f4"
+                "reference": "9a53f66a3cfaabc262000693f7b68b471910d88c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fun-validators/zipball/6e1da9e625ad96f2ae455f3fbdb0bd818ec0e5f4",
-                "reference": "6e1da9e625ad96f2ae455f3fbdb0bd818ec0e5f4",
+                "url": "https://api.github.com/repos/wmde/fun-validators/zipball/9a53f66a3cfaabc262000693f7b68b471910d88c",
+                "reference": "9a53f66a3cfaabc262000693f7b68b471910d88c",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1"
+                "php": ">=7.2"
             },
             "require-dev": {
                 "mediawiki/mediawiki-codesniffer": "~13.0",
-                "ockcyp/covers-validator": "~0.6",
-                "phpstan/phpstan": "~0.8.0",
-                "phpunit/phpunit": "~6.2",
+                "ockcyp/covers-validator": "~1.0",
+                "phpstan/phpstan": "^0.10",
+                "phpunit/phpunit": "~7.0",
                 "slevomat/coding-standard": "~4.0",
                 "squizlabs/php_codesniffer": "~3.0"
             },
@@ -4062,7 +4062,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "General and shared validation services created as part of the WMDE fundraising software",
-            "time": "2018-07-17T11:11:13+00:00"
+            "time": "2019-01-23T15:27:59+00:00"
         },
         {
             "name": "wmde/fundraising-address-change",
@@ -4070,12 +4070,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-address-change",
-                "reference": "9259948368fc3792b8944063c3ce4101899a819f"
+                "reference": "751574d8503531ff3ff26bea9e1e2a033e197fe3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-address-change/zipball/9259948368fc3792b8944063c3ce4101899a819f",
-                "reference": "9259948368fc3792b8944063c3ce4101899a819f",
+                "url": "https://api.github.com/repos/wmde/fundraising-address-change/zipball/751574d8503531ff3ff26bea9e1e2a033e197fe3",
+                "reference": "751574d8503531ff3ff26bea9e1e2a033e197fe3",
                 "shasum": ""
             },
             "require": {
@@ -4110,7 +4110,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Address change use case for fundraising application",
-            "time": "2019-01-16T17:15:54+00:00"
+            "time": "2019-01-18T12:11:58+00:00"
         },
         {
             "name": "wmde/fundraising-content-provider",
@@ -4182,12 +4182,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "ec879e47f202e855903b9aefe9384ca7bfe5e65d"
+                "reference": "708c96529ce98eac9fc29fc8f789c0d6805427c0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/ec879e47f202e855903b9aefe9384ca7bfe5e65d",
-                "reference": "ec879e47f202e855903b9aefe9384ca7bfe5e65d",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/708c96529ce98eac9fc29fc8f789c0d6805427c0",
+                "reference": "708c96529ce98eac9fc29fc8f789c0d6805427c0",
                 "shasum": ""
             },
             "require": {
@@ -4199,9 +4199,9 @@
                 "wmde/email-address": "~1.0",
                 "wmde/euro": "~1.0",
                 "wmde/freezable-value-object": "~1.0",
-                "wmde/fun-validators": "~1.0",
+                "wmde/fun-validators": "~1.2",
                 "wmde/fundraising-payments": "@dev",
-                "wmde/fundraising-store": "~10.1.1"
+                "wmde/fundraising-store": "~10.1"
             },
             "require-dev": {
                 "codeception/specify": "~1.0",
@@ -4233,7 +4233,7 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/FundraisingDonations",
-            "time": "2019-01-18T09:14:26+00:00"
+            "time": "2019-01-23T16:00:02+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
@@ -4241,12 +4241,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "78b179471f7178e7a4fa23a9e4258e1807ce1c4b"
+                "reference": "14e8dbaffc0fef0978e5f7a71a7932d68499bf9c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/78b179471f7178e7a4fa23a9e4258e1807ce1c4b",
-                "reference": "78b179471f7178e7a4fa23a9e4258e1807ce1c4b",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/14e8dbaffc0fef0978e5f7a71a7932d68499bf9c",
+                "reference": "14e8dbaffc0fef0978e5f7a71a7932d68499bf9c",
                 "shasum": ""
             },
             "require": {
@@ -4259,7 +4259,7 @@
                 "wmde/freezable-value-object": "~1.0",
                 "wmde/fun-validators": "~1.0",
                 "wmde/fundraising-payments": "@dev",
-                "wmde/fundraising-store": "~10.1.0"
+                "wmde/fundraising-store": "~10.1"
             },
             "require-dev": {
                 "codeception/specify": "~1.0",
@@ -4293,7 +4293,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "time": "2019-01-16T17:32:07+00:00"
+            "time": "2019-01-21T09:52:57+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
@@ -4417,12 +4417,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-subscriptions",
-                "reference": "fafcf16189c0ca5094986770414115cc8722fb48"
+                "reference": "d9d4b53e9b65a2f64839b92a0684e50d13efe629"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-subscriptions/zipball/fafcf16189c0ca5094986770414115cc8722fb48",
-                "reference": "fafcf16189c0ca5094986770414115cc8722fb48",
+                "url": "https://api.github.com/repos/wmde/fundraising-subscriptions/zipball/d9d4b53e9b65a2f64839b92a0684e50d13efe629",
+                "reference": "d9d4b53e9b65a2f64839b92a0684e50d13efe629",
                 "shasum": ""
             },
             "require": {
@@ -4431,7 +4431,7 @@
                 "psr/log": "~1.0",
                 "wmde/email-address": "~1.0",
                 "wmde/fun-validators": "~1.0",
-                "wmde/fundraising-store": "~10.1.0"
+                "wmde/fundraising-store": "~10.1"
             },
             "require-dev": {
                 "mediawiki/mediawiki-codesniffer": "~18.0",
@@ -4461,7 +4461,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for fundraising subcriptions",
-            "time": "2019-01-16T17:30:01+00:00"
+            "time": "2019-01-21T10:05:31+00:00"
         },
         {
             "name": "zendframework/zend-code",
@@ -5905,16 +5905,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.11",
+            "version": "0.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "cfb0b43021fb75abe853ab8d88d22cdb37596697"
+                "reference": "a138b8a2731b2c19f1dffa2f1411984a638fe977"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/cfb0b43021fb75abe853ab8d88d22cdb37596697",
-                "reference": "cfb0b43021fb75abe853ab8d88d22cdb37596697",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/a138b8a2731b2c19f1dffa2f1411984a638fe977",
+                "reference": "a138b8a2731b2c19f1dffa2f1411984a638fe977",
                 "shasum": ""
             },
             "require": {
@@ -5974,7 +5974,7 @@
                 "MIT"
             ],
             "description": "PHPStan - PHP Static Analysis Tool",
-            "time": "2019-01-15T14:21:47+00:00"
+            "time": "2019-01-19T20:23:08+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -6931,6 +6931,7 @@
             ],
             "description": "A WebProfiler for Silex",
             "homepage": "http://silex.sensiolabs.org/",
+            "abandoned": true,
             "time": "2018-04-04T11:41:51+00:00"
         },
         {
@@ -7904,12 +7905,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "ca8953dafe62bd1af746a6b33f1a21880780959a"
+                "reference": "5369584fc94a35d07b5bb4b0c656e40cb33f4218"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/ca8953dafe62bd1af746a6b33f1a21880780959a",
-                "reference": "ca8953dafe62bd1af746a6b33f1a21880780959a",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/5369584fc94a35d07b5bb4b0c656e40cb33f4218",
+                "reference": "5369584fc94a35d07b5bb4b0c656e40cb33f4218",
                 "shasum": ""
             },
             "require-dev": {
@@ -7942,7 +7943,7 @@
                 "GPL-2.0+"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2019-01-18T08:41:11+00:00"
+            "time": "2019-01-18T09:31:12+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",

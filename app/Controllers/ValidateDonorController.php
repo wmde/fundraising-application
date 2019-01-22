@@ -4,21 +4,16 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\App\Controllers;
 
-use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\TranslatorInterface;
-use WMDE\Fundraising\DonationContext\Domain\Model\Donor;
-use WMDE\Fundraising\DonationContext\Domain\Model\DonorAddress;
-use WMDE\Fundraising\DonationContext\Domain\Model\DonorName;
-use WMDE\Fundraising\DonationContext\UseCases\ValidateDonor\ValidateDonorRequest;
+use WMDE\Fundraising\DonationContext\UseCases\ValidateDonor\ValidateDonorAddressRequest;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\FunValidators\ConstraintViolation;
 
 /**
  * @license GNU GPL v2+
- * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class ValidateDonorController {
 
@@ -34,12 +29,11 @@ class ValidateDonorController {
 		return $this->newErrorResponse( $ffFactory->getTranslator(), ...$validationResult->getViolations() );
 	}
 
-	private function newRequestModel( Request $request ): ValidateDonorRequest {
-		return ValidateDonorRequest::newInstance()
+	private function newRequestModel( Request $request ): ValidateDonorAddressRequest {
+		return ValidateDonorAddressRequest::newInstance()
 			->withCity( $request->get( 'city', '' ) )
 			->withCompanyName( $request->get( 'companyName', '' ) )
 			->withCountryCode( $request->get( 'country', '' ) )
-			->withEmailAddress( $request->get( 'email', '' ) )
 			->withFirstName( $request->get( 'firstName', '' ) )
 			->withLastName( $request->get( 'lastName', '' ) )
 			->withPostalCode( $request->get( 'postcode', '' ) )
