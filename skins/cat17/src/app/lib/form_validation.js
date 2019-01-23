@@ -13,8 +13,8 @@ var objectAssign = require( 'object-assign' ),
 	},
 
 	DefaultRequiredFieldsForAddressType = {
-		person: [ 'salutation', 'firstName', 'lastName', 'street', 'postcode', 'city', 'email' ],
-		firma: [ 'companyName', 'street', 'postcode', 'city', 'email' ],
+		person: [ 'salutation', 'firstName', 'lastName', 'street', 'postcode', 'city' ],
+		firma: [ 'companyName', 'street', 'postcode', 'city' ],
 		anonym: []
 	},
 	AddressValidator = {

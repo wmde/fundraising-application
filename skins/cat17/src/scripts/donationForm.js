@@ -279,12 +279,22 @@ $( function () {
 		}
 		return WMDE.Promise.resolve();
 	}
+
+	function forceValidateEmail() {
+		store.dispatch( WMDE.Actions.newMarkEmptyFieldsInvalidAction( ['email'] ) );
+		return WMDE.Promise.resolve();
+	}
+
 	$( '.btn-donation' ).on( 'click', function () {
 		if ( WMDE.StateAggregation.Donation.allValiditySectionsAreValid( store.getState() ) ) {
 			$( 'form' ).submit();
 		}
 		else if ( WMDE.StateAggregation.Donation.someValiditySectionsAreIncomplete( store.getState() ) ) {
-			WMDE.Promise.all( [ forceValidateBankData(), forceValidateAddressData() ] ).then( function() {
+			WMDE.Promise.all( [
+				forceValidateBankData(),
+				forceValidateAddressData(),
+				forceValidateEmail()
+			] ).then( function() {
 				scroller.scrollTo( $( $( '.info-text.opened .field-grp.invalid' ).get( 0 ) ), {elementStart: WMDE.Scrolling.ElementStart.MARGIN}, animationTime );
 			});
 		}
