@@ -9,6 +9,7 @@ module.exports = function ( state ) {
 			( state.membershipFormContent.addressType === 'firma' && state.membershipFormContent.membershipType === 'sustaining' )
 		) &&
 		state.validity.paymentData === Validity.VALID &&
+		state.membershipInputValidation.email.isValid === Validity.VALID &&
 		state.validity.address === Validity.VALID &&
 		(
 			( state.membershipFormContent.paymentType === 'BEZ' && state.validity.bankData === Validity.VALID ) ||
