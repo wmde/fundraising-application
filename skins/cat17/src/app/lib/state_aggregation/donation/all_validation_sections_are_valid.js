@@ -10,8 +10,7 @@ module.exports = function ( state ) {
 		(
 			state.donationFormContent.addressType === 'anonym' ||
 			state.donationInputValidation.email.isValid === Validity.VALID
-		)
-		&&
+		) &&
 		(
 			( state.donationFormContent.paymentType === 'BEZ' && state.validity.bankData === Validity.VALID ) ||
 			( state.donationFormContent.paymentType !== 'BEZ' )
