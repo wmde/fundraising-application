@@ -1,7 +1,8 @@
 'use strict';
 
 var test = require( 'tape-catch' ),
-	allSectionsAreValid = require( '../../../lib/state_aggregation/membership/all_validation_sections_are_valid.js' )
+	allSectionsAreValid = require( '../../../lib/state_aggregation/membership/all_validation_sections_are_valid.js' ),
+	Validity = require( '../../../lib/validation/validation_states' ).Validity
 ;
 
 test( 'Unselected membership type is invalid', function ( t ) {
@@ -12,9 +13,15 @@ test( 'Unselected membership type is invalid', function ( t ) {
 			paymentType: 'PPL'
 		},
 		validity: {
-			paymentData: true,
-			address: true,
-			bankData: null
+			paymentData: Validity.VALID,
+			address: Validity.VALID,
+			bankData: Validity.INCOMPLETE
+		},
+		membershipInputValidation: {
+			email: {
+				isValid: Validity.VALID,
+				dataEntered: true
+			}
 		}
 	} ) );
 	t.end();
@@ -28,9 +35,15 @@ test( 'Active membership payed by BEZ with sane bank data, address, and payment 
 			paymentType: 'BEZ'
 		},
 		validity: {
-			paymentData: true,
-			address: true,
-			bankData: true
+			paymentData: Validity.VALID,
+			address: Validity.VALID,
+			bankData: Validity.VALID
+		},
+		membershipInputValidation: {
+			email: {
+				isValid: Validity.VALID,
+				dataEntered: true
+			}
 		}
 	} ) );
 	t.end();
@@ -44,9 +57,15 @@ test( 'Active membership payed by PPL with address, and payment info is valid wi
 			paymentType: 'PPL'
 		},
 		validity: {
-			paymentData: true,
-			address: true,
-			bankData: null
+			paymentData: Validity.VALID,
+			address: Validity.VALID,
+			bankData: Validity.INCOMPLETE
+		},
+		membershipInputValidation: {
+			email: {
+				isValid: Validity.VALID,
+				dataEntered: true
+			}
 		}
 	} ) );
 	t.end();
@@ -60,9 +79,15 @@ test( 'Sustaining membership payed by PPL with address, and payment info is vali
 			paymentType: 'PPL'
 		},
 		validity: {
-			paymentData: true,
-			address: true,
-			bankData: null
+			paymentData: Validity.VALID,
+			address: Validity.VALID,
+			bankData: Validity.INCOMPLETE
+		},
+		membershipInputValidation: {
+			email: {
+				isValid: Validity.VALID,
+				dataEntered: true
+			}
 		}
 	} ) );
 	t.end();
@@ -76,9 +101,15 @@ test( 'Sustaining membership payed by PPL with with invalid address is invalid',
 			paymentType: 'PPL'
 		},
 		validity: {
-			paymentData: true,
-			address: false,
-			bankData: null
+			paymentData: Validity.VALID,
+			address: Validity.INVALID,
+			bankData: Validity.INCOMPLETE
+		},
+		membershipInputValidation: {
+			email: {
+				isValid: Validity.VALID,
+				dataEntered: true
+			}
 		}
 	} ) );
 	t.end();
@@ -92,9 +123,15 @@ test( 'Sustaining membership payed by PPL with invalid paymentData is invalid', 
 			paymentType: 'PPL'
 		},
 		validity: {
-			paymentData: false,
-			address: true,
-			bankData: null
+			paymentData: Validity.INVALID,
+			address: Validity.VALID,
+			bankData: Validity.INCOMPLETE
+		},
+		membershipInputValidation: {
+			email: {
+				isValid: Validity.VALID,
+				dataEntered: true
+			}
 		}
 	} ) );
 	t.end();
@@ -108,9 +145,15 @@ test( 'Active membership for company donors is invalid', function ( t ) {
 			paymentType: 'PPL'
 		},
 		validity: {
-			paymentData: true,
-			address: true,
-			bankData: null
+			paymentData: Validity.VALID,
+			address: Validity.VALID,
+			bankData: Validity.INCOMPLETE
+		},
+		membershipInputValidation: {
+			email: {
+				isValid: Validity.VALID,
+				dataEntered: true
+			}
 		}
 	} ) );
 	t.end();
