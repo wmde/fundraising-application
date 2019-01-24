@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
     "content-hash": "661e688ac7f0b72b260656291711df3b",
@@ -4182,12 +4182,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "708c96529ce98eac9fc29fc8f789c0d6805427c0"
+                "reference": "6516ae14278bef15a4adf67bbfd912fb6ceee930"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/708c96529ce98eac9fc29fc8f789c0d6805427c0",
-                "reference": "708c96529ce98eac9fc29fc8f789c0d6805427c0",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/6516ae14278bef15a4adf67bbfd912fb6ceee930",
+                "reference": "6516ae14278bef15a4adf67bbfd912fb6ceee930",
                 "shasum": ""
             },
             "require": {
@@ -4233,7 +4233,7 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/FundraisingDonations",
-            "time": "2019-01-23T16:00:02+00:00"
+            "time": "2019-01-28T11:25:51+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
@@ -7905,12 +7905,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "5369584fc94a35d07b5bb4b0c656e40cb33f4218"
+                "reference": "85d31ab8b3f2aa18d3a6891523426028a67e1e9e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/5369584fc94a35d07b5bb4b0c656e40cb33f4218",
-                "reference": "5369584fc94a35d07b5bb4b0c656e40cb33f4218",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/85d31ab8b3f2aa18d3a6891523426028a67e1e9e",
+                "reference": "85d31ab8b3f2aa18d3a6891523426028a67e1e9e",
                 "shasum": ""
             },
             "require-dev": {
@@ -7943,7 +7943,7 @@
                 "GPL-2.0+"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2019-01-18T09:31:12+00:00"
+            "time": "2019-01-28T10:11:03+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",

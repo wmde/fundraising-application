@@ -48,6 +48,27 @@ class ValidateAddressRouteTest extends WebRouteTestCase {
 		$this->assertJsonSuccessResponse( $expectedResponse, $response );
 	}
 
+	public function testGivenAnonymousAddress_validationReturnsErrorMessage(): void {
+		$client = $this->createClient();
+		$client->followRedirects( false );
+
+		$client->request(
+			'POST',
+			'/validate-address',
+			$this->newAnonymousFormInput()
+		);
+
+		$response = $client->getResponse();
+
+		$expectedResponse = [
+			'status' => 'ERR',
+			'messages' => [
+				'addressType' => 'address_form_error'
+			]
+		];
+		$this->assertJsonSuccessResponse( $expectedResponse, $response );
+	}
+
 	private function newPersonFormInput(): array {
 		return [
 			'addressType' => 'person',
@@ -77,6 +98,12 @@ class ValidateAddressRouteTest extends WebRouteTestCase {
 			'city' => 'Einort',
 			'country' => 'DE',
 			'email' => 'karla@kennichnich.de',
+		];
+	}
+
+	private function newAnonymousFormInput(): array {
+		return [
+			'addressType' => 'anonymous'
 		];
 	}
 
