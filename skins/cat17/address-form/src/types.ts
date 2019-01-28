@@ -1,6 +1,12 @@
+export const enum Validity {
+    INVALID,
+    VALID,
+    INCOMPLETE
+}
+
 export interface FormValidity {
 	dataEntered: boolean,
-	isValid: boolean | null
+	isValid: Validity
 }
 
 export interface Form {
