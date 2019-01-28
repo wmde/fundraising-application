@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "661e688ac7f0b72b260656291711df3b",
@@ -4070,19 +4070,20 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-address-change",
-                "reference": "751574d8503531ff3ff26bea9e1e2a033e197fe3"
+                "reference": "8d4f5a7da75a194c7040dadcfe25d6e11f18e381"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-address-change/zipball/751574d8503531ff3ff26bea9e1e2a033e197fe3",
-                "reference": "751574d8503531ff3ff26bea9e1e2a033e197fe3",
+                "url": "https://api.github.com/repos/wmde/fundraising-address-change/zipball/8d4f5a7da75a194c7040dadcfe25d6e11f18e381",
+                "reference": "8d4f5a7da75a194c7040dadcfe25d6e11f18e381",
                 "shasum": ""
             },
             "require": {
                 "doctrine/dbal": "^2.5",
                 "doctrine/orm": "^2.5",
                 "php": ">=7.1",
-                "ramsey/uuid": "^3.7"
+                "ramsey/uuid": "^3.7",
+                "wmde/freezable-value-object": "~1.0"
             },
             "require-dev": {
                 "ockcyp/covers-validator": "~1.0",
@@ -4091,8 +4092,7 @@
                 "phpstan/phpstan-phpunit": "^0.11",
                 "phpunit/phpunit": "~7.0",
                 "slevomat/coding-standard": "^4.6",
-                "squizlabs/php_codesniffer": "~3.0",
-                "wmde/fundraising-store": "~10.1.0"
+                "squizlabs/php_codesniffer": "~3.0"
             },
             "type": "library",
             "autoload": {
@@ -4110,7 +4110,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Address change use case for fundraising application",
-            "time": "2019-01-18T12:11:58+00:00"
+            "time": "2019-01-28T16:03:05+00:00"
         },
         {
             "name": "wmde/fundraising-content-provider",
@@ -4348,16 +4348,16 @@
         },
         {
             "name": "wmde/fundraising-store",
-            "version": "10.1.1",
+            "version": "10.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/FundraisingStore",
-                "reference": "9f5c56f74afab1c4198b37a4f3caaa9e01d87a80"
+                "reference": "d430f871fa678f156e4964b2f5c6a0a54b66fe0e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/FundraisingStore/zipball/9f5c56f74afab1c4198b37a4f3caaa9e01d87a80",
-                "reference": "9f5c56f74afab1c4198b37a4f3caaa9e01d87a80",
+                "url": "https://api.github.com/repos/wmde/FundraisingStore/zipball/d430f871fa678f156e4964b2f5c6a0a54b66fe0e",
+                "reference": "d430f871fa678f156e4964b2f5c6a0a54b66fe0e",
                 "shasum": ""
             },
             "require": {
@@ -4409,7 +4409,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Persistence services around the fundraising database",
-            "time": "2019-01-17T17:10:37+00:00"
+            "time": "2019-01-28T14:47:17+00:00"
         },
         {
             "name": "wmde/fundraising-subscriptions",
@@ -6479,16 +6479,16 @@
         },
         {
             "name": "sebastian/environment",
-            "version": "4.0.1",
+            "version": "4.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/environment.git",
-                "reference": "febd209a219cea7b56ad799b30ebbea34b71eb8f"
+                "reference": "4a43e9af57b4afa663077b9bc85255dbc6e8a2bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/febd209a219cea7b56ad799b30ebbea34b71eb8f",
-                "reference": "febd209a219cea7b56ad799b30ebbea34b71eb8f",
+                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/4a43e9af57b4afa663077b9bc85255dbc6e8a2bd",
+                "reference": "4a43e9af57b4afa663077b9bc85255dbc6e8a2bd",
                 "shasum": ""
             },
             "require": {
@@ -6525,7 +6525,7 @@
                 "environment",
                 "hhvm"
             ],
-            "time": "2018-11-25T09:31:21+00:00"
+            "time": "2019-01-28T15:26:03+00:00"
         },
         {
             "name": "sebastian/exporter",

@@ -1,5 +1,6 @@
 {% extends 'Base_Layout.html.twig' %}
 
+{% block page_identifier %}error{% endblock %}
 {% block main %}
 	<div class="container">
 		<div class="row">
@@ -12,7 +13,7 @@
 
 				{% if message is defined %}
 					<p>
-						{$ message $}
+						{$ message | nl2br $}
 					</p>
 				{% endif %}
 

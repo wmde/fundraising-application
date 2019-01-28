@@ -15,11 +15,13 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\OverridingCampaignConfigurationLoad
 /**
  * @license GNU GPL v2+
  */
-class UpdateAddressRouteTest extends WebRouteTestCase {
+class ShowUpdateAddressFormRouteTest extends WebRouteTestCase {
 
 	private const PATH = 'update-address';
 
-	public function testWhenInvalidDataIsSent_serverThrowsAnError(): void {
+	const INVALID_TOKEN = 'abcdefghijklmnopqrstuvwxzy12345';
+
+	public function testWhenCorrectUpdateAddressTokenIsSupplied_addressChangeFormIsShown(): void {
 		$this->createEnvironment(
 			[],
 			function ( Client $client, FunFunFactory $factory ): void {
@@ -32,20 +34,19 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 
 				$addressToken = $donation->getAddressChange()->getCurrentIdentifier();
 
-				$client->request(
-					Request::METHOD_POST,
-					self::PATH . '/' . $addressToken,
-					[  ]
+				$this->performRequest(
+					$client,
+					$addressToken
 				);
 
 				$response = $client->getResponse();
 				$this->assertTrue( $response->isOk() );
-				$this->assertSame( 1, $client->getCrawler()->filter( '.page-error' )->count() );
+				$this->assertSame( $addressToken, $client->getCrawler()->filter( '#addressToken' )->attr( 'value' ) );
 			}
 		);
 	}
 
-	public function testWhenValidDataIsSent_serverShowsAConfirmationPage(): void {
+	public function testWhenIncorrectUpdateAddressTokenIsSupplied_accessToAddressChangeFormIsDenied(): void {
 		$this->createEnvironment(
 			[],
 			function ( Client $client, FunFunFactory $factory ): void {
@@ -56,27 +57,22 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 				$factory->getEntityManager()->persist( $donation );
 				$factory->getEntityManager()->flush();
 
-				$addressToken = $donation->getAddressChange()->getCurrentIdentifier();
-
-				$client->request(
-					Request::METHOD_POST,
-					self::PATH . '/' . $addressToken,
-					[
-						'addressType' => 'person',
-						'firstName' => 'Graf',
-						'lastName' => 'Zahl',
-						'salutation' => 'Herr',
-						'address' => 'Zählerweg 5',
-						'postcode' => '12345',
-						'city' => 'Berlin-Zehlendorf',
-						'country' => 'DE'
-					]
+				$this->performRequest(
+					$client,
+					self::INVALID_TOKEN
 				);
 
 				$response = $client->getResponse();
-				$this->assertTrue( $response->isOk() );
-				$this->assertSame( 1, $client->getCrawler()->filter( '.page-address-update-success' )->count(), 'Confirmation page should be shown' );
+				$this->assertTrue( $response->isForbidden() );
 			}
+		);
+	}
+
+	private function performRequest( Client $client, string $updateToken ): Crawler {
+		return $client->request(
+			Request::METHOD_GET,
+			self::PATH . '/' . $updateToken,
+			[ 'updateToken' => $updateToken ]
 		);
 	}
 

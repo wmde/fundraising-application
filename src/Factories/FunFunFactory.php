@@ -42,6 +42,7 @@ use WMDE\EmailAddress\EmailAddress;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\AddressChange\Domain\AddressChangeRepository;
 use WMDE\Fundraising\AddressChange\DataAccess\DoctrineAddressChangeRepository;
+use WMDE\Fundraising\AddressChange\UseCases\ChangeAddress\ChangeAddressUseCase;
 use WMDE\Fundraising\ContentProvider\ContentProvider;
 use WMDE\Fundraising\DonationContext\Authorization\DonationAuthorizer;
 use WMDE\Fundraising\DonationContext\Authorization\DonationTokenFetcher;
@@ -134,6 +135,7 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationConfirmationHtmlPr
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormViolationPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonorUpdateHtmlPresenter;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\ErrorPageHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\GetInTouchHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\IbanPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\InternalErrorHtmlPresenter;
@@ -953,6 +955,10 @@ class FunFunFactory implements ServiceProviderInterface {
 		return new EmailAddress( $this->config['contact-info']['organization']['email'] );
 	}
 
+	public function newErrorPageHtmlPresenter(): ErrorPageHtmlPresenter {
+		return new ErrorPageHtmlPresenter( $this->getLayoutTemplate( 'Error_Page.html.twig' ) );
+	}
+
 	public function newInternalErrorHtmlPresenter(): InternalErrorHtmlPresenter {
 		return new InternalErrorHtmlPresenter( $this->getLayoutTemplate( 'Error_Page.html.twig' ) );
 	}
@@ -1142,8 +1148,12 @@ class FunFunFactory implements ServiceProviderInterface {
 		return $this->pimple['donation_repository'];
 	}
 
-	public function getAddressChangeRepository(): AddressChangeRepository {
+	public function newAddressChangeRepository(): AddressChangeRepository {
 		return new DoctrineAddressChangeRepository( $this->getXmlEntityManager() );
+	}
+
+	public function newChangeAddressUseCase(): ChangeAddressUseCase {
+		return new ChangeAddressUseCase( $this->newAddressChangeRepository() );
 	}
 
 	public function newPaymentDataValidator(): PaymentDataValidator {
