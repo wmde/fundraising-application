@@ -5,36 +5,8 @@
 	<div class="row">
 		<div class="col-xs-12 col-md-9">
 			<div class="form-shadow-wrap">
-				<div v-if="!isCompany">
-					<div class="align-block">
-						<label for="salutation">{{ messages.salutation_label }}</label>
-						<select class="salutation col-xs-12 col-md-6"
-								id="salutation"
-								name="salutation"
-								data-jcf='{"wrapNative": false,  "wrapNativeOnMobile": true  }'
-								@blur="validateInput('salutation')">
-							<option hidden class="hideme" value="">{{ messages.salutation_label }}</option>
-							<option value="Herr">{{ messages.salutation_option_mr }}</option>
-							<option value="Frau">{{ messages.salutation_option_mrs }}</option>
-						</select>
-					</div>
-					<div class="align-block">
-						<label for="title">{{ messages.academic_title_label }}</label>
-						<select class="personal-title col-xs-12 col-md-6"
-								id="title"
-								name="title"
-								data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true}'
-								@blur="validateInput('title')">
-							<option value="">{{ messages.title_option_none }}</option>
-							<option value="Dr.">Dr.</option>
-							<option value="Prof.">Prof.</option>
-							<option value="Prof. Dr.">Prof. Dr.</option>
-						</select>
-					</div>
-					<span v-if="error('salutation')" class="error-text"> {{ messages.form_salutation_error }}</span>
-				</div>
-				<name :is-company="isCompany" :messages="messages"></name>
-				<postal :messages="messages" :countries="countries"></postal>
+				<name :form-data="formData" :validate-input="validateInput" :error="error" :is-company="isCompany" :messages="messages"></name>
+				<postal :form-data="formData" :validate-input="validateInput" :error="error" :messages="messages" :countries="countries"></postal>
 			</div>
 		</div>
 		<div class="col-xs-12 col-md-3 submit">
@@ -56,8 +28,9 @@
 			Name,
 			Postal
 		},
-		data: {
-			formData: [
+		data: function() {
+			return {
+				formData: [
 				{
 					name: 'salutation',
 					value: '',
@@ -69,8 +42,51 @@
 					value: 'Kein Titel',
 					pattern: '',
 					optionalField: true
+				},
+				{
+					name: 'companyName',
+					value: '',
+					pattern: '^.+$',
+					optionalField: false
+				},
+				{
+					name: 'firstName',
+					value: '',
+					pattern: '^.+$',
+					optionalField: false
+				},
+				{
+					name: 'lastName',
+					value: '',
+					pattern: '^.+$',
+					optionalField: false
+				},
+				{
+					name: 'street',
+					value: '',
+					pattern: '^.+$',
+					optionalField: false
+				},
+				{
+					name: 'city',
+					value: '',
+					pattern: '^.+$',
+					optionalField: false
+				},
+				{
+					name: 'postCode',
+					value: '',
+					pattern: '[0-9]{4,5}$',
+					optionalField: false
+				},
+				{
+					name: 'country',
+					value: '',
+					pattern: '',
+					optionalField: false
 				}
 			]
+			}
 		},
 		props: {
 			addressToken: String,
@@ -91,8 +107,8 @@
 					formData: this.formData
 				});
 			},
-			validateInput(fieldName: string) {
-				let field = this.formData.filter(data => data.name === fieldName)[0];
+			validateInput(formData, fieldName: string) {
+				let field = formData.filter( data => data.name === fieldName )[0];
 				this.$store.dispatch( 'validateInput', field );
 			},
 			error(fieldName: string) {
