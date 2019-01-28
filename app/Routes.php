@@ -23,6 +23,7 @@ use WMDE\Fundraising\Frontend\App\Controllers\AddDonationController;
 use WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowUpdateAddressController;
+use WMDE\Fundraising\Frontend\App\Controllers\UpdateAddressController;
 use WMDE\Fundraising\Frontend\App\Controllers\UpdateDonorController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidateAddressController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidateFeeController;
@@ -324,6 +325,12 @@ class Routes {
 		$app->get(
 			'update-address/{addressToken}',
 			ShowUpdateAddressController::class . '::showForm'
+
+		)->bind( 'update-address-show-form' );
+
+		$app->post(
+			'update-address/{addressToken}',
+			UpdateAddressController::class . '::updateAddress'
 
 		)->bind( 'update-address' );
 
