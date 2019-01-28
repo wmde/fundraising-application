@@ -3,7 +3,7 @@
 {% block page_identifier %}update-address{% endblock%}
 
 {% block main %}
-	<div id="updateAddress" data-address-token="{$ addressToken $}" data-is-company="{$ isCompany $}" data-messages="{$ messages $}">
+	<div id="updateAddress" data-address-token="{$ addressToken $}" data-is-company="{$ isCompany | json_encode $}" data-messages="{$ messages $}">
 	</div>
 {% endblock %}
 

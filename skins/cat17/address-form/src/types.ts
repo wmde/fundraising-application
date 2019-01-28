@@ -30,7 +30,7 @@ export interface inputField {
 
 export interface Payload {
 	validateAddressURL: string,
-    formData: Array<inputField>
+	formData: Array<inputField>
 }
 
 
