@@ -24,7 +24,7 @@ use WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowUpdateAddressController;
 use WMDE\Fundraising\Frontend\App\Controllers\UpdateDonorController;
-use WMDE\Fundraising\Frontend\App\Controllers\ValidateDonorController;
+use WMDE\Fundraising\Frontend\App\Controllers\ValidateAddressController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidateFeeController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidationController;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\AddSubscriptionHandler;
@@ -58,7 +58,7 @@ class Routes {
 
 		$app->post(
 			'validate-address', // Validates donor information. This route is named badly.
-			ValidateDonorController::class . '::validate'
+			ValidateAddressController::class . '::validate'
 		);
 
 		$app->post(
