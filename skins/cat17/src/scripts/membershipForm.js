@@ -379,6 +379,11 @@ $( function () {
 		return WMDE.Promise.resolve();
 	}
 
+	function forceValidateEmail() {
+		store.dispatch( WMDE.Actions.newMarkEmptyFieldsInvalidAction( ['email'] ) );
+		return WMDE.Promise.resolve();
+	}
+
 	function forceValidateFeeData() {
 		if ( WMDE.StateAggregation.Membership.amountAndFrequencyAreValid( store.getState() ).isValid !== WMDE.Validity.VALID ) {
 			store.dispatch( WMDE.Actions.newFinishPaymentDataValidationAction( { status: WMDE.ValidationStates.ERR } ) );
@@ -394,7 +399,8 @@ $( function () {
 			WMDE.Promise.all( [
 				forceValidateBankData(),
 				forceValidateAddressData(),
-				forceValidateFeeData()
+				forceValidateFeeData(),
+				forceValidateEmail()
 			] ).then( function() {
 				console.log("invalid stuff", store.getState().validity, store.getState().membershipInputValidation );
 				scroller.scrollTo( $( $( '.error-container.invalid' ).get( 0 ) ), { elementStart: WMDE.Scrolling.ElementStart.MARGIN }, animationTime );

@@ -14,6 +14,10 @@ test( 'When all sections are valid, none are incomplete', function ( t ) {
 			paymentType: {
 				isValid: Validity.VALID,
 				dataEntered: true
+			},
+			email: {
+				isValid: Validity.VALID,
+				dataEntered: true
 			}
 		},
 		validity: {
@@ -32,6 +36,10 @@ test( 'When all sections are invalid, none are incomplete', function ( t ) {
 		},
 		donationInputValidation: {
 			paymentType: {
+				isValid: Validity.INVALID,
+				dataEntered: true
+			},
+			email: {
 				isValid: Validity.INVALID,
 				dataEntered: true
 			}
@@ -54,6 +62,10 @@ test( 'Incomplete bank data ignored when not paying via debit', function ( t ) {
 			paymentType: {
 				isValid: Validity.VALID,
 				dataEntered: true
+			},
+			email: {
+				isValid: Validity.VALID,
+				dataEntered: true
 			}
 		},
 		validity: {
@@ -72,6 +84,10 @@ test( 'Incomplete payment data means incomplete', function ( t ) {
 		},
 		donationInputValidation: {
 			paymentType: {
+				isValid: Validity.VALID,
+				dataEntered: true
+			},
+			email: {
 				isValid: Validity.VALID,
 				dataEntered: true
 			}
@@ -94,6 +110,10 @@ test( 'Missing payment type means incomplete', function ( t ) {
 			paymentType: {
 				isValid: Validity.INCOMPLETE,
 				dataEntered: false
+			},
+			email: {
+				isValid: Validity.VALID,
+				dataEntered: true
 			}
 		},
 		validity: {
@@ -112,6 +132,10 @@ test( 'Incomplete address data means incomplete', function ( t ) {
 		},
 		donationInputValidation: {
 			paymentType: {
+				isValid: Validity.VALID,
+				dataEntered: true
+			},
+			email: {
 				isValid: Validity.VALID,
 				dataEntered: true
 			}
@@ -134,12 +158,40 @@ test( 'Incomplete bank data means incomplete', function ( t ) {
 			paymentType: {
 				isValid: Validity.VALID,
 				dataEntered: true
+			},
+			email: {
+				isValid: Validity.VALID,
+				dataEntered: true
 			}
 		},
 		validity: {
 			paymentData: Validity.VALID,
 			address: Validity.VALID,
 			bankData: Validity.INCOMPLETE
+		}
+	} ) );
+	t.end();
+} );
+
+test( 'Incomplete email data means incomplete', function ( t ) {
+	t.ok( someSectionsAreIncomplete( {
+		donationFormContent: {
+			paymentType: 'BEZ'
+		},
+		donationInputValidation: {
+			paymentType: {
+				isValid: Validity.VALID,
+				dataEntered: true
+			},
+			email: {
+				isValid: Validity.INCOMPLETE,
+				dataEntered: false
+			}
+		},
+		validity: {
+			paymentData: Validity.VALID,
+			address: Validity.VALID,
+			bankData: Validity.VALID
 		}
 	} ) );
 	t.end();
