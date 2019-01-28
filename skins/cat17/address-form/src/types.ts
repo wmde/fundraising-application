@@ -1,6 +1,18 @@
+export const enum Validity {
+    INVALID,
+    VALID,
+    INCOMPLETE
+}
+
+export const ValidationStates = {
+    OK: 'OK',
+    ERR: 'ERR',
+    INCOMPLETE: 'INCOMPLETE'
+};
+
 export interface FormValidity {
 	dataEntered: boolean,
-	isValid: boolean | null
+	isValid: Validity
 }
 
 export interface Form {
@@ -18,7 +30,7 @@ export interface ValidationResult {
 }
 
 export interface Helper {
-	inputIsValid(value: string, pattern: string): boolean
+	inputIsValid(value: string, pattern: string): Validity
 }
 
 export interface inputField {

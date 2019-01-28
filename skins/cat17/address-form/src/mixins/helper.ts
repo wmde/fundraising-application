@@ -1,7 +1,7 @@
-import { Validity } from '../lib/validation_states';
+import { Validity } from '@/types';
 
 export const Helper = {
-    inputIsValid: (value: string, pattern: string ) => {
+    inputIsValid: (value: string, pattern: string ): Validity => {
         if (pattern === null) {
             return value !== '' ? Validity.VALID : Validity.INVALID;
         }

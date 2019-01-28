@@ -1,8 +1,7 @@
 import Vue from 'vue';
 import Vuex, {StoreOptions} from 'vuex';
-import {Validity} from './lib/validation_states';
 import {Helper} from './mixins/helper';
-import {AddressState, inputField, Payload, ValidationResult} from './types';
+import {AddressState, inputField, Payload, ValidationResult, Validity, ValidationStates} from './types';
 
 const VALIDATE_INPUT: string = 'VALIDATE_INPUT';
 const MARK_EMPTY_FIELD_INVALID: string = 'MARK_EMPTY_FIELD_INVALID';
@@ -93,12 +92,12 @@ const store: StoreOptions<AddressState> = {
 			state.isValidating = true;
 		},
 		[FINISH_ADDRESS_VALIDATION](state, payload) {
-            if (payload.status === 'ERR') {
+            if (payload.status === ValidationStates.ERR) {
                 ADDRESS_FIELD_VALIDATOR_NAMES.forEach(name => {
                     if (state.form[name].dataEntered === true) {
                         state.form[name] = {
                             ...state.form[name],
-                            isValid: state.form[name].isValid !== false && !payload.messages[name] ? Validity.VALID : Validity.INVALID
+                            isValid: state.form[name].isValid = !payload.messages[name] ? Validity.VALID : Validity.INVALID
                         };
                     }
                 });
