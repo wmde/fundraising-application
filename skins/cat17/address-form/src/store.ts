@@ -57,7 +57,7 @@ const store: StoreOptions<AddressState> = {
 			},
 			country: {
 				dataEntered: false,
-				isValid: Validity.INCOMPLETE
+				isValid: Validity.VALID
 			}
 		}
 	},
@@ -112,12 +112,12 @@ const store: StoreOptions<AddressState> = {
 		validateInput({ commit }, field: inputField) {
 			commit('VALIDATE_INPUT', field);
 		},
-		storeAddressFields({ commit, state, getters }, payload: Payload) {
+		storeAddressFields({ commit, getters }, payload: Payload) {
 			commit('MARK_EMPTY_FIELD_INVALID', payload.formData);
-			if ( getters.allFieldsAreValid(state) ) {
+			if ( getters.allFieldsAreValid ) {
 				commit('BEGIN_ADDRESS_VALIDATION', payload.formData);
 				return transport.postData(payload.validateAddressURL, payload.formData)
-						.then( (validationResult: ValidationResult) => commit('FINISH_ADDRESS_VALIDATION', validationResult));
+					.then( (validationResult: ValidationResult) => commit('FINISH_ADDRESS_VALIDATION', validationResult));
 			}
 		}
 	}

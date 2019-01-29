@@ -1,19 +1,21 @@
 <template>
 <div class="row">
-	<div v-if="isCompany" class="field-grp field-company col-xs-12 col-md-6">
+	<div v-if="isCompany" v-bind:class="[{ invalid: showError.companyName}, 'field-grp', 'field-company', 'col-xs-12', 'col-md-6']">
 		<label for="company-name">{{ messages.companyname_label }}</label>
 		<input type="text"
 				id="company-name"
 				name="companyName"
 				:placeholder="messages.companyname_label"
+				v-model="formData[2].value"
 				@blur="validateInput(formData, 'companyName')">
-		<span v-if="error('companyName')" class="error-text">{{ messages.form_companyname_error }}</span>
+		<span v-if="showError.companyName" class="error-text">{{ messages.form_companyname_error }}</span>
 	</div>
 	<div v-else>
 		<div class="align-block">
 			<label for="salutation">{{ messages.salutation_label }}</label>
 			<select class="salutation col-xs-12 col-md-6"
 					id="salutation"
+					v-model="formData[0].value"
 					name="salutation"
 					data-jcf='{"wrapNative": false,  "wrapNativeOnMobile": true  }'
 					@blur="validateInput(formData, 'salutation')">
@@ -26,6 +28,7 @@
 			<label for="title">{{ messages.academic_title_label }}</label>
 			<select class="personal-title col-xs-12 col-md-6"
 					id="title"
+					v-model="formData[1].value"
 					name="title"
 					data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true}'
 					@blur="validateInput(formData, 'title')">
@@ -35,25 +38,26 @@
 				<option value="Prof. Dr.">Prof. Dr.</option>
 			</select>
 		</div>
-		<span v-if="error('salutation')" class="error-text"> {{ messages.form_salutation_error }}</span>
-		<div class="field-grp field-firstname col-xs-12 col-md-6">
+		<span v-if="showError.salutation" class="error-text"> {{ messages.form_salutation_error }}</span>
+		<div v-bind:class="[{ invalid: showError.firstName}, 'field-grp', 'field-firstname', 'col-xs-12', 'col-md-6']">
 			<label for="first-name">{{ messages.firstname_label }}</label>
 			<input type="text"
 					id="first-name"
+					v-model="formData[3].value"
 					name="firstName"
 					:placeholder="messages.firstname_label"
 					@blur="validateInput(formData, 'firstName')">
-			<span v-if="error('firstName')" class="error-text">{{ messages.form_firstname_error }}</span>
+			<span v-if="showError.firstName" class="error-text">{{ messages.form_firstname_error }}</span>
 		</div>
-		<div class="field-grp field-lastname col-xs-12 col-md-6">
+		<div v-bind:class="[{ invalid: showError.lastName}, 'field-grp', 'field-lastname', 'col-xs-12', 'col-md-6']">
 			<label for="last-name">{{ messages.lastname_label }}</label>
 			<input type="text"
 					id="last-name"
+					v-model="formData[4].value"
 					name="lastName"
 					:placeholder="messages.lastname_label"
 					@blur="validateInput(formData, 'lastName')">
-			<span v-if="error('lastName')" class="error-text">{{ messages.form_lastname_error }}</span>
-
+			<span v-if="showError.lastName" class="error-text">{{ messages.form_lastname_error }}</span>
 		</div>
 	</div>
 </div>
@@ -63,6 +67,6 @@
 	import Vue from 'vue';
 	export default Vue.extend( {
 		name: 'name',
-		props: [ 'formData', 'error', 'validateInput', 'isCompany', 'messages' ]
+		props: [ 'showError', 'formData', 'validateInput', 'isCompany', 'messages' ]
 	} );
 </script>
