@@ -5,8 +5,8 @@
 	<div class="row">
 		<div class="col-xs-12 col-md-9">
 			<div class="form-shadow-wrap">
-				<name :form-data="formData" :validate-input="validateInput" :error="error" :is-company="isCompany" :messages="messages"></name>
-				<postal :form-data="formData" :validate-input="validateInput" :error="error" :messages="messages" :countries="countries"></postal>
+				<name :show-error="showError" :form-data="formData" :validate-input="validateInput" :is-company="isCompany" :messages="messages"></name>
+				<postal :show-error="showError" :form-data="formData" :validate-input="validateInput" :messages="messages" :countries="countries"></postal>
 			</div>
 		</div>
 		<div class="col-xs-12 col-md-3 submit">
@@ -21,6 +21,7 @@
 	import Vue from 'vue';
 	import Name from './components/Name.vue';
 	import Postal from './components/Postal.vue';
+	import {inputField, ValidationResult} from './types';
 
 	export default Vue.extend ( {
 		name: 'addressForm',
@@ -31,68 +32,76 @@
 		data: function() {
 			return {
 				formData: [
-				{
-					name: 'salutation',
-					value: '',
-					pattern: '',
-					optionalField: false
-				},
-				{
-					name: 'title',
-					value: 'Kein Titel',
-					pattern: '',
-					optionalField: true
-				},
-				{
-					name: 'companyName',
-					value: '',
-					pattern: '^.+$',
-					optionalField: false
-				},
-				{
-					name: 'firstName',
-					value: '',
-					pattern: '^.+$',
-					optionalField: false
-				},
-				{
-					name: 'lastName',
-					value: '',
-					pattern: '^.+$',
-					optionalField: false
-				},
-				{
-					name: 'street',
-					value: '',
-					pattern: '^.+$',
-					optionalField: false
-				},
-				{
-					name: 'city',
-					value: '',
-					pattern: '^.+$',
-					optionalField: false
-				},
-				{
-					name: 'postCode',
-					value: '',
-					pattern: '[0-9]{4,5}$',
-					optionalField: false
-				},
-				{
-					name: 'country',
-					value: '',
-					pattern: '',
-					optionalField: false
+					{
+						name: 'salutation',
+						value: '',
+						pattern: '',
+						optionalField: false
+					},
+					{
+						name: 'title',
+						value: '',
+						pattern: '',
+						optionalField: true
+					},
+					{
+						name: 'companyName',
+						value: '',
+						pattern: '^.+$',
+						optionalField: !this.$props.isCompany
+					},
+					{
+						name: 'firstName',
+						value: '',
+						pattern: '^.+$',
+						optionalField: false
+					},
+					{
+						name: 'lastName',
+						value: '',
+						pattern: '^.+$',
+						optionalField: false
+					},
+					{
+						name: 'street',
+						value: '',
+						pattern: '^.+$',
+						optionalField: false
+					},
+					{
+						name: 'city',
+						value: '',
+						pattern: '^.+$',
+						optionalField: false
+					},
+					{
+						name: 'postCode',
+						value: '',
+						pattern: '[0-9]{4,5}$',
+						optionalField: false
+					},
+					{
+						name: 'country',
+						value: 'DE',
+						pattern: '',
+						optionalField: false
+					}
+				],
+				showError: {
+					companyName: false,
+					firstName: false,
+					lastName: false,
+					street: false,
+					city: false,
+					postCode: false
 				}
-			]
 			}
 		},
 		props: {
 			addressToken: String,
 			isCompany: Boolean,
 			messages: Object,
-			initAddressForm: Object,
+			validateAddressURL: String,
 			countries: {
 				type: Array,
 				default: function() {
@@ -103,16 +112,17 @@
 		methods: {
 			validateForm() {
 				this.$store.dispatch('storeAddressFields', {
-					validateAddressURL: this.initAddressForm.validateAddressURL,
+					validateAddressURL: this.validateAddressURL,
 					formData: this.formData
 				});
 			},
-			validateInput(formData, fieldName: string) {
+			validateInput(formData: Array<inputField>, fieldName: string) {
 				let field = formData.filter( data => data.name === fieldName )[0];
 				this.$store.dispatch( 'validateInput', field );
+				this.error(fieldName);
 			},
 			error(fieldName: string) {
-				return this.$store.getters.validity( fieldName );
+				this.showError[fieldName] = !this.$store.getters.validity(fieldName);
 			}
 		}
 	} );

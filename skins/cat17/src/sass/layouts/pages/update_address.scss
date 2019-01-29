@@ -36,6 +36,8 @@
             color: $gray-dark;
         }
         .error-text {
+            display: block;
+            color: $brand-error;
             margin-bottom: 16px;
             line-height: 16px;
             font-size: 12px;
@@ -44,18 +46,20 @@
         // which set elements to absolute and have some !important rules.
         // Those mess up the bootstrap grid used in the layout of the address form
         .align-block {
-            width: 47.5%;
+            width: 45.5%;
             float: left;
+            margin-left: 15px;
             &:nth-child(2) {
-                margin-left: 30px;
+                margin-left: 28px;
             }
             label, input, section {
                 display: block;
             }
             @media (max-width: 972px) {
-                width: 100%;
+                width: 92%;
+                margin-left: 15px;
                 &:nth-child(2) {
-                    margin-left: 0px;
+                    margin-left: 15px;
                 }
             }
         }
