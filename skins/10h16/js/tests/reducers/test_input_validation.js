@@ -144,20 +144,20 @@ test( 'If bank data validation fails, all fields retrieve invalid status', funct
 
 test( 'If address data validation is successful, all fields retrieve valid status', function ( t ) {
 	var stateBefore = {
+			salutation: { dataEntered: true, isValid: null },
 			firstName: { dataEntered: true, isValid: null },
 			lastName: { dataEntered: true, isValid: null },
 			street: { dataEntered: true, isValid: null },
 			city: { dataEntered: true, isValid: null },
-			postCode: { dataEntered: true, isValid: null },
-			email: { dataEntered: true, isValid: null }
+			postcode: { dataEntered: true, isValid: null }
 		},
 		expectedState = {
+			salutation: { dataEntered: true, isValid: true },
 			firstName: { dataEntered: true, isValid: true },
 			lastName: { dataEntered: true, isValid: true },
 			street: { dataEntered: true, isValid: true },
 			city: { dataEntered: true, isValid: true },
-			postCode: { dataEntered: true, isValid: true },
-			email: { dataEntered: true, isValid: true }
+			postcode: { dataEntered: true, isValid: true }
 		};
 
 	deepFreeze( stateBefore );
@@ -167,11 +167,11 @@ test( 'If address data validation is successful, all fields retrieve valid statu
 
 test( 'If address data validation is successful, invalid fields remain invalid', function ( t ) {
 	var stateBefore = {
-			postCode: { dataEntered: true, isValid: false },
+			postcode: { dataEntered: true, isValid: false },
 			city: { dataEntered: true, isValid: true }
 		},
 		expectedState = {
-			postCode: { dataEntered: true, isValid: false },
+			postcode: { dataEntered: true, isValid: false },
 			city: { dataEntered: true, isValid: true }
 		};
 
@@ -182,11 +182,11 @@ test( 'If address data validation is successful, invalid fields remain invalid',
 
 test( 'If the validity is reset for some fields, their validity status becomes null', function ( t ) {
 	var stateBefore = {
-			postCode: { dataEntered: true, isValid: true },
+			postcode: { dataEntered: true, isValid: true },
 			confirmSepa: { dataEntered: true, isValid: false }
 		},
 		expectedState = {
-			postCode: { dataEntered: true, isValid: true },
+			postcode: { dataEntered: true, isValid: true },
 			confirmSepa: { dataEntered: false, isValid: null }
 		};
 

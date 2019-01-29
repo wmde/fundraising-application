@@ -29,6 +29,11 @@ function newDataEnteredState( formWasFilledBefore ) {
 
 function inputValidation( validationState, action ) {
 	var newValidationState = objectAssign( {}, validationState ),
+		ADDRESS_FIELD_VALIDATOR_NAMES = [
+			'salutation', 'firstName', 'lastName',
+			'companyName',
+			'street', 'postcode', 'city'
+		],
 		bankDataIsValid, dataEnteredTransformer;
 
 	switch ( action.type ) {
@@ -111,7 +116,10 @@ function inputValidation( validationState, action ) {
 			if ( action.payload.status === ValidationStates.INCOMPLETE ) {
 				return newValidationState;
 			}
-			_.forEach( newValidationState, function ( value, key ) {
+			_.forEach( ADDRESS_FIELD_VALIDATOR_NAMES, function ( key ) {
+				if ( !newValidationState[ key ] ) {
+					return;
+				}
 				if ( newValidationState[ key ].dataEntered === true ) {
 					newValidationState[ key ] = {
 						dataEntered: true,

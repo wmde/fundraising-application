@@ -5,6 +5,7 @@
 skins:
   active: true
   start: "2018-10-10"
+  end: "2099-12-31"
 
 donation_address:
   active: true

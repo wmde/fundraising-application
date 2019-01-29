@@ -17,8 +17,8 @@ var jQuery = require( 'jquery' ),
 	},
 
 	DefaultRequiredFieldsForAddressType = {
-		person: [ 'salutation', 'firstName', 'lastName', 'street', 'postcode', 'city', 'email' ],
-		firma: [ 'companyName', 'street', 'postcode', 'city', 'email' ],
+		person: [ 'salutation', 'firstName', 'lastName', 'street', 'postcode', 'city' ],
+		firma: [ 'companyName', 'street', 'postcode', 'city' ],
 		anonym: []
 	},
 

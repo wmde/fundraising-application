@@ -266,9 +266,11 @@ $( function () {
 	// Validity checks for different form parts
 
 	function addressIsValid() {
-		var validity = store.getState().validity,
-			formContent = store.getState().donationFormContent;
-		return formContent.addressType === 'anonym' || validity.address;
+		var state = store.getState(),
+			validity = state.validity,
+			formContent = state.donationFormContent,
+			validations = state.donationInputValidation;
+		return formContent.addressType === 'anonym' || ( validity.address && validations.email.isValid === true );
 	}
 
 	function bankDataIsValid() {
@@ -278,7 +280,6 @@ $( function () {
 	}
 
 	function personalDataPageIsValid() {
-		var validity = store.getState().validity;
 		return !hasInvalidFields() && paymentDataIsValid() && addressIsValid() && bankDataIsValid();
 	}
 

@@ -268,7 +268,8 @@ $( function () {
 	}
 
 	function addressIsValid() {
-		return store.getState().validity.address;
+		var state = store.getState();
+		return state.validity.address && state.membershipInputValidation.email.isValid;
 	}
 
 	function bankDataIsValid() {
