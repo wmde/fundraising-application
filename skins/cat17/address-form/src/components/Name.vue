@@ -1,6 +1,6 @@
 <template>
 <div class="row">
-	<div v-if="isCompany" v-bind:class="[{ invalid: showError.companyName}, 'field-grp', 'field-company', 'col-xs-12', 'col-md-6']">
+	<div v-if="isCompany" v-bind:class="[{ invalid: showError.companyName }, 'field-grp', 'field-company', 'col-xs-12', 'col-md-6']">
 		<label for="company-name">{{ messages.companyname_label }}</label>
 		<input type="text"
 				id="company-name"
@@ -39,7 +39,7 @@
 			</select>
 		</div>
 		<span v-if="showError.salutation" class="error-text"> {{ messages.form_salutation_error }}</span>
-		<div v-bind:class="[{ invalid: showError.firstName}, 'field-grp', 'field-firstname', 'col-xs-12', 'col-md-6']">
+		<div v-bind:class="[{ invalid: showError.firstName }, 'field-grp', 'field-firstname', 'col-xs-12', 'col-md-6']">
 			<label for="first-name">{{ messages.firstname_label }}</label>
 			<input type="text"
 					id="first-name"
@@ -49,7 +49,7 @@
 					@blur="validateInput(formData, 'firstName')">
 			<span v-if="showError.firstName" class="error-text">{{ messages.form_firstname_error }}</span>
 		</div>
-		<div v-bind:class="[{ invalid: showError.lastName}, 'field-grp', 'field-lastname', 'col-xs-12', 'col-md-6']">
+		<div v-bind:class="[{ invalid: showError.lastName }, 'field-grp', 'field-lastname', 'col-xs-12', 'col-md-6']">
 			<label for="last-name">{{ messages.lastname_label }}</label>
 			<input type="text"
 					id="last-name"
