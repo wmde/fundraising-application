@@ -76,7 +76,7 @@
 						optionalField: false
 					},
 					{
-						name: 'postCode',
+						name: 'postcode',
 						value: '',
 						pattern: '[0-9]{4,5}$',
 						optionalField: false
@@ -100,7 +100,7 @@
 					lastName: false,
 					street: false,
 					city: false,
-					postCode: false
+					postcode: false
 				}
 			}
 		},
