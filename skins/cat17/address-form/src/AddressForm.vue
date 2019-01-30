@@ -13,6 +13,7 @@
 			<input type="submit" value="Kontaktdaten ändern" class="btn btn-address-change" @click="validateForm()">
 			<span class="info-text">Im folgenden Schritt können Sie die Daten noch einmal prüfen.</span>
 		</div>
+        <input type="hidden" name="addressType" v-model="formData[9].value">
 	</div>
 </div>
 </template>
@@ -85,6 +86,12 @@
 						value: 'DE',
 						pattern: '',
 						optionalField: false
+					},
+					 {
+						name: 'addressType',
+						value: this.$props.isCompany ? 'firma' : 'person',
+						pattern: '',
+						optionalField: false
 					}
 				],
 				showError: {
@@ -114,6 +121,12 @@
 				this.$store.dispatch('storeAddressFields', {
 					validateAddressURL: this.validateAddressURL,
 					formData: this.formData
+				}).then( resp => {
+					if (!this.$store.getters.allFieldsAreValid) {
+						this.$store.getters.invalidFields.forEach(invalidField => {
+							this.error(invalidField);
+						});
+					}
 				});
 			},
 			validateInput(formData: Array<inputField>, fieldName: string) {

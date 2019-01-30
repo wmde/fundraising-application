@@ -22,14 +22,14 @@
 					@blur="validateInput(formData, 'city')">
 			<span v-if="showError.city" class="error-text">{{ messages.form_city_error }}</span>
 		</div>
-		<div v-bind:class="[{ invalid: showError.postCode }, 'field-grp', 'field-postcode', 'col-xs-12', 'col-md-6']">
+		<div v-bind:class="[{ invalid: showError.postcode }, 'field-grp', 'field-postcode', 'col-xs-12', 'col-md-6']">
 			<label for="post-code">{{ messages.zip_label }}</label>
 			<input type="text"
 					id="post-code"
 					v-model="formData[7].value"
 					:placeholder="messages.zip_label"
-					@blur="validateInput(formData, 'postCode')">
-			<span v-if="showError.postCode" class="error-text">{{ messages.form_zip_error }}</span>
+					@blur="validateInput(formData, 'postcode')">
+			<span v-if="showError.postcode" class="error-text">{{ messages.form_zip_error }}</span>
 		</div>
 	</div>
 	<div class="row">

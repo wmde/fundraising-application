@@ -47,7 +47,7 @@ const store: StoreOptions<AddressState> = {
 				dataEntered: false,
 				isValid: Validity.INCOMPLETE
 			},
-			postCode: {
+			postcode: {
 				dataEntered: false,
 				isValid: Validity.INCOMPLETE
 			},
@@ -56,6 +56,10 @@ const store: StoreOptions<AddressState> = {
 				isValid: Validity.INCOMPLETE
 			},
 			country: {
+				dataEntered: false,
+				isValid: Validity.VALID
+			},
+			addressType: {
 				dataEntered: false,
 				isValid: Validity.VALID
 			}
@@ -104,8 +108,11 @@ const store: StoreOptions<AddressState> = {
 		validity: (state) => (contentName: string) => {
 			return state.form[contentName].isValid;
 		},
-		allFieldsAreValid: (state) :boolean => {
-			return Object.keys(state.form).filter(field => state.form[field].isValid === Validity.INVALID).length === 0;
+		invalidFields: (state) :Array<string> => {
+			return Object.keys(state.form).filter(field => state.form[field].isValid === Validity.INVALID)
+		},
+		allFieldsAreValid: (state, getters) :boolean => {
+			return getters.invalidFields.length === 0;
 		}
 	},
 	actions: {
@@ -115,10 +122,13 @@ const store: StoreOptions<AddressState> = {
 		storeAddressFields({ commit, getters }, payload: Payload) {
 			commit('MARK_EMPTY_FIELD_INVALID', payload.formData);
 			if ( getters.allFieldsAreValid ) {
-				commit('BEGIN_ADDRESS_VALIDATION', payload.formData);
+				commit('BEGIN_ADDRESS_VALIDATION');
 				return transport.postData(payload.validateAddressURL, payload.formData)
-					.then( (validationResult: ValidationResult) => commit('FINISH_ADDRESS_VALIDATION', validationResult));
+					.then( (validationResult: ValidationResult) => {
+						commit('FINISH_ADDRESS_VALIDATION', validationResult);
+					});
 			}
+			return Promise.resolve();
 		}
 	}
 }
