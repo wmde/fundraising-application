@@ -33,19 +33,19 @@
 		</div>
 	</div>
 	<div class="row">
-	<div class="align-block">
-		<label for="country">{{ messages.country_label }}</label>
-		<select id="country"
-				class="country-select col-xs-12 col-md-6"
-				data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true, "flipDropToFit": true,  "maxVisibleItems": 6}'
-				v-model="formData[8].value"
-				@blur="validateInput(formData, 'country')">
-			<option v-for="(countryCode, index) in countries" 
-					:value="countryCode"
-					:key="index">{{ messages[ 'country_option_' + countryCode ] }}
-			</option>
-		</select>
-	</div>
+        <div class="align-block">
+            <label for="country">{{ messages.country_label }}</label>
+            <select id="country"
+                    class="country-select col-xs-12 col-md-6"
+                    data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true, "flipDropToFit": true,  "maxVisibleItems": 6}'
+                    v-model="formData[8].value"
+                    @blur="validateInput(formData, 'country')">
+                <option v-for="(countryCode, index) in countries" 
+                        :value="countryCode"
+                        :key="index">{{ messages[ 'country_option_' + countryCode ] }}
+                </option>
+            </select>
+        </div>
 	</div>
 </div>
 </template>
