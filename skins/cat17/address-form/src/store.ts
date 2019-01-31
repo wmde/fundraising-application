@@ -93,14 +93,16 @@ const store: StoreOptions<AddressState> = {
 			state.isValidating = true;
 		},
 		[FINISH_ADDRESS_VALIDATION](state, payload) {
-			ADDRESS_FIELD_VALIDATOR_NAMES.forEach(name => {
-				if (state.form[name].dataEntered === true) {
-					state.form[name] = {
-						...state.form[name],
-						isValid: state.form[name].isValid !== false && !payload.messages[name] ? Validity.VALID : Validity.INVALID
-					};
-				}
-			});
+            if (payload.status === 'ERR') {
+                ADDRESS_FIELD_VALIDATOR_NAMES.forEach(name => {
+                    if (state.form[name].dataEntered === true) {
+                        state.form[name] = {
+                            ...state.form[name],
+                            isValid: state.form[name].isValid !== false && !payload.messages[name] ? Validity.VALID : Validity.INVALID
+                        };
+                    }
+                });
+            }
 			state.isValidating = false;
 		}
 	},
