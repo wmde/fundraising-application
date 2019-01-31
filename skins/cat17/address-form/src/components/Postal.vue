@@ -8,9 +8,9 @@
                     name="street"
 					:placeholder="messages.street_label"
 					v-model="formData[5].value"
-					@blur="validateInput(formData, 'street')">
+					@blur="validateInput(formData, 'street'); showWarning = true">
 			<span v-if="showError.street" class="error-text">{{ messages.form_street_error }}</span>
-			<span class="warning-text">{{ messages.form_street_number_warning }}</span>
+			<span v-if="showWarning" class="warning-text">{{ messages.form_street_number_warning }}</span>
 		</div>
 	</div>
 	<div class="row">
@@ -58,6 +58,11 @@
 	import Vue from 'vue';
 	export default Vue.extend( {
 		name: 'postal',
-		props: [ 'showError', 'formData', 'validateInput', 'messages', 'countries' ]
+        props: [ 'showError', 'formData', 'validateInput', 'messages', 'countries' ],
+        data() {
+            return {
+                showWarning: false
+            }
+        }
 	} );
 </script>
