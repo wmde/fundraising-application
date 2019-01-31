@@ -41,7 +41,7 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 
 				$response = $client->getResponse();
 				$this->assertTrue( $response->isOk() );
-				$this->assertSame( $addressToken, $client->getCrawler()->filter( '#addressToken' )->attr( 'value' ) );
+				$this->assertSame( $addressToken, $client->getCrawler()->filter( '#updateAddress' )->attr( 'data-address-token' ) );
 			}
 		);
 	}
