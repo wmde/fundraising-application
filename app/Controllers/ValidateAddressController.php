@@ -11,6 +11,7 @@ use Symfony\Component\Translation\TranslatorInterface;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonorName;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\FunValidators\ConstraintViolation;
+use WMDE\FunValidators\Validators\AddressValidator;
 
 /**
  * @license GNU GPL v2+
@@ -19,12 +20,13 @@ class ValidateAddressController {
 
 	private const VIOLATION_UNKNOWN_ADDRESS_TYPE = 'address_form_error';
 
+	/**
+	 * @var AddressValidator
+	 */
 	private $addressValidator;
-	private $emailValidator;
 
 	public function validate( Request $request, FunFunFactory $ffFactory ): Response {
 		$this->addressValidator = $ffFactory->newAddressValidator();
-		$this->emailValidator = $ffFactory->getEmailValidator();
 
 		if ( $this->getAddressType( $request ) === DonorName::PERSON_PRIVATE ) {
 			$nameViolations = $this->getPersonViolations( $request );
@@ -45,8 +47,7 @@ class ValidateAddressController {
 
 		$violations = array_merge(
 			$nameViolations,
-			$this->getAddressViolations( $request ),
-			$this->getEmailViolations( $request )
+			$this->getAddressViolations( $request )
 		);
 
 		if ( empty( $violations ) ) {
@@ -78,10 +79,6 @@ class ValidateAddressController {
 			$request->get( 'city', '' ),
 			$request->get( 'country', '' )
 		)->getViolations();
-	}
-
-	private function getEmailViolations( Request $request ): array {
-		return $this->emailValidator->validate( $request->get( 'email', '' ) )->getViolations();
 	}
 
 	private function getAddressType( Request $request ): string {
