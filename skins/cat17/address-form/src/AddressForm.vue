@@ -3,17 +3,19 @@
 	<h2>{{ messages.address_form_title }}</h2>
 	<h5>Die bisherigen Daten sind schon eingetragen, bitte passen Sie diese an. {{ messages.address_form_subtitle }}</h5>
 	<div class="row">
-		<div class="col-xs-12 col-md-9">
-			<div class="form-shadow-wrap">
-				<name :show-error="showError" :form-data="formData" :validate-input="validateInput" :is-company="isCompany" :messages="messages"></name>
-				<postal :show-error="showError" :form-data="formData" :validate-input="validateInput" :messages="messages" :countries="countries"></postal>
-			</div>
-		</div>
-		<div class="col-xs-12 col-md-3 submit">
-			<input type="submit" value="Kontaktdaten ändern" class="btn btn-address-change" @click="validateForm()">
-			<span class="info-text">Im folgenden Schritt können Sie die Daten noch einmal prüfen.</span>
-		</div>
-        <input type="hidden" name="addressType" v-model="formData[9].value">
+        <form ref="form" :action="updateAddressURL + addressToken" method="post">
+            <div class="col-xs-12 col-md-9">
+                <div class="form-shadow-wrap">
+                    <name :show-error="showError" :form-data="formData" :validate-input="validateInput" :is-company="isCompany" :messages="messages"></name>
+                    <postal :show-error="showError" :form-data="formData" :validate-input="validateInput" :messages="messages" :countries="countries"></postal>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-3 submit">
+                <input type="submit" value="Kontaktdaten ändern" class="btn btn-address-change" @click.prevent="validateForm()">
+                <span class="info-text">Im folgenden Schritt können Sie die Daten noch einmal prüfen.</span>
+            </div>
+            <input type="hidden" name="addressType" v-model="formData[9].value">
+        </form>
 	</div>
 </div>
 </template>
@@ -108,7 +110,8 @@
 			addressToken: String,
 			isCompany: Boolean,
 			messages: Object,
-			validateAddressURL: String,
+            validateAddressURL: String,
+            updateAddressURL: String,
 			countries: {
 				type: Array,
 				default: function() {
@@ -126,7 +129,10 @@
 						this.$store.getters.invalidFields.forEach(invalidField => {
 							this.error(invalidField);
 						});
-					}
+                    }
+                    else {
+                        this.$refs.form.submit();
+                    }
 				});
 			},
 			validateInput(formData: Array<inputField>, fieldName: string) {
