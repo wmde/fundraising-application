@@ -16,7 +16,7 @@ new Vue( {
 				addressToken: addressElement.getAttribute('data-address-token'),
 				isCompany: JSON.parse( addressElement.getAttribute('data-is-company') ),
 				messages: JSON.parse(addressElement.getAttribute('data-messages')),
-                validateAddressURL: initAddressForm.getAttribute('data-validate-address-url')
+                validateAddressURL: initAddressForm.getAttribute('data-validate-address-url'),
                 updateAddressURL: initAddressForm.getAttribute('data-update-address-url')
 			}
 		}
