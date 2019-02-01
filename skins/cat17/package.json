@@ -23,7 +23,8 @@
     "optimize-css": "postcss -r web/css",
     "build-css": "npm run build-sass && npm run optimize-css",
     "webpack-build-assets": "webpack --env production",
-    "webpack-watch-assets": "webpack --watch --env development"
+    "webpack-watch-assets": "webpack --watch --env development",
+    "postinstall": "npm --prefix=address-form install"
   },
   "repository": {
     "type": "git",
