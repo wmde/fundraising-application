@@ -8,7 +8,7 @@
                     name="street"
 					:placeholder="messages.street_label"
 					v-model="formData[5].value"
-					@blur="validateInput(formData, 'street'); showWarning = true">
+					@blur="validateInput(formData, 'street'); displayStreetWarning()">
 			<span v-if="showError.street" class="error-text">{{ messages.form_street_error }}</span>
 			<span v-if="showWarning" class="warning-text">{{ messages.form_street_number_warning }}</span>
 		</div>
@@ -62,6 +62,11 @@
         data() {
             return {
                 showWarning: false
+            }
+        },
+        methods: {
+            displayStreetWarning() {
+                this.showWarning = /^\D+$/.test(this.formData[5].value);
             }
         }
 	} );
