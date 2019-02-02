@@ -38,7 +38,7 @@
 						name: 'salutation',
 						value: '',
 						pattern: '^(Herr|Frau)$',
-						optionalField: false
+						optionalField: this.$props.isCompany
 					},
 					{
 						name: 'title',
@@ -56,13 +56,13 @@
 						name: 'firstName',
 						value: '',
 						pattern: '^.+$',
-						optionalField: false
+						optionalField: this.$props.isCompany
 					},
 					{
 						name: 'lastName',
 						value: '',
 						pattern: '^.+$',
-						optionalField: false
+						optionalField: this.$props.isCompany
 					},
 					{
 						name: 'street',
@@ -96,7 +96,7 @@
 					}
 				],
 				showError: {
-                    salutation: false;
+                    salutation: false,
 					companyName: false,
 					firstName: false,
 					lastName: false,
@@ -141,7 +141,6 @@
 				this.error(fieldName);
 			},
 			error(fieldName: string) {
-                console.log(fieldName, ' validity is ', this.$store.getters.validity(fieldName));
 				this.showError[fieldName] = !this.$store.getters.validity(fieldName);
 			}
 		}
