@@ -12,7 +12,6 @@
             </div>
             <div class="col-xs-12 col-md-3 submit">
                 <input type="submit" value="Kontaktdaten ändern" class="btn btn-address-change" @click.prevent="validateForm()">
-                <span class="info-text">Im folgenden Schritt können Sie die Daten noch einmal prüfen.</span>
             </div>
             <input type="hidden" name="addressType" v-model="formData[9].value">
         </form>
