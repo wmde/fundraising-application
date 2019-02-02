@@ -37,7 +37,7 @@
 					{
 						name: 'salutation',
 						value: '',
-						pattern: '',
+						pattern: '^(Herr|Frau)$',
 						optionalField: false
 					},
 					{
@@ -96,6 +96,7 @@
 					}
 				],
 				showError: {
+                    salutation: false;
 					companyName: false,
 					firstName: false,
 					lastName: false,
@@ -140,6 +141,7 @@
 				this.error(fieldName);
 			},
 			error(fieldName: string) {
+                console.log(fieldName, ' validity is ', this.$store.getters.validity(fieldName));
 				this.showError[fieldName] = !this.$store.getters.validity(fieldName);
 			}
 		}
