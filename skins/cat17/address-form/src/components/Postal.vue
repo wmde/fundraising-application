@@ -14,16 +14,6 @@
 		</div>
 	</div>
 	<div class="row">
-		<div v-bind:class="[{ invalid: showError.city }, 'field-grp', 'field-city', 'col-xs-12', 'col-md-6']">
-			<label for="city">{{ messages.city_label }}</label>
-			<input type="text"
-					id="city"
-                    name="city"
-					:placeholder="messages.city_label"
-					v-model="formData[6].value"
-					@blur="validateInput(formData, 'city')">
-			<span v-if="showError.city" class="error-text">{{ messages.form_city_error }}</span>
-		</div>
 		<div v-bind:class="[{ invalid: showError.postcode }, 'field-grp', 'field-postcode', 'col-xs-12', 'col-md-6']">
 			<label for="post-code">{{ messages.zip_label }}</label>
 			<input type="text"
@@ -33,6 +23,16 @@
 					:placeholder="messages.zip_label"
 					@blur="validateInput(formData, 'postcode')">
 			<span v-if="showError.postcode" class="error-text">{{ messages.form_zip_error }}</span>
+		</div>
+        <div v-bind:class="[{ invalid: showError.city }, 'field-grp', 'field-city', 'col-xs-12', 'col-md-6']">
+			<label for="city">{{ messages.city_label }}</label>
+			<input type="text"
+					id="city"
+                    name="city"
+					:placeholder="messages.city_label"
+					v-model="formData[6].value"
+					@blur="validateInput(formData, 'city')">
+			<span v-if="showError.city" class="error-text">{{ messages.form_city_error }}</span>
 		</div>
 	</div>
 	<div class="row">
