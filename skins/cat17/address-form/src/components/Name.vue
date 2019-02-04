@@ -4,7 +4,7 @@
 		<label for="company-name">{{ messages.companyname_label }}</label>
 		<input type="text"
 				id="company-name"
-				name="companyName"
+				name="company"
 				:placeholder="messages.companyname_label"
 				v-model="formData[2].value"
 				@blur="validateInput(formData, 'companyName')">
