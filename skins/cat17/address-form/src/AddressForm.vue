@@ -6,8 +6,8 @@
         <form ref="form" :action="updateAddressURL + addressToken" method="post">
             <div class="col-xs-12 col-md-9">
                 <div class="form-shadow-wrap">
-                    <name :show-error="showError" :form-data="formData" :validate-input="validateInput" :is-company="isCompany" :messages="messages"></name>
-                    <postal :show-error="showError" :form-data="formData" :validate-input="validateInput" :messages="messages" :countries="countries"></postal>
+                    <name :show-error="fieldErrors" :form-data="formData" :validate-input="validateInput" :is-company="isCompany" :messages="messages"></name>
+                    <postal :show-error="fieldErrors" :form-data="formData" :validate-input="validateInput" :messages="messages" :countries="countries"></postal>
                 </div>
             </div>
             <div class="col-xs-12 col-md-3 submit">
@@ -23,7 +23,8 @@
 	import Vue from 'vue';
 	import Name from './components/Name.vue';
 	import Postal from './components/Postal.vue';
-	import {InputField, ValidationResult, FormData, Transport} from './types';
+	import {AddressValidity, FormData, Transport} from './types';
+    import {Validity} from './lib/validation_states';
 
 	export default Vue.extend ( {
 		name: 'addressForm',
@@ -34,12 +35,12 @@
 		data: function() {
 			return {
 				formData: {
-					salutation: {
-						name: 'salutation',
-						value: '',
-						pattern: '^(Herr|Frau)$',
-						optionalField: this.$props.isCompany
-					},
+                    salutation: {
+                        name: 'salutation',
+                        value: '',
+                        pattern: '^(Herr|Frau)$',
+                        optionalField: this.$props.isCompany
+                    },
                     title: {
                         name: 'title',
                         value: '',
@@ -47,63 +48,54 @@
                         optionalField: true
                     },
                     companyName: {
-                            name: 'companyName',
-                            value: '',
-                            pattern: '^.+$',
-                            optionalField: !this.$props.isCompany
-                        },
-					firstName: {
-						name: 'firstName',
-						value: '',
-						pattern: '^.+$',
-						optionalField: this.$props.isCompany
-					},
-					lastName: {
-						name: 'lastName',
-						value: '',
-						pattern: '^.+$',
-						optionalField: this.$props.isCompany
-					},
-					street: {
-						name: 'street',
-						value: '',
-						pattern: '^.+$',
-						optionalField: false
-					},
-					city: {
-						name: 'city',
-						value: '',
-						pattern: '^.+$',
-						optionalField: false
-					},
-					postcode: {
-						name: 'postcode',
-						value: '',
-						pattern: '[0-9]{4,5}$',
-						optionalField: false
-					},
-					country: {
-						name: 'country',
-						value: 'DE',
-						pattern: '',
-						optionalField: false
-					},
-					addressType: {
-						name: 'addressType',
-						value: this.$props.isCompany ? 'firma' : 'person',
-						pattern: '',
-						optionalField: false
-					}
+                        name: 'companyName',
+                        value: '',
+                        pattern: '^.+$',
+                        optionalField: !this.$props.isCompany
+                    },
+                    firstName: {
+                        name: 'firstName',
+                        value: '',
+                        pattern: '^.+$',
+                        optionalField: this.$props.isCompany
+                    },
+                    lastName: {
+                        name: 'lastName',
+                        value: '',
+                        pattern: '^.+$',
+                        optionalField: this.$props.isCompany
+                    },
+                    street: {
+                        name: 'street',
+                        value: '',
+                        pattern: '^.+$',
+                        optionalField: false
+                    },
+                    city: {
+                        name: 'city',
+                        value: '',
+                        pattern: '^.+$',
+                        optionalField: false
+                    },
+                    postcode: {
+                        name: 'postcode',
+                        value: '',
+                        pattern: '[0-9]{4,5}$',
+                        optionalField: false
+                    },
+                    country: {
+                        name: 'country',
+                        value: 'DE',
+                        pattern: '',
+                        optionalField: false
+                    },
+                    addressType: {
+                        name: 'addressType',
+                        value: this.$props.isCompany ? 'firma' : 'person',
+                        pattern: '',
+                        optionalField: false
+                    }
                 },
-				showError: {
-                    salutation: false,
-					companyName: false,
-					firstName: false,
-					lastName: false,
-					street: false,
-					city: false,
-					postcode: false
-				}
 			}
 		},
 		props: {
@@ -122,6 +114,19 @@
 				}
 			}
 		},
+		computed: {
+            fieldErrors(): AddressValidity {
+                return {
+                    salutation: this.$store.state.form.salutation.isValid === Validity.INVALID,
+                    companyName: this.$store.state.form.companyName.isValid === Validity.INVALID,
+                    firstName: this.$store.state.form.firstName.isValid === Validity.INVALID,
+                    lastName: this.$store.state.form.lastName.isValid === Validity.INVALID,
+                    street: this.$store.state.form.street.isValid === Validity.INVALID,
+                    city:  this.$store.state.form.city.isValid === Validity.INVALID,
+                    postcode: this.$store.state.form.postcode.isValid === Validity.INVALID
+                }
+            },
+		},
 		methods: {
 			validateForm() {
 				this.$store.dispatch('storeAddressFields', {
@@ -129,22 +134,13 @@
 					validateAddressURL: this.$props.validateAddressURL,
 					formData: this.formData
 				}).then( resp => {
-					if (!this.$store.getters.allFieldsAreValid) {
-						this.$store.getters.invalidFields.forEach(invalidField => {
-							this.error(invalidField);
-						});
-                    }
-                    else {
-                        this.$refs.form.submit();
-                    }
+					if (this.$store.getters.allFieldsAreValid) {
+						(this.$refs.form as HTMLFormElement).submit();
+					}
 				});
 			},
-			validateInput(formData: FormData, fieldName: string) {
-				this.$store.dispatch( 'validateInput', formData[fieldName] );
-				this.error(fieldName);
-			},
-			error(fieldName: string) {
-				this.showError[fieldName] = !this.$store.getters.validity(fieldName);
+            validateInput(formData: FormData, fieldName: string) {
+                this.$store.dispatch( 'validateInput', formData[fieldName] );
 			}
 		}
 	} );

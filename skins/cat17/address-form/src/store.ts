@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Vuex, {StoreOptions} from 'vuex';
 import {Validity} from './lib/validation_states';
 import {Helper} from './mixins/helper';
-import { AddressState, InputField, Payload, PostData, ValidationResult} from './types';
+import { AddressState, AddressValidity, InputField, Payload, PostData, ValidationResult} from './types';
 
 const VALIDATE_INPUT: string = 'VALIDATE_INPUT';
 const MARK_EMPTY_FIELD_INVALID: string = 'MARK_EMPTY_FIELD_INVALID';
@@ -106,15 +106,12 @@ const store: StoreOptions<AddressState> = {
 		}
 	},
 	getters: {
-		validity: (state) => (contentName: string) => {
-			return state.form[contentName].isValid;
-		},
 		invalidFields: (state) :Array<string> => {
 			return Object.keys(state.form).filter(field => state.form[field].isValid === Validity.INVALID)
 		},
 		allFieldsAreValid: (state, getters) :boolean => {
 			return getters.invalidFields.length === 0;
-		}
+		},
 	},
 	actions: {
 		validateInput({ commit }, field: InputField) {

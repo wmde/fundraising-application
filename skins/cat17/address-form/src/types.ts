@@ -1,10 +1,20 @@
-export interface FormValidity {
+export interface FieldValidity {
 	dataEntered: boolean,
 	isValid: boolean | null
 }
 
 export interface Form {
-	[key: string]: FormValidity
+	[key: string]: FieldValidity
+}
+
+export interface AddressValidity {
+	salutation: boolean,
+	companyName: boolean,
+	firstName: boolean,
+	lastName: boolean,
+	street: boolean,
+	city: boolean,
+	postcode: boolean
 }
 
 export interface AddressState {
@@ -12,6 +22,9 @@ export interface AddressState {
 	form: Form,
 }
 
+/**
+ * Validation result JSON object from the server
+ */
 export interface ValidationResult {
 	status: string,
 	messages: object
