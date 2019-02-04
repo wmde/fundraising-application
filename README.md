@@ -169,11 +169,11 @@ at [http://localhost:8025/](http://localhost:8025/)
 
 ### Database migrations
 
-Out of the box, the database should be in a usable state for local development. For production changes to the database,
-doctrine migration scripts may be used. Migration scripts are stored in the *migrations* directory of
+Out of the box, the database should be in a usable state for local development. If you make changes to the database 
+schema, you must provide a migration script for the production database. Store the migration scripts in the `migrations` directory of
 the [FundraisingStore repository](https://github.com/wmde/FundraisingStore/tree/master/migrations).
 
-The scripts from the FundraisingStore repository can be executed through FundraisingFrontend by running `make migration` commands.
+To test you migration in your Docker development environment, deploy the changes in FundraisingStore to the FundraisingFrontend repository and run the `make migration` command.
 
 To execute a specific script, run the following command and add the version number of the migration script you want to use.
 As an example, executing `migrations/Version20180612000000.php` would look like this:
@@ -196,8 +196,7 @@ command from doctrine-migrations which supports `--add` and `--delete` paramters
 vendor/wmde/fundraising-store/vendor/doctrine/migrations/bin/doctrine-migrations migrations:version
 ```
 
-All of the previous make commands are only available in a dockerized environment.
-If you intend to use these commands on servers, you can check the `Makefile` for the underlying commands.
+Have a look the the [deployment documentation](deployment/README.md) on how to run the migrations on the server.
 
 ### Accessing the database from a Docker image
 
@@ -245,6 +244,29 @@ You then start the environment with the following command:
     docker-compose -f docker-compose.yml -f docker-compose.db.yml up
 
 You will be prompted for a password which you can grab from `config/config.prod.json`.
+
+### Resetting the database in your local environment
+
+To completely delete the database data you need to delete the volume `db-storage` defined in `docker-compose.yml`. 
+To allow the deletion, you must shut down all containers and images using the volume. 
+
+    docker-compose down
+    docker-compose rm
+
+List all volumes with
+
+    docker volume ls
+
+Look for a volume ending in `db-storage` and with a prefix of the directory of the FundraisingFrontend, 
+e.g. `FundraisingFrontend_db-storage` or `fundraising-frontend_db-storage`. 
+Copy the name and use it in the next command: 
+
+    docker volume rm VOLUME_NAME
+
+Finally, rebuild the database structure:
+
+    make setup-db
+
 
 ## Frontend development
 

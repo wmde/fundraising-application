@@ -43,15 +43,21 @@ Call the playbook (in this case for the test server) with the `skip_symlink` var
 
     ansible-playbook -i inventory/test --extra-vars 'skip_symlink=1' deployment.yml
 
-Afterwards, you login to the server, change to the new release directory and use the
-[Doctrine command line](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/tools.html#database-schema-generation)
-to update the database. The recommended way of doing this is to run
+This won't change the `html` symlink.
 
-    vendor/bin/doctrine orm:schema-tool:update --dump-sql
+Afterwards, you login to the server, change to the new release directory (the timestamped directory, *not* the `html`) and use 
+[Doctrine migrations](https://www.doctrine-project.org/projects/doctrine-migrations/en/2.0/reference/managing-migrations.html)
+to update the database. 
 
-and apply the database changes from a console MySQL client.
+Before running the migration you hav to set the application environment variable that will be used in the Doctrine `cli-config.php` configuration file. You can find the name of the application environment in the `environment_name` variable of the deployment inventory. Common names are `uat` (User Acceptance Testing) and `prod` (Production).
 
-When you're finished with the database changes, do a new deployment to ensure the symlink is changed and the cache is purged. 
+    export APP_ENV=prod
+
+Check the migrations directory of FundraisingStore for the migration name you want to run (usually a timestamp like `20190109000000`). Then run the following command (replacing ``MIGRATION_NAME` ) :
+
+    vendor/bin/doctrine-migrations migrations:execute --configuration=vendor/wmde/fundraising-store/migrations.yml 20190109000000
+
+When the migration is finished with the database changes, do a new deployment to ensure the symlink is changed and the cache is purged. 
 
 ## Preparing a new server for deployment
 
