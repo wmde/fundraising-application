@@ -49,7 +49,7 @@ Afterwards, you login to the server, change to the new release directory (the ti
 [Doctrine migrations](https://www.doctrine-project.org/projects/doctrine-migrations/en/2.0/reference/managing-migrations.html)
 to update the database. 
 
-Before running the migration you hav to set the application environment variable that will be used in the Doctrine `cli-config.php` configuration file. You can find the name of the application environment in the `environment_name` variable of the deployment inventory. Common names are `uat` (User Acceptance Testing) and `prod` (Production).
+Before running the migration you have to set the application environment variable that will be used in the Doctrine `cli-config.php` configuration file. You can find the name of the application environment in the `environment_name` variable of the deployment inventory. Common names are `uat` (User Acceptance Testing) and `prod` (Production).
 
     export APP_ENV=prod
 
