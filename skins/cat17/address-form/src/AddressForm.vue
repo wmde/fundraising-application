@@ -1,7 +1,7 @@
 <template>
 <div id="addressForm" class="container">
 	<h2>{{ messages.address_form_title }}</h2>
-	<h5>Die bisherigen Daten sind schon eingetragen, bitte passen Sie diese an. {{ messages.address_form_subtitle }}</h5>
+	<h5>{{ messages.address_form_subtitle }}</h5>
 	<div class="row">
         <form ref="form" :action="updateAddressURL + addressToken" method="post">
             <div class="col-xs-12 col-md-9">
