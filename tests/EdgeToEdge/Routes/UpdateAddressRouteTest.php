@@ -66,7 +66,7 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 						'firstName' => 'Graf',
 						'lastName' => 'Zahl',
 						'salutation' => 'Herr',
-						'address' => 'Zählerweg 5',
+						'street' => 'Zählerweg 5',
 						'postcode' => '12345',
 						'city' => 'Berlin-Zehlendorf',
 						'country' => 'DE'

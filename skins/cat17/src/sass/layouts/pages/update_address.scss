@@ -1,0 +1,67 @@
+.page-update-address {
+    #addressForm {
+        .form-shadow-wrap {
+            margin-top: 78px;
+            padding: 64px 48px 128px 48px;
+            width: 100%;
+            @media (max-width: 972px) {
+                margin-top: 32px;
+                padding: 0;
+            }
+        }
+        label {
+            font-size: 12px;
+            cursor: auto;
+        }
+        ::placeholder {
+            opacity: 0.5;
+            color: $gray-dark;
+        }
+        .submit {
+            margin-top: 131px;
+            margin-left: -12px;
+            @media (max-width: 972px) {
+                margin-top: 0;
+                margin-left: 0;
+            }
+        }
+        .btn-address-change {
+            width: 100%;
+            height: 50px;
+        }
+        .info-text {
+            display: inline-block;
+            margin-top: 16px;
+            font-size: 12px;
+            color: $gray-dark;
+        }
+        .error-text {
+            display: block;
+            color: $brand-error;
+            margin-bottom: 16px;
+            line-height: 16px;
+            font-size: 12px;
+        }
+        // This class is needed in order to go around the css rules coming from jcf components
+        // which set elements to absolute and have some !important rules.
+        // Those mess up the bootstrap grid used in the layout of the address form
+        .align-block {
+            width: 45.5%;
+            float: left;
+            margin-left: 15px;
+            &:nth-child(2) {
+                margin-left: 28px;
+            }
+            label, input, section {
+                display: block;
+            }
+            @media (max-width: 972px) {
+                width: 92%;
+                margin-left: 15px;
+                &:nth-child(2) {
+                    margin-left: 15px;
+                }
+            }
+        }
+    }
+}

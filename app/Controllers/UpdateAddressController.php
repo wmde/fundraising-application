@@ -65,7 +65,7 @@ class UpdateAddressController {
 	}
 
 	private function addPostalParams( ChangeAddressRequest $request, ParameterBag $params ): void {
-		$request->setAddress( $params->get( 'address', '' ) )
+		$request->setAddress( $params->get( 'street', '' ) )
 			->setPostcode( $params->get( 'postcode', '' ) )
 			->setCity( $params->get( 'city', '' ) )
 			->setCountry( $params->get( 'country', 'DE' ) );

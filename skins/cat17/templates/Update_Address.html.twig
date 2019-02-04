@@ -1,13 +1,17 @@
 {% extends 'page_layouts/base.html.twig' %}
 
-{% block page_identifier %}update=address{% endblock%}
+{% block page_identifier %}update-address{% endblock%}
 
 {% block main %}
-	<div>
-		<input hidden id="addressToken" value="{$ addressToken $}">
+	<div id="updateAddress" data-address-token="{$ addressToken $}" data-is-company="{$ isCompany | json_encode $}" data-messages="{$ messages $}">
 	</div>
 {% endblock %}
 
 {% block scripts %}
-
+	<script src="{$ basepath $}{$ '/skins/cat17/scripts/address-change/js/app.js' | prefix_file $}"
+            id="address-form"
+            data-validate-address-url="{$ basepath|e('html_attr') $}/validate-address"
+            data-update-address-url="{$ basepath|e('html_attr') $}/update-address/"
+    ></script>
+	<script src="{$ basepath $}{$ '/skins/cat17/scripts/address-change/js/chunk-vendors.js' | prefix_file $}"></script>
 {% endblock %}
