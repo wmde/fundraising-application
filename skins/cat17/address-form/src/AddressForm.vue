@@ -13,7 +13,7 @@
             <div class="col-xs-12 col-md-3 submit">
                 <input type="submit" value="Kontaktdaten ändern" class="btn btn-address-change" @click.prevent="validateForm()">
             </div>
-            <input type="hidden" name="addressType" v-model="formData[9].value">
+            <input type="hidden" name="addressType" v-model="formData.addressType.value">
         </form>
 	</div>
 </div>
@@ -33,68 +33,68 @@
 		},
 		data: function() {
 			return {
-				formData: [
-					{
+				formData: {
+					salutation: {
 						name: 'salutation',
 						value: '',
 						pattern: '^(Herr|Frau)$',
 						optionalField: this.$props.isCompany
 					},
-					{
-						name: 'title',
-						value: '',
-						pattern: '',
-						optionalField: true
-					},
-					{
-						name: 'companyName',
-						value: '',
-						pattern: '^.+$',
-						optionalField: !this.$props.isCompany
-					},
-					{
+                    title: {
+                        name: 'title',
+                        value: '',
+                        pattern: '',
+                        optionalField: true
+                    },
+                    companyName: {
+                            name: 'companyName',
+                            value: '',
+                            pattern: '^.+$',
+                            optionalField: !this.$props.isCompany
+                        },
+					firstName: {
 						name: 'firstName',
 						value: '',
 						pattern: '^.+$',
 						optionalField: this.$props.isCompany
 					},
-					{
+					lastName: {
 						name: 'lastName',
 						value: '',
 						pattern: '^.+$',
 						optionalField: this.$props.isCompany
 					},
-					{
+					street: {
 						name: 'street',
 						value: '',
 						pattern: '^.+$',
 						optionalField: false
 					},
-					{
+					city: {
 						name: 'city',
 						value: '',
 						pattern: '^.+$',
 						optionalField: false
 					},
-					{
+					postcode: {
 						name: 'postcode',
 						value: '',
 						pattern: '[0-9]{4,5}$',
 						optionalField: false
 					},
-					{
+					country: {
 						name: 'country',
 						value: 'DE',
 						pattern: '',
 						optionalField: false
 					},
-					 {
+					addressType: {
 						name: 'addressType',
 						value: this.$props.isCompany ? 'firma' : 'person',
 						pattern: '',
 						optionalField: false
 					}
-				],
+                },
 				showError: {
                     salutation: false,
 					companyName: false,
@@ -135,9 +135,8 @@
                     }
 				});
 			},
-			validateInput(formData: Array<inputField>, fieldName: string) {
-				let field = formData.filter( data => data.name === fieldName )[0];
-				this.$store.dispatch( 'validateInput', field );
+			validateInput(formData: FormData, fieldName: string) {
+				this.$store.dispatch( 'validateInput', formData[fieldName] );
 				this.error(fieldName);
 			},
 			error(fieldName: string) {

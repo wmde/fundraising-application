@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Vuex, {StoreOptions} from 'vuex';
 import {Validity} from './lib/validation_states';
 import {Helper} from './mixins/helper';
-import {AddressState, inputField, Payload, ValidationResult} from './types';
+import {AddressState, InputField, Payload, ValidationResult} from './types';
 
 const VALIDATE_INPUT: string = 'VALIDATE_INPUT';
 const MARK_EMPTY_FIELD_INVALID: string = 'MARK_EMPTY_FIELD_INVALID';
@@ -66,7 +66,7 @@ const store: StoreOptions<AddressState> = {
 		}
 	},
 	mutations: {
-		[VALIDATE_INPUT](state, field: inputField) {
+		[VALIDATE_INPUT](state, field: InputField) {
 			if (field.value === '' && field.optionalField) {
 				state.form[field.name] = {
 					...state.form[field.name],
@@ -83,9 +83,9 @@ const store: StoreOptions<AddressState> = {
 			}
 		},
 		[MARK_EMPTY_FIELD_INVALID](state, payload) {
-			payload.forEach((field: inputField) => {
-					if (!field.optionalField && state.form[field.name].isValid === Validity.INCOMPLETE) {
-						state.form[field.name].isValid = Validity.INVALID;
+            Object.keys(payload).forEach((field: string) => {
+					if (!payload[field].optionalField && state.form[payload[field].name].isValid === Validity.INCOMPLETE) {
+						state.form[payload[field].name].isValid = Validity.INVALID;
 					}
 				});
 		},
@@ -118,7 +118,7 @@ const store: StoreOptions<AddressState> = {
 		}
 	},
 	actions: {
-		validateInput({ commit }, field: inputField) {
+		validateInput({ commit }, field: InputField) {
 			commit('VALIDATE_INPUT', field);
 		},
 		storeAddressFields({ commit, getters }, payload: Payload) {

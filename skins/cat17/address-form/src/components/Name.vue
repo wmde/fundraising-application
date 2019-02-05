@@ -6,7 +6,7 @@
 				id="company-name"
 				name="company"
 				:placeholder="messages.companyname_label"
-				v-model="formData[2].value"
+				v-model="formData.companyName.value"
 				@blur="validateInput(formData, 'companyName')">
 		<span v-if="showError.companyName" class="error-text">{{ messages.form_companyname_error }}</span>
 	</div>
@@ -15,7 +15,7 @@
 			<label for="salutation">{{ messages.salutation_label }}</label>
 			<select class="salutation col-xs-12 col-md-6"
 					id="salutation"
-					v-model="formData[0].value"
+					v-model="formData.salutation.value"
 					name="salutation"
 					data-jcf='{"wrapNative": false,  "wrapNativeOnMobile": true  }'
 					@blur="validateInput(formData, 'salutation')">
@@ -28,7 +28,7 @@
 			<label for="title">{{ messages.academic_title_label }}</label>
 			<select class="personal-title col-xs-12 col-md-6"
 					id="title"
-					v-model="formData[1].value"
+					v-model="formData.title.value"
 					name="title"
 					data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true}'
 					@blur="validateInput(formData, 'title')">
@@ -43,7 +43,7 @@
 			<label for="first-name">{{ messages.firstname_label }}</label>
 			<input type="text"
 					id="first-name"
-					v-model="formData[3].value"
+					v-model="formData.firstName.value"
 					name="firstName"
 					:placeholder="messages.firstname_label"
 					@blur="validateInput(formData, 'firstName')">
@@ -53,7 +53,7 @@
 			<label for="last-name">{{ messages.lastname_label }}</label>
 			<input type="text"
 					id="last-name"
-					v-model="formData[4].value"
+					v-model="formData.lastName.value"
 					name="lastName"
 					:placeholder="messages.lastname_label"
 					@blur="validateInput(formData, 'lastName')">
