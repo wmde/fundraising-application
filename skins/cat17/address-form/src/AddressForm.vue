@@ -23,7 +23,7 @@
 	import Vue from 'vue';
 	import Name from './components/Name.vue';
 	import Postal from './components/Postal.vue';
-	import {inputField, ValidationResult} from './types';
+	import {InputField, ValidationResult} from './types';
 
 	export default Vue.extend ( {
 		name: 'addressForm',

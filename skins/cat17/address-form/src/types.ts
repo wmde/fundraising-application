@@ -37,4 +37,8 @@ export interface Payload {
 	formData: FormData
 }
 
+export interface PostData {
+    [key: string]: string
+}
+
 

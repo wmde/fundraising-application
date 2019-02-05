@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Vuex, {StoreOptions} from 'vuex';
 import {Validity} from './lib/validation_states';
 import {Helper} from './mixins/helper';
-import {AddressState, InputField, Payload, ValidationResult} from './types';
+import { AddressState, InputField, Payload, PostData, ValidationResult} from './types';
 
 const VALIDATE_INPUT: string = 'VALIDATE_INPUT';
 const MARK_EMPTY_FIELD_INVALID: string = 'MARK_EMPTY_FIELD_INVALID';
@@ -124,8 +124,9 @@ const store: StoreOptions<AddressState> = {
 		storeAddressFields({ commit, getters }, payload: Payload) {
 			commit('MARK_EMPTY_FIELD_INVALID', payload.formData);
 			if ( getters.allFieldsAreValid ) {
-				commit('BEGIN_ADDRESS_VALIDATION');
-				return transport.postData(payload.validateAddressURL, payload.formData)
+                commit('BEGIN_ADDRESS_VALIDATION');
+                let postData = Helper.formatPostData(payload.formData);
+                return transport.postData(payload.validateAddressURL, postData)
 					.then( (validationResult: ValidationResult) => {
 						commit('FINISH_ADDRESS_VALIDATION', validationResult);
 					});
