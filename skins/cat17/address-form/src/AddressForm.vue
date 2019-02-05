@@ -107,6 +107,7 @@
 			}
 		},
 		props: {
+            transport: Object,
 			addressToken: String,
 			isCompany: Boolean,
 			messages: Object,
@@ -122,6 +123,7 @@
 		methods: {
 			validateForm() {
 				this.$store.dispatch('storeAddressFields', {
+                    transport: this.transport,
 					validateAddressURL: this.validateAddressURL,
 					formData: this.formData
 				}).then( resp => {

@@ -14,8 +14,6 @@ const ADDRESS_FIELD_VALIDATOR_NAMES: Array<string> = [
 	'companyName',
 	'street', 'postcode', 'city', 'country'
 ];
-const JQueryTransport = require('../../src/app/lib/jquery_transport').default;
-let transport = new JQueryTransport();
 
 Vue.use(Vuex);
 
@@ -126,7 +124,7 @@ const store: StoreOptions<AddressState> = {
 			if ( getters.allFieldsAreValid ) {
                 commit('BEGIN_ADDRESS_VALIDATION');
                 let postData = Helper.formatPostData(payload.formData);
-                return transport.postData(payload.validateAddressURL, postData)
+                return payload.transport.postData(payload.validateAddressURL, postData)
 					.then( (validationResult: ValidationResult) => {
 						commit('FINISH_ADDRESS_VALIDATION', validationResult);
 					});
