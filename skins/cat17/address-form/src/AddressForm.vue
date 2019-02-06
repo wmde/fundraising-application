@@ -23,7 +23,7 @@
 	import Vue from 'vue';
 	import Name from './components/Name.vue';
 	import Postal from './components/Postal.vue';
-	import {InputField, ValidationResult} from './types';
+	import {InputField, ValidationResult, Transport} from './types';
 
 	export default Vue.extend ( {
 		name: 'addressForm',
@@ -107,7 +107,9 @@
 			}
 		},
 		props: {
-            transport: Object,
+            transport: {
+                type: Object as () => Transport
+            },
 			addressToken: String,
 			isCompany: Boolean,
 			messages: Object,
@@ -123,8 +125,8 @@
 		methods: {
 			validateForm() {
 				this.$store.dispatch('storeAddressFields', {
-                    transport: this.transport,
-					validateAddressURL: this.validateAddressURL,
+                    transport: this.$props.transport,
+					validateAddressURL: this.$props.validateAddressURL,
 					formData: this.formData
 				}).then( resp => {
 					if (!this.$store.getters.allFieldsAreValid) {

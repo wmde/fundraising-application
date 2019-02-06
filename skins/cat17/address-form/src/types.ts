@@ -32,17 +32,17 @@ export interface FormData {
     [key: string]: InputField
 }
 
+export interface Transport {
+    getData: Function
+    postData: Function
+}
+
 export interface Payload {
-    transport: JQueryTransport,
+    transport: Transport,
 	validateAddressURL: String,
 	formData: FormData
 }
 
 export interface PostData {
     [key: string]: string
-}
-
-export interface JQueryTransport {
-    getData: Function
-    postData: Function
 }
