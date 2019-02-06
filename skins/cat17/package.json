@@ -16,9 +16,9 @@
     "build-funds": "mkdirp web/scripts && cross-env NODE_ENV=production browserify -g envify -e use-of-funds/src/main.js | uglifyjs -c warnings=false -m > web/scripts/useOfFunds.js",
     "build-address-form": "cross-env NODE_ENV=production && npm --prefix=address-form run build",
     "test": "tape -r ./src/app/components/test-setup.js 'src/app/tests/**/*.js' | tap-min",
-    "test:unit": "jest",
+    "test:unit": "npm --prefix=address-form run test:unit",
     "cs": "eslint --ext .js,.vue src/app faq-page use-of-funds",
-    "ci": "npm-run-all --parallel cs test build-assets",
+    "ci": "npm-run-all --parallel cs test test:unit build-assets",
     "build-assets": "npm-run-all clean --parallel webpack-build-assets build-css build-faq build-funds",
     "build-sass": "node-sass --output-style compressed -o web/css --include-path node_modules src/sass/main.scss",
     "optimize-css": "postcss -r web/css",
@@ -68,7 +68,6 @@
     "file-loader": "^2.0.0",
     "glob": "^7.1.3",
     "imagemin-webpack-plugin": "^2.4.0",
-    "jest": "^24.1.0",
     "mkdirp": "^0.5.1",
     "node-sass": "^4.9.4",
     "npm-run-all": "^4.1.3",
@@ -84,10 +83,8 @@
     "tap-min": "^1.3.0",
     "tape": "^4.9.1",
     "tape-catch": "^1.0.6",
-    "ts-jest": "^23.10.5",
     "uglify-js": "^2.5.0",
     "uglifyjs-webpack-plugin": "^2.0.1",
-    "vue-jest": "^3.0.2",
     "vueify": "^9.0.0",
     "watchify": "^3.11.0",
     "webpack": "^4.20.2",
@@ -127,17 +124,5 @@
   },
   "browserify-shim": {
     "jquery": "global:jQuery"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "ts",
-      "json",
-      "vue"
-    ],
-    "transform": {
-      ".*\\.(vue)$": "vue-jest",
-      "^.+\\.tsx?$": "ts-jest"
-    }
   }
 }
