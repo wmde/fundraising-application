@@ -6,16 +6,16 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "test:unit": "jest"
+    "test:unit": "jest --config ./jest.config.json"
   },
   "dependencies": {
-    "@types/jest": "^24.0.0",
     "vue": "^2.5.21",
     "vue-class-component": "^6.0.0",
     "vue-property-decorator": "^7.0.0",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
+    "@types/jest": "^24.0.0",
     "@vue/cli-plugin-babel": "^3.3.0",
     "@vue/cli-plugin-eslint": "^3.3.0",
     "@vue/cli-plugin-typescript": "^3.3.0",
@@ -34,20 +34,5 @@
     "typescript": "~3.1.1",
     "vue-jest": "^3.0.2",
     "vue-template-compiler": "^2.5.21"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "ts",
-      "json",
-      "vue"
-    ],
-    "transform": {
-      ".*\\.(vue)$": "vue-jest",
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "verbose": true,
-    "testURL": "http://localhost/"
   }
 }
