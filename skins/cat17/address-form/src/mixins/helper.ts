@@ -9,9 +9,9 @@ export const Helper = {
         return new RegExp(pattern).test(value) ? Validity.VALID : Validity.INVALID;
     },
     formatPostData: (form: FormData) => {
-        return Object.keys(form).reduce((accumultaor: PostData, currentValue: string) => {
-            accumultaor[currentValue] = form[currentValue].value;
-            return accumultaor;
+        return Object.keys(form).reduce((accumulator: PostData, currentValue: string) => {
+            accumulator[currentValue] = form[currentValue].value;
+            return accumulator;
         }, {});
     }
 }

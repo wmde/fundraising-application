@@ -46,3 +46,4 @@ export interface Payload {
 export interface PostData {
     [key: string]: string
 }
+

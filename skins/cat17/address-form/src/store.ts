@@ -82,8 +82,9 @@ const store: StoreOptions<AddressState> = {
 		},
 		[MARK_EMPTY_FIELD_INVALID](state, payload) {
             Object.keys(payload).forEach((field: string) => {
-					if (!payload[field].optionalField && state.form[payload[field].name].isValid === Validity.INCOMPLETE) {
-						state.form[payload[field].name].isValid = Validity.INVALID;
+                const fieldName = payload[field];
+                if (!fieldName.optionalField && state.form[fieldName.name].isValid === Validity.INCOMPLETE) {
+                    state.form[fieldName.name].isValid = Validity.INVALID;
 					}
 				});
 		},
@@ -123,8 +124,8 @@ const store: StoreOptions<AddressState> = {
 			commit('MARK_EMPTY_FIELD_INVALID', payload.formData);
 			if ( getters.allFieldsAreValid ) {
                 commit('BEGIN_ADDRESS_VALIDATION');
-                let postData = Helper.formatPostData(payload.formData);
-                return payload.transport.postData(payload.validateAddressURL, postData)
+                const postData = Helper.formatPostData(payload.formData);
+                return transport.postData(payload.validateAddressURL, postData)
 					.then( (validationResult: ValidationResult) => {
 						commit('FINISH_ADDRESS_VALIDATION', validationResult);
 					});
