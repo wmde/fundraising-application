@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Vuex, {StoreOptions} from 'vuex';
 import {Validity} from './lib/validation_states';
 import {Helper} from './mixins/helper';
-import {AddressState, inputField, Payload, ValidationResult} from './types';
+import { AddressState, InputField, Payload, PostData, ValidationResult} from './types';
 
 const VALIDATE_INPUT: string = 'VALIDATE_INPUT';
 const MARK_EMPTY_FIELD_INVALID: string = 'MARK_EMPTY_FIELD_INVALID';
@@ -14,8 +14,6 @@ const ADDRESS_FIELD_VALIDATOR_NAMES: Array<string> = [
 	'companyName',
 	'street', 'postcode', 'city', 'country'
 ];
-const JQueryTransport = require('../../src/app/lib/jquery_transport').default;
-let transport = new JQueryTransport();
 
 Vue.use(Vuex);
 
@@ -66,7 +64,7 @@ const store: StoreOptions<AddressState> = {
 		}
 	},
 	mutations: {
-		[VALIDATE_INPUT](state, field: inputField) {
+		[VALIDATE_INPUT](state, field: InputField) {
 			if (field.value === '' && field.optionalField) {
 				state.form[field.name] = {
 					...state.form[field.name],
@@ -83,9 +81,10 @@ const store: StoreOptions<AddressState> = {
 			}
 		},
 		[MARK_EMPTY_FIELD_INVALID](state, payload) {
-			payload.forEach((field: inputField) => {
-					if (!field.optionalField && state.form[field.name].isValid === Validity.INCOMPLETE) {
-						state.form[field.name].isValid = Validity.INVALID;
+            Object.keys(payload).forEach((field: string) => {
+                const fieldName = payload[field];
+                if (!fieldName.optionalField && state.form[fieldName.name].isValid === Validity.INCOMPLETE) {
+                    state.form[fieldName.name].isValid = Validity.INVALID;
 					}
 				});
 		},
@@ -118,14 +117,15 @@ const store: StoreOptions<AddressState> = {
 		}
 	},
 	actions: {
-		validateInput({ commit }, field: inputField) {
+		validateInput({ commit }, field: InputField) {
 			commit('VALIDATE_INPUT', field);
 		},
 		storeAddressFields({ commit, getters }, payload: Payload) {
 			commit('MARK_EMPTY_FIELD_INVALID', payload.formData);
 			if ( getters.allFieldsAreValid ) {
-				commit('BEGIN_ADDRESS_VALIDATION');
-				return transport.postData(payload.validateAddressURL, payload.formData)
+                commit('BEGIN_ADDRESS_VALIDATION');
+                const postData = Helper.formatPostData(payload.formData);
+                return transport.postData(payload.validateAddressURL, postData)
 					.then( (validationResult: ValidationResult) => {
 						commit('FINISH_ADDRESS_VALIDATION', validationResult);
 					});

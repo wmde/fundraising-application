@@ -21,16 +21,29 @@ export interface Helper {
 	inputIsValid(value: string, pattern: string): boolean
 }
 
-export interface inputField {
+export interface InputField {
 	name: string,
 	value: string,
 	pattern: string,
 	optionalField: boolean
 }
 
-export interface Payload {
-	validateAddressURL: String,
-	formData: Array<inputField>
+export interface FormData {
+    [key: string]: InputField
 }
 
+export interface Transport {
+    getData: Function
+    postData: Function
+}
+
+export interface Payload {
+    transport: Transport,
+	validateAddressURL: String,
+	formData: FormData
+}
+
+export interface PostData {
+    [key: string]: string
+}
 

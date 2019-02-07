@@ -7,7 +7,7 @@
 					id="street"
                     name="street"
 					:placeholder="messages.street_label"
-					v-model="formData[5].value"
+					v-model="formData.street.value"
 					@blur="validateInput(formData, 'street'); displayStreetWarning()">
 			<span v-if="showError.street" class="error-text">{{ messages.form_street_error }}</span>
 			<span v-if="showWarning" class="warning-text">{{ messages.form_street_number_warning }}</span>
@@ -19,7 +19,7 @@
 			<input type="text"
 					id="post-code"
                     name="postcode"
-					v-model="formData[7].value"
+					v-model="formData.postcode.value"
 					:placeholder="messages.zip_label"
 					@blur="validateInput(formData, 'postcode')">
 			<span v-if="showError.postcode" class="error-text">{{ messages.form_zip_error }}</span>
@@ -30,7 +30,7 @@
 					id="city"
                     name="city"
 					:placeholder="messages.city_label"
-					v-model="formData[6].value"
+					v-model="formData.city.value"
 					@blur="validateInput(formData, 'city')">
 			<span v-if="showError.city" class="error-text">{{ messages.form_city_error }}</span>
 		</div>
@@ -42,7 +42,7 @@
 				name="country"
 				class="country-select col-xs-12 col-md-6"
 				data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true, "flipDropToFit": true,  "maxVisibleItems": 6}'
-				v-model="formData[8].value"
+				v-model="formData.country.value"
 				@blur="validateInput(formData, 'country')">
 			<option v-for="(countryCode, index) in countries" 
 					:value="countryCode"
@@ -66,7 +66,7 @@
         },
         methods: {
             displayStreetWarning() {
-                this.showWarning = /^\D+$/.test(this.formData[5].value);
+                this.showWarning = /^\D+$/.test(this.formData.street.value);
             }
         }
 	} );
