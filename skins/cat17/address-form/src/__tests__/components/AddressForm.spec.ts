@@ -9,12 +9,7 @@ function newTestProperties(overrides: Object) {
             messages: {},
             validateAddressURL: '/update-address',
             updateAddressURL: '/update-address/',
-            countries: {
-                type: Array,
-                default: function () {
-                    return ['DE', 'AT', 'CH', 'BE', 'IT', 'LI', 'LU'];
-                }
-            }
+            countries: ['DE', 'AT', 'CH', 'BE', 'IT', 'LI', 'LU']
         },
         overrides
     );
