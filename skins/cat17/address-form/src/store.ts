@@ -14,8 +14,6 @@ const ADDRESS_FIELD_VALIDATOR_NAMES: Array<string> = [
 	'companyName',
 	'street', 'postcode', 'city', 'country'
 ];
-const JQueryTransport = require('../../src/app/lib/jquery_transport').default;
-let transport = new JQueryTransport();
 
 Vue.use(Vuex);
 
