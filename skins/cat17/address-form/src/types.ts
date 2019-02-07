@@ -18,7 +18,8 @@ export interface ValidationResult {
 }
 
 export interface Helper {
-	inputIsValid(value: string, pattern: string): boolean
+    inputIsValid(value: string, pattern: string): boolean,
+    formatPostData(form: FormData): Object
 }
 
 export interface InputField {

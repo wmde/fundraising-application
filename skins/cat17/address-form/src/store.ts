@@ -125,7 +125,7 @@ const store: StoreOptions<AddressState> = {
 			if ( getters.allFieldsAreValid ) {
                 commit('BEGIN_ADDRESS_VALIDATION');
                 const postData = Helper.formatPostData(payload.formData);
-                return transport.postData(payload.validateAddressURL, postData)
+                return payload.transport.postData(payload.validateAddressURL, postData)
 					.then( (validationResult: ValidationResult) => {
 						commit('FINISH_ADDRESS_VALIDATION', validationResult);
 					});
