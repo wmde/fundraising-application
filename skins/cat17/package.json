@@ -19,7 +19,7 @@
     "test:unit": "npm --prefix=address-form run test:unit",
     "cs": "eslint --ext .js,.vue src/app faq-page use-of-funds",
     "ci": "npm-run-all --parallel cs test test:unit build-assets",
-    "build-assets": "npm-run-all clean --parallel webpack-build-assets build-css build-faq build-funds",
+    "build-assets": "npm-run-all clean --parallel webpack-build-assets build-css build-faq build-funds build-address-form",
     "build-sass": "node-sass --output-style compressed -o web/css --include-path node_modules src/sass/main.scss",
     "optimize-css": "postcss -r web/css",
     "build-css": "npm run build-sass && npm run optimize-css",
