@@ -23,8 +23,7 @@
 	import Vue from 'vue';
 	import Name from './components/Name.vue';
 	import Postal from './components/Postal.vue';
-    import {AddressValidity, FormData, Transport} from './types';
-    import {Validity} from './lib/validation_states';
+    import {AddressValidity, FormData, Transport, Validity} from './types';
 
 	export default Vue.extend ( {
 		name: 'addressForm',
@@ -118,7 +117,7 @@
             fieldErrors(): AddressValidity {
                 return Object.keys(this.formData).reduce( ( validity: AddressValidity, fieldName: string ) => {
                     if (!this.formData[fieldName].optionalField) {
-                        validity[fieldName] = this.$store.state.form[fieldName].isValid === Validity.INVALID
+                        validity[fieldName] = this.$store.state.form[fieldName] === Validity.INVALID
                     }
                     return validity;
                 }, ({} as AddressValidity) );

@@ -1,7 +1,7 @@
 import { shallowMount, mount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import AddressForm from '../../AddressForm.vue'
-import {Validity} from "@/lib/validation_states";
+import {Validity} from "@/types";
 
 const localVue = createLocalVue();
 
@@ -23,46 +23,16 @@ function newTestProperties(overrides: Object) {
 
 const defaultState = {
     form: {
-        salutation: {
-            dataEntered: false,
-            isValid: Validity.INCOMPLETE
-        },
-        title: {
-            dataEntered: false,
-            isValid: Validity.INCOMPLETE
-        },
-        firstName: {
-            dataEntered: false,
-            isValid: Validity.INCOMPLETE
-        },
-        lastName: {
-            dataEntered: false,
-            isValid: Validity.INCOMPLETE
-        },
-        companyName: {
-            dataEntered: false,
-            isValid: Validity.INCOMPLETE
-        },
-        street: {
-            dataEntered: false,
-            isValid: Validity.INCOMPLETE
-        },
-        postcode: {
-            dataEntered: false,
-            isValid: Validity.INCOMPLETE
-        },
-        city: {
-            dataEntered: false,
-            isValid: Validity.INCOMPLETE
-        },
-        country: {
-            dataEntered: false,
-            isValid: Validity.VALID
-        },
-        addressType: {
-            dataEntered: false,
-            isValid: Validity.VALID
-        }
+        salutation: Validity.INCOMPLETE,
+        title: Validity.INCOMPLETE,
+        firstName: Validity.INCOMPLETE,
+        lastName: Validity.INCOMPLETE,
+        companyName: Validity.INCOMPLETE,
+        street: Validity.INCOMPLETE,
+        postcode: Validity.INCOMPLETE,
+        city: Validity.INCOMPLETE,
+        country: Validity.VALID,
+        addressType: Validity.VALID
     }
 };
 

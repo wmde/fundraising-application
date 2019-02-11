@@ -1,5 +1,4 @@
-import { Validity } from '../lib/validation_states';
-import { PostData, FormData } from '../types';
+import { PostData, FormData, Validity } from '../types';
 
 export const Helper = {
     inputIsValid: (value: string, pattern: string ) => {

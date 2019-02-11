@@ -1,10 +1,11 @@
-export interface FieldValidity {
-	dataEntered: boolean,
-	isValid: boolean | null
+export enum Validity  {
+	INVALID,
+	VALID,
+	INCOMPLETE
 }
 
 export interface Form {
-	[key: string]: FieldValidity
+	[key: string]: Validity
 }
 
 export interface AddressState {
