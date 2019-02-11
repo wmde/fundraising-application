@@ -31,7 +31,7 @@ describe('AddressForm.vue', () => {
             storeAddressFields: jest.fn()
         };
         getters = {
-            validity: jest.fn(),
+            validity: () => jest.fn(),
             invalidFields: jest.fn(),
             allFieldsAreValid: jest.fn()
         }
@@ -86,12 +86,16 @@ describe('AddressForm.vue', () => {
         let input = wrapper.find('#first-name');
         input.setValue('test');
         input.trigger('blur');
-        expect(actions.validateInput).toHaveBeenCalledWith({
-            name: 'firstName',
-            value: 'test',
-            pattern: '^.+$',
-            optionalField: true
-        });
+        expect(actions.validateInput).toHaveBeenCalledWith(
+            expect.anything(),
+            {
+                name: 'firstName',
+                value: 'test',
+                pattern: '^.+$',
+                optionalField: false
+            },
+            undefined // empty "Root State"
+        );
     });
 
     it('showError is updated correctly according to the validation result', () => {
@@ -103,7 +107,7 @@ describe('AddressForm.vue', () => {
         let input = wrapper.find('#post-code');
         input.setValue('test');
         input.trigger('blur');
-        expect(wrapper.vm.$data.showError.postCode).toBe(false);
+        expect(wrapper.vm.$data.showError.postcode).toBe(false);
     });
 
 });
