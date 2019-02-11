@@ -7,16 +7,6 @@ export interface Form {
 	[key: string]: FieldValidity
 }
 
-export interface AddressValidity {
-	salutation: boolean,
-	companyName: boolean,
-	firstName: boolean,
-	lastName: boolean,
-	street: boolean,
-	city: boolean,
-	postcode: boolean
-}
-
 export interface AddressState {
 	isValidating: boolean
 	form: Form,
@@ -59,5 +49,12 @@ export interface Payload {
 
 export interface PostData {
     [key: string]: string
+}
+
+/**
+ * Form can be mapped to simple boolean validity (instead of the tri-state isValid in FieldValidity).
+ */
+export interface AddressValidity {
+	[key: string]: boolean
 }
 

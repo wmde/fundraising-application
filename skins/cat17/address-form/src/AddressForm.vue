@@ -23,7 +23,7 @@
 	import Vue from 'vue';
 	import Name from './components/Name.vue';
 	import Postal from './components/Postal.vue';
-	import {AddressValidity, FormData, Transport} from './types';
+    import {AddressValidity, FormData, Transport} from './types';
     import {Validity} from './lib/validation_states';
 
 	export default Vue.extend ( {
@@ -32,7 +32,7 @@
 			Name,
 			Postal
 		},
-		data: function() {
+		data: function(): { formData: FormData } {
 			return {
 				formData: {
                     salutation: {
@@ -116,16 +116,13 @@
 		},
 		computed: {
             fieldErrors(): AddressValidity {
-                return {
-                    salutation: this.$store.state.form.salutation.isValid === Validity.INVALID,
-                    companyName: this.$store.state.form.companyName.isValid === Validity.INVALID,
-                    firstName: this.$store.state.form.firstName.isValid === Validity.INVALID,
-                    lastName: this.$store.state.form.lastName.isValid === Validity.INVALID,
-                    street: this.$store.state.form.street.isValid === Validity.INVALID,
-                    city:  this.$store.state.form.city.isValid === Validity.INVALID,
-                    postcode: this.$store.state.form.postcode.isValid === Validity.INVALID
-                }
-            },
+                return Object.keys(this.formData).reduce( ( validity: AddressValidity, fieldName: string ) => {
+                    if (!this.formData[fieldName].optionalField) {
+                        validity[fieldName] = this.$store.state.form[fieldName].isValid === Validity.INVALID
+                    }
+                    return validity;
+                }, ({} as AddressValidity) );
+            }
 		},
 		methods: {
 			validateForm() {
@@ -133,7 +130,7 @@
                     transport: this.$props.transport,
 					validateAddressURL: this.$props.validateAddressURL,
 					formData: this.formData
-				}).then( resp => {
+				}).then( () => {
 					if (this.$store.getters.allFieldsAreValid) {
 						(this.$refs.form as HTMLFormElement).submit();
 					}
