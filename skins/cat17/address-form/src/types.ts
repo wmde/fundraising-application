@@ -1,10 +1,11 @@
-export interface FormValidity {
-	dataEntered: boolean,
-	isValid: boolean | null
+export enum Validity  {
+	INVALID,
+	VALID,
+	INCOMPLETE
 }
 
 export interface Form {
-	[key: string]: FormValidity
+	[key: string]: Validity
 }
 
 export interface AddressState {
@@ -12,6 +13,9 @@ export interface AddressState {
 	form: Form,
 }
 
+/**
+ * Validation result JSON object from the server
+ */
 export interface ValidationResult {
 	status: string,
 	messages: object
@@ -46,5 +50,12 @@ export interface Payload {
 
 export interface PostData {
     [key: string]: string
+}
+
+/**
+ * Form can be mapped to simple boolean validity (instead of the tri-state isValid in FieldValidity).
+ */
+export interface AddressValidity {
+	[key: string]: boolean
 }
 

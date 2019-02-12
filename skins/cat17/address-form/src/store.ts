@@ -1,8 +1,7 @@
 import Vue from 'vue';
 import Vuex, {StoreOptions} from 'vuex';
-import {Validity} from './lib/validation_states';
 import {Helper} from './mixins/helper';
-import { AddressState, InputField, Payload, PostData, ValidationResult} from './types';
+import {AddressState, InputField, Payload, ValidationResult, Validity} from './types';
 
 const VALIDATE_INPUT: string = 'VALIDATE_INPUT';
 const MARK_EMPTY_FIELD_INVALID: string = 'MARK_EMPTY_FIELD_INVALID';
@@ -21,70 +20,32 @@ const store: StoreOptions<AddressState> = {
 	state: {
 		isValidating: false,
 		form: {
-			salutation: {
-				dataEntered: false,
-				isValid: Validity.INCOMPLETE
-			},
-			title: {
-				dataEntered: false,
-				isValid: Validity.INCOMPLETE
-			},
-			firstName: {
-				dataEntered: false,
-				isValid: Validity.INCOMPLETE
-			},
-			lastName: {
-				dataEntered: false,
-				isValid: Validity.INCOMPLETE
-			},
-			companyName: {
-				dataEntered: false,
-				isValid: Validity.INCOMPLETE
-			},
-			street: {
-				dataEntered: false,
-				isValid: Validity.INCOMPLETE
-			},
-			postcode: {
-				dataEntered: false,
-				isValid: Validity.INCOMPLETE
-			},
-			city: {
-				dataEntered: false,
-				isValid: Validity.INCOMPLETE
-			},
-			country: {
-				dataEntered: false,
-				isValid: Validity.VALID
-			},
-			addressType: {
-				dataEntered: false,
-				isValid: Validity.VALID
-			}
+			salutation: Validity.INCOMPLETE,
+			title: Validity.INCOMPLETE,
+			firstName: Validity.INCOMPLETE,
+			lastName: Validity.INCOMPLETE,
+			companyName: Validity.INCOMPLETE,
+			street: Validity.INCOMPLETE,
+			postcode: Validity.INCOMPLETE,
+			city: Validity.INCOMPLETE,
+			country: Validity.VALID,
+			addressType: Validity.VALID
 		}
 	},
 	mutations: {
 		[VALIDATE_INPUT](state, field: InputField) {
 			if (field.value === '' && field.optionalField) {
-				state.form[field.name] = {
-					...state.form[field.name],
-					dataEntered: false,
-					isValid: Validity.INCOMPLETE
-				};
+				state.form[field.name] = Validity.INCOMPLETE
 			}
 			else {
-				state.form[field.name] = {
-					...state.form[field.name],
-					dataEntered: true,
-					isValid: Helper.inputIsValid(field.value, field.pattern)
-				};
+				state.form[field.name] = Helper.inputIsValid(field.value, field.pattern)
 			}
 		},
 		[MARK_EMPTY_FIELD_INVALID](state, payload) {
             Object.keys(payload).forEach((field: string) => {
                 const fieldName = payload[field];
-                if (!fieldName.optionalField && state.form[fieldName.name].isValid === Validity.INCOMPLETE) {
-                    state.form[fieldName.name].isValid = Validity.INVALID;
+                if (!fieldName.optionalField && state.form[fieldName.name] === Validity.INCOMPLETE) {
+                    state.form[fieldName.name] = Validity.INVALID;
 					}
 				});
 		},
@@ -94,27 +55,21 @@ const store: StoreOptions<AddressState> = {
 		[FINISH_ADDRESS_VALIDATION](state, payload) {
             if (payload.status === 'ERR') {
                 ADDRESS_FIELD_VALIDATOR_NAMES.forEach(name => {
-                    if (state.form[name].dataEntered === true) {
-                        state.form[name] = {
-                            ...state.form[name],
-                            isValid: state.form[name].isValid !== false && !payload.messages[name] ? Validity.VALID : Validity.INVALID
-                        };
-                    }
+                	if ( payload.messages[name] ) {
+						state.form[name] = Validity.INVALID;
+					}
                 });
             }
 			state.isValidating = false;
 		}
 	},
 	getters: {
-		validity: (state) => (contentName: string) => {
-			return state.form[contentName].isValid;
-		},
 		invalidFields: (state) :Array<string> => {
-			return Object.keys(state.form).filter(field => state.form[field].isValid === Validity.INVALID)
+			return Object.keys(state.form).filter(field => state.form[field] === Validity.INVALID)
 		},
 		allFieldsAreValid: (state, getters) :boolean => {
 			return getters.invalidFields.length === 0;
-		}
+		},
 	},
 	actions: {
 		validateInput({ commit }, field: InputField) {
