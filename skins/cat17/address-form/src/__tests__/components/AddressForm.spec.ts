@@ -1,7 +1,7 @@
 import { shallowMount, mount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import AddressForm from '../../AddressForm.vue'
-import { Validity } from '../../lib/validation_states'
+import { Validity } from "@/types";
 
 const localVue = createLocalVue();
 
@@ -34,48 +34,18 @@ describe('AddressForm.vue', () => {
         state = {
             isValidating: false,
             form: {
-                salutation: {
-                    dataEntered: false,
-                    isValid: Validity.INCOMPLETE
-                },
-                title: {
-                    dataEntered: false,
-                    isValid: Validity.INCOMPLETE
-                },
-                firstName: {
-                    dataEntered: false,
-                    isValid: Validity.INCOMPLETE
-                },
-                lastName: {
-                    dataEntered: false,
-                    isValid: Validity.INCOMPLETE
-                },
-                companyName: {
-                    dataEntered: false,
-                    isValid: Validity.INCOMPLETE
-                },
-                street: {
-                    dataEntered: false,
-                    isValid: Validity.INCOMPLETE
-                },
-                postcode: {
-                    dataEntered: false,
-                    isValid: Validity.INCOMPLETE
-                },
-                city: {
-                    dataEntered: false,
-                    isValid: Validity.INCOMPLETE
-                },
-                country: {
-                    dataEntered: false,
-                    isValid: Validity.VALID
-                },
-                addressType: {
-                    dataEntered: false,
-                    isValid: Validity.VALID
-                }
+                salutation: Validity.INCOMPLETE,
+                title: Validity.INCOMPLETE,
+                firstName: Validity.INCOMPLETE,
+                lastName: Validity.INCOMPLETE,
+                companyName: Validity.INCOMPLETE,
+                street: Validity.INCOMPLETE,
+                postcode: Validity.INCOMPLETE,
+                city: Validity.INCOMPLETE,
+                country: Validity.VALID,
+                addressType: Validity.VALID
             }
-        }
+        },
         actions = {
             validateInput: jest.fn(),
             storeAddressFields: jest.fn()
@@ -92,22 +62,28 @@ describe('AddressForm.vue', () => {
         });
     })
 
-    it('Form renders', () => {
+    it('renders', () => {
         const wrapper = mount(AddressForm, {
+            store,
+            localVue,
             propsData: newTestProperties({ addressToken: 'bla' })
         });
         expect(typeof wrapper).toEqual('object')
     });
 
-    it('Property isCompany is passed', () => {
+    it('passes property isCompany', () => {
         const wrapper = mount(AddressForm, {
+            store,
+            localVue,
             propsData: newTestProperties({ isCompany: true })
         });
         expect(wrapper.props('isCompany')).toBe(true);
     });
 
-    it('Company address form is shown when isCompany is passed as true', () => {
+    it('shows company address form when isCompany is passed as true', () => {
         const wrapper = mount(AddressForm, {
+            store,
+            localVue,
             propsData: newTestProperties({ isCompany: true })
         });
         expect(wrapper.contains('#company-name')).toBe(true);
@@ -117,8 +93,10 @@ describe('AddressForm.vue', () => {
         expect(wrapper.contains('#title')).toBe(false);
     });
 
-    it('Person address form is shown when isCompany is passed as false', () => {
+    it('shows person address form when isCompany is passed as false', () => {
         const wrapper = mount(AddressForm, {
+            store,
+            localVue,
             propsData: newTestProperties({ isCompany: false })
         });
         expect(wrapper.contains('#company-name')).toBe(false);
@@ -128,7 +106,7 @@ describe('AddressForm.vue', () => {
         expect(wrapper.contains('#title')).toBe(true);
     });
 
-    it('Error messages are not shown on initial load of an empty form', () => {
+    it('does not show error messages on initial load of an empty form', () => {
         const wrapper = mount(AddressForm, {
             store,
             localVue,
@@ -138,7 +116,7 @@ describe('AddressForm.vue', () => {
         expect(wrapper.contains('span.error-text')).toBe(false);
     });
 
-    it('On blur from an input field validateInput is dispatched with the correct field value', () => {
+    it('dispatches validateInput action with the field\'s value on blur from an input field', () => {
         const wrapper = mount(AddressForm, {
             store,
             localVue,
@@ -159,7 +137,7 @@ describe('AddressForm.vue', () => {
         );
     });
 
-    it('showError is updated correctly according to the validation result', () => {
+    it('updates fieldErrors correctly according to the validation result', () => {
         const wrapper = mount(AddressForm, {
             store,
             localVue,
@@ -169,11 +147,10 @@ describe('AddressForm.vue', () => {
         let input = wrapper.find('#post-code');
         input.setValue('test');
         input.trigger('blur');
-
-        expect(wrapper.vm.$data.showError.postcode).toBe(false);
+        expect(wrapper.fieldErrors.postcode).toBe(false);
     });
 
-    it('User input is saved to the respective part of formData', () => {
+    it('saves user input to the respective part of formData', () => {
         const wrapper = mount(AddressForm, {
             store,
             localVue,
@@ -191,7 +168,7 @@ describe('AddressForm.vue', () => {
         expect(wrapper.vm.$data.formData.lastName.value).toBe('von Testinson');
     });
 
-    it('Hidden field addressType is set to "firma" for company form', () => {
+    it('sets hidden field addressType "firma" for company form', () => {
         const wrapper = mount(AddressForm, {
             store,
             localVue,
@@ -200,7 +177,7 @@ describe('AddressForm.vue', () => {
         expect(wrapper.vm.$data.formData.addressType.value).toBe('firma');
     });
 
-    it('Hidden field addressType is set to "person" for person form', () => {
+    it('sets hidden field addressType to "person" for person form', () => {
         const wrapper = mount(AddressForm, {
             store,
             localVue,
@@ -209,7 +186,7 @@ describe('AddressForm.vue', () => {
         expect(wrapper.vm.$data.formData.addressType.value).toBe('person');
     });
 
-    it('On submit action storeAddressFields is dispatched with the correct values', () => {
+    it('dispatches storeAddressFields action with the correct values on submit', () => {
         const wrapper = mount(AddressForm, {
             store,
             localVue,
