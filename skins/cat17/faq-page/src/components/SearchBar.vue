@@ -1,3 +1,4 @@
+<!-- This component is not part of the MVP. -->
 <template>
 <div id="search">
 	<span>{{ messageSearch }}</span>
