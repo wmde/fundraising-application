@@ -47,13 +47,11 @@
 </template>
 
 <script>
-import SearchBar from './components/SearchBar.vue';
 import Question from './components/Question.vue';
 
 export default {
 	name: 'faq',
 	components: {
-		SearchBar,
 		Question
 	},
 	props: [ 'messages', 'content' ],
@@ -66,7 +64,7 @@ export default {
 		};
 	},
 	mounted: function () {
-		this.populatePageWithPreviewContent();
+		this.populatePageOnInitialLoad();
 	},
 	methods: {
 		populatePageByTopic: function ( topic ) {
@@ -74,7 +72,7 @@ export default {
 			this.setTopicTitle( topic.name );
 			this.setOpenQuestionId( '' );
 		},
-		populatePageWithPreviewContent: function () {
+		populatePageOnInitialLoad: function () {
 			this.setOpenQuestionId( '' );
 			this.page = this.content.questions.filter( question => question.topic.split( ',' ).indexOf( '1' ) !== -1 );
 			this.setTopicTitle( this.content.topics[ 0 ].name );
