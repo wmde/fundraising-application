@@ -108,6 +108,7 @@
     "underscore": "^1.9.1",
     "underscore.path": "^0.1.4",
     "vue": "^2.6.9",
+    "vue-template-compiler": "^2.6.9",
     "vue-loader": "^15.7.0",
     "vue-translate-plugin": "^1.2.0"
   },
