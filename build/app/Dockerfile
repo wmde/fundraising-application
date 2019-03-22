@@ -13,7 +13,7 @@ RUN apt-get update \
     # for xml
     && apt-get install -y libxml2-dev \
     # for konto_check
-    && apt-get install -y unzip patch libz-dev \
+    && apt-get install -y unzip libz-dev \
     #&& docker-php-ext-install -j$(nproc) pdo_sqlite \
     && docker-php-ext-install -j$(nproc) intl curl xml pdo_mysql mbstring
 
@@ -46,3 +46,17 @@ RUN pecl install xdebug-2.6.0 \
     && docker-php-ext-enable xdebug \
     && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
     && echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini
+
+FROM app AS app_composer
+
+RUN apt-get install -y git subversion mercurial bash patch make zip libzip-dev \
+    && docker-php-ext-configure zip --with-libzip \
+    && docker-php-ext-install -j$(nproc) zip
+
+COPY --from=composer:1.8 /usr/bin/composer /usr/bin/composer
+
+ENV COMPOSER_HOME /tmp
+
+WORKDIR /app
+
+CMD ["composer"]
