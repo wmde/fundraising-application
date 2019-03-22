@@ -324,7 +324,7 @@ $( function () {
 		{
 			viewHandler: WMDE.View.createElementClassSwitcher(
 				$( '.wrap-membership-type .error-container' ),
-				/^(|null)$/,
+				/^$/,
 				'invalid'
 			),
 			stateKey: 'membershipFormContent.membershipType'
