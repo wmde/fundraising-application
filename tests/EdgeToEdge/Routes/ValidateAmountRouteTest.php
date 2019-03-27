@@ -35,14 +35,13 @@ class ValidateAmountRouteTest extends WebRouteTestCase {
 	}
 
 	public function invalidTestDataProvider(): iterable {
-		yield [ [ 'amount' => '' ], [ 'amount' => [ 'This value should be of type digit.', 'This value should be a valid number.' ] ] ];
-		yield [ [ 'amount' => 'fff' ], [ 'amount' => [ 'This value should be of type digit.', 'This value should be a valid number.' ] ] ];
-		yield [ [ 'amount' => '12.34' ], [ 'amount' => [ 'This value should be of type digit.', 'This value should be 100 or more.' ] ] ];
-		yield [ [ 'amount' => '1233.99' ], [ 'amount' => [ 'This value should be of type digit.' ] ] ];
-		yield [ [ 'amount' => '12,34' ], [ 'amount' => [ 'This value should be of type digit.', 'This value should be a valid number.' ] ] ];
-		yield [ [ 'amount' => '12' ], [ 'amount' => [ 'This value should be 100 or more.' ] ] ];
-		yield [ [ 'amount' => '12879342897234879234' ], [ 'amount' => [ 'This value should be 10000000 or less.' ] ] ];
-		yield [ [ 'amount' => '1234', 'something' => 'more' ], [ 'something' => [ 'This field was not expected.' ] ] ];
-		yield [ [ 'no context' => 'indeed' ], [ 'amount' => [ 'This field is missing.' ], 'no context' => [ 'This field was not expected.' ] ] ];
+		yield [ [ 'amount' => '' ], [ 'amount' => 'Amount must be in cents.' ] ];
+		yield [ [ 'amount' => 'fff' ],  [ 'amount' => 'Amount must be in cents.' ] ];
+		yield [ [ 'amount' => '12.34' ],  [ 'amount' => 'Amount must be in cents.' ] ];
+		yield [ [ 'amount' => '1233.99' ], [ 'amount' => 'Amount must be in cents.' ] ];
+		yield [ [ 'amount' => '12,34' ], [ 'amount' => 'Amount must be in cents.' ] ];
+		yield [ [ 'amount' => '12' ], [ 'amount' => 'Amount too low' ] ];
+		yield [ [ 'amount' => '12879342897234879234' ], [ 'amount' => 'Amount too high' ] ];
+		yield [ [ ], [ 'amount' => 'Amount must be in cents.' ] ];
 	}
 }

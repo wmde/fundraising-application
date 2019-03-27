@@ -1731,16 +1731,6 @@ class FunFunFactory implements ServiceProviderInterface {
 		}, $this->config['preset-amounts'][$presetType] );
 	}
 
-	public function newDonationAmountConstraint(): ValidatorConstraint {
-		return new RequiredConstraint( [
-			new TypeConstraint( [ 'type' => 'digit' ] ),
-			new RangeConstraint( [
-				'min' => Euro::newFromInt( $this->config['donation-minimum-amount'] )->getEuroCents(),
-				'max' => Euro::newFromInt( $this->config['donation-maximum-amount'] )->getEuroCents()
-			] )
-		] );
-	}
-
 	public function newIsCustomDonationAmountValidator(): IsCustomAmountValidator {
 		return new IsCustomAmountValidator( $this->getPresetAmountsSettings( 'donations' ) );
 	}
