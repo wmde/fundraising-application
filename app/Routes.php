@@ -66,20 +66,15 @@ class Routes {
 			'validate-donation-amount',
 			function ( Request $httpRequest ) use ( $app, $ffFactory ) {
 
-				$constraint = new Collection(
-					[
-						'allowExtraFields' => false,
-						'fields' => [
-							'amount' => $ffFactory->newDonationAmountConstraint()
-						]
-					]
-				);
+				$rawAmount = $httpRequest->request->get('amount','');
 
-				$violations = Validation::createValidator()->validate( $httpRequest->request->all(), $constraint );
+				if( !ctype_digit( $rawAmount ) ){
+					return $app->json( [ 'status' => 'ERR', 'messages' => ['amount' => 'Amount must be in cents.'] ] );
+				}
+				$violations = $ffFactory->newPaymentDataValidator()->validateAmount(Euro::newFromCents((int)$rawAmount));
 
-				if ( $violations->count() > 0 ) {
-					$mapper = new ConstraintViolationListMapper();
-					return $app->json( [ 'status' => 'ERR', 'messages' => $mapper->map( $violations ) ] );
+				if ( $violations != null ) {
+					return $app->json( [ 'status' => 'ERR', 'messages' => ['amount' => $violations->getMessageIdentifier()] ] );
 				}
 
 				return $app->json( [ 'status' => 'OK' ] );
