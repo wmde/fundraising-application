@@ -73,7 +73,7 @@ var objectAssign = require( 'object-assign' ),
 			return this.transport.postData( this.validationUrl, postData );
 		},
 		formValuesHaveEmptyRequiredFields: function ( formValues ) {
-			return formValues.amount === 0 || !formValues.addressType || !formValues.paymentIntervalInMonths;
+			return formValues.amount === 0 || !formValues.addressType || !formValues.paymentIntervalInMonths || formValues.paymentIntervalInMonths === -1;
 		}
 	},
 
