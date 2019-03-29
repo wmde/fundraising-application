@@ -1039,16 +1039,16 @@
         },
         {
             "name": "gedmo/doctrine-extensions",
-            "version": "v2.4.36",
+            "version": "v2.4.37",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Atlantic18/DoctrineExtensions.git",
-                "reference": "87c78ff9fd4b90460386f753d95622f6fbbfcb27"
+                "reference": "5dd471f656e46d815f063bf3f12c667649ec7ffb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/87c78ff9fd4b90460386f753d95622f6fbbfcb27",
-                "reference": "87c78ff9fd4b90460386f753d95622f6fbbfcb27",
+                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/5dd471f656e46d815f063bf3f12c667649ec7ffb",
+                "reference": "5dd471f656e46d815f063bf3f12c667649ec7ffb",
                 "shasum": ""
             },
             "require": {
@@ -1116,7 +1116,7 @@
                 "tree",
                 "uploadable"
             ],
-            "time": "2018-07-26T12:16:35+00:00"
+            "time": "2019-03-17T18:16:12+00:00"
         },
         {
             "name": "graylog2/gelf-php",
@@ -3729,6 +3729,49 @@
             "time": "2019-02-23T15:17:42+00:00"
         },
         {
+            "name": "tomodomo/twig-pluralize-extension",
+            "version": "v2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/TomodomoCo/twig-pluralize-extension.git",
+                "reference": "aa9f41e621ef22f9b5558b7b16e1a5136eb2e2e0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/TomodomoCo/twig-pluralize-extension/zipball/aa9f41e621ef22f9b5558b7b16e1a5136eb2e2e0",
+                "reference": "aa9f41e621ef22f9b5558b7b16e1a5136eb2e2e0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0",
+                "twig/twig": ">=v1.0.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Tomodomo\\Twig\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Tomodomo",
+                    "homepage": "https://tomodomo.co/"
+                }
+            ],
+            "description": "Twig extension to output correctly pluralized strings",
+            "homepage": "https://tomodomo.co/",
+            "keywords": [
+                "plural",
+                "twig",
+                "twig extension"
+            ],
+            "time": "2018-11-16T13:47:49+00:00"
+        },
+        {
             "name": "twig/extensions",
             "version": "v1.5.4",
             "source": {
@@ -4122,22 +4165,23 @@
         },
         {
             "name": "wmde/fundraising-content-provider",
-            "version": "v2.1.0",
+            "version": "v2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-content-provider",
-                "reference": "218c29539662e795393a21769288bb5c446b802e"
+                "reference": "94bb3cfa064a5870d271a1e7119b95be563d68ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-content-provider/zipball/218c29539662e795393a21769288bb5c446b802e",
-                "reference": "218c29539662e795393a21769288bb5c446b802e",
+                "url": "https://api.github.com/repos/wmde/fundraising-content-provider/zipball/94bb3cfa064a5870d271a1e7119b95be563d68ec",
+                "reference": "94bb3cfa064a5870d271a1e7119b95be563d68ec",
                 "shasum": ""
             },
             "require": {
                 "ezyang/htmlpurifier": "^4.9",
                 "php": ">=7.1",
                 "symfony/console": "^3.2",
+                "tomodomo/twig-pluralize-extension": "^2.0",
                 "twig/twig": "~1.23"
             },
             "require-dev": {
@@ -4179,10 +4223,7 @@
                 "GPL-2.0+"
             ],
             "description": "WMDE fundraising application content provider and filter",
-            "support": {
-                "source": "https://github.com/wmde/fundraising-content-provider/tree/v2.1.0"
-            },
-            "time": "2018-06-07T09:54:02+00:00"
+            "time": "2019-03-28T11:05:08+00:00"
         },
         {
             "name": "wmde/fundraising-donations",
@@ -5116,7 +5157,7 @@
                     "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "? Nette Finder: find files and directories with an intuitive API.",
+            "description": "🔍 Nette Finder: find files and directories with an intuitive API.",
             "homepage": "https://nette.org",
             "keywords": [
                 "filesystem",
@@ -5176,7 +5217,7 @@
                     "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "? Nette NEON: encodes and decodes NEON file format.",
+            "description": "🍸 Nette NEON: encodes and decodes NEON file format.",
             "homepage": "http://ne-on.org",
             "keywords": [
                 "export",
@@ -5300,7 +5341,7 @@
                     "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "? Nette RobotLoader: high performance and comfortable autoloader that will search and autoload classes within your application.",
+            "description": "🍀 Nette RobotLoader: high performance and comfortable autoloader that will search and autoload classes within your application.",
             "homepage": "https://nette.org",
             "keywords": [
                 "autoload",
