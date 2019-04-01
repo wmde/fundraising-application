@@ -4290,12 +4290,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "14e8dbaffc0fef0978e5f7a71a7932d68499bf9c"
+                "reference": "e4b16975ac843f40870bf04d636f83286d9d84fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/14e8dbaffc0fef0978e5f7a71a7932d68499bf9c",
-                "reference": "14e8dbaffc0fef0978e5f7a71a7932d68499bf9c",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/e4b16975ac843f40870bf04d636f83286d9d84fc",
+                "reference": "e4b16975ac843f40870bf04d636f83286d9d84fc",
                 "shasum": ""
             },
             "require": {
@@ -4342,7 +4342,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "time": "2019-01-21T09:52:57+00:00"
+            "time": "2019-04-01T09:09:24+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
@@ -5157,7 +5157,7 @@
                     "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "🔍 Nette Finder: find files and directories with an intuitive API.",
+            "description": "? Nette Finder: find files and directories with an intuitive API.",
             "homepage": "https://nette.org",
             "keywords": [
                 "filesystem",
@@ -5217,7 +5217,7 @@
                     "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "🍸 Nette NEON: encodes and decodes NEON file format.",
+            "description": "? Nette NEON: encodes and decodes NEON file format.",
             "homepage": "http://ne-on.org",
             "keywords": [
                 "export",
@@ -5341,7 +5341,7 @@
                     "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "🍀 Nette RobotLoader: high performance and comfortable autoloader that will search and autoload classes within your application.",
+            "description": "? Nette RobotLoader: high performance and comfortable autoloader that will search and autoload classes within your application.",
             "homepage": "https://nette.org",
             "keywords": [
                 "autoload",
@@ -7954,12 +7954,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "46aaa1b7a2111251f0abdea1f1c9540eaebc4aa2"
+                "reference": "508c3524f2004e654ba45c41dc0006709161ae9b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/46aaa1b7a2111251f0abdea1f1c9540eaebc4aa2",
-                "reference": "46aaa1b7a2111251f0abdea1f1c9540eaebc4aa2",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/508c3524f2004e654ba45c41dc0006709161ae9b",
+                "reference": "508c3524f2004e654ba45c41dc0006709161ae9b",
                 "shasum": ""
             },
             "require-dev": {
@@ -7992,7 +7992,7 @@
                 "GPL-2.0+"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2019-03-27T09:46:11+00:00"
+            "time": "2019-03-29T12:01:06+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",
