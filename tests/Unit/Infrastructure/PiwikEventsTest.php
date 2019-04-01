@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 use WMDE\Fundraising\Frontend\Infrastructure\PiwikEvents;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Infrastructure\PiwikEvents
+ * @covers \WMDE\Fundraising\Frontend\Infrastructure\PiwikEvents
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >

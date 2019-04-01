@@ -11,7 +11,7 @@ use WMDE\Fundraising\DonationContext\Infrastructure\DonationEventLogger;
 use WMDE\Fundraising\DonationContext\Tests\Fixtures\DonationEventLoggerSpy;
 
 /**
- * @covers WMDE\Fundraising\DonationContext\Infrastructure\BestEffortDonationEventLogger
+ * @covers \WMDE\Fundraising\DonationContext\Infrastructure\BestEffortDonationEventLogger
  *
  * @licence GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >

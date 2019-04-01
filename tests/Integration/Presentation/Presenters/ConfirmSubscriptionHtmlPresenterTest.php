@@ -12,7 +12,7 @@ use WMDE\FunValidators\ValidationResponse;
 use WMDE\FunValidators\ConstraintViolation;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Presentation\Presenters\ConfirmSubscriptionHtmlPresenter
+ * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\ConfirmSubscriptionHtmlPresenter
  *
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >

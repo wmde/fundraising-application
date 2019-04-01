@@ -8,7 +8,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\ServerSideTrackerSpy;
 use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker
+ * @covers \WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker
  *
  * @licence GNU GPL v2+
  * @author Leszek Manicki <leszek.manicki@wikimedia.de>
