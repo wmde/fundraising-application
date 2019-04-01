@@ -346,6 +346,14 @@ $( function () {
     store
   );
 
+	function forceValidateMembershipType() {
+		if(store.getState().membershipFormContent.membershipType === null) {
+			store.dispatch( WMDE.Actions.newChangeContentAction( 'membershipType', '' ) );
+		}
+
+		return WMDE.Promise.resolve();
+	}
+
 	function forceValidateBankData() {
 		var state = store.getState();
 		if ( WMDE.StateAggregation.Membership.paymentAndBankDataAreValid( state ).isValid !== WMDE.Validity.VALID ) {
@@ -397,6 +405,7 @@ $( function () {
 		}
 		else if ( WMDE.StateAggregation.Membership.someValiditySectionsAreIncomplete( store.getState() ) ) {
 			WMDE.Promise.all( [
+				forceValidateMembershipType(),
 				forceValidateBankData(),
 				forceValidateAddressData(),
 				forceValidateFeeData(),
