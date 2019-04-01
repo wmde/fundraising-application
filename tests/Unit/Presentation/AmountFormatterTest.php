@@ -8,7 +8,7 @@ use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Presentation\AmountFormatter
+ * @covers \WMDE\Fundraising\Frontend\Presentation\AmountFormatter
  *
  * @licence GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >

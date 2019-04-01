@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation;
 use WMDE\Fundraising\Frontend\Presentation\Honorifics;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Presentation\Honorifics
+ * @covers \WMDE\Fundraising\Frontend\Presentation\Honorifics
  *
  * @license GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >

@@ -10,7 +10,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\Message;
 use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Infrastructure\Messenger
+ * @covers \WMDE\Fundraising\Frontend\Infrastructure\Messenger
  *
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >

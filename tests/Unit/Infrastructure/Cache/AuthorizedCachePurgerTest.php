@@ -9,7 +9,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\Cache\CachePurgingException;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 
 /**
- * @covers WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger
+ * @covers \WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger
  *
  * @license GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
