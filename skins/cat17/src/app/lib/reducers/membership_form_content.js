@@ -3,7 +3,11 @@
 var formContentLib = require( './form_content' ),
 	objectAssign = require( 'object-assign' ),
 	initialState = {
-		membershipType: null, // sustaining, active
+		// membershipType states:
+		// null = valid initial state
+		// '' = invalid state, explicitly set on form submission if state is null
+		// 'sustaining' or 'active' = valid states
+		membershipType: null,
 		amount: 0,
 		paymentType: null,
 		isCustomAmount: false,
