@@ -5,7 +5,9 @@ const Validity = require( '../../validation/validation_states' ).Validity;
 module.exports = function ( state ) {
 	return (
 		(
-			( state.membershipFormContent.addressType === 'person' && state.membershipFormContent.membershipType !== null ) ||
+			( state.membershipFormContent.addressType === 'person' &&
+				( state.membershipFormContent.membershipType === 'active' || state.membershipFormContent.membershipType === 'sustaining' )
+			) ||
 			( state.membershipFormContent.addressType === 'firma' && state.membershipFormContent.membershipType === 'sustaining' )
 		) &&
 		state.validity.paymentData === Validity.VALID &&
