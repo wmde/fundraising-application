@@ -6,9 +6,9 @@
 <script lang="ts">
 import Vue from 'vue';
 
-export default Vue.extend({
-  name: 'app',
-  components: {
-  }
-});
+export default Vue.extend( {
+	name: 'app',
+	components: {
+	},
+} );
 </script>
