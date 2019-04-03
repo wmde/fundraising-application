@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration;
 use WMDE\Fundraising\ContentProvider\ContentProvider;
 use WMDE\Fundraising\Frontend\App\Bootstrap;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\MailFormatter;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 use WMDE\Fundraising\Frontend\App\MailTemplates;
 
@@ -78,13 +79,13 @@ class MailTemplatesTest extends \PHPUnit\Framework\TestCase {
 		foreach( $templateTestData['variants'] as $variantName => $additionalContext ) {
 			$filePath = $this->createTestFilePath( $templateFileName, $variantName );
 
-			$content = $this->factory->getMailerTwig()->render(
+			$content = MailFormatter::format( $this->factory->getMailerTwig()->render(
 				$templateFileName,
 				array_merge_recursive(
 					$templateTestData['context'],
 					$additionalContext
 				)
-			);
+			) );
 
 			yield $filePath => $content;
 		}

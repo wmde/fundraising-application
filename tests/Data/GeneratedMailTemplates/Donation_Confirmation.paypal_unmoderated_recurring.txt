@@ -1,7 +1,8 @@
 Sehr geehrte Frau 姜,
 
 donation_confirmation/payment_intro
-donation_confirmation/paymenttype_directdebit
+donation_confirmation/paymenttype_external
+recurringDonation
 donation_confirmation/receipt_support
 donation_confirmation/receipt_opted_out
 donation_confirmation/greetings

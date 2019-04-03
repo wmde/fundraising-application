@@ -142,7 +142,8 @@
 			"paymentStatus": "paymentStatus.json",
 			"validations": "validations.json",
 			"pageTitles": "pageTitles.json",
-			"membershipTypes": "membershipTypes.json"
+			"membershipTypes": "membershipTypes.json",
+			"daysOfTheWeek": "daysOfTheWeek.json"
 		}
 	},
 	"payment-types": {

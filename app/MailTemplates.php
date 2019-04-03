@@ -101,10 +101,15 @@ class MailTemplates {
 							'status' => 'Z'
 						]
 					],
-					// PPL and MCP follow the same code path for recurring, no need to test each separately
-					'micropayment_unmoderated_recurring' => [
+					'credit_card_unmoderated_recurring' => [
 						'donation' => [
 							'paymentType' => 'MCP',
+							'interval' => 1
+						]
+					],
+					'paypal_unmoderated_recurring' => [
+						'donation' => [
+							'paymentType' => 'PPL',
 							'interval' => 6,
 						]
 					],

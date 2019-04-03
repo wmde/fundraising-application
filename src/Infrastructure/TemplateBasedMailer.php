@@ -35,7 +35,7 @@ class TemplateBasedMailer implements TemplateMailerInterface, DonationTemplateMa
 		$this->messenger->sendMessageToUser(
 			new Message(
 				$this->subject,
-				$this->template->render( $templateArguments )
+				MailFormatter::format( $this->template->render( $templateArguments ) )
 			),
 			$recipient
 		);
