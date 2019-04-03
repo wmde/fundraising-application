@@ -32,6 +32,7 @@ services:
     links:
       - database
       - mailhog
+      - skin_wmde19
 
   database:
     image: mysql:5.6
@@ -60,6 +61,19 @@ services:
     depends_on:
       - database
     command: database:3306
+
+  # webpack dev server for wmde19 skin development
+  skin_wmde19:
+    image: node:10
+    expose:
+      - "8080"
+    ports:
+      - "7072:8080"
+    volumes:
+      - ./skins/wmde19:/app:cached
+    working_dir: /app
+    command: npm run serve
+
 
 volumes:
   var-data:
