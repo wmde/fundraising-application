@@ -114,13 +114,6 @@
       "membership-enabled": false
     }
   },
-  "skin": {
-    "options": [
-      "10h16", "cat17", "wmde19"
-    ],
-    "default": "cat17",
-    "cookie-lifetime": 2592000
-  },
   "cookie": {
     "secure": false,
     "httpOnly": false
