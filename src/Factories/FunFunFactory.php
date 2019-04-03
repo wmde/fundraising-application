@@ -979,7 +979,10 @@ class FunFunFactory implements ServiceProviderInterface {
 		return new TwigFactory(
 			array_merge_recursive(
 				$twigConfig,
-				[ 'web-basepath' => $this->config['web-basepath'] ]
+				[
+					'web-basepath' => $this->config['web-basepath'],
+					'assets-path' => $this->config['assets-path']
+				]
 			),
 			$this->getCachePath() . '/twig',
 			$this->config['locale']
