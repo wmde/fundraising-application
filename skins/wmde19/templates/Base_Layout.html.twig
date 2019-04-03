@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="de" class="client-nojs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    {# TODO put title and meta info in content repo for translation & editing #}
+    <title>{% block title %}Spenden für Freies Wissen - Wikimedia Fördergesellschaft{% endblock %}</title>
+
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="title" content="{$ block('title') $}" />
+    <meta name="description" content="Wenn jeder nur einen kleinen Beitrag leisten würde, wäre unsere Spendenkampagne in einer Stunde vorüber." />
+
+    <meta property="og:title" content="Wenn jeder nur einen kleinen Beitrag leisten würde, wäre unsere Spendenkampagne in einer Stunde vorüber." />
+    <meta property="og:type" content="non_profit" />
+    <meta property="og:url" content="https://spenden.wikimedia.de/" />
+    <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Wikipedia_svg_logo-de.svg/200px-Wikipedia_svg_logo-de.svg.png" />
+    <meta property="og:site_name" content="Gemeinnnützige Wikimedia Fördergesellschaft mbH" />
+    <meta property="og:description" content="Mir liegt Wikipedia am Herzen, deshalb habe ich gespendet. Denn was wäre das Netz ohne Wikipedia?" />
+
+    <link rel="shortcut icon" href="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/wmde19{% endif %}/images/favicon.ico" />
+    <link rel="apple-touch-icon" href="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/wmde19{% endif %}/images/apple-touch-icon.png" />
+    <link rel="stylesheet" href="https://unpkg.com/buefy/dist/buefy.min.css"> {# TODO use local file when our application uses buefy #}
+</head>
+<body>
+{% block main %}
+    <div id="app" data-application-vars="{$ _context|json_encode|e('html_attr') $}" data-application-messages="{% block app_messages %}{}{% endblock %}" >
+        <noscript>
+                <h2>{$ 'no_javascript_title' | trans $}</h2>
+                {$ web_content( 'pages/no_javascript' ) $}
+        </noscript>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+{# TODO Add vendor and common chunks #}
+{% endblock %}
+
+{# TODO add Piwik tracking #}
+
+</body>
+</html>
