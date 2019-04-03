@@ -100,6 +100,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\JsonStringReader;
 use WMDE\Fundraising\Frontend\Infrastructure\LoggingMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\MailTemplateFilenameTraversable;
+use WMDE\Fundraising\Frontend\Infrastructure\MembershipMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 use WMDE\Fundraising\Frontend\Infrastructure\OperatorMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
@@ -337,10 +338,6 @@ class FunFunFactory implements ServiceProviderInterface {
 
 		$container['contact_validator'] = function() {
 			return new GetInTouchValidator( $this->getEmailValidator() );
-		};
-
-		$container['greeting_generator'] = function() {
-			return new GreetingGenerator();
 		};
 
 		$container['translator'] = function() {
@@ -829,7 +826,9 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function getGreetingGenerator(): GreetingGenerator {
-		return $this->pimple['greeting_generator'];
+		return $this->createSharedObject( GreetingGenerator::class, function (): GreetingGenerator {
+			return new GreetingGenerator( $this->getTranslator() );
+		} );
 	}
 
 	public function newCheckIbanUseCase(): CheckIbanUseCase {
@@ -1258,15 +1257,18 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	private function newApplyForMembershipMailer(): TemplateMailerInterface {
-		return $this->newTemplateMailer(
+		$mailer = new MembershipMailer(
 			$this->getOrganizationMessenger(),
 			new TwigTemplate(
 				$this->getMailerTwig(),
 				'Membership_Application_Confirmation.txt.twig',
 				[ 'greeting_generator' => $this->getGreetingGenerator() ]
 			),
-			'mail_subject_confirm_membership_application'
+			$this->getTranslator()->trans( 'mail_subject_confirm_membership_application_active' ),
+			$this->getTranslator()->trans( 'mail_subject_confirm_membership_application_sustaining' )
 		);
+
+		return new LoggingMailer( $mailer, $this->getLogger() );
 	}
 
 	private function newMembershipApplicationValidator(): MembershipApplicationValidator {

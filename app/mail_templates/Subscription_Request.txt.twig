@@ -1,4 +1,4 @@
-{$ greeting_generator.createGreeting( subscription.address.lastName, subscription.address.salutation, subscription.address.title )|raw $}
+{$ greeting_generator.createFormalGreeting( subscription.address.lastName, subscription.address.salutation, subscription.address.title )|raw $}
 
 {$ mail_content('subscription_request', {
     'confirm_subscription_link': url( 'confirm-subscription', { confirmationCode: subscription.confirmationCode } )

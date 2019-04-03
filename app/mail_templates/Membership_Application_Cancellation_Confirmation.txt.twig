@@ -1,4 +1,4 @@
-{$ greeting_generator.createGreeting( membershipApplicant.lastName, membershipApplicant.salutation, membershipApplicant.title )|raw $}
+{$ greeting_generator.createFormalGreeting( membershipApplicant.lastName, membershipApplicant.salutation, membershipApplicant.title )|raw $}
 
 {$ mail_content('membership_application_cancellation_confirmation', {
     'application_id': applicationId

@@ -1,8 +1,8 @@
 {%- set formattedAmount = membershipFee|localizedcurrency('EUR', 'de_DE') -%}
 {% if membershipType == 'sustaining' %}
-{$- greeting_generator.createGreeting( lastName, salutation, title )|raw $}
+{$- greeting_generator.createFormalGreeting( lastName, salutation, title )|raw $}
 {% else %}
-{$- mail_content('membership_application_confirmation/active_membership_salutation') $}
+{$- greeting_generator.createInformalGreeting( firstName, lastName, salutation )|raw $}
 {% endif %}
 
 {$ mail_content('membership_application_confirmation/intro', {

@@ -46,6 +46,7 @@ class MailTemplates {
 				'context' => [
 					'greeting_generator' => $this->factory->getGreetingGenerator(),
 					'recipient' => [
+						'firstName' => 'Timothy',
 						'lastName' => "O'Reilly",
 						'salutation' => 'Herr',
 						'title' => 'Dr.'
@@ -128,6 +129,7 @@ class MailTemplates {
 				'context' => [
 					'greeting_generator' => $this->factory->getGreetingGenerator(),
 					'membershipApplicant' => [
+						'firstName' => 'Timothy',
 						'lastName' => "O'Reilly",
 						'salutation' => 'Herr',
 						'title' => 'Dr.'
@@ -139,6 +141,7 @@ class MailTemplates {
 			'Membership_Application_Confirmation.txt.twig' => [
 				'context' => [
 					'greeting_generator' => $this->factory->getGreetingGenerator(),
+					'firstName' => 'Timothy',
 					'lastName' => "O'Reilly",
 					'salutation' => 'Herr',
 					'title' => 'Dr.',

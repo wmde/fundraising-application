@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace WMDE\Fundraising\Frontend\Infrastructure;
 
 class MailFormatter {
@@ -7,8 +9,8 @@ class MailFormatter {
 	public static function format( string $message ): string {
 		$formattedMessage = '';
 		$previousLine = '';
-		foreach ( explode( "\n", $message) as $line ) {
-			if ( trim( $line ) === '' && $previousLine === '') {
+		foreach ( explode( "\n", $message ) as $line ) {
+			if ( trim( $line ) === '' && $previousLine === '' ) {
 				continue;
 			}
 			$line = trim( $line );

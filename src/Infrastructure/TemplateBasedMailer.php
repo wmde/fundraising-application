@@ -11,11 +11,9 @@ use WMDE\Fundraising\DonationContext\Infrastructure\TemplateMailerInterface as D
 use WMDE\Fundraising\SubscriptionContext\Infrastructure\TemplateMailerInterface as SubscriptionTemplateMailerInterface;
 
 /**
- * @licence GNU GPL v2+
- * @author Jeroen De Dauw < jeroendedauw@gmail.com >
+ * @license GNU GPL v2+
  */
-class TemplateBasedMailer implements TemplateMailerInterface, DonationTemplateMailerInterface,
-	SubscriptionTemplateMailerInterface {
+class TemplateBasedMailer implements DonationTemplateMailerInterface, SubscriptionTemplateMailerInterface {
 
 	private $messenger;
 	private $template;
