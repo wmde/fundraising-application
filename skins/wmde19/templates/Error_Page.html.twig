@@ -11,6 +11,5 @@
 {% block scripts %}
 	{$ parent() $}
 
-	{# TODO create & use error entry point instead of general app #}
-	<script src="{$ assets_path $}/app.js"></script>
+	<script src="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/wmde19/scripts{% endif %}/error.js"></script>
 {% endblock %}
