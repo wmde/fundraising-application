@@ -66,6 +66,12 @@
       "description": "Base url of the application. Can be a full URL, a path (without trailing slash), or blank. All generated URLs in the HTML output will be relative to this path.",
       "default": ""
     },
+    "assets-path": {
+      "type": "string",
+      "title": "Path to assets",
+      "description": "Base url of web assets. Can be a full URL, a path (without trailing slash), or blank. Can be used in dev mode to point to an asset server for a specific skin",
+      "default": ""
+    },
     "twig": {
       "type": "object",
       "title": "Twig configuration settings for the skin Twig instance",

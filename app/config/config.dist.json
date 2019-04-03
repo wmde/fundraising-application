@@ -14,6 +14,7 @@
 	"enable-dev-entry-point": false,
 	"banned-ibans": [],
 	"web-basepath": "",
+	"assets-path": "",
 	"twig": {
 		"enable-cache": true,
 		"strict-variables": false
