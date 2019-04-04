@@ -34,22 +34,22 @@ class GreetingGeneratorTest extends TestCase {
 	}
 
 	public function testGivenNoFirstNameForInformalPersonalGreeting_neutralGreetingIsGenerated(): void {
-		$this->assertSame( 'mail_introduction_generic', $this->getGreetingGenerator()->createInformalGreeting( '', 'Zuse', 'Herr' ) );
+		$this->assertSame( 'mail_introduction_generic', $this->getGreetingGenerator()->createInformalGreeting( 'Herr', '', 'Zuse' ) );
 	}
 
 	public function testGivenNoLastNameForInformalFamilyGreeting_neutralGreetingIsGenerated(): void {
-		$this->assertSame( 'mail_introduction_generic', $this->getGreetingGenerator()->createInformalGreeting( 'Konrad', '', 'Familie' ) );
+		$this->assertSame( 'mail_introduction_generic', $this->getGreetingGenerator()->createInformalGreeting( 'Familie', 'Konrad', '' ) );
 	}
 
 	public function testGivenNoSalutationForInformalGreeting_neutralGreetingIsGenerated(): void {
-		$this->assertSame( 'mail_introduction_generic', $this->getGreetingGenerator()->createInformalGreeting( 'Testy', 'MacTest', '' ) );
+		$this->assertSame( 'mail_introduction_generic', $this->getGreetingGenerator()->createInformalGreeting( '', 'Testy', 'MacTest' ) );
 	}
 
 	/**
 	 * @dataProvider informalGreetingProvider
 	 */
 	public function testGivenASalutationForInformalGreeting_specificGreetingIsGenerated( string $salutation, string $expected ): void {
-		$this->assertSame( $expected, $this->getGreetingGenerator()->createInformalGreeting( 'Sascha', 'Mustermann', $salutation ) );
+		$this->assertSame( $expected, $this->getGreetingGenerator()->createInformalGreeting( $salutation, 'Sascha', 'Mustermann' ) );
 	}
 
 	public function informalGreetingProvider(): array {

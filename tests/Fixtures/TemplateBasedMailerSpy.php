@@ -6,13 +6,12 @@ namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
 use PHPUnit\Framework\TestCase;
 use WMDE\EmailAddress\EmailAddress;
-use WMDE\Fundraising\MembershipContext\Infrastructure\TemplateMailerInterface;
+use WMDE\Fundraising\Frontend\Infrastructure\GetInTouchMailerInterface;
 
 /**
- * @licence GNU GPL v2+
- * @author Jeroen De Dauw < jeroendedauw@gmail.com >
+ * @license GNU GPL v2+
  */
-class TemplateBasedMailerSpy implements TemplateMailerInterface {
+class TemplateBasedMailerSpy implements GetInTouchMailerInterface {
 
 	private $testCase;
 	private $sendMailCalls = [];

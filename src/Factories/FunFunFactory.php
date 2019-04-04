@@ -29,10 +29,6 @@ use Swift_NullTransport;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Component\Translation\TranslatorInterface;
-use Symfony\Component\Validator\Constraint as ValidatorConstraint;
-use Symfony\Component\Validator\Constraints\Range as RangeConstraint;
-use Symfony\Component\Validator\Constraints\Required as RequiredConstraint;
-use Symfony\Component\Validator\Constraints\Type as TypeConstraint;
 use TNvpServiceDispatcher;
 use Twig_Environment;
 use Twig_Extensions_Extension_Intl;
@@ -96,9 +92,9 @@ use WMDE\Fundraising\Frontend\BucketTesting\RandomBucketSelection;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder;
+use WMDE\Fundraising\Frontend\Infrastructure\GetInTouchMailerInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\JsonStringReader;
-use WMDE\Fundraising\Frontend\Infrastructure\LoggingMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\MailTemplateFilenameTraversable;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
@@ -809,20 +805,12 @@ class FunFunFactory implements ServiceProviderInterface {
 		);
 	}
 
-	/**
-	 * Create a new TemplateMailer instance
-	 *
-	 * There is decoration going on, so explicitly hinting what we return (Robustness principle) would be confusing
-	 * (you'd expect a TemplateBasedMailer, not a LoggingMailer), so we hint the interface instead.
-	 */
-	private function newTemplateMailer( Messenger $messenger, TwigTemplate $template, string $messageKey ): LoggingMailer {
-		$mailer = new TemplateBasedMailer(
+	private function newTemplateMailer( Messenger $messenger, TwigTemplate $template, string $messageKey ): TemplateBasedMailer {
+		return new TemplateBasedMailer(
 			$messenger,
 			$template,
 			$this->getTranslator()->trans( $messageKey )
 		);
-
-		return new LoggingMailer( $mailer, $this->getLogger() );
 	}
 
 	public function getGreetingGenerator(): GreetingGenerator {
@@ -863,7 +851,7 @@ class FunFunFactory implements ServiceProviderInterface {
 		);
 	}
 
-	private function newContactUserMailer(): MembershipTemplateMailerInterface {
+	private function newContactUserMailer(): GetInTouchMailerInterface {
 		return $this->newTemplateMailer(
 			$this->getSuborganizationMessenger(),
 			new TwigTemplate( $this->getMailerTwig(), 'Contact_Confirm_to_User.txt.twig' ),
@@ -1247,7 +1235,7 @@ class FunFunFactory implements ServiceProviderInterface {
 		return new ApplyForMembershipUseCase(
 			$this->getMembershipApplicationRepository(),
 			$this->newMembershipApplicationTokenFetcher(),
-			$this->newApplyForMembershipMailer(),
+			$this->newMembershipMailer(),
 			$this->newMembershipApplicationValidator(),
 			$this->newApplyForMembershipPolicyValidator(),
 			$this->newMembershipApplicationTracker(),
@@ -1256,8 +1244,8 @@ class FunFunFactory implements ServiceProviderInterface {
 		);
 	}
 
-	private function newApplyForMembershipMailer(): TemplateMailerInterface {
-		$mailer = new MembershipMailer(
+	private function newMembershipMailer(): MembershipTemplateMailerInterface {
+		return new MembershipMailer(
 			$this->getOrganizationMessenger(),
 			new TwigTemplate(
 				$this->getMailerTwig(),
@@ -1267,8 +1255,6 @@ class FunFunFactory implements ServiceProviderInterface {
 			$this->getTranslator()->trans( 'mail_subject_confirm_membership_application_active' ),
 			$this->getTranslator()->trans( 'mail_subject_confirm_membership_application_sustaining' )
 		);
-
-		return new LoggingMailer( $mailer, $this->getLogger() );
 	}
 
 	private function newMembershipApplicationValidator(): MembershipApplicationValidator {
@@ -1335,15 +1321,16 @@ class FunFunFactory implements ServiceProviderInterface {
 		$this->pimple['fundraising.membership.application.authorizer.class'] = $class;
 	}
 
-	private function newCancelMembershipApplicationMailer(): TemplateMailerInterface {
-		return $this->newTemplateMailer(
+	private function newCancelMembershipApplicationMailer(): MembershipTemplateMailerInterface {
+		return new MembershipMailer(
 			$this->getOrganizationMessenger(),
 			new TwigTemplate(
 				$this->getMailerTwig(),
 				'Membership_Application_Cancellation_Confirmation.txt.twig',
 				[ 'greeting_generator' => $this->getGreetingGenerator() ]
 			),
-			'mail_subject_confirm_membership_application_cancellation'
+			$this->getTranslator()->trans( 'mail_subject_confirm_membership_application_cancellation' ),
+			$this->getTranslator()->trans( 'mail_subject_confirm_membership_application_cancellation' )
 		);
 	}
 
@@ -1426,7 +1413,7 @@ class FunFunFactory implements ServiceProviderInterface {
 		return new HandleSubscriptionSignupNotificationUseCase(
 			$this->getMembershipApplicationRepository(),
 			$this->newMembershipApplicationAuthorizer( $updateToken ),
-			$this->newApplyForMembershipMailer(),
+			$this->newMembershipMailer(),
 			$this->getLogger()
 		);
 	}
@@ -1435,7 +1422,7 @@ class FunFunFactory implements ServiceProviderInterface {
 		return new HandleSubscriptionPaymentNotificationUseCase(
 			$this->getMembershipApplicationRepository(),
 			$this->newMembershipApplicationAuthorizer( $updateToken ),
-			$this->newApplyForMembershipMailer(),
+			$this->newMembershipMailer(),
 			$this->getLogger()
 		);
 	}

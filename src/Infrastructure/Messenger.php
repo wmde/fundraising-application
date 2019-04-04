@@ -10,8 +10,7 @@ use Swift_Transport;
 use WMDE\EmailAddress\EmailAddress;
 
 /**
- * @licence GNU GPL v2+
- * @author Kai Nissen < kai.nissen@wikimedia.de >
+ * @license GNU GPL v2+
  */
 class Messenger {
 
@@ -57,7 +56,7 @@ class Messenger {
 	private function sendMessage( Swift_Message $message ): void {
 		$deliveryCount = $this->mailTransport->send( $message );
 		if ( $deliveryCount === 0 ) {
-			throw new RuntimeException( 'Message delivery failed' );
+			throw new MailerException( 'Message delivery failed' );
 		}
 	}
 

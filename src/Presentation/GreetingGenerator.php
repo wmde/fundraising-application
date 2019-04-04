@@ -40,7 +40,7 @@ class GreetingGenerator {
 		}
 	}
 
-	public function createInformalGreeting( string $firstName, string $lastName, string $salutation ): string {
+	public function createInformalGreeting( string $salutation, string $firstName, string $lastName ): string {
 		if ( ( $salutation !== self::GREETING_FAMILY && $firstName === '' ) ||
 			( $salutation === self::GREETING_FAMILY && $lastName === '' ) ) {
 			return $this->translator->trans( 'mail_introduction_generic' );

@@ -12,7 +12,8 @@ use WMDE\Fundraising\SubscriptionContext\Infrastructure\TemplateMailerInterface 
 /**
  * @license GNU GPL v2+
  */
-class TemplateBasedMailer implements DonationTemplateMailerInterface, SubscriptionTemplateMailerInterface {
+class TemplateBasedMailer implements DonationTemplateMailerInterface, SubscriptionTemplateMailerInterface,
+	GetInTouchMailerInterface {
 
 	private $messenger;
 	private $template;
