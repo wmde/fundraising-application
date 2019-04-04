@@ -27,8 +27,8 @@ class MailFormatterTest extends \PHPUnit\Framework\TestCase {
 
 	public function testGivenBackslashN_charactersAreConvertedToLineBreaks() {
 		$this->assertSame(
-			"This is a\ntest\n",
-			MailFormatter::format( 'This is a\ntest' )
+			"This\n\nis a\ntest\n",
+			MailFormatter::format( 'This\\n\n is a\ntest' )
 		);
 	}
 
