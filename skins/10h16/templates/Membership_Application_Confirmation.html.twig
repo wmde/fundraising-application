@@ -49,7 +49,7 @@
 
 							<h2 class="f-left no-margin">SEPA-Lastschriftmandat</h2><br /><br />
 
-							<p class="title">Sie zahlen ab 2019 {$ membershipApplication.paymentIntervalInMonths|trans({}, 'paymentIntervals') $} einen Mitgliedsbeitrag in H&ouml;he von <strong>{$ formattedAmount $}</strong> an Wikimedia Deutschland e. V., Tempelhofer Ufer 23-24, 10963 Berlin</p>
+							<p class="title">Sie zahlen {$ membershipApplication.paymentIntervalInMonths|trans({}, 'paymentIntervals') $} einen Mitgliedsbeitrag in H&ouml;he von <strong>{$ formattedAmount $}</strong> an Wikimedia Deutschland e. V., Tempelhofer Ufer 23-24, 10963 Berlin</p>
 
 							<p class="title">Sie zahlen per {$ membershipApplication.paymentType|trans({}, 'paymentTypes') $}.</p>
 	{% if membershipApplication.paymentType == 'PPL' %}
