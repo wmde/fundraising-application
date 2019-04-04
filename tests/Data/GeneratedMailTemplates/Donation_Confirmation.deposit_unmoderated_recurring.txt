@@ -2,9 +2,10 @@ mail_introduction_female_formal
 
 donation_confirmation/paymenttype_banktransfer
 
-donation_confirmation/paymenttype_banktransfer_once
+donation_confirmation/paymenttype_banktransfer_interval
 
-donation_confirmation/receipt	donation_confirmation/receipt_support
+donation_confirmation/receipt_support
+donation_confirmation/receipt_opted_out
 donation_confirmation/greetings
 
 

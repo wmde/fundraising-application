@@ -19,9 +19,11 @@
 			'donation_id': donation.id
 		}) $}
 		{% if donation.interval > 0 %}
-			{$- mail_content('donation_confirmation/paymenttype_banktransfer_interval', {
+
+			{$ mail_content('donation_confirmation/paymenttype_banktransfer_interval', {
 				'donation_interval': donation.interval|trans({}, 'paymentIntervals')
-			}) -$}
+			}) $}
+
 		{% else %}
 
 			{$ mail_content('donation_confirmation/paymenttype_banktransfer_once') $}

@@ -75,6 +75,14 @@ class MailTemplates {
 							'paymentType' => 'UEB',
 							'interval' => 0,
 							'bankTransferCode' => 'WZF3984Y',
+							'receiptOptIn' => true
+						]
+					],
+					'deposit_unmoderated_recurring' => [
+						'donation' => [
+							'paymentType' => 'UEB',
+							'interval' => 6,
+							'bankTransferCode' => 'WZF3984Y',
 						]
 					],
 					'direct_debit_unmoderated_non_recurring' => [
@@ -87,6 +95,7 @@ class MailTemplates {
 						'donation' => [
 							'paymentType' => 'BEZ',
 							'interval' => 3,
+							'receiptOptIn' => true
 						]
 					],
 					'paypal_unmoderated_non_recurring' => [

@@ -1,13 +1,1 @@
 contact_confirm_to_user
-
--------------------------------------
-address_of_suborganization
-
-phone
-www.wikimedia.de
-
-wikimedia_vision
-<https://spenden.wikimedia.de/>
-
-tax_id_suborganization
-
