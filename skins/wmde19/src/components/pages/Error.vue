@@ -24,4 +24,3 @@ export default {
 	props: [ 'messages', 'errorMessage' ],
 };
 </script>
-
