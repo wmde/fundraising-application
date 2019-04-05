@@ -1,10 +1,10 @@
 <template>
 	<main>
 		<!-- TODO create small i18n vue function to use instead of messages variable -->
-		<h1>{{ messages.error_page_header }}</h1>
+		<h1>{{ $t( 'error_page_header' ) }}</h1>
 
 		<p>
-			<span v-html="messages.error_page"></span>
+			<span v-html="$t( 'error_page' )"></span>
 		</p>
 
 		<pre v-if="errorMessage">
@@ -12,7 +12,7 @@
 		</pre>
 
 		<p>
-			<a href="/"><span v-html="messages.error_pages_return_to_donation"></span></a>
+			<a href="/"><span v-html="$t( 'error_pages_return_to_donation' )"></span></a>
 		</p>
 	</main>
 
@@ -21,6 +21,6 @@
 <script>
 export default {
 	name: 'Error',
-	props: [ 'messages', 'errorMessage' ],
+	props: [ 'errorMessage' ],
 };
 </script>
