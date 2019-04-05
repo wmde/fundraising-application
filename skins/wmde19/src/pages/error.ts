@@ -1,23 +1,21 @@
 import Vue from 'vue';
 import Error from '@/components/pages/Error.vue';
 import App from '@/components/App.vue';
+import PageDataInitializer from '@/page_data_initializer';
 
 Vue.config.productionTip = false;
 
-const dataElement = document.getElementById( 'app' );
-let applicationVars: any = {}; // TODO Create interface
-let messages = {};
-
-if ( dataElement ) {
-	applicationVars = JSON.parse( dataElement.dataset.applicationVars || '{}' );
-	messages = JSON.parse( dataElement.dataset.applicationMessages || '{}' );
+interface ErrorModel {
+	message: string
 }
+
+const pageData = new PageDataInitializer<ErrorModel>( '#app' );
 
 new Vue( {
 	render: h => h( App, {}, [ h( Error, {
 		props: {
-			errorMessage: applicationVars.message,
-			messages: messages,
+			errorMessage: pageData.applicationVars.message,
+			messages: pageData.messages,
 		},
 	} ) ] ),
 } ).$mount( '#app' );
