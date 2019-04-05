@@ -16,4 +16,9 @@ module.exports = {
 		},
 		error: 'src/pages/error.ts',
 	},
+	devServer: {
+		watchOptions: {
+			poll: true
+		}
+	}
 };
