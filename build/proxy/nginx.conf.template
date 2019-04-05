@@ -39,6 +39,8 @@ server {
             fastcgi_pass   ${PHP_FPM_HOST}:9000;
         }
 
+
+
 		location = /status {
 			add_header Content-Type text/plain;
 			return 200 "Web server status: OK (Online)";
