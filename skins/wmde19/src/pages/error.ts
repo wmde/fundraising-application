@@ -1,5 +1,6 @@
 import Vue from 'vue';
-import Error from './Error.vue';
+import Error from '@/components/pages/Error.vue';
+import App from '@/components/App.vue';
 
 Vue.config.productionTip = false;
 
@@ -13,10 +14,10 @@ if ( dataElement ) {
 }
 
 new Vue( {
-	render: h => h( Error, {
+	render: h => h( App, {}, [ h( Error, {
 		props: {
 			errorMessage: applicationVars.message,
 			messages: messages,
 		},
-	} ),
+	} ) ] ),
 } ).$mount( '#app' );
