@@ -1,4 +1,4 @@
-const path = require('path');
+const path = require( 'path' );
 
 module.exports = {
 	pages: {
@@ -20,25 +20,27 @@ module.exports = {
 	},
 	devServer: {
 		watchOptions: {
-			poll: true
-		}
+			poll: true,
+		},
 	},
-	outputDir: path.resolve(__dirname, "../../web/skins/wmde19"),
+	outputDir: path.resolve( __dirname, '../../web/skins/wmde19' ),
 
 	// Copied from https://github.com/vuejs/vue-cli/issues/1649#issuecomment-399136133
 	chainWebpack: config => {
-		if(config.plugins.has('extract-css')) {
-			const extractCSSPlugin = config.plugin('extract-css')
-			extractCSSPlugin && extractCSSPlugin.tap(() => [{
-				filename: 'css/[name].css',
-				chunkFilename: 'css/[name].css'
-			}])
+		if ( config.plugins.has( 'extract-css' ) ) {
+			const extractCSSPlugin = config.plugin( 'extract-css' );
+			if ( extractCSSPlugin ) {
+				extractCSSPlugin.tap( () => [ {
+					filename: 'css/[name].css',
+					chunkFilename: 'css/[name].css',
+				} ] );
+			}
 		}
 	},
 	configureWebpack: {
 		output: {
 			filename: 'js/[name].js',
-			chunkFilename: 'js/[name].js'
-		}
-	}
+			chunkFilename: 'js/[name].js',
+		},
+	},
 };
