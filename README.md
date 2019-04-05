@@ -286,7 +286,7 @@ Actions and their resulting state will be logged.
     
 ### Automatic recompilation of assets during development (cat17)
 
-If you are working on the JavaScript files of the cat17 skin and need automatic recompilation when a files changes, run the command
+If you are working on the JavaScript files of the cat17 skin and need automatic recompilation when a file changes, run the command
 
     make watch-js  
 
@@ -300,7 +300,7 @@ If you want to debug problems in the Redux data flow, add the parameter `-e REDU
 
 ### Automatic recompilation of assets during development (wmde19)
 
-If you are working on the JavaScript files of the wmde19 skin and need automatic recompilation when a files changes, add the following setting to your `config.dev.json` file:
+If you are working on the JavaScript files of the wmde19 skin and need automatic recompilation when a file changes, add the following setting to your `config.dev.json` file:
 
 	"assets-path": "http://localhost:7072" 
 
