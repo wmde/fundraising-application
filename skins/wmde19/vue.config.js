@@ -14,6 +14,6 @@ module.exports = {
 			// extracted common chunks and vendor chunks.
 			chunks: [ 'chunk-vendors', 'chunk-common', 'index' ],
 		},
-		error: 'src/error.ts',
+		error: 'src/pages/error.ts',
 	},
 };
