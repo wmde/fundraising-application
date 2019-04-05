@@ -1,6 +1,6 @@
 export default class PageDataInitializer<T> {
 	applicationVars: T;
-	messages: object;
+	messages: { [key: string]: string };
 
 	constructor( dataElementSelector: string = '#app' ) {
 		const dataElement: HTMLElement | null = document.querySelector( dataElementSelector );
