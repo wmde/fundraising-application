@@ -21,12 +21,12 @@ const i18n = new VueI18n( {
 	},
 } );
 
+// TODO imagePath needs to be dynamically established
 new Vue( {
 	i18n,
-	render: h => h( App, {}, [ h( Error, {
+	render: h => h( App, { props: { imagePath: 'http://localhost:7072' } }, [ h( Error, {
 		props: {
 			errorMessage: pageData.applicationVars.message,
-			messages: pageData.messages,
 		},
 	} ) ] ),
 } ).$mount( '#app' );

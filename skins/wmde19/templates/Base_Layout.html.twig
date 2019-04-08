@@ -20,7 +20,7 @@
 
     <link rel="shortcut icon" href="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/wmde19{% endif %}/images/favicon.ico" />
     <link rel="apple-touch-icon" href="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/wmde19{% endif %}/images/apple-touch-icon.png" />
-    <link rel="stylesheet" href="https://unpkg.com/buefy/dist/buefy.min.css"> {# TODO use local file when our application uses buefy #}
+    {% block styles %}{% endblock %}
 </head>
 <body>
 {% block main %}

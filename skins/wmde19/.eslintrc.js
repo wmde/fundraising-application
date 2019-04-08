@@ -23,7 +23,7 @@ module.exports = {
 		'no-undef': 'off',
 
 		// diverging from Wikimedia rule set
-		'max-len': [ 'error', 120 ],
+		'max-len': [ 'error', 170 ],
 		'comma-dangle': [ 'error', 'always-multiline' ],
 		'operator-linebreak': 'off',
 		'quote-props': 'off',
