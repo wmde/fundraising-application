@@ -1,13 +1,19 @@
 <template>
-	<section id="app" class="section">
-		<div class="container">
-			<Header></Header>
-			<Content>
-				<slot></slot>
-			</Content>
-			<Footer></Footer>
-		</div>
-	</section>
+	<div>
+		<header>
+			<Header :imagePath=imagePath></Header>
+		</header>
+		<main id="app" class="section">
+			<div class="container">
+				<Content>
+					<slot></slot>
+				</Content>
+			</div>
+		</main>
+		<footer>
+			<Footer :imagePath=imagePath></Footer>
+		</footer>
+	</div>
 </template>
 
 <script lang="ts">
@@ -23,5 +29,21 @@ export default Vue.extend( {
 		Content,
 		Footer,
 	},
+	props: [ 'imagePath' ],
 } );
 </script>
+
+<style lang="scss">
+	@import "../scss/variables";
+
+	// Import Bulma's core
+	@import "~bulma/sass/utilities/_all";
+
+	// Overriding Bulma variables
+	@import "../scss/overrides";
+
+	// Import Bulma and Buefy styles
+	@import "~bulma";
+	@import "~buefy/src/scss/buefy";
+	@import "../scss/modifiers";
+</style>

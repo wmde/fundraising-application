@@ -25,7 +25,6 @@ module.exports = {
 	},
 	outputDir: path.resolve( __dirname, '../../web/skins/wmde19' ),
 
-	// Copied from https://github.com/vuejs/vue-cli/issues/1649#issuecomment-399136133
 	chainWebpack: config => {
 		if ( config.plugins.has( 'extract-css' ) ) {
 			const extractCSSPlugin = config.plugin( 'extract-css' );
