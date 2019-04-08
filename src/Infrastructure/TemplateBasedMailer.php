@@ -6,16 +6,14 @@ namespace WMDE\Fundraising\Frontend\Infrastructure;
 
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
-use WMDE\Fundraising\MembershipContext\Infrastructure\TemplateMailerInterface;
 use WMDE\Fundraising\DonationContext\Infrastructure\TemplateMailerInterface as DonationTemplateMailerInterface;
 use WMDE\Fundraising\SubscriptionContext\Infrastructure\TemplateMailerInterface as SubscriptionTemplateMailerInterface;
 
 /**
- * @licence GNU GPL v2+
- * @author Jeroen De Dauw < jeroendedauw@gmail.com >
+ * @license GNU GPL v2+
  */
-class TemplateBasedMailer implements TemplateMailerInterface, DonationTemplateMailerInterface,
-	SubscriptionTemplateMailerInterface {
+class TemplateBasedMailer implements DonationTemplateMailerInterface, SubscriptionTemplateMailerInterface,
+	GetInTouchMailerInterface {
 
 	private $messenger;
 	private $template;
@@ -35,7 +33,7 @@ class TemplateBasedMailer implements TemplateMailerInterface, DonationTemplateMa
 		$this->messenger->sendMessageToUser(
 			new Message(
 				$this->subject,
-				$this->template->render( $templateArguments )
+				MailFormatter::format( $this->template->render( $templateArguments ) )
 			),
 			$recipient
 		);

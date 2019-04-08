@@ -89,7 +89,8 @@
       "paymentIntervals": "paymentIntervals.json",
       "paymentStatus": "paymentStatus.json",
       "paymentTypes": "paymentTypes.json",
-      "validations": "validations.json"
+      "validations": "validations.json",
+      "daysOfTheWeek": "daysOfTheWeek.json"
     }
   },
   "payment-types": {

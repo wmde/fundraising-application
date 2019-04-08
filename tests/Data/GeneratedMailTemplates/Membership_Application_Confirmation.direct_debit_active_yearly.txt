@@ -1,21 +1,8 @@
-membership_application_confirmation/active_membership_salutation
+mail_introduction_male_informal
 
 membership_application_confirmation/intro
 
-membership_application_confirmation/payment_notice_direct_debit
-
 membership_application_confirmation/outro
 
-name_head_of_organization, title_head_of_organization
-
----------------------------------------------------------------------------
-wikimedia_vision
-<https://www.wikimedia.de/>
----------------------------------------------------------------------------
-
-address_of_organization
-
-phone
-www.wikimedia.de
-
-tax_id_organization
+name_head_of_suborganization,
+title_head_of_suborganizationaddress_of_organization

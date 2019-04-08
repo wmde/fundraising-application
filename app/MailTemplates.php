@@ -46,6 +46,7 @@ class MailTemplates {
 				'context' => [
 					'greeting_generator' => $this->factory->getGreetingGenerator(),
 					'recipient' => [
+						'firstName' => 'Timothy',
 						'lastName' => "O'Reilly",
 						'salutation' => 'Herr',
 						'title' => 'Dr.'
@@ -74,6 +75,14 @@ class MailTemplates {
 							'paymentType' => 'UEB',
 							'interval' => 0,
 							'bankTransferCode' => 'WZF3984Y',
+							'receiptOptIn' => true
+						]
+					],
+					'deposit_unmoderated_recurring' => [
+						'donation' => [
+							'paymentType' => 'UEB',
+							'interval' => 6,
+							'bankTransferCode' => 'WZF3984Y',
 						]
 					],
 					'direct_debit_unmoderated_non_recurring' => [
@@ -86,6 +95,7 @@ class MailTemplates {
 						'donation' => [
 							'paymentType' => 'BEZ',
 							'interval' => 3,
+							'receiptOptIn' => true
 						]
 					],
 					'paypal_unmoderated_non_recurring' => [
@@ -101,10 +111,15 @@ class MailTemplates {
 							'status' => 'Z'
 						]
 					],
-					// PPL and MCP follow the same code path for recurring, no need to test each separately
-					'micropayment_unmoderated_recurring' => [
+					'credit_card_unmoderated_recurring' => [
 						'donation' => [
 							'paymentType' => 'MCP',
+							'interval' => 1
+						]
+					],
+					'paypal_unmoderated_recurring' => [
+						'donation' => [
+							'paymentType' => 'PPL',
 							'interval' => 6,
 						]
 					],
@@ -123,6 +138,7 @@ class MailTemplates {
 				'context' => [
 					'greeting_generator' => $this->factory->getGreetingGenerator(),
 					'membershipApplicant' => [
+						'firstName' => 'Timothy',
 						'lastName' => "O'Reilly",
 						'salutation' => 'Herr',
 						'title' => 'Dr.'
@@ -134,6 +150,7 @@ class MailTemplates {
 			'Membership_Application_Confirmation.txt.twig' => [
 				'context' => [
 					'greeting_generator' => $this->factory->getGreetingGenerator(),
+					'firstName' => 'Timothy',
 					'lastName' => "O'Reilly",
 					'salutation' => 'Herr',
 					'title' => 'Dr.',

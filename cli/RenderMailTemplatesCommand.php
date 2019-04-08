@@ -19,6 +19,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
 use WMDE\Fundraising\Frontend\App\MailTemplates;
 use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
+use WMDE\Fundraising\Frontend\Infrastructure\MailFormatter;
 
 /**
  * A command to check and dump mail templates
@@ -147,11 +148,13 @@ class RenderMailTemplatesCommand extends Command {
 				try {
 					file_put_contents(
 						$outputName,
-						$twig->render(
-							$templateFileName,
-							array_merge_recursive(
-								$templateSettings['context'],
-								$additionalContext
+						MailFormatter::format(
+							$twig->render(
+								$templateFileName,
+								array_merge_recursive(
+									$templateSettings['context'],
+									$additionalContext
+								)
 							)
 						)
 					);

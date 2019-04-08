@@ -1,4 +1,4 @@
-{$ greeting_generator.createGreeting( recipient.lastName, recipient.salutation, recipient.title )|raw $}
+{$ greeting_generator.createFormalGreeting( recipient.lastName, recipient.salutation, recipient.title )|raw $}
 
 {$ mail_content('donation_cancellation_confirmation', {
     'donation_id': donationId

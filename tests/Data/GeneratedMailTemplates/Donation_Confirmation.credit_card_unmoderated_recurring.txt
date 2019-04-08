@@ -1,10 +1,12 @@
 mail_introduction_female_formal
 
 donation_confirmation/payment_intro
-donation_confirmation/paymenttype_directdebit
+donation_confirmation/paymenttype_external
+recurringDonation
 donation_confirmation/receipt_support
 donation_confirmation/receipt_opted_out
 donation_confirmation/greetings
+donation_confirmation/creditcard_interval_notice
 
 
 name_head_of_suborganization,

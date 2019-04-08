@@ -6,14 +6,13 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
 use Swift_NullTransport;
 use WMDE\EmailAddress\EmailAddress;
+use WMDE\Fundraising\Frontend\Infrastructure\MailerException;
 use WMDE\Fundraising\Frontend\Infrastructure\Message;
 use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\Messenger
- *
- * @licence GNU GPL v2+
- * @author Kai Nissen < kai.nissen@wikimedia.de >
+ * @license GNU GPL v2+
  */
 class MessengerTest extends \PHPUnit\Framework\TestCase {
 
@@ -24,7 +23,7 @@ class MessengerTest extends \PHPUnit\Framework\TestCase {
 			->method( 'send' )
 			->willReturn( 0 );
 
-		$this->expectException( \RuntimeException::class );
+		$this->expectException( MailerException::class );
 		$this->expectExceptionMessage( 'Message delivery failed' );
 		( new Messenger( $mailTransport, new EmailAddress( 'hostmaster@thatoperator.com' ) ) )
 			->sendMessageToUser(
