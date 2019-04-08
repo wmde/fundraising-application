@@ -8,9 +8,13 @@
     } | json_encode | e('html_attr')
 	$}{% endblock %}
 
+{% block styles %}
+<link rel="stylesheet" href="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/wmde19{% endif %}/css/error.css">
+{% endblock %}
+
 {% block scripts %}
 	{$ parent() $}
 
 	{% if not assets_path %}<script src="{$ basepath $}/skins/wmde19/js/chunk-vendors.js"></script>{% endif %}
-	<script src="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/wmde19/js{% endif %}/error.js"></script>
+	<script src="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/wmde19{% endif %}/js/error.js"></script>
 {% endblock %}

@@ -1,0 +1,32 @@
+$fun-color-basic-white: #FFFFFF;
+$fun-color-basic-black: #000000;
+$fun-color-secondary-black: rgba(0, 0, 0, 0.6);
+$fun-color-basic-blue: #0065a4;
+$fun-color-basic-blue-light: #1e88ca;
+$fun-color-mid-blue: #009ee0;
+$fun-color-mid-blue-light: #a5cee2;
+$fun-color-mid-blue-lighter: #dce4e8;
+$fun-color-mid-blue-gray: #c7d1d8;
+$fun-color-gray: #808080;
+$fun-color-gray-light: #b7b7b7;
+$fun-color-gray-lighter: #e5e5e5;
+$fun-color-red: #812923;
+$fun-color-red-light: #E6D4D3;
+
+// Used for selectors like ".has-background-red"
+$custom-colors: (
+		"basic-white": ($fun-color-basic-white, $fun-color-basic-black),
+		"basic-black": ($fun-color-basic-black, $fun-color-basic-white),
+		"secondary-black": ($fun-color-secondary-black),
+		"basic-blue": ($fun-color-basic-blue),
+		"basic-blue-light": ($fun-color-basic-blue-light),
+		"mid-blue": ($fun-color-mid-blue),
+		"mid-blue-light": ($fun-color-mid-blue-light),
+		"mid-blue-lighter": ($fun-color-mid-blue-lighter),
+		"mid-blue-gray": ($fun-color-mid-blue-gray),
+		"gray": ($fun-color-gray),
+		"gray-light": ($fun-color-gray-light),
+		"gray-lighter": ($fun-color-gray-lighter),
+		"red": ($fun-color-red),
+		"red-light": ($fun-color-red-light),
+);

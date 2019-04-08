@@ -12,6 +12,7 @@
     "build-assets": "npm run build"
   },
   "dependencies": {
+    "buefy": "^0.7.3",
     "core-js": "^2.6.5",
     "vue": "^2.6.6",
     "vue-i18n": "^8.10.0",

@@ -1,0 +1,28 @@
+@import "variables";
+
+// Overriding Bulma variables
+
+// General page / body
+$body-background-color: $fun-color-mid-blue-lighter;
+
+// Text or font related
+$primary: $fun-color-basic-blue;
+$text: $fun-color-basic-black;
+$body-size: 14px;
+$body-line-height: 1.8;
+
+// Header / Navbar
+$navbar-height: 5.2rem;
+$navbar-box-shadow-size: 1px 2px 3px;
+$navbar-box-shadow-color: rgba(0, 0, 0, 0.1);
+$navbar-item-color: $text;
+$navbar-item-hover-color: $fun-color-basic-blue-light;
+$navbar-item-hover-background-color: $fun-color-basic-white;
+$navbar-item-active-color: $primary;
+$navbar-item-active-background-color: $fun-color-basic-white;
+
+// Miscellaneous overrides
+.title {
+	margin-top: 30px;
+}
+
