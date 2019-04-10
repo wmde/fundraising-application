@@ -114,13 +114,15 @@
             }
         },
         computed: {
-            fieldErrors(): AddressValidity {
-                return Object.keys(this.formData).reduce( ( validity: AddressValidity, fieldName: string ) => {
-                    if (!this.formData[fieldName].optionalField) {
-                        validity[fieldName] = this.$store.state.form[fieldName] === Validity.INVALID
-                    }
-                    return validity;
-                }, ({} as AddressValidity) );
+            fieldErrors: {
+                get: function(): AddressValidity {
+                    return Object.keys(this.formData).reduce( ( validity: AddressValidity, fieldName: string ) => {
+                        if (!this.formData[fieldName].optionalField) {
+                            validity[fieldName] = this.$store.state.form[fieldName] === Validity.INVALID
+                        }
+                        return validity;
+                    }, ({} as AddressValidity) );
+                }
             }
         },
         methods: {

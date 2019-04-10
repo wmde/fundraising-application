@@ -1,7 +1,7 @@
 import { shallowMount, mount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import AddressForm from '../../AddressForm.vue'
-import { Validity } from "@/types";
+import { AddressValidity, Validity } from "@/types";
 
 const localVue = createLocalVue();
 
