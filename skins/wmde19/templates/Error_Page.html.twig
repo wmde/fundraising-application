@@ -1,12 +1,8 @@
 {% extends 'Base_Layout.html.twig' %}
 
-{# TODO remove block when we have a better way of passing messages #}
-{% block app_messages %}{$ {
-		'error_page_header': 'error_page_header' | trans,
-		'error_pages_return_to_donation': 'error_pages_return_to_donation'  | trans,
-		'error_page': 'error_page' | trans
-    } | json_encode | e('html_attr')
-	$}{% endblock %}
+{% block styles %}
+	<link rel="stylesheet" href="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/wmde19{% endif %}/css/error.css">
+{% endblock %}
 
 {% block styles %}
 <link rel="stylesheet" href="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/wmde19{% endif %}/css/error.css">

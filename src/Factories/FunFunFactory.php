@@ -26,6 +26,7 @@ use RemotelyLiving\Doorkeeper\Features\Set;
 use RemotelyLiving\Doorkeeper\Requestor;
 use Swift_MailTransport;
 use Swift_NullTransport;
+use Symfony\Bridge\Twig\TokenParser\TransChoiceTokenParser;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -113,6 +114,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\PiwikServerSideTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\ProfilerDataCollector;
 use WMDE\Fundraising\Frontend\Infrastructure\ServerSideTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\TranslationsCollector;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\WordListFileReader;
 use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
@@ -158,7 +160,6 @@ use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipApplicationP
 use WMDE\Fundraising\MembershipContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\MembershipContext\Infrastructure\LoggingApplicationRepository;
 use WMDE\Fundraising\MembershipContext\Infrastructure\TemplateMailerInterface as MembershipTemplateMailerInterface;
-use WMDE\Fundraising\MembershipContext\Infrastructure\TemplateMailerInterface;
 use WMDE\Fundraising\MembershipContext\MembershipContextFactory;
 use WMDE\Fundraising\MembershipContext\Tracking\ApplicationPiwikTracker;
 use WMDE\Fundraising\MembershipContext\Tracking\ApplicationTracker;
@@ -390,6 +391,13 @@ class FunFunFactory implements ServiceProviderInterface {
 					'web_content',
 					function( string $name, array $context = [] ): string {
 						return $this->getContentProvider()->getWeb( $name, $context );
+					},
+					[ 'is_safe' => [ 'html' ] ]
+				),
+				new Twig_SimpleFunction(
+					'translations',
+					function(): string {
+						return json_encode( $this-> getTranslationCollector()->collectTranslations() );
 					},
 					[ 'is_safe' => [ 'html' ] ]
 				),
@@ -1831,5 +1839,13 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	public function getCampaignCollection(): CampaignCollection {
 		return new CampaignCollection( ...$this->getCampaigns() );
+	}
+
+	public function getTranslationCollector(): TranslationsCollector {
+		return $this->createSharedObject( TranslationsCollector::class, function (): TranslationsCollector {
+			$translationsCollector = new TranslationsCollector( new SimpleFileFetcher() );
+			$translationsCollector->addTranslationFile( $this->getI18nDirectory() . '/messages/messages.json' );
+			return $translationsCollector;
+		} );
 	}
 }
