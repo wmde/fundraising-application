@@ -24,7 +24,7 @@
 </head>
 <body>
 {% block main %}
-    <div id="app" data-application-vars="{$ _context|json_encode|e('html_attr') $}" data-application-messages="{% block app_messages %}{}{% endblock %}" >
+    <div id="app" data-application-vars="{$ _context|json_encode|e('html_attr') $}" data-application-messages="{$ translations()|e('html_attr') $}" >
         <noscript>
                 <h2>{$ 'no_javascript_title' | trans $}</h2>
                 {$ web_content( 'pages/no_javascript' ) $}
