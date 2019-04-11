@@ -1,8 +1,8 @@
 <template>
-	<div class="navbar is-fixed-top has-background-white">
+	<div class="navbar is-fixed-top has-background-bright has-shadow">
 		<div class="container">
 			<div class="navbar-brand">
-				<a class="navbar-item">
+				<a class="navbar-item" href="/">
 					<img :src="imagePath + '/images/logo-horizontal-wikimedia.svg'" alt="Wikimedia Deutschland" width="144" height="29">
 				</a>
 				<a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
@@ -44,10 +44,8 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	if ( $navbarBurgers.length > 0 ) {
 		$navbarBurgers.forEach( el => {
 			el.addEventListener( 'click', () => {
-				const target = el.dataset.target;
-				const $target = document.getElementById( target );
 				el.classList.toggle( 'is-active' );
-				$target.classList.toggle( 'is-active' );
+				document.querySelector('.navbar-menu').classList.toggle('is-active');
 			} );
 		} );
 	}

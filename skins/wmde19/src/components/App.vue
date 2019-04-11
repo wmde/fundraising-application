@@ -35,6 +35,7 @@ export default Vue.extend( {
 
 <style lang="scss">
 	@import "../scss/variables";
+	@import "../scss/classes";
 
 	// Import Bulma's core
 	@import "~bulma/sass/utilities/_all";
@@ -45,5 +46,5 @@ export default Vue.extend( {
 	// Import Bulma and Buefy styles
 	@import "~bulma";
 	@import "~buefy/src/scss/buefy";
-	@import "../scss/modifiers";
+	@import "~bulma-helpers/sass/helpers/spacing/margin-padding";
 </style>
