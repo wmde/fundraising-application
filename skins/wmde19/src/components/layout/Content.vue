@@ -1,7 +1,7 @@
 <template>
-	<div class="container has-margin-top-112 has-margin-bottom-48">
+	<div class="container has-margin-top-108 has-margin-bottom-54">
 		<div class="columns">
-			<main class="column is-two-thirds has-background-white">
+			<main class="column is-two-thirds has-background-bright">
 				<slot></slot>
 			</main>
 			<aside class="column is-one-third">
@@ -24,10 +24,10 @@ export default {
 <style lang="scss">
 	@import "../../scss/variables";
 	.phone-number {
-		color: $fun-color-basic-black;
+		color: $fun-color-dark;
 		cursor: default;
 		&:hover {
-			color: $fun-color-basic-black;
+			color: $fun-color-dark;
 		}
 	}
 </style>
