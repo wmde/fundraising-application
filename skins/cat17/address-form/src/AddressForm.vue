@@ -79,7 +79,7 @@
                     postcode: {
                         name: 'postcode',
                         value: '',
-                        pattern: '[0-9]{4,5}$',
+                        pattern: '^[0-9]{4,5}$',
                         optionalField: false
                     },
                     country: {
