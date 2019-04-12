@@ -289,7 +289,7 @@ describe('AddressForm.vue', () => {
 					postcode: {
 						name: 'postcode',
 						optionalField: false,
-						pattern: '[0-9]{4,5}$',
+						pattern: '^[0-9]{4,5}$',
 						value: '1234'
 					},
 					salutation: {
