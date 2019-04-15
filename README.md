@@ -302,7 +302,7 @@ If you want to debug problems in the Redux data flow, add the parameter `-e REDU
 
 If you are working on the JavaScript files of the wmde19 skin and need automatic recompilation when a file changes, add the following setting to your `config.dev.json` file:
 
-	"assets-path": "http://localhost:7072" 
+    "assets-path": "http://localhost:7072" 
 
 ## Skins
 

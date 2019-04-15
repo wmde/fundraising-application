@@ -52,7 +52,7 @@ update-php: build_app_composer
 	docker run --rm $(DOCKER_FLAGS) --volume $(BUILD_DIR):/app -w /app --volume ~/.composer:/composer --user $(current_user):$(current_group) wmde/fundraising-frontend-composer composer update $(COMPOSER_FLAGS)
 
 default-config:
-	cp build/app/config.dev.json app/config
+	cp -i build/app/config.dev.json app/config
 
 js:
 	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR):/data:delegated -w /data -e NO_UPDATE_NOTIFIER=1 -e REDUX_LOG=$(REDUX_LOG) node:8 npm run build-assets
