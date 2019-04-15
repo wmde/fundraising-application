@@ -121,5 +121,6 @@
   },
   "campaigns": {
     "configurations": [ "campaigns.yml", "campaigns.dev.yml" ]
-  }
+  },
+  "assets-path": "http://localhost:7072"
 }
