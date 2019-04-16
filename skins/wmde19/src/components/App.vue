@@ -7,6 +7,9 @@
 			<div class="container">
 				<Content>
 					<slot></slot>
+					<template v-slot:sidebar>
+						<slot name="sidebar"></slot>
+					</template>
 				</Content>
 			</div>
 		</main>

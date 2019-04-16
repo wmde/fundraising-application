@@ -15,42 +15,21 @@
 							<div class="bank-data-content">
 								<p><strong>Kontoinhaber:</strong> Wikimedia Foerdergesellschaft</p>
 								<p>
-									<strong>IBAN:</strong>
-									<span class="spacer"></span>DE33
-									<span class="spacer"></span>1002
-									<span class="spacer"></span>0500
-									<span class="spacer"></span>0001
-									<span class="spacer"></span>1947
-									<span class="spacer"></span>00
+									<strong>{{ $t( 'iban')  }}:</strong><span class="spacer" v-for="ibanPartial in iban">{{ ibanPartial }}</span>
 								</p>
-								<p><strong>BIC:</strong> BFSWDE33BER</p>
+								<p><strong>{{ $t( 'bic')  }}:</strong> {{ $t( 'operator_account_bic')  }}</p>
 								<p>Bank für Sozialwirtschaft</p>
-								<p><strong>Kontonummer:</strong> 1194700</p>
-								<p><strong>BLZ:</strong> 10020500</p>
+								<p><strong>{{ $t( 'account_number')  }}:</strong> {{ $t( 'operator_account_number')  }}</p>
+								<p><strong>{{ $t( 'blz')  }}:</strong> {{ $t( 'operator_account_blz')  }}</p>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="column is-one-third">
 					<ul class="list-menu">
-						<li>
-							<a href="/contact/get-in-touch">
-								<span>Kontakt</span>
-							</a>
-						</li>
-						<li>
-							<a href="/page/Impressum">
-								<span>Impressum</span>
-							</a>
-						</li>
-						<li>
-							<a href="/page/Datenschutz">
-								<span>Datenschutz</span>
-							</a>
-						</li>
-						<li>
-							<a href="/page/Unterst%C3%BCtzerliste">
-								<span>Unterstützerliste</span>
+						<li v-for="link in footerMenu">
+							<a :href="link.url">
+								<span>{{ $t( 'footer_menu_' + link.id ) }}</span>
 							</a>
 						</li>
 					</ul>
@@ -64,6 +43,21 @@
 export default {
 	name: 'Footer',
 	props: [ 'imagePath' ],
+	computed: {
+		iban: function() {
+			return this.$t( 'operator_account_iban' ).split( ' ' );
+		}
+	},
+	data: function(  ) {
+		return {
+			'footerMenu': [
+				{ id: 'contact', url: '/contact/get-in-touch'},
+				{ id: 'imprint', url: '/page/Impressum'},
+				{ id: 'data_protection', url: '/page/Datenschutz'},
+				{ id: 'supporters_list', url: '/page/Unterst%C3%BCtzerliste'},
+			]
+		}
+	},
 };
 </script>
 
