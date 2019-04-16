@@ -25,6 +25,14 @@
         owner: "{{app_owner}}"
         group: "{{app_group}}"
 
+    - name: Create .env file
+      copy:
+        content: >
+          APP_ENV={{ environment_name }}
+        dest: "{{ app_dir }}/{{ release_name }}/.env"
+        owner: "{{app_owner}}"
+        group: "{{app_group}}"
+
     - name: Check if configuration file is valid JSON
       command: php -r 'json_decode( file_get_contents( "{{ app_dir }}/{{ release_name }}/app/config/config.{{ environment_name }}.json" ) ); echo json_last_error();'
       register: decode_json_config
