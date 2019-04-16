@@ -2,10 +2,11 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Infrastructure;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
 use FileFetcher\InMemoryFileFetcher;
 use PHPUnit\Framework\TestCase;
+use WMDE\Fundraising\Frontend\Infrastructure\TranslationsCollector;
 
 class TranslationsCollectorTest extends TestCase {
 
