@@ -17,17 +17,8 @@
             <div id="navMenu" v-bind:class="[{ 'is-active': showNavbarBurger }, 'navbar-menu']"
                  @click="showNavbarBurger = !showNavbarBurger">
                 <div class="navbar-start">
-                    <a class="navbar-item">
-                        Spendenkommentare
-                    </a>
-                    <a class="navbar-item">
-                        Häufige Fragen
-                    </a>
-                    <a class="navbar-item">
-                        Mittelverwendung
-                    </a>
-                    <a class="navbar-item">
-                        Spenden
+                    <a class="navbar-item" v-for="link in headerMenu" :href="link.url">
+                        {{ $t( 'menu_item_' + link.id ) }}
                     </a>
                 </div>
             </div>
@@ -44,6 +35,12 @@ export default Vue.extend( {
 	data: function () {
 		return {
 			showNavbarBurger: false,
+			'headerMenu': [
+				{ id: 'donation_comments', url: '/list-comments.html'},
+				{ id: 'faq', url: '/faq'},
+				{ id: 'use_of_resources', url: '/use-of-funds'},
+				{ id: 'donate', url: '/'},
+			]
 		};
 	},
 } );
