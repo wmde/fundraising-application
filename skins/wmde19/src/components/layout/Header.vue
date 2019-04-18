@@ -36,11 +36,11 @@ export default Vue.extend( {
 		return {
 			showNavbarBurger: false,
 			'headerMenu': [
-				{ id: 'donation_comments', url: '/list-comments.html'},
-				{ id: 'faq', url: '/faq'},
-				{ id: 'use_of_resources', url: '/use-of-funds'},
-				{ id: 'donate', url: '/'},
-			]
+				{ id: 'donation_comments', url: '/list-comments.html' },
+				{ id: 'faq', url: '/faq' },
+				{ id: 'use_of_resources', url: '/use-of-funds' },
+				{ id: 'donate', url: '/' },
+			],
 		};
 	},
 } );

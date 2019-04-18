@@ -41,8 +41,8 @@ module.exports = {
 			.loader( 'vue-loader' )
 			.tap( options => {
 				options.compilerOptions.whitespace = 'condense';
-				return options
-			} )
+				return options;
+			} );
 	},
 	configureWebpack: {
 		output: {

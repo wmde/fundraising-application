@@ -36,7 +36,7 @@ new Vue( {
 				},
 			} ),
 			h( Sidebar, {
-				slot: 'sidebar'
+				slot: 'sidebar',
 			} ),
 		] ),
 } ).$mount( '#app' );

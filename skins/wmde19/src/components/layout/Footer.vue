@@ -44,19 +44,19 @@ export default {
 	name: 'Footer',
 	props: [ 'imagePath' ],
 	computed: {
-		iban: function() {
+		iban: function () {
 			return this.$t( 'operator_account_iban' ).split( ' ' );
-		}
+		},
 	},
-	data: function(  ) {
+	data: function () {
 		return {
 			'footerMenu': [
-				{ id: 'contact', url: '/contact/get-in-touch'},
-				{ id: 'imprint', url: '/page/Impressum'},
-				{ id: 'data_protection', url: '/page/Datenschutz'},
-				{ id: 'supporters_list', url: '/page/Unterst%C3%BCtzerliste'},
-			]
-		}
+				{ id: 'contact', url: '/contact/get-in-touch' },
+				{ id: 'imprint', url: '/page/Impressum' },
+				{ id: 'data_protection', url: '/page/Datenschutz' },
+				{ id: 'supporters_list', url: '/page/Unterst%C3%BCtzerliste' },
+			],
+		};
 	},
 };
 </script>
