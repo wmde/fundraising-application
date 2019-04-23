@@ -17,9 +17,9 @@ $navbar-height: 5.2rem;
 $navbar-box-shadow-size: 1px 2px 3px;
 $navbar-box-shadow-color: rgba(0, 0, 0, 0.1);
 $navbar-item-color: $text;
-$navbar-item-hover-color: $fun-color-primary-light;
+$navbar-item-hover-color: $fun-color-primary;
 $navbar-item-hover-background-color: $fun-color-bright;
-$navbar-item-active-color: $primary;
+$navbar-item-active-color: $fun-color-primary;
 $navbar-item-active-background-color: $fun-color-bright;
 
 $spacing-range-start: 18;
@@ -27,7 +27,22 @@ $spacing-range-end: 110;
 $spacing-interval: 18;
 
 // Miscellaneous overrides
+
 .title {
 	margin-top: 30px;
 }
 
+// Ensure footer always sticks to the bottom of the page
+// by setting min-height of the root elements to 100vh
+// and ensuring the main element is set to flex: 1
+body {
+	min-height: 100vh;
+	> div {
+		display: flex;
+		min-height: 100vh;
+		flex-direction: column;
+	}
+}
+main {
+	flex: 1;
+}

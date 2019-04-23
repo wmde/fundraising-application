@@ -1661,7 +1661,7 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function newPageNotFoundHtmlPresenter(): PageNotFoundPresenter {
-		return new PageNotFoundPresenter( $this->getLayoutTemplate( 'Page_not_found.html.twig' ) );
+		return new PageNotFoundPresenter( $this->getLayoutTemplate( 'Page_Not_Found.html.twig' ) );
 	}
 
 	public function setPageViewTracker( PageViewTracker $tracker ): void {
