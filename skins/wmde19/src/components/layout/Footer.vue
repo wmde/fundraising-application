@@ -7,7 +7,7 @@
 						<div class="level-left">
 							<div class="logo-footer">
 								<a href="https://www.wikimedia.de/">
-									<img :src="imagePath + '/images/logo-vertical-wikimedia.svg'" alt="Wikimedia Deutschland">
+									<img :src="imagepath + '/images/logo-vertical-wikimedia.svg'" alt="Wikimedia Deutschland">
 								</a>
 							</div>
 						</div>
@@ -15,7 +15,7 @@
 							<div class="bank-data-content">
 								<p><strong>Kontoinhaber:</strong> Wikimedia Foerdergesellschaft</p>
 								<p>
-									<strong>{{ $t( 'iban')  }}:</strong><span class="spacer" v-for="ibanPartial in iban">{{ ibanPartial }}</span>
+									<strong>{{ $t( 'iban')  }}:</strong><span class="spacer" v-for="ibanPartial in formatIban()">{{ ibanPartial }}</span>
 								</p>
 								<p><strong>{{ $t( 'bic')  }}:</strong> {{ $t( 'operator_account_bic')  }}</p>
 								<p>Bank für Sozialwirtschaft</p>
@@ -42,12 +42,7 @@
 <script>
 export default {
 	name: 'Footer',
-	props: [ 'imagePath' ],
-	computed: {
-		iban: function () {
-			return this.$t( 'operator_account_iban' ).split( ' ' );
-		},
-	},
+	props: [ 'imagepath' ],
 	data: function () {
 		return {
 			'footerMenu': [
@@ -57,6 +52,11 @@ export default {
 				{ id: 'supporters_list', url: '/page/Unterst%C3%BCtzerliste' },
 			],
 		};
+	},
+	methods: {
+		formatIban: function () {
+			return this.$t( 'operator_account_iban' ).split( ' ' );
+		},
 	},
 };
 </script>
