@@ -7,7 +7,7 @@
 	}
 	.logo-footer {
 		span {
-			background: transparent url("#{$image-path}/logo-horizontal-wikimedia.svg") no-repeat left top;
+			background: transparent url("#{$imagepath}/logo-horizontal-wikimedia.svg") no-repeat left top;
 			background-size: contain;
 			height: 50px;
 			width: 100%;
@@ -16,7 +16,7 @@
 			margin-bottom: 50px;
 			margin-top: 18px;
 			@include bkp(sm) {
-				background: transparent url("#{$image-path}/logo-vertical-wikimedia.svg") no-repeat left top;
+				background: transparent url("#{$imagepath}/logo-vertical-wikimedia.svg") no-repeat left top;
 				background-size: contain;
 				height: 100px;
 				max-width: 134px;
