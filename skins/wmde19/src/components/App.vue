@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<header>
-			<Header :page-identifier="pageIdentifier" :imagepath="imagepath"></Header>
+			<Header :page-identifier="pageIdentifier" :image-path="imagePath"></Header>
 		</header>
 		<main id="app" class="section">
 			<div class="container">
@@ -14,7 +14,7 @@
 			</div>
 		</main>
 		<footer>
-			<Footer :imagepath=imagepath></Footer>
+			<Footer :image-path=imagePath></Footer>
 		</footer>
 	</div>
 </template>
@@ -32,7 +32,7 @@ export default Vue.extend( {
 		Content,
 		Footer,
 	},
-	props: [ 'imagepath', 'pageIdentifier' ],
+	props: [ 'imagePath', 'pageIdentifier' ],
 } );
 </script>
 

@@ -3,7 +3,7 @@
         <div class="container">
             <div class="navbar-brand">
                 <a class="navbar-item" href="/">
-                    <img :src="imagepath + '/images/logo-horizontal-wikimedia.svg'" alt="Wikimedia Deutschland"
+                    <img :src="imagePath + '/images/logo-horizontal-wikimedia.svg'" alt="Wikimedia Deutschland"
                          width="144" height="29">
                 </a>
                 <a role="button" aria-label="menu" aria-expanded="false" @click="showNavbarBurger = !showNavbarBurger"
@@ -17,7 +17,7 @@
                  @click="showNavbarBurger = !showNavbarBurger">
                 <div class="navbar-start">
                     <a v-for="link in headerMenu" :href="link.url" v-bind:class="[{ 'active': link.id === pageIdentifier }, 'navbar-item']">
-                        {{ $t( 'menu_item_' + link.locale_id ) }}
+                        {{ $t( 'menu_item_' + link.localeId ) }}
                     </a>
                 </div>
             </div>
@@ -30,15 +30,15 @@ import Vue from 'vue';
 
 export default Vue.extend( {
 	name: 'Header',
-	props: [ 'imagepath', 'pageIdentifier' ],
+	props: [ 'imagePath', 'pageIdentifier' ],
 	data: function () {
 		return {
 			showNavbarBurger: false,
 			'headerMenu': [
-				{ id: 'comment-list', locale_id: 'donation_comments', url: '/list-comments.html' },
-				{ id: 'faq-page', locale_id: 'faq', url: '/faq' },
-				{ id: 'use-of-funds', locale_id: 'use_of_resources', url: '/use-of-funds' },
-				{ id: 'donation-form', locale_id: 'donate', url: '/' },
+				{ id: 'donation-form', localeId: 'donate', url: '/' },
+				{ id: 'membership-application', localeId: 'membership_application', url: '/apply-for-membership' },
+				{ id: 'faq-page', localeId: 'faq', url: '/faq' },
+				{ id: 'use-of-funds', localeId: 'use_of_resources', url: '/use-of-funds' },
 			],
 		};
 	},
@@ -48,9 +48,11 @@ export default Vue.extend( {
 <style lang="scss">
     @import "../../scss/variables";
     .navbar {
+        &-item {
+            border-bottom: 2px solid $fun-color-bright;
+        }
         &-menu {
             .navbar-item {
-                border-bottom: 2px solid $fun-color-bright;
                 &:hover {
                     border-bottom: 2px solid $fun-color-primary;
                 }
