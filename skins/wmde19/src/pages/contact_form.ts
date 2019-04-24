@@ -30,7 +30,7 @@ new Vue( {
 	i18n,
 	render: h => h( App, {
 		props: {
-			imagePath: 'http://localhost:7072',
+			imagePath: pageData.assetsPath,
 			pageIdentifier: PAGE_IDENTIFIER,
 		},
 	},
