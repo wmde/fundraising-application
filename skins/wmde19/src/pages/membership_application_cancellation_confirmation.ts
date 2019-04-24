@@ -4,10 +4,10 @@ import PageDataInitializer from '@/page_data_initializer';
 import { DEFAULT_LOCALE } from '@/locales';
 import App from '@/components/App.vue';
 
-import Component from '@/components/pages/Error.vue';
+import Component from '@/components/pages/Placeholder.vue';
 import Sidebar from '@/components/layout/Sidebar.vue';
 
-const PAGE_IDENTIFIER = 'error-page';
+const PAGE_IDENTIFIER = 'membership-application-cancellation-confirmation';
 
 Vue.config.productionTip = false;
 Vue.use( VueI18n );
@@ -35,11 +35,7 @@ new Vue( {
 		},
 	},
 	[
-		h( Component, {
-			props: {
-				errorMessage: pageData.applicationVars.message,
-			},
-		} ),
+		h( Component, {} ),
 		h( Sidebar, {
 			slot: 'sidebar',
 		} ),

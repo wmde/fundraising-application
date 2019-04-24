@@ -1,0 +1,24 @@
+$fun-color-bright: #ffffff;
+$fun-color-dark: #000000;
+$fun-color-dark-lighter: rgba(0, 0, 0, 0.6);
+$fun-color-primary: #0065a4;
+$fun-color-primary-light: #1e88ca;
+$fun-color-primary-lighter: #a5cee2;
+$fun-color-primary-lightest: #dce4e8;
+$fun-color-footer: #c7d1d8;
+$fun-color-error: #812923;
+$fun-color-error-light: #e6d4d3;
+
+// Used for selectors like ".has-background-primary"
+$custom-colors: (
+		"bright": ($fun-color-bright, $fun-color-dark),
+		"dark": ($fun-color-dark, $fun-color-bright),
+		"dark-lighter": ($fun-color-dark-lighter),
+		"primary": ($fun-color-primary),
+		"primary-light": ($fun-color-primary-light),
+		"primary-lighter": ($fun-color-primary-lighter),
+		"primary-lightest": ($fun-color-primary-lightest),
+		"footer": ($fun-color-footer),
+		"error": ($fun-color-error),
+		"error-light": ($fun-color-error-light),
+);

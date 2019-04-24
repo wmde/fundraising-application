@@ -20,11 +20,15 @@
 
     <link rel="shortcut icon" href="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/wmde19{% endif %}/images/favicon.ico" />
     <link rel="apple-touch-icon" href="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/wmde19{% endif %}/images/apple-touch-icon.png" />
-    <link rel="stylesheet" href="https://unpkg.com/buefy/dist/buefy.min.css"> {# TODO use local file when our application uses buefy #}
+    {% block styles %}
+        {% if not assets_path %}
+            <link rel="stylesheet" href="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/wmde19{% endif %}/css/styles.css">
+        {% endif %}
+    {% endblock %}
 </head>
 <body>
 {% block main %}
-    <div id="app" data-application-vars="{$ _context|json_encode|e('html_attr') $}" data-application-messages="{% block app_messages %}{}{% endblock %}" >
+    <div id="app" data-application-vars="{$ _context|json_encode|e('html_attr') $}" data-application-messages="{$ translations()|e('html_attr') $}" >
         <noscript>
                 <h2>{$ 'no_javascript_title' | trans $}</h2>
                 {$ web_content( 'pages/no_javascript' ) $}
@@ -33,7 +37,19 @@
 {% endblock %}
 
 {% block scripts %}
-{# TODO Add vendor and common chunks #}
+    {% if not assets_path %}
+        <script src="{$ basepath $}/skins/wmde19/js/chunk-vendors.js"></script>
+        {#
+           The file `styles.js` is needed due to a webpack error that propagates to the CSS-extract plugin.
+           Hopefully, the error gets fixed before this skin is released, so we can remove this silly dependency.
+           Otherwise, we must integrate the contents of styles.js into chunk-vendors.js during the build process.
+           See
+           https://github.com/webpack/webpack/issues/7300
+           https://github.com/webpack-contrib/mini-css-extract-plugin/issues/85
+           https://github.com/webpack-contrib/mini-css-extract-plugin/issues/113
+        #}
+        <script src="{$ basepath $}/skins/wmde19/js/styles.js"></script>
+    {% endif %}
 {% endblock %}
 
 {# TODO add Piwik tracking #}

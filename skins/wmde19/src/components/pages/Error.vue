@@ -1,8 +1,6 @@
 <template>
-	<main>
-		<!-- TODO create small i18n vue function to use instead of messages variable -->
-		<h1>{{ $t( 'error_page_header' ) }}</h1>
-
+	<div class="column is-full">
+		<h1 class="title">{{ $t( 'error_page_header' ) }}</h1>
 		<p>
 			<span v-html="$t( 'error_page' )"></span>
 		</p>
@@ -14,8 +12,7 @@
 		<p>
 			<a href="/"><span v-html="$t( 'error_pages_return_to_donation' )"></span></a>
 		</p>
-	</main>
-
+	</div>
 </template>
 
 <script>

@@ -299,7 +299,7 @@ class Routes {
 		$app->get(
 			'contact/get-in-touch',
 			function () use ( $ffFactory ) {
-				return $ffFactory->getLayoutTemplate( 'contact_form.html.twig' )->render(
+				return $ffFactory->getLayoutTemplate( 'Contact_Form.html.twig' )->render(
 					[ 'contact_categories' => $ffFactory->getGetInTouchCategories() ]
 				);
 			}
@@ -308,7 +308,7 @@ class Routes {
 		$app->get(
 			'faq',
 			function () use ( $ffFactory ) {
-				return $ffFactory->getLayoutTemplate( 'faq.html.twig' )->render(
+				return $ffFactory->getLayoutTemplate( 'Frequent_Questions.html.twig' )->render(
 					[
 						'faq_content' => $ffFactory->getFaqContent(),
 						'faq_messages' => $ffFactory->getFaqMessages()
@@ -332,7 +332,7 @@ class Routes {
 		$app->get(
 			'use-of-funds',
 			function () use ( $ffFactory ) {
-				return $ffFactory->getLayoutTemplate( 'page_layouts/use_of_resources.html.twig' )->render(
+				return $ffFactory->getLayoutTemplate( 'Funds_Usage.html.twig' )->render(
 					[
 						'use_of_funds_content' => $ffFactory->getApplicationOfFundsContent(),
 						'use_of_funds_messages' => $ffFactory->getApplicationOfFundsMessages()

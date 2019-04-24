@@ -12,6 +12,8 @@
     "build-assets": "npm run build"
   },
   "dependencies": {
+    "buefy": "^0.7.3",
+    "bulma-helpers": "^0.3.6",
     "core-js": "^2.6.5",
     "vue": "^2.6.6",
     "vue-i18n": "^8.10.0",
@@ -35,7 +37,7 @@
     "node-sass": "^4.9.0",
     "sass-loader": "^7.1.0",
     "ts-jest": "^23.0.0",
-    "typescript": "^3.2.1",
+    "typescript": "^3.4.2",
     "vue-template-compiler": "^2.5.21"
   }
 }

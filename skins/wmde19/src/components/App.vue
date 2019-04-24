@@ -1,13 +1,22 @@
 <template>
-	<section id="app" class="section">
-		<div class="container">
-			<Header></Header>
-			<Content>
-				<slot></slot>
-			</Content>
-			<Footer></Footer>
-		</div>
-	</section>
+	<div>
+		<header>
+			<Header :page-identifier="pageIdentifier" :image-path="imagePath"></Header>
+		</header>
+		<main id="app" class="section">
+			<div class="container">
+				<Content>
+					<slot></slot>
+					<template v-slot:sidebar>
+						<slot name="sidebar"></slot>
+					</template>
+				</Content>
+			</div>
+		</main>
+		<footer>
+			<Footer :image-path=imagePath></Footer>
+		</footer>
+	</div>
 </template>
 
 <script lang="ts">
@@ -23,5 +32,22 @@ export default Vue.extend( {
 		Content,
 		Footer,
 	},
+	props: [ 'imagePath', 'pageIdentifier' ],
 } );
 </script>
+
+<style lang="scss">
+	@import "../scss/variables";
+	@import "../scss/classes";
+
+	// Import Bulma's core
+	@import "~bulma/sass/utilities/_all";
+
+	// Overriding Bulma variables
+	@import "../scss/overrides";
+
+	// Import Bulma and Buefy styles
+	@import "~bulma";
+	@import "~buefy/src/scss/buefy";
+	@import "~bulma-helpers/sass/helpers/spacing/margin-padding";
+</style>
