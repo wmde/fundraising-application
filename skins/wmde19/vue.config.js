@@ -1,10 +1,10 @@
 const path = require( 'path' );
-
+/* eslint-disable camelcase */
 module.exports = {
 	pages: {
 		index: {
 			// entry for the page
-			entry: 'src/main.ts',
+			entry: 'src/pages/donation_form.ts',
 			// the source template
 			template: 'public/index.html',
 			// output as dist/index.html
