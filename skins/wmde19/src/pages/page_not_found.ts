@@ -25,19 +25,19 @@ const i18n = new VueI18n( {
 	},
 } );
 
-// TODO imagepath needs to be dynamically established
+// TODO imagePath needs to be dynamically established
 new Vue( {
 	i18n,
 	render: h => h( App, {
-			props: {
-				imagepath: 'http://localhost:7072',
-				pageIdentifier: PAGE_IDENTIFIER,
-			}
+		props: {
+			imagePath: 'http://localhost:7072',
+			pageIdentifier: PAGE_IDENTIFIER,
 		},
-		[
-			h( Component, {} ),
-			h( Sidebar, {
-				slot: 'sidebar',
-			} ),
-		] ),
+	},
+	[
+		h( Component, {} ),
+		h( Sidebar, {
+			slot: 'sidebar',
+		} ),
+	] ),
 } ).$mount( '#app' );

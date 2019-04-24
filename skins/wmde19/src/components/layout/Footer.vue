@@ -7,7 +7,7 @@
 						<div class="level-left">
 							<div class="logo-footer">
 								<a href="https://www.wikimedia.de/">
-									<img :src="imagepath + '/images/logo-vertical-wikimedia.svg'" alt="Wikimedia Deutschland">
+									<img :src="imagePath + '/images/logo-vertical-wikimedia.svg'" alt="Wikimedia Deutschland">
 								</a>
 							</div>
 						</div>
@@ -28,7 +28,7 @@
 				<div class="column is-one-third">
 					<ul class="list-menu">
 						<li v-for="link in footerMenu">
-							<a :href="link.url">
+							<a :href="link.url" :key="link.id">
 								<span>{{ $t( 'footer_menu_' + link.id ) }}</span>
 							</a>
 						</li>
@@ -42,7 +42,7 @@
 <script>
 export default {
 	name: 'Footer',
-	props: [ 'imagepath' ],
+	props: [ 'imagePath' ],
 	data: function () {
 		return {
 			'footerMenu': [
