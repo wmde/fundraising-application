@@ -38,31 +38,34 @@
 		{$- mail_content('donation_confirmation/paymenttype_external', {
 			'formatted_amount': formattedAmount,
 			'payment_provider': donation.paymentType|trans({}, 'paymentTypes')
-		}) $}
+		}) -$}
 		{% if donation.interval > 0 %}
-			{$- 'recurringDonation'|transchoice( donation.interval, { '%interval%': donation.interval } ) $}
+			{$- mail_content('donation_confirmation/payment_interval_recurring') $}
+		{%  else %}
+			{$- mail_content('donation_confirmation/payment_interval_once') $}
 		{% endif %}
 	{% endif %}
 	{% if donation.receiptOptIn %}
 
 		{$ mail_content('donation_confirmation/receipt', {
 			'donation_interval': donation.interval
-		}) -$}
+		}) $}
 	{% endif %}
-	\n
+
 	{$ mail_content('donation_confirmation/receipt_support' ) -$}
 	{% if donation.receiptOptIn == false %}
 		{$- " " -$}
 		{$- mail_content('donation_confirmation/receipt_opted_out') $}
 	{% endif %}
-	\n
+
 	{$ mail_content('donation_confirmation/greetings', {
 		'day_of_the_week': "now"|date("N")|trans({}, 'daysOfTheWeek')
 	}) $}
 	{% if donation.paymentType == 'MCP' and donation.interval > 0 %}
+
 		{$ mail_content('donation_confirmation/creditcard_interval_notice') $}
 	{% endif %}
 {% endif %}
-\n
+
 {$ mail_content('name_head_of_suborganization') $}
 {$ mail_content('title_head_of_suborganization') -$}
