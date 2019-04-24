@@ -28,7 +28,9 @@
 </head>
 <body>
 {% block main %}
-    <div id="app" data-application-vars="{$ _context|json_encode|e('html_attr') $}" data-application-messages="{$ translations()|e('html_attr') $}" >
+    <div id="app" data-application-vars="{$ _context|json_encode|e('html_attr') $}" 
+    data-application-messages="{$ translations()|e('html_attr') $}" 
+    data-assets-path="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/wmde19{% endif %}">
         <noscript>
                 <h2>{$ 'no_javascript_title' | trans $}</h2>
                 {$ web_content( 'pages/no_javascript' ) $}
