@@ -7,7 +7,7 @@
 						<div class="level-left">
 							<div class="logo-footer">
 								<a href="https://www.wikimedia.de/">
-									<img :src="imagePath + '/images/logo-vertical-wikimedia.svg'" alt="Wikimedia Deutschland">
+									<img :src="assetsPath + '/images/logo-vertical-wikimedia.svg'" alt="Wikimedia Deutschland">
 								</a>
 							</div>
 						</div>
@@ -42,7 +42,7 @@
 <script>
 export default {
 	name: 'Footer',
-	props: [ 'imagePath' ],
+	props: [ 'assetsPath' ],
 	data: function () {
 		return {
 			'footerMenu': [

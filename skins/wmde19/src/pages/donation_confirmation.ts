@@ -25,12 +25,12 @@ const i18n = new VueI18n( {
 	},
 } );
 
-// TODO imagePath needs to be dynamically established
+// TODO assetsPath needs to be dynamically established
 new Vue( {
 	i18n,
 	render: h => h( App, {
 		props: {
-			imagePath: pageData.assetsPath,
+			assetsPath: pageData.assetsPath,
 			pageIdentifier: PAGE_IDENTIFIER,
 		},
 	},
