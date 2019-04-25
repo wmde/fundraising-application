@@ -649,7 +649,7 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	public function newGetInTouchHtmlPresenter(): GetInTouchHtmlPresenter {
 		return new GetInTouchHtmlPresenter(
-			$this->getLayoutTemplate( 'contact_form.html.twig' ),
+			$this->getLayoutTemplate( 'Contact_Form.html.twig' ),
 			$this->getTranslator(),
 			$this->getGetInTouchCategories()
 		);
