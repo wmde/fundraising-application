@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration;
 use WMDE\Fundraising\ContentProvider\ContentProvider;
 use WMDE\Fundraising\Frontend\App\Bootstrap;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\MailFormatter;
+use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailFormatter;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 use WMDE\Fundraising\Frontend\App\MailTemplates;
 

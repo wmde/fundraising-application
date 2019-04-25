@@ -2,16 +2,16 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Mail;
 
 use Swift_NullTransport;
 use WMDE\EmailAddress\EmailAddress;
-use WMDE\Fundraising\Frontend\Infrastructure\MailerException;
-use WMDE\Fundraising\Frontend\Infrastructure\Message;
-use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
+use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailerException;
+use WMDE\Fundraising\Frontend\Infrastructure\Mail\Message;
+use WMDE\Fundraising\Frontend\Infrastructure\Mail\Messenger;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\Messenger
+ * @covers \WMDE\Fundraising\Frontend\Infrastructure\Mail\Messenger
  * @license GNU GPL v2+
  */
 class MessengerTest extends \PHPUnit\Framework\TestCase {

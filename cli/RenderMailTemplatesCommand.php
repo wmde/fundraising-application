@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Cli;
 
 use FileFetcher\SimpleFileFetcher;
-use Symfony\Bridge\Twig\Extension\RoutingExtension;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
@@ -19,7 +18,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
 use WMDE\Fundraising\Frontend\App\MailTemplates;
 use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
-use WMDE\Fundraising\Frontend\Infrastructure\MailFormatter;
+use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailFormatter;
 
 /**
  * A command to check and dump mail templates
