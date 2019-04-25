@@ -3,6 +3,5 @@ mail_introduction_female_formal
 donation_confirmation/needs_moderation
 donation_confirmation/greetings
 
-
-name_head_of_suborganization,
+name_head_of_suborganization
 title_head_of_suborganization
