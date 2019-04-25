@@ -3,7 +3,7 @@
         <div class="container">
             <div class="navbar-brand">
                 <a class="navbar-item" href="/">
-                    <img :src="imagePath + '/images/logo-horizontal-wikimedia.svg'" alt="Wikimedia Deutschland"
+                    <img :src="assetsPath + '/images/logo-horizontal-wikimedia.svg'" alt="Wikimedia Deutschland"
                          width="144" height="29">
                 </a>
                 <a role="button" aria-label="menu" aria-expanded="false" @click="showNavbarBurger = !showNavbarBurger"
@@ -30,7 +30,7 @@ import Vue from 'vue';
 
 export default Vue.extend( {
 	name: 'Header',
-	props: [ 'imagePath', 'pageIdentifier' ],
+	props: [ 'assetsPath', 'pageIdentifier' ],
 	data: function () {
 		return {
 			showNavbarBurger: false,
