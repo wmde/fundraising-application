@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
 use PHPUnit\Framework\TestCase;
 use WMDE\EmailAddress\EmailAddress;
-use WMDE\Fundraising\Frontend\Infrastructure\GetInTouchMailerInterface;
+use WMDE\Fundraising\Frontend\Infrastructure\Mail\GetInTouchMailerInterface;
 
 /**
  * @license GNU GPL v2+

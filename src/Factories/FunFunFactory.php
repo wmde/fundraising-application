@@ -92,13 +92,16 @@ use WMDE\Fundraising\Frontend\BucketTesting\RandomBucketSelection;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder;
-use WMDE\Fundraising\Frontend\Infrastructure\GetInTouchMailerInterface;
+use WMDE\Fundraising\Frontend\Infrastructure\Mail\BasicMailSubjectRenderer;
+use WMDE\Fundraising\Frontend\Infrastructure\Mail\DonationConfirmationMailSubjectRenderer;
+use WMDE\Fundraising\Frontend\Infrastructure\Mail\GetInTouchMailerInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\JsonStringReader;
-use WMDE\Fundraising\Frontend\Infrastructure\MailTemplateFilenameTraversable;
-use WMDE\Fundraising\Frontend\Infrastructure\MembershipMailer;
-use WMDE\Fundraising\Frontend\Infrastructure\Messenger;
-use WMDE\Fundraising\Frontend\Infrastructure\OperatorMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailSubjectRendererInterface;
+use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailTemplateFilenameTraversable;
+use WMDE\Fundraising\Frontend\Infrastructure\Mail\MembershipConfirmationMailSubjectRenderer;
+use WMDE\Fundraising\Frontend\Infrastructure\Mail\Messenger;
+use WMDE\Fundraising\Frontend\Infrastructure\Mail\OperatorMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\KontoCheckBankDataGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\KontoCheckIbanValidator;
@@ -109,7 +112,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVe
 use WMDE\Fundraising\Frontend\Infrastructure\PiwikServerSideTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\ProfilerDataCollector;
 use WMDE\Fundraising\Frontend\Infrastructure\ServerSideTracker;
-use WMDE\Fundraising\Frontend\Infrastructure\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\Mail\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\WordListFileReader;
 use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
@@ -155,6 +158,7 @@ use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipApplicationP
 use WMDE\Fundraising\MembershipContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\MembershipContext\Infrastructure\LoggingApplicationRepository;
 use WMDE\Fundraising\MembershipContext\Infrastructure\TemplateMailerInterface as MembershipTemplateMailerInterface;
+use WMDE\Fundraising\MembershipContext\Infrastructure\TemplateMailerInterface;
 use WMDE\Fundraising\MembershipContext\MembershipContextFactory;
 use WMDE\Fundraising\MembershipContext\Tracking\ApplicationPiwikTracker;
 use WMDE\Fundraising\MembershipContext\Tracking\ApplicationTracker;
@@ -789,7 +793,7 @@ class FunFunFactory implements ServiceProviderInterface {
 					'greeting_generator' => $this->getGreetingGenerator()
 				]
 			),
-			'mail_subject_subscription'
+			new BasicMailSubjectRenderer( $this->getTranslator(), 'mail_subject_subscription' )
 		);
 	}
 
@@ -801,15 +805,15 @@ class FunFunFactory implements ServiceProviderInterface {
 					'Subscription_Confirmation.txt.twig',
 					[ 'greeting_generator' => $this->getGreetingGenerator() ]
 			),
-			'mail_subject_subscription_confirmed'
+			new BasicMailSubjectRenderer( $this->getTranslator(), 'mail_subject_subscription_confirmed' )
 		);
 	}
 
-	private function newTemplateMailer( Messenger $messenger, TwigTemplate $template, string $messageKey ): TemplateBasedMailer {
+	private function newTemplateMailer( Messenger $messenger, TwigTemplate $template, MailSubjectRendererInterface $subjectRenderer ): TemplateBasedMailer {
 		return new TemplateBasedMailer(
 			$messenger,
 			$template,
-			$this->getTranslator()->trans( $messageKey )
+			$subjectRenderer
 		);
 	}
 
@@ -855,7 +859,7 @@ class FunFunFactory implements ServiceProviderInterface {
 		return $this->newTemplateMailer(
 			$this->getSuborganizationMessenger(),
 			new TwigTemplate( $this->getMailerTwig(), 'Contact_Confirm_to_User.txt.twig' ),
-			'mail_subject_getintouch'
+			new BasicMailSubjectRenderer( $this->getTranslator(), 'mail_subject_getintouch' )
 		);
 	}
 
@@ -1012,7 +1016,7 @@ class FunFunFactory implements ServiceProviderInterface {
 				'Donation_Cancellation_Confirmation.txt.twig',
 				[ 'greeting_generator' => $this->getGreetingGenerator() ]
 			),
-			'mail_subject_confirm_cancellation'
+			new BasicMailSubjectRenderer( $this->getTranslator(), 'mail_subject_confirm_cancellation' )
 		);
 	}
 
@@ -1074,7 +1078,11 @@ class FunFunFactory implements ServiceProviderInterface {
 						'greeting_generator' => $this->getGreetingGenerator()
 					]
 				),
-				'mail_subject_confirm_donation'
+				new DonationConfirmationMailSubjectRenderer(
+					$this->getTranslator(),
+					'mail_subject_confirm_donation',
+					'mail_subject_confirm_donation_promise'
+				)
 			)
 		);
 	}
@@ -1235,7 +1243,7 @@ class FunFunFactory implements ServiceProviderInterface {
 		return new ApplyForMembershipUseCase(
 			$this->getMembershipApplicationRepository(),
 			$this->newMembershipApplicationTokenFetcher(),
-			$this->newMembershipMailer(),
+			$this->newApplyForMembershipMailer(),
 			$this->newMembershipApplicationValidator(),
 			$this->newApplyForMembershipPolicyValidator(),
 			$this->newMembershipApplicationTracker(),
@@ -1244,16 +1252,19 @@ class FunFunFactory implements ServiceProviderInterface {
 		);
 	}
 
-	private function newMembershipMailer(): MembershipTemplateMailerInterface {
-		return new MembershipMailer(
+	private function newApplyForMembershipMailer(): MembershipTemplateMailerInterface {
+		return $this->newTemplateMailer(
 			$this->getOrganizationMessenger(),
 			new TwigTemplate(
 				$this->getMailerTwig(),
 				'Membership_Application_Confirmation.txt.twig',
 				[ 'greeting_generator' => $this->getGreetingGenerator() ]
 			),
-			$this->getTranslator()->trans( 'mail_subject_confirm_membership_application_active' ),
-			$this->getTranslator()->trans( 'mail_subject_confirm_membership_application_sustaining' )
+			new MembershipConfirmationMailSubjectRenderer(
+				$this->getTranslator(),
+				'mail_subject_confirm_membership_application_active',
+				'mail_subject_confirm_membership_application_sustaining'
+			)
 		);
 	}
 
@@ -1322,15 +1333,14 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	private function newCancelMembershipApplicationMailer(): MembershipTemplateMailerInterface {
-		return new MembershipMailer(
+		return new TemplateBasedMailer(
 			$this->getOrganizationMessenger(),
 			new TwigTemplate(
 				$this->getMailerTwig(),
 				'Membership_Application_Cancellation_Confirmation.txt.twig',
 				[ 'greeting_generator' => $this->getGreetingGenerator() ]
 			),
-			$this->getTranslator()->trans( 'mail_subject_confirm_membership_application_cancellation' ),
-			$this->getTranslator()->trans( 'mail_subject_confirm_membership_application_cancellation' )
+			new BasicMailSubjectRenderer( $this->getTranslator(), 'mail_subject_confirm_membership_application_cancellation' )
 		);
 	}
 
@@ -1413,7 +1423,7 @@ class FunFunFactory implements ServiceProviderInterface {
 		return new HandleSubscriptionSignupNotificationUseCase(
 			$this->getMembershipApplicationRepository(),
 			$this->newMembershipApplicationAuthorizer( $updateToken ),
-			$this->newMembershipMailer(),
+			$this->newApplyForMembershipMailer(),
 			$this->getLogger()
 		);
 	}
@@ -1422,7 +1432,7 @@ class FunFunFactory implements ServiceProviderInterface {
 		return new HandleSubscriptionPaymentNotificationUseCase(
 			$this->getMembershipApplicationRepository(),
 			$this->newMembershipApplicationAuthorizer( $updateToken ),
-			$this->newMembershipMailer(),
+			$this->newApplyForMembershipMailer(),
 			$this->getLogger()
 		);
 	}

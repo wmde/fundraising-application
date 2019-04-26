@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Infrastructure;
+namespace WMDE\Fundraising\Frontend\Infrastructure\Mail;
 
 use RuntimeException;
 use Swift_Message;

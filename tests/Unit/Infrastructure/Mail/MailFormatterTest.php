@@ -2,12 +2,12 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Mail;
 
-use WMDE\Fundraising\Frontend\Infrastructure\MailFormatter;
+use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailFormatter;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\MailFormatter
+ * @covers \WMDE\Fundraising\Frontend\Infrastructure\Mail\MailFormatter
  */
 class MailFormatterTest extends \PHPUnit\Framework\TestCase {
 

@@ -4393,12 +4393,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "731fcad407933bb9d0ef9342d88ed7bfdc86ce2f"
+                "reference": "4edc92d73d91ae3cd1d0a47858ad0104dc00af78"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/731fcad407933bb9d0ef9342d88ed7bfdc86ce2f",
-                "reference": "731fcad407933bb9d0ef9342d88ed7bfdc86ce2f",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/4edc92d73d91ae3cd1d0a47858ad0104dc00af78",
+                "reference": "4edc92d73d91ae3cd1d0a47858ad0104dc00af78",
                 "shasum": ""
             },
             "require": {
@@ -4445,7 +4445,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "time": "2019-04-04T15:29:13+00:00"
+            "time": "2019-04-25T16:09:47+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
@@ -6678,16 +6678,16 @@
         },
         {
             "name": "sebastian/environment",
-            "version": "4.1.0",
+            "version": "4.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/environment.git",
-                "reference": "6fda8ce1974b62b14935adc02a9ed38252eca656"
+                "reference": "3095910f0f0fb155ac4021fc51a4a7a39ac04e8a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/6fda8ce1974b62b14935adc02a9ed38252eca656",
-                "reference": "6fda8ce1974b62b14935adc02a9ed38252eca656",
+                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/3095910f0f0fb155ac4021fc51a4a7a39ac04e8a",
+                "reference": "3095910f0f0fb155ac4021fc51a4a7a39ac04e8a",
                 "shasum": ""
             },
             "require": {
@@ -6702,7 +6702,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.1-dev"
+                    "dev-master": "4.2-dev"
                 }
             },
             "autoload": {
@@ -6727,7 +6727,7 @@
                 "environment",
                 "hhvm"
             ],
-            "time": "2019-02-01T05:27:49+00:00"
+            "time": "2019-04-25T07:55:20+00:00"
         },
         {
             "name": "sebastian/exporter",
@@ -8107,12 +8107,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "38ea58f68effa7d2025b4331eaf870b1bb65b8f7"
+                "reference": "43d75ac5d4263ce303bd4a647ab3e1211ca7dbaa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/38ea58f68effa7d2025b4331eaf870b1bb65b8f7",
-                "reference": "38ea58f68effa7d2025b4331eaf870b1bb65b8f7",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/43d75ac5d4263ce303bd4a647ab3e1211ca7dbaa",
+                "reference": "43d75ac5d4263ce303bd4a647ab3e1211ca7dbaa",
                 "shasum": ""
             },
             "require-dev": {
@@ -8145,7 +8145,7 @@
                 "GPL-2.0+"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2019-04-24T15:01:26+00:00"
+            "time": "2019-04-25T09:53:52+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",
