@@ -25,7 +25,6 @@ const i18n = new VueI18n( {
 	},
 } );
 
-// TODO assetsPath needs to be dynamically established
 new Vue( {
 	i18n,
 	render: h => h( App, {
