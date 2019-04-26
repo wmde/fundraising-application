@@ -23,7 +23,7 @@
                     </p>
                 </footer>
             </div>
-            <div class="sidebar col-xs-12 col-sm-4">
+            <div class="sidebar">
                 <h5>{{ $t('about') }}</h5>
                 <ul>
                     <li @click="populatePageByTopic( topic ); isOverview = false;"
@@ -47,43 +47,46 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
+import { Vue, Component, Prop } from 'vue-property-decorator';
 import Question from '../Question.vue';
+import { FaqContent, Question as QuestionModel, Topic } from '../../view_models/faq';
 
-export default {
-	name: 'faq',
+@Component( {
 	components: {
 		Question,
 	},
-	props: [ 'content' ],
-	data() {
-		return {
-			isOverview: true,
-			topicTitle: '',
-			page: [],
-			openQuestionId: '',
-		};
-	},
-	mounted: function () {
+} )
+export default class Faq extends Vue {
+	@Prop() content!: FaqContent;
+
+	isOverview = true;
+	topicTitle = '';
+	page: QuestionModel[] = [];
+	openQuestionId = '';
+
+	mounted() {
 		this.populatePageOnInitialLoad();
-	},
-	methods: {
-		populatePageByTopic: function ( topic ) {
-			this.page = this.content.questions.filter( question => question.topic.split( ',' ).indexOf( topic.id ) !== -1 );
-			this.setTopicTitle( topic.name );
-			this.setOpenQuestionId( '' );
-		},
-		populatePageOnInitialLoad: function () {
-			this.setOpenQuestionId( '' );
-			this.page = this.content.questions.filter( question => question.topic.split( ',' ).indexOf( '1' ) !== -1 );
-			this.setTopicTitle( this.content.topics[ 0 ].name );
-		},
-		setTopicTitle: function ( name ) {
-			this.topicTitle = name;
-		},
-		setOpenQuestionId: function ( id ) {
-			this.openQuestionId = id;
-		},
-	},
-};
+	}
+
+	populatePageByTopic( topic:Topic ) {
+		this.page = this.content.questions.filter( question => question.topic.split( ',' ).indexOf( topic.id ) !== -1 );
+		this.setTopicTitle( topic.name );
+		this.setOpenQuestionId( '' );
+	}
+
+	populatePageOnInitialLoad() {
+		this.setOpenQuestionId( '' );
+		this.page = this.content.questions.filter( question => question.topic.split( ',' ).indexOf( '1' ) !== -1 );
+		this.setTopicTitle( this.content.topics[ 0 ].name );
+	}
+
+	setTopicTitle( name:string ) {
+		this.topicTitle = name;
+	}
+
+	setOpenQuestionId( id:string ) {
+		this.openQuestionId = id;
+	}
+}
 </script>
