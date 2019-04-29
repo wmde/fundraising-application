@@ -1,4 +1,4 @@
-# wmde19
+# Laika skin
 
 ## Project setup
 ```

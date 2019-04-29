@@ -298,9 +298,9 @@ To do the same for the 10h16 skin, run the following Docker command correspondin
 
 If you want to debug problems in the Redux data flow, add the parameter `-e REDUX_LOG=on` to the command line above
 
-### Automatic recompilation of assets during development (wmde19)
+### Automatic recompilation of assets during development (Laika)
 
-If you are working on the JavaScript files of the wmde19 skin and need automatic recompilation when a file changes, add the following setting to your `config.dev.json` file:
+If you are working on the JavaScript files of the Laika skin and need automatic recompilation when a file changes, add the following setting to your `config.dev.json` file:
 
     "assets-path": "http://localhost:7072" 
 

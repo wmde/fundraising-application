@@ -37,8 +37,8 @@ class ChoiceFactory {
 	public function getSkinTemplateDirectory(): string {
 		if ( $this->featureToggle->featureIsActive( 'campaigns.skins.cat17' ) ) {
 			return $this->getSkinDirectory( 'cat17' );
-		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.skins.wmde19' ) ) {
-			return $this->getSkinDirectory( 'wmde19' );
+		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.skins.laika' ) ) {
+			return $this->getSkinDirectory( 'laika' );
 		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.skins.10h16' ) ) {
 			return $this->getSkinDirectory( '10h16' );
 		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.skins.test' ) ) {
