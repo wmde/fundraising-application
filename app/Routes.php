@@ -308,6 +308,7 @@ class Routes {
 		$app->get(
 			'faq',
 			function () use ( $ffFactory ) {
+				$ffFactory->getTranslationCollector()->addTranslationFile($ffFactory->getI18nDirectory() . '/messages/faqMessages.json' );
 				return $ffFactory->getLayoutTemplate( 'Frequent_Questions.html.twig' )->render(
 					[
 						'faq_content' => $ffFactory->getFaqContent(),
