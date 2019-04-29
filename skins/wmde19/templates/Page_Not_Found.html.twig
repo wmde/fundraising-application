@@ -1,6 +1,0 @@
-{% extends 'Base_Layout.html.twig' %}
-
-{% block scripts %}
-	{$ parent() $}
-	<script src="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/wmde19{% endif %}/js/page_not_found.js"></script>
-{% endblock %}

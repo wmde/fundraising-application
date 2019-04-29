@@ -18,11 +18,11 @@
     <meta property="og:site_name" content="Gemeinnützige Wikimedia Fördergesellschaft mbH" />
     <meta property="og:description" content="Mir liegt Wikipedia am Herzen, deshalb habe ich gespendet. Denn was wäre das Netz ohne Wikipedia?" />
 
-    <link rel="shortcut icon" href="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/wmde19{% endif %}/images/favicon.ico" />
-    <link rel="apple-touch-icon" href="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/wmde19{% endif %}/images/apple-touch-icon.png" />
+    <link rel="shortcut icon" href="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}/images/favicon.ico" />
+    <link rel="apple-touch-icon" href="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}/images/apple-touch-icon.png" />
     {% block styles %}
         {% if not assets_path %}
-            <link rel="stylesheet" href="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/wmde19{% endif %}/css/styles.css">
+            <link rel="stylesheet" href="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}/css/styles.css">
         {% endif %}
     {% endblock %}
 </head>
@@ -30,7 +30,7 @@
 {% block main %}
     <div id="app" data-application-vars="{$ _context|json_encode|e('html_attr') $}" 
     data-application-messages="{$ translations()|e('html_attr') $}" 
-    data-assets-path="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/wmde19{% endif %}">
+    data-assets-path="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}">
         <noscript>
                 <h2>{$ 'no_javascript_title' | trans $}</h2>
                 {$ web_content( 'pages/no_javascript' ) $}
@@ -40,7 +40,7 @@
 
 {% block scripts %}
     {% if not assets_path %}
-        <script src="{$ basepath $}/skins/wmde19/js/chunk-vendors.js"></script>
+        <script src="{$ basepath $}/skins/laika/js/chunk-vendors.js"></script>
         {#
            The file `styles.js` is needed due to a webpack error that propagates to the CSS-extract plugin.
            Hopefully, the error gets fixed before this skin is released, so we can remove this silly dependency.
@@ -50,7 +50,7 @@
            https://github.com/webpack-contrib/mini-css-extract-plugin/issues/85
            https://github.com/webpack-contrib/mini-css-extract-plugin/issues/113
         #}
-        <script src="{$ basepath $}/skins/wmde19/js/styles.js"></script>
+        <script src="{$ basepath $}/skins/laika/js/styles.js"></script>
     {% endif %}
 {% endblock %}
 

@@ -41,7 +41,7 @@ module.exports = {
 			poll: true,
 		},
 	},
-	outputDir: path.resolve( __dirname, '../../web/skins/wmde19' ),
+	outputDir: path.resolve( __dirname, '../../web/skins/laika' ),
 
 	chainWebpack: config => {
 		if ( config.plugins.has( 'extract-css' ) ) {

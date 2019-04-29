@@ -5,7 +5,7 @@
 skins:
   active: true
   buckets:
-    - "wmde19"
+    - "laika"
   start: "2018-10-10"
   end: "2099-12-31"
 

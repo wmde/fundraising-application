@@ -32,7 +32,7 @@ services:
     links:
       - database
       - mailhog
-      - skin_wmde19
+      - skin_laika
 
   database:
     image: mysql:5.6
@@ -62,15 +62,15 @@ services:
       - database
     command: database:3306
 
-  # webpack dev server for wmde19 skin development
-  skin_wmde19:
+  # webpack dev server for laika skin development
+  skin_laika:
     image: node:10
     expose:
       - "8080"
     ports:
       - "7072:8080"
     volumes:
-      - ./skins/wmde19:/app:cached
+      - ./skins/laika:/app:cached
     working_dir: /app
     command: npm run serve
 
