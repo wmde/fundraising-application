@@ -4,19 +4,18 @@ import PageDataInitializer from '@/page_data_initializer';
 import { DEFAULT_LOCALE } from '@/locales';
 import App from '@/components/App.vue';
 
-import Component from '@/components/pages/Placeholder.vue';
+import Component from '@/components/pages/Faq.vue';
 import Sidebar from '@/components/layout/Sidebar.vue';
+
+import { faqContentFromObject } from '@/view_models/faq.ts';
 
 const PAGE_IDENTIFIER = 'faq-page';
 
 Vue.config.productionTip = false;
 Vue.use( VueI18n );
 
-interface ErrorModel {
-	message: string
-}
-
-const pageData = new PageDataInitializer<ErrorModel>( '#app' );
+const pageData = new PageDataInitializer<any>( '#app' );
+console.log( 'hello: ', pageData.applicationVars );
 
 const i18n = new VueI18n( {
 	locale: DEFAULT_LOCALE,
@@ -34,7 +33,11 @@ new Vue( {
 		},
 	},
 	[
-		h( Component, {} ),
+		h( Component, {
+			props: {
+				content: faqContentFromObject( pageData.applicationVars ),
+			},
+		} ),
 		h( Sidebar, {
 			slot: 'sidebar',
 		} ),
