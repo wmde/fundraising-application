@@ -15,7 +15,8 @@
 							<div class="bank-data-content">
 								<p><strong>Kontoinhaber:</strong> Wikimedia Foerdergesellschaft</p>
 								<p>
-									<strong>{{ $t( 'iban')  }}:</strong><span class="spacer" v-for="ibanPartial in formatIban()">{{ ibanPartial }}</span>
+									<strong>{{ $t( 'iban')  }}:</strong>
+									<span class="spacer" v-for="( ibanPartial, index ) in formatIban()" :key="index">{{ ibanPartial }}</span>
 								</p>
 								<p><strong>{{ $t( 'bic')  }}:</strong> {{ $t( 'operator_account_bic')  }}</p>
 								<p>Bank für Sozialwirtschaft</p>
@@ -27,7 +28,7 @@
 				</div>
 				<div class="column is-one-third">
 					<ul class="list-menu">
-						<li v-for="link in footerMenu">
+						<li v-for="( link, index ) in footerMenu" :key="index">
 							<a :href="link.url" :key="link.id">
 								<span>{{ $t( 'footer_menu_' + link.id ) }}</span>
 							</a>

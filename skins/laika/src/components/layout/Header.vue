@@ -16,7 +16,10 @@
             <div id="navMenu" v-bind:class="[{ 'is-active': showNavbarBurger }, 'navbar-menu']"
                  @click="showNavbarBurger = !showNavbarBurger">
                 <div class="navbar-start">
-                    <a v-for="link in headerMenu" :href="link.url" v-bind:class="[{ 'active': link.id === pageIdentifier }, 'navbar-item']">
+                    <a v-for="( link, index ) in headerMenu" 
+                        :key="index" 
+                        :href="link.url" 
+                        v-bind:class="[{ 'active': link.id === pageIdentifier }, 'navbar-item']">
                         {{ $t( 'menu_item_' + link.localeId ) }}
                     </a>
                 </div>
