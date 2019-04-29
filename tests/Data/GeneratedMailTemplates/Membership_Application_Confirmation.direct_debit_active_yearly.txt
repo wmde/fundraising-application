@@ -4,5 +4,6 @@ membership_application_confirmation/intro
 
 membership_application_confirmation/outro
 
-name_head_of_suborganization,
-title_head_of_suborganizationaddress_of_organization
+name_head_of_organization
+title_head_of_organization
+address_of_organization

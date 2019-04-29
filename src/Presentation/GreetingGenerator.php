@@ -57,4 +57,21 @@ class GreetingGenerator {
 				return $this->translator->trans( 'mail_introduction_generic' );
 		}
 	}
+
+	public function createInformalLastnameGreeting( string $salutation, string $lastName ): string {
+		if ( $lastName === '' ) {
+			return $this->translator->trans( 'mail_introduction_generic' );
+		}
+
+		switch ( $salutation ) {
+			case self::GREETING_MALE:
+				return $this->translator->trans( 'mail_introduction_male_lastname_informal', [ '%lastName%' => $lastName ] );
+			case self::GREETING_FEMALE:
+				return $this->translator->trans( 'mail_introduction_female_lastname_informal', [ '%lastName%' => $lastName ] );
+			case self::GREETING_FAMILY:
+				return $this->translator->trans( 'mail_introduction_family_informal', [ '%lastName%' => $lastName ] );
+			default:
+				return $this->translator->trans( 'mail_introduction_generic' );
+		}
+	}
 }

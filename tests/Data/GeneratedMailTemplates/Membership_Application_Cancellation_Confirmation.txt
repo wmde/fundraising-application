@@ -4,15 +4,5 @@ membership_application_cancellation_confirmation
 
 name_head_of_organization
 title_head_of_organization
-
----------------------------------------------------------------------------
-wikimedia_vision
-<https://spenden.wikimedia.de/>
----------------------------------------------------------------------------
-
 address_of_organization
 
-phone
-www.wikimedia.de
-
-tax_id_organization
