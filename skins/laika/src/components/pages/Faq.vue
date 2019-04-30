@@ -48,45 +48,48 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import Vue from 'vue';
 import Question from '../Question.vue';
-import { FaqContent, Question as QuestionModel, Topic } from '../../view_models/faq';
+import { FaqContent, Topic, FaqData } from '../../view_models/faq';
 
-@Component( {
+export default Vue.extend( {
+	name: 'faq',
 	components: {
-		Question,
+		Question
 	},
-} )
-export default class Faq extends Vue {
-	@Prop() content!: FaqContent;
-
-	isOverview = true;
-	topicTitle = '';
-	page: QuestionModel[] = [];
-	openQuestionId = '';
-
-	mounted() {
+	props: {
+		content: {
+			type: Object as () => FaqContent
+		},
+	},
+	data: function (): FaqData {
+		return {
+			page: [],
+			isOverview: true,
+			topicTitle: '',
+			openQuestionId: ''
+		};
+	},
+	mounted: function () {
 		this.populatePageOnInitialLoad();
+	},
+	methods: {
+		populatePageByTopic: function ( topic: Topic ): void {
+			this.page = this.content.questions.filter( question => question.topic.split( ',' ).indexOf( topic.id ) !== -1 );
+			this.setTopicTitle( topic.name );
+			this.setOpenQuestionId( '' );
+		},
+		populatePageOnInitialLoad: function (): void {
+			this.setOpenQuestionId( '' );
+			this.page = this.content.questions.filter( question => question.topic.split( ',' ).indexOf( '1' ) !== -1 );
+			this.setTopicTitle( this.content.topics[ 0 ].name );
+		},
+		setTopicTitle: function ( name: string ): void {
+			this.topicTitle = name;
+		},
+		setOpenQuestionId: function ( id: string ): void {
+			this.openQuestionId = id;
+		}
 	}
-
-	populatePageByTopic( topic:Topic ) {
-		this.page = this.content.questions.filter( question => question.topic.split( ',' ).indexOf( topic.id ) !== -1 );
-		this.setTopicTitle( topic.name );
-		this.setOpenQuestionId( '' );
-	}
-
-	populatePageOnInitialLoad() {
-		this.setOpenQuestionId( '' );
-		this.page = this.content.questions.filter( question => question.topic.split( ',' ).indexOf( '1' ) !== -1 );
-		this.setTopicTitle( this.content.topics[ 0 ].name );
-	}
-
-	setTopicTitle( name:string ) {
-		this.topicTitle = name;
-	}
-
-	setOpenQuestionId( id:string ) {
-		this.openQuestionId = id;
-	}
-}
+} );
 </script>
