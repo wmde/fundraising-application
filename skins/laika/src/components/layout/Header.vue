@@ -6,7 +6,10 @@
                     <img :src="assetsPath + '/images/logo-horizontal-wikimedia.svg'" alt="Wikimedia Deutschland"
                          width="144" height="29">
                 </a>
-                <a role="button" aria-label="menu" aria-expanded="false" @click="showNavbarBurger = !showNavbarBurger"
+                <a role="button"
+                   aria-label="menu"
+                   aria-expanded="false"
+                   @click="showNavbarBurger = !showNavbarBurger"
                    v-bind:class="[{ 'is-active': showNavbarBurger }, 'navbar-burger']">
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
@@ -16,9 +19,9 @@
             <div id="navMenu" v-bind:class="[{ 'is-active': showNavbarBurger }, 'navbar-menu']"
                  @click="showNavbarBurger = !showNavbarBurger">
                 <div class="navbar-start">
-                    <a v-for="( link, index ) in headerMenu" 
-                        :key="index" 
-                        :href="link.url" 
+                    <a v-for="( link, index ) in headerMenu"
+                        :key="index"
+                        :href="link.url"
                         v-bind:class="[{ 'active': link.id === pageIdentifier }, 'navbar-item']">
                         {{ $t( 'menu_item_' + link.localeId ) }}
                     </a>
