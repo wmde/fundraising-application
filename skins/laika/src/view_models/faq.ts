@@ -1,3 +1,10 @@
+export interface FaqData {
+	page : Question[],
+	isOverview: boolean,
+	topicTitle: string,
+	openQuestionId: string
+}
+
 export interface Question {
 	question : string,
 	visibleText : string,
