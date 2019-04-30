@@ -10,7 +10,8 @@
                               v-on:question-opened="setOpenQuestionId( $event )"
                               :content="content"
                               :key="index"
-                              :visible-question-id="openQuestionId">
+                              :visible-question-id="openQuestionId"
+                              :question-id="index">
                     </question>
                 </div>
                 <footer>
@@ -55,11 +56,11 @@ import { FaqContent, Topic, FaqData } from '../../view_models/faq';
 export default Vue.extend( {
 	name: 'faq',
 	components: {
-		Question
+		Question,
 	},
 	props: {
 		content: {
-			type: Object as () => FaqContent
+			type: Object as () => FaqContent,
 		},
 	},
 	data: function (): FaqData {
@@ -67,7 +68,7 @@ export default Vue.extend( {
 			page: [],
 			isOverview: true,
 			topicTitle: '',
-			openQuestionId: ''
+			openQuestionId: '',
 		};
 	},
 	mounted: function () {
@@ -89,7 +90,7 @@ export default Vue.extend( {
 		},
 		setOpenQuestionId: function ( id: string ): void {
 			this.openQuestionId = id;
-		}
-	}
+		},
+	},
 } );
 </script>
