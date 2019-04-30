@@ -17,8 +17,9 @@ export interface FaqContent {
 /**
  * Convert from json format (with snake case) to proper typescript format in interfaces ( camel case )
  */
-export function faqContentFromObject( obj:any ): FaqContent {
-	return { topics: obj.topics,
+export function faqContentFromObject( obj: any ): FaqContent {
+	return {
+		topics: obj.topics,
 		questions: obj.questions.map( ( rawQuestion: any ) => {
 			return {
 				question: rawQuestion.question,

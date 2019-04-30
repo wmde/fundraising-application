@@ -7,7 +7,7 @@ import App from '@/components/App.vue';
 import Component from '@/components/pages/Faq.vue';
 import Sidebar from '@/components/layout/Sidebar.vue';
 
-import { faqContentFromObject } from '@/view_models/faq.ts';
+import { faqContentFromObject } from '@/view_models/faq';
 
 const PAGE_IDENTIFIER = 'faq-page';
 
@@ -15,7 +15,6 @@ Vue.config.productionTip = false;
 Vue.use( VueI18n );
 
 const pageData = new PageDataInitializer<any>( '#app' );
-console.log( 'hello: ', pageData.applicationVars );
 
 const i18n = new VueI18n( {
 	locale: DEFAULT_LOCALE,
