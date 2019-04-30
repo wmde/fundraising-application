@@ -18,32 +18,33 @@
 </template>
 
 <script lang="ts">
-	import Vue from 'vue';
-	import { Question } from "@/view_models/faq";
+import Vue from 'vue';
+import { Question } from '@/view_models/faq';
 
-	export default Vue.extend( {
-		name: 'question',
-		props: {
-			content: {
-				type: Object as () => Question
+export default Vue.extend( {
+	name: 'question',
+	props: {
+		content: {
+			type: Object as () => Question,
+		},
+		visibleQuestionId: String,
+		questionId: String,
+	},
+	computed: {
+		isOpen: {
+			get: function (): boolean {
+				return this.questionId === this.visibleQuestionId;
 			},
-			visibleQuestionId: String
 		},
-		computed: {
-			isOpen: {
-				get: function (): boolean {
-					return this.$vnode.key === this.visibleQuestionId;
-				}
+	},
+	methods: {
+		toggle: function () {
+			if ( !this.isOpen ) {
+				this.$emit( 'question-opened', this.questionId );
+			} else {
+				this.$emit( 'question-opened' ); // close the current question when the arrow up icon is clicked
 			}
 		},
-		methods: {
-			toggle: function () {
-				if( !this.isOpen ) {
-					this.$emit( 'question-opened', this.$vnode.key );
-				} else {
-					this.$emit( 'question-opened' ); // close the current question when the arrow up icon is clicked
-				}
-			}
-		}
-	} );
+	},
+} );
 </script>
