@@ -5,7 +5,6 @@ export default class PageDataInitializer<T> {
 
 	constructor( dataElementSelector: string = '#app' ) {
 		const dataElement: HTMLElement | null = document.querySelector( dataElementSelector );
-
 		if ( !dataElement ) {
 			throw new Error( 'No element found with selector ' + dataElementSelector );
 		}

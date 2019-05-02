@@ -14,7 +14,7 @@
 			</div>
 		</main>
 		<footer>
-			<Footer :assets-path=assetsPath></Footer>
+			<Footer :assets-path="assetsPath"></Footer>
 		</footer>
 	</div>
 </template>
