@@ -1,5 +1,7 @@
-export interface Payment {
+import { Validity } from './Validity';
 
+export interface Payment {
+    amount: Validity
 }
 
 export interface AmountData {
