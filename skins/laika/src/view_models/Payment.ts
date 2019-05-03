@@ -1,10 +1,16 @@
 import { Validity } from './Validity';
 
 export interface Payment {
-    amount: Validity
+    validity: {
+        amount: Validity
+    },
+    values: {
+        amount: string
+    }
+
 }
 
 export interface AmountData {
-    amountValue: String
-    amountCustomValue: String
+    amountValue: string
+    amountCustomValue: string
 }

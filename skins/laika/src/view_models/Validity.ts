@@ -1,4 +1,4 @@
-export enum Validity  {
+export enum Validity {
 	INVALID,
 	VALID,
 	INCOMPLETE

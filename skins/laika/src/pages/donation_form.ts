@@ -18,6 +18,7 @@ interface PaymentAmountModel {
 }
 
 const pageData = new PageDataInitializer<PaymentAmountModel>( '#app' );
+const donationForm: any = document.getElementById( 'app' );
 
 const store = createStore();
 
@@ -32,19 +33,20 @@ new Vue( {
 	store,
 	i18n,
 	render: h => h( App, {
-			props: {
-				assetsPath: pageData.assetsPath,
-				pageIdentifier: PAGE_IDENTIFIER,
-			},
+		props: {
+			assetsPath: pageData.assetsPath,
+			pageIdentifier: PAGE_IDENTIFIER,
 		},
-		[
-			h( Component, {
-				props: {
-					paymentAmounts: pageData.applicationVars,
-				},
-			} ),
-			h( Sidebar, {
-				slot: 'sidebar',
-			} ),
-		] ),
+	},
+	[
+		h( Component, {
+			props: {
+				paymentAmounts: pageData.applicationVars,
+				validateAmountURL: donationForm.getAttribute( 'data-validate-amount-url' ),
+			},
+		} ),
+		h( Sidebar, {
+			slot: 'sidebar',
+		} ),
+	] ),
 } ).$mount( '#app' );

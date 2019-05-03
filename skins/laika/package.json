@@ -12,6 +12,7 @@
     "build-assets": "npm run build"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "buefy": "^0.7.3",
     "bulma-helpers": "^0.3.6",
     "core-js": "^2.6.5",
