@@ -2,8 +2,8 @@
     <fieldset class="amount-qty">
         <h2>How much cash do you wanna hand over?</h2>
         <div class="wrap-amounts">
-            <div class="wrap-radio" v-for="amount in paymentAmounts">
-                <input type="radio" :id="'amount-' + toCents( amount )" name="amount-grp" v-model="amountValue">
+            <div class="wrap-radio" v-for="amount in paymentAmounts" :key="'amount-' + toCents( amount )">
+                <input type="radio" :id="'amount-' + toCents( amount )" name="amount-grp" v-model="amountValue" :value="amount">
                 <label :for="'amount-' + toCents( amount )">
                     <span>{{ amount | formatAmount }} €</span>
                 </label>
@@ -21,26 +21,29 @@
 
 <script lang="ts">
 	import Vue from 'vue';
+	import { AmountData } from '../../../view_models/Payment';
 
 	export default Vue.extend( {
 		name: 'PaymentAmount',
-		data: {
-			amountValue: '',
-			amountCustomValue: ''
+		data: function(): AmountData {
+			return {
+				amountValue: '',
+				amountCustomValue: ''
+			}
 		},
 		props: [ 'paymentAmounts' ],
-		filters: {
-			formatAmount: ( amount: string ) => Number( amount ).toFixed( 0 )
-		},
-		methods: {
-			toCents: ( amount: string ) => Number( amount ) * 100
-		},
 		computed: {
 			hasErrors: {
 				get: function (): boolean {
 					return true; //TODO also add a class to the span above
 				}
 			}
+		},
+		filters: {
+			formatAmount: ( amount: string ) => Number( amount ).toFixed( 0 )
+		},
+		methods: {
+			toCents: ( amount: string ) => Number( amount ) * 100
 		}
 	} );
 </script>

@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import PaymentAmount from "@/components/pages/donation_form/PaymentAmount.vue";
+import PaymentAmount from './donation_form/PaymentAmount.vue'
 
 export default Vue.extend( {
 	name: 'Payment',
