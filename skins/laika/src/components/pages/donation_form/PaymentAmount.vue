@@ -1,6 +1,6 @@
 <template>
     <fieldset class="amount-qty">
-        <h2>How much cash do you wanna hand over?</h2>
+        <h2>Welchen Betrag möchten Sie spenden?</h2>
         <div class="wrap-amounts">
             <div class="wrap-radio" v-for="amount in paymentAmounts" :key="'amount-' + toCents( amount )">
                 <input type="radio" :id="'amount-' + toCents( amount )" name="amount-grp" v-model="amountValue" :value="amount">
@@ -43,7 +43,10 @@
 			formatAmount: ( amount: string ) => Number( amount ).toFixed( 0 )
 		},
 		methods: {
-			toCents: ( amount: string ) => Number( amount ) * 100
+			toCents: ( amount: string ) => Number( amount ) * 100,
+			validateAmount( amountData: AmountData ) {
+                this.$store.dispatch( 'validateAmount', amountData );
+            }
 		}
 	} );
 </script>
