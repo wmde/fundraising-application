@@ -1,4 +1,9 @@
 import { GetterTree } from 'vuex';
-import Payment from "@/view_models/Payment";
+import { Payment } from '@/view_models/Payment';
+import { Validity } from '@/view_models/Validity';
 
-export const getters: GetterTree<Payment, any> = {};
+export const getters: GetterTree<Payment, any> = {
+	amountIsValid: function ( state: Payment ): boolean {
+		return state.validity.amount !== Validity.INVALID;
+	},
+};
