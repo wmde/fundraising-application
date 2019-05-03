@@ -11,7 +11,7 @@
                               :content="content"
                               :key="index"
                               :visible-question-id="openQuestionId"
-                              :question-id="index">
+                              :question-id="index.toString()">
                     </question>
                 </div>
                 <footer>
@@ -29,7 +29,8 @@
                 <ul>
                     <li @click="populatePageByTopic( topic ); isOverview = false;"
                         v-bind:class="[ 'link', 'underlined' ]"
-                        v-for="topic in content.topics">
+                        v-for="( topic, index ) in content.topics"
+                        :key="index">
                         <a
                                 data-content-target="/page/Häufige Fragen"
                                 data-track-content
