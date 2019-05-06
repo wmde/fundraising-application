@@ -374,6 +374,9 @@ class Routes {
 		$app->get(
 			'donation/new',
 			function ( Application $app, Request $request ) use ( $ffFactory ) {
+				$ffFactory->getTranslationCollector()->addTranslationFile(
+					$ffFactory->getI18nDirectory() . '/messages/paymentTypes.json'
+				);
 				$app['session']->set(
 					'piwikTracking',
 					array_filter(
