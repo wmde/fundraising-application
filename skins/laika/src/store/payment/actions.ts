@@ -1,11 +1,12 @@
 import { ActionContext } from 'vuex';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { Payment, AmountData } from '@/view_models/Payment';
-import { validateAmount, registerAmount } from './actionTypes';
+import { validateAmount, registerAmount, registerInterval, registerOption } from './actionTypes';
 import {
 	MARK_EMPTY_FIELD_INVALID,
 	SET_AMOUNT_VALIDITY,
 	REGISTER_AMOUNT,
+	REGISTER_INTERVAL, REGISTER_OPTION
 } from './mutationTypes';
 
 export const actions = {
@@ -26,4 +27,10 @@ export const actions = {
 			// TODO throw an Exception
 		} );
 	},
+	[ registerInterval ]( context: ActionContext<Payment, any>, payload: string ): void {
+		context.commit( REGISTER_INTERVAL, payload );
+	},
+	[ registerOption ]( context: ActionContext<Payment, any>, payload: string ): void {
+		context.commit( REGISTER_OPTION, payload );
+	}
 };

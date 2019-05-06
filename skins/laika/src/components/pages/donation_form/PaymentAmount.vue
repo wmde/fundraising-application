@@ -1,8 +1,8 @@
 <template>
-	<fieldset class="amount-qty">
+	<fieldset>
 		<h2>Welchen Betrag möchten Sie spenden?</h2>
-		<div class="wrap-amounts">
-			<div class="wrap-radio" v-for="amount in paymentAmounts" :key="'amount-' + toCents( amount )">
+		<div>
+			<div v-for="amount in paymentAmounts" :key="'amount-' + toCents( amount )">
 				<input type="radio"
 					:id="'amount-' + toCents( amount )"
 					name="amount-grp"
@@ -18,7 +18,6 @@
 			</div>
 			<span v-if="hasErrors">{{ $t('form_amount_error') }}</span>
 
-			<input type="hidden" name="betrag" id="amount-hidden">
 			<label for="amount-typed" class="sr-only">{{ $t('payment_amount_legend') }}</label>
 		</div>
 	</fieldset>
