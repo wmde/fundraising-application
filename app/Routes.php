@@ -8,8 +8,6 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\Validator\Constraints\Collection;
-use Symfony\Component\Validator\Validation;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\DonationContext\UseCases\AddComment\AddCommentRequest;
@@ -21,11 +19,13 @@ use WMDE\Fundraising\DonationContext\UseCases\GetDonation\GetDonationRequest;
 use WMDE\Fundraising\DonationContext\UseCases\ListComments\CommentListingRequest;
 use WMDE\Fundraising\Frontend\App\Controllers\AddDonationController;
 use WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController;
+use WMDE\Fundraising\Frontend\App\Controllers\IbanController;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowUpdateAddressController;
 use WMDE\Fundraising\Frontend\App\Controllers\UpdateAddressController;
 use WMDE\Fundraising\Frontend\App\Controllers\UpdateDonorController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidateAddressController;
+use WMDE\Fundraising\Frontend\App\Controllers\ValidateDonationAmountController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidateFeeController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidationController;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\AddSubscriptionHandler;
@@ -39,52 +39,63 @@ use WMDE\Fundraising\Frontend\Infrastructure\AmountParser;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 use WMDE\Fundraising\Frontend\Presentation\DonationMembershipApplicationAdapter;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
-use WMDE\Fundraising\Frontend\Validation\ConstraintViolationListMapper;
 use WMDE\Fundraising\MembershipContext\UseCases\CancelMembershipApplication\CancellationRequest;
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowAppConfirmationRequest;
-use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
-use WMDE\Fundraising\PaymentContext\UseCases\GenerateIban\GenerateIbanRequest;
 
 class Routes {
+
+	public const ADD_COMMENT_PAGE = 'AddCommentPage';
+	public const CONFIRM_SUBSCRIPTION = 'confirm-subscription';
+	public const CONVERT_BANKDATA = 'generate-iban';
+	public const GET_IN_TOUCH = 'contact';
+	public const INDEX = '/';
+	public const LIST_COMMENTS_HTML = 'list-comments.html';
+	public const LIST_COMMENTS_RSS = 'list-comments.rss';
+	public const POST_COMMENT = 'PostComment';
+	public const SHOW_DONATION_CONFIRMATION = 'show-donation-confirmation';
+	public const SHOW_DONATION_FORM = 'show-donation-form';
+	public const SHOW_FAQ = 'faq';
+	public const SHOW_MEMBERSHIP_CONFIRMATION = 'show-membership-confirmation';
+	public const SHOW_PAGE = 'page';
+	public const SHOW_UPDATE_ADDRESS = 'update-address-show-form';
+	public const SHOW_USE_OF_FUNDS = 'use-of-funds';
+	public const SUBSCRIBE = 'subscribe';
+	public const UPDATE_ADDRESS = 'update-address';
+	public const VALIDATE_ADDRESS = 'validate-donor-address';
+	public const VALIDATE_DONATION_AMOUNT = 'validate-donation-amount';
+	/**
+	 * @deprecated This is not used by client side code
+	 */
+	public const VALIDATE_DONATION_PAYMENT = 'validate-donation-payment';
+	public const VALIDATE_EMAIL = 'validate-email';
+	public const VALIDATE_FEE = 'validate-fee';
+	public const VALIDATE_IBAN = 'check-iban';
+
 	public static function initializeRoutes( Application $app, FunFunFactory $ffFactory ): Application {
 		$app->post(
 			'validate-email',
 			ValidationController::class . '::validateEmail'
-		);
+		)->bind( self::VALIDATE_EMAIL );
 
 		$app->post(
 			'validate-payment-data',
 			ValidationController::class . '::validateDonationPayment'
-		);
+		)->bind( self::VALIDATE_DONATION_PAYMENT );
 
 		$app->post(
 			'validate-address', // Validates donor information. This route is named badly.
 			ValidateAddressController::class . '::validate'
-		);
+		)->bind( self::VALIDATE_ADDRESS );
 
 		$app->post(
 			'validate-donation-amount',
-			function ( Request $httpRequest ) use ( $app, $ffFactory ) {
-
-				$rawAmount = $httpRequest->request->get('amount','');
-
-				if( !ctype_digit( $rawAmount ) ){
-					return $app->json( [ 'status' => 'ERR', 'messages' => ['amount' => 'Amount must be in cents.'] ] );
-				}
-				$violations = $ffFactory->newPaymentDataValidator()->validateAmount(Euro::newFromCents((int)$rawAmount));
-
-				if ( $violations != null ) {
-					return $app->json( [ 'status' => 'ERR', 'messages' => ['amount' => $violations->getMessageIdentifier()] ] );
-				}
-
-				return $app->json( [ 'status' => 'OK' ] );
-			}
-		);
+			ValidateDonationAmountController::class . '::validate'
+		)->bind( self::VALIDATE_DONATION_AMOUNT );
 
 		$app->post(
 			'validate-fee',
 			ValidateFeeController::class . '::validateFee'
-		);
+		)->bind( self::VALIDATE_FEE );
 
 		$app->get(
 			'list-comments.json',
@@ -126,7 +137,7 @@ class Routes {
 					]
 				);
 			}
-		)->bind( 'list-comments.rss' );
+		)->bind( self::LIST_COMMENTS_RSS );
 
 		$app->get(
 			'list-comments.html',
@@ -143,7 +154,7 @@ class Routes {
 					)
 				);
 			}
-		)->bind( 'list-comments.html' );
+		)->bind( self::LIST_COMMENTS_HTML );
 
 		$app->get(
 			'page/{pageName}',
@@ -151,7 +162,7 @@ class Routes {
 				return ( new PageDisplayHandler( $ffFactory, $app ) )->handle( $pageName );
 			}
 		)
-			->bind( 'page' );
+			->bind( self::SHOW_PAGE );
 
 		// Form for this is provided by route page/Subscription_Form
 		$app->match(
@@ -162,7 +173,7 @@ class Routes {
 			}
 		)
 			->method( 'GET|POST' )
-			->bind( 'subscribe' );
+			->bind( self::SUBSCRIBE );
 
 		$app->get(
 			'contact/confirm-subscription/{confirmationCode}',
@@ -173,29 +184,17 @@ class Routes {
 			}
 		)
 			->assert( 'confirmationCode', '^[0-9a-f]+$' )
-			->bind( 'confirm-subscription' );
+			->bind( self::CONFIRM_SUBSCRIPTION );
 
 		$app->get(
 			'check-iban',
-			function ( Request $request ) use ( $app, $ffFactory ) {
-				$useCase = $ffFactory->newCheckIbanUseCase();
-				$checkIbanResponse = $useCase->checkIban( new Iban( $request->query->get( 'iban', '' ) ) );
-				return $app->json( $ffFactory->newIbanPresenter()->present( $checkIbanResponse ) );
-			}
-		);
+			IbanController::class . '::validateIban'
+		)->bind( self::VALIDATE_IBAN );
 
 		$app->get(
 			'generate-iban',
-			function ( Request $request ) use ( $app, $ffFactory ) {
-				$generateIbanRequest = new GenerateIbanRequest(
-					$request->query->get( 'accountNumber', '' ),
-					$request->query->get( 'bankCode', '' )
-				);
-
-				$generateIbanResponse = $ffFactory->newGenerateIbanUseCase()->generateIban( $generateIbanRequest );
-				return $app->json( $ffFactory->newIbanPresenter()->present( $generateIbanResponse ) );
-			}
-		);
+			IbanController::class . '::convertBankDataToIban'
+		)->bind( self::CONVERT_BANKDATA );
 
 		$app->post(
 			'add-comment',
@@ -242,7 +241,7 @@ class Routes {
 					]
 				);
 			}
-		)->bind( 'PostComment' );
+		)->bind( self::POST_COMMENT );
 
 		$app->get(
 			'add-comment',
@@ -267,7 +266,7 @@ class Routes {
 					)
 				);
 			}
-		)->bind( 'AddCommentPage' );
+		)->bind( self::ADD_COMMENT_PAGE );
 
 		$app->post(
 			'contact/get-in-touch',
@@ -303,7 +302,7 @@ class Routes {
 					[ 'contact_categories' => $ffFactory->getGetInTouchCategories() ]
 				);
 			}
-		)->bind( 'contact' );
+		)->bind( self::GET_IN_TOUCH );
 
 		$app->get(
 			'faq',
@@ -316,19 +315,19 @@ class Routes {
 					]
 				);
 			}
-		)->bind( 'faq' );
+		)->bind( self::SHOW_FAQ );
 
 		$app->get(
 			'update-address/{addressToken}',
 			ShowUpdateAddressController::class . '::showForm'
 
-		)->bind( 'update-address-show-form' );
+		)->bind( self::SHOW_UPDATE_ADDRESS );
 
 		$app->post(
 			'update-address/{addressToken}',
 			UpdateAddressController::class . '::updateAddress'
 
-		)->bind( 'update-address' );
+		)->bind( self::UPDATE_ADDRESS );
 
 		$app->get(
 			'use-of-funds',
@@ -340,7 +339,7 @@ class Routes {
 					]
 				);
 			}
-		)->bind( 'use-of-funds' );
+		)->bind( self::SHOW_USE_OF_FUNDS );
 
 		$app->post(
 			'donation/cancel',
@@ -423,7 +422,7 @@ class Routes {
 			}
 		)
 			->method( 'POST|GET' )
-			->bind( 'show-donation-form' );
+			->bind( self::SHOW_DONATION_FORM );
 
 		$app->post(
 			'apply-for-membership',
@@ -474,7 +473,7 @@ class Routes {
 
 				return $presenter->getHtml();
 			}
-		)->bind( 'show-membership-confirmation' );
+		)->bind( self::SHOW_MEMBERSHIP_CONFIRMATION );
 
 		$app->get(
 			'cancel-membership-application',
@@ -493,7 +492,7 @@ class Routes {
 		$app->match(
 			'show-donation-confirmation',
 			ShowDonationConfirmationController::class . '::show'
-		)->bind( 'show-donation-confirmation' )
+		)->bind( self::SHOW_DONATION_CONFIRMATION )
 			->method( 'GET|POST' );
 
 		$app->post(
@@ -578,7 +577,7 @@ class Routes {
 					HttpKernelInterface::SUB_REQUEST
 				);
 			}
-		)->bind( '/' );
+		)->bind( self::INDEX );
 
 		// TODO Figure out how to rewrite with Nginx
 		// See https://serverfault.com/questions/805881/nginx-populate-request-uri-with-rewritten-url

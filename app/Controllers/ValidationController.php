@@ -21,6 +21,11 @@ class ValidationController {
 		] );
 	}
 
+	// phpcs:disable SlevomatCodingStandard.TypeHints.TypeHintDeclaration.UselessDocComment
+	/**
+	 * @deprecated This is not used by client side code
+	 */
+	// phpcs:enable SlevomatCodingStandard.TypeHints.TypeHintDeclaration.UselessDocComment
 	public function validateDonationPayment( Request $request, FunFunFactory $ffFactory ): Response {
 		$amount = (float) $ffFactory->newDecimalNumberFormatter()->parse( $request->get( 'amount', '0' ) );
 		$validator = $ffFactory->newPaymentDataValidator();
