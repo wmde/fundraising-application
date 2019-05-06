@@ -9,9 +9,12 @@ export default function (): Module<Payment, any> {
 	const state: Payment = {
 		validity: {
 			amount: Validity.INCOMPLETE,
+			option: Validity.INCOMPLETE,
 		},
 		values: {
 			amount: '',
+			interval: '0',
+			option: ''
 		},
 	};
 
