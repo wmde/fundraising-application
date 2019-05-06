@@ -86,7 +86,6 @@
       "membershipTypes": "membershipTypes.json",
       "messages": "messages.json",
       "pageTitles": "pageTitles.json",
-      "paymentIntervals": "paymentIntervals.json",
       "paymentStatus": "paymentStatus.json",
       "paymentTypes": "paymentTypes.json",
       "validations": "validations.json",

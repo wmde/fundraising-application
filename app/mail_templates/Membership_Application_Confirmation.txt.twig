@@ -8,7 +8,7 @@
 {$ mail_content('membership_application_confirmation/intro', {
     'membership_type': membershipType|trans( {}, 'membershipTypes' ),
     'formatted_amount': formattedAmount,
-    'donation_interval': paymentIntervalInMonths|trans({}, 'paymentIntervals')
+    'donation_interval': ( 'donation_payment_interval_' ~ paymentIntervalInMonths ) | trans
 }) $}
 
 {$ mail_content('membership_application_confirmation/outro', {

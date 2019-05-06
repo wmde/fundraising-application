@@ -1,5 +1,5 @@
 {$ donation.amount|localizedcurrency('EUR', 'de_DE') $}
-{$ donation.interval|trans({}, 'paymentIntervals') $}
+{$ ( 'donation_payment_interval_' ~ donation.interval ) | trans $}
 
 {% if donation.paymentType == 'PPL' or donation.paymentType == 'MCP' %}
 	Ihre Spende per {$ donation.paymentType|trans({}, 'paymentTypes') $} {$ donation.status|trans({}, 'paymentStatus') $}.
