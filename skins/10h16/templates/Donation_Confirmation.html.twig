@@ -206,7 +206,7 @@
 					Sie k&ouml;nnen Ihre Spende stornieren, bevor sie bei uns eingebucht wird. Dazu senden Sie eine Mail an uns.
 				</p>
 				<p>
-					<form action="{$ basepath $}/donation/cancel" method="post">
+					<form action="{$ urls.cancelDonation | e('html_attr') $}" method="post">
 						<input type="submit" name="go_storno" value="Jetzt stornieren." style="cursor: pointer; background: none; border-width: 0px; color: #9D9D9D; text-decoration: underline;" />
                                                 <input type="hidden" value="{$ donation.id $}" name="sid" />
                                                 <input type="hidden" name="utoken" value="{$ donation.updateToken $}">

@@ -4,9 +4,9 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\Presentation\Presenters;
 
+use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Infrastructure\PiwikEvents;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationConfirmationHtmlPresenter;
-use WMDE\Fundraising\Frontend\Presentation\SelectedConfirmationPage;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeUrlGenerator;
@@ -17,7 +17,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeUrlGenerator;
  * @licence GNU GPL v2+
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class DonationConfirmationHtmlPresenterTest extends \PHPUnit\Framework\TestCase {
+class DonationConfirmationHtmlPresenterTest extends TestCase {
 
 	private const STATUS_BOOKED = 'status-booked';
 	private const STATUS_UNCONFIRMED = 'status-unconfirmed';
@@ -42,7 +42,8 @@ class DonationConfirmationHtmlPresenterTest extends \PHPUnit\Framework\TestCase 
 			$donation,
 			self::UPDATE_TOKEN,
 			self::ACCESS_TOKEN,
-			$this->newPiwikEvents()
+			$this->newPiwikEvents(),
+			$this->newUrls()
 		);
 	}
 
@@ -70,7 +71,11 @@ class DonationConfirmationHtmlPresenterTest extends \PHPUnit\Framework\TestCase 
 				[ 'setCustomVariable', 1, 'Payment', 'some value', PiwikEvents::SCOPE_VISIT ],
 				[ 'trackGoal', 4095 ]
 			],
-			'commentUrl' => '/such.a.url/AddCommentPage?donationId=42&updateToken=update_token&accessToken=access_token'
+			'urls' => [
+				'testUrl' => 'https://example.com/',
+				'addComment' => '/such.a.url/AddCommentPage?donationId=42&updateToken=update_token&accessToken=access_token'
+			]
+
 		];
 	}
 
@@ -105,8 +110,15 @@ class DonationConfirmationHtmlPresenterTest extends \PHPUnit\Framework\TestCase 
 			$donation,
 			self::UPDATE_TOKEN,
 			self::ACCESS_TOKEN,
-			$this->newPiwikEvents()
+			$this->newPiwikEvents(),
+			$this->newUrls()
 		);
+	}
+
+	private function newUrls(): array {
+		return [
+			'testUrl' => 'https://example.com/'
+		];
 	}
 
 }

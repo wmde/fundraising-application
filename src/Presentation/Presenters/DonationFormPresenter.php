@@ -19,6 +19,7 @@ class DonationFormPresenter {
 	private $template;
 	private $amountFormatter;
 	private $isCustomDonationAmountValidator;
+	private $urlGenerator;
 
 	public function __construct(
 		TwigTemplate $template,
@@ -31,7 +32,7 @@ class DonationFormPresenter {
 	}
 
 	public function present( Euro $amount, string $paymentType, int $paymentInterval, bool $paymentDataIsValid,
-							 DonationTrackingInfo $trackingInfo, string $addressType ): string {
+							 DonationTrackingInfo $trackingInfo, string $addressType, array $urlEndpoints ): string {
 		return $this->template->render( [
 			'initialFormValues' => [
 				'amount' => $this->amountFormatter->format( $amount ),
@@ -46,8 +47,10 @@ class DonationFormPresenter {
 			'tracking' => [
 				'bannerImpressionCount' => $trackingInfo->getSingleBannerImpressionCount(),
 				'impressionCount' => $trackingInfo->getTotalImpressionCount()
-			]
+			],
+			'urls' => $urlEndpoints
 		] );
 	}
 
 }
+

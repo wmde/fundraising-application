@@ -30,14 +30,15 @@ class DonationConfirmationHtmlPresenter {
 		$this->donorDataFormatter = new DonorDataFormatter();
 	}
 
-	public function present( Donation $donation, string $updateToken, string $accessToken, PiwikEvents $piwikEvents ): string {
+	public function present( Donation $donation, string $updateToken, string $accessToken, PiwikEvents $piwikEvents,
+							 array $urlEndpoints ): string {
 		return $this->template->render(
-			$this->getConfirmationPageArguments( $donation, $updateToken, $accessToken, $piwikEvents )
+			$this->getConfirmationPageArguments( $donation, $updateToken, $accessToken, $piwikEvents, $urlEndpoints )
 		);
 	}
 
 	private function getConfirmationPageArguments( Donation $donation, string $updateToken, string $accessToken,
-		PiwikEvents $piwikEvents ): array {
+		PiwikEvents $piwikEvents, array $urlEndpoints ): array {
 
 		return [
 			'donation' => [
@@ -61,12 +62,17 @@ class DonationConfirmationHtmlPresenter {
 				$donation
 			),
 			'piwikEvents' => $piwikEvents->getEvents(),
-			'commentUrl' => $this->urlGenerator->generateRelativeUrl(
-				'AddCommentPage',
+			'urls' => array_merge(
+				$urlEndpoints,
 				[
-					'donationId' => $donation->getId(),
-					'updateToken' => $updateToken,
-					'accessToken' => $accessToken
+					'addComment'  => $this->urlGenerator->generateRelativeUrl(
+						'AddCommentPage',
+						[
+							'donationId' => $donation->getId(),
+							'updateToken' => $updateToken,
+							'accessToken' => $accessToken
+						]
+					)
 				]
 			)
 		];

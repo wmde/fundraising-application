@@ -8,8 +8,11 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Euro\Euro;
+use WMDE\Fundraising\DonationContext\UseCases\GetDonation\GetDonationRequest;
+use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\MembershipApplicationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Presentation\DonationMembershipApplicationAdapter;
 use WMDE\Fundraising\MembershipContext\Tracking\MembershipApplicationTrackingInfo;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplicationValidationResult;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipRequest;
@@ -28,6 +31,35 @@ class ApplyForMembershipController {
 
 	/** @var FunFunFactory */
 	private $ffFactory;
+
+	public function showApplicationForm( FunFunFactory $ffFactory, Request $httpRequest ): Response {
+		$params = [
+			'urls' => Routes::getNamedRouteUrls( $ffFactory->getUrlGenerator() )
+		];
+
+		if ( $httpRequest->query->get( 'type' ) === 'sustaining' ) {
+			$params['showMembershipTypeOption'] = false;
+		}
+
+		$useCase = $ffFactory->newGetDonationUseCase( $httpRequest->query->get( 'donationAccessToken', '' ) );
+		$responseModel = $useCase->showConfirmation(
+			new GetDonationRequest(
+				$httpRequest->query->getInt( 'donationId' )
+			)
+		);
+
+		if ( $responseModel->accessIsPermitted() ) {
+			$adapter = new DonationMembershipApplicationAdapter();
+			$params['initialFormValues'] = $adapter->getInitialMembershipFormValues(
+				$responseModel->getDonation()
+			);
+			$params['initialValidationResult'] = $adapter->getInitialValidationState(
+				$responseModel->getDonation()
+			);
+		}
+
+		return new Response( $ffFactory->getMembershipApplicationFormTemplate()->render( $params ) );
+	}
 
 	public function applyForMembership( FunFunFactory $ffFactory, Request $httpRequest ): Response {
 		$this->ffFactory = $ffFactory;

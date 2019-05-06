@@ -15,7 +15,6 @@ use WMDE\Fundraising\DonationContext\UseCases\CancelDonation\CancelDonationReque
 use WMDE\Fundraising\DonationContext\UseCases\CreditCardPaymentNotification\CreditCardNotificationResponse;
 use WMDE\Fundraising\DonationContext\UseCases\CreditCardPaymentNotification\CreditCardPaymentHandlerException;
 use WMDE\Fundraising\DonationContext\UseCases\CreditCardPaymentNotification\CreditCardPaymentNotificationRequest;
-use WMDE\Fundraising\DonationContext\UseCases\GetDonation\GetDonationRequest;
 use WMDE\Fundraising\DonationContext\UseCases\ListComments\CommentListingRequest;
 use WMDE\Fundraising\Frontend\App\Controllers\AddDonationController;
 use WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController;
@@ -37,7 +36,7 @@ use WMDE\Fundraising\Frontend\App\RouteHandlers\SofortNotificationHandler;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\AmountParser;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
-use WMDE\Fundraising\Frontend\Presentation\DonationMembershipApplicationAdapter;
+use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 use WMDE\Fundraising\MembershipContext\UseCases\CancelMembershipApplication\CancellationRequest;
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowAppConfirmationRequest;
@@ -45,6 +44,7 @@ use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\Show
 class Routes {
 
 	public const ADD_COMMENT_PAGE = 'AddCommentPage';
+	public const CANCEL_DONATION = 'cancel-donation';
 	public const CONFIRM_SUBSCRIPTION = 'confirm-subscription';
 	public const CONVERT_BANKDATA = 'generate-iban';
 	public const GET_IN_TOUCH = 'contact';
@@ -68,7 +68,7 @@ class Routes {
 	 */
 	public const VALIDATE_DONATION_PAYMENT = 'validate-donation-payment';
 	public const VALIDATE_EMAIL = 'validate-email';
-	public const VALIDATE_FEE = 'validate-fee';
+	public const VALIDATE_MEMBERSHIP_FEE = 'validate-fee';
 	public const VALIDATE_IBAN = 'check-iban';
 
 	public static function initializeRoutes( Application $app, FunFunFactory $ffFactory ): Application {
@@ -95,7 +95,7 @@ class Routes {
 		$app->post(
 			'validate-fee',
 			ValidateFeeController::class . '::validateFee'
-		)->bind( self::VALIDATE_FEE );
+		)->bind( self::VALIDATE_MEMBERSHIP_FEE );
 
 		$app->get(
 			'list-comments.json',
@@ -358,7 +358,7 @@ class Routes {
 
 				return $httpResponse;
 			}
-		);
+		)->bind( self::CANCEL_DONATION );
 
 		$app->post(
 			'donation/add',
@@ -416,7 +416,8 @@ class Routes {
 						intval( $request->get( 'periode', 0 ) ),
 						$validationResult->isSuccessful(),
 						$trackingInfo,
-						$request->get( 'addressType', 'person' )
+						$request->get( 'addressType', 'person' ),
+						self::getNamedRouteUrls( $ffFactory->getUrlGenerator() )
 					)
 				);
 			}
@@ -431,32 +432,7 @@ class Routes {
 
 		$app->get(
 			'apply-for-membership',
-			function ( Request $request ) use ( $ffFactory ) {
-				$params = [];
-
-				if ( $request->query->get( 'type' ) === 'sustaining' ) {
-					$params['showMembershipTypeOption'] = false;
-				}
-
-				$useCase = $ffFactory->newGetDonationUseCase( $request->query->get( 'donationAccessToken', '' ) );
-				$responseModel = $useCase->showConfirmation(
-					new GetDonationRequest(
-						$request->query->getInt( 'donationId' )
-					)
-				);
-
-				if ( $responseModel->accessIsPermitted() ) {
-					$adapter = new DonationMembershipApplicationAdapter();
-					$params['initialFormValues'] = $adapter->getInitialMembershipFormValues(
-						$responseModel->getDonation()
-					);
-					$params['initialValidationResult'] = $adapter->getInitialValidationState(
-						$responseModel->getDonation()
-					);
-				}
-
-				return $ffFactory->getMembershipApplicationFormTemplate()->render( $params );
-			}
+			ApplyForMembershipController::class . '::showApplicationForm'
 		);
 
 		$app->get(
@@ -648,5 +624,19 @@ class Routes {
 		);
 
 		return $app;
+	}
+
+	public static function getNamedRouteUrls( UrlGenerator $urlGenerator ): array {
+		return [
+			'validateDonationAmount' => $urlGenerator->generateAbsoluteUrl( self::VALIDATE_DONATION_AMOUNT ),
+			'validateAddress' => $urlGenerator->generateAbsoluteUrl( self::VALIDATE_ADDRESS ),
+			'validateEmail' => $urlGenerator->generateAbsoluteUrl( self::VALIDATE_EMAIL ),
+			'validatePayment' => $urlGenerator->generateAbsoluteUrl( self::VALIDATE_DONATION_PAYMENT ),
+			'validateIban' => $urlGenerator->generateAbsoluteUrl( self::VALIDATE_IBAN ),
+			'validateMembershipFee' => $urlGenerator->generateAbsoluteUrl( self::VALIDATE_MEMBERSHIP_FEE ),
+			'convertBankData' => $urlGenerator->generateAbsoluteUrl( self::CONVERT_BANKDATA ),
+			'cancelDonation' => $urlGenerator->generateAbsoluteUrl( self::CANCEL_DONATION ),
+			'updateAddress' => $urlGenerator->generateAbsoluteUrl( self::UPDATE_ADDRESS )
+		];
 	}
 }

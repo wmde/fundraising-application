@@ -37,7 +37,7 @@
 			data-initial-form-values="{% if initialFormValues %}{$ initialFormValues|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
 			data-violated-fields="{% if violatedFields %}{$ violatedFields|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
 			data-initial-validation-result="{% if validationResult %}{$ validationResult|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
-			data-validate-address-url="{$ basepath|e('html_attr') $}/validate-address"
-			data-validate-email-address-url="{$ basepath|e('html_attr') $}/validate-email"
+			data-validate-address-url="{$ urls.validateAddress | e('html_attr') $}"
+			data-validate-email-address-url="{$ urls.validateEmail | e('html_attr') $}"
 	></script>
 {% endblock %}

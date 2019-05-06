@@ -74,13 +74,13 @@
 					'label': 'donation_confirmation_print_confirmation_debit' | trans
 				} only %}
                 <li class="cancel">
-                    <form action="{$ basepath $}/donation/cancel" method="post">
+                    <form action="{$ urls.cancelDonation | e('html_attr') $}" method="post">
                         <button type="submit" name="go_storno" class="btn-link">{$ 'cancel_donation' | trans $}</button>
                         <input type="hidden" name="sid" value="{$ donation.id $}" />
                         <input type="hidden" name="utoken" value="{$ donation.updateToken $}">
                     </form>
                 </li>
-                <li><a href="{$ commentUrl $}"><span>{$ "add_donation_comment" | trans $}</span></a></li>
+                <li><a href="{$ urls.addComment | e('html_attr') $}"><span>{$ "add_donation_comment" | trans $}</span></a></li>
 				{% include 'partials/share_on_social_networks.html.twig' %}
             </ul>
         </div>
