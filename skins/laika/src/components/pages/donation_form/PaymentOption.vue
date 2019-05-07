@@ -21,9 +21,9 @@
 <script lang="ts">
 import Vue from 'vue';
 import { OptionData } from '@/view_models/Payment';
-import { NS_PAYMENT } from '../../../store/namespaces';
-import { action } from '../../../store/util';
-import { setOption } from '../../../store/payment/actionTypes';
+import { NS_PAYMENT } from '@/store/namespaces';
+import { action } from '@/store/util';
+import { setOption } from '@/store/payment/actionTypes';
 
 export default Vue.extend( {
 	name: 'PaymentOption',
