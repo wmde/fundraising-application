@@ -26,6 +26,10 @@
 <script lang="ts">
 import Vue from 'vue';
 import { AmountData } from '../../../view_models/Payment';
+import { action } from '../../../store/util';
+import { NS_PAYMENT } from '../../../store/namespaces';
+import { validateAmount, setAmount } from '../../../store/payment/actionTypes';
+
 
 export default Vue.extend( {
 	name: 'PaymentAmount',
@@ -59,7 +63,7 @@ export default Vue.extend( {
 				amountValue: this.toCents( this.amountCustomValue ).toString(),
 				validateAmountURL: this.$props.validateAmountURL,
 			};
-			this.$store.dispatch( 'payment/registerAmount', payload );
+			this.$store.dispatch( 'payment/setAmount', payload );
 		},
 		clearCustomAmount() {
 			this.amountCustomValue = '';
@@ -67,8 +71,8 @@ export default Vue.extend( {
 				amountValue: this.toCents( this.amountValue ).toString(),
 				validateAmountURL: this.$props.validateAmountURL,
 			};
-			this.$store.dispatch( 'payment/validateAmount', this.$data );
-			this.$store.dispatch( 'payment/registerAmount', payload );
+			this.$store.dispatch( action( NS_PAYMENT, validateAmount ), this.$data );
+			this.$store.dispatch( action( NS_PAYMENT, setAmount ), payload );
 		},
 	},
 } );

@@ -1,4 +1,4 @@
 export const validateAmount = 'validateAmount';
-export const registerAmount = 'registerAmount';
-export const registerInterval = 'registerInterval';
-export const registerOption = 'registerOption';
+export const setAmount = 'setAmount';
+export const setInterval = 'setInterval';
+export const setOption = 'setOption';

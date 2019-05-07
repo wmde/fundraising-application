@@ -8,7 +8,7 @@
                        name="payment"
                        v-model="selectedOption"
                        :value="option.type"
-                       @change="registerOption()">
+                       @change="setOption()">
                 <label :for="option.id">
                     <span>{{ $t( option.type ) }}</span>
                 </label>
@@ -21,6 +21,9 @@
 <script lang="ts">
 	import Vue from 'vue';
 	import { OptionData } from "@/view_models/Payment";
+	import { NS_PAYMENT } from '../../../store/namespaces';
+    import { action } from '../../../store/util';
+    import { setOption } from '../../../store/payment/actionTypes';
 
 	export default Vue.extend( {
 		name: 'PaymentOption',
@@ -38,8 +41,8 @@
 			},
         },
 		methods: {
-			registerOption(): void {
-				this.$store.dispatch( 'payment/registerOption', this.$data.selectedOption );
+			setOption(): void {
+				this.$store.dispatch( action( NS_PAYMENT, setOption ), this.$data.selectedOption );
 			}
 		},
 	} );

@@ -8,7 +8,7 @@
                        name="interval"
                        v-model="selectedInterval"
                        :value="option.interval"
-                       @change="registerInterval()">
+                       @change="setInterval()">
                 <label :for="option.id">
                     <span>{{ $t( "donation_payment_interval_" + option.interval.toString() ) }}</span>
                 </label>
@@ -19,7 +19,10 @@
 
 <script lang="ts">
 	import Vue from 'vue';
-	import { IntervalData } from "@/view_models/Payment";
+    import { IntervalData } from "@/view_models/Payment";
+    import { NS_PAYMENT } from '../../../store/namespaces';
+    import { action } from '../../../store/util';
+    import { setInterval } from '../../../store/payment/actionTypes';
 
 	export default Vue.extend( {
 		name: 'PaymentInterval',
@@ -30,8 +33,8 @@
 		},
 		props: [ 'paymentIntervals' ],
 		methods: {
-			registerInterval(): void {
-				this.$store.dispatch( 'payment/registerInterval', this.$data.selectedInterval );
+			setInterval(): void {
+				this.$store.dispatch( action( NS_PAYMENT, setInterval ), this.$data.selectedInterval );
             }
         },
 	} );
