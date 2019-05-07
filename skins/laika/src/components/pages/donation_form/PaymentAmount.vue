@@ -25,10 +25,10 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { AmountData } from '../../../view_models/Payment';
-import { action } from '../../../store/util';
-import { NS_PAYMENT } from '../../../store/namespaces';
-import { validateAmount, setAmount } from '../../../store/payment/actionTypes';
+import { AmountData } from '@/view_models/Payment';
+import { action } from '@/store/util';
+import { NS_PAYMENT } from '@/store/namespaces';
+import { validateAmount, setAmount } from '@/store/payment/actionTypes';
 
 export default Vue.extend( {
 	name: 'PaymentAmount',

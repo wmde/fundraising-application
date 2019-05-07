@@ -3,7 +3,7 @@ import VueI18n from 'vue-i18n';
 import PageDataInitializer from '@/page_data_initializer';
 import { DEFAULT_LOCALE } from '@/locales';
 import App from '@/components/App.vue';
-import { createStore } from '../store/store';
+import { createStore } from '@/store/donation_store';
 
 import Component from '@/components/pages/Payment.vue';
 import Sidebar from '@/components/layout/Sidebar.vue';
@@ -11,19 +11,19 @@ import Sidebar from '@/components/layout/Sidebar.vue';
 const PAGE_IDENTIFIER = 'donation-form';
 
 const PAYMENT_INTERVAL_OPTIONS = [
-	{ interval: 0, id: 'one-time', icon: 'icon-unique' },
-	{ interval: 1, id: 'monthly', icon: 'icon-repeat_1' },
-	{ interval: 3, id: 'quarterly', icon: 'icon-repeat_3' },
-	{ interval: 6, id: 'biannual', icon: 'icon-repeat_6' },
-	{ interval: 12, id: 'yearly', icon: 'icon-repeat_12' },
+	{ interval: 0, id: 'one-time' },
+	{ interval: 1, id: 'monthly' },
+	{ interval: 3, id: 'quarterly' },
+	{ interval: 6, id: 'biannual' },
+	{ interval: 12, id: 'yearly' },
 ];
 
 const PAYMENT_TYPE_OPTIONS = [
-	{ type: 'PPL', id: 'paypal', icon: 'icon-payment-paypal' },
-	{ type: 'MCP', id: 'credit-card', icon: 'icon-payment-credit_card' },
-	{ type: 'BEZ', id: 'debit-card', icon: 'icon-payment-debit' },
-	{ type: 'UEB', id: 'bank-transfer', icon: 'icon-payment-transfer' },
-	{ type: 'SUB', id: 'sofort', icon: 'icon-payment-sofort' },
+	{ type: 'PPL', id: 'paypal' },
+	{ type: 'MCP', id: 'credit-card' },
+	{ type: 'BEZ', id: 'debit-card' },
+	{ type: 'UEB', id: 'bank-transfer' },
+	{ type: 'SUB', id: 'sofort' },
 ];
 
 Vue.config.productionTip = false;

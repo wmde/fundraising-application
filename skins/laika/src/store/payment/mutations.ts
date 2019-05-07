@@ -5,7 +5,7 @@ import {
 	MARK_EMPTY_FIELD_INVALID,
 	SET_AMOUNT_VALIDITY,
 	SET_AMOUNT, SET_INTERVAL, SET_OPTION,
-} from './mutationTypes';
+} from '@/store/payment/mutationTypes';
 import { AxiosResponse } from 'axios';
 
 export const mutations: MutationTree<Payment> = {

@@ -1,13 +1,13 @@
 import { ActionContext } from 'vuex';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { Payment, AmountData } from '@/view_models/Payment';
-import { validateAmount, setAmount, setInterval, setOption } from './actionTypes';
+import { validateAmount, setAmount, setInterval, setOption } from '@/store/payment/actionTypes';
 import {
 	MARK_EMPTY_FIELD_INVALID,
 	SET_AMOUNT_VALIDITY,
 	SET_AMOUNT,
 	SET_INTERVAL, SET_OPTION,
-} from './mutationTypes';
+} from '@/store/payment/mutationTypes';
 
 export const actions = {
 	[ validateAmount ]( context: ActionContext<Payment, any>, amountData: AmountData ): void {
