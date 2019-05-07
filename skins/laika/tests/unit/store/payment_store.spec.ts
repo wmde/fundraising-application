@@ -83,7 +83,7 @@ describe( 'Payment', () => {
 	describe( 'Actions/validateAmount', () => {
 		it( 'commits to mutation [MARK_EMPTY_AMOUNT_INVALID]', () => {
 			const context = {
-				commit: jest.fn()
+				commit: jest.fn(),
 			};
 			const action = actions.validateAmount as any;
 			action( context, 1500 );
@@ -99,8 +99,8 @@ describe( 'Payment', () => {
 			const context = {
 				commit: jest.fn(),
 				getters: {
-					'payment/paymentDataIsValid': true
-				}
+					'payment/paymentDataIsValid': true,
+				},
 			};
 			const action = actions.validatePayment as any;
 			action( context );
@@ -113,7 +113,7 @@ describe( 'Payment', () => {
 	describe( 'Actions/setAmount', () => {
 		it.skip( 'commits to mutation [SET_AMOUNT]', () => {
 			const context = {
-				commit: jest.fn()
+				commit: jest.fn(),
 			};
 			const action = actions.setAmount as any;
 			action( context, 2500 );

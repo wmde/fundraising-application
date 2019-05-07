@@ -52,13 +52,13 @@ export default Vue.extend( {
 	methods: {
 		toCents: ( amount: string ) => Number( amount ) * 100,
 		validateAmount() {
-			this.$store.dispatch( 'payment/validateAmount', this.$data );
+			this.$store.dispatch( action( NS_PAYMENT, validateAmount ), this.$data );
 		},
 		clearSelectedAmount() {
 			if ( this.$store.getters[ 'payment/amountIsValid' ] && this.amountCustomValue !== '' ) {
 				this.amountValue = '';
 			}
-			let payload = {
+			const payload = {
 				amountValue: this.toCents( this.amountCustomValue ).toString(),
 				validateAmountURL: this.$props.validateAmountURL,
 			};
