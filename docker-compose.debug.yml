@@ -10,12 +10,11 @@ services:
         - app_debug
 
   app_debug:
-    build:
-      context: ./build/app
-      target: app_debug
+    image: "wikimediade/fundraising-frontend:xdebug"
     environment:
       - XDEBUG_CONFIG=remote_host=${LOCAL_IP} # This won't work for PHPStorm CLI runs until https://youtrack.jetbrains.com/issue/WI-41043 is fixed
       - PHP_IDE_CONFIG=serverName=spenden.wikimedia.de
+      - APP_ENV
     expose:
       - "9000" # PHP-FPM
     volumes:
