@@ -10,18 +10,18 @@
 </template>
 
 <script lang="ts">
-	import Vue from 'vue';
-	import PaymentAmount from './donation_form/PaymentAmount.vue';
-	import PaymentInterval from './donation_form/PaymentInterval.vue';
-	import PaymentOption from "./donation_form/PaymentOption.vue";
+import Vue from 'vue';
+import PaymentAmount from './donation_form/PaymentAmount.vue';
+import PaymentInterval from './donation_form/PaymentInterval.vue';
+import PaymentOption from './donation_form/PaymentOption.vue';
 
-	export default Vue.extend( {
-		name: 'Payment',
-		components: {
-			PaymentAmount,
-			PaymentInterval,
-			PaymentOption
-		},
-		props: [ 'paymentAmounts', 'validateAmountURL', 'paymentIntervals', 'paymentIntervalMessages', 'paymentOptions' ],
-	} );
+export default Vue.extend( {
+	name: 'Payment',
+	components: {
+		PaymentAmount,
+		PaymentInterval,
+		PaymentOption,
+	},
+	props: [ 'paymentAmounts', 'validateAmountURL', 'paymentIntervals', 'paymentIntervalMessages', 'paymentOptions' ],
+} );
 </script>

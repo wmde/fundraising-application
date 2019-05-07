@@ -14,7 +14,7 @@ export default function (): Module<Payment, any> {
 		values: {
 			amount: '',
 			interval: '0',
-			option: ''
+			option: '',
 		},
 	};
 

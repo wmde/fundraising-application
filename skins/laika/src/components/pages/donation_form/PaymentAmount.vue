@@ -30,7 +30,6 @@ import { action } from '../../../store/util';
 import { NS_PAYMENT } from '../../../store/namespaces';
 import { validateAmount, setAmount } from '../../../store/payment/actionTypes';
 
-
 export default Vue.extend( {
 	name: 'PaymentAmount',
 	data: function (): AmountData {
@@ -67,7 +66,7 @@ export default Vue.extend( {
 		},
 		clearCustomAmount() {
 			this.amountCustomValue = '';
-			let payload = {
+			const payload = {
 				amountValue: this.toCents( this.amountValue ).toString(),
 				validateAmountURL: this.$props.validateAmountURL,
 			};

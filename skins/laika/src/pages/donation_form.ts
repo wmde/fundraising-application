@@ -15,7 +15,7 @@ const PAYMENT_INTERVAL_OPTIONS = [
 	{ interval: 1, id: 'monthly', icon: 'icon-repeat_1' },
 	{ interval: 3, id: 'quarterly', icon: 'icon-repeat_3' },
 	{ interval: 6, id: 'biannual', icon: 'icon-repeat_6' },
-	{ interval: 12, id: 'yearly', icon: 'icon-repeat_12' }
+	{ interval: 12, id: 'yearly', icon: 'icon-repeat_12' },
 ];
 
 const PAYMENT_TYPE_OPTIONS = [
@@ -23,7 +23,7 @@ const PAYMENT_TYPE_OPTIONS = [
 	{ type: 'MCP', id: 'credit-card', icon: 'icon-payment-credit_card' },
 	{ type: 'BEZ', id: 'debit-card', icon: 'icon-payment-debit' },
 	{ type: 'UEB', id: 'bank-transfer', icon: 'icon-payment-transfer' },
-	{ type: 'SUB', id: 'sofort', icon: 'icon-payment-sofort' }
+	{ type: 'SUB', id: 'sofort', icon: 'icon-payment-sofort' },
 ];
 
 Vue.config.productionTip = false;
@@ -60,7 +60,7 @@ new Vue( {
 				paymentAmounts: pageData.applicationVars,
 				validateAmountURL: donationForm.getAttribute( 'data-validate-amount-url' ),
 				paymentIntervals: PAYMENT_INTERVAL_OPTIONS,
-				paymentOptions: PAYMENT_TYPE_OPTIONS
+				paymentOptions: PAYMENT_TYPE_OPTIONS,
 			},
 		} ),
 		h( Sidebar, {

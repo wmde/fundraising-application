@@ -18,24 +18,24 @@
 </template>
 
 <script lang="ts">
-	import Vue from 'vue';
-    import { IntervalData } from "@/view_models/Payment";
-    import { NS_PAYMENT } from '../../../store/namespaces';
-    import { action } from '../../../store/util';
-    import { setInterval } from '../../../store/payment/actionTypes';
+import Vue from 'vue';
+import { IntervalData } from '@/view_models/Payment';
+import { NS_PAYMENT } from '../../../store/namespaces';
+import { action } from '../../../store/util';
+import { setInterval } from '../../../store/payment/actionTypes';
 
-	export default Vue.extend( {
-		name: 'PaymentInterval',
-		data: function (): IntervalData {
-			return {
-				selectedInterval: 0,
-			};
+export default Vue.extend( {
+	name: 'PaymentInterval',
+	data: function (): IntervalData {
+		return {
+			selectedInterval: 0,
+		};
+	},
+	props: [ 'paymentIntervals' ],
+	methods: {
+		setInterval(): void {
+			this.$store.dispatch( action( NS_PAYMENT, setInterval ), this.$data.selectedInterval );
 		},
-		props: [ 'paymentIntervals' ],
-		methods: {
-			setInterval(): void {
-				this.$store.dispatch( action( NS_PAYMENT, setInterval ), this.$data.selectedInterval );
-            }
-        },
-	} );
+	},
+} );
 </script>

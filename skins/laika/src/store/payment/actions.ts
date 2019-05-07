@@ -6,7 +6,7 @@ import {
 	MARK_EMPTY_FIELD_INVALID,
 	SET_AMOUNT_VALIDITY,
 	SET_AMOUNT,
-	SET_INTERVAL, SET_OPTION
+	SET_INTERVAL, SET_OPTION,
 } from './mutationTypes';
 
 export const actions = {
@@ -14,14 +14,14 @@ export const actions = {
 		context.commit( MARK_EMPTY_FIELD_INVALID, amountData );
 	},
 	[ setAmount ]( context: ActionContext<Payment, any>, payload: any ): void {
-        context.commit( SET_AMOUNT, payload.amountValue );
-        var bodyFormData = new FormData();
-        bodyFormData.append('amount', payload.amountValue );
-        axios( payload.validateAmountURL, {
-            method: 'post',
-            data: bodyFormData,
-            headers: { 'Content-Type': 'multipart/form-data' }
-        } ).then( ( validationResult: AxiosResponse ) => {
+		context.commit( SET_AMOUNT, payload.amountValue );
+		const bodyFormData = new FormData();
+		bodyFormData.append( 'amount', payload.amountValue );
+		axios( payload.validateAmountURL, {
+			method: 'post',
+			data: bodyFormData,
+			headers: { 'Content-Type': 'multipart/form-data' },
+		} ).then( ( validationResult: AxiosResponse ) => {
 			context.commit( SET_AMOUNT_VALIDITY, validationResult );
 		} ).catch( ( error: AxiosError ) => {
 			// TODO throw an Exception
@@ -32,5 +32,5 @@ export const actions = {
 	},
 	[ setOption ]( context: ActionContext<Payment, any>, payload: string ): void {
 		context.commit( SET_OPTION, payload );
-	}
+	},
 };
