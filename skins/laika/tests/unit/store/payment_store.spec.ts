@@ -1,8 +1,8 @@
-import { getters } from '@/store/payment/getters'
-import { actions } from '@/store/payment/actions'
-import { mutations } from '@/store/payment/mutations'
-import { AmountData, Payment } from "@/view_models/Payment";
-import { Validity } from "@/view_models/Validity";
+import { getters } from '@/store/payment/getters';
+import { actions } from '@/store/payment/actions';
+import { mutations } from '@/store/payment/mutations';
+import { AmountData, Payment } from '@/view_models/Payment';
+import { Validity } from '@/view_models/Validity';
 import each from 'jest-each';
 
 function newMinimalStore( overrides: Object ): Payment {
@@ -40,7 +40,7 @@ describe( 'Payment', () => {
 					validity: {
 						amount: validity,
 						option: Validity.INCOMPLETE,
-					}
+					},
 				};
 				expect( getters.amountIsValid(
 					newMinimalStore( state ),
@@ -68,7 +68,7 @@ describe( 'Payment', () => {
 					validity: {
 						amount: Validity.INCOMPLETE,
 						option: validity,
-					}
+					},
 				};
 				expect( getters.optionIsValid(
 					newMinimalStore( state ),
@@ -81,38 +81,46 @@ describe( 'Payment', () => {
 	} );
 
 	describe( 'Actions/validateAmount', () => {
-		it( 'commits to mutation [MARK_EMPTY_AMOUNT_SELECTION_INVALID]', () => {
-			const commit = jest.fn();
-			const action = actions[ 'validateAmount' ] as any;
-			action( { commit }, 1500 );
-			expect( commit ).toBeCalledWith(
-				'MARK_EMPTY_AMOUNT_SELECTION_INVALID',
+		it( 'commits to mutation [MARK_EMPTY_AMOUNT_INVALID]', () => {
+			const context = {
+				commit: jest.fn()
+			};
+			const action = actions.validateAmount as any;
+			action( context, 1500 );
+			expect( context.commit ).toBeCalledWith(
+				'MARK_EMPTY_AMOUNT_INVALID',
 				1500
-			)
-		} )
+			);
+		} );
 	} );
 
 	describe( 'Actions/validatePayment', () => {
 		it( 'commits to mutation [MARK_EMPTY_FIELDS_INVALID]', () => {
-			const commit = jest.fn();
-			const action = actions[ 'validatePayment' ] as any;
-			action( { commit }, 1500 );
-			expect( commit ).toBeCalledWith(
-				'MARK_EMPTY_FIELDS_INVALID',
-				1500
-			)
-		} )
+			const context = {
+				commit: jest.fn(),
+				getters: {
+					'payment/paymentDataIsValid': true
+				}
+			};
+			const action = actions.validatePayment as any;
+			action( context );
+			expect( context.commit ).toBeCalledWith(
+				'MARK_EMPTY_FIELDS_INVALID'
+			);
+		} );
 	} );
 
 	describe( 'Actions/setAmount', () => {
-		xit( 'commits to mutation [SET_AMOUNT]', () => {
-			const commit = jest.fn();
-			const action = actions[ 'setAmount' ] as any;
-			action( { commit }, 2500 );
-			expect( commit ).toBeCalledWith(
+		it.skip( 'commits to mutation [SET_AMOUNT]', () => {
+			const context = {
+				commit: jest.fn()
+			};
+			const action = actions.setAmount as any;
+			action( context, 2500 );
+			expect( context.commit ).toBeCalledWith(
 				'SET_AMOUNT',
 				2500
-			)
+			);
 		} );
 	} );
 
@@ -123,7 +131,7 @@ describe( 'Payment', () => {
 			'mutates the state with the correct validity for a given amount',
 			( inputData, isValid ) => {
 				const store = newMinimalStore( {} );
-				mutations[ 'MARK_EMPTY_AMOUNT_SELECTION_INVALID' ]( store, inputData );
+				mutations.MARK_EMPTY_AMOUNT_INVALID( store, inputData );
 				expect( store.validity.amount ).toStrictEqual( isValid );
 			} );
 
@@ -132,31 +140,31 @@ describe( 'Payment', () => {
 			'mutates the state with the correct validity for a given server response',
 			( inputData, isValid ) => {
 				const store = newMinimalStore( {} );
-				mutations[ 'SET_AMOUNT_VALIDITY' ]( store, inputData );
+				mutations.SET_AMOUNT_VALIDITY( store, inputData );
 				expect( store.validity.amount ).toStrictEqual( isValid );
 			} );
 
 		it( 'mutates the amount', () => {
 			const store = newMinimalStore( {} );
-			mutations[ 'SET_AMOUNT' ]( store, 2500 );
+			mutations.SET_AMOUNT( store, 2500 );
 			expect( store.values.amount ).toStrictEqual( 2500 );
-			mutations[ 'SET_AMOUNT' ]( store, 5500 );
+			mutations.SET_AMOUNT( store, 5500 );
 			expect( store.values.amount ).toStrictEqual( 5500 );
 		} );
 
 		it( 'mutates the interval', () => {
 			const store = newMinimalStore( {} );
-			mutations[ 'SET_INTERVAL' ]( store, 3 );
+			mutations.SET_INTERVAL( store, 3 );
 			expect( store.values.interval ).toStrictEqual( 3 );
-			mutations[ 'SET_INTERVAL' ]( store, 0 );
+			mutations.SET_INTERVAL( store, 0 );
 			expect( store.values.interval ).toStrictEqual( 0 );
 		} );
 
 		it( 'mutates the payment option', () => {
 			const store = newMinimalStore( {} );
-			mutations[ 'SET_OPTION' ]( store, 'UEB' );
+			mutations.SET_OPTION( store, 'UEB' );
 			expect( store.values.option ).toStrictEqual( 'UEB' );
-			mutations[ 'SET_OPTION' ]( store, 'BEZ' );
+			mutations.SET_OPTION( store, 'BEZ' );
 			expect( store.values.option ).toStrictEqual( 'BEZ' );
 		} );
 	} );

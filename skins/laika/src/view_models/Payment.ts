@@ -2,13 +2,10 @@ import { Validity } from './Validity';
 
 export interface Payment {
     validity: {
-        amount: Validity
-        option: Validity
+        [key: string]: Validity
     },
     values: {
-        amount: string
-        interval: string
-        option: string
+        [key: string]: string
     }
 }
 
