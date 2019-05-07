@@ -51,8 +51,8 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import Question from '../Question.vue';
-import { FaqContent, Topic, FaqData } from '../../view_models/faq';
+import Question from '@/components/Question.vue';
+import { FaqContent, Topic, FaqData } from '@/view_models/faq';
 
 export default Vue.extend( {
 	name: 'faq',
