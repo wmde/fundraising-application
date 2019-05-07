@@ -4,6 +4,8 @@ import { mutations } from '@/store/payment/mutations';
 import { AmountData, Payment } from '@/view_models/Payment';
 import { Validity } from '@/view_models/Validity';
 import each from 'jest-each';
+import axios, { AxiosResponse } from 'axios';
+import moxios from 'moxios';
 
 function newMinimalStore( overrides: Object ): Payment {
 	return Object.assign(
@@ -111,15 +113,31 @@ describe( 'Payment', () => {
 	} );
 
 	describe( 'Actions/setAmount', () => {
-		it.skip( 'commits to mutation [SET_AMOUNT]', () => {
+		beforeEach( function () {
+			// import and pass your custom axios instance to this method
+			moxios.install();
+		} );
+		afterEach( function () {
+			// import and pass your custom axios instance to this method
+			moxios.uninstall();
+		} );
+		it( 'commits to mutation [SET_AMOUNT]', () => {
 			const context = {
-				commit: jest.fn(),
-			};
+					commit: jest.fn(),
+				},
+				payload = {
+					amountValue: '2500',
+					validateAmountURL: '/validation-amount-url',
+				};
+			moxios.stubRequest( payload.validateAmountURL, {
+				status: 200,
+				responseText: 'OK',
+			} );
 			const action = actions.setAmount as any;
-			action( context, 2500 );
-			expect( context.commit ).toBeCalledWith(
+			action( context, payload );
+			expect( context.commit ).toHaveBeenCalledWith(
 				'SET_AMOUNT',
-				2500
+				payload.amountValue
 			);
 		} );
 	} );

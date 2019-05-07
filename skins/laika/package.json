@@ -22,6 +22,7 @@
   },
   "devDependencies": {
     "@types/jest": "^23.1.4",
+    "@types/moxios": "^0.4.8",
     "@vue/cli-plugin-babel": "^3.5.5",
     "@vue/cli-plugin-e2e-nightwatch": "^3.5.0",
     "@vue/cli-plugin-eslint": "^3.5.0",
@@ -36,6 +37,7 @@
     "eslint-config-wikimedia": "0.9.0",
     "eslint-plugin-vue": "^5.0.0",
     "jest-each": "^24.8.0",
+    "moxios": "^0.4.0",
     "node-sass": "^4.9.0",
     "sass-loader": "^7.1.0",
     "ts-jest": "^23.0.0",
