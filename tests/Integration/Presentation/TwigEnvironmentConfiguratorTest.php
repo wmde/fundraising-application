@@ -60,7 +60,8 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 		$environmentConfigurator = new TwigEnvironmentConfigurator(
 			[
 				'enable-cache' => false,
-				'web-basepath' => ''
+				'web-basepath' => '',
+				'assets-path' => ''
 			],
 			'/tmp/fun'
 		);
