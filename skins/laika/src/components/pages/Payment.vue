@@ -14,7 +14,7 @@
 	import PaymentAmount from './donation_form/PaymentAmount.vue';
 	import PaymentInterval from './donation_form/PaymentInterval.vue';
 	import PaymentOption from './donation_form/PaymentOption.vue';
-	import { validateOption } from "@/store/payment/actionTypes";
+	import { validatePayment } from "@/store/payment/actionTypes";
 	import { action } from '@/store/util';
 	import { NS_PAYMENT } from "@/store/namespaces";
 
@@ -27,7 +27,7 @@
 		},
 		methods: {
 			validatePaymentData(): void {
-				this.$store.dispatch( action( NS_PAYMENT, validateOption ),  );
+				this.$store.dispatch( action( NS_PAYMENT, validatePayment ) );
 			}
 		},
 		props: [ 'paymentAmounts', 'validateAmountURL', 'paymentIntervals', 'paymentIntervalMessages', 'paymentOptions' ],

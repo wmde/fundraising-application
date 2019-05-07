@@ -92,13 +92,13 @@ describe( 'Payment', () => {
 		} )
 	} );
 
-	describe( 'Actions/validateOption', () => {
-		it( 'commits to mutation [MARK_EMPTY_OPTION_SELECTION_INVALID]', () => {
+	describe( 'Actions/validatePayment', () => {
+		it( 'commits to mutation [MARK_EMPTY_FIELDS_INVALID]', () => {
 			const commit = jest.fn();
-			const action = actions[ 'validateOption' ] as any;
+			const action = actions[ 'validatePayment' ] as any;
 			action( { commit }, 1500 );
 			expect( commit ).toBeCalledWith(
-				'MARK_EMPTY_OPTION_SELECTION_INVALID',
+				'MARK_EMPTY_FIELDS_INVALID',
 				1500
 			)
 		} )
