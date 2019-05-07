@@ -10,6 +10,8 @@ REDUX_LOG     :=
 MIGRATION_VERSION :=
 APP_ENV       := dev
 NODE_IMAGE    := node:10
+DOCKER_IMAGE  := wikimediade/fundraising-frontend
+
 
 .DEFAULT_GOAL := ci
 
@@ -22,17 +24,13 @@ up_debug: down_app
 down_app:
 	docker-compose -f docker-compose.yml -f docker-compose.debug.yml down > /dev/null 2>&1
 
-build_app_composer:
-	@mkdir -p $(TMPDIR)
-	@docker build -t wmde/fundraising-frontend-composer --target app_composer build/app > $(TMPDIR)/composer_build.log 2>&1
-
 install-js:
 	-mkdir -p $(TMPDIR)/home
 	-echo "node:x:$(current_user):$(current_group)::/var/nodehome:/bin/bash" > $(TMPDIR)/passwd
 	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR):/data:delegated -w /data -v $(TMPDIR)/home:/var/nodehome:delegated -v $(TMPDIR)/passwd:/etc/passwd $(NODE_IMAGE) npm install $(NPM_FLAGS)
 
-install-php: build_app_composer
-	docker run --rm $(DOCKER_FLAGS) --volume $(BUILD_DIR):/app -w /app --volume /tmp:/tmp --volume ~/.composer:/composer --user $(current_user):$(current_group) wmde/fundraising-frontend-composer composer install $(COMPOSER_FLAGS)
+install-php:
+	docker run --rm $(DOCKER_FLAGS) --volume $(BUILD_DIR):/app -w /app --volume /tmp:/tmp --volume ~/.composer:/composer --user $(current_user):$(current_group) $(DOCKER_IMAGE):composer composer install $(COMPOSER_FLAGS)
 
 update-js:
 	-mkdir -p $(TMPDIR)/home
@@ -40,8 +38,8 @@ update-js:
 	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR)/skins/cat17:/data:delegated -w /data -v $(TMPDIR)/home:/var/nodehome:delegated -v $(TMPDIR)/passwd:/etc/passwd $(NODE_IMAGE) npm update $(NPM_FLAGS)
 	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR)/skins/10h16:/data:delegated -w /data -v $(TMPDIR)/home:/var/nodehome:delegated -v $(TMPDIR)/passwd:/etc/passwd $(NODE_IMAGE) npm update $(NPM_FLAGS)
 
-update-php: build_app_composer
-	docker run --rm $(DOCKER_FLAGS) --volume $(BUILD_DIR):/app -w /app --volume ~/.composer:/composer --user $(current_user):$(current_group) wmde/fundraising-frontend-composer composer update $(COMPOSER_FLAGS)
+update-php:
+	docker run --rm $(DOCKER_FLAGS) --volume $(BUILD_DIR):/app -w /app --volume ~/.composer:/composer --user $(current_user):$(current_group) $(DOCKER_IMAGE):composer composer update $(COMPOSER_FLAGS)
 
 default-config:
 	cp build/app/config.dev.json app/config
@@ -88,7 +86,7 @@ fix-cs:
 	docker-compose run --rm --no-deps --name $@ app ./vendor/bin/phpcbf
 
 stan:
-	docker-compose run --rm --no-deps --name $@ app php -d memory_limit=-1 vendor/bin/phpstan analyse --level=1 --no-progress cli/ src/ tests/
+	docker run --rm -it --volume $(BUILD_DIR):/app -w /app $(DOCKER_IMAGE):stan analyse --level=1 --no-progress cli/ src/ tests/
 
 validate-app-config:
 	docker-compose run --rm --no-deps --name $@ app ./console app:validate:config app/config/config.dist.json app/config/config.test.json
