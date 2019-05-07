@@ -1,11 +1,8 @@
 export interface FaqData {
-	page : Question[],
-	isOverview: boolean,
-	topicTitle: string,
 	openQuestionId: string
 }
 
-export interface Question {
+export interface QuestionModel {
 	question : string,
 	visibleText : string,
 	topic : string,
@@ -18,7 +15,7 @@ export interface Topic {
 
 export interface FaqContent {
 	topics : Topic[],
-	questions : Question[],
+	questions : QuestionModel[],
 }
 
 /**
