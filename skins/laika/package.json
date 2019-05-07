@@ -35,6 +35,7 @@
     "eslint": "^5.8.0",
     "eslint-config-wikimedia": "0.9.0",
     "eslint-plugin-vue": "^5.0.0",
+    "jest-each": "^24.8.0",
     "node-sass": "^4.9.0",
     "sass-loader": "^7.1.0",
     "ts-jest": "^23.0.0",

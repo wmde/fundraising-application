@@ -1,5 +1,5 @@
 import { ActionContext } from 'vuex';
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { Payment, AmountData } from '@/view_models/Payment';
 import { validateAmount, setAmount, setInterval, setOption } from '@/store/payment/actionTypes';
 import {
@@ -23,8 +23,6 @@ export const actions = {
 			headers: { 'Content-Type': 'multipart/form-data' },
 		} ).then( ( validationResult: AxiosResponse ) => {
 			context.commit( SET_AMOUNT_VALIDITY, validationResult );
-		} ).catch( ( error: AxiosError ) => {
-			// TODO throw an Exception
 		} );
 	},
 	[ setInterval ]( context: ActionContext<Payment, any>, payload: string ): void {
