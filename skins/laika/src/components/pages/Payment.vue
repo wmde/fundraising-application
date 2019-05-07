@@ -10,26 +10,27 @@
 </template>
 
 <script lang="ts">
-	import Vue from 'vue';
-	import PaymentAmount from './donation_form/PaymentAmount.vue';
-	import PaymentInterval from './donation_form/PaymentInterval.vue';
-	import PaymentOption from './donation_form/PaymentOption.vue';
-	import { validatePayment } from "@/store/payment/actionTypes";
-	import { action } from '@/store/util';
-	import { NS_PAYMENT } from "@/store/namespaces";
+import Vue from 'vue';
+import PaymentAmount from './donation_form/PaymentAmount.vue';
+import PaymentInterval from './donation_form/PaymentInterval.vue';
+import PaymentOption from './donation_form/PaymentOption.vue';
+import { validatePayment } from '@/store/payment/actionTypes';
+import { action } from '@/store/util';
+import { NS_PAYMENT } from '@/store/namespaces';
 
-	export default Vue.extend( {
-		name: 'Payment',
-		components: {
-			PaymentAmount,
-			PaymentInterval,
-			PaymentOption,
+export default Vue.extend( {
+	name: 'Payment',
+	components: {
+		PaymentAmount,
+		PaymentInterval,
+		PaymentOption,
+	},
+	props: [ 'paymentAmounts', 'validateAmountURL', 'paymentIntervals', 'paymentIntervalMessages', 'paymentOptions' ],
+	methods: {
+		validatePaymentData(): void {
+			this.$store.dispatch( action( NS_PAYMENT, validatePayment ) );
 		},
-		methods: {
-			validatePaymentData(): void {
-				this.$store.dispatch( action( NS_PAYMENT, validatePayment ) );
-			}
-		},
-		props: [ 'paymentAmounts', 'validateAmountURL', 'paymentIntervals', 'paymentIntervalMessages', 'paymentOptions' ],
-	} );
+	},
+
+} );
 </script>

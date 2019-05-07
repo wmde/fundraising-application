@@ -9,4 +9,12 @@ export const getters: GetterTree<Payment, any> = {
 	optionIsValid: function ( state: Payment ): boolean {
 		return state.validity.option !== Validity.INVALID;
 	},
+	paymentDataIsValid: function ( state: Payment ): boolean {
+		for ( const prop in state.validity ) {
+			if ( state.validity[ prop ] !== Validity.VALID ) {
+				return false;
+			}
+		}
+		return true;
+	},
 };
