@@ -62,7 +62,7 @@ export default Vue.extend( {
 				amountValue: this.toCents( this.amountCustomValue ).toString(),
 				validateAmountURL: this.$props.validateAmountURL,
 			};
-			this.$store.dispatch( 'payment/setAmount', payload );
+			this.$store.dispatch( action( NS_PAYMENT, setAmount ), payload );
 		},
 		clearCustomAmount() {
 			this.amountCustomValue = '';
