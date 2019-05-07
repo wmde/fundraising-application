@@ -1,20 +1,20 @@
 import { ActionContext } from 'vuex';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { Payment, AmountData } from '@/view_models/Payment';
-import { validateAmount, registerAmount, registerInterval, registerOption } from './actionTypes';
+import { validateAmount, setAmount, setInterval, setOption } from './actionTypes';
 import {
 	MARK_EMPTY_FIELD_INVALID,
 	SET_AMOUNT_VALIDITY,
-	REGISTER_AMOUNT,
-	REGISTER_INTERVAL, REGISTER_OPTION
+	SET_AMOUNT,
+	SET_INTERVAL, SET_OPTION
 } from './mutationTypes';
 
 export const actions = {
 	[ validateAmount ]( context: ActionContext<Payment, any>, amountData: AmountData ): void {
 		context.commit( MARK_EMPTY_FIELD_INVALID, amountData );
 	},
-	[ registerAmount ]( context: ActionContext<Payment, any>, payload: any ): void {
-        context.commit( REGISTER_AMOUNT, payload.amountValue );
+	[ setAmount ]( context: ActionContext<Payment, any>, payload: any ): void {
+        context.commit( SET_AMOUNT, payload.amountValue );
         var bodyFormData = new FormData();
         bodyFormData.append('amount', payload.amountValue );
         axios( payload.validateAmountURL, {
@@ -27,10 +27,10 @@ export const actions = {
 			// TODO throw an Exception
 		} );
 	},
-	[ registerInterval ]( context: ActionContext<Payment, any>, payload: string ): void {
-		context.commit( REGISTER_INTERVAL, payload );
+	[ setInterval ]( context: ActionContext<Payment, any>, payload: string ): void {
+		context.commit( SET_INTERVAL, payload );
 	},
-	[ registerOption ]( context: ActionContext<Payment, any>, payload: string ): void {
-		context.commit( REGISTER_OPTION, payload );
+	[ setOption ]( context: ActionContext<Payment, any>, payload: string ): void {
+		context.commit( SET_OPTION, payload );
 	}
 };
