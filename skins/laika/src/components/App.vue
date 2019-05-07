@@ -21,9 +21,9 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import Header from './layout/Header.vue';
-import Content from './layout/Content.vue';
-import Footer from './layout/Footer.vue';
+import Header from '@/components/layout/Header.vue';
+import Content from '@/components/layout/Content.vue';
+import Footer from '@/components/layout/Footer.vue';
 
 export default Vue.extend( {
 	name: 'app',
