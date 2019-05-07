@@ -81,12 +81,24 @@ describe( 'Payment', () => {
 	} );
 
 	describe( 'Actions/validateAmount', () => {
-		it( 'commits to mutation [MARK_EMPTY_FIELD_INVALID]', () => {
+		it( 'commits to mutation [MARK_EMPTY_AMOUNT_SELECTION_INVALID]', () => {
 			const commit = jest.fn();
 			const action = actions[ 'validateAmount' ] as any;
 			action( { commit }, 1500 );
 			expect( commit ).toBeCalledWith(
-				'MARK_EMPTY_FIELD_INVALID',
+				'MARK_EMPTY_AMOUNT_SELECTION_INVALID',
+				1500
+			)
+		} )
+	} );
+
+	describe( 'Actions/validateOption', () => {
+		it( 'commits to mutation [MARK_EMPTY_OPTION_SELECTION_INVALID]', () => {
+			const commit = jest.fn();
+			const action = actions[ 'validateOption' ] as any;
+			action( { commit }, 1500 );
+			expect( commit ).toBeCalledWith(
+				'MARK_EMPTY_OPTION_SELECTION_INVALID',
 				1500
 			)
 		} )
@@ -111,7 +123,7 @@ describe( 'Payment', () => {
 			'mutates the state with the correct validity for a given amount',
 			( inputData, isValid ) => {
 				const store = newMinimalStore( {} );
-				mutations[ 'MARK_EMPTY_FIELD_INVALID' ]( store, inputData );
+				mutations[ 'MARK_EMPTY_AMOUNT_SELECTION_INVALID' ]( store, inputData );
 				expect( store.validity.amount ).toStrictEqual( isValid );
 			} );
 

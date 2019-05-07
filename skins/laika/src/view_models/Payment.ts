@@ -24,3 +24,7 @@ export interface IntervalData {
 export interface OptionData {
     selectedOption: string
 }
+
+export interface PaymentData {
+    optionHasError: boolean
+}
