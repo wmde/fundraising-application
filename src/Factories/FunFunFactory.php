@@ -1470,7 +1470,6 @@ class FunFunFactory implements ServiceProviderInterface {
 			$this->newDonationAuthorizer( $updateToken ),
 			$this->getCreditCardService(),
 			$this->newDonationConfirmationMailer(),
-			$this->getLogger(),
 			$this->newDonationEventLogger()
 		);
 	}

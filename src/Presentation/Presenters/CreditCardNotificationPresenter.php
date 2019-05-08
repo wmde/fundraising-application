@@ -21,7 +21,7 @@ class CreditCardNotificationPresenter {
 		$this->returnUrl = $returnUrl;
 	}
 
-	public function present( CreditCardNotificationResponse $response ): string {
+	public function present( CreditCardNotificationResponse $response, string $donationId, string $accessToken ): string {
 		if ( !$response->isSuccessful() ) {
 			return $this->render( [
 				'status' => 'error',
@@ -32,8 +32,8 @@ class CreditCardNotificationPresenter {
 		return $this->render( [
 			'status' => 'ok',
 			'url' => $this->returnUrl . '?' . http_build_query( [
-					'id' => $response->getDonationId(),
-					'accessToken' => $response->getAccessToken()
+					'id' => $donationId,
+					'accessToken' => $accessToken
 				] ),
 			'target' => '_top',
 			'forward' => '1',

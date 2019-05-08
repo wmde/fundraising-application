@@ -19,6 +19,7 @@ use WMDE\Fundraising\DonationContext\UseCases\ListComments\CommentListingRequest
 use WMDE\Fundraising\Frontend\App\Controllers\AddDonationController;
 use WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController;
 use WMDE\Fundraising\Frontend\App\Controllers\IbanController;
+use WMDE\Fundraising\Frontend\App\Controllers\CreditCardPaymentNotificationController;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowUpdateAddressController;
 use WMDE\Fundraising\Frontend\App\Controllers\UpdateAddressController;
@@ -490,33 +491,7 @@ class Routes {
 
 		$app->get(
 			'handle-creditcard-payment-notification',
-			function ( Request $request ) use ( $ffFactory ) {
-				try {
-					$ffFactory->newCreditCardNotificationUseCase( $request->query->get( 'utoken', '' ) )
-						->handleNotification(
-							( new CreditCardPaymentNotificationRequest() )
-								->setTransactionId( $request->query->get( 'transactionId', '' ) )
-								->setDonationId( (int)$request->query->get( 'donation_id', '' ) )
-								->setAmount( Euro::newFromCents( (int)$request->query->get( 'amount' ) ) )
-								->setCustomerId( $request->query->get( 'customerId', '' ) )
-								->setSessionId( $request->query->get( 'sessionId', '' ) )
-								->setAuthId( $request->query->get( 'auth', '' ) )
-								->setTitle( $request->query->get( 'title', '' ) )
-								->setCountry( $request->query->get( 'country', '' ) )
-								->setCurrency( $request->query->get( 'currency', '' ) )
-						);
-
-					$response = CreditCardNotificationResponse::newSuccessResponse(
-						(int)$request->query->get( 'donation_id', '' ),
-						$request->query->get( 'token', '' )
-					);
-				}
-				catch ( CreditCardPaymentHandlerException $e ) {
-					$response = CreditCardNotificationResponse::newFailureResponse( $e->getMessage() );
-				}
-
-				return new Response( $ffFactory->newCreditCardNotificationPresenter()->present( $response ) );
-			}
+			CreditCardPaymentNotificationController::class . '::handleNotification'
 		);
 
 		$app->get(
