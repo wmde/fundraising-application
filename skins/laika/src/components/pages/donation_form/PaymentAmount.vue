@@ -51,7 +51,7 @@ export default Vue.extend( {
 	},
 	methods: {
 		toCents: ( amount: string ) => Number( amount ) * 100,
-		validateAmount() {
+		checkIfEmptyAmount() {
 			this.$store.dispatch( action( NS_PAYMENT, checkIfEmptyAmount ), this.$data );
 		},
 		clearSelectedAmount() {

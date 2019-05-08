@@ -1,24 +1,24 @@
-import { getters } from '@/store/payment/getters'
-import { actions } from '@/store/payment/actions'
-import { mutations } from '@/store/payment/mutations'
-import { Payment } from "@/view_models/Payment";
-import { Validity } from "@/view_models/Validity";
-import { checkIfEmptyAmount, markEmptyValuesAsInvalid } from "@/store/payment/actionTypes";
+import { getters } from '@/store/payment/getters';
+import { actions } from '@/store/payment/actions';
+import { mutations } from '@/store/payment/mutations';
+import { Payment } from '@/view_models/Payment';
+import { Validity } from '@/view_models/Validity';
+import { checkIfEmptyAmount, markEmptyValuesAsInvalid } from '@/store/payment/actionTypes';
 import each from 'jest-each';
 import moxios from 'moxios';
-import { SET_AMOUNT } from "@/store/payment/mutationTypes";
+import { SET_AMOUNT } from '@/store/payment/mutationTypes';
 
 function newMinimalStore( overrides: Object ): Payment {
 	return Object.assign(
 		{
 			validity: {
 				amount: Validity.INCOMPLETE,
-				option: Validity.INCOMPLETE,
+				type: Validity.INCOMPLETE,
 			},
 			values: {
 				amount: '',
 				interval: '0',
-				option: '',
+				type: '',
 			},
 		},
 		overrides
@@ -30,7 +30,7 @@ describe( 'Payment', () => {
 	const validityCases = [
 		[ Validity.VALID, true ],
 		[ Validity.INVALID, false ],
-		[ Validity.INCOMPLETE, true ]
+		[ Validity.INCOMPLETE, true ],
 	];
 
 	describe( 'Getters/amountIsValid', () => {
@@ -48,8 +48,8 @@ describe( 'Payment', () => {
 				const state = {
 					validity: {
 						amount: amountValidity,
-						option: Validity.INCOMPLETE,
-					}
+						type: Validity.INCOMPLETE,
+					},
 				};
 				expect( getters.amountIsValid(
 					newMinimalStore( state ),
@@ -61,9 +61,9 @@ describe( 'Payment', () => {
 		);
 	} );
 
-	describe( 'Getters/optionIsValid', () => {
-		it( 'does not return invalid option on initalization', () => {
-			expect( getters.optionIsValid(
+	describe( 'Getters/typeIsValid', () => {
+		it( 'does not return invalid payment type on initalization', () => {
+			expect( getters.typeIsValid(
 				newMinimalStore( {} ),
 				null,
 				null,
@@ -72,15 +72,15 @@ describe( 'Payment', () => {
 		} );
 
 		each( validityCases ).it(
-			'returns the expected validity for a given option (test index %#)',
-			( optionValidity, isValid ) => {
+			'returns the expected validity for a given type (test index %#)',
+			( typeValidity, isValid ) => {
 				const state = {
 					validity: {
 						amount: Validity.INCOMPLETE,
-						option: optionValidity,
-					}
+						type: typeValidity,
+					},
 				};
-				expect( getters.optionIsValid(
+				expect( getters.typeIsValid(
 					newMinimalStore( state ),
 					null,
 					null,
@@ -96,13 +96,13 @@ describe( 'Payment', () => {
 			const action = actions[ checkIfEmptyAmount ] as any;
 			action( { commit }, {
 				amountValue: '5000',
-				amountCustomValue: ''
+				amountCustomValue: '',
 			} );
 			expect( commit ).toBeCalledWith(
 				'MARK_EMPTY_AMOUNT_INVALID',
 				{ amountValue: '5000', amountCustomValue: '' }
-			)
-		} )
+			);
+		} );
 	} );
 
 	describe( 'Actions/markEmptyValuesAsInvalid', () => {
@@ -153,20 +153,20 @@ describe( 'Payment', () => {
 		const amountInputStates = [
 			[ { amountValue: '1200', amountCustomValue: '' }, Validity.VALID ],
 			[ { amountValue: '', amountCustomValue: '1500' }, Validity.VALID ],
-			[ { amountValue: '', amountCustomValue: '' }, Validity.INVALID ]
+			[ { amountValue: '', amountCustomValue: '' }, Validity.INVALID ],
 		];
 
 		each( amountInputStates ).it(
 			'mutates the state with the correct validity for a given amount (test index %#)',
 			( inputData, isValid ) => {
 				const store = newMinimalStore( {} );
-				mutations[ 'MARK_EMPTY_AMOUNT_INVALID' ]( store, inputData );
+				mutations.MARK_EMPTY_AMOUNT_INVALID( store, inputData );
 				expect( store.validity.amount ).toStrictEqual( isValid );
 			} );
 
 		const serverResponseStates = [
 			[ { data: { status: 'OK' } }, Validity.VALID ],
-			[ { data: { status: 'ERR' } }, Validity.INVALID ]
+			[ { data: { status: 'ERR' } }, Validity.INVALID ],
 		];
 
 		each( serverResponseStates ).it(
@@ -193,12 +193,12 @@ describe( 'Payment', () => {
 			expect( store.values.interval ).toStrictEqual( 0 );
 		} );
 
-		it( 'mutates the payment option', () => {
+		it( 'mutates the payment type', () => {
 			const store = newMinimalStore( {} );
-			mutations.SET_OPTION( store, 'UEB' );
-			expect( store.values.option ).toStrictEqual( 'UEB' );
-			mutations.SET_OPTION( store, 'BEZ' );
-			expect( store.values.option ).toStrictEqual( 'BEZ' );
+			mutations.SET_TYPE( store, 'UEB' );
+			expect( store.values.type ).toStrictEqual( 'UEB' );
+			mutations.SET_TYPE( store, 'BEZ' );
+			expect( store.values.type ).toStrictEqual( 'BEZ' );
 		} );
 	} );
 } );

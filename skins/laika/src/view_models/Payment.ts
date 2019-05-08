@@ -18,10 +18,6 @@ export interface IntervalData {
     selectedInterval: Number
 }
 
-export interface OptionData {
-    selectedOption: string
-}
-
-export interface PaymentData {
-    optionHasError: boolean
+export interface TypeData {
+    selectedType: string
 }
