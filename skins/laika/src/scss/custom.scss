@@ -1,6 +1,16 @@
+// This class imports all variables and overrides
+// and adds custom classes on top of that
 @import "variables";
+@import "overrides";
+
+.has-border-rounded {
+	background-color: $fun-color-bright;
+	border: 1px solid $fun-color-off-bright;
+	border-radius: 2px;
+}
 
 .list-menu {
+	max-width: 340px;
 	li {
 		height: 54px;
 		position: relative;

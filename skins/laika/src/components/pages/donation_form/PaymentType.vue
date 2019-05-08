@@ -1,6 +1,6 @@
 <template>
     <fieldset>
-        <h2>Wie möchten Sie zahlen?</h2>
+        <h2 class="title is-size-5">{{ $t('donation_form_payment_type_title') }}</h2>
         <div>
             <div v-for="paymentMethod in paymentTypes" :key="paymentMethod.type">
                 <input type="radio"
@@ -14,7 +14,7 @@
                 </label>
             </div>
         </div>
-        <span v-if="hasErrors">{{ $t('form_amount_error') }}</span>
+        <span class="help is-danger" v-if="hasErrors">{{ $t('donation_form_payment_type_error') }}</span>
     </fieldset>
 </template>
 

@@ -1,7 +1,7 @@
 <template>
-	<div class="container has-margin-top-108 has-margin-bottom-54">
-		<div class="columns">
-			<main class="column is-two-thirds has-background-bright">
+	<div class="container">
+		<div class="columns has-margin-top-0">
+			<main class="column is-two-thirds is-half-desktop has-background-bright">
 				<slot></slot>
 			</main>
 			<slot name="sidebar"></slot>
