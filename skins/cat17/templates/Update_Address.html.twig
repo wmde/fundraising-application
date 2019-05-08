@@ -10,8 +10,8 @@
 {% block scripts %}
 	<script src="{$ basepath $}{$ '/skins/cat17/scripts/address-change/js/app.js' | prefix_file $}"
             id="address-form"
-            data-validate-address-url="{$ basepath|e('html_attr') $}/validate-address"
-            data-update-address-url="{$ basepath|e('html_attr') $}/update-address/"
+            data-validate-address-url="{$ urls.validateAddress | e('html_attr') $}"
+            data-update-address-url="{$ urls.updateAddress | e('html_attr') $}"
     ></script>
 	<script src="{$ basepath $}{$ '/skins/cat17/scripts/address-change/js/chunk-vendors.js' | prefix_file $}"></script>
 {% endblock %}

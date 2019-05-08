@@ -23,7 +23,7 @@
 				{% include 'partials/donation_confirmation/link_print.html.twig' with {
 					'label': 'donation_confirmation_print_confirmation' | trans
 				} only %}
-                <li><a href="{$ commentUrl $}"><span>{$ "add_donation_comment" | trans $}</span></a></li>
+                <li><a href="{$ urls.addComment | e('html_attr') $}"><span>{$ "add_donation_comment" | trans $}</span></a></li>
 				{% include 'partials/share_on_social_networks.html.twig' %}
             </ul>
         </div>
