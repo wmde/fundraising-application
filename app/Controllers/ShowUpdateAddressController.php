@@ -28,7 +28,12 @@ class ShowUpdateAddressController {
 					'addressToken' => $addressToken,
 					'isCompany' => $addressChange->isCompanyAddress(),
 					'messages' => $ffFactory->getMessages(),
-					'urls' => Routes::getNamedRouteUrls( $ffFactory->getUrlGenerator() )
+					'urls' => array_merge(
+						Routes::getNamedRouteUrls( $ffFactory->getUrlGenerator() ),
+						[
+							'updateAddress' => $ffFactory->getUrlGenerator()->generateAbsoluteUrl( Routes::UPDATE_ADDRESS, [ 'addressToken' => $addressToken ] )
+						]
+					)
 				]
 			)
 		);

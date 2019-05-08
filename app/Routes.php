@@ -634,12 +634,11 @@ class Routes {
 			'validateDonationAmount' => $urlGenerator->generateAbsoluteUrl( self::VALIDATE_DONATION_AMOUNT ),
 			'validateAddress' => $urlGenerator->generateAbsoluteUrl( self::VALIDATE_ADDRESS ),
 			'validateEmail' => $urlGenerator->generateAbsoluteUrl( self::VALIDATE_EMAIL ),
-			'markEmptyValuesAsInvalid' => $urlGenerator->generateAbsoluteUrl( self::VALIDATE_DONATION_PAYMENT ),
+			'validatePayment' => $urlGenerator->generateAbsoluteUrl( self::VALIDATE_DONATION_PAYMENT ),
 			'validateIban' => $urlGenerator->generateAbsoluteUrl( self::VALIDATE_IBAN ),
 			'validateMembershipFee' => $urlGenerator->generateAbsoluteUrl( self::VALIDATE_MEMBERSHIP_FEE ),
 			'convertBankData' => $urlGenerator->generateAbsoluteUrl( self::CONVERT_BANKDATA ),
 			'cancelDonation' => $urlGenerator->generateAbsoluteUrl( self::CANCEL_DONATION ),
-			// TODO FIXME 'updateAddress' => $urlGenerator->generateAbsoluteUrl( self::UPDATE_ADDRESS )
 		];
 	}
 }
