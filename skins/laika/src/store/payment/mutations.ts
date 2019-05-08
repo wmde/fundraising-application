@@ -5,10 +5,10 @@ import {
 	MARK_EMPTY_AMOUNT_INVALID,
 	MARK_EMPTY_FIELDS_INVALID,
 	SET_AMOUNT_VALIDITY,
-	SET_OPTION_VALIDITY,
+	SET_TYPE_VALIDITY,
 	SET_AMOUNT,
 	SET_INTERVAL,
-	SET_OPTION,
+	SET_TYPE,
 } from '@/store/payment/mutationTypes';
 import { AxiosResponse } from 'axios';
 
@@ -23,14 +23,14 @@ export const mutations: MutationTree<Payment> = {
 				state.validity[ prop ] = Validity.INVALID;
 			}
 		}
-		state.validity.option = ( state.values.option === '' ) ? Validity.INVALID : Validity.VALID;
+		state.validity.type = ( state.values.type === '' ) ? Validity.INVALID : Validity.VALID;
 	},
 	[ SET_AMOUNT_VALIDITY ]( state: Payment, validationResult: AxiosResponse ) {
 		state.validity.amount = validationResult.data.status === 'ERR' ?
 			Validity.INVALID : Validity.VALID;
 	},
-	[ SET_OPTION_VALIDITY ]( state: Payment ) {
-		state.validity.option = state.values.option === '' ?
+	[ SET_TYPE_VALIDITY ]( state: Payment ) {
+		state.validity.type = state.values.type === '' ?
 			Validity.INVALID : Validity.VALID;
 	},
 	[ SET_AMOUNT ]( state: Payment, amount ) {
@@ -39,7 +39,7 @@ export const mutations: MutationTree<Payment> = {
 	[ SET_INTERVAL ]( state: Payment, interval ) {
 		state.values.interval = interval;
 	},
-	[ SET_OPTION ]( state: Payment, option ) {
-		state.values.option = option;
+	[ SET_TYPE ]( state: Payment, type ) {
+		state.values.type = type;
 	},
 };

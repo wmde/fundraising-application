@@ -1,12 +1,12 @@
 import { ActionContext } from 'vuex';
 import axios, { AxiosResponse } from 'axios';
-import { Payment, AmountData, OptionData, IntervalData } from '@/view_models/Payment';
+import { Payment, AmountData, TypeData, IntervalData } from '@/view_models/Payment';
 import {
 	checkIfEmptyAmount,
 	setAmount,
 	setInterval,
-	setOption,
-	markEmptyValuesAsInvalid
+	setType,
+	markEmptyValuesAsInvalid,
 } from '@/store/payment/actionTypes';
 import {
 	MARK_EMPTY_AMOUNT_INVALID,
@@ -14,7 +14,7 @@ import {
 	SET_AMOUNT_VALIDITY,
 	SET_AMOUNT,
 	SET_INTERVAL,
-	SET_OPTION,
+	SET_TYPE,
 } from '@/store/payment/mutationTypes';
 
 export const actions = {
@@ -23,7 +23,7 @@ export const actions = {
 	},
 	[ markEmptyValuesAsInvalid ]( context: ActionContext<Payment, any> ): void {
 		context.commit( MARK_EMPTY_FIELDS_INVALID );
-		if( context.getters[ 'payment/paymentDataIsValid' ] ) {
+		if ( context.getters[ 'payment/paymentDataIsValid' ] ) {
 			// TODO Go to next page
 		}
 	},
@@ -42,7 +42,7 @@ export const actions = {
 	[ setInterval ]( context: ActionContext<Payment, any>, payload: IntervalData ): void {
 		context.commit( SET_INTERVAL, payload );
 	},
-	[ setOption ]( context: ActionContext<Payment, any>, payload: OptionData ): void {
-		context.commit( SET_OPTION, payload );
+	[ setType ]( context: ActionContext<Payment, any>, payload: TypeData ): void {
+		context.commit( SET_TYPE, payload );
 	},
 };

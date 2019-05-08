@@ -2,4 +2,4 @@ export const checkIfEmptyAmount = 'checkIfEmptyAmount';
 export const markEmptyValuesAsInvalid = 'markEmptyValuesAsInvalid';
 export const setAmount = 'setAmount';
 export const setInterval = 'setInterval';
-export const setOption = 'setOption';
+export const setType = 'setType';

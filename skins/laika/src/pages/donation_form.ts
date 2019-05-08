@@ -60,7 +60,7 @@ new Vue( {
 				paymentAmounts: pageData.applicationVars,
 				validateAmountURL: donationForm.getAttribute( 'data-validate-amount-url' ),
 				paymentIntervals: PAYMENT_INTERVAL_OPTIONS,
-				paymentOptions: PAYMENT_TYPE_OPTIONS,
+				paymentTypes: PAYMENT_TYPE_OPTIONS,
 			},
 		} ),
 		h( Sidebar, {
