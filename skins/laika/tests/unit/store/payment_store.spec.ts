@@ -1,11 +1,12 @@
-import { getters } from '@/store/payment/getters';
-import { actions } from '@/store/payment/actions';
-import { mutations } from '@/store/payment/mutations';
-import { AmountData, Payment } from '@/view_models/Payment';
-import { Validity } from '@/view_models/Validity';
+import { getters } from '@/store/payment/getters'
+import { actions } from '@/store/payment/actions'
+import { mutations } from '@/store/payment/mutations'
+import { Payment } from "@/view_models/Payment";
+import { Validity } from "@/view_models/Validity";
+import { checkIfEmptyAmount, markEmptyValuesAsInvalid } from "@/store/payment/actionTypes";
 import each from 'jest-each';
-import axios, { AxiosResponse } from 'axios';
 import moxios from 'moxios';
+import { SET_AMOUNT } from "@/store/payment/mutationTypes";
 
 function newMinimalStore( overrides: Object ): Payment {
 	return Object.assign(
@@ -26,6 +27,12 @@ function newMinimalStore( overrides: Object ): Payment {
 
 describe( 'Payment', () => {
 
+	const validityCases = [
+		[ Validity.VALID, true ],
+		[ Validity.INVALID, false ],
+		[ Validity.INCOMPLETE, true ]
+	];
+
 	describe( 'Getters/amountIsValid', () => {
 		it( 'does not return invalid amount on initalization', () => {
 			expect( getters.amountIsValid(
@@ -35,14 +42,14 @@ describe( 'Payment', () => {
 				null
 			) ).toBe( true );
 		} );
-		each( [ [ Validity.VALID, true ], [ Validity.INVALID, false ] ] ).it(
-			'returns the expected validity for a given amount',
-			( validity, isValid ) => {
+
+		each( validityCases ).it( 'converts validity types to boolean state (test index %#)',
+			( amountValidity, isValid ) => {
 				const state = {
 					validity: {
-						amount: validity,
+						amount: amountValidity,
 						option: Validity.INCOMPLETE,
-					},
+					}
 				};
 				expect( getters.amountIsValid(
 					newMinimalStore( state ),
@@ -63,14 +70,15 @@ describe( 'Payment', () => {
 				null
 			) ).toBe( true );
 		} );
-		each( [ [ Validity.VALID, true ], [ Validity.INVALID, false ] ] ).it(
-			'returns the expected validity for a given option',
-			( validity, isValid ) => {
+
+		each( validityCases ).it(
+			'returns the expected validity for a given option (test index %#)',
+			( optionValidity, isValid ) => {
 				const state = {
 					validity: {
 						amount: Validity.INCOMPLETE,
-						option: validity,
-					},
+						option: optionValidity,
+					}
 				};
 				expect( getters.optionIsValid(
 					newMinimalStore( state ),
@@ -82,21 +90,22 @@ describe( 'Payment', () => {
 		);
 	} );
 
-	describe( 'Actions/validateAmount', () => {
+	describe( 'Actions/checkIfEmptyAmount', () => {
 		it( 'commits to mutation [MARK_EMPTY_AMOUNT_INVALID]', () => {
-			const context = {
-				commit: jest.fn(),
-			};
-			const action = actions.validateAmount as any;
-			action( context, 1500 );
-			expect( context.commit ).toBeCalledWith(
+			const commit = jest.fn();
+			const action = actions[ checkIfEmptyAmount ] as any;
+			action( { commit }, {
+				amountValue: '5000',
+				amountCustomValue: ''
+			} );
+			expect( commit ).toBeCalledWith(
 				'MARK_EMPTY_AMOUNT_INVALID',
-				1500
-			);
-		} );
+				{ amountValue: '5000', amountCustomValue: '' }
+			)
+		} )
 	} );
 
-	describe( 'Actions/validatePayment', () => {
+	describe( 'Actions/markEmptyValuesAsInvalid', () => {
 		it( 'commits to mutation [MARK_EMPTY_FIELDS_INVALID]', () => {
 			const context = {
 				commit: jest.fn(),
@@ -104,7 +113,7 @@ describe( 'Payment', () => {
 					'payment/paymentDataIsValid': true,
 				},
 			};
-			const action = actions.validatePayment as any;
+			const action = actions.markEmptyValuesAsInvalid as any;
 			action( context );
 			expect( context.commit ).toBeCalledWith(
 				'MARK_EMPTY_FIELDS_INVALID'
@@ -114,11 +123,9 @@ describe( 'Payment', () => {
 
 	describe( 'Actions/setAmount', () => {
 		beforeEach( function () {
-			// import and pass your custom axios instance to this method
 			moxios.install();
 		} );
 		afterEach( function () {
-			// import and pass your custom axios instance to this method
 			moxios.uninstall();
 		} );
 		it( 'commits to mutation [SET_AMOUNT]', () => {
@@ -143,19 +150,27 @@ describe( 'Payment', () => {
 	} );
 
 	describe( 'Mutations', () => {
-		each( [ [ { amountValue: '1200', amountCustomValue: '' }, Validity.VALID ],
+		const amountInputStates = [
+			[ { amountValue: '1200', amountCustomValue: '' }, Validity.VALID ],
 			[ { amountValue: '', amountCustomValue: '1500' }, Validity.VALID ],
-			[ { amountValue: '', amountCustomValue: '' }, Validity.INVALID ] ] ).it(
-			'mutates the state with the correct validity for a given amount',
+			[ { amountValue: '', amountCustomValue: '' }, Validity.INVALID ]
+		];
+
+		each( amountInputStates ).it(
+			'mutates the state with the correct validity for a given amount (test index %#)',
 			( inputData, isValid ) => {
 				const store = newMinimalStore( {} );
-				mutations.MARK_EMPTY_AMOUNT_INVALID( store, inputData );
+				mutations[ 'MARK_EMPTY_AMOUNT_INVALID' ]( store, inputData );
 				expect( store.validity.amount ).toStrictEqual( isValid );
 			} );
 
-		each( [ [ { data: { status: 'OK' } }, Validity.VALID ],
-			[ { data: { status: 'ERR' } }, Validity.INVALID ] ] ).it(
-			'mutates the state with the correct validity for a given server response',
+		const serverResponseStates = [
+			[ { data: { status: 'OK' } }, Validity.VALID ],
+			[ { data: { status: 'ERR' } }, Validity.INVALID ]
+		];
+
+		each( serverResponseStates ).it(
+			'mutates the state with the correct validity for a given server response (test index %#)',
 			( inputData, isValid ) => {
 				const store = newMinimalStore( {} );
 				mutations.SET_AMOUNT_VALIDITY( store, inputData );

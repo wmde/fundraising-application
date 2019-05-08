@@ -1,21 +1,30 @@
 import { ActionContext } from 'vuex';
 import axios, { AxiosResponse } from 'axios';
 import { Payment, AmountData, OptionData, IntervalData } from '@/view_models/Payment';
-import { validateAmount, validatePayment, setAmount, setInterval, setOption } from '@/store/payment/actionTypes';
 import {
-	MARK_EMPTY_AMOUNT_INVALID, MARK_EMPTY_FIELDS_INVALID,
-	SET_AMOUNT_VALIDITY, SET_OPTION_VALIDITY,
-	SET_AMOUNT, SET_INTERVAL, SET_OPTION,
+	checkIfEmptyAmount,
+	setAmount,
+	setInterval,
+	setOption,
+	markEmptyValuesAsInvalid
+} from '@/store/payment/actionTypes';
+import {
+	MARK_EMPTY_AMOUNT_INVALID,
+	MARK_EMPTY_FIELDS_INVALID,
+	SET_AMOUNT_VALIDITY,
+	SET_AMOUNT,
+	SET_INTERVAL,
+	SET_OPTION,
 } from '@/store/payment/mutationTypes';
 
 export const actions = {
-	[ validateAmount ]( context: ActionContext<Payment, any>, amountData: AmountData ): void {
+	[ checkIfEmptyAmount ]( context: ActionContext<Payment, any>, amountData: AmountData ): void {
 		context.commit( MARK_EMPTY_AMOUNT_INVALID, amountData );
 	},
-	[ validatePayment ]( context: ActionContext<Payment, any> ): void {
+	[ markEmptyValuesAsInvalid ]( context: ActionContext<Payment, any> ): void {
 		context.commit( MARK_EMPTY_FIELDS_INVALID );
-		if ( context.getters[ 'payment/paymentDataIsValid' ] ) {
-			// go to next page
+		if( context.getters[ 'payment/paymentDataIsValid' ] ) {
+			// TODO Go to next page
 		}
 	},
 	[ setAmount ]( context: ActionContext<Payment, any>, payload: any ): void {
@@ -35,6 +44,5 @@ export const actions = {
 	},
 	[ setOption ]( context: ActionContext<Payment, any>, payload: OptionData ): void {
 		context.commit( SET_OPTION, payload );
-		context.commit( SET_OPTION_VALIDITY );
 	},
 };

@@ -4,8 +4,11 @@ import { Validity } from '@/view_models/Validity';
 import {
 	MARK_EMPTY_AMOUNT_INVALID,
 	MARK_EMPTY_FIELDS_INVALID,
-	SET_AMOUNT_VALIDITY, SET_OPTION_VALIDITY,
-	SET_AMOUNT, SET_INTERVAL, SET_OPTION,
+	SET_AMOUNT_VALIDITY,
+	SET_OPTION_VALIDITY,
+	SET_AMOUNT,
+	SET_INTERVAL,
+	SET_OPTION,
 } from '@/store/payment/mutationTypes';
 import { AxiosResponse } from 'axios';
 
