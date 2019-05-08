@@ -14,7 +14,7 @@
 				</label>
 			</div>
 			<div class="" data-currency="€">
-				<input type="text" id="amount-typed" v-model="amountCustomValue" @blur="validateAmount(); clearSelectedAmount()">
+				<input type="text" id="amount-typed" v-model="amountCustomValue" @blur="checkIfEmptyAmount(); clearSelectedAmount()">
 			</div>
 			<span v-if="hasErrors">{{ $t('form_amount_error') }}</span>
 
@@ -28,7 +28,7 @@ import Vue from 'vue';
 import { AmountData } from '@/view_models/Payment';
 import { action } from '@/store/util';
 import { NS_PAYMENT } from '@/store/namespaces';
-import { validateAmount, setAmount } from '@/store/payment/actionTypes';
+import { checkIfEmptyAmount, setAmount } from '@/store/payment/actionTypes';
 
 export default Vue.extend( {
 	name: 'PaymentAmount',
@@ -52,7 +52,7 @@ export default Vue.extend( {
 	methods: {
 		toCents: ( amount: string ) => Number( amount ) * 100,
 		validateAmount() {
-			this.$store.dispatch( action( NS_PAYMENT, validateAmount ), this.$data );
+			this.$store.dispatch( action( NS_PAYMENT, checkIfEmptyAmount ), this.$data );
 		},
 		clearSelectedAmount() {
 			if ( this.$store.getters[ 'payment/amountIsValid' ] && this.amountCustomValue !== '' ) {
@@ -70,7 +70,7 @@ export default Vue.extend( {
 				amountValue: this.toCents( this.amountValue ).toString(),
 				validateAmountURL: this.$props.validateAmountURL,
 			};
-			this.$store.dispatch( action( NS_PAYMENT, validateAmount ), this.$data );
+			this.$store.dispatch( action( NS_PAYMENT, checkIfEmptyAmount ), this.$data );
 			this.$store.dispatch( action( NS_PAYMENT, setAmount ), payload );
 		},
 	},

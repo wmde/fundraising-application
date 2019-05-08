@@ -1,5 +1,5 @@
-export const validateAmount = 'validateAmount';
-export const validatePayment = 'validatePayment';
+export const checkIfEmptyAmount = 'checkIfEmptyAmount';
+export const markEmptyValuesAsInvalid = 'markEmptyValuesAsInvalid';
 export const setAmount = 'setAmount';
 export const setInterval = 'setInterval';
 export const setOption = 'setOption';
