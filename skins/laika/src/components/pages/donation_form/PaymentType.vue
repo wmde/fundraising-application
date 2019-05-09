@@ -43,7 +43,6 @@ export default Vue.extend( {
 	methods: {
 		setType(): void {
 			this.$store.dispatch( action( NS_PAYMENT, setType ), this.$data.selectedType );
-			this.$store.dispatch( action( NS_PAYMENT, markEmptyValuesAsInvalid ), );
 		},
 	},
 } );

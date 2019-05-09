@@ -9,12 +9,9 @@ import {
 	markEmptyValuesAsInvalid,
 } from '@/store/payment/actionTypes';
 import {
-	MARK_EMPTY_AMOUNT_INVALID,
-	MARK_EMPTY_FIELDS_INVALID,
-	SET_AMOUNT_VALIDITY,
-	SET_AMOUNT,
-	SET_INTERVAL,
-	SET_TYPE,
+	MARK_EMPTY_AMOUNT_INVALID, MARK_EMPTY_FIELDS_INVALID,
+	SET_AMOUNT_VALIDITY, SET_TYPE_VALIDITY,
+	SET_AMOUNT, SET_INTERVAL, SET_TYPE,
 } from '@/store/payment/mutationTypes';
 
 export const actions = {
@@ -44,5 +41,6 @@ export const actions = {
 	},
 	[ setType ]( context: ActionContext<Payment, any>, payload: TypeData ): void {
 		context.commit( SET_TYPE, payload );
+		context.commit( SET_TYPE_VALIDITY );
 	},
 };

@@ -23,7 +23,6 @@ export const mutations: MutationTree<Payment> = {
 				state.validity[ prop ] = Validity.INVALID;
 			}
 		}
-		state.validity.type = ( state.values.type === '' ) ? Validity.INVALID : Validity.VALID;
 	},
 	[ SET_AMOUNT_VALIDITY ]( state: Payment, validationResult: AxiosResponse ) {
 		state.validity.amount = validationResult.data.status === 'ERR' ?
