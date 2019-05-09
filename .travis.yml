@@ -7,7 +7,7 @@ install:
   - make install-js
 
 before_script:
-  - if [ "$MCP_ACCESS_KEY" != "" ] && [ "$MCP_PROJECT_ID" != "" ]; then bash build/travis/createLocalTestConfig.sh > app/config/config.test.local.json; fi
+  - bash build/travis/createLocalTestConfig.sh
   - echo "APP_ENV=dev" > .env
 
 script:
