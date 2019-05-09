@@ -13,6 +13,8 @@ import {
 	SET_AMOUNT_VALIDITY, SET_TYPE_VALIDITY,
 	SET_AMOUNT, SET_INTERVAL, SET_TYPE,
 } from '@/store/payment/mutationTypes';
+import { ValidationResponse } from '@/store/ValidationResponse';
+import { Validity } from "@/view_models/Validity";
 
 export const actions = {
 	[ checkIfEmptyAmount ]( context: ActionContext<Payment, any>, amountData: AmountData ): void {
@@ -32,8 +34,10 @@ export const actions = {
 			method: 'post',
 			data: bodyFormData,
 			headers: { 'Content-Type': 'multipart/form-data' },
-		} ).then( ( validationResult: AxiosResponse ) => {
-			context.commit( SET_AMOUNT_VALIDITY, validationResult );
+		} ).then( ( validationResult: AxiosResponse<ValidationResponse> ) => {
+			const validity = validationResult.data.status === 'ERR' ?
+				Validity.INVALID : Validity.VALID;
+			context.commit( SET_AMOUNT_VALIDITY, validity );
 		} );
 	},
 	[ setInterval ]( context: ActionContext<Payment, any>, payload: IntervalData ): void {

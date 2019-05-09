@@ -10,7 +10,6 @@ import {
 	SET_INTERVAL,
 	SET_TYPE,
 } from '@/store/payment/mutationTypes';
-import { AxiosResponse } from 'axios';
 
 export const mutations: MutationTree<Payment> = {
 	[ MARK_EMPTY_AMOUNT_INVALID ]( state: Payment, fields: AmountData ) {
@@ -24,9 +23,8 @@ export const mutations: MutationTree<Payment> = {
 			}
 		}
 	},
-	[ SET_AMOUNT_VALIDITY ]( state: Payment, validationResult: AxiosResponse ) {
-		state.validity.amount = validationResult.data.status === 'ERR' ?
-			Validity.INVALID : Validity.VALID;
+	[ SET_AMOUNT_VALIDITY ]( state: Payment, validity: Validity ) {
+		state.validity.amount = validity
 	},
 	[ SET_TYPE_VALIDITY ]( state: Payment ) {
 		state.validity.type = state.values.type === '' ?
