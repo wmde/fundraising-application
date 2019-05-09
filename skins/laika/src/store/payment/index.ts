@@ -12,7 +12,7 @@ export default function (): Module<Payment, any> {
 			type: Validity.INCOMPLETE,
 		},
 		values: {
-			amount: '',
+			amount: '', // amount in cents
 			interval: '0',
 			type: '',
 		},

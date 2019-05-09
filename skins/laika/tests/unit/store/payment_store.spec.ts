@@ -3,7 +3,7 @@ import { actions } from '@/store/payment/actions';
 import { mutations } from '@/store/payment/mutations';
 import { Payment } from '@/view_models/Payment';
 import { Validity } from '@/view_models/Validity';
-import { checkIfEmptyAmount, markEmptyValuesAsInvalid } from '@/store/payment/actionTypes';
+import { markEmptyAmountAsInvalid, markEmptyValuesAsInvalid } from '@/store/payment/actionTypes';
 import { SET_AMOUNT, SET_AMOUNT_VALIDITY } from '@/store/payment/mutationTypes';
 import each from 'jest-each';
 import moxios from 'moxios';
@@ -90,17 +90,13 @@ describe( 'Payment', () => {
 		);
 	} );
 
-	describe( 'Actions/checkIfEmptyAmount', () => {
+	describe( 'Actions/markEmptyAmountAsInvalid', () => {
 		it( 'commits to mutation [MARK_EMPTY_AMOUNT_INVALID]', () => {
 			const commit = jest.fn();
-			const action = actions[ checkIfEmptyAmount ] as any;
-			action( { commit }, {
-				amountValue: '5000',
-				amountCustomValue: '',
-			} );
+			const action = actions[ markEmptyAmountAsInvalid ] as any;
+			action( { commit } );
 			expect( commit ).toBeCalledWith(
-				'MARK_EMPTY_AMOUNT_INVALID',
-				{ amountValue: '5000', amountCustomValue: '' }
+				'MARK_EMPTY_AMOUNT_INVALID'
 			);
 		} );
 	} );
@@ -242,18 +238,19 @@ describe( 'Payment', () => {
 	} );
 
 	describe( 'Mutations/MARK_EMPTY_AMOUNT_INVALID', () => {
-		const amountInputStates = [
-			[ { amountValue: '1200', amountCustomValue: '' }, Validity.VALID ],
-			[ { amountValue: '', amountCustomValue: '1500' }, Validity.VALID ],
-			[ { amountValue: '', amountCustomValue: '' }, Validity.INVALID ],
-		];
+        const amountStates = [
+            [ { values: { amount: '1' } }, Validity.VALID ],
+            [ { values: { amount: '' } }, Validity.INVALID ],
+            [ { values: { amount: '0' } }, Validity.INVALID ],
+            [ { values: { amount: 'hello' } }, Validity.INVALID ],
+        ];
 
-		each( amountInputStates ).it(
+		each( amountStates ).it(
 			'mutates the state with the correct validity for a given amount (test index %#)',
-			( inputData, isValid ) => {
-				const store = newMinimalStore( {} );
-				mutations.MARK_EMPTY_AMOUNT_INVALID( store, inputData );
-				expect( store.validity.amount ).toStrictEqual( isValid );
+			( amountState, expectedValidity ) => {
+				const store = newMinimalStore( amountState );
+				mutations.MARK_EMPTY_AMOUNT_INVALID( store, {} );
+				expect( store.validity.amount ).toStrictEqual( expectedValidity );
 			} );
 	} );
 

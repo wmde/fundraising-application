@@ -12,8 +12,9 @@ import {
 } from '@/store/payment/mutationTypes';
 
 export const mutations: MutationTree<Payment> = {
-	[ MARK_EMPTY_AMOUNT_INVALID ]( state: Payment, fields: AmountData ) {
-		state.validity.amount = ( fields.amountCustomValue === '' && fields.amountValue === '' ) ?
+	[ MARK_EMPTY_AMOUNT_INVALID ]( state: Payment ) {
+		const numericAmount = Number( state.values.amount );
+		state.validity.amount = ( isNaN( numericAmount ) || numericAmount <= 0 ) ?
 			Validity.INVALID : Validity.VALID;
 	},
 	[ MARK_EMPTY_FIELDS_INVALID ]( state: Payment ) {
