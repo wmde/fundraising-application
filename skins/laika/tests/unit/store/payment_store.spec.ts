@@ -8,7 +8,6 @@ import { SET_AMOUNT, SET_AMOUNT_VALIDITY } from '@/store/payment/mutationTypes';
 import each from 'jest-each';
 import moxios from 'moxios';
 
-
 function newMinimalStore( overrides: Object ): Payment {
 	return Object.assign(
 		{
@@ -164,19 +163,19 @@ describe( 'Payment', () => {
 		beforeEach( function () {
 			moxios.install();
 		} );
-		
+
 		afterEach( function () {
 			moxios.uninstall();
 		} );
 
 		it( 'commits to mutation [SET_AMOUNT]', () => {
 			const context = {
-				commit: jest.fn(),
-			},
-			payload = {
-				amountValue: '2500',
-				validateAmountURL: '/validation-amount-url',
-			};
+					commit: jest.fn(),
+				},
+				payload = {
+					amountValue: '2500',
+					validateAmountURL: '/validation-amount-url',
+				};
 			moxios.stubRequest( payload.validateAmountURL, {
 				status: 200,
 				responseText: 'OK',
@@ -191,18 +190,18 @@ describe( 'Payment', () => {
 
 		it( 'sends a post request for amount validation', () => {
 			const context = {
-				commit: jest.fn(),
-			},
-			payload = {
-				amountValue: '2500',
-				validateAmountURL: '/validation-amount-url',
-			},
-			bodyFormData = new FormData();
+					commit: jest.fn(),
+				},
+				payload = {
+					amountValue: '2500',
+					validateAmountURL: '/validation-amount-url',
+				},
+				bodyFormData = new FormData();
 			bodyFormData.append( 'amount', payload.amountValue );
 
 			const action = actions.setAmount as any;
 			action( context, payload );
-	
+
 			moxios.wait( function () {
 				const request = moxios.requests.mostRecent();
 				expect( request.config.method ).toBe( 'post' );
@@ -212,37 +211,37 @@ describe( 'Payment', () => {
 
 		it( 'commits to mutation [SET_AMOUNT_VALIDITY] after server side validation', ( done ) => {
 			const context = {
-				commit: jest.fn(),
-			},
-			payload = {
-				amountValue: '2500',
-				validateAmountURL: '/validation-amount-url',
-			},
-			action = actions.setAmount as any;
+					commit: jest.fn(),
+				},
+				payload = {
+					amountValue: '2500',
+					validateAmountURL: '/validation-amount-url',
+				},
+				action = actions.setAmount as any;
 
 			action( context, payload );
-			
+
 			moxios.wait( function () {
 				let request = moxios.requests.mostRecent();
 				request.respondWith( {
 					status: 200,
 					response: {
 						'data': {
-							'status': 'OK'
-						}
-					}
-				} ).then(function () {
+							'status': 'OK',
+						},
+					},
+				} ).then( function () {
 					expect( context.commit ).toHaveBeenCalledWith(
 						'SET_AMOUNT_VALIDITY',
 						Validity.VALID
 					);
 					done();
 				} );
-			} )
+			} );
 		} );
 	} );
 
-	describe( 'Mutations', () => {
+	describe( 'Mutations/MARK_EMPTY_AMOUNT_INVALID', () => {
 		const amountInputStates = [
 			[ { amountValue: '1200', amountCustomValue: '' }, Validity.VALID ],
 			[ { amountValue: '', amountCustomValue: '1500' }, Validity.VALID ],
@@ -256,15 +255,19 @@ describe( 'Payment', () => {
 				mutations.MARK_EMPTY_AMOUNT_INVALID( store, inputData );
 				expect( store.validity.amount ).toStrictEqual( isValid );
 			} );
+	} );
 
-		it('mutates the amount validity', () => {
+	describe( 'Mutations/SET_AMOUNT_VALIDITY', () => {
+		it( 'mutates the amount validity', () => {
 			const store = newMinimalStore( {} );
 			mutations.SET_AMOUNT_VALIDITY( store, Validity.VALID );
 			expect( store.validity.amount ).toStrictEqual( Validity.VALID );
 			mutations.SET_AMOUNT_VALIDITY( store, Validity.INVALID );
 			expect( store.validity.amount ).toStrictEqual( Validity.INVALID );
 		} );
+	} );
 
+	describe( 'Mutations/SET_AMOUNT', () => {
 		it( 'mutates the amount', () => {
 			const store = newMinimalStore( {} );
 			mutations.SET_AMOUNT( store, 2500 );
@@ -272,7 +275,9 @@ describe( 'Payment', () => {
 			mutations.SET_AMOUNT( store, 5500 );
 			expect( store.values.amount ).toStrictEqual( 5500 );
 		} );
+	} );
 
+	describe( 'Mutations/SET_INTERVAL', () => {
 		it( 'mutates the interval', () => {
 			const store = newMinimalStore( {} );
 			mutations.SET_INTERVAL( store, 3 );
@@ -280,7 +285,9 @@ describe( 'Payment', () => {
 			mutations.SET_INTERVAL( store, 0 );
 			expect( store.values.interval ).toStrictEqual( 0 );
 		} );
+	} );
 
+	describe( 'Mutations/SET_TYPE', () => {
 		it( 'mutates the payment type', () => {
 			const store = newMinimalStore( {} );
 			mutations.SET_TYPE( store, 'UEB' );
