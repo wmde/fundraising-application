@@ -4,9 +4,10 @@ import { mutations } from '@/store/payment/mutations';
 import { Payment } from '@/view_models/Payment';
 import { Validity } from '@/view_models/Validity';
 import { checkIfEmptyAmount, markEmptyValuesAsInvalid } from '@/store/payment/actionTypes';
+import { SET_AMOUNT, SET_AMOUNT_VALIDITY } from '@/store/payment/mutationTypes';
 import each from 'jest-each';
 import moxios from 'moxios';
-import {SET_AMOUNT, SET_AMOUNT_VALIDITY} from '@/store/payment/mutationTypes';
+
 
 function newMinimalStore( overrides: Object ): Payment {
 	return Object.assign(
@@ -121,21 +122,61 @@ describe( 'Payment', () => {
 		} );
 	} );
 
+	describe( 'Actions/setInterval', () => {
+		it( 'commits to mutation [SET_INTERVAL]', () => {
+			const context = {
+				commit: jest.fn(),
+			};
+			const action = actions.setInterval as any;
+			action( context, 3 );
+			expect( context.commit ).toBeCalledWith(
+				'SET_INTERVAL',
+				3
+			);
+		} );
+	} );
+
+	describe( 'Actions/setType', () => {
+		it( 'commits to mutation [SET_TYPE]', () => {
+			const context = {
+				commit: jest.fn(),
+			};
+			const action = actions.setType as any;
+			action( context, 'BEZ' );
+			expect( context.commit ).toBeCalledWith(
+				'SET_TYPE',
+				'BEZ'
+			);
+		} );
+		it( 'commits to mutation [SET_TYPE_VALIDITY]', () => {
+			const context = {
+				commit: jest.fn(),
+			};
+			const action = actions.setType as any;
+			action( context );
+			expect( context.commit ).toBeCalledWith(
+				'SET_TYPE_VALIDITY'
+			);
+		} );
+	} );
+
 	describe( 'Actions/setAmount', () => {
 		beforeEach( function () {
 			moxios.install();
 		} );
+		
 		afterEach( function () {
 			moxios.uninstall();
 		} );
+
 		it( 'commits to mutation [SET_AMOUNT]', () => {
 			const context = {
-					commit: jest.fn(),
-				},
-				payload = {
-					amountValue: '2500',
-					validateAmountURL: '/validation-amount-url',
-				};
+				commit: jest.fn(),
+			},
+			payload = {
+				amountValue: '2500',
+				validateAmountURL: '/validation-amount-url',
+			};
 			moxios.stubRequest( payload.validateAmountURL, {
 				status: 200,
 				responseText: 'OK',
@@ -146,6 +187,58 @@ describe( 'Payment', () => {
 				'SET_AMOUNT',
 				payload.amountValue
 			);
+		} );
+
+		it( 'sends a post request for amount validation', () => {
+			const context = {
+				commit: jest.fn(),
+			},
+			payload = {
+				amountValue: '2500',
+				validateAmountURL: '/validation-amount-url',
+			},
+			bodyFormData = new FormData();
+			bodyFormData.append( 'amount', payload.amountValue );
+
+			const action = actions.setAmount as any;
+			action( context, payload );
+	
+			moxios.wait( function () {
+				const request = moxios.requests.mostRecent();
+				expect( request.config.method ).toBe( 'post' );
+				expect( request.config.data ).toStrictEqual( bodyFormData );
+			} );
+		} );
+
+		it( 'commits to mutation [SET_AMOUNT_VALIDITY] after server side validation', ( done ) => {
+			const context = {
+				commit: jest.fn(),
+			},
+			payload = {
+				amountValue: '2500',
+				validateAmountURL: '/validation-amount-url',
+			},
+			action = actions.setAmount as any;
+
+			action( context, payload );
+			
+			moxios.wait( function () {
+				let request = moxios.requests.mostRecent();
+				request.respondWith( {
+					status: 200,
+					response: {
+						'data': {
+							'status': 'OK'
+						}
+					}
+				} ).then(function () {
+					expect( context.commit ).toHaveBeenCalledWith(
+						'SET_AMOUNT_VALIDITY',
+						Validity.VALID
+					);
+					done();
+				} );
+			} )
 		} );
 	} );
 
