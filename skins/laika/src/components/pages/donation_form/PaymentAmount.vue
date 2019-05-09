@@ -7,14 +7,14 @@
 					:id="'amount-' + toCents( amount )"
 					name="amount-grp"
 					v-model="amountValue"
-					:value="amount"
-					@change="clearCustomAmount()">
+					:value="toCents( amount )"
+					@change="amountSelected()">
 				<label :for="'amount-' + toCents( amount )">
 					<span>{{ amount | formatAmount }} €</span>
 				</label>
 			</div>
-			<div class="" data-currency="€">
-				<input type="text" id="amount-typed" v-model="amountCustomValue" @blur="checkIfEmptyAmount(); clearSelectedAmount()">
+			<div>
+				<input type="text" id="amount-typed" v-model="amountCustomValue" @blur="customAmountEntered()">
 			</div>
 			<span v-if="hasErrors">{{ $t('form_amount_error') }}</span>
 
@@ -28,7 +28,7 @@ import Vue from 'vue';
 import { AmountData } from '@/view_models/Payment';
 import { action } from '@/store/util';
 import { NS_PAYMENT } from '@/store/namespaces';
-import { checkIfEmptyAmount, setAmount } from '@/store/payment/actionTypes';
+import { markEmptyAmountAsInvalid, setAmount } from '@/store/payment/actionTypes';
 
 export default Vue.extend( {
 	name: 'PaymentAmount',
@@ -51,27 +51,37 @@ export default Vue.extend( {
 	},
 	methods: {
 		toCents: ( amount: string ) => Number( amount ) * 100,
-		checkIfEmptyAmount() {
-			this.$store.dispatch( action( NS_PAYMENT, checkIfEmptyAmount ), this.$data );
+		amountSelected() {
+			this.sendAmountToStore( this.$data.amountValue );
+			this.clearCustomAmount();
+			this.markEmptyAmountAsInvalid();
 		},
-		clearSelectedAmount() {
-			if ( this.$store.getters[ 'payment/amountIsValid' ] && this.amountCustomValue !== '' ) {
-				this.amountValue = '';
+		customAmountEntered() {
+			const englishDecimalAmount = this.$data.amountCustomValue.replace( /,/, '.' );
+			if( englishDecimalAmount !== '' ) {
+				this.sendAmountToStore( this.toCents( englishDecimalAmount ) );
+				this.clearSelectedAmount();
 			}
+			else {
+				this.markEmptyAmountAsInvalid();
+			}
+		},
+		sendAmountToStore( amount: number ) {
+			const amountValue = isNaN( amount ) ? '' : amount.toString();
 			const payload = {
-				amountValue: this.toCents( this.amountCustomValue ).toString(),
+				amountValue,
 				validateAmountURL: this.$props.validateAmountURL,
 			};
 			this.$store.dispatch( action( NS_PAYMENT, setAmount ), payload );
+		},
+		markEmptyAmountAsInvalid() {
+			this.$store.dispatch( action( NS_PAYMENT, markEmptyAmountAsInvalid ) );
+		},
+		clearSelectedAmount() {
+			this.amountValue = '';
 		},
 		clearCustomAmount() {
 			this.amountCustomValue = '';
-			const payload = {
-				amountValue: this.toCents( this.amountValue ).toString(),
-				validateAmountURL: this.$props.validateAmountURL,
-			};
-			this.$store.dispatch( action( NS_PAYMENT, checkIfEmptyAmount ), this.$data );
-			this.$store.dispatch( action( NS_PAYMENT, setAmount ), payload );
 		},
 	},
 } );

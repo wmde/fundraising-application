@@ -2,7 +2,7 @@ import { ActionContext } from 'vuex';
 import axios, { AxiosResponse } from 'axios';
 import { Payment, AmountData, TypeData, IntervalData } from '@/view_models/Payment';
 import {
-	checkIfEmptyAmount,
+	markEmptyAmountAsInvalid,
 	setAmount,
 	setInterval,
 	setType,
@@ -17,8 +17,8 @@ import { ValidationResponse } from '@/store/ValidationResponse';
 import { Validity } from "@/view_models/Validity";
 
 export const actions = {
-	[ checkIfEmptyAmount ]( context: ActionContext<Payment, any>, amountData: AmountData ): void {
-		context.commit( MARK_EMPTY_AMOUNT_INVALID, amountData );
+	[ markEmptyAmountAsInvalid ]( context: ActionContext<Payment, any> ): void {
+		context.commit( MARK_EMPTY_AMOUNT_INVALID );
 	},
 	[ markEmptyValuesAsInvalid ]( context: ActionContext<Payment, any> ): void {
 		context.commit( MARK_EMPTY_FIELDS_INVALID );
