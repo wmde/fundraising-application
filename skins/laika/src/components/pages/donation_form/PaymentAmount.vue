@@ -54,13 +54,17 @@ export default Vue.extend( {
 		amountSelected() {
 			this.sendAmountToStore( this.$data.amountValue );
 			this.clearCustomAmount();
-			this.checkIfAmountIsEmpty();
+			this.markEmptyAmountAsInvalid();
 		},
 		customAmountEntered() {
 			const englishDecimalAmount = this.$data.amountCustomValue.replace( /,/, '.' );
-			this.sendAmountToStore( this.toCents( englishDecimalAmount ) );
-			this.clearSelectedAmount();
-			this.checkIfAmountIsEmpty();
+			if( englishDecimalAmount !== '' ) {
+				this.sendAmountToStore( this.toCents( englishDecimalAmount ) );
+				this.clearSelectedAmount();
+			}
+			else {
+				this.markEmptyAmountAsInvalid();
+			}
 		},
 		sendAmountToStore( amount: number ) {
 			const amountValue = isNaN( amount ) ? '' : amount.toString();
@@ -70,7 +74,7 @@ export default Vue.extend( {
 			};
 			this.$store.dispatch( action( NS_PAYMENT, setAmount ), payload );
 		},
-		checkIfAmountIsEmpty() {
+		markEmptyAmountAsInvalid() {
 			this.$store.dispatch( action( NS_PAYMENT, markEmptyAmountAsInvalid ) );
 		},
 		clearSelectedAmount() {
