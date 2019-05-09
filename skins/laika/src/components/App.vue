@@ -54,6 +54,7 @@ export default Vue.extend( {
 	@import "~bulma";
 	@import "~buefy/src/scss/buefy";
 	@import "~bulma-helpers/sass/helpers/spacing/margin-padding";
+	@import '~bulma-checkradio';
 
 	.main-wrapper {
 		padding: $navbar-height 0;

@@ -3,7 +3,8 @@
         <h2 class="title is-size-5">{{ $t('donation_form_payment_type_title') }}</h2>
         <div>
             <div v-for="paymentMethod in paymentTypes" :key="paymentMethod.type">
-                <input type="radio"
+                <input class="is-checkradio is-info"
+                       type="radio"
                        :id="paymentMethod.id"
                        name="payment"
                        v-model="selectedType"

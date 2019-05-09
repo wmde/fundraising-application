@@ -3,7 +3,8 @@
         <h2 class="title is-size-5">{{ $t('donation_form_interval_title') }}</h2>
         <div>
             <div class="wrap-radio" v-for="option in paymentIntervals" :key="option.id">
-                <input type="radio"
+                <input class="is-checkradio is-info"
+                       type="radio"
                        :id="option.id"
                        name="interval"
                        v-model="selectedInterval"

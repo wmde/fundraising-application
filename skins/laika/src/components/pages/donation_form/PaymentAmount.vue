@@ -51,7 +51,7 @@
 				get: function (): boolean {
 					return !this.$store.getters[ 'payment/amountIsValid' ];
 				},
-		}
+			}
 		},
 		filters: {
 			formatAmount: ( amount: string ) => Number( amount ).toFixed( 0 ),
