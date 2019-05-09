@@ -6,7 +6,7 @@ import { Validity } from '@/view_models/Validity';
 import { checkIfEmptyAmount, markEmptyValuesAsInvalid } from '@/store/payment/actionTypes';
 import each from 'jest-each';
 import moxios from 'moxios';
-import { SET_AMOUNT } from '@/store/payment/mutationTypes';
+import {SET_AMOUNT, SET_AMOUNT_VALIDITY} from '@/store/payment/mutationTypes';
 
 function newMinimalStore( overrides: Object ): Payment {
 	return Object.assign(
@@ -164,18 +164,13 @@ describe( 'Payment', () => {
 				expect( store.validity.amount ).toStrictEqual( isValid );
 			} );
 
-		const serverResponseStates = [
-			[ { data: { status: 'OK' } }, Validity.VALID ],
-			[ { data: { status: 'ERR' } }, Validity.INVALID ],
-		];
-
-		each( serverResponseStates ).it(
-			'mutates the state with the correct validity for a given server response (test index %#)',
-			( inputData, isValid ) => {
-				const store = newMinimalStore( {} );
-				mutations.SET_AMOUNT_VALIDITY( store, inputData );
-				expect( store.validity.amount ).toStrictEqual( isValid );
-			} );
+		it('mutates the amount validity', () => {
+			const store = newMinimalStore( {} );
+			mutations.SET_AMOUNT_VALIDITY( store, Validity.VALID );
+			expect( store.validity.amount ).toStrictEqual( Validity.VALID );
+			mutations.SET_AMOUNT_VALIDITY( store, Validity.INVALID );
+			expect( store.validity.amount ).toStrictEqual( Validity.INVALID );
+		} );
 
 		it( 'mutates the amount', () => {
 			const store = newMinimalStore( {} );
