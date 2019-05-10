@@ -14,7 +14,7 @@ import {
 	SET_AMOUNT, SET_INTERVAL, SET_TYPE,
 } from '@/store/payment/mutationTypes';
 import { ValidationResponse } from '@/store/ValidationResponse';
-import { Validity } from "@/view_models/Validity";
+import { Validity } from '@/view_models/Validity';
 
 export const actions = {
 	[ markEmptyAmountAsInvalid ]( context: ActionContext<Payment, any> ): void {

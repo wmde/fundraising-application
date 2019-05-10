@@ -238,12 +238,12 @@ describe( 'Payment', () => {
 	} );
 
 	describe( 'Mutations/MARK_EMPTY_AMOUNT_INVALID', () => {
-        const amountStates = [
-            [ { values: { amount: '1' } }, Validity.VALID ],
-            [ { values: { amount: '' } }, Validity.INVALID ],
-            [ { values: { amount: '0' } }, Validity.INVALID ],
-            [ { values: { amount: 'hello' } }, Validity.INVALID ],
-        ];
+		const amountStates = [
+			[ { values: { amount: '1' } }, Validity.VALID ],
+			[ { values: { amount: '' } }, Validity.INVALID ],
+			[ { values: { amount: '0' } }, Validity.INVALID ],
+			[ { values: { amount: 'hello' } }, Validity.INVALID ],
+		];
 
 		each( amountStates ).it(
 			'mutates the state with the correct validity for a given amount (test index %#)',
