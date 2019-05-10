@@ -30,7 +30,7 @@ export const actions = {
 		context.commit( SET_AMOUNT, payload.amountValue );
 		const bodyFormData = new FormData();
 		bodyFormData.append( 'amount', payload.amountValue );
-		axios( payload.validateAmountURL, {
+		axios( payload.validateAmountUrl, {
 			method: 'post',
 			data: bodyFormData,
 			headers: { 'Content-Type': 'multipart/form-data' },

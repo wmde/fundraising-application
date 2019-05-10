@@ -170,9 +170,9 @@ describe( 'Payment', () => {
 				},
 				payload = {
 					amountValue: '2500',
-					validateAmountURL: '/validation-amount-url',
+					validateAmountUrl: '/validation-amount-url',
 				};
-			moxios.stubRequest( payload.validateAmountURL, {
+			moxios.stubRequest( payload.validateAmountUrl, {
 				status: 200,
 				responseText: 'OK',
 			} );
@@ -190,7 +190,7 @@ describe( 'Payment', () => {
 				},
 				payload = {
 					amountValue: '2500',
-					validateAmountURL: '/validation-amount-url',
+					validateAmountUrl: '/validation-amount-url',
 				},
 				bodyFormData = new FormData();
 			bodyFormData.append( 'amount', payload.amountValue );
@@ -211,7 +211,7 @@ describe( 'Payment', () => {
 				},
 				payload = {
 					amountValue: '2500',
-					validateAmountURL: '/validation-amount-url',
+					validateAmountUrl: '/validation-amount-url',
 				},
 				action = actions.setAmount as any;
 
