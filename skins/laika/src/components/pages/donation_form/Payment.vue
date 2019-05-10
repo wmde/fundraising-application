@@ -1,10 +1,10 @@
 <template>
     <div class="column is-full">
         <form>
-            <payment-amount :paymentAmounts="paymentAmounts" :validateAmountURL="validateAmountURL"></payment-amount>
-            <payment-interval :paymentIntervals="paymentIntervals"></payment-interval>
-            <payment-type :paymentTypes="paymentTypes"></payment-type>
-            <div class="has-margin-top-36">
+            <payment-amount :payment-amounts="paymentAmounts" :validate-amount-url="validateAmountUrl"></payment-amount>
+            <payment-interval :payment-intervals="paymentIntervals"></payment-interval>
+            <payment-type :payment-types="paymentTypes"></payment-type>
+           <div class="has-margin-top-36">
                 <b-button type="is-primary is-main">Weiter</b-button>
             </div>
         </form>
@@ -13,9 +13,9 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import PaymentAmount from './donation_form/PaymentAmount.vue';
-import PaymentInterval from './donation_form/PaymentInterval.vue';
-import PaymentType from './donation_form/PaymentType.vue';
+import PaymentAmount from '@/components/pages/donation_form/PaymentAmount.vue';
+import PaymentInterval from '@/components/pages/donation_form/PaymentInterval.vue';
+import PaymentType from '@/components/pages/donation_form/PaymentType.vue';
 import { markEmptyValuesAsInvalid } from '@/store/payment/actionTypes';
 import { action } from '@/store/util';
 import { NS_PAYMENT } from '@/store/namespaces';
@@ -27,7 +27,7 @@ export default Vue.extend( {
 		PaymentInterval,
 		PaymentType,
 	},
-	props: [ 'paymentAmounts', 'validateAmountURL', 'paymentIntervals', 'paymentIntervalMessages', 'paymentTypes' ],
+	props: [ 'validateAmountUrl', 'paymentAmounts', 'paymentIntervals', 'paymentTypes' ],
 	methods: {
 		validatePaymentData(): void {
 			this.$store.dispatch( action( NS_PAYMENT, markEmptyValuesAsInvalid ) );

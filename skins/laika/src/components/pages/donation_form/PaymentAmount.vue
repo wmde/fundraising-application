@@ -47,7 +47,7 @@ export default Vue.extend( {
 			amountCustomValue: '',
 		};
 	},
-	props: [ 'paymentAmounts', 'validateAmountURL' ],
+	props: [ 'paymentAmounts', 'validateAmountUrl' ],
 	computed: {
 		hasErrors: {
 			get: function (): boolean {
@@ -78,7 +78,7 @@ export default Vue.extend( {
 			const amountValue = isNaN( amount ) ? '' : amount.toString();
 			const payload = {
 				amountValue,
-				validateAmountURL: this.$props.validateAmountURL,
+				validateAmountUrl: this.$props.validateAmountUrl,
 			};
 			this.$store.dispatch( action( NS_PAYMENT, setAmount ), payload );
 		},
