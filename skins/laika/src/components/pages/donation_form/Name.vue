@@ -1,5 +1,5 @@
 <template>
-<div class="row">
+<div>
 	<div v-if="isCompany" v-bind:class="[{ invalid: showError.companyName }]">
 		<label for="company-name">{{ $t( 'companyname_label' ) }}</label>
 		<input type="text"
@@ -11,19 +11,38 @@
 		<span v-if="showError.companyName" class="error-text">{{ $t( 'form_companyname_error' )  }}</span>
 	</div>
 	<div v-else>
-		<div class="align-block">
-			<label for="salutation">{{ $t( 'salutation_label' ) }}</label>
-			<select class=""
-					id="salutation"
-					v-model="formData.salutation.value"
+		<label for="salutation">{{ $t( 'salutation_label' ) }}</label>
+		<div>
+			<input type="radio"
+					id="salutation-mr"
 					name="salutation"
+					v-model="formData.salutation.value"
 					@blur="validateInput(formData, 'salutation')">
-				<option hidden class="hideme" value="">{{ $t( 'salutation_label' ) }}</option>
-				<option value="Herr">{{ $t( 'salutation_option_mr' ) }}</option>
-				<option value="Frau">{{ $t( 'salutation_option_mrs' ) }}</option>
-			</select>
+			<label for="salutation-mr">
+				<span>{{ $t( 'salutation_option_mr' ) }}</span>
+			</label>
 		</div>
-		<div class="align-block">
+		<div>
+			<input type="radio"
+					id="salutation-mrs"
+					name="salutation"
+					v-model="formData.salutation.value"
+					@blur="validateInput(formData, 'salutation')">
+			<label for="salutation-mr">
+				<span>{{ $t( 'salutation_option_mrs' ) }}</span>
+			</label>
+		</div>
+		<div>
+			<input type="radio"
+					id="salutation-family"
+					name="salutation"
+					v-model="formData.salutation.value"
+					@blur="validateInput(formData, 'salutation')">
+			<label for="salutation-familie">
+				<span>{{ $t( 'salutation_option_family' ) }}</span>
+			</label>
+		</div>
+		<div>
 			<label for="title">{{ $t( 'academic_title_label' ) }}</label>
 			<select class=""
 					id="title"
