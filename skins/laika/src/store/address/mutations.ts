@@ -6,6 +6,7 @@ import {
 	MARK_EMPTY_FIELD_INVALID,
 	BEGIN_ADDRESS_VALIDATION,
 	FINISH_ADDRESS_VALIDATION,
+	SET_ADDRESS_TYPE,
 } from '@/store/address/mutationTypes';
 import { AddressState, InputField } from '@/view_models/Address';
 const ADDRESS_FIELD_VALIDATOR_NAMES: Array<string> = [
@@ -43,4 +44,7 @@ export const mutations: MutationTree<AddressState> = {
 		}
 		state.isValidating = false;
 	},
+	[ SET_ADDRESS_TYPE ]( state, type ) {
+		state.addressType = type;
+	}
 };

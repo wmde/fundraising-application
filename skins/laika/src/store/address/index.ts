@@ -4,10 +4,12 @@ import { Validity } from '@/view_models/Validity';
 import { actions } from '@/store/address/actions';
 import { getters } from '@/store/address/getters';
 import { mutations } from '@/store/address/mutations';
+import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 
 export default function (): Module<AddressState, any> {
 	const state: AddressState = {
 		isValidating: false,
+		addressType: AddressTypeModel.PERSON,
 		form: {
 			salutation: Validity.INCOMPLETE,
 			title: Validity.INCOMPLETE,
