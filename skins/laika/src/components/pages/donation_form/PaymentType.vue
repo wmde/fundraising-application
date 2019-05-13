@@ -3,16 +3,15 @@
         <h2 class="title is-size-5">{{ $t('donation_form_payment_type_title') }}</h2>
         <div>
             <div v-for="paymentMethod in paymentTypes" :key="paymentMethod.type">
-                <input class="is-checkradio is-info"
+                <b-radio class="is-primary"
                        type="radio"
                        :id="paymentMethod.id"
                        name="payment"
                        v-model="selectedType"
-                       :value="paymentMethod.type"
+                       :native-value="paymentMethod.type"
                        @change="setType()">
-                <label :for="paymentMethod.id">
-                    <span>{{ $t( paymentMethod.type ) }}</span>
-                </label>
+                    {{ $t( paymentMethod.type ) }}
+                </b-radio>
             </div>
         </div>
         <span class="help is-danger" v-if="hasErrors">{{ $t('donation_form_payment_type_error') }}</span>

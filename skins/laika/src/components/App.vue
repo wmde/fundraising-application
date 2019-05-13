@@ -29,10 +29,12 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import Buefy from 'buefy';
 import Header from '@/components/layout/Header.vue';
 import Content from '@/components/layout/Content.vue';
 import Footer from '@/components/layout/Footer.vue';
 
+Vue.use( Buefy );
 export default Vue.extend( {
 	name: 'app',
 	components: {
@@ -54,16 +56,15 @@ export default Vue.extend( {
 	@import "~bulma";
 	@import "~buefy/src/scss/buefy";
 	@import "~bulma-helpers/sass/helpers/spacing/margin-padding";
-	@import '~bulma-checkradio';
 
 	.main-wrapper {
-		padding: $navbar-height 0;
+		padding: $navbar-height 18px;
 	}
 
-	 @include until($desktop) {
-		 .intro-content {
-			 margin: 18px !important;
-			 padding: 18px 5%;
-		 }
-	 }
+	@include until($desktop) {
+		.intro-content {
+			margin: 18px !important;
+			padding: 18px 5%;
+		}
+	}
 </style>
