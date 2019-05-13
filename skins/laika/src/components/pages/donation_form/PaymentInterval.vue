@@ -1,17 +1,17 @@
 <template>
     <fieldset>
-        <h2>Wie häufig möchten Sie spenden?</h2>
+        <h2 class="title is-size-5">{{ $t('donation_form_interval_title') }}</h2>
         <div>
             <div class="wrap-radio" v-for="option in paymentIntervals" :key="option.id">
-                <input type="radio"
+                <b-radio class="is-checkradio is-info"
+                       type="radio"
                        :id="option.id"
                        name="interval"
                        v-model="selectedInterval"
-                       :value="option.interval"
+                       :native-value="option.interval"
                        @change="setInterval()">
-                <label :for="option.id">
-                    <span>{{ $t( "donation_payment_interval_" + option.interval.toString() ) }}</span>
-                </label>
+                    {{ $t( "donation_payment_interval_" + option.interval.toString() ) }}
+                </b-radio>
             </div>
         </div>
     </fieldset>

@@ -4,7 +4,8 @@
 	<div id="app" 
 		data-validate-amount-url="{$ basepath | e( 'html_attr' ) $}/validate-donation-amount"
 		data-application-vars="{$ presetAmounts|json_encode $}" 
-		data-application-messages="{$ translations()|e('html_attr') $}">
+		data-application-messages="{$ translations()|e('html_attr') $}"
+		data-assets-path="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}">
 		<noscript>
 			<h2>{$ 'no_javascript_title' | trans $}</h2>
 			{$ web_content( 'pages/no_javascript' ) $}

@@ -1,10 +1,10 @@
 <template>
-	<aside class="column is-one-third">
-		<p>Verschlüsselte Datenübertragung</p>
+	<aside class="column is-one-third is-half-desktop">
+		<p>{{ $t('sidebar_data_encryption_notice') }}</p>
 		<br>
-		<p><strong>Frage zum Spenden?</strong></p>
-		<p>Rufen Sie uns an oder nutzen Sie das Kontakformular</p>
-		<p><a class="phone-number" href="tel:0049030219158260">030 / 21 91 58 26 - 0</a></p>
+		<p><strong>{{ $t('sidebar_getintouch_headline') }}</strong></p>
+		<p>{{ $t('sidebar_getintouch_text') }}</p>
+		<p>{{ $t('sidebar_getintouch_text_phone') }}</p>
 	</aside>
 </template>
 

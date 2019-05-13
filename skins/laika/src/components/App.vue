@@ -3,7 +3,15 @@
 		<header>
 			<Header :page-identifier="pageIdentifier" :assets-path="assetsPath"></Header>
 		</header>
-		<main id="app" class="section">
+		<main id="app" class="main-wrapper">
+			<div class="container">
+				<div class="columns has-margin-top-36 has-margin-bottom-36 intro-content">
+					<div class="column is-two-thirds is-half-desktop has-padding-0">
+						<span>Die Wikimedia Fördergesellschaft ist eine unabhängige gemeinnützige Organisation,
+							die in Deutschland Spenden für Wikipedia und andere Wikimedia-Projekte sammelt.</span>
+					</div>
+				</div>
+			</div>
 			<div class="container">
 				<Content>
 					<slot></slot>
@@ -21,10 +29,12 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import Buefy from 'buefy';
 import Header from '@/components/layout/Header.vue';
 import Content from '@/components/layout/Content.vue';
 import Footer from '@/components/layout/Footer.vue';
 
+Vue.use( Buefy );
 export default Vue.extend( {
 	name: 'app',
 	components: {
@@ -37,17 +47,24 @@ export default Vue.extend( {
 </script>
 
 <style lang="scss">
-	@import "../scss/variables";
-	@import "../scss/classes";
+	@import "../scss/custom";
 
 	// Import Bulma's core
 	@import "~bulma/sass/utilities/_all";
-
-	// Overriding Bulma variables
-	@import "../scss/overrides";
 
 	// Import Bulma and Buefy styles
 	@import "~bulma";
 	@import "~buefy/src/scss/buefy";
 	@import "~bulma-helpers/sass/helpers/spacing/margin-padding";
+
+	.main-wrapper {
+		padding: $navbar-height 18px;
+	}
+
+	@include until($desktop) {
+		.intro-content {
+			margin: 18px !important;
+			padding: 18px 5%;
+		}
+	}
 </style>
