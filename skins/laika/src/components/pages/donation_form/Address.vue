@@ -6,8 +6,12 @@
 			<name :show-error="fieldErrors" :form-data="formData" :validate-input="validateInput"></name>
 			<postal :show-error="fieldErrors" :form-data="formData" :validate-input="validateInput" :countries="countries"></postal>
 		</div>
-		<input type="submit" value="Kontaktdaten ändern" @click.prevent="validateForm()">
 		<input type="hidden" name="addressType" v-model="formData.addressType.value">
+		<!--
+			Vue component for an overview of the donation (Zusammenfassung in the design).
+			It will contain the final Donate button.
+			validateForm() should be called upon clicking that button.
+		-->
     </div>
 </template>
 
