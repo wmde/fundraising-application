@@ -25,7 +25,7 @@ export const mutations: MutationTree<Payment> = {
 		}
 	},
 	[ SET_AMOUNT_VALIDITY ]( state: Payment, validity: Validity ) {
-		state.validity.amount = validity
+		state.validity.amount = validity;
 	},
 	[ SET_TYPE_VALIDITY ]( state: Payment ) {
 		state.validity.type = state.values.type === '' ?

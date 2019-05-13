@@ -58,11 +58,10 @@ export default Vue.extend( {
 		},
 		customAmountEntered() {
 			const englishDecimalAmount = this.$data.amountCustomValue.replace( /,/, '.' );
-			if( englishDecimalAmount !== '' ) {
+			if ( englishDecimalAmount !== '' ) {
 				this.sendAmountToStore( this.toCents( englishDecimalAmount ) );
 				this.clearSelectedAmount();
-			}
-			else {
+			} else {
 				this.markEmptyAmountAsInvalid();
 			}
 		},
