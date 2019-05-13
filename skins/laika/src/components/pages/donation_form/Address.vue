@@ -3,6 +3,7 @@
         <h2>{{ $t( 'address_form_title' ) }}</h2>
         <h5>{{ $t( 'address_form_subtitle' ) }}</h5>
 		<div>
+			<address-type></address-type>
 			<name :show-error="fieldErrors" :form-data="formData" :validate-input="validateInput"></name>
 			<postal :show-error="fieldErrors" :form-data="formData" :validate-input="validateInput" :countries="countries"></postal>
 		</div>
@@ -17,6 +18,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import AddressType from '@/components/pages/donation_form/AddressType.vue';
 import Name from '@/components/pages/donation_form/Name.vue';
 import Postal from '@/components/pages/donation_form/Postal.vue';
 import { AddressValidity, FormData } from '@/view_models/Address';
@@ -30,6 +32,7 @@ export default Vue.extend( {
 	components: {
 		Name,
 		Postal,
+		AddressType,
 	},
 	data: function (): { formData: FormData } {
 		return {

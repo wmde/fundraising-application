@@ -1,4 +1,5 @@
 import { Validity } from './Validity';
+import { AddressTypeModel } from './AddressTypeModel';
 
 export interface AddressValidity {
     [key: string]: boolean
@@ -20,7 +21,8 @@ export interface Form {
 }
 
 export interface AddressState {
-    isValidating: boolean
+    isValidating: boolean,
+    addressType: AddressTypeModel,
     form: Form,
 }
 
