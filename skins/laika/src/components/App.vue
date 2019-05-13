@@ -7,8 +7,7 @@
 			<div class="container">
 				<div class="columns has-margin-top-36 has-margin-bottom-36 intro-content">
 					<div class="column is-two-thirds is-half-desktop has-padding-0">
-						<span>Die Wikimedia Fördergesellschaft ist eine unabhängige gemeinnützige Organisation,
-							die in Deutschland Spenden für Wikipedia und andere Wikimedia-Projekte sammelt.</span>
+						<span>{{ $t('wikimedia_tagline') }}</span>
 					</div>
 				</div>
 			</div>
