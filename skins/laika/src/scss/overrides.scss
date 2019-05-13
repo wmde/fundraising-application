@@ -50,6 +50,15 @@ $spacing-interval: 18;
 	margin-top: 30px;
 }
 
+.b-radio.radio {
+	width: 320px;
+	border-bottom: 2px solid $fun-color-off-bright;
+	padding: 18px 0;
+	&:hover {
+		border-bottom: 2px solid $fun-color-dark-lighter;
+	}
+}
+
 .input {
 	&:active {
 		background-color: $fun-color-primary-lightest;
