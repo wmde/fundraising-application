@@ -1,13 +1,13 @@
 <template>
-    <div id="addressForm">
-        <h2>{{ $t( 'address_form_title' ) }}</h2>
-        <h5>{{ $t( 'address_form_subtitle' ) }}</h5>
+	<div id="addressForm">
+		<h2>{{ $t( 'address_form_title' ) }}</h2>
+		<h5>{{ $t( 'address_form_subtitle' ) }}</h5>
 		<div>
 			<address-type></address-type>
 			<name :show-error="fieldErrors" :form-data="formData" :validate-input="validateInput" :address-type="addressType"></name>
 			<postal v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :validate-input="validateInput" :countries="countries"></postal>
 		</div>
-    </div>
+	</div>
 </template>
 
 <script lang="ts">
@@ -15,6 +15,7 @@ import Vue from 'vue';
 import AddressType from '@/components/pages/donation_form/AddressType.vue';
 import Name from '@/components/pages/donation_form/Name.vue';
 import Postal from '@/components/pages/donation_form/Postal.vue';
+import { mapGetters } from 'vuex';
 import { AddressValidity, FormData } from '@/view_models/Address';
 import { Validity } from '@/view_models/Validity';
 import { NS_ADDRESS } from '@/store/namespaces';
@@ -104,16 +105,10 @@ export default Vue.extend( {
 				}, ( {} as AddressValidity ) );
 			},
 		},
-		addressType: {
-			get: function (): AddressTypeModel {
-				return this.$store.getters[ 'address/addressType' ];
-			},
-		},
-		addressTypeIsNotAnon: {
-			get: function (): boolean {
-				return this.$store.getters[ 'address/addressType' ] !== AddressTypeModel.ANON;
-			},
-		},
+		...mapGetters( NS_ADDRESS, [
+			'addressType',
+			'addressTypeIsNotAnon',
+		] ),
 	},
 	methods: {
 		validateForm() {

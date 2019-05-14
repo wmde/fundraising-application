@@ -11,4 +11,5 @@ export const getters: GetterTree<AddressState, any> = {
 		return getters.invalidFields.length === 0;
 	},
 	addressType: ( state: AddressState ): AddressTypeModel => state.addressType,
+	addressTypeIsNotAnon: ( state: AddressState, getters ): boolean => getters.addressType !== AddressTypeModel.ANON,
 };
