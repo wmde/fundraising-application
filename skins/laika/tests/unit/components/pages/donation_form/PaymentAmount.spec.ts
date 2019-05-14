@@ -15,7 +15,7 @@ describe( 'PaymentAmount', () => {
 		const wrapper = mount( PaymentAmount, {
 			propsData: {
 				paymentAmounts: [ 5, 10, 100, 299 ],
-				validateAmountURL: 'https://example.com/amount-check',
+				validateAmountUrl: 'https://example.com/amount-check',
 			},
 			store: createStore(),
 			mocks: {
@@ -29,7 +29,7 @@ describe( 'PaymentAmount', () => {
 		const expectedAction = action( NS_PAYMENT, setAmount );
 		const expectedPayload = {
 			amountValue: '29900',
-			validateAmountURL: 'https://example.com/amount-check',
+			validateAmountUrl: 'https://example.com/amount-check',
 		};
 
 		expect( store.dispatch ).toBeCalledWith( expectedAction, expectedPayload );
@@ -39,7 +39,7 @@ describe( 'PaymentAmount', () => {
 		const wrapper = mount( PaymentAmount, {
 			propsData: {
 				paymentAmounts: [ 5, 10, 100, 299 ],
-				validateAmountURL: 'https://example.com/amount-check',
+				validateAmountUrl: 'https://example.com/amount-check',
 			},
 			store: createStore(),
 			mocks: {
@@ -61,7 +61,7 @@ describe( 'PaymentAmount', () => {
 		const wrapper = mount( PaymentAmount, {
 			propsData: {
 				paymentAmounts: [ 5 ],
-				validateAmountURL: 'https://example.com/amount-check',
+				validateAmountUrl: 'https://example.com/amount-check',
 			},
 			store: createStore(),
 			mocks: {
@@ -77,7 +77,7 @@ describe( 'PaymentAmount', () => {
 		const expectedAction = action( NS_PAYMENT, setAmount );
 		const expectedPayload = {
 			amountValue: '2300',
-			validateAmountURL: 'https://example.com/amount-check',
+			validateAmountUrl: 'https://example.com/amount-check',
 		};
 
 		expect( store.dispatch ).toBeCalledWith( expectedAction, expectedPayload );
@@ -87,7 +87,7 @@ describe( 'PaymentAmount', () => {
 		const wrapper = mount( PaymentAmount, {
 			propsData: {
 				paymentAmounts: [ 5 ],
-				validateAmountURL: 'https://example.com/amount-check',
+				validateAmountUrl: 'https://example.com/amount-check',
 			},
 			store: createStore(),
 			mocks: {
@@ -103,7 +103,7 @@ describe( 'PaymentAmount', () => {
 		const expectedAction = action( NS_PAYMENT, setAmount );
 		const expectedPayload = {
 			amountValue: '1234',
-			validateAmountURL: 'https://example.com/amount-check',
+			validateAmountUrl: 'https://example.com/amount-check',
 		};
 
 		expect( store.dispatch ).toBeCalledWith( expectedAction, expectedPayload );
@@ -113,7 +113,7 @@ describe( 'PaymentAmount', () => {
 		const wrapper = mount( PaymentAmount, {
 			propsData: {
 				paymentAmounts: [ 5 ],
-				validateAmountURL: 'https://example.com/amount-check',
+				validateAmountUrl: 'https://example.com/amount-check',
 			},
 			store: createStore(),
 			mocks: {
@@ -129,7 +129,7 @@ describe( 'PaymentAmount', () => {
 		const expectedAction = action( NS_PAYMENT, setAmount );
 		const expectedPayload = {
 			amountValue: '2342',
-			validateAmountURL: 'https://example.com/amount-check',
+			validateAmountUrl: 'https://example.com/amount-check',
 		};
 
 		expect( store.dispatch ).toBeCalledWith( expectedAction, expectedPayload );
@@ -139,7 +139,7 @@ describe( 'PaymentAmount', () => {
 		const wrapper = mount( PaymentAmount, {
 			propsData: {
 				paymentAmounts: [ 5 ],
-				validateAmountURL: 'https://example.com/amount-check',
+				validateAmountUrl: 'https://example.com/amount-check',
 			},
 			store: createStore(),
 			mocks: {
@@ -155,7 +155,7 @@ describe( 'PaymentAmount', () => {
 		const expectedAction = action( NS_PAYMENT, setAmount );
 		const expectedPayload = {
 			amountValue: '2342',
-			validateAmountURL: 'https://example.com/amount-check',
+			validateAmountUrl: 'https://example.com/amount-check',
 		};
 
 		expect( store.dispatch ).toBeCalledWith( expectedAction, expectedPayload );
@@ -165,7 +165,7 @@ describe( 'PaymentAmount', () => {
 		const wrapper = mount( PaymentAmount, {
 			propsData: {
 				paymentAmounts: [ 5 ],
-				validateAmountURL: 'https://example.com/amount-check',
+				validateAmountUrl: 'https://example.com/amount-check',
 			},
 			store: createStore(),
 			mocks: {
@@ -181,7 +181,7 @@ describe( 'PaymentAmount', () => {
 		const expectedAction = action( NS_PAYMENT, setAmount );
 		const expectedPayload = {
 			amountValue: '',
-			validateAmountURL: 'https://example.com/amount-check',
+			validateAmountUrl: 'https://example.com/amount-check',
 		};
 
 		expect( store.dispatch ).toBeCalledWith( expectedAction, expectedPayload );
@@ -227,7 +227,7 @@ describe( 'PaymentAmount', () => {
 		const wrapper = mount( PaymentAmount, {
 			propsData: {
 				paymentAmounts: [ 5, 10, 100, 299 ],
-				validateAmountURL: 'https://example.com/amount-check',
+				validateAmountUrl: 'https://example.com/amount-check',
 			},
 			store: createStore(),
 			mocks: {
