@@ -18,7 +18,7 @@ import Postal from '@/components/pages/donation_form/Postal.vue';
 import { AddressValidity, FormData } from '@/view_models/Address';
 import { Validity } from '@/view_models/Validity';
 import { NS_ADDRESS } from '@/store/namespaces';
-import { storeAddressFields, validateInput } from '@/store/address/actionTypes';
+import { setAddressFields, validateInput } from '@/store/address/actionTypes';
 import { action } from '@/store/util';
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 import { AddressTypeModel } from '../../../view_models/AddressTypeModel';
@@ -118,7 +118,7 @@ export default Vue.extend( {
 	},
 	methods: {
 		validateForm() {
-			return this.$store.dispatch( action( NS_ADDRESS, storeAddressFields ), {
+			return this.$store.dispatch( action( NS_ADDRESS, setAddressFields ), {
 				validateAddressUrl: this.$props.validateAddressUrl,
 				formData: this.$data.formData,
 			} );
