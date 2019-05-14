@@ -61,10 +61,10 @@ export default Vue.extend( {
 	},
 	computed: {
 		AddressTypeModel: {
-			get: function() {
+			get: function () {
 				return AddressTypeModel;
-			}
-		}
+			},
+		},
 	},
 	methods: {
 		displayStreetWarning() {

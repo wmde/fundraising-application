@@ -124,8 +124,8 @@ export default Vue.extend( {
 		addressType: {
 			get: function (): AddressTypeModel {
 				return this.$store.getters[ 'address/addressType' ];
-			}
-		}
+			},
+		},
 	},
 	methods: {
 		validateForm() {

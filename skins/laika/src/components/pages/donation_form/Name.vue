@@ -38,7 +38,7 @@
 					name="salutation"
 					v-model="formData.salutation.value"
 					@blur="validateInput(formData, 'salutation')">
-			<label for="salutation-familie">
+			<label for="salutation-family">
 				<span>{{ $t( 'salutation_option_family' ) }}</span>
 			</label>
 		</div>
@@ -88,10 +88,10 @@ export default Vue.extend( {
 	props: [ 'showError', 'formData', 'validateInput', 'addressType' ],
 	computed: {
 		AddressTypeModel: {
-			get: function() {
+			get: function () {
 				return AddressTypeModel;
-			}
-		}
+			},
+		},
 	},
 } );
 </script>
