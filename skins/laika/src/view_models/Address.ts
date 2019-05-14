@@ -16,14 +16,19 @@ export interface FormData {
     [key: string]: InputField
 }
 
-export interface Form {
+export interface FormValidity {
     [key: string]: Validity
+}
+
+export interface FormValues {
+    [key: string]: string
 }
 
 export interface AddressState {
     isValidating: boolean,
     addressType: AddressTypeModel,
-    form: Form,
+    values: FormValues,
+    validity: FormValidity,
 }
 
 export interface InputField {
