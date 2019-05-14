@@ -8,11 +8,6 @@
 			<postal :show-error="fieldErrors" :form-data="formData" :validate-input="validateInput" :countries="countries" :address-type="addressType"></postal>
 		</div>
 		<input type="hidden" name="addressType" v-model="formData.addressType.value">
-		<!--
-			Vue component for an overview of the donation (Zusammenfassung in the design).
-			It will contain the final Donate button.
-			validateForm() should be called upon clicking that button.
-		-->
     </div>
 </template>
 
@@ -124,13 +119,9 @@ export default Vue.extend( {
 	},
 	methods: {
 		validateForm() {
-			this.$store.dispatch( action( NS_ADDRESS, storeAddressFields ), {
+			return this.$store.dispatch( action( NS_ADDRESS, storeAddressFields ), {
 				validateAddressUrl: this.$props.validateAddressUrl,
 				formData: this.$data.formData,
-			} ).then( () => {
-				if ( this.$store.getters[ 'address/allFieldsAreValid' ] ) {
-					// TODO submit form
-				}
 			} );
 		},
 		validateInput( formData: FormData, fieldName: string ) {

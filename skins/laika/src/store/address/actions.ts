@@ -23,7 +23,7 @@ export const actions = {
 			for ( const field in postData ) {
 				bodyFormData.append( field, postData[ field ] );
 			}
-			axios( payload.validateAddressUrl, {
+			return axios( payload.validateAddressUrl, {
 				method: 'post',
 				data: bodyFormData,
 				headers: { 'Content-Type': 'multipart/form-data' },
