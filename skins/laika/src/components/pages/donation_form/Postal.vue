@@ -1,5 +1,5 @@
 <template>
-<div v-if="addressType !== AddressTypeModel.ANON">
+<div>
 	<div v-bind:class="[{ invalid: showError.street }]">
 		<label for="street">{{ $t('street_label') }}</label>
 		<input type="text"
@@ -59,7 +59,6 @@ export default Vue.extend( {
 		formData:  Object as () => FormData,
 		validateInput: Function,
 		countries: Array as () => Array<String>,
-		addressType: Object as () => AddressTypeModel,
 	},	
 	data() {
 		return {

@@ -5,7 +5,7 @@
 		<div>
 			<address-type></address-type>
 			<name :show-error="fieldErrors" :form-data="formData" :validate-input="validateInput" :address-type="addressType"></name>
-			<postal :show-error="fieldErrors" :form-data="formData" :validate-input="validateInput" :countries="countries" :address-type="addressType"></postal>
+			<postal v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :validate-input="validateInput" :countries="countries"></postal>
 		</div>
     </div>
 </template>
@@ -21,6 +21,7 @@ import { NS_ADDRESS } from '@/store/namespaces';
 import { storeAddressFields, validateInput } from '@/store/address/actionTypes';
 import { action } from '@/store/util';
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
+import { AddressTypeModel } from '../../../view_models/AddressTypeModel';
 
 export default Vue.extend( {
 	name: 'Address',
@@ -105,10 +106,15 @@ export default Vue.extend( {
 			},
 		},
 		addressType: {
-			get: function (): AddressTypeModel {
+			get: function(): AddressTypeModel {
 				return this.$store.getters[ 'address/addressType' ];
-			},
+			}
 		},
+		addressTypeIsNotAnon: {
+			get: function (): boolean {
+				return this.$store.getters[ 'address/addressType' ] !== AddressTypeModel.ANON;
+			},
+		}
 	},
 	methods: {
 		validateForm() {

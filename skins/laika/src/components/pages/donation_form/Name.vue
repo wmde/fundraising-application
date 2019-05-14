@@ -91,7 +91,7 @@ export default Vue.extend( {
 		showError: Object as () => AddressValidity,
 		formData:  Object as () => FormData,
 		validateInput: Function,
-		addressType: Array as () => Array<String>,
+		addressType: Number as () => AddressTypeModel,
 	},
 	computed: {
 		AddressTypeModel: {
