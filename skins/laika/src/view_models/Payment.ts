@@ -21,3 +21,13 @@ export interface IntervalData {
 export interface TypeData {
     selectedType: string
 }
+
+export interface Interval {
+    interval: Number,
+    id: string
+}
+
+export interface Type {
+    type: string,
+    id: string
+}

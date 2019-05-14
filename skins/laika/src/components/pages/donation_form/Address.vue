@@ -103,12 +103,7 @@ export default Vue.extend( {
 	},
 	props: {
 		validateAddressUrl: String,
-		countries: {
-			type: Array,
-			default: function () {
-				return [ 'DE', 'AT', 'CH', 'BE', 'IT', 'LI', 'LU' ];
-			},
-		},
+		countries: Array as () => Array<String>,
 	},
 	computed: {
 		fieldErrors: {
