@@ -17,21 +17,26 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts">
 import Vue from 'vue';
-import FundSection from '@/components/FundSection';
+import FundSection from '@/components/FundSection.vue';
 
 export default Vue.extend( {
 	name: 'OrganizationSection',
 	components: {
 		FundSection,
 	},
-	props: [ 'title', 'description', 'overallAmount', 'funds' ],                // TODO datentypen!
+	props: {
+		title: String,
+		description: String,
+		overallAmount: String,
+		funds: {}
+	},
 	methods: {
-		calculateProgressBarWidth: function ( amount ) {
-			let castedOverAllAmount = Number( this.overallAmount.replace( / /g, '' ) );
-			let castedAmountNumber = Number( amount.replace( / /g, '' ) );
-			let barWidthPercentage = castedAmountNumber / castedOverAllAmount * 100;
+		calculateProgressBarWidth: function ( amount: string ) : string {
+			let castedOverAllAmount: number = Number( this.overallAmount.replace( / /g, '' ) );
+			let castedAmountNumber: number = Number( amount.replace( / /g, '' ) );
+			let barWidthPercentage: number = castedAmountNumber / castedOverAllAmount * 100;
 			return barWidthPercentage.toString() + '%';
 		},
 	},

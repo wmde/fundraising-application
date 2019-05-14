@@ -1,7 +1,7 @@
 <template>
 	<div class="column is-full" id="use-of-funds">
 		<div>
-			<h1>{{ $t('use_of_funds_header') }}</h1>
+			<h1 class="title is-size-1">{{ $t('use_of_funds_header') }}</h1>
 			<p>{{ $t('use_of_funds_description') }}</p>
 		</div>
 
@@ -17,17 +17,22 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts">
 import Vue from 'vue';
-import OrganizationSection from '@/components/OrganizationSection';
+import OrganizationSection from '@/components/OrganizationSection.vue';
+import { UseOfFundsContent } from '@/view_models/useOfFunds';
 
 export default Vue.extend( {
 	name: 'use-of-funds',
 	components: {
 		OrganizationSection,
 	},
-	props: [ 'content' ],
-	data() {
+	props: {
+		content: {
+			type: Object as () => UseOfFundsContent,
+		},
+	},
+	data: function () {
 		return {
 			title: '',
 			overallAmount: '',
