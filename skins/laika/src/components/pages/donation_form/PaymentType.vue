@@ -4,6 +4,7 @@
         <div>
             <div v-for="paymentMethod in paymentTypes" :key="paymentMethod.type">
                 <b-radio class="is-primary"
+                       :class="{ 'is-active': selectedType === paymentMethod.type }"
                        type="radio"
                        :id="paymentMethod.id"
                        name="payment"

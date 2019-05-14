@@ -5,7 +5,7 @@
             <payment-interval :payment-intervals="paymentIntervals"></payment-interval>
             <payment-type :payment-types="paymentTypes"></payment-type>
            <div class="has-margin-top-36">
-                <b-button type="is-primary is-main">Weiter</b-button>
+                <b-button type="is-primary is-main">{{ $t('donation_section_continue') }}</b-button>
             </div>
         </form>
     </div>
@@ -37,11 +37,18 @@ export default Vue.extend( {
 </script>
 
 <style lang="scss">
+    @import "../../../scss/custom";
+
     button.is-main {
         height: 54px;
         font-size: 1em;
         font-weight: bold;
         width: 270px;
         border-radius: 0;
+    }
+    @include until($tablet) {
+        button.is-main {
+            width: 100%;
+        }
     }
 </style>

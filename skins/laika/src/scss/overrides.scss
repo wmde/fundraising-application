@@ -1,63 +1,42 @@
 @import "variables";
 
-// Overriding Bulma variables
-
-// General page / body
-$primary: $fun-color-primary;
-$body-background-color: $fun-color-primary-lightest;
-
-// Text or font related
-$size-1: 1.7rem;
-$size-2: 1.6rem;
-$size-3: 1.5rem;
-$size-4: 1.4rem;
-$size-5: 1.3rem;
-$size-6: 1.2rem;
-$size-7: 1.1rem;
-
-$input-color: $fun-color-dark-lighter;
-$input-shadow: none;
-$input-focus-border-color: $fun-color-off-bright;
-$input-focus-box-shadow-size: 0;
-
-$text: $fun-color-dark;
-$family-primary: "Open Sans",Helvetica,Arial,sans-serif;
-$body-size: 14px;
-$body-line-height: 1.8;
-$danger: $fun-color-error;
-
-$title-size: $size-1;
-$title-weight: 400;
-$subtitle-size: $size-5;
-
-// Header / Navbar
-$navbar-height: 5.2rem;
-$navbar-box-shadow-size: 1px 2px 3px;
-$navbar-box-shadow-color: rgba(0, 0, 0, 0.1);
-$navbar-item-color: $text;
-$navbar-item-hover-color: $fun-color-primary;
-$navbar-item-hover-background-color: $fun-color-bright;
-$navbar-item-active-color: $fun-color-primary;
-$navbar-item-active-background-color: $fun-color-bright;
-
-$spacing-range-start: 0;
-$spacing-range-end: 54;
-$spacing-interval: 18;
-
 // Miscellaneous overrides
 
 .title {
 	margin-top: 30px;
 }
 
+.b-radio.radio {
+	height: 4em;
+	width: 320px;
+	border-bottom: 2px solid $fun-color-off-bright;
+	&:hover {
+		border-bottom: 2px solid $fun-color-dark-lighter;
+	}
+	&.is-active {
+		border-bottom: 2px solid $fun-color-primary;
+		&:hover {
+			border-bottom: 2px solid $fun-color-primary;
+		}
+	}
+	.check.radio {
+		font-size: 13px;
+	}
+}
+
 .input {
+	&::-ms-clear {
+		display: none;
+	}
 	&:active {
 		background-color: $fun-color-primary-lightest;
 	}
 	&.is-large {
 		font-size: 1rem;
-		padding: 25px;
+		padding: 0 25px;
+		line-height: 25px;
 		width: 100%;
+		height: 50px;
 	}
 	&-amount {
 		text-align: right;
