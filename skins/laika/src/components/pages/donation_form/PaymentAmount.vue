@@ -18,15 +18,17 @@
 				<div class="amount-custom">
 					<input v-bind:class="[amountCustomValue ? 'is-valid' : '', 'input', 'is-large', 'input-amount', 'has-border-rounded' ]"
 							type="text"
-							id="amount-typed"
+							id="amount-custom"
 							v-model="amountCustomValue"
 							@blur="customAmountEntered(); clearSelectedAmount()"
 							maxlength="9">
-					<label for="amount-typed" class="is-sr-only">{{ $t('payment_amount_legend') }}</label>
+					<label for="amount-custom" class="is-sr-only">{{ $t('payment_amount_legend') }}</label>
 				</div>
 			</div>
 		</div>
 		<span class="help is-danger" v-if="hasErrors">{{ $t('donation_form_amount_error') }}</span>
+
+		<label for="amount-custom" class="sr-only">{{ $t('payment_amount_legend') }}</label>
 	</fieldset>
 </template>
 
@@ -57,7 +59,7 @@ export default Vue.extend( {
 		formatAmount: ( amount: string ) => Number( amount ).toFixed( 0 ),
 	},
 	methods: {
-		toCents: ( amount: string ) => Number( amount ) * 100,
+		toCents: ( amount: string ) => Math.trunc( Number( amount ) * 100 ),
 		amountSelected() {
 			this.sendAmountToStore( this.$data.amountValue );
 			this.clearCustomAmount();
