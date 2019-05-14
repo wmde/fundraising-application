@@ -21,14 +21,13 @@
 							id="amount-custom"
 							v-model="amountCustomValue"
 							@blur="customAmountEntered(); clearSelectedAmount()"
-							maxlength="9">
+							maxlength="9"
+							:placeholder="$t('custom_amount')">
 					<label for="amount-custom" class="is-sr-only">{{ $t('payment_amount_legend') }}</label>
 				</div>
 			</div>
 		</div>
 		<span class="help is-danger" v-if="hasErrors">{{ $t('donation_form_amount_error') }}</span>
-
-		<label for="amount-custom" class="sr-only">{{ $t('payment_amount_legend') }}</label>
 	</fieldset>
 </template>
 
@@ -97,6 +96,7 @@ export default Vue.extend( {
 
 <style lang="scss">
 	@import "../../../scss/custom";
+
 	.amount {
 		&-wrapper {
 			display: flex;
@@ -133,8 +133,9 @@ export default Vue.extend( {
 				width: 100%;
 			}
 			&:after {
-                color: $fun-color-dark-lighter;
+				color: $fun-color-dark-lighter;
 				content: "€";
+				font-size: 1.1em;
 				position: absolute;
 				right: 10px;
 				top: 50%;

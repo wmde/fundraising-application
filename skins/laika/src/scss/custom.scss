@@ -2,7 +2,6 @@
 // and adds custom classes on top of that
 @import "fonts";
 @import "variables";
-@import "overrides";
 
 .has-border-rounded {
 	background-color: $fun-color-bright;
@@ -36,3 +35,13 @@
 		}
 	}
 }
+
+// Import Bulma's core
+@import "~bulma/sass/utilities/_all";
+
+// Import Bulma and Buefy styles
+@import "~bulma";
+@import "~buefy/src/scss/buefy";
+@import "~bulma-helpers/sass/helpers/spacing/margin-padding";
+
+@import "overrides";

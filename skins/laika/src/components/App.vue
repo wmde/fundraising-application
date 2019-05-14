@@ -47,15 +47,6 @@ export default Vue.extend( {
 
 <style lang="scss">
 	@import "../scss/custom";
-
-	// Import Bulma's core
-	@import "~bulma/sass/utilities/_all";
-
-	// Import Bulma and Buefy styles
-	@import "~bulma";
-	@import "~buefy/src/scss/buefy";
-	@import "~bulma-helpers/sass/helpers/spacing/margin-padding";
-
 	.main-wrapper {
 		padding: $navbar-height 18px;
 	}

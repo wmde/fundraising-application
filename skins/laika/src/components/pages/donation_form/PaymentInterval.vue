@@ -4,6 +4,7 @@
         <div>
             <div class="wrap-radio" v-for="option in paymentIntervals" :key="option.id">
                 <b-radio class="is-checkradio is-info"
+                       :class="{ 'is-active': selectedInterval === option.interval }"
                        type="radio"
                        :id="option.id"
                        name="interval"
