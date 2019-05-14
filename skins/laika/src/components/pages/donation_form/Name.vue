@@ -1,6 +1,6 @@
 <template>
 <div>
-	<div v-if="isCompany" v-bind:class="[{ invalid: showError.companyName }]">
+	<div v-if="addressType === AddressTypeModel.COMPANY" v-bind:class="[{ invalid: showError.companyName }]">
 		<label for="company-name">{{ $t( 'companyname_label' ) }}</label>
 		<input type="text"
 				id="company-name"
@@ -10,7 +10,7 @@
 				@blur="validateInput(formData, 'companyName')">
 		<span v-if="showError.companyName" class="error-text">{{ $t( 'form_companyname_error' )  }}</span>
 	</div>
-	<div v-else>
+	<div v-else-if="addressType === AddressTypeModel.PERSON">
 		<label for="salutation">{{ $t( 'salutation_label' ) }}</label>
 		<div>
 			<input type="radio"
@@ -82,8 +82,16 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 export default Vue.extend( {
 	name: 'name',
-	props: [ 'showError', 'formData', 'validateInput', 'isCompany' ],
+	props: [ 'showError', 'formData', 'validateInput', 'addressType' ],
+	computed: {
+		AddressTypeModel: {
+			get: function() {
+				return AddressTypeModel;
+			}
+		}
+	},
 } );
 </script>
