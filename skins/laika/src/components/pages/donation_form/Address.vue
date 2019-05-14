@@ -4,8 +4,8 @@
         <h5>{{ $t( 'address_form_subtitle' ) }}</h5>
 		<div>
 			<address-type></address-type>
-			<name :show-error="fieldErrors" :form-data="formData" :validate-input="validateInput"></name>
-			<postal :show-error="fieldErrors" :form-data="formData" :validate-input="validateInput" :countries="countries"></postal>
+			<name :show-error="fieldErrors" :form-data="formData" :validate-input="validateInput" :address-type="addressType"></name>
+			<postal :show-error="fieldErrors" :form-data="formData" :validate-input="validateInput" :countries="countries" :address-type="addressType"></postal>
 		</div>
 		<input type="hidden" name="addressType" v-model="formData.addressType.value">
 		<!--
@@ -26,6 +26,7 @@ import { Validity } from '@/view_models/Validity';
 import { NS_ADDRESS } from '@/store/namespaces';
 import { storeAddressFields, validateInput } from '@/store/address/actionTypes';
 import { action } from '@/store/util';
+import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 
 export default Vue.extend( {
 	name: 'Address',
@@ -120,6 +121,11 @@ export default Vue.extend( {
 				}, ( {} as AddressValidity ) );
 			},
 		},
+		addressType: {
+			get: function (): AddressTypeModel {
+				return this.$store.getters[ 'address/addressType' ];
+			}
+		}
 	},
 	methods: {
 		validateForm() {

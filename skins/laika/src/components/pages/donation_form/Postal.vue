@@ -1,5 +1,5 @@
 <template>
-<div>
+<div v-if="addressType !== AddressTypeModel.ANON">
 	<div v-bind:class="[{ invalid: showError.street }]">
 		<label for="street">{{ $t('street_label') }}</label>
 		<input type="text"
@@ -49,13 +49,22 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import { AddressTypeModel } from '@/view_models/AddressTypeModel';
+
 export default Vue.extend( {
 	name: 'postal',
-	props: [ 'showError', 'formData', 'validateInput', 'countries' ],
+	props: [ 'showError', 'formData', 'validateInput', 'countries', 'addressType' ],
 	data() {
 		return {
 			showWarning: false,
 		};
+	},
+	computed: {
+		AddressTypeModel: {
+			get: function() {
+				return AddressTypeModel;
+			}
+		}
 	},
 	methods: {
 		displayStreetWarning() {
