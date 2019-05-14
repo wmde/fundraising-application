@@ -44,23 +44,23 @@ import { action } from '@/store/util';
 import { setAddressType } from '@/store/address/actionTypes';
 
 export default Vue.extend( {
-    name: 'AddressType',
-    data: function () { 
-		return { 
+	name: 'AddressType',
+	data: function () {
+		return {
 			type: AddressTypeModel.PERSON,
-		} 
+		};
 	},
 	computed: {
 		AddressTypeModel: {
-			get: function() {
+			get: function () {
 				return AddressTypeModel;
-			}
-		}
+			},
+		},
 	},
 	methods: {
-		setAddressType: function() {
+		setAddressType: function () {
 			this.$store.dispatch( action( NS_ADDRESS, setAddressType ), this.type );
-		}
-	}
-} )
+		},
+	},
+} );
 </script>

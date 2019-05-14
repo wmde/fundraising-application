@@ -46,5 +46,5 @@ export const mutations: MutationTree<AddressState> = {
 	},
 	[ SET_ADDRESS_TYPE ]( state, type ) {
 		state.addressType = type;
-	}
+	},
 };
