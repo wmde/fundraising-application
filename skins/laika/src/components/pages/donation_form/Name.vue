@@ -89,7 +89,7 @@ export default Vue.extend( {
 	name: 'name',
 	props: {
 		showError: Object as () => AddressValidity,
-		formData:  Object as () => FormData,
+		formData: Object as () => FormData,
 		validateInput: Function,
 		addressType: Number as () => AddressTypeModel,
 	},

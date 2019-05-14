@@ -1,23 +1,23 @@
 <template>
-     <div class="column is-full">
-        <form>
-            <payment
-                :validate-amount-url="validateAmountUrl"
-                :payment-amounts="paymentAmounts"
-                :payment-intervals="paymentIntervals"
-                :payment-types="paymentTypes">
-            </payment>
-            <address-form
-                :validate-address-url="validateAddressUrl"
-                :countries="addressCountries">
-            </address-form>
-            <!--
-                Vue component for an overview of the donation (Zusammenfassung in the design).
-                It will contain the final Donate button.
-                validateForm() should be called upon clicking that button.
-		    -->
-        </form>
-    </div>
+	<div class="column is-full">
+		<form>
+			<payment
+				:validate-amount-url="validateAmountUrl"
+				:payment-amounts="paymentAmounts"
+				:payment-intervals="paymentIntervals"
+				:payment-types="paymentTypes">
+			</payment>
+			<address-form
+				:validate-address-url="validateAddressUrl"
+				:countries="addressCountries">
+			</address-form>
+			<!--
+				Vue component for an overview of the donation (Zusammenfassung in the design).
+				It will contain the final Donate button.
+				validateForm() should be called upon clicking that button.
+			-->
+		</form>
+	</div>
 </template>
 
 <script lang="ts">

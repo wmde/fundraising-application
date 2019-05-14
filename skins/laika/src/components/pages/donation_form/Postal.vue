@@ -56,10 +56,10 @@ export default Vue.extend( {
 	name: 'postal',
 	props: {
 		showError: Object as () => AddressValidity,
-		formData:  Object as () => FormData,
+		formData: Object as () => FormData,
 		validateInput: Function,
 		countries: Array as () => Array<String>,
-	},	
+	},
 	data() {
 		return {
 			showWarning: false,

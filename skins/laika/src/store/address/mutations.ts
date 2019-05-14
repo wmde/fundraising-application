@@ -7,6 +7,7 @@ import {
 	BEGIN_ADDRESS_VALIDATION,
 	FINISH_ADDRESS_VALIDATION,
 	SET_ADDRESS_TYPE,
+	SET_ADDRESS_FIELDS,
 } from '@/store/address/mutationTypes';
 import { AddressState, InputField } from '@/view_models/Address';
 const ADDRESS_FIELD_VALIDATOR_NAMES: Array<string> = [
@@ -18,16 +19,16 @@ const ADDRESS_FIELD_VALIDATOR_NAMES: Array<string> = [
 export const mutations: MutationTree<AddressState> = {
 	[ VALIDATE_INPUT ]( state, field: InputField ) {
 		if ( field.value === '' && field.optionalField ) {
-			state.form[ field.name ] = Validity.INCOMPLETE;
+			state.validity[ field.name ] = Validity.INCOMPLETE;
 		} else {
-			state.form[ field.name ] = Helper.inputIsValid( field.value, field.pattern );
+			state.validity[ field.name ] = Helper.inputIsValid( field.value, field.pattern );
 		}
 	},
 	[ MARK_EMPTY_FIELD_INVALID ]( state, payload ) {
 		Object.keys( payload ).forEach( ( field: string ) => {
 			const fieldName = payload[ field ];
-			if ( !fieldName.optionalField && state.form[ fieldName.name ] === Validity.INCOMPLETE ) {
-				state.form[ fieldName.name ] = Validity.INVALID;
+			if ( !fieldName.optionalField && state.validity[ fieldName.name ] === Validity.INCOMPLETE ) {
+				state.validity[ fieldName.name ] = Validity.INVALID;
 			}
 		} );
 	},
@@ -38,7 +39,7 @@ export const mutations: MutationTree<AddressState> = {
 		if ( payload.status === 'ERR' ) {
 			ADDRESS_FIELD_VALIDATOR_NAMES.forEach( name => {
 				if ( payload.messages[ name ] ) {
-					state.form[ name ] = Validity.INVALID;
+					state.validity[ name ] = Validity.INVALID;
 				}
 			} );
 		}
@@ -46,5 +47,13 @@ export const mutations: MutationTree<AddressState> = {
 	},
 	[ SET_ADDRESS_TYPE ]( state, type ) {
 		state.addressType = type;
+	},
+	[ SET_ADDRESS_FIELDS ]( state, fields ) {
+		Object.keys( fields ).forEach( ( field: string ) => {
+			const fieldName = fields[ field ];
+			if ( state.validity[ fieldName.name ] !== Validity.INVALID ) {
+				state.values[ fieldName.name ] = fieldName.value;
+			}
+		} );
 	},
 };

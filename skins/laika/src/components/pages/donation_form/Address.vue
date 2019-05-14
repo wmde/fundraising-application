@@ -21,7 +21,6 @@ import { NS_ADDRESS } from '@/store/namespaces';
 import { setAddressFields, validateInput } from '@/store/address/actionTypes';
 import { action } from '@/store/util';
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
-import { AddressTypeModel } from '../../../view_models/AddressTypeModel';
 
 export default Vue.extend( {
 	name: 'Address',
@@ -99,22 +98,22 @@ export default Vue.extend( {
 			get: function (): AddressValidity {
 				return Object.keys( this.formData ).reduce( ( validity: AddressValidity, fieldName: string ) => {
 					if ( !this.formData[ fieldName ].optionalField ) {
-						validity[ fieldName ] = this.$store.state.address.form[ fieldName ] === Validity.INVALID;
+						validity[ fieldName ] = this.$store.state.address.validity[ fieldName ] === Validity.INVALID;
 					}
 					return validity;
 				}, ( {} as AddressValidity ) );
 			},
 		},
 		addressType: {
-			get: function(): AddressTypeModel {
+			get: function (): AddressTypeModel {
 				return this.$store.getters[ 'address/addressType' ];
-			}
+			},
 		},
 		addressTypeIsNotAnon: {
 			get: function (): boolean {
 				return this.$store.getters[ 'address/addressType' ] !== AddressTypeModel.ANON;
 			},
-		}
+		},
 	},
 	methods: {
 		validateForm() {

@@ -10,7 +10,18 @@ export default function (): Module<AddressState, any> {
 	const state: AddressState = {
 		isValidating: false,
 		addressType: AddressTypeModel.PERSON,
-		form: {
+		values: {
+			salutation: '',
+			title: '',
+			firstName: '',
+			lastName: '',
+			companyName: '',
+			street: '',
+			postcode: '',
+			city: '',
+			country: 'DE',
+		},
+		validity: {
 			salutation: Validity.INCOMPLETE,
 			title: Validity.INCOMPLETE,
 			firstName: Validity.INCOMPLETE,

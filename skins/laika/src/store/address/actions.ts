@@ -16,6 +16,7 @@ export const actions = {
 	},
 	[ setAddressFields ]( context: ActionContext<AddressState, any>, payload: Payload ) {
 		context.commit( 'MARK_EMPTY_FIELD_INVALID', payload.formData );
+		context.commit( 'SET_ADDRESS_FIELDS', payload.formData );
 		if ( context.getters.allFieldsAreValid ) {
 			context.commit( 'BEGIN_ADDRESS_VALIDATION' );
 			const postData = Helper.formatPostData( payload.formData );
