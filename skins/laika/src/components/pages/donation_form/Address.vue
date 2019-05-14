@@ -7,7 +7,6 @@
 			<name :show-error="fieldErrors" :form-data="formData" :validate-input="validateInput" :address-type="addressType"></name>
 			<postal :show-error="fieldErrors" :form-data="formData" :validate-input="validateInput" :countries="countries" :address-type="addressType"></postal>
 		</div>
-		<input type="hidden" name="addressType" v-model="formData.addressType.value">
     </div>
 </template>
 
@@ -84,12 +83,6 @@ export default Vue.extend( {
 				country: {
 					name: 'country',
 					value: 'DE',
-					pattern: '',
-					optionalField: false,
-				},
-				addressType: {
-					name: 'addressType',
-					value: 'person',
 					pattern: '',
 					optionalField: false,
 				},
