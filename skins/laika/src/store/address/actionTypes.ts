@@ -1,3 +1,3 @@
 export const validateInput = 'validateInput';
-export const storeAddressFields = 'storeAddressFields';
+export const setAddressFields = 'setAddressFields';
 export const setAddressType = 'setAddressType';
