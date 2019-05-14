@@ -3,14 +3,13 @@
         <h2 class="title is-size-5">{{ $t('donation_form_interval_title') }}</h2>
         <div>
             <div class="wrap-radio" v-for="option in paymentIntervals" :key="option.id">
-                <b-radio class="is-checkradio is-info"
-                       :class="{ 'is-active': selectedInterval === option.interval }"
+                <b-radio :class="{ 'is-active': selectedInterval === option.interval }"
                        type="radio"
                        :id="option.id"
                        name="interval"
                        v-model="selectedInterval"
                        :native-value="option.interval"
-                       @change="setInterval()">
+                       @change.native="setInterval()">
                     {{ $t( "donation_payment_interval_" + option.interval.toString() ) }}
                 </b-radio>
             </div>
