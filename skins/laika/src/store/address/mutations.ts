@@ -17,14 +17,14 @@ const ADDRESS_FIELD_VALIDATOR_NAMES: Array<string> = [
 ];
 
 export const mutations: MutationTree<AddressState> = {
-	[ VALIDATE_INPUT ]( state, field: InputField ) {
+	[ VALIDATE_INPUT ]( state: AddressState, field: InputField ) {
 		if ( field.value === '' && field.optionalField ) {
 			state.validity[ field.name ] = Validity.INCOMPLETE;
 		} else {
 			state.validity[ field.name ] = Helper.inputIsValid( field.value, field.pattern );
 		}
 	},
-	[ MARK_EMPTY_FIELD_INVALID ]( state, payload ) {
+	[ MARK_EMPTY_FIELD_INVALID ]( state: AddressState, payload ) {
 		Object.keys( payload ).forEach( ( field: string ) => {
 			const fieldName = payload[ field ];
 			if ( !fieldName.optionalField && state.validity[ fieldName.name ] === Validity.INCOMPLETE ) {
@@ -32,10 +32,10 @@ export const mutations: MutationTree<AddressState> = {
 			}
 		} );
 	},
-	[ BEGIN_ADDRESS_VALIDATION ]( state ) {
+	[ BEGIN_ADDRESS_VALIDATION ]( state: AddressState ) {
 		state.isValidating = true;
 	},
-	[ FINISH_ADDRESS_VALIDATION ]( state, payload ) {
+	[ FINISH_ADDRESS_VALIDATION ]( state: AddressState, payload ) {
 		if ( payload.status === 'ERR' ) {
 			ADDRESS_FIELD_VALIDATOR_NAMES.forEach( name => {
 				if ( payload.messages[ name ] ) {
@@ -45,10 +45,10 @@ export const mutations: MutationTree<AddressState> = {
 		}
 		state.isValidating = false;
 	},
-	[ SET_ADDRESS_TYPE ]( state, type ) {
+	[ SET_ADDRESS_TYPE ]( state: AddressState, type ) {
 		state.addressType = type;
 	},
-	[ SET_ADDRESS_FIELDS ]( state, fields ) {
+	[ SET_ADDRESS_FIELDS ]( state: AddressState, fields ) {
 		Object.keys( fields ).forEach( ( field: string ) => {
 			const fieldName = fields[ field ];
 			if ( state.validity[ fieldName.name ] !== Validity.INVALID ) {
