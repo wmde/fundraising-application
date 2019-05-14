@@ -83,9 +83,16 @@
 <script lang="ts">
 import Vue from 'vue';
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
+import { AddressValidity, FormData } from '@/view_models/Address';
+
 export default Vue.extend( {
 	name: 'name',
-	props: [ 'showError', 'formData', 'validateInput', 'addressType' ],
+	props: {
+		showError: Object as () => AddressValidity,
+		formData:  Object as () => FormData,
+		validateInput: Function,
+		addressType: Array as () => Array<String>,
+	},
 	computed: {
 		AddressTypeModel: {
 			get: function () {
