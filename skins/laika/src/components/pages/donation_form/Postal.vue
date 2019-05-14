@@ -66,13 +66,6 @@ export default Vue.extend( {
 			showWarning: false,
 		};
 	},
-	computed: {
-		AddressTypeModel: {
-			get: function () {
-				return AddressTypeModel;
-			},
-		},
-	},
 	methods: {
 		displayStreetWarning() {
 			this.showWarning = /^\D+$/.test( this.formData.street.value );
