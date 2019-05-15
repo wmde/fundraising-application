@@ -2,15 +2,15 @@
 	<fieldset>
 		<h2 class="title is-size-5">{{ $t('donation_form_payment_type_title') }}</h2>
 		<div>
-			<div v-for="paymentMethod in paymentTypes" :key="paymentMethod.type">
-				<b-radio :class="{ 'is-active': selectedType === paymentMethod.type }"
+			<div v-for="paymentType in paymentTypes" :key="paymentType">
+				<b-radio :class="{ 'is-active': selectedType === paymentType }"
 						type="radio"
-						:id="paymentMethod.id"
+						:id="'payment-' + paymentType.toLowerCase()"
 						name="payment"
 						v-model="selectedType"
-						:native-value="paymentMethod.type"
-						@change.native="setType()">
-					{{ $t( paymentMethod.type ) }}
+						:native-value="paymentType"
+						@change.native="setType">
+					{{ $t( paymentType ) }}
 				</b-radio>
 			</div>
 		</div>
@@ -23,7 +23,7 @@ import Vue from 'vue';
 import { TypeData } from '@/view_models/Payment';
 import { NS_PAYMENT } from '@/store/namespaces';
 import { action } from '@/store/util';
-import { setType, markEmptyValuesAsInvalid } from '@/store/payment/actionTypes';
+import { setType } from '@/store/payment/actionTypes';
 
 export default Vue.extend( {
 	name: 'PaymentType',
