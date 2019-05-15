@@ -5262,7 +5262,7 @@
                     "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "🔍 Nette Finder: find files and directories with an intuitive API.",
+            "description": "? Nette Finder: find files and directories with an intuitive API.",
             "homepage": "https://nette.org",
             "keywords": [
                 "filesystem",
@@ -5322,7 +5322,7 @@
                     "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "🍸 Nette NEON: encodes and decodes NEON file format.",
+            "description": "? Nette NEON: encodes and decodes NEON file format.",
             "homepage": "http://ne-on.org",
             "keywords": [
                 "export",
@@ -8111,12 +8111,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "4db3543e5ae6fb372287af0427e7e7f0f8867ad9"
+                "reference": "2e5012a14d27d959fb5ece9cb263016fa9cc1b25"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/4db3543e5ae6fb372287af0427e7e7f0f8867ad9",
-                "reference": "4db3543e5ae6fb372287af0427e7e7f0f8867ad9",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/2e5012a14d27d959fb5ece9cb263016fa9cc1b25",
+                "reference": "2e5012a14d27d959fb5ece9cb263016fa9cc1b25",
                 "shasum": ""
             },
             "require-dev": {
@@ -8149,7 +8149,7 @@
                 "GPL-2.0+"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2019-05-14T22:59:30+00:00"
+            "time": "2019-05-15T09:09:18+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",
