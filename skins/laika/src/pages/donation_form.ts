@@ -9,13 +9,6 @@ import Component from '@/components/pages/DonationForm.vue';
 import Sidebar from '@/components/layout/Sidebar.vue';
 
 const PAGE_IDENTIFIER = 'donation-form',
-	PAYMENT_INTERVAL_OPTIONS = [
-		{ interval: 0, id: 'one-time' },
-		{ interval: 1, id: 'monthly' },
-		{ interval: 3, id: 'quarterly' },
-		{ interval: 6, id: 'biannual' },
-		{ interval: 12, id: 'yearly' },
-	],
 	PAYMENT_TYPE_OPTIONS = [
 		{ type: 'PPL', id: 'paypal' },
 		{ type: 'MCP', id: 'credit-card' },
@@ -30,6 +23,7 @@ Vue.use( VueI18n );
 
 interface DonationAmountModel {
 	presetAmounts: Array<string>,
+	paymentIntervals: Array<number>
 	urls: any
 }
 
@@ -58,7 +52,7 @@ new Vue( {
 				validateAddressUrl: pageData.applicationVars.urls.validateAddress,
 				validateAmountUrl: pageData.applicationVars.urls.validateDonationAmount,
 				paymentAmounts: pageData.applicationVars.presetAmounts,
-				paymentIntervals: PAYMENT_INTERVAL_OPTIONS,
+				paymentIntervals: pageData.applicationVars.paymentIntervals,
 				paymentTypes: PAYMENT_TYPE_OPTIONS,
 				addressCountries: COUNTRIES,
 			},

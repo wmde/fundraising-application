@@ -1400,6 +1400,8 @@ class FunFunFactory implements ServiceProviderInterface {
 			[
 				'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForDonation(),
 				'presetAmounts' => $this->getPresetAmountsSettings( 'donations' ),
+				// TODO use Interval class (does not exist yet) when https://phabricator.wikimedia.org/T222636 is done
+				'paymentIntervals' => [0, 1, 3, 6, 12],
 				'messages' => $this->getMessages(),
 			]
 		);
