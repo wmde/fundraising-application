@@ -2,15 +2,15 @@
     <fieldset>
         <h2 class="title is-size-5">{{ $t('donation_form_interval_title') }}</h2>
         <div>
-            <div class="wrap-radio" v-for="option in paymentIntervals" :key="option.id">
-                <b-radio :class="{ 'is-active': selectedInterval === option.interval }"
+            <div class="wrap-radio" v-for="interval in paymentIntervals" :key="'interval-' + interval">
+                <b-radio :class="{ 'is-active': selectedInterval === interval }"
                        type="radio"
-                       :id="option.id"
+                         :id="'interval-' + interval"
                        name="interval"
                        v-model="selectedInterval"
-                       :native-value="option.interval"
-                       @change.native="setInterval()">
-                    {{ $t( "donation_payment_interval_" + option.interval.toString() ) }}
+                       :native-value="interval"
+                       @change.native="setInterval">
+                    {{ $t( 'donation_payment_interval_' + interval.toString() ) }}
                 </b-radio>
             </div>
         </div>
