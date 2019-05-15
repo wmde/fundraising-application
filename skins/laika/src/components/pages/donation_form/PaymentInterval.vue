@@ -1,6 +1,6 @@
 <template>
     <fieldset>
-        <h2 class="title is-size-5">{{ $t('donation_form_interval_title') }}</h2>
+        <legend class="title is-size-5">{{ $t('donation_form_interval_title') }}</legend>
         <div>
             <div class="wrap-radio" v-for="option in paymentIntervals" :key="option.id">
                 <b-radio :class="{ 'is-active': selectedInterval === option.interval }"

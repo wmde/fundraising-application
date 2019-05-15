@@ -6,6 +6,21 @@
 	margin-top: 30px;
 }
 
+.subtitle {
+	display: inline-block;
+	&:not(:last-child) {
+		margin-bottom: 0;
+	}
+}
+
+.input {
+	max-width: 300px;
+}
+
+.is-danger, .is-warning {
+	font-size: 1em;
+}
+
 .b-radio.radio {
 	height: 4em;
 	width: 320px;
@@ -25,6 +40,13 @@
 }
 
 .input {
+	border-radius: 2px;
+	font-size: 1rem;
+	padding: 0 24px;
+	line-height: 24px;
+	width: 100%;
+	height: 48px;
+
 	&::-ms-clear {
 		display: none;
 	}

@@ -1,6 +1,6 @@
 <template>
 	<fieldset>
-		<h2 class="subtitle">{{ $t( 'donation_section_address_header_type' ) }}</h2>
+		<legend class="subtitle has-margin-top-18">{{ $t( 'donation_section_address_header_type' ) }}</legend>
 		<div>
 			<b-radio type="radio"
 					id="personal"

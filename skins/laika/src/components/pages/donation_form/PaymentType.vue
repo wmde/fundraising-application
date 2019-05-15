@@ -1,6 +1,6 @@
 <template>
 	<fieldset>
-		<h2 class="title is-size-5">{{ $t('donation_form_payment_type_title') }}</h2>
+		<legend class="title is-size-5">{{ $t('donation_form_payment_type_title') }}</legend>
 		<div>
 			<div v-for="paymentMethod in paymentTypes" :key="paymentMethod.type">
 				<b-radio :class="{ 'is-active': selectedType === paymentMethod.type }"

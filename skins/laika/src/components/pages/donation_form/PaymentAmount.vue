@@ -1,8 +1,8 @@
 <template>
 	<fieldset>
-		<h2 class="title is-size-5">{{ $t('donation_form_amount_title') }}</h2>
+		<legend class="title is-size-5">{{ $t('donation_form_amount_title') }}</legend>
 		<div class="amount-wrapper">
-			<div class="amount-selector" v-for="amount in paymentAmounts" :key="'amount-' + toCents( amount )">
+			<div class="amount-selector is-form-input" v-for="amount in paymentAmounts" :key="'amount-' + toCents( amount )">
 				<input type="radio"
 					:id="'amount-' + toCents( amount )"
 					name="amount-grp"
@@ -15,7 +15,7 @@
 				</label>
 			</div>
 			<div class="amount-custom-wrapper">
-				<div class="amount-custom">
+				<div class="amount-custom is-form-input">
 					<input v-bind:class="[amountCustomValue ? 'is-valid' : '', 'input', 'is-large', 'input-amount', 'has-border-rounded' ]"
 							type="text"
 							id="amount-custom"
