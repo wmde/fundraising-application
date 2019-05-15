@@ -1,7 +1,6 @@
 <template>
 	<div id="addressForm">
-		<h2>{{ $t( 'address_form_title' ) }}</h2>
-		<h5>{{ $t( 'address_form_subtitle' ) }}</h5>
+		<h1 class="title is-size-1">{{ $t( 'donation_section_address_title' ) }}</h1>
 		<div>
 			<address-type></address-type>
 			<name :show-error="fieldErrors" :form-data="formData" :validate-input="validateInput" :address-type="addressType"></name>

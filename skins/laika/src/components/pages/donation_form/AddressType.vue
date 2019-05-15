@@ -1,37 +1,34 @@
 <template>
-    <fieldset>
-        <div>
-			<input type="radio"
+	<fieldset>
+		<h2 class="subtitle">{{ $t( 'donation_section_address_header_type' ) }}</h2>
+		<div>
+			<b-radio type="radio"
 					id="personal"
 					name="addressType"
 					v-model="type"
-					:value="AddressTypeModel.PERSON"
-					@change="setAddressType()">
-			<label for="personal">
-				<span>{{ $t( 'donation_addresstype_option_private' ) }}</span>
-			</label>
+					:native-value="AddressTypeModel.PERSON"
+					@change.native="setAddressType()">{{ $t( 'donation_addresstype_option_private' ) }}
+			</b-radio>
 		</div>
 		<div>
-			<input type="radio"
+			<b-radio type="radio"
 					id="company"
 					name="addressType"
 					v-model="type"
-					:value="AddressTypeModel.COMPANY"
-					@change="setAddressType()">
-			<label for="company">
-				<span>{{ $t( 'donation_addresstype_option_company' ) }}</span>
-			</label>
+					:native-value="AddressTypeModel.COMPANY"
+					@change.native="setAddressType()">
+				{{ $t( 'donation_addresstype_option_company' ) }}
+			</b-radio>
 		</div>
 		<div>
-			<input type="radio"
+			<b-radio type="radio"
 					id="anonymous"
 					name="addressType"
 					v-model="type"
-					:value="AddressTypeModel.ANON"
-					@change="setAddressType()">
-			<label for="anonymous">
-				<span>{{ $t( 'donation_addresstype_option_anonymous' ) }}</span>
-			</label>
+					:native-value="AddressTypeModel.ANON"
+					@change.native="setAddressType()">
+				{{ $t( 'donation_addresstype_option_anonymous' ) }}
+			</b-radio>
 		</div>
     </fieldset>
 </template>

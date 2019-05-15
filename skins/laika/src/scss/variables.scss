@@ -40,6 +40,7 @@ $size-4: 1.4rem;
 $size-5: 1.3rem;
 $size-6: 1.2rem;
 $size-7: 1.1rem;
+$size-8: 1.0rem;
 
 $input-color: $fun-color-dark-lighter;
 $input-shadow: none;
@@ -52,9 +53,12 @@ $body-size: 14px;
 $body-line-height: 1.8;
 $danger: $fun-color-error;
 
+$title-color: $fun-color-dark;
 $title-size: $size-1;
 $title-weight: 400;
-$subtitle-size: $size-5;
+$subtitle-size: $size-8;
+$subtitle-color: $fun-color-dark;
+$subtitle-weight: bold;
 
 // Header / Navbar
 $navbar-height: 5.2rem;
