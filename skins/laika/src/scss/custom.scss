@@ -8,6 +8,21 @@
 	border: 1px solid $fun-color-off-bright;
 	border-radius: 2px;
 }
+.is-form-input {
+	.select {
+		select {
+			border-radius: 0;
+			width: 300px;
+			font-size: 1rem;
+			line-height: 40px;
+			height: 48px;
+		}
+		// Don't hate the player, hate the game
+		&:not(.is-multiple):not(.is-loading)::after {
+			top: 24px;
+		}
+	}
+}
 
 .list-menu {
 	max-width: 340px;
