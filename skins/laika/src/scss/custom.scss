@@ -17,7 +17,8 @@
 			line-height: 40px;
 			height: 48px;
 		}
-		// Don't hate the player, hate the game
+		// Buefy has different types of dropdowns with selectors like these
+		// This modifies a "normal" selection dropdown list to accommodate for the custom size we apply
 		&:not(.is-multiple):not(.is-loading)::after {
 			top: 24px;
 		}

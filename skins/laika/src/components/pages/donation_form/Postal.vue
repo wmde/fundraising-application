@@ -1,7 +1,7 @@
 <template>
 <div>
 	<div v-bind:class="[{ invalid: showError.street }]">
-		<h2 class="subtitle has-margin-top-36">{{ $t( 'street_label' ) }}</h2>
+		<label for="street" class="subtitle has-margin-top-36">{{ $t( 'street_label' ) }}</label>
 		<b-input type="text"
 				id="street"
 				name="street"
@@ -13,7 +13,7 @@
 		<span v-if="showWarning" class="help is-warning">{{ $t('form_street_number_warning') }}</span>
 	</div>
 	<div v-bind:class="[{ invalid: showError.postcode }]">
-		<h2 class="subtitle has-margin-top-36">{{ $t( 'zip_label' ) }}</h2>
+		<label for="post-code" class="subtitle has-margin-top-36">{{ $t( 'zip_label' ) }}</label>
 		<b-input type="text"
 				id="post-code"
 				name="postcode"
@@ -24,7 +24,7 @@
 		<span v-if="showError.postcode" class="help is-danger">{{ $t('form_zip_error') }}</span>
 	</div>
 	<div v-bind:class="[{ invalid: showError.city }]">
-		<h2 class="subtitle has-margin-top-36">{{ $t( 'city_label' ) }}</h2>
+		<label for="city" class="subtitle has-margin-top-36">{{ $t( 'city_label' ) }}</label>
 		<b-input type="text"
 				id="city"
 				name="city"
@@ -35,7 +35,7 @@
 		<span v-if="showError.city" class="help is-danger">{{ $t('form_city_error') }}</span>
 	</div>
 	<div>
-		<h2 class="subtitle has-margin-top-36">{{ $t( 'country_label' ) }}</h2>
+		<label for="country" class="subtitle has-margin-top-36">{{ $t( 'country_label' ) }}</label>
 		<b-select
 				class="is-form-input"
 				v-model="formData.country.value"

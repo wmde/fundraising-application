@@ -1,29 +1,31 @@
 <template>
 <div>
 	<div v-if="addressType === AddressTypeModel.PERSON">
-		<h2 class="subtitle has-margin-top-36">{{ $t( 'salutation_label' ) }}</h2>
+		<fieldset>
+			<legend class="subtitle has-margin-top-36">{{ $t( 'salutation_label' ) }}</legend>
+			<div>
+				<b-radio type="radio"
+						id="salutation-mr"
+						name="salutation"
+						:native-value="$t( 'salutation_option_mr' ) "
+						v-model="formData.salutation.value"
+						@blur="validateInput(formData, 'salutation')">
+					{{ $t( 'salutation_option_mr' ) }}
+				</b-radio>
+			</div>
+			<div>
+				<b-radio type="radio"
+						id="salutation-mrs"
+						name="salutation"
+						:native-value="$t( 'salutation_option_mrs' ) "
+						v-model="formData.salutation.value"
+						@blur="validateInput(formData, 'salutation')">
+					{{ $t( 'salutation_option_mrs' ) }}
+				</b-radio>
+			</div>
+		</fieldset>
 		<div>
-			<b-radio type="radio"
-					id="salutation-mr"
-					name="salutation"
-					:native-value="$t( 'salutation_option_mr' ) "
-					v-model="formData.salutation.value"
-					@blur="validateInput(formData, 'salutation')">
-				{{ $t( 'salutation_option_mr' ) }}
-			</b-radio>
-		</div>
-		<div>
-			<b-radio type="radio"
-					id="salutation-mrs"
-					name="salutation"
-					:native-value="$t( 'salutation_option_mrs' ) "
-					v-model="formData.salutation.value"
-					@blur="validateInput(formData, 'salutation')">
-				{{ $t( 'salutation_option_mrs' ) }}
-			</b-radio>
-		</div>
-		<div>
-			<h2 class="subtitle has-margin-top-36">{{ $t( 'academic_title_label' ) }}</h2>
+			<label for="title" class="subtitle has-margin-top-36">{{ $t( 'academic_title_label' ) }}</label>
 			<b-select
 					class="is-form-input"
 					v-model="formData.title.value"
@@ -38,7 +40,7 @@
 		</div>
 		<span v-if="showError.salutation" class="help is-danger"> {{ $t( 'form_salutation_error' ) }}</span>
 		<div v-bind:class="[{ invalid: showError.firstName }]">
-			<h2 class="subtitle has-margin-top-36">{{ $t( 'firstname_label' ) }}</h2>
+			<label for="first-name" class="subtitle has-margin-top-36">{{ $t( 'firstname_label' ) }}</label>
 			<b-input type="text"
 					id="first-name"
 					v-model="formData.firstName.value"
@@ -49,7 +51,7 @@
 			<span v-if="showError.firstName" class="help is-danger">{{ $t( 'form_firstname_error' ) }}</span>
 		</div>
 		<div v-bind:class="[{ invalid: showError.lastName }]">
-			<h2 class="subtitle has-margin-top-36">{{ $t( 'lastname_label' ) }}</h2>
+			<label for="last-name" class="subtitle has-margin-top-36">{{ $t( 'lastname_label' ) }}</label>
 			<b-input type="text"
 					id="last-name"
 					v-model="formData.lastName.value"
@@ -61,7 +63,7 @@
 		</div>
 	</div>
 	<div v-else-if="addressType === AddressTypeModel.COMPANY" v-bind:class="[{ invalid: showError.companyName }]">
-		<h2 class="subtitle has-margin-top-36">{{ $t( 'companyname_label' ) }}</h2>
+		<label for="company-name" class="subtitle has-margin-top-36">{{ $t( 'companyname_label' ) }}</label>
 		<b-input type="text"
 				id="company-name"
 				name="company"

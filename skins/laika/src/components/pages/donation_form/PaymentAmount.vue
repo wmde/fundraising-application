@@ -1,6 +1,6 @@
 <template>
 	<fieldset>
-		<h2 class="title is-size-5">{{ $t('donation_form_amount_title') }}</h2>
+		<legend class="title is-size-5">{{ $t('donation_form_amount_title') }}</legend>
 		<div class="amount-wrapper">
 			<div class="amount-selector" v-for="amount in paymentAmounts" :key="'amount-' + toCents( amount )">
 				<input type="radio"

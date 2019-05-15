@@ -6,6 +6,13 @@
 	margin-top: 30px;
 }
 
+.subtitle {
+	display: inline-block;
+	&:not(:last-child) {
+		margin-bottom: 0;
+	}
+}
+
 .input {
 	max-width: 300px;
 }
