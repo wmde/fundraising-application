@@ -3,12 +3,13 @@
 @import "fonts";
 @import "variables";
 
-.has-border-rounded {
-	background-color: $fun-color-bright;
-	border: 1px solid $fun-color-off-bright;
-	border-radius: 2px;
-}
 .is-form-input {
+	.has-border-rounded {
+		background-color: $fun-color-bright;
+		border: 1px solid $fun-color-off-bright;
+		border-radius: 2px;
+	}
+
 	.select {
 		select {
 			border-radius: 0;

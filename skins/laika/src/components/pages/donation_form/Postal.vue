@@ -1,6 +1,6 @@
 <template>
 <div>
-	<div v-bind:class="[{ invalid: showError.street }]">
+	<div v-bind:class="[{ 'is-invalid': showError.street }]">
 		<label for="street" class="subtitle has-margin-top-36">{{ $t( 'street_label' ) }}</label>
 		<b-input type="text"
 				id="street"
@@ -12,7 +12,7 @@
 		<span v-if="showError.street" class="help is-danger">{{ $t('form_street_error') }}</span>
 		<span v-if="showWarning" class="help is-warning">{{ $t('form_street_number_warning') }}</span>
 	</div>
-	<div v-bind:class="[{ invalid: showError.postcode }]">
+	<div v-bind:class="[{ 'is-invalid': showError.postcode }]">
 		<label for="post-code" class="subtitle has-margin-top-36">{{ $t( 'zip_label' ) }}</label>
 		<b-input type="text"
 				id="post-code"
@@ -23,7 +23,7 @@
 		</b-input>
 		<span v-if="showError.postcode" class="help is-danger">{{ $t('form_zip_error') }}</span>
 	</div>
-	<div v-bind:class="[{ invalid: showError.city }]">
+	<div v-bind:class="[{ 'is-invalid': showError.city }]">
 		<label for="city" class="subtitle has-margin-top-36">{{ $t( 'city_label' ) }}</label>
 		<b-input type="text"
 				id="city"

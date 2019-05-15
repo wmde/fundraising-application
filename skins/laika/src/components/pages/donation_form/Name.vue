@@ -39,9 +39,10 @@
 			</b-select>
 		</div>
 		<span v-if="showError.salutation" class="help is-danger"> {{ $t( 'form_salutation_error' ) }}</span>
-		<div v-bind:class="[{ invalid: showError.firstName }]">
+		<div v-bind:class="[{ 'is-invalid': showError.firstName }]">
 			<label for="first-name" class="subtitle has-margin-top-36">{{ $t( 'firstname_label' ) }}</label>
-			<b-input type="text"
+			<b-input class="is-medium"
+					type="text"
 					id="first-name"
 					v-model="formData.firstName.value"
 					name="firstName"
@@ -50,7 +51,7 @@
 			</b-input>
 			<span v-if="showError.firstName" class="help is-danger">{{ $t( 'form_firstname_error' ) }}</span>
 		</div>
-		<div v-bind:class="[{ invalid: showError.lastName }]">
+		<div v-bind:class="[{ 'is-invalid': showError.lastName }]">
 			<label for="last-name" class="subtitle has-margin-top-36">{{ $t( 'lastname_label' ) }}</label>
 			<b-input type="text"
 					id="last-name"
@@ -62,7 +63,7 @@
 			<span v-if="showError.lastName" class="help is-danger">{{ $t( 'form_lastname_error' ) }}</span>
 		</div>
 	</div>
-	<div v-else-if="addressType === AddressTypeModel.COMPANY" v-bind:class="[{ invalid: showError.companyName }]">
+	<div v-else-if="addressType === AddressTypeModel.COMPANY" v-bind:class="[{ 'is-invalid': showError.companyName }]">
 		<label for="company-name" class="subtitle has-margin-top-36">{{ $t( 'companyname_label' ) }}</label>
 		<b-input type="text"
 				id="company-name"
