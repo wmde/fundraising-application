@@ -5,6 +5,7 @@
 			<address-type></address-type>
 			<name :show-error="fieldErrors" :form-data="formData" :validate-input="validateInput" :address-type="addressType"></name>
 			<postal v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :validate-input="validateInput" :countries="countries"></postal>
+			<email></email>
 		</div>
 	</div>
 </template>
@@ -14,13 +15,14 @@ import Vue from 'vue';
 import AddressType from '@/components/pages/donation_form/AddressType.vue';
 import Name from '@/components/pages/donation_form/Name.vue';
 import Postal from '@/components/pages/donation_form/Postal.vue';
+import Email from '@/components/pages/donation_form/Email.vue';
 import { mapGetters } from 'vuex';
 import { AddressValidity, FormData } from '@/view_models/Address';
+import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 import { Validity } from '@/view_models/Validity';
 import { NS_ADDRESS } from '@/store/namespaces';
 import { setAddressFields, validateInput } from '@/store/address/actionTypes';
 import { action } from '@/store/util';
-import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 
 export default Vue.extend( {
 	name: 'Address',
@@ -28,6 +30,7 @@ export default Vue.extend( {
 		Name,
 		Postal,
 		AddressType,
+		Email,
 	},
 	data: function (): { formData: FormData } {
 		return {
