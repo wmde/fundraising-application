@@ -24,7 +24,6 @@
 import Vue from 'vue';
 import Payment from '@/components/pages/donation_form/Payment.vue';
 import AddressForm from '@/components/pages/donation_form/Address.vue';
-import { Type } from '@/view_models/Payment';
 
 export default Vue.extend( {
 	name: 'DonationForm',
@@ -37,7 +36,7 @@ export default Vue.extend( {
 		validateAmountUrl: String,
 		paymentAmounts: Array as () => Array<String>,
 		paymentIntervals: Array as () => Array<Number>,
-		paymentTypes: Array as () => Array<Type>,
+		paymentTypes: Array as () => Array<String>,
 		addressCountries: Array as () => Array<String>,
 	},
 } );
