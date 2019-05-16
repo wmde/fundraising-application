@@ -9,6 +9,13 @@ $fun-color-primary-lightest: #dce4e8;
 $fun-color-footer: #c7d1d8;
 $fun-color-error: #812923;
 $fun-color-error-light: #e6d4d3;
+$fun-color-gray-dark: #808080;
+$fun-color-gray-mid: #B7B7B7;
+$fun-color-gray-light-solid: #E5E5E5;
+$fun-color-gray-light-transparency: rgba(0, 0, 0, 0.14);
+$fun-color-gray-very-light: rgba(0, 0, 0, 0.07);
+
+
 
 // Used for selectors like ".has-background-primary"
 $custom-colors: (
@@ -22,6 +29,11 @@ $custom-colors: (
 		"footer": ($fun-color-footer),
 		"error": ($fun-color-error),
 		"error-light": ($fun-color-error-light),
+		"gray-dark": ($fun-color-gray-dark),
+		"gray-mid": ($fun-color-gray-mid),
+		"gray-light-solid": ($fun-color-gray-light-solid),
+		"gray-light-transparency": ($fun-color-gray-light-transparency),
+		"gray-very-light": ($fun-color-gray-very-light),
 );
 
 //

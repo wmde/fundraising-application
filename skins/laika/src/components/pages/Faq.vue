@@ -1,11 +1,11 @@
 <template>
 	<div id="faq" class="column">
-		<h1 class="title">{{ $t('page_title') }}</h1>
+		<h1 class="title is-size-1">{{ $t('page_title') }}</h1>
 		<ul>
-			<li v-bind:class="[ 'link', 'underlined' ]"
-				v-for="( topic, index ) in content.topics"
+			<li v-for="( topic, index ) in content.topics"
 				:key="index">
-				<h2 class="title is-size-5">{{ topic.name }}</h2>
+
+				<h2 class="title is-size-2">{{ topic.name }}</h2>
 
 				<question
 						v-for="(content, index) in getQuestionsByTopic(topic)"
