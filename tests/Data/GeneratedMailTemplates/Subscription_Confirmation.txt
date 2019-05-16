@@ -4,3 +4,16 @@ subscription_confirmation/body
 
 name_head_of_fundraising
 
+donation_hint
+
+-------------------------------------
+address_of_suborganization
+
+phone
+email
+
+bank_account
+
+tax_id_suborganization
+
+unsubscribe_hint

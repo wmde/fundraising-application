@@ -6,3 +6,20 @@
 }) $}
 
 {$ mail_content('name_head_of_fundraising') $}
+
+{$ mail_content('donation_hint', { 'piwiki_keyword': 'requested' }) $}
+
+-------------------------------------
+{$ mail_content('address_of_suborganization') $}
+
+{$ mail_content('phone') $}
+{$ mail_content('email') $}
+
+{$ mail_content('bank_account') $}
+
+{$ mail_content('tax_id_suborganization') $}
+
+{$ mail_content('unsubscribe_hint', {
+    'subscription_email': subscription.email,
+    'privacy_protection_link': url( 'page', { pageName: 'Datenschutz' } )
+}) $}

@@ -9,3 +9,14 @@ donation_confirmation/greetings
 
 name_head_of_suborganization
 title_head_of_suborganization
+
+---------------------------------------------------------------------------
+wikimedia_vision
+<https://spenden.wikimedia.de/>
+---------------------------------------------------------------------------
+
+address_of_suborganization
+
+tax_id_suborganization_verbose
+
+donation_confirmation/number
