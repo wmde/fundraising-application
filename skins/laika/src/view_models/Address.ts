@@ -21,12 +21,13 @@ export interface FormValidity {
 }
 
 export interface FormValues {
-    [key: string]: string
+    [key: string]: string,
 }
 
 export interface AddressState {
     isValidating: boolean,
     addressType: AddressTypeModel,
+    newsletterOptIn: boolean,
     values: FormValues,
     validity: FormValidity,
 }
