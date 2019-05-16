@@ -53,6 +53,27 @@
 	}
 }
 
+//FAQ page accordions
+
+.accordion {
+	border: 1px solid $fun-color-gray-light-transparency;
+	padding: 1.4rem;
+	box-sizing: content-box;
+	h3 {
+		cursor: pointer;
+	}
+}
+
+.accordion-heading {
+	padding: 1.4rem;
+	border-bottom: 2px solid $fun-color-gray-light-transparency;
+	cursor: pointer;
+}
+
+.accordion-content {
+	padding-top: 2.8rem;
+	padding-right: 0.6rem;
+}
 // Import Bulma's core
 @import "~bulma/sass/utilities/_all";
 
