@@ -10,6 +10,7 @@ export default function (): Module<AddressState, any> {
 	const state: AddressState = {
 		isValidating: false,
 		addressType: AddressTypeModel.PERSON,
+		newsletterOptIn: false,
 		values: {
 			salutation: '',
 			title: '',
@@ -20,6 +21,7 @@ export default function (): Module<AddressState, any> {
 			postcode: '',
 			city: '',
 			country: 'DE',
+			email: '',
 		},
 		validity: {
 			salutation: Validity.INCOMPLETE,
@@ -31,6 +33,7 @@ export default function (): Module<AddressState, any> {
 			postcode: Validity.INCOMPLETE,
 			city: Validity.INCOMPLETE,
 			country: Validity.VALID,
+			email: Validity.INCOMPLETE,
 			addressType: Validity.VALID,
 		},
 	};

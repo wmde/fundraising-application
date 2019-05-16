@@ -4,6 +4,8 @@ import {
 	validateInput,
 	setAddressFields,
 	setAddressType,
+	setEmail,
+	setNewsletterOptIn,
 } from '@/store/address/actionTypes';
 import { AddressState, InputField, Payload } from '@/view_models/Address';
 import { Helper } from '@/store/util';
@@ -37,4 +39,11 @@ export const actions = {
 	[ setAddressType ]( context: ActionContext<AddressState, any>, type: AddressTypeModel ) {
 		context.commit( 'SET_ADDRESS_TYPE', type );
 	},
+	[ setEmail ]( context: ActionContext<AddressState, any>, email: string ) {
+		context.commit( 'SET_EMAIL', email );
+	},
+	[ setNewsletterOptIn ]( context: ActionContext<AddressState, any>, optIn: boolean ) {
+		context.commit( 'SET_NEWSLETTER_OPTIN', optIn );
+	},
+
 };

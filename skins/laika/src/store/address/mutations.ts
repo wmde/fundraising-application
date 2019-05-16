@@ -8,6 +8,8 @@ import {
 	FINISH_ADDRESS_VALIDATION,
 	SET_ADDRESS_TYPE,
 	SET_ADDRESS_FIELDS,
+	SET_EMAIL,
+	SET_NEWSLETTER_OPTIN,
 } from '@/store/address/mutationTypes';
 import { AddressState, InputField } from '@/view_models/Address';
 const ADDRESS_FIELD_VALIDATOR_NAMES: Array<string> = [
@@ -55,5 +57,11 @@ export const mutations: MutationTree<AddressState> = {
 				state.values[ fieldName.name ] = fieldName.value;
 			}
 		} );
+	},
+	[ SET_EMAIL ]( state: AddressState, email ) {
+		state.values.email = email;
+	},
+	[ SET_NEWSLETTER_OPTIN ]( state: AddressState, optIn ) {
+		state.newsletterOptIn = optIn;
 	},
 };
