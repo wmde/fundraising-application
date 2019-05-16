@@ -68,4 +68,17 @@
 {% endif %}
 
 {$ mail_content('name_head_of_suborganization') $}
-{$ mail_content('title_head_of_suborganization') -$}
+{$ mail_content('title_head_of_suborganization') $}
+
+---------------------------------------------------------------------------
+{$ mail_content('wikimedia_vision') $}
+<https://spenden.wikimedia.de/>
+---------------------------------------------------------------------------
+
+{$ mail_content('address_of_suborganization') $}
+
+{$ mail_content('tax_id_suborganization_verbose') $}
+
+{$ mail_content('donation_confirmation/number', {
+    'donation_id': donation.id
+}) $}
