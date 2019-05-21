@@ -35,6 +35,8 @@ module.exports = {
 		system_message: 'src/pages/system_message.ts',
 		update_address: 'src/pages/update_address.ts',
 		warning_page: 'src/pages/warning_page.ts',
+		static_page: 'src/pages/static_page.ts',
+		supporters: 'src/pages/supporters.ts',
 	},
 	devServer: {
 		watchOptions: {

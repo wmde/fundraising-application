@@ -1,0 +1,15 @@
+{% extends 'Base_Layout.html.twig' %}
+{% set page_works_without_js = true %}
+{% block page_identifier %}{$ page_id $}{% endblock %}
+
+{% block scripts %}
+	{$ parent() $}
+	<script src="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}/js/static_page.js"></script>
+{% endblock %}
+
+{%  block main %}
+	<script type="text/x-template" id="static-content-template">
+		<div>{$ web_content("pages/#{page_id}") $}</div>
+	</script>
+	{$ parent() $}
+{% endblock %}

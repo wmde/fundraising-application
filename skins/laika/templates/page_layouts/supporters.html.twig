@@ -1,0 +1,7 @@
+{% extends 'page_layouts/base.html.twig' %}
+{% set page_works_without_js = false %}
+
+{% block scripts %}
+	{$ parent() $}
+	<script src="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}/js/supporters.js"></script>
+{% endblock %}
