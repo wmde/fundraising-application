@@ -1,17 +1,14 @@
 <template>
     <div>
-        <h1 class="title is-size-1">{{ $t( 'donation_section_email_title' ) }}</h1>
-        <div>
-            <label for="email" class="subtitle has-margin-top-18">{{ $t( 'email_label' ) }}</label>
-            <b-input type="text"
-                id="email"
-                name="email"
-                :placeholder="$t( 'email_label' )"
-                v-model="emailValue"
-                @blur="validateEmail">
-            </b-input>
-            <span v-if="emailHasError" class="help is-danger">{{ $t( 'form_email_error' ) }}</span>
-        </div>
+		<label for="email" class="subtitle has-margin-top-18">{{ $t( 'email_label' ) }}</label>
+		<b-input type="text"
+			id="email"
+			name="email"
+			:placeholder="$t( 'email_label' )"
+			v-model="emailValue"
+			@blur="validateEmail">
+		</b-input>
+		<span v-if="emailHasError" class="help is-danger">{{ $t( 'form_email_error' ) }}</span>
     </div>
 </template>
 
