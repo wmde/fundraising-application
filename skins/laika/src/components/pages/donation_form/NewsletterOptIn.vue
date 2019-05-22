@@ -1,13 +1,13 @@
 <template>
-     <div>
-        <b-checkbox type="checkbox" class="subtitle has-margin-top-18"
-            id="newsletter"
-            name="newsletter"
-            v-model="newsletterOptIn"
-            @click="setNewsletterOptIn()">
-        </b-checkbox>
-        <label for="newsletter">{{ $t( 'donation_sendinfo_label' ) }}</label>
-    </div>
+	<div>
+		<b-checkbox type="checkbox" class="subtitle has-margin-top-18"
+			id="newsletter"
+			name="newsletter"
+			v-model="newsletterOptIn"
+			@change.native="setNewsletterOptIn()">
+		</b-checkbox>
+		<label for="newsletter">{{ $t( 'donation_sendinfo_label' ) }}</label>
+	</div>
 </template>
 
 <script lang="ts">

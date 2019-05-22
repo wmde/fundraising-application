@@ -36,7 +36,7 @@ describe( 'NewsletterOptIn', () => {
 		const expectedAction = action( NS_ADDRESS, setNewsletterOptIn );
 		const checkbox = wrapper.find( '#newsletter' );
 		wrapper.setData( { newsletterOptIn: true } );
-		checkbox.trigger( 'click' );
+		checkbox.trigger( 'change' );
 		expect( store.dispatch ).toBeCalledWith( expectedAction, true );
 	} );
 } );
