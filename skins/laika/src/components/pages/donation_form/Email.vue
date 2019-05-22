@@ -7,8 +7,9 @@
                 type="text"
                 id="email"
                 v-model="emailValue"
-                @blur="setEmail"
+                @blur="validateEmail"
                 :placeholder="$t( 'email_label' )">
+                <span v-if="emailHasError" class="help is-danger">{{ $t('form_email_error') }}</span>
         </div>
         <div>
             <input type="checkbox"
@@ -32,6 +33,8 @@ export default Vue.extend( {
 	data: function () {
 		return {
 			emailValue: '',
+			emailPattern: /^[^@]+@.+$/,
+			emailHasError: false,
 			newsletterOptIn: false,
 		};
 	},
@@ -41,6 +44,15 @@ export default Vue.extend( {
 		},
 		setNewsletterOptIn: function () {
 			this.$store.dispatch( action( NS_ADDRESS, setNewsletterOptIn ), this.$data.setNewsletterOptIn );
+		},
+		validateEmail: function () {
+			if ( this.emailIsValid() ) {
+				this.emailHasError = false;
+				this.setEmail();
+			} else { this.emailHasError = true; }
+		},
+		emailIsValid: function () {
+			return this.emailPattern.test( this.emailValue );
 		},
 	},
 } );

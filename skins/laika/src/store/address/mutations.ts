@@ -60,6 +60,7 @@ export const mutations: MutationTree<AddressState> = {
 	},
 	[ SET_EMAIL ]( state: AddressState, email ) {
 		state.values.email = email;
+		state.validity.email = Validity.VALID;
 	},
 	[ SET_NEWSLETTER_OPTIN ]( state: AddressState, optIn ) {
 		state.newsletterOptIn = optIn;
