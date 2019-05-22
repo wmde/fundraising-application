@@ -9,8 +9,8 @@
                 :placeholder="$t( 'email_label' )"
                 v-model="emailValue"
                 @blur="validateEmail">
-		    </b-input>
-             <span v-if="emailHasError" class="help is-danger">{{ $t( 'form_email_error' ) }}</span>
+            </b-input>
+            <span v-if="emailHasError" class="help is-danger">{{ $t( 'form_email_error' ) }}</span>
         </div>
     </div>
 </template>
