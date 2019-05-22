@@ -19,7 +19,7 @@
 import Vue from 'vue';
 import { NS_ADDRESS } from '@/store/namespaces';
 import { action } from '@/store/util';
-import { setEmail, setNewsletterOptIn } from '@/store/address/actionTypes';
+import { setEmail } from '@/store/address/actionTypes';
 
 export default Vue.extend( {
 	name: 'Email',
