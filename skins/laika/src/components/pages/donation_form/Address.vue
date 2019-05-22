@@ -1,5 +1,5 @@
 <template>
-	<div id="addressForm">
+	<div id="addressForm" class="column is-full">
 		<h1 class="title is-size-1">{{ $t( 'donation_section_address_title' ) }}</h1>
 		<div>
 			<address-type></address-type>
