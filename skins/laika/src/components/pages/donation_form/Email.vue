@@ -32,10 +32,10 @@ export default Vue.extend( {
 			this.$store.dispatch( action( NS_ADDRESS, setEmail ), this.$data.emailValue );
 		},
 		validateEmail: function () {
-			if ( this.emailIsValid() ) {
-				this.emailHasError = false;
+			this.emailHasError = !this.emailIsValid();
+			if ( !this.emailHasError ) {
 				this.setEmail();
-			} else { this.emailHasError = true; }
+			}
 		},
 		emailIsValid: function () {
 			return this.emailPattern.test( this.emailValue );
