@@ -21,7 +21,7 @@ describe( 'Email', () => {
 				$t: () => { },
 			},
 		} );
-		const email = wrapper.find('#email');
+		const email = wrapper.find( '#email' );
 		wrapper.setData( { emailValue: 'abc@' } );
 		email.trigger( 'blur' );
 		const hasError = wrapper.vm.$data.emailHasError;
