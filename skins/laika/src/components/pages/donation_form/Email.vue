@@ -9,15 +9,7 @@
                 v-model="emailValue"
                 @blur="validateEmail"
                 :placeholder="$t( 'email_label' )">
-                <span v-if="emailHasError" class="help is-danger">{{ $t('form_email_error') }}</span>
-        </div>
-        <div>
-            <input type="checkbox"
-                id="newsletter"
-                name="newsletter"
-                v-model="newsletterOptIn"
-                @change="setNewsletterOptIn">
-            <label for="newsletter">{{ $t( 'donation_sendinfo_label' ) }}</label>
+            <span v-if="emailHasError" class="help is-danger">{{ $t('form_email_error') }}</span>
         </div>
     </div>
 </template>
@@ -35,15 +27,11 @@ export default Vue.extend( {
 			emailValue: '',
 			emailPattern: /^[^@]+@.+$/,
 			emailHasError: false,
-			newsletterOptIn: false,
 		};
 	},
 	methods: {
 		setEmail: function () {
 			this.$store.dispatch( action( NS_ADDRESS, setEmail ), this.$data.emailValue );
-		},
-		setNewsletterOptIn: function () {
-			this.$store.dispatch( action( NS_ADDRESS, setNewsletterOptIn ), this.$data.setNewsletterOptIn );
 		},
 		validateEmail: function () {
 			if ( this.emailIsValid() ) {
