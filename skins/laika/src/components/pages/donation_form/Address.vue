@@ -5,6 +5,7 @@
 			<address-type></address-type>
 			<name :show-error="fieldErrors" :form-data="formData" :validate-input="validateInput" :address-type="addressType"></name>
 			<postal v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :validate-input="validateInput" :countries="countries"></postal>
+			<h1 class="title is-size-1">{{ $t( 'donation_section_email_title' ) }}</h1>
 			<email></email>
 		</div>
 	</div>
