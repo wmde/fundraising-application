@@ -7,6 +7,7 @@
 			<postal v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :validate-input="validateInput" :countries="countries"></postal>
 			<h1 class="title is-size-1">{{ $t( 'donation_section_email_title' ) }}</h1>
 			<email></email>
+			<newsletter-opt-in></newsletter-opt-in>
 		</div>
 	</div>
 </template>
@@ -17,6 +18,7 @@ import AddressType from '@/components/pages/donation_form/AddressType.vue';
 import Name from '@/components/pages/donation_form/Name.vue';
 import Postal from '@/components/pages/donation_form/Postal.vue';
 import Email from '@/components/pages/donation_form/Email.vue';
+import NewsletterOptIn from '@/components/pages/donation_form/NewsletterOptIn.vue';
 import { mapGetters } from 'vuex';
 import { AddressValidity, FormData } from '@/view_models/Address';
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
@@ -32,6 +34,7 @@ export default Vue.extend( {
 		Postal,
 		AddressType,
 		Email,
+		NewsletterOptIn,
 	},
 	data: function (): { formData: FormData } {
 		return {
