@@ -202,9 +202,9 @@ test( 'Given filled classic values on blur, classic validation is triggered and 
 		bic: 'INGDDEFFXXX'
 	};
 	const fakeBankDataValidator = {
-		validateClassicBankData: function ( accountNumber, bankNumber ) {
-			t.equals( accountNumber, '0648489890' );
-			t.equals( bankNumber, '50010517' );
+		validateClassicBankData: function ( accountId, bankId ) {
+			t.equals( accountId, '0648489890' );
+			t.equals( bankId, '50010517' );
 			return validationResult;
 		},
 		validateSepaBankData: function () { t.fail(); }

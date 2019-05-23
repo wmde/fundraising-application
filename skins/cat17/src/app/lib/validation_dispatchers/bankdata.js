@@ -17,7 +17,7 @@ var objectAssign = require( 'object-assign' ),
 	 * @return {ValidationDispatcher}
 	 */
 	createBankDataValidationDispatcher = function ( validator, initialValues ) {
-		var fieldNames = [ 'iban', 'bic', 'accountNumber', 'bankCode', 'debitType', 'paymentType' ];
+		var fieldNames = [ 'iban', 'bic', 'debitType', 'paymentType' ];
 
 		return objectAssign( Object.create( ValidationDispatcher ), {
 			validationFunction: validator.validate.bind( validator ),
