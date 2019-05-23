@@ -399,6 +399,28 @@ $( function () {
 		return WMDE.Promise.resolve();
 	}
 
+	/**
+	 * @param {object} formValues
+	 * @return {object}
+	 */
+	function convertInitialFormValues( formValues ) {
+		if ( typeof formValues.amount === 'string' ) {
+			formValues.amount = WMDE.IntegerCurrency.createCurrencyParser( 'de' ).parse( formValues.amount );
+		}
+		// When the initial form values are passed to the initializeValidationStateAction,
+		// it's better to have no value (which will lead to Validity.INCOMPLETE) than an invalid value
+		if ( formValues.amount === 0 ) {
+			delete formValues.amount;
+		}
+
+		// Delete old-style bank data as short-term fix for https://phabricator.wikimedia.org/T222798
+		// Could be deleted as part of https://phabricator.wikimedia.org/T224220,
+		// but by then this file should already be gone (cat17 replaced by laika)
+		delete formValues.accountNumber;
+		delete formValues.bankCode;
+		return formValues;
+	}
+
 	$( '.btn-donation' ).on( 'click', function () {
 		if ( WMDE.StateAggregation.Membership.allValiditySectionsAreValid( store.getState() ) ) {
 			$( 'form' ).submit();
@@ -419,19 +441,12 @@ $( function () {
 	} );
 
 	// Set initial form values
-	var initSetup = initData.data( 'initial-form-values' );
-	if ( typeof initSetup.amount === 'string' ) {
-		initSetup.amount = WMDE.IntegerCurrency.createCurrencyParser( 'de' ).parse( initSetup.amount );
-	}
-	store.dispatch( actions.newInitializeContentAction( initSetup ) );
+	var initialFormValues = convertInitialFormValues( initData.data( 'initial-form-values' ) );
+	store.dispatch( actions.newInitializeContentAction( initialFormValues ) );
 
-	// Set initial validation state
-	if ( initSetup.amount === 0 ) {
-		delete initSetup.amount;
-	}
 	store.dispatch( actions.newInitializeValidationStateAction(
 		initData.data( 'violatedFields' ),
-		initSetup,
+		initialFormValues,
 		initData.data( 'initial-validation-result' )
 	) );
 

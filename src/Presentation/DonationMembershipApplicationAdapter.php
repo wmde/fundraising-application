@@ -46,9 +46,10 @@ class DonationMembershipApplicationAdapter {
 		return [
 			'iban' => $paymentMethod->getBankData()->getIban()->toString(),
 			'bic' => $paymentMethod->getBankData()->getBic(),
+			'bankname' => $paymentMethod->getBankData()->getBankName(),
+			// TODO delete the following fields as part of https://phabricator.wikimedia.org/T224220
 			'accountNumber' => $paymentMethod->getBankData()->getAccount(),
 			'bankCode' => $paymentMethod->getBankData()->getBankCode(),
-			'bankname' => $paymentMethod->getBankData()->getBankName(),
 		];
 	}
 
