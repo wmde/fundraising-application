@@ -159,7 +159,8 @@ describe( 'Store', () => {
 				postData: jest.fn( function( validationResult ) { return Promise.resolve() } )
 			},
 			validateAddressURL: '',
-			formData: fakeFormData
+			formData: fakeFormData,
+			receiptOptOut: false
 		};
 
 		it( 'commits to mutation [MARK_EMPTY_FIELD_INVALID] with form data', () => {
@@ -177,6 +178,21 @@ describe( 'Store', () => {
 			);
 		} );
 
+		it( 'does not start address validation if there all fields are empty and user opts out of receipt', () => {
+			const action = actions[ 'storeAddressFields' ] as any,
+				context = {
+					commit: jest.fn()
+				},
+				optOutPayload = {
+					...payload,
+					receiptOptOut: true
+				},
+				resp = action( context, optOutPayload );
+			expect( resp ).toEqual( Promise.resolve() );
+			expect( context.commit ).not.toHaveBeenCalled();
+			expect( payload.transport.postData ).not.toHaveBeenCalled();
+		} );
+
 		it( 'does not start address validation if there are invalid fields', () => {
 			const action = actions[ 'storeAddressFields' ] as any,
 			context = {
@@ -187,6 +203,10 @@ describe( 'Store', () => {
 			},
 			resp = action( context, payload );
 			expect( resp ).toEqual( Promise.resolve() );
+			expect( context.commit ).not.toBeCalledWith(
+				'BEGIN_ADDRESS_VALIDATION'
+			);
+			expect( payload.transport.postData ).not.toHaveBeenCalled();
 		} );
 
 		it( 'commits [BEGIN_ADDRESS_VALIDATION] when all fields are valid', () => {
@@ -222,6 +242,7 @@ describe( 'Store', () => {
 				'salutation': '',
 				'street': '',
 				'title': '',
+				'receiptOptOut': false
 			};
 			action( context, payload );
 			expect( payload.transport.postData ).toBeCalledWith(

@@ -37,6 +37,11 @@ export interface FormData {
     [key: string]: InputField
 }
 
+export interface AddressFormState {
+	formData: FormData,
+	receiptOptOut: boolean
+}
+
 export interface Transport {
     getData: Function
     postData: Function
@@ -45,7 +50,8 @@ export interface Transport {
 export interface Payload {
     transport: Transport,
 	validateAddressURL: String,
-	formData: FormData
+	formData: FormData,
+	receiptOptOut: boolean
 }
 
 export interface PostData {

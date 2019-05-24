@@ -1,4 +1,4 @@
-import { PostData, FormData, Validity } from '../types';
+import {PostData, FormData, Validity, InputField} from '../types';
 
 export const Helper = {
     inputIsValid: (value: string, pattern: string ) => {
@@ -12,5 +12,9 @@ export const Helper = {
             accumulator[currentValue] = form[currentValue].value;
             return accumulator;
         }, {});
+    },
+    allFieldsAreEmpty: ( formFields: FormData, ignoreFields: string[] ): boolean => {
+        const isEmpty = ( field: InputField ) => field.value !== '' && ignoreFields.indexOf( field.name ) == -1;
+        return Object.values( formFields ).find( isEmpty ) === undefined;
     }
 }

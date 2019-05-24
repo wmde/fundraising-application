@@ -43,7 +43,8 @@ describe('AddressForm.vue', () => {
 				postcode: Validity.INCOMPLETE,
 				city: Validity.INCOMPLETE,
 				country: Validity.VALID,
-				addressType: Validity.VALID
+				addressType: Validity.VALID,
+				receiptOptOut: Validity.VALID
 			}
 		},
 		actions = {
@@ -309,8 +310,9 @@ describe('AddressForm.vue', () => {
 						optionalField: true,
 						pattern: '',
 						value: ''
-					}
+					},
 				},
+				receiptOptOut: false,
 				transport: {},
 				validateAddressURL: '/update-address'
 			},
