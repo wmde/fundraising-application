@@ -39,25 +39,40 @@
 
 */
 
+function toggleComment( tableRow: Element ) {
+	let comment : HTMLElement = tableRow.getElementsByTagName( 'div' )[ 1 ];
+	let heading : HTMLElement = tableRow.getElementsByTagName('h3')[0];
+	if ( comment.style.display === 'none' ) {
+		comment.style.display = '';
+		tableRow.classList.add( 'accordion' );
+		heading.classList.add('has-text-primary', 'has-text-weight-bold');
+		heading.classList.remove('accordion-heading');
+	} else {
+		comment.style.display = 'none';
+		tableRow.classList.remove( 'accordion' );
+		heading.classList.add('accordion-heading');
+		heading.classList.remove('has-text-primary', 'has-text-weight-bold');
+	}
+	// TODO needs distinction if a comment exists or not
+}
+
 window.onload = () => {
 
 	// remove table heading
-	let bodyEl : Element = document.getElementsByClassName('donors')[0]!;
+	let bodyEl : Element = document.getElementsByClassName( 'donors' )[ 0 ]!;
 	let tableHead : HTMLElement = document.getElementsByTagName( 'thead' )[ 0 ];
-	bodyEl.removeChild(tableHead);
-
-
+	bodyEl.removeChild( tableHead );
 
 	let tableRows : HTMLCollection | null = document.getElementsByTagName( 'tr' )!;
 
+	// TODO clean up code and make it more readable (put stuff in functions...)
 
 	for ( let tableRow of tableRows ) {
-		//tableRow.classList.add( 'accordion' );
-
+		// tableRow.classList.add( 'accordion' );
 
 		// merge donor name cell and donation amount cell to one new div
 		let newHeading : HTMLElement = document.createElement( 'div' );
-		let newHeadingH : HTMLElement = document.createElement('h3');
+		let newHeadingH : HTMLElement = document.createElement( 'h3' );
 		newHeadingH.classList.add( 'accordion-heading' );
 
 		let newHeadingText: string = '';
@@ -67,46 +82,30 @@ window.onload = () => {
 
 		newHeadingH.appendChild( document.createTextNode( newHeadingText ) );
 		newHeading.appendChild( newHeadingH );
-		//newHeading.addEventListener("click", toggleComment(tableRow));
+		newHeading.addEventListener( 'click', () => toggleComment( tableRow ) );
 
 		tableRow.appendChild( newHeading );
 
-
-		//create a new div for the comment (might be empty)
-		let newComment : HTMLElement = document.createElement('div');
-		let newCommentP : HTMLElement = document.createElement('p');
-		newComment.classList.add('accordion-content');
+		// create a new div for the comment (might be empty)
+		let newComment : HTMLElement = document.createElement( 'div' );
+		let newCommentP : HTMLElement = document.createElement( 'p' );
+		newComment.classList.add( 'accordion-content' );
 		let newCommentText: string = '';
 		newCommentText += tableRow.getElementsByTagName( 'td' )[ 2 ].textContent;
-		newCommentP.appendChild(document.createTextNode(newCommentText));
+		newCommentP.appendChild( document.createTextNode( newCommentText ) );
 		newComment.appendChild( newCommentP );
+		newComment.style.display = 'none';
 
 		tableRow.appendChild( newComment );
 
-
-		//remove old td elements from this row
+		// remove old td elements from this row
 		let tds : HTMLCollection = tableRow.getElementsByTagName( 'td' );
-		while (tds[0]) {
+		while ( tds[ 0 ] ) {
 			for ( let td of tds ) {
-				tableRow.removeChild(td);
+				tableRow.removeChild( td );
 			}
 		}
 
-		// unterscheidung machen, ob ein Kommentar existiert, oer nicht
 	}
 
-
-	function toggleComment(tableRow: Element) {
-		let comment : HTMLElement = tableRow.getElementsByTagName( 'div' )[ 1 ];
-		comment.style.display = 'none';
-		//style von der tableRow auch ändern
-	};
-
-
-
-	// clickevent zu tr(1,2) hinzufügen
-
-	// tr(3) toggeln (active/inactive)
 };
-
-
