@@ -6,6 +6,7 @@
             <form ref="form" :action="updateAddressURL + addressToken" method="post">
                 <div class="col-xs-12 col-md-9">
                     <div class="form-shadow-wrap">
+                        <receipt-opt-out v-model="receiptOptOut" :messages="messages" />
                         <name :show-error="fieldErrors" :form-data="formData" :validate-input="validateInput" :is-company="isCompany" :messages="messages"></name>
                         <postal :show-error="fieldErrors" :form-data="formData" :validate-input="validateInput" :messages="messages" :countries="countries"></postal>
                     </div>
@@ -23,15 +24,17 @@
     import Vue from 'vue';
     import Name from './components/Name.vue';
     import Postal from './components/Postal.vue';
-    import {AddressValidity, FormData, Transport, Validity} from './types';
+    import ReceiptOptOut from './components/ReceiptOptOut.vue';
+    import { AddressValidity, FormData, Transport, Validity, AddressFormState } from './types';
 
     export default Vue.extend ( {
         name: 'addressForm',
         components: {
             Name,
-            Postal
+            Postal,
+            ReceiptOptOut
         },
-        data: function(): { formData: FormData } {
+        data: function(): AddressFormState {
             return {
                 formData: {
                     salutation: {
@@ -95,6 +98,7 @@
                         optionalField: false
                     }
                 },
+                receiptOptOut: false,
             }
         },
         props: {
@@ -130,7 +134,8 @@
                 this.$store.dispatch('storeAddressFields', {
                     transport: this.$props.transport,
                     validateAddressURL: this.$props.validateAddressURL,
-                    formData: this.formData
+                    formData: this.formData,
+                    receiptOptOut: this.receiptOptOut
                 }).then( () => {
                     if (this.$store.getters.allFieldsAreValid) {
                         (this.$refs.form as HTMLFormElement).submit();
