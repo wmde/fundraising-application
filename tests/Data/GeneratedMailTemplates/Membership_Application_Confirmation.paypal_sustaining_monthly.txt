@@ -2,6 +2,8 @@ mail_introduction_male_lastname_informal
 
 membership_application_confirmation/intro
 
+membership_application_confirmation/contact
+
 membership_application_confirmation/outro
 
 name_head_of_organization
