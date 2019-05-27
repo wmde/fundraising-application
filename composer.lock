@@ -1632,16 +1632,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v4.2.1",
+            "version": "v4.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "5221f49a608808c1e4d436df32884cbc1b821ac0"
+                "reference": "1bd73cc04c3843ad8d6b0bfc0956026a151fc420"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/5221f49a608808c1e4d436df32884cbc1b821ac0",
-                "reference": "5221f49a608808c1e4d436df32884cbc1b821ac0",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/1bd73cc04c3843ad8d6b0bfc0956026a151fc420",
+                "reference": "1bd73cc04c3843ad8d6b0bfc0956026a151fc420",
                 "shasum": ""
             },
             "require": {
@@ -1679,7 +1679,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2019-02-16T20:54:15+00:00"
+            "time": "2019-05-25T20:07:01+00:00"
         },
         {
             "name": "ocramius/package-versions",
@@ -8112,12 +8112,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "aa23470f1d7f9a6f0193e66aa93195dce12dd132"
+                "reference": "f135c4a5353216177829419ad04f0f3df20075d2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/aa23470f1d7f9a6f0193e66aa93195dce12dd132",
-                "reference": "aa23470f1d7f9a6f0193e66aa93195dce12dd132",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/f135c4a5353216177829419ad04f0f3df20075d2",
+                "reference": "f135c4a5353216177829419ad04f0f3df20075d2",
                 "shasum": ""
             },
             "require-dev": {
@@ -8150,7 +8150,7 @@
                 "GPL-2.0+"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2019-05-24T15:21:04+00:00"
+            "time": "2019-05-27T12:29:30+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",
