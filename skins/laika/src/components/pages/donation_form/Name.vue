@@ -1,8 +1,8 @@
 <template>
 <div>
 	<div v-if="addressType === AddressTypeModel.PERSON">
-		<fieldset>
-			<legend class="subtitle has-margin-top-36">{{ $t( 'salutation_label' ) }}</legend>
+		<fieldset class="has-margin-top-36">
+			<legend class="subtitle">{{ $t( 'salutation_label' ) }}</legend>
 			<div>
 				<b-radio type="radio"
 						id="salutation-mr"
@@ -24,8 +24,8 @@
 				</b-radio>
 			</div>
 		</fieldset>
-		<div>
-			<label for="title" class="subtitle has-margin-top-36">{{ $t( 'academic_title_label' ) }}</label>
+		<div class="has-margin-top-36">
+			<label for="title" class="subtitle">{{ $t( 'academic_title_label' ) }}</label>
 			<b-select
 					class="is-form-input"
 					v-model="formData.title.value"

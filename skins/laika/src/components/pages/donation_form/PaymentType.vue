@@ -1,5 +1,5 @@
 <template>
-	<fieldset>
+	<fieldset class="has-margin-top-36">
 		<legend class="title is-size-5">{{ $t('donation_form_payment_type_title') }}</legend>
 		<div>
 			<div v-for="paymentType in paymentTypes" :key="paymentType">

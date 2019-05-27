@@ -1,5 +1,5 @@
 <template>
-    <fieldset>
+    <fieldset class="has-margin-top-36">
         <legend class="title is-size-5">{{ $t('donation_form_interval_title') }}</legend>
         <div>
             <div class="wrap-radio" v-for="interval in paymentIntervals" :key="'interval-' + interval">
