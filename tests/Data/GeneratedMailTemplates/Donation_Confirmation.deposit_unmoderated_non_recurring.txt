@@ -1,4 +1,4 @@
-mail_introduction_female_formal
+mail_introduction_female_lastname_informal
 
 donation_confirmation/paymenttype_banktransfer
 
@@ -7,6 +7,7 @@ donation_confirmation/paymenttype_banktransfer_once
 donation_confirmation/receipt
 
 donation_confirmation/receipt_support
+
 donation_confirmation/greetings
 
 name_head_of_suborganization

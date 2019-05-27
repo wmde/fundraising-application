@@ -1,5 +1,5 @@
-{%- set formattedAmount = donation.amount|localizedcurrency('Euro', 'de_DE') -%}
-{$ greeting_generator.createFormalGreeting( recipient.lastName, recipient.salutation, recipient.title )|raw $}
+{%- set formattedAmount = donation.amount|number_format(2, ',', '.') -%}
+{$ greeting_generator.createInformalLastnameGreeting( recipient.salutation, recipient.lastName )|raw $}
 
 {% if donation.needsModeration %}{# Moderated emails look completely different #}
 	{$ mail_content('donation_confirmation/needs_moderation', {
@@ -13,7 +13,8 @@
 		{$ mail_content('donation_confirmation/paymenttype_banktransfer', {
 			'formatted_amount': formattedAmount,
 			'bank_transfer_code': donation.bankTransferCode,
-			'donation_id': donation.id
+			'donation_id': donation.id,
+			'donation_interval': donation.interval|trans({}, 'paymentIntervals')
 		}) $}
 
 		{% if donation.interval > 0 %}
@@ -26,23 +27,24 @@
 	{% else %}{# All payment methods except UEB share the same intro #}
 		{$- mail_content('donation_confirmation/payment_intro', {
 			'formatted_amount': formattedAmount,
-			'donation_id': donation.id
-		}) $}
-	{% endif %}
-	{% if donation.paymentType == 'BEZ' %}
-
-		{$ mail_content('donation_confirmation/paymenttype_directdebit', {
-			'formatted_amount': formattedAmount
-		}) $}
-	{% elseif donation.paymentType == 'PPL' or donation.paymentType == 'MCP' or donation.paymentType == 'SUB' %}
-		{$- mail_content('donation_confirmation/paymenttype_external', {
-			'formatted_amount': formattedAmount,
-			'payment_provider': donation.paymentType|trans({}, 'paymentTypes')
+			'donation_id': donation.id,
+			'donation_interval': donation.interval|trans({}, 'paymentIntervals')
 		}) -$}
-		{% if donation.interval > 0 %}
-			{$- mail_content('donation_confirmation/payment_interval_recurring') $}
-		{%  else %}
-			{$- mail_content('donation_confirmation/payment_interval_once') $}
+		{% if donation.paymentType == 'BEZ' %}
+			{$- mail_content('donation_confirmation/paymenttype_directdebit', {
+				'formatted_amount': formattedAmount,
+				'donation_interval': donation.interval
+			}) $}
+		{% elseif donation.paymentType == 'PPL' or donation.paymentType == 'MCP' or donation.paymentType == 'SUB' %}
+			{$- mail_content('donation_confirmation/paymenttype_external', {
+				'formatted_amount': formattedAmount,
+				'payment_provider': donation.paymentType|trans({}, 'paymentTypes')
+			}) -$}
+			{% if donation.interval > 0 %}
+				{$- mail_content('donation_confirmation/payment_interval_recurring') $}
+			{%  else %}
+				{$- mail_content('donation_confirmation/payment_interval_once') $}
+			{% endif %}
 		{% endif %}
 	{% endif %}
 	{% if donation.receiptOptIn %}
@@ -52,23 +54,27 @@
 		}) $}
 	{% endif %}
 
-	{$ mail_content('donation_confirmation/receipt_support' ) -$}
 	{% if donation.receiptOptIn == false %}
-		{$- " " -$}
-		{$- mail_content('donation_confirmation/receipt_opted_out') $}
+		{$ mail_content('donation_confirmation/receipt_support', {
+			'donation_interval': donation.interval
+		} ) $} {$ mail_content('donation_confirmation/receipt_opted_out') $}
+	{% else %}
+		{$ mail_content('donation_confirmation/receipt_support', {
+			'donation_interval': donation.interval
+		} ) $}
 	{% endif %}
 
 	{$ mail_content('donation_confirmation/greetings', {
 		'day_of_the_week': "now"|date("N")|trans({}, 'daysOfTheWeek')
 	}) $}
-	{% if donation.paymentType == 'MCP' and donation.interval > 0 %}
-
-		{$ mail_content('donation_confirmation/creditcard_interval_notice') $}
-	{% endif %}
 {% endif %}
 
 {$ mail_content('name_head_of_suborganization') $}
 {$ mail_content('title_head_of_suborganization') $}
+
+{% if donation.paymentType == 'MCP' and donation.interval > 0 %}
+	{$ mail_content('donation_confirmation/creditcard_interval_notice') $}
+{% endif %}
 
 ---------------------------------------------------------------------------
 {$ mail_content('wikimedia_vision') $}

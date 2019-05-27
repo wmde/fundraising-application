@@ -1,4 +1,4 @@
-mail_introduction_female_formal
+mail_introduction_female_lastname_informal
 
 donation_confirmation/paymenttype_banktransfer
 
