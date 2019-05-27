@@ -1,14 +1,16 @@
 <template>
 	<div id="addressForm" class="column is-full">
-		<h1 class="title is-size-1">{{ $t( 'donation_section_address_title' ) }}</h1>
-		<div>
+		<div class="has-margin-top-18">
+			<h1 class="title is-size-1">{{ $t( 'donation_section_address_title' ) }}</h1>
 			<address-type></address-type>
-			<name :show-error="fieldErrors" :form-data="formData" :validate-input="validateInput" :address-type="addressType"></name>
-			<postal v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :validate-input="validateInput" :countries="countries"></postal>
+		</div>
+		<name :show-error="fieldErrors" :form-data="formData" :validate-input="validateInput" :address-type="addressType"></name>
+		<postal v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :validate-input="validateInput" :countries="countries"></postal>
+		<div class="has-margin-top-36">
 			<h1 class="title is-size-1">{{ $t( 'donation_section_email_title' ) }}</h1>
 			<email></email>
-			<newsletter-opt-in></newsletter-opt-in>
 		</div>
+		<newsletter-opt-in></newsletter-opt-in>
 	</div>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
-	<div>
-		<b-checkbox type="checkbox" class="subtitle has-margin-top-18"
+	<div class="has-margin-top-18">
+		<b-checkbox type="checkbox" class="is-inline-checkbox"
 			id="newsletter"
 			name="newsletter"
 			v-model="newsletterOptIn"

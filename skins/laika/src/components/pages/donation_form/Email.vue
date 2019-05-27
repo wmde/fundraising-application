@@ -1,6 +1,6 @@
 <template>
-    <div>
-		<label for="email" class="subtitle has-margin-top-18">{{ $t( 'email_label' ) }}</label>
+    <fieldset>
+		<label for="email" class="subtitle">{{ $t( 'email_label' ) }}</label>
 		<b-input type="text"
 			id="email"
 			name="email"
@@ -9,7 +9,7 @@
 			@blur="validateEmail">
 		</b-input>
 		<span v-if="emailHasError" class="help is-danger">{{ $t( 'form_email_error' ) }}</span>
-    </div>
+    </fieldset>
 </template>
 
 <script lang="ts">
