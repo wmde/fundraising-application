@@ -1,9 +1,9 @@
 <template>
 	<div class="container">
 		<div class="columns has-margin-top-0">
-			<main class="column is-two-thirds is-half-desktop has-background-bright">
+			<div v-bind:class="[isFullWidth ? 'is-full' : 'is-two-thirds is-half-desktop column has-background-bright']">
 				<slot></slot>
-			</main>
+			</div>
 			<slot name="sidebar"></slot>
 		</div>
 	</div>
@@ -12,5 +12,6 @@
 <script>
 export default {
 	name: 'Content',
+	props: [ 'isFullWidth' ],
 };
 </script>

@@ -38,17 +38,4 @@ export default Vue.extend( {
 
 <style lang="scss">
     @import "../../../scss/custom";
-
-    button.is-main {
-        height: 54px;
-        font-size: 1em;
-        font-weight: bold;
-        width: 270px;
-        border-radius: 0;
-    }
-    @include until($tablet) {
-        button.is-main {
-            width: 100%;
-        }
-    }
 </style>
