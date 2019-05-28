@@ -5,14 +5,10 @@
 		</header>
 		<main id="app" class="main-wrapper">
 			<div class="container">
-				<div class="columns has-margin-top-36 has-margin-bottom-36 intro-content">
-					<div class="column is-two-thirds is-half-desktop has-padding-0">
-						<span>{{ $t('wikimedia_tagline') }}</span>
-					</div>
-				</div>
+				<Headline :is-full-width="isFullWidth"></Headline>
 			</div>
 			<div class="container">
-				<Content>
+				<Content :is-full-width="isFullWidth">
 					<slot></slot>
 					<template v-slot:sidebar>
 						<slot name="sidebar"></slot>
@@ -30,6 +26,7 @@
 import Vue from 'vue';
 import Buefy from 'buefy';
 import Header from '@/components/layout/Header.vue';
+import Headline from '@/components/layout/Headline.vue';
 import Content from '@/components/layout/Content.vue';
 import Footer from '@/components/layout/Footer.vue';
 
@@ -38,10 +35,22 @@ export default Vue.extend( {
 	name: 'app',
 	components: {
 		Header,
+		Headline,
 		Content,
 		Footer,
 	},
-	props: [ 'assetsPath', 'pageIdentifier' ],
+	props: {
+		assetsPath: {
+			type: String,
+		},
+		pageIdentifier: {
+			type: String,
+		},
+		isFullWidth: {
+			type: Boolean,
+			default: false,
+		},
+	},
 } );
 </script>
 
