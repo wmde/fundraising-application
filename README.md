@@ -24,9 +24,7 @@ User facing application for the [Wikimedia Deutschland](https://wikimedia.de) fu
 
 ## Installation
 
-For development you need to have Docker and docker-compose installed. You need at least Docker Version >= 17.09.0 and docker-compose version >= 1.17.0. If your OS does not come with the right version, please use the official installation instructions for [Docker](https://docs.docker.com/install/) and [docker-compose](https://docs.docker.com/compose/install/). You don't need to install other dependencies (PHP, Node.js, MySQL) on your machine, but you will need:
-
-    sudo apt install uuid-runtime
+For development you need to have Docker and docker-compose installed. You need at least Docker Version >= 17.09.0 and docker-compose version >= 1.17.0. If your OS does not come with the right version, please use the official installation instructions for [Docker](https://docs.docker.com/install/) and [docker-compose](https://docs.docker.com/compose/install/). You don't need to install other dependencies (PHP, Node.js, MySQL) on your machine.
 
 Get a clone of our git repository and then run:
 
@@ -56,6 +54,14 @@ You can add local modifications by adding a file that follows the name pattern o
 
 The application merges the values from the configuration files with the default values from the file 
 `app/config/config.dist.json`.
+
+### Run in parallel to speed up continuous integration
+
+On a multi-core machine, you can use the `-j` flag to `make` to speed up some builds.  For example,
+
+    make -j4 ci
+
+This will require the `uuidgen` program, available from the `uuid-runtime` package on most Linux distributions.
 
 ### Create local test configuration to speed up tests
 
