@@ -160,6 +160,7 @@ class Routes {
 		$app->get(
 			'page/{pageName}',
 			function ( Application $app, $pageName ) use ( $ffFactory ) {
+				$ffFactory->getTranslationCollector()->addTranslationFile($ffFactory->getI18nDirectory() . '/messages/pageTitles.json' );
 				return ( new PageDisplayHandler( $ffFactory, $app ) )->handle( $pageName );
 			}
 		)

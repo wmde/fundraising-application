@@ -19,8 +19,6 @@ function createNewAccordionElements() {
 
 	let tableRows : HTMLCollection = document.getElementsByTagName( 'tr' )!;
 
-	// TODO clean up code and make it more readable (put stuff in functions...) e.g. initSupportersTable()
-
 	for ( let tableRow of tableRows ) {
 
 		// merge donor name cell and donation amount cell to one new div
@@ -107,6 +105,3 @@ window.onload = () => {
 	addToggleFunction();
 
 };
-
-// TODO maybe write function to generically unwrap htmlElement children from all the needles table/div elements
-// https://plainjs.com/javascript/manipulation/unwrap-a-dom-element-35/

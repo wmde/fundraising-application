@@ -6,17 +6,15 @@ import App from '@/components/App.vue';
 
 import Component from '@/components/pages/StaticPage.vue';
 import Sidebar from '@/components/layout/Sidebar.vue';
+import { pageContentFromObject } from '@/view_models/StaticPages';
 
 const PAGE_IDENTIFIER = 'error-page';
 
 Vue.config.productionTip = false;
 Vue.use( VueI18n );
 
-interface ErrorModel {
-	message: string
-}
-
-const pageData = new PageDataInitializer<ErrorModel>( '#app' );
+const pageData = new PageDataInitializer<any>( '#app' );
+console.log( pageData );
 
 const i18n = new VueI18n( {
 	locale: DEFAULT_LOCALE,
@@ -25,7 +23,6 @@ const i18n = new VueI18n( {
 	},
 } );
 
-// TODO: clean this up maybe more
 const templateContent : HTMLElement = document.getElementById( 'static-content-template' )!;
 
 new Vue( {
@@ -40,6 +37,7 @@ new Vue( {
 		h( Component, {
 			props: {
 				pageContent: templateContent.textContent,
+				pageId: pageContentFromObject( pageData.applicationVars ).pageId,
 			},
 		} ),
 		h( Sidebar, {
