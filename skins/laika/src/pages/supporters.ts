@@ -1,74 +1,27 @@
-/*
-(function( $ ) {
-	$( document ).ready( function() {
-		initSupportersTable();
-		attachEvents();
-	} );
-
-	function initSupportersTable() {
-		$( '.donors tbody tr' ).each( function() {
-			if( getComment( this ) ) {
-				$( this ).addClass( 'commented' );
-			}
-		} );
-	}
-
-	function attachEvents() {
-		$( '.commented' ).click( function() {
-			if( $( this ).hasClass( 'active' ) ) {
-				hideComment( $( this ) );
-			} else {
-				showComment( $( this ) );
-			}
-		} );
-	}
-
-	function getComment( tableRow ) {
-		return $( tableRow ).find( ':nth-child(3)' ).html(); //findet das 3. Element in der Reihe (also 3. Spalte (Kommentar))
-	}
-
-	function showComment( tableRow ) {
-		$( '.commented' ).removeClass( 'active' );
-		tableRow.addClass( 'active' );
-	}
-
-	function hideComment( tableRow ) {
-		tableRow.removeClass( 'active' );
-	}
-})( jQuery );
-
-*/
-
-function toggleComment( tableRow: Element ) {
-	let comment : HTMLElement = tableRow.getElementsByTagName( 'div' )[ 1 ];
-	let heading : HTMLElement = tableRow.getElementsByTagName('h3')[0];
+function toggleComment( supporterDiv: Element ) {
+	let heading : HTMLElement = supporterDiv.getElementsByTagName( 'h3' )[ 0 ];
+	let comment : HTMLElement = supporterDiv.getElementsByTagName( 'div' )[ 1 ];
 	if ( comment.style.display === 'none' ) {
 		comment.style.display = '';
-		tableRow.classList.add( 'accordion' );
-		heading.classList.add('has-text-primary', 'has-text-weight-bold');
-		heading.classList.remove('accordion-heading');
+		supporterDiv.classList.add( 'accordion' );
+		heading.classList.add( 'has-text-primary', 'has-text-weight-bold' );
+		heading.classList.remove( 'accordion-heading' );
 	} else {
 		comment.style.display = 'none';
-		tableRow.classList.remove( 'accordion' );
-		heading.classList.add('accordion-heading');
-		heading.classList.remove('has-text-primary', 'has-text-weight-bold');
+		supporterDiv.classList.remove( 'accordion' );
+		heading.classList.add( 'accordion-heading' );
+		heading.classList.remove( 'has-text-primary', 'has-text-weight-bold' );
 	}
-	// TODO needs distinction if a comment exists or not
+	// TODO needs distinction if a comment exists or not?
 }
 
-window.onload = () => {
+function createNewAccordionElements() {
 
-	// remove table heading
-	let bodyEl : Element = document.getElementsByClassName( 'donors' )[ 0 ]!;
-	let tableHead : HTMLElement = document.getElementsByTagName( 'thead' )[ 0 ];
-	bodyEl.removeChild( tableHead );
+	let tableRows : HTMLCollection = document.getElementsByTagName( 'tr' )!;
 
-	let tableRows : HTMLCollection | null = document.getElementsByTagName( 'tr' )!;
-
-	// TODO clean up code and make it more readable (put stuff in functions...)
+	// TODO clean up code and make it more readable (put stuff in functions...) e.g. initSupportersTable()
 
 	for ( let tableRow of tableRows ) {
-		// tableRow.classList.add( 'accordion' );
 
 		// merge donor name cell and donation amount cell to one new div
 		let newHeading : HTMLElement = document.createElement( 'div' );
@@ -82,7 +35,6 @@ window.onload = () => {
 
 		newHeadingH.appendChild( document.createTextNode( newHeadingText ) );
 		newHeading.appendChild( newHeadingH );
-		newHeading.addEventListener( 'click', () => toggleComment( tableRow ) );
 
 		tableRow.appendChild( newHeading );
 
@@ -106,6 +58,55 @@ window.onload = () => {
 			}
 		}
 
+		// rename tag to div
+		let newSupporterDiv = document.createElement( 'div' );
+		newSupporterDiv.classList.add( 'supporter' );
+		newSupporterDiv.innerHTML = tableRow.innerHTML;
+
+		tableRow.parentNode!.parentNode!.appendChild( newSupporterDiv );
 	}
 
+}
+
+function removeTableHeading() {
+	let bodyEl : Element = document.getElementsByClassName( 'donors' )[ 0 ]!;
+	let tableHead : HTMLElement = document.getElementsByTagName( 'thead' )[ 0 ];
+	bodyEl.removeChild( tableHead );
+}
+
+function renameTableToDiv() {
+
+	// this automatically removes tbody too
+
+	let bodyEl : Element = document.getElementsByClassName( 'donors' )[ 0 ]!;
+
+	let tableBody : Element = document.getElementsByTagName( 'tbody' )[ 0 ];
+	tableBody.parentNode!.removeChild( tableBody );
+
+	let newSupportersListDiv = document.createElement( 'div' );
+	newSupportersListDiv.classList.add( 'supporters', 'donors' );
+	newSupportersListDiv.innerHTML = bodyEl.innerHTML;
+	bodyEl.parentNode!.replaceChild( newSupportersListDiv, bodyEl );
+}
+
+function addToggleFunction() {
+	let supporterDivs : HTMLCollection = document.getElementsByClassName( 'supporter' );
+	for ( let sDiv of supporterDivs ) {
+		sDiv.addEventListener( 'click', () => toggleComment( sDiv ) );
+	}
+}
+
+window.onload = () => {
+
+	removeTableHeading();
+
+	createNewAccordionElements();
+
+	renameTableToDiv();
+
+	addToggleFunction();
+
 };
+
+// TODO maybe write function to generically unwrap htmlElement children from all the needles table/div elements
+// https://plainjs.com/javascript/manipulation/unwrap-a-dom-element-35/
