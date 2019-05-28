@@ -3,7 +3,7 @@
     <div class="row receipt-opt-out">
         <div class="col-xs-12">
             <div class="field-grp wrap-check">
-                <input type="checkbox" id="donation_receipt" class="jcf" data-jcf='{"wrapNative":true}' v-model="optedOut" >
+                <input type="checkbox" id="donation_receipt" name="receiptOptOut" class="jcf" data-jcf='{"wrapNative":true}' v-model="optedOut" >
                 <label class="news" for="donation_receipt">
                   {{  messages.receipt_opt_out }}
                 </label>
