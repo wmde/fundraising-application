@@ -11,6 +11,14 @@
 			<email></email>
 		</div>
 		<newsletter-opt-in></newsletter-opt-in>
+		<div class="level has-margin-top-36">
+			<div class="level-left">
+        		<b-button class="level-item" @click="previous()" type="is-primary is-main">{{ $t('donation_section_back') }}</b-button>
+			</div>
+			<div class="level-right">
+        		<b-button class="level-item" @click="submit()" type="is-primary is-main">{{ $t('donation_banner_anchor') }}</b-button>
+        	</div>
+        </div>
 	</div>
 </template>
 
@@ -115,7 +123,7 @@ export default Vue.extend( {
 		},
 		...mapGetters( NS_ADDRESS, [
 			'addressType',
-			'addressTypeIsNotAnon',
+			'addressTypeIsNotAnon',																																																																																																						
 		] ),
 	},
 	methods: {
@@ -128,6 +136,28 @@ export default Vue.extend( {
 		validateInput( formData: FormData, fieldName: string ) {
 			this.$store.dispatch( action( NS_ADDRESS, validateInput ), formData[ fieldName ] );
 		},
+		previous() {
+			this.$emit( 'change-component', 'Payment' );
+		},
+		submit() {
+			//TODO
+		}
 	},
 } );
 </script>
+<style lang="scss" scoped>
+    @import "../../../scss/custom";
+
+    button.is-main {
+        height: 54px;
+        font-size: 1em;
+        font-weight: bold;
+        width: 250px;
+        border-radius: 0;
+    }
+    @include until($tablet) {
+        button.is-main {
+            width: 100%;
+        }
+    }
+</style>
