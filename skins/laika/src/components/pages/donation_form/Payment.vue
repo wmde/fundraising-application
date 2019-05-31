@@ -4,8 +4,8 @@
             <payment-amount :payment-amounts="paymentAmounts" :validate-amount-url="validateAmountUrl"></payment-amount>
             <payment-interval :payment-intervals="paymentIntervals"></payment-interval>
             <payment-type :payment-types="paymentTypes"></payment-type>
-           <div class="has-margin-top-36">
-                <b-button type="is-primary is-main">{{ $t('donation_section_continue') }}</b-button>
+            <div class="has-margin-top-36">
+                <b-button @click="next()" type="is-primary is-main">{{ $t('donation_section_continue') }}</b-button>
             </div>
         </form>
     </div>
@@ -31,6 +31,9 @@ export default Vue.extend( {
 	methods: {
 		validatePaymentData(): void {
 			this.$store.dispatch( action( NS_PAYMENT, markEmptyValuesAsInvalid ) );
+		},
+		next(): void {
+			this.$emit( 'change-component', 'AddressForm' );
 		},
 	},
 } );

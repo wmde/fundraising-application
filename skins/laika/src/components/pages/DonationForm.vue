@@ -1,21 +1,13 @@
 <template>
 	<div class="column is-full">
 		<form>
-			<payment
-				:validate-amount-url="validateAmountUrl"
-				:payment-amounts="paymentAmounts"
-				:payment-intervals="paymentIntervals"
-				:payment-types="paymentTypes">
-			</payment>
-			<address-form
-				:validate-address-url="validateAddressUrl"
-				:countries="addressCountries">
-			</address-form>
-			<!--
-				Vue component for an overview of the donation (Zusammenfassung in the design).
-				It will contain the final Donate button.
-				validateForm() should be called upon clicking that button.
-			-->
+		<keep-alive>
+			<component
+				:is="currentFormComponent"
+				v-bind="currentProperties"
+				v-on:change-component="changeCurrentFormComponent( $event )">
+			</component>
+		</keep-alive>
 		</form>
 	</div>
 </template>
@@ -38,6 +30,35 @@ export default Vue.extend( {
 		paymentIntervals: Array as () => Array<Number>,
 		paymentTypes: Array as () => Array<String>,
 		addressCountries: Array as () => Array<String>,
+	},
+	data: function () {
+		return {
+			currentFormComponent: 'Payment',
+		};
+	},
+	computed: {
+		currentProperties: {
+			get() {
+				if ( this.$data.currentFormComponent === 'Payment' ) {
+					return {
+						validateAmountUrl: this.$props.validateAmountUrl,
+						paymentAmounts: this.$props.paymentAmounts,
+						paymentIntervals: this.$props.paymentIntervals,
+						paymentTypes: this.$props.paymentTypes,
+					};
+				} else if ( this.$data.currentFormComponent === 'AddressForm' ) {
+					return {
+						validateAddressUrl: this.$props.validateAddressUrl,
+						countries: this.$props.addressCountries,
+					};
+				}
+			},
+		},
+	},
+	methods: {
+		changeCurrentFormComponent( newComponent: string ) {
+			this.$data.currentFormComponent = newComponent;
+		},
 	},
 } );
 </script>
