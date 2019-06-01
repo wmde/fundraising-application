@@ -55,14 +55,6 @@ You can add local modifications by adding a file that follows the name pattern o
 The application merges the values from the configuration files with the default values from the file 
 `app/config/config.dist.json`.
 
-### Run in parallel to speed up continuous integration
-
-On a multi-core machine, you can use the `-j` flag to `make` to speed up some builds.  For example,
-
-    make -j4 ci
-
-This will require the `uuidgen` program, available from the `uuid-runtime` package on most Linux distributions.
-
 ### Create local test configuration to speed up tests
 
 To speed up the tests when running them locally, use SQLite instead of the default MySQL. This can be done by

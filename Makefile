@@ -7,7 +7,6 @@ NPM_FLAGS     := --prefer-offline
 DOCKER_FLAGS  := --interactive --tty
 TEST_DIR      :=
 REDUX_LOG     :=
-UNIQUE_APP_CONTAINER = $(shell (echo $(MAKEFLAGS) | grep -qE -- '-j[0-9]*\>') && uuidgen)-app
 MIGRATION_VERSION :=
 APP_ENV       := dev
 NODE_IMAGE    := node:10
@@ -56,7 +55,7 @@ watch-js:
 
 clear:
 	rm -rf var/cache/
-	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app rm -rf var/cache/
+	docker-compose run --rm --no-deps --name $@ app rm -rf var/cache/
 
 # n alias to avoid frequent typo
 clean: clear
@@ -71,37 +70,37 @@ setup-db:
 	docker-compose run --rm app ./vendor/bin/doctrine orm:generate-proxies var/doctrine_proxies
 
 covers:
-	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./vendor/bin/covers-validator
+	docker-compose run --rm --no-deps --name $@ app ./vendor/bin/covers-validator
 
 phpunit:
-	docker-compose run --rm --name $(UNIQUE_APP_CONTAINER)-$@ app ./vendor/bin/phpunit $(TEST_DIR)
+	docker-compose run --rm --name $@ app ./vendor/bin/phpunit $(TEST_DIR)
 
 phpunit-with-coverage:
-	docker-compose -f docker-compose.yml -f docker-compose.debug.yml run --rm --name $(UNIQUE_APP_CONTAINER)-$@ app_debug ./vendor/bin/phpunit --configuration=phpunit.xml.dist --coverage-clover coverage.clover --printer="PHPUnit\TextUI\ResultPrinter"
+	docker-compose -f docker-compose.yml -f docker-compose.debug.yml run --rm --name $@ app_debug ./vendor/bin/phpunit --configuration=phpunit.xml.dist --coverage-clover coverage.clover --printer="PHPUnit\TextUI\ResultPrinter"
 
 phpunit-system:
-	docker-compose run --rm --name $(UNIQUE_APP_CONTAINER)-$@ app ./vendor/bin/phpunit tests/System/
+	docker-compose run --rm --name $@ app ./vendor/bin/phpunit tests/System/
 
 cs:
-	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./vendor/bin/phpcs
+	docker-compose run --rm --no-deps --name $@ app ./vendor/bin/phpcs
 
 fix-cs:
-	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./vendor/bin/phpcbf
+	docker-compose run --rm --no-deps --name $@ app ./vendor/bin/phpcbf
 
 stan:
-	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app php -d memory_limit=-1 vendor/bin/phpstan analyse --level=1 --no-progress cli/ src/ tests/
+	docker-compose run --rm --no-deps --name $@ app php -d memory_limit=-1 vendor/bin/phpstan analyse --level=1 --no-progress cli/ src/ tests/
 
 validate-app-config:
-	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./console app:validate:config app/config/config.dist.json app/config/config.test.json
+	docker-compose run --rm --no-deps --name $@ app ./console app:validate:config app/config/config.dist.json app/config/config.test.json
 
 validate-campaign-config:
-	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./console app:validate:campaigns $(APP_ENV)
+	docker-compose run --rm --no-deps --name $@ app ./console app:validate:campaigns $(APP_ENV)
 
 validate-campaign-utilization:
-	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./console app:validate:campaigns:utilization
+	docker-compose run --rm --no-deps --name $@ app ./console app:validate:campaigns:utilization
 
 phpmd:
-	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./vendor/bin/phpmd src/ text phpmd.xml
+	docker-compose run --rm --no-deps --name $@ app ./vendor/bin/phpmd src/ text phpmd.xml
 
 npm-ci:
 	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR):/code -w /code -e NO_UPDATE_NOTIFIER=1 $(NODE_IMAGE) npm run ci
