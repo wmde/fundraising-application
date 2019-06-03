@@ -1,3 +1,5 @@
+// TODO Possibly throw this file away
+
 import { PrivateDonorName, CompanyDonorName, DonorAddress, DonorEmail } from './AddressData';
 import { IntervalData, TypeData, AmountData } from './Payment';
 

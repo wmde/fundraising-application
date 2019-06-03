@@ -55,6 +55,7 @@ class DonationConfirmationHtmlPresenter {
 				'updateToken' => $updateToken,
 				'accessToken' => $accessToken
 			],
+			'addressType' => $this->donorDataFormatter->getAddressType( $donation ),
 			'address' => $this->donorDataFormatter->getAddressArguments( $donation ),
 			'bankData' => $this->donorDataFormatter->getBankDataArguments( $donation->getPaymentMethod() ),
 			// TODO Remove this together with 10h16 skin. cat17 does not display confirmation and membership form on the same page.
